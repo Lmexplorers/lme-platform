@@ -1,0 +1,50 @@
+name: Sync HTML to R2
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**.html'
+      - '.github/workflows/sync-to-r2.yml'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hent koden
+        uses: actions/checkout@v4
+
+      - name: Installer rclone
+        run: |
+          curl https://rclone.org/install.sh | sudo bash
+
+      - name: Konfigurer rclone for Cloudflare R2
+        run: |
+          mkdir -p ~/.config/rclone
+          cat > ~/.config/rclone/rclone.conf <<EOF
+          [r2]
+          type = s3
+          provider = Cloudflare
+          access_key_id = ${{ secrets.R2_ACCESS_KEY_ID }}
+          secret_access_key = ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          endpoint = ${{ secrets.R2_ENDPOINT }}
+          acl = private
+          EOF
+
+      - name: Synker HTML-filer til R2-bøtten
+        run: |
+          rclone sync . r2:lme-platform-html/ \
+            --include "*.html" \
+            --include "**/*.html" \
+            --exclude "node_modules/**" \
+            --exclude ".git/**" \
+            --exclude "build/**" \
+            --exclude "dist/**" \
+            --progress \
+            --stats-one-line
+
+      - name: List opp synkroniserte filer
+        run: |
+          echo "✅ Synkronisering ferdig. Filer i R2-bøtten:"
+          rclone ls r2:lme-platform-html/
