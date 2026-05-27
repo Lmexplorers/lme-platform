@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<title>Onboarding-samtale — LME</title>
+
+<style>
+  :root {
+    --pink-soft: #F8D7DA;
+    --pink-mid: #F5A8B8;
+    --cream: #FBF6F0;
+    --cream-deep: #F4E9DD;
+    --cerise: #E91E89;
+    --sun: #F7C72E;
+    --ink: #1A1A1A;
+    --ink-soft: #4A4A4A;
+    --ink-muted: #8A8A8A;
+    --line: rgba(26, 26, 26, 0.08);
+    --btn-yellow: #F7E76B;
+    --btn-yellow-hover: #F0DD4F;
+    --shadow-sm: 0 1px 3px rgba(26, 26, 26, 0.04);
+    --shadow-md: 0 4px 16px rgba(26, 26, 26, 0.06);
+    --shadow-lg: 0 12px 40px rgba(26, 26, 26, 0.08);
+    --r-md: 18px;
+    --r-lg: 24px;
+    --r-pill: 999px;
+    --font-display: 'Playpen Sans', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-display);
+    color: var(--ink);
+    background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 50%, #F8D7DA 100%);
+    min-height: 100vh;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* Enkel header */
+  .ob-header {
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .ob-logo {
+    font-size: 28px;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .ob-skip {
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+  .ob-skip:hover { color: var(--cerise); }
+
+  /* Hovedlayout */
+  .ob-wrap { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  .ob-progress { display: flex; gap: 8px; margin-bottom: 40px; justify-content: center; }
+  .ob-progress .pip { width: 36px; height: 6px; border-radius: 3px; background: var(--pink-soft); transition: background 0.3s ease, transform 0.3s ease; }
+  .ob-progress .pip.done { background: var(--cerise); }
+  .ob-progress .pip.active { background: var(--cerise); transform: scaleY(1.4); }
+
+  .ob-step { display: none; animation: obFade 0.4s ease; }
+  .ob-step.active { display: block; }
+  @keyframes obFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .ob-kicker { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: var(--cerise); background: var(--pink-soft); padding: 8px 16px; border-radius: var(--r-pill); margin-bottom: 20px; }
+  .ob-q { font-size: 32px; line-height: 1.2; margin: 0 0 8px; font-weight: 500; }
+  .ob-q em { font-style: italic; color: var(--cerise); }
+  .ob-sub { color: var(--ink-soft); font-size: 16px; margin: 0 0 28px; }
+
+  .ob-options { display: grid; gap: 12px; margin-bottom: 32px; }
+  .ob-options.grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .ob-options.grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+  @media (max-width: 640px) {
+    .ob-options.grid-2, .ob-options.grid-3 { grid-template-columns: 1fr; }
+    .ob-q { font-size: 24px; }
+    .ob-wrap { padding: 24px 16px 60px; }
+  }
+
+  .ob-opt {
+    background: #fff;
+    border: 2px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 18px 20px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: inherit;
+    font-size: 15px;
+    color: var(--ink);
+    width: 100%;
+  }
+  .ob-opt:hover { border-color: var(--pink-mid); background: var(--pink-soft); transform: translateY(-1px); }
+  .ob-opt.selected { border-color: var(--cerise); background: var(--pink-soft); }
+  .ob-opt .ob-emoji { font-size: 24px; flex-shrink: 0; }
+  .ob-opt .ob-label { flex: 1; }
+  .ob-opt .ob-label strong { display: block; font-weight: 700; margin-bottom: 2px; }
+  .ob-opt .ob-label span { color: var(--ink-soft); font-size: 13px; font-weight: 400; }
+  .ob-opt .ob-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .ob-opt.selected .ob-check { background: var(--cerise); border-color: var(--cerise); }
+  .ob-opt.selected .ob-check::after { content: '✓'; color: #fff; font-size: 14px; font-weight: 700; }
+
+  .ob-nav { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 24px; }
+  .ob-back {
+    background: transparent;
+    border: none;
+    color: var(--ink-soft);
+    font-size: 14px;
+    cursor: pointer;
+    padding: 12px 0;
+    font-family: inherit;
+  }
+  .ob-back:hover { color: var(--cerise); }
+  .ob-back:disabled { opacity: 0.3; cursor: not-allowed; }
+  .ob-next {
+    background: var(--btn-yellow);
+    color: var(--ink);
+    padding: 14px 32px;
+    border-radius: var(--r-pill);
+    font-weight: 600;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform 0.15s ease, background 0.2s ease, opacity 0.2s ease;
+  }
+  .ob-next:hover:not(:disabled) { transform: translateY(-1px); background: var(--btn-yellow-hover); }
+  .ob-next:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .ob-hint { text-align: center; font-size: 13px; color: var(--ink-muted); margin-top: 12px; }
+
+  /* Resultat */
+  .ob-result {
+    background: linear-gradient(135deg, var(--pink-soft) 0%, #FFE5E8 50%, var(--cream) 100%);
+    border-radius: var(--r-lg);
+    padding: 48px 32px;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(228, 160, 168, 0.2);
+    margin-bottom: 32px;
+  }
+  .ob-result h2 { font-size: 30px; margin: 0 0 8px; font-weight: 500; }
+  .ob-result h2 em { font-style: italic; color: var(--cerise); }
+  .ob-result .ob-summary { color: var(--ink-soft); font-size: 15px; margin: 0; }
+
+  .ob-plan-grid { display: grid; gap: 16px; margin: 32px 0; }
+  .ob-plan-step {
+    background: #fff;
+    border-radius: var(--r-md);
+    padding: 24px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    text-align: left;
+    border: 1px solid var(--line);
+    transition: all 0.2s ease;
+  }
+  .ob-plan-step:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .ob-plan-step .ob-num {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--cerise);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .ob-plan-step .ob-text { flex: 1; }
+  .ob-plan-step h3 { margin: 0 0 6px; font-size: 18px; font-weight: 600; }
+  .ob-plan-step p { margin: 0 0 12px; color: var(--ink-soft); font-size: 14px; line-height: 1.5; }
+  .ob-plan-step a { display: inline-block; color: var(--cerise); font-weight: 600; font-size: 14px; }
+  .ob-plan-step.locked { opacity: 0.75; }
+  .ob-plan-step.locked .ob-num { background: var(--ink-muted); }
+  .ob-locked-pill {
+    display: inline-block;
+    background: var(--cream-deep);
+    color: var(--ink-soft);
+    padding: 4px 10px;
+    border-radius: var(--r-pill);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-left: 8px;
+  }
+
+  .ob-upsell {
+    background: #fff;
+    border: 2px dashed var(--pink-mid);
+    border-radius: var(--r-md);
+    padding: 20px 24px;
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+  }
+  .ob-upsell-icon { font-size: 28px; }
+  .ob-upsell-text { flex: 1; }
+  .ob-upsell-text strong { display: block; margin-bottom: 4px; font-weight: 700; }
+  .ob-upsell-text p { margin: 0; color: var(--ink-soft); font-size: 13px; }
+  .ob-upsell a {
+    background: var(--cerise);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: var(--r-pill);
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 640px) {
+    .ob-upsell { flex-direction: column; text-align: center; }
+  }
+
+  .ob-final-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 12px; margin-bottom: 16px; }
+  .btn-primary {
+    background: var(--btn-yellow);
+    color: var(--ink);
+    padding: 14px 28px;
+    border-radius: var(--r-pill);
+    font-weight: 600;
+    font-size: 15px;
+    display: inline-block;
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+  .btn-primary:hover { background: var(--btn-yellow-hover); transform: translateY(-1px); }
+  .btn-secondary {
+    background: #fff;
+    color: var(--ink);
+    padding: 14px 28px;
+    border-radius: var(--r-pill);
+    font-weight: 600;
+    font-size: 15px;
+    border: 1px solid var(--line);
+    display: inline-block;
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+  .btn-secondary:hover { background: var(--pink-soft); transform: translateY(-1px); }
+  .ob-restart {
+    background: transparent;
+    border: none;
+    color: var(--ink-soft);
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: inherit;
+    display: block;
+    margin: 16px auto 0;
+  }
+  .ob-restart:hover { color: var(--cerise); }
+</style>
+</head>
+<body>
+
+<header class="ob-header">
+  <a href="/dashboard" class="ob-logo">LME</a>
+  <a href="/dashboard" class="ob-skip">Hopp over →</a>
+</header>
+
+<main class="ob-wrap">
+
+  <!-- Progressindikator -->
+  <div class="ob-progress" id="obProgress">
+    <span class="pip active"></span>
+    <span class="pip"></span>
+    <span class="pip"></span>
+    <span class="pip"></span>
+    <span class="pip"></span>
+  </div>
+
+  <!-- STEG 1: Hvem er du? -->
+  <div class="ob-step active" data-step="1">
+    <span class="ob-kicker">VELKOMMEN TIL LME 🩷</span>
+    <h1 class="ob-q">Først — <em>hvem er du?</em></h1>
+    <p class="ob-sub">Dette hjelper oss å vise akkurat det innholdet som passer deg best.</p>
+    <div class="ob-options grid-2" data-question="role" data-multi="false">
+      <button class="ob-opt" data-value="parent">
+        <span class="ob-emoji">👩‍👧</span>
+        <span class="ob-label"><strong>Forelder</strong><span>Jeg vil inspirere mine egne barn</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="educator">
+        <span class="ob-emoji">🍎</span>
+        <span class="ob-label"><strong>Pedagog</strong><span>Jeg jobber med barn profesjonelt</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="both">
+        <span class="ob-emoji">🌷</span>
+        <span class="ob-label"><strong>Begge deler</strong><span>Forelder OG pedagog</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="caregiver">
+        <span class="ob-emoji">🩷</span>
+        <span class="ob-label"><strong>Annen omsorgsperson</strong><span>Bestemor, tante, dagmamma…</span></span>
+        <span class="ob-check"></span>
+      </button>
+    </div>
+    <div class="ob-nav">
+      <button class="ob-back" disabled>← Tilbake</button>
+      <button class="ob-next" disabled>Neste →</button>
+    </div>
+  </div>
+
+  <!-- STEG 2: Aldersgrupper -->
+  <div class="ob-step" data-step="2">
+    <span class="ob-kicker">STEG 2 AV 5</span>
+    <h1 class="ob-q">Hvilke <em>aldersgrupper</em> er du opptatt av?</h1>
+    <p class="ob-sub">Velg én eller flere — du kan endre dette senere.</p>
+    <div class="ob-options grid-3" data-question="ages" data-multi="true">
+      <button class="ob-opt" data-value="0-3">
+        <span class="ob-emoji">🍼</span>
+        <span class="ob-label"><strong>0–3 år</strong><span>Toddler</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="3-6">
+        <span class="ob-emoji">🌸</span>
+        <span class="ob-label"><strong>3–6 år</strong><span>Barnehage</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="6-9">
+        <span class="ob-emoji">📚</span>
+        <span class="ob-label"><strong>6–9 år</strong><span>Småskole</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="9-12">
+        <span class="ob-emoji">🔬</span>
+        <span class="ob-label"><strong>9–12 år</strong><span>Mellomtrinn</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="12-16">
+        <span class="ob-emoji">🌱</span>
+        <span class="ob-label"><strong>12–16 år</strong><span>Ungdom</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="adult">
+        <span class="ob-emoji">✨</span>
+        <span class="ob-label"><strong>Voksne</strong><span>For egen utvikling</span></span>
+        <span class="ob-check"></span>
+      </button>
+    </div>
+    <div class="ob-nav">
+      <button class="ob-back">← Tilbake</button>
+      <button class="ob-next" disabled>Neste →</button>
+    </div>
+    <p class="ob-hint">Du kan velge flere.</p>
+  </div>
+
+  <!-- STEG 3: Erfaring -->
+  <div class="ob-step" data-step="3">
+    <span class="ob-kicker">STEG 3 AV 5</span>
+    <h1 class="ob-q">Hvor er du i din <em>Montessori-reise?</em></h1>
+    <p class="ob-sub">Ærlige svar gir bedre anbefalinger 🌸</p>
+    <div class="ob-options" data-question="experience" data-multi="false">
+      <button class="ob-opt" data-value="curious">
+        <span class="ob-emoji">🌱</span>
+        <span class="ob-label"><strong>Nysgjerrig nybegynner</strong><span>Har hørt om Montessori, vil lære grunnleggende</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="tried">
+        <span class="ob-emoji">🌿</span>
+        <span class="ob-label"><strong>Har prøvd litt</strong><span>Kjenner prinsippene, ønsker mer struktur</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="established">
+        <span class="ob-emoji">🌳</span>
+        <span class="ob-label"><strong>Etablert praksis</strong><span>Bruker Montessori daglig, vil utdype og finne nytt materiell</span></span>
+        <span class="ob-check"></span>
+      </button>
+    </div>
+    <div class="ob-nav">
+      <button class="ob-back">← Tilbake</button>
+      <button class="ob-next" disabled>Neste →</button>
+    </div>
+  </div>
+
+  <!-- STEG 4: Mål -->
+  <div class="ob-step" data-step="4">
+    <span class="ob-kicker">STEG 4 AV 5</span>
+    <h1 class="ob-q">Hva vil du <em>oppnå først?</em></h1>
+    <p class="ob-sub">Velg én eller flere — vi setter sammen en plan ut fra dette.</p>
+    <div class="ob-options grid-2" data-question="goals" data-multi="true">
+      <button class="ob-opt" data-value="create-book">
+        <span class="ob-emoji">📖</span>
+        <span class="ob-label"><strong>Lage egen bok</strong><span>Med Mia & Teo eller egne karakterer</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="learn-theory">
+        <span class="ob-emoji">🎓</span>
+        <span class="ob-label"><strong>Lære Montessori-teori</strong><span>Academy-kurs og fagstoff</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="live-events">
+        <span class="ob-emoji">🎬</span>
+        <span class="ob-label"><strong>Live med Mia & Teo</strong><span>Eventyrlesning og workshops</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="get-resources">
+        <span class="ob-emoji">🌷</span>
+        <span class="ob-label"><strong>Få ressurser raskt</strong><span>Printables, observasjonsark, aktiviteter</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="community">
+        <span class="ob-emoji">🩷</span>
+        <span class="ob-label"><strong>Bli del av fellesskap</strong><span>Inner Circle og pedagog-partnere</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="ask-ai">
+        <span class="ob-emoji">💬</span>
+        <span class="ob-label"><strong>Få svar fra Renate AI</strong><span>Stille spørsmål når jeg lurer</span></span>
+        <span class="ob-check"></span>
+      </button>
+    </div>
+    <div class="ob-nav">
+      <button class="ob-back">← Tilbake</button>
+      <button class="ob-next" disabled>Neste →</button>
+    </div>
+  </div>
+
+  <!-- STEG 5: Plan -->
+  <div class="ob-step" data-step="5">
+    <span class="ob-kicker">STEG 5 AV 5</span>
+    <h1 class="ob-q">Hvilken <em>plan</em> har du?</h1>
+    <p class="ob-sub">Slik vet vi hva du har tilgang til — og hva som krever oppgradering.</p>
+    <div class="ob-options" data-question="plan" data-multi="false">
+      <button class="ob-opt" data-value="start">
+        <span class="ob-emoji">🌱</span>
+        <span class="ob-label"><strong>Start — 299 kr/mnd</strong><span>Grunnressurser og begrenset Academy</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="proff">
+        <span class="ob-emoji">🌸</span>
+        <span class="ob-label"><strong>Proff — 499 kr/mnd</strong><span>Full Academy og alle aldersgrupper</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="proff-community">
+        <span class="ob-emoji">🌷</span>
+        <span class="ob-label"><strong>Proff + Fellesskap — 699 kr/mnd</strong><span>Alt + Inner Circle</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="yearly">
+        <span class="ob-emoji">✨</span>
+        <span class="ob-label"><strong>Årlig Proff + Fellesskap — 6 990 kr</strong><span>Alt + ekstra perks (spar ~1 400 kr)</span></span>
+        <span class="ob-check"></span>
+      </button>
+      <button class="ob-opt" data-value="none">
+        <span class="ob-emoji">🩷</span>
+        <span class="ob-label"><strong>Ingen plan ennå</strong><span>Jeg utforsker først</span></span>
+        <span class="ob-check"></span>
+      </button>
+    </div>
+    <div class="ob-nav">
+      <button class="ob-back">← Tilbake</button>
+      <button class="ob-next" disabled>Se min plan →</button>
+    </div>
+  </div>
+
+  <!-- RESULTAT -->
+  <div class="ob-step" data-step="result">
+    <div class="ob-result">
+      <span class="ob-kicker">DIN PERSONLIGE START-PLAN 🩷</span>
+      <h2>Klar til å <em>begynne!</em></h2>
+      <p class="ob-summary" id="obSummary">Her er dine tre neste steg.</p>
+    </div>
+
+    <div class="ob-plan-grid" id="obPlanGrid"></div>
+
+    <div id="obUpsell"></div>
+
+    <div class="ob-final-cta">
+      <a href="/dashboard" class="btn-primary">Gå til dashbord →</a>
+      <a href="/spor-renate-ai" class="btn-secondary">Spør Renate AI</a>
+    </div>
+    <button class="ob-restart" onclick="obRestart()">Start på nytt</button>
+  </div>
+
+</main>
+
+<script>
+(function() {
+  const state = { step: 1, answers: {} };
+  const totalSteps = 5;
+  const progress = document.getElementById('obProgress');
+  const steps = document.querySelectorAll('.ob-step');
+
+  function showStep(n) {
+    steps.forEach(s => s.classList.remove('active'));
+    const target = document.querySelector('.ob-step[data-step="' + n + '"]');
+    if (target) target.classList.add('active');
+    updateProgress(n);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateProgress(n) {
+    const pips = progress.querySelectorAll('.pip');
+    pips.forEach((p, i) => {
+      p.classList.remove('active', 'done');
+      if (n === 'result') {
+        p.classList.add('done');
+      } else if (i + 1 < n) {
+        p.classList.add('done');
+      } else if (i + 1 === n) {
+        p.classList.add('active');
+      }
+    });
+  }
+
+  document.querySelectorAll('.ob-options').forEach(group => {
+    const multi = group.dataset.multi === 'true';
+    const question = group.dataset.question;
+    group.querySelectorAll('.ob-opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (multi) {
+          btn.classList.toggle('selected');
+        } else {
+          group.querySelectorAll('.ob-opt').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+        }
+        const selected = [...group.querySelectorAll('.ob-opt.selected')].map(b => b.dataset.value);
+        state.answers[question] = multi ? selected : (selected[0] || null);
+        const stepEl = btn.closest('.ob-step');
+        const nextBtn = stepEl.querySelector('.ob-next');
+        if (nextBtn) nextBtn.disabled = selected.length === 0;
+      });
+    });
+  });
+
+  document.querySelectorAll('.ob-next').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (state.step < totalSteps) {
+        state.step++;
+        showStep(state.step);
+      } else {
+        try {
+          localStorage.setItem('lme_onboarding', JSON.stringify({
+            ...state.answers,
+            completedAt: new Date().toISOString()
+          }));
+        } catch(e) {}
+        renderResult();
+        showStep('result');
+      }
+    });
+  });
+
+  document.querySelectorAll('.ob-back').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (state.step > 1) {
+        state.step--;
+        showStep(state.step);
+      }
+    });
+  });
+
+  function renderResult() {
+    const a = state.answers;
+    const plan = a.plan || 'none';
+    const ages = a.ages || [];
+    const goals = a.goals || [];
+    const role = a.role;
+    const exp = a.experience;
+
+    const access = {
+      academy_full: ['proff', 'proff-community', 'yearly'],
+      academy_basic: ['start', 'proff', 'proff-community', 'yearly'],
+      inner_circle: ['proff-community', 'yearly'],
+      ai_limited: ['start', 'proff', 'proff-community', 'yearly'],
+      create_book: ['start', 'proff', 'proff-community', 'yearly'],
+      live_events: ['start', 'proff', 'proff-community', 'yearly'],
+      resources: ['start', 'proff', 'proff-community', 'yearly']
+    };
+    const has = (key) => plan !== 'none' && access[key].includes(plan);
+
+    const allSteps = [];
+
+    if (goals.includes('learn-theory') || exp === 'curious') {
+      const ageRoute = ages.includes('3-6') ? '/academy/3-6'
+                     : ages.includes('6-9') ? '/academy/6-9'
+                     : ages.includes('9-12') ? '/academy/9-12'
+                     : '/academy/intro';
+      allSteps.push({
+        title: 'Start i Academy',
+        desc: exp === 'curious'
+          ? 'Begynn med introduksjonskurset for å få grunnprinsippene først.'
+          : 'Dykk dypere inn i pedagogikken med Renate som veileder.',
+        link: ageRoute,
+        linkText: 'Åpne Academy →',
+        locked: !has(exp === 'curious' ? 'academy_basic' : 'academy_full'),
+        lockReason: 'Proff'
+      });
+    }
+
+    if (goals.includes('create-book')) {
+      allSteps.push({
+        title: 'Lag din første bok',
+        desc: 'Bruk LME Create-bok til å bygge din egen Montessori-bok — du velger karakterer, tema og aktiviteter.',
+        link: '/lme-builder',
+        linkText: 'Start bok-byggeren →',
+        locked: !has('create_book')
+      });
+    }
+
+    if (goals.includes('live-events')) {
+      allSteps.push({
+        title: 'Bli med på neste live',
+        desc: 'Mia & Teo har eventyr-lesninger og workshops jevnlig. Se hva som kommer.',
+        link: '/live',
+        linkText: 'Se kalenderen →',
+        locked: !has('live_events')
+      });
+    }
+
+    if (goals.includes('get-resources')) {
+      allSteps.push({
+        title: 'Utforsk biblioteket',
+        desc: 'Printables, observasjonsark og aktiviteter — sortert etter alder.',
+        link: '/biblioteket',
+        linkText: 'Åpne biblioteket →',
+        locked: !has('resources')
+      });
+    }
+
+    if (goals.includes('community')) {
+      allSteps.push({
+        title: 'Bli med i Inner Circle',
+        desc: 'Pedagoger og foreldre som deler erfaringer, spør og inspirerer hverandre.',
+        link: '/community',
+        linkText: 'Gå til Inner Circle →',
+        locked: !has('inner_circle'),
+        lockReason: 'Proff + Fellesskap'
+      });
+    }
+
+    if (goals.includes('ask-ai')) {
+      allSteps.push({
+        title: 'Snakk med Renate AI',
+        desc: 'Still spørsmål om Montessori, observasjon, materiell eller hverdag — når som helst.',
+        link: '/spor-renate-ai',
+        linkText: 'Åpne Renate AI →',
+        locked: !has('ai_limited')
+      });
+    }
+
+    if (allSteps.length === 0) {
+      allSteps.push(
+        { title: 'Utforsk dashbordet', desc: 'Se hva som er nytt og hva som passer for deg.', link: '/dashboard', linkText: 'Gå til dashbord →', locked: false },
+        { title: 'Se ressursbiblioteket', desc: 'Bla i printables, observasjonsark og aktiviteter.', link: '/biblioteket', linkText: 'Åpne biblioteket →', locked: false },
+        { title: 'Spør Renate AI', desc: 'Få svar på det du lurer på om Montessori.', link: '/spor-renate-ai', linkText: 'Snakk med Renate →', locked: false }
+      );
+    }
+
+    const top3 = allSteps.slice(0, 3);
+    const grid = document.getElementById('obPlanGrid');
+    grid.innerHTML = top3.map((s, i) => {
+      const lockPill = s.locked ? '<span class="ob-locked-pill">🔒 ' + (s.lockReason || 'Krever oppgradering') + '</span>' : '';
+      const linkHref = s.locked ? '/oppgrader' : s.link;
+      const linkLabel = s.locked ? 'Se planene →' : s.linkText;
+      return '<div class="ob-plan-step ' + (s.locked ? 'locked' : '') + '">' +
+        '<div class="ob-num">' + (i + 1) + '</div>' +
+        '<div class="ob-text">' +
+          '<h3>' + s.title + lockPill + '</h3>' +
+          '<p>' + s.desc + '</p>' +
+          '<a href="' + linkHref + '">' + linkLabel + '</a>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    const upsellEl = document.getElementById('obUpsell');
+    const wantsAdult = ages.includes('adult');
+    const wantsCommunity = goals.includes('community');
+    const wantsTheory = goals.includes('learn-theory');
+
+    if (plan === 'start' && (wantsAdult || wantsTheory)) {
+      upsellEl.innerHTML = '<div class="ob-upsell"><div class="ob-upsell-icon">🌸</div><div class="ob-upsell-text"><strong>Oppgrader til Proff for full tilgang</strong><p>Du har valgt voksen-innhold og Academy-kurs — disse låses helt opp på Proff (499 kr/mnd).</p></div><a href="/oppgrader">Se planene</a></div>';
+    } else if (plan === 'none') {
+      upsellEl.innerHTML = '<div class="ob-upsell"><div class="ob-upsell-icon">🩷</div><div class="ob-upsell-text"><strong>Velg en plan for å låse opp alt</strong><p>Du kan utforske gratis, men en plan gir deg full tilgang til Academy, Create-bok, live og mer.</p></div><a href="/oppgrader">Se planene</a></div>';
+    } else if (plan === 'proff' && wantsCommunity) {
+      upsellEl.innerHTML = '<div class="ob-upsell"><div class="ob-upsell-icon">🌷</div><div class="ob-upsell-text"><strong>Legg til Fellesskap for 200 kr ekstra</strong><p>Du ønsker fellesskap — Inner Circle er hjertet av LME.</p></div><a href="/oppgrader">Oppgrader</a></div>';
+    } else {
+      upsellEl.innerHTML = '';
+    }
+
+    const summary = document.getElementById('obSummary');
+    const ageLabels = {
+      '0-3': '0–3 år', '3-6': '3–6 år', '6-9': '6–9 år',
+      '9-12': '9–12 år', '12-16': '12–16 år', 'adult': 'voksne'
+    };
+    const ageText = ages.length > 0 ? ages.map(a => ageLabels[a] || a).join(', ') : 'din målgruppe';
+    const roleText = { parent: 'forelder', educator: 'pedagog', both: 'forelder og pedagog', caregiver: 'omsorgsperson' }[role] || 'utforsker';
+    summary.textContent = 'Som ' + roleText + ' med fokus på ' + ageText + ' — her er dine tre neste steg.';
+  }
+
+  window.obRestart = function() {
+    state.step = 1;
+    state.answers = {};
+    document.querySelectorAll('.ob-opt.selected').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('.ob-next').forEach(b => b.disabled = true);
+    showStep(1);
+  };
+})();
+</script>
+
+</body>
+</html>

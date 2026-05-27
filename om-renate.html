@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Om Renate Dahl — Montessori-pedagog | Little Montessori Explorers</title>
+<meta name="description" content="Møt Renate Dahl — Montessori-pedagog, gründer og mor til Little Montessori Explorers. Over 20 års erfaring fra klasserommet og rektorrollen.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    --pink-50:  #fff5f8;
+    --pink-100: #ffe8f0;
+    --pink-200: #ffd1e1;
+    --pink-300: #ffb3cd;
+    --pink-400: #ff8ab3;
+    --pink-500: #e85a92;
+    --pink-600: #c43d75;
+    --pink-700: #8f2a55;
+
+    --warm-white: #fffcf9;
+    --ink:      #3d2438;
+    --ink-soft: #6b4760;
+
+    --shadow-soft: 0 8px 32px rgba(196, 61, 117, 0.08);
+    --shadow-med:  0 16px 48px rgba(196, 61, 117, 0.14);
+    --shadow-deep: 0 24px 64px rgba(196, 61, 117, 0.18);
+
+    --font-sasson: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+    --font-display: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Playpen Sans', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--ink);
+    line-height: 1.6;
+    overflow-x: hidden;
+    font-weight: 400;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 5%, rgba(255, 209, 225, 0.35), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 20%, rgba(255, 232, 240, 0.4), transparent 60%),
+      var(--warm-white);
+    background-attachment: scroll;
+  }
+  body::before { display: none; }
+
+  /* ============ NAVIGASJON MED LOGO ============ */
+  nav {
+    transform: translateZ(0);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 252, 249, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--pink-100);
+    padding: 0.75rem 2rem;
+  }
+
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+  }
+
+  .logo-img {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+  }
+
+  .logo:hover .logo-img {
+    transform: scale(1.05) rotate(-3deg);
+  }
+
+  .logo-text {
+    font-family: var(--font-sasson);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--pink-600);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  .logo-text .subtitle {
+    display: block;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+    font-weight: 400;
+    margin-top: 0.1rem;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 1.05rem;
+    font-weight: 700;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--pink-600); }
+  .nav-links a.active { color: var(--pink-600); font-weight: 600; }
+
+  .lang-toggle {
+    background: linear-gradient(135deg, var(--pink-400), var(--pink-500));
+    color: white;
+    border: none;
+    padding: 0.55rem 1.2rem;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .lang-toggle:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-med);
+  }
+
+  /* ============ HERO MED PORTRETT ============ */
+  .hero {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 4rem 2rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+  }
+
+  .hero-portrait {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  .portrait-frame {
+    position: relative;
+    width: 100%;
+    max-width: 380px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    box-shadow: var(--shadow-deep);
+    overflow: hidden;
+    border: 8px solid white;
+    background: var(--pink-100);
+  }
+
+  .portrait-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    display: block;
+  }
+
+  .portrait-deco {
+    position: absolute;
+    font-size: 2.5rem;
+    z-index: 2;
+    pointer-events: none;
+    filter: drop-shadow(0 4px 8px rgba(196, 61, 117, 0.15));
+  }
+  .portrait-deco-1 { top: -10px; right: 5%; transform: rotate(15deg); }
+  .portrait-deco-2 { bottom: 8%; left: -5%; transform: rotate(-20deg); font-size: 2rem; }
+  .portrait-deco-3 { top: 30%; right: -10px; transform: rotate(25deg); font-size: 1.8rem; }
+
+  .hero-text .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--pink-100);
+    color: var(--pink-700);
+    padding: 0.5rem 1.2rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--pink-200);
+  }
+
+  .hero-text h1 {
+    font-family: var(--font-sasson);
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .hero-text h1 .accent {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    color: var(--pink-600);
+  }
+
+  .hero-tagline {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--pink-600);
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+  }
+
+  .hero-text .hero-sub {
+    font-size: 1.1rem;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  .location-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    background: white;
+    padding: 0.5rem 1.1rem;
+    border-radius: 999px;
+    border: 1px solid var(--pink-100);
+    box-shadow: var(--shadow-soft);
+  }
+
+  /* ============ HOVED-INNHOLD ============ */
+  .container {
+    max-width: 900px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+  }
+
+  .section { margin-bottom: 5rem; }
+
+  .section-title {
+    font-family: var(--font-sasson);
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    color: var(--ink);
+    margin-bottom: 1rem;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .section-title .accent {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    color: var(--pink-600);
+  }
+
+  .section-intro {
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    max-width: 600px;
+    margin: 0 auto 3rem;
+  }
+
+  /* ============ HISTORIE ============ */
+  .story-card {
+    background: white;
+    border-radius: 32px;
+    padding: 3rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--pink-100);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .story-card::before {
+    content: '✿';
+    position: absolute;
+    top: 1.5rem;
+    right: 2rem;
+    font-size: 3rem;
+    color: var(--pink-100);
+    line-height: 1;
+  }
+
+  .story-card p {
+    color: var(--ink);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+  }
+
+  .story-card p:last-child { margin-bottom: 0; }
+
+  .story-card .lead {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--pink-600);
+    border-left: 3px solid var(--pink-300);
+    padding-left: 1.25rem;
+    margin: 1.5rem 0;
+    line-height: 1.5;
+  }
+
+  /* ============ KVALIFIKASJONER ============ */
+  .credentials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .cred-card {
+    background: white;
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--pink-100);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .cred-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-med);
+  }
+
+  .cred-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .cred-title {
+    font-family: var(--font-sasson);
+    font-size: 1.2rem;
+    color: var(--ink);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .cred-place {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--pink-600);
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .cred-desc {
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  /* ============ ERFARING ============ */
+  .experience-timeline {
+    position: relative;
+    padding-left: 2.5rem;
+  }
+
+  .experience-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.75rem;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--pink-300), var(--pink-200));
+    border-radius: 2px;
+  }
+
+  .exp-item {
+    position: relative;
+    margin-bottom: 2rem;
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--pink-100);
+  }
+
+  .exp-item::before {
+    content: '';
+    position: absolute;
+    left: -2.15rem;
+    top: 2rem;
+    width: 16px;
+    height: 16px;
+    background: var(--pink-400);
+    border: 3px solid white;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--pink-200);
+  }
+
+  .exp-role {
+    font-family: var(--font-sasson);
+    font-size: 1.15rem;
+    color: var(--ink);
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+
+  .exp-icon { margin-right: 0.4rem; }
+
+  .exp-place {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--pink-600);
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+
+
+  .exp-desc {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* ============ FILOSOFI ============ */
+  .philosophy {
+    background: linear-gradient(135deg, var(--pink-100), var(--pink-50));
+    border-radius: 36px;
+    padding: 4rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--pink-200);
+  }
+
+  .philosophy::before {
+    content: '"';
+    position: absolute;
+    top: -2rem;
+    left: 2rem;
+    font-family: var(--font-display);
+    font-size: 12rem;
+    color: var(--pink-300);
+    opacity: 0.5;
+    line-height: 1;
+  }
+
+  .philosophy::after {
+    content: '"';
+    position: absolute;
+    bottom: -5rem;
+    right: 2rem;
+    font-family: var(--font-display);
+    font-size: 12rem;
+    color: var(--pink-300);
+    opacity: 0.5;
+    line-height: 1;
+  }
+
+  .philosophy-quote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+    color: var(--ink);
+    line-height: 1.5;
+    max-width: 700px;
+    margin: 0 auto 1.5rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .philosophy-attribution {
+    font-family: var(--font-sasson);
+    color: var(--pink-600);
+    font-size: 1rem;
+    font-weight: 600;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ============ MIA & TEO ============ */
+  .characters-card {
+    background: white;
+    border-radius: 32px;
+    padding: 3rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--pink-100);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .characters-visual {
+    text-align: center;
+    line-height: 1;
+    max-width: 240px;
+  }
+
+  .characters-visual img {
+    width: 100%;
+    height: auto;
+    border-radius: 24px;
+    box-shadow: var(--shadow-med);
+    display: block;
+  }
+
+  .characters-text h3 {
+    font-family: var(--font-sasson);
+    font-size: 1.6rem;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+  }
+
+  .characters-text h3 .accent {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--pink-600);
+    font-weight: 500;
+  }
+
+  .characters-text p {
+    color: var(--ink-soft);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  /* ============ CTA ============ */
+  .cta-section {
+    background: linear-gradient(135deg, var(--pink-500), var(--pink-600));
+    border-radius: 36px;
+    padding: 4rem 2.5rem;
+    margin: 5rem auto;
+    max-width: 900px;
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-deep);
+  }
+
+  .cta-section::before {
+    content: '✿';
+    position: absolute;
+    top: 2rem;
+    left: 3rem;
+    font-size: 4rem;
+    opacity: 0.15;
+    transform: rotate(-15deg);
+  }
+
+  .cta-section::after {
+    content: '✿';
+    position: absolute;
+    bottom: 2rem;
+    right: 3rem;
+    font-size: 5rem;
+    opacity: 0.15;
+    transform: rotate(20deg);
+  }
+
+  .cta-section h2 {
+    font-family: var(--font-sasson);
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    margin-bottom: 1rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .cta-section h2 .accent {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    display: block;
+    margin-top: 0.5rem;
+    opacity: 0.95;
+  }
+
+  .cta-section p {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    opacity: 0.95;
+    line-height: 1.6;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    padding: 1rem 2.2rem;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .cta-btn-primary {
+    background: white;
+    color: var(--pink-600);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  .cta-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  }
+
+  .cta-btn-secondary {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(6px);
+  }
+
+  .cta-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--pink-100);
+  }
+
+  footer .heart {
+    color: var(--pink-500);
+    display: inline-block;
+    animation: heartbeat 2s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  /* ============ MOBIL ============ */
+  @media (max-width: 768px) {
+    nav { padding: 0.6rem 1rem; }
+    .logo-img { width: 44px; height: 44px; }
+    .logo-text { font-size: 0.95rem; }
+    .logo-text .subtitle { display: none; }
+    .nav-links { gap: 1rem; }
+    .nav-links a { font-size: 0.85rem; }
+    .nav-links li:not(:last-child) { display: none; }
+
+    .hero {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      padding: 3rem 1.25rem 2rem;
+      text-align: center;
+    }
+
+    .hero-portrait { order: -1; }
+    .portrait-frame { max-width: 280px; }
+
+    .container { padding: 0 1rem; margin: 2rem auto; }
+
+    .story-card,
+    .characters-card,
+    .philosophy {
+      padding: 2rem 1.5rem;
+      border-radius: 24px;
+    }
+
+    .characters-card {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 1.5rem;
+    }
+
+    .characters-visual {
+      margin: 0 auto;
+      max-width: 200px;
+    }
+
+    .credentials-grid { grid-template-columns: 1fr; }
+
+    .cta-section {
+      padding: 3rem 1.5rem;
+      border-radius: 24px;
+      margin: 3rem 1rem;
+    }
+
+    .philosophy::before,
+    .philosophy::after { font-size: 8rem; }
+  }
+
+  /* ============ FADE-IN ============ */
+  .reveal {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    will-change: opacity, transform;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* Flytende språk-veksler i hjørnet */
+  .lang-float {
+    position: fixed;
+    top: 90px;
+    right: 24px;
+    z-index: 150;
+    background: white;
+    border: 1.5px solid var(--pink-300);
+    border-radius: 999px;
+    padding: 8px 18px;
+    box-shadow: var(--shadow-med);
+    text-decoration: none;
+    color: var(--pink-600);
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+  .lang-float:hover {
+    background: var(--pink-50);
+    transform: translateY(-2px);
+  }
+  .lang-float svg {
+    width: 16px;
+    height: 16px;
+  }
+  @media (max-width: 600px) {
+    .lang-float { top: 70px; right: 16px; padding: 6px 14px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/dashboard" class="logo">
+      <img src="/images/lme-logo.png" alt="LME Logo" class="logo-img" width="56" height="56" loading="eager" decoding="async">
+      <div class="logo-text">
+        Little Montessori<br>Explorers
+        <span class="subtitle">Learn · Explore · Grow</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/dashboard" data-no="Dashboard" data-en="Dashboard">Dashboard</a></li>
+      <li><a href="/om-renate" class="active" data-no="Om Renate" data-en="About Renate">Om Renate</a></li>
+      <li><a href="/roadmap" data-no="Roadmap" data-en="Roadmap">Roadmap</a></li>
+      <li><a href="/musikk" data-no="Musikk" data-en="Music">Musikk</a></li>
+      <li><a href="/academy" data-no="Akademiet" data-en="Academy">Akademiet</a></li>
+      <li>
+        <button class="lang-toggle" id="langToggle">EN 🌍</button>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-portrait">
+    <div class="portrait-frame">
+      <img src="/images/renate-portrait.jpg" alt="Renate Dahl — Montessori-pedagog" width="800" height="1000" loading="eager" decoding="async">
+    </div>
+    <span class="portrait-deco portrait-deco-1">🌸</span>
+    <span class="portrait-deco portrait-deco-2">✿</span>
+    <span class="portrait-deco portrait-deco-3">🌷</span>
+  </div>
+
+  <div class="hero-text">
+    <span class="hero-badge" data-no="✿ Montessori-pedagog" data-en="✿ Montessori Educator">✿ Montessori-pedagog</span>
+
+    <h1>
+      <span data-no="Hei, jeg er" data-en="Hello, I'm">Hei, jeg er</span>
+      <span class="accent">Renate</span>
+    </h1>
+
+    <p class="hero-tagline" data-no="Pedagog. Gründer. Mamma til Nikolai og Ida Vendelin." data-en="Educator. Entrepreneur. Mother of Nikolai and Ida Vendelin.">
+      Pedagog. Gründer. Mamma til Nikolai og Ida Vendelin.
+    </p>
+
+    <p class="hero-sub" data-no="Med over 20 års erfaring som lærer, Montessori-pedagog og rektor, har jeg viet livet mitt til å hjelpe barn og unge vokse. Nå bygger jeg Little Montessori Explorers — for å gjøre autentisk Montessori-pedagogikk tilgjengelig for alle som ønsker å se barnet med nye øyne." data-en="With over 20 years of experience as a teacher, Montessori educator and school principal, I have devoted my life to helping children and young people grow. Now I am building Little Montessori Explorers — to make authentic Montessori pedagogy accessible to everyone who wants to see the child with new eyes.">
+      Med over 20 års erfaring som lærer, Montessori-pedagog og rektor, har jeg viet livet mitt til å hjelpe barn og unge vokse. Nå bygger jeg Little Montessori Explorers — for å gjøre autentisk Montessori-pedagogikk tilgjengelig for alle som ønsker å se barnet med nye øyne.
+    </p>
+
+    <span class="location-tag">
+      <span>📍</span>
+      <span data-no="Basert i Tønsberg, Norge" data-en="Based in Tønsberg, Norway">Basert i Tønsberg, Norge</span>
+    </span>
+  </div>
+</section>
+
+<!-- ============ HOVED-INNHOLD ============ -->
+<div class="container">
+  <section class="section reveal">
+    <h2 class="section-title">
+      <span data-no="Min" data-en="My">Min</span>
+      <span class="accent" data-no="historie" data-en="story">historie</span>
+    </h2>
+
+    <div class="story-card">
+      <p data-no="Jeg er Renate — tidligere lærer og rektor ved Montessori-skole, med over 20 års erfaring fra utdanning, inkludert mange år som lærer i klasserommet samtidig som jeg ledet en Montessori-skole. Jeg veiledet både barn og voksne til å lære med nysgjerrighet og mening." data-en="I'm Renate — a former teacher and Montessori school principal with over 20 years of experience in education, including years teaching in the classroom while leading a Montessori school. I was guiding both children and adults to learn with curiosity and purpose.">
+        Jeg er Renate — tidligere lærer og rektor ved Montessori-skole, med over 20 års erfaring fra utdanning, inkludert mange år som lærer i klasserommet samtidig som jeg ledet en Montessori-skole. Jeg veiledet både barn og voksne til å lære med nysgjerrighet og mening.
+      </p>
+
+      <p data-no="Da helsen min gjorde at jeg ikke lenger kunne undervise i klasserommet, måtte jeg stoppe opp og tenke nytt om hva mening kunne være for meg." data-en="When my health meant I could no longer teach in the classroom, I had to pause and reimagine what purpose could look like for me.">
+        Da helsen min gjorde at jeg ikke lenger kunne undervise i klasserommet, måtte jeg stoppe opp og tenke nytt om hva mening kunne være for meg.
+      </p>
+
+      <p class="lead" data-no="Den pausen ble et vendepunkt. Jeg innså at selv om jeg ikke kunne undervise på samme måte som før, kunne jeg fortsatt dele det jeg elsker mest — å hjelpe andre vokse, skape, og finne mening i sitt arbeid." data-en="That pause became a turning point. I realised that while I couldn't teach in the same way, I could still share what I love most — helping others grow, create, and find meaning in their work.">
+        Den pausen ble et vendepunkt. Jeg innså at selv om jeg ikke kunne undervise på samme måte som før, kunne jeg fortsatt dele det jeg elsker mest — å hjelpe andre vokse, skape, og finne mening i sitt arbeid.
+      </p>
+
+      <p data-no="Jeg ville lage noe annerledes, noe som støtter måten barn naturlig lærer på. Ikke gjennom press, men gjennom nysgjerrighet, lek og varsom veiledning." data-en="I wanted to create something different, something that supports how children naturally learn. Not through pressure, but through curiosity, play, and gentle guidance.">
+        Jeg ville lage noe annerledes, noe som støtter måten barn naturlig lærer på. Ikke gjennom press, men gjennom nysgjerrighet, lek og varsom veiledning.
+      </p>
+
+      <p data-no="Slik ble Mia &amp; Teo og Little Montessori Explorers til. Jeg lager enkle, engasjerende ressurser som hjelper barn å utforske verden på tvers av fag — gjennom hverdagsøyeblikk, natur, kreativitet og praktisk læring." data-en="That's how Mia &amp; Teo and Little Montessori Explorers were created. I design simple, engaging resources that help children explore the world across subjects — through everyday moments, nature, creativity, and hands-on learning.">
+        Slik ble Mia &amp; Teo og Little Montessori Explorers til. Jeg lager enkle, engasjerende ressurser som hjelper barn å utforske verden på tvers av fag — gjennom hverdagsøyeblikk, natur, kreativitet og praktisk læring.
+      </p>
+
+      <p data-no="Alt jeg skaper er laget med ett mål for øye: å hjelpe barn til å føle seg trygge, nysgjerrige og glade for å lære." data-en="Everything I create is made with one goal in mind: to help children feel confident, curious, and excited to learn.">
+        Alt jeg skaper er laget med ett mål for øye: å hjelpe barn til å føle seg trygge, nysgjerrige og glade for å lære.
+      </p>
+    </div>
+  </section>
+
+  <section class="section reveal">
+    <h2 class="section-title">
+      <span data-no="Mine" data-en="My">Mine</span>
+      <span class="accent" data-no="kvalifikasjoner" data-en="qualifications">kvalifikasjoner</span>
+    </h2>
+    <p class="section-intro" data-no="Autentisk pedagogikk krever autentisk utdanning. Her er fundamentet bak Little Montessori Explorers." data-en="Authentic pedagogy requires authentic education. Here is the foundation behind Little Montessori Explorers.">
+      Autentisk pedagogikk krever autentisk utdanning. Her er fundamentet bak Little Montessori Explorers.
+    </p>
+
+    <div class="credentials-grid">
+      <div class="cred-card">
+        <span class="cred-icon">🎓</span>
+        <h3 class="cred-title" data-no="Montessori-pedagogikk" data-en="Montessori Pedagogy">Montessori-pedagogikk</h3>
+        <p class="cred-place" data-no="Høgskolen i Vestfold · 60 ECTS · 2012–2013" data-en="University College of Vestfold · 60 ECTS · 2012–2013">Høgskolen i Vestfold · 60 ECTS · 2012–2013</p>
+        <p class="cred-desc" data-no="Godkjent montessoriutdanning fra Høgskolen i Vestfold på 60 studiepoeng, forankret i nordisk pedagogisk tradisjon med dybdekunnskap om aldersgruppene 3–12 år." data-en="Approved Montessori education from the University College of Vestfold (60 ECTS), rooted in Nordic pedagogical tradition with in-depth knowledge of the 3–12 age groups.">
+          Godkjent montessoriutdanning fra Høgskolen i Vestfold på 60 studiepoeng, forankret i nordisk pedagogisk tradisjon med dybdekunnskap om aldersgruppene 3–12 år.
+        </p>
+      </div>
+
+      <div class="cred-card">
+        <span class="cred-icon">📚</span>
+        <h3 class="cred-title" data-no="Bachelor i utdanning (6–16 år)" data-en="Bachelor in Education (Ages 6–16)">Bachelor i utdanning (6–16 år)</h3>
+        <p class="cred-place" data-no="Høgskolen i Vestfold · 1997–2000" data-en="University College of Vestfold · 1997–2000">Høgskolen i Vestfold · 1997–2000</p>
+        <p class="cred-desc" data-no="Allmennlærerutdanning med grunnfag i norsk (Høgskolen i Telemark, 1996–1997) og engelsk (Høgskolen i Telemark, 1995–1996) — fundamentet for det tospråklige LME-økosystemet." data-en="General teacher education with foundation studies in Norwegian (Telemark University College, 1996–1997) and English (Telemark University College, 1995–1996) — the foundation of the bilingual LME ecosystem.">
+          Allmennlærerutdanning med grunnfag i norsk (Høgskolen i Telemark, 1996–1997) og engelsk (Høgskolen i Telemark, 1995–1996) — fundamentet for det tospråklige LME-økosystemet.
+        </p>
+      </div>
+
+      <div class="cred-card">
+        <span class="cred-icon">💻</span>
+        <h3 class="cred-title" data-no="IKT i læring" data-en="ICT in Learning">IKT i læring</h3>
+        <p class="cred-place" data-no="Høgskolen i Vestfold · 60 ECTS · 2009–2010" data-en="University College of Vestfold · 60 ECTS · 2009–2010">Høgskolen i Vestfold · 60 ECTS · 2009–2010</p>
+        <p class="cred-desc" data-no="Spesialisering på 60 studiepoeng i hvordan digitale verktøy kan styrke — ikke erstatte — pedagogisk arbeid. Grunnlaget for LME Studio og AI-verktøyene." data-en="60 ECTS specialisation in how digital tools can strengthen — not replace — pedagogical work. The foundation for LME Studio and the AI tools.">
+          Spesialisering på 60 studiepoeng i hvordan digitale verktøy kan styrke — ikke erstatte — pedagogisk arbeid. Grunnlaget for LME Studio og AI-verktøyene.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal">
+    <h2 class="section-title">
+      <span data-no="Over 20 år i" data-en="Over 20 years in">Over 20 år i</span>
+      <span class="accent" data-no="praksis" data-en="practice">praksis</span>
+    </h2>
+    <p class="section-intro" data-no="Reisen startet med ungdommer i sårbare livsfaser, fortsatte gjennom to tiår med barn i klasserommet, og førte til Little Montessori Explorers. Hver rolle har formet hvordan jeg ser mennesker — og hvordan jeg lærer." data-en="The journey began with young people in vulnerable life stages, continued through two decades with children in the classroom, and led to Little Montessori Explorers. Each role has shaped how I see people — and how I learn.">
+      Reisen startet med ungdommer i sårbare livsfaser, fortsatte gjennom to tiår med barn i klasserommet, og førte til Little Montessori Explorers. Hver rolle har formet hvordan jeg ser mennesker — og hvordan jeg lærer.
+    </p>
+
+    <div class="experience-timeline">
+
+      <div class="exp-item">
+        <h3 class="exp-role">
+          <span class="exp-icon">🌿</span>
+          <span data-no="Miljøterapeut" data-en="Environmental Therapist">Miljøterapeut</span>
+        </h3>
+        <p class="exp-place" data-no="2000–2001" data-en="2000–2001">2000–2001</p>
+        <p class="exp-desc" data-no="Arbeid med ungdommer i bolig — en formende rolle hvor jeg fikk dyp erfaring med relasjonsbygging, trygge rammer og struktur for unge i sårbare livsfaser. Her lærte jeg hvor avgjørende tålmodighet, tilstedeværelse og forutsigbarhet er for vekst — kvaliteter som siden har preget alt mitt arbeid som pedagog." data-en="Working with young people in residential care — a formative role where I gained deep experience in relationship-building, safe boundaries and structure for youth in vulnerable life stages. Here I learned how essential patience, presence and predictability are for growth — qualities that have shaped all my subsequent work as an educator.">
+          Arbeid med ungdommer i bolig — en formende rolle hvor jeg fikk dyp erfaring med relasjonsbygging, trygge rammer og struktur for unge i sårbare livsfaser. Her lærte jeg hvor avgjørende tålmodighet, tilstedeværelse og forutsigbarhet er for vekst — kvaliteter som siden har preget alt mitt arbeid som pedagog.
+        </p>
+      </div>
+
+      <div class="exp-item">
+        <h3 class="exp-role">
+          <span class="exp-icon">🍎</span>
+          <span data-no="Lærer og Montessori-pedagog" data-en="Teacher and Montessori Educator">Lærer og Montessori-pedagog</span>
+        </h3>
+        <p class="exp-place" data-no="2000–2023" data-en="2000–2023">2000–2023</p>
+        <p class="exp-desc" data-no="Over to tiår i klasserommet — på flere norske skoler, inkludert Montessori-miljøer for aldersgruppene 3–12 år. Jeg har spesialisert meg på lese- og skriveutvikling, strukturert læring, og kunsten å forenkle komplekse begreper til klare, tilgjengelige forklaringer. Hver dag har vært en øvelse i å se hvert barn som et individ." data-en="Over two decades in the classroom — at several Norwegian schools, including Montessori settings for ages 3–12. I specialised in reading and writing development, structured learning, and the art of simplifying complex concepts into clear, accessible explanations. Every day has been an exercise in seeing each child as an individual.">
+          Over to tiår i klasserommet — på flere norske skoler, inkludert Montessori-miljøer for aldersgruppene 3–12 år. Jeg har spesialisert meg på lese- og skriveutvikling, strukturert læring, og kunsten å forenkle komplekse begreper til klare, tilgjengelige forklaringer. Hver dag har vært en øvelse i å se hvert barn som et individ.
+        </p>
+      </div>
+
+      <div class="exp-item">
+        <h3 class="exp-role">
+          <span class="exp-icon">🏫</span>
+          <span data-no="Rektor — Montessori-skoler" data-en="Principal — Montessori Schools">Rektor — Montessori-skoler</span>
+        </h3>
+        <p class="exp-place" data-no="2011–2017 · Falkensten Montessori og Drammen Montessori" data-en="2011–2017 · Falkensten Montessori and Drammen Montessori">2011–2017 · Falkensten Montessori og Drammen Montessori</p>
+        <p class="exp-desc" data-no="Som rektor ved Falkensten Montessori og Drammen Montessori ledet jeg pedagogisk utvikling og kvalitetssikring på alle trinn. Jeg evaluerte undervisningsmetoder og læringsutbytte løpende, sikret høye standarder i pedagogikk og kommunikasjon, og ledet personalet med fokus på strukturerte, autentiske Montessori-baserte læringssystemer." data-en="As principal at Falkensten Montessori and Drammen Montessori, I led educational development and quality assurance across all levels. I continuously evaluated teaching methods and learning outcomes, ensured high standards in pedagogy and communication, and led staff with a focus on structured, authentic Montessori-based learning systems.">
+          Som rektor ved Falkensten Montessori og Drammen Montessori ledet jeg pedagogisk utvikling og kvalitetssikring på alle trinn. Jeg evaluerte undervisningsmetoder og læringsutbytte løpende, sikret høye standarder i pedagogikk og kommunikasjon, og ledet personalet med fokus på strukturerte, autentiske Montessori-baserte læringssystemer.
+        </p>
+      </div>
+
+      <div class="exp-item">
+        <h3 class="exp-role">
+          <span class="exp-icon">🌸</span>
+          <span data-no="Gründer — Little Montessori Explorers" data-en="Founder — Little Montessori Explorers">Gründer — Little Montessori Explorers</span>
+        </h3>
+        <p class="exp-place" data-no="2023 — nå" data-en="2023 — present">2023 — nå</p>
+        <p class="exp-desc" data-no="Bygger et komplett LME-økosystem: bøker, arbeidshefter, AI-drevne verktøy, Akademiet, Studio og det kommende Inner Circle-fellesskapet — alt på norsk og engelsk. Aktiv bruker av AI-verktøy for innholdsproduksjon, prompt engineering og digital pedagogikk." data-en="Building a complete LME ecosystem: books, workbooks, AI-powered tools, the Academy, the Studio, and the upcoming Inner Circle community — all in Norwegian and English. Active user of AI tools for content creation, prompt engineering and digital pedagogy.">
+          Bygger et komplett LME-økosystem: bøker, arbeidshefter, AI-drevne verktøy, Akademiet, Studio og det kommende Inner Circle-fellesskapet — alt på norsk og engelsk. Aktiv bruker av AI-verktøy for innholdsproduksjon, prompt engineering og digital pedagogikk.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section reveal">
+    <div class="philosophy">
+      <p class="philosophy-quote" data-no="Et barn trenger ikke fylles som et tomt kar — det trenger et miljø der det får lov til å folde seg ut, slik et frø folder seg ut til en blomst når jord, lys og vann er rett." data-en="A child does not need to be filled like an empty vessel — it needs an environment where it is allowed to unfold, just as a seed unfolds into a flower when the soil, light and water are right.">
+        Et barn trenger ikke fylles som et tomt kar — det trenger et miljø der det får lov til å folde seg ut, slik et frø folder seg ut til en blomst når jord, lys og vann er rett.
+      </p>
+      <p class="philosophy-attribution">— Renate Dahl</p>
+    </div>
+  </section>
+
+  <section class="section reveal">
+    <h2 class="section-title">
+      <span data-no="Det kreative" data-en="The creative">Det kreative</span>
+      <span class="accent" data-no="hjertet" data-en="heart">hjertet</span>
+    </h2>
+    <p class="section-intro" data-no="Hver historie i LME-universet bæres av to seks år gamle bestevenner." data-en="Every story in the LME universe is carried by two six-year-old best friends.">
+      Hver historie i LME-universet bæres av to seks år gamle bestevenner.
+    </p>
+
+    <div class="characters-card">
+      <div class="characters-visual">
+        <img src="/images/mia-og-teo.jpg" alt="Mia og Teo — karakterene i LME-universet" loading="lazy" decoding="async">
+      </div>
+      <div class="characters-text">
+        <h3>
+          <span data-no="Møt" data-en="Meet">Møt</span>
+          <span class="accent">Mia & Teo</span>
+        </h3>
+        <p data-no="Mia og Teo er seks år gamle bestevenner — ikke søsken — som utforsker verden gjennom undring, lek og oppdagelse. De er det kreative hjertet i LME-universet, designet i Pixar/Disney 3D-stil, og de bæres av Montessori-prinsipper: dyr som ikke snakker, autentisk barnespråk, og en verden der det å undre seg er like viktig som å vite." data-en="Mia and Teo are six-year-old best friends — not siblings — who explore the world through wonder, play and discovery. They are the creative heart of the LME universe, designed in Pixar/Disney 3D style, and they are carried by Montessori principles: animals that don't speak, authentic children's language, and a world where wondering is just as important as knowing.">
+          Mia og Teo er seks år gamle bestevenner — ikke søsken — som utforsker verden gjennom undring, lek og oppdagelse. De er det kreative hjertet i LME-universet, designet i Pixar/Disney 3D-stil, og de bæres av Montessori-prinsipper: dyr som ikke snakker, autentisk barnespråk, og en verden der det å undre seg er like viktig som å vite.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<section class="cta-section reveal">
+  <h2>
+    <span data-no="La oss bygge noe vakkert sammen" data-en="Let's build something beautiful together">La oss bygge noe vakkert sammen</span>
+    <span class="accent" data-no="for barna" data-en="for the children">for barna</span>
+  </h2>
+
+  <p data-no="Enten du er pedagog, forelder eller bare nysgjerrig på Montessori — det er plass til deg i LME-fellesskapet." data-en="Whether you are an educator, parent, or simply curious about Montessori — there is a place for you in the LME community.">
+    Enten du er pedagog, forelder eller bare nysgjerrig på Montessori — det er plass til deg i LME-fellesskapet.
+  </p>
+
+  <div class="cta-buttons">
+    <a href="/roadmap" class="cta-btn cta-btn-primary" data-no="🌸 Se Roadmap" data-en="🌸 View Roadmap">🌸 Se Roadmap</a>
+    <a href="mailto:hello@littlemontessoriexplorers.com" class="cta-btn cta-btn-secondary" data-no="💌 Send meg en melding" data-en="💌 Send me a message">💌 Send meg en melding</a>
+  </div>
+</section>
+
+<footer>
+  <p>
+    <span data-no="Laget med" data-en="Made with">Laget med</span>
+    <span class="heart">💗</span>
+    <span data-no="i Tønsberg, Norge" data-en="in Tønsberg, Norway">i Tønsberg, Norge</span>
+    · © 2026 Little Montessori Explorers
+  </p>
+</footer>
+
+<script>
+  let currentLang = 'no';
+  const toggle = document.getElementById('langToggle');
+
+  function switchLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(el => {
+      const text = el.getAttribute(`data-${lang}`);
+      if (text.includes('<')) el.innerHTML = text;
+      else el.textContent = text;
+    });
+    toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    document.title = lang === 'no'
+      ? 'Om Renate Dahl — Montessori-pedagog | Little Montessori Explorers'
+      : 'About Renate Dahl — Montessori Educator | Little Montessori Explorers';
+  }
+
+  toggle.addEventListener('click', () => switchLanguage(currentLang === 'no' ? 'en' : 'no'));
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.05, rootMargin: "50px" });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+
+<!-- ============= MØT RENATE AI ============= -->
+<section style="background: linear-gradient(135deg, #FCE7F3 0%, #F8D7DA 100%); padding: 80px 24px; margin-top: 64px;">
+  <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+    <div style="display: inline-block; width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #F5A8B8, #E91E89); margin-bottom: 24px; overflow: hidden;">
+      <img src="/images/renate-portrait.jpg" alt="Renate" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'">
+    </div>
+    <h2 style="font-family: 'Sasson Montessori', 'Playpen Sans', cursive; font-size: clamp(36px, 5vw, 56px); font-weight: 700; color: #2a1e2e; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 16px;">
+      Møt <em style="color: #E91E89; font-style: italic;">Renate AI</em>
+    </h2>
+    <p style="font-size: 17px; color: #2a1e2e; line-height: 1.7; margin-bottom: 28px;">
+      Har du spørsmål om Montessori, eller hvordan du best kommer i gang? 
+      Renate AI er en AI-versjon av meg som er her for å støtte deg på reisen din, døgnet rundt. 💗
+    </p>
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <a href="/spor-renate-ai" style="display: inline-flex; align-items: center; gap: 10px; background: #2a1e2e; color: white; padding: 14px 28px; border-radius: 999px; text-decoration: none; font-size: 16px; font-weight: 600;">
+        <span style="display: inline-block; width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #F5A8B8, #E91E89); overflow: hidden;">
+          <img src="/images/renate-portrait.jpg" alt="R" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'">
+        </span>
+        Spør Renate AI ↗
+      </a>
+      <a href="/renate-ai-info" style="display: inline-flex; align-items: center; background: white; color: #2a1e2e; padding: 14px 28px; border-radius: 999px; text-decoration: none; font-size: 16px; font-weight: 600; border: 1.5px solid #F5A8B8;">
+        Les mer →
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- Språk-veksler i hjørnet -->
+<a href="/ask-renate-ai" class="lang-float" aria-label="Switch to English" title="Switch to English">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+  English
+</a>
+
+</body>
+</html>

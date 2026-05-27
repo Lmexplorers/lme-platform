@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LME Roadmap — Din Montessori-reise | Little Montessori Explorers</title>
+<meta name="description" content="Din Montessori-reise med Renate Dahl — høgskoleutdannet Montessori-pedagog fra Høgskolen i Vestfold. Fra første skritt til blomstrende praksis i fem faser.">
+
+<link rel="preload" as="image" href="images/lme-banner.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    --pink-50:  #fff5f8;
+    --pink-100: #ffe8f0;
+    --pink-200: #ffd1e1;
+    --pink-300: #ffb3cd;
+    --pink-400: #ff8ab3;
+    --pink-500: #e85a92;
+    --pink-600: #c43d75;
+    --pink-700: #8f2a55;
+
+    --warm-white: #fffcf9;
+    --ink:      #3d2438;
+    --ink-soft: #6b4760;
+
+    --shadow-soft: 0 8px 32px rgba(196, 61, 117, 0.08);
+    --shadow-med:  0 16px 48px rgba(196, 61, 117, 0.14);
+    --shadow-deep: 0 24px 64px rgba(196, 61, 117, 0.18);
+
+    --font-sasson: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+    --font-display: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Playpen Sans', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--ink);
+    line-height: 1.6;
+    overflow-x: hidden;
+    font-weight: 400;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 5%, rgba(255, 209, 225, 0.35), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 20%, rgba(255, 232, 240, 0.4), transparent 60%),
+      var(--warm-white);
+    background-attachment: scroll;
+  }
+  body::before { display: none; }
+
+  /* ============ NAVIGASJON MED LOGO ============ */
+  nav {
+    transform: translateZ(0);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 252, 249, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--pink-100);
+    padding: 0.75rem 2rem;
+  }
+
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+  }
+
+  .logo-img {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+  }
+
+  .logo:hover .logo-img {
+    transform: scale(1.05) rotate(-3deg);
+  }
+
+  .logo-text {
+    font-family: var(--font-sasson);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--pink-600);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  .logo-text .subtitle {
+    display: block;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+    font-weight: 400;
+    margin-top: 0.1rem;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 1.05rem;
+    font-weight: 700;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--pink-600); }
+  .nav-links a.active { color: var(--pink-600); font-weight: 600; }
+
+  .lang-toggle {
+    background: linear-gradient(135deg, var(--pink-400), var(--pink-500));
+    color: white;
+    border: none;
+    padding: 0.55rem 1.2rem;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .lang-toggle:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-med);
+  }
+
+  /* ============ BANNER HERO ============ */
+  .banner-hero {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background: #87ceeb;
+  }
+
+  .banner-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Undertekst-overlay midt i bildet, under LME-tittelen */
+  .banner-tagline {
+    position: absolute;
+    left: 50%;
+    top: 72%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    max-width: 900px;
+    text-align: center;
+    font-family: var(--font-sasson);
+    font-size: clamp(1.6rem, 4.5vw, 4rem);
+    font-weight: 700;
+    color: var(--pink-700);
+    line-height: 1.15;
+    letter-spacing: 0.01em;
+    text-shadow: 0 2px 10px rgba(255,252,249,0.85), 0 1px 3px rgba(255,252,249,0.7);
+    z-index: 3;
+    pointer-events: none;
+  }
+  .banner-tagline .accent {
+    display: block;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    color: var(--pink-600);
+    margin-top: 0.2em;
+  }
+  @media (max-width: 600px) {
+    .banner-tagline {
+      font-size: clamp(1rem, 4vw, 1.6rem);
+      width: 80%;
+    }
+  }
+
+  .banner-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2rem;
+    text-align: center;
+    z-index: 3;
+    width: 90%;
+    max-width: 700px;
+  }
+
+  .banner-overlay-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .banner-overlay .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    color: var(--pink-700);
+    padding: 0.5rem 1.2rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--pink-200);
+  }
+
+  .banner-overlay h1 {
+    font-family: var(--font-sasson);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+    text-shadow: 0 2px 12px rgba(255, 252, 249, 0.95), 0 1px 3px rgba(255, 252, 249, 0.8);
+  }
+
+  .banner-overlay h1 .accent {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    color: var(--pink-600);
+  }
+
+  .banner-overlay .hero-sub {
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    color: var(--ink-soft);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  /* ============ LME-TITTEL OPPÅ BANNER ============ */
+  .lme-title {
+    font-family: var(--font-sasson);
+    font-size: clamp(4rem, 12vw, 9rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin: 0 0 0.5rem;
+    text-shadow:
+      0 2px 8px rgba(255, 252, 249, 0.7),
+      0 4px 24px rgba(255, 252, 249, 0.5);
+  }
+  .lme-title .lme-l { color: #e91e89; }   /* cerise */
+  .lme-title .lme-m { color: #a4d233; }   /* lime */
+  .lme-title .lme-e { color: #3fa9f5; }   /* sky-blue */
+
+  .lme-tagline {
+    font-family: var(--font-sasson);
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    font-weight: 600;
+    color: var(--pink-700);
+    letter-spacing: 0.02em;
+    margin: 0;
+    text-shadow: 0 2px 8px rgba(255, 252, 249, 0.9);
+  }
+
+  /* ============ SKILT-TEKST ============ */
+  .sign-left,
+  .sign-right {
+    position: absolute;
+    z-index: 4;
+    font-family: var(--font-sasson);
+    font-weight: 800;
+    text-align: center;
+    pointer-events: none;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+    letter-spacing: 0.02em;
+  }
+
+  /* Venstre skilt — tre piler over hverandre */
+  .sign-left {
+    left: 3.5%;
+    top: 58%;
+    width: 9%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6vw;
+    line-height: 1;
+  }
+  .sign-line {
+    color: white;
+    font-size: clamp(0.55rem, 1.05vw, 1rem);
+    display: block;
+    padding: 0.15vw 0;
+  }
+  .sign-line.sign-pink  { /* venstre top */ }
+  .sign-line.sign-green { /* venstre middle */ }
+  .sign-line.sign-blue  { /* venstre bottom */ }
+
+  /* Høyre skilt — én linje */
+  .sign-right {
+    right: 1%;
+    top: 60%;
+    width: 9%;
+    color: white;
+    font-size: clamp(0.45rem, 0.9vw, 0.85rem);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    line-height: 1.1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3vw;
+  }
+  .sign-arrow {
+    font-size: clamp(0.7rem, 1.3vw, 1.2rem);
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  @media (max-width: 700px) {
+    .sign-left, .sign-right { display: none; }
+  }
+
+  /* ============ BANNER-INTRO (under banner) ============ */
+  .banner-intro {
+    background: linear-gradient(180deg, var(--pink-50), var(--warm-white));
+    padding: 3rem 2rem 3.5rem;
+    text-align: center;
+    border-bottom: 1px solid var(--pink-100);
+  }
+  .banner-intro-inner {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .banner-intro-title {
+    font-family: var(--font-sasson);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 1rem;
+  }
+  .banner-intro-title .accent {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    color: var(--pink-600);
+    display: block;
+    margin-top: 0.25rem;
+  }
+  .banner-intro-sub {
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    color: var(--ink-soft);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ============ CREDENTIALS-KORT ============ */
+  .credentials {
+    background: white;
+    border-radius: 28px;
+    padding: 1.75rem 2.25rem;
+    max-width: 720px;
+    margin: 2rem auto 3rem;
+    box-shadow: var(--shadow-med);
+    border: 1px solid var(--pink-100);
+    position: relative;
+    z-index: 5;
+  }
+
+  .credentials-title {
+    font-family: var(--font-sasson);
+    font-size: 1.1rem;
+    color: var(--pink-600);
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .credentials p {
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  .credentials strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ============ TIDSLINJE ============ */
+  .journey {
+    max-width: 1100px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+  }
+
+  .journey-intro {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .journey-intro h2 {
+    font-family: var(--font-sasson);
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    color: var(--ink);
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  .journey-intro p {
+    color: var(--ink-soft);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .timeline {
+    position: relative;
+    padding: 2rem 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--pink-200) 0%, var(--pink-300) 50%, var(--pink-400) 100%);
+    transform: translateX(-50%);
+    border-radius: 2px;
+  }
+
+  .phase {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    margin-bottom: 4rem;
+    gap: 2rem;
+  }
+
+  .phase-icon {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    box-shadow: var(--shadow-med);
+    border: 3px solid var(--pink-200);
+    position: relative;
+    z-index: 2;
+    transition: transform 0.3s ease;
+  }
+
+  .phase:hover .phase-icon { transform: scale(1.1) rotate(5deg); }
+
+  .phase-card {
+    background: white;
+    border-radius: 28px;
+    padding: 2rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--pink-100);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .phase-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, var(--pink-100) 0%, transparent 70%);
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  .phase-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-deep);
+  }
+
+  .phase-number {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--pink-500);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .phase-title {
+    font-family: var(--font-sasson);
+    font-size: 1.5rem;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+
+  .phase-tagline {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--pink-600);
+    margin-bottom: 1rem;
+  }
+
+  .phase-desc {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .phase-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--pink-50);
+    color: var(--pink-700);
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    border: 1px solid var(--pink-200);
+  }
+
+  .phase-items {
+    list-style: none;
+    padding: 0;
+  }
+
+  .phase-items li {
+    padding: 0.4rem 0;
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .phase-items li::before {
+    content: '✿';
+    color: var(--pink-400);
+    font-size: 0.85rem;
+    margin-top: 0.15rem;
+    flex-shrink: 0;
+  }
+
+  .phase:nth-child(odd) .phase-card { grid-column: 1; }
+  .phase:nth-child(odd) .phase-icon { grid-column: 2; }
+  .phase:nth-child(odd) .phase-spacer { grid-column: 3; }
+
+  .phase:nth-child(even) .phase-spacer { grid-column: 1; }
+  .phase:nth-child(even) .phase-icon { grid-column: 2; }
+  .phase:nth-child(even) .phase-card { grid-column: 3; }
+
+  .phase-spacer { display: block; }
+
+  /* ============ CTA ============ */
+  .cta-section {
+    background: linear-gradient(135deg, var(--pink-500), var(--pink-600));
+    border-radius: 36px;
+    padding: 4rem 2.5rem;
+    max-width: 1100px;
+    margin: 5rem auto;
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-deep);
+  }
+
+  .cta-section::before {
+    content: '✿';
+    position: absolute;
+    top: 2rem;
+    left: 3rem;
+    font-size: 4rem;
+    opacity: 0.15;
+    transform: rotate(-15deg);
+  }
+
+  .cta-section::after {
+    content: '✿';
+    position: absolute;
+    bottom: 2rem;
+    right: 3rem;
+    font-size: 5rem;
+    opacity: 0.15;
+    transform: rotate(20deg);
+  }
+
+  .cta-section h2 {
+    font-family: var(--font-sasson);
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    margin-bottom: 1rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .cta-section h2 .accent {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    display: block;
+    margin-top: 0.5rem;
+    opacity: 0.95;
+  }
+
+  .cta-section p {
+    font-size: 1.15rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    opacity: 0.95;
+    line-height: 1.6;
+  }
+
+  .founder-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(6px);
+    padding: 0.6rem 1.5rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .cta-btn {
+    display: inline-block;
+    background: white;
+    color: var(--pink-600);
+    padding: 1rem 2.5rem;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--pink-100);
+    margin-top: 2rem;
+  }
+
+  footer .heart {
+    color: var(--pink-500);
+    display: inline-block;
+    animation: heartbeat 2s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  /* ============ MOBIL ============ */
+  @media (max-width: 768px) {
+    nav { padding: 0.6rem 1rem; }
+    .logo-img { width: 44px; height: 44px; }
+    .logo-text { font-size: 0.95rem; }
+    .logo-text .subtitle { display: none; }
+    .nav-links { gap: 1rem; }
+    .nav-links a { font-size: 0.85rem; }
+    .nav-links li:not(:last-child) { display: none; }
+
+    .banner-overlay {
+      padding: 3rem 1.25rem 2.5rem;
+    }
+
+    .credentials {
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 1rem 2rem;
+      border-radius: 20px;
+    }
+
+    .journey { padding: 0 1rem; }
+
+    .timeline::before { left: 30px; }
+
+    .phase {
+      grid-template-columns: 60px 1fr !important;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .phase-icon {
+      width: 60px;
+      height: 60px;
+      font-size: 1.7rem;
+      grid-column: 1 !important;
+    }
+
+    .phase-card,
+    .phase:nth-child(odd) .phase-card,
+    .phase:nth-child(even) .phase-card {
+      grid-column: 2 !important;
+      padding: 1.5rem;
+      border-radius: 20px;
+    }
+
+    .phase-spacer { display: none !important; }
+
+    .cta-section {
+      padding: 3rem 1.5rem;
+      border-radius: 24px;
+      margin: 3rem 1rem;
+    }
+  }
+
+  /* ============ FADE-IN ============ */
+  .reveal {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    will-change: opacity, transform;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* Flytende språk-veksler i hjørnet */
+  .lang-float {
+    position: fixed;
+    top: 90px;
+    right: 24px;
+    z-index: 150;
+    background: white;
+    border: 1.5px solid var(--pink-300);
+    border-radius: 999px;
+    padding: 8px 18px;
+    box-shadow: var(--shadow-med);
+    text-decoration: none;
+    color: var(--pink-600);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+  .lang-float:hover {
+    background: var(--pink-50);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-deep);
+  }
+  .lang-float svg {
+    width: 16px;
+    height: 16px;
+  }
+  @media (max-width: 600px) {
+    .lang-float { top: 70px; right: 16px; padding: 6px 14px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/dashboard" class="logo">
+      <img src="/images/lme-logo.png" alt="LME Logo" class="logo-img" width="56" height="56" loading="eager" decoding="async">
+      <div class="logo-text">
+        Little Montessori<br>Explorers
+        <span class="subtitle">Learn · Explore · Grow</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/dashboard" data-no="Dashboard" data-en="Dashboard">Dashboard</a></li>
+      <li><a href="/om-renate" data-no="Om Renate" data-en="About Renate">Om Renate</a></li>
+      <li><a href="/roadmap" class="active" data-no="Roadmap" data-en="Roadmap">Roadmap</a></li>
+      <li><a href="/musikk" data-no="Musikk" data-en="Music">Musikk</a></li>
+      <li><a href="/academy" data-no="Akademiet" data-en="Academy">Akademiet</a></li>
+      <li>
+        <button class="lang-toggle" id="langToggle">EN 🌍</button>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============ BANNER HERO ============ -->
+<section class="banner-hero">
+  <img src="/images/lme-banner.jpg" alt="Mia og Teo i LME-verdenen — LÆR, UTFORSK, VOKS" class="banner-img" width="1600" height="900" loading="eager" decoding="async">
+  <div class="banner-tagline">
+    <span data-no="Fra første skritt" data-en="From the first step">Fra første skritt</span>
+    <span class="accent" data-no="til blomstrende praksis" data-en="to a flourishing practice">til blomstrende praksis</span>
+  </div>
+</section>
+
+<!-- ============ CREDENTIALS-KORT ============ -->
+<div class="credentials">
+  <div class="credentials-title">
+    <span>✿</span>
+    <span data-no="Lær med Renate Dahl" data-en="Learn with Renate Dahl">Lær med Renate Dahl</span>
+  </div>
+  <p data-no="<strong>Allmennlærerutdannet for 6–16 år (2000) og Montessoripedagog for 3–12 år</strong> (60 studiepoeng, Høgskolen i Vestfold, 2013), med videreutdanning i Engelsk (1995) og IKT i læring (2010). Rektor ved Montessoriskole 2011–2017. Over 20 år med barn som lærer, rektor og pedagog — med Montessorimetoden i praksis hele veien." data-en="<strong>Qualified general teacher for ages 6–16 (2000) and Montessori educator for ages 3–12</strong> (60 ECTS, University College of Vestfold, 2013), with further studies in English (1995) and ICT in Learning (2010). Principal at a Montessori school 2011–2017. Over 20 years with children as teacher, principal and educator — applying the Montessori method throughout.">
+    <strong>Allmennlærerutdannet for 6–16 år (2000) og Montessoripedagog for 3–12 år</strong> (60 studiepoeng, Høgskolen i Vestfold, 2013), med videreutdanning i Engelsk (1995) og IKT i læring (2010). Rektor ved Montessoriskole 2011–2017. Over 20 år med barn som lærer, rektor og pedagog — med Montessorimetoden i praksis hele veien.
+  </p>
+</div>
+
+<!-- ============ TIDSLINJE ============ -->
+<section class="journey">
+  <div class="journey-intro reveal">
+    <h2 data-no="Reisen i fem faser" data-en="The journey in five phases">Reisen i fem faser</h2>
+    <p data-no="Som et frø som vokser til et frukttre — slik utvikler din Montessori-praksis seg gjennom fem naturlige stadier." data-en="Like a seed growing into a fruit tree — your Montessori practice develops through five natural stages.">
+      Som et frø som vokser til et frukttre — slik utvikler din Montessori-praksis seg gjennom fem naturlige stadier.
+    </p>
+  </div>
+
+  <div class="timeline">
+
+    <article class="phase reveal">
+      <div class="phase-card">
+        <div class="phase-number" data-no="Fase 01" data-en="Phase 01">Fase 01</div>
+        <h3 class="phase-title" data-no="Frøet" data-en="The Seed">Frøet</h3>
+        <p class="phase-tagline" data-no="Lær prinsippene" data-en="Learn the principles">Lær prinsippene</p>
+        <span class="phase-tag" data-no="🎓 LME Akademiet" data-en="🎓 LME Academy">🎓 LME Akademiet</span>
+        <p class="phase-desc" data-no="Bygg et solid fundament i Montessori-pedagogikken. Forstå barnets utvikling, det forberedte miljøet og pedagogens rolle som observatør." data-en="Build a solid foundation in Montessori pedagogy. Understand child development, the prepared environment and the educator's role as observer.">
+          Bygg et solid fundament i Montessori-pedagogikken. Forstå barnets utvikling, det forberedte miljøet og pedagogens rolle som observatør.
+        </p>
+        <ul class="phase-items">
+          <li data-no="Det forberedte miljøet" data-en="The prepared environment">Det forberedte miljøet</li>
+          <li data-no="Observasjon som metode" data-en="Observation as method">Observasjon som metode</li>
+          <li data-no="Utviklingsfasene 3–6, 6–9 og 9–12 år" data-en="Developmental phases 3–6, 6–9 and 9–12 years">Utviklingsfasene 3–6, 6–9 og 9–12 år</li>
+          <li data-no="Sensitive perioder" data-en="Sensitive periods">Sensitive perioder</li>
+        </ul>
+      </div>
+      <div class="phase-icon">🌱</div>
+      <div class="phase-spacer"></div>
+    </article>
+
+    <article class="phase reveal">
+      <div class="phase-spacer"></div>
+      <div class="phase-icon">🌿</div>
+      <div class="phase-card">
+        <div class="phase-number" data-no="Fase 02" data-en="Phase 02">Fase 02</div>
+        <h3 class="phase-title" data-no="Spiren" data-en="The Sprout">Spiren</h3>
+        <p class="phase-tagline" data-no="Forbered miljøet" data-en="Prepare the environment">Forbered miljøet</p>
+        <span class="phase-tag" data-no="📚 LME Biblioteket" data-en="📚 LME Library">📚 LME Biblioteket</span>
+        <p class="phase-desc" data-no="Få tilgang til ferdige ressurser — fra Sasson Montessori-bokstaver og observasjonsskjemaer til lydressurser og maler du kan bruke fra dag én." data-en="Access ready-made resources — from Sasson Montessori letters and observation forms to audio resources and templates you can use from day one.">
+          Få tilgang til ferdige ressurser — fra Sasson Montessori-bokstaver og observasjonsskjemaer til lydressurser og maler du kan bruke fra dag én.
+        </p>
+        <ul class="phase-items">
+          <li data-no="Sasson Montessori-bokstaver" data-en="Sasson Montessori letters">Sasson Montessori-bokstaver</li>
+          <li data-no="Observasjonsskjemaer" data-en="Observation forms">Observasjonsskjemaer</li>
+          <li data-no="Maler for forberedt miljø" data-en="Prepared environment templates">Maler for forberedt miljø</li>
+          <li data-no="Lydressurser og presentasjoner" data-en="Audio resources and presentations">Lydressurser og presentasjoner</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="phase reveal">
+      <div class="phase-card">
+        <div class="phase-number" data-no="Fase 03" data-en="Phase 03">Fase 03</div>
+        <h3 class="phase-title" data-no="Blomsten" data-en="The Bloom">Blomsten</h3>
+        <p class="phase-tagline" data-no="Skap dine egne verktøy" data-en="Create your own tools">Skap dine egne verktøy</p>
+        <span class="phase-tag" data-no="🌸 LME Studio" data-en="🌸 LME Studio">🌸 LME Studio</span>
+        <p class="phase-desc" data-no="Lag din egen bok, dine egne invitasjoner og klistremerker — alt forankret i Montessori-prinsippene. AI som assistent, du som pedagogen i førersetet." data-en="Create your own book, your own invitations and stickers — all grounded in Montessori principles. AI as assistant, you as the educator in the driver's seat.">
+          Lag din egen bok, dine egne invitasjoner og klistremerker — alt forankret i Montessori-prinsippene. AI som assistent, du som pedagogen i førersetet.
+        </p>
+        <ul class="phase-items">
+          <li data-no="LME Bookly — Bygg en bok" data-en="LME Bookly — Build a book">LME Bookly — Bygg en bok</li>
+          <li data-no="Invitations — invitasjoner til familier" data-en="Invitations — family invitations">Invitations — invitasjoner til familier</li>
+          <li data-no="Stickers — belønning og dekor" data-en="Stickers — rewards and decoration">Stickers — belønning og dekor</li>
+          <li data-no="Reel-editor for sosiale medier" data-en="Reel editor for social media">Reel-editor for sosiale medier</li>
+        </ul>
+      </div>
+      <div class="phase-icon">🌸</div>
+      <div class="phase-spacer"></div>
+    </article>
+
+    <article class="phase reveal">
+      <div class="phase-spacer"></div>
+      <div class="phase-icon">🌳</div>
+      <div class="phase-card">
+        <div class="phase-number" data-no="Fase 04" data-en="Phase 04">Fase 04</div>
+        <h3 class="phase-title" data-no="Treet" data-en="The Tree">Treet</h3>
+        <p class="phase-tagline" data-no="Bygg ditt fellesskap" data-en="Build your community">Bygg ditt fellesskap</p>
+        <span class="phase-tag" data-no="💗 LME Inner Circle" data-en="💗 LME Inner Circle">💗 LME Inner Circle</span>
+        <p class="phase-desc" data-no="Møt likesinnede pedagoger i et tospråklig fellesskap. Månedlige live-økter med Renate, direkte tråd til veiledning og en kultur av gjensidig vekst." data-en="Meet like-minded educators in a bilingual community. Monthly live sessions with Renate, a direct thread to guidance and a culture of mutual growth.">
+          Møt likesinnede pedagoger i et tospråklig fellesskap. Månedlige live-økter med Renate, direkte tråd til veiledning og en kultur av gjensidig vekst.
+        </p>
+        <ul class="phase-items">
+          <li data-no="Månedlige live-økter med Renate" data-en="Monthly live sessions with Renate">Månedlige live-økter med Renate</li>
+          <li data-no="Tospråklig fellesskap (NO/EN)" data-en="Bilingual community (NO/EN)">Tospråklig fellesskap (NO/EN)</li>
+          <li data-no="Direkte tråd til veiledning" data-en="Direct thread to guidance">Direkte tråd til veiledning</li>
+          <li data-no="Eksklusivt innhold og workshops" data-en="Exclusive content and workshops">Eksklusivt innhold og workshops</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="phase reveal">
+      <div class="phase-card">
+        <div class="phase-number" data-no="Fase 05" data-en="Phase 05">Fase 05</div>
+        <h3 class="phase-title" data-no="Frukten" data-en="The Fruit">Frukten</h3>
+        <p class="phase-tagline" data-no="Del din kunnskap" data-en="Share your knowledge">Del din kunnskap</p>
+        <span class="phase-tag" data-no="🍎 Butikk + AI-innhold" data-en="🍎 Shop + AI content">🍎 Butikk + AI-innhold</span>
+        <p class="phase-desc" data-no="Gjør din praksis til en bærekraftig inntekt. Selg dine egne produkter, bruk AI til innhold på sosiale medier, og bygg din egen Montessori-merkevare." data-en="Turn your practice into sustainable income. Sell your own products, use AI for social media content, and build your own Montessori brand.">
+          Gjør din praksis til en bærekraftig inntekt. Selg dine egne produkter, bruk AI til innhold på sosiale medier, og bygg din egen Montessori-merkevare.
+        </p>
+        <ul class="phase-items">
+          <li data-no="LME Butikken — selg dine produkter" data-en="LME Shop — sell your products">LME Butikken — selg dine produkter</li>
+          <li data-no="AI-innhold for sosiale medier" data-en="AI content for social media">AI-innhold for sosiale medier</li>
+          <li data-no="Affiliate-program" data-en="Affiliate program">Affiliate-program</li>
+          <li data-no="Bygg din egen merkevare" data-en="Build your own brand">Bygg din egen merkevare</li>
+        </ul>
+      </div>
+      <div class="phase-icon">🍎</div>
+      <div class="phase-spacer"></div>
+    </article>
+
+  </div>
+</section>
+
+<section class="cta-section reveal">
+  <span class="founder-badge" data-no="✨ Bli grunnlegger — kun 17 plasser igjen" data-en="✨ Become a founder — only 17 spots left">✨ Bli grunnlegger — kun 17 plasser igjen</span>
+
+  <h2>
+    <span data-no="Er du klar for å plante frøet?" data-en="Ready to plant the seed?">Er du klar for å plante frøet?</span>
+    <span class="accent" data-no="LME Inner Circle åpner snart" data-en="LME Inner Circle opens soon">LME Inner Circle åpner snart</span>
+  </h2>
+
+  <p data-no="Bli en av de første 17 grunnleggerne av LME Inner Circle og få livstidstilgang til en høgskoleutdannet Montessori-pedagog, tospråklig fellesskap, og hele LME-økosystemet — til en pris som aldri kommer tilbake." data-en="Become one of the first 17 founders of LME Inner Circle and get lifetime access to a university-college trained Montessori educator, a bilingual community, and the entire LME ecosystem — at a price that won't return.">
+    Bli en av de første 17 grunnleggerne av LME Inner Circle og få livstidstilgang til en høgskoleutdannet Montessori-pedagog, tospråklig fellesskap, og hele LME-økosystemet — til en pris som aldri kommer tilbake.
+  </p>
+
+  <a href="/oppgrader" class="cta-btn" data-no="🌸 Sikre min grunnlegger-plass" data-en="🌸 Secure my founder spot">🌸 Sikre min grunnlegger-plass</a>
+</section>
+
+<footer>
+  <p>
+    <span data-no="Laget med" data-en="Made with">Laget med</span>
+    <span class="heart">💗</span>
+    <span data-no="i Tønsberg, Norge" data-en="in Tønsberg, Norway">i Tønsberg, Norge</span>
+    · © 2026 Little Montessori Explorers
+  </p>
+</footer>
+
+<script>
+  let currentLang = 'no';
+  const toggle = document.getElementById('langToggle');
+
+  function switchLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(el => {
+      const text = el.getAttribute(`data-${lang}`);
+      if (text.includes('<')) el.innerHTML = text;
+      else el.textContent = text;
+    });
+    toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    document.title = lang === 'no'
+      ? 'LME Roadmap — Din Montessori-reise | Little Montessori Explorers'
+      : 'LME Roadmap — Your Montessori Journey | Little Montessori Explorers';
+  }
+
+  const langFloat = document.getElementById('langFloat');
+  const langFloatLabel = document.getElementById('langFloatLabel');
+
+  function toggleLang() {
+    switchLanguage(currentLang === 'no' ? 'en' : 'no');
+    if (langFloatLabel) langFloatLabel.textContent = currentLang === 'no' ? 'English' : 'Norsk';
+  }
+
+  toggle.addEventListener('click', toggleLang);
+  if (langFloat) langFloat.addEventListener('click', toggleLang);
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.05, rootMargin: "50px" });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+
+<!-- Språk-veksler i hjørnet (ekte språkbytte, ikke død lenke) -->
+<button type="button" class="lang-float" id="langFloat" aria-label="Bytt språk / Switch language" title="Bytt språk / Switch language">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+  <span id="langFloatLabel">English</span>
+</button>
+
+</body>
+</html>

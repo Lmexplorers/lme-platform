@@ -1,0 +1,230 @@
+/**
+ * Renate AI — Cloudflare Worker
+ *
+ * Proxy mellom lme-plattform.pages.dev (frontend) og Anthropic Claude API.
+ * API-nøkkel ligger som Worker-secret (aldri i frontend).
+ *
+ * DEPLOY-INSTRUKSJONER:
+ *
+ * 1. Logg inn på Cloudflare → Workers & Pages → "lme-proxy" (din eksisterende Worker)
+ *    eller opprett ny Worker hvis du vil holde dette adskilt
+ *
+ * 2. Lim inn denne koden i Worker-editoren
+ *
+ * 3. Legg til API-key som secret:
+ *    Settings → Variables → Encrypted variables
+ *    Variable name: ANTHROPIC_API_KEY
+ *    Value: sk-ant-api03-... (din nøkkel fra console.anthropic.com)
+ *
+ * 4. Klikk "Save and Deploy"
+ *
+ * 5. Test fra terminal:
+ *    curl -X POST https://lme-proxy.renateshobby.workers.dev/renate-ai \
+ *      -H "Content-Type: application/json" \
+ *      -d '{"messages":[{"role":"user","content":"Hei!"}]}'
+ */
+
+// =====================================================
+// RENATE AI — SYSTEM-PROMPT
+// =====================================================
+const RENATE_SYSTEM_PROMPT = `Du er Renate AI — en AI-assistent som representerer Renate Dahl og Little Montessori Explorers (LME). Du svarer på vegne av Renate, men er ærlig om at du er en AI-versjon og ikke Renate selv.
+
+OM RENATE:
+- Renate Dahl er en norsk Montessori-pedagog og gründer av Little Montessori Explorers
+- Hun er utdannet i AMI-tradisjonen ved Høgskolen i Vestfold (60 ECTS, 2012-2013), VEILEDET av AMI-pedagoger
+- VIKTIG: Renate er IKKE "AMI-sertifisert" eller "AMI-utdannet" — det er en juridisk og etisk viktig forskjell. Bruk formuleringer som "Montessori-pedagog (AMI-tradisjon)", "utdannet i AMI-tradisjon", "trent opp av AMI-veiledere"
+- Hun har 20+ års erfaring som klasserumslærer, Montessori-pedagog, skoleleder og miljøterapeut
+- Hun bor i Tønsberg, Norge
+- Hennes barn heter Nikolai (f. 2005) og Ida Vendelin (f. 2009) — IKKE Mia og Teo. Mia og Teo er karakterene i bøkene hennes, ikke barna hennes
+
+OM LME-PLATTFORMEN:
+- LME har tre planer: Start (299 NOK/mnd / $29), Proff (499 NOK/mnd / $49), Proff + Fellesskap (699 NOK/mnd / $69)
+- 7 dagers gratis prøveperiode, ingen binding
+- Plattformen inkluderer: Akademiet (kurs), Biblioteket (ressurser), Butikk (bøker), Inner Circle (fellesskap), LME Studio (innholdsverktøy)
+- Mia & Teo er karakterene i Renates bøker (De små naturutforskerne)
+- LME Create-bok er Renates interne verktøy (ALDRI nevn som offentlig produkt)
+- LME Create er det offentlige curriculum-byggerverktøyet
+
+STIL OG TONE:
+- Snakk varmt, vennlig og pedagogisk — som en mentor som har Montessori-pedagogikken i hjertet
+- Bruk Renates feminine, varme stil med litt rosa-energi 🩷
+- Svar på norsk hvis brukeren skriver norsk, engelsk hvis engelsk
+- Vær konkret og praktisk, ikke for lange svar (med mindre brukeren ber om dybde)
+- Bruk eksempler fra Montessori-praksis når det er relevant
+- Anbefal LME-ressurser når det passer (kurs i Akademiet, ressurser i Biblioteket, bøker i Butikken)
+- Ved spørsmål om timing eller tilgang, henvis til Renate direkte for personlig oppfølging
+
+VIKTIG:
+- Hvis noen spør om noe sensitivt (helse, juridiske ting, økonomiske råd), henvis dem til Renate selv eller en profesjonell
+- Du kan ikke booke timer, sende e-poster eller utføre handlinger — du svarer bare på spørsmål
+- Hvis du ikke vet svaret, si det ærlig og foreslå at brukeren tar kontakt direkte med Renate via /help/contact
+- Aldri lov ting på vegne av Renate du ikke er sikker på`;
+
+// =====================================================
+// CORS — Tillatte opprinnelser
+// =====================================================
+const ALLOWED_ORIGINS = [
+  "https://lme-plattform.pages.dev",
+  "https://lmexplorers.com",
+  "https://littlemontessoriexplorers.com",
+  "http://localhost:8000",   // for lokal testing
+  "http://localhost:3000",
+  "http://127.0.0.1:8000",
+];
+
+function corsHeaders(origin) {
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Max-Age": "86400",
+  };
+}
+
+// =====================================================
+// HOVED-HANDLER
+// =====================================================
+export default {
+  async fetch(request, env) {
+    const origin = request.headers.get("Origin") || "";
+    const url = new URL(request.url);
+
+    // CORS preflight
+    if (request.method === "OPTIONS") {
+      return new Response(null, { status: 204, headers: corsHeaders(origin) });
+    }
+
+    // Bare POST tillatt
+    if (request.method !== "POST") {
+      return new Response("Method not allowed", {
+        status: 405,
+        headers: corsHeaders(origin),
+      });
+    }
+
+    // Sjekk API-key er konfigurert
+    if (!env.ANTHROPIC_API_KEY) {
+      return jsonResponse(
+        { error: "Server-konfigurasjon mangler. Kontakt Renate." },
+        500,
+        origin
+      );
+    }
+
+    // Endepunkt-routing — Renate AI svarer på /renate-ai
+    // (la SocialBu-funksjonene være urørt hvis de finnes i samme Worker)
+    if (url.pathname === "/renate-ai" || url.pathname === "/spor-renate-ai") {
+      return handleRenateAI(request, env, origin);
+    }
+
+    return new Response("Not found", { status: 404, headers: corsHeaders(origin) });
+  },
+};
+
+// =====================================================
+// RENATE AI — Hovedlogikk
+// =====================================================
+async function handleRenateAI(request, env, origin) {
+  let body;
+  try {
+    body = await request.json();
+  } catch (e) {
+    return jsonResponse({ error: "Ugyldig JSON" }, 400, origin);
+  }
+
+  const messages = body.messages;
+  if (!Array.isArray(messages) || messages.length === 0) {
+    return jsonResponse({ error: "Meldinger mangler" }, 400, origin);
+  }
+
+  // Begrens lengde for å unngå misbruk
+  if (messages.length > 30) {
+    return jsonResponse(
+      { error: "Samtalen er for lang. Start en ny samtale." },
+      400,
+      origin
+    );
+  }
+
+  // Sjekk at hver melding har rett format
+  for (const msg of messages) {
+    if (!msg.role || !msg.content) {
+      return jsonResponse({ error: "Ugyldig meldingsformat" }, 400, origin);
+    }
+    if (typeof msg.content === "string" && msg.content.length > 4000) {
+      return jsonResponse(
+        { error: "Meldingen er for lang (maks 4000 tegn)" },
+        400,
+        origin
+      );
+    }
+  }
+
+  // Kall Anthropic API
+  try {
+    const anthropicResponse = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": env.ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1024,
+        system: RENATE_SYSTEM_PROMPT,
+        messages: messages,
+      }),
+    });
+
+    if (!anthropicResponse.ok) {
+      const errText = await anthropicResponse.text();
+      console.error("Anthropic API feil:", anthropicResponse.status, errText);
+      return jsonResponse(
+        {
+          error: "Renate AI er midlertidig utilgjengelig. Prøv igjen om litt.",
+        },
+        502,
+        origin
+      );
+    }
+
+    const data = await anthropicResponse.json();
+
+    // Hent ut svaret fra Anthropic-responsen
+    const reply = data.content
+      ?.filter((block) => block.type === "text")
+      .map((block) => block.text)
+      .join("\n") || "";
+
+    return jsonResponse(
+      {
+        reply: reply,
+        usage: data.usage,
+      },
+      200,
+      origin
+    );
+  } catch (err) {
+    console.error("Worker-feil:", err);
+    return jsonResponse(
+      { error: "Noe gikk galt. Prøv igjen om litt." },
+      500,
+      origin
+    );
+  }
+}
+
+// =====================================================
+// Helper: JSON-respons med CORS-headere
+// =====================================================
+function jsonResponse(data, status, origin) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      "Content-Type": "application/json",
+      ...corsHeaders(origin),
+    },
+  });
+}
