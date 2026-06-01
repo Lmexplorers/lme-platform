@@ -40,21 +40,21 @@ window.LME_FUNNEL = {
     },
 
     optIn: {
-      merkelapp: "Gratis nedlasting",
-      overskrift: "Den lille guiden til en roligere hverdag med Montessori hjemme",
+      merkelapp: "Gratis guide",
+      overskrift: "Slik bygger du en Montessori-inntekt hjemmefra — med hjerte, strategi og AI",
       underoverskrift:
-        "Få vår gratis startguide med 7 enkle aktiviteter du kan gjøre på kjøkkenet, " +
-        "i stua og i hagen — laget for nysgjerrige barn mellom 1 og 6 år.",
+        "Last ned vår gratis guide og få en realistisk, varm og konkret vei fra " +
+        "Montessori-pedagogikk til en inntekt du kan bygge i ditt eget tempo — hjemmefra.",
       punkter: [
-        "7 ferdige aktiviteter du kan starte med i dag",
-        "Hva du trenger (spoiler: ting du allerede har hjemme)",
-        "Slik forbereder du miljøet så barnet klarer mer selv"
+        "En realistisk vei fra pedagogikk til inntekt — uten luftslott",
+        "Ferdige maler og refleksjonsoppgaver du fyller ut underveis",
+        "Slik bruker du AI og Content Studio for å spare tid"
       ],
       epostPlaceholder: "Skriv inn e-posten din",
       navnPlaceholder: "Fornavn",
-      knapp: "Send meg guiden gratis",
+      knapp: "Send meg gratisguiden",
       sikkerhet: "Ingen spam. Meld deg av når som helst.",
-      bilde: "/images/mia-og-teo.jpg"
+      bilde: "/images/renate-portrait.jpg"
     },
 
     tilbud: {
@@ -102,17 +102,17 @@ window.LME_FUNNEL = {
 
     takkIkkeKjoper: {
       merkelapp: "Guiden er på vei",
-      overskrift: "Helt i orden — gratisguiden ligger i innboksen din 💛",
+      overskrift: "Helt i orden — her er gratisguiden din 💛",
       underoverskrift:
-        "Du trenger ikke kjøpe noe for å komme i gang. Åpne e-posten fra oss, " +
-        "last ned startguiden, og prøv den første aktiviteten allerede i dag.",
+        "Du trenger ikke kjøpe noe for å komme i gang. Last ned gratisguiden under " +
+        "(den ligger også i innboksen din), og ta det første steget mot en Montessori-inntekt i dag.",
       steg: [
-        "Åpne e-posten fra oss (sjekk også søppelpost).",
-        "Last ned den gratis startguiden.",
-        "Velg én aktivitet og prøv den i dag."
+        "Trykk på knappen under for å laste ned gratisguiden (PDF).",
+        "Sjekk også innboksen din — vi har sendt deg en kopi.",
+        "Velg ett steg fra guiden og start i dag."
       ],
-      knapp: "Utforsk gratis ressurser",
-      knappLenke: "/ressurser",
+      knapp: "Last ned gratisguiden (PDF)",
+      knappLenke: "/funnel/nedlasting/LME-Gratis-Guide-Montessori-Inntekt.pdf",
       sekundaerKnapp: "Tilbake til Creative Studio",
       sekundaerLenke: "/creative-studio",
       angre: "Ombestemte du deg? Du kan fortsatt få AI-guiden til introprisen.",
@@ -144,21 +144,21 @@ window.LME_FUNNEL = {
     },
 
     optIn: {
-      merkelapp: "Free download",
-      overskrift: "The little guide to calmer days with Montessori at home",
+      merkelapp: "Free guide",
+      overskrift: "How to build a Montessori income from home — with heart, strategy and AI",
       underoverskrift:
-        "Get our free starter guide with 7 simple activities you can do in the kitchen, " +
-        "living room and garden — made for curious children aged 1 to 6.",
+        "Download our free guide for a realistic, warm and concrete path from " +
+        "Montessori teaching to an income you can build at your own pace — from home.",
       punkter: [
-        "7 ready-to-use activities you can start today",
-        "What you need (spoiler: things you already have at home)",
-        "How to prepare the environment so your child can do more on their own"
+        "A realistic path from pedagogy to income — no get-rich-quick promises",
+        "Ready-made templates and reflection tasks you fill in as you go",
+        "How to use AI and Content Studio to save time"
       ],
       epostPlaceholder: "Enter your email",
       navnPlaceholder: "First name",
       knapp: "Send me the free guide",
       sikkerhet: "No spam. Unsubscribe anytime.",
-      bilde: "/images/mia-og-teo.jpg"
+      bilde: "/images/renate-portrait.jpg"
     },
 
     tilbud: {
@@ -208,15 +208,16 @@ window.LME_FUNNEL = {
 
     takkIkkeKjoper: {
       merkelapp: "Your guide is on its way",
-      overskrift: "All good — your free guide is in your inbox 💛",
+      overskrift: "All good — your free guide is on its way 💛",
       underoverskrift:
-        "You don't need to buy anything to get started. Open the email from us, " +
-        "download the starter guide, and try the first activity today.",
+        "You don't need to buy anything to get started. We've sent the free guide to your " +
+        "inbox — open it and take your first step toward a Montessori income today.",
       steg: [
         "Open the email from us (check your spam folder too).",
-        "Download the free starter guide.",
-        "Pick one activity and try it today."
+        "Download the free guide from the email.",
+        "Pick one step from the guide and start today."
       ],
+      // Engelsk gratisguide kommer — sett stien her når PDF-en er klar (tom = «Utforsk ressurser» vises i stedet).
       knapp: "Explore free resources",
       knappLenke: "/ressurser",
       sekundaerKnapp: "Back to Creative Studio",
