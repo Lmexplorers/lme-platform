@@ -85,7 +85,8 @@ window.LME_FUNNEL = {
     kjopKnapp: "Ja takk — gi meg AI-guiden",
     avslaaKnapp: "Nei takk, jeg vil ikke ha dette tilbudet",
     sosialtBevis: "Allerede valgt av over 1 200 norske familier.",
-    bilde: "/images/poster-norsk.jpg"
+    bilde: "/images/poster-norsk.jpg",        // stillbilde (poster) som vises før videoen spiller
+    video: "/videos/mia-og-teo-norsk.mp4"     // Mia & Teo-video; sett "" for å bruke kun stillbildet
   },
 
   /* -----------------------------------------------------------------
