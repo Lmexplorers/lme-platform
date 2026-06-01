@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FBF7F0">
+<title>Tripwire-funnel · Oversikt · LME</title>
+<link rel="icon" href="/images/lme-logo.png">
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --lime: #A4D233; --lime-soft: #E8F5D1;
+    --cerise: #E91E89; --cerise-soft: #FCE3F1;
+    --sun: #F7C72E; --sun-soft: #FFF4D6;
+    --bg: #FBF7F0; --bg-2: #FFFFFF;
+    --ink: #1F1B24; --ink-soft: #5A5560; --ink-muted: #938E99;
+    --line: rgba(31, 27, 36, 0.08);
+    --r-md: 18px; --r-lg: 26px; --r-xl: 36px; --r-pill: 999px;
+    --shadow-md: 0 6px 26px rgba(31, 27, 36, 0.07);
+    --shadow-lg: 0 22px 60px rgba(31, 27, 36, 0.10);
+    --font: 'Playpen Sans', 'Comic Sans MS', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font); color: var(--ink);
+    background:
+      radial-gradient(1100px 600px at 8% -8%, var(--cerise-soft) 0%, transparent 52%),
+      radial-gradient(1000px 560px at 100% 4%, var(--lime-soft) 0%, transparent 50%),
+      radial-gradient(800px 520px at 50% 116%, var(--sun-soft) 0%, transparent 55%),
+      var(--bg);
+    min-height: 100vh; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 24px 72px; }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 44px; flex-wrap: wrap; }
+  .brandbar { display: flex; align-items: center; gap: 10px; }
+  .brandbar img { height: 36px; }
+  .brandbar .brandname { font-weight: 700; font-size: 16px; }
+  .back {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 13.5px; font-weight: 600; color: var(--ink-soft);
+    padding: 9px 16px; border-radius: var(--r-pill);
+    background: var(--bg-2); border: 1px solid var(--line); box-shadow: var(--shadow-md);
+    transition: transform .16s ease, color .16s ease;
+  }
+  .back:hover { transform: translateY(-1px); color: var(--cerise); }
+  .back svg { width: 14px; height: 14px; }
+
+  .header { text-align: center; max-width: 720px; margin: 0 auto 16px; }
+  .header .chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--cerise-soft); color: var(--cerise);
+    font-size: 12.5px; font-weight: 700; padding: 7px 15px;
+    border-radius: var(--r-pill); margin-bottom: 18px;
+  }
+  .header .chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cerise); }
+  .header h1 { font-size: clamp(30px, 4.6vw, 44px); font-weight: 800; line-height: 1.12; letter-spacing: -0.02em; margin-bottom: 14px; }
+  .header h1 .hl { background: linear-gradient(120deg, var(--cerise), var(--sun)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .header p { font-size: 17px; color: var(--ink-soft); }
+
+  /* Statlinje */
+  .stats { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin: 26px 0 48px; }
+  .stat {
+    background: var(--bg-2); border: 1px solid var(--line); box-shadow: var(--shadow-md);
+    border-radius: var(--r-md); padding: 14px 22px; text-align: center; min-width: 150px;
+  }
+  .stat .v { font-size: 24px; font-weight: 800; letter-spacing: -0.01em; }
+  .stat .v.cerise { color: var(--cerise); }
+  .stat .v.lime { color: #6f9c1a; }
+  .stat .v.sun { color: #c79400; }
+  .stat .l { font-size: 12.5px; color: var(--ink-muted); font-weight: 600; margin-top: 2px; }
+
+  /* Flyt-diagram */
+  .flow {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 18px; align-items: stretch; margin-bottom: 18px;
+  }
+  .node {
+    position: relative; background: var(--bg-2);
+    border: 1px solid var(--line); border-radius: var(--r-lg);
+    box-shadow: var(--shadow-md); padding: 22px 20px;
+    display: flex; flex-direction: column;
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .node:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .node .step-no {
+    position: absolute; top: -12px; left: 20px;
+    width: 30px; height: 30px; border-radius: 50%;
+    color: #fff; font-size: 14px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 16px rgba(31,27,36,0.18);
+  }
+  .node.s1 .step-no { background: linear-gradient(135deg, var(--cerise), #ff5fb0); }
+  .node.s2 .step-no { background: linear-gradient(135deg, var(--sun), #e0a800); }
+  .node.s3 .step-no { background: linear-gradient(135deg, var(--lime), #7fae1f); }
+  .node.s4 .step-no { background: linear-gradient(135deg, var(--ink), #4a4350); }
+
+  .node .ic { font-size: 28px; margin: 6px 0 12px; }
+  .node h3 { font-size: 16px; font-weight: 800; margin-bottom: 7px; }
+  .node p { font-size: 13.5px; color: var(--ink-soft); flex: 1; }
+  .node .tag {
+    display: inline-block; margin-top: 14px; align-self: flex-start;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+    padding: 4px 10px; border-radius: var(--r-pill);
+  }
+  .node.s1 .tag { background: var(--cerise-soft); color: var(--cerise); }
+  .node.s2 .tag { background: var(--sun-soft); color: #a87b00; }
+  .node.s3 .tag { background: var(--lime-soft); color: #5b7d12; }
+  .node.s4 .tag { background: rgba(31,27,36,0.07); color: var(--ink-soft); }
+  .node .open {
+    margin-top: 16px; display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 700; color: var(--ink);
+  }
+  .node .open svg { width: 14px; height: 14px; transition: transform .16s ease; }
+  .node:hover .open svg { transform: translateX(3px); }
+
+  /* Pil mellom noder */
+  .arrow {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-muted); font-size: 20px;
+  }
+
+  /* Forklaring av forgrening */
+  .branch-note {
+    text-align: center; font-size: 13.5px; color: var(--ink-muted);
+    margin: 8px auto 44px; max-width: 560px;
+  }
+  .branch-note b { color: var(--ink-soft); }
+
+  /* Konfig-kort */
+  .config {
+    background: var(--bg-2); border: 1px solid var(--line);
+    border-radius: var(--r-xl); box-shadow: var(--shadow-lg);
+    padding: 32px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: center;
+  }
+  .config h2 { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+  .config p { font-size: 15px; color: var(--ink-soft); margin-bottom: 16px; }
+  .config ul { list-style: none; display: grid; gap: 10px; }
+  .config li { display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; }
+  .config .tick {
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--lime-soft); color: #5b7d12; font-size: 12px; font-weight: 800;
+    display: inline-flex; align-items: center; justify-content: center; margin-top: 1px;
+  }
+  .codeblock {
+    background: #1f1b24; color: #f3eef7; border-radius: var(--r-lg);
+    padding: 22px; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+    font-size: 12.5px; line-height: 1.7; overflow-x: auto;
+  }
+  .codeblock .k { color: #ff8fc6; }
+  .codeblock .v { color: #c7e88a; }
+  .codeblock .c { color: #7d7689; font-style: italic; }
+  .config .filechip {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--cerise-soft); color: var(--cerise);
+    font-size: 12.5px; font-weight: 700; padding: 6px 13px; border-radius: var(--r-pill); margin-bottom: 14px;
+  }
+
+  .footer { text-align: center; margin-top: 50px; font-size: 13px; color: var(--ink-muted); }
+
+  @media (max-width: 920px) {
+    .flow { grid-template-columns: 1fr 1fr; }
+    .arrow { display: none; }
+    .config { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 540px) {
+    .wrap { padding: 22px 16px 56px; }
+    .flow { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="topbar">
+      <div class="brandbar">
+        <img id="brandLogo" src="/images/lme-logo.png" alt="LME" onerror="this.style.display='none'">
+        <span class="brandname" id="brandName">LME</span>
+      </div>
+      <a href="/creative-studio" class="back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Til Creative Studio
+      </a>
+    </div>
+
+    <div class="header">
+      <span class="chip"><span class="dot"></span>Tripwire-funnel</span>
+      <h1>Fra gratis guide til <span class="hl">betalende kunde</span></h1>
+      <p>En komplett liten salgsreise i fire steg. Klikk deg gjennom hvert steg for å se hvordan det ser ut for kunden — alt kan tilpasses i én fil.</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="v cerise" id="statPris"></div><div class="l">Pris på AI-guiden</div></div>
+      <div class="stat"><div class="v sun" id="statTimer"></div><div class="l">Nedtelling på tilbudet</div></div>
+      <div class="stat"><div class="v lime">4</div><div class="l">Sider i funnelen</div></div>
+    </div>
+
+    <!-- Flyt -->
+    <div class="flow">
+      <a class="node s1" href="tripwire/opt-in.html">
+        <span class="step-no">1</span>
+        <div class="ic">💌</div>
+        <h3>Opt-in</h3>
+        <p>Besøkende legger igjen e-posten sin i bytte mot den gratis startguiden.</p>
+        <span class="tag">Gratis guide</span>
+        <span class="open">Åpne siden <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+      </a>
+
+      <a class="node s2" href="tripwire/tilbud.html">
+        <span class="step-no">2</span>
+        <div class="ic">⏳</div>
+        <h3>Tilbud</h3>
+        <p>AI-guiden presenteres til introduksjonspris med en 72-timers nedtelling.</p>
+        <span class="tag" id="tagPris"></span>
+        <span class="open">Åpne siden <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+      </a>
+
+      <a class="node s3" href="tripwire/takk-kjoper.html">
+        <span class="step-no">3</span>
+        <div class="ic">🎉</div>
+        <h3>Takk — kjøper</h3>
+        <p>Bekreftelse og onboarding for dem som sa ja til AI-guiden.</p>
+        <span class="tag">Kjøp fullført</span>
+        <span class="open">Åpne siden <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+      </a>
+
+      <a class="node s4" href="tripwire/takk-ikke-kjoper.html">
+        <span class="step-no">4</span>
+        <div class="ic">💛</div>
+        <h3>Takk — ikke-kjøper</h3>
+        <p>Varm avslutning for dem som kun tok gratisguiden — med en mild ny sjanse.</p>
+        <span class="tag">Kun gratis</span>
+        <span class="open">Åpne siden <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+      </a>
+    </div>
+
+    <p class="branch-note">
+      Flyten forgrener seg etter steg 2: sier kunden <b>ja</b> → steg 3 (takk til kjøper),
+      sier kunden <b>nei takk</b> → steg 4 (takk til ikke-kjøper).
+    </p>
+
+    <!-- Konfig -->
+    <div class="config">
+      <div>
+        <span class="filechip">📝 funnel/tripwire/funnel-config.js</span>
+        <h2>Alt redigeres ett sted</h2>
+        <p>Du trenger ikke åpne HTML-en. All tekst, pris, nedtelling og lenker styres fra én enkelt fil — bare endre verdiene og lagre.</p>
+        <ul>
+          <li><span class="tick">✓</span><span>Overskrifter, brødtekst og knappetekster på alle fire sider</span></li>
+          <li><span class="tick">✓</span><span>Pris, «før»-pris og antall timer på nedtellingen</span></li>
+          <li><span class="tick">✓</span><span>Lenker til e-postliste, betaling og videresending</span></li>
+        </ul>
+      </div>
+      <div class="codeblock">
+<span class="c">// funnel-config.js</span><br>
+tilbudPris: {<br>
+&nbsp;&nbsp;<span class="k">belop</span>: <span class="v">99</span>,<br>
+&nbsp;&nbsp;<span class="k">valuta</span>: <span class="v">"kr"</span>,<br>
+&nbsp;&nbsp;<span class="k">visningFor</span>: <span class="v">"299 kr"</span>,<br>
+&nbsp;&nbsp;<span class="k">timerNedtelling</span>: <span class="v">72</span><br>
+},<br>
+brand: {<br>
+&nbsp;&nbsp;<span class="k">checkoutUrl</span>: <span class="v">""</span>,&nbsp;<span class="c">// din betalingslenke</span><br>
+&nbsp;&nbsp;<span class="k">etterKjop</span>: <span class="v">"takk-kjoper.html"</span><br>
+}
+      </div>
+    </div>
+
+    <div class="footer">© <span id="yr"></span> <span id="brandFooter">LME</span> · Tripwire-funnel</div>
+  </div>
+
+  <script src="tripwire/funnel-config.js"></script>
+  <script>
+    const C = window.LME_FUNNEL;
+    const txt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+
+    document.getElementById('brandLogo').src = C.brand.logo;
+    txt('brandName', C.brand.kortnavn);
+    txt('brandFooter', C.brand.navn);
+    txt('yr', new Date().getFullYear());
+
+    const p = C.tilbudPris;
+    txt('statPris', p.belop + ' ' + p.valuta);
+    txt('statTimer', p.timerNedtelling + ' t');
+    txt('tagPris', p.belop + ' ' + p.valuta);
+  </script>
+</body>
+</html>
