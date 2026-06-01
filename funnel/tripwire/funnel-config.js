@@ -69,17 +69,18 @@ window.LME_FUNNEL = {
      ----------------------------------------------------------------- */
   tilbud: {
     merkelapp: "Engangstilbud — kun nå",
-    overskrift: "Vil du ha hele AI-guiden som gjør planleggingen for deg?",
+    overskrift: "Vil du ha hele AI-guiden som lærer deg å lage alt selv?",
     underoverskrift:
       "Du har akkurat fått startguiden. Vil du ta det et steg videre? " +
-      "AI-guiden gir deg personlige Montessori-aktiviteter tilpasset barnets alder, " +
-      "humør og det du har hjemme — på sekunder.",
+      "AI-guiden viser deg, steg for steg, hvordan du bruker AI til å lage " +
+      "Montessori-aktiviteter, ukeplaner og materiell — tilpasset barnets alder " +
+      "og det du har hjemme.",
     nedtellingTekst: "Tilbudet forsvinner om:",
     punkter: [
-      "Ubegrenset bruk av Renate AI-guiden i 12 måneder",
-      "Personlige aktiviteter tilpasset alder og interesser",
-      "Ferdige ukesplaner du kan skrive ut",
-      "Bonus: 30 utskrivbare aktivitetskort (verdi 149 kr)"
+      "20-siders AI-guide og arbeidshefte — din for alltid",
+      "6 moduler: fra trygg AI-start til ukeplaner, aktiviteter og printables",
+      "Komplett promptbibliotek — ferdige prompts du bare kopierer og bruker",
+      "Bonus: Mia & Teo-sangen «Kom bli med!» — til kos og bevegelse hjemme"
     ],
     garanti: "14 dagers full pengene-tilbake-garanti — uten spørsmål.",
     kjopKnapp: "Ja takk — gi meg AI-guiden",
