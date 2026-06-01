@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - '**.html'
+      - '**.js'
       - '.github/workflows/sync-to-r2.yml'
   workflow_dispatch:
 
@@ -32,11 +33,13 @@ jobs:
           acl = private
           EOF
 
-      - name: Synker HTML-filer til R2-bøtten
+      - name: Synker HTML- og JS-filer til R2-bøtten
         run: |
           rclone sync . r2:lme-platform-html/ \
             --include "*.html" \
             --include "**/*.html" \
+            --include "*.js" \
+            --include "**/*.js" \
             --exclude "node_modules/**" \
             --exclude ".git/**" \
             --exclude "build/**" \
