@@ -101,11 +101,11 @@ window.LME_FUNNEL = {
       "og du finner alt du trenger rett under.",
     steg: [
       "Sjekk innboksen din — kvittering og tilgang er på vei.",
-      "Trykk på knappen under for å åpne AI-guiden med en gang.",
-      "Lagre siden som bokmerke så du finner tilbake."
+      "Trykk på knappen under for å laste ned AI-guiden (PDF) med en gang.",
+      "Lagre filen så du alltid finner tilbake til den."
     ],
-    knapp: "Åpne AI-guiden nå",
-    knappLenke: "/spor-renate-ai",
+    knapp: "Last ned AI-guiden (PDF)",
+    knappLenke: "/funnel/nedlasting/LME-AI-Guide.pdf",
     sekundaerKnapp: "Tilbake til Creative Studio",
     sekundaerLenke: "/creative-studio",
     support: "Spørsmål? Svar på e-posten du nettopp fikk, så hjelper vi deg."

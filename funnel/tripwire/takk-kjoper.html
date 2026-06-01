@@ -144,7 +144,14 @@
 
     const main = document.getElementById('mainBtn');
     main.textContent = k.knapp;
-    main.addEventListener('click', () => { window.location.href = k.knappLenke; });
+    main.addEventListener('click', () => {
+      // Filer (f.eks. PDF) åpnes i ny fane så takk-siden blir liggende; ellers vanlig navigering.
+      if (/\.(pdf|zip|epub|mp3|mp4)$/i.test(k.knappLenke)) {
+        window.open(k.knappLenke, '_blank', 'noopener');
+      } else {
+        window.location.href = k.knappLenke;
+      }
+    });
 
     const sec = document.getElementById('secBtn');
     sec.textContent = k.sekundaerKnapp;
