@@ -209,9 +209,8 @@ window.LME_FUNNEL = {
         "Save the file so you can always find your way back."
       ],
       knapp: "Download the AI guide (PDF)",
-      // ENGELSK PDF kommer — legg filen i funnel/nedlasting/ og sett stien her.
-      // Tom ("") skjuler nedlastingsknappen til guiden er klar.
-      knappLenke: "",
+      // ENGELSK PDF er klar:
+      knappLenke: "/funnel/nedlasting/LME-AI-Guide-EN.pdf",
       bonusKnapp: "Download the bonus song “Come and Play”",
       bonusLenke: "/funnel/nedlasting/mia-and-teo-come-and-play.mp4",
       sekundaerKnapp: "Back to Creative Studio",
