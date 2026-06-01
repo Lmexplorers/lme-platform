@@ -27,7 +27,7 @@ window.LME_FUNNEL = {
     etterOptIn: "tilbud.html",
     // Stripe/betalings-lenke for kjøp av guiden (lim inn din checkout-URL).
     // La stå tom ("") for å bruke demo-knappen som går til takk-siden.
-    checkoutUrl: "",
+    checkoutUrl: "https://buy.stripe.com/00wfZidkpaft1PLgNN9R60f",
     // Sider brukeren sendes til avhengig av utfall:
     etterKjop: "takk-kjoper.html",
     avslo: "takk-ikke-kjoper.html"
