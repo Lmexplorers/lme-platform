@@ -104,7 +104,10 @@ window.LME_FUNNEL = {
       bonusLenke: "/funnel/nedlasting/mia-og-teo-kom-bli-med.mp4",
       sekundaerKnapp: "Tilbake til Creative Studio",
       sekundaerLenke: "/creative-studio",
-      support: "Spørsmål? Svar på e-posten du nettopp fikk, så hjelper vi deg."
+      support: "Spørsmål? Svar på e-posten du nettopp fikk, så hjelper vi deg.",
+      butikkTekst: "Når du er klar for neste steg, finner du workbooks og bundles i butikken.",
+      butikkKnapp: "Se workbooks og bundles i butikken",
+      butikkLenke: "/butikk"
     },
 
     takkIkkeKjoper: {
@@ -124,7 +127,10 @@ window.LME_FUNNEL = {
       sekundaerLenke: "/creative-studio",
       angre: "Ombestemte du deg? Du kan fortsatt få AI-guiden til introprisen.",
       angreKnapp: "Se tilbudet igjen",
-      angreLenke: "tilbud.html"
+      angreLenke: "tilbud.html",
+      butikkTekst: "Vil du utforske mer? Ta gjerne en rolig titt i butikken.",
+      butikkKnapp: "Se butikken",
+      butikkLenke: "/butikk"
     }
   },
 
@@ -215,7 +221,10 @@ window.LME_FUNNEL = {
       bonusLenke: "/funnel/nedlasting/mia-and-teo-come-and-play.mp4",
       sekundaerKnapp: "Back to Creative Studio",
       sekundaerLenke: "/creative-studio",
-      support: "Questions? Just reply to the email you received and we'll help you."
+      support: "Questions? Just reply to the email you received and we'll help you.",
+      butikkTekst: "Whenever you're ready for the next step, you'll find workbooks and bundles in the shop.",
+      butikkKnapp: "See workbooks and bundles in the shop",
+      butikkLenke: "/butikk"
     },
 
     takkIkkeKjoper: {
@@ -235,7 +244,10 @@ window.LME_FUNNEL = {
       sekundaerLenke: "/creative-studio",
       angre: "Changed your mind? You can still get the AI guide at the intro price.",
       angreKnapp: "See the offer again",
-      angreLenke: "tilbud.html"
+      angreLenke: "tilbud.html",
+      butikkTekst: "Want to explore more? Feel free to take a calm look in the shop.",
+      butikkKnapp: "Visit the shop",
+      butikkLenke: "/butikk"
     }
   }
 };

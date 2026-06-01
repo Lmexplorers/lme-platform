@@ -94,6 +94,16 @@
   .btn-bonus .gift { font-size: 18px; }
   .btn-secondary { display: inline-block; margin-top: 14px; font-size: 14px; font-weight: 600; color: var(--ink-muted); }
   .btn-secondary:hover { color: var(--ink-soft); text-decoration: underline; }
+  .shop-step { margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--line); }
+  .shop-step .shop-lead { font-size: 14px; color: var(--ink-muted); margin-bottom: 12px; line-height: 1.5; }
+  .shop-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 14px; font-weight: 700;
+    padding: 11px 20px; border-radius: var(--r-pill);
+    background: var(--cerise-soft); color: var(--cerise);
+    transition: transform .16s ease, background .16s ease;
+  }
+  .shop-btn:hover { background: #f9d3e6; transform: translateY(-1px); }
 
   .support { margin-top: 30px; font-size: 13.5px; color: var(--ink-muted); }
   .footer { margin-top: 26px; font-size: 13px; color: var(--ink-muted); }
@@ -124,6 +134,11 @@
     <button class="btn-primary" id="mainBtn"></button>
     <button class="btn-bonus" id="bonusBtn" style="display:none;"><span class="gift">🎁</span><span id="bonusBtnText"></span></button>
     <a href="#" class="btn-secondary" id="secBtn"></a>
+
+    <div class="shop-step" id="shopStep" style="display:none;">
+      <p class="shop-lead" id="shopLead"></p>
+      <a class="shop-btn" id="shopBtn" href="#"><span>🛍️</span><span id="shopBtnText"></span></a>
+    </div>
 
     <p class="support" id="support"></p>
     <div class="footer">© <span id="yr"></span> <span id="brandFooter">LME</span></div>
@@ -203,6 +218,14 @@
     const sec = document.getElementById('secBtn');
     sec.textContent = k.sekundaerKnapp;
     sec.href = k.sekundaerLenke;
+
+    // Rolig neste steg til butikken (vises bare hvis lenke er satt i config)
+    if (k.butikkLenke) {
+      txt('shopLead', k.butikkTekst || '');
+      txt('shopBtnText', k.butikkKnapp || '');
+      document.getElementById('shopBtn').href = k.butikkLenke;
+      document.getElementById('shopStep').style.display = 'block';
+    }
   </script>
 </body>
 </html>
