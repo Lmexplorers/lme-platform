@@ -60,6 +60,22 @@
     box-shadow: 0 8px 20px rgba(233, 30, 137, 0.28);
   }
 
+  .free-deliver {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    max-width: 760px; margin: 0 auto 24px; padding: 14px 18px;
+    background: var(--lime-soft); border: 1px solid var(--lime);
+    border-radius: var(--r-lg); box-shadow: 0 6px 22px rgba(164, 210, 51, 0.18);
+  }
+  .free-deliver .fd-check { font-size: 22px; line-height: 1; }
+  .free-deliver .fd-text { flex: 1; min-width: 180px; font-weight: 700; font-size: 14.5px; color: #4c6b12; }
+  .free-deliver .fd-btn {
+    font-family: inherit; font-weight: 800; font-size: 14px;
+    padding: 11px 18px; border-radius: var(--r-pill);
+    background: var(--ink); color: #fff; cursor: pointer; border: none;
+    transition: transform .16s ease, background .16s ease;
+  }
+  .free-deliver .fd-btn:hover { transform: translateY(-1px); background: var(--cerise); }
+
   .head { text-align: center; margin-bottom: 28px; }
   h1 {
     font-size: clamp(28px, 4.4vw, 42px);
@@ -165,6 +181,13 @@
       <span class="brandname" id="brandName">LME</span>
     </div>
 
+    <!-- Levering av gratisguiden rett etter påmelding -->
+    <div class="free-deliver" id="freeDeliver" style="display:none;">
+      <span class="fd-check">🎁</span>
+      <span class="fd-text" id="freeDeliverText"></span>
+      <button class="fd-btn" id="freeDeliverBtn"></button>
+    </div>
+
     <span class="topchip" id="topLabel"></span>
 
     <div class="head">
@@ -261,6 +284,15 @@
     txt('buyBtn', t.kjopKnapp);
     txt('declineBtn', t.avslaaKnapp);
     txt('offerSocial', t.sosialtBevis);
+
+    // Levering av gratisguiden (vises bare hvis en lenke er satt i config)
+    if (t.gratisLenke) {
+      txt('freeDeliverText', t.gratisLevering || '');
+      const fb = document.getElementById('freeDeliverBtn');
+      fb.textContent = t.gratisKnapp || 'Last ned';
+      fb.addEventListener('click', () => window.open(t.gratisLenke, '_blank', 'noopener'));
+      document.getElementById('freeDeliver').style.display = 'flex';
+    }
 
     // Video: starter automatisk uten lyd, men har synlige kontroller
     // så brukeren kan trykke play/pause og skru på lyd.

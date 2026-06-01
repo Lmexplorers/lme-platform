@@ -181,9 +181,9 @@
           </p>
         </form>
         <div class="form-done" id="optDone">
-          <div class="big">💌</div>
-          <h3>Sjekk innboksen din!</h3>
-          <p>Vi sender deg videre til et lite tilbud du ikke vil gå glipp av …</p>
+          <div class="big">🎁</div>
+          <h3 id="optDoneTitle"></h3>
+          <p id="optDoneText"></p>
         </div>
       </div>
     </div>
@@ -232,6 +232,8 @@
     txt('optSub', o.underoverskrift);
     txt('optBtn', o.knapp);
     txt('optSafe', o.sikkerhet);
+    txt('optDoneTitle', o.bekreftelseTittel);
+    txt('optDoneText', o.bekreftelseTekst);
     document.getElementById('optName').placeholder = o.navnPlaceholder;
     document.getElementById('optEmail').placeholder = o.epostPlaceholder;
     const img = document.getElementById('optImg');
@@ -252,20 +254,35 @@
       return words.slice(0, cut).join(' ') + ' <span class="hl">' + words.slice(cut).join(' ') + '</span>';
     }
 
-    // Skjema
+    // Skjema — fanger e-posten og sender brukeren rett videre til nedlasting av guiden
     document.getElementById('optForm').addEventListener('submit', function (e) {
-      const email = document.getElementById('optEmail').value.trim();
-      if (!email) return;
-      // Hvis en ekte liste-URL er satt, la skjemaet sende dit; ellers vis demo + gå videre.
-      if (C.brand.optInActionUrl) {
-        this.action = C.brand.optInActionUrl;
-        this.method = 'post';
-        return; // nettleseren sender skjemaet
-      }
       e.preventDefault();
+      const email = document.getElementById('optEmail').value.trim();
+      const name = document.getElementById('optName').value.trim();
+      if (!email) { document.getElementById('optEmail').focus(); return; }
+
+      // 1) Lagre lead lokalt så ingen e-post går tapt før e-postverktøyet er koblet på.
+      try {
+        const leads = JSON.parse(localStorage.getItem('lme_leads') || '[]');
+        leads.push({ email, name, lang: LANG, ts: new Date().toISOString() });
+        localStorage.setItem('lme_leads', JSON.stringify(leads));
+      } catch (err) {}
+
+      // 2) Send til e-postliste/CRM hvis konfigurert (fire-and-forget, så vi kan vise vår egen side).
+      if (C.brand.optInActionUrl) {
+        try {
+          fetch(C.brand.optInActionUrl, {
+            method: 'POST', mode: 'no-cors',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ email, name, fields: name })
+          });
+        } catch (err) {}
+      }
+
+      // 3) Bekreft og send videre til siden der gratisguiden lastes ned (tilbud.html).
       this.style.display = 'none';
       document.getElementById('optDone').classList.add('show');
-      setTimeout(() => { window.location.href = C.brand.etterOptIn; }, 1800);
+      setTimeout(() => { window.location.href = C.brand.etterOptIn; }, 1500);
     });
   </script>
 </body>

@@ -53,6 +53,8 @@ window.LME_FUNNEL = {
       epostPlaceholder: "Skriv inn e-posten din",
       navnPlaceholder: "Fornavn",
       knapp: "Send meg gratisguiden",
+      bekreftelseTittel: "Takk for påmeldingen! 🎉",
+      bekreftelseTekst: "Gratisguiden din er klar — vi sender deg rett videre til nedlasting …",
       sikkerhet: "Ingen spam. Meld deg av når som helst.",
       bilde: "/images/renate-portrait.jpg"
     },
@@ -76,6 +78,11 @@ window.LME_FUNNEL = {
       kjopKnapp: "Ja takk — gi meg AI-guiden",
       avslaaKnapp: "Nei takk, jeg vil ikke ha dette tilbudet",
       sosialtBevis: "Allerede valgt av over 1 200 norske familier.",
+      // Levering av gratisguiden rett etter påmelding (banner øverst på tilbudssiden).
+      // Tom gratisLenke skjuler banneret.
+      gratisLevering: "Takk for påmeldingen! Gratisguiden din er klar:",
+      gratisKnapp: "Last ned gratisguiden (PDF)",
+      gratisLenke: "/funnel/nedlasting/LME-Gratis-Guide-Montessori-Inntekt.pdf",
       bilde: "/images/poster-norsk.jpg",
       video: "/videos/mia-og-teo-norsk.mp4"
     },
@@ -101,14 +108,14 @@ window.LME_FUNNEL = {
     },
 
     takkIkkeKjoper: {
-      merkelapp: "Guiden er på vei",
+      merkelapp: "Klar til nedlasting",
       overskrift: "Helt i orden — her er gratisguiden din 💛",
       underoverskrift:
-        "Du trenger ikke kjøpe noe for å komme i gang. Last ned gratisguiden under " +
-        "(den ligger også i innboksen din), og ta det første steget mot en Montessori-inntekt i dag.",
+        "Du trenger ikke kjøpe noe for å komme i gang. Last ned gratisguiden med en gang " +
+        "under, og ta det første steget mot en Montessori-inntekt i dag.",
       steg: [
-        "Trykk på knappen under for å laste ned gratisguiden (PDF).",
-        "Sjekk også innboksen din — vi har sendt deg en kopi.",
+        "Trykk på knappen under for å laste ned gratisguiden (PDF) med en gang.",
+        "Lagre filen så du alltid har den for hånden.",
         "Velg ett steg fra guiden og start i dag."
       ],
       knapp: "Last ned gratisguiden (PDF)",
@@ -157,6 +164,8 @@ window.LME_FUNNEL = {
       epostPlaceholder: "Enter your email",
       navnPlaceholder: "First name",
       knapp: "Send me the free guide",
+      bekreftelseTittel: "Thank you for signing up! 🎉",
+      bekreftelseTekst: "Your free guide is ready — taking you straight to the download …",
       sikkerhet: "No spam. Unsubscribe anytime.",
       bilde: "/images/renate-portrait.jpg"
     },
@@ -180,6 +189,10 @@ window.LME_FUNNEL = {
       kjopKnapp: "Yes please — give me the AI guide",
       avslaaKnapp: "No thanks, I don't want this offer",
       sosialtBevis: "Already chosen by over 1,200 families.",
+      // Free-guide delivery banner. Set gratisLenke to the English PDF when ready (empty = hidden).
+      gratisLevering: "Thanks for signing up! Your free guide is ready:",
+      gratisKnapp: "Download the free guide (PDF)",
+      gratisLenke: "",
       bilde: "/images/poster-english.jpg",
       video: "/videos/mia-and-teo-english.mp4"
     },
@@ -208,16 +221,16 @@ window.LME_FUNNEL = {
 
     takkIkkeKjoper: {
       merkelapp: "Your guide is on its way",
-      overskrift: "All good — your free guide is on its way 💛",
+      overskrift: "All good — let's get you started 💛",
       underoverskrift:
-        "You don't need to buy anything to get started. We've sent the free guide to your " +
-        "inbox — open it and take your first step toward a Montessori income today.",
+        "You don't need to buy anything to begin. Explore our free resources below — " +
+        "the full English guide is coming soon.",
       steg: [
-        "Open the email from us (check your spam folder too).",
-        "Download the free guide from the email.",
-        "Pick one step from the guide and start today."
+        "Browse our free resources below.",
+        "Pick one idea and try it today.",
+        "Check back soon — the English guide is on its way."
       ],
-      // Engelsk gratisguide kommer — sett stien her når PDF-en er klar (tom = «Utforsk ressurser» vises i stedet).
+      // Engelsk gratisguide kommer — sett knappLenke til den engelske PDF-en når den er klar.
       knapp: "Explore free resources",
       knappLenke: "/ressurser",
       sekundaerKnapp: "Back to Creative Studio",
