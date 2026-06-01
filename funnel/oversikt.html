@@ -276,7 +276,13 @@ brand: {<br>
 
   <script src="tripwire/funnel-config.js"></script>
   <script>
-    const C = window.LME_FUNNEL;
+    // Respekterer språkvalget (lme_lang / ?lang=) for pris og lenker
+    const LANG = (() => {
+      const q = new URLSearchParams(location.search).get('lang');
+      const l = (q || localStorage.getItem('lme_lang') || 'no').toLowerCase();
+      return l === 'en' ? 'en' : 'no';
+    })();
+    const C = window.LME_FUNNEL[LANG] || window.LME_FUNNEL.no;
     const txt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
 
     document.getElementById('brandLogo').src = C.brand.logo;

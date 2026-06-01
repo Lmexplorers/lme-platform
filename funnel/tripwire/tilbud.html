@@ -218,7 +218,30 @@
 
   <script src="funnel-config.js"></script>
   <script>
-    const C = window.LME_FUNNEL;
+    // Språk: ?lang=… > localStorage 'lme_lang' (samme som plattformen) > 'no'
+    const LANG = (() => {
+      const q = new URLSearchParams(location.search).get('lang');
+      let l = (q || localStorage.getItem('lme_lang') || 'no').toLowerCase();
+      if (l !== 'en' && l !== 'no') l = 'no';
+      try { localStorage.setItem('lme_lang', l); } catch (e) {}
+      return l;
+    })();
+    document.documentElement.lang = LANG;
+    const C = window.LME_FUNNEL[LANG] || window.LME_FUNNEL.no;
+
+    // Språk-knapp (🇬🇧/🇳🇴) — samme valg som resten av plattformen
+    (() => {
+      const b = document.createElement('button');
+      b.textContent = LANG === 'en' ? '🇳🇴 Norsk' : '🇬🇧 English';
+      b.setAttribute('aria-label', 'Bytt språk / Switch language');
+      b.style.cssText = 'position:fixed;top:16px;right:16px;z-index:300;display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(31,27,36,.12);background:#fff;color:#1F1B24;font-family:inherit;font-weight:700;font-size:13px;line-height:1;padding:10px 15px;border-radius:999px;box-shadow:0 6px 20px rgba(31,27,36,.12);cursor:pointer;';
+      b.addEventListener('click', () => {
+        const next = LANG === 'en' ? 'no' : 'en';
+        try { localStorage.setItem('lme_lang', next); } catch (e) {}
+        const u = new URL(location.href); u.searchParams.set('lang', next); location.href = u.toString();
+      });
+      document.body.appendChild(b);
+    })();
     const t = C.tilbud;
     const p = C.tilbudPris;
     const txt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
