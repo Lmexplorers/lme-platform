@@ -192,7 +192,7 @@ window.LME_FUNNEL = {
       // Free-guide delivery banner. Set gratisLenke to the English PDF when ready (empty = hidden).
       gratisLevering: "Thanks for signing up! Your free guide is ready:",
       gratisKnapp: "Download the free guide (PDF)",
-      gratisLenke: "",
+      gratisLenke: "/funnel/nedlasting/LME-Free-Guide-Montessori-Income-EN.pdf",
       bilde: "/images/poster-english.jpg",
       video: "/videos/mia-and-teo-english.mp4"
     },
@@ -219,19 +219,18 @@ window.LME_FUNNEL = {
     },
 
     takkIkkeKjoper: {
-      merkelapp: "Your guide is on its way",
-      overskrift: "All good — let's get you started 💛",
+      merkelapp: "Ready to download",
+      overskrift: "All good — here's your free guide 💛",
       underoverskrift:
-        "You don't need to buy anything to begin. Explore our free resources below — " +
-        "the full English guide is coming soon.",
+        "You don't need to buy anything to begin. Download the free guide right away " +
+        "below, and take your first step toward a Montessori income today.",
       steg: [
-        "Browse our free resources below.",
-        "Pick one idea and try it today.",
-        "Check back soon — the English guide is on its way."
+        "Tap the button below to download the free guide (PDF) right away.",
+        "Save the file so you always have it handy.",
+        "Pick one step from the guide and start today."
       ],
-      // Engelsk gratisguide kommer — sett knappLenke til den engelske PDF-en når den er klar.
-      knapp: "Explore free resources",
-      knappLenke: "/ressurser",
+      knapp: "Download the free guide (PDF)",
+      knappLenke: "/funnel/nedlasting/LME-Free-Guide-Montessori-Income-EN.pdf",
       sekundaerKnapp: "Back to Creative Studio",
       sekundaerLenke: "/creative-studio",
       angre: "Changed your mind? You can still get the AI guide at the intro price.",
