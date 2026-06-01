@@ -199,9 +199,8 @@ window.LME_FUNNEL = {
       // ENGELSK PDF kommer — legg filen i funnel/nedlasting/ og sett stien her.
       // Tom ("") skjuler nedlastingsknappen til guiden er klar.
       knappLenke: "",
-      bonusKnapp: "Download the bonus song “Come Along!”",
-      // ENGELSK SANG — legg filen i funnel/nedlasting/ og sett stien her.
-      bonusLenke: "",
+      bonusKnapp: "Download the bonus song “Come and Play”",
+      bonusLenke: "/funnel/nedlasting/mia-and-teo-come-and-play.mp4",
       sekundaerKnapp: "Back to Creative Studio",
       sekundaerLenke: "/creative-studio",
       support: "Questions? Just reply to the email you received and we'll help you."
