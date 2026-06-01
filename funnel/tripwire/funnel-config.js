@@ -106,6 +106,9 @@ window.LME_FUNNEL = {
     ],
     knapp: "Last ned AI-guiden (PDF)",
     knappLenke: "/funnel/nedlasting/LME-AI-Guide.pdf",
+    // Bonus: Mia & Teo-sangen «Kom bli med!». La bonusLenke stå tom ("") for å skjule bonusknappen.
+    bonusKnapp: "Last ned bonussangen «Kom bli med!»",
+    bonusLenke: "/funnel/nedlasting/mia-og-teo-kom-bli-med.mp4",
     sekundaerKnapp: "Tilbake til Creative Studio",
     sekundaerLenke: "/creative-studio",
     support: "Spørsmål? Svar på e-posten du nettopp fikk, så hjelper vi deg."
