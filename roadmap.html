@@ -997,9 +997,17 @@
   </p>
 </footer>
 
+<!-- Språk-veksler i hjørnet (ekte språkbytte, ikke død lenke) -->
+<button type="button" class="lang-float" id="langFloat" aria-label="Bytt språk / Switch language" title="Bytt språk / Switch language">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+  <span id="langFloatLabel">English</span>
+</button>
+
 <script>
   let currentLang = 'no';
   const toggle = document.getElementById('langToggle');
+  const langFloat = document.getElementById('langFloat');
+  const langFloatLabel = document.getElementById('langFloatLabel');
 
   function switchLanguage(lang) {
     currentLang = lang;
@@ -1009,22 +1017,21 @@
       if (text.includes('<')) el.innerHTML = text;
       else el.textContent = text;
     });
-    toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    if (toggle) toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    if (langFloatLabel) langFloatLabel.textContent = lang === 'no' ? 'English' : 'Norsk';
     document.title = lang === 'no'
       ? 'LME Roadmap — Din Montessori-reise | Little Montessori Explorers'
       : 'LME Roadmap — Your Montessori Journey | Little Montessori Explorers';
+    try { localStorage.setItem('lme_lang', lang); } catch (e) {}
   }
 
-  const langFloat = document.getElementById('langFloat');
-  const langFloatLabel = document.getElementById('langFloatLabel');
+  function toggleLang() { switchLanguage(currentLang === 'no' ? 'en' : 'no'); }
 
-  function toggleLang() {
-    switchLanguage(currentLang === 'no' ? 'en' : 'no');
-    if (langFloatLabel) langFloatLabel.textContent = currentLang === 'no' ? 'English' : 'Norsk';
-  }
-
-  toggle.addEventListener('click', toggleLang);
+  if (toggle) toggle.addEventListener('click', toggleLang);
   if (langFloat) langFloat.addEventListener('click', toggleLang);
+
+  // Respekter språkvalget fra resten av plattformen
+  try { if (localStorage.getItem('lme_lang') === 'en') switchLanguage('en'); } catch (e) {}
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -1034,13 +1041,6 @@
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
-
-
-<!-- Språk-veksler i hjørnet (ekte språkbytte, ikke død lenke) -->
-<button type="button" class="lang-float" id="langFloat" aria-label="Bytt språk / Switch language" title="Bytt språk / Switch language">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-  <span id="langFloatLabel">English</span>
-</button>
 
 </body>
 </html>
