@@ -1,0 +1,3 @@
+# Bygge-artefakter (genereres av build_book*.py / GitHub Actions)
+book.html
+*.pdf
