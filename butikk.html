@@ -1216,12 +1216,9 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 
   <!-- Featured produkt -->
   <article class="featured-product">
-    <div class="featured-image" style="background: linear-gradient(135deg, #A4D233 0%, #3FA9F5 100%);">
-      <div class="featured-content">
-        <span class="badge-new">NY UTGIVELSE</span>
-        <h2><em>De små</em><br>naturutforskerne</h2>
-        <p class="featured-by">av Renate Dahl</p>
-      </div>
+    <div class="featured-image" style="padding:0;background:#fff;">
+      <img src="/images/bok-cover.jpg" data-en-src="/images/book-cover-en.jpg" alt="De små naturutforskerne — bokomslag" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+      <span class="badge-new" style="position:absolute;top:18px;left:18px;z-index:2;">NY UTGIVELSE</span>
     </div>
     <div class="featured-body">
       <span class="kicker">SIGNATUR-BOK · 24 SIDER</span>
@@ -1311,12 +1308,9 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     <div class="product-grid">
 
       <article class="product-card">
-        <div class="product-image" style="background: linear-gradient(135deg, #A4D233 0%, #3FA9F5 100%);">
+        <div class="product-image" style="background:#fff;">
           <span class="product-tag">BESTSELGER</span>
-          <div class="product-title-overlay">
-            <span class="kicker">BARNEBOK</span>
-            <span class="title">De små<br>naturutforskerne</span>
-          </div>
+          <img src="/images/bok-cover.jpg" data-en-src="/images/book-cover-en.jpg" alt="De små naturutforskerne — bokomslag" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
         </div>
         <div class="product-info">
           <h4>De små naturutforskerne</h4>
@@ -1948,6 +1942,12 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
       }
     });
     
+    // Bytt bilder som har en engelsk variant (data-en-src), f.eks. bokomslag
+    document.querySelectorAll('img[data-en-src]').forEach(img => {
+      if (!img.dataset.noSrc) img.dataset.noSrc = img.getAttribute('src');
+      img.setAttribute('src', newLang === 'en' ? img.getAttribute('data-en-src') : img.dataset.noSrc);
+    });
+
     window.LME_CURRENT_LANG = newLang;
     btn.textContent = newLang === 'en' ? '🇳🇴 Norsk' : '🇬🇧 English';
     document.documentElement.lang = newLang;

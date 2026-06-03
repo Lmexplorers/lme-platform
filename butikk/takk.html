@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FBF7F0">
+<title>Takk for kjøpet · LME Butikk</title>
+<link rel="icon" href="/images/lme-logo.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
+  :root{
+    --lime:#A4D233; --lime-soft:#E8F5D1; --cerise:#E91E89; --cerise-soft:#FCE3F1;
+    --sun:#F7C72E; --sun-soft:#FFF4D6; --sky:#3FA9F5; --bg:#FBF7F0; --bg2:#FFFFFF;
+    --ink:#1F1B24; --ink-soft:#5A5560; --ink-muted:#938E99; --line:rgba(31,27,36,.08);
+    --r-md:18px; --r-lg:26px; --r-xl:36px; --r-pill:999px;
+    --shadow-lg:0 22px 60px rgba(31,27,36,.10);
+    --font-body:'Playpen Sans','Comic Sans MS',sans-serif;
+    --font-head:'Playpen Sans','Comic Sans MS',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-body);color:var(--ink);
+    background:radial-gradient(900px 520px at 50% -10%,var(--lime-soft) 0%,transparent 55%),
+      radial-gradient(700px 460px at 100% 100%,var(--sun-soft) 0%,transparent 55%),
+      radial-gradient(700px 460px at 0% 90%,var(--cerise-soft) 0%,transparent 55%),var(--bg);
+    min-height:100vh;line-height:1.6;-webkit-font-smoothing:antialiased;
+    display:flex;align-items:center;justify-content:center}
+  h1,h2,h3{font-family:var(--font-head)}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none}
+  .wrap{max-width:640px;width:100%;padding:40px 24px;text-align:center}
+  .brandbar{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:26px}
+  .brandbar img{height:34px}
+  .brandbar .bn{font-weight:700;font-size:15px}
+  .seal{width:84px;height:84px;margin:0 auto 20px;border-radius:50%;
+    background:linear-gradient(135deg,var(--lime),#7fae1f);display:flex;align-items:center;justify-content:center;
+    box-shadow:0 16px 36px rgba(127,174,31,.35);animation:pop .5s cubic-bezier(.18,.89,.32,1.28) both}
+  .seal svg{width:42px;height:42px;color:#fff}
+  @keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+  .chip{display:inline-block;background:var(--lime-soft);color:#5b7d12;font-size:12.5px;font-weight:700;
+    letter-spacing:.03em;padding:6px 15px;border-radius:var(--r-pill);margin-bottom:16px}
+  h1{font-size:clamp(26px,4.6vw,34px);font-weight:800;line-height:1.15;letter-spacing:-.02em;margin-bottom:12px}
+  .lead{font-size:16px;color:var(--ink-soft);max-width:480px;margin:0 auto 28px}
+  .card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r-xl);
+    box-shadow:var(--shadow-lg);padding:28px;margin-bottom:24px}
+  .prod{display:flex;align-items:center;gap:16px;text-align:left;margin-bottom:22px}
+  .prod img{width:84px;height:84px;border-radius:var(--r-md);object-fit:cover;flex-shrink:0;box-shadow:0 6px 18px rgba(31,27,36,.12)}
+  .prod .pn{font-size:17px;font-weight:800}
+  .prod .ps{font-size:13.5px;color:var(--ink-soft);margin-top:3px}
+  .dl{display:flex;flex-direction:column;gap:12px}
+  .dl-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;
+    font-size:15.5px;font-weight:800;padding:15px 20px;border-radius:var(--r-pill);
+    background:linear-gradient(120deg,var(--cerise),#ff5fb0);color:#fff;
+    box-shadow:0 12px 28px rgba(233,30,137,.28);transition:transform .16s ease,box-shadow .16s ease}
+  .dl-btn:hover{transform:translateY(-2px);box-shadow:0 18px 36px rgba(233,30,137,.36)}
+  .dl-btn.en{background:linear-gradient(120deg,var(--sky),#7ec6ff);box-shadow:0 12px 28px rgba(63,169,245,.28)}
+  .dl-btn.en:hover{box-shadow:0 18px 36px rgba(63,169,245,.36)}
+  .dl-btn .flag{font-size:18px}
+  .support{margin-top:26px;font-size:13.5px;color:var(--ink-muted)}
+  .back{display:inline-block;margin-top:14px;font-size:14px;font-weight:600;color:var(--ink-muted)}
+  .back:hover{color:var(--ink-soft);text-decoration:underline}
+  .footer{margin-top:26px;font-size:13px;color:var(--ink-muted)}
+  .lang-toggle{position:fixed;top:16px;right:16px;z-index:50;border:1px solid var(--line);background:#fff;
+    color:var(--ink);font-family:inherit;font-weight:700;font-size:13px;padding:9px 14px;border-radius:var(--r-pill);
+    box-shadow:0 6px 20px rgba(31,27,36,.12);cursor:pointer}
+  @media(max-width:520px){.card{padding:22px}.prod img{width:64px;height:64px}}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brandbar">
+      <img src="/images/lme-logo.png" alt="LME" onerror="this.style.display='none'">
+      <span class="bn">LME Butikk</span>
+    </div>
+    <div class="seal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <span class="chip" id="label"></span>
+    <h1 id="heading"></h1>
+    <p class="lead" id="sub"></p>
+
+    <div class="card" id="card">
+      <div class="prod">
+        <img id="cover" src="" alt="">
+        <div>
+          <div class="pn" id="pname"></div>
+          <div class="ps" id="psub"></div>
+        </div>
+      </div>
+      <div class="dl" id="downloads"></div>
+    </div>
+
+    <p class="support" id="support"></p>
+    <a class="back" id="back" href="/butikk"></a>
+    <div class="footer">© <span id="yr"></span> Little Montessori Explorers</div>
+  </div>
+
+  <script src="butikk-config.js"></script>
+  <script>
+    const C = window.LME_BUTIKK;
+    // Språk: ?lang= > localStorage 'lme_lang' (samme som plattformen) > 'no'
+    const params = new URLSearchParams(location.search);
+    let LANG = (params.get('lang') || localStorage.getItem('lme_lang') || 'no').toLowerCase();
+    if (LANG !== 'en' && LANG !== 'no') LANG = 'no';
+    const t = (o) => (o && (o[LANG] || o.no)) || '';
+    const txt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+
+    const pid = params.get('p');
+    const prod = pid && C.produkter[pid];
+
+    function render() {
+      document.documentElement.lang = LANG;
+      txt('yr', new Date().getFullYear());
+      txt('label', t(C.takk.merkelapp));
+      txt('heading', t(C.takk.overskrift));
+      txt('support', t(C.takk.support));
+      const back = document.getElementById('back');
+      back.textContent = t(C.takk.tilbake); back.href = C.takk.tilbakeLenke;
+
+      if (!prod) {
+        txt('sub', t(C.takk.mangler));
+        document.getElementById('card').style.display = 'none';
+        return;
+      }
+      txt('sub', t(C.takk.underUtenMail));
+      txt('pname', t(prod.navn));
+      txt('psub', t(prod.undertittel));
+      const cover = document.getElementById('cover');
+      cover.src = (LANG === 'en' && prod.coverEn) ? prod.coverEn : prod.cover;
+      cover.alt = t(prod.navn);
+
+      const dl = document.getElementById('downloads');
+      dl.innerHTML = '';
+      prod.filer.forEach(f => {
+        const a = document.createElement('a');
+        a.className = 'dl-btn' + (f.sprak === 'en' ? ' en' : '');
+        a.href = f.url; a.setAttribute('download', ''); a.target = '_blank'; a.rel = 'noopener';
+        const flag = f.sprak === 'en' ? '🇬🇧' : '🇳🇴';
+        a.innerHTML = '<span class="flag">' + flag + '</span><span>' + t(f.knapp) + '</span>';
+        dl.appendChild(a);
+      });
+    }
+    render();
+
+    // Språk-knapp (samme valg som resten av plattformen)
+    (() => {
+      const b = document.createElement('button');
+      b.className = 'lang-toggle';
+      b.textContent = LANG === 'en' ? '🇳🇴 Norsk' : '🇬🇧 English';
+      b.addEventListener('click', () => {
+        LANG = LANG === 'en' ? 'no' : 'en';
+        try { localStorage.setItem('lme_lang', LANG); } catch (e) {}
+        b.textContent = LANG === 'en' ? '🇳🇴 Norsk' : '🇬🇧 English';
+        render();
+      });
+      document.body.appendChild(b);
+    })();
+  </script>
+</body>
+</html>
