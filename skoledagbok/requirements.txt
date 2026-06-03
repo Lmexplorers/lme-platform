@@ -1,0 +1,4 @@
+weasyprint==68.1
+fonttools>=4.50
+brotli>=1.1
+Pillow>=10.0
