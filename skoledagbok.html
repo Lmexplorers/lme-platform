@@ -86,8 +86,8 @@
         </div>
         <div class="body">
           <div class="meta" id="b1meta"></div>
-          <a class="dl no" id="b1no" target="_blank" rel="noopener"><span class="flag">🇳🇴</span><span></span></a>
-          <a class="dl en" id="b1en" target="_blank" rel="noopener"><span class="flag">🇬🇧</span><span></span></a>
+          <a class="dl no" id="b1no"><span class="flag">🇳🇴</span><span></span></a>
+          <a class="dl en" id="b1en"><span class="flag">🇬🇧</span><span></span></a>
         </div>
       </article>
 
@@ -100,8 +100,8 @@
         </div>
         <div class="body">
           <div class="meta" id="b2meta"></div>
-          <a class="dl no" id="b2no" target="_blank" rel="noopener"><span class="flag">🇳🇴</span><span></span></a>
-          <a class="dl en" id="b2en" target="_blank" rel="noopener"><span class="flag">🇬🇧</span><span></span></a>
+          <a class="dl no" id="b2no"><span class="flag">🇳🇴</span><span></span></a>
+          <a class="dl en" id="b2en"><span class="flag">🇬🇧</span><span></span></a>
         </div>
       </article>
     </div>
@@ -112,8 +112,10 @@
   </div>
 
   <script>
-    // Google Drive direkte-nedlasting (krever at filene er delt "Alle med lenken")
-    var DRIVE = function(id){ return "https://drive.google.com/uc?export=download&id=" + id; };
+    // Google Drive direkte-nedlasting via usercontent-endepunktet med confirm=t,
+    // som hopper over "kan ikke skanne for virus"-mellomsiden for store filer.
+    // (Krever at filene er delt "Alle med lenken".)
+    var DRIVE = function(id){ return "https://drive.usercontent.google.com/download?id=" + id + "&export=download&confirm=t"; };
     var FILES = {
       b1no: "1v9QsJCtOgD5vaKBV4iOex278PSbr9z1B",
       b1en: "1bePd9HK3CUfmf-HMIn6aKOQzVkt52G4q",
