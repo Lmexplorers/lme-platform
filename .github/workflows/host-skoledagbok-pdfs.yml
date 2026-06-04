@@ -1,8 +1,8 @@
 name: Host skoledagbok-PDF-er
 
-# Henter de fire ferdige skoledagbok-PDF-ene fra Google Drive, komprimerer dem
-# under Cloudflare Pages' 25 MB-grense, og legger dem i /nedlasting/ slik at
-# nedlasting skjer direkte fra LME-siten (ingen Drive, ingen mellomside).
+# Henter de fire ferdige skoledagbok-PDF-ene fra Google Drive og publiserer dem
+# som GitHub Release-filer (offentlig repo => offentlige direkte-nedlastinger,
+# ingen 25 MB-grense, full kvalitet). Takkesiden lenker til release-filene.
 # Kjøres manuelt: Actions -> "Host skoledagbok-PDF-er" -> Run workflow.
 
 on:
@@ -17,54 +17,32 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Installer verktøy (ghostscript + gdown)
-        run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ghostscript
-          python3 -m pip install --quiet gdown
+      - name: Installer gdown
+        run: python3 -m pip install --quiet gdown
 
       - name: Last ned fra Google Drive
         run: |
-          mkdir -p _raw
-          gdown "1v9QsJCtOgD5vaKBV4iOex278PSbr9z1B" -O _raw/1-3-no.pdf
-          gdown "1bePd9HK3CUfmf-HMIn6aKOQzVkt52G4q" -O _raw/1-3-en.pdf
-          gdown "1ohjn77TI_RgNV3EYkWDLnB_YVg2IIKvU" -O _raw/4-7-no.pdf
-          gdown "13WqVhd35ush-jiHwS4HiJxHcADvEeBJJ" -O _raw/4-7-en.pdf
-          ls -la _raw
+          mkdir -p pdfs
+          gdown "1v9QsJCtOgD5vaKBV4iOex278PSbr9z1B" -O pdfs/skoledagbok-1-3-no.pdf
+          gdown "1bePd9HK3CUfmf-HMIn6aKOQzVkt52G4q" -O pdfs/skoledagbok-1-3-en.pdf
+          gdown "1ohjn77TI_RgNV3EYkWDLnB_YVg2IIKvU" -O pdfs/skoledagbok-4-7-no.pdf
+          gdown "13WqVhd35ush-jiHwS4HiJxHcADvEeBJJ" -O pdfs/skoledagbok-4-7-en.pdf
+          ls -la pdfs
 
-      - name: Sjekk at filene faktisk er PDF (ikke en Drive-feilside)
+      - name: Sjekk at filene faktisk er PDF
         run: |
-          for f in _raw/*.pdf; do
+          for f in pdfs/*.pdf; do
             if ! head -c4 "$f" | grep -q '%PDF'; then
-              echo "::error::$f er ikke en PDF. Sannsynligvis er nedlasting avslått for lesere på Drive-fila. Skru på 'Lesere og kommentatorer kan laste ned, skrive ut og kopiere' og kjør på nytt."
+              echo "::error::$f er ikke en PDF. Sannsynligvis er nedlasting avslått for lesere på Drive-fila."
               exit 1
             fi
           done
 
-      - name: Komprimer under 25 MB for Cloudflare Pages
+      - name: Publiser som GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          mkdir -p nedlasting
-          MAX=$((24*1024*1024))
-          shrink () {
-            in="$1"; out="$2"
-            gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dPDFSETTINGS=/ebook \
-               -dNOPAUSE -dQUIET -dBATCH -sOutputFile="$out" "$in"
-            if [ "$(stat -c%s "$out")" -gt "$MAX" ]; then
-              echo "$out fortsatt over 24MB, bruker /screen"
-              gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.5 -dPDFSETTINGS=/screen \
-                 -dNOPAUSE -dQUIET -dBATCH -sOutputFile="$out" "$in"
-            fi
-            ls -la "$out"
-          }
-          shrink _raw/1-3-no.pdf nedlasting/skoledagbok-1-3-no.pdf
-          shrink _raw/1-3-en.pdf nedlasting/skoledagbok-1-3-en.pdf
-          shrink _raw/4-7-no.pdf nedlasting/skoledagbok-4-7-no.pdf
-          shrink _raw/4-7-en.pdf nedlasting/skoledagbok-4-7-en.pdf
-
-      - name: Commit til repoet
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add nedlasting/*.pdf
-          git commit -m "Host skoledagbok-PDF-er for direkte nedlasting [skip ci]" || { echo "Ingen endring"; exit 0; }
-          git push
+          gh release delete skoledagbok-pdf --yes --cleanup-tag 2>/dev/null || true
+          gh release create skoledagbok-pdf pdfs/*.pdf \
+            --title "Mia & Teo Skoledagbok — PDF" \
+            --notes "Digitale skoledagbøker (norsk + engelsk). Lenkes fra takkesiden etter kjøp."
