@@ -77,7 +77,7 @@ window.LME_FUNNEL = {
       garanti: "14 dagers full pengene-tilbake-garanti — uten spørsmål.",
       kjopKnapp: "Ja takk — gi meg AI-guiden",
       avslaaKnapp: "Nei takk, jeg vil ikke ha dette tilbudet",
-      sosialtBevis: "Allerede valgt av over 1 200 norske familier.",
+      sosialtBevis: "Laget av en høgskoleutdannet Montessori-pedagog med 20+ års erfaring med barn.",
       // Levering av gratisguiden rett etter påmelding (banner øverst på tilbudssiden).
       // Tom gratisLenke skjuler banneret.
       gratisLevering: "Takk for påmeldingen! Gratisguiden din er klar:",
@@ -194,7 +194,7 @@ window.LME_FUNNEL = {
       garanti: "14-day full money-back guarantee — no questions asked.",
       kjopKnapp: "Yes please — give me the AI guide",
       avslaaKnapp: "No thanks, I don't want this offer",
-      sosialtBevis: "Already chosen by over 1,200 families.",
+      sosialtBevis: "Created by a college-educated Montessori educator with 20+ years working with children.",
       // Free-guide delivery banner. Set gratisLenke to the English PDF when ready (empty = hidden).
       gratisLevering: "Thanks for signing up! Your free guide is ready:",
       gratisKnapp: "Download the free guide (PDF)",
