@@ -83,21 +83,18 @@
   </div>
 
   <script>
-    // Drive standard nedlastings-URL, aapnet i ny fane (paalitelig paa tvers av nettlesere).
-    var DRIVE = function(id){ return "https://drive.google.com/uc?export=download&id=" + id; };
-
     var BOKER = {
       "1-3": {
         navn: { no: "Mia & Teo Skoledagbok — 1.–3. trinn", en: "Mia & Teo School Diary — Grades 1–3" },
         sub:  { no: "358 sider · A5 · 5–9 år", en: "358 pages · A5 · ages 5–9" },
-        no_id: "1v9QsJCtOgD5vaKBV4iOex278PSbr9z1B",
-        en_id: "1bePd9HK3CUfmf-HMIn6aKOQzVkt52G4q"
+        no_url: "/nedlasting/skoledagbok-1-3-no.pdf", no_file: "Mia-og-Teo-skoledagbok-1-3-norsk.pdf",
+        en_url: "/nedlasting/skoledagbok-1-3-en.pdf", en_file: "Mia-and-Teo-school-diary-grades-1-3.pdf"
       },
       "4-7": {
         navn: { no: "Mia & Teo Skoledagbok — 4.–7. trinn", en: "Mia & Teo School Diary — Grades 4–7" },
         sub:  { no: "358 sider · A5 · 9–13 år", en: "358 pages · A5 · ages 9–13" },
-        no_id: "1ohjn77TI_RgNV3EYkWDLnB_YVg2IIKvU",
-        en_id: "13WqVhd35ush-jiHwS4HiJxHcADvEeBJJ"
+        no_url: "/nedlasting/skoledagbok-4-7-no.pdf", no_file: "Mia-og-Teo-skoledagbok-4-7-norsk.pdf",
+        en_url: "/nedlasting/skoledagbok-4-7-en.pdf", en_file: "Mia-and-Teo-school-diary-grades-4-7.pdf"
       }
     };
 
@@ -155,10 +152,10 @@
       var dl = document.getElementById('downloads');
       dl.innerHTML = '';
       var bNo = document.createElement('a');
-      bNo.className = 'dl-btn'; bNo.href = DRIVE(bok.no_id); bNo.target = '_blank'; bNo.rel = 'noopener';
+      bNo.className = 'dl-btn'; bNo.href = bok.no_url; bNo.setAttribute('download', bok.no_file);
       bNo.innerHTML = '<span class="flag">🇳🇴</span><span>' + t.nob + '</span>';
       var bEn = document.createElement('a');
-      bEn.className = 'dl-btn en'; bEn.href = DRIVE(bok.en_id); bEn.target = '_blank'; bEn.rel = 'noopener';
+      bEn.className = 'dl-btn en'; bEn.href = bok.en_url; bEn.setAttribute('download', bok.en_file);
       bEn.innerHTML = '<span class="flag">🇬🇧</span><span>' + t.enb + '</span>';
       dl.appendChild(bNo); dl.appendChild(bEn);
     }
