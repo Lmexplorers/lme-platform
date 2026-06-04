@@ -77,7 +77,7 @@ window.LME_FUNNEL = {
       garanti: "14 dagers full pengene-tilbake-garanti — uten spørsmål.",
       kjopKnapp: "Ja takk — gi meg AI-guiden",
       avslaaKnapp: "Nei takk, jeg vil ikke ha dette tilbudet",
-      sosialtBevis: "Laget av en høgskoleutdannet Montessori-pedagog med 20+ års erfaring med barn.",
+      sosialtBevis: "Laget av en høgskoleutdannet montessoripedagog med 20+ års erfaring med barn.",
       // Levering av gratisguiden rett etter påmelding (banner øverst på tilbudssiden).
       // Tom gratisLenke skjuler banneret.
       gratisLevering: "Takk for påmeldingen! Gratisguiden din er klar:",
