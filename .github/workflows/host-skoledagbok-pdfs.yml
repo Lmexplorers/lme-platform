@@ -46,3 +46,23 @@ jobs:
           gh release create skoledagbok-pdf pdfs/*.pdf \
             --title "Mia & Teo Skoledagbok — PDF" \
             --notes "Digitale skoledagbøker (norsk + engelsk). Lenkes fra takkesiden etter kjøp."
+
+      - name: Lag forside-thumbnails (side 1 av hver PDF)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+          mkdir -p images/skoledagbok
+          for key in 1-3-no 1-3-en 4-7-no 4-7-en; do
+            pdftoppm -png -singlefile -f 1 -l 1 -scale-to 640 \
+              "pdfs/skoledagbok-$key.pdf" "images/skoledagbok/cover-$key"
+          done
+          ls -la images/skoledagbok
+
+      - name: Commit forsidebilder til repoet
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add images/skoledagbok/*.png
+          git commit -m "Forside-thumbnails for skoledagbok-takkeside" || { echo "Ingen endring"; exit 0; }
+          git pull --rebase origin main || true
+          git push

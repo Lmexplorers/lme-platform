@@ -40,7 +40,9 @@
   .card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r-xl);
     box-shadow:var(--shadow-lg);padding:28px;margin-bottom:22px}
   .pn{font-size:18px;font-weight:800}
-  .ps{font-size:13.5px;color:var(--ink-soft);margin:3px 0 20px}
+  .ps{font-size:13.5px;color:var(--ink-soft);margin:3px 0 18px}
+  .cover{display:block;width:160px;max-width:56%;height:auto;margin:2px auto 20px;border-radius:12px;
+    box-shadow:0 12px 30px rgba(31,27,36,.18);border:1px solid var(--line)}
   .dl{display:flex;flex-direction:column;gap:12px}
   .dl-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;
     font-size:15.5px;font-weight:800;padding:15px 20px;border-radius:var(--r-pill);
@@ -74,6 +76,7 @@
     <div class="card" id="card">
       <div class="pn" id="pname"></div>
       <div class="ps" id="psub"></div>
+      <img class="cover" id="cover" alt="">
       <div class="dl" id="downloads"></div>
     </div>
 
@@ -148,6 +151,12 @@
       txt('lead', t.lead);
       txt('pname', bok.navn[LANG] || bok.navn.no);
       txt('psub', bok.sub[LANG] || bok.sub.no);
+
+      var cover = document.getElementById('cover');
+      cover.onerror = function(){ this.style.display = 'none'; };
+      cover.style.display = '';
+      cover.src = '/images/skoledagbok/cover-' + P + '-' + LANG + '.png';
+      cover.alt = (bok.navn[LANG] || bok.navn.no) + ' — forside';
 
       var dl = document.getElementById('downloads');
       dl.innerHTML = '';
