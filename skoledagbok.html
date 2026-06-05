@@ -102,7 +102,7 @@
       no: {
         chip: "Kjøpet er bekreftet",
         heading: "Tusen takk for kjøpet! 🎉",
-        lead: "Her er skoledagboka di. Du får begge språkversjonene — last ned så mange ganger du vil, og lagre dem trygt.",
+        lead: "Her er skoledagboka di. Last ned så mange ganger du vil, og lagre fila trygt.",
         nob: "Last ned (norsk PDF)", enb: "Download (English PDF)",
         support: "Spørsmål? Svar på kvitteringen fra Stripe, så hjelper vi deg.",
         back: "← Tilbake til butikken",
@@ -112,7 +112,7 @@
       en: {
         chip: "Purchase confirmed",
         heading: "Thank you for your purchase! 🎉",
-        lead: "Here is your school diary. You get both language versions — download as many times as you like, and keep them safe.",
+        lead: "Here is your school diary. Download as many times as you like, and keep the file safe.",
         nob: "Last ned (norsk PDF)", enb: "Download (English PDF)",
         support: "Questions? Reply to your Stripe receipt and we'll help you.",
         back: "← Back to the shop",
@@ -151,28 +151,16 @@
 
       var dl = document.getElementById('downloads');
       dl.innerHTML = '';
-      var bNo = document.createElement('a');
-      bNo.className = 'dl-btn'; bNo.href = bok.no_url; bNo.target = '_blank'; bNo.rel = 'noopener';
-      bNo.innerHTML = '<span class="flag">🇳🇴</span><span>' + t.nob + '</span>';
-      var bEn = document.createElement('a');
-      bEn.className = 'dl-btn en'; bEn.href = bok.en_url; bEn.target = '_blank'; bEn.rel = 'noopener';
-      bEn.innerHTML = '<span class="flag">🇬🇧</span><span>' + t.enb + '</span>';
-      dl.appendChild(bNo); dl.appendChild(bEn);
+      var url   = LANG === 'en' ? bok.en_url : bok.no_url;
+      var label = LANG === 'en' ? t.enb : t.nob;
+      var flag  = LANG === 'en' ? '🇬🇧' : '🇳🇴';
+      var a = document.createElement('a');
+      a.className = 'dl-btn' + (LANG === 'en' ? ' en' : '');
+      a.href = url; a.target = '_blank'; a.rel = 'noopener';
+      a.innerHTML = '<span class="flag">' + flag + '</span><span>' + label + '</span>';
+      dl.appendChild(a);
     }
     render();
-
-    (function(){
-      var b = document.createElement('button');
-      b.className = 'lang-toggle';
-      b.textContent = LANG === 'en' ? '🇳🇴 Norsk' : '🇬🇧 English';
-      b.addEventListener('click', function(){
-        LANG = LANG === 'en' ? 'no' : 'en';
-        try { localStorage.setItem('lme_lang', LANG); } catch(e){}
-        b.textContent = LANG === 'en' ? '🇳🇴 Norsk' : '🇬🇧 English';
-        render();
-      });
-      document.body.appendChild(b);
-    })();
   </script>
 </body>
 </html>
