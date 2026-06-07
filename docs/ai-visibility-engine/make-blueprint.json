@@ -20,6 +20,10 @@
           { "name": "slug", "type": "text" },
           { "name": "lang", "type": "text" },
           { "name": "seoTitle", "type": "text" },
+          { "name": "title", "type": "text" },
+          { "name": "metaDescription", "type": "text" },
+          { "name": "summary", "type": "text" },
+          { "name": "url", "type": "text" },
           { "name": "html", "type": "text" }
         ],
         "note": "Custom webhook. Ved import oppretter Make en webhook-URL — kopier den og sett den som MAKE_WEBHOOK_URL i ai-visibility-worker.js. Workeren POSTer {slug, lang, seoTitle, html} hit naar en artikkel publiseres."
@@ -65,22 +69,57 @@
     },
     {
       "id": 4,
-      "module": "util:SetVariable2",
-      "version": 1,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": { "handleErrors": true, "useNewZLibDeCompress": true },
       "filter": {
-        "name": "Ingen html (kun metadata)",
-        "conditions": [[
-          { "a": "{{1.html}}", "o": "notexist" }
-        ]]
+        "name": "Har tittel",
+        "conditions": [[ { "a": "{{1.title}}", "o": "exist" } ]]
       },
       "mapper": {
-        "name": "skipped",
-        "scope": "roundtrip",
-        "value": "Mottok metadata uten html — ingenting publisert. (Plass for MailerLite/Pinterest/Notion senere.)"
+        "url": "https://connect.mailerlite.com/api/campaigns",
+        "method": "post",
+        "headers": [
+          { "name": "Authorization", "value": "Bearer YOUR_MAILERLITE_TOKEN" },
+          { "name": "Content-Type", "value": "application/json" },
+          { "name": "Accept", "value": "application/json" }
+        ],
+        "qs": [],
+        "bodyType": "raw",
+        "parseResponse": true,
+        "contentType": "application/json",
+        "data": "{\n  \"name\": \"AI Visibility: {{1.seoTitle}}\",\n  \"type\": \"regular\",\n  \"emails\": [{\n    \"subject\": \"{{1.seoTitle}}\",\n    \"from_name\": \"Little Montessori Explorers\",\n    \"from\": \"hei@lmexplorers.com\",\n    \"content\": \"<h1>{{1.title}}</h1><p>{{1.summary}}</p><p><a href=\\\"{{1.url}}\\\">Les hele artikkelen</a></p>\"\n  }],\n  \"groups\": [\"YOUR_MAILERLITE_GROUP_ID\"]\n}"
       },
       "metadata": {
         "designer": { "x": 600, "y": 150 },
-        "note": "Plassholder-rute. Legg til MailerLite-, Pinterest- eller Notion-moduler her senere (Fase 2+)."
+        "note": "MailerLite: oppretter et kampanje-UTKAST om den nye artikkelen. Bytt YOUR_MAILERLITE_TOKEN og YOUR_MAILERLITE_GROUP_ID. Kampanjen sendes ikke automatisk — du gjennomgaar og sender den i MailerLite. (Du kan ogsaa bytte HTTP-modulen med MailerLite-appens native modul for OAuth.)"
+      }
+    },
+    {
+      "id": 5,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": { "handleErrors": true, "useNewZLibDeCompress": true },
+      "filter": {
+        "name": "Har bilde-URL (Pinterest)",
+        "conditions": [[ { "a": "{{1.imageUrl}}", "o": "exist" } ]]
+      },
+      "mapper": {
+        "url": "https://api.pinterest.com/v5/pins",
+        "method": "post",
+        "headers": [
+          { "name": "Authorization", "value": "Bearer YOUR_PINTEREST_TOKEN" },
+          { "name": "Content-Type", "value": "application/json" }
+        ],
+        "qs": [],
+        "bodyType": "raw",
+        "parseResponse": true,
+        "contentType": "application/json",
+        "data": "{\n  \"board_id\": \"YOUR_PINTEREST_BOARD_ID\",\n  \"title\": \"{{1.title}}\",\n  \"description\": \"{{1.summary}}\",\n  \"link\": \"{{1.url}}\",\n  \"media_source\": { \"source_type\": \"image_url\", \"url\": \"{{1.imageUrl}}\" }\n}"
+      },
+      "metadata": {
+        "designer": { "x": 600, "y": 320 },
+        "note": "Pinterest: oppretter en pin. KREVER en faktisk bilde-URL ({{1.imageUrl}}). Engine-en gir i dag en bilde-PROMPT, ikke et bilde — denne grenen kjoerer foerst naar Fase 3 genererer et bilde (Canva/Adobe MCP -> R2) og sender imageUrl i webhook-payloaden. Bytt YOUR_PINTEREST_TOKEN og YOUR_PINTEREST_BOARD_ID."
       }
     }
   ],

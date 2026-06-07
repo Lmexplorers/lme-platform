@@ -343,7 +343,16 @@ async function handlePublish(request, env, origin) {
       const r = await fetch(env.MAKE_WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug: a.slug, lang, seoTitle: a.seoTitle || a.h1, html }),
+        body: JSON.stringify({
+          slug: a.slug,
+          lang,
+          seoTitle: a.seoTitle || a.h1,
+          title: a.h1 || a.seoTitle || "",
+          metaDescription: a.metaDescription || "",
+          summary: a.intro || a.metaDescription || "",
+          url: `https://lmexplorers.com/blog/${a.slug}`,
+          html,
+        }),
       });
       makeStatus = r.status;
       sent = r.ok;

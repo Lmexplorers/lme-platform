@@ -22,10 +22,23 @@ ai-visibility.html  ──(🚀 Publiser)──►  ai-visibility-worker.js  /ai
 Make → **Scenarios** → *Create a new scenario* → ⋯-meny → **Import Blueprint** →
 velg `docs/ai-visibility-engine/make-blueprint.json`.
 
-Scenarioet inneholder:
-- **Custom webhook** (trigger)
-- **Router** → HTTP-modul som skriver fila via GitHub Contents API
-- En plassholder-rute for senere MailerLite/Pinterest/Notion
+Scenarioet inneholder en **Router** med tre grener:
+- **Custom webhook** (trigger) — mottar `{slug, lang, seoTitle, title, summary, url, html}`
+- **Gren 1 — GitHub**: skriver `/blog/<slug>.html` via Contents API (krever `html`)
+- **Gren 2 — MailerLite**: oppretter et kampanje-**utkast** om artikkelen (krever `title`)
+- **Gren 3 — Pinterest**: oppretter en pin (krever `imageUrl` — se note nedenfor)
+
+### Tokens å bytte ut
+| Gren | Plassholder | Hvor |
+|------|-------------|------|
+| GitHub | `YOUR_GITHUB_TOKEN` | fine-grained token, Contents: R/W |
+| MailerLite | `YOUR_MAILERLITE_TOKEN`, `YOUR_MAILERLITE_GROUP_ID` | MailerLite → Integrations / Groups |
+| Pinterest | `YOUR_PINTEREST_TOKEN`, `YOUR_PINTEREST_BOARD_ID` | Pinterest developer app / board |
+
+> **Pinterest-grenen** krever en faktisk bilde-URL. Engine-en lager i dag en
+> bilde-*prompt*, ikke et bilde, så grenen kjører først når **Fase 3** genererer
+> bildet (Canva/Adobe MCP → R2) og sender `imageUrl` i payloaden. Inntil da
+> hopper Make over grenen (filteret `imageUrl exist` er ikke oppfylt).
 
 ### 2. Koble webhook → worker
 - Åpne webhook-modulen, opprett/bekreft webhooken, **kopier URL-en**.
