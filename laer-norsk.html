@@ -137,6 +137,19 @@
   .lesson-video { width:100%; aspect-ratio:16/9; border-radius:18px; overflow:hidden; background:#000; box-shadow:var(--shadow-soft); }
   .lesson-video video { width:100%; height:100%; object-fit:contain; background:#000; display:block; }
 
+  /* gratis "se & lær"-animasjon (uten videofil) */
+  .mini-stage { width:100%; aspect-ratio:16/9; border-radius:18px; box-shadow:var(--shadow-soft);
+    background:linear-gradient(135deg,var(--bla-soft),var(--pink-50)); display:flex; flex-direction:column;
+    align-items:center; justify-content:center; position:relative; overflow:hidden; text-align:center; }
+  .mini-stage::after { content:''; position:absolute; inset:0;
+    background:radial-gradient(circle at 75% 18%, rgba(255,255,255,.5), transparent 60%); pointer-events:none; }
+  .mini-emoji { font-size:5rem; line-height:1; z-index:1; }
+  .mini-word { font-family:var(--font-head); font-weight:700; font-size:2.1rem; color:var(--pink-600); margin-top:.5rem; z-index:1; }
+  .mini-en { color:var(--ink-soft); font-size:1.05rem; z-index:1; }
+  .mini-anim { animation: mpPop .5s ease; }
+  @keyframes mpPop { 0%{opacity:0; transform:scale(.6) translateY(8px);} 60%{opacity:1; transform:scale(1.12);} 100%{transform:scale(1);} }
+  .mini-controls { text-align:center; margin-top:1rem; }
+
   /* word cards */
   .word-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:.9rem; }
   .word-card { background:white; border:1px solid var(--pink-100); border-radius:20px; padding:1rem .6rem; text-align:center;
@@ -294,10 +307,17 @@
         <div class="lesson-video" id="videoBox">
           <video id="lessonVideo" controls playsinline preload="metadata"></video>
         </div>
-        <div id="videoSoon" style="display:none; text-align:center; padding:2.5rem 1.5rem; background:var(--bla-soft); border:1px dashed var(--bla); border-radius:18px;">
-          <div style="font-size:3rem; margin-bottom:.5rem;">🎬</div>
-          <p style="color:var(--ink-soft);" data-no="Videoen til denne leksjonen kommer snart — øv på ordene og ta quizen så lenge! 🌸" data-en="The video for this lesson is coming soon — practice the words and take the quiz meanwhile! 🌸">
-            Videoen til denne leksjonen kommer snart — øv på ordene og ta quizen så lenge! 🌸
+        <div id="miniPlayer" style="display:none;">
+          <div class="mini-stage">
+            <div class="mini-emoji" id="mpEmoji">🎬</div>
+            <div class="mini-word" id="mpWord"></div>
+            <div class="mini-en" id="mpEn"></div>
+          </div>
+          <div class="mini-controls">
+            <button class="btn" id="mpPlay">▶ <span data-no="Spill av" data-en="Play">Spill av</span></button>
+          </div>
+          <p class="step-intro" style="text-align:center; margin-top:.9rem;" data-no="En liten «se &amp; lær»-film: ordene vises med norsk stemme. 🔊 (Helt gratis — laget i siden.)" data-en="A little watch &amp; learn clip: the words appear with a Norwegian voice. 🔊 (Completely free — built into the page.)">
+            En liten «se &amp; lær»-film: ordene vises med norsk stemme. 🔊 (Helt gratis — laget i siden.)
           </p>
         </div>
         <div class="step-foot">
@@ -521,8 +541,37 @@
   function setStep(n) {
     document.querySelectorAll('.step').forEach((s,i)=>s.classList.toggle('active', i===n));
     document.querySelectorAll('.step-tab').forEach((t,i)=>t.classList.toggle('active', i===n));
-    if (n!==0) lessonVideo.pause();
+    if (n!==0) { lessonVideo.pause(); stopMini(); }
   }
+
+  /* ===== Gratis "se & lær"-animasjon ===== */
+  const mini = { timer:null, idx:0, words:[] };
+  const mpEmoji = document.getElementById('mpEmoji');
+  const mpWord  = document.getElementById('mpWord');
+  const mpEn    = document.getElementById('mpEn');
+  function setupMini(words) {
+    stopMini();
+    mini.words = words; mini.idx = 0;
+    mpEmoji.textContent = '🎬'; mpWord.textContent = ''; mpEn.textContent = '';
+  }
+  function stopMini() {
+    if (mini.timer) { clearTimeout(mini.timer); mini.timer = null; }
+    if (window.speechSynthesis) speechSynthesis.cancel();
+  }
+  function stepMini() {
+    if (mini.idx >= mini.words.length) {
+      mpEmoji.textContent = '🌟'; mpEmoji.classList.remove('mini-anim'); void mpEmoji.offsetWidth; mpEmoji.classList.add('mini-anim');
+      mpWord.textContent = currentLang==='no' ? 'Bra jobba!' : 'Well done!'; mpEn.textContent = '';
+      return;
+    }
+    const w = mini.words[mini.idx];
+    mpEmoji.textContent = w.emoji; mpWord.textContent = w.no; mpEn.textContent = w.en;
+    [mpEmoji,mpWord].forEach(el => { el.classList.remove('mini-anim'); void el.offsetWidth; el.classList.add('mini-anim'); });
+    speakNo(w.no);
+    mini.idx++;
+    mini.timer = setTimeout(stepMini, 2300);
+  }
+  document.getElementById('mpPlay').addEventListener('click', () => { stopMini(); mini.idx = 0; stepMini(); });
   function markStep(n) {
     stepDone[n] = true;
     document.getElementById('chk'+n).textContent = '✓';
@@ -539,11 +588,13 @@
     if (l.video) {
       lessonVideo.src = l.video;
       document.getElementById('videoBox').style.display = '';
-      document.getElementById('videoSoon').style.display = 'none';
+      document.getElementById('miniPlayer').style.display = 'none';
+      stopMini();
     } else {
       lessonVideo.removeAttribute('src'); lessonVideo.load();
       document.getElementById('videoBox').style.display = 'none';
-      document.getElementById('videoSoon').style.display = '';
+      document.getElementById('miniPlayer').style.display = '';
+      setupMini(l.words);
     }
     renderWords(l.words);
     resetQuiz(l.words);
@@ -555,6 +606,7 @@
     overlay.classList.remove('open');
     document.body.style.overflow = '';
     lessonVideo.pause();
+    stopMini();
     if (window.speechSynthesis) speechSynthesis.cancel();
   }
   document.getElementById('panelClose').addEventListener('click', closeLesson);
