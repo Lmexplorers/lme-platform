@@ -316,12 +316,14 @@
     position: relative; width: min(100%, 480px); display: flex; flex-direction: column;
     align-items: center; gap: 1.1rem; transform: scale(.96); transition: transform .3s;
   }
+  .player-overlay .stage.landscape { width: min(100%, 920px); }
   .player-overlay.open .stage { transform: scale(1); }
   .player-screen {
     position: relative; width: 100%; aspect-ratio: 9/16; max-height: 74vh;
     border-radius: 26px; overflow: hidden; background: #000;
     box-shadow: 0 30px 80px rgba(0,0,0,.5); border: 4px solid rgba(255,255,255,.12);
   }
+  .player-screen.landscape { aspect-ratio: 16/9; }
   .player-screen video { width: 100%; height: 100%; object-fit: contain; background:#000; display: block; }
   .player-meta { text-align: center; color: white; }
   .player-meta h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem; }
@@ -480,19 +482,24 @@
         </div>
       </div>
 
-      <!-- Slide 3: Lær -->
+      <!-- Slide 3: Lær Norsk (spiller) -->
       <div class="hero-slide bg-bla">
         <span class="deco" aria-hidden="true">🔤</span>
         <div class="hero-copy">
-          <span class="hero-badge" data-no="🍎 Montessori" data-en="🍎 Montessori">🍎 Montessori</span>
+          <span class="hero-badge" data-no="🆕 Ny video — Lær Norsk" data-en="🆕 New video — Learn Norwegian">🆕 Ny video — Lær Norsk</span>
           <h1>
-            <span data-no="Lær med" data-en="Learn with">Lær med</span>
+            <span data-no="Lær Norsk med" data-en="Learn Norwegian with">Lær Norsk med</span>
             <span class="accent">Mia &amp; Teo</span>
           </h1>
-          <p data-no="Bokstaver, tall, farger og praktisk liv — i et trygt tempo som passer de små." data-en="Letters, numbers, colors and practical life — at a gentle pace that suits the little ones.">
-            Bokstaver, tall, farger og praktisk liv — i et trygt tempo som passer de små.
+          <p data-no="Bli kjent med norske ord og lyder sammen med Mia og Teo — i et trygt tempo som passer de små." data-en="Get to know Norwegian words and sounds together with Mia and Teo — at a gentle pace that suits the little ones.">
+            Bli kjent med norske ord og lyder sammen med Mia og Teo — i et trygt tempo som passer de små.
           </p>
-          <span class="hero-cta soon"><span class="play-ic">🔒</span><span data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></span>
+          <button class="hero-cta play-clip"
+            data-src="videos/laer-norsk.mp4" data-orient="landscape"
+            data-title-no="Lær Norsk med Mia &amp; Teo" data-title-en="Learn Norwegian with Mia &amp; Teo"
+            data-desc-no="Bli kjent med norske ord og lyder sammen med Mia og Teo." data-desc-en="Get to know Norwegian words and sounds together with Mia and Teo.">
+            <span class="play-ic">▶</span><span data-no="Spill av" data-en="Play">Spill av</span>
+          </button>
         </div>
       </div>
 
@@ -585,13 +592,24 @@
 <section class="shelf-wrap" id="laer">
   <div class="shelf-head">
     <h2 data-no="Lær med Mia &amp; Teo" data-en="Learn with Mia &amp; Teo">Lær med Mia &amp; Teo</h2>
-    <span class="tag" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span>
+    <span class="tag live" data-no="Ny video!" data-en="New video!">Ny video!</span>
   </div>
   <div class="shelf">
-    <div class="tile soon">
-      <div class="tile-cat cat-gul">🔤</div>
-      <div class="tile-body"><h3 data-no="Lær Norsk" data-en="Learn Norwegian">Lær Norsk</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
-    </div>
+    <button class="tile" type="button"
+      data-src="videos/laer-norsk.mp4" data-orient="landscape"
+      data-title-no="Lær Norsk med Mia &amp; Teo" data-title-en="Learn Norwegian with Mia &amp; Teo"
+      data-desc-no="Bli kjent med norske ord og lyder sammen med Mia og Teo." data-desc-en="Get to know Norwegian words and sounds together with Mia and Teo.">
+      <div class="tile-cat cat-gul">
+        🔤
+        <span class="tile-flagpill">🇳🇴</span>
+        <span class="tile-play"><span>▶</span></span>
+        <span class="tile-dur">0:40</span>
+      </div>
+      <div class="tile-body">
+        <h3 data-no="Lær Norsk" data-en="Learn Norwegian">Lær Norsk</h3>
+        <p data-no="Mia &amp; Teo · Norske ord" data-en="Mia &amp; Teo · Norwegian words">Mia &amp; Teo · Norske ord</p>
+      </div>
+    </button>
     <div class="tile soon">
       <div class="tile-cat cat-lime">🍎</div>
       <div class="tile-body"><h3 data-no="Praktisk liv" data-en="Practical life">Praktisk liv</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
@@ -698,9 +716,9 @@
 
 <!-- ============ FULLSKJERM-SPILLER (TV-MODUS) ============ -->
 <div class="player-overlay" id="playerOverlay" role="dialog" aria-modal="true" aria-label="Videospiller">
-  <div class="stage">
+  <div class="stage" id="tvStage">
     <button class="player-close" id="playerClose" aria-label="Lukk">×</button>
-    <div class="player-screen">
+    <div class="player-screen" id="tvScreen">
       <video id="tvVideo" controls playsinline preload="metadata"></video>
     </div>
     <div class="player-meta">
@@ -781,10 +799,15 @@
   const tvVideo = document.getElementById('tvVideo');
   const tvTitle = document.getElementById('tvTitle');
   const tvDesc  = document.getElementById('tvDesc');
+  const tvStage = document.getElementById('tvStage');
+  const tvScreen = document.getElementById('tvScreen');
 
-  function openPlayer({ src, poster, titleNo, titleEn, descNo, descEn }) {
+  function openPlayer({ src, poster, titleNo, titleEn, descNo, descEn, orient }) {
+    const landscape = orient === 'landscape';
+    tvStage.classList.toggle('landscape', landscape);
+    tvScreen.classList.toggle('landscape', landscape);
     tvVideo.src = src;
-    if (poster) tvVideo.poster = poster;
+    if (poster) tvVideo.poster = poster; else tvVideo.removeAttribute('poster');
     tvTitle.setAttribute('data-no', titleNo); tvTitle.setAttribute('data-en', titleEn);
     tvDesc.setAttribute('data-no', descNo);   tvDesc.setAttribute('data-en', descEn);
     tvTitle.textContent = currentLang === 'no' ? titleNo : titleEn;
@@ -809,8 +832,20 @@
     tile.addEventListener('click', () => openPlayer({
       src: tile.dataset.src,
       poster: tile.dataset.poster,
+      orient: tile.dataset.orient,
       titleNo: tile.dataset.titleNo, titleEn: tile.dataset.titleEn,
       descNo: tile.dataset.descNo,   descEn: tile.dataset.descEn
+    }));
+  });
+
+  // Hero/CTA enkel klipp-avspilling (ikke språkbyttende kilde)
+  document.querySelectorAll('.play-clip[data-src]').forEach(btn => {
+    btn.addEventListener('click', () => openPlayer({
+      src: btn.dataset.src,
+      poster: btn.dataset.poster,
+      orient: btn.dataset.orient,
+      titleNo: btn.dataset.titleNo, titleEn: btn.dataset.titleEn,
+      descNo: btn.dataset.descNo,   descEn: btn.dataset.descEn
     }));
   });
 
