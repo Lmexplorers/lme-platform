@@ -291,8 +291,14 @@
         <p class="step-intro" data-no="Se og hør Mia og Teo. Trykk på avspilling og bli kjent med ordene." data-en="Watch and listen to Mia and Teo. Press play and get to know the words.">
           Se og hør Mia og Teo. Trykk på avspilling og bli kjent med ordene.
         </p>
-        <div class="lesson-video">
-          <video id="lessonVideo" controls playsinline preload="metadata" src="videos/laer-norsk.mp4"></video>
+        <div class="lesson-video" id="videoBox">
+          <video id="lessonVideo" controls playsinline preload="metadata"></video>
+        </div>
+        <div id="videoSoon" style="display:none; text-align:center; padding:2.5rem 1.5rem; background:var(--bla-soft); border:1px dashed var(--bla); border-radius:18px;">
+          <div style="font-size:3rem; margin-bottom:.5rem;">🎬</div>
+          <p style="color:var(--ink-soft);" data-no="Videoen til denne leksjonen kommer snart — øv på ordene og ta quizen så lenge! 🌸" data-en="The video for this lesson is coming soon — practice the words and take the quiz meanwhile! 🌸">
+            Videoen til denne leksjonen kommer snart — øv på ordene og ta quizen så lenge! 🌸
+          </p>
         </div>
         <div class="step-foot">
           <button class="btn" id="toWords" data-no="Videre til ordlek →" data-en="On to word play →">Videre til ordlek →</button>
@@ -384,26 +390,77 @@
   }
 
   /* ============ KURSDATA ============ */
-  const WORDS = [
-    { no:'Hund',   en:'Dog',    emoji:'🐶' },
-    { no:'Katt',   en:'Cat',    emoji:'🐱' },
-    { no:'Sol',    en:'Sun',    emoji:'☀️' },
-    { no:'Måne',   en:'Moon',   emoji:'🌙' },
-    { no:'Eple',   en:'Apple',  emoji:'🍎' },
-    { no:'Ball',   en:'Ball',   emoji:'⚽' },
-    { no:'Fisk',   en:'Fish',   emoji:'🐟' },
-    { no:'Blomst', en:'Flower', emoji:'🌸' },
-    { no:'Bil',    en:'Car',    emoji:'🚗' },
-    { no:'Hus',    en:'House',  emoji:'🏠' },
-  ];
-
   const LESSONS = [
-    { id:1, icon:'🔤', cls:'c1', titleNo:'Første ord',     titleEn:'First words',      metaNo:'Video · Ordlek · Quiz', metaEn:'Video · Word play · Quiz', open:true },
-    { id:2, icon:'🔢', cls:'c2', titleNo:'Tall og telling', titleEn:'Numbers & counting', metaNo:'Kommer snart', metaEn:'Coming soon', open:false },
-    { id:3, icon:'🎨', cls:'c3', titleNo:'Farger',          titleEn:'Colors',            metaNo:'Kommer snart', metaEn:'Coming soon', open:false },
-    { id:4, icon:'👪', cls:'c4', titleNo:'Familien',        titleEn:'The family',        metaNo:'Kommer snart', metaEn:'Coming soon', open:false },
-    { id:5, icon:'🍎', cls:'c5', titleNo:'Mat og frukt',    titleEn:'Food & fruit',      metaNo:'Kommer snart', metaEn:'Coming soon', open:false },
+    { id:1, icon:'🔤', cls:'c1', titleNo:'Første ord', titleEn:'First words',
+      video:'videos/laer-norsk.mp4',
+      words:[
+        { no:'Hund',   en:'Dog',    emoji:'🐶' },
+        { no:'Katt',   en:'Cat',    emoji:'🐱' },
+        { no:'Sol',    en:'Sun',    emoji:'☀️' },
+        { no:'Måne',   en:'Moon',   emoji:'🌙' },
+        { no:'Eple',   en:'Apple',  emoji:'🍎' },
+        { no:'Ball',   en:'Ball',   emoji:'⚽' },
+        { no:'Fisk',   en:'Fish',   emoji:'🐟' },
+        { no:'Blomst', en:'Flower', emoji:'🌸' },
+        { no:'Bil',    en:'Car',    emoji:'🚗' },
+        { no:'Hus',    en:'House',  emoji:'🏠' },
+      ] },
+    { id:2, icon:'🔢', cls:'c2', titleNo:'Tall og telling', titleEn:'Numbers & counting',
+      video:null,
+      words:[
+        { no:'En',   en:'One',   emoji:'1️⃣' },
+        { no:'To',   en:'Two',   emoji:'2️⃣' },
+        { no:'Tre',  en:'Three', emoji:'3️⃣' },
+        { no:'Fire', en:'Four',  emoji:'4️⃣' },
+        { no:'Fem',  en:'Five',  emoji:'5️⃣' },
+        { no:'Seks', en:'Six',   emoji:'6️⃣' },
+        { no:'Sju',  en:'Seven', emoji:'7️⃣' },
+        { no:'Åtte', en:'Eight', emoji:'8️⃣' },
+        { no:'Ni',   en:'Nine',  emoji:'9️⃣' },
+        { no:'Ti',   en:'Ten',   emoji:'🔟' },
+      ] },
+    { id:3, icon:'🎨', cls:'c3', titleNo:'Farger', titleEn:'Colors',
+      video:null,
+      words:[
+        { no:'Rød',    en:'Red',    emoji:'🔴' },
+        { no:'Blå',    en:'Blue',   emoji:'🔵' },
+        { no:'Gul',    en:'Yellow', emoji:'🟡' },
+        { no:'Grønn',  en:'Green',  emoji:'🟢' },
+        { no:'Oransje',en:'Orange', emoji:'🟠' },
+        { no:'Lilla',  en:'Purple', emoji:'🟣' },
+        { no:'Rosa',   en:'Pink',   emoji:'🌸' },
+        { no:'Brun',   en:'Brown',  emoji:'🟤' },
+        { no:'Svart',  en:'Black',  emoji:'⚫' },
+        { no:'Hvit',   en:'White',  emoji:'⚪' },
+      ] },
+    { id:4, icon:'👪', cls:'c4', titleNo:'Familien', titleEn:'The family',
+      video:null,
+      words:[
+        { no:'Mamma',    en:'Mum',     emoji:'👩' },
+        { no:'Pappa',    en:'Dad',     emoji:'👨' },
+        { no:'Baby',     en:'Baby',    emoji:'👶' },
+        { no:'Jente',    en:'Girl',    emoji:'👧' },
+        { no:'Gutt',     en:'Boy',     emoji:'👦' },
+        { no:'Bestemor', en:'Grandma', emoji:'👵' },
+        { no:'Bestefar', en:'Grandpa', emoji:'👴' },
+        { no:'Familie',  en:'Family',  emoji:'👪' },
+      ] },
+    { id:5, icon:'🍎', cls:'c5', titleNo:'Mat og frukt', titleEn:'Food & fruit',
+      video:null,
+      words:[
+        { no:'Eple',    en:'Apple',      emoji:'🍎' },
+        { no:'Banan',   en:'Banana',     emoji:'🍌' },
+        { no:'Jordbær', en:'Strawberry', emoji:'🍓' },
+        { no:'Drue',    en:'Grapes',     emoji:'🍇' },
+        { no:'Brød',    en:'Bread',      emoji:'🍞' },
+        { no:'Ost',     en:'Cheese',     emoji:'🧀' },
+        { no:'Melk',    en:'Milk',       emoji:'🥛' },
+        { no:'Egg',     en:'Egg',        emoji:'🥚' },
+        { no:'Gulrot',  en:'Carrot',     emoji:'🥕' },
+        { no:'Vann',    en:'Water',      emoji:'💧' },
+      ] },
   ];
+  let currentLesson = LESSONS[0];
 
   /* ============ FREMGANG (localStorage) ============ */
   const PKEY = 'lme_laernorsk_progress';
@@ -432,15 +489,14 @@
     grid.innerHTML = '';
     LESSONS.forEach(l => {
       const pr = progress['l'+l.id] || {};
-      const el = document.createElement(l.open ? 'button' : 'div');
-      el.className = 'lesson' + (l.open ? '' : ' locked');
-      if (l.open) el.type = 'button';
+      const el = document.createElement('button');
+      el.className = 'lesson'; el.type = 'button';
       const title = currentLang==='no' ? l.titleNo : l.titleEn;
-      const meta  = currentLang==='no' ? l.metaNo  : l.metaEn;
+      const meta = l.video
+        ? (currentLang==='no' ? 'Video · Ordlek · Quiz' : 'Video · Word play · Quiz')
+        : (currentLang==='no' ? 'Ordlek · Quiz' : 'Word play · Quiz');
       let statusHtml;
-      if (!l.open) {
-        statusHtml = `<span class="status soon">🔒 ${currentLang==='no'?'Kommer snart':'Coming soon'}</span>`;
-      } else if (pr.done) {
+      if (pr.done) {
         statusHtml = `<span class="status done">✓ ${currentLang==='no'?'Fullført':'Completed'}</span>
                       <div class="stars">${starStr(pr.stars||0)}</div>`;
       } else {
@@ -451,7 +507,7 @@
         <h3>${currentLang==='no'?'Leksjon':'Lesson'} ${l.id} · ${title}</h3>
         <div class="meta">${meta}</div>
         ${statusHtml}`;
-      if (l.open) el.addEventListener('click', () => openLesson(l));
+      el.addEventListener('click', () => openLesson(l));
       grid.appendChild(el);
     });
     updateRing();
@@ -474,12 +530,23 @@
   document.querySelectorAll('.step-tab').forEach(t => t.addEventListener('click', () => setStep(+t.dataset.step)));
 
   function openLesson(l) {
+    currentLesson = l;
     document.getElementById('panelTitle').textContent =
       (currentLang==='no'?'Leksjon ':'Lesson ') + l.id + ' · ' + (currentLang==='no'?l.titleNo:l.titleEn);
     stepDone = [false,false,false];
     ['chk0','chk1','chk2'].forEach((id,i)=>document.getElementById(id).textContent = i===0?'▶':'○');
-    renderWords();
-    resetQuiz();
+    // Video eller "kommer snart"
+    if (l.video) {
+      lessonVideo.src = l.video;
+      document.getElementById('videoBox').style.display = '';
+      document.getElementById('videoSoon').style.display = 'none';
+    } else {
+      lessonVideo.removeAttribute('src'); lessonVideo.load();
+      document.getElementById('videoBox').style.display = 'none';
+      document.getElementById('videoSoon').style.display = '';
+    }
+    renderWords(l.words);
+    resetQuiz(l.words);
     setStep(0);
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -498,10 +565,10 @@
   document.getElementById('toQuiz').addEventListener('click', () => { markStep(1); setStep(2); });
 
   /* ============ ORDLEK ============ */
-  function renderWords() {
+  function renderWords(words) {
     const wg = document.getElementById('wordGrid');
     wg.innerHTML = '';
-    WORDS.forEach(w => {
+    words.forEach(w => {
       const c = document.createElement('button');
       c.className = 'word-card'; c.type = 'button';
       c.innerHTML = `<span class="emoji">${w.emoji}</span>
@@ -515,13 +582,14 @@
 
   /* ============ QUIZ ============ */
   const QN = 5;
-  let qIndex = 0, qScore = 0, qOrder = [];
+  let qIndex = 0, qScore = 0, qOrder = [], quizWords = [];
   function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 
-  function resetQuiz() {
+  function resetQuiz(words) {
+    if (words) quizWords = words;
     qIndex = 0; qScore = 0;
-    qOrder = shuffle(WORDS).slice(0, QN);
-    document.getElementById('qTotal').textContent = QN;
+    qOrder = shuffle(quizWords).slice(0, QN);
+    document.getElementById('qTotal').textContent = qOrder.length;
     document.getElementById('quizPlay').style.display = '';
     document.getElementById('quizResult').style.display = 'none';
     renderQuestion();
@@ -530,9 +598,9 @@
     const target = qOrder[qIndex];
     document.getElementById('qNum').textContent = qIndex+1;
     document.getElementById('quizTarget').textContent = target.no;
-    document.getElementById('quizStars').innerHTML = starStr(qScore, QN);
+    document.getElementById('quizStars').innerHTML = starStr(qScore, qOrder.length);
     // bygg alternativer: target + 3 distraktorer
-    const distract = shuffle(WORDS.filter(w => w.no !== target.no)).slice(0,3);
+    const distract = shuffle(quizWords.filter(w => w.no !== target.no)).slice(0,3);
     const opts = shuffle([target, ...distract]);
     const wrap = document.getElementById('quizOpts');
     wrap.innerHTML = '';
@@ -568,8 +636,9 @@
     // 1–3 stjerner basert på antall riktige av QN
     let stars = 1;
     if (qScore >= QN) stars = 3; else if (qScore >= Math.ceil(QN*0.6)) stars = 2;
-    const prev = progress['l1'] || {};
-    progress['l1'] = { done:true, stars: Math.max(stars, prev.stars||0) };
+    const key = 'l' + currentLesson.id;
+    const prev = progress[key] || {};
+    progress[key] = { done:true, stars: Math.max(stars, prev.stars||0) };
     saveProgress(progress);
     updateRing();
     document.getElementById('quizPlay').style.display = 'none';
