@@ -302,25 +302,18 @@
 
       <!-- STEP 0: VIDEO -->
       <div class="step active" id="step0">
-        <p class="step-intro" data-no="Se og hør Mia og Teo. Trykk på avspilling og bli kjent med ordene." data-en="Watch and listen to Mia and Teo. Press play and get to know the words.">
-          Se og hør Mia og Teo. Trykk på avspilling og bli kjent med ordene.
+        <p class="step-intro" data-no="Bli kjent med ordene i denne leksjonen." data-en="Get to know the words in this lesson.">
+          Bli kjent med ordene i denne leksjonen.
         </p>
         <div class="lesson-video" id="videoBox">
           <video id="lessonVideo" controls playsinline preload="metadata"></video>
         </div>
-        <div id="miniPlayer" style="display:none;">
+        <div id="noVideo" style="display:none;">
           <div class="mini-stage">
-            <img class="mini-char" id="mpChar" src="images/mia-og-teo.jpg" alt="Mia og Teo" style="display:none;">
-            <div class="mini-emoji" id="mpEmoji">🎬</div>
-            <div class="mini-word" id="mpWord"></div>
-            <div class="mini-en" id="mpEn"></div>
+            <div class="mini-emoji">🌈</div>
+            <div class="mini-word" data-no="Bli med og lær!" data-en="Come and learn!">Bli med og lær!</div>
+            <div class="mini-en" data-no="Trykk «Videre til ordlek» under for å starte." data-en="Tap “On to word play” below to start.">Trykk «Videre til ordlek» under for å starte.</div>
           </div>
-          <div class="mini-controls">
-            <button class="btn" id="mpPlay">▶ <span data-no="Spill av" data-en="Play">Spill av</span></button>
-          </div>
-          <p class="step-intro" style="text-align:center; margin-top:.9rem;" data-no="En liten «se &amp; lær»-film: ordene vises med norsk stemme. 🔊 (Helt gratis — laget i siden.)" data-en="A little watch &amp; learn clip: the words appear with a Norwegian voice. 🔊 (Completely free — built into the page.)">
-            En liten «se &amp; lær»-film: ordene vises med norsk stemme. 🔊 (Helt gratis — laget i siden.)
-          </p>
         </div>
         <div class="step-foot">
           <button class="btn" id="toWords" data-no="Videre til ordlek →" data-en="On to word play →">Videre til ordlek →</button>
@@ -543,67 +536,9 @@
   function setStep(n) {
     document.querySelectorAll('.step').forEach((s,i)=>s.classList.toggle('active', i===n));
     document.querySelectorAll('.step-tab').forEach((t,i)=>t.classList.toggle('active', i===n));
-    if (n!==0) { lessonVideo.pause(); stopMini(); }
-    if (n===2 && document.getElementById('quizResult').style.display === 'none' && qOrder[qIndex]) speakNo(qOrder[qIndex].no);
+    if (n!==0) lessonVideo.pause();
   }
 
-  /* ===== Gratis "se & lær"-animasjon med Mia & Teo ===== */
-  const mini = { timer:null, idx:0, seq:[] };
-  const mpEmoji = document.getElementById('mpEmoji');
-  const mpWord  = document.getElementById('mpWord');
-  const mpEn    = document.getElementById('mpEn');
-  const mpChar  = document.getElementById('mpChar');
-  const CHEERS = [
-    { no:'Bra!',      en:'Great!' },
-    { no:'Flott!',    en:'Wonderful!' },
-    { no:'Heia!',     en:'Yay!' },
-    { no:'Så flink!', en:'So clever!' },
-  ];
-  function buildSeq(words) {
-    const seq = [{ type:'char', no:'Hei! Skal vi lære norsk?', en:'Hi! Shall we learn Norwegian?' }];
-    words.forEach((w, i) => {
-      seq.push({ type:'word', w });
-      if ((i+1) % 3 === 0 && i < words.length-1) {
-        seq.push({ type:'char', ...CHEERS[((i+1)/3 - 1) % CHEERS.length] });
-      }
-    });
-    seq.push({ type:'char', no:'Bra jobba!', en:'Well done!', star:true });
-    return seq;
-  }
-  function setupMini(words) {
-    stopMini();
-    mini.seq = buildSeq(words); mini.idx = 0;
-    mpChar.style.display = 'none';
-    mpEmoji.style.display = ''; mpEmoji.textContent = '🎬';
-    mpWord.textContent = ''; mpEn.textContent = '';
-  }
-  function stopMini() {
-    if (mini.timer) { clearTimeout(mini.timer); mini.timer = null; }
-    if (window.speechSynthesis) speechSynthesis.cancel();
-  }
-  function animate(el) { el.classList.remove('mini-anim'); void el.offsetWidth; el.classList.add('mini-anim'); }
-  function stepMini() {
-    if (mini.idx >= mini.seq.length) return;
-    const f = mini.seq[mini.idx];
-    if (f.type === 'char') {
-      if (f.star) { mpChar.style.display = 'none'; mpEmoji.style.display = ''; mpEmoji.textContent = '🌟'; animate(mpEmoji); }
-      else { mpEmoji.style.display = 'none'; mpChar.style.display = ''; animate(mpChar); }
-      mpWord.textContent = currentLang==='no' ? f.no : f.en;
-      mpEn.textContent   = currentLang==='no' ? f.en : f.no;
-      animate(mpWord);
-      speakNo(f.no);
-    } else {
-      const w = f.w;
-      mpChar.style.display = 'none';
-      mpEmoji.style.display = ''; mpEmoji.textContent = w.emoji;
-      mpWord.textContent = w.no; mpEn.textContent = w.en;
-      animate(mpEmoji); animate(mpWord);
-      speakNo(w.no);
-    }
-    mini.idx++;
-    mini.timer = setTimeout(stepMini, 2300);
-  }
-  document.getElementById('mpPlay').addEventListener('click', () => { stopMini(); mini.idx = 0; stepMini(); });
   function markStep(n) {
     stepDone[n] = true;
     document.getElementById('chk'+n).textContent = '✓';
@@ -620,13 +555,11 @@
     if (l.video) {
       lessonVideo.src = l.video;
       document.getElementById('videoBox').style.display = '';
-      document.getElementById('miniPlayer').style.display = 'none';
-      stopMini();
+      document.getElementById('noVideo').style.display = 'none';
     } else {
       lessonVideo.removeAttribute('src'); lessonVideo.load();
       document.getElementById('videoBox').style.display = 'none';
-      document.getElementById('miniPlayer').style.display = '';
-      setupMini(l.words);
+      document.getElementById('noVideo').style.display = '';
     }
     renderWords(l.words);
     resetQuiz(l.words);
@@ -638,7 +571,6 @@
     overlay.classList.remove('open');
     document.body.style.overflow = '';
     lessonVideo.pause();
-    stopMini();
     if (window.speechSynthesis) speechSynthesis.cancel();
   }
   document.getElementById('panelClose').addEventListener('click', closeLesson);
@@ -712,7 +644,7 @@
     setTimeout(() => {
       answering = false;
       qIndex++;
-      if (qIndex < QN) renderQuestion(true); else finishQuiz();
+      if (qIndex < QN) renderQuestion(false); else finishQuiz();
     }, 1100);
   }
   function finishQuiz() {
