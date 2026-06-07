@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pinnsvinet i hagen — Mia &amp; Teo | Little Montessori Explorers</title>
+<meta name="description" content="Pinnsvinet i hagen — et illustrert eventyr med Mia og Teo. Demo av profesjonell billedbok-stil.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('fonts/SassoonMontessori.woff2') format('woff2'), url('fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root{
+    --pink-100:#ffe8f0; --pink-300:#ffb3cd; --pink-500:#e85a92; --pink-600:#c43d75; --pink-700:#8f2a55;
+    --ink:#3d2438; --ink-soft:#6b4760; --warm-white:#fffcf9;
+    --font-head:'Playpen Sans',system-ui,sans-serif;
+    --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+    --font-display:'Cormorant Garamond',Georgia,serif;
+    --shadow-deep:0 24px 64px rgba(61,36,56,.28);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:var(--font-body); color:var(--ink); background:#241522;
+    min-height:100%; display:flex; align-items:center; justify-content:center; padding:18px;
+    overflow:hidden;
+  }
+  h1,h2,h3{font-family:var(--font-head);}
+
+  .book{
+    position:relative; width:min(100%,980px); aspect-ratio:16/10; max-height:94vh;
+    border-radius:28px; overflow:hidden; box-shadow:var(--shadow-deep);
+    background:#bfe3f5;
+  }
+  .stage{position:absolute; inset:0; width:100%; height:100%; display:block;}
+
+  /* ---- topbar ---- */
+  .topbar{
+    position:absolute; top:0; left:0; right:0; z-index:6; display:flex; justify-content:space-between;
+    align-items:center; padding:16px 20px;
+    background:linear-gradient(to bottom, rgba(36,21,34,.32), transparent);
+  }
+  .back, .langbtn{
+    display:inline-flex; align-items:center; gap:.45rem; border:none; cursor:pointer; text-decoration:none;
+    background:rgba(255,255,255,.92); color:var(--pink-600); font-weight:700; font-size:.92rem;
+    padding:.5rem 1rem; border-radius:999px; box-shadow:0 6px 18px rgba(0,0,0,.18); font-family:var(--font-body);
+    transition:transform .2s;
+  }
+  .back:hover,.langbtn:hover{transform:translateY(-2px);}
+  .book-title{
+    position:absolute; left:50%; top:18px; transform:translateX(-50%); z-index:6;
+    color:#fff; font-size:1.05rem; font-weight:700; text-shadow:0 2px 10px rgba(0,0,0,.35);
+    pointer-events:none; white-space:nowrap;
+  }
+
+  /* ---- caption ---- */
+  .caption{
+    position:absolute; left:0; right:0; bottom:74px; z-index:6; padding:0 8%;
+    text-align:center; pointer-events:none;
+  }
+  .caption .inner{
+    display:inline-block; background:rgba(255,252,249,.92); backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px); border-radius:22px; padding:14px 26px; max-width:760px;
+    box-shadow:0 12px 36px rgba(0,0,0,.22); border:1px solid rgba(255,255,255,.7);
+    animation:capIn .7s ease;
+  }
+  @keyframes capIn{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:none;}}
+  .caption .no{font-size:clamp(1.05rem,2.4vw,1.5rem); color:var(--ink); line-height:1.35; font-weight:500;}
+  .caption .en{display:block; font-family:var(--font-display); font-style:italic; color:var(--ink-soft);
+    font-size:clamp(.85rem,1.7vw,1.05rem); margin-top:.35rem;}
+
+  /* ---- controls ---- */
+  .controls{
+    position:absolute; left:0; right:0; bottom:16px; z-index:7; display:flex; align-items:center;
+    justify-content:center; gap:18px;
+  }
+  .navbtn{
+    width:52px; height:52px; border-radius:50%; border:none; cursor:pointer; background:#fff; color:var(--pink-600);
+    font-size:1.5rem; box-shadow:0 8px 22px rgba(0,0,0,.25); transition:transform .2s, opacity .2s;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .navbtn:hover:not(:disabled){transform:scale(1.1);}
+  .navbtn:disabled{opacity:.4; cursor:default;}
+  .dots{display:flex; gap:8px;}
+  .dots button{width:10px; height:10px; border-radius:50%; border:none; background:rgba(255,255,255,.55);
+    cursor:pointer; padding:0; transition:all .25s;}
+  .dots button.active{background:#fff; width:26px; border-radius:999px;}
+
+  /* ============ SCENE / SVG ANIMASJON ============ */
+  .toggle{opacity:0; transition:opacity 1s ease, transform 1s ease;}
+  .toggle.show{opacity:1;}
+  .sky2,.sky3{opacity:0; transition:opacity 1.1s ease;}
+  .book[data-sky="eve"] .sky2{opacity:1;}
+  .book[data-sky="night"] .sky3{opacity:1;}
+
+  .rays{transform-box:fill-box; transform-origin:center; animation:spin 60s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .cloud{animation:drift 26s ease-in-out infinite;}
+  .cloud.b{animation-duration:34s; animation-delay:-8s;}
+  @keyframes drift{0%,100%{transform:translateX(0);}50%{transform:translateX(34px);}}
+  .blade{transform-box:fill-box; transform-origin:bottom center; animation:sway 4.5s ease-in-out infinite;}
+  .blade:nth-of-type(2n){animation-delay:-1.2s;} .blade:nth-of-type(3n){animation-delay:-2.4s;}
+  @keyframes sway{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
+  .twinkle{animation:tw 3s ease-in-out infinite;}
+  .twinkle:nth-of-type(2n){animation-delay:-1s;} .twinkle:nth-of-type(3n){animation-delay:-2s;}
+  @keyframes tw{0%,100%{opacity:.35; transform:scale(.8);}50%{opacity:1; transform:scale(1.1);}}
+  .hog-bob{transform-box:fill-box; transform-origin:center; animation:bob 3.4s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+  .float{transform-box:fill-box; transform-origin:center; animation:bob 4s ease-in-out infinite;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;}
+  }
+  @media (max-width:600px){
+    .caption{bottom:70px; padding:0 5%;}
+    .book-title{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="book" id="book" data-sky="day">
+  <svg class="stage" viewBox="0 0 1000 625" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Illustrert eventyr">
+    <defs>
+      <linearGradient id="gDay" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#aee3f7"/><stop offset="1" stop-color="#e7f7ef"/>
+      </linearGradient>
+      <linearGradient id="gEve" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ffd29b"/><stop offset=".55" stop-color="#ffb6b0"/><stop offset="1" stop-color="#f7c9d8"/>
+      </linearGradient>
+      <linearGradient id="gNight" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#2b2a5e"/><stop offset=".6" stop-color="#3f3a6e"/><stop offset="1" stop-color="#5b4a7a"/>
+      </linearGradient>
+      <radialGradient id="gSun" cx=".5" cy=".5" r=".5">
+        <stop offset="0" stop-color="#fff2b0"/><stop offset="1" stop-color="#ffd23e"/>
+      </radialGradient>
+      <linearGradient id="gHillBack" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#a8d96e"/><stop offset="1" stop-color="#8fc24a"/>
+      </linearGradient>
+      <linearGradient id="gHillFront" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#8cc247"/><stop offset="1" stop-color="#6fa838"/>
+      </linearGradient>
+    </defs>
+
+    <!-- SKY layers -->
+    <rect class="sky1" x="0" y="0" width="1000" height="625" fill="url(#gDay)"/>
+    <rect class="sky2" x="0" y="0" width="1000" height="625" fill="url(#gEve)"/>
+    <rect class="sky3" x="0" y="0" width="1000" height="625" fill="url(#gNight)"/>
+
+    <!-- STARS (night) -->
+    <g id="stars" class="toggle">
+      <g class="twinkle"><circle cx="160" cy="90" r="3.5" fill="#fff"/></g>
+      <g class="twinkle"><circle cx="300" cy="60" r="2.6" fill="#fff"/></g>
+      <g class="twinkle"><circle cx="470" cy="100" r="3" fill="#fff"/></g>
+      <g class="twinkle"><circle cx="620" cy="55" r="2.4" fill="#fff"/></g>
+      <g class="twinkle"><circle cx="760" cy="120" r="3.4" fill="#fff"/></g>
+      <g class="twinkle"><circle cx="880" cy="70" r="2.6" fill="#fff"/></g>
+      <g class="twinkle"><circle cx="540" cy="160" r="2.2" fill="#fff"/></g>
+      <g class="twinkle"><circle cx="220" cy="170" r="2.4" fill="#fff"/></g>
+    </g>
+
+    <!-- MOON (night) -->
+    <g id="moon" class="toggle float">
+      <circle cx="830" cy="120" r="46" fill="#fdf6d8"/>
+      <circle cx="815" cy="108" r="9" fill="#ece0b0" opacity=".7"/>
+      <circle cx="848" cy="132" r="6" fill="#ece0b0" opacity=".6"/>
+      <circle cx="838" cy="104" r="4" fill="#ece0b0" opacity=".6"/>
+    </g>
+
+    <!-- SUN (day/eve) -->
+    <g id="sun" class="toggle show">
+      <circle cx="150" cy="135" r="80" fill="#ffe27a" opacity=".35"/>
+      <g class="rays">
+        <g fill="#ffd23e">
+          <rect x="146" y="35" width="8" height="34" rx="4"/>
+          <rect x="146" y="201" width="8" height="34" rx="4"/>
+          <rect x="50" y="131" width="34" height="8" rx="4"/>
+          <rect x="216" y="131" width="34" height="8" rx="4"/>
+          <rect x="78" y="63" width="8" height="30" rx="4" transform="rotate(-45 82 78)"/>
+          <rect x="214" y="63" width="8" height="30" rx="4" transform="rotate(45 218 78)"/>
+          <rect x="78" y="177" width="8" height="30" rx="4" transform="rotate(45 82 192)"/>
+          <rect x="214" y="177" width="8" height="30" rx="4" transform="rotate(-45 218 192)"/>
+        </g>
+      </g>
+      <circle cx="150" cy="135" r="50" fill="url(#gSun)"/>
+    </g>
+
+    <!-- CLOUDS (day/eve) -->
+    <g id="clouds" class="toggle show">
+      <g class="cloud" fill="#ffffff" opacity=".92">
+        <ellipse cx="640" cy="120" rx="46" ry="26"/><ellipse cx="680" cy="110" rx="38" ry="30"/><ellipse cx="606" cy="128" rx="30" ry="20"/>
+      </g>
+      <g class="cloud b" fill="#ffffff" opacity=".8">
+        <ellipse cx="420" cy="80" rx="38" ry="22"/><ellipse cx="452" cy="74" rx="30" ry="24"/>
+      </g>
+    </g>
+
+    <!-- HILLS -->
+    <path d="M0,470 Q250,400 500,455 T1000,440 L1000,625 L0,625 Z" fill="url(#gHillBack)"/>
+    <path d="M0,520 Q300,455 560,510 T1000,500 L1000,625 L0,625 Z" fill="url(#gHillFront)"/>
+
+    <!-- TREE -->
+    <g>
+      <rect x="892" y="430" width="26" height="120" rx="10" fill="#8a5a3c"/>
+      <circle cx="905" cy="420" r="58" fill="#6fa838"/>
+      <circle cx="868" cy="445" r="42" fill="#7fb24a"/>
+      <circle cx="942" cy="448" r="40" fill="#7fb24a"/>
+      <circle cx="905" cy="455" r="46" fill="#86bb50"/>
+    </g>
+
+    <!-- BUSH -->
+    <g>
+      <ellipse cx="560" cy="540" rx="120" ry="20" fill="#000" opacity=".06"/>
+      <circle cx="520" cy="505" r="42" fill="#6fa838"/>
+      <circle cx="600" cy="505" r="46" fill="#6fa838"/>
+      <circle cx="560" cy="480" r="50" fill="#7fb24a"/>
+      <circle cx="560" cy="512" r="42" fill="#86bb50"/>
+      <circle cx="540" cy="492" r="5" fill="#e0392f"/><circle cx="588" cy="500" r="5" fill="#e0392f"/><circle cx="566" cy="476" r="5" fill="#e0392f"/>
+    </g>
+
+    <!-- APPLE -->
+    <g id="apple" class="toggle">
+      <ellipse cx="470" cy="556" rx="20" ry="6" fill="#000" opacity=".12"/>
+      <circle cx="470" cy="536" r="17" fill="#e0392f"/>
+      <circle cx="464" cy="530" r="5" fill="#ff7a6e" opacity=".8"/>
+      <rect x="468" y="514" width="4" height="10" rx="2" fill="#7a4a2a"/>
+      <ellipse cx="479" cy="516" rx="9" ry="5" fill="#6fae3a" transform="rotate(-25 479 516)"/>
+    </g>
+
+    <!-- HEDGEHOG -->
+    <g id="hog" class="toggle">
+      <g class="hog-bob">
+        <ellipse cx="640" cy="560" rx="58" ry="10" fill="#000" opacity=".12"/>
+        <!-- spikes -->
+        <path d="M598,548 L606,506 L618,540 L628,500 L640,538 L652,500 L662,540 L674,506 L682,548 Z" fill="#6f4a2c"/>
+        <ellipse cx="640" cy="546" rx="50" ry="30" fill="#7c5436"/>
+        <!-- face -->
+        <ellipse cx="600" cy="552" rx="26" ry="20" fill="#d8b48c"/>
+        <path d="M576,552 q-12,0 -14,8 q10,4 16,-2 Z" fill="#c89b72"/>
+        <circle cx="567" cy="552" r="5" fill="#3a2418"/>
+        <circle cx="601" cy="545" r="3.4" fill="#3a2418"/>
+        <circle cx="602" cy="544" r="1.1" fill="#fff"/>
+        <path d="M592,560 q6,5 13,1" stroke="#3a2418" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <circle cx="612" cy="558" r="5" fill="#ffb3cd" opacity=".55"/>
+        <!-- feet -->
+        <ellipse cx="624" cy="574" rx="8" ry="5" fill="#5e3f26"/><ellipse cx="660" cy="574" rx="8" ry="5" fill="#5e3f26"/>
+      </g>
+    </g>
+
+    <!-- MIA -->
+    <g id="mia" class="toggle" transform="translate(250,372)">
+      <ellipse cx="40" cy="176" rx="34" ry="8" fill="#000" opacity=".12"/>
+      <rect x="30" y="150" width="9" height="28" rx="4" fill="#f0b48f"/><rect x="44" y="150" width="9" height="28" rx="4" fill="#f0b48f"/>
+      <ellipse cx="34" cy="180" rx="9" ry="5" fill="#8f2a55"/><ellipse cx="49" cy="180" rx="9" ry="5" fill="#8f2a55"/>
+      <path d="M16,158 L26,96 L56,96 L66,158 Z" fill="#e85a92"/>
+      <path d="M16,158 L66,158 L62,148 L20,148 Z" fill="#c43d75"/>
+      <rect x="14" y="100" width="8" height="40" rx="4" fill="#f0b48f" transform="rotate(18 18 100)"/>
+      <rect x="60" y="100" width="8" height="40" rx="4" fill="#f0b48f" transform="rotate(-18 64 100)"/>
+      <circle cx="41" cy="74" r="24" fill="#f6c9a8"/>
+      <path d="M16,72 q0,-30 25,-30 q25,0 25,30 q-10,-14 -25,-14 q-15,0 -25,14 Z" fill="#6b4a36"/>
+      <circle cx="16" cy="70" r="10" fill="#6b4a36"/><circle cx="66" cy="70" r="10" fill="#6b4a36"/>
+      <circle cx="33" cy="76" r="2.6" fill="#3a2418"/><circle cx="49" cy="76" r="2.6" fill="#3a2418"/>
+      <circle cx="29" cy="84" r="4.5" fill="#ffb3cd" opacity=".6"/><circle cx="53" cy="84" r="4.5" fill="#ffb3cd" opacity=".6"/>
+      <path d="M35,84 q6,6 12,0" stroke="#a85" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- TEO -->
+    <g id="teo" class="toggle" transform="translate(355,378)">
+      <ellipse cx="38" cy="170" rx="32" ry="8" fill="#000" opacity=".12"/>
+      <rect x="28" y="142" width="9" height="30" rx="4" fill="#e2a877"/><rect x="42" y="142" width="9" height="30" rx="4" fill="#e2a877"/>
+      <ellipse cx="32" cy="174" rx="9" ry="5" fill="#3d2438"/><ellipse cx="47" cy="174" rx="9" ry="5" fill="#3d2438"/>
+      <rect x="22" y="92" width="36" height="56" rx="14" fill="#6ec1e4"/>
+      <rect x="16" y="98" width="8" height="38" rx="4" fill="#e2a877" transform="rotate(16 20 98)"/>
+      <rect x="56" y="98" width="8" height="38" rx="4" fill="#e2a877" transform="rotate(-16 60 98)"/>
+      <circle cx="40" cy="72" r="23" fill="#f3bd97"/>
+      <path d="M18,66 q2,-26 22,-26 q20,0 22,26 q-11,-12 -22,-12 q-11,0 -22,12 Z" fill="#3a2a1e"/>
+      <circle cx="33" cy="74" r="2.6" fill="#3a2418"/><circle cx="48" cy="74" r="2.6" fill="#3a2418"/>
+      <circle cx="29" cy="82" r="4.2" fill="#ff9d7a" opacity=".55"/><circle cx="52" cy="82" r="4.2" fill="#ff9d7a" opacity=".55"/>
+      <path d="M34,82 q6,6 12,0" stroke="#a85" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- GRASS foreground -->
+    <g fill="#5e9a30">
+      <path class="blade" d="M40,625 q-6,-40 2,-64 q8,24 2,64 Z"/>
+      <path class="blade" d="M120,625 q-8,-50 2,-78 q10,28 4,78 Z"/>
+      <path class="blade" d="M210,625 q-5,-36 2,-58 q7,22 2,58 Z"/>
+      <path class="blade" d="M760,625 q-7,-46 2,-72 q9,26 3,72 Z"/>
+      <path class="blade" d="M850,625 q-5,-38 2,-60 q7,22 2,60 Z"/>
+      <path class="blade" d="M930,625 q-8,-52 2,-80 q10,30 4,80 Z"/>
+    </g>
+  </svg>
+
+  <div class="topbar">
+    <a class="back" href="/mia-og-teo" data-no="← Tilbake" data-en="← Back">← Tilbake</a>
+    <button class="langbtn" id="langbtn">EN 🌍</button>
+  </div>
+  <div class="book-title" data-no="Pinnsvinet i hagen" data-en="The hedgehog in the garden">Pinnsvinet i hagen</div>
+
+  <div class="caption">
+    <div class="inner" id="capInner">
+      <div class="no" id="capNo"></div>
+      <span class="en" id="capEn"></span>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="navbtn" id="prev" aria-label="Forrige">‹</button>
+    <div class="dots" id="dots"></div>
+    <button class="navbtn" id="next" aria-label="Neste">›</button>
+  </div>
+</div>
+
+<script>
+  let lang = 'no';
+  const SCENES = [
+    { sky:'day',   show:['sun','clouds','mia','teo','hog'],
+      no:'I hagen til Mia og Teo bodde et lite pinnsvin.',
+      en:'In Mia and Teo’s garden lived a little hedgehog.' },
+    { sky:'day',   show:['sun','clouds','hog'],
+      no:'Hver kveld kom det fram for å lete etter mat i det høye gresset.',
+      en:'Every evening it came out to look for food in the tall grass.' },
+    { sky:'eve',   show:['sun','mia','teo','apple','hog'],
+      no:'Mia la et rødt eple ved busken. Teo satt helt stille og ventet.',
+      en:'Mia placed a red apple by the bush. Teo sat very still and waited.' },
+    { sky:'eve',   show:['apple','hog'],
+      no:'Pinnsvinet snuste, tok en bit — og rullet seg lykkelig sammen.',
+      en:'The hedgehog sniffed, took a bite — and curled up happily.' },
+    { sky:'night', show:['moon','stars','hog'],
+      no:'«God natt, lille venn», hvisket Mia mens stjernene tentes.',
+      en:'“Good night, little friend,” Mia whispered as the stars came out.' },
+  ];
+  const TOGGLE = ['sun','clouds','moon','stars','mia','teo','hog','apple'];
+  const book = document.getElementById('book');
+  const capNo = document.getElementById('capNo');
+  const capEn = document.getElementById('capEn');
+  const capInner = document.getElementById('capInner');
+  const dotsWrap = document.getElementById('dots');
+  let idx = 0;
+
+  SCENES.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.addEventListener('click', () => go(i));
+    dotsWrap.appendChild(b);
+  });
+  const dots = [...dotsWrap.children];
+
+  function render() {
+    const s = SCENES[idx];
+    book.dataset.sky = s.sky;
+    TOGGLE.forEach(id => document.getElementById(id).classList.toggle('show', s.show.includes(id)));
+    capNo.textContent = lang === 'no' ? s.no : s.en;
+    capEn.textContent = lang === 'no' ? s.en : s.no;
+    capInner.style.animation = 'none'; void capInner.offsetWidth; capInner.style.animation = '';
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    document.getElementById('prev').disabled = idx === 0;
+    document.getElementById('next').disabled = idx === SCENES.length - 1;
+  }
+  function go(i){ idx = Math.max(0, Math.min(SCENES.length - 1, i)); render(); }
+
+  document.getElementById('next').addEventListener('click', () => go(idx + 1));
+  document.getElementById('prev').addEventListener('click', () => go(idx - 1));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') go(idx + 1);
+    else if (e.key === 'ArrowLeft') go(idx - 1);
+  });
+
+  document.getElementById('langbtn').addEventListener('click', () => {
+    lang = lang === 'no' ? 'en' : 'no';
+    document.documentElement.lang = lang;
+    document.getElementById('langbtn').textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    document.querySelectorAll('[data-no][data-en]').forEach(el => { el.textContent = el.getAttribute('data-' + lang); });
+    render();
+  });
+
+  render();
+</script>
+</body>
+</html>
