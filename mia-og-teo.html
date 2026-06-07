@@ -179,6 +179,29 @@
   .bg-bla   { background: linear-gradient(135deg, var(--bla-soft), #c4e8f5 70%, #aadcef); }
   .bg-lime  { background: linear-gradient(135deg, var(--lime-soft), #d7ecb3 70%, #c4e394); }
 
+  /* ===== Kino-hero med ekte bilder (Disney+/Netflix-stil) ===== */
+  .hero-slide.cine { min-height: 460px; align-items: flex-end; padding: 2.5rem 3rem; }
+  .hero-bg {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; z-index: 0; transform: scale(1.04);
+    animation: heroPan 18s ease-in-out infinite alternate;
+  }
+  @keyframes heroPan { from { transform: scale(1.04) translateX(0); } to { transform: scale(1.12) translateX(-1.5%); } }
+  .hero-scrim {
+    position: absolute; inset: 0; z-index: 1;
+    background:
+      linear-gradient(100deg, rgba(58,20,44,.80) 0%, rgba(58,20,44,.52) 34%, rgba(58,20,44,.08) 66%, transparent 80%),
+      linear-gradient(to top, rgba(40,12,32,.55) 0%, transparent 42%);
+  }
+  .hero-slide.cine .hero-copy { color: #fff; }
+  .hero-slide.cine h1 { color: #fff; text-shadow: 0 2px 18px rgba(0,0,0,.4); }
+  .hero-slide.cine h1 .accent { color: var(--gul, #ffd23e); -webkit-text-fill-color: var(--gul, #ffd23e); }
+  .hero-slide.cine p { color: rgba(255,255,255,.94); text-shadow: 0 1px 10px rgba(0,0,0,.35); }
+  .hero-slide.cine .hero-badge {
+    background: rgba(255,255,255,.16); color: #fff; border: 1px solid rgba(255,255,255,.38);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  }
+
   /* Karusell-kontroller */
   .hero-arrow {
     position: absolute; top: 50%; transform: translateY(-50%); z-index: 5;
@@ -453,6 +476,11 @@
     .hero-slide p { margin-left: auto; margin-right: auto; }
     .hero-poster { margin: 0.5rem auto 0; width: 150px; }
     .hero-slide .deco { font-size: 8rem; opacity: .12; right: -1rem; bottom: -1rem; }
+    /* Kino-hero på mobil: full bildehøyde, mørkere bunn-scrim for lesbarhet */
+    .hero-slide.cine { min-height: 430px; justify-content: flex-end; padding: 1.6rem; }
+    .hero-slide.cine .hero-scrim {
+      background: linear-gradient(to top, rgba(40,12,32,.82) 0%, rgba(40,12,32,.35) 55%, rgba(40,12,32,.15) 100%);
+    }
     .hero-arrow { display: none; }
     .chips-wrap, .shelf-wrap { padding: 0 1rem; }
     .parents { padding: 0 1rem; }
@@ -507,8 +535,9 @@
     <div class="hero-track" id="heroTrack">
 
       <!-- Slide 1: Sangen (spiller) -->
-      <div class="hero-slide bg-pink">
-        <span class="deco" aria-hidden="true">🎵</span>
+      <div class="hero-slide cine">
+        <img class="hero-bg" src="images/mia-og-teo.jpg" alt="" aria-hidden="true" style="object-position:center 22%;">
+        <div class="hero-scrim" aria-hidden="true"></div>
         <div class="hero-copy">
           <span class="hero-badge" data-no="🌟 Mia &amp; Teo — Lek &amp; Lær" data-en="🌟 Mia &amp; Teo — Play &amp; Learn">🌟 Mia &amp; Teo — Lek &amp; Lær</span>
           <h1>
@@ -526,14 +555,12 @@
             <span class="play-ic">▶</span><span data-no="Spill av" data-en="Play">Spill av</span>
           </button>
         </div>
-        <div class="hero-poster">
-          <img id="heroPoster" src="images/poster-norsk.jpg" alt="Mia og Teo synger">
-        </div>
       </div>
 
       <!-- Slide 2: Eventyr -->
-      <div class="hero-slide bg-lilla">
-        <span class="deco" aria-hidden="true">📖</span>
+      <div class="hero-slide cine">
+        <img class="hero-bg" src="images/lme-banner.jpg" alt="" aria-hidden="true" style="object-position:center 35%;">
+        <div class="hero-scrim" aria-hidden="true"></div>
         <div class="hero-copy">
           <span class="hero-badge" data-no="✨ Nytt kapittel" data-en="✨ New chapter">✨ Nytt kapittel</span>
           <h1>
@@ -548,8 +575,9 @@
       </div>
 
       <!-- Slide 3: Lær Norsk (spiller) -->
-      <div class="hero-slide bg-bla">
-        <span class="deco" aria-hidden="true">🔤</span>
+      <div class="hero-slide cine">
+        <img class="hero-bg" src="images/mia-og-teo.jpg" alt="" aria-hidden="true" style="object-position:center 30%; transform:scaleX(-1) scale(1.04);">
+        <div class="hero-scrim" aria-hidden="true"></div>
         <div class="hero-copy">
           <span class="hero-badge" data-no="🆕 Ny video — Lær Norsk" data-en="🆕 New video — Learn Norwegian">🆕 Ny video — Lær Norsk</span>
           <h1>
