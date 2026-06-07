@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mia &amp; Teo — Lek &amp; Lær | Little Montessori Explorers</title>
+<meta name="description" content="Mia og Teo Lek & Lær — et trygt, varmt videounivers for små oppdagere. Sanger, eventyr og læring på norsk og engelsk.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('fonts/SassoonMontessori.woff2') format('woff2'),
+         url('fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    --pink-50:  #fff5f8;
+    --pink-100: #ffe8f0;
+    --pink-200: #ffd1e1;
+    --pink-300: #ffb3cd;
+    --pink-400: #ff8ab3;
+    --pink-500: #e85a92;   /* cerise */
+    --pink-600: #c43d75;
+    --pink-700: #8f2a55;
+
+    /* Brand-aksenter (kun til kategori-fliser) */
+    --lime:      #8fc23f;
+    --lime-soft: #e6f2cf;
+    --gul:       #ffce3d;
+    --gul-soft:  #fff3cf;
+    --bla:       #6ec1e4;
+    --bla-soft:  #dff1f9;
+
+    --warm-white: #fffcf9;
+    --ink:      #3d2438;
+    --ink-soft: #6b4760;
+
+    --shadow-soft: 0 8px 32px rgba(196, 61, 117, 0.08);
+    --shadow-med:  0 16px 48px rgba(196, 61, 117, 0.14);
+    --shadow-deep: 0 24px 64px rgba(196, 61, 117, 0.18);
+
+    /* LÅST FONTREGEL: Playpen Sans = KUN overskrifter h1–h4. Sassoon = all annen tekst. */
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--ink);
+    line-height: 1.6;
+    overflow-x: hidden;
+    font-weight: 400;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 5%, rgba(255, 209, 225, 0.35), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 20%, rgba(255, 232, 240, 0.4), transparent 60%),
+      var(--warm-white);
+  }
+
+  h1, h2, h3, h4 { font-family: var(--font-head); }
+
+  /* Knapper/input får eksplisitt body-font (låst regel) */
+  button, input, select, textarea { font-family: var(--font-body) !important; }
+
+  /* ============ NAVIGASJON ============ */
+  nav {
+    transform: translateZ(0);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 252, 249, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--pink-100);
+    padding: 0.75rem 2rem;
+  }
+  .nav-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+  .logo-img { width: 56px; height: 56px; object-fit: contain; }
+  .logo-text {
+    font-family: var(--font-head); font-size: 1.15rem; font-weight: 600;
+    color: var(--pink-600); letter-spacing: -0.01em; line-height: 1.1;
+  }
+  .logo-text .subtitle {
+    display: block; font-family: var(--font-display); font-style: italic;
+    font-size: 0.75rem; color: var(--ink-soft); font-weight: 400; margin-top: 0.1rem;
+  }
+  .nav-links { display: flex; gap: 2rem; align-items: center; list-style: none; }
+  .nav-links a {
+    color: var(--ink-soft); text-decoration: none; font-size: 1.05rem;
+    font-weight: 700; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--pink-600); }
+  .nav-links a.active { color: var(--pink-600); }
+  .lang-toggle {
+    background: linear-gradient(135deg, var(--pink-400), var(--pink-500));
+    color: white; border: none; padding: 0.55rem 1.2rem; border-radius: 999px;
+    font-weight: 600; font-size: 0.9rem; cursor: pointer; box-shadow: var(--shadow-soft);
+  }
+
+  /* ============ HERO / SPILLER NÅ ============ */
+  .hero {
+    max-width: 1100px; margin: 0 auto; padding: 3.5rem 2rem 1rem; text-align: center;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--pink-100); color: var(--pink-700);
+    padding: 0.5rem 1.2rem; border-radius: 999px; font-size: 0.85rem;
+    font-weight: 600; margin-bottom: 1.25rem; border: 1px solid var(--pink-200);
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 700; color: var(--ink);
+    line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1rem;
+  }
+  .hero h1 .accent {
+    font-family: var(--font-display); font-style: italic; font-weight: 500; color: var(--pink-600);
+  }
+  .hero-sub {
+    font-size: 1.15rem; color: var(--ink-soft); max-width: 600px;
+    margin: 0 auto 2rem; line-height: 1.5;
+  }
+
+  .player-stage { max-width: 760px; margin: 0 auto; }
+  .player-card {
+    background: white; border-radius: 32px; padding: 1.5rem;
+    box-shadow: var(--shadow-med); border: 1px solid var(--pink-100);
+  }
+  .player-now {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--pink-50); color: var(--pink-600); font-weight: 700;
+    font-size: 0.85rem; padding: 0.35rem 0.9rem; border-radius: 999px;
+    border: 1px solid var(--pink-100); margin-bottom: 1rem;
+  }
+  .player-now .dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--pink-500);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(.75);} }
+
+  .video-frame {
+    position: relative; width: 100%; aspect-ratio: 9/16; max-width: 340px;
+    margin: 0 auto; border-radius: 20px; overflow: hidden;
+    background: var(--pink-50); box-shadow: var(--shadow-soft);
+  }
+  .video-frame video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .player-title {
+    font-size: 1.5rem; color: var(--ink); font-weight: 700; margin: 1.25rem 0 0.25rem;
+  }
+  .player-desc {
+    color: var(--ink-soft); font-size: 0.98rem; max-width: 520px; margin: 0 auto;
+  }
+
+  /* ============ HYLLER (NRK Super-stil) ============ */
+  .shelf-wrap { max-width: 1180px; margin: 3.5rem auto 0; padding: 0 2rem; }
+  .shelf-head {
+    display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 1.1rem;
+  }
+  .shelf-head h2 { font-size: 1.5rem; color: var(--ink); font-weight: 700; }
+  .shelf-head .tag {
+    font-family: var(--font-body); font-size: 0.8rem; font-weight: 600;
+    color: var(--ink-soft); background: var(--pink-50);
+    padding: 0.25rem 0.7rem; border-radius: 999px; border: 1px solid var(--pink-100);
+  }
+  .shelf {
+    display: grid; grid-auto-flow: column; grid-auto-columns: minmax(220px, 1fr);
+    gap: 1.25rem; overflow-x: auto; padding: 0.25rem 0.25rem 1.25rem;
+    scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+  }
+  .shelf::-webkit-scrollbar { height: 8px; }
+  .shelf::-webkit-scrollbar-thumb { background: var(--pink-200); border-radius: 999px; }
+
+  .tile {
+    scroll-snap-align: start; background: white; border-radius: 24px;
+    border: 1px solid var(--pink-100); box-shadow: var(--shadow-soft);
+    overflow: hidden; cursor: pointer; transition: transform .25s, box-shadow .25s;
+    text-align: left;
+  }
+  .tile:hover { transform: translateY(-4px); box-shadow: var(--shadow-med); }
+  .tile-thumb {
+    position: relative; width: 100%; aspect-ratio: 4/3; overflow: hidden;
+    background: var(--pink-50);
+  }
+  .tile-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .tile-play {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  }
+  .tile-play span {
+    width: 54px; height: 54px; border-radius: 50%; background: rgba(255,255,255,.92);
+    display: flex; align-items: center; justify-content: center; color: var(--pink-600);
+    font-size: 1.3rem; box-shadow: var(--shadow-soft); padding-left: 4px;
+  }
+  .tile-body { padding: 0.9rem 1.1rem 1.2rem; }
+  .tile-body h3 { font-size: 1.05rem; color: var(--ink); font-weight: 700; line-height: 1.25; }
+  .tile-body p { font-size: 0.85rem; color: var(--ink-soft); margin-top: 0.2rem; }
+  .tile-flag { font-size: 1rem; margin-right: 0.35rem; }
+
+  /* Kommer snart-fliser, fargede etter kategori */
+  .tile.soon { cursor: default; }
+  .tile.soon:hover { transform: none; box-shadow: var(--shadow-soft); }
+  .tile-cat {
+    width: 100%; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+  }
+  .cat-lime { background: linear-gradient(135deg, var(--lime-soft), #f3f9e6); }
+  .cat-gul  { background: linear-gradient(135deg, var(--gul-soft), #fff9e8); }
+  .cat-bla  { background: linear-gradient(135deg, var(--bla-soft), #eef8fc); }
+  .cat-pink { background: linear-gradient(135deg, var(--pink-100), var(--pink-50)); }
+  .soon-pill {
+    display: inline-block; font-size: 0.72rem; font-weight: 700; color: var(--ink-soft);
+    background: var(--warm-white); border: 1px dashed var(--pink-200);
+    padding: 0.2rem 0.6rem; border-radius: 999px; margin-top: 0.4rem;
+  }
+
+  /* ============ FORELDRE-NOTAT ============ */
+  .parents {
+    max-width: 900px; margin: 4rem auto 0; padding: 0 2rem;
+  }
+  .parents-card {
+    background: linear-gradient(135deg, var(--bla-soft), var(--pink-50));
+    border: 1px solid var(--pink-100); border-radius: 28px; padding: 2rem 2.25rem;
+    display: flex; gap: 1.25rem; align-items: flex-start;
+  }
+  .parents-card .ic { font-size: 1.8rem; line-height: 1; }
+  .parents-card h3 { font-size: 1.2rem; color: var(--ink); margin-bottom: 0.4rem; }
+  .parents-card p { color: var(--ink-soft); font-size: 0.97rem; }
+
+  /* ============ CTA ============ */
+  .cta-section {
+    background: linear-gradient(135deg, var(--pink-500), var(--pink-600));
+    border-radius: 36px; padding: 4rem 2.5rem; margin: 4.5rem auto 0; max-width: 900px;
+    text-align: center; color: white; position: relative; overflow: hidden;
+    box-shadow: var(--shadow-deep);
+  }
+  .cta-section::before { content:'♪'; position:absolute; top:2rem; left:3rem; font-size:4rem; opacity:.15; }
+  .cta-section::after  { content:'★'; position:absolute; bottom:2rem; right:3rem; font-size:5rem; opacity:.15; }
+  .cta-section h2 { font-size: clamp(1.8rem, 3.5vw, 2.4rem); margin-bottom: 1rem; font-weight: 700; line-height: 1.2; }
+  .cta-section h2 .accent { font-family: var(--font-display); font-style: italic; font-weight: 500; display: block; margin-top: 0.5rem; opacity: 0.95; }
+  .cta-section p { font-size: 1.1rem; max-width: 600px; margin: 0 auto 2rem; opacity: 0.95; line-height: 1.6; }
+  .cta-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .cta-btn {
+    display: inline-block; background: white; color: var(--pink-600);
+    padding: 1rem 2.2rem; border-radius: 999px; font-weight: 700; font-size: 1.05rem;
+    text-decoration: none; box-shadow: 0 8px 24px rgba(0,0,0,.15); transition: transform .2s;
+  }
+  .cta-btn.ghost { background: transparent; color: white; border: 2px solid rgba(255,255,255,.7); box-shadow: none; }
+  .cta-btn:hover { transform: translateY(-2px); }
+
+  /* ============ FOOTER ============ */
+  footer { text-align: center; padding: 3rem 2rem; color: var(--ink-soft); font-size: 0.9rem; border-top: 1px solid var(--pink-100); margin-top: 4rem; }
+  footer .heart { color: var(--pink-500); display: inline-block; }
+
+  /* ============ MOBIL ============ */
+  @media (max-width: 768px) {
+    nav { padding: 0.6rem 1rem; }
+    .logo-img { width: 44px; height: 44px; }
+    .logo-text { font-size: 0.95rem; }
+    .logo-text .subtitle { display: none; }
+    .nav-links { gap: 1rem; }
+    .nav-links a { font-size: 0.85rem; }
+    .nav-links li:not(:last-child) { display: none; }
+    .hero { padding: 2.25rem 1.25rem 0.5rem; }
+    .player-card { padding: 1rem; border-radius: 24px; }
+    .shelf-wrap { padding: 0 1rem; }
+    .parents { padding: 0 1rem; }
+    .parents-card { flex-direction: column; padding: 1.5rem; border-radius: 22px; }
+    .cta-section { padding: 3rem 1.5rem; border-radius: 24px; margin: 3rem 1rem 0; }
+  }
+
+  .lang-float {
+    position: fixed; top: 90px; right: 24px; z-index: 150; background: white;
+    border: 1.5px solid var(--pink-300); border-radius: 999px; padding: 8px 18px;
+    box-shadow: var(--shadow-med); text-decoration: none; color: var(--pink-600);
+    font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;
+  }
+  .lang-float:hover { background: var(--pink-50); transform: translateY(-2px); }
+  .lang-float svg { width: 16px; height: 16px; }
+  @media (max-width: 600px) { .lang-float { top: 70px; right: 16px; padding: 6px 14px; font-size: 13px; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/dashboard" class="logo">
+      <img src="images/lme-logo.png" alt="LME Logo" class="logo-img" width="56" height="56">
+      <div class="logo-text">
+        Little Montessori<br>Explorers
+        <span class="subtitle">Learn · Explore · Grow</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/dashboard" data-no="Dashboard" data-en="Dashboard">Dashboard</a></li>
+      <li><a href="/mia-og-teo" class="active" data-no="Lek &amp; Lær" data-en="Play &amp; Learn">Lek &amp; Lær</a></li>
+      <li><a href="/musikk" data-no="Musikk" data-en="Music">Musikk</a></li>
+      <li><a href="/butikk" data-no="Butikk" data-en="Shop">Butikk</a></li>
+      <li><button class="lang-toggle" id="langToggle">EN 🌍</button></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============ HERO / SPILLER NÅ ============ -->
+<section class="hero">
+  <span class="hero-badge" data-no="🌟 Mia &amp; Teo — Lek &amp; Lær" data-en="🌟 Mia &amp; Teo — Play &amp; Learn">🌟 Mia &amp; Teo — Lek &amp; Lær</span>
+  <h1>
+    <span data-no="Bli med Mia og Teo" data-en="Join Mia and Teo">Bli med Mia og Teo</span>
+    <span class="accent" data-no="på oppdagelse" data-en="on an adventure">på oppdagelse</span>
+  </h1>
+  <p class="hero-sub" data-no="Et trygt og varmt videounivers for små oppdagere. Sett deg godt til rette — vi starter med sangen som startet det hele." data-en="A safe, warm little video world for young explorers. Settle in — we begin with the song that started it all.">
+    Et trygt og varmt videounivers for små oppdagere. Sett deg godt til rette — vi starter med sangen som startet det hele.
+  </p>
+
+  <div class="player-stage">
+    <div class="player-card">
+      <span class="player-now"><span class="dot"></span><span data-no="Spiller nå" data-en="Now playing">Spiller nå</span></span>
+      <div class="video-frame">
+        <video id="heroVideo"
+          src="videos/mia-og-teo-norsk.mp4"
+          poster="images/poster-norsk.jpg"
+          controls playsinline preload="metadata">
+          <span data-no="Din nettleser støtter ikke videoavspilling." data-en="Your browser doesn't support video playback.">Din nettleser støtter ikke videoavspilling.</span>
+        </video>
+      </div>
+      <h2 class="player-title" id="heroTitle" data-no="Mia og Teo, kom bli med!" data-en="Mia and Teo, Come and Play">Mia og Teo, kom bli med!</h2>
+      <p class="player-desc" id="heroDesc" data-no="Den offisielle Mia og Teo-sangen — hjertet i hele LME-universet." data-en="The official Mia and Teo song — the heart of the whole LME universe.">
+        Den offisielle Mia og Teo-sangen — hjertet i hele LME-universet.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HYLLE: SANGER ============ -->
+<section class="shelf-wrap">
+  <div class="shelf-head">
+    <h2 data-no="Sanger" data-en="Songs">Sanger</h2>
+    <span class="tag" data-no="Trykk for å spille" data-en="Tap to play">Trykk for å spille</span>
+  </div>
+  <div class="shelf">
+    <button class="tile" type="button"
+      data-src="videos/mia-og-teo-norsk.mp4" data-poster="images/poster-norsk.jpg"
+      data-title-no="Mia og Teo, kom bli med!" data-title-en="Mia og Teo, kom bli med!"
+      data-desc-no="Den offisielle Mia og Teo-sangen — hjertet i hele LME-universet." data-desc-en="The official Mia and Teo song — the heart of the whole LME universe.">
+      <div class="tile-thumb">
+        <img src="images/poster-norsk.jpg" alt="Mia og Teo synger — norsk versjon">
+        <span class="tile-play"><span>▶</span></span>
+      </div>
+      <div class="tile-body">
+        <h3><span class="tile-flag">🇳🇴</span><span data-no="Mia og Teo, kom bli med!" data-en="Mia og Teo, kom bli med!">Mia og Teo, kom bli med!</span></h3>
+        <p data-no="Norsk versjon · 1:46" data-en="Norwegian version · 1:46">Norsk versjon · 1:46</p>
+      </div>
+    </button>
+
+    <button class="tile" type="button"
+      data-src="videos/mia-and-teo-english.mp4" data-poster="images/poster-english.jpg"
+      data-title-no="Mia and Teo, Come and Play" data-title-en="Mia and Teo, Come and Play"
+      data-desc-no="Den engelske versjonen av Mia og Teo-sangen." data-desc-en="The English version of the Mia and Teo song.">
+      <div class="tile-thumb">
+        <img src="images/poster-english.jpg" alt="Mia and Teo sing — English version">
+        <span class="tile-play"><span>▶</span></span>
+      </div>
+      <div class="tile-body">
+        <h3><span class="tile-flag">🇬🇧</span><span data-no="Mia and Teo, Come and Play" data-en="Mia and Teo, Come and Play">Mia and Teo, Come and Play</span></h3>
+        <p data-no="Engelsk versjon · 1:54" data-en="English version · 1:54">Engelsk versjon · 1:54</p>
+      </div>
+    </button>
+  </div>
+</section>
+
+<!-- ============ HYLLE: EVENTYR (KOMMER SNART) ============ -->
+<section class="shelf-wrap">
+  <div class="shelf-head">
+    <h2 data-no="Eventyr med Mia &amp; Teo" data-en="Stories with Mia &amp; Teo">Eventyr med Mia &amp; Teo</h2>
+    <span class="tag" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span>
+  </div>
+  <div class="shelf">
+    <div class="tile soon">
+      <div class="tile-cat cat-lime">🦔</div>
+      <div class="tile-body"><h3 data-no="Pinnsvinet i hagen" data-en="The hedgehog in the garden">Pinnsvinet i hagen</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
+    </div>
+    <div class="tile soon">
+      <div class="tile-cat cat-gul">🌳</div>
+      <div class="tile-body"><h3 data-no="Skogtur" data-en="Forest walk">Skogtur</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
+    </div>
+    <div class="tile soon">
+      <div class="tile-cat cat-bla">🌊</div>
+      <div class="tile-body"><h3 data-no="En dag ved sjøen" data-en="A day by the sea">En dag ved sjøen</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
+    </div>
+    <div class="tile soon">
+      <div class="tile-cat cat-pink">⭐</div>
+      <div class="tile-body"><h3 data-no="Stjerner og undring" data-en="Stars and wonder">Stjerner og undring</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HYLLE: LÆR MED MIA & TEO (KOMMER SNART) ============ -->
+<section class="shelf-wrap">
+  <div class="shelf-head">
+    <h2 data-no="Lær med Mia &amp; Teo" data-en="Learn with Mia &amp; Teo">Lær med Mia &amp; Teo</h2>
+    <span class="tag" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span>
+  </div>
+  <div class="shelf">
+    <div class="tile soon">
+      <div class="tile-cat cat-gul">🔤</div>
+      <div class="tile-body"><h3 data-no="Lær Norsk" data-en="Learn Norwegian">Lær Norsk</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
+    </div>
+    <div class="tile soon">
+      <div class="tile-cat cat-lime">🍎</div>
+      <div class="tile-body"><h3 data-no="Praktisk liv" data-en="Practical life">Praktisk liv</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
+    </div>
+    <div class="tile soon">
+      <div class="tile-cat cat-bla">🔢</div>
+      <div class="tile-body"><h3 data-no="Tall og telling" data-en="Numbers and counting">Tall og telling</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
+    </div>
+    <div class="tile soon">
+      <div class="tile-cat cat-pink">🎨</div>
+      <div class="tile-body"><h3 data-no="Farger og former" data-en="Colors and shapes">Farger og former</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FORELDRE-NOTAT ============ -->
+<section class="parents">
+  <div class="parents-card">
+    <span class="ic">🌸</span>
+    <div>
+      <h3 data-no="For foreldre og pedagoger" data-en="For parents and educators">For foreldre og pedagoger</h3>
+      <p data-no="Lek &amp; Lær er bygget rolig og trygt — uten reklame, uten autospill til neste video, og uten skarpe farger eller lyder. Barnet velger selv hva det vil se. Vi legger til nytt innhold steg for steg, slik at universet vokser i takt med de små oppdagerne." data-en="Play &amp; Learn is built to be calm and safe — no ads, no autoplay to the next video, no harsh colors or sounds. The child chooses what to watch. We add new content step by step, so the universe grows alongside your little explorers.">
+        Lek &amp; Lær er bygget rolig og trygt — uten reklame, uten autospill til neste video, og uten skarpe farger eller lyder. Barnet velger selv hva det vil se. Vi legger til nytt innhold steg for steg, slik at universet vokser i takt med de små oppdagerne.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta-section">
+  <h2>
+    <span data-no="Ta med Mia og Teo hjem" data-en="Take Mia and Teo home">Ta med Mia og Teo hjem</span>
+    <span class="accent" data-no="bøker, hefter og mer" data-en="books, workbooks and more">bøker, hefter og mer</span>
+  </h2>
+  <p data-no="Oppdag bøkene, arbeidsheftene og ressursene i LME-butikken — eller bli en del av fellesskapet vårt." data-en="Discover the books, workbooks and resources in the LME shop — or join our community.">
+    Oppdag bøkene, arbeidsheftene og ressursene i LME-butikken — eller bli en del av fellesskapet vårt.
+  </p>
+  <div class="cta-row">
+    <a href="/butikk" class="cta-btn" data-no="🌸 Se LME Butikk" data-en="🌸 Visit LME Shop">🌸 Se LME Butikk</a>
+    <a href="/community" class="cta-btn ghost" data-no="Bli med i fellesskapet" data-en="Join the community">Bli med i fellesskapet</a>
+  </div>
+</section>
+
+<footer>
+  <p>
+    <span data-no="Laget med" data-en="Made with">Laget med</span>
+    <span class="heart">💗</span>
+    <span data-no="i Tønsberg, Norge" data-en="in Tønsberg, Norway">i Tønsberg, Norge</span>
+    · © 2026 Little Montessori Explorers
+  </p>
+</footer>
+
+<a href="#" class="lang-float" id="langFloat" aria-label="Switch language" title="Switch language">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+  <span data-no="English" data-en="Norsk">English</span>
+</a>
+
+<script>
+  let currentLang = 'no';
+  const toggle = document.getElementById('langToggle');
+  const heroVideo = document.getElementById('heroVideo');
+  // Sporer om hovedspilleren viser sangen (da skal den følge språkvalg)
+  let heroIsSong = true;
+
+  function applyLang(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(el => {
+      const text = el.getAttribute('data-' + lang);
+      if (text === null) return;
+      if (text.includes('<')) el.innerHTML = text; else el.textContent = text;
+    });
+    toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    document.title = lang === 'no'
+      ? 'Mia & Teo — Lek & Lær | Little Montessori Explorers'
+      : 'Mia & Teo — Play & Learn | Little Montessori Explorers';
+
+    // Hvis hovedspilleren viser sangen, bytt til riktig språkversjon
+    if (heroIsSong) {
+      const norsk = lang === 'no';
+      heroVideo.poster = norsk ? 'images/poster-norsk.jpg' : 'images/poster-english.jpg';
+      heroVideo.src = norsk ? 'videos/mia-og-teo-norsk.mp4' : 'videos/mia-and-teo-english.mp4';
+    }
+  }
+
+  toggle.addEventListener('click', () => applyLang(currentLang === 'no' ? 'en' : 'no'));
+  document.getElementById('langFloat').addEventListener('click', (e) => {
+    e.preventDefault(); applyLang(currentLang === 'no' ? 'en' : 'no');
+  });
+
+  // Klikk på en sang-flis -> last den inn i hovedspilleren
+  document.querySelectorAll('.tile[data-src]').forEach(tile => {
+    tile.addEventListener('click', () => {
+      heroIsSong = tile.dataset.src.indexOf('mia-og-teo-norsk') > -1
+                || tile.dataset.src.indexOf('mia-and-teo-english') > -1;
+      heroVideo.src = tile.dataset.src;
+      heroVideo.poster = tile.dataset.poster;
+      const t = document.getElementById('heroTitle');
+      const d = document.getElementById('heroDesc');
+      t.setAttribute('data-no', tile.dataset.titleNo); t.setAttribute('data-en', tile.dataset.titleEn);
+      d.setAttribute('data-no', tile.dataset.descNo);  d.setAttribute('data-en', tile.dataset.descEn);
+      t.textContent = currentLang === 'no' ? tile.dataset.titleNo : tile.dataset.titleEn;
+      d.textContent = currentLang === 'no' ? tile.dataset.descNo : tile.dataset.descEn;
+      heroVideo.play().catch(() => {});
+      document.querySelector('.player-stage').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+</script>
+
+</body>
+</html>
