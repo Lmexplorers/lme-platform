@@ -97,6 +97,11 @@ export default {
       return handleSchema(request, origin);
     }
 
+    // Publisering: render artikkel -> HTML og send til Make-webhook (Fase 2).
+    if (url.pathname === "/ai/publish") {
+      return handlePublish(request, env, origin);
+    }
+
     const route = ROUTES[url.pathname];
     if (!route) {
       return json({ error: "Ukjent endepunkt." }, 404, origin);
@@ -309,4 +314,116 @@ async function handleSchema(request, origin) {
 
   const jsonld = `<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n</script>`;
   return json({ result: { schema, jsonld } }, 200, origin);
+}
+
+// =====================================================
+// Publisering (Fase 2) — render artikkel til HTML + send til Make
+// =====================================================
+// Body: { article: {seoTitle, metaDescription, slug, h1, intro, sections, faq, cta}, lang }
+// 1) Bygger en full LME-stilet HTML-side med JSON-LD (Article + FAQ).
+// 2) Hvis env.MAKE_WEBHOOK_URL er satt: POSTer {slug, lang, seoTitle, html} dit,
+//    slik at Make-scenarioet skriver fila til repoet (/blog/<slug>.html) og
+//    Cloudflare Pages deployer den automatisk.
+async function handlePublish(request, env, origin) {
+  let body;
+  try { body = await request.json(); }
+  catch { return json({ error: "Ugyldig JSON" }, 400, origin); }
+
+  const a = body.article || {};
+  const lang = body.lang === "en" ? "en" : "no";
+  if (!a.slug || !a.h1) {
+    return json({ error: "Mangler artikkeldata (slug/h1)." }, 400, origin);
+  }
+
+  const html = renderArticleHTML(a, lang);
+
+  let sent = false, makeStatus = null;
+  if (env.MAKE_WEBHOOK_URL) {
+    try {
+      const r = await fetch(env.MAKE_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slug: a.slug, lang, seoTitle: a.seoTitle || a.h1, html }),
+      });
+      makeStatus = r.status;
+      sent = r.ok;
+    } catch (e) {
+      makeStatus = "error";
+    }
+  }
+
+  return json({ result: { slug: a.slug, html, sent, makeStatus } }, 200, origin);
+}
+
+function esc(s) {
+  return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function renderArticleHTML(a, lang) {
+  const sections = (a.sections || []).map((s) => {
+    const h3s = (s.h3 || []).map((h) => `      <h3>${esc(h)}</h3>`).join("\n");
+    const body = esc(s.body || "").replace(/\n\n+/g, "</p>\n      <p>");
+    return `    <section>\n      <h2>${esc(s.h2 || "")}</h2>\n      <p>${body}</p>\n${h3s}\n    </section>`;
+  }).join("\n");
+
+  const faqItems = (a.faq || []).map((f) =>
+    `      <details><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("\n");
+
+  const articleSchema = {
+    "@context": "https://schema.org", "@type": "Article",
+    headline: a.h1 || a.seoTitle || "", description: a.metaDescription || "",
+    author: { "@type": "Person", name: "Renate Dahl" },
+    publisher: { "@type": "Organization", name: "Little Montessori Explorers",
+      logo: "https://lmexplorers.com/images/lme-logo.png" },
+    inLanguage: lang, datePublished: new Date().toISOString().slice(0, 10),
+  };
+  const faqSchema = (a.faq || []).length ? {
+    "@context": "https://schema.org", "@type": "FAQPage",
+    mainEntity: a.faq.map((f) => ({ "@type": "Question", name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  } : null;
+
+  const ld = [articleSchema, faqSchema].filter(Boolean)
+    .map((s) => `<script type="application/ld+json">\n${JSON.stringify(s)}\n</script>`).join("\n");
+
+  return `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${esc(a.seoTitle || a.h1)}</title>
+<meta name="description" content="${esc(a.metaDescription || "")}">
+<link rel="canonical" href="https://lmexplorers.com/blog/${esc(a.slug)}">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;600;700;800&display=swap');
+  :root{--cerise:#E91E89;--ink:#1A1A1A;--ink-soft:#4A4A4A;--cream:#FBF6F0;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Playpen Sans',sans-serif;color:var(--ink);line-height:1.6;
+    background:linear-gradient(180deg,#FDF5F1,#FBEAE9);}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 22px 80px;}
+  a{color:var(--cerise);}
+  h1{font-size:32px;line-height:1.2;margin-bottom:14px;}
+  h2{font-size:23px;margin:32px 0 10px;}
+  h3{font-size:18px;margin:18px 0 6px;color:var(--ink-soft);}
+  p{margin-bottom:14px;color:var(--ink-soft);}
+  .lead{font-size:18px;color:var(--ink);}
+  details{background:#fff;border:1px solid rgba(26,26,26,.08);border-radius:14px;padding:14px 16px;margin-bottom:10px;}
+  summary{font-weight:700;cursor:pointer;}
+  .cta{display:inline-block;margin-top:24px;background:var(--cerise);color:#fff;font-weight:700;
+    padding:14px 26px;border-radius:999px;}
+  .brand{font-size:13px;color:#8A8A8A;margin-bottom:28px;}
+</style>
+${ld}
+</head>
+<body>
+  <article class="wrap">
+    <p class="brand">Little Montessori Explorers</p>
+    <h1>${esc(a.h1)}</h1>
+    <p class="lead">${esc(a.intro || "")}</p>
+${sections}
+${faqItems ? `    <section>\n      <h2>FAQ</h2>\n${faqItems}\n    </section>` : ""}
+    ${a.cta ? `<a class="cta" href="${esc(a.cta.url || "/")}">${esc(a.cta.text || "Utforsk LME")}</a>` : ""}
+  </article>
+</body>
+</html>`;
 }

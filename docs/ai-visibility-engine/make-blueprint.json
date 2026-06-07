@@ -1,0 +1,108 @@
+{
+  "name": "LME AI Visibility — Publiser artikkel til repo",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": null,
+        "maxResults": 1
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": { "x": 0, "y": 0 },
+        "restore": {},
+        "parameters": [
+          { "name": "hook", "type": "hook:gateway-webhook", "label": "Webhook", "required": true }
+        ],
+        "interface": [
+          { "name": "slug", "type": "text" },
+          { "name": "lang", "type": "text" },
+          { "name": "seoTitle", "type": "text" },
+          { "name": "html", "type": "text" }
+        ],
+        "note": "Custom webhook. Ved import oppretter Make en webhook-URL — kopier den og sett den som MAKE_WEBHOOK_URL i ai-visibility-worker.js. Workeren POSTer {slug, lang, seoTitle, html} hit naar en artikkel publiseres."
+      }
+    },
+    {
+      "id": 2,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "mapper": null,
+      "metadata": { "designer": { "x": 300, "y": 0 } }
+    },
+    {
+      "id": 3,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": { "handleErrors": true, "useNewZLibDeCompress": true },
+      "filter": {
+        "name": "Har slug + html",
+        "conditions": [[
+          { "a": "{{1.slug}}", "o": "exist" },
+          { "a": "{{1.html}}", "o": "exist" }
+        ]]
+      },
+      "mapper": {
+        "url": "https://api.github.com/repos/Lmexplorers/lme-platform/contents/blog/{{1.slug}}.html",
+        "method": "put",
+        "headers": [
+          { "name": "Authorization", "value": "Bearer YOUR_GITHUB_TOKEN" },
+          { "name": "Accept", "value": "application/vnd.github+json" },
+          { "name": "User-Agent", "value": "LME-AI-Visibility" }
+        ],
+        "qs": [],
+        "bodyType": "raw",
+        "parseResponse": true,
+        "contentType": "application/json",
+        "data": "{\n  \"message\": \"AI Visibility: ny artikkel {{1.slug}} ({{1.lang}})\",\n  \"branch\": \"claude/lme-ai-visibility-engine-hGkpL\",\n  \"content\": \"{{base64(1.html)}}\"\n}"
+      },
+      "metadata": {
+        "designer": { "x": 600, "y": -150 },
+        "note": "Skriver artikkelen til /blog/<slug>.html via GitHub Contents API. Bytt YOUR_GITHUB_TOKEN med en fine-grained token (Contents: Read+Write). Vil du gaa via Pull Request i stedet, bruk GitHub-appens 'Create a File'-modul mot en egen branch. Sett 'branch' til main naar du er klar for live."
+      }
+    },
+    {
+      "id": 4,
+      "module": "util:SetVariable2",
+      "version": 1,
+      "filter": {
+        "name": "Ingen html (kun metadata)",
+        "conditions": [[
+          { "a": "{{1.html}}", "o": "notexist" }
+        ]]
+      },
+      "mapper": {
+        "name": "skipped",
+        "scope": "roundtrip",
+        "value": "Mottok metadata uten html — ingenting publisert. (Plass for MailerLite/Pinterest/Notion senere.)"
+      },
+      "metadata": {
+        "designer": { "x": 600, "y": 150 },
+        "note": "Plassholder-rute. Legg til MailerLite-, Pinterest- eller Notion-moduler her senere (Fase 2+)."
+      }
+    }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false
+    },
+    "designer": { "orphans": [] },
+    "zone": "eu1.make.com",
+    "notes": [
+      "LME AI Visibility Engine — Fase 2 auto-publisering.",
+      "Importer: Make -> Scenarios -> Create new scenario -> ... -> Import Blueprint -> velg denne fila.",
+      "Etter import: 1) aapne webhook-modulen og opprett/bekreft webhook -> kopier URL. 2) Sett MAKE_WEBHOOK_URL i ai-visibility-worker.js til den URL-en. 3) Bytt YOUR_GITHUB_TOKEN i HTTP-modulen. 4) Slaa paa scenarioet."
+    ]
+  }
+}
