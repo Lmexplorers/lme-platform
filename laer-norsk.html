@@ -146,6 +146,7 @@
   .mini-emoji { font-size:5rem; line-height:1; z-index:1; }
   .mini-word { font-family:var(--font-head); font-weight:700; font-size:2.1rem; color:var(--pink-600); margin-top:.5rem; z-index:1; }
   .mini-en { color:var(--ink-soft); font-size:1.05rem; z-index:1; }
+  .mini-char { max-height:58%; max-width:48%; border-radius:14px; box-shadow:var(--shadow-soft); object-fit:contain; z-index:1; margin-bottom:.5rem; }
   .mini-anim { animation: mpPop .5s ease; }
   @keyframes mpPop { 0%{opacity:0; transform:scale(.6) translateY(8px);} 60%{opacity:1; transform:scale(1.12);} 100%{transform:scale(1);} }
   .mini-controls { text-align:center; margin-top:1rem; }
@@ -309,6 +310,7 @@
         </div>
         <div id="miniPlayer" style="display:none;">
           <div class="mini-stage">
+            <img class="mini-char" id="mpChar" src="images/mia-og-teo.jpg" alt="Mia og Teo" style="display:none;">
             <div class="mini-emoji" id="mpEmoji">🎬</div>
             <div class="mini-word" id="mpWord"></div>
             <div class="mini-en" id="mpEn"></div>
@@ -542,32 +544,62 @@
     document.querySelectorAll('.step').forEach((s,i)=>s.classList.toggle('active', i===n));
     document.querySelectorAll('.step-tab').forEach((t,i)=>t.classList.toggle('active', i===n));
     if (n!==0) { lessonVideo.pause(); stopMini(); }
+    if (n===2 && document.getElementById('quizResult').style.display === 'none' && qOrder[qIndex]) speakNo(qOrder[qIndex].no);
   }
 
-  /* ===== Gratis "se & lær"-animasjon ===== */
-  const mini = { timer:null, idx:0, words:[] };
+  /* ===== Gratis "se & lær"-animasjon med Mia & Teo ===== */
+  const mini = { timer:null, idx:0, seq:[] };
   const mpEmoji = document.getElementById('mpEmoji');
   const mpWord  = document.getElementById('mpWord');
   const mpEn    = document.getElementById('mpEn');
+  const mpChar  = document.getElementById('mpChar');
+  const CHEERS = [
+    { no:'Bra!',      en:'Great!' },
+    { no:'Flott!',    en:'Wonderful!' },
+    { no:'Heia!',     en:'Yay!' },
+    { no:'Så flink!', en:'So clever!' },
+  ];
+  function buildSeq(words) {
+    const seq = [{ type:'char', no:'Hei! Skal vi lære norsk?', en:'Hi! Shall we learn Norwegian?' }];
+    words.forEach((w, i) => {
+      seq.push({ type:'word', w });
+      if ((i+1) % 3 === 0 && i < words.length-1) {
+        seq.push({ type:'char', ...CHEERS[((i+1)/3 - 1) % CHEERS.length] });
+      }
+    });
+    seq.push({ type:'char', no:'Bra jobba!', en:'Well done!', star:true });
+    return seq;
+  }
   function setupMini(words) {
     stopMini();
-    mini.words = words; mini.idx = 0;
-    mpEmoji.textContent = '🎬'; mpWord.textContent = ''; mpEn.textContent = '';
+    mini.seq = buildSeq(words); mini.idx = 0;
+    mpChar.style.display = 'none';
+    mpEmoji.style.display = ''; mpEmoji.textContent = '🎬';
+    mpWord.textContent = ''; mpEn.textContent = '';
   }
   function stopMini() {
     if (mini.timer) { clearTimeout(mini.timer); mini.timer = null; }
     if (window.speechSynthesis) speechSynthesis.cancel();
   }
+  function animate(el) { el.classList.remove('mini-anim'); void el.offsetWidth; el.classList.add('mini-anim'); }
   function stepMini() {
-    if (mini.idx >= mini.words.length) {
-      mpEmoji.textContent = '🌟'; mpEmoji.classList.remove('mini-anim'); void mpEmoji.offsetWidth; mpEmoji.classList.add('mini-anim');
-      mpWord.textContent = currentLang==='no' ? 'Bra jobba!' : 'Well done!'; mpEn.textContent = '';
-      return;
+    if (mini.idx >= mini.seq.length) return;
+    const f = mini.seq[mini.idx];
+    if (f.type === 'char') {
+      if (f.star) { mpChar.style.display = 'none'; mpEmoji.style.display = ''; mpEmoji.textContent = '🌟'; animate(mpEmoji); }
+      else { mpEmoji.style.display = 'none'; mpChar.style.display = ''; animate(mpChar); }
+      mpWord.textContent = currentLang==='no' ? f.no : f.en;
+      mpEn.textContent   = currentLang==='no' ? f.en : f.no;
+      animate(mpWord);
+      speakNo(f.no);
+    } else {
+      const w = f.w;
+      mpChar.style.display = 'none';
+      mpEmoji.style.display = ''; mpEmoji.textContent = w.emoji;
+      mpWord.textContent = w.no; mpEn.textContent = w.en;
+      animate(mpEmoji); animate(mpWord);
+      speakNo(w.no);
     }
-    const w = mini.words[mini.idx];
-    mpEmoji.textContent = w.emoji; mpWord.textContent = w.no; mpEn.textContent = w.en;
-    [mpEmoji,mpWord].forEach(el => { el.classList.remove('mini-anim'); void el.offsetWidth; el.classList.add('mini-anim'); });
-    speakNo(w.no);
     mini.idx++;
     mini.timer = setTimeout(stepMini, 2300);
   }
@@ -644,9 +676,9 @@
     document.getElementById('qTotal').textContent = qOrder.length;
     document.getElementById('quizPlay').style.display = '';
     document.getElementById('quizResult').style.display = 'none';
-    renderQuestion();
+    renderQuestion(false);
   }
-  function renderQuestion() {
+  function renderQuestion(speak) {
     const target = qOrder[qIndex];
     document.getElementById('qNum').textContent = qIndex+1;
     document.getElementById('quizTarget').textContent = target.no;
@@ -662,7 +694,7 @@
       b.addEventListener('click', () => handleAnswer(b, o, target));
       wrap.appendChild(b);
     });
-    speakNo(target.no);
+    if (speak) speakNo(target.no);
   }
   let answering = false;
   function handleAnswer(btn, chosen, target) {
@@ -680,7 +712,7 @@
     setTimeout(() => {
       answering = false;
       qIndex++;
-      if (qIndex < QN) renderQuestion(); else finishQuiz();
+      if (qIndex < QN) renderQuestion(true); else finishQuiz();
     }, 1100);
   }
   function finishQuiz() {
