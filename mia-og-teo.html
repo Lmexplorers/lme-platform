@@ -337,6 +337,71 @@
   }
   .player-close:hover { transform: scale(1.1) rotate(90deg); }
 
+  /* ============ ÅPNE-PILL PÅ INNHOLDSFLISER ============ */
+  .open-pill {
+    display: inline-block; font-size: 0.74rem; font-weight: 700; color: var(--pink-700);
+    background: var(--pink-50); border: 1px solid var(--pink-200);
+    padding: 0.22rem 0.65rem; border-radius: 999px; margin-top: 0.45rem;
+  }
+
+  /* ============ INNHOLDS-VINDU (eventyr/aktivitet) ============ */
+  .content-overlay {
+    position: fixed; inset: 0; z-index: 1000; display: none;
+    background: rgba(61,36,56,.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    align-items: center; justify-content: center; padding: 1.5rem; opacity: 0; transition: opacity .3s;
+  }
+  .content-overlay.open { display: flex; opacity: 1; }
+  .content-card {
+    position: relative; width: min(100%, 560px); background: var(--warm-white);
+    border-radius: 30px; box-shadow: var(--shadow-deep); border: 1px solid var(--pink-100);
+    overflow: hidden; transform: scale(.96); transition: transform .3s; display: flex; flex-direction: column;
+    max-height: 90vh;
+  }
+  .content-overlay.open .content-card { transform: scale(1); }
+  .content-head { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--pink-100);
+    background: linear-gradient(135deg, var(--pink-100), var(--pink-50)); }
+  .content-head h2 { font-size: 1.25rem; color: var(--ink); }
+  .content-close {
+    position: absolute; top: 0.8rem; right: 0.8rem; z-index: 3; width: 44px; height: 44px;
+    border: none; border-radius: 50%; background: white; color: var(--pink-600); font-size: 1.5rem;
+    cursor: pointer; box-shadow: var(--shadow-soft); transition: transform .2s;
+  }
+  .content-close:hover { transform: scale(1.1) rotate(90deg); }
+  .content-page {
+    flex: 1; overflow-y: auto; text-align: center; padding: 2rem 1.75rem;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 240px;
+  }
+  .c-emoji { font-size: 4.5rem; line-height: 1; margin-bottom: 1rem; animation: cPop .45s ease; }
+  @keyframes cPop { 0%{opacity:0; transform:scale(.6) translateY(8px);} 60%{opacity:1; transform:scale(1.1);} 100%{transform:scale(1);} }
+  .c-text { font-size: 1.2rem; color: var(--ink); line-height: 1.5; max-width: 420px; }
+  .c-text .c-en { display:block; font-family: var(--font-display); font-style: italic; color: var(--ink-soft); font-size: 1rem; margin-top: 0.5rem; }
+  .c-link { margin-top: 1.4rem; }
+  .content-nav {
+    display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+    padding: 1rem 1.5rem 1.3rem; border-top: 1px solid var(--pink-100);
+  }
+  .cnav {
+    border: 1.5px solid var(--pink-200); background: white; color: var(--pink-600);
+    padding: 0.55rem 1.1rem; border-radius: 999px; font-weight: 700; font-size: 0.95rem; cursor: pointer;
+    transition: all .2s;
+  }
+  .cnav:hover:not(:disabled) { background: var(--pink-50); transform: translateY(-1px); }
+  .cnav:disabled { opacity: 0.35; cursor: default; }
+  .cnav.next { background: linear-gradient(135deg, var(--pink-400), var(--pink-500)); color: white; border-color: transparent; }
+  .content-dots { display: flex; gap: 0.4rem; }
+  .content-dots span { width: 9px; height: 9px; border-radius: 50%; background: var(--pink-200); transition: all .25s; }
+  .content-dots span.active { background: var(--pink-500); width: 24px; border-radius: 999px; }
+
+  /* Pusteøvelse */
+  .breath { display: flex; flex-direction: column; align-items: center; gap: 1.2rem; }
+  .breath-circle {
+    width: 90px; height: 90px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #bfe7f5, var(--bla));
+    transform: scale(1); transition: transform 3.8s ease-in-out; box-shadow: var(--shadow-med);
+  }
+  .breath-circle.big { transform: scale(1.85); }
+  .breath-label { font-family: var(--font-head); font-weight: 700; font-size: 1.3rem; color: var(--bla); }
+
   /* ============ FORELDRE-NOTAT ============ */
   .parents { max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
   .parents-card {
@@ -563,25 +628,25 @@
 <section class="shelf-wrap" id="eventyr">
   <div class="shelf-head">
     <h2 data-no="Eventyr med Mia &amp; Teo" data-en="Stories with Mia &amp; Teo">Eventyr med Mia &amp; Teo</h2>
-    <span class="tag" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span>
+    <span class="tag live" data-no="Trykk for å lese" data-en="Tap to read">Trykk for å lese</span>
   </div>
   <div class="shelf">
-    <div class="tile soon">
+    <button class="tile" type="button" data-content="eventyr-pinnsvin">
       <div class="tile-cat cat-lime">🦔</div>
-      <div class="tile-body"><h3 data-no="Pinnsvinet i hagen" data-en="The hedgehog in the garden">Pinnsvinet i hagen</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
-    </div>
-    <div class="tile soon">
+      <div class="tile-body"><h3 data-no="Pinnsvinet i hagen" data-en="The hedgehog in the garden">Pinnsvinet i hagen</h3><span class="open-pill" data-no="📖 Les eventyret" data-en="📖 Read the story">📖 Les eventyret</span></div>
+    </button>
+    <button class="tile" type="button" data-content="eventyr-skogtur">
       <div class="tile-cat cat-gul">🌳</div>
-      <div class="tile-body"><h3 data-no="Skogtur" data-en="Forest walk">Skogtur</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
-    </div>
-    <div class="tile soon">
+      <div class="tile-body"><h3 data-no="Skogtur" data-en="Forest walk">Skogtur</h3><span class="open-pill" data-no="📖 Les eventyret" data-en="📖 Read the story">📖 Les eventyret</span></div>
+    </button>
+    <button class="tile" type="button" data-content="eventyr-sjoen">
       <div class="tile-cat cat-bla">🌊</div>
-      <div class="tile-body"><h3 data-no="En dag ved sjøen" data-en="A day by the sea">En dag ved sjøen</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
-    </div>
-    <div class="tile soon">
+      <div class="tile-body"><h3 data-no="En dag ved sjøen" data-en="A day by the sea">En dag ved sjøen</h3><span class="open-pill" data-no="📖 Les eventyret" data-en="📖 Read the story">📖 Les eventyret</span></div>
+    </button>
+    <button class="tile" type="button" data-content="eventyr-stjerner">
       <div class="tile-cat cat-pink">⭐</div>
-      <div class="tile-body"><h3 data-no="Stjerner og undring" data-en="Stars and wonder">Stjerner og undring</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
-    </div>
+      <div class="tile-body"><h3 data-no="Stjerner og undring" data-en="Stars and wonder">Stjerner og undring</h3><span class="open-pill" data-no="📖 Les eventyret" data-en="📖 Read the story">📖 Les eventyret</span></div>
+    </button>
   </div>
 </section>
 
@@ -604,18 +669,18 @@
         <p data-no="Video · Ordlek · Quiz" data-en="Video · Word play · Quiz">Video · Ordlek · Quiz</p>
       </div>
     </a>
-    <div class="tile soon">
+    <button class="tile" type="button" data-content="laer-praktisk">
       <div class="tile-cat cat-lime">🍎</div>
-      <div class="tile-body"><h3 data-no="Praktisk liv" data-en="Practical life">Praktisk liv</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
-    </div>
-    <div class="tile soon">
+      <div class="tile-body"><h3 data-no="Praktisk liv" data-en="Practical life">Praktisk liv</h3><span class="open-pill" data-no="✨ Se aktiviteter" data-en="✨ See activities">✨ Se aktiviteter</span></div>
+    </button>
+    <button class="tile" type="button" data-content="laer-tall">
       <div class="tile-cat cat-bla">🔢</div>
-      <div class="tile-body"><h3 data-no="Tall og telling" data-en="Numbers and counting">Tall og telling</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
-    </div>
-    <div class="tile soon">
+      <div class="tile-body"><h3 data-no="Tall og telling" data-en="Numbers and counting">Tall og telling</h3><span class="open-pill" data-no="✨ Lær &amp; lek" data-en="✨ Learn &amp; play">✨ Lær &amp; lek</span></div>
+    </button>
+    <button class="tile" type="button" data-content="laer-farger">
       <div class="tile-cat cat-pink">🎨</div>
-      <div class="tile-body"><h3 data-no="Farger og former" data-en="Colors and shapes">Farger og former</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
-    </div>
+      <div class="tile-body"><h3 data-no="Farger og former" data-en="Colors and shapes">Farger og former</h3><span class="open-pill" data-no="✨ Lær &amp; lek" data-en="✨ Learn &amp; play">✨ Lær &amp; lek</span></div>
+    </button>
   </div>
 </section>
 
@@ -623,25 +688,25 @@
 <section class="shelf-wrap" id="bevegelse">
   <div class="shelf-head">
     <h2 data-no="Sang &amp; bevegelse" data-en="Sing &amp; move">Sang &amp; bevegelse</h2>
-    <span class="tag" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span>
+    <span class="tag live" data-no="Trykk for å leke" data-en="Tap to play">Trykk for å leke</span>
   </div>
   <div class="shelf">
-    <div class="tile soon">
+    <button class="tile" type="button" data-content="beve-hopp">
       <div class="tile-cat cat-oransje">🤸</div>
-      <div class="tile-body"><h3 data-no="Hopp og sprett" data-en="Jump and bounce">Hopp og sprett</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
-    </div>
-    <div class="tile soon">
+      <div class="tile-body"><h3 data-no="Hopp og sprett" data-en="Jump and bounce">Hopp og sprett</h3><span class="open-pill" data-no="🤸 Bli med" data-en="🤸 Join in">🤸 Bli med</span></div>
+    </button>
+    <button class="tile" type="button" data-content="beve-klapp">
       <div class="tile-cat cat-lilla">👏</div>
-      <div class="tile-body"><h3 data-no="Klappeleker" data-en="Clapping games">Klappeleker</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
-    </div>
-    <div class="tile soon">
+      <div class="tile-body"><h3 data-no="Klappeleker" data-en="Clapping games">Klappeleker</h3><span class="open-pill" data-no="👏 Bli med" data-en="👏 Join in">👏 Bli med</span></div>
+    </button>
+    <button class="tile" type="button" data-content="beve-dyredans">
       <div class="tile-cat cat-lime">🐸</div>
-      <div class="tile-body"><h3 data-no="Dyredans" data-en="Animal dance">Dyredans</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
-    </div>
-    <div class="tile soon">
+      <div class="tile-body"><h3 data-no="Dyredans" data-en="Animal dance">Dyredans</h3><span class="open-pill" data-no="🐸 Bli med" data-en="🐸 Join in">🐸 Bli med</span></div>
+    </button>
+    <button class="tile" type="button" data-content="beve-rim">
       <div class="tile-cat cat-gul">🎶</div>
-      <div class="tile-body"><h3 data-no="Rim og regler" data-en="Rhymes" >Rim og regler</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
-    </div>
+      <div class="tile-body"><h3 data-no="Rim og regler" data-en="Rhymes">Rim og regler</h3><span class="open-pill" data-no="🎶 Les regla" data-en="🎶 Read the rhyme">🎶 Les regla</span></div>
+    </button>
   </div>
 </section>
 
@@ -649,25 +714,25 @@
 <section class="shelf-wrap" id="rolig">
   <div class="shelf-head">
     <h2 data-no="Rolig stund" data-en="Quiet time">Rolig stund</h2>
-    <span class="tag" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span>
+    <span class="tag live" data-no="Trykk for ro" data-en="Tap for calm">Trykk for ro</span>
   </div>
   <div class="shelf">
-    <div class="tile soon">
+    <button class="tile" type="button" data-content="rolig-godnatt">
       <div class="tile-cat cat-lilla">🌙</div>
-      <div class="tile-body"><h3 data-no="Godnattsang" data-en="Lullaby">Godnattsang</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
-    </div>
-    <div class="tile soon">
+      <div class="tile-body"><h3 data-no="Godnattsang" data-en="Lullaby">Godnattsang</h3><span class="open-pill" data-no="🌙 Syng med" data-en="🌙 Sing along">🌙 Syng med</span></div>
+    </button>
+    <button class="tile" type="button" data-content="rolig-pusterom">
       <div class="tile-cat cat-bla">☁️</div>
-      <div class="tile-body"><h3 data-no="Pusterom" data-en="Breathing break">Pusterom</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
-    </div>
-    <div class="tile soon">
+      <div class="tile-body"><h3 data-no="Pusterom" data-en="Breathing break">Pusterom</h3><span class="open-pill" data-no="☁️ Pust med oss" data-en="☁️ Breathe with us">☁️ Pust med oss</span></div>
+    </button>
+    <button class="tile" type="button" data-content="rolig-kosestund">
       <div class="tile-cat cat-pink">🧸</div>
-      <div class="tile-body"><h3 data-no="Kosestund" data-en="Cuddle time">Kosestund</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
-    </div>
-    <div class="tile soon">
+      <div class="tile-body"><h3 data-no="Kosestund" data-en="Cuddle time">Kosestund</h3><span class="open-pill" data-no="🧸 Kos deg" data-en="🧸 Get cosy">🧸 Kos deg</span></div>
+    </button>
+    <button class="tile" type="button" data-content="rolig-stjernedryss">
       <div class="tile-cat cat-gul">⭐</div>
-      <div class="tile-body"><h3 data-no="Stjernedryss" data-en="Stardust">Stjernedryss</h3><span class="soon-pill" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></div>
-    </div>
+      <div class="tile-body"><h3 data-no="Stjernedryss" data-en="Stardust">Stjernedryss</h3><span class="open-pill" data-no="⭐ Slapp av" data-en="⭐ Relax">⭐ Slapp av</span></div>
+    </button>
   </div>
 </section>
 
@@ -722,6 +787,28 @@
   </div>
 </div>
 
+<!-- ============ INNHOLDS-VINDU (eventyr / aktivitet / rolig) ============ -->
+<div class="content-overlay" id="contentOverlay" role="dialog" aria-modal="true" aria-label="Innhold">
+  <div class="content-card">
+    <button class="content-close" id="contentClose" aria-label="Lukk">×</button>
+    <div class="content-head"><h2 id="cTitle"></h2></div>
+    <div class="content-page" id="cPage">
+      <div class="c-emoji" id="cEmoji"></div>
+      <div class="c-text" id="cText"></div>
+      <div class="breath" id="cBreath" style="display:none;">
+        <div class="breath-circle" id="breathCircle"></div>
+        <div class="breath-label" id="breathLabel"></div>
+      </div>
+      <a class="btn c-link" id="cLink" style="display:none;"></a>
+    </div>
+    <div class="content-nav">
+      <button class="cnav prev" id="cPrev">‹ <span data-no="Forrige" data-en="Back">Forrige</span></button>
+      <div class="content-dots" id="cDots"></div>
+      <button class="cnav next" id="cNext"><span data-no="Neste" data-en="Next">Neste</span> ›</button>
+    </div>
+  </div>
+</div>
+
 <a href="#" class="lang-float" id="langFloat" aria-label="Switch language" title="Switch language">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
   <span data-no="English" data-en="Norsk">English</span>
@@ -747,7 +834,11 @@
     // Hero-poster følger språk
     const hp = document.getElementById('heroPoster');
     if (hp) hp.src = lang === 'no' ? 'images/poster-norsk.jpg' : 'images/poster-english.jpg';
+
+    // Innholds-vindu følger språk hvis åpent
+    if (contentOpen) renderContentPage();
   }
+  let contentOpen = false;
 
   toggle.addEventListener('click', () => applyLang(currentLang === 'no' ? 'en' : 'no'));
   document.getElementById('langFloat').addEventListener('click', (e) => {
@@ -854,6 +945,192 @@
         descNo: btn.dataset.descNo,   descEn: btn.dataset.descEn
       });
     });
+  });
+
+  /* ============ INNHOLD: EVENTYR / AKTIVITETER / ROLIG ============ */
+  const CONTENT = {
+    'eventyr-pinnsvin': { titleNo:'Pinnsvinet i hagen', titleEn:'The hedgehog in the garden', pages:[
+      { emoji:'🦔', no:'I hagen til Mia og Teo bodde et lite pinnsvin.', en:'In Mia and Teo’s garden lived a little hedgehog.' },
+      { emoji:'🌿', no:'Hver kveld kom det fram for å lete etter mat i det høye gresset.', en:'Every evening it came out to look for food in the tall grass.' },
+      { emoji:'🍎', no:'Mia la et eple ved busken. Teo satt helt stille og ventet.', en:'Mia placed an apple by the bush. Teo sat very still and waited.' },
+      { emoji:'💗', no:'Pinnsvinet snuste, tok en bit — og rullet seg lykkelig sammen.', en:'The hedgehog sniffed, took a bite — and curled up happily.' },
+      { emoji:'🌙', no:'«God natt, lille pinnsvin», hvisket Mia. «Vi ses i morgen.»', en:'“Good night, little hedgehog,” Mia whispered. “See you tomorrow.”' },
+    ]},
+    'eventyr-skogtur': { titleNo:'Skogtur', titleEn:'Forest walk', pages:[
+      { emoji:'🎒', no:'Mia og Teo pakket sekken og gikk på skogtur.', en:'Mia and Teo packed a backpack and went for a walk in the forest.' },
+      { emoji:'🐿️', no:'Et ekorn hoppet fra gren til gren over hodene deres.', en:'A squirrel jumped from branch to branch above their heads.' },
+      { emoji:'🍄', no:'De fant en sopp, en fjær og en glatt stein.', en:'They found a mushroom, a feather and a smooth stone.' },
+      { emoji:'🌲', no:'Sola tittet ned mellom de høye trærne.', en:'The sun peeked down between the tall trees.' },
+      { emoji:'🏡', no:'Trøtte og glade gikk de hjem igjen.', en:'Tired and happy, they walked back home.' },
+    ]},
+    'eventyr-sjoen': { titleNo:'En dag ved sjøen', titleEn:'A day by the sea', pages:[
+      { emoji:'🌊', no:'En varm dag dro Mia og Teo ned til sjøen.', en:'On a warm day, Mia and Teo went down to the sea.' },
+      { emoji:'🐚', no:'De samlet skjell og kjente på den våte sanden.', en:'They collected shells and felt the wet sand.' },
+      { emoji:'🦀', no:'En liten krabbe vinket med klørne og forsvant.', en:'A little crab waved its claws and disappeared.' },
+      { emoji:'👣', no:'Bølgene kilte dem på tærne. De lo og lo.', en:'The waves tickled their toes. They laughed and laughed.' },
+      { emoji:'🌅', no:'Da sola gikk ned, vinket de farvel til havet.', en:'When the sun set, they waved goodbye to the sea.' },
+    ]},
+    'eventyr-stjerner': { titleNo:'Stjerner og undring', titleEn:'Stars and wonder', pages:[
+      { emoji:'🌌', no:'Om kvelden la Mia og Teo seg i gresset og så opp.', en:'In the evening, Mia and Teo lay in the grass and looked up.' },
+      { emoji:'⭐', no:'Stjernene blinket som tusen små lys.', en:'The stars twinkled like a thousand tiny lights.' },
+      { emoji:'🤔', no:'«Hvor mange stjerner finnes det?» undret Teo.', en:'“How many stars are there?” Teo wondered.' },
+      { emoji:'✨', no:'«Flere enn vi kan telle», sa Mia. «Kanskje uendelig mange.»', en:'“More than we can count,” said Mia. “Maybe endlessly many.”' },
+      { emoji:'😴', no:'De gjespet, og en stjerne så ut til å blunke god natt.', en:'They yawned, and one star seemed to wink good night.' },
+    ]},
+
+    'laer-praktisk': { titleNo:'Praktisk liv', titleEn:'Practical life', pages:[
+      { emoji:'🍎', no:'Praktisk liv er små oppgaver barn kan klare selv. Prøv én i dag!', en:'Practical life is small tasks children can do themselves. Try one today!' },
+      { emoji:'🧺', no:'✔ Legg sokkene i kurven\n✔ Hell vann i et glass\n✔ Tørk av bordet', en:'✔ Put the socks in the basket\n✔ Pour water into a glass\n✔ Wipe the table' },
+      { emoji:'🌱', no:'✔ Vann en blomst\n✔ Knepp en knapp\n✔ Rydd én leke på plass', en:'✔ Water a flower\n✔ Button a button\n✔ Put one toy away' },
+      { emoji:'👏', no:'Ros barnet for innsatsen, ikke bare resultatet. Heia!', en:'Praise the effort, not just the result. Well done!' },
+    ]},
+    'laer-tall': { titleNo:'Tall og telling', titleEn:'Numbers and counting', pages:[
+      { emoji:'🔢', no:'La oss telle sammen! Tell tingene høyt.', en:'Let’s count together! Count the things out loud.' },
+      { emoji:'🍎', no:'🍎 = en (1)\n🍎🍎 = to (2)\n🍎🍎🍎 = tre (3)', en:'🍎 = one (1)\n🍎🍎 = two (2)\n🍎🍎🍎 = three (3)' },
+      { emoji:'⭐', no:'Hvor mange stjerner? ⭐⭐⭐⭐⭐ — fem!', en:'How many stars? ⭐⭐⭐⭐⭐ — five!' },
+      { emoji:'🎮', no:'Vil du leke tallspillet med Mia & Teo?', en:'Want to play the number game with Mia & Teo?', linkHref:'/laer-norsk', linkNo:'Gå til Lær Norsk-kurset →', linkEn:'Go to the Learn Norwegian course →' },
+    ]},
+    'laer-farger': { titleNo:'Farger og former', titleEn:'Colors and shapes', pages:[
+      { emoji:'🎨', no:'Farger og former er overalt! Hva ser du rundt deg?', en:'Colors and shapes are everywhere! What do you see around you?' },
+      { emoji:'🔺', no:'Sirkel ⚪   ·   Firkant 🟦   ·   Trekant 🔺', en:'Circle ⚪   ·   Square 🟦   ·   Triangle 🔺' },
+      { emoji:'🌈', no:'Finn noe rødt 🔴, noe blått 🔵 og noe gult 🟡 i rommet!', en:'Find something red 🔴, blue 🔵 and yellow 🟡 in the room!' },
+      { emoji:'🎮', no:'Vil du leke fargespillet med Mia & Teo?', en:'Want to play the color game with Mia & Teo?', linkHref:'/laer-norsk', linkNo:'Gå til Lær Norsk-kurset →', linkEn:'Go to the Learn Norwegian course →' },
+    ]},
+
+    'beve-hopp': { titleNo:'Hopp og sprett', titleEn:'Jump and bounce', pages:[
+      { emoji:'🤸', no:'Hopp og sprett! Klar, ferdig — hopp!', en:'Jump and bounce! Ready, set — jump!' },
+      { emoji:'🐸', no:'Hopp som en frosk — lavt og langt!', en:'Hop like a frog — low and far!' },
+      { emoji:'🦘', no:'Hopp høyt som en kenguru!', en:'Jump high like a kangaroo!' },
+      { emoji:'🗿', no:'Stå helt stille som en statue. Frys!', en:'Stand completely still like a statue. Freeze!' },
+    ]},
+    'beve-klapp': { titleNo:'Klappeleker', titleEn:'Clapping games', pages:[
+      { emoji:'👏', no:'Klapp i takt: klapp — klapp — klapp!', en:'Clap to the beat: clap — clap — clap!' },
+      { emoji:'🖐️', no:'Klapp hendene, klapp på knærne, klapp over hodet!', en:'Clap your hands, pat your knees, clap above your head!' },
+      { emoji:'🎵', no:'Klapp navnet ditt: Mi-a! Te-o! Ett klapp for hver stavelse.', en:'Clap your name: Mi-a! Te-o! One clap per syllable.' },
+    ]},
+    'beve-dyredans': { titleNo:'Dyredans', titleEn:'Animal dance', pages:[
+      { emoji:'🐻', no:'Dans som en bjørn — tung og rolig.', en:'Dance like a bear — heavy and slow.' },
+      { emoji:'🦋', no:'Flagre som en sommerfugl — lett og fint.', en:'Flutter like a butterfly — light and gentle.' },
+      { emoji:'🐍', no:'Bukt deg som en slange langs gulvet.', en:'Wiggle like a snake along the floor.' },
+      { emoji:'🦆', no:'Vagg som en and — kvakk, kvakk!', en:'Waddle like a duck — quack, quack!' },
+    ]},
+    'beve-rim': { titleNo:'Rim og regler', titleEn:'Rhymes', pages:[
+      { emoji:'🎶', no:'Lille Mia, lille Teo,\nhopper høyt og ler så glad.', en:'Little Mia, little Teo,\njump up high and laugh with glee.' },
+      { emoji:'🌼', no:'Klapp i hendene, tramp med foten,\nså er alle venner glad!', en:'Clap your hands and stamp your feet,\nnow all our friends are happy!' },
+      { emoji:'🔁', no:'Si regla én gang til — litt raskere denne gangen!', en:'Say the rhyme once more — a little faster this time!' },
+    ]},
+
+    'rolig-godnatt': { titleNo:'Godnattsang', titleEn:'Lullaby', pages:[
+      { emoji:'🌙', no:'Sov nå, lille venn,\nstjernene passer på.', en:'Sleep now, little friend,\nthe stars are watching over you.' },
+      { emoji:'💤', no:'Månen lyser mykt,\nalt er stille og trygt.', en:'The moon shines softly,\nall is quiet and safe.' },
+      { emoji:'🧸', no:'Lukk de små øynene,\ndrøm noe fint i natt.', en:'Close your little eyes,\ndream something lovely tonight.' },
+    ]},
+    'rolig-pusterom': { titleNo:'Pusterom', titleEn:'Breathing break', pages:[
+      { emoji:'☁️', no:'La oss puste rolig sammen. Følg den blå sirkelen.', en:'Let’s breathe calmly together. Follow the blue circle.' },
+      { breath:true, no:'', en:'' },
+      { emoji:'😌', no:'Godt jobba. Kjenn hvor rolig kroppen ble.', en:'Well done. Feel how calm your body became.' },
+    ]},
+    'rolig-kosestund': { titleNo:'Kosestund', titleEn:'Cuddle time', pages:[
+      { emoji:'🧸', no:'Finn bamsen din og gi den en god, varm klem.', en:'Find your teddy and give it a big, warm hug.' },
+      { emoji:'💗', no:'Kjenn hvor godt det er å være trygg og varm.', en:'Feel how nice it is to be safe and warm.' },
+      { emoji:'📖', no:'Kos dere med en rolig bok sammen.', en:'Enjoy a calm book together.' },
+    ]},
+    'rolig-stjernedryss': { titleNo:'Stjernedryss', titleEn:'Stardust', pages:[
+      { emoji:'✨', no:'Lukk øynene og se for deg en stille natthimmel.', en:'Close your eyes and picture a quiet night sky.' },
+      { emoji:'⭐', no:'Tenk deg at en stjerne daler sakte ned.', en:'Imagine a star drifting slowly down.' },
+      { emoji:'😌', no:'Pust rolig. Du er trygg og god.', en:'Breathe calmly. You are safe and loved.' },
+    ]},
+  };
+
+  const cOverlay = document.getElementById('contentOverlay');
+  const cTitle = document.getElementById('cTitle');
+  const cEmoji = document.getElementById('cEmoji');
+  const cText  = document.getElementById('cText');
+  const cLink  = document.getElementById('cLink');
+  const cBreath = document.getElementById('cBreath');
+  const cDots  = document.getElementById('cDots');
+  const cPrev  = document.getElementById('cPrev');
+  const cNext  = document.getElementById('cNext');
+  let current = null, cIdx = 0, breathTimer = null;
+
+  function stopBreath() { if (breathTimer) { clearInterval(breathTimer); breathTimer = null; } }
+  function startBreath() {
+    stopBreath();
+    const circle = document.getElementById('breathCircle');
+    const label = document.getElementById('breathLabel');
+    let inhale = true;
+    const cycle = () => {
+      label.textContent = inhale ? (currentLang==='no'?'Pust inn …':'Breathe in …') : (currentLang==='no'?'Pust ut …':'Breathe out …');
+      circle.classList.toggle('big', inhale);
+      inhale = !inhale;
+    };
+    cycle();
+    breathTimer = setInterval(cycle, 4000);
+  }
+
+  function renderContentPage() {
+    if (!current) return;
+    const page = current.pages[cIdx];
+    cTitle.textContent = currentLang==='no' ? current.titleNo : current.titleEn;
+    // dots
+    cDots.innerHTML = '';
+    current.pages.forEach((_, i) => {
+      const d = document.createElement('span'); if (i===cIdx) d.classList.add('active'); cDots.appendChild(d);
+    });
+    // nav state
+    cPrev.disabled = cIdx === 0;
+    const last = cIdx === current.pages.length - 1;
+    cNext.querySelector('span').textContent = last ? (currentLang==='no'?'Ferdig':'Done') : (currentLang==='no'?'Neste':'Next');
+    // breath page vs normal
+    stopBreath();
+    if (page.breath) {
+      cEmoji.style.display = 'none'; cText.style.display = 'none'; cLink.style.display = 'none';
+      cBreath.style.display = 'flex';
+      startBreath();
+    } else {
+      cBreath.style.display = 'none';
+      cEmoji.style.display = ''; cEmoji.textContent = page.emoji;
+      cEmoji.classList.remove('c-emoji'); void cEmoji.offsetWidth; cEmoji.classList.add('c-emoji');
+      cText.style.display = '';
+      const txt = (currentLang==='no' ? page.no : page.en).replace(/\n/g,'<br>');
+      const alt = (currentLang==='no' ? page.en : page.no).replace(/\n/g,'<br>');
+      cText.innerHTML = txt + '<span class="c-en">' + alt + '</span>';
+      if (page.linkHref) {
+        cLink.style.display = ''; cLink.href = page.linkHref;
+        cLink.textContent = currentLang==='no' ? page.linkNo : page.linkEn;
+      } else { cLink.style.display = 'none'; }
+    }
+  }
+
+  function openContent(id) {
+    current = CONTENT[id]; if (!current) return;
+    cIdx = 0; contentOpen = true;
+    renderContentPage();
+    cOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeContent() {
+    stopBreath();
+    cOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+    contentOpen = false; current = null;
+  }
+  cNext.addEventListener('click', () => {
+    if (!current) return;
+    if (cIdx < current.pages.length - 1) { cIdx++; renderContentPage(); } else { closeContent(); }
+  });
+  cPrev.addEventListener('click', () => { if (current && cIdx > 0) { cIdx--; renderContentPage(); } });
+  document.getElementById('contentClose').addEventListener('click', closeContent);
+  cOverlay.addEventListener('click', e => { if (e.target === cOverlay) closeContent(); });
+  document.addEventListener('keydown', e => {
+    if (!contentOpen) return;
+    if (e.key === 'Escape') closeContent();
+    else if (e.key === 'ArrowRight') cNext.click();
+    else if (e.key === 'ArrowLeft') cPrev.click();
+  });
+
+  document.querySelectorAll('.tile[data-content]').forEach(tile => {
+    tile.addEventListener('click', () => openContent(tile.dataset.content));
   });
 </script>
 
