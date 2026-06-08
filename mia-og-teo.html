@@ -430,6 +430,56 @@
   .c-emoji { font-size: 4.5rem; line-height: 1; margin-bottom: 1rem; animation: cPop .45s ease; }
   @keyframes cPop { 0%{opacity:0; transform:scale(.6) translateY(8px);} 60%{opacity:1; transform:scale(1.1);} 100%{transform:scale(1);} }
   .c-text { font-size: 1.2rem; color: var(--ink); line-height: 1.5; max-width: 420px; }
+
+  /* ===== Bok-leser ===== */
+  .book-overlay {
+    position: fixed; inset: 0; z-index: 60; display: none; align-items: center; justify-content: center;
+    padding: 1rem; background: rgba(40, 20, 35, 0.55); backdrop-filter: blur(6px); opacity: 0; transition: opacity .3s;
+  }
+  .book-overlay.open { display: flex; opacity: 1; }
+  .book-card {
+    position: relative; width: min(100%, 620px); max-height: 92vh; background: var(--warm-white);
+    border-radius: 30px; box-shadow: var(--shadow-deep); border: 1px solid var(--pink-100);
+    overflow: hidden; display: flex; flex-direction: column; transform: scale(.96); transition: transform .3s;
+  }
+  .book-overlay.open .book-card { transform: scale(1); }
+  .book-head {
+    display: flex; align-items: center; justify-content: space-between; gap: .75rem;
+    padding: 1rem 1.25rem; padding-right: 3.5rem; border-bottom: 1px solid var(--pink-100);
+    background: linear-gradient(135deg, var(--pink-100), var(--pink-50));
+  }
+  .book-head h2 { font-size: 1.2rem; color: var(--ink); line-height: 1.2; }
+  .book-audio {
+    flex: none; display: inline-flex; align-items: center; gap: .4rem; cursor: pointer;
+    border: none; border-radius: 999px; padding: .5rem .9rem; font-size: .95rem; font-weight: 700;
+    background: white; color: var(--pink-600); box-shadow: var(--shadow-soft); transition: transform .15s, background .2s, color .2s;
+  }
+  .book-audio:hover { transform: scale(1.05); }
+  .book-audio.on { background: var(--pink-600); color: white; }
+  .book-audio.on .ba-icon { animation: baPulse 1.4s ease-in-out infinite; }
+  .book-audio:disabled { opacity: .45; cursor: default; transform: none; }
+  @keyframes baPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.18);} }
+  .book-stage {
+    position: relative; width: 100%; aspect-ratio: 16/9; background: #1a1014; overflow: hidden; flex: none;
+  }
+  .book-stage img, .book-stage video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .book-stage img { animation: bkFade .4s ease; }
+  @keyframes bkFade { from{opacity:0; transform:scale(1.03);} to{opacity:1; transform:scale(1);} }
+  .book-text {
+    flex: 1; overflow-y: auto; text-align: center; padding: 1.5rem 1.75rem; min-height: 90px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.25rem; line-height: 1.55; color: var(--ink); font-weight: 600;
+  }
+  .book-nav {
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    padding: .85rem 1.25rem; border-top: 1px solid var(--pink-100); background: var(--pink-50);
+  }
+  .book-count { font-size: .95rem; font-weight: 700; color: var(--pink-600); letter-spacing: .02em; }
+  .book-nav .cnav:disabled { opacity: .3; cursor: default; }
+  @media (max-width: 480px) {
+    .book-head h2 { font-size: 1.05rem; }
+    .book-text { font-size: 1.12rem; padding: 1.2rem 1.25rem; }
+  }
   .c-text .c-en { display:block; font-family: var(--font-body); color: var(--ink-soft); font-size: 1rem; margin-top: 0.5rem; }
   .c-link { margin-top: 1.4rem; }
   .content-nav {
@@ -721,7 +771,7 @@
     <span class="world-tag" data-no="Trykk for å lese" data-en="Tap to read">Trykk for å lese</span>
   </div>
   <div class="shelf">
-    <button class="tile" type="button" data-content="eventyr-pinnsvin">
+    <button class="tile" type="button" data-book="pinnsvin">
       <div class="tile-thumb"><img class="cover" src="images/eventyr/pinnsvin.webp" alt="" loading="lazy"></div>
       <div class="tile-body"><h3 data-no="Pinnsvinet i hagen" data-en="The hedgehog in the garden">Pinnsvinet i hagen</h3><span class="open-pill" data-no="📖 Les eventyret" data-en="📖 Read the story">📖 Les eventyret</span></div>
     </button>
@@ -915,6 +965,27 @@
   </div>
 </div>
 
+<!-- ============ BOK-LESER (eventyr: bilde + tekst + lyd / lydbok) ============ -->
+<div class="book-overlay" id="bookOverlay" role="dialog" aria-modal="true" aria-label="Bok">
+  <div class="book-card">
+    <button class="content-close" id="bookClose" aria-label="Lukk">×</button>
+    <div class="book-head">
+      <h2 id="bkTitle"></h2>
+      <button class="book-audio" id="bkAudio" type="button" aria-pressed="false">
+        <span class="ba-icon">🎧</span>
+        <span class="ba-label" data-no="Lydbok" data-en="Audiobook">Lydbok</span>
+      </button>
+    </div>
+    <div class="book-stage" id="bkStage"></div>
+    <div class="book-text" id="bkText"></div>
+    <div class="book-nav">
+      <button class="cnav prev" id="bkPrev" aria-label="Forrige side">‹</button>
+      <div class="book-count" id="bkCount"></div>
+      <button class="cnav next" id="bkNext" aria-label="Neste side">›</button>
+    </div>
+  </div>
+</div>
+
 <a href="#" class="lang-float" id="langFloat" aria-label="Switch language" title="Switch language">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
   <span data-no="English" data-en="Norsk">English</span>
@@ -943,6 +1014,7 @@
 
     // Innholds-vindu følger språk hvis åpent
     if (contentOpen) renderContentPage();
+    if (bookOpen) renderBookPage();
   }
   let contentOpen = false;
 
@@ -1246,6 +1318,116 @@
 
   document.querySelectorAll('.tile[data-content]').forEach(tile => {
     tile.addEventListener('click', () => openContent(tile.dataset.content));
+  });
+
+  /* ---------- BOK-LESER (bilde + tekst + lyd / lydbok) ---------- */
+  let bookOpen = false;
+  let book = null, bkIdx = 0, bkBase = '', bkAudioOn = false, bkAudioEl = null, bkTimer = null;
+  const bookCache = {};
+  const bookOverlay = document.getElementById('bookOverlay');
+  const bkStage = document.getElementById('bkStage');
+  const bkTextEl = document.getElementById('bkText');
+  const bkCountEl = document.getElementById('bkCount');
+  const bkTitleEl = document.getElementById('bkTitle');
+  const bkPrevBtn = document.getElementById('bkPrev');
+  const bkNextBtn = document.getElementById('bkNext');
+  const bkAudioBtn = document.getElementById('bkAudio');
+
+  function bkAsset(p) {
+    if (!p) return '';
+    return /^(https?:|\/|images\/|videos\/|books\/)/.test(p) ? p : bkBase + p;
+  }
+  function bookHasAudio() { return !!(book && book.pages.some(p => p.audioNo || p.audioEn)); }
+  function pageAudioSrc(p) {
+    const s = currentLang === 'en' ? (p.audioEn || p.audioNo) : (p.audioNo || p.audioEn);
+    return s ? bkAsset(s) : '';
+  }
+
+  async function openBook(id) {
+    bkBase = 'books/' + id + '/';
+    try {
+      if (!bookCache[id]) {
+        const res = await fetch(bkBase + 'pages.json', { cache: 'no-cache' });
+        if (!res.ok) throw new Error(res.status);
+        bookCache[id] = await res.json();
+      }
+      book = bookCache[id];
+    } catch (err) { book = null; return; }
+    bkIdx = 0; bookOpen = true;
+    setBookAudio(false);
+    bkAudioBtn.disabled = !bookHasAudio();
+    bkAudioBtn.title = bookHasAudio() ? '' : (currentLang === 'no' ? 'Lyd kommer snart' : 'Audio coming soon');
+    renderBookPage();
+    bookOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function renderBookPage() {
+    if (!book) return;
+    const total = book.pages.length;
+    const p = book.pages[bkIdx];
+    bkTitleEl.textContent = currentLang === 'en' ? (book.titleEn || book.titleNo) : (book.titleNo || book.titleEn);
+    if (p.video) {
+      bkStage.innerHTML = '<video src="' + bkAsset(p.video) + '" poster="' + bkAsset(p.poster) + '" controls playsinline preload="metadata"></video>';
+    } else if (p.img) {
+      bkStage.innerHTML = '<img src="' + bkAsset(p.img) + '" alt="">';
+    } else {
+      bkStage.innerHTML = '';
+    }
+    bkTextEl.textContent = currentLang === 'en' ? (p.en || p.no || '') : (p.no || p.en || '');
+    bkCountEl.textContent = (currentLang === 'no' ? 'Side ' : 'Page ') + (bkIdx + 1) + ' / ' + total;
+    bkPrevBtn.disabled = bkIdx === 0;
+    bkNextBtn.disabled = bkIdx === total - 1;
+    if (bkAudioOn) playPageAudio();
+  }
+
+  function stopBookAudio() {
+    if (bkAudioEl) { bkAudioEl.onended = null; bkAudioEl.pause(); bkAudioEl = null; }
+    if (bkTimer) { clearTimeout(bkTimer); bkTimer = null; }
+  }
+  function bkAdvanceOrStop() {
+    if (bkAudioOn && bkIdx < book.pages.length - 1) { bkIdx++; renderBookPage(); }
+    else setBookAudio(false);
+  }
+  function playPageAudio() {
+    stopBookAudio();
+    const src = pageAudioSrc(book.pages[bkIdx]);
+    if (src) {
+      bkAudioEl = new Audio(src);
+      bkAudioEl.play().catch(() => {});
+      bkAudioEl.onended = bkAdvanceOrStop;
+    } else {
+      // ingen lyd for siden – hold lesetempo og bla videre
+      bkTimer = setTimeout(bkAdvanceOrStop, 3500);
+    }
+  }
+  function setBookAudio(on) {
+    bkAudioOn = on && bookHasAudio();
+    bkAudioBtn.classList.toggle('on', bkAudioOn);
+    bkAudioBtn.setAttribute('aria-pressed', bkAudioOn ? 'true' : 'false');
+    if (bkAudioOn) playPageAudio(); else stopBookAudio();
+  }
+  function closeBook() {
+    stopBookAudio(); bkAudioOn = false; bkAudioBtn.classList.remove('on');
+    bkStage.innerHTML = '';
+    bookOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+    bookOpen = false;
+  }
+
+  bkNextBtn.addEventListener('click', () => { if (book && bkIdx < book.pages.length - 1) { bkIdx++; renderBookPage(); } });
+  bkPrevBtn.addEventListener('click', () => { if (book && bkIdx > 0) { bkIdx--; renderBookPage(); } });
+  bkAudioBtn.addEventListener('click', () => setBookAudio(!bkAudioOn));
+  document.getElementById('bookClose').addEventListener('click', closeBook);
+  bookOverlay.addEventListener('click', e => { if (e.target === bookOverlay) closeBook(); });
+  document.addEventListener('keydown', e => {
+    if (!bookOpen) return;
+    if (e.key === 'Escape') closeBook();
+    else if (e.key === 'ArrowRight') bkNextBtn.click();
+    else if (e.key === 'ArrowLeft') bkPrevBtn.click();
+  });
+  document.querySelectorAll('.tile[data-book]').forEach(tile => {
+    tile.addEventListener('click', () => openBook(tile.dataset.book));
   });
 </script>
 

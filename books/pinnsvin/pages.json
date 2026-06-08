@@ -1,0 +1,23 @@
+{
+  "titleNo": "Pinnsvinet i hagen",
+  "titleEn": "The hedgehog in the garden",
+  "pages": [
+    { "video": "videos/eventyr/pinnsvin.mp4", "poster": "images/eventyr/pinnsvin.webp",
+      "no": "Pinnsvinet i hagen", "en": "The hedgehog in the garden" },
+    { "img": "images/eventyr/pinnsvin.webp",
+      "no": "I hagen til Mia og Teo bodde et lite pinnsvin.",
+      "en": "In Mia and Teo’s garden lived a little hedgehog." },
+    { "img": "images/eventyr/pinnsvin.webp",
+      "no": "Hver kveld kom det fram for å lete etter mat i det høye gresset.",
+      "en": "Every evening it came out to look for food in the tall grass." },
+    { "img": "images/eventyr/pinnsvin.webp",
+      "no": "Mia la et eple ved busken. Teo satt helt stille og ventet.",
+      "en": "Mia placed an apple by the bush. Teo sat very still and waited." },
+    { "img": "images/eventyr/pinnsvin.webp",
+      "no": "Pinnsvinet snuste, tok en bit — og rullet seg lykkelig sammen.",
+      "en": "The hedgehog sniffed, took a bite — and curled up happily." },
+    { "img": "images/eventyr/pinnsvin.webp",
+      "no": "«God natt, lille pinnsvin», hvisket Mia. «Vi ses i morgen.»",
+      "en": "“Good night, little hedgehog,” Mia whispered. “See you tomorrow.”" }
+  ]
+}
