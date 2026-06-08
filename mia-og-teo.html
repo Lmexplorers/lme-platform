@@ -775,15 +775,15 @@
       <div class="tile-thumb"><img class="cover" src="images/eventyr/pinnsvin.webp" alt="" loading="lazy"></div>
       <div class="tile-body"><h3 data-no="Pinnsvinet i hagen" data-en="The hedgehog in the garden">Pinnsvinet i hagen</h3><span class="open-pill" data-no="📖 Les eventyret" data-en="📖 Read the story">📖 Les eventyret</span></div>
     </button>
-    <button class="tile" type="button" data-content="eventyr-skogtur">
+    <button class="tile" type="button" data-book="skogtur">
       <div class="tile-cat cat-gul">🌳</div>
       <div class="tile-body"><h3 data-no="Skogtur" data-en="Forest walk">Skogtur</h3><span class="open-pill" data-no="📖 Les eventyret" data-en="📖 Read the story">📖 Les eventyret</span></div>
     </button>
-    <button class="tile" type="button" data-content="eventyr-sjoen">
+    <button class="tile" type="button" data-book="sjoen">
       <div class="tile-cat cat-bla">🌊</div>
       <div class="tile-body"><h3 data-no="En dag ved sjøen" data-en="A day by the sea">En dag ved sjøen</h3><span class="open-pill" data-no="📖 Les eventyret" data-en="📖 Read the story">📖 Les eventyret</span></div>
     </button>
-    <button class="tile" type="button" data-content="eventyr-stjerner">
+    <button class="tile" type="button" data-book="stjerner">
       <div class="tile-cat cat-pink">⭐</div>
       <div class="tile-body"><h3 data-no="Stjerner og undring" data-en="Stars and wonder">Stjerner og undring</h3><span class="open-pill" data-no="📖 Les eventyret" data-en="📖 Read the story">📖 Les eventyret</span></div>
     </button>
@@ -1369,10 +1369,12 @@
     bkTitleEl.textContent = currentLang === 'en' ? (book.titleEn || book.titleNo) : (book.titleNo || book.titleEn);
     if (p.video) {
       bkStage.innerHTML = '<video src="' + bkAsset(p.video) + '" poster="' + bkAsset(p.poster) + '" controls playsinline preload="metadata"></video>';
+      bkStage.style.display = 'block';
     } else if (p.img) {
       bkStage.innerHTML = '<img src="' + bkAsset(p.img) + '" alt="">';
+      bkStage.style.display = 'block';
     } else {
-      bkStage.innerHTML = '';
+      bkStage.innerHTML = ''; bkStage.style.display = 'none';
     }
     bkTextEl.textContent = currentLang === 'en' ? (p.en || p.no || '') : (p.no || p.en || '');
     bkCountEl.textContent = (currentLang === 'no' ? 'Side ' : 'Page ') + (bkIdx + 1) + ' / ' + total;
