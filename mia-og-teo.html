@@ -250,6 +250,32 @@
   }
   .shelf-head .tag.live { color: var(--pink-700); background: var(--pink-100); border-color: var(--pink-200); }
 
+  /* ===== Kino-"verden"-bånd som seksjonsoverskrift ===== */
+  .world-head {
+    position: relative; border-radius: 24px; overflow: hidden; min-height: 144px;
+    display: flex; align-items: flex-end; margin-bottom: 1.3rem; box-shadow: var(--shadow-soft);
+  }
+  .world-head .wbg {
+    position: absolute; inset: 0; background-size: cover; background-position: center 42%;
+    transform: scale(1.05); transition: transform .7s ease;
+  }
+  .world-head:hover .wbg { transform: scale(1.11); }
+  .world-head .wscrim {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg, rgba(58,20,44,.80) 0%, rgba(58,20,44,.45) 42%, rgba(58,20,44,.06) 78%),
+      linear-gradient(to top, rgba(40,12,32,.55), transparent 60%);
+  }
+  .world-head .wcopy { position: relative; z-index: 2; padding: 1.25rem 1.6rem; }
+  .world-head .wcopy h2 { color: #fff; font-size: clamp(1.4rem, 2.6vw, 1.85rem); text-shadow: 0 2px 14px rgba(0,0,0,.45); }
+  .world-head .wcopy p { color: rgba(255,255,255,.93); font-size: .95rem; margin-top: .25rem; text-shadow: 0 1px 8px rgba(0,0,0,.4); }
+  .world-tag {
+    position: absolute; z-index: 2; top: 1rem; right: 1.1rem;
+    background: rgba(255,255,255,.92); color: var(--pink-700); font-weight: 700; font-size: .8rem;
+    padding: .35rem .85rem; border-radius: 999px; box-shadow: var(--shadow-soft);
+  }
+  @media (max-width: 600px) { .world-head { min-height: 118px; } .world-tag { display: none; } }
+
   .shelf {
     display: grid; grid-auto-flow: column; grid-auto-columns: minmax(260px, 1fr);
     gap: 1.25rem; overflow-x: auto; padding: 0.25rem 0.25rem 1.25rem;
@@ -631,9 +657,14 @@
 
 <!-- ============ HYLLE: SANGER ============ -->
 <section class="shelf-wrap" id="sanger">
-  <div class="shelf-head">
-    <h2 data-no="Sanger" data-en="Songs">Sanger</h2>
-    <span class="tag live" data-no="Trykk for å spille" data-en="Tap to play">Trykk for å spille</span>
+  <div class="world-head">
+    <div class="wbg" style="background-image:url('images/banner_sanger_video.webp')"></div>
+    <div class="wscrim"></div>
+    <div class="wcopy">
+      <h2 data-no="Sanger" data-en="Songs">Sanger</h2>
+      <p data-no="Syng med Mia &amp; Teo" data-en="Sing along with Mia &amp; Teo">Syng med Mia &amp; Teo</p>
+    </div>
+    <span class="world-tag" data-no="Trykk for å spille" data-en="Tap to play">Trykk for å spille</span>
   </div>
   <div class="shelf">
     <button class="tile" type="button"
@@ -674,9 +705,14 @@
 
 <!-- ============ HYLLE: EVENTYR (KOMMER SNART) ============ -->
 <section class="shelf-wrap" id="eventyr">
-  <div class="shelf-head">
-    <h2 data-no="Eventyr med Mia &amp; Teo" data-en="Stories with Mia &amp; Teo">Eventyr med Mia &amp; Teo</h2>
-    <span class="tag live" data-no="Trykk for å lese" data-en="Tap to read">Trykk for å lese</span>
+  <div class="world-head">
+    <div class="wbg" style="background-image:url('images/banner_eventyr.webp')"></div>
+    <div class="wscrim"></div>
+    <div class="wcopy">
+      <h2 data-no="Eventyr med Mia &amp; Teo" data-en="Stories with Mia &amp; Teo">Eventyr med Mia &amp; Teo</h2>
+      <p data-no="Varme fortellinger om vennskap og natur" data-en="Warm tales of friendship and nature">Varme fortellinger om vennskap og natur</p>
+    </div>
+    <span class="world-tag" data-no="Trykk for å lese" data-en="Tap to read">Trykk for å lese</span>
   </div>
   <div class="shelf">
     <button class="tile" type="button" data-content="eventyr-pinnsvin">
@@ -700,9 +736,14 @@
 
 <!-- ============ HYLLE: LÆR (KOMMER SNART) ============ -->
 <section class="shelf-wrap" id="laer">
-  <div class="shelf-head">
-    <h2 data-no="Lær med Mia &amp; Teo" data-en="Learn with Mia &amp; Teo">Lær med Mia &amp; Teo</h2>
-    <span class="tag live" data-no="Nytt kurs!" data-en="New course!">Nytt kurs!</span>
+  <div class="world-head">
+    <div class="wbg" style="background-image:url('images/banner_laer.webp')"></div>
+    <div class="wscrim"></div>
+    <div class="wcopy">
+      <h2 data-no="Lær med Mia &amp; Teo" data-en="Learn with Mia &amp; Teo">Lær med Mia &amp; Teo</h2>
+      <p data-no="Lek og lær — i Montessori-ånd" data-en="Play and learn — the Montessori way">Lek og lær — i Montessori-ånd</p>
+    </div>
+    <span class="world-tag" data-no="Nytt kurs!" data-en="New course!">Nytt kurs!</span>
   </div>
   <div class="shelf">
     <a class="tile" href="/laer-norsk">
@@ -734,9 +775,14 @@
 
 <!-- ============ HYLLE: SANG & BEVEGELSE (KOMMER SNART) ============ -->
 <section class="shelf-wrap" id="bevegelse">
-  <div class="shelf-head">
-    <h2 data-no="Sang &amp; bevegelse" data-en="Sing &amp; move">Sang &amp; bevegelse</h2>
-    <span class="tag live" data-no="Trykk for å leke" data-en="Tap to play">Trykk for å leke</span>
+  <div class="world-head">
+    <div class="wbg" style="background-image:url('images/hero_learning_tree.webp')"></div>
+    <div class="wscrim"></div>
+    <div class="wcopy">
+      <h2 data-no="Sang &amp; bevegelse" data-en="Sing &amp; move">Sang &amp; bevegelse</h2>
+      <p data-no="Dans, hopp og syng med kroppen" data-en="Dance, jump and sing with your body">Dans, hopp og syng med kroppen</p>
+    </div>
+    <span class="world-tag" data-no="Trykk for å leke" data-en="Tap to play">Trykk for å leke</span>
   </div>
   <div class="shelf">
     <button class="tile" type="button" data-content="beve-hopp">
@@ -760,9 +806,14 @@
 
 <!-- ============ HYLLE: ROLIG STUND (KOMMER SNART) ============ -->
 <section class="shelf-wrap" id="rolig">
-  <div class="shelf-head">
-    <h2 data-no="Rolig stund" data-en="Quiet time">Rolig stund</h2>
-    <span class="tag live" data-no="Trykk for ro" data-en="Tap for calm">Trykk for ro</span>
+  <div class="world-head">
+    <div class="wbg" style="background-image:url('images/banner_rolig_stund.webp')"></div>
+    <div class="wscrim"></div>
+    <div class="wcopy">
+      <h2 data-no="Rolig stund" data-en="Quiet time">Rolig stund</h2>
+      <p data-no="Ro og hvile før leggetid" data-en="Calm and rest before bedtime">Ro og hvile før leggetid</p>
+    </div>
+    <span class="world-tag" data-no="Trykk for ro" data-en="Tap for calm">Trykk for ro</span>
   </div>
   <div class="shelf">
     <button class="tile" type="button" data-content="rolig-godnatt">
