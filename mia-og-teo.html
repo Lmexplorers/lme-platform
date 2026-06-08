@@ -305,6 +305,9 @@
     position: relative; z-index: 1; height: 100%; margin: 0 auto; display: block;
     object-fit: contain;
   }
+  .tile-thumb img.cover {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
+  }
   .tile-play {
     position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center;
   }
@@ -747,8 +750,8 @@
   </div>
   <div class="shelf">
     <a class="tile" href="/laer-norsk">
-      <div class="tile-cat cat-gul">
-        🔤
+      <div class="tile-thumb">
+        <img class="cover" src="images/courses/course_laer_norsk.webp" alt="" loading="lazy">
         <span class="tile-flagpill">🇳🇴</span>
         <span class="tile-play"><span>▶</span></span>
         <span class="tile-dur" data-no="Kurs" data-en="Course">Kurs</span>
@@ -759,15 +762,15 @@
       </div>
     </a>
     <button class="tile" type="button" data-content="laer-praktisk">
-      <div class="tile-cat cat-lime">🍎</div>
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_praktisk_liv.webp" alt="" loading="lazy"></div>
       <div class="tile-body"><h3 data-no="Praktisk liv" data-en="Practical life">Praktisk liv</h3><span class="open-pill" data-no="✨ Se aktiviteter" data-en="✨ See activities">✨ Se aktiviteter</span></div>
     </button>
     <button class="tile" type="button" data-content="laer-tall">
-      <div class="tile-cat cat-bla">🔢</div>
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_tall_og_telling.webp" alt="" loading="lazy"></div>
       <div class="tile-body"><h3 data-no="Tall og telling" data-en="Numbers and counting">Tall og telling</h3><span class="open-pill" data-no="✨ Lær &amp; lek" data-en="✨ Learn &amp; play">✨ Lær &amp; lek</span></div>
     </button>
     <button class="tile" type="button" data-content="laer-farger">
-      <div class="tile-cat cat-pink">🎨</div>
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_farger_og_former.webp" alt="" loading="lazy"></div>
       <div class="tile-body"><h3 data-no="Farger og former" data-en="Colors and shapes">Farger og former</h3><span class="open-pill" data-no="✨ Lær &amp; lek" data-en="✨ Learn &amp; play">✨ Lær &amp; lek</span></div>
     </button>
   </div>
@@ -786,19 +789,19 @@
   </div>
   <div class="shelf">
     <button class="tile" type="button" data-content="beve-hopp">
-      <div class="tile-cat cat-oransje">🤸</div>
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_hopp_og_sprett.webp" alt="" loading="lazy"></div>
       <div class="tile-body"><h3 data-no="Hopp og sprett" data-en="Jump and bounce">Hopp og sprett</h3><span class="open-pill" data-no="🤸 Bli med" data-en="🤸 Join in">🤸 Bli med</span></div>
     </button>
     <button class="tile" type="button" data-content="beve-klapp">
-      <div class="tile-cat cat-lilla">👏</div>
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_klappeleker.webp" alt="" loading="lazy"></div>
       <div class="tile-body"><h3 data-no="Klappeleker" data-en="Clapping games">Klappeleker</h3><span class="open-pill" data-no="👏 Bli med" data-en="👏 Join in">👏 Bli med</span></div>
     </button>
     <button class="tile" type="button" data-content="beve-dyredans">
-      <div class="tile-cat cat-lime">🐸</div>
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_dyredans.webp" alt="" loading="lazy"></div>
       <div class="tile-body"><h3 data-no="Dyredans" data-en="Animal dance">Dyredans</h3><span class="open-pill" data-no="🐸 Bli med" data-en="🐸 Join in">🐸 Bli med</span></div>
     </button>
     <button class="tile" type="button" data-content="beve-rim">
-      <div class="tile-cat cat-gul">🎶</div>
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_rim_og_regler.webp" alt="" loading="lazy"></div>
       <div class="tile-body"><h3 data-no="Rim og regler" data-en="Rhymes">Rim og regler</h3><span class="open-pill" data-no="🎶 Les regla" data-en="🎶 Read the rhyme">🎶 Les regla</span></div>
     </button>
   </div>
@@ -817,19 +820,19 @@
   </div>
   <div class="shelf">
     <button class="tile" type="button" data-content="rolig-godnatt">
-      <div class="tile-cat cat-lilla">🌙</div>
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_godnattsang.webp" alt="" loading="lazy"></div>
       <div class="tile-body"><h3 data-no="Godnattsang" data-en="Lullaby">Godnattsang</h3><span class="open-pill" data-no="🌙 Syng med" data-en="🌙 Sing along">🌙 Syng med</span></div>
     </button>
     <button class="tile" type="button" data-content="rolig-pusterom">
-      <div class="tile-cat cat-bla">☁️</div>
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_pusterom.webp" alt="" loading="lazy"></div>
       <div class="tile-body"><h3 data-no="Pusterom" data-en="Breathing break">Pusterom</h3><span class="open-pill" data-no="☁️ Pust med oss" data-en="☁️ Breathe with us">☁️ Pust med oss</span></div>
     </button>
     <button class="tile" type="button" data-content="rolig-kosestund">
-      <div class="tile-cat cat-pink">🧸</div>
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_kosestund.webp" alt="" loading="lazy"></div>
       <div class="tile-body"><h3 data-no="Kosestund" data-en="Cuddle time">Kosestund</h3><span class="open-pill" data-no="🧸 Kos deg" data-en="🧸 Get cosy">🧸 Kos deg</span></div>
     </button>
     <button class="tile" type="button" data-content="rolig-stjernedryss">
-      <div class="tile-cat cat-gul">⭐</div>
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_stjernedryss.webp" alt="" loading="lazy"></div>
       <div class="tile-body"><h3 data-no="Stjernedryss" data-en="Stardust">Stjernedryss</h3><span class="open-pill" data-no="⭐ Slapp av" data-en="⭐ Relax">⭐ Slapp av</span></div>
     </button>
   </div>
