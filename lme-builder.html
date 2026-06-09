@@ -5561,17 +5561,7 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
     document.body.appendChild(bar);
 
     let savedRange = null;
-    function saveRange() {
-      const sel = window.getSelection();
-      if (sel && sel.rangeCount && !sel.isCollapsed) savedRange = sel.getRangeAt(0).cloneRange();
-    }
-    function restoreRange() {
-      if (!savedRange) return false;
-      const sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(savedRange);
-      return true;
-    }
+    function hide() { bar.style.display = 'none'; }
     function editableOf(range) {
       let n = range && range.commonAncestorContainer;
       n = n && (n.nodeType === 1 ? n : n.parentElement);
@@ -5599,59 +5589,51 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
       bar.style.left = (window.scrollX + Math.max(8, rect.left)) + 'px';
     }
 
-    document.addEventListener('selectionchange', function () {
+    // Vis verktøylinjen først NÅR du har markert ferdig (museslipp / tastatur)
+    function maybeShow() {
       const sel = window.getSelection();
-      if (!sel || !sel.rangeCount || sel.isCollapsed) { bar.style.display = 'none'; return; }
+      if (!sel || !sel.rangeCount || sel.isCollapsed) { hide(); return; }
       const range = sel.getRangeAt(0);
-      if (!editableOf(range)) { bar.style.display = 'none'; return; }
-      saveRange();
+      if (!editableOf(range)) { hide(); return; }
+      savedRange = range.cloneRange();
       showFor(range);
-    });
-
-    function apply(fn) {
-      if (!savedRange) return;
-      const editable = editableOf(savedRange);
-      if (editable) editable.focus();            // fokuser teksten igjen før styling
-      const sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(savedRange);                  // gjenopprett markeringen
-      try { document.execCommand('styleWithCSS', false, true); } catch (e) {}
-      fn();
-      persist(editable);
-      saveRange();                               // behold markeringen for videre styling
     }
-    function adjustSpacing(deltaPx) {
-      const sel = window.getSelection();
-      if (!sel.rangeCount) return;
-      const range = sel.getRangeAt(0);
+    document.addEventListener('mouseup', function (e) { if (bar.contains(e.target)) return; setTimeout(maybeShow, 0); });
+    document.addEventListener('keyup', function () { setTimeout(maybeShow, 0); });
+    document.addEventListener('mousedown', function (e) { if (!bar.contains(e.target)) hide(); });
+
+    // Legg stil DIREKTE på den markerte teksten (span-innpakking) — trenger ikke fokus
+    function styleSelection(styleObj) {
+      if (!savedRange || savedRange.collapsed) return;
+      const editable = editableOf(savedRange);
+      if (!editable) return;
+      const range = savedRange.cloneRange();
       const span = document.createElement('span');
-      span.style.letterSpacing = deltaPx + 'px';
+      for (const k in styleObj) span.style[k] = styleObj[k];
       try {
         span.appendChild(range.extractContents());
         range.insertNode(span);
-        sel.removeAllRanges();
-        const r = document.createRange();
-        r.selectNodeContents(span);
-        sel.addRange(r);
-      } catch (e) {}
+      } catch (e) { return; }
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      const r = document.createRange();
+      r.selectNodeContents(span);
+      sel.addRange(r);
+      savedRange = r.cloneRange();
+      persist(editable);
+      showFor(savedRange);
     }
 
-    // Behold markeringen når man klikker knappene (men la select/farge fungere normalt)
-    bar.addEventListener('mousedown', function (e) {
-      if (e.target.id !== 'rtFont' && e.target.id !== 'rtColor') e.preventDefault();
-    });
-    bar.querySelector('#rtBold').addEventListener('click', function () { apply(function () { document.execCommand('bold'); }); });
+    bar.querySelector('#rtBold').addEventListener('click', function () { styleSelection({ fontWeight: '800' }); });
     bar.querySelector('#rtFont').addEventListener('change', function (e) {
       const v = e.target.value; if (!v) return;
       ensureFontFamilyLoaded(v);
-      apply(function () { document.execCommand('fontName', false, v); });
+      styleSelection({ fontFamily: "'" + v + "', sans-serif" });
       e.target.value = '';
     });
-    bar.querySelector('#rtColor').addEventListener('input', function (e) {
-      apply(function () { document.execCommand('foreColor', false, e.target.value); });
-    });
-    bar.querySelector('#rtWide').addEventListener('click', function () { apply(function () { adjustSpacing(0.5); }); });
-    bar.querySelector('#rtNarrow').addEventListener('click', function () { apply(function () { adjustSpacing(-0.5); }); });
+    bar.querySelector('#rtColor').addEventListener('input', function (e) { styleSelection({ color: e.target.value }); });
+    bar.querySelector('#rtWide').addEventListener('click', function () { styleSelection({ letterSpacing: '0.5px' }); });
+    bar.querySelector('#rtNarrow').addEventListener('click', function () { styleSelection({ letterSpacing: '-0.5px' }); });
   })();
 
   loadState();
