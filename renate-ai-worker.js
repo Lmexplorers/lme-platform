@@ -119,9 +119,12 @@ export default {
       );
     }
 
-    // Endepunkt-routing — Renate AI svarer på /renate-ai
-    // (la SocialBu-funksjonene være urørt hvis de finnes i samme Worker)
-    if (url.pathname === "/renate-ai" || url.pathname === "/spor-renate-ai") {
+    // Endepunkt-routing — Renate AI svarer på /renate-ai, /spor-renate-ai og /ask-renate-ai
+    if (
+      url.pathname === "/renate-ai" ||
+      url.pathname === "/spor-renate-ai" ||
+      url.pathname === "/ask-renate-ai"
+    ) {
       return handleRenateAI(request, env, origin);
     }
 
