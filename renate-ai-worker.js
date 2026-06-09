@@ -72,8 +72,15 @@ const ALLOWED_ORIGINS = [
   "http://127.0.0.1:8000",
 ];
 
+// Tillat alle Cloudflare Pages-deploy (auto-deploy via GitHub lager nye
+// subdomener som https://<hash>.lme-plattform.pages.dev og branch-previews)
+function isAllowedOrigin(origin) {
+  if (ALLOWED_ORIGINS.includes(origin)) return true;
+  return /^https:\/\/[a-z0-9-]+\.lme-plattform\.pages\.dev$/.test(origin);
+}
+
 function corsHeaders(origin) {
-  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  const allowedOrigin = isAllowedOrigin(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
     "Access-Control-Allow-Origin": allowedOrigin,
     "Access-Control-Allow-Methods": "POST, OPTIONS",
