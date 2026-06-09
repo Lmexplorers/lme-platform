@@ -445,6 +445,79 @@
   }
   .section-header a:hover { color: var(--cerise); }
 
+  /* Kom i gang / Get set up-sjekkliste */
+  .setup-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 48px;
+  }
+  .setup-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  .setup-top h2 { font-size: 22px; font-weight: 700; }
+  .setup-top p { font-size: 13px; color: var(--ink-soft); margin-top: 4px; max-width: 460px; }
+  .setup-progress { min-width: 180px; flex: 0 0 auto; }
+  .setup-progress-label {
+    font-size: 13px; font-weight: 700; color: var(--ink);
+    display: flex; justify-content: space-between; gap: 8px; margin-bottom: 6px;
+  }
+  .setup-progress-label span:last-child { color: var(--cerise); }
+  .setup-bar {
+    height: 8px; border-radius: var(--r-pill);
+    background: var(--cream-deep); overflow: hidden;
+  }
+  .setup-bar-fill {
+    height: 100%; width: 0;
+    background: linear-gradient(90deg, var(--pink-mid), var(--cerise));
+    border-radius: var(--r-pill);
+    transition: width 0.4s ease;
+  }
+  .setup-steps { display: flex; flex-direction: column; gap: 4px; }
+  .setup-step {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px; border-radius: var(--r-md);
+    transition: background 0.18s;
+  }
+  .setup-step:hover { background: var(--cream); }
+  .setup-check {
+    flex: 0 0 auto; width: 26px; height: 26px;
+    border-radius: 50%; border: 2px solid var(--pink-deep);
+    background: transparent; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 14px; line-height: 1;
+    transition: all 0.18s;
+  }
+  .setup-check:hover { border-color: var(--cerise); }
+  .setup-step.done .setup-check {
+    background: var(--cerise); border-color: var(--cerise);
+  }
+  .setup-step:not(.done) .setup-check { color: transparent; }
+  .setup-step-text { flex: 1 1 auto; min-width: 0; }
+  .setup-step-text h3 { font-size: 15px; font-weight: 600; }
+  .setup-step-text p { font-size: 13px; color: var(--ink-muted); margin-top: 2px; }
+  .setup-step.done .setup-step-text h3 { text-decoration: line-through; color: var(--ink-muted); }
+  .setup-step-go {
+    flex: 0 0 auto; font-size: 13px; font-weight: 600;
+    color: var(--ink-muted); display: inline-flex; align-items: center; gap: 4px;
+    white-space: nowrap; transition: color 0.18s;
+  }
+  .setup-step-go:hover { color: var(--cerise); }
+  .setup-done-msg {
+    display: none; margin-top: 12px; padding: 12px 16px;
+    background: var(--pink-soft); border-radius: var(--r-md);
+    font-size: 14px; font-weight: 600; color: var(--ink);
+  }
+  .setup-card.all-done .setup-done-msg { display: block; }
+
   /* Verktøy-grid */
   .tool-grid {
     display: grid;
@@ -827,35 +900,70 @@
       </a>
     </div>
 
-    <!-- Kom i gang / onboarding -->
-    <section class="section" id="kom-i-gang">
-      <div class="section-header">
-        <h2>Kom i gang</h2>
-        <a href="#tutorials">Se tutorials →</a>
+    <!-- Kom i gang / Get set up-sjekkliste -->
+    <section class="setup-card" id="kom-i-gang" data-setup>
+      <div class="setup-top">
+        <div>
+          <h2>🚀 Kom i gang</h2>
+          <p>Fem steg til å være oppe og kjøre med LME Creative Academy. Huk av etter hvert som du fullfører.</p>
+        </div>
+        <div class="setup-progress">
+          <div class="setup-progress-label">
+            <span data-setup-count>0 av 5 fullført</span>
+            <span data-setup-pct>0%</span>
+          </div>
+          <div class="setup-bar"><div class="setup-bar-fill" data-setup-fill></div></div>
+        </div>
       </div>
 
-      <div class="tool-grid">
-        <a href="/min-konto" class="tool-card ic-3">
-          <div class="tool-icon">1️⃣</div>
-          <h3>Koble kontoene dine</h3>
-          <p>Knytt til Instagram, TikTok, Facebook og e-post — så kan du publisere og selge.</p>
-        </a>
-        <a href="https://lme-conten-studio-no-eng.pages.dev" class="tool-card ic-1">
-          <div class="tool-icon">2️⃣</div>
-          <h3>Lag ditt første innlegg</h3>
-          <p>Bruk Content Studio og lag bilingual innhold på under 60 sekunder.</p>
-        </a>
-        <a href="/lme-builder" class="tool-card ic-2">
-          <div class="tool-icon">3️⃣</div>
-          <h3>Bygg en landingsside</h3>
-          <p>Lag din første landingsside med dra-og-slipp i LME Builder.</p>
-        </a>
-        <a href="/funnel/oversikt.html" class="tool-card ic-4">
-          <div class="tool-icon">4️⃣</div>
-          <h3>Sett opp en funnel</h3>
-          <p>Gjør gratis-lesere til kunder med en tripwire-funnel i fire steg.</p>
-        </a>
+      <div class="setup-steps">
+        <div class="setup-step" data-step="profil">
+          <button class="setup-check" aria-label="Marker som fullført">✓</button>
+          <div class="setup-step-text">
+            <h3>Sett opp profilen din</h3>
+            <p>Legg inn merke, farger og kontaktinfo så alt ser ut som ditt.</p>
+          </div>
+          <a href="/min-konto" class="setup-step-go">Åpne →</a>
+        </div>
+
+        <div class="setup-step" data-step="konto">
+          <button class="setup-check" aria-label="Marker som fullført">✓</button>
+          <div class="setup-step-text">
+            <h3>Koble kontoene dine</h3>
+            <p>Knytt til Instagram, TikTok, Facebook og e-post for å publisere og selge.</p>
+          </div>
+          <a href="/min-konto" class="setup-step-go">Åpne →</a>
+        </div>
+
+        <div class="setup-step" data-step="innlegg">
+          <button class="setup-check" aria-label="Marker som fullført">✓</button>
+          <div class="setup-step-text">
+            <h3>Lag ditt første innlegg</h3>
+            <p>Bruk Content Studio og lag bilingual innhold på under 60 sekunder.</p>
+          </div>
+          <a href="https://lme-conten-studio-no-eng.pages.dev" class="setup-step-go">Åpne →</a>
+        </div>
+
+        <div class="setup-step" data-step="side">
+          <button class="setup-check" aria-label="Marker som fullført">✓</button>
+          <div class="setup-step-text">
+            <h3>Bygg en landingsside</h3>
+            <p>Lag din første side med dra-og-slipp i LME Builder.</p>
+          </div>
+          <a href="/lme-builder" class="setup-step-go">Åpne →</a>
+        </div>
+
+        <div class="setup-step" data-step="funnel">
+          <button class="setup-check" aria-label="Marker som fullført">✓</button>
+          <div class="setup-step-text">
+            <h3>Sett opp en funnel</h3>
+            <p>Gjør gratis-lesere til kunder med en tripwire-funnel i fire steg.</p>
+          </div>
+          <a href="/funnel/oversikt.html" class="setup-step-go">Åpne →</a>
+        </div>
       </div>
+
+      <div class="setup-done-msg">🎉 Alt klart! Du har fullført oppsettet — nå er du klar til å skape.</div>
     </section>
 
     <!-- Verktøy-seksjon -->
@@ -1024,6 +1132,44 @@
       }
     });
   });
+
+  // Kom i gang-sjekkliste: fremdrift + lagring i nettleseren
+  (function () {
+    const card = document.querySelector('[data-setup]');
+    if (!card) return;
+    const KEY = 'lme_setup_steps';
+    const steps = Array.from(card.querySelectorAll('.setup-step'));
+    const fill = card.querySelector('[data-setup-fill]');
+    const count = card.querySelector('[data-setup-count]');
+    const pct = card.querySelector('[data-setup-pct]');
+    let done;
+    try { done = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { done = {}; }
+
+    function render() {
+      let n = 0;
+      steps.forEach(step => {
+        const isDone = !!done[step.dataset.step];
+        step.classList.toggle('done', isDone);
+        if (isDone) n++;
+      });
+      const total = steps.length;
+      const p = Math.round((n / total) * 100);
+      fill.style.width = p + '%';
+      count.textContent = n + ' av ' + total + ' fullført';
+      pct.textContent = p + '%';
+      card.classList.toggle('all-done', n === total);
+    }
+
+    steps.forEach(step => {
+      step.querySelector('.setup-check').addEventListener('click', () => {
+        done[step.dataset.step] = !done[step.dataset.step];
+        try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (e) {}
+        render();
+      });
+    });
+
+    render();
+  })();
 </script>
 
 </body>
