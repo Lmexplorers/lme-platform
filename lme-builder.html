@@ -5589,18 +5589,16 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
       bar.style.left = (window.scrollX + Math.max(8, rect.left)) + 'px';
     }
 
-    // Vis verktøylinjen først NÅR du har markert ferdig (museslipp / tastatur)
-    function maybeShow() {
+    // Vis verktøylinjen når du har en markering i et redigerbart felt
+    function refresh() {
       const sel = window.getSelection();
       if (!sel || !sel.rangeCount || sel.isCollapsed) { hide(); return; }
       const range = sel.getRangeAt(0);
       if (!editableOf(range)) { hide(); return; }
-      savedRange = range.cloneRange();
+      savedRange = range.cloneRange();   // husk markeringen (brukes selv om fokus flytter seg)
       showFor(range);
     }
-    document.addEventListener('mouseup', function (e) { if (bar.contains(e.target)) return; setTimeout(maybeShow, 0); });
-    document.addEventListener('keyup', function () { setTimeout(maybeShow, 0); });
-    document.addEventListener('mousedown', function (e) { if (!bar.contains(e.target)) hide(); });
+    document.addEventListener('selectionchange', function () { setTimeout(refresh, 0); });
 
     // Legg stil DIREKTE på den markerte teksten (span-innpakking) — trenger ikke fokus
     function styleSelection(styleObj) {
