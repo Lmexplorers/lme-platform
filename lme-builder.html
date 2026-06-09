@@ -230,7 +230,7 @@
   .hero { padding: 80px 60px; display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center; }
   .hero-content h1 { font-family: var(--font-display); font-size: 44px; line-height: 1.15; color: var(--ink); margin-bottom: 20px; font-weight: 700; }
   .hero-content p { font-size: 16px; color: var(--ink-soft); margin-bottom: 28px; line-height: 1.65; }
-  .hero-cta, .cta-button { display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px; background: var(--pink-deep); color: white; border-radius: 12px; font-weight: 600; font-size: 15px; text-decoration: none; box-shadow: var(--shadow-md); transition: all 0.2s; border: none; cursor: pointer; font-family: var(--font-body); }
+  .hero-cta, .cta-button { display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px; background: var(--btn-color, var(--pink-deep)); color: white; border-radius: 12px; font-weight: 600; font-size: calc(15px * var(--btn-scale, 1)); text-decoration: none; box-shadow: var(--shadow-md); transition: all 0.2s; border: none; cursor: pointer; font-family: var(--btn-font, var(--font-body)); }
   .hero-cta:hover, .cta-button:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
 
   /* === IMAGE BOX === */
@@ -417,8 +417,8 @@
   .pricing-features { list-style: none; padding: 0; margin: 0 0 28px 0; flex: 1; }
   .pricing-features li { padding: 7px 0; font-size: 13.5px; color: var(--ink); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
   .pricing-features li::before { content: '✓'; color: var(--brand); font-weight: 800; flex-shrink: 0; }
-  .pricing-cta { display: block; text-align: center; padding: 12px 20px; background: var(--cream); color: var(--pink-ink); border: 1.5px solid var(--pink-deep); border-radius: 12px; font-weight: 600; font-size: 14px; text-decoration: none; cursor: pointer; transition: all 0.2s; font-family: var(--font-body); }
-  .pricing-card.featured .pricing-cta { background: var(--pink-deep); color: white; }
+  .pricing-cta { display: block; text-align: center; padding: 12px 20px; background: var(--cream); color: var(--pink-ink); border: 1.5px solid var(--btn-color, var(--pink-deep)); border-radius: 12px; font-weight: 600; font-size: calc(14px * var(--btn-scale, 1)); text-decoration: none; cursor: pointer; transition: all 0.2s; font-family: var(--btn-font, var(--font-body)); }
+  .pricing-card.featured .pricing-cta { background: var(--btn-color, var(--pink-deep)); color: white; }
   .pricing-cta:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
 
   /* FAQ */
@@ -4463,7 +4463,7 @@ img { max-width: 100%; display: block; }
 .hero { padding: 80px 60px; display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center; }
 .hero-content h1 { font-family: var(--font-display); font-size: 44px; line-height: 1.15; color: var(--ink); margin-bottom: 20px; font-weight: 700; }
 .hero-content p { font-size: 16px; color: var(--ink-soft); margin-bottom: 28px; line-height: 1.65; }
-.hero-cta, .cta-button { display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px; background: var(--pink-deep); color: white; border-radius: 12px; font-weight: 600; font-size: 15px; box-shadow: var(--shadow-md); transition: all 0.2s; border: none; cursor: pointer; font-family: var(--font-body); }
+.hero-cta, .cta-button { display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px; background: var(--btn-color, var(--pink-deep)); color: white; border-radius: 12px; font-weight: 600; font-size: calc(15px * var(--btn-scale, 1)); box-shadow: var(--shadow-md); transition: all 0.2s; border: none; cursor: pointer; font-family: var(--btn-font, var(--font-body)); }
 .hero-cta:hover, .cta-button:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
 .hero-image { border-radius: 20px; overflow: hidden; background: linear-gradient(135deg, var(--pink-soft), var(--brand)); margin: 0 auto; }
 .hero-image img { width: 100%; height: 100%; object-fit: cover; }
@@ -4531,8 +4531,8 @@ img { max-width: 100%; display: block; }
 .pricing-features { list-style: none; padding: 0; margin: 0 0 28px 0; flex: 1; }
 .pricing-features li { padding: 7px 0; font-size: 13.5px; color: var(--ink); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
 .pricing-features li::before { content: '✓'; color: var(--brand); font-weight: 800; flex-shrink: 0; }
-.pricing-cta { display: block; text-align: center; padding: 12px 20px; background: var(--cream); color: var(--pink-ink); border: 1.5px solid var(--pink-deep); border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; font-family: var(--font-body); }
-.pricing-card.featured .pricing-cta { background: var(--pink-deep); color: white; }
+.pricing-cta { display: block; text-align: center; padding: 12px 20px; background: var(--cream); color: var(--pink-ink); border: 1.5px solid var(--btn-color, var(--pink-deep)); border-radius: 12px; font-weight: 600; font-size: calc(14px * var(--btn-scale, 1)); cursor: pointer; transition: all 0.2s; font-family: var(--btn-font, var(--font-body)); }
+.pricing-card.featured .pricing-cta { background: var(--btn-color, var(--pink-deep)); color: white; }
 .pricing-cta:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
 
 /* FAQ */
@@ -5437,6 +5437,9 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
       fontBody: null,      // fri overstyring av brødtekst-font
       headingWeight: '700',
       fontScale: '1',
+      btnColor: '',        // tom = bruk merkefargen
+      btnFont: '',         // tom = følg brødtekst-font
+      btnScale: '1',
       logoUrl: '',
       businessName: 'Little Montessori Explorers',
       tagline: 'Naturbaserte Montessori-ressurser',
@@ -5488,6 +5491,11 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
     root.setProperty('--font-body', `'${bodyName}', 'Comic Sans MS', system-ui, sans-serif`);
     root.setProperty('--heading-weight', brand.headingWeight || '700');
     root.setProperty('--font-scale', brand.fontScale || '1');
+
+    // Knapp-stil (farge / font / størrelse) — tomt felt = fall tilbake til standard
+    if (brand.btnColor) root.setProperty('--btn-color', brand.btnColor); else root.removeProperty('--btn-color');
+    if (brand.btnFont) { ensureFontFamilyLoaded(brand.btnFont); root.setProperty('--btn-font', `'${brand.btnFont}', sans-serif`); } else root.removeProperty('--btn-font');
+    root.setProperty('--btn-scale', brand.btnScale || '1');
   }
 
   const loadedFonts = new Set();
@@ -5669,8 +5677,31 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
         <option value="1" ${sCur === '1' ? 'selected' : ''}>Middels</option>
         <option value="1.15" ${sCur === '1.15' ? 'selected' : ''}>Stor</option>
       </select>
+
+      <div class="brand-section-title" style="margin-top:26px;">Knapper</div>
+      <div class="brand-section-desc">Farge, font og størrelse på knappene (CTA-er).</div>
+      <label style="${lblStyle}">Knappefarge</label>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
+        <input type="color" value="${escapeHtml(brand.btnColor || '#EE9CAD')}" oninput="setBtnColor(this.value)" style="width:46px;height:34px;border:1px solid var(--line);border-radius:8px;padding:2px;cursor:pointer;background:#fff;">
+        ${brand.btnColor ? `<button class="repeater-add" style="width:auto;padding:6px 12px;margin:0;" onclick="setBtnColor('')">Bruk merkefarge</button>` : '<span style="font-size:12px;color:var(--ink-muted);">Bruker merkefargen</span>'}
+      </div>
+      <label style="${lblStyle}">Knappefont</label>
+      <select style="${selStyle}" onchange="setBtnFont(this.value)">
+        <option value="" ${!brand.btnFont ? 'selected' : ''}>Følg brødtekst</option>
+        ${FONT_CHOICES.map(f => `<option value="${escapeHtml(f.name)}" ${f.name === brand.btnFont ? 'selected' : ''}>${escapeHtml(f.name)}</option>`).join('')}
+      </select>
+      <label style="${lblStyle}">Knappestørrelse</label>
+      <select style="${selStyle}" onchange="setBtnScale(this.value)">
+        <option value="0.9" ${(brand.btnScale || '1') === '0.9' ? 'selected' : ''}>Liten</option>
+        <option value="1" ${(brand.btnScale || '1') === '1' ? 'selected' : ''}>Middels</option>
+        <option value="1.2" ${(brand.btnScale || '1') === '1.2' ? 'selected' : ''}>Stor</option>
+      </select>
     `;
   }
+
+  function setBtnColor(c) { state.brand.btnColor = c; applyBrand(); renderBrandPaneFonts(); }
+  function setBtnFont(name) { state.brand.btnFont = name; applyBrand(); }
+  function setBtnScale(s) { state.brand.btnScale = s; applyBrand(); }
 
   function selectFont(fontId) {
     state.brand.fontId = fontId;
