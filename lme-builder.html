@@ -2342,12 +2342,8 @@
     // Spør etter navn
     openNameInput('Gi siden et navn', template.defaultName || 'Ny side', (name) => {
       const sections = template.build();
-      // Maler kan bære eget tema (font + farger) — settes for hele nettstedet
-      if (template.brand && state.brand) {
-        if (template.brand.paletteId) { state.brand.paletteId = template.brand.paletteId; state.brand.customColors = null; }
-        if (template.brand.fontId) { state.brand.fontId = template.brand.fontId; state.brand.fontDisplay = null; state.brand.fontBody = null; }
-        applyBrand();
-      }
+      // Maler endrer IKKE lenger nettstedets font/farger automatisk (det forvirret).
+      // Du styrer font og farger selv under 🎨 Merke.
       const page = createPage(name, sections);
       state.pages.push(page);
       state.currentPageId = page.id;
