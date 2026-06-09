@@ -1412,6 +1412,15 @@
   .preview-mode .image-box.img-selected { box-shadow: none; }
   .preview-mode .image-box.empty { border: none; }
 
+  /* Mobil-forhåndsvisning: etterlign ekte mobil-layout inne i canvas (media-spørringer ser på vindu, ikke canvas) */
+  .canvas-wrap.device-mobil .hero { grid-template-columns: 1fr; padding: 44px 26px; gap: 30px; }
+  .canvas-wrap.device-mobil .image-box { width: 100% !important; max-width: 300px; height: auto !important; aspect-ratio: 4 / 5; margin: 0 auto; }
+  .canvas-wrap.device-mobil .leadmagnet-inner { grid-template-columns: 1fr; gap: 36px; }
+  .canvas-wrap.device-mobil .features-grid { grid-template-columns: 1fr; }
+  .canvas-wrap.device-mobil .testimonials-grid { grid-template-columns: 1fr; }
+  .canvas-wrap.device-mobil .pricing-grid { grid-template-columns: 1fr; }
+  .canvas-wrap.device-mobil .footer-grid { grid-template-columns: 1fr; gap: 26px; }
+
   /* Hidden file input */
   .hidden-file-input { position: absolute; left: -9999px; opacity: 0; }
 </style>
