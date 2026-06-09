@@ -2523,9 +2523,19 @@
       sec.props.items.push({ icon: '🌸', title: 'Ny funksjon', desc: 'Beskrivelse av denne funksjonen' });
     } else if (sec.type === 'pricing') {
       sec.props.items.push({ name: 'Ny pakke', desc: 'Beskrivelse', amount: '0', period: 'kr / mnd', featured: false, badge: '', features: ['Funksjon 1', 'Funksjon 2'], ctaText: 'Velg', ctaLink: '#' });
+    } else if (sec.type === 'products') {
+      sec.props.items.push({ name: 'Nytt produkt', desc: '', amount: '0', period: 'kr', featured: false, badge: '', features: [], ctaText: 'Kjøp nå', ctaLink: '#', imageUrl: '' });
     } else if (sec.type === 'faq') {
       sec.props.items.push({ question: 'Nytt spørsmål?', answer: 'Svaret her...' });
     }
+    render();
+  }
+
+  function duplicateItem(secId, idx) {
+    const sec = findSection(secId);
+    if (!sec || !sec.props.items || !sec.props.items[idx]) return;
+    const copy = JSON.parse(JSON.stringify(sec.props.items[idx]));
+    sec.props.items.splice(idx + 1, 0, copy);
     render();
   }
 
@@ -3046,6 +3056,7 @@
             <div class="repeater-item-header">
               <span class="repeater-item-title">#${idx + 1}</span>
               <div style="display:flex;gap:2px;">
+                <button class="icon-btn" onclick="duplicateItem('${s.id}', ${idx})" title="Dupliser">📋</button>
                 <button class="icon-btn" onclick="moveItem('${s.id}', ${idx}, -1)" title="Opp">↑</button>
                 <button class="icon-btn" onclick="moveItem('${s.id}', ${idx}, 1)" title="Ned">↓</button>
                 <button class="icon-btn danger" onclick="removeItem('${s.id}', ${idx})" title="Slett">✕</button>
@@ -3101,6 +3112,7 @@
             <div class="repeater-item-header">
               <span class="repeater-item-title">#${idx + 1}</span>
               <div style="display:flex;gap:2px;">
+                <button class="icon-btn" onclick="duplicateItem('${s.id}', ${idx})" title="Dupliser">📋</button>
                 <button class="icon-btn" onclick="moveItem('${s.id}', ${idx}, -1)" title="Opp">↑</button>
                 <button class="icon-btn" onclick="moveItem('${s.id}', ${idx}, 1)" title="Ned">↓</button>
                 <button class="icon-btn danger" onclick="removeItem('${s.id}', ${idx})" title="Slett">✕</button>
@@ -3166,6 +3178,7 @@
             <div class="repeater-item-header">
               <span class="repeater-item-title">#${idx + 1} ${item.featured ? '⭐' : ''}</span>
               <div style="display:flex;gap:2px;">
+                <button class="icon-btn" onclick="duplicateItem('${s.id}', ${idx})" title="Dupliser">📋</button>
                 <button class="icon-btn" onclick="moveItem('${s.id}', ${idx}, -1)" title="Opp">↑</button>
                 <button class="icon-btn" onclick="moveItem('${s.id}', ${idx}, 1)" title="Ned">↓</button>
                 <button class="icon-btn danger" onclick="removeItem('${s.id}', ${idx})" title="Slett">✕</button>
@@ -3268,6 +3281,7 @@
             <div class="repeater-item-header">
               <span class="repeater-item-title">#${idx + 1}</span>
               <div style="display:flex;gap:2px;">
+                <button class="icon-btn" onclick="duplicateItem('${s.id}', ${idx})" title="Dupliser">📋</button>
                 <button class="icon-btn" onclick="moveItem('${s.id}', ${idx}, -1)" title="Opp">↑</button>
                 <button class="icon-btn" onclick="moveItem('${s.id}', ${idx}, 1)" title="Ned">↓</button>
                 <button class="icon-btn danger" onclick="removeItem('${s.id}', ${idx})" title="Slett">✕</button>
