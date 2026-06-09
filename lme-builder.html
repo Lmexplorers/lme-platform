@@ -39,6 +39,11 @@
   .topbar-center { display: flex; align-items: center; gap: 4px; background: var(--pink-blush); padding: 4px; border-radius: 10px; }
   .mode-btn { border: none; background: transparent; padding: 8px 16px; border-radius: 8px; font-family: var(--font-body); font-weight: 500; font-size: 13px; color: var(--ink-soft); cursor: pointer; transition: all 0.2s; }
   .mode-btn.active { background: white; color: var(--pink-ink); box-shadow: var(--shadow-sm); }
+  .tb-sep { width: 1px; height: 20px; background: rgba(139,74,82,0.18); margin: 0 4px; }
+  .device-btn { border: none; background: transparent; padding: 8px 11px; border-radius: 8px; font-size: 14px; line-height: 1; color: var(--ink-soft); cursor: pointer; transition: all 0.2s; }
+  .device-btn.active { background: white; color: var(--brand); box-shadow: var(--shadow-sm); }
+  .canvas { transition: max-width 0.3s ease; }
+  .canvas-wrap.device-mobil .canvas { max-width: 400px; }
   .topbar-right { display: flex; align-items: center; gap: 10px; }
   .btn { border: none; padding: 9px 16px; border-radius: 10px; font-family: var(--font-body); font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
   .btn-ghost { background: transparent; color: var(--ink-soft); }
@@ -1422,6 +1427,9 @@
   <div class="topbar-center">
     <button class="mode-btn active" data-mode="edit">✏️ Rediger</button>
     <button class="mode-btn" data-mode="preview">👁️ Forhåndsvis</button>
+    <span class="tb-sep"></span>
+    <button class="device-btn active" data-device="desktop" title="Desktop-visning" aria-label="Desktop-visning">🖥️</button>
+    <button class="device-btn" data-device="mobil" title="Mobil-visning" aria-label="Mobil-visning">📱</button>
   </div>
   <div class="topbar-right">
     <a href="/spor-renate-ai" class="btn-ai-link">
@@ -3781,6 +3789,17 @@
         state.selectedImageId = null;
       }
       render();
+    });
+  });
+
+  // Enhets-forhåndsvisning (Desktop / Mobil) — endrer kun canvas-bredden
+  document.querySelectorAll('.device-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const wrap = document.querySelector('.canvas-wrap');
+      if (!wrap) return;
+      wrap.classList.toggle('device-mobil', btn.dataset.device === 'mobil');
     });
   });
 
