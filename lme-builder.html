@@ -1622,6 +1622,11 @@
     if (str == null) return '';
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
+  // CTA-tekst med nøyaktig én pil — stripper avsluttende piler så de ikke hoper seg opp
+  function ctaLabel(str) {
+    var clean = String(str == null ? '' : str).replace(/[\s→➝➜]+$/, '');
+    return escapeHtml(clean) + ' →';
+  }
   function bgForStyle(style) {
     if (style === 'teal') return 'linear-gradient(135deg, var(--brand-blush) 0%, #FFF 100%)';
     if (style === 'cream') return 'linear-gradient(135deg, var(--cream) 0%, #FFF 100%)';
@@ -2648,8 +2653,11 @@
         const id = el.closest('.canvas-section').dataset.id;
         const key = el.dataset.edit;
         const sec = findSection(id);
-        if (sec && sec.props[key] !== el.innerText) {
-          sec.props[key] = el.innerText;
+        if (!sec) return;
+        let val = el.innerText;
+        if (key === 'ctaText') val = val.replace(/[\s→➝➜]+$/, '');
+        if (sec.props[key] !== val) {
+          sec.props[key] = val;
           renderProps();
         }
       });
@@ -2818,7 +2826,7 @@
         <div class="hero-content">
           <h1 contenteditable="${state.mode === 'edit'}" data-edit="heading">${escapeHtml(p.heading)}</h1>
           <p contenteditable="${state.mode === 'edit'}" data-edit="body">${escapeHtml(p.body)}</p>
-          <button class="hero-cta" contenteditable="${state.mode === 'edit'}" data-edit="ctaText" onclick="event.preventDefault(); ${state.mode === 'preview' ? `handleLinkClick('${escapeHtml(p.ctaLink || '')}', event)` : ''}">${escapeHtml(p.ctaText)} →</button>
+          <button class="hero-cta" contenteditable="${state.mode === 'edit'}" data-edit="ctaText" onclick="event.preventDefault(); ${state.mode === 'preview' ? `handleLinkClick('${escapeHtml(p.ctaLink || '')}', event)` : ''}">${ctaLabel(p.ctaText)}</button>
         </div>
         <div style="display:flex;justify-content:center;align-items:center;">
           ${imageBlock(s.id, p.imageUrl, p.imageWidth, p.imageHeight)}
@@ -2868,7 +2876,7 @@
         <div class="cta-section-inner">
           <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${escapeHtml(p.heading)}</h2>
           <p contenteditable="${state.mode === 'edit'}" data-edit="body">${escapeHtml(p.body)}</p>
-          <button class="cta-button" contenteditable="${state.mode === 'edit'}" data-edit="ctaText" onclick="event.preventDefault(); ${state.mode === 'preview' ? `handleLinkClick('${escapeHtml(p.ctaLink || '')}', event)` : ''}">${escapeHtml(p.ctaText)} →</button>
+          <button class="cta-button" contenteditable="${state.mode === 'edit'}" data-edit="ctaText" onclick="event.preventDefault(); ${state.mode === 'preview' ? `handleLinkClick('${escapeHtml(p.ctaLink || '')}', event)` : ''}">${ctaLabel(p.ctaText)}</button>
         </div>
       </div>
     `;
@@ -4222,7 +4230,7 @@ img { max-width: 100%; display: block; }
   <div class="hero-content">
     <h1>${escapeHtml(p.heading)}</h1>
     <p>${escapeHtml(p.body)}</p>
-    <a class="hero-cta" href="${escapeHtml(link)}">${escapeHtml(p.ctaText)} →</a>
+    <a class="hero-cta" href="${escapeHtml(link)}">${ctaLabel(p.ctaText)}</a>
   </div>
   <div style="display:flex;justify-content:center;align-items:center;">
     <div class="hero-image" style="width:${w}px;height:${h}px;">${imageHTML}</div>
@@ -4237,7 +4245,7 @@ img { max-width: 100%; display: block; }
   <div class="cta-section-inner">
     <h2>${escapeHtml(p.heading)}</h2>
     <p>${escapeHtml(p.body)}</p>
-    <a class="cta-button" href="${escapeHtml(link)}">${escapeHtml(p.ctaText)} →</a>
+    <a class="cta-button" href="${escapeHtml(link)}">${ctaLabel(p.ctaText)}</a>
   </div>
 </section>`;
       }
