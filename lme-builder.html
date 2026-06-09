@@ -2141,6 +2141,36 @@
   const STORAGE_KEY = 'lme-builder:site';
   const LEGACY_KEY = 'lme-builder:page'; // gammel single-page lagring
 
+  // Lagring: Cloudflare KV (via /api/builder/store) med nettleser-fallback.
+  // Byggeren bruker window.storage.get/set; her kobles den til Cloudflare.
+  if (!window.storage) {
+    window.storage = {
+      async get(key) {
+        try {
+          const r = await fetch('/api/builder/store?key=' + encodeURIComponent(key), { cache: 'no-store' });
+          if (r.ok) {
+            const d = await r.json();
+            if (d && d.value != null) return { value: d.value };
+          }
+        } catch (e) { /* faller tilbake til localStorage */ }
+        try { return { value: localStorage.getItem(key) }; } catch (e) { return { value: null }; }
+      },
+      async set(key, value) {
+        let cloudOk = false;
+        try {
+          const r = await fetch('/api/builder/store?key=' + encodeURIComponent(key), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ value: value })
+          });
+          if (r.ok) { const d = await r.json(); cloudOk = !!(d && d.ok); }
+        } catch (e) { /* faller tilbake til localStorage */ }
+        try { localStorage.setItem(key, value); } catch (e) {}
+        return cloudOk;
+      }
+    };
+  }
+
   function getCurrentPage() {
     return state.pages.find(p => p.id === state.currentPageId);
   }
@@ -2241,8 +2271,8 @@
         showToast('⚠️ Nettstedet er for stort (' + sizeMB + 'MB). Reduser bilder.');
         return;
       }
-      await window.storage.set(STORAGE_KEY, payload);
-      showToast('💾 Lagret (' + sizeMB + 'MB)');
+      const cloud = await window.storage.set(STORAGE_KEY, payload);
+      showToast(cloud ? '☁️ Lagret i skyen (' + sizeMB + 'MB)' : '💾 Lagret lokalt (' + sizeMB + 'MB)');
     } catch (e) {
       showToast('⚠️ Kunne ikke lagre');
     }
