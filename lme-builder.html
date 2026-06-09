@@ -4261,6 +4261,61 @@
         pricing.props.heading = 'Pakker & priser';
         return [hero, features, pricing, createSection('faq'), createSection('testimonials'), createSection('cta'), createSection('footer')];
       }
+    },
+    omMeg: {
+      icon: '💛',
+      name: 'Om meg',
+      desc: 'Personlig historie med verdier, galleri og anbefalinger',
+      defaultName: 'Om meg',
+      brand: { paletteId: 'sunset', fontId: 'lora-open' },
+      blocks: ['hero', 'features', 'testimonials', 'cta', 'footer'],
+      build: () => {
+        const hero = createSection('hero');
+        hero.props.heading = 'Hei, jeg er [navnet ditt]';
+        hero.props.body = 'Velkommen inn! Her deler jeg historien min, hjertet bak det jeg gjør, og hvordan vi kan jobbe sammen.';
+        hero.props.ctaText = 'Min historie';
+        const features = createSection('features');
+        features.props.heading = 'Det jeg står for';
+        features.props.subheading = 'Verdiene som ligger til grunn for alt jeg lager';
+        features.props.items = [
+          { icon: '🌿', title: 'Nærhet til naturen', desc: 'Læring som starter med undring for verden rundt oss.' },
+          { icon: '💛', title: 'Varme & respekt', desc: 'Barnet i sentrum, alltid møtt med tålmodighet.' },
+          { icon: '✨', title: 'Ekte håndverk', desc: 'Vakkert materiell laget med omtanke og kjærlighet.' }
+        ];
+        const gallery = createSection('gallery');
+        gallery.props.heading = 'Et lite innblikk';
+        gallery.props.subheading = 'Glimt fra hverdagen og arbeidet mitt';
+        const testimonials = createSection('testimonials');
+        testimonials.props.heading = 'Kjærlige ord';
+        const cta = createSection('cta');
+        cta.props.heading = 'La oss holde kontakten';
+        cta.props.body = 'Bli med på listen, så deler jeg inspirasjon og nyheter med deg.';
+        cta.props.ctaText = 'Bli med';
+        return [hero, features, gallery, testimonials, cta, createSection('footer')];
+      }
+    },
+    lansering: {
+      icon: '🚀',
+      name: 'Lansering',
+      desc: 'Tydelig lanseringsside for et nytt produkt eller kurs',
+      defaultName: 'Lansering',
+      brand: { paletteId: 'ocean-calm', fontId: 'dm-modern' },
+      blocks: ['hero', 'features', 'pricing', 'faq', 'cta', 'footer'],
+      build: () => {
+        const hero = createSection('hero');
+        hero.props.heading = 'Noe nytt er på vei 🚀';
+        hero.props.body = 'Bli den første til å vite når vi åpner dørene. Meld deg på, så får du beskjed — og en liten overraskelse.';
+        hero.props.ctaText = 'Sett meg på listen';
+        const features = createSection('features');
+        features.props.heading = 'Hva du får';
+        const pricing = createSection('pricing');
+        pricing.props.heading = 'Velg din pakke';
+        const cta = createSection('cta');
+        cta.props.heading = 'Klar for lansering?';
+        cta.props.body = 'Dørene åpner snart — vær klar.';
+        cta.props.ctaText = 'Meld meg på';
+        return [hero, features, pricing, createSection('faq'), cta, createSection('footer')];
+      }
     }
   };
 
