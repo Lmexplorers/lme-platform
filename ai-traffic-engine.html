@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spør Renate AI — LME</title>
-
+<title>AI Traffic Engine — LME</title>
 <style>
 @font-face {
   font-family: 'Playpen Sans';
@@ -21,1002 +20,1679 @@
   font-display: swap;
 }
 
-  
+:root {
+  --pink-soft: #F8D7DA;
+  --pink-deep: #E4A0A8;
+  --pink-blush: #FCE8EA;
+  --teal: #5FB3B3;
+  --teal-deep: #3A8B8B;
+  --cream: #FFF9F5;
+  --ink: #1A1418;
+  --ink-soft: #4A3F44;
+  --ink-mute: #8B7B81;
+  --gold: #D4A574;
+  --lavender: #C8B6D8;
+  --mint: #B8D8C5;
+  --bg: #FAF6F2;
+  --card: #FFFFFF;
+  --border: rgba(228, 160, 168, 0.18);
+  --shadow-sm: 0 2px 8px rgba(228, 160, 168, 0.08);
+  --shadow-md: 0 8px 32px rgba(228, 160, 168, 0.12);
+  --shadow-lg: 0 24px 64px rgba(228, 160, 168, 0.18);
+}
 
-  :root {
-    --pink-soft: #F8D7DA;
-    --pink-mid: #F5A8B8;
-    --pink-deep: #E4A0A8;
-    --cerise: #E91E89;
-    --cream: #FBF6F0;
-    --sun: #F5E050;
-    --ink: #2a1e2e;
-    --ink-soft: #6b5b6f;
-    --line: #f0e0eb;
-    --line-soft: #f7e9f0;
-    --shadow-lg: 0 10px 40px rgba(0,0,0,0.08);
-    --shadow-pill: 0 4px 20px rgba(0,0,0,0.06);
-    --r-pill: 999px;
-    --font-display: 'Playpen Sans', sans-serif;
-    --font-body: 'Playpen Sans', sans-serif;
-  }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; }
-  body {
-    font-family: var(--font-body);
-    background: var(--cream);
-    color: var(--ink);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+body {
+  font-family: 'Playpen Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-  /* HEADER */
-  .header-wrap { padding: 20px 24px 0; position: sticky; top: 16px; z-index: 100; }
-  .header {
-    max-width: 1280px; margin: 0 auto;
-    background: rgba(255,255,255,0.92);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-radius: var(--r-pill);
-    padding: 12px 20px;
-    box-shadow: var(--shadow-pill);
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 16px;
-    border: 1px solid rgba(255,255,255,0.5);
-  }
-  .header-left { display: flex; align-items: center; gap: 28px; }
-  .logo {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    height: 36px;
-  }
-  .logo img {
-    height: 100%;
-    width: auto;
-    display: block;
-    background: transparent;
-  }
-  .nav-pills { display: flex; gap: 4px; }
-  .nav-pill { padding: 10px 16px; border-radius: var(--r-pill); font-size: 16px; font-weight: 700; color: var(--ink); text-decoration: none; transition: background 0.2s ease; }
-  .nav-pill:hover { background: rgba(248, 215, 218, 0.4); }
-  .header-right { display: flex; align-items: center; gap: 10px; }
-  .btn-ai { background: var(--ink); color: white; padding: 6px 16px 6px 6px; border-radius: var(--r-pill); text-decoration: none; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
-  .btn-ai .avatar-mini { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--pink-mid), var(--cerise)); display: grid; place-items: center; color: white; font-weight: 700; font-size: 13px; overflow: hidden; }
-  .btn-ai .avatar-mini img { width: 100%; height: 100%; object-fit: cover; }
-  .btn-studio { background: var(--sun); color: var(--ink); padding: 9px 18px; border-radius: var(--r-pill); text-decoration: none; font-size: 14px; font-weight: 600; }
-  .icon-btn { width: 36px; height: 36px; border-radius: 50%; border: none; background: none; cursor: pointer; color: var(--ink); display: grid; place-items: center; }
-  .icon-btn:hover { background: var(--pink-soft); }
-  .avatar-btn { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; cursor: pointer; border: none; padding: 0; background: linear-gradient(135deg, var(--pink-mid), var(--sun)); }
-  .avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
+/* Decorative background mesh */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 10% 10%, rgba(248, 215, 218, 0.4), transparent 60%),
+    radial-gradient(ellipse 500px 500px at 90% 20%, rgba(95, 179, 179, 0.12), transparent 60%),
+    radial-gradient(ellipse 400px 400px at 50% 90%, rgba(212, 165, 116, 0.1), transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
 
-  /* TITTEL */
-  .title-section { text-align: center; padding: 32px 24px 16px; max-width: 1280px; margin: 0 auto; width: 100%; }
-  .title-section h1 { font-family: var(--font-display); font-size: clamp(40px, 5vw, 64px); font-weight: 700; color: var(--ink); letter-spacing: -0.02em; line-height: 1.1; }
-  .title-section h1 em { color: var(--cerise); font-style: italic; }
-  .title-section .tagline { color: var(--ink-soft); font-size: 16px; font-style: italic; margin-top: 12px; }
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 1;
+}
 
-  /* LAYOUT */
-  .main-layout {
-    flex: 1;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 16px 24px 24px;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: 20px;
-  }
+.app {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+  position: relative;
+  z-index: 2;
+}
 
-  /* SIDEBAR */
-  .sidebar {
-    background: white;
-    border: 2px solid var(--pink-soft);
-    border-radius: 24px;
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-    height: fit-content;
-    max-height: 700px;
-    position: sticky;
-    top: 100px;
-  }
-  .sidebar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--line-soft); }
-  .sidebar-title { font-size: 15px; font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 8px; }
-  .new-chat-btn { background: linear-gradient(135deg, var(--pink-mid), var(--cerise)); color: white; border: none; border-radius: var(--r-pill); padding: 8px 14px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; }
-  .new-chat-btn:hover { transform: scale(1.05); }
-  .conversations-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
-  .conversations-list::-webkit-scrollbar { width: 6px; }
-  .conversations-list::-webkit-scrollbar-thumb { background: var(--pink-soft); border-radius: 3px; }
-  .conversation-item { padding: 12px 14px; border-radius: 14px; cursor: pointer; border: 1px solid transparent; display: flex; align-items: flex-start; gap: 10px; }
-  .conversation-item:hover { background: var(--pink-soft); border-color: var(--pink-mid); }
-  .conversation-item.active { background: var(--pink-soft); border-color: var(--cerise); }
-  .conversation-content { flex: 1; min-width: 0; }
-  .conversation-title { font-size: 13.5px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
-  .conversation-date { font-size: 11.5px; color: var(--ink-soft); }
-  .conversation-delete { background: none; border: none; cursor: pointer; color: var(--ink-soft); padding: 4px; border-radius: 50%; opacity: 0; display: grid; place-items: center; }
-  .conversation-item:hover .conversation-delete { opacity: 1; }
-  .conversation-delete:hover { background: white; color: var(--cerise); }
-  .no-conversations { text-align: center; color: var(--ink-soft); font-size: 13px; padding: 24px 12px; line-height: 1.5; font-style: italic; }
-  .sidebar-info-link {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid var(--line-soft);
-    text-align: center;
-  }
-  .sidebar-info-link a {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--cerise);
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 600;
-    padding: 8px 14px;
-    border-radius: var(--r-pill);
-    transition: all 0.2s;
-  }
-  .sidebar-info-link a:hover {
-    background: var(--pink-soft);
-  }
+/* ===== SIDEBAR ===== */
+.sidebar {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-right: 1px solid var(--border);
+  padding: 28px 20px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
 
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+  padding: 0 8px;
+}
 
-  /* CHAT VINDU */
-  .chat-window { background: white; border: 2px solid var(--pink-mid); border-radius: 28px; box-shadow: var(--shadow-lg); display: flex; flex-direction: column; min-height: 600px; overflow: hidden; }
-  .chat-bar { padding: 18px 24px; border-bottom: 1px solid var(--line-soft); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .chat-bar-left { display: flex; align-items: center; gap: 14px; }
-  .chat-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--pink-mid), var(--cerise)); overflow: hidden; display: grid; place-items: center; color: white; font-weight: 600; }
-  .chat-avatar img { width: 100%; height: 100%; object-fit: cover; }
-  .chat-name { font-size: 16px; font-weight: 600; color: var(--ink); }
-  .chat-status { font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
-  .chat-bar-actions { display: flex; gap: 6px; }
-  .chat-icon-btn { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: white; display: grid; place-items: center; cursor: pointer; color: var(--ink-soft); }
-  .chat-icon-btn:hover { background: var(--pink-soft); color: var(--cerise); border-color: var(--pink-mid); }
+.brand-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--pink-deep), var(--teal));
+  display: grid;
+  place-items: center;
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 700;
+  color: white;
+  font-size: 18px;
+  box-shadow: 0 4px 16px rgba(228, 160, 168, 0.4);
+  position: relative;
+  overflow: hidden;
+}
 
-  .chat-messages { flex: 1; overflow-y: auto; padding: 32px 40px; display: flex; flex-direction: column; gap: 16px; }
-  .chat-messages::-webkit-scrollbar { width: 8px; }
-  .chat-messages::-webkit-scrollbar-thumb { background: var(--pink-soft); border-radius: 4px; }
+.brand-mark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4), transparent 60%);
+}
 
-  .welcome-mini { text-align: center; color: var(--ink-soft); font-size: 15px; margin: 20px 0; font-style: italic; }
-  .welcome-mini em { color: var(--cerise); }
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
 
-  .message {
-    max-width: 70%;
-    padding: 14px 20px;
-    border-radius: 18px;
-    line-height: 1.55;
-    font-size: 15px;
-    word-wrap: break-word;
-    white-space: pre-wrap;
-  }
-  .message.bot { background: #fef8fb; border: 1px solid var(--line); color: var(--ink); align-self: flex-start; border-top-left-radius: 4px; }
-  .message.user { background: linear-gradient(135deg, var(--pink-mid), var(--cerise)); color: white; align-self: flex-end; border-top-right-radius: 4px; }
+.brand-title {
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: -0.02em;
+}
 
-  /* VEDLEGG i meldinger */
-  .message-attachments {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 10px;
-  }
-  .attachment-thumb {
-    border-radius: 12px;
-    overflow: hidden;
-    max-width: 240px;
-    max-height: 240px;
-    border: 1px solid rgba(255,255,255,0.3);
-  }
-  .attachment-thumb img {
-    max-width: 100%;
-    max-height: 240px;
-    display: block;
-  }
-  .attachment-file {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(255,255,255,0.2);
-    padding: 10px 14px;
-    border-radius: 12px;
-    font-size: 13px;
-  }
-  .message.bot .attachment-file {
-    background: var(--cream);
-  }
-  .attachment-file-icon {
-    width: 32px;
-    height: 32px;
-    background: rgba(255,255,255,0.3);
-    border-radius: 8px;
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-  }
-  .message.bot .attachment-file-icon {
-    background: var(--pink-soft);
-    color: var(--cerise);
-  }
-  .attachment-file-name {
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 180px;
-  }
+.brand-sub {
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 10px;
+  color: var(--ink-mute);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
 
-  .quick-prompts { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 8px 0 16px; padding: 0 16px; }
-  .quick-prompt { background: white; border: 1px solid var(--line); border-radius: var(--r-pill); padding: 9px 18px; font-size: 14px; color: var(--ink); cursor: pointer; font-family: var(--font-body); }
-  .quick-prompt:hover { border-color: var(--pink-mid); background: var(--pink-soft); color: var(--cerise); }
-  .quick-prompt em { color: var(--cerise); font-style: italic; }
+.nav-label {
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-mute);
+  padding: 0 12px;
+  margin: 20px 0 8px;
+  font-weight: 600;
+}
 
-  .typing-indicator { display: flex; gap: 4px; padding: 14px 20px; background: #fef8fb; border: 1px solid var(--line); border-radius: 18px; border-top-left-radius: 4px; align-self: flex-start; max-width: 80px; }
-  .typing-indicator span { width: 8px; height: 8px; background: var(--pink-mid); border-radius: 50%; animation: typing 1.4s infinite; }
-  .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-  .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes typing { 0%, 60%, 100% { opacity: 0.3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-4px); } }
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 500;
+  margin-bottom: 2px;
+  position: relative;
+}
 
-  /* INPUT */
-  .chat-input-bar { padding: 18px 24px 22px; border-top: 1px solid var(--line-soft); }
+.nav-item:hover {
+  background: rgba(248, 215, 218, 0.4);
+  color: var(--ink);
+}
 
-  /* Pending vedlegg-forhåndsvisning ovenfor input */
-  .pending-attachments {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-  .pending-attachments:empty { display: none; }
-  .pending-attachment {
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1.5px solid var(--pink-mid);
-    background: var(--cream);
-  }
-  .pending-attachment-image {
-    width: 64px;
-    height: 64px;
-  }
-  .pending-attachment-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .pending-attachment-file {
-    width: 200px;
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-  }
-  .pending-attachment-file-icon {
-    width: 28px;
-    height: 28px;
-    background: var(--pink-soft);
-    color: var(--cerise);
-    border-radius: 6px;
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-  }
-  .pending-attachment-file-name {
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .pending-attachment-remove {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: var(--cerise);
-    color: white;
-    border: 2px solid white;
-    cursor: pointer;
-    display: grid;
-    place-items: center;
-    font-size: 14px;
-    line-height: 1;
-    font-weight: 700;
-  }
-  .pending-attachment-remove:hover { background: var(--ink); }
+.nav-item.active {
+  background: linear-gradient(135deg, rgba(228, 160, 168, 0.15), rgba(95, 179, 179, 0.08));
+  color: var(--ink);
+  font-weight: 600;
+}
 
-  .chat-input-wrap { display: flex; align-items: center; gap: 12px; background: var(--cream); border-radius: var(--r-pill); padding: 6px 6px 6px 22px; border: 1px solid var(--line); }
-  .chat-input-wrap:focus-within { border-color: var(--pink-mid); background: white; }
-  .chat-input { flex: 1; border: none; background: none; outline: none; padding: 12px 0; font-size: 15px; font-family: var(--font-body); color: var(--ink); }
-  .chat-input::placeholder { color: var(--ink-soft); }
-  .input-tools { display: flex; align-items: center; gap: 4px; }
-  .tool-btn { width: 36px; height: 36px; border-radius: 50%; background: none; border: none; cursor: pointer; color: var(--ink-soft); display: grid; place-items: center; position: relative; }
-  .tool-btn:hover { color: var(--cerise); background: var(--pink-soft); }
-  .tool-btn.has-attachment { color: var(--cerise); }
-  .lang-pill { font-size: 13px; color: var(--ink-soft); padding: 0 8px; font-weight: 500; }
-  .send-btn { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--pink-mid), var(--cerise)); border: none; cursor: pointer; display: grid; place-items: center; color: white; }
-  .send-btn:hover { transform: scale(1.05); }
-  .send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  background: linear-gradient(180deg, var(--pink-deep), var(--teal));
+  border-radius: 0 3px 3px 0;
+}
 
-  .chat-footer-note { text-align: center; color: var(--ink-soft); font-size: 13.5px; padding: 16px 24px 40px; max-width: 1280px; margin: 0 auto; line-height: 1.7; grid-column: 1 / -1; }
-  .chat-footer-note a { color: var(--cerise); text-decoration: none; font-weight: 500; }
+.nav-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  opacity: 0.8;
+}
 
-  /* Toast */
-  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--ink); color: white; padding: 12px 24px; border-radius: var(--r-pill); font-size: 14px; box-shadow: var(--shadow-lg); z-index: 200; opacity: 0; transition: all 0.3s; pointer-events: none; }
-  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.nav-badge {
+  margin-left: auto;
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, var(--gold), #E8B888);
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
 
-  @media (max-width: 900px) {
-    .nav-pills { display: none; }
-    .btn-studio { display: none; }
-    .header { padding: 10px 16px; }
-    .main-layout { grid-template-columns: 1fr; padding: 12px 16px 20px; }
-    .sidebar { max-height: 200px; position: static; }
-    .chat-messages { padding: 20px 16px; }
-    .message { max-width: 85%; }
-  }
-  @media (max-width: 600px) {
-    .header-wrap { padding: 12px 12px 0; top: 8px; }
-    .chat-window { border-radius: 20px; }
-    .chat-bar { padding: 14px 16px; }
-    .chat-input-bar { padding: 14px 16px 18px; }
-    .input-tools .tool-btn:not(.attach-btn) { display: none; }
-    .input-tools .lang-pill { display: none; }
-    .title-section { padding: 20px 16px 8px; }
-  }
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 24px;
+}
 
-  /* Flytende språk-veksler i hjørnet */
-  .lang-float {
-    position: fixed;
-    top: 90px;
-    right: 24px;
-    z-index: 150;
-    background: white;
-    border: 1.5px solid var(--pink-mid);
-    border-radius: var(--r-pill);
-    padding: 8px 18px;
-    box-shadow: var(--shadow-lg);
-    text-decoration: none;
-    color: var(--cerise);
-    font-size: 14px;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.2s;
-  }
-  .lang-float:hover {
-    background: var(--pink-soft);
-    transform: translateY(-2px);
-  }
-  .lang-float svg {
-    width: 16px;
-    height: 16px;
-  }
-  @media (max-width: 600px) {
-    .lang-float { top: 70px; right: 16px; padding: 6px 14px; font-size: 13px; }
-  }
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink-soft), var(--pink-deep));
+  display: grid;
+  place-items: center;
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 600;
+  color: white;
+  font-size: 13px;
+}
+
+.user-info { flex: 1; min-width: 0; }
+.user-name { font-size: 13px; font-weight: 600; }
+.user-plan { font-family: 'Playpen Sans', sans-serif; font-size: 10px; color: var(--ink-mute); }
+
+/* ===== MAIN ===== */
+.main {
+  padding: 32px 40px;
+  max-width: 1400px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.greeting {
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: var(--ink-mute);
+  margin-bottom: 4px;
+  font-style: italic;
+}
+
+.page-title {
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 500;
+  font-size: 36px;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.page-title .accent {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--pink-deep);
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.search-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(255,255,255,0.7);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 13px;
+  color: var(--ink-mute);
+  min-width: 240px;
+  backdrop-filter: blur(12px);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 100px;
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--ink), #2a1f25);
+  color: white;
+  box-shadow: 0 4px 16px rgba(26, 20, 24, 0.2);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(26, 20, 24, 0.3);
+}
+
+.btn-ghost {
+  background: rgba(255,255,255,0.6);
+  color: var(--ink);
+  border: 1px solid var(--border);
+}
+
+/* ===== HERO STATUS ===== */
+.hero {
+  background: linear-gradient(135deg, #FFFFFF 0%, #FDF4F1 60%, #FFEFE6 100%);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 36px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(228, 160, 168, 0.25), transparent 60%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -50%;
+  left: 20%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(95, 179, 179, 0.15), transparent 60%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(255,255,255,0.7);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-bottom: 16px;
+  backdrop-filter: blur(8px);
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4CAF50;
+  box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.6);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.6); }
+  70% { box-shadow: 0 0 0 8px rgba(76, 175, 80, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+}
+
+.hero-headline {
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 400;
+  font-size: 42px;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  margin-bottom: 16px;
+  color: var(--ink);
+}
+
+.hero-headline em {
+  font-style: italic;
+  font-weight: 500;
+  background: linear-gradient(135deg, var(--pink-deep), var(--teal-deep));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtext {
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin-bottom: 24px;
+  max-width: 540px;
+}
+
+.hero-cta-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.hero-stats {
+  background: rgba(255,255,255,0.7);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px;
+  backdrop-filter: blur(16px);
+}
+
+.hero-stats-title {
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-mute);
+  margin-bottom: 16px;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px dashed rgba(228, 160, 168, 0.25);
+}
+
+.stat-row:last-child { border-bottom: none; }
+
+.stat-label { font-size: 13px; color: var(--ink-soft); font-family: 'Playpen Sans', sans-serif; }
+.stat-value { font-family: 'Playpen Sans', sans-serif; font-weight: 600; font-size: 18px; letter-spacing: -0.02em; }
+.stat-trend { font-family: 'Playpen Sans', sans-serif; font-size: 11px; color: var(--teal-deep); margin-left: 6px; }
+
+/* ===== WORKFLOW STEPS ===== */
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 36px 0 20px;
+}
+
+.section-title {
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 500;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+}
+
+.section-title em {
+  font-style: italic;
+  color: var(--pink-deep);
+  font-weight: 400;
+}
+
+.section-sub {
+  font-family: 'Playpen Sans', sans-serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 14px;
+  color: var(--ink-mute);
+}
+
+.workflow-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+  margin-bottom: 36px;
+}
+
+.step-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px 18px;
+  position: relative;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+.step-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--pink-deep);
+}
+
+.step-num {
+  font-family: 'Playpen Sans', sans-serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 11px;
+  color: var(--ink-mute);
+  margin-bottom: 12px;
+}
+
+.step-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 14px;
+  font-size: 18px;
+}
+
+.step-icon.c1 { background: linear-gradient(135deg, #FCE4E7, #F8D7DA); }
+.step-icon.c2 { background: linear-gradient(135deg, #E6F4F4, #C8E8E8); }
+.step-icon.c3 { background: linear-gradient(135deg, #FFF4E6, #FFE4C4); }
+.step-icon.c4 { background: linear-gradient(135deg, #F0E8F5, #D8C8E0); }
+.step-icon.c5 { background: linear-gradient(135deg, #E4F0E8, #C4DCC8); }
+.step-icon.c6 { background: linear-gradient(135deg, #F8E8E0, #F0D8C8); }
+
+.step-name {
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+
+.step-desc {
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 300;
+  font-size: 12px;
+  color: var(--ink-mute);
+  line-height: 1.4;
+}
+
+.step-status {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 9px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.step-status.done {
+  background: rgba(95, 179, 179, 0.15);
+  color: var(--teal-deep);
+}
+
+.step-status.active {
+  background: rgba(228, 160, 168, 0.2);
+  color: var(--pink-deep);
+}
+
+.step-status.queued {
+  background: rgba(139, 123, 129, 0.12);
+  color: var(--ink-mute);
+}
+
+/* ===== ANALYZER PANEL ===== */
+.analyzer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 20px;
+  margin-bottom: 36px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+}
+
+.card-title em {
+  font-style: italic;
+  color: var(--pink-deep);
+}
+
+.tag-ai {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: linear-gradient(135deg, rgba(228, 160, 168, 0.15), rgba(95, 179, 179, 0.1));
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  letter-spacing: 0.05em;
+}
+
+.sparkle {
+  display: inline-block;
+  font-size: 11px;
+}
+
+.form-field { margin-bottom: 16px; }
+
+.field-label {
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-mute);
+  margin-bottom: 6px;
+  display: block;
+  font-weight: 600;
+}
+
+.field-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--cream);
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  transition: all 0.2s ease;
+}
+
+.field-input:focus {
+  outline: none;
+  border-color: var(--pink-deep);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(228, 160, 168, 0.15);
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.chip {
+  padding: 5px 11px;
+  background: rgba(248, 215, 218, 0.4);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 11px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chip:hover {
+  background: var(--pink-deep);
+  color: white;
+}
+
+/* ===== INSIGHTS PANEL ===== */
+.insight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.insight {
+  display: flex;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--cream), white);
+  border: 1px solid var(--border);
+}
+
+.insight-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--pink-soft), var(--pink-blush));
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+.insight-body { flex: 1; min-width: 0; }
+
+.insight-title {
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 3px;
+}
+
+.insight-text {
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 300;
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.insight-meta {
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 10px;
+  color: var(--teal-deep);
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+/* ===== CONTENT GENERATOR ===== */
+.generator-card {
+  background: linear-gradient(135deg, #1A1418 0%, #2a1f25 100%);
+  color: white;
+  border-radius: 24px;
+  padding: 32px;
+  margin-bottom: 36px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.generator-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(228, 160, 168, 0.18), transparent 60%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.generator-card::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(95, 179, 179, 0.12), transparent 60%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.generator-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 36px;
+}
+
+.gen-title {
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+
+.gen-title em {
+  font-style: italic;
+  color: var(--pink-soft);
+}
+
+.gen-sub {
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.platform-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.platform-pill {
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 100px;
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.platform-pill:hover, .platform-pill.active {
+  background: linear-gradient(135deg, var(--pink-deep), var(--teal));
+  border-color: transparent;
+  color: white;
+}
+
+.gen-prompt-area {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  padding: 18px;
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 14px;
+  color: white;
+  min-height: 100px;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.gen-prompt-area .placeholder {
+  color: rgba(255,255,255,0.4);
+  font-style: italic;
+}
+
+.gen-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-gen {
+  background: linear-gradient(135deg, var(--pink-deep), var(--teal));
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 100px;
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(228, 160, 168, 0.4);
+  transition: all 0.2s ease;
+}
+
+.btn-gen:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(228, 160, 168, 0.6);
+}
+
+.gen-output {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  padding: 22px;
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+.output-block {
+  padding: 14px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  border-left: 2px solid var(--pink-deep);
+}
+
+.output-block:last-child { margin-bottom: 0; }
+
+.output-platform {
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--pink-soft);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.output-text {
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  color: rgba(255,255,255,0.92);
+  line-height: 1.6;
+}
+
+.output-meta {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 10px;
+  color: rgba(255,255,255,0.5);
+}
+
+.score-pill {
+  padding: 2px 8px;
+  background: rgba(95, 179, 179, 0.25);
+  color: var(--mint);
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+/* ===== CALENDAR ===== */
+.calendar-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 28px;
+  margin-bottom: 36px;
+  box-shadow: var(--shadow-sm);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.cal-day-label {
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-mute);
+  text-align: center;
+  padding: 6px 0;
+  font-weight: 600;
+}
+
+.cal-day {
+  aspect-ratio: 1;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.cal-day:hover {
+  border-color: var(--pink-deep);
+  transform: scale(1.02);
+}
+
+.cal-date {
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.cal-day.today .cal-date {
+  color: var(--pink-deep);
+  font-weight: 700;
+}
+
+.cal-day.today {
+  background: linear-gradient(135deg, var(--pink-blush), white);
+  border-color: var(--pink-deep);
+}
+
+.cal-posts {
+  margin-top: auto;
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+
+.cal-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.cal-dot.ig { background: #E4A0A8; }
+.cal-dot.tt { background: #1A1418; }
+.cal-dot.pt { background: #E60023; opacity: 0.7; }
+.cal-dot.fb { background: #5FB3B3; }
+.cal-dot.yt { background: #D4A574; }
+
+.cal-count {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 9px;
+  color: var(--ink-mute);
+  font-weight: 600;
+}
+
+/* ===== METRICS GRID ===== */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.metric {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 22px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.metric-label {
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-mute);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.metric-value {
+  font-family: 'Playpen Sans', sans-serif;
+  font-weight: 500;
+  font-size: 32px;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.metric-change {
+  font-family: 'Playpen Sans', sans-serif;
+  font-size: 11px;
+  color: var(--teal-deep);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.metric-sparkline {
+  margin-top: 12px;
+  height: 36px;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.spark-bar {
+  flex: 1;
+  background: linear-gradient(180deg, var(--pink-deep), var(--pink-soft));
+  border-radius: 3px;
+  opacity: 0.7;
+}
+
+.metric:nth-child(2) .spark-bar { background: linear-gradient(180deg, var(--teal), var(--mint)); }
+.metric:nth-child(3) .spark-bar { background: linear-gradient(180deg, var(--gold), #F0D4B8); }
+.metric:nth-child(4) .spark-bar { background: linear-gradient(180deg, var(--lavender), #E8DEF0); }
+
+/* ===== FOOTER NOTE ===== */
+.footer-note {
+  text-align: center;
+  padding: 40px 20px;
+  font-family: 'Playpen Sans', sans-serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 14px;
+  color: var(--ink-mute);
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+.footer-note strong {
+  color: var(--ink);
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1100px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .hero-content { grid-template-columns: 1fr; }
+  .analyzer-grid { grid-template-columns: 1fr; }
+  .generator-grid { grid-template-columns: 1fr; }
+  .workflow-grid { grid-template-columns: repeat(3, 1fr); }
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  .main { padding: 24px 20px; }
+  .hero-headline { font-size: 32px; }
+}
+
+@media (max-width: 600px) {
+  .workflow-grid { grid-template-columns: repeat(2, 1fr); }
+  .calendar-grid { font-size: 10px; }
+  .cal-day { padding: 6px; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--pink-soft); border-radius: 100px; }
+::-webkit-scrollbar-thumb:hover { background: var(--pink-deep); }
+
+/* Entrance animation */
+.fade-in {
+  animation: fadeInUp 0.6s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in:nth-child(1) { animation-delay: 0.05s; }
+.fade-in:nth-child(2) { animation-delay: 0.15s; }
+.fade-in:nth-child(3) { animation-delay: 0.25s; }
+.fade-in:nth-child(4) { animation-delay: 0.35s; }
 </style>
 </head>
 <body>
-<!-- deploy: 1778709368 -->
+<div class="app">
 
-
-<div class="header-wrap">
-  <header class="header">
-    <div class="header-left">
-      <a href="/dashboard" class="logo"><img src="/images/lme-logo.png" alt="LME"></a>
-      <nav class="nav-pills">
-        <a href="/academy" class="nav-pill">Lær</a>
-        <a href="/community" class="nav-pill">Fellesskap</a>
-        <a href="/biblioteket" class="nav-pill">Mer</a>
-      </nav>
-    </div>
-    <div class="header-right">
-      <a href="/spor-renate-ai" class="btn-ai">
-        <span class="avatar-mini">
-          <img src="/images/renate-portrait.jpg" alt="R" onerror="this.style.display='none';this.parentElement.textContent='R'">
-        </span>
-        Spør Renate AI ↗
-      </a>
-      <a href="/creative-studio" class="btn-studio">Åpne LME Creative Studio</a>
-      <button class="icon-btn" aria-label="Søk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-      <button class="icon-btn" aria-label="Meldinger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 12c0 4.4-4 8-9 8-1.3 0-2.5-.2-3.6-.7L3 21l1.7-5.4C3.6 14.2 3 12.7 3 11c0-4.4 4-8 9-8s9 3.6 9 8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
-      <button class="icon-btn" aria-label="Varsler"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 8a6 6 0 1112 0c0 7 3 8 3 8H3s3-1 3-8M10 21a2 2 0 004 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <button class="avatar-btn" aria-label="Profil"><img src="" alt="R" id="headerAvatar" onerror="this.style.display='none'"></button>
-    </div>
-  </header>
-</div>
-
-<div class="title-section">
-  <h1>Spør <em>Renate AI</em></h1>
-  <p class="tagline">Hei, jeg er Renate AI ✨ Spør meg, eller last opp et bilde/PDF jeg kan se på 💗</p>
-</div>
-
-<div class="main-layout">
-
+  <!-- ========== SIDEBAR ========== -->
   <aside class="sidebar">
-    <div class="sidebar-header">
-      <div class="sidebar-title">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-        Mine samtaler
+    <div class="brand">
+      <div class="brand-mark">A</div>
+      <div class="brand-text">
+        <div class="brand-title">AI Traffic Engine</div>
+        <div class="brand-sub">av LME</div>
       </div>
-      <button class="new-chat-btn" id="newChatBtn" title="Start ny samtale">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
-        Ny
-      </button>
     </div>
-    <div class="conversations-list" id="conversationsList"></div>
-    <div class="sidebar-info-link">
-      <a href="/renate-ai-info">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 16v-4M12 8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        Om Renate AI
-      </a>
+
+    <div class="nav-label">Arbeidsflyt</div>
+    <div class="nav-item active">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h12a1 1 0 001-1V10"/></svg>
+      Oversikt
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      Nisje-analyse
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+      Innholdsgenerator
+      <span class="nav-badge">AI</span>
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M4 12h16M4 18h7"/><circle cx="18" cy="18" r="3"/></svg>
+      Repurposing
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      Kalender
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>
+      Analytics
+    </div>
+
+    <div class="nav-label">Intelligens</div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a7 7 0 00-7 7c0 3 2 5 2 7v3a2 2 0 002 2h6a2 2 0 002-2v-3c0-2 2-4 2-7a7 7 0 00-7-7z"/></svg>
+      AI Strategist
+      <span class="nav-badge">PRO</span>
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+      Trend-prediksjon
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      Beste publiserings­tid
+    </div>
+
+    <div class="nav-label">Konto</div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.5 13.5a8 8 0 11-15-3"/><path d="M12 2v6h6"/></svg>
+      Tilkoblinger
+    </div>
+    <div class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51h0a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Innstillinger
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar">R</div>
+        <div class="user-info">
+          <div class="user-name">Renate</div>
+          <div class="user-plan">Premium · LME</div>
+        </div>
+      </div>
     </div>
   </aside>
 
-  <div class="chat-window">
-    <div class="chat-bar">
-      <div class="chat-bar-left">
-        <div class="chat-avatar"><img src="/images/renate-portrait.jpg" alt="Renate" onerror="this.style.display='none';this.parentElement.textContent='R'"></div>
-        <div>
-          <div class="chat-name" id="chatTitle">Spør Renate AI</div>
-          <div class="chat-status">Online · Svarer vanligvis raskt 💗</div>
-        </div>
-      </div>
-      <div class="chat-bar-actions">
-        <button class="chat-icon-btn" id="downloadBtn" title="Last ned samtale som tekstfil"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <button class="chat-icon-btn" id="resetBtn" title="Slett ALLE lagrede samtaler"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
-      </div>
-    </div>
+  <!-- ========== MAIN ========== -->
+  <main class="main">
 
-    <div class="chat-messages" id="chatMessages"></div>
-
-    <div class="chat-input-bar">
-      <!-- Pending vedlegg vises her -->
-      <div class="pending-attachments" id="pendingAttachments"></div>
-      
-      <div class="chat-input-wrap">
-        <input type="text" class="chat-input" id="chatInput" placeholder="Skriv en melding til Renate AI..." autocomplete="off">
-        <div class="input-tools">
-          <!-- Skjult filinput -->
-          <input type="file" id="fileInput" accept="image/jpeg,image/png,image/gif,image/webp,application/pdf" multiple style="display:none">
-          
-          <button class="tool-btn attach-btn" id="attachBtn" aria-label="Legg ved fil" title="Last opp bilde eller PDF (maks 5MB)">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <button class="tool-btn" aria-label="Tale" title="Snakk inn melding (kommer snart)">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <span class="lang-pill">NO ▾</span>
+    <!-- TOPBAR -->
+    <div class="topbar fade-in">
+      <div>
+        <div class="greeting">God ettermiddag, Renate</div>
+        <h1 class="page-title">AI Traffic <span class="accent">Engine</span></h1>
+      </div>
+      <div class="topbar-actions">
+        <div class="search-pill">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          Søk nisje, hashtag, hook…
         </div>
-        <button class="send-btn" id="sendBtn" aria-label="Send">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        <button class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          Ny kampanje
         </button>
       </div>
     </div>
-  </div>
 
-  <p class="chat-footer-note">
-    💗 Samtalene dine lagres automatisk i nettleseren. Last opp bilder av Montessori-materiale, klasserom eller PDF-er — Renate AI kan se og hjelpe deg! <a href="/renate-ai-info">Les mer om Renate AI →</a> · For personlig oppfølging, <a href="mailto:hello@littlemontessoriexplorers.com">kontakt Renate direkte</a>.
-  </p>
+    <!-- HERO -->
+    <section class="hero fade-in">
+      <div class="hero-content">
+        <div>
+          <span class="hero-badge">
+            <span class="live-dot"></span>
+            AI-motor aktiv · 7 plattformer tilkoblet
+          </span>
+          <h2 class="hero-headline">
+            Riktig innhold til <em>riktig publikum</em> — automatisk.
+          </h2>
+          <p class="hero-subtext">
+            AI Traffic Engine analyserer nisjen din, forstår algoritmer på tvers av plattformer, 
+            og distribuerer optimalisert innhold som tiltrekker målgruppen som faktisk konverterer.
+            Ingen spam. Ingen scraping. Bare målrettet, organisk vekst.
+          </p>
+          <div class="hero-cta-row">
+            <button class="btn btn-primary">
+              <span>✦</span> Start ny nisje-analyse
+            </button>
+            <button class="btn btn-ghost">Se live demo</button>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stats-title">Denne uken</div>
+          <div class="stat-row">
+            <span class="stat-label">Innlegg publisert</span>
+            <span><span class="stat-value">47</span><span class="stat-trend">+12</span></span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Organisk rekkevidde</span>
+            <span><span class="stat-value">28.4k</span><span class="stat-trend">+34%</span></span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Nye følgere</span>
+            <span><span class="stat-value">412</span><span class="stat-trend">+18%</span></span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Klikk til shop</span>
+            <span><span class="stat-value">186</span><span class="stat-trend">+22%</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <!-- WORKFLOW -->
+    <div class="section-header">
+      <div>
+        <h3 class="section-title">Din AI-<em>arbeidsflyt</em></h3>
+        <p class="section-sub">Seks steg fra idé til organisk trafikk</p>
+      </div>
+    </div>
+
+    <div class="workflow-grid">
+      <div class="step-card fade-in">
+        <div class="step-num">01</div>
+        <div class="step-icon c1">🎯</div>
+        <span class="step-status done">Ferdig</span>
+        <div class="step-name">Nisje-analyse</div>
+        <div class="step-desc">Målgruppe, triggere og søkeintensjon kartlagt.</div>
+      </div>
+      <div class="step-card fade-in">
+        <div class="step-num">02</div>
+        <div class="step-icon c2">📊</div>
+        <span class="step-status done">Ferdig</span>
+        <div class="step-name">Strategi</div>
+        <div class="step-desc">Anbefalte plattformer og innholdsmiks lagt opp.</div>
+      </div>
+      <div class="step-card fade-in">
+        <div class="step-num">03</div>
+        <div class="step-icon c3">✦</div>
+        <span class="step-status active">Aktiv</span>
+        <div class="step-name">Innholds­generator</div>
+        <div class="step-desc">12 innlegg generert. Klar for repurposing.</div>
+      </div>
+      <div class="step-card fade-in">
+        <div class="step-num">04</div>
+        <div class="step-icon c4">⟳</div>
+        <span class="step-status active">Aktiv</span>
+        <div class="step-name">Repurposing</div>
+        <div class="step-desc">Én idé → 8 plattform-spesifikke versjoner.</div>
+      </div>
+      <div class="step-card fade-in">
+        <div class="step-num">05</div>
+        <div class="step-icon c5">⏱</div>
+        <span class="step-status queued">I kø</span>
+        <div class="step-name">Auto-publisering</div>
+        <div class="step-desc">23 innlegg planlagt. Optimale tider valgt av AI.</div>
+      </div>
+      <div class="step-card fade-in">
+        <div class="step-num">06</div>
+        <div class="step-icon c6">↗</div>
+        <span class="step-status queued">I kø</span>
+        <div class="step-name">Trafikk-vekst</div>
+        <div class="step-desc">Sanntids­målinger og AI-anbefalinger.</div>
+      </div>
+    </div>
+
+    <!-- ANALYZER + INSIGHTS -->
+    <div class="section-header">
+      <div>
+        <h3 class="section-title">Nisje-<em>analyse</em></h3>
+        <p class="section-sub">Fortell AI hva du selger — så gjør resten seg selv</p>
+      </div>
+    </div>
+
+    <div class="analyzer-grid">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Definér din <em>nisje</em></div>
+          <span class="tag-ai"><span class="sparkle">✦</span> AI-drevet</span>
+        </div>
+
+        <div class="form-field">
+          <label class="field-label">Nisje</label>
+          <input class="field-input" value="Montessori-pedagogikk for barn 3–9 år" />
+        </div>
+
+        <div class="field-row">
+          <div class="form-field">
+            <label class="field-label">Produkt</label>
+            <input class="field-input" value="Bilingvale arbeidsbøker" />
+          </div>
+          <div class="form-field">
+            <label class="field-label">Pris­punkt</label>
+            <input class="field-input" value="kr 99 – 6 990" />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="field-label">Mål­gruppe</label>
+          <input class="field-input" value="Foreldre + hjemmeundervisere, 28–45 år" />
+        </div>
+
+        <div class="form-field">
+          <label class="field-label">Hovedmål</label>
+          <input class="field-input" value="Etsy-salg + Inner Circle medlemmer" />
+        </div>
+
+        <div class="form-field">
+          <label class="field-label">Nøkkelord (AI har foreslått)</label>
+          <div class="chip-row">
+            <span class="chip">montessori hjemme</span>
+            <span class="chip">hjemmeskole</span>
+            <span class="chip">barneaktiviteter</span>
+            <span class="chip">printables</span>
+            <span class="chip">bilingual kids</span>
+            <span class="chip">+ 14 flere</span>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 8px;">
+          <span>✦</span> Kjør ny analyse
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">AI <em>innsikt</em></div>
+          <span class="tag-ai">Oppdatert i dag</span>
+        </div>
+
+        <div class="insight-list">
+          <div class="insight">
+            <div class="insight-icon">🎯</div>
+            <div class="insight-body">
+              <div class="insight-title">Målgruppen din er mest aktiv tirsdag kl 19:30–21:00</div>
+              <div class="insight-text">Pinterest og Instagram viser 2.3× høyere engasjement i dette vinduet for foreldre 28–45.</div>
+              <div class="insight-meta">+ Anvendt på kalenderen</div>
+            </div>
+          </div>
+          <div class="insight">
+            <div class="insight-icon">💡</div>
+            <div class="insight-body">
+              <div class="insight-title">Innholdsgap oppdaget: «Montessori-aktiviteter med ting du har hjemme»</div>
+              <div class="insight-text">Høy søkevolum (12k/mnd), lav konkurranse. Anbefaler 4 reels + 3 Pinterest pins denne måneden.</div>
+              <div class="insight-meta">+ Lagt i innholdskøen</div>
+            </div>
+          </div>
+          <div class="insight">
+            <div class="insight-icon">🪄</div>
+            <div class="insight-body">
+              <div class="insight-title">Hook-mønster som funker for din nisje</div>
+              <div class="insight-text">«Det jeg ønsker jeg visste da [X]…» — fungerer 3.8× bedre enn produkt-fokuserte hooks i Montessori-nisjen.</div>
+              <div class="insight-meta">+ 12 nye hooks generert</div>
+            </div>
+          </div>
+          <div class="insight">
+            <div class="insight-icon">📌</div>
+            <div class="insight-body">
+              <div class="insight-title">Pinterest er din raskeste vekstkanal</div>
+              <div class="insight-text">Forventet rekkevidde: 8–14k/mnd organisk. AI anbefaler 5 pins/uke med «søk-første»-titler.</div>
+              <div class="insight-meta">+ Strategi aktivert</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT GENERATOR -->
+    <section class="generator-card fade-in">
+      <div class="generator-grid">
+        <div>
+          <h3 class="gen-title">Innholds­generator <em>+ repurposing</em></h3>
+          <p class="gen-sub">
+            Skriv én idé. AI tilpasser den til hver plattforms algoritme, tone og format.
+            Premium · Faceless · Pedagogisk · Viral — du velger.
+          </p>
+
+          <div class="platform-row">
+            <span class="platform-pill active">✓ Instagram</span>
+            <span class="platform-pill active">✓ TikTok</span>
+            <span class="platform-pill active">✓ Pinterest</span>
+            <span class="platform-pill active">✓ Facebook</span>
+            <span class="platform-pill">+ LinkedIn</span>
+            <span class="platform-pill">+ YouTube</span>
+            <span class="platform-pill">+ E-post</span>
+          </div>
+
+          <div class="gen-prompt-area">
+            5 enkle Montessori-aktiviteter med ting du allerede har hjemme — perfekt for regnværsdager.
+          </div>
+
+          <div class="gen-actions">
+            <button class="btn-gen">
+              <span>✦</span> Generér 8 versjoner
+            </button>
+            <button class="btn btn-ghost" style="background: rgba(255,255,255,0.08); color: white; border-color: rgba(255,255,255,0.15);">Lagre som mal</button>
+          </div>
+        </div>
+
+        <div class="gen-output">
+          <div class="output-block">
+            <div class="output-platform">Instagram · Reel</div>
+            <div class="output-text">
+              <strong>Hook:</strong> «Det jeg ønsker jeg visste før jeg kjøpte Montessori-materiell…»<br>
+              <strong>Innhold:</strong> 5 hverdagsaktiviteter med ting du har hjemme. Bestikk-sortering. Vann-overføring. Knapp-tråding. Tøy-bretting. Lukt-bokser.<br>
+              <strong>CTA:</strong> Last ned hele guiden gratis — link i bio 🌸
+            </div>
+            <div class="output-meta">
+              <span class="score-pill">Hook-score 92</span>
+              <span>· 7 hashtags</span>
+              <span>· 1.8k forventet rekkevidde</span>
+            </div>
+          </div>
+
+          <div class="output-block">
+            <div class="output-platform">Pinterest · Pin</div>
+            <div class="output-text">
+              <strong>Tittel:</strong> 5 Montessori-aktiviteter med ting du har hjemme | Gratis printable<br>
+              <strong>Beskrivelse:</strong> Slik introduserer du Montessori-prinsipper hjemme uten å kjøpe ett eneste nytt materiale. Perfekt for foreldre med barn 3–6 år…
+            </div>
+            <div class="output-meta">
+              <span class="score-pill">SEO-score 88</span>
+              <span>· Søkevolum 12k</span>
+              <span>· Lav konkurranse</span>
+            </div>
+          </div>
+
+          <div class="output-block">
+            <div class="output-platform">TikTok · Faceless</div>
+            <div class="output-text">
+              <strong>0–3s:</strong> Tekst-overlay: «Du trenger ikke kjøpe noe.» Klipp av kjøkkenskuff som åpnes.<br>
+              <strong>3–15s:</strong> 5 raske klipp av aktivitetene. Trending sound.<br>
+              <strong>15–22s:</strong> Tekst: «Lagre dette — du kommer til å trenge det.»
+            </div>
+            <div class="output-meta">
+              <span class="score-pill">Viral-score 85</span>
+              <span>· Trend-sound matchet</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- METRICS -->
+    <div class="section-header">
+      <div>
+        <h3 class="section-title">Trafikk &amp; <em>vekst</em></h3>
+        <p class="section-sub">Sanntid · Siste 30 dager</p>
+      </div>
+      <button class="btn btn-ghost">Eksportér rapport</button>
+    </div>
+
+    <div class="metrics-grid">
+      <div class="metric">
+        <div class="metric-label">Total rekkevidde</div>
+        <div class="metric-value">142.8k</div>
+        <div class="metric-change">↑ 34.2% vs forrige</div>
+        <div class="metric-sparkline">
+          <div class="spark-bar" style="height: 40%"></div>
+          <div class="spark-bar" style="height: 55%"></div>
+          <div class="spark-bar" style="height: 45%"></div>
+          <div class="spark-bar" style="height: 70%"></div>
+          <div class="spark-bar" style="height: 62%"></div>
+          <div class="spark-bar" style="height: 85%"></div>
+          <div class="spark-bar" style="height: 95%"></div>
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Engasjement</div>
+        <div class="metric-value">8.4%</div>
+        <div class="metric-change">↑ 2.1 pp vs forrige</div>
+        <div class="metric-sparkline">
+          <div class="spark-bar" style="height: 60%"></div>
+          <div class="spark-bar" style="height: 75%"></div>
+          <div class="spark-bar" style="height: 50%"></div>
+          <div class="spark-bar" style="height: 80%"></div>
+          <div class="spark-bar" style="height: 90%"></div>
+          <div class="spark-bar" style="height: 72%"></div>
+          <div class="spark-bar" style="height: 88%"></div>
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Klikk til Etsy/Shop</div>
+        <div class="metric-value">1 247</div>
+        <div class="metric-change">↑ 41% vs forrige</div>
+        <div class="metric-sparkline">
+          <div class="spark-bar" style="height: 30%"></div>
+          <div class="spark-bar" style="height: 45%"></div>
+          <div class="spark-bar" style="height: 55%"></div>
+          <div class="spark-bar" style="height: 60%"></div>
+          <div class="spark-bar" style="height: 78%"></div>
+          <div class="spark-bar" style="height: 82%"></div>
+          <div class="spark-bar" style="height: 92%"></div>
+        </div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">Nye følgere</div>
+        <div class="metric-value">1 834</div>
+        <div class="metric-change">↑ 18.6% vs forrige</div>
+        <div class="metric-sparkline">
+          <div class="spark-bar" style="height: 50%"></div>
+          <div class="spark-bar" style="height: 62%"></div>
+          <div class="spark-bar" style="height: 70%"></div>
+          <div class="spark-bar" style="height: 65%"></div>
+          <div class="spark-bar" style="height: 80%"></div>
+          <div class="spark-bar" style="height: 75%"></div>
+          <div class="spark-bar" style="height: 88%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CALENDAR -->
+    <div class="calendar-card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Innholds­<em>kalender</em></div>
+          <div class="section-sub" style="margin-top: 4px;">Mai 2026 · 23 innlegg planlagt</div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-ghost" style="padding: 8px 14px; font-size: 13px;">Måned</button>
+          <button class="btn btn-primary" style="padding: 8px 14px; font-size: 13px;">+ Planlegg</button>
+        </div>
+      </div>
+
+      <div class="calendar-grid">
+        <div class="cal-day-label">Man</div>
+        <div class="cal-day-label">Tir</div>
+        <div class="cal-day-label">Ons</div>
+        <div class="cal-day-label">Tor</div>
+        <div class="cal-day-label">Fre</div>
+        <div class="cal-day-label">Lør</div>
+        <div class="cal-day-label">Søn</div>
+
+        <div class="cal-day"><div class="cal-date">11</div><div class="cal-posts"><div class="cal-dot ig"></div><div class="cal-dot pt"></div></div></div>
+        <div class="cal-day"><div class="cal-date">12</div><div class="cal-count">3</div><div class="cal-posts"><div class="cal-dot ig"></div><div class="cal-dot tt"></div><div class="cal-dot pt"></div></div></div>
+        <div class="cal-day"><div class="cal-date">13</div><div class="cal-posts"><div class="cal-dot pt"></div></div></div>
+        <div class="cal-day"><div class="cal-date">14</div><div class="cal-count">2</div><div class="cal-posts"><div class="cal-dot ig"></div><div class="cal-dot fb"></div></div></div>
+        <div class="cal-day"><div class="cal-date">15</div><div class="cal-posts"><div class="cal-dot tt"></div></div></div>
+        <div class="cal-day"><div class="cal-date">16</div></div>
+        <div class="cal-day today"><div class="cal-date">17</div><div class="cal-count">4</div><div class="cal-posts"><div class="cal-dot ig"></div><div class="cal-dot tt"></div><div class="cal-dot pt"></div><div class="cal-dot yt"></div></div></div>
+
+        <div class="cal-day"><div class="cal-date">18</div><div class="cal-count">2</div><div class="cal-posts"><div class="cal-dot ig"></div><div class="cal-dot pt"></div></div></div>
+        <div class="cal-day"><div class="cal-date">19</div><div class="cal-count">3</div><div class="cal-posts"><div class="cal-dot ig"></div><div class="cal-dot tt"></div><div class="cal-dot fb"></div></div></div>
+        <div class="cal-day"><div class="cal-date">20</div><div class="cal-posts"><div class="cal-dot pt"></div></div></div>
+        <div class="cal-day"><div class="cal-date">21</div><div class="cal-count">2</div><div class="cal-posts"><div class="cal-dot ig"></div><div class="cal-dot tt"></div></div></div>
+        <div class="cal-day"><div class="cal-date">22</div><div class="cal-posts"><div class="cal-dot pt"></div></div></div>
+        <div class="cal-day"><div class="cal-date">23</div></div>
+        <div class="cal-day"><div class="cal-date">24</div><div class="cal-count">3</div><div class="cal-posts"><div class="cal-dot ig"></div><div class="cal-dot tt"></div><div class="cal-dot pt"></div></div></div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      <strong>AI Traffic Engine</strong> bruker kun offisielle API-er fra Meta, TikTok, Pinterest, LinkedIn, YouTube og SocialBu.
+      <br>Ingen scraping. Ingen falsk engasjement. Ingen spam.
+      <br>Bare målrettet, organisk vekst — slik plattformene selv anbefaler.
+    </div>
+
+  </main>
 </div>
 
-<div class="toast" id="toast"></div>
-
 <script>
-const WORKER_URL = '/renate-ai';
-const STORAGE_KEY = 'lme_renate_ai_conversations';
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
-
-const savedPhoto = localStorage.getItem('lme_profile_photo');
-if (savedPhoto) {
-  const headerAvatar = document.getElementById('headerAvatar');
-  if (headerAvatar) { headerAvatar.src = savedPhoto; headerAvatar.style.display = 'block'; }
-}
-
-// ============= TILSTAND =============
-let conversations = loadConversations();
-let currentConversationId = null;
-let conversationHistory = []; // sendes til API
-let displayHistory = []; // det vi viser i UI (kan inneholde thumbnail-data for visning)
-let pendingAttachments = []; // filer som ikke er sendt ennå
-
-// ============= DOM =============
-const chatMessages = document.getElementById('chatMessages');
-const chatInput = document.getElementById('chatInput');
-const sendBtn = document.getElementById('sendBtn');
-const resetBtn = document.getElementById('resetBtn');
-const downloadBtn = document.getElementById('downloadBtn');
-const newChatBtn = document.getElementById('newChatBtn');
-const conversationsList = document.getElementById('conversationsList');
-const chatTitle = document.getElementById('chatTitle');
-const toast = document.getElementById('toast');
-const attachBtn = document.getElementById('attachBtn');
-const fileInput = document.getElementById('fileInput');
-const pendingAttachmentsEl = document.getElementById('pendingAttachments');
-
-// ============= STORAGE =============
-function loadConversations() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch (e) { return []; }
-}
-
-function saveConversations() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
-  } catch (e) {
-    console.error('Storage feil:', e);
-    showToast('Kunne ikke lagre — kanskje for mange/store vedlegg 💔');
-  }
-}
-
-function createNewConversation() {
-  const id = 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
-  return { id, title: 'Ny samtale', messages: [], displayMessages: [], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
-}
-
-function saveCurrentConversation() {
-  if (!currentConversationId || displayHistory.length === 0) return;
-  const idx = conversations.findIndex(c => c.id === currentConversationId);
-  const now = new Date().toISOString();
-  
-  // Tittel fra første brukermelding (tekst-delen)
-  const firstUserMsg = displayHistory.find(m => m.role === 'user');
-  let title = 'Ny samtale';
-  if (firstUserMsg) {
-    const textPart = firstUserMsg.text || '(vedlegg)';
-    title = textPart.slice(0, 50);
-    if (textPart.length > 50) title += '...';
-  }
-  
-  const data = {
-    id: currentConversationId,
-    title,
-    messages: [...conversationHistory], // API-format
-    displayMessages: [...displayHistory], // visnings-format med thumbnails
-    createdAt: idx >= 0 ? conversations[idx].createdAt : now,
-    updatedAt: now
-  };
-  
-  if (idx >= 0) {
-    conversations[idx] = data;
-  } else {
-    conversations.unshift(data);
-  }
-  
-  saveConversations();
-  renderConversationsList();
-}
-
-// ============= UI =============
-function showToast(message) {
-  toast.textContent = message;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2500);
-}
-
-function formatDate(isoString) {
-  const date = new Date(isoString);
-  const diffMs = new Date() - date;
-  const diffMin = Math.floor(diffMs / 60000);
-  const diffHr = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
-  if (diffMin < 1) return 'Akkurat nå';
-  if (diffMin < 60) return diffMin + ' min siden';
-  if (diffHr < 24) return diffHr + ' t siden';
-  if (diffDays < 7) return diffDays + ' d siden';
-  return date.toLocaleDateString('nb-NO', { day: 'numeric', month: 'short' });
-}
-
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-}
-
-function renderConversationsList() {
-  conversationsList.innerHTML = '';
-  if (conversations.length === 0) {
-    conversationsList.innerHTML = '<div class="no-conversations">Ingen samtaler ennå. Start din første samtale med Renate AI! 💗</div>';
-    return;
-  }
-  const sorted = [...conversations].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-  sorted.forEach(conv => {
-    const item = document.createElement('div');
-    item.className = 'conversation-item' + (conv.id === currentConversationId ? ' active' : '');
-    item.innerHTML = `
-      <div class="conversation-content">
-        <div class="conversation-title">${escapeHtml(conv.title)}</div>
-        <div class="conversation-date">${formatDate(conv.updatedAt)}</div>
-      </div>
-      <button class="conversation-delete" title="Slett samtale" data-id="${conv.id}">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-      </button>
-    `;
-    item.addEventListener('click', (e) => {
-      if (e.target.closest('.conversation-delete')) return;
-      loadConversation(conv.id);
-    });
-    item.querySelector('.conversation-delete').addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (confirm('Slette samtalen "' + conv.title + '"?')) deleteConversation(conv.id);
-    });
-    conversationsList.appendChild(item);
-  });
-}
-
-function showWelcome() {
-  chatMessages.innerHTML = `
-    <div class="welcome-mini">Hva vil du <em>snakke om i dag?</em></div>
-    <div class="message bot">Hei Renate! 💗 Så hyggelig at du er her. Jeg er Renate AI, og jeg er her for å hjelpe deg med spørsmål om Montessori-pedagogikk i Montessori-tradisjonen, LME-plattformen, og hvordan du best kommer i gang. Du kan også laste opp bilder eller PDF-er jeg kan se på! Hva vil du snakke om i dag? 🌷</div>
-    <div class="quick-prompts">
-      <button class="quick-prompt" data-prompt="Hvilken plan passer for meg?">Hvilken <em>plan</em> passer for meg?</button>
-      <button class="quick-prompt" data-prompt="Forklar 3-6">Forklar <em>3-6</em></button>
-      <button class="quick-prompt" data-prompt="Hvordan bruker jeg LME Studio?">Bruke <em>LME Studio</em></button>
-      <button class="quick-prompt" data-prompt="Montessori vs andre pedagogiske retninger">Montessori vs andre <em>retninger</em></button>
-      <button class="quick-prompt" data-prompt="Hvordan komme i gang med Montessori hjemme?">Komme i gang <em>hjemme</em></button>
-    </div>
-  `;
-  document.querySelectorAll('.quick-prompt').forEach(btn => {
-    btn.addEventListener('click', () => sendMessage(btn.getAttribute('data-prompt')));
-  });
-}
-
-function startNewChat() {
-  if (displayHistory.length > 0) saveCurrentConversation();
-  currentConversationId = createNewConversation().id;
-  conversationHistory = [];
-  displayHistory = [];
-  pendingAttachments = [];
-  renderPendingAttachments();
-  chatTitle.textContent = 'Spør Renate AI';
-  showWelcome();
-  renderConversationsList();
-  chatInput.focus();
-}
-
-function loadConversation(id) {
-  if (displayHistory.length > 0 && currentConversationId !== id) saveCurrentConversation();
-  const conv = conversations.find(c => c.id === id);
-  if (!conv) return;
-  currentConversationId = id;
-  conversationHistory = [...(conv.messages || [])];
-  displayHistory = [...(conv.displayMessages || [])];
-  chatTitle.textContent = conv.title;
-  chatMessages.innerHTML = '';
-  displayHistory.forEach(msg => renderMessage(msg));
-  renderConversationsList();
-  chatInput.focus();
-}
-
-function deleteConversation(id) {
-  conversations = conversations.filter(c => c.id !== id);
-  saveConversations();
-  if (currentConversationId === id) startNewChat();
-  else renderConversationsList();
-  showToast('Samtale slettet 🌷');
-}
-
-// ============= VEDLEGG =============
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const result = reader.result;
-      // result er "data:image/jpeg;base64,AAAA..."
-      const base64 = result.split(',')[1];
-      resolve(base64);
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-function getFileIcon(mimeType) {
-  if (mimeType === 'application/pdf') return 'PDF';
-  return 'FIL';
-}
-
-function renderPendingAttachments() {
-  pendingAttachmentsEl.innerHTML = '';
-  pendingAttachments.forEach((att, idx) => {
-    const el = document.createElement('div');
-    el.className = 'pending-attachment';
-    
-    if (att.type === 'image') {
-      el.innerHTML = `
-        <div class="pending-attachment-image">
-          <img src="${att.dataUrl}" alt="${escapeHtml(att.name)}">
-        </div>
-        <button class="pending-attachment-remove" title="Fjern" data-idx="${idx}">×</button>
-      `;
-    } else {
-      el.innerHTML = `
-        <div class="pending-attachment-file">
-          <div class="pending-attachment-file-icon">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-          </div>
-          <div class="pending-attachment-file-name">${escapeHtml(att.name)}</div>
-        </div>
-        <button class="pending-attachment-remove" title="Fjern" data-idx="${idx}">×</button>
-      `;
-    }
-    
-    el.querySelector('.pending-attachment-remove').addEventListener('click', () => {
-      pendingAttachments.splice(idx, 1);
-      renderPendingAttachments();
-      updateAttachButton();
-    });
-    
-    pendingAttachmentsEl.appendChild(el);
-  });
-}
-
-function updateAttachButton() {
-  if (pendingAttachments.length > 0) {
-    attachBtn.classList.add('has-attachment');
-  } else {
-    attachBtn.classList.remove('has-attachment');
-  }
-}
-
-attachBtn.addEventListener('click', () => fileInput.click());
-
-fileInput.addEventListener('change', async (e) => {
-  const files = Array.from(e.target.files || []);
-  fileInput.value = ''; // reset så samme fil kan velges igjen
-  
-  for (const file of files) {
-    if (file.size > MAX_FILE_SIZE) {
-      showToast(`"${file.name}" er for stor (maks 5MB) 💔`);
-      continue;
-    }
-    
-    if (pendingAttachments.length >= 5) {
-      showToast('Maks 5 vedlegg per melding 🌷');
-      break;
-    }
-    
-    try {
-      const base64 = await fileToBase64(file);
-      const isImage = file.type.startsWith('image/');
-      const isPdf = file.type === 'application/pdf';
-      
-      if (!isImage && !isPdf) {
-        showToast(`Kan ikke laste opp "${file.name}" — kun bilder og PDF 🌷`);
-        continue;
-      }
-      
-      pendingAttachments.push({
-        type: isImage ? 'image' : 'pdf',
-        mediaType: file.type,
-        name: file.name,
-        base64: base64,
-        dataUrl: 'data:' + file.type + ';base64,' + base64
-      });
-    } catch (err) {
-      showToast(`Feil ved opplasting av "${file.name}" 💔`);
-    }
-  }
-  
-  renderPendingAttachments();
-  updateAttachButton();
+// Add interactivity
+document.querySelectorAll('.platform-pill').forEach(pill => {
+  pill.addEventListener('click', () => pill.classList.toggle('active'));
 });
 
-// ============= MELDINGER =============
-function renderMessage(msg) {
-  const div = document.createElement('div');
-  div.className = 'message ' + (msg.role === 'user' ? 'user' : 'bot');
-  
-  // Render vedlegg først
-  if (msg.attachments && msg.attachments.length > 0) {
-    const attDiv = document.createElement('div');
-    attDiv.className = 'message-attachments';
-    msg.attachments.forEach(att => {
-      if (att.type === 'image' && att.dataUrl) {
-        const thumb = document.createElement('div');
-        thumb.className = 'attachment-thumb';
-        thumb.innerHTML = `<img src="${att.dataUrl}" alt="${escapeHtml(att.name || 'bilde')}">`;
-        attDiv.appendChild(thumb);
-      } else {
-        const file = document.createElement('div');
-        file.className = 'attachment-file';
-        file.innerHTML = `
-          <div class="attachment-file-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="attachment-file-name">${escapeHtml(att.name || 'fil.pdf')}</span>
-        `;
-        attDiv.appendChild(file);
-      }
-    });
-    div.appendChild(attDiv);
-  }
-  
-  // Render tekst
-  if (msg.text) {
-    const textDiv = document.createElement('div');
-    textDiv.textContent = msg.text;
-    div.appendChild(textDiv);
-  }
-  
-  chatMessages.appendChild(div);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  return div;
-}
-
-function showTyping() {
-  const typing = document.createElement('div');
-  typing.className = 'typing-indicator';
-  typing.innerHTML = '<span></span><span></span><span></span>';
-  chatMessages.appendChild(typing);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  return typing;
-}
-
-async function sendMessage(text) {
-  text = text ? text.trim() : '';
-  
-  // Sjekk at det er noe å sende (tekst eller vedlegg)
-  if (!text && pendingAttachments.length === 0) return;
-  
-  // Fjern velkomst
-  const welcome = chatMessages.querySelector('.welcome-mini');
-  const quickPrompts = chatMessages.querySelector('.quick-prompts');
-  if (welcome) welcome.remove();
-  if (quickPrompts) quickPrompts.remove();
-  
-  // Bygg API-melding (Anthropic-format)
-  let apiContent;
-  if (pendingAttachments.length === 0) {
-    apiContent = text;
-  } else {
-    apiContent = [];
-    // Vedlegg først
-    pendingAttachments.forEach(att => {
-      if (att.type === 'image') {
-        apiContent.push({
-          type: 'image',
-          source: {
-            type: 'base64',
-            media_type: att.mediaType,
-            data: att.base64
-          }
-        });
-      } else if (att.type === 'pdf') {
-        apiContent.push({
-          type: 'document',
-          source: {
-            type: 'base64',
-            media_type: 'application/pdf',
-            data: att.base64
-          }
-        });
-      }
-    });
-    // Så tekst (selv om tom)
-    if (text) {
-      apiContent.push({ type: 'text', text: text });
-    } else {
-      apiContent.push({ type: 'text', text: 'Hva ser du her?' });
-    }
-  }
-  
-  // Lagre display-versjon (med thumbnails for visning)
-  const displayMsg = {
-    role: 'user',
-    text: text,
-    attachments: pendingAttachments.map(att => ({
-      type: att.type,
-      name: att.name,
-      dataUrl: att.type === 'image' ? att.dataUrl : null
-    }))
-  };
-  
-  // Lagre API-versjon
-  conversationHistory.push({ role: 'user', content: apiContent });
-  displayHistory.push(displayMsg);
-  renderMessage(displayMsg);
-  
-  // Reset input
-  const sentAttachments = pendingAttachments.length;
-  chatInput.value = '';
-  pendingAttachments = [];
-  renderPendingAttachments();
-  updateAttachButton();
-  sendBtn.disabled = true;
-  
-  const typingEl = showTyping();
-  
-  try {
-    const response = await fetch(WORKER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: conversationHistory })
-    });
-    
-    if (!response.ok) {
-      const errData = await response.json().catch(() => ({}));
-      throw new Error(errData.error || ('HTTP ' + response.status));
-    }
-    
-    const data = await response.json();
-    const reply = data.content?.[0]?.text || data.reply || data.message || 'Beklager, jeg fikk ikke svar akkurat nå.';
-    
-    typingEl.remove();
-    const botMsg = { role: 'assistant', text: reply, attachments: [] };
-    conversationHistory.push({ role: 'assistant', content: reply });
-    displayHistory.push(botMsg);
-    renderMessage(botMsg);
-    
-    saveCurrentConversation();
-    
-  } catch (err) {
-    typingEl.remove();
-    const errorMsg = { role: 'assistant', text: 'Beklager, noe gikk galt. Prøv igjen om litt 🌷 (' + err.message + ')', attachments: [] };
-    displayHistory.push(errorMsg);
-    renderMessage(errorMsg);
-  } finally {
-    sendBtn.disabled = false;
-    chatInput.focus();
-  }
-}
-
-// ============= EVENTS =============
-sendBtn.addEventListener('click', () => sendMessage(chatInput.value));
-chatInput.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') sendMessage(chatInput.value);
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+  });
 });
 
-newChatBtn.addEventListener('click', startNewChat);
-
-resetBtn.addEventListener('click', () => {
-  if (confirm('Vil du slette ALLE lagrede samtaler? Dette kan ikke angres.')) {
-    conversations = [];
-    saveConversations();
-    startNewChat();
-    showToast('Alle samtaler slettet');
-  }
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => chip.classList.toggle('selected'));
 });
-
-downloadBtn.addEventListener('click', () => {
-  if (displayHistory.length === 0) {
-    showToast('Ingen samtale å laste ned ennå 🌷');
-    return;
-  }
-  const text = displayHistory.map(m => {
-    const prefix = m.role === 'user' ? 'Du: ' : 'Renate AI: ';
-    const attInfo = m.attachments && m.attachments.length > 0 ? ` [${m.attachments.length} vedlegg]` : '';
-    return prefix + (m.text || '(kun vedlegg)') + attInfo;
-  }).join('\n\n');
-  const blob = new Blob([text], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'samtale-med-renate-ai-' + new Date().toISOString().slice(0,10) + '.txt';
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('Samtale lastet ned 💗');
-});
-
-// INIT
-currentConversationId = createNewConversation().id;
-showWelcome();
-renderConversationsList();
-chatInput.focus();
 </script>
-
-
-<!-- Språk-veksler i hjørnet -->
-<a href="/ask-renate-ai" class="lang-float" aria-label="Switch to English" title="Switch to English">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-  English
-</a>
-
 </body>
 </html>
