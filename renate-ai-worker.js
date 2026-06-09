@@ -1,25 +1,24 @@
 /**
  * Renate AI — Cloudflare Worker
  *
- * Proxy mellom lme-plattform.pages.dev (frontend) og Anthropic Claude API.
+ * Proxy mellom LME-nettsiden (frontend) og Anthropic Claude API.
  * API-nøkkel ligger som Worker-secret (aldri i frontend).
  *
  * DEPLOY-INSTRUKSJONER:
  *
- * 1. Logg inn på Cloudflare → Workers & Pages → "lme-proxy" (din eksisterende Worker)
- *    eller opprett ny Worker hvis du vil holde dette adskilt
+ * 1. Cloudflare → Workers & Pages → åpne workeren som har URL-en
+ *    https://lme-renate-ai.renateshobby.workers.dev
+ *    (det er DENNE nettsiden kaller — IKKE en worker med et annet navn)
  *
- * 2. Lim inn denne koden i Worker-editoren
+ * 2. Lim inn denne koden i Worker-editoren (merk alt → slett → lim inn)
  *
- * 3. Legg til API-key som secret:
- *    Settings → Variables → Encrypted variables
- *    Variable name: ANTHROPIC_API_KEY
- *    Value: sk-ant-api03-... (din nøkkel fra console.anthropic.com)
+ * 3. Sjekk at API-nøkkelen finnes som secret:
+ *    Settings → Variables → ANTHROPIC_API_KEY = sk-ant-api03-...
  *
  * 4. Klikk "Save and Deploy"
  *
  * 5. Test fra terminal:
- *    curl -X POST https://lme-proxy.renateshobby.workers.dev/renate-ai \
+ *    curl -X POST https://lme-renate-ai.renateshobby.workers.dev/renate-ai \
  *      -H "Content-Type: application/json" \
  *      -d '{"messages":[{"role":"user","content":"Hei!"}]}'
  */
