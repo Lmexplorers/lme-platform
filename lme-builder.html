@@ -4051,6 +4051,43 @@
         pricing.props.heading = 'Bestill nå';
         return [hero, features, createSection('testimonials'), pricing, createSection('cta'), createSection('footer')];
       }
+    },
+    miateoshop: {
+      icon: '🛍️',
+      name: 'Mia & Teo Nettbutikk',
+      desc: 'Ferdig butikk-side: hero, produkter, fordeler, anbefalinger og kjøp',
+      defaultName: 'Mia & Teo Butikk',
+      blocks: ['hero', 'pricing', 'features', 'testimonials', 'cta', 'footer'],
+      build: () => {
+        const hero = createSection('hero');
+        hero.props.heading = 'Mia & Teo — naturens små oppdagere';
+        hero.props.body = 'Vakre, naturbaserte bøker og materiell som vekker barnas nysgjerrighet. Montessori-inspirert lek og læring for små eventyrere fra 3 til 12 år.';
+        hero.props.ctaText = 'Se bøkene';
+
+        const products = createSection('products');
+        products.props.heading = 'Bøker & materiell';
+        products.props.subheading = 'Alt du trenger for en magisk Montessori-hverdag hjemme';
+
+        const features = createSection('features');
+        features.props.heading = 'Hvorfor Little Montessori Explorers?';
+        features.props.subheading = 'Laget med kjærlighet, forankret i Montessori-pedagogikken';
+        features.props.items = [
+          { icon: '📚', title: 'Vakre bøker', desc: 'Naturbaserte fortellinger med Mia & Teo, illustrert med varme og omtanke' },
+          { icon: '🌿', title: 'Natur i fokus', desc: 'Reality-baserte historier som åpner barnas nysgjerrighet for verden rundt dem' },
+          { icon: '🇳🇴', title: 'Tospråklig', desc: 'Alt finnes på norsk og engelsk — perfekt for tospråklige familier' },
+          { icon: '✋', title: 'Montessori-basert', desc: 'Utviklet av en utdannet Montessori-pedagog med 20+ års erfaring' }
+        ];
+
+        const testimonials = createSection('testimonials');
+        testimonials.props.heading = 'Det familiene sier';
+
+        const cta = createSection('cta');
+        cta.props.heading = 'Klar for å starte eventyret?';
+        cta.props.body = 'Gi barnet ditt en verden av nysgjerrighet, natur og læring — i ditt eget tempo, hjemme.';
+        cta.props.ctaText = 'Handle nå';
+
+        return [hero, products, features, testimonials, cta, createSection('footer')];
+      }
     }
   };
 
