@@ -41,7 +41,7 @@ OM LME-PLATTFORMEN:
 - 7 dagers gratis prøveperiode, ingen binding
 - Plattformen inkluderer: Akademiet (kurs), Biblioteket (ressurser), Butikk (bøker), Inner Circle (fellesskap), LME Studio (innholdsverktøy)
 - Mia & Teo er karakterene i Renates bøker (De små naturutforskerne)
-- LME Create-bok er Renates interne verktøy (ALDRI nevn som offentlig produkt)
+- LME Bookly er Renates interne verktøy (ALDRI nevn som offentlig produkt)
 - LME Create er det offentlige curriculum-byggerverktøyet
 
 STIL OG TONE:
