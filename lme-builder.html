@@ -5609,12 +5609,16 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
     });
 
     function apply(fn) {
-      if (!restoreRange()) return;
-      const editable = editableOf(window.getSelection().getRangeAt(0));
+      if (!savedRange) return;
+      const editable = editableOf(savedRange);
+      if (editable) editable.focus();            // fokuser teksten igjen før styling
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(savedRange);                  // gjenopprett markeringen
       try { document.execCommand('styleWithCSS', false, true); } catch (e) {}
       fn();
       persist(editable);
-      saveRange();
+      saveRange();                               // behold markeringen for videre styling
     }
     function adjustSpacing(deltaPx) {
       const sel = window.getSelection();
