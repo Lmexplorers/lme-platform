@@ -1613,6 +1613,18 @@
         </div>
       </div>
 
+      <label>Språk</label>
+      <div class="ai-modal-mode">
+        <div class="ai-mode-pill ai-lang-pill active" data-ai-lang="no" onclick="setAILang('no')">
+          <span class="ai-mode-pill-title">🇳🇴 Norsk</span>
+          <span class="ai-mode-pill-desc">Generer på norsk</span>
+        </div>
+        <div class="ai-mode-pill ai-lang-pill" data-ai-lang="en" onclick="setAILang('en')">
+          <span class="ai-mode-pill-title">🇬🇧 English</span>
+          <span class="ai-mode-pill-desc">Generate in English</span>
+        </div>
+      </div>
+
       <div class="name-input-modal-actions" style="margin-top:24px;">
         <button class="btn btn-ghost" onclick="closeAIModal()">Avbryt</button>
         <button class="btn btn-primary" onclick="runAIGeneration()" id="aiRunBtn">✨ Generer</button>
@@ -4792,10 +4804,12 @@ ${sections}
 
     aiState.targetSecId = secId;
     aiState.mode = 'replace';
+    aiState.lang = 'no';
 
     document.getElementById('aiSectionTag').innerHTML = `${config.icon} ${config.label}`;
     document.getElementById('aiPromptInput').value = '';
-    document.querySelectorAll('.ai-mode-pill').forEach(p => p.classList.toggle('active', p.dataset.aiMode === 'replace'));
+    document.querySelectorAll('.ai-mode-pill[data-ai-mode]').forEach(p => p.classList.toggle('active', p.dataset.aiMode === 'replace'));
+    document.querySelectorAll('.ai-lang-pill').forEach(p => p.classList.toggle('active', p.dataset.aiLang === 'no'));
 
     // Suggestions chips
     const suggestionsEl = document.getElementById('aiSuggestions');
@@ -4814,7 +4828,12 @@ ${sections}
 
   function setAIMode(mode) {
     aiState.mode = mode;
-    document.querySelectorAll('.ai-mode-pill').forEach(p => p.classList.toggle('active', p.dataset.aiMode === mode));
+    document.querySelectorAll('.ai-mode-pill[data-ai-mode]').forEach(p => p.classList.toggle('active', p.dataset.aiMode === mode));
+  }
+
+  function setAILang(lang) {
+    aiState.lang = lang;
+    document.querySelectorAll('.ai-lang-pill').forEach(p => p.classList.toggle('active', p.dataset.aiLang === lang));
   }
 
   document.getElementById('aiModal').addEventListener('click', e => {
@@ -4864,7 +4883,7 @@ Generer innholdet for denne ${config.label.toLowerCase()}-seksjonen. Returner KU
 ${config.schemaDesc}
 
 Husk:
-- Skriv på norsk
+${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything) in natural, fluent English' : '- Skriv på norsk'}
 - Tonen skal være varm, profesjonell og passe for foreldre/pedagoger
 - Vær konkret og spesifikk, unngå generiske markedsføringsfraser
 - Returner ren JSON som kan parses med JSON.parse()`;
