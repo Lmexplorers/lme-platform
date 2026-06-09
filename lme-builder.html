@@ -1423,6 +1423,19 @@
 
   /* Hidden file input */
   .hidden-file-input { position: absolute; left: -9999px; opacity: 0; }
+
+  /* Font-kontroller: tykkelse + størrelse. Skalerer canvas-teksten; ingen endring ved standard (vekt 700, skala 1). */
+  .canvas h1, .canvas h2, .canvas h3 { font-weight: var(--heading-weight, 700); }
+  .canvas .hero-content h1 { font-size: calc(44px * var(--font-scale, 1)); }
+  .canvas .cta-section h2 { font-size: calc(36px * var(--font-scale, 1)); }
+  .canvas .testimonials-header h2 { font-size: calc(32px * var(--font-scale, 1)); }
+  .canvas .features-header h2 { font-size: calc(36px * var(--font-scale, 1)); }
+  .canvas .pricing-header h2 { font-size: calc(36px * var(--font-scale, 1)); }
+  .canvas .faq-header h2 { font-size: calc(32px * var(--font-scale, 1)); }
+  .canvas .hero-content p { font-size: calc(16px * var(--font-scale, 1)); }
+  .canvas .cta-section p { font-size: calc(17px * var(--font-scale, 1)); }
+  .canvas .features-header p, .canvas .pricing-header p { font-size: calc(16px * var(--font-scale, 1)); }
+  .canvas .testimonials-header p { font-size: calc(15px * var(--font-scale, 1)); }
 </style>
 </head>
 <body>
@@ -5131,6 +5144,10 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
       paletteId: 'lme-pink',
       customColors: null, // if set, overrides palette
       fontId: 'playpen-inter',
+      fontDisplay: null,   // fri overstyring av overskrift-font
+      fontBody: null,      // fri overstyring av brødtekst-font
+      headingWeight: '700',
+      fontScale: '1',
       logoUrl: '',
       businessName: 'Little Montessori Explorers',
       tagline: 'Naturbaserte Montessori-ressurser',
@@ -5172,10 +5189,16 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
     root.setProperty('--ink-soft', palette.ink_soft);
     root.setProperty('--line', palette.line);
 
-    // Load font if not standard
+    // Fonter — bruk frie overstyringer hvis satt, ellers font-paret
+    const dispName = brand.fontDisplay || font.display;
+    const bodyName = brand.fontBody || font.body;
     ensureFontLoaded(font);
-    root.setProperty('--font-display', `'${font.display}', system-ui, sans-serif`);
-    root.setProperty('--font-body', `'${font.body}', system-ui, sans-serif`);
+    ensureFontFamilyLoaded(dispName);
+    ensureFontFamilyLoaded(bodyName);
+    root.setProperty('--font-display', `'${dispName}', system-ui, sans-serif`);
+    root.setProperty('--font-body', `'${bodyName}', 'Comic Sans MS', system-ui, sans-serif`);
+    root.setProperty('--heading-weight', brand.headingWeight || '700');
+    root.setProperty('--font-scale', brand.fontScale || '1');
   }
 
   const loadedFonts = new Set();
@@ -5187,6 +5210,37 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = `https://fonts.googleapis.com/css2?family=${displayQuery}&family=${bodyQuery}&display=swap`;
+    document.head.appendChild(link);
+  }
+
+  // Frittstående fontvalg for fri miksing (overskrift + brødtekst hver for seg)
+  const FONT_CHOICES = [
+    { name: 'Playpen Sans', weights: '400;500;600;700;800' },
+    { name: 'Nunito', weights: '400;600;700;800' },
+    { name: 'Comfortaa', weights: '400;500;600;700' },
+    { name: 'Manrope', weights: '400;500;600;700' },
+    { name: 'Poppins', weights: '400;500;600;700' },
+    { name: 'Montserrat', weights: '400;500;600;700;800' },
+    { name: 'Quicksand', weights: '400;500;600;700' },
+    { name: 'Inter', weights: '400;500;600;700' },
+    { name: 'Caveat', weights: '400;500;600;700' },
+    { name: 'Playfair Display', weights: '400;500;600;700' },
+    { name: 'Lora', weights: '400;500;600;700' },
+    { name: 'Source Sans 3', weights: '400;600;700' },
+    { name: 'Open Sans', weights: '400;600;700' },
+    { name: 'DM Sans', weights: '400;500;700' },
+    { name: 'DM Serif Display', weights: '400' }
+  ];
+  function ensureFontFamilyLoaded(name) {
+    if (!name) return;
+    const id = 'fam:' + name;
+    if (loadedFonts.has(id)) return;
+    loadedFonts.add(id);
+    const choice = FONT_CHOICES.find(f => f.name === name);
+    const weights = choice ? choice.weights : '400;500;600;700';
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://fonts.googleapis.com/css2?family=' + encodeURIComponent(name) + ':wght@' + weights + '&display=swap';
     document.head.appendChild(link);
   }
 
@@ -5292,18 +5346,55 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
       </div>
     `).join('');
 
+    const activeFont = getActiveFont(brand);
+    const dispCur = brand.fontDisplay || activeFont.display;
+    const bodyCur = brand.fontBody || activeFont.body;
+    const wCur = brand.headingWeight || '700';
+    const sCur = brand.fontScale || '1';
+    FONT_CHOICES.forEach(f => ensureFontFamilyLoaded(f.name));
+    const opts = (sel) => FONT_CHOICES.map(f => `<option value="${escapeHtml(f.name)}" style="font-family:'${f.name}';" ${f.name === sel ? 'selected' : ''}>${escapeHtml(f.name)}</option>`).join('');
+    const selStyle = "width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:10px;font-family:var(--font-body);font-size:13px;background:var(--cream);color:var(--ink);margin-top:4px;";
+    const lblStyle = "font-size:12px;font-weight:600;color:var(--ink-soft);display:block;margin-top:14px;";
+
     document.getElementById('brandPaneFonts').innerHTML = `
       <div class="brand-section-title">Velg font-par</div>
-      <div class="brand-section-desc">Hver kombinasjon har en display-font for overskrifter og en body-font for brødtekst. Velg det som matcher stemmen til merket ditt.</div>
+      <div class="brand-section-desc">Ferdige kombinasjoner — eller tilpass fritt nedenfor.</div>
       <div class="font-grid">${fontsHTML}</div>
+
+      <div class="brand-section-title" style="margin-top:26px;">Tilpass fritt</div>
+      <div class="brand-section-desc">Mikse egne fonter, og juster tykkelse og størrelse på teksten.</div>
+      <label style="${lblStyle}">Overskrift-font</label>
+      <select style="${selStyle}" onchange="setHeadingFont(this.value)">${opts(dispCur)}</select>
+      <label style="${lblStyle}">Brødtekst-font</label>
+      <select style="${selStyle}" onchange="setBodyFont(this.value)">${opts(bodyCur)}</select>
+      <label style="${lblStyle}">Tykkelse på overskrifter</label>
+      <select style="${selStyle}" onchange="setHeadingWeight(this.value)">
+        <option value="400" ${wCur === '400' ? 'selected' : ''}>Tynn</option>
+        <option value="600" ${wCur === '600' ? 'selected' : ''}>Halvfet</option>
+        <option value="700" ${wCur === '700' ? 'selected' : ''}>Fet</option>
+        <option value="800" ${wCur === '800' ? 'selected' : ''}>Ekstra fet</option>
+      </select>
+      <label style="${lblStyle}">Tekststørrelse</label>
+      <select style="${selStyle}" onchange="setFontScale(this.value)">
+        <option value="0.9" ${sCur === '0.9' ? 'selected' : ''}>Liten</option>
+        <option value="1" ${sCur === '1' ? 'selected' : ''}>Middels</option>
+        <option value="1.15" ${sCur === '1.15' ? 'selected' : ''}>Stor</option>
+      </select>
     `;
   }
 
   function selectFont(fontId) {
     state.brand.fontId = fontId;
+    state.brand.fontDisplay = null;  // nullstill frie overstyringer så font-paret slår inn
+    state.brand.fontBody = null;
     applyBrand();
     renderBrandPaneFonts();
   }
+
+  function setHeadingFont(name) { state.brand.fontDisplay = name; applyBrand(); }
+  function setBodyFont(name) { state.brand.fontBody = name; applyBrand(); }
+  function setHeadingWeight(w) { state.brand.headingWeight = w; applyBrand(); }
+  function setFontScale(s) { state.brand.fontScale = s; applyBrand(); }
 
   function renderBrandPaneInfo() {
     const brand = state.brand;
