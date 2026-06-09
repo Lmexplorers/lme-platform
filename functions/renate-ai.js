@@ -117,8 +117,15 @@ export async function onRequestPost(context) {
     if (!res.ok) {
       const errText = await res.text();
       console.error("Anthropic API feil:", res.status, errText);
+      let hint = "";
+      if (res.status === 401) hint = "ugyldig API-nøkkel";
+      else if (res.status === 400) hint = "forespørsel avvist (modell eller nøkkel)";
+      else if (res.status === 402 || res.status === 403) hint = "ingen kreditt / tilgang på Anthropic-kontoen";
+      else if (res.status === 404) hint = "modellen ble ikke funnet";
+      else if (res.status === 429) hint = "for mange forespørsler — vent litt";
+      else hint = "ukjent feil fra Anthropic";
       return json(
-        { error: "Renate AI er midlertidig utilgjengelig. Prøv igjen om litt." },
+        { error: `Renate AI er midlertidig utilgjengelig — Anthropic svarte ${res.status} (${hint}).` },
         502
       );
     }
