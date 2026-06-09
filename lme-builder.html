@@ -2154,6 +2154,9 @@
   const STORAGE_KEY = 'lme-builder:site';
   const LEGACY_KEY = 'lme-builder:page'; // gammel single-page lagring
 
+  // Felter som lagres som rik tekst (HTML) for markér-og-styl. Andre lagres som ren tekst.
+  const RICH_FIELDS = new Set(['heading', 'body', 'subheading', 'text', 'name', 'role', 'title', 'desc']);
+
   // Lagring: Cloudflare KV (via /api/builder/store) med nettleser-fallback.
   // Byggeren bruker window.storage.get/set; her kobles den til Cloudflare.
   if (!window.storage) {
@@ -2739,7 +2742,7 @@
         const key = el.dataset.edit;
         const sec = findSection(id);
         if (!sec) return;
-        let val = el.innerText;
+        let val = RICH_FIELDS.has(key) ? el.innerHTML : el.innerText;
         if (key === 'ctaText') val = val.replace(/[\s→➝➜]+$/, '');
         if (sec.props[key] !== val) {
           sec.props[key] = val;
@@ -2760,8 +2763,9 @@
         const key = el.dataset.itemEdit;
         const idx = parseInt(el.dataset.itemIdx, 10);
         const sec = findSection(id);
-        if (sec && sec.props.items[idx] && sec.props.items[idx][key] !== el.innerText) {
-          sec.props.items[idx][key] = el.innerText;
+        const ival = RICH_FIELDS.has(key) ? el.innerHTML : el.innerText;
+        if (sec && sec.props.items[idx] && sec.props.items[idx][key] !== ival) {
+          sec.props.items[idx][key] = ival;
           renderProps();
         }
       });
@@ -2909,8 +2913,8 @@
     return `
       <div class="hero" style="background:${bgForStyle(p.style)}">
         <div class="hero-content">
-          <h1 contenteditable="${state.mode === 'edit'}" data-edit="heading">${escapeHtml(p.heading)}</h1>
-          <p contenteditable="${state.mode === 'edit'}" data-edit="body">${escapeHtml(p.body)}</p>
+          <h1 contenteditable="${state.mode === 'edit'}" data-edit="heading">${p.heading || ''}</h1>
+          <p contenteditable="${state.mode === 'edit'}" data-edit="body">${p.body || ''}</p>
           <button class="hero-cta" contenteditable="${state.mode === 'edit'}" data-edit="ctaText" onclick="event.preventDefault(); ${state.mode === 'preview' ? `handleLinkClick('${escapeHtml(p.ctaLink || '')}', event)` : ''}">${ctaLabel(p.ctaText)}</button>
         </div>
         <div style="display:flex;justify-content:center;align-items:center;">
@@ -2959,8 +2963,8 @@
     return `
       <div class="cta-section" style="background:${bgForStyle(p.style)}">
         <div class="cta-section-inner">
-          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${escapeHtml(p.heading)}</h2>
-          <p contenteditable="${state.mode === 'edit'}" data-edit="body">${escapeHtml(p.body)}</p>
+          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${p.heading || ''}</h2>
+          <p contenteditable="${state.mode === 'edit'}" data-edit="body">${p.body || ''}</p>
           <button class="cta-button" contenteditable="${state.mode === 'edit'}" data-edit="ctaText" onclick="event.preventDefault(); ${state.mode === 'preview' ? `handleLinkClick('${escapeHtml(p.ctaLink || '')}', event)` : ''}">${ctaLabel(p.ctaText)}</button>
         </div>
       </div>
@@ -2984,19 +2988,19 @@
     return `
       <div class="testimonials" style="background:${bgForStyle(p.style)}">
         <div class="testimonials-header">
-          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${escapeHtml(p.heading)}</h2>
-          <p contenteditable="${state.mode === 'edit'}" data-edit="subheading">${escapeHtml(p.subheading)}</p>
+          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${p.heading || ''}</h2>
+          <p contenteditable="${state.mode === 'edit'}" data-edit="subheading">${p.subheading || ''}</p>
         </div>
         <div class="testimonials-grid">
           ${p.items.map((item, idx) => `
             <div class="testimonial-card">
               <div class="testimonial-quote">"</div>
-              <p class="testimonial-text" contenteditable="${state.mode === 'edit'}" data-item-edit="text" data-item-idx="${idx}">${escapeHtml(item.text)}</p>
+              <p class="testimonial-text" contenteditable="${state.mode === 'edit'}" data-item-edit="text" data-item-idx="${idx}">${item.text || ''}</p>
               <div class="testimonial-author">
                 <div class="testimonial-avatar">${escapeHtml(item.initial || (item.name || '?').charAt(0))}</div>
                 <div>
-                  <div class="testimonial-name" contenteditable="${state.mode === 'edit'}" data-item-edit="name" data-item-idx="${idx}">${escapeHtml(item.name)}</div>
-                  <div class="testimonial-role" contenteditable="${state.mode === 'edit'}" data-item-edit="role" data-item-idx="${idx}">${escapeHtml(item.role)}</div>
+                  <div class="testimonial-name" contenteditable="${state.mode === 'edit'}" data-item-edit="name" data-item-idx="${idx}">${item.name || ''}</div>
+                  <div class="testimonial-role" contenteditable="${state.mode === 'edit'}" data-item-edit="role" data-item-idx="${idx}">${item.role || ''}</div>
                 </div>
               </div>
             </div>
@@ -3045,15 +3049,15 @@
     return `
       <div class="features" style="background:${bgForStyle(p.style)}">
         <div class="features-header">
-          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${escapeHtml(p.heading)}</h2>
-          <p contenteditable="${state.mode === 'edit'}" data-edit="subheading">${escapeHtml(p.subheading)}</p>
+          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${p.heading || ''}</h2>
+          <p contenteditable="${state.mode === 'edit'}" data-edit="subheading">${p.subheading || ''}</p>
         </div>
         <div class="features-grid">
           ${p.items.map((item, idx) => `
             <div class="feature-card">
               <div class="feature-icon">${escapeHtml(item.icon)}</div>
-              <div class="feature-title" contenteditable="${state.mode === 'edit'}" data-item-edit="title" data-item-idx="${idx}">${escapeHtml(item.title)}</div>
-              <div class="feature-desc" contenteditable="${state.mode === 'edit'}" data-item-edit="desc" data-item-idx="${idx}">${escapeHtml(item.desc)}</div>
+              <div class="feature-title" contenteditable="${state.mode === 'edit'}" data-item-edit="title" data-item-idx="${idx}">${item.title || ''}</div>
+              <div class="feature-desc" contenteditable="${state.mode === 'edit'}" data-item-edit="desc" data-item-idx="${idx}">${item.desc || ''}</div>
             </div>
           `).join('')}
         </div>
@@ -3098,15 +3102,15 @@
     return `
       <div class="pricing" style="background:${bgForStyle(p.style)}">
         <div class="pricing-header">
-          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${escapeHtml(p.heading)}</h2>
-          <p contenteditable="${state.mode === 'edit'}" data-edit="subheading">${escapeHtml(p.subheading)}</p>
+          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${p.heading || ''}</h2>
+          <p contenteditable="${state.mode === 'edit'}" data-edit="subheading">${p.subheading || ''}</p>
         </div>
         <div class="pricing-grid">
           ${p.items.map((item, idx) => `
             <div class="pricing-card ${item.featured ? 'featured' : ''}">
               ${item.featured && item.badge ? `<div class="pricing-badge">${escapeHtml(item.badge)}</div>` : ''}
-              <div class="pricing-name" contenteditable="${state.mode === 'edit'}" data-item-edit="name" data-item-idx="${idx}">${escapeHtml(item.name)}</div>
-              <div class="pricing-desc" contenteditable="${state.mode === 'edit'}" data-item-edit="desc" data-item-idx="${idx}">${escapeHtml(item.desc)}</div>
+              <div class="pricing-name" contenteditable="${state.mode === 'edit'}" data-item-edit="name" data-item-idx="${idx}">${item.name || ''}</div>
+              <div class="pricing-desc" contenteditable="${state.mode === 'edit'}" data-item-edit="desc" data-item-idx="${idx}">${item.desc || ''}</div>
               <div class="pricing-price">
                 <span class="pricing-amount" contenteditable="${state.mode === 'edit'}" data-item-edit="amount" data-item-idx="${idx}">${escapeHtml(item.amount)}</span>
                 <span class="pricing-period" contenteditable="${state.mode === 'edit'}" data-item-edit="period" data-item-idx="${idx}">${escapeHtml(item.period)}</span>
@@ -3197,8 +3201,8 @@
     return `
       <div class="faq" style="background:${bgForStyle(p.style)}">
         <div class="faq-header">
-          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${escapeHtml(p.heading)}</h2>
-          <p contenteditable="${state.mode === 'edit'}" data-edit="subheading">${escapeHtml(p.subheading)}</p>
+          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${p.heading || ''}</h2>
+          <p contenteditable="${state.mode === 'edit'}" data-edit="subheading">${p.subheading || ''}</p>
         </div>
         <div class="faq-list">
           ${p.items.map((item, idx) => {
@@ -3426,8 +3430,8 @@
             </div>
           </div>
           <div class="leadmagnet-content">
-            <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${escapeHtml(p.heading)}</h2>
-            <p contenteditable="${state.mode === 'edit'}" data-edit="body">${escapeHtml(p.body)}</p>
+            <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${p.heading || ''}</h2>
+            <p contenteditable="${state.mode === 'edit'}" data-edit="body">${p.body || ''}</p>
             <ul class="leadmagnet-benefits">${benefitsHTML}</ul>
             <div class="leadmagnet-form">
               <div class="leadmagnet-form-label" contenteditable="${state.mode === 'edit'}" data-edit="formLabel">${escapeHtml(p.formLabel)}</div>
@@ -5538,6 +5542,113 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
     renderBrandPaneDomain();
     showToast('🌸 Tilbakestilt til LME-standard');
   }
+
+  // ============ RIK-TEKST VERKTØYLINJE (marker tekst → styl biten) ============
+  (function () {
+    const bar = document.createElement('div');
+    bar.id = 'richToolbar';
+    bar.style.cssText = 'position:absolute;z-index:2000;display:none;gap:4px;align-items:center;background:#fff;border:1px solid rgba(0,0,0,0.1);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.18);padding:5px 6px;font-family:var(--font-body);';
+    const btn = 'border:none;background:#f3f3f3;border-radius:7px;min-width:30px;height:28px;cursor:pointer;font-size:13px;display:inline-flex;align-items:center;justify-content:center;color:#333;padding:0 6px;';
+    bar.innerHTML =
+      '<select id="rtFont" title="Skrifttype" style="border:1px solid #eee;border-radius:7px;height:28px;font-size:12px;max-width:120px;">' +
+        '<option value="">Font…</option>' +
+        FONT_CHOICES.map(function (f) { return '<option value="' + f.name + '">' + f.name + '</option>'; }).join('') +
+      '</select>' +
+      '<button id="rtBold" title="Fet" style="' + btn + 'font-weight:800;">B</button>' +
+      '<button id="rtNarrow" title="Smalere" style="' + btn + '">A&#8249;</button>' +
+      '<button id="rtWide" title="Bredere" style="' + btn + '">A&#8250;</button>' +
+      '<input id="rtColor" type="color" title="Tekstfarge" value="#1A1A1A" style="width:32px;height:28px;border:1px solid #eee;border-radius:7px;padding:1px;cursor:pointer;background:#fff;">';
+    document.body.appendChild(bar);
+
+    let savedRange = null;
+    function saveRange() {
+      const sel = window.getSelection();
+      if (sel && sel.rangeCount && !sel.isCollapsed) savedRange = sel.getRangeAt(0).cloneRange();
+    }
+    function restoreRange() {
+      if (!savedRange) return false;
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(savedRange);
+      return true;
+    }
+    function editableOf(range) {
+      let n = range && range.commonAncestorContainer;
+      n = n && (n.nodeType === 1 ? n : n.parentElement);
+      return n ? n.closest('.canvas [contenteditable="true"]') : null;
+    }
+    function persist(editable) {
+      if (!editable) return;
+      try {
+        const secEl = editable.closest('.canvas-section');
+        if (!secEl) return;
+        const sec = findSection(secEl.dataset.id);
+        if (!sec) return;
+        if (editable.dataset.edit) sec.props[editable.dataset.edit] = editable.innerHTML;
+        else if (editable.dataset.itemEdit) {
+          const i = parseInt(editable.dataset.itemIdx, 10);
+          if (sec.props.items && sec.props.items[i]) sec.props.items[i][editable.dataset.itemEdit] = editable.innerHTML;
+        }
+      } catch (e) {}
+    }
+    function showFor(range) {
+      const rect = range.getBoundingClientRect();
+      bar.style.display = 'flex';
+      const top = window.scrollY + rect.top - bar.offsetHeight - 8;
+      bar.style.top = Math.max(window.scrollY + 4, top) + 'px';
+      bar.style.left = (window.scrollX + Math.max(8, rect.left)) + 'px';
+    }
+
+    document.addEventListener('selectionchange', function () {
+      const sel = window.getSelection();
+      if (!sel || !sel.rangeCount || sel.isCollapsed) { bar.style.display = 'none'; return; }
+      const range = sel.getRangeAt(0);
+      if (!editableOf(range)) { bar.style.display = 'none'; return; }
+      saveRange();
+      showFor(range);
+    });
+
+    function apply(fn) {
+      if (!restoreRange()) return;
+      const editable = editableOf(window.getSelection().getRangeAt(0));
+      try { document.execCommand('styleWithCSS', false, true); } catch (e) {}
+      fn();
+      persist(editable);
+      saveRange();
+    }
+    function adjustSpacing(deltaPx) {
+      const sel = window.getSelection();
+      if (!sel.rangeCount) return;
+      const range = sel.getRangeAt(0);
+      const span = document.createElement('span');
+      span.style.letterSpacing = deltaPx + 'px';
+      try {
+        span.appendChild(range.extractContents());
+        range.insertNode(span);
+        sel.removeAllRanges();
+        const r = document.createRange();
+        r.selectNodeContents(span);
+        sel.addRange(r);
+      } catch (e) {}
+    }
+
+    // Behold markeringen når man klikker knappene (men la select/farge fungere normalt)
+    bar.addEventListener('mousedown', function (e) {
+      if (e.target.id !== 'rtFont' && e.target.id !== 'rtColor') e.preventDefault();
+    });
+    bar.querySelector('#rtBold').addEventListener('click', function () { apply(function () { document.execCommand('bold'); }); });
+    bar.querySelector('#rtFont').addEventListener('change', function (e) {
+      const v = e.target.value; if (!v) return;
+      ensureFontFamilyLoaded(v);
+      apply(function () { document.execCommand('fontName', false, v); });
+      e.target.value = '';
+    });
+    bar.querySelector('#rtColor').addEventListener('input', function (e) {
+      apply(function () { document.execCommand('foreColor', false, e.target.value); });
+    });
+    bar.querySelector('#rtWide').addEventListener('click', function () { apply(function () { adjustSpacing(0.5); }); });
+    bar.querySelector('#rtNarrow').addEventListener('click', function () { apply(function () { adjustSpacing(-0.5); }); });
+  })();
 
   loadState();
 
