@@ -4870,7 +4870,7 @@ Husk:
 - Returner ren JSON som kan parses med JSON.parse()`;
 
     try {
-      const response = await fetch('https://lme-proxy.renateshobby.workers.dev/ai-generate', {
+      const response = await fetch('/ai-generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
