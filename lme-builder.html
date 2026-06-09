@@ -2314,6 +2314,12 @@
     // Spør etter navn
     openNameInput('Gi siden et navn', template.defaultName || 'Ny side', (name) => {
       const sections = template.build();
+      // Maler kan bære eget tema (font + farger) — settes for hele nettstedet
+      if (template.brand && state.brand) {
+        if (template.brand.paletteId) { state.brand.paletteId = template.brand.paletteId; state.brand.customColors = null; }
+        if (template.brand.fontId) { state.brand.fontId = template.brand.fontId; state.brand.fontDisplay = null; state.brand.fontBody = null; }
+        applyBrand();
+      }
       const page = createPage(name, sections);
       state.pages.push(page);
       state.currentPageId = page.id;
@@ -4087,6 +4093,57 @@
         cta.props.ctaText = 'Handle nå';
 
         return [hero, products, features, testimonials, cta, createSection('footer')];
+      }
+    },
+    personligmerke: {
+      icon: '✨',
+      name: 'Personlig merke',
+      desc: 'Elegant én-sider for ekspert/kursskaper — om meg, tilbud og anbefalinger',
+      defaultName: 'Mitt merke',
+      brand: { paletteId: 'sage-garden', fontId: 'playfair-source' },
+      blocks: ['hero', 'features', 'testimonials', 'pricing', 'cta', 'footer'],
+      build: () => {
+        const hero = createSection('hero');
+        hero.props.heading = 'Hei, jeg er [navnet ditt]';
+        hero.props.body = 'Jeg hjelper [målgruppen din] med å [resultatet du skaper] — uten [det de strever med]. Så glad du er her.';
+        hero.props.ctaText = 'Bli kjent med meg';
+        const features = createSection('features');
+        features.props.heading = 'Slik kan jeg hjelpe deg';
+        features.props.subheading = 'Tre måter vi kan jobbe sammen på';
+        features.props.items = [
+          { icon: '🌱', title: 'Kom i gang', desc: 'Et lavterskel-tilbud som tar deg det første viktige steget.' },
+          { icon: '💫', title: 'Signaturprogram', desc: 'Min dypere reise for deg som vil ha varig forandring.' },
+          { icon: '🤝', title: '1:1 veiledning', desc: 'Personlig oppfølging, skreddersydd til akkurat din situasjon.' }
+        ];
+        const testimonials = createSection('testimonials');
+        testimonials.props.heading = 'Kjærlige ord';
+        const pricing = createSection('pricing');
+        pricing.props.heading = 'Mitt signaturtilbud';
+        pricing.props.subheading = 'Alt du trenger for å komme dit du vil';
+        const cta = createSection('cta');
+        cta.props.heading = 'Klar for neste steg?';
+        cta.props.body = 'Bli med på listen, så hører du fra meg når dørene åpner.';
+        cta.props.ctaText = 'Bli med på listen';
+        return [hero, features, testimonials, pricing, cta, createSection('footer')];
+      }
+    },
+    tjenester: {
+      icon: '🌿',
+      name: 'Tjenester & priser',
+      desc: 'Presenter tjenestene dine med priser, FAQ og anbefalinger',
+      defaultName: 'Tjenester',
+      brand: { paletteId: 'lavendel', fontId: 'lora-open' },
+      blocks: ['hero', 'features', 'pricing', 'faq', 'testimonials', 'cta', 'footer'],
+      build: () => {
+        const hero = createSection('hero');
+        hero.props.heading = 'Tjenester som gjør en forskjell';
+        hero.props.body = 'Profesjonell hjelp og veiledning, tilpasset deg og din hverdag. Se hva jeg tilbyr nedenfor.';
+        hero.props.ctaText = 'Se tjenester';
+        const features = createSection('features');
+        features.props.heading = 'Hva jeg tilbyr';
+        const pricing = createSection('pricing');
+        pricing.props.heading = 'Pakker & priser';
+        return [hero, features, pricing, createSection('faq'), createSection('testimonials'), createSection('cta'), createSection('footer')];
       }
     }
   };
