@@ -3930,6 +3930,38 @@
         hero.props.ctaText = 'Se alle produkter →';
         return [hero, createSection('pricing'), createSection('testimonials'), createSection('faq'), createSection('footer')];
       }
+    },
+    landing: {
+      icon: '📄',
+      name: 'Enkel landingsside',
+      desc: 'Rask, fokusert side: hero, oppfordring og bunntekst',
+      defaultName: 'Landingsside',
+      blocks: ['hero', 'cta', 'footer'],
+      build: () => {
+        const hero = createSection('hero');
+        hero.props.heading = 'Én ting, gjort godt';
+        hero.props.body = 'En kort, fokusert side som leder leseren rett til neste steg.';
+        hero.props.ctaText = 'Kom i gang';
+        return [hero, createSection('cta'), createSection('footer')];
+      }
+    },
+    bookLaunch: {
+      icon: '📖',
+      name: 'Bok-lansering',
+      desc: 'Lanser en ny bok med smakebit, anbefalinger og kjøp',
+      defaultName: 'Bok-lansering',
+      blocks: ['hero', 'features', 'testimonials', 'pricing', 'cta', 'footer'],
+      build: () => {
+        const hero = createSection('hero');
+        hero.props.heading = 'Ny bok: Mia & Teo på eventyr';
+        hero.props.body = 'En vakker, naturbasert fortelling for nysgjerrige små oppdagere — nå tilgjengelig.';
+        hero.props.ctaText = 'Kjøp boken';
+        const features = createSection('features');
+        features.props.heading = 'Hva gjør boken spesiell';
+        const pricing = createSection('pricing');
+        pricing.props.heading = 'Bestill nå';
+        return [hero, features, createSection('testimonials'), pricing, createSection('cta'), createSection('footer')];
+      }
     }
   };
 
