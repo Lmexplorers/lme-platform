@@ -71,20 +71,17 @@ const ALLOWED_ORIGINS = [
   "http://127.0.0.1:8000",
 ];
 
-// Tillat alle Cloudflare Pages-deploy (auto-deploy via GitHub lager nye
-// subdomener som https://<hash>.lme-plattform.pages.dev og branch-previews)
-function isAllowedOrigin(origin) {
-  if (ALLOWED_ORIGINS.includes(origin)) return true;
-  return /^https:\/\/[a-z0-9-]+\.lme-plattform\.pages\.dev$/.test(origin);
-}
-
+// CORS: speil tilbake hvilken som helst opprinnelse. Workeren er kun en proxy
+// til Renate AI (ingen cookies/innlogging, maks 30 meldinger, maks 4000 tegn),
+// så det er trygt å svare alle LME-adresser — inkl. alle GitHub-auto-deploy- og
+// preview-adresser. Dette fjerner "Failed to fetch"/CORS-feil for godt.
 function corsHeaders(origin) {
-  const allowedOrigin = isAllowedOrigin(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
-    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Origin": origin || "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Max-Age": "86400",
+    "Vary": "Origin",
   };
 }
 
