@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#F8D7DA">
-<title>Analyse — LME Creative Academy</title>
+<title>Payments — LME Creative Academy</title>
 
 <style>
   /* =========================================
@@ -785,7 +785,7 @@
         <span class="si-icon">👤</span>
         <span class="si-label">Subscribers</span>
       </a>
-      <a href="/payments" class="sidebar-item">
+      <a href="/payments" class="sidebar-item active">
         <span class="si-icon">💳</span>
         <span class="si-label">Payments</span>
       </a>
@@ -797,7 +797,7 @@
         <span class="si-icon">📈</span>
         <span class="si-label">Sales pipeline</span>
       </a>
-      <a href="/analytics" class="sidebar-item active">
+      <a href="/analytics" class="sidebar-item">
         <span class="si-icon">📊</span>
         <span class="si-label">Analyse</span>
       </a>
@@ -891,50 +891,50 @@
   <!-- HOVEDINNHOLD -->
   <main class="main">
     <style>
-      .an-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
-      .an-stat { background:rgba(255,255,255,0.7); border:1px solid var(--line); border-radius:var(--r-lg); padding:18px 20px; box-shadow:var(--shadow-sm); }
-      .an-stat .lbl { font-size:13px; color:var(--ink-muted); font-weight:600; }
-      .an-stat .val { font-size:26px; font-weight:800; margin-top:4px; }
-      .an-stat .delta { font-size:12px; font-weight:700; margin-top:4px; }
-      .an-stat .delta.up { color:#3a9d4e; }
-      .an-stat .delta.down { color:#d24a4a; }
-      .an-card { background:rgba(255,255,255,0.7); border:1px solid var(--line); border-radius:var(--r-lg); padding:22px; box-shadow:var(--shadow-sm); margin-bottom:24px; }
-      .an-card h2 { font-size:16px; font-weight:700; margin-bottom:4px; }
-      .an-card p.sub { font-size:13px; color:var(--ink-muted); margin-bottom:16px; }
-      .an-chart { width:100%; height:200px; display:block; }
-      @media (max-width:760px){ .an-stats{ grid-template-columns:1fr 1fr; } }
+      .pay-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
+      .pay-stat { background:rgba(255,255,255,0.7); border:1px solid var(--line); border-radius:var(--r-lg); padding:18px 20px; box-shadow:var(--shadow-sm); }
+      .pay-stat .lbl { font-size:13px; color:var(--ink-muted); font-weight:600; }
+      .pay-stat .val { font-size:24px; font-weight:800; margin-top:4px; }
+      .pay-table-wrap { background:rgba(255,255,255,0.7); border:1px solid var(--line); border-radius:var(--r-lg); box-shadow:var(--shadow-sm); overflow:hidden; }
+      .pay-table { width:100%; border-collapse:collapse; font-size:14px; }
+      .pay-table th { text-align:left; font-size:12px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-muted); font-weight:700; padding:14px 18px; border-bottom:1px solid var(--line); }
+      .pay-table td { padding:14px 18px; border-bottom:1px solid var(--line-soft); }
+      .pay-table tr:last-child td { border-bottom:none; }
+      .pay-table tbody tr:hover { background:rgba(248,215,218,0.35); }
+      .pay-amt { font-weight:700; }
+      .pay-badge { font-size:11px; font-weight:700; padding:3px 10px; border-radius:var(--r-pill); }
+      .pay-badge.ok { background:rgba(58,157,78,0.14); color:#2f7d40; }
+      .pay-badge.refund { background:var(--cream-deep); color:var(--ink-muted); }
+      .pay-section-title { font-size:16px; font-weight:700; margin:0 0 14px; }
+      @media (max-width:760px){ .pay-stats{ grid-template-columns:1fr 1fr; } .pay-table .hide-sm{ display:none; } }
     </style>
 
     <div class="page-header">
-      <h1>Analyse</h1>
-      <p>Se hvordan innholdet, sidene og salget ditt presterer — samlet på ett sted.</p>
+      <h1>Payments</h1>
+      <p>Oversikt over inntekt, transaksjoner og utbetalinger.</p>
     </div>
 
-    <div class="an-stats">
-      <div class="an-stat"><div class="lbl">Besøkende (30 d)</div><div class="val">2 480</div><div class="delta up">▲ 12%</div></div>
-      <div class="an-stat"><div class="lbl">Påmeldinger</div><div class="val">186</div><div class="delta up">▲ 8%</div></div>
-      <div class="an-stat"><div class="lbl">Salg</div><div class="val">42</div><div class="delta up">▲ 5%</div></div>
-      <div class="an-stat"><div class="lbl">Inntekt</div><div class="val">NOK 18 320</div><div class="delta down">▼ 3%</div></div>
+    <div class="pay-stats">
+      <div class="pay-stat"><div class="lbl">Inntekt totalt</div><div class="val">NOK 42 870</div></div>
+      <div class="pay-stat"><div class="lbl">Denne måneden</div><div class="val">NOK 18 320</div></div>
+      <div class="pay-stat"><div class="lbl">Utbetalt</div><div class="val">NOK 38 000</div></div>
+      <div class="pay-stat"><div class="lbl">Venter</div><div class="val">NOK 4 870</div></div>
     </div>
 
-    <div class="an-card">
-      <h2>Besøkende siste 30 dager</h2>
-      <p class="sub">Daglige besøk på sidene dine.</p>
-      <svg class="an-chart" viewBox="0 0 600 200" preserveAspectRatio="none" role="img" aria-label="Linjediagram over besøkende siste 30 dager">
-        <path d="M0,150 L50,140 L100,120 L150,130 L200,100 L250,90 L300,110 L350,70 L400,80 L450,60 L500,75 L550,50 L600,55 L600,200 L0,200 Z" fill="rgba(238,156,173,0.18)" />
-        <polyline fill="none" stroke="#E91E89" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="0,150 50,140 100,120 150,130 200,100 250,90 300,110 350,70 400,80 450,60 500,75 550,50 600,55" />
-      </svg>
-    </div>
-
-    <div class="an-card">
-      <h2>Toppsider</h2>
-      <p class="sub">Mest besøkte sider denne måneden.</p>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <div style="display:flex;justify-content:space-between;font-size:14px;"><span>/creative-academy</span><strong>812</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:14px;"><span>/spor-renate-ai</span><strong>540</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:14px;"><span>/butikk</span><strong>388</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:14px;"><span>/biblioteket</span><strong>246</strong></div>
-      </div>
+    <h2 class="pay-section-title">Siste transaksjoner</h2>
+    <div class="pay-table-wrap">
+      <table class="pay-table">
+        <thead>
+          <tr><th>Kunde</th><th class="hide-sm">Produkt</th><th>Beløp</th><th class="hide-sm">Dato</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Nora Berg</td><td class="hide-sm">Inner Circle medlemskap</td><td class="pay-amt">NOK 199</td><td class="hide-sm">8. juni 2026</td><td><span class="pay-badge ok">Betalt</span></td></tr>
+          <tr><td>Camilla Ruud</td><td class="hide-sm">AI-guiden</td><td class="pay-amt">NOK 99</td><td class="hide-sm">6. juni 2026</td><td><span class="pay-badge ok">Betalt</span></td></tr>
+          <tr><td>Hanne Tveit</td><td class="hide-sm">Mia &amp; Teo bokpakke</td><td class="pay-amt">NOK 349</td><td class="hide-sm">3. juni 2026</td><td><span class="pay-badge ok">Betalt</span></td></tr>
+          <tr><td>Sofie Lund</td><td class="hide-sm">Montessori spillplaner</td><td class="pay-amt">NOK 149</td><td class="hide-sm">1. juni 2026</td><td><span class="pay-badge refund">Refundert</span></td></tr>
+          <tr><td>Ingrid Hansen</td><td class="hide-sm">AI-guiden</td><td class="pay-amt">NOK 99</td><td class="hide-sm">29. mai 2026</td><td><span class="pay-badge ok">Betalt</span></td></tr>
+        </tbody>
+      </table>
     </div>
 
   </main>
