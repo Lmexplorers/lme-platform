@@ -2091,10 +2091,31 @@
       },
       render: renderLeadmagnet, props: leadmagnetProps
     },
-    products: { icon: '📚', name: 'Produkter', desc: 'Bøker og materiell', available: false },
+    products: {
+      icon: '📚', name: 'Produkter', desc: 'Bøker og materiell — kort med pris og kjøpsknapp', available: true,
+      defaultProps: {
+        heading: 'Bøker & materiell',
+        subheading: 'Utforsk hele LME-utvalget',
+        items: [
+          { name: 'Mia & Teo — Skogsboken', desc: 'Vakker naturfortelling', amount: '249', period: 'kr', featured: false, badge: '', features: ['Innbundet bok', 'Norsk + engelsk', 'For 3–9 år'], ctaText: 'Kjøp nå', ctaLink: '#' },
+          { name: 'Arbeidshefte-pakke', desc: 'Alle alderstrinn', amount: '349', period: 'kr', featured: true, badge: 'Bestselger', features: ['3–6, 6–9 og 9–12 år', 'Print-klar PDF', 'Montessori-basert'], ctaText: 'Kjøp nå', ctaLink: '#' },
+          { name: 'Komplett sett', desc: 'Bok + hefter + materiell', amount: '599', period: 'kr', featured: false, badge: '', features: ['Alt inkludert', 'Best verdi', 'Gratis frakt'], ctaText: 'Kjøp nå', ctaLink: '#' }
+        ],
+        style: 'cream'
+      },
+      render: renderPricing, props: pricingProps
+    },
     gallery: { icon: '🖼️', name: 'Galleri', desc: 'Bildevisning', available: false },
     blog: { icon: '📝', name: 'Blogg', desc: 'Siste innlegg', available: false },
-    community: { icon: '🌷', name: 'Fellesskap', desc: 'Inviter til Inner Circle', available: false }
+    community: {
+      icon: '🌷', name: 'Fellesskap', desc: 'Inviter til Inner Circle — sentrert blokk med knapp', available: true,
+      defaultProps: {
+        heading: 'Bli med i LME Inner Circle',
+        body: 'Et varmt fellesskap av foreldre og pedagoger. Få månedlige live-samlinger, eksklusivt materiell og en direkte tråd til Renate.',
+        ctaText: 'Bli medlem', ctaLink: '#', style: 'soft'
+      },
+      render: renderCTA, props: ctaProps
+    }
   };
 
   let state = {
@@ -4279,6 +4300,7 @@ img { max-width: 100%; display: block; }
 </section>`;
       }
 
+      case 'community':
       case 'cta': {
         const link = resolveExportLink(p.ctaLink);
         return `
@@ -4333,6 +4355,7 @@ img { max-width: 100%; display: block; }
 </section>`;
       }
 
+      case 'products':
       case 'pricing': {
         const cards = (p.items || []).map(item => {
           const link = resolveExportLink(item.ctaLink);
