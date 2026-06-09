@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#F8D7DA">
-<title>Analyse — LME Creative Academy</title>
+<title>Produkter — LME Creative Academy</title>
 
 <style>
   /* =========================================
@@ -790,7 +790,7 @@
         <span class="si-label">Payments</span>
         <span class="si-badge">Snart</span>
       </span>
-      <a href="/produkter" class="sidebar-item">
+      <a href="/produkter" class="sidebar-item active">
         <span class="si-icon">🛍️</span>
         <span class="si-label">Produkter</span>
       </a>
@@ -798,7 +798,7 @@
         <span class="si-icon">📈</span>
         <span class="si-label">Sales pipeline</span>
       </a>
-      <a href="/analytics" class="sidebar-item active">
+      <a href="/analytics" class="sidebar-item">
         <span class="si-icon">📊</span>
         <span class="si-label">Analyse</span>
       </a>
@@ -889,49 +889,65 @@
   <!-- HOVEDINNHOLD -->
   <main class="main">
     <style>
-      .an-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
-      .an-stat { background:rgba(255,255,255,0.7); border:1px solid var(--line); border-radius:var(--r-lg); padding:18px 20px; box-shadow:var(--shadow-sm); }
-      .an-stat .lbl { font-size:13px; color:var(--ink-muted); font-weight:600; }
-      .an-stat .val { font-size:26px; font-weight:800; margin-top:4px; }
-      .an-stat .delta { font-size:12px; font-weight:700; margin-top:4px; }
-      .an-stat .delta.up { color:#3a9d4e; }
-      .an-stat .delta.down { color:#d24a4a; }
-      .an-card { background:rgba(255,255,255,0.7); border:1px solid var(--line); border-radius:var(--r-lg); padding:22px; box-shadow:var(--shadow-sm); margin-bottom:24px; }
-      .an-card h2 { font-size:16px; font-weight:700; margin-bottom:4px; }
-      .an-card p.sub { font-size:13px; color:var(--ink-muted); margin-bottom:16px; }
-      .an-chart { width:100%; height:200px; display:block; }
-      @media (max-width:760px){ .an-stats{ grid-template-columns:1fr 1fr; } }
+      .pr-top { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:20px; }
+      .pr-top .count { font-size:13px; color:var(--ink-muted); font-weight:600; }
+      .pr-add { background:var(--btn-yellow); color:var(--ink); font-weight:700; font-size:13px; padding:10px 18px; border-radius:var(--r-pill); }
+      .pr-add:hover { background:var(--btn-yellow-hover); }
+      .pr-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:16px; }
+      .pr-card { background:rgba(255,255,255,0.7); border:1px solid var(--line); border-radius:var(--r-lg); box-shadow:var(--shadow-sm); overflow:hidden; display:flex; flex-direction:column; }
+      .pr-thumb { height:120px; display:flex; align-items:center; justify-content:center; font-size:42px; background:linear-gradient(135deg, var(--pink-soft), var(--pink-mid)); }
+      .pr-body { padding:16px; display:flex; flex-direction:column; gap:6px; flex:1; }
+      .pr-body h3 { font-size:15px; font-weight:700; }
+      .pr-body .price { font-size:15px; font-weight:800; color:var(--ink); }
+      .pr-foot { display:flex; align-items:center; justify-content:space-between; margin-top:auto; padding-top:8px; }
+      .pr-badge { font-size:11px; font-weight:700; padding:3px 10px; border-radius:var(--r-pill); }
+      .pr-badge.live { background:rgba(58,157,78,0.14); color:#2f7d40; }
+      .pr-badge.draft { background:var(--cream-deep); color:var(--ink-muted); }
+      .pr-edit { font-size:12px; font-weight:700; color:var(--cerise); }
     </style>
 
     <div class="page-header">
-      <h1>Analyse</h1>
-      <p>Se hvordan innholdet, sidene og salget ditt presterer — samlet på ett sted.</p>
+      <h1>Produkter</h1>
+      <p>Alt du selger — bøker, guider, medlemskap og spillplaner — på ett sted.</p>
     </div>
 
-    <div class="an-stats">
-      <div class="an-stat"><div class="lbl">Besøkende (30 d)</div><div class="val">2 480</div><div class="delta up">▲ 12%</div></div>
-      <div class="an-stat"><div class="lbl">Påmeldinger</div><div class="val">186</div><div class="delta up">▲ 8%</div></div>
-      <div class="an-stat"><div class="lbl">Salg</div><div class="val">42</div><div class="delta up">▲ 5%</div></div>
-      <div class="an-stat"><div class="lbl">Inntekt</div><div class="val">NOK 18 320</div><div class="delta down">▼ 3%</div></div>
+    <div class="pr-top">
+      <span class="count">4 produkter</span>
+      <a href="/lme-builder" class="pr-add">+ Nytt produkt</a>
     </div>
 
-    <div class="an-card">
-      <h2>Besøkende siste 30 dager</h2>
-      <p class="sub">Daglige besøk på sidene dine.</p>
-      <svg class="an-chart" viewBox="0 0 600 200" preserveAspectRatio="none" role="img" aria-label="Linjediagram over besøkende siste 30 dager">
-        <path d="M0,150 L50,140 L100,120 L150,130 L200,100 L250,90 L300,110 L350,70 L400,80 L450,60 L500,75 L550,50 L600,55 L600,200 L0,200 Z" fill="rgba(238,156,173,0.18)" />
-        <polyline fill="none" stroke="#E91E89" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="0,150 50,140 100,120 150,130 200,100 250,90 300,110 350,70 400,80 450,60 500,75 550,50 600,55" />
-      </svg>
-    </div>
-
-    <div class="an-card">
-      <h2>Toppsider</h2>
-      <p class="sub">Mest besøkte sider denne måneden.</p>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <div style="display:flex;justify-content:space-between;font-size:14px;"><span>/creative-academy</span><strong>812</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:14px;"><span>/spor-renate-ai</span><strong>540</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:14px;"><span>/butikk</span><strong>388</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:14px;"><span>/biblioteket</span><strong>246</strong></div>
+    <div class="pr-grid">
+      <div class="pr-card">
+        <div class="pr-thumb">📚</div>
+        <div class="pr-body">
+          <h3>Mia &amp; Teo bokpakke</h3>
+          <span class="price">NOK 349</span>
+          <div class="pr-foot"><span class="pr-badge live">Publisert</span><a href="#" class="pr-edit">Rediger →</a></div>
+        </div>
+      </div>
+      <div class="pr-card">
+        <div class="pr-thumb">🤖</div>
+        <div class="pr-body">
+          <h3>AI-guiden</h3>
+          <span class="price">NOK 99</span>
+          <div class="pr-foot"><span class="pr-badge live">Publisert</span><a href="#" class="pr-edit">Rediger →</a></div>
+        </div>
+      </div>
+      <div class="pr-card">
+        <div class="pr-thumb">🌸</div>
+        <div class="pr-body">
+          <h3>Inner Circle medlemskap</h3>
+          <span class="price">NOK 199 / mnd</span>
+          <div class="pr-foot"><span class="pr-badge live">Publisert</span><a href="#" class="pr-edit">Rediger →</a></div>
+        </div>
+      </div>
+      <div class="pr-card">
+        <div class="pr-thumb">🎲</div>
+        <div class="pr-body">
+          <h3>Montessori spillplaner</h3>
+          <span class="price">NOK 149</span>
+          <div class="pr-foot"><span class="pr-badge draft">Utkast</span><a href="#" class="pr-edit">Rediger →</a></div>
+        </div>
       </div>
     </div>
 

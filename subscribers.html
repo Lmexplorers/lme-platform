@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#F8D7DA">
-<title>Analyse — LME Creative Academy</title>
+<title>Subscribers — LME Creative Academy</title>
 
 <style>
   /* =========================================
@@ -781,7 +781,7 @@
         <span class="si-label">Tripwire-funnel</span>
         <span class="si-badge beta">Ny</span>
       </a>
-      <a href="/subscribers" class="sidebar-item">
+      <a href="/subscribers" class="sidebar-item active">
         <span class="si-icon">👤</span>
         <span class="si-label">Subscribers</span>
       </a>
@@ -798,7 +798,7 @@
         <span class="si-icon">📈</span>
         <span class="si-label">Sales pipeline</span>
       </a>
-      <a href="/analytics" class="sidebar-item active">
+      <a href="/analytics" class="sidebar-item">
         <span class="si-icon">📊</span>
         <span class="si-label">Analyse</span>
       </a>
@@ -889,50 +889,53 @@
   <!-- HOVEDINNHOLD -->
   <main class="main">
     <style>
-      .an-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
-      .an-stat { background:rgba(255,255,255,0.7); border:1px solid var(--line); border-radius:var(--r-lg); padding:18px 20px; box-shadow:var(--shadow-sm); }
-      .an-stat .lbl { font-size:13px; color:var(--ink-muted); font-weight:600; }
-      .an-stat .val { font-size:26px; font-weight:800; margin-top:4px; }
-      .an-stat .delta { font-size:12px; font-weight:700; margin-top:4px; }
-      .an-stat .delta.up { color:#3a9d4e; }
-      .an-stat .delta.down { color:#d24a4a; }
-      .an-card { background:rgba(255,255,255,0.7); border:1px solid var(--line); border-radius:var(--r-lg); padding:22px; box-shadow:var(--shadow-sm); margin-bottom:24px; }
-      .an-card h2 { font-size:16px; font-weight:700; margin-bottom:4px; }
-      .an-card p.sub { font-size:13px; color:var(--ink-muted); margin-bottom:16px; }
-      .an-chart { width:100%; height:200px; display:block; }
-      @media (max-width:760px){ .an-stats{ grid-template-columns:1fr 1fr; } }
+      .sb-top { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:18px; }
+      .sb-search { flex:1 1 240px; max-width:340px; }
+      .sb-search input {
+        width:100%; font-family:var(--font-body); font-size:14px; color:var(--ink);
+        background:var(--cream); border:1px solid var(--line); border-radius:var(--r-pill);
+        padding:10px 16px;
+      }
+      .sb-search input:focus { outline:none; border-color:var(--pink-deep); box-shadow:0 0 0 3px rgba(233,30,137,0.12); }
+      .sb-add { background:var(--btn-yellow); color:var(--ink); font-weight:700; font-size:13px; padding:10px 18px; border-radius:var(--r-pill); }
+      .sb-add:hover { background:var(--btn-yellow-hover); }
+      .sb-table-wrap { background:rgba(255,255,255,0.7); border:1px solid var(--line); border-radius:var(--r-lg); box-shadow:var(--shadow-sm); overflow:hidden; }
+      .sb-table { width:100%; border-collapse:collapse; font-size:14px; }
+      .sb-table th { text-align:left; font-size:12px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-muted); font-weight:700; padding:14px 18px; border-bottom:1px solid var(--line); }
+      .sb-table td { padding:14px 18px; border-bottom:1px solid var(--line-soft); }
+      .sb-table tr:last-child td { border-bottom:none; }
+      .sb-table tbody tr:hover { background:rgba(248,215,218,0.35); }
+      .sb-name { font-weight:600; }
+      .sb-tag { display:inline-block; font-size:11px; font-weight:700; padding:3px 10px; border-radius:var(--r-pill); background:var(--pink-soft); color:var(--ink); }
+      .sb-tag.lead { background:rgba(63,169,245,0.16); }
+      .sb-tag.kunde { background:rgba(58,157,78,0.14); color:#2f7d40; }
+      @media (max-width:640px){ .sb-table .hide-sm { display:none; } }
     </style>
 
     <div class="page-header">
-      <h1>Analyse</h1>
-      <p>Se hvordan innholdet, sidene og salget ditt presterer — samlet på ett sted.</p>
+      <h1>Subscribers</h1>
+      <p>Alle som har meldt seg på, lastet ned eller kjøpt noe — samlet i én liste.</p>
     </div>
 
-    <div class="an-stats">
-      <div class="an-stat"><div class="lbl">Besøkende (30 d)</div><div class="val">2 480</div><div class="delta up">▲ 12%</div></div>
-      <div class="an-stat"><div class="lbl">Påmeldinger</div><div class="val">186</div><div class="delta up">▲ 8%</div></div>
-      <div class="an-stat"><div class="lbl">Salg</div><div class="val">42</div><div class="delta up">▲ 5%</div></div>
-      <div class="an-stat"><div class="lbl">Inntekt</div><div class="val">NOK 18 320</div><div class="delta down">▼ 3%</div></div>
+    <div class="sb-top">
+      <div class="sb-search"><input type="search" placeholder="Søk etter navn eller e-post …"></div>
+      <a href="/produkter" class="sb-add">+ Legg til kontakt</a>
     </div>
 
-    <div class="an-card">
-      <h2>Besøkende siste 30 dager</h2>
-      <p class="sub">Daglige besøk på sidene dine.</p>
-      <svg class="an-chart" viewBox="0 0 600 200" preserveAspectRatio="none" role="img" aria-label="Linjediagram over besøkende siste 30 dager">
-        <path d="M0,150 L50,140 L100,120 L150,130 L200,100 L250,90 L300,110 L350,70 L400,80 L450,60 L500,75 L550,50 L600,55 L600,200 L0,200 Z" fill="rgba(238,156,173,0.18)" />
-        <polyline fill="none" stroke="#E91E89" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="0,150 50,140 100,120 150,130 200,100 250,90 300,110 350,70 400,80 450,60 500,75 550,50 600,55" />
-      </svg>
-    </div>
-
-    <div class="an-card">
-      <h2>Toppsider</h2>
-      <p class="sub">Mest besøkte sider denne måneden.</p>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <div style="display:flex;justify-content:space-between;font-size:14px;"><span>/creative-academy</span><strong>812</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:14px;"><span>/spor-renate-ai</span><strong>540</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:14px;"><span>/butikk</span><strong>388</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:14px;"><span>/biblioteket</span><strong>246</strong></div>
-      </div>
+    <div class="sb-table-wrap">
+      <table class="sb-table">
+        <thead>
+          <tr><th>Navn</th><th>E-post</th><th class="hide-sm">Kilde</th><th class="hide-sm">Påmeldt</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="sb-name">Ingrid Hansen</td><td>ingrid@example.no</td><td class="hide-sm"><span class="sb-tag lead">Gratis guide</span></td><td class="hide-sm">2. juni 2026</td></tr>
+          <tr><td class="sb-name">Marte Karlsen</td><td>marte.k@example.no</td><td class="hide-sm"><span class="sb-tag">Nyhetsbrev</span></td><td class="hide-sm">30. mai 2026</td></tr>
+          <tr><td class="sb-name">Sofie Lund</td><td>sofie@example.no</td><td class="hide-sm"><span class="sb-tag lead">Inner Circle-interesse</span></td><td class="hide-sm">28. mai 2026</td></tr>
+          <tr><td class="sb-name">Camilla Ruud</td><td>camilla.r@example.no</td><td class="hide-sm"><span class="sb-tag kunde">Kunde</span></td><td class="hide-sm">24. mai 2026</td></tr>
+          <tr><td class="sb-name">Nora Berg</td><td>nora@example.no</td><td class="hide-sm"><span class="sb-tag kunde">Kunde</span></td><td class="hide-sm">19. mai 2026</td></tr>
+          <tr><td class="sb-name">Hanne Tveit</td><td>hanne.t@example.no</td><td class="hide-sm"><span class="sb-tag">Nyhetsbrev</span></td><td class="hide-sm">15. mai 2026</td></tr>
+        </tbody>
+      </table>
     </div>
 
   </main>
