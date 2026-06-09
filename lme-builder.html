@@ -2183,7 +2183,8 @@
   const LEGACY_KEY = 'lme-builder:page'; // gammel single-page lagring
 
   // Felter som lagres som rik tekst (HTML) for markér-og-styl. Andre lagres som ren tekst.
-  const RICH_FIELDS = new Set(['heading', 'body', 'subheading', 'text', 'name', 'role', 'title', 'desc']);
+  const RICH_FIELDS = new Set(['heading', 'body', 'subheading', 'text', 'name', 'role', 'title', 'desc',
+    'brandName', 'brandDesc', 'col1Title', 'col2Title', 'col3Title', 'copyright']);
 
   // Lagring: Cloudflare KV (via /api/builder/store) med nettleser-fallback.
   // Byggeren bruker window.storage.get/set; her kobles den til Cloudflare.
@@ -3389,8 +3390,8 @@
       <div class="footer" style="background:${bgForStyle(p.style)}">
         <div class="footer-grid">
           <div>
-            <div class="footer-brand-name" contenteditable="${state.mode === 'edit'}" data-edit="brandName">${escapeHtml(p.brandName)}</div>
-            <p class="footer-brand-desc" contenteditable="${state.mode === 'edit'}" data-edit="brandDesc">${escapeHtml(p.brandDesc)}</p>
+            <div class="footer-brand-name" contenteditable="${state.mode === 'edit'}" data-edit="brandName">${p.brandName || ''}</div>
+            <p class="footer-brand-desc" contenteditable="${state.mode === 'edit'}" data-edit="brandDesc">${p.brandDesc || ''}</p>
             <div class="footer-socials">
               ${(p.socials || []).map((soc, idx) => `
                 <a class="footer-social" title="${escapeHtml(soc.label)}" onclick="event.preventDefault(); ${state.mode === 'preview' ? `handleLinkClick('${escapeHtml(soc.link)}', event)` : ''}">${escapeHtml(soc.icon)}</a>
@@ -3398,20 +3399,20 @@
             </div>
           </div>
           <div>
-            <div class="footer-col-title" contenteditable="${state.mode === 'edit'}" data-edit="col1Title">${escapeHtml(p.col1Title)}</div>
+            <div class="footer-col-title" contenteditable="${state.mode === 'edit'}" data-edit="col1Title">${p.col1Title || ''}</div>
             <ul class="footer-links">${renderColLinks('col1Links')}</ul>
           </div>
           <div>
-            <div class="footer-col-title" contenteditable="${state.mode === 'edit'}" data-edit="col2Title">${escapeHtml(p.col2Title)}</div>
+            <div class="footer-col-title" contenteditable="${state.mode === 'edit'}" data-edit="col2Title">${p.col2Title || ''}</div>
             <ul class="footer-links">${renderColLinks('col2Links')}</ul>
           </div>
           <div>
-            <div class="footer-col-title" contenteditable="${state.mode === 'edit'}" data-edit="col3Title">${escapeHtml(p.col3Title)}</div>
+            <div class="footer-col-title" contenteditable="${state.mode === 'edit'}" data-edit="col3Title">${p.col3Title || ''}</div>
             <ul class="footer-links">${renderColLinks('col3Links')}</ul>
           </div>
         </div>
         <div class="footer-bottom">
-          <div contenteditable="${state.mode === 'edit'}" data-edit="copyright">${escapeHtml(p.copyright)}</div>
+          <div contenteditable="${state.mode === 'edit'}" data-edit="copyright">${p.copyright || ''}</div>
           <div style="display:flex;gap:16px;">
             <span>Personvern</span>
             <span>Vilkår</span>
