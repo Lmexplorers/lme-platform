@@ -230,7 +230,7 @@
   .hero { padding: 80px 60px; display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center; }
   .hero-content h1 { font-family: var(--font-display); font-size: 44px; line-height: 1.15; color: var(--ink); margin-bottom: 20px; font-weight: 700; }
   .hero-content p { font-size: 16px; color: var(--ink-soft); margin-bottom: 28px; line-height: 1.65; }
-  .hero-cta, .cta-button { display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px; background: var(--btn-color, var(--pink-deep)); color: white; border-radius: 12px; font-weight: 600; font-size: calc(15px * var(--btn-scale, 1)); text-decoration: none; box-shadow: var(--shadow-md); transition: all 0.2s; border: none; cursor: pointer; font-family: var(--btn-font, var(--font-body)); }
+  .hero-cta, .cta-button { display: inline-flex; align-items: center; gap: 8px; padding: calc(14px * var(--btn-scale, 1)) calc(26px * var(--btn-scale, 1)); background: var(--btn-color, var(--pink-deep)); color: white; border-radius: 12px; font-weight: 600; font-size: calc(15px * var(--btn-scale, 1)); text-decoration: none; box-shadow: var(--shadow-md); transition: all 0.2s; border: none; cursor: pointer; font-family: var(--btn-font, var(--font-body)); }
   .hero-cta:hover, .cta-button:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
 
   /* === IMAGE BOX === */
@@ -417,7 +417,7 @@
   .pricing-features { list-style: none; padding: 0; margin: 0 0 28px 0; flex: 1; }
   .pricing-features li { padding: 7px 0; font-size: 13.5px; color: var(--ink); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
   .pricing-features li::before { content: '✓'; color: var(--brand); font-weight: 800; flex-shrink: 0; }
-  .pricing-cta { display: block; text-align: center; padding: 12px 20px; background: var(--cream); color: var(--pink-ink); border: 1.5px solid var(--btn-color, var(--pink-deep)); border-radius: 12px; font-weight: 600; font-size: calc(14px * var(--btn-scale, 1)); text-decoration: none; cursor: pointer; transition: all 0.2s; font-family: var(--btn-font, var(--font-body)); }
+  .pricing-cta { display: block; text-align: center; padding: calc(12px * var(--btn-scale, 1)) calc(20px * var(--btn-scale, 1)); background: var(--cream); color: var(--pink-ink); border: 1.5px solid var(--btn-color, var(--pink-deep)); border-radius: 12px; font-weight: 600; font-size: calc(14px * var(--btn-scale, 1)); text-decoration: none; cursor: pointer; transition: all 0.2s; font-family: var(--btn-font, var(--font-body)); }
   .pricing-card.featured .pricing-cta { background: var(--btn-color, var(--pink-deep)); color: white; }
   .pricing-cta:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
 
@@ -4463,7 +4463,7 @@ img { max-width: 100%; display: block; }
 .hero { padding: 80px 60px; display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center; }
 .hero-content h1 { font-family: var(--font-display); font-size: 44px; line-height: 1.15; color: var(--ink); margin-bottom: 20px; font-weight: 700; }
 .hero-content p { font-size: 16px; color: var(--ink-soft); margin-bottom: 28px; line-height: 1.65; }
-.hero-cta, .cta-button { display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px; background: var(--btn-color, var(--pink-deep)); color: white; border-radius: 12px; font-weight: 600; font-size: calc(15px * var(--btn-scale, 1)); box-shadow: var(--shadow-md); transition: all 0.2s; border: none; cursor: pointer; font-family: var(--btn-font, var(--font-body)); }
+.hero-cta, .cta-button { display: inline-flex; align-items: center; gap: 8px; padding: calc(14px * var(--btn-scale, 1)) calc(26px * var(--btn-scale, 1)); background: var(--btn-color, var(--pink-deep)); color: white; border-radius: 12px; font-weight: 600; font-size: calc(15px * var(--btn-scale, 1)); box-shadow: var(--shadow-md); transition: all 0.2s; border: none; cursor: pointer; font-family: var(--btn-font, var(--font-body)); }
 .hero-cta:hover, .cta-button:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
 .hero-image { border-radius: 20px; overflow: hidden; background: linear-gradient(135deg, var(--pink-soft), var(--brand)); margin: 0 auto; }
 .hero-image img { width: 100%; height: 100%; object-fit: cover; }
@@ -4531,7 +4531,7 @@ img { max-width: 100%; display: block; }
 .pricing-features { list-style: none; padding: 0; margin: 0 0 28px 0; flex: 1; }
 .pricing-features li { padding: 7px 0; font-size: 13.5px; color: var(--ink); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
 .pricing-features li::before { content: '✓'; color: var(--brand); font-weight: 800; flex-shrink: 0; }
-.pricing-cta { display: block; text-align: center; padding: 12px 20px; background: var(--cream); color: var(--pink-ink); border: 1.5px solid var(--btn-color, var(--pink-deep)); border-radius: 12px; font-weight: 600; font-size: calc(14px * var(--btn-scale, 1)); cursor: pointer; transition: all 0.2s; font-family: var(--btn-font, var(--font-body)); }
+.pricing-cta { display: block; text-align: center; padding: calc(12px * var(--btn-scale, 1)) calc(20px * var(--btn-scale, 1)); background: var(--cream); color: var(--pink-ink); border: 1.5px solid var(--btn-color, var(--pink-deep)); border-radius: 12px; font-weight: 600; font-size: calc(14px * var(--btn-scale, 1)); cursor: pointer; transition: all 0.2s; font-family: var(--btn-font, var(--font-body)); }
 .pricing-card.featured .pricing-cta { background: var(--btn-color, var(--pink-deep)); color: white; }
 .pricing-cta:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
 
@@ -5695,6 +5695,7 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
         <option value="0.9" ${(brand.btnScale || '1') === '0.9' ? 'selected' : ''}>Liten</option>
         <option value="1" ${(brand.btnScale || '1') === '1' ? 'selected' : ''}>Middels</option>
         <option value="1.2" ${(brand.btnScale || '1') === '1.2' ? 'selected' : ''}>Stor</option>
+        <option value="1.4" ${(brand.btnScale || '1') === '1.4' ? 'selected' : ''}>Ekstra stor</option>
       </select>
     `;
   }
