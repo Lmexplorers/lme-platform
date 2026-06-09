@@ -2547,14 +2547,27 @@
 
   // ============ FILE UPLOAD HANDLING ============
   let pendingImageTarget = null; // section id awaiting file
+  let pendingImageItem = null;   // { secId, idx } for opplasting av produktbilde
 
   function triggerFileUpload(secId) {
     pendingImageTarget = secId;
     document.getElementById('hiddenFileInput').click();
   }
 
+  function triggerProductUpload(secId, idx) {
+    pendingImageItem = { secId: secId, idx: idx };
+    document.getElementById('hiddenFileInput').click();
+  }
+
   document.getElementById('hiddenFileInput').addEventListener('change', async e => {
     const file = e.target.files[0];
+    if (file && pendingImageItem) {
+      const t = pendingImageItem;
+      pendingImageItem = null;
+      await handleImageFile(file, dataUrl => updateItemProp(t.secId, t.idx, 'imageUrl', dataUrl));
+      e.target.value = '';
+      return;
+    }
     if (!file || !pendingImageTarget) return;
     const targetId = pendingImageTarget;
     pendingImageTarget = null;
@@ -3162,8 +3175,12 @@
             <input class="mini-input" value="${escapeHtml(item.name)}" oninput="updateItemProp('${s.id}', ${idx}, 'name', this.value)">
             <label class="mini-label">Beskrivelse</label>
             <input class="mini-input" value="${escapeHtml(item.desc)}" oninput="updateItemProp('${s.id}', ${idx}, 'desc', this.value)">
-            ${s.type === 'products' ? `<label class="mini-label">Bilde-URL (valgfritt)</label>
-            <input class="mini-input" value="${escapeHtml(item.imageUrl || '')}" placeholder="Lim inn bilde-URL …" oninput="updateItemProp('${s.id}', ${idx}, 'imageUrl', this.value)">` : ''}
+            ${s.type === 'products' ? `<label class="mini-label">Produktbilde</label>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              ${item.imageUrl ? `<img src="${escapeHtml(item.imageUrl)}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;border:1px solid var(--line);">` : '<div style="width:44px;height:44px;border-radius:8px;background:var(--pink-blush);display:flex;align-items:center;justify-content:center;font-size:18px;">📷</div>'}
+              <button class="repeater-add" style="width:auto;padding:7px 12px;margin:0;" onclick="triggerProductUpload('${s.id}', ${idx})">${item.imageUrl ? '🔄 Bytt bilde' : '📤 Last opp bilde'}</button>
+              ${item.imageUrl ? `<button class="icon-btn danger" onclick="updateItemProp('${s.id}', ${idx}, 'imageUrl', '')" title="Fjern">✕</button>` : ''}
+            </div>` : ''}
             <div class="size-row">
               <div>
                 <label class="mini-label">Pris</label>
