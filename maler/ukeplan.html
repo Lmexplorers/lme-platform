@@ -852,13 +852,81 @@
       <h1 style="font-family:'Playpen Sans',system-ui,sans-serif; font-size:clamp(32px,5vw,48px); font-weight:400; line-height:1.1; color:#2a1e2e; margin:0 0 18px;" data-no="Din rolige ukeplan" data-en="Your calm weekly plan">Din rolige ukeplan</h1>
       <a href="#" class="res-cta" data-edit="cta" data-no="⬇ Last ned ukeplanen" data-en="⬇ Download the weekly plan">⬇ Last ned ukeplanen</a>
       <p class="intro" data-edit="intro" data-no="Denne malen hjelper deg å lage en forutsigbar, men luftig uke for barnet. En tydelig rytme gir trygghet, og trygghet gir rom for konsentrasjon. Skriv den ut, heng den opp i barnets høyde, og la barnet være med å fylle den ut." data-en="This template helps you build a predictable yet relaxed week for your child. A clear rhythm brings security, and security makes room for concentration. Print it, hang it at the child's height, and let the child help fill it in.">Denne malen hjelper deg å lage en forutsigbar, men luftig uke for barnet. En tydelig rytme gir trygghet, og trygghet gir rom for konsentrasjon. Skriv den ut, heng den opp i barnets høyde, og la barnet være med å fylle den ut.</p>
-      <p class="watch" data-no="Se en kort gjennomgang av hvordan du bruker malen." data-en="Watch a short walkthrough of how to use the template.">Se en kort gjennomgang av hvordan du bruker malen.</p>
-      <div class="res-video" data-video="">
-        <div class="ph">
-          <div class="play">▶</div>
-          <div class="lbl" data-no="Videogjennomgang kommer snart" data-en="Video walkthrough coming soon">Videogjennomgang kommer snart</div>
+      <p class="watch" data-no="Trykk på play, så får du en kort gjennomgang av hvordan du bruker malen." data-en="Press play for a short walkthrough of how to use the template.">Trykk på play, så får du en kort gjennomgang av hvordan du bruker malen.</p>
+      <style>
+        .res-video .vo-poster{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:#fff;font-family:inherit;}
+        .res-video .vo-playbtn{width:74px;height:74px;border-radius:50%;background:rgba(255,255,255,.92);color:#E91E89;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 8px 22px rgba(0,0,0,.18);}
+        .res-video .vo-postlbl{font-weight:700;font-size:15px;text-shadow:0 2px 8px rgba(0,0,0,.25);}
+        .res-video .vo-scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:28px;text-align:center;color:#fff;}
+        .res-video .vo-emoji{font-size:54px;filter:drop-shadow(0 3px 10px rgba(0,0,0,.25));}
+        .res-video .vo-cap{font-family:'Playpen Sans',system-ui,sans-serif;font-size:clamp(16px,2.6vw,22px);line-height:1.35;max-width:560px;text-shadow:0 2px 10px rgba(0,0,0,.25);}
+        .res-video .vo-bar{position:absolute;left:18px;right:18px;bottom:16px;height:6px;border-radius:999px;background:rgba(255,255,255,.35);overflow:hidden;}
+        .res-video .vo-bar-fill{height:100%;width:0;background:#fff;border-radius:999px;transition:width .2s linear;}
+        .res-video .vo-pause{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:#E91E89;font-size:13px;cursor:pointer;}
+      </style>
+      <div class="res-video" id="ukeplanPlayer">
+        <audio id="vo-audio" preload="none"></audio>
+        <button class="vo-poster" id="vo-play" type="button" aria-label="Spill av">
+          <span class="vo-playbtn">▶</span>
+          <span class="vo-postlbl" data-no="Spill av gjennomgangen" data-en="Play the walkthrough">Spill av gjennomgangen</span>
+        </button>
+        <div class="vo-scene" id="vo-scene" hidden>
+          <div class="vo-emoji" id="vo-emoji">👋</div>
+          <div class="vo-cap" id="vo-cap"></div>
+          <div class="vo-bar"><div class="vo-bar-fill" id="vo-fill"></div></div>
+          <button class="vo-pause" id="vo-pause" type="button" aria-label="Pause">❚❚</button>
         </div>
       </div>
+      <script>
+      (function(){
+        var P=document.getElementById('ukeplanPlayer'); if(!P) return;
+        var audio=document.getElementById('vo-audio'),
+            playBtn=document.getElementById('vo-play'),
+            scene=document.getElementById('vo-scene'),
+            emojiEl=document.getElementById('vo-emoji'),
+            capEl=document.getElementById('vo-cap'),
+            fill=document.getElementById('vo-fill'),
+            pauseBtn=document.getElementById('vo-pause');
+        var SRC={no:'/media/maler/ukeplan/ukeplan-no.mp3', en:'/media/maler/ukeplan/ukeplan-en.mp3'};
+        var STEPS={
+          no:[[0,'👋','Velkommen! Slik bruker du ukeplanen.'],
+              [0.16,'🍎','Skriv de faste holdepunktene øverst: måltider, hvile og leggetid.'],
+              [0.42,'🗓️','Legg inn bare én eller to aktiviteter hver dag, med god plass mellom.'],
+              [0.66,'📏','Heng planen opp i barnets høyde.'],
+              [0.82,'✅','La barnet selv krysse av. Det gir mestring.']],
+          en:[[0,'👋','Welcome! Here is how to use the weekly plan.'],
+              [0.16,'🍎','Write the fixed anchors at the top: meals, rest and bedtime.'],
+              [0.42,'🗓️','Add just one or two activities each day, with plenty of space.'],
+              [0.66,'📏','Hang the plan at the child\'s height.'],
+              [0.82,'✅','Let the child tick things off. It gives a sense of mastery.']]
+        };
+        function lang(){ return (document.documentElement.lang==='en')?'en':'no'; }
+        function load(){ audio.src=SRC[lang()]; }
+        function render(){
+          var st=STEPS[lang()], d=audio.duration||1, f=audio.currentTime/d, cur=st[0];
+          for(var i=0;i<st.length;i++){ if(f>=st[i][0]) cur=st[i]; }
+          emojiEl.textContent=cur[1]; capEl.textContent=cur[2];
+          fill.style.width=Math.min(100,f*100)+'%';
+        }
+        playBtn.addEventListener('click', function(){ load(); scene.hidden=false; playBtn.style.display='none'; render(); audio.play(); });
+        pauseBtn.addEventListener('click', function(){ if(audio.paused){audio.play();pauseBtn.textContent='❚❚';} else {audio.pause();pauseBtn.textContent='▶';} });
+        audio.addEventListener('timeupdate', render);
+        audio.addEventListener('ended', function(){ pauseBtn.textContent='▶'; fill.style.width='100%'; });
+        var lt=document.getElementById('langToggle');
+        if(lt) lt.addEventListener('click', function(){
+          if(scene.hidden) return;
+          setTimeout(function(){
+            var was=!audio.paused, t=audio.currentTime/(audio.duration||1);
+            load();
+            audio.addEventListener('loadedmetadata', function once(){
+              audio.currentTime=t*(audio.duration||1); if(was) audio.play();
+              audio.removeEventListener('loadedmetadata', once);
+            });
+            render();
+          },60);
+        });
+      })();
+      </script>
       <div class="res-previews"><div class="res-prev"><span data-no="Mandag" data-en="Monday">Mandag</span></div><div class="res-prev"><span data-no="Tirsdag" data-en="Tuesday">Tirsdag</span></div><div class="res-prev"><span data-no="Helg" data-en="Weekend">Helg</span></div><div class="res-prev"><span data-no="Rytme" data-en="Rhythm">Rytme</span></div></div>
     </div>
   </div>
