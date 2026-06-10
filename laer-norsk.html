@@ -4,13 +4,215 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lær Norsk med Mia &amp; Teo | Little Montessori Explorers</title>
-<meta name="description" content="Lær Norsk med Mia og Teo, et trygt, lekent kurs for barn. Video, ordlek og quiz med fremgang. Norsk og engelsk.">
+<meta name="description" content="Lær Norsk med Mia og Teo — et trygt, lekent kurs for barn. Video, ordlek og quiz med fremgang. Norsk og engelsk.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 
-<title>Lær Norsk med Mia &amp; Teo | Little Montessori Explorers</title>
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('fonts/SassoonMontessori.woff2') format('woff2'),
+         url('fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+
+  :root {
+    --pink-50:#fff5f8; --pink-100:#ffe8f0; --pink-200:#ffd1e1; --pink-300:#ffb3cd;
+    --pink-400:#ff8ab3; --pink-500:#e85a92; --pink-600:#c43d75; --pink-700:#8f2a55;
+    --lime:#8fc23f; --lime-soft:#e6f2cf; --gul:#ffce3d; --gul-soft:#fff3cf;
+    --bla:#6ec1e4; --bla-soft:#dff1f9; --lilla:#b07fd4; --lilla-soft:#efe4f7;
+    --oransje:#ff9d5c; --oransje-soft:#ffe9da;
+    --warm-white:#fffcf9; --ink:#3d2438; --ink-soft:#6b4760;
+    --shadow-soft:0 8px 32px rgba(196,61,117,.08);
+    --shadow-med:0 16px 48px rgba(196,61,117,.14);
+    --shadow-deep:0 24px 64px rgba(196,61,117,.18);
+    --font-head:'Playpen Sans',system-ui,sans-serif;
+    --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+    --font-display:'Cormorant Garamond',Georgia,serif;
+  }
+
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body {
+    font-family:var(--font-body); color:var(--ink); line-height:1.6; font-weight:400; overflow-x:hidden;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 5%, rgba(255,209,225,.35), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 20%, rgba(255,232,240,.4), transparent 60%),
+      var(--warm-white);
+  }
+  h1,h2,h3,h4 { font-family:var(--font-head); }
+  button,input,select,textarea { font-family:var(--font-body) !important; }
+
+  /* ====== NAV ====== */
+  nav { position:sticky; top:0; z-index:100; background:rgba(255,252,249,.92);
+    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--pink-100); padding:.75rem 2rem; transform:translateZ(0); }
+  .nav-inner { max-width:1280px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+  .logo { display:flex; align-items:center; gap:.75rem; text-decoration:none; }
+  .logo-img { width:56px; height:56px; object-fit:contain; }
+  .logo-text { font-family:var(--font-head); font-size:1.15rem; font-weight:600; color:var(--pink-600); line-height:1.1; letter-spacing:-.01em; }
+  .logo-text .subtitle { display:block; font-family:var(--font-display); font-style:italic; font-size:.75rem; color:var(--ink-soft); font-weight:400; margin-top:.1rem; }
+  .nav-links { display:flex; gap:2rem; align-items:center; list-style:none; }
+  .nav-links a { color:var(--ink-soft); text-decoration:none; font-size:1.05rem; font-weight:700; transition:color .2s; }
+  .nav-links a:hover, .nav-links a.active { color:var(--pink-600); }
+  .lang-toggle { background:linear-gradient(135deg,var(--pink-400),var(--pink-500)); color:white; border:none;
+    padding:.55rem 1.2rem; border-radius:999px; font-weight:600; font-size:.9rem; cursor:pointer; box-shadow:var(--shadow-soft); }
+
+  /* ====== COURSE HERO ====== */
+  .course-hero { max-width:1080px; margin:2rem auto 0; padding:0 2rem; }
+  .crumb { font-size:.92rem; color:var(--ink-soft); font-weight:600; margin-bottom:1rem; }
+  .crumb a { color:var(--pink-600); text-decoration:none; }
+  .crumb a:hover { text-decoration:underline; }
+  .hero-card {
+    background:linear-gradient(135deg,var(--bla-soft),var(--pink-50)); border:1px solid var(--pink-100);
+    border-radius:32px; padding:2.5rem; display:flex; gap:2rem; align-items:center; box-shadow:var(--shadow-soft); position:relative; overflow:hidden;
+  }
+  .hero-card .deco { position:absolute; right:-1rem; bottom:-2rem; font-size:11rem; opacity:.14; pointer-events:none; }
+  .hero-card .copy { position:relative; z-index:1; flex:1; }
+  .hero-badge { display:inline-flex; align-items:center; gap:.4rem; background:rgba(255,255,255,.8);
+    color:var(--pink-700); padding:.4rem 1rem; border-radius:999px; font-size:.82rem; font-weight:700; margin-bottom:.9rem; }
+  .hero-card h1 { font-size:clamp(1.9rem,4vw,2.8rem); line-height:1.1; letter-spacing:-.02em; margin-bottom:.7rem; }
+  .hero-card h1 .accent { font-family:var(--font-display); font-style:italic; font-weight:500; color:var(--pink-600); }
+  .hero-card p { color:var(--ink-soft); font-size:1.05rem; max-width:520px; }
+
+  /* progress ring */
+  .progress-ring { position:relative; z-index:1; flex:0 0 auto; width:130px; height:130px; }
+  .progress-ring svg { transform:rotate(-90deg); }
+  .progress-ring .label { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .progress-ring .pct { font-family:var(--font-head); font-size:1.6rem; font-weight:700; color:var(--pink-600); }
+  .progress-ring .cap { font-size:.72rem; color:var(--ink-soft); font-weight:600; }
+
+  /* ====== LESSON RAIL ====== */
+  .section { max-width:1080px; margin:2.5rem auto 0; padding:0 2rem; }
+  .section h2 { font-size:1.5rem; margin-bottom:1.1rem; }
+  .lesson-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1.1rem; }
+  .lesson {
+    background:white; border:1px solid var(--pink-100); border-radius:22px; padding:1.25rem; cursor:pointer;
+    box-shadow:var(--shadow-soft); transition:transform .2s, box-shadow .2s; text-align:left; display:block; width:100%; color:inherit; font:inherit;
+  }
+  .lesson:hover { transform:translateY(-4px); box-shadow:var(--shadow-med); }
+  .lesson:focus-visible { outline:3px solid var(--pink-400); outline-offset:2px; }
+  .lesson.locked { cursor:default; opacity:.75; }
+  .lesson.locked:hover { transform:none; box-shadow:var(--shadow-soft); }
+  .lesson .ic { width:54px; height:54px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:1.7rem; margin-bottom:.8rem; }
+  .ic.c1 { background:var(--gul-soft); } .ic.c2 { background:var(--lime-soft); }
+  .ic.c3 { background:var(--bla-soft); } .ic.c4 { background:var(--lilla-soft); } .ic.c5 { background:var(--oransje-soft); }
+  .lesson h3 { font-size:1.1rem; margin-bottom:.2rem; }
+  .lesson .meta { font-size:.85rem; color:var(--ink-soft); }
+  .lesson .status { margin-top:.7rem; display:inline-flex; align-items:center; gap:.3rem; font-size:.8rem; font-weight:700;
+    padding:.25rem .7rem; border-radius:999px; }
+  .status.go { background:var(--pink-100); color:var(--pink-700); }
+  .status.soon { background:var(--warm-white); color:var(--ink-soft); border:1px dashed var(--pink-200); }
+  .status.done { background:var(--lime-soft); color:#4d7a13; }
+  .lesson .stars { margin-top:.5rem; color:var(--gul); font-size:1rem; letter-spacing:1px; }
+  .lesson .stars .dim { color:var(--pink-100); }
+
+  /* ====== LESSON PANEL (modal/overlay) ====== */
+  .panel-overlay { position:fixed; inset:0; z-index:1000; display:none; background:rgba(61,36,56,.55);
+    backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); padding:2rem 1rem; overflow-y:auto; }
+  .panel-overlay.open { display:block; }
+  .panel { max-width:760px; margin:1rem auto; background:var(--warm-white); border-radius:30px; box-shadow:var(--shadow-deep);
+    border:1px solid var(--pink-100); overflow:hidden; }
+  .panel-head { display:flex; align-items:center; justify-content:space-between; padding:1.3rem 1.6rem; border-bottom:1px solid var(--pink-100);
+    background:linear-gradient(135deg,var(--gul-soft),var(--pink-50)); }
+  .panel-head h2 { font-size:1.3rem; }
+  .panel-close { width:44px; height:44px; border:none; border-radius:50%; background:white; color:var(--pink-600);
+    font-size:1.5rem; cursor:pointer; box-shadow:var(--shadow-soft); transition:transform .2s; }
+  .panel-close:hover { transform:scale(1.1) rotate(90deg); }
+
+  /* steps tab bar */
+  .steps { display:flex; gap:.5rem; padding:1rem 1.6rem 0; flex-wrap:wrap; }
+  .step-tab { border:1.5px solid var(--pink-100); background:white; color:var(--ink-soft); border-radius:999px;
+    padding:.5rem 1.1rem; font-weight:700; font-size:.92rem; cursor:pointer; display:inline-flex; align-items:center; gap:.4rem; transition:all .2s; }
+  .step-tab.active { background:linear-gradient(135deg,var(--pink-400),var(--pink-500)); color:white; border-color:transparent; }
+  .step-tab .chk { font-size:.85rem; }
+  .step-body { padding:1.5rem 1.6rem 2rem; }
+  .step { display:none; }
+  .step.active { display:block; animation:fade .3s; }
+  @keyframes fade { from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
+  .step-intro { color:var(--ink-soft); margin-bottom:1.1rem; }
+
+  /* video step */
+  .lesson-video { width:100%; aspect-ratio:16/9; border-radius:18px; overflow:hidden; background:#000; box-shadow:var(--shadow-soft); }
+  .lesson-video video { width:100%; height:100%; object-fit:contain; background:#000; display:block; }
+
+  /* gratis "se & lær"-animasjon (uten videofil) */
+  .mini-stage { width:100%; aspect-ratio:16/9; border-radius:18px; box-shadow:var(--shadow-soft);
+    background:linear-gradient(135deg,var(--bla-soft),var(--pink-50)); display:flex; flex-direction:column;
+    align-items:center; justify-content:center; position:relative; overflow:hidden; text-align:center; }
+  .mini-stage::after { content:''; position:absolute; inset:0;
+    background:radial-gradient(circle at 75% 18%, rgba(255,255,255,.5), transparent 60%); pointer-events:none; }
+  .mini-emoji { font-size:5rem; line-height:1; z-index:1; }
+  .mini-word { font-family:var(--font-head); font-weight:700; font-size:2.1rem; color:var(--pink-600); margin-top:.5rem; z-index:1; }
+  .mini-en { color:var(--ink-soft); font-size:1.05rem; z-index:1; }
+  .mini-char { max-height:58%; max-width:48%; border-radius:14px; box-shadow:var(--shadow-soft); object-fit:contain; z-index:1; margin-bottom:.5rem; }
+  .mini-anim { animation: mpPop .5s ease; }
+  @keyframes mpPop { 0%{opacity:0; transform:scale(.6) translateY(8px);} 60%{opacity:1; transform:scale(1.12);} 100%{transform:scale(1);} }
+  .mini-controls { text-align:center; margin-top:1rem; }
+
+  /* word cards */
+  .word-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:.9rem; }
+  .word-card { background:white; border:1px solid var(--pink-100); border-radius:20px; padding:1rem .6rem; text-align:center;
+    cursor:pointer; box-shadow:var(--shadow-soft); transition:transform .15s; }
+  .word-card:hover { transform:translateY(-3px); }
+  .word-card:active { transform:scale(.96); }
+  .word-card .emoji { font-size:2.6rem; display:block; margin-bottom:.4rem; }
+  .word-card .no { font-family:var(--font-head); font-weight:700; font-size:1.1rem; color:var(--ink); }
+  .word-card .en { font-size:.82rem; color:var(--ink-soft); }
+  .word-card .spk { margin-top:.35rem; font-size:.75rem; color:var(--pink-600); font-weight:700; }
+
+  /* quiz */
+  .quiz-prompt { text-align:center; margin-bottom:1.2rem; }
+  .quiz-prompt .ask { font-size:1rem; color:var(--ink-soft); }
+  .quiz-prompt .target { font-family:var(--font-head); font-size:2.2rem; color:var(--pink-600); font-weight:700; margin:.2rem 0; }
+  .quiz-prompt .hear { background:var(--pink-100); color:var(--pink-700); border:none; border-radius:999px;
+    padding:.5rem 1.2rem; font-weight:700; cursor:pointer; display:inline-flex; gap:.4rem; align-items:center; }
+  .quiz-opts { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; max-width:420px; margin:0 auto; }
+  .quiz-opt { background:white; border:2px solid var(--pink-100); border-radius:22px; font-size:3.4rem; padding:1.3rem 0;
+    cursor:pointer; transition:transform .15s, border-color .2s, background .2s; }
+  .quiz-opt:hover { transform:translateY(-3px); border-color:var(--pink-300); }
+  .quiz-opt.correct { border-color:var(--lime); background:var(--lime-soft); animation:pop .4s; }
+  .quiz-opt.wrong { border-color:var(--pink-400); background:var(--pink-50); animation:shake .4s; }
+  @keyframes pop { 0%{transform:scale(1);} 50%{transform:scale(1.12);} 100%{transform:scale(1);} }
+  @keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-6px);} 75%{transform:translateX(6px);} }
+  .quiz-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; font-weight:700; color:var(--ink-soft); }
+  .quiz-stars { color:var(--gul); font-size:1.3rem; letter-spacing:2px; }
+  .quiz-stars .dim { color:var(--pink-100); }
+
+  /* result / celebrate */
+  .result { text-align:center; padding:1rem 0; }
+  .result .big { font-size:4rem; line-height:1; margin-bottom:.6rem; }
+  .result h3 { font-size:1.6rem; margin-bottom:.4rem; }
+  .result p { color:var(--ink-soft); margin-bottom:1.3rem; }
+  .result .earned { color:var(--gul); font-size:2rem; letter-spacing:3px; margin-bottom:1.3rem; }
+  .btn { display:inline-flex; align-items:center; gap:.5rem; border:none; cursor:pointer; text-decoration:none;
+    background:linear-gradient(135deg,var(--pink-500),var(--pink-600)); color:white; padding:.85rem 1.8rem;
+    border-radius:999px; font-weight:700; font-size:1rem; box-shadow:var(--shadow-soft); transition:transform .2s; }
+  .btn:hover { transform:translateY(-2px); }
+  .btn.ghost { background:white; color:var(--pink-600); border:1.5px solid var(--pink-200); box-shadow:none; }
+  .step-foot { display:flex; justify-content:flex-end; gap:.7rem; margin-top:1.6rem; }
+
+  .parents { max-width:1080px; margin:3rem auto 0; padding:0 2rem; }
+  .parents-card { background:linear-gradient(135deg,var(--lilla-soft),var(--pink-50)); border:1px solid var(--pink-100);
+    border-radius:24px; padding:1.6rem 2rem; display:flex; gap:1rem; align-items:flex-start; }
+  .parents-card .ic { font-size:1.6rem; }
+  .parents-card h3 { font-size:1.1rem; margin-bottom:.3rem; }
+  .parents-card p { color:var(--ink-soft); font-size:.95rem; }
+
+  footer { text-align:center; padding:3rem 2rem; color:var(--ink-soft); font-size:.9rem; border-top:1px solid var(--pink-100); margin-top:3.5rem; }
+  footer .heart { color:var(--pink-500); }
+
+  @media (max-width:768px) {
+    nav { padding:.6rem 1rem; } .logo-img { width:44px; height:44px; } .logo-text { font-size:.95rem; }
+    .logo-text .subtitle { display:none; } .nav-links { gap:1rem; } .nav-links a { font-size:.85rem; }
+    .nav-links li:not(:last-child) { display:none; }
+    .hero-card { flex-direction:column; text-align:center; padding:2rem 1.5rem; }
+    .hero-card p { margin:0 auto; } .course-hero, .section, .parents { padding:0 1rem; }
+    .quiz-opt { font-size:2.8rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { *{ animation:none !important; } }
+</style>
 </head>
 <body>
 
@@ -41,8 +243,8 @@
         <span data-no="Lær Norsk med" data-en="Learn Norwegian with">Lær Norsk med</span>
         <span class="accent">Mia &amp; Teo</span>
       </h1>
-      <p data-no="Se, hør og lek deg til norske ord, én rolig leksjon om gangen. Video, ordlek og en liten quiz med stjerner." data-en="Watch, listen and play your way to Norwegian words, one calm lesson at a time. Video, word play and a little quiz with stars." data-edit="dp1">
-        Se, hør og lek deg til norske ord, én rolig leksjon om gangen. Video, ordlek og en liten quiz med stjerner.
+      <p data-no="Se, hør og lek deg til norske ord — én rolig leksjon om gangen. Video, ordlek og en liten quiz med stjerner." data-en="Watch, listen and play your way to Norwegian words — one calm lesson at a time. Video, word play and a little quiz with stars." data-edit="dp1">
+        Se, hør og lek deg til norske ord — én rolig leksjon om gangen. Video, ordlek og en liten quiz med stjerner.
       </p>
     </div>
     <div class="progress-ring" aria-hidden="true">
@@ -68,8 +270,8 @@
     <span class="ic">🌸</span>
     <div>
       <h3 data-no="For foreldre" data-en="For parents">For foreldre</h3>
-      <p data-no="Kurset er rolig og reklamefritt. Uttalen bruker nettleserens norske stemme, sett gjerne på lyd. Fremgang lagres kun på denne enheten." data-en="The course is calm and ad-free. Pronunciation uses your browser's Norwegian voice, turn on sound. Progress is saved on this device only." data-edit="dp2">
-        Kurset er rolig og reklamefritt. Uttalen bruker nettleserens norske stemme, sett gjerne på lyd. Fremgang lagres kun på denne enheten.
+      <p data-no="Kurset er rolig og reklamefritt. Uttalen bruker nettleserens norske stemme — sett gjerne på lyd. Fremgang lagres kun på denne enheten." data-en="The course is calm and ad-free. Pronunciation uses your browser's Norwegian voice — turn on sound. Progress is saved on this device only." data-edit="dp2">
+        Kurset er rolig og reklamefritt. Uttalen bruker nettleserens norske stemme — sett gjerne på lyd. Fremgang lagres kun på denne enheten.
       </p>
     </div>
   </div>
@@ -110,7 +312,7 @@
           <div class="mini-stage">
             <div class="mini-emoji">🌈</div>
             <div class="mini-word" data-no="Bli med og lær!" data-en="Come and learn!">Bli med og lær!</div>
-            <div class="mini-en" data-no="Trykk “Videre til ordlek” under for å starte." data-en="Tap “On to word play” below to start.">Trykk “Videre til ordlek” under for å starte.</div>
+            <div class="mini-en" data-no="Trykk «Videre til ordlek» under for å starte." data-en="Tap “On to word play” below to start.">Trykk «Videre til ordlek» under for å starte.</div>
           </div>
         </div>
         <div class="step-foot">
@@ -164,7 +366,314 @@
   <span data-no="English" data-en="Norsk">English</span>
 </a>
 
-<title>Lær Norsk med Mia &amp; Teo | Little Montessori Explorers</title>
+<script>
+  /* ============ SPRÅK ============ */
+  let currentLang = 'no';
+  const toggle = document.getElementById('langToggle');
+  function applyLang(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(el => {
+      const t = el.getAttribute('data-' + lang);
+      if (t === null) return;
+      if (t.includes('<')) el.innerHTML = t; else el.textContent = t;
+    });
+    toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    document.title = lang === 'no'
+      ? 'Lær Norsk med Mia & Teo | Little Montessori Explorers'
+      : 'Learn Norwegian with Mia & Teo | Little Montessori Explorers';
+    renderLessons();
+  }
+  toggle.addEventListener('click', () => applyLang(currentLang === 'no' ? 'en' : 'no'));
+  document.getElementById('langFloat').addEventListener('click', e => { e.preventDefault(); applyLang(currentLang === 'no' ? 'en' : 'no'); });
+
+  /* ============ NORSK TALE (uttale) ============ */
+  let voices = [];
+  function loadVoices() { voices = window.speechSynthesis ? speechSynthesis.getVoices() : []; }
+  if (window.speechSynthesis) {
+    loadVoices();
+    speechSynthesis.onvoiceschanged = loadVoices;
+  }
+  function speakNo(text) {
+    if (!window.speechSynthesis) return;
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'nb-NO'; u.rate = 0.85; u.pitch = 1.05;
+    const v = voices.find(v => /^nb|^no|nor/i.test(v.lang));
+    if (v) u.voice = v;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+  }
+
+  /* ============ KURSDATA ============ */
+  const LESSONS = [
+    { id:1, icon:'🔤', cls:'c1', titleNo:'Første ord', titleEn:'First words',
+      video:'videos/laer-norsk.mp4',
+      words:[
+        { no:'Hund',   en:'Dog',    emoji:'🐶' },
+        { no:'Katt',   en:'Cat',    emoji:'🐱' },
+        { no:'Sol',    en:'Sun',    emoji:'☀️' },
+        { no:'Måne',   en:'Moon',   emoji:'🌙' },
+        { no:'Eple',   en:'Apple',  emoji:'🍎' },
+        { no:'Ball',   en:'Ball',   emoji:'⚽' },
+        { no:'Fisk',   en:'Fish',   emoji:'🐟' },
+        { no:'Blomst', en:'Flower', emoji:'🌸' },
+        { no:'Bil',    en:'Car',    emoji:'🚗' },
+        { no:'Hus',    en:'House',  emoji:'🏠' },
+      ] },
+    { id:2, icon:'🔢', cls:'c2', titleNo:'Tall og telling', titleEn:'Numbers & counting',
+      video:null,
+      words:[
+        { no:'En',   en:'One',   emoji:'1️⃣' },
+        { no:'To',   en:'Two',   emoji:'2️⃣' },
+        { no:'Tre',  en:'Three', emoji:'3️⃣' },
+        { no:'Fire', en:'Four',  emoji:'4️⃣' },
+        { no:'Fem',  en:'Five',  emoji:'5️⃣' },
+        { no:'Seks', en:'Six',   emoji:'6️⃣' },
+        { no:'Sju',  en:'Seven', emoji:'7️⃣' },
+        { no:'Åtte', en:'Eight', emoji:'8️⃣' },
+        { no:'Ni',   en:'Nine',  emoji:'9️⃣' },
+        { no:'Ti',   en:'Ten',   emoji:'🔟' },
+      ] },
+    { id:3, icon:'🎨', cls:'c3', titleNo:'Farger', titleEn:'Colors',
+      video:null,
+      words:[
+        { no:'Rød',    en:'Red',    emoji:'🔴' },
+        { no:'Blå',    en:'Blue',   emoji:'🔵' },
+        { no:'Gul',    en:'Yellow', emoji:'🟡' },
+        { no:'Grønn',  en:'Green',  emoji:'🟢' },
+        { no:'Oransje',en:'Orange', emoji:'🟠' },
+        { no:'Lilla',  en:'Purple', emoji:'🟣' },
+        { no:'Rosa',   en:'Pink',   emoji:'🌸' },
+        { no:'Brun',   en:'Brown',  emoji:'🟤' },
+        { no:'Svart',  en:'Black',  emoji:'⚫' },
+        { no:'Hvit',   en:'White',  emoji:'⚪' },
+      ] },
+    { id:4, icon:'👪', cls:'c4', titleNo:'Familien', titleEn:'The family',
+      video:null,
+      words:[
+        { no:'Mamma',    en:'Mum',     emoji:'👩' },
+        { no:'Pappa',    en:'Dad',     emoji:'👨' },
+        { no:'Baby',     en:'Baby',    emoji:'👶' },
+        { no:'Jente',    en:'Girl',    emoji:'👧' },
+        { no:'Gutt',     en:'Boy',     emoji:'👦' },
+        { no:'Bestemor', en:'Grandma', emoji:'👵' },
+        { no:'Bestefar', en:'Grandpa', emoji:'👴' },
+        { no:'Familie',  en:'Family',  emoji:'👪' },
+      ] },
+    { id:5, icon:'🍎', cls:'c5', titleNo:'Mat og frukt', titleEn:'Food & fruit',
+      video:null,
+      words:[
+        { no:'Eple',    en:'Apple',      emoji:'🍎' },
+        { no:'Banan',   en:'Banana',     emoji:'🍌' },
+        { no:'Jordbær', en:'Strawberry', emoji:'🍓' },
+        { no:'Drue',    en:'Grapes',     emoji:'🍇' },
+        { no:'Brød',    en:'Bread',      emoji:'🍞' },
+        { no:'Ost',     en:'Cheese',     emoji:'🧀' },
+        { no:'Melk',    en:'Milk',       emoji:'🥛' },
+        { no:'Egg',     en:'Egg',        emoji:'🥚' },
+        { no:'Gulrot',  en:'Carrot',     emoji:'🥕' },
+        { no:'Vann',    en:'Water',      emoji:'💧' },
+      ] },
+  ];
+  let currentLesson = LESSONS[0];
+
+  /* ============ FREMGANG (localStorage) ============ */
+  const PKEY = 'lme_laernorsk_progress';
+  function loadProgress() { try { return JSON.parse(localStorage.getItem(PKEY)) || {}; } catch(e){ return {}; } }
+  function saveProgress(p) { try { localStorage.setItem(PKEY, JSON.stringify(p)); } catch(e){} }
+  let progress = loadProgress();
+
+  function updateRing() {
+    const total = LESSONS.length;
+    const done = LESSONS.filter(l => progress['l'+l.id] && progress['l'+l.id].done).length;
+    const pct = Math.round((done/total)*100);
+    const C = 351.86;
+    document.getElementById('ringFill').style.strokeDashoffset = C - (C * pct/100);
+    document.getElementById('pctText').textContent = pct + '%';
+  }
+
+  function starStr(n, max=3) {
+    let s = '';
+    for (let i=0;i<max;i++) s += i<n ? '★' : '<span class="dim">★</span>';
+    return s;
+  }
+
+  /* ============ RENDER LEKSJONER ============ */
+  const grid = document.getElementById('lessonGrid');
+  function renderLessons() {
+    grid.innerHTML = '';
+    LESSONS.forEach(l => {
+      const pr = progress['l'+l.id] || {};
+      const el = document.createElement('button');
+      el.className = 'lesson'; el.type = 'button';
+      const title = currentLang==='no' ? l.titleNo : l.titleEn;
+      const meta = l.video
+        ? (currentLang==='no' ? 'Video · Ordlek · Quiz' : 'Video · Word play · Quiz')
+        : (currentLang==='no' ? 'Ordlek · Quiz' : 'Word play · Quiz');
+      let statusHtml;
+      if (pr.done) {
+        statusHtml = `<span class="status done">✓ ${currentLang==='no'?'Fullført':'Completed'}</span>
+                      <div class="stars">${starStr(pr.stars||0)}</div>`;
+      } else {
+        statusHtml = `<span class="status go">▶ ${currentLang==='no'?'Start leksjon':'Start lesson'}</span>`;
+      }
+      el.innerHTML = `
+        <div class="ic ${l.cls}">${l.icon}</div>
+        <h3>${currentLang==='no'?'Leksjon':'Lesson'} ${l.id} · ${title}</h3>
+        <div class="meta">${meta}</div>
+        ${statusHtml}`;
+      el.addEventListener('click', () => openLesson(l));
+      grid.appendChild(el);
+    });
+    updateRing();
+  }
+
+  /* ============ LEKSJONSPANEL ============ */
+  const overlay = document.getElementById('panelOverlay');
+  const lessonVideo = document.getElementById('lessonVideo');
+  let stepDone = [false,false,false];
+
+  function setStep(n) {
+    document.querySelectorAll('.step').forEach((s,i)=>s.classList.toggle('active', i===n));
+    document.querySelectorAll('.step-tab').forEach((t,i)=>t.classList.toggle('active', i===n));
+    if (n!==0) lessonVideo.pause();
+  }
+
+  function markStep(n) {
+    stepDone[n] = true;
+    document.getElementById('chk'+n).textContent = '✓';
+  }
+  document.querySelectorAll('.step-tab').forEach(t => t.addEventListener('click', () => setStep(+t.dataset.step)));
+
+  function openLesson(l) {
+    currentLesson = l;
+    document.getElementById('panelTitle').textContent =
+      (currentLang==='no'?'Leksjon ':'Lesson ') + l.id + ' · ' + (currentLang==='no'?l.titleNo:l.titleEn);
+    stepDone = [false,false,false];
+    ['chk0','chk1','chk2'].forEach((id,i)=>document.getElementById(id).textContent = i===0?'▶':'○');
+    // Video eller "kommer snart"
+    if (l.video) {
+      lessonVideo.src = l.video;
+      document.getElementById('videoBox').style.display = '';
+      document.getElementById('noVideo').style.display = 'none';
+    } else {
+      lessonVideo.removeAttribute('src'); lessonVideo.load();
+      document.getElementById('videoBox').style.display = 'none';
+      document.getElementById('noVideo').style.display = '';
+    }
+    renderWords(l.words);
+    resetQuiz(l.words);
+    setStep(0);
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLesson() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    lessonVideo.pause();
+    if (window.speechSynthesis) speechSynthesis.cancel();
+  }
+  document.getElementById('panelClose').addEventListener('click', closeLesson);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeLesson(); });
+  document.addEventListener('keydown', e => { if (e.key==='Escape' && overlay.classList.contains('open')) closeLesson(); });
+
+  document.getElementById('toWords').addEventListener('click', () => { markStep(0); setStep(1); });
+  document.getElementById('toQuiz').addEventListener('click', () => { markStep(1); setStep(2); });
+
+  /* ============ ORDLEK ============ */
+  function renderWords(words) {
+    const wg = document.getElementById('wordGrid');
+    wg.innerHTML = '';
+    words.forEach(w => {
+      const c = document.createElement('button');
+      c.className = 'word-card'; c.type = 'button';
+      c.innerHTML = `<span class="emoji">${w.emoji}</span>
+        <span class="no">${w.no}</span>
+        <span class="en">${w.en}</span>
+        <span class="spk">🔊 ${currentLang==='no'?'Hør':'Listen'}</span>`;
+      c.addEventListener('click', () => speakNo(w.no));
+      wg.appendChild(c);
+    });
+  }
+
+  /* ============ QUIZ ============ */
+  const QN = 5;
+  let qIndex = 0, qScore = 0, qOrder = [], quizWords = [];
+  function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+  function resetQuiz(words) {
+    if (words) quizWords = words;
+    qIndex = 0; qScore = 0;
+    qOrder = shuffle(quizWords).slice(0, QN);
+    document.getElementById('qTotal').textContent = qOrder.length;
+    document.getElementById('quizPlay').style.display = '';
+    document.getElementById('quizResult').style.display = 'none';
+    renderQuestion(false);
+  }
+  function renderQuestion(speak) {
+    const target = qOrder[qIndex];
+    document.getElementById('qNum').textContent = qIndex+1;
+    document.getElementById('quizTarget').textContent = target.no;
+    document.getElementById('quizStars').innerHTML = starStr(qScore, qOrder.length);
+    // bygg alternativer: target + 3 distraktorer
+    const distract = shuffle(quizWords.filter(w => w.no !== target.no)).slice(0,3);
+    const opts = shuffle([target, ...distract]);
+    const wrap = document.getElementById('quizOpts');
+    wrap.innerHTML = '';
+    opts.forEach(o => {
+      const b = document.createElement('button');
+      b.className = 'quiz-opt'; b.type = 'button'; b.textContent = o.emoji;
+      b.addEventListener('click', () => handleAnswer(b, o, target));
+      wrap.appendChild(b);
+    });
+    if (speak) speakNo(target.no);
+  }
+  let answering = false;
+  function handleAnswer(btn, chosen, target) {
+    if (answering) return; answering = true;
+    if (chosen.no === target.no) {
+      btn.classList.add('correct'); qScore++;
+      document.getElementById('quizStars').innerHTML = starStr(qScore, QN);
+    } else {
+      btn.classList.add('wrong');
+      // marker riktig
+      Array.from(document.getElementById('quizOpts').children).forEach(b => {
+        if (b.textContent === target.emoji) b.classList.add('correct');
+      });
+    }
+    setTimeout(() => {
+      answering = false;
+      qIndex++;
+      if (qIndex < QN) renderQuestion(false); else finishQuiz();
+    }, 1100);
+  }
+  function finishQuiz() {
+    markStep(2);
+    // 1–3 stjerner basert på antall riktige av QN
+    let stars = 1;
+    if (qScore >= QN) stars = 3; else if (qScore >= Math.ceil(QN*0.6)) stars = 2;
+    const key = 'l' + currentLesson.id;
+    const prev = progress[key] || {};
+    progress[key] = { done:true, stars: Math.max(stars, prev.stars||0) };
+    saveProgress(progress);
+    updateRing();
+    document.getElementById('quizPlay').style.display = 'none';
+    document.getElementById('quizResult').style.display = '';
+    document.getElementById('earnedStars').innerHTML = starStr(stars, 3);
+    const msg = document.getElementById('resultMsg');
+    const txtNo = `Du fikk ${qScore} av ${QN} riktige!`;
+    const txtEn = `You got ${qScore} of ${QN} correct!`;
+    msg.setAttribute('data-no', txtNo); msg.setAttribute('data-en', txtEn);
+    msg.textContent = currentLang==='no' ? txtNo : txtEn;
+    renderLessons();
+  }
+  document.getElementById('quizHear').addEventListener('click', () => speakNo(qOrder[qIndex].no));
+  document.getElementById('quizAgain').addEventListener('click', resetQuiz);
+  document.getElementById('quizDone').addEventListener('click', closeLesson);
+
+  /* ============ INIT ============ */
+  renderLessons();
+</script>
   <script src="/js/page-editor.js" defer></script>
 </body>
 </html>
