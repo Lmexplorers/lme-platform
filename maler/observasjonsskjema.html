@@ -852,14 +852,103 @@
       <h1 style="font-family:'Playpen Sans',system-ui,sans-serif; font-size:clamp(32px,5vw,48px); font-weight:400; line-height:1.1; color:#2a1e2e; margin:0 0 18px;" data-no="Observasjonsskjema" data-en="Observation sheet">Observasjonsskjema</h1>
       <a href="#" class="res-cta" data-edit="cta" data-no="⬇ Last ned skjemaet" data-en="⬇ Download the sheet">⬇ Last ned skjemaet</a>
       <p class="intro" data-edit="intro" data-no="Før du underviser, før du griper inn, ser du. Dette skjemaet hjelper deg å notere hva barnet faktisk gjør, ikke hva du tror det føler. Bruk det fem minutter om dagen, så vil du oppdage mønstre du ikke visste var der." data-en="Before you teach, before you step in, you observe. This sheet helps you note what the child actually does, not what you think it feels. Use it five minutes a day, and you will discover patterns you did not know were there.">Før du underviser, før du griper inn, ser du. Dette skjemaet hjelper deg å notere hva barnet faktisk gjør, ikke hva du tror det føler. Bruk det fem minutter om dagen, så vil du oppdage mønstre du ikke visste var der.</p>
-      <p class="watch" data-no="Se en kort gjennomgang av hvordan du bruker malen." data-en="Watch a short walkthrough of how to use the template.">Se en kort gjennomgang av hvordan du bruker malen.</p>
-      <div class="res-video" data-video="">
-        <div class="ph">
-          <div class="play">▶</div>
-          <div class="lbl" data-no="Videogjennomgang kommer snart" data-en="Video walkthrough coming soon">Videogjennomgang kommer snart</div>
+      <p class="watch" data-no="Trykk på play, så viser jeg deg skjemaet steg for steg." data-en="Press play and I'll walk you through the sheet, step by step.">Trykk på play, så viser jeg deg skjemaet steg for steg.</p>
+
+      <style>
+        .res-stage { position:relative; border-radius:22px; }
+        .plan { background:#fff; border:1px solid #F1DDE2; border-radius:22px; padding:24px 24px 26px; box-shadow:0 14px 40px rgba(180,120,140,.16); }
+        .plan-head { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:18px; }
+        .plan-title { font-family:'Playpen Sans',system-ui,sans-serif; font-size:clamp(22px,3.4vw,30px); color:#2a1e2e; line-height:1.05; }
+        .plan-sub { font-size:13px; color:#9a7b85; margin-top:4px; letter-spacing:.02em; }
+        .plan-logo { width:46px; height:46px; object-fit:contain; flex:none; }
+        .region { transition:opacity .45s ease, box-shadow .45s ease, transform .45s ease; border-radius:16px; }
+        .res-stage.dim .region { opacity:.3; }
+        .res-stage.dim .region.active { opacity:1; box-shadow:0 0 0 3px #F5A8B8, 0 12px 30px rgba(233,30,137,.20); transform:translateY(-1px); }
+        .stage-play { position:absolute; inset:0; width:100%; height:100%; border:0; cursor:pointer; background:rgba(42,30,46,0); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:13px; font-family:inherit; border-radius:22px; transition:background .3s ease; }
+        .stage-play:hover { background:rgba(42,30,46,.06); }
+        .stage-play .sp-ico { width:74px; height:74px; border-radius:50%; background:#E91E89; color:#fff; display:flex; align-items:center; justify-content:center; font-size:28px; box-shadow:0 10px 28px rgba(233,30,137,.4); padding-left:5px; }
+        .stage-play .sp-lbl { background:#2a1e2e; color:#fff; font-weight:700; font-size:14px; padding:8px 16px; border-radius:999px; }
+        .stage-pause { position:absolute; top:14px; right:14px; width:38px; height:38px; border-radius:50%; border:0; background:#fff; color:#E91E89; font-size:12px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,.14); z-index:3; }
+        .stage-cap { margin:16px auto 0; max-width:720px; text-align:center; font-family:'Playpen Sans',system-ui,sans-serif; font-size:clamp(14px,1.9vw,17px); line-height:1.45; color:#2a1e2e; background:#fff; border:1px solid #F1DDE2; border-radius:14px; padding:12px 18px; box-shadow:0 6px 18px rgba(180,120,140,.14); }
+        .stage-bar { margin:10px auto 0; max-width:720px; height:6px; border-radius:999px; background:rgba(233,30,137,.15); overflow:hidden; }
+        .stage-fill { height:100%; width:0; background:#E91E89; border-radius:999px; transition:width .25s linear; }
+
+        .obs-fields { display:flex; gap:18px; flex-wrap:wrap; background:linear-gradient(135deg,#FCEFF2,#F8DBE1); border-radius:16px; padding:14px 16px; margin-bottom:16px; }
+        .obs-fields .f { flex:1; min-width:110px; }
+        .obs-fields .f span { display:block; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#C13D6A; margin-bottom:7px; }
+        .obs-fields .f .line { border-bottom:1.5px solid #E7C3CD; height:18px; }
+        .obs-table { border:1px solid #EFE0E4; border-radius:12px; overflow:hidden; }
+        .obs-table .row { display:grid; grid-template-columns:74px 1fr 1fr; }
+        .obs-table .row > div { border-bottom:1px solid #EFE0E4; padding:11px 12px; font-size:13px; min-height:40px; }
+        .obs-table .row:last-child > div { border-bottom:0; }
+        .obs-table .head > div { font-weight:700; color:#E91E89; font-size:11px; letter-spacing:.06em; text-transform:uppercase; background:#FCF6F8; }
+        .obs-note { margin-top:16px; background:#F4F9E9; border:1px solid #DCEBBE; border-radius:14px; padding:12px 16px; color:#5a6a32; font-size:14px; text-align:center; }
+      </style>
+      <div class="res-stage" id="obsStage">
+        <div class="plan" id="plan">
+          <div class="plan-head">
+            <div>
+              <div class="plan-title" data-no="Observasjon" data-en="Observation">Observasjon</div>
+              <div class="plan-sub" data-no="Se barnet · Little Montessori Explorers" data-en="See the child · Little Montessori Explorers">Se barnet · Little Montessori Explorers</div>
+            </div>
+            <img src="/images/lme-logo.png" alt="LME" class="plan-logo">
+          </div>
+          <div class="obs-fields region" id="region-fields">
+            <div class="f"><span data-no="Barn" data-en="Child">Barn</span><div class="line"></div></div>
+            <div class="f"><span data-no="Dato" data-en="Date">Dato</span><div class="line"></div></div>
+            <div class="f"><span data-no="Tid" data-en="Time">Tid</span><div class="line"></div></div>
+          </div>
+          <div class="obs-table region" id="region-table">
+            <div class="row head"><div data-no="Tid" data-en="Time">Tid</div><div data-no="Hva barnet gjør" data-en="What the child does">Hva barnet gjør</div><div data-no="Notat" data-en="Note">Notat</div></div>
+            <div class="row"><div></div><div></div><div></div></div><div class="row"><div></div><div></div><div></div></div><div class="row"><div></div><div></div><div></div></div><div class="row"><div></div><div></div><div></div></div>
+          </div>
+          <div class="obs-note region" id="region-note" data-no="Se, ikke tolk. Skriv det du ser." data-en="See, don't interpret. Write what you see.">Se, ikke tolk. Skriv det du ser.</div>
         </div>
+        <button class="stage-play" type="button" aria-label="Spill av">
+          <span class="sp-ico">▶</span>
+          <span class="sp-lbl" data-no="Spill av gjennomgangen" data-en="Play the walkthrough">Spill av gjennomgangen</span>
+        </button>
+        <button class="stage-pause" type="button" aria-label="Pause" hidden>❚❚</button>
+        <div class="stage-cap" hidden></div>
+        <div class="stage-bar" hidden><div class="stage-fill"></div></div>
+        <audio preload="none"></audio>
       </div>
-      <div class="res-previews"><div class="res-prev"><span data-no="Dato" data-en="Date">Dato</span></div><div class="res-prev"><span data-no="Aktivitet" data-en="Activity">Aktivitet</span></div><div class="res-prev"><span data-no="Notat" data-en="Note">Notat</span></div><div class="res-prev"><span data-no="Neste" data-en="Next">Neste</span></div></div>
+
+      <script>
+      (function(){
+        var stage=document.getElementById('obsStage'); if(!stage) return;
+        var audio=stage.querySelector('audio'), playBtn=stage.querySelector('.stage-play'),
+            pauseBtn=stage.querySelector('.stage-pause'), capEl=stage.querySelector('.stage-cap'),
+            bar=stage.querySelector('.stage-bar'), fill=stage.querySelector('.stage-fill'),
+            regions=[].slice.call(stage.querySelectorAll('.region'));
+        var SRC={"no": "/media/maler/observasjonsskjema/observasjonsskjema-no.mp3", "en": "/media/maler/observasjonsskjema/observasjonsskjema-en.mp3"}, STEPS={no:[[0, "", "Velkommen! Dette er observasjonsskjemaet."], [0.18, "fields", "Noter barnets navn, dato og tidspunkt øverst."], [0.44, "table", "Skriv ned hva barnet faktisk gjør, ikke hva du tror det føler."], [0.72, "note", "Se, ikke tolk. Tolkningen kan komme etterpå."], [0.88, "", "Din ro er en gave til barnet."]], en:[[0, "", "Welcome! This is the observation sheet."], [0.18, "fields", "Note the child's name, date and time at the top."], [0.44, "table", "Write down what the child actually does, not what you think it feels."], [0.72, "note", "See, don't interpret. Interpretation can come later."], [0.88, "", "Your calm is a gift to the child."]]}, TOTAL={"no": 28, "en": 29};
+        var timer=null, started=false, paused=false, elapsed=0, lastIdx=-1;
+        function lang(){ return (document.documentElement.lang==='en')?'en':'no'; }
+        function load(){ audio.src=SRC[lang()]; }
+        function dur(){ return (audio.duration && isFinite(audio.duration) && audio.duration>1) ? audio.duration : TOTAL[lang()]; }
+        function setStep(st){ capEl.textContent=st[2]; var r=st[1]; var dim=(r!==''&&r!=='check');
+          stage.classList.toggle('dim', dim);
+          regions.forEach(function(el){ el.classList.toggle('active', dim && el.id==='region-'+r); });
+          stage.classList.toggle('checked', r==='check'); }
+        function render(){ var s=STEPS[lang()], f=Math.min(1, elapsed/dur()); fill.style.width=(f*100)+'%';
+          var idx=0; for(var i=0;i<s.length;i++){ if(f>=s[i][0]) idx=i; }
+          if(idx!==lastIdx){ lastIdx=idx; setStep(s[idx]); } }
+        function tick(){ if(paused) return;
+          if(!audio.paused && audio.currentTime>0.05){ elapsed=audio.currentTime; } else { elapsed+=0.2; }
+          render(); if(elapsed>=dur()-0.05){ clearInterval(timer); timer=null; } }
+        function start(){ if(started) return; started=true; paused=false; elapsed=0; lastIdx=-1;
+          playBtn.style.display='none'; pauseBtn.hidden=false; capEl.hidden=false; bar.hidden=false;
+          load(); render(); audio.play().catch(function(){}); timer=setInterval(tick,200); }
+        stage.addEventListener('click', function(e){ if(e.target.closest('.stage-pause')) return; if(!started) start(); });
+        pauseBtn.addEventListener('click', function(e){ e.stopPropagation(); paused=!paused;
+          if(paused){ audio.pause(); pauseBtn.textContent='▶'; } else { audio.play().catch(function(){}); pauseBtn.textContent='❚❚'; if(!timer) timer=setInterval(tick,200); } });
+        var lt=document.getElementById('langToggle');
+        if(lt) lt.addEventListener('click', function(){ if(!started) return; setTimeout(function(){
+          var was=!paused, frac=elapsed/dur(); lastIdx=-1; load();
+          audio.addEventListener('loadedmetadata', function once(){ audio.currentTime=frac*(audio.duration||dur()); if(was&&!paused) audio.play().catch(function(){}); audio.removeEventListener('loadedmetadata', once); });
+          render(); },60); });
+      })();
+      </script>
     </div>
   </div>
 </main>

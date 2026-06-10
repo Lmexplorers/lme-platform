@@ -852,14 +852,93 @@
       <h1 style="font-family:'Playpen Sans',system-ui,sans-serif; font-size:clamp(32px,5vw,48px); font-weight:400; line-height:1.1; color:#2a1e2e; margin:0 0 18px;" data-no="Sjekkliste: Forberedt miljø" data-en="Prepared environment checklist">Sjekkliste: Forberedt miljø</h1>
       <a href="#" class="res-cta" data-edit="cta" data-no="⬇ Last ned sjekklisten" data-en="⬇ Download the checklist">⬇ Last ned sjekklisten</a>
       <p class="intro" data-edit="intro" data-no="Et godt forberedt miljø gjør at barnet kan handle selvstendig. Denne sjekklisten tar deg rom for rom gjennom de fire byggesteinene, så du ser med en gang hva som kan endres for å gi barnet mer frihet." data-en="A well-prepared environment lets the child act independently. This checklist takes you room by room through the four building blocks, so you see at once what can change to give the child more freedom.">Et godt forberedt miljø gjør at barnet kan handle selvstendig. Denne sjekklisten tar deg rom for rom gjennom de fire byggesteinene, så du ser med en gang hva som kan endres for å gi barnet mer frihet.</p>
-      <p class="watch" data-no="Se en kort gjennomgang av hvordan du bruker malen." data-en="Watch a short walkthrough of how to use the template.">Se en kort gjennomgang av hvordan du bruker malen.</p>
-      <div class="res-video" data-video="">
-        <div class="ph">
-          <div class="play">▶</div>
-          <div class="lbl" data-no="Videogjennomgang kommer snart" data-en="Video walkthrough coming soon">Videogjennomgang kommer snart</div>
+      <p class="watch" data-no="Trykk på play, så viser jeg deg sjekklisten steg for steg." data-en="Press play and I'll walk you through the checklist, step by step.">Trykk på play, så viser jeg deg sjekklisten steg for steg.</p>
+
+      <style>
+        .res-stage { position:relative; border-radius:22px; }
+        .plan { background:#fff; border:1px solid #F1DDE2; border-radius:22px; padding:24px 24px 26px; box-shadow:0 14px 40px rgba(180,120,140,.16); }
+        .plan-head { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:18px; }
+        .plan-title { font-family:'Playpen Sans',system-ui,sans-serif; font-size:clamp(22px,3.4vw,30px); color:#2a1e2e; line-height:1.05; }
+        .plan-sub { font-size:13px; color:#9a7b85; margin-top:4px; letter-spacing:.02em; }
+        .plan-logo { width:46px; height:46px; object-fit:contain; flex:none; }
+        .region { transition:opacity .45s ease, box-shadow .45s ease, transform .45s ease; border-radius:16px; }
+        .res-stage.dim .region { opacity:.3; }
+        .res-stage.dim .region.active { opacity:1; box-shadow:0 0 0 3px #F5A8B8, 0 12px 30px rgba(233,30,137,.20); transform:translateY(-1px); }
+        .stage-play { position:absolute; inset:0; width:100%; height:100%; border:0; cursor:pointer; background:rgba(42,30,46,0); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:13px; font-family:inherit; border-radius:22px; transition:background .3s ease; }
+        .stage-play:hover { background:rgba(42,30,46,.06); }
+        .stage-play .sp-ico { width:74px; height:74px; border-radius:50%; background:#E91E89; color:#fff; display:flex; align-items:center; justify-content:center; font-size:28px; box-shadow:0 10px 28px rgba(233,30,137,.4); padding-left:5px; }
+        .stage-play .sp-lbl { background:#2a1e2e; color:#fff; font-weight:700; font-size:14px; padding:8px 16px; border-radius:999px; }
+        .stage-pause { position:absolute; top:14px; right:14px; width:38px; height:38px; border-radius:50%; border:0; background:#fff; color:#E91E89; font-size:12px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,.14); z-index:3; }
+        .stage-cap { margin:16px auto 0; max-width:720px; text-align:center; font-family:'Playpen Sans',system-ui,sans-serif; font-size:clamp(14px,1.9vw,17px); line-height:1.45; color:#2a1e2e; background:#fff; border:1px solid #F1DDE2; border-radius:14px; padding:12px 18px; box-shadow:0 6px 18px rgba(180,120,140,.14); }
+        .stage-bar { margin:10px auto 0; max-width:720px; height:6px; border-radius:999px; background:rgba(233,30,137,.15); overflow:hidden; }
+        .stage-fill { height:100%; width:0; background:#E91E89; border-radius:999px; transition:width .25s linear; }
+
+        .chk-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        @media (max-width:560px){ .chk-grid{ grid-template-columns:1fr; } }
+        .chk-block { background:#FCFBFA; border:1px solid #EFE4E8; border-radius:14px; padding:14px 16px; }
+        .chk-block h4 { font-family:'Playpen Sans',system-ui,sans-serif; font-size:16px; color:#E91E89; margin-bottom:11px; }
+        .chk-item { display:flex; align-items:center; gap:10px; font-size:13.5px; color:#5a4650; margin-bottom:9px; }
+        .chk-item:last-child { margin-bottom:0; }
+        .chk-item .box { width:18px; height:18px; border:2px solid #E2B9C4; border-radius:6px; flex:none; position:relative; transition:all .35s ease; }
+        .checked .chk-item .box { background:#A4D233; border-color:#A4D233; }
+        .checked .chk-item .box::after { content:''; position:absolute; left:4px; top:1px; width:5px; height:9px; border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg); }
+      </style>
+      <div class="res-stage" id="chkStage">
+        <div class="plan" id="plan">
+          <div class="plan-head">
+            <div>
+              <div class="plan-title" data-no="Det forberedte miljøet" data-en="The prepared environment">Det forberedte miljøet</div>
+              <div class="plan-sub" data-no="Sjekkliste · Little Montessori Explorers" data-en="Checklist · Little Montessori Explorers">Sjekkliste · Little Montessori Explorers</div>
+            </div>
+            <img src="/images/lme-logo.png" alt="LME" class="plan-logo">
+          </div>
+          <div class="chk-grid"><div class="chk-block region" id="region-orden"><h4 data-no="Orden" data-en="Order">Orden</h4><div class="chk-item"><span class="box"></span><span data-no="Alt har sin faste plass" data-en="Everything has its fixed place">Alt har sin faste plass</span></div><div class="chk-item"><span class="box"></span><span data-no="Lave hyller, åpne kurver" data-en="Low shelves, open baskets">Lave hyller, åpne kurver</span></div><div class="chk-item"><span class="box"></span><span data-no="Rydd sammen med barnet" data-en="Tidy up with the child">Rydd sammen med barnet</span></div></div><div class="chk-block region" id="region-skjonnhet"><h4 data-no="Skjønnhet" data-en="Beauty">Skjønnhet</h4><div class="chk-item"><span class="box"></span><span data-no="Naturlige materialer" data-en="Natural materials">Naturlige materialer</span></div><div class="chk-item"><span class="box"></span><span data-no="Rolige farger" data-en="Calm colours">Rolige farger</span></div><div class="chk-item"><span class="box"></span><span data-no="Litt luft rundt tingene" data-en="A little space around things">Litt luft rundt tingene</span></div></div><div class="chk-block region" id="region-tilgang"><h4 data-no="Tilgjengelighet" data-en="Accessibility">Tilgjengelighet</h4><div class="chk-item"><span class="box"></span><span data-no="I barnets høyde" data-en="At the child's height">I barnets høyde</span></div><div class="chk-item"><span class="box"></span><span data-no="Klart til bruk" data-en="Ready to use">Klart til bruk</span></div><div class="chk-item"><span class="box"></span><span data-no="Få, men gode valg" data-en="Few, but good choices">Få, men gode valg</span></div></div><div class="chk-block region" id="region-frihet"><h4 data-no="Frihet innenfor rammer" data-en="Freedom within limits">Frihet innenfor rammer</h4><div class="chk-item"><span class="box"></span><span data-no="Barnet velger selv" data-en="The child chooses">Barnet velger selv</span></div><div class="chk-item"><span class="box"></span><span data-no="Tydelige grenser" data-en="Clear boundaries">Tydelige grenser</span></div><div class="chk-item"><span class="box"></span><span data-no="Tid til å fullføre" data-en="Time to finish">Tid til å fullføre</span></div></div></div>
         </div>
+        <button class="stage-play" type="button" aria-label="Spill av">
+          <span class="sp-ico">▶</span>
+          <span class="sp-lbl" data-no="Spill av gjennomgangen" data-en="Play the walkthrough">Spill av gjennomgangen</span>
+        </button>
+        <button class="stage-pause" type="button" aria-label="Pause" hidden>❚❚</button>
+        <div class="stage-cap" hidden></div>
+        <div class="stage-bar" hidden><div class="stage-fill"></div></div>
+        <audio preload="none"></audio>
       </div>
-      <div class="res-previews"><div class="res-prev"><span data-no="Orden" data-en="Order">Orden</span></div><div class="res-prev"><span data-no="Skjønnhet" data-en="Beauty">Skjønnhet</span></div><div class="res-prev"><span data-no="Tilgang" data-en="Access">Tilgang</span></div><div class="res-prev"><span data-no="Frihet" data-en="Freedom">Frihet</span></div></div>
+
+      <script>
+      (function(){
+        var stage=document.getElementById('chkStage'); if(!stage) return;
+        var audio=stage.querySelector('audio'), playBtn=stage.querySelector('.stage-play'),
+            pauseBtn=stage.querySelector('.stage-pause'), capEl=stage.querySelector('.stage-cap'),
+            bar=stage.querySelector('.stage-bar'), fill=stage.querySelector('.stage-fill'),
+            regions=[].slice.call(stage.querySelectorAll('.region'));
+        var SRC={"no": "/media/maler/forberedt-miljo-sjekkliste/sjekkliste-no.mp3", "en": "/media/maler/forberedt-miljo-sjekkliste/sjekkliste-en.mp3"}, STEPS={no:[[0, "", "Velkommen! Dette er sjekklisten for det forberedte miljøet."], [0.16, "orden", "Orden: Alt har sin faste plass."], [0.36, "skjonnhet", "Skjønnhet: Naturlige materialer og rolige farger."], [0.54, "tilgang", "Tilgjengelighet: I barnets høyde, klart til bruk."], [0.72, "frihet", "Frihet innenfor rammer: Barnet velger selv."], [0.88, "check", "Kryss av etter hvert. Små endringer, stor forskjell."]], en:[[0, "", "Welcome! This is the prepared environment checklist."], [0.16, "orden", "Order: Everything has its fixed place."], [0.36, "skjonnhet", "Beauty: Natural materials and calm colours."], [0.54, "tilgang", "Accessibility: At the child's height, ready to use."], [0.72, "frihet", "Freedom within limits: The child chooses."], [0.88, "check", "Tick each item as you go. Small changes, big difference."]]}, TOTAL={"no": 31, "en": 29};
+        var timer=null, started=false, paused=false, elapsed=0, lastIdx=-1;
+        function lang(){ return (document.documentElement.lang==='en')?'en':'no'; }
+        function load(){ audio.src=SRC[lang()]; }
+        function dur(){ return (audio.duration && isFinite(audio.duration) && audio.duration>1) ? audio.duration : TOTAL[lang()]; }
+        function setStep(st){ capEl.textContent=st[2]; var r=st[1]; var dim=(r!==''&&r!=='check');
+          stage.classList.toggle('dim', dim);
+          regions.forEach(function(el){ el.classList.toggle('active', dim && el.id==='region-'+r); });
+          stage.classList.toggle('checked', r==='check'); }
+        function render(){ var s=STEPS[lang()], f=Math.min(1, elapsed/dur()); fill.style.width=(f*100)+'%';
+          var idx=0; for(var i=0;i<s.length;i++){ if(f>=s[i][0]) idx=i; }
+          if(idx!==lastIdx){ lastIdx=idx; setStep(s[idx]); } }
+        function tick(){ if(paused) return;
+          if(!audio.paused && audio.currentTime>0.05){ elapsed=audio.currentTime; } else { elapsed+=0.2; }
+          render(); if(elapsed>=dur()-0.05){ clearInterval(timer); timer=null; } }
+        function start(){ if(started) return; started=true; paused=false; elapsed=0; lastIdx=-1;
+          playBtn.style.display='none'; pauseBtn.hidden=false; capEl.hidden=false; bar.hidden=false;
+          load(); render(); audio.play().catch(function(){}); timer=setInterval(tick,200); }
+        stage.addEventListener('click', function(e){ if(e.target.closest('.stage-pause')) return; if(!started) start(); });
+        pauseBtn.addEventListener('click', function(e){ e.stopPropagation(); paused=!paused;
+          if(paused){ audio.pause(); pauseBtn.textContent='▶'; } else { audio.play().catch(function(){}); pauseBtn.textContent='❚❚'; if(!timer) timer=setInterval(tick,200); } });
+        var lt=document.getElementById('langToggle');
+        if(lt) lt.addEventListener('click', function(){ if(!started) return; setTimeout(function(){
+          var was=!paused, frac=elapsed/dur(); lastIdx=-1; load();
+          audio.addEventListener('loadedmetadata', function once(){ audio.currentTime=frac*(audio.duration||dur()); if(was&&!paused) audio.play().catch(function(){}); audio.removeEventListener('loadedmetadata', once); });
+          render(); },60); });
+      })();
+      </script>
     </div>
   </div>
 </main>
