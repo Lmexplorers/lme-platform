@@ -852,93 +852,132 @@
       <h1 style="font-family:'Playpen Sans',system-ui,sans-serif; font-size:clamp(32px,5vw,48px); font-weight:400; line-height:1.1; color:#2a1e2e; margin:0 0 18px;" data-no="Din rolige ukeplan" data-en="Your calm weekly plan">Din rolige ukeplan</h1>
       <a href="#" class="res-cta" data-edit="cta" data-no="⬇ Last ned ukeplanen" data-en="⬇ Download the weekly plan">⬇ Last ned ukeplanen</a>
       <p class="intro" data-edit="intro" data-no="Denne malen hjelper deg å lage en forutsigbar, men luftig uke for barnet. En tydelig rytme gir trygghet, og trygghet gir rom for konsentrasjon. Skriv den ut, heng den opp i barnets høyde, og la barnet være med å fylle den ut." data-en="This template helps you build a predictable yet relaxed week for your child. A clear rhythm brings security, and security makes room for concentration. Print it, hang it at the child's height, and let the child help fill it in.">Denne malen hjelper deg å lage en forutsigbar, men luftig uke for barnet. En tydelig rytme gir trygghet, og trygghet gir rom for konsentrasjon. Skriv den ut, heng den opp i barnets høyde, og la barnet være med å fylle den ut.</p>
-      <p class="watch" data-no="Trykk på play, så får du en kort gjennomgang av hvordan du bruker malen." data-en="Press play for a short walkthrough of how to use the template.">Trykk på play, så får du en kort gjennomgang av hvordan du bruker malen.</p>
+      <p class="watch" data-no="Trykk på play, så viser jeg deg malen steg for steg." data-en="Press play and I'll walk you through the template, step by step.">Trykk på play, så viser jeg deg malen steg for steg.</p>
+
       <style>
-        .res-video .vo-poster{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:#fff;font-family:inherit;}
-        .res-video .vo-playbtn{width:74px;height:74px;border-radius:50%;background:rgba(255,255,255,.92);color:#E91E89;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 8px 22px rgba(0,0,0,.18);}
-        .res-video .vo-postlbl{font-weight:700;font-size:15px;text-shadow:0 2px 8px rgba(0,0,0,.25);}
-        .res-video .vo-scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:28px;text-align:center;color:#fff;}
-        .res-video .vo-emoji{font-size:54px;filter:drop-shadow(0 3px 10px rgba(0,0,0,.25));}
-        .res-video .vo-cap{font-family:'Playpen Sans',system-ui,sans-serif;font-size:clamp(16px,2.6vw,22px);line-height:1.35;max-width:560px;text-shadow:0 2px 10px rgba(0,0,0,.25);}
-        .res-video .vo-bar{position:absolute;left:18px;right:18px;bottom:16px;height:6px;border-radius:999px;background:rgba(255,255,255,.35);overflow:hidden;}
-        .res-video .vo-bar-fill{height:100%;width:0;background:#fff;border-radius:999px;transition:width .2s linear;}
-        .res-video .vo-pause{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:#E91E89;font-size:13px;cursor:pointer;}
+        .res-stage { position:relative; border-radius:22px; }
+        .plan { background:#fff; border:1px solid #F1DDE2; border-radius:22px; padding:24px 24px 26px; box-shadow:0 14px 40px rgba(180,120,140,.16); }
+        .plan-head { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:18px; }
+        .plan-title { font-family:'Playpen Sans',system-ui,sans-serif; font-size:clamp(22px,3.4vw,30px); color:#2a1e2e; line-height:1.05; }
+        .plan-sub { font-size:13px; color:#9a7b85; margin-top:4px; letter-spacing:.02em; }
+        .plan-logo { width:46px; height:46px; object-fit:contain; flex:none; }
+        .region { transition:opacity .45s ease, box-shadow .45s ease, transform .45s ease; border-radius:16px; }
+        .plan-anchors { display:flex; flex-wrap:wrap; gap:10px; align-items:center; background:linear-gradient(135deg,#FCEFF2,#F8DBE1); border-radius:16px; padding:14px 16px; margin-bottom:16px; }
+        .plan-anchors .lab { font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#C13D6A; margin-right:4px; }
+        .plan-anchors .chip { display:inline-flex; align-items:center; gap:7px; background:#fff; border-radius:999px; padding:7px 13px; font-size:13px; font-weight:600; color:#5a4650; box-shadow:0 2px 6px rgba(180,120,140,.12); }
+        .plan-anchors .chip i { width:9px; height:9px; border-radius:50%; display:inline-block; }
+        .plan-week { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+        .day { background:#FCFBFA; border:1px solid #EFE4E8; border-radius:12px; padding:10px 8px 12px; min-height:108px; display:flex; flex-direction:column; }
+        .day-name { font-size:12px; font-weight:700; color:#E91E89; text-align:center; margin-bottom:9px; letter-spacing:.04em; }
+        .day .slot { height:0; border-bottom:1.5px dashed #E7D3D9; margin:0 2px 11px; }
+        .day .check { width:18px; height:18px; border:2px solid #E2B9C4; border-radius:6px; margin:auto auto 0; position:relative; transition:all .35s ease; }
+        .checked .day .check { background:#A4D233; border-color:#A4D233; }
+        .checked .day .check::after { content:''; position:absolute; left:4px; top:1px; width:5px; height:9px; border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg); }
+        .res-stage.dim .region { opacity:.32; }
+        .res-stage.dim .region.active { opacity:1; box-shadow:0 0 0 3px #F5A8B8, 0 12px 30px rgba(233,30,137,.20); transform:translateY(-1px); }
+        .stage-play { position:absolute; inset:0; width:100%; height:100%; border:0; cursor:pointer; background:rgba(42,30,46,.0); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:13px; font-family:inherit; border-radius:22px; transition:background .3s ease; }
+        .stage-play:hover { background:rgba(42,30,46,.06); }
+        .stage-play .sp-ico { width:74px; height:74px; border-radius:50%; background:#E91E89; color:#fff; display:flex; align-items:center; justify-content:center; font-size:28px; box-shadow:0 10px 28px rgba(233,30,137,.4); padding-left:5px; }
+        .stage-play .sp-lbl { background:#2a1e2e; color:#fff; font-weight:700; font-size:14px; padding:8px 16px; border-radius:999px; }
+        .stage-cap { position:absolute; left:16px; right:16px; bottom:40px; text-align:center; font-family:'Playpen Sans',system-ui,sans-serif; font-size:clamp(15px,2.3vw,19px); color:#2a1e2e; background:rgba(255,255,255,.92); border-radius:14px; padding:11px 16px; box-shadow:0 6px 18px rgba(180,120,140,.18); }
+        .stage-bar { position:absolute; left:24px; right:24px; bottom:18px; height:6px; border-radius:999px; background:rgba(233,30,137,.15); overflow:hidden; }
+        .stage-fill { height:100%; width:0; background:#E91E89; border-radius:999px; transition:width .25s linear; }
+        .stage-pause { position:absolute; top:14px; right:14px; width:38px; height:38px; border-radius:50%; border:0; background:#fff; color:#E91E89; font-size:12px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,.14); z-index:3; }
       </style>
-      <div class="res-video" id="ukeplanPlayer">
-        <audio id="vo-audio" preload="none"></audio>
-        <button class="vo-poster" id="vo-play" type="button" aria-label="Spill av">
-          <span class="vo-playbtn">▶</span>
-          <span class="vo-postlbl" data-no="Spill av gjennomgangen" data-en="Play the walkthrough">Spill av gjennomgangen</span>
-        </button>
-        <div class="vo-scene" id="vo-scene" hidden>
-          <div class="vo-emoji" id="vo-emoji">👋</div>
-          <div class="vo-cap" id="vo-cap"></div>
-          <div class="vo-bar"><div class="vo-bar-fill" id="vo-fill"></div></div>
-          <button class="vo-pause" id="vo-pause" type="button" aria-label="Pause">❚❚</button>
+
+      <div class="res-stage" id="ukeplanStage">
+        <div class="plan" id="plan">
+          <div class="plan-head">
+            <div>
+              <div class="plan-title" data-no="Vår uke" data-en="Our week">Vår uke</div>
+              <div class="plan-sub" data-no="En rolig rytme for hjemmet · Little Montessori Explorers" data-en="A calm rhythm for the home · Little Montessori Explorers">En rolig rytme for hjemmet · Little Montessori Explorers</div>
+            </div>
+            <img src="/images/lme-logo.png" alt="LME" class="plan-logo">
+          </div>
+          <div class="plan-anchors region" id="region-anchors">
+            <span class="lab" data-no="Faste holdepunkter" data-en="Fixed anchors">Faste holdepunkter</span>
+            <span class="chip"><i style="background:var(--sun,#F7C72E)"></i><span data-no="Frokost" data-en="Breakfast">Frokost</span></span><span class="chip"><i style="background:var(--sky,#3FA9F5)"></i><span data-no="Lunsj" data-en="Lunch">Lunsj</span></span><span class="chip"><i style="background:var(--cerise,#E91E89)"></i><span data-no="Middag" data-en="Dinner">Middag</span></span><span class="chip"><i style="background:var(--lime,#A4D233)"></i><span data-no="Leggetid" data-en="Bedtime">Leggetid</span></span>
+          </div>
+          <div class="plan-week region" id="region-week">
+            <div class="day"><div class="day-name" data-no="Man" data-en="Mon">Man</div><div class="slot"></div><div class="slot"></div><div class="check"></div></div><div class="day"><div class="day-name" data-no="Tir" data-en="Tue">Tir</div><div class="slot"></div><div class="slot"></div><div class="check"></div></div><div class="day"><div class="day-name" data-no="Ons" data-en="Wed">Ons</div><div class="slot"></div><div class="slot"></div><div class="check"></div></div><div class="day"><div class="day-name" data-no="Tor" data-en="Thu">Tor</div><div class="slot"></div><div class="slot"></div><div class="check"></div></div><div class="day"><div class="day-name" data-no="Fre" data-en="Fri">Fre</div><div class="slot"></div><div class="slot"></div><div class="check"></div></div><div class="day"><div class="day-name" data-no="Lør" data-en="Sat">Lør</div><div class="slot"></div><div class="slot"></div><div class="check"></div></div><div class="day"><div class="day-name" data-no="Søn" data-en="Sun">Søn</div><div class="slot"></div><div class="slot"></div><div class="check"></div></div>
+          </div>
         </div>
+        <button class="stage-play" id="stage-play" type="button" aria-label="Spill av">
+          <span class="sp-ico">▶</span>
+          <span class="sp-lbl" data-no="Spill av gjennomgangen" data-en="Play the walkthrough">Spill av gjennomgangen</span>
+        </button>
+        <button class="stage-pause" id="stage-pause" type="button" aria-label="Pause" hidden>❚❚</button>
+        <div class="stage-cap" id="stage-cap" hidden></div>
+        <div class="stage-bar" id="stage-bar" hidden><div class="stage-fill" id="stage-fill"></div></div>
+        <audio id="vo-audio" preload="none"></audio>
       </div>
       <script>
       (function(){
-        var P=document.getElementById('ukeplanPlayer'); if(!P) return;
+        var stage=document.getElementById('ukeplanStage'); if(!stage) return;
         var audio=document.getElementById('vo-audio'),
-            playBtn=document.getElementById('vo-play'),
-            scene=document.getElementById('vo-scene'),
-            emojiEl=document.getElementById('vo-emoji'),
-            capEl=document.getElementById('vo-cap'),
-            fill=document.getElementById('vo-fill'),
-            pauseBtn=document.getElementById('vo-pause');
+            playBtn=document.getElementById('stage-play'),
+            pauseBtn=document.getElementById('stage-pause'),
+            capEl=document.getElementById('stage-cap'),
+            bar=document.getElementById('stage-bar'),
+            fill=document.getElementById('stage-fill'),
+            rAnchors=document.getElementById('region-anchors'),
+            rWeek=document.getElementById('region-week');
         var SRC={no:'/media/maler/ukeplan/ukeplan-no.mp3', en:'/media/maler/ukeplan/ukeplan-en.mp3'};
         var STEPS={
-          no:[[0,'👋','Velkommen! Slik bruker du ukeplanen.'],
-              [0.16,'🍎','Skriv de faste holdepunktene øverst: måltider, hvile og leggetid.'],
-              [0.42,'🗓️','Legg inn bare én eller to aktiviteter hver dag, med god plass mellom.'],
-              [0.66,'📏','Heng planen opp i barnets høyde.'],
-              [0.82,'✅','La barnet selv krysse av. Det gir mestring.']],
-          en:[[0,'👋','Welcome! Here is how to use the weekly plan.'],
-              [0.16,'🍎','Write the fixed anchors at the top: meals, rest and bedtime.'],
-              [0.42,'🗓️','Add just one or two activities each day, with plenty of space.'],
-              [0.66,'📏','Hang the plan at the child\'s height.'],
-              [0.82,'✅','Let the child tick things off. It gives a sense of mastery.']]
+          no:[[0,'','Velkommen! Slik bruker du ukeplanen.'],
+              [0.16,'anchors','Skriv de faste holdepunktene øverst: måltider, hvile og leggetid.'],
+              [0.42,'week','Legg inn bare én eller to aktiviteter hver dag, med god plass mellom.'],
+              [0.66,'','Heng planen opp i barnets høyde, så barnet når den selv.'],
+              [0.82,'check','La barnet selv krysse av når noe er gjort. Det gir mestring.']],
+          en:[[0,'','Welcome! Here is how to use the weekly plan.'],
+              [0.16,'anchors','Write the fixed anchors at the top: meals, rest and bedtime.'],
+              [0.42,'week','Add just one or two activities each day, with plenty of space.'],
+              [0.66,'','Hang the plan at the child\'s height, so the child can reach it.'],
+              [0.82,'check','Let the child tick things off when something is done. It gives a sense of mastery.']]
         };
-        var TOTAL={no:34, en:35};
-        var timer=null, started=false, paused=false, elapsed=0;
+        var TOTAL={no:34, en:35}, timer=null, started=false, paused=false, elapsed=0, lastIdx=-1;
         function lang(){ return (document.documentElement.lang==='en')?'en':'no'; }
         function load(){ audio.src=SRC[lang()]; }
         function dur(){ return (audio.duration && isFinite(audio.duration) && audio.duration>1) ? audio.duration : TOTAL[lang()]; }
+        function setStep(st){
+          capEl.textContent=st[2];
+          var r=st[1];
+          stage.classList.toggle('dim', r!=='');
+          rAnchors.classList.toggle('active', r==='anchors');
+          rWeek.classList.toggle('active', r==='week'||r==='check');
+          stage.classList.toggle('checked', r==='check');
+        }
         function render(){
-          var st=STEPS[lang()], f=Math.min(1, elapsed/dur()), cur=st[0];
-          for(var i=0;i<st.length;i++){ if(f>=st[i][0]) cur=st[i]; }
-          emojiEl.textContent=cur[1]; capEl.textContent=cur[2];
-          fill.style.width=Math.min(100,f*100)+'%';
+          var s=STEPS[lang()], f=Math.min(1, elapsed/dur());
+          fill.style.width=(f*100)+'%';
+          var idx=0; for(var i=0;i<s.length;i++){ if(f>=s[i][0]) idx=i; }
+          if(idx!==lastIdx){ lastIdx=idx; setStep(s[idx]); }
         }
         function tick(){
           if(paused) return;
           if(!audio.paused && audio.currentTime>0.05){ elapsed=audio.currentTime; }
           else { elapsed+=0.2; }
           render();
-          if(elapsed>=dur()-0.05){ stop(); }
+          if(elapsed>=dur()-0.05){ clearInterval(timer); timer=null; }
         }
         function start(){
-          if(started) return; started=true; paused=false; elapsed=0;
-          scene.hidden=false; playBtn.style.display='none';
+          if(started) return; started=true; paused=false; elapsed=0; lastIdx=-1;
+          playBtn.style.display='none'; pauseBtn.hidden=false; capEl.hidden=false; bar.hidden=false;
           load(); render();
-          audio.play().catch(function(){});   // visuell avspilling går uansett
+          audio.play().catch(function(){});
           timer=setInterval(tick,200);
         }
-        function stop(){ clearInterval(timer); timer=null; paused=true; pauseBtn.textContent='▶'; fill.style.width='100%'; }
-        // hele feltet er klikkbart for å starte
-        P.addEventListener('click', function(){ if(!started) start(); });
+        stage.addEventListener('click', function(e){ if(e.target.closest('#stage-pause')) return; if(!started) start(); });
         pauseBtn.addEventListener('click', function(e){
-          e.stopPropagation();
-          paused=!paused;
+          e.stopPropagation(); paused=!paused;
           if(paused){ audio.pause(); pauseBtn.textContent='▶'; }
-          else { audio.play().catch(function(){}); pauseBtn.textContent='❚❚'; }
+          else { audio.play().catch(function(){}); pauseBtn.textContent='❚❚'; if(!timer) timer=setInterval(tick,200); }
         });
         var lt=document.getElementById('langToggle');
         if(lt) lt.addEventListener('click', function(){
           if(!started) return;
           setTimeout(function(){
-            var was=!paused, frac=elapsed/dur();
+            var was=!paused, frac=elapsed/dur(); lastIdx=-1;
             load();
             audio.addEventListener('loadedmetadata', function once(){
               audio.currentTime=frac*(audio.duration||dur()); if(was&&!paused) audio.play().catch(function(){});
@@ -949,7 +988,6 @@
         });
       })();
       </script>
-      <div class="res-previews"><div class="res-prev"><span data-no="Mandag" data-en="Monday">Mandag</span></div><div class="res-prev"><span data-no="Tirsdag" data-en="Tuesday">Tirsdag</span></div><div class="res-prev"><span data-no="Helg" data-en="Weekend">Helg</span></div><div class="res-prev"><span data-no="Rytme" data-en="Rhythm">Rytme</span></div></div>
     </div>
   </div>
 </main>
