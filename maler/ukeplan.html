@@ -900,26 +900,48 @@
               [0.66,'📏','Hang the plan at the child\'s height.'],
               [0.82,'✅','Let the child tick things off. It gives a sense of mastery.']]
         };
+        var TOTAL={no:34, en:35};
+        var timer=null, started=false, paused=false, elapsed=0;
         function lang(){ return (document.documentElement.lang==='en')?'en':'no'; }
         function load(){ audio.src=SRC[lang()]; }
+        function dur(){ return (audio.duration && isFinite(audio.duration) && audio.duration>1) ? audio.duration : TOTAL[lang()]; }
         function render(){
-          var st=STEPS[lang()], d=audio.duration||1, f=audio.currentTime/d, cur=st[0];
+          var st=STEPS[lang()], f=Math.min(1, elapsed/dur()), cur=st[0];
           for(var i=0;i<st.length;i++){ if(f>=st[i][0]) cur=st[i]; }
           emojiEl.textContent=cur[1]; capEl.textContent=cur[2];
           fill.style.width=Math.min(100,f*100)+'%';
         }
-        playBtn.addEventListener('click', function(){ load(); scene.hidden=false; playBtn.style.display='none'; render(); audio.play(); });
-        pauseBtn.addEventListener('click', function(){ if(audio.paused){audio.play();pauseBtn.textContent='❚❚';} else {audio.pause();pauseBtn.textContent='▶';} });
-        audio.addEventListener('timeupdate', render);
-        audio.addEventListener('ended', function(){ pauseBtn.textContent='▶'; fill.style.width='100%'; });
+        function tick(){
+          if(paused) return;
+          if(!audio.paused && audio.currentTime>0.05){ elapsed=audio.currentTime; }
+          else { elapsed+=0.2; }
+          render();
+          if(elapsed>=dur()-0.05){ stop(); }
+        }
+        function start(){
+          if(started) return; started=true; paused=false; elapsed=0;
+          scene.hidden=false; playBtn.style.display='none';
+          load(); render();
+          audio.play().catch(function(){});   // visuell avspilling går uansett
+          timer=setInterval(tick,200);
+        }
+        function stop(){ clearInterval(timer); timer=null; paused=true; pauseBtn.textContent='▶'; fill.style.width='100%'; }
+        // hele feltet er klikkbart for å starte
+        P.addEventListener('click', function(){ if(!started) start(); });
+        pauseBtn.addEventListener('click', function(e){
+          e.stopPropagation();
+          paused=!paused;
+          if(paused){ audio.pause(); pauseBtn.textContent='▶'; }
+          else { audio.play().catch(function(){}); pauseBtn.textContent='❚❚'; }
+        });
         var lt=document.getElementById('langToggle');
         if(lt) lt.addEventListener('click', function(){
-          if(scene.hidden) return;
+          if(!started) return;
           setTimeout(function(){
-            var was=!audio.paused, t=audio.currentTime/(audio.duration||1);
+            var was=!paused, frac=elapsed/dur();
             load();
             audio.addEventListener('loadedmetadata', function once(){
-              audio.currentTime=t*(audio.duration||1); if(was) audio.play();
+              audio.currentTime=frac*(audio.duration||dur()); if(was&&!paused) audio.play().catch(function(){});
               audio.removeEventListener('loadedmetadata', once);
             });
             render();
