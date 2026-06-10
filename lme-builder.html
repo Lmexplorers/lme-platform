@@ -1629,7 +1629,7 @@
       <div class="ai-section-tag" id="aiSectionTag">Hero</div>
 
       <label>Beskriv hva du vil ha</label>
-      <textarea id="aiPromptInput" placeholder="F.eks. «Salgsside for mitt nye kurs om Montessori hjemme — målgruppe er nybegynner-foreldre med små barn»"></textarea>
+      <textarea id="aiPromptInput" placeholder="F.eks. “Salgsside for mitt nye kurs om Montessori hjemme, målgruppe er nybegynner-foreldre med små barn”"></textarea>
 
       <div class="ai-suggestions" id="aiSuggestions"></div>
 
@@ -2404,7 +2404,7 @@
     }
     const page = state.pages.find(p => p.id === pageId);
     if (!page) return;
-    if (!confirm('Slett siden «' + page.name + '»? Dette kan ikke angres.')) return;
+    if (!confirm('Slett siden “' + page.name + '”? Dette kan ikke angres.')) return;
     const wasCurrent = state.currentPageId === pageId;
     const wasHome = page.isHome;
     state.pages = state.pages.filter(p => p.id !== pageId);
@@ -2748,7 +2748,7 @@
     const list = document.getElementById('sectionsList');
     const sections = getCurrentSections();
     if (sections.length === 0) {
-      list.innerHTML = '<div style="text-align:center;padding:30px 16px;color:var(--ink-soft);font-size:13px;">Ingen seksjoner ennå.<br>Klikk «Legg til seksjon»</div>';
+      list.innerHTML = '<div style="text-align:center;padding:30px 16px;color:var(--ink-soft);font-size:13px;">Ingen seksjoner ennå.<br>Klikk “Legg til seksjon”</div>';
       return;
     }
     list.innerHTML = sections.map((s, i) => {
@@ -3640,7 +3640,7 @@
         ` : `
           <div class="pdf-content-preview" style="text-align:center;padding:18px;">
             <div style="font-size:24px;margin-bottom:6px;opacity:0.4;">📄</div>
-            PDF-innhold er tomt. Klikk «Generer med AI» øverst for å lage komplett guide-innhold automatisk.
+            PDF-innhold er tomt. Klikk “Generer med AI” øverst for å lage komplett guide-innhold automatisk.
           </div>
         `}
       </div>
@@ -4030,7 +4030,7 @@
   async function resetPage() {
     const page = getCurrentPage();
     if (!page) return;
-    if (!confirm('Tøm innholdet på «' + page.name + '»? Dette kan ikke angres.')) return;
+    if (!confirm('Tøm innholdet på “' + page.name + '”? Dette kan ikke angres.')) return;
     page.sections = [createSection('hero')];
     state.selectedId = page.sections[0].id;
     state.selectedImageId = null;
