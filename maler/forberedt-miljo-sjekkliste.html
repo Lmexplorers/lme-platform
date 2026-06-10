@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sjekkliste: Forberedt miljø — LME</title>
+<title>Sjekkliste: forberedt miljø — LME</title>
 <meta name="description" content="Møt Renate Dahl, Montessori-pedagog, gründer og mor til Little Montessori Explorers. Over 20 års erfaring fra klasserommet og rektorrollen.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -849,7 +849,7 @@
   <div class="res">
     <div style="padding:48px 0 0;">
       <a href="/maler" class="tpl-back" data-no="‹ Tilbake til maler" data-en="‹ Back to templates">‹ Tilbake til maler</a>
-      <h1 style="font-family:'Playpen Sans',system-ui,sans-serif; font-size:clamp(32px,5vw,48px); font-weight:400; line-height:1.1; color:#2a1e2e; margin:0 0 18px;" data-no="Sjekkliste: Forberedt miljø" data-en="Prepared environment checklist">Sjekkliste: Forberedt miljø</h1>
+      <h1 style="font-family:'Playpen Sans',system-ui,sans-serif; font-size:clamp(32px,5vw,48px); font-weight:400; line-height:1.1; color:#2a1e2e; margin:0 0 18px;" data-no="Sjekkliste: forberedt miljø" data-en="Prepared environment checklist">Sjekkliste: forberedt miljø</h1>
       <a href="#" class="res-cta" data-edit="cta" data-no="⬇ Last ned sjekklisten" data-en="⬇ Download the checklist">⬇ Last ned sjekklisten</a>
       <p class="intro" data-edit="intro" data-no="Et godt forberedt miljø gjør at barnet kan handle selvstendig. Denne sjekklisten tar deg rom for rom gjennom de fire byggesteinene, så du ser med en gang hva som kan endres for å gi barnet mer frihet." data-en="A well-prepared environment lets the child act independently. This checklist takes you room by room through the four building blocks, so you see at once what can change to give the child more freedom.">Et godt forberedt miljø gjør at barnet kan handle selvstendig. Denne sjekklisten tar deg rom for rom gjennom de fire byggesteinene, så du ser med en gang hva som kan endres for å gi barnet mer frihet.</p>
       <p class="watch" data-no="Trykk på play, så viser jeg deg sjekklisten steg for steg." data-en="Press play and I'll walk you through the checklist, step by step.">Trykk på play, så viser jeg deg sjekklisten steg for steg.</p>
@@ -911,7 +911,7 @@
             pauseBtn=stage.querySelector('.stage-pause'), capEl=stage.querySelector('.stage-cap'),
             bar=stage.querySelector('.stage-bar'), fill=stage.querySelector('.stage-fill'),
             regions=[].slice.call(stage.querySelectorAll('.region'));
-        var SRC={"no": "/media/maler/forberedt-miljo-sjekkliste/sjekkliste-no.mp3", "en": "/media/maler/forberedt-miljo-sjekkliste/sjekkliste-en.mp3"}, STEPS={no:[[0, "", "Velkommen! Dette er sjekklisten for det forberedte miljøet."], [0.16, "orden", "Orden: Alt har sin faste plass."], [0.36, "skjonnhet", "Skjønnhet: Naturlige materialer og rolige farger."], [0.54, "tilgang", "Tilgjengelighet: I barnets høyde, klart til bruk."], [0.72, "frihet", "Frihet innenfor rammer: Barnet velger selv."], [0.88, "check", "Kryss av etter hvert. Små endringer, stor forskjell."]], en:[[0, "", "Welcome! This is the prepared environment checklist."], [0.16, "orden", "Order: Everything has its fixed place."], [0.36, "skjonnhet", "Beauty: Natural materials and calm colours."], [0.54, "tilgang", "Accessibility: At the child's height, ready to use."], [0.72, "frihet", "Freedom within limits: The child chooses."], [0.88, "check", "Tick each item as you go. Small changes, big difference."]]}, TOTAL={"no": 31, "en": 29};
+        var SRC={"no": "/media/maler/forberedt-miljo-sjekkliste/sjekkliste-no.mp3", "en": "/media/maler/forberedt-miljo-sjekkliste/sjekkliste-en.mp3"}, STEPS={no:[[0, "", "Velkommen! Dette er sjekklisten for det forberedte miljøet."], [0.16, "orden", "Orden: Alt har sin faste plass."], [0.36, "skjonnhet", "Skjønnhet: naturlige materialer og rolige farger."], [0.54, "tilgang", "Tilgjengelighet: i barnets høyde, klart til bruk."], [0.72, "frihet", "Frihet innenfor rammer: Barnet velger selv."], [0.88, "check", "Kryss av etter hvert. Små endringer, stor forskjell."]], en:[[0, "", "Welcome! This is the prepared environment checklist."], [0.16, "orden", "Order: Everything has its fixed place."], [0.36, "skjonnhet", "Beauty: natural materials and calm colours."], [0.54, "tilgang", "Accessibility: at the child's height, ready to use."], [0.72, "frihet", "Freedom within limits: The child chooses."], [0.88, "check", "Tick each item as you go. Small changes, big difference."]]}, TOTAL={"no": 31, "en": 29};
         var timer=null, started=false, paused=false, elapsed=0, lastIdx=-1;
         function lang(){ return (document.documentElement.lang==='en')?'en':'no'; }
         function load(){ audio.src=SRC[lang()]; }
@@ -965,7 +965,7 @@
       if (text.includes('<')) el.innerHTML = text; else el.textContent = text;
     });
     if (toggle) toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
-    document.title = (lang === 'no' ? 'Sjekkliste: Forberedt miljø' : 'Prepared environment checklist') + ' — LME';
+    document.title = (lang === 'no' ? 'Sjekkliste: forberedt miljø' : 'Prepared environment checklist') + ' — LME';
   }
   if (toggle) toggle.addEventListener('click', () => switchLanguage(currentLang === 'no' ? 'en' : 'no'));
   if (currentLang === 'en') switchLanguage('en');

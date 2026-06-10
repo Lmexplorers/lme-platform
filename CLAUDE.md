@@ -17,10 +17,12 @@ Renate retter ofte disse tingene manuelt. Følg reglene fra start, så slipper h
    - Feil: `Du er ikke der for å underholde — du er der for å legge til rette.`
    - Riktig: `Du er ikke der for å underholde, men for å legge til rette.`
 
-3. **Alltid stor forbokstav etter kolon (`:`)** i synlig tekst, også når det
-   følger en oppramsing eller undertittel. Eksempler:
-   `Praktisk liv: Der alt starter.` · `Faste holdepunkter: Måltider, hvile og leggetid.`
-   · `Sjekkliste: Forberedt miljø`. (Gjelder ikke kode, klokkeslett eller forhold.)
+3. **Kolon (`:`):** stor forbokstav etter kolon **kun når en hel setning
+   (helsetning) følger**. Ellers liten forbokstav (oppramsinger, undertitler,
+   setningsfragmenter). Egennavn har alltid stor forbokstav.
+   - Hel setning: `Husk: Du trenger ikke være ekspert.`
+   - Fragment/liste: `Faste holdepunkter: måltider, hvile og leggetid.` ·
+     `Sjekkliste: forberedt miljø` · `Praktisk liv: der alt starter`
 
 4. **Liten forbokstav etter semikolon (`;`)**. Semikolon binder to setninger;
    det skal ikke følges av stor bokstav.
