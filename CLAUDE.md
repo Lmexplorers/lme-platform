@@ -34,6 +34,14 @@ Renate retter ofte disse tingene manuelt. Følg reglene fra start, så slipper h
 Disse reglene gjelder all norsk tekst jeg skriver: nettsider, kursinnhold,
 e-poster og lignende.
 
+## 🌍 Tospråklig — VIKTIG
+
+**Alt i LME skal lett kunne byttes til engelsk.** Når jeg lager ny tekst på en
+side, skal hvert synlig tekst-element ha både `data-no="…"` og `data-en="…"`,
+og siden må ha et fungerende språkbytte (samme `switchLanguage`-mønster som
+`om-renate.html`: går gjennom alle `[data-no][data-en]` og setter tekst/HTML
+etter valgt språk). Lag aldri ny norsk-only tekst uten engelsk oversettelse.
+
 ## 🚀 Utgivelse / git
 
 - Utvikling skjer på arbeidsbranchen; publiser ved å ff-merge til `main` og pushe.
