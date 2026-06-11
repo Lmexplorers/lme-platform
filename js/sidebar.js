@@ -18,6 +18,7 @@
     '  <a href="/bookly/" class="sidebar-item"><span class="si-icon">📚</span><span class="si-label">LME Bookly</span><span class="si-badge beta">Ny</span></a>',
     '  <a href="https://lme-conten-studio-no-eng.pages.dev" class="sidebar-item"><span class="si-icon">🎨</span><span class="si-label">Content Studio</span></a>',
     '  <a href="/spor-renate-ai" class="sidebar-item"><span class="si-icon">💗</span><span class="si-label">Renate AI</span></a>',
+    '  <a href="/ai-visibility" class="sidebar-item"><span class="si-icon">🔍</span><span class="si-label">AI Visibility</span><span class="si-badge beta">Ny</span></a>',
     '</div>',
     '<div class="sidebar-group">',
     '  <div class="sidebar-group-title"><span class="grp-emoji">👥</span> Kunder &amp; salg</div>',
