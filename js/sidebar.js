@@ -16,6 +16,7 @@
     '  <div class="sidebar-group-title"><span class="grp-emoji">🛠️</span> Verktøy</div>',
     '  <a href="/lme-builder" class="sidebar-item" data-tool="builder"><span class="si-icon">✨</span><span class="si-label">LME Builder</span></a>',
     '  <a href="https://lme-conten-studio-no-eng.pages.dev" class="sidebar-item"><span class="si-icon">🎨</span><span class="si-label">Content Studio</span></a>',
+    '  <a href="/publiseringsassistent" class="sidebar-item"><span class="si-icon">📚</span><span class="si-label">Publiseringsassistent</span><span class="si-badge beta">Ny</span></a>',
     '  <a href="/spor-renate-ai" class="sidebar-item"><span class="si-icon">💗</span><span class="si-label">Renate AI</span></a>',
     '</div>',
     '<div class="sidebar-group">',
