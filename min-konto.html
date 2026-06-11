@@ -1166,6 +1166,11 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 12c0 4.4-4 8-9 8-1.3 0-2.5-.2-3.6-.7L3 21l1.7-5.4C3.6 14.2 3 12.7 3 11c0-4.4 4-8 9-8s9 3.6 9 8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
             Spør Renate AI
           </a>
+          <div class="divider"></div>
+          <a href="#" id="logoutLink">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M16 17l5-5-5-5M21 12H9M12 21H5a2 2 0 01-2-2V5a2 2 0 012-2h7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Logg ut
+          </a>
         </div>
       </div>
     </div>
@@ -1183,7 +1188,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 
   <section class="page-hero" style="text-align: left; padding-bottom: 24px;">
     <span class="kicker">DIN KONTO</span>
-    <h1>Hei <em>Renate!</em></h1>
+    <h1>Hei <em id="greetName">Renate!</em></h1>
     <p>Administrer abonnementet ditt, betalingsinformasjon og kjøp.</p>
   </section>
 
@@ -1435,11 +1440,11 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
       <h3>Profilinformasjon</h3>
       <div class="profile-row">
         <label>Navn</label>
-        <input type="text" value="Renate Dahl" />
+        <input type="text" id="pfName" value="Renate Dahl" />
       </div>
       <div class="profile-row">
         <label>E-post</label>
-        <input type="email" value="hello@lmexplorers.com" />
+        <input type="email" id="pfEmail" value="hello@lmexplorers.com" />
       </div>
       <div class="profile-row">
         <label>Språk</label>
@@ -1857,5 +1862,26 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 </a>
 
 <script>function lmeSoon(m){var t=document.createElement("div");t.textContent=m||"Kommer snart 💛";t.style.cssText="position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#2a1e2e;color:#fff;padding:12px 20px;border-radius:999px;z-index:99999;font-weight:700;font-family:inherit;box-shadow:0 8px 24px rgba(0,0,0,.25)";document.body.appendChild(t);setTimeout(function(){t.remove();},2200);}</script>
+
+<script src="/js/lme-auth.js"></script>
+<script>
+  (function () {
+    // Krev innlogging; ikke innlogget -> til /login
+    LME.requireAuth('/login').then(function (d) {
+      if (!d || !d.user) return;
+      var u = d.user;
+      var first = (u.name || '').trim().split(' ')[0] || 'der';
+      var g = document.getElementById('greetName'); if (g) g.textContent = first + '!';
+      var n = document.getElementById('pfName'); if (n && u.name) n.value = u.name;
+      var e = document.getElementById('pfEmail'); if (e) e.value = u.email;
+      if (u.role === 'owner') {
+        // Eier: ingen kunde-abonnement. Marker tydelig.
+        document.querySelectorAll('[data-content="abonnement"], [data-content="subscription"]').forEach(function () {});
+      }
+    });
+    var lo = document.getElementById('logoutLink');
+    if (lo) lo.addEventListener('click', function (ev) { ev.preventDefault(); LME.signOut(); });
+  })();
+</script>
 </body>
 </html>
