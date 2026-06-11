@@ -1866,19 +1866,51 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 <script src="/js/lme-auth.js"></script>
 <script>
   (function () {
-    // Krev innlogging; ikke innlogget -> til /login
+    function setHTML(sel, html) { var el = document.querySelector(sel); if (el) el.innerHTML = html; }
+    function card(title, body) {
+      return '<div class="settings-card"><h3>' + title + '</h3>' +
+             '<p style="color:#6a5560;line-height:1.6;margin:0;">' + body + '</p></div>';
+    }
+
     LME.requireAuth('/login').then(function (d) {
       if (!d || !d.user) return;
       var u = d.user;
       var first = (u.name || '').trim().split(' ')[0] || 'der';
       var g = document.getElementById('greetName'); if (g) g.textContent = first + '!';
-      var n = document.getElementById('pfName'); if (n && u.name) n.value = u.name;
+      var n = document.getElementById('pfName'); if (n) n.value = u.name || '';
       var e = document.getElementById('pfEmail'); if (e) e.value = u.email;
+
       if (u.role === 'owner') {
-        // Eier: ingen kunde-abonnement. Marker tydelig.
-        document.querySelectorAll('[data-content="abonnement"], [data-content="subscription"]').forEach(function () {});
+        setHTML('.status-card',
+          '<span class="status-badge" style="background:#A4D233;color:#2a1e2e;">EIER</span>' +
+          '<h3>Eier-konto</h3>' +
+          '<p class="status-desc">Du eier Little Montessori Explorers</p>' +
+          '<div class="status-meta"><div><span class="meta-label">Rolle</span><span class="meta-value">Eier</span></div>' +
+          '<div><span class="meta-label">Abonnement</span><span class="meta-value">Ingen</span></div></div>' +
+          '<a href="/dashboard" class="btn-yellow">Til dashbordet →</a>');
+        setHTML('.tab-content[data-content="subscription"]',
+          card('Abonnement', 'Du er innlogget som <strong>eier</strong>. Du har ikke et kunde-abonnement, dette er kundenes side. 🌷'));
+        setHTML('.tab-content[data-content="payment"]',
+          card('Betaling', 'Som eier har du ingen betalingsmetode eller fakturaer her. Kundenes betalinger håndteres av betalingsleverandøren når den kobles på.'));
+        setHTML('.tab-content[data-content="purchases"]',
+          card('Kjøp', 'Som eier har du ingen kjøp her. Her ser kundene sine egne kjøp og fakturaer.'));
+      } else {
+        var sub = d.subscription;
+        if (!sub || sub.status !== 'active') {
+          setHTML('.status-card',
+            '<span class="status-badge" style="background:#F5A8B8;color:#2a1e2e;">INGEN</span>' +
+            '<h3>Ingen aktivt abonnement</h3>' +
+            '<p class="status-desc">Du har ikke et abonnement ennå.</p>' +
+            '<a href="/oppgrader" class="btn-yellow">Se planer →</a>');
+          setHTML('.tab-content[data-content="subscription"]',
+            card('Abonnement', 'Du har ikke et aktivt abonnement ennå. <a href="/oppgrader" style="color:#E91E89;font-weight:700;">Se planer →</a>'));
+          setHTML('.tab-content[data-content="payment"]', card('Betaling', 'Ingen betalingsmetode lagt til ennå.'));
+          setHTML('.tab-content[data-content="purchases"]',
+            card('Kjøp', 'Du har ingen kjøp ennå. <a href="/butikk" style="color:#E91E89;font-weight:700;">Utforsk butikken →</a>'));
+        }
       }
     });
+
     var lo = document.getElementById('logoutLink');
     if (lo) lo.addEventListener('click', function (ev) { ev.preventDefault(); LME.signOut(); });
   })();
