@@ -1,5 +1,6 @@
 /**
- * LME konto/innlogging — helt i Cloudflare (D1 + KV-sesjoner).
+ * LME konto/innlogging — helt i Cloudflare, kun på KV (ingen ny database).
+ * Bruker KV-bindingen BUILDER_KV som allerede er satt opp.
  *
  * Ruter:
  *   POST /api/auth/register   { email, password, name }
@@ -7,10 +8,13 @@
  *   POST /api/auth/logout
  *   GET  /api/auth/me         -> { user, subscription, purchases }
  *
- * Krever:
- *   - D1-binding "DB"  (Settings -> Functions -> D1 database bindings)
- *   - KV-binding "BUILDER_KV"  (brukes til sesjoner, prefiks "sess:")
+ * Lagring i KV:
+ *   user:<e-post>   -> { id, email, name, salt, hash, role, created_at, subscription, purchases }
+ *   sess:<sid>      -> { uid, email, role }   (HttpOnly-cookie lme_sess)
  */
+
+// E-poster som automatisk blir eier (ikke kunde, uten abonnement).
+const OWNER_EMAILS = ["hei@littlemontessoriexplorers.com", "renateshobby@hotmail.com"];
 
 function json(data, status, headers) {
   return new Response(JSON.stringify(data), {
@@ -66,6 +70,8 @@ function sessionCookie(sid) {
 function clearCookie() {
   return "lme_sess=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0";
 }
+function userKey(email) { return "user:" + email.trim().toLowerCase(); }
+
 async function createSession(env, user) {
   const sid = (crypto.randomUUID() + crypto.randomUUID()).replace(/-/g, "");
   await env.BUILDER_KV.put(
@@ -81,34 +87,26 @@ async function sessionFrom(context) {
   if (!sid || !env.BUILDER_KV) return null;
   const raw = await env.BUILDER_KV.get("sess:" + sid);
   if (!raw) return null;
-  try {
-    const s = JSON.parse(raw);
-    s.sid = sid;
-    return s;
-  } catch (e) {
-    return null;
-  }
+  try { const s = JSON.parse(raw); s.sid = sid; return s; } catch (e) { return null; }
+}
+async function getUser(env, email) {
+  const raw = await env.BUILDER_KV.get(userKey(email));
+  if (!raw) return null;
+  try { return JSON.parse(raw); } catch (e) { return null; }
+}
+function publicUser(u) {
+  return { id: u.id, email: u.email, name: u.name || null, role: u.role || "customer", created_at: u.created_at };
 }
 
 export async function onRequestGet(context) {
   const { params, env } = context;
   if (params.action !== "me") return json({ error: "not_found" }, 404);
+  if (!env.BUILDER_KV) return json({ user: null }, 200);
   const sess = await sessionFrom(context);
   if (!sess) return json({ user: null }, 200);
-  if (!env.DB) {
-    return json({ user: { id: sess.uid, email: sess.email, role: sess.role }, subscription: null, purchases: [] });
-  }
-  const user = await env.DB.prepare(
-    "SELECT id,email,name,role,created_at FROM users WHERE id=?"
-  ).bind(sess.uid).first();
-  if (!user) return json({ user: null }, 200);
-  const subscription = await env.DB.prepare(
-    "SELECT plan,status,provider,current_period_end FROM subscriptions WHERE user_id=? ORDER BY created_at DESC LIMIT 1"
-  ).bind(sess.uid).first();
-  const purchasesRes = await env.DB.prepare(
-    "SELECT title,amount_ore,created_at FROM purchases WHERE user_id=? ORDER BY created_at DESC"
-  ).bind(sess.uid).all();
-  return json({ user, subscription: subscription || null, purchases: (purchasesRes && purchasesRes.results) || [] });
+  const u = await getUser(env, sess.email);
+  if (!u) return json({ user: null }, 200);
+  return json({ user: publicUser(u), subscription: u.subscription || null, purchases: u.purchases || [] });
 }
 
 export async function onRequestPost(context) {
@@ -121,7 +119,7 @@ export async function onRequestPost(context) {
     return json({ ok: true }, 200, { "Set-Cookie": clearCookie() });
   }
 
-  if (!env.DB) return json({ error: "not_configured" }, 200);
+  if (!env.BUILDER_KV) return json({ error: "not_configured" }, 200);
   let body;
   try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
   const email = (body.email || "").trim().toLowerCase();
@@ -130,27 +128,29 @@ export async function onRequestPost(context) {
   if (action === "register") {
     if (!email || !/.+@.+\..+/.test(email)) return json({ error: "bad_email" }, 400);
     if (password.length < 6) return json({ error: "weak_password" }, 400);
-    const existing = await env.DB.prepare("SELECT id FROM users WHERE email=?").bind(email).first();
-    if (existing) return json({ error: "exists" }, 409);
+    if (await getUser(env, email)) return json({ error: "exists" }, 409);
     const { salt, hash } = await hashPassword(password);
-    const id = crypto.randomUUID();
-    const name = (body.name || "").trim() || null;
-    await env.DB.prepare(
-      "INSERT INTO users (id,email,name,pass_salt,pass_hash,role,created_at) VALUES (?,?,?,?,?,?,?)"
-    ).bind(id, email, name, salt, hash, "customer", Date.now()).run();
-    const sid = await createSession(env, { id, email, role: "customer" });
-    return json({ ok: true, user: { id, email, name, role: "customer" } }, 200, { "Set-Cookie": sessionCookie(sid) });
+    const role = OWNER_EMAILS.indexOf(email) !== -1 ? "owner" : "customer";
+    const user = {
+      id: crypto.randomUUID(),
+      email,
+      name: (body.name || "").trim() || null,
+      salt, hash, role,
+      created_at: Date.now(),
+      subscription: null,
+      purchases: [],
+    };
+    await env.BUILDER_KV.put(userKey(email), JSON.stringify(user));
+    const sid = await createSession(env, user);
+    return json({ ok: true, user: publicUser(user) }, 200, { "Set-Cookie": sessionCookie(sid) });
   }
 
   if (action === "login") {
-    const u = await env.DB.prepare(
-      "SELECT id,email,name,role,pass_salt,pass_hash FROM users WHERE email=?"
-    ).bind(email).first();
+    const u = await getUser(env, email);
     if (!u) return json({ error: "invalid" }, 401);
-    const ok = await verifyPassword(password, u.pass_salt, u.pass_hash);
-    if (!ok) return json({ error: "invalid" }, 401);
+    if (!(await verifyPassword(password, u.salt, u.hash))) return json({ error: "invalid" }, 401);
     const sid = await createSession(env, u);
-    return json({ ok: true, user: { id: u.id, email: u.email, name: u.name, role: u.role } }, 200, { "Set-Cookie": sessionCookie(sid) });
+    return json({ ok: true, user: publicUser(u) }, 200, { "Set-Cookie": sessionCookie(sid) });
   }
 
   return json({ error: "not_found" }, 404);
