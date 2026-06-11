@@ -1620,10 +1620,28 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 
   function updateLinks() {
     document.querySelectorAll('.plan-cta').forEach(btn => {
-      const key = `link-${curr.toLowerCase() === 'nok' ? 'nok' : 'usd'}-${cycle}`;
-      const linkAttr = `data-${key}`;
-      const link = btn.getAttribute(linkAttr);
-      if (link) btn.href = link;
+      const key = `data-link-${curr.toLowerCase() === 'nok' ? 'nok' : 'usd'}-${cycle}`;
+      const link = btn.getAttribute(key);
+      if (link) {
+        // Gyldig betalingslenke for valgt valuta + syklus
+        btn.href = link;
+        btn.onclick = null;
+        btn.removeAttribute('aria-disabled');
+        btn.style.opacity = '';
+        btn.title = '';
+      } else {
+        // Mangler lenke (f.eks. årlig for Start/Proff) -> ikke send til feil betaling
+        btn.removeAttribute('href');
+        btn.setAttribute('aria-disabled', 'true');
+        btn.style.opacity = '0.6';
+        btn.style.cursor = 'not-allowed';
+        btn.title = 'Årlig betaling for denne planen kommer snart';
+        btn.onclick = function (e) {
+          e.preventDefault();
+          if (window.lmeSoon) lmeSoon('Årlig betaling for denne planen er på vei 💛');
+          else alert('Årlig betaling for denne planen kommer snart.');
+        };
+      }
     });
   }
 
