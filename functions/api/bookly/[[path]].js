@@ -66,6 +66,58 @@ export async function onRequestPost(context) {
   let body;
   try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
 
+  /* ---------- Bildegenerering (OpenAI Images) ---------- */
+  if (path === "image") {
+    const prompt = String(body.prompt || "").slice(0, 3000);
+    if (!prompt) return json({ error: "no_prompt" }, 400);
+    if (!env.OPENAI_API_KEY) return json({ error: "image_unavailable" }, 200);
+    const size = ["1024x1024", "1024x1536", "1536x1024"].indexOf(body.size) !== -1 ? body.size : "1024x1024";
+
+    // 1) gpt-image-1 (nyeste, best kvalitet)
+    try {
+      const res = await fetch("https://api.openai.com/v1/images/generations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + env.OPENAI_API_KEY,
+        },
+        body: JSON.stringify({
+          model: env.BOOKLY_IMAGE_MODEL || "gpt-image-1",
+          prompt: prompt,
+          size: size,
+          quality: env.BOOKLY_IMAGE_QUALITY || "medium",
+          n: 1,
+        }),
+      });
+      const data = await res.json();
+      const b64 = data && data.data && data.data[0] && data.data[0].b64_json;
+      if (res.ok && b64) return json({ b64 }, 200);
+    } catch (e) { /* prøv reserve */ }
+
+    // 2) dall-e-3 som reserve
+    try {
+      const res = await fetch("https://api.openai.com/v1/images/generations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + env.OPENAI_API_KEY,
+        },
+        body: JSON.stringify({
+          model: "dall-e-3",
+          prompt: prompt,
+          size: "1024x1024",
+          response_format: "b64_json",
+          n: 1,
+        }),
+      });
+      const data = await res.json();
+      const b64 = data && data.data && data.data[0] && data.data[0].b64_json;
+      if (res.ok && b64) return json({ b64 }, 200);
+    } catch (e) { /* gi opp */ }
+
+    return json({ error: "image_failed" }, 200);
+  }
+
   /* ---------- AI-generering ---------- */
   if (path === "ai") {
     const system = String(body.system || "").slice(0, 4000);

@@ -590,9 +590,24 @@
       }
       var canImage = ['story', 'text', 'intro', 'colorprompt', 'cover'].indexOf(pgObj.kind) !== -1;
       if (canImage) {
-        fields.push('<div class="bk-field full"><label>🖼️ ' + (no ? 'Bilde på siden' : 'Image on this page') + '</label>' +
+        var defPrompt = d.imgPrompt;
+        if (!defPrompt) {
+          if (pgObj.kind === 'colorprompt') defPrompt = d.prompt || '';
+          else if (pgObj.kind === 'cover') defPrompt = "Children's book cover art, " + (d.title || p.title) +
+            ((p.config && p.config.topic) ? ', ' + p.config.topic : '') +
+            ', soft watercolor, warm pastel palette, whimsical, no text, space for title at the top';
+          else defPrompt = "Children's book illustration, " + (d.illustration || (p.config && p.config.topic) || pgObj.title || p.title) +
+            ', soft watercolor, warm pastel palette, whimsical, kid friendly, no text';
+        }
+        fields.push('<div class="bk-field full"><label>✨ ' + (no ? 'Bildeprompt for denne siden' : 'Image prompt for this page') + '</label>' +
+          '<textarea id="edPrompt" rows="2">' + esc(defPrompt) + '</textarea>' +
+          '<div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">' +
+          '<button class="bk-btn primary sm" id="edGenImg">🎨 ' + (no ? 'Generer bilde' : 'Generate image') + '</button>' +
+          '<button class="bk-btn ghost sm" id="edCopyPrompt">' + t('copy') + '</button>' +
+          '</div></div>');
+        fields.push('<div class="bk-field full"><label>🖼️ ' + (no ? 'Eller last opp eget bilde' : 'Or upload your own image') + '</label>' +
           '<input id="edImg" type="file" accept="image/*">' +
-          '<div class="hint">' + (no ? 'Eget foto eller AI-illustrasjon. Bildet erstatter illustrasjonsboksen.' : 'Your own photo or AI illustration. The image replaces the illustration box.') + '</div>' +
+          '<div class="hint">' + (no ? 'Bildet erstatter illustrasjonsboksen og blir med i alle eksporter.' : 'The image replaces the illustration box and is included in all exports.') + '</div>' +
           (d.image ? '<div><button class="bk-btn quiet sm" id="edImgRm" style="margin-top:4px">🗑️ ' + (no ? 'Fjern bilde' : 'Remove image') + '</button></div>' : '') +
           '</div>');
       }
@@ -636,6 +651,36 @@
       if ($('#edSol')) $('#edSol').onclick = function () {
         d.showSolution = !d.showSolution;
         renderStage();
+      };
+      if ($('#edGenImg')) $('#edGenImg').onclick = function () {
+        var promptTxt = $('#edPrompt').value.trim();
+        if (!promptTxt) { BK.toast(no ? 'Skriv en bildeprompt først.' : 'Write an image prompt first.'); return; }
+        d.imgPrompt = promptTxt;
+        var btn = this;
+        btn.disabled = true;
+        btn.innerHTML = '⏳ ' + (no ? 'Genererer bilde… (kan ta opptil ett minutt)' : 'Generating image… (can take up to a minute)');
+        BK.ai.image(promptTxt).then(function (dataUrl) {
+          d.image = dataUrl;
+          BK.touch(p);
+          BK.toast(no ? 'Bildet er lagt på siden!' : 'The image is on the page!');
+          renderStage();
+        }, function (err) {
+          btn.disabled = false;
+          btn.innerHTML = '🎨 ' + (no ? 'Generer bilde' : 'Generate image');
+          if (err && err.message === 'image_unavailable') {
+            BK.toast(no
+              ? 'Bildegenerering krever en OpenAI-nøkkel (OPENAI_API_KEY) i Cloudflare-innstillingene. Kopier prompten og lag bildet i et annet verktøy så lenge.'
+              : 'Image generation needs an OpenAI key (OPENAI_API_KEY) in the Cloudflare settings. Copy the prompt and create the image in another tool for now.');
+          } else {
+            BK.toast(no ? 'Bildegenereringen feilet. Prøv igjen, eller juster prompten.' : 'Image generation failed. Try again, or adjust the prompt.');
+          }
+        });
+      };
+      if ($('#edCopyPrompt')) $('#edCopyPrompt').onclick = function () {
+        d.imgPrompt = $('#edPrompt').value.trim();
+        BK.copyText(d.imgPrompt);
+        BK.touch(p);
+        BK.toast(t('copied'));
       };
       if ($('#edImg')) $('#edImg').onchange = function () {
         var file = this.files && this.files[0];

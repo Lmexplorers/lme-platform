@@ -42,27 +42,34 @@
       if (typeof blobOrUrl !== 'string') URL.revokeObjectURL(a.href);
     }, 200);
   };
-  /* Les en bildefil, skaler ned og returner data-URL (JPEG).
+  /* Skaler ned en data-URL og returner JPEG-data-URL.
      Holder lagringen liten nok for localStorage og KV. */
+  BK.shrinkImage = function (dataUrl, maxDim) {
+    return new Promise(function (resolve, reject) {
+      var img = new Image();
+      img.onerror = function () { reject(new Error('bad_image')); };
+      img.onload = function () {
+        var sc = Math.min(1, (maxDim || 1400) / Math.max(img.width, img.height));
+        var cv = document.createElement('canvas');
+        cv.width = Math.round(img.width * sc);
+        cv.height = Math.round(img.height * sc);
+        var ctx = cv.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, cv.width, cv.height);
+        ctx.drawImage(img, 0, 0, cv.width, cv.height);
+        resolve(cv.toDataURL('image/jpeg', 0.86));
+      };
+      img.src = dataUrl;
+    });
+  };
+
+  /* Les en bildefil, skaler ned og returner data-URL (JPEG). */
   BK.readImage = function (file, maxDim) {
     return new Promise(function (resolve, reject) {
       var reader = new FileReader();
       reader.onerror = function () { reject(new Error('read_failed')); };
       reader.onload = function () {
-        var img = new Image();
-        img.onerror = function () { reject(new Error('bad_image')); };
-        img.onload = function () {
-          var sc = Math.min(1, (maxDim || 1400) / Math.max(img.width, img.height));
-          var cv = document.createElement('canvas');
-          cv.width = Math.round(img.width * sc);
-          cv.height = Math.round(img.height * sc);
-          var ctx = cv.getContext('2d');
-          ctx.fillStyle = '#ffffff';
-          ctx.fillRect(0, 0, cv.width, cv.height);
-          ctx.drawImage(img, 0, 0, cv.width, cv.height);
-          resolve(cv.toDataURL('image/jpeg', 0.86));
-        };
-        img.src = reader.result;
+        BK.shrinkImage(reader.result, maxDim).then(resolve, reject);
       };
       reader.readAsDataURL(file);
     });
@@ -379,6 +386,22 @@
         if (!m) throw new Error('no_json');
         return JSON.parse(m[0]);
       });
+    },
+
+    /* Bildegenerering: prompt -> nedskalert JPEG-data-URL.
+       Kaster 'image_unavailable' hvis ingen bildenøkkel er satt opp. */
+    image: function (prompt, size) {
+      return fetch('/api/bookly/image', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: prompt, size: size || '1024x1024' }),
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (d && d.b64) return BK.shrinkImage('data:image/png;base64,' + d.b64, 1400);
+          throw new Error((d && d.error) || 'image_failed');
+        });
     },
   };
 
