@@ -429,7 +429,9 @@
         .then(function (r) { return r.json(); })
         .then(function (d) {
           if (d && d.b64) return BK.shrinkImage('data:image/png;base64,' + d.b64, 1400);
-          throw new Error((d && d.error) || 'image_failed');
+          var err = new Error((d && d.error) || 'image_failed');
+          err.detail = (d && d.detail) || '';
+          throw err;
         });
     },
   };

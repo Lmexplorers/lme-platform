@@ -679,12 +679,23 @@
         }, function (err) {
           btn.disabled = false;
           btn.innerHTML = '🎨 ' + (no ? 'Generer bilde' : 'Generate image');
+          var detail = (err && err.detail) || '';
+          var low = detail.toLowerCase();
           if (err && err.message === 'image_unavailable') {
             BK.toast(no
               ? 'Bildegenerering krever en OpenAI-nøkkel (OPENAI_API_KEY) i Cloudflare-innstillingene. Kopier prompten og lag bildet i et annet verktøy så lenge.'
               : 'Image generation needs an OpenAI key (OPENAI_API_KEY) in the Cloudflare settings. Copy the prompt and create the image in another tool for now.');
+          } else if (low.indexOf('billing') !== -1 || low.indexOf('quota') !== -1) {
+            BK.toast(no
+              ? 'OpenAI-kontoen mangler kreditt: legg inn betalingskort eller kjøp kreditt på platform.openai.com under Billing, så virker det.'
+              : 'The OpenAI account has no credit: add a payment method or buy credits at platform.openai.com under Billing.');
+          } else if (low.indexOf('api key') !== -1 || low.indexOf('incorrect') !== -1 || low.indexOf('invalid') !== -1) {
+            BK.toast(no
+              ? 'OpenAI avviser nøkkelen: sjekk at hele nøkkelen ble limt inn riktig i Cloudflare (begynner med sk-).'
+              : 'OpenAI rejects the key: check that the full key was pasted correctly in Cloudflare (starts with sk-).');
           } else {
-            BK.toast(no ? 'Bildegenereringen feilet. Prøv igjen, eller juster prompten.' : 'Image generation failed. Try again, or adjust the prompt.');
+            BK.toast((no ? 'Bildegenereringen feilet' : 'Image generation failed') +
+              (detail ? ': ' + detail : (no ? '. Prøv igjen, eller juster prompten.' : '. Try again, or adjust the prompt.')));
           }
         });
       };

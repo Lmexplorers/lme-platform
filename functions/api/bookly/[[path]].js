@@ -82,6 +82,7 @@ export async function onRequestPost(context) {
     if (!prompt) return json({ error: "no_prompt" }, 400);
     if (!env.OPENAI_API_KEY) return json({ error: "image_unavailable" }, 200);
     const size = ["1024x1024", "1024x1536", "1536x1024"].indexOf(body.size) !== -1 ? body.size : "1024x1024";
+    let lastErr = null;
 
     // 1) gpt-image-1 (nyeste, best kvalitet)
     try {
@@ -102,7 +103,8 @@ export async function onRequestPost(context) {
       const data = await res.json();
       const b64 = data && data.data && data.data[0] && data.data[0].b64_json;
       if (res.ok && b64) return json({ b64 }, 200);
-    } catch (e) { /* prøv reserve */ }
+      lastErr = (data && data.error && data.error.message) || ("HTTP " + res.status);
+    } catch (e) { lastErr = String((e && e.message) || e); }
 
     // 2) dall-e-3 som reserve
     try {
@@ -123,9 +125,10 @@ export async function onRequestPost(context) {
       const data = await res.json();
       const b64 = data && data.data && data.data[0] && data.data[0].b64_json;
       if (res.ok && b64) return json({ b64 }, 200);
-    } catch (e) { /* gi opp */ }
+      lastErr = (data && data.error && data.error.message) || lastErr || ("HTTP " + res.status);
+    } catch (e) { lastErr = lastErr || String((e && e.message) || e); }
 
-    return json({ error: "image_failed" }, 200);
+    return json({ error: "image_failed", detail: String(lastErr || "").slice(0, 300) }, 200);
   }
 
   /* ---------- AI-generering ---------- */
