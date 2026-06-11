@@ -602,19 +602,22 @@
       }
       var canImage = ['story', 'text', 'intro', 'colorprompt', 'cover'].indexOf(pgObj.kind) !== -1;
       if (canImage) {
-        var defPrompt = d.imgPrompt;
-        if (!defPrompt) {
-          if (pgObj.kind === 'colorprompt') defPrompt = d.prompt || '';
-          else if (pgObj.kind === 'cover') defPrompt = "Children's book cover art, " + (d.title || p.title) +
+        // Bygg standardprompten fra sidens (gjeldende) beskrivelse
+        var buildPrompt = function (illusText) {
+          if (pgObj.kind === 'colorprompt') return d.prompt || '';
+          if (pgObj.kind === 'cover') return "Children's book cover art, " + (d.title || p.title) +
             ((p.config && p.config.topic) ? ', ' + p.config.topic : '') +
             ', Pixar inspired 3D render, Disney style, soft global illumination, rounded friendly shapes, expressive big eyes, warm cinematic lighting, kid friendly, high detail, no text, space for title at the top';
-          else defPrompt = "Children's book illustration, " + (d.illustration || (p.config && p.config.topic) || pgObj.title || p.title) +
+          return "Children's book illustration, " + (illusText || (p.config && p.config.topic) || pgObj.title || p.title) +
             ', Pixar inspired 3D render, Disney style, soft global illumination, rounded friendly shapes, expressive big eyes, warm cinematic lighting, kid friendly, high detail, no text';
-        }
+        };
+        var defPrompt = d.imgPrompt || buildPrompt(d.illustration);
         fields.push('<div class="bk-field full"><label>✨ ' + (no ? 'Bildeprompt for denne siden' : 'Image prompt for this page') + '</label>' +
           '<textarea id="edPrompt" rows="2">' + esc(defPrompt) + '</textarea>' +
+          '<div class="hint">' + (no ? 'Det er denne teksten som styrer bildet. Endrer du beskrivelsen over, trykk ↻ for å oppdatere prompten.' : 'This text controls the image. If you change the description above, press ↻ to refresh the prompt.') + '</div>' +
           '<div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">' +
           '<button class="bk-btn primary sm" id="edGenImg">🎨 ' + (no ? 'Generer bilde' : 'Generate image') + '</button>' +
+          '<button class="bk-btn ghost sm" id="edPromptSync">↻ ' + (no ? 'Hent fra beskrivelsen' : 'From the description') + '</button>' +
           '<button class="bk-btn ghost sm" id="edCopyPrompt">' + t('copy') + '</button>' +
           (BK.state.user && BK.state.user.role === 'owner'
             ? '<button class="bk-btn soft sm" id="edMiaTeo">🧒 Mia &amp; Teo</button>' : '') +
@@ -748,6 +751,19 @@
           btn2.disabled = false;
           BK.toast(no ? 'Karakterprompten er kun tilgjengelig for eierkontoen.' : 'The character prompt is only available to the owner account.');
         });
+      };
+      if ($('#edPromptSync')) $('#edPromptSync').onclick = function () {
+        syncFields(); // få med ferske endringer i beskrivelsen
+        var fresh = buildPrompt(d.illustration);
+        var ta = $('#edPrompt');
+        // Behold Mia & Teo-blokken hvis den lå i prompten
+        if (BK._charPrompt && ta.value.indexOf(BK._charPrompt) !== -1) {
+          fresh = BK._charPrompt + '\n\nScene: ' + fresh;
+        }
+        ta.value = fresh;
+        d.imgPrompt = fresh;
+        BK.touch(p);
+        BK.toast(no ? 'Prompten er oppdatert fra beskrivelsen.' : 'The prompt was refreshed from the description.');
       };
       if ($('#edCopyPrompt')) $('#edCopyPrompt').onclick = function () {
         d.imgPrompt = $('#edPrompt').value.trim();

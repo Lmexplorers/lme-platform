@@ -52,16 +52,20 @@ const MIA_TEO_PROMPT =
   "yellow-and-white striped shirt, blue shorts, brown shoes, green backpack, adventurous expression. " +
   "Best friends with equal visual importance and supportive, positive body language, never romantic framing. " +
   "CRITICAL CHARACTER LOCK: Mia and Teo must look EXACTLY like this in every single image, with zero changes: " +
-  "identical faces, identical eye color, identical hair color and hairstyle, identical clothing and clothing colors, " +
-  "identical proportions and identical art style. Do not change, restyle, age, simplify or redesign them in ANY way. " +
+  "identical faces, identical eye color, identical hair color and hairstyle, identical proportions and identical art style. " +
+  "Their standard outfits are as described above. NEVER add jackets, coats, hats or any extra clothing unless the scene " +
+  "description explicitly asks for it. If the scene description specifies clothing, follow the scene description. " +
+  "Do not change, restyle, age, simplify or redesign the characters in ANY way. " +
   "Only the pose, the scene and the background may change between images. " +
   "Animals never talk, environments feel alive, magical, safe and premium with warm light and depth.";
 
 /* Identitetslås som alltid legges på når referansebilder brukes. */
 const REF_LOCK =
-  "\n\nCRITICAL: The characters shown in the attached reference images must remain EXACTLY the same, with zero changes: " +
-  "same faces, same eyes, same hair color and hairstyle, same clothing and colors, same proportions, same art style. " +
-  "Do not redesign, restyle, age or alter the characters in any way. Only the pose, scene and background may change.";
+  "\n\nCRITICAL: The characters shown in the attached reference images must keep EXACTLY the same identity: " +
+  "same faces, same eyes, same hair color and hairstyle, same proportions and same art style. Do not redesign, restyle or age them. " +
+  "Clothing: keep their standard outfits from the references, but if the scene description above specifies clothing, " +
+  "the scene description WINS. NEVER add jackets, coats or extra clothing unless the scene description explicitly asks for it. " +
+  "Only the pose, scene and background may change.";
 
 export async function onRequestGet(context) {
   const { params, env } = context;
