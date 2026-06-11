@@ -619,22 +619,23 @@
           (BK.state.user && BK.state.user.role === 'owner'
             ? '<button class="bk-btn soft sm" id="edMiaTeo">🧒 Mia &amp; Teo</button>' : '') +
           '</div></div>');
-        var refs = p.refs || [];
-        fields.push('<div class="bk-field full"><label>📎 ' + (no ? 'Referansebilder for karakterene (gjelder hele prosjektet)' : 'Character reference images (apply to the whole project)') + '</label>' +
-          '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">' +
-          refs.map(function (r2, ri) {
-            return '<span style="position:relative;display:inline-block"><img src="' + r2 + '" alt="" style="width:56px;height:56px;object-fit:cover;border-radius:10px;border:1.5px solid var(--line)">' +
-              '<button data-refrm="' + ri + '" style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;border:none;background:var(--cerise);color:#fff;font-size:11px;cursor:pointer">✕</button></span>';
-          }).join('') +
-          (refs.length < 3 ? '<label class="bk-btn ghost sm" style="cursor:pointer">＋ ' + (no ? 'Legg til' : 'Add') + '<input id="edRefAdd" type="file" accept="image/*" multiple style="display:none"></label>' : '') +
-          '</div>' +
-          '<div class="hint">' + (no ? 'Last opp 1-3 godkjente bilder av karakterene (f.eks. Mia & Teo), så bruker bildegenereringen dem som fasit for utseendet.' : 'Upload 1-3 approved images of your characters, and image generation will use them as the reference for their look.') + '</div></div>');
         fields.push('<div class="bk-field full"><label>🖼️ ' + (no ? 'Eller last opp eget bilde' : 'Or upload your own image') + '</label>' +
           '<input id="edImg" type="file" accept="image/*">' +
           '<div class="hint">' + (no ? 'Bildet erstatter illustrasjonsboksen og blir med i alle eksporter.' : 'The image replaces the illustration box and is included in all exports.') + '</div>' +
           (d.image ? '<div><button class="bk-btn quiet sm" id="edImgRm" style="margin-top:4px">🗑️ ' + (no ? 'Fjern bilde' : 'Remove image') + '</button></div>' : '') +
           '</div>');
       }
+      // Referansebilder gjelder hele prosjektet og vises derfor på alle sider
+      var refs = p.refs || [];
+      fields.push('<div class="bk-field full"><label>📎 ' + (no ? 'Referansebilder for karakterene (gjelder hele prosjektet)' : 'Character reference images (apply to the whole project)') + '</label>' +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">' +
+        refs.map(function (r2, ri) {
+          return '<span style="position:relative;display:inline-block"><img src="' + r2 + '" alt="" style="width:56px;height:56px;object-fit:cover;border-radius:10px;border:1.5px solid var(--line)">' +
+            '<button data-refrm="' + ri + '" style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;border:none;background:var(--cerise);color:#fff;font-size:11px;cursor:pointer">✕</button></span>';
+        }).join('') +
+        (refs.length < 3 ? '<label class="bk-btn ghost sm" style="cursor:pointer">＋ ' + (no ? 'Legg til' : 'Add') + '<input id="edRefAdd" type="file" accept="image/*" multiple style="display:none"></label>' : '') +
+        '</div>' +
+        '<div class="hint">' + (no ? 'Last opp 1-3 godkjente bilder av karakterene (f.eks. Mia & Teo), så bruker bildegenereringen dem som fasit for utseendet.' : 'Upload 1-3 approved images of your characters, and image generation will use them as the reference for their look.') + '</div></div>');
       var regen = ['mandala', 'maze', 'wordsearch', 'sudoku', 'spotdiff', 'findobject', 'numberpuzzle'].indexOf(pgObj.kind) !== -1;
       var sol = ['sudoku', 'crossword', 'numberpuzzle'].indexOf(pgObj.kind) !== -1;
       ed.innerHTML = '<div class="bk-form">' + fields.join('') + '</div>' +
