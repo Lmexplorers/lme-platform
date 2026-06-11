@@ -1,22 +1,17 @@
 /* =========================================================
-   LME — mobilmeny for toppnavigasjonen (delt)
-   Sidene med <nav class="nav" id="nav"> skjuler menyen på
-   mobil. Dette skriptet legger til en hamburgerknapp og gjør
-   menyen om til et panel med HELE menyen ferdig utvidet.
-   Endre mobilmenyen KUN her — gjelder alle sidene.
+   LME — mobilfikser for toppnavigasjonen (delt)
+   1) Hamburgermeny: sidene med <nav class="nav" id="nav">
+      skjuler menyen på mobil; her får de et panel med HELE
+      menyen ferdig utvidet.
+   2) Topplinje på mobil: lar knappene bryte pent og skjuler
+      pynteikonene (søk/meldinger/varsler uten funksjon).
+   3) Flytende språkknapp: flyttes ned i hjørnet på mobil, og
+      den gamle hvite "English"-dubletten skjules der begge
+      finnes.
+   Endre mobiloppførselen KUN her — gjelder alle sidene.
    ========================================================= */
 (function () {
-  var nav = document.getElementById('nav');
-  var header = nav && nav.closest('.header');
-  if (!nav || !header) return;
-
-  /* Marker grupper som har undermeny, så de kan vises som overskrifter */
-  var items = nav.querySelectorAll('.nav-item');
-  for (var i = 0; i < items.length; i++) {
-    if (items[i].querySelector('.dropdown')) items[i].className += ' lme-grp';
-  }
-
-  /* --- Stiler --- */
+  /* --- Globale stiler (uavhengig av meny) --- */
   var css = [
     '.lme-burger { display: none; align-items: center; justify-content: center;',
     '  width: 40px; height: 40px; border-radius: 999px; border: none;',
@@ -24,6 +19,15 @@
     '  cursor: pointer; flex: none; }',
     '@media (max-width: 768px) {',
     '  .lme-burger { display: inline-flex !important; }',
+    /* Topplinje: bryt pent, skjul pynteikonene */
+    '  .header .icon-btn { display: none !important; }',
+    '  .header-right { flex: 1 1 auto !important; flex-wrap: wrap;',
+    '    justify-content: flex-end; min-width: 0; gap: 6px; }',
+    /* Flytende språkknapper: nederst i hjørnet, aldri over topplinjen */
+    '  #lme-floating-lang-btn { top: auto !important; bottom: 14px !important;',
+    '    right: 12px !important; padding: 8px 14px !important; font-size: 12px !important; }',
+    '  a.lang-float { top: auto !important; bottom: 14px !important; right: 12px !important; }',
+    /* Mobilmeny-panelet */
     '  .nav { display: none !important; position: fixed; left: 12px; right: 12px;',
     '    flex-direction: column; background: #fff; border-radius: 22px;',
     '    box-shadow: 0 22px 60px rgba(43,30,46,.22); border: 1px solid #f3dce6;',
@@ -31,7 +35,6 @@
     '    -webkit-overflow-scrolling: touch; gap: 0; }',
     '  .nav.lme-open { display: flex !important; }',
     '  .nav .nav-item { position: static; width: 100%; }',
-    /* Gruppeknappene blir overskrifter; hele menyen vises ferdig utvidet */
     '  .nav .lme-grp > .nav-btn { pointer-events: none; width: 100%;',
     '    font-size: 12px; font-weight: 800; text-transform: uppercase;',
     '    letter-spacing: .07em; color: #c2255c; padding: 14px 4px 2px; }',
@@ -48,7 +51,27 @@
   st.textContent = css;
   document.head.appendChild(st);
 
-  /* --- Hamburgerknapp --- */
+  /* --- Fjern den gamle hvite "English"-dubletten der begge finnes --- */
+  function dedupeLang() {
+    var pink = document.getElementById('lme-floating-lang-btn');
+    var dup = document.querySelector('a.lang-float');
+    if (pink && dup) dup.style.display = 'none';
+  }
+  dedupeLang();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', dedupeLang);
+  }
+
+  /* --- Hamburgermeny (bare på sider med delt toppnav) --- */
+  var nav = document.getElementById('nav');
+  var header = nav && nav.closest('.header');
+  if (!nav || !header) return;
+
+  var items = nav.querySelectorAll('.nav-item');
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].querySelector('.dropdown')) items[i].className += ' lme-grp';
+  }
+
   var btn = document.createElement('button');
   btn.className = 'lme-burger';
   btn.setAttribute('aria-label', 'Meny');
