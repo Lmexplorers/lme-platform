@@ -1275,6 +1275,8 @@
         (no ? 'Logg inn med LME-kontoen din for å synkronisere prosjektene mellom enheter.' : 'Sign in with your LME account to sync projects across devices.') + '</p>' +
         '<a class="bk-btn primary sm" href="/login?next=' + encodeURIComponent('/bookly/') + '">' + (no ? 'Logg inn' : 'Sign in') + '</a>') +
       '</div>' +
+      '<div class="bk-card" style="margin-bottom:14px"><h3>🤖 ' + (no ? 'AI-status' : 'AI status') + '</h3>' +
+      '<div id="setAiStatus" style="font-size:13px;margin-top:8px;color:var(--ink-soft)">' + (no ? 'Sjekker…' : 'Checking…') + '</div></div>' +
       '<div class="bk-card" style="margin-bottom:14px"><h3>🌍 ' + t('language') + '</h3><div class="bk-chips" style="margin-top:8px">' +
       '<button class="bk-chip' + (BK.lang() === 'no' ? ' on' : '') + '" data-lng="no">🇳🇴 Norsk</button>' +
       '<button class="bk-chip' + (BK.lang() === 'en' ? ' on' : '') + '" data-lng="en">🌍 English</button></div></div>' +
@@ -1300,6 +1302,27 @@
       b.onclick = function () { BK.setLang(b.getAttribute('data-lng')); BK.renderChrome(); BK.refresh(); };
     });
     if ($('#setLogout')) $('#setLogout').onclick = function () { window.LME && LME.signOut(); };
+    fetch('/api/bookly/status', { credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (s) {
+        var el = $('#setAiStatus');
+        if (!el) return;
+        function row(ok, label, hint) {
+          return '<div style="padding:3px 0">' + (ok ? '✅' : '❌') + ' <strong>' + label + '</strong>' +
+            (ok ? '' : '<div style="font-size:11.5px;color:var(--ink-soft);margin-left:24px">' + hint + '</div>') + '</div>';
+        }
+        el.innerHTML =
+          row(s.text, no ? 'Tekstgenerering (bøker)' : 'Text generation (books)',
+            no ? 'Legg inn ANTHROPIC_API_KEY i Cloudflare → prosjektet → Settings → Variables and Secrets.' : 'Add ANTHROPIC_API_KEY in Cloudflare → project → Settings → Variables and Secrets.') +
+          row(s.image, no ? 'Bildegenerering' : 'Image generation',
+            no ? 'Legg inn OPENAI_API_KEY (Production) i Cloudflare → prosjektet → Settings → Variables and Secrets, og kjør "Retry deployment" etterpå.' : 'Add OPENAI_API_KEY (Production) in Cloudflare → project → Settings → Variables and Secrets, then "Retry deployment".') +
+          row(s.kv, no ? 'Skylagring (KV)' : 'Cloud storage (KV)',
+            no ? 'KV-bindingen BUILDER_KV mangler på prosjektet.' : 'The BUILDER_KV binding is missing on the project.');
+      })
+      .catch(function () {
+        var el = $('#setAiStatus');
+        if (el) el.textContent = no ? 'Fikk ikke kontakt med serveren.' : 'Could not reach the server.';
+      });
     $('#setExport').onclick = function () {
       var data = JSON.stringify({ projects: BK.state.projects, folders: BK.state.folders, savedPrompts: BK.state.savedPrompts, settings: BK.state.settings }, null, 2);
       BK.download('lme-bookly-bibliotek.json', new Blob([data], { type: 'application/json' }));

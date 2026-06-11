@@ -46,6 +46,16 @@ export async function onRequestGet(context) {
   const { params, env } = context;
   const path = (params.path || []).join("/");
 
+  /* Status: viser hvilke AI-nøkler serveren ser (kun ja/nei, aldri verdier) */
+  if (path === "status") {
+    return json({
+      text: !!(env.ANTHROPIC_API_KEY || env.OPENAI_API_KEY),
+      textProvider: env.ANTHROPIC_API_KEY ? "anthropic" : (env.OPENAI_API_KEY ? "openai" : null),
+      image: !!env.OPENAI_API_KEY,
+      kv: !!env.BUILDER_KV,
+    }, 200);
+  }
+
   if (path === "library") {
     const sess = await sessionFrom(context);
     if (!sess) return json({ error: "not_logged_in", library: null }, 200);
