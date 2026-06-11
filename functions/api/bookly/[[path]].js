@@ -42,9 +42,28 @@ async function sessionFrom(context) {
 
 const libKey = (uid) => "bookly:lib:" + uid;
 
+/* Låst Mia & Teo-karakterprompt (fra brand/master-creative-bible).
+   Ligger kun her på serveren og leveres bare til innloggede eiere. */
+const MIA_TEO_PROMPT =
+  "Mia and Teo, two six-year-old best friends, premium Disney/Pixar-inspired 3D animation style with NRK Super warmth. " +
+  "Mia: light blue eyes, golden light-blonde hair in a high ponytail with a pink bow, warm smile, round Pixar-inspired face, " +
+  "small button nose, pink floral dress, white socks, pink shoes, pink backpack. " +
+  "Teo: brown eyes, medium-brown softly wavy slightly tousled hair, warm smile, round Pixar-inspired face, " +
+  "yellow-and-white striped shirt, blue shorts, brown shoes, green backpack, adventurous expression. " +
+  "Best friends with equal visual importance and supportive, positive body language, never romantic framing. " +
+  "Keep the exact same faces, hair silhouettes, proportions and identity cues in every image; do not redesign the characters. " +
+  "Animals never talk, environments feel alive, magical, safe and premium with warm light and depth.";
+
 export async function onRequestGet(context) {
   const { params, env } = context;
   const path = (params.path || []).join("/");
+
+  /* Mia & Teo-karakterprompt: kun for eier */
+  if (path === "charprompt") {
+    const sess = await sessionFrom(context);
+    if (!sess || sess.role !== "owner") return json({ error: "forbidden" }, 403);
+    return json({ prompt: MIA_TEO_PROMPT }, 200);
+  }
 
   /* Status: viser hvilke AI-nøkler serveren ser (kun ja/nei, aldri verdier) */
   if (path === "status") {
@@ -83,6 +102,43 @@ export async function onRequestPost(context) {
     if (!env.OPENAI_API_KEY) return json({ error: "image_unavailable" }, 200);
     const size = ["1024x1024", "1024x1536", "1536x1024"].indexOf(body.size) !== -1 ? body.size : "1024x1024";
     let lastErr = null;
+
+    /* Med referansebilder: bruk edits-endepunktet, som tar inn bilder og
+       bevarer karakterenes utseende (krever gpt-image-1). */
+    const refs = Array.isArray(body.refs) ? body.refs.slice(0, 3) : [];
+    if (refs.length) {
+      try {
+        const fd = new FormData();
+        fd.append("model", env.BOOKLY_IMAGE_MODEL || "gpt-image-1");
+        fd.append("prompt", prompt);
+        fd.append("size", size);
+        fd.append("quality", env.BOOKLY_IMAGE_QUALITY || "medium");
+        fd.append("n", "1");
+        let added = 0;
+        for (let i = 0; i < refs.length; i++) {
+          const m = /^data:(image\/(?:png|jpe?g|webp));base64,([A-Za-z0-9+/=]+)$/.exec(refs[i] || "");
+          if (!m) continue;
+          const bin = Uint8Array.from(atob(m[2]), (c) => c.charCodeAt(0));
+          const ext = m[1] === "image/png" ? ".png" : m[1] === "image/webp" ? ".webp" : ".jpg";
+          fd.append("image[]", new Blob([bin], { type: m[1] }), "ref" + i + ext);
+          added++;
+        }
+        if (added) {
+          const res = await fetch("https://api.openai.com/v1/images/edits", {
+            method: "POST",
+            headers: { "Authorization": "Bearer " + env.OPENAI_API_KEY },
+            body: fd,
+          });
+          const data = await res.json();
+          const b64 = data && data.data && data.data[0] && data.data[0].b64_json;
+          if (res.ok && b64) return json({ b64 }, 200);
+          lastErr = (data && data.error && data.error.message) || ("HTTP " + res.status);
+          return json({ error: "image_failed", detail: String(lastErr || "").slice(0, 300) }, 200);
+        }
+      } catch (e) {
+        return json({ error: "image_failed", detail: String((e && e.message) || e).slice(0, 300) }, 200);
+      }
+    }
 
     // 1) gpt-image-1 (nyeste, best kvalitet)
     try {

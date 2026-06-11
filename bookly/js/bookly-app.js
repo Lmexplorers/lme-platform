@@ -616,7 +616,19 @@
           '<div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">' +
           '<button class="bk-btn primary sm" id="edGenImg">🎨 ' + (no ? 'Generer bilde' : 'Generate image') + '</button>' +
           '<button class="bk-btn ghost sm" id="edCopyPrompt">' + t('copy') + '</button>' +
+          (BK.state.user && BK.state.user.role === 'owner'
+            ? '<button class="bk-btn soft sm" id="edMiaTeo">🧒 Mia &amp; Teo</button>' : '') +
           '</div></div>');
+        var refs = p.refs || [];
+        fields.push('<div class="bk-field full"><label>📎 ' + (no ? 'Referansebilder for karakterene (gjelder hele prosjektet)' : 'Character reference images (apply to the whole project)') + '</label>' +
+          '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">' +
+          refs.map(function (r2, ri) {
+            return '<span style="position:relative;display:inline-block"><img src="' + r2 + '" alt="" style="width:56px;height:56px;object-fit:cover;border-radius:10px;border:1.5px solid var(--line)">' +
+              '<button data-refrm="' + ri + '" style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;border:none;background:var(--cerise);color:#fff;font-size:11px;cursor:pointer">✕</button></span>';
+          }).join('') +
+          (refs.length < 3 ? '<label class="bk-btn ghost sm" style="cursor:pointer">＋ ' + (no ? 'Legg til' : 'Add') + '<input id="edRefAdd" type="file" accept="image/*" multiple style="display:none"></label>' : '') +
+          '</div>' +
+          '<div class="hint">' + (no ? 'Last opp 1-3 godkjente bilder av karakterene (f.eks. Mia & Teo), så bruker bildegenereringen dem som fasit for utseendet.' : 'Upload 1-3 approved images of your characters, and image generation will use them as the reference for their look.') + '</div></div>');
         fields.push('<div class="bk-field full"><label>🖼️ ' + (no ? 'Eller last opp eget bilde' : 'Or upload your own image') + '</label>' +
           '<input id="edImg" type="file" accept="image/*">' +
           '<div class="hint">' + (no ? 'Bildet erstatter illustrasjonsboksen og blir med i alle eksporter.' : 'The image replaces the illustration box and is included in all exports.') + '</div>' +
@@ -671,7 +683,7 @@
         var btn = this;
         btn.disabled = true;
         btn.innerHTML = '⏳ ' + (no ? 'Genererer bilde… (kan ta opptil ett minutt)' : 'Generating image… (can take up to a minute)');
-        BK.ai.image(promptTxt).then(function (dataUrl) {
+        BK.ai.image(promptTxt, null, (p.refs && p.refs.length) ? p.refs : null).then(function (dataUrl) {
           d.image = dataUrl;
           BK.touch(p);
           BK.toast(no ? 'Bildet er lagt på siden!' : 'The image is on the page!');
@@ -699,6 +711,26 @@
           }
         });
       };
+      if ($('#edMiaTeo')) $('#edMiaTeo').onclick = function () {
+        var btn2 = this;
+        btn2.disabled = true;
+        BK.ai.charPrompt().then(function (cp) {
+          btn2.disabled = false;
+          var ta = $('#edPrompt');
+          if (ta.value.indexOf('Mia and Teo, two six-year-old') !== -1) {
+            BK.toast(no ? 'Mia & Teo er allerede med i prompten.' : 'Mia & Teo are already in the prompt.');
+            return;
+          }
+          // Karakteridentiteten først, deretter scenen
+          ta.value = cp + '\n\nScene: ' + ta.value;
+          d.imgPrompt = ta.value;
+          BK.touch(p);
+          BK.toast(no ? 'Mia & Teo-karakterprompten er lagt inn.' : 'The Mia & Teo character prompt was inserted.');
+        }, function () {
+          btn2.disabled = false;
+          BK.toast(no ? 'Karakterprompten er kun tilgjengelig for eierkontoen.' : 'The character prompt is only available to the owner account.');
+        });
+      };
       if ($('#edCopyPrompt')) $('#edCopyPrompt').onclick = function () {
         d.imgPrompt = $('#edPrompt').value.trim();
         BK.copyText(d.imgPrompt);
@@ -722,6 +754,25 @@
         BK.touch(p);
         renderStage();
       };
+      if ($('#edRefAdd')) $('#edRefAdd').onchange = function () {
+        var files = Array.prototype.slice.call(this.files || []).slice(0, 3 - (p.refs || []).length);
+        if (!files.length) return;
+        Promise.all(files.map(function (f) { return BK.readImage(f, 800); })).then(function (urls) {
+          p.refs = (p.refs || []).concat(urls).slice(0, 3);
+          BK.touch(p);
+          BK.toast(no ? 'Referansebilde lagt til. Brukes ved all bildegenerering i prosjektet.' : 'Reference image added. Used for all image generation in this project.');
+          renderEditPanel();
+        }, function () {
+          BK.toast(no ? 'Kunne ikke lese bildet. Prøv en JPG eller PNG.' : 'Could not read the image. Try a JPG or PNG.');
+        });
+      };
+      BK.$$('[data-refrm]', ed).forEach(function (rb) {
+        rb.onclick = function () {
+          p.refs.splice(parseInt(rb.getAttribute('data-refrm'), 10), 1);
+          BK.touch(p);
+          renderEditPanel();
+        };
+      });
       $('#edDelPg').onclick = function () {
         p.pages.splice(cur, 1);
         BK._curPage = Math.max(0, cur - 1);
@@ -990,9 +1041,26 @@
       out.style.display = 'block';
       out.innerHTML = '<h3 style="margin-bottom:8px">' + esc(L(kind.name)) + ' · ' + esc(L(style.name)) + '</h3>' +
         '<div class="bk-out" id="prText">' + esc(promptTxt) + '</div>' +
-        '<div style="display:flex;gap:8px;margin-top:12px">' +
+        '<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">' +
         '<button class="bk-btn primary sm" id="prCopy">' + t('copy') + '</button>' +
-        '<button class="bk-btn ghost sm" id="prSave">💾 ' + t('save') + '</button></div>';
+        '<button class="bk-btn ghost sm" id="prSave">💾 ' + t('save') + '</button>' +
+        (BK.state.user && BK.state.user.role === 'owner'
+          ? '<button class="bk-btn soft sm" id="prMiaTeo">🧒 Mia &amp; Teo</button>' : '') +
+        '</div>';
+      if ($('#prMiaTeo')) $('#prMiaTeo').onclick = function () {
+        var btn2 = this;
+        btn2.disabled = true;
+        BK.ai.charPrompt().then(function (cp) {
+          btn2.disabled = false;
+          if (promptTxt.indexOf('Mia and Teo, two six-year-old') !== -1) return;
+          promptTxt = cp + '\n\nScene: ' + promptTxt;
+          $('#prText').textContent = promptTxt;
+          BK.toast(no ? 'Mia & Teo-karakterprompten er lagt inn.' : 'The Mia & Teo character prompt was inserted.');
+        }, function () {
+          btn2.disabled = false;
+          BK.toast(no ? 'Karakterprompten er kun tilgjengelig for eierkontoen.' : 'The character prompt is only available to the owner account.');
+        });
+      };
       $('#prCopy').onclick = function () { BK.copyText(promptTxt); BK.toast(t('copied')); };
       $('#prSave').onclick = function () {
         BK.state.savedPrompts.unshift({ id: BK.uid(), ts: Date.now(), title: st.subject.slice(0, 60), text: promptTxt, style: st.style, kind: st.kind });

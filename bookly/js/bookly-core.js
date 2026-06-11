@@ -241,6 +241,7 @@
           if (pg.data && pg.data.image) pg.data.image = null;
         });
         if (p.cover && p.cover.image) p.cover.image = null;
+        if (p.refs && p.refs.length) p.refs = [];
       });
       localStorage.setItem(LS_KEY, JSON.stringify(slim));
       if (!warnedQuota) {
@@ -421,12 +422,12 @@
 
     /* Bildegenerering: prompt -> nedskalert JPEG-data-URL.
        Kaster 'image_unavailable' hvis ingen bildenøkkel er satt opp. */
-    image: function (prompt, size) {
+    image: function (prompt, size, refs) {
       return fetch('/api/bookly/image', {
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: prompt, size: size || '1024x1024' }),
+        body: JSON.stringify({ prompt: prompt, size: size || '1024x1024', refs: refs || [] }),
       })
         .then(function (r) { return r.json(); })
         .then(function (d) {
@@ -434,6 +435,16 @@
           var err = new Error((d && d.error) || 'image_failed');
           err.detail = (d && d.detail) || '';
           throw err;
+        });
+    },
+    /* Mia & Teo-karakterprompt: hentes fra serveren, kun for eier. */
+    charPrompt: function () {
+      if (BK._charPrompt) return Promise.resolve(BK._charPrompt);
+      return fetch('/api/bookly/charprompt', { credentials: 'same-origin' })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (d && d.prompt) { BK._charPrompt = d.prompt; return d.prompt; }
+          throw new Error('forbidden');
         });
     },
   };
