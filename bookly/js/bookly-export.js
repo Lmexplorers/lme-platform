@@ -93,13 +93,24 @@
         }
       } catch (e) { /* cross-origin stilark hoppes over */ }
 
+      /* foreignObject krever velformet XML: serialiser arket som XML, slik at
+         void-elementer som <img> blir selvlukkende. Vanlig innerHTML gir
+         HTML-syntaks som får hele SVG-en til å feile på sider med bilder. */
+      var xhtml;
+      try {
+        xhtml = new XMLSerializer().serializeToString(sheetEl);
+        // XMLSerializer kan legge på xmlns selv; fjern dobbelt opp i wrapperen under
+      } catch (e) {
+        xhtml = wrap.innerHTML;
+      }
+
       var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '">' +
         '<foreignObject width="100%" height="100%">' +
         '<div xmlns="http://www.w3.org/1999/xhtml" style="width:' + size.w + 'mm;height:' + size.h + 'mm;' +
         'transform:scale(' + (W / (size.w * 96 / 25.4)) + ');transform-origin:0 0;' +
         'font-family:\'Playpen Sans\',system-ui,sans-serif">' +
         '<style>' + css + '</style>' +
-        wrap.innerHTML +
+        xhtml +
         '</div></foreignObject></svg>';
 
       var img = new Image();
