@@ -27,7 +27,7 @@
   /* =====================================================================
      BOKSKAPER
      ===================================================================== */
-  make.book = function (cfg) {
+  make.book = function (cfg, onProgress) {
     var no = isNo(cfg);
     var count = parseInt(cfg.pages, 10) || 24;
     var inner = Math.max(6, count - 4); // minus omslag, tittelside, mål, bakside
@@ -71,19 +71,66 @@
 
     var sys = 'You are a professional children\'s book author for the brand Little Montessori Explorers. ' +
       'Answer ONLY with valid JSON, no markdown. Write in ' + (no ? 'Norwegian (bokmål). Follow Norwegian typography: use straight quotes, never long dashes.' : 'English.');
-    var prompt = 'Write a complete ' + (cfg.bookType || 'children\'s picture book') + '.\n' +
-      'Title: ' + cfg.title + '\nTopic: ' + (cfg.topic || '-') + '\nAudience: ' + (cfg.audience || '-') +
+    var facts = 'Title: ' + cfg.title + '\nTopic: ' + (cfg.topic || '-') + '\nAudience: ' + (cfg.audience || '-') +
       '\nAge group: ' + (cfg.age || '-') + '\nCharacters: ' + (cfg.characters || '-') +
       '\nWriting style: ' + (cfg.style || 'warm, simple') + '\nTone: ' + (cfg.tone || 'curious, gentle') +
-      '\nLearning goals: ' + (cfg.goals || '-') +
+      '\nLearning goals: ' + (cfg.goals || '-');
+    var pageSpec = '{"text":"page text (1-3 sentences for picture books)","illustration":"illustration description for this page"}';
+
+    function prog(s) { if (onProgress) { try { onProgress(s); } catch (e) {} } }
+
+    /* Små bøker: ett kall. Store bøker: disposisjon først, deretter sidene
+       i parallelle bolker, så det går raskt og JSON aldri blir kuttet. */
+    if (inner <= 18) {
+      var prompt = 'Write a complete ' + (cfg.bookType || 'children\'s picture book') + '.\n' + facts +
+        '\nNumber of content pages: ' + inner + '\n' +
+        'Return JSON: {"description":"2-3 sentence book description","coverConcept":"one sentence cover idea",' +
+        '"hook":"short back cover hook","backCover":"3-4 sentence back cover text",' +
+        '"objectives":["learning objective", ...],' +
+        '"outline":["chapter/section", ...],' +
+        '"pages":[' + pageSpec + ', ...exactly ' + inner + ' items]}';
+      prog(no ? 'Renate AI skriver boka…' : 'Renate AI is writing the book…');
+      return BK.ai.json(sys, prompt, Math.min(7000, 800 + inner * 170)).then(build, function () { return build(null); });
+    }
+
+    var CHUNK = 14;
+    prog(no ? 'Lager disposisjon…' : 'Creating the outline…');
+    var metaPrompt = 'Plan a complete ' + (cfg.bookType || 'children\'s picture book') + '.\n' + facts +
       '\nNumber of content pages: ' + inner + '\n' +
       'Return JSON: {"description":"2-3 sentence book description","coverConcept":"one sentence cover idea",' +
       '"hook":"short back cover hook","backCover":"3-4 sentence back cover text",' +
       '"objectives":["learning objective", ...],' +
       '"outline":["chapter/section", ...],' +
-      '"pages":[{"text":"page text (1-3 sentences for picture books)","illustration":"illustration description for this page"}, ...exactly ' + inner + ' items]}';
+      '"beats":["one short sentence describing what happens on this page", ...exactly ' + inner + ' items]}';
 
-    return BK.ai.json(sys, prompt, 4000).then(build, function () { return build(null); });
+    return BK.ai.json(sys, metaPrompt, Math.min(4000, 900 + inner * 30)).then(function (meta) {
+      var beats = (meta.beats || []).slice(0, inner);
+      while (beats.length < inner) beats.push('');
+      var beatList = beats.map(function (b, i) { return (i + 1) + '. ' + b; }).join('\n');
+      var calls = [];
+      for (var start = 0; start < inner; start += CHUNK) {
+        (function (s0) {
+          var n2 = Math.min(CHUNK, inner - s0);
+          var chunkPrompt = 'Book in progress: ' + (cfg.bookType || 'children\'s picture book') + '.\n' + facts +
+            '\nFull page plan (' + inner + ' pages):\n' + beatList +
+            '\nWrite the final text and illustration description for pages ' + (s0 + 1) + ' to ' + (s0 + n2) + ' only, following the plan.' +
+            '\nReturn JSON: {"pages":[' + pageSpec + ', ...exactly ' + n2 + ' items]}';
+          calls.push(BK.ai.json(sys, chunkPrompt, Math.min(6000, 500 + n2 * 170)));
+        })(start);
+      }
+      prog(no ? 'Skriver alle ' + inner + ' sidene…' : 'Writing all ' + inner + ' pages…');
+      return Promise.all(calls).then(function (parts) {
+        var pages = [];
+        parts.forEach(function (part) { pages = pages.concat((part && part.pages) || []); });
+        pages = pages.slice(0, inner);
+        if (pages.length < inner) {
+          var fb = gen.fallbackStory(cfg, inner);
+          while (pages.length < inner) pages.push(fb[pages.length]);
+        }
+        meta.pages = pages;
+        return build(meta);
+      });
+    }).catch(function () { return build(null); });
   };
 
   /* =====================================================================

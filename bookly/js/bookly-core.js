@@ -171,7 +171,7 @@
     sort_oldest: ['Eldste først', 'Oldest first'],
     sort_name: ['Navn A til Å', 'Name A to Z'],
     working: ['Genererer…', 'Generating…'],
-    ai_note: ['AI-tekst lages av Renate AI. Uten API-nøkkel brukes innebygde maler, så alt fungerer uansett.', 'AI text is written by Renate AI. Without an API key the built-in templates are used, so everything works either way.'],
+    ai_note: ['AI-tekst lages av Renate AI. En hel bok tar vanligvis 30 til 90 sekunder. Uten API-nøkkel brukes innebygde maler, så alt fungerer uansett.', 'AI text is written by Renate AI. A full book usually takes 30 to 90 seconds. Without an API key the built-in templates are used, so everything works either way.'],
     confirm_delete: ['Vil du slette dette for godt?', 'Delete this permanently?'],
     project_saved: ['Prosjektet er lagret', 'Project saved'],
     synced: ['Synkronisert til kontoen din', 'Synced to your account'],

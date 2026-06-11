@@ -483,11 +483,19 @@
       }
       var btn = this;
       btn.disabled = true;
-      btn.innerHTML = '⏳ ' + t('working');
-      BK.make[type](cfg).then(function (p) {
+      var t0 = Date.now();
+      var stage = t('working');
+      function tick() {
+        btn.innerHTML = '⏳ ' + stage + ' ' + Math.round((Date.now() - t0) / 1000) + ' s';
+      }
+      tick();
+      var iv = setInterval(tick, 1000);
+      BK.make[type](cfg, function (s) { stage = s; tick(); }).then(function (p) {
+        clearInterval(iv);
         BK.toast(no ? 'Ferdig! ' + p.pages.length + ' sider generert.' : 'Done! ' + p.pages.length + ' pages generated.');
         BK.go('/project/' + p.id);
       }).catch(function () {
+        clearInterval(iv);
         btn.disabled = false;
         btn.innerHTML = '✨ ' + t('generate');
         BK.toast(no ? 'Noe gikk galt. Prøv igjen.' : 'Something went wrong. Try again.');
@@ -595,9 +603,9 @@
           if (pgObj.kind === 'colorprompt') defPrompt = d.prompt || '';
           else if (pgObj.kind === 'cover') defPrompt = "Children's book cover art, " + (d.title || p.title) +
             ((p.config && p.config.topic) ? ', ' + p.config.topic : '') +
-            ', soft watercolor, warm pastel palette, whimsical, no text, space for title at the top';
+            ', Pixar inspired 3D render, Disney style, soft global illumination, rounded friendly shapes, expressive big eyes, warm cinematic lighting, kid friendly, high detail, no text, space for title at the top';
           else defPrompt = "Children's book illustration, " + (d.illustration || (p.config && p.config.topic) || pgObj.title || p.title) +
-            ', soft watercolor, warm pastel palette, whimsical, kid friendly, no text';
+            ', Pixar inspired 3D render, Disney style, soft global illumination, rounded friendly shapes, expressive big eyes, warm cinematic lighting, kid friendly, high detail, no text';
         }
         fields.push('<div class="bk-field full"><label>✨ ' + (no ? 'Bildeprompt for denne siden' : 'Image prompt for this page') + '</label>' +
           '<textarea id="edPrompt" rows="2">' + esc(defPrompt) + '</textarea>' +
@@ -879,7 +887,7 @@
       BK.exp.downloadPageImage(tmp, 0, 'png');
     };
     $('#cvPrompt').onclick = function () {
-      var style = 'soft watercolor, warm pastel palette, pink accents';
+      var style = 'Pixar inspired 3D render, Disney style, soft global illumination, rounded friendly shapes, expressive big eyes, warm cinematic lighting, kid friendly, high detail';
       var prompt = 'Children\'s book cover art, ' + (c.title || p.title) + ', ' +
         ((p.config && p.config.topic) || 'a warm exploratory scene') + ', ' + style +
         ', whimsical, high detail, no text, square composition, centered focal point';
