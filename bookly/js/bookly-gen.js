@@ -589,7 +589,7 @@
     return '<div class="bk-sheet" data-page="' + i + '" style="width:' + size.w + 'mm;height:' + size.h + 'mm;background:' + (bgs[theme] || bgs.pink) + '">' +
       '<div class="pg-inner" style="text-align:center;padding:16mm">' +
       '<div style="font-size:9pt;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#b02458">' + esc(d.kicker || 'Little Montessori Explorers') + '</div>' +
-      '<div style="font-family:\'Playpen Sans\',sans-serif;font-weight:700;font-size:30pt;line-height:1.12;color:#2b2530;margin-top:8mm">' + esc(d.title || p.title) + '</div>' +
+      '<div style="font-family:\'Sasson Montessori\',\'Playpen Sans\',sans-serif;font-weight:700;font-size:30pt;line-height:1.12;color:#2b2530;margin-top:8mm">' + esc(d.title || p.title) + '</div>' +
       (d.subtitle ? '<div style="font-size:13pt;color:#7a6a72;margin-top:4mm">' + esc(d.subtitle) + '</div>' : '') +
       img +
       '<div style="font-size:12pt;font-weight:800;color:#b02458">' + esc(d.author || '') + '</div>' +
@@ -600,7 +600,7 @@
     var d = pg.data || {};
     return sheet(p, pg, i, n,
       '<div style="display:flex;flex-direction:column;height:100%;justify-content:center;max-width:80%;margin:0 auto;text-align:center;gap:6mm">' +
-      '<div style="font-family:\'Playpen Sans\',sans-serif;font-size:14pt;color:#b02458">' + esc(d.hook || '') + '</div>' +
+      '<div style="font-family:\'Sasson Montessori\',\'Playpen Sans\',sans-serif;font-size:14pt;color:#b02458">' + esc(d.hook || '') + '</div>' +
       '<div style="font-size:11pt;line-height:1.8">' + esc(d.text || '') + '</div>' +
       (d.bio ? '<div style="font-size:9.5pt;color:#7a6a72">' + esc(d.bio) + '</div>' : '') +
       '<div style="margin-top:8mm;border:1pt solid #d8c4ce;border-radius:2mm;height:18mm;width:42mm;align-self:center;display:flex;align-items:center;justify-content:center;font-size:8pt;color:#9b8b93">ISBN / EAN-13</div>' +
@@ -641,7 +641,7 @@
     return sheet(p, pg, i, n,
       '<div style="border:2.5pt solid #f0a8c4;border-radius:6mm;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5mm;text-align:center;padding:10mm">' +
       '<div style="font-size:16mm">🏅</div>' +
-      '<div style="font-family:\'Playpen Sans\',sans-serif;font-size:22pt;color:#b02458">' + esc(d.heading || (lang === 'no' ? 'Diplom' : 'Certificate')) + '</div>' +
+      '<div style="font-family:\'Sasson Montessori\',\'Playpen Sans\',sans-serif;font-size:22pt;color:#b02458">' + esc(d.heading || (lang === 'no' ? 'Diplom' : 'Certificate')) + '</div>' +
       '<div style="font-size:11pt">' + esc(d.line || (lang === 'no' ? 'tildeles' : 'is awarded to')) + '</div>' +
       '<div style="border-bottom:1.5pt solid #b02458;width:70%;height:10mm"></div>' +
       '<div style="font-size:10.5pt;max-width:80%">' + esc(d.reason || '') + '</div>' +
@@ -688,7 +688,7 @@
         '<svg viewBox="0 0 180 30" style="width:100%;height:19mm;display:block">' +
         '<line x1="0" y1="22" x2="180" y2="22" stroke="#e8d4dd" stroke-width="0.6"/>' +
         '<line x1="0" y1="8" x2="180" y2="8" stroke="#f3e4ea" stroke-width="0.5" stroke-dasharray="2,2"/>' +
-        '<text x="2" y="22" font-size="19" font-family="Playpen Sans, sans-serif" fill="none" stroke="#8a7a82" stroke-width="0.45" stroke-dasharray="2.2,1.6" letter-spacing="3">' + esc(word) + '</text>' +
+        '<text x="2" y="22" font-size="19" font-family="Sasson Montessori, Playpen Sans, sans-serif" fill="none" stroke="#8a7a82" stroke-width="0.45" stroke-dasharray="2.2,1.6" letter-spacing="3">' + esc(word) + '</text>' +
         '</svg></div>';
     }).join('');
     return sheet(p, pg, i, n, rows +

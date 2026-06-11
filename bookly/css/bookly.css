@@ -3,6 +3,15 @@
    Premium, feminint, moderne SaaS. Cerise/lys rosa + lyseblå/lime/sitron.
    ===================================================================== */
 
+@font-face {
+  font-family: 'Sasson Montessori';
+  src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+       url('/fonts/SassoonMontessori.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* Merkefarger */
   --cerise:      #d6336c;
@@ -40,6 +49,11 @@
 
   --font-display: 'Playpen Sans', 'Nunito', system-ui, sans-serif;
   --font-body: 'Nunito', system-ui, -apple-system, sans-serif;
+
+  /* Merkefonter for boksidene (samme fontregler som resten av LME):
+     Sassoon Montessori til titler og lesetekst, Playpen Sans som grunnskrift. */
+  --font-sasson: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  --font-sheet: 'Playpen Sans', 'Nunito', system-ui, sans-serif;
 
   --sidebar-w: 252px;
   --topbar-h: 64px;
@@ -621,6 +635,7 @@ a { color: var(--cerise); }
   position: relative;
   overflow: hidden;
   flex: none;
+  font-family: var(--font-sheet);
 }
 
 /* Standardmål settes inline (mm) av renderen. Skjermen skalerer via transform. */
@@ -628,7 +643,7 @@ a { color: var(--cerise); }
 
 .bk-sheet .pg-inner { position: absolute; inset: 0; padding: 12mm; display: flex; flex-direction: column; }
 .bk-sheet .pg-head {
-  font-family: var(--font-display);
+  font-family: var(--font-sasson);
   font-weight: 700;
   font-size: 16pt;
   color: #b02458;
@@ -660,7 +675,7 @@ a { color: var(--cerise); }
   gap: 2mm;
 }
 
-.bk-sheet .story-text { font-size: 13pt; line-height: 1.8; }
+.bk-sheet .story-text { font-family: var(--font-sasson); font-size: 13pt; line-height: 1.8; }
 
 .bk-sheet table.cal { width: 100%; border-collapse: collapse; table-layout: fixed; }
 .bk-sheet table.cal th {

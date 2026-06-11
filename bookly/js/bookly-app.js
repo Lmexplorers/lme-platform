@@ -748,7 +748,7 @@
           '<div style="width:' + Math.max(2, sp.spine) + 'mm;background:rgba(176,36,88,.14);display:flex;align-items:center;justify-content:center">' +
           (sp.spine > 5 ? '<span style="writing-mode:vertical-rl;font-size:8pt;font-weight:800;color:#b02458;white-space:nowrap">' + esc(c.title) + '</span>' : '') + '</div>' +
           '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8mm;text-align:center">' +
-          '<div style="font-family:\'Playpen Sans\',sans-serif;font-weight:700;font-size:16pt;color:#2b2530">' + esc(c.title) + '</div>' +
+          '<div style="font-family:\'Sasson Montessori\',\'Playpen Sans\',sans-serif;font-weight:700;font-size:16pt;color:#2b2530">' + esc(c.title) + '</div>' +
           (c.subtitle ? '<div style="font-size:9pt;color:#7a6a72;margin-top:2mm">' + esc(c.subtitle) + '</div>' : '') +
           (c.image ? '<img src="' + c.image + '" alt="" style="max-width:80%;max-height:45%;border-radius:3mm;margin:4mm 0"/>' : '<div style="font-size:24mm;margin:3mm 0">' + (c.emoji || '🌸') + '</div>') +
           '<div style="font-size:9pt;font-weight:800;color:#b02458">' + esc(c.author) + '</div></div></div>';

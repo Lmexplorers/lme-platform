@@ -97,7 +97,7 @@
         '<foreignObject width="100%" height="100%">' +
         '<div xmlns="http://www.w3.org/1999/xhtml" style="width:' + size.w + 'mm;height:' + size.h + 'mm;' +
         'transform:scale(' + (W / (size.w * 96 / 25.4)) + ');transform-origin:0 0;' +
-        'font-family:Nunito,system-ui,sans-serif">' +
+        'font-family:\'Playpen Sans\',Nunito,system-ui,sans-serif">' +
         '<style>' + css + '</style>' +
         wrap.innerHTML +
         '</div></foreignObject></svg>';
