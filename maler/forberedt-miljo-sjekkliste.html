@@ -850,7 +850,7 @@
     <div style="padding:48px 0 0;">
       <a href="/maler" class="tpl-back" data-no="‹ Tilbake til maler" data-en="‹ Back to templates">‹ Tilbake til maler</a>
       <h1 style="font-family:'Playpen Sans',system-ui,sans-serif; font-size:clamp(32px,5vw,48px); font-weight:400; line-height:1.1; color:#2a1e2e; margin:0 0 18px;" data-no="Sjekkliste: forberedt miljø" data-en="Prepared environment checklist">Sjekkliste: forberedt miljø</h1>
-      <a href="#" class="res-cta" data-edit="cta" data-no="⬇ Last ned sjekklisten" data-en="⬇ Download the checklist">⬇ Last ned sjekklisten</a>
+      <a href="#" onclick="window.print();return false;" class="res-cta" data-edit="cta" data-no="⬇ Last ned sjekklisten" data-en="⬇ Download the checklist">⬇ Last ned sjekklisten</a>
       <p class="intro" data-edit="intro" data-no="Et godt forberedt miljø gjør at barnet kan handle selvstendig. Denne sjekklisten tar deg rom for rom gjennom de fire byggesteinene, så du ser med en gang hva som kan endres for å gi barnet mer frihet." data-en="A well-prepared environment lets the child act independently. This checklist takes you room by room through the four building blocks, so you see at once what can change to give the child more freedom.">Et godt forberedt miljø gjør at barnet kan handle selvstendig. Denne sjekklisten tar deg rom for rom gjennom de fire byggesteinene, så du ser med en gang hva som kan endres for å gi barnet mer frihet.</p>
       <p class="watch" data-no="Trykk på play, så viser jeg deg sjekklisten steg for steg." data-en="Press play and I'll walk you through the checklist, step by step.">Trykk på play, så viser jeg deg sjekklisten steg for steg.</p>
 
@@ -882,6 +882,15 @@
         .chk-item .box { width:18px; height:18px; border:2px solid #E2B9C4; border-radius:6px; flex:none; position:relative; transition:all .35s ease; }
         .checked .chk-item .box { background:#A4D233; border-color:#A4D233; }
         .checked .chk-item .box::after { content:''; position:absolute; left:4px; top:1px; width:5px; height:9px; border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg); }
+      </style>
+      
+      <style media="print">
+        nav, footer, .tpl-back, .watch, .stage-play, .stage-pause, .stage-cap, .stage-bar, .res-cta, .lang-toggle, .res > .res > h1, .res h1 { display:none !important; }
+        body { background:#fff !important; }
+        .res, .res-stage, .res-stage .plan { max-width:100% !important; margin:0 !important; }
+        .res-stage .plan { box-shadow:none !important; border:1px solid #e6dde0 !important; }
+        .res-stage.dim .region, .plan .region { opacity:1 !important; box-shadow:none !important; transform:none !important; }
+        @page { size:A4; margin:14mm; }
       </style>
       <div class="res-stage" id="chkStage">
         <div class="plan" id="plan">

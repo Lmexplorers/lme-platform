@@ -850,7 +850,7 @@
     <div style="padding:48px 0 0;">
       <a href="/maler" class="tpl-back" data-no="‹ Tilbake til maler" data-en="‹ Back to templates">‹ Tilbake til maler</a>
       <h1 style="font-family:'Playpen Sans',system-ui,sans-serif; font-size:clamp(32px,5vw,48px); font-weight:400; line-height:1.1; color:#2a1e2e; margin:0 0 18px;" data-no="Observasjonsskjema" data-en="Observation sheet">Observasjonsskjema</h1>
-      <a href="#" class="res-cta" data-edit="cta" data-no="⬇ Last ned skjemaet" data-en="⬇ Download the sheet">⬇ Last ned skjemaet</a>
+      <a href="#" onclick="window.print();return false;" class="res-cta" data-edit="cta" data-no="⬇ Last ned skjemaet" data-en="⬇ Download the sheet">⬇ Last ned skjemaet</a>
       <p class="intro" data-edit="intro" data-no="Før du underviser, før du griper inn, ser du. Dette skjemaet hjelper deg å notere hva barnet faktisk gjør, ikke hva du tror det føler. Bruk det fem minutter om dagen, så vil du oppdage mønstre du ikke visste var der." data-en="Before you teach, before you step in, you observe. This sheet helps you note what the child actually does, not what you think it feels. Use it five minutes a day, and you will discover patterns you did not know were there.">Før du underviser, før du griper inn, ser du. Dette skjemaet hjelper deg å notere hva barnet faktisk gjør, ikke hva du tror det føler. Bruk det fem minutter om dagen, så vil du oppdage mønstre du ikke visste var der.</p>
       <p class="watch" data-no="Trykk på play, så viser jeg deg skjemaet steg for steg." data-en="Press play and I'll walk you through the sheet, step by step.">Trykk på play, så viser jeg deg skjemaet steg for steg.</p>
 
@@ -883,6 +883,15 @@
         .obs-table .row:last-child > div { border-bottom:0; }
         .obs-table .head > div { font-weight:700; color:#E91E89; font-size:11px; letter-spacing:.06em; text-transform:uppercase; background:#FCF6F8; }
         .obs-note { margin-top:16px; background:#F4F9E9; border:1px solid #DCEBBE; border-radius:14px; padding:12px 16px; color:#5a6a32; font-size:14px; text-align:center; }
+      </style>
+      
+      <style media="print">
+        nav, footer, .tpl-back, .watch, .stage-play, .stage-pause, .stage-cap, .stage-bar, .res-cta, .lang-toggle, .res > .res > h1, .res h1 { display:none !important; }
+        body { background:#fff !important; }
+        .res, .res-stage, .res-stage .plan { max-width:100% !important; margin:0 !important; }
+        .res-stage .plan { box-shadow:none !important; border:1px solid #e6dde0 !important; }
+        .res-stage.dim .region, .plan .region { opacity:1 !important; box-shadow:none !important; transform:none !important; }
+        @page { size:A4; margin:14mm; }
       </style>
       <div class="res-stage" id="obsStage">
         <div class="plan" id="plan">
