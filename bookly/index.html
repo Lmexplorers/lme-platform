@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LME Bookly™ — lag, design og publiser bøker | Little Montessori Explorers</title>
+<meta name="description" content="LME Bookly™: profesjonelt verktøy for å lage, organisere, designe og eksportere bøker, arbeidsbøker, aktivitetsbøker, flashkort, journaler, planleggere og printbare produkter. På norsk og engelsk.">
+<meta name="theme-color" content="#d6336c">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Playpen+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/bookly/css/bookly.css">
+</head>
+<body>
+
+<div class="bk-app">
+  <aside class="bk-sidebar" id="bkSidebar" aria-label="Hovedmeny"></aside>
+
+  <div class="bk-main">
+    <header class="bk-topbar">
+      <button class="bk-burger" id="bkBurger" aria-label="Meny">☰</button>
+      <div class="bk-search">
+        <span class="ico">🔎</span>
+        <input id="bkSearch" type="search" placeholder="Søk…" aria-label="Søk i prosjekter">
+      </div>
+      <div class="bk-top-actions" id="bkTopActions"></div>
+    </header>
+
+    <main class="bk-content" id="bkView" aria-live="polite"></main>
+  </div>
+</div>
+
+<div class="bk-toast" id="bkToast" role="status"></div>
+<div id="bkPrintArea"></div>
+
+<script src="/js/lme-auth.js"></script>
+<script src="/bookly/js/bookly-core.js"></script>
+<script src="/bookly/js/bookly-gen.js"></script>
+<script src="/bookly/js/bookly-creators.js"></script>
+<script src="/bookly/js/bookly-export.js"></script>
+<script src="/bookly/js/bookly-publish.js"></script>
+<script src="/bookly/js/bookly-app.js"></script>
+<script>BK.boot();</script>
+</body>
+</html>
