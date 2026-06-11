@@ -263,7 +263,7 @@
           <h3>Download the <em>app</em></h3>
           <p>Get the LME platform in your pocket. Access the Academy, Library, and Renate AI wherever you are.</p>
         </div>
-        <a href="#" class="card-btn">Download →</a>
+        <a href="#" onclick="lmeSoon();return false;" class="card-btn">Download →</a>
       </div>
     </div>
   </div>
@@ -291,5 +291,6 @@
   Norsk
 </a>
 
+<script>function lmeSoon(m){var t=document.createElement("div");t.textContent=m||"Kommer snart 💛";t.style.cssText="position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#2a1e2e;color:#fff;padding:12px 20px;border-radius:999px;z-index:99999;font-weight:700;font-family:inherit;box-shadow:0 8px 24px rgba(0,0,0,.25)";document.body.appendChild(t);setTimeout(function(){t.remove();},2200);}</script>
 </body>
 </html>

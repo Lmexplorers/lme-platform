@@ -777,7 +777,7 @@
           <div class="meta">Overføres fra FEA · DNS i Cloudflare</div>
         </div>
         <span class="dm-status pending">Under overføring</span>
-        <a href="#" class="dm-manage">Administrer</a>
+        <a href="#" onclick="lmeSoon();return false;" class="dm-manage">Administrer</a>
       </div>
       <div class="dm-row">
         <span class="dm-dot ok"></span>
@@ -786,7 +786,7 @@
           <div class="meta">Tilkoblet · Creative Academy <em>(eksempel)</em></div>
         </div>
         <span class="dm-status ok">Aktiv</span>
-        <a href="#" class="dm-manage">Administrer</a>
+        <a href="#" onclick="lmeSoon();return false;" class="dm-manage">Administrer</a>
       </div>
       <div class="dm-row">
         <span class="dm-dot ok"></span>
@@ -795,7 +795,7 @@
           <div class="meta">Tilkoblet · Landingsside <em>(eksempel)</em></div>
         </div>
         <span class="dm-status ok">Aktiv</span>
-        <a href="#" class="dm-manage">Administrer</a>
+        <a href="#" onclick="lmeSoon();return false;" class="dm-manage">Administrer</a>
       </div>
     </div>
 
@@ -883,5 +883,6 @@
 </script>
 
   <script src="/js/page-editor.js" defer></script>
+<script>function lmeSoon(m){var t=document.createElement("div");t.textContent=m||"Kommer snart 💛";t.style.cssText="position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#2a1e2e;color:#fff;padding:12px 20px;border-radius:999px;z-index:99999;font-weight:700;font-family:inherit;box-shadow:0 8px 24px rgba(0,0,0,.25)";document.body.appendChild(t);setTimeout(function(){t.remove();},2200);}</script>
 </body>
 </html>
