@@ -645,12 +645,27 @@
         (sol ? '<button class="bk-btn ghost sm" id="edSol">' + (d.showSolution ? (no ? 'Skjul fasit' : 'Hide solution') : (no ? 'Vis fasit' : 'Show solution')) + '</button>' : '') +
         '<button class="bk-btn quiet sm" id="edDelPg">🗑️ ' + (no ? 'Slett side' : 'Delete page') + '</button>' +
         '</div>';
-      $('#edSave').onclick = function () {
-        pgObj.title = $('#edTitle').value;
+      /* Synkroniser alle felter inn i modellen, så ingenting går tapt
+         selv om man genererer eller bytter side uten å trykke Lagre. */
+      function syncFields() {
+        if ($('#edTitle')) pgObj.title = $('#edTitle').value;
         if ($('#edText')) d.text = $('#edText').value;
         if ($('#edIllus')) d.illustration = $('#edIllus').value;
         if ($('#edHook')) d.hook = $('#edHook').value;
         if ($('#edBack')) d.text = $('#edBack').value;
+        if ($('#edPrompt')) d.imgPrompt = $('#edPrompt').value;
+      }
+      ['edTitle', 'edText', 'edIllus', 'edHook', 'edBack', 'edPrompt'].forEach(function (id) {
+        var el2 = $('#' + id);
+        if (!el2) return;
+        el2.addEventListener('input', function () {
+          syncFields();
+          clearTimeout(BK._edT);
+          BK._edT = setTimeout(function () { BK.touch(p); }, 600);
+        });
+      });
+      $('#edSave').onclick = function () {
+        syncFields();
         BK.touch(p);
         BK.toast(t('saved'));
         BK.refresh();
@@ -678,9 +693,11 @@
         renderStage();
       };
       if ($('#edGenImg')) $('#edGenImg').onclick = function () {
-        var promptTxt = $('#edPrompt').value.trim();
+        syncFields();
+        var promptTxt = ($('#edPrompt').value || '').trim();
         if (!promptTxt) { BK.toast(no ? 'Skriv en bildeprompt først.' : 'Write an image prompt first.'); return; }
         d.imgPrompt = promptTxt;
+        BK.touch(p);
         var btn = this;
         btn.disabled = true;
         btn.innerHTML = '⏳ ' + (no ? 'Genererer bilde… (kan ta opptil ett minutt)' : 'Generating image… (can take up to a minute)');
