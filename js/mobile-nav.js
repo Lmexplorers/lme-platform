@@ -27,6 +27,14 @@
     '  #lme-floating-lang-btn { top: auto !important; bottom: 14px !important;',
     '    right: 12px !important; padding: 8px 14px !important; font-size: 12px !important; }',
     '  a.lang-float { top: auto !important; bottom: 14px !important; right: 12px !important; }',
+    /* Hero-seksjonen: nyhetsliste + banner under hverandre, ikke ved siden av */
+    '  .hero-section { grid-template-columns: 1fr !important; gap: 16px; }',
+    '  .hero-section .hero { min-height: 250px; aspect-ratio: auto; }',
+    '  .hero-section .hero-slide { padding: 22px; }',
+    '  .hero-section .hero h1 { font-size: 24px; }',
+    '  .hero-section .hero .by { font-size: 15px; }',
+    /* Fanerader (Oversikt/Abonnement/...): hold dem innenfor skjermen, rull sidelengs */
+    '  .tabs { max-width: 100% !important; }',
     /* Mobilmeny-panelet */
     '  .nav { display: none !important; position: fixed; left: 12px; right: 12px;',
     '    flex-direction: column; background: #fff; border-radius: 22px;',
