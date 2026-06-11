@@ -47,13 +47,12 @@
   --r-lg: 24px;
   --r-xl: 32px;
 
-  --font-display: 'Playpen Sans', 'Nunito', system-ui, sans-serif;
-  --font-body: 'Nunito', system-ui, -apple-system, sans-serif;
-
-  /* Merkefonter for boksidene (samme fontregler som resten av LME):
-     Sassoon Montessori til titler og lesetekst, Playpen Sans som grunnskrift. */
+  /* LME-fontregler: Sassoon Montessori til overskrifter og lesetekst,
+     Playpen Sans som grunnskrift, i hele appen og i bøkene. */
   --font-sasson: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
-  --font-sheet: 'Playpen Sans', 'Nunito', system-ui, sans-serif;
+  --font-display: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  --font-body: 'Playpen Sans', system-ui, -apple-system, sans-serif;
+  --font-sheet: 'Playpen Sans', system-ui, sans-serif;
 
   --sidebar-w: 252px;
   --topbar-h: 64px;
