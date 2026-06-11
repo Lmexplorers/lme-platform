@@ -51,8 +51,17 @@ const MIA_TEO_PROMPT =
   "Teo: brown eyes, medium-brown softly wavy slightly tousled hair, warm smile, round Pixar-inspired face, " +
   "yellow-and-white striped shirt, blue shorts, brown shoes, green backpack, adventurous expression. " +
   "Best friends with equal visual importance and supportive, positive body language, never romantic framing. " +
-  "Keep the exact same faces, hair silhouettes, proportions and identity cues in every image; do not redesign the characters. " +
+  "CRITICAL CHARACTER LOCK: Mia and Teo must look EXACTLY like this in every single image, with zero changes: " +
+  "identical faces, identical eye color, identical hair color and hairstyle, identical clothing and clothing colors, " +
+  "identical proportions and identical art style. Do not change, restyle, age, simplify or redesign them in ANY way. " +
+  "Only the pose, the scene and the background may change between images. " +
   "Animals never talk, environments feel alive, magical, safe and premium with warm light and depth.";
+
+/* Identitetslås som alltid legges på når referansebilder brukes. */
+const REF_LOCK =
+  "\n\nCRITICAL: The characters shown in the attached reference images must remain EXACTLY the same, with zero changes: " +
+  "same faces, same eyes, same hair color and hairstyle, same clothing and colors, same proportions, same art style. " +
+  "Do not redesign, restyle, age or alter the characters in any way. Only the pose, scene and background may change.";
 
 export async function onRequestGet(context) {
   const { params, env } = context;
@@ -110,7 +119,7 @@ export async function onRequestPost(context) {
       try {
         const fd = new FormData();
         fd.append("model", env.BOOKLY_IMAGE_MODEL || "gpt-image-1");
-        fd.append("prompt", prompt);
+        fd.append("prompt", prompt.indexOf("CRITICAL") !== -1 ? prompt : prompt + REF_LOCK);
         fd.append("size", size);
         fd.append("quality", env.BOOKLY_IMAGE_QUALITY || "medium");
         fd.append("n", "1");
