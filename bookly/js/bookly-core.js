@@ -57,7 +57,7 @@
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, cv.width, cv.height);
         ctx.drawImage(img, 0, 0, cv.width, cv.height);
-        resolve(cv.toDataURL('image/jpeg', 0.86));
+        resolve(cv.toDataURL('image/jpeg', 0.82));
       };
       img.src = dataUrl;
     });
@@ -216,16 +216,45 @@
   };
   BK.state = state;
 
+  var warnedQuota = false;
   function persistLocal() {
+    var payload = {
+      projects: state.projects,
+      folders: state.folders,
+      exports: state.exports.slice(0, 60),
+      savedPrompts: state.savedPrompts,
+      settings: state.settings,
+    };
     try {
-      localStorage.setItem(LS_KEY, JSON.stringify({
-        projects: state.projects,
-        folders: state.folders,
-        exports: state.exports.slice(0, 60),
-        savedPrompts: state.savedPrompts,
-        settings: state.settings,
-      }));
-    } catch (e) { /* full lagring: ignorer */ }
+      localStorage.setItem(LS_KEY, JSON.stringify(payload));
+      return;
+    } catch (e) { /* full: prøv uten bilder under */ }
+
+    // Nettleserens lagring er full. Redd alltid tekstene: lagre en kopi
+    // uten bilder lokalt. Skysynken (innlogget) beholder alt med bilder.
+    try {
+      var slim = JSON.parse(JSON.stringify(payload));
+      (slim.projects || []).forEach(function (p) {
+        (p.pages || []).forEach(function (pg) {
+          if (pg.data && pg.data.image) pg.data.image = null;
+        });
+        if (p.cover && p.cover.image) p.cover.image = null;
+      });
+      localStorage.setItem(LS_KEY, JSON.stringify(slim));
+      if (!warnedQuota) {
+        warnedQuota = true;
+        BK.toast(BK.lang() === 'no'
+          ? 'Nettleserens lagring er full: tekstene er trygge, men bildene får ikke plass lokalt. ' + (state.user ? 'Alt med bilder ligger trygt i skyen.' : 'Logg inn, så lagres alt med bilder i skyen.')
+          : 'Browser storage is full: your texts are safe, but the images do not fit locally. ' + (state.user ? 'Everything incl. images is safe in the cloud.' : 'Sign in to keep everything incl. images in the cloud.'));
+      }
+    } catch (e2) {
+      if (!warnedQuota) {
+        warnedQuota = true;
+        BK.toast(BK.lang() === 'no'
+          ? 'Lagring feilet: nettleserens lagring er full. Slett gamle prosjekter, eller logg inn for skylagring.'
+          : 'Saving failed: browser storage is full. Delete old projects, or sign in for cloud storage.');
+      }
+    }
   }
 
   function loadLocal() {

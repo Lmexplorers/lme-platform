@@ -446,7 +446,9 @@
     var def = FORMS[type] || FORMS.book;
     var no = BK.lang() === 'no';
     var preset = (BK.pendingTemplate && BK.pendingTemplate.type === type) ? BK.pendingTemplate : null;
-    var pcfg = preset ? preset.cfg : {};
+    // Husk sist brukte oppsett per skaper, så ingenting må fylles inn på nytt.
+    var lastCfg = (BK.state.settings.lastCfg || {})[type] || {};
+    var pcfg = preset ? preset.cfg : lastCfg;
 
     root.innerHTML =
       head(def.icon + ' ' + esc(L(def.title)), L(def.sub),
@@ -481,6 +483,8 @@
         BK.toast(no ? 'Gi prosjektet en tittel først.' : 'Give the project a title first.');
         return;
       }
+      BK.state.settings.lastCfg = BK.state.settings.lastCfg || {};
+      BK.state.settings.lastCfg[type] = cfg;
       var btn = this;
       btn.disabled = true;
       var t0 = Date.now();
