@@ -1584,22 +1584,16 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 
   function updatePrices() {
     document.querySelectorAll('.price-amount').forEach(el => {
-      const monthlyNok = parseInt(el.dataset.monthlyNok);
-      const monthlyUsd = parseInt(el.dataset.monthlyUsd);
-      const annualNok = parseInt(el.dataset.annualNok);
-      const annualUsd = parseInt(el.dataset.annualUsd);
-      const isMonthly = cycle === 'monthly';
-      let amount;
-      if (curr === 'NOK') {
-        amount = isMonthly ? monthlyNok : annualNok;
-      } else {
-        amount = isMonthly ? monthlyUsd : annualUsd;
-      }
-      const suffix = curr === 'NOK' ? ' kr' : '$';
+      const card = el.closest('.plan-card');
+      // Bare planer med en årlig betalingslenke (Proff + Fellesskap) følger Årlig-bryteren.
+      const annualCapable = !!(card && card.querySelector('.plan-cta[data-link-nok-annual], .plan-cta[data-link-usd-annual]'));
+      const useAnnual = cycle === 'annual' && annualCapable;
+      const amount = curr === 'NOK'
+        ? (useAnnual ? parseInt(el.dataset.annualNok) : parseInt(el.dataset.monthlyNok))
+        : (useAnnual ? parseInt(el.dataset.annualUsd) : parseInt(el.dataset.monthlyUsd));
       el.textContent = curr === 'USD' ? '$' + amount : amount + ' kr';
-    });
-    document.querySelectorAll('.price-period').forEach(el => {
-      el.textContent = cycle === 'monthly' ? '/måned' : '/år';
+      const period = card && card.querySelector('.price-period');
+      if (period) period.textContent = useAnnual ? '/år' : '/måned';
     });
   }
 
@@ -1620,28 +1614,12 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 
   function updateLinks() {
     document.querySelectorAll('.plan-cta').forEach(btn => {
-      const key = `data-link-${curr.toLowerCase() === 'nok' ? 'nok' : 'usd'}-${cycle}`;
+      // Start/Proff har ingen årlig lenke -> de blir alltid månedlig, uansett bryteren.
+      const annualCapable = btn.hasAttribute('data-link-nok-annual') || btn.hasAttribute('data-link-usd-annual');
+      const useAnnual = cycle === 'annual' && annualCapable;
+      const key = `data-link-${curr.toLowerCase() === 'nok' ? 'nok' : 'usd'}-${useAnnual ? 'annual' : 'monthly'}`;
       const link = btn.getAttribute(key);
-      if (link) {
-        // Gyldig betalingslenke for valgt valuta + syklus
-        btn.href = link;
-        btn.onclick = null;
-        btn.removeAttribute('aria-disabled');
-        btn.style.opacity = '';
-        btn.title = '';
-      } else {
-        // Mangler lenke (f.eks. årlig for Start/Proff) -> ikke send til feil betaling
-        btn.removeAttribute('href');
-        btn.setAttribute('aria-disabled', 'true');
-        btn.style.opacity = '0.6';
-        btn.style.cursor = 'not-allowed';
-        btn.title = 'Årlig betaling for denne planen kommer snart';
-        btn.onclick = function (e) {
-          e.preventDefault();
-          if (window.lmeSoon) lmeSoon('Årlig betaling for denne planen er på vei 💛');
-          else alert('Årlig betaling for denne planen kommer snart.');
-        };
-      }
+      if (link) btn.href = link;
     });
   }
 
