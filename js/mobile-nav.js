@@ -49,17 +49,37 @@
   ].join('\n');
   var st = document.createElement('style');
   st.textContent = css;
-  document.head.appendChild(st);
+  /* Sist i body, så reglene vinner over sidens egne stilblokker i body */
+  (document.body || document.head).appendChild(st);
+
+  /* --- Flytende språkknapp: flytt ned på mobil med inline-stil (slår alt) --- */
+  function placeLangBtn() {
+    var b = document.getElementById('lme-floating-lang-btn');
+    if (!b) return;
+    if (window.matchMedia('(max-width: 768px)').matches) {
+      b.style.setProperty('top', 'auto', 'important');
+      b.style.setProperty('bottom', '14px', 'important');
+      b.style.setProperty('right', '12px', 'important');
+      b.style.setProperty('padding', '8px 14px', 'important');
+      b.style.setProperty('font-size', '12px', 'important');
+    } else {
+      ['top', 'bottom', 'right', 'padding', 'font-size'].forEach(function (k) {
+        b.style.removeProperty(k);
+      });
+    }
+  }
+  placeLangBtn();
+  window.addEventListener('resize', placeLangBtn);
 
   /* --- Fjern den gamle hvite "English"-dubletten der begge finnes --- */
   function dedupeLang() {
     var pink = document.getElementById('lme-floating-lang-btn');
-    var dup = document.querySelector('a.lang-float');
+    var dup = document.querySelector('a.lang-float, button.lang-float');
     if (pink && dup) dup.style.display = 'none';
   }
   dedupeLang();
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', dedupeLang);
+    document.addEventListener('DOMContentLoaded', function () { dedupeLang(); placeLangBtn(); });
   }
 
   /* --- Hamburgermeny (bare på sider med delt toppnav) --- */
