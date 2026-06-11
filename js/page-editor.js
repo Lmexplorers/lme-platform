@@ -17,6 +17,7 @@
   if (id === "") id = "/index";
 
   var FLAG = "lme-page-edit";
+  var FLAGS = ["lme-edit", "lme-page-edit", "lme-course-edit"];
 
   // 1) Hent lagret innhold og bytt ut de merkede blokkene.
   fetch("/api/content?id=" + encodeURIComponent(id))
@@ -45,7 +46,7 @@
 
   function reveal() { bar.style.display = "flex"; }
   if (/(^|[#&?])rediger(=1)?($|[&])/.test(location.hash + location.search) ||
-      localStorage.getItem(FLAG) === "1") reveal();
+      FLAGS.some(function(k){ return localStorage.getItem(k) === "1"; })) reveal();
   document.addEventListener("keydown", function (e) {
     if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "E" || e.key === "e")) reveal();
   });
@@ -110,7 +111,7 @@
     })
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        if (d && d.ok) { localStorage.setItem(FLAG, "1"); toast("☁️ Lagret i skyen"); stopEdit(); }
+        if (d && d.ok) { localStorage.setItem(FLAG, "1"); localStorage.setItem("lme-edit", "1"); toast("☁️ Lagret i skyen"); stopEdit(); }
         else if (d && d.error === "bad_password") { pw = null; alert("Feil passord. Prøv igjen."); resetSave(); }
         else { alert("Kunne ikke lagre: " + ((d && d.error) || "ukjent feil")); resetSave(); }
       })
