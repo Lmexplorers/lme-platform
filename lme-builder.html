@@ -10,12 +10,12 @@
 <style>
   :root {
     --pink-soft: #F8D7DA;
-    --pink-deep: #E4A0A8;
+    --pink-deep: #EE9CAD;
     --pink-blush: #FCE8EA;
     --pink-ink: #8B4A52;
-    --teal: #5FB3B3;
-    --teal-deep: #3D8B8B;
-    --teal-blush: #E6F4F4;
+    --brand: #E91E89;
+    --brand-deep: #C2185B;
+    --brand-blush: #FCE8EA;
     --cream: #FFF9F7;
     --ink: #2A2329;
     --ink-soft: #5C5359;
@@ -26,7 +26,7 @@
     --radius: 14px;
     --radius-lg: 20px;
     --font-display: 'Playpen Sans', system-ui, sans-serif;
-    --font-body: 'Inter', system-ui, sans-serif;
+    --font-body: 'Playpen Sans', 'Comic Sans MS', sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: var(--font-body); background: var(--cream); color: var(--ink); height: 100vh; overflow: hidden; font-size: 14px; line-height: 1.5; }
@@ -35,15 +35,20 @@
   .brand { display: flex; align-items: center; gap: 12px; font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--pink-ink); text-decoration: none; transition: opacity 0.15s; }
   .brand:hover { opacity: 0.75; }
   .brand-logo-img { height: 32px; width: auto; display: block; }
-  .brand-mark { width: 32px; height: 32px; background: linear-gradient(135deg, var(--pink-deep), var(--teal)); border-radius: 10px; display: grid; place-items: center; color: white; font-size: 16px; font-weight: 800; }
+  .brand-mark { width: 32px; height: 32px; background: linear-gradient(135deg, var(--pink-deep), var(--brand)); border-radius: 10px; display: grid; place-items: center; color: white; font-size: 16px; font-weight: 800; }
   .topbar-center { display: flex; align-items: center; gap: 4px; background: var(--pink-blush); padding: 4px; border-radius: 10px; }
   .mode-btn { border: none; background: transparent; padding: 8px 16px; border-radius: 8px; font-family: var(--font-body); font-weight: 500; font-size: 13px; color: var(--ink-soft); cursor: pointer; transition: all 0.2s; }
   .mode-btn.active { background: white; color: var(--pink-ink); box-shadow: var(--shadow-sm); }
+  .tb-sep { width: 1px; height: 20px; background: rgba(139,74,82,0.18); margin: 0 4px; }
+  .device-btn { border: none; background: transparent; padding: 8px 11px; border-radius: 8px; font-size: 14px; line-height: 1; color: var(--ink-soft); cursor: pointer; transition: all 0.2s; }
+  .device-btn.active { background: white; color: var(--brand); box-shadow: var(--shadow-sm); }
+  .canvas { transition: max-width 0.3s ease; }
+  .canvas-wrap.device-mobil .canvas { max-width: 400px; }
   .topbar-right { display: flex; align-items: center; gap: 10px; }
   .btn { border: none; padding: 9px 16px; border-radius: 10px; font-family: var(--font-body); font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
   .btn-ghost { background: transparent; color: var(--ink-soft); }
   .btn-ghost:hover { background: var(--pink-blush); color: var(--pink-ink); }
-  .btn-primary { background: linear-gradient(135deg, var(--pink-deep), #C77A82); color: white; box-shadow: var(--shadow-sm); }
+  .btn-primary { background: linear-gradient(135deg, var(--pink-deep), #D46A8C); color: white; box-shadow: var(--shadow-sm); }
   .btn-primary:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
 
   /* "Spør Renate AI" button — matching style fra spor-renate-ai.html */
@@ -65,7 +70,7 @@
   .btn-ai-link .ai-avatar-mini {
     width: 26px; height: 26px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--pink-deep), #C77A82);
+    background: linear-gradient(135deg, var(--pink-deep), #D46A8C);
     display: grid; place-items: center;
     color: white; font-weight: 700; font-size: 12px;
     overflow: hidden;
@@ -225,7 +230,7 @@
   .hero { padding: 80px 60px; display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center; }
   .hero-content h1 { font-family: var(--font-display); font-size: 44px; line-height: 1.15; color: var(--ink); margin-bottom: 20px; font-weight: 700; }
   .hero-content p { font-size: 16px; color: var(--ink-soft); margin-bottom: 28px; line-height: 1.65; }
-  .hero-cta, .cta-button { display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px; background: var(--pink-deep); color: white; border-radius: 12px; font-weight: 600; font-size: 15px; text-decoration: none; box-shadow: var(--shadow-md); transition: all 0.2s; border: none; cursor: pointer; font-family: var(--font-body); }
+  .hero-cta, .cta-button { display: inline-flex; align-items: center; gap: 8px; padding: calc(14px * var(--btn-scale, 1)) calc(26px * var(--btn-scale, 1)); background: var(--btn-color, var(--pink-deep)); color: white; border-radius: 12px; font-weight: 600; font-size: calc(15px * var(--btn-scale, 1)); text-decoration: none; box-shadow: var(--shadow-md); transition: all 0.2s; border: none; cursor: pointer; font-family: var(--btn-font, var(--font-body)); }
   .hero-cta:hover, .cta-button:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
 
   /* === IMAGE BOX === */
@@ -233,7 +238,7 @@
     position: relative;
     border-radius: var(--radius-lg);
     overflow: hidden;
-    background: linear-gradient(135deg, var(--pink-soft), var(--teal));
+    background: linear-gradient(135deg, var(--pink-soft), var(--brand));
     margin: 0 auto;
     transition: box-shadow 0.2s;
   }
@@ -377,7 +382,7 @@
   .testimonial-quote { font-size: 32px; color: var(--pink-deep); line-height: 1; margin-bottom: 12px; font-family: Georgia, serif; }
   .testimonial-text { color: var(--ink); font-size: 14.5px; line-height: 1.65; margin-bottom: 20px; font-style: italic; }
   .testimonial-author { display: flex; align-items: center; gap: 12px; padding-top: 16px; border-top: 1px solid var(--line); }
-  .testimonial-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--pink-soft), var(--teal)); display: grid; place-items: center; color: white; font-weight: 700; font-size: 16px; flex-shrink: 0; }
+  .testimonial-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--pink-soft), var(--brand)); display: grid; place-items: center; color: white; font-weight: 700; font-size: 16px; flex-shrink: 0; }
   .testimonial-name { font-weight: 600; color: var(--ink); font-size: 13.5px; }
   .testimonial-role { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
 
@@ -411,9 +416,9 @@
   .pricing-divider { height: 1px; background: var(--line); margin: 24px 0; }
   .pricing-features { list-style: none; padding: 0; margin: 0 0 28px 0; flex: 1; }
   .pricing-features li { padding: 7px 0; font-size: 13.5px; color: var(--ink); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
-  .pricing-features li::before { content: '✓'; color: var(--teal); font-weight: 800; flex-shrink: 0; }
-  .pricing-cta { display: block; text-align: center; padding: 12px 20px; background: var(--cream); color: var(--pink-ink); border: 1.5px solid var(--pink-deep); border-radius: 12px; font-weight: 600; font-size: 14px; text-decoration: none; cursor: pointer; transition: all 0.2s; font-family: var(--font-body); }
-  .pricing-card.featured .pricing-cta { background: var(--pink-deep); color: white; }
+  .pricing-features li::before { content: '✓'; color: var(--brand); font-weight: 800; flex-shrink: 0; }
+  .pricing-cta { display: block; text-align: center; padding: calc(12px * var(--btn-scale, 1)) calc(20px * var(--btn-scale, 1)); background: var(--cream); color: var(--pink-ink); border: 1.5px solid var(--btn-color, var(--pink-deep)); border-radius: 12px; font-weight: 600; font-size: calc(14px * var(--btn-scale, 1)); text-decoration: none; cursor: pointer; transition: all 0.2s; font-family: var(--btn-font, var(--font-body)); }
+  .pricing-card.featured .pricing-cta { background: var(--btn-color, var(--pink-deep)); color: white; }
   .pricing-cta:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
 
   /* FAQ */
@@ -532,7 +537,7 @@
   }
   .leadmagnet-benefits li::before {
     content: '✓';
-    color: var(--teal);
+    color: var(--brand);
     font-weight: 800;
     font-size: 16px;
     flex-shrink: 0;
@@ -590,9 +595,9 @@
   .pdf-export-btn {
     width: 100%;
     padding: 11px 16px;
-    background: var(--teal-blush);
-    color: var(--teal-deep);
-    border: 1.5px solid var(--teal);
+    background: var(--brand-blush);
+    color: var(--brand-deep);
+    border: 1.5px solid var(--brand);
     border-radius: 10px;
     font-family: var(--font-body);
     font-weight: 600;
@@ -605,7 +610,7 @@
     gap: 6px;
     margin-top: 8px;
   }
-  .pdf-export-btn:hover { background: var(--teal); color: white; transform: translateY(-1px); }
+  .pdf-export-btn:hover { background: var(--brand); color: white; transform: translateY(-1px); }
   .pdf-export-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
   .pdf-content-preview {
@@ -637,7 +642,7 @@
     margin-left: 6px;
   }
   .pdf-status-tag.empty { background: var(--cream); color: var(--ink-soft); }
-  .pdf-status-tag.filled { background: var(--teal-blush); color: var(--teal-deep); }
+  .pdf-status-tag.filled { background: var(--brand-blush); color: var(--brand-deep); }
 
   /* BRAND MODAL */
   .brand-modal .modal { max-width: 820px; }
@@ -1153,7 +1158,7 @@
   }
   .template-block.hero { height: 22px; background: linear-gradient(90deg, var(--pink-blush), var(--pink-soft)); }
   .template-block.features { height: 12px; background: var(--cream); border: 1px solid var(--line); }
-  .template-block.testimonials { height: 10px; background: var(--teal-blush); }
+  .template-block.testimonials { height: 10px; background: var(--brand-blush); }
   .template-block.pricing { height: 14px; background: linear-gradient(90deg, var(--pink-soft), var(--pink-deep)); opacity: 0.4; }
   .template-block.cta { height: 8px; background: var(--pink-deep); opacity: 0.5; }
   .template-block.faq { height: 10px; background: var(--cream); border: 1px solid var(--line); }
@@ -1198,7 +1203,7 @@
   .ai-section-btn {
     width: 100%;
     padding: 12px 16px;
-    background: linear-gradient(135deg, #E4A0A8 0%, #5FB3B3 100%);
+    background: linear-gradient(135deg, #EE9CAD 0%, #E91E89 100%);
     color: white;
     border: none;
     border-radius: 12px;
@@ -1367,7 +1372,7 @@
   .export-info {
     display: flex;
     gap: 12px;
-    background: var(--teal-blush);
+    background: var(--brand-blush);
     border-radius: 12px;
     padding: 14px 16px;
     align-items: flex-start;
@@ -1407,8 +1412,49 @@
   .preview-mode .image-box.img-selected { box-shadow: none; }
   .preview-mode .image-box.empty { border: none; }
 
+  /* Mobil-forhåndsvisning: etterlign ekte mobil-layout inne i canvas (media-spørringer ser på vindu, ikke canvas) */
+  .canvas-wrap.device-mobil .hero { grid-template-columns: 1fr; padding: 44px 26px; gap: 30px; }
+  .canvas-wrap.device-mobil .image-box { width: 100% !important; max-width: 300px; height: auto !important; aspect-ratio: 4 / 5; margin: 0 auto; }
+  .canvas-wrap.device-mobil .leadmagnet-inner { grid-template-columns: 1fr; gap: 36px; }
+  .canvas-wrap.device-mobil .features-grid { grid-template-columns: 1fr; }
+  .canvas-wrap.device-mobil .testimonials-grid { grid-template-columns: 1fr; }
+  .canvas-wrap.device-mobil .pricing-grid { grid-template-columns: 1fr; }
+  .canvas-wrap.device-mobil .footer-grid { grid-template-columns: 1fr; gap: 26px; }
+
   /* Hidden file input */
   .hidden-file-input { position: absolute; left: -9999px; opacity: 0; }
+
+  /* Produktbilde på kort */
+  .product-img { width: 100%; aspect-ratio: 4 / 3; border-radius: 12px; overflow: hidden; margin-bottom: 14px; background: var(--pink-blush); display: flex; align-items: center; justify-content: center; }
+  .product-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .product-img-ph { font-size: 30px; opacity: 0.5; }
+
+  /* Galleri */
+  .gallery { padding: 72px 60px; }
+  .gallery-header { text-align: center; max-width: 640px; margin: 0 auto 40px; }
+  .gallery-header h2 { font-family: var(--font-display); font-size: 36px; color: var(--ink); margin-bottom: 10px; font-weight: 700; }
+  .gallery-header p { color: var(--ink-soft); font-size: 16px; }
+  .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 1000px; margin: 0 auto; }
+  .gallery-cell { aspect-ratio: 1; border-radius: 16px; overflow: hidden; background: var(--pink-blush); display: flex; align-items: center; justify-content: center; }
+  .gallery-cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .gallery-cell.empty { border: 2px dashed var(--pink-deep); cursor: pointer; transition: background 0.18s; }
+  .gallery-cell.empty:hover { background: var(--pink-soft); }
+  .gallery-ph { text-align: center; color: var(--pink-ink); font-size: 26px; }
+  .gallery-ph small { display: block; font-size: 11px; margin-top: 4px; opacity: 0.85; }
+  .canvas-wrap.device-mobil .gallery-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Font-kontroller: tykkelse + størrelse. Skalerer canvas-teksten; ingen endring ved standard (vekt 700, skala 1). */
+  .canvas h1, .canvas h2, .canvas h3 { font-weight: var(--heading-weight, 700); }
+  .canvas .hero-content h1 { font-size: calc(44px * var(--font-scale, 1)); }
+  .canvas .cta-section h2 { font-size: calc(36px * var(--font-scale, 1)); }
+  .canvas .testimonials-header h2 { font-size: calc(32px * var(--font-scale, 1)); }
+  .canvas .features-header h2 { font-size: calc(36px * var(--font-scale, 1)); }
+  .canvas .pricing-header h2 { font-size: calc(36px * var(--font-scale, 1)); }
+  .canvas .faq-header h2 { font-size: calc(32px * var(--font-scale, 1)); }
+  .canvas .hero-content p { font-size: calc(16px * var(--font-scale, 1)); }
+  .canvas .cta-section p { font-size: calc(17px * var(--font-scale, 1)); }
+  .canvas .features-header p, .canvas .pricing-header p { font-size: calc(16px * var(--font-scale, 1)); }
+  .canvas .testimonials-header p { font-size: calc(15px * var(--font-scale, 1)); }
 </style>
 </head>
 <body>
@@ -1422,6 +1468,9 @@
   <div class="topbar-center">
     <button class="mode-btn active" data-mode="edit">✏️ Rediger</button>
     <button class="mode-btn" data-mode="preview">👁️ Forhåndsvis</button>
+    <span class="tb-sep"></span>
+    <button class="device-btn active" data-device="desktop" title="Desktop-visning" aria-label="Desktop-visning">🖥️</button>
+    <button class="device-btn" data-device="mobil" title="Mobil-visning" aria-label="Mobil-visning">📱</button>
   </div>
   <div class="topbar-right">
     <a href="/spor-renate-ai" class="btn-ai-link">
@@ -1580,7 +1629,7 @@
       <div class="ai-section-tag" id="aiSectionTag">Hero</div>
 
       <label>Beskriv hva du vil ha</label>
-      <textarea id="aiPromptInput" placeholder="F.eks. «Salgsside for mitt nye kurs om Montessori hjemme — målgruppe er nybegynner-foreldre med små barn»"></textarea>
+      <textarea id="aiPromptInput" placeholder="F.eks. “Salgsside for mitt nye kurs om Montessori hjemme, målgruppe er nybegynner-foreldre med små barn”"></textarea>
 
       <div class="ai-suggestions" id="aiSuggestions"></div>
 
@@ -1593,6 +1642,18 @@
         <div class="ai-mode-pill" data-ai-mode="fill" onclick="setAIMode('fill')">
           <span class="ai-mode-pill-title">✏️ Fyll tomme</span>
           <span class="ai-mode-pill-desc">Behold ditt eksisterende</span>
+        </div>
+      </div>
+
+      <label>Språk</label>
+      <div class="ai-modal-mode">
+        <div class="ai-mode-pill ai-lang-pill active" data-ai-lang="no" onclick="setAILang('no')">
+          <span class="ai-mode-pill-title">🇳🇴 Norsk</span>
+          <span class="ai-mode-pill-desc">Generer på norsk</span>
+        </div>
+        <div class="ai-mode-pill ai-lang-pill" data-ai-lang="en" onclick="setAILang('en')">
+          <span class="ai-mode-pill-title">🇬🇧 English</span>
+          <span class="ai-mode-pill-desc">Generate in English</span>
         </div>
       </div>
 
@@ -1614,8 +1675,13 @@
     if (str == null) return '';
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
+  // CTA-tekst med nøyaktig én pil — stripper avsluttende piler så de ikke hoper seg opp
+  function ctaLabel(str) {
+    var clean = String(str == null ? '' : str).replace(/[\s→➝➜]+$/, '');
+    return escapeHtml(clean) + ' →';
+  }
   function bgForStyle(style) {
-    if (style === 'teal') return 'linear-gradient(135deg, var(--teal-blush) 0%, #FFF 100%)';
+    if (style === 'teal') return 'linear-gradient(135deg, var(--brand-blush) 0%, #FFF 100%)';
     if (style === 'cream') return 'linear-gradient(135deg, var(--cream) 0%, #FFF 100%)';
     if (style === 'white') return '#FFFFFF';
     return 'linear-gradient(135deg, var(--pink-blush) 0%, #FFF 100%)';
@@ -1937,7 +2003,7 @@
         subheading: 'Ekte tilbakemeldinger fra LME-familien',
         items: [
           { text: 'Bøkene er nydelige og barna mine elsker Mia og Teo. Endelig læringsmateriell som er både vakkert og pedagogisk.', name: 'Anne', role: 'Mor til 2', initial: 'A' },
-          { text: 'Som Montessori-pedagog setter jeg stor pris på den naturbaserte tilnærmingen. Anbefales på det sterkeste!', name: 'Maria', role: 'Montessori-lærer', initial: 'M' },
+          { text: 'Som Montessoripedagog setter jeg stor pris på den naturbaserte tilnærmingen. Anbefales på det sterkeste!', name: 'Maria', role: 'Montessorilærer', initial: 'M' },
           { text: 'Mia og Teo har blitt en del av kveldsritualet hjemme hos oss. Magiske historier som åpner barnas nysgjerrighet.', name: 'Kristin', role: 'Forelder', initial: 'K' }
         ],
         style: 'cream'
@@ -1948,7 +2014,7 @@
       icon: '🌟', name: 'Funksjoner', desc: 'Hva som er inkludert — ikoner med tekst i rutenett', available: true,
       defaultProps: {
         heading: 'Alt du trenger på ett sted',
-        subheading: 'Et helhetlig læringsunivers utviklet i Montessori-tradisjon',
+        subheading: 'Et helhetlig læringsunivers utviklet i Montessoritradisjon',
         items: [
           { icon: '📚', title: 'Vakre bøker', desc: 'Naturbaserte fortellinger med Mia og Teo, illustrert med kjærlighet' },
           { icon: '✏️', title: 'Arbeidshefter', desc: 'Pedagogiske arbeidsbøker tilpasset alder 3–6, 6–9 og 9–12 år' },
@@ -2018,7 +2084,7 @@
         col2Title: 'Om LME',
         col2Links: [
           { label: 'Vår historie', link: '' },
-          { label: 'Montessori-pedagogikk', link: '' },
+          { label: 'Montessoripedagogikk', link: '' },
           { label: 'Kontakt', link: '' },
           { label: 'Blogg', link: '' }
         ],
@@ -2044,8 +2110,8 @@
       icon: '🎁', name: 'Gratisguide', desc: 'Last ned-i-bytte-for-e-post landingsside med PDF-innhold', available: true,
       defaultProps: {
         eyebrow: 'GRATIS GUIDE',
-        heading: 'Få din gratis Montessori-guide',
-        body: 'Praktiske tips og aktiviteter du kan bruke med barna dine fra og med i dag — basert på Montessori-prinsipper.',
+        heading: 'Få din gratis Montessoriguide',
+        body: 'Praktiske tips og aktiviteter du kan bruke med barna dine fra og med i dag — basert på Montessoriprinsipper.',
         coverIcon: '🌸',
         coverTitle: 'Montessori hjemme',
         coverSubtitle: 'En guide for foreldre med små barn',
@@ -2058,7 +2124,7 @@
         formLabel: 'Send guiden til e-posten min',
         formButtonText: 'Send meg guiden',
         formPlaceholder: 'din@epost.no',
-        formNote: 'Ingen spam — kun verdifulle Montessori-tips iblant. Du kan melde deg av når som helst.',
+        formNote: 'Ingen spam — kun verdifulle Montessoritips iblant. Du kan melde deg av når som helst.',
         // PDF content (set by AI generation)
         pdfTitle: '',
         pdfSubtitle: '',
@@ -2069,10 +2135,40 @@
       },
       render: renderLeadmagnet, props: leadmagnetProps
     },
-    products: { icon: '📚', name: 'Produkter', desc: 'Bøker og materiell', available: false },
-    gallery: { icon: '🖼️', name: 'Galleri', desc: 'Bildevisning', available: false },
+    products: {
+      icon: '📚', name: 'Produkter', desc: 'Bøker og materiell — kort med pris og kjøpsknapp', available: true,
+      defaultProps: {
+        heading: 'Bøker & materiell',
+        subheading: 'Utforsk hele LME-utvalget',
+        items: [
+          { name: 'Mia & Teo — Skogsboken', desc: 'Vakker naturfortelling', amount: '249', period: 'kr', featured: false, badge: '', features: ['Innbundet bok', 'Norsk + engelsk', 'For 3–9 år'], ctaText: 'Kjøp nå', ctaLink: '#' },
+          { name: 'Arbeidshefte-pakke', desc: 'Alle alderstrinn', amount: '349', period: 'kr', featured: true, badge: 'Bestselger', features: ['3–6, 6–9 og 9–12 år', 'Print-klar PDF', 'Montessoribasert'], ctaText: 'Kjøp nå', ctaLink: '#' },
+          { name: 'Komplett sett', desc: 'Bok + hefter + materiell', amount: '599', period: 'kr', featured: false, badge: '', features: ['Alt inkludert', 'Best verdi', 'Gratis frakt'], ctaText: 'Kjøp nå', ctaLink: '#' }
+        ],
+        style: 'cream'
+      },
+      render: renderPricing, props: pricingProps
+    },
+    gallery: {
+      icon: '🖼️', name: 'Galleri', desc: 'Bilderutenett — vis frem bilder', available: true,
+      defaultProps: {
+        heading: 'Galleri',
+        subheading: 'Et lite innblikk i vår verden',
+        items: [ { imageUrl: '' }, { imageUrl: '' }, { imageUrl: '' }, { imageUrl: '' }, { imageUrl: '' }, { imageUrl: '' } ],
+        style: 'white'
+      },
+      render: renderGallery, props: galleryProps
+    },
     blog: { icon: '📝', name: 'Blogg', desc: 'Siste innlegg', available: false },
-    community: { icon: '🌷', name: 'Fellesskap', desc: 'Inviter til Inner Circle', available: false }
+    community: {
+      icon: '🌷', name: 'Fellesskap', desc: 'Inviter til Inner Circle — sentrert blokk med knapp', available: true,
+      defaultProps: {
+        heading: 'Bli med i LME Inner Circle',
+        body: 'Et varmt fellesskap av foreldre og pedagoger. Få månedlige live-samlinger, eksklusivt materiell og en direkte tråd til Renate.',
+        ctaText: 'Bli medlem', ctaLink: '#', style: 'soft'
+      },
+      render: renderCTA, props: ctaProps
+    }
   };
 
   let state = {
@@ -2085,6 +2181,40 @@
   };
   const STORAGE_KEY = 'lme-builder:site';
   const LEGACY_KEY = 'lme-builder:page'; // gammel single-page lagring
+
+  // Felter som lagres som rik tekst (HTML) for markér-og-styl. Andre lagres som ren tekst.
+  const RICH_FIELDS = new Set(['heading', 'body', 'subheading', 'text', 'name', 'role', 'title', 'desc',
+    'brandName', 'brandDesc', 'col1Title', 'col2Title', 'col3Title', 'copyright']);
+
+  // Lagring: Cloudflare KV (via /api/builder/store) med nettleser-fallback.
+  // Byggeren bruker window.storage.get/set; her kobles den til Cloudflare.
+  if (!window.storage) {
+    window.storage = {
+      async get(key) {
+        try {
+          const r = await fetch('/api/builder/store?key=' + encodeURIComponent(key), { cache: 'no-store' });
+          if (r.ok) {
+            const d = await r.json();
+            if (d && d.value != null) return { value: d.value };
+          }
+        } catch (e) { /* faller tilbake til localStorage */ }
+        try { return { value: localStorage.getItem(key) }; } catch (e) { return { value: null }; }
+      },
+      async set(key, value) {
+        let cloudOk = false;
+        try {
+          const r = await fetch('/api/builder/store?key=' + encodeURIComponent(key), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ value: value })
+          });
+          if (r.ok) { const d = await r.json(); cloudOk = !!(d && d.ok); }
+        } catch (e) { /* faller tilbake til localStorage */ }
+        try { localStorage.setItem(key, value); } catch (e) {}
+        return cloudOk;
+      }
+    };
+  }
 
   function getCurrentPage() {
     return state.pages.find(p => p.id === state.currentPageId);
@@ -2186,8 +2316,8 @@
         showToast('⚠️ Nettstedet er for stort (' + sizeMB + 'MB). Reduser bilder.');
         return;
       }
-      await window.storage.set(STORAGE_KEY, payload);
-      showToast('💾 Lagret (' + sizeMB + 'MB)');
+      const cloud = await window.storage.set(STORAGE_KEY, payload);
+      showToast(cloud ? '☁️ Lagret i skyen (' + sizeMB + 'MB)' : '💾 Lagret lokalt (' + sizeMB + 'MB)');
     } catch (e) {
       showToast('⚠️ Kunne ikke lagre');
     }
@@ -2213,6 +2343,8 @@
     // Spør etter navn
     openNameInput('Gi siden et navn', template.defaultName || 'Ny side', (name) => {
       const sections = template.build();
+      // Maler endrer IKKE lenger nettstedets font/farger automatisk (det forvirret).
+      // Du styrer font og farger selv under 🎨 Merke.
       const page = createPage(name, sections);
       state.pages.push(page);
       state.currentPageId = page.id;
@@ -2272,7 +2404,7 @@
     }
     const page = state.pages.find(p => p.id === pageId);
     if (!page) return;
-    if (!confirm('Slett siden «' + page.name + '»? Dette kan ikke angres.')) return;
+    if (!confirm('Slett siden “' + page.name + '”? Dette kan ikke angres.')) return;
     const wasCurrent = state.currentPageId === pageId;
     const wasHome = page.isHome;
     state.pages = state.pages.filter(p => p.id !== pageId);
@@ -2411,9 +2543,21 @@
       sec.props.items.push({ icon: '🌸', title: 'Ny funksjon', desc: 'Beskrivelse av denne funksjonen' });
     } else if (sec.type === 'pricing') {
       sec.props.items.push({ name: 'Ny pakke', desc: 'Beskrivelse', amount: '0', period: 'kr / mnd', featured: false, badge: '', features: ['Funksjon 1', 'Funksjon 2'], ctaText: 'Velg', ctaLink: '#' });
+    } else if (sec.type === 'products') {
+      sec.props.items.push({ name: 'Nytt produkt', desc: '', amount: '0', period: 'kr', featured: false, badge: '', features: [], ctaText: 'Kjøp nå', ctaLink: '#', imageUrl: '' });
     } else if (sec.type === 'faq') {
       sec.props.items.push({ question: 'Nytt spørsmål?', answer: 'Svaret her...' });
+    } else if (sec.type === 'gallery') {
+      sec.props.items.push({ imageUrl: '' });
     }
+    render();
+  }
+
+  function duplicateItem(secId, idx) {
+    const sec = findSection(secId);
+    if (!sec || !sec.props.items || !sec.props.items[idx]) return;
+    const copy = JSON.parse(JSON.stringify(sec.props.items[idx]));
+    sec.props.items.splice(idx + 1, 0, copy);
     render();
   }
 
@@ -2435,14 +2579,27 @@
 
   // ============ FILE UPLOAD HANDLING ============
   let pendingImageTarget = null; // section id awaiting file
+  let pendingImageItem = null;   // { secId, idx } for opplasting av produktbilde
 
   function triggerFileUpload(secId) {
     pendingImageTarget = secId;
     document.getElementById('hiddenFileInput').click();
   }
 
+  function triggerProductUpload(secId, idx) {
+    pendingImageItem = { secId: secId, idx: idx };
+    document.getElementById('hiddenFileInput').click();
+  }
+
   document.getElementById('hiddenFileInput').addEventListener('change', async e => {
     const file = e.target.files[0];
+    if (file && pendingImageItem) {
+      const t = pendingImageItem;
+      pendingImageItem = null;
+      await handleImageFile(file, dataUrl => updateItemProp(t.secId, t.idx, 'imageUrl', dataUrl));
+      e.target.value = '';
+      return;
+    }
     if (!file || !pendingImageTarget) return;
     const targetId = pendingImageTarget;
     pendingImageTarget = null;
@@ -2591,7 +2748,7 @@
     const list = document.getElementById('sectionsList');
     const sections = getCurrentSections();
     if (sections.length === 0) {
-      list.innerHTML = '<div style="text-align:center;padding:30px 16px;color:var(--ink-soft);font-size:13px;">Ingen seksjoner ennå.<br>Klikk «Legg til seksjon»</div>';
+      list.innerHTML = '<div style="text-align:center;padding:30px 16px;color:var(--ink-soft);font-size:13px;">Ingen seksjoner ennå.<br>Klikk “Legg til seksjon”</div>';
       return;
     }
     list.innerHTML = sections.map((s, i) => {
@@ -2640,8 +2797,11 @@
         const id = el.closest('.canvas-section').dataset.id;
         const key = el.dataset.edit;
         const sec = findSection(id);
-        if (sec && sec.props[key] !== el.innerText) {
-          sec.props[key] = el.innerText;
+        if (!sec) return;
+        let val = RICH_FIELDS.has(key) ? el.innerHTML : el.innerText;
+        if (key === 'ctaText') val = val.replace(/[\s→➝➜]+$/, '');
+        if (sec.props[key] !== val) {
+          sec.props[key] = val;
           renderProps();
         }
       });
@@ -2659,8 +2819,9 @@
         const key = el.dataset.itemEdit;
         const idx = parseInt(el.dataset.itemIdx, 10);
         const sec = findSection(id);
-        if (sec && sec.props.items[idx] && sec.props.items[idx][key] !== el.innerText) {
-          sec.props.items[idx][key] = el.innerText;
+        const ival = RICH_FIELDS.has(key) ? el.innerHTML : el.innerText;
+        if (sec && sec.props.items[idx] && sec.props.items[idx][key] !== ival) {
+          sec.props.items[idx][key] = ival;
           renderProps();
         }
       });
@@ -2808,9 +2969,9 @@
     return `
       <div class="hero" style="background:${bgForStyle(p.style)}">
         <div class="hero-content">
-          <h1 contenteditable="${state.mode === 'edit'}" data-edit="heading">${escapeHtml(p.heading)}</h1>
-          <p contenteditable="${state.mode === 'edit'}" data-edit="body">${escapeHtml(p.body)}</p>
-          <button class="hero-cta" contenteditable="${state.mode === 'edit'}" data-edit="ctaText" onclick="event.preventDefault(); ${state.mode === 'preview' ? `handleLinkClick('${escapeHtml(p.ctaLink || '')}', event)` : ''}">${escapeHtml(p.ctaText)} →</button>
+          <h1 contenteditable="${state.mode === 'edit'}" data-edit="heading">${p.heading || ''}</h1>
+          <p contenteditable="${state.mode === 'edit'}" data-edit="body">${p.body || ''}</p>
+          <button class="hero-cta" contenteditable="${state.mode === 'edit'}" data-edit="ctaText" onclick="event.preventDefault(); ${state.mode === 'preview' ? `handleLinkClick('${escapeHtml(p.ctaLink || '')}', event)` : ''}">${ctaLabel(p.ctaText)}</button>
         </div>
         <div style="display:flex;justify-content:center;align-items:center;">
           ${imageBlock(s.id, p.imageUrl, p.imageWidth, p.imageHeight)}
@@ -2858,9 +3019,9 @@
     return `
       <div class="cta-section" style="background:${bgForStyle(p.style)}">
         <div class="cta-section-inner">
-          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${escapeHtml(p.heading)}</h2>
-          <p contenteditable="${state.mode === 'edit'}" data-edit="body">${escapeHtml(p.body)}</p>
-          <button class="cta-button" contenteditable="${state.mode === 'edit'}" data-edit="ctaText" onclick="event.preventDefault(); ${state.mode === 'preview' ? `handleLinkClick('${escapeHtml(p.ctaLink || '')}', event)` : ''}">${escapeHtml(p.ctaText)} →</button>
+          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${p.heading || ''}</h2>
+          <p contenteditable="${state.mode === 'edit'}" data-edit="body">${p.body || ''}</p>
+          <button class="cta-button" contenteditable="${state.mode === 'edit'}" data-edit="ctaText" onclick="event.preventDefault(); ${state.mode === 'preview' ? `handleLinkClick('${escapeHtml(p.ctaLink || '')}', event)` : ''}">${ctaLabel(p.ctaText)}</button>
         </div>
       </div>
     `;
@@ -2883,19 +3044,19 @@
     return `
       <div class="testimonials" style="background:${bgForStyle(p.style)}">
         <div class="testimonials-header">
-          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${escapeHtml(p.heading)}</h2>
-          <p contenteditable="${state.mode === 'edit'}" data-edit="subheading">${escapeHtml(p.subheading)}</p>
+          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${p.heading || ''}</h2>
+          <p contenteditable="${state.mode === 'edit'}" data-edit="subheading">${p.subheading || ''}</p>
         </div>
         <div class="testimonials-grid">
           ${p.items.map((item, idx) => `
             <div class="testimonial-card">
               <div class="testimonial-quote">"</div>
-              <p class="testimonial-text" contenteditable="${state.mode === 'edit'}" data-item-edit="text" data-item-idx="${idx}">${escapeHtml(item.text)}</p>
+              <p class="testimonial-text" contenteditable="${state.mode === 'edit'}" data-item-edit="text" data-item-idx="${idx}">${item.text || ''}</p>
               <div class="testimonial-author">
                 <div class="testimonial-avatar">${escapeHtml(item.initial || (item.name || '?').charAt(0))}</div>
                 <div>
-                  <div class="testimonial-name" contenteditable="${state.mode === 'edit'}" data-item-edit="name" data-item-idx="${idx}">${escapeHtml(item.name)}</div>
-                  <div class="testimonial-role" contenteditable="${state.mode === 'edit'}" data-item-edit="role" data-item-idx="${idx}">${escapeHtml(item.role)}</div>
+                  <div class="testimonial-name" contenteditable="${state.mode === 'edit'}" data-item-edit="name" data-item-idx="${idx}">${item.name || ''}</div>
+                  <div class="testimonial-role" contenteditable="${state.mode === 'edit'}" data-item-edit="role" data-item-idx="${idx}">${item.role || ''}</div>
                 </div>
               </div>
             </div>
@@ -2917,6 +3078,7 @@
             <div class="repeater-item-header">
               <span class="repeater-item-title">#${idx + 1}</span>
               <div style="display:flex;gap:2px;">
+                <button class="icon-btn" onclick="duplicateItem('${s.id}', ${idx})" title="Dupliser" style="width:auto;padding:0 8px;font-size:11px;font-weight:700;color:var(--pink-ink);">Kopier</button>
                 <button class="icon-btn" onclick="moveItem('${s.id}', ${idx}, -1)" title="Opp">↑</button>
                 <button class="icon-btn" onclick="moveItem('${s.id}', ${idx}, 1)" title="Ned">↓</button>
                 <button class="icon-btn danger" onclick="removeItem('${s.id}', ${idx})" title="Slett">✕</button>
@@ -2944,15 +3106,15 @@
     return `
       <div class="features" style="background:${bgForStyle(p.style)}">
         <div class="features-header">
-          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${escapeHtml(p.heading)}</h2>
-          <p contenteditable="${state.mode === 'edit'}" data-edit="subheading">${escapeHtml(p.subheading)}</p>
+          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${p.heading || ''}</h2>
+          <p contenteditable="${state.mode === 'edit'}" data-edit="subheading">${p.subheading || ''}</p>
         </div>
         <div class="features-grid">
           ${p.items.map((item, idx) => `
             <div class="feature-card">
               <div class="feature-icon">${escapeHtml(item.icon)}</div>
-              <div class="feature-title" contenteditable="${state.mode === 'edit'}" data-item-edit="title" data-item-idx="${idx}">${escapeHtml(item.title)}</div>
-              <div class="feature-desc" contenteditable="${state.mode === 'edit'}" data-item-edit="desc" data-item-idx="${idx}">${escapeHtml(item.desc)}</div>
+              <div class="feature-title" contenteditable="${state.mode === 'edit'}" data-item-edit="title" data-item-idx="${idx}">${item.title || ''}</div>
+              <div class="feature-desc" contenteditable="${state.mode === 'edit'}" data-item-edit="desc" data-item-idx="${idx}">${item.desc || ''}</div>
             </div>
           `).join('')}
         </div>
@@ -2972,6 +3134,7 @@
             <div class="repeater-item-header">
               <span class="repeater-item-title">#${idx + 1}</span>
               <div style="display:flex;gap:2px;">
+                <button class="icon-btn" onclick="duplicateItem('${s.id}', ${idx})" title="Dupliser" style="width:auto;padding:0 8px;font-size:11px;font-weight:700;color:var(--pink-ink);">Kopier</button>
                 <button class="icon-btn" onclick="moveItem('${s.id}', ${idx}, -1)" title="Opp">↑</button>
                 <button class="icon-btn" onclick="moveItem('${s.id}', ${idx}, 1)" title="Ned">↓</button>
                 <button class="icon-btn danger" onclick="removeItem('${s.id}', ${idx})" title="Slett">✕</button>
@@ -2997,15 +3160,16 @@
     return `
       <div class="pricing" style="background:${bgForStyle(p.style)}">
         <div class="pricing-header">
-          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${escapeHtml(p.heading)}</h2>
-          <p contenteditable="${state.mode === 'edit'}" data-edit="subheading">${escapeHtml(p.subheading)}</p>
+          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${p.heading || ''}</h2>
+          <p contenteditable="${state.mode === 'edit'}" data-edit="subheading">${p.subheading || ''}</p>
         </div>
         <div class="pricing-grid">
           ${p.items.map((item, idx) => `
             <div class="pricing-card ${item.featured ? 'featured' : ''}">
               ${item.featured && item.badge ? `<div class="pricing-badge">${escapeHtml(item.badge)}</div>` : ''}
-              <div class="pricing-name" contenteditable="${state.mode === 'edit'}" data-item-edit="name" data-item-idx="${idx}">${escapeHtml(item.name)}</div>
-              <div class="pricing-desc" contenteditable="${state.mode === 'edit'}" data-item-edit="desc" data-item-idx="${idx}">${escapeHtml(item.desc)}</div>
+              ${(s.type === 'products' || item.imageUrl) ? `<div class="product-img">${item.imageUrl ? `<img src="${escapeHtml(item.imageUrl)}" alt="">` : '<span class="product-img-ph">📷</span>'}</div>` : ''}
+              <div class="pricing-name" contenteditable="${state.mode === 'edit'}" data-item-edit="name" data-item-idx="${idx}">${item.name || ''}</div>
+              <div class="pricing-desc" contenteditable="${state.mode === 'edit'}" data-item-edit="desc" data-item-idx="${idx}">${item.desc || ''}</div>
               <div class="pricing-price">
                 <span class="pricing-amount" contenteditable="${state.mode === 'edit'}" data-item-edit="amount" data-item-idx="${idx}">${escapeHtml(item.amount)}</span>
                 <span class="pricing-period" contenteditable="${state.mode === 'edit'}" data-item-edit="period" data-item-idx="${idx}">${escapeHtml(item.period)}</span>
@@ -3036,6 +3200,7 @@
             <div class="repeater-item-header">
               <span class="repeater-item-title">#${idx + 1} ${item.featured ? '⭐' : ''}</span>
               <div style="display:flex;gap:2px;">
+                <button class="icon-btn" onclick="duplicateItem('${s.id}', ${idx})" title="Dupliser" style="width:auto;padding:0 8px;font-size:11px;font-weight:700;color:var(--pink-ink);">Kopier</button>
                 <button class="icon-btn" onclick="moveItem('${s.id}', ${idx}, -1)" title="Opp">↑</button>
                 <button class="icon-btn" onclick="moveItem('${s.id}', ${idx}, 1)" title="Ned">↓</button>
                 <button class="icon-btn danger" onclick="removeItem('${s.id}', ${idx})" title="Slett">✕</button>
@@ -3045,6 +3210,12 @@
             <input class="mini-input" value="${escapeHtml(item.name)}" oninput="updateItemProp('${s.id}', ${idx}, 'name', this.value)">
             <label class="mini-label">Beskrivelse</label>
             <input class="mini-input" value="${escapeHtml(item.desc)}" oninput="updateItemProp('${s.id}', ${idx}, 'desc', this.value)">
+            ${s.type === 'products' ? `<label class="mini-label">Produktbilde</label>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              ${item.imageUrl ? `<img src="${escapeHtml(item.imageUrl)}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;border:1px solid var(--line);">` : '<div style="width:44px;height:44px;border-radius:8px;background:var(--pink-blush);display:flex;align-items:center;justify-content:center;font-size:18px;">📷</div>'}
+              <button class="repeater-add" style="width:auto;padding:7px 12px;margin:0;" onclick="triggerProductUpload('${s.id}', ${idx})">${item.imageUrl ? '🔄 Bytt bilde' : '📤 Last opp bilde'}</button>
+              ${item.imageUrl ? `<button class="icon-btn danger" onclick="updateItemProp('${s.id}', ${idx}, 'imageUrl', '')" title="Fjern">✕</button>` : ''}
+            </div>` : ''}
             <div class="size-row">
               <div>
                 <label class="mini-label">Pris</label>
@@ -3076,6 +3247,58 @@
     `;
   }
 
+  // ====== GALLERI ======
+  function renderGallery(s) {
+    const p = s.props;
+    return `
+      <div class="gallery" style="background:${bgForStyle(p.style)}">
+        <div class="gallery-header">
+          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${p.heading || ''}</h2>
+          <p contenteditable="${state.mode === 'edit'}" data-edit="subheading">${p.subheading || ''}</p>
+        </div>
+        <div class="gallery-grid">
+          ${(p.items || []).map((item, idx) => `
+            <div class="gallery-cell ${item.imageUrl ? '' : 'empty'}" ${state.mode === 'edit' ? `onclick="triggerProductUpload('${s.id}', ${idx})"` : ''}>
+              ${item.imageUrl
+                ? `<img src="${escapeHtml(item.imageUrl)}" alt="">`
+                : '<div class="gallery-ph"><span>📷</span><small>Klikk for å laste opp</small></div>'}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  function galleryProps(s) {
+    const p = s.props;
+    return `
+      <div class="prop-group"><label class="prop-label">Overskrift</label><input class="prop-input" value="${escapeHtml(p.heading)}" oninput="updateProp('${s.id}', 'heading', this.value)"></div>
+      <div class="prop-group"><label class="prop-label">Underoverskrift</label><input class="prop-input" value="${escapeHtml(p.subheading)}" oninput="updateProp('${s.id}', 'subheading', this.value)"></div>
+      <div class="prop-group">
+        <label class="prop-label">Bilder (${p.items.length})</label>
+        ${p.items.map((item, idx) => `
+          <div class="repeater-item">
+            <div class="repeater-item-header">
+              <span class="repeater-item-title">Bilde ${idx + 1}</span>
+              <div style="display:flex;gap:2px;">
+                <button class="icon-btn" onclick="duplicateItem('${s.id}', ${idx})" title="Dupliser" style="width:auto;padding:0 8px;font-size:11px;font-weight:700;color:var(--pink-ink);">Kopier</button>
+                <button class="icon-btn" onclick="moveItem('${s.id}', ${idx}, -1)" title="Opp">↑</button>
+                <button class="icon-btn" onclick="moveItem('${s.id}', ${idx}, 1)" title="Ned">↓</button>
+                <button class="icon-btn danger" onclick="removeItem('${s.id}', ${idx})" title="Slett">✕</button>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              ${item.imageUrl ? `<img src="${escapeHtml(item.imageUrl)}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;border:1px solid var(--line);">` : '<div style="width:44px;height:44px;border-radius:8px;background:var(--pink-blush);display:flex;align-items:center;justify-content:center;font-size:18px;">📷</div>'}
+              <button class="repeater-add" style="width:auto;padding:7px 12px;margin:0;" onclick="triggerProductUpload('${s.id}', ${idx})">${item.imageUrl ? '🔄 Bytt' : '📤 Last opp'}</button>
+            </div>
+          </div>
+        `).join('')}
+        <button class="repeater-add" onclick="addItem('${s.id}')">+ Legg til bilde</button>
+      </div>
+      ${stylePicker(s.id, p.style, DEFAULT_STYLES)}
+    `;
+  }
+
   // ====== FAQ ======
   function toggleFAQ(secId, idx) {
     if (state.mode !== 'preview') return; // i preview-mode: oppfør seg som ekte FAQ
@@ -3096,8 +3319,8 @@
     return `
       <div class="faq" style="background:${bgForStyle(p.style)}">
         <div class="faq-header">
-          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${escapeHtml(p.heading)}</h2>
-          <p contenteditable="${state.mode === 'edit'}" data-edit="subheading">${escapeHtml(p.subheading)}</p>
+          <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${p.heading || ''}</h2>
+          <p contenteditable="${state.mode === 'edit'}" data-edit="subheading">${p.subheading || ''}</p>
         </div>
         <div class="faq-list">
           ${p.items.map((item, idx) => {
@@ -3132,6 +3355,7 @@
             <div class="repeater-item-header">
               <span class="repeater-item-title">#${idx + 1}</span>
               <div style="display:flex;gap:2px;">
+                <button class="icon-btn" onclick="duplicateItem('${s.id}', ${idx})" title="Dupliser" style="width:auto;padding:0 8px;font-size:11px;font-weight:700;color:var(--pink-ink);">Kopier</button>
                 <button class="icon-btn" onclick="moveItem('${s.id}', ${idx}, -1)" title="Opp">↑</button>
                 <button class="icon-btn" onclick="moveItem('${s.id}', ${idx}, 1)" title="Ned">↓</button>
                 <button class="icon-btn danger" onclick="removeItem('${s.id}', ${idx})" title="Slett">✕</button>
@@ -3166,8 +3390,8 @@
       <div class="footer" style="background:${bgForStyle(p.style)}">
         <div class="footer-grid">
           <div>
-            <div class="footer-brand-name" contenteditable="${state.mode === 'edit'}" data-edit="brandName">${escapeHtml(p.brandName)}</div>
-            <p class="footer-brand-desc" contenteditable="${state.mode === 'edit'}" data-edit="brandDesc">${escapeHtml(p.brandDesc)}</p>
+            <div class="footer-brand-name" contenteditable="${state.mode === 'edit'}" data-edit="brandName">${p.brandName || ''}</div>
+            <p class="footer-brand-desc" contenteditable="${state.mode === 'edit'}" data-edit="brandDesc">${p.brandDesc || ''}</p>
             <div class="footer-socials">
               ${(p.socials || []).map((soc, idx) => `
                 <a class="footer-social" title="${escapeHtml(soc.label)}" onclick="event.preventDefault(); ${state.mode === 'preview' ? `handleLinkClick('${escapeHtml(soc.link)}', event)` : ''}">${escapeHtml(soc.icon)}</a>
@@ -3175,20 +3399,20 @@
             </div>
           </div>
           <div>
-            <div class="footer-col-title" contenteditable="${state.mode === 'edit'}" data-edit="col1Title">${escapeHtml(p.col1Title)}</div>
+            <div class="footer-col-title" contenteditable="${state.mode === 'edit'}" data-edit="col1Title">${p.col1Title || ''}</div>
             <ul class="footer-links">${renderColLinks('col1Links')}</ul>
           </div>
           <div>
-            <div class="footer-col-title" contenteditable="${state.mode === 'edit'}" data-edit="col2Title">${escapeHtml(p.col2Title)}</div>
+            <div class="footer-col-title" contenteditable="${state.mode === 'edit'}" data-edit="col2Title">${p.col2Title || ''}</div>
             <ul class="footer-links">${renderColLinks('col2Links')}</ul>
           </div>
           <div>
-            <div class="footer-col-title" contenteditable="${state.mode === 'edit'}" data-edit="col3Title">${escapeHtml(p.col3Title)}</div>
+            <div class="footer-col-title" contenteditable="${state.mode === 'edit'}" data-edit="col3Title">${p.col3Title || ''}</div>
             <ul class="footer-links">${renderColLinks('col3Links')}</ul>
           </div>
         </div>
         <div class="footer-bottom">
-          <div contenteditable="${state.mode === 'edit'}" data-edit="copyright">${escapeHtml(p.copyright)}</div>
+          <div contenteditable="${state.mode === 'edit'}" data-edit="copyright">${p.copyright || ''}</div>
           <div style="display:flex;gap:16px;">
             <span>Personvern</span>
             <span>Vilkår</span>
@@ -3325,8 +3549,8 @@
             </div>
           </div>
           <div class="leadmagnet-content">
-            <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${escapeHtml(p.heading)}</h2>
-            <p contenteditable="${state.mode === 'edit'}" data-edit="body">${escapeHtml(p.body)}</p>
+            <h2 contenteditable="${state.mode === 'edit'}" data-edit="heading">${p.heading || ''}</h2>
+            <p contenteditable="${state.mode === 'edit'}" data-edit="body">${p.body || ''}</p>
             <ul class="leadmagnet-benefits">${benefitsHTML}</ul>
             <div class="leadmagnet-form">
               <div class="leadmagnet-form-label" contenteditable="${state.mode === 'edit'}" data-edit="formLabel">${escapeHtml(p.formLabel)}</div>
@@ -3416,7 +3640,7 @@
         ` : `
           <div class="pdf-content-preview" style="text-align:center;padding:18px;">
             <div style="font-size:24px;margin-bottom:6px;opacity:0.4;">📄</div>
-            PDF-innhold er tomt. Klikk «Generer med AI» øverst for å lage komplett guide-innhold automatisk.
+            PDF-innhold er tomt. Klikk “Generer med AI” øverst for å lage komplett guide-innhold automatisk.
           </div>
         `}
       </div>
@@ -3784,6 +4008,17 @@
     });
   });
 
+  // Enhets-forhåndsvisning (Desktop / Mobil) — endrer kun canvas-bredden
+  document.querySelectorAll('.device-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const wrap = document.querySelector('.canvas-wrap');
+      if (!wrap) return;
+      wrap.classList.toggle('device-mobil', btn.dataset.device === 'mobil');
+    });
+  });
+
   function showToast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg;
@@ -3795,7 +4030,7 @@
   async function resetPage() {
     const page = getCurrentPage();
     if (!page) return;
-    if (!confirm('Tøm innholdet på «' + page.name + '»? Dette kan ikke angres.')) return;
+    if (!confirm('Tøm innholdet på “' + page.name + '”? Dette kan ikke angres.')) return;
     page.sections = [createSection('hero')];
     state.selectedId = page.sections[0].id;
     state.selectedImageId = null;
@@ -3902,6 +4137,181 @@
         hero.props.body = 'Utforsk hele utvalget vårt av bøker, arbeidshefter og materiell.';
         hero.props.ctaText = 'Se alle produkter →';
         return [hero, createSection('pricing'), createSection('testimonials'), createSection('faq'), createSection('footer')];
+      }
+    },
+    landing: {
+      icon: '📄',
+      name: 'Enkel landingsside',
+      desc: 'Rask, fokusert side: hero, oppfordring og bunntekst',
+      defaultName: 'Landingsside',
+      blocks: ['hero', 'cta', 'footer'],
+      build: () => {
+        const hero = createSection('hero');
+        hero.props.heading = 'Én ting, gjort godt';
+        hero.props.body = 'En kort, fokusert side som leder leseren rett til neste steg.';
+        hero.props.ctaText = 'Kom i gang';
+        return [hero, createSection('cta'), createSection('footer')];
+      }
+    },
+    bookLaunch: {
+      icon: '📖',
+      name: 'Bok-lansering',
+      desc: 'Lanser en ny bok med smakebit, anbefalinger og kjøp',
+      defaultName: 'Bok-lansering',
+      blocks: ['hero', 'features', 'testimonials', 'pricing', 'cta', 'footer'],
+      build: () => {
+        const hero = createSection('hero');
+        hero.props.heading = 'Ny bok: Mia & Teo på eventyr';
+        hero.props.body = 'En vakker, naturbasert fortelling for nysgjerrige små oppdagere — nå tilgjengelig.';
+        hero.props.ctaText = 'Kjøp boken';
+        const features = createSection('features');
+        features.props.heading = 'Hva gjør boken spesiell';
+        const pricing = createSection('pricing');
+        pricing.props.heading = 'Bestill nå';
+        return [hero, features, createSection('testimonials'), pricing, createSection('cta'), createSection('footer')];
+      }
+    },
+    miateoshop: {
+      icon: '🛍️',
+      name: 'Mia & Teo Nettbutikk',
+      desc: 'Ferdig butikk-side: hero, produkter, fordeler, anbefalinger og kjøp',
+      defaultName: 'Mia & Teo Butikk',
+      blocks: ['hero', 'pricing', 'features', 'testimonials', 'cta', 'footer'],
+      build: () => {
+        const hero = createSection('hero');
+        hero.props.heading = 'Mia & Teo — naturens små oppdagere';
+        hero.props.body = 'Vakre, naturbaserte bøker og materiell som vekker barnas nysgjerrighet. Montessori-inspirert lek og læring for små eventyrere fra 3 til 12 år.';
+        hero.props.ctaText = 'Se bøkene';
+
+        const products = createSection('products');
+        products.props.heading = 'Bøker & materiell';
+        products.props.subheading = 'Alt du trenger for en magisk Montessorihverdag hjemme';
+
+        const features = createSection('features');
+        features.props.heading = 'Hvorfor Little Montessori Explorers?';
+        features.props.subheading = 'Laget med kjærlighet, forankret i Montessoripedagogikken';
+        features.props.items = [
+          { icon: '📚', title: 'Vakre bøker', desc: 'Naturbaserte fortellinger med Mia & Teo, illustrert med varme og omtanke' },
+          { icon: '🌿', title: 'Natur i fokus', desc: 'Reality-baserte historier som åpner barnas nysgjerrighet for verden rundt dem' },
+          { icon: '🇳🇴', title: 'Tospråklig', desc: 'Alt finnes på norsk og engelsk — perfekt for tospråklige familier' },
+          { icon: '✋', title: 'Montessoribasert', desc: 'Utviklet av en utdannet Montessoripedagog med 20+ års erfaring' }
+        ];
+
+        const testimonials = createSection('testimonials');
+        testimonials.props.heading = 'Det familiene sier';
+
+        const cta = createSection('cta');
+        cta.props.heading = 'Klar for å starte eventyret?';
+        cta.props.body = 'Gi barnet ditt en verden av nysgjerrighet, natur og læring — i ditt eget tempo, hjemme.';
+        cta.props.ctaText = 'Handle nå';
+
+        return [hero, products, features, testimonials, cta, createSection('footer')];
+      }
+    },
+    personligmerke: {
+      icon: '✨',
+      name: 'Personlig merke',
+      desc: 'Elegant én-sider for ekspert/kursskaper — om meg, tilbud og anbefalinger',
+      defaultName: 'Mitt merke',
+      brand: { paletteId: 'sage-garden', fontId: 'playfair-source' },
+      blocks: ['hero', 'features', 'testimonials', 'pricing', 'cta', 'footer'],
+      build: () => {
+        const hero = createSection('hero');
+        hero.props.heading = 'Hei, jeg er [navnet ditt]';
+        hero.props.body = 'Jeg hjelper [målgruppen din] med å [resultatet du skaper] — uten [det de strever med]. Så glad du er her.';
+        hero.props.ctaText = 'Bli kjent med meg';
+        const features = createSection('features');
+        features.props.heading = 'Slik kan jeg hjelpe deg';
+        features.props.subheading = 'Tre måter vi kan jobbe sammen på';
+        features.props.items = [
+          { icon: '🌱', title: 'Kom i gang', desc: 'Et lavterskel-tilbud som tar deg det første viktige steget.' },
+          { icon: '💫', title: 'Signaturprogram', desc: 'Min dypere reise for deg som vil ha varig forandring.' },
+          { icon: '🤝', title: '1:1 veiledning', desc: 'Personlig oppfølging, skreddersydd til akkurat din situasjon.' }
+        ];
+        const testimonials = createSection('testimonials');
+        testimonials.props.heading = 'Kjærlige ord';
+        const pricing = createSection('pricing');
+        pricing.props.heading = 'Mitt signaturtilbud';
+        pricing.props.subheading = 'Alt du trenger for å komme dit du vil';
+        const cta = createSection('cta');
+        cta.props.heading = 'Klar for neste steg?';
+        cta.props.body = 'Bli med på listen, så hører du fra meg når dørene åpner.';
+        cta.props.ctaText = 'Bli med på listen';
+        return [hero, features, testimonials, pricing, cta, createSection('footer')];
+      }
+    },
+    tjenester: {
+      icon: '🌿',
+      name: 'Tjenester & priser',
+      desc: 'Presenter tjenestene dine med priser, FAQ og anbefalinger',
+      defaultName: 'Tjenester',
+      brand: { paletteId: 'lavendel', fontId: 'lora-open' },
+      blocks: ['hero', 'features', 'pricing', 'faq', 'testimonials', 'cta', 'footer'],
+      build: () => {
+        const hero = createSection('hero');
+        hero.props.heading = 'Tjenester som gjør en forskjell';
+        hero.props.body = 'Profesjonell hjelp og veiledning, tilpasset deg og din hverdag. Se hva jeg tilbyr nedenfor.';
+        hero.props.ctaText = 'Se tjenester';
+        const features = createSection('features');
+        features.props.heading = 'Hva jeg tilbyr';
+        const pricing = createSection('pricing');
+        pricing.props.heading = 'Pakker & priser';
+        return [hero, features, pricing, createSection('faq'), createSection('testimonials'), createSection('cta'), createSection('footer')];
+      }
+    },
+    omMeg: {
+      icon: '💛',
+      name: 'Om meg',
+      desc: 'Personlig historie med verdier, galleri og anbefalinger',
+      defaultName: 'Om meg',
+      brand: { paletteId: 'sunset', fontId: 'lora-open' },
+      blocks: ['hero', 'features', 'testimonials', 'cta', 'footer'],
+      build: () => {
+        const hero = createSection('hero');
+        hero.props.heading = 'Hei, jeg er [navnet ditt]';
+        hero.props.body = 'Velkommen inn! Her deler jeg historien min, hjertet bak det jeg gjør, og hvordan vi kan jobbe sammen.';
+        hero.props.ctaText = 'Min historie';
+        const features = createSection('features');
+        features.props.heading = 'Det jeg står for';
+        features.props.subheading = 'Verdiene som ligger til grunn for alt jeg lager';
+        features.props.items = [
+          { icon: '🌿', title: 'Nærhet til naturen', desc: 'Læring som starter med undring for verden rundt oss.' },
+          { icon: '💛', title: 'Varme & respekt', desc: 'Barnet i sentrum, alltid møtt med tålmodighet.' },
+          { icon: '✨', title: 'Ekte håndverk', desc: 'Vakkert materiell laget med omtanke og kjærlighet.' }
+        ];
+        const gallery = createSection('gallery');
+        gallery.props.heading = 'Et lite innblikk';
+        gallery.props.subheading = 'Glimt fra hverdagen og arbeidet mitt';
+        const testimonials = createSection('testimonials');
+        testimonials.props.heading = 'Kjærlige ord';
+        const cta = createSection('cta');
+        cta.props.heading = 'La oss holde kontakten';
+        cta.props.body = 'Bli med på listen, så deler jeg inspirasjon og nyheter med deg.';
+        cta.props.ctaText = 'Bli med';
+        return [hero, features, gallery, testimonials, cta, createSection('footer')];
+      }
+    },
+    lansering: {
+      icon: '🚀',
+      name: 'Lansering',
+      desc: 'Tydelig lanseringsside for et nytt produkt eller kurs',
+      defaultName: 'Lansering',
+      brand: { paletteId: 'ocean-calm', fontId: 'dm-modern' },
+      blocks: ['hero', 'features', 'pricing', 'faq', 'cta', 'footer'],
+      build: () => {
+        const hero = createSection('hero');
+        hero.props.heading = 'Noe nytt er på vei 🚀';
+        hero.props.body = 'Bli den første til å vite når vi åpner dørene. Meld deg på, så får du beskjed — og en liten overraskelse.';
+        hero.props.ctaText = 'Sett meg på listen';
+        const features = createSection('features');
+        features.props.heading = 'Hva du får';
+        const pricing = createSection('pricing');
+        pricing.props.heading = 'Velg din pakke';
+        const cta = createSection('cta');
+        cta.props.heading = 'Klar for lansering?';
+        cta.props.body = 'Dørene åpner snart — vær klar.';
+        cta.props.ctaText = 'Meld meg på';
+        return [hero, features, pricing, createSection('faq'), cta, createSection('footer')];
       }
     }
   };
@@ -4022,11 +4432,11 @@
     return `
 :root {
   --pink-soft: #F8D7DA;
-  --pink-deep: #E4A0A8;
+  --pink-deep: #EE9CAD;
   --pink-blush: #FCE8EA;
   --pink-ink: #8B4A52;
-  --teal: #5FB3B3;
-  --teal-blush: #E6F4F4;
+  --brand: #E91E89;
+  --brand-blush: #FCE8EA;
   --cream: #FFF9F7;
   --ink: #2A2329;
   --ink-soft: #5C5359;
@@ -4035,7 +4445,7 @@
   --shadow-md: 0 8px 24px rgba(139, 74, 82, 0.08);
   --shadow-lg: 0 20px 48px rgba(139, 74, 82, 0.12);
   --font-display: 'Playpen Sans', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-body: 'Playpen Sans', 'Comic Sans MS', sans-serif;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: var(--font-body); color: var(--ink); font-size: 14px; line-height: 1.5; background: white; }
@@ -4054,9 +4464,9 @@ img { max-width: 100%; display: block; }
 .hero { padding: 80px 60px; display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center; }
 .hero-content h1 { font-family: var(--font-display); font-size: 44px; line-height: 1.15; color: var(--ink); margin-bottom: 20px; font-weight: 700; }
 .hero-content p { font-size: 16px; color: var(--ink-soft); margin-bottom: 28px; line-height: 1.65; }
-.hero-cta, .cta-button { display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px; background: var(--pink-deep); color: white; border-radius: 12px; font-weight: 600; font-size: 15px; box-shadow: var(--shadow-md); transition: all 0.2s; border: none; cursor: pointer; font-family: var(--font-body); }
+.hero-cta, .cta-button { display: inline-flex; align-items: center; gap: 8px; padding: calc(14px * var(--btn-scale, 1)) calc(26px * var(--btn-scale, 1)); background: var(--btn-color, var(--pink-deep)); color: white; border-radius: 12px; font-weight: 600; font-size: calc(15px * var(--btn-scale, 1)); box-shadow: var(--shadow-md); transition: all 0.2s; border: none; cursor: pointer; font-family: var(--btn-font, var(--font-body)); }
 .hero-cta:hover, .cta-button:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-.hero-image { border-radius: 20px; overflow: hidden; background: linear-gradient(135deg, var(--pink-soft), var(--teal)); margin: 0 auto; }
+.hero-image { border-radius: 20px; overflow: hidden; background: linear-gradient(135deg, var(--pink-soft), var(--brand)); margin: 0 auto; }
 .hero-image img { width: 100%; height: 100%; object-fit: cover; }
 .hero-image-placeholder { display: grid; place-items: center; height: 100%; width: 100%; color: white; font-size: 48px; }
 
@@ -4078,7 +4488,7 @@ img { max-width: 100%; display: block; }
 .testimonial-quote { font-size: 32px; color: var(--pink-deep); line-height: 1; margin-bottom: 12px; font-family: Georgia, serif; }
 .testimonial-text { color: var(--ink); font-size: 14.5px; line-height: 1.65; margin-bottom: 20px; font-style: italic; }
 .testimonial-author { display: flex; align-items: center; gap: 12px; padding-top: 16px; border-top: 1px solid var(--line); }
-.testimonial-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--pink-soft), var(--teal)); display: grid; place-items: center; color: white; font-weight: 700; font-size: 16px; flex-shrink: 0; }
+.testimonial-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--pink-soft), var(--brand)); display: grid; place-items: center; color: white; font-weight: 700; font-size: 16px; flex-shrink: 0; }
 .testimonial-name { font-weight: 600; color: var(--ink); font-size: 13.5px; }
 .testimonial-role { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
 
@@ -4102,6 +4512,15 @@ img { max-width: 100%; display: block; }
 .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; align-items: stretch; }
 .pricing-card { background: white; border-radius: 20px; padding: 32px 28px; border: 1.5px solid var(--line); box-shadow: var(--shadow-sm); position: relative; display: flex; flex-direction: column; transition: all 0.25s; }
 .pricing-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.product-img { width: 100%; aspect-ratio: 4 / 3; border-radius: 12px; overflow: hidden; margin-bottom: 14px; background: #F8E9EC; }
+.product-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gallery { padding: 72px 60px; }
+.gallery-header { text-align: center; max-width: 640px; margin: 0 auto 40px; }
+.gallery-header h2 { font-family: var(--font-display); font-size: 36px; color: var(--ink); margin-bottom: 10px; font-weight: 700; }
+.gallery-header p { color: var(--ink-soft); font-size: 16px; }
+.gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 1000px; margin: 0 auto; }
+.gallery-cell { aspect-ratio: 1; border-radius: 16px; overflow: hidden; background: #F8E9EC; }
+.gallery-cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .pricing-card.featured { border-color: var(--pink-deep); border-width: 2px; box-shadow: var(--shadow-md); background: linear-gradient(180deg, var(--pink-blush) 0%, white 40%); }
 .pricing-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--pink-deep); color: white; padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; box-shadow: var(--shadow-sm); }
 .pricing-name { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
@@ -4112,9 +4531,9 @@ img { max-width: 100%; display: block; }
 .pricing-divider { height: 1px; background: var(--line); margin: 24px 0; }
 .pricing-features { list-style: none; padding: 0; margin: 0 0 28px 0; flex: 1; }
 .pricing-features li { padding: 7px 0; font-size: 13.5px; color: var(--ink); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
-.pricing-features li::before { content: '✓'; color: var(--teal); font-weight: 800; flex-shrink: 0; }
-.pricing-cta { display: block; text-align: center; padding: 12px 20px; background: var(--cream); color: var(--pink-ink); border: 1.5px solid var(--pink-deep); border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; font-family: var(--font-body); }
-.pricing-card.featured .pricing-cta { background: var(--pink-deep); color: white; }
+.pricing-features li::before { content: '✓'; color: var(--brand); font-weight: 800; flex-shrink: 0; }
+.pricing-cta { display: block; text-align: center; padding: calc(12px * var(--btn-scale, 1)) calc(20px * var(--btn-scale, 1)); background: var(--cream); color: var(--pink-ink); border: 1.5px solid var(--btn-color, var(--pink-deep)); border-radius: 12px; font-weight: 600; font-size: calc(14px * var(--btn-scale, 1)); cursor: pointer; transition: all 0.2s; font-family: var(--btn-font, var(--font-body)); }
+.pricing-card.featured .pricing-cta { background: var(--btn-color, var(--pink-deep)); color: white; }
 .pricing-cta:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
 
 /* FAQ */
@@ -4161,7 +4580,7 @@ img { max-width: 100%; display: block; }
 .leadmagnet-content > p { font-size: 16px; color: var(--ink-soft); line-height: 1.65; margin-bottom: 24px; }
 .leadmagnet-benefits { list-style: none; margin: 0 0 28px 0; padding: 0; }
 .leadmagnet-benefits li { padding: 8px 0; font-size: 14.5px; color: var(--ink); display: flex; align-items: flex-start; gap: 12px; line-height: 1.55; }
-.leadmagnet-benefits li::before { content: '✓'; color: var(--teal); font-weight: 800; font-size: 16px; flex-shrink: 0; }
+.leadmagnet-benefits li::before { content: '✓'; color: var(--brand); font-weight: 800; font-size: 16px; flex-shrink: 0; }
 .leadmagnet-form { background: white; border: 1.5px solid var(--line); border-radius: 16px; padding: 22px; box-shadow: var(--shadow-sm); }
 .leadmagnet-form-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--ink-soft); margin-bottom: 10px; }
 .leadmagnet-form-input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 10px; font-family: var(--font-body); font-size: 14px; color: var(--ink); margin-bottom: 10px; background: var(--cream); }
@@ -4187,7 +4606,7 @@ img { max-width: 100%; display: block; }
     const p = s.props;
     const bg = bgForStyle(p.style)
       .replaceAll('var(--pink-blush)', '#FCE8EA')
-      .replaceAll('var(--teal-blush)', '#E6F4F4')
+      .replaceAll('var(--brand-blush)', '#FCE8EA')
       .replaceAll('var(--cream)', '#FFF9F7');
 
     switch (s.type) {
@@ -4203,7 +4622,7 @@ img { max-width: 100%; display: block; }
   <div class="hero-content">
     <h1>${escapeHtml(p.heading)}</h1>
     <p>${escapeHtml(p.body)}</p>
-    <a class="hero-cta" href="${escapeHtml(link)}">${escapeHtml(p.ctaText)} →</a>
+    <a class="hero-cta" href="${escapeHtml(link)}">${ctaLabel(p.ctaText)}</a>
   </div>
   <div style="display:flex;justify-content:center;align-items:center;">
     <div class="hero-image" style="width:${w}px;height:${h}px;">${imageHTML}</div>
@@ -4211,6 +4630,7 @@ img { max-width: 100%; display: block; }
 </section>`;
       }
 
+      case 'community':
       case 'cta': {
         const link = resolveExportLink(p.ctaLink);
         return `
@@ -4218,7 +4638,7 @@ img { max-width: 100%; display: block; }
   <div class="cta-section-inner">
     <h2>${escapeHtml(p.heading)}</h2>
     <p>${escapeHtml(p.body)}</p>
-    <a class="cta-button" href="${escapeHtml(link)}">${escapeHtml(p.ctaText)} →</a>
+    <a class="cta-button" href="${escapeHtml(link)}">${ctaLabel(p.ctaText)}</a>
   </div>
 </section>`;
       }
@@ -4265,6 +4685,7 @@ img { max-width: 100%; display: block; }
 </section>`;
       }
 
+      case 'products':
       case 'pricing': {
         const cards = (p.items || []).map(item => {
           const link = resolveExportLink(item.ctaLink);
@@ -4273,6 +4694,7 @@ img { max-width: 100%; display: block; }
           return `
     <div class="pricing-card ${item.featured ? 'featured' : ''}">
       ${badge}
+      ${s.type === 'products' && item.imageUrl ? `<div class="product-img"><img src="${escapeHtml(item.imageUrl)}" alt=""></div>` : ''}
       <div class="pricing-name">${escapeHtml(item.name)}</div>
       <div class="pricing-desc">${escapeHtml(item.desc)}</div>
       <div class="pricing-price">
@@ -4321,6 +4743,20 @@ img { max-width: 100%; display: block; }
 .faq-item[open] .faq-toggle { background: var(--pink-deep); color: white; transform: rotate(45deg); }
 .faq-item .faq-answer { padding: 0 22px 20px; }
 </style>`;
+      }
+
+      case 'gallery': {
+        const cells = (p.items || []).filter(it => it.imageUrl).map(it =>
+          `<div class="gallery-cell"><img src="${escapeHtml(it.imageUrl)}" alt=""></div>`).join('');
+        return `
+<section class="gallery" style="background:${bg}">
+  <div class="gallery-header">
+    <h2>${escapeHtml(p.heading)}</h2>
+    <p>${escapeHtml(p.subheading)}</p>
+  </div>
+  <div class="gallery-grid">${cells}
+  </div>
+</section>`;
       }
 
       case 'footer': {
@@ -4508,9 +4944,9 @@ ${sections}
         'Velkomstside for mitt LME-merke',
         'Hero for salgsside av nytt kurs',
         'Landingsside for gratis e-bok',
-        'Hjemmeside for Montessori-skole'
+        'Hjemmeside for Montessoriskole'
       ],
-      systemPrompt: `Du er Renate Dahl, høgskoleutdannet Montessori-pedagog (utdannet ved Høgskolen i Vestfold, godkjent av AMI) med 20+ års erfaring med barn. Du er grunnleggeren av Little Montessori Explorers — et norsk merke for Montessori-baserte bøker og læringsmateriell for barn 3–12 år. Skriv som deg selv: varm, klok og praktisk, som en erfaren venninne som deler ekte kunnskap. Aldri belærende eller akademisk. Bruk "du" og "deg" mot leseren.`,
+      systemPrompt: `Du er Renate Dahl, høgskoleutdannet Montessoripedagog (utdannet ved Høgskolen i Vestfold) med 20+ års erfaring med barn. Du er grunnleggeren av Little Montessori Explorers — et norsk merke for Montessoribaserte bøker og læringsmateriell for barn 3–12 år. Skriv som deg selv: varm, klok og praktisk, som en erfaren venninne som deler ekte kunnskap. Aldri belærende eller akademisk. Bruk "du" og "deg" mot leseren.`,
       schemaDesc: `{
   "heading": "Hovedoverskrift (5-10 ord, fengende og varm)",
   "body": "Brødtekst (2-3 setninger, ca 25-40 ord, beskrivende og inviterende)",
@@ -4527,7 +4963,7 @@ ${sections}
         'Inviter til gratis konsultasjon',
         'Bli med i fellesskapet'
       ],
-      systemPrompt: `Du er Renate Dahl, høgskoleutdannet Montessori-pedagog fra Little Montessori Explorers. Skriv en kort, sterk oppfordring til handling — varm tone, men tydelig på hva leseren bør gjøre. Snakk fra ditt eget hjerte og din egen erfaring med barn og foreldre.`,
+      systemPrompt: `Du er Renate Dahl, høgskoleutdannet Montessoripedagog fra Little Montessori Explorers. Skriv en kort, sterk oppfordring til handling — varm tone, men tydelig på hva leseren bør gjøre. Snakk fra ditt eget hjerte og din egen erfaring med barn og foreldre.`,
       schemaDesc: `{
   "heading": "Kort overskrift (4-8 ord, handlingsorientert)",
   "body": "Kort tekst (1-2 setninger, ca 15-25 ord)",
@@ -4541,10 +4977,10 @@ ${sections}
       suggestions: [
         'Hovedfordeler ved bokserien',
         'Hva som er inkludert i kurset',
-        'Fordeler med Montessori-tilnærming',
+        'Fordeler med Montessoritilnærming',
         'Hva som gjør oss unike'
       ],
-      systemPrompt: `Du er Renate Dahl, høgskoleutdannet Montessori-pedagog fra Little Montessori Explorers med 20+ års erfaring med barn. Skriv om 4 funksjoner/fordeler — hver med en kort fengende tittel og en beskrivende setning. Vær konkret og praktisk, ikke generisk markedsføring. Bruk din egen erfaring som pedagog og mor som rettesnor.`,
+      systemPrompt: `Du er Renate Dahl, høgskoleutdannet Montessoripedagog fra Little Montessori Explorers med 20+ års erfaring med barn. Skriv om 4 funksjoner/fordeler — hver med en kort fengende tittel og en beskrivende setning. Vær konkret og praktisk, ikke generisk markedsføring. Bruk din egen erfaring som pedagog og mor som rettesnor.`,
       schemaDesc: `{
   "heading": "Seksjonens hovedoverskrift (4-8 ord)",
   "subheading": "Underoverskrift (en setning, 8-15 ord)",
@@ -4564,9 +5000,9 @@ ${sections}
         'Foreldre om bokserien',
         'Lærere som bruker materiellet',
         'Familier som har deltatt i kurs',
-        'Pedagoger om Montessori-tilnærmingen'
+        'Pedagoger om Montessoritilnærmingen'
       ],
-      systemPrompt: `Du er Renate Dahl, høgskoleutdannet Montessori-pedagog fra Little Montessori Explorers. Skriv 3 realistiske, varme anbefalinger fra fornøyde brukere — slik foreldre og pedagoger faktisk skriver om Montessori-materiell. Bruk norske navn. Tonen skal være ekte og spesifikk, ikke generisk markedsføring. Hver anbefaling skal lyde som om en faktisk forelder eller pedagog har skrevet den.`,
+      systemPrompt: `Du er Renate Dahl, høgskoleutdannet Montessoripedagog fra Little Montessori Explorers. Skriv 3 realistiske, varme anbefalinger fra fornøyde brukere — slik foreldre og pedagoger faktisk skriver om Montessorimateriell. Bruk norske navn. Tonen skal være ekte og spesifikk, ikke generisk markedsføring. Hver anbefaling skal lyde som om en faktisk forelder eller pedagog har skrevet den.`,
       schemaDesc: `{
   "heading": "Seksjonsoverskrift (3-6 ord)",
   "subheading": "Underoverskrift (5-10 ord)",
@@ -4587,7 +5023,7 @@ ${sections}
         'Medlemskap i LME Inner Circle',
         'Engangskjøp av bokserien'
       ],
-      systemPrompt: `Du er Renate Dahl, høgskoleutdannet Montessori-pedagog og grunnlegger av Little Montessori Explorers. Lag 3 prispakker med tydelig differensiering. Midterste pakke bør være fremhevet (featured: true) med badge "Mest populær". Priser i norske kroner (kr). Skriv pakkebeskrivelsene varmt og direkte — slik du ville snakket til en forelder som lurer på hva som passer best for deres familie.`,
+      systemPrompt: `Du er Renate Dahl, høgskoleutdannet Montessoripedagog og grunnlegger av Little Montessori Explorers. Lag 3 prispakker med tydelig differensiering. Midterste pakke bør være fremhevet (featured: true) med badge "Mest populær". Priser i norske kroner (kr). Skriv pakkebeskrivelsene varmt og direkte — slik du ville snakket til en forelder som lurer på hva som passer best for deres familie.`,
       schemaDesc: `{
   "heading": "Seksjonsoverskrift (3-6 ord)",
   "subheading": "Underoverskrift (8-15 ord)",
@@ -4623,10 +5059,10 @@ ${sections}
       suggestions: [
         'Vanlige spørsmål om bokserien',
         'Spørsmål om kurs og medlemskap',
-        'Spørsmål om Montessori-pedagogikk',
+        'Spørsmål om Montessoripedagogikk',
         'Praktiske spørsmål fra foreldre'
       ],
-      systemPrompt: `Du er Renate Dahl, høgskoleutdannet Montessori-pedagog fra Little Montessori Explorers med 20+ års erfaring med barn. Skriv 4-5 vanlige spørsmål med svar — slike spørsmål du faktisk får fra foreldre og pedagoger. Svarene skal være konkrete og hjelpsomme, ikke for korte. Bruk varm, personlig norsk tone og din egen erfaring som pedagog.`,
+      systemPrompt: `Du er Renate Dahl, høgskoleutdannet Montessoripedagog fra Little Montessori Explorers med 20+ års erfaring med barn. Skriv 4-5 vanlige spørsmål med svar — slike spørsmål du faktisk får fra foreldre og pedagoger. Svarene skal være konkrete og hjelpsomme, ikke for korte. Bruk varm, personlig norsk tone og din egen erfaring som pedagog.`,
       schemaDesc: `{
   "heading": "Seksjonsoverskrift (2-5 ord)",
   "subheading": "Underoverskrift (5-10 ord)",
@@ -4646,11 +5082,11 @@ ${sections}
         'Montessori hjemme — for foreldre med 2-4 åringer',
         'Praktisk liv-aktiviteter for barn 3-6 år',
         'Naturutforskning med barn — hverdagsmagi',
-        'Roen i hjemmet — Montessori-prinsipper',
-        'Lese og skrive — første steg på Montessori-måten',
+        'Roen i hjemmet — Montessoriprinsipper',
+        'Lese og skrive — første steg på Montessorimåten',
         'Sanseintegrering — aktiviteter for små barn'
       ],
-      systemPrompt: `Du er Renate Dahl, Montessori-pedagog fra Little Montessori Explorers med 20+ års erfaring med barn. Du skriver med varm, klok og praktisk tone — som en erfaren venninne som deler ekte kunnskap. Du har studert Montessori-pedagogikk ved Høgskolen i Vestfold. Du elsker naturbasert læring og praktiske, hjemmevennlige aktiviteter. Aldri belærende eller akademisk — alltid varm, konkret og inviterende. Bruk "du" og "deg" mot leseren.`,
+      systemPrompt: `Du er Renate Dahl, Montessoripedagog fra Little Montessori Explorers med 20+ års erfaring med barn. Du skriver med varm, klok og praktisk tone — som en erfaren venninne som deler ekte kunnskap. Du har studert Montessoripedagogikk ved Høgskolen i Vestfold. Du elsker naturbasert læring og praktiske, hjemmevennlige aktiviteter. Aldri belærende eller akademisk — alltid varm, konkret og inviterende. Bruk "du" og "deg" mot leseren.`,
       schemaDesc: `{
   "eyebrow": "Liten merkelapp øverst (1-3 ord, store bokstaver, f.eks. 'GRATIS GUIDE')",
   "heading": "Landingsside-overskrift (5-10 ord, fengende)",
@@ -4701,10 +5137,12 @@ ${sections}
 
     aiState.targetSecId = secId;
     aiState.mode = 'replace';
+    aiState.lang = 'no';
 
     document.getElementById('aiSectionTag').innerHTML = `${config.icon} ${config.label}`;
     document.getElementById('aiPromptInput').value = '';
-    document.querySelectorAll('.ai-mode-pill').forEach(p => p.classList.toggle('active', p.dataset.aiMode === 'replace'));
+    document.querySelectorAll('.ai-mode-pill[data-ai-mode]').forEach(p => p.classList.toggle('active', p.dataset.aiMode === 'replace'));
+    document.querySelectorAll('.ai-lang-pill').forEach(p => p.classList.toggle('active', p.dataset.aiLang === 'no'));
 
     // Suggestions chips
     const suggestionsEl = document.getElementById('aiSuggestions');
@@ -4723,7 +5161,12 @@ ${sections}
 
   function setAIMode(mode) {
     aiState.mode = mode;
-    document.querySelectorAll('.ai-mode-pill').forEach(p => p.classList.toggle('active', p.dataset.aiMode === mode));
+    document.querySelectorAll('.ai-mode-pill[data-ai-mode]').forEach(p => p.classList.toggle('active', p.dataset.aiMode === mode));
+  }
+
+  function setAILang(lang) {
+    aiState.lang = lang;
+    document.querySelectorAll('.ai-lang-pill').forEach(p => p.classList.toggle('active', p.dataset.aiLang === lang));
   }
 
   document.getElementById('aiModal').addEventListener('click', e => {
@@ -4773,13 +5216,13 @@ Generer innholdet for denne ${config.label.toLowerCase()}-seksjonen. Returner KU
 ${config.schemaDesc}
 
 Husk:
-- Skriv på norsk
+${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything) in natural, fluent English' : '- Skriv på norsk'}
 - Tonen skal være varm, profesjonell og passe for foreldre/pedagoger
 - Vær konkret og spesifikk, unngå generiske markedsføringsfraser
 - Returner ren JSON som kan parses med JSON.parse()`;
 
     try {
-      const response = await fetch('https://lme-proxy.renateshobby.workers.dev/ai-generate', {
+      const response = await fetch('/ai-generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -4882,8 +5325,8 @@ Husk:
       id: 'lme-pink',
       name: 'LME Soft Pink',
       desc: 'Den klassiske LME-paletten — varm og feminin',
-      pink_soft: '#F8D7DA', pink_deep: '#E4A0A8', pink_blush: '#FCE8EA', pink_ink: '#8B4A52',
-      teal: '#5FB3B3', teal_deep: '#3D8B8B', teal_blush: '#E6F4F4',
+      pink_soft: '#F8D7DA', pink_deep: '#EE9CAD', pink_blush: '#FCE8EA', pink_ink: '#8B4A52',
+      teal: '#E91E89', teal_deep: '#C2185B', teal_blush: '#FCE8EA',
       cream: '#FFF9F7', ink: '#2A2329', ink_soft: '#5C5359', line: '#F0E3E5'
     },
     {
@@ -4891,7 +5334,7 @@ Husk:
       name: 'Ocean Calm',
       desc: 'Beroligende blå og teal — rolig og profesjonell',
       pink_soft: '#D7E8F4', pink_deep: '#7BAFD4', pink_blush: '#EAF2F9', pink_ink: '#3A5F7D',
-      teal: '#5FB3B3', teal_deep: '#3D8B8B', teal_blush: '#E6F4F4',
+      teal: '#E91E89', teal_deep: '#C2185B', teal_blush: '#FCE8EA',
       cream: '#F7FAFC', ink: '#1F2937', ink_soft: '#52606D', line: '#E2ECF3'
     },
     {
@@ -4907,7 +5350,7 @@ Husk:
       name: 'Lavendel Drøm',
       desc: 'Drømmende lilla og rosa — myk og romantisk',
       pink_soft: '#E5D9F2', pink_deep: '#B59CD8', pink_blush: '#F0E8F8', pink_ink: '#6B4B8C',
-      teal: '#E4A0A8', teal_deep: '#B47A82', teal_blush: '#FCE8EA',
+      teal: '#EE9CAD', teal_deep: '#B47A82', teal_blush: '#FCE8EA',
       cream: '#FBF9FD', ink: '#2D2533', ink_soft: '#5E5462', line: '#EAE3F0'
     },
     {
@@ -4923,7 +5366,7 @@ Husk:
       name: 'Midnight',
       desc: 'Mørk modus — elegant og moderne',
       pink_soft: '#3D3548', pink_deep: '#A78BBA', pink_blush: '#2A2333', pink_ink: '#D9C8E8',
-      teal: '#7DC6C0', teal_deep: '#5FB3B3', teal_blush: '#2F3D3D',
+      teal: '#7DC6C0', teal_deep: '#E91E89', teal_blush: '#2F3D3D',
       cream: '#1B1620', ink: '#F5F0F8', ink_soft: '#B5ACBD', line: '#3D3548'
     }
   ];
@@ -4933,9 +5376,9 @@ Husk:
       id: 'playpen-inter',
       name: 'LME Standard',
       display: 'Playpen Sans',
-      body: 'Inter',
+      body: 'Playpen Sans',
       displayWeights: '400;500;600;700;800',
-      bodyWeights: '400;500;600',
+      bodyWeights: '400;500;600;700',
       sample: 'Velkommen til LME'
     },
     {
@@ -4991,10 +5434,17 @@ Husk:
       paletteId: 'lme-pink',
       customColors: null, // if set, overrides palette
       fontId: 'playpen-inter',
+      fontDisplay: null,   // fri overstyring av overskrift-font
+      fontBody: null,      // fri overstyring av brødtekst-font
+      headingWeight: '700',
+      fontScale: '1',
+      btnColor: '',        // tom = bruk merkefargen
+      btnFont: '',         // tom = følg brødtekst-font
+      btnScale: '1',
       logoUrl: '',
       businessName: 'Little Montessori Explorers',
-      tagline: 'Naturbaserte Montessori-ressurser',
-      email: 'hello@littlemontessoriexplorers.com',
+      tagline: 'Naturbaserte Montessoriressurser',
+      email: 'hello@lmexplorers.com',
       phone: '+47 45 88 46 49',
       address: 'Tønsberg, Norge',
       domain: ''
@@ -5024,18 +5474,29 @@ Husk:
     root.setProperty('--pink-deep', palette.pink_deep);
     root.setProperty('--pink-blush', palette.pink_blush);
     root.setProperty('--pink-ink', palette.pink_ink);
-    root.setProperty('--teal', palette.teal);
-    root.setProperty('--teal-deep', palette.teal_deep);
-    root.setProperty('--teal-blush', palette.teal_blush);
+    root.setProperty('--brand', palette.teal);
+    root.setProperty('--brand-deep', palette.teal_deep);
+    root.setProperty('--brand-blush', palette.teal_blush);
     root.setProperty('--cream', palette.cream);
     root.setProperty('--ink', palette.ink);
     root.setProperty('--ink-soft', palette.ink_soft);
     root.setProperty('--line', palette.line);
 
-    // Load font if not standard
+    // Fonter — bruk frie overstyringer hvis satt, ellers font-paret
+    const dispName = brand.fontDisplay || font.display;
+    const bodyName = brand.fontBody || font.body;
     ensureFontLoaded(font);
-    root.setProperty('--font-display', `'${font.display}', system-ui, sans-serif`);
-    root.setProperty('--font-body', `'${font.body}', system-ui, sans-serif`);
+    ensureFontFamilyLoaded(dispName);
+    ensureFontFamilyLoaded(bodyName);
+    root.setProperty('--font-display', `'${dispName}', system-ui, sans-serif`);
+    root.setProperty('--font-body', `'${bodyName}', 'Comic Sans MS', system-ui, sans-serif`);
+    root.setProperty('--heading-weight', brand.headingWeight || '700');
+    root.setProperty('--font-scale', brand.fontScale || '1');
+
+    // Knapp-stil (farge / font / størrelse) — tomt felt = fall tilbake til standard
+    if (brand.btnColor) root.setProperty('--btn-color', brand.btnColor); else root.removeProperty('--btn-color');
+    if (brand.btnFont) { ensureFontFamilyLoaded(brand.btnFont); root.setProperty('--btn-font', `'${brand.btnFont}', sans-serif`); } else root.removeProperty('--btn-font');
+    root.setProperty('--btn-scale', brand.btnScale || '1');
   }
 
   const loadedFonts = new Set();
@@ -5047,6 +5508,37 @@ Husk:
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = `https://fonts.googleapis.com/css2?family=${displayQuery}&family=${bodyQuery}&display=swap`;
+    document.head.appendChild(link);
+  }
+
+  // Frittstående fontvalg for fri miksing (overskrift + brødtekst hver for seg)
+  const FONT_CHOICES = [
+    { name: 'Playpen Sans', weights: '400;500;600;700;800' },
+    { name: 'Nunito', weights: '400;600;700;800' },
+    { name: 'Comfortaa', weights: '400;500;600;700' },
+    { name: 'Manrope', weights: '400;500;600;700' },
+    { name: 'Poppins', weights: '400;500;600;700' },
+    { name: 'Montserrat', weights: '400;500;600;700;800' },
+    { name: 'Quicksand', weights: '400;500;600;700' },
+    { name: 'Inter', weights: '400;500;600;700' },
+    { name: 'Caveat', weights: '400;500;600;700' },
+    { name: 'Playfair Display', weights: '400;500;600;700' },
+    { name: 'Lora', weights: '400;500;600;700' },
+    { name: 'Source Sans 3', weights: '400;600;700' },
+    { name: 'Open Sans', weights: '400;600;700' },
+    { name: 'DM Sans', weights: '400;500;700' },
+    { name: 'DM Serif Display', weights: '400' }
+  ];
+  function ensureFontFamilyLoaded(name) {
+    if (!name) return;
+    const id = 'fam:' + name;
+    if (loadedFonts.has(id)) return;
+    loadedFonts.add(id);
+    const choice = FONT_CHOICES.find(f => f.name === name);
+    const weights = choice ? choice.weights : '400;500;600;700';
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://fonts.googleapis.com/css2?family=' + encodeURIComponent(name) + ':wght@' + weights + '&display=swap';
     document.head.appendChild(link);
   }
 
@@ -5152,18 +5644,79 @@ Husk:
       </div>
     `).join('');
 
+    const activeFont = getActiveFont(brand);
+    const dispCur = brand.fontDisplay || activeFont.display;
+    const bodyCur = brand.fontBody || activeFont.body;
+    const wCur = brand.headingWeight || '700';
+    const sCur = brand.fontScale || '1';
+    FONT_CHOICES.forEach(f => ensureFontFamilyLoaded(f.name));
+    const opts = (sel) => FONT_CHOICES.map(f => `<option value="${escapeHtml(f.name)}" style="font-family:'${f.name}';" ${f.name === sel ? 'selected' : ''}>${escapeHtml(f.name)}</option>`).join('');
+    const selStyle = "width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:10px;font-family:var(--font-body);font-size:13px;background:var(--cream);color:var(--ink);margin-top:4px;";
+    const lblStyle = "font-size:12px;font-weight:600;color:var(--ink-soft);display:block;margin-top:14px;";
+
     document.getElementById('brandPaneFonts').innerHTML = `
       <div class="brand-section-title">Velg font-par</div>
-      <div class="brand-section-desc">Hver kombinasjon har en display-font for overskrifter og en body-font for brødtekst. Velg det som matcher stemmen til merket ditt.</div>
+      <div class="brand-section-desc">Ferdige kombinasjoner — eller tilpass fritt nedenfor.</div>
       <div class="font-grid">${fontsHTML}</div>
+
+      <div class="brand-section-title" style="margin-top:26px;">Tilpass fritt</div>
+      <div class="brand-section-desc">Mikse egne fonter, og juster tykkelse og størrelse på teksten.</div>
+      <label style="${lblStyle}">Overskrift-font</label>
+      <select style="${selStyle}" onchange="setHeadingFont(this.value)">${opts(dispCur)}</select>
+      <label style="${lblStyle}">Brødtekst-font</label>
+      <select style="${selStyle}" onchange="setBodyFont(this.value)">${opts(bodyCur)}</select>
+      <label style="${lblStyle}">Tykkelse på overskrifter</label>
+      <select style="${selStyle}" onchange="setHeadingWeight(this.value)">
+        <option value="400" ${wCur === '400' ? 'selected' : ''}>Tynn</option>
+        <option value="600" ${wCur === '600' ? 'selected' : ''}>Halvfet</option>
+        <option value="700" ${wCur === '700' ? 'selected' : ''}>Fet</option>
+        <option value="800" ${wCur === '800' ? 'selected' : ''}>Ekstra fet</option>
+      </select>
+      <label style="${lblStyle}">Tekststørrelse</label>
+      <select style="${selStyle}" onchange="setFontScale(this.value)">
+        <option value="0.9" ${sCur === '0.9' ? 'selected' : ''}>Liten</option>
+        <option value="1" ${sCur === '1' ? 'selected' : ''}>Middels</option>
+        <option value="1.15" ${sCur === '1.15' ? 'selected' : ''}>Stor</option>
+      </select>
+
+      <div class="brand-section-title" style="margin-top:26px;">Knapper</div>
+      <div class="brand-section-desc">Farge, font og størrelse på knappene (CTA-er).</div>
+      <label style="${lblStyle}">Knappefarge</label>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
+        <input type="color" value="${escapeHtml(brand.btnColor || '#EE9CAD')}" oninput="setBtnColor(this.value)" style="width:46px;height:34px;border:1px solid var(--line);border-radius:8px;padding:2px;cursor:pointer;background:#fff;">
+        ${brand.btnColor ? `<button class="repeater-add" style="width:auto;padding:6px 12px;margin:0;" onclick="setBtnColor('')">Bruk merkefarge</button>` : '<span style="font-size:12px;color:var(--ink-muted);">Bruker merkefargen</span>'}
+      </div>
+      <label style="${lblStyle}">Knappefont</label>
+      <select style="${selStyle}" onchange="setBtnFont(this.value)">
+        <option value="" ${!brand.btnFont ? 'selected' : ''}>Følg brødtekst</option>
+        ${FONT_CHOICES.map(f => `<option value="${escapeHtml(f.name)}" ${f.name === brand.btnFont ? 'selected' : ''}>${escapeHtml(f.name)}</option>`).join('')}
+      </select>
+      <label style="${lblStyle}">Knappestørrelse</label>
+      <select style="${selStyle}" onchange="setBtnScale(this.value)">
+        <option value="0.9" ${(brand.btnScale || '1') === '0.9' ? 'selected' : ''}>Liten</option>
+        <option value="1" ${(brand.btnScale || '1') === '1' ? 'selected' : ''}>Middels</option>
+        <option value="1.2" ${(brand.btnScale || '1') === '1.2' ? 'selected' : ''}>Stor</option>
+        <option value="1.4" ${(brand.btnScale || '1') === '1.4' ? 'selected' : ''}>Ekstra stor</option>
+      </select>
     `;
   }
 
+  function setBtnColor(c) { state.brand.btnColor = c; applyBrand(); renderBrandPaneFonts(); }
+  function setBtnFont(name) { state.brand.btnFont = name; applyBrand(); }
+  function setBtnScale(s) { state.brand.btnScale = s; applyBrand(); }
+
   function selectFont(fontId) {
     state.brand.fontId = fontId;
+    state.brand.fontDisplay = null;  // nullstill frie overstyringer så font-paret slår inn
+    state.brand.fontBody = null;
     applyBrand();
     renderBrandPaneFonts();
   }
+
+  function setHeadingFont(name) { state.brand.fontDisplay = name; applyBrand(); }
+  function setBodyFont(name) { state.brand.fontBody = name; applyBrand(); }
+  function setHeadingWeight(w) { state.brand.headingWeight = w; applyBrand(); }
+  function setFontScale(s) { state.brand.fontScale = s; applyBrand(); }
 
   function renderBrandPaneInfo() {
     const brand = state.brand;
@@ -5286,7 +5839,7 @@ Husk:
         </div>
       </div>
 
-      <div style="margin-top:24px;padding:16px 18px;background:var(--teal-blush);border-radius:12px;display:flex;gap:12px;align-items:flex-start;">
+      <div style="margin-top:24px;padding:16px 18px;background:var(--brand-blush);border-radius:12px;display:flex;gap:12px;align-items:flex-start;">
         <div style="font-size:18px;">💡</div>
         <div style="font-size:12.5px;color:var(--ink-soft);line-height:1.55;">
           <strong style="color:var(--pink-ink);">Tips:</strong> Når du eksporterer nettstedet,
@@ -5307,6 +5860,97 @@ Husk:
     renderBrandPaneDomain();
     showToast('🌸 Tilbakestilt til LME-standard');
   }
+
+  // ============ RIK-TEKST VERKTØYLINJE (marker tekst → styl biten) ============
+  (function () {
+    const bar = document.createElement('div');
+    bar.id = 'richToolbar';
+    bar.style.cssText = 'position:absolute;z-index:2000;display:none;gap:4px;align-items:center;background:#fff;border:1px solid rgba(0,0,0,0.1);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.18);padding:5px 6px;font-family:var(--font-body);';
+    const btn = 'border:none;background:#f3f3f3;border-radius:7px;min-width:30px;height:28px;cursor:pointer;font-size:13px;display:inline-flex;align-items:center;justify-content:center;color:#333;padding:0 6px;';
+    bar.innerHTML =
+      '<select id="rtFont" title="Skrifttype" style="border:1px solid #eee;border-radius:7px;height:28px;font-size:12px;max-width:120px;">' +
+        '<option value="">Font…</option>' +
+        FONT_CHOICES.map(function (f) { return '<option value="' + f.name + '">' + f.name + '</option>'; }).join('') +
+      '</select>' +
+      '<button id="rtBold" title="Fet" style="' + btn + 'font-weight:800;">B</button>' +
+      '<button id="rtNarrow" title="Smalere" style="' + btn + '">A&#8249;</button>' +
+      '<button id="rtWide" title="Bredere" style="' + btn + '">A&#8250;</button>' +
+      '<input id="rtColor" type="color" title="Tekstfarge" value="#1A1A1A" style="width:32px;height:28px;border:1px solid #eee;border-radius:7px;padding:1px;cursor:pointer;background:#fff;">';
+    document.body.appendChild(bar);
+
+    let savedRange = null;
+    function hide() { bar.style.display = 'none'; }
+    function editableOf(range) {
+      let n = range && range.commonAncestorContainer;
+      n = n && (n.nodeType === 1 ? n : n.parentElement);
+      return n ? n.closest('.canvas [contenteditable="true"]') : null;
+    }
+    function persist(editable) {
+      if (!editable) return;
+      try {
+        const secEl = editable.closest('.canvas-section');
+        if (!secEl) return;
+        const sec = findSection(secEl.dataset.id);
+        if (!sec) return;
+        if (editable.dataset.edit) sec.props[editable.dataset.edit] = editable.innerHTML;
+        else if (editable.dataset.itemEdit) {
+          const i = parseInt(editable.dataset.itemIdx, 10);
+          if (sec.props.items && sec.props.items[i]) sec.props.items[i][editable.dataset.itemEdit] = editable.innerHTML;
+        }
+      } catch (e) {}
+    }
+    function showFor(range) {
+      const rect = range.getBoundingClientRect();
+      bar.style.display = 'flex';
+      const top = window.scrollY + rect.top - bar.offsetHeight - 8;
+      bar.style.top = Math.max(window.scrollY + 4, top) + 'px';
+      bar.style.left = (window.scrollX + Math.max(8, rect.left)) + 'px';
+    }
+
+    // Vis verktøylinjen når du har en markering i et redigerbart felt
+    function refresh() {
+      const sel = window.getSelection();
+      if (!sel || !sel.rangeCount || sel.isCollapsed) { hide(); return; }
+      const range = sel.getRangeAt(0);
+      if (!editableOf(range)) { hide(); return; }
+      savedRange = range.cloneRange();   // husk markeringen (brukes selv om fokus flytter seg)
+      showFor(range);
+    }
+    document.addEventListener('selectionchange', function () { setTimeout(refresh, 0); });
+
+    // Legg stil DIREKTE på den markerte teksten (span-innpakking) — trenger ikke fokus
+    function styleSelection(styleObj) {
+      if (!savedRange || savedRange.collapsed) return;
+      const editable = editableOf(savedRange);
+      if (!editable) return;
+      const range = savedRange.cloneRange();
+      const span = document.createElement('span');
+      for (const k in styleObj) span.style[k] = styleObj[k];
+      try {
+        span.appendChild(range.extractContents());
+        range.insertNode(span);
+      } catch (e) { return; }
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      const r = document.createRange();
+      r.selectNodeContents(span);
+      sel.addRange(r);
+      savedRange = r.cloneRange();
+      persist(editable);
+      showFor(savedRange);
+    }
+
+    bar.querySelector('#rtBold').addEventListener('click', function () { styleSelection({ fontWeight: '800' }); });
+    bar.querySelector('#rtFont').addEventListener('change', function (e) {
+      const v = e.target.value; if (!v) return;
+      ensureFontFamilyLoaded(v);
+      styleSelection({ fontFamily: "'" + v + "', sans-serif" });
+      e.target.value = '';
+    });
+    bar.querySelector('#rtColor').addEventListener('input', function (e) { styleSelection({ color: e.target.value }); });
+    bar.querySelector('#rtWide').addEventListener('click', function () { styleSelection({ letterSpacing: '0.5px' }); });
+    bar.querySelector('#rtNarrow').addEventListener('click', function () { styleSelection({ letterSpacing: '-0.5px' }); });
+  })();
 
   loadState();
 

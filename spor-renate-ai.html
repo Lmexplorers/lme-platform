@@ -420,11 +420,11 @@
         </span>
         Spør Renate AI ↗
       </a>
-      <a href="/creative-studio" class="btn-studio">Åpne LME Creative Studio</a>
+      <a href="/creative-academy" class="btn-studio">Åpne LME Creative Academy</a>
       <button class="icon-btn" aria-label="Søk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
       <button class="icon-btn" aria-label="Meldinger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 12c0 4.4-4 8-9 8-1.3 0-2.5-.2-3.6-.7L3 21l1.7-5.4C3.6 14.2 3 12.7 3 11c0-4.4 4-8 9-8s9 3.6 9 8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
       <button class="icon-btn" aria-label="Varsler"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 8a6 6 0 1112 0c0 7 3 8 3 8H3s3-1 3-8M10 21a2 2 0 004 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <button class="avatar-btn" aria-label="Profil"><img src="" alt="R" id="headerAvatar" onerror="this.style.display='none'"></button>
+      <button class="avatar-btn" aria-label="Profil"><img src="/images/renate-portrait.jpg" alt="Renate" id="headerAvatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block"></button>
     </div>
   </header>
 </div>
@@ -499,7 +499,7 @@
   </div>
 
   <p class="chat-footer-note">
-    💗 Samtalene dine lagres automatisk i nettleseren. Last opp bilder av Montessori-materiale, klasserom eller PDF-er — Renate AI kan se og hjelpe deg! <a href="/renate-ai-info">Les mer om Renate AI →</a> · For personlig oppfølging, <a href="mailto:hello@littlemontessoriexplorers.com">kontakt Renate direkte</a>.
+    💗 Samtalene dine lagres automatisk i nettleseren. Last opp bilder av Montessorimateriale, klasserom eller PDF-er, Renate AI kan se og hjelpe deg! <a href="/renate-ai-info">Les mer om Renate AI →</a> · For personlig oppfølging, <a href="mailto:hello@lmexplorers.com">kontakt Renate direkte</a>.
   </p>
 
 </div>
@@ -507,7 +507,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const WORKER_URL = 'https://lme-renate-ai.renateshobby.workers.dev/renate-ai';
+const WORKER_URL = '/renate-ai';
 const STORAGE_KEY = 'lme_renate_ai_conversations';
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
@@ -653,12 +653,12 @@ function renderConversationsList() {
 function showWelcome() {
   chatMessages.innerHTML = `
     <div class="welcome-mini">Hva vil du <em>snakke om i dag?</em></div>
-    <div class="message bot">Hei Renate! 💗 Så hyggelig at du er her. Jeg er Renate AI, og jeg er her for å hjelpe deg med spørsmål om Montessori-pedagogikk i AMI-tradisjonen, LME-plattformen, og hvordan du best kommer i gang. Du kan også laste opp bilder eller PDF-er jeg kan se på! Hva vil du snakke om i dag? 🌷</div>
+    <div class="message bot">Hei Renate! 💗 Så hyggelig at du er her. Jeg er Renate AI, og jeg er her for å hjelpe deg med spørsmål om Montessoripedagogikk i Montessoritradisjonen, LME-plattformen, og hvordan du best kommer i gang. Du kan også laste opp bilder eller PDF-er jeg kan se på! Hva vil du snakke om i dag? 🌷</div>
     <div class="quick-prompts">
       <button class="quick-prompt" data-prompt="Hvilken plan passer for meg?">Hvilken <em>plan</em> passer for meg?</button>
-      <button class="quick-prompt" data-prompt="Forklar AMI 3-6">Forklar <em>AMI 3-6</em></button>
+      <button class="quick-prompt" data-prompt="Forklar 3-6">Forklar <em>3-6</em></button>
       <button class="quick-prompt" data-prompt="Hvordan bruker jeg LME Studio?">Bruke <em>LME Studio</em></button>
-      <button class="quick-prompt" data-prompt="AMI vs andre Montessori-retninger">AMI vs andre <em>retninger</em></button>
+      <button class="quick-prompt" data-prompt="Montessori vs andre pedagogiske retninger">Montessori vs andre <em>retninger</em></button>
       <button class="quick-prompt" data-prompt="Hvordan komme i gang med Montessori hjemme?">Komme i gang <em>hjemme</em></button>
     </div>
   `;

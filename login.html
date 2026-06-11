@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<title>Logg inn — Little Montessori Explorers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink-soft: #F8D7DA;
+    --pink-mid: #F5A8B8;
+    --cream: #FBF6F0;
+    --cerise: #E91E89;
+    --ink: #1A1A1A;
+    --ink-soft: #4A4A4A;
+    --ink-muted: #8A8A8A;
+    --line: rgba(26, 26, 26, 0.08);
+    --btn-yellow: #F7E76B;
+    --btn-yellow-hover: #F0DD4F;
+    --shadow-lg: 0 12px 40px rgba(26, 26, 26, 0.08);
+    --r-md: 18px;
+    --r-lg: 24px;
+    --r-pill: 999px;
+    --font-display: 'Playpen Sans', system-ui, -apple-system, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-display);
+    color: var(--ink);
+    background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 50%, #F8D7DA 100%);
+    min-height: 100vh;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  .lg-header { padding: 20px 24px; max-width: 1280px; margin: 0 auto; width: 100%; }
+  .lg-logo { display: inline-flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 600; color: var(--ink); text-decoration: none; }
+  .lg-logo img { width: 48px; height: 48px; object-fit: contain; }
+
+  .lg-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px 16px 60px; }
+  .lg-card {
+    background: #fff;
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 36px 32px;
+    width: 100%;
+    max-width: 420px;
+  }
+  .lg-title { font-size: 26px; font-weight: 500; margin-bottom: 4px; }
+  .lg-title em { font-style: italic; color: var(--cerise); }
+  .lg-sub { color: var(--ink-soft); font-size: 15px; margin-bottom: 24px; }
+
+  .lg-tabs { display: flex; gap: 6px; background: var(--cream); padding: 5px; border-radius: var(--r-pill); margin-bottom: 24px; }
+  .lg-tab {
+    flex: 1; border: none; background: transparent; font-family: inherit;
+    font-size: 14px; font-weight: 700; color: var(--ink-soft);
+    padding: 10px; border-radius: var(--r-pill); cursor: pointer; transition: all 0.2s ease;
+  }
+  .lg-tab.active { background: #fff; color: var(--cerise); box-shadow: 0 1px 3px rgba(26,26,26,0.08); }
+
+  .lg-field { margin-bottom: 16px; }
+  .lg-field label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--ink-soft); }
+  .lg-field input {
+    width: 100%; font-family: inherit; font-size: 15px;
+    padding: 13px 16px; border: 2px solid var(--line); border-radius: var(--r-md);
+    background: #fff; color: var(--ink); transition: border-color 0.2s ease;
+  }
+  .lg-field input:focus { outline: none; border-color: var(--pink-mid); }
+
+  .lg-btn {
+    width: 100%; font-family: inherit; font-size: 15px; font-weight: 700;
+    padding: 14px; border: none; border-radius: var(--r-pill); cursor: pointer;
+    background: var(--btn-yellow); color: var(--ink); transition: all 0.2s ease; margin-top: 4px;
+  }
+  .lg-btn:hover:not(:disabled) { background: var(--btn-yellow-hover); transform: translateY(-1px); }
+  .lg-btn:disabled { opacity: 0.6; cursor: default; }
+
+  .lg-alt { text-align: center; margin-top: 18px; font-size: 14px; }
+  .lg-link { color: var(--cerise); font-weight: 700; cursor: pointer; background: none; border: none; font-family: inherit; font-size: inherit; }
+  .lg-link:hover { text-decoration: underline; }
+
+  .lg-divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--ink-muted); font-size: 13px; }
+  .lg-divider::before, .lg-divider::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+  .lg-msg { margin-top: 16px; padding: 12px 14px; border-radius: var(--r-md); font-size: 14px; display: none; }
+  .lg-msg.show { display: block; }
+  .lg-msg.error { background: #FDECEA; color: #B42318; }
+  .lg-msg.success { background: #E7F6EC; color: #146C2E; }
+
+  .lg-foot { text-align: center; padding: 0 16px 24px; color: var(--ink-muted); font-size: 13px; }
+  .lg-foot a { color: var(--ink-soft); font-weight: 600; }
+
+  @media (max-width: 480px) {
+    .lg-card { padding: 28px 22px; }
+    .lg-title { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+  <header class="lg-header">
+    <a href="/dashboard" class="lg-logo">
+      <img src="/images/lme-logo.png" alt="Little Montessori Explorers" width="48" height="48">
+      <span>Little Montessori Explorers</span>
+    </a>
+  </header>
+
+  <main class="lg-wrap">
+    <div class="lg-card">
+      <h1 class="lg-title" id="lgTitle">Velkommen <em>tilbake</em></h1>
+      <p class="lg-sub" id="lgSub">Logg inn for å fortsette til Little Montessori Explorers.</p>
+
+      <div class="lg-tabs" role="tablist">
+        <button class="lg-tab active" id="tabLogin" type="button">Logg inn</button>
+        <button class="lg-tab" id="tabSignup" type="button">Opprett konto</button>
+      </div>
+
+      <form id="authForm" novalidate>
+        <div class="lg-field" id="nameField" style="display:none;">
+          <label for="name">Navn</label>
+          <input type="text" id="name" name="name" autocomplete="name" placeholder="Fornavn">
+        </div>
+        <div class="lg-field">
+          <label for="email">E-post</label>
+          <input type="email" id="email" name="email" autocomplete="email" placeholder="deg@eksempel.no" required>
+        </div>
+        <div class="lg-field">
+          <label for="password">Passord</label>
+          <input type="password" id="password" name="password" autocomplete="current-password" placeholder="Minst 6 tegn" required>
+        </div>
+        <button class="lg-btn" id="submitBtn" type="submit">Logg inn</button>
+      </form>
+
+      <div class="lg-alt">
+        <button class="lg-link" id="forgotBtn" type="button">Glemt passord?</button>
+      </div>
+
+      <div class="lg-divider">eller</div>
+
+      <button class="lg-btn" id="magicBtn" type="button" style="background:var(--pink-soft);">
+        Send meg en innloggingslenke
+      </button>
+
+      <div class="lg-msg" id="msg" role="status"></div>
+    </div>
+  </main>
+
+  <footer class="lg-foot">
+    Trenger du hjelp? <a href="/help">Kontakt oss</a>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+      var mode = 'login';
+      var params = new URLSearchParams(location.search);
+      var next = params.get('next') || '/dashboard';
+      if (!/^\/[^\/]/.test(next)) next = '/dashboard';
+
+      var els = {
+        title: document.getElementById('lgTitle'),
+        sub: document.getElementById('lgSub'),
+        tabLogin: document.getElementById('tabLogin'),
+        tabSignup: document.getElementById('tabSignup'),
+        nameField: document.getElementById('nameField'),
+        form: document.getElementById('authForm'),
+        email: document.getElementById('email'),
+        password: document.getElementById('password'),
+        name: document.getElementById('name'),
+        submitBtn: document.getElementById('submitBtn'),
+        forgotBtn: document.getElementById('forgotBtn'),
+        magicBtn: document.getElementById('magicBtn'),
+        msg: document.getElementById('msg')
+      };
+      function showMsg(t, type){ els.msg.textContent = t; els.msg.className = 'lg-msg show ' + type; }
+      function clearMsg(){ els.msg.className = 'lg-msg'; }
+      function setMode(m){
+        mode = m; var s = m === 'signup';
+        els.tabLogin.classList.toggle('active', !s);
+        els.tabSignup.classList.toggle('active', s);
+        els.nameField.style.display = s ? 'block' : 'none';
+        els.title.innerHTML = s ? 'Opprett <em>konto</em>' : 'Velkommen <em>tilbake</em>';
+        els.sub.textContent = s ? 'Lag en konto for \u00e5 komme i gang.' : 'Logg inn for \u00e5 fortsette til Little Montessori Explorers.';
+        els.submitBtn.textContent = s ? 'Opprett konto' : 'Logg inn';
+        els.password.setAttribute('autocomplete', s ? 'new-password' : 'current-password');
+        clearMsg();
+      }
+      els.tabLogin.addEventListener('click', function(){ setMode('login'); });
+      els.tabSignup.addEventListener('click', function(){ setMode('signup'); });
+
+      fetch('/api/auth/me', { credentials: 'same-origin' }).then(function(r){ return r.json(); })
+        .then(function(d){ if (d && d.user) location.replace(next); }).catch(function(){});
+
+      function busy(on){ els.submitBtn.disabled = on; els.magicBtn.disabled = on; }
+
+      els.form.addEventListener('submit', function(e){
+        e.preventDefault(); clearMsg();
+        var email = els.email.value.trim(), password = els.password.value;
+        if (!email || !password) { showMsg('Fyll inn e-post og passord.', 'error'); return; }
+        if (mode === 'signup' && password.length < 6) { showMsg('Passordet m\u00e5 v\u00e6re minst 6 tegn.', 'error'); return; }
+        busy(true);
+        var url = mode === 'signup' ? '/api/auth/register' : '/api/auth/login';
+        fetch(url, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, password: password, name: els.name.value.trim() }) })
+          .then(function(r){ return r.json(); })
+          .then(function(d){
+            busy(false);
+            if (d && d.ok) { location.replace(next); return; }
+            showMsg(translateError(d && d.error), 'error');
+          })
+          .catch(function(){ busy(false); showMsg('Noe gikk galt. Pr\u00f8v igjen om litt.', 'error'); });
+      });
+
+      els.magicBtn.addEventListener('click', function(){
+        showMsg('Innloggingslenke p\u00e5 e-post kommer snart. Bruk e-post og passord inntil videre. \ud83d\udc9b', 'success');
+      });
+      els.forgotBtn.addEventListener('click', function(){
+        showMsg('Tilbakestilling av passord p\u00e5 e-post kommer snart. Trenger du hjelp n\u00e5, kontakt oss p\u00e5 /help.', 'success');
+      });
+
+      function translateError(code){
+        switch (code) {
+          case 'invalid': return 'Feil e-post eller passord.';
+          case 'exists': return 'Denne e-posten har allerede en konto. Pr\u00f8v \u00e5 logge inn.';
+          case 'weak_password': return 'Passordet m\u00e5 v\u00e6re minst 6 tegn.';
+          case 'bad_email': return 'Skriv inn en gyldig e-postadresse.';
+          case 'not_configured': return 'Innlogging er ikke koblet til databasen enn\u00e5. Pr\u00f8v igjen om litt.';
+          default: return 'Noe gikk galt. Pr\u00f8v igjen om litt.';
+        }
+      }
+      setMode('login');
+    })();
+  </script>
+</body>
+</html>

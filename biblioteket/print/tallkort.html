@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tallkort 1–10 — Little Montessori Explorers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--cerise:#E91E89;--pink:#F5A8B8;--soft:#F8D7DA;--ink:#2a1e2e;--lime:#A4D233;--sky:#3FA9F5;--sun:#F7C72E;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Playpen Sans',system-ui,sans-serif;color:var(--ink);background:#faf6f7;}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 20px;background:#fff;box-shadow:0 2px 10px rgba(180,120,140,.12);position:sticky;top:0;z-index:5;}
+  .bar .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--cerise);text-decoration:none;font-size:15px;}
+  .bar .brand img{width:32px;height:32px;object-fit:contain;}
+  .bar .actions{display:flex;gap:10px;}
+  .btn{border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-family:inherit;cursor:pointer;text-decoration:none;font-size:14px;}
+  .btn-print{background:var(--cerise);color:#fff;box-shadow:0 6px 16px rgba(233,30,137,.35);}
+  .btn-back{background:#fff;color:var(--ink);border:1px solid #eedce2;}
+  .sheet{max-width:820px;margin:22px auto;background:#fff;padding:30px;border-radius:14px;box-shadow:0 10px 30px rgba(180,120,140,.14);}
+  .sheet h1{font-size:27px;line-height:1.1;margin-bottom:6px;}
+  .sheet .sub{color:#9a7b85;font-size:13.5px;margin-bottom:22px;}
+  .doc-foot{margin-top:24px;text-align:center;color:#c2a7b0;font-size:11px;letter-spacing:.04em;}
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.card{border:2px dashed #E7C3CD;border-radius:14px;padding:16px;text-align:center;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;}
+.card .num{font-size:48px;font-weight:700;color:var(--cerise);line-height:1;}
+.card .dots{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:160px;}
+.card .dots i{width:14px;height:14px;border-radius:50%;background:var(--sky);display:inline-block;}
+  @media print{
+    .bar{display:none !important;}
+    body{background:#fff;}
+    .sheet{box-shadow:none;border:0;margin:0;max-width:100%;border-radius:0;padding:0;}
+    @page{size:A4;margin:14mm;}
+  }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/biblioteket"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <div class="actions">
+      <a class="btn btn-back" href="/biblioteket">‹ Biblioteket</a>
+      <button class="btn btn-print" onclick="window.print()">⬇ Lagre som PDF</button>
+    </div>
+  </div>
+  <div class="sheet">
+    <h1>Tallkort 1–10</h1>
+    <div class="sub">Klipp ut langs de stiplede strekene. La barnet legge riktig antall prikker, eller småting, til hvert tall.</div>
+<div class="cards"><div class="card"><div class="num">1</div><div class="dots"><i></i></div></div><div class="card"><div class="num">2</div><div class="dots"><i></i><i></i></div></div><div class="card"><div class="num">3</div><div class="dots"><i></i><i></i><i></i></div></div><div class="card"><div class="num">4</div><div class="dots"><i></i><i></i><i></i><i></i></div></div><div class="card"><div class="num">5</div><div class="dots"><i></i><i></i><i></i><i></i><i></i></div></div><div class="card"><div class="num">6</div><div class="dots"><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div class="card"><div class="num">7</div><div class="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div class="card"><div class="num">8</div><div class="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div class="card"><div class="num">9</div><div class="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div class="card"><div class="num">10</div><div class="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div>
+    <div class="doc-foot">Little Montessori Explorers · lmexplorers.com</div>
+  </div>
+</body>
+</html>

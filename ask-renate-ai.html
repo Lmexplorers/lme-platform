@@ -260,7 +260,7 @@
       <nav class="nav-pills">
         <a href="/academy" class="nav-pill">Learn</a>
         <a href="/community" class="nav-pill">Community</a>
-        <a href="/library" class="nav-pill">More</a>
+        <a href="/biblioteket" class="nav-pill">More</a>
       </nav>
     </div>
     <div class="header-right">
@@ -270,18 +270,18 @@
         </span>
         Ask Renate AI ↗
       </a>
-      <a href="/creative-studio" class="btn-studio">Open LME Creative Studio</a>
+      <a href="/creative-academy" class="btn-studio">Open LME Creative Academy</a>
       <button class="icon-btn" aria-label="Search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
       <button class="icon-btn" aria-label="Messages"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 12c0 4.4-4 8-9 8-1.3 0-2.5-.2-3.6-.7L3 21l1.7-5.4C3.6 14.2 3 12.7 3 11c0-4.4 4-8 9-8s9 3.6 9 8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
       <button class="icon-btn" aria-label="Notifications"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 8a6 6 0 1112 0c0 7 3 8 3 8H3s3-1 3-8M10 21a2 2 0 004 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <button class="avatar-btn" aria-label="Profile"><img src="" alt="R" id="headerAvatar" onerror="this.style.display='none'"></button>
+      <button class="avatar-btn" aria-label="Profile"><img src="/images/renate-portrait.jpg" alt="Renate" id="headerAvatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block"></button>
     </div>
   </header>
 </div>
 
 <div class="title-section">
   <h1>Ask <em>Renate AI</em></h1>
-  <p class="tagline">Hi, I'm Renate AI ✨ Ask me about Montessori, the AMI tradition, or upload a photo I can look at 💗</p>
+  <p class="tagline">Hi, I'm Renate AI ✨ Ask me about Montessori, the Montessori tradition, or upload a photo I can look at 💗</p>
 </div>
 
 <div class="main-layout">
@@ -299,7 +299,7 @@
     </div>
     <div class="conversations-list" id="conversationsList"></div>
     <div class="sidebar-info-link">
-      <a href="/renate-ai-info-en">
+      <a href="/renate-ai-info">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 16v-4M12 8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         About Renate AI
       </a>
@@ -347,7 +347,7 @@
   </div>
 
   <p class="chat-footer-note">
-    💗 Your conversations are saved automatically in your browser. Upload photos of Montessori materials, classrooms, or PDFs — Renate AI can see and help you! <a href="/renate-ai-info-en">Learn more about Renate AI →</a> · For personal follow-up, <a href="mailto:hello@littlemontessoriexplorers.com">contact Renate directly</a>.
+    💗 Your conversations are saved automatically in your browser. Upload photos of Montessori materials, classrooms, or PDFs, Renate AI can see and help you! <a href="/renate-ai-info">Learn more about Renate AI →</a> · For personal follow-up, <a href="mailto:hello@lmexplorers.com">contact Renate directly</a>.
   </p>
 
 </div>
@@ -355,7 +355,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const WORKER_URL = 'https://lme-renate-ai.renateshobby.workers.dev/ask-renate-ai';
+const WORKER_URL = '/ask-renate-ai';
 const STORAGE_KEY = 'lme_renate_ai_conversations_en';
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -492,12 +492,12 @@ function renderConversationsList() {
 function showWelcome() {
   chatMessages.innerHTML = `
     <div class="welcome-mini">What would you like to <em>talk about today?</em></div>
-    <div class="message bot">Hi there! 💗 So lovely that you're here. I'm Renate AI, and I'm here to help you with questions about Montessori pedagogy in the AMI tradition, the LME platform, and how to get started on your journey. You can also upload images or PDFs for me to look at! What would you like to chat about today? 🌷</div>
+    <div class="message bot">Hi there! 💗 So lovely that you're here. I'm Renate AI, and I'm here to help you with questions about Montessori pedagogy in the Montessori tradition, the LME platform, and how to get started on your journey. You can also upload images or PDFs for me to look at! What would you like to chat about today? 🌷</div>
     <div class="quick-prompts">
       <button class="quick-prompt" data-prompt="Which plan is right for me?">Which <em>plan</em> is right for me?</button>
-      <button class="quick-prompt" data-prompt="Explain AMI 3-6">Explain <em>AMI 3-6</em></button>
+      <button class="quick-prompt" data-prompt="Explain 3-6">Explain <em>3-6</em></button>
       <button class="quick-prompt" data-prompt="How do I use LME Studio?">Using <em>LME Studio</em></button>
-      <button class="quick-prompt" data-prompt="AMI vs other Montessori approaches">AMI vs other <em>approaches</em></button>
+      <button class="quick-prompt" data-prompt="Montessori vs other approaches">Montessori vs other <em>approaches</em></button>
       <button class="quick-prompt" data-prompt="How do I get started with Montessori at home?">Getting started <em>at home</em></button>
     </div>
   `;

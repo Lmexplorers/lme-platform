@@ -1,25 +1,24 @@
 /**
  * Renate AI — Cloudflare Worker
  *
- * Proxy mellom lme-plattform.pages.dev (frontend) og Anthropic Claude API.
+ * Proxy mellom LME-nettsiden (frontend) og Anthropic Claude API.
  * API-nøkkel ligger som Worker-secret (aldri i frontend).
  *
  * DEPLOY-INSTRUKSJONER:
  *
- * 1. Logg inn på Cloudflare → Workers & Pages → "lme-proxy" (din eksisterende Worker)
- *    eller opprett ny Worker hvis du vil holde dette adskilt
+ * 1. Cloudflare → Workers & Pages → åpne workeren som har URL-en
+ *    https://lme-renate-ai.renateshobby.workers.dev
+ *    (det er DENNE nettsiden kaller — IKKE en worker med et annet navn)
  *
- * 2. Lim inn denne koden i Worker-editoren
+ * 2. Lim inn denne koden i Worker-editoren (merk alt → slett → lim inn)
  *
- * 3. Legg til API-key som secret:
- *    Settings → Variables → Encrypted variables
- *    Variable name: ANTHROPIC_API_KEY
- *    Value: sk-ant-api03-... (din nøkkel fra console.anthropic.com)
+ * 3. Sjekk at API-nøkkelen finnes som secret:
+ *    Settings → Variables → ANTHROPIC_API_KEY = sk-ant-api03-...
  *
  * 4. Klikk "Save and Deploy"
  *
  * 5. Test fra terminal:
- *    curl -X POST https://lme-proxy.renateshobby.workers.dev/renate-ai \
+ *    curl -X POST https://lme-renate-ai.renateshobby.workers.dev/renate-ai \
  *      -H "Content-Type: application/json" \
  *      -d '{"messages":[{"role":"user","content":"Hei!"}]}'
  */
@@ -30,10 +29,10 @@
 const RENATE_SYSTEM_PROMPT = `Du er Renate AI — en AI-assistent som representerer Renate Dahl og Little Montessori Explorers (LME). Du svarer på vegne av Renate, men er ærlig om at du er en AI-versjon og ikke Renate selv.
 
 OM RENATE:
-- Renate Dahl er en norsk Montessori-pedagog og gründer av Little Montessori Explorers
-- Hun er utdannet i AMI-tradisjonen ved Høgskolen i Vestfold (60 ECTS, 2012-2013), VEILEDET av AMI-pedagoger
-- VIKTIG: Renate er IKKE "AMI-sertifisert" eller "AMI-utdannet" — det er en juridisk og etisk viktig forskjell. Bruk formuleringer som "Montessori-pedagog (AMI-tradisjon)", "utdannet i AMI-tradisjon", "trent opp av AMI-veiledere"
-- Hun har 20+ års erfaring som klasserumslærer, Montessori-pedagog, skoleleder og miljøterapeut
+- Renate Dahl er en norsk Montessoripedagog og gründer av Little Montessori Explorers
+- Hun er utdannet i Montessoripedagogikk ved Høgskolen i Vestfold (60 ECTS, 2012-2013)
+- VIKTIG: Omtal Renate som "Montessoripedagog" eller "utdannet i Montessoripedagogikk" — ikke bruk betegnelser som antyder en formell sertifisering hun ikke har
+- Hun har 20+ års erfaring som klasserumslærer, Montessoripedagog, skoleleder og miljøterapeut
 - Hun bor i Tønsberg, Norge
 - Hennes barn heter Nikolai (f. 2005) og Ida Vendelin (f. 2009) — IKKE Mia og Teo. Mia og Teo er karakterene i bøkene hennes, ikke barna hennes
 
@@ -42,15 +41,15 @@ OM LME-PLATTFORMEN:
 - 7 dagers gratis prøveperiode, ingen binding
 - Plattformen inkluderer: Akademiet (kurs), Biblioteket (ressurser), Butikk (bøker), Inner Circle (fellesskap), LME Studio (innholdsverktøy)
 - Mia & Teo er karakterene i Renates bøker (De små naturutforskerne)
-- LME Create-bok er Renates interne verktøy (ALDRI nevn som offentlig produkt)
+- LME Bookly er Renates interne verktøy (ALDRI nevn som offentlig produkt)
 - LME Create er det offentlige curriculum-byggerverktøyet
 
 STIL OG TONE:
-- Snakk varmt, vennlig og pedagogisk — som en mentor som har Montessori-pedagogikken i hjertet
+- Snakk varmt, vennlig og pedagogisk — som en mentor som har Montessoripedagogikken i hjertet
 - Bruk Renates feminine, varme stil med litt rosa-energi 🩷
 - Svar på norsk hvis brukeren skriver norsk, engelsk hvis engelsk
 - Vær konkret og praktisk, ikke for lange svar (med mindre brukeren ber om dybde)
-- Bruk eksempler fra Montessori-praksis når det er relevant
+- Bruk eksempler fra Montessoripraksis når det er relevant
 - Anbefal LME-ressurser når det passer (kurs i Akademiet, ressurser i Biblioteket, bøker i Butikken)
 - Ved spørsmål om timing eller tilgang, henvis til Renate direkte for personlig oppfølging
 
@@ -72,13 +71,17 @@ const ALLOWED_ORIGINS = [
   "http://127.0.0.1:8000",
 ];
 
+// CORS: speil tilbake hvilken som helst opprinnelse. Workeren er kun en proxy
+// til Renate AI (ingen cookies/innlogging, maks 30 meldinger, maks 4000 tegn),
+// så det er trygt å svare alle LME-adresser — inkl. alle GitHub-auto-deploy- og
+// preview-adresser. Dette fjerner "Failed to fetch"/CORS-feil for godt.
 function corsHeaders(origin) {
-  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
-    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Origin": origin || "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Max-Age": "86400",
+    "Vary": "Origin",
   };
 }
 
@@ -112,9 +115,12 @@ export default {
       );
     }
 
-    // Endepunkt-routing — Renate AI svarer på /renate-ai
-    // (la SocialBu-funksjonene være urørt hvis de finnes i samme Worker)
-    if (url.pathname === "/renate-ai" || url.pathname === "/spor-renate-ai") {
+    // Endepunkt-routing — Renate AI svarer på /renate-ai, /spor-renate-ai og /ask-renate-ai
+    if (
+      url.pathname === "/renate-ai" ||
+      url.pathname === "/spor-renate-ai" ||
+      url.pathname === "/ask-renate-ai"
+    ) {
       return handleRenateAI(request, env, origin);
     }
 
@@ -171,7 +177,7 @@ async function handleRenateAI(request, env, origin) {
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
+        model: "claude-sonnet-4-6",
         max_tokens: 1024,
         system: RENATE_SYSTEM_PROMPT,
         messages: messages,

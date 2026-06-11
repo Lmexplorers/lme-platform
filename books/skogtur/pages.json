@@ -1,0 +1,16 @@
+{
+  "titleNo": "Skogtur",
+  "titleEn": "Forest walk",
+  "pages": [
+    { "no": "Mia og Teo pakket sekken og gikk på skogtur.",
+      "en": "Mia and Teo packed a backpack and went for a walk in the forest." },
+    { "no": "Et ekorn hoppet fra gren til gren over hodene deres.",
+      "en": "A squirrel jumped from branch to branch above their heads." },
+    { "no": "De fant en sopp, en fjær og en glatt stein.",
+      "en": "They found a mushroom, a feather and a smooth stone." },
+    { "no": "Sola tittet ned mellom de høye trærne.",
+      "en": "The sun peeked down between the tall trees." },
+    { "no": "Trøtte og glade gikk de hjem igjen.",
+      "en": "Tired and happy, they walked back home." }
+  ]
+}

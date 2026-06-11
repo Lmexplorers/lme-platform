@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mia &amp; Teo — Lek &amp; Lær | Little Montessori Explorers</title>
+<meta name="description" content="Mia og Teo Lek & Lær, et trygt, varmt videounivers for små oppdagere. Sanger, eventyr og læring på norsk og engelsk.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('fonts/SassoonMontessori.woff2') format('woff2'),
+         url('fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    --pink-50:  #fff5f8;
+    --pink-100: #ffe8f0;
+    --pink-200: #ffd1e1;
+    --pink-300: #ffb3cd;
+    --pink-400: #ff8ab3;
+    --pink-500: #e85a92;   /* cerise */
+    --pink-600: #c43d75;
+    --pink-700: #8f2a55;
+
+    /* Brand-aksenter (kategorifarger — NRK Super-lekent) */
+    --lime:       #8fc23f;
+    --lime-soft:  #e6f2cf;
+    --gul:        #ffce3d;
+    --gul-soft:   #fff3cf;
+    --bla:        #6ec1e4;
+    --bla-soft:   #dff1f9;
+    --lilla:      #b07fd4;
+    --lilla-soft: #efe4f7;
+    --oransje:    #ff9d5c;
+    --oransje-soft:#ffe9da;
+
+    --warm-white: #fffcf9;
+    --ink:      #3d2438;
+    --ink-soft: #6b4760;
+
+    --shadow-soft: 0 8px 32px rgba(196, 61, 117, 0.08);
+    --shadow-med:  0 16px 48px rgba(196, 61, 117, 0.14);
+    --shadow-deep: 0 24px 64px rgba(196, 61, 117, 0.18);
+
+    /* LÅST FONTREGEL: Playpen Sans = KUN overskrifter h1–h4. Sassoon = all annen tekst. */
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+    /* Cormorant fjernet — låst regel: kun Playpen (overskrifter) + Sassoon (resten) */
+    --font-display: 'Playpen Sans', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--ink);
+    line-height: 1.6;
+    overflow-x: hidden;
+    font-weight: 400;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 5%, rgba(255, 209, 225, 0.35), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 20%, rgba(255, 232, 240, 0.4), transparent 60%),
+      var(--warm-white);
+  }
+
+  h1, h2, h3, h4 { font-family: var(--font-head); }
+
+  /* Knapper/input får eksplisitt body-font (låst regel) */
+  button, input, select, textarea { font-family: var(--font-body) !important; }
+
+  /* ============ NAVIGASJON ============ */
+  nav {
+    transform: translateZ(0);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 252, 249, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--pink-100);
+    padding: 0.75rem 2rem;
+  }
+  .nav-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+  .logo-img { width: 56px; height: 56px; object-fit: contain; }
+  .logo-text {
+    font-family: var(--font-head); font-size: 1.15rem; font-weight: 600;
+    color: var(--pink-600); letter-spacing: -0.01em; line-height: 1.1;
+  }
+  .logo-text .subtitle {
+    display: block; font-family: var(--font-body);
+    font-size: 0.75rem; color: var(--ink-soft); font-weight: 400; margin-top: 0.1rem;
+  }
+  .nav-links { display: flex; gap: 2rem; align-items: center; list-style: none; }
+  .nav-links a {
+    color: var(--ink-soft); text-decoration: none; font-size: 1.05rem;
+    font-weight: 700; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--pink-600); }
+  .nav-links a.active { color: var(--pink-600); }
+  .lang-toggle {
+    background: linear-gradient(135deg, var(--pink-400), var(--pink-500));
+    color: white; border: none; padding: 0.55rem 1.2rem; border-radius: 999px;
+    font-weight: 600; font-size: 0.9rem; cursor: pointer; box-shadow: var(--shadow-soft);
+  }
+
+  /* ============ HERO-KARUSELL (NRK Super-stil) ============ */
+  .hero-carousel {
+    max-width: 1180px; margin: 1.75rem auto 0; padding: 0 2rem; position: relative;
+  }
+  .hero-viewport { overflow: hidden; border-radius: 32px; box-shadow: var(--shadow-med); }
+  .hero-track {
+    display: flex; transition: transform .6s cubic-bezier(.22,.61,.36,1);
+  }
+  .hero-slide {
+    min-width: 100%; position: relative; display: flex; align-items: center;
+    min-height: 380px; padding: 2.5rem 3rem; gap: 2rem; overflow: hidden;
+  }
+  .hero-slide .deco {
+    position: absolute; font-size: 13rem; opacity: .16; line-height: 1;
+    right: 6%; bottom: -2rem; pointer-events: none; user-select: none;
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,.06));
+  }
+  .hero-copy { position: relative; z-index: 2; max-width: 560px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    background: rgba(255,255,255,.75); color: var(--pink-700);
+    padding: 0.45rem 1.1rem; border-radius: 999px; font-size: 0.85rem;
+    font-weight: 700; margin-bottom: 1rem; border: 1px solid rgba(255,255,255,.9);
+  }
+  .hero-slide h1 {
+    font-size: clamp(2rem, 4.2vw, 3.2rem); font-weight: 700; color: var(--ink);
+    line-height: 1.08; letter-spacing: -0.02em; margin-bottom: 0.9rem;
+  }
+  .hero-slide h1 .accent {
+    font-family: var(--font-head); font-weight: 700; color: var(--pink-600);
+  }
+  .hero-slide p {
+    font-size: 1.1rem; color: var(--ink-soft); max-width: 460px; margin-bottom: 1.6rem; line-height: 1.5;
+  }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: linear-gradient(135deg, var(--pink-500), var(--pink-600));
+    color: white; border: none; padding: 0.95rem 1.9rem; border-radius: 999px;
+    font-weight: 700; font-size: 1.05rem; cursor: pointer; text-decoration: none;
+    box-shadow: 0 10px 26px rgba(196,61,117,.28); transition: transform .2s;
+  }
+  .hero-cta:hover { transform: translateY(-2px); }
+  .hero-cta.soon {
+    background: rgba(255,255,255,.85); color: var(--pink-700);
+    box-shadow: var(--shadow-soft); cursor: default; border: 1px dashed var(--pink-300);
+  }
+  .hero-cta.soon:hover { transform: none; }
+  .hero-cta .play-ic { font-size: 1.1rem; }
+
+  /* Portrett-poster i hero (blurfyll bak + skarpt bilde foran) */
+  .hero-poster {
+    position: relative; z-index: 2; flex: 0 0 auto;
+    width: 200px; aspect-ratio: 9/16; border-radius: 20px; overflow: hidden;
+    box-shadow: var(--shadow-deep); margin-left: auto;
+    border: 4px solid rgba(255,255,255,.85);
+  }
+  .hero-poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* Slide-bakgrunner */
+  .bg-pink  { background: linear-gradient(135deg, var(--pink-100), var(--pink-200) 70%, var(--pink-300)); }
+  .bg-lilla { background: linear-gradient(135deg, var(--lilla-soft), #e3d3f1 70%, #d3bbe9); }
+  .bg-gul   { background: linear-gradient(135deg, var(--gul-soft), #ffe9a8 70%, #ffe08a); }
+  .bg-bla   { background: linear-gradient(135deg, var(--bla-soft), #c4e8f5 70%, #aadcef); }
+  .bg-lime  { background: linear-gradient(135deg, var(--lime-soft), #d7ecb3 70%, #c4e394); }
+
+  /* ===== Kino-hero med ekte bilder (Disney+/Netflix-stil) ===== */
+  .hero-slide.cine { min-height: 460px; align-items: flex-end; padding: 2.5rem 3rem; }
+  .hero-bg {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; z-index: 0; transform: scale(1.04);
+    animation: heroPan 18s ease-in-out infinite alternate;
+  }
+  @keyframes heroPan { from { transform: scale(1.04) translateX(0); } to { transform: scale(1.12) translateX(-1.5%); } }
+  .hero-scrim {
+    position: absolute; inset: 0; z-index: 1;
+    background:
+      linear-gradient(100deg, rgba(58,20,44,.80) 0%, rgba(58,20,44,.52) 34%, rgba(58,20,44,.08) 66%, transparent 80%),
+      linear-gradient(to top, rgba(40,12,32,.55) 0%, transparent 42%);
+  }
+  .hero-slide.cine .hero-copy { color: #fff; }
+  .hero-slide.cine h1 { color: #fff; text-shadow: 0 2px 18px rgba(0,0,0,.4); }
+  .hero-slide.cine h1 .accent { color: var(--gul, #ffd23e); -webkit-text-fill-color: var(--gul, #ffd23e); }
+  .hero-slide.cine p { color: rgba(255,255,255,.94); text-shadow: 0 1px 10px rgba(0,0,0,.35); }
+  .hero-slide.cine .hero-badge {
+    background: rgba(255,255,255,.16); color: #fff; border: 1px solid rgba(255,255,255,.38);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  }
+
+  /* Karusell-kontroller */
+  .hero-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 5;
+    width: 48px; height: 48px; border-radius: 50%; border: none; cursor: pointer;
+    background: rgba(255,255,255,.92); color: var(--pink-600); font-size: 1.4rem;
+    box-shadow: var(--shadow-med); display: flex; align-items: center; justify-content: center;
+    transition: transform .2s, background .2s;
+  }
+  .hero-arrow:hover { background: white; transform: translateY(-50%) scale(1.08); }
+  .hero-arrow.prev { left: 2.75rem; }
+  .hero-arrow.next { right: 2.75rem; }
+  .hero-dots { display: flex; gap: 0.5rem; justify-content: center; margin-top: 1.1rem; }
+  .hero-dots button {
+    width: 11px; height: 11px; border-radius: 50%; border: none; cursor: pointer;
+    background: var(--pink-200); transition: all .25s; padding: 0;
+  }
+  .hero-dots button.active { background: var(--pink-500); width: 30px; border-radius: 999px; }
+
+  /* ============ KATEGORI-CHIPS ============ */
+  .chips-wrap { max-width: 1180px; margin: 2rem auto 0; padding: 0 2rem; }
+  .chips {
+    display: flex; gap: 0.6rem; overflow-x: auto; padding-bottom: 0.4rem;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip {
+    flex: 0 0 auto; display: inline-flex; align-items: center; gap: 0.4rem;
+    background: white; border: 1.5px solid var(--pink-100); color: var(--ink-soft);
+    padding: 0.55rem 1.1rem; border-radius: 999px; font-weight: 700; font-size: 0.95rem;
+    cursor: pointer; text-decoration: none; white-space: nowrap; transition: all .2s;
+  }
+  .chip:hover { border-color: var(--pink-300); color: var(--pink-600); transform: translateY(-1px); }
+  .chip .ic { font-size: 1.1rem; }
+
+  /* ============ HYLLER (NRK Super-stil) ============ */
+  .shelf-wrap { max-width: 1180px; margin: 2.75rem auto 0; padding: 0 2rem; scroll-margin-top: 90px; }
+  .shelf-head {
+    display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 1.1rem;
+  }
+  .shelf-head h2 { font-size: 1.5rem; color: var(--ink); font-weight: 700; }
+  .shelf-head .tag {
+    font-family: var(--font-body); font-size: 0.8rem; font-weight: 600;
+    color: var(--ink-soft); background: var(--pink-50);
+    padding: 0.25rem 0.7rem; border-radius: 999px; border: 1px solid var(--pink-100);
+  }
+  .shelf-head .tag.live { color: var(--pink-700); background: var(--pink-100); border-color: var(--pink-200); }
+
+  /* ===== Kino-"verden"-bånd som seksjonsoverskrift ===== */
+  .world-head {
+    position: relative; border-radius: 24px; overflow: hidden; min-height: 144px;
+    display: flex; align-items: flex-end; margin-bottom: 1.3rem; box-shadow: var(--shadow-soft);
+  }
+  .world-head .wbg {
+    position: absolute; inset: 0; background-size: cover; background-position: center 42%;
+    transform: scale(1.05); transition: transform .7s ease;
+  }
+  .world-head:hover .wbg { transform: scale(1.11); }
+  .world-head .wscrim {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg, rgba(58,20,44,.80) 0%, rgba(58,20,44,.45) 42%, rgba(58,20,44,.06) 78%),
+      linear-gradient(to top, rgba(40,12,32,.55), transparent 60%);
+  }
+  .world-head .wcopy { position: relative; z-index: 2; padding: 1.25rem 1.6rem; }
+  .world-head .wcopy h2 { color: #fff; font-size: clamp(1.4rem, 2.6vw, 1.85rem); text-shadow: 0 2px 14px rgba(0,0,0,.45); }
+  .world-head .wcopy p { color: rgba(255,255,255,.93); font-size: .95rem; margin-top: .25rem; text-shadow: 0 1px 8px rgba(0,0,0,.4); }
+  .world-tag {
+    position: absolute; z-index: 2; top: 1rem; right: 1.1rem;
+    background: rgba(255,255,255,.92); color: var(--pink-700); font-weight: 700; font-size: .8rem;
+    padding: .35rem .85rem; border-radius: 999px; box-shadow: var(--shadow-soft);
+  }
+  @media (max-width: 600px) { .world-head { min-height: 118px; } .world-tag { display: none; } }
+
+  .shelf {
+    display: grid; grid-auto-flow: column; grid-auto-columns: minmax(260px, 1fr);
+    gap: 1.25rem; overflow-x: auto; padding: 0.25rem 0.25rem 1.25rem;
+    scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+  }
+  .shelf::-webkit-scrollbar { height: 8px; }
+  .shelf::-webkit-scrollbar-thumb { background: var(--pink-200); border-radius: 999px; }
+
+  .tile {
+    scroll-snap-align: start; background: white; border-radius: 24px;
+    border: 1px solid var(--pink-100); box-shadow: var(--shadow-soft);
+    overflow: hidden; cursor: pointer; transition: transform .25s, box-shadow .25s;
+    text-align: left; display: block; width: 100%; padding: 0; font: inherit; color: inherit;
+  }
+  .tile:hover { transform: translateY(-5px); box-shadow: var(--shadow-med); }
+  .tile:focus-visible { outline: 3px solid var(--pink-400); outline-offset: 2px; }
+
+  /* Thumb i 16:9 med blurret fyll bak + skarpt portrettbilde foran */
+  .tile-thumb {
+    position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: var(--pink-50);
+  }
+  .tile-thumb .fill {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    transform: scale(1.25); filter: blur(18px) brightness(.92); opacity: .9;
+  }
+  .tile-thumb .fore {
+    position: relative; z-index: 1; height: 100%; margin: 0 auto; display: block;
+    object-fit: contain;
+  }
+  .tile-thumb img.cover {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .tile-play {
+    position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center;
+  }
+  .tile-play span {
+    width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,.94);
+    display: flex; align-items: center; justify-content: center; color: var(--pink-600);
+    font-size: 1.5rem; box-shadow: var(--shadow-soft); padding-left: 4px;
+    transition: transform .25s;
+  }
+  .tile:hover .tile-play span { transform: scale(1.12); }
+  .tile-dur {
+    position: absolute; z-index: 2; bottom: 0.6rem; right: 0.6rem;
+    background: rgba(61,36,56,.82); color: white; font-size: 0.78rem; font-weight: 700;
+    padding: 0.18rem 0.55rem; border-radius: 999px;
+  }
+  .tile-flagpill {
+    position: absolute; z-index: 2; top: 0.6rem; left: 0.6rem;
+    background: rgba(255,255,255,.92); font-size: 1.1rem;
+    width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow-soft);
+  }
+  .tile-body { padding: 0.9rem 1.1rem 1.2rem; }
+  .tile-body h3 { font-size: 1.08rem; color: var(--ink); font-weight: 700; line-height: 1.25; }
+  .tile-body p { font-size: 0.85rem; color: var(--ink-soft); margin-top: 0.2rem; }
+
+  /* Kommer snart-fliser, fargede etter kategori */
+  .tile.soon { cursor: default; }
+  .tile.soon:hover { transform: none; box-shadow: var(--shadow-soft); }
+  .tile-cat {
+    width: 100%; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center;
+    font-size: 3.4rem; position: relative;
+  }
+  .tile-cat::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 70% 20%, rgba(255,255,255,.5), transparent 60%);
+  }
+  .cat-lime   { background: linear-gradient(135deg, var(--lime-soft), #f3f9e6); }
+  .cat-gul    { background: linear-gradient(135deg, var(--gul-soft), #fff9e8); }
+  .cat-bla    { background: linear-gradient(135deg, var(--bla-soft), #eef8fc); }
+  .cat-pink   { background: linear-gradient(135deg, var(--pink-100), var(--pink-50)); }
+  .cat-lilla  { background: linear-gradient(135deg, var(--lilla-soft), #f6eefb); }
+  .cat-oransje{ background: linear-gradient(135deg, var(--oransje-soft), #fff2e8); }
+  .soon-pill {
+    display: inline-block; font-size: 0.72rem; font-weight: 700; color: var(--ink-soft);
+    background: var(--warm-white); border: 1px dashed var(--pink-200);
+    padding: 0.2rem 0.6rem; border-radius: 999px; margin-top: 0.4rem;
+  }
+
+  /* ============ FULLSKJERM-SPILLER (TV-MODUS) ============ */
+  .player-overlay {
+    position: fixed; inset: 0; z-index: 1000; display: none;
+    background: radial-gradient(ellipse at center, rgba(61,36,56,.92), rgba(30,18,28,.97));
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    align-items: center; justify-content: center; padding: 2rem;
+    opacity: 0; transition: opacity .3s;
+  }
+  .player-overlay.open { display: flex; opacity: 1; }
+  .player-overlay .stage {
+    position: relative; width: min(100%, 480px); display: flex; flex-direction: column;
+    align-items: center; gap: 1.1rem; transform: scale(.96); transition: transform .3s;
+  }
+  .player-overlay .stage.landscape { width: min(100%, 920px); }
+  .player-overlay.open .stage { transform: scale(1); }
+  .player-screen {
+    position: relative; width: 100%; aspect-ratio: 9/16; max-height: 74vh;
+    border-radius: 26px; overflow: hidden; background: #000;
+    box-shadow: 0 30px 80px rgba(0,0,0,.5); border: 4px solid rgba(255,255,255,.12);
+  }
+  .player-screen.landscape { aspect-ratio: 16/9; }
+  .player-screen video { width: 100%; height: 100%; object-fit: contain; background:#000; display: block; }
+  .player-meta { text-align: center; color: white; }
+  .player-meta h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem; }
+  .player-meta p { color: rgba(255,255,255,.8); font-size: 0.98rem; max-width: 460px; }
+  .player-close {
+    position: absolute; top: -0.5rem; right: -0.5rem; z-index: 3;
+    width: 52px; height: 52px; border-radius: 50%; border: none; cursor: pointer;
+    background: white; color: var(--pink-600); font-size: 1.6rem; line-height: 1;
+    box-shadow: var(--shadow-deep); display: flex; align-items: center; justify-content: center;
+    transition: transform .2s;
+  }
+  .player-close:hover { transform: scale(1.1) rotate(90deg); }
+
+  /* ============ ÅPNE-PILL PÅ INNHOLDSFLISER ============ */
+  .open-pill {
+    display: inline-block; font-size: 0.74rem; font-weight: 700; color: var(--pink-700);
+    background: var(--pink-50); border: 1px solid var(--pink-200);
+    padding: 0.22rem 0.65rem; border-radius: 999px; margin-top: 0.45rem;
+  }
+
+  /* ============ INNHOLDS-VINDU (eventyr/aktivitet) ============ */
+  .content-overlay {
+    position: fixed; inset: 0; z-index: 1000; display: none;
+    background: rgba(61,36,56,.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    align-items: center; justify-content: center; padding: 1.5rem; opacity: 0; transition: opacity .3s;
+  }
+  .content-overlay.open { display: flex; opacity: 1; }
+  .content-card {
+    position: relative; width: min(100%, 560px); background: var(--warm-white);
+    border-radius: 30px; box-shadow: var(--shadow-deep); border: 1px solid var(--pink-100);
+    overflow: hidden; transform: scale(.96); transition: transform .3s; display: flex; flex-direction: column;
+    max-height: 90vh;
+  }
+  .content-overlay.open .content-card { transform: scale(1); }
+  .content-head { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--pink-100);
+    background: linear-gradient(135deg, var(--pink-100), var(--pink-50)); }
+  .content-head h2 { font-size: 1.25rem; color: var(--ink); }
+  .c-media { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; display: none; }
+  .c-media.show { display: block; }
+  .c-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .content-close {
+    position: absolute; top: 0.8rem; right: 0.8rem; z-index: 3; width: 44px; height: 44px;
+    border: none; border-radius: 50%; background: white; color: var(--pink-600); font-size: 1.5rem;
+    cursor: pointer; box-shadow: var(--shadow-soft); transition: transform .2s;
+  }
+  .content-close:hover { transform: scale(1.1) rotate(90deg); }
+  .content-page {
+    flex: 1; overflow-y: auto; text-align: center; padding: 2rem 1.75rem;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 240px;
+  }
+  .c-emoji { font-size: 4.5rem; line-height: 1; margin-bottom: 1rem; animation: cPop .45s ease; }
+  @keyframes cPop { 0%{opacity:0; transform:scale(.6) translateY(8px);} 60%{opacity:1; transform:scale(1.1);} 100%{transform:scale(1);} }
+  .c-text { font-size: 1.2rem; color: var(--ink); line-height: 1.5; max-width: 420px; }
+
+  /* ===== Bok-leser ===== */
+  .book-overlay {
+    position: fixed; inset: 0; z-index: 60; display: none; align-items: center; justify-content: center;
+    padding: 1rem; background: rgba(40, 20, 35, 0.55); backdrop-filter: blur(6px); opacity: 0; transition: opacity .3s;
+  }
+  .book-overlay.open { display: flex; opacity: 1; }
+  .book-card {
+    position: relative; width: min(100%, 620px); max-height: 92vh; background: var(--warm-white);
+    border-radius: 30px; box-shadow: var(--shadow-deep); border: 1px solid var(--pink-100);
+    overflow: hidden; display: flex; flex-direction: column; transform: scale(.96); transition: transform .3s;
+  }
+  .book-overlay.open .book-card { transform: scale(1); }
+  .book-head {
+    display: flex; align-items: center; justify-content: space-between; gap: .75rem;
+    padding: 1rem 1.25rem; padding-right: 3.5rem; border-bottom: 1px solid var(--pink-100);
+    background: linear-gradient(135deg, var(--pink-100), var(--pink-50));
+  }
+  .book-head h2 { font-size: 1.2rem; color: var(--ink); line-height: 1.2; }
+  .book-audio {
+    flex: none; display: inline-flex; align-items: center; gap: .4rem; cursor: pointer;
+    border: none; border-radius: 999px; padding: .5rem .9rem; font-size: .95rem; font-weight: 700;
+    background: white; color: var(--pink-600); box-shadow: var(--shadow-soft); transition: transform .15s, background .2s, color .2s;
+  }
+  .book-audio:hover { transform: scale(1.05); }
+  .book-audio.on { background: var(--pink-600); color: white; }
+  .book-audio.on .ba-icon { animation: baPulse 1.4s ease-in-out infinite; }
+  .book-audio:disabled { opacity: .45; cursor: default; transform: none; }
+  @keyframes baPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.18);} }
+  .book-stage {
+    position: relative; width: 100%; aspect-ratio: 16/9; background: #1a1014; overflow: hidden; flex: none;
+  }
+  .book-stage img, .book-stage video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .book-stage img { animation: bkFade .4s ease; }
+  @keyframes bkFade { from{opacity:0; transform:scale(1.03);} to{opacity:1; transform:scale(1);} }
+  .book-text {
+    flex: 1; overflow-y: auto; text-align: center; padding: 1.5rem 1.75rem; min-height: 90px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.25rem; line-height: 1.55; color: var(--ink); font-weight: 600;
+  }
+  .book-nav {
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    padding: .85rem 1.25rem; border-top: 1px solid var(--pink-100); background: var(--pink-50);
+  }
+  .book-count { font-size: .95rem; font-weight: 700; color: var(--pink-600); letter-spacing: .02em; }
+  .book-nav .cnav:disabled { opacity: .3; cursor: default; }
+  @media (max-width: 480px) {
+    .book-head h2 { font-size: 1.05rem; }
+    .book-text { font-size: 1.12rem; padding: 1.2rem 1.25rem; }
+  }
+  .c-text .c-en { display:block; font-family: var(--font-body); color: var(--ink-soft); font-size: 1rem; margin-top: 0.5rem; }
+  .c-link { margin-top: 1.4rem; }
+  .content-nav {
+    display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+    padding: 1rem 1.5rem 1.3rem; border-top: 1px solid var(--pink-100);
+  }
+  .cnav {
+    border: 1.5px solid var(--pink-200); background: white; color: var(--pink-600);
+    padding: 0.55rem 1.1rem; border-radius: 999px; font-weight: 700; font-size: 0.95rem; cursor: pointer;
+    transition: all .2s;
+  }
+  .cnav:hover:not(:disabled) { background: var(--pink-50); transform: translateY(-1px); }
+  .cnav:disabled { opacity: 0.35; cursor: default; }
+  .cnav.next { background: linear-gradient(135deg, var(--pink-400), var(--pink-500)); color: white; border-color: transparent; }
+  .content-dots { display: flex; gap: 0.4rem; }
+  .content-dots span { width: 9px; height: 9px; border-radius: 50%; background: var(--pink-200); transition: all .25s; }
+  .content-dots span.active { background: var(--pink-500); width: 24px; border-radius: 999px; }
+
+  /* Pusteøvelse */
+  .breath { display: flex; flex-direction: column; align-items: center; gap: 1.2rem; }
+  .breath-circle {
+    width: 90px; height: 90px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #bfe7f5, var(--bla));
+    transform: scale(1); transition: transform 3.8s ease-in-out; box-shadow: var(--shadow-med);
+  }
+  .breath-circle.big { transform: scale(1.85); }
+  .breath-label { font-family: var(--font-head); font-weight: 700; font-size: 1.3rem; color: var(--bla); }
+
+  /* ============ FORELDRE-NOTAT ============ */
+  .parents { max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
+  .parents-card {
+    background: linear-gradient(135deg, var(--bla-soft), var(--pink-50));
+    border: 1px solid var(--pink-100); border-radius: 28px; padding: 2rem 2.25rem;
+    display: flex; gap: 1.25rem; align-items: flex-start;
+  }
+  .parents-card .ic { font-size: 1.8rem; line-height: 1; }
+  .parents-card h3 { font-size: 1.2rem; color: var(--ink); margin-bottom: 0.4rem; }
+  .parents-card p { color: var(--ink-soft); font-size: 0.97rem; }
+
+  /* ============ CTA ============ */
+  .cta-section {
+    background: linear-gradient(135deg, var(--pink-500), var(--pink-600));
+    border-radius: 36px; padding: 4rem 2.5rem; margin: 4.5rem auto 0; max-width: 900px;
+    text-align: center; color: white; position: relative; overflow: hidden;
+    box-shadow: var(--shadow-deep);
+  }
+  .cta-section::before { content:'♪'; position:absolute; top:2rem; left:3rem; font-size:4rem; opacity:.15; }
+  .cta-section::after  { content:'★'; position:absolute; bottom:2rem; right:3rem; font-size:5rem; opacity:.15; }
+  .cta-section h2 { font-size: clamp(1.8rem, 3.5vw, 2.4rem); margin-bottom: 1rem; font-weight: 700; line-height: 1.2; }
+  .cta-section h2 .accent { font-family: var(--font-head); font-weight: 700; display: block; margin-top: 0.5rem; opacity: 0.95; }
+  .cta-section p { font-size: 1.1rem; max-width: 600px; margin: 0 auto 2rem; opacity: 0.95; line-height: 1.6; }
+  .cta-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .cta-btn {
+    display: inline-block; background: white; color: var(--pink-600);
+    padding: 1rem 2.2rem; border-radius: 999px; font-weight: 700; font-size: 1.05rem;
+    text-decoration: none; box-shadow: 0 8px 24px rgba(0,0,0,.15); transition: transform .2s;
+  }
+  .cta-btn.ghost { background: transparent; color: white; border: 2px solid rgba(255,255,255,.7); box-shadow: none; }
+  .cta-btn:hover { transform: translateY(-2px); }
+
+  /* ============ FOOTER ============ */
+  footer { text-align: center; padding: 3rem 2rem; color: var(--ink-soft); font-size: 0.9rem; border-top: 1px solid var(--pink-100); margin-top: 4rem; }
+  footer .heart { color: var(--pink-500); display: inline-block; }
+
+  /* ============ MOBIL ============ */
+  @media (max-width: 768px) {
+    nav { padding: 0.6rem 1rem; }
+    .logo-img { width: 44px; height: 44px; }
+    .logo-text { font-size: 0.95rem; }
+    .logo-text .subtitle { display: none; }
+    .nav-links { gap: 1rem; }
+    .nav-links a { font-size: 0.85rem; }
+    .nav-links li:not(:last-child) { display: none; }
+    .hero-carousel { padding: 0 1rem; margin-top: 1rem; }
+    .hero-slide { flex-direction: column; text-align: center; padding: 2rem 1.5rem; min-height: 0; }
+    .hero-copy { max-width: 100%; }
+    .hero-slide p { margin-left: auto; margin-right: auto; }
+    .hero-poster { margin: 0.5rem auto 0; width: 150px; }
+    .hero-slide .deco { font-size: 8rem; opacity: .12; right: -1rem; bottom: -1rem; }
+    /* Kino-hero på mobil: full bildehøyde, mørkere bunn-scrim for lesbarhet */
+    .hero-slide.cine { min-height: 430px; justify-content: flex-end; padding: 1.6rem; }
+    .hero-slide.cine .hero-scrim {
+      background: linear-gradient(to top, rgba(40,12,32,.82) 0%, rgba(40,12,32,.35) 55%, rgba(40,12,32,.15) 100%);
+    }
+    .hero-arrow { display: none; }
+    .chips-wrap, .shelf-wrap { padding: 0 1rem; }
+    .parents { padding: 0 1rem; }
+    .parents-card { flex-direction: column; padding: 1.5rem; border-radius: 22px; }
+    .cta-section { padding: 3rem 1.5rem; border-radius: 24px; margin: 3rem 1rem 0; }
+    .player-overlay { padding: 1rem; }
+    .player-screen { max-height: 68vh; }
+  }
+
+  .lang-float {
+    position: fixed; top: 90px; right: 24px; z-index: 150; background: white;
+    border: 1.5px solid var(--pink-300); border-radius: 999px; padding: 8px 18px;
+    box-shadow: var(--shadow-med); text-decoration: none; color: var(--pink-600);
+    font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;
+  }
+  .lang-float:hover { background: var(--pink-50); transform: translateY(-2px); }
+  .lang-float svg { width: 16px; height: 16px; }
+  @media (max-width: 600px) { .lang-float { top: 70px; right: 16px; padding: 6px 14px; font-size: 13px; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-track { transition: none; }
+    .dot { animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/dashboard" class="logo">
+      <img src="images/lme-logo.png" alt="LME Logo" class="logo-img" width="56" height="56">
+      <div class="logo-text">
+        Little Montessori<br>Explorers
+        <span class="subtitle">Learn · Explore · Grow</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/dashboard" data-no="Dashboard" data-en="Dashboard">Dashboard</a></li>
+      <li><a href="/mia-og-teo" class="active" data-no="Lek &amp; Lær" data-en="Play &amp; Learn">Lek &amp; Lær</a></li>
+      <li><a href="/musikk" data-no="Musikk" data-en="Music">Musikk</a></li>
+      <li><a href="/butikk" data-no="Butikk" data-en="Shop">Butikk</a></li>
+      <li><button class="lang-toggle" id="langToggle">EN 🌍</button></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============ HERO-KARUSELL ============ -->
+<section class="hero-carousel" aria-label="Utvalgt innhold">
+  <button class="hero-arrow prev" id="heroPrev" aria-label="Forrige">‹</button>
+  <button class="hero-arrow next" id="heroNext" aria-label="Neste">›</button>
+  <div class="hero-viewport">
+    <div class="hero-track" id="heroTrack">
+
+      <!-- Slide 0: Velkommen (signatur-hero) -->
+      <div class="hero-slide cine">
+        <img class="hero-bg" src="images/hero_learning_tree.webp" alt="" aria-hidden="true" style="object-position:center 45%;">
+        <div class="hero-scrim" aria-hidden="true"></div>
+        <div class="hero-copy">
+          <span class="hero-badge" data-no="🌳 Mia &amp; Teo, Lek &amp; Lær" data-en="🌳 Mia &amp; Teo, Play &amp; Learn">🌳 Mia &amp; Teo, Lek &amp; Lær</span>
+          <h1>
+            <span data-no="En hel verden å" data-en="A whole world to">En hel verden å</span>
+            <span class="accent" data-no="oppdage" data-en="discover">oppdage</span>
+          </h1>
+          <p data-no="Sanger, eventyr og læring i en trygg, magisk verden, laget med kjærlighet for de minste." data-en="Songs, stories and learning in a safe, magical world, made with love for the little ones." data-edit="mt1">
+            Sanger, eventyr og læring i en trygg, magisk verden, laget med kjærlighet for de minste.
+          </p>
+          <a class="hero-cta" href="#sanger">
+            <span class="play-ic">✨</span><span data-no="Utforsk" data-en="Explore">Utforsk</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Slide 1: Sangen (spiller) -->
+      <div class="hero-slide cine">
+        <img class="hero-bg" src="images/banner_sanger_video.webp" alt="" aria-hidden="true" style="object-position:center 50%;">
+        <div class="hero-scrim" aria-hidden="true"></div>
+        <div class="hero-copy">
+          <span class="hero-badge" data-no="🌟 Mia &amp; Teo, Lek &amp; Lær" data-en="🌟 Mia &amp; Teo, Play &amp; Learn">🌟 Mia &amp; Teo, Lek &amp; Lær</span>
+          <h1>
+            <span data-no="Bli med Mia og Teo" data-en="Join Mia and Teo">Bli med Mia og Teo</span>
+            <span class="accent" data-no="på oppdagelse" data-en="on an adventure">på oppdagelse</span>
+          </h1>
+          <p data-no="Sangen som startet det hele, hjertet i hele LME-universet. Trykk og syng med!" data-en="The song that started it all, the heart of the whole LME universe. Tap and sing along!" data-edit="mt2">
+            Sangen som startet det hele, hjertet i hele LME-universet. Trykk og syng med!
+          </p>
+          <button class="hero-cta play-song"
+            data-src-no="videos/mia-og-teo-norsk.mp4" data-src-en="videos/mia-and-teo-english.mp4"
+            data-poster-no="images/poster-norsk.jpg" data-poster-en="images/poster-english.jpg"
+            data-title-no="Mia og Teo, kom bli med!" data-title-en="Mia and Teo, Come and Play"
+            data-desc-no="Den offisielle Mia og Teo-sangen." data-desc-en="The official Mia and Teo song.">
+            <span class="play-ic">▶</span><span data-no="Spill av" data-en="Play">Spill av</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Slide 2: Eventyr -->
+      <div class="hero-slide cine">
+        <img class="hero-bg" src="images/banner_eventyr.webp" alt="" aria-hidden="true" style="object-position:center 50%;">
+        <div class="hero-scrim" aria-hidden="true"></div>
+        <div class="hero-copy">
+          <span class="hero-badge" data-no="✨ Nytt kapittel" data-en="✨ New chapter">✨ Nytt kapittel</span>
+          <h1>
+            <span data-no="Eventyr med" data-en="Stories with">Eventyr med</span>
+            <span class="accent">Mia &amp; Teo</span>
+          </h1>
+          <p data-no="Rolige, varme fortellinger om vennskap, natur og små oppdagelser. Snart i Lek &amp; Lær." data-en="Calm, warm tales about friendship, nature and small discoveries. Coming soon to Play &amp; Learn." data-edit="mt3">
+            Rolige, varme fortellinger om vennskap, natur og små oppdagelser. Snart i Lek &amp; Lær.
+          </p>
+          <span class="hero-cta soon"><span class="play-ic">🔒</span><span data-no="Kommer snart" data-en="Coming soon">Kommer snart</span></span>
+        </div>
+      </div>
+
+      <!-- Slide 3: Lær Norsk (spiller) -->
+      <div class="hero-slide cine">
+        <img class="hero-bg" src="images/banner_laer.webp" alt="" aria-hidden="true" style="object-position:center 50%;">
+        <div class="hero-scrim" aria-hidden="true"></div>
+        <div class="hero-copy">
+          <span class="hero-badge" data-no="🆕 Ny video, Lær Norsk" data-en="🆕 New video, Learn Norwegian">🆕 Ny video, Lær Norsk</span>
+          <h1>
+            <span data-no="Lær Norsk med" data-en="Learn Norwegian with">Lær Norsk med</span>
+            <span class="accent">Mia &amp; Teo</span>
+          </h1>
+          <p data-no="Bli kjent med norske ord og lyder sammen med Mia og Teo, i et trygt tempo som passer de små." data-en="Get to know Norwegian words and sounds together with Mia and Teo, at a gentle pace that suits the little ones." data-edit="mt4">
+            Bli kjent med norske ord og lyder sammen med Mia og Teo, i et trygt tempo som passer de små.
+          </p>
+          <a class="hero-cta" href="/laer-norsk">
+            <span class="play-ic">▶</span><span data-no="Start kurs" data-en="Start course">Start kurs</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="hero-dots" id="heroDots" role="tablist" aria-label="Velg utvalgt"></div>
+</section>
+
+<!-- ============ KATEGORI-CHIPS ============ -->
+<section class="chips-wrap" aria-label="Kategorier">
+  <div class="chips">
+    <a class="chip" href="#sanger"><span class="ic">🎵</span><span data-no="Sanger" data-en="Songs">Sanger</span></a>
+    <a class="chip" href="#eventyr"><span class="ic">📖</span><span data-no="Eventyr" data-en="Stories">Eventyr</span></a>
+    <a class="chip" href="#laer"><span class="ic">🔤</span><span data-no="Lær" data-en="Learn">Lær</span></a>
+    <a class="chip" href="#bevegelse"><span class="ic">🤸</span><span data-no="Sang &amp; bevegelse" data-en="Sing &amp; move">Sang &amp; bevegelse</span></a>
+    <a class="chip" href="#rolig"><span class="ic">🌙</span><span data-no="Rolig stund" data-en="Quiet time">Rolig stund</span></a>
+  </div>
+</section>
+
+<!-- ============ HYLLE: SANGER ============ -->
+<section class="shelf-wrap" id="sanger">
+  <div class="world-head">
+    <div class="wbg" style="background-image:url('images/banner_sanger_video.webp')"></div>
+    <div class="wscrim"></div>
+    <div class="wcopy">
+      <h2 data-no="Sanger" data-en="Songs">Sanger</h2>
+      <p data-no="Syng med Mia &amp; Teo" data-en="Sing along with Mia &amp; Teo" data-edit="mt5">Syng med Mia &amp; Teo</p>
+    </div>
+    <span class="world-tag" data-no="Trykk for å spille" data-en="Tap to play">Trykk for å spille</span>
+  </div>
+  <div class="shelf">
+    <button class="tile" type="button"
+      data-src="videos/mia-og-teo-norsk.mp4" data-poster="images/poster-norsk.jpg"
+      data-title-no="Mia og Teo, kom bli med!" data-title-en="Mia og Teo, kom bli med!"
+      data-desc-no="Den offisielle Mia og Teo-sangen, hjertet i hele LME-universet." data-desc-en="The official Mia and Teo song, the heart of the whole LME universe.">
+      <div class="tile-thumb">
+        <img class="fill" src="images/poster-norsk.jpg" alt="" aria-hidden="true">
+        <img class="fore" src="images/poster-norsk.jpg" alt="Mia og Teo synger, norsk versjon">
+        <span class="tile-flagpill">🇳🇴</span>
+        <span class="tile-play"><span>▶</span></span>
+        <span class="tile-dur">1:46</span>
+      </div>
+      <div class="tile-body">
+        <h3 data-no="Mia og Teo, kom bli med!" data-en="Mia og Teo, kom bli med!">Mia og Teo, kom bli med!</h3>
+        <p data-no="Norsk versjon · Syng med" data-en="Norwegian version · Sing along" data-edit="mt6">Norsk versjon · Syng med</p>
+      </div>
+    </button>
+
+    <button class="tile" type="button"
+      data-src="videos/mia-and-teo-english.mp4" data-poster="images/poster-english.jpg"
+      data-title-no="Mia and Teo, Come and Play" data-title-en="Mia and Teo, Come and Play"
+      data-desc-no="Den engelske versjonen av Mia og Teo-sangen." data-desc-en="The English version of the Mia and Teo song.">
+      <div class="tile-thumb">
+        <img class="fill" src="images/poster-english.jpg" alt="" aria-hidden="true">
+        <img class="fore" src="images/poster-english.jpg" alt="Mia and Teo sing, English version">
+        <span class="tile-flagpill">🇬🇧</span>
+        <span class="tile-play"><span>▶</span></span>
+        <span class="tile-dur">1:54</span>
+      </div>
+      <div class="tile-body">
+        <h3 data-no="Mia and Teo, Come and Play" data-en="Mia and Teo, Come and Play">Mia and Teo, Come and Play</h3>
+        <p data-no="Engelsk versjon · Syng med" data-en="English version · Sing along" data-edit="mt7">Engelsk versjon · Syng med</p>
+      </div>
+    </button>
+  </div>
+</section>
+
+<!-- ============ HYLLE: EVENTYR (KOMMER SNART) ============ -->
+<section class="shelf-wrap" id="eventyr">
+  <div class="world-head">
+    <div class="wbg" style="background-image:url('images/banner_eventyr.webp')"></div>
+    <div class="wscrim"></div>
+    <div class="wcopy">
+      <h2 data-no="Eventyr med Mia &amp; Teo" data-en="Stories with Mia &amp; Teo">Eventyr med Mia &amp; Teo</h2>
+      <p data-no="Varme fortellinger om vennskap og natur" data-en="Warm tales of friendship and nature" data-edit="mt8">Varme fortellinger om vennskap og natur</p>
+    </div>
+    <span class="world-tag" data-no="Trykk for å lese" data-en="Tap to read">Trykk for å lese</span>
+  </div>
+  <div class="shelf">
+    <button class="tile" type="button" data-book="pinnsvin">
+      <div class="tile-thumb"><img class="cover" src="images/eventyr/pinnsvin.webp" alt="" loading="lazy"></div>
+      <div class="tile-body"><h3 data-no="Pinnsvinet i hagen" data-en="The hedgehog in the garden">Pinnsvinet i hagen</h3><span class="open-pill" data-no="📖 Les eventyret" data-en="📖 Read the story">📖 Les eventyret</span></div>
+    </button>
+    <button class="tile" type="button" data-book="skogtur">
+      <div class="tile-cat cat-gul">🌳</div>
+      <div class="tile-body"><h3 data-no="Skogtur" data-en="Forest walk">Skogtur</h3><span class="open-pill" data-no="📖 Les eventyret" data-en="📖 Read the story">📖 Les eventyret</span></div>
+    </button>
+    <button class="tile" type="button" data-book="sjoen">
+      <div class="tile-cat cat-bla">🌊</div>
+      <div class="tile-body"><h3 data-no="En dag ved sjøen" data-en="A day by the sea">En dag ved sjøen</h3><span class="open-pill" data-no="📖 Les eventyret" data-en="📖 Read the story">📖 Les eventyret</span></div>
+    </button>
+    <button class="tile" type="button" data-book="stjerner">
+      <div class="tile-cat cat-pink">⭐</div>
+      <div class="tile-body"><h3 data-no="Stjerner og undring" data-en="Stars and wonder">Stjerner og undring</h3><span class="open-pill" data-no="📖 Les eventyret" data-en="📖 Read the story">📖 Les eventyret</span></div>
+    </button>
+  </div>
+</section>
+
+<!-- ============ HYLLE: LÆR (KOMMER SNART) ============ -->
+<section class="shelf-wrap" id="laer">
+  <div class="world-head">
+    <div class="wbg" style="background-image:url('images/banner_laer.webp')"></div>
+    <div class="wscrim"></div>
+    <div class="wcopy">
+      <h2 data-no="Lær med Mia &amp; Teo" data-en="Learn with Mia &amp; Teo">Lær med Mia &amp; Teo</h2>
+      <p data-no="Lek og lær, i Montessoriånd" data-en="Play and learn, the Montessori way" data-edit="mt9">Lek og lær, i Montessoriånd</p>
+    </div>
+    <span class="world-tag" data-no="Nytt kurs!" data-en="New course!">Nytt kurs!</span>
+  </div>
+  <div class="shelf">
+    <a class="tile" href="/laer-norsk">
+      <div class="tile-thumb">
+        <img class="cover" src="images/courses/course_laer_norsk.webp" alt="" loading="lazy">
+        <span class="tile-flagpill">🇳🇴</span>
+        <span class="tile-play"><span>▶</span></span>
+        <span class="tile-dur" data-no="Kurs" data-en="Course">Kurs</span>
+      </div>
+      <div class="tile-body">
+        <h3 data-no="Lær Norsk" data-en="Learn Norwegian">Lær Norsk</h3>
+        <p data-no="Video · Ordlek · Quiz" data-en="Video · Word play · Quiz" data-edit="mt10">Video · Ordlek · Quiz</p>
+      </div>
+    </a>
+    <button class="tile" type="button" data-content="laer-praktisk">
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_praktisk_liv.webp" alt="" loading="lazy"></div>
+      <div class="tile-body"><h3 data-no="Praktisk liv" data-en="Practical life">Praktisk liv</h3><span class="open-pill" data-no="✨ Se aktiviteter" data-en="✨ See activities">✨ Se aktiviteter</span></div>
+    </button>
+    <button class="tile" type="button" data-content="laer-tall">
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_tall_og_telling.webp" alt="" loading="lazy"></div>
+      <div class="tile-body"><h3 data-no="Tall og telling" data-en="Numbers and counting">Tall og telling</h3><span class="open-pill" data-no="✨ Lær &amp; lek" data-en="✨ Learn &amp; play">✨ Lær &amp; lek</span></div>
+    </button>
+    <button class="tile" type="button" data-content="laer-farger">
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_farger_og_former.webp" alt="" loading="lazy"></div>
+      <div class="tile-body"><h3 data-no="Farger og former" data-en="Colors and shapes">Farger og former</h3><span class="open-pill" data-no="✨ Lær &amp; lek" data-en="✨ Learn &amp; play">✨ Lær &amp; lek</span></div>
+    </button>
+  </div>
+</section>
+
+<!-- ============ HYLLE: SANG & BEVEGELSE (KOMMER SNART) ============ -->
+<section class="shelf-wrap" id="bevegelse">
+  <div class="world-head">
+    <div class="wbg" style="background-image:url('images/hero_learning_tree.webp')"></div>
+    <div class="wscrim"></div>
+    <div class="wcopy">
+      <h2 data-no="Sang &amp; bevegelse" data-en="Sing &amp; move">Sang &amp; bevegelse</h2>
+      <p data-no="Dans, hopp og syng med kroppen" data-en="Dance, jump and sing with your body" data-edit="mt11">Dans, hopp og syng med kroppen</p>
+    </div>
+    <span class="world-tag" data-no="Trykk for å leke" data-en="Tap to play">Trykk for å leke</span>
+  </div>
+  <div class="shelf">
+    <button class="tile" type="button" data-content="beve-hopp">
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_hopp_og_sprett.webp" alt="" loading="lazy"></div>
+      <div class="tile-body"><h3 data-no="Hopp og sprett" data-en="Jump and bounce">Hopp og sprett</h3><span class="open-pill" data-no="🤸 Bli med" data-en="🤸 Join in">🤸 Bli med</span></div>
+    </button>
+    <button class="tile" type="button" data-content="beve-klapp">
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_klappeleker.webp" alt="" loading="lazy"></div>
+      <div class="tile-body"><h3 data-no="Klappeleker" data-en="Clapping games">Klappeleker</h3><span class="open-pill" data-no="👏 Bli med" data-en="👏 Join in">👏 Bli med</span></div>
+    </button>
+    <button class="tile" type="button" data-content="beve-dyredans">
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_dyredans.webp" alt="" loading="lazy"></div>
+      <div class="tile-body"><h3 data-no="Dyredans" data-en="Animal dance">Dyredans</h3><span class="open-pill" data-no="🐸 Bli med" data-en="🐸 Join in">🐸 Bli med</span></div>
+    </button>
+    <button class="tile" type="button" data-content="beve-rim">
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_rim_og_regler.webp" alt="" loading="lazy"></div>
+      <div class="tile-body"><h3 data-no="Rim og regler" data-en="Rhymes">Rim og regler</h3><span class="open-pill" data-no="🎶 Les regla" data-en="🎶 Read the rhyme">🎶 Les regla</span></div>
+    </button>
+  </div>
+</section>
+
+<!-- ============ HYLLE: ROLIG STUND (KOMMER SNART) ============ -->
+<section class="shelf-wrap" id="rolig">
+  <div class="world-head">
+    <div class="wbg" style="background-image:url('images/banner_rolig_stund.webp')"></div>
+    <div class="wscrim"></div>
+    <div class="wcopy">
+      <h2 data-no="Rolig stund" data-en="Quiet time">Rolig stund</h2>
+      <p data-no="Ro og hvile før leggetid" data-en="Calm and rest before bedtime" data-edit="mt12">Ro og hvile før leggetid</p>
+    </div>
+    <span class="world-tag" data-no="Trykk for ro" data-en="Tap for calm">Trykk for ro</span>
+  </div>
+  <div class="shelf">
+    <button class="tile" type="button" data-content="rolig-godnatt">
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_godnattsang.webp" alt="" loading="lazy"></div>
+      <div class="tile-body"><h3 data-no="Godnattsang" data-en="Lullaby">Godnattsang</h3><span class="open-pill" data-no="🌙 Syng med" data-en="🌙 Sing along">🌙 Syng med</span></div>
+    </button>
+    <button class="tile" type="button" data-content="rolig-pusterom">
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_pusterom.webp" alt="" loading="lazy"></div>
+      <div class="tile-body"><h3 data-no="Pusterom" data-en="Breathing break">Pusterom</h3><span class="open-pill" data-no="☁️ Pust med oss" data-en="☁️ Breathe with us">☁️ Pust med oss</span></div>
+    </button>
+    <button class="tile" type="button" data-content="rolig-kosestund">
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_kosestund.webp" alt="" loading="lazy"></div>
+      <div class="tile-body"><h3 data-no="Kosestund" data-en="Cuddle time">Kosestund</h3><span class="open-pill" data-no="🧸 Kos deg" data-en="🧸 Get cosy">🧸 Kos deg</span></div>
+    </button>
+    <button class="tile" type="button" data-content="rolig-stjernedryss">
+      <div class="tile-thumb"><img class="cover" src="images/courses/course_stjernedryss.webp" alt="" loading="lazy"></div>
+      <div class="tile-body"><h3 data-no="Stjernedryss" data-en="Stardust">Stjernedryss</h3><span class="open-pill" data-no="⭐ Slapp av" data-en="⭐ Relax">⭐ Slapp av</span></div>
+    </button>
+  </div>
+</section>
+
+<!-- ============ FORELDRE-NOTAT ============ -->
+<section class="parents">
+  <div class="parents-card">
+    <span class="ic">🌸</span>
+    <div>
+      <h3 data-no="For foreldre og pedagoger" data-en="For parents and educators">For foreldre og pedagoger</h3>
+      <p data-no="Lek &amp; Lær er bygget rolig og trygt, uten reklame, uten autospill til neste video, og uten skarpe farger eller lyder. Barnet velger selv hva det vil se. Vi legger til nytt innhold steg for steg, slik at universet vokser i takt med de små oppdagerne." data-en="Play &amp; Learn is built to be calm and safe, no ads, no autoplay to the next video, no harsh colors or sounds. The child chooses what to watch. We add new content step by step, so the universe grows alongside your little explorers." data-edit="mt13">
+        Lek &amp; Lær er bygget rolig og trygt, uten reklame, uten autospill til neste video, og uten skarpe farger eller lyder. Barnet velger selv hva det vil se. Vi legger til nytt innhold steg for steg, slik at universet vokser i takt med de små oppdagerne.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta-section">
+  <h2>
+    <span data-no="Ta med Mia og Teo hjem" data-en="Take Mia and Teo home">Ta med Mia og Teo hjem</span>
+    <span class="accent" data-no="bøker, hefter og mer" data-en="books, workbooks and more">bøker, hefter og mer</span>
+  </h2>
+  <p data-no="Oppdag bøkene, arbeidsheftene og ressursene i LME-butikken, eller bli en del av fellesskapet vårt." data-en="Discover the books, workbooks and resources in the LME shop, or join our community." data-edit="mt14">
+    Oppdag bøkene, arbeidsheftene og ressursene i LME-butikken, eller bli en del av fellesskapet vårt.
+  </p>
+  <div class="cta-row">
+    <a href="/butikk" class="cta-btn" data-no="🌸 Se LME Butikk" data-en="🌸 Visit LME Shop">🌸 Se LME Butikk</a>
+    <a href="/community" class="cta-btn ghost" data-no="Bli med i fellesskapet" data-en="Join the community">Bli med i fellesskapet</a>
+  </div>
+</section>
+
+<footer>
+  <p>
+    <span data-no="Laget med" data-en="Made with">Laget med</span>
+    <span class="heart">💗</span>
+    <span data-no="i Tønsberg, Norge" data-en="in Tønsberg, Norway">i Tønsberg, Norge</span>
+    · © 2026 Little Montessori Explorers
+  </p>
+</footer>
+
+<!-- ============ FULLSKJERM-SPILLER (TV-MODUS) ============ -->
+<div class="player-overlay" id="playerOverlay" role="dialog" aria-modal="true" aria-label="Videospiller">
+  <div class="stage" id="tvStage">
+    <button class="player-close" id="playerClose" aria-label="Lukk">×</button>
+    <div class="player-screen" id="tvScreen">
+      <video id="tvVideo" controls playsinline preload="metadata"></video>
+    </div>
+    <div class="player-meta">
+      <h2 id="tvTitle"></h2>
+      <p id="tvDesc"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ INNHOLDS-VINDU (eventyr / aktivitet / rolig) ============ -->
+<div class="content-overlay" id="contentOverlay" role="dialog" aria-modal="true" aria-label="Innhold">
+  <div class="content-card">
+    <button class="content-close" id="contentClose" aria-label="Lukk">×</button>
+    <div class="content-head"><h2 id="cTitle"></h2></div>
+    <div class="c-media" id="cMedia"></div>
+    <div class="content-page" id="cPage">
+      <div class="c-emoji" id="cEmoji"></div>
+      <div class="c-text" id="cText"></div>
+      <div class="breath" id="cBreath" style="display:none;">
+        <div class="breath-circle" id="breathCircle"></div>
+        <div class="breath-label" id="breathLabel"></div>
+      </div>
+      <a class="btn c-link" id="cLink" style="display:none;"></a>
+    </div>
+    <div class="content-nav">
+      <button class="cnav prev" id="cPrev">‹ <span data-no="Forrige" data-en="Back">Forrige</span></button>
+      <div class="content-dots" id="cDots"></div>
+      <button class="cnav next" id="cNext"><span data-no="Neste" data-en="Next">Neste</span> ›</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BOK-LESER (eventyr: bilde + tekst + lyd / lydbok) ============ -->
+<div class="book-overlay" id="bookOverlay" role="dialog" aria-modal="true" aria-label="Bok">
+  <div class="book-card">
+    <button class="content-close" id="bookClose" aria-label="Lukk">×</button>
+    <div class="book-head">
+      <h2 id="bkTitle"></h2>
+      <button class="book-audio" id="bkAudio" type="button" aria-pressed="false">
+        <span class="ba-icon">🎧</span>
+        <span class="ba-label" data-no="Lydbok" data-en="Audiobook">Lydbok</span>
+      </button>
+    </div>
+    <div class="book-stage" id="bkStage"></div>
+    <div class="book-text" id="bkText"></div>
+    <div class="book-nav">
+      <button class="cnav prev" id="bkPrev" aria-label="Forrige side">‹</button>
+      <div class="book-count" id="bkCount"></div>
+      <button class="cnav next" id="bkNext" aria-label="Neste side">›</button>
+    </div>
+  </div>
+</div>
+
+<a href="#" class="lang-float" id="langFloat" aria-label="Switch language" title="Switch language">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+  <span data-no="English" data-en="Norsk">English</span>
+</a>
+
+<script>
+  let currentLang = 'no';
+  const toggle = document.getElementById('langToggle');
+
+  function applyLang(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(el => {
+      const text = el.getAttribute('data-' + lang);
+      if (text === null) return;
+      if (text.includes('<')) el.innerHTML = text; else el.textContent = text;
+    });
+    toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    document.title = lang === 'no'
+      ? 'Mia & Teo — Lek & Lær | Little Montessori Explorers'
+      : 'Mia & Teo — Play & Learn | Little Montessori Explorers';
+
+    // Hero-poster følger språk
+    const hp = document.getElementById('heroPoster');
+    if (hp) hp.src = lang === 'no' ? 'images/poster-norsk.jpg' : 'images/poster-english.jpg';
+
+    // Innholds-vindu følger språk hvis åpent
+    if (contentOpen) renderContentPage();
+    if (bookOpen) renderBookPage();
+  }
+  let contentOpen = false;
+
+  toggle.addEventListener('click', () => applyLang(currentLang === 'no' ? 'en' : 'no'));
+  document.getElementById('langFloat').addEventListener('click', (e) => {
+    e.preventDefault(); applyLang(currentLang === 'no' ? 'en' : 'no');
+  });
+
+  /* ---------- HERO-KARUSELL ---------- */
+  const track = document.getElementById('heroTrack');
+  const slides = Array.from(track.children);
+  const dotsWrap = document.getElementById('heroDots');
+  let heroIndex = 0;
+  let heroTimer = null;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  slides.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.setAttribute('role', 'tab');
+    b.setAttribute('aria-label', 'Slide ' + (i + 1));
+    if (i === 0) b.classList.add('active');
+    b.addEventListener('click', () => { goHero(i); restartHero(); });
+    dotsWrap.appendChild(b);
+  });
+  const dots = Array.from(dotsWrap.children);
+
+  function goHero(i) {
+    heroIndex = (i + slides.length) % slides.length;
+    track.style.transform = 'translateX(' + (-100 * heroIndex) + '%)';
+    dots.forEach((d, di) => d.classList.toggle('active', di === heroIndex));
+  }
+  function restartHero() {
+    if (reduceMotion) return;
+    clearInterval(heroTimer);
+    heroTimer = setInterval(() => goHero(heroIndex + 1), 7000);
+  }
+  document.getElementById('heroNext').addEventListener('click', () => { goHero(heroIndex + 1); restartHero(); });
+  document.getElementById('heroPrev').addEventListener('click', () => { goHero(heroIndex - 1); restartHero(); });
+  document.querySelector('.hero-carousel').addEventListener('mouseenter', () => clearInterval(heroTimer));
+  document.querySelector('.hero-carousel').addEventListener('mouseleave', restartHero);
+  restartHero();
+
+  /* ---------- FULLSKJERM-SPILLER (TV-MODUS) ---------- */
+  const overlay = document.getElementById('playerOverlay');
+  const tvVideo = document.getElementById('tvVideo');
+  const tvTitle = document.getElementById('tvTitle');
+  const tvDesc  = document.getElementById('tvDesc');
+  const tvStage = document.getElementById('tvStage');
+  const tvScreen = document.getElementById('tvScreen');
+
+  function openPlayer({ src, poster, titleNo, titleEn, descNo, descEn, orient }) {
+    const landscape = orient === 'landscape';
+    tvStage.classList.toggle('landscape', landscape);
+    tvScreen.classList.toggle('landscape', landscape);
+    tvVideo.src = src;
+    if (poster) tvVideo.poster = poster; else tvVideo.removeAttribute('poster');
+    tvTitle.setAttribute('data-no', titleNo); tvTitle.setAttribute('data-en', titleEn);
+    tvDesc.setAttribute('data-no', descNo);   tvDesc.setAttribute('data-en', descEn);
+    tvTitle.textContent = currentLang === 'no' ? titleNo : titleEn;
+    tvDesc.textContent  = currentLang === 'no' ? descNo  : descEn;
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    tvVideo.play().catch(() => {});
+  }
+  function closePlayer() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    tvVideo.pause();
+    tvVideo.removeAttribute('src');
+    tvVideo.load();
+  }
+  document.getElementById('playerClose').addEventListener('click', closePlayer);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closePlayer(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay.classList.contains('open')) closePlayer(); });
+
+  // Klikk på en sang-flis -> åpne fullskjerm-spiller
+  document.querySelectorAll('.tile[data-src]').forEach(tile => {
+    tile.addEventListener('click', () => openPlayer({
+      src: tile.dataset.src,
+      poster: tile.dataset.poster,
+      orient: tile.dataset.orient,
+      titleNo: tile.dataset.titleNo, titleEn: tile.dataset.titleEn,
+      descNo: tile.dataset.descNo,   descEn: tile.dataset.descEn
+    }));
+  });
+
+  // Hero/CTA enkel klipp-avspilling (ikke språkbyttende kilde)
+  document.querySelectorAll('.play-clip[data-src]').forEach(btn => {
+    btn.addEventListener('click', () => openPlayer({
+      src: btn.dataset.src,
+      poster: btn.dataset.poster,
+      orient: btn.dataset.orient,
+      titleNo: btn.dataset.titleNo, titleEn: btn.dataset.titleEn,
+      descNo: btn.dataset.descNo,   descEn: btn.dataset.descEn
+    }));
+  });
+
+  // Hero "Spill av" -> språkbevisst åpning av spilleren
+  document.querySelectorAll('.hero-cta.play-song').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const no = currentLang === 'no';
+      openPlayer({
+        src: no ? btn.dataset.srcNo : btn.dataset.srcEn,
+        poster: no ? btn.dataset.posterNo : btn.dataset.posterEn,
+        titleNo: btn.dataset.titleNo, titleEn: btn.dataset.titleEn,
+        descNo: btn.dataset.descNo,   descEn: btn.dataset.descEn
+      });
+    });
+  });
+
+  /* ============ INNHOLD: EVENTYR / AKTIVITETER / ROLIG ============ */
+  const CONTENT = {
+    'eventyr-pinnsvin': { titleNo:'Pinnsvinet i hagen', titleEn:'The hedgehog in the garden', video:'videos/eventyr/pinnsvin.mp4', poster:'images/eventyr/pinnsvin.webp', pages:[
+      { emoji:'🦔', no:'I hagen til Mia og Teo bodde et lite pinnsvin.', en:'In Mia and Teo’s garden lived a little hedgehog.' },
+      { emoji:'🌿', no:'Hver kveld kom det fram for å lete etter mat i det høye gresset.', en:'Every evening it came out to look for food in the tall grass.' },
+      { emoji:'🍎', no:'Mia la et eple ved busken. Teo satt helt stille og ventet.', en:'Mia placed an apple by the bush. Teo sat very still and waited.' },
+      { emoji:'💗', no:'Pinnsvinet snuste, tok en bit — og rullet seg lykkelig sammen.', en:'The hedgehog sniffed, took a bite — and curled up happily.' },
+      { emoji:'🌙', no:'“God natt, lille pinnsvin”, hvisket Mia. “Vi ses i morgen.”', en:'“Good night, little hedgehog,” Mia whispered. “See you tomorrow.”' },
+    ]},
+    'eventyr-skogtur': { titleNo:'Skogtur', titleEn:'Forest walk', pages:[
+      { emoji:'🎒', no:'Mia og Teo pakket sekken og gikk på skogtur.', en:'Mia and Teo packed a backpack and went for a walk in the forest.' },
+      { emoji:'🐿️', no:'Et ekorn hoppet fra gren til gren over hodene deres.', en:'A squirrel jumped from branch to branch above their heads.' },
+      { emoji:'🍄', no:'De fant en sopp, en fjær og en glatt stein.', en:'They found a mushroom, a feather and a smooth stone.' },
+      { emoji:'🌲', no:'Sola tittet ned mellom de høye trærne.', en:'The sun peeked down between the tall trees.' },
+      { emoji:'🏡', no:'Trøtte og glade gikk de hjem igjen.', en:'Tired and happy, they walked back home.' },
+    ]},
+    'eventyr-sjoen': { titleNo:'En dag ved sjøen', titleEn:'A day by the sea', pages:[
+      { emoji:'🌊', no:'En varm dag dro Mia og Teo ned til sjøen.', en:'On a warm day, Mia and Teo went down to the sea.' },
+      { emoji:'🐚', no:'De samlet skjell og kjente på den våte sanden.', en:'They collected shells and felt the wet sand.' },
+      { emoji:'🦀', no:'En liten krabbe vinket med klørne og forsvant.', en:'A little crab waved its claws and disappeared.' },
+      { emoji:'👣', no:'Bølgene kilte dem på tærne. De lo og lo.', en:'The waves tickled their toes. They laughed and laughed.' },
+      { emoji:'🌅', no:'Da sola gikk ned, vinket de farvel til havet.', en:'When the sun set, they waved goodbye to the sea.' },
+    ]},
+    'eventyr-stjerner': { titleNo:'Stjerner og undring', titleEn:'Stars and wonder', pages:[
+      { emoji:'🌌', no:'Om kvelden la Mia og Teo seg i gresset og så opp.', en:'In the evening, Mia and Teo lay in the grass and looked up.' },
+      { emoji:'⭐', no:'Stjernene blinket som tusen små lys.', en:'The stars twinkled like a thousand tiny lights.' },
+      { emoji:'🤔', no:'“Hvor mange stjerner finnes det?” undret Teo.', en:'“How many stars are there?” Teo wondered.' },
+      { emoji:'✨', no:'“Flere enn vi kan telle”, sa Mia. “Kanskje uendelig mange.”', en:'“More than we can count,” said Mia. “Maybe endlessly many.”' },
+      { emoji:'😴', no:'De gjespet, og en stjerne så ut til å blunke god natt.', en:'They yawned, and one star seemed to wink good night.' },
+    ]},
+
+    'laer-praktisk': { titleNo:'Praktisk liv', titleEn:'Practical life', pages:[
+      { emoji:'🍎', no:'Praktisk liv er små oppgaver barn kan klare selv. Prøv én i dag!', en:'Practical life is small tasks children can do themselves. Try one today!' },
+      { emoji:'🧺', no:'✔ Legg sokkene i kurven\n✔ Hell vann i et glass\n✔ Tørk av bordet', en:'✔ Put the socks in the basket\n✔ Pour water into a glass\n✔ Wipe the table' },
+      { emoji:'🌱', no:'✔ Vann en blomst\n✔ Knepp en knapp\n✔ Rydd én leke på plass', en:'✔ Water a flower\n✔ Button a button\n✔ Put one toy away' },
+      { emoji:'👏', no:'Ros barnet for innsatsen, ikke bare resultatet. Heia!', en:'Praise the effort, not just the result. Well done!' },
+    ]},
+    'laer-tall': { titleNo:'Tall og telling', titleEn:'Numbers and counting', pages:[
+      { emoji:'🔢', no:'La oss telle sammen! Tell tingene høyt.', en:'Let’s count together! Count the things out loud.' },
+      { emoji:'🍎', no:'🍎 = en (1)\n🍎🍎 = to (2)\n🍎🍎🍎 = tre (3)', en:'🍎 = one (1)\n🍎🍎 = two (2)\n🍎🍎🍎 = three (3)' },
+      { emoji:'⭐', no:'Hvor mange stjerner? ⭐⭐⭐⭐⭐ — fem!', en:'How many stars? ⭐⭐⭐⭐⭐ — five!' },
+      { emoji:'🎮', no:'Vil du leke tallspillet med Mia & Teo?', en:'Want to play the number game with Mia & Teo?', linkHref:'/laer-norsk', linkNo:'Gå til Lær Norsk-kurset →', linkEn:'Go to the Learn Norwegian course →' },
+    ]},
+    'laer-farger': { titleNo:'Farger og former', titleEn:'Colors and shapes', pages:[
+      { emoji:'🎨', no:'Farger og former er overalt! Hva ser du rundt deg?', en:'Colors and shapes are everywhere! What do you see around you?' },
+      { emoji:'🔺', no:'Sirkel ⚪   ·   Firkant 🟦   ·   Trekant 🔺', en:'Circle ⚪   ·   Square 🟦   ·   Triangle 🔺' },
+      { emoji:'🌈', no:'Finn noe rødt 🔴, noe blått 🔵 og noe gult 🟡 i rommet!', en:'Find something red 🔴, blue 🔵 and yellow 🟡 in the room!' },
+      { emoji:'🎮', no:'Vil du leke fargespillet med Mia & Teo?', en:'Want to play the color game with Mia & Teo?', linkHref:'/laer-norsk', linkNo:'Gå til Lær Norsk-kurset →', linkEn:'Go to the Learn Norwegian course →' },
+    ]},
+
+    'beve-hopp': { titleNo:'Hopp og sprett', titleEn:'Jump and bounce', pages:[
+      { emoji:'🤸', no:'Hopp og sprett! Klar, ferdig — hopp!', en:'Jump and bounce! Ready, set — jump!' },
+      { emoji:'🐸', no:'Hopp som en frosk — lavt og langt!', en:'Hop like a frog — low and far!' },
+      { emoji:'🦘', no:'Hopp høyt som en kenguru!', en:'Jump high like a kangaroo!' },
+      { emoji:'🗿', no:'Stå helt stille som en statue. Frys!', en:'Stand completely still like a statue. Freeze!' },
+    ]},
+    'beve-klapp': { titleNo:'Klappeleker', titleEn:'Clapping games', pages:[
+      { emoji:'👏', no:'Klapp i takt: klapp — klapp — klapp!', en:'Clap to the beat: clap — clap — clap!' },
+      { emoji:'🖐️', no:'Klapp hendene, klapp på knærne, klapp over hodet!', en:'Clap your hands, pat your knees, clap above your head!' },
+      { emoji:'🎵', no:'Klapp navnet ditt: Mi-a! Te-o! Ett klapp for hver stavelse.', en:'Clap your name: Mi-a! Te-o! One clap per syllable.' },
+    ]},
+    'beve-dyredans': { titleNo:'Dyredans', titleEn:'Animal dance', pages:[
+      { emoji:'🐻', no:'Dans som en bjørn — tung og rolig.', en:'Dance like a bear — heavy and slow.' },
+      { emoji:'🦋', no:'Flagre som en sommerfugl — lett og fint.', en:'Flutter like a butterfly — light and gentle.' },
+      { emoji:'🐍', no:'Bukt deg som en slange langs gulvet.', en:'Wiggle like a snake along the floor.' },
+      { emoji:'🦆', no:'Vagg som en and — kvakk, kvakk!', en:'Waddle like a duck — quack, quack!' },
+    ]},
+    'beve-rim': { titleNo:'Rim og regler', titleEn:'Rhymes', pages:[
+      { emoji:'🎶', no:'Lille Mia, lille Teo,\nhopper høyt og ler så glad.', en:'Little Mia, little Teo,\njump up high and laugh with glee.' },
+      { emoji:'🌼', no:'Klapp i hendene, tramp med foten,\nså er alle venner glad!', en:'Clap your hands and stamp your feet,\nnow all our friends are happy!' },
+      { emoji:'🔁', no:'Si regla én gang til — litt raskere denne gangen!', en:'Say the rhyme once more — a little faster this time!' },
+    ]},
+
+    'rolig-godnatt': { titleNo:'Godnattsang', titleEn:'Lullaby', pages:[
+      { emoji:'🌙', no:'Sov nå, lille venn,\nstjernene passer på.', en:'Sleep now, little friend,\nthe stars are watching over you.' },
+      { emoji:'💤', no:'Månen lyser mykt,\nalt er stille og trygt.', en:'The moon shines softly,\nall is quiet and safe.' },
+      { emoji:'🧸', no:'Lukk de små øynene,\ndrøm noe fint i natt.', en:'Close your little eyes,\ndream something lovely tonight.' },
+    ]},
+    'rolig-pusterom': { titleNo:'Pusterom', titleEn:'Breathing break', pages:[
+      { emoji:'☁️', no:'La oss puste rolig sammen. Følg den blå sirkelen.', en:'Let’s breathe calmly together. Follow the blue circle.' },
+      { breath:true, no:'', en:'' },
+      { emoji:'😌', no:'Godt jobba. Kjenn hvor rolig kroppen ble.', en:'Well done. Feel how calm your body became.' },
+    ]},
+    'rolig-kosestund': { titleNo:'Kosestund', titleEn:'Cuddle time', pages:[
+      { emoji:'🧸', no:'Finn bamsen din og gi den en god, varm klem.', en:'Find your teddy and give it a big, warm hug.' },
+      { emoji:'💗', no:'Kjenn hvor godt det er å være trygg og varm.', en:'Feel how nice it is to be safe and warm.' },
+      { emoji:'📖', no:'Kos dere med en rolig bok sammen.', en:'Enjoy a calm book together.' },
+    ]},
+    'rolig-stjernedryss': { titleNo:'Stjernedryss', titleEn:'Stardust', pages:[
+      { emoji:'✨', no:'Lukk øynene og se for deg en stille natthimmel.', en:'Close your eyes and picture a quiet night sky.' },
+      { emoji:'⭐', no:'Tenk deg at en stjerne daler sakte ned.', en:'Imagine a star drifting slowly down.' },
+      { emoji:'😌', no:'Pust rolig. Du er trygg og god.', en:'Breathe calmly. You are safe and loved.' },
+    ]},
+  };
+
+  const cOverlay = document.getElementById('contentOverlay');
+  const cTitle = document.getElementById('cTitle');
+  const cEmoji = document.getElementById('cEmoji');
+  const cText  = document.getElementById('cText');
+  const cLink  = document.getElementById('cLink');
+  const cBreath = document.getElementById('cBreath');
+  const cDots  = document.getElementById('cDots');
+  const cPrev  = document.getElementById('cPrev');
+  const cNext  = document.getElementById('cNext');
+  let current = null, cIdx = 0, breathTimer = null;
+
+  function stopBreath() { if (breathTimer) { clearInterval(breathTimer); breathTimer = null; } }
+  function startBreath() {
+    stopBreath();
+    const circle = document.getElementById('breathCircle');
+    const label = document.getElementById('breathLabel');
+    let inhale = true;
+    const cycle = () => {
+      label.textContent = inhale ? (currentLang==='no'?'Pust inn …':'Breathe in …') : (currentLang==='no'?'Pust ut …':'Breathe out …');
+      circle.classList.toggle('big', inhale);
+      inhale = !inhale;
+    };
+    cycle();
+    breathTimer = setInterval(cycle, 4000);
+  }
+
+  function renderContentPage() {
+    if (!current) return;
+    const page = current.pages[cIdx];
+    cTitle.textContent = currentLang==='no' ? current.titleNo : current.titleEn;
+    // dots
+    cDots.innerHTML = '';
+    current.pages.forEach((_, i) => {
+      const d = document.createElement('span'); if (i===cIdx) d.classList.add('active'); cDots.appendChild(d);
+    });
+    // nav state
+    cPrev.disabled = cIdx === 0;
+    const last = cIdx === current.pages.length - 1;
+    cNext.querySelector('span').textContent = last ? (currentLang==='no'?'Ferdig':'Done') : (currentLang==='no'?'Neste':'Next');
+    // breath page vs normal
+    stopBreath();
+    if (page.breath) {
+      cEmoji.style.display = 'none'; cText.style.display = 'none'; cLink.style.display = 'none';
+      cBreath.style.display = 'flex';
+      startBreath();
+    } else {
+      cBreath.style.display = 'none';
+      cEmoji.style.display = ''; cEmoji.textContent = page.emoji;
+      cEmoji.classList.remove('c-emoji'); void cEmoji.offsetWidth; cEmoji.classList.add('c-emoji');
+      cText.style.display = '';
+      const txt = (currentLang==='no' ? page.no : page.en).replace(/\n/g,'<br>');
+      const alt = (currentLang==='no' ? page.en : page.no).replace(/\n/g,'<br>');
+      cText.innerHTML = txt + '<span class="c-en">' + alt + '</span>';
+      if (page.linkHref) {
+        cLink.style.display = ''; cLink.href = page.linkHref;
+        cLink.textContent = currentLang==='no' ? page.linkNo : page.linkEn;
+      } else { cLink.style.display = 'none'; }
+    }
+  }
+
+  function openContent(id) {
+    current = CONTENT[id]; if (!current) return;
+    cIdx = 0; contentOpen = true;
+    const cMedia = document.getElementById('cMedia');
+    if (current.video) {
+      cMedia.innerHTML = '<video src="' + current.video + '" poster="' + (current.poster || '') + '" controls playsinline preload="metadata"></video>';
+      cMedia.classList.add('show');
+    } else {
+      cMedia.classList.remove('show'); cMedia.innerHTML = '';
+    }
+    renderContentPage();
+    cOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeContent() {
+    stopBreath();
+    const cMedia = document.getElementById('cMedia');
+    cMedia.innerHTML = ''; cMedia.classList.remove('show');
+    cOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+    contentOpen = false; current = null;
+  }
+  cNext.addEventListener('click', () => {
+    if (!current) return;
+    if (cIdx < current.pages.length - 1) { cIdx++; renderContentPage(); } else { closeContent(); }
+  });
+  cPrev.addEventListener('click', () => { if (current && cIdx > 0) { cIdx--; renderContentPage(); } });
+  document.getElementById('contentClose').addEventListener('click', closeContent);
+  cOverlay.addEventListener('click', e => { if (e.target === cOverlay) closeContent(); });
+  document.addEventListener('keydown', e => {
+    if (!contentOpen) return;
+    if (e.key === 'Escape') closeContent();
+    else if (e.key === 'ArrowRight') cNext.click();
+    else if (e.key === 'ArrowLeft') cPrev.click();
+  });
+
+  document.querySelectorAll('.tile[data-content]').forEach(tile => {
+    tile.addEventListener('click', () => openContent(tile.dataset.content));
+  });
+
+  /* ---------- BOK-LESER (bilde + tekst + lyd / lydbok) ---------- */
+  let bookOpen = false;
+  let book = null, bkIdx = 0, bkBase = '', bkAudioOn = false, bkAudioEl = null, bkTimer = null;
+  const bookCache = {};
+  const bookOverlay = document.getElementById('bookOverlay');
+  const bkStage = document.getElementById('bkStage');
+  const bkTextEl = document.getElementById('bkText');
+  const bkCountEl = document.getElementById('bkCount');
+  const bkTitleEl = document.getElementById('bkTitle');
+  const bkPrevBtn = document.getElementById('bkPrev');
+  const bkNextBtn = document.getElementById('bkNext');
+  const bkAudioBtn = document.getElementById('bkAudio');
+
+  function bkAsset(p) {
+    if (!p) return '';
+    return /^(https?:|\/|images\/|videos\/|books\/)/.test(p) ? p : bkBase + p;
+  }
+  function bookHasAudio() { return !!(book && book.pages.some(p => p.audioNo || p.audioEn)); }
+  function pageAudioSrc(p) {
+    const s = currentLang === 'en' ? (p.audioEn || p.audioNo) : (p.audioNo || p.audioEn);
+    return s ? bkAsset(s) : '';
+  }
+
+  async function openBook(id) {
+    bkBase = 'books/' + id + '/';
+    try {
+      if (!bookCache[id]) {
+        const res = await fetch(bkBase + 'pages.json', { cache: 'no-cache' });
+        if (!res.ok) throw new Error(res.status);
+        bookCache[id] = await res.json();
+      }
+      book = bookCache[id];
+    } catch (err) { book = null; return; }
+    bkIdx = 0; bookOpen = true;
+    setBookAudio(false);
+    bkAudioBtn.disabled = !bookHasAudio();
+    bkAudioBtn.title = bookHasAudio() ? '' : (currentLang === 'no' ? 'Lyd kommer snart' : 'Audio coming soon');
+    renderBookPage();
+    bookOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function renderBookPage() {
+    if (!book) return;
+    const total = book.pages.length;
+    const p = book.pages[bkIdx];
+    bkTitleEl.textContent = currentLang === 'en' ? (book.titleEn || book.titleNo) : (book.titleNo || book.titleEn);
+    if (p.video) {
+      bkStage.innerHTML = '<video src="' + bkAsset(p.video) + '" poster="' + bkAsset(p.poster) + '" controls playsinline preload="metadata"></video>';
+      bkStage.style.display = 'block';
+    } else if (p.img) {
+      bkStage.innerHTML = '<img src="' + bkAsset(p.img) + '" alt="">';
+      bkStage.style.display = 'block';
+    } else {
+      bkStage.innerHTML = ''; bkStage.style.display = 'none';
+    }
+    bkTextEl.textContent = currentLang === 'en' ? (p.en || p.no || '') : (p.no || p.en || '');
+    bkCountEl.textContent = (currentLang === 'no' ? 'Side ' : 'Page ') + (bkIdx + 1) + ' / ' + total;
+    bkPrevBtn.disabled = bkIdx === 0;
+    bkNextBtn.disabled = bkIdx === total - 1;
+    if (bkAudioOn) playPageAudio();
+  }
+
+  function stopBookAudio() {
+    if (bkAudioEl) { bkAudioEl.onended = null; bkAudioEl.pause(); bkAudioEl = null; }
+    if (bkTimer) { clearTimeout(bkTimer); bkTimer = null; }
+  }
+  function bkAdvanceOrStop() {
+    if (bkAudioOn && bkIdx < book.pages.length - 1) { bkIdx++; renderBookPage(); }
+    else setBookAudio(false);
+  }
+  function playPageAudio() {
+    stopBookAudio();
+    const src = pageAudioSrc(book.pages[bkIdx]);
+    if (src) {
+      bkAudioEl = new Audio(src);
+      bkAudioEl.play().catch(() => {});
+      bkAudioEl.onended = bkAdvanceOrStop;
+    } else {
+      // ingen lyd for siden – hold lesetempo og bla videre
+      bkTimer = setTimeout(bkAdvanceOrStop, 3500);
+    }
+  }
+  function setBookAudio(on) {
+    bkAudioOn = on && bookHasAudio();
+    bkAudioBtn.classList.toggle('on', bkAudioOn);
+    bkAudioBtn.setAttribute('aria-pressed', bkAudioOn ? 'true' : 'false');
+    if (bkAudioOn) playPageAudio(); else stopBookAudio();
+  }
+  function closeBook() {
+    stopBookAudio(); bkAudioOn = false; bkAudioBtn.classList.remove('on');
+    bkStage.innerHTML = '';
+    bookOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+    bookOpen = false;
+  }
+
+  bkNextBtn.addEventListener('click', () => { if (book && bkIdx < book.pages.length - 1) { bkIdx++; renderBookPage(); } });
+  bkPrevBtn.addEventListener('click', () => { if (book && bkIdx > 0) { bkIdx--; renderBookPage(); } });
+  bkAudioBtn.addEventListener('click', () => setBookAudio(!bkAudioOn));
+  document.getElementById('bookClose').addEventListener('click', closeBook);
+  bookOverlay.addEventListener('click', e => { if (e.target === bookOverlay) closeBook(); });
+  document.addEventListener('keydown', e => {
+    if (!bookOpen) return;
+    if (e.key === 'Escape') closeBook();
+    else if (e.key === 'ArrowRight') bkNextBtn.click();
+    else if (e.key === 'ArrowLeft') bkPrevBtn.click();
+  });
+  document.querySelectorAll('.tile[data-book]').forEach(tile => {
+    tile.addEventListener('click', () => openBook(tile.dataset.book));
+  });
+</script>
+
+  <script src="/js/page-editor.js" defer></script>
+</body>
+</html>
