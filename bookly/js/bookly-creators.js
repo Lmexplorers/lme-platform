@@ -602,7 +602,7 @@
   tpl('workbooks', '🌸', 'tint-pink', 'Montessori hjemme', 'Montessori at Home', 'Montessori-inspirerte oppgaver for hjemmebruk.', 'Montessori-inspired tasks for home.', 'workbook', { category: 'montessori', topic: 'praktisk liv og sansene', age: '3-6', count: 10 });
 
   /* Flashkort (8) */
-  tpl('flashcards', '🐱', 'tint-pink', 'Dyrekort', 'Animal Cards', 'Trepartskort med dyr, Montessori-stil.', 'Three-part animal cards, Montessori style.', 'flashcards', { mode: 'threepart', theme: 'dyr' });
+  tpl('flashcards', '🐱', 'tint-pink', 'Dyrekort', 'Animal Cards', 'Trepartskort med dyr, Montessoristil.', 'Three-part animal cards, Montessori style.', 'flashcards', { mode: 'threepart', theme: 'dyr' });
   tpl('flashcards', '🌳', 'tint-lime', 'Naturkort', 'Nature Cards', 'Kort med ting fra naturen.', 'Cards with things from nature.', 'flashcards', { mode: 'threepart', theme: 'natur' });
   tpl('flashcards', '🍎', 'tint-lemon', 'Matkort', 'Food Cards', 'Mat og frukt med bilde og navn.', 'Food and fruit with picture and name.', 'flashcards', { mode: 'vocab', theme: 'mat' });
   tpl('flashcards', '🫶', 'tint-blue', 'Kroppskort', 'Body Cards', 'Kroppens deler som læringskort.', 'Parts of the body as learning cards.', 'flashcards', { mode: 'vocab', theme: 'kropp' });
@@ -663,7 +663,7 @@
 
   /* Hjemmeskole (8) */
   tpl('homeschool', '🏡', 'tint-lime', 'Hjemmeskole-uka', 'The Homeschool Week', 'Ukeplan tilpasset hjemmeundervisning.', 'Weekly plan adapted to homeschooling.', 'planner', { kind: 'weekly', weeks: 12 });
-  tpl('homeschool', '🌸', 'tint-pink', 'Montessori-morgener', 'Montessori Mornings', 'Arbeidsbok for rolige hjemmeøkter.', 'Workbook for calm sessions at home.', 'workbook', { category: 'montessori', topic: 'praktisk liv hjemme', age: '3-6', count: 10 });
+  tpl('homeschool', '🌸', 'tint-pink', 'Montessorimorgener', 'Montessori Mornings', 'Arbeidsbok for rolige hjemmeøkter.', 'Workbook for calm sessions at home.', 'workbook', { category: 'montessori', topic: 'praktisk liv hjemme', age: '3-6', count: 10 });
   tpl('homeschool', '🔬', 'tint-blue', 'Forskerklubben', 'The Science Club', 'Naturfag hjemme med undring.', 'Science at home with wonder.', 'workbook', { category: 'science', topic: 'eksperimenter og naturen hjemme', age: '6-9', count: 8 });
   tpl('homeschool', '📚', 'tint-lemon', 'Lesestund-loggen', 'Reading Log', 'Journal for daglig lesing.', 'A journal for daily reading.', 'journal', { kind: 'student', count: 21 });
   tpl('homeschool', '🧮', 'tint-blue', 'Matte i hverdagen', 'Everyday Math', 'Praktiske matteoppgaver hjemmefra.', 'Practical math from daily life.', 'workbook', { category: 'mathematics', topic: 'matte i hverdagen', age: '6-9', count: 10 });

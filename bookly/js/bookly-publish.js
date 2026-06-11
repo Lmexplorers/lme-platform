@@ -198,7 +198,7 @@
 
     /* --- Forfatterbio --- */
     out.bio = d.bio || (no
-      ? (d.author || fillIn()) + ' er Montessori-pedagog med over 20 års erfaring fra klasserom og skoleledelse, og skaperen av Little Montessori Explorers. ' +
+      ? (d.author || fillIn()) + ' er Montessoripedagog med over 20 års erfaring fra klasserom og skoleledelse, og skaperen av Little Montessori Explorers. ' +
         (d.author ? d.author.split(' ')[0] : 'Forfatteren') + ' lager ressurser som hjelper barn å lære gjennom undring, lek og praktisk utforsking.'
       : (d.author || fillIn()) + ' is a Montessori educator with over 20 years of classroom and school leadership experience, and the creator of Little Montessori Explorers. ' +
         (d.author ? d.author.split(' ')[0] : 'The author') + ' makes resources that help children learn through wonder, play and hands-on exploration.');
@@ -285,7 +285,7 @@
     out.features = no ? [
       'Digital nedlasting: PDF i høy oppløsning (300 dpi)',
       'Skriv ut hjemme eller hos trykkeri, så mange ganger du vil (privat bruk)',
-      'Laget av Montessori-pedagog med 20+ års erfaring',
+      'Laget av Montessoripedagog med 20+ års erfaring',
       'A4 og US Letter inkludert',
       'Umiddelbar levering: fil tilgjengelig rett etter kjøp',
     ] : [

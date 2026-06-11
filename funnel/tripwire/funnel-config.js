@@ -44,7 +44,7 @@ window.LME_FUNNEL = {
       overskrift: "Slik bygger du en Montessori-inntekt hjemmefra — med hjerte, strategi og AI",
       underoverskrift:
         "Last ned vår gratis guide og få en realistisk, varm og konkret vei fra " +
-        "Montessori-pedagogikk til en inntekt du kan bygge i ditt eget tempo — hjemmefra.",
+        "Montessoripedagogikk til en inntekt du kan bygge i ditt eget tempo — hjemmefra.",
       punkter: [
         "En realistisk vei fra pedagogikk til inntekt — uten luftslott",
         "Ferdige maler og refleksjonsoppgaver du fyller ut underveis",
@@ -65,7 +65,7 @@ window.LME_FUNNEL = {
       underoverskrift:
         "Du har akkurat fått startguiden. Vil du ta det et steg videre? " +
         "AI-guiden viser deg, steg for steg, hvordan du bruker AI til å lage " +
-        "Montessori-aktiviteter, ukeplaner og materiell — tilpasset barnets alder " +
+        "Montessoriaktiviteter, ukeplaner og materiell — tilpasset barnets alder " +
         "og det du har hjemme.",
       nedtellingTekst: "Tilbudet forsvinner om:",
       punkter: [
