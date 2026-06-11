@@ -14,7 +14,14 @@
  */
 
 // E-poster som automatisk blir eier (ikke kunde, uten abonnement).
-const OWNER_EMAILS = ["hei@littlemontessoriexplorers.com", "renateshobby@hotmail.com"];
+// Kan også settes/utvides med env-variabelen OWNER_EMAILS (komma-separert).
+const OWNER_EMAILS = [
+  "renate@lmexplorers.com",
+  "hei@lmexplorers.com",
+  "hello@lmexplorers.com",
+  "support@lmexplorers.com",
+  "renateshobby@hotmail.com",
+];
 
 function json(data, status, headers) {
   return new Response(JSON.stringify(data), {
@@ -130,7 +137,10 @@ export async function onRequestPost(context) {
     if (password.length < 6) return json({ error: "weak_password" }, 400);
     if (await getUser(env, email)) return json({ error: "exists" }, 409);
     const { salt, hash } = await hashPassword(password);
-    const role = OWNER_EMAILS.indexOf(email) !== -1 ? "owner" : "customer";
+    const owners = OWNER_EMAILS.map((e) => e.toLowerCase()).concat(
+      (env.OWNER_EMAILS || "").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean)
+    );
+    const role = owners.indexOf(email) !== -1 ? "owner" : "customer";
     const user = {
       id: crypto.randomUUID(),
       email,
