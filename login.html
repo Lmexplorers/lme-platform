@@ -150,16 +150,12 @@
     Trenger du hjelp? <a href="/help">Kontakt oss</a>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/js/lme-auth.js"></script>
   <script>
     (function () {
       'use strict';
-
-      var mode = 'login'; // 'login' | 'signup'
+      var mode = 'login';
       var params = new URLSearchParams(location.search);
       var next = params.get('next') || '/dashboard';
-      // Hindre open-redirect: bare interne stier tillatt
       if (!/^\/[^\/]/.test(next)) next = '/dashboard';
 
       var els = {
@@ -177,115 +173,62 @@
         magicBtn: document.getElementById('magicBtn'),
         msg: document.getElementById('msg')
       };
-
-      function showMsg(text, type) {
-        els.msg.textContent = text;
-        els.msg.className = 'lg-msg show ' + type;
-      }
-      function clearMsg() { els.msg.className = 'lg-msg'; }
-
-      function setMode(next_mode) {
-        mode = next_mode;
-        var isSignup = mode === 'signup';
-        els.tabLogin.classList.toggle('active', !isSignup);
-        els.tabSignup.classList.toggle('active', isSignup);
-        els.nameField.style.display = isSignup ? 'block' : 'none';
-        els.title.innerHTML = isSignup ? 'Opprett <em>konto</em>' : 'Velkommen <em>tilbake</em>';
-        els.sub.textContent = isSignup
-          ? 'Lag en konto for å komme i gang.'
-          : 'Logg inn for å fortsette til Little Montessori Explorers.';
-        els.submitBtn.textContent = isSignup ? 'Opprett konto' : 'Logg inn';
-        els.password.setAttribute('autocomplete', isSignup ? 'new-password' : 'current-password');
+      function showMsg(t, type){ els.msg.textContent = t; els.msg.className = 'lg-msg show ' + type; }
+      function clearMsg(){ els.msg.className = 'lg-msg'; }
+      function setMode(m){
+        mode = m; var s = m === 'signup';
+        els.tabLogin.classList.toggle('active', !s);
+        els.tabSignup.classList.toggle('active', s);
+        els.nameField.style.display = s ? 'block' : 'none';
+        els.title.innerHTML = s ? 'Opprett <em>konto</em>' : 'Velkommen <em>tilbake</em>';
+        els.sub.textContent = s ? 'Lag en konto for \u00e5 komme i gang.' : 'Logg inn for \u00e5 fortsette til Little Montessori Explorers.';
+        els.submitBtn.textContent = s ? 'Opprett konto' : 'Logg inn';
+        els.password.setAttribute('autocomplete', s ? 'new-password' : 'current-password');
         clearMsg();
       }
+      els.tabLogin.addEventListener('click', function(){ setMode('login'); });
+      els.tabSignup.addEventListener('click', function(){ setMode('signup'); });
 
-      els.tabLogin.addEventListener('click', function () { setMode('login'); });
-      els.tabSignup.addEventListener('click', function () { setMode('signup'); });
+      fetch('/api/auth/me', { credentials: 'same-origin' }).then(function(r){ return r.json(); })
+        .then(function(d){ if (d && d.user) location.replace(next); }).catch(function(){});
 
-      if (!window.LME) {
-        showMsg('Kunne ikke laste innloggingen. Sjekk nettforbindelsen og last siden på nytt.', 'error');
-        return;
-      }
+      function busy(on){ els.submitBtn.disabled = on; els.magicBtn.disabled = on; }
 
-      // Allerede innlogget? Send videre.
-      LME.getSession().then(function (session) {
-        if (session) location.replace(next);
-      });
-
-      function busy(on) {
-        els.submitBtn.disabled = on;
-        els.magicBtn.disabled = on;
-      }
-
-      els.form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        clearMsg();
-        var email = els.email.value.trim();
-        var password = els.password.value;
+      els.form.addEventListener('submit', function(e){
+        e.preventDefault(); clearMsg();
+        var email = els.email.value.trim(), password = els.password.value;
         if (!email || !password) { showMsg('Fyll inn e-post og passord.', 'error'); return; }
-        if (mode === 'signup' && password.length < 6) {
-          showMsg('Passordet må være minst 6 tegn.', 'error'); return;
+        if (mode === 'signup' && password.length < 6) { showMsg('Passordet m\u00e5 v\u00e6re minst 6 tegn.', 'error'); return; }
+        busy(true);
+        var url = mode === 'signup' ? '/api/auth/register' : '/api/auth/login';
+        fetch(url, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, password: password, name: els.name.value.trim() }) })
+          .then(function(r){ return r.json(); })
+          .then(function(d){
+            busy(false);
+            if (d && d.ok) { location.replace(next); return; }
+            showMsg(translateError(d && d.error), 'error');
+          })
+          .catch(function(){ busy(false); showMsg('Noe gikk galt. Pr\u00f8v igjen om litt.', 'error'); });
+      });
+
+      els.magicBtn.addEventListener('click', function(){
+        showMsg('Innloggingslenke p\u00e5 e-post kommer snart. Bruk e-post og passord inntil videre. \ud83d\udc9b', 'success');
+      });
+      els.forgotBtn.addEventListener('click', function(){
+        showMsg('Tilbakestilling av passord p\u00e5 e-post kommer snart. Trenger du hjelp n\u00e5, kontakt oss p\u00e5 /help.', 'success');
+      });
+
+      function translateError(code){
+        switch (code) {
+          case 'invalid': return 'Feil e-post eller passord.';
+          case 'exists': return 'Denne e-posten har allerede en konto. Pr\u00f8v \u00e5 logge inn.';
+          case 'weak_password': return 'Passordet m\u00e5 v\u00e6re minst 6 tegn.';
+          case 'bad_email': return 'Skriv inn en gyldig e-postadresse.';
+          case 'not_configured': return 'Innlogging er ikke koblet til databasen enn\u00e5. Pr\u00f8v igjen om litt.';
+          default: return 'Noe gikk galt. Pr\u00f8v igjen om litt.';
         }
-        busy(true);
-
-        var action = mode === 'signup'
-          ? LME.signUp(email, password, { full_name: els.name.value.trim() })
-          : LME.signIn(email, password);
-
-        action.then(function (res) {
-          busy(false);
-          if (res.error) { showMsg(translateError(res.error.message), 'error'); return; }
-          if (mode === 'signup' && res.data && res.data.user && !res.data.session) {
-            showMsg('Konto opprettet! Sjekk e-posten din for å bekrefte før du logger inn.', 'success');
-            return;
-          }
-          location.replace(next);
-        }).catch(function () {
-          busy(false);
-          showMsg('Noe gikk galt. Prøv igjen om litt.', 'error');
-        });
-      });
-
-      els.magicBtn.addEventListener('click', function () {
-        clearMsg();
-        var email = els.email.value.trim();
-        if (!email) { showMsg('Skriv inn e-posten din først.', 'error'); return; }
-        busy(true);
-        LME.signInMagicLink(email, location.origin + next).then(function (res) {
-          busy(false);
-          if (res.error) { showMsg(translateError(res.error.message), 'error'); return; }
-          showMsg('Lenke sendt! Sjekk e-posten din for å logge inn.', 'success');
-        }).catch(function () {
-          busy(false);
-          showMsg('Kunne ikke sende lenke. Prøv igjen om litt.', 'error');
-        });
-      });
-
-      els.forgotBtn.addEventListener('click', function () {
-        clearMsg();
-        var email = els.email.value.trim();
-        if (!email) { showMsg('Skriv inn e-posten din først, så sender vi en lenke.', 'error'); return; }
-        busy(true);
-        LME.resetPassword(email).then(function (res) {
-          busy(false);
-          if (res.error) { showMsg(translateError(res.error.message), 'error'); return; }
-          showMsg('Vi har sendt deg en lenke for å tilbakestille passordet.', 'success');
-        }).catch(function () {
-          busy(false);
-          showMsg('Kunne ikke sende lenke. Prøv igjen om litt.', 'error');
-        });
-      });
-
-      function translateError(m) {
-        m = (m || '').toLowerCase();
-        if (m.indexOf('invalid login') !== -1) return 'Feil e-post eller passord.';
-        if (m.indexOf('already registered') !== -1 || m.indexOf('already exists') !== -1) return 'Denne e-posten har allerede en konto. Prøv å logge inn.';
-        if (m.indexOf('email not confirmed') !== -1) return 'Bekreft e-posten din først (sjekk innboksen).';
-        if (m.indexOf('rate limit') !== -1 || m.indexOf('too many') !== -1) return 'For mange forsøk. Vent litt og prøv igjen.';
-        if (m.indexOf('password') !== -1 && m.indexOf('weak') !== -1) return 'Passordet er for svakt. Velg et sterkere passord.';
-        return 'Noe gikk galt: ' + m;
       }
-
       setMode('login');
     })();
   </script>
