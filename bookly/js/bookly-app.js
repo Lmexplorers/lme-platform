@@ -1287,7 +1287,9 @@
         '<a class="bk-btn primary sm" href="/login?next=' + encodeURIComponent('/bookly/') + '">' + (no ? 'Logg inn' : 'Sign in') + '</a>') +
       '</div>' +
       '<div class="bk-card" style="margin-bottom:14px"><h3>🤖 ' + (no ? 'AI-status' : 'AI status') + '</h3>' +
-      '<div id="setAiStatus" style="font-size:13px;margin-top:8px;color:var(--ink-soft)">' + (no ? 'Sjekker…' : 'Checking…') + '</div></div>' +
+      '<div id="setAiStatus" style="font-size:13px;margin-top:8px;color:var(--ink-soft)">' + (no ? 'Sjekker…' : 'Checking…') + '</div>' +
+      '<button class="bk-btn ghost sm" id="setImgTest" style="margin-top:10px">🧪 ' + (no ? 'Test bildegenerering' : 'Test image generation') + '</button>' +
+      '<div id="setImgTestOut" style="font-size:12px;margin-top:8px;line-height:1.5"></div></div>' +
       '<div class="bk-card" style="margin-bottom:14px"><h3>🌍 ' + t('language') + '</h3><div class="bk-chips" style="margin-top:8px">' +
       '<button class="bk-chip' + (BK.lang() === 'no' ? ' on' : '') + '" data-lng="no">🇳🇴 Norsk</button>' +
       '<button class="bk-chip' + (BK.lang() === 'en' ? ' on' : '') + '" data-lng="en">🌍 English</button></div></div>' +
@@ -1334,6 +1336,34 @@
         var el = $('#setAiStatus');
         if (el) el.textContent = no ? 'Fikk ikke kontakt med serveren.' : 'Could not reach the server.';
       });
+    if ($('#setImgTest')) $('#setImgTest').onclick = function () {
+      var btn = this, out = $('#setImgTestOut');
+      btn.disabled = true;
+      btn.innerHTML = '⏳ ' + (no ? 'Tester… (opptil ett minutt)' : 'Testing… (up to a minute)');
+      out.textContent = '';
+      fetch('/api/bookly/image', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: 'a single red apple on a white background, simple test image' }),
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          btn.disabled = false;
+          btn.innerHTML = '🧪 ' + (no ? 'Test bildegenerering' : 'Test image generation');
+          if (d && d.b64) {
+            out.innerHTML = '✅ <strong>' + (no ? 'Bildegenerering virker!' : 'Image generation works!') + '</strong><br>' +
+              '<img src="data:image/png;base64,' + d.b64 + '" alt="" style="width:90px;border-radius:8px;margin-top:6px">';
+          } else {
+            out.innerHTML = '❌ <strong>' + (no ? 'Feil fra OpenAI:' : 'Error from OpenAI:') + '</strong><br>' +
+              '<span style="color:var(--ink-soft)">' + esc((d && d.detail) || (d && d.error) || (no ? 'ukjent feil' : 'unknown error')) + '</span>';
+          }
+        })
+        .catch(function (e) {
+          btn.disabled = false;
+          btn.innerHTML = '🧪 ' + (no ? 'Test bildegenerering' : 'Test image generation');
+          out.textContent = '❌ ' + String((e && e.message) || e);
+        });
+    };
     $('#setExport').onclick = function () {
       var data = JSON.stringify({ projects: BK.state.projects, folders: BK.state.folders, savedPrompts: BK.state.savedPrompts, settings: BK.state.settings }, null, 2);
       BK.download('lme-bookly-bibliotek.json', new Blob([data], { type: 'application/json' }));

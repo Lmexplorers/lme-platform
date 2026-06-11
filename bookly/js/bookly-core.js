@@ -95,7 +95,9 @@
     el.textContent = msg;
     el.classList.add('show');
     clearTimeout(BK._toastT);
-    BK._toastT = setTimeout(function () { el.classList.remove('show'); }, 2400);
+    // Lange meldinger (feilforklaringer) skal rekke å leses
+    var ms = msg.length > 80 ? 9000 : 2400;
+    BK._toastT = setTimeout(function () { el.classList.remove('show'); }, ms);
   };
 
   /* ============ I18N ============ */
