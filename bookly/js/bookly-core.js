@@ -42,6 +42,32 @@
       if (typeof blobOrUrl !== 'string') URL.revokeObjectURL(a.href);
     }, 200);
   };
+  /* Les en bildefil, skaler ned og returner data-URL (JPEG).
+     Holder lagringen liten nok for localStorage og KV. */
+  BK.readImage = function (file, maxDim) {
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();
+      reader.onerror = function () { reject(new Error('read_failed')); };
+      reader.onload = function () {
+        var img = new Image();
+        img.onerror = function () { reject(new Error('bad_image')); };
+        img.onload = function () {
+          var sc = Math.min(1, (maxDim || 1400) / Math.max(img.width, img.height));
+          var cv = document.createElement('canvas');
+          cv.width = Math.round(img.width * sc);
+          cv.height = Math.round(img.height * sc);
+          var ctx = cv.getContext('2d');
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, cv.width, cv.height);
+          ctx.drawImage(img, 0, 0, cv.width, cv.height);
+          resolve(cv.toDataURL('image/jpeg', 0.86));
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
   BK.copyText = function (text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       return navigator.clipboard.writeText(text).catch(function () { fallback(); });

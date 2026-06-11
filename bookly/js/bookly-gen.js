@@ -620,15 +620,23 @@
 
   R.text = function (p, pg, i, n) {
     var d = pg.data || {};
-    return sheet(p, pg, i, n, '<div style="white-space:pre-wrap;font-size:11pt;line-height:1.8">' + esc(d.text || '') + '</div>');
+    return sheet(p, pg, i, n,
+      '<div style="display:flex;flex-direction:column;height:100%;gap:5mm">' +
+      '<div style="white-space:pre-wrap;font-size:11pt;line-height:1.8">' + esc(d.text || '') + '</div>' +
+      (d.image ? '<div style="flex:1;display:flex;align-items:center;justify-content:center;min-height:0">' +
+        '<img src="' + d.image + '" alt="" style="max-width:100%;max-height:100%;border-radius:4mm;object-fit:contain"/></div>' : '') +
+      '</div>');
   };
 
   R.story = function (p, pg, i, n) {
     var d = pg.data || {};
+    var illus = d.image
+      ? '<div style="flex:1.4;display:flex;align-items:center;justify-content:center;min-height:0">' +
+        '<img src="' + d.image + '" alt="" style="max-width:100%;max-height:100%;border-radius:4mm;object-fit:contain"/></div>'
+      : '<div class="illus-box" style="flex:1.4"><div style="font-size:10mm">🎨</div>' +
+        '<div><strong>' + (BK.lang() === 'no' ? 'Illustrasjon' : 'Illustration') + ':</strong> ' + esc(d.illustration || '') + '</div></div>';
     return sheet(p, pg, i, n,
-      '<div style="display:flex;flex-direction:column;height:100%;gap:5mm">' +
-      '<div class="illus-box" style="flex:1.4"><div style="font-size:10mm">🎨</div>' +
-      '<div><strong>' + (BK.lang() === 'no' ? 'Illustrasjon' : 'Illustration') + ':</strong> ' + esc(d.illustration || '') + '</div></div>' +
+      '<div style="display:flex;flex-direction:column;height:100%;gap:5mm">' + illus +
       '<div class="story-text" style="flex:1">' + esc(d.text || '') + '</div>' +
       '</div>', {});
   };
@@ -900,6 +908,11 @@
   R.colorprompt = function (p, pg, i, n) {
     var d = pg.data || {};
     var lang = BK.lang();
+    if (d.image) {
+      return sheet(p, pg, i, n,
+        '<div style="height:100%;display:flex;align-items:center;justify-content:center">' +
+        '<img src="' + d.image + '" alt="" style="max-width:100%;max-height:100%;object-fit:contain"/></div>');
+    }
     return sheet(p, pg, i, n,
       '<div class="illus-box" style="height:100%;border-color:#c8b2bd;background:#fff">' +
       '<div style="font-size:12mm">🖍️</div>' +

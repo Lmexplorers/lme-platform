@@ -588,6 +588,14 @@
         fields.push('<div class="bk-field"><label>Hook</label><input id="edHook" type="text" value="' + esc(d.hook || '') + '"></div>');
         fields.push('<div class="bk-field full"><label>' + (no ? 'Baksidetekst' : 'Back cover text') + '</label><textarea id="edBack" rows="3">' + esc(d.text || '') + '</textarea></div>');
       }
+      var canImage = ['story', 'text', 'intro', 'colorprompt', 'cover'].indexOf(pgObj.kind) !== -1;
+      if (canImage) {
+        fields.push('<div class="bk-field full"><label>🖼️ ' + (no ? 'Bilde på siden' : 'Image on this page') + '</label>' +
+          '<input id="edImg" type="file" accept="image/*">' +
+          '<div class="hint">' + (no ? 'Eget foto eller AI-illustrasjon. Bildet erstatter illustrasjonsboksen.' : 'Your own photo or AI illustration. The image replaces the illustration box.') + '</div>' +
+          (d.image ? '<div><button class="bk-btn quiet sm" id="edImgRm" style="margin-top:4px">🗑️ ' + (no ? 'Fjern bilde' : 'Remove image') + '</button></div>' : '') +
+          '</div>');
+      }
       var regen = ['mandala', 'maze', 'wordsearch', 'sudoku', 'spotdiff', 'findobject', 'numberpuzzle'].indexOf(pgObj.kind) !== -1;
       var sol = ['sudoku', 'crossword', 'numberpuzzle'].indexOf(pgObj.kind) !== -1;
       ed.innerHTML = '<div class="bk-form">' + fields.join('') + '</div>' +
@@ -627,6 +635,23 @@
       };
       if ($('#edSol')) $('#edSol').onclick = function () {
         d.showSolution = !d.showSolution;
+        renderStage();
+      };
+      if ($('#edImg')) $('#edImg').onchange = function () {
+        var file = this.files && this.files[0];
+        if (!file) return;
+        BK.readImage(file, 1400).then(function (dataUrl) {
+          d.image = dataUrl;
+          BK.touch(p);
+          BK.toast(t('saved'));
+          renderStage();
+        }, function () {
+          BK.toast(no ? 'Kunne ikke lese bildet. Prøv en JPG eller PNG.' : 'Could not read the image. Try a JPG or PNG.');
+        });
+      };
+      if ($('#edImgRm')) $('#edImgRm').onclick = function () {
+        d.image = null;
+        BK.touch(p);
         renderStage();
       };
       $('#edDelPg').onclick = function () {
