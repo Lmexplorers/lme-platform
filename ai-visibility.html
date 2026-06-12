@@ -425,7 +425,7 @@ function busy(btnId,on){
   if(on){b.dataset.label=b.textContent;b.disabled=true;b.innerHTML='<span class="spinner"></span> '+t('loading');}
   else{b.disabled=false;b.textContent=b.dataset.label;}
 }
-function fail(outId,e){var msg=(e&&e.message)?e.message:'';document.getElementById(outId).innerHTML=`<p style="color:var(--cerise)">${t('error')}<br><small style="color:var(--ink-muted)">${msg} · ${WORKER_BASE}</small></p>`;}
+function fail(outId,e){if(e)console.error('AI Visibility:',e,'·',WORKER_BASE);document.getElementById(outId).innerHTML=`<p style="color:var(--cerise)">${t('error')}</p>`;}
 function copyText(txt,el){navigator.clipboard.writeText(txt);const o=el.textContent;el.textContent=t('copied');setTimeout(()=>el.textContent=o,1200);}
 function copyBtn(txt){return `<button class="copy-btn" onclick='copyText(${JSON.stringify(txt)},this)'>${t('copy')}</button>`;}
 
