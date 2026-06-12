@@ -4436,6 +4436,12 @@
   // The CSS bundle used in every exported page. Mirrors the live preview look.
   function getExportCSS() {
     return `
+@font-face {
+  font-family: 'Sasson Montessori';
+  src: url('https://lmexplorers.com/fonts/SassoonMontessori.woff2') format('woff2'),
+       url('https://lmexplorers.com/fonts/SassoonMontessori.ttf') format('truetype');
+  font-weight: normal; font-style: normal; font-display: swap;
+}
 :root {
   --pink-soft: #F8D7DA;
   --pink-deep: #EE9CAD;
@@ -5386,9 +5392,9 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
       id: 'playpen-inter',
       name: 'LME Standard',
       display: 'Playpen Sans',
-      body: 'Playpen Sans',
+      body: 'Sasson Montessori',
       displayWeights: '400;500;600;700;800',
-      bodyWeights: '400;500;600;700',
+      bodyWeights: '400',
       sample: 'Velkommen til LME'
     },
     {
@@ -5495,11 +5501,10 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
     // Fonter — bruk frie overstyringer hvis satt, ellers font-paret
     const dispName = brand.fontDisplay || font.display;
     const bodyName = brand.fontBody || font.body;
-    ensureFontLoaded(font);
     ensureFontFamilyLoaded(dispName);
     ensureFontFamilyLoaded(bodyName);
     root.setProperty('--font-display', `'${dispName}', system-ui, sans-serif`);
-    root.setProperty('--font-body', `'${bodyName}', system-ui, sans-serif`);
+    root.setProperty('--font-body', `'${bodyName}', 'Sasson Montessori', system-ui, sans-serif`);
     root.setProperty('--heading-weight', brand.headingWeight || '700');
     root.setProperty('--font-scale', brand.fontScale || '1');
 
@@ -5511,18 +5516,13 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
 
   const loadedFonts = new Set();
   function ensureFontLoaded(font) {
-    if (loadedFonts.has(font.id)) return;
-    loadedFonts.add(font.id);
-    const displayQuery = encodeURIComponent(font.display) + ':wght@' + font.displayWeights;
-    const bodyQuery = encodeURIComponent(font.body) + ':wght@' + font.bodyWeights;
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = `https://fonts.googleapis.com/css2?family=${displayQuery}&family=${bodyQuery}&display=swap`;
-    document.head.appendChild(link);
+    ensureFontFamilyLoaded(font.display);
+    ensureFontFamilyLoaded(font.body);
   }
 
   // Frittstående fontvalg for fri miksing (overskrift + brødtekst hver for seg)
   const FONT_CHOICES = [
+    { name: 'Sasson Montessori', weights: '400' },
     { name: 'Playpen Sans', weights: '400;500;600;700;800' },
     { name: 'Nunito', weights: '400;600;700;800' },
     { name: 'Comfortaa', weights: '400;500;600;700' },
@@ -5541,6 +5541,8 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
   ];
   function ensureFontFamilyLoaded(name) {
     if (!name) return;
+    // Sasson Montessori er en lokal font (@font-face), finnes ikke hos Google
+    if (name === 'Sasson Montessori') return;
     const id = 'fam:' + name;
     if (loadedFonts.has(id)) return;
     loadedFonts.add(id);
