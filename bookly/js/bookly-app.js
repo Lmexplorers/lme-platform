@@ -657,6 +657,9 @@
             }
             var st2 = BK.state.settings;
             return '<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:flex-end">' +
+              sel('edImgProvider', no ? 'Motor' : 'Engine',
+                [['openai', 'OpenAI'], ['gemini', 'Google Gemini'], ['stability', 'Stability AI']],
+                st2.imgProvider || 'openai') +
               sel('edImgStyle', no ? 'Stil' : 'Style',
                 Object.keys(IMG_STYLES).map(function (k) { return [k, L(IMG_STYLES[k].name)]; }), st2.imgStyle || 'pixar') +
               sel('edImgSize', no ? 'Format' : 'Format',
@@ -777,6 +780,7 @@
         btn.disabled = true;
         btn.innerHTML = '⏳ ' + (no ? 'Genererer bilde… (kan ta opptil ett minutt)' : 'Generating image… (can take up to a minute)');
         var st2 = BK.state.settings;
+        if ($('#edImgProvider')) st2.imgProvider = $('#edImgProvider').value;
         if ($('#edImgStyle')) st2.imgStyle = $('#edImgStyle').value;
         if ($('#edImgSize')) st2.imgSize = $('#edImgSize').value;
         if ($('#edImgQ')) st2.imgQuality = $('#edImgQ').value;
@@ -850,6 +854,7 @@
         BK.save(true);
         if ($('#edPromptSync')) $('#edPromptSync').click(); // bygg prompten med ny stil
       };
+      if ($('#edImgProvider')) $('#edImgProvider').onchange = function () { BK.state.settings.imgProvider = this.value; BK.save(true); };
       if ($('#edImgSize')) $('#edImgSize').onchange = function () { BK.state.settings.imgSize = this.value; BK.save(true); };
       if ($('#edImgN')) $('#edImgN').onchange = function () { BK.state.settings.imgN = parseInt(this.value, 10) || 1; BK.save(true); };
       if ($('#edPromptSync')) $('#edPromptSync').onclick = function () {
@@ -1685,8 +1690,12 @@
         el.innerHTML =
           row(s.text, no ? 'Tekstgenerering (bøker)' : 'Text generation (books)',
             no ? 'Legg inn ANTHROPIC_API_KEY i Cloudflare → prosjektet → Settings → Variables and Secrets.' : 'Add ANTHROPIC_API_KEY in Cloudflare → project → Settings → Variables and Secrets.') +
-          row(s.image, no ? 'Bildegenerering' : 'Image generation',
-            no ? 'Legg inn OPENAI_API_KEY (Production) i Cloudflare → prosjektet → Settings → Variables and Secrets, og kjør "Retry deployment" etterpå.' : 'Add OPENAI_API_KEY (Production) in Cloudflare → project → Settings → Variables and Secrets, then "Retry deployment".') +
+          row((s.providers || {}).openai, no ? 'Bildemotor: OpenAI' : 'Image engine: OpenAI',
+            no ? 'Legg inn OPENAI_API_KEY i Cloudflare → Settings → Variables and Secrets.' : 'Add OPENAI_API_KEY in Cloudflare → Settings → Variables and Secrets.') +
+          row((s.providers || {}).gemini, no ? 'Bildemotor: Google Gemini' : 'Image engine: Google Gemini',
+            no ? 'Valgfritt: legg inn GEMINI_API_KEY (fra aistudio.google.com) for Gemini-bilder.' : 'Optional: add GEMINI_API_KEY (from aistudio.google.com) for Gemini images.') +
+          row((s.providers || {}).stability, no ? 'Bildemotor: Stability AI' : 'Image engine: Stability AI',
+            no ? 'Valgfritt: legg inn STABILITY_API_KEY (fra platform.stability.ai).' : 'Optional: add STABILITY_API_KEY (from platform.stability.ai).') +
           row(s.kv, no ? 'Skylagring (KV)' : 'Cloud storage (KV)',
             no ? 'KV-bindingen BUILDER_KV mangler på prosjektet.' : 'The BUILDER_KV binding is missing on the project.');
       })

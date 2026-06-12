@@ -552,6 +552,7 @@
           refs: refs || [],
           quality: quality || (BK.state.settings.imgQuality || 'medium'),
           n: n || 1,
+          provider: BK.state.settings.imgProvider || 'openai',
         }),
       })
         .then(function (r) { return r.json(); })

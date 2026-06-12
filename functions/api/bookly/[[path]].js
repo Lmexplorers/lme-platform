@@ -83,7 +83,12 @@ export async function onRequestGet(context) {
     return json({
       text: !!(env.ANTHROPIC_API_KEY || env.OPENAI_API_KEY),
       textProvider: env.ANTHROPIC_API_KEY ? "anthropic" : (env.OPENAI_API_KEY ? "openai" : null),
-      image: !!env.OPENAI_API_KEY,
+      image: !!(env.OPENAI_API_KEY || env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.STABILITY_API_KEY),
+      providers: {
+        openai: !!env.OPENAI_API_KEY,
+        gemini: !!(env.GEMINI_API_KEY || env.GOOGLE_API_KEY),
+        stability: !!env.STABILITY_API_KEY,
+      },
       kv: !!env.BUILDER_KV,
     }, 200);
   }
@@ -108,20 +113,84 @@ export async function onRequestPost(context) {
   let body;
   try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
 
-  /* ---------- Bildegenerering (OpenAI Images) ---------- */
+  /* ---------- Bildegenerering (OpenAI / Google Gemini / Stability AI) ---------- */
   if (path === "image") {
     const prompt = String(body.prompt || "").slice(0, 3000);
     if (!prompt) return json({ error: "no_prompt" }, 400);
-    if (!env.OPENAI_API_KEY) return json({ error: "image_unavailable" }, 200);
     const size = ["1024x1024", "1024x1536", "1536x1024"].indexOf(body.size) !== -1 ? body.size : "1024x1024";
     const quality = ["low", "medium", "high"].indexOf(body.quality) !== -1
       ? body.quality : (env.BOOKLY_IMAGE_QUALITY || "medium");
     const n = Math.min(3, Math.max(1, parseInt(body.n, 10) || 1));
+    const refs = Array.isArray(body.refs) ? body.refs.slice(0, 3) : [];
+    const provider = ["openai", "gemini", "stability"].indexOf(body.provider) !== -1 ? body.provider : "openai";
     let lastErr = null;
+
+    const fullPrompt = (refs.length && prompt.indexOf("CRITICAL") === -1) ? prompt + REF_LOCK : prompt;
+
+    /* --- Google Gemini (utmerket på karakter-konsistens med referanser) --- */
+    if (provider === "gemini") {
+      const gKey = env.GEMINI_API_KEY || env.GOOGLE_API_KEY;
+      if (!gKey) return json({ error: "image_unavailable", detail: "GEMINI_API_KEY mangler i Cloudflare-innstillingene" }, 200);
+      const parts = [{ text: fullPrompt }];
+      refs.forEach((r) => {
+        const m = /^data:(image\/(?:png|jpe?g|webp));base64,([A-Za-z0-9+/=]+)$/.exec(r || "");
+        if (m) parts.push({ inline_data: { mime_type: m[1], data: m[2] } });
+      });
+      const model = env.BOOKLY_GEMINI_MODEL || "gemini-2.5-flash-image";
+      async function oneGemini() {
+        const res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-goog-api-key": gKey },
+          body: JSON.stringify({
+            contents: [{ parts }],
+            generationConfig: { responseModalities: ["TEXT", "IMAGE"] },
+          }),
+        });
+        const data = await res.json();
+        const outParts = (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) || [];
+        const imgPart = outParts.find((pt) => (pt.inlineData && pt.inlineData.data) || (pt.inline_data && pt.inline_data.data));
+        if (res.ok && imgPart) return (imgPart.inlineData || imgPart.inline_data).data;
+        throw new Error((data.error && data.error.message) || ("HTTP " + res.status));
+      }
+      try {
+        const b64s = await Promise.all(Array.from({ length: n }, oneGemini));
+        return json({ b64: b64s[0], b64s }, 200);
+      } catch (e) {
+        return json({ error: "image_failed", detail: String((e && e.message) || e).slice(0, 300) }, 200);
+      }
+    }
+
+    /* --- Stability AI (Stable Image Core) --- */
+    if (provider === "stability") {
+      if (!env.STABILITY_API_KEY) return json({ error: "image_unavailable", detail: "STABILITY_API_KEY mangler i Cloudflare-innstillingene" }, 200);
+      const aspect = size === "1024x1536" ? "2:3" : size === "1536x1024" ? "3:2" : "1:1";
+      async function oneStability() {
+        const fd = new FormData();
+        fd.append("prompt", fullPrompt);
+        fd.append("output_format", "png");
+        fd.append("aspect_ratio", aspect);
+        const res = await fetch("https://api.stability.ai/v2beta/stable-image/generate/core", {
+          method: "POST",
+          headers: { "Authorization": "Bearer " + env.STABILITY_API_KEY, "Accept": "application/json" },
+          body: fd,
+        });
+        const data = await res.json();
+        if (res.ok && data.image) return data.image;
+        throw new Error((data.errors && data.errors.join("; ")) || data.message || ("HTTP " + res.status));
+      }
+      try {
+        const b64s = await Promise.all(Array.from({ length: n }, oneStability));
+        return json({ b64: b64s[0], b64s }, 200);
+      } catch (e) {
+        return json({ error: "image_failed", detail: String((e && e.message) || e).slice(0, 300) }, 200);
+      }
+    }
+
+    /* --- OpenAI (standard) --- */
+    if (!env.OPENAI_API_KEY) return json({ error: "image_unavailable" }, 200);
 
     /* Med referansebilder: bruk edits-endepunktet, som tar inn bilder og
        bevarer karakterenes utseende (krever gpt-image-1). */
-    const refs = Array.isArray(body.refs) ? body.refs.slice(0, 3) : [];
     if (refs.length) {
       try {
         const fd = new FormData();
