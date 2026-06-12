@@ -114,6 +114,8 @@ export async function onRequestPost(context) {
     if (!prompt) return json({ error: "no_prompt" }, 400);
     if (!env.OPENAI_API_KEY) return json({ error: "image_unavailable" }, 200);
     const size = ["1024x1024", "1024x1536", "1536x1024"].indexOf(body.size) !== -1 ? body.size : "1024x1024";
+    const quality = ["low", "medium", "high"].indexOf(body.quality) !== -1
+      ? body.quality : (env.BOOKLY_IMAGE_QUALITY || "medium");
     let lastErr = null;
 
     /* Med referansebilder: bruk edits-endepunktet, som tar inn bilder og
@@ -125,7 +127,7 @@ export async function onRequestPost(context) {
         fd.append("model", env.BOOKLY_IMAGE_MODEL || "gpt-image-1");
         fd.append("prompt", prompt.indexOf("CRITICAL") !== -1 ? prompt : prompt + REF_LOCK);
         fd.append("size", size);
-        fd.append("quality", env.BOOKLY_IMAGE_QUALITY || "medium");
+        fd.append("quality", quality);
         fd.append("n", "1");
         let added = 0;
         for (let i = 0; i < refs.length; i++) {
@@ -165,7 +167,7 @@ export async function onRequestPost(context) {
           model: env.BOOKLY_IMAGE_MODEL || "gpt-image-1",
           prompt: prompt,
           size: size,
-          quality: env.BOOKLY_IMAGE_QUALITY || "medium",
+          quality: quality,
           n: 1,
         }),
       });

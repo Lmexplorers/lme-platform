@@ -540,12 +540,12 @@
 
     /* Bildegenerering: prompt -> nedskalert JPEG-data-URL.
        Kaster 'image_unavailable' hvis ingen bildenøkkel er satt opp. */
-    image: function (prompt, size, refs) {
+    image: function (prompt, size, refs, quality) {
       return fetch('/api/bookly/image', {
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: prompt, size: size || '1024x1024', refs: refs || [] }),
+        body: JSON.stringify({ prompt: prompt, size: size || '1024x1024', refs: refs || [], quality: quality || (BK.state.settings.imgQuality || 'medium') }),
       })
         .then(function (r) { return r.json(); })
         .then(function (d) {

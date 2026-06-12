@@ -636,6 +636,10 @@
           '<div class="hint">' + (no ? 'Det er denne teksten som styrer bildet. Endrer du beskrivelsen over, trykk ↻ for å oppdatere prompten.' : 'This text controls the image. If you change the description above, press ↻ to refresh the prompt.') + '</div>' +
           '<div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">' +
           '<button class="bk-btn primary sm" id="edGenImg">🎨 ' + (no ? 'Generer bilde' : 'Generate image') + '</button>' +
+          '<select id="edImgQ" style="border:1.5px solid var(--line);border-radius:999px;padding:5px 10px;font-size:12px;background:var(--surface)">' +
+          [['low', no ? '💸 Utkast (billigst)' : '💸 Draft (cheapest)'], ['medium', no ? 'Standard' : 'Standard'], ['high', no ? '✨ Høy (endelig)' : '✨ High (final)']].map(function (q) {
+            return '<option value="' + q[0] + '"' + ((BK.state.settings.imgQuality || 'medium') === q[0] ? ' selected' : '') + '>' + q[1] + '</option>';
+          }).join('') + '</select>' +
           '<button class="bk-btn ghost sm" id="edPromptSync">↻ ' + (no ? 'Hent fra beskrivelsen' : 'From the description') + '</button>' +
           '<button class="bk-btn ghost sm" id="edCopyPrompt">' + t('copy') + '</button>' +
           (BK.state.user && BK.state.user.role === 'owner'
@@ -740,7 +744,9 @@
         var btn = this;
         btn.disabled = true;
         btn.innerHTML = '⏳ ' + (no ? 'Genererer bilde… (kan ta opptil ett minutt)' : 'Generating image… (can take up to a minute)');
-        BK.ai.image(promptTxt, null, (p.refs && p.refs.length) ? p.refs : null).then(function (dataUrl) {
+        var q = $('#edImgQ') ? $('#edImgQ').value : null;
+        if (q) { BK.state.settings.imgQuality = q; }
+        BK.ai.image(promptTxt, null, (p.refs && p.refs.length) ? p.refs : null, q).then(function (dataUrl) {
           d.image = dataUrl;
           BK.touch(p);
           BK.toast(no ? 'Bildet er lagt på siden!' : 'The image is on the page!');
