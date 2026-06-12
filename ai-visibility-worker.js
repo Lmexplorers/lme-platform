@@ -155,7 +155,7 @@ async function handlePing(env, origin) {
           "anthropic-version": "2023-06-01",
         },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
+          model: "claude-sonnet-4-6",
           max_tokens: 8,
           messages: [{ role: "user", content: "hi" }],
         }),
@@ -180,7 +180,7 @@ async function callClaude(env, system, userPrompt, maxTokens) {
       "anthropic-version": "2023-06-01",
     },
     body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-6",
       max_tokens: maxTokens || 2048,
       system,
       messages: [{ role: "user", content: userPrompt }],

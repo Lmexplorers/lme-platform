@@ -425,7 +425,7 @@ function busy(btnId,on){
   if(on){b.dataset.label=b.textContent;b.disabled=true;b.innerHTML='<span class="spinner"></span> '+t('loading');}
   else{b.disabled=false;b.textContent=b.dataset.label;}
 }
-function fail(outId){document.getElementById(outId).innerHTML=`<p style="color:var(--cerise)">${t('error')}</p>`;}
+function fail(outId,e){var msg=(e&&e.message)?e.message:'';document.getElementById(outId).innerHTML=`<p style="color:var(--cerise)">${t('error')}<br><small style="color:var(--ink-muted)">${msg} · ${WORKER_BASE}</small></p>`;}
 function copyText(txt,el){navigator.clipboard.writeText(txt);const o=el.textContent;el.textContent=t('copied');setTimeout(()=>el.textContent=o,1200);}
 function copyBtn(txt){return `<button class="copy-btn" onclick='copyText(${JSON.stringify(txt)},this)'>${t('copy')}</button>`;}
 
@@ -439,7 +439,7 @@ async function runKeywords(){
       `<h4 class="meta-row">HEAD</h4>${(d.head||[]).map(chip).join('')}
        <h4 class="meta-row" style="margin-top:10px">LONG-TAIL</h4>${(d.longtail||[]).map(chip).join('')}
        <h4 class="meta-row" style="margin-top:10px">${LANG==='en'?'QUESTIONS':'SPØRSMÅL'}</h4>${(d.questions||[]).map(chip).join('')}`;
-  }catch(e){fail('kw-out');}finally{busy('kw-btn',false);bumpScore();}
+  }catch(e){fail('kw-out',e);}finally{busy('kw-btn',false);bumpScore();}
 }
 function toArticle(kw){document.getElementById('a-kw').value=kw;showTab('article');window.scrollTo({top:0,behavior:'smooth'});}
 
@@ -450,7 +450,7 @@ async function runQuestions(){
     const d=parseJSON(await api('/ai/questions',{topic}));
     document.getElementById('q-out').innerHTML=(d.questions||[]).map(q=>
       `<div class="card-out"><p><b>${q.q}</b></p><div class="meta-row">${q.intent||''} ${copyBtn(q.q)}</div></div>`).join('');
-  }catch(e){fail('q-out');}finally{busy('q-btn',false);}
+  }catch(e){fail('q-out',e);}finally{busy('q-btn',false);}
 }
 
 /* ---- Article ---- */
@@ -473,7 +473,7 @@ async function runArticle(){
     html+=`<button class="btn secondary" id="pub-btn" onclick="publishArticle()">🚀 ${LANG==='en'?'Publish to site':'Publiser til siden'}</button>
       <span id="pub-status" class="meta-row" style="margin-left:10px"></span>`;
     document.getElementById('a-out').innerHTML=html;
-  }catch(e){fail('a-out');}finally{busy('a-btn',false);bumpScore('articles');}
+  }catch(e){fail('a-out',e);}finally{busy('a-btn',false);bumpScore('articles');}
 }
 
 /* Publiser artikkel -> worker rendrer HTML og committer rett til GitHub (Cloudflare Pages deployer) */
@@ -499,7 +499,7 @@ async function runFaq(){
     const sc=await api('/ai/schema',{type:'faq',data:{faq:lastFaq}});
     html+=`<div class="card-out"><h4>FAQ Schema (JSON-LD) ${copyBtn(sc.jsonld)}</h4><pre class="code">${esc(sc.jsonld)}</pre></div>`;
     document.getElementById('f-out').innerHTML=html;
-  }catch(e){fail('f-out');}finally{busy('f-btn',false);bumpScore('faqs');}
+  }catch(e){fail('f-out',e);}finally{busy('f-btn',false);bumpScore('faqs');}
 }
 
 /* ---- Schema (standalone) ---- */
@@ -516,7 +516,7 @@ async function runSchema(){
   try{
     const sc=await api('/ai/schema',{type,data:sample});
     document.getElementById('sc-out').innerHTML=`<div class="card-out"><h4>${type} ${copyBtn(sc.jsonld)}</h4><pre class="code">${esc(sc.jsonld)}</pre></div>`;
-  }catch(e){fail('sc-out');}finally{busy('sc-btn',false);}
+  }catch(e){fail('sc-out',e);}finally{busy('sc-btn',false);}
 }
 
 /* ---- Pinterest ---- */
@@ -530,7 +530,7 @@ async function runPinterest(){
         <div class="meta-row"><b>Beskrivelse:</b> ${d.pinDescription||''} ${copyBtn(d.pinDescription||'')}</div></div>
        <div class="card-out"><h4>Pin-idéer</h4><p>${(d.pinIdeas||[]).map(x=>'• '+x).join('\n')}</p></div>
        <div class="card-out"><h4>Bilde-prompt (Canva) ${copyBtn(d.imagePrompt||'')}</h4><p>${d.imagePrompt||''}</p></div>`;
-  }catch(e){fail('p-out');}finally{busy('p-btn',false);}
+  }catch(e){fail('p-out',e);}finally{busy('p-btn',false);}
 }
 
 /* ---- Repurpose ---- */
@@ -542,7 +542,7 @@ async function runRepurpose(){
     document.getElementById('r-out').innerHTML=
       row('📝 Blogg',d.blog)+row('📘 Facebook',d.facebook)+row('📸 Instagram',d.instagram)+
       row('📌 Pinterest',d.pinterest)+row('🎵 TikTok',d.tiktok)+row('🎬 Reel-manus',d.reelScript)+row('💌 E-post',d.email);
-  }catch(e){fail('r-out');}finally{busy('r-btn',false);}
+  }catch(e){fail('r-out',e);}finally{busy('r-btn',false);}
 }
 
 function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
