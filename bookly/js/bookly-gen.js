@@ -558,8 +558,10 @@
   function sheet(project, page, idx, total, bodyHtml, opts) {
     opts = opts || {};
     var size = BK.sizeOf(project);
+    var headSizes = { s: '12pt', m: '16pt', l: '22pt', xl: '28pt' };
+    var hs = headSizes[(page.data && page.data.headSize) || 'm'] || '16pt';
     var head = opts.noHead ? '' :
-      '<div class="pg-head">' + esc(page.title || '') + '</div>' +
+      '<div class="pg-head" style="font-size:' + hs + '">' + esc(page.title || '') + '</div>' +
       (page.data && page.data.sub ? '<div class="pg-sub">' + esc(page.data.sub) + '</div>' : '');
     var foot = opts.noFoot ? '' :
       '<div class="pg-foot"><span>' + esc(project.title) + '</span><span>' + (idx + 1) + ' / ' + total + '</span></div>';
@@ -642,6 +644,20 @@
   };
 
   R.intro = R.text;
+
+  /* Helsides bildeside: for egne design, f.eks. eksportert fra Canva */
+  R.fullimage = function (p, pg, i, n) {
+    var d = pg.data || {};
+    var size = BK.sizeOf(p);
+    var lang = BK.lang();
+    var inner = d.image
+      ? '<img src="' + d.image + '" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:' + (d.fit === 'contain' ? 'contain' : 'cover') + '"/>'
+      : '<div class="pg-inner"><div class="illus-box" style="height:100%"><div style="font-size:12mm">🖼️</div>' +
+        '<div style="max-width:80%">' + (lang === 'no'
+          ? 'Last opp et bilde som fyller hele siden, f.eks. en side du har designet i Canva (eksporter som PNG eller JPG i sidens format).'
+          : 'Upload an image that fills the whole page, e.g. a page designed in Canva (export as PNG or JPG in the page format).') + '</div></div></div>';
+    return '<div class="bk-sheet" data-page="' + i + '" style="width:' + size.w + 'mm;height:' + size.h + 'mm">' + inner + '</div>';
+  };
 
   R.certificate = function (p, pg, i, n) {
     var d = pg.data || {};

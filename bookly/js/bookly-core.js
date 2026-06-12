@@ -306,11 +306,32 @@
       .then(function (d) {
         if (!d || !d.library) return;
         var lib = d.library;
-        // Nyeste vinner: slå sammen på prosjekt-id med høyeste updated.
+        /* Hent inn bilder fra den andre kopien der vinneren mangler dem.
+           Den lokale kopien kan være lagret uten bilder (full lagring),
+           mens skyen alltid har dem. */
+        function hydrateImages(winner, loser) {
+          if (!winner || !loser) return;
+          var src = {};
+          (loser.pages || []).forEach(function (pg) { src[pg.id] = pg; });
+          (winner.pages || []).forEach(function (pg) {
+            var s = src[pg.id];
+            if (s && s.data && s.data.image && pg.data && !pg.data.image) pg.data.image = s.data.image;
+          });
+          if (loser.cover && loser.cover.image && winner.cover && !winner.cover.image) winner.cover.image = loser.cover.image;
+          if ((loser.refs || []).length && !(winner.refs || []).length) winner.refs = loser.refs;
+        }
+        // Nyeste vinner; ved likt tidsstempel vinner skyen (den har bildene).
         var byId = {};
         (state.projects || []).forEach(function (p) { byId[p.id] = p; });
         (lib.projects || []).forEach(function (p) {
-          if (!byId[p.id] || (p.updated || 0) > (byId[p.id].updated || 0)) byId[p.id] = p;
+          var local = byId[p.id];
+          if (!local) { byId[p.id] = p; return; }
+          if ((p.updated || 0) >= (local.updated || 0)) {
+            hydrateImages(p, local);
+            byId[p.id] = p;
+          } else {
+            hydrateImages(local, p);
+          }
         });
         state.projects = Object.keys(byId).map(function (k) { return byId[k]; });
         var fIds = {};

@@ -563,7 +563,9 @@
       p.pages.map(function (pgObj, i) {
         return '<div class="bk-pageitem' + (i === cur ? ' on' : '') + '" data-pg="' + i + '"><span class="no">' + (i + 1) + '</span>' +
           esc(pgObj.title || kindName(pgObj.kind)) + '</div>';
-      }).join('') + '</div>' +
+      }).join('') +
+      '<div class="bk-pageitem" id="ePgAdd" style="border-style:dashed;color:var(--cerise)">＋ ' + (no ? 'Legg til side' : 'Add page') + '</div>' +
+      '</div>' +
       '<div><div id="eStage" class="bk-stage"></div><div id="eEdit" class="bk-card bk-no-print" style="margin-top:14px"></div></div>' +
       '</div>';
 
@@ -573,6 +575,7 @@
         story: ['Historieside', 'Story page'], text: ['Tekstside', 'Text page'], intro: ['Intro', 'Intro'],
         certificate: ['Diplom', 'Certificate'], answers: ['Fasit', 'Answer key'],
         mandala: ['Mandala', 'Mandala'], colorprompt: ['Motivside', 'Artwork page'],
+        fullimage: ['Bildeside', 'Image page'], journal: ['Skriveside', 'Writing page'],
       };
       return names[k] ? L(names[k]) : k;
     }
@@ -600,7 +603,21 @@
         fields.push('<div class="bk-field"><label>Hook</label><input id="edHook" type="text" value="' + esc(d.hook || '') + '"></div>');
         fields.push('<div class="bk-field full"><label>' + (no ? 'Baksidetekst' : 'Back cover text') + '</label><textarea id="edBack" rows="3">' + esc(d.text || '') + '</textarea></div>');
       }
-      var canImage = ['story', 'text', 'intro', 'colorprompt', 'cover'].indexOf(pgObj.kind) !== -1;
+      // Justerbar overskriftsstørrelse for sider med sideoverskrift
+      var hasHead = ['cover', 'backcover', 'fullimage', 'certificate', 'cardsheet'].indexOf(pgObj.kind) === -1;
+      if (hasHead) {
+        fields.push('<div class="bk-field"><label>' + (no ? 'Overskriftsstørrelse' : 'Heading size') + '</label><select id="edHeadSize">' +
+          [['s', no ? 'Liten' : 'Small'], ['m', no ? 'Vanlig' : 'Normal'], ['l', no ? 'Stor' : 'Large'], ['xl', no ? 'Ekstra stor' : 'Extra large']].map(function (op) {
+            return '<option value="' + op[0] + '"' + ((d.headSize || 'm') === op[0] ? ' selected' : '') + '>' + op[1] + '</option>';
+          }).join('') + '</select></div>');
+      }
+      if (pgObj.kind === 'fullimage' && d.image) {
+        fields.push('<div class="bk-field"><label>' + (no ? 'Bildetilpasning' : 'Image fit') + '</label><div class="bk-chips">' +
+          '<button type="button" class="bk-chip' + (d.fit !== 'contain' ? ' on' : '') + '" data-fit="cover">' + (no ? 'Fyll hele siden' : 'Fill the page') + '</button>' +
+          '<button type="button" class="bk-chip' + (d.fit === 'contain' ? ' on' : '') + '" data-fit="contain">' + (no ? 'Vis alt (tilpass)' : 'Show all (fit)') + '</button>' +
+          '</div></div>');
+      }
+      var canImage = ['story', 'text', 'intro', 'colorprompt', 'cover', 'fullimage'].indexOf(pgObj.kind) !== -1;
       if (canImage) {
         // Bygg standardprompten fra sidens (gjeldende) beskrivelse
         var buildPrompt = function (illusText) {
@@ -658,7 +675,20 @@
         if ($('#edHook')) d.hook = $('#edHook').value;
         if ($('#edBack')) d.text = $('#edBack').value;
         if ($('#edPrompt')) d.imgPrompt = $('#edPrompt').value;
+        if ($('#edHeadSize')) d.headSize = $('#edHeadSize').value;
       }
+      if ($('#edHeadSize')) $('#edHeadSize').onchange = function () {
+        d.headSize = this.value;
+        BK.touch(p);
+        renderStage(true);
+      };
+      BK.$$('[data-fit]', ed).forEach(function (fb) {
+        fb.onclick = function () {
+          d.fit = fb.getAttribute('data-fit');
+          BK.touch(p);
+          renderStage();
+        };
+      });
       ['edTitle', 'edText', 'edIllus', 'edHook', 'edBack', 'edPrompt'].forEach(function (id) {
         var el2 = $('#' + id);
         if (!el2) return;
@@ -864,6 +894,52 @@
         renderStage();
       };
     });
+
+    $('#ePgAdd').onclick = function () {
+      var types = [
+        ['text', no ? '📄 Tekstside' : '📄 Text page'],
+        ['story', no ? '📖 Historieside (tekst + illustrasjon)' : '📖 Story page (text + illustration)'],
+        ['fullimage', no ? '🖼️ Helsides bilde (f.eks. fra Canva)' : '🖼️ Full-page image (e.g. from Canva)'],
+        ['journal', no ? '✏️ Skriveside (linjer)' : '✏️ Writing page (lines)'],
+        ['mandala', no ? '🌸 Mandala (fargelegging)' : '🌸 Mandala (coloring)'],
+        ['duplicate', no ? '⧉ Kopi av gjeldende side' : '⧉ Copy of the current page'],
+      ];
+      BK.modal('<h3>＋ ' + (no ? 'Legg til side' : 'Add page') + '</h3>' +
+        '<p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:10px">' +
+        (no ? 'Siden settes inn etter siden du står på.' : 'The page is inserted after the current page.') + '</p>' +
+        '<div class="bk-chips" style="flex-direction:column;align-items:stretch">' +
+        types.map(function (ty) {
+          return '<button type="button" class="bk-chip" data-newpg="' + ty[0] + '" style="text-align:left">' + ty[1] + '</button>';
+        }).join('') + '</div>',
+        function (back, close) {
+          BK.$$('[data-newpg]', back).forEach(function (b) {
+            b.onclick = function () {
+              var kind = b.getAttribute('data-newpg');
+              var newPg;
+              if (kind === 'duplicate') {
+                newPg = BK.clone(p.pages[cur]);
+                newPg.id = BK.uid();
+              } else if (kind === 'story') {
+                newPg = { id: BK.uid(), kind: 'story', title: '', data: { text: '', illustration: '' } };
+              } else if (kind === 'fullimage') {
+                newPg = { id: BK.uid(), kind: 'fullimage', title: '', data: {} };
+              } else if (kind === 'journal') {
+                newPg = { id: BK.uid(), kind: 'journal', title: no ? 'Min side' : 'My page', data: { prompts: [''] } };
+              } else if (kind === 'mandala') {
+                newPg = { id: BK.uid(), kind: 'mandala', title: '', data: { seed: BK.gen.seed(), mm: 150 } };
+              } else {
+                newPg = { id: BK.uid(), kind: 'text', title: no ? 'Ny side' : 'New page', data: { text: '' } };
+              }
+              p.pages.splice(cur + 1, 0, newPg);
+              BK._curPage = cur + 1;
+              BK.touch(p);
+              close();
+              BK.refresh();
+              BK.toast(no ? 'Side lagt til.' : 'Page added.');
+            };
+          });
+        });
+    };
 
     $('#eTitle').onblur = function () {
       p.title = this.textContent.trim() || t('untitled');
