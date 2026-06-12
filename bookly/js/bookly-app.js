@@ -576,6 +576,7 @@
         certificate: ['Diplom', 'Certificate'], answers: ['Fasit', 'Answer key'],
         mandala: ['Mandala', 'Mandala'], colorprompt: ['Motivside', 'Artwork page'],
         fullimage: ['Bildeside', 'Image page'], journal: ['Skriveside', 'Writing page'],
+        lines: ['Skrivelinjer', 'Writing lines'],
       };
       return names[k] ? L(names[k]) : k;
     }
@@ -900,7 +901,7 @@
         ['text', no ? '📄 Tekstside' : '📄 Text page'],
         ['story', no ? '📖 Historieside (tekst + illustrasjon)' : '📖 Story page (text + illustration)'],
         ['fullimage', no ? '🖼️ Helsides bilde (f.eks. fra Canva)' : '🖼️ Full-page image (e.g. from Canva)'],
-        ['journal', no ? '✏️ Skriveside (linjer)' : '✏️ Writing page (lines)'],
+        ['lines', no ? '✏️ Skriveside (hel side med linjer)' : '✏️ Writing page (full page of lines)'],
         ['mandala', no ? '🌸 Mandala (fargelegging)' : '🌸 Mandala (coloring)'],
         ['duplicate', no ? '⧉ Kopi av gjeldende side' : '⧉ Copy of the current page'],
       ];
@@ -923,8 +924,8 @@
                 newPg = { id: BK.uid(), kind: 'story', title: '', data: { text: '', illustration: '' } };
               } else if (kind === 'fullimage') {
                 newPg = { id: BK.uid(), kind: 'fullimage', title: '', data: {} };
-              } else if (kind === 'journal') {
-                newPg = { id: BK.uid(), kind: 'journal', title: no ? 'Min side' : 'My page', data: { prompts: [''] } };
+              } else if (kind === 'lines') {
+                newPg = { id: BK.uid(), kind: 'lines', title: '', data: {} };
               } else if (kind === 'mandala') {
                 newPg = { id: BK.uid(), kind: 'mandala', title: '', data: { seed: BK.gen.seed(), mm: 150 } };
               } else {

@@ -257,23 +257,87 @@ export async function onRequestPost(context) {
     return json({ error: "ai_unavailable" }, 200);
   }
 
-  /* ---------- Bibliotek-synk ---------- */
+  /* ---------- Bibliotek-synk (fletter, erstatter aldri blindt) ---------- */
   if (path === "library") {
     const sess = await sessionFrom(context);
     if (!sess) return json({ error: "not_logged_in" }, 401);
-    const lib = {
+
+    const incoming = {
       projects: Array.isArray(body.projects) ? body.projects : [],
       folders: Array.isArray(body.folders) ? body.folders : [],
       exports: Array.isArray(body.exports) ? body.exports.slice(0, 60) : [],
       savedPrompts: Array.isArray(body.savedPrompts) ? body.savedPrompts : [],
       settings: body.settings || {},
-      updated: Date.now(),
+      deleted: body.deleted && typeof body.deleted === "object" ? body.deleted : {},
     };
+
+    /* Flett med det som ligger lagret: en enhet som mangler prosjekter
+       (f.eks. en fersk mobil) kan da aldri slette dem fra skyen.
+       Sletting skjer kun via slettemerker (deleted: id -> tidspunkt). */
+    let current = null;
+    try {
+      const raw = await env.BUILDER_KV.get(libKey(sess.uid));
+      if (raw) current = JSON.parse(raw);
+    } catch (e) { current = null; }
+
+    function hydrateImages(winner, loser) {
+      if (!winner || !loser) return;
+      const src = {};
+      (loser.pages || []).forEach((pg) => { src[pg.id] = pg; });
+      (winner.pages || []).forEach((pg) => {
+        const s = src[pg.id];
+        if (s && s.data && s.data.image && pg.data && !pg.data.image) pg.data.image = s.data.image;
+      });
+      if (loser.cover && loser.cover.image && winner.cover && !winner.cover.image) winner.cover.image = loser.cover.image;
+      if ((loser.refs || []).length && !(winner.refs || []).length) winner.refs = loser.refs;
+    }
+
+    let lib;
+    if (!current) {
+      lib = incoming;
+    } else {
+      const byId = {};
+      (current.projects || []).forEach((p) => { byId[p.id] = p; });
+      (incoming.projects || []).forEach((p) => {
+        const c = byId[p.id];
+        if (!c) { byId[p.id] = p; return; }
+        if ((p.updated || 0) >= (c.updated || 0)) {
+          hydrateImages(p, c);
+          byId[p.id] = p;
+        } else {
+          hydrateImages(c, p);
+        }
+      });
+      // Slettemerker: nyeste tidspunkt vinner, og fjerner eldre prosjekter
+      const dead = {};
+      Object.keys(current.deleted || {}).forEach((k) => { dead[k] = current.deleted[k]; });
+      Object.keys(incoming.deleted || {}).forEach((k) => {
+        if (!dead[k] || incoming.deleted[k] > dead[k]) dead[k] = incoming.deleted[k];
+      });
+      Object.keys(dead).forEach((id) => {
+        const pr = byId[id];
+        if (pr && dead[id] >= (pr.updated || 0)) delete byId[id];
+      });
+      const fIds = {};
+      (current.folders || []).concat(incoming.folders || []).forEach((f) => { fIds[f.id] = f; });
+
+      lib = {
+        projects: Object.keys(byId).map((k) => byId[k]),
+        folders: Object.keys(fIds).map((k) => fIds[k]),
+        exports: (incoming.exports || []).length ? incoming.exports : (current.exports || []),
+        savedPrompts: (incoming.savedPrompts || []).length >= (current.savedPrompts || []).length
+          ? incoming.savedPrompts : current.savedPrompts,
+        settings: Object.assign({}, current.settings || {}, incoming.settings || {}),
+        deleted: dead,
+      };
+    }
+    lib.updated = Date.now();
+
     const out = JSON.stringify(lib);
     if (out.length > 20 * 1024 * 1024) return json({ error: "too_large" }, 413);
     try {
       await env.BUILDER_KV.put(libKey(sess.uid), out);
-      return json({ ok: true }, 200);
+      return json({ ok: true, projects: (lib.projects || []).length }, 200);
     } catch (e) {
       return json({ error: "write_failed" }, 200);
     }

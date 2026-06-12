@@ -213,6 +213,7 @@
     exports: [],      // {id, ts, projectId, projectTitle, format, what}
     savedPrompts: [], // {id, ts, title, text, style, kind}
     settings: { pageSize: 'a4', bleed: 3, defaultLang: 'no' },
+    deleted: {},        // slettemerker: prosjekt-id -> tidspunkt
     user: null,       // fra /api/auth/me
     plan: 'free',
   };
@@ -269,6 +270,7 @@
       exports: state.exports.slice(0, 60),
       savedPrompts: state.savedPrompts,
       settings: state.settings,
+      deleted: state.deleted,
     };
   }
 
@@ -325,6 +327,7 @@
       state.exports = d.exports || [];
       state.savedPrompts = d.savedPrompts || [];
       if (d.settings) state.settings = Object.assign(state.settings, d.settings);
+      state.deleted = d.deleted || {};
       return true;
     } catch (e) { return false; }
   }
@@ -409,6 +412,17 @@
             hydrateImages(local, p);
           }
         });
+        // Slettemerker fra begge sider: nyeste vinner, fjerner eldre prosjekter
+        var dead = {};
+        Object.keys(state.deleted || {}).forEach(function (k) { dead[k] = state.deleted[k]; });
+        Object.keys(lib.deleted || {}).forEach(function (k) {
+          if (!dead[k] || lib.deleted[k] > dead[k]) dead[k] = lib.deleted[k];
+        });
+        Object.keys(dead).forEach(function (id) {
+          var pr = byId[id];
+          if (pr && dead[id] >= (pr.updated || 0)) delete byId[id];
+        });
+        state.deleted = dead;
         state.projects = Object.keys(byId).map(function (k) { return byId[k]; });
         var fIds = {};
         (state.folders || []).concat(lib.folders || []).forEach(function (f) { fIds[f.id] = f; });
@@ -448,6 +462,13 @@
   BK.touch = function (p) { p.updated = Date.now(); BK.save(true); };
   BK.deleteProject = function (id) {
     state.projects = state.projects.filter(function (p) { return p.id !== id; });
+    state.deleted[id] = Date.now();
+    // Hold kartet lite: behold de 300 nyeste merkene
+    var keys = Object.keys(state.deleted);
+    if (keys.length > 300) {
+      keys.sort(function (a, b) { return state.deleted[a] - state.deleted[b]; });
+      keys.slice(0, keys.length - 300).forEach(function (k) { delete state.deleted[k]; });
+    }
     BK.save(true);
   };
   BK.duplicateProject = function (id) {

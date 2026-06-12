@@ -645,6 +645,17 @@
 
   R.intro = R.text;
 
+  /* Skriveside: hele siden fylt med skrivelinjer */
+  R.lines = function (p, pg, i, n) {
+    var size = BK.sizeOf(p);
+    // Fyll tilgjengelig høyde (minus topp/bunn og ev. overskrift) med linjer
+    var avail = size.h - 24 - (pg.title ? 18 : 0) - 12;
+    var count = Math.max(6, Math.floor(avail / 11));
+    var rows = '';
+    for (var li = 0; li < count; li++) rows += '<div style="border-bottom:1pt solid #d8c4ce;height:11mm"></div>';
+    return sheet(p, pg, i, n, rows, { noHead: !pg.title });
+  };
+
   /* Helsides bildeside: for egne design, f.eks. eksportert fra Canva */
   R.fullimage = function (p, pg, i, n) {
     var d = pg.data || {};
