@@ -6,7 +6,18 @@
 <meta name="theme-color" content="#F8D7DA">
 <title>LME Creative Academy</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+
   /* =========================================
      LME Creative Academy
      Hovedside (som FEA Create)
@@ -42,27 +53,16 @@
     --r-xl: 32px;
     --r-pill: 999px;
 
-    --font-body: 'Playpen Sans', 'Comic Sans MS', sans-serif;
-    --font-heading: 'Playpen Sans', 'Comic Sans MS', sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+    --font-heading: 'Playpen Sans', system-ui, sans-serif;
 
     --sidebar-w: 260px;
   }
 
-  /* Playpen Sans fra Google Fonts — har naturlig rund "a" */
-  @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
-
-  /* Overskrifter bruker Playpen Sans eksplisitt */
+  /* Kun overskrifter (og logo) bruker Playpen Sans, alt annet Sasson Montessori */
   h1, h2, h3, h4, h5, h6,
   .topbar-logo,
-  .topbar-logo .badge,
-  .page-header h1,
-  .page-header h1 em,
-  .section-header h2,
-  .tool-card h3,
-  .welcome-card-text h3,
-  .sidebar-group-title,
-  .quick-btn,
-  .btn-studio {
+  .topbar-logo .badge {
     font-family: var(--font-heading);
   }
 
@@ -79,7 +79,8 @@
   }
   img { max-width: 100%; display: block; }
   a { color: inherit; text-decoration: none; }
-  button { font-family: inherit; cursor: pointer; border: none; background: none; }
+  button { font-family: var(--font-body); cursor: pointer; border: none; background: none; }
+  input, select, textarea { font-family: var(--font-body); }
 
   /* =========================================
      TOPP-BAR (slank)
