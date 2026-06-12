@@ -331,6 +331,19 @@
   /* =====================================================================
      SKAPERE — skjemadefinisjoner
      ===================================================================== */
+  /* Bildestiler for generering (gjelder standardprompter og ↻) */
+  var IMG_STYLES = {
+    pixar:      { name: ['Pixar/Disney 3D (merkestil)', 'Pixar/Disney 3D (brand)'], txt: 'Pixar inspired 3D render, Disney style, soft global illumination, rounded friendly shapes, expressive big eyes, warm cinematic lighting, kid friendly, high detail' },
+    watercolor: { name: ['Akvarell', 'Watercolor'], txt: 'soft watercolor illustration, gentle washes, visible paper texture, pastel palette, storybook charm' },
+    montessori: { name: ['Montessori-realistisk', 'Montessori realistic'], txt: 'realistic calm educational illustration, accurate natural details, muted natural colors, no fantasy elements, clean composition' },
+    clipart:    { name: ['Clipart', 'Clipart'], txt: 'clean vector clipart, bold outlines, flat bright colors, simple shapes, white background, sticker style' },
+    cartoon:    { name: ['Tegneserie', 'Cartoon'], txt: 'playful cartoon illustration, bold clean linework, cel shading, cheerful colors' },
+    coloring:   { name: ['Linjekunst (fargelegging)', 'Line art (coloring)'], txt: 'black and white coloring book line art, clean bold outlines, no shading, no color fills, white background, printable' },
+  };
+  function imgStyleTxt() {
+    return (IMG_STYLES[BK.state.settings.imgStyle || 'pixar'] || IMG_STYLES.pixar).txt;
+  }
+
   var FORMS = {
     book: {
       icon: '📖', title: ['Bokskaper', 'Book Creator'],
@@ -626,20 +639,39 @@
           if (pgObj.kind === 'colorprompt') return d.prompt || '';
           if (pgObj.kind === 'cover') return "Children's book cover art, " + (d.title || p.title) +
             ((p.config && p.config.topic) ? ', ' + p.config.topic : '') +
-            ', Pixar inspired 3D render, Disney style, soft global illumination, rounded friendly shapes, expressive big eyes, warm cinematic lighting, kid friendly, high detail, no text, space for title at the top';
+            ', ' + imgStyleTxt() + ', no text, space for title at the top';
           return "Children's book illustration, " + (illusText || (p.config && p.config.topic) || pgObj.title || p.title) +
-            ', Pixar inspired 3D render, Disney style, soft global illumination, rounded friendly shapes, expressive big eyes, warm cinematic lighting, kid friendly, high detail, no text';
+            ', ' + imgStyleTxt() + ', no text';
         };
         var defPrompt = d.imgPrompt || buildPrompt(d.illustration);
         fields.push('<div class="bk-field full"><label>✨ ' + (no ? 'Bildeprompt for denne siden' : 'Image prompt for this page') + '</label>' +
           '<textarea id="edPrompt" rows="2">' + esc(defPrompt) + '</textarea>' +
           '<div class="hint">' + (no ? 'Det er denne teksten som styrer bildet. Endrer du beskrivelsen over, trykk ↻ for å oppdatere prompten.' : 'This text controls the image. If you change the description above, press ↻ to refresh the prompt.') + '</div>' +
-          '<div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">' +
+          (function () {
+            function sel(id, label, opts, curVal) {
+              return '<label style="font-size:11px;font-weight:800;color:var(--ink-soft);display:flex;flex-direction:column;gap:2px">' + label +
+                '<select id="' + id + '" style="border:1.5px solid var(--line);border-radius:999px;padding:5px 10px;font-size:12px;background:var(--surface)">' +
+                opts.map(function (o2) {
+                  return '<option value="' + o2[0] + '"' + (curVal === o2[0] ? ' selected' : '') + '>' + o2[1] + '</option>';
+                }).join('') + '</select></label>';
+            }
+            var st2 = BK.state.settings;
+            return '<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:flex-end">' +
+              sel('edImgStyle', no ? 'Stil' : 'Style',
+                Object.keys(IMG_STYLES).map(function (k) { return [k, L(IMG_STYLES[k].name)]; }), st2.imgStyle || 'pixar') +
+              sel('edImgSize', no ? 'Format' : 'Format',
+                [['1024x1024', no ? 'Kvadrat' : 'Square'], ['1024x1536', no ? 'Stående' : 'Portrait'], ['1536x1024', no ? 'Liggende' : 'Landscape']],
+                st2.imgSize || '1024x1024') +
+              sel('edImgQ', no ? 'Kvalitet' : 'Quality',
+                [['low', no ? '💸 Utkast' : '💸 Draft'], ['medium', 'Standard'], ['high', no ? '✨ Høy' : '✨ High']],
+                st2.imgQuality || 'medium') +
+              sel('edImgN', no ? 'Varianter' : 'Variants',
+                [['1', no ? '1 bilde' : '1 image'], ['2', no ? '2 (velg beste)' : '2 (pick best)'], ['3', no ? '3 (velg beste)' : '3 (pick best)']],
+                String(st2.imgN || 1)) +
+              '</div>';
+          })() +
+          '<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">' +
           '<button class="bk-btn primary sm" id="edGenImg">🎨 ' + (no ? 'Generer bilde' : 'Generate image') + '</button>' +
-          '<select id="edImgQ" style="border:1.5px solid var(--line);border-radius:999px;padding:5px 10px;font-size:12px;background:var(--surface)">' +
-          [['low', no ? '💸 Utkast (billigst)' : '💸 Draft (cheapest)'], ['medium', no ? 'Standard' : 'Standard'], ['high', no ? '✨ Høy (endelig)' : '✨ High (final)']].map(function (q) {
-            return '<option value="' + q[0] + '"' + ((BK.state.settings.imgQuality || 'medium') === q[0] ? ' selected' : '') + '>' + q[1] + '</option>';
-          }).join('') + '</select>' +
           '<button class="bk-btn ghost sm" id="edPromptSync">↻ ' + (no ? 'Hent fra beskrivelsen' : 'From the description') + '</button>' +
           '<button class="bk-btn ghost sm" id="edCopyPrompt">' + t('copy') + '</button>' +
           (BK.state.user && BK.state.user.role === 'owner'
@@ -744,13 +776,32 @@
         var btn = this;
         btn.disabled = true;
         btn.innerHTML = '⏳ ' + (no ? 'Genererer bilde… (kan ta opptil ett minutt)' : 'Generating image… (can take up to a minute)');
-        var q = $('#edImgQ') ? $('#edImgQ').value : null;
-        if (q) { BK.state.settings.imgQuality = q; }
-        BK.ai.image(promptTxt, null, (p.refs && p.refs.length) ? p.refs : null, q).then(function (dataUrl) {
-          d.image = dataUrl;
-          BK.touch(p);
-          BK.toast(no ? 'Bildet er lagt på siden!' : 'The image is on the page!');
-          renderStage();
+        var st2 = BK.state.settings;
+        if ($('#edImgStyle')) st2.imgStyle = $('#edImgStyle').value;
+        if ($('#edImgSize')) st2.imgSize = $('#edImgSize').value;
+        if ($('#edImgQ')) st2.imgQuality = $('#edImgQ').value;
+        if ($('#edImgN')) st2.imgN = parseInt($('#edImgN').value, 10) || 1;
+        BK.ai.image(promptTxt, st2.imgSize, (p.refs && p.refs.length) ? p.refs : null, st2.imgQuality, st2.imgN).then(function (urls) {
+          btn.disabled = false;
+          btn.innerHTML = '🎨 ' + (no ? 'Generer bilde' : 'Generate image');
+          function apply(u) {
+            d.image = u;
+            BK.touch(p);
+            BK.toast(no ? 'Bildet er lagt på siden!' : 'The image is on the page!');
+            renderStage();
+          }
+          if (urls.length === 1) return apply(urls[0]);
+          // Flere varianter: la brukeren velge
+          BK.modal('<h3>🎨 ' + (no ? 'Velg bildet du vil bruke' : 'Pick the image to use') + '</h3>' +
+            '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">' +
+            urls.map(function (u, ui) {
+              return '<img src="' + u + '" data-pick="' + ui + '" alt="" style="width:150px;border-radius:12px;cursor:pointer;border:2.5px solid var(--line)">';
+            }).join('') + '</div>',
+            function (back, close) {
+              BK.$$('[data-pick]', back).forEach(function (im) {
+                im.onclick = function () { apply(urls[+im.getAttribute('data-pick')]); close(); };
+              });
+            });
         }, function (err) {
           btn.disabled = false;
           btn.innerHTML = '🎨 ' + (no ? 'Generer bilde' : 'Generate image');
@@ -794,6 +845,13 @@
           BK.toast(no ? 'Karakterprompten er kun tilgjengelig for eierkontoen.' : 'The character prompt is only available to the owner account.');
         });
       };
+      if ($('#edImgStyle')) $('#edImgStyle').onchange = function () {
+        BK.state.settings.imgStyle = this.value;
+        BK.save(true);
+        if ($('#edPromptSync')) $('#edPromptSync').click(); // bygg prompten med ny stil
+      };
+      if ($('#edImgSize')) $('#edImgSize').onchange = function () { BK.state.settings.imgSize = this.value; BK.save(true); };
+      if ($('#edImgN')) $('#edImgN').onchange = function () { BK.state.settings.imgN = parseInt(this.value, 10) || 1; BK.save(true); };
       if ($('#edPromptSync')) $('#edPromptSync').onclick = function () {
         syncFields(); // få med ferske endringer i beskrivelsen
         var fresh = buildPrompt(d.illustration);
@@ -965,9 +1023,9 @@
       if (pgObj.kind === 'colorprompt') return dd.prompt || '';
       if (pgObj.kind === 'cover') return "Children's book cover art, " + (dd.title || p.title) +
         ((p.config && p.config.topic) ? ', ' + p.config.topic : '') +
-        ', Pixar inspired 3D render, Disney style, soft global illumination, rounded friendly shapes, expressive big eyes, warm cinematic lighting, kid friendly, high detail, no text, space for title at the top';
+        ', ' + imgStyleTxt() + ', no text, space for title at the top';
       return "Children's book illustration, " + (dd.illustration || (p.config && p.config.topic) || pgObj.title || p.title) +
-        ', Pixar inspired 3D render, Disney style, soft global illumination, rounded friendly shapes, expressive big eyes, warm cinematic lighting, kid friendly, high detail, no text';
+        ', ' + imgStyleTxt() + ', no text';
     }
     $('#eGenAll').onclick = function () {
       var btn = this;
@@ -1017,8 +1075,8 @@
           var dd = pgObj.data;
           btn.innerHTML = '⏹ ' + (no ? 'Stopp · bilde ' : 'Stop · image ') + (done + 1) + ' / ' + total;
           var promptTxt = dd.imgPrompt || defaultPromptFor(pgObj);
-          BK.ai.image(promptTxt, null, (p.refs && p.refs.length) ? p.refs : null).then(function (url) {
-            dd.image = url;
+          BK.ai.image(promptTxt, null, (p.refs && p.refs.length) ? p.refs : null).then(function (urls) {
+            dd.image = urls[0];
             dd.imgPrompt = promptTxt;
             done++;
             BK.touch(p);

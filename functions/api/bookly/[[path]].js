@@ -116,6 +116,7 @@ export async function onRequestPost(context) {
     const size = ["1024x1024", "1024x1536", "1536x1024"].indexOf(body.size) !== -1 ? body.size : "1024x1024";
     const quality = ["low", "medium", "high"].indexOf(body.quality) !== -1
       ? body.quality : (env.BOOKLY_IMAGE_QUALITY || "medium");
+    const n = Math.min(3, Math.max(1, parseInt(body.n, 10) || 1));
     let lastErr = null;
 
     /* Med referansebilder: bruk edits-endepunktet, som tar inn bilder og
@@ -128,7 +129,7 @@ export async function onRequestPost(context) {
         fd.append("prompt", prompt.indexOf("CRITICAL") !== -1 ? prompt : prompt + REF_LOCK);
         fd.append("size", size);
         fd.append("quality", quality);
-        fd.append("n", "1");
+        fd.append("n", String(n));
         let added = 0;
         for (let i = 0; i < refs.length; i++) {
           const m = /^data:(image\/(?:png|jpe?g|webp));base64,([A-Za-z0-9+/=]+)$/.exec(refs[i] || "");
@@ -145,8 +146,8 @@ export async function onRequestPost(context) {
             body: fd,
           });
           const data = await res.json();
-          const b64 = data && data.data && data.data[0] && data.data[0].b64_json;
-          if (res.ok && b64) return json({ b64 }, 200);
+          const b64s = ((data && data.data) || []).map((x) => x && x.b64_json).filter(Boolean);
+          if (res.ok && b64s.length) return json({ b64: b64s[0], b64s }, 200);
           lastErr = (data && data.error && data.error.message) || ("HTTP " + res.status);
           return json({ error: "image_failed", detail: String(lastErr || "").slice(0, 300) }, 200);
         }
@@ -168,12 +169,12 @@ export async function onRequestPost(context) {
           prompt: prompt,
           size: size,
           quality: quality,
-          n: 1,
+          n: n,
         }),
       });
       const data = await res.json();
-      const b64 = data && data.data && data.data[0] && data.data[0].b64_json;
-      if (res.ok && b64) return json({ b64 }, 200);
+      const b64s = ((data && data.data) || []).map((x) => x && x.b64_json).filter(Boolean);
+      if (res.ok && b64s.length) return json({ b64: b64s[0], b64s }, 200);
       lastErr = (data && data.error && data.error.message) || ("HTTP " + res.status);
     } catch (e) { lastErr = String((e && e.message) || e); }
 

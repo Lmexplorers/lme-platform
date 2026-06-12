@@ -540,16 +540,28 @@
 
     /* Bildegenerering: prompt -> nedskalert JPEG-data-URL.
        Kaster 'image_unavailable' hvis ingen bildenøkkel er satt opp. */
-    image: function (prompt, size, refs, quality) {
+    /* Bildegenerering: returnerer en liste med 1-3 nedskalerte data-URL-er */
+    image: function (prompt, size, refs, quality, n) {
       return fetch('/api/bookly/image', {
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: prompt, size: size || '1024x1024', refs: refs || [], quality: quality || (BK.state.settings.imgQuality || 'medium') }),
+        body: JSON.stringify({
+          prompt: prompt,
+          size: size || (BK.state.settings.imgSize || '1024x1024'),
+          refs: refs || [],
+          quality: quality || (BK.state.settings.imgQuality || 'medium'),
+          n: n || 1,
+        }),
       })
         .then(function (r) { return r.json(); })
         .then(function (d) {
-          if (d && d.b64) return BK.shrinkImage('data:image/png;base64,' + d.b64, 1400);
+          var list = (d && (d.b64s || (d.b64 ? [d.b64] : []))) || [];
+          if (list.length) {
+            return Promise.all(list.map(function (b) {
+              return BK.shrinkImage('data:image/png;base64,' + b, 1400);
+            }));
+          }
           var err = new Error((d && d.error) || 'image_failed');
           err.detail = (d && d.detail) || '';
           throw err;
