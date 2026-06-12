@@ -2187,6 +2187,7 @@
   };
   const STORAGE_KEY = 'lme-builder:site';
   const LEGACY_KEY = 'lme-builder:page'; // gammel single-page lagring
+  const BRAND_KEY = 'lme-builder:brand'; // lite lokalt speil av merkevalg (font m.m.)
 
   // Felter som lagres som rik tekst (HTML) for markér-og-styl. Andre lagres som ren tekst.
   const RICH_FIELDS = new Set(['heading', 'body', 'subheading', 'text', 'name', 'role', 'title', 'desc',
@@ -2243,7 +2244,26 @@
     };
   }
 
+  let brandNeedsCloudSync = false;
+
   async function loadState() {
+    // Fonten skal stå låst fra første øyeblikk: bruk sist lagrede merkevalg
+    // (lokalt speil) synkront, slik at skylastingen ikke bytter font etterpå.
+    try {
+      let cachedBrand = null;
+      const mirror = localStorage.getItem(BRAND_KEY);
+      if (mirror) cachedBrand = JSON.parse(mirror);
+      if (!cachedBrand) {
+        const full = localStorage.getItem(STORAGE_KEY);
+        if (full) cachedBrand = (JSON.parse(full) || {}).brand || null;
+      }
+      if (cachedBrand && cachedBrand.fontId) {
+        state.brand = Object.assign(defaultBrand(), cachedBrand);
+        normalizeBrandFonts(state.brand);
+        applyBrand();
+      }
+    } catch (e) { /* uten speil gjelder standardfontene til skyen svarer */ }
+
     try {
       // Prøv ny multi-page lagring først
       const result = await window.storage.get(STORAGE_KEY);
@@ -2255,6 +2275,16 @@
             ? parsed.currentPageId
             : parsed.pages[0].id;
           state.brand = parsed.brand || defaultBrand();
+          // Hvis det lokale merkespeilet er nyere enn skyen (f.eks. fordi en
+          // skylagring feilet), gjelder det sist valgte: fonten skal stå låst.
+          try {
+            const m = JSON.parse(localStorage.getItem(BRAND_KEY) || 'null');
+            if (m && (m.updatedAt || 0) > (state.brand.updatedAt || 0)) {
+              if (!m.logoUrl && state.brand.logoUrl) m.logoUrl = state.brand.logoUrl;
+              state.brand = Object.assign(defaultBrand(), m);
+              brandNeedsCloudSync = true;
+            }
+          } catch (e) { /* uten speil gjelder skyens verdi */ }
           normalizeBrandFonts(state.brand);
           migrateFooterColumns();
           applyBrand();
@@ -5535,6 +5565,18 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
   let brandLoaded = false;
   let brandSaveTimer = null;
   function persistBrand() {
+    // Aktive endringer (etter lasting) tidsstemples, slik at det nyeste valget
+    // alltid vinner over en eldre skylagring ved neste sidelast.
+    if (brandLoaded && state.brand) state.brand.updatedAt = Date.now();
+
+    // Speil merkevalget i et lite lokalt felt, slik at neste sidelast kan
+    // bruke den valgte (låste) fonten umiddelbart, før skylagringen svarer.
+    try {
+      const mirror = { ...(state.brand || defaultBrand()) };
+      if (mirror.logoUrl && mirror.logoUrl.length > 2000) mirror.logoUrl = '';
+      localStorage.setItem(BRAND_KEY, JSON.stringify(mirror));
+    } catch (e) { /* speilet er kun en forbedring, ikke kritisk */ }
+
     if (!brandLoaded) return;
     clearTimeout(brandSaveTimer);
     brandSaveTimer = setTimeout(() => {
@@ -6004,7 +6046,11 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
     bar.querySelector('#rtNarrow').addEventListener('click', function () { styleSelection({ letterSpacing: '-0.5px' }); });
   })();
 
-  loadState().then(() => { brandLoaded = true; });
+  loadState().then(() => {
+    brandLoaded = true;
+    // Hvis det lokale merkevalget var nyere enn skyen, dytt det opp nå
+    if (brandNeedsCloudSync) { brandNeedsCloudSync = false; persistBrand(); }
+  });
 
 </script>
 
