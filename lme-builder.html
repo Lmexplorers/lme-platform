@@ -8,6 +8,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
   :root {
     --pink-soft: #F8D7DA;
     --pink-deep: #EE9CAD;
@@ -26,7 +32,7 @@
     --radius: 14px;
     --radius-lg: 20px;
     --font-display: 'Playpen Sans', system-ui, sans-serif;
-    --font-body: 'Playpen Sans', 'Comic Sans MS', sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: var(--font-body); background: var(--cream); color: var(--ink); height: 100vh; overflow: hidden; font-size: 14px; line-height: 1.5; }
@@ -4445,7 +4451,7 @@
   --shadow-md: 0 8px 24px rgba(139, 74, 82, 0.08);
   --shadow-lg: 0 20px 48px rgba(139, 74, 82, 0.12);
   --font-display: 'Playpen Sans', system-ui, sans-serif;
-  --font-body: 'Playpen Sans', 'Comic Sans MS', sans-serif;
+  --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: var(--font-body); color: var(--ink); font-size: 14px; line-height: 1.5; background: white; }
@@ -4742,6 +4748,10 @@ img { max-width: 100%; display: block; }
 .faq-item[open] { border-color: var(--pink-deep); box-shadow: var(--shadow-sm); }
 .faq-item[open] .faq-toggle { background: var(--pink-deep); color: white; transform: rotate(45deg); }
 .faq-item .faq-answer { padding: 0 22px 20px; }
+
+  /* Laast fontregel: Sasson Montessori paa alt unntatt overskrifter */
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); }
+  button, input, select, textarea { font-family: var(--font-body); }
 </style>`;
       }
 
@@ -5489,7 +5499,7 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
     ensureFontFamilyLoaded(dispName);
     ensureFontFamilyLoaded(bodyName);
     root.setProperty('--font-display', `'${dispName}', system-ui, sans-serif`);
-    root.setProperty('--font-body', `'${bodyName}', 'Comic Sans MS', system-ui, sans-serif`);
+    root.setProperty('--font-body', `'${bodyName}', system-ui, sans-serif`);
     root.setProperty('--heading-weight', brand.headingWeight || '700');
     root.setProperty('--font-scale', brand.fontScale || '1');
 

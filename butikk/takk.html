@@ -8,14 +8,20 @@
 <link rel="icon" href="/images/lme-logo.png">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
   :root{
     --lime:#A4D233; --lime-soft:#E8F5D1; --cerise:#E91E89; --cerise-soft:#FCE3F1;
     --sun:#F7C72E; --sun-soft:#FFF4D6; --sky:#3FA9F5; --bg:#FBF7F0; --bg2:#FFFFFF;
     --ink:#1F1B24; --ink-soft:#5A5560; --ink-muted:#938E99; --line:rgba(31,27,36,.08);
     --r-md:18px; --r-lg:26px; --r-xl:36px; --r-pill:999px;
     --shadow-lg:0 22px 60px rgba(31,27,36,.10);
-    --font-body:'Playpen Sans','Comic Sans MS',sans-serif;
-    --font-head:'Playpen Sans','Comic Sans MS',sans-serif;
+    --font-body:'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+    --font-head:'Playpen Sans', system-ui, sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:var(--font-body);color:var(--ink);
@@ -63,6 +69,9 @@
     color:var(--ink);font-family:inherit;font-weight:700;font-size:13px;padding:9px 14px;border-radius:var(--r-pill);
     box-shadow:0 6px 20px rgba(31,27,36,.12);cursor:pointer}
   @media(max-width:520px){.card{padding:22px}.prod img{width:64px;height:64px}}
+
+  /* Laast fontregel: Sasson Montessori paa alt unntatt overskrifter */
+  button,input,select,textarea{font-family:var(--font-body);}
 </style>
 </head>
 <body>

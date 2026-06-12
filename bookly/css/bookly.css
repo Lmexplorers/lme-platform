@@ -50,9 +50,9 @@
   /* LME-fontregler: Sassoon Montessori til overskrifter og lesetekst,
      Playpen Sans som grunnskrift, i hele appen og i bøkene. */
   --font-sasson: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
-  --font-display: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
-  --font-body: 'Playpen Sans', system-ui, -apple-system, sans-serif;
-  --font-sheet: 'Playpen Sans', system-ui, sans-serif;
+  --font-display: 'Playpen Sans', system-ui, sans-serif;
+  --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  --font-sheet: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
 
   --sidebar-w: 252px;
   --topbar-h: 64px;
@@ -807,3 +807,6 @@ a { color: var(--cerise); }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+
+/* Laast fontregel: Sasson Montessori paa alt unntatt overskrifter */
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); }

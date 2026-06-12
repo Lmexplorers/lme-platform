@@ -7,6 +7,13 @@
 <title>Domener — LME Creative Academy</title>
 
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
   /* =========================================
      LME Creative Academy
      Hovedside (som FEA Create)
@@ -42,15 +49,13 @@
     --r-xl: 32px;
     --r-pill: 999px;
 
-    --font-body: 'Playpen Sans', 'Comic Sans MS', sans-serif;
-    --font-heading: 'Playpen Sans', 'Comic Sans MS', sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+    --font-heading: 'Playpen Sans', system-ui, sans-serif;
 
     --sidebar-w: 260px;
   }
 
   /* Playpen Sans fra Google Fonts — har naturlig rund "a" */
-  @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
-
   /* Overskrifter bruker Playpen Sans eksplisitt */
   h1, h2, h3, h4, h5, h6,
   .topbar-logo,
@@ -757,7 +762,11 @@
       .dm-manage { font-size:13px; font-weight:700; color:var(--ink); background:var(--cream-deep); padding:8px 16px; border-radius:var(--r-pill); }
       .dm-manage:hover { background:var(--pink-soft); }
       .dm-note { margin-top:22px; font-size:13px; color:var(--ink-soft); background:var(--pink-soft); border-radius:var(--r-md); padding:14px 18px; }
-    </style>
+    
+  /* Laast fontregel: Sasson Montessori paa alt unntatt overskrifter */
+  button, input, select, textarea { font-family: var(--font-body); }
+  .quick-btn, .btn-studio, .sidebar-group-title { font-family: var(--font-body); }
+</style>
 
     <div class="page-header">
       <h1 data-edit="ph-title">Domener</h1>

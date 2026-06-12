@@ -9,6 +9,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
   :root {
     --pink-soft: #F8D7DA;
     --pink-mid: #F5A8B8;
@@ -25,10 +31,11 @@
     --r-lg: 24px;
     --r-pill: 999px;
     --font-display: 'Playpen Sans', system-ui, -apple-system, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     color: var(--ink);
     background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 50%, #F8D7DA 100%);
     min-height: 100vh;
@@ -100,6 +107,10 @@
     .lg-card { padding: 28px 22px; }
     .lg-title { font-size: 22px; }
   }
+
+  /* Laast fontregel: Sasson Montessori paa alt unntatt overskrifter */
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); }
+  button, input, select, textarea { font-family: var(--font-body); }
 </style>
 </head>
 <body>

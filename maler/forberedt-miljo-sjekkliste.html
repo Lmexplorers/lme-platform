@@ -40,7 +40,8 @@
 
     --font-sasson: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
     --font-display: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
-    --font-body: 'Playpen Sans', system-ui, sans-serif;
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -891,7 +892,11 @@
         .res-stage .plan { box-shadow:none !important; border:1px solid #e6dde0 !important; }
         .res-stage.dim .region, .plan .region { opacity:1 !important; box-shadow:none !important; transform:none !important; }
         @page { size:A4; margin:14mm; }
-      </style>
+      
+  /* Laast fontregel: Sasson Montessori paa alt unntatt overskrifter */
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); }
+  button, input, select, textarea { font-family: var(--font-body); }
+</style>
       <div class="res-stage" id="chkStage">
         <div class="plan" id="plan">
           <div class="plan-head">

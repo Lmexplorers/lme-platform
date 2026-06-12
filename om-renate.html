@@ -40,7 +40,8 @@
 
     --font-sasson: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
     --font-display: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
-    --font-body: 'Playpen Sans', system-ui, sans-serif;
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -778,6 +779,10 @@
   @media (max-width: 600px) {
     .lang-float { top: 70px; right: 16px; padding: 6px 14px; font-size: 13px; }
   }
+
+  /* Laast fontregel: Sasson Montessori paa alt unntatt overskrifter */
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); }
+  button, input, select, textarea { font-family: var(--font-body); }
 </style>
 </head>
 <body>

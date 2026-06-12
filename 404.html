@@ -8,6 +8,12 @@
 
 <style>
   @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  @font-face {
     font-family: 'Playpen Sans';
     src: local('Playpen Sans');
     font-display: swap;
@@ -29,12 +35,13 @@
     --r-md: 18px;
     --r-pill: 999px;
     --font-display: 'Playpen Sans', system-ui, -apple-system, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     color: var(--ink);
     background:
       radial-gradient(ellipse 70% 50% at 20% 10%, rgba(255, 209, 225, 0.45), transparent 60%),
@@ -172,6 +179,10 @@
     .actions { flex-direction: column; }
     .btn { width: 100%; }
   }
+
+  /* Laast fontregel: Sasson Montessori paa alt unntatt overskrifter */
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); }
+  button, input, select, textarea { font-family: var(--font-body); }
 </style>
 </head>
 <body>
