@@ -54,17 +54,48 @@
   };
 
   /* ============ PNG / JPG ============ */
-  /* Render en side til canvas via SVG foreignObject. Inline alt; ingen
-     eksterne ressurser, så canvas forblir ren og kan eksporteres. */
+  /* Foretrukket vei: html2canvas tegner siden direkte til canvas og virker i
+     alle nettlesere (Safari/Firefox blokkerer SVG foreignObject-metoden).
+     SVG-metoden beholdes som reserve. */
   exp.pageToImage = function (project, pageIdx, format, scale) {
-    return new Promise(function (resolve, reject) {
-      var pages = project.pages;
-      var pgObj = pages[pageIdx];
-      var size = BK.sizeOf(project);
-      var pxPerMm = 300 / 25.4; // 300 dpi
-      var W = Math.round(size.w * pxPerMm * (scale || 1));
-      var H = Math.round(size.h * pxPerMm * (scale || 1));
+    var pages = project.pages;
+    var pgObj = pages[pageIdx];
+    var size = BK.sizeOf(project);
+    var pxPerMm = 300 / 25.4; // 300 dpi
+    var W = Math.round(size.w * pxPerMm * (scale || 1));
+    var H = Math.round(size.h * pxPerMm * (scale || 1));
+    var mime = format === 'jpg' ? 'image/jpeg' : 'image/png';
 
+    if (window.html2canvas) {
+      var holder = document.createElement('div');
+      holder.style.cssText = 'position:fixed;left:-12000px;top:0;';
+      holder.innerHTML = BK.gen.renderPage(project, pgObj, pageIdx, pages.length);
+      var sheetEl = holder.firstChild;
+      sheetEl.style.boxShadow = 'none';
+      sheetEl.style.borderRadius = '0';
+      if (!sheetEl.style.background) sheetEl.style.background = '#ffffff';
+      document.body.appendChild(holder);
+      var fontsReady = (document.fonts && document.fonts.ready)
+        ? Promise.resolve(document.fonts.ready).catch(function () {})
+        : Promise.resolve();
+      return fontsReady.then(function () {
+        return window.html2canvas(sheetEl, {
+          scale: (300 / 96) * (scale || 1),
+          backgroundColor: '#ffffff',
+          logging: false,
+        });
+      }).then(function (canvas) {
+        if (holder.parentNode) holder.parentNode.removeChild(holder);
+        return canvas.toDataURL(mime, 0.92);
+      }).catch(function () {
+        if (holder.parentNode) holder.parentNode.removeChild(holder);
+        return svgFallback();
+      });
+    }
+    return svgFallback();
+
+    function svgFallback() {
+      return new Promise(function (resolve, reject) {
       var html = BK.gen.renderPage(project, pgObj, pageIdx, pages.length);
       // Fjern data-attributter og sørg for hvit bakgrunn
       var wrap = document.createElement('div');
@@ -131,7 +162,8 @@
       };
       img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('render_failed')); };
       img.src = url;
-    });
+      });
+    }
   };
 
   exp.downloadPageImage = function (project, pageIdx, format) {
