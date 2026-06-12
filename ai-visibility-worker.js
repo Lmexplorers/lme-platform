@@ -46,19 +46,26 @@ GEO-prinsipper du ALLTID følger:
 - Avslutt med en relevant CTA til riktig LME-område (Akademiet/Biblioteket/Butikk/Inner Circle).`;
 
 // =====================================================
-// CORS — samme tillatte opprinnelser som resten av LME
+// CORS — godtar alle LME-egne adresser (med/uten www + Pages-forhåndsvisninger)
 // =====================================================
-const ALLOWED_ORIGINS = [
-  "https://lme-plattform.pages.dev",
-  "https://lmexplorers.com",
-  "https://littlemontessoriexplorers.com",
-  "http://localhost:8000",
-  "http://localhost:3000",
-  "http://127.0.0.1:8000",
+const ALLOWED_SUFFIXES = [
+  "lmexplorers.com",
+  "littlemontessoriexplorers.com",
+  "lme-plattform.pages.dev",
 ];
 
+function isAllowedOrigin(origin) {
+  try {
+    const host = new URL(origin).hostname;
+    if (host === "localhost" || host === "127.0.0.1") return true;
+    return ALLOWED_SUFFIXES.some((s) => host === s || host.endsWith("." + s));
+  } catch {
+    return false;
+  }
+}
+
 function corsHeaders(origin) {
-  const allowed = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  const allowed = isAllowedOrigin(origin) ? origin : "https://lmexplorers.com";
   return {
     "Access-Control-Allow-Origin": allowed,
     "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -85,6 +92,12 @@ export default {
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders(origin) });
     }
+
+    // Helsesjekk: åpne worker-URL-en i nettleseren (GET) for å se hva som mangler.
+    if (request.method === "GET" && (url.pathname === "/" || url.pathname === "/ping")) {
+      return handlePing(env, origin);
+    }
+
     if (request.method !== "POST") {
       return new Response("Method not allowed", { status: 405, headers: corsHeaders(origin) });
     }
@@ -120,6 +133,40 @@ export default {
     }
   },
 };
+
+// =====================================================
+// Helsesjekk — GET worker-URL i nettleseren for å se hva som mangler
+// =====================================================
+async function handlePing(env, origin) {
+  const out = {
+    worker: "lme-ai-visibility",
+    hasAnthropicKey: !!env.ANTHROPIC_API_KEY,
+    hasGithubToken: !!env.GITHUB_TOKEN,
+    hasMailerlite: !!(env.MAILERLITE_TOKEN && env.MAILERLITE_GROUP_ID),
+    anthropic: env.ANTHROPIC_API_KEY ? "tester…" : "MANGLER nøkkel",
+  };
+  if (env.ANTHROPIC_API_KEY) {
+    try {
+      const r = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": env.ANTHROPIC_API_KEY,
+          "anthropic-version": "2023-06-01",
+        },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 8,
+          messages: [{ role: "user", content: "hi" }],
+        }),
+      });
+      out.anthropic = r.ok ? "OK ✓" : `feil ${r.status}: ${(await r.text()).slice(0, 180)}`;
+    } catch (e) {
+      out.anthropic = "exception: " + String(e).slice(0, 150);
+    }
+  }
+  return json(out, 200, origin);
+}
 
 // =====================================================
 // Anthropic-kall (samme som renate-ai-worker.js)
