@@ -469,15 +469,15 @@ async function runArticle(){
   }catch(e){fail('a-out');}finally{busy('a-btn',false);bumpScore('articles');}
 }
 
-/* Publiser artikkel -> worker renderer HTML og sender til Make-webhook (Fase 2) */
+/* Publiser artikkel -> worker rendrer HTML og committer rett til GitHub (Cloudflare Pages deployer) */
 async function publishArticle(){
   if(!lastArticle) return;
   const st=document.getElementById('pub-status');busy('pub-btn',true);
   try{
     const r=await api('/ai/publish',{article:lastArticle});
-    st.innerHTML=r.sent
-      ? `✅ ${LANG==='en'?'Sent to Make — publishing':'Sendt til Make — publiseres'} (/blog/${r.slug})`
-      : `⚠️ ${LANG==='en'?'Rendered, but MAKE_WEBHOOK_URL not set in worker':'Generert, men MAKE_WEBHOOK_URL er ikke satt i workeren'} (/blog/${r.slug})`;
+    st.innerHTML=r.published
+      ? `✅ ${LANG==='en'?'Published — deploying':'Publisert — deployes'} (/blog/${r.slug})`
+      : `⚠️ ${LANG==='en'?'Rendered, but GITHUB_TOKEN not set in worker':'Generert, men GITHUB_TOKEN er ikke satt i workeren'} (/blog/${r.slug})`;
   }catch(e){st.innerHTML=`<span style="color:var(--cerise)">${t('error')}</span>`;}
   finally{busy('pub-btn',false);}
 }
