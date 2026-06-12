@@ -219,23 +219,79 @@
   BK.state = state;
 
   var warnedQuota = false;
-  function persistLocal() {
-    var payload = {
+  var warnedSync = false;
+
+  /* --- IndexedDB: primær lokal lagring (tar hundrevis av MB, så bilder
+         aldri må strippes). localStorage beholdes som reserve/migrering. --- */
+  var idb = null;
+  function idbOpen() {
+    return new Promise(function (resolve) {
+      if (typeof indexedDB === 'undefined' || !indexedDB) return resolve(null);
+      try {
+        var req = indexedDB.open('bookly', 1);
+        req.onupgradeneeded = function () {
+          try { req.result.createObjectStore('kv'); } catch (e) {}
+        };
+        req.onsuccess = function () { resolve(req.result); };
+        req.onerror = function () { resolve(null); };
+        req.onblocked = function () { resolve(null); };
+      } catch (e) { resolve(null); }
+    });
+  }
+  function idbSet(key, val) {
+    return new Promise(function (resolve) {
+      if (!idb) return resolve(false);
+      try {
+        var tx = idb.transaction('kv', 'readwrite');
+        tx.objectStore('kv').put(val, key);
+        tx.oncomplete = function () { resolve(true); };
+        tx.onerror = function () { resolve(false); };
+        tx.onabort = function () { resolve(false); };
+      } catch (e) { resolve(false); }
+    });
+  }
+  function idbGet(key) {
+    return new Promise(function (resolve) {
+      if (!idb) return resolve(null);
+      try {
+        var tx = idb.transaction('kv', 'readonly');
+        var rq = tx.objectStore('kv').get(key);
+        rq.onsuccess = function () { resolve(rq.result || null); };
+        rq.onerror = function () { resolve(null); };
+      } catch (e) { resolve(null); }
+    });
+  }
+
+  function libraryPayload() {
+    return {
       projects: state.projects,
       folders: state.folders,
       exports: state.exports.slice(0, 60),
       savedPrompts: state.savedPrompts,
       settings: state.settings,
     };
+  }
+
+  function persistLocal() {
+    var json = JSON.stringify(libraryPayload());
+
+    if (idb) {
+      idbSet('library', json).then(function (ok) {
+        if (ok) return;
+        persistLocalStorage(json); // reserve hvis IndexedDB feiler
+      });
+      return;
+    }
+    persistLocalStorage(json);
+  }
+
+  function persistLocalStorage(json) {
     try {
-      localStorage.setItem(LS_KEY, JSON.stringify(payload));
+      localStorage.setItem(LS_KEY, json);
       return;
     } catch (e) { /* full: prøv uten bilder under */ }
-
-    // Nettleserens lagring er full. Redd alltid tekstene: lagre en kopi
-    // uten bilder lokalt. Skysynken (innlogget) beholder alt med bilder.
     try {
-      var slim = JSON.parse(JSON.stringify(payload));
+      var slim = JSON.parse(json);
       (slim.projects || []).forEach(function (p) {
         (p.pages || []).forEach(function (pg) {
           if (pg.data && pg.data.image) pg.data.image = null;
@@ -260,17 +316,32 @@
     }
   }
 
-  function loadLocal() {
+  function applyLibrary(raw) {
     try {
-      var raw = localStorage.getItem(LS_KEY);
-      if (!raw) return;
-      var d = JSON.parse(raw);
+      var d = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      if (!d) return false;
       state.projects = d.projects || [];
       state.folders = d.folders || [];
       state.exports = d.exports || [];
       state.savedPrompts = d.savedPrompts || [];
       if (d.settings) state.settings = Object.assign(state.settings, d.settings);
-    } catch (e) {}
+      return true;
+    } catch (e) { return false; }
+  }
+
+  function loadLocal() {
+    // Åpne IndexedDB og les biblioteket derfra; migrer fra localStorage
+    // første gang (den kopien kan mangle bilder, skyen fyller på etterpå).
+    return idbOpen().then(function (db) {
+      idb = db;
+      return idbGet('library');
+    }).then(function (raw) {
+      if (raw && applyLibrary(raw)) return;
+      try {
+        var ls = localStorage.getItem(LS_KEY);
+        if (ls && applyLibrary(ls) && idb) idbSet('library', ls);
+      } catch (e) {}
+    });
   }
 
   var syncTimer = null;
@@ -282,14 +353,19 @@
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          projects: state.projects,
-          folders: state.folders,
-          exports: state.exports.slice(0, 60),
-          savedPrompts: state.savedPrompts,
-          settings: state.settings,
-        }),
-      }).catch(function () {});
+        body: JSON.stringify(libraryPayload()),
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          // Si tydelig ifra hvis skylagringen feiler, i stedet for stillhet
+          if (d && d.error && !warnedSync) {
+            warnedSync = true;
+            BK.toast(BK.lang() === 'no'
+              ? 'Skylagringen feilet (' + d.error + '). Prosjektene er trygge lokalt, men sjekk innlogging eller si ifra til support.'
+              : 'Cloud sync failed (' + d.error + '). Projects are safe locally, but check your sign-in or contact support.');
+          }
+        })
+        .catch(function () {});
     }, 1200);
   }
 
@@ -510,11 +586,12 @@
 
   /* ============ OPPSTART ============ */
   BK.boot = function () {
-    loadLocal();
     BK.setLang(BK.lang());
-    // Hent bruker (deler auth med resten av LME-plattformen)
-    var me = window.LME && window.LME.me ? window.LME.me() : Promise.resolve({ user: null });
-    me.then(function (d) {
+    loadLocal().then(function () {
+      // Hent bruker (deler auth med resten av LME-plattformen)
+      var me = window.LME && window.LME.me ? window.LME.me() : Promise.resolve({ user: null });
+      return me;
+    }).then(function (d) {
       if (d && d.user) {
         state.user = d.user;
         var sub = d.subscription;

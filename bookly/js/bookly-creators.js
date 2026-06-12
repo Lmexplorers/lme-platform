@@ -156,17 +156,27 @@
     var isMath = mathCats.indexOf(cfg.category) !== -1;
     var isLit = litCats.indexOf(cfg.category) !== -1;
 
+    /* Respekter temaet: "gangetabellene" skal gi gangestykker, ikke pluss/minus */
+    var topicTxt = ((cfg.topic || '') + ' ' + (cfg.title || '')).toLowerCase();
+    var topicOps = [];
+    if (/gange|multiplikasjon|multiplication|times table/.test(topicTxt)) topicOps.push('mul');
+    if (/divisjon|deling|division|divide/.test(topicTxt)) topicOps.push('div');
+    if (/pluss|addisjon|addition/.test(topicTxt)) topicOps.push('add');
+    if (/minus|subtraksjon|subtraction/.test(topicTxt)) topicOps.push('sub');
+
     for (var i = 0; i < count; i++) {
       var no_ = i + 1;
       if (isMath) {
-        if (level === 1 && i % 2 === 0) {
+        if (!topicOps.length && level === 1 && i % 2 === 0) {
           var set = gen.emojiSet(BK.pick(gen.EMOJI_KEYS));
           var rows = [];
           for (var r = 0; r < 6; r++) rows.push({ emoji: BK.pick(set), count: BK.rnd(1, 9) });
           pages.push(pg('counting', (no ? 'Telle og skrive ' : 'Count and write ') + no_, { rows: rows }));
           rows.forEach(function (row, ri) { answers.push({ ref: (no ? 'Ark ' : 'Sheet ') + no_ + '.' + (ri + 1), ans: String(row.count) }); });
         } else {
-          var op = ['add', 'sub', 'mix', 'mul'][i % (level === 1 ? 2 : 4)];
+          var op = topicOps.length
+            ? topicOps[i % topicOps.length]
+            : ['add', 'sub', 'mix', 'mul'][i % (level === 1 ? 2 : 4)];
           var probs = gen.mathProblems(level, op, 16);
           pages.push(pg('mathsheet', (no ? 'Regneark ' : 'Math sheet ') + no_, { problems: probs }));
           probs.forEach(function (prb, pi) { answers.push({ ref: (no ? 'Ark ' : 'Sheet ') + no_ + '.' + (pi + 1), ans: prb.q.replace(' =', ' = ') + prb.a }); });
