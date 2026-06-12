@@ -2255,6 +2255,7 @@
             ? parsed.currentPageId
             : parsed.pages[0].id;
           state.brand = parsed.brand || defaultBrand();
+          normalizeBrandFonts(state.brand);
           migrateFooterColumns();
           applyBrand();
           render();
@@ -5472,6 +5473,19 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
     return BRAND_PALETTES.find(p => p.id === brand.paletteId) || BRAND_PALETTES[0];
   }
 
+  // Den låste LME-fonten er fast standard. Gamle lagringer kan ha Playpen
+  // liggende som brødtekst fra før fontreglene ble håndhevet; nullstill slik
+  // at font-paret (Sasson på brødtekst) gjelder til brukeren aktivt velger
+  // noe annet i merkepanelet.
+  function normalizeBrandFonts(brand) {
+    if (!brand) return;
+    if (!brand.fontId) brand.fontId = 'playpen-inter';
+    if (brand.fontId === 'playpen-inter') {
+      if (brand.fontBody === 'Playpen Sans') brand.fontBody = null;
+      if (brand.fontDisplay === 'Playpen Sans') brand.fontDisplay = null;
+    }
+  }
+
   function getActiveFont(brand) {
     return BRAND_FONTS.find(f => f.id === brand.fontId) || BRAND_FONTS[0];
   }
@@ -5512,6 +5526,28 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
     if (brand.btnColor) root.setProperty('--btn-color', brand.btnColor); else root.removeProperty('--btn-color');
     if (brand.btnFont) { ensureFontFamilyLoaded(brand.btnFont); root.setProperty('--btn-font', `'${brand.btnFont}', sans-serif`); } else root.removeProperty('--btn-font');
     root.setProperty('--btn-scale', brand.btnScale || '1');
+
+    persistBrand();
+  }
+
+  // Autolagre merkevarevalg (font, farger, logo, info) stille i bakgrunnen,
+  // slik at valget står fast og kun endres når brukeren velger noe annet.
+  let brandLoaded = false;
+  let brandSaveTimer = null;
+  function persistBrand() {
+    if (!brandLoaded) return;
+    clearTimeout(brandSaveTimer);
+    brandSaveTimer = setTimeout(() => {
+      try {
+        const payload = JSON.stringify({
+          pages: state.pages,
+          currentPageId: state.currentPageId,
+          brand: state.brand || defaultBrand()
+        });
+        if (payload.length > 4.8 * 1024 * 1024) return;
+        window.storage.set(STORAGE_KEY, payload);
+      } catch (e) { /* manuell lagring finnes fortsatt */ }
+    }, 800);
   }
 
   const loadedFonts = new Set();
@@ -5646,19 +5682,19 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
 
   function renderBrandPaneFonts() {
     const brand = state.brand;
+    const activeFont = getActiveFont(brand);
+    const dispCur = brand.fontDisplay || activeFont.display;
+    const bodyCur = brand.fontBody || activeFont.body;
     // Preload all font samples so the cards can be previewed inline
     BRAND_FONTS.forEach(f => ensureFontLoaded(f));
+    // Markeringen følger fontene som faktisk er i bruk, også ved fri miksing
     const fontsHTML = BRAND_FONTS.map(f => `
-      <div class="font-card ${brand.fontId === f.id ? 'active' : ''}" onclick="selectFont('${f.id}')">
+      <div class="font-card ${f.display === dispCur && f.body === bodyCur ? 'active' : ''}" onclick="selectFont('${f.id}')">
         <div class="font-display-preview" style="font-family:'${f.display}';">${escapeHtml(f.sample)}</div>
         <div class="font-body-preview" style="font-family:'${f.body}';">Smart, varm og enkel for alle å lese — perfekt for innholdet ditt.</div>
         <div class="font-name">${escapeHtml(f.name)} — ${escapeHtml(f.display)} + ${escapeHtml(f.body)}</div>
       </div>
     `).join('');
-
-    const activeFont = getActiveFont(brand);
-    const dispCur = brand.fontDisplay || activeFont.display;
-    const bodyCur = brand.fontBody || activeFont.body;
     const wCur = brand.headingWeight || '700';
     const sCur = brand.fontScale || '1';
     FONT_CHOICES.forEach(f => ensureFontFamilyLoaded(f.name));
@@ -5725,8 +5761,8 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
     renderBrandPaneFonts();
   }
 
-  function setHeadingFont(name) { state.brand.fontDisplay = name; applyBrand(); }
-  function setBodyFont(name) { state.brand.fontBody = name; applyBrand(); }
+  function setHeadingFont(name) { state.brand.fontDisplay = name; applyBrand(); renderBrandPaneFonts(); }
+  function setBodyFont(name) { state.brand.fontBody = name; applyBrand(); renderBrandPaneFonts(); }
   function setHeadingWeight(w) { state.brand.headingWeight = w; applyBrand(); }
   function setFontScale(s) { state.brand.fontScale = s; applyBrand(); }
 
@@ -5804,6 +5840,7 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
       await handleImageFile(file, dataUrl => {
         state.brand.logoUrl = dataUrl;
         renderBrandPaneInfo();
+        persistBrand();
       });
     });
   }
@@ -5818,6 +5855,7 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
       await handleImageFile(file, dataUrl => {
         state.brand.logoUrl = dataUrl;
         renderBrandPaneInfo();
+        persistBrand();
       });
     };
     input.click();
@@ -5827,11 +5865,13 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
     if (!confirm('Fjerne logoen?')) return;
     state.brand.logoUrl = '';
     renderBrandPaneInfo();
+    persistBrand();
     showToast('🌿 Logo fjernet');
   }
 
   function updateBrandField(field, value) {
     state.brand[field] = value;
+    persistBrand();
     // No re-render needed — input keeps its value
   }
 
@@ -5964,7 +6004,7 @@ ${aiState.lang === 'en' ? '- Write ALL text (headings, body, buttons, everything
     bar.querySelector('#rtNarrow').addEventListener('click', function () { styleSelection({ letterSpacing: '-0.5px' }); });
   })();
 
-  loadState();
+  loadState().then(() => { brandLoaded = true; });
 
 </script>
 
