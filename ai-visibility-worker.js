@@ -459,11 +459,13 @@ function renderArticleHTML(a, lang) {
 <meta name="description" content="${esc(a.metaDescription || "")}">
 <link rel="canonical" href="https://lmexplorers.com/blog/${esc(a.slug)}">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;600;700;800&display=swap');
-  :root{--cerise:#E91E89;--ink:#1A1A1A;--ink-soft:#4A4A4A;--cream:#FBF6F0;}
+  @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
+  :root{--cerise:#E91E89;--ink:#1A1A1A;--ink-soft:#4A4A4A;--cream:#FBF6F0;
+    --font:'Playpen Sans','Comic Sans MS',sans-serif;}
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Playpen Sans',sans-serif;color:var(--ink);line-height:1.6;
+  body{font-family:var(--font);color:var(--ink);line-height:1.6;
     background:linear-gradient(180deg,#FDF5F1,#FBEAE9);}
+  h1,h2,h3,h4,h5,h6{font-family:var(--font);}
   .wrap{max-width:760px;margin:0 auto;padding:48px 22px 80px;}
   a{color:var(--cerise);}
   h1{font-size:32px;line-height:1.2;margin-bottom:14px;}
