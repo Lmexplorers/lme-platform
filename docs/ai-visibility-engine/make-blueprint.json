@@ -88,7 +88,7 @@
         "bodyType": "raw",
         "parseResponse": true,
         "contentType": "application/json",
-        "data": "{\n  \"name\": \"AI Visibility: {{1.seoTitle}}\",\n  \"type\": \"regular\",\n  \"emails\": [{\n    \"subject\": \"{{1.seoTitle}}\",\n    \"from_name\": \"Little Montessori Explorers\",\n    \"from\": \"hei@lmexplorers.com\",\n    \"content\": \"<h1>{{1.title}}</h1><p>{{1.summary}}</p><p><a href=\\\"{{1.url}}\\\">Les hele artikkelen</a></p>\"\n  }],\n  \"groups\": [\"YOUR_MAILERLITE_GROUP_ID\"]\n}"
+        "data": "{\n  \"name\": \"AI Visibility: {{1.seoTitle}}\",\n  \"type\": \"regular\",\n  \"emails\": [{\n    \"subject\": \"{{1.seoTitle}}\",\n    \"from_name\": \"Little Montessori Explorers\",\n    \"from\": \"Renate@lmexplorers.com\",\n    \"content\": \"<h1>{{1.title}}</h1><p>{{1.summary}}</p><p><a href=\\\"{{1.url}}\\\">Les hele artikkelen</a></p>\"\n  }],\n  \"groups\": [\"YOUR_MAILERLITE_GROUP_ID\"]\n}"
       },
       "metadata": {
         "designer": { "x": 600, "y": 150 },
