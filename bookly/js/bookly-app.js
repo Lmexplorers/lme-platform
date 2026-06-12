@@ -571,6 +571,8 @@
         '<a class="bk-btn soft" href="#/cover/' + p.id + '">🖼️ ' + t('nav_cover') + '</a>' +
         '<a class="bk-btn soft" href="#/publishing/' + p.id + '">🚀</a>' +
         '<button class="bk-btn ghost" id="eGenAll">🎨 ' + (no ? 'Manglende bilder' : 'Missing images') + '</button>' +
+        '<button class="bk-btn ghost" id="eCopyPrompts">📋 ' + (no ? 'Alle prompter' : 'All prompts') + '</button>' +
+        '<label class="bk-btn ghost" style="cursor:pointer">📥 ' + (no ? 'Importer bilder' : 'Import images') + '<input id="eImportImgs" type="file" accept="image/*" multiple style="display:none"></label>' +
         '</div>') +
       '<div class="bk-editor" style="margin-top:18px">' +
       '<div class="bk-pagelist bk-no-print" id="ePages">' +
@@ -1032,6 +1034,55 @@
       return "Children's book illustration, " + (dd.illustration || (p.config && p.config.topic) || pgObj.title || p.title) +
         ', ' + imgStyleTxt() + ', no text';
     }
+    /* Kopier alle bildeprompter som nummerert liste (for Manus, ChatGPT m.fl.) */
+    $('#eCopyPrompts').onclick = function () {
+      var imgKinds = ['story', 'text', 'intro', 'colorprompt', 'cover', 'fullimage'];
+      var rows = [];
+      p.pages.forEach(function (pgObj, ix) {
+        if (imgKinds.indexOf(pgObj.kind) === -1) return;
+        var dd = pgObj.data || {};
+        var pr = dd.imgPrompt || defaultPromptFor(pgObj);
+        if (pr) rows.push((no ? 'Bilde ' : 'Image ') + String(ix + 1).padStart(2, '0') + ':\n' + pr);
+      });
+      if (!rows.length) { BK.toast(t('none_yet')); return; }
+      var header = no
+        ? 'Generer ett bilde per prompt under. Navngi filene 01.png, 02.png osv. i samme rekkefolge, sa kan de importeres samlet i Bookly.\n\n'
+        : 'Generate one image per prompt below. Name the files 01.png, 02.png etc. in the same order, so they can be imported in bulk in Bookly.\n\n';
+      BK.copyText(header + rows.join('\n\n'));
+      BK.toast((no ? 'Kopierte ' : 'Copied ') + rows.length + (no ? ' prompter. Lim inn i Manus/ChatGPT.' : ' prompts. Paste into Manus/ChatGPT.'));
+    };
+
+    /* Importer mange bilder pa en gang: fylles inn pa bildesider uten bilde,
+       i sidenes rekkefolge (filene sorteres pa navn, tallbevisst). */
+    $('#eImportImgs').onchange = function () {
+      var files = Array.prototype.slice.call(this.files || []);
+      this.value = '';
+      if (!files.length) return;
+      files.sort(function (a, b) { return a.name.localeCompare(b.name, undefined, { numeric: true }); });
+      var imgKinds = ['story', 'text', 'intro', 'colorprompt', 'cover', 'fullimage'];
+      var targets = [];
+      p.pages.forEach(function (pgObj, ix) {
+        if (imgKinds.indexOf(pgObj.kind) !== -1 && !(pgObj.data || {}).image) targets.push(ix);
+      });
+      if (!targets.length) {
+        BK.toast(no ? 'Alle bildesidene har allerede bilde. Fjern bilder forst, eller bytt enkeltsider manuelt.' : 'Every image page already has an image. Remove images first, or replace single pages manually.');
+        return;
+      }
+      var pairs = files.slice(0, targets.length).map(function (f, i) { return { file: f, ix: targets[i] }; });
+      Promise.all(pairs.map(function (pair) {
+        return BK.readImage(pair.file, 1400).then(function (url) {
+          p.pages[pair.ix].data.image = url;
+        });
+      })).then(function () {
+        BK.touch(p);
+        BK.refresh();
+        var extra = files.length > targets.length ? (no ? ' (' + (files.length - targets.length) + ' filer til overs)' : ' (' + (files.length - targets.length) + ' files left over)') : '';
+        BK.toast((no ? 'La ' : 'Placed ') + pairs.length + (no ? ' bilder pa sidene i rekkefolge.' : ' images onto the pages in order.') + extra);
+      }, function () {
+        BK.toast(no ? 'Kunne ikke lese en av filene. Bruk JPG eller PNG.' : 'Could not read one of the files. Use JPG or PNG.');
+      });
+    };
+
     $('#eGenAll').onclick = function () {
       var btn = this;
       if (BK._genAllRun) { BK._genAllRun = false; return; } // nytt klikk = stopp
