@@ -59,6 +59,25 @@
     --sidebar-w: 260px;
   }
 
+  /* Språkbytte-knapp i toppbaren */
+  .lang-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-soft);
+    background: #fff;
+    border: 1px solid var(--line);
+    padding: 8px 14px;
+    border-radius: var(--r-pill);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: .18s;
+  }
+  .lang-btn:hover { color: var(--cerise); transform: translateY(-1px); }
+
   /* Kun overskrifter (og logo) bruker Playpen Sans, alt annet Sasson Montessori */
   h1, h2, h3, h4, h5, h6,
   .topbar-logo,
@@ -713,8 +732,9 @@
     <div class="topbar-right">
       <a href="/dashboard" class="topbar-back">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="15 18 9 12 15 6"/></svg>
-        <span>Til dashbord</span>
+        <span data-no="Til dashbord" data-en="To dashboard">Til dashbord</span>
       </a>
+      <button class="lang-btn" id="langToggle" aria-label="Bytt språk / Switch language">EN 🌍</button>
       <button class="icon-btn" aria-label="Søk">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
       </button>
@@ -741,29 +761,29 @@
   <main class="main">
 
     <div class="page-header">
-      <h1 data-edit="ca-title">Velkommen til <em>LME Creative Academy</em></h1>
-      <p data-edit="ca-intro">Din kreative kommandosentral, her bygger du bøker, lager innhold, snakker med Renate AI og gjør Montessorimagien synlig for verden.</p>
+      <h1 data-edit="ca-title" data-no="Velkommen til <em>LME Creative Academy</em>" data-en="Welcome to <em>LME Creative Academy</em>">Velkommen til <em>LME Creative Academy</em></h1>
+      <p data-edit="ca-intro" data-no="Din kreative kommandosentral, her bygger du bøker, lager innhold, snakker med Renate AI og gjør Montessorimagien synlig for verden." data-en="Your creative command center, this is where you build books, create content, talk to Renate AI and make the Montessori magic visible to the world.">Din kreative kommandosentral, her bygger du bøker, lager innhold, snakker med Renate AI og gjør Montessorimagien synlig for verden.</p>
     </div>
 
     <!-- Hurtigvalg -->
     <div class="quick-row">
-      <a href="https://lme-conten-studio-no-eng.pages.dev" class="quick-btn primary">
+      <a href="https://lme-conten-studio-no-eng.pages.dev" class="quick-btn primary" data-no="🎨 Lag innhold nå" data-en="🎨 Create content now">
         🎨 Lag innhold nå
       </a>
       <!-- TODO: pek til Bookly når app-en er opprettet -->
-      <a href="/lme-builder" class="quick-btn">✨ Bygg en bok</a>
-      <a href="/spor-renate-ai" class="quick-btn">💗 Spør Renate AI</a>
-      <a href="#tutorials" class="quick-btn">📚 Lær noe nytt</a>
+      <a href="/lme-builder" class="quick-btn" data-no="✨ Bygg en bok" data-en="✨ Build a book">✨ Bygg en bok</a>
+      <a href="/spor-renate-ai" class="quick-btn" data-no="💗 Spør Renate AI" data-en="💗 Ask Renate AI">💗 Spør Renate AI</a>
+      <a href="#tutorials" class="quick-btn" data-no="📚 Lær noe nytt" data-en="📚 Learn something new">📚 Lær noe nytt</a>
     </div>
 
     <!-- Velkomst-/onboarding-kort -->
     <div class="welcome-card">
       <div class="welcome-card-text">
-        <h3>🌸 Ny her? Start med en kort tutorial</h3>
-        <p data-edit="ca-welcome">Lær hvordan LME Creative Academy fungerer på 5 minutter, og finn ut hvordan du publiserer ditt første innlegg, bygger din første bok eller setter opp e-postlisten din.</p>
+        <h3 data-no="🌸 Ny her? Start med en kort tutorial" data-en="🌸 New here? Start with a short tutorial">🌸 Ny her? Start med en kort tutorial</h3>
+        <p data-edit="ca-welcome" data-no="Lær hvordan LME Creative Academy fungerer på 5 minutter, og finn ut hvordan du publiserer ditt første innlegg, bygger din første bok eller setter opp e-postlisten din." data-en="Learn how LME Creative Academy works in 5 minutes, and find out how to publish your first post, build your first book or set up your email list.">Lær hvordan LME Creative Academy fungerer på 5 minutter, og finn ut hvordan du publiserer ditt første innlegg, bygger din første bok eller setter opp e-postlisten din.</p>
       </div>
       <a href="#tutorials" class="welcome-card-action">
-        Se tutorials
+        <span data-no="Se tutorials" data-en="See tutorials">Se tutorials</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><polyline points="9 18 15 12 9 6"/></svg>
       </a>
     </div>
@@ -772,8 +792,8 @@
     <section class="setup-card" id="kom-i-gang" data-setup>
       <div class="setup-top">
         <div>
-          <h2>🚀 Kom i gang</h2>
-          <p>Fem steg til å være oppe og kjøre med LME Creative Academy. Huk av etter hvert som du fullfører.</p>
+          <h2 data-no="🚀 Kom i gang" data-en="🚀 Get set up">🚀 Kom i gang</h2>
+          <p data-no="Fem steg til å være oppe og kjøre med LME Creative Academy. Huk av etter hvert som du fullfører." data-en="Five steps to get up and running with LME Creative Academy. Check them off as you complete them.">Fem steg til å være oppe og kjøre med LME Creative Academy. Huk av etter hvert som du fullfører.</p>
         </div>
         <div class="setup-progress">
           <div class="setup-progress-label">
@@ -788,107 +808,107 @@
         <div class="setup-step" data-step="profil">
           <button class="setup-check" aria-label="Marker som fullført">✓</button>
           <div class="setup-step-text">
-            <h3>Sett opp profilen din</h3>
-            <p>Legg inn merke, farger og kontaktinfo så alt ser ut som ditt.</p>
+            <h3 data-no="Sett opp profilen din" data-en="Set up your profile">Sett opp profilen din</h3>
+            <p data-no="Legg inn merke, farger og kontaktinfo så alt ser ut som ditt." data-en="Add your brand, colors and contact info so everything looks like you.">Legg inn merke, farger og kontaktinfo så alt ser ut som ditt.</p>
           </div>
-          <a href="/min-konto" class="setup-step-go">Åpne →</a>
+          <a href="/min-konto" class="setup-step-go" data-no="Åpne →" data-en="Open →">Åpne →</a>
         </div>
 
         <div class="setup-step" data-step="konto">
           <button class="setup-check" aria-label="Marker som fullført">✓</button>
           <div class="setup-step-text">
-            <h3>Koble kontoene dine</h3>
-            <p>Knytt til Instagram, TikTok, Facebook og e-post for å publisere og selge.</p>
+            <h3 data-no="Koble kontoene dine" data-en="Connect your accounts">Koble kontoene dine</h3>
+            <p data-no="Knytt til Instagram, TikTok, Facebook og e-post for å publisere og selge." data-en="Link Instagram, TikTok, Facebook and email to publish and sell.">Knytt til Instagram, TikTok, Facebook og e-post for å publisere og selge.</p>
           </div>
-          <a href="/min-konto" class="setup-step-go">Åpne →</a>
+          <a href="/min-konto" class="setup-step-go" data-no="Åpne →" data-en="Open →">Åpne →</a>
         </div>
 
         <div class="setup-step" data-step="innlegg">
           <button class="setup-check" aria-label="Marker som fullført">✓</button>
           <div class="setup-step-text">
-            <h3>Lag ditt første innlegg</h3>
-            <p>Bruk Content Studio og lag bilingual innhold på under 60 sekunder.</p>
+            <h3 data-no="Lag ditt første innlegg" data-en="Create your first post">Lag ditt første innlegg</h3>
+            <p data-no="Bruk Content Studio og lag bilingual innhold på under 60 sekunder." data-en="Use Content Studio and create bilingual content in under 60 seconds.">Bruk Content Studio og lag bilingual innhold på under 60 sekunder.</p>
           </div>
-          <a href="https://lme-conten-studio-no-eng.pages.dev" class="setup-step-go">Åpne →</a>
+          <a href="https://lme-conten-studio-no-eng.pages.dev" class="setup-step-go" data-no="Åpne →" data-en="Open →">Åpne →</a>
         </div>
 
         <div class="setup-step" data-step="side">
           <button class="setup-check" aria-label="Marker som fullført">✓</button>
           <div class="setup-step-text">
-            <h3>Bygg en landingsside</h3>
-            <p>Lag din første side med dra-og-slipp i LME Builder.</p>
+            <h3 data-no="Bygg en landingsside" data-en="Build a landing page">Bygg en landingsside</h3>
+            <p data-no="Lag din første side med dra-og-slipp i LME Builder." data-en="Create your first page with drag and drop in LME Builder.">Lag din første side med dra-og-slipp i LME Builder.</p>
           </div>
-          <a href="/lme-builder" class="setup-step-go">Åpne →</a>
+          <a href="/lme-builder" class="setup-step-go" data-no="Åpne →" data-en="Open →">Åpne →</a>
         </div>
 
         <div class="setup-step" data-step="funnel">
           <button class="setup-check" aria-label="Marker som fullført">✓</button>
           <div class="setup-step-text">
-            <h3>Sett opp en funnel</h3>
-            <p>Gjør gratis-lesere til kunder med en tripwire-funnel i fire steg.</p>
+            <h3 data-no="Sett opp en funnel" data-en="Set up a funnel">Sett opp en funnel</h3>
+            <p data-no="Gjør gratis-lesere til kunder med en tripwire-funnel i fire steg." data-en="Turn free readers into customers with a four-step tripwire funnel.">Gjør gratis-lesere til kunder med en tripwire-funnel i fire steg.</p>
           </div>
-          <a href="/funnel/oversikt.html" class="setup-step-go">Åpne →</a>
+          <a href="/funnel/oversikt.html" class="setup-step-go" data-no="Åpne →" data-en="Open →">Åpne →</a>
         </div>
       </div>
 
-      <div class="setup-done-msg">🎉 Alt klart! Du har fullført oppsettet, nå er du klar til å skape.</div>
+      <div class="setup-done-msg" data-no="🎉 Alt klart! Du har fullført oppsettet, nå er du klar til å skape." data-en="🎉 All done! You have completed the setup, now you are ready to create.">🎉 Alt klart! Du har fullført oppsettet, nå er du klar til å skape.</div>
     </section>
 
     <!-- Verktøy-seksjon -->
     <section class="section" id="oversikt">
       <div class="section-header">
-        <h2>Dine verktøy</h2>
-        <a href="/butikk">Se alle →</a>
+        <h2 data-no="Dine verktøy" data-en="Your tools">Dine verktøy</h2>
+        <a href="/butikk" data-no="Se alle →" data-en="See all →">Se alle →</a>
       </div>
 
       <div class="tool-grid">
         <a href="https://lme-conten-studio-no-eng.pages.dev" class="tool-card ic-1">
           <div class="tool-icon">🎨</div>
           <h3>Content Studio</h3>
-          <p>Lag bilingual innhold for Instagram, TikTok og Facebook på under 60 sekunder.</p>
+          <p data-no="Lag bilingual innhold for Instagram, TikTok og Facebook på under 60 sekunder." data-en="Create bilingual content for Instagram, TikTok and Facebook in under 60 seconds.">Lag bilingual innhold for Instagram, TikTok og Facebook på under 60 sekunder.</p>
           <span class="tool-tag">LIVE</span>
         </a>
 
         <a href="/lme-builder" class="tool-card ic-2">
           <div class="tool-icon">✨</div>
           <h3>LME Builder</h3>
-          <p>Bygg landingssider, e-postkampanjer og visuelle ressurser med dra-og-slipp.</p>
+          <p data-no="Bygg landingssider, e-postkampanjer og visuelle ressurser med dra-og-slipp." data-en="Build landing pages, email campaigns and visual assets with drag and drop.">Bygg landingssider, e-postkampanjer og visuelle ressurser med dra-og-slipp.</p>
           <span class="tool-tag">LIVE</span>
         </a>
 
         <a href="/spor-renate-ai" class="tool-card ic-3">
           <div class="tool-icon">💗</div>
           <h3>Renate AI</h3>
-          <p>Pedagogisk veiledning, Montessorispørsmål og innholdsidéer, døgnet rundt.</p>
+          <p data-no="Pedagogisk veiledning, Montessorispørsmål og innholdsidéer, døgnet rundt." data-en="Educational guidance, Montessori questions and content ideas, around the clock.">Pedagogisk veiledning, Montessorispørsmål og innholdsidéer, døgnet rundt.</p>
           <span class="tool-tag">LIVE</span>
         </a>
 
         <a href="/funnel/oversikt.html" class="tool-card ic-4">
           <div class="tool-icon">🪝</div>
-          <h3>Tripwire-funnel</h3>
-          <p>Komplett salgsreise i fire steg, fra gratis guide til AI-guiden på 99 kr. Alt redigeres i én fil.</p>
-          <span class="tool-tag">NY</span>
+          <h3 data-no="Tripwire-funnel" data-en="Tripwire funnel">Tripwire-funnel</h3>
+          <p data-no="Komplett salgsreise i fire steg, fra gratis guide til AI-guiden på 99 kr. Alt redigeres i én fil." data-en="A complete four-step sales journey, from free guide to the 99 NOK AI guide. Everything is edited in one file.">Komplett salgsreise i fire steg, fra gratis guide til AI-guiden på 99 kr. Alt redigeres i én fil.</p>
+          <span class="tool-tag" data-no="NY" data-en="NEW">NY</span>
         </a>
 
         <a href="/ai-visibility" class="tool-card ic-3">
           <div class="tool-icon">🔍</div>
           <h3>AI Visibility Engine</h3>
-          <p>Bli funnet i Google, Pinterest og AI-søk (ChatGPT, Gemini, Claude, Perplexity). Søkeord, GEO-artikler, FAQ, schema og pins, fra ett tema.</p>
-          <span class="tool-tag beta">NY</span>
+          <p data-no="Bli funnet i Google, Pinterest og AI-søk (ChatGPT, Gemini, Claude, Perplexity). Søkeord, GEO-artikler, FAQ, schema og pins, fra ett tema." data-en="Get found in Google, Pinterest and AI search (ChatGPT, Gemini, Claude, Perplexity). Keywords, GEO articles, FAQ, schema and pins, from one topic.">Bli funnet i Google, Pinterest og AI-søk (ChatGPT, Gemini, Claude, Perplexity). Søkeord, GEO-artikler, FAQ, schema og pins, fra ett tema.</p>
+          <span class="tool-tag beta" data-no="NY" data-en="NEW">NY</span>
         </a>
 
         <span class="tool-card ic-5 disabled">
           <div class="tool-icon">🌸</div>
           <h3>Inner Circle</h3>
-          <p>Tospråklig fellesskap, månedlige live-samlinger og direkte tråd til Renate.</p>
-          <span class="tool-tag soon">SNART</span>
+          <p data-no="Tospråklig fellesskap, månedlige live-samlinger og direkte tråd til Renate." data-en="Bilingual community, monthly live sessions and a direct line to Renate.">Tospråklig fellesskap, månedlige live-samlinger og direkte tråd til Renate.</p>
+          <span class="tool-tag soon" data-no="SNART" data-en="SOON">SNART</span>
         </span>
 
         <span class="tool-card ic-6 disabled">
           <div class="tool-icon">🎬</div>
           <h3>Reel Studio</h3>
-          <p>Lag korte videoer med Mia &amp; Teo-stil, musikk og automatisk publisering.</p>
-          <span class="tool-tag soon">SNART</span>
+          <p data-no="Lag korte videoer med Mia &amp; Teo-stil, musikk og automatisk publisering." data-en="Create short videos in the Mia &amp; Teo style, with music and automatic publishing.">Lag korte videoer med Mia &amp; Teo-stil, musikk og automatisk publisering.</p>
+          <span class="tool-tag soon" data-no="SNART" data-en="SOON">SNART</span>
         </span>
       </div>
     </section>
@@ -896,28 +916,28 @@
     <!-- Aktivitet/snarvei-seksjon -->
     <section class="section">
       <div class="section-header">
-        <h2>Fortsett der du slapp</h2>
-        <a href="/min-konto">Se all aktivitet →</a>
+        <h2 data-no="Fortsett der du slapp" data-en="Continue where you left off">Fortsett der du slapp</h2>
+        <a href="/min-konto" data-no="Se all aktivitet →" data-en="See all activity →">Se all aktivitet →</a>
       </div>
 
       <div class="tool-grid">
         <a href="https://lme-conten-studio-no-eng.pages.dev" class="tool-card ic-1">
           <div class="tool-icon">📝</div>
-          <h3>Vårens innholdsplan</h3>
-          <p>Du har 14 av 30 innlegg planlagt for mai. Klikk for å fortsette.</p>
+          <h3 data-no="Vårens innholdsplan" data-en="Spring content plan">Vårens innholdsplan</h3>
+          <p data-no="Du har 14 av 30 innlegg planlagt for mai. Klikk for å fortsette." data-en="You have 14 of 30 posts planned for May. Click to continue.">Du har 14 av 30 innlegg planlagt for mai. Klikk for å fortsette.</p>
         </a>
 
         <!-- TODO: pek til Bookly når app-en er opprettet -->
         <a href="/lme-builder" class="tool-card ic-3">
           <div class="tool-icon">📖</div>
-          <h3>Mia &amp; Teo, Skogsboken</h3>
-          <p>Utkast lagret 3 dager siden · 12 av 24 sider klare.</p>
+          <h3 data-no="Mia &amp; Teo, Skogsboken" data-en="Mia &amp; Teo, The Forest Book">Mia &amp; Teo, Skogsboken</h3>
+          <p data-no="Utkast lagret 3 dager siden · 12 av 24 sider klare." data-en="Draft saved 3 days ago · 12 of 24 pages ready.">Utkast lagret 3 dager siden · 12 av 24 sider klare.</p>
         </a>
 
         <a href="/lme-builder" class="tool-card ic-2">
           <div class="tool-icon">💌</div>
-          <h3>Velkomst-epost-sekvensen</h3>
-          <p>3 av 5 e-poster ferdig. Sett av 15 min for å fullføre denne.</p>
+          <h3 data-no="Velkomst-epost-sekvensen" data-en="The welcome email sequence">Velkomst-epost-sekvensen</h3>
+          <p data-no="3 av 5 e-poster ferdig. Sett av 15 min for å fullføre denne." data-en="3 of 5 emails done. Set aside 15 minutes to finish this one.">3 av 5 e-poster ferdig. Sett av 15 min for å fullføre denne.</p>
         </a>
       </div>
     </section>
@@ -931,39 +951,39 @@
       <div class="tool-grid">
         <a href="https://lme-conten-studio-no-eng.pages.dev" class="tool-card ic-1">
           <div class="tool-icon">🎨</div>
-          <h3>Lag ditt første innlegg</h3>
-          <p>Fra idé til ferdig bilingual innlegg i Content Studio, steg for steg.</p>
+          <h3 data-no="Lag ditt første innlegg" data-en="Create your first post">Lag ditt første innlegg</h3>
+          <p data-no="Fra idé til ferdig bilingual innlegg i Content Studio, steg for steg." data-en="From idea to finished bilingual post in Content Studio, step by step.">Fra idé til ferdig bilingual innlegg i Content Studio, steg for steg.</p>
           <span class="tool-tag soon">5 MIN</span>
         </a>
         <a href="/lme-builder" class="tool-card ic-2">
           <div class="tool-icon">✨</div>
-          <h3>Bygg en landingsside</h3>
-          <p>Lag en vakker side med dra-og-slipp i LME Builder.</p>
+          <h3 data-no="Bygg en landingsside" data-en="Build a landing page">Bygg en landingsside</h3>
+          <p data-no="Lag en vakker side med dra-og-slipp i LME Builder." data-en="Create a beautiful page with drag and drop in LME Builder.">Lag en vakker side med dra-og-slipp i LME Builder.</p>
           <span class="tool-tag soon">6 MIN</span>
         </a>
         <!-- TODO: pek til Bookly når app-en er opprettet -->
         <a href="/lme-builder" class="tool-card ic-3">
           <div class="tool-icon">📖</div>
-          <h3>Lag din egen Mia &amp; Teo-bok</h3>
-          <p>Bygg en bok side for side, klar for nedlasting eller KDP.</p>
-          <span class="tool-tag soon">Snart</span>
+          <h3 data-no="Lag din egen Mia &amp; Teo-bok" data-en="Create your own Mia &amp; Teo book">Lag din egen Mia &amp; Teo-bok</h3>
+          <p data-no="Bygg en bok side for side, klar for nedlasting eller KDP." data-en="Build a book page by page, ready for download or KDP.">Bygg en bok side for side, klar for nedlasting eller KDP.</p>
+          <span class="tool-tag soon" data-no="Snart" data-en="Soon">Snart</span>
         </a>
         <a href="/funnel/oversikt.html" class="tool-card ic-4">
           <div class="tool-icon">🪝</div>
-          <h3>Sett opp en tripwire-funnel</h3>
-          <p>Hele salgsreisen fra gratis guide til AI-guide på 99 kr.</p>
+          <h3 data-no="Sett opp en tripwire-funnel" data-en="Set up a tripwire funnel">Sett opp en tripwire-funnel</h3>
+          <p data-no="Hele salgsreisen fra gratis guide til AI-guide på 99 kr." data-en="The whole sales journey from free guide to the 99 NOK AI guide.">Hele salgsreisen fra gratis guide til AI-guide på 99 kr.</p>
           <span class="tool-tag soon">7 MIN</span>
         </a>
         <a href="/spor-renate-ai" class="tool-card ic-5">
           <div class="tool-icon">💗</div>
-          <h3>Få idéer fra Renate AI</h3>
-          <p>Spør om innholdsidéer, hooks og Montessoriveiledning når som helst.</p>
+          <h3 data-no="Få idéer fra Renate AI" data-en="Get ideas from Renate AI">Få idéer fra Renate AI</h3>
+          <p data-no="Spør om innholdsidéer, hooks og Montessoriveiledning når som helst." data-en="Ask for content ideas, hooks and Montessori guidance any time.">Spør om innholdsidéer, hooks og Montessoriveiledning når som helst.</p>
           <span class="tool-tag soon">3 MIN</span>
         </a>
         <a href="/lme-inntektskalkulator" class="tool-card ic-6">
           <div class="tool-icon">💰</div>
-          <h3>Regn ut inntektspotensialet</h3>
-          <p>Se hvor mange salg som skal til for å nå inntektsmålet ditt.</p>
+          <h3 data-no="Regn ut inntektspotensialet" data-en="Calculate your income potential">Regn ut inntektspotensialet</h3>
+          <p data-no="Se hvor mange salg som skal til for å nå inntektsmålet ditt." data-en="See how many sales it takes to reach your income goal.">Se hvor mange salg som skal til for å nå inntektsmålet ditt.</p>
           <span class="tool-tag soon">2 MIN</span>
         </a>
       </div>
@@ -1031,10 +1051,16 @@
       const total = steps.length;
       const p = Math.round((n / total) * 100);
       fill.style.width = p + '%';
-      count.textContent = n + ' av ' + total + ' fullført';
+      const en = document.documentElement.lang === 'en';
+      count.textContent = en
+        ? n + ' of ' + total + ' completed'
+        : n + ' av ' + total + ' fullført';
       pct.textContent = p + '%';
       card.classList.toggle('all-done', n === total);
     }
+
+    // Oppdater telleren når språket byttes
+    document.addEventListener('lme:lang', render);
 
     steps.forEach(step => {
       step.querySelector('.setup-check').addEventListener('click', () => {
@@ -1045,6 +1071,31 @@
     });
 
     render();
+  })();
+
+  // Språkbytte (NO/EN), samme mønster som om-renate.html.
+  // Husker valget på tvers av sider via localStorage.
+  (function () {
+    const btn = document.getElementById('langToggle');
+    if (!btn) return;
+    let lang = 'no';
+    try { lang = localStorage.getItem('lme_lang') || 'no'; } catch (e) {}
+
+    function apply(l) {
+      lang = l;
+      document.documentElement.lang = l;
+      document.querySelectorAll('[data-no][data-en]').forEach(el => {
+        const text = el.getAttribute('data-' + l);
+        if (text.includes('<')) el.innerHTML = text;
+        else el.textContent = text;
+      });
+      btn.textContent = l === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+      try { localStorage.setItem('lme_lang', l); } catch (e) {}
+      document.dispatchEvent(new CustomEvent('lme:lang', { detail: l }));
+    }
+
+    btn.addEventListener('click', () => apply(lang === 'no' ? 'en' : 'no'));
+    if (lang !== 'no') apply(lang);
   })();
 </script>
 

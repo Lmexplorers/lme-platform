@@ -78,107 +78,140 @@
   .footer{text-align:center;margin-top:48px;font-size:13px;color:var(--ink-muted);}
   .footer a{color:var(--cerise);font-weight:600;}
   @media(max-width:600px){.grid{grid-template-columns:1fr;}}
+
+  .lang-toggle{position:fixed;top:16px;right:16px;z-index:50;border:1px solid var(--line);background:#fff;
+    color:var(--ink);font-family:var(--font-body);font-weight:700;font-size:13px;padding:9px 14px;
+    border-radius:var(--r-pill);box-shadow:0 6px 20px rgba(26,26,26,.12);cursor:pointer;transition:.18s;}
+  .lang-toggle:hover{color:var(--cerise);}
 </style>
 </head>
 <body>
+  <button class="lang-toggle" id="langToggle" aria-label="Bytt språk / Switch language">EN 🌍</button>
   <div class="wrap">
-    <a href="/creative-academy" class="back">← Tilbake til Creative Academy</a>
+    <a href="/creative-academy" class="back" data-no="← Tilbake til Creative Academy" data-en="← Back to Creative Academy">← Tilbake til Creative Academy</a>
 
     <header class="hero">
-      <span class="kicker">📚 LME Kurs</span>
-      <h1>Lær å bruke <em>LME-verktøyene</em></h1>
-      <p>Korte, praktiske kurs som tar deg fra idé til ferdig innhold, bok, funnel og inntekt, i ditt eget tempo.</p>
+      <span class="kicker" data-no="📚 LME Kurs" data-en="📚 LME Courses">📚 LME Kurs</span>
+      <h1 data-no="Lær å bruke <em>LME-verktøyene</em>" data-en="Learn to use <em>the LME tools</em>">Lær å bruke <em>LME-verktøyene</em></h1>
+      <p data-no="Korte, praktiske kurs som tar deg fra idé til ferdig innhold, bok, funnel og inntekt, i ditt eget tempo." data-en="Short, practical courses that take you from idea to finished content, book, funnel and income, at your own pace.">Korte, praktiske kurs som tar deg fra idé til ferdig innhold, bok, funnel og inntekt, i ditt eget tempo.</p>
     </header>
 
     <div class="grid">
 
       <article class="course c1">
         <div class="ico">🌱</div>
-        <div class="meta">4 leksjoner · ~20 min · Nybegynner</div>
-        <h3>Kom i gang med LME</h3>
-        <p class="desc">Bli kjent med plattformen og sett opp det viktigste først.</p>
+        <div class="meta" data-no="4 leksjoner · ~20 min · Nybegynner" data-en="4 lessons · ~20 min · Beginner">4 leksjoner · ~20 min · Nybegynner</div>
+        <h3 data-no="Kom i gang med LME" data-en="Get started with LME">Kom i gang med LME</h3>
+        <p class="desc" data-no="Bli kjent med plattformen og sett opp det viktigste først." data-en="Get to know the platform and set up the essentials first.">Bli kjent med plattformen og sett opp det viktigste først.</p>
         <ul>
-          <li>Slik henger verktøyene sammen</li>
-          <li>Koble til kontoene dine</li>
-          <li>Lag ditt aller første innlegg</li>
-          <li>Planlegg din første uke</li>
+          <li data-no="Slik henger verktøyene sammen" data-en="How the tools fit together">Slik henger verktøyene sammen</li>
+          <li data-no="Koble til kontoene dine" data-en="Connect your accounts">Koble til kontoene dine</li>
+          <li data-no="Lag ditt aller første innlegg" data-en="Create your very first post">Lag ditt aller første innlegg</li>
+          <li data-no="Planlegg din første uke" data-en="Plan your first week">Planlegg din første uke</li>
         </ul>
-        <a href="/creative-academy#kom-i-gang" class="cta">Start kurset →</a>
+        <a href="/creative-academy#kom-i-gang" class="cta" data-no="Start kurset →" data-en="Start the course →">Start kurset →</a>
       </article>
 
       <article class="course c2">
         <div class="ico">🎨</div>
-        <div class="meta">5 leksjoner · ~30 min · Innhold</div>
-        <h3>Lag innhold som konverterer</h3>
-        <p class="desc">Lag bilingual Montessori-innhold for sosiale medier med Content Studio.</p>
+        <div class="meta" data-no="5 leksjoner · ~30 min · Innhold" data-en="5 lessons · ~30 min · Content">5 leksjoner · ~30 min · Innhold</div>
+        <h3 data-no="Lag innhold som konverterer" data-en="Create content that converts">Lag innhold som konverterer</h3>
+        <p class="desc" data-no="Lag bilingual Montessori-innhold for sosiale medier med Content Studio." data-en="Create bilingual Montessori content for social media with Content Studio.">Lag bilingual Montessori-innhold for sosiale medier med Content Studio.</p>
         <ul>
-          <li>Finn din nisje og tone</li>
-          <li>Hooks som stopper scrollingen</li>
-          <li>Bilder og karakter-konsistens</li>
-          <li>Planlegg og publiser automatisk</li>
+          <li data-no="Finn din nisje og tone" data-en="Find your niche and tone">Finn din nisje og tone</li>
+          <li data-no="Hooks som stopper scrollingen" data-en="Hooks that stop the scroll">Hooks som stopper scrollingen</li>
+          <li data-no="Bilder og karakter-konsistens" data-en="Images and character consistency">Bilder og karakter-konsistens</li>
+          <li data-no="Planlegg og publiser automatisk" data-en="Schedule and publish automatically">Planlegg og publiser automatisk</li>
         </ul>
-        <a href="https://lme-conten-studio-no-eng.pages.dev" class="cta">Åpne Content Studio →</a>
+        <a href="https://lme-conten-studio-no-eng.pages.dev" class="cta" data-no="Åpne Content Studio →" data-en="Open Content Studio →">Åpne Content Studio →</a>
       </article>
 
       <article class="course c3">
         <div class="ico">📖</div>
-        <div class="meta">6 leksjoner · ~40 min · Produkt</div>
-        <h3>Bygg din egen bok</h3>
-        <p class="desc">Lag en Mia &amp; Teo-bok eller arbeidsbok, klar for nedlasting eller KDP.</p>
+        <div class="meta" data-no="6 leksjoner · ~40 min · Produkt" data-en="6 lessons · ~40 min · Product">6 leksjoner · ~40 min · Produkt</div>
+        <h3 data-no="Bygg din egen bok" data-en="Build your own book">Bygg din egen bok</h3>
+        <p class="desc" data-no="Lag en Mia &amp; Teo-bok eller arbeidsbok, klar for nedlasting eller KDP." data-en="Create a Mia &amp; Teo book or workbook, ready for download or KDP.">Lag en Mia &amp; Teo-bok eller arbeidsbok, klar for nedlasting eller KDP.</p>
         <ul>
-          <li>Velg format og struktur</li>
-          <li>Skriv og illustrer side for side</li>
-          <li>Sett opp omslag og tittel</li>
-          <li>Eksporter for salg på Etsy/KDP</li>
+          <li data-no="Velg format og struktur" data-en="Choose format and structure">Velg format og struktur</li>
+          <li data-no="Skriv og illustrer side for side" data-en="Write and illustrate page by page">Skriv og illustrer side for side</li>
+          <li data-no="Sett opp omslag og tittel" data-en="Set up cover and title">Sett opp omslag og tittel</li>
+          <li data-no="Eksporter for salg på Etsy/KDP" data-en="Export for sale on Etsy/KDP">Eksporter for salg på Etsy/KDP</li>
         </ul>
-        <a href="/lme-builder" class="cta">Åpne LME Builder →</a>
+        <a href="/lme-builder" class="cta" data-no="Åpne LME Builder →" data-en="Open LME Builder →">Åpne LME Builder →</a>
       </article>
 
       <article class="course c4">
         <div class="ico">🪝</div>
-        <div class="meta">4 leksjoner · ~25 min · Salg</div>
-        <h3>Selg med en tripwire-funnel</h3>
-        <p class="desc">Gjør gratis-lesere til betalende kunder med en enkel salgsreise.</p>
+        <div class="meta" data-no="4 leksjoner · ~25 min · Salg" data-en="4 lessons · ~25 min · Sales">4 leksjoner · ~25 min · Salg</div>
+        <h3 data-no="Selg med en tripwire-funnel" data-en="Sell with a tripwire funnel">Selg med en tripwire-funnel</h3>
+        <p class="desc" data-no="Gjør gratis-lesere til betalende kunder med en enkel salgsreise." data-en="Turn free readers into paying customers with a simple sales journey.">Gjør gratis-lesere til betalende kunder med en enkel salgsreise.</p>
         <ul>
-          <li>Lag en gratis lead magnet</li>
-          <li>Sett opp et lavterskel-tilbud (tripwire)</li>
-          <li>Skriv e-postene som selger</li>
-          <li>Mål og forbedre</li>
+          <li data-no="Lag en gratis lead magnet" data-en="Create a free lead magnet">Lag en gratis lead magnet</li>
+          <li data-no="Sett opp et lavterskel-tilbud (tripwire)" data-en="Set up a low-cost offer (tripwire)">Sett opp et lavterskel-tilbud (tripwire)</li>
+          <li data-no="Skriv e-postene som selger" data-en="Write the emails that sell">Skriv e-postene som selger</li>
+          <li data-no="Mål og forbedre" data-en="Measure and improve">Mål og forbedre</li>
         </ul>
-        <a href="/funnel/oversikt.html" class="cta">Åpne funnel-oversikten →</a>
+        <a href="/funnel/oversikt.html" class="cta" data-no="Åpne funnel-oversikten →" data-en="Open the funnel overview →">Åpne funnel-oversikten →</a>
       </article>
 
       <article class="course c5">
         <div class="ico">💗</div>
-        <div class="meta">3 leksjoner · ~15 min · AI</div>
-        <h3>Renate AI som din assistent</h3>
-        <p class="desc">Bruk Renate AI til idéer, tekster og pedagogisk veiledning når som helst.</p>
+        <div class="meta" data-no="3 leksjoner · ~15 min · AI" data-en="3 lessons · ~15 min · AI">3 leksjoner · ~15 min · AI</div>
+        <h3 data-no="Renate AI som din assistent" data-en="Renate AI as your assistant">Renate AI som din assistent</h3>
+        <p class="desc" data-no="Bruk Renate AI til idéer, tekster og pedagogisk veiledning når som helst." data-en="Use Renate AI for ideas, texts and educational guidance any time.">Bruk Renate AI til idéer, tekster og pedagogisk veiledning når som helst.</p>
         <ul>
-          <li>Gode spørsmål å stille</li>
-          <li>Få innholdsidéer og hooks</li>
-          <li>Få hjelp med Montessorifaglige svar</li>
+          <li data-no="Gode spørsmål å stille" data-en="Good questions to ask">Gode spørsmål å stille</li>
+          <li data-no="Få innholdsidéer og hooks" data-en="Get content ideas and hooks">Få innholdsidéer og hooks</li>
+          <li data-no="Få hjelp med Montessorifaglige svar" data-en="Get help with Montessori answers">Få hjelp med Montessorifaglige svar</li>
         </ul>
-        <a href="/spor-renate-ai" class="cta">Spør Renate AI →</a>
+        <a href="/spor-renate-ai" class="cta" data-no="Spør Renate AI →" data-en="Ask Renate AI →">Spør Renate AI →</a>
       </article>
 
       <article class="course c6">
         <div class="ico">💌</div>
-        <div class="meta">Kommer snart · E-post</div>
-        <h3>E-post som selger</h3>
-        <p class="desc">Bygg en e-postliste og lag sekvenser som bygger relasjon og salg.</p>
+        <div class="meta" data-no="Kommer snart · E-post" data-en="Coming soon · Email">Kommer snart · E-post</div>
+        <h3 data-no="E-post som selger" data-en="Email that sells">E-post som selger</h3>
+        <p class="desc" data-no="Bygg en e-postliste og lag sekvenser som bygger relasjon og salg." data-en="Build an email list and create sequences that build relationships and sales.">Bygg en e-postliste og lag sekvenser som bygger relasjon og salg.</p>
         <ul>
-          <li>Sett opp en velkomstsekvens</li>
-          <li>Skriv e-poster folk gleder seg til</li>
-          <li>Automatiser oppfølging</li>
+          <li data-no="Sett opp en velkomstsekvens" data-en="Set up a welcome sequence">Sett opp en velkomstsekvens</li>
+          <li data-no="Skriv e-poster folk gleder seg til" data-en="Write emails people look forward to">Skriv e-poster folk gleder seg til</li>
+          <li data-no="Automatiser oppfølging" data-en="Automate follow-up">Automatiser oppfølging</li>
         </ul>
-        <span class="cta soon">Kommer snart</span>
+        <span class="cta soon" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span>
       </article>
 
     </div>
 
-    <div class="footer">
+    <div class="footer" data-no="Drevet av <a href='/creative-academy'>LME Creative Academy</a> · Little Montessori Explorers" data-en="Powered by <a href='/creative-academy'>LME Creative Academy</a> · Little Montessori Explorers">
       Drevet av <a href="/creative-academy">LME Creative Academy</a> · Little Montessori Explorers
     </div>
   </div>
+
+  <script>
+    // Språkbytte (NO/EN), samme mønster som om-renate.html.
+    // Husker valget på tvers av sider via localStorage.
+    (function () {
+      const btn = document.getElementById('langToggle');
+      if (!btn) return;
+      let lang = 'no';
+      try { lang = localStorage.getItem('lme_lang') || 'no'; } catch (e) {}
+
+      function apply(l) {
+        lang = l;
+        document.documentElement.lang = l;
+        document.querySelectorAll('[data-no][data-en]').forEach(el => {
+          const text = el.getAttribute('data-' + l);
+          if (text.includes('<')) el.innerHTML = text;
+          else el.textContent = text;
+        });
+        btn.textContent = l === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+        document.title = l === 'no' ? 'LME Kurs — LME Creative Academy' : 'LME Courses — LME Creative Academy';
+        try { localStorage.setItem('lme_lang', l); } catch (e) {}
+      }
+
+      btn.addEventListener('click', () => apply(lang === 'no' ? 'en' : 'no'));
+      if (lang !== 'no') apply(lang);
+    })();
+  </script>
 </body>
 </html>
