@@ -557,6 +557,7 @@
         '<button class="bk-btn ghost" id="eDocx">DOCX</button>' +
         '<a class="bk-btn soft" href="#/cover/' + p.id + '">🖼️ ' + t('nav_cover') + '</a>' +
         '<a class="bk-btn soft" href="#/publishing/' + p.id + '">🚀</a>' +
+        '<button class="bk-btn ghost" id="eGenAll">🎨 ' + (no ? 'Manglende bilder' : 'Missing images') + '</button>' +
         '</div>') +
       '<div class="bk-editor" style="margin-top:18px">' +
       '<div class="bk-pagelist bk-no-print" id="ePages">' +
@@ -950,6 +951,80 @@
     $('#ePng').onclick = function () { BK.exp.downloadPageImage(p, cur, 'png'); };
     $('#eJpg').onclick = function () { BK.exp.downloadPageImage(p, cur, 'jpg'); };
     $('#eDocx').onclick = function () { BK.exp.downloadDocx(p); };
+
+    /* Generer alle manglende bilder i boka, side for side */
+    var GENALL_LABEL = '🎨 ' + (no ? 'Manglende bilder' : 'Missing images');
+    function defaultPromptFor(pgObj) {
+      var dd = pgObj.data || {};
+      if (pgObj.kind === 'colorprompt') return dd.prompt || '';
+      if (pgObj.kind === 'cover') return "Children's book cover art, " + (dd.title || p.title) +
+        ((p.config && p.config.topic) ? ', ' + p.config.topic : '') +
+        ', Pixar inspired 3D render, Disney style, soft global illumination, rounded friendly shapes, expressive big eyes, warm cinematic lighting, kid friendly, high detail, no text, space for title at the top';
+      return "Children's book illustration, " + (dd.illustration || (p.config && p.config.topic) || pgObj.title || p.title) +
+        ', Pixar inspired 3D render, Disney style, soft global illumination, rounded friendly shapes, expressive big eyes, warm cinematic lighting, kid friendly, high detail, no text';
+    }
+    $('#eGenAll').onclick = function () {
+      var btn = this;
+      if (BK._genAllRun) { BK._genAllRun = false; return; } // nytt klikk = stopp
+      var imgKinds = ['story', 'text', 'intro', 'colorprompt', 'cover'];
+      var targets = [];
+      p.pages.forEach(function (pgObj, ix) {
+        var dd = pgObj.data || {};
+        if (dd.image) return;
+        if (imgKinds.indexOf(pgObj.kind) !== -1) targets.push(ix);
+        else if (pgObj.kind === 'fullimage' && dd.imgPrompt) targets.push(ix);
+      });
+      if (!targets.length) {
+        BK.toast(no ? 'Alle bildesidene har allerede bilde.' : 'Every image page already has an image.');
+        return;
+      }
+      BK.modal('<h3>🎨 ' + (no ? 'Generer manglende bilder' : 'Generate missing images') + '</h3>' +
+        '<p style="font-size:13px;line-height:1.6">' +
+        (no ? targets.length + ' sider mangler bilde. Bildene genereres ett og ett fra sidens prompt' +
+          ((p.refs && p.refs.length) ? ', med referansebildene dine som fasit for karakterene' : '') +
+          '. Dette tar omtrent ' + Math.ceil(targets.length * 0.75) + ' minutter, og du kan stoppe underveis.'
+        : targets.length + ' pages are missing an image. They are generated one by one from each page prompt' +
+          ((p.refs && p.refs.length) ? ', using your reference images for the characters' : '') +
+          '. This takes about ' + Math.ceil(targets.length * 0.75) + ' minutes, and you can stop along the way.') + '</p>' +
+        '<div class="actions"><button class="bk-btn quiet" id="mC">' + t('cancel') + '</button>' +
+        '<button class="bk-btn primary" id="mGo">🎨 ' + (no ? 'Start' : 'Start') + '</button></div>',
+        function (back, close) {
+          BK.$('#mC', back).onclick = close;
+          BK.$('#mGo', back).onclick = function () { close(); start(); };
+        });
+
+      function start() {
+        BK._genAllRun = true;
+        var total = targets.length, done = 0;
+        next();
+        function finish(msg) {
+          BK._genAllRun = false;
+          btn.innerHTML = GENALL_LABEL;
+          BK.toast(msg);
+          BK.refresh();
+        }
+        function next() {
+          if (!BK._genAllRun) return finish((no ? 'Stoppet. ' : 'Stopped. ') + done + (no ? ' bilder generert.' : ' images generated.'));
+          if (!targets.length) return finish(done + (no ? ' bilder generert!' : ' images generated!'));
+          var ix = targets.shift();
+          var pgObj = p.pages[ix];
+          var dd = pgObj.data;
+          btn.innerHTML = '⏹ ' + (no ? 'Stopp · bilde ' : 'Stop · image ') + (done + 1) + ' / ' + total;
+          var promptTxt = dd.imgPrompt || defaultPromptFor(pgObj);
+          BK.ai.image(promptTxt, null, (p.refs && p.refs.length) ? p.refs : null).then(function (url) {
+            dd.image = url;
+            dd.imgPrompt = promptTxt;
+            done++;
+            BK.touch(p);
+            if (ix === cur) renderStage(true);
+            next();
+          }, function (err) {
+            finish((no ? 'Stoppet ved feil etter ' : 'Stopped on an error after ') + done +
+              (no ? ' bilder' : ' images') + ((err && err.detail) ? ': ' + err.detail : '.'));
+          });
+        }
+      }
+    };
 
     renderStage();
   });
