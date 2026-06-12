@@ -92,6 +92,12 @@ export default {
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders(origin) });
     }
+
+    // Helsesjekk: åpne worker-URL-en i nettleseren (GET) for å se hva som mangler.
+    if (request.method === "GET" && (url.pathname === "/" || url.pathname === "/ping")) {
+      return handlePing(env, origin);
+    }
+
     if (request.method !== "POST") {
       return new Response("Method not allowed", { status: 405, headers: corsHeaders(origin) });
     }
@@ -127,6 +133,40 @@ export default {
     }
   },
 };
+
+// =====================================================
+// Helsesjekk — GET worker-URL i nettleseren for å se hva som mangler
+// =====================================================
+async function handlePing(env, origin) {
+  const out = {
+    worker: "lme-ai-visibility",
+    hasAnthropicKey: !!env.ANTHROPIC_API_KEY,
+    hasGithubToken: !!env.GITHUB_TOKEN,
+    hasMailerlite: !!(env.MAILERLITE_TOKEN && env.MAILERLITE_GROUP_ID),
+    anthropic: env.ANTHROPIC_API_KEY ? "tester…" : "MANGLER nøkkel",
+  };
+  if (env.ANTHROPIC_API_KEY) {
+    try {
+      const r = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": env.ANTHROPIC_API_KEY,
+          "anthropic-version": "2023-06-01",
+        },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 8,
+          messages: [{ role: "user", content: "hi" }],
+        }),
+      });
+      out.anthropic = r.ok ? "OK ✓" : `feil ${r.status}: ${(await r.text()).slice(0, 180)}`;
+    } catch (e) {
+      out.anthropic = "exception: " + String(e).slice(0, 150);
+    }
+  }
+  return json(out, 200, origin);
+}
 
 // =====================================================
 // Anthropic-kall (samme som renate-ai-worker.js)
