@@ -23,11 +23,18 @@
     --shadow-md:0 4px 16px rgba(26,26,26,0.06),0 2px 6px rgba(26,26,26,0.04);
     --shadow-lg:0 12px 40px rgba(26,26,26,0.08),0 4px 12px rgba(26,26,26,0.04);
     --r-sm:12px; --r-md:18px; --r-lg:24px; --r-xl:32px; --r-pill:999px;
-    --font-body:'Playpen Sans','Comic Sans MS',sans-serif;
-    --font-heading:'Playpen Sans','Comic Sans MS',sans-serif;
+    /* LÅST FONTREGEL: Playpen Sans = KUN overskrifter. Sasson Montessori = all annen tekst. Aldri avvik. */
+    --font-heading:'Playpen Sans',system-ui,sans-serif;
+    --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
     --sidebar-w:260px;
   }
   @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
+  @font-face{
+    font-family:'Sasson Montessori';
+    src:url('/fonts/SassoonMontessori.woff2') format('woff2'),
+        url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-display:swap;
+  }
 
   *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
@@ -40,7 +47,7 @@
   h1,h2,h3,h4,h5,h6{font-family:var(--font-heading);}
   img{max-width:100%;display:block;}
   a{color:inherit;text-decoration:none;}
-  button{font-family:inherit;cursor:pointer;border:none;background:none;}
+  button,input,select,textarea{font-family:var(--font-body);cursor:pointer;border:none;background:none;}
 
   /* TOPBAR */
   .topbar{position:sticky;top:0;z-index:50;background:rgba(253,245,241,0.85);

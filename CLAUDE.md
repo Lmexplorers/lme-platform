@@ -52,6 +52,20 @@ etter valgt språk). Lag aldri ny norsk-only tekst uten engelsk oversettelse.
 - Push med retry (2s, 4s, 8s, 16s) ved nettverksfeil.
 - Ikke lag pull request med mindre Renate ber om det.
 
+## 🔤 Fontregler — LÅST (aldri avvik)
+
+LMEs fonter er ikke valgfrie. På alle sider, og i alt jeg genererer (også
+worker-rendrede sider), gjelder:
+
+- **Overskrifter (h1–h4/h6): Playpen Sans** — kun overskrifter.
+- **All annen tekst (brødtekst, knapper, input, lister, osv.): Sasson Montessori.**
+
+Sasson lastes lokalt med `@font-face` fra `/fonts/SassoonMontessori.woff2`
+(+ `.ttf`), familienavn `'Sasson Montessori'`. Standard CSS-variabler:
+`--font-head:'Playpen Sans',system-ui,sans-serif;`
+`--font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;`
+Bruk aldri Playpen (eller systemfont/Comic Sans) på brødtekst. Aldri avvik.
+
 ## 🧩 Arkitektur (kort)
 
 - Cloudflare Pages + Functions (`functions/`). KV-binding: `BUILDER_KV`.
