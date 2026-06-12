@@ -74,7 +74,8 @@
     var facts = 'Title: ' + cfg.title + '\nTopic: ' + (cfg.topic || '-') + '\nAudience: ' + (cfg.audience || '-') +
       '\nAge group: ' + (cfg.age || '-') + '\nCharacters: ' + (cfg.characters || '-') +
       '\nWriting style: ' + (cfg.style || 'warm, simple') + '\nTone: ' + (cfg.tone || 'curious, gentle') +
-      '\nLearning goals: ' + (cfg.goals || '-');
+      '\nLearning goals: ' + (cfg.goals || '-') +
+      (cfg.characters ? '\nIMPORTANT: Use ONLY these exact character names: ' + cfg.characters + '. Never invent, rename or add other named characters.' : '');
     var pageSpec = '{"text":"page text (1-3 sentences for picture books)","illustration":"illustration description for this page: describe ONLY the scene, action, setting and mood. Never describe character appearance, hair or clothing; the character look is locked elsewhere"}';
 
     function prog(s) { if (onProgress) { try { onProgress(s); } catch (e) {} } }

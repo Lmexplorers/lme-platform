@@ -577,11 +577,11 @@
       return names[k] ? L(names[k]) : k;
     }
 
-    function renderStage() {
+    function renderStage(skipPanel) {
       var stage = $('#eStage');
       stage.innerHTML = BK.gen.renderPage(p, p.pages[cur], cur, p.pages.length);
       mountSheets(stage);
-      renderEditPanel();
+      if (!skipPanel) renderEditPanel();
     }
 
     function renderEditPanel() {
@@ -647,6 +647,7 @@
         (regen ? '<button class="bk-btn ghost sm" id="edRegen">🎲 ' + t('regenerate') + '</button>' : '') +
         (sol ? '<button class="bk-btn ghost sm" id="edSol">' + (d.showSolution ? (no ? 'Skjul fasit' : 'Hide solution') : (no ? 'Vis fasit' : 'Show solution')) + '</button>' : '') +
         '<button class="bk-btn quiet sm" id="edDelPg">🗑️ ' + (no ? 'Slett side' : 'Delete page') + '</button>' +
+        '<button class="bk-btn ghost sm" id="edReplace">🔁 ' + (no ? 'Søk og erstatt i hele boka' : 'Find & replace in the whole book') + '</button>' +
         '</div>';
       /* Synkroniser alle felter inn i modellen, så ingenting går tapt
          selv om man genererer eller bytter side uten å trykke Lagre. */
@@ -664,7 +665,10 @@
         el2.addEventListener('input', function () {
           syncFields();
           clearTimeout(BK._edT);
-          BK._edT = setTimeout(function () { BK.touch(p); }, 600);
+          BK._edT = setTimeout(function () {
+            BK.touch(p);
+            renderStage(true); // levende forhåndsvisning, uten å miste fokus i feltet
+          }, 500);
         });
       });
       $('#edSave').onclick = function () {
@@ -812,6 +816,42 @@
         BK._curPage = Math.max(0, cur - 1);
         BK.touch(p);
         BK.refresh();
+      };
+      $('#edReplace').onclick = function () {
+        BK.modal('<h3>🔁 ' + (no ? 'Søk og erstatt i hele boka' : 'Find & replace in the whole book') + '</h3>' +
+          '<div class="bk-form" style="grid-template-columns:1fr">' +
+          '<div class="bk-field"><label>' + (no ? 'Finn' : 'Find') + '</label><input id="mFind" type="text" placeholder="' + (no ? 'F.eks. Elias' : 'E.g. Elias') + '"></div>' +
+          '<div class="bk-field"><label>' + (no ? 'Erstatt med' : 'Replace with') + '</label><input id="mRepl" type="text" placeholder="' + (no ? 'F.eks. Teo' : 'E.g. Teo') + '"></div>' +
+          '</div><div class="hint" style="margin-top:6px">' + (no ? 'Gjelder tekst, titler, illustrasjonsbeskrivelser og prompter på alle sidene.' : 'Applies to text, titles, illustration descriptions and prompts on every page.') + '</div>' +
+          '<div class="actions"><button class="bk-btn quiet" id="mC">' + t('cancel') + '</button>' +
+          '<button class="bk-btn primary" id="mGo">🔁 ' + (no ? 'Erstatt' : 'Replace') + '</button></div>',
+          function (back, close) {
+            BK.$('#mC', back).onclick = close;
+            BK.$('#mGo', back).onclick = function () {
+              var find = BK.$('#mFind', back).value;
+              var repl = BK.$('#mRepl', back).value;
+              if (!find) { BK.toast(no ? 'Skriv inn hva som skal finnes.' : 'Enter what to find.'); return; }
+              var count = 0;
+              function rep(s2) {
+                if (typeof s2 !== 'string' || s2.indexOf(find) === -1) return s2;
+                count += s2.split(find).length - 1;
+                return s2.split(find).join(repl);
+              }
+              p.pages.forEach(function (pg2) {
+                pg2.title = rep(pg2.title);
+                var dd = pg2.data || {};
+                ['text', 'illustration', 'hook', 'imgPrompt', 'sub', 'idea', 'prompt', 'reason', 'title', 'subtitle'].forEach(function (k) {
+                  if (typeof dd[k] === 'string') dd[k] = rep(dd[k]);
+                });
+                if (dd.prompts) dd.prompts = dd.prompts.map(rep);
+                if (dd.items && pg2.kind === 'toc') dd.items.forEach(function (it) { it.t = rep(it.t); });
+              });
+              BK.touch(p);
+              close();
+              BK.refresh();
+              BK.toast((no ? 'Erstattet ' : 'Replaced ') + count + (no ? ' forekomster.' : ' occurrences.'));
+            };
+          });
       };
     }
 
