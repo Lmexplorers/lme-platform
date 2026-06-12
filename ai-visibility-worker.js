@@ -97,7 +97,7 @@ export default {
       return handleSchema(request, origin);
     }
 
-    // Publisering: render artikkel -> HTML og send til Make-webhook (Fase 2).
+    // Publisering: render artikkel -> HTML og commit rett til GitHub (Fase 2).
     if (url.pathname === "/ai/publish") {
       return handlePublish(request, env, origin);
     }
@@ -317,13 +317,15 @@ async function handleSchema(request, origin) {
 }
 
 // =====================================================
-// Publisering (Fase 2) — render artikkel til HTML + send til Make
+// Publisering (Fase 2) — alt i Cloudflare, ingen mellomledd
 // =====================================================
 // Body: { article: {seoTitle, metaDescription, slug, h1, intro, sections, faq, cta}, lang }
 // 1) Bygger en full LME-stilet HTML-side med JSON-LD (Article + FAQ).
-// 2) Hvis env.MAKE_WEBHOOK_URL er satt: POSTer {slug, lang, seoTitle, html} dit,
-//    slik at Make-scenarioet skriver fila til repoet (/blog/<slug>.html) og
-//    Cloudflare Pages deployer den automatisk.
+// 2) Committer den rett til repoet via GitHub Contents API -> Cloudflare Pages
+//    deployer automatisk. Krever Worker-secret GITHUB_TOKEN (Contents: R/W).
+//    Valgfritt: GITHUB_REPO (default Lmexplorers/lme-platform), GITHUB_BRANCH (default main).
+// 3) Valgfritt: sender et MailerLite-kampanjeutkast direkte hvis MAILERLITE_TOKEN
+//    og MAILERLITE_GROUP_ID er satt. Ingen Make, ingen webhook.
 async function handlePublish(request, env, origin) {
   let body;
   try { body = await request.json(); }
@@ -336,32 +338,85 @@ async function handlePublish(request, env, origin) {
   }
 
   const html = renderArticleHTML(a, lang);
+  const path = `blog/${a.slug}.html`;
+  const url = `https://lmexplorers.com/${path.replace(/\.html$/, "")}`;
 
-  let sent = false, makeStatus = null;
-  if (env.MAKE_WEBHOOK_URL) {
+  // 1) Commit rett til GitHub (utløser Pages-deploy)
+  let published = false, githubStatus = null;
+  if (env.GITHUB_TOKEN) {
+    const repo = env.GITHUB_REPO || "Lmexplorers/lme-platform";
+    const branch = env.GITHUB_BRANCH || "main";
+    const api = `https://api.github.com/repos/${repo}/contents/${path}`;
+    const gh = {
+      "Authorization": `Bearer ${env.GITHUB_TOKEN}`,
+      "Accept": "application/vnd.github+json",
+      "User-Agent": "LME-AI-Visibility",
+      "Content-Type": "application/json",
+    };
     try {
-      const r = await fetch(env.MAKE_WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      // Finn eksisterende sha (for oppdatering); 404 = ny fil
+      let sha;
+      const head = await fetch(`${api}?ref=${branch}`, { headers: gh });
+      if (head.ok) sha = (await head.json()).sha;
+
+      const put = await fetch(api, {
+        method: "PUT",
+        headers: gh,
         body: JSON.stringify({
-          slug: a.slug,
-          lang,
-          seoTitle: a.seoTitle || a.h1,
-          title: a.h1 || a.seoTitle || "",
-          metaDescription: a.metaDescription || "",
-          summary: a.intro || a.metaDescription || "",
-          url: `https://lmexplorers.com/blog/${a.slug}`,
-          html,
+          message: `AI Visibility: artikkel ${a.slug} (${lang})`,
+          branch,
+          content: b64utf8(html),
+          ...(sha ? { sha } : {}),
         }),
       });
-      makeStatus = r.status;
-      sent = r.ok;
+      githubStatus = put.status;
+      published = put.ok;
     } catch (e) {
-      makeStatus = "error";
+      githubStatus = "error";
     }
   }
 
-  return json({ result: { slug: a.slug, html, sent, makeStatus } }, 200, origin);
+  // 2) Valgfritt: MailerLite-kampanjeutkast direkte fra workeren
+  let mailStatus = null;
+  if (env.MAILERLITE_TOKEN && env.MAILERLITE_GROUP_ID) {
+    try {
+      const r = await fetch("https://connect.mailerlite.com/api/campaigns", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${env.MAILERLITE_TOKEN}`,
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify({
+          name: `AI Visibility: ${a.seoTitle || a.h1}`,
+          type: "regular",
+          groups: [env.MAILERLITE_GROUP_ID],
+          emails: [{
+            subject: a.seoTitle || a.h1,
+            from_name: "Little Montessori Explorers",
+            from: env.MAILERLITE_FROM || "Renate@lmexplorers.com",
+            content: `<h1>${esc(a.h1)}</h1><p>${esc(a.intro || "")}</p><p><a href="${url}">Les hele artikkelen</a></p>`,
+          }],
+        }),
+      });
+      mailStatus = r.status; // utkast opprettes; sending skjer manuelt i MailerLite
+    } catch (e) {
+      mailStatus = "error";
+    }
+  }
+
+  return json({ result: { slug: a.slug, url, html, published, githubStatus, mailStatus } }, 200, origin);
+}
+
+// Base64 av UTF-8-streng i Workers (uten å sprenge call-stacken på store HTML-er)
+function b64utf8(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = "";
+  const chunk = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunk) {
+    bin += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+  }
+  return btoa(bin);
 }
 
 function esc(s) {
@@ -404,11 +459,18 @@ function renderArticleHTML(a, lang) {
 <meta name="description" content="${esc(a.metaDescription || "")}">
 <link rel="canonical" href="https://lmexplorers.com/blog/${esc(a.slug)}">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;600;700;800&display=swap');
-  :root{--cerise:#E91E89;--ink:#1A1A1A;--ink-soft:#4A4A4A;--cream:#FBF6F0;}
+  /* LAAST FONTREGEL: Playpen Sans = KUN overskrifter. Sasson Montessori = all annen tekst. Aldri avvik. */
+  @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
+  @font-face{font-family:'Sasson Montessori';
+    src:url('/fonts/SassoonMontessori.woff2') format('woff2'),
+        url('/fonts/SassoonMontessori.ttf') format('truetype');font-display:swap;}
+  :root{--cerise:#E91E89;--ink:#1A1A1A;--ink-soft:#4A4A4A;--cream:#FBF6F0;
+    --font-head:'Playpen Sans',system-ui,sans-serif;
+    --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;}
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Playpen Sans',sans-serif;color:var(--ink);line-height:1.6;
+  body{font-family:var(--font-body);color:var(--ink);line-height:1.6;
     background:linear-gradient(180deg,#FDF5F1,#FBEAE9);}
+  h1,h2,h3,h4,h5,h6{font-family:var(--font-head);}
   .wrap{max-width:760px;margin:0 auto;padding:48px 22px 80px;}
   a{color:var(--cerise);}
   h1{font-size:32px;line-height:1.2;margin-bottom:14px;}
