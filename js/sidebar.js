@@ -16,7 +16,7 @@
     '  <div class="sidebar-group-title"><span class="grp-emoji">🛠️</span> <span data-no="Verktøy" data-en="Tools">Verktøy</span></div>',
     '  <a href="/lme-builder" class="sidebar-item" data-tool="builder"><span class="si-icon">✨</span><span class="si-label">LME Builder</span></a>',
     '  <a href="/bookly/" class="sidebar-item"><span class="si-icon">📚</span><span class="si-label">LME Bookly</span><span class="si-badge beta" data-no="Ny" data-en="New">Ny</span></a>',
-    '  <a href="https://lme-conten-studio-no-eng.pages.dev" class="sidebar-item"><span class="si-icon">🎨</span><span class="si-label">Content Studio</span></a>',
+    '  <a href="https://lme-contentstudio.pages.dev" class="sidebar-item"><span class="si-icon">🎨</span><span class="si-label">Content Studio</span></a>',
     '  <a href="/spor-renate-ai" class="sidebar-item"><span class="si-icon">💗</span><span class="si-label">Renate AI</span></a>',
     '  <a href="/ai-visibility" class="sidebar-item"><span class="si-icon">🔍</span><span class="si-label">AI Visibility</span><span class="si-badge beta" data-no="Ny" data-en="New">Ny</span></a>',
     '</div>',

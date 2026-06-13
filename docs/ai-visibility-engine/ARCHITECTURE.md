@@ -54,7 +54,7 @@ som medlemshjem. Bilingual norsk/engelsk Montessori-plattform.
 
 ### Apper / verktøy
 - **LME Creative Studio** (`creative-studio.html`) — hub for alle AI-/skaperverktøy.
-- **Content Studio** (ekstern: `lme-conten-studio-no-eng.pages.dev`) — bilingual sosiale-medier-innhold (AI SaaS).
+- **Content Studio** (ekstern: `lme-contentstudio.pages.dev`) — bilingual sosiale-medier-innhold (AI SaaS).
 - **LME Builder** (`lme-builder.html`) — side-/bok-/ressursbygger (bruker `lme-proxy/ai-generate`).
 - **Renate AI** (`spor-renate-ai.html`, `ask-renate-ai.html`, worker `renate-ai-worker.js`) — pedagogisk AI-assistent.
 - **Tripwire-funnel** (`funnel/`) — salgstrakt.
