@@ -33,17 +33,15 @@
   body{
     font-family:var(--font-body);color:var(--ink);line-height:1.6;font-weight:400;
     background:
-      radial-gradient(ellipse 80% 50% at 20% 0,rgba(255,209,225,.35),transparent 60%),
-      radial-gradient(ellipse 60% 40% at 100% 8%,rgba(255,232,240,.4),transparent 60%),
+      radial-gradient(ellipse 80% 50% at 20% 0,rgba(255,209,225,.32),transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 8%,rgba(255,232,240,.38),transparent 60%),
       var(--warm-white);
     min-height:100vh;
   }
   h1,h2,h3,h4{font-family:var(--font-head);font-weight:700;line-height:1.15;color:var(--ink);}
 
-  /* Topbar */
   .topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:16px;
-    padding:14px 26px;background:rgba(255,252,249,.85);backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--line);}
+    padding:14px 26px;background:rgba(255,252,249,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
   .topbar .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);}
   .topbar .brand img{width:34px;height:34px;border-radius:9px;background:#fff;object-fit:contain;}
   .topbar .brand b{font-family:var(--font-head);font-weight:800;font-size:18px;letter-spacing:-.3px;}
@@ -53,17 +51,27 @@
   .lang-toggle{font-family:var(--font-head);font-weight:700;font-size:13px;border:1.5px solid var(--pink-200);
     background:#fff;color:var(--pink-600);border-radius:999px;padding:7px 14px;cursor:pointer;}
 
-  .wrap{max-width:1080px;margin:0 auto;padding:40px 26px 90px;}
+  .wrap{max-width:1100px;margin:0 auto;padding:36px 26px 90px;}
+  .crumb{font-size:13px;color:var(--ink-muted);margin-bottom:14px;}
+  .crumb a{color:var(--ink-muted);text-decoration:none;}
 
-  .hero{text-align:center;margin-bottom:40px;}
-  .hero .eyebrow{font-family:var(--font-head);font-weight:700;font-size:13px;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--pink-500);margin-bottom:10px;}
-  .hero h1{font-size:clamp(34px,6vw,52px);font-weight:800;letter-spacing:-1px;}
-  .hero p{margin:14px auto 0;max-width:54ch;font-size:18px;color:var(--ink-soft);}
+  .hero{margin-bottom:22px;}
+  .hero h1{font-size:clamp(34px,6vw,54px);font-weight:800;letter-spacing:-1px;}
+  .hero p{margin:12px 0 0;max-width:56ch;font-size:18px;color:var(--ink-soft);}
 
-  /* Owner toolbar */
-  .owner-bar{display:none;justify-content:center;gap:10px;margin:0 0 30px;}
-  .owner-bar.show{display:flex;}
+  .controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:26px 0 8px;}
+  .search{position:relative;flex:1;min-width:220px;max-width:360px;}
+  .search input{width:100%;font-family:var(--font-body);font-size:15px;color:var(--ink);
+    border:1.5px solid var(--line);border-radius:999px;padding:11px 16px 11px 40px;background:#fff;}
+  .search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--ink-muted);}
+
+  .pills{display:flex;gap:9px;flex-wrap:wrap;margin:6px 0 30px;}
+  .pill{font-family:var(--font-head);font-weight:700;font-size:13.5px;border:1.5px solid var(--pink-200);
+    background:#fff;color:var(--pink-600);border-radius:999px;padding:8px 16px;cursor:pointer;white-space:nowrap;}
+  .pill.active{background:linear-gradient(120deg,var(--pink-500),var(--pink-600));color:#fff;border-color:transparent;}
+
+  .owner-bar{display:none;margin:0 0 24px;}
+  .owner-bar.show{display:block;}
   .btn{font-family:var(--font-head);font-weight:700;font-size:15px;border:none;border-radius:999px;
     padding:12px 22px;cursor:pointer;transition:transform .15s,box-shadow .15s;}
   .btn:active{transform:scale(.98);}
@@ -71,14 +79,33 @@
     box-shadow:0 10px 24px -10px rgba(196,61,117,.6);}
   .btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink-soft);}
 
-  /* Category sections */
-  .cat-section{margin-bottom:54px;}
-  .cat-head{display:flex;align-items:baseline;gap:12px;margin-bottom:20px;}
-  .cat-head h2{font-size:24px;font-weight:700;}
+  .demo-note{background:var(--pink-50);border:1px dashed var(--pink-300);border-radius:16px;
+    padding:14px 18px;margin-bottom:26px;font-size:14.5px;color:var(--pink-700);}
+
+  .section-title{font-size:15px;font-family:var(--font-head);font-weight:700;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--ink-muted);margin:0 0 16px;}
+
+  /* Featured */
+  .featured{display:grid;grid-template-columns:1.25fr 1fr;gap:26px;background:#fff;border-radius:var(--r-lg);
+    overflow:hidden;box-shadow:var(--shadow-soft);margin-bottom:46px;text-decoration:none;color:inherit;
+    transition:transform .25s,box-shadow .25s;}
+  .featured:hover{transform:translateY(-4px);box-shadow:var(--shadow-med);}
+  .featured .img{min-height:300px;background:linear-gradient(135deg,var(--pink-200),var(--pink-400));
+    background-size:cover;background-position:center;}
+  .featured .fbody{padding:34px 34px 34px 8px;display:flex;flex-direction:column;justify-content:center;}
+  .featured .kicker{font-family:var(--font-head);font-weight:700;font-size:12px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--pink-500);margin-bottom:12px;}
+  .featured h2{font-size:30px;font-weight:800;letter-spacing:-.5px;line-height:1.12;}
+  .featured .excerpt{margin-top:14px;font-size:16px;color:var(--ink-soft);line-height:1.6;}
+  .featured .meta{margin-top:18px;font-size:13px;color:var(--ink-muted);}
+  @media(max-width:760px){.featured{grid-template-columns:1fr;}.featured .fbody{padding:26px;}.featured h2{font-size:24px;}}
+
+  .cat-section{margin-bottom:50px;}
+  .cat-head{display:flex;align-items:baseline;gap:12px;margin-bottom:18px;}
+  .cat-head h2{font-size:23px;font-weight:700;}
   .cat-head .count{font-size:14px;color:var(--ink-muted);}
 
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:24px;}
-
   .card{position:relative;display:flex;flex-direction:column;background:#fff;border-radius:var(--r-lg);
     overflow:hidden;box-shadow:var(--shadow-soft);text-decoration:none;color:inherit;
     transition:transform .25s ease,box-shadow .25s ease;}
@@ -91,6 +118,8 @@
   .card h3{font-size:19px;font-weight:700;margin-bottom:8px;}
   .card .excerpt{font-size:14.5px;color:var(--ink-soft);line-height:1.55;flex:1;}
   .card .meta{margin-top:14px;font-size:12.5px;color:var(--ink-muted);}
+  .badge-demo{position:absolute;top:12px;left:12px;background:rgba(255,252,249,.92);color:var(--pink-600);
+    font-family:var(--font-head);font-weight:700;font-size:11px;border-radius:999px;padding:5px 11px;box-shadow:var(--shadow-soft);}
   .card .admin{position:absolute;top:10px;right:10px;display:none;gap:6px;}
   .owner-mode .card .admin{display:flex;}
   .card .admin button{font-family:var(--font-head);font-weight:700;font-size:12px;border:none;border-radius:999px;
@@ -98,7 +127,7 @@
   .card .admin .edit{background:#fff;color:var(--pink-600);}
   .card .admin .del{background:#fff;color:#c0392b;}
 
-  .empty{text-align:center;color:var(--ink-muted);padding:50px 0;font-size:16px;}
+  .empty{text-align:center;color:var(--ink-muted);padding:30px 0;font-size:16px;}
 
   /* Editor modal */
   .modal{position:fixed;inset:0;z-index:200;display:none;align-items:flex-start;justify-content:center;
@@ -122,9 +151,6 @@
   .rich:focus{outline:2px solid var(--pink-200);}
   .sheet-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:22px;}
   @media(max-width:620px){.two{grid-template-columns:1fr;}}
-
-  .lang-flag{font-size:11px;font-weight:700;color:var(--pink-500);background:var(--pink-50);
-    border-radius:6px;padding:2px 7px;margin-left:6px;}
 </style>
 </head>
 <body>
@@ -140,77 +166,62 @@
 </div>
 
 <div class="wrap">
+  <div class="crumb"><a href="/dashboard" data-no="Hjem" data-en="Home">Hjem</a> / <span data-no="Blogg" data-en="Blog">Blogg</span></div>
+
   <div class="hero">
-    <div class="eyebrow" data-no="LME Blogg" data-en="LME Blog">LME Blogg</div>
-    <h1 data-no="Tanker, tips og historier" data-en="Thoughts, tips and stories">Tanker, tips og historier</h1>
+    <h1 data-no="Blogg" data-en="Blog">Blogg</h1>
     <p data-no="Montessori, lek og læring i hverdagen. Inspirasjon og praktiske råd fra Renate og Little Montessori Explorers."
        data-en="Montessori, play and learning in everyday life. Inspiration and practical advice from Renate and Little Montessori Explorers.">Montessori, lek og læring i hverdagen.</p>
   </div>
+
+  <div class="controls">
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/></svg>
+      <input id="searchInput" type="text" data-no-ph="Søk i alle innlegg" data-en-ph="Search all articles" placeholder="Søk i alle innlegg">
+    </div>
+  </div>
+  <div class="pills" id="pills"></div>
 
   <div class="owner-bar" id="ownerBar">
     <button class="btn btn-primary" id="newPostBtn" data-no="+ Nytt innlegg" data-en="+ New post">+ Nytt innlegg</button>
   </div>
 
+  <div class="demo-note" id="demoNote" style="display:none;"
+       data-no="Dette er eksempler så du ser hvordan bloggen blir. Trykk Ctrl/Cmd + Shift + E eller legg #rediger i adressen for å skrive dine egne innlegg."
+       data-en="These are examples so you can see how the blog looks. Press Ctrl/Cmd + Shift + E or add #rediger to the address to write your own posts.">Eksempler.</div>
+
+  <div id="featuredWrap"></div>
   <div id="sections"></div>
   <div class="empty" id="emptyState" style="display:none;"
-       data-no="Ingen innlegg ennå. Trykk «+ Nytt innlegg» for å skrive det første."
-       data-en="No posts yet. Click “+ New post” to write the first one.">Ingen innlegg ennå.</div>
+       data-no="Ingen treff." data-en="No results.">Ingen treff.</div>
 </div>
 
 <!-- Editor -->
 <div class="modal" id="editor">
   <div class="sheet">
     <h2 id="edTitle" data-no="Nytt innlegg" data-en="New post">Nytt innlegg</h2>
-    <div class="hint" data-no="Fyll inn på norsk og engelsk. Bildelenke kan være en sti som /images/gallery/g-tre.webp eller en full nettadresse."
-         data-en="Fill in Norwegian and English. The image link can be a path like /images/gallery/g-tre.webp or a full URL.">…</div>
+    <div class="hint" data-no="Fyll inn på norsk og engelsk. Bildelenke kan være en sti som /images/hero_learning_tree.webp eller en full nettadresse."
+         data-en="Fill in Norwegian and English. The image link can be a path like /images/hero_learning_tree.webp or a full URL.">…</div>
 
     <div class="field two">
-      <div>
-        <label data-no="Tittel (norsk)" data-en="Title (Norwegian)">Tittel (norsk)</label>
-        <input id="f-titleNo" type="text">
-      </div>
-      <div>
-        <label data-no="Tittel (engelsk)" data-en="Title (English)">Tittel (engelsk)</label>
-        <input id="f-titleEn" type="text">
-      </div>
+      <div><label data-no="Tittel (norsk)" data-en="Title (Norwegian)">Tittel (norsk)</label><input id="f-titleNo" type="text"></div>
+      <div><label data-no="Tittel (engelsk)" data-en="Title (English)">Tittel (engelsk)</label><input id="f-titleEn" type="text"></div>
     </div>
-
     <div class="field two">
-      <div>
-        <label data-no="Kategori" data-en="Category">Kategori</label>
-        <input id="f-category" type="text" placeholder="Tips &amp; råd">
-      </div>
-      <div>
-        <label data-no="Lesetid (f.eks. 4 min)" data-en="Read time (e.g. 4 min)">Lesetid</label>
-        <input id="f-readMin" type="text" placeholder="4 min">
-      </div>
+      <div><label data-no="Kategori" data-en="Category">Kategori</label><input id="f-category" type="text" placeholder="Tips &amp; råd"></div>
+      <div><label data-no="Lesetid (f.eks. 4 min)" data-en="Read time (e.g. 4 min)">Lesetid</label><input id="f-readMin" type="text" placeholder="4 min"></div>
     </div>
-
     <div class="field two">
-      <div>
-        <label data-no="Bildelenke" data-en="Image link">Bildelenke</label>
-        <input id="f-image" type="text" placeholder="/images/gallery/g-tre.webp">
-      </div>
-      <div>
-        <label data-no="Dato" data-en="Date">Dato</label>
-        <input id="f-date" type="date">
-      </div>
+      <div><label data-no="Bildelenke" data-en="Image link">Bildelenke</label><input id="f-image" type="text" placeholder="/images/hero_learning_tree.webp"></div>
+      <div><label data-no="Dato" data-en="Date">Dato</label><input id="f-date" type="date"></div>
     </div>
-
-    <div class="field">
-      <label data-no="Ingress (norsk)" data-en="Excerpt (Norwegian)">Ingress (norsk)</label>
-      <textarea id="f-excerptNo"></textarea>
-    </div>
-    <div class="field">
-      <label data-no="Ingress (engelsk)" data-en="Excerpt (English)">Ingress (engelsk)</label>
-      <textarea id="f-excerptEn"></textarea>
-    </div>
+    <div class="field"><label data-no="Ingress (norsk)" data-en="Excerpt (Norwegian)">Ingress (norsk)</label><textarea id="f-excerptNo"></textarea></div>
+    <div class="field"><label data-no="Ingress (engelsk)" data-en="Excerpt (English)">Ingress (engelsk)</label><textarea id="f-excerptEn"></textarea></div>
 
     <div class="field">
       <label data-no="Brødtekst (norsk)" data-en="Body (Norwegian)">Brødtekst (norsk)</label>
       <div class="ed-toolbar" data-target="f-bodyNo">
-        <button type="button" data-cmd="bold"><b>B</b></button>
-        <button type="button" data-cmd="italic"><i>I</i></button>
+        <button type="button" data-cmd="bold"><b>B</b></button><button type="button" data-cmd="italic"><i>I</i></button>
         <button type="button" data-cmd="h3" data-no="Tittel" data-en="Heading">Tittel</button>
         <button type="button" data-cmd="ul" data-no="Liste" data-en="List">Liste</button>
         <button type="button" data-cmd="link" data-no="Lenke" data-en="Link">Lenke</button>
@@ -220,8 +231,7 @@
     <div class="field">
       <label data-no="Brødtekst (engelsk)" data-en="Body (English)">Brødtekst (engelsk)</label>
       <div class="ed-toolbar" data-target="f-bodyEn">
-        <button type="button" data-cmd="bold"><b>B</b></button>
-        <button type="button" data-cmd="italic"><i>I</i></button>
+        <button type="button" data-cmd="bold"><b>B</b></button><button type="button" data-cmd="italic"><i>I</i></button>
         <button type="button" data-cmd="h3" data-no="Tittel" data-en="Heading">Tittel</button>
         <button type="button" data-cmd="ul" data-no="Liste" data-en="List">Liste</button>
         <button type="button" data-cmd="link" data-no="Lenke" data-en="Link">Lenke</button>
@@ -238,109 +248,139 @@
 
 <script>
 (function(){
-  var lang='no';
-  var posts=[];
-  var editingId=null;
-  var pw=null;
+  var lang='no', posts=[], isDemo=false, activeCat='__all__', query='', editingId=null, pw=null;
 
-  /* ---------- language ---------- */
-  function applyStatic(){
-    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
-      var t=el.getAttribute('data-'+lang);
-      if(t==null) return;
-      if(/[<&]/.test(t)) el.innerHTML=t; else el.textContent=t;
-    });
-  }
-  function switchLanguage(l){
-    lang=l;
-    document.documentElement.lang=l;
-    applyStatic();
-    document.getElementById('langToggle').textContent = l==='no' ? 'EN 🌍' : 'NO 🇳🇴';
-    render();
-  }
-  document.getElementById('langToggle').addEventListener('click',function(){
-    switchLanguage(lang==='no'?'en':'no');
-  });
+  var DEMO=[
+    {id:'demo1',category:'Montessori hjemme',categoryEn:'Montessori at home',readMin:'5 min',date:'2026-06-10',
+     image:'/images/courses/course_praktisk_liv.webp',
+     titleNo:'Praktisk liv: der alt starter',titleEn:'Practical life: where it all begins',
+     excerptNo:'Hvordan enkle hverdagsoppgaver gir barnet selvstendighet, konsentrasjon og mestring.',
+     excerptEn:'How simple everyday tasks give the child independence, concentration and mastery.'},
+    {id:'demo2',category:'Lek & læring',categoryEn:'Play & learning',readMin:'4 min',date:'2026-06-05',
+     image:'/images/hero_learning_tree.webp',
+     titleNo:'Naturen som klasserom',titleEn:'Nature as a classroom',
+     excerptNo:'Ute finnes matematikk, språk og vitenskap overalt. Slik følger du barnets nysgjerrighet.',
+     excerptEn:'Outdoors, maths, language and science are everywhere. How to follow their curiosity.'},
+    {id:'demo3',category:'Historier',categoryEn:'Stories',readMin:'6 min',date:'2026-05-28',
+     image:'/images/eventyr/pinnsvin.webp',
+     titleNo:'Pinnsvinet i hagen',titleEn:'The hedgehog in the garden',
+     excerptNo:'En liten fortelling om Mia og Teo som møter et pinnsvin, og om å vente og undre seg.',
+     excerptEn:'A little story about Mia and Teo meeting a hedgehog, and about waiting and wondering.'},
+    {id:'demo4',category:'Lek & læring',categoryEn:'Play & learning',readMin:'3 min',date:'2026-05-20',
+     image:'/images/courses/course_kosestund.webp',
+     titleNo:'Rolig stund før leggetid',titleEn:'A calm moment before bed',
+     excerptNo:'Faste, rolige holdepunkter på kvelden hjelper barnet å lande. Her er en enkel rytme.',
+     excerptEn:'Steady, calm anchors in the evening help the child settle. Here is a simple rhythm.'}
+  ];
 
-  /* ---------- helpers ---------- */
   function esc(s){return (s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function catOf(p){ return (lang==='no'? (p.category||'') : (p.categoryEn||p.category||'')).trim(); }
   function pick(p,base){ return p[base+(lang==='no'?'No':'En')] || p[base+(lang==='no'?'En':'No')] || ''; }
   function fmtDate(d){
-    if(!d) return '';
-    var parts=(''+d).split('-'); if(parts.length<3) return d;
-    var months_no=['jan','feb','mars','apr','mai','juni','juli','aug','sep','okt','nov','des'];
-    var months_en=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    var m=(lang==='no'?months_no:months_en)[parseInt(parts[1],10)-1]||'';
+    if(!d) return ''; var parts=(''+d).split('-'); if(parts.length<3) return d;
+    var mno=['jan','feb','mars','apr','mai','juni','juli','aug','sep','okt','nov','des'];
+    var men=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var m=(lang==='no'?mno:men)[parseInt(parts[1],10)-1]||'';
     return parseInt(parts[2],10)+'. '+m+' '+parts[0];
   }
 
-  /* ---------- render listing ---------- */
+  function applyStatic(){
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
+      var t=el.getAttribute('data-'+lang); if(t==null)return;
+      if(/[<&]/.test(t))el.innerHTML=t; else el.textContent=t;
+    });
+    var si=document.getElementById('searchInput');
+    si.setAttribute('placeholder', si.getAttribute('data-'+lang+'-ph')||'');
+  }
+
+  function cardHTML(p){
+    var thumb = p.image ? '<div class="thumb" style="background-image:url(\''+esc(p.image)+'\')"></div>' : '<div class="thumb"></div>';
+    var meta = fmtDate(p.date) + (p.readMin? ' · '+esc(p.readMin):'');
+    var demoBadge = isDemo ? '<span class="badge-demo">'+(lang==='no'?'Eksempel':'Example')+'</span>' : '';
+    var admin = !isDemo ? '<div class="admin"><button class="edit" type="button" data-id="'+esc(p.id)+'">'+(lang==='no'?'Rediger':'Edit')+
+       '</button><button class="del" type="button" data-id="'+esc(p.id)+'">'+(lang==='no'?'Slett':'Delete')+'</button></div>' : '';
+    var href = isDemo ? 'javascript:void(0)' : '/blogg/les?id='+encodeURIComponent(p.id);
+    return '<a class="card" href="'+href+'">'+demoBadge+thumb+
+      '<div class="body"><div class="kicker">'+esc(catOf(p))+'</div><h3>'+esc(pick(p,'title'))+
+      '</h3><div class="excerpt">'+esc(pick(p,'excerpt'))+'</div><div class="meta">'+meta+'</div></div>'+admin+'</a>';
+  }
+
+  function matchesQuery(p){
+    if(!query) return true;
+    var hay=(pick(p,'title')+' '+pick(p,'excerpt')+' '+catOf(p)).toLowerCase();
+    return hay.indexOf(query.toLowerCase())>=0;
+  }
+
   function render(){
-    var host=document.getElementById('sections');
+    var list=posts.slice().filter(matchesQuery);
+    // pills
+    var cats=[]; list.forEach(function(p){var c=catOf(p)||(lang==='no'?'Annet':'Other'); if(cats.indexOf(c)<0)cats.push(c);});
+    var pillsEl=document.getElementById('pills');
+    var ph='<button class="pill'+(activeCat==='__all__'?' active':'')+'" data-cat="__all__">'+(lang==='no'?'Alle':'All')+'</button>';
+    cats.forEach(function(c){ ph+='<button class="pill'+(activeCat===c?' active':'')+'" data-cat="'+esc(c)+'">'+esc(c)+'</button>'; });
+    pillsEl.innerHTML=ph;
+    pillsEl.querySelectorAll('.pill').forEach(function(b){ b.addEventListener('click',function(){ activeCat=b.getAttribute('data-cat'); render(); }); });
+
+    var visible = list.filter(function(p){ return activeCat==='__all__' || catOf(p)===activeCat; });
+    var fWrap=document.getElementById('featuredWrap');
+    var secWrap=document.getElementById('sections');
     var empty=document.getElementById('emptyState');
-    host.innerHTML='';
-    if(!posts.length){ empty.style.display='block'; return; }
+    fWrap.innerHTML=''; secWrap.innerHTML='';
+
+    if(!visible.length){ empty.style.display='block'; return; }
     empty.style.display='none';
 
-    var cats=[]; var byCat={};
-    posts.forEach(function(p){
-      var c=(p.category||'').trim()|| (lang==='no'?'Annet':'Other');
-      if(!byCat[c]){byCat[c]=[];cats.push(c);}
-      byCat[c].push(p);
-    });
+    var rest=visible.slice();
+    // Featured only on "Alle" without search
+    if(activeCat==='__all__' && !query && visible.length){
+      var f=visible[0]; rest=visible.slice(1);
+      var fimg=f.image?'<div class="img" style="background-image:url(\''+esc(f.image)+'\')"></div>':'<div class="img"></div>';
+      var fhref=isDemo?'javascript:void(0)':'/blogg/les?id='+encodeURIComponent(f.id);
+      fWrap.innerHTML='<div class="section-title">'+(lang==='no'?'Utvalgt':'Featured')+'</div>'+
+        '<a class="featured" href="'+fhref+'">'+fimg+'<div class="fbody"><div class="kicker">'+esc(catOf(f))+
+        '</div><h2>'+esc(pick(f,'title'))+'</h2><div class="excerpt">'+esc(pick(f,'excerpt'))+
+        '</div><div class="meta">'+fmtDate(f.date)+(f.readMin?' · '+esc(f.readMin):'')+'</div></div></a>';
+    }
 
-    cats.forEach(function(c){
+    // group rest by category
+    var order=[], byCat={};
+    rest.forEach(function(p){var c=catOf(p)||(lang==='no'?'Annet':'Other'); if(!byCat[c]){byCat[c]=[];order.push(c);} byCat[c].push(p);});
+    order.forEach(function(c){
       var sec=document.createElement('div'); sec.className='cat-section';
-      var list=byCat[c];
-      sec.innerHTML='<div class="cat-head"><h2>'+esc(c)+'</h2><span class="count">'+list.length+'</span></div>';
+      sec.innerHTML='<div class="cat-head"><h2>'+esc(c)+'</h2><span class="count">'+byCat[c].length+'</span></div>';
       var grid=document.createElement('div'); grid.className='grid';
-      list.forEach(function(p){
-        var a=document.createElement('a'); a.className='card'; a.href='/blogg/les?id='+encodeURIComponent(p.id);
-        var thumb = p.image ? '<div class="thumb" style="background-image:url(\''+esc(p.image)+'\')"></div>'
-                            : '<div class="thumb"></div>';
-        var meta = fmtDate(p.date) + (p.readMin? ' · '+esc(p.readMin):'');
-        a.innerHTML = thumb +
-          '<div class="body">'+
-            '<div class="kicker">'+esc(p.category||'')+'</div>'+
-            '<h3>'+esc(pick(p,'title'))+'</h3>'+
-            '<div class="excerpt">'+esc(pick(p,'excerpt'))+'</div>'+
-            '<div class="meta">'+meta+'</div>'+
-          '</div>'+
-          '<div class="admin">'+
-            '<button class="edit" type="button" data-id="'+esc(p.id)+'">'+(lang==='no'?'Rediger':'Edit')+'</button>'+
-            '<button class="del" type="button" data-id="'+esc(p.id)+'">'+(lang==='no'?'Slett':'Delete')+'</button>'+
-          '</div>';
-        grid.appendChild(a);
-      });
-      sec.appendChild(grid); host.appendChild(sec);
+      grid.innerHTML=byCat[c].map(cardHTML).join('');
+      sec.appendChild(grid); secWrap.appendChild(sec);
     });
 
-    // admin buttons
-    host.querySelectorAll('.admin .edit').forEach(function(b){
-      b.addEventListener('click',function(e){e.preventDefault();openEditor(b.getAttribute('data-id'));});
-    });
-    host.querySelectorAll('.admin .del').forEach(function(b){
-      b.addEventListener('click',function(e){e.preventDefault();delPost(b.getAttribute('data-id'));});
-    });
+    // admin handlers
+    if(!isDemo){
+      secWrap.querySelectorAll('.admin .edit').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();openEditor(b.getAttribute('data-id'));});});
+      secWrap.querySelectorAll('.admin .del').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();delPost(b.getAttribute('data-id'));});});
+    }
   }
 
-  /* ---------- data ---------- */
   function load(){
     fetch('/api/blog').then(function(r){return r.json();}).then(function(d){
-      posts=(d&&d.posts)||[]; render();
-    }).catch(function(){posts=[];render();});
+      var real=(d&&d.posts)||[];
+      if(real.length){ posts=real; isDemo=false; document.getElementById('demoNote').style.display='none'; }
+      else { posts=DEMO; isDemo=true; document.getElementById('demoNote').style.display='block'; }
+      render();
+    }).catch(function(){ posts=DEMO; isDemo=true; document.getElementById('demoNote').style.display='block'; render(); });
   }
 
-  function ensurePw(){
-    if(pw) return pw;
-    pw=prompt(lang==='no'?'Skriv inn passord for å lagre:':'Enter password to save:');
-    return pw;
+  function switchLanguage(l){
+    lang=l; document.documentElement.lang=l; applyStatic();
+    document.getElementById('langToggle').textContent=l==='no'?'EN 🌍':'NO 🇳🇴';
+    render();
   }
+  document.getElementById('langToggle').addEventListener('click',function(){switchLanguage(lang==='no'?'en':'no');});
+  document.getElementById('searchInput').addEventListener('input',function(e){query=e.target.value.trim();activeCat='__all__';render();});
 
-  /* ---------- editor ---------- */
+  /* editor */
+  function ensurePw(){ if(pw)return pw; pw=prompt(lang==='no'?'Skriv inn passord for å lagre:':'Enter password to save:'); return pw; }
   function openEditor(id){
-    editingId=id||null;
-    var p={};
+    editingId=id||null; var p={};
     if(id){ for(var i=0;i<posts.length;i++){ if(posts[i].id===id){p=posts[i];break;} } }
     document.getElementById('f-titleNo').value=p.titleNo||'';
     document.getElementById('f-titleEn').value=p.titleEn||'';
@@ -350,32 +390,21 @@
     document.getElementById('f-date').value=p.date|| new Date().toISOString().slice(0,10);
     document.getElementById('f-excerptNo').value=p.excerptNo||'';
     document.getElementById('f-excerptEn').value=p.excerptEn||'';
-    // bodies: need full post (index has no body) -> fetch if editing
-    document.getElementById('f-bodyNo').innerHTML='';
-    document.getElementById('f-bodyEn').innerHTML='';
-    if(id){
-      fetch('/api/blog?action=post&id='+encodeURIComponent(id)).then(function(r){return r.json();}).then(function(d){
-        if(d&&d.post){
-          document.getElementById('f-bodyNo').innerHTML=d.post.bodyNo||'';
-          document.getElementById('f-bodyEn').innerHTML=d.post.bodyEn||'';
-        }
-      });
-    }
+    document.getElementById('f-bodyNo').innerHTML=''; document.getElementById('f-bodyEn').innerHTML='';
+    if(id){ fetch('/api/blog?action=post&id='+encodeURIComponent(id)).then(function(r){return r.json();}).then(function(d){
+      if(d&&d.post){document.getElementById('f-bodyNo').innerHTML=d.post.bodyNo||'';document.getElementById('f-bodyEn').innerHTML=d.post.bodyEn||'';} }); }
     document.getElementById('edTitle').textContent = id? (lang==='no'?'Rediger innlegg':'Edit post') : (lang==='no'?'Nytt innlegg':'New post');
     document.getElementById('editor').classList.add('show');
   }
   function closeEditor(){ document.getElementById('editor').classList.remove('show'); editingId=null; }
-
   document.getElementById('newPostBtn').addEventListener('click',function(){openEditor(null);});
   document.getElementById('ed-cancel').addEventListener('click',closeEditor);
 
-  // toolbar
   document.querySelectorAll('.ed-toolbar').forEach(function(bar){
     var targetId=bar.getAttribute('data-target');
     bar.querySelectorAll('button').forEach(function(btn){
       btn.addEventListener('click',function(){
-        var cmd=btn.getAttribute('data-cmd');
-        document.getElementById(targetId).focus();
+        var cmd=btn.getAttribute('data-cmd'); document.getElementById(targetId).focus();
         if(cmd==='bold')document.execCommand('bold');
         else if(cmd==='italic')document.execCommand('italic');
         else if(cmd==='h3')document.execCommand('formatBlock',false,'h3');
@@ -386,25 +415,16 @@
   });
 
   document.getElementById('ed-save').addEventListener('click',function(){
-    var p=ensurePw(); if(!p) return;
-    var btn=document.getElementById('ed-save');
-    var post={
-      id:editingId||'',
-      titleNo:document.getElementById('f-titleNo').value.trim(),
-      titleEn:document.getElementById('f-titleEn').value.trim(),
-      category:document.getElementById('f-category').value.trim(),
-      readMin:document.getElementById('f-readMin').value.trim(),
-      image:document.getElementById('f-image').value.trim(),
-      date:document.getElementById('f-date').value.trim(),
-      excerptNo:document.getElementById('f-excerptNo').value.trim(),
-      excerptEn:document.getElementById('f-excerptEn').value.trim(),
-      bodyNo:document.getElementById('f-bodyNo').innerHTML,
-      bodyEn:document.getElementById('f-bodyEn').innerHTML
-    };
+    var p=ensurePw(); if(!p) return; var btn=document.getElementById('ed-save');
+    var post={ id:editingId||'',
+      titleNo:document.getElementById('f-titleNo').value.trim(), titleEn:document.getElementById('f-titleEn').value.trim(),
+      category:document.getElementById('f-category').value.trim(), readMin:document.getElementById('f-readMin').value.trim(),
+      image:document.getElementById('f-image').value.trim(), date:document.getElementById('f-date').value.trim(),
+      excerptNo:document.getElementById('f-excerptNo').value.trim(), excerptEn:document.getElementById('f-excerptEn').value.trim(),
+      bodyNo:document.getElementById('f-bodyNo').innerHTML, bodyEn:document.getElementById('f-bodyEn').innerHTML };
     if(!post.titleNo && !post.titleEn){ alert(lang==='no'?'Skriv minst en tittel.':'Add at least a title.'); return; }
     btn.disabled=true; btn.textContent=lang==='no'?'Lagrer…':'Saving…';
-    fetch('/api/blog',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({action:'save',password:p,post:post})})
+    fetch('/api/blog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'save',password:p,post:post})})
     .then(function(r){return r.json();}).then(function(d){
       btn.disabled=false; btn.textContent=lang==='no'?'Lagre innlegg':'Save post';
       if(d&&d.ok){ closeEditor(); load(); }
@@ -416,29 +436,17 @@
   function delPost(id){
     if(!confirm(lang==='no'?'Slette dette innlegget?':'Delete this post?')) return;
     var p=ensurePw(); if(!p) return;
-    fetch('/api/blog',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({action:'delete',password:p,id:id})})
-    .then(function(r){return r.json();}).then(function(d){
-      if(d&&d.ok) load();
-      else if(d&&d.error==='bad_password'){pw=null;alert(lang==='no'?'Feil passord.':'Wrong password.');}
-      else alert('?');
-    });
+    fetch('/api/blog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'delete',password:p,id:id})})
+    .then(function(r){return r.json();}).then(function(d){ if(d&&d.ok) load(); else if(d&&d.error==='bad_password'){pw=null;alert(lang==='no'?'Feil passord.':'Wrong password.');} else alert('?'); });
   }
 
-  /* ---------- owner reveal ---------- */
-  function revealOwner(){
-    document.getElementById('ownerBar').classList.add('show');
-    document.body.classList.add('owner-mode');
-    try{localStorage.setItem('lme-blog-edit','1');}catch(e){}
-  }
+  /* owner reveal */
+  function revealOwner(){ document.getElementById('ownerBar').classList.add('show'); document.body.classList.add('owner-mode'); try{localStorage.setItem('lme-blog-edit','1');}catch(e){} }
   if(/(^|[#&?])rediger/.test(location.hash+location.search)) revealOwner();
   try{ if(localStorage.getItem('lme-blog-edit')==='1'||localStorage.getItem('lme-edit')==='1') revealOwner(); }catch(e){}
-  document.addEventListener('keydown',function(e){
-    if((e.ctrlKey||e.metaKey)&&e.shiftKey&&(e.key==='E'||e.key==='e')) revealOwner();
-  });
+  document.addEventListener('keydown',function(e){ if((e.ctrlKey||e.metaKey)&&e.shiftKey&&(e.key==='E'||e.key==='e')) revealOwner(); });
 
-  applyStatic();
-  load();
+  applyStatic(); load();
 })();
 </script>
 </body>
