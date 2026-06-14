@@ -8,7 +8,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
   @font-face {
@@ -41,7 +41,7 @@
     /* LÅST FONTREGEL: Playpen Sans = KUN overskrifter h1–h4. Sassoon = all annen tekst. */
     --font-head: 'Playpen Sans', system-ui, sans-serif;
     --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
-    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-display: 'Playpen Sans', system-ui, sans-serif;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -106,7 +106,7 @@
 
   .logo-text .subtitle {
     display: block;
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-style: italic;
     font-size: 0.75rem;
     color: var(--ink-soft);
@@ -245,7 +245,7 @@
   }
 
   .song-subtitle {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-style: italic;
     color: var(--pink-600);
     font-size: 1rem;
@@ -348,7 +348,7 @@
   }
 
   .lyrics-text {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-style: italic;
     font-size: clamp(1.1rem, 2vw, 1.3rem);
     color: var(--ink);
