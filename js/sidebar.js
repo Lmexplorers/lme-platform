@@ -41,6 +41,7 @@
     '  <div class="sidebar-group-title"><span class="grp-emoji">🎨</span> <span data-no="Innhold" data-en="Content">Innhold</span></div>',
     '  <a href="/websites" class="sidebar-item"><span class="si-icon">🌐</span><span class="si-label">Websites</span></a>',
     '  <a href="/courses" class="sidebar-item"><span class="si-icon">🎬</span><span class="si-label">Courses</span></a>',
+    '  <a href="/blogg" class="sidebar-item"><span class="si-icon">📝</span><span class="si-label" data-no="Blogg" data-en="Blog">Blogg</span></a>',
     '  <a href="/webinars" class="sidebar-item"><span class="si-icon">🎥</span><span class="si-label">Webinars</span></a>',
     '  <a href="/biblioteket" class="sidebar-item"><span class="si-icon">📂</span><span class="si-label">Library</span></a>',
     '  <a href="/community" class="sidebar-item"><span class="si-icon">🌸</span><span class="si-label">Community</span><span class="si-badge beta">Beta</span></a>',

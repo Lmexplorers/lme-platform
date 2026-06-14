@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blogg | Little Montessori Explorers</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  @font-face{
+    font-family:'Sasson Montessori';
+    src:url('/fonts/SassoonMontessori.woff2') format('woff2'),
+        url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight:normal;font-style:normal;font-display:swap;
+  }
+  :root{
+    --pink-100:#ffe8f0;--pink-200:#ffd1e1;--pink-400:#ff8ab3;--pink-500:#e85a92;--pink-600:#c43d75;
+    --warm-white:#fffcf9;--ink:#3d2438;--ink-soft:#6b4760;--ink-muted:#9a8693;--line:#f0dde6;
+    --font-head:'Playpen Sans',system-ui,sans-serif;
+    --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--font-body);color:var(--ink);line-height:1.7;
+    background:radial-gradient(ellipse 80% 40% at 20% 0,rgba(255,209,225,.3),transparent 60%),var(--warm-white);min-height:100vh;}
+  h1,h2,h3,h4{font-family:var(--font-head);font-weight:700;line-height:1.18;color:var(--ink);}
+
+  .topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:16px;
+    padding:14px 26px;background:rgba(255,252,249,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+  .topbar .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);}
+  .topbar .brand img{width:34px;height:34px;border-radius:9px;background:#fff;object-fit:contain;}
+  .topbar .brand b{font-family:var(--font-head);font-weight:800;font-size:18px;letter-spacing:-.3px;}
+  .topbar .spacer{flex:1;}
+  .topbar a.back{color:var(--ink-soft);text-decoration:none;font-size:14px;}
+  .lang-toggle{font-family:var(--font-head);font-weight:700;font-size:13px;border:1.5px solid var(--pink-200);
+    background:#fff;color:var(--pink-600);border-radius:999px;padding:7px 14px;cursor:pointer;}
+
+  .article{max-width:760px;margin:0 auto;padding:36px 24px 90px;}
+  .kicker{font-family:var(--font-head);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--pink-500);margin-bottom:12px;}
+  .article h1{font-size:clamp(30px,5.5vw,46px);font-weight:800;letter-spacing:-.8px;}
+  .article .meta{margin-top:14px;color:var(--ink-muted);font-size:14px;}
+  .hero-img{margin:26px 0;border-radius:24px;overflow:hidden;aspect-ratio:16/9;
+    background:linear-gradient(135deg,var(--pink-200),var(--pink-400));background-size:cover;background-position:center;}
+  .content{font-size:17.5px;color:var(--ink);}
+  .content p{margin:0 0 18px;}
+  .content h3{font-size:22px;margin:28px 0 12px;}
+  .content ul,.content ol{margin:0 0 18px 22px;}
+  .content li{margin-bottom:7px;}
+  .content a{color:var(--pink-600);}
+  .content img{max-width:100%;border-radius:16px;margin:14px 0;}
+  .backlink{display:inline-block;margin-top:34px;color:var(--pink-600);text-decoration:none;font-family:var(--font-head);font-weight:700;}
+  .edit-link{display:none;margin-left:14px;color:var(--ink-muted);font-size:13px;text-decoration:underline;cursor:pointer;}
+  .edit-link.show{display:inline;}
+  .notfound{text-align:center;color:var(--ink-muted);padding:60px 0;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="/dashboard"><img src="/images/lme-logo.png" alt="LME"><b>Little Montessori Explorers</b></a>
+  <span class="spacer"></span>
+  <a class="back" href="/blogg" data-no="Til bloggen" data-en="To the blog">Til bloggen</a>
+  <button class="lang-toggle" id="langToggle">EN 🌍</button>
+</div>
+
+<div class="article" id="article">
+  <div class="notfound" id="loading" data-no="Laster…" data-en="Loading…">Laster…</div>
+</div>
+
+<script>
+(function(){
+  var lang='no';
+  var post=null;
+  var id=new URLSearchParams(location.search).get('id')||'';
+
+  function pick(base){ if(!post)return''; return post[base+(lang==='no'?'No':'En')]||post[base+(lang==='no'?'En':'No')]||''; }
+  function fmtDate(d){
+    if(!d)return''; var parts=(''+d).split('-'); if(parts.length<3)return d;
+    var mno=['jan','feb','mars','apr','mai','juni','juli','aug','sep','okt','nov','des'];
+    var men=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var m=(lang==='no'?mno:men)[parseInt(parts[1],10)-1]||'';
+    return parseInt(parts[2],10)+'. '+m+' '+parts[0];
+  }
+  function applyStatic(){
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
+      var t=el.getAttribute('data-'+lang); if(t==null)return;
+      if(/[<&]/.test(t))el.innerHTML=t; else el.textContent=t;
+    });
+  }
+  function render(){
+    var host=document.getElementById('article');
+    if(!post){ host.innerHTML='<div class="notfound">'+(lang==='no'?'Fant ikke innlegget.':'Post not found.')+
+      ' <a class="backlink" href="/blogg">'+(lang==='no'?'Til bloggen':'To the blog')+'</a></div>'; return; }
+    document.title=pick('title')+' | Little Montessori Explorers';
+    var meta=fmtDate(post.date)+(post.readMin?' · '+post.readMin:'');
+    var hero=post.image?'<div class="hero-img" style="background-image:url(\''+post.image.replace(/'/g,"%27")+'\')"></div>':'';
+    var editLink='<span class="edit-link" id="editLink" data-no="Rediger" data-en="Rediger">Rediger</span>';
+    host.innerHTML=
+      '<div class="kicker">'+(post.category||'')+'</div>'+
+      '<h1>'+pick('title')+'</h1>'+
+      '<div class="meta">'+meta+editLink+'</div>'+
+      hero+
+      '<div class="content">'+(pick('body')||'')+'</div>'+
+      '<a class="backlink" href="/blogg">'+(lang==='no'?'← Til bloggen':'← To the blog')+'</a>';
+    // owner edit shortcut
+    var canEdit=false;
+    try{ canEdit=localStorage.getItem('lme-blog-edit')==='1'||localStorage.getItem('lme-edit')==='1'; }catch(e){}
+    if(canEdit){ var el=document.getElementById('editLink'); if(el){ el.classList.add('show');
+      el.addEventListener('click',function(){location.href='/blogg#rediger';}); } }
+  }
+  function switchLanguage(l){
+    lang=l; document.documentElement.lang=l; applyStatic();
+    document.getElementById('langToggle').textContent=l==='no'?'EN 🌍':'NO 🇳🇴';
+    render();
+  }
+  document.getElementById('langToggle').addEventListener('click',function(){switchLanguage(lang==='no'?'en':'no');});
+
+  applyStatic();
+  if(!id){ post=null; render(); return; }
+  fetch('/api/blog?action=post&id='+encodeURIComponent(id)).then(function(r){return r.json();}).then(function(d){
+    post=(d&&d.post)||null; render();
+  }).catch(function(){post=null;render();});
+})();
+</script>
+</body>
+</html>
