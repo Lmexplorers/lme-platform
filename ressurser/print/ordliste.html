@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Montessori-ordliste — Little Montessori Explorers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face{font-family:'Sasson Montessori';src:url('/fonts/SassoonMontessori.woff2') format('woff2'),url('/fonts/SassoonMontessori.ttf') format('truetype');font-weight:normal;font-style:normal;font-display:swap;}
+  :root{--cerise:#E91E89;--pink:#F5A8B8;--soft:#F8D7DA;--ink:#2a1e2e;--lime:#A4D233;--sky:#3FA9F5;--sun:#F7C72E;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;color:var(--ink);background:#faf6f7;}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 20px;background:#fff;box-shadow:0 2px 10px rgba(180,120,140,.12);position:sticky;top:0;z-index:5;}
+  .bar .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--cerise);text-decoration:none;font-size:15px;}
+  .bar .brand img{width:32px;height:32px;object-fit:contain;}
+  .bar .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+  .btn{border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-family:inherit;cursor:pointer;text-decoration:none;font-size:14px;white-space:nowrap;}
+  .btn-print{background:var(--cerise);color:#fff;box-shadow:0 6px 16px rgba(233,30,137,.35);}
+  .btn-back{background:#fff;color:var(--ink);border:1px solid #eedce2;}
+  .sheet{max-width:820px;margin:22px auto;background:#fff;padding:34px 38px;border-radius:14px;box-shadow:0 10px 30px rgba(180,120,140,.14);}
+  .sheet h1{font-size:28px;line-height:1.1;margin-bottom:6px;}
+  .sheet .sub{color:#9a7b85;font-size:14px;margin-bottom:8px;line-height:1.5;}
+  .doc-foot{margin-top:26px;text-align:center;color:#c2a7b0;font-size:11px;letter-spacing:.04em;}
+  .doc h2{font-size:18px;color:var(--cerise);margin:22px 0 8px;}
+  .doc p{font-size:15px;line-height:1.7;margin-bottom:10px;}
+  .doc ul{margin:0 0 12px 20px;}
+  .doc li{font-size:15px;line-height:1.65;margin-bottom:6px;}
+  .num{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
+  .num .n{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:var(--cerise);color:#fff;font-weight:700;font-family:'Playpen Sans',sans-serif;display:flex;align-items:center;justify-content:center;font-size:15px;}
+  .num .b{flex:1;}
+  .num .b b{display:block;margin-bottom:2px;}
+  .callout{background:#F4F9E9;border:1px solid #DCEBBE;border-radius:12px;padding:14px 18px;color:#5a6a32;font-size:15px;line-height:1.6;margin:18px 0 4px;font-weight:600;text-align:center;}
+  .shopcta{margin-top:22px;background:linear-gradient(135deg,#FDE7E0,#F8DBE1);border-radius:14px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .shopcta .t{font-size:14.5px;color:#9a5b6e;font-weight:600;}
+  .shopcta a{background:var(--cerise);color:#fff;border-radius:999px;padding:10px 18px;font-weight:700;text-decoration:none;font-size:14px;white-space:nowrap;}
+  @media print{
+    .bar{display:none !important;}
+    body{background:#fff;}
+    .sheet{box-shadow:none;border:0;margin:0;max-width:100%;border-radius:0;padding:0;}
+    .shopcta{display:none !important;}
+    @page{size:A4;margin:16mm;}
+  }
+  h1,h2,h3,h4,h5,h6{font-family:'Playpen Sans',system-ui,sans-serif;}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/ressurser"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <div class="actions">
+      <button class="btn" id="lme-print-lang" type="button" style="background:#FCEFF2;color:#C13D6A;">🇬🇧 English</button>
+      <a class="btn btn-back" href="/ressurser" data-no="‹ Ressurser" data-en="‹ Resources">‹ Ressurser</a>
+      <button class="btn btn-print" onclick="window.print()" data-no="⬇ Lagre som PDF" data-en="⬇ Save as PDF">⬇ Lagre som PDF</button>
+    </div>
+  </div>
+  <div class="sheet">
+    <h1 data-no="Montessori-ordliste" data-en="Montessori glossary">Montessori-ordliste</h1>
+    <div class="sub" data-no="De viktigste begrepene, forklart enkelt." data-en="The most important terms, explained simply.">De viktigste begrepene, forklart enkelt.</div>
+
+    <div class="doc">
+      <h2 data-no="Begreper" data-en="Terms">Begreper</h2>
+
+      <p data-no="<strong>Det absorberende sinn:</strong> barnets evne i de første årene til å suge til seg inntrykk og lære nesten uten anstrengelse." data-en="<strong>The absorbent mind:</strong> the child's capacity in the early years to soak up impressions and learn almost without effort."><strong>Det absorberende sinn:</strong> barnets evne i de første årene til å suge til seg inntrykk og lære nesten uten anstrengelse.</p>
+
+      <p data-no="<strong>Sensitive perioder:</strong> korte vinduer der barnet lærer noe bestemt særlig lett." data-en="<strong>Sensitive periods:</strong> short windows when the child learns something particular especially easily."><strong>Sensitive perioder:</strong> korte vinduer der barnet lærer noe bestemt særlig lett.</p>
+
+      <p data-no="<strong>Forberedt miljø:</strong> et rom gjort klart for barnet, med orden, skjønnhet og alt i barnets høyde." data-en="<strong>Prepared environment:</strong> a room made ready for the child, with order, beauty and everything at the child's height."><strong>Forberedt miljø:</strong> et rom gjort klart for barnet, med orden, skjønnhet og alt i barnets høyde.</p>
+
+      <p data-no="<strong>Veilederen:</strong> den voksne som legger til rette og observerer i stedet for å styre." data-en="<strong>The guide:</strong> the adult who facilitates and observes rather than directs."><strong>Veilederen:</strong> den voksne som legger til rette og observerer i stedet for å styre.</p>
+
+      <p data-no="<strong>Feilkontroll:</strong> materiellet er laget slik at barnet selv ser og retter feilen, uten en voksen." data-en="<strong>Control of error:</strong> the material is made so the child itself sees and corrects the mistake, without an adult."><strong>Feilkontroll:</strong> materiellet er laget slik at barnet selv ser og retter feilen, uten en voksen.</p>
+
+      <p data-no="<strong>Praktisk liv:</strong> hverdagslige aktiviteter som å helle, knytte og feie, som bygger selvstendighet og konsentrasjon." data-en="<strong>Practical life:</strong> everyday activities like pouring, tying and sweeping, which build independence and concentration."><strong>Praktisk liv:</strong> hverdagslige aktiviteter som å helle, knytte og feie, som bygger selvstendighet og konsentrasjon.</p>
+
+      <p data-no="<strong>Sansemateriell:</strong> materiell som lar barnet utforske og sortere etter farge, form, lyd og tekstur." data-en="<strong>Sensorial material:</strong> material that lets the child explore and sort by colour, shape, sound and texture."><strong>Sansemateriell:</strong> materiell som lar barnet utforske og sortere etter farge, form, lyd og tekstur.</p>
+
+      <p data-no="<strong>Tregangsleksjonen:</strong> en enkel måte å lære nye ord på i tre steg, vis, kjenn igjen og benevn." data-en="<strong>The three-period lesson:</strong> a simple way to teach new words in three steps, show, recognise and name."><strong>Tregangsleksjonen:</strong> en enkel måte å lære nye ord på i tre steg, vis, kjenn igjen og benevn.</p>
+
+      <p data-no="<strong>Normalisering:</strong> tilstanden der barnet finner ro, glede og dyp konsentrasjon i arbeidet sitt." data-en="<strong>Normalisation:</strong> the state in which the child finds calm, joy and deep concentration in its work."><strong>Normalisering:</strong> tilstanden der barnet finner ro, glede og dyp konsentrasjon i arbeidet sitt.</p>
+
+      <p data-no="<strong>Frihet innenfor rammer:</strong> barnet velger fritt, men innenfor få og tydelige grenser." data-en="<strong>Freedom within limits:</strong> the child chooses freely, but within few and clear boundaries."><strong>Frihet innenfor rammer:</strong> barnet velger fritt, men innenfor få og tydelige grenser.</p>
+
+      <p data-no="<strong>Kosmisk utdannelse:</strong> tanken om at alt henger sammen, som gir det eldre barnet det store bildet av verden." data-en="<strong>Cosmic education:</strong> the idea that everything is connected, giving the older child the big picture of the world."><strong>Kosmisk utdannelse:</strong> tanken om at alt henger sammen, som gir det eldre barnet det store bildet av verden.</p>
+
+      <p data-no="<strong>Going out:</strong> turer ut i samfunnet der det eldre barnet undersøker verden utenfor klasserommet." data-en="<strong>Going out:</strong> trips into the community where the older child explores the world beyond the classroom."><strong>Going out:</strong> turer ut i samfunnet der det eldre barnet undersøker verden utenfor klasserommet.</p>
+
+      <div class="callout" data-no="Begrepene henger sammen: miljøet, barnet og den voksne." data-en="The terms belong together: the environment, the child and the adult.">Begrepene henger sammen: miljøet, barnet og den voksne.</div>
+    </div>
+
+    <div class="shopcta">
+      <span class="t" data-no="Vil du komme videre med Montessori hjemmefra?" data-en="Want to take Montessori further from home?">Vil du komme videre med Montessori hjemmefra?</span>
+      <a href="/funnel/tripwire/opt-in" data-no="Få gratisguiden →" data-en="Get the free guide →">Få gratisguiden →</a>
+    </div>
+
+    <div class="doc-foot">Little Montessori Explorers · lmexplorers.com</div>
+  </div>
+<script>
+(function(){
+  function apply(lang){
+    window.__lmeLang=lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
+      el.innerHTML = (lang==='en') ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    document.documentElement.lang=lang;
+    var b=document.getElementById('lme-print-lang');
+    if(b) b.textContent = (lang==='en') ? '🇳🇴 Norsk' : '🇬🇧 English';
+    try{localStorage.setItem('lme_lang',lang);}catch(e){}
+  }
+  var saved='no';try{saved=localStorage.getItem('lme_lang')||'no';}catch(e){}
+  var btn=document.getElementById('lme-print-lang');
+  if(btn) btn.addEventListener('click',function(){apply(window.__lmeLang==='en'?'no':'en');});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){apply(saved);});
+  else apply(saved);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Montessori hjemme — Little Montessori Explorers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face{font-family:'Sasson Montessori';src:url('/fonts/SassoonMontessori.woff2') format('woff2'),url('/fonts/SassoonMontessori.ttf') format('truetype');font-weight:normal;font-style:normal;font-display:swap;}
+  :root{--cerise:#E91E89;--pink:#F5A8B8;--soft:#F8D7DA;--ink:#2a1e2e;--lime:#A4D233;--sky:#3FA9F5;--sun:#F7C72E;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;color:var(--ink);background:#faf6f7;}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 20px;background:#fff;box-shadow:0 2px 10px rgba(180,120,140,.12);position:sticky;top:0;z-index:5;}
+  .bar .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--cerise);text-decoration:none;font-size:15px;}
+  .bar .brand img{width:32px;height:32px;object-fit:contain;}
+  .bar .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+  .btn{border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-family:inherit;cursor:pointer;text-decoration:none;font-size:14px;white-space:nowrap;}
+  .btn-print{background:var(--cerise);color:#fff;box-shadow:0 6px 16px rgba(233,30,137,.35);}
+  .btn-back{background:#fff;color:var(--ink);border:1px solid #eedce2;}
+  .sheet{max-width:820px;margin:22px auto;background:#fff;padding:34px 38px;border-radius:14px;box-shadow:0 10px 30px rgba(180,120,140,.14);}
+  .sheet h1{font-size:28px;line-height:1.1;margin-bottom:6px;}
+  .sheet .sub{color:#9a7b85;font-size:14px;margin-bottom:8px;line-height:1.5;}
+  .doc-foot{margin-top:26px;text-align:center;color:#c2a7b0;font-size:11px;letter-spacing:.04em;}
+  .doc h2{font-size:18px;color:var(--cerise);margin:22px 0 8px;}
+  .doc p{font-size:15px;line-height:1.7;margin-bottom:10px;}
+  .doc ul{margin:0 0 12px 20px;}
+  .doc li{font-size:15px;line-height:1.65;margin-bottom:6px;}
+  .num{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
+  .num .n{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:var(--cerise);color:#fff;font-weight:700;font-family:'Playpen Sans',sans-serif;display:flex;align-items:center;justify-content:center;font-size:15px;}
+  .num .b{flex:1;}
+  .num .b b{display:block;margin-bottom:2px;}
+  .callout{background:#F4F9E9;border:1px solid #DCEBBE;border-radius:12px;padding:14px 18px;color:#5a6a32;font-size:15px;line-height:1.6;margin:18px 0 4px;font-weight:600;text-align:center;}
+  .shopcta{margin-top:22px;background:linear-gradient(135deg,#FDE7E0,#F8DBE1);border-radius:14px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .shopcta .t{font-size:14.5px;color:#9a5b6e;font-weight:600;}
+  .shopcta a{background:var(--cerise);color:#fff;border-radius:999px;padding:10px 18px;font-weight:700;text-decoration:none;font-size:14px;white-space:nowrap;}
+  @media print{
+    .bar{display:none !important;}
+    body{background:#fff;}
+    .sheet{box-shadow:none;border:0;margin:0;max-width:100%;border-radius:0;padding:0;}
+    .shopcta{display:none !important;}
+    @page{size:A4;margin:16mm;}
+  }
+  h1,h2,h3,h4,h5,h6{font-family:'Playpen Sans',system-ui,sans-serif;}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/ressurser"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <div class="actions">
+      <button class="btn" id="lme-print-lang" type="button" style="background:#FCEFF2;color:#C13D6A;">🇬🇧 English</button>
+      <a class="btn btn-back" href="/ressurser" data-no="‹ Ressurser" data-en="‹ Resources">‹ Ressurser</a>
+      <button class="btn btn-print" onclick="window.print()" data-no="⬇ Lagre som PDF" data-en="⬇ Save as PDF">⬇ Lagre som PDF</button>
+    </div>
+  </div>
+  <div class="sheet">
+    <h1 data-no="Montessori hjemme" data-en="Montessori at home">Montessori hjemme</h1>
+    <div class="sub" data-no="Enkle grep, rom for rom. Du trenger ikke kjøpe mye, det handler mest om å senke ting ned i barnets høyde og slippe barnet til." data-en="Simple steps, room by room. You do not need to buy much, it is mostly about lowering things to the child's height and letting the child take part.">Enkle grep, rom for rom. Du trenger ikke kjøpe mye, det handler mest om å senke ting ned i barnets høyde og slippe barnet til.</div>
+
+    <div class="doc">
+      <h2 data-no="Gangen" data-en="The hallway">Gangen</h2>
+      <ul>
+        <li data-no="Knagger i barnehøyde, så barnet selv kan henge opp jakke og lue." data-en="Hooks at child height, so the child can hang up its own coat and hat.">Knagger i barnehøyde, så barnet selv kan henge opp jakke og lue.</li>
+        <li data-no="En krakk å sitte på når skoene skal av og på." data-en="A stool to sit on when shoes go on and off.">En krakk å sitte på når skoene skal av og på.</li>
+        <li data-no="En kurv til sko, så barnet vet hvor de hører hjemme." data-en="A basket for shoes, so the child knows where they belong.">En kurv til sko, så barnet vet hvor de hører hjemme.</li>
+      </ul>
+
+      <h2 data-no="Kjøkkenet" data-en="The kitchen">Kjøkkenet</h2>
+      <ul>
+        <li data-no="En lav skuff barnet eier, med kopp, tallerken og bestikk det når selv." data-en="A low drawer the child owns, with a cup, plate and cutlery it can reach itself.">En lav skuff barnet eier, med kopp, tallerken og bestikk det når selv.</li>
+        <li data-no="Ekte redskaper i barnestørrelse, som en liten kniv og en visp som virker." data-en="Real tools in child size, like a small knife and a whisk that actually work.">Ekte redskaper i barnestørrelse, som en liten kniv og en visp som virker.</li>
+        <li data-no="La barnet hjelpe til med å dekke bord, skjære og rydde." data-en="Let the child help set the table, cut food and tidy up.">La barnet hjelpe til med å dekke bord, skjære og rydde.</li>
+      </ul>
+
+      <h2 data-no="Soverommet" data-en="The bedroom">Soverommet</h2>
+      <ul>
+        <li data-no="Lav seng eller madrass på gulvet, så barnet kan legge seg og stå opp selv." data-en="A low bed or a mattress on the floor, so the child can lie down and get up on its own.">Lav seng eller madrass på gulvet, så barnet kan legge seg og stå opp selv.</li>
+        <li data-no="Klær barnet når selv, hengt lavt eller lagt i en åpen kurv." data-en="Clothes the child can reach itself, hung low or kept in an open basket.">Klær barnet når selv, hengt lavt eller lagt i en åpen kurv.</li>
+      </ul>
+
+      <h2 data-no="Stua" data-en="The living room">Stua</h2>
+      <ul>
+        <li data-no="Én hylle med få aktiviteter, som byttes ut nå og da etter barnets interesse." data-en="One shelf with a few activities, swapped out now and then to follow the child's interest.">Én hylle med få aktiviteter, som byttes ut nå og da etter barnets interesse.</li>
+      </ul>
+
+      <h2 data-no="Badet" data-en="The bathroom">Badet</h2>
+      <ul>
+        <li data-no="En krakk ved vasken, så barnet rekker opp til kranen selv." data-en="A stool by the sink, so the child can reach the tap itself.">En krakk ved vasken, så barnet rekker opp til kranen selv.</li>
+        <li data-no="Tannbørste og klut i rekkevidde, klare til bruk." data-en="A toothbrush and a cloth within reach, ready to use.">Tannbørste og klut i rekkevidde, klare til bruk.</li>
+      </ul>
+
+      <div class="callout" data-no="Senk hyllene, og si ja til at barnet hjelper." data-en="Lower the shelves, and say yes to the child helping.">Senk hyllene, og si ja til at barnet hjelper.</div>
+    </div>
+
+    <div class="shopcta">
+      <span class="t" data-no="Vil du komme videre med Montessori hjemmefra?" data-en="Want to take Montessori further from home?">Vil du komme videre med Montessori hjemmefra?</span>
+      <a href="/funnel/tripwire/opt-in" data-no="Få gratisguiden →" data-en="Get the free guide →">Få gratisguiden →</a>
+    </div>
+
+    <div class="doc-foot">Little Montessori Explorers · lmexplorers.com</div>
+  </div>
+<script>
+(function(){
+  function apply(lang){
+    window.__lmeLang=lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
+      el.innerHTML = (lang==='en') ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    document.documentElement.lang=lang;
+    var b=document.getElementById('lme-print-lang');
+    if(b) b.textContent = (lang==='en') ? '🇳🇴 Norsk' : '🇬🇧 English';
+    try{localStorage.setItem('lme_lang',lang);}catch(e){}
+  }
+  var saved='no';try{saved=localStorage.getItem('lme_lang')||'no';}catch(e){}
+  var btn=document.getElementById('lme-print-lang');
+  if(btn) btn.addEventListener('click',function(){apply(window.__lmeLang==='en'?'no':'en');});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){apply(saved);});
+  else apply(saved);
+})();
+</script>
+</body>
+</html>
