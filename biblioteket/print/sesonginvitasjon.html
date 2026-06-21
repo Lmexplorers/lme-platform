@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesonginvitasjon — Little Montessori Explorers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face{font-family:'Sasson Montessori';src:url('/fonts/SassoonMontessori.woff2') format('woff2'),url('/fonts/SassoonMontessori.ttf') format('truetype');font-weight:normal;font-style:normal;font-display:swap;}
+  :root{--cerise:#E91E89;--pink:#F5A8B8;--soft:#F8D7DA;--ink:#2a1e2e;--lime:#A4D233;--sky:#3FA9F5;--sun:#F7C72E;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;color:var(--ink);background:#faf6f7;}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 20px;background:#fff;box-shadow:0 2px 10px rgba(180,120,140,.12);position:sticky;top:0;z-index:5;}
+  .bar .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--cerise);text-decoration:none;font-size:15px;}
+  .bar .brand img{width:32px;height:32px;object-fit:contain;}
+  .bar .actions{display:flex;gap:10px;}
+  .btn{border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-family:inherit;cursor:pointer;text-decoration:none;font-size:14px;}
+  .btn-print{background:var(--cerise);color:#fff;box-shadow:0 6px 16px rgba(233,30,137,.35);}
+  .btn-back{background:#fff;color:var(--ink);border:1px solid #eedce2;}
+  .sheet{max-width:820px;margin:22px auto;background:#fff;padding:30px;border-radius:14px;box-shadow:0 10px 30px rgba(180,120,140,.14);}
+  .sheet h1{font-size:27px;line-height:1.1;margin-bottom:6px;}
+  .sheet .sub{color:#9a7b85;font-size:13.5px;margin-bottom:22px;}
+  .doc-foot{margin-top:24px;text-align:center;color:#c2a7b0;font-size:11px;letter-spacing:.04em;}
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  .inv{border:2px solid;border-radius:16px;padding:22px 20px;text-align:center;}
+  .inv .season{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;}
+  .inv .icons{font-size:24px;margin-bottom:6px;}
+  .inv h2{font-size:21px;margin-bottom:14px;}
+  .inv .f{font-size:12px;text-align:left;margin:0 6px 9px;}
+  .inv .f span{display:block;font-weight:700;color:#9a7b85;font-size:10px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;}
+  .inv .f .line{border-bottom:1.5px solid rgba(0,0,0,.14);height:16px;}
+  .vaar{border-color:#A4D233;background:#F6FBE9;}
+  .sommer{border-color:#F7C72E;background:#FFFAEA;}
+  .host{border-color:#F39A2B;background:#FFF3E6;}
+  .vinter{border-color:#3FA9F5;background:#ECF6FE;}
+  @media print{
+    .bar{display:none !important;}
+    body{background:#fff;}
+    .sheet{box-shadow:none;border:0;margin:0;max-width:100%;border-radius:0;padding:0;}
+    .inv{break-inside:avoid;}
+    @page{size:A4;margin:14mm;}
+  }
+  h1,h2,h3,h4,h5,h6{font-family:'Playpen Sans',system-ui,sans-serif;}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/biblioteket"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <div class="actions">
+      <a class="btn btn-back" href="/biblioteket">‹ Biblioteket</a>
+      <button class="btn btn-print" onclick="window.print()">⬇ Lagre som PDF</button>
+    </div>
+  </div>
+  <div class="sheet">
+    <h1>Sesonginvitasjon</h1>
+    <div class="sub">Fire ferdige invitasjoner, en for hver årstid. Klipp ut den som passer, fyll inn anledning, dato og sted, og send den hjem.</div>
+
+    <div class="cards">
+      <div class="inv vaar">
+        <div class="season" style="color:#6f9220">Vår</div>
+        <div class="icons">🌷🐝🌿</div>
+        <h2>Du er invitert!</h2>
+        <div class="f"><span>Anledning</span><div class="line"></div></div>
+        <div class="f"><span>Dato og tid</span><div class="line"></div></div>
+        <div class="f"><span>Sted</span><div class="line"></div></div>
+      </div>
+      <div class="inv sommer">
+        <div class="season" style="color:#b8901a">Sommer</div>
+        <div class="icons">☀️🍓🦋</div>
+        <h2>Du er invitert!</h2>
+        <div class="f"><span>Anledning</span><div class="line"></div></div>
+        <div class="f"><span>Dato og tid</span><div class="line"></div></div>
+        <div class="f"><span>Sted</span><div class="line"></div></div>
+      </div>
+      <div class="inv host">
+        <div class="season" style="color:#b56b16">Høst</div>
+        <div class="icons">🍂🍎🍄</div>
+        <h2>Du er invitert!</h2>
+        <div class="f"><span>Anledning</span><div class="line"></div></div>
+        <div class="f"><span>Dato og tid</span><div class="line"></div></div>
+        <div class="f"><span>Sted</span><div class="line"></div></div>
+      </div>
+      <div class="inv vinter">
+        <div class="season" style="color:#2877b8">Vinter</div>
+        <div class="icons">❄️⛄🌟</div>
+        <h2>Du er invitert!</h2>
+        <div class="f"><span>Anledning</span><div class="line"></div></div>
+        <div class="f"><span>Dato og tid</span><div class="line"></div></div>
+        <div class="f"><span>Sted</span><div class="line"></div></div>
+      </div>
+    </div>
+
+    <div class="doc-foot">Little Montessori Explorers · lmexplorers.com</div>
+  </div>
+</body>
+</html>

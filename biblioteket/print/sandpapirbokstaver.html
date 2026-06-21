@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sandpapirbokstaver — Little Montessori Explorers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face{font-family:'Sasson Montessori';src:url('/fonts/SassoonMontessori.woff2') format('woff2'),url('/fonts/SassoonMontessori.ttf') format('truetype');font-weight:normal;font-style:normal;font-display:swap;}
+  :root{--cerise:#E91E89;--pink:#F5A8B8;--soft:#F8D7DA;--ink:#2a1e2e;--lime:#A4D233;--sky:#3FA9F5;--sun:#F7C72E;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;color:var(--ink);background:#faf6f7;}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 20px;background:#fff;box-shadow:0 2px 10px rgba(180,120,140,.12);position:sticky;top:0;z-index:5;}
+  .bar .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--cerise);text-decoration:none;font-size:15px;}
+  .bar .brand img{width:32px;height:32px;object-fit:contain;}
+  .bar .actions{display:flex;gap:10px;}
+  .btn{border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-family:inherit;cursor:pointer;text-decoration:none;font-size:14px;}
+  .btn-print{background:var(--cerise);color:#fff;box-shadow:0 6px 16px rgba(233,30,137,.35);}
+  .btn-back{background:#fff;color:var(--ink);border:1px solid #eedce2;}
+  .sheet{max-width:820px;margin:22px auto;background:#fff;padding:30px;border-radius:14px;box-shadow:0 10px 30px rgba(180,120,140,.14);}
+  .sheet h1{font-size:27px;line-height:1.1;margin-bottom:6px;}
+  .sheet .sub{color:#9a7b85;font-size:13.5px;margin-bottom:18px;}
+  .doc-foot{margin-top:24px;text-align:center;color:#c2a7b0;font-size:11px;letter-spacing:.04em;}
+  .legend{display:flex;gap:18px;font-size:12px;color:#7a626b;margin-bottom:16px;flex-wrap:wrap;}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .legend i{width:12px;height:12px;border-radius:50%;display:inline-block;}
+  .alpha{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+  .glyph{border:2px dashed #E7C3CD;border-radius:14px;min-height:96px;display:flex;align-items:center;justify-content:center;font-size:56px;line-height:1;}
+  .glyph.vowel{background:#EAF4FC;color:var(--sky);}
+  .glyph.cons{background:#FDEFF4;color:var(--cerise);}
+  @media print{
+    .bar{display:none !important;}
+    body{background:#fff;}
+    .sheet{box-shadow:none;border:0;margin:0;max-width:100%;border-radius:0;padding:0;}
+    @page{size:A4;margin:14mm;}
+  }
+  h1,h2,h3,h4,h5,h6{font-family:'Playpen Sans',system-ui,sans-serif;}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/biblioteket"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <div class="actions">
+      <a class="btn btn-back" href="/biblioteket">‹ Biblioteket</a>
+      <button class="btn btn-print" onclick="window.print()">⬇ Lagre som PDF</button>
+    </div>
+  </div>
+  <div class="sheet">
+    <h1>Sandpapirbokstaver</h1>
+    <div class="sub">Det norske alfabetet i Sasson-skrift. Skriv ut på kraftig papir, lim bokstavene på sandpapir og klipp dem ut, så kan barnet kjenne formen med fingeren og knytte lyd til bevegelse.</div>
+    <div class="legend">
+      <span><i style="background:#3FA9F5"></i> Vokaler (blå)</span>
+      <span><i style="background:#E91E89"></i> Konsonanter (rosa)</span>
+    </div>
+    <div class="alpha">
+      <div class="glyph vowel">a</div>
+      <div class="glyph cons">b</div>
+      <div class="glyph cons">c</div>
+      <div class="glyph cons">d</div>
+      <div class="glyph vowel">e</div>
+      <div class="glyph cons">f</div>
+      <div class="glyph cons">g</div>
+      <div class="glyph cons">h</div>
+      <div class="glyph vowel">i</div>
+      <div class="glyph cons">j</div>
+      <div class="glyph cons">k</div>
+      <div class="glyph cons">l</div>
+      <div class="glyph cons">m</div>
+      <div class="glyph cons">n</div>
+      <div class="glyph vowel">o</div>
+      <div class="glyph cons">p</div>
+      <div class="glyph cons">q</div>
+      <div class="glyph cons">r</div>
+      <div class="glyph cons">s</div>
+      <div class="glyph cons">t</div>
+      <div class="glyph vowel">u</div>
+      <div class="glyph cons">v</div>
+      <div class="glyph cons">w</div>
+      <div class="glyph cons">x</div>
+      <div class="glyph vowel">y</div>
+      <div class="glyph cons">z</div>
+      <div class="glyph vowel">æ</div>
+      <div class="glyph vowel">ø</div>
+      <div class="glyph vowel">å</div>
+    </div>
+    <div class="doc-foot">Little Montessori Explorers · lmexplorers.com</div>
+  </div>
+</body>
+</html>
