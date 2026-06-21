@@ -46,21 +46,46 @@
   <div class="bar">
     <a class="brand" href="/biblioteket"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
     <div class="actions">
-      <a class="btn btn-back" href="/biblioteket">‹ Biblioteket</a>
-      <button class="btn btn-print" onclick="window.print()">⬇ Lagre som PDF</button>
+      <a class="btn btn-back" href="/biblioteket" data-no="‹ Biblioteket" data-en="‹ Library">‹ Biblioteket</a>
+      <button class="btn btn-print" onclick="window.print()" data-no="⬇ Lagre som PDF" data-en="⬇ Save as PDF">⬇ Lagre som PDF</button>
     </div>
   </div>
   <div class="sheet">
-    <h1>Observasjonsjournal</h1>
-    <div class="sub">Bruk fem rolige minutter om dagen. Noter hva barnet gjør, ikke hva du tror det føler.</div>
+    <h1 data-no="Observasjonsjournal" data-en="Observation journal">Observasjonsjournal</h1>
+    <div class="sub" data-no="Bruk fem rolige minutter om dagen. Noter hva barnet gjør, ikke hva du tror det føler." data-en="Use five calm minutes a day. Note what the child does, not what you think it feels.">Bruk fem rolige minutter om dagen. Noter hva barnet gjør, ikke hva du tror det føler.</div>
 <div class="fields">
-      <div class="f"><span>Barn</span><div class="line"></div></div>
-      <div class="f"><span>Dato</span><div class="line"></div></div>
-      <div class="f"><span>Observatør</span><div class="line"></div></div>
+      <div class="f"><span data-no="Barn" data-en="Child">Barn</span><div class="line"></div></div>
+      <div class="f"><span data-no="Dato" data-en="Date">Dato</span><div class="line"></div></div>
+      <div class="f"><span data-no="Observatør" data-en="Observer">Observatør</span><div class="line"></div></div>
     </div>
-    <div class="tbl"><div class="row head"><div>Tid</div><div>Hva barnet gjør (se, ikke tolk)</div><div>Tolkning (senere)</div></div><div class="row"><div></div><div></div><div></div></div><div class="row"><div></div><div></div><div></div></div><div class="row"><div></div><div></div><div></div></div><div class="row"><div></div><div></div><div></div></div><div class="row"><div></div><div></div><div></div></div><div class="row"><div></div><div></div><div></div></div><div class="row"><div></div><div></div><div></div></div><div class="row"><div></div><div></div><div></div></div></div>
-    <div class="note">Se, ikke tolk. Skriv det du faktisk ser. Tolkningen kan komme etterpå.</div>
+    <div class="tbl"><div class="row head"><div data-no="Tid" data-en="Time">Tid</div><div data-no="Hva barnet gjør (se, ikke tolk)" data-en="What the child does (observe, don't interpret)">Hva barnet gjør (se, ikke tolk)</div><div data-no="Tolkning (senere)" data-en="Interpretation (later)">Tolkning (senere)</div></div><div class="row"><div></div><div></div><div></div></div><div class="row"><div></div><div></div><div></div></div><div class="row"><div></div><div></div><div></div></div><div class="row"><div></div><div></div><div></div></div><div class="row"><div></div><div></div><div></div></div><div class="row"><div></div><div></div><div></div></div><div class="row"><div></div><div></div><div></div></div><div class="row"><div></div><div></div><div></div></div></div>
+    <div class="note" data-no="Se, ikke tolk. Skriv det du faktisk ser. Tolkningen kan komme etterpå." data-en="Observe, don't interpret. Write what you actually see. The interpretation can come afterwards.">Se, ikke tolk. Skriv det du faktisk ser. Tolkningen kan komme etterpå.</div>
     <div class="doc-foot">Little Montessori Explorers · lmexplorers.com</div>
   </div>
+
+<style>
+#lme-print-lang{position:fixed;top:14px;right:14px;z-index:9999;background:#E91E89;color:#fff;border:2px solid #fff;border-radius:50px;padding:8px 14px;font-size:13px;font-weight:700;font-family:'Playpen Sans',sans-serif;cursor:pointer;box-shadow:0 6px 16px rgba(233,30,137,.35);}
+@media print{#lme-print-lang{display:none !important;}}
+</style>
+<button id="lme-print-lang" type="button">🇬🇧 English</button>
+<script>
+(function(){
+  function apply(lang){
+    window.__lmeLang=lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
+      el.innerHTML = (lang==='en') ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    document.documentElement.lang=lang;
+    var b=document.getElementById('lme-print-lang');
+    if(b) b.textContent = (lang==='en') ? '🇳🇴 Norsk' : '🇬🇧 English';
+    try{localStorage.setItem('lme_lang',lang);}catch(e){}
+  }
+  var saved='no';try{saved=localStorage.getItem('lme_lang')||'no';}catch(e){}
+  var btn=document.getElementById('lme-print-lang');
+  if(btn) btn.addEventListener('click',function(){apply(window.__lmeLang==='en'?'no':'en');});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){apply(saved);});
+  else apply(saved);
+})();
+</script>
 </body>
 </html>

@@ -40,13 +40,13 @@
   <div class="bar">
     <a class="brand" href="/biblioteket"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
     <div class="actions">
-      <a class="btn btn-back" href="/biblioteket">‹ Biblioteket</a>
-      <button class="btn btn-print" onclick="window.print()">⬇ Lagre som PDF</button>
+      <a class="btn btn-back" href="/biblioteket" data-no="‹ Biblioteket" data-en="‹ Library">‹ Biblioteket</a>
+      <button class="btn btn-print" onclick="window.print()" data-no="⬇ Lagre som PDF" data-en="⬇ Save as PDF">⬇ Lagre som PDF</button>
     </div>
   </div>
   <div class="sheet">
-    <h1>Botaniske kort, Norges flora</h1>
-    <div class="sub">Vanlige norske planter og trær med norske og latinske navn. Klipp ut kortene og bruk dem til å kjenne igjen, benevne og sortere det dere finner ute i naturen.</div>
+    <h1 data-no="Botaniske kort, Norges flora" data-en="Botanical cards, the flora of Norway">Botaniske kort, Norges flora</h1>
+    <div class="sub" data-no="Vanlige norske planter og trær med norske og latinske navn. Klipp ut kortene og bruk dem til å kjenne igjen, benevne og sortere det dere finner ute i naturen." data-en="Common Norwegian plants and trees with their Norwegian and Latin names. Cut out the cards and use them to recognise, name and sort what you find out in nature.">Vanlige norske planter og trær med norske og latinske navn. Klipp ut kortene og bruk dem til å kjenne igjen, benevne og sortere det dere finner ute i naturen.</div>
     <div class="cards">
       <div class="card"><svg viewBox="0 0 78 78"><line x1="39" y1="46" x2="39" y2="70" stroke="#A4D233" stroke-width="3"/><circle cx="39" cy="30" r="9" fill="#F7C72E"/><circle cx="39" cy="16" r="7" fill="#C8A2E0"/><circle cx="52" cy="24" r="7" fill="#C8A2E0"/><circle cx="52" cy="38" r="7" fill="#C8A2E0"/><circle cx="26" cy="24" r="7" fill="#C8A2E0"/><circle cx="26" cy="38" r="7" fill="#C8A2E0"/></svg><div class="lbl">Blåveis</div><div class="lat">Hepatica nobilis</div></div>
       <div class="card"><svg viewBox="0 0 78 78"><line x1="39" y1="46" x2="39" y2="70" stroke="#A4D233" stroke-width="3"/><circle cx="39" cy="30" r="9" fill="#F7C72E"/><circle cx="39" cy="16" r="7" fill="#fff" stroke="#d9c4cb" stroke-width="1.5"/><circle cx="52" cy="24" r="7" fill="#fff" stroke="#d9c4cb" stroke-width="1.5"/><circle cx="52" cy="38" r="7" fill="#fff" stroke="#d9c4cb" stroke-width="1.5"/><circle cx="26" cy="24" r="7" fill="#fff" stroke="#d9c4cb" stroke-width="1.5"/><circle cx="26" cy="38" r="7" fill="#fff" stroke="#d9c4cb" stroke-width="1.5"/></svg><div class="lbl">Hvitveis</div><div class="lat">Anemone nemorosa</div></div>
@@ -60,5 +60,30 @@
     </div>
     <div class="doc-foot">Little Montessori Explorers · lmexplorers.com</div>
   </div>
+
+<style>
+#lme-print-lang{position:fixed;top:14px;right:14px;z-index:9999;background:#E91E89;color:#fff;border:2px solid #fff;border-radius:50px;padding:8px 14px;font-size:13px;font-weight:700;font-family:'Playpen Sans',sans-serif;cursor:pointer;box-shadow:0 6px 16px rgba(233,30,137,.35);}
+@media print{#lme-print-lang{display:none !important;}}
+</style>
+<button id="lme-print-lang" type="button">🇬🇧 English</button>
+<script>
+(function(){
+  function apply(lang){
+    window.__lmeLang=lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
+      el.innerHTML = (lang==='en') ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    document.documentElement.lang=lang;
+    var b=document.getElementById('lme-print-lang');
+    if(b) b.textContent = (lang==='en') ? '🇳🇴 Norsk' : '🇬🇧 English';
+    try{localStorage.setItem('lme_lang',lang);}catch(e){}
+  }
+  var saved='no';try{saved=localStorage.getItem('lme_lang')||'no';}catch(e){}
+  var btn=document.getElementById('lme-print-lang');
+  if(btn) btn.addEventListener('click',function(){apply(window.__lmeLang==='en'?'no':'en');});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){apply(saved);});
+  else apply(saved);
+})();
+</script>
 </body>
 </html>

@@ -48,50 +48,75 @@
   <div class="bar">
     <a class="brand" href="/biblioteket"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
     <div class="actions">
-      <a class="btn btn-back" href="/biblioteket">‹ Biblioteket</a>
-      <button class="btn btn-print" onclick="window.print()">⬇ Lagre som PDF</button>
+      <a class="btn btn-back" href="/biblioteket" data-no="‹ Biblioteket" data-en="‹ Library">‹ Biblioteket</a>
+      <button class="btn btn-print" onclick="window.print()" data-no="⬇ Lagre som PDF" data-en="⬇ Save as PDF">⬇ Lagre som PDF</button>
     </div>
   </div>
   <div class="sheet">
-    <h1>Sesonginvitasjon</h1>
-    <div class="sub">Fire ferdige invitasjoner, en for hver årstid. Klipp ut den som passer, fyll inn anledning, dato og sted, og send den hjem.</div>
+    <h1 data-no="Sesonginvitasjon" data-en="Seasonal invitation">Sesonginvitasjon</h1>
+    <div class="sub" data-no="Fire ferdige invitasjoner, en for hver årstid. Klipp ut den som passer, fyll inn anledning, dato og sted, og send den hjem." data-en="Four ready-made invitations, one for each season. Cut out the one that fits, fill in the occasion, date and place, and send it home.">Fire ferdige invitasjoner, en for hver årstid. Klipp ut den som passer, fyll inn anledning, dato og sted, og send den hjem.</div>
 
     <div class="cards">
       <div class="inv vaar">
-        <div class="season" style="color:#6f9220">Vår</div>
+        <div class="season" style="color:#6f9220" data-no="Vår" data-en="Spring">Vår</div>
         <div class="icons">🌷🐝🌿</div>
-        <h2>Du er invitert!</h2>
-        <div class="f"><span>Anledning</span><div class="line"></div></div>
-        <div class="f"><span>Dato og tid</span><div class="line"></div></div>
-        <div class="f"><span>Sted</span><div class="line"></div></div>
+        <h2 data-no="Du er invitert!" data-en="You're invited!">Du er invitert!</h2>
+        <div class="f"><span data-no="Anledning" data-en="Occasion">Anledning</span><div class="line"></div></div>
+        <div class="f"><span data-no="Dato og tid" data-en="Date and time">Dato og tid</span><div class="line"></div></div>
+        <div class="f"><span data-no="Sted" data-en="Place">Sted</span><div class="line"></div></div>
       </div>
       <div class="inv sommer">
-        <div class="season" style="color:#b8901a">Sommer</div>
+        <div class="season" style="color:#b8901a" data-no="Sommer" data-en="Summer">Sommer</div>
         <div class="icons">☀️🍓🦋</div>
-        <h2>Du er invitert!</h2>
-        <div class="f"><span>Anledning</span><div class="line"></div></div>
-        <div class="f"><span>Dato og tid</span><div class="line"></div></div>
-        <div class="f"><span>Sted</span><div class="line"></div></div>
+        <h2 data-no="Du er invitert!" data-en="You're invited!">Du er invitert!</h2>
+        <div class="f"><span data-no="Anledning" data-en="Occasion">Anledning</span><div class="line"></div></div>
+        <div class="f"><span data-no="Dato og tid" data-en="Date and time">Dato og tid</span><div class="line"></div></div>
+        <div class="f"><span data-no="Sted" data-en="Place">Sted</span><div class="line"></div></div>
       </div>
       <div class="inv host">
-        <div class="season" style="color:#b56b16">Høst</div>
+        <div class="season" style="color:#b56b16" data-no="Høst" data-en="Autumn">Høst</div>
         <div class="icons">🍂🍎🍄</div>
-        <h2>Du er invitert!</h2>
-        <div class="f"><span>Anledning</span><div class="line"></div></div>
-        <div class="f"><span>Dato og tid</span><div class="line"></div></div>
-        <div class="f"><span>Sted</span><div class="line"></div></div>
+        <h2 data-no="Du er invitert!" data-en="You're invited!">Du er invitert!</h2>
+        <div class="f"><span data-no="Anledning" data-en="Occasion">Anledning</span><div class="line"></div></div>
+        <div class="f"><span data-no="Dato og tid" data-en="Date and time">Dato og tid</span><div class="line"></div></div>
+        <div class="f"><span data-no="Sted" data-en="Place">Sted</span><div class="line"></div></div>
       </div>
       <div class="inv vinter">
-        <div class="season" style="color:#2877b8">Vinter</div>
+        <div class="season" style="color:#2877b8" data-no="Vinter" data-en="Winter">Vinter</div>
         <div class="icons">❄️⛄🌟</div>
-        <h2>Du er invitert!</h2>
-        <div class="f"><span>Anledning</span><div class="line"></div></div>
-        <div class="f"><span>Dato og tid</span><div class="line"></div></div>
-        <div class="f"><span>Sted</span><div class="line"></div></div>
+        <h2 data-no="Du er invitert!" data-en="You're invited!">Du er invitert!</h2>
+        <div class="f"><span data-no="Anledning" data-en="Occasion">Anledning</span><div class="line"></div></div>
+        <div class="f"><span data-no="Dato og tid" data-en="Date and time">Dato og tid</span><div class="line"></div></div>
+        <div class="f"><span data-no="Sted" data-en="Place">Sted</span><div class="line"></div></div>
       </div>
     </div>
 
     <div class="doc-foot">Little Montessori Explorers · lmexplorers.com</div>
   </div>
+
+<style>
+#lme-print-lang{position:fixed;top:14px;right:14px;z-index:9999;background:#E91E89;color:#fff;border:2px solid #fff;border-radius:50px;padding:8px 14px;font-size:13px;font-weight:700;font-family:'Playpen Sans',sans-serif;cursor:pointer;box-shadow:0 6px 16px rgba(233,30,137,.35);}
+@media print{#lme-print-lang{display:none !important;}}
+</style>
+<button id="lme-print-lang" type="button">🇬🇧 English</button>
+<script>
+(function(){
+  function apply(lang){
+    window.__lmeLang=lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
+      el.innerHTML = (lang==='en') ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    document.documentElement.lang=lang;
+    var b=document.getElementById('lme-print-lang');
+    if(b) b.textContent = (lang==='en') ? '🇳🇴 Norsk' : '🇬🇧 English';
+    try{localStorage.setItem('lme_lang',lang);}catch(e){}
+  }
+  var saved='no';try{saved=localStorage.getItem('lme_lang')||'no';}catch(e){}
+  var btn=document.getElementById('lme-print-lang');
+  if(btn) btn.addEventListener('click',function(){apply(window.__lmeLang==='en'?'no':'en');});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){apply(saved);});
+  else apply(saved);
+})();
+</script>
 </body>
 </html>

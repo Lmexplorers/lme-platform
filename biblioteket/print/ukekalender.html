@@ -41,15 +41,40 @@
   <div class="bar">
     <a class="brand" href="/biblioteket"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
     <div class="actions">
-      <a class="btn btn-back" href="/biblioteket">‹ Biblioteket</a>
-      <button class="btn btn-print" onclick="window.print()">⬇ Lagre som PDF</button>
+      <a class="btn btn-back" href="/biblioteket" data-no="‹ Biblioteket" data-en="‹ Library">‹ Biblioteket</a>
+      <button class="btn btn-print" onclick="window.print()" data-no="⬇ Lagre som PDF" data-en="⬇ Save as PDF">⬇ Lagre som PDF</button>
     </div>
   </div>
   <div class="sheet">
-    <h1>Vår uke</h1>
-    <div class="sub">En rolig, visuell ukeplan for hjemmet eller klasserommet. Heng den opp i barnets høyde og fyll inn sammen.</div>
-<div class="wk"><div class="day">Mandag</div><div class="lines"><div class="ln"></div><div class="ln"></div></div><div class="day">Tirsdag</div><div class="lines"><div class="ln"></div><div class="ln"></div></div><div class="day">Onsdag</div><div class="lines"><div class="ln"></div><div class="ln"></div></div><div class="day">Torsdag</div><div class="lines"><div class="ln"></div><div class="ln"></div></div><div class="day">Fredag</div><div class="lines"><div class="ln"></div><div class="ln"></div></div><div class="day">Lørdag</div><div class="lines"><div class="ln"></div><div class="ln"></div></div><div class="day">Søndag</div><div class="lines"><div class="ln"></div><div class="ln"></div></div></div>
+    <h1 data-no="Vår uke" data-en="Our week">Vår uke</h1>
+    <div class="sub" data-no="En rolig, visuell ukeplan for hjemmet eller klasserommet. Heng den opp i barnets høyde og fyll inn sammen." data-en="A calm, visual weekly plan for home or the classroom. Hang it up at the child's height and fill it in together.">En rolig, visuell ukeplan for hjemmet eller klasserommet. Heng den opp i barnets høyde og fyll inn sammen.</div>
+<div class="wk"><div class="day" data-no="Mandag" data-en="Monday">Mandag</div><div class="lines"><div class="ln"></div><div class="ln"></div></div><div class="day" data-no="Tirsdag" data-en="Tuesday">Tirsdag</div><div class="lines"><div class="ln"></div><div class="ln"></div></div><div class="day" data-no="Onsdag" data-en="Wednesday">Onsdag</div><div class="lines"><div class="ln"></div><div class="ln"></div></div><div class="day" data-no="Torsdag" data-en="Thursday">Torsdag</div><div class="lines"><div class="ln"></div><div class="ln"></div></div><div class="day" data-no="Fredag" data-en="Friday">Fredag</div><div class="lines"><div class="ln"></div><div class="ln"></div></div><div class="day" data-no="Lørdag" data-en="Saturday">Lørdag</div><div class="lines"><div class="ln"></div><div class="ln"></div></div><div class="day" data-no="Søndag" data-en="Sunday">Søndag</div><div class="lines"><div class="ln"></div><div class="ln"></div></div></div>
     <div class="doc-foot">Little Montessori Explorers · lmexplorers.com</div>
   </div>
+
+<style>
+#lme-print-lang{position:fixed;top:14px;right:14px;z-index:9999;background:#E91E89;color:#fff;border:2px solid #fff;border-radius:50px;padding:8px 14px;font-size:13px;font-weight:700;font-family:'Playpen Sans',sans-serif;cursor:pointer;box-shadow:0 6px 16px rgba(233,30,137,.35);}
+@media print{#lme-print-lang{display:none !important;}}
+</style>
+<button id="lme-print-lang" type="button">🇬🇧 English</button>
+<script>
+(function(){
+  function apply(lang){
+    window.__lmeLang=lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
+      el.innerHTML = (lang==='en') ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    document.documentElement.lang=lang;
+    var b=document.getElementById('lme-print-lang');
+    if(b) b.textContent = (lang==='en') ? '🇳🇴 Norsk' : '🇬🇧 English';
+    try{localStorage.setItem('lme_lang',lang);}catch(e){}
+  }
+  var saved='no';try{saved=localStorage.getItem('lme_lang')||'no';}catch(e){}
+  var btn=document.getElementById('lme-print-lang');
+  if(btn) btn.addEventListener('click',function(){apply(window.__lmeLang==='en'?'no':'en');});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){apply(saved);});
+  else apply(saved);
+})();
+</script>
 </body>
 </html>

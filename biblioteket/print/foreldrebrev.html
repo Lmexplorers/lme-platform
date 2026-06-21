@@ -46,44 +46,69 @@
   <div class="bar">
     <a class="brand" href="/biblioteket"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
     <div class="actions">
-      <a class="btn btn-back" href="/biblioteket">‹ Biblioteket</a>
-      <button class="btn btn-print" onclick="window.print()">⬇ Lagre som PDF</button>
+      <a class="btn btn-back" href="/biblioteket" data-no="‹ Biblioteket" data-en="‹ Library">‹ Biblioteket</a>
+      <button class="btn btn-print" onclick="window.print()" data-no="⬇ Lagre som PDF" data-en="⬇ Save as PDF">⬇ Lagre som PDF</button>
     </div>
   </div>
   <div class="sheet">
-    <h1>Foreldrebrev</h1>
-    <div class="sub">En enkel mal for det månedlige brevet hjem. Fyll inn månedens innhold på linjene, så har du et varmt og oversiktlig brev til familiene.</div>
+    <h1 data-no="Foreldrebrev" data-en="Letter to parents">Foreldrebrev</h1>
+    <div class="sub" data-no="En enkel mal for det månedlige brevet hjem. Fyll inn månedens innhold på linjene, så har du et varmt og oversiktlig brev til familiene." data-en="A simple template for the monthly letter home. Fill in the month's content on the lines, and you have a warm and clear letter for the families.">En enkel mal for det månedlige brevet hjem. Fyll inn månedens innhold på linjene, så har du et varmt og oversiktlig brev til familiene.</div>
 
     <div class="head-row">
-      <div class="f"><span>Måned</span><div class="line"></div></div>
-      <div class="f"><span>Gruppe</span><div class="line"></div></div>
-      <div class="f"><span>Dato</span><div class="line"></div></div>
+      <div class="f"><span data-no="Måned" data-en="Month">Måned</span><div class="line"></div></div>
+      <div class="f"><span data-no="Gruppe" data-en="Group">Gruppe</span><div class="line"></div></div>
+      <div class="f"><span data-no="Dato" data-en="Date">Dato</span><div class="line"></div></div>
     </div>
 
     <div class="block">
-      <h3>Dette har vi gjort</h3>
+      <h3 data-no="Dette har vi gjort" data-en="This is what we have done">Dette har vi gjort</h3>
       <div class="lines"><i></i><i></i><i></i></div>
     </div>
     <div class="block">
-      <h3>Dette ser vi fremover mot</h3>
+      <h3 data-no="Dette ser vi fremover mot" data-en="This is what we look forward to">Dette ser vi fremover mot</h3>
       <div class="lines"><i></i><i></i></div>
     </div>
     <div class="block">
-      <h3>Til hjemmet</h3>
+      <h3 data-no="Til hjemmet" data-en="For home">Til hjemmet</h3>
       <div class="lines"><i></i><i></i></div>
     </div>
     <div class="block">
-      <h3>Datoer å huske</h3>
+      <h3 data-no="Datoer å huske" data-en="Dates to remember">Datoer å huske</h3>
       <div class="lines"><i></i><i></i></div>
     </div>
 
-    <p style="margin:14px 0 0;font-size:15px;line-height:1.7;">Takk for at dere deler reisen med oss.</p>
+    <p style="margin:14px 0 0;font-size:15px;line-height:1.7;" data-no="Takk for at dere deler reisen med oss." data-en="Thank you for sharing the journey with us.">Takk for at dere deler reisen med oss.</p>
     <div class="sign">
       <div class="line"></div>
-      <small>hilsen fra</small>
+      <small data-no="hilsen fra" data-en="greetings from">hilsen fra</small>
     </div>
 
     <div class="doc-foot">Little Montessori Explorers · lmexplorers.com</div>
   </div>
+
+<style>
+#lme-print-lang{position:fixed;top:14px;right:14px;z-index:9999;background:#E91E89;color:#fff;border:2px solid #fff;border-radius:50px;padding:8px 14px;font-size:13px;font-weight:700;font-family:'Playpen Sans',sans-serif;cursor:pointer;box-shadow:0 6px 16px rgba(233,30,137,.35);}
+@media print{#lme-print-lang{display:none !important;}}
+</style>
+<button id="lme-print-lang" type="button">🇬🇧 English</button>
+<script>
+(function(){
+  function apply(lang){
+    window.__lmeLang=lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
+      el.innerHTML = (lang==='en') ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    document.documentElement.lang=lang;
+    var b=document.getElementById('lme-print-lang');
+    if(b) b.textContent = (lang==='en') ? '🇳🇴 Norsk' : '🇬🇧 English';
+    try{localStorage.setItem('lme_lang',lang);}catch(e){}
+  }
+  var saved='no';try{saved=localStorage.getItem('lme_lang')||'no';}catch(e){}
+  var btn=document.getElementById('lme-print-lang');
+  if(btn) btn.addEventListener('click',function(){apply(window.__lmeLang==='en'?'no':'en');});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){apply(saved);});
+  else apply(saved);
+})();
+</script>
 </body>
 </html>

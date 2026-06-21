@@ -42,37 +42,62 @@
   <div class="bar">
     <a class="brand" href="/biblioteket"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
     <div class="actions">
-      <a class="btn btn-back" href="/biblioteket">‹ Biblioteket</a>
-      <button class="btn btn-print" onclick="window.print()">⬇ Lagre som PDF</button>
+      <a class="btn btn-back" href="/biblioteket" data-no="‹ Biblioteket" data-en="‹ Library">‹ Biblioteket</a>
+      <button class="btn btn-print" onclick="window.print()" data-no="⬇ Lagre som PDF" data-en="⬇ Save as PDF">⬇ Lagre som PDF</button>
     </div>
   </div>
   <div class="sheet">
-    <h1>Velkomstbrev til nye familier</h1>
-    <div class="sub">En ferdig mal du kan tilpasse. Bytt ut feltene i lys farge med deres egne navn og datoer, så er brevet klart til å sende.</div>
+    <h1 data-no="Velkomstbrev til nye familier" data-en="Welcome letter for new families">Velkomstbrev til nye familier</h1>
+    <div class="sub" data-no="En ferdig mal du kan tilpasse. Bytt ut feltene i lys farge med deres egne navn og datoer, så er brevet klart til å sende." data-en="A ready-made template you can adapt. Replace the light-coloured fields with your own names and dates, and the letter is ready to send.">En ferdig mal du kan tilpasse. Bytt ut feltene i lys farge med deres egne navn og datoer, så er brevet klart til å sende.</div>
 
     <div class="letter">
-      <p>Kjære <span class="ph">familiens navn</span>,</p>
+      <p><span data-no="Kjære " data-en="Dear ">Kjære </span><span class="ph" data-no="familiens navn" data-en="family name">familiens navn</span><span data-no="," data-en=",">,</span></p>
 
-      <p>Velkommen til <span class="ph">navn på barnehage/skole</span>! Vi gleder oss til å bli kjent med <span class="ph">barnets navn</span> og til å følge med på alt det lille mennesket skal oppdage hos oss.</p>
+      <p><span data-no="Velkommen til " data-en="Welcome to ">Velkommen til </span><span class="ph" data-no="navn på barnehage/skole" data-en="name of nursery/school">navn på barnehage/skole</span><span data-no="! Vi gleder oss til å bli kjent med " data-en="! We look forward to getting to know ">! Vi gleder oss til å bli kjent med </span><span class="ph" data-no="barnets navn" data-en="child's name">barnets navn</span><span data-no=" og til å følge med på alt det lille mennesket skal oppdage hos oss." data-en=" and to following all the things this little person will discover with us."> og til å følge med på alt det lille mennesket skal oppdage hos oss.</span></p>
 
-      <p>Hos oss møter barnet et forberedt miljø der ting har sin faste plass, og der det får frihet til å velge, utforske og gjenta i sitt eget tempo. Vår rolle er å observere og legge til rette, ikke å styre. Når barnet er konsentrert, lar vi det få jobbe i fred.</p>
+      <p><span data-no="Hos oss møter barnet et forberedt miljø der ting har sin faste plass, og der det får frihet til å velge, utforske og gjenta i sitt eget tempo. Vår rolle er å observere og legge til rette, ikke å styre. Når barnet er konsentrert, lar vi det få jobbe i fred." data-en="With us the child meets a prepared environment where things have their fixed place, and where it has the freedom to choose, explore and repeat at its own pace. Our role is to observe and facilitate, not to direct. When the child is concentrating, we let it work in peace.">Hos oss møter barnet et forberedt miljø der ting har sin faste plass, og der det får frihet til å velge, utforske og gjenta i sitt eget tempo. Vår rolle er å observere og legge til rette, ikke å styre. Når barnet er konsentrert, lar vi det få jobbe i fred.</span></p>
 
-      <p>De første dagene bruker vi god tid på tilvenning. Det er helt normalt at små barn trenger tid på å finne seg til rette, og vi tar imot både gråt og glede med ro. Dere er alltid velkomne til å spørre oss om hva som helst underveis.</p>
+      <p><span data-no="De første dagene bruker vi god tid på tilvenning. Det er helt normalt at små barn trenger tid på å finne seg til rette, og vi tar imot både gråt og glede med ro. Dere er alltid velkomne til å spørre oss om hva som helst underveis." data-en="During the first days we take plenty of time to settle in. It is completely normal that small children need time to find their feet, and we receive both tears and joy with calm. You are always welcome to ask us about anything along the way.">De første dagene bruker vi god tid på tilvenning. Det er helt normalt at små barn trenger tid på å finne seg til rette, og vi tar imot både gråt og glede med ro. Dere er alltid velkomne til å spørre oss om hva som helst underveis.</span></p>
 
-      <p>Første dag er <span class="ph">dato</span>, og dere møter <span class="ph">tid og sted</span>. Ta gjerne med <span class="ph">skiftetøy, innesko og en kjær gjenstand</span>.</p>
+      <p><span data-no="Første dag er " data-en="The first day is ">Første dag er </span><span class="ph" data-no="dato" data-en="date">dato</span><span data-no=", og dere møter " data-en=", and you arrive at ">, og dere møter </span><span class="ph" data-no="tid og sted" data-en="time and place">tid og sted</span><span data-no=". Ta gjerne med " data-en=". Feel free to bring ">. Ta gjerne med </span><span class="ph" data-no="skiftetøy, innesko og en kjær gjenstand" data-en="a change of clothes, indoor shoes and a treasured object">skiftetøy, innesko og en kjær gjenstand</span><span data-no="." data-en=".">.</span></p>
 
-      <p>Vi ser frem til et fint samarbeid og til å skape trygghet, undring og glede sammen.</p>
+      <p><span data-no="Vi ser frem til et fint samarbeid og til å skape trygghet, undring og glede sammen." data-en="We look forward to a good partnership and to creating security, wonder and joy together.">Vi ser frem til et fint samarbeid og til å skape trygghet, undring og glede sammen.</span></p>
 
-      <p>Varme hilsener,</p>
+      <p><span data-no="Varme hilsener," data-en="Warm regards,">Varme hilsener,</span></p>
 
       <div class="sign">
         <div class="line"></div>
-        <small>navn og rolle</small>
+        <small data-no="navn og rolle" data-en="name and role">navn og rolle</small>
       </div>
     </div>
 
-    <div class="tip">Tips: Skriv ut til PDF, eller åpne i et tekstprogram for å fylle inn navnene digitalt før utsending.</div>
+    <div class="tip" data-no="Tips: Skriv ut til PDF, eller åpne i et tekstprogram for å fylle inn navnene digitalt før utsending." data-en="Tip: Print to PDF, or open it in a text editor to fill in the names digitally before sending.">Tips: Skriv ut til PDF, eller åpne i et tekstprogram for å fylle inn navnene digitalt før utsending.</div>
     <div class="doc-foot">Little Montessori Explorers · lmexplorers.com</div>
   </div>
+
+<style>
+#lme-print-lang{position:fixed;top:14px;right:14px;z-index:9999;background:#E91E89;color:#fff;border:2px solid #fff;border-radius:50px;padding:8px 14px;font-size:13px;font-weight:700;font-family:'Playpen Sans',sans-serif;cursor:pointer;box-shadow:0 6px 16px rgba(233,30,137,.35);}
+@media print{#lme-print-lang{display:none !important;}}
+</style>
+<button id="lme-print-lang" type="button">🇬🇧 English</button>
+<script>
+(function(){
+  function apply(lang){
+    window.__lmeLang=lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
+      el.innerHTML = (lang==='en') ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    document.documentElement.lang=lang;
+    var b=document.getElementById('lme-print-lang');
+    if(b) b.textContent = (lang==='en') ? '🇳🇴 Norsk' : '🇬🇧 English';
+    try{localStorage.setItem('lme_lang',lang);}catch(e){}
+  }
+  var saved='no';try{saved=localStorage.getItem('lme_lang')||'no';}catch(e){}
+  var btn=document.getElementById('lme-print-lang');
+  if(btn) btn.addEventListener('click',function(){apply(window.__lmeLang==='en'?'no':'en');});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){apply(saved);});
+  else apply(saved);
+})();
+</script>
 </body>
 </html>

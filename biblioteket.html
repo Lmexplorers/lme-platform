@@ -1260,15 +1260,12 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
       <input type="search" class="search" placeholder="Søk i biblioteket...">
     </div>
     <div class="filter-pills">
-      <button class="filter-pill active">Alle</button>
-      <button class="filter-pill">Utskrivbare</button>
-      <button class="filter-pill">Maler</button>
-      <button class="filter-pill">Observasjon</button>
-      <button class="filter-pill">Lyd & meditasjon</button>
-      <button class="filter-pill">Foreldrebrev</button>
-      <button class="filter-pill">3–6 år</button>
-      <button class="filter-pill">6–9 år</button>
-      <button class="filter-pill">9–12 år</button>
+      <button class="filter-pill active" data-filter="alle">Alle</button>
+      <button class="filter-pill" data-filter="utskrivbare">Utskrivbare</button>
+      <button class="filter-pill" data-filter="maler">Maler</button>
+      <button class="filter-pill" data-filter="observasjon">Observasjon</button>
+      <button class="filter-pill" data-filter="lyd">Lyd & meditasjon</button>
+      <button class="filter-pill" data-filter="foreldrebrev">Foreldrebrev</button>
     </div>
   </div>
 
@@ -1301,7 +1298,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 
     <div class="lib-grid">
 
-      <article class="lib-card">
+      <article class="lib-card" data-cat="observasjon">
         <div class="lib-thumb" style="background: linear-gradient(135deg, #FDE7E0, #F5A8B8);">
           <span class="lib-type">📋 SKJEMA</span>
           <h4>Observasjons-<br>journal</h4>
@@ -1317,7 +1314,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
         </div>
       </article>
 
-      <article class="lib-card">
+      <article class="lib-card" data-cat="maler foreldrebrev">
         <div class="lib-thumb" style="background: linear-gradient(135deg, #C8E4F4, #A4D233);">
           <span class="lib-type">💌 MAL</span>
           <h4>Foreldre-<br>brev</h4>
@@ -1333,7 +1330,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
         </div>
       </article>
 
-      <article class="lib-card">
+      <article class="lib-card" data-cat="utskrivbare">
         <div class="lib-thumb" style="background: linear-gradient(135deg, #F7C72E, #F5A8B8);">
           <span class="lib-type">🖨️ UTSKRIVBAR</span>
           <h4>Bokstav-<br>kort</h4>
@@ -1353,7 +1350,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
   </section>
 
   <!-- Kategori: Utskrivbare ark -->
-  <section class="lib-section">
+  <section class="lib-section" data-cat="utskrivbare">
     <h2 class="cat-h2">🖨️ <em>Utskrivbare</em> ark</h2>
     <p class="cat-sub">Klar-til-print materialer for klasserommet og hjemmet.</p>
 
@@ -1421,7 +1418,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
   </section>
 
   <!-- Kategori: Canva-maler -->
-  <section class="lib-section">
+  <section class="lib-section" data-cat="maler">
     <h2 class="cat-h2">🎨 <em>Ferdige maler</em></h2>
     <p class="cat-sub">Utskrivbare maler du kan tilpasse din egen klasse eller familie.</p>
 
@@ -1471,7 +1468,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
   </section>
 
   <!-- Kategori: Lyd & meditasjon -->
-  <section class="lib-section">
+  <section class="lib-section" data-cat="lyd">
     <h2 class="cat-h2">🎧 <em>Lyd</em> & meditasjon</h2>
     <p class="cat-sub">Lyttepakker for ro, refleksjon og bevisst pedagogikk.</p>
 
@@ -1517,7 +1514,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
   </section>
 
   <!-- Foreldrebrev-maler -->
-  <section class="lib-section">
+  <section class="lib-section" data-cat="foreldrebrev maler">
     <h2 class="cat-h2">💌 <em>Foreldrebrev</em> & kommunikasjon</h2>
     <p class="cat-sub">Ferdige brev for ulike anledninger, bare fyll inn navn og send.</p>
 
@@ -1817,12 +1814,37 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 
 
 <script>
-  document.querySelectorAll('.filter-pill').forEach(p => {
-    p.addEventListener('click', () => {
-      document.querySelectorAll('.filter-pill').forEach(x => x.classList.remove('active'));
+(function(){
+  var pills = document.querySelectorAll('.filter-pill');
+  var cards = document.querySelectorAll('.lib-card, .canva-card, .audio-card');
+  function catsOf(card){
+    if (card.dataset.cat) return card.dataset.cat;
+    var sec = card.closest('section');
+    return (sec && sec.dataset.cat) ? sec.dataset.cat : '';
+  }
+  function applyFilter(f){
+    cards.forEach(function(c){
+      var cats = ' ' + catsOf(c) + ' ';
+      c.style.display = (f === 'alle' || cats.indexOf(' ' + f + ' ') >= 0) ? '' : 'none';
+    });
+    document.querySelectorAll('main > section').forEach(function(sec){
+      if (sec.classList.contains('page-hero')) return;
+      if (f === 'alle') { sec.style.display = ''; return; }
+      var inCards = sec.querySelectorAll('.lib-card, .canva-card, .audio-card');
+      if (inCards.length === 0) { sec.style.display = 'none'; return; }
+      var anyVisible = false;
+      inCards.forEach(function(c){ if (c.style.display !== 'none') anyVisible = true; });
+      sec.style.display = anyVisible ? '' : 'none';
+    });
+  }
+  pills.forEach(function(p){
+    p.addEventListener('click', function(){
+      pills.forEach(function(x){ x.classList.remove('active'); });
       p.classList.add('active');
+      applyFilter(p.dataset.filter || 'alle');
     });
   });
+})();
 </script>
 
 

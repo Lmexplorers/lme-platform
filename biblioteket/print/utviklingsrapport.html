@@ -44,52 +44,77 @@
   <div class="bar">
     <a class="brand" href="/biblioteket"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
     <div class="actions">
-      <a class="btn btn-back" href="/biblioteket">‹ Biblioteket</a>
-      <button class="btn btn-print" onclick="window.print()">⬇ Lagre som PDF</button>
+      <a class="btn btn-back" href="/biblioteket" data-no="‹ Biblioteket" data-en="‹ Library">‹ Biblioteket</a>
+      <button class="btn btn-print" onclick="window.print()" data-no="⬇ Lagre som PDF" data-en="⬇ Save as PDF">⬇ Lagre som PDF</button>
     </div>
   </div>
   <div class="sheet">
-    <h1>Utviklingsrapport</h1>
-    <div class="sub">En mal for å oppsummere barnets utvikling innen Montessoriområdene. Skriv det du har observert, ikke det du tror barnet føler.</div>
+    <h1 data-no="Utviklingsrapport" data-en="Development report">Utviklingsrapport</h1>
+    <div class="sub" data-no="En mal for å oppsummere barnets utvikling innen Montessoriområdene. Skriv det du har observert, ikke det du tror barnet føler." data-en="A template for summarising the child's development across the Montessori areas. Write what you have observed, not what you think the child feels.">En mal for å oppsummere barnets utvikling innen Montessoriområdene. Skriv det du har observert, ikke det du tror barnet føler.</div>
 
     <div class="fields">
-      <div class="f"><span>Barn</span><div class="line"></div></div>
-      <div class="f"><span>Periode</span><div class="line"></div></div>
-      <div class="f"><span>Pedagog</span><div class="line"></div></div>
+      <div class="f"><span data-no="Barn" data-en="Child">Barn</span><div class="line"></div></div>
+      <div class="f"><span data-no="Periode" data-en="Period">Periode</span><div class="line"></div></div>
+      <div class="f"><span data-no="Pedagog" data-en="Educator">Pedagog</span><div class="line"></div></div>
     </div>
 
     <div class="block">
-      <h3>Praktisk liv</h3>
-      <div class="hint">Selvstendighet, konsentrasjon, omsorg for seg selv og miljøet.</div>
+      <h3 data-no="Praktisk liv" data-en="Practical life">Praktisk liv</h3>
+      <div class="hint" data-no="Selvstendighet, konsentrasjon, omsorg for seg selv og miljøet." data-en="Independence, concentration, care for oneself and the environment.">Selvstendighet, konsentrasjon, omsorg for seg selv og miljøet.</div>
       <div class="lines"><i></i><i></i></div>
     </div>
     <div class="block">
-      <h3>Sansetrening</h3>
-      <div class="hint">Sortering, gradering og forfining av sansene.</div>
+      <h3 data-no="Sansetrening" data-en="Sensorial">Sansetrening</h3>
+      <div class="hint" data-no="Sortering, gradering og forfining av sansene." data-en="Sorting, grading and refinement of the senses.">Sortering, gradering og forfining av sansene.</div>
       <div class="lines"><i></i><i></i></div>
     </div>
     <div class="block">
-      <h3>Språk</h3>
-      <div class="hint">Ordforråd, lyder, skriving og lesing.</div>
+      <h3 data-no="Språk" data-en="Language">Språk</h3>
+      <div class="hint" data-no="Ordforråd, lyder, skriving og lesing." data-en="Vocabulary, sounds, writing and reading.">Ordforråd, lyder, skriving og lesing.</div>
       <div class="lines"><i></i><i></i></div>
     </div>
     <div class="block">
-      <h3>Matematikk</h3>
-      <div class="hint">Mengde, tallforståelse og det matematiske sinnet.</div>
+      <h3 data-no="Matematikk" data-en="Mathematics">Matematikk</h3>
+      <div class="hint" data-no="Mengde, tallforståelse og det matematiske sinnet." data-en="Quantity, number sense and the mathematical mind.">Mengde, tallforståelse og det matematiske sinnet.</div>
       <div class="lines"><i></i><i></i></div>
     </div>
     <div class="block">
-      <h3>Sosial og emosjonell utvikling</h3>
-      <div class="hint">Samspill, selvregulering og forhold til andre barn og voksne.</div>
+      <h3 data-no="Sosial og emosjonell utvikling" data-en="Social and emotional development">Sosial og emosjonell utvikling</h3>
+      <div class="hint" data-no="Samspill, selvregulering og forhold til andre barn og voksne." data-en="Interaction, self-regulation and relationships with other children and adults.">Samspill, selvregulering og forhold til andre barn og voksne.</div>
       <div class="lines"><i></i><i></i></div>
     </div>
     <div class="block">
-      <h3>Veien videre</h3>
-      <div class="hint">Hva vi legger til rette for i neste periode.</div>
+      <h3 data-no="Veien videre" data-en="The way forward">Veien videre</h3>
+      <div class="hint" data-no="Hva vi legger til rette for i neste periode." data-en="What we will facilitate in the next period.">Hva vi legger til rette for i neste periode.</div>
       <div class="lines"><i></i><i></i></div>
     </div>
 
     <div class="doc-foot">Little Montessori Explorers · lmexplorers.com</div>
   </div>
+
+<style>
+#lme-print-lang{position:fixed;top:14px;right:14px;z-index:9999;background:#E91E89;color:#fff;border:2px solid #fff;border-radius:50px;padding:8px 14px;font-size:13px;font-weight:700;font-family:'Playpen Sans',sans-serif;cursor:pointer;box-shadow:0 6px 16px rgba(233,30,137,.35);}
+@media print{#lme-print-lang{display:none !important;}}
+</style>
+<button id="lme-print-lang" type="button">🇬🇧 English</button>
+<script>
+(function(){
+  function apply(lang){
+    window.__lmeLang=lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
+      el.innerHTML = (lang==='en') ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    document.documentElement.lang=lang;
+    var b=document.getElementById('lme-print-lang');
+    if(b) b.textContent = (lang==='en') ? '🇳🇴 Norsk' : '🇬🇧 English';
+    try{localStorage.setItem('lme_lang',lang);}catch(e){}
+  }
+  var saved='no';try{saved=localStorage.getItem('lme_lang')||'no';}catch(e){}
+  var btn=document.getElementById('lme-print-lang');
+  if(btn) btn.addEventListener('click',function(){apply(window.__lmeLang==='en'?'no':'en');});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){apply(saved);});
+  else apply(saved);
+})();
+</script>
 </body>
 </html>
