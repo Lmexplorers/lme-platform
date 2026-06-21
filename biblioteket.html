@@ -1997,34 +1997,30 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 
   <script src="/js/page-editor.js" defer></script>
 <script>
-/* Nyheter i biblioteket, rendres automatisk fra listen under, sortert på dato (nyeste først).
-   Legg til en ny ressurs ved å sette inn et nytt objekt med dagens dato, så oppdaterer seksjonen seg selv. */
+/* "Nytt i biblioteket" hentes helautomatisk fra /api/biblioteket-nytt, som finner
+   ressursene i biblioteket/print/ av seg selv. Ingen liste a vedlikeholde her. */
 (function(){
-  var LME_NYHETER = [
-    {dato:"2026-06-21", url:"/biblioteket/print/sandpapirbokstaver", t_no:"Sandpapirbokstaver", t_en:"Sandpaper letters", d_no:"Hele det norske alfabetet, klar til print og laminering", d_en:"The whole Norwegian alphabet, ready to print and laminate"},
-    {dato:"2026-06-21", url:"/biblioteket/print/botaniske-kort", t_no:"Botaniske kort", t_en:"Botanical cards", d_no:"Norske planter med norske og latinske navn", d_en:"Norwegian plants with Norwegian and Latin names"},
-    {dato:"2026-06-21", url:"/biblioteket/print/kontinentkart", t_no:"Kontinent-kart", t_en:"Continent maps", d_no:"De sju kontinentene i Montessori-fargene", d_en:"The seven continents in the Montessori colours"},
-    {dato:"2026-06-21", url:"/biblioteket/print/velkomstbrev", t_no:"Velkomstbrev", t_en:"Welcome letter", d_no:"Ferdig brev til nye familier, bare fyll inn og send", d_en:"A ready-made letter for new families, just fill in and send"}
-  ];
   var MND_NO=["jan","feb","mar","apr","mai","jun","jul","aug","sep","okt","nov","des"];
   var MND_EN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var DATA=[];
   function erEn(){ if(window.LME_CURRENT_LANG) return window.LME_CURRENT_LANG==='en'; try{return localStorage.getItem('lme_lang')==='en';}catch(e){return false;} }
-  function fmt(iso,en){ var d=new Date(iso+"T00:00:00"); if(isNaN(d)) return ""; return d.getDate()+". "+(en?MND_EN:MND_NO)[d.getMonth()]; }
-  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function fmt(iso,en){ if(!iso) return ""; var d=new Date(iso); if(isNaN(d)) return ""; return d.getDate()+". "+(en?MND_EN:MND_NO)[d.getMonth()]; }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function seksjon(){ var b=document.getElementById('lme-nyheter'); return b?b.closest('.new-this-month'):null; }
   function render(){
     var box=document.getElementById('lme-nyheter'); if(!box) return;
+    if(!DATA.length){ var s=seksjon(); if(s) s.style.display='none'; return; }
     var en=erEn();
-    var items=LME_NYHETER.slice().sort(function(a,b){return b.dato.localeCompare(a.dato);}).slice(0,4);
-    box.innerHTML=items.map(function(n){
+    box.innerHTML=DATA.slice(0,4).map(function(n){
       return '<div class="timeline-item"><span class="timeline-date">'+esc(fmt(n.dato,en))+'</span>'+
         '<div class="timeline-content"><h4><a href="'+esc(n.url)+'" style="color:inherit;text-decoration:none;">'+
         esc(en?n.t_en:n.t_no)+'</a></h4><p>'+esc(en?n.d_en:n.d_no)+'</p></div></div>';
     }).join('');
   }
-  // Render etter at hovedsidens captureAll har kjørt (~200ms), så ordbok-byttet lar disse nodene være i fred.
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){setTimeout(render,350);});
-  else setTimeout(render,350);
-  // Bytt språk på nyhetene når siden bytter språk.
+  fetch('/api/biblioteket-nytt').then(function(r){return r.json();}).then(function(j){
+    DATA=(j&&j.items)||[]; render();
+  }).catch(function(){ var s=seksjon(); if(s) s.style.display='none'; });
+  // Bytt sprak pa nyhetene nar siden bytter sprak.
   var _toggle=window.lmeToggleLang;
   window.lmeToggleLang=function(){ if(typeof _toggle==='function') _toggle.apply(this,arguments); render(); };
 })();
