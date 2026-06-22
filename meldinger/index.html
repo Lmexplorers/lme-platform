@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meldinger — Little Montessori Explorers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face{font-family:'Sasson Montessori';src:url('/fonts/SassoonMontessori.woff2') format('woff2'),url('/fonts/SassoonMontessori.ttf') format('truetype');font-weight:normal;font-style:normal;font-display:swap;}
+  :root{--cerise:#E91E89;--ink:#2a1e2e;--ink-soft:#6b5563;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;color:var(--ink);background:#faf6f7;min-height:100vh;display:flex;flex-direction:column;}
+  h1,h2,h3,h4{font-family:'Playpen Sans',system-ui,sans-serif;}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 20px;background:#fff;box-shadow:0 2px 10px rgba(180,120,140,.12);position:sticky;top:0;z-index:5;}
+  .bar .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--cerise);text-decoration:none;font-size:15px;}
+  .bar .brand img{width:32px;height:32px;object-fit:contain;}
+  .bar a.lnk,.bar button.lnk{color:var(--ink);text-decoration:none;border:1px solid #eedce2;border-radius:999px;padding:8px 16px;font-size:13.5px;font-weight:700;background:#fff;cursor:pointer;font-family:inherit;}
+  .wrap{max-width:760px;width:100%;margin:0 auto;padding:22px 18px 28px;flex:1;display:flex;flex-direction:column;}
+  .ihead{font-size:24px;margin-bottom:16px;}
+  .conv-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
+  .conv-list a{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #f3dce6;border-radius:16px;padding:14px 16px;text-decoration:none;color:var(--ink);box-shadow:0 6px 18px rgba(180,120,140,.08);}
+  .conv-list a:hover{transform:translateY(-2px);}
+  .conv-ava{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#F5A8B8,#E91E89);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Playpen Sans';font-style:italic;font-size:18px;flex:none;}
+  .conv-ava.grp{background:linear-gradient(135deg,#A4D233,#3FA9F5);}
+  .conv-title{font-weight:600;font-size:15.5px;}
+  .conv-type{font-size:12px;color:var(--ink-soft);}
+  .empty{color:var(--ink-soft);font-size:15px;padding:18px 4px;}
+  .newbtn{background:var(--cerise);color:#fff;border:0;border-radius:999px;padding:11px 20px;font-weight:700;font-family:inherit;cursor:pointer;font-size:14.5px;margin-bottom:18px;}
+  /* picker */
+  .picker{background:#fff;border:1px solid #f3dce6;border-radius:18px;padding:20px;margin-bottom:18px;box-shadow:0 8px 24px rgba(180,120,140,.12);}
+  .picker h3{font-size:18px;margin-bottom:12px;}
+  .picker input[type=text]{width:100%;border:1px solid #eedce2;border-radius:12px;padding:11px 14px;font-family:inherit;font-size:15px;margin-bottom:12px;}
+  .plist{list-style:none;max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;margin-bottom:12px;}
+  .plist li{display:flex;align-items:center;gap:10px;padding:8px 6px;border-bottom:1px solid #f3e3e9;}
+  .plist label{font-size:15px;cursor:pointer;flex:1;}
+  /* chat base */
+  .chat-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+  .chat-head .back{color:var(--ink);text-decoration:none;border:1px solid #eedce2;border-radius:999px;padding:7px 13px;font-size:13px;font-weight:700;}
+  #lme-chat-title{font-size:20px;}
+  #lme-chat{flex:1;display:flex;flex-direction:column;}
+  .lme-chat-wrap{display:flex;flex-direction:column;flex:1;min-height:420px;}
+  .lme-chat-stream{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#fff;border:1px solid #f3dce6;border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:10px;min-height:340px;max-height:62vh;}
+  .lme-chat-empty{margin:auto;color:#a98b96;font-size:15px;text-align:center;padding:24px;}
+  .lme-msg{display:flex;}
+  .lme-msg.mine{justify-content:flex-end;}
+  .lme-msg-bubble{max-width:78%;background:#FBF1F4;border:1px solid #f3dce6;border-radius:14px;padding:9px 13px;}
+  .lme-msg.mine .lme-msg-bubble{background:linear-gradient(135deg,#FDE7E0,#F8DBE1);}
+  .lme-msg-name{display:block;font-size:12px;font-weight:700;color:var(--cerise);margin-bottom:2px;}
+  .lme-msg-text{display:block;font-size:15px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;}
+  .lme-msg-time{display:block;font-size:10.5px;color:#b6a0a9;margin-top:3px;text-align:right;}
+  .lme-chat-form{display:flex;gap:10px;}
+  .lme-chat-form input{flex:1;border:1px solid #eedce2;border-radius:999px;padding:12px 18px;font-family:inherit;font-size:15px;background:#fff;color:var(--ink);}
+  .lme-chat-form input:focus{outline:none;border-color:var(--cerise);}
+  .lme-chat-send{background:var(--cerise);color:#fff;border:0;border-radius:999px;padding:12px 22px;font-weight:700;font-family:inherit;cursor:pointer;font-size:15px;}
+  .lme-chat-note{min-height:18px;color:#c2255c;font-size:13px;margin-top:6px;text-align:center;}
+  .lme-chat-gate{background:#fff;border:1px solid #f3dce6;border-radius:22px;padding:48px 28px;text-align:center;max-width:520px;margin:24px auto;box-shadow:0 10px 30px rgba(180,120,140,.12);}
+  .lme-chat-gate-icon{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#FDE7E0,#F5A8B8);display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;margin:0 auto 16px;}
+  .lme-chat-gate h2{font-size:23px;margin-bottom:10px;}
+  .lme-chat-gate p{color:var(--ink-soft);font-size:15.5px;line-height:1.6;margin-bottom:22px;}
+  .lme-chat-gate-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .lme-chat-btn{border-radius:999px;padding:11px 20px;font-weight:700;text-decoration:none;font-size:14.5px;background:#fff;color:var(--ink);border:1px solid #eedce2;}
+  .lme-chat-btn.primary{background:var(--cerise);color:#fff;border-color:var(--cerise);}
+  @media(max-width:600px){.lme-chat-stream{max-height:none;}}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/grupper"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <a class="lnk" href="/grupper">Grupper</a>
+  </div>
+  <div class="wrap" id="wrap"><p class="empty">Laster…</p></div>
+
+<script>
+  (function(){
+    function q(n){var m=location.search.match(new RegExp('[?&]'+n+'=([^&]+)'));return m?decodeURIComponent(m[1]):'';}
+    window.__LME_CONV = q('c');
+    if (window.__LME_CONV) { window.LME_GROUP_ID = window.__LME_CONV; window.LME_GROUP_NAME = 'Samtale'; }
+  })();
+</script>
+<script>
+(function(){
+  var wrap=document.getElementById('wrap');
+  function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
+
+  if (window.__LME_CONV) {
+    // Samtale-visning: chat-motoren tar over #lme-chat
+    wrap.innerHTML =
+      '<div class="chat-head"><a class="back" href="/meldinger">‹ Innboks</a><h2 id="lme-chat-title">Samtale</h2></div>' +
+      '<div id="lme-chat"></div>';
+    var s=document.createElement('script'); s.src='/js/lme-chat.js?v=4'; s.defer=true; document.body.appendChild(s);
+    return;
+  }
+
+  // Innboks
+  function render(convs){
+    var html='<h1 class="ihead">Meldinger</h1>' +
+      '<button class="newbtn" id="newgrp">+ Ny privat gruppe</button>' +
+      '<div id="picker"></div>';
+    if(!convs.length){
+      html+='<p class="empty">Ingen private samtaler ennå. Gå til en gruppe, trykk på navnet til noen, og velg «Send melding», eller lag en privat gruppe over.</p>';
+    } else {
+      html+='<ul class="conv-list">'+convs.map(function(c){
+        var ini=(c.title||'?').trim().charAt(0).toUpperCase();
+        return '<a href="/meldinger?c='+encodeURIComponent(c.id)+'">'+
+          '<span class="conv-ava'+(c.type==='group'?' grp':'')+'">'+esc(ini)+'</span>'+
+          '<span><span class="conv-title">'+esc(c.title)+'</span><br><span class="conv-type">'+(c.type==='group'?'Privat gruppe':'Privat samtale')+'</span></span>'+
+        '</a>';
+      }).join('')+'</ul>';
+    }
+    wrap.innerHTML=html;
+    document.getElementById('newgrp').addEventListener('click', openPicker);
+  }
+
+  function openPicker(){
+    var box=document.getElementById('picker');
+    if(box.innerHTML){ box.innerHTML=''; return; }
+    box.innerHTML='<div class="picker"><p class="empty">Laster medlemmer…</p></div>';
+    fetch('/api/group/directory',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){
+      var people=(d&&d.people)||[];
+      if(!people.length){ box.innerHTML='<div class="picker"><p class="empty">Ingen andre medlemmer å legge til ennå.</p></div>'; return; }
+      box.innerHTML='<div class="picker"><h3>Ny privat gruppe</h3>'+
+        '<input type="text" id="grp-title" placeholder="Navn på gruppen">'+
+        '<ul class="plist">'+people.map(function(p){
+          return '<li><input type="checkbox" id="p_'+esc(p.uid)+'" value="'+esc(p.uid)+'"><label for="p_'+esc(p.uid)+'">'+esc(p.name)+'</label></li>';
+        }).join('')+'</ul>'+
+        '<button class="newbtn" id="creategrp" style="margin:0">Opprett gruppe</button>'+
+        '<p class="lme-chat-note" id="grp-note"></p></div>';
+      document.getElementById('creategrp').addEventListener('click', createGroup);
+    });
+  }
+
+  function createGroup(){
+    var title=(document.getElementById('grp-title').value||'').trim();
+    var uids=Array.prototype.map.call(document.querySelectorAll('.plist input:checked'),function(c){return c.value;});
+    var note=document.getElementById('grp-note');
+    if(!uids.length){ note.textContent='Velg minst én person.'; return; }
+    fetch('/api/group/conv/group',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:title,memberUids:uids})})
+      .then(function(r){return r.json();})
+      .then(function(d){ if(d&&d.id){ location.href='/meldinger?c='+d.id; } else { note.textContent='Kunne ikke opprette gruppen.'; } })
+      .catch(function(){ note.textContent='Noe gikk galt.'; });
+  }
+
+  fetch('/api/group/conv/list',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){
+    if(d&&d.error==='forbidden'){ wrap.innerHTML='<div class="lme-chat-gate"><div class="lme-chat-gate-icon">♡</div><h2>Logg inn</h2><p>Logg inn som Inner Circle-medlem for å se meldingene dine.</p><div class="lme-chat-gate-actions"><a class="lme-chat-btn primary" href="/login?next=/meldinger">Logg inn</a></div></div>'; return; }
+    render((d&&d.conversations)||[]);
+  }).catch(function(){ wrap.innerHTML='<p class="empty">Noe gikk galt.</p>'; });
+})();
+</script>
+</body>
+</html>

@@ -62,6 +62,8 @@
       ".lme-react-row{display:flex;gap:4px;align-items:center;margin-top:4px;flex-wrap:wrap;}",
       ".lme-react-chip{font-size:12.5px;background:#fff;border:1px solid #f3dce6;border-radius:999px;padding:1px 8px;cursor:pointer;}",
       ".lme-react-chip.mine{background:#FCE3EC;border-color:#E91E89;}",
+      "a.lme-msg-name{color:#E91E89;text-decoration:none;cursor:pointer;}",
+      "a.lme-msg-name:hover{text-decoration:underline;}",
     ].join("");
     var st = document.createElement("style");
     st.textContent = css;
@@ -199,10 +201,13 @@
     inner.className = "lme-msg-wrap";
 
     var canDelete = (meEmail && m.u === meEmail) || meOwner;
+    var nameHtml = (m.uid && !mine)
+      ? '<a class="lme-msg-name" href="/medlem?u=' + encodeURIComponent(m.uid) + '">' + esc(m.n) + '</a>'
+      : '<span class="lme-msg-name">' + esc(m.n) + '</span>';
     var bubble = document.createElement("div");
     bubble.className = "lme-msg-bubble";
     bubble.innerHTML =
-      '<span class="lme-msg-name">' + esc(m.n) + '</span>' +
+      nameHtml +
       (m.t ? '<span class="lme-msg-text">' + esc(m.t) + '</span>' : "") +
       attachmentHtml(m.a) +
       '<span class="lme-msg-time">' + esc(timeLabel(m.ts)) + '</span>' +
@@ -426,13 +431,17 @@
 
   /* ---------- Oppstart ---------- */
   injectCss();
-  fetch("/api/group/access", { credentials: "same-origin" })
+  fetch("/api/group/" + GID + "/access", { credentials: "same-origin" })
     .then(function (r) { return r.json(); })
     .then(function (state) {
       if (!state || !state.member) { renderGate(state || {}); return; }
       meName = state.name || (state.email ? state.email.split("@")[0] : null);
       meEmail = state.email || null;
       meOwner = !!state.owner;
+      if (state.title) {
+        var ttl = document.getElementById("lme-chat-title");
+        if (ttl) ttl.textContent = state.title;
+      }
       renderShell();
       if (window.LME_CHAT_LIVE) startLive(); else startPolling();
     })
