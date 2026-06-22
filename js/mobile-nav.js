@@ -91,6 +91,66 @@
     document.addEventListener('DOMContentLoaded', function () { dedupeLang(); placeLangBtn(); });
   }
 
+  /* --- Gjør topplinjens ikoner (søk, meldinger, varsler) funksjonelle --- */
+  (function wireHeaderIcons() {
+    var st2 = document.createElement('style');
+    st2.textContent = [
+      '.icon-btn { position: relative; }',
+      '.lme-badge { position: absolute; top: 6px; right: 6px; width: 9px; height: 9px; border-radius: 50%; background: #E91E89; border: 2px solid #fff; }',
+      '.lme-pop2 { position: fixed; top: 64px; right: 14px; width: 300px; max-width: 92vw; background: #fff; border: 1px solid #f3dce6; border-radius: 16px; box-shadow: 0 18px 50px rgba(43,30,46,.22); z-index: 3000; overflow: hidden; font-family: "Sasson Montessori","Playpen Sans",system-ui,sans-serif; }',
+      '.lme-pop2 .ph { padding: 12px 14px; border-bottom: 1px solid #f3e3e9; display: flex; justify-content: space-between; align-items: center; }',
+      '.lme-pop2 .ph b { font-size: 14px; color: #2a1e2e; font-family: "Playpen Sans",sans-serif; }',
+      '.lme-pop2 .ph button { font-size: 12px; border: 0; background: none; color: #c2255c; cursor: pointer; font-family: inherit; }',
+      '.lme-pop2 .pb { max-height: 60vh; overflow-y: auto; }',
+      '.lme-pop2 a.it { display: block; padding: 10px 14px; border-bottom: 1px solid #f6ecf0; text-decoration: none; color: #2a1e2e; font-size: 13.5px; }',
+      '.lme-pop2 a.it:hover { background: #FCEFF2; }',
+      '.lme-pop2 .empty { padding: 14px; color: #9a7b85; font-size: 13.5px; }',
+      '.lme-pop2 input { width: 100%; border: 0; border-bottom: 1px solid #f3e3e9; padding: 12px 14px; font-family: inherit; font-size: 14px; outline: none; }'
+    ].join('\n');
+    document.head.appendChild(st2);
+
+    function lang() { try { return localStorage.getItem('lme_lang') || 'no'; } catch (e) { return 'no'; } }
+    function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+    function closePop2() { var p = document.getElementById('lme-pop2'); if (p) p.remove(); document.removeEventListener('click', out2, true); }
+    function out2(e) { var p = document.getElementById('lme-pop2'); if (p && !p.contains(e.target) && !(e.target.closest && e.target.closest('.icon-btn'))) closePop2(); }
+    function openPop2(html) { closePop2(); var p = document.createElement('div'); p.className = 'lme-pop2'; p.id = 'lme-pop2'; p.innerHTML = html; document.body.appendChild(p); setTimeout(function () { document.addEventListener('click', out2, true); }, 0); return p; }
+
+    var msg = document.querySelector('.icon-btn[aria-label="Meldinger"]');
+    if (msg) msg.addEventListener('click', function (e) { e.stopPropagation(); location.href = '/meldinger'; });
+
+    var search = document.querySelector('.icon-btn[aria-label="Søk"]');
+    if (search) search.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var p = openPop2('<input type="text" id="lme-search-in" placeholder="' + (lang() === 'en' ? 'Search members…' : 'Søk etter medlemmer…') + '"><div class="pb" id="lme-search-res"><p class="empty">' + (lang() === 'en' ? 'Type a name' : 'Skriv et navn') + '</p></div>');
+      var inp = p.querySelector('#lme-search-in'); inp.focus();
+      var people = null;
+      inp.addEventListener('input', function () {
+        var q = inp.value.trim().toLowerCase(); var res = p.querySelector('#lme-search-res');
+        if (!q) { res.innerHTML = '<p class="empty">' + (lang() === 'en' ? 'Type a name' : 'Skriv et navn') + '</p>'; return; }
+        function paint() { var hits = (people || []).filter(function (x) { return (x.name || '').toLowerCase().indexOf(q) >= 0; }).slice(0, 12); res.innerHTML = hits.length ? hits.map(function (x) { return '<a class="it" href="/medlem?u=' + encodeURIComponent(x.uid) + '">' + esc(x.name) + '</a>'; }).join('') : '<p class="empty">' + (lang() === 'en' ? 'No matches' : 'Ingen treff') + '</p>'; }
+        if (people) { paint(); return; }
+        fetch('/api/group/directory', { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (d) { people = (d && d.people) || []; paint(); }).catch(function () { res.innerHTML = '<p class="empty">' + (lang() === 'en' ? 'Log in to search' : 'Logg inn for å søke') + '</p>'; });
+      });
+    });
+
+    var bell = document.querySelector('.icon-btn[aria-label="Varsler"]');
+    if (bell) {
+      fetch('/api/group/notifs', { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (d) {
+        var unread = ((d && d.notifs) || []).filter(function (n) { return !n.read; }).length;
+        if (unread > 0 && !bell.querySelector('.lme-badge')) { var b = document.createElement('span'); b.className = 'lme-badge'; bell.appendChild(b); }
+      }).catch(function () {});
+      bell.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var p = openPop2('<div class="ph"><b>' + (lang() === 'en' ? 'Notifications' : 'Varsler') + '</b><button id="lme-nr2">' + (lang() === 'en' ? 'Mark read' : 'Marker lest') + '</button></div><div class="pb" id="lme-nb2"><p class="empty">' + (lang() === 'en' ? 'Loading…' : 'Laster…') + '</p></div>');
+        fetch('/api/group/notifs', { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (d) {
+          var ns = (d && d.notifs) || []; var nb = p.querySelector('#lme-nb2');
+          nb.innerHTML = ns.length ? ns.slice(0, 20).map(function (n) { return '<a class="it" href="' + esc(n.link || '#') + '"' + (n.read ? '' : ' style="background:#FFF6DA;"') + '>' + esc(n.text) + '</a>'; }).join('') : '<p class="empty">' + (lang() === 'en' ? 'No notifications yet' : 'Ingen varsler ennå') + '</p>';
+        }).catch(function () { p.querySelector('#lme-nb2').innerHTML = '<p class="empty">' + (lang() === 'en' ? 'Log in to see notifications' : 'Logg inn for å se varsler') + '</p>'; });
+        p.querySelector('#lme-nr2').addEventListener('click', function () { fetch('/api/group/notifs/read', { method: 'POST', credentials: 'same-origin' }).then(function () { var b = bell.querySelector('.lme-badge'); if (b) b.remove(); closePop2(); }); });
+      });
+    }
+  })();
+
   /* --- Hamburgermeny (bare på sider med delt toppnav) --- */
   var nav = document.getElementById('nav');
   var header = nav && nav.closest('.header');
