@@ -26,6 +26,7 @@
   var FEED = !!window.LME_CHAT_FEED;
   var accessState = null;
   var transCache = {};
+  var feedQuery = "";
 
   var COMPOSE_EMOJI = ["😊","😀","😍","🥰","😂","😉","😮","😢","😭","🙏","👍","👎","👏","🙌","💪","🌸","🌿","☀️","⭐","✨","❤️","🧡","💛","💚","💙","💜","🎉","🎈","📚","✏️","🖍️","🧩","🍎","🌈","🐛","🦋","🐌","🐞","🌷"];
   var REACTIONS = ["❤️","👍","😂","😮","😢","🙏"];
@@ -84,7 +85,9 @@
       "a.lme-msg-name:hover{text-decoration:underline;}",
       /* Feed-modus */
       ".lme-feed #lme-chat-stream{max-height:none;background:transparent;border:0;padding:0;gap:16px;overflow:visible;}",
-      ".lme-feed-composer{background:#fff;border:1px solid #f3dce6;border-radius:18px;padding:14px 16px;margin-bottom:18px;box-shadow:0 6px 18px rgba(180,120,140,.08);}",
+      ".lme-feed-composer{background:#fff;border:1px solid #f3dce6;border-radius:18px;padding:14px 16px;margin-bottom:14px;box-shadow:0 6px 18px rgba(180,120,140,.08);}",
+      ".lme-feed-search{width:100%;border:1px solid #eedce2;border-radius:999px;padding:10px 16px;font-family:inherit;font-size:14.5px;background:#fff;color:#2a1e2e;margin-bottom:14px;}",
+      ".lme-feed-search:focus{outline:none;border-color:#E91E89;}",
       ".lme-post{background:#fff;border:1px solid #f3dce6;border-radius:18px;padding:16px 18px;box-shadow:0 6px 18px rgba(180,120,140,.08);}",
       ".lme-post.ann{background:linear-gradient(135deg,#FFF6DA,#FDE7E0);border-color:#F3D98B;}",
       ".lme-post-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}",
@@ -199,6 +202,7 @@
         '<div class="lme-chat-wrap">' +
           '<div class="lme-pinned" id="lme-pinned"></div>' +
           '<div class="lme-feed-composer">' + composerHtml() + '</div>' +
+          '<input type="text" id="lme-feed-search" class="lme-feed-search" placeholder="' + esc(t("Søk i innlegg…", "Search posts…")) + '">' +
           '<div class="lme-chat-stream" id="lme-chat-stream">' +
             '<div class="lme-chat-empty" id="lme-chat-empty">' +
               esc(t("Ingen innlegg ennå. Skriv det første 💛", "No posts yet. Write the first one 💛")) +
@@ -217,6 +221,9 @@
           composerHtml() +
         '</div>';
     }
+
+    var fs = document.getElementById("lme-feed-search");
+    if (fs) fs.addEventListener("input", function () { feedQuery = this.value; applyFeedFilter(); });
 
     document.getElementById("lme-chat-form").addEventListener("submit", onSend);
     document.getElementById("lme-emoji").addEventListener("click", function () {
@@ -502,6 +509,20 @@
     }
     list.forEach(function (m) { if (m.ann && (!latestAnn || m.ts >= latestAnn.ts)) latestAnn = m; });
     renderPinned();
+    applyFeedFilter();
+  }
+
+  function applyFeedFilter() {
+    if (!FEED) return;
+    var q = feedQuery.trim().toLowerCase();
+    Object.keys(rendered).forEach(function (id) {
+      var rec = rendered[id];
+      if (!rec || !rec.el) return;
+      if (!q) { rec.el.style.display = ""; return; }
+      var m = rec.msg || {};
+      var hay = ((m.t || "") + " " + (m.n || "") + " " + ((m.replies || []).map(function (r) { return (r.t || "") + " " + (r.n || ""); }).join(" "))).toLowerCase();
+      rec.el.style.display = hay.indexOf(q) >= 0 ? "" : "none";
+    });
   }
 
   function syncMessages(list, full) {
