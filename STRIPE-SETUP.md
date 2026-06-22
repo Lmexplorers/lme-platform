@@ -1,56 +1,50 @@
-# Betaling = tilgang (Stripe-webhook)
+# Betaling = tilgang (Stripe), uten Cloudflare
 
-Når noen betaler for Inner Circle, skal de automatisk få tilgang til
-gruppe-chatten. Koden er ferdig (`functions/api/stripe-webhook.js`) og live.
-Det gjenstår ÉN engangsting som bare du kan gjøre, fordi den krever din
-Stripe-konto: koble Stripe til webhooken og lime inn én hemmelig nøkkel.
-Dette tar et par minutter.
+Når noen betaler for Inner Circle, får de automatisk tilgang til gruppe-
+chatten. Du gjør dette ÉN gang, og slipper Cloudflare helt: nøkkelen limes
+inn på din egen side.
 
-## Steg 1 – Lag webhooken i Stripe
+## Del 1 – Lag webhooken i Stripe
 
-1. Logg inn på Stripe → **Developers → Webhooks → Add endpoint**.
-2. Endpoint-URL:
+1. Gå til **dashboard.stripe.com** (slå **av** «Test mode» øverst hvis det
+   skal gjelde ekte betalinger).
+2. Lag en ny webhook / «event destination». Snarvei: lim
+   `https://dashboard.stripe.com/webhooks/create` i adressefeltet, eller søk
+   «Webhooks» i søkefeltet på toppen.
+3. **Endpoint URL:**
    ```
    https://lmexplorers.com/api/stripe-webhook
    ```
-3. Velg disse hendelsene («Select events»):
+4. Velg disse fem hendelsene:
    - `checkout.session.completed`
    - `customer.subscription.created`
    - `customer.subscription.updated`
    - `customer.subscription.deleted`
    - `invoice.paid`
-4. Lagre. Stripe viser nå en **Signing secret** som starter med `whsec_...`.
-   Kopier den.
+5. Opprett. Finn **Signing secret** (klikk «Reveal»), kopier koden som starter
+   med `whsec_...`.
 
-## Steg 2 – Lim nøkkelen inn i Cloudflare
+## Del 2 – Lim nøkkelen inn på din egen side
 
-1. Cloudflare-dashbordet → **Workers & Pages → (LME-prosjektet) → Settings →
-   Variables and Secrets** (miljøvariabler for Production).
-2. Legg til:
-   - Navn: `STRIPE_WEBHOOK_SECRET`
-   - Verdi: `whsec_...` (nøkkelen fra Stripe)
-3. Lagre, og gjør en ny deploy (eller bare push noe lite til `main`) slik at
-   variabelen tas i bruk.
+1. Gå til **lmexplorers.com/grupper/admin** og logg inn med eierkontoen din.
+2. Under **«Automatisk tilgang (Stripe)»**, lim inn `whsec_...`-koden og trykk
+   **Lagre nøkkel**.
+3. Det skal nå stå «✅ På: betaling gir tilgang automatisk».
 
-Det er alt. Fra nå av:
+Ferdig. Ingen Cloudflare. Fra nå av:
 
-- Når noen betaler, skriver webhooken et medlemskap til kontoen deres og de
-  slipper rett inn i gruppene.
-- Sier de opp, fjernes tilgangen automatisk.
-- Du (eier) har alltid tilgang uansett.
-
-## Slik virker det
-
-- Stripe sender en signert melding til `/api/stripe-webhook`. Vi sjekker
-  signaturen mot `STRIPE_WEBHOOK_SECRET` så ingen kan forfalske betalinger.
-- Ved betaling lagres `member:<e-post>` i KV (og speiles til kontoen for «Min
-  konto»). Porten foran gruppene (`/api/group`) sjekker dette.
-- Mangler nøkkelen, svarer webhooken med 503, og Stripe viser «failed» på
-  leveringen. Da vet du at steg 2 ikke er gjort ennå.
+- Når noen betaler, slipper de rett inn i gruppene.
+- Sier de opp, fjernes tilgangen.
+- Du (eier) er alltid inne.
 
 ## Test at det virker
 
-1. Etter oppsettet: i Stripe → Webhooks → din endpoint → **Send test event**
-   → velg `checkout.session.completed`. Den skal svare `200`.
-2. Eller betal en ekte (eller test-modus) Inner Circle-bestilling med en
-   e-post du har en LME-konto på, og åpne en gruppe. Du skal være inne.
+I Stripe, på webhookens side: klikk **Send test event** → `checkout.session.completed`.
+Den skal svare **200**. Får du **503**, er ikke nøkkelen lagret ennå (gjør del 2).
+Får du **400**, er feil nøkkel limt inn.
+
+## Manuell tilgang (valgfritt)
+
+På samme side (`/grupper/admin`) kan du gi gratis tilgang til enkeltpersoner
+uten betaling, og fjerne tilgang igjen. Det er ikke nødvendig for det
+automatiske, bare et alternativ.

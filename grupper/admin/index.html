@@ -71,9 +71,23 @@
   function render(){
     app.innerHTML =
       '<h1>Medlemmer i gruppene</h1>' +
-      '<p class="lede">Skriv inn e-posten til den som har betalt for Inner Circle, og gi dem tilgang. ' +
-      'De kommer da rett inn i alle gruppene neste gang de logger inn. Du kan fjerne tilgang igjen når som helst.</p>' +
-      '<div class="card"><h2>Gi tilgang</h2>' +
+      '<p class="lede">Når Stripe-automatikken er på, får alle som betaler for Inner Circle tilgang helt av seg selv. ' +
+      'Du trenger ikke gjøre noe per person. Feltet under er en engangsjobb.</p>' +
+
+      '<div class="card" id="stripe-card">' +
+        '<h2>Automatisk tilgang (Stripe)</h2>' +
+        '<p class="m-meta" id="stripe-status" style="margin-bottom:12px">Sjekker…</p>' +
+        '<p class="lede" style="font-size:14px;margin-bottom:12px">Lim inn signeringsnøkkelen fra Stripe-webhooken (starter med <b>whsec_</b>). ' +
+        'Da kobles betaling og tilgang sammen, og du slipper å gjøre noe i Cloudflare.</p>' +
+        '<div class="row">' +
+          '<input type="text" id="secret" placeholder="whsec_..." autocomplete="off">' +
+          '<button class="btn" id="save-secret">Lagre nøkkel</button>' +
+        '</div>' +
+        '<div class="note" id="snote"></div>' +
+      '</div>' +
+
+      '<div class="card"><h2>Gi tilgang manuelt</h2>' +
+        '<p class="lede" style="font-size:14px;margin-bottom:12px">Trenger du å gi noen gratis tilgang (uten betaling), kan du legge dem inn her.</p>' +
         '<div class="row">' +
           '<input type="email" id="email" placeholder="navn@epost.no" autocomplete="off">' +
           '<button class="btn" id="grant">Gi tilgang</button>' +
@@ -84,7 +98,32 @@
 
     document.getElementById('grant').addEventListener('click', grant);
     document.getElementById('email').addEventListener('keydown', function(e){ if(e.key==='Enter') grant(); });
+    document.getElementById('save-secret').addEventListener('click', saveSecret);
+    document.getElementById('secret').addEventListener('keydown', function(e){ if(e.key==='Enter') saveSecret(); });
+    loadConfig();
     loadList();
+  }
+
+  function loadConfig(){
+    api('admin/config').then(function(r){
+      var s=document.getElementById('stripe-status'); if(!s) return;
+      if(r.body && r.body.stripeConfigured){ s.innerHTML='✅ På: betaling gir tilgang automatisk.'; s.style.color='#3d8b40'; }
+      else { s.innerHTML='⚠️ Ikke koblet ennå. Lim inn nøkkelen under for å slå det på.'; s.style.color='#c2255c'; }
+    });
+  }
+
+  function saveSecret(){
+    var input=document.getElementById('secret');
+    var secret=(input.value||'').trim();
+    var n=document.getElementById('snote');
+    if(!/^whsec_/.test(secret)){ n.textContent='Nøkkelen skal starte med whsec_'; n.className='note err'; return; }
+    api('admin/stripe-secret', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ secret:secret }) })
+      .then(function(r){
+        if(r.body && r.body.ok){ n.textContent='Lagret ✓ Betaling gir nå tilgang automatisk.'; n.className='note ok'; input.value=''; loadConfig(); }
+        else if(r.body && r.body.error==='bad_secret'){ n.textContent='Nøkkelen skal starte med whsec_'; n.className='note err'; }
+        else { n.textContent='Noe gikk galt. Prøv igjen.'; n.className='note err'; }
+      })
+      .catch(function(){ n.textContent='Noe gikk galt. Prøv igjen.'; n.className='note err'; });
   }
 
   function note(msg, ok){

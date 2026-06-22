@@ -140,6 +140,14 @@ export async function onRequestGet(context) {
     return json({ loggedIn: true, member: isMember(u, membership), name: u.name || null, email: u.email, owner: isOwner(u) });
   }
 
+  // /api/group/admin/config  (kun eier) -> er Stripe-automatikken paa?
+  if (parts.length === 2 && parts[0] === "admin" && parts[1] === "config") {
+    const owner = await ownerFrom(context);
+    if (!owner) return json({ error: "forbidden" }, 403);
+    const fromKv = await env.BUILDER_KV.get("config:stripe_webhook_secret");
+    return json({ stripeConfigured: !!fromKv });
+  }
+
   // /api/group/admin/members  (kun eier) -> liste over medlemmer
   if (parts.length === 2 && parts[0] === "admin" && parts[1] === "members") {
     const owner = await ownerFrom(context);
@@ -178,6 +186,19 @@ export async function onRequestPost(context) {
   const { params, env, request } = context;
   const parts = [].concat(params.path || []);
   if (!env.BUILDER_KV) return json({ error: "not_configured" }, 200);
+
+  // /api/group/admin/stripe-secret  (kun eier) -> lagre Stripe-signeringsnoekkel i KV
+  if (parts.length === 2 && parts[0] === "admin" && parts[1] === "stripe-secret") {
+    const owner = await ownerFrom(context);
+    if (!owner) return json({ error: "forbidden" }, 403);
+    let body;
+    try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
+    const secret = (body.secret || "").trim();
+    if (secret === "") { await env.BUILDER_KV.delete("config:stripe_webhook_secret"); return json({ ok: true, cleared: true }); }
+    if (!/^whsec_/.test(secret)) return json({ error: "bad_secret" }, 400);
+    await env.BUILDER_KV.put("config:stripe_webhook_secret", secret);
+    return json({ ok: true });
+  }
 
   // /api/group/admin/grant | /api/group/admin/revoke  (kun eier)
   if (parts.length === 2 && parts[0] === "admin" && (parts[1] === "grant" || parts[1] === "revoke")) {

@@ -107,13 +107,15 @@ async function emailForCustomer(env, customerId) {
 export async function onRequestPost(context) {
   const { request, env } = context;
   if (!env.BUILDER_KV) return json({ error: "not_configured" }, 503);
-  if (!env.STRIPE_WEBHOOK_SECRET) {
+  // Noekkelen kan ligge i KV (limt inn paa /grupper/admin) eller som env-variabel.
+  const secret = (await env.BUILDER_KV.get("config:stripe_webhook_secret")) || env.STRIPE_WEBHOOK_SECRET;
+  if (!secret) {
     // Signaliser tydelig i Stripe-dashbordet at noekkelen mangler.
     return json({ error: "missing_webhook_secret" }, 503);
   }
 
   const raw = await request.text();
-  const ok = await verifyStripe(raw, request.headers.get("Stripe-Signature"), env.STRIPE_WEBHOOK_SECRET);
+  const ok = await verifyStripe(raw, request.headers.get("Stripe-Signature"), secret);
   if (!ok) return json({ error: "bad_signature" }, 400);
 
   let event;
