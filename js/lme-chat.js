@@ -17,7 +17,7 @@
 
   var POLL_MS = 3000;
   var rendered = {};        // id -> { el, reactRow }
-  var meName = null, meEmail = null;
+  var meName = null, meEmail = null, meOwner = false;
   var pollTimer = null, ws = null;
   var mediaRecorder = null, recChunks = [];
   var curPop = null;
@@ -53,10 +53,12 @@
       ".lme-att-audio{margin-top:6px;width:240px;max-width:60vw;}",
       ".lme-att-file{display:inline-flex;gap:7px;align-items:center;margin-top:6px;background:#fff;border:1px solid #eedce2;border-radius:10px;padding:8px 12px;text-decoration:none;color:#2a1e2e;font-size:14px;}",
       ".lme-msg-bubble{position:relative;}",
-      ".lme-react-btn{position:absolute;top:-10px;font-size:13px;background:#fff;border:1px solid #f3dce6;border-radius:999px;width:24px;height:24px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;color:#9a7b85;}",
-      ".lme-msg .lme-msg-bubble:hover .lme-react-btn{display:flex;}",
-      ".lme-msg.mine .lme-react-btn{left:-12px;}",
-      ".lme-msg:not(.mine) .lme-react-btn{right:-12px;}",
+      ".lme-msg-ctrls{position:absolute;top:-12px;display:none;gap:3px;}",
+      ".lme-msg .lme-msg-bubble:hover .lme-msg-ctrls{display:flex;}",
+      ".lme-msg.mine .lme-msg-ctrls{left:-8px;}",
+      ".lme-msg:not(.mine) .lme-msg-ctrls{right:-8px;}",
+      ".lme-ctrl-btn{font-size:12px;background:#fff;border:1px solid #f3dce6;border-radius:999px;width:24px;height:24px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;color:#9a7b85;}",
+      ".lme-ctrl-btn:hover{background:#FCEFF2;}",
       ".lme-react-row{display:flex;gap:4px;align-items:center;margin-top:4px;flex-wrap:wrap;}",
       ".lme-react-chip{font-size:12.5px;background:#fff;border:1px solid #f3dce6;border-radius:999px;padding:1px 8px;cursor:pointer;}",
       ".lme-react-chip.mine{background:#FCE3EC;border-color:#E91E89;}",
@@ -196,6 +198,7 @@
     var inner = document.createElement("div");
     inner.className = "lme-msg-wrap";
 
+    var canDelete = (meEmail && m.u === meEmail) || meOwner;
     var bubble = document.createElement("div");
     bubble.className = "lme-msg-bubble";
     bubble.innerHTML =
@@ -203,11 +206,20 @@
       (m.t ? '<span class="lme-msg-text">' + esc(m.t) + '</span>' : "") +
       attachmentHtml(m.a) +
       '<span class="lme-msg-time">' + esc(timeLabel(m.ts)) + '</span>' +
-      '<button type="button" class="lme-react-btn" title="' + esc(t("Reager","React")) + '">☺</button>';
+      '<div class="lme-msg-ctrls">' +
+        '<button type="button" class="lme-ctrl-btn lme-react-btn" title="' + esc(t("Reager", "React")) + '">☺</button>' +
+        (canDelete ? '<button type="button" class="lme-ctrl-btn lme-del-btn" title="' + esc(t("Slett", "Delete")) + '">🗑</button>' : "") +
+      '</div>';
     bubble.querySelector(".lme-react-btn").addEventListener("click", function (e) {
       e.stopPropagation();
       openPop(this, REACTIONS, true, function (em) { react(m.id, em); });
     });
+    if (canDelete) {
+      bubble.querySelector(".lme-del-btn").addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (confirm(t("Slette denne meldingen?", "Delete this message?"))) deleteMessage(m.id);
+      });
+    }
 
     var row = document.createElement("div");
     row.className = "lme-react-row";
@@ -221,8 +233,8 @@
     return wrap;
   }
 
-  function syncMessages(list) {
-    if (!list || !list.length) return;
+  function syncMessages(list, full) {
+    if (!list) return;
     var s = streamEl(); if (!s) return;
     var atBottom = s.scrollHeight - s.scrollTop - s.clientHeight < 80;
     var appended = false, mineAppended = false;
@@ -233,20 +245,44 @@
         appended = true;
         if (meEmail && m.u === meEmail) mineAppended = true;
       } else {
-        // oppdater reaksjoner paa eksisterende melding
         var rec = rendered[m.id];
         var html = reactionRowHtml(m);
         if (rec.row.innerHTML !== html) { rec.row.innerHTML = html; bindReactionRow(rec.row, m); }
       }
     });
+    // Ved full liste (polling): fjern meldinger som er slettet hos andre.
+    if (full) {
+      var present = {};
+      list.forEach(function (m) { present[m.id] = true; });
+      Object.keys(rendered).forEach(function (id) {
+        if (!present[id]) { removeRendered(id); }
+      });
+    }
     if (appended && (atBottom || mineAppended)) s.scrollTop = s.scrollHeight;
+  }
+
+  function removeRendered(id) {
+    var rec = rendered[id];
+    if (rec && rec.el && rec.el.parentNode) rec.el.parentNode.removeChild(rec.el);
+    delete rendered[id];
+  }
+
+  function deleteMessage(id) {
+    removeRendered(id); // fjern med en gang
+    fetch("/api/group/" + GID + "/delete", {
+      method: "POST", credentials: "same-origin",
+      headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messageId: id }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) { if (!d || !d.ok) { note(t("Klarte ikke å slette.", "Couldn't delete.")); poll(); } })
+      .catch(function () { note(t("Klarte ikke å slette.", "Couldn't delete.")); poll(); });
   }
 
   /* ---------- Henting ---------- */
   function poll() {
     fetch("/api/group/" + GID + "/messages", { credentials: "same-origin" })
       .then(function (r) { return r.json(); })
-      .then(function (d) { if (d && d.messages) syncMessages(d.messages); })
+      .then(function (d) { if (d && d.messages) syncMessages(d.messages, true); })
       .catch(function () {});
   }
   function startPolling() { poll(); pollTimer = setInterval(poll, POLL_MS); }
@@ -396,6 +432,7 @@
       if (!state || !state.member) { renderGate(state || {}); return; }
       meName = state.name || (state.email ? state.email.split("@")[0] : null);
       meEmail = state.email || null;
+      meOwner = !!state.owner;
       renderShell();
       if (window.LME_CHAT_LIVE) startLive(); else startPolling();
     })

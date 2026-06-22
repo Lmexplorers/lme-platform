@@ -258,6 +258,29 @@ export async function onRequestPost(context) {
     return json({ ok: true, file: { id: fid, url: "/api/group/" + id + "/file/" + fid, type: type, name: name, kind: kind } });
   }
 
+  // /api/group/<id>/delete  -> slett en melding (egen, eller eier sletter hvilken som helst)
+  if (parts.length === 2 && parts[1] === "delete") {
+    const id = parts[0];
+    if (!GROUPS[id]) return json({ error: "unknown_group" }, 404);
+    const sess = await sessionFrom(context);
+    const u = sess ? await getUser(env, sess.email) : null;
+    const membership = u ? await getMembership(env, u.email) : null;
+    if (!isMember(u, membership)) return json({ error: "forbidden", member: false }, 403);
+
+    let body;
+    try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
+    const mid = (body.messageId || "").toString();
+    if (!mid) return json({ error: "bad_request" }, 400);
+
+    const messages = await loadMessages(env, id);
+    const idx = messages.findIndex((m) => m.id === mid);
+    if (idx === -1) return json({ ok: true, deleted: mid });
+    if (messages[idx].u !== u.email && !isOwner(u)) return json({ error: "not_yours" }, 403);
+    messages.splice(idx, 1);
+    await env.BUILDER_KV.put(chatKey(id), JSON.stringify(messages));
+    return json({ ok: true, deleted: mid });
+  }
+
   // /api/group/<id>/react  -> sla av/paa reaksjon paa en melding
   if (parts.length === 2 && parts[1] === "react") {
     const id = parts[0];
