@@ -103,7 +103,9 @@
       ".lme-reply-form{display:flex;gap:8px;margin-top:8px;}",
       ".lme-reply-form input{flex:1;border:1px solid #eedce2;border-radius:999px;padding:9px 14px;font-family:inherit;font-size:14px;}",
       ".lme-reply-form input:focus{outline:none;border-color:#E91E89;}",
-      ".lme-reply-form button{background:#E91E89;color:#fff;border:0;border-radius:999px;padding:9px 16px;font-weight:700;font-family:inherit;cursor:pointer;font-size:13.5px;}",
+      ".lme-reply-form button[type=submit]{background:#E91E89;color:#fff;border:0;border-radius:999px;padding:9px 16px;font-weight:700;font-family:inherit;cursor:pointer;font-size:13.5px;}",
+      ".lme-reply-img{background:#fff;border:1px solid #eedce2;border-radius:50%;width:36px;height:36px;font-size:16px;cursor:pointer;flex:none;padding:0;line-height:1;}",
+      ".lme-reply-img:hover{background:#FCEFF2;}",
     ].join("");
     var st = document.createElement("style");
     st.textContent = css;
@@ -353,7 +355,12 @@
         (canDelete ? '<button type="button" class="lme-post-act" data-role="del">🗑 ' + esc(t("Slett", "Delete")) + '</button>' : "") +
       '</div>' +
       '<div class="lme-comments" data-role="comments"></div>' +
-      '<form class="lme-reply-form" data-role="replyform"><input type="text" autocomplete="off" maxlength="1000" placeholder="' + esc(t("Skriv en kommentar…", "Write a comment…")) + '"><button type="submit">' + esc(t("Svar", "Reply")) + '</button></form>';
+      '<form class="lme-reply-form" data-role="replyform">' +
+        '<button type="button" class="lme-reply-img" data-role="replyimg" title="' + esc(t("Bilde", "Image")) + '">🖼️</button>' +
+        '<input type="text" autocomplete="off" maxlength="1000" placeholder="' + esc(t("Skriv en kommentar…", "Write a comment…")) + '">' +
+        '<button type="submit">' + esc(t("Svar", "Reply")) + '</button>' +
+        '<input type="file" accept="image/*" data-role="replyfile" hidden>' +
+      '</form>';
 
     var reactRow = card.querySelector('[data-role="react"]');
     reactRow.innerHTML = reactionRowHtml(m); bindReactionRow(reactRow, m);
@@ -371,20 +378,26 @@
     var rf = card.querySelector('[data-role="replyform"]');
     rf.addEventListener("submit", function (e) {
       e.preventDefault();
-      var inp = rf.querySelector("input"); var txt = (inp.value || "").trim();
+      var inp = rf.querySelector('input[type="text"]'); var txt = (inp.value || "").trim();
       if (!txt) return; inp.value = "";
-      sendReply(m.id, txt, comments);
+      postReply(m.id, txt, null, comments);
     });
+    var rImgBtn = rf.querySelector('[data-role="replyimg"]');
+    var rFile = rf.querySelector('[data-role="replyfile"]');
+    rImgBtn.addEventListener("click", function () { rFile.click(); });
+    rFile.addEventListener("change", function () { if (this.files[0]) sendReplyImage(m.id, this.files[0], comments); this.value = ""; });
 
     rendered[m.id] = { el: card, row: reactRow, commentsEl: comments, countEl: countEl, count: (m.replies ? m.replies.length : 0), msg: m };
     return card;
   }
 
-  function sendReply(postId, text, commentsEl) {
+  function postReply(postId, text, attachment, commentsEl) {
     commentsEl.classList.add("open");
+    var payload = { postId: postId, text: text || "" };
+    if (attachment) payload.attachment = attachment;
     fetch("/api/group/" + GID + "/reply", {
       method: "POST", credentials: "same-origin",
-      headers: { "Content-Type": "application/json" }, body: JSON.stringify({ postId: postId, text: text }),
+      headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
     })
       .then(function (r) { return r.json(); })
       .then(function (d) {
@@ -399,6 +412,20 @@
         } else { note(t("Klarte ikke å kommentere.", "Couldn't comment.")); }
       })
       .catch(function () { note(t("Klarte ikke å kommentere.", "Couldn't comment.")); });
+  }
+
+  function sendReplyImage(postId, file, commentsEl) {
+    commentsEl.classList.add("open");
+    note(t("Laster opp…", "Uploading…"));
+    var go = function (blob, name, type) {
+      uploadBlob(blob, name, type).then(function (j) {
+        if (j && j.ok && j.file) { note(""); postReply(postId, "", { url: j.file.url, type: j.file.type, name: j.file.name, kind: j.file.kind }, commentsEl); }
+        else if (j && j.error === "too_large") note(t("Bildet er for stort (maks 5 MB).", "Image too large (max 5 MB)."));
+        else note(t("Klarte ikke å laste opp.", "Upload failed."));
+      }).catch(function () { note(t("Klarte ikke å laste opp.", "Upload failed.")); });
+    };
+    if (/^image\//.test(file.type)) compressImage(file).then(function (b) { go(b, (file.name || "bilde").replace(/\.\w+$/, "") + ".jpg", "image/jpeg"); });
+    else go(file, file.name || "fil", file.type || "application/octet-stream");
   }
 
   function deleteReply(postId, replyId) {
