@@ -94,6 +94,10 @@
           <div id="side-news"><p class="side-empty" data-no="Laster…" data-en="Loading…">Laster…</p></div>
         </div>
         <div class="side-card">
+          <h3 data-no="📅 Arrangementer" data-en="📅 Events">📅 Arrangementer</h3>
+          <div id="side-events"><p class="side-empty" data-no="Laster…" data-en="Loading…">Laster…</p></div>
+        </div>
+        <div class="side-card">
           <h3 data-no="Snarveier" data-en="Shortcuts">Snarveier</h3>
           <ul class="side-links">
             <li><a href="/grupper">👥 <span data-no="Alle grupper" data-en="All groups">Alle grupper</span></a></li>
@@ -105,7 +109,7 @@
         </div>
         <div class="side-card welcome">
           <h3 data-no="Velkommen 💛" data-en="Welcome 💛">Velkommen 💛</h3>
-          <p data-no="Dette er hjertet i Inner Circle. Del tanker, spør om råd og bli kjent med andre som elsker Montessori." data-en="This is the heart of Inner Circle. Share thoughts, ask for advice, and get to know others who love Montessori.">Dette er hjertet i Inner Circle. Del tanker, spør om råd og bli kjent med andre som elsker Montessori.</p>
+          <p data-no="Dette er hjertet i Inner Circle. Del tanker, spør om råd og bli kjent med andre som elsker Montessori. Vær raus, nysgjerrig og snill, det er slik vi vokser sammen." data-en="This is the heart of Inner Circle. Share thoughts, ask for advice, and get to know others who love Montessori. Be generous, curious and kind, that is how we grow together.">Dette er hjertet i Inner Circle. Del tanker, spør om råd og bli kjent med andre som elsker Montessori. Vær raus, nysgjerrig og snill, det er slik vi vokser sammen.</p>
         </div>
       </aside>
     </div>
@@ -162,6 +166,40 @@
       .catch(function(){ box.innerHTML='<p class="side-empty">'+(lang()==='en'?'Log in as a member to see news.':'Logg inn som medlem for å se nyheter.')+'</p>'; });
   }
   load(); setInterval(load,30000);
+  window.addEventListener('lme-lang', load);
+})();
+</script>
+<script>
+/* Arrangementer i sidekolonnen: kommende live-samlinger med paamelding. */
+(function(){
+  var box=document.getElementById('side-events');
+  if(!box) return;
+  function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
+  function lang(){try{return localStorage.getItem('lme_lang')||'no';}catch(e){return 'no';}}
+  function evDate(ts){try{return new Date(ts).toLocaleString(lang()==='en'?'en-GB':'nb-NO',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
+  function paint(evs){
+    var up=evs.filter(function(e){return e.ts>Date.now()-2*3600000;}).slice(0,4);
+    if(!up.length){ box.innerHTML='<p class="side-empty">'+(lang()==='en'?'No upcoming events.':'Ingen kommende arrangementer.')+'</p>'; return; }
+    box.innerHTML=up.map(function(e){
+      return '<div class="side-news-item"><span class="d">'+esc(evDate(e.ts))+'</span><span class="x">'+esc(e.title)+'</span>'+
+        (e.link?' <a href="'+esc(e.link)+'" target="_blank" rel="noopener" style="font-size:12px;color:#E91E89;text-decoration:none;">'+(lang()==='en'?'Open link →':'Åpne lenke →')+'</a>':'')+
+        '<div style="margin-top:5px;display:flex;align-items:center;gap:8px;"><button class="ev-rsvp" data-id="'+esc(e.id)+'" style="font-size:12px;border:1px solid #f3dce6;border-radius:999px;padding:3px 11px;cursor:pointer;font-family:inherit;background:'+(e.youRsvp?'#FCE3EC':'#fff')+';color:#2a1e2e;">'+(e.youRsvp?(lang()==='en'?'✓ Going':'✓ Påmeldt'):(lang()==='en'?'Join':'Meld meg på'))+'</button><span style="font-size:11px;color:#b6a0a9;">'+e.rsvpCount+'</span></div>'+
+      '</div>';
+    }).join('');
+    Array.prototype.forEach.call(box.querySelectorAll('.ev-rsvp'),function(b){
+      b.addEventListener('click',function(){
+        fetch('/api/events',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'rsvp',id:b.getAttribute('data-id')})})
+          .then(function(r){return r.json();}).then(function(){ load(); });
+      });
+    });
+  }
+  function load(){
+    fetch('/api/events',{credentials:'same-origin'})
+      .then(function(r){ if(r.status===403) throw 'forbidden'; return r.json(); })
+      .then(function(d){ paint((d&&d.events)||[]); })
+      .catch(function(){ box.innerHTML='<p class="side-empty">'+(lang()==='en'?'Log in to see events.':'Logg inn for å se arrangementer.')+'</p>'; });
+  }
+  load(); setInterval(load,60000);
   window.addEventListener('lme-lang', load);
 })();
 </script>

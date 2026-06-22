@@ -94,15 +94,52 @@
         '</div>' +
         '<div class="note" id="note"></div>' +
       '</div>' +
+      '<div class="card"><h2>Arrangementer</h2>' +
+        '<p class="lede" style="font-size:14px;margin-bottom:12px">Lag live-samlinger og events. Medlemmene ser dem i fellesskapet og kan melde seg på.</p>' +
+        '<input type="text" id="ev-title" placeholder="Tittel, f.eks. Mia & Teo Live" style="width:100%;border:1px solid #eedce2;border-radius:12px;padding:11px 14px;font-family:inherit;font-size:15px;margin-bottom:8px;">' +
+        '<input type="datetime-local" id="ev-when" style="width:100%;border:1px solid #eedce2;border-radius:12px;padding:11px 14px;font-family:inherit;font-size:15px;margin-bottom:8px;">' +
+        '<input type="text" id="ev-link" placeholder="Lenke (valgfritt), f.eks. Zoom" style="width:100%;border:1px solid #eedce2;border-radius:12px;padding:11px 14px;font-family:inherit;font-size:15px;margin-bottom:8px;">' +
+        '<textarea id="ev-desc" placeholder="Kort beskrivelse (valgfritt)" style="width:100%;border:1px solid #eedce2;border-radius:12px;padding:11px 14px;font-family:inherit;font-size:15px;margin-bottom:10px;min-height:60px;"></textarea>' +
+        '<button class="btn" id="ev-create">Opprett arrangement</button>' +
+        '<div class="note" id="ev-note"></div>' +
+        '<ul class="members" id="ev-list" style="margin-top:8px;"></ul>' +
+      '</div>' +
       '<div class="card"><h2>Har tilgang nå</h2><ul class="members" id="list"><li class="empty">Laster…</li></ul></div>';
 
     document.getElementById('grant').addEventListener('click', grant);
     document.getElementById('email').addEventListener('keydown', function(e){ if(e.key==='Enter') grant(); });
     document.getElementById('save-secret').addEventListener('click', saveSecret);
     document.getElementById('secret').addEventListener('keydown', function(e){ if(e.key==='Enter') saveSecret(); });
+    document.getElementById('ev-create').addEventListener('click', createEvent);
     loadConfig();
     loadList();
+    loadEvents();
   }
+
+  function evDate(ts){ try { return new Date(ts).toLocaleString('nb-NO',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); } catch(e){ return ''; } }
+  function loadEvents(){
+    fetch('/api/events',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){
+      var ul=document.getElementById('ev-list'); if(!ul) return;
+      var evs=(d&&d.events)||[];
+      if(!evs.length){ ul.innerHTML='<li class="empty">Ingen arrangementer ennå.</li>'; return; }
+      ul.innerHTML=evs.map(function(e){ return '<li><div><div class="m-email">'+esc(e.title)+'</div><div class="m-meta">'+esc(evDate(e.ts))+' · '+e.rsvpCount+' påmeldt</div></div><button class="btn ghost" data-ev="'+esc(e.id)+'">Slett</button></li>'; }).join('');
+      Array.prototype.forEach.call(ul.querySelectorAll('button[data-ev]'),function(b){ b.addEventListener('click',function(){ if(confirm('Slette dette arrangementet?')) delEvent(b.getAttribute('data-ev')); }); });
+    });
+  }
+  function createEvent(){
+    var title=(document.getElementById('ev-title').value||'').trim();
+    var when=document.getElementById('ev-when').value;
+    var link=(document.getElementById('ev-link').value||'').trim();
+    var desc=(document.getElementById('ev-desc').value||'').trim();
+    var n=document.getElementById('ev-note');
+    if(!title||!when){ n.textContent='Fyll inn tittel og tidspunkt.'; n.className='note err'; return; }
+    fetch('/api/events',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'create',title:title,datetime:when,link:link,desc:desc})})
+      .then(function(r){return r.json();}).then(function(d){
+        if(d&&d.ok){ n.textContent='Opprettet ✓'; n.className='note ok'; ['ev-title','ev-when','ev-link','ev-desc'].forEach(function(id){document.getElementById(id).value='';}); loadEvents(); }
+        else { n.textContent='Kunne ikke opprette.'; n.className='note err'; }
+      }).catch(function(){ n.textContent='Noe gikk galt.'; n.className='note err'; });
+  }
+  function delEvent(id){ fetch('/api/events',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'delete',id:id})}).then(function(){ loadEvents(); }); }
 
   function loadConfig(){
     api('admin/config').then(function(r){
