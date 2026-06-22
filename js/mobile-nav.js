@@ -53,6 +53,7 @@
     '  .nav .dropdown::before { display: none; }',
     '  .nav .dropdown-col h4 { margin: 8px 0 2px; }',
     '  .nav .dropdown-col li a { padding: 9px 0; }',
+    '  .nav .lme-dup-hide { display: none !important; }',
     '}',
   ].join('\n');
   var st = document.createElement('style');
@@ -98,6 +99,29 @@
   var items = nav.querySelectorAll('.nav-item');
   for (var i = 0; i < items.length; i++) {
     if (items[i].querySelector('.dropdown')) items[i].className += ' lme-grp';
+  }
+
+  /* --- Fjern dubletter på mobil: samme menykolonne (f.eks. "Støtte")
+     finnes i flere nedtrekk. På desktop vises bare ett nedtrekk om
+     gangen, men i mobilpanelet stables alt, så kolonnen dukker opp
+     flere ganger. Behold den fyldigste og skjul resten. --- */
+  var cols = nav.querySelectorAll('.dropdown-col');
+  var seen = {};
+  for (var c = 0; c < cols.length; c++) {
+    var h4 = cols[c].querySelector('h4');
+    if (!h4) continue;
+    var key = (h4.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    if (!key) continue;
+    var score = cols[c].querySelectorAll('li').length +
+      (cols[c].querySelector('.dropdown-cta') ? 1 : 0);
+    if (!seen[key]) {
+      seen[key] = { el: cols[c], score: score };
+    } else if (score > seen[key].score) {
+      seen[key].el.className += ' lme-dup-hide';
+      seen[key] = { el: cols[c], score: score };
+    } else {
+      cols[c].className += ' lme-dup-hide';
+    }
   }
 
   var btn = document.createElement('button');
