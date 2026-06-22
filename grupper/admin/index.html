@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medlemmer — Inner Circle — LME</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face{font-family:'Sasson Montessori';src:url('/fonts/SassoonMontessori.woff2') format('woff2'),url('/fonts/SassoonMontessori.ttf') format('truetype');font-weight:normal;font-style:normal;font-display:swap;}
+  :root{--cerise:#E91E89;--ink:#2a1e2e;--ink-soft:#6b5563;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;color:var(--ink);background:#faf6f7;}
+  h1,h2,h3{font-family:'Playpen Sans',system-ui,sans-serif;}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 20px;background:#fff;box-shadow:0 2px 10px rgba(180,120,140,.12);}
+  .bar .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--cerise);text-decoration:none;font-size:15px;}
+  .bar .brand img{width:32px;height:32px;object-fit:contain;}
+  .bar a.back{color:var(--ink);text-decoration:none;border:1px solid #eedce2;border-radius:999px;padding:8px 16px;font-size:13.5px;font-weight:700;}
+  .wrap{max-width:680px;margin:24px auto;padding:0 18px 40px;}
+  h1{font-size:26px;margin-bottom:4px;}
+  .lede{color:var(--ink-soft);font-size:15px;line-height:1.55;margin-bottom:22px;}
+  .card{background:#fff;border:1px solid #f3dce6;border-radius:18px;padding:22px;box-shadow:0 8px 24px rgba(180,120,140,.1);margin-bottom:20px;}
+  .card h2{font-size:18px;margin-bottom:12px;}
+  .row{display:flex;gap:10px;flex-wrap:wrap;}
+  input[type=email]{flex:1;min-width:200px;border:1px solid #eedce2;border-radius:999px;padding:12px 18px;font-family:inherit;font-size:15px;}
+  input[type=email]:focus{outline:none;border-color:var(--cerise);}
+  .btn{border:0;border-radius:999px;padding:12px 22px;font-weight:700;font-family:inherit;cursor:pointer;font-size:15px;background:var(--cerise);color:#fff;}
+  .btn.ghost{background:#fff;color:var(--cerise);border:1px solid #f3dce6;padding:8px 14px;font-size:13px;}
+  .note{min-height:20px;font-size:14px;margin-top:10px;}
+  .note.ok{color:#3d8b40;} .note.err{color:#c2255c;}
+  ul.members{list-style:none;}
+  ul.members li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 4px;border-bottom:1px solid #f3e3e9;}
+  ul.members li:last-child{border-bottom:0;}
+  .m-email{font-size:14.5px;}
+  .m-meta{font-size:12px;color:var(--ink-soft);}
+  .empty{color:var(--ink-soft);font-size:14.5px;padding:8px 4px;}
+  .gate{max-width:460px;margin:60px auto;text-align:center;background:#fff;border:1px solid #f3dce6;border-radius:20px;padding:40px 26px;}
+  .gate h2{font-size:22px;margin-bottom:10px;}
+  .gate p{color:var(--ink-soft);margin-bottom:20px;}
+  .gate a{background:var(--cerise);color:#fff;border-radius:999px;padding:11px 20px;font-weight:700;text-decoration:none;}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/grupper"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <a class="back" href="/grupper">‹ Grupper</a>
+  </div>
+
+  <div class="wrap" id="app">
+    <p class="empty">Laster…</p>
+  </div>
+
+<script>
+(function(){
+  var app = document.getElementById('app');
+
+  function api(path, opts){
+    return fetch('/api/group/' + path, Object.assign({ credentials:'same-origin' }, opts || {}))
+      .then(function(r){ return r.json().then(function(b){ return { status:r.status, body:b }; }); });
+  }
+  function esc(s){ var d=document.createElement('div'); d.textContent=s==null?'':String(s); return d.innerHTML; }
+  function dateLabel(ts){ if(!ts) return ''; try { return new Date(ts).toLocaleDateString('nb-NO'); } catch(e){ return ''; } }
+
+  function gate(){
+    app.innerHTML =
+      '<div class="gate"><h2>Kun for eier</h2>' +
+      '<p>Logg inn med eierkontoen din for å administrere hvem som har tilgang til gruppene.</p>' +
+      '<a href="/login?next=' + encodeURIComponent(location.pathname) + '">Logg inn</a></div>';
+  }
+
+  function render(){
+    app.innerHTML =
+      '<h1>Medlemmer i gruppene</h1>' +
+      '<p class="lede">Skriv inn e-posten til den som har betalt for Inner Circle, og gi dem tilgang. ' +
+      'De kommer da rett inn i alle gruppene neste gang de logger inn. Du kan fjerne tilgang igjen når som helst.</p>' +
+      '<div class="card"><h2>Gi tilgang</h2>' +
+        '<div class="row">' +
+          '<input type="email" id="email" placeholder="navn@epost.no" autocomplete="off">' +
+          '<button class="btn" id="grant">Gi tilgang</button>' +
+        '</div>' +
+        '<div class="note" id="note"></div>' +
+      '</div>' +
+      '<div class="card"><h2>Har tilgang nå</h2><ul class="members" id="list"><li class="empty">Laster…</li></ul></div>';
+
+    document.getElementById('grant').addEventListener('click', grant);
+    document.getElementById('email').addEventListener('keydown', function(e){ if(e.key==='Enter') grant(); });
+    loadList();
+  }
+
+  function note(msg, ok){
+    var n=document.getElementById('note'); if(!n) return;
+    n.textContent=msg; n.className='note ' + (ok?'ok':'err');
+  }
+
+  function grant(){
+    var input=document.getElementById('email');
+    var email=(input.value||'').trim();
+    if(!email){ note('Skriv inn en e-post.', false); return; }
+    api('admin/grant', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ email:email }) })
+      .then(function(r){
+        if(r.body && r.body.ok){ note('Tilgang gitt til ' + email + ' ✓', true); input.value=''; loadList(); }
+        else if(r.body && r.body.error==='bad_email'){ note('Det ser ikke ut som en gyldig e-post.', false); }
+        else if(r.status===403){ note('Du må være innlogget som eier.', false); }
+        else { note('Noe gikk galt. Prøv igjen.', false); }
+      })
+      .catch(function(){ note('Noe gikk galt. Prøv igjen.', false); });
+  }
+
+  function revoke(email){
+    api('admin/revoke', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ email:email }) })
+      .then(function(){ loadList(); });
+  }
+
+  function loadList(){
+    api('admin/members').then(function(r){
+      var ul=document.getElementById('list'); if(!ul) return;
+      var members=(r.body && r.body.members) || [];
+      var active=members.filter(function(m){ return m.status==='active'; });
+      if(!active.length){ ul.innerHTML='<li class="empty">Ingen medlemmer ennå. Gi noen tilgang over.</li>'; return; }
+      ul.innerHTML = active.map(function(m){
+        return '<li><div><div class="m-email">' + esc(m.email) + '</div>' +
+               '<div class="m-meta">Lagt til ' + esc(dateLabel(m.since)) + (m.source==='stripe'?' · betalte via Stripe':' · lagt til manuelt') + '</div></div>' +
+               '<button class="btn ghost" data-email="' + esc(m.email) + '">Fjern</button></li>';
+      }).join('');
+      Array.prototype.forEach.call(ul.querySelectorAll('button[data-email]'), function(b){
+        b.addEventListener('click', function(){ if(confirm('Fjerne tilgang for ' + b.getAttribute('data-email') + '?')) revoke(b.getAttribute('data-email')); });
+      });
+    });
+  }
+
+  api('access').then(function(r){
+    if(r.body && r.body.owner) render();
+    else gate();
+  }).catch(gate);
+})();
+</script>
+</body>
+</html>

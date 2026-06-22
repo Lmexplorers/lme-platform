@@ -92,6 +92,33 @@ async function getMembership(env, email) {
 
 function chatKey(id) { return "gchat:" + id; }
 
+function isOwner(u) {
+  if (!u) return false;
+  return u.role === "owner" || OWNER_EMAILS.indexOf((u.email || "").toLowerCase()) !== -1;
+}
+
+async function ownerFrom(context) {
+  const sess = await sessionFrom(context);
+  if (!sess) return null;
+  const u = await getUser(context.env, sess.email);
+  return isOwner(u) ? u : null;
+}
+
+async function setMembership(env, email, status) {
+  email = (email || "").trim().toLowerCase();
+  if (!email) return;
+  const rec = { status: status, plan: "inner-circle", source: "manual", since: Date.now(), updated: Date.now() };
+  await env.BUILDER_KV.put("member:" + email, JSON.stringify(rec));
+  const uraw = await env.BUILDER_KV.get("user:" + email);
+  if (uraw) {
+    try {
+      const u = JSON.parse(uraw);
+      u.subscription = { status: status, plan: "inner-circle", source: "manual", updated: Date.now() };
+      await env.BUILDER_KV.put("user:" + email, JSON.stringify(u));
+    } catch (e) {}
+  }
+}
+
 async function loadMessages(env, id) {
   const raw = await env.BUILDER_KV.get(chatKey(id));
   if (!raw) return [];
@@ -110,7 +137,23 @@ export async function onRequestGet(context) {
     const u = await getUser(env, sess.email);
     if (!u) return json({ loggedIn: false, member: false });
     const membership = await getMembership(env, u.email);
-    return json({ loggedIn: true, member: isMember(u, membership), name: u.name || null, email: u.email });
+    return json({ loggedIn: true, member: isMember(u, membership), name: u.name || null, email: u.email, owner: isOwner(u) });
+  }
+
+  // /api/group/admin/members  (kun eier) -> liste over medlemmer
+  if (parts.length === 2 && parts[0] === "admin" && parts[1] === "members") {
+    const owner = await ownerFrom(context);
+    if (!owner) return json({ error: "forbidden" }, 403);
+    const list = await env.BUILDER_KV.list({ prefix: "member:" });
+    const members = [];
+    for (const k of list.keys) {
+      const email = k.name.slice("member:".length);
+      const raw = await env.BUILDER_KV.get(k.name);
+      let rec = {}; try { rec = JSON.parse(raw); } catch (e) {}
+      members.push({ email: email, status: rec.status || "active", source: rec.source || "", since: rec.since || null });
+    }
+    members.sort((a, b) => (b.since || 0) - (a.since || 0));
+    return json({ members: members });
   }
 
   // /api/group/<id>/messages
@@ -135,6 +178,18 @@ export async function onRequestPost(context) {
   const { params, env, request } = context;
   const parts = [].concat(params.path || []);
   if (!env.BUILDER_KV) return json({ error: "not_configured" }, 200);
+
+  // /api/group/admin/grant | /api/group/admin/revoke  (kun eier)
+  if (parts.length === 2 && parts[0] === "admin" && (parts[1] === "grant" || parts[1] === "revoke")) {
+    const owner = await ownerFrom(context);
+    if (!owner) return json({ error: "forbidden" }, 403);
+    let body;
+    try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
+    const email = (body.email || "").trim().toLowerCase();
+    if (!email || !/.+@.+\..+/.test(email)) return json({ error: "bad_email" }, 400);
+    await setMembership(env, email, parts[1] === "grant" ? "active" : "canceled");
+    return json({ ok: true, email: email, status: parts[1] === "grant" ? "active" : "canceled" });
+  }
 
   if (parts.length === 2 && parts[1] === "messages") {
     const id = parts[0];
