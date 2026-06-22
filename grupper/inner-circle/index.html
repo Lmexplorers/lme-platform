@@ -48,6 +48,24 @@
   .lme-chat-gate-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
   .lme-chat-btn{border-radius:999px;padding:11px 20px;font-weight:700;text-decoration:none;font-size:14.5px;background:#fff;color:var(--ink);border:1px solid #eedce2;}
   .lme-chat-btn.primary{background:var(--cerise);color:#fff;border-color:var(--cerise);box-shadow:0 6px 16px rgba(233,30,137,.3);}
+  /* To-kolonne fellesskaps-layout */
+  .community-layout{display:grid;grid-template-columns:1fr 300px;gap:24px;align-items:start;}
+  .cl-main{min-width:0;display:flex;flex-direction:column;}
+  .cl-side{display:flex;flex-direction:column;gap:16px;position:sticky;top:84px;}
+  .side-card{background:#fff;border:1px solid #f3dce6;border-radius:18px;padding:18px;box-shadow:0 6px 18px rgba(180,120,140,.08);}
+  .side-card h3{font-size:15px;margin-bottom:12px;color:var(--cerise);text-transform:uppercase;letter-spacing:.05em;}
+  .side-card.welcome{background:linear-gradient(135deg,#FDE7E0,#C8E4F4);border-color:#F5C9D6;}
+  .side-card.welcome h3{color:#b8456e;}
+  .side-card.welcome p{font-size:14px;line-height:1.55;color:#7a5563;}
+  .side-news-item{border-bottom:1px solid #f3e3e9;padding:9px 0;}
+  .side-news-item:last-child{border-bottom:0;padding-bottom:0;}
+  .side-news-item .d{font-size:11px;color:#b6a0a9;display:block;margin-bottom:2px;}
+  .side-news-item .x{font-size:13.5px;line-height:1.45;}
+  .side-empty{font-size:13.5px;color:var(--ink-soft);line-height:1.5;}
+  .side-links{list-style:none;display:flex;flex-direction:column;gap:10px;}
+  .side-links a{text-decoration:none;color:var(--ink);font-size:14.5px;display:flex;gap:9px;align-items:center;}
+  .side-links a:hover{color:var(--cerise);}
+  @media(max-width:860px){.community-layout{grid-template-columns:1fr;}.cl-side{position:static;}}
   @media(max-width:600px){.ghead h1{font-size:23px;}.lme-chat-stream{max-height:none;}}
 </style>
 </head>
@@ -62,13 +80,35 @@
     </div>
   </div>
 
-  <div class="wrap">
+  <div class="wrap" style="max-width:1080px;">
     <div class="ghead">
       <span class="kick" data-no="Inner Circle · Gruppe" data-en="Inner Circle · Group">Inner Circle · Gruppe</span>
       <h1 data-no="Inner Circle" data-en="Inner Circle">Inner Circle</h1>
       <p data-no="Det åpne fellesrommet for alle Inner Circle-medlemmer, på tvers av aldersgruppene. Her snakker vi om alt." data-en="The open shared room for all Inner Circle members, across the age groups. Here we talk about anything.">Det åpne fellesrommet for alle Inner Circle-medlemmer, på tvers av aldersgruppene. Her snakker vi om alt.</p>
     </div>
-    <div id="lme-chat"></div>
+    <div class="community-layout">
+      <main class="cl-main"><div id="lme-chat"></div></main>
+      <aside class="cl-side">
+        <div class="side-card">
+          <h3 data-no="📢 Nyheter" data-en="📢 News">📢 Nyheter</h3>
+          <div id="side-news"><p class="side-empty" data-no="Laster…" data-en="Loading…">Laster…</p></div>
+        </div>
+        <div class="side-card">
+          <h3 data-no="Snarveier" data-en="Shortcuts">Snarveier</h3>
+          <ul class="side-links">
+            <li><a href="/grupper">👥 <span data-no="Alle grupper" data-en="All groups">Alle grupper</span></a></li>
+            <li><a href="/meldinger">💬 <span data-no="Meldinger" data-en="Messages">Meldinger</span></a></li>
+            <li><a href="/biblioteket">📚 <span data-no="Biblioteket" data-en="Library">Biblioteket</span></a></li>
+            <li><a href="/ressurser">🧰 <span data-no="Ressurser" data-en="Resources">Ressurser</span></a></li>
+            <li><a href="/academy">🎓 <span data-no="Akademiet" data-en="Academy">Akademiet</span></a></li>
+          </ul>
+        </div>
+        <div class="side-card welcome">
+          <h3 data-no="Velkommen 💛" data-en="Welcome 💛">Velkommen 💛</h3>
+          <p data-no="Dette er hjertet i Inner Circle. Del tanker, spør om råd og bli kjent med andre som elsker Montessori." data-en="This is the heart of Inner Circle. Share thoughts, ask for advice, and get to know others who love Montessori.">Dette er hjertet i Inner Circle. Del tanker, spør om råd og bli kjent med andre som elsker Montessori.</p>
+        </div>
+      </aside>
+    </div>
   </div>
 
 <script>
@@ -94,6 +134,28 @@
   var btn=document.getElementById('lme-print-lang');
   if(btn) btn.addEventListener('click',function(){apply(window.__lmeLang==='en'?'no':'en');});
   apply(saved);
+})();
+</script>
+<script>
+/* Nyheter i sidekolonnen: matet av kunngjoeringene (📢) i feeden. */
+(function(){
+  var box=document.getElementById('side-news');
+  if(!box) return;
+  function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
+  function lang(){try{return localStorage.getItem('lme_lang')||'no';}catch(e){return 'no';}}
+  function dateLabel(ts){try{return new Date(ts).toLocaleDateString(lang()==='en'?'en-GB':'nb-NO',{day:'numeric',month:'short'});}catch(e){return '';}}
+  function load(){
+    fetch('/api/group/inner-circle/messages',{credentials:'same-origin'})
+      .then(function(r){ if(r.status===403) throw 'forbidden'; return r.json(); })
+      .then(function(d){
+        var anns=((d&&d.messages)||[]).filter(function(m){return m.ann;}).sort(function(a,b){return b.ts-a.ts;}).slice(0,6);
+        if(!anns.length){ box.innerHTML='<p class="side-empty">'+(lang()==='en'?'No news yet.':'Ingen nyheter ennå.')+'</p>'; return; }
+        box.innerHTML=anns.map(function(m){return '<div class="side-news-item"><span class="d">'+esc(dateLabel(m.ts))+'</span><span class="x">'+esc(m.t)+'</span></div>';}).join('');
+      })
+      .catch(function(){ box.innerHTML='<p class="side-empty">'+(lang()==='en'?'Log in as a member to see news.':'Logg inn som medlem for å se nyheter.')+'</p>'; });
+  }
+  load(); setInterval(load,30000);
+  window.addEventListener('lme-lang', load);
 })();
 </script>
 </body>
