@@ -21,6 +21,8 @@
   var pollTimer = null, ws = null;
   var mediaRecorder = null, recChunks = [];
   var curPop = null;
+  var announceMode = false;
+  var latestAnn = null;
 
   var COMPOSE_EMOJI = ["😊","😀","😍","🥰","😂","😉","😮","😢","😭","🙏","👍","👎","👏","🙌","💪","🌸","🌿","☀️","⭐","✨","❤️","🧡","💛","💚","💙","💜","🎉","🎈","📚","✏️","🖍️","🧩","🍎","🌈","🐛","🦋","🐌","🐞","🌷"];
   var REACTIONS = ["❤️","👍","😂","😮","😢","🙏"];
@@ -62,6 +64,14 @@
       ".lme-react-row{display:flex;gap:4px;align-items:center;margin-top:4px;flex-wrap:wrap;}",
       ".lme-react-chip{font-size:12.5px;background:#fff;border:1px solid #f3dce6;border-radius:999px;padding:1px 8px;cursor:pointer;}",
       ".lme-react-chip.mine{background:#FCE3EC;border-color:#E91E89;}",
+      ".lme-tool.on{background:#E91E89;border-color:#E91E89;}",
+      ".lme-pinned{margin-bottom:10px;}",
+      ".lme-pinned .pin{display:flex;gap:9px;align-items:flex-start;background:linear-gradient(135deg,#FFF6DA,#FDE7E0);border:1px solid #F3D98B;border-radius:14px;padding:11px 14px;}",
+      ".lme-pinned .pin .ico{font-size:18px;line-height:1.3;}",
+      ".lme-pinned .pin .who{font-weight:700;color:#b8860b;font-size:12px;display:block;margin-bottom:2px;}",
+      ".lme-pinned .pin .txt{font-size:14px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;}",
+      ".lme-msg.ann .lme-msg-bubble{background:linear-gradient(135deg,#FFF6DA,#FDE7E0);border-color:#F3D98B;}",
+      ".lme-ann-tag{display:block;font-size:10.5px;font-weight:700;color:#b8860b;letter-spacing:.04em;margin-bottom:2px;}",
       "a.lme-msg-name{color:#E91E89;text-decoration:none;cursor:pointer;}",
       "a.lme-msg-name:hover{text-decoration:underline;}",
     ].join("");
@@ -122,6 +132,7 @@
   function renderShell() {
     root.innerHTML =
       '<div class="lme-chat-wrap">' +
+        '<div class="lme-pinned" id="lme-pinned"></div>' +
         '<div class="lme-chat-stream" id="lme-chat-stream">' +
           '<div class="lme-chat-empty" id="lme-chat-empty">' +
             esc(t("Ingen meldinger ennå. Vær den første som skriver noe 💛", "No messages yet. Be the first to write something 💛")) +
@@ -134,6 +145,7 @@
             '<button type="button" class="lme-tool" id="lme-image" title="' + esc(t("Bilde","Image")) + '">🖼️</button>' +
             '<button type="button" class="lme-tool" id="lme-file" title="' + esc(t("Fil","File")) + '">📎</button>' +
             '<button type="button" class="lme-tool" id="lme-mic" title="' + esc(t("Lyd","Audio")) + '">🎤</button>' +
+            (meOwner ? '<button type="button" class="lme-tool" id="lme-announce" title="' + esc(t("Annonser nyhet","Post news")) + '">📢</button>' : '') +
           '</div>' +
           '<div class="lme-chat-form">' +
             '<input type="text" id="lme-chat-input" autocomplete="off" maxlength="1000" placeholder="' + esc(t("Skriv en melding…","Write a message…")) + '">' +
@@ -162,6 +174,19 @@
     camIn.addEventListener("change", function () { if (this.files[0]) handleImage(this.files[0]); this.value = ""; });
     fileIn.addEventListener("change", function () { if (this.files[0]) handleFile(this.files[0]); this.value = ""; });
     document.getElementById("lme-mic").addEventListener("click", function () { toggleMic(this); });
+    var annBtn = document.getElementById("lme-announce");
+    if (annBtn) annBtn.addEventListener("click", function () {
+      announceMode = !announceMode;
+      this.classList.toggle("on", announceMode);
+      var inp = document.getElementById("lme-chat-input");
+      inp.placeholder = announceMode ? t("Skriv en nyhet til alle…", "Write news for everyone…") : t("Skriv en melding…", "Write a message…");
+    });
+  }
+
+  function setAnnounceOff() {
+    announceMode = false;
+    var b = document.getElementById("lme-announce"); if (b) b.classList.remove("on");
+    var inp = document.getElementById("lme-chat-input"); if (inp) inp.placeholder = t("Skriv en melding…", "Write a message…");
   }
 
   function streamEl() { return document.getElementById("lme-chat-stream"); }
@@ -195,7 +220,7 @@
   function buildBubble(m) {
     var mine = meEmail && m.u === meEmail;
     var wrap = document.createElement("div");
-    wrap.className = "lme-msg" + (mine ? " mine" : "");
+    wrap.className = "lme-msg" + (mine ? " mine" : "") + (m.ann ? " ann" : "");
 
     var inner = document.createElement("div");
     inner.className = "lme-msg-wrap";
@@ -207,6 +232,7 @@
     var bubble = document.createElement("div");
     bubble.className = "lme-msg-bubble";
     bubble.innerHTML =
+      (m.ann ? '<span class="lme-ann-tag">📢 ' + esc(t("NYHET", "NEWS")) + '</span>' : "") +
       nameHtml +
       (m.t ? '<span class="lme-msg-text">' + esc(m.t) + '</span>' : "") +
       attachmentHtml(m.a) +
@@ -264,6 +290,21 @@
       });
     }
     if (appended && (atBottom || mineAppended)) s.scrollTop = s.scrollHeight;
+    // Spor nyeste kunngjoering. Ved full liste (polling) regnes den ut paa nytt
+    // saa en slettet nyhet ogsaa forsvinner; ellers oppgraderes den bare.
+    if (full) latestAnn = null;
+    list.forEach(function (m) { if (m.ann && (!latestAnn || m.ts >= latestAnn.ts)) latestAnn = m; });
+    renderPinned();
+  }
+
+  function renderPinned() {
+    var pin = document.getElementById("lme-pinned");
+    if (!pin) return;
+    if (!latestAnn) { pin.innerHTML = ""; return; }
+    pin.innerHTML =
+      '<div class="pin"><span class="ico">📢</span><span><span class="who">' +
+      esc(latestAnn.n) + " · " + esc(t("Nyhet", "News")) + '</span><span class="txt">' +
+      esc(latestAnn.t) + "</span></span></div>";
   }
 
   function removeRendered(id) {
@@ -304,8 +345,10 @@
     var text = (input.value || "").trim();
     if (!text) return;
     input.value = "";
-    if (ws && ws.readyState === 1) { try { ws.send(JSON.stringify({ text: text })); return; } catch (e2) {} }
-    postMessage({ text: text });
+    var ann = announceMode;
+    if (ann) setAnnounceOff();
+    if (!ann && ws && ws.readyState === 1) { try { ws.send(JSON.stringify({ text: text })); return; } catch (e2) {} }
+    postMessage({ text: text, announce: ann });
   }
 
   function postMessage(payload) {

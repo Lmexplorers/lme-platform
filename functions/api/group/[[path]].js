@@ -472,6 +472,7 @@ export async function onRequestPost(context) {
       ts: Date.now(),
     };
     if (att) message.a = att;
+    if (body.announce && isOwner(u)) message.ann = 1;
 
     const messages = await loadMessages(env, id);
     messages.push(message);
