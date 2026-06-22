@@ -441,7 +441,7 @@ async function handlePublish(request, env, origin) {
           emails: [{
             subject: a.seoTitle || a.h1,
             from_name: "Little Montessori Explorers",
-            from: env.MAILERLITE_FROM || "Renate@lmexplorers.com",
+            from: env.MAILERLITE_FROM || "post@lmexplorers.com",
             content: `<h1>${esc(a.h1)}</h1><p>${esc(a.intro || "")}</p><p><a href="${url}">Les hele artikkelen</a></p>`,
           }],
         }),

@@ -28,7 +28,7 @@ Settings → Variables):
 | `GITHUB_BRANCH` | nei | default `main` (sett til en test-branch om du vil) |
 | `MAILERLITE_TOKEN` | nei | MailerLite API-token (utsendelse) |
 | `MAILERLITE_GROUP_ID` | nei | gruppe som skal varsles |
-| `MAILERLITE_FROM` | nei | default `Renate@lmexplorers.com` (må være verifisert avsender) |
+| `MAILERLITE_FROM` | nei | default `post@lmexplorers.com` (automatisk system-post; må være verifisert avsender) |
 
 Uten `GITHUB_TOKEN` returnerer `/ai/publish` bare den ferdige HTML-en
 (ingenting committes), så du kan teste trygt.
