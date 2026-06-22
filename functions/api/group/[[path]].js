@@ -403,7 +403,38 @@ export async function onRequestPost(context) {
     return json({ ok: true, file: { id: fid, url: "/api/group/" + id + "/file/" + fid, type: type, name: name, kind: kind } });
   }
 
-  // /api/group/<id>/delete  -> slett en melding (egen, eller eier sletter hvilken som helst)
+  // /api/group/<id>/reply  -> kommentar (svar) paa et innlegg
+  if (parts.length === 2 && parts[1] === "reply") {
+    const id = parts[0];
+    const r = await resolveRoom(context, id);
+    if (!r.allowed) return json({ error: "forbidden", member: false }, 403);
+    const u = r.user;
+    let body;
+    try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
+    const postId = (body.postId || "").toString();
+    let text = (body.text || "").toString().trim();
+    const att = body.attachment && typeof body.attachment === "object" ? {
+      url: (body.attachment.url || "").toString().slice(0, 300),
+      type: (body.attachment.type || "").toString().slice(0, 100),
+      name: (body.attachment.name || "").toString().slice(0, 120),
+      kind: (body.attachment.kind || "file").toString().slice(0, 12),
+    } : null;
+    if (!postId || (!text && !att)) return json({ error: "bad_request" }, 400);
+    if (text.length > MAX_LEN) text = text.slice(0, MAX_LEN);
+    const messages = await loadMessages(env, id);
+    const post = messages.find((m) => m.id === postId);
+    if (!post) return json({ error: "not_found" }, 404);
+    const reply = { id: crypto.randomUUID(), u: u.email, uid: u.id, n: u.name || (u.email ? u.email.split("@")[0] : "Medlem"), t: text, ts: Date.now() };
+    if (att) reply.a = att;
+    if (!post.replies) post.replies = [];
+    post.replies.push(reply);
+    while (post.replies.length > MAX_MESSAGES) post.replies.shift();
+    await env.BUILDER_KV.put(chatKey(id), JSON.stringify(messages));
+    if (r.kind === "conv" && r.conv) { r.conv.lastTs = reply.ts; await putConv(env, r.conv); }
+    return json({ ok: true, postId: postId, reply: reply });
+  }
+
+  // /api/group/<id>/delete  -> slett innlegg eller kommentar (egen, eller eier)
   if (parts.length === 2 && parts[1] === "delete") {
     const id = parts[0];
     const r = await resolveRoom(context, id);
@@ -412,8 +443,19 @@ export async function onRequestPost(context) {
     let body;
     try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
     const mid = (body.messageId || "").toString();
+    const replyId = (body.replyId || "").toString();
     if (!mid) return json({ error: "bad_request" }, 400);
     const messages = await loadMessages(env, id);
+    const post = messages.find((m) => m.id === mid);
+    if (replyId) {
+      if (!post || !post.replies) return json({ ok: true, deleted: replyId });
+      const ri = post.replies.findIndex((x) => x.id === replyId);
+      if (ri === -1) return json({ ok: true, deleted: replyId });
+      if (post.replies[ri].u !== u.email && !isOwner(u)) return json({ error: "not_yours" }, 403);
+      post.replies.splice(ri, 1);
+      await env.BUILDER_KV.put(chatKey(id), JSON.stringify(messages));
+      return json({ ok: true, deleted: replyId });
+    }
     const idx = messages.findIndex((m) => m.id === mid);
     if (idx === -1) return json({ ok: true, deleted: mid });
     if (messages[idx].u !== u.email && !isOwner(u)) return json({ error: "not_yours" }, 403);

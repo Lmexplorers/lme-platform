@@ -23,6 +23,7 @@
   var curPop = null;
   var announceMode = false;
   var latestAnn = null;
+  var FEED = !!window.LME_CHAT_FEED;
 
   var COMPOSE_EMOJI = ["😊","😀","😍","🥰","😂","😉","😮","😢","😭","🙏","👍","👎","👏","🙌","💪","🌸","🌿","☀️","⭐","✨","❤️","🧡","💛","💚","💙","💜","🎉","🎈","📚","✏️","🖍️","🧩","🍎","🌈","🐛","🦋","🐌","🐞","🌷"];
   var REACTIONS = ["❤️","👍","😂","😮","😢","🙏"];
@@ -74,6 +75,34 @@
       ".lme-ann-tag{display:block;font-size:10.5px;font-weight:700;color:#b8860b;letter-spacing:.04em;margin-bottom:2px;}",
       "a.lme-msg-name{color:#E91E89;text-decoration:none;cursor:pointer;}",
       "a.lme-msg-name:hover{text-decoration:underline;}",
+      /* Feed-modus */
+      ".lme-feed #lme-chat-stream{max-height:none;background:transparent;border:0;padding:0;gap:16px;overflow:visible;}",
+      ".lme-feed-composer{background:#fff;border:1px solid #f3dce6;border-radius:18px;padding:14px 16px;margin-bottom:18px;box-shadow:0 6px 18px rgba(180,120,140,.08);}",
+      ".lme-post{background:#fff;border:1px solid #f3dce6;border-radius:18px;padding:16px 18px;box-shadow:0 6px 18px rgba(180,120,140,.08);}",
+      ".lme-post.ann{background:linear-gradient(135deg,#FFF6DA,#FDE7E0);border-color:#F3D98B;}",
+      ".lme-post-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}",
+      ".lme-post-ava{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#F5A8B8,#E91E89);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Playpen Sans';font-style:italic;font-size:17px;flex:none;}",
+      ".lme-post-meta{flex:1;min-width:0;}",
+      "a.lme-post-name,.lme-post-name{font-weight:700;font-size:14.5px;color:#2a1e2e;text-decoration:none;display:block;}",
+      "a.lme-post-name:hover{text-decoration:underline;}",
+      ".lme-post-time{font-size:12px;color:#b6a0a9;}",
+      ".lme-post-text{font-size:15.5px;line-height:1.55;white-space:pre-wrap;word-wrap:break-word;}",
+      ".lme-post-actions{display:flex;gap:16px;align-items:center;border-top:1px solid #f3e3e9;padding-top:9px;margin-top:10px;}",
+      ".lme-post-act{font-size:13.5px;color:#9a7b85;cursor:pointer;background:none;border:0;padding:0;font-family:inherit;}",
+      ".lme-post-act:hover{color:#E91E89;}",
+      ".lme-comments{margin-top:10px;flex-direction:column;gap:8px;display:none;}",
+      ".lme-comments.open{display:flex;}",
+      ".lme-comment{display:flex;gap:8px;align-items:flex-start;}",
+      ".lme-comment .c-ava{width:28px;height:28px;border-radius:50%;background:#F5A8B8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none;font-family:'Playpen Sans';font-style:italic;}",
+      ".lme-comment .c-body{background:#FBF1F4;border-radius:12px;padding:7px 11px;flex:1;min-width:0;}",
+      ".lme-comment .c-name{font-size:12px;font-weight:700;color:#E91E89;}",
+      ".lme-comment .c-name a{color:#E91E89;text-decoration:none;}",
+      ".lme-comment .c-text{font-size:14px;line-height:1.45;white-space:pre-wrap;word-wrap:break-word;}",
+      ".lme-comment .c-del{font-size:11px;color:#b6a0a9;background:none;border:0;cursor:pointer;font-family:inherit;margin-top:2px;}",
+      ".lme-reply-form{display:flex;gap:8px;margin-top:8px;}",
+      ".lme-reply-form input{flex:1;border:1px solid #eedce2;border-radius:999px;padding:9px 14px;font-family:inherit;font-size:14px;}",
+      ".lme-reply-form input:focus{outline:none;border-color:#E91E89;}",
+      ".lme-reply-form button{background:#E91E89;color:#fff;border:0;border-radius:999px;padding:9px 16px;font-weight:700;font-family:inherit;cursor:pointer;font-size:13.5px;}",
     ].join("");
     var st = document.createElement("style");
     st.textContent = css;
@@ -128,35 +157,53 @@
       '<div class="lme-chat-gate-actions">' + actions + '</div></div>';
   }
 
-  /* ---------- Chat-skall ---------- */
-  function renderShell() {
-    root.innerHTML =
-      '<div class="lme-chat-wrap">' +
-        '<div class="lme-pinned" id="lme-pinned"></div>' +
-        '<div class="lme-chat-stream" id="lme-chat-stream">' +
-          '<div class="lme-chat-empty" id="lme-chat-empty">' +
-            esc(t("Ingen meldinger ennå. Vær den første som skriver noe 💛", "No messages yet. Be the first to write something 💛")) +
-          '</div>' +
+  /* ---------- Skall (chat eller feed) ---------- */
+  function composerHtml() {
+    return '<form class="lme-compose" id="lme-chat-form">' +
+        '<div class="lme-tools">' +
+          '<button type="button" class="lme-tool" id="lme-emoji" title="Emoji">😊</button>' +
+          '<button type="button" class="lme-tool" id="lme-camera" title="' + esc(t("Kamera","Camera")) + '">📷</button>' +
+          '<button type="button" class="lme-tool" id="lme-image" title="' + esc(t("Bilde","Image")) + '">🖼️</button>' +
+          '<button type="button" class="lme-tool" id="lme-file" title="' + esc(t("Fil","File")) + '">📎</button>' +
+          '<button type="button" class="lme-tool" id="lme-mic" title="' + esc(t("Lyd","Audio")) + '">🎤</button>' +
+          (meOwner ? '<button type="button" class="lme-tool" id="lme-announce" title="' + esc(t("Annonser nyhet","Post news")) + '">📢</button>' : '') +
         '</div>' +
-        '<form class="lme-compose" id="lme-chat-form">' +
-          '<div class="lme-tools">' +
-            '<button type="button" class="lme-tool" id="lme-emoji" title="Emoji">😊</button>' +
-            '<button type="button" class="lme-tool" id="lme-camera" title="' + esc(t("Kamera","Camera")) + '">📷</button>' +
-            '<button type="button" class="lme-tool" id="lme-image" title="' + esc(t("Bilde","Image")) + '">🖼️</button>' +
-            '<button type="button" class="lme-tool" id="lme-file" title="' + esc(t("Fil","File")) + '">📎</button>' +
-            '<button type="button" class="lme-tool" id="lme-mic" title="' + esc(t("Lyd","Audio")) + '">🎤</button>' +
-            (meOwner ? '<button type="button" class="lme-tool" id="lme-announce" title="' + esc(t("Annonser nyhet","Post news")) + '">📢</button>' : '') +
+        '<div class="lme-chat-form">' +
+          '<input type="text" id="lme-chat-input" autocomplete="off" maxlength="1000" placeholder="' + esc(FEED ? t("Del noe med fellesskapet…","Share something with the community…") : t("Skriv en melding…","Write a message…")) + '">' +
+          '<button type="submit" class="lme-chat-send">' + esc(FEED ? t("Publiser","Post") : t("Send","Send")) + '</button>' +
+        '</div>' +
+      '</form>' +
+      '<p class="lme-chat-note" id="lme-chat-note"></p>' +
+      '<input type="file" id="lme-in-image" accept="image/*" hidden>' +
+      '<input type="file" id="lme-in-camera" accept="image/*" capture="environment" hidden>' +
+      '<input type="file" id="lme-in-file" hidden>';
+  }
+
+  function renderShell() {
+    if (FEED) {
+      root.classList.add("lme-feed");
+      root.innerHTML =
+        '<div class="lme-chat-wrap">' +
+          '<div class="lme-pinned" id="lme-pinned"></div>' +
+          '<div class="lme-feed-composer">' + composerHtml() + '</div>' +
+          '<div class="lme-chat-stream" id="lme-chat-stream">' +
+            '<div class="lme-chat-empty" id="lme-chat-empty">' +
+              esc(t("Ingen innlegg ennå. Skriv det første 💛", "No posts yet. Write the first one 💛")) +
+            '</div>' +
           '</div>' +
-          '<div class="lme-chat-form">' +
-            '<input type="text" id="lme-chat-input" autocomplete="off" maxlength="1000" placeholder="' + esc(t("Skriv en melding…","Write a message…")) + '">' +
-            '<button type="submit" class="lme-chat-send">' + esc(t("Send","Send")) + '</button>' +
+        '</div>';
+    } else {
+      root.innerHTML =
+        '<div class="lme-chat-wrap">' +
+          '<div class="lme-pinned" id="lme-pinned"></div>' +
+          '<div class="lme-chat-stream" id="lme-chat-stream">' +
+            '<div class="lme-chat-empty" id="lme-chat-empty">' +
+              esc(t("Ingen meldinger ennå. Vær den første som skriver noe 💛", "No messages yet. Be the first to write something 💛")) +
+            '</div>' +
           '</div>' +
-        '</form>' +
-        '<p class="lme-chat-note" id="lme-chat-note"></p>' +
-        '<input type="file" id="lme-in-image" accept="image/*" hidden>' +
-        '<input type="file" id="lme-in-camera" accept="image/*" capture="environment" hidden>' +
-        '<input type="file" id="lme-in-file" hidden>' +
-      '</div>';
+          composerHtml() +
+        '</div>';
+    }
 
     document.getElementById("lme-chat-form").addEventListener("submit", onSend);
     document.getElementById("lme-emoji").addEventListener("click", function () {
@@ -264,9 +311,142 @@
     return wrap;
   }
 
+  /* ---------- Feed-modus (innlegg med kommentartraader) ---------- */
+  function ava(name, cls) { return '<div class="' + cls + '">' + esc((name || "?").trim().charAt(0).toUpperCase()) + '</div>'; }
+
+  function renderReplies(el, m) {
+    var replies = m.replies || [];
+    el.innerHTML = replies.map(function (rp) {
+      var canDel = (meEmail && rp.u === meEmail) || meOwner;
+      var nm = rp.uid ? '<a href="/medlem?u=' + encodeURIComponent(rp.uid) + '">' + esc(rp.n) + '</a>' : esc(rp.n);
+      return '<div class="lme-comment">' + ava(rp.n, "c-ava") +
+        '<div class="c-body"><span class="c-name">' + nm + '</span>' +
+        (rp.t ? '<div class="c-text">' + esc(rp.t) + '</div>' : "") +
+        (rp.a ? attachmentHtml(rp.a) : "") +
+        (canDel ? '<button class="c-del" data-rid="' + esc(rp.id) + '">' + esc(t("Slett", "Delete")) + '</button>' : "") +
+        '</div></div>';
+    }).join("");
+    Array.prototype.forEach.call(el.querySelectorAll(".c-del"), function (b) {
+      b.addEventListener("click", function () { deleteReply(m.id, b.getAttribute("data-rid")); });
+    });
+  }
+
+  function buildPost(m) {
+    var canDelete = (meEmail && m.u === meEmail) || meOwner;
+    var nameHtml = m.uid
+      ? '<a class="lme-post-name" href="/medlem?u=' + encodeURIComponent(m.uid) + '">' + esc(m.n) + '</a>'
+      : '<span class="lme-post-name">' + esc(m.n) + '</span>';
+    var card = document.createElement("div");
+    card.className = "lme-post" + (m.ann ? " ann" : "");
+    card.innerHTML =
+      '<div class="lme-post-head">' + ava(m.n, "lme-post-ava") +
+        '<div class="lme-post-meta">' + nameHtml +
+        '<span class="lme-post-time">' + (m.ann ? "📢 " + esc(t("Nyhet", "News")) + " · " : "") + esc(timeLabel(m.ts)) + '</span></div>' +
+      '</div>' +
+      (m.t ? '<div class="lme-post-text">' + esc(m.t) + '</div>' : "") +
+      attachmentHtml(m.a) +
+      '<div class="lme-react-row" data-role="react"></div>' +
+      '<div class="lme-post-actions">' +
+        '<button type="button" class="lme-post-act" data-role="reactbtn">☺ ' + esc(t("Reager", "React")) + '</button>' +
+        '<button type="button" class="lme-post-act" data-role="commentbtn">💬 <span data-role="ccount">0</span> ' + esc(t("kommentarer", "comments")) + '</button>' +
+        (canDelete ? '<button type="button" class="lme-post-act" data-role="del">🗑 ' + esc(t("Slett", "Delete")) + '</button>' : "") +
+      '</div>' +
+      '<div class="lme-comments" data-role="comments"></div>' +
+      '<form class="lme-reply-form" data-role="replyform"><input type="text" autocomplete="off" maxlength="1000" placeholder="' + esc(t("Skriv en kommentar…", "Write a comment…")) + '"><button type="submit">' + esc(t("Svar", "Reply")) + '</button></form>';
+
+    var reactRow = card.querySelector('[data-role="react"]');
+    reactRow.innerHTML = reactionRowHtml(m); bindReactionRow(reactRow, m);
+    card.querySelector('[data-role="reactbtn"]').addEventListener("click", function () {
+      openPop(this, REACTIONS, true, function (em) { react(m.id, em); });
+    });
+    var comments = card.querySelector('[data-role="comments"]');
+    var countEl = card.querySelector('[data-role="ccount"]');
+    card.querySelector('[data-role="commentbtn"]').addEventListener("click", function () { comments.classList.toggle("open"); });
+    if (canDelete) card.querySelector('[data-role="del"]').addEventListener("click", function () {
+      if (confirm(t("Slette dette innlegget?", "Delete this post?"))) deleteMessage(m.id);
+    });
+    renderReplies(comments, m);
+    countEl.textContent = (m.replies ? m.replies.length : 0);
+    var rf = card.querySelector('[data-role="replyform"]');
+    rf.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var inp = rf.querySelector("input"); var txt = (inp.value || "").trim();
+      if (!txt) return; inp.value = "";
+      sendReply(m.id, txt, comments);
+    });
+
+    rendered[m.id] = { el: card, row: reactRow, commentsEl: comments, countEl: countEl, count: (m.replies ? m.replies.length : 0), msg: m };
+    return card;
+  }
+
+  function sendReply(postId, text, commentsEl) {
+    commentsEl.classList.add("open");
+    fetch("/api/group/" + GID + "/reply", {
+      method: "POST", credentials: "same-origin",
+      headers: { "Content-Type": "application/json" }, body: JSON.stringify({ postId: postId, text: text }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.ok && d.reply) {
+          var rec = rendered[postId];
+          if (rec) {
+            if (!rec.msg.replies) rec.msg.replies = [];
+            if (!rec.msg.replies.some(function (x) { return x.id === d.reply.id; })) rec.msg.replies.push(d.reply);
+            renderReplies(rec.commentsEl, rec.msg);
+            rec.count = rec.msg.replies.length; rec.countEl.textContent = rec.count;
+          }
+        } else { note(t("Klarte ikke å kommentere.", "Couldn't comment.")); }
+      })
+      .catch(function () { note(t("Klarte ikke å kommentere.", "Couldn't comment.")); });
+  }
+
+  function deleteReply(postId, replyId) {
+    fetch("/api/group/" + GID + "/delete", {
+      method: "POST", credentials: "same-origin",
+      headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messageId: postId, replyId: replyId }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.ok) {
+          var rec = rendered[postId];
+          if (rec && rec.msg.replies) {
+            rec.msg.replies = rec.msg.replies.filter(function (x) { return x.id !== replyId; });
+            renderReplies(rec.commentsEl, rec.msg);
+            rec.count = rec.msg.replies.length; rec.countEl.textContent = rec.count;
+          }
+        }
+      })
+      .catch(function () {});
+  }
+
+  function syncFeed(list, full) {
+    var s = streamEl(); if (!s) return;
+    list.forEach(function (m) {
+      if (!rendered[m.id]) {
+        var empty = document.getElementById("lme-chat-empty"); if (empty) empty.remove();
+        s.insertBefore(buildPost(m), s.firstChild); // nyeste øverst
+      } else {
+        var rec = rendered[m.id]; rec.msg = m;
+        var html = reactionRowHtml(m);
+        if (rec.row.innerHTML !== html) { rec.row.innerHTML = html; bindReactionRow(rec.row, m); }
+        var rc = m.replies ? m.replies.length : 0;
+        if (rec.count !== rc) { renderReplies(rec.commentsEl, m); rec.countEl.textContent = rc; rec.count = rc; }
+      }
+    });
+    if (full) {
+      var present = {};
+      list.forEach(function (m) { present[m.id] = true; });
+      Object.keys(rendered).forEach(function (id) { if (!present[id]) removeRendered(id); });
+      latestAnn = null;
+    }
+    list.forEach(function (m) { if (m.ann && (!latestAnn || m.ts >= latestAnn.ts)) latestAnn = m; });
+    renderPinned();
+  }
+
   function syncMessages(list, full) {
     if (!list) return;
     var s = streamEl(); if (!s) return;
+    if (FEED) { syncFeed(list, full); return; }
     var atBottom = s.scrollHeight - s.scrollTop - s.clientHeight < 80;
     var appended = false, mineAppended = false;
     list.forEach(function (m) {
