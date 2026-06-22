@@ -863,11 +863,16 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     gap: 20px;
   }
   .post-card {
+    display: block;
+    color: inherit;
+    text-decoration: none;
     background: #FBF6F0;
     border-radius: var(--r-md);
     padding: 24px;
     border: 1px solid var(--line-soft);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
+  .post-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
   .post-head {
     display: flex;
     align-items: center;
@@ -930,6 +935,9 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     gap: 20px;
   }
   .group-card {
+    display: block;
+    color: inherit;
+    text-decoration: none;
     background: #fff;
     border-radius: var(--r-md);
     overflow: hidden;
@@ -1369,7 +1377,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     <p class="sub">Et lite glimt fra fellesskapet, slik samtalene faktisk ser ut inne.</p>
 
     <div class="feed-grid">
-      <article class="post-card">
+      <a href="/grupper" class="post-card">
         <div class="post-head">
           <div class="avatar" style="background: linear-gradient(135deg, #F5A8B8, #E91E89);">I</div>
           <div class="meta">
@@ -1383,9 +1391,9 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           <span>💬 8 svar</span>
           <span>↗ Del</span>
         </div>
-      </article>
+      </a>
 
-      <article class="post-card">
+      <a href="/grupper" class="post-card">
         <div class="post-head">
           <div class="avatar" style="background: linear-gradient(135deg, #A4D233, #3FA9F5);">S</div>
           <div class="meta">
@@ -1399,9 +1407,9 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           <span>💬 17 svar</span>
           <span>↗ Del</span>
         </div>
-      </article>
+      </a>
 
-      <article class="post-card">
+      <a href="/grupper" class="post-card">
         <div class="post-head">
           <div class="avatar" style="background: linear-gradient(135deg, #F7C72E, #F5A8B8);">K</div>
           <div class="meta">
@@ -1415,9 +1423,9 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           <span>💬 22 svar</span>
           <span>↗ Del</span>
         </div>
-      </article>
+      </a>
 
-      <article class="post-card">
+      <a href="/grupper" class="post-card">
         <div class="post-head">
           <div class="avatar" style="background: linear-gradient(135deg, #3FA9F5, #C8E4F4); color: var(--ink);">M</div>
           <div class="meta">
@@ -1431,7 +1439,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           <span>💬 14 svar</span>
           <span>↗ Del</span>
         </div>
-      </article>
+      </a>
     </div>
   </section>
 
@@ -1443,68 +1451,37 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     </div>
 
     <div class="groups-grid">
-      <article class="group-card">
+      <a href="/grupper" class="group-card">
         <div class="cover">3–6</div>
         <div class="body">
           <h4>3–6 år</h4>
           <p class="meta">98 medlemmer · 24 aktive i dag</p>
         </div>
-      </article>
+      </a>
 
-      <article class="group-card">
+      <a href="/grupper" class="group-card">
         <div class="cover">6–9</div>
         <div class="body">
           <h4>6–9 år</h4>
           <p class="meta">64 medlemmer · 18 aktive i dag</p>
         </div>
-      </article>
+      </a>
 
-      <article class="group-card">
+      <a href="/grupper" class="group-card">
         <div class="cover">9–12</div>
         <div class="body">
           <h4>9–12 år</h4>
           <p class="meta">37 medlemmer · 9 aktive i dag</p>
         </div>
-      </article>
+      </a>
 
-      <article class="group-card">
+      <a href="/grupper" class="group-card">
         <div class="cover">Hjem</div>
         <div class="body">
           <h4>Montessori hjemme</h4>
           <p class="meta">142 medlemmer · 31 aktive i dag</p>
         </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- Kommende live -->
-  <section class="events-section">
-    <h2>Kommende <em>live-samlinger</em></h2>
-
-    <div class="events-grid">
-      <article class="event-tile">
-        <p class="date">20</p>
-        <p class="month">MAI · ONS 19:00</p>
-        <h4>Vårens små venner</h4>
-        <p>Mia & Teo Live med Renate</p>
-        <a href="/help/book-call" class="btn-sm">Sett av tid →</a>
-      </article>
-
-      <article class="event-tile">
-        <p class="date">04</p>
-        <p class="month">JUN · TIR 20:00</p>
-        <h4>Spørretime 3–6</h4>
-        <p>Praktiske spørsmål, ekte svar</p>
-        <a href="/help/book-call" class="btn-sm">Sett av tid →</a>
-      </article>
-
-      <article class="event-tile">
-        <p class="date">18</p>
-        <p class="month">JUN · ONS 19:00</p>
-        <h4>Sommer-prosjektet</h4>
-        <p>30 dagers utendørs Montessori</p>
-        <a href="/help/book-call" class="btn-sm">Sett av tid →</a>
-      </article>
+      </a>
     </div>
   </section>
 
