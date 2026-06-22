@@ -99,12 +99,15 @@
       ".lme-comment .c-name a{color:#E91E89;text-decoration:none;}",
       ".lme-comment .c-text{font-size:14px;line-height:1.45;white-space:pre-wrap;word-wrap:break-word;}",
       ".lme-comment .c-del{font-size:11px;color:#b6a0a9;background:none;border:0;cursor:pointer;font-family:inherit;margin-top:2px;}",
-      ".lme-reply-form{display:flex;gap:8px;margin-top:8px;}",
-      ".lme-reply-form input{flex:1;border:1px solid #eedce2;border-radius:999px;padding:9px 14px;font-family:inherit;font-size:14px;}",
-      ".lme-reply-form input:focus{outline:none;border-color:#E91E89;}",
-      ".lme-reply-form button[type=submit]{background:#E91E89;color:#fff;border:0;border-radius:999px;padding:9px 16px;font-weight:700;font-family:inherit;cursor:pointer;font-size:13.5px;}",
-      ".lme-reply-img{background:#fff;border:1px solid #eedce2;border-radius:50%;width:36px;height:36px;font-size:16px;cursor:pointer;flex:none;padding:0;line-height:1;}",
-      ".lme-reply-img:hover{background:#FCEFF2;}",
+      ".lme-reply-form{display:flex;flex-direction:column;gap:6px;margin-top:8px;}",
+      ".lme-reply-tools{display:flex;gap:5px;}",
+      ".lme-reply-tool{background:#fff;border:1px solid #eedce2;border-radius:50%;width:32px;height:32px;font-size:15px;cursor:pointer;flex:none;padding:0;line-height:1;}",
+      ".lme-reply-tool:hover{background:#FCEFF2;}",
+      ".lme-reply-tool.rec{background:#E91E89;border-color:#E91E89;}",
+      ".lme-reply-row{display:flex;gap:8px;}",
+      ".lme-reply-row input{flex:1;border:1px solid #eedce2;border-radius:999px;padding:9px 14px;font-family:inherit;font-size:14px;}",
+      ".lme-reply-row input:focus{outline:none;border-color:#E91E89;}",
+      ".lme-reply-row button[type=submit]{background:#E91E89;color:#fff;border:0;border-radius:999px;padding:9px 16px;font-weight:700;font-family:inherit;cursor:pointer;font-size:13.5px;}",
     ].join("");
     var st = document.createElement("style");
     st.textContent = css;
@@ -356,10 +359,20 @@
       '</div>' +
       '<div class="lme-comments" data-role="comments"></div>' +
       '<form class="lme-reply-form" data-role="replyform">' +
-        '<button type="button" class="lme-reply-img" data-role="replyimg" title="' + esc(t("Bilde", "Image")) + '">🖼️</button>' +
-        '<input type="text" autocomplete="off" maxlength="1000" placeholder="' + esc(t("Skriv en kommentar…", "Write a comment…")) + '">' +
-        '<button type="submit">' + esc(t("Svar", "Reply")) + '</button>' +
-        '<input type="file" accept="image/*" data-role="replyfile" hidden>' +
+        '<div class="lme-reply-tools">' +
+          '<button type="button" class="lme-reply-tool" data-role="r-emoji" title="Emoji">😊</button>' +
+          '<button type="button" class="lme-reply-tool" data-role="r-camera" title="' + esc(t("Kamera", "Camera")) + '">📷</button>' +
+          '<button type="button" class="lme-reply-tool" data-role="r-image" title="' + esc(t("Bilde", "Image")) + '">🖼️</button>' +
+          '<button type="button" class="lme-reply-tool" data-role="r-file" title="' + esc(t("Fil", "File")) + '">📎</button>' +
+          '<button type="button" class="lme-reply-tool" data-role="r-mic" title="' + esc(t("Lyd", "Audio")) + '">🎤</button>' +
+        '</div>' +
+        '<div class="lme-reply-row">' +
+          '<input type="text" autocomplete="off" maxlength="1000" placeholder="' + esc(t("Skriv en kommentar…", "Write a comment…")) + '">' +
+          '<button type="submit">' + esc(t("Svar", "Reply")) + '</button>' +
+        '</div>' +
+        '<input type="file" accept="image/*" data-role="r-imagefile" hidden>' +
+        '<input type="file" accept="image/*" capture="environment" data-role="r-camerafile" hidden>' +
+        '<input type="file" data-role="r-anyfile" hidden>' +
       '</form>';
 
     var reactRow = card.querySelector('[data-role="react"]');
@@ -376,16 +389,28 @@
     renderReplies(comments, m);
     countEl.textContent = (m.replies ? m.replies.length : 0);
     var rf = card.querySelector('[data-role="replyform"]');
+    var rInput = rf.querySelector('input[type="text"]');
     rf.addEventListener("submit", function (e) {
       e.preventDefault();
-      var inp = rf.querySelector('input[type="text"]'); var txt = (inp.value || "").trim();
-      if (!txt) return; inp.value = "";
+      var txt = (rInput.value || "").trim();
+      if (!txt) return; rInput.value = "";
       postReply(m.id, txt, null, comments);
     });
-    var rImgBtn = rf.querySelector('[data-role="replyimg"]');
-    var rFile = rf.querySelector('[data-role="replyfile"]');
-    rImgBtn.addEventListener("click", function () { rFile.click(); });
-    rFile.addEventListener("change", function () { if (this.files[0]) sendReplyImage(m.id, this.files[0], comments); this.value = ""; });
+    rf.querySelector('[data-role="r-emoji"]').addEventListener("click", function () {
+      openPop(this, COMPOSE_EMOJI, false, function (em) { rInput.value += em; rInput.focus(); });
+    });
+    var rImg = rf.querySelector('[data-role="r-imagefile"]');
+    var rCam = rf.querySelector('[data-role="r-camerafile"]');
+    var rAny = rf.querySelector('[data-role="r-anyfile"]');
+    rf.querySelector('[data-role="r-image"]').addEventListener("click", function () { rImg.click(); });
+    rf.querySelector('[data-role="r-camera"]').addEventListener("click", function () { rCam.click(); });
+    rf.querySelector('[data-role="r-file"]').addEventListener("click", function () { rAny.click(); });
+    rImg.addEventListener("change", function () { if (this.files[0]) sendReplyMedia(m.id, this.files[0], comments); this.value = ""; });
+    rCam.addEventListener("change", function () { if (this.files[0]) sendReplyMedia(m.id, this.files[0], comments); this.value = ""; });
+    rAny.addEventListener("change", function () { if (this.files[0]) sendReplyMedia(m.id, this.files[0], comments); this.value = ""; });
+    rf.querySelector('[data-role="r-mic"]').addEventListener("click", function () {
+      var b = this; toggleMic(b, function (blob, name, type) { uploadReply(m.id, blob, name, type, comments); });
+    });
 
     rendered[m.id] = { el: card, row: reactRow, commentsEl: comments, countEl: countEl, count: (m.replies ? m.replies.length : 0), msg: m };
     return card;
@@ -414,18 +439,18 @@
       .catch(function () { note(t("Klarte ikke å kommentere.", "Couldn't comment.")); });
   }
 
-  function sendReplyImage(postId, file, commentsEl) {
+  function uploadReply(postId, blob, name, type, commentsEl) {
     commentsEl.classList.add("open");
     note(t("Laster opp…", "Uploading…"));
-    var go = function (blob, name, type) {
-      uploadBlob(blob, name, type).then(function (j) {
-        if (j && j.ok && j.file) { note(""); postReply(postId, "", { url: j.file.url, type: j.file.type, name: j.file.name, kind: j.file.kind }, commentsEl); }
-        else if (j && j.error === "too_large") note(t("Bildet er for stort (maks 5 MB).", "Image too large (max 5 MB)."));
-        else note(t("Klarte ikke å laste opp.", "Upload failed."));
-      }).catch(function () { note(t("Klarte ikke å laste opp.", "Upload failed.")); });
-    };
-    if (/^image\//.test(file.type)) compressImage(file).then(function (b) { go(b, (file.name || "bilde").replace(/\.\w+$/, "") + ".jpg", "image/jpeg"); });
-    else go(file, file.name || "fil", file.type || "application/octet-stream");
+    uploadBlob(blob, name, type).then(function (j) {
+      if (j && j.ok && j.file) { note(""); postReply(postId, "", { url: j.file.url, type: j.file.type, name: j.file.name, kind: j.file.kind }, commentsEl); }
+      else if (j && j.error === "too_large") note(t("Filen er for stor (maks 5 MB).", "File too large (max 5 MB)."));
+      else note(t("Klarte ikke å laste opp.", "Upload failed."));
+    }).catch(function () { note(t("Klarte ikke å laste opp.", "Upload failed.")); });
+  }
+  function sendReplyMedia(postId, file, commentsEl) {
+    if (/^image\//.test(file.type)) compressImage(file).then(function (b) { uploadReply(postId, b, (file.name || "bilde").replace(/\.\w+$/, "") + ".jpg", "image/jpeg", commentsEl); });
+    else { if (file.size > 5 * 1024 * 1024) { note(t("Filen er for stor (maks 5 MB).", "File too large (max 5 MB).")); return; } uploadReply(postId, file, file.name || "fil", file.type || "application/octet-stream", commentsEl); }
   }
 
   function deleteReply(postId, replyId) {
@@ -639,7 +664,7 @@
   }
 
   /* ---------- Mikrofon ---------- */
-  function toggleMic(btn) {
+  function toggleMic(btn, onResult) {
     if (mediaRecorder && mediaRecorder.state === "recording") { mediaRecorder.stop(); return; }
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === "undefined") {
       note(t("Lydopptak støttes ikke her.", "Audio recording not supported here.")); return;
@@ -654,7 +679,7 @@
         var type = (recChunks[0] && recChunks[0].type) || "audio/webm";
         var blob = new Blob(recChunks, { type: type });
         mediaRecorder = null;
-        if (blob.size) sendFileLike(blob, "lydmelding." + (type.indexOf("ogg") >= 0 ? "ogg" : "webm"), type);
+        if (blob.size) (onResult || sendFileLike)(blob, "lydmelding." + (type.indexOf("ogg") >= 0 ? "ogg" : "webm"), type);
       };
       mediaRecorder.start();
       btn.classList.add("rec");
