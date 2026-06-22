@@ -74,6 +74,13 @@
       ".lme-react-chip{font-size:12.5px;background:#fff;border:1px solid #f3dce6;border-radius:999px;padding:1px 8px;cursor:pointer;}",
       ".lme-react-chip.mine{background:#FCE3EC;border-color:#E91E89;}",
       ".lme-tool.on{background:#E91E89;border-color:#E91E89;}",
+      ".lme-notifs{margin-bottom:10px;}",
+      ".lme-notifs .nbox{background:#fff;border:1px solid #F3D98B;border-radius:14px;padding:12px 14px;box-shadow:0 6px 18px rgba(180,120,140,.1);}",
+      ".lme-notifs .nhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}",
+      ".lme-notifs .nhead b{font-size:13.5px;color:#b8860b;}",
+      ".lme-notifs .nread{font-size:12px;color:#9a7b85;background:none;border:0;cursor:pointer;font-family:inherit;text-decoration:underline;}",
+      ".lme-notifs .nitem{display:block;font-size:13.5px;color:#2a1e2e;text-decoration:none;padding:4px 0;border-top:1px solid #f6ecd6;}",
+      ".lme-notifs .nitem:hover{color:#E91E89;}",
       ".lme-pinned{margin-bottom:10px;}",
       ".lme-pinned .pin{display:flex;gap:9px;align-items:flex-start;background:linear-gradient(135deg,#FFF6DA,#FDE7E0);border:1px solid #F3D98B;border-radius:14px;padding:11px 14px;}",
       ".lme-pinned .pin .ico{font-size:18px;line-height:1.3;}",
@@ -200,6 +207,7 @@
       root.classList.add("lme-feed");
       root.innerHTML =
         '<div class="lme-chat-wrap">' +
+          '<div class="lme-notifs" id="lme-notifs"></div>' +
           '<div class="lme-pinned" id="lme-pinned"></div>' +
           '<div class="lme-feed-composer">' + composerHtml() + '</div>' +
           '<input type="text" id="lme-feed-search" class="lme-feed-search" placeholder="' + esc(t("Søk i innlegg…", "Search posts…")) + '">' +
@@ -212,6 +220,7 @@
     } else {
       root.innerHTML =
         '<div class="lme-chat-wrap">' +
+          '<div class="lme-notifs" id="lme-notifs"></div>' +
           '<div class="lme-pinned" id="lme-pinned"></div>' +
           '<div class="lme-chat-stream" id="lme-chat-stream">' +
             '<div class="lme-chat-empty" id="lme-chat-empty">' +
@@ -616,6 +625,36 @@
       .catch(function () { note(t("Klarte ikke å slette.", "Couldn't delete.")); poll(); });
   }
 
+  /* ---------- Varsler ---------- */
+  function timeAgo(ts) {
+    var s = Math.floor((Date.now() - ts) / 1000);
+    if (s < 60) return t("nå", "now");
+    if (s < 3600) return Math.floor(s / 60) + t(" min", "m");
+    if (s < 86400) return Math.floor(s / 3600) + t(" t", "h");
+    return Math.floor(s / 86400) + t(" d", "d");
+  }
+  function loadNotifs() {
+    var box = document.getElementById("lme-notifs");
+    if (!box) return;
+    fetch("/api/group/notifs", { credentials: "same-origin" })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        var unread = (d && d.notifs || []).filter(function (n) { return !n.read; });
+        if (!unread.length) { box.innerHTML = ""; return; }
+        box.innerHTML =
+          '<div class="nbox"><div class="nhead"><b>🔔 ' + unread.length + " " +
+          esc(t(unread.length === 1 ? "nytt varsel" : "nye varsler", unread.length === 1 ? "new notification" : "new notifications")) +
+          '</b><button class="nread" id="lme-nread">' + esc(t("Marker som lest", "Mark as read")) + "</button></div>" +
+          unread.slice(0, 6).map(function (n) {
+            return '<a class="nitem" href="' + esc(n.link || "#") + '">' + esc(n.text) + ' <span style="color:#b6a0a9">· ' + esc(timeAgo(n.ts)) + "</span></a>";
+          }).join("") + "</div>";
+        document.getElementById("lme-nread").addEventListener("click", function () {
+          fetch("/api/group/notifs/read", { method: "POST", credentials: "same-origin" }).then(function () { box.innerHTML = ""; });
+        });
+      })
+      .catch(function () {});
+  }
+
   /* ---------- Henting ---------- */
   function poll() {
     fetch("/api/group/" + GID + "/messages", { credentials: "same-origin" })
@@ -793,6 +832,8 @@
       }
       renderShell();
       if (window.LME_CHAT_LIVE) startLive(); else startPolling();
+      loadNotifs(); setInterval(loadNotifs, 30000);
+      window.addEventListener("lme-lang", loadNotifs);
     })
     .catch(function () { renderGate({ loggedIn: false }); });
 })();

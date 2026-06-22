@@ -166,6 +166,35 @@ async function resolveRoom(context, id) {
   return { allowed: false, user: u, kind: null };
 }
 
+/* ---------- Varsler ---------- */
+function roomLink(id) { return GROUPS[id] ? "/grupper/" + id : "/meldinger?c=" + id; }
+async function addNotif(env, email, n) {
+  if (!email) return;
+  const key = "notif:" + email.toLowerCase();
+  let arr = [];
+  const raw = await env.BUILDER_KV.get(key);
+  if (raw) { try { arr = JSON.parse(raw) || []; } catch (e) {} }
+  arr.unshift(Object.assign({ id: crypto.randomUUID(), ts: Date.now(), read: false }, n));
+  while (arr.length > 50) arr.pop();
+  await env.BUILDER_KV.put(key, JSON.stringify(arr));
+}
+async function notifyMentions(env, text, fromEmail, fromName, link) {
+  if (!text || text.indexOf("@") < 0) return;
+  const low = text.toLowerCase();
+  const list = await env.BUILDER_KV.list({ prefix: "user:" });
+  for (const k of list.keys) {
+    const raw = await env.BUILDER_KV.get(k.name);
+    let u; try { u = JSON.parse(raw); } catch (e) { continue; }
+    if (!u || !u.id || u.email === fromEmail) continue;
+    const name = (u.name || "").trim();
+    if (!name || name.length < 2) continue;
+    if (low.indexOf("@" + name.toLowerCase()) === -1) continue;
+    const mem = await getMembership(env, u.email);
+    if (!isMember(u, mem)) continue;
+    await addNotif(env, u.email, { type: "mention", text: fromName + " nevnte deg", link: link });
+  }
+}
+
 export async function onRequestGet(context) {
   const { params, env, request } = context;
   const parts = [].concat(params.path || []);
@@ -193,6 +222,18 @@ export async function onRequestGet(context) {
       titleA = other ? (other.name || otherEmail.split("@")[0]) : "Samtale";
     }
     return json({ loggedIn: true, member: r.allowed, name: r.user.name || null, email: r.user.email, owner: isOwner(r.user), uid: r.user.id, title: titleA, kind: r.kind, feed: !!GROUPS[parts[0]] || !!(r.conv && r.conv.type === "group") });
+  }
+
+  // /api/group/notifs  -> mine varsler
+  if (parts.length === 1 && parts[0] === "notifs") {
+    const sess = await sessionFrom(context);
+    const me = sess ? await getUser(env, sess.email) : null;
+    if (!me) return json({ notifs: [], unread: 0 });
+    let arr = [];
+    const raw = await env.BUILDER_KV.get("notif:" + me.email.toLowerCase());
+    if (raw) { try { arr = JSON.parse(raw) || []; } catch (e) {} }
+    const unread = arr.filter(function (n) { return !n.read; }).length;
+    return json({ notifs: arr.slice(0, 30), unread: unread });
   }
 
   // /api/group/directory  -> navn + uid paa medlemmer (for aa lage privat gruppe)
@@ -353,6 +394,19 @@ export async function onRequestPost(context) {
     return json({ ok: true, email: email, status: parts[1] === "grant" ? "active" : "canceled" });
   }
 
+  // /api/group/notifs/read  -> marker alle varsler som lest
+  if (parts.length === 2 && parts[0] === "notifs" && parts[1] === "read") {
+    const sess = await sessionFrom(context);
+    const me = sess ? await getUser(env, sess.email) : null;
+    if (!me) return json({ error: "forbidden" }, 403);
+    const key = "notif:" + me.email.toLowerCase();
+    const raw = await env.BUILDER_KV.get(key);
+    if (raw) {
+      try { const arr = JSON.parse(raw) || []; arr.forEach(function (n) { n.read = true; }); await env.BUILDER_KV.put(key, JSON.stringify(arr)); } catch (e) {}
+    }
+    return json({ ok: true });
+  }
+
   // /api/group/profile/save  -> oppdater egen profil
   if (parts.length === 2 && parts[0] === "profile" && parts[1] === "save") {
     const sess = await sessionFrom(context);
@@ -482,6 +536,8 @@ export async function onRequestPost(context) {
     while (post.replies.length > MAX_MESSAGES) post.replies.shift();
     await env.BUILDER_KV.put(chatKey(id), JSON.stringify(messages));
     if (r.kind === "conv" && r.conv) { r.conv.lastTs = reply.ts; await putConv(env, r.conv); }
+    if (post.u && post.u !== u.email) await addNotif(env, post.u, { type: "reply", text: reply.n + " kommenterte innlegget ditt", link: roomLink(id) });
+    await notifyMentions(env, text, u.email, reply.n, roomLink(id));
     return json({ ok: true, postId: postId, reply: reply });
   }
 
@@ -574,6 +630,7 @@ export async function onRequestPost(context) {
 
     // Hold samtaler oppdatert (for innboks-sortering)
     if (r.kind === "conv" && r.conv) { r.conv.lastTs = message.ts; await putConv(env, r.conv); }
+    await notifyMentions(env, text, u.email, message.n, roomLink(parts[0]));
 
     return json({ ok: true, message: message });
   }
