@@ -1,0 +1,25 @@
+name = "lme-chat"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+# Samme KV-namespace som resten av LME (BUILDER_KV).
+# Bytt ut id-en med den faktiske namespace-id-en (finnes i Cloudflare-
+# dashbordet under Workers & Pages > KV, eller med `wrangler kv namespace list`).
+[[kv_namespaces]]
+binding = "BUILDER_KV"
+id = "DIN_BUILDER_KV_NAMESPACE_ID"
+
+# Durable Object for hvert chat-rom.
+[[durable_objects.bindings]]
+name = "CHAT_ROOM"
+class_name = "ChatRoom"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["ChatRoom"]
+
+# Rut workeren paa samme domene som siden, slik at innloggings-cookien
+# (lme_sess) sendes med WebSocket-forespoerselen.
+[[routes]]
+pattern = "lmexplorers.com/api/chat-ws/*"
+zone_name = "lmexplorers.com"
