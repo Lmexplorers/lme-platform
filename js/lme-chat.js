@@ -24,6 +24,7 @@
   var announceMode = false;
   var latestAnn = null;
   var FEED = !!window.LME_CHAT_FEED;
+  var accessState = null;
 
   var COMPOSE_EMOJI = ["😊","😀","😍","🥰","😂","😉","😮","😢","😭","🙏","👍","👎","👏","🙌","💪","🌸","🌿","☀️","⭐","✨","❤️","🧡","💛","💚","💙","💜","🎉","🎈","📚","✏️","🖍️","🧩","🍎","🌈","🐛","🦋","🐌","🐞","🌷"];
   var REACTIONS = ["❤️","👍","😂","😮","😢","🙏"];
@@ -653,10 +654,23 @@
   }
 
   /* ---------- Oppstart ---------- */
+  /* Bytt sprog i farten: tegn chatten paa nytt naar siden bytter spraak. */
+  function relang() {
+    if (!root) return;
+    if (accessState && accessState.member) {
+      rendered = {}; latestAnn = null;
+      renderShell(); poll();
+    } else if (accessState) {
+      renderGate(accessState);
+    }
+  }
+  window.addEventListener("lme-lang", relang);
+
   injectCss();
   fetch("/api/group/" + GID + "/access", { credentials: "same-origin" })
     .then(function (r) { return r.json(); })
     .then(function (state) {
+      accessState = state || { loggedIn: false };
       if (!state || !state.member) { renderGate(state || {}); return; }
       meName = state.name || (state.email ? state.email.split("@")[0] : null);
       meEmail = state.email || null;

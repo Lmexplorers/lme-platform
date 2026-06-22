@@ -75,7 +75,7 @@
   window.LME_GROUP_ID = "3-6";
   window.LME_GROUP_NAME = "3–6 år";
 </script>
-<script src="/js/lme-chat.js?v=6" defer></script>
+<script src="/js/lme-chat.js?v=7" defer></script>
 <script>
 (function(){
   function apply(lang){
@@ -87,6 +87,7 @@
     var b=document.getElementById('lme-print-lang');
     if(b) b.textContent = (lang==='en') ? '🇳🇴 Norsk' : '🇬🇧 English';
     try{localStorage.setItem('lme_lang',lang);}catch(e){}
+    try{window.dispatchEvent(new Event('lme-lang'));}catch(e){}
   }
   var saved='no';try{saved=localStorage.getItem('lme_lang')||'no';}catch(e){}
   var btn=document.getElementById('lme-print-lang');
