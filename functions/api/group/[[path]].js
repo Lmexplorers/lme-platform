@@ -192,7 +192,7 @@ export async function onRequestGet(context) {
       const other = otherEmail ? await getUser(env, otherEmail) : null;
       titleA = other ? (other.name || otherEmail.split("@")[0]) : "Samtale";
     }
-    return json({ loggedIn: true, member: r.allowed, name: r.user.name || null, email: r.user.email, owner: isOwner(r.user), uid: r.user.id, title: titleA, kind: r.kind });
+    return json({ loggedIn: true, member: r.allowed, name: r.user.name || null, email: r.user.email, owner: isOwner(r.user), uid: r.user.id, title: titleA, kind: r.kind, feed: !!GROUPS[parts[0]] || !!(r.conv && r.conv.type === "group") });
   }
 
   // /api/group/directory  -> navn + uid paa medlemmer (for aa lage privat gruppe)

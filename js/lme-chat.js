@@ -57,8 +57,7 @@
       ".lme-att-audio{margin-top:6px;width:240px;max-width:60vw;}",
       ".lme-att-file{display:inline-flex;gap:7px;align-items:center;margin-top:6px;background:#fff;border:1px solid #eedce2;border-radius:10px;padding:8px 12px;text-decoration:none;color:#2a1e2e;font-size:14px;}",
       ".lme-msg-bubble{position:relative;}",
-      ".lme-msg-ctrls{position:absolute;top:-12px;display:none;gap:3px;}",
-      ".lme-msg .lme-msg-bubble:hover .lme-msg-ctrls{display:flex;}",
+      ".lme-msg-ctrls{position:absolute;top:-12px;display:flex;gap:3px;}",
       ".lme-msg.mine .lme-msg-ctrls{left:-8px;}",
       ".lme-msg:not(.mine) .lme-msg-ctrls{right:-8px;}",
       ".lme-ctrl-btn{font-size:12px;background:#fff;border:1px solid #f3dce6;border-radius:999px;width:24px;height:24px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;color:#9a7b85;}",
@@ -113,8 +112,9 @@
   }
 
   /* ---------- Popover ---------- */
+  var popOpenedAt = 0;
   function closePop() { if (curPop) { curPop.remove(); curPop = null; document.removeEventListener("click", outside, true); } }
-  function outside(e) { if (curPop && !curPop.contains(e.target)) closePop(); }
+  function outside(e) { if (curPop && !curPop.contains(e.target) && Date.now() - popOpenedAt > 350) closePop(); }
   function openPop(anchor, emojis, round, cb) {
     closePop();
     var p = document.createElement("div");
@@ -131,7 +131,7 @@
     var top = r.top - p.offsetHeight - 8;
     if (top < 8) top = r.bottom + 8;
     p.style.left = left + "px"; p.style.top = top + "px";
-    curPop = p;
+    curPop = p; popOpenedAt = Date.now();
     setTimeout(function () { document.addEventListener("click", outside, true); }, 0);
   }
 
@@ -699,6 +699,7 @@
     .then(function (state) {
       accessState = state || { loggedIn: false };
       if (!state || !state.member) { renderGate(state || {}); return; }
+      FEED = !!window.LME_CHAT_FEED || !!state.feed;
       meName = state.name || (state.email ? state.email.split("@")[0] : null);
       meEmail = state.email || null;
       meOwner = !!state.owner;
