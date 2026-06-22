@@ -116,7 +116,7 @@
   window.LME_GROUP_NAME = "Inner Circle";
   window.LME_CHAT_FEED = true;
 </script>
-<script src="/js/lme-chat.js?v=10" defer></script>
+<script src="/js/lme-chat.js?v=11" defer></script>
 <script>
 (function(){
   function apply(lang){
@@ -144,13 +144,20 @@
   function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
   function lang(){try{return localStorage.getItem('lme_lang')||'no';}catch(e){return 'no';}}
   function dateLabel(ts){try{return new Date(ts).toLocaleDateString(lang()==='en'?'en-GB':'nb-NO',{day:'numeric',month:'short'});}catch(e){return '';}}
+  function paint(anns, trans){
+    box.innerHTML=anns.map(function(m){var x=(trans&&trans[m.t])||m.t;return '<div class="side-news-item"><span class="d">'+esc(dateLabel(m.ts))+'</span><span class="x">'+esc(x)+'</span></div>';}).join('');
+  }
   function load(){
     fetch('/api/group/inner-circle/messages',{credentials:'same-origin'})
       .then(function(r){ if(r.status===403) throw 'forbidden'; return r.json(); })
       .then(function(d){
         var anns=((d&&d.messages)||[]).filter(function(m){return m.ann;}).sort(function(a,b){return b.ts-a.ts;}).slice(0,6);
         if(!anns.length){ box.innerHTML='<p class="side-empty">'+(lang()==='en'?'No news yet.':'Ingen nyheter ennå.')+'</p>'; return; }
-        box.innerHTML=anns.map(function(m){return '<div class="side-news-item"><span class="d">'+esc(dateLabel(m.ts))+'</span><span class="x">'+esc(m.t)+'</span></div>';}).join('');
+        paint(anns,null);
+        if(lang()==='en'){
+          fetch('/api/translate',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({texts:anns.map(function(a){return a.t;}),to:'en'})})
+            .then(function(r){return r.json();}).then(function(d2){ if(d2&&d2.translations) paint(anns,d2.translations); }).catch(function(){});
+        }
       })
       .catch(function(){ box.innerHTML='<p class="side-empty">'+(lang()==='en'?'Log in as a member to see news.':'Logg inn som medlem for å se nyheter.')+'</p>'; });
   }

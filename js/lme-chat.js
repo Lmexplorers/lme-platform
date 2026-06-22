@@ -25,12 +25,19 @@
   var latestAnn = null;
   var FEED = !!window.LME_CHAT_FEED;
   var accessState = null;
+  var transCache = {};
 
   var COMPOSE_EMOJI = ["😊","😀","😍","🥰","😂","😉","😮","😢","😭","🙏","👍","👎","👏","🙌","💪","🌸","🌿","☀️","⭐","✨","❤️","🧡","💛","💚","💙","💜","🎉","🎈","📚","✏️","🖍️","🧩","🍎","🌈","🐛","🦋","🐌","🐞","🌷"];
   var REACTIONS = ["❤️","👍","😂","😮","😢","🙏"];
 
   function esc(s) { var d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML; }
+  function escAttr(s) { return esc(s).replace(/"/g, "&quot;"); }
   function lang() { try { return localStorage.getItem("lme_lang") || "no"; } catch (e) { return "no"; } }
+  function dispNow(raw) { return (lang() === "en" && transCache[raw]) ? transCache[raw] : raw; }
+  function txHtml(raw, tag, cls) {
+    tag = tag || "span";
+    return "<" + tag + ' class="lme-tx ' + (cls || "") + '" data-orig="' + escAttr(raw) + '">' + esc(dispNow(raw)) + "</" + tag + ">";
+  }
   function t(no, en) { return lang() === "en" ? en : no; }
   function timeLabel(ts) {
     try { return new Date(ts).toLocaleTimeString(lang() === "en" ? "en-GB" : "nb-NO", { hour: "2-digit", minute: "2-digit" }); }
@@ -287,7 +294,7 @@
     bubble.innerHTML =
       (m.ann ? '<span class="lme-ann-tag">📢 ' + esc(t("NYHET", "NEWS")) + '</span>' : "") +
       nameHtml +
-      (m.t ? '<span class="lme-msg-text">' + esc(m.t) + '</span>' : "") +
+      (m.t ? txHtml(m.t, "span", "lme-msg-text") : "") +
       attachmentHtml(m.a) +
       '<span class="lme-msg-time">' + esc(timeLabel(m.ts)) + '</span>' +
       '<div class="lme-msg-ctrls">' +
@@ -327,7 +334,7 @@
       var nm = rp.uid ? '<a href="/medlem?u=' + encodeURIComponent(rp.uid) + '">' + esc(rp.n) + '</a>' : esc(rp.n);
       return '<div class="lme-comment">' + ava(rp.n, "c-ava") +
         '<div class="c-body"><span class="c-name">' + nm + '</span>' +
-        (rp.t ? '<div class="c-text">' + esc(rp.t) + '</div>' : "") +
+        (rp.t ? txHtml(rp.t, "div", "c-text") : "") +
         (rp.a ? attachmentHtml(rp.a) : "") +
         (canDel ? '<button class="c-del" data-rid="' + esc(rp.id) + '">' + esc(t("Slett", "Delete")) + '</button>' : "") +
         '</div></div>';
@@ -349,7 +356,7 @@
         '<div class="lme-post-meta">' + nameHtml +
         '<span class="lme-post-time">' + (m.ann ? "📢 " + esc(t("Nyhet", "News")) + " · " : "") + esc(timeLabel(m.ts)) + '</span></div>' +
       '</div>' +
-      (m.t ? '<div class="lme-post-text">' + esc(m.t) + '</div>' : "") +
+      (m.t ? txHtml(m.t, "div", "lme-post-text") : "") +
       attachmentHtml(m.a) +
       '<div class="lme-react-row" data-role="react"></div>' +
       '<div class="lme-post-actions">' +
@@ -433,6 +440,7 @@
             if (!rec.msg.replies.some(function (x) { return x.id === d.reply.id; })) rec.msg.replies.push(d.reply);
             renderReplies(rec.commentsEl, rec.msg);
             rec.count = rec.msg.replies.length; rec.countEl.textContent = rec.count;
+            scheduleTranslate();
           }
         } else { note(t("Klarte ikke å kommentere.", "Couldn't comment.")); }
       })
@@ -536,8 +544,38 @@
     if (!latestAnn) { pin.innerHTML = ""; return; }
     pin.innerHTML =
       '<div class="pin"><span class="ico">📢</span><span><span class="who">' +
-      esc(latestAnn.n) + " · " + esc(t("Nyhet", "News")) + '</span><span class="txt">' +
-      esc(latestAnn.t) + "</span></span></div>";
+      esc(latestAnn.n) + " · " + esc(t("Nyhet", "News")) + '</span>' +
+      txHtml(latestAnn.t, "span", "txt") + "</span></div>";
+    scheduleTranslate();
+  }
+
+  /* ---------- Auto-oversetting (engelsk modus) ---------- */
+  function applyLang() {
+    if (!root) return;
+    var en = lang() === "en";
+    var els = root.querySelectorAll("[data-orig]");
+    for (var i = 0; i < els.length; i++) {
+      var o = els[i].getAttribute("data-orig");
+      els[i].textContent = (en && transCache[o]) ? transCache[o] : o;
+    }
+  }
+  function scheduleTranslate() {
+    applyLang();
+    if (lang() !== "en" || !root) return;
+    var els = root.querySelectorAll("[data-orig]");
+    var set = {}, pending = [];
+    for (var i = 0; i < els.length; i++) {
+      var o = els[i].getAttribute("data-orig");
+      if (o && !transCache[o] && !set[o]) { set[o] = true; pending.push(o); }
+    }
+    if (!pending.length) return;
+    fetch("/api/translate", {
+      method: "POST", credentials: "same-origin",
+      headers: { "Content-Type": "application/json" }, body: JSON.stringify({ texts: pending, to: "en" }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) { if (d && d.translations) { Object.keys(d.translations).forEach(function (k) { transCache[k] = d.translations[k]; }); applyLang(); } })
+      .catch(function () {});
   }
 
   function removeRendered(id) {
