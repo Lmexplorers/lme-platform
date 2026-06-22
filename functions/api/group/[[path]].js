@@ -227,7 +227,24 @@ export async function onRequestGet(context) {
     const u = await getUser(env, email);
     if (!u) return json({ error: "not_found" }, 404);
     const mem = await getMembership(env, u.email);
-    return json({ uid: u.id, name: u.name || u.email.split("@")[0], member: isMember(u, mem), isSelf: u.email === me.email });
+    return json({
+      uid: u.id, name: u.name || u.email.split("@")[0], member: isMember(u, mem), isSelf: u.email === me.email,
+      bio: u.bio || "", location: u.location || "", kids: u.kids || "",
+      avatar: u.avatarTs ? ("/api/group/avatar/" + u.id + "?t=" + u.avatarTs) : null,
+    });
+  }
+
+  // /api/group/avatar/<uid>  -> profilbilde
+  if (parts.length === 2 && parts[0] === "avatar") {
+    const sess = await sessionFrom(context);
+    if (!sess) return new Response("forbidden", { status: 403 });
+    const raw = await env.BUILDER_KV.get("pavatar:" + parts[1]);
+    if (!raw) return new Response("not found", { status: 404 });
+    let f; try { f = JSON.parse(raw); } catch (e) { return new Response("error", { status: 500 }); }
+    const bin = atob(f.data);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new Response(bytes, { headers: { "Content-Type": f.type || "image/jpeg", "Cache-Control": "private, max-age=86400" } });
   }
 
   // /api/group/conv/list  -> mine private samtaler
@@ -334,6 +351,40 @@ export async function onRequestPost(context) {
     if (!email || !/.+@.+\..+/.test(email)) return json({ error: "bad_email" }, 400);
     await setMembership(env, email, parts[1] === "grant" ? "active" : "canceled");
     return json({ ok: true, email: email, status: parts[1] === "grant" ? "active" : "canceled" });
+  }
+
+  // /api/group/profile/save  -> oppdater egen profil
+  if (parts.length === 2 && parts[0] === "profile" && parts[1] === "save") {
+    const sess = await sessionFrom(context);
+    const me = sess ? await getUser(env, sess.email) : null;
+    if (!me) return json({ error: "forbidden" }, 403);
+    let body;
+    try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
+    if (typeof body.name === "string" && body.name.trim()) me.name = body.name.trim().slice(0, 80);
+    if (typeof body.bio === "string") me.bio = body.bio.trim().slice(0, 600);
+    if (typeof body.location === "string") me.location = body.location.trim().slice(0, 80);
+    if (typeof body.kids === "string") me.kids = body.kids.trim().slice(0, 120);
+    await env.BUILDER_KV.put("user:" + me.email, JSON.stringify(me));
+    await ensureUid(env, me);
+    return json({ ok: true });
+  }
+
+  // /api/group/profile/avatar  -> last opp profilbilde
+  if (parts.length === 2 && parts[0] === "profile" && parts[1] === "avatar") {
+    const sess = await sessionFrom(context);
+    const me = sess ? await getUser(env, sess.email) : null;
+    if (!me) return json({ error: "forbidden" }, 403);
+    let body;
+    try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
+    const data = (body.data || "").toString();
+    if (!data) return json({ error: "empty" }, 400);
+    if (data.length * 0.75 > 3 * 1024 * 1024) return json({ error: "too_large" }, 413);
+    const type = (body.type || "image/jpeg").toString().slice(0, 60);
+    await env.BUILDER_KV.put("pavatar:" + me.id, JSON.stringify({ type: type, data: data }));
+    me.avatarTs = Date.now();
+    await env.BUILDER_KV.put("user:" + me.email, JSON.stringify(me));
+    await ensureUid(env, me);
+    return json({ ok: true, avatar: "/api/group/avatar/" + me.id + "?t=" + me.avatarTs });
   }
 
   // /api/group/conv/dm   { withUid }  -> finn/opprett privat 1-til-1-samtale
