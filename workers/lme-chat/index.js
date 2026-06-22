@@ -36,14 +36,20 @@ function readCookies(request) {
   return out;
 }
 
-function isMember(u) {
-  if (!u) return false;
-  if (u.role === "owner") return true;
-  if (OWNER_EMAILS.indexOf((u.email || "").toLowerCase()) !== -1) return true;
-  const s = u.subscription;
+function activeStatus(s) {
   if (!s) return false;
   if (s.status && /cancel|inactive|expired|none/i.test(s.status)) return false;
   return true;
+}
+
+function isMember(u, membership) {
+  if (u) {
+    if (u.role === "owner") return true;
+    if (OWNER_EMAILS.indexOf((u.email || "").toLowerCase()) !== -1) return true;
+    if (activeStatus(u.subscription)) return true;
+  }
+  if (activeStatus(membership)) return true;
+  return false;
 }
 
 async function authedUser(request, env) {
@@ -55,7 +61,11 @@ async function authedUser(request, env) {
   try { sess = JSON.parse(sraw); } catch (e) { return null; }
   const uraw = await env.BUILDER_KV.get("user:" + (sess.email || "").toLowerCase());
   if (!uraw) return null;
-  try { return JSON.parse(uraw); } catch (e) { return null; }
+  let u;
+  try { u = JSON.parse(uraw); } catch (e) { return null; }
+  const mraw = await env.BUILDER_KV.get("member:" + (u.email || "").toLowerCase());
+  if (mraw) { try { u._membership = JSON.parse(mraw); } catch (e) {} }
+  return u;
 }
 
 export default {
@@ -71,7 +81,7 @@ export default {
     }
 
     const user = await authedUser(request, env);
-    if (!isMember(user)) return new Response("forbidden", { status: 403 });
+    if (!isMember(user, user && user._membership)) return new Response("forbidden", { status: 403 });
 
     const roomId = env.CHAT_ROOM.idFromName(id);
     const stub = env.CHAT_ROOM.get(roomId);

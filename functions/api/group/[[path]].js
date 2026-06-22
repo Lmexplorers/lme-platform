@@ -65,16 +65,29 @@ async function getUser(env, email) {
   try { return JSON.parse(raw); } catch (e) { return null; }
 }
 
-/* Medlemskap: eier eller et aktivt abonnement. Et hvilket som helst
-   abonnement-objekt regnes som medlem, saa betalende ikke laases ute. */
-function isMember(u) {
-  if (!u) return false;
-  if (u.role === "owner") return true;
-  if (OWNER_EMAILS.indexOf((u.email || "").toLowerCase()) !== -1) return true;
-  const s = u.subscription;
+function activeStatus(s) {
   if (!s) return false;
   if (s.status && /cancel|inactive|expired|none/i.test(s.status)) return false;
   return true;
+}
+
+/* Medlemskap: eier, et aktivt abonnement paa kontoen, eller et aktivt
+   medlemskap skrevet av Stripe-webhooken (member:<e-post>). */
+function isMember(u, membership) {
+  if (u) {
+    if (u.role === "owner") return true;
+    if (OWNER_EMAILS.indexOf((u.email || "").toLowerCase()) !== -1) return true;
+    if (activeStatus(u.subscription)) return true;
+  }
+  if (activeStatus(membership)) return true;
+  return false;
+}
+
+async function getMembership(env, email) {
+  if (!email) return null;
+  const raw = await env.BUILDER_KV.get("member:" + email.trim().toLowerCase());
+  if (!raw) return null;
+  try { return JSON.parse(raw); } catch (e) { return null; }
 }
 
 function chatKey(id) { return "gchat:" + id; }
@@ -96,7 +109,8 @@ export async function onRequestGet(context) {
     if (!sess) return json({ loggedIn: false, member: false });
     const u = await getUser(env, sess.email);
     if (!u) return json({ loggedIn: false, member: false });
-    return json({ loggedIn: true, member: isMember(u), name: u.name || null, email: u.email });
+    const membership = await getMembership(env, u.email);
+    return json({ loggedIn: true, member: isMember(u, membership), name: u.name || null, email: u.email });
   }
 
   // /api/group/<id>/messages
@@ -105,7 +119,8 @@ export async function onRequestGet(context) {
     if (!GROUPS[id]) return json({ error: "unknown_group" }, 404);
     const sess = await sessionFrom(context);
     const u = sess ? await getUser(env, sess.email) : null;
-    if (!isMember(u)) return json({ error: "forbidden", member: false }, 403);
+    const membership = u ? await getMembership(env, u.email) : null;
+    if (!isMember(u, membership)) return json({ error: "forbidden", member: false }, 403);
 
     let messages = await loadMessages(env, id);
     const after = Number(new URL(request.url).searchParams.get("after") || 0);
@@ -127,7 +142,8 @@ export async function onRequestPost(context) {
 
     const sess = await sessionFrom(context);
     const u = sess ? await getUser(env, sess.email) : null;
-    if (!isMember(u)) return json({ error: "forbidden", member: false }, 403);
+    const membership = u ? await getMembership(env, u.email) : null;
+    if (!isMember(u, membership)) return json({ error: "forbidden", member: false }, 403);
 
     let body;
     try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
