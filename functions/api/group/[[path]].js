@@ -22,6 +22,13 @@ const GROUPS = {
   "inner-circle": "Inner Circle",
 };
 
+// Eiere har alltid tilgang, selv om rollen i KV skulle vaere utdatert
+// (f.eks. registrert foer e-posten ble lagt til som eier).
+const OWNER_EMAILS = [
+  "renate@lmexplorers.com", "hei@lmexplorers.com", "hello@lmexplorers.com",
+  "support@lmexplorers.com", "renateshobby@hotmail.com",
+];
+
 const MAX_MESSAGES = 200;
 const MAX_LEN = 1000;
 
@@ -63,6 +70,7 @@ async function getUser(env, email) {
 function isMember(u) {
   if (!u) return false;
   if (u.role === "owner") return true;
+  if (OWNER_EMAILS.indexOf((u.email || "").toLowerCase()) !== -1) return true;
   const s = u.subscription;
   if (!s) return false;
   if (s.status && /cancel|inactive|expired|none/i.test(s.status)) return false;
