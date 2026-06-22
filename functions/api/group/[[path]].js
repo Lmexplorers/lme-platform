@@ -164,6 +164,25 @@ export async function onRequestGet(context) {
     return json({ members: members });
   }
 
+  // /api/group/<id>/file/<fid>  -> serverer opplastet fil/bilde/lyd (kun medlem)
+  if (parts.length === 3 && parts[1] === "file") {
+    const id = parts[0];
+    if (!GROUPS[id]) return new Response("unknown group", { status: 404 });
+    const sess = await sessionFrom(context);
+    const u = sess ? await getUser(env, sess.email) : null;
+    const membership = u ? await getMembership(env, u.email) : null;
+    if (!isMember(u, membership)) return new Response("forbidden", { status: 403 });
+    const raw = await env.BUILDER_KV.get("gfile:" + id + ":" + parts[2]);
+    if (!raw) return new Response("not found", { status: 404 });
+    let f; try { f = JSON.parse(raw); } catch (e) { return new Response("error", { status: 500 }); }
+    const bin = atob(f.data);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new Response(bytes, {
+      headers: { "Content-Type": f.type || "application/octet-stream", "Cache-Control": "private, max-age=86400" },
+    });
+  }
+
   // /api/group/<id>/messages
   if (parts.length === 2 && parts[1] === "messages") {
     const id = parts[0];
@@ -212,6 +231,61 @@ export async function onRequestPost(context) {
     return json({ ok: true, email: email, status: parts[1] === "grant" ? "active" : "canceled" });
   }
 
+  // /api/group/<id>/upload  -> lagre fil/bilde/lyd i KV, returner referanse
+  if (parts.length === 2 && parts[1] === "upload") {
+    const id = parts[0];
+    if (!GROUPS[id]) return json({ error: "unknown_group" }, 404);
+    const sess = await sessionFrom(context);
+    const u = sess ? await getUser(env, sess.email) : null;
+    const membership = u ? await getMembership(env, u.email) : null;
+    if (!isMember(u, membership)) return json({ error: "forbidden", member: false }, 403);
+
+    let body;
+    try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
+    const data = (body.data || "").toString();
+    if (!data) return json({ error: "empty" }, 400);
+    // base64-lengde * 0.75 ~ antall bytes. Tak paa ca 5 MB.
+    if (data.length * 0.75 > 5 * 1024 * 1024) return json({ error: "too_large" }, 413);
+    const type = (body.type || "application/octet-stream").toString().slice(0, 100);
+    const name = (body.name || "fil").toString().slice(0, 120);
+    const kind = type.indexOf("image/") === 0 ? "image" : type.indexOf("audio/") === 0 ? "audio" : "file";
+    const fid = crypto.randomUUID();
+    await env.BUILDER_KV.put(
+      "gfile:" + id + ":" + fid,
+      JSON.stringify({ name: name, type: type, data: data }),
+      { expirationTtl: 60 * 60 * 24 * 365 }
+    );
+    return json({ ok: true, file: { id: fid, url: "/api/group/" + id + "/file/" + fid, type: type, name: name, kind: kind } });
+  }
+
+  // /api/group/<id>/react  -> sla av/paa reaksjon paa en melding
+  if (parts.length === 2 && parts[1] === "react") {
+    const id = parts[0];
+    if (!GROUPS[id]) return json({ error: "unknown_group" }, 404);
+    const sess = await sessionFrom(context);
+    const u = sess ? await getUser(env, sess.email) : null;
+    const membership = u ? await getMembership(env, u.email) : null;
+    if (!isMember(u, membership)) return json({ error: "forbidden", member: false }, 403);
+
+    let body;
+    try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
+    const mid = (body.messageId || "").toString();
+    const emoji = (body.emoji || "").toString().slice(0, 8);
+    if (!mid || !emoji) return json({ error: "bad_request" }, 400);
+
+    const messages = await loadMessages(env, id);
+    const msg = messages.find((m) => m.id === mid);
+    if (!msg) return json({ error: "not_found" }, 404);
+    if (!msg.r) msg.r = {};
+    const who = u.email;
+    const list = msg.r[emoji] || [];
+    const i = list.indexOf(who);
+    if (i === -1) list.push(who); else list.splice(i, 1);
+    if (list.length) msg.r[emoji] = list; else delete msg.r[emoji];
+    await env.BUILDER_KV.put(chatKey(id), JSON.stringify(messages));
+    return json({ ok: true, reactions: msg.r });
+  }
+
   if (parts.length === 2 && parts[1] === "messages") {
     const id = parts[0];
     if (!GROUPS[id]) return json({ error: "unknown_group" }, 404);
@@ -224,7 +298,13 @@ export async function onRequestPost(context) {
     let body;
     try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
     let text = (body.text || "").toString().trim();
-    if (!text) return json({ error: "empty" }, 400);
+    const att = body.attachment && typeof body.attachment === "object" ? {
+      url: (body.attachment.url || "").toString().slice(0, 300),
+      type: (body.attachment.type || "").toString().slice(0, 100),
+      name: (body.attachment.name || "").toString().slice(0, 120),
+      kind: (body.attachment.kind || "file").toString().slice(0, 12),
+    } : null;
+    if (!text && !att) return json({ error: "empty" }, 400);
     if (text.length > MAX_LEN) text = text.slice(0, MAX_LEN);
 
     const message = {
@@ -234,6 +314,7 @@ export async function onRequestPost(context) {
       t: text,
       ts: Date.now(),
     };
+    if (att) message.a = att;
 
     const messages = await loadMessages(env, id);
     messages.push(message);
