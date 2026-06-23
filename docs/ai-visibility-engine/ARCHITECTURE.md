@@ -47,7 +47,7 @@ som medlemshjem. Bilingual norsk/engelsk Montessori-plattform.
 | Akademiet | `academy/` (intro, 3-6, 6-9, 9-12, forberedt-miljø, observasjon) | Kurs |
 | Biblioteket | `biblioteket.html`, `ressurser.html`, `favoritter.html` | Ressurser |
 | Butikk | `butikk.html` + `butikk/` | Digitale produkter/bøker |
-| Community (Inner Circle) | `community.html`, `grupper.html`, `medlemmer.html`, `wins.html`, `live.html`, `replays.html`, `spillplaner.html`, `partnere.html` | Fellesskap |
+| Community (Inner Circle) | `community.html`, `grupper.html`, `medlemmer.html`, `wins.html`, `live.html`, `replays.html`, `partnere.html` | Fellesskap |
 | Perks | `perks.html` | Medlemsfordeler |
 | Min konto / Oppgrader | `min-konto.html`, `oppgrader.html` | Konto & plan |
 | Hjelp | `help/` | Support, booking, kontakt |
@@ -77,7 +77,7 @@ som medlemshjem. Bilingual norsk/engelsk Montessori-plattform.
 - **Apper:** Creative Studio, Content Studio, LME Builder, Renate AI, Tripwire, Bookly, Skoledagbok, Learn Norwegian.
 - **Verktøy:** AI-generering (proxy), bokbygger, funnel-bygger.
 - **Medlemskap:** Start (299/$29), Proff (499/$49), Proff + Fellesskap (699/$69). 7 dager gratis prøve.
-- **Bibliotek:** kurs (Akademiet), ressurser/printables (Biblioteket), favoritter, spillplaner.
+- **Bibliotek:** kurs (Akademiet), ressurser/printables (Biblioteket), favoritter.
 - **Butikk:** Mia & Teo-bøker, skoledagbøker, arbeidsbøker, digitale Montessori-ressurser (registerdrevet).
 - **Community:** Inner Circle — grupper, medlemmer, wins, live-samlinger, replays.
 
