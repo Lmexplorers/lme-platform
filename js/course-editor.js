@@ -18,12 +18,16 @@
   var FLAGS = ["lme-edit", "lme-page-edit", "lme-course-edit"];
 
   // 1) Hent lagret innhold (offentlig) og bytt ut teksten hvis noe er lagret.
-  fetch("/api/course?id=" + encodeURIComponent(id))
-    .then(function (r) { return r.json(); })
-    .then(function (d) {
-      if (d && typeof d.html === "string" && d.html.trim()) sec.innerHTML = d.html;
-    })
-    .catch(function () {});
+  //    Hopp over hvis seksjonen er merket data-source-wins: da er kildekoden
+  //    (HTML-en) fasit, og en gammel lagret versjon skal ikke overstyre den.
+  if (!sec.hasAttribute("data-source-wins")) {
+    fetch("/api/course?id=" + encodeURIComponent(id))
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && typeof d.html === "string" && d.html.trim()) sec.innerHTML = d.html;
+      })
+      .catch(function () {});
+  }
 
   // 2) Bygg knapperaden (skjult som standard).
   var bar = document.createElement("div");
