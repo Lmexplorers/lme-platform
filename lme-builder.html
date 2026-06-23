@@ -1461,6 +1461,26 @@
   .canvas .cta-section p { font-size: calc(17px * var(--font-scale, 1)); }
   .canvas .features-header p, .canvas .pricing-header p { font-size: calc(16px * var(--font-scale, 1)); }
   .canvas .testimonials-header p { font-size: calc(15px * var(--font-scale, 1)); }
+
+  /* ---- LME Builder: mobil/nettbrett (stabler 3-kolonners arbeidsflate) ---- */
+  @media (max-width: 900px) {
+    html, body { height: auto; min-height: 100vh; overflow-y: auto; -webkit-text-size-adjust: 100%; }
+
+    .topbar { height: auto; flex-wrap: wrap; padding: 8px 12px; gap: 8px; position: sticky; top: 0; }
+    .topbar-center { order: 3; width: 100%; justify-content: center; }
+    .topbar-right { flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
+    .topbar-right .btn { padding: 7px 11px; font-size: 12px; }
+
+    .pages-bar { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    /* Stable kolonnene loddrett i stedet for 280px | 1fr | 320px */
+    .workspace { display: block; height: auto; }
+    .sidebar-left, .canvas-wrap, .sidebar-right { overflow: visible; }
+    .sidebar-left { border-right: none; border-bottom: 1px solid var(--line); }
+    .sidebar-left .sections-list { overflow: visible; }
+    .canvas-wrap { padding: 16px; }
+    .sidebar-right { border-left: none; border-top: 1px solid var(--line); }
+  }
 </style>
 </head>
 <body>
