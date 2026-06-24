@@ -32,6 +32,12 @@
           if (el.hasAttribute("data-no")) el.setAttribute("data-no", d.blocks[k]);
         }
       });
+      // Etter at lagret tekst er satt inn: kjor spraakvalget paa nytt, slik at
+      // forste visning i engelsk modus ikke faller tilbake til redigert (norsk) tekst.
+      try {
+        var lang = (localStorage.getItem("lme_lang") === "en") ? "en" : "no";
+        if (typeof window.switchLanguage === "function") window.switchLanguage(lang);
+      } catch (e) {}
     })
     .catch(function () {});
 
