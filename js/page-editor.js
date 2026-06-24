@@ -24,12 +24,17 @@
     .then(function (r) { return r.json(); })
     .then(function (d) {
       if (!d || !d.blocks) return;
+      var en = (d.blocksEn && typeof d.blocksEn === "object") ? d.blocksEn : {};
       nodes.forEach(function (el) {
         var k = el.getAttribute("data-edit");
         if (k && typeof d.blocks[k] === "string" && d.blocks[k].trim()) {
           el.innerHTML = d.blocks[k];
           // Hold språk-systemet i sync, så et språkbytte ikke overskriver redigert tekst.
           if (el.hasAttribute("data-no")) el.setAttribute("data-no", d.blocks[k]);
+          // Auto-oversatt engelsk fra serveren, så språkbytte viser riktig engelsk.
+          if (el.hasAttribute("data-no") && typeof en[k] === "string" && en[k].trim()) {
+            el.setAttribute("data-en", en[k]);
+          }
         }
       });
       // Etter at lagret tekst er satt inn: kjor spraakvalget paa nytt, slik at
@@ -117,7 +122,25 @@
     })
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        if (d && d.ok) { localStorage.setItem(FLAG, "1"); localStorage.setItem("lme-edit", "1"); toast("☁️ Lagret i skyen"); stopEdit(); }
+        if (d && d.ok) {
+          localStorage.setItem(FLAG, "1"); localStorage.setItem("lme-edit", "1");
+          // Server returnerer auto-oversatt engelsk: legg den inn med en gang,
+          // så et språkbytte viser riktig engelsk uten å laste siden på nytt.
+          var en = (d.en && typeof d.en === "object") ? d.en : {};
+          var any = false;
+          nodes.forEach(function (el) {
+            var k = el.getAttribute("data-edit");
+            if (k && el.hasAttribute("data-no") && typeof en[k] === "string" && en[k].trim()) {
+              el.setAttribute("data-en", en[k]); any = true;
+            }
+          });
+          try {
+            var lang = (localStorage.getItem("lme_lang") === "en") ? "en" : "no";
+            if (typeof window.switchLanguage === "function") window.switchLanguage(lang);
+          } catch (e) {}
+          toast(any ? "☁️ Lagret, engelsk laget automatisk" : "☁️ Lagret i skyen");
+          stopEdit();
+        }
         else if (d && d.error === "bad_password") { pw = null; alert("Feil passord. Prøv igjen."); resetSave(); }
         else { alert("Kunne ikke lagre: " + ((d && d.error) || "ukjent feil")); resetSave(); }
       })
