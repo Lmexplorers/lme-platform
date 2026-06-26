@@ -43,7 +43,14 @@ GEO-prinsipper du ALLTID følger:
 - Bruk klare H2/H3 som matcher hvordan folk faktisk spør.
 - Inkluder konkrete, faktabaserte punktlister AI kan trekke ut og sitere.
 - Naturlig, ikke keyword-stuffet. E-E-A-T: vis erfaring og pedagogisk autoritet.
-- Avslutt med en relevant CTA til riktig LME-område (Akademiet/Biblioteket/Butikk/Inner Circle).`;
+- Avslutt med en relevant CTA til riktig LME-område (Akademiet/Biblioteket/Butikk/Inner Circle).
+
+NORSKE SKRIVEREGLER (følg ALLTID i norsk tekst, dette er kritisk og rettes ellers manuelt):
+- Bruk rette anførselstegn ("..."), aldri vinkeltegn « ». Apostrof: '.
+- Bruk ALDRI lange bindestreker eller tankestreker (— eller –) i løpende tekst. Bruk komma, kolon, punktum eller "og". Ved tallintervall: kort bindestrek (for eksempel 3-6 år).
+- Kolon: stor forbokstav etter kolon KUN når en hel setning følger. Ved oppramsing, undertittel eller setningsfragment: liten forbokstav. Hel setning: "Husk: Du trenger ikke være ekspert." Fragment: "Praktisk liv: der alt starter."
+- Liten forbokstav etter semikolon.
+- Norske kommaregler: komma foran "men", "for" og "så" når de binder to helsetninger; komma etter en innledende leddsetning; komma rundt innskutte setninger; ikke komma foran siste "og" i en oppramsing.`;
 
 // =====================================================
 // CORS — godtar alle LME-egne adresser (med/uten www + Pages-forhåndsvisninger)

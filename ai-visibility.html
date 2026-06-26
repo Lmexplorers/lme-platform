@@ -455,10 +455,20 @@ async function runQuestions(){
 
 /* ---- Article ---- */
 let lastArticle=null;
+function cleanNo(x){ if(typeof x!=='string') return x; return x
+  .replace(/«|»/g,'"')
+  .replace(/(\d)\s*[–—]\s*(\d)/g,'$1-$2')
+  .replace(/ [–—] /g,', ')
+  .replace(/[–—]/g,'-'); }
+function cleanArticleNo(d){ if(!d||LANG==='en') return d;
+  ['seoTitle','metaDescription','h1','intro'].forEach(function(k){ if(d[k]) d[k]=cleanNo(d[k]); });
+  (d.sections||[]).forEach(function(s){ if(s.h2)s.h2=cleanNo(s.h2); if(s.body)s.body=cleanNo(s.body); });
+  (d.faq||[]).forEach(function(f){ if(f.q)f.q=cleanNo(f.q); if(f.a)f.a=cleanNo(f.a); });
+  if(d.cta&&d.cta.text) d.cta.text=cleanNo(d.cta.text); return d; }
 async function runArticle(){
   const keyword=document.getElementById('a-kw').value.trim();busy('a-btn',true);
   try{
-    const d=parseJSON(await api('/ai/article',{keyword}));lastArticle=d;
+    const d=parseJSON(await api('/ai/article',{keyword}));cleanArticleNo(d);lastArticle=d;
     let html=`<div class="card-out">
       <div class="meta-row"><b>SEO title:</b> ${d.seoTitle||''} ${copyBtn(d.seoTitle||'')}</div>
       <div class="meta-row"><b>Meta:</b> ${d.metaDescription||''}</div>
