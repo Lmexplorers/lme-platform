@@ -483,8 +483,8 @@ async function publishArticle(){
   try{
     const r=await api('/ai/publish',{article:lastArticle});
     st.innerHTML=r.published
-      ? `✅ ${LANG==='en'?'Published — deploying':'Publisert — deployes'} (/blog/${r.slug})`
-      : `⚠️ ${LANG==='en'?'Rendered, but GITHUB_TOKEN not set in worker':'Generert, men GITHUB_TOKEN er ikke satt i workeren'} (/blog/${r.slug})`;
+      ? `✅ ${LANG==='en'?'Published, deploying':'Publisert, deployes'} (/blog/${r.slug})`
+      : `⚠️ ${LANG==='en'?'Not published. GitHub status':'Ikke publisert. GitHub-status'}: ${r.githubStatus} (/blog/${r.slug})`;
   }catch(e){st.innerHTML=`<span style="color:var(--cerise)">${t('error')}</span>`;}
   finally{busy('pub-btn',false);}
 }
