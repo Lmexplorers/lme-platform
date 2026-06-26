@@ -93,6 +93,7 @@ export async function onRequestPost(context) {
       image: s(p.image, 500),
       date: s(p.date, 40) || new Date().toISOString().slice(0, 10),
       readMin: s(p.readMin, 10),
+      url: s(p.url, 500),
       bodyNo: s(p.bodyNo, 200000),
       bodyEn: s(p.bodyEn, 200000),
       updated: new Date().toISOString(),
@@ -105,7 +106,7 @@ export async function onRequestPost(context) {
     const meta = {
       id: post.id, titleNo: post.titleNo, titleEn: post.titleEn,
       excerptNo: post.excerptNo, excerptEn: post.excerptEn,
-      category: post.category, image: post.image, date: post.date, readMin: post.readMin,
+      category: post.category, image: post.image, date: post.date, readMin: post.readMin, url: post.url,
     };
     index = index.filter(function (x) { return x.id !== id; });
     index.unshift(meta);

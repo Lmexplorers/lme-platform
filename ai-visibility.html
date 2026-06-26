@@ -480,11 +480,20 @@ async function runArticle(){
 async function publishArticle(){
   if(!lastArticle) return;
   const st=document.getElementById('pub-status');busy('pub-btn',true);
+  const d=lastArticle;
   try{
-    const r=await api('/ai/publish',{article:lastArticle});
+    const r=await api('/ai/publish',{article:d});
+    // Legg artikkelen i blogg-oversikten (/blogg) og lenk til SEO-siden
+    let blogMsg='';
+    if(!window._blogPw){ window._blogPw=prompt(LANG==='en'?'Blog password (to list it on /blogg):':'Blogg-passord (for aa vise den i /blogg):')||''; }
+    if(window._blogPw){
+      const ex=(d.metaDescription||d.intro||'').replace(/<[^>]+>/g,'').slice(0,280);
+      const post={ id:d.slug, titleNo:d.h1||d.seoTitle||'', titleEn:d.h1||d.seoTitle||'', excerptNo:ex, excerptEn:ex, category:'Montessori hjemme', image:'/images/hero_learning_tree.webp', date:new Date().toISOString().slice(0,10), readMin:'5 min', url:'/blog/'+(d.slug||''), bodyNo:'<p>'+ex+'</p>', bodyEn:'<p>'+ex+'</p>' };
+      try{ const br=await fetch('/api/blog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'save',password:window._blogPw,post})}); const bj=await br.json(); if(bj&&bj.ok){ blogMsg=LANG==='en'?' + listed on /blogg':' + lagt i /blogg'; } else if(bj&&bj.error==='bad_password'){ window._blogPw=null; blogMsg=LANG==='en'?' (wrong blog password)':' (feil blogg-passord)'; } }catch(_){}
+    }
     st.innerHTML=r.published
-      ? `✅ ${LANG==='en'?'Published, deploying':'Publisert, deployes'} (/blog/${r.slug})`
-      : `⚠️ ${LANG==='en'?'Not published. GitHub status':'Ikke publisert. GitHub-status'}: ${r.githubStatus} (/blog/${r.slug})`;
+      ? `✅ ${LANG==='en'?'Published':'Publisert'} (/blog/${r.slug})${blogMsg}`
+      : `⚠️ GitHub-status: ${r.githubStatus} (/blog/${r.slug})${blogMsg}`;
   }catch(e){st.innerHTML=`<span style="color:var(--cerise)">${t('error')}</span>`;}
   finally{busy('pub-btn',false);}
 }

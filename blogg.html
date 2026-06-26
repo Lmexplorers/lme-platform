@@ -299,7 +299,7 @@
     var demoBadge = isDemo ? '<span class="badge-demo">'+(lang==='no'?'Eksempel':'Example')+'</span>' : '';
     var admin = !isDemo ? '<div class="admin"><button class="edit" type="button" data-id="'+esc(p.id)+'">'+(lang==='no'?'Rediger':'Edit')+
        '</button><button class="del" type="button" data-id="'+esc(p.id)+'">'+(lang==='no'?'Slett':'Delete')+'</button></div>' : '';
-    var href = isDemo ? 'javascript:void(0)' : '/blogg/les?id='+encodeURIComponent(p.id);
+    var href = isDemo ? 'javascript:void(0)' : (p.url || '/blogg/les?id='+encodeURIComponent(p.id));
     return '<a class="card" href="'+href+'">'+demoBadge+thumb+
       '<div class="body"><div class="kicker">'+esc(catOf(p))+'</div><h3>'+esc(pick(p,'title'))+
       '</h3><div class="excerpt">'+esc(pick(p,'excerpt'))+'</div><div class="meta">'+meta+'</div></div>'+admin+'</a>';
@@ -335,7 +335,7 @@
     if(activeCat==='__all__' && !query && visible.length){
       var f=visible[0]; rest=visible.slice(1);
       var fimg=f.image?'<div class="img" style="background-image:url(\''+esc(f.image)+'\')"></div>':'<div class="img"></div>';
-      var fhref=isDemo?'javascript:void(0)':'/blogg/les?id='+encodeURIComponent(f.id);
+      var fhref=isDemo?'javascript:void(0)':(f.url || '/blogg/les?id='+encodeURIComponent(f.id));
       fWrap.innerHTML='<div class="section-title">'+(lang==='no'?'Utvalgt':'Featured')+'</div>'+
         '<a class="featured" href="'+fhref+'">'+fimg+'<div class="fbody"><div class="kicker">'+esc(catOf(f))+
         '</div><h2>'+esc(pick(f,'title'))+'</h2><div class="excerpt">'+esc(pick(f,'excerpt'))+
