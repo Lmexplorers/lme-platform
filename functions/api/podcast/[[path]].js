@@ -1,32 +1,32 @@
 /**
  * LME Podkast, en helautomatisk podkast-serie som lager seg selv og
  * publiserer en ny episode hver dag. Innholdet handler om hele LME-systemet:
- * Montessori og pedagogikk, det forberedte miljoet, observasjon,
- * aldersgruppene (3-6, 6-9, 9-12), LME-boekene, LME-appene (Mia og Teo m.fl.),
- * Inner Circle, akademiet og verktoeyene.
+ * Montessori og pedagogikk, det forberedte miljøet, observasjon,
+ * aldersgruppene (3-6, 6-9, 9-12), LME-bøkene, LME-appene (Mia og Teo m.fl.),
+ * Inner Circle, akademiet og verktøyene.
  *
- * Slik henger det sammen (dette er hele "publiser paa alle plattformer"-magien):
+ * Slik henger det sammen (dette er hele "publiser på alle plattformer"-magien):
  * Apple Podcasts, Spotify, Amazon Music, YouTube Music, Pocket Casts osv. henter
  * ALLE episodene fra EN RSS-feed. Du melder feed-en inn EN gang per plattform
  * (se workers/lme-podcast/PODCAST-SETUP.md). Etter det dukker hver nye daglige
- * episode opp automatisk overalt, uten at noen maa loefte en finger.
+ * episode opp automatisk overalt, uten at noen må løfte en finger.
  *
- * Ruter (Pages [[path]]-fanger paa /api/podcast/*):
+ * Ruter (Pages [[path]]-fanger på /api/podcast/*):
  *   GET  /api/podcast/feed.xml            -> RSS 2.0 + iTunes-namespace (norsk)
  *   GET  /api/podcast/feed-en.xml         -> RSS 2.0 (engelsk)
  *   GET  /api/podcast/episodes            -> { episodes:[...], config:{...} }
  *   GET  /api/podcast/episode?id=<id>     -> { episode:{full...} | null }
- *   GET  /api/podcast/audio/<id>.mp3      -> lydfila (stoetter Range)
+ *   GET  /api/podcast/audio/<id>.mp3      -> lydfila (støtter Range)
  *   GET  /api/podcast/status              -> { count, lastDate, hasTts, nextTopic }
  *   POST /api/podcast/generate            { password, force?, date? } -> { ok, episode }
  *
  * Lagring i KV (BUILDER_KV):
- *   lme-podcast:index            -> JSON [ {meta...} ]  (nyeste foerst)
+ *   lme-podcast:index            -> JSON [ {meta...} ]  (nyeste først)
  *   lme-podcast:ep:<id>          -> JSON { full episode }
  *   lme-podcast:audio:<id>       -> raw MP3 (ArrayBuffer)
  *   lme-podcast:state            -> JSON { lastNum, lastDate, topicCursor }
  *
- * Ingen manuell liste: cron-workeren (eller knappen paa /podkast) kaller
+ * Ingen manuell liste: cron-workeren (eller knappen på /podkast) kaller
  * generate en gang om dagen, og serien skriver og stemmelegger seg selv.
  */
 
@@ -37,7 +37,7 @@ const AUDIO = "lme-podcast:audio:";
 const STATE = "lme-podcast:state";
 
 // Hvor mange lydfiler vi beholder i KV. Eldre episoder beholder tekst/visning,
-// men lydblobben ryddes vekk for aa spare plass. Feed-en viser de nyeste.
+// men lydblobben ryddes vekk for å spare plass. Feed-en viser de nyeste.
 const MAX_AUDIO = 90;
 const FEED_LIMIT = 200;
 
@@ -49,7 +49,7 @@ const SHOW = {
   author: "Renate Dahl",
   ownerName: "Renate Dahl",
   ownerEmail: "hei@lmexplorers.com",
-  descNo: "En liten daglig dose Montessori og pedagogikk fra Little Montessori Explorers. Korte, varme episoder om det forberedte miljoet, observasjon, aldersgruppene, LME-boekene og appene, Inner Circle og hele LME-systemet. Ny episode hver dag, helautomatisk.",
+  descNo: "En liten daglig dose Montessori og pedagogikk fra Little Montessori Explorers. Korte, varme episoder om det forberedte miljøet, observasjon, aldersgruppene, LME-bøkene og appene, Inner Circle og hele LME-systemet. Ny episode hver dag, helautomatisk.",
   descEn: "A small daily dose of Montessori and pedagogy from Little Montessori Explorers. Short, warm episodes about the prepared environment, observation, the age groups, the LME books and apps, Inner Circle and the whole LME system. A new episode every day, fully automated.",
   image: "https://lmexplorers.com/images/podkast-cover.png",
   language: "no",
@@ -60,31 +60,31 @@ const SHOW = {
 
 const CLAUDE_MODEL = "claude-sonnet-4-6";
 
-/* ---- Tema-bank: serien "lager seg selv" ved aa rotere gjennom disse ---- */
+/* ---- Tema-bank: serien "lager seg selv" ved å rotere gjennom disse ---- */
 /* Hver runde plukkes neste tema (topicCursor), og Claude skriver en hel
-   tospraaklig episode rundt vinkelen. Dekker hele LME-systemet. */
+   tospråklig episode rundt vinkelen. Dekker hele LME-systemet. */
 const TOPICS = [
-  { cat: "Montessori-prinsipper", no: "Foelg barnet", en: "Follow the child", angle: "hva 'foelg barnet' egentlig betyr i hverdagen, med et konkret eksempel" },
+  { cat: "Montessori-prinsipper", no: "Følg barnet", en: "Follow the child", angle: "hva 'følg barnet' egentlig betyr i hverdagen, med et konkret eksempel" },
   { cat: "Praktisk liv", no: "Helle vann og dekke bord", en: "Pouring water and setting the table", angle: "hvorfor praktiske hverdagsoppgaver bygger konsentrasjon og selvstendighet" },
-  { cat: "Forberedt miljoe", no: "Mindre er mer", en: "Less is more", angle: "hvordan et rolig, ryddig miljoe hjelper barnet aa velge og fokusere" },
-  { cat: "Observasjon", no: "Aa se uten aa gripe inn", en: "Watching without stepping in", angle: "kunsten aa observere, og hvorfor det er pedagogens viktigste verktoey" },
-  { cat: "Aldersgruppen 3-6", no: "De sensitive periodene", en: "The sensitive periods", angle: "hva som skjer i barnet fra 3 til 6 aar, og hvordan vi moeter det" },
-  { cat: "Aldersgruppen 6-9", no: "Den store fortellingen", en: "The great lessons", angle: "hvordan fantasi og store fortellinger aapner verden for 6-9-aaringen" },
-  { cat: "Aldersgruppen 9-12", no: "Going out", en: "Going out", angle: "hvordan barnet fra 9 til 12 trenger aa knytte laering til den virkelige verden" },
-  { cat: "LME-boekene", no: "Mia og Teo", en: "Mia and Teo", angle: "hvordan LME-boekene om Mia og Teo brukes til samtale og hoeytlesning" },
-  { cat: "LME-appene", no: "Laering gjennom lek i appen", en: "Learning through play in the app", angle: "hvordan LME-appene stoetter Montessori-prinsipper hjemme paa en skjermvennlig maate" },
-  { cat: "Inner Circle", no: "Et faellesskap av voksne", en: "A community of grown-ups", angle: "hva Inner Circle er, og hvorfor voksne trenger et faellesskap rundt oppdragelsen" },
+  { cat: "Forberedt miljø", no: "Mindre er mer", en: "Less is more", angle: "hvordan et rolig, ryddig miljø hjelper barnet å velge og fokusere" },
+  { cat: "Observasjon", no: "Å se uten å gripe inn", en: "Watching without stepping in", angle: "kunsten å observere, og hvorfor det er pedagogens viktigste verktøy" },
+  { cat: "Aldersgruppen 3-6", no: "De sensitive periodene", en: "The sensitive periods", angle: "hva som skjer i barnet fra 3 til 6 år, og hvordan vi møter det" },
+  { cat: "Aldersgruppen 6-9", no: "Den store fortellingen", en: "The great lessons", angle: "hvordan fantasi og store fortellinger åpner verden for 6-9-åringen" },
+  { cat: "Aldersgruppen 9-12", no: "Going out", en: "Going out", angle: "hvordan barnet fra 9 til 12 trenger å knytte læring til den virkelige verden" },
+  { cat: "LME-bøkene", no: "Mia og Teo", en: "Mia and Teo", angle: "hvordan LME-bøkene om Mia og Teo brukes til samtale og høytlesning" },
+  { cat: "LME-appene", no: "Læring gjennom lek i appen", en: "Learning through play in the app", angle: "hvordan LME-appene støtter Montessori-prinsipper hjemme på en skjermvennlig måte" },
+  { cat: "Inner Circle", no: "Et fellesskap av voksne", en: "A community of grown-ups", angle: "hva Inner Circle er, og hvorfor voksne trenger et fellesskap rundt oppdragelsen" },
   { cat: "Pedagogikk", no: "Frihet innenfor rammer", en: "Freedom within limits", angle: "balansen mellom frihet og tydelige rammer, og hvorfor begge trengs" },
-  { cat: "Foreldretips", no: "Den vanskelige morgenen", en: "The difficult morning", angle: "et konkret Montessori-grep for stressfrie morgener med smaa barn" },
-  { cat: "Forberedt miljoe", no: "Barnets hoeyde", en: "The child's height", angle: "hvorfor alt boer vaere tilgjengelig i barnets hoeyde, og enkle grep hjemme" },
-  { cat: "Praktisk liv", no: "Aa vente paa tur", en: "Waiting for your turn", angle: "hvordan ekte oppgaver laerer taalmodighet bedre enn formaninger" },
-  { cat: "Montessori-prinsipper", no: "Den absorberende hjernen", en: "The absorbent mind", angle: "hvordan smaa barn suger til seg omgivelsene, og hva det betyr for oss" },
-  { cat: "Observasjon", no: "Konsentrasjonens oeyeblikk", en: "The moment of concentration", angle: "hvordan vi kjenner igjen dyp konsentrasjon og verner om den" },
-  { cat: "LME-systemet", no: "Akademiet og verktoeyene", en: "The academy and the tools", angle: "hvordan LME-akademiet og verktoeyene henger sammen til en helhet" },
-  { cat: "Foreldretips", no: "Naar barnet sier nei", en: "When the child says no", angle: "et rolig, respektfullt svar paa trass, forklart med Montessori-blikk" },
+  { cat: "Foreldretips", no: "Den vanskelige morgenen", en: "The difficult morning", angle: "et konkret Montessori-grep for stressfrie morgener med små barn" },
+  { cat: "Forberedt miljø", no: "Barnets høyde", en: "The child's height", angle: "hvorfor alt bør være tilgjengelig i barnets høyde, og enkle grep hjemme" },
+  { cat: "Praktisk liv", no: "Å vente på tur", en: "Waiting for your turn", angle: "hvordan ekte oppgaver lærer tålmodighet bedre enn formaninger" },
+  { cat: "Montessori-prinsipper", no: "Den absorberende hjernen", en: "The absorbent mind", angle: "hvordan små barn suger til seg omgivelsene, og hva det betyr for oss" },
+  { cat: "Observasjon", no: "Konsentrasjonens øyeblikk", en: "The moment of concentration", angle: "hvordan vi kjenner igjen dyp konsentrasjon og verner om den" },
+  { cat: "LME-systemet", no: "Akademiet og verktøyene", en: "The academy and the tools", angle: "hvordan LME-akademiet og verktøyene henger sammen til en helhet" },
+  { cat: "Foreldretips", no: "Når barnet sier nei", en: "When the child says no", angle: "et rolig, respektfullt svar på trass, forklart med Montessori-blikk" },
 ];
 
-/* ---------------------------- smaa hjelpere ---------------------------- */
+/* ---------------------------- små hjelpere ---------------------------- */
 function json(data, status) {
   return new Response(JSON.stringify(data), {
     status: status || 200,
@@ -116,7 +116,7 @@ function isoDate(d) {
 }
 
 function estDuration(text) {
-  // Norsk hoeytlesning ~140 ord/min. Gir hh:mm:ss for itunes:duration.
+  // Norsk høytlesning ~140 ord/min. Gir hh:mm:ss for itunes:duration.
   const words = (text || "").trim().split(/\s+/).filter(Boolean).length;
   const secs = Math.max(60, Math.round((words / 140) * 60));
   const h = Math.floor(secs / 3600), m = Math.floor((secs % 3600) / 60), sec = secs % 60;
@@ -129,8 +129,8 @@ async function readJson(env, key, fallback) {
 }
 
 /* ----------------------------- TTS-lag ----------------------------- */
-/* Provider-agnostisk: ElevenLabs (best paa norsk) hvis satt, ellers OpenAI,
-   ellers ingen lyd (episoden lages likevel; /podkast leser den hoeyt i nettleseren
+/* Provider-agnostisk: ElevenLabs (best på norsk) hvis satt, ellers OpenAI,
+   ellers ingen lyd (episoden lages likevel; /podkast leser den høyt i nettleseren
    via tale-syntese, og feed-en hopper over enclosure for den episoden). */
 function ttsProvider(env) {
   if (env.ELEVENLABS_API_KEY && env.ELEVENLABS_VOICE_ID) return "elevenlabs";
@@ -224,7 +224,7 @@ function buildPrompt(topic, num) {
   return { sys, user };
 }
 
-// Escaper raa kontrolltegn (linjeskift, tab) som ligger INNI JSON-strenger.
+// Escaper rå kontrolltegn (linjeskift, tab) som ligger INNI JSON-strenger.
 // Modeller skriver ofte ekte linjeskift i manus-feltet, og det er ugyldig JSON.
 function escapeControlInsideStrings(t) {
   let out = "", inStr = false, prev = "";
@@ -247,11 +247,11 @@ function parseModelJson(txt) {
   // Fjern ev. kodeblokk-omslag.
   t = t.replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "").trim();
   try { return JSON.parse(t); } catch (e) {}
-  // Plukk ut foerste {...}-blokk.
+  // Plukk ut første {...}-blokk.
   const a = t.indexOf("{"), b = t.lastIndexOf("}");
   const cand = (a >= 0 && b > a) ? t.slice(a, b + 1) : t;
   try { return JSON.parse(cand); } catch (e) {}
-  // Siste forsoek: reparer raa linjeskift inni strenger.
+  // Siste forsøk: reparer rå linjeskift inni strenger.
   try { return JSON.parse(escapeControlInsideStrings(cand)); } catch (e) {}
   return null;
 }

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-no="Podkast | Little Montessori Explorers" data-en="Podcast | Little Montessori Explorers">Podkast | Little Montessori Explorers</title>
-<meta name="description" data-no="En daglig Montessori-podkast som lager seg selv. Korte, varme episoder om pedagogikk, det forberedte miljoet, boekene, appene og hele LME-systemet." data-en="A daily Montessori podcast that creates itself. Short, warm episodes about pedagogy, the prepared environment, the books, the apps and the whole LME system.">
+<meta name="description" data-no="En daglig Montessori-podkast som lager seg selv. Korte, varme episoder om pedagogikk, det forberedte miljøet, bøkene, appene og hele LME-systemet." data-en="A daily Montessori podcast that creates itself. Short, warm episodes about pedagogy, the prepared environment, the books, the apps and the whole LME system.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -156,7 +156,7 @@
     <div class="htext">
       <span class="tag" data-no="Ny episode hver dag" data-en="A new episode every day">Ny episode hver dag</span>
       <h1 data-no="LME Podkast" data-en="LME Podcast">LME Podkast</h1>
-      <p data-no="En liten daglig dose Montessori og pedagogikk. Korte, varme episoder om det forberedte miljoet, observasjon, aldersgruppene, boekene og appene, Inner Circle og hele LME-systemet. Serien skriver og leser seg selv, og publiseres automatisk paa alle plattformer."
+      <p data-no="En liten daglig dose Montessori og pedagogikk. Korte, varme episoder om det forberedte miljøet, observasjon, aldersgruppene, bøkene og appene, Inner Circle og hele LME-systemet. Serien skriver og leser seg selv, og publiseres automatisk på alle plattformer."
          data-en="A small daily dose of Montessori and pedagogy. Short, warm episodes about the prepared environment, observation, the age groups, the books and apps, Inner Circle and the whole LME system. The series writes and reads itself, and publishes automatically to all platforms.">En liten daglig dose Montessori og pedagogikk.</p>
     </div>
   </div>
@@ -177,13 +177,13 @@
   </div>
 
   <div class="info-note" id="infoNote" style="display:none"
-       data-no="Slik fungerer det: Alle podkast-apper henter episodene fra den samme feed-lenken. Meld den inn en gang per plattform, saa dukker hver ny daglig episode opp automatisk overalt."
+       data-no="Slik fungerer det: Alle podkast-apper henter episodene fra den samme feed-lenken. Meld den inn en gang per plattform, så dukker hver ny daglig episode opp automatisk overalt."
        data-en="How it works: every podcast app pulls episodes from the same feed link. Submit it once per platform, and each new daily episode appears automatically everywhere.">…</div>
 
   <!-- Eier: lag dagens episode -->
   <div class="owner-bar" id="ownerBar" style="scroll-margin-top:80px">
     <h3 data-no="Studio (kun for deg)" data-en="Studio (owner only)">Studio (kun for deg)</h3>
-    <p data-no="Serien lager en episode av seg selv hver dag. Du kan ogsaa lage dagens episode med en gang her."
+    <p data-no="Serien lager en episode av seg selv hver dag. Du kan også lage dagens episode med en gang her."
        data-en="The series creates an episode by itself every day. You can also generate today's episode right now.">…</p>
     <div class="row">
       <button class="btn btn-primary" id="genBtn" data-no="Lag dagens episode" data-en="Generate today's episode">Lag dagens episode</button>
@@ -197,10 +197,10 @@
     <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
   </div>
   <div class="empty" id="emptyState" style="display:none"
-       data-no="Ingen episoder enda. Den foerste lages snart, helt av seg selv."
+       data-no="Ingen episoder enda. Den første lages snart, helt av seg selv."
        data-en="No episodes yet. The first one will be created soon, all by itself.">…</div>
 
-  <footer data-no="Little Montessori Explorers · Laget med kjaerlighet av Renate"
+  <footer data-no="Little Montessori Explorers · Laget med kjærlighet av Renate"
           data-en="Little Montessori Explorers · Made with love by Renate">Little Montessori Explorers</footer>
 </div>
 
@@ -209,8 +209,8 @@
   var lang = (localStorage.getItem('lme-lang')==='en') ? 'en' : 'no';
   var episodes = [];
   var details = {};        // id -> full episode
-  var pw = null;
-  var currentAudio = null; // <audio> som spiller naa
+  var pw = (function(){ try{ return localStorage.getItem('lme-podcast-pw') || null; }catch(e){ return null; } })();
+  var currentAudio = null; // <audio> som spiller nå
 
   function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
   function pick(o,base){ return (lang==='no'? o[base+'No'] : o[base+'En']) || o[base+'No'] || o[base+'En'] || ''; }
@@ -295,14 +295,22 @@
       existing.play().catch(function(){});
       return;
     }
-    // Ingen lydfil: les manuset hoeyt i nettleseren.
+    // Ingen lydfil: les manuset høyt i nettleseren.
     getDetail(id).then(function(ep){
       if(!ep) return;
       stopCurrent();
       var text = lang==='no' ? ep.scriptNo : (ep.scriptEn||ep.scriptNo);
-      if(!window.speechSynthesis){ alert(lang==='no'?'Nettleseren stoetter ikke opplesing.':'Your browser does not support read-aloud.'); return; }
+      if(!window.speechSynthesis){ alert(lang==='no'?'Nettleseren støtter ikke opplesing.':'Your browser does not support read-aloud.'); return; }
       var u=new SpeechSynthesisUtterance(text);
-      u.lang = lang==='no'?'nb-NO':'en-GB'; u.rate=0.98;
+      u.lang = lang==='no'?'nb-NO':'en-GB'; u.rate=0.95; u.pitch=1;
+      // Velg en ekte norsk stemme hvis nettleseren har en (bedre uttale).
+      try{
+        var want = lang==='no' ? /^nb|^no/i : /^en/i;
+        var voices = window.speechSynthesis.getVoices()||[];
+        var nb = voices.filter(function(v){ return want.test(v.lang||''); });
+        var pref = nb.find(function(v){ return /naturlig|natural|premium|enhanced|nora|finn|google/i.test(v.name||''); }) || nb[0];
+        if(pref) u.voice=pref;
+      }catch(e){}
       window.speechSynthesis.speak(u);
     });
   }
@@ -330,7 +338,7 @@
     }).catch(function(){ episodes=[]; render(); });
   }
 
-  /* Spraakbytte */
+  /* Språkbytte */
   function switchLanguage(l){
     lang=l; document.documentElement.lang=l; try{localStorage.setItem('lme-lang',l);}catch(e){}
     applyStatic();
@@ -349,7 +357,7 @@
   });
 
   /* Eier-studio */
-  function ensurePw(){ if(pw)return pw; pw=prompt(lang==='no'?'Skriv inn passord:':'Enter password:'); return pw; }
+  function ensurePw(){ if(pw)return pw; pw=prompt(lang==='no'?'Skriv inn passord (lagres på denne enheten):':'Enter password (saved on this device):'); if(pw){ try{ localStorage.setItem('lme-podcast-pw', pw); }catch(e){} } return pw; }
   function generate(force){
     var p=ensurePw(); if(!p) return;
     var st=document.getElementById('ownerStatus');
@@ -364,7 +372,7 @@
         st.textContent = d.reused ? (lang==='no'?'Dagens episode finnes allerede.':"Today's episode already exists.")
                                   : (lang==='no'?'Ferdig! Ny episode lagt ut.':'Done! New episode published.');
         details={}; load();
-      } else if(d&&d.error==='bad_password'){ pw=null; st.textContent=lang==='no'?'Feil passord.':'Wrong password.'; }
+      } else if(d&&d.error==='bad_password'){ pw=null; try{localStorage.removeItem('lme-podcast-pw');}catch(e){} st.textContent=lang==='no'?'Feil passord, prøv igjen.':'Wrong password, try again.'; }
       else if(d&&d.error==='missing_anthropic_key'){ st.textContent=lang==='no'?'Mangler ANTHROPIC_API_KEY i innstillingene.':'Missing ANTHROPIC_API_KEY in settings.'; }
       else { st.textContent=(lang==='no'?'Kunne ikke lage episoden: ':'Could not generate: ')+((d&&(d.detail||d.error))||'?'); }
     }).catch(function(){ b1.disabled=false; b2.disabled=false; st.textContent=lang==='no'?'Nettverksfeil.':'Network error.'; });

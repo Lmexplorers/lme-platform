@@ -1,7 +1,7 @@
 # LME Podkast, en serie som lager seg selv og publiserer daglig
 
 Dette er en helautomatisk podkast. Hver dag skriver den et nytt manus om LME
-(Montessori, pedagogikk, det forberedte miljoet, aldersgruppene, boekene, appene,
+(Montessori, pedagogikk, det forberedte miljøet, aldersgruppene, bøkene, appene,
 Inner Circle og hele systemet), stemmelegger det, og legger det i en RSS-feed.
 Alle plattformer (Apple Podcasts, Spotify, Amazon Music, YouTube Music, Pocket
 Casts osv.) henter nye episoder fra den samme feed-en av seg selv.
@@ -18,21 +18,21 @@ Landingsside: `https://lmexplorers.com/podkast`
 ## Hva som allerede virker uten oppsett
 
 - Siden `/podkast` og API-et `/api/podcast/*` deployes med vanlig Pages-bygg.
-- Trykk "Lag dagens episode" paa `/podkast` (med passord) saa lages en episode
-  med en gang. Den vises paa siden og leses hoeyt i nettleseren.
+- Trykk "Lag dagens episode" på `/podkast` (med passord) så lages en episode
+  med en gang. Den vises på siden og leses høyt i nettleseren.
 
-To ting maa settes opp for at det skal bli en EKTE, daglig podkast paa
+To ting må settes opp for at det skal bli en EKTE, daglig podkast på
 plattformene: en **stemme (TTS)** og en **daglig cron**.
 
 ---
 
-## 1. Skru paa stemmen (TTS), kreves for plattformene
+## 1. Skru på stemmen (TTS), kreves for plattformene
 
 Plattformene trenger en lydfil per episode. Sett EN av disse i Pages-prosjektet
-(**Pages -> Settings -> Variables and Secrets**), saa stemmelegges hver episode
+(**Pages -> Settings -> Variables and Secrets**), så stemmelegges hver episode
 automatisk:
 
-**Alternativ A, ElevenLabs (best paa norsk):**
+**Alternativ A, ElevenLabs (best på norsk):**
 - `ELEVENLABS_API_KEY` = noekkelen din
 - `ELEVENLABS_VOICE_ID` = id-en til en norsk/flerspraaklig stemme
 - (valgfritt) `ELEVENLABS_MODEL_ID` = `eleven_multilingual_v2` (standard)
@@ -43,20 +43,20 @@ automatisk:
 - (valgfritt) `OPENAI_TTS_MODEL` = `gpt-4o-mini-tts` (standard)
 
 Uten noen av disse lages episodene fortsatt (manus + visning + opplesing i
-nettleseren), men de faar ingen lydfil og dukker derfor ikke opp paa Apple/Spotify.
+nettleseren), men de faar ingen lydfil og dukker derfor ikke opp på Apple/Spotify.
 
-`ANTHROPIC_API_KEY` brukes til aa skrive manuset og er allerede satt (samme
+`ANTHROPIC_API_KEY` brukes til å skrive manuset og er allerede satt (samme
 noekkel som Renate AI / LME Builder).
 
-Sett ogsaa et eget passord for generering (ellers brukes samme standard som
+Sett også et eget passord for generering (ellers brukes samme standard som
 kurs-redigering):
 - `PODCAST_PASSWORD` = et passord du velger
 
 ---
 
-## 2. Skru paa den daglige cron-en (workeren)
+## 2. Skru på den daglige cron-en (workeren)
 
-Pages-funksjoner kan ikke ha cron, saa den daglige utloeseren er en liten Worker
+Pages-funksjoner kan ikke ha cron, så den daglige utloeseren er en liten Worker
 (akkurat som chat-workeren). Den gjoer bare ett kall om dagen til generate-
 endepunktet.
 
@@ -75,11 +75,11 @@ Vil du teste med en gang, etter deploy:
 https://<worker-url>/run?key=<PODCAST_PASSWORD>
 ```
 
-Endre tidspunkt ved aa redigere `crons` i `wrangler.toml` (UTC-tid).
+Endre tidspunkt ved å redigere `crons` i `wrangler.toml` (UTC-tid).
 
 ---
 
-## 3. Meld feed-en inn paa plattformene (engangsjobb)
+## 3. Meld feed-en inn på plattformene (engangsjobb)
 
 Dette er det eneste manuelle steget, og det gjoeres bare en gang. Bruk
 feed-URL-en over.
@@ -90,10 +90,10 @@ feed-URL-en over.
 - **YouTube Music:** via YouTube Studio -> Settings -> Podcasts -> RSS.
 - **Pocket Casts / Overcast m.fl.:** indekserer automatisk etter Apple/Spotify.
 
-Naar feed-en er godkjent (kan ta noen timer til et doegn foerste gang), dukker
+Når feed-en er godkjent (kan ta noen timer til et doegn første gang), dukker
 hver ny daglig episode opp automatisk overalt.
 
-> Tips: Lag minst en episode FOER du melder inn feed-en, saa plattformene ser at
+> Tips: Lag minst en episode FOER du melder inn feed-en, så plattformene ser at
 > den har innhold.
 
 ---
@@ -101,15 +101,15 @@ hver ny daglig episode opp automatisk overalt.
 ## Hvordan det henger sammen
 
 - **Skriving:** `/api/podcast/generate` ber Claude (samme `ANTHROPIC_API_KEY`)
-  skrive en tospraaklig episode rundt neste tema i en roterende tema-bank.
+  skrive en tospråklig episode rundt neste tema i en roterende tema-bank.
 - **Stemme:** Samme endepunkt stemmelegger den norske teksten via TTS og lagrer
-  MP3-en i KV (`BUILDER_KV`), servert paa `/api/podcast/audio/<id>.mp3` (med
-  Range-stoette saa podkast-spillere kan spole).
+  MP3-en i KV (`BUILDER_KV`), servert på `/api/podcast/audio/<id>.mp3` (med
+  Range-stoette så podkast-spillere kan spole).
 - **Publisering:** `/api/podcast/feed.xml` bygger RSS 2.0 + iTunes av alle
   episodene. Plattformene poller feed-en og henter nye episoder selv.
 - **Daglig:** Cron-workeren kaller generate en gang i doegnet. Idempotent per
-  dato, saa den lager bare en episode per dag.
-- **Opprydding:** Lyd for de eldste episodene ryddes etter 90 episoder for aa
+  dato, så den lager bare en episode per dag.
+- **Opprydding:** Lyd for de eldste episodene ryddes etter 90 episoder for å
   spare KV-plass. Tekst og visning beholdes.
 
 ## Justere innholdet

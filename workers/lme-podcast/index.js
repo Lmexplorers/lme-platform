@@ -12,7 +12,7 @@
  *   PODCAST_PASSWORD      (secret) samme verdi som Pages-prosjektet bruker
  *
  * Cron settes i wrangler.toml ([triggers] crons). Standard: 06:00 UTC daglig.
- * Du kan ogsaa trigge manuelt: GET https://<worker>/run?key=<PODCAST_PASSWORD>
+ * Du kan også trigge manuelt: GET https://<worker>/run?key=<PODCAST_PASSWORD>
  */
 
 const DEFAULT_URL = "https://lmexplorers.com/api/podcast/generate";
