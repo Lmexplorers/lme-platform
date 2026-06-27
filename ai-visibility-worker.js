@@ -243,7 +243,7 @@ Skriv en komplett, GEO-optimalisert artikkel. Returner KUN gyldig JSON:
  "slug":"kebab-case",
  "h1":"...",
  "intro":"answer-first, 2-3 setninger",
- "sections":[{"h2":"...","body":"2-4 avsnitt markdown","h3":["valgfrie underpunkter"]}],
+ "sections":[{"h2":"...","body":"2-4 avsnitt ren tekst. IKKE markdown (ingen ** og ingen - lister). Foelg de norske skrivereglene.","h3":["valgfrie underpunkter"]}],
  "faq":[{"q":"...","a":"..."}],
  "cta":{"text":"...","area":"academy|library|shop|innercircle","url":"/biblioteket"}
 }
@@ -477,15 +477,36 @@ function esc(s) {
   return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+// Gjoer om markdown/streker/« » til ren HTML (sikkerhetsnett uansett hva modellen skriver).
+function mdClean(raw) {
+  let t = esc(raw || "");
+  t = t.replace(/«|»/g, '"');
+  t = t.replace(/(\d)\s*[–—]\s*(\d)/g, "$1-$2").replace(/ [–—] /g, ", ").replace(/[–—]/g, "-");
+  t = t.replace(/\*\*([^*\n]+?)\*\*/g, "<strong>$1</strong>");
+  t = t.replace(/\*([^*\n]+?)\*/g, "<em>$1</em>");
+  const lines = t.split("\n");
+  let out = [], inList = false, para = [];
+  const flush = () => { if (para.length) { out.push("<p>" + para.join(" ") + "</p>"); para = []; } };
+  for (const ln of lines) {
+    const m = ln.match(/^\s*-\s+(.*)$/);
+    if (m) { flush(); if (!inList) { out.push("<ul>"); inList = true; } out.push("<li>" + m[1].trim() + "</li>"); }
+    else if (ln.trim()) { para.push(ln.trim()); }
+    else { if (inList) { out.push("</ul>"); inList = false; } flush(); }
+  }
+  if (inList) out.push("</ul>");
+  flush();
+  return out.join("\n      ");
+}
+
 function renderArticleHTML(a, lang) {
   const sections = (a.sections || []).map((s) => {
     const h3s = (s.h3 || []).map((h) => `      <h3>${esc(h)}</h3>`).join("\n");
-    const body = esc(s.body || "").replace(/\n\n+/g, "</p>\n      <p>");
-    return `    <section>\n      <h2>${esc(s.h2 || "")}</h2>\n      <p>${body}</p>\n${h3s}\n    </section>`;
+    const body = mdClean(s.body);
+    return `    <section>\n      <h2>${esc(s.h2 || "")}</h2>\n      ${body}\n${h3s}\n    </section>`;
   }).join("\n");
 
   const faqItems = (a.faq || []).map((f) =>
-    `      <details><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("\n");
+    `      <details><summary>${esc(f.q)}</summary>${mdClean(f.a)}</details>`).join("\n");
 
   const articleSchema = {
     "@context": "https://schema.org", "@type": "Article",
