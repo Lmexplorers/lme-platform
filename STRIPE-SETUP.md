@@ -48,3 +48,43 @@ Får du **400**, er feil nøkkel limt inn.
 På samme side (`/grupper/admin`) kan du gi gratis tilgang til enkeltpersoner
 uten betaling, og fjerne tilgang igjen. Det er ikke nødvendig for det
 automatiske, bare et alternativ.
+
+## Vipps (for norske brukere)
+
+Vipps vises som betalingsvalg på `/oppgrader` når prisene står i NOK. Selve
+betalingen skjer i Stripe-kassa, så du må slå Vipps på i Stripe én gang:
+
+1. Gå til **dashboard.stripe.com** → **Settings** → **Payment methods**.
+2. Slå på **Vipps MobilePay**. Da dukker Vipps opp i kassa for kunder som
+   betaler i NOK, automatisk på alle betalingslenkene dine.
+
+Merk: kort, Apple Pay og Google Pay er alltid med. Vipps er norsk og vises
+bare for NOK-priser, ikke for USD.
+
+## Tilgang følger planen (Start / Proff / Proff + Fellesskap)
+
+Når noen betaler, leser webhooken hvilken plan de kjøpte (ut fra beløpet) og gir
+tilgang etter nivå. Sidene er låst slik:
+
+- **Start (299 kr):** dashbord, AI-innhold (Spør Renate AI), Akademiet.
+- **Proff (499 kr):** alt i Start, pluss innholdsstudioet (LME Builder),
+  AI Traffic Engine, Bookly (bokbygger), AI Visibility Engine og Maler.
+- **Proff + Fellesskap (699 kr):** alt i Proff, pluss
+  - fellesskapet: grupper, Inner Circle, live, opptak, ressurser, biblioteket,
+    medlemmer, perks, wins, partnere, meldinger og favoritter, og
+  - hele Creative Academy med verktøysuiten: analyse, automations, e-post,
+    forms, pipeline, subscribers, surveys, quizzes, webinars, websites,
+    domener, payments, produkter, forretningsprofil, courses og utforsk.
+
+Innlogget uten betalt plan blir sendt til `/oppgrader`. Du (eier) slipper alltid
+inn overalt.
+
+### Endre hvilke sider som hører til hvilken plan
+
+Alt styres ett sted: `functions/_plans.js`.
+
+- **`PAGE_RULES`** kobler side til nivå (1 = Start, 2 = Proff,
+  3 = Proff + Fellesskap, `"auth"` = bare innlogging). Legg til eller endre en
+  linje for å gate flere sider. Alt som ikke står der, er åpent for alle.
+- **`PLAN_AMOUNTS`** kobler beløp til plan. Endrer du prisene i LME
+  innholdsstudio, oppdater beløpene her (i øre/cent) så riktig plan blir gitt.
