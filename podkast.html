@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-no="Podkast | Little Montessori Explorers" data-en="Podcast | Little Montessori Explorers">Podkast | Little Montessori Explorers</title>
+<meta name="description" data-no="En daglig Montessori-podkast som lager seg selv. Korte, varme episoder om pedagogikk, det forberedte miljoet, boekene, appene og hele LME-systemet." data-en="A daily Montessori podcast that creates itself. Short, warm episodes about pedagogy, the prepared environment, the books, the apps and the whole LME system.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  @font-face{
+    font-family:'Sasson Montessori';
+    src:url('/fonts/SassoonMontessori.woff2') format('woff2'),
+        url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight:normal;font-style:normal;font-display:swap;
+  }
+  :root{
+    --pink-50:#fff5f8;--pink-100:#ffe8f0;--pink-200:#ffd1e1;--pink-300:#ffb3cd;
+    --pink-400:#ff8ab3;--pink-500:#e85a92;--pink-600:#c43d75;--pink-700:#8f2a55;
+    --warm-white:#fffcf9;--ink:#3d2438;--ink-soft:#6b4760;--ink-muted:#9a8693;
+    --line:#f0dde6;
+    --shadow-soft:0 8px 32px rgba(196,61,117,.08);
+    --shadow-med:0 16px 48px rgba(196,61,117,.14);
+    --font-head:'Playpen Sans',system-ui,sans-serif;
+    --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+    --r-md:18px;--r-lg:26px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--font-body);color:var(--ink);line-height:1.6;font-weight:400;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 0,rgba(255,209,225,.32),transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 8%,rgba(255,232,240,.38),transparent 60%),
+      var(--warm-white);
+    min-height:100vh;
+  }
+  h1,h2,h3,h4{font-family:var(--font-head);font-weight:700;line-height:1.15;color:var(--ink);}
+
+  .topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:16px;
+    padding:14px 26px;background:rgba(255,252,249,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+  .topbar .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);}
+  .topbar .brand img{width:34px;height:34px;border-radius:9px;background:#fff;object-fit:contain;}
+  .topbar .brand b{font-family:var(--font-head);font-weight:800;font-size:18px;letter-spacing:-.3px;}
+  .topbar .spacer{flex:1;}
+  .topbar a.back{color:var(--ink-soft);text-decoration:none;font-size:14px;}
+  .topbar a.back:hover{color:var(--pink-600);}
+  .lang-toggle{font-family:var(--font-head);font-weight:700;font-size:13px;border:1.5px solid var(--pink-200);
+    background:#fff;color:var(--pink-600);border-radius:999px;padding:7px 14px;cursor:pointer;}
+
+  .wrap{max-width:920px;margin:0 auto;padding:36px 26px 90px;}
+  .crumb{font-size:13px;color:var(--ink-muted);margin-bottom:14px;}
+  .crumb a{color:var(--ink-muted);text-decoration:none;}
+
+  .hero{display:flex;gap:26px;align-items:center;flex-wrap:wrap;margin-bottom:26px;}
+  .hero .cover{width:148px;height:148px;border-radius:24px;flex:none;box-shadow:var(--shadow-med);
+    background:linear-gradient(135deg,var(--pink-300),var(--pink-500));display:flex;align-items:center;justify-content:center;
+    font-size:64px;color:#fff;}
+  .hero .htext{flex:1;min-width:260px;}
+  .hero h1{font-size:clamp(32px,6vw,50px);font-weight:800;letter-spacing:-1px;}
+  .hero .htext p{margin:12px 0 0;max-width:54ch;font-size:17px;color:var(--ink-soft);}
+  .hero .tag{display:inline-block;font-family:var(--font-head);font-weight:700;font-size:12px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--pink-500);margin-bottom:8px;}
+
+  .subscribe{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 30px;}
+  .sub-btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-head);font-weight:700;font-size:14px;
+    text-decoration:none;border:1.5px solid var(--line);background:#fff;color:var(--ink-soft);border-radius:999px;
+    padding:10px 18px;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s;}
+  .sub-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-soft);border-color:var(--pink-200);color:var(--pink-600);}
+  .sub-btn.primary{background:linear-gradient(120deg,var(--pink-500),var(--pink-600));color:#fff;border-color:transparent;}
+  .sub-btn .ico{font-size:16px;}
+
+  .info-note{background:var(--pink-50);border:1px dashed var(--pink-300);border-radius:16px;
+    padding:14px 18px;margin-bottom:26px;font-size:14.5px;color:var(--pink-700);}
+
+  .owner-bar{display:none;margin:0 0 26px;background:#fff;border:1.5px solid var(--line);border-radius:var(--r-lg);
+    padding:18px 20px;box-shadow:var(--shadow-soft);}
+  .owner-bar.show{display:block;}
+  .owner-bar h3{font-size:16px;margin-bottom:6px;}
+  .owner-bar p{font-size:13.5px;color:var(--ink-muted);margin-bottom:12px;}
+  .owner-bar .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .btn{font-family:var(--font-head);font-weight:700;font-size:15px;border:none;border-radius:999px;
+    padding:11px 20px;cursor:pointer;transition:transform .15s,box-shadow .15s;}
+  .btn:active{transform:scale(.98);}
+  .btn:disabled{opacity:.6;cursor:default;}
+  .btn-primary{background:linear-gradient(120deg,var(--pink-500),var(--pink-600));color:#fff;
+    box-shadow:0 10px 24px -10px rgba(196,61,117,.6);}
+  .btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink-soft);}
+  .owner-status{font-size:13px;color:var(--ink-muted);}
+
+  .section-title{font-size:15px;font-family:var(--font-head);font-weight:700;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--ink-muted);margin:0 0 16px;}
+
+  .eplist{display:flex;flex-direction:column;gap:18px;}
+  .ep{background:#fff;border-radius:var(--r-lg);box-shadow:var(--shadow-soft);overflow:hidden;
+    transition:box-shadow .2s;}
+  .ep:hover{box-shadow:var(--shadow-med);}
+  .ep .ep-main{display:flex;gap:16px;padding:20px 22px;align-items:flex-start;}
+  .ep .play{flex:none;width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;
+    background:linear-gradient(120deg,var(--pink-500),var(--pink-600));color:#fff;font-size:20px;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px -8px rgba(196,61,117,.7);}
+  .ep .play:active{transform:scale(.95);}
+  .ep .ep-body{flex:1;min-width:0;}
+  .ep .kicker{font-family:var(--font-head);font-weight:700;font-size:11px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--pink-500);margin-bottom:5px;}
+  .ep h3{font-size:19px;font-weight:700;margin-bottom:6px;}
+  .ep .teaser{font-size:14.5px;color:var(--ink-soft);line-height:1.55;}
+  .ep .meta{margin-top:10px;font-size:12.5px;color:var(--ink-muted);display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .ep .meta .dot{opacity:.5;}
+  .ep .notes-toggle{background:none;border:none;color:var(--pink-600);font-family:var(--font-body);
+    font-size:13px;cursor:pointer;padding:0;text-decoration:underline;}
+  .ep .panel{display:none;border-top:1px solid var(--line);padding:18px 22px 22px;}
+  .ep .panel.show{display:block;}
+  .ep .panel h4{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-muted);margin-bottom:8px;}
+  .ep .panel .notes{font-size:14px;color:var(--ink-soft);white-space:pre-line;margin-bottom:14px;}
+  .ep .panel .script{font-size:14.5px;color:var(--ink);line-height:1.7;white-space:pre-line;max-height:320px;overflow:auto;
+    border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--pink-50);}
+  .ep audio{width:100%;margin-top:12px;}
+
+  .badge-auto{display:inline-block;font-family:var(--font-head);font-weight:700;font-size:10.5px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--pink-600);background:var(--pink-100);border-radius:999px;padding:3px 9px;}
+
+  .empty{text-align:center;color:var(--ink-muted);padding:60px 20px;font-size:15px;}
+  .skeleton{height:96px;border-radius:var(--r-lg);background:linear-gradient(100deg,#fff,var(--pink-50),#fff);
+    background-size:200% 100%;animation:sk 1.3s linear infinite;box-shadow:var(--shadow-soft);}
+  @keyframes sk{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+  footer{text-align:center;color:var(--ink-muted);font-size:13px;margin-top:60px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="/dashboard">
+    <img src="/images/lme-logo.png" alt="LME" onerror="this.style.display='none'">
+    <b>Little Montessori Explorers</b>
+  </a>
+  <div class="spacer"></div>
+  <a class="back" href="/dashboard" data-no="Tilbake til dashbord" data-en="Back to dashboard">Tilbake til dashbord</a>
+  <button class="lang-toggle" id="langToggle">EN 🌍</button>
+</div>
+
+<div class="wrap">
+  <div class="crumb"><a href="/dashboard" data-no="Hjem" data-en="Home">Hjem</a> / <span data-no="Podkast" data-en="Podcast">Podkast</span></div>
+
+  <div class="hero">
+    <div class="cover">🎙️</div>
+    <div class="htext">
+      <span class="tag" data-no="Ny episode hver dag" data-en="A new episode every day">Ny episode hver dag</span>
+      <h1 data-no="LME Podkast" data-en="LME Podcast">LME Podkast</h1>
+      <p data-no="En liten daglig dose Montessori og pedagogikk. Korte, varme episoder om det forberedte miljoet, observasjon, aldersgruppene, boekene og appene, Inner Circle og hele LME-systemet. Serien skriver og leser seg selv, og publiseres automatisk paa alle plattformer."
+         data-en="A small daily dose of Montessori and pedagogy. Short, warm episodes about the prepared environment, observation, the age groups, the books and apps, Inner Circle and the whole LME system. The series writes and reads itself, and publishes automatically to all platforms.">En liten daglig dose Montessori og pedagogikk.</p>
+    </div>
+  </div>
+
+  <div class="subscribe" id="subscribe">
+    <a class="sub-btn primary" id="rssBtn" href="/api/podcast/feed.xml" target="_blank" rel="noopener">
+      <span class="ico">📡</span><span data-no="Abonner (RSS)" data-en="Subscribe (RSS)">Abonner (RSS)</span>
+    </a>
+    <a class="sub-btn" id="appleBtn" href="https://podcasts.apple.com/" target="_blank" rel="noopener">
+      <span class="ico"></span><span>Apple Podcasts</span>
+    </a>
+    <a class="sub-btn" id="spotifyBtn" href="https://open.spotify.com/" target="_blank" rel="noopener">
+      <span class="ico">🟢</span><span>Spotify</span>
+    </a>
+    <button class="sub-btn" id="copyFeed">
+      <span class="ico">🔗</span><span data-no="Kopier feed-lenke" data-en="Copy feed link">Kopier feed-lenke</span>
+    </button>
+  </div>
+
+  <div class="info-note" id="infoNote" style="display:none"
+       data-no="Slik fungerer det: alle podkast-apper henter episodene fra den samme feed-lenken. Meld den inn en gang per plattform, saa dukker hver ny daglig episode opp automatisk overalt."
+       data-en="How it works: every podcast app pulls episodes from the same feed link. Submit it once per platform, and each new daily episode appears automatically everywhere.">…</div>
+
+  <!-- Eier: lag dagens episode -->
+  <div class="owner-bar" id="ownerBar">
+    <h3 data-no="Studio (kun for deg)" data-en="Studio (owner only)">Studio (kun for deg)</h3>
+    <p data-no="Serien lager en episode av seg selv hver dag. Du kan ogsaa lage dagens episode med en gang her."
+       data-en="The series creates an episode by itself every day. You can also generate today's episode right now.">…</p>
+    <div class="row">
+      <button class="btn btn-primary" id="genBtn" data-no="Lag dagens episode" data-en="Generate today's episode">Lag dagens episode</button>
+      <button class="btn btn-ghost" id="genForceBtn" data-no="Lag en ekstra" data-en="Generate an extra">Lag en ekstra</button>
+      <span class="owner-status" id="ownerStatus"></span>
+    </div>
+  </div>
+
+  <div class="section-title" data-no="Episoder" data-en="Episodes">Episoder</div>
+  <div class="eplist" id="eplist">
+    <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+  </div>
+  <div class="empty" id="emptyState" style="display:none"
+       data-no="Ingen episoder enda. Den foerste lages snart, helt av seg selv."
+       data-en="No episodes yet. The first one will be created soon, all by itself.">…</div>
+
+  <footer data-no="Little Montessori Explorers · Laget med kjaerlighet av Renate"
+          data-en="Little Montessori Explorers · Made with love by Renate">Little Montessori Explorers</footer>
+</div>
+
+<script>
+(function(){
+  var lang = (localStorage.getItem('lme-lang')==='en') ? 'en' : 'no';
+  var episodes = [];
+  var details = {};        // id -> full episode
+  var pw = null;
+  var currentAudio = null; // <audio> som spiller naa
+
+  function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function pick(o,base){ return (lang==='no'? o[base+'No'] : o[base+'En']) || o[base+'No'] || o[base+'En'] || ''; }
+
+  function fmtDate(d){
+    if(!d) return '';
+    var p=String(d).split('-'); if(p.length<3) return d;
+    var dt=new Date(+p[0],+p[1]-1,+p[2]);
+    return dt.toLocaleDateString(lang==='no'?'nb-NO':'en-GB',{day:'numeric',month:'short',year:'numeric'});
+  }
+
+  function applyStatic(){
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
+      var t=el.getAttribute('data-'+lang); if(t==null)return;
+      if(/[<&]/.test(t))el.innerHTML=t; else el.textContent=t;
+    });
+  }
+
+  function epHTML(e){
+    var playable = e.hasAudio;
+    var playLabel = playable ? '▶' : '🔊';
+    var autoBadge = '<span class="badge-auto">'+(lang==='no'?'Auto':'Auto')+'</span>';
+    var dur = e.duration ? e.duration : '';
+    return '<div class="ep" id="'+esc(e.id)+'" data-id="'+esc(e.id)+'">'+
+      '<div class="ep-main">'+
+        '<button class="play" data-act="play" title="'+(lang==='no'?'Spill av':'Play')+'">'+playLabel+'</button>'+
+        '<div class="ep-body">'+
+          '<div class="kicker">'+esc(e.category||'')+'</div>'+
+          '<h3>'+esc(pick(e,'title'))+'</h3>'+
+          '<div class="teaser">'+esc(pick(e,'teaser'))+'</div>'+
+          '<div class="meta">'+
+            '<span>'+(lang==='no'?'Episode ':'Episode ')+(e.num||'')+'</span>'+
+            '<span class="dot">·</span><span>'+esc(fmtDate(e.date))+'</span>'+
+            (dur?'<span class="dot">·</span><span>'+esc(dur)+'</span>':'')+
+            '<span class="dot">·</span>'+autoBadge+
+            '<span class="dot">·</span><button class="notes-toggle" data-act="notes">'+(lang==='no'?'Vis manus og notater':'Show script and notes')+'</button>'+
+          '</div>'+
+          '<div class="audiomount"></div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="panel"><div class="paneltext">'+(lang==='no'?'Laster…':'Loading…')+'</div></div>'+
+    '</div>';
+  }
+
+  function render(){
+    var list=document.getElementById('eplist');
+    var empty=document.getElementById('emptyState');
+    if(!episodes.length){ list.innerHTML=''; empty.style.display='block'; return; }
+    empty.style.display='none';
+    list.innerHTML = episodes.map(epHTML).join('');
+    list.querySelectorAll('.ep').forEach(function(card){
+      var id=card.getAttribute('data-id');
+      card.querySelector('[data-act="play"]').addEventListener('click',function(){ play(id,card); });
+      card.querySelector('[data-act="notes"]').addEventListener('click',function(){ toggleNotes(id,card); });
+    });
+  }
+
+  function stopCurrent(){
+    if(currentAudio){ try{currentAudio.pause();}catch(e){} currentAudio=null; }
+    try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){}
+  }
+
+  function getDetail(id){
+    if(details[id]) return Promise.resolve(details[id]);
+    return fetch('/api/podcast/episode?id='+encodeURIComponent(id)).then(function(r){return r.json();})
+      .then(function(d){ if(d&&d.episode){ details[id]=d.episode; } return details[id]||null; });
+  }
+
+  function play(id,card){
+    var meta=null; for(var i=0;i<episodes.length;i++){ if(episodes[i].id===id){meta=episodes[i];break;} }
+    if(!meta) return;
+    var mount=card.querySelector('.audiomount');
+    if(meta.hasAudio){
+      stopCurrent();
+      // Bygg en ekte audio-spiller en gang.
+      var existing=mount.querySelector('audio');
+      if(!existing){
+        mount.innerHTML='<audio controls preload="none" src="/api/podcast/audio/'+encodeURIComponent(id)+'.mp3"></audio>';
+        existing=mount.querySelector('audio');
+      }
+      currentAudio=existing;
+      existing.play().catch(function(){});
+      return;
+    }
+    // Ingen lydfil: les manuset hoeyt i nettleseren.
+    getDetail(id).then(function(ep){
+      if(!ep) return;
+      stopCurrent();
+      var text = lang==='no' ? ep.scriptNo : (ep.scriptEn||ep.scriptNo);
+      if(!window.speechSynthesis){ alert(lang==='no'?'Nettleseren stoetter ikke opplesing.':'Your browser does not support read-aloud.'); return; }
+      var u=new SpeechSynthesisUtterance(text);
+      u.lang = lang==='no'?'nb-NO':'en-GB'; u.rate=0.98;
+      window.speechSynthesis.speak(u);
+    });
+  }
+
+  function toggleNotes(id,card){
+    var panel=card.querySelector('.panel');
+    var txt=card.querySelector('.paneltext');
+    if(panel.classList.contains('show')){ panel.classList.remove('show'); return; }
+    panel.classList.add('show');
+    getDetail(id).then(function(ep){
+      if(!ep){ txt.textContent=(lang==='no'?'Kunne ikke laste.':'Could not load.'); return; }
+      var notes = lang==='no' ? (ep.showNotesNo||'') : (ep.showNotesEn||ep.showNotesNo||'');
+      var script = lang==='no' ? (ep.scriptNo||'') : (ep.scriptEn||ep.scriptNo||'');
+      txt.innerHTML =
+        (notes? '<h4>'+(lang==='no'?'I denne episoden':'In this episode')+'</h4><div class="notes">'+esc(notes)+'</div>':'')+
+        '<h4>'+(lang==='no'?'Manus':'Script')+'</h4><div class="script">'+esc(script)+'</div>';
+    });
+  }
+
+  function load(){
+    fetch('/api/podcast/episodes').then(function(r){return r.json();}).then(function(d){
+      episodes=(d&&d.episodes)||[];
+      render();
+      document.getElementById('infoNote').style.display='block';
+    }).catch(function(){ episodes=[]; render(); });
+  }
+
+  /* Spraakbytte */
+  function switchLanguage(l){
+    lang=l; document.documentElement.lang=l; try{localStorage.setItem('lme-lang',l);}catch(e){}
+    applyStatic();
+    document.getElementById('langToggle').textContent = l==='no'?'EN 🌍':'NO 🇳🇴';
+    details={}; render();
+  }
+  document.getElementById('langToggle').addEventListener('click',function(){ switchLanguage(lang==='no'?'en':'no'); });
+
+  /* Kopier feed-lenke */
+  document.getElementById('copyFeed').addEventListener('click',function(){
+    var url=location.origin+'/api/podcast/feed.xml';
+    var done=function(){ var b=document.getElementById('copyFeed').querySelector('span:last-child');
+      var old=b.textContent; b.textContent=(lang==='no'?'Kopiert!':'Copied!'); setTimeout(function(){b.textContent=old;},1600); };
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(done,function(){prompt('Feed:',url);}); }
+    else prompt('Feed:',url);
+  });
+
+  /* Eier-studio */
+  function ensurePw(){ if(pw)return pw; pw=prompt(lang==='no'?'Skriv inn passord:':'Enter password:'); return pw; }
+  function generate(force){
+    var p=ensurePw(); if(!p) return;
+    var st=document.getElementById('ownerStatus');
+    var b1=document.getElementById('genBtn'), b2=document.getElementById('genForceBtn');
+    b1.disabled=true; b2.disabled=true;
+    st.textContent=lang==='no'?'Skriver og stemmelegger episoden…':'Writing and voicing the episode…';
+    fetch('/api/podcast/generate',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({password:p,force:!!force})})
+    .then(function(r){return r.json();}).then(function(d){
+      b1.disabled=false; b2.disabled=false;
+      if(d&&d.ok){
+        st.textContent = d.reused ? (lang==='no'?'Dagens episode finnes allerede.':"Today's episode already exists.")
+                                  : (lang==='no'?'Ferdig! Ny episode lagt ut.':'Done! New episode published.');
+        details={}; load();
+      } else if(d&&d.error==='bad_password'){ pw=null; st.textContent=lang==='no'?'Feil passord.':'Wrong password.'; }
+      else if(d&&d.error==='missing_anthropic_key'){ st.textContent=lang==='no'?'Mangler ANTHROPIC_API_KEY i innstillingene.':'Missing ANTHROPIC_API_KEY in settings.'; }
+      else { st.textContent=(lang==='no'?'Kunne ikke lage episoden: ':'Could not generate: ')+((d&&(d.detail||d.error))||'?'); }
+    }).catch(function(){ b1.disabled=false; b2.disabled=false; st.textContent=lang==='no'?'Nettverksfeil.':'Network error.'; });
+  }
+  document.getElementById('genBtn').addEventListener('click',function(){ generate(false); });
+  document.getElementById('genForceBtn').addEventListener('click',function(){ generate(true); });
+
+  function loadStatus(){
+    fetch('/api/podcast/status').then(function(r){return r.json();}).then(function(d){
+      if(!d) return;
+      var st=document.getElementById('ownerStatus');
+      var bits=[];
+      bits.push((lang==='no'?'Episoder: ':'Episodes: ')+(d.count||0));
+      if(d.lastDate) bits.push((lang==='no'?'sist: ':'last: ')+d.lastDate);
+      bits.push((lang==='no'?'stemme: ':'voice: ')+(d.hasTts?(d.ttsProvider):(lang==='no'?'ikke satt':'not set')));
+      st.textContent=bits.join('  ·  ');
+    }).catch(function(){});
+  }
+
+  /* Eier-modus: #rediger i adressen, lagret flagg, eller Ctrl/Cmd+Shift+E */
+  function revealOwner(){ document.getElementById('ownerBar').classList.add('show'); try{localStorage.setItem('lme-edit','1');}catch(e){} loadStatus(); }
+  if(/(^|[#&?])rediger/.test(location.hash+location.search)) revealOwner();
+  try{ if(localStorage.getItem('lme-edit')==='1') revealOwner(); }catch(e){}
+  document.addEventListener('keydown',function(e){ if((e.ctrlKey||e.metaKey)&&e.shiftKey&&(e.key==='E'||e.key==='e')) revealOwner(); });
+
+  /* Hopp til en episode hvis URL har #ep-... */
+  window.addEventListener('hashchange',function(){ var h=location.hash.slice(1); var el=h&&document.getElementById(h); if(el) el.scrollIntoView({behavior:'smooth'}); });
+
+  document.getElementById('langToggle').textContent = lang==='no'?'EN 🌍':'NO 🇳🇴';
+  applyStatic(); load();
+})();
+</script>
+</body>
+</html>

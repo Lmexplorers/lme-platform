@@ -1,0 +1,13 @@
+name = "lme-podcast"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+# Daglig cron: lager en ny episode kl 06:00 UTC hver dag.
+# (Cron-syntaks: minutt time dag maaned ukedag.)
+[triggers]
+crons = ["0 6 * * *"]
+
+# Variabler. PODCAST_PASSWORD settes som SECRET (ikke her), se PODCAST-SETUP.md:
+#   npx wrangler secret put PODCAST_PASSWORD
+[vars]
+PODCAST_GENERATE_URL = "https://lmexplorers.com/api/podcast/generate"

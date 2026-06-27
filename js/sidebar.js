@@ -42,6 +42,7 @@
     '  <a href="/websites" class="sidebar-item"><span class="si-icon">🌐</span><span class="si-label">Websites</span></a>',
     '  <a href="/courses" class="sidebar-item"><span class="si-icon">🎬</span><span class="si-label">Courses</span></a>',
     '  <a href="/blogg" class="sidebar-item"><span class="si-icon">📝</span><span class="si-label" data-no="Blogg" data-en="Blog">Blogg</span></a>',
+    '  <a href="/podkast" class="sidebar-item"><span class="si-icon">🎙️</span><span class="si-label" data-no="Podkast" data-en="Podcast">Podkast</span><span class="si-badge beta" data-no="Ny" data-en="New">Ny</span></a>',
     '  <a href="/webinars" class="sidebar-item"><span class="si-icon">🎥</span><span class="si-label">Webinars</span></a>',
     '  <a href="/biblioteket" class="sidebar-item"><span class="si-icon">📂</span><span class="si-label">Library</span></a>',
     '  <a href="/community" class="sidebar-item"><span class="si-icon">🌸</span><span class="si-label">Community</span><span class="si-badge beta">Beta</span></a>',

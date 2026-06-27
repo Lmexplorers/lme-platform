@@ -1,0 +1,537 @@
+/**
+ * LME Podkast, en helautomatisk podkast-serie som lager seg selv og
+ * publiserer en ny episode hver dag. Innholdet handler om hele LME-systemet:
+ * Montessori og pedagogikk, det forberedte miljoet, observasjon,
+ * aldersgruppene (3-6, 6-9, 9-12), LME-boekene, LME-appene (Mia og Teo m.fl.),
+ * Inner Circle, akademiet og verktoeyene.
+ *
+ * Slik henger det sammen (dette er hele "publiser paa alle plattformer"-magien):
+ * Apple Podcasts, Spotify, Amazon Music, YouTube Music, Pocket Casts osv. henter
+ * ALLE episodene fra EN RSS-feed. Du melder feed-en inn EN gang per plattform
+ * (se workers/lme-podcast/PODCAST-SETUP.md). Etter det dukker hver nye daglige
+ * episode opp automatisk overalt, uten at noen maa loefte en finger.
+ *
+ * Ruter (Pages [[path]]-fanger paa /api/podcast/*):
+ *   GET  /api/podcast/feed.xml            -> RSS 2.0 + iTunes-namespace (norsk)
+ *   GET  /api/podcast/feed-en.xml         -> RSS 2.0 (engelsk)
+ *   GET  /api/podcast/episodes            -> { episodes:[...], config:{...} }
+ *   GET  /api/podcast/episode?id=<id>     -> { episode:{full...} | null }
+ *   GET  /api/podcast/audio/<id>.mp3      -> lydfila (stoetter Range)
+ *   GET  /api/podcast/status              -> { count, lastDate, hasTts, nextTopic }
+ *   POST /api/podcast/generate            { password, force?, date? } -> { ok, episode }
+ *
+ * Lagring i KV (BUILDER_KV):
+ *   lme-podcast:index            -> JSON [ {meta...} ]  (nyeste foerst)
+ *   lme-podcast:ep:<id>          -> JSON { full episode }
+ *   lme-podcast:audio:<id>       -> raw MP3 (ArrayBuffer)
+ *   lme-podcast:state            -> JSON { lastNum, lastDate, topicCursor }
+ *
+ * Ingen manuell liste: cron-workeren (eller knappen paa /podkast) kaller
+ * generate en gang om dagen, og serien skriver og stemmelegger seg selv.
+ */
+
+const DEFAULT_PASSWORD = "LilleOppdager2026";
+const IDX = "lme-podcast:index";
+const EP = "lme-podcast:ep:";
+const AUDIO = "lme-podcast:audio:";
+const STATE = "lme-podcast:state";
+
+// Hvor mange lydfiler vi beholder i KV. Eldre episoder beholder tekst/visning,
+// men lydblobben ryddes vekk for aa spare plass. Feed-en viser de nyeste.
+const MAX_AUDIO = 90;
+const FEED_LIMIT = 200;
+
+// Podkast-metadata. Endres her om Renate vil justere tittel/forfatter/bilde.
+const SHOW = {
+  site: "https://lmexplorers.com",
+  titleNo: "Daglig Montessori med Little Montessori Explorers",
+  titleEn: "Daily Montessori with Little Montessori Explorers",
+  author: "Renate Dahl",
+  ownerName: "Renate Dahl",
+  ownerEmail: "hei@lmexplorers.com",
+  descNo: "En liten daglig dose Montessori og pedagogikk fra Little Montessori Explorers. Korte, varme episoder om det forberedte miljoet, observasjon, aldersgruppene, LME-boekene og appene, Inner Circle og hele LME-systemet. Ny episode hver dag, helautomatisk.",
+  descEn: "A small daily dose of Montessori and pedagogy from Little Montessori Explorers. Short, warm episodes about the prepared environment, observation, the age groups, the LME books and apps, Inner Circle and the whole LME system. A new episode every day, fully automated.",
+  image: "https://lmexplorers.com/images/lme-banner.png",
+  language: "no",
+  category: "Kids & Family",
+  subCategory: "Parenting",
+  copyright: "Little Montessori Explorers",
+};
+
+const CLAUDE_MODEL = "claude-sonnet-4-6";
+
+/* ---- Tema-bank: serien "lager seg selv" ved aa rotere gjennom disse ---- */
+/* Hver runde plukkes neste tema (topicCursor), og Claude skriver en hel
+   tospraaklig episode rundt vinkelen. Dekker hele LME-systemet. */
+const TOPICS = [
+  { cat: "Montessori-prinsipper", no: "Foelg barnet", en: "Follow the child", angle: "hva 'foelg barnet' egentlig betyr i hverdagen, med et konkret eksempel" },
+  { cat: "Praktisk liv", no: "Helle vann og dekke bord", en: "Pouring water and setting the table", angle: "hvorfor praktiske hverdagsoppgaver bygger konsentrasjon og selvstendighet" },
+  { cat: "Forberedt miljoe", no: "Mindre er mer", en: "Less is more", angle: "hvordan et rolig, ryddig miljoe hjelper barnet aa velge og fokusere" },
+  { cat: "Observasjon", no: "Aa se uten aa gripe inn", en: "Watching without stepping in", angle: "kunsten aa observere, og hvorfor det er pedagogens viktigste verktoey" },
+  { cat: "Aldersgruppen 3-6", no: "De sensitive periodene", en: "The sensitive periods", angle: "hva som skjer i barnet fra 3 til 6 aar, og hvordan vi moeter det" },
+  { cat: "Aldersgruppen 6-9", no: "Den store fortellingen", en: "The great lessons", angle: "hvordan fantasi og store fortellinger aapner verden for 6-9-aaringen" },
+  { cat: "Aldersgruppen 9-12", no: "Going out", en: "Going out", angle: "hvordan barnet fra 9 til 12 trenger aa knytte laering til den virkelige verden" },
+  { cat: "LME-boekene", no: "Mia og Teo", en: "Mia and Teo", angle: "hvordan LME-boekene om Mia og Teo brukes til samtale og hoeytlesning" },
+  { cat: "LME-appene", no: "Laering gjennom lek i appen", en: "Learning through play in the app", angle: "hvordan LME-appene stoetter Montessori-prinsipper hjemme paa en skjermvennlig maate" },
+  { cat: "Inner Circle", no: "Et faellesskap av voksne", en: "A community of grown-ups", angle: "hva Inner Circle er, og hvorfor voksne trenger et faellesskap rundt oppdragelsen" },
+  { cat: "Pedagogikk", no: "Frihet innenfor rammer", en: "Freedom within limits", angle: "balansen mellom frihet og tydelige rammer, og hvorfor begge trengs" },
+  { cat: "Foreldretips", no: "Den vanskelige morgenen", en: "The difficult morning", angle: "et konkret Montessori-grep for stressfrie morgener med smaa barn" },
+  { cat: "Forberedt miljoe", no: "Barnets hoeyde", en: "The child's height", angle: "hvorfor alt boer vaere tilgjengelig i barnets hoeyde, og enkle grep hjemme" },
+  { cat: "Praktisk liv", no: "Aa vente paa tur", en: "Waiting for your turn", angle: "hvordan ekte oppgaver laerer taalmodighet bedre enn formaninger" },
+  { cat: "Montessori-prinsipper", no: "Den absorberende hjernen", en: "The absorbent mind", angle: "hvordan smaa barn suger til seg omgivelsene, og hva det betyr for oss" },
+  { cat: "Observasjon", no: "Konsentrasjonens oeyeblikk", en: "The moment of concentration", angle: "hvordan vi kjenner igjen dyp konsentrasjon og verner om den" },
+  { cat: "LME-systemet", no: "Akademiet og verktoeyene", en: "The academy and the tools", angle: "hvordan LME-akademiet og verktoeyene henger sammen til en helhet" },
+  { cat: "Foreldretips", no: "Naar barnet sier nei", en: "When the child says no", angle: "et rolig, respektfullt svar paa trass, forklart med Montessori-blikk" },
+];
+
+/* ---------------------------- smaa hjelpere ---------------------------- */
+function json(data, status) {
+  return new Response(JSON.stringify(data), {
+    status: status || 200,
+    headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
+  });
+}
+
+function xmlEsc(s) {
+  return (s == null ? "" : String(s))
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+}
+
+function cleanId(id) {
+  if (typeof id !== "string") return null;
+  const c = id.trim().toLowerCase();
+  return /^[a-z0-9\-]{1,60}$/.test(c) ? c : null;
+}
+
+function s(v, max) { return (typeof v === "string" ? v : "").slice(0, max); }
+
+function pad(n) { return n < 10 ? "0" + n : "" + n; }
+
+function isoDate(d) {
+  // d: "YYYY-MM-DD" -> RFC822-ish dato for RSS (publisering kl 06:00 UTC)
+  const parts = (d || "").split("-");
+  const dt = new Date(Date.UTC(+parts[0], (+parts[1] || 1) - 1, +parts[2] || 1, 6, 0, 0));
+  return dt.toUTCString();
+}
+
+function estDuration(text) {
+  // Norsk hoeytlesning ~140 ord/min. Gir hh:mm:ss for itunes:duration.
+  const words = (text || "").trim().split(/\s+/).filter(Boolean).length;
+  const secs = Math.max(60, Math.round((words / 140) * 60));
+  const h = Math.floor(secs / 3600), m = Math.floor((secs % 3600) / 60), sec = secs % 60;
+  return (h ? h + ":" + pad(m) : m) + ":" + pad(sec);
+}
+
+async function readJson(env, key, fallback) {
+  try { const raw = await env.BUILDER_KV.get(key); return raw ? JSON.parse(raw) : fallback; }
+  catch (e) { return fallback; }
+}
+
+/* ----------------------------- TTS-lag ----------------------------- */
+/* Provider-agnostisk: ElevenLabs (best paa norsk) hvis satt, ellers OpenAI,
+   ellers ingen lyd (episoden lages likevel; /podkast leser den hoeyt i nettleseren
+   via tale-syntese, og feed-en hopper over enclosure for den episoden). */
+function ttsProvider(env) {
+  if (env.ELEVENLABS_API_KEY && env.ELEVENLABS_VOICE_ID) return "elevenlabs";
+  if (env.OPENAI_API_KEY) return "openai";
+  return null;
+}
+
+async function synthesize(env, text) {
+  const provider = ttsProvider(env);
+  if (!provider) return null;
+  // Hold lydlengden i sjakk (TTS-grenser). Vi stemmelegger den norske teksten.
+  const body = s(text, 4500);
+  try {
+    if (provider === "elevenlabs") {
+      const res = await fetch(
+        "https://api.elevenlabs.io/v1/text-to-speech/" + env.ELEVENLABS_VOICE_ID,
+        {
+          method: "POST",
+          headers: {
+            "xi-api-key": env.ELEVENLABS_API_KEY,
+            "Content-Type": "application/json",
+            "Accept": "audio/mpeg",
+          },
+          body: JSON.stringify({
+            text: body,
+            model_id: env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2",
+            voice_settings: { stability: 0.5, similarity_boost: 0.75 },
+          }),
+        }
+      );
+      if (!res.ok) return null;
+      return await res.arrayBuffer();
+    }
+    if (provider === "openai") {
+      const res = await fetch("https://api.openai.com/v1/audio/speech", {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + env.OPENAI_API_KEY,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: env.OPENAI_TTS_MODEL || "gpt-4o-mini-tts",
+          voice: env.OPENAI_TTS_VOICE || "alloy",
+          input: body,
+          format: "mp3",
+        }),
+      });
+      if (!res.ok) return null;
+      return await res.arrayBuffer();
+    }
+  } catch (e) { return null; }
+  return null;
+}
+
+/* ------------------------- AI-episodegenerator ------------------------- */
+function buildPrompt(topic, num) {
+  const sys =
+    "Du er manusforfatter for podkasten til Little Montessori Explorers (LME), " +
+    "eid av Renate Dahl. Verten er en varm, rolig norsk stemme som snakker direkte " +
+    "til foreldre og pedagoger. Tonen er nær, klok og oppmuntrende, aldri belærende.\n\n" +
+    "SKRIVEREGLER (følg alltid):\n" +
+    "- Bruk rette anførselstegn \"slik\" og apostrof ', aldri « ».\n" +
+    "- ALDRI lange bindestreker eller tankestreker (— eller –) i teksten. Bruk komma, kolon, punktum eller \"og\".\n" +
+    "- Stor forbokstav etter kolon kun når en hel setning følger.\n" +
+    "- Følg norske kommaregler.\n" +
+    "- Engelsk oversettelse skal være naturlig, ikke ord for ord.\n\n" +
+    "Episoden skal være et kort monolog-manus (ca. 550 til 750 ord på norsk) som " +
+    "kan leses høyt på 4 til 6 minutter. Bygg den slik: en vennlig velkomst som nevner " +
+    "Little Montessori Explorers, så dagens tema med ett konkret hverdagseksempel, " +
+    "så én ting lytteren kan prøve i dag, og en kort, varm avrunding som inviterer " +
+    "videre inn i LME (akademiet, bøkene, appene eller Inner Circle der det passer). " +
+    "Ikke nevn at manuset er skrevet av AI. Ikke bruk scene-anvisninger.\n\n" +
+    "Svar KUN med gyldig JSON (ingen kodeblokk), med nøyaktig disse feltene:\n" +
+    "{\n" +
+    '  "titleNo": "kort, fengende episodetittel på norsk",\n' +
+    '  "titleEn": "engelsk episodetittel",\n' +
+    '  "teaserNo": "1 til 2 setninger som lokker til lytting (norsk)",\n' +
+    '  "teaserEn": "engelsk teaser",\n' +
+    '  "scriptNo": "hele manuset på norsk, ren tekst med doble linjeskift mellom avsnitt",\n' +
+    '  "scriptEn": "hele manuset på engelsk",\n' +
+    '  "showNotesNo": "3 til 5 punkter som ren tekst, ett per linje, norsk",\n' +
+    '  "showNotesEn": "engelske punkter",\n' +
+    '  "keywords": "5 til 8 komma-separerte nøkkelord på engelsk for plattformene"\n' +
+    "}";
+  const user =
+    "Lag episode nummer " + num + " i serien.\n" +
+    "Kategori: " + topic.cat + "\n" +
+    "Tema (norsk): " + topic.no + "\n" +
+    "Tema (engelsk): " + topic.en + "\n" +
+    "Vinkel: " + topic.angle;
+  return { sys, user };
+}
+
+function parseModelJson(txt) {
+  if (!txt) return null;
+  let t = txt.trim();
+  // Fjern ev. kodeblokk-omslag.
+  t = t.replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "").trim();
+  try { return JSON.parse(t); } catch (e) {}
+  // Fallback: plukk ut foerste {...}-blokk.
+  const a = t.indexOf("{"), b = t.lastIndexOf("}");
+  if (a >= 0 && b > a) { try { return JSON.parse(t.slice(a, b + 1)); } catch (e) {} }
+  return null;
+}
+
+async function callClaude(env, topic, num) {
+  if (!env.ANTHROPIC_API_KEY) throw new Error("missing_anthropic_key");
+  const { sys, user } = buildPrompt(topic, num);
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": env.ANTHROPIC_API_KEY,
+      "anthropic-version": "2023-06-01",
+    },
+    body: JSON.stringify({
+      model: CLAUDE_MODEL,
+      max_tokens: 3000,
+      system: sys,
+      messages: [{ role: "user", content: user }],
+    }),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok || !data) throw new Error("claude_" + res.status);
+  const txt = Array.isArray(data.content) ? data.content.map((c) => c.text || "").join("") : "";
+  const parsed = parseModelJson(txt);
+  if (!parsed || !parsed.scriptNo) throw new Error("bad_model_output");
+  return parsed;
+}
+
+/**
+ * Lager neste daglige episode. Idempotent per dato med mindre force=true:
+ * har vi allerede laget en episode i dag, returnerer vi den i stedet.
+ */
+async function generateEpisode(env, opts) {
+  opts = opts || {};
+  if (!env.BUILDER_KV) throw new Error("not_configured");
+  const date = (opts.date && /^\d{4}-\d{2}-\d{2}$/.test(opts.date)) ? opts.date : todayUTC();
+
+  const state = (await readJson(env, STATE, null)) || { lastNum: 0, lastDate: "", topicCursor: 0 };
+  let index = await readJson(env, IDX, []);
+  if (!Array.isArray(index)) index = [];
+
+  if (!opts.force && state.lastDate === date) {
+    // Allerede laget i dag: returner den nyeste.
+    const existing = index[0] ? await readJson(env, EP + index[0].id, null) : null;
+    if (existing) return { episode: existing, reused: true };
+  }
+
+  const num = (state.lastNum || 0) + 1;
+  const topic = TOPICS[(state.topicCursor || 0) % TOPICS.length];
+  const id = "ep-" + pad(num >= 100 ? num : num) + "-" + date;
+  const safeId = cleanId(id) || ("ep-" + Date.now());
+
+  const gen = await callClaude(env, topic, num);
+
+  // Stemmelegg den norske teksten (om TTS er konfigurert).
+  let audioBytes = null;
+  try { audioBytes = await synthesize(env, gen.scriptNo); } catch (e) { audioBytes = null; }
+  let audioSize = 0;
+  if (audioBytes) {
+    audioSize = audioBytes.byteLength;
+    await env.BUILDER_KV.put(AUDIO + safeId, audioBytes);
+  }
+
+  const episode = {
+    id: safeId,
+    num: num,
+    date: date,
+    category: topic.cat,
+    titleNo: s(gen.titleNo, 160) || topic.no,
+    titleEn: s(gen.titleEn, 160) || topic.en,
+    teaserNo: s(gen.teaserNo, 400),
+    teaserEn: s(gen.teaserEn, 400),
+    scriptNo: s(gen.scriptNo, 12000),
+    scriptEn: s(gen.scriptEn, 12000),
+    showNotesNo: s(gen.showNotesNo, 1200),
+    showNotesEn: s(gen.showNotesEn, 1200),
+    keywords: s(gen.keywords, 300),
+    hasAudio: !!audioBytes,
+    audioSize: audioSize,
+    duration: estDuration(gen.scriptNo),
+    created: new Date().toISOString(),
+  };
+
+  await env.BUILDER_KV.put(EP + safeId, JSON.stringify(episode));
+
+  // Index-meta (lett).
+  const meta = {
+    id: safeId, num: num, date: date, category: topic.cat,
+    titleNo: episode.titleNo, titleEn: episode.titleEn,
+    teaserNo: episode.teaserNo, teaserEn: episode.teaserEn,
+    hasAudio: episode.hasAudio, duration: episode.duration,
+  };
+  index.unshift(meta);
+  if (index.length > FEED_LIMIT) index = index.slice(0, FEED_LIMIT);
+  await env.BUILDER_KV.put(IDX, JSON.stringify(index));
+
+  // Rydd gamle lydblobber utover MAX_AUDIO (behold tekst/visning).
+  if (index.length > MAX_AUDIO) {
+    for (let i = MAX_AUDIO; i < index.length; i++) {
+      if (index[i].hasAudio) {
+        try { await env.BUILDER_KV.delete(AUDIO + index[i].id); } catch (e) {}
+        index[i].hasAudio = false;
+      }
+    }
+    await env.BUILDER_KV.put(IDX, JSON.stringify(index));
+  }
+
+  await env.BUILDER_KV.put(STATE, JSON.stringify({
+    lastNum: num, lastDate: date, topicCursor: ((state.topicCursor || 0) + 1) % TOPICS.length,
+  }));
+
+  return { episode: episode, reused: false };
+}
+
+function todayUTC() {
+  const d = new Date();
+  return d.getUTCFullYear() + "-" + pad(d.getUTCMonth() + 1) + "-" + pad(d.getUTCDate());
+}
+
+/* ------------------------------ RSS-feed ------------------------------ */
+function audioUrl(id) { return SHOW.site + "/api/podcast/audio/" + id + ".mp3"; }
+function episodeLink(id) { return SHOW.site + "/podkast#" + id; }
+
+function buildFeed(index, lang) {
+  const no = lang !== "en";
+  const title = no ? SHOW.titleNo : SHOW.titleEn;
+  const desc = no ? SHOW.descNo : SHOW.descEn;
+  const self = SHOW.site + "/api/podcast/" + (no ? "feed.xml" : "feed-en.xml");
+  const items = index.filter((e) => e && e.hasAudio).slice(0, FEED_LIMIT).map((e) => {
+    const t = no ? (e.titleNo || e.titleEn) : (e.titleEn || e.titleNo);
+    const teaser = no ? (e.teaserNo || "") : (e.teaserEn || "");
+    return [
+      "    <item>",
+      "      <title>" + xmlEsc(t) + "</title>",
+      "      <link>" + xmlEsc(episodeLink(e.id)) + "</link>",
+      "      <guid isPermaLink=\"false\">lme-podcast-" + xmlEsc(e.id) + "</guid>",
+      "      <pubDate>" + isoDate(e.date) + "</pubDate>",
+      "      <description>" + xmlEsc(teaser) + "</description>",
+      "      <itunes:summary>" + xmlEsc(teaser) + "</itunes:summary>",
+      "      <itunes:subtitle>" + xmlEsc(e.category || "") + "</itunes:subtitle>",
+      "      <itunes:episode>" + (e.num || 0) + "</itunes:episode>",
+      "      <itunes:duration>" + xmlEsc(e.duration || "5:00") + "</itunes:duration>",
+      "      <itunes:explicit>false</itunes:explicit>",
+      "      <itunes:image href=\"" + xmlEsc(SHOW.image) + "\"/>",
+      "      <enclosure url=\"" + xmlEsc(audioUrl(e.id)) + "\" length=\"" + (e.audioSize || 0) + "\" type=\"audio/mpeg\"/>",
+      "    </item>",
+    ].join("\n");
+  }).join("\n");
+
+  const xml = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">',
+    "  <channel>",
+    "    <title>" + xmlEsc(title) + "</title>",
+    "    <link>" + SHOW.site + "/podkast</link>",
+    '    <atom:link href="' + xmlEsc(self) + '" rel="self" type="application/rss+xml"/>',
+    "    <language>" + (no ? "no" : "en") + "</language>",
+    "    <copyright>" + xmlEsc(SHOW.copyright) + "</copyright>",
+    "    <description>" + xmlEsc(desc) + "</description>",
+    "    <itunes:author>" + xmlEsc(SHOW.author) + "</itunes:author>",
+    "    <itunes:summary>" + xmlEsc(desc) + "</itunes:summary>",
+    "    <itunes:type>episodic</itunes:type>",
+    "    <itunes:owner><itunes:name>" + xmlEsc(SHOW.ownerName) + "</itunes:name><itunes:email>" + xmlEsc(SHOW.ownerEmail) + "</itunes:email></itunes:owner>",
+    '    <itunes:image href="' + xmlEsc(SHOW.image) + '"/>',
+    '    <itunes:category text="' + xmlEsc(SHOW.category) + '"><itunes:category text="' + xmlEsc(SHOW.subCategory) + '"/></itunes:category>',
+    "    <itunes:explicit>false</itunes:explicit>",
+    "    <image><url>" + xmlEsc(SHOW.image) + "</url><title>" + xmlEsc(title) + "</title><link>" + SHOW.site + "/podkast</link></image>",
+    items,
+    "  </channel>",
+    "</rss>",
+  ].join("\n");
+  return xml;
+}
+
+/* ----------------------------- lyd-serving ----------------------------- */
+async function serveAudio(env, id, request) {
+  const cid = cleanId(id);
+  if (!cid) return new Response("bad id", { status: 400 });
+  const buf = await env.BUILDER_KV.get(AUDIO + cid, "arrayBuffer");
+  if (!buf) return new Response("not found", { status: 404 });
+  const total = buf.byteLength;
+  const range = request.headers.get("Range");
+  const baseHeaders = {
+    "Content-Type": "audio/mpeg",
+    "Accept-Ranges": "bytes",
+    "Cache-Control": "public, max-age=86400",
+  };
+  if (range) {
+    const m = range.match(/bytes=(\d*)-(\d*)/);
+    if (m) {
+      let start = m[1] ? parseInt(m[1], 10) : 0;
+      let end = m[2] ? parseInt(m[2], 10) : total - 1;
+      if (isNaN(start)) start = 0;
+      if (isNaN(end) || end >= total) end = total - 1;
+      if (start > end || start >= total) {
+        return new Response(null, { status: 416, headers: { "Content-Range": "bytes */" + total } });
+      }
+      const slice = buf.slice(start, end + 1);
+      return new Response(slice, {
+        status: 206,
+        headers: Object.assign({}, baseHeaders, {
+          "Content-Range": "bytes " + start + "-" + end + "/" + total,
+          "Content-Length": "" + (end - start + 1),
+        }),
+      });
+    }
+  }
+  return new Response(buf, {
+    status: 200,
+    headers: Object.assign({}, baseHeaders, { "Content-Length": "" + total }),
+  });
+}
+
+/* ------------------------------- ruting ------------------------------- */
+export async function onRequestGet(context) {
+  const { request, env, params } = context;
+  const parts = [].concat(params.path || []);
+  const head = (parts[0] || "").toLowerCase();
+
+  if (!env.BUILDER_KV) {
+    if (head === "feed.xml" || head === "feed-en.xml") {
+      return new Response(buildFeed([], head === "feed-en.xml" ? "en" : "no"), {
+        headers: { "Content-Type": "application/rss+xml; charset=utf-8" },
+      });
+    }
+    return json({ error: "not_configured", episodes: [] }, 200);
+  }
+
+  if (head === "feed.xml" || head === "feed-en.xml") {
+    const index = await readJson(env, IDX, []);
+    const xml = buildFeed(Array.isArray(index) ? index : [], head === "feed-en.xml" ? "en" : "no");
+    return new Response(xml, {
+      headers: {
+        "Content-Type": "application/rss+xml; charset=utf-8",
+        "Cache-Control": "public, max-age=900",
+      },
+    });
+  }
+
+  if (head === "audio") {
+    const file = parts[1] || "";
+    const id = file.replace(/\.mp3$/i, "");
+    return serveAudio(env, id, request);
+  }
+
+  if (head === "episodes") {
+    const index = await readJson(env, IDX, []);
+    return json({
+      episodes: Array.isArray(index) ? index : [],
+      config: { hasTts: !!ttsProvider(env), site: SHOW.site, titleNo: SHOW.titleNo, titleEn: SHOW.titleEn },
+    }, 200);
+  }
+
+  if (head === "episode") {
+    const id = cleanId(new URL(request.url).searchParams.get("id"));
+    if (!id) return json({ episode: null }, 400);
+    const ep = await readJson(env, EP + id, null);
+    return json({ episode: ep }, 200);
+  }
+
+  if (head === "status") {
+    const index = await readJson(env, IDX, []);
+    const state = (await readJson(env, STATE, null)) || { topicCursor: 0, lastDate: "" };
+    const next = TOPICS[(state.topicCursor || 0) % TOPICS.length];
+    return json({
+      count: Array.isArray(index) ? index.length : 0,
+      lastDate: state.lastDate || "",
+      hasTts: !!ttsProvider(env),
+      ttsProvider: ttsProvider(env) || "none",
+      feed: SHOW.site + "/api/podcast/feed.xml",
+      feedEn: SHOW.site + "/api/podcast/feed-en.xml",
+      nextTopic: next ? { cat: next.cat, no: next.no, en: next.en } : null,
+    }, 200);
+  }
+
+  return json({ error: "not_found" }, 404);
+}
+
+export async function onRequestPost(context) {
+  const { request, env, params } = context;
+  const parts = [].concat(params.path || []);
+  const head = (parts[0] || "").toLowerCase();
+
+  if (head !== "generate") return json({ error: "not_found" }, 404);
+
+  let body = {};
+  try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
+
+  const expected = (env.PODCAST_PASSWORD || env.COURSE_EDIT_PASSWORD || DEFAULT_PASSWORD) + "";
+  if (((body && body.password) || "") + "" !== expected) {
+    return json({ error: "bad_password" }, 401);
+  }
+  if (!env.BUILDER_KV) return json({ error: "not_configured" }, 500);
+  if (!env.ANTHROPIC_API_KEY) return json({ error: "missing_anthropic_key" }, 500);
+
+  try {
+    const out = await generateEpisode(env, { force: !!body.force, date: body.date });
+    return json({ ok: true, reused: !!out.reused, episode: out.episode }, 200);
+  } catch (e) {
+    return json({ error: "generate_failed", detail: (e && e.message) || "?" }, 500);
+  }
+}
