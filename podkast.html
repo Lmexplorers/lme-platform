@@ -50,6 +50,10 @@
   .topbar a.back:hover{color:var(--pink-600);}
   .lang-toggle{font-family:var(--font-head);font-weight:700;font-size:13px;border:1.5px solid var(--pink-200);
     background:#fff;color:var(--pink-600);border-radius:999px;padding:7px 14px;cursor:pointer;}
+  .studio-link{font-family:var(--font-head);font-weight:700;font-size:13px;color:var(--ink-muted);
+    text-decoration:none;opacity:.7;white-space:nowrap;}
+  .studio-link:hover{color:var(--pink-600);opacity:1;}
+  @media(max-width:560px){.studio-link span{display:none;}}
 
   .wrap{max-width:920px;margin:0 auto;padding:36px 26px 90px;}
   .crumb{font-size:13px;color:var(--ink-muted);margin-bottom:14px;}
@@ -139,6 +143,7 @@
     <b>Little Montessori Explorers</b>
   </a>
   <div class="spacer"></div>
+  <a class="studio-link" id="studioLink" href="#studio" title="Studio (kun for deg)">🎛️ <span data-no="Studio" data-en="Studio">Studio</span></a>
   <a class="back" href="/dashboard" data-no="Tilbake til dashbord" data-en="Back to dashboard">Tilbake til dashbord</a>
   <button class="lang-toggle" id="langToggle">EN 🌍</button>
 </div>
@@ -176,7 +181,7 @@
        data-en="How it works: every podcast app pulls episodes from the same feed link. Submit it once per platform, and each new daily episode appears automatically everywhere.">…</div>
 
   <!-- Eier: lag dagens episode -->
-  <div class="owner-bar" id="ownerBar">
+  <div class="owner-bar" id="ownerBar" style="scroll-margin-top:80px">
     <h3 data-no="Studio (kun for deg)" data-en="Studio (owner only)">Studio (kun for deg)</h3>
     <p data-no="Serien lager en episode av seg selv hver dag. Du kan ogsaa lage dagens episode med en gang her."
        data-en="The series creates an episode by itself every day. You can also generate today's episode right now.">…</p>
@@ -380,7 +385,8 @@
   }
 
   /* Eier-modus: #rediger i adressen, lagret flagg, eller Ctrl/Cmd+Shift+E */
-  function revealOwner(){ document.getElementById('ownerBar').classList.add('show'); try{localStorage.setItem('lme-edit','1');}catch(e){} loadStatus(); }
+  function revealOwner(scroll){ var b=document.getElementById('ownerBar'); b.classList.add('show'); try{localStorage.setItem('lme-edit','1');}catch(e){} loadStatus(); if(scroll) b.scrollIntoView({behavior:'smooth',block:'start'}); }
+  document.getElementById('studioLink').addEventListener('click',function(e){ e.preventDefault(); revealOwner(true); });
   if(/(^|[#&?])rediger/.test(location.hash+location.search)) revealOwner();
   try{ if(localStorage.getItem('lme-edit')==='1') revealOwner(); }catch(e){}
   document.addEventListener('keydown',function(e){ if((e.ctrlKey||e.metaKey)&&e.shiftKey&&(e.key==='E'||e.key==='e')) revealOwner(); });
