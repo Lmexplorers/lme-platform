@@ -169,7 +169,7 @@ async function synthesize(env, text, lang) {
       const model = env.OPENAI_TTS_MODEL || "gpt-4o-mini-tts";
       const payload = {
         model: model,
-        voice: env.OPENAI_TTS_VOICE || "nova",
+        voice: env.OPENAI_TTS_VOICE || "coral",
         input: body,
         response_format: "mp3",
       };
