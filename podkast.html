@@ -324,7 +324,8 @@
       // Bygg en ekte audio-spiller en gang.
       var existing=mount.querySelector('audio');
       if(!existing){
-        mount.innerHTML='<audio controls preload="none" src="/api/podcast/audio/'+encodeURIComponent(id)+'.mp3"></audio>';
+        var src = meta.audioPath ? meta.audioPath : ('/api/podcast/audio/'+encodeURIComponent(id)+'.mp3');
+        mount.innerHTML='<audio controls preload="none" src="'+src+'"></audio>';
         existing=mount.querySelector('audio');
       }
       currentAudio=existing;

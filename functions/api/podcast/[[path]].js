@@ -60,6 +60,35 @@ const SHOW = {
 
 const CLAUDE_MODEL = "claude-sonnet-4-6";
 
+// Faste launch-episoder (Mia og Teo-sangene, laget med Suno). Lyden ligger som
+// statiske filer i repoet, så de virker uten KV og uten opplasting.
+const STATIC_EPISODES = [
+  {
+    id: "sang-mia-og-teo-no", num: 1, date: "2026-06-21", category: "Mia og Teo",
+    titleNo: "Mia og Teo, kom bli med!", titleEn: "Mia og Teo, kom bli med!",
+    teaserNo: "Den offisielle Mia og Teo-sangen på norsk. Bli med på eventyret!",
+    teaserEn: "The official Mia and Teo song, in Norwegian. Join the adventure!",
+    audioPath: "/media/podkast/sang-mia-og-teo-norsk.mp3", audioSize: 1997475,
+    audioType: "audio/mpeg", audioLang: "no", duration: "1:46", hasAudio: true, isStatic: true,
+  },
+  {
+    id: "sang-mia-and-teo-en", num: 2, date: "2026-06-21", category: "Mia og Teo",
+    titleNo: "Mia and Teo, Come and Play", titleEn: "Mia and Teo, Come and Play",
+    teaserNo: "Den offisielle Mia og Teo-sangen på engelsk. Små oppdagere hver dag!",
+    teaserEn: "The official Mia and Teo song. Little explorers every day!",
+    audioPath: "/media/podkast/sang-mia-and-teo-english.mp3", audioSize: 2136699,
+    audioType: "audio/mpeg", audioLang: "en", duration: "1:54", hasAudio: true, isStatic: true,
+  },
+];
+
+function findStatic(id) {
+  for (let i = 0; i < STATIC_EPISODES.length; i++) { if (STATIC_EPISODES[i].id === id) return STATIC_EPISODES[i]; }
+  return null;
+}
+function allEpisodes(kvIndex) {
+  return (Array.isArray(kvIndex) ? kvIndex : []).concat(STATIC_EPISODES);
+}
+
 /* ---- Tema-bank: serien "lager seg selv" ved å rotere gjennom disse ---- */
 /* Hver runde plukkes neste tema (topicCursor), og Claude skriver en hel
    tospråklig episode rundt vinkelen. Dekker hele LME-systemet. */
@@ -561,7 +590,7 @@ function buildFeed(index, lang) {
       "      <itunes:duration>" + xmlEsc(e.duration || "5:00") + "</itunes:duration>",
       "      <itunes:explicit>false</itunes:explicit>",
       "      <itunes:image href=\"" + xmlEsc(SHOW.image) + "\"/>",
-      "      <enclosure url=\"" + xmlEsc(audioUrl(e.id)) + "\" length=\"" + (e.audioSize || 0) + "\" type=\"" + xmlEsc(e.audioType || "audio/mpeg") + "\"/>",
+      "      <enclosure url=\"" + xmlEsc(e.audioPath ? (SHOW.site + e.audioPath) : audioUrl(e.id)) + "\" length=\"" + (e.audioSize || 0) + "\" type=\"" + xmlEsc(e.audioType || "audio/mpeg") + "\"/>",
       "    </item>",
     ].join("\n");
   }).join("\n");
@@ -640,16 +669,17 @@ export async function onRequestGet(context) {
 
   if (!env.BUILDER_KV) {
     if (head === "feed.xml" || head === "feed-en.xml") {
-      return new Response(buildFeed([], head === "feed-en.xml" ? "en" : "no"), {
+      return new Response(buildFeed(allEpisodes([]), head === "feed-en.xml" ? "en" : "no"), {
         headers: { "Content-Type": "application/rss+xml; charset=utf-8" },
       });
     }
-    return json({ error: "not_configured", episodes: [] }, 200);
+    if (head === "episodes") return json({ episodes: STATIC_EPISODES, config: { hasTts: false } }, 200);
+    return json({ error: "not_configured", episodes: STATIC_EPISODES }, 200);
   }
 
   if (head === "feed.xml" || head === "feed-en.xml") {
     const index = await readJson(env, IDX, []);
-    const xml = buildFeed(Array.isArray(index) ? index : [], head === "feed-en.xml" ? "en" : "no");
+    const xml = buildFeed(allEpisodes(index), head === "feed-en.xml" ? "en" : "no");
     return new Response(xml, {
       headers: {
         "Content-Type": "application/rss+xml; charset=utf-8",
@@ -667,7 +697,7 @@ export async function onRequestGet(context) {
   if (head === "episodes") {
     const index = await readJson(env, IDX, []);
     return json({
-      episodes: Array.isArray(index) ? index : [],
+      episodes: allEpisodes(index),
       config: { hasTts: !!ttsProvider(env), site: SHOW.site, titleNo: SHOW.titleNo, titleEn: SHOW.titleEn },
     }, 200);
   }
@@ -675,6 +705,8 @@ export async function onRequestGet(context) {
   if (head === "episode") {
     const id = cleanId(new URL(request.url).searchParams.get("id"));
     if (!id) return json({ episode: null }, 400);
+    const stat = findStatic(id);
+    if (stat) return json({ episode: stat }, 200);
     const ep = await readJson(env, EP + id, null);
     return json({ episode: ep }, 200);
   }
