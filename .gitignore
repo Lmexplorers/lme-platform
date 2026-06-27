@@ -1,2 +1,5 @@
 # Lokale backup-filer (skal ikke i repoet)
 *.bak
+
+# Node-avhengigheter (kun for lokale verktoey, ikke i repoet)
+node_modules/

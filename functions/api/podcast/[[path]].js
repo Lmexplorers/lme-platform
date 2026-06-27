@@ -51,7 +51,7 @@ const SHOW = {
   ownerEmail: "hei@lmexplorers.com",
   descNo: "En liten daglig dose Montessori og pedagogikk fra Little Montessori Explorers. Korte, varme episoder om det forberedte miljoet, observasjon, aldersgruppene, LME-boekene og appene, Inner Circle og hele LME-systemet. Ny episode hver dag, helautomatisk.",
   descEn: "A small daily dose of Montessori and pedagogy from Little Montessori Explorers. Short, warm episodes about the prepared environment, observation, the age groups, the LME books and apps, Inner Circle and the whole LME system. A new episode every day, fully automated.",
-  image: "https://lmexplorers.com/images/lme-banner.png",
+  image: "https://lmexplorers.com/images/podkast-cover.png",
   language: "no",
   category: "Kids & Family",
   subCategory: "Parenting",

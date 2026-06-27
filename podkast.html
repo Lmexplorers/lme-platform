@@ -58,7 +58,7 @@
   .hero{display:flex;gap:26px;align-items:center;flex-wrap:wrap;margin-bottom:26px;}
   .hero .cover{width:148px;height:148px;border-radius:24px;flex:none;box-shadow:var(--shadow-med);
     background:linear-gradient(135deg,var(--pink-300),var(--pink-500));display:flex;align-items:center;justify-content:center;
-    font-size:64px;color:#fff;}
+    font-size:64px;color:#fff;object-fit:cover;}
   .hero .htext{flex:1;min-width:260px;}
   .hero h1{font-size:clamp(32px,6vw,50px);font-weight:800;letter-spacing:-1px;}
   .hero .htext p{margin:12px 0 0;max-width:54ch;font-size:17px;color:var(--ink-soft);}
@@ -147,7 +147,7 @@
   <div class="crumb"><a href="/dashboard" data-no="Hjem" data-en="Home">Hjem</a> / <span data-no="Podkast" data-en="Podcast">Podkast</span></div>
 
   <div class="hero">
-    <div class="cover">🎙️</div>
+    <img class="cover" src="/images/podkast-cover.png" alt="LME Podkast" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'cover',textContent:'🎙️'}))">
     <div class="htext">
       <span class="tag" data-no="Ny episode hver dag" data-en="A new episode every day">Ny episode hver dag</span>
       <h1 data-no="LME Podkast" data-en="LME Podcast">LME Podkast</h1>
