@@ -123,6 +123,15 @@
   .ep .panel .script{font-size:14.5px;color:var(--ink);line-height:1.7;white-space:pre-line;max-height:320px;overflow:auto;
     border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--pink-50);}
   .ep audio{width:100%;margin-top:12px;}
+  .ownerctl{margin-top:18px;border-top:1px dashed var(--pink-300);padding-top:14px;}
+  .ownerctl h4{margin-bottom:6px;}
+  .ownerctl .hint{font-size:13px;color:var(--ink-muted);margin-bottom:10px;}
+  .ownerctl .ctlrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px;}
+  .ownerctl .ctlrow2{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between;}
+  .ownerctl input[type=file]{font-family:var(--font-body);font-size:13px;}
+  .ownerctl select{font-family:var(--font-body);font-size:14px;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff;}
+  .ownerctl .btn{font-size:14px;padding:9px 16px;}
+  .ownerctl .aud-state{font-size:13px;color:var(--ink-soft);}
 
   .badge-auto{display:inline-block;font-family:var(--font-head);font-weight:700;font-size:10.5px;letter-spacing:.08em;
     text-transform:uppercase;color:var(--pink-600);background:var(--pink-100);border-radius:999px;padding:3px 9px;}
@@ -211,6 +220,7 @@
   var details = {};        // id -> full episode
   var pw = (function(){ try{ return localStorage.getItem('lme-podcast-pw') || null; }catch(e){ return null; } })();
   var currentAudio = null; // <audio> som spiller nå
+  var owner = false;       // eier-modus: vis opplasting/slett per episode
 
   function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
   function pick(o,base){ return (lang==='no'? o[base+'No'] : o[base+'En']) || o[base+'No'] || o[base+'En'] || ''; }
@@ -326,7 +336,54 @@
       var script = lang==='no' ? (ep.scriptNo||'') : (ep.scriptEn||ep.scriptNo||'');
       txt.innerHTML =
         (notes? '<h4>'+(lang==='no'?'I denne episoden':'In this episode')+'</h4><div class="notes">'+esc(notes)+'</div>':'')+
-        '<h4>'+(lang==='no'?'Manus':'Script')+'</h4><div class="script">'+esc(script)+'</div>';
+        '<h4>'+(lang==='no'?'Manus':'Script')+'</h4><div class="script">'+esc(script)+'</div>'+
+        (owner? ownerCtlHTML(ep) : '');
+      if(owner) wireOwnerCtl(id, txt);
+    });
+  }
+
+  // Eier-kontroller i panelet: les inn manuset, last opp din egen stemme, slett.
+  function ownerCtlHTML(ep){
+    var has = ep.hasAudio ? (lang==='no'?('Har lyd ('+(ep.audioLang==='en'?'engelsk':'norsk')+')'):('Has audio ('+(ep.audioLang==='en'?'English':'Norwegian')+')')) : (lang==='no'?'Ingen lyd ennå':'No audio yet');
+    return '<div class="ownerctl">'+
+      '<h4>'+(lang==='no'?'Din egen stemme':'Your own voice')+'</h4>'+
+      '<p class="hint">'+(lang==='no'?'Les manuset over inn på telefonen (talememo) eller PC, og last opp lydfila her (mp3 eller m4a). Da blir det din ekte stemme.':'Read the script above into your phone (voice memo) or PC, and upload the file here (mp3 or m4a). Then it is your real voice.')+'</p>'+
+      '<div class="ctlrow">'+
+        '<input type="file" class="aud-file" accept="audio/*">'+
+        '<select class="aud-lang"><option value="no">'+(lang==='no'?'Norsk':'Norwegian')+'</option><option value="en">'+(lang==='no'?'Engelsk':'English')+'</option></select>'+
+        '<button type="button" class="btn btn-primary aud-up">'+(lang==='no'?'Last opp lyd':'Upload audio')+'</button>'+
+      '</div>'+
+      '<div class="ctlrow2"><span class="aud-state">'+esc(has)+'</span>'+
+        '<button type="button" class="btn btn-ghost aud-del">'+(lang==='no'?'Slett episode':'Delete episode')+'</button></div>'+
+    '</div>';
+  }
+
+  function wireOwnerCtl(id, root){
+    var up=root.querySelector('.aud-up'), del=root.querySelector('.aud-del'),
+        fileEl=root.querySelector('.aud-file'), langEl=root.querySelector('.aud-lang'),
+        st=root.querySelector('.aud-state');
+    if(up) up.addEventListener('click',function(){
+      var f=fileEl&&fileEl.files&&fileEl.files[0];
+      if(!f){ st.textContent=lang==='no'?'Velg en lydfil først.':'Pick an audio file first.'; return; }
+      var p=ensurePw(); if(!p) return;
+      var fd=new FormData(); fd.append('password',p); fd.append('id',id); fd.append('lang',langEl.value); fd.append('audio',f);
+      up.disabled=true; st.textContent=lang==='no'?'Laster opp…':'Uploading…';
+      fetch('/api/podcast/upload',{method:'POST',body:fd}).then(function(r){return r.json();}).then(function(d){
+        up.disabled=false;
+        if(d&&d.ok){ st.textContent=lang==='no'?'Lastet opp! Lyden er din nå.':'Uploaded! The audio is yours now.'; delete details[id]; load(); }
+        else if(d&&d.error==='bad_password'){ pw=null; try{localStorage.removeItem('lme-podcast-pw');}catch(e){} st.textContent=lang==='no'?'Feil passord.':'Wrong password.'; }
+        else st.textContent=(lang==='no'?'Kunne ikke laste opp: ':'Upload failed: ')+((d&&d.error)||'?');
+      }).catch(function(){ up.disabled=false; st.textContent=lang==='no'?'Nettverksfeil.':'Network error.'; });
+    });
+    if(del) del.addEventListener('click',function(){
+      if(!confirm(lang==='no'?'Slette hele denne episoden?':'Delete this whole episode?')) return;
+      var p=ensurePw(); if(!p) return;
+      fetch('/api/podcast/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:p,id:id})})
+      .then(function(r){return r.json();}).then(function(d){
+        if(d&&d.ok){ delete details[id]; load(); }
+        else if(d&&d.error==='bad_password'){ pw=null; try{localStorage.removeItem('lme-podcast-pw');}catch(e){} alert(lang==='no'?'Feil passord.':'Wrong password.'); }
+        else alert((lang==='no'?'Kunne ikke slette: ':'Delete failed: ')+((d&&d.error)||'?'));
+      }).catch(function(){ alert(lang==='no'?'Nettverksfeil.':'Network error.'); });
     });
   }
 
@@ -393,7 +450,7 @@
   }
 
   /* Eier-modus: #rediger i adressen, lagret flagg, eller Ctrl/Cmd+Shift+E */
-  function revealOwner(scroll){ var b=document.getElementById('ownerBar'); b.classList.add('show'); try{localStorage.setItem('lme-edit','1');}catch(e){} loadStatus(); if(scroll) b.scrollIntoView({behavior:'smooth',block:'start'}); }
+  function revealOwner(scroll){ var b=document.getElementById('ownerBar'); b.classList.add('show'); owner=true; try{localStorage.setItem('lme-edit','1');}catch(e){} loadStatus(); render(); if(scroll) b.scrollIntoView({behavior:'smooth',block:'start'}); }
   document.getElementById('studioLink').addEventListener('click',function(e){ e.preventDefault(); revealOwner(true); });
   if(/(^|[#&?])rediger/.test(location.hash+location.search)) revealOwner();
   try{ if(localStorage.getItem('lme-edit')==='1') revealOwner(); }catch(e){}

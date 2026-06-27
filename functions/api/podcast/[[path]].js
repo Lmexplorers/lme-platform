@@ -317,9 +317,9 @@ async function generateEpisode(env, opts) {
 
   const gen = await callClaude(env, topic, num);
 
-  // Engelsk lyd foreløpig. Kan slås av med PODCAST_TTS="off", eller byttes til
-  // norsk med PODCAST_AUDIO_LANG="no".
-  const wantTts = (env.PODCAST_TTS || "on").toLowerCase() !== "off";
+  // Syntetisk stemme er AV. Renate leser inn med sin egen stemme (opplasting).
+  // Kan slås på igjen med PODCAST_TTS="on" om ønskelig.
+  const wantTts = (env.PODCAST_TTS || "off").toLowerCase() === "on";
   const audioLang = (env.PODCAST_AUDIO_LANG || "en").toLowerCase() === "no" ? "no" : "en";
   const scriptForAudio = audioLang === "no" ? gen.scriptNo : (gen.scriptEn || gen.scriptNo);
 
@@ -420,7 +420,7 @@ function buildFeed(index, lang) {
       "      <itunes:duration>" + xmlEsc(e.duration || "5:00") + "</itunes:duration>",
       "      <itunes:explicit>false</itunes:explicit>",
       "      <itunes:image href=\"" + xmlEsc(SHOW.image) + "\"/>",
-      "      <enclosure url=\"" + xmlEsc(audioUrl(e.id)) + "\" length=\"" + (e.audioSize || 0) + "\" type=\"audio/mpeg\"/>",
+      "      <enclosure url=\"" + xmlEsc(audioUrl(e.id)) + "\" length=\"" + (e.audioSize || 0) + "\" type=\"" + xmlEsc(e.audioType || "audio/mpeg") + "\"/>",
       "    </item>",
     ].join("\n");
   }).join("\n");
@@ -457,9 +457,11 @@ async function serveAudio(env, id, request) {
   const buf = await env.BUILDER_KV.get(AUDIO + cid, "arrayBuffer");
   if (!buf) return new Response("not found", { status: 404 });
   const total = buf.byteLength;
+  const ep = await readJson(env, EP + cid, null);
+  const ctype = (ep && ep.audioType) || "audio/mpeg";
   const range = request.headers.get("Range");
   const baseHeaders = {
-    "Content-Type": "audio/mpeg",
+    "Content-Type": ctype,
     "Accept-Ranges": "bytes",
     "Cache-Control": "public, max-age=86400",
   };
@@ -554,18 +556,74 @@ export async function onRequestGet(context) {
   return json({ error: "not_found" }, 404);
 }
 
+function pwOk(env, given) {
+  const expected = (env.PODCAST_PASSWORD || env.COURSE_EDIT_PASSWORD || DEFAULT_PASSWORD) + "";
+  return (((given) || "") + "") === expected;
+}
+
+// Last opp Renates egen innleste lyd til en episode (multipart/form-data).
+async function handleUpload(request, env) {
+  if (!env.BUILDER_KV) return json({ error: "not_configured" }, 500);
+  let form;
+  try { form = await request.formData(); } catch (e) { return json({ error: "bad_form" }, 400); }
+  if (!pwOk(env, form.get("password"))) return json({ error: "bad_password" }, 401);
+  const id = cleanId(form.get("id"));
+  if (!id) return json({ error: "bad_id" }, 400);
+  const lang = (form.get("lang") + "").toLowerCase() === "en" ? "en" : "no";
+  const file = form.get("audio");
+  if (!file || typeof file.arrayBuffer !== "function") return json({ error: "no_file" }, 400);
+  const buf = await file.arrayBuffer();
+  if (!buf || buf.byteLength < 200) return json({ error: "empty_file" }, 400);
+  if (buf.byteLength > 24 * 1024 * 1024) return json({ error: "too_big" }, 413);
+
+  const ep = await readJson(env, EP + id, null);
+  if (!ep) return json({ error: "no_episode" }, 404);
+  const type = (file.type && /^audio\//.test(file.type)) ? file.type : "audio/mpeg";
+
+  await env.BUILDER_KV.put(AUDIO + id, buf);
+  ep.hasAudio = true; ep.audioLang = lang; ep.audioSize = buf.byteLength; ep.audioType = type;
+  await env.BUILDER_KV.put(EP + id, JSON.stringify(ep));
+
+  let index = await readJson(env, IDX, []);
+  if (Array.isArray(index)) {
+    for (let i = 0; i < index.length; i++) {
+      if (index[i].id === id) { index[i].hasAudio = true; index[i].audioLang = lang; }
+    }
+    await env.BUILDER_KV.put(IDX, JSON.stringify(index));
+  }
+  return json({ ok: true, id: id, audioLang: lang }, 200);
+}
+
+// Slett en episode (tekst + lyd + indeks).
+async function handleDelete(env, body) {
+  if (!env.BUILDER_KV) return json({ error: "not_configured" }, 500);
+  if (!pwOk(env, body && body.password)) return json({ error: "bad_password" }, 401);
+  const id = cleanId(body && body.id);
+  if (!id) return json({ error: "bad_id" }, 400);
+  try { await env.BUILDER_KV.delete(AUDIO + id); } catch (e) {}
+  try { await env.BUILDER_KV.delete(EP + id); } catch (e) {}
+  let index = await readJson(env, IDX, []);
+  if (Array.isArray(index)) {
+    index = index.filter(function (m) { return m.id !== id; });
+    await env.BUILDER_KV.put(IDX, JSON.stringify(index));
+  }
+  return json({ ok: true, id: id }, 200);
+}
+
 export async function onRequestPost(context) {
   const { request, env, params } = context;
   const parts = [].concat(params.path || []);
   const head = (parts[0] || "").toLowerCase();
 
-  if (head !== "generate") return json({ error: "not_found" }, 404);
+  if (head === "upload") return handleUpload(request, env);
 
   let body = {};
   try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
 
-  const expected = (env.PODCAST_PASSWORD || env.COURSE_EDIT_PASSWORD || DEFAULT_PASSWORD) + "";
-  if (((body && body.password) || "") + "" !== expected) {
+  if (head === "delete") return handleDelete(env, body);
+  if (head !== "generate") return json({ error: "not_found" }, 404);
+
+  if (!pwOk(env, body && body.password)) {
     return json({ error: "bad_password" }, 401);
   }
   if (!env.BUILDER_KV) return json({ error: "not_configured" }, 500);
