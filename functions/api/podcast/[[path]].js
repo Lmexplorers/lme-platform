@@ -169,7 +169,7 @@ async function synthesize(env, text, lang) {
       const model = env.OPENAI_TTS_MODEL || "gpt-4o-mini-tts";
       const payload = {
         model: model,
-        voice: env.OPENAI_TTS_VOICE || "coral",
+        voice: env.OPENAI_TTS_VOICE || "shimmer",
         input: body,
         response_format: "mp3",
       };
@@ -317,14 +317,16 @@ async function generateEpisode(env, opts) {
 
   const gen = await callClaude(env, topic, num);
 
-  // Hvilket språk lyden lages på. Foreløpig engelsk (god syntetisk stemme),
-  // til Renate leser inn norsk selv. Styres med PODCAST_AUDIO_LANG ("en"/"no").
+  // Engelsk lyd foreløpig. Kan slås av med PODCAST_TTS="off", eller byttes til
+  // norsk med PODCAST_AUDIO_LANG="no".
+  const wantTts = (env.PODCAST_TTS || "on").toLowerCase() !== "off";
   const audioLang = (env.PODCAST_AUDIO_LANG || "en").toLowerCase() === "no" ? "no" : "en";
   const scriptForAudio = audioLang === "no" ? gen.scriptNo : (gen.scriptEn || gen.scriptNo);
 
-  // Stemmelegg teksten (om TTS er konfigurert).
   let audioBytes = null;
-  try { audioBytes = await synthesize(env, scriptForAudio, audioLang); } catch (e) { audioBytes = null; }
+  if (wantTts) {
+    try { audioBytes = await synthesize(env, scriptForAudio, audioLang); } catch (e) { audioBytes = null; }
+  }
   let audioSize = 0;
   if (audioBytes) {
     audioSize = audioBytes.byteLength;
