@@ -561,37 +561,69 @@ function pwOk(env, given) {
   return (((given) || "") + "") === expected;
 }
 
-// Last opp Renates egen innleste lyd til en episode (multipart/form-data).
+// Last opp lyd (multipart/form-data). To bruk:
+//  - med "id": legg lyd til en eksisterende episode.
+//  - uten "id": lag en HELT NY episode fra lydfila (f.eks. en Suno-sang),
+//    med tittel og kort tekst du sender med.
 async function handleUpload(request, env) {
   if (!env.BUILDER_KV) return json({ error: "not_configured" }, 500);
   let form;
   try { form = await request.formData(); } catch (e) { return json({ error: "bad_form" }, 400); }
   if (!pwOk(env, form.get("password"))) return json({ error: "bad_password" }, 401);
-  const id = cleanId(form.get("id"));
-  if (!id) return json({ error: "bad_id" }, 400);
   const lang = (form.get("lang") + "").toLowerCase() === "en" ? "en" : "no";
   const file = form.get("audio");
   if (!file || typeof file.arrayBuffer !== "function") return json({ error: "no_file" }, 400);
   const buf = await file.arrayBuffer();
   if (!buf || buf.byteLength < 200) return json({ error: "empty_file" }, 400);
   if (buf.byteLength > 24 * 1024 * 1024) return json({ error: "too_big" }, 413);
-
-  const ep = await readJson(env, EP + id, null);
-  if (!ep) return json({ error: "no_episode" }, 404);
   const type = (file.type && /^audio\//.test(file.type)) ? file.type : "audio/mpeg";
 
-  await env.BUILDER_KV.put(AUDIO + id, buf);
-  ep.hasAudio = true; ep.audioLang = lang; ep.audioSize = buf.byteLength; ep.audioType = type;
-  await env.BUILDER_KV.put(EP + id, JSON.stringify(ep));
-
   let index = await readJson(env, IDX, []);
-  if (Array.isArray(index)) {
+  if (!Array.isArray(index)) index = [];
+
+  const givenId = cleanId(form.get("id"));
+  if (givenId) {
+    // Legg lyd til eksisterende episode.
+    const ep = await readJson(env, EP + givenId, null);
+    if (!ep) return json({ error: "no_episode" }, 404);
+    await env.BUILDER_KV.put(AUDIO + givenId, buf);
+    ep.hasAudio = true; ep.audioLang = lang; ep.audioSize = buf.byteLength; ep.audioType = type;
+    await env.BUILDER_KV.put(EP + givenId, JSON.stringify(ep));
     for (let i = 0; i < index.length; i++) {
-      if (index[i].id === id) { index[i].hasAudio = true; index[i].audioLang = lang; }
+      if (index[i].id === givenId) { index[i].hasAudio = true; index[i].audioLang = lang; }
     }
     await env.BUILDER_KV.put(IDX, JSON.stringify(index));
+    return json({ ok: true, id: givenId, audioLang: lang }, 200);
   }
-  return json({ ok: true, id: id, audioLang: lang }, 200);
+
+  // Lag en helt ny episode fra lydfila (Suno-sang e.l.).
+  const titleNo = s(form.get("titleNo"), 160) || s(form.get("titleEn"), 160) || "Mia og Teo";
+  const titleEn = s(form.get("titleEn"), 160) || titleNo;
+  const teaserNo = s(form.get("teaserNo"), 400);
+  const teaserEn = s(form.get("teaserEn"), 400) || teaserNo;
+  const date = todayUTC();
+  let maxNum = 0;
+  for (let i = 0; i < index.length; i++) { if ((index[i].num || 0) > maxNum) maxNum = index[i].num; }
+  const num = maxNum + 1;
+  const id = cleanId("sang-" + num + "-" + date) || ("sang-" + num);
+
+  const episode = {
+    id: id, num: num, date: date, category: "Mia og Teo",
+    titleNo: titleNo, titleEn: titleEn, teaserNo: teaserNo, teaserEn: teaserEn,
+    scriptNo: "", scriptEn: "", showNotesNo: "", showNotesEn: "", keywords: "",
+    hasAudio: true, audioLang: lang, audioSize: buf.byteLength, audioType: type,
+    duration: "", created: new Date().toISOString(),
+  };
+  await env.BUILDER_KV.put(AUDIO + id, buf);
+  await env.BUILDER_KV.put(EP + id, JSON.stringify(episode));
+  index.unshift({
+    id: id, num: num, date: date, category: episode.category,
+    titleNo: titleNo, titleEn: titleEn, teaserNo: teaserNo, teaserEn: teaserEn,
+    hasAudio: true, audioLang: lang, duration: "",
+  });
+  if (index.length > FEED_LIMIT) index = index.slice(0, FEED_LIMIT);
+  await env.BUILDER_KV.put(IDX, JSON.stringify(index));
+  return json({ ok: true, id: id, audioLang: lang, created: true }, 200);
 }
 
 // Slett en episode (tekst + lyd + indeks).

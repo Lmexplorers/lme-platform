@@ -94,6 +94,15 @@
     box-shadow:0 10px 24px -10px rgba(196,61,117,.6);}
   .btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink-soft);}
   .owner-status{font-size:13px;color:var(--ink-muted);}
+  .song-up{margin-top:18px;border-top:1px dashed var(--pink-300);padding-top:16px;}
+  .song-up h3{font-size:15px;margin-bottom:4px;}
+  .song-up p{font-size:13px;color:var(--ink-muted);margin-bottom:12px;}
+  .song-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+  .song-grid input,.song-grid select{font-family:var(--font-body);font-size:14px;border:1.5px solid var(--line);
+    border-radius:10px;padding:9px 12px;background:#fff;width:100%;}
+  .song-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .song-row input[type=file]{font-family:var(--font-body);font-size:13px;}
+  @media(max-width:560px){.song-grid{grid-template-columns:1fr;}}
 
   .section-title{font-size:15px;font-family:var(--font-head);font-weight:700;letter-spacing:.04em;
     text-transform:uppercase;color:var(--ink-muted);margin:0 0 16px;}
@@ -198,6 +207,23 @@
       <button class="btn btn-primary" id="genBtn" data-no="Lag dagens episode" data-en="Generate today's episode">Lag dagens episode</button>
       <button class="btn btn-ghost" id="genForceBtn" data-no="Lag en ekstra" data-en="Generate an extra">Lag en ekstra</button>
       <span class="owner-status" id="ownerStatus"></span>
+    </div>
+
+    <div class="song-up">
+      <h3 data-no="Last opp en sang eller episode (f.eks. fra Suno)" data-en="Upload a song or episode (e.g. from Suno)">Last opp en sang eller episode</h3>
+      <p data-no="Last ned sangen din fra Suno (mp3) og last den opp her. Da blir den en egen episode med Mia og Teo sine stemmer, og publiseres på podkasten."
+         data-en="Download your song from Suno (mp3) and upload it here. It becomes its own episode with Mia and Teo's voices, published to the podcast.">…</p>
+      <div class="song-grid">
+        <input id="song-titleNo" type="text" data-no-ph="Tittel (norsk)" data-en-ph="Title (Norwegian)" placeholder="Tittel (norsk)">
+        <input id="song-titleEn" type="text" data-no-ph="Tittel (engelsk)" data-en-ph="Title (English)" placeholder="Tittel (engelsk)">
+        <input id="song-teaserNo" type="text" data-no-ph="Kort beskrivelse (norsk)" data-en-ph="Short description (Norwegian)" placeholder="Kort beskrivelse">
+        <select id="song-lang"><option value="no">Norsk</option><option value="en">Engelsk</option></select>
+      </div>
+      <div class="song-row">
+        <input id="song-file" type="file" accept="audio/*">
+        <button class="btn btn-primary" id="song-up" data-no="Last opp som episode" data-en="Upload as episode">Last opp som episode</button>
+        <span class="owner-status" id="songStatus"></span>
+      </div>
     </div>
   </div>
 
@@ -436,6 +462,33 @@
   }
   document.getElementById('genBtn').addEventListener('click',function(){ generate(false); });
   document.getElementById('genForceBtn').addEventListener('click',function(){ generate(true); });
+
+  /* Last opp en sang/episode (f.eks. Suno) som blir en egen episode */
+  document.getElementById('song-up').addEventListener('click',function(){
+    var st=document.getElementById('songStatus');
+    var f=document.getElementById('song-file').files[0];
+    if(!f){ st.textContent=lang==='no'?'Velg en lydfil først.':'Pick an audio file first.'; return; }
+    var p=ensurePw(); if(!p) return;
+    var fd=new FormData();
+    fd.append('password',p);
+    fd.append('titleNo',document.getElementById('song-titleNo').value.trim());
+    fd.append('titleEn',document.getElementById('song-titleEn').value.trim());
+    fd.append('teaserNo',document.getElementById('song-teaserNo').value.trim());
+    fd.append('lang',document.getElementById('song-lang').value);
+    fd.append('audio',f);
+    var btn=document.getElementById('song-up'); btn.disabled=true;
+    st.textContent=lang==='no'?'Laster opp sangen…':'Uploading the song…';
+    fetch('/api/podcast/upload',{method:'POST',body:fd}).then(function(r){return r.json();}).then(function(d){
+      btn.disabled=false;
+      if(d&&d.ok){
+        st.textContent=lang==='no'?'Lagt ut som episode!':'Published as an episode!';
+        document.getElementById('song-file').value='';
+        document.getElementById('song-titleNo').value=''; document.getElementById('song-titleEn').value=''; document.getElementById('song-teaserNo').value='';
+        details={}; load();
+      } else if(d&&d.error==='bad_password'){ pw=null; try{localStorage.removeItem('lme-podcast-pw');}catch(e){} st.textContent=lang==='no'?'Feil passord.':'Wrong password.'; }
+      else st.textContent=(lang==='no'?'Kunne ikke laste opp: ':'Upload failed: ')+((d&&d.error)||'?');
+    }).catch(function(){ btn.disabled=false; st.textContent=lang==='no'?'Nettverksfeil.':'Network error.'; });
+  });
 
   function loadStatus(){
     fetch('/api/podcast/status').then(function(r){return r.json();}).then(function(d){
