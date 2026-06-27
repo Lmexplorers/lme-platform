@@ -68,10 +68,13 @@ tilgang etter nivå. Sidene er låst slik:
 
 - **Start (299 kr):** dashbord, AI-innhold (Spør Renate AI), Akademiet.
 - **Proff (499 kr):** alt i Start, pluss innholdsstudioet (LME Builder),
-  AI Traffic Engine og Creative/Creator Academy.
-- **Proff + Fellesskap (699 kr):** alt i Proff, pluss fellesskapet: grupper,
-  Inner Circle, live, opptak, ressurser, biblioteket, medlemmer, perks, wins,
-  partnere, meldinger og favoritter.
+  AI Traffic Engine, Bookly (bokbygger), AI Visibility Engine og Maler.
+- **Proff + Fellesskap (699 kr):** alt i Proff, pluss
+  - fellesskapet: grupper, Inner Circle, live, opptak, ressurser, biblioteket,
+    medlemmer, perks, wins, partnere, meldinger og favoritter, og
+  - hele Creative Academy med verktøysuiten: analyse, automations, e-post,
+    forms, pipeline, subscribers, surveys, quizzes, webinars, websites,
+    domener, payments, produkter, forretningsprofil, courses og utforsk.
 
 Innlogget uten betalt plan blir sendt til `/oppgrader`. Du (eier) slipper alltid
 inn overalt.
