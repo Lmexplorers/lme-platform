@@ -14,6 +14,11 @@
  * Gyldige grupper er laast under GROUPS, saa ingen kan lage vilkaarlige rom.
  */
 
+import { planRank } from "../../_plans.js";
+
+// Fellesskap/Inner Circle krever Proff + Fellesskap (rang 3).
+const COMMUNITY_RANK = 3;
+
 const GROUPS = {
   "3-6": "3–6 år",
   "6-9": "6–9 år",
@@ -77,9 +82,9 @@ function isMember(u, membership) {
   if (u) {
     if (u.role === "owner") return true;
     if (OWNER_EMAILS.indexOf((u.email || "").toLowerCase()) !== -1) return true;
-    if (activeStatus(u.subscription)) return true;
+    if (activeStatus(u.subscription) && planRank(u.subscription.plan) >= COMMUNITY_RANK) return true;
   }
-  if (activeStatus(membership)) return true;
+  if (activeStatus(membership) && planRank(membership.plan) >= COMMUNITY_RANK) return true;
   return false;
 }
 

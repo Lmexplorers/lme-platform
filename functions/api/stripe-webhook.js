@@ -1,9 +1,11 @@
 /**
- * LME Stripe-webhook — gir Inner Circle-tilgang automatisk ved betaling.
+ * LME Stripe-webhook — gir nivaadelt tilgang automatisk ved betaling.
  *
  * Stripe sender hit naar noen betaler (Payment Link / Checkout). Vi
- * verifiserer signaturen, finner e-posten og skriver medlemskap til KV slik
- * at gruppe-chatten (isMember) slipper dem inn. Ved oppsigelse fjernes det.
+ * verifiserer signaturen, finner e-posten, leser hvilken plan de kjoepte (ut
+ * fra beloepet, se _plans.js) og skriver medlemskap til KV med riktig plan slik
+ * at tilgangsvakten (_middleware.js) og gruppe-chatten slipper dem inn paa
+ * riktig nivaa. Ved oppsigelse fjernes tilgangen.
  *
  *   POST /api/stripe-webhook   (sett denne URL-en i Stripe > Developers >
  *                               Webhooks, og lim signeringsnoekkelen inn som
@@ -16,11 +18,26 @@
  * saa "Min konto" viser status.
  */
 
+import { planFromAmount, planRank } from "../_plans.js";
+
 function json(data, status) {
   return new Response(JSON.stringify(data), {
     status: status || 200,
     headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
   });
+}
+
+/** Hent betalt beloep (minste valutaenhet) fra ulike Stripe-objekter. */
+function amountFrom(obj) {
+  if (obj == null) return null;
+  if (obj.amount_total != null) return obj.amount_total;        // checkout.session
+  if (obj.amount_paid != null) return obj.amount_paid;          // invoice
+  if (obj.plan && obj.plan.amount != null) return obj.plan.amount; // subscription
+  const item = obj.items && obj.items.data && obj.items.data[0];
+  if (item && item.price && item.price.unit_amount != null) return item.price.unit_amount;
+  const line = obj.lines && obj.lines.data && obj.lines.data[0];
+  if (line && line.amount != null) return line.amount;
+  return null;
 }
 
 function hex(buf) {
@@ -64,9 +81,17 @@ function userKey(email) { return "user:" + email.trim().toLowerCase(); }
 
 async function grant(env, email, info) {
   if (!email) return;
+  // Behold eksisterende (hoeyere) plan hvis et nytt beloep ikke kunne tydes,
+  // saa en kunde aldri blir nedgradert ved en uventet hendelse.
+  let plan = (info && info.plan) || null;
+  if (!plan) {
+    const prevRaw = await env.BUILDER_KV.get(memberKey(email));
+    if (prevRaw) { try { plan = JSON.parse(prevRaw).plan; } catch (e) {} }
+  }
+  plan = plan || "start";
   const rec = Object.assign(
-    { status: "active", plan: "inner-circle", source: "stripe", since: Date.now() },
-    info || {}, { updated: Date.now() }
+    { status: "active", source: "stripe", since: Date.now() },
+    info || {}, { plan: plan, rank: planRank(plan), updated: Date.now() }
   );
   await env.BUILDER_KV.put(memberKey(email), JSON.stringify(rec));
   if (info && info.customer) await env.BUILDER_KV.put(custKey(info.customer), email.toLowerCase());
@@ -75,7 +100,7 @@ async function grant(env, email, info) {
   if (uraw) {
     try {
       const u = JSON.parse(uraw);
-      u.subscription = { status: rec.status, plan: rec.plan, source: "stripe", updated: rec.updated };
+      u.subscription = { status: rec.status, plan: rec.plan, rank: rec.rank, source: "stripe", updated: rec.updated };
       await env.BUILDER_KV.put(userKey(email), JSON.stringify(u));
     } catch (e) {}
   }
@@ -125,14 +150,15 @@ export async function onRequestPost(context) {
   switch (event.type) {
     case "checkout.session.completed": {
       const email = (obj.customer_details && obj.customer_details.email) || obj.customer_email;
-      await grant(env, email, { customer: obj.customer, sub: obj.subscription });
+      await grant(env, email, { customer: obj.customer, sub: obj.subscription, plan: planFromAmount(amountFrom(obj)) });
       break;
     }
     case "customer.subscription.created":
     case "customer.subscription.updated": {
       const email = await emailForCustomer(env, obj.customer);
       const active = obj.status === "active" || obj.status === "trialing";
-      if (email) { if (active) await grant(env, email, { customer: obj.customer, sub: obj.id }); else await revoke(env, email); }
+      const amt = amountFrom(obj);
+      if (email) { if (active) await grant(env, email, { customer: obj.customer, sub: obj.id, plan: amt != null ? planFromAmount(amt) : null }); else await revoke(env, email); }
       break;
     }
     case "customer.subscription.deleted": {
@@ -142,7 +168,8 @@ export async function onRequestPost(context) {
     }
     case "invoice.paid": {
       const email = obj.customer_email || (await emailForCustomer(env, obj.customer));
-      if (email) await grant(env, email, { customer: obj.customer });
+      const amt = amountFrom(obj);
+      if (email) await grant(env, email, { customer: obj.customer, plan: amt != null ? planFromAmount(amt) : null });
       break;
     }
     default:
