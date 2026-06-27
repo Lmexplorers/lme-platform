@@ -224,15 +224,35 @@ function buildPrompt(topic, num) {
   return { sys, user };
 }
 
+// Escaper raa kontrolltegn (linjeskift, tab) som ligger INNI JSON-strenger.
+// Modeller skriver ofte ekte linjeskift i manus-feltet, og det er ugyldig JSON.
+function escapeControlInsideStrings(t) {
+  let out = "", inStr = false, prev = "";
+  for (let i = 0; i < t.length; i++) {
+    const c = t[i];
+    if (c === '"' && prev !== "\\") inStr = !inStr;
+    if (inStr) {
+      if (c === "\n") { out += "\\n"; prev = c; continue; }
+      if (c === "\r") { out += "\\r"; prev = c; continue; }
+      if (c === "\t") { out += "\\t"; prev = c; continue; }
+    }
+    out += c; prev = c;
+  }
+  return out;
+}
+
 function parseModelJson(txt) {
   if (!txt) return null;
   let t = txt.trim();
   // Fjern ev. kodeblokk-omslag.
   t = t.replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "").trim();
   try { return JSON.parse(t); } catch (e) {}
-  // Fallback: plukk ut foerste {...}-blokk.
+  // Plukk ut foerste {...}-blokk.
   const a = t.indexOf("{"), b = t.lastIndexOf("}");
-  if (a >= 0 && b > a) { try { return JSON.parse(t.slice(a, b + 1)); } catch (e) {} }
+  const cand = (a >= 0 && b > a) ? t.slice(a, b + 1) : t;
+  try { return JSON.parse(cand); } catch (e) {}
+  // Siste forsoek: reparer raa linjeskift inni strenger.
+  try { return JSON.parse(escapeControlInsideStrings(cand)); } catch (e) {}
   return null;
 }
 
@@ -248,7 +268,7 @@ async function callClaude(env, topic, num) {
     },
     body: JSON.stringify({
       model: CLAUDE_MODEL,
-      max_tokens: 3000,
+      max_tokens: 8000,
       system: sys,
       messages: [{ role: "user", content: user }],
     }),
