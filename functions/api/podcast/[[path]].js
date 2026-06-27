@@ -138,10 +138,11 @@ function ttsProvider(env) {
   return null;
 }
 
-async function synthesize(env, text) {
+async function synthesize(env, text, lang) {
   const provider = ttsProvider(env);
   if (!provider) return null;
-  // Hold lydlengden i sjakk (TTS-grenser). Vi stemmelegger den norske teksten.
+  lang = lang === "no" ? "no" : "en";
+  // Hold lydlengden i sjakk (TTS-grenser).
   const body = s(text, 4500);
   try {
     if (provider === "elevenlabs") {
@@ -175,8 +176,9 @@ async function synthesize(env, text) {
       // Nyere modeller (gpt-4o-*) kan styres med en instruksjon. Det løfter
       // den norske uttalen og tonen tydelig.
       if (/gpt-4o/.test(model)) {
-        payload.instructions = env.OPENAI_TTS_INSTRUCTIONS ||
-          "Les teksten rolig, varmt og tydelig på naturlig norsk bokmål, som en vennlig og nær podkast-vert. Bruk naturlig norsk intonasjon, ikke engelsk aksent.";
+        payload.instructions = env.OPENAI_TTS_INSTRUCTIONS || (lang === "no"
+          ? "Les teksten rolig, varmt og tydelig på naturlig norsk bokmål, som en vennlig og nær podkast-vert. Bruk naturlig norsk intonasjon, ikke engelsk aksent."
+          : "Read the text calmly, warmly and clearly in natural English, like a friendly, close podcast host with a gentle, reassuring tone.");
       }
       const res = await fetch("https://api.openai.com/v1/audio/speech", {
         method: "POST",
@@ -315,9 +317,14 @@ async function generateEpisode(env, opts) {
 
   const gen = await callClaude(env, topic, num);
 
-  // Stemmelegg den norske teksten (om TTS er konfigurert).
+  // Hvilket språk lyden lages på. Foreløpig engelsk (god syntetisk stemme),
+  // til Renate leser inn norsk selv. Styres med PODCAST_AUDIO_LANG ("en"/"no").
+  const audioLang = (env.PODCAST_AUDIO_LANG || "en").toLowerCase() === "no" ? "no" : "en";
+  const scriptForAudio = audioLang === "no" ? gen.scriptNo : (gen.scriptEn || gen.scriptNo);
+
+  // Stemmelegg teksten (om TTS er konfigurert).
   let audioBytes = null;
-  try { audioBytes = await synthesize(env, gen.scriptNo); } catch (e) { audioBytes = null; }
+  try { audioBytes = await synthesize(env, scriptForAudio, audioLang); } catch (e) { audioBytes = null; }
   let audioSize = 0;
   if (audioBytes) {
     audioSize = audioBytes.byteLength;
@@ -339,8 +346,9 @@ async function generateEpisode(env, opts) {
     showNotesEn: s(gen.showNotesEn, 1200),
     keywords: s(gen.keywords, 300),
     hasAudio: !!audioBytes,
+    audioLang: audioBytes ? audioLang : null,
     audioSize: audioSize,
-    duration: estDuration(gen.scriptNo),
+    duration: estDuration(scriptForAudio),
     created: new Date().toISOString(),
   };
 
@@ -351,7 +359,7 @@ async function generateEpisode(env, opts) {
     id: safeId, num: num, date: date, category: topic.cat,
     titleNo: episode.titleNo, titleEn: episode.titleEn,
     teaserNo: episode.teaserNo, teaserEn: episode.teaserEn,
-    hasAudio: episode.hasAudio, duration: episode.duration,
+    hasAudio: episode.hasAudio, audioLang: episode.audioLang, duration: episode.duration,
   };
   index.unshift(meta);
   if (index.length > FEED_LIMIT) index = index.slice(0, FEED_LIMIT);
@@ -389,7 +397,12 @@ function buildFeed(index, lang) {
   const title = no ? SHOW.titleNo : SHOW.titleEn;
   const desc = no ? SHOW.descNo : SHOW.descEn;
   const self = SHOW.site + "/api/podcast/" + (no ? "feed.xml" : "feed-en.xml");
-  const items = index.filter((e) => e && e.hasAudio).slice(0, FEED_LIMIT).map((e) => {
+  // Hver feed tar bare med episoder med lyd på sitt eget språk. Foreløpig er
+  // lyden engelsk, så den norske feed-en står tom til Renate leser inn norsk.
+  const feedLang = no ? "no" : "en";
+  const items = index
+    .filter((e) => e && e.hasAudio && (e.audioLang || "no") === feedLang)
+    .slice(0, FEED_LIMIT).map((e) => {
     const t = no ? (e.titleNo || e.titleEn) : (e.titleEn || e.titleNo);
     const teaser = no ? (e.teaserNo || "") : (e.teaserEn || "");
     return [
