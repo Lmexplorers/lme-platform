@@ -102,14 +102,14 @@ hver ny daglig episode opp automatisk overalt.
 
 - **Skriving:** `/api/podcast/generate` ber Claude (samme `ANTHROPIC_API_KEY`)
   skrive en tospraaklig episode rundt neste tema i en roterende tema-bank.
-- **Stemme:** samme endepunkt stemmelegger den norske teksten via TTS og lagrer
+- **Stemme:** Samme endepunkt stemmelegger den norske teksten via TTS og lagrer
   MP3-en i KV (`BUILDER_KV`), servert paa `/api/podcast/audio/<id>.mp3` (med
   Range-stoette saa podkast-spillere kan spole).
 - **Publisering:** `/api/podcast/feed.xml` bygger RSS 2.0 + iTunes av alle
   episodene. Plattformene poller feed-en og henter nye episoder selv.
-- **Daglig:** cron-workeren kaller generate en gang i doegnet. Idempotent per
+- **Daglig:** Cron-workeren kaller generate en gang i doegnet. Idempotent per
   dato, saa den lager bare en episode per dag.
-- **Opprydding:** lyd for de eldste episodene ryddes etter 90 episoder for aa
+- **Opprydding:** Lyd for de eldste episodene ryddes etter 90 episoder for aa
   spare KV-plass. Tekst og visning beholdes.
 
 ## Justere innholdet
