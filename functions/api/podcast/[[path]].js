@@ -291,6 +291,147 @@ async function callClaude(env, topic, num) {
   return parsed;
 }
 
+// Generisk Claude-kall som returnerer parset JSON (brukt av Mia og Teo-eventyr).
+async function callClaudeJson(env, sys, user, maxTokens) {
+  if (!env.ANTHROPIC_API_KEY) throw new Error("missing_anthropic_key");
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": env.ANTHROPIC_API_KEY,
+      "anthropic-version": "2023-06-01",
+    },
+    body: JSON.stringify({
+      model: CLAUDE_MODEL,
+      max_tokens: maxTokens || 4000,
+      system: sys,
+      messages: [{ role: "user", content: user }],
+    }),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok || !data) throw new Error("claude_" + res.status);
+  const txt = Array.isArray(data.content) ? data.content.map((c) => c.text || "").join("") : "";
+  const parsed = parseModelJson(txt);
+  if (!parsed) throw new Error("bad_model_output");
+  return parsed;
+}
+
+/* ----------------------- Mia og Teo: lydeventyr ----------------------- */
+// ElevenLabs-stemme for én replikk (Mia, Teo eller forteller).
+function voiceFor(env, speaker) {
+  const up = (speaker || "").toUpperCase();
+  if (up.indexOf("MIA") >= 0) return env.ELEVENLABS_VOICE_MIA || env.ELEVENLABS_VOICE_ID || null;
+  if (up.indexOf("TEO") >= 0) return env.ELEVENLABS_VOICE_TEO || env.ELEVENLABS_VOICE_ID || null;
+  return env.ELEVENLABS_VOICE_NARRATOR || env.ELEVENLABS_VOICE_ID || null; // forteller
+}
+
+async function elevenTTS(env, text, voiceId) {
+  if (!env.ELEVENLABS_API_KEY || !voiceId) return null;
+  try {
+    const res = await fetch("https://api.elevenlabs.io/v1/text-to-speech/" + voiceId, {
+      method: "POST",
+      headers: {
+        "xi-api-key": env.ELEVENLABS_API_KEY,
+        "Content-Type": "application/json",
+        "Accept": "audio/mpeg",
+      },
+      body: JSON.stringify({
+        text: s(text, 600),
+        model_id: env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2",
+        voice_settings: { stability: 0.45, similarity_boost: 0.8, style: 0.25 },
+      }),
+    });
+    if (!res.ok) return null;
+    return await res.arrayBuffer();
+  } catch (e) { return null; }
+}
+
+function concatBuffers(arr) {
+  let total = 0;
+  for (let i = 0; i < arr.length; i++) total += arr[i].byteLength;
+  const out = new Uint8Array(total);
+  let off = 0;
+  for (let i = 0; i < arr.length; i++) { out.set(new Uint8Array(arr[i]), off); off += arr[i].byteLength; }
+  return out.buffer;
+}
+
+function buildDramaPrompt(num) {
+  const sys =
+    "Du er manusforfatter for et lite norsk lydeventyr for barn (3 til 6 år) fra " +
+    "Little Montessori Explorers, med figurene Mia og Teo og en varm forteller. " +
+    "Skriv en kort, koselig scene på 12 til 16 replikker der Mia og Teo opplever noe " +
+    "i hverdagen, med en liten Montessori-spire i seg (selvstendighet, utforsking, " +
+    "vennlighet, tålmodighet). Enkelt språk, korte setninger, varmt og trygt. Mia og " +
+    "Teo er barn og snakker som barn. Fortelleren rammer scenen rolig inn.\n\n" +
+    "SKRIVEREGLER: bruk rette anførselstegn, ALDRI tankestreker, følg norske kommaregler.\n\n" +
+    "Svar KUN med gyldig JSON (ingen kodeblokk):\n" +
+    "{\n" +
+    '  "titleNo": "kort tittel", "titleEn": "engelsk tittel",\n' +
+    '  "teaserNo": "1 setning", "teaserEn": "engelsk teaser",\n' +
+    '  "lines": [ { "speaker": "FORTELLER", "no": "...", "en": "..." }, { "speaker": "MIA", "no": "...", "en": "..." }, { "speaker": "TEO", "no": "...", "en": "..." } ]\n' +
+    "}\n" +
+    "Hver replikk er kort (én til to setninger). Bruk kun FORTELLER, MIA eller TEO som speaker.";
+  const user = "Lag lydeventyr nummer " + num + ".";
+  return { sys, user };
+}
+
+// Lager en Mia og Teo-episode: AI skriver replikkene, ElevenLabs gir hver figur
+// stemme, og bitene settes sammen til én lydfil.
+async function generateDrama(env) {
+  if (!env.BUILDER_KV) throw new Error("not_configured");
+  if (!env.ANTHROPIC_API_KEY) throw new Error("missing_anthropic_key");
+  if (!env.ELEVENLABS_API_KEY) throw new Error("missing_elevenlabs");
+  if (!voiceFor(env, "FORTELLER") && !voiceFor(env, "MIA") && !voiceFor(env, "TEO")) {
+    throw new Error("missing_voice_ids");
+  }
+
+  let index = await readJson(env, IDX, []);
+  if (!Array.isArray(index)) index = [];
+  const date = todayUTC();
+  let maxNum = 0;
+  for (let i = 0; i < index.length; i++) { if ((index[i].num || 0) > maxNum) maxNum = index[i].num; }
+  const num = maxNum + 1;
+
+  const { sys, user } = buildDramaPrompt(num);
+  const gen = await callClaudeJson(env, sys, user, 4000);
+  const lines = Array.isArray(gen.lines) ? gen.lines.slice(0, 18) : [];
+  if (!lines.length) throw new Error("bad_model_output");
+
+  const parts = [];
+  for (let i = 0; i < lines.length; i++) {
+    const txt = s(lines[i] && lines[i].no, 600);
+    if (!txt) continue;
+    const buf = await elevenTTS(env, txt, voiceFor(env, lines[i].speaker));
+    if (buf) parts.push(buf);
+  }
+  if (!parts.length) throw new Error("tts_failed");
+  const audio = concatBuffers(parts);
+
+  const id = cleanId("mt-" + num + "-" + date) || ("mt-" + num);
+  await env.BUILDER_KV.put(AUDIO + id, audio);
+
+  const scriptNo = lines.map(function (l) { return (l.speaker || "") + ": " + (l.no || ""); }).join("\n");
+  const scriptEn = lines.map(function (l) { return (l.speaker || "") + ": " + (l.en || ""); }).join("\n");
+  const episode = {
+    id: id, num: num, date: date, category: "Mia og Teo",
+    titleNo: s(gen.titleNo, 160) || "Mia og Teo", titleEn: s(gen.titleEn, 160) || "Mia and Teo",
+    teaserNo: s(gen.teaserNo, 400), teaserEn: s(gen.teaserEn, 400),
+    scriptNo: scriptNo, scriptEn: scriptEn, showNotesNo: "", showNotesEn: "", keywords: "",
+    hasAudio: true, audioLang: "no", audioSize: audio.byteLength, audioType: "audio/mpeg",
+    duration: "", created: new Date().toISOString(),
+  };
+  await env.BUILDER_KV.put(EP + id, JSON.stringify(episode));
+  index.unshift({
+    id: id, num: num, date: date, category: episode.category,
+    titleNo: episode.titleNo, titleEn: episode.titleEn,
+    teaserNo: episode.teaserNo, teaserEn: episode.teaserEn,
+    hasAudio: true, audioLang: "no", duration: "",
+  });
+  if (index.length > FEED_LIMIT) index = index.slice(0, FEED_LIMIT);
+  await env.BUILDER_KV.put(IDX, JSON.stringify(index));
+  return { episode: episode };
+}
+
 /**
  * Lager neste daglige episode. Idempotent per dato med mindre force=true:
  * har vi allerede laget en episode i dag, returnerer vi den i stedet.
@@ -662,6 +803,10 @@ export async function onRequestPost(context) {
   if (!env.ANTHROPIC_API_KEY) return json({ error: "missing_anthropic_key" }, 500);
 
   try {
+    if (body.mode === "drama") {
+      const out = await generateDrama(env);
+      return json({ ok: true, episode: out.episode }, 200);
+    }
     const out = await generateEpisode(env, { force: !!body.force, date: body.date });
     return json({ ok: true, reused: !!out.reused, episode: out.episode }, 200);
   } catch (e) {

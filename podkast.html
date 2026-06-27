@@ -204,8 +204,8 @@
     <p data-no="Serien lager en episode av seg selv hver dag. Du kan også lage dagens episode med en gang her."
        data-en="The series creates an episode by itself every day. You can also generate today's episode right now.">…</p>
     <div class="row">
-      <button class="btn btn-primary" id="genBtn" data-no="Lag dagens episode" data-en="Generate today's episode">Lag dagens episode</button>
-      <button class="btn btn-ghost" id="genForceBtn" data-no="Lag en ekstra" data-en="Generate an extra">Lag en ekstra</button>
+      <button class="btn btn-primary" id="dramaBtn" data-no="Lag Mia &amp; Teo-episode" data-en="Make a Mia &amp; Teo episode">Lag Mia &amp; Teo-episode</button>
+      <button class="btn btn-ghost" id="genBtn" data-no="Lag voksen-episode" data-en="Make adult episode">Lag voksen-episode</button>
       <span class="owner-status" id="ownerStatus"></span>
     </div>
 
@@ -441,27 +441,33 @@
 
   /* Eier-studio */
   function ensurePw(){ if(pw)return pw; pw=prompt(lang==='no'?'Skriv inn passord (lagres på denne enheten):':'Enter password (saved on this device):'); if(pw){ try{ localStorage.setItem('lme-podcast-pw', pw); }catch(e){} } return pw; }
-  function generate(force){
+  function postGenerate(payload, working){
     var p=ensurePw(); if(!p) return;
+    payload.password=p;
     var st=document.getElementById('ownerStatus');
-    var b1=document.getElementById('genBtn'), b2=document.getElementById('genForceBtn');
-    b1.disabled=true; b2.disabled=true;
-    st.textContent=lang==='no'?'Skriver og stemmelegger episoden…':'Writing and voicing the episode…';
-    fetch('/api/podcast/generate',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({password:p,force:!!force})})
+    var btns=document.querySelectorAll('#ownerBar .row .btn');
+    btns.forEach(function(b){ b.disabled=true; });
+    st.textContent=working;
+    fetch('/api/podcast/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
     .then(function(r){return r.json();}).then(function(d){
-      b1.disabled=false; b2.disabled=false;
+      btns.forEach(function(b){ b.disabled=false; });
       if(d&&d.ok){
         st.textContent = d.reused ? (lang==='no'?'Dagens episode finnes allerede.':"Today's episode already exists.")
                                   : (lang==='no'?'Ferdig! Ny episode lagt ut.':'Done! New episode published.');
         details={}; load();
       } else if(d&&d.error==='bad_password'){ pw=null; try{localStorage.removeItem('lme-podcast-pw');}catch(e){} st.textContent=lang==='no'?'Feil passord, prøv igjen.':'Wrong password, try again.'; }
       else if(d&&d.error==='missing_anthropic_key'){ st.textContent=lang==='no'?'Mangler ANTHROPIC_API_KEY i innstillingene.':'Missing ANTHROPIC_API_KEY in settings.'; }
-      else { st.textContent=(lang==='no'?'Kunne ikke lage episoden: ':'Could not generate: ')+((d&&(d.detail||d.error))||'?'); }
-    }).catch(function(){ b1.disabled=false; b2.disabled=false; st.textContent=lang==='no'?'Nettverksfeil.':'Network error.'; });
+      else {
+        var detail=(d&&(d.detail||d.error))||'?';
+        var msg = detail==='missing_elevenlabs' ? (lang==='no'?'Mangler ELEVENLABS_API_KEY i innstillingene.':'Missing ELEVENLABS_API_KEY in settings.')
+                : detail==='missing_voice_ids' ? (lang==='no'?'Mangler stemme-ID-er (Mia, Teo, forteller).':'Missing voice IDs (Mia, Teo, narrator).')
+                : (lang==='no'?'Kunne ikke lage episoden: ':'Could not generate: ')+detail;
+        st.textContent=msg;
+      }
+    }).catch(function(){ btns.forEach(function(b){ b.disabled=false; }); st.textContent=lang==='no'?'Nettverksfeil.':'Network error.'; });
   }
-  document.getElementById('genBtn').addEventListener('click',function(){ generate(false); });
-  document.getElementById('genForceBtn').addEventListener('click',function(){ generate(true); });
+  document.getElementById('genBtn').addEventListener('click',function(){ postGenerate({force:true}, lang==='no'?'Skriver episoden…':'Writing the episode…'); });
+  document.getElementById('dramaBtn').addEventListener('click',function(){ postGenerate({mode:'drama'}, lang==='no'?'Skriver eventyret og lager stemmene til Mia og Teo…':'Writing the story and voicing Mia and Teo…'); });
 
   /* Last opp en sang/episode (f.eks. Suno) som blir en egen episode */
   document.getElementById('song-up').addEventListener('click',function(){
