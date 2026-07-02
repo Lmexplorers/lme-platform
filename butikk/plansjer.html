@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<title>Plansjer og kortsett — forhistoriske dyr | LME Butikk</title>
+<meta name="description" content="Digitalt sett med Montessoriplansjer og kortsett om forhistoriske dyr: bildekort, faktakort og brukerveiledning. PDF-nedlasting til utskrift.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+
+  :root {
+    --pink-soft: #F8D7DA;
+    --pink-mid: #F5A8B8;
+    --cream: #FBF6F0;
+    --cream-deep: #F4E9DD;
+    --cerise: #E91E89;
+    --sun: #F7C72E;
+    --sky: #3FA9F5;
+    --lime: #A4D233;
+    --ink: #1A1A1A;
+    --ink-soft: #4A4A4A;
+    --ink-muted: #8A8A8A;
+    --line: rgba(26, 26, 26, 0.08);
+    --btn-yellow: #F7E76B;
+    --btn-yellow-hover: #F0DD4F;
+    --shadow-sm: 0 1px 3px rgba(26, 26, 26, 0.04), 0 1px 2px rgba(26, 26, 26, 0.03);
+    --shadow-md: 0 4px 16px rgba(26, 26, 26, 0.06), 0 2px 6px rgba(26, 26, 26, 0.04);
+    --shadow-lg: 0 12px 40px rgba(26, 26, 26, 0.08), 0 4px 12px rgba(26, 26, 26, 0.04);
+    --r-sm: 12px; --r-md: 18px; --r-lg: 24px; --r-pill: 999px;
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: linear-gradient(180deg, #FDF0F1 0%, var(--cream) 340px);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 { font-family: var(--font-head); }
+  button, input, select, textarea { font-family: var(--font-body); }
+  a { color: inherit; }
+
+  .topbar {
+    max-width: 1060px; margin: 0 auto; padding: 18px 20px 0;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .topbar .logo img { height: 52px; display: block; }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #fff; border: 1px solid var(--line); border-radius: var(--r-pill);
+    padding: 9px 16px; font-size: 13px; font-weight: 700; text-decoration: none;
+    box-shadow: var(--shadow-sm); transition: all .2s ease;
+  }
+  .back-link:hover { border-color: var(--cerise); color: var(--cerise); }
+  .lang-btn {
+    background: var(--cerise); color: #fff; border: none; cursor: pointer;
+    border-radius: var(--r-pill); padding: 10px 16px; font-size: 13px; font-weight: 700;
+    box-shadow: var(--shadow-sm); transition: transform .2s ease;
+  }
+  .lang-btn:hover { transform: translateY(-1px); }
+
+  main { max-width: 1060px; margin: 0 auto; padding: 26px 20px 70px; }
+
+  .crumbs { font-size: 13px; color: var(--ink-muted); margin-bottom: 22px; }
+  .crumbs a { text-decoration: none; }
+  .crumbs a:hover { color: var(--cerise); }
+  .crumbs .sep { margin: 0 6px; }
+
+  .hero { text-align: center; margin-bottom: 26px; }
+  .kicker {
+    display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--cerise); margin-bottom: 10px;
+  }
+  .hero h1 { font-size: clamp(30px, 5vw, 46px); line-height: 1.12; margin-bottom: 12px; }
+  .hero h1 em { font-style: normal; color: var(--cerise); }
+  .hero .sub { font-size: 17px; color: var(--ink-soft); max-width: 640px; margin: 0 auto; line-height: 1.55; }
+
+  .cover-card {
+    background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow-lg);
+    padding: 14px; margin-bottom: 34px;
+  }
+  .cover-card img { width: 100%; height: auto; display: block; border-radius: var(--r-md); }
+  .cover-note { text-align: center; font-size: 12.5px; color: var(--ink-muted); padding: 10px 6px 2px; }
+
+  .layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 26px; align-items: start; }
+
+  .includes { background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow-md); padding: 28px; }
+  .includes h2 { font-size: 24px; margin-bottom: 6px; }
+  .includes .lead { font-size: 14.5px; color: var(--ink-soft); margin-bottom: 18px; line-height: 1.5; }
+  .item { display: flex; gap: 14px; padding: 13px 0; border-top: 1px solid var(--line); }
+  .item:first-of-type { border-top: none; }
+  .item .emoji {
+    width: 44px; height: 44px; border-radius: var(--r-sm); background: var(--cream);
+    display: grid; place-items: center; font-size: 22px; flex-shrink: 0;
+  }
+  .item h3 { font-size: 16px; margin-bottom: 2px; }
+  .item p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.45; }
+
+  .buy-box {
+    background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow-md);
+    padding: 26px; position: sticky; top: 20px;
+  }
+  .buy-box .tag {
+    display: inline-block; background: var(--lime); border-radius: var(--r-pill);
+    font-size: 11px; font-weight: 700; letter-spacing: .1em; padding: 5px 12px; margin-bottom: 12px;
+  }
+  .buy-box .price { font-size: 38px; font-weight: 700; font-family: var(--font-head); }
+  .buy-box .price-sub { font-size: 13px; color: var(--ink-muted); margin-bottom: 16px; }
+  .btn-buy {
+    display: block; text-align: center; background: var(--btn-yellow); color: var(--ink);
+    border-radius: var(--r-pill); padding: 15px 20px; font-size: 16px; font-weight: 700;
+    text-decoration: none; box-shadow: var(--shadow-sm); transition: all .2s ease; margin-bottom: 12px;
+  }
+  .btn-buy:hover { background: var(--btn-yellow-hover); transform: translateY(-1px); }
+  .fine { font-size: 12.5px; color: var(--ink-muted); line-height: 1.5; }
+  .fine li { margin: 6px 0 0 18px; }
+
+  .fact-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 18px; }
+  .fact {
+    background: var(--cream); border-radius: var(--r-pill); padding: 7px 14px;
+    font-size: 12.5px; font-weight: 700;
+  }
+
+  footer { text-align: center; padding: 26px 20px 44px; font-size: 13px; color: var(--ink-muted); }
+  footer a { color: var(--cerise); }
+
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; }
+    .buy-box { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="/dashboard" class="logo"><img src="/images/lme-logo.png" alt="Little Montessori Explorers"></a>
+  <div class="topbar-right">
+    <a href="/butikk" class="back-link" data-no="← Tilbake til butikken" data-en="← Back to the shop">← Tilbake til butikken</a>
+    <button class="lang-btn" id="langToggle">EN 🌍</button>
+  </div>
+</div>
+
+<main>
+  <nav class="crumbs">
+    <a href="/dashboard" data-no="Dashbord" data-en="Dashboard">Dashbord</a><span class="sep">/</span><a href="/butikk" data-no="Butikk" data-en="Shop">Butikk</a><span class="sep">/</span><span data-no="Plansjer og kortsett" data-en="Posters and card sets">Plansjer og kortsett</span>
+  </nav>
+
+  <section class="hero">
+    <span class="kicker" data-no="MONTESSORIMATERIELL · 3–9 ÅR · DIGITAL NEDLASTING" data-en="MONTESSORI MATERIAL · AGES 3–9 · DIGITAL DOWNLOAD">MONTESSORIMATERIELL · 3–9 ÅR · DIGITAL NEDLASTING</span>
+    <h1 data-no="Plansjer og kortsett, <em>forhistoriske dyr</em>" data-en="Posters and card sets, <em>prehistoric animals</em>">Plansjer og kortsett, <em>forhistoriske dyr</em></h1>
+    <p class="sub" data-no="Møt dinosaurene og de andre forhistoriske dyrene gjennom vakre akvarellillustrasjoner. Et digitalt sett med plansjer og kort, klart til utskrift og bruk samme dag." data-en="Meet the dinosaurs and the other prehistoric animals through beautiful watercolour illustrations. A digital set of posters and cards, ready to print and use the same day.">Møt dinosaurene og de andre forhistoriske dyrene gjennom vakre akvarellillustrasjoner. Et digitalt sett med plansjer og kort, klart til utskrift og bruk samme dag.</p>
+  </section>
+
+  <div class="cover-card">
+    <img src="/images/thumb-plansjer.jpg" data-no-src="/images/thumb-plansjer.jpg" data-en-src="/images/thumb-charts-en.jpg" alt="Akvarellillustrasjoner av forhistoriske dyr fra LME-materiellet">
+    <p class="cover-note" data-no="Akvarellillustrasjoner fra LME-materiellet: dinosaurer og andre forhistoriske dyr i samme stil som kortene." data-en="Watercolour illustrations from the LME material: dinosaurs and other prehistoric animals in the same style as the cards.">Akvarellillustrasjoner fra LME-materiellet: dinosaurer og andre forhistoriske dyr i samme stil som kortene.</p>
+  </div>
+
+  <div class="layout">
+    <section class="includes">
+      <h2 data-no="Dette får du" data-en="What you get">Dette får du</h2>
+      <p class="lead" data-no="Et komplett sett for å utforske forhistoriske dyr, hjemme eller i klasserommet." data-en="A complete set for exploring prehistoric animals, at home or in the classroom.">Et komplett sett for å utforske forhistoriske dyr, hjemme eller i klasserommet.</p>
+
+      <div class="item">
+        <span class="emoji">🖼️</span>
+        <div>
+          <h3 data-no="Plansjer" data-en="Posters">Plansjer</h3>
+          <p data-no="Plansjer med forhistoriske dyr i akvarell, fine på veggen og i samlingsstunden." data-en="Posters with prehistoric animals in watercolour, lovely on the wall and in circle time.">Plansjer med forhistoriske dyr i akvarell, fine på veggen og i samlingsstunden.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="emoji">🦖</span>
+        <div>
+          <h3 data-no="Bildekort" data-en="Picture cards">Bildekort</h3>
+          <p data-no="Kort med dyrene til sortering, matching og trestegsleksjonen." data-en="Cards with the animals for sorting, matching and the three-period lesson.">Kort med dyrene til sortering, matching og trestegsleksjonen.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="emoji">💡</span>
+        <div>
+          <h3 data-no="Faktakort" data-en="Fact cards">Faktakort</h3>
+          <p data-no="Spennende fakta om hvert dyr, tilpasset barn i alderen 3–9 år." data-en="Fascinating facts about each animal, adapted for children ages 3–9.">Spennende fakta om hvert dyr, tilpasset barn i alderen 3–9 år.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="emoji">📖</span>
+        <div>
+          <h3 data-no="Brukerveiledning" data-en="User guide">Brukerveiledning</h3>
+          <p data-no="Slik bruker du plansjene og kortene i Montessoriånd, steg for steg." data-en="How to use the posters and cards the Montessori way, step by step.">Slik bruker du plansjene og kortene i Montessoriånd, steg for steg.</p>
+        </div>
+      </div>
+    </section>
+
+    <aside class="buy-box">
+      <span class="tag" data-no="DIGITALT SETT" data-en="DIGITAL SET">DIGITALT SETT</span>
+      <div class="price" data-no="199 kr" data-en="$19">199 kr</div>
+      <p class="price-sub" data-no="Engangskjøp · digital PDF-nedlasting" data-en="One-time purchase · digital PDF download">Engangskjøp · digital PDF-nedlasting</p>
+
+      <div class="fact-row">
+        <span class="fact" data-no="3–9 år" data-en="Ages 3–9">3–9 år</span>
+        <span class="fact" data-no="Skriv ut selv" data-en="Print at home">Skriv ut selv</span>
+        <span class="fact" data-no="Av Renate Dahl" data-en="By Renate Dahl">Av Renate Dahl</span>
+      </div>
+
+      <a class="btn-buy" href="https://buy.stripe.com/cNi28s2FL73hamh4119R60n" data-no-href="https://buy.stripe.com/cNi28s2FL73hamh4119R60n" data-en-href="https://buy.stripe.com/5kQbJ2fsx2N13XTgNN9R60o" data-no="Kjøp nå, 199 kr →" data-en="Buy now, $19 →">Kjøp nå, 199 kr →</a>
+
+      <ul class="fine">
+        <li data-no="Norsk utgave. Engelsk utgave kjøper du fra den engelske siden (bytt språk øverst)." data-en="English edition. The Norwegian edition is available from the Norwegian page (switch language at the top).">Norsk utgave. Engelsk utgave kjøper du fra den engelske siden (bytt språk øverst).</li>
+        <li data-no="Trygg betaling med kort via Stripe." data-en="Secure card payment via Stripe.">Trygg betaling med kort via Stripe.</li>
+        <li data-no="Spørsmål? Svar på kvitteringen fra Stripe, så hjelper vi deg." data-en="Questions? Reply to your Stripe receipt and we'll help you.">Spørsmål? Svar på kvitteringen fra Stripe, så hjelper vi deg.</li>
+      </ul>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <span data-no="Little Montessori Explorers · av Renate Dahl" data-en="Little Montessori Explorers · by Renate Dahl">Little Montessori Explorers · av Renate Dahl</span>
+  · <a href="/butikk" data-no="Tilbake til butikken" data-en="Back to the shop">Tilbake til butikken</a>
+</footer>
+
+<script>
+  let currentLang = 'no';
+  const toggle = document.getElementById('langToggle');
+
+  function switchLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(el => {
+      const text = el.getAttribute('data-' + lang);
+      if (text.includes('<')) el.innerHTML = text;
+      else el.textContent = text;
+    });
+    document.querySelectorAll('[data-no-src][data-en-src]').forEach(el => {
+      el.src = el.getAttribute('data-' + lang + '-src');
+    });
+    document.querySelectorAll('[data-no-href][data-en-href]').forEach(el => {
+      el.href = el.getAttribute('data-' + lang + '-href');
+    });
+    toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    document.title = lang === 'no'
+      ? 'Plansjer og kortsett — forhistoriske dyr | LME Butikk'
+      : 'Posters and Card Sets — Prehistoric Animals | LME Shop';
+    try { localStorage.setItem('lme_lang', lang); } catch (e) {}
+  }
+
+  toggle.addEventListener('click', () => switchLanguage(currentLang === 'no' ? 'en' : 'no'));
+
+  (function () {
+    const urlLang = new URLSearchParams(location.search).get('lang');
+    let saved = null;
+    try { saved = localStorage.getItem('lme_lang'); } catch (e) {}
+    const lang = urlLang || saved;
+    if (lang === 'en') switchLanguage('en');
+  })();
+</script>
+
+</body>
+</html>
