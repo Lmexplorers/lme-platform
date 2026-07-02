@@ -77,6 +77,21 @@ window.LME_BUTIKK = {
         { sprak: "en", url: "/butikk/nedlasting/plansjer/LME_Cosmic_User_Guide_EN.pdf",
           knapp: { no: "Brukerveiledning (engelsk PDF)", en: "User guide (English PDF)" } }
       ]
+    },
+
+    "tidslinje": {
+      navn:  { no: "Livets Tidslinje, komplett pakke", en: "Timeline of Life, complete package" },
+      undertittel: { no: "Ferdig + tom tidslinje · 55 bildekort · navnekort · lærerveiledning",
+                     en: "Finished + blank timeline · 55 picture cards · name cards · teacher's guide" },
+      cover:   "/images/thumb-tidslinje.jpg",
+      coverEn: "/images/thumb-timeline.jpg",
+      // Pakken er for stor for nettstedet (113 MB) og leveres derfor fra skylagring.
+      filer: [
+        { sprak: "no",
+          url: "https://drive.usercontent.google.com/download?id=1n43Ha7f4xu4NW0GS4wj-FgEEzTHKe2zQ&export=download&confirm=t",
+          knapp: { no: "Last ned hele pakken (zip, norsk + engelsk)",
+                   en: "Download the complete package (zip, Norwegian + English)" } }
+      ]
     }
 
     // ,"neste-produkt-id": { ... samme mønster ... }
