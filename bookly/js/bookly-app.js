@@ -1128,6 +1128,20 @@
           BK.toast(msg);
           BK.refresh();
         }
+        /* Ett bilde med automatisk nytt forsoek: leverandoerene sier ofte
+           "vent litt" (koe/kvote) midt i en serie. Da venter vi 25 sekunder
+           og proever samme bilde igjen, opptil to ganger, foer vi gir oss. */
+        function genOne(promptTxt, attempt) {
+          return BK.refsFor(p, promptTxt).then(function (refs) {
+            return BK.ai.image(promptTxt, null, refs);
+          }).catch(function (err) {
+            if (attempt >= 2 || !BK._genAllRun) throw err;
+            btn.innerHTML = '⏳ ' + (no ? 'Venter litt og prøver igjen · bilde ' : 'Waiting and retrying · image ') + (done + 1) + ' / ' + total;
+            return new Promise(function (res) { setTimeout(res, 25000); }).then(function () {
+              return genOne(promptTxt, attempt + 1);
+            });
+          });
+        }
         function next() {
           if (!BK._genAllRun) return finish((no ? 'Stoppet. ' : 'Stopped. ') + done + (no ? ' bilder generert.' : ' images generated.'));
           if (!targets.length) return finish(done + (no ? ' bilder generert!' : ' images generated!'));
@@ -1136,9 +1150,7 @@
           var dd = pgObj.data;
           btn.innerHTML = '⏹ ' + (no ? 'Stopp · bilde ' : 'Stop · image ') + (done + 1) + ' / ' + total;
           var promptTxt = dd.imgPrompt || defaultPromptFor(pgObj);
-          BK.refsFor(p, promptTxt).then(function (refs) {
-            return BK.ai.image(promptTxt, null, refs);
-          }).then(function (urls) {
+          genOne(promptTxt, 0).then(function (urls) {
             dd.image = urls[0];
             dd.imgPrompt = promptTxt;
             done++;
