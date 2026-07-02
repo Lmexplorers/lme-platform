@@ -815,20 +815,23 @@
           btn.innerHTML = '🎨 ' + (no ? 'Generer bilde' : 'Generate image');
           var detail = (err && err.detail) || '';
           var low = detail.toLowerCase();
+          var prov = BK.state.settings.imgProvider || 'openai';
+          var provName = prov === 'gemini' ? 'Google Gemini' : prov === 'stability' ? 'Stability AI' : 'OpenAI';
+          var keyName = prov === 'gemini' ? 'GEMINI_API_KEY' : prov === 'stability' ? 'STABILITY_API_KEY' : 'OPENAI_API_KEY';
           if (err && err.message === 'image_unavailable') {
-            BK.toast(no
-              ? 'Bildegenerering krever en OpenAI-nøkkel (OPENAI_API_KEY) i Cloudflare-innstillingene. Kopier prompten og lag bildet i et annet verktøy så lenge.'
-              : 'Image generation needs an OpenAI key (OPENAI_API_KEY) in the Cloudflare settings. Copy the prompt and create the image in another tool for now.');
+            BK.toast(detail || (no
+              ? 'Bildegenerering med ' + provName + ' krever nøkkelen ' + keyName + ' i Cloudflare-innstillingene. Legg inn nøkkelen, eller velg en annen leverandør i innstillingene.'
+              : 'Image generation with ' + provName + ' needs the ' + keyName + ' key in the Cloudflare settings. Add the key, or pick another provider in settings.'));
           } else if (low.indexOf('billing') !== -1 || low.indexOf('quota') !== -1) {
             BK.toast(no
-              ? 'OpenAI-kontoen mangler kreditt: legg inn betalingskort eller kjøp kreditt på platform.openai.com under Billing, så virker det.'
-              : 'The OpenAI account has no credit: add a payment method or buy credits at platform.openai.com under Billing.');
+              ? provName + '-kontoen mangler kreditt eller kvote: sjekk betaling/kvote hos leverandøren, eller velg en annen leverandør i innstillingene.'
+              : 'The ' + provName + ' account is out of credit or quota: check billing/quota with the provider, or pick another provider in settings.');
           } else if (low.indexOf('api key') !== -1 || low.indexOf('incorrect') !== -1 || low.indexOf('invalid') !== -1) {
             BK.toast(no
-              ? 'OpenAI avviser nøkkelen: sjekk at hele nøkkelen ble limt inn riktig i Cloudflare (begynner med sk-).'
-              : 'OpenAI rejects the key: check that the full key was pasted correctly in Cloudflare (starts with sk-).');
+              ? provName + ' avviser nøkkelen: sjekk at hele ' + keyName + ' ble limt inn riktig i Cloudflare-innstillingene.'
+              : provName + ' rejects the key: check that the full ' + keyName + ' was pasted correctly in the Cloudflare settings.');
           } else {
-            BK.toast((no ? 'Bildegenereringen feilet' : 'Image generation failed') +
+            BK.toast((no ? 'Bildegenereringen feilet (' + provName + ')' : 'Image generation failed (' + provName + ')') +
               (detail ? ': ' + detail : (no ? '. Prøv igjen, eller juster prompten.' : '. Try again, or adjust the prompt.')));
           }
         });
