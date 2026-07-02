@@ -47,6 +47,36 @@ window.LME_BUTIKK = {
         { sprak: "en", url: "/butikk/nedlasting/the-little-nature-explorers-en.pdf",
           knapp: { no: "Last ned boka (engelsk PDF)", en: "Download the book (English PDF)" } }
       ]
+    },
+
+    "plansjer": {
+      navn:  { no: "Plansjer og kortsett, forhistoriske dyr", en: "Posters and card sets, prehistoric animals" },
+      undertittel: { no: "LME Cosmic · 10 A3-plansjer · tekstkort · brukerveiledning",
+                     en: "LME Cosmic · 10 A3 posters · text cards · user guide" },
+      cover:   "/images/plansjer/thumb-plansjer.jpg",
+      coverEn: "/images/plansjer/thumb-posters-en.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/plansjer/LME_Cosmic_Plansjer_A3_NO.pdf",
+          knapp: { no: "Plansjer A3 (norsk PDF)", en: "Posters A3 (Norwegian PDF)" } },
+        { sprak: "no", url: "/butikk/nedlasting/plansjer/LME_Cosmic_Tekstkort_Navn_NO.pdf",
+          knapp: { no: "Tekstkort, navn (norsk PDF)", en: "Text cards, names (Norwegian PDF)" } },
+        { sprak: "no", url: "/butikk/nedlasting/plansjer/LME_Cosmic_Tekstkort_Navn_Type_NO.pdf",
+          knapp: { no: "Tekstkort, navn og type (norsk PDF)", en: "Text cards, name and type (Norwegian PDF)" } },
+        { sprak: "no", url: "/butikk/nedlasting/plansjer/LME_Cosmic_Tekstkort_Fakta_NO.pdf",
+          knapp: { no: "Tekstkort, fakta (norsk PDF)", en: "Text cards, facts (Norwegian PDF)" } },
+        { sprak: "no", url: "/butikk/nedlasting/plansjer/LME_Cosmic_Brukerveiledning_NO.pdf",
+          knapp: { no: "Brukerveiledning (norsk PDF)", en: "User guide (Norwegian PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/plansjer/LME_Cosmic_Posters_A3_EN.pdf",
+          knapp: { no: "Plansjer A3 (engelsk PDF)", en: "Posters A3 (English PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/plansjer/LME_Cosmic_Text_Cards_Names_EN.pdf",
+          knapp: { no: "Tekstkort, navn (engelsk PDF)", en: "Text cards, names (English PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/plansjer/LME_Cosmic_Text_Cards_Name_Type_EN.pdf",
+          knapp: { no: "Tekstkort, navn og type (engelsk PDF)", en: "Text cards, name and type (English PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/plansjer/LME_Cosmic_Text_Cards_Facts_EN.pdf",
+          knapp: { no: "Tekstkort, fakta (engelsk PDF)", en: "Text cards, facts (English PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/plansjer/LME_Cosmic_User_Guide_EN.pdf",
+          knapp: { no: "Brukerveiledning (engelsk PDF)", en: "User guide (English PDF)" } }
+      ]
     }
 
     // ,"neste-produkt-id": { ... samme mønster ... }
