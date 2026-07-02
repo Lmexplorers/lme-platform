@@ -787,7 +787,9 @@
         if ($('#edImgSize')) st2.imgSize = $('#edImgSize').value;
         if ($('#edImgQ')) st2.imgQuality = $('#edImgQ').value;
         if ($('#edImgN')) st2.imgN = parseInt($('#edImgN').value, 10) || 1;
-        BK.ai.image(promptTxt, st2.imgSize, (p.refs && p.refs.length) ? p.refs : null, st2.imgQuality, st2.imgN).then(function (urls) {
+        BK.refsFor(p, promptTxt).then(function (refs) {
+          return BK.ai.image(promptTxt, st2.imgSize, refs, st2.imgQuality, st2.imgN);
+        }).then(function (urls) {
           btn.disabled = false;
           btn.innerHTML = '🎨 ' + (no ? 'Generer bilde' : 'Generate image');
           function apply(u) {
@@ -1131,7 +1133,9 @@
           var dd = pgObj.data;
           btn.innerHTML = '⏹ ' + (no ? 'Stopp · bilde ' : 'Stop · image ') + (done + 1) + ' / ' + total;
           var promptTxt = dd.imgPrompt || defaultPromptFor(pgObj);
-          BK.ai.image(promptTxt, null, (p.refs && p.refs.length) ? p.refs : null).then(function (urls) {
+          BK.refsFor(p, promptTxt).then(function (refs) {
+            return BK.ai.image(promptTxt, null, refs);
+          }).then(function (urls) {
             dd.image = urls[0];
             dd.imgPrompt = promptTxt;
             done++;

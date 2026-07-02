@@ -580,6 +580,36 @@
     },
   };
 
+  /* Faste Mia & Teo-referansebilder: de offisielle bildene av Mia og Teo,
+     brukt automatisk som fasit for utseendet når prosjektet ikke har egne
+     referanser og scenen nevner Mia eller Teo. */
+  BK.miaTeoRefs = function () {
+    if (BK._miaTeoRefs) return Promise.resolve(BK._miaTeoRefs);
+    var urls = ['/bookly/refs/mia-teo-ref-1.jpg', '/bookly/refs/mia-teo-ref-2.jpg'];
+    return Promise.all(urls.map(function (u) {
+      return fetch(u).then(function (r) {
+        if (!r.ok) throw new Error('ref_missing');
+        return r.blob();
+      }).then(function (b) {
+        return new Promise(function (res, rej) {
+          var fr = new FileReader();
+          fr.onload = function () { res(fr.result); };
+          fr.onerror = rej;
+          fr.readAsDataURL(b);
+        });
+      });
+    })).then(function (list) { BK._miaTeoRefs = list; return list; })
+      .catch(function () { return null; });
+  };
+
+  /* Referansevalg for bildegenerering: prosjektets egne referanser vinner;
+     ellers de faste Mia & Teo-referansene når scenen nevner Mia eller Teo. */
+  BK.refsFor = function (p, promptTxt) {
+    if (p && p.refs && p.refs.length) return Promise.resolve(p.refs);
+    if (/\bmia\b|\bteo\b/i.test(String(promptTxt || ''))) return BK.miaTeoRefs();
+    return Promise.resolve(null);
+  };
+
   /* ============ RUTER ============ */
   var routes = {};
   BK.route = function (path, fn) { routes[path] = fn; };
