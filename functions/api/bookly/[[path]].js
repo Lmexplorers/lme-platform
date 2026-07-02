@@ -83,10 +83,10 @@ export async function onRequestGet(context) {
     return json({
       text: !!(env.ANTHROPIC_API_KEY || env.OPENAI_API_KEY),
       textProvider: env.ANTHROPIC_API_KEY ? "anthropic" : (env.OPENAI_API_KEY ? "openai" : null),
-      image: !!(env.OPENAI_API_KEY || env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.STABILITY_API_KEY),
+      image: !!(env.OPENAI_API_KEY || env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY || env.STABILITY_API_KEY),
       providers: {
         openai: !!env.OPENAI_API_KEY,
-        gemini: !!(env.GEMINI_API_KEY || env.GOOGLE_API_KEY),
+        gemini: !!(env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY),
         stability: !!env.STABILITY_API_KEY,
       },
       kv: !!env.BUILDER_KV,
@@ -129,7 +129,7 @@ export async function onRequestPost(context) {
 
     /* --- Google Gemini (utmerket på karakter-konsistens med referanser) --- */
     if (provider === "gemini") {
-      const gKey = env.GEMINI_API_KEY || env.GOOGLE_API_KEY;
+      const gKey = env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY;
       if (!gKey) return json({ error: "image_unavailable", detail: "GEMINI_API_KEY mangler i Cloudflare-innstillingene" }, 200);
       const parts = [{ text: fullPrompt }];
       refs.forEach((r) => {
