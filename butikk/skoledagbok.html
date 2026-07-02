@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<title>Mia &amp; Teo skoledagbok 2026/2027 | LME Butikk</title>
+<meta name="description" content="Mia & Teo skoledagbok for skoleåret 2026/2027: én side per dag, i Montessoriånd. 358 sider, A5, digital PDF på norsk og engelsk. For 1.–3. og 4.–7. trinn.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+
+  :root {
+    --pink-soft: #F8D7DA;
+    --pink-mid: #F5A8B8;
+    --cream: #FBF6F0;
+    --cream-deep: #F4E9DD;
+    --cerise: #E91E89;
+    --sun: #F7C72E;
+    --sky: #3FA9F5;
+    --lime: #A4D233;
+    --ink: #1A1A1A;
+    --ink-soft: #4A4A4A;
+    --ink-muted: #8A8A8A;
+    --line: rgba(26, 26, 26, 0.08);
+    --btn-yellow: #F7E76B;
+    --btn-yellow-hover: #F0DD4F;
+    --shadow-sm: 0 1px 3px rgba(26, 26, 26, 0.04), 0 1px 2px rgba(26, 26, 26, 0.03);
+    --shadow-md: 0 4px 16px rgba(26, 26, 26, 0.06), 0 2px 6px rgba(26, 26, 26, 0.04);
+    --shadow-lg: 0 12px 40px rgba(26, 26, 26, 0.08), 0 4px 12px rgba(26, 26, 26, 0.04);
+    --r-sm: 12px; --r-md: 18px; --r-lg: 24px; --r-pill: 999px;
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: linear-gradient(180deg, #FDF0F1 0%, var(--cream) 340px);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 { font-family: var(--font-head); }
+  button, input, select, textarea { font-family: var(--font-body); }
+  a { color: inherit; }
+
+  .topbar {
+    max-width: 1060px; margin: 0 auto; padding: 18px 20px 0;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .topbar .logo img { height: 52px; display: block; }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #fff; border: 1px solid var(--line); border-radius: var(--r-pill);
+    padding: 9px 16px; font-size: 13px; font-weight: 700; text-decoration: none;
+    box-shadow: var(--shadow-sm); transition: all .2s ease;
+  }
+  .back-link:hover { border-color: var(--cerise); color: var(--cerise); }
+  .lang-btn {
+    background: var(--cerise); color: #fff; border: none; cursor: pointer;
+    border-radius: var(--r-pill); padding: 10px 16px; font-size: 13px; font-weight: 700;
+    box-shadow: var(--shadow-sm); transition: transform .2s ease;
+  }
+  .lang-btn:hover { transform: translateY(-1px); }
+
+  main { max-width: 1060px; margin: 0 auto; padding: 26px 20px 70px; }
+
+  .crumbs { font-size: 13px; color: var(--ink-muted); margin-bottom: 22px; }
+  .crumbs a { text-decoration: none; }
+  .crumbs a:hover { color: var(--cerise); }
+  .crumbs .sep { margin: 0 6px; }
+
+  .hero { text-align: center; margin-bottom: 26px; }
+  .kicker {
+    display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--cerise); margin-bottom: 10px;
+  }
+  .hero h1 { font-size: clamp(30px, 5vw, 46px); line-height: 1.12; margin-bottom: 12px; }
+  .hero h1 em { font-style: normal; color: var(--cerise); }
+  .hero .sub { font-size: 17px; color: var(--ink-soft); max-width: 640px; margin: 0 auto; line-height: 1.55; }
+
+  .covers { display: flex; justify-content: center; gap: 22px; flex-wrap: wrap; margin-bottom: 34px; }
+  .cover-card {
+    background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow-lg);
+    padding: 16px; max-width: 340px; flex: 1 1 260px;
+  }
+  .cover-card img { width: 100%; height: auto; display: block; border-radius: var(--r-md); }
+  .cover-card p { text-align: center; font-size: 13px; font-weight: 700; padding-top: 10px; }
+
+  .layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 26px; align-items: start; }
+
+  .includes { background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow-md); padding: 28px; }
+  .includes h2 { font-size: 24px; margin-bottom: 6px; }
+  .includes .lead { font-size: 14.5px; color: var(--ink-soft); margin-bottom: 18px; line-height: 1.5; }
+  .item { display: flex; gap: 14px; padding: 13px 0; border-top: 1px solid var(--line); }
+  .item:first-of-type { border-top: none; }
+  .item .emoji {
+    width: 44px; height: 44px; border-radius: var(--r-sm); background: var(--cream);
+    display: grid; place-items: center; font-size: 22px; flex-shrink: 0;
+  }
+  .item h3 { font-size: 16px; margin-bottom: 2px; }
+  .item p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.45; }
+
+  .buy-col { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 20px; }
+  .buy-box {
+    background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow-md);
+    padding: 24px;
+  }
+  .buy-box .tag {
+    display: inline-block; background: var(--cerise); color: #fff; border-radius: var(--r-pill);
+    font-size: 11px; font-weight: 700; letter-spacing: .1em; padding: 5px 12px; margin-bottom: 10px;
+  }
+  .buy-box h3 { font-size: 19px; margin-bottom: 4px; }
+  .buy-box .age { font-size: 13px; color: var(--ink-muted); margin-bottom: 12px; }
+  .buy-box .price { font-size: 30px; font-weight: 700; font-family: var(--font-head); margin-bottom: 12px; }
+  .btn-buy {
+    display: block; text-align: center; background: var(--btn-yellow); color: var(--ink);
+    border-radius: var(--r-pill); padding: 13px 18px; font-size: 15px; font-weight: 700;
+    text-decoration: none; box-shadow: var(--shadow-sm); transition: all .2s ease;
+  }
+  .btn-buy:hover { background: var(--btn-yellow-hover); transform: translateY(-1px); }
+  .fine { font-size: 12.5px; color: var(--ink-muted); line-height: 1.5; }
+  .fine li { margin: 6px 0 0 18px; }
+
+  footer { text-align: center; padding: 26px 20px 44px; font-size: 13px; color: var(--ink-muted); }
+  footer a { color: var(--cerise); }
+
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; }
+    .buy-col { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="/dashboard" class="logo"><img src="/images/lme-logo.png" alt="Little Montessori Explorers"></a>
+  <div class="topbar-right">
+    <a href="/butikk" class="back-link" data-no="← Tilbake til butikken" data-en="← Back to the shop">← Tilbake til butikken</a>
+    <button class="lang-btn" id="langToggle">EN 🌍</button>
+  </div>
+</div>
+
+<main>
+  <nav class="crumbs">
+    <a href="/dashboard" data-no="Dashbord" data-en="Dashboard">Dashbord</a><span class="sep">/</span><a href="/butikk" data-no="Butikk" data-en="Shop">Butikk</a><span class="sep">/</span><span data-no="Skoledagbøker" data-en="School diaries">Skoledagbøker</span>
+  </nav>
+
+  <section class="hero">
+    <span class="kicker" data-no="NYHET · SKOLEÅRET 2026/2027 · DIGITAL NEDLASTING" data-en="NEW · SCHOOL YEAR 2026/2027 · DIGITAL DOWNLOAD">NYHET · SKOLEÅRET 2026/2027 · DIGITAL NEDLASTING</span>
+    <h1 data-no="Mia &amp; Teo <em>skoledagbok</em>" data-en="Mia &amp; Teo <em>school diary</em>">Mia &amp; Teo <em>skoledagbok</em></h1>
+    <p class="sub" data-no="Én side per dag gjennom hele skoleåret, i Montessoriånd. 358 sider i A5-format, som digital PDF på norsk og engelsk. Velg utgaven som passer barnets trinn." data-en="One page per day through the whole school year, in the Montessori spirit. 358 pages in A5 format, as a digital PDF in Norwegian and English. Choose the edition that fits your child's grade.">Én side per dag gjennom hele skoleåret, i Montessoriånd. 358 sider i A5-format, som digital PDF på norsk og engelsk. Velg utgaven som passer barnets trinn.</p>
+  </section>
+
+  <div class="covers">
+    <div class="cover-card">
+      <img src="/images/skoledagbok/cover-1-3-no.png" data-no-src="/images/skoledagbok/cover-1-3-no.png" data-en-src="/images/skoledagbok/cover-1-3-en.png" alt="Mia &amp; Teo skoledagbok 1.–3. trinn, forside">
+      <p data-no="1.–3. trinn · 5–9 år" data-en="Grades 1–3 · ages 5–9">1.–3. trinn · 5–9 år</p>
+    </div>
+    <div class="cover-card">
+      <img src="/images/skoledagbok/cover-4-7-no.png" data-no-src="/images/skoledagbok/cover-4-7-no.png" data-en-src="/images/skoledagbok/cover-4-7-en.png" alt="Mia &amp; Teo skoledagbok 4.–7. trinn, forside">
+      <p data-no="4.–7. trinn · 9–13 år" data-en="Grades 4–7 · ages 9–13">4.–7. trinn · 9–13 år</p>
+    </div>
+  </div>
+
+  <div class="layout">
+    <section class="includes">
+      <h2 data-no="Dette får du" data-en="What you get">Dette får du</h2>
+      <p class="lead" data-no="En skoledagbok som følger barnet dag for dag gjennom hele skoleåret 2026/2027." data-en="A school diary that follows the child day by day through the whole 2026/2027 school year.">En skoledagbok som følger barnet dag for dag gjennom hele skoleåret 2026/2027.</p>
+
+      <div class="item">
+        <span class="emoji">📅</span>
+        <div>
+          <h3 data-no="Én side per dag" data-en="One page per day">Én side per dag</h3>
+          <p data-no="358 sider som følger skoleåret 2026/2027, dag for dag." data-en="358 pages following the 2026/2027 school year, day by day.">358 sider som følger skoleåret 2026/2027, dag for dag.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="emoji">🌱</span>
+        <div>
+          <h3 data-no="I Montessoriånd" data-en="In the Montessori spirit">I Montessoriånd</h3>
+          <p data-no="Laget av Montessoripedagog Renate Dahl, med barnets egen refleksjon i sentrum." data-en="Made by Montessori educator Renate Dahl, with the child's own reflection at the centre.">Laget av Montessoripedagog Renate Dahl, med barnets egen refleksjon i sentrum.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="emoji">🖨️</span>
+        <div>
+          <h3 data-no="A5-format, klar til utskrift" data-en="A5 format, ready to print">A5-format, klar til utskrift</h3>
+          <p data-no="Digital PDF i A5. Skriv ut hele boka, eller sidene dere trenger." data-en="Digital PDF in A5. Print the whole book, or just the pages you need.">Digital PDF i A5. Skriv ut hele boka, eller sidene dere trenger.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="emoji">🌍</span>
+        <div>
+          <h3 data-no="Norsk og engelsk utgave" data-en="Norwegian and English edition">Norsk og engelsk utgave</h3>
+          <p data-no="Du får dagboka på begge språk, fint for tospråklige familier og klasserom." data-en="You get the diary in both languages, great for bilingual families and classrooms.">Du får dagboka på begge språk, fint for tospråklige familier og klasserom.</p>
+        </div>
+      </div>
+    </section>
+
+    <aside class="buy-col">
+      <div class="buy-box">
+        <span class="tag" data-no="1.–3. TRINN" data-en="GRADES 1–3">1.–3. TRINN</span>
+        <h3 data-no="Skoledagbok 1.–3. trinn" data-en="School diary, grades 1–3">Skoledagbok 1.–3. trinn</h3>
+        <p class="age" data-no="5–9 år · 358 sider · Norsk + Engelsk" data-en="Ages 5–9 · 358 pages · Norwegian + English">5–9 år · 358 sider · Norsk + Engelsk</p>
+        <div class="price" data-no="299 kr" data-en="$29">299 kr</div>
+        <a class="btn-buy" href="https://buy.stripe.com/28EdRa2FL5Zd7a5fJJ9R60r" data-no-href="https://buy.stripe.com/28EdRa2FL5Zd7a5fJJ9R60r" data-en-href="https://buy.stripe.com/5kQfZigwB2N1fGB4119R60s" data-no="Kjøp nå, 299 kr →" data-en="Buy now, $29 →">Kjøp nå, 299 kr →</a>
+      </div>
+
+      <div class="buy-box">
+        <span class="tag" style="background:var(--sky);" data-no="4.–7. TRINN" data-en="GRADES 4–7">4.–7. TRINN</span>
+        <h3 data-no="Skoledagbok 4.–7. trinn" data-en="School diary, grades 4–7">Skoledagbok 4.–7. trinn</h3>
+        <p class="age" data-no="9–13 år · 358 sider · Norsk + Engelsk" data-en="Ages 9–13 · 358 pages · Norwegian + English">9–13 år · 358 sider · Norsk + Engelsk</p>
+        <div class="price" data-no="299 kr" data-en="$29">299 kr</div>
+        <a class="btn-buy" href="https://buy.stripe.com/fZu6oI949gDRbqlgNN9R60t" data-no-href="https://buy.stripe.com/fZu6oI949gDRbqlgNN9R60t" data-en-href="https://buy.stripe.com/4gM3cwgwBbjx0LHeFF9R60u" data-no="Kjøp nå, 299 kr →" data-en="Buy now, $29 →">Kjøp nå, 299 kr →</a>
+      </div>
+
+      <ul class="fine">
+        <li data-no="Du får dagboka som PDF på både norsk og engelsk." data-en="You get the diary as a PDF in both Norwegian and English.">Du får dagboka som PDF på både norsk og engelsk.</li>
+        <li data-no="Trygg betaling med kort via Stripe. Nedlastingen kommer rett etter kjøpet." data-en="Secure card payment via Stripe. The download is available right after purchase.">Trygg betaling med kort via Stripe. Nedlastingen kommer rett etter kjøpet.</li>
+        <li data-no="Spørsmål? Svar på kvitteringen fra Stripe, så hjelper vi deg." data-en="Questions? Reply to your Stripe receipt and we'll help you.">Spørsmål? Svar på kvitteringen fra Stripe, så hjelper vi deg.</li>
+      </ul>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <span data-no="Little Montessori Explorers · av Renate Dahl" data-en="Little Montessori Explorers · by Renate Dahl">Little Montessori Explorers · av Renate Dahl</span>
+  · <a href="/butikk" data-no="Tilbake til butikken" data-en="Back to the shop">Tilbake til butikken</a>
+</footer>
+
+<script>
+  let currentLang = 'no';
+  const toggle = document.getElementById('langToggle');
+
+  function switchLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(el => {
+      const text = el.getAttribute('data-' + lang);
+      if (text.includes('<')) el.innerHTML = text;
+      else el.textContent = text;
+    });
+    document.querySelectorAll('[data-no-src][data-en-src]').forEach(el => {
+      el.src = el.getAttribute('data-' + lang + '-src');
+    });
+    document.querySelectorAll('[data-no-href][data-en-href]').forEach(el => {
+      el.href = el.getAttribute('data-' + lang + '-href');
+    });
+    toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    document.title = lang === 'no'
+      ? 'Mia & Teo skoledagbok 2026/2027 | LME Butikk'
+      : 'Mia & Teo School Diary 2026/2027 | LME Shop';
+    try { localStorage.setItem('lme_lang', lang); } catch (e) {}
+  }
+
+  toggle.addEventListener('click', () => switchLanguage(currentLang === 'no' ? 'en' : 'no'));
+
+  (function () {
+    const urlLang = new URLSearchParams(location.search).get('lang');
+    let saved = null;
+    try { saved = localStorage.getItem('lme_lang'); } catch (e) {}
+    const lang = urlLang || saved;
+    if (lang === 'en') switchLanguage('en');
+  })();
+</script>
+
+</body>
+</html>
