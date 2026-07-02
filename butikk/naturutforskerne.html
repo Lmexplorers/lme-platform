@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<title>De små naturutforskerne — bildebok | LME Butikk</title>
+<meta name="description" content="Vakkert illustrert bildebok der Mia og Teo utforsker skogen og møter syv små venner. 24 sider, digital PDF på norsk og engelsk.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+
+  :root {
+    --pink-soft: #F8D7DA;
+    --pink-mid: #F5A8B8;
+    --cream: #FBF6F0;
+    --cream-deep: #F4E9DD;
+    --cerise: #E91E89;
+    --sun: #F7C72E;
+    --sky: #3FA9F5;
+    --lime: #A4D233;
+    --ink: #1A1A1A;
+    --ink-soft: #4A4A4A;
+    --ink-muted: #8A8A8A;
+    --line: rgba(26, 26, 26, 0.08);
+    --btn-yellow: #F7E76B;
+    --btn-yellow-hover: #F0DD4F;
+    --shadow-sm: 0 1px 3px rgba(26, 26, 26, 0.04), 0 1px 2px rgba(26, 26, 26, 0.03);
+    --shadow-md: 0 4px 16px rgba(26, 26, 26, 0.06), 0 2px 6px rgba(26, 26, 26, 0.04);
+    --shadow-lg: 0 12px 40px rgba(26, 26, 26, 0.08), 0 4px 12px rgba(26, 26, 26, 0.04);
+    --r-sm: 12px; --r-md: 18px; --r-lg: 24px; --r-pill: 999px;
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: linear-gradient(180deg, #FDF0F1 0%, var(--cream) 340px);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 { font-family: var(--font-head); }
+  button, input, select, textarea { font-family: var(--font-body); }
+  a { color: inherit; }
+
+  .topbar {
+    max-width: 1060px; margin: 0 auto; padding: 18px 20px 0;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .topbar .logo img { height: 52px; display: block; }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #fff; border: 1px solid var(--line); border-radius: var(--r-pill);
+    padding: 9px 16px; font-size: 13px; font-weight: 700; text-decoration: none;
+    box-shadow: var(--shadow-sm); transition: all .2s ease;
+  }
+  .back-link:hover { border-color: var(--cerise); color: var(--cerise); }
+  .lang-btn {
+    background: var(--cerise); color: #fff; border: none; cursor: pointer;
+    border-radius: var(--r-pill); padding: 10px 16px; font-size: 13px; font-weight: 700;
+    box-shadow: var(--shadow-sm); transition: transform .2s ease;
+  }
+  .lang-btn:hover { transform: translateY(-1px); }
+
+  main { max-width: 1060px; margin: 0 auto; padding: 26px 20px 70px; }
+
+  .crumbs { font-size: 13px; color: var(--ink-muted); margin-bottom: 22px; }
+  .crumbs a { text-decoration: none; }
+  .crumbs a:hover { color: var(--cerise); }
+  .crumbs .sep { margin: 0 6px; }
+
+  .hero { text-align: center; margin-bottom: 26px; }
+  .kicker {
+    display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--cerise); margin-bottom: 10px;
+  }
+  .hero h1 { font-size: clamp(30px, 5vw, 46px); line-height: 1.12; margin-bottom: 12px; }
+  .hero h1 em { font-style: normal; color: var(--cerise); }
+  .hero .sub { font-size: 17px; color: var(--ink-soft); max-width: 640px; margin: 0 auto; line-height: 1.55; }
+
+  .cover-card {
+    background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow-lg);
+    padding: 22px; margin: 0 auto 34px; max-width: 460px;
+  }
+  .cover-card img { width: 100%; height: auto; display: block; border-radius: var(--r-md); }
+
+  .layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 26px; align-items: start; }
+
+  .includes { background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow-md); padding: 28px; }
+  .includes h2 { font-size: 24px; margin-bottom: 6px; }
+  .includes .lead { font-size: 14.5px; color: var(--ink-soft); margin-bottom: 18px; line-height: 1.5; }
+  .item { display: flex; gap: 14px; padding: 13px 0; border-top: 1px solid var(--line); }
+  .item:first-of-type { border-top: none; }
+  .item .emoji {
+    width: 44px; height: 44px; border-radius: var(--r-sm); background: var(--cream);
+    display: grid; place-items: center; font-size: 22px; flex-shrink: 0;
+  }
+  .item h3 { font-size: 16px; margin-bottom: 2px; }
+  .item p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.45; }
+
+  .buy-box {
+    background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow-md);
+    padding: 26px; position: sticky; top: 20px;
+  }
+  .buy-box .tag {
+    display: inline-block; background: var(--pink-mid); color: #fff; border-radius: var(--r-pill);
+    font-size: 11px; font-weight: 700; letter-spacing: .1em; padding: 5px 12px; margin-bottom: 12px;
+  }
+  .buy-box .price { font-size: 38px; font-weight: 700; font-family: var(--font-head); }
+  .buy-box .price-sub { font-size: 13px; color: var(--ink-muted); margin-bottom: 16px; }
+  .btn-buy {
+    display: block; text-align: center; background: var(--btn-yellow); color: var(--ink);
+    border-radius: var(--r-pill); padding: 15px 20px; font-size: 16px; font-weight: 700;
+    text-decoration: none; box-shadow: var(--shadow-sm); transition: all .2s ease; margin-bottom: 12px;
+  }
+  .btn-buy:hover { background: var(--btn-yellow-hover); transform: translateY(-1px); }
+  .fine { font-size: 12.5px; color: var(--ink-muted); line-height: 1.5; }
+  .fine li { margin: 6px 0 0 18px; }
+
+  .fact-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 18px; }
+  .fact {
+    background: var(--cream); border-radius: var(--r-pill); padding: 7px 14px;
+    font-size: 12.5px; font-weight: 700;
+  }
+
+  footer { text-align: center; padding: 26px 20px 44px; font-size: 13px; color: var(--ink-muted); }
+  footer a { color: var(--cerise); }
+
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; }
+    .buy-box { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="/dashboard" class="logo"><img src="/images/lme-logo.png" alt="Little Montessori Explorers"></a>
+  <div class="topbar-right">
+    <a href="/butikk" class="back-link" data-no="← Tilbake til butikken" data-en="← Back to the shop">← Tilbake til butikken</a>
+    <button class="lang-btn" id="langToggle">EN 🌍</button>
+  </div>
+</div>
+
+<main>
+  <nav class="crumbs">
+    <a href="/dashboard" data-no="Dashbord" data-en="Dashboard">Dashbord</a><span class="sep">/</span><a href="/butikk" data-no="Butikk" data-en="Shop">Butikk</a><span class="sep">/</span><span data-no="De små naturutforskerne" data-en="The Little Nature Explorers">De små naturutforskerne</span>
+  </nav>
+
+  <section class="hero">
+    <span class="kicker" data-no="SIGNATURBOK · 24 SIDER · 3–6 ÅR · DIGITAL NEDLASTING" data-en="SIGNATURE BOOK · 24 PAGES · AGES 3–6 · DIGITAL DOWNLOAD">SIGNATURBOK · 24 SIDER · 3–6 ÅR · DIGITAL NEDLASTING</span>
+    <h1 data-no="De små <em>naturutforskerne</em>" data-en="The Little <em>Nature Explorers</em>">De små <em>naturutforskerne</em></h1>
+    <p class="sub" data-no="En vakkert illustrert bildebok i Pixar-stil, der bestevennene Mia og Teo utforsker skogen og møter syv små venner: sommerfuglen, marihøna, larven, sneglen, mauren, frosken og blåfuglen. En bok som vekker undring og kjærlighet til naturen." data-en="A beautifully illustrated picture book in Pixar style, where best friends Mia and Teo explore the forest and meet seven little friends: the butterfly, the ladybug, the caterpillar, the snail, the ant, the frog and the bluebird. A book that awakens wonder and a love for nature.">En vakkert illustrert bildebok i Pixar-stil, der bestevennene Mia og Teo utforsker skogen og møter syv små venner: sommerfuglen, marihøna, larven, sneglen, mauren, frosken og blåfuglen. En bok som vekker undring og kjærlighet til naturen.</p>
+  </section>
+
+  <div class="cover-card">
+    <img src="/images/bok-cover.jpg" data-no-src="/images/bok-cover.jpg" data-en-src="/images/book-cover-en.jpg" alt="De små naturutforskerne, bokomslag med Mia og Teo i skogen">
+  </div>
+
+  <div class="layout">
+    <section class="includes">
+      <h2 data-no="Dette får du" data-en="What you get">Dette får du</h2>
+      <p class="lead" data-no="En komplett digital bildebok, klar til høytlesning på skjerm eller utskrift." data-en="A complete digital picture book, ready for reading aloud on screen or in print.">En komplett digital bildebok, klar til høytlesning på skjerm eller utskrift.</p>
+
+      <div class="item">
+        <span class="emoji">📖</span>
+        <div>
+          <h3 data-no="24 illustrerte sider" data-en="24 illustrated pages">24 illustrerte sider</h3>
+          <p data-no="Gjennomillustrert fortelling i varm Pixar-stil, laget med Montessoriprinsippene i bunn." data-en="A fully illustrated story in a warm Pixar style, made with Montessori principles at its core.">Gjennomillustrert fortelling i varm Pixar-stil, laget med Montessoriprinsippene i bunn.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="emoji">🐞</span>
+        <div>
+          <h3 data-no="Syv små venner" data-en="Seven little friends">Syv små venner</h3>
+          <p data-no="Mia og Teo møter sommerfuglen, marihøna, larven, sneglen, mauren, frosken og blåfuglen." data-en="Mia and Teo meet the butterfly, the ladybug, the caterpillar, the snail, the ant, the frog and the bluebird.">Mia og Teo møter sommerfuglen, marihøna, larven, sneglen, mauren, frosken og blåfuglen.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="emoji">🌍</span>
+        <div>
+          <h3 data-no="Norsk og engelsk utgave" data-en="Norwegian and English edition">Norsk og engelsk utgave</h3>
+          <p data-no="Du får boka som PDF på begge språk, fint for tospråklige familier og klasserom." data-en="You get the book as a PDF in both languages, great for bilingual families and classrooms.">Du får boka som PDF på begge språk, fint for tospråklige familier og klasserom.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="emoji">💛</span>
+        <div>
+          <h3 data-no="Undring og samtale" data-en="Wonder and conversation">Undring og samtale</h3>
+          <p data-no="Fortellingen inviterer til samtale om de små vennene barnet selv kan finne ute i naturen." data-en="The story invites conversation about the little friends the child can find outdoors in nature.">Fortellingen inviterer til samtale om de små vennene barnet selv kan finne ute i naturen.</p>
+        </div>
+      </div>
+    </section>
+
+    <aside class="buy-box">
+      <span class="tag" data-no="BESTSELGER" data-en="BESTSELLER">BESTSELGER</span>
+      <div class="price" data-no="99 kr" data-en="$9.90">99 kr</div>
+      <p class="price-sub" data-no="Engangskjøp · digital PDF-nedlasting" data-en="One-time purchase · digital PDF download">Engangskjøp · digital PDF-nedlasting</p>
+
+      <div class="fact-row">
+        <span class="fact" data-no="3–6 år" data-en="Ages 3–6">3–6 år</span>
+        <span class="fact" data-no="24 sider" data-en="24 pages">24 sider</span>
+        <span class="fact" data-no="Av Renate Dahl" data-en="By Renate Dahl">Av Renate Dahl</span>
+      </div>
+
+      <a class="btn-buy" href="https://buy.stripe.com/00weVedkp3R5gKFbtt9R60q" data-no-href="https://buy.stripe.com/00weVedkp3R5gKFbtt9R60q" data-en-href="https://buy.stripe.com/dRm6oIcglevJ2TP7dd9R601" data-no="Kjøp nå, 99 kr →" data-en="Buy now, $9.90 →">Kjøp nå, 99 kr →</a>
+
+      <ul class="fine">
+        <li data-no="Du får boka som PDF på både norsk og engelsk." data-en="You get the book as a PDF in both Norwegian and English.">Du får boka som PDF på både norsk og engelsk.</li>
+        <li data-no="Trygg betaling med kort via Stripe. Nedlastingen kommer rett etter kjøpet." data-en="Secure card payment via Stripe. The download is available right after purchase.">Trygg betaling med kort via Stripe. Nedlastingen kommer rett etter kjøpet.</li>
+        <li data-no="Ønsker du trykt bok? Forhåndsbestilling av trykt utgave kommer snart." data-en="Want a printed book? Pre-orders for the printed edition are coming soon.">Ønsker du trykt bok? Forhåndsbestilling av trykt utgave kommer snart.</li>
+        <li data-no="Spørsmål? Svar på kvitteringen fra Stripe, så hjelper vi deg." data-en="Questions? Reply to your Stripe receipt and we'll help you.">Spørsmål? Svar på kvitteringen fra Stripe, så hjelper vi deg.</li>
+      </ul>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <span data-no="Little Montessori Explorers · av Renate Dahl" data-en="Little Montessori Explorers · by Renate Dahl">Little Montessori Explorers · av Renate Dahl</span>
+  · <a href="/butikk" data-no="Tilbake til butikken" data-en="Back to the shop">Tilbake til butikken</a>
+</footer>
+
+<script>
+  let currentLang = 'no';
+  const toggle = document.getElementById('langToggle');
+
+  function switchLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(el => {
+      const text = el.getAttribute('data-' + lang);
+      if (text.includes('<')) el.innerHTML = text;
+      else el.textContent = text;
+    });
+    document.querySelectorAll('[data-no-src][data-en-src]').forEach(el => {
+      el.src = el.getAttribute('data-' + lang + '-src');
+    });
+    document.querySelectorAll('[data-no-href][data-en-href]').forEach(el => {
+      el.href = el.getAttribute('data-' + lang + '-href');
+    });
+    toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    document.title = lang === 'no'
+      ? 'De små naturutforskerne — bildebok | LME Butikk'
+      : 'The Little Nature Explorers — Picture Book | LME Shop';
+    try { localStorage.setItem('lme_lang', lang); } catch (e) {}
+  }
+
+  toggle.addEventListener('click', () => switchLanguage(currentLang === 'no' ? 'en' : 'no'));
+
+  (function () {
+    const urlLang = new URLSearchParams(location.search).get('lang');
+    let saved = null;
+    try { saved = localStorage.getItem('lme_lang'); } catch (e) {}
+    const lang = urlLang || saved;
+    if (lang === 'en') switchLanguage('en');
+  })();
+</script>
+
+</body>
+</html>
