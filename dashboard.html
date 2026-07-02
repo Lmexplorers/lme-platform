@@ -1475,6 +1475,15 @@
     .lang-float { top: 70px; right: 16px; padding: 6px 14px; font-size: 13px; }
   }
 </style>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/images/app/apple-touch-icon.png">
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/sw.js').catch(function () {});
+    });
+  }
+</script>
 </head>
 <body>
 
