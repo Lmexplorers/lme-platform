@@ -602,11 +602,14 @@
       .catch(function () { return null; });
   };
 
-  /* Referansevalg for bildegenerering: prosjektets egne referanser vinner;
-     ellers de faste Mia & Teo-referansene når scenen nevner Mia eller Teo. */
+  /* Referansevalg for bildegenerering: prosjektets egne referanser vinner.
+     De faste Mia & Teo-referansene brukes KUN for eierkontoen (Renate),
+     og bare når scenen nevner Mia eller Teo. Andre brukere får aldri
+     LME-figurene automatisk; de bruker egne opplastede referanser. */
   BK.refsFor = function (p, promptTxt) {
     if (p && p.refs && p.refs.length) return Promise.resolve(p.refs);
-    if (/\bmia\b|\bteo\b/i.test(String(promptTxt || ''))) return BK.miaTeoRefs();
+    var isOwner = BK.state.user && BK.state.user.role === 'owner';
+    if (isOwner && /\bmia\b|\bteo\b/i.test(String(promptTxt || ''))) return BK.miaTeoRefs();
     return Promise.resolve(null);
   };
 
