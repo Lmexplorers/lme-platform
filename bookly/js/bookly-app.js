@@ -44,6 +44,7 @@
 
     $('#bkTopActions').innerHTML =
       '<span class="bk-plan-chip">' + (planNames[BK.state.plan] || 'Free') + '</span>' +
+      '<span class="bk-ver" title="Bookly-versjon">v19</span>' +
       '<button class="bk-lang" id="bkLang">' + (BK.lang() === 'no' ? 'EN 🌍' : 'NO 🇳🇴') + '</button>' +
       '<div class="bk-avatar" id="bkAvatar" title="' + (u ? esc(u.email) : (BK.lang() === 'no' ? 'Logg inn' : 'Sign in')) + '">' +
       (u ? esc((u.name || u.email || '?').charAt(0).toUpperCase()) : '👤') + '</div>';
@@ -681,6 +682,10 @@
         fields.push('<div class="bk-field full"><label>' + (no ? 'Overskrift på omslaget' : 'Cover heading') + '</label><input id="edCvTitle" type="text" value="' + esc(d.title || p.title || '') + '"></div>');
         fields.push('<div class="bk-field"><label>' + (no ? 'Undertittel' : 'Subtitle') + '</label><input id="edCvSub" type="text" value="' + esc(d.subtitle || '') + '"></div>');
         fields.push('<div class="bk-field"><label>' + (no ? 'Forfatter' : 'Author') + '</label><input id="edCvAuthor" type="text" value="' + esc(d.author || '') + '"></div>');
+        fields.push('<div class="bk-field"><label>' + (no ? 'Størrelse på overskriften' : 'Heading size') + '</label><div class="bk-chips">' +
+          [['s', no ? 'Liten' : 'Small'], ['m', no ? 'Vanlig' : 'Normal'], ['l', no ? 'Stor' : 'Large'], ['xl', no ? 'Ekstra stor' : 'Extra large']].map(function (op) {
+            return '<button type="button" class="bk-chip' + ((d.titleSize || 'm') === op[0] ? ' on' : '') + '" data-cvts="' + op[0] + '">' + op[1] + '</button>';
+          }).join('') + '</div></div>');
       } else {
         fields.push('<div class="bk-field"><label>' + (no ? 'Sidetittel' : 'Page title') + '</label><input id="edTitle" type="text" value="' + esc(pgObj.title || '') + '"></div>');
       }
@@ -802,6 +807,14 @@
         BK.touch(p);
         renderStage(true);
       };
+      BK.$$('[data-cvts]', ed).forEach(function (cb) {
+        cb.onclick = function () {
+          d.titleSize = cb.getAttribute('data-cvts');
+          BK.$$('[data-cvts]', ed).forEach(function (x) { x.classList.toggle('on', x === cb); });
+          BK.touch(p);
+          renderStage(true);
+        };
+      });
       BK.$$('[data-fit]', ed).forEach(function (fb) {
         fb.onclick = function () {
           d.fit = fb.getAttribute('data-fit');

@@ -69,9 +69,46 @@
 
   function select(el) {
     if (sel) sel.classList.remove('sel');
+    var oldHandle = ctx && ctx.sheet.querySelector('.bk-lay-handle');
+    if (oldHandle) oldHandle.remove();
     sel = el;
-    if (sel) sel.classList.add('sel');
+    if (sel) {
+      sel.classList.add('sel');
+      if (sel.hasAttribute('data-img-frame')) addResizeHandle(sel);
+    }
     renderBar();
+  }
+
+  /* Hjoernehaandtak: dra for aa endre bildestoerrelsen, som i Canva. */
+  function addResizeHandle(frame) {
+    var h = document.createElement('div');
+    h.className = 'bk-lay-handle';
+    h.title = 'Dra for å endre størrelse';
+    frame.appendChild(h);
+    h.addEventListener('pointerdown', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var key = frame.getAttribute('data-el');
+      var l = lay(key);
+      var s = scaleOf(ctx.sheet);
+      var startX = e.clientX;
+      var parentW = frame.parentElement.offsetWidth || 1;
+      var startW = frame.offsetWidth;
+      function move(ev) {
+        var dw = (ev.clientX - startX) / s;
+        l.w = Math.round(clamp(((startW + dw) / parentW) * 100, 20, 100));
+        frame.style.width = l.w + '%';
+        var slider = ctx.bar && ctx.bar.querySelector('[data-act="width"]');
+        if (slider) slider.value = l.w;
+      }
+      function up() {
+        window.removeEventListener('pointermove', move);
+        window.removeEventListener('pointerup', up);
+        BK.save(true);
+      }
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up);
+    });
   }
 
   /* ---------- dra: flytt element eller panorer bilde ---------- */

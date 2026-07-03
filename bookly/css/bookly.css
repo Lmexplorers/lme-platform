@@ -853,3 +853,19 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); }
 .bk-lay-el { cursor: grab; touch-action: none; }
 .bk-lay-el:hover { outline: 1.5px dashed rgba(214, 51, 108, 0.55); outline-offset: 2px; }
 .bk-lay-el.sel { outline: 2px solid var(--cerise, #d6336c); outline-offset: 2px; cursor: grabbing; }
+
+.bk-ver { font-size: 10px; font-weight: 800; color: #b8a4ad; letter-spacing: 0.04em; margin-left: 4px; align-self: center; }
+.bk-lay-handle {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--cerise, #d6336c);
+  cursor: nwse-resize;
+  z-index: 5;
+  touch-action: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
