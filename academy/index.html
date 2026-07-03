@@ -1639,7 +1639,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
       courses.forEach(function (c, i) {
         var a = document.createElement('a');
         a.className = 'course-tile';
-        a.href = '/academy/kurs/' + encodeURIComponent(c.slug || '');
+        a.href = '/academy/kurs?k=' + encodeURIComponent(c.slug || '');
         a.innerHTML =
           '<div class="thumb ' + thumbs[i % thumbs.length] + '"><div class="thumb-content">' +
           '<div class="kicker"></div><div class="title"></div></div></div>' +

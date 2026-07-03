@@ -707,9 +707,9 @@ function askPassword() {
 function updateOpenLink() {
   var slug = slugify(q('f-slug').value.trim() || slugify(q('f-title').value));
   var link = q('openLink');
-  if (slug) { link.href = '/academy/kurs/' + slug; link.style.display = ''; }
+  if (slug) { link.href = '/academy/kurs?k=' + slug; link.style.display = ''; }
   else link.style.display = 'none';
-  q('slugPreview').textContent = slug ? (location.origin + '/academy/kurs/' + slug) : '';
+  q('slugPreview').textContent = slug ? (location.origin + '/academy/kurs?k=' + slug) : '';
 }
 
 function saveCourse() {

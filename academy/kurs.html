@@ -1895,7 +1895,7 @@
               : (en ? 'No published courses yet. Create one in the course builder!' : 'Ingen publiserte kurs ennå. Lag et i kursbyggeren!');
             list.forEach(function (c) {
               var a = el('a', 'crs-lesson');
-              a.href = '/academy/kurs/' + encodeURIComponent(c.slug);
+              a.href = '/academy/kurs?k=' + encodeURIComponent(c.slug);
               a.style.cssText = 'display:block;text-decoration:none;color:inherit';
               a.appendChild(el('div', 'crs-lesson-num', c.size === 'stor' ? (en ? 'FULL COURSE' : 'STORT KURS') : (en ? 'MINI COURSE' : 'MINIKURS')));
               a.appendChild(el('h3', null, pick(c.title) || c.slug));
