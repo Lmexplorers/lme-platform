@@ -675,7 +675,15 @@
       var d = pgObj.data || {};
       var ed = $('#eEdit');
       var fields = [];
-      fields.push('<div class="bk-field"><label>' + (no ? 'Sidetittel' : 'Page title') + '</label><input id="edTitle" type="text" value="' + esc(pgObj.title || '') + '"></div>');
+      /* Omslaget viser d.title/d.subtitle/d.author, ikke sidetittelen.
+         Derfor faar omslaget egne felter som faktisk endrer overskriften. */
+      if (pgObj.kind === 'cover') {
+        fields.push('<div class="bk-field full"><label>' + (no ? 'Overskrift på omslaget' : 'Cover heading') + '</label><input id="edCvTitle" type="text" value="' + esc(d.title || p.title || '') + '"></div>');
+        fields.push('<div class="bk-field"><label>' + (no ? 'Undertittel' : 'Subtitle') + '</label><input id="edCvSub" type="text" value="' + esc(d.subtitle || '') + '"></div>');
+        fields.push('<div class="bk-field"><label>' + (no ? 'Forfatter' : 'Author') + '</label><input id="edCvAuthor" type="text" value="' + esc(d.author || '') + '"></div>');
+      } else {
+        fields.push('<div class="bk-field"><label>' + (no ? 'Sidetittel' : 'Page title') + '</label><input id="edTitle" type="text" value="' + esc(pgObj.title || '') + '"></div>');
+      }
       if (pgObj.kind === 'story' || pgObj.kind === 'text' || pgObj.kind === 'intro') {
         fields.push('<div class="bk-field full"><label>' + (no ? 'Tekst' : 'Text') + '</label><textarea id="edText" rows="4">' + esc(d.text || '') + '</textarea></div>');
       }
@@ -779,6 +787,9 @@
          selv om man genererer eller bytter side uten å trykke Lagre. */
       function syncFields() {
         if ($('#edTitle')) pgObj.title = $('#edTitle').value;
+        if ($('#edCvTitle')) { d.title = $('#edCvTitle').value; pgObj.title = pgObj.title || (no ? 'Omslag' : 'Cover'); }
+        if ($('#edCvSub')) d.subtitle = $('#edCvSub').value;
+        if ($('#edCvAuthor')) d.author = $('#edCvAuthor').value;
         if ($('#edText')) d.text = $('#edText').value;
         if ($('#edIllus')) d.illustration = $('#edIllus').value;
         if ($('#edHook')) d.hook = $('#edHook').value;
@@ -798,7 +809,7 @@
           renderStage();
         };
       });
-      ['edTitle', 'edText', 'edIllus', 'edHook', 'edBack', 'edPrompt'].forEach(function (id) {
+      ['edTitle', 'edCvTitle', 'edCvSub', 'edCvAuthor', 'edText', 'edIllus', 'edHook', 'edBack', 'edPrompt'].forEach(function (id) {
         var el2 = $('#' + id);
         if (!el2) return;
         el2.addEventListener('input', function () {
@@ -1267,6 +1278,13 @@
         theme: first.theme || 'pink', emoji: first.emoji || '🌸',
         image: first.image || null, paper: 'premium', wrap: false,
       };
+    } else if (p.pages[0] && p.pages[0].kind === 'cover') {
+      /* Omslagssiden i boka er fasit: hent ferske verdier derfra, saa
+         designeren ikke viser en gammel tittel etter redigering i editoren. */
+      var pd0 = p.pages[0].data || {};
+      ['title', 'subtitle', 'author', 'theme', 'emoji', 'image', 'titleSize', 'titleColor', 'titleFont'].forEach(function (k) {
+        if (pd0[k] != null) p.cover[k] = pd0[k];
+      });
     }
     var c = p.cover;
     var spec = BK.exp.printSpec(p, { paper: c.paper });
