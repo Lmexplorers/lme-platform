@@ -203,6 +203,21 @@
     <div class="hint" data-no="Fyll inn på norsk og engelsk. Bildelenke kan være en sti som /images/hero_learning_tree.webp eller en full nettadresse."
          data-en="Fill in Norwegian and English. The image link can be a path like /images/hero_learning_tree.webp or a full URL.">…</div>
 
+    <div class="field" id="aiBox" style="background:#FFF4F6;border:1.5px dashed #F5A8B8;border-radius:14px;padding:14px 16px">
+      <label data-no="✨ La KI lage utkastet for deg" data-en="✨ Let AI draft it for you">✨ La KI lage utkastet for deg</label>
+      <input id="f-aiTopic" type="text"
+             data-no-ph="Hva skal innlegget handle om? F.eks. ro i samlingsstunden"
+             data-en-ph="What should the post be about? E.g. calm circle time"
+             placeholder="Hva skal innlegget handle om? F.eks. ro i samlingsstunden">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+        <button class="btn btn-primary" type="button" id="ai-text" data-no="✨ Skriv innlegget" data-en="✨ Write the post">✨ Skriv innlegget</button>
+        <button class="btn btn-ghost" type="button" id="ai-image" data-no="🎨 Lag toppbilde" data-en="🎨 Create header image">🎨 Lag toppbilde</button>
+      </div>
+      <div class="hint" id="aiStatus" style="margin:8px 0 0"
+           data-no="Teksten kommer på både norsk og engelsk, klar til å leses over og lagres."
+           data-en="The text arrives in both Norwegian and English, ready to review and save.">Teksten kommer på både norsk og engelsk, klar til å leses over og lagres.</div>
+    </div>
+
     <div class="field two">
       <div><label data-no="Tittel (norsk)" data-en="Title (Norwegian)">Tittel (norsk)</label><input id="f-titleNo" type="text"></div>
       <div><label data-no="Tittel (engelsk)" data-en="Title (English)">Tittel (engelsk)</label><input id="f-titleEn" type="text"></div>
@@ -412,6 +427,52 @@
         else if(cmd==='link'){var u=prompt('URL:','https://');if(u)document.execCommand('createLink',false,u);}
       });
     });
+  });
+
+  /* KI-generering: tekst og toppbilde. Fyller feltene; Renate leser over og lagrer. */
+  var lastImagePrompt='';
+  function aiStatus(no,en){ document.getElementById('aiStatus').textContent = lang==='no'?no:en; }
+  document.getElementById('ai-text').addEventListener('click',function(){
+    var topic=document.getElementById('f-aiTopic').value.trim();
+    if(!topic){ alert(lang==='no'?'Skriv først hva innlegget skal handle om.':'First write what the post should be about.'); return; }
+    var p=ensurePw(); if(!p) return;
+    var btn=this; btn.disabled=true;
+    aiStatus('✍️ Skriver innlegget, det tar gjerne et halvt minutt …','✍️ Writing the post, this usually takes half a minute …');
+    fetch('/api/blog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'generate',password:p,topic:topic})})
+    .then(function(r){return r.json();}).then(function(d){
+      btn.disabled=false;
+      if(d&&d.ok&&d.draft){
+        var dr=d.draft;
+        document.getElementById('f-titleNo').value=dr.titleNo||'';
+        document.getElementById('f-titleEn').value=dr.titleEn||'';
+        document.getElementById('f-excerptNo').value=dr.excerptNo||'';
+        document.getElementById('f-excerptEn').value=dr.excerptEn||'';
+        if(dr.category)document.getElementById('f-category').value=dr.category;
+        if(dr.readMin)document.getElementById('f-readMin').value=dr.readMin;
+        document.getElementById('f-bodyNo').innerHTML=dr.bodyNo||'';
+        document.getElementById('f-bodyEn').innerHTML=dr.bodyEn||'';
+        lastImagePrompt=dr.imagePrompt||'';
+        aiStatus('✅ Utkastet er klart! Les over, juster det du vil, og trykk "Lag toppbilde" om du vil ha bilde.','✅ The draft is ready! Review it, adjust anything, and press "Create header image" if you want one.');
+      } else if(d&&d.error==='bad_password'){ pw=null; aiStatus('Feil passord. Prøv igjen.','Wrong password. Try again.'); }
+      else aiStatus('Fikk ikke skrevet innlegget: '+((d&&d.error)||'?')+'. Prøv igjen.','Could not write the post: '+((d&&d.error)||'?')+'. Try again.');
+    }).catch(function(){ btn.disabled=false; aiStatus('Nettverksfeil. Prøv igjen.','Network error. Try again.'); });
+  });
+  document.getElementById('ai-image').addEventListener('click',function(){
+    var topic=document.getElementById('f-aiTopic').value.trim();
+    var prompt=lastImagePrompt || document.getElementById('f-titleEn').value.trim() || document.getElementById('f-titleNo').value.trim() || topic;
+    if(!prompt){ alert(lang==='no'?'Skriv et tema eller lag teksten først.':'Write a topic or create the text first.'); return; }
+    var p=ensurePw(); if(!p) return;
+    var btn=this; btn.disabled=true;
+    aiStatus('🎨 Lager toppbildet, det tar gjerne ett minutt …','🎨 Creating the header image, this usually takes a minute …');
+    fetch('/api/blog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'generate-image',password:p,prompt:prompt})})
+    .then(function(r){return r.json();}).then(function(d){
+      btn.disabled=false;
+      if(d&&d.ok&&d.url){
+        document.getElementById('f-image').value=d.url;
+        aiStatus('✅ Toppbildet er klart og lagt inn som bildelenke. Lagre innlegget for å se det på bloggen.','✅ The header image is ready and set as the image link. Save the post to see it on the blog.');
+      } else if(d&&d.error==='bad_password'){ pw=null; aiStatus('Feil passord. Prøv igjen.','Wrong password. Try again.'); }
+      else aiStatus('Fikk ikke laget bildet: '+((d&&d.error)||'?')+'. Prøv igjen.','Could not create the image: '+((d&&d.error)||'?')+'. Try again.');
+    }).catch(function(){ btn.disabled=false; aiStatus('Nettverksfeil. Prøv igjen.','Network error. Try again.'); });
   });
 
   document.getElementById('ed-save').addEventListener('click',function(){
