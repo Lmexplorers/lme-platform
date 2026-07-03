@@ -378,6 +378,7 @@
         ['category', 'select', ['Kategori', 'Category'], { opts: [['literacy', ['Lese og skrive', 'Literacy']], ['reading', ['Lesing', 'Reading']], ['writing', ['Skriving', 'Writing']], ['mathematics', ['Matematikk', 'Mathematics']], ['science', ['Naturfag', 'Science']], ['geography', ['Geografi', 'Geography']], ['language', ['Språklæring', 'Language learning']], ['montessori', ['Montessori-inspirert', 'Montessori inspired']]] }],
         ['topic', 'text', ['Tema', 'Topic'], {}],
         ['age', 'select', ['Aldersgruppe', 'Age group'], { opts: [['3-6', ['3-6 år (førskole)', 'Ages 3-6 (preschool)']], ['6-9', ['6-9 år', 'Ages 6-9']], ['9-12', ['9-12 år', 'Ages 9-12']]], def: '6-9' }],
+        ['goals', 'text', ['Læringsmål (fra læreplanen)', 'Learning goals (from the curriculum)'], { ph: ['Fylles automatisk fra malene, eller skriv egne mål', 'Prefilled by templates, or write your own goals'] }],
         ['count', 'select', ['Antall oppgaveark', 'Number of worksheets'], { opts: [['6', ['6', '6']], ['8', ['8', '8']], ['10', ['10', '10']], ['12', ['12', '12']], ['16', ['16', '16']]], def: '10' }],
         ['size', 'size', ['Sidestørrelse', 'Page size'], { def: 'a4' }],
       ],
