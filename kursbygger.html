@@ -111,6 +111,11 @@
   .crs-next p { color: #6a3a44; font-size: 14px; }
 
   .toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); background: #2b2b2b; color: #fff; padding: 12px 20px; border-radius: 999px; z-index: 100; font-weight: 700; box-shadow: 0 8px 24px rgba(0,0,0,0.25); font-family: var(--font-body); }
+
+  /* Flytende lagre-knapp: alltid tilgjengelig mens et kurs er aapent */
+  .save-fab { position: fixed; right: 22px; bottom: 22px; z-index: 90; display: none; border: none; border-radius: 999px; background: var(--cerise); color: #fff; font-family: var(--font-body); font-size: 15px; font-weight: 700; padding: 14px 22px; cursor: pointer; box-shadow: 0 10px 28px rgba(233,30,137,0.35); }
+  .save-fab:hover { transform: translateY(-1px); }
+  body.editing .save-fab { display: block; }
 </style>
 </head>
 <body>
@@ -214,6 +219,8 @@
   </div>
 
 </main>
+
+<button type="button" class="save-fab" onclick="saveCourse()" data-no="💾 Lagre kurset" data-en="💾 Save course">💾 Lagre kurset</button>
 
 <script>
 /* ============================================================
@@ -361,6 +368,7 @@ function openCourse(slug) {
 
 /* ---------- Skjema <-> kursobjekt ---------- */
 function loadCourse(c, isNew) {
+  document.body.classList.add('editing');
   q('editorPanel').style.display = '';
   q('lessonsPanel').style.display = '';
   q('outroPanel').style.display = '';
@@ -725,7 +733,9 @@ function saveCourse() {
   if (!c.lessons.length) { toast(L('Legg til minst én leksjon med innhold.', 'Add at least one lesson with content.')); return; }
   if (!askPassword()) return;
   var btn = q('saveBtn');
+  var fab = document.querySelector('.save-fab');
   btn.disabled = true;
+  if (fab) fab.disabled = true;
   fetch('/api/kurs', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -747,7 +757,7 @@ function saveCourse() {
       }
     })
     .catch(function () { alert(L('Nettverksfeil ved lagring. Prøv igjen.', 'Network error while saving. Try again.')); })
-    .then(function () { btn.disabled = false; });
+    .then(function () { btn.disabled = false; if (fab) fab.disabled = false; });
 }
 
 function deleteCourse() {
@@ -763,6 +773,7 @@ function deleteCourse() {
     .then(function (r) { return r.json(); })
     .then(function (d) {
       if (d && d.ok) {
+        document.body.classList.remove('editing');
         q('editorPanel').style.display = 'none';
         q('lessonsPanel').style.display = 'none';
         q('outroPanel').style.display = 'none';
