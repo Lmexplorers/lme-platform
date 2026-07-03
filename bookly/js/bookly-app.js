@@ -486,6 +486,65 @@
       ch.onclick = function () { ch.classList.toggle('on'); };
     });
 
+    /* Målvelger: hent læreplanmål (Montessori eller LK20) rett inn i målfeltet. */
+    (function () {
+      var goalsInput = BK.$('[name="goals"]', root);
+      if (!goalsInput || !BK.CURRICULUM) return;
+      var wrap = goalsInput.parentNode;
+      var btn2 = document.createElement('button');
+      btn2.type = 'button';
+      btn2.className = 'bk-btn soft sm';
+      btn2.style.marginTop = '6px';
+      btn2.innerHTML = '📚 ' + (no ? 'Hent mål fra læreplanen' : 'Get goals from the curriculum');
+      wrap.appendChild(btn2);
+      btn2.onclick = function () {
+        var lang = no ? 0 : 1;
+        function fagOpts(plan) {
+          var fag = BK.CURRICULUM[plan].fag;
+          return Object.keys(fag).map(function (k) {
+            return '<option value="' + k + '">' + esc(fag[k].navn[lang]) + '</option>';
+          }).join('');
+        }
+        function alderOpts(plan, fagKey) {
+          return Object.keys(BK.CURRICULUM[plan].fag[fagKey].maal).map(function (a) {
+            return '<option value="' + a + '">' + a + ' ' + (no ? 'år' : 'years') + '</option>';
+          }).join('');
+        }
+        BK.modal('<h3>📚 ' + (no ? 'Mål fra læreplanen' : 'Curriculum goals') + '</h3>' +
+          '<div class="bk-form" style="grid-template-columns:1fr">' +
+          '<div class="bk-field"><label>' + (no ? 'Læreplan' : 'Curriculum') + '</label><select id="kmPlan">' +
+          ['montessori', 'lk20'].map(function (pl) {
+            return '<option value="' + pl + '">' + esc(BK.CURRICULUM[pl].navn[lang]) + '</option>';
+          }).join('') + '</select></div>' +
+          '<div class="bk-field"><label>' + (no ? 'Fag eller område' : 'Subject or area') + '</label><select id="kmFag">' + fagOpts('montessori') + '</select></div>' +
+          '<div class="bk-field"><label>' + (no ? 'Aldersgruppe' : 'Age group') + '</label><select id="kmAlder">' + alderOpts('montessori', 'praktisk') + '</select></div>' +
+          '<div class="bk-note" id="kmKilde" style="font-size:12px"></div>' +
+          '</div><div class="actions"><button class="bk-btn quiet" id="kmC">' + t('cancel') + '</button>' +
+          '<button class="bk-btn primary" id="kmOk">' + (no ? 'Bruk målene' : 'Use the goals') + '</button></div>',
+          function (back, close) {
+            var selPlan = BK.$('#kmPlan', back), selFag = BK.$('#kmFag', back), selAlder = BK.$('#kmAlder', back);
+            function syncKilde() {
+              var k = BK.CURRICULUM[selPlan.value].kilde[lang];
+              BK.$('#kmKilde', back).textContent = k || '';
+            }
+            selPlan.onchange = function () {
+              selFag.innerHTML = fagOpts(selPlan.value);
+              selFag.onchange();
+              syncKilde();
+            };
+            selFag.onchange = function () {
+              selAlder.innerHTML = alderOpts(selPlan.value, selFag.value);
+            };
+            syncKilde();
+            BK.$('#kmC', back).onclick = close;
+            BK.$('#kmOk', back).onclick = function () {
+              goalsInput.value = BK.curriculumGoal(selPlan.value, selFag.value, selAlder.value, no ? 'no' : 'en');
+              close();
+            };
+          });
+      };
+    })();
+
     $('#cGo').onclick = function () {
       var cfg = {};
       def.fields.forEach(function (f) {

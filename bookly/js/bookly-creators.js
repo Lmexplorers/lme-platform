@@ -560,72 +560,111 @@
      ===================================================================== */
   /* =====================================================================
      MÅLBANK — mål fra læreplanene, per fag/område og aldersgruppe.
-     Montessori: etter Montessorilæreplanens områder.
+     Montessori: foreløpig LME-formulerte mål etter Montessoripedagogikkens
+     områder; byttes ut med målene fra Læreplan for montessoriskolen.
      LK20: fritt gjengitt etter kompetansemålene i offentlig læreplan.
      Brukes av eier-malene og kan hentes inn i bok- og arbeidsbok-skaperen.
      ===================================================================== */
   BK.CURRICULUM = {
     montessori: {
-      navn: ['Montessorilæreplanen', 'Montessori curriculum'],
+      navn: ['Montessori-inspirerte mål', 'Montessori-inspired goals'],
+      kilde: ['', ''],
       fag: {
-        praktisk:   { navn: ['Praktisk liv', 'Practical life'], maal: {
-          '3-6': 'mestre hverdagsferdigheter som å helle, øse og kle på seg; utvikle selvstendighet, konsentrasjon og omsorg for omgivelsene',
-          '6-9': 'ta ansvar for egne oppgaver og fellesskapet; planlegge og gjennomføre praktiske prosjekter' } },
-        sansene:    { navn: ['Sansene', 'Sensorial'], maal: {
-          '3-6': 'utforske og sortere inntrykk med alle sansene; gradere, pare og beskrive størrelse, form, farge og lyd' } },
-        sprak:      { navn: ['Språk', 'Language'], maal: {
-          '3-6': 'utvikle ordforråd og språklyder; forberede lesing og skriving gjennom lyder, sandpapirbokstaver og førskriving',
-          '6-9': 'lese med flyt og forståelse; utforske ordklasser og setninger; uttrykke seg skriftlig' } },
+        praktisk: { navn: ['Praktisk liv', 'Practical life'], maal: {
+          '3-6': ['mestre hverdagsferdigheter som å helle, øse og kle på seg; utvikle selvstendighet, konsentrasjon og omsorg for omgivelsene',
+                  'master everyday skills like pouring, spooning and dressing; develop independence, concentration and care for the environment'],
+          '6-9': ['ta ansvar for egne oppgaver og fellesskapet; planlegge og gjennomføre praktiske prosjekter',
+                  'take responsibility for own tasks and the community; plan and carry out practical projects'] } },
+        sansene: { navn: ['Sansene', 'Sensorial'], maal: {
+          '3-6': ['utforske og sortere inntrykk med alle sansene; gradere, pare og beskrive størrelse, form, farge og lyd',
+                  'explore and sort impressions with all the senses; grade, pair and describe size, shape, color and sound'] } },
+        sprak: { navn: ['Språk', 'Language'], maal: {
+          '3-6': ['utvikle ordforråd og språklyder; forberede lesing og skriving gjennom lyder, sandpapirbokstaver og førskriving',
+                  'develop vocabulary and speech sounds; prepare reading and writing through sounds, sandpaper letters and pre-writing'],
+          '6-9': ['lese med flyt og forståelse; utforske ordklasser og setninger; uttrykke seg skriftlig',
+                  'read with fluency and understanding; explore word classes and sentences; express oneself in writing'] } },
         matematikk: { navn: ['Matematikk', 'Mathematics'], maal: {
-          '3-6': 'forstå mengder 0 til 10 og koble mengde til tallsymbol; bygge tallforståelse med konkreter',
-          '6-9': 'forstå posisjonssystemet og de fire regneartene med konkreter; arbeide mot abstraksjon' } },
-        kosmisk:    { navn: ['Kosmisk utdanning', 'Cosmic education'], maal: {
-          '6-9': 'få overblikk over universets, livets og menneskenes historie; se sammenhenger i naturen og kulturen og sin egen plass i helheten',
-          '9-12': 'fordype seg i naturens og kulturens sammenhenger; ta ansvar for fellesskapet og miljøet' } },
-        botanikk:   { navn: ['Botanikk', 'Botany'], maal: {
-          '3-6': 'kjenne plantens deler og hva planter trenger; utvikle omsorg for levende ting' } },
-        fred:       { navn: ['Fred og høflighet', 'Grace and courtesy'], maal: {
-          '3-6': 'øve høflighet og omsorg i hverdagen; løse små konflikter med ord og bidra til fred i gruppa' } },
+          '3-6': ['forstå mengder 0 til 10 og koble mengde til tallsymbol; bygge tallforståelse med konkreter',
+                  'understand quantities 0 to 10 and connect quantity to numeral; build number sense with concrete materials'],
+          '6-9': ['forstå posisjonssystemet og de fire regneartene med konkreter; arbeide mot abstraksjon',
+                  'understand the decimal system and the four operations with concrete materials; work towards abstraction'] } },
+        kosmisk: { navn: ['Kosmisk utdanning', 'Cosmic education'], maal: {
+          '6-9': ['få overblikk over universets, livets og menneskenes historie; se sammenhenger i naturen og kulturen og sin egen plass i helheten',
+                  'gain an overview of the history of the universe, life and humankind; see connections in nature and culture and one\'s own place in the whole'],
+          '9-12': ['fordype seg i naturens og kulturens sammenhenger; ta ansvar for fellesskapet og miljøet',
+                   'go deeper into the connections of nature and culture; take responsibility for the community and the environment'] } },
+        botanikk: { navn: ['Botanikk og zoologi', 'Botany and zoology'], maal: {
+          '3-6': ['kjenne plantens deler og hva planter trenger; utvikle omsorg for levende ting',
+                  'know the parts of the plant and what plants need; develop care for living things'] } },
+        fred: { navn: ['Fred og høflighet', 'Grace and courtesy'], maal: {
+          '3-6': ['øve høflighet og omsorg i hverdagen; løse små konflikter med ord og bidra til fred i gruppa',
+                  'practice courtesy and care in daily life; solve small conflicts with words and contribute to peace in the group'] } },
       },
     },
     lk20: {
-      navn: ['Læreplanen (LK20)', 'Norwegian national curriculum (LK20)'],
+      navn: ['Skolens læreplan (LK20, Norge)', 'Norwegian national curriculum (LK20)'],
+      kilde: ['Målene er fritt gjengitt etter kompetansemålene i LK20 (Udir).',
+              'The goals are freely rendered from the LK20 competence aims (Norwegian Directorate for Education).'],
       fag: {
-        norsk:      { navn: ['Norsk', 'Norwegian'], maal: {
-          '6-9': 'leke med språket og prøve ut ulike uttrykksmåter; lese med sammenheng og forståelse; skrive enkle tekster for hånd',
-          '9-12': 'lese skjønnlitteratur og sakprosa med forståelse; skrive tekster med struktur; utforske språklige virkemidler' } },
+        norsk: { navn: ['Norsk', 'Norwegian'], maal: {
+          '6-9': ['leke med språket og prøve ut ulike uttrykksmåter; lese med sammenheng og forståelse; skrive enkle tekster for hånd',
+                  'play with language and try out ways of expression; read with coherence and understanding; write simple texts by hand'],
+          '9-12': ['lese skjønnlitteratur og sakprosa med forståelse; skrive tekster med struktur; utforske språklige virkemidler',
+                   'read fiction and non-fiction with understanding; write structured texts; explore literary devices'] } },
         matematikk: { navn: ['Matematikk', 'Mathematics'], maal: {
-          '6-9': 'utforske tall, mengder og telling; bruke de fire regneartene i praktiske situasjoner; kjenne igjen og lage mønster',
-          '9-12': 'utvikle strategier i regning; utforske brøk og desimaltall; løse praktiske problemer og forklare tenkemåter' } },
-        engelsk:    { navn: ['Engelsk', 'English'], maal: {
-          '6-9': 'bruke enkle ord og fraser i samtale; lytte til og forstå enkle instruksjoner på engelsk',
-          '9-12': 'delta i samtaler om kjente emner; lese og skrive enkle tekster på engelsk' } },
-        naturfag:   { navn: ['Naturfag', 'Science'], maal: {
-          '6-9': 'undre seg, stille spørsmål og lage hypoteser; utforske naturen i nærmiljøet og presentere funn',
-          '9-12': 'planlegge og gjennomføre undersøkelser; sammenligne funn og trekke enkle konklusjoner' } },
-        samfunnsfag:{ navn: ['Samfunnsfag', 'Social studies'], maal: {
-          '6-9': 'samtale om regler og normer i fellesskapet; utforske eget lokalmiljø og hvordan folk lever sammen',
-          '9-12': 'utforske demokrati og medvirkning; reflektere over identitet, mangfold og fellesskap' } },
-        krle:       { navn: ['KRLE', 'Religion and ethics'], maal: {
-          '6-9': 'utforske høytider og tradisjoner i ulike religioner og livssyn; samtale om etiske spørsmål fra hverdagen' } },
-        kunst:      { navn: ['Kunst og håndverk', 'Arts and crafts'], maal: {
-          '3-6': 'skape med ulike materialer og teknikker; utforske farge, form og mønster',
-          '6-9': 'lage produkter med enkle håndverksteknikker; samtale om egne og andres arbeider' } },
-        mathelse:   { navn: ['Mat og helse', 'Food and health'], maal: {
-          '6-9': 'lage enkel og sunn mat; forstå hvor maten kommer fra og gode måltidsvaner' } },
-        livsmestring:{ navn: ['Livsmestring (tverrfaglig)', 'Life skills (cross-curricular)'], maal: {
-          '6-9': 'sette ord på egne følelser og grenser; utvikle gode relasjoner og ta trygge valg' } },
+          '6-9': ['utforske tall, mengder og telling; bruke de fire regneartene i praktiske situasjoner; kjenne igjen og lage mønster',
+                  'explore numbers, quantities and counting; use the four operations in practical situations; recognise and create patterns'],
+          '9-12': ['utvikle strategier i regning; utforske brøk og desimaltall; løse praktiske problemer og forklare tenkemåter',
+                   'develop calculation strategies; explore fractions and decimals; solve practical problems and explain reasoning'] } },
+        engelsk: { navn: ['Engelsk', 'English'], maal: {
+          '6-9': ['bruke enkle ord og fraser i samtale; lytte til og forstå enkle instruksjoner på engelsk',
+                  'use simple words and phrases in conversation; listen to and understand simple instructions in English'],
+          '9-12': ['delta i samtaler om kjente emner; lese og skrive enkle tekster på engelsk',
+                   'take part in conversations on familiar topics; read and write simple texts in English'] } },
+        naturfag: { navn: ['Naturfag', 'Science'], maal: {
+          '6-9': ['undre seg, stille spørsmål og lage hypoteser; utforske naturen i nærmiljøet og presentere funn',
+                  'wonder, ask questions and form hypotheses; explore local nature and present findings'],
+          '9-12': ['planlegge og gjennomføre undersøkelser; sammenligne funn og trekke enkle konklusjoner',
+                   'plan and carry out investigations; compare findings and draw simple conclusions'] } },
+        samfunnsfag: { navn: ['Samfunnsfag', 'Social studies'], maal: {
+          '6-9': ['samtale om regler og normer i fellesskapet; utforske eget lokalmiljø og hvordan folk lever sammen',
+                  'talk about rules and norms in the community; explore the local area and how people live together'],
+          '9-12': ['utforske demokrati og medvirkning; reflektere over identitet, mangfold og fellesskap',
+                   'explore democracy and participation; reflect on identity, diversity and community'] } },
+        krle: { navn: ['KRLE', 'Religion and ethics'], maal: {
+          '6-9': ['utforske høytider og tradisjoner i ulike religioner og livssyn; samtale om etiske spørsmål fra hverdagen',
+                  'explore holidays and traditions in different religions and worldviews; talk about everyday ethical questions'] } },
+        kunst: { navn: ['Kunst og håndverk', 'Arts and crafts'], maal: {
+          '3-6': ['skape med ulike materialer og teknikker; utforske farge, form og mønster',
+                  'create with different materials and techniques; explore color, shape and pattern'],
+          '6-9': ['lage produkter med enkle håndverksteknikker; samtale om egne og andres arbeider',
+                  'make products with simple craft techniques; talk about one\'s own and others\' work'] } },
+        mathelse: { navn: ['Mat og helse', 'Food and health'], maal: {
+          '6-9': ['lage enkel og sunn mat; forstå hvor maten kommer fra og gode måltidsvaner',
+                  'prepare simple healthy food; understand where food comes from and good meal habits'] } },
+        livsmestring: { navn: ['Livsmestring (tverrfaglig)', 'Life skills (cross-curricular)'], maal: {
+          '6-9': ['sette ord på egne følelser og grenser; utvikle gode relasjoner og ta trygge valg',
+                  'put words to feelings and boundaries; develop good relationships and make safe choices'] } },
         baerekraft: { navn: ['Bærekraftig utvikling (tverrfaglig)', 'Sustainability (cross-curricular)'], maal: {
-          '6-9': 'forstå hvordan egne valg påvirker naturen; utforske kildesortering og gjenbruk i hverdagen' } },
-        demokrati:  { navn: ['Demokrati og medborgerskap (tverrfaglig)', 'Democracy and citizenship (cross-curricular)'], maal: {
-          '9-12': 'forstå hva demokrati og medvirkning betyr; delta i felles beslutninger og kjenne barns rettigheter' } },
+          '6-9': ['forstå hvordan egne valg påvirker naturen; utforske kildesortering og gjenbruk i hverdagen',
+                  'understand how personal choices affect nature; explore recycling and reuse in daily life'] } },
+        demokrati: { navn: ['Demokrati og medborgerskap (tverrfaglig)', 'Democracy and citizenship (cross-curricular)'], maal: {
+          '9-12': ['forstå hva demokrati og medvirkning betyr; delta i felles beslutninger og kjenne barns rettigheter',
+                   'understand what democracy and participation mean; take part in shared decisions and know children\'s rights'] } },
       },
     },
   };
   function KM(plan, fagKey, alder) {
     var f = BK.CURRICULUM[plan].fag[fagKey];
-    return (f && f.maal[alder]) || '';
+    var m = f && f.maal[alder];
+    return m ? m[0] : '';
   }
+  /* Hent mål på valgt språk: brukes av målvelgeren i skaperne. */
+  BK.curriculumGoal = function (plan, fagKey, alder, lang) {
+    var f = BK.CURRICULUM[plan] && BK.CURRICULUM[plan].fag[fagKey];
+    var m = f && f.maal[alder];
+    return m ? m[lang === 'en' ? 1 : 0] : '';
+  };
 
   var T = [];
   function tpl(cat, icon, tint, nameNo, nameEn, descNo, descEn, type, cfg) {

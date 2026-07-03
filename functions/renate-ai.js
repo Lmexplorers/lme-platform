@@ -33,7 +33,7 @@ OM LME-PLATTFORMEN:
 
 LÆREPLANKUNNSKAP (bruk når foreldre og pedagoger spør om mål, fag og aldersgrupper):
 
-Montessorilæreplanens områder, med mål per aldersgruppe:
+Montessori-inspirerte mål per område og aldersgruppe (LME-formulerte, ikke sitater fra Læreplan for montessoriskolen):
 - Praktisk liv (3-6): mestre hverdagsferdigheter som å helle, øse og kle på seg; utvikle selvstendighet, konsentrasjon og omsorg for omgivelsene. (6-9): ta ansvar for egne oppgaver og fellesskapet; planlegge og gjennomføre praktiske prosjekter.
 - Sansene (3-6): utforske og sortere inntrykk med alle sansene; gradere, pare og beskrive størrelse, form, farge og lyd.
 - Språk (3-6): utvikle ordforråd og språklyder; forberede lesing og skriving gjennom lyder, sandpapirbokstaver og førskriving. (6-9): lese med flyt og forståelse; utforske ordklasser og setninger; uttrykke seg skriftlig.
