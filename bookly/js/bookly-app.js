@@ -44,7 +44,7 @@
 
     $('#bkTopActions').innerHTML =
       '<span class="bk-plan-chip">' + (planNames[BK.state.plan] || 'Free') + '</span>' +
-      '<span class="bk-ver" title="Bookly-versjon">v20</span>' +
+      '<span class="bk-ver" title="Bookly-versjon">v21</span>' +
       '<button class="bk-lang" id="bkLang">' + (BK.lang() === 'no' ? 'EN 🌍' : 'NO 🇳🇴') + '</button>' +
       '<div class="bk-avatar" id="bkAvatar" title="' + (u ? esc(u.email) : (BK.lang() === 'no' ? 'Logg inn' : 'Sign in')) + '">' +
       (u ? esc((u.name || u.email || '?').charAt(0).toUpperCase()) : '👤') + '</div>';
@@ -732,8 +732,10 @@
           if (pgObj.kind === 'cover') return "Children's book cover art, " + (d.title || p.title) +
             ((p.config && p.config.topic) ? ', ' + p.config.topic : '') +
             ', ' + imgStyleTxt() + ', no text, space for title at the top';
-          return "Children's book illustration, " + (illusText || (p.config && p.config.topic) || pgObj.title || p.title) +
-            ', ' + imgStyleTxt() + ', no text';
+          var scene = illusText || d.text || (p.config && p.config.topic) || pgObj.title || p.title;
+          var pageCtx = (illusText && d.text) ? ' Page text for context: "' + d.text.slice(0, 280) + '"' : '';
+          return "Children's book illustration, faithful to this scene: " + scene + '.' + pageCtx +
+            ' ' + imgStyleTxt() + ', no text in the image. Depict ONLY the characters, animals and objects mentioned in the scene; never add or substitute other animals.';
         };
         var defPrompt = d.imgPrompt || buildPrompt(d.illustration);
         fields.push('<div class="bk-field full"><label>✨ ' + (no ? 'Bildeprompt for denne siden' : 'Image prompt for this page') + '</label>' +
@@ -1166,8 +1168,10 @@
       if (pgObj.kind === 'cover') return "Children's book cover art, " + (dd.title || p.title) +
         ((p.config && p.config.topic) ? ', ' + p.config.topic : '') +
         ', ' + imgStyleTxt() + ', no text, space for title at the top';
-      return "Children's book illustration, " + (dd.illustration || (p.config && p.config.topic) || pgObj.title || p.title) +
-        ', ' + imgStyleTxt() + ', no text';
+      var scene = dd.illustration || dd.text || (p.config && p.config.topic) || pgObj.title || p.title;
+      var pageCtx = (dd.illustration && dd.text) ? ' Page text for context: "' + String(dd.text).slice(0, 280) + '"' : '';
+      return "Children's book illustration, faithful to this scene: " + scene + '.' + pageCtx +
+        ' ' + imgStyleTxt() + ', no text in the image. Depict ONLY the characters, animals and objects mentioned in the scene; never add or substitute other animals.';
     }
     /* Kopier alle bildeprompter som nummerert liste (for Manus, ChatGPT m.fl.) */
     $('#eCopyPrompts').onclick = function () {

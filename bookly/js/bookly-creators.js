@@ -33,6 +33,11 @@
     var inner = Math.max(6, count - 4); // minus omslag, tittelside, mål, bakside
 
     function build(aiData) {
+      if (!aiData) {
+        BK.toast(no
+          ? '⚠️ Renate AI svarte ikke, så boka fikk standard maltekst. Prøv å generere på nytt for en original historie.'
+          : '⚠️ Renate AI did not respond, so the book got standard template text. Try generating again for an original story.');
+      }
       var p = BK.newProject('book', cfg.title, cfg);
       var pages = [];
       pages.push(coverPage(cfg, '📖'));
@@ -75,8 +80,9 @@
       '\nAge group: ' + (cfg.age || '-') + '\nCharacters: ' + (cfg.characters || '-') +
       '\nWriting style: ' + (cfg.style || 'warm, simple') + '\nTone: ' + (cfg.tone || 'curious, gentle') +
       '\nLearning goals: ' + (cfg.goals || '-') +
-      (cfg.characters ? '\nIMPORTANT: Use ONLY these exact character names: ' + cfg.characters + '. Never invent, rename or add other named characters.' : '');
-    var pageSpec = '{"text":"page text (1-3 sentences for picture books)","illustration":"illustration description for this page: describe ONLY the scene, action, setting and mood. Never describe character appearance, hair or clothing; the character look is locked elsewhere"}';
+      (cfg.characters ? '\nIMPORTANT: Use ONLY these exact character names: ' + cfg.characters + '. Never invent, rename or add other named characters.' : '') +
+      '\nORIGINALITY RULES: This brand already has books using the formula "the characters walk through nature and greet one new animal per page" (Naturutforskerne, the Easter book). Do NOT reuse that formula, its structure or its phrasing. Give THIS book its own story arc shaped by the topic: an opening with a wish or question, a small challenge or surprise in the middle, and a warm resolution. Vary how pages begin; never open several pages with the same words.';
+    var pageSpec = '{"text":"page text (1-3 sentences for picture books)","illustration":"illustration description for this page: describe the scene, action, setting and mood, and NAME every character and animal that appears in the page text. Never introduce animals or characters that are not in the page text. Never describe character appearance, hair or clothing; the character look is locked elsewhere"}';
 
     function prog(s) { if (onProgress) { try { onProgress(s); } catch (e) {} } }
 
