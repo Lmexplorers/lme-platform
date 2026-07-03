@@ -647,11 +647,12 @@
     var tColor = d.titleColor || '#2b2530';
     var tFont = (gen.COVER_FONTS[d.titleFont] || gen.COVER_FONTS.sasson).css;
 
-    /* Canva-stil: bildet fyller hele siden ut i kantene, teksten ligger
-       oppaa med en myk lys tone i topp og bunn saa den er lett aa lese.
-       Panorering og zoom fra "Flytt og tilpass" virker fortsatt; ramme-
-       bredde/-flytting gjelder ikke naar bildet dekker alt. */
-    if (d.fullbleed && d.image) {
+    /* Canva-stil (standard): bildet fyller hele siden ut i kantene, teksten
+       ligger oppaa med en myk lys tone i topp og bunn saa den er lett aa
+       lese. Panorering og zoom fra "Flytt og tilpass" virker fortsatt;
+       rammebredde/-flytting gjelder ikke naar bildet dekker alt.
+       Velg "I ramme" i omslagspanelet for den gamle stilen. */
+    if (d.image && d.fullbleed !== false) {
       var dd = d;
       if (d.layout && d.layout.img) {
         var li = {};

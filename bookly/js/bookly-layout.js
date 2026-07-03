@@ -216,6 +216,11 @@
         h += '<button type="button" class="bk-lay-tool" data-act="fit">' + (contain
           ? '⬜ ' + (no() ? 'Fyll rammen' : 'Fill frame')
           : '🖼 ' + (no() ? 'Vis hele bildet' : 'Show whole image')) + '</button>';
+        if (ctx.project.pages[ctx.pageIdx].kind === 'cover') {
+          var fbOn = pageData().fullbleed !== false;
+          h += '<button type="button" class="bk-lay-tool' + (fbOn ? ' on' : '') + '" data-act="fullbleed">📐 ' +
+            (no() ? 'Fyll hele siden' : 'Fill the whole page') + '</button>';
+        }
       }
       h += '<button type="button" class="bk-lay-tool" data-act="reset-el">↩︎ ' + (no() ? 'Nullstill' : 'Reset') + '</button>';
     }
@@ -238,6 +243,16 @@
       b.onclick = function () {
         if (act === 'tool-pan') { tool = 'pan'; renderBar(); }
         else if (act === 'tool-move') { tool = 'move'; renderBar(); }
+        else if (act === 'fullbleed') {
+          var pd = pageData();
+          pd.fullbleed = pd.fullbleed === false;
+          // hold chipene i omslagspanelet i takt med knappen
+          document.querySelectorAll('[data-cvfb]').forEach(function (x) {
+            x.classList.toggle('on', (x.getAttribute('data-cvfb') === '1') === (pd.fullbleed !== false));
+          });
+          BK.save(true);
+          ctx.rerender();
+        }
         else if (act === 'fit' && sel) {
           var l3 = lay(sel.getAttribute('data-el'));
           l3.mode = (l3.mode || 'cover') === 'contain' ? 'cover' : 'contain';
