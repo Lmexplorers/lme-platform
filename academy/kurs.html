@@ -1873,6 +1873,23 @@
         back2.href = '/academy';
         next.appendChild(back2);
         root.appendChild(next);
+
+        /* Rediger-knapp for Renate: vises bare i nettlesere som har brukt
+           kursbyggeren (eller med #rediger). Hopper rett inn i byggeren
+           med dette kurset aapent, der hun redigerer og lagrer. */
+        var erRedaktoer = false;
+        try {
+          erRedaktoer = localStorage.getItem('lme-kursbygger-bruker') === '1' ||
+            localStorage.getItem('lme-edit') === '1' ||
+            /(^|[#&?])rediger(=1)?($|[&])/.test(location.hash + location.search);
+        } catch (e) {}
+        if (erRedaktoer) {
+          var rediger = el('a', 'btn-primary', en ? '✏️ Edit and save' : '✏️ Rediger og lagre');
+          rediger.id = 'kurs-rediger-knapp';
+          rediger.href = '/kursbygger#' + encodeURIComponent(course.slug || slug);
+          rediger.style.marginLeft = '10px';
+          next.appendChild(rediger);
+        }
       }
 
       function hook() {
@@ -2187,11 +2204,15 @@
     timer = setInterval(next, 6000);
   }
 
-  document.querySelector('.hero-nav.next').addEventListener('click', () => { next(); startAuto(); });
-  document.querySelector('.hero-nav.prev').addEventListener('click', () => { prev(); startAuto(); });
+  /* Denne siden har ingen hero-karusell; koden arvet fra malen skal
+     ikke krasje resten av scriptet. */
+  const navNext = document.querySelector('.hero-nav.next');
+  const navPrev = document.querySelector('.hero-nav.prev');
+  if (navNext) navNext.addEventListener('click', () => { next(); startAuto(); });
+  if (navPrev) navPrev.addEventListener('click', () => { prev(); startAuto(); });
   dots.forEach((d, i) => d.addEventListener('click', () => { show(i); startAuto(); }));
 
-  startAuto();
+  if (slides.length) startAuto();
 
   /* ====== Språkbytte ====== */
   

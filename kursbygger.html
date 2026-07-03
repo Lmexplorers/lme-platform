@@ -807,7 +807,18 @@ document.addEventListener('input', function (e) {
   if (e.target.closest && e.target.closest('.wrap')) renderPreview();
 });
 
-refreshList();
+/* Husk at denne nettleseren bruker kursbyggeren, saa kurssidene kan vise
+   en rediger-knapp (kun her, ikke for medlemmer). */
+try { localStorage.setItem('lme-kursbygger-bruker', '1'); } catch (e) {}
+
+/* /kursbygger#<adresse> aapner kurset direkte, f.eks. fra rediger-knappen
+   paa kurssiden. Virker baade ved sidelast og naar bare #-delen endres. */
+function openFromHash() {
+  var hashSlug = slugify((location.hash || '').replace(/^#/, ''));
+  if (hashSlug) openCourse(hashSlug);
+}
+window.addEventListener('hashchange', openFromHash);
+refreshList(openFromHash);
 </script>
 
 </body>
