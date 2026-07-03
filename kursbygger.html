@@ -642,7 +642,8 @@ function renderPreview() {
 
   var crs = el('div', 'crs');
 
-  if (c.meet !== false) {
+  var introPresenterer = /jeg heter renate|jeg er renate|i'?m renate|my name is renate/i.test(pick(c.lede));
+  if (c.meet !== false && !introPresenterer) {
     var meet = el('div', 'crs-meet');
     var img = el('img', 'crs-meet-avatar');
     img.src = '/images/renate-portrait.jpg'; img.alt = 'Renate Dahl';

@@ -1785,8 +1785,11 @@
 
         root.innerHTML = '';
 
-        // Din lærer (kan skrus av per kurs i kursbyggeren)
-        if (course.meet !== false) {
+        // Din lærer (kan skrus av per kurs i kursbyggeren). Hopper også
+        // over seg selv når kursets egen intro allerede presenterer
+        // Renate, saa det ikke blir dobbelt opp.
+        var introPresenterer = /jeg heter renate|jeg er renate|i'?m renate|my name is renate/i.test(pick(course.lede));
+        if (course.meet !== false && !introPresenterer) {
           var meet = el('div', 'crs-meet');
           var img = el('img', 'crs-meet-avatar');
           img.src = '/images/renate-portrait.jpg';
