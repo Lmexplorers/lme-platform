@@ -135,6 +135,36 @@ async function readIndex(env) {
   }
 }
 
+/* Selvreparerende liste: indeksen kan henge etter (KV er "eventually
+   consistent"). Finnes det lagrede kurs som mangler i indeksen, hentes de
+   inn og indeksen repareres, saa kurs aldri "forsvinner" fra listene. */
+async function fullIndex(env) {
+  const index = await readIndex(env);
+  try {
+    const listed = await env.BUILDER_KV.list({ prefix: KEY_PREFIX, limit: 1000 });
+    const kjent = new Set(index.map((c) => c && c.slug));
+    let endret = false;
+    for (const key of (listed && listed.keys) || []) {
+      const slug = key.name.slice(KEY_PREFIX.length);
+      if (!slug || kjent.has(slug)) continue;
+      const raw = await env.BUILDER_KV.get(key.name);
+      if (!raw) continue;
+      try {
+        const course = JSON.parse(raw);
+        if (course && course.slug) {
+          index.push(indexEntry(course));
+          endret = true;
+        }
+      } catch (e) { /* hopp over oedelagte oppfoeringer */ }
+    }
+    if (endret) {
+      index.sort((a, b) => (b.updated || 0) - (a.updated || 0));
+      await env.BUILDER_KV.put(INDEX_KEY, JSON.stringify(index));
+    }
+  } catch (e) { /* uten list-stoette brukes indeksen som foer */ }
+  return index;
+}
+
 export async function onRequestGet(context) {
   const { request, env } = context;
   if (!env.BUILDER_KV) return json({ error: "not_configured", courses: [], course: null }, 200);
@@ -149,7 +179,7 @@ export async function onRequestGet(context) {
       return json({ error: "read_failed", course: null }, 200);
     }
   }
-  const index = await readIndex(env);
+  const index = await fullIndex(env);
   return json({ courses: index }, 200);
 }
 
