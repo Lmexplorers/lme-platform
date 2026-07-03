@@ -44,7 +44,7 @@
 
     $('#bkTopActions').innerHTML =
       '<span class="bk-plan-chip">' + (planNames[BK.state.plan] || 'Free') + '</span>' +
-      '<span class="bk-ver" title="Bookly-versjon">v21</span>' +
+      '<span class="bk-ver" title="Bookly-versjon">v22</span>' +
       '<button class="bk-lang" id="bkLang">' + (BK.lang() === 'no' ? 'EN 🌍' : 'NO 🇳🇴') + '</button>' +
       '<div class="bk-avatar" id="bkAvatar" title="' + (u ? esc(u.email) : (BK.lang() === 'no' ? 'Logg inn' : 'Sign in')) + '">' +
       (u ? esc((u.name || u.email || '?').charAt(0).toUpperCase()) : '👤') + '</div>';
