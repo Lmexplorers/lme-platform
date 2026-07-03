@@ -44,7 +44,7 @@
 
     $('#bkTopActions').innerHTML =
       '<span class="bk-plan-chip">' + (planNames[BK.state.plan] || 'Free') + '</span>' +
-      '<span class="bk-ver" title="Bookly-versjon">v22</span>' +
+      '<span class="bk-ver" title="Bookly-versjon">v23</span>' +
       '<button class="bk-lang" id="bkLang">' + (BK.lang() === 'no' ? 'EN 🌍' : 'NO 🇳🇴') + '</button>' +
       '<div class="bk-avatar" id="bkAvatar" title="' + (u ? esc(u.email) : (BK.lang() === 'no' ? 'Logg inn' : 'Sign in')) + '">' +
       (u ? esc((u.name || u.email || '?').charAt(0).toUpperCase()) : '👤') + '</div>';
@@ -697,6 +697,10 @@
           ['#2b2530', '#b02458', '#E91E89', '#1c6dd0', '#5b7d12', '#b8860b', '#ffffff'].map(function (cc) {
             return '<button type="button" class="bk-chip' + ((d.titleColor || '#2b2530') === cc ? ' on' : '') + '" data-cvtc="' + cc + '" title="' + cc + '" style="width:26px;height:26px;padding:0;border-radius:50%;background:' + cc + ';border:1.5px solid rgba(0,0,0,.18)"></button>';
           }).join('') + '</div></div>');
+        fields.push('<div class="bk-field full"><label>' + (no ? 'Bildet på omslaget' : 'Cover image') + '</label><div class="bk-chips">' +
+          '<button type="button" class="bk-chip' + (!d.fullbleed ? ' on' : '') + '" data-cvfb="0">🖼 ' + (no ? 'I ramme' : 'Framed') + '</button>' +
+          '<button type="button" class="bk-chip' + (d.fullbleed ? ' on' : '') + '" data-cvfb="1">📐 ' + (no ? 'Fyller hele siden, tekst oppå' : 'Fills the whole page, text on top') + '</button>' +
+          '</div></div>');
       } else {
         fields.push('<div class="bk-field"><label>' + (no ? 'Sidetittel' : 'Page title') + '</label><input id="edTitle" type="text" value="' + esc(pgObj.title || '') + '"></div>');
       }
@@ -844,6 +848,14 @@
           d.titleColor = cb.getAttribute('data-cvtc');
           if ($('#edCvColor')) $('#edCvColor').value = d.titleColor;
           BK.$$('[data-cvtc]', ed).forEach(function (x) { x.classList.toggle('on', x === cb); });
+          BK.touch(p);
+          renderStage(true);
+        };
+      });
+      BK.$$('[data-cvfb]', ed).forEach(function (cb) {
+        cb.onclick = function () {
+          d.fullbleed = cb.getAttribute('data-cvfb') === '1';
+          BK.$$('[data-cvfb]', ed).forEach(function (x) { x.classList.toggle('on', x === cb); });
           BK.touch(p);
           renderStage(true);
         };

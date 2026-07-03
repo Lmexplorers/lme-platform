@@ -646,6 +646,37 @@
     var tSize = tSizes[d.titleSize] || '30pt';
     var tColor = d.titleColor || '#2b2530';
     var tFont = (gen.COVER_FONTS[d.titleFont] || gen.COVER_FONTS.sasson).css;
+
+    /* Canva-stil: bildet fyller hele siden ut i kantene, teksten ligger
+       oppaa med en myk lys tone i topp og bunn saa den er lett aa lese.
+       Panorering og zoom fra "Flytt og tilpass" virker fortsatt; ramme-
+       bredde/-flytting gjelder ikke naar bildet dekker alt. */
+    if (d.fullbleed && d.image) {
+      var dd = d;
+      if (d.layout && d.layout.img) {
+        var li = {};
+        for (var k in d.layout.img) li[k] = d.layout.img[k];
+        delete li.w; delete li.dx; delete li.dy;
+        li.mode = 'cover';
+        dd = {};
+        for (var k2 in d) dd[k2] = d[k2];
+        dd.layout = {};
+        for (var k3 in d.layout) dd.layout[k3] = d.layout[k3];
+        dd.layout.img = li;
+      }
+      return '<div class="bk-sheet" data-page="' + i + '" style="width:' + size.w + 'mm;height:' + size.h + 'mm;position:relative;background:#fff">' +
+        gen.imgFrame(dd, { defW: 100, radius: '0', frameStyle: 'position:absolute;inset:0;width:100%;' }) +
+        '<div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(255,255,255,0) 26%,rgba(255,255,255,0) 72%,rgba(255,255,255,.85) 100%)"></div>' +
+        '<div class="pg-inner" style="position:absolute;inset:0;text-align:center;padding:12mm;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none">' +
+        '<div>' +
+        '<div data-el="kicker" style="' + gen.layStyle(d, 'kicker') + 'pointer-events:auto;font-size:9pt;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#b02458">' + esc(d.kicker || 'Little Montessori Explorers') + '</div>' +
+        '<div data-el="title" style="' + gen.layStyle(d, 'title') + 'pointer-events:auto;font-family:' + tFont + ';font-weight:700;font-size:' + tSize + ';line-height:1.12;color:' + tColor + ';margin-top:4mm">' + esc(d.title || p.title) + '</div>' +
+        (d.subtitle ? '<div data-el="subtitle" style="' + gen.layStyle(d, 'subtitle') + 'pointer-events:auto;font-size:13pt;color:#5c4a54;margin-top:3mm">' + esc(d.subtitle) + '</div>' : '') +
+        '</div>' +
+        '<div data-el="author" style="' + gen.layStyle(d, 'author') + 'pointer-events:auto;font-size:12pt;font-weight:800;color:#b02458">' + esc(d.author || '') + '</div>' +
+        '</div></div>';
+    }
+
     return '<div class="bk-sheet" data-page="' + i + '" style="width:' + size.w + 'mm;height:' + size.h + 'mm;background:' + (bgs[theme] || bgs.pink) + '">' +
       '<div class="pg-inner" style="text-align:center;padding:16mm">' +
       '<div data-el="kicker" style="' + gen.layStyle(d, 'kicker') + 'font-size:9pt;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#b02458">' + esc(d.kicker || 'Little Montessori Explorers') + '</div>' +
