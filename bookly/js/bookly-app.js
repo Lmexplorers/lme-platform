@@ -15,7 +15,7 @@
     $('#bkSidebar').innerHTML =
       '<a class="bk-logo" href="#/dashboard">' +
       '<span class="mark">📚</span>' +
-      '<span class="name">LME Bookly<span class="tm">™</span><small>Little Montessori Explorers</small></span></a>' +
+      '<span class="name">' + (BK.isOwner && BK.isOwner() ? 'Bokbygger' : 'LME Bookly<span class="tm">™</span>') + '<small>Little Montessori Explorers</small></span></a>' +
       navGroup('', [
         ['/dashboard', '🏡', t('nav_dashboard')],
         ['/projects', '📂', t('nav_projects')],
@@ -313,11 +313,15 @@
   BK.route('/templates', function (root) {
     var no = BK.lang() === 'no';
     var cat = BK._tplCat || 'all';
-    var list = BK.TEMPLATES.filter(function (tp) { return cat === 'all' || tp.cat === cat; });
+    var visible = BK.visibleTemplates ? BK.visibleTemplates() : BK.TEMPLATES;
+    var list = visible.filter(function (tp) { return cat === 'all' || tp.cat === cat; });
+    var cats = Object.keys(BK.TPL_CATS).filter(function (c) {
+      return !(BK.OWNER_TPL_CATS && BK.OWNER_TPL_CATS[c]) || (BK.isOwner && BK.isOwner());
+    });
     root.innerHTML =
-      head(t('nav_templates') + ' <em>(' + BK.TEMPLATES.length + ')</em>',
+      head(t('nav_templates') + ' <em>(' + visible.length + ')</em>',
         no ? 'Profesjonelle utgangspunkt for alt du vil lage. Velg en mal, juster, og generer.' : 'Professional starting points for everything you want to make. Pick a template, adjust, and generate.') +
-      '<div class="bk-tabs">' + ['all'].concat(Object.keys(BK.TPL_CATS)).map(function (c) {
+      '<div class="bk-tabs">' + ['all'].concat(cats).map(function (c) {
         return '<button class="bk-tab' + (cat === c ? ' on' : '') + '" data-cat="' + c + '">' +
           (c === 'all' ? t('all') : esc(L(BK.TPL_CATS[c]))) + '</button>';
       }).join('') + '</div>' +

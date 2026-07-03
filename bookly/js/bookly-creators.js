@@ -726,6 +726,19 @@
   tpl('lk20', '♻️', 'tint-lime', 'Bærekraftig utvikling', 'Sustainable Development', 'Tverrfaglig tema: miljø og bærekraft i hverdagen.', 'Cross-curricular theme: environment and sustainability in daily life.', 'workbook', { category: 'science', topic: 'bærekraftig utvikling: kildesortering, forbruk og å ta vare på naturen', age: '6-9', count: 10 });
   tpl('lk20', '🗳️', 'tint-lemon', 'Demokrati og medborgerskap', 'Democracy and Citizenship', 'Tverrfaglig tema: medvirkning, regler og fellesskap.', 'Cross-curricular theme: participation, rules and community.', 'book', { bookType: 'educational book', topic: 'demokrati og medborgerskap for barn: stemme, regler og fellesskap', age: '9-12', pages: 24 });
 
+  /* Eier-eksklusivt innhold (Renates Bokbygger): laereplan-kategoriene og
+     FEA-kursheftemalen vises kun for eierkontoen, aldri for vanlige
+     Bookly-brukere. */
+  BK.OWNER_TPL_CATS = { montessori: 1, lk20: 1 };
+  T.forEach(function (tp) {
+    if (BK.OWNER_TPL_CATS[tp.cat] || tp.name[0].indexOf('FEA') !== -1) tp.own = true;
+  });
+  BK.isOwner = function () { return !!(BK.state.user && BK.state.user.role === 'owner'); };
+  BK.visibleTemplates = function () {
+    var own = BK.isOwner();
+    return T.filter(function (tp) { return !tp.own || own; });
+  };
+
   BK.TEMPLATES = T;
 
   /* Bruk en mal: åpner riktig skaper med forhåndsutfylt oppsett. */
@@ -733,6 +746,7 @@
     var t = null;
     for (var i = 0; i < T.length; i++) if (T[i].id === id) t = T[i];
     if (!t) return;
+    if (t.own && !BK.isOwner()) return;
     BK.pendingTemplate = t;
     var routeMap = { book: 'book', workbook: 'workbook', activity: 'activity', puzzle: 'puzzle', flashcards: 'flashcards', coloring: 'coloring', journal: 'journal', planner: 'planner' };
     BK.go('/create/' + routeMap[t.type]);
