@@ -11,11 +11,18 @@ Lag minikurs og større kurs uten kode, rett i nettleseren.
    (8 leksjoner med modul-forslag).
 3. Fyll inn tittel, ingress, "hva du lærer" og leksjonene. Tom linje i
    innholdsfeltet blir nytt avsnitt. Tips-feltet lager den gule tipsboksen.
+   - Start en linje med `## ` for en liten rosa mellomoverskrift i leksjonen,
+     for eksempel `## Slik kommer du i gang`.
+   - Skriv `**ord**` for tykk skrift, for eksempel `Dette er **viktig**.`
+   - Hver leksjon kan få et **bilde**: velg en bildefil i leksjonskortet, så
+     krympes det automatisk og vises øverst i leksjonen.
 4. Se forhåndsvisningen til høyre; den oppdateres mens du skriver.
 5. Trykk **💾 Lagre kurset**. Første gang blir du bedt om passordet (samme som
    for kursredigering, `COURSE_EDIT_PASSWORD`).
 6. Kurset får sin egen side på **`/academy/kurs/<adresse>`** og vises
    automatisk under "Dine egne kurs" på akademi-forsiden når det er publisert.
+   Merk: rett etter lagring kan skyen bruke opptil ett minutt på å vise kurset
+   på lenken; kurssiden prøver selv igjen noen ganger før den gir beskjed.
 
 ## Engelsk
 

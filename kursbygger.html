@@ -99,6 +99,9 @@
   .crs-lesson-num { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cerise); }
   .crs-lesson h3 { font-size: 19px; margin: 4px 0 10px; }
   .crs-lesson p { color: var(--grey); font-size: 14.5px; margin-bottom: 10px; }
+  .crs-sub { font-family: var(--font-head); font-size: 15px; font-weight: 700; color: var(--cerise); margin: 12px 0 4px; }
+  .crs-lessonfig { margin: 10px 0 14px; border-radius: 14px; overflow: hidden; }
+  .crs-lessonfig img { width: 100%; display: block; }
   .crs-tip { background: #FFF8E6; border-left: 4px solid var(--yellow); border-radius: 10px; padding: 12px 14px; font-size: 13.5px; color: var(--grey); margin-top: 10px; }
   .crs-cert { text-align: center; background: linear-gradient(135deg, #FFF8E6, #FBF6F0); border: 2px dashed var(--yellow); border-radius: 18px; padding: 24px 20px; margin: 24px 0 16px; }
   .crs-cert h3 { font-size: 18px; margin: 4px 0 6px; }
@@ -166,7 +169,7 @@
 
     <section class="panel" id="lessonsPanel" style="display:none">
       <h2 data-no="Leksjoner" data-en="Lessons">Leksjoner</h2>
-      <p class="hint" data-no="Tomme linjer i innholdet blir nye avsnitt. Modul-feltet lager et grønt merke over leksjonen, fint for å dele større kurs i deler." data-en="Blank lines in the content become new paragraphs. The module field creates a green label above the lesson, useful for splitting full courses into parts.">Tomme linjer i innholdet blir nye avsnitt. Modul-feltet lager et grønt merke over leksjonen, fint for å dele større kurs i deler.</p>
+      <p class="hint" data-no="Tomme linjer i innholdet blir nye avsnitt. Start en linje med ## for en liten rosa overskrift, og skriv **ord** for tykk skrift. Modul-feltet lager et grønt merke over leksjonen." data-en="Blank lines in the content become new paragraphs. Start a line with ## for a small pink heading, and write **word** for bold text. The module field creates a green label above the lesson.">Tomme linjer i innholdet blir nye avsnitt. Start en linje med ## for en liten rosa overskrift, og skriv **ord** for tykk skrift. Modul-feltet lager et grønt merke over leksjonen.</p>
       <div id="lessonList"></div>
       <div class="new-row">
         <button class="btn btn-soft" type="button" onclick="addLesson()" data-no="＋ Legg til leksjon" data-en="＋ Add lesson">＋ Legg til leksjon</button>
@@ -256,7 +259,22 @@ function slugify(s) {
     .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
 }
 function paras(text) {
-  return (text || '').split(/\n\s*\n/).map(function (s) { return s.trim(); }).filter(Boolean);
+  // Blank linje skiller avsnitt. En linje som starter med ## blir alltid
+  // sitt eget avsnitt (liten overskrift), også uten blank linje rundt.
+  var out = [];
+  (text || '').split(/\n\s*\n/).forEach(function (block) {
+    var buf = [];
+    block.split('\n').forEach(function (line) {
+      if (/^\s*##\s+/.test(line)) {
+        if (buf.length) { out.push(buf.join('\n')); buf = []; }
+        out.push(line);
+      } else {
+        buf.push(line);
+      }
+    });
+    if (buf.length) out.push(buf.join('\n'));
+  });
+  return out.map(function (s) { return s.trim(); }).filter(Boolean);
 }
 function lines(text) {
   return (text || '').split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
@@ -399,7 +417,8 @@ function collectCourse() {
       module: g('.lc-module') ? { no: g('.lc-module'), en: g('.lc-module-en') } : null,
       title: { no: g('.lc-title'), en: g('.lc-title-en') },
       body: bodyNo.map(function (t, i) { return { no: t, en: bodyEn[i] || '' }; }),
-      tip: g('.lc-tip') ? { no: g('.lc-tip'), en: g('.lc-tip-en') } : null
+      tip: g('.lc-tip') ? { no: g('.lc-tip'), en: g('.lc-tip-en') } : null,
+      img: card._img || ''
     };
     if (lesson.title.no || lesson.body.length) c.lessons.push(lesson);
   });
@@ -430,7 +449,13 @@ function addLesson(l) {
     '<div class="en-field"><textarea class="lc-body-en" rows="5" data-ph-no="Engelsk innhold" data-ph-en="English content"></textarea></div>' +
     '<label class="f" for="lc-tip-' + id + '" data-no="Tips-boks (valgfritt, f.eks. 🌿 Prøv dette: …)" data-en="Tip box (optional, e.g. 🌿 Try this: …)"></label>' +
     '<input type="text" id="lc-tip-' + id + '" class="lc-tip">' +
-    '<div class="en-field"><input type="text" class="lc-tip-en" data-ph-no="Engelsk tips" data-ph-en="English tip"></div>';
+    '<div class="en-field"><input type="text" class="lc-tip-en" data-ph-no="Engelsk tips" data-ph-en="English tip"></div>' +
+    '<label class="f" for="lc-imgfile-' + id + '" data-no="Bilde til leksjonen (valgfritt)" data-en="Lesson image (optional)"></label>' +
+    '<input type="file" id="lc-imgfile-' + id + '" class="lc-imgfile" accept="image/*">' +
+    '<div class="lc-imgwrap" style="display:none;margin-top:8px">' +
+    '<img class="lc-imgprev" alt="" style="max-width:220px;border-radius:12px;display:block;box-shadow:0 4px 14px rgba(26,26,26,0.12)">' +
+    '<button type="button" class="icon-btn lc-imgrm" style="margin-top:6px" data-no="🗑 Fjern bildet" data-en="🗑 Remove image">🗑 Fjern bildet</button>' +
+    '</div>';
   card.querySelectorAll('[data-no][data-en], [data-ph-no][data-ph-en]').forEach(function (n) {
     if (n.hasAttribute('data-no')) n.textContent = n.getAttribute('data-' + currentLang);
     if (n.hasAttribute('data-ph-no')) n.setAttribute('placeholder', n.getAttribute(currentLang === 'no' ? 'data-ph-no' : 'data-ph-en'));
@@ -443,6 +468,29 @@ function addLesson(l) {
   card.querySelector('.lc-body-en').value = (l.body || []).map(function (p) { return p.en || ''; }).join('\n\n');
   card.querySelector('.lc-tip').value = (l.tip && l.tip.no) || '';
   card.querySelector('.lc-tip-en').value = (l.tip && l.tip.en) || '';
+  card._img = l.img || '';
+  var imgWrap = card.querySelector('.lc-imgwrap');
+  function paintImg() {
+    imgWrap.style.display = card._img ? '' : 'none';
+    card.querySelector('.lc-imgprev').src = card._img || '';
+  }
+  paintImg();
+  card.querySelector('.lc-imgfile').addEventListener('change', function () {
+    var file = this.files && this.files[0];
+    if (!file) return;
+    var input = this;
+    shrinkImage(file, function (dataUrl) {
+      card._img = dataUrl;
+      input.value = '';
+      paintImg();
+      renderPreview();
+    });
+  });
+  card.querySelector('.lc-imgrm').onclick = function () {
+    card._img = '';
+    paintImg();
+    renderPreview();
+  };
   card.querySelectorAll('[data-act]').forEach(function (b) {
     b.onclick = function () {
       if (b.dataset.act === 'del') {
@@ -536,6 +584,47 @@ function el(tag, cls, text) {
   return e;
 }
 
+/* Krymper opplastede bilder saa kurset ikke blir for stort aa lagre. */
+function shrinkImage(file, cb) {
+  var reader = new FileReader();
+  reader.onload = function () {
+    var img = new Image();
+    img.onload = function () {
+      var max = 1200;
+      var scale = Math.min(1, max / Math.max(img.width, img.height));
+      var c = document.createElement('canvas');
+      c.width = Math.max(1, Math.round(img.width * scale));
+      c.height = Math.max(1, Math.round(img.height * scale));
+      var g = c.getContext('2d');
+      g.fillStyle = '#ffffff';
+      g.fillRect(0, 0, c.width, c.height);
+      g.drawImage(img, 0, 0, c.width, c.height);
+      cb(c.toDataURL('image/jpeg', 0.82));
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* Avsnitt med enkel formatering: "## " gir liten rosa overskrift,
+   **ord** gir tykk skrift. Bygges som DOM-noder, aldri som raa HTML. */
+function richPara(text) {
+  if (/^##\s+/.test(text)) {
+    return el('h4', 'crs-sub', text.replace(/^##\s+/, ''));
+  }
+  var p = el('p');
+  String(text).split(/(\*\*[^*]+\*\*)/g).forEach(function (part) {
+    if (/^\*\*[^*]+\*\*$/.test(part)) {
+      var b = document.createElement('strong');
+      b.textContent = part.slice(2, -2);
+      p.appendChild(b);
+    } else if (part) {
+      p.appendChild(document.createTextNode(part));
+    }
+  });
+  return p;
+}
+
 function renderPreview() {
   var frame = q('previewFrame');
   if (q('editorPanel').style.display === 'none') return;
@@ -579,7 +668,15 @@ function renderPreview() {
     var box = el('div', 'crs-lesson');
     box.appendChild(el('div', 'crs-lesson-num', L('Leksjon ', 'Lesson ') + (i + 1)));
     box.appendChild(el('h3', null, pick(l.title)));
-    l.body.forEach(function (p) { box.appendChild(el('p', null, pick(p))); });
+    if (l.img) {
+      var fg = el('figure', 'crs-lessonfig');
+      var im = el('img');
+      im.src = l.img;
+      im.alt = '';
+      fg.appendChild(im);
+      box.appendChild(fg);
+    }
+    l.body.forEach(function (p) { box.appendChild(richPara(pick(p))); });
     if (l.tip) box.appendChild(el('div', 'crs-tip', pick(l.tip)));
     crs.appendChild(box);
   });

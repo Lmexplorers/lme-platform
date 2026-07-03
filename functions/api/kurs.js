@@ -24,7 +24,7 @@
  *     kicker, title, lede,
  *     learn: [ {no,en}, ... ],
  *     lessons: [ { module: {no,en}|null, title, body: [ {no,en}, ... ],
- *                  tip: {no,en}|null } ],
+ *                  tip: {no,en}|null, img: dataURL|undefined } ],
  *     outro: { title, text }
  *   }
  */
@@ -32,7 +32,7 @@
 const DEFAULT_PASSWORD = "LilleOppdager2026";
 const KEY_PREFIX = "lme-builder:kurs:";
 const INDEX_KEY = "lme-builder:kurs-index";
-const MAX_SIZE = 512 * 1024;
+const MAX_SIZE = 4 * 1024 * 1024; // kurs med leksjonsbilder trenger plass
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -102,6 +102,9 @@ function sanitizeCourse(raw) {
     });
     const tip = langField(l.tip, 500);
     if (tip.no.trim()) lesson.tip = tip;
+    if (typeof l.img === "string" && /^data:image\/(png|jpe?g|webp|gif);base64,/.test(l.img) && l.img.length <= 900000) {
+      lesson.img = l.img;
+    }
     if (lesson.title.no.trim() || lesson.body.length) course.lessons.push(lesson);
   });
   if (!course.title.no.trim() || !course.lessons.length) return null;

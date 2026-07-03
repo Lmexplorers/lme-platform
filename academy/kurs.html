@@ -1691,6 +1691,9 @@
     .crs-lesson p { color: #4A4A4A; line-height: 1.75; margin-bottom: 14px; }
     .crs-lesson p:last-child { margin-bottom: 0; }
     .crs-lesson strong { color: #1A1A1A; }
+    .crs-sub { font-size: 16px; font-weight: 700; color: #E91E89; margin: 16px 0 6px; }
+    .crs-lessonfig { margin: 12px 0 18px; border-radius: 16px; overflow: hidden; }
+    .crs-lessonfig img { width: 100%; display: block; }
     .crs-tip { background: #FFF8E6; border-left: 4px solid #F7C72E; border-radius: 10px; padding: 14px 18px; font-size: 14.5px; color: #4A4A4A; margin: 14px 0 4px; }
     .crs-cert { text-align: center; background: linear-gradient(135deg, #FFF8E6, #FBF6F0); border: 2px dashed #F7C72E; border-radius: 24px; padding: 34px 28px; margin: 34px 0 22px; }
     .crs-cert .crs-cert-icon { font-size: 40px; margin-bottom: 6px; }
@@ -1730,17 +1733,40 @@
         if (text) e.textContent = text;
         return e;
       }
+      /* Avsnitt med enkel formatering: "## tekst" gir en liten rosa
+         overskrift, og **ord** gir tykk skrift. Samme regler som i
+         kursbyggeren. */
+      function richPara(text) {
+        text = String(text || '');
+        if (/^##\s+/.test(text)) return el('h4', 'crs-sub', text.replace(/^##\s+/, ''));
+        var p = el('p');
+        text.split(/(\*\*[^*]+\*\*)/g).forEach(function (part) {
+          if (/^\*\*[^*]+\*\*$/.test(part)) {
+            var b = document.createElement('strong');
+            b.textContent = part.slice(2, -2);
+            p.appendChild(b);
+          } else if (part) {
+            p.appendChild(document.createTextNode(part));
+          }
+        });
+        return p;
+      }
 
       function render() {
         var en = window.LME_CURRENT_LANG === 'en';
         if (!course) {
           document.getElementById('kurs-tittel').textContent = en ? 'Course not found' : 'Fant ikke kurset';
           document.getElementById('kurs-lede').textContent = en
-            ? 'The course may have been moved or unpublished.'
-            : 'Kurset kan være flyttet eller avpublisert.';
+            ? 'A newly saved course can take up to a minute to appear. Try again shortly, or check that the address is correct.'
+            : 'Et nylagret kurs kan bruke opptil ett minutt på å dukke opp. Prøv igjen om litt, eller sjekk at adressen stemmer.';
           root.innerHTML = '';
           var back = el('div', 'crs-next');
           back.appendChild(el('h3', null, en ? 'Back to the academy' : 'Tilbake til akademiet'));
+          var retry = el('button', 'btn-primary', en ? '🔄 Try again' : '🔄 Prøv igjen');
+          retry.type = 'button';
+          retry.style.marginRight = '10px';
+          retry.onclick = function () { location.reload(); };
+          back.appendChild(retry);
           var a = el('a', 'btn-primary', en ? '← All courses' : '← Alle kurs');
           a.href = '/academy';
           back.appendChild(a);
@@ -1791,9 +1817,18 @@
           var box = el('div', 'crs-lesson');
           box.appendChild(el('div', 'crs-lesson-num', (en ? 'Lesson ' : 'Leksjon ') + (i + 1)));
           box.appendChild(el('h3', null, pick(l.title)));
+          if (l.img) {
+            var fg = el('figure', 'crs-lessonfig');
+            var fim = el('img');
+            fim.src = l.img;
+            fim.alt = pick(l.title) || '';
+            fim.loading = 'lazy';
+            fg.appendChild(fim);
+            box.appendChild(fg);
+          }
           (l.body || []).forEach(function (p) {
             var t = pick(p);
-            if (t.trim()) box.appendChild(el('p', null, t));
+            if (t.trim()) box.appendChild(richPara(t));
           });
           if (l.tip && pick(l.tip).trim()) box.appendChild(el('div', 'crs-tip', pick(l.tip)));
           root.appendChild(box);
@@ -1840,11 +1875,24 @@
         return;
       }
 
-      fetch('/api/kurs?slug=' + encodeURIComponent(slug))
-        .then(function (r) { return r.json(); })
-        .then(function (d) { course = (d && d.course) || null; })
-        .catch(function () { course = null; })
-        .then(function () { render(); hook(); });
+      /* Nylagrede kurs kan bruke noen sekunder på å bli synlige i skyen
+         (KV er "eventually consistent"), så vi prøver noen ganger før vi
+         sier at kurset ikke finnes. */
+      function hent(forsok) {
+        fetch('/api/kurs?slug=' + encodeURIComponent(slug) + '&t=' + Date.now())
+          .then(function (r) { return r.json(); })
+          .then(function (d) { course = (d && d.course) || null; })
+          .catch(function () { course = null; })
+          .then(function () {
+            if (!course && forsok < 3) {
+              setTimeout(function () { hent(forsok + 1); }, 2500);
+              return;
+            }
+            render();
+            hook();
+          });
+      }
+      hent(1);
     })();
 
     /* Kursbevis: aapner et utskriftsvennlig vindu med diplom i LME-stil. */
