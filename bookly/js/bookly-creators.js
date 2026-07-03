@@ -560,6 +560,8 @@
     story:      ['Fortellinger', 'Story books'],
     edu:        ['Pedagogiske bøker', 'Educational books'],
     workbooks:  ['Arbeidsbøker', 'Workbooks'],
+    montessori: ['Montessori (læreplanen)', 'Montessori (curriculum)'],
+    lk20:       ['Skole (læreplanen)', 'School (curriculum)'],
     flashcards: ['Flashkort', 'Flashcards'],
     activity:   ['Aktivitetsbøker', 'Activity books'],
     puzzles:    ['Puslebøker', 'Puzzle books'],
@@ -701,6 +703,28 @@
   tpl('teacher', '🃏', 'tint-pink', 'Klassesett med kort', 'Classroom Card Set', 'Trepartskort til samlingsstund.', 'Three-part cards for circle time.', 'flashcards', { mode: 'threepart', theme: 'natur' });
   tpl('teacher', '🧘', 'tint-lime', 'Rolig start-sider', 'Calm Start Pages', 'Mandala-sider til rolig oppstart.', 'Mandala pages for a calm start.', 'coloring', { theme: 'natur', count: 10 });
   tpl('teacher', '📊', 'tint-lemon', 'Vaner i klassen', 'Class Habit Tracker', 'Felles vaner og rutiner som rutenett.', 'Shared habits and routines as grids.', 'planner', { kind: 'habits', months: 2 });
+  tpl('teacher', '💼', 'tint-pink', 'Kurshefte (FEA-stil)', 'Course Booklet (FEA style)', 'Kurshefte for voksne i FEA-stil: moduler, refleksjon, sjekklister og handlingssteg.', 'Course booklet for adults in FEA style: modules, reflection, checklists and action steps.', 'workbook', { category: 'course', topic: 'kurshefte i varm og motiverende FEA-stil (Carrie Green): velkomst fra kursholderen, moduler med kort leksjonstekst, refleksjonsspørsmål, sjekklister og konkrete handlingssteg per modul', age: 'voksne', count: 12 });
+  tpl('teacher', '📔', 'tint-blue', 'Observasjonsjournal for pedagoger', 'Observation Journal for Educators', 'Utvidet observasjonsjournal: barnets valg, konsentrasjon, sosialt samspill og oppfølging.', 'Extended observation journal: the child\'s choices, concentration, social interaction and follow-up.', 'journal', { kind: 'teacher', count: 30 });
+
+  /* Montessori (læreplanen): områdene i Montessoripedagogikken (8) */
+  tpl('montessori', '🧺', 'tint-pink', 'Praktisk liv', 'Practical Life', 'Øvelser i praktisk liv: helle, øse, kle på seg og dekke bord.', 'Practical life exercises: pouring, spooning, dressing and setting the table.', 'workbook', { category: 'montessori', topic: 'praktisk liv: helle, øse, kle på seg, dekke bord og hjelpe til hjemme', age: '3-6', count: 10 });
+  tpl('montessori', '👐', 'tint-blue', 'Sansene', 'The Senses', 'Sansetrening: se, høre, kjenne, lukte og smake.', 'Sensorial work: seeing, hearing, touching, smelling and tasting.', 'workbook', { category: 'montessori', topic: 'sansene og sansematerialer: sortere, gradere og beskrive', age: '3-6', count: 10 });
+  tpl('montessori', '🔤', 'tint-lemon', 'Språk: lyder og bokstaver', 'Language: Sounds and Letters', 'Språkarbeid i Montessorirekkefølge: lyder først, så bokstaver og ord.', 'Language work in Montessori order: sounds first, then letters and words.', 'workbook', { category: 'literacy', topic: 'språklyder, sandpapirbokstaver og de første ordene, i Montessorirekkefølge', age: '3-6', count: 12 });
+  tpl('montessori', '🔢', 'tint-lime', 'Matematikk med konkreter', 'Math with Materials', 'Mengder og tall slik Montessorimatematikken bygger dem opp.', 'Quantities and numerals the way Montessori math builds them.', 'workbook', { category: 'mathematics', topic: 'mengder og tall 0 til 10 med konkreter, i Montessorirekkefølge', age: '3-6', count: 12 });
+  tpl('montessori', '🌌', 'tint-blue', 'De store fortellingene', 'The Great Lessons', 'Kosmisk utdanning: universet, livet og menneskene.', 'Cosmic education: the universe, life and human beings.', 'book', { bookType: 'educational book', topic: 'de store fortellingene i kosmisk utdanning: universet blir til, livet utvikler seg og menneskene kommer', age: '6-9', pages: 32 });
+  tpl('montessori', '🌱', 'tint-lime', 'Botanikk: plantene', 'Botany: Plants', 'Plantens deler, frø og vekst.', 'Parts of the plant, seeds and growth.', 'workbook', { category: 'science', topic: 'botanikk: plantens deler, frø som spirer og det planter trenger', age: '3-6', count: 10 });
+  tpl('montessori', '🐾', 'tint-pink', 'Zoologi: trepartskort', 'Zoology: Three-Part Cards', 'Klassiske trepartskort med dyr.', 'Classic three-part cards with animals.', 'flashcards', { mode: 'threepart', theme: 'dyr' });
+  tpl('montessori', '🕊️', 'tint-lemon', 'Fred og høflighet', 'Grace and Courtesy', 'Grace and courtesy: vennlighet, hensyn og fred.', 'Grace and courtesy: kindness, consideration and peace.', 'book', { bookType: 'educational book', topic: 'høflighet, vennlighet og fredsarbeid i hverdagen (grace and courtesy)', age: '3-6', pages: 24 });
+
+  /* Skole (læreplanen LK20): fagene og de tverrfaglige temaene (8) */
+  tpl('lk20', '📖', 'tint-pink', 'Norsk: lese og skrive', 'Norwegian: Read and Write', 'Bokstaver, lesing og skriving for begynneropplæringen.', 'Letters, reading and writing for early literacy.', 'workbook', { category: 'literacy', topic: 'begynneropplæring i norsk: bokstaver, lesing og skriving', age: '6-9', count: 12 });
+  tpl('lk20', '➕', 'tint-blue', 'Matematikk 1.-4. trinn', 'Math Grades 1-4', 'Tall, regning og problemløsing etter læreplanen.', 'Numbers, arithmetic and problem solving per the curriculum.', 'workbook', { category: 'mathematics', topic: 'tall, de fire regneartene og problemløsing for småtrinnet', age: '6-9', count: 12 });
+  tpl('lk20', '🇬🇧', 'tint-lemon', 'Engelsk: første ord', 'English: First Words', 'Engelske gloser som læringskort.', 'English vocabulary as learning cards.', 'flashcards', { mode: 'vocab', itemsText: 'hund = dog\nkatt = cat\nskole = school\nvenn = friend\nbok = book\nlærer = teacher\nfamilie = family\nhus = house' });
+  tpl('lk20', '🔬', 'tint-lime', 'Naturfag: utforskeren', 'Science: The Explorer', 'Utforskende arbeidsmåter: undre, undersøke og forklare.', 'Inquiry-based science: wonder, investigate and explain.', 'workbook', { category: 'science', topic: 'utforskende arbeidsmåter i naturfag: observere, stille spørsmål og undersøke', age: '6-9', count: 10 });
+  tpl('lk20', '🏘️', 'tint-blue', 'Samfunnsfag: meg og fellesskapet', 'Social Studies: Me and Community', 'Familie, klasse og lokalsamfunn.', 'Family, class and local community.', 'book', { bookType: 'educational book', topic: 'meg selv, familien, klassen og lokalsamfunnet', age: '6-9', pages: 24 });
+  tpl('lk20', '💛', 'tint-pink', 'Livsmestring', 'Life Skills', 'Tverrfaglig tema: følelser, vennskap og gode valg.', 'Cross-curricular theme: feelings, friendship and good choices.', 'workbook', { category: 'montessori', topic: 'folkehelse og livsmestring: følelser, vennskap, kropp og gode valg', age: '6-9', count: 10 });
+  tpl('lk20', '♻️', 'tint-lime', 'Bærekraftig utvikling', 'Sustainable Development', 'Tverrfaglig tema: miljø og bærekraft i hverdagen.', 'Cross-curricular theme: environment and sustainability in daily life.', 'workbook', { category: 'science', topic: 'bærekraftig utvikling: kildesortering, forbruk og å ta vare på naturen', age: '6-9', count: 10 });
+  tpl('lk20', '🗳️', 'tint-lemon', 'Demokrati og medborgerskap', 'Democracy and Citizenship', 'Tverrfaglig tema: medvirkning, regler og fellesskap.', 'Cross-curricular theme: participation, rules and community.', 'book', { bookType: 'educational book', topic: 'demokrati og medborgerskap for barn: stemme, regler og fellesskap', age: '9-12', pages: 24 });
 
   BK.TEMPLATES = T;
 

@@ -665,7 +665,7 @@
               sel('edImgStyle', no ? 'Stil' : 'Style',
                 Object.keys(IMG_STYLES).map(function (k) { return [k, L(IMG_STYLES[k].name)]; }), st2.imgStyle || 'pixar') +
               sel('edImgSize', no ? 'Format' : 'Format',
-                [['1024x1024', no ? 'Kvadrat' : 'Square'], ['1024x1536', no ? 'Stående' : 'Portrait'], ['1536x1024', no ? 'Liggende' : 'Landscape']],
+                [['1024x1024', no ? 'Kvadrat (anbefalt)' : 'Square (recommended)'], ['1024x1536', no ? 'Stående' : 'Portrait'], ['1536x1024', no ? 'Liggende' : 'Landscape']],
                 st2.imgSize || '1024x1024') +
               sel('edImgQ', no ? 'Kvalitet' : 'Quality',
                 [['low', no ? '💸 Utkast' : '💸 Draft'], ['medium', 'Standard'], ['high', no ? '✨ Høy' : '✨ High']],
@@ -1212,6 +1212,16 @@
         return '<button class="bk-chip' + (c.theme === th ? ' on' : '') + '" data-th="' + th + '">' +
           ({ pink: '🌸', blue: '💙', lime: '🍀', lemon: '🍋' }[th]) + ' ' + th + '</button>';
       }).join('') + '</div></div>' +
+      '<div class="bk-field"><label>' + (no ? 'Tittelstørrelse' : 'Title size') + '</label><div class="bk-chips">' +
+      [['s', no ? 'Liten' : 'Small'], ['m', 'Medium'], ['l', no ? 'Stor' : 'Large'], ['xl', no ? 'Ekstra stor' : 'Extra large']].map(function (op) {
+        return '<button class="bk-chip' + ((c.titleSize || 'm') === op[0] ? ' on' : '') + '" data-ts="' + op[0] + '">' + op[1] + '</button>';
+      }).join('') + '</div></div>' +
+      '<div class="bk-field"><label>' + (no ? 'Tittelfarge' : 'Title color') + '</label>' +
+      '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">' +
+      '<input id="cvTitleColor" type="color" value="' + esc(c.titleColor || '#2b2530') + '" style="width:44px;height:34px;padding:2px;border-radius:8px;border:1px solid var(--line,#ddd);cursor:pointer">' +
+      ['#2b2530', '#b02458', '#1c6dd0', '#5b7d12', '#b8860b', '#ffffff'].map(function (cc) {
+        return '<button class="bk-chip' + ((c.titleColor || '#2b2530') === cc ? ' on' : '') + '" data-tc="' + cc + '" title="' + cc + '" style="width:26px;height:26px;padding:0;border-radius:50%;background:' + cc + ';border:1.5px solid rgba(0,0,0,.18)"></button>';
+      }).join('') + '</div></div>' +
       '<div class="bk-field"><label>Emoji</label><div class="bk-chips">' +
       ['🌸', '📖', '🦊', '🌳', '🧩', '🎨', '⭐', '🦋', '🚀', '🐻'].map(function (e) {
         return '<button class="bk-chip' + (c.emoji === e ? ' on' : '') + '" data-em="' + e + '">' + e + '</button>';
@@ -1257,7 +1267,7 @@
           '<div style="width:' + Math.max(2, sp.spine) + 'mm;background:rgba(176,36,88,.14);display:flex;align-items:center;justify-content:center">' +
           (sp.spine > 5 ? '<span style="writing-mode:vertical-rl;font-size:8pt;font-weight:800;color:#b02458;white-space:nowrap">' + esc(c.title) + '</span>' : '') + '</div>' +
           '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8mm;text-align:center">' +
-          '<div style="font-family:\'Sasson Montessori\',\'Playpen Sans\',sans-serif;font-weight:700;font-size:16pt;color:#2b2530">' + esc(c.title) + '</div>' +
+          '<div style="font-family:\'Sasson Montessori\',\'Playpen Sans\',sans-serif;font-weight:700;font-size:' + ({ s: '12pt', m: '16pt', l: '20pt', xl: '24pt' }[c.titleSize] || '16pt') + ';color:' + (c.titleColor || '#2b2530') + '">' + esc(c.title) + '</div>' +
           (c.subtitle ? '<div style="font-size:9pt;color:#7a6a72;margin-top:2mm">' + esc(c.subtitle) + '</div>' : '') +
           (c.image ? '<img src="' + c.image + '" alt="" style="max-width:80%;max-height:45%;border-radius:3mm;margin:4mm 0"/>' : '<div style="font-size:24mm;margin:3mm 0">' + (c.emoji || '🌸') + '</div>') +
           '<div style="font-size:9pt;font-weight:800;color:#b02458">' + esc(c.author) + '</div></div></div>';
@@ -1271,11 +1281,18 @@
       c.author = $('#cvAuthor').value;
       c.paper = $('#cvPaper').value;
       if (p.pages[0] && p.pages[0].kind === 'cover') {
-        Object.assign(p.pages[0].data, { title: c.title, subtitle: c.subtitle, author: c.author, theme: c.theme, emoji: c.emoji, image: c.image });
+        Object.assign(p.pages[0].data, { title: c.title, subtitle: c.subtitle, author: c.author, theme: c.theme, emoji: c.emoji, image: c.image, titleSize: c.titleSize, titleColor: c.titleColor });
       }
     }
     ['cvTitle', 'cvSub', 'cvAuthor'].forEach(function (id) {
       $('#' + id).oninput = function () { syncInputs(); renderPrev(); };
+    });
+    $('#cvTitleColor').oninput = function () { c.titleColor = this.value; syncInputs(); renderPrev(); };
+    BK.$$('[data-tc]', root).forEach(function (b) {
+      b.onclick = function () { c.titleColor = b.getAttribute('data-tc'); syncInputs(); BK.refresh(); };
+    });
+    BK.$$('[data-ts]', root).forEach(function (b) {
+      b.onclick = function () { c.titleSize = b.getAttribute('data-ts'); syncInputs(); BK.refresh(); };
     });
     $('#cvPaper').onchange = function () { syncInputs(); BK.refresh(); };
     $('#cvProj').onchange = function () { BK._curPage = 0; BK.go('/cover/' + this.value); };

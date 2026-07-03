@@ -588,10 +588,13 @@
     var img = d.image ? '<div style="flex:1;display:flex;align-items:center;justify-content:center;min-height:0">' +
         '<img src="' + d.image + '" alt="" style="max-width:88%;max-height:100%;border-radius:5mm;box-shadow:0 4mm 10mm rgba(176,36,88,.18)"/></div>'
       : '<div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:46mm">' + (d.emoji || '🌸') + '</div>';
+    var tSizes = { s: '22pt', m: '30pt', l: '38pt', xl: '46pt' };
+    var tSize = tSizes[d.titleSize] || '30pt';
+    var tColor = d.titleColor || '#2b2530';
     return '<div class="bk-sheet" data-page="' + i + '" style="width:' + size.w + 'mm;height:' + size.h + 'mm;background:' + (bgs[theme] || bgs.pink) + '">' +
       '<div class="pg-inner" style="text-align:center;padding:16mm">' +
       '<div style="font-size:9pt;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#b02458">' + esc(d.kicker || 'Little Montessori Explorers') + '</div>' +
-      '<div style="font-family:\'Sasson Montessori\',\'Playpen Sans\',sans-serif;font-weight:700;font-size:30pt;line-height:1.12;color:#2b2530;margin-top:8mm">' + esc(d.title || p.title) + '</div>' +
+      '<div style="font-family:\'Sasson Montessori\',\'Playpen Sans\',sans-serif;font-weight:700;font-size:' + tSize + ';line-height:1.12;color:' + tColor + ';margin-top:8mm">' + esc(d.title || p.title) + '</div>' +
       (d.subtitle ? '<div style="font-size:13pt;color:#7a6a72;margin-top:4mm">' + esc(d.subtitle) + '</div>' : '') +
       img +
       '<div style="font-size:12pt;font-weight:800;color:#b02458">' + esc(d.author || '') + '</div>' +
@@ -632,14 +635,16 @@
 
   R.story = function (p, pg, i, n) {
     var d = pg.data || {};
+    /* Bildet faar mesteparten av siden (kvadratiske bilder vises da store);
+       teksten ligger under. Kort sidetekst = stor illustrasjon. */
     var illus = d.image
-      ? '<div style="flex:1.4;display:flex;align-items:center;justify-content:center;min-height:0">' +
+      ? '<div style="flex:2.2;display:flex;align-items:center;justify-content:center;min-height:0">' +
         '<img src="' + d.image + '" alt="" style="max-width:100%;max-height:100%;border-radius:4mm;object-fit:contain"/></div>'
-      : '<div class="illus-box" style="flex:1.4"><div style="font-size:10mm">🎨</div>' +
+      : '<div class="illus-box" style="flex:2.2"><div style="font-size:10mm">🎨</div>' +
         '<div><strong>' + (BK.lang() === 'no' ? 'Illustrasjon' : 'Illustration') + ':</strong> ' + esc(d.illustration || '') + '</div></div>';
     return sheet(p, pg, i, n,
       '<div style="display:flex;flex-direction:column;height:100%;gap:5mm">' + illus +
-      '<div class="story-text" style="flex:1">' + esc(d.text || '') + '</div>' +
+      '<div class="story-text" style="flex:1;min-height:0">' + esc(d.text || '') + '</div>' +
       '</div>', {});
   };
 
