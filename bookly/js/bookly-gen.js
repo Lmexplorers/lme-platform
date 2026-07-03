@@ -552,6 +552,14 @@
      SIDERENDERERE
      Hver side: { id, kind, title, data }. Render gir komplett .bk-sheet.
      ===================================================================== */
+  /* Fonter for omslagstittelen: alle er tilgjengelige ved PDF-eksport. */
+  gen.COVER_FONTS = {
+    sasson:    { name: ['Sasson Montessori (standard)', 'Sasson Montessori (default)'], css: "'Sasson Montessori','Playpen Sans',sans-serif" },
+    playpen:   { name: ['Playpen Sans (håndskrift)', 'Playpen Sans (handwriting)'], css: "'Playpen Sans',cursive" },
+    georgia:   { name: ['Georgia (klassisk)', 'Georgia (classic)'], css: "Georgia,'Times New Roman',serif" },
+    trebuchet: { name: ['Trebuchet (ren og moderne)', 'Trebuchet (clean and modern)'], css: "'Trebuchet MS',Verdana,sans-serif" },
+  };
+
   var R = {};
   gen.renderers = R;
 
@@ -591,10 +599,11 @@
     var tSizes = { s: '22pt', m: '30pt', l: '38pt', xl: '46pt' };
     var tSize = tSizes[d.titleSize] || '30pt';
     var tColor = d.titleColor || '#2b2530';
+    var tFont = (gen.COVER_FONTS[d.titleFont] || gen.COVER_FONTS.sasson).css;
     return '<div class="bk-sheet" data-page="' + i + '" style="width:' + size.w + 'mm;height:' + size.h + 'mm;background:' + (bgs[theme] || bgs.pink) + '">' +
       '<div class="pg-inner" style="text-align:center;padding:16mm">' +
       '<div style="font-size:9pt;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#b02458">' + esc(d.kicker || 'Little Montessori Explorers') + '</div>' +
-      '<div style="font-family:\'Sasson Montessori\',\'Playpen Sans\',sans-serif;font-weight:700;font-size:' + tSize + ';line-height:1.12;color:' + tColor + ';margin-top:8mm">' + esc(d.title || p.title) + '</div>' +
+      '<div style="font-family:' + tFont + ';font-weight:700;font-size:' + tSize + ';line-height:1.12;color:' + tColor + ';margin-top:8mm">' + esc(d.title || p.title) + '</div>' +
       (d.subtitle ? '<div style="font-size:13pt;color:#7a6a72;margin-top:4mm">' + esc(d.subtitle) + '</div>' : '') +
       img +
       '<div style="font-size:12pt;font-weight:800;color:#b02458">' + esc(d.author || '') + '</div>' +

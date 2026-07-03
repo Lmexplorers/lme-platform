@@ -1216,6 +1216,11 @@
         return '<button class="bk-chip' + (c.theme === th ? ' on' : '') + '" data-th="' + th + '">' +
           ({ pink: '🌸', blue: '💙', lime: '🍀', lemon: '🍋' }[th]) + ' ' + th + '</button>';
       }).join('') + '</div></div>' +
+      '<div class="bk-field"><label>' + (no ? 'Tittelfont' : 'Title font') + '</label><select id="cvTitleFont">' +
+      Object.keys(BK.gen.COVER_FONTS).map(function (fk) {
+        var fo = BK.gen.COVER_FONTS[fk];
+        return '<option value="' + fk + '"' + ((c.titleFont || 'sasson') === fk ? ' selected' : '') + ' style="font-family:' + fo.css.replace(/"/g, '') + '">' + esc(fo.name[no ? 0 : 1]) + '</option>';
+      }).join('') + '</select></div>' +
       '<div class="bk-field"><label>' + (no ? 'Tittelstørrelse' : 'Title size') + '</label><div class="bk-chips">' +
       [['s', no ? 'Liten' : 'Small'], ['m', 'Medium'], ['l', no ? 'Stor' : 'Large'], ['xl', no ? 'Ekstra stor' : 'Extra large']].map(function (op) {
         return '<button class="bk-chip' + ((c.titleSize || 'm') === op[0] ? ' on' : '') + '" data-ts="' + op[0] + '">' + op[1] + '</button>';
@@ -1271,7 +1276,7 @@
           '<div style="width:' + Math.max(2, sp.spine) + 'mm;background:rgba(176,36,88,.14);display:flex;align-items:center;justify-content:center">' +
           (sp.spine > 5 ? '<span style="writing-mode:vertical-rl;font-size:8pt;font-weight:800;color:#b02458;white-space:nowrap">' + esc(c.title) + '</span>' : '') + '</div>' +
           '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8mm;text-align:center">' +
-          '<div style="font-family:\'Sasson Montessori\',\'Playpen Sans\',sans-serif;font-weight:700;font-size:' + ({ s: '12pt', m: '16pt', l: '20pt', xl: '24pt' }[c.titleSize] || '16pt') + ';color:' + (c.titleColor || '#2b2530') + '">' + esc(c.title) + '</div>' +
+          '<div style="font-family:' + (BK.gen.COVER_FONTS[c.titleFont] || BK.gen.COVER_FONTS.sasson).css + ';font-weight:700;font-size:' + ({ s: '12pt', m: '16pt', l: '20pt', xl: '24pt' }[c.titleSize] || '16pt') + ';color:' + (c.titleColor || '#2b2530') + '">' + esc(c.title) + '</div>' +
           (c.subtitle ? '<div style="font-size:9pt;color:#7a6a72;margin-top:2mm">' + esc(c.subtitle) + '</div>' : '') +
           (c.image ? '<img src="' + c.image + '" alt="" style="max-width:80%;max-height:45%;border-radius:3mm;margin:4mm 0"/>' : '<div style="font-size:24mm;margin:3mm 0">' + (c.emoji || '🌸') + '</div>') +
           '<div style="font-size:9pt;font-weight:800;color:#b02458">' + esc(c.author) + '</div></div></div>';
@@ -1285,13 +1290,14 @@
       c.author = $('#cvAuthor').value;
       c.paper = $('#cvPaper').value;
       if (p.pages[0] && p.pages[0].kind === 'cover') {
-        Object.assign(p.pages[0].data, { title: c.title, subtitle: c.subtitle, author: c.author, theme: c.theme, emoji: c.emoji, image: c.image, titleSize: c.titleSize, titleColor: c.titleColor });
+        Object.assign(p.pages[0].data, { title: c.title, subtitle: c.subtitle, author: c.author, theme: c.theme, emoji: c.emoji, image: c.image, titleSize: c.titleSize, titleColor: c.titleColor, titleFont: c.titleFont });
       }
     }
     ['cvTitle', 'cvSub', 'cvAuthor'].forEach(function (id) {
       $('#' + id).oninput = function () { syncInputs(); renderPrev(); };
     });
     $('#cvTitleColor').oninput = function () { c.titleColor = this.value; syncInputs(); renderPrev(); };
+    $('#cvTitleFont').onchange = function () { c.titleFont = this.value; syncInputs(); BK.refresh(); };
     BK.$$('[data-tc]', root).forEach(function (b) {
       b.onclick = function () { c.titleColor = b.getAttribute('data-tc'); syncInputs(); BK.refresh(); };
     });
