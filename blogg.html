@@ -454,7 +454,7 @@
         lastImagePrompt=dr.imagePrompt||'';
         aiStatus('✅ Utkastet er klart! Les over, juster det du vil, og trykk "Lag toppbilde" om du vil ha bilde.','✅ The draft is ready! Review it, adjust anything, and press "Create header image" if you want one.');
       } else if(d&&d.error==='bad_password'){ pw=null; aiStatus('Feil passord. Prøv igjen.','Wrong password. Try again.'); }
-      else aiStatus('Fikk ikke skrevet innlegget: '+((d&&d.error)||'?')+'. Prøv igjen.','Could not write the post: '+((d&&d.error)||'?')+'. Try again.');
+      else { var det2=(d&&d.detail)?' ('+d.detail+')':''; aiStatus('Fikk ikke skrevet innlegget: '+((d&&d.error)||'?')+det2+'. Prøv igjen.','Could not write the post: '+((d&&d.error)||'?')+det2+'. Try again.'); }
     }).catch(function(){ btn.disabled=false; aiStatus('Nettverksfeil. Prøv igjen.','Network error. Try again.'); });
   });
   document.getElementById('ai-image').addEventListener('click',function(){
@@ -471,7 +471,7 @@
         document.getElementById('f-image').value=d.url;
         aiStatus('✅ Toppbildet er klart og lagt inn som bildelenke. Lagre innlegget for å se det på bloggen.','✅ The header image is ready and set as the image link. Save the post to see it on the blog.');
       } else if(d&&d.error==='bad_password'){ pw=null; aiStatus('Feil passord. Prøv igjen.','Wrong password. Try again.'); }
-      else aiStatus('Fikk ikke laget bildet: '+((d&&d.error)||'?')+'. Prøv igjen.','Could not create the image: '+((d&&d.error)||'?')+'. Try again.');
+      else { var det=(d&&d.detail)?' ('+d.detail+')':''; aiStatus('Fikk ikke laget bildet: '+((d&&d.error)||'?')+det+'. Prøv igjen.','Could not create the image: '+((d&&d.error)||'?')+det+'. Try again.'); }
     }).catch(function(){ btn.disabled=false; aiStatus('Nettverksfeil. Prøv igjen.','Network error. Try again.'); });
   });
 

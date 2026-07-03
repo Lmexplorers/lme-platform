@@ -233,42 +233,92 @@ function parseDraft(text) {
   return d;
 }
 
-/* Lager toppbilde med OpenAI (samme nøkkel som Bookly), lagrer det i KV
-   og returnerer en kort adresse som kan brukes som bildelenke. */
+/* Lager toppbilde, lagrer det i KV og returnerer en kort adresse som kan
+   brukes som bildelenke. Gemini foerst (Renates oppsett, samme kall som
+   Bookly), deretter OpenAI og Stability som reserver hvis noekler finnes. */
 async function generateImage(body, env) {
-  if (!env.OPENAI_API_KEY) return json({ error: "image_unavailable" }, 200);
   if (!env.BUILDER_KV) return json({ error: "not_configured" }, 200);
   const prompt = s(body.prompt, 1200).trim();
   if (!prompt) return json({ error: "missing_prompt" }, 400);
 
+  const gKey = env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY;
+  if (!gKey && !env.OPENAI_API_KEY && !env.STABILITY_API_KEY) {
+    return json({ error: "image_unavailable", detail: "ingen bildenøkkel (GEMINI_API_KEY) i Cloudflare-innstillingene" }, 200);
+  }
+
   const full =
-    "Warm, inviting blog header illustration for a Montessori parenting blog: " + prompt + ". " +
+    "Warm, inviting blog header illustration in wide landscape format for a Montessori parenting blog: " + prompt + ". " +
     "Soft pastel palette with gentle pink and cream tones, cozy and natural, high quality, no text in the image.";
 
   let b64 = null;
-  try {
-    const res = await fetch("https://api.openai.com/v1/images/generations", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + env.OPENAI_API_KEY },
-      body: JSON.stringify({ model: "gpt-image-1", prompt: full, size: "1536x1024", quality: "medium", n: 1 }),
-    });
-    const data = await res.json().catch(() => null);
-    if (res.ok && data && data.data && data.data[0] && data.data[0].b64_json) b64 = data.data[0].b64_json;
-  } catch (e) { /* proever reserven under */ }
+  let lastErr = "";
 
-  if (!b64) {
+  // 1) Google Gemini (samme modell og kall som Bookly)
+  if (gKey) {
     try {
-      const res = await fetch("https://api.openai.com/v1/images/generations", {
+      const model = env.BOOKLY_GEMINI_MODEL || "gemini-2.5-flash-image";
+      const res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent", {
         method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + env.OPENAI_API_KEY },
-        body: JSON.stringify({ model: "dall-e-3", prompt: full, size: "1792x1024", response_format: "b64_json", n: 1 }),
+        headers: { "Content-Type": "application/json", "x-goog-api-key": gKey },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: full }] }],
+          generationConfig: { responseModalities: ["TEXT", "IMAGE"] },
+        }),
       });
       const data = await res.json().catch(() => null);
-      if (res.ok && data && data.data && data.data[0] && data.data[0].b64_json) b64 = data.data[0].b64_json;
-    } catch (e) { /* gir beskjed under */ }
+      const parts = (data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) || [];
+      const imgPart = parts.find((pt) => (pt.inlineData && pt.inlineData.data) || (pt.inline_data && pt.inline_data.data));
+      if (res.ok && imgPart) b64 = (imgPart.inlineData || imgPart.inline_data).data;
+      else lastErr = (data && data.error && (data.error.message || data.error)) || ("HTTP " + (res && res.status));
+    } catch (e) {
+      lastErr = String((e && e.message) || e);
+    }
   }
 
-  if (!b64) return json({ error: "image_failed" }, 200);
+  // 2) OpenAI som reserve
+  if (!b64 && env.OPENAI_API_KEY) {
+    const forsoek = [
+      { model: env.BOOKLY_IMAGE_MODEL || "gpt-image-1", body: { size: "1536x1024", quality: "medium", n: 1 } },
+      { model: "dall-e-3", body: { size: "1792x1024", response_format: "b64_json", n: 1 } },
+    ];
+    for (const f of forsoek) {
+      try {
+        const res = await fetch("https://api.openai.com/v1/images/generations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": "Bearer " + env.OPENAI_API_KEY },
+          body: JSON.stringify(Object.assign({ model: f.model, prompt: full }, f.body)),
+        });
+        const data = await res.json().catch(() => null);
+        const got = data && data.data && data.data[0] && data.data[0].b64_json;
+        if (res.ok && got) { b64 = got; break; }
+        lastErr = (data && data.error && (data.error.message || data.error)) || ("HTTP " + res.status);
+      } catch (e) {
+        lastErr = String((e && e.message) || e);
+      }
+    }
+  }
+
+  // 3) Stability som siste reserve
+  if (!b64 && env.STABILITY_API_KEY) {
+    try {
+      const fd = new FormData();
+      fd.append("prompt", full);
+      fd.append("output_format", "png");
+      fd.append("aspect_ratio", "3:2");
+      const res = await fetch("https://api.stability.ai/v2beta/stable-image/generate/core", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + env.STABILITY_API_KEY, "Accept": "application/json" },
+        body: fd,
+      });
+      const data = await res.json().catch(() => null);
+      if (res.ok && data && data.image) b64 = data.image;
+      else lastErr = (data && ((data.errors && data.errors.join("; ")) || data.message)) || lastErr;
+    } catch (e) {
+      lastErr = lastErr || String((e && e.message) || e);
+    }
+  }
+
+  if (!b64) return json({ error: "image_failed", detail: String(lastErr || "").slice(0, 300) }, 200);
   if (b64.length > 8 * 1024 * 1024) return json({ error: "image_too_large" }, 200);
 
   try {
