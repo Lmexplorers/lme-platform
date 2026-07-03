@@ -285,7 +285,7 @@
           fetch(C.brand.optInActionUrl, {
             method: 'POST', mode: 'no-cors',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({ email, name, fields: name })
+            body: new URLSearchParams({ email, name, lang: LANG })
           });
         } catch (err) {}
       }

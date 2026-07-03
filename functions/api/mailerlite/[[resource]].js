@@ -54,3 +54,57 @@ export async function onRequestGet(context) {
     return json({ error: "fetch_failed", message: String(e) }, 200);
   }
 }
+
+/* POST /api/mailerlite/subscribe — melder en lead inn i e-postlisten.
+   Brukes av tripwire-funnelens opt-in-skjema (funnel/tripwire/opt-in.html).
+   Tar imot både JSON og skjema-data: { email, name, lang }.
+   Grupper: sett gjerne hemmeligheten MAILERLITE_FUNNEL_GROUP til en
+   gruppe-ID i MailerLite, saa havner leads i riktig gruppe. */
+export async function onRequestPost(context) {
+  const { request, env, params } = context;
+  const seg = Array.isArray(params.resource) ? params.resource[0] : params.resource;
+  if (seg !== "subscribe") return json({ error: "unknown_resource" }, 404);
+
+  const key = env.MAILERLITE_API_KEY;
+  if (!key) return json({ error: "not_configured" }, 200);
+
+  let email = "", name = "", lang = "";
+  try {
+    const ct = request.headers.get("Content-Type") || "";
+    if (ct.indexOf("application/json") !== -1) {
+      const b = await request.json();
+      email = (b.email || "") + ""; name = (b.name || "") + ""; lang = (b.lang || "") + "";
+    } else {
+      const form = new URLSearchParams(await request.text());
+      email = form.get("email") || ""; name = form.get("name") || ""; lang = form.get("lang") || "";
+    }
+  } catch (e) {
+    return json({ error: "bad_body" }, 400);
+  }
+  email = email.trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: "bad_email" }, 400);
+
+  const payload = { email: email, fields: {} };
+  if (name.trim()) payload.fields.name = name.trim().slice(0, 100);
+  if (lang) payload.fields.language = lang === "en" ? "en" : "no";
+  if (env.MAILERLITE_FUNNEL_GROUP) payload.groups = [env.MAILERLITE_FUNNEL_GROUP + ""];
+
+  try {
+    const res = await fetch(ML + "/subscribers", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + key,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      return json({ error: "mailerlite_error", status: res.status, body }, 200);
+    }
+    return json({ ok: true }, 200);
+  } catch (e) {
+    return json({ error: "fetch_failed" }, 200);
+  }
+}
