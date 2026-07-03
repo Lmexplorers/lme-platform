@@ -1810,32 +1810,38 @@
           root.appendChild(ov);
         }
 
-        // Leksjoner (med valgfrie modul-merker)
+        // Leksjoner (med valgfrie modul-merker). Hver leksjon rendres for seg,
+        // saa en enkelt leksjon med rare data aldri stopper resten av kurset.
         var lastModule = '';
         (course.lessons || []).forEach(function (l, i) {
-          var mod = l.module ? pick(l.module) : '';
-          if (mod && mod !== lastModule) {
-            root.appendChild(el('div', 'crs-module', mod));
-            lastModule = mod;
+          try {
+            var mod = l.module ? pick(l.module) : '';
+            if (mod && mod !== lastModule) {
+              root.appendChild(el('div', 'crs-module', mod));
+              lastModule = mod;
+            }
+            var box = el('div', 'crs-lesson');
+            box.appendChild(el('div', 'crs-lesson-num', (en ? 'Lesson ' : 'Leksjon ') + (i + 1)));
+            box.appendChild(el('h3', null, pick(l.title)));
+            if (l.img) {
+              var fg = el('figure', 'crs-lessonfig');
+              var fim = el('img');
+              fim.src = l.img;
+              fim.alt = pick(l.title) || '';
+              fim.loading = 'lazy';
+              fg.appendChild(fim);
+              box.appendChild(fg);
+            }
+            (l.body || []).forEach(function (p) {
+              var t = pick(p);
+              if (t.trim()) box.appendChild(richPara(t));
+            });
+            if (l.tip && pick(l.tip).trim()) box.appendChild(el('div', 'crs-tip', pick(l.tip)));
+            root.appendChild(box);
+          } catch (e) {
+            var feil = el('div', 'crs-lesson', 'Leksjon ' + (i + 1) + ' kunne ikke vises. Teknisk: ' + (e && e.message));
+            root.appendChild(feil);
           }
-          var box = el('div', 'crs-lesson');
-          box.appendChild(el('div', 'crs-lesson-num', (en ? 'Lesson ' : 'Leksjon ') + (i + 1)));
-          box.appendChild(el('h3', null, pick(l.title)));
-          if (l.img) {
-            var fg = el('figure', 'crs-lessonfig');
-            var fim = el('img');
-            fim.src = l.img;
-            fim.alt = pick(l.title) || '';
-            fim.loading = 'lazy';
-            fg.appendChild(fim);
-            box.appendChild(fg);
-          }
-          (l.body || []).forEach(function (p) {
-            var t = pick(p);
-            if (t.trim()) box.appendChild(richPara(t));
-          });
-          if (l.tip && pick(l.tip).trim()) box.appendChild(el('div', 'crs-tip', pick(l.tip)));
-          root.appendChild(box);
         });
 
         // Kursbevis
@@ -1895,7 +1901,11 @@
               a.appendChild(el('h3', null, pick(c.title) || c.slug));
               var ld = pick(c.lede);
               if (ld) a.appendChild(el('p', null, ld));
-              a.appendChild(el('p', null, (c.lessonCount || 0) + (en ? ' lessons →' : ' leksjoner →')));
+              var knapp = el('span', 'btn-primary', en
+                ? 'Open the course (' + (c.lessonCount || 0) + ' lessons) →'
+                : 'Åpne kurset (' + (c.lessonCount || 0) + ' leksjoner) →');
+              knapp.style.cssText = 'display:inline-block;margin-top:10px';
+              a.appendChild(knapp);
               root.appendChild(a);
             });
             var back = el('div', 'crs-next');
@@ -1940,7 +1950,14 @@
               setTimeout(function () { hent(forsok + 1); }, 2500);
               return;
             }
-            render();
+            try {
+              render();
+            } catch (e) {
+              var st = document.getElementById('kurs-status');
+              var melding = 'Noe gikk galt da kurset skulle vises. Teknisk: ' + (e && e.message);
+              if (st) st.textContent = melding;
+              else root.appendChild(el('p', 'crs-empty', melding));
+            }
             hook();
           });
       }
