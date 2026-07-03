@@ -44,7 +44,7 @@
 
     $('#bkTopActions').innerHTML =
       '<span class="bk-plan-chip">' + (planNames[BK.state.plan] || 'Free') + '</span>' +
-      '<span class="bk-ver" title="Bookly-versjon">v19</span>' +
+      '<span class="bk-ver" title="Bookly-versjon">v20</span>' +
       '<button class="bk-lang" id="bkLang">' + (BK.lang() === 'no' ? 'EN 🌍' : 'NO 🇳🇴') + '</button>' +
       '<div class="bk-avatar" id="bkAvatar" title="' + (u ? esc(u.email) : (BK.lang() === 'no' ? 'Logg inn' : 'Sign in')) + '">' +
       (u ? esc((u.name || u.email || '?').charAt(0).toUpperCase()) : '👤') + '</div>';
@@ -686,6 +686,17 @@
           [['s', no ? 'Liten' : 'Small'], ['m', no ? 'Vanlig' : 'Normal'], ['l', no ? 'Stor' : 'Large'], ['xl', no ? 'Ekstra stor' : 'Extra large']].map(function (op) {
             return '<button type="button" class="bk-chip' + ((d.titleSize || 'm') === op[0] ? ' on' : '') + '" data-cvts="' + op[0] + '">' + op[1] + '</button>';
           }).join('') + '</div></div>');
+        fields.push('<div class="bk-field"><label>' + (no ? 'Font på overskriften' : 'Heading font') + '</label><select id="edCvFont">' +
+          Object.keys(BK.gen.COVER_FONTS).map(function (fk) {
+            var fo = BK.gen.COVER_FONTS[fk];
+            return '<option value="' + fk + '"' + ((d.titleFont || 'sasson') === fk ? ' selected' : '') + ' style="font-family:' + fo.css.replace(/"/g, '') + '">' + esc(fo.name[no ? 0 : 1]) + '</option>';
+          }).join('') + '</select></div>');
+        fields.push('<div class="bk-field"><label>' + (no ? 'Farge på overskriften' : 'Heading colour') + '</label>' +
+          '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">' +
+          '<input id="edCvColor" type="color" value="' + esc(d.titleColor || '#2b2530') + '" style="width:44px;height:34px;padding:2px;border-radius:8px;border:1.5px solid var(--line);cursor:pointer">' +
+          ['#2b2530', '#b02458', '#E91E89', '#1c6dd0', '#5b7d12', '#b8860b', '#ffffff'].map(function (cc) {
+            return '<button type="button" class="bk-chip' + ((d.titleColor || '#2b2530') === cc ? ' on' : '') + '" data-cvtc="' + cc + '" title="' + cc + '" style="width:26px;height:26px;padding:0;border-radius:50%;background:' + cc + ';border:1.5px solid rgba(0,0,0,.18)"></button>';
+          }).join('') + '</div></div>');
       } else {
         fields.push('<div class="bk-field"><label>' + (no ? 'Sidetittel' : 'Page title') + '</label><input id="edTitle" type="text" value="' + esc(pgObj.title || '') + '"></div>');
       }
@@ -811,6 +822,26 @@
         cb.onclick = function () {
           d.titleSize = cb.getAttribute('data-cvts');
           BK.$$('[data-cvts]', ed).forEach(function (x) { x.classList.toggle('on', x === cb); });
+          BK.touch(p);
+          renderStage(true);
+        };
+      });
+      if ($('#edCvFont')) $('#edCvFont').onchange = function () {
+        d.titleFont = this.value;
+        BK.touch(p);
+        renderStage(true);
+      };
+      if ($('#edCvColor')) $('#edCvColor').oninput = function () {
+        d.titleColor = this.value;
+        BK.$$('[data-cvtc]', ed).forEach(function (x) { x.classList.remove('on'); });
+        BK.touch(p);
+        renderStage(true);
+      };
+      BK.$$('[data-cvtc]', ed).forEach(function (cb) {
+        cb.onclick = function () {
+          d.titleColor = cb.getAttribute('data-cvtc');
+          if ($('#edCvColor')) $('#edCvColor').value = d.titleColor;
+          BK.$$('[data-cvtc]', ed).forEach(function (x) { x.classList.toggle('on', x === cb); });
           BK.touch(p);
           renderStage(true);
         };

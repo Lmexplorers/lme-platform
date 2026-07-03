@@ -15,7 +15,7 @@
   'use strict';
   var BK = window.BK;
   var ed = (BK.layoutEd = {});
-  ed.enabled = false;
+  ed.enabled = true; // paa som standard: dra bilder og tekst rett paa siden
 
   var ctx = null;   // { project, pageIdx, stage, rerender, sheet, bar }
   var sel = null;   // valgt element (DOM)
