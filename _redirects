@@ -1,5 +1,6 @@
 /podkast/feed.xml  /api/podcast/feed.xml  200
 /podkast/feed-en.xml  /api/podcast/feed-en.xml  200
+/academy/kurs/*  /academy/kurs.html  200
 /creative-studio  /creative-academy  301
 /brand/*  /dashboard.html  302
 /  /dashboard.html  302

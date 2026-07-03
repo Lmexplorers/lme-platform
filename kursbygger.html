@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<meta name="robots" content="noindex">
+<title>LME Kursbygger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink: #F8D7DA; --pink-mid: #F5A8B8; --cerise: #E91E89;
+    --lime: #7AAE1F; --yellow: #F7C72E; --cream: #FBF6F0;
+    --ink: #1A1A1A; --grey: #4A4A4A; --line: rgba(26,26,26,0.1);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); color: var(--ink); background: var(--cream); line-height: 1.6; }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); }
+  button, input, select, textarea { font-family: var(--font-body); font-size: 15px; color: var(--ink); }
+
+  .topbar { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; gap: 14px; background: #fff; border-bottom: 1px solid var(--line); padding: 12px 20px; }
+  .topbar img { height: 36px; display: block; }
+  .topbar h1 { font-size: 20px; flex: 1; }
+  .topbar a, .topbar .lang-btn { text-decoration: none; color: var(--ink); background: var(--cream); border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 700; cursor: pointer; }
+
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 22px 20px 80px; display: grid; grid-template-columns: minmax(340px, 520px) 1fr; gap: 26px; align-items: start; }
+  @media (max-width: 980px) { .wrap { grid-template-columns: 1fr; } .preview-col { position: static !important; } }
+
+  .panel { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 20px 22px; box-shadow: 0 6px 22px rgba(26,26,26,0.05); margin-bottom: 18px; }
+  .panel h2 { font-size: 17px; margin-bottom: 12px; }
+  .hint { font-size: 13px; color: var(--grey); margin-bottom: 10px; }
+
+  .course-list { display: flex; flex-direction: column; gap: 8px; }
+  .course-list button { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; text-align: left; background: var(--cream); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; cursor: pointer; }
+  .course-list button.active { border-color: var(--cerise); background: #FFF4F6; }
+  .course-list .tag { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: var(--lime); background: #F3F8E8; border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+  .course-list .tag.draft { color: #b58a00; background: #FFF8E6; }
+  .new-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+
+  label.f { display: block; font-size: 13px; font-weight: 700; margin: 12px 0 4px; }
+  input[type="text"], textarea, select { width: 100%; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; }
+  textarea { min-height: 74px; resize: vertical; line-height: 1.55; }
+  input:focus, textarea:focus { outline: 2px solid var(--pink-mid); border-color: transparent; }
+  .en-field { display: none; margin-top: 6px; }
+  .en-field input, .en-field textarea { border-style: dashed; background: #FBFDF6; }
+  body.en-mode .en-field { display: block; }
+  .en-badge { font-size: 11px; font-weight: 700; color: var(--lime); }
+
+  .opts { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; font-size: 14px; }
+  .opts label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
+  .lesson-card { border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; margin-top: 14px; background: #FFFDFB; }
+  .lesson-card .lc-head { display: flex; align-items: center; gap: 8px; }
+  .lesson-card .lc-head .num { font-size: 12px; font-weight: 700; color: var(--cerise); flex: 1; letter-spacing: 0.05em; text-transform: uppercase; }
+  .icon-btn { background: var(--cream); border: 1px solid var(--line); border-radius: 8px; padding: 4px 9px; cursor: pointer; font-size: 13px; }
+  .icon-btn:hover { background: var(--pink); }
+
+  .btn { border: none; border-radius: 999px; padding: 11px 20px; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .btn-pink { background: var(--cerise); color: #fff; }
+  .btn-lime { background: var(--lime); color: #fff; }
+  .btn-soft { background: var(--cream); color: var(--ink); border: 1px solid var(--line); }
+  .btn-danger { background: #fff; color: #c0392b; border: 1px solid #c0392b; }
+  .btn[disabled] { opacity: 0.6; cursor: wait; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; align-items: center; }
+  .actions .open-link { font-size: 14px; font-weight: 700; color: var(--cerise); }
+
+  .preview-col { position: sticky; top: 74px; }
+  .preview-frame { background: var(--cream); border: 1px solid var(--line); border-radius: 20px; padding: 26px 22px; max-height: calc(100vh - 120px); overflow: auto; }
+  .pv-hero { text-align: center; margin-bottom: 26px; }
+  .pv-hero .kick { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: var(--cerise); text-transform: uppercase; }
+  .pv-hero h1 { font-size: 30px; margin: 6px 0 10px; }
+  .pv-hero p { color: var(--grey); max-width: 560px; margin: 0 auto; }
+
+  /* Samme kursstil som paa akademisidene */
+  .crs { max-width: 720px; margin: 0 auto; }
+  .crs-meet { display: flex; gap: 18px; align-items: center; background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 18px 20px; margin-bottom: 26px; flex-wrap: wrap; }
+  .crs-meet-avatar { width: 66px; height: 66px; border-radius: 50%; object-fit: cover; }
+  .crs-meet-text { flex: 1 1 220px; }
+  .crs-meet-text .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cerise); }
+  .crs-meet-text h2 { font-size: 18px; margin: 2px 0 6px; }
+  .crs-meet-text p { color: var(--grey); font-size: 14px; }
+  .crs-overview { background: linear-gradient(135deg, #FFF4F6, #FBF6F0); border-radius: 18px; padding: 20px 22px; margin-bottom: 28px; }
+  .crs-overview h3 { font-size: 16px; margin-bottom: 10px; }
+  .crs-overview ul { list-style: none; display: grid; gap: 8px; }
+  .crs-overview li { padding-left: 26px; position: relative; color: var(--grey); font-size: 14.5px; }
+  .crs-overview li::before { content: '🌸'; position: absolute; left: 0; }
+  .crs-module { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lime); background: #F3F8E8; border-radius: 999px; padding: 7px 16px; display: inline-block; margin: 20px 0 14px; }
+  .crs-lesson { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 22px 24px; margin-bottom: 16px; }
+  .crs-lesson-num { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cerise); }
+  .crs-lesson h3 { font-size: 19px; margin: 4px 0 10px; }
+  .crs-lesson p { color: var(--grey); font-size: 14.5px; margin-bottom: 10px; }
+  .crs-tip { background: #FFF8E6; border-left: 4px solid var(--yellow); border-radius: 10px; padding: 12px 14px; font-size: 13.5px; color: var(--grey); margin-top: 10px; }
+  .crs-cert { text-align: center; background: linear-gradient(135deg, #FFF8E6, #FBF6F0); border: 2px dashed var(--yellow); border-radius: 18px; padding: 24px 20px; margin: 24px 0 16px; }
+  .crs-cert h3 { font-size: 18px; margin: 4px 0 6px; }
+  .crs-cert p { color: var(--grey); font-size: 14px; }
+  .crs-next { text-align: center; background: linear-gradient(135deg, var(--pink), var(--pink-mid)); border-radius: 18px; padding: 24px 20px; }
+  .crs-next h3 { font-size: 18px; margin-bottom: 6px; }
+  .crs-next p { color: #6a3a44; font-size: 14px; }
+
+  .toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); background: #2b2b2b; color: #fff; padding: 12px 20px; border-radius: 999px; z-index: 100; font-weight: 700; box-shadow: 0 8px 24px rgba(0,0,0,0.25); font-family: var(--font-body); }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="/academy" aria-label="LME Akademiet"><img src="/images/lme-logo.png" alt="Little Montessori Explorers"></a>
+  <h1 data-no="Kursbygger 🌸" data-en="Course builder 🌸">Kursbygger 🌸</h1>
+  <button class="lang-btn" id="langToggle" type="button">EN 🌍</button>
+  <a href="/academy" data-no="← Akademiet" data-en="← Academy">← Akademiet</a>
+</header>
+
+<main class="wrap">
+
+  <!-- VENSTRE: skjema -->
+  <div>
+    <section class="panel">
+      <h2 data-no="Kursene dine" data-en="Your courses">Kursene dine</h2>
+      <p class="hint" data-no="Kurs lagres trygt i skyen og vises automatisk på akademi-forsiden når de er publisert." data-en="Courses are saved safely in the cloud and appear automatically on the academy front page once published.">Kurs lagres trygt i skyen og vises automatisk på akademi-forsiden når de er publisert.</p>
+      <div class="course-list" id="courseList"></div>
+      <div class="new-row">
+        <button class="btn btn-pink" type="button" onclick="newCourse('mini')" data-no="＋ Nytt minikurs" data-en="＋ New mini course">＋ Nytt minikurs</button>
+        <button class="btn btn-lime" type="button" onclick="newCourse('stor')" data-no="＋ Nytt større kurs" data-en="＋ New full course">＋ Nytt større kurs</button>
+      </div>
+    </section>
+
+    <section class="panel" id="editorPanel" style="display:none">
+      <h2 data-no="Om kurset" data-en="About the course">Om kurset</h2>
+
+      <label class="f" for="f-title" data-no="Tittel" data-en="Title">Tittel</label>
+      <input type="text" id="f-title" data-ph-no="F.eks. Ro i samlingsstunden" data-ph-en="E.g. Calm circle time">
+      <div class="en-field"><input type="text" id="f-title-en" data-ph-no="Engelsk tittel" data-ph-en="English title"></div>
+
+      <label class="f" for="f-slug" data-no="Adresse (lages automatisk fra tittelen)" data-en="Address (created automatically from the title)">Adresse (lages automatisk fra tittelen)</label>
+      <input type="text" id="f-slug" data-ph-no="ro-i-samlingsstunden" data-ph-en="calm-circle-time">
+      <p class="hint" id="slugPreview"></p>
+
+      <label class="f" for="f-kicker" data-no="Liten overskrift (kicker)" data-en="Small heading (kicker)">Liten overskrift (kicker)</label>
+      <input type="text" id="f-kicker" data-ph-no="F.eks. LME VERKTØYKASSE" data-ph-en="E.g. LME TOOLKIT">
+      <div class="en-field"><input type="text" id="f-kicker-en" data-ph-no="Engelsk kicker" data-ph-en="English kicker"></div>
+
+      <label class="f" for="f-lede" data-no="Ingress (kort beskrivelse under tittelen)" data-en="Intro (short description under the title)">Ingress (kort beskrivelse under tittelen)</label>
+      <textarea id="f-lede"></textarea>
+      <div class="en-field"><textarea id="f-lede-en" data-ph-no="Engelsk ingress" data-ph-en="English intro"></textarea></div>
+
+      <label class="f" for="f-learn" data-no="Hva du lærer (ett punkt per linje)" data-en="What you'll learn (one point per line)">Hva du lærer (ett punkt per linje)</label>
+      <textarea id="f-learn"></textarea>
+      <div class="en-field"><textarea id="f-learn-en" data-ph-no="Engelske punkter, ett per linje" data-ph-en="English points, one per line"></textarea></div>
+
+      <div class="opts">
+        <label><input type="radio" name="f-size" value="mini" checked> <span data-no="Minikurs" data-en="Mini course">Minikurs</span></label>
+        <label><input type="radio" name="f-size" value="stor"> <span data-no="Større kurs" data-en="Full course">Større kurs</span></label>
+        <label><input type="checkbox" id="f-cert" checked> <span data-no="Med kursbevis" data-en="With certificate">Med kursbevis</span></label>
+        <label><input type="checkbox" id="f-published" checked> <span data-no="Publisert" data-en="Published">Publisert</span></label>
+      </div>
+    </section>
+
+    <section class="panel" id="lessonsPanel" style="display:none">
+      <h2 data-no="Leksjoner" data-en="Lessons">Leksjoner</h2>
+      <p class="hint" data-no="Tomme linjer i innholdet blir nye avsnitt. Modul-feltet lager et grønt merke over leksjonen, fint for å dele større kurs i deler." data-en="Blank lines in the content become new paragraphs. The module field creates a green label above the lesson, useful for splitting full courses into parts.">Tomme linjer i innholdet blir nye avsnitt. Modul-feltet lager et grønt merke over leksjonen, fint for å dele større kurs i deler.</p>
+      <div id="lessonList"></div>
+      <div class="new-row">
+        <button class="btn btn-soft" type="button" onclick="addLesson()" data-no="＋ Legg til leksjon" data-en="＋ Add lesson">＋ Legg til leksjon</button>
+      </div>
+    </section>
+
+    <section class="panel" id="outroPanel" style="display:none">
+      <h2 data-no="Avslutning" data-en="Ending">Avslutning</h2>
+
+      <label class="f" for="f-outro-title" data-no="Overskrift" data-en="Heading">Overskrift</label>
+      <input type="text" id="f-outro-title" data-ph-no="F.eks. Klar for mer?" data-ph-en="E.g. Ready for more?">
+      <div class="en-field"><input type="text" id="f-outro-title-en" data-ph-no="Engelsk overskrift" data-ph-en="English heading"></div>
+
+      <label class="f" for="f-outro-text" data-no="Tekst" data-en="Text">Tekst</label>
+      <textarea id="f-outro-text"></textarea>
+      <div class="en-field"><textarea id="f-outro-text-en" data-ph-no="Engelsk tekst" data-ph-en="English text"></textarea></div>
+
+      <div class="actions">
+        <button class="btn btn-soft" type="button" id="enToggle" onclick="toggleEnglish()" data-no="🇬🇧 Vis engelske felt" data-en="🇬🇧 Show English fields">🇬🇧 Vis engelske felt</button>
+        <button class="btn btn-soft" type="button" onclick="autoTranslate(this)" data-no="✨ Oversett til engelsk automatisk" data-en="✨ Translate to English automatically">✨ Oversett til engelsk automatisk</button>
+      </div>
+      <p class="hint" data-no="Automatisk oversetting bruker LME-oversetteren og krever at du er innlogget. Engelske felt kan stå tomme; da vises norsk tekst også på engelsk." data-en="Automatic translation uses the LME translator and requires you to be signed in. English fields can be left empty; the Norwegian text is then shown in English too.">Automatisk oversetting bruker LME-oversetteren og krever at du er innlogget. Engelske felt kan stå tomme; da vises norsk tekst også på engelsk.</p>
+
+      <div class="actions">
+        <button class="btn btn-pink" type="button" id="saveBtn" onclick="saveCourse()" data-no="💾 Lagre kurset" data-en="💾 Save course">💾 Lagre kurset</button>
+        <a class="open-link" id="openLink" href="#" target="_blank" rel="noopener" style="display:none" data-no="Åpne kurssiden ↗" data-en="Open the course page ↗">Åpne kurssiden ↗</a>
+        <button class="btn btn-danger" type="button" id="deleteBtn" onclick="deleteCourse()" style="display:none" data-no="Slett kurset" data-en="Delete course">Slett kurset</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- HØYRE: forhåndsvisning -->
+  <div class="preview-col">
+    <section class="panel" style="margin-bottom:12px; display:flex; align-items:center; gap:10px;">
+      <h2 style="flex:1" data-no="Forhåndsvisning" data-en="Preview">Forhåndsvisning</h2>
+      <span class="hint" style="margin:0" data-no="Slik ser kurset ut for medlemmene." data-en="This is how the course looks to members.">Slik ser kurset ut for medlemmene.</span>
+    </section>
+    <div class="preview-frame" id="previewFrame">
+      <p class="hint" data-no="Velg et kurs eller lag et nytt, så ser du det her. 🌷" data-en="Choose a course or create a new one, and you'll see it here. 🌷">Velg et kurs eller lag et nytt, så ser du det her. 🌷</p>
+    </div>
+  </div>
+
+</main>
+
+<script>
+/* ============================================================
+   LME Kursbygger — lager og redigerer kurs uten kode.
+   Kurs lagres som JSON via /api/kurs (Cloudflare KV) og vises
+   paa /academy/kurs/<adresse> i vanlig LME-kursstil.
+   ============================================================ */
+
+var currentLang = 'no';
+var pw = null;              // passord huskes til siden lukkes
+var courses = [];           // indeks fra serveren
+var lessonSeq = 0;          // for unike felt-id-er
+
+function q(id) { return document.getElementById(id); }
+function isEn() { return currentLang === 'en'; }
+function L(no, en) { return isEn() ? en : no; }
+
+/* ---------- Spraakbytte (samme moenster som om-renate) ---------- */
+function switchLanguage(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+    var text = el.getAttribute('data-' + lang);
+    if (text.indexOf('<') !== -1) el.innerHTML = text;
+    else el.textContent = text;
+  });
+  document.querySelectorAll('[data-ph-no][data-ph-en]').forEach(function (el) {
+    el.setAttribute('placeholder', el.getAttribute(lang === 'no' ? 'data-ph-no' : 'data-ph-en'));
+  });
+  q('langToggle').textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+  document.title = lang === 'no' ? 'LME Kursbygger' : 'LME Course Builder';
+  renderList();
+  renumber();
+  renderPreview();
+}
+q('langToggle').addEventListener('click', function () {
+  switchLanguage(currentLang === 'no' ? 'en' : 'no');
+});
+
+/* ---------- Hjelpere ---------- */
+function slugify(s) {
+  return (s || '').toLowerCase()
+    .replace(/æ/g, 'ae').replace(/ø/g, 'oe').replace(/å/g, 'aa')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
+}
+function paras(text) {
+  return (text || '').split(/\n\s*\n/).map(function (s) { return s.trim(); }).filter(Boolean);
+}
+function lines(text) {
+  return (text || '').split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+}
+function pick(v) {
+  if (v && typeof v === 'object') return (isEn() && v.en) ? v.en : (v.no || '');
+  return v || '';
+}
+function toast(msg) {
+  var t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function () { t.remove(); }, 2600);
+}
+
+/* ---------- Kursliste ---------- */
+function renderList() {
+  var box = q('courseList');
+  box.innerHTML = '';
+  if (!courses.length) {
+    var p = document.createElement('p');
+    p.className = 'hint';
+    p.textContent = L('Ingen kurs ennå. Lag ditt første med knappene under! 🌱', 'No courses yet. Create your first with the buttons below! 🌱');
+    box.appendChild(p);
+    return;
+  }
+  courses.forEach(function (c) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    if (q('f-slug').value === c.slug) b.className = 'active';
+    var name = document.createElement('span');
+    name.textContent = pick(c.title) || c.slug;
+    var tag = document.createElement('span');
+    tag.className = 'tag' + (c.published === false ? ' draft' : '');
+    tag.textContent = c.published === false
+      ? L('Utkast', 'Draft')
+      : (c.size === 'stor' ? L('Større kurs', 'Full course') : L('Minikurs', 'Mini course'));
+    b.appendChild(name);
+    b.appendChild(tag);
+    b.onclick = function () { openCourse(c.slug); };
+    box.appendChild(b);
+  });
+}
+
+function refreshList(then) {
+  fetch('/api/kurs')
+    .then(function (r) { return r.json(); })
+    .then(function (d) { courses = (d && d.courses) || []; })
+    .catch(function () { courses = []; })
+    .then(function () { renderList(); if (then) then(); });
+}
+
+/* ---------- Nytt kurs / aapne kurs ---------- */
+function blankLesson() { return { module: null, title: { no: '', en: '' }, body: [], tip: null }; }
+
+function newCourse(size) {
+  var c = {
+    slug: '', size: size, published: true, cert: true,
+    kicker: { no: '', en: '' }, title: { no: '', en: '' }, lede: { no: '', en: '' },
+    learn: [], lessons: [], outro: { title: { no: '', en: '' }, text: { no: '', en: '' } }
+  };
+  var n = size === 'stor' ? 8 : 3;
+  for (var i = 0; i < n; i++) c.lessons.push(blankLesson());
+  if (size === 'stor') {
+    c.lessons[0].module = { no: 'Modul 1', en: 'Module 1' };
+    c.lessons[3].module = { no: 'Modul 2', en: 'Module 2' };
+    c.lessons[6].module = { no: 'Modul 3', en: 'Module 3' };
+  }
+  loadCourse(c, true);
+  toast(L('Nytt kurs klart. Fyll inn og lagre! 🌸', 'New course ready. Fill it in and save! 🌸'));
+}
+
+function openCourse(slug) {
+  fetch('/api/kurs?slug=' + encodeURIComponent(slug))
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (d && d.course) loadCourse(d.course, false);
+      else toast(L('Fant ikke kurset.', 'Could not find the course.'));
+    })
+    .catch(function () { toast(L('Nettverksfeil. Prøv igjen.', 'Network error. Try again.')); });
+}
+
+/* ---------- Skjema <-> kursobjekt ---------- */
+function loadCourse(c, isNew) {
+  q('editorPanel').style.display = '';
+  q('lessonsPanel').style.display = '';
+  q('outroPanel').style.display = '';
+  q('f-title').value = c.title.no || '';
+  q('f-title-en').value = c.title.en || '';
+  q('f-slug').value = c.slug || '';
+  q('f-slug').dataset.autoOk = c.slug ? '' : '1';
+  q('f-kicker').value = c.kicker.no || '';
+  q('f-kicker-en').value = c.kicker.en || '';
+  q('f-lede').value = c.lede.no || '';
+  q('f-lede-en').value = c.lede.en || '';
+  q('f-learn').value = (c.learn || []).map(function (x) { return x.no; }).join('\n');
+  q('f-learn-en').value = (c.learn || []).map(function (x) { return x.en || ''; }).join('\n');
+  document.querySelectorAll('[name="f-size"]').forEach(function (r) { r.checked = r.value === c.size; });
+  q('f-cert').checked = c.cert !== false;
+  q('f-published').checked = c.published !== false;
+  q('f-outro-title').value = (c.outro && c.outro.title.no) || '';
+  q('f-outro-title-en').value = (c.outro && c.outro.title.en) || '';
+  q('f-outro-text').value = (c.outro && c.outro.text.no) || '';
+  q('f-outro-text-en').value = (c.outro && c.outro.text.en) || '';
+  q('lessonList').innerHTML = '';
+  (c.lessons || []).forEach(function (l) { addLesson(l); });
+  q('deleteBtn').style.display = isNew ? 'none' : '';
+  updateOpenLink();
+  renderList();
+  renderPreview();
+  if (isNew) q('f-title').focus();
+}
+
+function collectCourse() {
+  var slug = q('f-slug').value.trim() || slugify(q('f-title').value);
+  var c = {
+    slug: slugify(slug),
+    size: document.querySelector('[name="f-size"]:checked').value,
+    published: q('f-published').checked,
+    cert: q('f-cert').checked,
+    kicker: { no: q('f-kicker').value.trim(), en: q('f-kicker-en').value.trim() },
+    title: { no: q('f-title').value.trim(), en: q('f-title-en').value.trim() },
+    lede: { no: q('f-lede').value.trim(), en: q('f-lede-en').value.trim() },
+    learn: [],
+    lessons: [],
+    outro: {
+      title: { no: q('f-outro-title').value.trim(), en: q('f-outro-title-en').value.trim() },
+      text: { no: q('f-outro-text').value.trim(), en: q('f-outro-text-en').value.trim() }
+    }
+  };
+  var learnNo = lines(q('f-learn').value);
+  var learnEn = lines(q('f-learn-en').value);
+  learnNo.forEach(function (t, i) { c.learn.push({ no: t, en: learnEn[i] || '' }); });
+  document.querySelectorAll('#lessonList .lesson-card').forEach(function (card) {
+    var g = function (sel) { return card.querySelector(sel).value.trim(); };
+    var bodyNo = paras(card.querySelector('.lc-body').value);
+    var bodyEn = paras(card.querySelector('.lc-body-en').value);
+    var lesson = {
+      module: g('.lc-module') ? { no: g('.lc-module'), en: g('.lc-module-en') } : null,
+      title: { no: g('.lc-title'), en: g('.lc-title-en') },
+      body: bodyNo.map(function (t, i) { return { no: t, en: bodyEn[i] || '' }; }),
+      tip: g('.lc-tip') ? { no: g('.lc-tip'), en: g('.lc-tip-en') } : null
+    };
+    if (lesson.title.no || lesson.body.length) c.lessons.push(lesson);
+  });
+  return c;
+}
+
+/* ---------- Leksjonskort ---------- */
+function addLesson(l) {
+  l = l || blankLesson();
+  var id = ++lessonSeq;
+  var card = document.createElement('div');
+  card.className = 'lesson-card';
+  card.innerHTML =
+    '<div class="lc-head">' +
+      '<span class="num"></span>' +
+      '<button class="icon-btn" type="button" data-act="up" title="Flytt opp">↑</button>' +
+      '<button class="icon-btn" type="button" data-act="down" title="Flytt ned">↓</button>' +
+      '<button class="icon-btn" type="button" data-act="del" title="Slett">🗑</button>' +
+    '</div>' +
+    '<label class="f" for="lc-module-' + id + '" data-no="Modul (valgfritt)" data-en="Module (optional)"></label>' +
+    '<input type="text" id="lc-module-' + id + '" class="lc-module">' +
+    '<div class="en-field"><input type="text" class="lc-module-en" data-ph-no="Engelsk modulnavn" data-ph-en="English module name"></div>' +
+    '<label class="f" for="lc-title-' + id + '" data-no="Leksjonstittel" data-en="Lesson title"></label>' +
+    '<input type="text" id="lc-title-' + id + '" class="lc-title">' +
+    '<div class="en-field"><input type="text" class="lc-title-en" data-ph-no="Engelsk tittel" data-ph-en="English title"></div>' +
+    '<label class="f" for="lc-body-' + id + '" data-no="Innhold (tom linje = nytt avsnitt)" data-en="Content (blank line = new paragraph)"></label>' +
+    '<textarea id="lc-body-' + id + '" class="lc-body" rows="5"></textarea>' +
+    '<div class="en-field"><textarea class="lc-body-en" rows="5" data-ph-no="Engelsk innhold" data-ph-en="English content"></textarea></div>' +
+    '<label class="f" for="lc-tip-' + id + '" data-no="Tips-boks (valgfritt, f.eks. 🌿 Prøv dette: …)" data-en="Tip box (optional, e.g. 🌿 Try this: …)"></label>' +
+    '<input type="text" id="lc-tip-' + id + '" class="lc-tip">' +
+    '<div class="en-field"><input type="text" class="lc-tip-en" data-ph-no="Engelsk tips" data-ph-en="English tip"></div>';
+  card.querySelectorAll('[data-no][data-en], [data-ph-no][data-ph-en]').forEach(function (n) {
+    if (n.hasAttribute('data-no')) n.textContent = n.getAttribute('data-' + currentLang);
+    if (n.hasAttribute('data-ph-no')) n.setAttribute('placeholder', n.getAttribute(currentLang === 'no' ? 'data-ph-no' : 'data-ph-en'));
+  });
+  card.querySelector('.lc-module').value = (l.module && l.module.no) || '';
+  card.querySelector('.lc-module-en').value = (l.module && l.module.en) || '';
+  card.querySelector('.lc-title').value = l.title.no || '';
+  card.querySelector('.lc-title-en').value = l.title.en || '';
+  card.querySelector('.lc-body').value = (l.body || []).map(function (p) { return p.no; }).join('\n\n');
+  card.querySelector('.lc-body-en').value = (l.body || []).map(function (p) { return p.en || ''; }).join('\n\n');
+  card.querySelector('.lc-tip').value = (l.tip && l.tip.no) || '';
+  card.querySelector('.lc-tip-en').value = (l.tip && l.tip.en) || '';
+  card.querySelectorAll('[data-act]').forEach(function (b) {
+    b.onclick = function () {
+      if (b.dataset.act === 'del') {
+        if (confirm(L('Slette denne leksjonen?', 'Delete this lesson?'))) { card.remove(); renumber(); renderPreview(); }
+      } else if (b.dataset.act === 'up' && card.previousElementSibling) {
+        card.parentNode.insertBefore(card, card.previousElementSibling); renumber(); renderPreview();
+      } else if (b.dataset.act === 'down' && card.nextElementSibling) {
+        card.parentNode.insertBefore(card.nextElementSibling, card); renumber(); renderPreview();
+      }
+    };
+  });
+  q('lessonList').appendChild(card);
+  renumber();
+}
+
+function renumber() {
+  document.querySelectorAll('#lessonList .lesson-card').forEach(function (card, i) {
+    card.querySelector('.num').textContent = L('Leksjon ', 'Lesson ') + (i + 1);
+  });
+}
+
+/* ---------- Engelske felt / oversetting ---------- */
+function toggleEnglish() {
+  document.body.classList.toggle('en-mode');
+}
+
+function autoTranslate(btn) {
+  var c = collectCourse();
+  var texts = [];
+  function need(f) { if (f && f.no && !f.en && texts.indexOf(f.no) === -1) texts.push(f.no); }
+  need(c.title); need(c.kicker); need(c.lede);
+  c.learn.forEach(need);
+  c.lessons.forEach(function (l) { need(l.module); need(l.title); need(l.tip); (l.body || []).forEach(need); });
+  need(c.outro.title); need(c.outro.text);
+  if (!texts.length) { toast(L('Alt har allerede engelsk tekst. 🌟', 'Everything already has English text. 🌟')); return; }
+  btn.disabled = true;
+  var all = {};
+  var batches = [];
+  for (var i = 0; i < texts.length; i += 40) batches.push(texts.slice(i, i + 40));
+  var chain = Promise.resolve();
+  batches.forEach(function (batch) {
+    chain = chain.then(function () {
+      return fetch('/api/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ texts: batch, to: 'en' })
+      }).then(function (r) {
+        if (!r.ok) throw new Error('http ' + r.status);
+        return r.json();
+      }).then(function (d) { Object.assign(all, (d && d.translations) || {}); });
+    });
+  });
+  chain.then(function () {
+    fillEnglish(all);
+    document.body.classList.add('en-mode');
+    renderPreview();
+    toast(L('Oversatt! Les gjerne over de engelske feltene.', 'Translated! Do read over the English fields.'));
+  }).catch(function () {
+    toast(L('Fikk ikke oversatt. Er du innlogget som medlem?', 'Could not translate. Are you signed in as a member?'));
+  }).then(function () { btn.disabled = false; });
+}
+
+function fillEnglish(map) {
+  function fill(noId, enId) {
+    var no = q(noId).value.trim();
+    if (no && !q(enId).value.trim() && map[no]) q(enId).value = map[no];
+  }
+  fill('f-title', 'f-title-en'); fill('f-kicker', 'f-kicker-en'); fill('f-lede', 'f-lede-en');
+  fill('f-outro-title', 'f-outro-title-en'); fill('f-outro-text', 'f-outro-text-en');
+  if (!q('f-learn-en').value.trim()) {
+    q('f-learn-en').value = lines(q('f-learn').value).map(function (t) { return map[t] || ''; }).join('\n');
+  }
+  document.querySelectorAll('#lessonList .lesson-card').forEach(function (card) {
+    [['lc-module', 'lc-module-en'], ['lc-title', 'lc-title-en'], ['lc-tip', 'lc-tip-en']].forEach(function (pair) {
+      var no = card.querySelector('.' + pair[0]).value.trim();
+      var en = card.querySelector('.' + pair[1]);
+      if (no && !en.value.trim() && map[no]) en.value = map[no];
+    });
+    var bodyEn = card.querySelector('.lc-body-en');
+    if (!bodyEn.value.trim()) {
+      bodyEn.value = paras(card.querySelector('.lc-body').value).map(function (t) { return map[t] || ''; }).join('\n\n');
+    }
+  });
+}
+
+/* ---------- Forhaandsvisning ---------- */
+function el(tag, cls, text) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text) e.textContent = text;
+  return e;
+}
+
+function renderPreview() {
+  var frame = q('previewFrame');
+  if (q('editorPanel').style.display === 'none') return;
+  var c = collectCourse();
+  frame.innerHTML = '';
+
+  var hero = el('div', 'pv-hero');
+  hero.appendChild(el('div', 'kick', pick(c.kicker) || L('LME AKADEMIET', 'LME ACADEMY')));
+  hero.appendChild(el('h1', null, pick(c.title) || L('(uten tittel)', '(untitled)')));
+  if (pick(c.lede)) hero.appendChild(el('p', null, pick(c.lede)));
+  frame.appendChild(hero);
+
+  var crs = el('div', 'crs');
+
+  var meet = el('div', 'crs-meet');
+  var img = el('img', 'crs-meet-avatar');
+  img.src = '/images/renate-portrait.jpg'; img.alt = 'Renate Dahl';
+  meet.appendChild(img);
+  var mt = el('div', 'crs-meet-text');
+  mt.appendChild(el('div', 'eyebrow', L('Din lærer', 'Your teacher')));
+  mt.appendChild(el('h2', null, L('Hei, jeg er Renate 💕', "Hi, I'm Renate 💕")));
+  mt.appendChild(el('p', null, L(
+    'Montessoripedagog med over 20 års erfaring. I dette kurset deler jeg det jeg har lært gjennom årene, varmt og praktisk og rett på sak. La oss dykke ned i det sammen.',
+    "Montessori educator with over 20 years of experience. In this course I share what I've learned over the years, warmly, practically, and to the point. Let's dive in together.")));
+  meet.appendChild(mt);
+  crs.appendChild(meet);
+
+  if (c.learn.length) {
+    var ov = el('div', 'crs-overview');
+    ov.appendChild(el('h3', null, L('Hva du lærer i dette kurset', "What you'll learn in this course")));
+    var ul = el('ul');
+    c.learn.forEach(function (li) { ul.appendChild(el('li', null, pick(li))); });
+    ov.appendChild(ul);
+    crs.appendChild(ov);
+  }
+
+  var lastModule = '';
+  c.lessons.forEach(function (l, i) {
+    var mod = l.module ? pick(l.module) : '';
+    if (mod && mod !== lastModule) { crs.appendChild(el('div', 'crs-module', mod)); lastModule = mod; }
+    var box = el('div', 'crs-lesson');
+    box.appendChild(el('div', 'crs-lesson-num', L('Leksjon ', 'Lesson ') + (i + 1)));
+    box.appendChild(el('h3', null, pick(l.title)));
+    l.body.forEach(function (p) { box.appendChild(el('p', null, pick(p))); });
+    if (l.tip) box.appendChild(el('div', 'crs-tip', pick(l.tip)));
+    crs.appendChild(box);
+  });
+
+  if (c.cert) {
+    var cert = el('div', 'crs-cert');
+    cert.appendChild(el('div', null, '🎓'));
+    cert.appendChild(el('h3', null, L('Ditt kursbevis', 'Your certificate')));
+    cert.appendChild(el('p', null, L('Medlemmene kan laste ned et kursbevis med navnet sitt når de er ferdige.', 'Members can download a certificate with their name when they finish.')));
+    crs.appendChild(cert);
+  }
+
+  var next = el('div', 'crs-next');
+  next.appendChild(el('h3', null, pick(c.outro.title) || L('Klar for mer?', 'Ready for more?')));
+  if (pick(c.outro.text)) next.appendChild(el('p', null, pick(c.outro.text)));
+  crs.appendChild(next);
+
+  frame.appendChild(crs);
+}
+
+/* ---------- Lagre / slette ---------- */
+function askPassword() {
+  if (pw) return pw;
+  pw = prompt(L('Skriv inn passordet for å lagre:', 'Enter the password to save:'));
+  return pw;
+}
+
+function updateOpenLink() {
+  var slug = slugify(q('f-slug').value.trim() || slugify(q('f-title').value));
+  var link = q('openLink');
+  if (slug) { link.href = '/academy/kurs/' + slug; link.style.display = ''; }
+  else link.style.display = 'none';
+  q('slugPreview').textContent = slug ? (location.origin + '/academy/kurs/' + slug) : '';
+}
+
+function saveCourse() {
+  var c = collectCourse();
+  if (!c.title.no) { toast(L('Gi kurset en tittel først. 🌷', 'Give the course a title first. 🌷')); return; }
+  if (!c.slug) { toast(L('Kurset trenger en adresse.', 'The course needs an address.')); return; }
+  if (!c.lessons.length) { toast(L('Legg til minst én leksjon med innhold.', 'Add at least one lesson with content.')); return; }
+  if (!askPassword()) return;
+  var btn = q('saveBtn');
+  btn.disabled = true;
+  fetch('/api/kurs', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'save', course: c, password: pw })
+  })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (d && d.ok) {
+        q('f-slug').value = d.slug;
+        q('deleteBtn').style.display = '';
+        updateOpenLink();
+        refreshList();
+        toast(L('☁️ Lagret! Kurset ligger nå i skyen.', '☁️ Saved! The course is now in the cloud.'));
+      } else if (d && d.error === 'bad_password') {
+        pw = null;
+        alert(L('Feil passord. Prøv igjen.', 'Wrong password. Try again.'));
+      } else {
+        alert(L('Kunne ikke lagre: ', 'Could not save: ') + ((d && d.error) || L('ukjent feil', 'unknown error')));
+      }
+    })
+    .catch(function () { alert(L('Nettverksfeil ved lagring. Prøv igjen.', 'Network error while saving. Try again.')); })
+    .then(function () { btn.disabled = false; });
+}
+
+function deleteCourse() {
+  var slug = slugify(q('f-slug').value.trim());
+  if (!slug) return;
+  if (!confirm(L('Slette kurset for godt? Dette kan ikke angres.', 'Delete the course for good? This cannot be undone.'))) return;
+  if (!askPassword()) return;
+  fetch('/api/kurs', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'delete', slug: slug, password: pw })
+  })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (d && d.ok) {
+        q('editorPanel').style.display = 'none';
+        q('lessonsPanel').style.display = 'none';
+        q('outroPanel').style.display = 'none';
+        q('previewFrame').innerHTML = '';
+        refreshList();
+        toast(L('Kurset er slettet.', 'The course has been deleted.'));
+      } else if (d && d.error === 'bad_password') {
+        pw = null;
+        alert(L('Feil passord. Prøv igjen.', 'Wrong password. Try again.'));
+      } else {
+        alert(L('Kunne ikke slette: ', 'Could not delete: ') + ((d && d.error) || L('ukjent feil', 'unknown error')));
+      }
+    })
+    .catch(function () { alert(L('Nettverksfeil. Prøv igjen.', 'Network error. Try again.')); });
+}
+
+/* ---------- Automatisk adresse + levende forhaandsvisning ---------- */
+q('f-title').addEventListener('input', function () {
+  var slugField = q('f-slug');
+  if (slugField.dataset.autoOk === '1' || !slugField.value.trim()) {
+    slugField.value = slugify(this.value);
+    slugField.dataset.autoOk = '1';
+  }
+  updateOpenLink();
+});
+q('f-slug').addEventListener('input', function () {
+  this.dataset.autoOk = '';
+  updateOpenLink();
+});
+document.addEventListener('input', function (e) {
+  if (e.target.closest && e.target.closest('.wrap')) renderPreview();
+});
+
+refreshList();
+</script>
+
+</body>
+</html>
