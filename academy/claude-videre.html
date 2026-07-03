@@ -1696,9 +1696,13 @@
     .crs-next h3 { font-size: 22px; margin-bottom: 8px; }
     .crs-next p { color: #6a3a44; margin-bottom: 18px; }
     .crs-next .btn-primary { display: inline-block; }
+    .crs-module { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #7AAE1F; background: #F3F8E8; border-radius: 999px; padding: 8px 18px; display: inline-block; margin: 26px 0 18px; }
+    .crs-fig { margin: 0 0 26px; border-radius: 22px; overflow: hidden; box-shadow: 0 8px 28px rgba(26,26,26,0.08); background: #fff; }
+    .crs-fig img { width: 100%; display: block; }
+    .crs-fig figcaption { padding: 12px 20px; font-size: 13.5px; color: #4A4A4A; }
   </style>
 
-  <section class="crs">
+  <section class="crs" data-source-wins>
 
     <div class="crs-meet">
       <img class="crs-meet-avatar" src="/images/renate-portrait.jpg" alt="Renate Dahl">
@@ -1720,6 +1724,10 @@
         <li>Å sette det sammen i ett lite prosjekt fra idé til ferdig</li>
       </ul>
     </div>
+
+    <figure class="crs-fig"><img src="/images/courses/course_stjernedryss.webp" alt="Mia og Teo ser opp på stjernehimmelen"><figcaption>Fra idé til virkelighet: det du kan beskrive, kan du få bygget.</figcaption></figure>
+
+    <div class="crs-module">Modul 1 · Nye muligheter</div>
 
     <div class="crs-lesson">
       <div class="crs-lesson-num">Leksjon 1</div>
@@ -1745,6 +1753,8 @@
       <div class="crs-tip">🔐 Trygt å vite: en kobling gjør ingenting på egen hånd. Den venter på at du sier ja, og du kan koble fra igjen når som helst.</div>
     </div>
 
+    <div class="crs-module">Modul 2 · Bygg med Claude</div>
+
     <div class="crs-lesson">
       <div class="crs-lesson-num">Leksjon 4</div>
       <h3>Coding for ikke-kodere</h3>
@@ -1763,16 +1773,42 @@
 
     <div class="crs-lesson">
       <div class="crs-lesson-num">Leksjon 6</div>
+      <h3>Se det i praksis: kursbyggeren og Bookly</h3>
+      <p>Du har allerede eksempler rundt deg. Kursbyggeren, Bookly og salgstrakten på denne plattformen ble alle til på samme måte: en idé beskrevet med vanlige ord, et utkast, en forhåndsvisning og en publisering.</p>
+      <p>Neste gang du bruker et av verktøyene, tenk "dette begynte som en setning". Det senker terskelen for din egen neste idé.</p>
+      <div class="crs-tip">🔍 Prøv dette: Finn én ting på plattformen du ville endret, og formuler den som én tydelig setning. Det er hele starten.</div>
+    </div>
+
+    <div class="crs-module">Modul 3 · Ditt prosjekt</div>
+
+    <div class="crs-lesson">
+      <div class="crs-lesson-num">Leksjon 7</div>
       <h3>Sett det sammen: ditt første prosjekt</h3>
       <p>Nå binder vi det hele i hop med ett lite prosjekt. Velg noe ekte og overkommelig, for eksempel en enkel side med ukens aktiviteter, eller et nyhetsbrev til foreldrene.</p>
       <p>Fremgangsmåten er alltid den samme: beskriv målet, la Claude lage et utkast, se forhåndsvisningen, be om justeringer, og publisér når du er fornøyd. Start smått. Det viktigste er å fullføre én ting, så vokser motet av seg selv.</p>
       <div class="crs-tip">💗 Husk: du trenger ikke forstå alt på forhånd. Du lærer mest ved å fullføre én liten ting, og så en til.</div>
     </div>
 
+    <div class="crs-lesson">
+      <div class="crs-lesson-num">Leksjon 8</div>
+      <h3>Når noe ikke virker</h3>
+      <p>Noen ganger blir resultatet feil, og det er helt normalt. Det viktigste å vite: ingenting er ødelagt, og alt kan rulles tilbake.</p>
+      <p>Beskriv hva du ser, gjerne med et skjermbilde, og hva du forventet i stedet. Jo mer konkret du er ("knappen fører ingen vei", "dette blir ikke engelsk"), jo raskere blir det rettet. Du har kanskje kjent igjen arbeidsmåten fra våre egne samtaler.</p>
+      <div class="crs-tip">🛟 Trygt å vite: Alt som publiseres kan angres. Å si ifra om en feil er aldri til bry; det er slik det blir bra.</div>
+    </div>
+
+    <div class="crs-lesson">
+      <div class="crs-lesson-num">Leksjon 9</div>
+      <h3>Gode vaner for trygg bygging</h3>
+      <p>Tre vaner gjør byggingen rolig og trygg. Én ting om gangen: små endringer er lette å vurdere og lette å angre. Se før du publiserer: be alltid om en forhåndsvisning eller et skjermbilde. Ta vare på det som virker: når noe blir riktig, be om at måten det ble gjort på huskes til neste gang.</p>
+      <p>Og den fjerde, hemmelige vanen: spør "kan du forklare det du gjorde, i vanlig språk?" Da lærer du litt for hver runde, uten å måtte lese kode.</p>
+      <div class="crs-tip">🌱 Husk: Du trenger ikke bli utvikler. Du trenger bare å kunne beskrive, vurdere og bestemme. Resten er hender.</div>
+    </div>
+
     <div class="crs-next">
-      <h3>Klar for å bygge noe?</h3>
-      <p>Begynn med en idé du har lyst på, og ta den med til Renate AI. Beskriv hva du vil lage, så hjelper den deg steg for steg.</p>
-      <a href="/spor-renate-ai" class="btn-primary">Start et prosjekt med Renate AI →</a>
+      <h3>Klar for neste steg?</h3>
+      <p>Vil du ha overblikket over hele KI-verktøykassen, med ChatGPT, Gemini, bildeverktøy og mer? Da er KI for pedagoger neste kurs.</p>
+      <a href="/academy/ki-for-pedagoger" class="btn-primary">Fortsett: KI for pedagoger →</a>
     </div>
 
   </section>
@@ -2115,5 +2151,67 @@
 })();
 </script>
 <script src="/js/i18n-auto.js" defer></script>
+<script>
+/* Engelske oversettelser for utvidet kursinnhold. */
+Object.assign(window.LME_TRANSLATIONS, {
+ "Hei igjen, det er Renate 💕": "Hello again, it is Renate 💕",
+ "Dette er litt nytt for meg også, og det er helt greit. Vi lærer dette sammen. Du trenger fortsatt ingen utdanning i data; jeg viser deg hva som er mulig, og forklarer de litt større ordene i et språk vi begge forstår. Ta det rolig, og prøv heller én ting om gangen.": "This is a little new for me too, and that is perfectly fine. We are learning this together. You still need no computer education; I show you what is possible and explain the bigger words in a language we both understand. Take it easy, and try one thing at a time.",
+ "Hva som skiller videregående bruk fra de første samtalene": "What separates advanced use from the first conversations",
+ "Skills: å gi Claude faste arbeidsmåter som den følger hver gang": "Skills: giving Claude fixed ways of working that it follows every time",
+ "Koblinger: å la Claude jobbe sammen med verktøyene dine": "Connections: letting Claude work together with your tools",
+ "Coding for ikke-kodere: å la Claude skrive og endre kode for deg": "Coding for non-coders: letting Claude write and change code for you",
+ "Hvordan sider og apper, som denne plattformen, faktisk bygges": "How pages and apps, like this platform, are actually built",
+ "Å sette det sammen i ett lite prosjekt fra idé til ferdig": "Putting it all together in one small project from idea to done",
+ "Fra samtale til verktøy": "From conversation to tool",
+ "I det første kurset brukte du Claude som en samtalepartner: du spurte, og den svarte. Nå tar vi et steg videre. I stedet for å forklare det samme på nytt hver gang, kan du gi Claude faste arbeidsmåter, koble den til verktøyene dine og la den bygge ting for deg.": "In the first course you used Claude as a conversation partner: you asked, and it answered. Now we take a step further. Instead of explaining the same thing anew every time, you can give Claude fixed ways of working, connect it to your tools, and let it build things for you.",
+ "Tenk på forskjellen mellom å be en kollega om hjelp én gang, og å lære henne opp så hun kan gjøre oppgaven på egen hånd hver uke. Det er dit vi skal.": "Think of the difference between asking a colleague for help once, and training her so she can do the task on her own every week. That is where we are going.",
+ "🌸 Ro i magen: du møter noen nye ord her, som \"skill\" og \"kobling\". Jeg forklarer hvert av dem underveis. Du trenger ikke kunne noe på forhånd.": "🌸 Stay calm: you will meet a few new words here, like \"skill\" and \"connection\". I explain each of them along the way. You do not need to know anything beforehand.",
+ "Skills: faste arbeidsmåter": "Skills: fixed ways of working",
+ "En": "A",
+ "skill": "skill",
+ "er rett og slett en oppskrift du lærer Claude én gang, som den så følger hver gang. I stedet for å minne den på alt på nytt, sier du \"bruk LME-måten\", og den vet hva du mener.": "is simply a recipe you teach Claude once, which it then follows every time. Instead of reminding it of everything anew, you say \"use the LME way\", and it knows what you mean.",
+ "Et eksempel fra vår egen verden: en \"LME-stil\"-skill kan hver gang sørge for riktig tone, rette anførselstegn, ingen lange tankestreker og de riktige fontene. Du gjør jobben én gang, og høster av den for alltid.": "An example from our own world: an \"LME style\" skill can ensure the right tone, straight quotation marks, no long dashes, and the right fonts every time. You do the job once, and harvest from it forever.",
+ "💡 Tenk slik: en beskjed løser én oppgave. En skill løser den samme typen oppgave igjen og igjen, på din måte.": "💡 Think of it like this: a message solves one task. A skill solves the same kind of task again and again, your way.",
+ "Koblinger: Claude og verktøyene dine": "Connections: Claude and your tools",
+ "kobling": "connection",
+ "er en bro mellom Claude og et verktøy du allerede bruker. Når broen er på plass, kan Claude hjelpe deg rett der arbeidet ditt skjer, i stedet for at du kopierer fram og tilbake.": "is a bridge between Claude and a tool you already use. Once the bridge is in place, Claude can help you right where your work happens, instead of you copying back and forth.",
+ "Noen koblinger som passer en hverdag som din: Google Drive for dokumenter, kalender for planlegging, e-post og nyhetsbrev som MailerLite for foreldrekontakt. Du gir alltid lov først, og du bestemmer hva Claude får se.": "Some connections that suit a life like yours: Google Drive for documents, a calendar for planning, email and newsletters like MailerLite for parent contact. You always give permission first, and you decide what Claude gets to see.",
+ "🔐 Trygt å vite: en kobling gjør ingenting på egen hånd. Den venter på at du sier ja, og du kan koble fra igjen når som helst.": "🔐 Good to know: a connection does nothing on its own. It waits for you to say yes, and you can disconnect again at any time.",
+ "Coding for ikke-kodere": "Coding for non-coders",
+ "Her er hemmeligheten: du trenger ikke å lære deg å kode. Du forklarer på vanlig norsk hva du vil ha, og Claude skriver koden for deg. Det er som å fortelle en snekker hva slags hylle du ønsker deg, i stedet for å lære deg å snekre selv.": "Here is the secret: you do not need to learn to code. You explain in plain language what you want, and Claude writes the code for you. It is like telling a carpenter what kind of shelf you want, instead of learning carpentry yourself.",
+ "Vil du ha en ny knapp, en ny side eller en liten endring i farge? Du beskriver det, Claude foreslår, og du ser resultatet før noe publiseres. Du forblir den som bestemmer.": "Want a new button, a new page, or a small change of colour? You describe it, Claude proposes, and you see the result before anything is published. You remain the one who decides.",
+ "🌿 Trygg arbeidsmåte: be alltid om å se en forhåndsvisning først, prøv den, og publisér først når du er fornøyd. Ingenting går live før du sier ja.": "🌿 Safe way of working: always ask to see a preview first, try it, and publish only when you are happy. Nothing goes live before you say yes.",
+ "Bygg på plattformen og appen": "Build on the platform and the app",
+ "Denne plattformen er bygget av mange enkle sider. Hver side er en fil, og når en endring er klar, publiseres den automatisk slik at alle ser den. Det høres avansert ut, men i praksis er det du som beskriver hva du vil, og Claude som ordner det tekniske.": "This platform is built from many simple pages. Each page is a file, and when a change is ready, it is published automatically so everyone sees it. It sounds advanced, but in practice you describe what you want, and Claude handles the technical part.",
+ "Akkurat slik dette Claude-kurset ble til: en idé fra deg, en samtale, en forhåndsvisning, og så live. Det samme kan du gjøre med en ny side, et nytt kort eller en liten app-funksjon.": "That is exactly how this Claude course came to be: an idea from you, a conversation, a preview, and then live. You can do the same with a new page, a new card, or a small app feature.",
+ "🌼 Husk: du eier helheten og retningen. Claude er hendene som bygger, du er hodet og hjertet som bestemmer hva som skal bygges.": "🌼 Remember: you own the whole and the direction. Claude is the hands that build, you are the head and the heart that decide what gets built.",
+ "Sett det sammen: ditt første prosjekt": "Put it together: your first project",
+ "Nå binder vi det hele i hop med ett lite prosjekt. Velg noe ekte og overkommelig, for eksempel en enkel side med ukens aktiviteter, eller et nyhetsbrev til foreldrene.": "Now we tie it all together with one small project. Choose something real and manageable, for example a simple page with this week's activities, or a newsletter for the parents.",
+ "Fremgangsmåten er alltid den samme: beskriv målet, la Claude lage et utkast, se forhåndsvisningen, be om justeringer, og publisér når du er fornøyd. Start smått. Det viktigste er å fullføre én ting, så vokser motet av seg selv.": "The approach is always the same: describe the goal, let Claude make a draft, look at the preview, ask for adjustments, and publish when you are happy. Start small. The most important thing is to finish one thing, then the courage grows by itself.",
+ "💗 Husk: du trenger ikke forstå alt på forhånd. Du lærer mest ved å fullføre én liten ting, og så en til.": "💗 Remember: you do not need to understand everything beforehand. You learn most by finishing one small thing, and then one more.",
+ "Leksjon 7": "Lesson 7",
+ "Leksjon 8": "Lesson 8",
+ "Leksjon 9": "Lesson 9",
+ "Modul 1 · Nye muligheter": "Module 1 · New possibilities",
+ "Modul 2 · Bygg med Claude": "Module 2 · Build with Claude",
+ "Modul 3 · Ditt prosjekt": "Module 3 · Your project",
+ "Fra idé til virkelighet: det du kan beskrive, kan du få bygget.": "From idea to reality: what you can describe, you can have built.",
+ "Se det i praksis: kursbyggeren og Bookly": "See it in practice: the course builder and Bookly",
+ "Du har allerede eksempler rundt deg. Kursbyggeren, Bookly og salgstrakten på denne plattformen ble alle til på samme måte: en idé beskrevet med vanlige ord, et utkast, en forhåndsvisning og en publisering.": "You already have examples around you. The course builder, Bookly, and the sales funnel on this platform all came about the same way: an idea described in plain words, a draft, a preview, and a publish.",
+ "Neste gang du bruker et av verktøyene, tenk \"dette begynte som en setning\". Det senker terskelen for din egen neste idé.": "Next time you use one of the tools, think \"this began as a sentence\". That lowers the bar for your own next idea.",
+ "🔍 Prøv dette: Finn én ting på plattformen du ville endret, og formuler den som én tydelig setning. Det er hele starten.": "🔍 Try this: Find one thing on the platform you would change, and phrase it as one clear sentence. That is the whole start.",
+ "Når noe ikke virker": "When something does not work",
+ "Noen ganger blir resultatet feil, og det er helt normalt. Det viktigste å vite: ingenting er ødelagt, og alt kan rulles tilbake.": "Sometimes the result comes out wrong, and that is completely normal. The most important thing to know: nothing is broken, and everything can be rolled back.",
+ "Beskriv hva du ser, gjerne med et skjermbilde, og hva du forventet i stedet. Jo mer konkret du er (\"knappen fører ingen vei\", \"dette blir ikke engelsk\"), jo raskere blir det rettet. Du har kanskje kjent igjen arbeidsmåten fra våre egne samtaler.": "Describe what you see, preferably with a screenshot, and what you expected instead. The more concrete you are (\"the button leads nowhere\", \"this does not switch to English\"), the faster it gets fixed. You may recognise this way of working from our own conversations.",
+ "🛟 Trygt å vite: Alt som publiseres kan angres. Å si ifra om en feil er aldri til bry; det er slik det blir bra.": "🛟 Good to know: Everything published can be undone. Reporting a problem is never a bother; that is how it gets good.",
+ "Gode vaner for trygg bygging": "Good habits for safe building",
+ "Tre vaner gjør byggingen rolig og trygg. Én ting om gangen: små endringer er lette å vurdere og lette å angre. Se før du publiserer: be alltid om en forhåndsvisning eller et skjermbilde. Ta vare på det som virker: når noe blir riktig, be om at måten det ble gjort på huskes til neste gang.": "Three habits make building calm and safe. One thing at a time: small changes are easy to judge and easy to undo. Look before you publish: always ask for a preview or a screenshot. Keep what works: when something turns out right, ask for that way of doing it to be remembered for next time.",
+ "Og den fjerde, hemmelige vanen: spør \"kan du forklare det du gjorde, i vanlig språk?\" Da lærer du litt for hver runde, uten å måtte lese kode.": "And the fourth, secret habit: ask \"can you explain what you did, in plain language?\" Then you learn a little with every round, without having to read code.",
+ "🌱 Husk: Du trenger ikke bli utvikler. Du trenger bare å kunne beskrive, vurdere og bestemme. Resten er hender.": "🌱 Remember: You do not need to become a developer. You only need to describe, judge, and decide. The rest is hands.",
+ "Klar for neste steg?": "Ready for the next step?",
+ "Vil du ha overblikket over hele KI-verktøykassen, med ChatGPT, Gemini, bildeverktøy og mer? Da er KI for pedagoger neste kurs.": "Want the overview of the whole AI toolbox, with ChatGPT, Gemini, image tools, and more? Then AI for educators is your next course.",
+ "Fortsett: KI for pedagoger →": "Continue: AI for educators →"
+});
+</script>
 </body>
 </html>
