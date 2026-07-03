@@ -39,7 +39,7 @@ OM RENATE:
 OM LME-PLATTFORMEN:
 - LME har tre planer: Start (299 NOK/mnd / $29), Proff (499 NOK/mnd / $49), Proff + Fellesskap (699 NOK/mnd / $69)
 - 7 dagers gratis prøveperiode, ingen binding
-- Plattformen inkluderer: Akademiet (kurs), Biblioteket (ressurser), Butikk (bøker), Inner Circle (fellesskap), LME Studio (innholdsverktøy)
+- Plattformen inkluderer: Akademiet (kurs), Biblioteket (ressurser), Butikk (bøker), Inner Circle (fellesskap), Content Studio (innholdsverktøy)
 - Mia & Teo er karakterene i Renates bøker (De små naturutforskerne)
 - LME Bookly er Renates interne verktøy (ALDRI nevn som offentlig produkt)
 - LME Create er det offentlige curriculum-byggerverktøyet
