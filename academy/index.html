@@ -1676,7 +1676,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     fetch('/api/kurs')
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        courses = ((d && d.courses) || []).filter(function (c) { return c && c.published !== false; });
+        courses = ((d && d.courses) || []).filter(function (c) { return c && c.slug && c.published !== false; });
       })
       .catch(function () {})
       .then(function () {

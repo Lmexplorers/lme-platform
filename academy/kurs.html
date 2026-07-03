@@ -1872,10 +1872,51 @@
         }
       }
 
+      /* Uten kursnavn i adressen (/academy/kurs) er ikke siden en blindvei:
+         da viser vi lista over publiserte egne kurs i stedet. */
+      function visListe() {
+        var en = window.LME_CURRENT_LANG === 'en';
+        document.getElementById('kurs-kicker').textContent = en ? 'LME ACADEMY' : 'LME AKADEMIET';
+        document.getElementById('kurs-tittel').textContent = en ? 'Your own courses' : 'Dine egne kurs';
+        document.getElementById('kurs-lede').textContent = '';
+        root.innerHTML = '';
+        fetch('/api/kurs?t=' + Date.now())
+          .then(function (r) { return r.json(); })
+          .then(function (d) {
+            var list = ((d && d.courses) || []).filter(function (c) { return c && c.slug && c.published !== false; });
+            document.getElementById('kurs-lede').textContent = list.length
+              ? (en ? 'Courses made with the LME course builder. Pick one:' : 'Kurs laget med LME kursbyggeren. Velg et kurs:')
+              : (en ? 'No published courses yet. Create one in the course builder!' : 'Ingen publiserte kurs ennå. Lag et i kursbyggeren!');
+            list.forEach(function (c) {
+              var a = el('a', 'crs-lesson');
+              a.href = '/academy/kurs/' + encodeURIComponent(c.slug);
+              a.style.cssText = 'display:block;text-decoration:none;color:inherit';
+              a.appendChild(el('div', 'crs-lesson-num', c.size === 'stor' ? (en ? 'FULL COURSE' : 'STORT KURS') : (en ? 'MINI COURSE' : 'MINIKURS')));
+              a.appendChild(el('h3', null, pick(c.title) || c.slug));
+              var ld = pick(c.lede);
+              if (ld) a.appendChild(el('p', null, ld));
+              a.appendChild(el('p', null, (c.lessonCount || 0) + (en ? ' lessons →' : ' leksjoner →')));
+              root.appendChild(a);
+            });
+            var back = el('div', 'crs-next');
+            var ba = el('a', 'btn-primary', en ? '← Back to the academy' : '← Tilbake til akademiet');
+            ba.href = '/academy';
+            back.appendChild(ba);
+            root.appendChild(back);
+          })
+          .catch(function () {
+            course = null;
+            render();
+          });
+      }
+
       if (!slug) {
-        course = null;
-        render();
-        hook();
+        visListe();
+        var orig2 = window.lmeToggleLang;
+        if (typeof orig2 === 'function' && !orig2.__kursliste) {
+          window.lmeToggleLang = function () { orig2(); visListe(); };
+          window.lmeToggleLang.__kursliste = true;
+        }
         return;
       }
 
