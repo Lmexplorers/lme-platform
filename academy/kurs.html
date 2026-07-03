@@ -1720,6 +1720,7 @@
       slug = slug.toLowerCase();
 
       var course = null;
+      var sistSvar = ''; // teknisk detalj til feilsiden, saa feil er lette aa melde
       var root = document.getElementById('kurs-innhold');
 
       function pick(v) {
@@ -1771,6 +1772,9 @@
           a.href = '/academy';
           back.appendChild(a);
           root.appendChild(back);
+          var tek = el('p', null, 'Teknisk: adresse "' + (slug || '(tom)') + '"' + (sistSvar ? ', svar fra skyen: ' + sistSvar : ''));
+          tek.style.cssText = 'text-align:center;color:#9b8b93;font-size:12.5px;margin-top:14px';
+          root.appendChild(tek);
           return;
         }
 
@@ -1880,9 +1884,16 @@
          sier at kurset ikke finnes. */
       function hent(forsok) {
         fetch('/api/kurs?slug=' + encodeURIComponent(slug) + '&t=' + Date.now())
-          .then(function (r) { return r.json(); })
-          .then(function (d) { course = (d && d.course) || null; })
-          .catch(function () { course = null; })
+          .then(function (r) {
+            sistSvar = 'HTTP ' + r.status;
+            return r.json();
+          })
+          .then(function (d) {
+            course = (d && d.course) || null;
+            if (!course && d && d.error) sistSvar += ', ' + d.error;
+            else if (!course) sistSvar += ', kurset finnes ikke i skyen';
+          })
+          .catch(function (e) { course = null; sistSvar = 'nettverksfeil: ' + (e && e.message); })
           .then(function () {
             if (!course && forsok < 3) {
               setTimeout(function () { hent(forsok + 1); }, 2500);
