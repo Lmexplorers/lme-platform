@@ -517,7 +517,7 @@
             return '<option value="' + pl + '">' + esc(BK.CURRICULUM[pl].navn[lang]) + '</option>';
           }).join('') + '</select></div>' +
           '<div class="bk-field"><label>' + (no ? 'Fag eller område' : 'Subject or area') + '</label><select id="kmFag">' + fagOpts('montessori') + '</select></div>' +
-          '<div class="bk-field"><label>' + (no ? 'Aldersgruppe' : 'Age group') + '</label><select id="kmAlder">' + alderOpts('montessori', 'praktisk') + '</select></div>' +
+          '<div class="bk-field"><label>' + (no ? 'Aldersgruppe' : 'Age group') + '</label><select id="kmAlder">' + alderOpts('montessori', Object.keys(BK.CURRICULUM.montessori.fag)[0]) + '</select></div>' +
           '<div class="bk-note" id="kmKilde" style="font-size:12px"></div>' +
           '</div><div class="actions"><button class="bk-btn quiet" id="kmC">' + t('cancel') + '</button>' +
           '<button class="bk-btn primary" id="kmOk">' + (no ? 'Bruk målene' : 'Use the goals') + '</button></div>',

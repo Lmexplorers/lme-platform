@@ -567,32 +567,90 @@
      ===================================================================== */
   BK.CURRICULUM = {
     montessori: {
-      navn: ['Montessori-inspirerte mål', 'Montessori-inspired goals'],
-      kilde: ['', ''],
+      navn: ['Montessorilæreplanen (2020)', 'Norwegian Montessori curriculum (2020)'],
+      kilde: ['Målene er sitert fra Læreplan for montessoriskolen 2020 (Montessori Norge, godkjent av Udir). 6-9 = etter første halvdel av andre utviklingstrinn, 9-12 = etter andre halvdel.',
+              'Goals quoted (in translation) from the Norwegian Montessori School Curriculum 2020 (Montessori Norge, approved by the Directorate for Education).'],
+      fag: {
+        norsk: { navn: ['Norsk', 'Norwegian'], maal: {
+          '6-9': ['lytte, ta ordet etter tur og begrunne egne meninger i samtaler; holde muntlige presentasjoner med og uten digitale ressurser; beskrive, fortelle og argumentere muntlig og skriftlig, og bruke språket på kreative måter',
+                  'listen, take turns speaking and justify own opinions in conversations; give oral presentations with and without digital resources; describe, narrate and argue orally and in writing, and use language creatively'],
+          '9-12': ['lese lyrikk, noveller, fagtekster og annen skjønnlitteratur og sakprosa og samtale om formål, form og innhold; orientere seg i faglige kilder og vurdere hvor pålitelige kildene er; bruke lesestrategier tilpasset formålet med lesingen',
+                   'read poetry, short stories, subject texts and other fiction and non-fiction and discuss purpose, form and content; navigate subject sources and assess their reliability; use reading strategies suited to the purpose'] } },
+        aritmetikk: { navn: ['Matematikk: aritmetikk og algebra', 'Math: arithmetic and algebra'], maal: {
+          '6-9': ['kjenne igjen og kunne samtale om noen tallsystemer fra ulike sivilisasjoner; forklare hvordan vi beskriver tid ved hjelp av klokke og kalendere; gjenkjenne og skrive tall til millioner både med materiell og på papir',
+                  'recognise and discuss number systems from different civilisations; explain how we describe time using clocks and calendars; recognise and write numbers up to millions with materials and on paper'] } },
+        geometri: { navn: ['Matematikk: geometri', 'Math: geometry'], maal: {
+          '6-9': ['kjenne igjen og beskrive repeterende enheter i mønstre og lage egne mønstre; utforske, tegne og beskrive geometriske figurer fra sitt eget nærmiljø; utforske, beskrive og sammenligne egenskaper ved to- og tredimensjonale figurer',
+                  'recognise and describe repeating units in patterns and create own patterns; explore, draw and describe geometric shapes from the local environment; explore and compare properties of 2D and 3D shapes'],
+          '9-12': ['beskrive egenskaper ved og minimumsdefinisjoner av to- og tredimensjonale figurer; måle radius, diameter og omkrets i sirkler og utforske sammenhengen; bruke ulike strategier for å regne ut areal og omkrets',
+                   'describe properties and minimum definitions of 2D and 3D shapes; measure radius, diameter and circumference and explore the relationship; use different strategies to calculate area and perimeter'] } },
+        engelsk: { navn: ['Engelsk', 'English'], maal: {
+          '6-9': ['delta aktivt i framføring av engelskspråklige rim, regler, sanger og fortellinger; lytte til og gjenkjenne språklyder og stavelser i ord; koble språklyder til bokstaver og stavemønstre og trekke bokstavlyder sammen til ord',
+                  'take active part in performing English rhymes, chants, songs and stories; listen to and recognise speech sounds and syllables; connect sounds to letters and spelling patterns and blend sounds into words'],
+          '9-12': ['bruke enkle strategier i språklæring, tekstskaping og kommunikasjon; utforske og bruke uttalemønstre og ord og uttrykk i lek, sang og rollespill; lytte til og forstå ord og uttrykk i tilpassede og autentiske tekster',
+                   'use simple strategies in language learning, writing and communication; explore pronunciation patterns and expressions in play, song and role play; listen to and understand words and expressions in adapted and authentic texts'] } },
+        biologi: { navn: ['Naturfag: biologi', 'Science: biology'], maal: {
+          '6-9': ['utforske og beskrive plantenes og dyrenes grunnleggende behov og samtale om plantenes og dyrenes tilpasning; oppleve naturen til ulike årstider og reflektere over hvordan naturen er i endring; utforske naturområder i nærmiljøet, og drøfte bærekraftig bruk av områdene',
+                  'explore and describe the basic needs of plants and animals and discuss their adaptation; experience nature through the seasons and reflect on how nature changes; explore local natural areas and discuss their sustainable use'],
+          '9-12': ['beskrive cellens betydning som byggestein i alt levende; gjøre rede for hvordan organismer kan deles inn i hovedgrupper; gjøre rede for ulike aspekter ved menneskers fysiske og psykiske helse og hvordan livsstil og trivsel påvirker helse',
+                   'describe the cell as the building block of all living things; explain how organisms are divided into main groups; explain aspects of physical and mental health and how lifestyle and well-being affect health'] } },
+        naturvitenskap: { navn: ['Naturfag: utforsking og geografi', 'Science: inquiry and geography'], maal: {
+          '6-9': ['undre seg, utforske og lage spørsmål og knytte dette til presentasjoner og egne erfaringer; gjennomføre enkle forsøk ved å følge en presis metode og presentere funnene sine; planlegge og gjennomføre undersøkelser av vær og himmelfenomener',
+                  'wonder, explore and form questions linked to presentations and own experiences; carry out simple experiments following a precise method and present findings; plan and carry out investigations of weather and sky phenomena'],
+          '9-12': ['bruke tabeller og figurer til å organisere data og presentere funn; skille mellom observasjoner og slutninger og vurdere feilkilder; bruke og vurdere modeller som representerer fenomener man ikke kan observere direkte',
+                   'use tables and figures to organise data and present findings; distinguish observations from inferences and assess sources of error; use and evaluate models of phenomena that cannot be observed directly'] } },
+        samfunnsfag: { navn: ['Samfunnsfag: historie og samfunn', 'Social studies: history and society'], maal: {
+          '6-9': ['utforske menneskers ulike måter å måle tid på, og anvende begreper om tid i egen utforsking; utforske og samtale om ulike perioder i menneskets historie og hvordan ulike samfunn er blitt til; utforske ulike kulturer og sammenligne med hvordan vi lever i dag',
+                  'explore how people have measured time and use time concepts in own inquiry; explore and discuss periods of human history and how societies came to be; explore different cultures and compare with how we live today'],
+          '9-12': ['gjennomføre en samfunnsfaglig undersøkelse og presentere resultatene ved hjelp av egnede digitale verktøy; presentere aktuelle nyhetssaker og reflektere over forskjeller mellom fakta, meninger og kommersielle budskap i mediebildet',
+                   'carry out a social studies investigation and present the results with suitable digital tools; present current news stories and reflect on the differences between facts, opinions and commercial messages'] } },
+        krle: { navn: ['KRLE', 'Religion and ethics'], maal: {
+          '6-9': ['gi eksempler på hvordan mennesker tilfredsstiller sine åndelige behov; utforske og beskrive hvordan kristendom og andre religioner og livssyn kommer til uttrykk lokalt og globalt; sammenligne og presentere ulike årstider og høytider i kristendom og andre religions- og livssynstradisjoner',
+                  'give examples of how people meet their spiritual needs; explore how Christianity and other religions and worldviews are expressed locally and globally; compare and present seasons and holidays across religious and worldview traditions'],
+          '9-12': ['gjøre rede for religions- og livssynshistorie i Norge, inkludert samers og nasjonale minoriteters historie; beskrive og presentere sentrale rituelle praksiser og etiske normer i ulike tradisjoner; utforske og samtale om mangfold innenfor religionssamfunn',
+                   'explain the history of religion and worldviews in Norway, including Sami and national minorities; describe central ritual practices and ethical norms across traditions; explore and discuss diversity within religious communities'] } },
+        kunst: { navn: ['Kunst og håndverk', 'Arts and crafts'], maal: {
+          '6-9': ['samtale om hvordan menneskers fundamentale behov har ført til et mangfold av kulturer, kunstneriske uttrykk og ulike håndverk; undersøke egenskaper ved materialer og dele sanseerfaringer; utforske ulike visuelle uttrykk og bygge videre på andres ideer i eget skapende arbeid',
+                  'discuss how fundamental human needs have led to a diversity of cultures, artistic expressions and crafts; investigate properties of materials and share sensory experiences; explore visual expressions and build on others\' ideas in own creative work'],
+          '9-12': ['bruke ulike verktøy for håndverk på en trygg og miljøbevisst måte; undersøke materialer og vurdere funksjon, holdbarhet og muligheter for reparasjon og gjenbruk; bruke ulike strategier for ideutvikling og problemløsning',
+                   'use craft tools safely and with environmental awareness; investigate materials and assess function, durability, repair and reuse; use different strategies for idea development and problem solving'] } },
+        musikk: { navn: ['Musikk', 'Music'], maal: {
+          '6-9': ['utøve et repertoar av sangleker, sanger og danser fra elevenes nære musikkultur, fra kulturarven og fra andre deler av verden; utforske og eksperimentere med puls, rytme, tempo, klang, melodi, dynamikk, harmoni og form; leke med musikkens grunnelementer og sette sammen mønstre til enkle improvisasjoner',
+                  'perform a repertoire of singing games, songs and dances from near and far; explore pulse, rhythm, tempo, timbre, melody, dynamics, harmony and form; play with the building blocks of music and combine patterns into simple improvisations'],
+          '9-12': ['utøve et repertoar av musikk, sang og dans fra samtiden og historien; øve inn og framføre sang og musikk, i samspill eller individuelt; bruke teknologi og digitale verktøy til å skape, øve inn og bearbeide musikk',
+                   'perform music, song and dance from the present and the past; rehearse and perform together or individually; use technology and digital tools to create, rehearse and edit music'] } },
+        kroppsoving: { navn: ['Kroppsøving', 'Physical education'], maal: {
+          '6-9': ['utforske og gjennomføre leker, idrettsaktiviteter, danser og andre bevegelsesaktiviteter; øve på og bruke basisferdigheter som å føre, kaste, sprette, sparke og ta imot ball; leke og være med sammen med andre i aktivitet i varierte bevegelsesmiljø',
+                  'explore and take part in games, sports, dances and other movement activities; practice basic skills like dribbling, throwing, bouncing, kicking and catching; play and join others in varied movement environments'],
+          '9-12': ['gjennomføre aktiviteter ut ifra egne interesser og forutsetninger i dans, friluftsliv og idrettsaktiviteter; bruke kart, digitale verktøy og tegn i naturen til å orientere seg; forstå og praktisere regler for aktivitet og spill og respektere resultatene',
+                   'take part in dance, outdoor life and sports based on own interests and abilities; use maps, digital tools and signs in nature to navigate; understand and follow rules for games and respect the results'] } },
+        mathelse: { navn: ['Mat og helse', 'Food and health'], maal: {
+          '6-9': ['følge prinsipper for god hygiene i forbindelse med matlaging; bruke redskaper, rom- og vektmål og enkle teknikker i forbindelse med matlaging; utnytte lokale matvarer i matlaging og presentere leddene i produksjonskjeden fra jord til bord',
+                  'follow good hygiene principles when cooking; use tools, measures and simple techniques in cooking; use local ingredients and present the steps of the production chain from soil to table'],
+          '9-12': ['bruke redskaper, grunnleggende teknikker og matlagingsmetoder til å lage trygg, helsefremmende og bærekraftig mat; bruke oppskrifter i matlaging og regne ut og vurdere mengden i porsjonene; bruke sansene til å utforske og vurdere matens smak og tekstur',
+                   'use tools, basic techniques and cooking methods to make safe, healthy and sustainable food; use recipes and calculate and assess portions; use the senses to explore and assess taste and texture'] } },
+      },
+    },
+    lme36: {
+      navn: ['LME-mål 3-6 år (Montessori-inspirert)', 'LME goals ages 3-6 (Montessori-inspired)'],
+      kilde: ['LME-formulerte mål for førskolealder. Montessorilæreplanen gjelder skolealder; disse dekker 3-6 år i Montessoriånd.',
+              'LME-formulated goals for preschool age, in the Montessori spirit.'],
       fag: {
         praktisk: { navn: ['Praktisk liv', 'Practical life'], maal: {
           '3-6': ['mestre hverdagsferdigheter som å helle, øse og kle på seg; utvikle selvstendighet, konsentrasjon og omsorg for omgivelsene',
-                  'master everyday skills like pouring, spooning and dressing; develop independence, concentration and care for the environment'],
-          '6-9': ['ta ansvar for egne oppgaver og fellesskapet; planlegge og gjennomføre praktiske prosjekter',
-                  'take responsibility for own tasks and the community; plan and carry out practical projects'] } },
+                  'master everyday skills like pouring, spooning and dressing; develop independence, concentration and care for the environment'] } },
         sansene: { navn: ['Sansene', 'Sensorial'], maal: {
           '3-6': ['utforske og sortere inntrykk med alle sansene; gradere, pare og beskrive størrelse, form, farge og lyd',
                   'explore and sort impressions with all the senses; grade, pair and describe size, shape, color and sound'] } },
         sprak: { navn: ['Språk', 'Language'], maal: {
           '3-6': ['utvikle ordforråd og språklyder; forberede lesing og skriving gjennom lyder, sandpapirbokstaver og førskriving',
-                  'develop vocabulary and speech sounds; prepare reading and writing through sounds, sandpaper letters and pre-writing'],
-          '6-9': ['lese med flyt og forståelse; utforske ordklasser og setninger; uttrykke seg skriftlig',
-                  'read with fluency and understanding; explore word classes and sentences; express oneself in writing'] } },
+                  'develop vocabulary and speech sounds; prepare reading and writing through sounds, sandpaper letters and pre-writing'] } },
         matematikk: { navn: ['Matematikk', 'Mathematics'], maal: {
           '3-6': ['forstå mengder 0 til 10 og koble mengde til tallsymbol; bygge tallforståelse med konkreter',
-                  'understand quantities 0 to 10 and connect quantity to numeral; build number sense with concrete materials'],
-          '6-9': ['forstå posisjonssystemet og de fire regneartene med konkreter; arbeide mot abstraksjon',
-                  'understand the decimal system and the four operations with concrete materials; work towards abstraction'] } },
+                  'understand quantities 0 to 10 and connect quantity to numeral; build number sense with concrete materials'] } },
         kosmisk: { navn: ['Kosmisk utdanning', 'Cosmic education'], maal: {
           '6-9': ['få overblikk over universets, livets og menneskenes historie; se sammenhenger i naturen og kulturen og sin egen plass i helheten',
-                  'gain an overview of the history of the universe, life and humankind; see connections in nature and culture and one\'s own place in the whole'],
-          '9-12': ['fordype seg i naturens og kulturens sammenhenger; ta ansvar for fellesskapet og miljøet',
-                   'go deeper into the connections of nature and culture; take responsibility for the community and the environment'] } },
+                  'gain an overview of the history of the universe, life and humankind; see connections in nature and culture and one\'s own place in the whole'] } },
         botanikk: { navn: ['Botanikk og zoologi', 'Botany and zoology'], maal: {
           '3-6': ['kjenne plantens deler og hva planter trenger; utvikle omsorg for levende ting',
                   'know the parts of the plant and what plants need; develop care for living things'] } },
@@ -822,14 +880,14 @@
   tpl('teacher', '📔', 'tint-blue', 'Observasjonsjournal for pedagoger', 'Observation Journal for Educators', 'Utvidet observasjonsjournal: barnets valg, konsentrasjon, sosialt samspill og oppfølging.', 'Extended observation journal: the child\'s choices, concentration, social interaction and follow-up.', 'journal', { kind: 'teacher', count: 30 });
 
   /* Montessori (læreplanen): områdene i Montessoripedagogikken (8) */
-  tpl('montessori', '🧺', 'tint-pink', 'Praktisk liv', 'Practical Life', 'Øvelser i praktisk liv: helle, øse, kle på seg og dekke bord.', 'Practical life exercises: pouring, spooning, dressing and setting the table.', 'workbook', { category: 'montessori', topic: 'praktisk liv: helle, øse, kle på seg, dekke bord og hjelpe til hjemme', age: '3-6', count: 10, goals: KM('montessori', 'praktisk', '3-6') });
-  tpl('montessori', '👐', 'tint-blue', 'Sansene', 'The Senses', 'Sansetrening: se, høre, kjenne, lukte og smake.', 'Sensorial work: seeing, hearing, touching, smelling and tasting.', 'workbook', { category: 'montessori', topic: 'sansene og sansematerialer: sortere, gradere og beskrive', age: '3-6', count: 10, goals: KM('montessori', 'sansene', '3-6') });
-  tpl('montessori', '🔤', 'tint-lemon', 'Språk: lyder og bokstaver', 'Language: Sounds and Letters', 'Språkarbeid i Montessorirekkefølge: lyder først, så bokstaver og ord.', 'Language work in Montessori order: sounds first, then letters and words.', 'workbook', { category: 'literacy', topic: 'språklyder, sandpapirbokstaver og de første ordene, i Montessorirekkefølge', age: '3-6', count: 12, goals: KM('montessori', 'sprak', '3-6') });
-  tpl('montessori', '🔢', 'tint-lime', 'Matematikk med konkreter', 'Math with Materials', 'Mengder og tall slik Montessorimatematikken bygger dem opp.', 'Quantities and numerals the way Montessori math builds them.', 'workbook', { category: 'mathematics', topic: 'mengder og tall 0 til 10 med konkreter, i Montessorirekkefølge', age: '3-6', count: 12, goals: KM('montessori', 'matematikk', '3-6') });
-  tpl('montessori', '🌌', 'tint-blue', 'De store fortellingene', 'The Great Lessons', 'Kosmisk utdanning: universet, livet og menneskene.', 'Cosmic education: the universe, life and human beings.', 'book', { bookType: 'educational book', topic: 'de store fortellingene i kosmisk utdanning: universet blir til, livet utvikler seg og menneskene kommer', age: '6-9', pages: 32, goals: KM('montessori', 'kosmisk', '6-9') });
-  tpl('montessori', '🌱', 'tint-lime', 'Botanikk: plantene', 'Botany: Plants', 'Plantens deler, frø og vekst.', 'Parts of the plant, seeds and growth.', 'workbook', { category: 'science', topic: 'botanikk: plantens deler, frø som spirer og det planter trenger', age: '3-6', count: 10, goals: KM('montessori', 'botanikk', '3-6') });
+  tpl('montessori', '🧺', 'tint-pink', 'Praktisk liv', 'Practical Life', 'Øvelser i praktisk liv: helle, øse, kle på seg og dekke bord.', 'Practical life exercises: pouring, spooning, dressing and setting the table.', 'workbook', { category: 'montessori', topic: 'praktisk liv: helle, øse, kle på seg, dekke bord og hjelpe til hjemme', age: '3-6', count: 10, goals: KM('lme36', 'praktisk', '3-6') });
+  tpl('montessori', '👐', 'tint-blue', 'Sansene', 'The Senses', 'Sansetrening: se, høre, kjenne, lukte og smake.', 'Sensorial work: seeing, hearing, touching, smelling and tasting.', 'workbook', { category: 'montessori', topic: 'sansene og sansematerialer: sortere, gradere og beskrive', age: '3-6', count: 10, goals: KM('lme36', 'sansene', '3-6') });
+  tpl('montessori', '🔤', 'tint-lemon', 'Språk: lyder og bokstaver', 'Language: Sounds and Letters', 'Språkarbeid i Montessorirekkefølge: lyder først, så bokstaver og ord.', 'Language work in Montessori order: sounds first, then letters and words.', 'workbook', { category: 'literacy', topic: 'språklyder, sandpapirbokstaver og de første ordene, i Montessorirekkefølge', age: '3-6', count: 12, goals: KM('lme36', 'sprak', '3-6') });
+  tpl('montessori', '🔢', 'tint-lime', 'Matematikk med konkreter', 'Math with Materials', 'Mengder og tall slik Montessorimatematikken bygger dem opp.', 'Quantities and numerals the way Montessori math builds them.', 'workbook', { category: 'mathematics', topic: 'mengder og tall 0 til 10 med konkreter, i Montessorirekkefølge', age: '3-6', count: 12, goals: KM('lme36', 'matematikk', '3-6') });
+  tpl('montessori', '🌌', 'tint-blue', 'De store fortellingene', 'The Great Lessons', 'Kosmisk utdanning: universet, livet og menneskene.', 'Cosmic education: the universe, life and human beings.', 'book', { bookType: 'educational book', topic: 'de store fortellingene i kosmisk utdanning: universet blir til, livet utvikler seg og menneskene kommer', age: '6-9', pages: 32, goals: KM('lme36', 'kosmisk', '6-9') });
+  tpl('montessori', '🌱', 'tint-lime', 'Botanikk: plantene', 'Botany: Plants', 'Plantens deler, frø og vekst.', 'Parts of the plant, seeds and growth.', 'workbook', { category: 'science', topic: 'botanikk: plantens deler, frø som spirer og det planter trenger', age: '3-6', count: 10, goals: KM('lme36', 'botanikk', '3-6') });
   tpl('montessori', '🐾', 'tint-pink', 'Zoologi: trepartskort', 'Zoology: Three-Part Cards', 'Klassiske trepartskort med dyr.', 'Classic three-part cards with animals.', 'flashcards', { mode: 'threepart', theme: 'dyr' });
-  tpl('montessori', '🕊️', 'tint-lemon', 'Fred og høflighet', 'Grace and Courtesy', 'Grace and courtesy: vennlighet, hensyn og fred.', 'Grace and courtesy: kindness, consideration and peace.', 'book', { bookType: 'educational book', topic: 'høflighet, vennlighet og fredsarbeid i hverdagen (grace and courtesy)', age: '3-6', pages: 24, goals: KM('montessori', 'fred', '3-6') });
+  tpl('montessori', '🕊️', 'tint-lemon', 'Fred og høflighet', 'Grace and Courtesy', 'Grace and courtesy: vennlighet, hensyn og fred.', 'Grace and courtesy: kindness, consideration and peace.', 'book', { bookType: 'educational book', topic: 'høflighet, vennlighet og fredsarbeid i hverdagen (grace and courtesy)', age: '3-6', pages: 24, goals: KM('lme36', 'fred', '3-6') });
 
   /* Skole (læreplanen LK20): fagene og de tverrfaglige temaene (8) */
   tpl('lk20', '📖', 'tint-pink', 'Norsk: lese og skrive', 'Norwegian: Read and Write', 'Bokstaver, lesing og skriving for begynneropplæringen.', 'Letters, reading and writing for early literacy.', 'workbook', { category: 'literacy', topic: 'begynneropplæring i norsk: bokstaver, lesing og skriving', age: '6-9', count: 12, goals: KM('lk20', 'norsk', '6-9') });

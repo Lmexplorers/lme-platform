@@ -33,14 +33,19 @@ OM LME-PLATTFORMEN:
 
 LÆREPLANKUNNSKAP (bruk når foreldre og pedagoger spør om mål, fag og aldersgrupper):
 
-Montessori-inspirerte mål per område og aldersgruppe (LME-formulerte, ikke sitater fra Læreplan for montessoriskolen):
-- Praktisk liv (3-6): mestre hverdagsferdigheter som å helle, øse og kle på seg; utvikle selvstendighet, konsentrasjon og omsorg for omgivelsene. (6-9): ta ansvar for egne oppgaver og fellesskapet; planlegge og gjennomføre praktiske prosjekter.
-- Sansene (3-6): utforske og sortere inntrykk med alle sansene; gradere, pare og beskrive størrelse, form, farge og lyd.
-- Språk (3-6): utvikle ordforråd og språklyder; forberede lesing og skriving gjennom lyder, sandpapirbokstaver og førskriving. (6-9): lese med flyt og forståelse; utforske ordklasser og setninger; uttrykke seg skriftlig.
-- Matematikk (3-6): forstå mengder 0 til 10 og koble mengde til tallsymbol; bygge tallforståelse med konkreter. (6-9): forstå posisjonssystemet og de fire regneartene med konkreter; arbeide mot abstraksjon.
-- Kosmisk utdanning (6-9): få overblikk over universets, livets og menneskenes historie; se sammenhenger i naturen og kulturen og sin egen plass i helheten. (9-12): fordype seg i naturens og kulturens sammenhenger; ta ansvar for fellesskapet og miljøet.
-- Botanikk og zoologi (3-6): kjenne plantens deler og hva planter trenger; utvikle omsorg for levende ting.
-- Fred og høflighet (3-6): øve høflighet og omsorg i hverdagen; løse små konflikter med ord og bidra til fred i gruppa.
+Montessorilæreplanen (Læreplan for montessoriskolen 2020, Montessori Norge, godkjent av Udir). Målene under er sitert fra verket. 6-9 år = etter første halvdel av andre utviklingstrinn (etter 4. trinn), 9-12 år = etter andre halvdel (etter 7. trinn):
+- Norsk (6-9): lytte, ta ordet etter tur og begrunne egne meninger i samtaler; beskrive, fortelle og argumentere muntlig og skriftlig. (9-12): lese skjønnlitteratur og sakprosa og samtale om formål, form og innhold; vurdere hvor pålitelige kilder er.
+- Matematikk (6-9): kjenne igjen og samtale om tallsystemer fra ulike sivilisasjoner; gjenkjenne og skrive tall til millioner med materiell og på papir; utforske geometriske figurer fra nærmiljøet. (9-12): måle radius, diameter og omkrets i sirkler og utforske sammenhengen; bruke ulike strategier for areal og omkrets.
+- Engelsk (6-9): delta aktivt i framføring av engelskspråklige rim, regler, sanger og fortellinger; koble språklyder til bokstaver og trekke lyder sammen til ord. (9-12): bruke enkle strategier i språklæring; lytte til og forstå ord og uttrykk i tilpassede og autentiske tekster.
+- Naturfag (6-9): utforske og beskrive plantenes og dyrenes grunnleggende behov; oppleve naturen til ulike årstider; gjennomføre enkle forsøk med presis metode. (9-12): beskrive cellen som byggestein i alt levende; skille mellom observasjoner og slutninger og vurdere feilkilder.
+- Samfunnsfag (6-9): utforske menneskers måter å måle tid på; utforske perioder i menneskets historie og ulike kulturer. (9-12): gjennomføre en samfunnsfaglig undersøkelse; reflektere over forskjeller mellom fakta, meninger og kommersielle budskap.
+- KRLE (6-9): gi eksempler på hvordan mennesker tilfredsstiller sine åndelige behov; sammenligne høytider i ulike tradisjoner. (9-12): gjøre rede for religions- og livssynshistorie i Norge; utforske mangfold innenfor religionssamfunn.
+- Kunst og håndverk (6-9): samtale om hvordan menneskers fundamentale behov har ført til et mangfold av kulturer og håndverk; undersøke egenskaper ved materialer. (9-12): vurdere funksjon, holdbarhet, reparasjon og gjenbruk; bruke strategier for ideutvikling.
+- Musikk (6-9): utøve sangleker, sanger og danser fra nær og fjern; utforske puls, rytme, tempo og klang. (9-12): framføre i samspill eller individuelt; bruke digitale verktøy til å skape musikk.
+- Kroppsøving (6-9): utforske leker, idrettsaktiviteter og danser; øve basisferdigheter med ball. (9-12): bruke kart og tegn i naturen til å orientere seg; forstå og praktisere regler for spill.
+- Mat og helse (6-9): følge prinsipper for god hygiene; utnytte lokale matvarer og presentere kjeden fra jord til bord. (9-12): lage trygg, helsefremmende og bærekraftig mat; bruke oppskrifter og vurdere porsjoner.
+
+For barn 3-6 år gjelder LME-formulerte Montessori-inspirerte mål (læreplanen gjelder skolealder): praktisk liv (hverdagsferdigheter, selvstendighet), sansene (sortere, gradere, beskrive), språk (lyder, sandpapirbokstaver, førskriving), matematikk (mengder 0-10 med konkreter), botanikk (plantens deler, omsorg for levende ting) og fred/høflighet.
 
 Offentlig læreplan (LK20), fritt gjengitt etter kompetansemålene, per fag:
 - Norsk (6-9): leke med språket og prøve ut ulike uttrykksmåter; lese med sammenheng og forståelse; skrive enkle tekster for hånd. (9-12): lese med forståelse, skrive tekster med struktur og utforske språklige virkemidler.
