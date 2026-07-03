@@ -163,19 +163,25 @@ async function generateDraft(body, env) {
     '3) Etter kolon: stor forbokstav kun når en hel setning følger, ellers liten. ' +
     '4) Liten forbokstav etter semikolon. ' +
     '5) Norske kommaregler: komma foran "men", komma etter leddsetning foran hovedsetningen, komma rundt innskutte setninger, ikke komma foran siste "og" i oppramsing. ' +
-    'Svar KUN med et gyldig JSON-objekt, ingen annen tekst og ingen kodeblokk.';
+    'Svar KUN i merkeformatet du får beskrevet, ingen annen tekst.';
 
   const prompt =
     'Skriv et blogginnlegg for LME-bloggen om: "' + topic + '".\n\n' +
     'Krav:\n' +
-    '- Norsk brødtekst på 500-800 ord og en god engelsk oversettelse.\n' +
+    '- Norsk brødtekst på 500-700 ord og en god engelsk oversettelse.\n' +
     '- Brødteksten er enkel HTML: <p>, <h3> for 2-4 mellomtitler, <ul><li> der det passer og <strong> for viktige ord. Ingen andre elementer.\n' +
     '- Konkret og praktisk, med eksempler foreldre eller pedagoger kan bruke samme dag.\n' +
     '- Ingress på 1-2 setninger som vekker lyst til å lese.\n\n' +
-    'Svar med nøyaktig dette JSON-formatet:\n' +
-    '{"titleNo":"...","titleEn":"...","excerptNo":"...","excerptEn":"...",' +
-    '"bodyNo":"<p>...</p>","bodyEn":"<p>...</p>","category":"...","readMin":"X min",' +
-    '"imagePrompt":"en engelsk beskrivelse av et vakkert toppbilde for innlegget, uten tekst i bildet"}';
+    'Svar i nøyaktig dette formatet, med hvert merke på egen linje og innholdet under:\n' +
+    '===TITTEL_NO===\n(tittel på norsk)\n' +
+    '===TITTEL_EN===\n(tittel på engelsk)\n' +
+    '===INGRESS_NO===\n(ingress på norsk)\n' +
+    '===INGRESS_EN===\n(ingress på engelsk)\n' +
+    '===KATEGORI===\n(kort kategori, f.eks. Tips & råd)\n' +
+    '===LESETID===\n(f.eks. 4 min)\n' +
+    '===BILDE===\n(en engelsk beskrivelse av et vakkert toppbilde for innlegget, uten tekst i bildet)\n' +
+    '===BROEDTEKST_NO===\n(hele den norske brødteksten som HTML)\n' +
+    '===BROEDTEKST_EN===\n(hele den engelske brødteksten som HTML)';
 
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
@@ -187,7 +193,7 @@ async function generateDraft(body, env) {
       },
       body: JSON.stringify({
         model: env.BLOG_TEXT_MODEL || "claude-sonnet-4-6",
-        max_tokens: 6000,
+        max_tokens: 16000,
         system: system,
         messages: [{ role: "user", content: prompt }],
       }),
@@ -207,26 +213,24 @@ async function generateDraft(body, env) {
   }
 }
 
-/* Robust JSON-parsing: modellen kan pakke svaret i kodeblokk. */
+/* Merkeformat-parsing: ===MERKE=== paa egen linje, innholdet under.
+   Taaler anførselstegn, linjeskift og HTML i innholdet, og gir et brukbart
+   utkast selv om svaret skulle bli kuttet mot slutten. */
 function parseDraft(text) {
-  let t = (text || "").trim();
-  const fence = t.match(/```(?:json)?\s*([\s\S]*?)```/);
-  if (fence) t = fence[1].trim();
-  const start = t.indexOf("{");
-  const end = t.lastIndexOf("}");
-  if (start === -1 || end <= start) return null;
-  try {
-    const d = JSON.parse(t.slice(start, end + 1));
-    return {
-      titleNo: s(d.titleNo, 200), titleEn: s(d.titleEn, 200),
-      excerptNo: s(d.excerptNo, 600), excerptEn: s(d.excerptEn, 600),
-      bodyNo: s(d.bodyNo, 200000), bodyEn: s(d.bodyEn, 200000),
-      category: s(d.category, 80), readMin: s(d.readMin, 10),
-      imagePrompt: s(d.imagePrompt, 1000),
-    };
-  } catch (e) {
-    return null;
-  }
+  const t = (text || "").replace(/```[a-z]*\n?|```/g, "");
+  const felt = {};
+  const re = /===\s*([A-ZÆØÅ_]+)\s*===\s*\n?([\s\S]*?)(?====\s*[A-ZÆØÅ_]+\s*===|$)/g;
+  let m;
+  while ((m = re.exec(t)) !== null) felt[m[1]] = (m[2] || "").trim();
+  const d = {
+    titleNo: s(felt.TITTEL_NO, 200), titleEn: s(felt.TITTEL_EN, 200),
+    excerptNo: s(felt.INGRESS_NO, 600), excerptEn: s(felt.INGRESS_EN, 600),
+    bodyNo: s(felt.BROEDTEKST_NO, 200000), bodyEn: s(felt.BROEDTEKST_EN, 200000),
+    category: s(felt.KATEGORI, 80), readMin: s(felt.LESETID, 10),
+    imagePrompt: s(felt.BILDE, 1000),
+  };
+  if (!d.titleNo || !d.bodyNo) return null;
+  return d;
 }
 
 /* Lager toppbilde med OpenAI (samme nøkkel som Bookly), lagrer det i KV
