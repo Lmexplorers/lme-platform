@@ -1106,7 +1106,7 @@
       this.classList.toggle('soft', !BK.layoutEd.enabled);
       renderStage(true);
       if (BK.layoutEd.enabled) {
-        BK.toast(no ? 'Flytt og tilpass er på: trykk på tekst eller bilde på siden.' : 'Move and adjust is on: tap text or an image on the page.');
+        BK.toast(no ? 'Flytt og tilpass er på: Trykk på tekst eller bilde på siden.' : 'Move and adjust is on: Tap text or an image on the page.');
       }
     };
     $('#ePdf').onclick = function () { BK.exp.printProject(p); };
