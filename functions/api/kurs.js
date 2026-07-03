@@ -71,6 +71,7 @@ function sanitizeCourse(raw) {
     size: raw.size === "stor" ? "stor" : "mini",
     published: raw.published !== false,
     cert: raw.cert !== false,
+    meet: raw.meet !== false,
     kicker: langField(raw.kicker, 80),
     title: langField(raw.title, 120),
     lede: langField(raw.lede, 600),

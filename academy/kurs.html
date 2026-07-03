@@ -1785,20 +1785,22 @@
 
         root.innerHTML = '';
 
-        // Din lærer
-        var meet = el('div', 'crs-meet');
-        var img = el('img', 'crs-meet-avatar');
-        img.src = '/images/renate-portrait.jpg';
-        img.alt = 'Renate Dahl';
-        meet.appendChild(img);
-        var mt = el('div', 'crs-meet-text');
-        mt.appendChild(el('div', 'eyebrow', en ? 'Your teacher' : 'Din lærer'));
-        mt.appendChild(el('h2', null, en ? "Hi, I'm Renate 💕" : 'Hei, jeg er Renate 💕'));
-        mt.appendChild(el('p', null, en
-          ? "Montessori educator with over 20 years of experience. In this course I share what I've learned over the years, warmly, practically, and to the point. Let's dive in together."
-          : 'Montessoripedagog med over 20 års erfaring. I dette kurset deler jeg det jeg har lært gjennom årene, varmt og praktisk og rett på sak. La oss dykke ned i det sammen.'));
-        meet.appendChild(mt);
-        root.appendChild(meet);
+        // Din lærer (kan skrus av per kurs i kursbyggeren)
+        if (course.meet !== false) {
+          var meet = el('div', 'crs-meet');
+          var img = el('img', 'crs-meet-avatar');
+          img.src = '/images/renate-portrait.jpg';
+          img.alt = 'Renate Dahl';
+          meet.appendChild(img);
+          var mt = el('div', 'crs-meet-text');
+          mt.appendChild(el('div', 'eyebrow', en ? 'Your teacher' : 'Din lærer'));
+          mt.appendChild(el('h2', null, en ? "Hi, I'm Renate 💕" : 'Hei, jeg er Renate 💕'));
+          mt.appendChild(el('p', null, en
+            ? "Montessori educator with over 20 years of experience. In this course I share what I've learned over the years, warmly, practically, and to the point. Let's dive in together."
+            : 'Montessoripedagog med over 20 års erfaring. I dette kurset deler jeg det jeg har lært gjennom årene, varmt og praktisk og rett på sak. La oss dykke ned i det sammen.'));
+          meet.appendChild(mt);
+          root.appendChild(meet);
+        }
 
         // Hva du lærer
         if (course.learn && course.learn.length) {

@@ -163,6 +163,7 @@
         <label><input type="radio" name="f-size" value="mini" checked> <span data-no="Minikurs" data-en="Mini course">Minikurs</span></label>
         <label><input type="radio" name="f-size" value="stor"> <span data-no="Større kurs" data-en="Full course">Større kurs</span></label>
         <label><input type="checkbox" id="f-cert" checked> <span data-no="Med kursbevis" data-en="With certificate">Med kursbevis</span></label>
+        <label><input type="checkbox" id="f-meet" checked> <span data-no='Med "Din lærer"-blokk' data-en='With "Your teacher" block'>Med "Din lærer"-blokk</span></label>
         <label><input type="checkbox" id="f-published" checked> <span data-no="Publisert" data-en="Published">Publisert</span></label>
       </div>
     </section>
@@ -375,6 +376,7 @@ function loadCourse(c, isNew) {
   q('f-learn-en').value = (c.learn || []).map(function (x) { return x.en || ''; }).join('\n');
   document.querySelectorAll('[name="f-size"]').forEach(function (r) { r.checked = r.value === c.size; });
   q('f-cert').checked = c.cert !== false;
+  q('f-meet').checked = c.meet !== false;
   q('f-published').checked = c.published !== false;
   q('f-outro-title').value = (c.outro && c.outro.title.no) || '';
   q('f-outro-title-en').value = (c.outro && c.outro.title.en) || '';
@@ -396,6 +398,7 @@ function collectCourse() {
     size: document.querySelector('[name="f-size"]:checked').value,
     published: q('f-published').checked,
     cert: q('f-cert').checked,
+    meet: q('f-meet').checked,
     kicker: { no: q('f-kicker').value.trim(), en: q('f-kicker-en').value.trim() },
     title: { no: q('f-title').value.trim(), en: q('f-title-en').value.trim() },
     lede: { no: q('f-lede').value.trim(), en: q('f-lede-en').value.trim() },
@@ -639,18 +642,20 @@ function renderPreview() {
 
   var crs = el('div', 'crs');
 
-  var meet = el('div', 'crs-meet');
-  var img = el('img', 'crs-meet-avatar');
-  img.src = '/images/renate-portrait.jpg'; img.alt = 'Renate Dahl';
-  meet.appendChild(img);
-  var mt = el('div', 'crs-meet-text');
-  mt.appendChild(el('div', 'eyebrow', L('Din lærer', 'Your teacher')));
-  mt.appendChild(el('h2', null, L('Hei, jeg er Renate 💕', "Hi, I'm Renate 💕")));
-  mt.appendChild(el('p', null, L(
-    'Montessoripedagog med over 20 års erfaring. I dette kurset deler jeg det jeg har lært gjennom årene, varmt og praktisk og rett på sak. La oss dykke ned i det sammen.',
-    "Montessori educator with over 20 years of experience. In this course I share what I've learned over the years, warmly, practically, and to the point. Let's dive in together.")));
-  meet.appendChild(mt);
-  crs.appendChild(meet);
+  if (c.meet !== false) {
+    var meet = el('div', 'crs-meet');
+    var img = el('img', 'crs-meet-avatar');
+    img.src = '/images/renate-portrait.jpg'; img.alt = 'Renate Dahl';
+    meet.appendChild(img);
+    var mt = el('div', 'crs-meet-text');
+    mt.appendChild(el('div', 'eyebrow', L('Din lærer', 'Your teacher')));
+    mt.appendChild(el('h2', null, L('Hei, jeg er Renate 💕', "Hi, I'm Renate 💕")));
+    mt.appendChild(el('p', null, L(
+      'Montessoripedagog med over 20 års erfaring. I dette kurset deler jeg det jeg har lært gjennom årene, varmt og praktisk og rett på sak. La oss dykke ned i det sammen.',
+      "Montessori educator with over 20 years of experience. In this course I share what I've learned over the years, warmly, practically, and to the point. Let's dive in together.")));
+    meet.appendChild(mt);
+    crs.appendChild(meet);
+  }
 
   if (c.learn.length) {
     var ov = el('div', 'crs-overview');
