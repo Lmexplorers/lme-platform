@@ -634,6 +634,7 @@
         '<button class="bk-btn ghost" id="eDocx">DOCX</button>' +
         '<a class="bk-btn soft" href="#/cover/' + p.id + '">🖼️ ' + t('nav_cover') + '</a>' +
         '<a class="bk-btn soft" href="#/publishing/' + p.id + '">🚀</a>' +
+        '<button class="bk-btn ' + (BK.layoutEd && BK.layoutEd.enabled ? 'primary' : 'soft') + '" id="eLayoutMode">🎯 ' + (no ? 'Flytt og tilpass' : 'Move and adjust') + '</button>' +
         '<button class="bk-btn ghost" id="eGenAll">🎨 ' + (no ? 'Manglende bilder' : 'Missing images') + '</button>' +
         '<button class="bk-btn ghost" id="eCopyPrompts">📋 ' + (no ? 'Alle prompter' : 'All prompts') + '</button>' +
         '<label class="bk-btn ghost" style="cursor:pointer">📥 ' + (no ? 'Importer bilder' : 'Import images') + '<input id="eImportImgs" type="file" accept="image/*" multiple style="display:none"></label>' +
@@ -665,6 +666,7 @@
       var stage = $('#eStage');
       stage.innerHTML = BK.gen.renderPage(p, p.pages[cur], cur, p.pages.length);
       mountSheets(stage);
+      if (BK.layoutEd) BK.layoutEd.mount(stage, p, cur, function () { renderStage(true); });
       if (!skipPanel) renderEditPanel();
     }
 
@@ -1086,6 +1088,15 @@
     $('#eTitle').onblur = function () {
       p.title = this.textContent.trim() || t('untitled');
       BK.touch(p);
+    };
+    $('#eLayoutMode').onclick = function () {
+      BK.layoutEd.enabled = !BK.layoutEd.enabled;
+      this.classList.toggle('primary', BK.layoutEd.enabled);
+      this.classList.toggle('soft', !BK.layoutEd.enabled);
+      renderStage(true);
+      if (BK.layoutEd.enabled) {
+        BK.toast(no ? 'Flytt og tilpass er på: trykk på tekst eller bilde på siden.' : 'Move and adjust is on: tap text or an image on the page.');
+      }
     };
     $('#ePdf').onclick = function () { BK.exp.printProject(p); };
     $('#ePng').onclick = function () { BK.exp.downloadPageImage(p, cur, 'png'); };

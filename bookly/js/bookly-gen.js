@@ -563,6 +563,52 @@
   var R = {};
   gen.renderers = R;
 
+  /* ============ LAYOUT: flytt og tilpass (Canva-aktig) ============
+     Hver side kan ha page.data.layout = { <element>: {dx,dy,w,zoom,px,py,mode} }.
+     dx/dy: forskyvning i % av siden. w: rammebredde i %. zoom: 100-300.
+     px/py: hvilken del av bildet som vises (0-100). mode: cover|contain.
+     Brukes av baade forhaandsvisning og alle eksporter (samme renderere). */
+  function num(v, lo, hi, def) {
+    v = parseFloat(v);
+    if (isNaN(v)) return def;
+    return Math.min(hi, Math.max(lo, v));
+  }
+  gen.layOf = function (d, key) { return (d && d.layout && d.layout[key]) || {}; }
+
+  /* Stil-tillegg som gjoer et element flyttbart (legges paa eksisterende element). */
+  gen.layStyle = function (d, key) {
+    var l = gen.layOf(d, key);
+    var dx = num(l.dx, -100, 100, 0), dy = num(l.dy, -100, 100, 0);
+    if (!dx && !dy) return 'position:relative;';
+    return 'position:relative;left:' + dx + '%;top:' + dy + '%;';
+  };
+
+  /* Bilderamme med fyll/panorering/zoom. Bildet fyller rammen (cover) som
+     standard, saa liggende og staaende bilder passer ogsaa paa kvadratsider. */
+  gen.imgFrame = function (d, opts) {
+    opts = opts || {};
+    var l = gen.layOf(d, 'img');
+    var zoom = num(l.zoom, 100, 300, 100);
+    var px = num(l.px, 0, 100, 50);
+    var py = num(l.py, 0, 100, 50);
+    var mode = l.mode === 'contain' || l.mode === 'cover' ? l.mode : (opts.defMode || 'cover');
+    var w = num(l.w, 20, 100, opts.defW || 100);
+    var dx = num(l.dx, -100, 100, 0), dy = num(l.dy, -100, 100, 0);
+    var frameStyle = 'position:relative;overflow:hidden;border-radius:' + (opts.radius || '4mm') + ';' +
+      'width:' + w + '%;height:100%;' + (opts.frameStyle || '');
+    if (dx || dy) frameStyle += 'left:' + dx + '%;top:' + dy + '%;';
+    var imgStyle = 'width:100%;height:100%;display:block;object-fit:' + mode +
+      ';object-position:' + px + '% ' + py + '%;';
+    if (zoom !== 100) imgStyle += 'transform:scale(' + (zoom / 100) + ');transform-origin:' + px + '% ' + py + '%;';
+    return '<div data-el="img" data-img-frame="1" style="' + frameStyle + '">' +
+      '<img src="' + d.image + '" alt="" draggable="false" style="' + imgStyle + '"/></div>';
+  };
+
+  /* Kvadratisk plassholder-markering: samme fasong som bildene som genereres. */
+  gen.illusBox = function (inner, extraStyle) {
+    return '<div class="illus-box" style="aspect-ratio:1/1;height:100%;max-width:100%;margin:0 auto;' + (extraStyle || '') + '">' + inner + '</div>';
+  };
+
   function sheet(project, page, idx, total, bodyHtml, opts) {
     opts = opts || {};
     var size = BK.sizeOf(project);
@@ -593,8 +639,8 @@
       lime: 'linear-gradient(160deg,#f0fadd,#ffffff 60%,#e6f5c8)',
       lemon: 'linear-gradient(160deg,#fff8db,#ffffff 60%,#ffefb3)',
     };
-    var img = d.image ? '<div style="flex:1;display:flex;align-items:center;justify-content:center;min-height:0">' +
-        '<img src="' + d.image + '" alt="" style="max-width:88%;max-height:100%;border-radius:5mm;box-shadow:0 4mm 10mm rgba(176,36,88,.18)"/></div>'
+    var img = d.image ? '<div style="flex:1;display:flex;align-items:center;justify-content:center;min-height:0;margin:5mm 0">' +
+        gen.imgFrame(d, { defW: 88, radius: '5mm', frameStyle: 'box-shadow:0 4mm 10mm rgba(176,36,88,.18);' }) + '</div>'
       : '<div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:46mm">' + (d.emoji || '🌸') + '</div>';
     var tSizes = { s: '22pt', m: '30pt', l: '38pt', xl: '46pt' };
     var tSize = tSizes[d.titleSize] || '30pt';
@@ -602,11 +648,11 @@
     var tFont = (gen.COVER_FONTS[d.titleFont] || gen.COVER_FONTS.sasson).css;
     return '<div class="bk-sheet" data-page="' + i + '" style="width:' + size.w + 'mm;height:' + size.h + 'mm;background:' + (bgs[theme] || bgs.pink) + '">' +
       '<div class="pg-inner" style="text-align:center;padding:16mm">' +
-      '<div style="font-size:9pt;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#b02458">' + esc(d.kicker || 'Little Montessori Explorers') + '</div>' +
-      '<div style="font-family:' + tFont + ';font-weight:700;font-size:' + tSize + ';line-height:1.12;color:' + tColor + ';margin-top:8mm">' + esc(d.title || p.title) + '</div>' +
-      (d.subtitle ? '<div style="font-size:13pt;color:#7a6a72;margin-top:4mm">' + esc(d.subtitle) + '</div>' : '') +
+      '<div data-el="kicker" style="' + gen.layStyle(d, 'kicker') + 'font-size:9pt;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#b02458">' + esc(d.kicker || 'Little Montessori Explorers') + '</div>' +
+      '<div data-el="title" style="' + gen.layStyle(d, 'title') + 'font-family:' + tFont + ';font-weight:700;font-size:' + tSize + ';line-height:1.12;color:' + tColor + ';margin-top:8mm">' + esc(d.title || p.title) + '</div>' +
+      (d.subtitle ? '<div data-el="subtitle" style="' + gen.layStyle(d, 'subtitle') + 'font-size:13pt;color:#7a6a72;margin-top:4mm">' + esc(d.subtitle) + '</div>' : '') +
       img +
-      '<div style="font-size:12pt;font-weight:800;color:#b02458">' + esc(d.author || '') + '</div>' +
+      '<div data-el="author" style="' + gen.layStyle(d, 'author') + 'font-size:12pt;font-weight:800;color:#b02458">' + esc(d.author || '') + '</div>' +
       '</div></div>';
   };
 
@@ -614,9 +660,9 @@
     var d = pg.data || {};
     return sheet(p, pg, i, n,
       '<div style="display:flex;flex-direction:column;height:100%;justify-content:center;max-width:80%;margin:0 auto;text-align:center;gap:6mm">' +
-      '<div style="font-family:\'Sasson Montessori\',\'Playpen Sans\',sans-serif;font-size:14pt;color:#b02458">' + esc(d.hook || '') + '</div>' +
-      '<div style="font-size:11pt;line-height:1.8">' + esc(d.text || '') + '</div>' +
-      (d.bio ? '<div style="font-size:9.5pt;color:#7a6a72">' + esc(d.bio) + '</div>' : '') +
+      '<div data-el="hook" style="' + gen.layStyle(d, 'hook') + 'font-family:\'Sasson Montessori\',\'Playpen Sans\',sans-serif;font-size:14pt;color:#b02458">' + esc(d.hook || '') + '</div>' +
+      '<div data-el="text" style="' + gen.layStyle(d, 'text') + 'font-size:11pt;line-height:1.8">' + esc(d.text || '') + '</div>' +
+      (d.bio ? '<div data-el="bio" style="' + gen.layStyle(d, 'bio') + 'font-size:9.5pt;color:#7a6a72">' + esc(d.bio) + '</div>' : '') +
       '<div style="margin-top:8mm;border:1pt solid #d8c4ce;border-radius:2mm;height:18mm;width:42mm;align-self:center;display:flex;align-items:center;justify-content:center;font-size:8pt;color:#9b8b93">ISBN / EAN-13</div>' +
       '</div>', { noHead: true, noFoot: true });
   };
@@ -636,9 +682,9 @@
     var d = pg.data || {};
     return sheet(p, pg, i, n,
       '<div style="display:flex;flex-direction:column;height:100%;gap:5mm">' +
-      '<div style="white-space:pre-wrap;font-size:11pt;line-height:1.8">' + esc(d.text || '') + '</div>' +
+      '<div data-el="text" style="' + gen.layStyle(d, 'text') + 'white-space:pre-wrap;font-size:11pt;line-height:1.8">' + esc(d.text || '') + '</div>' +
       (d.image ? '<div style="flex:1;display:flex;align-items:center;justify-content:center;min-height:0">' +
-        '<img src="' + d.image + '" alt="" style="max-width:100%;max-height:100%;border-radius:4mm;object-fit:contain"/></div>' : '') +
+        gen.imgFrame(d, { defW: 100 }) + '</div>' : '') +
       '</div>');
   };
 
@@ -648,12 +694,13 @@
        teksten ligger under. Kort sidetekst = stor illustrasjon. */
     var illus = d.image
       ? '<div style="flex:2.2;display:flex;align-items:center;justify-content:center;min-height:0">' +
-        '<img src="' + d.image + '" alt="" style="max-width:100%;max-height:100%;border-radius:4mm;object-fit:contain"/></div>'
-      : '<div class="illus-box" style="flex:2.2"><div style="font-size:10mm">🎨</div>' +
-        '<div><strong>' + (BK.lang() === 'no' ? 'Illustrasjon' : 'Illustration') + ':</strong> ' + esc(d.illustration || '') + '</div></div>';
+        gen.imgFrame(d, { defW: 100 }) + '</div>'
+      : '<div style="flex:2.2;min-height:0;display:flex;justify-content:center">' +
+        gen.illusBox('<div style="font-size:10mm">🎨</div>' +
+        '<div><strong>' + (BK.lang() === 'no' ? 'Illustrasjon' : 'Illustration') + ':</strong> ' + esc(d.illustration || '') + '</div>') + '</div>';
     return sheet(p, pg, i, n,
       '<div style="display:flex;flex-direction:column;height:100%;gap:5mm">' + illus +
-      '<div class="story-text" style="flex:1;min-height:0">' + esc(d.text || '') + '</div>' +
+      '<div class="story-text" data-el="text" style="' + gen.layStyle(d, 'text') + 'flex:1;min-height:0">' + esc(d.text || '') + '</div>' +
       '</div>', {});
   };
 
@@ -676,7 +723,7 @@
     var size = BK.sizeOf(p);
     var lang = BK.lang();
     var inner = d.image
-      ? '<img src="' + d.image + '" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:' + (d.fit === 'contain' ? 'contain' : 'cover') + '"/>'
+      ? gen.imgFrame(d, { defW: 100, radius: '0', defMode: d.fit === 'contain' ? 'contain' : 'cover', frameStyle: 'position:absolute;inset:0;' })
       : '<div class="pg-inner"><div class="illus-box" style="height:100%"><div style="font-size:12mm">🖼️</div>' +
         '<div style="max-width:80%">' + (lang === 'no'
           ? 'Last opp et bilde som fyller hele siden, f.eks. en side du har designet i Canva (eksporter som PNG eller JPG i sidens format).'

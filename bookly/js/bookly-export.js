@@ -57,6 +57,55 @@
   /* Foretrukket vei: html2canvas tegner siden direkte til canvas og virker i
      alle nettlesere (Safari/Firefox blokkerer SVG foreignObject-metoden).
      SVG-metoden beholdes som reserve. */
+
+  /* html2canvas stoetter ikke object-fit/object-position/zoom paa <img>.
+     Derfor tegnes hver bilderamme ([data-img-frame]) om til en canvas med
+     samme beskjaering som CSS-en gir, foer html2canvas tar over. */
+  function flattenImageFrames(sheetEl, pxScale) {
+    var frames = sheetEl.querySelectorAll('[data-img-frame]');
+    var jobs = [];
+    Array.prototype.forEach.call(frames, function (frame) {
+      var img = frame.querySelector('img');
+      if (!img) return;
+      jobs.push(new Promise(function (resolve) {
+        function run() {
+          try {
+            var fw = frame.clientWidth, fh = frame.clientHeight;
+            if (!fw || !fh || !img.naturalWidth) return resolve();
+            var cs = getComputedStyle(img);
+            var fit = cs.objectFit === 'contain' ? 'contain' : 'cover';
+            var pos = (cs.objectPosition || '50% 50%').split(' ');
+            var px = parseFloat(pos[0]); if (isNaN(px)) px = 50;
+            var py = parseFloat(pos[1]); if (isNaN(py)) py = 50;
+            var z = 1;
+            var m = /scale\(([\d.]+)\)/.exec(img.style.transform || '');
+            if (m) z = parseFloat(m[1]) || 1;
+            var iw = img.naturalWidth, ih = img.naturalHeight;
+            var fa = fw / fh, ia = iw / ih;
+            var bw, bh;
+            if (fit === 'contain' ? ia > fa : ia < fa) { bw = fw; bh = fw / ia; }
+            else { bh = fh; bw = fh * ia; }
+            var bx = (fw - bw) * px / 100, by = (fh - bh) * py / 100;
+            var ox = fw * px / 100, oy = fh * py / 100; // zoom-senter (transform-origin)
+            var X = ox + (bx - ox) * z, Y = oy + (by - oy) * z;
+            var canvas = document.createElement('canvas');
+            canvas.width = Math.max(1, Math.round(fw * pxScale));
+            canvas.height = Math.max(1, Math.round(fh * pxScale));
+            canvas.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%;display:block';
+            var g = canvas.getContext('2d');
+            g.scale(pxScale, pxScale);
+            g.drawImage(img, X, Y, bw * z, bh * z);
+            img.style.display = 'none';
+            frame.appendChild(canvas);
+            resolve();
+          } catch (e) { resolve(); }
+        }
+        if (img.complete) run();
+        else { img.onload = run; img.onerror = function () { resolve(); }; }
+      }));
+    });
+    return Promise.all(jobs);
+  }
   exp.pageToImage = function (project, pageIdx, format, scale) {
     var pages = project.pages;
     var pgObj = pages[pageIdx];
@@ -79,6 +128,8 @@
         ? Promise.resolve(document.fonts.ready).catch(function () {})
         : Promise.resolve();
       return fontsReady.then(function () {
+        return flattenImageFrames(sheetEl, (300 / 96) * (scale || 1));
+      }).then(function () {
         return window.html2canvas(sheetEl, {
           scale: (300 / 96) * (scale || 1),
           backgroundColor: '#ffffff',
