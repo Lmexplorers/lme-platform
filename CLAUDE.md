@@ -47,8 +47,9 @@ etter valgt språk). Lag aldri ny norsk-only tekst uten engelsk oversettelse.
 
 ## 🚀 Utgivelse / git
 
-- Utvikling skjer på arbeidsbranchen; publiser ved å ff-merge til `main` og pushe.
-  Cloudflare Pages bygger fra `main`.
+- **Publiser alltid med en gang** (avtalt med Renate 3. juli 2026): når en endring
+  er ferdig og verifisert, commit på arbeidsbranchen, ff-merge til `main` og push
+  umiddelbart, uten å vente på klarsignal. Cloudflare Pages bygger fra `main`.
 - Push med retry (2s, 4s, 8s, 16s) ved nettverksfeil.
 - Ikke lag pull request med mindre Renate ber om det.
 
