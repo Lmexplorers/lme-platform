@@ -185,8 +185,33 @@
   }
 
   /* ---------- trigger ---------- */
+  // Personvern-lenke i bunnen på hele plattforma (GDPR). Ikke på selve
+  // personvern-siden, og aldri to ganger.
+  function mountLegalFooter() {
+    var path = (location.pathname || "").replace(/\/+$/, "");
+    if (path === "/personvern") return;
+    if (document.querySelector('a[href="/personvern"], a[href$="/personvern"]')) return;
+    var link = '<a href="/personvern" style="color:inherit;opacity:.85;text-decoration:underline;font:inherit">' +
+      T("Personvern", "Privacy") + "</a>";
+    var footers = document.querySelectorAll("footer");
+    if (footers.length) {
+      var span = document.createElement("span");
+      span.style.cssText = "display:inline-block;margin-left:12px;font-size:13px;opacity:.85";
+      span.innerHTML = link;
+      footers[footers.length - 1].appendChild(span);
+      return;
+    }
+    // Ingen footer: en diskré linje nederst, i vanlig flyt (overlapper ingenting).
+    var bar = document.createElement("div");
+    bar.setAttribute("data-lme-legal", "1");
+    bar.style.cssText = "text-align:center;padding:22px 16px;font-size:13px;color:#8a7a84;opacity:.9";
+    bar.innerHTML = link;
+    document.body.appendChild(bar);
+  }
+
   function mount() {
     injectStyles();
+    mountLegalFooter();
     // Egen knapp om siden har en, ellers en flytende knapp.
     var custom = document.querySelectorAll("[data-lme-visibility]");
     if (custom.length) {

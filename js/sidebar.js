@@ -55,6 +55,7 @@
     '  <a href="/min-konto" class="sidebar-item"><span class="si-icon">🌷</span><span class="si-label" data-no="Merke" data-en="Brand">Merke</span></a>',
     '  <a href="/min-konto" class="sidebar-item"><span class="si-icon">⚙️</span><span class="si-label" data-no="Innstillinger" data-en="Settings">Innstillinger</span></a>',
     '  <a href="/help/contact" class="sidebar-item"><span class="si-icon">💬</span><span class="si-label" data-no="Hjelp &amp; kontakt" data-en="Help &amp; contact">Hjelp &amp; kontakt</span></a>',
+    '  <a href="/personvern" class="sidebar-item"><span class="si-icon">🔒</span><span class="si-label" data-no="Personvern" data-en="Privacy">Personvern</span></a>',
     '</div>',
     '<div class="sidebar-ai-card">',
     '  <div class="ai-avatar">R</div>',
