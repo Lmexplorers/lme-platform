@@ -90,16 +90,76 @@ function buildPrompt(text, character) {
 }
 
 // =====================================================
+// Bildemotorer — brukeren velger hvilken. Hver returnerer
+// { bytes, contentType } | { url } | { error, status?, detail? }.
+// Nøklene ligger som hemmelige miljøvariabler på plattformen.
+// =====================================================
+async function genOpenAI(env, prompt, size) {
+  const key = env.OPENAI_API_KEY || env.IMAGE_OPENAI_KEY || env.IMAGE_API_KEY;
+  if (!key) return { error: "OpenAI er ikke koblet til ennå (OPENAI_API_KEY mangler).", status: 400 };
+  const base = (env.IMAGE_OPENAI_BASE || env.IMAGE_API_BASE || "https://api.openai.com/v1").replace(/\/$/, "");
+  const model = env.IMAGE_OPENAI_MODEL || env.IMAGE_MODEL || "gpt-image-1";
+  const r = await fetch(`${base}/images/generations`, {
+    method: "POST",
+    headers: { "Authorization": `Bearer ${key}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ model, prompt, size, n: 1 }),
+  });
+  if (!r.ok) return { error: `OpenAI svarte ${r.status}.`, detail: (await r.text()).slice(0, 300) };
+  const data = await r.json();
+  const item = data && data.data && data.data[0];
+  if (item && item.b64_json) return { bytes: b64ToBytes(item.b64_json) };
+  if (item && item.url) return { url: item.url };
+  return { error: "OpenAI ga ikke noe bilde tilbake." };
+}
+
+async function genGemini(env, prompt, size) {
+  const key = env.GEMINI_API_KEY || env.GOOGLE_API_KEY;
+  if (!key) return { error: "Gemini er ikke koblet til ennå (GEMINI_API_KEY mangler).", status: 400 };
+  const model = env.GEMINI_IMAGE_MODEL || "gemini-2.5-flash-image";
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
+  const r = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      generationConfig: { responseModalities: ["IMAGE"], imageConfig: { aspectRatio: aspectFor(size) } },
+    }),
+  });
+  if (!r.ok) return { error: `Gemini svarte ${r.status}.`, detail: (await r.text()).slice(0, 300) };
+  const data = await r.json();
+  const parts = (((data.candidates || [])[0] || {}).content || {}).parts || [];
+  const img = parts.find((p) => p && p.inlineData && p.inlineData.data);
+  if (img) return { bytes: b64ToBytes(img.inlineData.data), contentType: img.inlineData.mimeType || "image/png" };
+  return { error: "Gemini ga ikke noe bilde tilbake." };
+}
+
+async function genHiggsfield(env, prompt, size) {
+  // Higgsfield sitt API er asynkront (send inn, så poll). Kobles på når nøkkelen finnes.
+  const key = env.HIGGSFIELD_API_KEY;
+  const secret = env.HIGGSFIELD_SECRET;
+  if (!key || !secret) {
+    return { error: "Higgsfield er ikke koblet til ennå. Legg inn HIGGSFIELD_API_KEY og HIGGSFIELD_SECRET, så fullfører jeg koblingen.", status: 400 };
+  }
+  // Plass til den asynkrone flyten når nøklene er på plass.
+  return { error: "Higgsfield-koblingen fullføres når nøkkelen er testet. Bruk OpenAI eller Gemini i mellomtiden.", status: 501 };
+}
+
+const PROVIDERS = { openai: genOpenAI, gemini: genGemini, higgsfield: genHiggsfield };
+
+function aspectFor(size) {
+  switch (size) {
+    case "1024x1536": return "2:3";
+    case "1536x1024": return "3:2";
+    default: return "1:1";
+  }
+}
+
+// =====================================================
 // POST — generer og lagre bilde
 // =====================================================
 export async function onRequestPost(context) {
   const { request, env } = context;
   if (!env.BUILDER_KV) return json({ error: "not_configured" }, 200);
-
-  const key = env.IMAGE_API_KEY || env.OPENAI_API_KEY;
-  if (!key) {
-    return json({ error: "Bildemotor er ikke koblet til ennå (IMAGE_API_KEY mangler)." }, 400);
-  }
 
   let body;
   try { body = await request.json(); }
@@ -108,37 +168,29 @@ export async function onRequestPost(context) {
   let character = String(body.character || "none").toLowerCase();
   if (!["none", "mia", "teo", "both"].includes(character)) character = "none";
 
-  const base = (env.IMAGE_API_BASE || "https://api.openai.com/v1").replace(/\/$/, "");
-  const model = env.IMAGE_MODEL || "gpt-image-1";
+  let provider = String(body.provider || "openai").toLowerCase();
+  if (!PROVIDERS[provider]) provider = "openai";
+
   const prompt = buildPrompt(body.text, character);
   const size = sizeFor(body.platform);
 
-  let bytes, contentType = "image/png";
+  let out;
   try {
-    const r = await fetch(`${base}/images/generations`, {
-      method: "POST",
-      headers: { "Authorization": `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ model, prompt, size, n: 1 }),
-    });
-    if (!r.ok) {
-      const t = await r.text();
-      return json({ error: `Bildemotor svarte ${r.status}.`, detail: t.slice(0, 300) }, 502);
-    }
-    const data = await r.json();
-    const item = data && data.data && data.data[0];
-    if (item && item.b64_json) {
-      bytes = b64ToBytes(item.b64_json);
-    } else if (item && item.url) {
-      // Noen modeller returnerer en midlertidig URL; hent bytene så vi hoster den selv.
-      const ir = await fetch(item.url);
-      bytes = new Uint8Array(await ir.arrayBuffer());
-      contentType = ir.headers.get("Content-Type") || contentType;
-    } else {
-      return json({ error: "Fikk ikke noe bilde tilbake." }, 502);
-    }
+    out = await PROVIDERS[provider](env, prompt, size);
   } catch (e) {
     return json({ error: "Kom ikke i kontakt med bildemotoren." }, 502);
   }
+  if (out && out.error) return json({ error: out.error, detail: out.detail }, out.status || 502);
+
+  let bytes = out.bytes, contentType = out.contentType || "image/png";
+  if (!bytes && out.url) {
+    try {
+      const ir = await fetch(out.url);
+      bytes = new Uint8Array(await ir.arrayBuffer());
+      contentType = ir.headers.get("Content-Type") || contentType;
+    } catch (e) { return json({ error: "Klarte ikke å hente bildet fra motoren." }, 502); }
+  }
+  if (!bytes) return json({ error: "Fikk ikke noe bilde tilbake." }, 502);
 
   const id = crypto.randomUUID().replace(/-/g, "");
   try {

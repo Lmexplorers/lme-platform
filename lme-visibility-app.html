@@ -428,8 +428,11 @@
   }
 
   function isOwner(){try{return localStorage.getItem('lme-owner')==='1';}catch(e){return false;}}
+  var ENGINES=[{k:'openai',n:'OpenAI'},{k:'gemini',n:'Gemini'},{k:'higgsfield',n:'Higgsfield'}];
+  function loadEngine(){try{var v=localStorage.getItem('lme-vis-engine');return v&&ENGINES.some(function(e){return e.k===v;})?v:'openai';}catch(e){return 'openai';}}
+  function saveEngine(v){try{localStorage.setItem('lme-vis-engine',v);}catch(e){}}
 
-  // Bilde-verktøy: karaktervalg (kun for Renate) + «Lag bilde» + forhåndsvisning + URL-felt.
+  // Bilde-verktøy: karaktervalg (kun for Renate) + bildemotor + «Lag bilde» + forhåndsvisning + URL-felt.
   function imgTool(c){
     var owner=isOwner();
     var opts='<option value="none">'+T('Uten karakter (Montessori-scene)','No character (Montessori scene)')+'</option>';
@@ -438,10 +441,12 @@
             '<option value="teo">'+T('Teo','Teo')+'</option>'+
             '<option value="both">'+T('Mia og Teo','Mia and Teo')+'</option>';
     }
+    var cur=loadEngine();
+    var eng='<select class="engSel" title="'+T('Bildemotor','Image engine')+'">'+ENGINES.map(function(e){return '<option value="'+e.k+'"'+(e.k===cur?' selected':'')+'>'+e.n+'</option>';}).join('')+'</select>';
     var ph=c.needsMedia?T('Bilde-URL (kreves)','Image URL (required)'):T('Bilde-URL (valgfritt)','Image URL (optional)');
     return '<div class="imgtool">'+
-      '<div class="imgtoolRow"><select class="charSel">'+opts+'</select>'+
-      '<button class="genImg" data-gen>🎨 '+T('Lag bilde','Create image')+'</button></div>'+
+      '<div class="imgtoolRow"><select class="charSel">'+opts+'</select>'+eng+'</div>'+
+      '<div class="imgtoolRow"><button class="genImg" data-gen>🎨 '+T('Lag bilde','Create image')+'</button></div>'+
       '<div class="imgPrev" data-prev></div>'+
       '<div class="mediaRow"><input class="pubImg" placeholder="'+esc(ph)+'"></div></div>';
   }
@@ -463,12 +468,12 @@
   var IMGBASE=(window.LME_IMAGE_BASE||location.origin).replace(/\/$/,'');
   function makeImage(card){
     var ch=card.getAttribute('data-ch');var c=CH.filter(function(x){return x.k===ch;})[0];if(!c)return;
-    var btn=card.querySelector('[data-gen]');var sel=card.querySelector('.charSel');
+    var btn=card.querySelector('[data-gen]');var sel=card.querySelector('.charSel');var eng=card.querySelector('.engSel');
     var prev=card.querySelector('[data-prev]');var urlIn=card.querySelector('.pubImg');
-    var character=sel?sel.value:'none';
-    btn.disabled=true;var lbl=btn.innerHTML;btn.innerHTML='<span class="sp" style="border-top-color:var(--pink-500);border-color:rgba(200,60,120,.3);border-top-color:var(--pink-500)"></span> '+T('Lager…','Creating…');
+    var character=sel?sel.value:'none';var provider=eng?eng.value:'openai';if(eng)saveEngine(provider);
+    btn.disabled=true;var lbl=btn.innerHTML;btn.innerHTML='<span class="sp" style="border-color:rgba(200,60,120,.3);border-top-color:var(--pink-500)"></span> '+T('Lager…','Creating…');
     fetch(IMGBASE+'/api/image',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({text:postText(card),character:character,platform:c.tt,lang:lang})})
+      body:JSON.stringify({text:postText(card),character:character,platform:c.tt,lang:lang,provider:provider})})
     .then(function(r){return r.json();}).then(function(res){
       btn.disabled=false;btn.innerHTML=lbl;
       if(res&&res.url){urlIn.value=res.url;prev.innerHTML='<img src="'+esc(res.url)+'" alt="">';prev.classList.add('on');toast(T('Bilde klart ✨','Image ready ✨'));}
