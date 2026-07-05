@@ -194,6 +194,7 @@
   var tone='varm';
 
   function T(no,en){return lang==='en'?en:no;}
+  function asText(v){if(v==null)return"";if(typeof v==="string")return v;if(typeof v==="object"){var a=Object.keys(v).map(function(k){return v[k];}).filter(function(x){return typeof x==="string";});return a.join("\n\n")||JSON.stringify(v);}return String(v);}
   function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},1500);}
 
@@ -256,7 +257,7 @@
   function render(obj){
     var stage=document.getElementById('stage');
     var html='<div class="gallery">';var any=false;
-    CH.forEach(function(c){var v=obj[c.k];if(!v)return;any=true;html+=postCard(c,v);});
+    CH.forEach(function(c){var v=asText(obj[c.k]);if(!v)return;any=true;html+=postCard(c,v);});
     html+='</div>';
     stage.innerHTML=any?html:'<div class="empty"><div class="ico">🙈</div><h3>'+T('Ingen forslag denne gangen','No suggestions this time')+'</h3><p>'+T('Prøv en litt lengre idé.','Try a slightly longer idea.')+'</p></div>';
     document.getElementById('regen').style.display=any?'':'none';

@@ -333,6 +333,7 @@
   var CH=[{k:'instagram',i:'📸',no:'Instagram',en:'Instagram'},{k:'pinterest',i:'📌',no:'Pinterest',en:'Pinterest'},
     {k:'facebook',i:'👍',no:'Facebook',en:'Facebook'},{k:'tiktok',i:'🎵',no:'TikTok',en:'TikTok'},
     {k:'reelScript',i:'🎬',no:'Reel',en:'Reel'},{k:'email',i:'✉️',no:'E-post',en:'Email'}];
+  function asText(v){if(v==null)return"";if(typeof v==="string")return v;if(typeof v==="object"){var a=Object.keys(v).map(function(k){return v[k];}).filter(function(x){return typeof x==="string";});return a.join("\n\n")||JSON.stringify(v);}return String(v);}
   function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   document.getElementById('run').addEventListener('click',function(){
     var idea=document.getElementById('idea').value.trim();
@@ -348,7 +349,7 @@
       var html='';
       CH.forEach(function(c){ if(!o[c.k])return;
         html+='<div class="pcard"><div class="h"><span>'+c.i+'</span><b>'+(lang==='no'?c.no:c.en)+'</b>'+
-          '<button class="c" data-copy>'+(lang==='no'?'Kopier':'Copy')+'</button></div><div class="t">'+esc(o[c.k])+'</div></div>';
+          '<button class="c" data-copy>'+(lang==='no'?'Kopier':'Copy')+'</button></div><div class="t">'+esc(asText(o[c.k]))+'</div></div>';
       });
       out.innerHTML=html; hint.textContent=lang==='no'?'Ferdig! Kopier det du vil bruke. Dette er bare en smakebit av den fulle appen.':'Done! Copy what you want. This is just a taste of the full app.';
       out.querySelectorAll('[data-copy]').forEach(function(b){b.addEventListener('click',function(){
