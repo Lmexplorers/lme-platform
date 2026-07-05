@@ -111,6 +111,16 @@
   .post .pub .pubBtn:disabled{opacity:.55;cursor:default;}
   .post .pub .st{font-size:11.5px;line-height:1.4;}
   .post .pub .st.ok{color:#1f7a4d;} .post .pub .st.err{color:#c1385f;} .post .pub .st.muted{color:var(--ink-muted);}
+  .post .imgtool{display:flex;flex-direction:column;gap:7px;}
+  .post .imgtool .imgtoolRow{display:flex;gap:7px;}
+  .post .imgtool select{font-size:12.5px;padding:8px 10px;border-radius:11px;flex:1;}
+  .post .imgtool .genImg{font-family:var(--fh);font-weight:700;font-size:12px;border-radius:999px;padding:8px 12px;cursor:pointer;border:1.5px solid var(--pink-200);background:var(--pink-50);color:var(--pink-600);white-space:nowrap;}
+  .post .imgtool .genImg:disabled{opacity:.55;cursor:default;}
+  .post .imgtool .imgPrev{display:none;}
+  .post .imgtool .imgPrev.on{display:block;}
+  .post .imgtool .imgPrev img{width:100%;border-radius:12px;display:block;border:1px solid var(--line);}
+  .sheet .own{display:flex;align-items:flex-start;gap:9px;border:1px solid var(--line);border-radius:14px;padding:11px 13px;margin:2px 0 12px;font-size:12.5px;color:var(--ink-soft);line-height:1.45;}
+  .sheet .own input{width:auto;margin-top:2px;}
   .stage-head .pubAll{font-family:var(--fh);font-weight:700;font-size:12px;border:1.5px solid var(--pink-200);background:var(--surface);color:var(--pink-600);border-radius:999px;padding:7px 13px;cursor:pointer;}
   .stage-head .gear{margin-left:auto;background:none;border:none;font-size:18px;cursor:pointer;line-height:1;}
 
@@ -206,6 +216,7 @@
   <div class="sheet">
     <h3 data-no="Koble til Blotato" data-en="Connect Blotato">Koble til Blotato</h3>
     <p class="lead" data-no="Lim inn konto-ID-en fra Blotato for hver app du vil publisere til. Du finner dem i Blotato under «Accounts». Nøkkelen din ligger trygt på serveren, den lagres aldri her." data-en="Paste the account ID from Blotato for each app you want to publish to. Find them in Blotato under “Accounts”. Your key stays safely on the server, never stored here.">Lim inn konto-ID fra Blotato for hver app.</p>
+    <label class="own"><input type="checkbox" id="blOwner"><span data-no="Jeg er Renate. Vis karaktervalg for Mia og Teo når jeg lager bilder. (Andre brukere får kun nøytrale Montessori-bilder.)" data-en="I am Renate. Show the Mia and Teo character choices when I create images. (Other users only get neutral Montessori images.)">Jeg er Renate. Vis karaktervalg for Mia og Teo.</span></label>
     <div id="blFields"></div>
     <button class="chip" id="blFetch" style="margin-bottom:6px" data-no="↺ Hent kontoene mine fra Blotato" data-en="↺ Fetch my accounts from Blotato">↺ Hent kontoene mine fra Blotato</button>
     <div class="row">
@@ -257,7 +268,7 @@
       h+='</div>';wrap.insertAdjacentHTML('beforeend',h);
     });
   }
-  function openBl(){buildBlFields();applyStatic();document.getElementById('blOv').classList.add('show');}
+  function openBl(){buildBlFields();var ow=document.getElementById('blOwner');if(ow)ow.checked=isOwner();applyStatic();document.getElementById('blOv').classList.add('show');}
   function closeBl(){document.getElementById('blOv').classList.remove('show');}
   function readBlFields(){
     var cfg={};
@@ -338,7 +349,7 @@
   document.getElementById('gear').addEventListener('click',openBl);
   document.getElementById('blCancel').addEventListener('click',closeBl);
   document.getElementById('blOv').addEventListener('click',function(e){if(e.target===this)closeBl();});
-  document.getElementById('blSave').addEventListener('click',function(){saveBl(readBlFields());closeBl();toast(T('Lagret 💾','Saved 💾'));if(last&&last.lastObj)render(last.lastObj);});
+  document.getElementById('blSave').addEventListener('click',function(){var ow=document.getElementById('blOwner');try{localStorage.setItem('lme-owner',ow&&ow.checked?'1':'0');}catch(e){}saveBl(readBlFields());closeBl();toast(T('Lagret 💾','Saved 💾'));if(last&&last.lastObj)render(last.lastObj);});
   document.getElementById('blFetch').addEventListener('click',function(){
     var b=this;var lbl=b.textContent;b.textContent=T('Henter…','Fetching…');b.disabled=true;
     fetch(BASE+'/ai/blotato/accounts',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})
@@ -416,17 +427,53 @@
     return '<div class="post" data-ch="'+esc(c.k)+'">'+head+media+body+foot+pub+'</div>';
   }
 
+  function isOwner(){try{return localStorage.getItem('lme-owner')==='1';}catch(e){return false;}}
+
+  // Bilde-verktøy: karaktervalg (kun for Renate) + «Lag bilde» + forhåndsvisning + URL-felt.
+  function imgTool(c){
+    var owner=isOwner();
+    var opts='<option value="none">'+T('Uten karakter (Montessori-scene)','No character (Montessori scene)')+'</option>';
+    if(owner){
+      opts+='<option value="mia">'+T('Mia','Mia')+'</option>'+
+            '<option value="teo">'+T('Teo','Teo')+'</option>'+
+            '<option value="both">'+T('Mia og Teo','Mia and Teo')+'</option>';
+    }
+    var ph=c.needsMedia?T('Bilde-URL (kreves)','Image URL (required)'):T('Bilde-URL (valgfritt)','Image URL (optional)');
+    return '<div class="imgtool">'+
+      '<div class="imgtoolRow"><select class="charSel">'+opts+'</select>'+
+      '<button class="genImg" data-gen>🎨 '+T('Lag bilde','Create image')+'</button></div>'+
+      '<div class="imgPrev" data-prev></div>'+
+      '<div class="mediaRow"><input class="pubImg" placeholder="'+esc(ph)+'"></div></div>';
+  }
+
   // Publiseringsrad (kun for kanaler Blotato kan poste til).
   function pubRow(c){
     if(!c.tt)return '';
     var cfg=loadBl();var acc=cfg[c.k]&&cfg[c.k].accountId;
-    var mediaInput=c.needsMedia?'<div class="mediaRow"><input class="pubImg" data-no-ph="Lim inn bilde-URL (kreves)" data-en-ph="Paste image URL (required)" placeholder="'+T('Lim inn bilde-URL (kreves)','Paste image URL (required)')+'"></div>':'';
+    var tool=imgTool(c);
     if(!acc){
-      return '<div class="pub"><div class="st muted">'+T('Legg inn konto-ID i ⚙️ for å publisere til '+c.pl,'Add an account ID in ⚙️ to publish to '+c.pl)+'</div></div>';
+      return '<div class="pub">'+tool+'<div class="st muted">'+T('Legg inn konto-ID i ⚙️ for å publisere til '+c.pl,'Add an account ID in ⚙️ to publish to '+c.pl)+'</div></div>';
     }
-    return '<div class="pub">'+mediaInput+
+    return '<div class="pub">'+tool+
       '<button class="pubBtn" data-pub>'+c.ico+' '+T('Publiser til ','Publish to ')+esc(c.pl)+'</button>'+
       '<div class="st" data-pubst></div></div>';
+  }
+
+  // Lag bilde for ett kort.
+  var IMGBASE=(window.LME_IMAGE_BASE||location.origin).replace(/\/$/,'');
+  function makeImage(card){
+    var ch=card.getAttribute('data-ch');var c=CH.filter(function(x){return x.k===ch;})[0];if(!c)return;
+    var btn=card.querySelector('[data-gen]');var sel=card.querySelector('.charSel');
+    var prev=card.querySelector('[data-prev]');var urlIn=card.querySelector('.pubImg');
+    var character=sel?sel.value:'none';
+    btn.disabled=true;var lbl=btn.innerHTML;btn.innerHTML='<span class="sp" style="border-top-color:var(--pink-500);border-color:rgba(200,60,120,.3);border-top-color:var(--pink-500)"></span> '+T('Lager…','Creating…');
+    fetch(IMGBASE+'/api/image',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:postText(card),character:character,platform:c.tt,lang:lang})})
+    .then(function(r){return r.json();}).then(function(res){
+      btn.disabled=false;btn.innerHTML=lbl;
+      if(res&&res.url){urlIn.value=res.url;prev.innerHTML='<img src="'+esc(res.url)+'" alt="">';prev.classList.add('on');toast(T('Bilde klart ✨','Image ready ✨'));}
+      else{toast('⚠️ '+((res&&res.error)||T('Klarte ikke å lage bilde','Could not create image')));}
+    }).catch(function(){btn.disabled=false;btn.innerHTML=lbl;toast('⚠️ '+T('Nettverksfeil','Network error'));});
   }
 
   function render(obj){
@@ -446,6 +493,7 @@
       try{navigator.clipboard.writeText(txt);}catch(e){}toast(T('Kopiert!','Copied!'));
     });});
     stage.querySelectorAll('[data-pub]').forEach(function(btn){btn.addEventListener('click',function(){publishOne(btn.closest('.post'));});});
+    stage.querySelectorAll('[data-gen]').forEach(function(btn){btn.addEventListener('click',function(){makeImage(btn.closest('.post'));});});
   }
 
   function generate(reuse){
