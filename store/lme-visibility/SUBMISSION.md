@@ -31,9 +31,9 @@ Ingenting av det kan gjøres herfra, og det er derfor det står som steg til deg
   play.google.com/console. Android bygges med **Android Studio**, som går på
   Windows, Mac og Linux.
 - **Node.js** på maskinen (for Capacitor-kommandoene under).
-- En **personvernerklæring** på en offentlig nettadresse. Begge butikkene krever
-  det, og LME har ikke en egen personvern-side ennå. Si fra, så lager jeg
-  `/personvern` i samme stil som resten av plattforma.
+- En **personvernerklæring** på en offentlig nettadresse. Dette er nå på plass,
+  tospråklig, på `https://lmexplorers.com/personvern`. Bruk den som personvern-URL
+  i begge butikkene.
 
 ## 3. Bygg appen (Capacitor, både iOS og Android)
 
@@ -108,7 +108,7 @@ godtar PWA/TWA rett fram.
 
 - [ ] Apple Developer Program betalt (for iOS)
 - [ ] Google Play Console betalt (for Android)
-- [ ] Personvern-side publisert (be meg lage `/personvern`)
+- [x] Personvern-side publisert (`/personvern`, tospråklig)
 - [ ] `npm install` og `npx cap add ...` kjørt lokalt
 - [ ] Ikon og splash satt
 - [ ] Signeringsnøkkel laget og `.aab` / arkiv bygget

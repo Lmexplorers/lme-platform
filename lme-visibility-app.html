@@ -231,6 +231,9 @@
       <button id="blCancel" data-no="Lukk" data-en="Close">Lukk</button>
       <button class="prim" id="blSave" data-no="Lagre" data-en="Save">Lagre</button>
     </div>
+    <div style="text-align:center;margin-top:14px;font-size:12.5px;">
+      <a href="/personvern" target="_blank" rel="noopener" style="color:var(--pink-600);font-weight:700;text-decoration:none;" data-no="Personvern og GDPR" data-en="Privacy and GDPR">Personvern og GDPR</a>
+    </div>
   </div>
 </div>
 
@@ -383,7 +386,8 @@
     document.querySelectorAll('[data-no-ph]').forEach(function(el){el.setAttribute('placeholder',el.getAttribute('data-'+lang+'-ph')||'');});
   }
   function setLang(l){lang=l;document.documentElement.lang=l;try{localStorage.setItem('lme-lang',l);}catch(e){}
-    document.getElementById('lang').textContent=l==='no'?'EN 🌍':'NO 🇳🇴';document.getElementById('lng').value=l;buildChips();applyStatic();renderUsage();}
+    document.getElementById('lang').textContent=l==='no'?'EN 🌍':'NO 🇳🇴';document.getElementById('lng').value=l;buildChips();applyStatic();renderUsage();
+    if(last&&last.lastObj)render(last.lastObj);}
   document.getElementById('lang').addEventListener('click',function(){setLang(lang==='no'?'en':'no');});
   document.getElementById('lng').addEventListener('change',function(){setLang(this.value);});
 
