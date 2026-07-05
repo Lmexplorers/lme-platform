@@ -1,0 +1,17 @@
+{
+  "appId": "com.littlemontessoriexplorers.visibility",
+  "appName": "LME Visibility",
+  "webDir": "www",
+  "backgroundColor": "#fffcf9",
+  "server": {
+    "url": "https://lmexplorers.com/lme-visibility-app",
+    "cleartext": false
+  },
+  "ios": {
+    "contentInset": "always",
+    "backgroundColor": "#fffcf9"
+  },
+  "android": {
+    "backgroundColor": "#fffcf9"
+  }
+}

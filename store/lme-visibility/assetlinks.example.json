@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.littlemontessoriexplorers.visibility",
+      "sha256_cert_fingerprints": [
+        "ERSTATT_MED_SHA256_FRA_DIN_SIGNERINGSNOKKEL"
+      ]
+    }
+  }
+]

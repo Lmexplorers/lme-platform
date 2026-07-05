@@ -2,9 +2,17 @@
 <html lang="no">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title data-no="LME Visibility Studio" data-en="LME Visibility Studio">LME Visibility Studio</title>
 <meta name="description" data-no="Skriv en idé, få vakre innlegg til alle plattformer, i din egen merkevare-stemme." data-en="Write an idea, get beautiful posts for every platform, in your own brand voice.">
+<!-- Installérbar app (PWA) — grunnlaget for App Store / Google Play-pakking -->
+<link rel="manifest" href="/visibility.webmanifest">
+<meta name="theme-color" content="#e85a92">
+<link rel="apple-touch-icon" href="/images/app/visibility/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="LME Visibility">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -525,6 +533,9 @@
   document.getElementById('lang').textContent=lang==='no'?'EN 🌍':'NO 🇳🇴';
   document.getElementById('lng').value=lang;
   buildChips();initBrand();applyStatic();renderUsage();
+
+  // Installérbar app: registrer service worker (samme som resten av plattforma).
+  if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}
 })();
 </script>
 </body>
