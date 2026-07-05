@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-no="LME Visibility Studio" data-en="LME Visibility Studio">LME Visibility Studio</title>
+<meta name="description" data-no="Skriv en idé, få vakre innlegg til alle plattformer, i din egen merkevare-stemme." data-en="Write an idea, get beautiful posts for every platform, in your own brand voice.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  @font-face{font-family:'Sasson Montessori';src:url('/fonts/SassoonMontessori.woff2') format('woff2'),url('/fonts/SassoonMontessori.ttf') format('truetype');font-weight:normal;font-style:normal;font-display:swap;}
+  :root{
+    --pink-50:#fff5f8;--pink-100:#ffe8f0;--pink-200:#ffd1e1;--pink-300:#ffb3cd;
+    --pink-400:#ff8ab3;--pink-500:#e85a92;--pink-600:#c43d75;--pink-700:#8f2a55;
+    --gold:#caa46a;--gold-soft:#f4ead7;
+    --cream:#fffcf9;--surface:#ffffff;--ink:#3d2438;--ink-soft:#6b4760;--ink-muted:#9a8693;--line:#f0dde6;
+    --shadow-soft:0 10px 34px -18px rgba(196,61,117,.3);--shadow-med:0 22px 54px -26px rgba(80,30,60,.4);
+    --fh:'Playpen Sans',system-ui,sans-serif;--fb:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){:root{--cream:#160e14;--surface:#211621;--ink:#f4e9ef;--ink-soft:#c9b3c2;--ink-muted:#8f7889;--line:#382837;--pink-50:#241823;--gold-soft:#2a2416;}}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+  body{font-family:var(--fb);color:var(--ink);line-height:1.55;min-height:100vh;background:
+    radial-gradient(ellipse 60% 40% at 12% -5%,rgba(255,209,225,.34),transparent 60%),
+    radial-gradient(ellipse 50% 40% at 100% 0,rgba(244,234,215,.4),transparent 55%),var(--cream);}
+  h1,h2,h3,h4{font-family:var(--fh);font-weight:800;color:var(--ink);letter-spacing:-.01em;}
+  .top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:14px;padding:13px 24px;
+    background:color-mix(in srgb,var(--cream) 84%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);}
+  .brand{display:flex;align-items:center;gap:9px;color:var(--ink);}
+  .brand .mk{width:30px;height:30px;border-radius:9px;background:linear-gradient(150deg,var(--pink-500),var(--pink-600));display:flex;align-items:center;justify-content:center;color:#fff;}
+  .brand b{font-family:var(--fh);font-weight:800;font-size:16px;}
+  .brand small{display:block;font-size:10.5px;color:var(--ink-muted);letter-spacing:.04em;}
+  .sp{flex:1;}
+  .lang,.ghost{font-family:var(--fh);font-weight:700;font-size:13px;border:1.5px solid var(--pink-200);background:var(--surface);color:var(--pink-600);border-radius:999px;padding:8px 14px;cursor:pointer;text-decoration:none;}
+  .ghost{border-color:var(--line);color:var(--ink-soft);}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:26px 24px 90px;display:grid;grid-template-columns:390px 1fr;gap:28px;}
+  @media(max-width:900px){.wrap{grid-template-columns:1fr;}}
+
+  /* composer */
+  .composer{align-self:start;position:sticky;top:78px;background:var(--surface);border:1px solid var(--line);border-radius:24px;
+    padding:22px;box-shadow:var(--shadow-med);}
+  @media(max-width:900px){.composer{position:static;}}
+  .composer h2{font-size:19px;margin-bottom:3px;}
+  .composer .cap{font-size:13px;color:var(--ink-muted);margin-bottom:16px;}
+  .fieldlabel{font-family:var(--fh);font-weight:700;font-size:12.5px;color:var(--ink-soft);margin:14px 0 7px;display:flex;align-items:center;gap:8px;}
+  textarea,input,select{font-family:var(--fb);font-size:15px;color:var(--ink);background:var(--pink-50);border:1.5px solid var(--line);border-radius:14px;padding:13px 14px;width:100%;}
+  textarea{resize:vertical;min-height:96px;}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;}
+  .chip{font-family:var(--fh);font-weight:700;font-size:12.5px;border:1.5px solid var(--pink-200);background:var(--surface);color:var(--pink-600);border-radius:999px;padding:7px 13px;cursor:pointer;}
+  .chip.on{background:linear-gradient(120deg,var(--pink-500),var(--pink-600));color:#fff;border-color:transparent;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .go{font-family:var(--fh);font-weight:800;font-size:16px;border:none;border-radius:999px;cursor:pointer;width:100%;margin-top:18px;
+    padding:15px;color:#fff;background:linear-gradient(120deg,var(--pink-500),var(--pink-600));box-shadow:0 14px 30px -12px rgba(196,61,117,.7);}
+  .go:disabled{opacity:.6;}
+  .brandvoice{margin-top:14px;border-top:1px dashed var(--pink-300);padding-top:14px;}
+  .bv-toggle{display:flex;align-items:center;gap:8px;font-family:var(--fh);font-weight:700;font-size:13px;color:var(--pink-600);cursor:pointer;background:none;border:none;padding:0;}
+  .bv-body{display:none;margin-top:12px;}
+  .bv-body.show{display:block;}
+  .bv-saved{font-size:12px;color:var(--gold);font-family:var(--fh);font-weight:700;margin-top:6px;}
+
+  /* output */
+  .stage{min-width:0;}
+  .stage-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+  .stage-head h2{font-size:18px;}
+  .stage-head .sub{font-size:13px;color:var(--ink-muted);flex:1;}
+  .regen{font-family:var(--fh);font-weight:700;font-size:13px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink-soft);border-radius:999px;padding:8px 14px;cursor:pointer;}
+
+  .empty{border:1.5px dashed var(--pink-200);border-radius:24px;padding:56px 30px;text-align:center;color:var(--ink-muted);background:var(--surface);}
+  .empty .ico{font-size:40px;}
+  .empty h3{margin:12px 0 6px;color:var(--ink-soft);font-size:18px;}
+  .empty p{font-size:14px;max-width:40ch;margin:0 auto;}
+
+  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(288px,1fr));gap:18px;}
+  .post{background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:var(--shadow-soft);display:flex;flex-direction:column;}
+  .post .ph{display:flex;align-items:center;gap:10px;padding:13px 15px;border-bottom:1px solid var(--line);}
+  .post .ph .av{width:32px;height:32px;border-radius:50%;background:linear-gradient(140deg,var(--pink-300),var(--pink-500));color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;font-size:13px;}
+  .post .ph .who{flex:1;min-width:0;}
+  .post .ph .who b{font-family:var(--fh);font-size:13.5px;display:block;line-height:1.1;}
+  .post .ph .who span{font-size:11.5px;color:var(--ink-muted);}
+  .post .ph .pl{font-family:var(--fh);font-weight:700;font-size:11px;color:var(--pink-600);background:var(--pink-50);border-radius:999px;padding:4px 9px;}
+  .post .media{height:120px;background:linear-gradient(135deg,var(--pink-200),var(--pink-400));display:flex;align-items:center;justify-content:center;color:#fff;font-size:30px;}
+  .post .body{padding:14px 15px;flex:1;}
+  .post .body .txt{font-size:13.5px;line-height:1.55;white-space:pre-wrap;color:var(--ink);max-height:210px;overflow:auto;}
+  .post .body .subj{font-family:var(--fh);font-weight:800;font-size:14px;margin-bottom:6px;}
+  .post .foot{display:flex;gap:8px;padding:11px 15px;border-top:1px solid var(--line);}
+  .post .foot button{font-family:var(--fh);font-weight:700;font-size:12px;border-radius:999px;padding:7px 12px;cursor:pointer;border:1.5px solid var(--pink-200);background:var(--surface);color:var(--pink-600);}
+  .post .foot .cp{flex:1;background:linear-gradient(120deg,var(--pink-500),var(--pink-600));color:#fff;border-color:transparent;}
+  .post .cnt{font-size:11px;color:var(--ink-muted);margin-left:auto;align-self:center;font-variant-numeric:tabular-nums;}
+
+  .skel{background:var(--surface);border:1px solid var(--line);border-radius:20px;height:230px;overflow:hidden;position:relative;}
+  .skel::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent,var(--pink-50),transparent);background-size:200% 100%;animation:sh 1.3s linear infinite;}
+  @keyframes sh{to{background-position:-200% 0;}}
+  .sp{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.5);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:-2px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .usage{margin-top:16px;font-size:12.5px;color:var(--ink-muted);text-align:center;}
+  .usage a{color:var(--pink-600);font-weight:700;}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);opacity:0;
+    background:var(--ink);color:#fff;font-family:var(--fh);font-weight:700;font-size:13px;padding:11px 20px;border-radius:999px;
+    box-shadow:var(--shadow-med);transition:.25s;pointer-events:none;z-index:60;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <a class="brand" href="/lme-visibility">
+    <span class="mk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v13"/><circle cx="8" cy="15" r="3"/></svg></span>
+    <span><b>LME Visibility</b><small data-no="Studio" data-en="Studio">Studio</small></span>
+  </a>
+  <div class="sp"></div>
+  <button class="lang" id="lang">EN 🌍</button>
+  <a class="ghost" href="/lme-visibility" data-no="Priser" data-en="Pricing">Priser</a>
+</div>
+
+<div class="wrap">
+
+  <!-- COMPOSER -->
+  <aside class="composer">
+    <h2 data-no="Lag innlegg" data-en="Create posts">Lag innlegg</h2>
+    <p class="cap" data-no="Én idé blir til ferdige innlegg for hele uka." data-en="One idea becomes finished posts for the whole week.">Én idé blir ferdige innlegg.</p>
+
+    <div class="fieldlabel" data-no="Din idé eller nyhet" data-en="Your idea or news">Din idé eller nyhet</div>
+    <textarea id="idea" data-no-ph="F.eks: Ny Mia & Teo-aktivitet: skattejakt i naturen som lærer barn om årstidene." data-en-ph="E.g: New Mia & Teo activity: a nature treasure hunt that teaches kids about the seasons."></textarea>
+
+    <div class="fieldlabel" data-no="Tone" data-en="Tone">Tone</div>
+    <div class="chips" id="tones"></div>
+
+    <div class="two" style="margin-top:14px;">
+      <div>
+        <div class="fieldlabel" data-no="Målgruppe" data-en="Audience">Målgruppe</div>
+        <select id="aud"></select>
+      </div>
+      <div>
+        <div class="fieldlabel" data-no="Språk" data-en="Language">Språk</div>
+        <select id="lng"><option value="no">Norsk</option><option value="en">English</option></select>
+      </div>
+    </div>
+
+    <div class="brandvoice">
+      <button class="bv-toggle" id="bvToggle">🎨 <span data-no="Merkevare-stemme" data-en="Brand voice">Merkevare-stemme</span> <span id="bvChev">▾</span></button>
+      <div class="bv-body" id="bvBody">
+        <div class="fieldlabel" data-no="Merkenavn" data-en="Brand name">Merkenavn</div>
+        <input id="bvName" data-no-ph="Little Montessori Explorers" data-en-ph="Little Montessori Explorers">
+        <div class="fieldlabel" data-no="Hvordan skal det høres ut?" data-en="How should it sound?">Hvordan skal det høres ut?</div>
+        <input id="bvTone" data-no-ph="Varm, pedagogisk, tillitsvekkende" data-en-ph="Warm, pedagogical, trustworthy">
+        <button class="chip" id="bvSave" style="margin-top:12px;" data-no="Lagre stemmen" data-en="Save voice">Lagre stemmen</button>
+        <div class="bv-saved" id="bvSaved"></div>
+      </div>
+    </div>
+
+    <button class="go" id="go" data-no="✨ Lag innlegg" data-en="✨ Create posts">✨ Lag innlegg</button>
+    <div class="usage" id="usage"></div>
+  </aside>
+
+  <!-- STAGE -->
+  <main class="stage">
+    <div class="stage-head">
+      <h2 data-no="Dine innlegg" data-en="Your posts">Dine innlegg</h2>
+      <span class="sub" id="stageSub" data-no="Klare til å kopiere og dele" data-en="Ready to copy and share">Klare til å kopiere og dele</span>
+      <button class="regen" id="regen" style="display:none" data-no="↻ Lag på nytt" data-en="↻ Regenerate">↻ Lag på nytt</button>
+    </div>
+    <div id="stage">
+      <div class="empty" id="empty">
+        <div class="ico">✨</div>
+        <h3 data-no="Her dukker innleggene dine opp" data-en="Your posts will appear here">Her dukker innleggene dine opp</h3>
+        <p data-no="Skriv en idé til venstre og trykk «Lag innlegg», så får du vakre, klar-til-deling versjoner til hver plattform." data-en="Write an idea on the left and press “Create posts” to get beautiful, ready-to-share versions for every platform.">Skriv en idé og trykk «Lag innlegg».</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var BASE=(window.LME_VISIBILITY_BASE||"https://lme-ai-visibility.lmexplorers.workers.dev").replace(/\/$/,"");
+  var lang=(localStorage.getItem('lme-lang')==='en')?'en':'no';
+  var last=null; // siste idé/kontekst for "lag paa nytt"
+
+  var TONES=[{k:'varm',no:'Varm',en:'Warm'},{k:'leken',no:'Leken',en:'Playful'},{k:'proff',no:'Proff',en:'Professional'},{k:'inspirerende',no:'Inspirerende',en:'Inspiring'},{k:'eventyrlig',no:'Eventyrlig',en:'Whimsical'}];
+  var AUD=[{k:'foreldre',no:'Foreldre',en:'Parents'},{k:'laerere',no:'Lærere',en:'Teachers'},{k:'barn',no:'Barnefamilier',en:'Families'},{k:'grundere',no:'Gründere',en:'Founders'},{k:'kunder',no:'Kunder',en:'Customers'}];
+  var CH=[
+    {k:'instagram',pl:'Instagram',ico:'📸',media:true},
+    {k:'pinterest',pl:'Pinterest',ico:'📌',media:true},
+    {k:'facebook',pl:'Facebook',ico:'👍',media:false},
+    {k:'tiktok',pl:'TikTok',ico:'🎵',media:false},
+    {k:'reelScript',pl:'Reel',ico:'🎬',media:false},
+    {k:'email',pl:lang==='no'?'E-post':'Email',ico:'✉️',email:true}
+  ];
+  var tone='varm';
+
+  function T(no,en){return lang==='en'?en:no;}
+  function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},1500);}
+
+  function applyStatic(){
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){var t=el.getAttribute('data-'+lang);if(t==null)return;if(/[<&]/.test(t))el.innerHTML=t;else el.textContent=t;});
+    document.querySelectorAll('[data-no-ph]').forEach(function(el){el.setAttribute('placeholder',el.getAttribute('data-'+lang+'-ph')||'');});
+  }
+  function setLang(l){lang=l;document.documentElement.lang=l;try{localStorage.setItem('lme-lang',l);}catch(e){}
+    document.getElementById('lang').textContent=l==='no'?'EN 🌍':'NO 🇳🇴';document.getElementById('lng').value=l;buildChips();applyStatic();renderUsage();}
+  document.getElementById('lang').addEventListener('click',function(){setLang(lang==='no'?'en':'no');});
+  document.getElementById('lng').addEventListener('change',function(){setLang(this.value);});
+
+  function buildChips(){
+    var tc=document.getElementById('tones');tc.innerHTML='';
+    TONES.forEach(function(t){var b=document.createElement('button');b.className='chip'+(t.k===tone?' on':'');b.textContent=lang==='no'?t.no:t.en;
+      b.onclick=function(){tone=t.k;buildChips();};tc.appendChild(b);});
+    var a=document.getElementById('aud');var cur=a.value;a.innerHTML='';AUD.forEach(function(x){var o=document.createElement('option');o.value=x.k;o.textContent=lang==='no'?x.no:x.en;a.appendChild(o);});if(cur)a.value=cur;
+  }
+
+  /* merkevare-stemme */
+  function loadBrand(){try{return JSON.parse(localStorage.getItem('lme-vis-brand')||'{}');}catch(e){return {};}}
+  function initBrand(){var b=loadBrand();document.getElementById('bvName').value=b.name||'';document.getElementById('bvTone').value=b.tone||'';
+    if(b.name||b.tone)document.getElementById('bvSaved').textContent=T('Lagret ✓','Saved ✓');}
+  document.getElementById('bvToggle').addEventListener('click',function(){var body=document.getElementById('bvBody');body.classList.toggle('show');document.getElementById('bvChev').textContent=body.classList.contains('show')?'▴':'▾';});
+  document.getElementById('bvSave').addEventListener('click',function(){
+    var b={name:document.getElementById('bvName').value.trim(),tone:document.getElementById('bvTone').value.trim()};
+    try{localStorage.setItem('lme-vis-brand',JSON.stringify(b));}catch(e){}
+    document.getElementById('bvSaved').textContent=T('Lagret ✓','Saved ✓');toast(T('Merkevare-stemmen er lagret','Brand voice saved'));
+  });
+
+  /* enkel bruks-teller (smakebit) */
+  function usage(){try{var d=JSON.parse(localStorage.getItem('lme-vis-usage')||'{}');var m=new Date().toISOString().slice(0,7);if(d.m!==m){d={m:m,n:0};}return d;}catch(e){return {m:'',n:0};}}
+  function bumpUsage(){var d=usage();d.n++;try{localStorage.setItem('lme-vis-usage',JSON.stringify(d));}catch(e){}renderUsage();}
+  function renderUsage(){var d=usage();var left=Math.max(0,5-d.n);
+    document.getElementById('usage').innerHTML=T('Smakebit: '+left+' gratis igjen denne måneden. ','Taster: '+left+' free left this month. ')+'<a href="/lme-visibility#pris">'+T('Oppgrader','Upgrade')+'</a>';}
+
+  /* generering */
+  function brandPrefix(){var b=loadBrand();var au=document.getElementById('aud');var aud=au.options[au.selectedIndex]?au.options[au.selectedIndex].text:'';
+    var tName=(TONES.filter(function(x){return x.k===tone;})[0]||{});tName=lang==='no'?tName.no:tName.en;
+    var parts=[];if(b.name)parts.push((lang==='no'?'Merke: ':'Brand: ')+b.name);if(b.tone)parts.push((lang==='no'?'Stemme: ':'Voice: ')+b.tone);
+    parts.push((lang==='no'?'Tone: ':'Tone: ')+tName);if(aud)parts.push((lang==='no'?'Målgruppe: ':'Audience: ')+aud);
+    return parts.join('. ')+'.';}
+
+  function skeletons(){var s=document.getElementById('stage');var h='<div class="gallery">';for(var i=0;i<6;i++)h+='<div class="skel"></div>';h+='</div>';s.innerHTML=h;}
+
+  function postCard(c,text){
+    var b=loadBrand();var handle=(b.name||'Little Montessori Explorers');
+    var initial=(handle.trim()[0]||'L').toUpperCase();
+    var head='<div class="ph"><div class="av">'+esc(initial)+'</div><div class="who"><b>'+esc(handle)+'</b><span>'+(c.email?T('E-post','Email'):'@'+esc(handle.toLowerCase().replace(/[^a-z0-9]+/g,'').slice(0,18)||'lme'))+'</span></div><span class="pl">'+c.ico+' '+esc(c.pl)+'</span></div>';
+    var media=c.media?'<div class="media">'+c.ico+'</div>':'';
+    var body;
+    if(c.email){var lines=String(text).split('\n');var subj=lines[0]||'';var rest=lines.slice(1).join('\n').trim()||text;
+      body='<div class="body"><div class="subj">'+esc(subj)+'</div><div class="txt">'+esc(rest)+'</div></div>';}
+    else body='<div class="body"><div class="txt">'+esc(text)+'</div></div>';
+    var cnt=String(text).length;
+    var foot='<div class="foot"><button class="cp" data-copy>'+T('Kopier','Copy')+'</button><span class="cnt">'+cnt+' '+T('tegn','chars')+'</span></div>';
+    return '<div class="post">'+head+media+body+foot+'</div>';
+  }
+
+  function render(obj){
+    var stage=document.getElementById('stage');
+    var html='<div class="gallery">';var any=false;
+    CH.forEach(function(c){var v=obj[c.k];if(!v)return;any=true;html+=postCard(c,v);});
+    html+='</div>';
+    stage.innerHTML=any?html:'<div class="empty"><div class="ico">🙈</div><h3>'+T('Ingen forslag denne gangen','No suggestions this time')+'</h3><p>'+T('Prøv en litt lengre idé.','Try a slightly longer idea.')+'</p></div>';
+    document.getElementById('regen').style.display=any?'':'none';
+    stage.querySelectorAll('[data-copy]').forEach(function(btn){btn.addEventListener('click',function(){
+      var txt=btn.closest('.post').querySelector('.txt').innerText;var subjEl=btn.closest('.post').querySelector('.subj');
+      if(subjEl)txt=subjEl.innerText+'\n'+txt;
+      try{navigator.clipboard.writeText(txt);}catch(e){}toast(T('Kopiert!','Copied!'));
+    });});
+  }
+
+  function generate(reuse){
+    var idea=reuse?last.idea:document.getElementById('idea').value.trim();
+    if(!idea){toast(T('Skriv en idé først 🙂','Write an idea first 🙂'));return;}
+    var d=usage();if(d.n>=5){document.getElementById('stage').innerHTML='<div class="empty"><div class="ico">🌸</div><h3>'+T('Du har brukt opp smakebiten','You have used up the taster')+'</h3><p>'+T('Oppgrader til Kreativ for ubegrenset deling.','Upgrade to Creative for unlimited sharing.')+'</p><div style="margin-top:16px"><a class="chip" href="/lme-visibility#pris">'+T('Se priser','See pricing')+'</a></div></div>';return;}
+    last={idea:idea};
+    var article=brandPrefix()+'\n\n'+idea;
+    var go=document.getElementById('go');go.disabled=true;var lbl=go.innerHTML;go.innerHTML='<span class="sp"></span> '+T('Lager…','Creating…');
+    document.getElementById('empty')&&(document.getElementById('empty').style.display='none');
+    skeletons();
+    fetch(BASE+'/ai/repurpose',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({article:article.slice(0,6000),lang:lang})})
+    .then(function(r){return r.json();}).then(function(res){
+      go.disabled=false;go.innerHTML=lbl;
+      var o=res&&res.result;if(typeof o==='string'){var m=o.match(/\{[\s\S]*\}/);o=JSON.parse(m?m[0]:o);}
+      if(!o||typeof o!=='object')throw new Error('bad');
+      render(o);bumpUsage();
+    }).catch(function(){go.disabled=false;go.innerHTML=lbl;
+      document.getElementById('stage').innerHTML='<div class="empty"><div class="ico">💗</div><h3>'+T('Klarte ikke akkurat nå','Could not do it right now')+'</h3><p>'+T('Prøv igjen om et lite øyeblikk.','Try again in a moment.')+'</p></div>';});
+  }
+  document.getElementById('go').addEventListener('click',function(){generate(false);});
+  document.getElementById('regen').addEventListener('click',function(){generate(true);});
+
+  document.getElementById('lang').textContent=lang==='no'?'EN 🌍':'NO 🇳🇴';
+  document.getElementById('lng').value=lang;
+  buildChips();initBrand();applyStatic();renderUsage();
+})();
+</script>
+</body>
+</html>
