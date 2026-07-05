@@ -102,6 +102,30 @@
     background:var(--ink);color:#fff;font-family:var(--fh);font-weight:700;font-size:13px;padding:11px 20px;border-radius:999px;
     box-shadow:var(--shadow-med);transition:.25s;pointer-events:none;z-index:60;}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  /* Blotato-publisering */
+  .post .pub{display:flex;flex-direction:column;gap:8px;padding:0 15px 13px;}
+  .post .pub .mediaRow{display:flex;gap:7px;align-items:center;}
+  .post .pub .mediaRow input{font-size:12.5px;padding:9px 11px;border-radius:11px;}
+  .post .pub .pubBtn{font-family:var(--fh);font-weight:700;font-size:12px;border-radius:999px;padding:9px 12px;cursor:pointer;border:1.5px solid var(--pink-200);background:var(--pink-50);color:var(--pink-600);white-space:nowrap;}
+  .post .pub .pubBtn:disabled{opacity:.55;cursor:default;}
+  .post .pub .st{font-size:11.5px;line-height:1.4;}
+  .post .pub .st.ok{color:#1f7a4d;} .post .pub .st.err{color:#c1385f;} .post .pub .st.muted{color:var(--ink-muted);}
+  .stage-head .pubAll{font-family:var(--fh);font-weight:700;font-size:12px;border:1.5px solid var(--pink-200);background:var(--surface);color:var(--pink-600);border-radius:999px;padding:7px 13px;cursor:pointer;}
+  .stage-head .gear{margin-left:auto;background:none;border:none;font-size:18px;cursor:pointer;line-height:1;}
+
+  .ov{position:fixed;inset:0;background:rgba(61,36,72,.42);display:none;align-items:center;justify-content:center;z-index:70;padding:20px;}
+  .ov.show{display:flex;}
+  .sheet{background:var(--surface);border-radius:22px;box-shadow:var(--shadow-med);width:100%;max-width:520px;max-height:88vh;overflow:auto;padding:22px 22px 26px;}
+  .sheet h3{font-family:var(--fh);font-size:19px;margin-bottom:4px;}
+  .sheet .lead{font-size:13px;color:var(--ink-muted);margin-bottom:14px;line-height:1.5;}
+  .sheet .bl{border:1px solid var(--line);border-radius:14px;padding:12px 13px;margin-bottom:10px;}
+  .sheet .bl b{font-family:var(--fh);font-size:13px;display:block;margin-bottom:7px;}
+  .sheet .bl input{font-size:13px;padding:9px 11px;margin-bottom:7px;}
+  .sheet .bl input:last-child{margin-bottom:0;}
+  .sheet .row{display:flex;gap:9px;margin-top:8px;}
+  .sheet .row button{flex:1;font-family:var(--fh);font-weight:700;font-size:13px;border-radius:999px;padding:11px;cursor:pointer;border:1.5px solid var(--pink-200);background:var(--surface);color:var(--pink-600);}
+  .sheet .row .prim{background:linear-gradient(120deg,var(--pink-500),var(--pink-600));color:#fff;border-color:transparent;}
 </style>
 </head>
 <body>
@@ -160,8 +184,10 @@
   <main class="stage">
     <div class="stage-head">
       <h2 data-no="Dine innlegg" data-en="Your posts">Dine innlegg</h2>
-      <span class="sub" id="stageSub" data-no="Klare til å kopiere og dele" data-en="Ready to copy and share">Klare til å kopiere og dele</span>
+      <span class="sub" id="stageSub" data-no="Klare til å dele, eller publiser rett til appene" data-en="Ready to share, or publish straight to your apps">Klare til å dele, eller publiser rett til appene</span>
       <button class="regen" id="regen" style="display:none" data-no="↻ Lag på nytt" data-en="↻ Regenerate">↻ Lag på nytt</button>
+      <button class="pubAll" id="pubAll" style="display:none" data-no="🚀 Publiser alle" data-en="🚀 Publish all">🚀 Publiser alle</button>
+      <button class="gear" id="gear" title="Blotato" aria-label="Blotato">⚙️</button>
     </div>
     <div id="stage">
       <div class="empty" id="empty">
@@ -175,6 +201,20 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- Blotato-innstillinger -->
+<div class="ov" id="blOv">
+  <div class="sheet">
+    <h3 data-no="Koble til Blotato" data-en="Connect Blotato">Koble til Blotato</h3>
+    <p class="lead" data-no="Lim inn konto-ID-en fra Blotato for hver app du vil publisere til. Du finner dem i Blotato under «Accounts». Nøkkelen din ligger trygt på serveren, den lagres aldri her." data-en="Paste the account ID from Blotato for each app you want to publish to. Find them in Blotato under “Accounts”. Your key stays safely on the server, never stored here.">Lim inn konto-ID fra Blotato for hver app.</p>
+    <div id="blFields"></div>
+    <button class="chip" id="blFetch" style="margin-bottom:6px" data-no="↺ Hent kontoene mine fra Blotato" data-en="↺ Fetch my accounts from Blotato">↺ Hent kontoene mine fra Blotato</button>
+    <div class="row">
+      <button id="blCancel" data-no="Lukk" data-en="Close">Lukk</button>
+      <button class="prim" id="blSave" data-no="Lagre" data-en="Save">Lagre</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
   var BASE=(window.LME_VISIBILITY_BASE||"https://lme-ai-visibility.lmexplorers.workers.dev").replace(/\/$/,"");
@@ -183,11 +223,12 @@
 
   var TONES=[{k:'varm',no:'Varm',en:'Warm'},{k:'leken',no:'Leken',en:'Playful'},{k:'proff',no:'Proff',en:'Professional'},{k:'inspirerende',no:'Inspirerende',en:'Inspiring'},{k:'eventyrlig',no:'Eventyrlig',en:'Whimsical'}];
   var AUD=[{k:'foreldre',no:'Foreldre',en:'Parents'},{k:'laerere',no:'Lærere',en:'Teachers'},{k:'barn',no:'Barnefamilier',en:'Families'},{k:'grundere',no:'Gründere',en:'Founders'},{k:'kunder',no:'Kunder',en:'Customers'}];
+  // tt = Blotato targetType (publiserbar). needsMedia = krever bilde/video. extra = ekstra felt i Blotato.
   var CH=[
-    {k:'instagram',pl:'Instagram',ico:'📸',media:true},
-    {k:'pinterest',pl:'Pinterest',ico:'📌',media:true},
-    {k:'facebook',pl:'Facebook',ico:'👍',media:false},
-    {k:'tiktok',pl:'TikTok',ico:'🎵',media:false},
+    {k:'instagram',pl:'Instagram',ico:'📸',media:true,tt:'instagram',needsMedia:true},
+    {k:'pinterest',pl:'Pinterest',ico:'📌',media:true,tt:'pinterest',needsMedia:true,extra:['boardId']},
+    {k:'facebook',pl:'Facebook',ico:'👍',media:false,tt:'facebook',needsMedia:false,extra:['pageId']},
+    {k:'tiktok',pl:'TikTok',ico:'🎵',media:false,tt:'tiktok',needsMedia:true},
     {k:'reelScript',pl:'Reel',ico:'🎬',media:false},
     {k:'email',pl:lang==='no'?'E-post':'Email',ico:'✉️',email:true}
   ];
@@ -197,6 +238,126 @@
   function asText(v){if(v==null)return"";if(typeof v==="string")return v;if(typeof v==="object"){var a=Object.keys(v).map(function(k){return v[k];}).filter(function(x){return typeof x==="string";});return a.join("\n\n")||JSON.stringify(v);}return String(v);}
   function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},1500);}
+
+  // ===== Blotato: konto-oppsett og publisering =====
+  function loadBl(){try{return JSON.parse(localStorage.getItem('lme-vis-blotato')||'{}');}catch(e){return {};}}
+  function saveBl(v){try{localStorage.setItem('lme-vis-blotato',JSON.stringify(v));}catch(e){}}
+  function pubChannels(){return CH.filter(function(c){return c.tt;});}
+
+  function buildBlFields(){
+    var cfg=loadBl();var wrap=document.getElementById('blFields');wrap.innerHTML='';
+    pubChannels().forEach(function(c){
+      var v=cfg[c.k]||{};
+      var h='<div class="bl"><b>'+c.ico+' '+esc(c.pl)+'</b>'+
+        '<input data-blk="'+c.k+'" data-blf="accountId" value="'+esc(v.accountId||'')+'" placeholder="'+T('Konto-ID','Account ID')+'">';
+      (c.extra||[]).forEach(function(f){
+        var ph=f==='pageId'?T('Side-ID (Facebook)','Page ID (Facebook)'):(f==='boardId'?T('Tavle-ID (Pinterest)','Board ID (Pinterest)'):f);
+        h+='<input data-blk="'+c.k+'" data-blf="'+f+'" value="'+esc(v[f]||'')+'" placeholder="'+esc(ph)+'">';
+      });
+      h+='</div>';wrap.insertAdjacentHTML('beforeend',h);
+    });
+  }
+  function openBl(){buildBlFields();applyStatic();document.getElementById('blOv').classList.add('show');}
+  function closeBl(){document.getElementById('blOv').classList.remove('show');}
+  function readBlFields(){
+    var cfg={};
+    document.querySelectorAll('#blFields input[data-blk]').forEach(function(el){
+      var k=el.getAttribute('data-blk'),f=el.getAttribute('data-blf'),val=el.value.trim();
+      if(!val)return;cfg[k]=cfg[k]||{};cfg[k][f]=val;
+    });
+    return cfg;
+  }
+
+  // Bygg Blotato-"post" for en kanal ut fra kortets tekst + evt. bilde-URL.
+  function buildPost(c,text,imgUrl){
+    var cfg=loadBl();var conf=cfg[c.k]||{};
+    if(!conf.accountId)return {err:T('Mangler konto-ID for '+c.pl,'Missing account ID for '+c.pl)};
+    if(c.needsMedia&&!imgUrl)return {err:T('Legg til en bilde-URL først','Add an image URL first')};
+    var target={targetType:c.tt};
+    (c.extra||[]).forEach(function(f){if(conf[f])target[f]=conf[f];});
+    if(c.tt==='facebook'&&!target.pageId)return {err:T('Facebook trenger en side-ID (⚙️)','Facebook needs a page ID (⚙️)')};
+    if(c.tt==='pinterest'&&!target.boardId)return {err:T('Pinterest trenger en tavle-ID (⚙️)','Pinterest needs a board ID (⚙️)')};
+    var content={text:String(text),platform:c.tt};
+    if(imgUrl)content.mediaUrls=[imgUrl];
+    return {label:c.pl,post:{accountId:conf.accountId,content:content,target:target}};
+  }
+
+  function postText(card){
+    var subjEl=card.querySelector('.subj'),txtEl=card.querySelector('.txt');
+    var t=txtEl?txtEl.innerText:'';if(subjEl)t=subjEl.innerText+'\n'+t;return t.trim();
+  }
+
+  function publishItems(items){
+    return fetch(BASE+'/ai/blotato/publish',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items:items})})
+      .then(function(r){return r.json();});
+  }
+
+  // Publiser ett kort.
+  function publishOne(card){
+    var ch=card.getAttribute('data-ch');var c=CH.filter(function(x){return x.k===ch;})[0];if(!c||!c.tt)return;
+    var st=card.querySelector('[data-pubst]');var btn=card.querySelector('[data-pub]');
+    var imgEl=card.querySelector('.pubImg');var img=imgEl?imgEl.value.trim():'';
+    var built=buildPost(c,postText(card),img);
+    if(built.err){st.className='st err';st.textContent='⚠️ '+built.err;return;}
+    if(!confirm(T('Publisere dette innlegget til '+c.pl+' nå?','Publish this post to '+c.pl+' now?')))return;
+    btn.disabled=true;st.className='st muted';st.textContent=T('Publiserer…','Publishing…');
+    publishItems([built]).then(function(res){
+      btn.disabled=false;var r=res&&res.result&&res.result.results&&res.result.results[0];
+      if(res&&res.error){st.className='st err';st.textContent='⚠️ '+res.error;return;}
+      if(r&&r.ok){st.className='st ok';st.textContent='✓ '+T('Publisert til '+c.pl,'Published to '+c.pl);}
+      else{st.className='st err';st.textContent='⚠️ '+T('Gikk ikke gjennom','Did not go through')+(r&&r.status?' ('+r.status+')':'');}
+    }).catch(function(){btn.disabled=false;st.className='st err';st.textContent='⚠️ '+T('Nettverksfeil','Network error');});
+  }
+
+  // Publiser alle kort som er klare.
+  function publishAll(){
+    var cards=[].slice.call(document.querySelectorAll('.post[data-ch]'));
+    var ready=[],cardFor=[];
+    cards.forEach(function(card){
+      var c=CH.filter(function(x){return x.k===card.getAttribute('data-ch');})[0];if(!c||!c.tt)return;
+      var imgEl=card.querySelector('.pubImg');var img=imgEl?imgEl.value.trim():'';
+      var built=buildPost(c,postText(card),img);
+      var st=card.querySelector('[data-pubst]');
+      if(built.err){if(st){st.className='st muted';st.textContent='– '+built.err;}return;}
+      ready.push(built);cardFor.push(card);
+    });
+    if(!ready.length){toast(T('Ingen innlegg er klare ennå 🙂','No posts are ready yet 🙂'));return;}
+    if(!confirm(T('Publisere '+ready.length+' innlegg til appene nå?','Publish '+ready.length+' posts to your apps now?')))return;
+    cardFor.forEach(function(card){var st=card.querySelector('[data-pubst]');if(st){st.className='st muted';st.textContent=T('Publiserer…','Publishing…');}});
+    publishItems(ready).then(function(res){
+      if(res&&res.error){toast('⚠️ '+res.error);return;}
+      var rs=(res&&res.result&&res.result.results)||[];
+      cardFor.forEach(function(card,i){var st=card.querySelector('[data-pubst]');var r=rs[i];if(!st)return;
+        if(r&&r.ok){st.className='st ok';st.textContent='✓ '+T('Publisert','Published');}
+        else{st.className='st err';st.textContent='⚠️ '+T('Gikk ikke gjennom','Did not go through')+(r&&r.status?' ('+r.status+')':'');}
+      });
+      var okN=rs.filter(function(r){return r&&r.ok;}).length;toast(okN+' '+T('publisert','published'));
+    }).catch(function(){toast('⚠️ '+T('Nettverksfeil','Network error'));});
+  }
+
+  document.getElementById('gear').addEventListener('click',openBl);
+  document.getElementById('blCancel').addEventListener('click',closeBl);
+  document.getElementById('blOv').addEventListener('click',function(e){if(e.target===this)closeBl();});
+  document.getElementById('blSave').addEventListener('click',function(){saveBl(readBlFields());closeBl();toast(T('Lagret 💾','Saved 💾'));if(last&&last.lastObj)render(last.lastObj);});
+  document.getElementById('blFetch').addEventListener('click',function(){
+    var b=this;var lbl=b.textContent;b.textContent=T('Henter…','Fetching…');b.disabled=true;
+    fetch(BASE+'/ai/blotato/accounts',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})
+    .then(function(r){return r.json();}).then(function(res){
+      b.disabled=false;b.textContent=lbl;
+      if(res&&res.error){toast('⚠️ '+res.error);return;}
+      var list=(res&&res.result&&(res.result.items||res.result.accounts||res.result))||[];
+      if(!Array.isArray(list)){toast(T('Fant ingen kontoer','No accounts found'));return;}
+      var cfg=loadBl();
+      list.forEach(function(a){
+        var plat=String(a.platform||a.type||a.targetType||'').toLowerCase();
+        var c=pubChannels().filter(function(x){return x.tt===plat;})[0];if(!c)return;
+        cfg[c.k]=cfg[c.k]||{};cfg[c.k].accountId=String(a.id||a.accountId||cfg[c.k].accountId||'');
+        if(a.pageId)cfg[c.k].pageId=String(a.pageId);
+      });
+      saveBl(cfg);buildBlFields();applyStatic();toast(T('Kontoer hentet ✓','Accounts fetched ✓'));
+    }).catch(function(){b.disabled=false;b.textContent=lbl;toast('⚠️ '+T('Nettverksfeil','Network error'));});
+  });
+  document.getElementById('pubAll').addEventListener('click',publishAll);
 
   function applyStatic(){
     document.querySelectorAll('[data-no][data-en]').forEach(function(el){var t=el.getAttribute('data-'+lang);if(t==null)return;if(/[<&]/.test(t))el.innerHTML=t;else el.textContent=t;});
@@ -251,7 +412,21 @@
     else body='<div class="body"><div class="txt">'+esc(text)+'</div></div>';
     var cnt=String(text).length;
     var foot='<div class="foot"><button class="cp" data-copy>'+T('Kopier','Copy')+'</button><span class="cnt">'+cnt+' '+T('tegn','chars')+'</span></div>';
-    return '<div class="post">'+head+media+body+foot+'</div>';
+    var pub=pubRow(c);
+    return '<div class="post" data-ch="'+esc(c.k)+'">'+head+media+body+foot+pub+'</div>';
+  }
+
+  // Publiseringsrad (kun for kanaler Blotato kan poste til).
+  function pubRow(c){
+    if(!c.tt)return '';
+    var cfg=loadBl();var acc=cfg[c.k]&&cfg[c.k].accountId;
+    var mediaInput=c.needsMedia?'<div class="mediaRow"><input class="pubImg" data-no-ph="Lim inn bilde-URL (kreves)" data-en-ph="Paste image URL (required)" placeholder="'+T('Lim inn bilde-URL (kreves)','Paste image URL (required)')+'"></div>':'';
+    if(!acc){
+      return '<div class="pub"><div class="st muted">'+T('Legg inn konto-ID i ⚙️ for å publisere til '+c.pl,'Add an account ID in ⚙️ to publish to '+c.pl)+'</div></div>';
+    }
+    return '<div class="pub">'+mediaInput+
+      '<button class="pubBtn" data-pub>'+c.ico+' '+T('Publiser til ','Publish to ')+esc(c.pl)+'</button>'+
+      '<div class="st" data-pubst></div></div>';
   }
 
   function render(obj){
@@ -261,11 +436,16 @@
     html+='</div>';
     stage.innerHTML=any?html:'<div class="empty"><div class="ico">🙈</div><h3>'+T('Ingen forslag denne gangen','No suggestions this time')+'</h3><p>'+T('Prøv en litt lengre idé.','Try a slightly longer idea.')+'</p></div>';
     document.getElementById('regen').style.display=any?'':'none';
+    if(last)last.lastObj=obj;
+    var anyPub=any&&stage.querySelector('[data-pub]');
+    document.getElementById('pubAll').style.display=anyPub?'':'none';
+    applyStatic();
     stage.querySelectorAll('[data-copy]').forEach(function(btn){btn.addEventListener('click',function(){
       var txt=btn.closest('.post').querySelector('.txt').innerText;var subjEl=btn.closest('.post').querySelector('.subj');
       if(subjEl)txt=subjEl.innerText+'\n'+txt;
       try{navigator.clipboard.writeText(txt);}catch(e){}toast(T('Kopiert!','Copied!'));
     });});
+    stage.querySelectorAll('[data-pub]').forEach(function(btn){btn.addEventListener('click',function(){publishOne(btn.closest('.post'));});});
   }
 
   function generate(reuse){

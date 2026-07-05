@@ -108,6 +108,16 @@ export default {
     if (request.method !== "POST") {
       return new Response("Method not allowed", { status: 405, headers: corsHeaders(origin) });
     }
+
+    // Blotato: autopublisering til sosiale medier. Trenger ikke Anthropic-nøkkel,
+    // så disse rutene ligger før sjekken under.
+    if (url.pathname === "/ai/blotato/accounts") {
+      return handleBlotatoAccounts(env, origin);
+    }
+    if (url.pathname === "/ai/blotato/publish") {
+      return handleBlotatoPublish(request, env, origin);
+    }
+
     if (!env.ANTHROPIC_API_KEY) {
       return json({ error: "Server-konfigurasjon mangler (ANTHROPIC_API_KEY)." }, 500, origin);
     }
@@ -150,6 +160,7 @@ async function handlePing(env, origin) {
     hasAnthropicKey: !!env.ANTHROPIC_API_KEY,
     hasGithubToken: !!env.GITHUB_TOKEN,
     hasMailerlite: !!(env.MAILERLITE_TOKEN && env.MAILERLITE_GROUP_ID),
+    hasBlotato: !!env.BLOTATO_API_KEY,
     anthropic: env.ANTHROPIC_API_KEY ? "tester…" : "MANGLER nøkkel",
   };
   if (env.ANTHROPIC_API_KEY) {
@@ -460,6 +471,75 @@ async function handlePublish(request, env, origin) {
   }
 
   return json({ result: { slug: a.slug, url, html, published, githubStatus, mailStatus } }, 200, origin);
+}
+
+// =====================================================
+// Blotato — autopublisering til sosiale medier
+// Nøkkelen (BLOTATO_API_KEY) ligger som hemmelig variabel på selve workeren,
+// aldri i nettsiden. Klienten bygger den ferdige "post"-en (kontoID, innhold,
+// mål-plattform), og workeren legger bare på nøkkelen og videresender til Blotato.
+// =====================================================
+const BLOTATO_BASE = "https://backend.blotato.com/v2";
+
+async function handleBlotatoAccounts(env, origin) {
+  if (!env.BLOTATO_API_KEY) {
+    return json({ error: "Blotato er ikke koblet til ennå (BLOTATO_API_KEY mangler på workeren)." }, 400, origin);
+  }
+  try {
+    const r = await fetch(`${BLOTATO_BASE}/accounts`, {
+      headers: { "blotato-api-key": env.BLOTATO_API_KEY, "Accept": "application/json" },
+    });
+    const text = await r.text();
+    let data; try { data = JSON.parse(text); } catch { data = text; }
+    if (!r.ok) return json({ error: `Blotato svarte ${r.status}.`, detail: data }, 502, origin);
+    return json({ result: data }, 200, origin);
+  } catch (e) {
+    return json({ error: "Kom ikke i kontakt med Blotato." }, 502, origin);
+  }
+}
+
+async function handleBlotatoPublish(request, env, origin) {
+  if (!env.BLOTATO_API_KEY) {
+    return json({ error: "Blotato er ikke koblet til ennå (BLOTATO_API_KEY mangler på workeren)." }, 400, origin);
+  }
+  let body;
+  try { body = await request.json(); }
+  catch { return json({ error: "Ugyldig JSON" }, 400, origin); }
+
+  const items = Array.isArray(body.items) ? body.items : [];
+  if (!items.length) return json({ error: "Ingen innlegg å publisere." }, 400, origin);
+  if (items.length > 12) return json({ error: "Maks 12 innlegg om gangen." }, 400, origin);
+
+  const results = [];
+  for (const it of items) {
+    const label = (it && it.label)
+      || (it && it.post && it.post.target && it.post.target.targetType)
+      || "?";
+    if (!it || !it.post || !it.post.accountId || !it.post.target) {
+      results.push({ label, ok: false, status: 0, error: "Mangler kontoID eller mål-plattform." });
+      continue;
+    }
+    const payload = { post: it.post };
+    if (it.scheduledTime) payload.scheduledTime = it.scheduledTime;
+    try {
+      const r = await fetch(`${BLOTATO_BASE}/posts`, {
+        method: "POST",
+        headers: {
+          "blotato-api-key": env.BLOTATO_API_KEY,
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      const text = await r.text();
+      let data; try { data = JSON.parse(text); } catch { data = text; }
+      const id = data && (data.id || (data.submission && data.submission.id));
+      results.push({ label, ok: r.ok, status: r.status, id, detail: r.ok ? undefined : data });
+    } catch (e) {
+      results.push({ label, ok: false, status: 0, error: "Nettverksfeil mot Blotato." });
+    }
+  }
+  return json({ result: { results } }, 200, origin);
 }
 
 // Base64 av UTF-8-streng i Workers (uten å sprenge call-stacken på store HTML-er)
