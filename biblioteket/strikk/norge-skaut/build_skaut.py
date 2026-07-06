@@ -379,19 +379,19 @@ def cover_illustration():
         p.append(f'<path d="M{sx},{TLy+2} C{c1},112 {c2},148 {ex},176" fill="none" stroke="{RED}" stroke-width="9" stroke-linecap="round"/>')
     # trekanten
     p.append(f'<path d="M{TLx},{TLy} L{TRx},{TRy} L{PXx},{PYy} Z" fill="{RED}" stroke="#8f0a20" stroke-width="2"/>')
-    # flagg i midten
+    # flagg litt oppe
     p.append('<g clip-path="url(#tri)">')
-    p.append(flag_rects(198, 158, 64, 48))
+    p.append(flag_rects(198, 138, 64, 46))
     p.append('</g>')
-    # flaggstriper som ramme rundt (inntrukket trekant i hvit/blå/hvit)
+    # flaggstriper langs de to skråsidene (åpen V, ikke toppen)
     for inset, col, wdt in [(9, '#fff', 5), (15, NAVY, 6), (21, '#fff', 5)]:
         k = 1 - inset/95.0
         ix1, iy1 = ctx+(TLx-ctx)*k, cty+(TLy-cty)*k
         ix2, iy2 = ctx+(TRx-ctx)*k, cty+(TRy-cty)*k
         ix3, iy3 = ctx+(PXx-ctx)*k, cty+(PYy-cty)*k
-        p.append(f'<path d="M{ix1:.1f},{iy1:.1f} L{ix2:.1f},{iy2:.1f} L{ix3:.1f},{iy3:.1f} Z" fill="none" stroke="{col}" stroke-width="{wdt}" stroke-linejoin="round"/>')
-    # bølgekant rundt HELE skautet
-    edge = f'M{TLx},{TLy}' + scallop(TLx,TLy,TRx,TRy) + scallop(TRx,TRy,PXx,PYy) + scallop(PXx,PYy,TLx,TLy)
+        p.append(f'<path d="M{ix1:.1f},{iy1:.1f} L{ix3:.1f},{iy3:.1f} L{ix2:.1f},{iy2:.1f}" fill="none" stroke="{col}" stroke-width="{wdt}" stroke-linejoin="round"/>')
+    # bølgekant langs de to skråsidene (TR -> spiss -> TL); toppen er glatt
+    edge = f'M{TRx},{TRy}' + scallop(TRx,TRy,PXx,PYy) + scallop(PXx,PYy,TLx,TLy)
     p.append(f'<path d="{edge}" fill="none" stroke="{RED}" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>')
     p.append('</svg>')
     return ''.join(p)
@@ -402,20 +402,22 @@ def scarf_schematic():
   <defs><marker id="ah" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
     <path d="M0,0 L8,4 L0,8 z" fill="#777"/></marker></defs>
   <path d="M110,90 L370,90 L240,285 Z" fill="{RED}" stroke="#8f0a20" stroke-width="2"/>
-  <rect x="110" y="96" width="260" height="7" fill="#fff"/>
-  <rect x="110" y="103" width="260" height="8" fill="{NAVY}"/>
-  <rect x="110" y="111" width="260" height="7" fill="#fff"/>
-  {flag_rects(214, 140, 52, 40)}
+  {flag_rects(214, 116, 52, 40)}
+  <path d="M123,96 L240,272 L357,96" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M130,100 L240,266 L350,100" fill="none" stroke="{NAVY}" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M137,103 L240,260 L343,103" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M110,90 Q100,96 104,104 Q114,110 108,120 Q118,128 240,290 Q362,128 372,120 Q366,110 376,104 Q380,96 370,90" fill="none" stroke="{RED}" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" opacity="0.9"/>
   <path d="M96,80 C70,86 58,110 74,132" fill="none" stroke="{RED}" stroke-width="7" stroke-linecap="round"/>
   <path d="M384,80 C410,86 422,110 406,132" fill="none" stroke="{RED}" stroke-width="7" stroke-linecap="round"/>
   <line x1="110" y1="72" x2="370" y2="72" stroke="#777" stroke-width="2" marker-start="url(#ah)" marker-end="url(#ah)"/>
-  <text x="240" y="64" text-anchor="middle" font-size="14" font-family="sans-serif" fill="#555">toppen: 34 (44) cm</text>
+  <text x="240" y="64" text-anchor="middle" font-size="14" font-family="sans-serif" fill="#555">toppen (glatt): 34 (44) cm</text>
   <line x1="392" y1="90" x2="392" y2="285" stroke="#777" stroke-width="2" marker-start="url(#ah)" marker-end="url(#ah)"/>
   <text x="400" y="190" font-size="14" font-family="sans-serif" fill="#555">ned til</text>
   <text x="400" y="208" font-size="14" font-family="sans-serif" fill="#555">spissen:</text>
   <text x="400" y="226" font-size="14" font-family="sans-serif" fill="#555">24 (31) cm</text>
-  <text x="150" y="84" font-size="13" font-family="sans-serif" fill="#555">bølgekant rundt hele</text>
-  <text x="60" y="120" font-size="13" font-family="sans-serif" fill="#555" text-anchor="middle">snor</text>
+  <text x="66" y="150" font-size="13" font-family="sans-serif" fill="#555">bølgekant</text>
+  <text x="66" y="166" font-size="13" font-family="sans-serif" fill="#555">på sidene</text>
+  <text x="60" y="118" font-size="13" font-family="sans-serif" fill="#555" text-anchor="middle">snor</text>
   <text x="240" y="300" text-anchor="middle" font-size="13" font-family="sans-serif" fill="#888">spissen henger ned bak</text>
 </svg>'''
 
@@ -447,7 +449,7 @@ pages.append(page(f'''
 pages.append(page(f'''
 {banner('FØR DU BEGYNNER')}
 <p>Et skaut er lett å strikke. Du starter nede i spissen med noen få masker. Så øker du litt og
-litt, til trekanten er stor nok. Rundt hele skautet lager du en bølget kant med flaggstriper. Vil du, strikker du også inn et flagg på midten. Til slutt lager du to snorer å knyte med.</p>
+litt, til trekanten er stor nok. Langs de to skråsidene lager du en bølget kant med flaggstriper. Vil du, strikker du også inn et flagg på midten. Til slutt lager du to snorer å knyte med.</p>
 {tealp('DETTE LÆRER DU')}
 {card(ul([
   'å strikke en trekant',
@@ -518,8 +520,8 @@ pages.append(page(f'''
       '<tr><td><b>flott</b></td><td>tråden i fargen du ikke bruker akkurat nå, som ligger bak</td></tr></table>')}
 {pink('SLIK ER SKAUTET BYGGET OPP')}
 {card(steps([
-  '<b>Trekanten:</b> Du starter i spissen og øker til trekanten er stor nok. Vil du ha flagg, strikker du det inn på veien.',
-  '<b>Bølgekanten:</b> Rundt hele skautet lager du en bølget kant med hvite og blå striper.',
+  '<b>Trekanten:</b> Du starter i spissen og øker til trekanten er stor nok. Vil du ha flagg, strikker du det inn litt oppe.',
+  '<b>Bølgekanten:</b> Langs de to skråsidene lager du en bølget kant med hvite og blå striper.',
   '<b>Snorene:</b> Til slutt lager du to snorer å knyte bak i nakken.',
 ]))}
 ''', 5))
@@ -551,9 +553,9 @@ pages.append(page(f'''
   'Nå øker du. På <b>hver 2. pinne</b> øker du 1 maske i hver ende, slik: strikk 1, øk i neste '
   'maske, strikk til det er 2 masker igjen, øk, strikk 1. Da blir det 2 masker mer for hver gang.',
   'Fortsett slik. Trekanten blir større og større. Strikk til toppen måler <b>34 (44) cm</b>.',
-  'Vil du ha flagg? Når trekanten er ca. <b>17 masker bred</b>, strikker du inn flagget på '
-  'midten. Følg flaggdiagrammet på side 10. Rundt flagget strikker du rødt. Vil du ha det '
-  'enkelt, hopper du over flagget og strikker bare rødt.',
+  'Vil du ha flagg? Strikk trekanten til det er ca. <b>5 cm igjen</b> før toppen er ferdig. '
+  'Strikk så inn flagget midt på, med rødt rundt. Følg flaggdiagrammet på side 10. Da havner '
+  'flagget litt oppe på skautet, som på bildet. Vil du ha det enkelt, hopper du over flagget.',
 ])}
 {cream('<p class="creamtitle">Mistet du en maske? Ta det med ro. Løft den opp igjen, eller be en '
        'voksen om hjelp. Ingenting er ødelagt.</p>')}
@@ -561,18 +563,17 @@ pages.append(page(f'''
 
 # ============ SIDE 8: DEL 2 BØLGEKANTEN ============
 pages.append(page(f'''
-{banner('DEL 2: BØLGEKANT RUNDT HELE SKAUTET')}
-<p>Nå lager du en bølget kant med flaggstriper rundt hele skautet. Bølgene kommer av at du får
-mange masker på lite plass.</p>
+{banner('DEL 2: BØLGEKANT PÅ SIDENE')}
+<p>Nå lager du den bølgete kanten med flaggstriper langs de to skråsidene, ned til spissen.
+Toppen som ligger mot hodet, er glatt. Bølgene kommer av at du får mange masker på lite plass.</p>
 {steps([
-  'Fell av toppen løst. Nå har du en rød trekant med tre kanter.',
-  'Plukk opp masker med rundpinnen langs <b>hele kanten</b>: bortover toppen, ned til spissen, og '
-  'opp igjen. Plukk opp ca. 3 masker for hver 4 du går forbi. I spissen og hjørnene plukker du '
-  'opp 1 ekstra, så det ikke strammer.',
-  'Strikk 1 omgang rundt med rødt.',
-  'Øk til <b>dobbelt så mange</b> masker: strikk 1, øk i neste, hele veien rundt. Nå bukter '
-  'kanten seg i bølger.',
-  'Strikk striper rundt: <b>2 omganger hvit, 2 omganger marineblå, 2 omganger hvit</b>.',
+  'Fell av toppen løst. Nå har du en rød trekant.',
+  'Plukk opp masker med rundpinnen langs <b>de to skråsidene</b>: start i det ene topphjørnet, gå '
+  'ned til spissen, og opp til det andre topphjørnet. <b>Ikke</b> plukk opp langs toppen. Plukk '
+  'opp ca. 3 masker for hver 4 du går forbi. I spissen plukker du opp 1 ekstra.',
+  'Strikk fram og tilbake. Strikk 1 pinne rødt.',
+  'Øk til <b>dobbelt så mange</b> masker: strikk 1, øk i neste, hele pinnen ut. Nå bukter kanten seg.',
+  'Strikk striper: <b>2 pinner hvit, 2 pinner marineblå, 2 pinner hvit</b>.',
   'Fell av løst med rødt. Strammer du, blir kanten stiv. Løst gir fine bølger.',
 ])}
 {cream('<p class="creamtitle">ENKEL VARIANT (fin for de yngste, ca. 8 år):<br>'
@@ -612,9 +613,9 @@ gjennom, uten brudd.</p>
 </div>
 {pink('HVOR PÅ SKAUTET?')}
 {card(ul([
-  'Flagget står midt på skautet.',
-  'Start flagget når trekanten er ca. 17 masker bred. Da er det plass til flagget (13 masker) '
-  'med litt rødt på hver side.',
+  'Flagget sitter litt oppe på skautet, midt mellom de to sidene (ikke midt på).',
+  'Strikk det inn når det er ca. 5 cm igjen før toppen er ferdig. Da er trekanten bred nok (mer '
+  'enn 13 masker), og flagget havner litt oppe, som på bildet.',
   'Strikk rødt under, over og rundt flagget.',
 ]))}
 ''', 10))
