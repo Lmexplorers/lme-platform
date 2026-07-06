@@ -288,11 +288,11 @@ sammen toppen. Bokstavene, flagget og bølgene broderer du på helt til slutt. D
 maskesting og er mye enklere enn det ser ut.</p>
 {tealp('DETTE LÆRER DU')}
 {card(ul([
-  'å strikke rundt på rundpinne',
-  'å lage en bølgekant (den er nesten magisk enkel)',
-  'å strikke striper i flere farger',
-  'å felle masker så toppen blir fin og rund',
-  'å brodere med maskesting, sting som ser ut som strikkede masker',
+  'Å strikke rundt på rundpinne',
+  'Å lage en bølgekant (den er nesten magisk enkel)',
+  'Å strikke striper i flere farger',
+  'Å felle masker så toppen blir fin og rund',
+  'Å brodere med maskesting, sting som ser ut som strikkede masker',
 ]))}
 {pink('HVOR VANSKELIG ER DET?')}
 {card('<p><b>Nybegynner pluss.</b> Du bør kunne legge opp masker, strikke rett og strikke to masker '
@@ -322,19 +322,19 @@ pages.append(page(f'''
 {card(ul([
   '<b>rundpinne 5 mm</b>, 40 cm lang (hele hatten strikkes på denne)',
   '<b>strømpepinner 5 mm</b> til toppen, når det blir for trangt på rundpinnen',
-  'rundpinne 4,5 mm hvis du strikker løst (prøvelappen forteller deg det)',
-  'en <b>maskemarkør</b> (eller en liten løkke av garn i en annen farge)',
-  'en <b>stoppenål med butt spiss</b> til broderiet og trådfestene',
-  'målebånd og saks',
+  'Rundpinne 4,5 mm hvis du strikker løst (prøvelappen forteller deg det)',
+  'En <b>maskemarkør</b> (eller en liten løkke av garn i en annen farge)',
+  'En <b>stoppenål med butt spiss</b> til broderiet og trådfestene',
+  'Målebånd og saks',
 ]))}
 {pink('STRIKKEFASTHET, DEN HEMMELIGE NØKKELEN')}
 {card('<p><b>17 masker og 22 omganger glattstrikk på pinne 5 skal bli 10 &times; 10 cm.</b></p>'
       '<p>Slik sjekker du: Legg opp 22 masker og strikk glatt (frem og tilbake: en pinne rett, '
       'en pinne vrang) til lappen er ca. 12 cm høy. Legg lappen flatt og mål hvor mange masker '
       'det er på 10 cm på midten.</p>'
-      + ul(['flere enn 17 masker: bytt til tykkere pinne (5,5 mm)',
-            'færre enn 17 masker: bytt til tynnere pinne (4,5 mm)',
-            'akkurat 17 masker: perfekt, sett i gang!']))}
+      + ul(['Flere enn 17 masker? Bytt til tykkere pinne (5,5 mm).',
+            'Færre enn 17 masker? Bytt til tynnere pinne (4,5 mm).',
+            'Akkurat 17 masker? Perfekt, sett i gang!']))}
 ''', 3))
 
 # ============ SIDE 4: STØRRELSER OG MÅL ============
@@ -515,10 +515,10 @@ pages.append(page(f'''
 ])}
 {pink('SJEKKLISTE FOR EN FERDIG HATT')}
 {card(ul([
-  'alle tråder er festet på innsiden',
+  'Alle tråder er festet på innsiden',
   '"NORGE" og flagget sitter foran, "RO" og bølgene bak',
-  'bremmen bølger og toppen er rund',
-  'hatten er tørr og klar for sommer, sjø og softis',
+  'Bremmen bølger og toppen er rund',
+  'Hatten er tørr og klar for sommer, sjø og softis',
 ]))}
 {cream('<p class="creamtitle">Gratulerer, du har strikket din egen Norge-hatt!<br>'
        'Vis den frem 17. mai, på hytta og i båten.</p>')}

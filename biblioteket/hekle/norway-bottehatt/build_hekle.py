@@ -416,7 +416,7 @@ pages.append(page(f'''
       '<tr><td><span class="dot" style="background:'+RED+'"></span> Rød (06)</td><td>4 nøster</td></tr>'
       '<tr><td><span class="dot" style="background:#fff;border:1px solid #bbb"></span> Hvit (01)</td><td>1 nøste</td></tr>'
       '<tr><td><span class="dot" style="background:'+NAVY+'"></span> Marineblå (17)</td><td>1 nøste</td></tr></table>'
-      + ul(['heklenål <b>5 mm</b>', 'maskemarkører', 'stoppenål', 'saks']))}
+      + ul(['Heklenål <b>5 mm</b>', 'Maskemarkører', 'Stoppenål', 'Saks']))}
 ''', 2))
 
 # ============ SIDE 3: HEKLEFASTHET OG FORKORTELSER ============

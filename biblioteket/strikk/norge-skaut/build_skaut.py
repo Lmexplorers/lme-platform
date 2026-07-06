@@ -453,11 +453,11 @@ pages.append(page(f'''
 litt, til trekanten er stor nok. Rundt hele skautet lager du en bølget kant med flaggstriper. Vil du, strikker du også inn et flagg på midten. Til slutt lager du to snorer å knyte med.</p>
 {tealp('DETTE LÆRER DU')}
 {card(ul([
-  'å strikke en trekant',
-  'å øke masker i sidene',
-  'å strikke inn et flagg med to farger (valgfritt)',
-  'å lage en snor (I-cord)',
-  'å lage en bølget kant',
+  'Å strikke en trekant',
+  'Å øke masker i sidene',
+  'Å strikke inn et flagg med to farger (valgfritt)',
+  'Å lage en snor (I-cord)',
+  'Å lage en bølget kant',
 ]))}
 {pink('ER DET VANSKELIG?')}
 {card('<p><b>Nybegynner.</b> Kan du legge opp masker, strikke rett og øke, klarer du dette. '
@@ -481,10 +481,10 @@ pages.append(page(f'''
 {tealp('DETTE OGSÅ')}
 {card(ul([
   '<b>rundpinne 5 mm</b> (den er lang, så det er plass til mange masker)',
-  'to <b>strømpepinner 5 mm</b> til snorene',
-  'en <b>maskemarkør</b> (eller en liten trådløkke)',
-  'en <b>stoppenål</b> med butt spiss',
-  'saks',
+  'To <b>strømpepinner 5 mm</b> til snorene',
+  'En <b>maskemarkør</b> (eller en liten trådløkke)',
+  'En <b>stoppenål</b> med butt spiss',
+  'Saks',
 ]))}
 {pink('PRØVELAPP')}
 {card('<p>Strikk en liten lapp først. Legg opp 20 masker og strikk rett fram og tilbake til '
@@ -634,10 +634,10 @@ pages.append(page(f'''
 ])}
 {pink('SJEKKLISTE')}
 {card(ul([
-  'alle tråder er festet',
-  'flagget står midt på',
-  'toppkanten bølger',
-  'de to snorene sitter godt fast',
+  'Alle tråder er festet',
+  'Flagget står midt på',
+  'Toppkanten bølger',
+  'De to snorene sitter godt fast',
 ]))}
 {cream('<p class="creamtitle">Gratulerer! Nå har du strikket ditt eget skaut.<br>'
        'Bruk det sammen med hatten, heia Norge!</p>')}
