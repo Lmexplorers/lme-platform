@@ -167,7 +167,7 @@ def vgrid(cols, rows, sw=34, sh=26, ox=10, oy=14, hi=None, done=None):
 def stranded_panels():
     """Tre paneler som viser flerfargestrikk: strikk etter diagram, flott bak, fest lange flott."""
     def darker(c):
-        return {'#C8102E': '#a30d24', '#F8F4EA': '#d9d2be', '#00205B': '#001640', '#ffffff': '#cccccc'}.get(c, '#999')
+        return {'#C8102E': '#a30d24', '#F8F4EA': '#d9d2be', '#00205B': '#001640', '#1f5fbf': '#123a7a', '#ffffff': '#cccccc'}.get(c, '#999')
     def vrow(colors, sw=21, sh=24, ox=19, oy=34):
         out = []
         for i, c in enumerate(colors):
@@ -187,10 +187,10 @@ def stranded_panels():
     panels = []
 
     # Panel 1: forsiden, strikk hver maske i fargen diagrammet viser
-    cols = [RED, RED, CREAM, CREAM, CREAM, RED]
+    cols = [CREAM, CREAM, BLUE, BLUE, BLUE, CREAM]
     g, ox, sw, oy, sh = vrow(cols)
     g1 = g + tag(78, 'forsiden')
-    panels.append((1, 'Strikk hver maske i fargen diagrammet viser. Rød er bunnen, hvit (eller blå) er mønsteret.', g1))
+    panels.append((1, 'Strikk hver maske i fargen diagrammet viser. Hvit er bunnen, blå er mønsteret.', g1))
 
     # Panel 2: baksiden, flott ligger løst bak
     y0 = 40
@@ -343,14 +343,14 @@ pages.append(page(f'''
 pages.append(page(f'''
 {banner('FØR DU BEGYNNER')}
 <p>Denne hatten strikkes rundt og rundt på rundpinne, nedenfra og opp. Du begynner med den
-bølgete bremmen, strikker striper i hvitt og marineblått, og fortsetter opp. Midt på hoveddelen
-strikker du inn flagget, "RO" og bølgene med flerfargestrikk, altså rett inn i hatten
-mens du strikker. Helt til slutt feller du sammen toppen.</p>
+bølgete blå bremmen, og fortsetter opp i hvitt. Midt på hoveddelen strikker du inn "RO" og
+flagget foran og bølgene bak, i blått med flerfargestrikk, altså rett inn i hatten mens du
+strikker. Helt til slutt feller du sammen toppen.</p>
 {tealp('DETTE LÆRER DU')}
 {card(ul([
   'å strikke rundt på rundpinne',
   'å lage en bølgekant (den er nesten magisk enkel)',
-  'å strikke striper i flere farger',
+  'å strikke en jevn brem i én farge',
   'å strikke inn mønster med to farger (flerfargestrikk med flott)',
   'å felle masker så toppen blir fin og rund',
 ]))}
@@ -395,9 +395,9 @@ pages.append(page(f'''
       '<p>Slik sjekker du: Legg opp 22 masker og strikk glatt (frem og tilbake: en pinne rett, '
       'en pinne vrang) til lappen er ca. 12 cm høy. Legg lappen flatt og mål hvor mange masker '
       'det er på 10 cm på midten.</p>'
-      + ul(['flere enn 17 masker: bytt til tykkere pinne (5,5 mm)',
-            'færre enn 17 masker: bytt til tynnere pinne (4,5 mm)',
-            'akkurat 17 masker: perfekt, sett i gang!']))}
+      + ul(['Flere enn 17 masker? Bytt til tykkere pinne (5,5 mm).',
+            'Færre enn 17 masker? Bytt til tynnere pinne (4,5 mm).',
+            'Akkurat 17 masker? Perfekt, sett i gang!']))}
 ''', 3))
 
 # ============ SIDE 4: STØRRELSER OG MÅL ============
@@ -434,11 +434,10 @@ pages.append(page(f'''
       'bak på innsiden</td></tr></table>')}
 {pink('SLIK ER HATTEN BYGGET OPP')}
 {card(steps([
-  '<b>Bølgekanten:</b> Du legger opp dobbelt så mange masker som du trenger og strikker striper. '
+  '<b>Den blå bremmen:</b> Du legger opp dobbelt så mange masker som du trenger og strikker i blått. '
   'Når du etterpå strikker to og to masker sammen, folder kanten seg i myke bølger helt av seg selv.',
-  '<b>Stripene:</b> hvit, marineblå og hvit, som en liten hilsen til flagget.',
-  '<b>Hoveddelen med mønster:</b> du strikker rødt et lite stykke, og så strikker du inn "NORGE", '
-  'flagget, "RO" og bølgene med to farger. Deretter rødt videre opp.',
+  '<b>Hoveddelen med mønster:</b> Du bytter til hvitt, og strikker inn "RO" og flagget foran og '
+  'bølgene bak, alt i blått. Rundt motivene strikker du hvitt.',
   '<b>Toppen:</b> Du feller jevnt sju steder, så toppen blir rund som en bolle.',
 ]))}
 ''', 5))
@@ -581,10 +580,10 @@ pages.append(page(f'''
 ])}
 {pink('SJEKKLISTE FOR EN FERDIG HATT')}
 {card(ul([
-  'alle tråder er festet og flottene ligger løst på innsiden',
+  'Alle tråder er festet og flottene ligger løst på innsiden',
   '"RO" og flagget sitter foran, bølgene bak',
-  'bremmen bølger og toppen er rund',
-  'hatten er tørr og klar for sommer, sjø og softis',
+  'Bremmen bølger og toppen er rund',
+  'Hatten er tørr og klar for sommer, sjø og softis',
 ]))}
 {cream('<p class="creamtitle">Gratulerer, du har strikket din egen RO-hatt!<br>'
        'Vis den frem 17. mai, på hytta og i båten.</p>')}

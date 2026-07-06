@@ -497,7 +497,7 @@ du to blå bølgeskvulp.</p>
       'Legg fargen du ikke bruker oppå omgangen og hekle de hvite maskene rundt den, så den '
       'ligger gjemt inni.',
       'Der et motiv skal være, henter du opp den blå tråden og hekler med blått i stedet.',
-      'Bytt farge i den <b>siste bevegelsen</b> på masken før: hent den nye fargen gjennom de to '
+      'Bytt farge i den <b>siste bevegelsen</b> på masken før: Hent den nye fargen gjennom de to '
       'siste løkkene. Da blir skiftet reint.',
       'Hold tråden som ligger inni løs, så hatten ikke strammer.',
       ]))}
@@ -517,9 +517,9 @@ pages.append(page(f'''
 {chart_svg(FLAG, cell=15, numbers=True)}
 </div>
 {card(ul([
-  '<b>Bortover:</b> midt foran er rett overfor maskemarkøren (som er midt bak). RO er 15 masker '
+  '<b>Bortover:</b> Midt foran er rett overfor maskemarkøren (som er midt bak). RO er 15 masker '
   'bredt (R, 1 maske hvit imellom, O). Tell 7 til 8 masker til hver side av midt foran.',
-  '<b>Oppover:</b> hekle RO nederst, ca. omgang 18. Flagget hekles ca. 2 omganger over RO, midt på.',
+  '<b>Oppover:</b> Hekle RO nederst, ca. omgang 18. Flagget hekles ca. 2 omganger over RO, midt på.',
   'Rundt RO og flagget hekler du hvitt. Flagget er i rødt, hvitt og blått.',
 ]))}
 ''', 6))
@@ -533,9 +533,9 @@ pages.append(page(f'''
 </div>
 {pink('HVOR PÅ HATTEN?')}
 {card(ul([
-  '<b>Bortover:</b> midt bak er ved maskemarkøren. Sett en bølge på hver side av markøren, med '
+  '<b>Bortover:</b> Midt bak er ved maskemarkøren. Sett en bølge på hver side av markøren, med '
   'litt hvitt imellom.',
-  '<b>Oppover:</b> bølgene starter på samme omgang som RO foran, ca. omgang 18.',
+  '<b>Oppover:</b> Bølgene starter på samme omgang som RO foran, ca. omgang 18.',
   'De små prikkene øverst i diagrammet er sjøsprøyt. Ikke glem dem, de er som skvulp i lufta!',
 ]))}
 ''', 7))
