@@ -3,7 +3,7 @@
 import base64, html, pathlib
 
 BASE = pathlib.Path(__file__).parent
-PHOTO = pathlib.Path('/root/.claude/uploads/8a2defc1-69f7-5b9a-9a21-28d0d3730f69/7785364c-4E168E657A324A48BB6B5D4B9B2FD459.png')
+PHOTO = pathlib.Path('/root/.claude/uploads/8a2defc1-69f7-5b9a-9a21-28d0d3730f69/709dfc1a-IMG_2685.png')
 
 # ---------- farger ----------
 RED   = '#C8102E'
@@ -370,7 +370,7 @@ def cover_illustration():
 
 # ============ SIDE 1: FORSIDE ============
 pages.append(page(f'''
-<div class="coverimg">{cover_illustration()}</div>
+<div class="coverimg"><img src="{photo_src}" alt="Rød NORGE-bøttehatt med flagg bak og bølget brem"></div>
 <div class="covertag">LME STRIKKEOPPSKRIFT</div>
 <div class="coverbanner">
   <div class="cflag">{mini_flag(40)}</div>
