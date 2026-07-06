@@ -348,11 +348,11 @@ flagget foran og bølgene bak, i blått med flerfargestrikk, altså rett inn i h
 strikker. Helt til slutt feller du sammen toppen.</p>
 {tealp('DETTE LÆRER DU')}
 {card(ul([
-  'å strikke rundt på rundpinne',
-  'å lage en bølgekant (den er nesten magisk enkel)',
-  'å strikke en jevn brem i én farge',
-  'å strikke inn mønster med to farger (flerfargestrikk med flott)',
-  'å felle masker så toppen blir fin og rund',
+  'Å strikke rundt på rundpinne',
+  'Å lage en bølgekant (den er nesten magisk enkel)',
+  'Å strikke en jevn brem i én farge',
+  'Å strikke inn mønster med to farger (flerfargestrikk med flott)',
+  'Å felle masker så toppen blir fin og rund',
 ]))}
 {pink('HVOR VANSKELIG ER DET?')}
 {card('<p><b>Litt øvet.</b> Du bør kunne legge opp masker, strikke rundt og strikke to masker '
@@ -382,13 +382,13 @@ pages.append(page(f'''
       'banderolen, for eksempel Hobbii Rainbow Cotton 8/8. Sjekk alltid strikkefastheten!</p>')}
 {tealp('PINNER OG UTSTYR')}
 {card(ul([
-  '<b>rundpinne 5 mm</b>, 40 cm lang (hele hatten strikkes på denne)',
-  '<b>strømpepinner 5 mm</b> til toppen, når det blir for trangt på rundpinnen',
-  'rundpinne 4,5 mm hvis du strikker løst (prøvelappen forteller deg det)',
-  'en <b>maskemarkør</b> (eller en liten løkke av garn i en annen farge)',
-  'en <b>stoppenål med butt spiss</b> til å feste tråder',
-  'et lite <b>ruteark og blyant</b> er lurt, så kan du tegne inn mønsterbåndet før du strikker',
-  'målebånd og saks',
+  '<b>Rundpinne 5 mm</b>, 40 cm lang (hele hatten strikkes på denne)',
+  '<b>Strømpepinner 5 mm</b> til toppen, når det blir for trangt på rundpinnen',
+  'Rundpinne 4,5 mm hvis du strikker løst (prøvelappen forteller deg det)',
+  'En <b>maskemarkør</b> (eller en liten løkke av garn i en annen farge)',
+  'En <b>stoppenål med butt spiss</b> til å feste tråder',
+  'Et lite <b>ruteark og blyant</b> er lurt, så kan du tegne inn mønsterbåndet før du strikker',
+  'Målebånd og saks',
 ]))}
 {pink('STRIKKEFASTHET, DEN HEMMELIGE NØKKELEN')}
 {card('<p><b>17 masker og 22 omganger glattstrikk på pinne 5 skal bli 10 &times; 10 cm.</b></p>'
