@@ -123,14 +123,14 @@ def hat_schematic():
   <path d="M190,235 L190,180 Q190,88 320,88 Q450,88 450,180 L450,235 Z" fill="{RED}" stroke="#8f0a20" stroke-width="2"/>
   <!-- fellelinjer på toppen -->
   <path d="M320,88 Q290,130 272,180 M320,88 Q320,135 320,180 M320,88 Q350,130 368,180 M320,88 Q255,125 218,168 M320,88 Q385,125 422,168" stroke="#a30d24" stroke-width="2" fill="none"/>
-  <!-- striper -->
-  <rect x="190" y="206" width="260" height="9" fill="#fff"/>
-  <rect x="190" y="215" width="260" height="10" fill="{NAVY}"/>
-  <rect x="190" y="225" width="260" height="9" fill="#fff"/>
-  <!-- brem med bølgekant -->
+  <!-- brem: rød, flarer ut med bølget kant. Én stripe-rad på bremmen. -->
+  <defs><clipPath id="brem"><path d="M190,235 L140,292 Q152,306 164,292 Q176,278 188,292 Q200,306 212,292 Q224,278 236,292 Q248,306 260,292 Q272,278 284,292 Q296,306 308,292 Q320,278 332,292 Q344,306 356,292 Q368,278 380,292 Q392,306 404,292 Q416,278 428,292 Q440,306 452,292 Q464,278 476,292 Q488,306 500,292 L450,235 Z"/></clipPath></defs>
   <path d="M190,235 L140,292 Q152,306 164,292 Q176,278 188,292 Q200,306 212,292 Q224,278 236,292 Q248,306 260,292 Q272,278 284,292 Q296,306 308,292 Q320,278 332,292 Q344,306 356,292 Q368,278 380,292 Q392,306 404,292 Q416,278 428,292 Q440,306 452,292 Q464,278 476,292 Q488,306 500,292 L450,235 Z" fill="{RED}" stroke="#8f0a20" stroke-width="2"/>
-  <path d="M181,245 L162,267 L478,267 L459,245 Z" fill="#ffffff" opacity="0.92"/>
-  <path d="M173,254 L166,262 L474,262 L467,254 Z" fill="{NAVY}"/>
+  <g clip-path="url(#brem)">
+    <rect x="120" y="248" width="400" height="7" fill="#fff"/>
+    <rect x="120" y="255" width="400" height="10" fill="{NAVY}"/>
+    <rect x="120" y="265" width="400" height="7" fill="#fff"/>
+  </g>
   <!-- mål: høyde -->
   <line x1="512" y1="88" x2="512" y2="235" stroke="#777" stroke-width="2" marker-start="url(#ah)" marker-end="url(#ah)"/>
   <text x="522" y="156" font-size="15" font-family="sans-serif" fill="#555">høyde</text>
@@ -141,8 +141,8 @@ def hat_schematic():
   <line x1="156" y1="96" x2="280" y2="105" stroke="#aaa" stroke-width="1.5"/>
   <text x="118" y="190" font-size="15" font-family="sans-serif" fill="#555" text-anchor="end">3. hoveddelen</text>
   <line x1="124" y1="186" x2="192" y2="190" stroke="#aaa" stroke-width="1.5"/>
-  <text x="116" y="226" font-size="15" font-family="sans-serif" fill="#555" text-anchor="end">2. stripene</text>
-  <line x1="122" y1="222" x2="190" y2="218" stroke="#aaa" stroke-width="1.5"/>
+  <text x="116" y="260" font-size="15" font-family="sans-serif" fill="#555" text-anchor="end">2. stripene</text>
+  <line x1="122" y1="256" x2="178" y2="260" stroke="#aaa" stroke-width="1.5"/>
   <text x="110" y="292" font-size="15" font-family="sans-serif" fill="#555" text-anchor="end">1. bølgekanten</text>
   <line x1="116" y1="288" x2="146" y2="282" stroke="#aaa" stroke-width="1.5"/>
   <text x="320" y="332" text-anchor="middle" font-size="14" font-family="sans-serif" fill="#888">Tallene står slik: barn (dame) herre</text>
