@@ -3,7 +3,7 @@
 import base64, html, pathlib
 
 BASE = pathlib.Path(__file__).parent
-PHOTO = pathlib.Path('/root/.claude/uploads/8a2defc1-69f7-5b9a-9a21-28d0d3730f69/de660ac6-IMG_2688.png')
+PHOTO = pathlib.Path('/root/.claude/uploads/8a2defc1-69f7-5b9a-9a21-28d0d3730f69/7990fa35-IMG_2691.png')
 
 # ---------- farger ----------
 RED   = '#C8102E'
@@ -395,7 +395,7 @@ def cme(t):
 
 # ============ SIDE 1: FORSIDE ============
 pages.append(page(f'''
-<div class="coverimg">{cover_illustration()}</div>
+<div class="coverimg"><img src="{photo_src}" alt="Heklet RO-bøttehatt: hvit med blå RO, flagg og bølger"></div>
 <div class="covertag">LME HEKLEOPPSKRIFT</div>
 <div class="coverbanner">
   <div class="cflag">{mini_flag(40)}</div>
