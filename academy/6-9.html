@@ -1962,11 +1962,13 @@
     timer = setInterval(next, 6000);
   }
 
-  document.querySelector('.hero-nav.next').addEventListener('click', () => { next(); startAuto(); });
-  document.querySelector('.hero-nav.prev').addEventListener('click', () => { prev(); startAuto(); });
+  const heroNext = document.querySelector('.hero-nav.next');
+  const heroPrev = document.querySelector('.hero-nav.prev');
+  if (heroNext) heroNext.addEventListener('click', () => { next(); startAuto(); });
+  if (heroPrev) heroPrev.addEventListener('click', () => { prev(); startAuto(); });
   dots.forEach((d, i) => d.addEventListener('click', () => { show(i); startAuto(); }));
 
-  startAuto();
+  if (slides.length) startAuto();
 
   /* ====== Språkbytte ====== */
   
