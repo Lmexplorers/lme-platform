@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<title>NORGE-bøttehatt (maskesting), strikkeoppskrift | LME Butikk</title>
+<meta name="description" content="Rød bomullshatt med &quot;NORGE&quot; og det norske flagget foran, og &quot;RO&quot; med bølgeskvulp bak. Mønsteret broderes på med maskesting etter at hatten er strikket. Bølget brem, tre størrelser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink-soft: #F8D7DA; --pink-mid: #F5A8B8; --cream: #FBF6F0; --cream-deep: #F4E9DD;
+    --cerise: #E91E89; --sun: #F7C72E; --sky: #3FA9F5; --lime: #A4D233;
+    --ink: #1A1A1A; --ink-soft: #4A4A4A; --ink-muted: #8A8A8A; --line: rgba(26,26,26,0.08);
+    --btn-yellow: #F7E76B; --btn-yellow-hover: #F0DD4F;
+    --vipps: #FF5B24; --vipps-hover: #E64A16; --paypal: #F7C72E;
+    --shadow-sm: 0 1px 3px rgba(26,26,26,0.04), 0 1px 2px rgba(26,26,26,0.03);
+    --shadow-md: 0 4px 16px rgba(26,26,26,0.06), 0 2px 6px rgba(26,26,26,0.04);
+    --shadow-lg: 0 12px 40px rgba(26,26,26,0.08), 0 4px 12px rgba(26,26,26,0.04);
+    --r-sm: 12px; --r-md: 18px; --r-lg: 24px; --r-pill: 999px;
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font-body); background: linear-gradient(180deg,#FDF0F1 0%,var(--cream) 340px);
+    color: var(--ink); -webkit-font-smoothing: antialiased; }
+  h1,h2,h3,h4 { font-family: var(--font-head); }
+  button,input,select,textarea { font-family: var(--font-body); }
+  a { color: inherit; }
+  .topbar { max-width: 1060px; margin: 0 auto; padding: 18px 20px 0;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .topbar .logo img { height: 52px; display: block; }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; background: #fff;
+    border: 1px solid var(--line); border-radius: var(--r-pill); padding: 9px 16px;
+    font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: var(--shadow-sm); transition: all .2s ease; }
+  .back-link:hover { border-color: var(--cerise); color: var(--cerise); }
+  .lang-btn { background: var(--cerise); color: #fff; border: none; cursor: pointer;
+    border-radius: var(--r-pill); padding: 10px 16px; font-size: 13px; font-weight: 700;
+    box-shadow: var(--shadow-sm); transition: transform .2s ease; }
+  .lang-btn:hover { transform: translateY(-1px); }
+  main { max-width: 1060px; margin: 0 auto; padding: 26px 20px 70px; }
+  .crumbs { font-size: 13px; color: var(--ink-muted); margin-bottom: 22px; }
+  .crumbs a { text-decoration: none; } .crumbs a:hover { color: var(--cerise); }
+  .crumbs .sep { margin: 0 6px; }
+  .hero { text-align: center; margin-bottom: 26px; }
+  .kicker { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--cerise); margin-bottom: 10px; }
+  .hero h1 { font-size: clamp(30px,5vw,46px); line-height: 1.12; margin-bottom: 12px; }
+  .hero h1 em { font-style: normal; color: var(--cerise); }
+  .hero .sub { font-size: 17px; color: var(--ink-soft); max-width: 640px; margin: 0 auto; line-height: 1.55; }
+  .cover-card { background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow-lg); padding: 14px; margin-bottom: 34px; }
+  .cover-card img { width: 100%; height: auto; display: block; border-radius: var(--r-md); }
+  .cover-note { text-align: center; font-size: 12.5px; color: var(--ink-muted); padding: 10px 6px 2px; }
+  .layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 26px; align-items: start; }
+  .includes { background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow-md); padding: 28px; }
+  .includes h2 { font-size: 24px; margin-bottom: 6px; }
+  .includes .lead { font-size: 14.5px; color: var(--ink-soft); margin-bottom: 18px; line-height: 1.5; }
+  .item { display: flex; gap: 14px; padding: 13px 0; border-top: 1px solid var(--line); }
+  .item:first-of-type { border-top: none; }
+  .item .emoji { width: 44px; height: 44px; border-radius: var(--r-sm); background: var(--cream);
+    display: grid; place-items: center; font-size: 22px; flex-shrink: 0; }
+  .item h3 { font-size: 16px; margin-bottom: 2px; }
+  .item p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.45; }
+  .buy-box { background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow-md); padding: 26px; position: sticky; top: 20px; }
+  .buy-box .tag { display: inline-block; background: var(--lime); border-radius: var(--r-pill);
+    font-size: 11px; font-weight: 700; letter-spacing: .1em; padding: 5px 12px; margin-bottom: 12px; }
+  .buy-box .price { font-size: 38px; font-weight: 700; font-family: var(--font-head); }
+  .buy-box .price-sub { font-size: 13px; color: var(--ink-muted); margin-bottom: 16px; }
+  .pay-label { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink-muted); margin: 6px 0 10px; }
+  .pay-methods { font-size: 12.5px; color: var(--ink-muted); text-align: center; margin: 2px 0 4px; }
+  .btn-buy { display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center;
+    border-radius: var(--r-pill); padding: 14px 20px; font-size: 15.5px; font-weight: 700;
+    text-decoration: none; box-shadow: var(--shadow-sm); transition: all .2s ease; margin-bottom: 10px; }
+  .btn-buy:hover { transform: translateY(-1px); }
+  .btn-vipps { background: var(--vipps); color: #fff; }
+  .btn-vipps:hover { background: var(--vipps-hover); }
+  .btn-card { background: var(--btn-yellow); color: var(--ink); }
+  .btn-card:hover { background: var(--btn-yellow-hover); }
+  .btn-paypal { background: #fff; color: #003087; border: 2px solid #003087; }
+  .btn-paypal:hover { background: #f4f7fd; }
+  .fine { font-size: 12.5px; color: var(--ink-muted); line-height: 1.5; margin-top: 14px; }
+  .fine li { margin: 6px 0 0 18px; }
+  .fact-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 18px; }
+  .fact { background: var(--cream); border-radius: var(--r-pill); padding: 7px 14px; font-size: 12.5px; font-weight: 700; }
+  footer { text-align: center; padding: 26px 20px 44px; font-size: 13px; color: var(--ink-muted); }
+  footer a { color: var(--cerise); }
+  @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } .buy-box { position: static; } }
+</style>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/images/app/apple-touch-icon.png">
+</head>
+<body>
+
+<div class="topbar">
+  <a href="/dashboard" class="logo"><img src="/images/lme-logo.png" alt="Little Montessori Explorers"></a>
+  <div class="topbar-right">
+    <a href="/butikk" class="back-link" data-no="← Tilbake til butikken" data-en="← Back to the shop">← Tilbake til butikken</a>
+    <button class="lang-btn" id="langToggle">EN 🌍</button>
+  </div>
+</div>
+
+<main>
+  <nav class="crumbs">
+    <a href="/dashboard" data-no="Dashbord" data-en="Dashboard">Dashbord</a><span class="sep">/</span><a href="/butikk" data-no="Butikk" data-en="Shop">Butikk</a><span class="sep">/</span><span data-no="NORGE-bøttehatt (maskesting), strikkeoppskrift" data-en="NORGE bucket hat (duplicate stitch), knitting pattern">NORGE-bøttehatt (maskesting), strikkeoppskrift</span>
+  </nav>
+
+  <section class="hero">
+    <span class="kicker" data-no="STRIKKEOPPSKRIFT · BARN, DAME OG HERRE · DIGITAL NEDLASTING" data-en="KNITTING PATTERN · CHILD, WOMAN &amp; MAN · DIGITAL DOWNLOAD">STRIKKEOPPSKRIFT · BARN, DAME OG HERRE · DIGITAL NEDLASTING</span>
+    <h1 data-no="NORGE-bøttehatt, &lt;em&gt;strikkeoppskrift&lt;/em&gt;" data-en="NORGE bucket hat, &lt;em&gt;knitting pattern&lt;/em&gt;">NORGE-bøttehatt, <em>strikkeoppskrift</em></h1>
+    <p class="sub" data-no="Rød bomullshatt med &quot;NORGE&quot; og det norske flagget foran, og &quot;RO&quot; med bølgeskvulp bak. Mønsteret broderes på med maskesting etter at hatten er strikket. Bølget brem, tre størrelser." data-en="Red cotton hat with &quot;NORGE&quot; and the Norwegian flag on the front, and &quot;RO&quot; with waves on the back. The motif is added with duplicate stitch after the hat is knitted. Wavy brim, three sizes.">Rød bomullshatt med &quot;NORGE&quot; og det norske flagget foran, og &quot;RO&quot; med bølgeskvulp bak. Mønsteret broderes på med maskesting etter at hatten er strikket. Bølget brem, tre størrelser.</p>
+  </section>
+
+  <div class="cover-card">
+    <img src="/images/oppskrift-norge-strikk.jpg" alt="NORGE-bøttehatt (maskesting), strikkeoppskrift">
+    <p class="cover-note" data-no="Ferdig strikket NORGE-hatt: NORGE og flagget foran, RO og bølgene bak." data-en="Finished knitted NORGE hat: NORGE and the flag on the front, RO and the waves on the back.">Ferdig strikket NORGE-hatt: NORGE og flagget foran, RO og bølgene bak.</p>
+  </div>
+
+  <div class="layout">
+    <section class="includes">
+      <h2 data-no="Dette får du" data-en="What you get">Dette får du</h2>
+      <p class="lead" data-no="En komplett strikkeoppskrift i LME-stil, med mønsterdiagram og steg for steg." data-en="A complete knitting pattern in LME style, with charts and step by step.">En komplett strikkeoppskrift i LME-stil, med mønsterdiagram og steg for steg.</p>
+      <div class="item">
+        <span class="emoji">🧢</span>
+        <div>
+          <h3 data-no="Bøttehatt i tre størrelser" data-en="Bucket hat in three sizes">Bøttehatt i tre størrelser</h3>
+          <p data-no="Passer barn, dame og herre. Alle tallene står gjennom hele oppskriften." data-en="Fits child, woman and man. All the numbers run through the whole pattern.">Passer barn, dame og herre. Alle tallene står gjennom hele oppskriften.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="emoji">🇳🇴</span>
+        <div>
+          <h3 data-no="NORGE og flagget foran" data-en="NORGE and the flag on the front">NORGE og flagget foran</h3>
+          <p data-no="Broderes på med maskesting, som legger seg oppå de strikkede maskene." data-en="Added with duplicate stitch, sitting on top of the knitted stitches.">Broderes på med maskesting, som legger seg oppå de strikkede maskene.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="emoji">🌊</span>
+        <div>
+          <h3 data-no="RO og bølger bak" data-en="RO and waves on the back">RO og bølger bak</h3>
+          <p data-no="&quot;RO&quot; med to bølgeskvulp bak, og en bølget brem med flaggstriper." data-en="&quot;RO&quot; with two waves on the back, and a wavy brim with flag stripes.">&quot;RO&quot; med to bølgeskvulp bak, og en bølget brem med flaggstriper.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="emoji">📊</span>
+        <div>
+          <h3 data-no="Mønsterdiagram" data-en="Charts">Mønsterdiagram</h3>
+          <p data-no="Tydelige rutediagram for bokstavene, flagget og bølgene, med plassering." data-en="Clear grid charts for the letters, the flag and the waves, with placement.">Tydelige rutediagram for bokstavene, flagget og bølgene, med plassering.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="emoji">📄</span>
+        <div>
+          <h3 data-no="PDF i LME-stil" data-en="PDF in LME style">PDF i LME-stil</h3>
+          <p data-no="Klar til utskrift på A4. Playpen Sans og Sasson Montessori." data-en="Ready to print on A4. Playpen Sans and Sasson Montessori.">Klar til utskrift på A4. Playpen Sans og Sasson Montessori.</p>
+        </div>
+      </div>
+    </section>
+
+    <aside class="buy-box">
+      <span class="tag" data-no="STRIKKEOPPSKRIFT" data-en="KNITTING PATTERN">STRIKKEOPPSKRIFT</span>
+      <div class="price" data-no="99 kr" data-en="$9">99 kr</div>
+      <p class="price-sub" data-no="Engangskjøp · digital PDF-nedlasting" data-en="One-time purchase · digital PDF download">Engangskjøp · digital PDF-nedlasting</p>
+
+      <div class="fact-row">
+        <span class="fact" data-no="Barn, dame, herre" data-en="Child, woman, man">Barn, dame, herre</span> <span class="fact" data-no="Skriv ut selv" data-en="Print at home">Skriv ut selv</span> <span class="fact" data-no="Av Renate Dahl" data-en="By Renate Dahl">Av Renate Dahl</span>
+      </div>
+
+      <a class="btn-buy btn-card" href="https://buy.stripe.com/9B6aEY4NT73heCxdBB9R60H" data-no-href="https://buy.stripe.com/9B6aEY4NT73heCxdBB9R60H" data-en-href="https://buy.stripe.com/9B6aEY4NT73heCxdBB9R60H" data-no="Kjøp nå, 99 kr →" data-en="Buy now, $9 →">Kjøp nå, 99 kr →</a>
+      <p class="pay-methods" data-no="Betal trygt med kort, Vipps eller PayPal" data-en="Pay securely with card, Vipps or PayPal">Betal trygt med kort, Vipps eller PayPal</p>
+
+      <ul class="fine">
+        <li data-no="Digital PDF i LME-stil, klar til utskrift hjemme." data-en="Digital PDF in LME style, ready to print at home.">Digital PDF i LME-stil, klar til utskrift hjemme.</li>
+        <li data-no="Trygg betaling. Nedlastingen kommer rett etter kjøpet." data-en="Secure payment. The download is available right after purchase.">Trygg betaling. Nedlastingen kommer rett etter kjøpet.</li>
+        <li data-no="Spørsmål? Svar på kvitteringen, så hjelper vi deg." data-en="Questions? Reply to your receipt and we'll help you.">Spørsmål? Svar på kvitteringen, så hjelper vi deg.</li>
+      </ul>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <span data-no="Little Montessori Explorers · av Renate Dahl" data-en="Little Montessori Explorers · by Renate Dahl">Little Montessori Explorers · av Renate Dahl</span>
+  · <a href="/butikk" data-no="Tilbake til butikken" data-en="Back to the shop">Tilbake til butikken</a>
+</footer>
+
+<script>
+  let currentLang = 'no';
+  const toggle = document.getElementById('langToggle');
+  function switchLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(el => {
+      const text = el.getAttribute('data-' + lang);
+      if (text.includes('<')) el.innerHTML = text; else el.textContent = text;
+    });
+    document.querySelectorAll('[data-no-src][data-en-src]').forEach(el => { el.src = el.getAttribute('data-' + lang + '-src'); });
+    document.querySelectorAll('[data-no-href][data-en-href]').forEach(el => { el.href = el.getAttribute('data-' + lang + '-href'); });
+    toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    document.title = lang === 'no' ? 'NORGE-bøttehatt (maskesting), strikkeoppskrift | LME Butikk' : 'NORGE bucket hat (duplicate stitch), knitting pattern | LME Shop';
+    try { localStorage.setItem('lme_lang', lang); } catch (e) {}
+  }
+  toggle.addEventListener('click', () => switchLanguage(currentLang === 'no' ? 'en' : 'no'));
+  (function () {
+    const urlLang = new URLSearchParams(location.search).get('lang');
+    let saved = null; try { saved = localStorage.getItem('lme_lang'); } catch (e) {}
+    const lang = urlLang || saved; if (lang === 'en') switchLanguage('en');
+  })();
+</script>
+<script src="/js/lme-visibility.js" defer></script>
+</body>
+</html>

@@ -92,6 +92,168 @@ window.LME_BUTIKK = {
           knapp: { no: "Last ned hele pakken (zip, norsk + engelsk)",
                    en: "Download the complete package (zip, Norwegian + English)" } }
       ]
+    },
+
+    "ro-strikk": {
+      navn:  { no: "RO-bøttehatt, strikkeoppskrift", en: "RO bucket hat, knitting pattern" },
+      undertittel: { no: "Hvit hatt · blå RO og flagg · bølger · tre størrelser",
+                     en: "White hat · blue RO and flag · waves · three sizes" },
+      cover:   "/images/oppskrift-ro-strikk.jpg",
+      coverEn: "/images/oppskrift-ro-strikk.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/ro-strikk.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "ro-hekle": {
+      navn:  { no: "RO-bøttehatt, hekleoppskrift", en: "RO bucket hat, crochet pattern" },
+      undertittel: { no: "Hvit hatt · blå RO og flagg · bølger · voksen",
+                     en: "White hat · blue RO and flag · waves · adult" },
+      cover:   "/images/oppskrift-ro-hekle.jpg",
+      coverEn: "/images/oppskrift-ro-hekle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/ro-hekle.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "norway-strikk": {
+      navn:  { no: "NORWAY-bøttehatt, strikkeoppskrift", en: "NORWAY bucket hat, knitting pattern" },
+      undertittel: { no: "Rød hatt · NORWAY foran · flagg bak · tre størrelser",
+                     en: "Red hat · NORWAY front · flag back · three sizes" },
+      cover:   "/images/oppskrift-norway-strikk.jpg",
+      coverEn: "/images/oppskrift-norway-strikk.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norway-strikk.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "norway-hekle": {
+      navn:  { no: "NORWAY-bøttehatt, hekleoppskrift", en: "NORWAY bucket hat, crochet pattern" },
+      undertittel: { no: "Rød hatt · NORWAY foran · flagg bak · voksen",
+                     en: "Red hat · NORWAY front · flag back · adult" },
+      cover:   "/images/oppskrift-norway-hekle.jpg",
+      coverEn: "/images/oppskrift-norway-hekle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norway-hekle.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "norge-strikk": {
+      navn:  { no: "NORGE-bøttehatt (maskesting), strikkeoppskrift", en: "NORGE bucket hat (duplicate stitch), knitting pattern" },
+      undertittel: { no: "Rød hatt · NORGE og flagg foran · RO og bølger bak · tre størrelser",
+                     en: "Red hat · NORGE and flag front · RO and waves back · three sizes" },
+      cover:   "/images/oppskrift-norge-strikk.jpg",
+      coverEn: "/images/oppskrift-norge-strikk.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-strikk.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "norge-blokk": {
+      navn:  { no: "NORGE-bøttehatt (blokkbokstaver), strikkeoppskrift", en: "NORGE bucket hat (block letters), knitting pattern" },
+      undertittel: { no: "Rød hatt · NORGE i blokkbokstaver · flagg bak · tre størrelser",
+                     en: "Red hat · NORGE in block letters · flag back · three sizes" },
+      cover:   "/images/oppskrift-norge-blokk.jpg",
+      coverEn: "/images/oppskrift-norge-blokk.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-blokk.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "norge-innstrikket": {
+      navn:  { no: "NORGE-bøttehatt (innstrikket), strikkeoppskrift", en: "NORGE bucket hat (knitted in), knitting pattern" },
+      undertittel: { no: "Rød hatt · NORGE, flagg, RO og bølger innstrikket · tre størrelser",
+                     en: "Red hat · NORGE, flag, RO and waves knitted in · three sizes" },
+      cover:   "/images/oppskrift-norge-innstrikket.jpg",
+      coverEn: "/images/oppskrift-norge-innstrikket.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-innstrikket.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "norge-hekle": {
+      navn:  { no: "NORGE-bøttehatt, hekleoppskrift", en: "NORGE bucket hat, crochet pattern" },
+      undertittel: { no: "Rød hatt · NORGE i blokkbokstaver · flagg · voksen",
+                     en: "Red hat · NORGE in block letters · flag · adult" },
+      cover:   "/images/oppskrift-norge-hekle.jpg",
+      coverEn: "/images/oppskrift-norge-hekle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-hekle.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "norge-skaut": {
+      navn:  { no: "Norge-skaut, strikkeoppskrift", en: "Norway kerchief, knitting pattern" },
+      undertittel: { no: "Trekantskaut · bølger og flaggstriper rundt · I-cord-snorer",
+                     en: "Triangular kerchief · waves and flag stripes all around · I-cord ties" },
+      cover:   "/images/oppskrift-skaut.jpg",
+      coverEn: "/images/oppskrift-skaut.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-skaut.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "norge-pakke": {
+      navn:  { no: "NORGE-bøttehatt, alle 3 strikkevariantene", en: "NORGE bucket hat, all 3 knitting versions" },
+      undertittel: { no: "Pakke · maskesting + blokkbokstaver + innstrikket",
+                     en: "Bundle · duplicate stitch + block letters + knitted in" },
+      cover:   "/images/oppskrift-norge-blokk.jpg",
+      coverEn: "/images/oppskrift-norge-blokk.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-strikk.pdf",
+          knapp: { no: "NORGE, maskesting (PDF)", en: "NORGE, duplicate stitch (PDF)" } },
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-blokk.pdf",
+          knapp: { no: "NORGE, blokkbokstaver (PDF)", en: "NORGE, block letters (PDF)" } },
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-innstrikket.pdf",
+          knapp: { no: "NORGE, innstrikket (PDF)", en: "NORGE, knitted in (PDF)" } }
+      ]
+    },
+
+    "hekle-pakke": {
+      navn:  { no: "Alle hekleoppskriftene, pakke", en: "All crochet patterns, bundle" },
+      undertittel: { no: "Pakke · RO + NORWAY + NORGE i hekleutgave",
+                     en: "Bundle · RO + NORWAY + NORGE in crochet" },
+      cover:   "/images/oppskrift-ro-hekle.jpg",
+      coverEn: "/images/oppskrift-ro-hekle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/ro-hekle.pdf",
+          knapp: { no: "RO-bøttehatt, hekle (PDF)", en: "RO bucket hat, crochet (PDF)" } },
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norway-hekle.pdf",
+          knapp: { no: "NORWAY-bøttehatt, hekle (PDF)", en: "NORWAY bucket hat, crochet (PDF)" } },
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-hekle.pdf",
+          knapp: { no: "NORGE-bøttehatt, hekle (PDF)", en: "NORGE bucket hat, crochet (PDF)" } }
+      ]
+    },
+
+    "strikk-pakke": {
+      navn:  { no: "Alle strikkeoppskriftene, pakke", en: "All knitting patterns, bundle" },
+      undertittel: { no: "Pakke · RO + NORWAY + NORGE (3) + skaut",
+                     en: "Bundle · RO + NORWAY + NORGE (3) + kerchief" },
+      cover:   "/images/oppskrift-ro-strikk.jpg",
+      coverEn: "/images/oppskrift-ro-strikk.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/ro-strikk.pdf",
+          knapp: { no: "RO-bøttehatt, strikk (PDF)", en: "RO bucket hat, knit (PDF)" } },
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norway-strikk.pdf",
+          knapp: { no: "NORWAY-bøttehatt, strikk (PDF)", en: "NORWAY bucket hat, knit (PDF)" } },
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-strikk.pdf",
+          knapp: { no: "NORGE, maskesting (PDF)", en: "NORGE, duplicate stitch (PDF)" } },
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-blokk.pdf",
+          knapp: { no: "NORGE, blokkbokstaver (PDF)", en: "NORGE, block letters (PDF)" } },
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-innstrikket.pdf",
+          knapp: { no: "NORGE, innstrikket (PDF)", en: "NORGE, knitted in (PDF)" } },
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-skaut.pdf",
+          knapp: { no: "Norge-skaut (PDF)", en: "Norway kerchief (PDF)" } }
+      ]
     }
 
     // ,"neste-produkt-id": { ... samme mønster ... }
