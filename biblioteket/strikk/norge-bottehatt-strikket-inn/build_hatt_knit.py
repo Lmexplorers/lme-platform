@@ -15,17 +15,17 @@ TEAL  = '#4aa7a4'
 
 # ---------- diagramdata ----------
 LETTERS5 = {
-    'N': ["#...#","##..#","##..#","#.#.#","#..##","#..##","#...#"],
-    'O': [".###.","#...#","#...#","#...#","#...#","#...#",".###."],
-    'R': ["####.","#...#","#...#","####.","#.#..","#..#.","#...#"],
-    'G': [".###.","#...#","#....","#.###","#...#","#...#",".###."],
-    'E': ["#####","#....","#....","####.","#....","#....","#####"],
+    'N': ["#....#","##...#","#.#..#","#.#..#","#..#.#","#..#.#","#...##","#....#"],
+    'O': [".####.","#....#","#....#","#....#","#....#","#....#","#....#",".####."],
+    'R': ["#####.","#....#","#....#","#####.","#.#...","#..#..","#..#..","#...#."],
+    'G': [".####.","#....#","#.....","#.....","#..###","#....#","#....#",".####."],
+    'E': ["######","#.....","#.....","#####.","#.....","#.....","#.....","######"],
 }
 BIG_R = ["######.","#.....#","#.....#","#.....#","######.","#..#...","#...#..","#....#.","#.....#"]
 BIG_O = ["..###..",".#...#.","#.....#","#.....#","#.....#","#.....#","#.....#",".#...#.","..###.."]
 FLAG = [
     "RRRWBBWRRRRRR","RRRWBBWRRRRRR","RRRWBBWRRRRRR",
-    "WWWWWWWWWWWWW","BBBBBBBBBBBBB","BBBBBBBBBBBBB","WWWWWWWWWWWWW",
+    "WWWWBBWWWWWWW","BBBBBBBBBBBBB","BBBBBBBBBBBBB","WWWWBBWWWWWWW",
     "RRRWBBWRRRRRR","RRRWBBWRRRRRR","RRRWBBWRRRRRR",
 ]
 WAVE = [
@@ -370,7 +370,7 @@ mens du strikker. Helt til slutt feller du sammen toppen.</p>
 {card('<p>Oppskriften har tre størrelser. Tallene skrives alltid slik:</p>'
       '<p class="center bignum">barn (dame) herre &nbsp;&rarr;&nbsp; for eksempel 84 (91) 98 masker</p>'
       '<p>Strikker du barnestørrelsen, bruker du det første tallet. Dame bruker tallet i parentes, '
-      'og herre bruker det siste. Tips: sett en ring rundt tallene dine med blyant før du begynner.</p>')}
+      'og herre bruker det siste. Tips: Sett en ring rundt tallene dine med blyant før du begynner.</p>')}
 {cream('<p class="creamtitle">Ett steg om gangen, så blir det hatt til slutt.</p>')}
 ''', 2))
 
@@ -398,7 +398,7 @@ pages.append(page(f'''
 ]))}
 {pink('STRIKKEFASTHET, DEN HEMMELIGE NØKKELEN')}
 {card('<p><b>17 masker og 22 omganger glattstrikk på pinne 5 skal bli 10 &times; 10 cm.</b></p>'
-      '<p>Slik sjekker du: legg opp 22 masker og strikk glatt (frem og tilbake: en pinne rett, '
+      '<p>Slik sjekker du: Legg opp 22 masker og strikk glatt (frem og tilbake: en pinne rett, '
       'en pinne vrang) til lappen er ca. 12 cm høy. Legg lappen flatt og mål hvor mange masker '
       'det er på 10 cm på midten.</p>'
       + ul(['flere enn 17 masker: bytt til tykkere pinne (5,5 mm)',
@@ -440,12 +440,12 @@ pages.append(page(f'''
       'bak på innsiden</td></tr></table>')}
 {pink('SLIK ER HATTEN BYGGET OPP')}
 {card(steps([
-  '<b>Bølgekanten:</b> du legger opp dobbelt så mange masker som du trenger og strikker striper. '
+  '<b>Bølgekanten:</b> Du legger opp dobbelt så mange masker som du trenger og strikker striper. '
   'Når du etterpå strikker to og to masker sammen, folder kanten seg i myke bølger helt av seg selv.',
   '<b>Stripene:</b> hvit, marineblå og hvit, som en liten hilsen til flagget.',
   '<b>Hoveddelen med mønster:</b> du strikker rødt et lite stykke, og så strikker du inn "NORGE", '
   'flagget, "RO" og bølgene med to farger. Deretter rødt videre opp.',
-  '<b>Toppen:</b> du feller jevnt sju steder, så toppen blir rund som en bolle.',
+  '<b>Toppen:</b> Du feller jevnt sju steder, så toppen blir rund som en bolle.',
 ]))}
 ''', 5))
 
@@ -455,17 +455,17 @@ pages.append(page(f'''
 <p>Nå begynner vi! Husk: barn (dame) herre. Hele bremmen strikkes rett, altså glattstrikk rundt.</p>
 {steps([
   'Legg opp <b>168 (182) 196 m</b> med rød på rundpinne 5 mm. Ja, det er mange masker, '
-  'men det er dobbelt med vilje: det er det som lager bølgene til slutt.',
+  'men det er dobbelt med vilje: Det er det som lager bølgene til slutt.',
   'Sett maskemarkøren på pinnen. Den viser hvor omgangen starter, og den blir midt bak på hatten.',
   'Legg strikketøyet på bordet og se at oppleggskanten ikke er vridd rundt pinnen. Alle maskene '
   'skal peke samme vei, som en rett togskinne. Strikk så den første masken, nå er ringen lukket!',
   'Strikk rett rundt i striper, slik: <b>4 omg rød, 3 omg hvit, 3 omg marineblå, 3 omg hvit</b>. '
   'Når du bytter farge, lar du den gamle tråden bare hvile på baksiden. Ikke klipp den røde, '
   'du trenger den igjen straks.',
-  '<b>Bølgeomgangen (med rød):</b> strikk 2 r sammen hele omgangen. Tell etterpå: nå har du '
+  '<b>Bølgeomgangen (med rød):</b> Strikk 2 r sammen hele omgangen. Tell etterpå: Nå har du '
   '<b>84 (91) 98 m</b>, og bremmen buer seg ut i fine bølgeskvulp. Magisk!',
 ])}
-{cream('<p class="creamtitle">Mist du en maske? Ta det med ro. Stikk pinnen inn igjen og løft den opp, '
+{cream('<p class="creamtitle">Mistet du en maske? Ta det med ro. Stikk pinnen inn igjen og løft den opp, '
        'eller be en voksen om hjelp. Ingenting er ødelagt.</p>')}
 {pink('SJEKKPUNKT')}
 {card(ul(['Har du 84 (91) 98 masker på pinnen?',
@@ -514,14 +514,14 @@ pages.append(page(f'''
 
 # ============ SIDE 9: DIAGRAM NORGE + FLAGG ============
 front_strip = strip_svg([
-    ('N',5,'x'),('',1,'sp'),('O',5,'x'),('',1,'sp'),('R',5,'x'),('',1,'sp'),
-    ('G',5,'x'),('',1,'sp'),('E',5,'x'),('',2,'sp'),('FLAGG',13,'x'),
-], 'Til sammen 44 masker bredt')
+    ('N',6,'x'),('',1,'sp'),('O',6,'x'),('',1,'sp'),('R',6,'x'),('',1,'sp'),
+    ('G',6,'x'),('',1,'sp'),('E',6,'x'),('',2,'sp'),('FLAGG',13,'x'),
+], 'Til sammen 49 masker bredt')
 pages.append(page(f'''
 {banner('DIAGRAM: NORGE OG FLAGGET')}
 <p>En rute = en maske. Hvit rute = strikk med hvit. Blå rute = strikk med blå. Rød rute = strikk
 med rød (bunnfargen). Les hver rad nedenfra og opp, og fra høyre mot venstre.</p>
-{tealp('BOKSTAVENE (5 ruter brede, 7 ruter høye)')}
+{tealp('BOKSTAVENE (6 ruter brede, 8 ruter høye)')}
 <div class="chartrow tight">
 {chart_svg(LETTERS5['N'], cell=16)}{chart_svg(LETTERS5['O'], cell=16)}{chart_svg(LETTERS5['R'], cell=16)}{chart_svg(LETTERS5['G'], cell=16)}{chart_svg(LETTERS5['E'], cell=16)}
 </div>
@@ -531,9 +531,9 @@ med rød (bunnfargen). Les hver rad nedenfra og opp, og fra høyre mot venstre.<
 {pink('HVOR PÅ HATTEN?')}
 {card(f'<div class="stripwrap">{front_strip}</div>'
   + ul([
-  '<b>Bortover:</b> midt foran er rett overfor maskemarkøren. Tell 22 masker til venstre for '
+  '<b>Bortover:</b> Midt foran er rett overfor maskemarkøren. Tell 24 masker til venstre for '
   'midten. Der starter N-en. La det være 1 maske rødt mellom bokstavene og 2 før flagget.',
-  '<b>Oppover:</b> bokstavene og flagget starter på den <b>første omgangen</b> i mønsterbåndet, '
+  '<b>Oppover:</b> Bokstavene og flagget starter på den <b>første omgangen</b> i mønsterbåndet, '
   'samme omgang som "Ro" og bølgene bak. Flagget er høyest og fyller alle 10 omgangene.',
   'På barnestørrelsen fyller mønsteret nesten hele forsiden. Det skal det!',
 ]))}
@@ -556,9 +556,9 @@ og det du gjør med årene i en robåt. Begge deler passer en sommerdag ved sjø
 {pink('HVOR PÅ HATTEN?')}
 {card(f'<div class="stripwrap">{back_strip}</div>'
   + ul([
-  '<b>Bortover:</b> midt bak er ved maskemarkøren. Tell 21 masker til venstre for markøren. '
+  '<b>Bortover:</b> Midt bak er ved maskemarkøren. Tell 21 masker til venstre for markøren. '
   'Der starter den venstre bølgen.',
-  '<b>Oppover:</b> bølgene, R og O starter på den <b>første omgangen</b> i mønsterbåndet, samme '
+  '<b>Oppover:</b> Bølgene, R og O starter på den <b>første omgangen</b> i mønsterbåndet, samme '
   'omgang som NORGE og flagget foran. Da blir forsiden og baksiden like høyt oppe.',
   'De små prikkene øverst i bølgediagrammet er sjøsprøyt. Ikke glem dem, de er prikken over i-en!',
 ]))}
@@ -578,7 +578,7 @@ på hver omgang.</p>
   '<tr><td>osv.</td><td colspan="3">strikk en maske mindre mellom fellingene for hver felleomgang</td></tr>'
   '<tr><td>nest siste</td><td colspan="3">*1 r, 2 r sammen* hele omgangen = 14 m</td></tr>'
   '<tr><td>siste</td><td colspan="3">2 r sammen hele omgangen = 7 m</td></tr></table>'
-  '<p class="small">Stjernene betyr: gjenta det som står mellom dem, hele omgangen ut. '
+  '<p class="small">Stjernene betyr: Gjenta det som står mellom dem, hele omgangen ut. '
   'Når det blir for trangt på rundpinnen, deler du maskene på tre eller fire strømpepinner '
   'og strikker videre akkurat som før.</p>')}
 {steps([
@@ -593,7 +593,7 @@ pages.append(page(f'''
 {banner('MONTERING OG STELL')}
 {tealp('HELT TIL SLUTT')}
 {steps([
-  'Fest alle løse tråder på innsiden av hatten: vev dem frem og tilbake gjennom baksiden av '
+  'Fest alle løse tråder på innsiden av hatten: Vev dem frem og tilbake gjennom baksiden av '
   'maskene med stoppenålen, og klipp av det som er igjen.',
   'Se over flottene på innsiden. Er noen for stramme, kan du dra dem litt løsere med nålen '
   'så mønsteret på utsiden blir jevnt.',
