@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#F8D7DA">
-<title>LME — Dashbord</title>
+<title>Minikurs: Gro e-postlisten din — LME</title>
 
 
 
@@ -129,17 +129,13 @@
   }
 
   .logo {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    height: 44px;
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 500;
+    font-style: italic;
+    color: var(--ink);
+    letter-spacing: -0.02em;
     flex-shrink: 0;
-  }
-  .logo img {
-    height: 100%;
-    width: auto;
-    display: block;
-    background: transparent;
   }
 
   .nav {
@@ -155,8 +151,8 @@
   .nav-btn {
     padding: 10px 16px;
     border-radius: var(--r-pill);
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 15px;
+    font-weight: 500;
     color: var(--ink);
     display: flex;
     align-items: center;
@@ -315,64 +311,8 @@
     font-size: 15px;
     cursor: pointer;
     transition: transform 0.2s ease;
-    border: none;
-    overflow: hidden;
-    padding: 0;
-    text-decoration: none;
-    position: relative;
   }
   .avatar-btn:hover { transform: scale(1.05); }
-  .avatar-btn img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-  }
-
-  /* Avatar dropdown-meny */
-  .avatar-wrapper {
-    position: relative;
-    display: inline-block;
-  }
-  .avatar-menu {
-    display: none;
-    position: absolute;
-    top: 48px;
-    right: 0;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-    min-width: 200px;
-    padding: 8px;
-    z-index: 1000;
-    border: 1px solid #f0e0eb;
-  }
-  .avatar-wrapper.open .avatar-menu { display: block; }
-  .avatar-menu a, .avatar-menu button {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    padding: 10px 14px;
-    background: none;
-    border: none;
-    text-align: left;
-    color: #2a1e2e;
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: 10px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background 0.15s;
-  }
-  .avatar-menu a:hover, .avatar-menu button:hover {
-    background: #fdf2f7;
-  }
-  .avatar-menu .divider {
-    height: 1px;
-    background: #f0e0eb;
-    margin: 6px 0;
-  }
 
   
   
@@ -385,7 +325,6 @@
 
   .welcome {
     text-align: center;
-    margin-top: 40px;
     margin-bottom: 32px;
     font-family: var(--font-display);
     font-size: clamp(20px, 2.4vw, 28px);
@@ -842,47 +781,6 @@
     font-family: var(--font-display);
     font-size: 64px;
     color: rgba(26, 26, 26, 0.2);
-    position: relative;
-    overflow: hidden;
-  }
-  .create-card.is-hidden { display: none; }
-  .create-card { animation: createIn 0.35s ease both; }
-  @keyframes createIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .create-card .visual img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .create-card .visual .big {
-    font-size: 84px;
-    line-height: 1;
-    animation: lmeFloat 3.6s ease-in-out infinite;
-  }
-  .create-card .visual .spark {
-    position: absolute;
-    font-size: 30px;
-    animation: lmeFloat 4.8s ease-in-out infinite;
-  }
-  .create-card .visual .s1 { top: 18%; left: 16%; animation-delay: 0.6s; }
-  .create-card .visual .s2 { bottom: 16%; right: 14%; animation-delay: 1.4s; }
-  @keyframes lmeFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-  .create-card .visual-workbook { background: linear-gradient(135deg, #FFF3C4 0%, #FDE7E0 100%); }
-  .create-card .visual-social { background: linear-gradient(135deg, #E8DFF5 0%, #C8E4F4 100%); }
-  .create-card .visual-miateo { background: linear-gradient(135deg, #DFF2E4 0%, #FFF3C4 100%); }
-  .create-card .visual-miateo img { object-position: 50% 28%; }
-  .create-card .visual-booking { background: linear-gradient(135deg, #C8E4F4 0%, #E8DFF5 100%); }
-  @media (prefers-reduced-motion: reduce) {
-    .create-card,
-    .create-card .visual .big,
-    .create-card .visual .spark { animation: none; }
   }
 
   /* === AI ASSISTENT PILLE === */
@@ -1317,16 +1215,9 @@
     .nav { display: none; }
     .logo { font-size: 22px; }
     .btn-ai span:not(.avatar) { display: none; }
-    .btn-studio { font-size: 12px; padding: 8px 12px; white-space: nowrap; }
-    .icon-btn { display: none; }
+    .btn-studio { font-size: 12px; padding: 8px 12px; }
+    .icon-btn { width: 36px; height: 36px; }
     .avatar-btn { width: 36px; height: 36px; }
-    .header-right {
-      flex: 1 1 auto;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      min-width: 0;
-      gap: 6px;
-    }
     
 
     .welcome { font-size: 18px; padding: 0 8px; }
@@ -1483,48 +1374,162 @@
     .cta-icon { width: 50px; height: 50px; font-size: 32px; }
     .cta-body h3 { font-size: 18px; }
   }
+</style>
 
-  /* Flytende språk-veksler i hjørnet */
-  .lang-float {
-    position: fixed;
-    top: 90px;
-    right: 24px;
-    z-index: 150;
-    background: white;
-    border: 1.5px solid var(--pink-mid);
-    border-radius: var(--r-pill);
-    padding: 8px 18px;
-    box-shadow: var(--shadow-lg);
-    text-decoration: none;
+<style>
+  /* === Kommer-snart-seksjonen === */
+  .page-hero {
+    padding: 80px 0 40px;
+    text-align: center;
+  }
+  .page-kicker {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
     color: var(--cerise);
-    font-size: 14px;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.2s;
-  }
-  .lang-float:hover {
     background: var(--pink-soft);
-    transform: translateY(-2px);
+    padding: 8px 16px;
+    border-radius: var(--r-pill);
+    margin-bottom: 24px;
   }
-  .lang-float svg {
-    width: 16px;
-    height: 16px;
+  .page-hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--ink);
+    margin: 0 0 20px;
   }
-  @media (max-width: 600px) {
-    .lang-float { top: 70px; right: 16px; padding: 6px 14px; font-size: 13px; }
+  .page-hero h1 em {
+    font-style: italic;
+    color: var(--cerise);
+  }
+  .page-hero .lede {
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 640px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+  }
+  .coming-soon-card {
+    max-width: 720px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, var(--pink-soft) 0%, #FFE5E8 50%, var(--cream) 100%);
+    border-radius: var(--r-lg);
+    padding: 64px 40px;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(228, 160, 168, 0.2);
+    position: relative;
+    overflow: hidden;
+  }
+  .coming-soon-card::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 160px;
+    height: 160px;
+    background: radial-gradient(circle, rgba(247, 231, 107, 0.4), transparent);
+    border-radius: 50%;
+  }
+  .coming-soon-card::after {
+    content: '';
+    position: absolute;
+    bottom: -60px;
+    left: -60px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(233, 30, 137, 0.15), transparent);
+    border-radius: 50%;
+  }
+  .coming-soon-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    background: #fff;
+    border-radius: var(--r-pill);
+    display: grid;
+    place-items: center;
+    font-size: 36px;
+    box-shadow: 0 8px 24px rgba(228, 160, 168, 0.3);
+    position: relative;
+    z-index: 1;
+  }
+  .coming-soon-card h2 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-style: italic;
+    color: var(--ink);
+    margin: 0 0 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .coming-soon-card p {
+    font-size: 16px;
+    color: var(--ink-soft);
+    max-width: 480px;
+    margin: 0 auto 32px;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+  }
+  .coming-soon-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+  .btn-primary {
+    background: var(--btn-yellow);
+    color: var(--ink);
+    padding: 14px 28px;
+    border-radius: var(--r-pill);
+    font-weight: 600;
+    font-size: 15px;
+    transition: background 0.2s ease, transform 0.15s ease;
+    display: inline-block;
+  }
+  .btn-primary:hover {
+    background: var(--btn-yellow-hover);
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    background: #fff;
+    color: var(--ink);
+    padding: 14px 28px;
+    border-radius: var(--r-pill);
+    font-weight: 600;
+    font-size: 15px;
+    border: 1px solid var(--line);
+    transition: background 0.2s ease, transform 0.15s ease;
+    display: inline-block;
+  }
+  .btn-secondary:hover {
+    background: var(--pink-soft);
+    transform: translateY(-1px);
+  }
+  .roadmap-note {
+    margin-top: 40px;
+    font-size: 14px;
+    color: var(--ink-muted);
+    font-style: italic;
+  }
+  .roadmap-note a {
+    color: var(--cerise);
+    border-bottom: 1px solid currentColor;
+  }
+
+  @media (max-width: 640px) {
+    .page-hero { padding: 48px 0 24px; }
+    .coming-soon-card { padding: 40px 24px; }
+    .coming-soon-card h2 { font-size: 26px; }
   }
 </style>
-<link rel="manifest" href="/manifest.webmanifest">
-<link rel="apple-touch-icon" href="/images/app/apple-touch-icon.png">
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-      navigator.serviceWorker.register('/sw.js').catch(function () {});
-    });
-  }
-</script>
+
 </head>
 <body>
 
@@ -1533,7 +1538,7 @@
      =================================== -->
 <div class="header-wrap">
   <header class="header">
-    <a href="/dashboard" class="logo"><img src="/images/lme-logo.png" alt="LME"></a>
+    <a href="/dashboard" class="logo"><img src="/images/lme-logo.png" alt="Little Montessori Explorers" style="height:40px;width:auto;display:block"></a>
 
     <nav class="nav" id="nav">
       <div class="nav-item" data-menu="learn">
@@ -1633,7 +1638,7 @@
     </nav>
 
     <div class="header-right">
-      <a href="/butikk" class="btn-header-pill">🛍️ Butikk</a>
+      
       <a href="/spor-renate-ai" class="btn-ai">
         <span class="avatar">R</span>
         <span>Spør Renate AI ↗</span>
@@ -1648,52 +1653,7 @@
       <button class="icon-btn" aria-label="Varsler">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 8a6 6 0 1112 0c0 7 3 8 3 8H3s3-1 3-8M10 21a2 2 0 004 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <div class="avatar-wrapper" id="avatarWrapper">
-        <button class="avatar-btn" aria-label="Profil" id="avatarBtn">
-          <img src="/images/renate-portrait.jpg" alt="Renate">
-        </button>
-        <div class="avatar-menu" id="avatarMenu">
-          <a href="/min-konto">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zM12 14c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5z" fill="currentColor"/></svg>
-            Min konto
-          </a>
-          <button id="uploadPhotoBtn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 16l-4-4h3V4h2v8h3l-4 4zm-8 4h16v-2H4v2z" fill="currentColor"/></svg>
-            Last opp bilde
-          </button>
-          <input type="file" id="photoInput" accept="image/*" style="display:none">
-          <div class="divider"></div>
-          <a href="/butikk">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 4h10l1 4H6l1-4zm-2 6h14l-1 10H6L5 10z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-            LME Butikk
-          </a>
-          <a href="/perks">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6L12 2z" fill="currentColor"/></svg>
-            LME Perks
-          </a>
-          <a href="/oppgrader">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/></svg>
-            Oppgrader plan
-          </a>
-          <a href="/wins">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 21l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.18L12 21z" fill="currentColor"/></svg>
-            Del din seier
-          </a>
-          <div class="divider"></div>
-          <a href="/om-renate">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-            Om Renate
-          </a>
-          <a href="/renate-ai-info">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 12c0 4.4-4 8-9 8-1.3 0-2.5-.2-3.6-.7L3 21l1.7-5.4C3.6 14.2 3 12.7 3 11c0-4.4 4-8 9-8s9 3.6 9 8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="11" r="1" fill="currentColor"/><circle cx="8" cy="11" r="1" fill="currentColor"/><circle cx="16" cy="11" r="1" fill="currentColor"/></svg>
-            Om Renate AI
-          </a>
-                    <a href="/spor-renate-ai">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 12c0 4.4-4 8-9 8-1.3 0-2.5-.2-3.6-.7L3 21l1.7-5.4C3.6 14.2 3 12.7 3 11c0-4.4 4-8 9-8s9 3.6 9 8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-            Spør Renate AI
-          </a>
-        </div>
-      </div>
+      <button class="avatar-btn" aria-label="Profil"><img src="/images/renate-portrait.jpg" alt="Renate" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block"></button>
     </div>
   </header>
 </div>
@@ -1703,472 +1663,119 @@
      =================================== -->
 <main class="container">
 
-  <p class="welcome">Velkommen tilbake <span class="name">Renate</span>, <em>la oss skape magi i dag</em></p>
+  <!-- HERO / KOMMER-SNART -->
+  <section class="page-hero">
+    <a class="crs-back" href="/academy" style="display:inline-block;margin-bottom:12px;font-size:14px;font-weight:700;color:#E91E89;text-decoration:none">← Til akademiet</a>
+    <span class="page-kicker">MINIKURS</span>
+    <h1>Gro <em>e-postlisten din</em></h1>
+    <p class="lede">Et lite kurs om å bygge en lojal e-postliste med en lead magnet, en enkel påmeldingsside og en velkomstserie som jobber for deg mens du sover.</p>
 
-  <!-- STOR CTA-RAD: butikk + Inner Circle -->
-  <div class="hero-cta-row">
-    <a href="/butikk" class="hero-cta-card hero-cta-shop" style="text-decoration:none;color:inherit;">
-      <span class="cta-icon">🛍️</span>
-      <div class="cta-body">
-        <span class="cta-kicker">UTFORSK BUTIKKEN</span>
-        <h3>Bøker &amp; ressurser</h3>
-        <p>Mia &amp; Teo-bøker, arbeidsbøker og digitale Montessoriressurser</p>
-      </div>
-      <span class="cta-arrow">→</span>
-    </a>
-    <a href="/community" class="hero-cta-card hero-cta-ic" style="text-decoration:none;color:inherit;">
-      <span class="cta-icon">✨</span>
-      <div class="cta-body">
-        <span class="cta-kicker">BLI MEDLEM</span>
-        <h3>Inner Circle</h3>
-        <p>Tospråklig fellesskap + månedlige live-samtaler med Renate</p>
-      </div>
-      <span class="cta-arrow">→</span>
-    </a>
-  </div>
-
-  <!-- HERO + LISTE -->
-  <section class="hero-section">
-    <aside class="latest-list">
-      <h3>Nytt <em>fra LME</em></h3>
-      <div class="latest-item">
-        <span class="num">1</span>
-        <div class="text"><strong>NYTT!</strong> Bygg din egen bok</div>
-      </div>
-      <div class="latest-item">
-        <span class="num">2</span>
-        <div class="text">Naturutforskerne: Live-lesning</div>
-      </div>
-      <div class="latest-item active">
-        <span class="num">3</span>
-        <div class="text"><strong>Mia & Teo Live:</strong> Skogeventyret</div>
-      </div>
-      <div class="latest-item">
-        <span class="num">4</span>
-        <div class="text"><strong>Mia & Teo Live:</strong> Vårens små venner</div>
-      </div>
-    </aside>
-
-    <div class="hero">
-      <div class="hero-slide active" data-slide="0">
-        <div class="hero-content">
-          <span class="hero-badge"><span class="dot"></span>LIVE</span>
-          <h1>De små <em>naturutforskerne</em> møter skogen</h1>
-          <p class="by">med Mia & Teo</p>
-        </div>
-      </div>
-      <div class="hero-slide" data-slide="1">
-        <div class="hero-content">
-          <span class="hero-badge">NYTT</span>
-          <h1>Bygg din <em>første</em> Montessoribok</h1>
-          <p class="by">i LME Bookly</p>
-        </div>
-      </div>
-      <div class="hero-slide" data-slide="2">
-        <div class="hero-content">
-          <span class="hero-badge">WORKSHOP</span>
-          <h1>3–6 år: <em>Det forberedte miljøet</em></h1>
-          <p class="by">med Renate Dahl</p>
-        </div>
-      </div>
-      <div class="hero-slide" data-slide="3">
-        <div class="hero-content">
-          <span class="hero-badge">RESSURS</span>
-          <h1>Vårens <em>observasjonsjournal</em></h1>
-          <p class="by">gratis nedlasting</p>
-        </div>
-      </div>
-
-      <button class="hero-nav prev" aria-label="Forrige">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-      <button class="hero-nav next" aria-label="Neste">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-
-      <div class="hero-dots">
-        <span class="dot active" data-dot="0"></span>
-        <span class="dot" data-dot="1"></span>
-        <span class="dot" data-dot="2"></span>
-      </div>
-    </div>
   </section>
 
-  <!-- HJELP-PILLE -->
-  <div class="help-pill">
-    <span class="label">SLIK KAN VI HJELPE:</span>
-    <ul>
-      <li><a href="/academy" style="display:flex;align-items:center;gap:8px;color:inherit;text-decoration:none;width:100%;">
-        <svg class="icon" viewBox="0 0 24 24" fill="none"><polygon points="9,7 17,12 9,17" fill="currentColor"/></svg>
-        <span>Klasser</span>
-      </a></li>
-      <li><a href="/maler" style="display:flex;align-items:center;gap:8px;color:inherit;text-decoration:none;width:100%;">
-        <svg class="icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" stroke="currentColor" stroke-width="2"/><rect x="13" y="3" width="8" height="8" stroke="currentColor" stroke-width="2"/><rect x="3" y="13" width="8" height="8" stroke="currentColor" stroke-width="2"/></svg>
-        <span>Maler</span>
-      </a></li>
-      <li><a href="/musikk" style="display:flex;align-items:center;gap:8px;color:inherit;text-decoration:none;width:100%;">
-        <svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M9 18V5l12-2v13M9 18a3 3 0 11-6 0 3 3 0 016 0zM21 16a3 3 0 11-6 0 3 3 0 016 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span>Lydbok & musikk</span>
-      </a></li>
-      <li><a href="/live" style="display:flex;align-items:center;gap:8px;color:inherit;text-decoration:none;width:100%;">
-        <svg class="icon" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 22h8M12 18v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <span>Live arrangementer</span>
-      </a></li>
-      <li><a href="/partnere" style="display:flex;align-items:center;gap:8px;color:inherit;text-decoration:none;width:100%;">
-        <svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span>Pedagog-partnere</span>
-      </a></li>
-    </ul>
-  </div>
+  <style>
+    .crs { max-width: 820px; margin: 0 auto; }
+    .crs-meet { display: flex; gap: 22px; align-items: center; background: #fff; border: 1px solid rgba(26,26,26,0.08); border-radius: 22px; padding: 24px 26px; box-shadow: 0 8px 28px rgba(26,26,26,0.06); margin-bottom: 40px; flex-wrap: wrap; }
+    .crs-meet-avatar { width: 88px; height: 88px; border-radius: 50%; flex: 0 0 auto; background: #F8D7DA; display: grid; place-items: center; font-size: 34px; }
+    .crs-meet-text { flex: 1 1 280px; }
+    .crs-meet-text .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #E91E89; }
+    .crs-meet-text h2 { font-size: 22px; margin: 4px 0 8px; }
+    .crs-meet-text p { color: #4A4A4A; line-height: 1.65; font-size: 15px; }
+    .crs-overview { background: linear-gradient(135deg, #FFF4F6, #FBF6F0); border-radius: 22px; padding: 26px 28px; margin-bottom: 44px; }
+    .crs-overview h3 { font-size: 18px; margin-bottom: 14px; }
+    .crs-overview ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+    .crs-overview li { padding-left: 28px; position: relative; color: #4A4A4A; line-height: 1.55; }
+    .crs-overview li::before { content: '🌸'; position: absolute; left: 0; }
+    .crs-lesson { background: #fff; border: 1px solid rgba(26,26,26,0.08); border-radius: 22px; padding: 30px 32px; box-shadow: 0 6px 22px rgba(26,26,26,0.05); margin-bottom: 22px; }
+    .crs-lesson-num { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #E91E89; }
+    .crs-lesson h3 { font-size: 22px; margin: 6px 0 14px; line-height: 1.25; }
+    .crs-lesson p { color: #4A4A4A; line-height: 1.75; margin-bottom: 14px; }
+    .crs-lesson p:last-child { margin-bottom: 0; }
+    .crs-lesson strong { color: #1A1A1A; }
+    .crs-tip { background: #FFF8E6; border-left: 4px solid #F7C72E; border-radius: 10px; padding: 14px 18px; font-size: 14.5px; color: #4A4A4A; margin: 14px 0 4px; }
+    .crs-next { text-align: center; background: linear-gradient(135deg, #F8D7DA, #F5A8B8); border-radius: 24px; padding: 36px 28px; margin: 12px 0 20px; }
+    .crs-next h3 { font-size: 22px; margin-bottom: 8px; }
+    .crs-next p { color: #6a3a44; margin-bottom: 18px; }
+    .crs-next .btn-primary { display: inline-block; }
+    .crs-module { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #7AAE1F; background: #F3F8E8; border-radius: 999px; padding: 8px 18px; display: inline-block; margin: 26px 0 18px; }
+    .crs-fig { margin: 0 0 26px; border-radius: 22px; overflow: hidden; box-shadow: 0 8px 28px rgba(26,26,26,0.08); background: #fff; }
+    .crs-fig img { width: 100%; display: block; }
+    .crs-fig figcaption { padding: 12px 20px; font-size: 13.5px; color: #4A4A4A; }
+  </style>
 
-  <!-- JUMP BACK IN -->
-  <div class="section-head">
-    <h2>Fortsett <em>der du slapp</em></h2>
-    <a href="/favoritter" class="link-pill">Se favorittene dine →</a>
-  </div>
+  <section class="crs" data-source-wins>
 
-  <div class="card-grid-3">
-    <a href="/academy/forberedt-miljo" class="course-card course-card-1" style="text-decoration:none;color:inherit;display:block;">
-      <div class="thumb">
-        <div class="thumb-label">
-          <span class="kicker">MONTESSORI</span>
-          <span class="title">Det forberedte<br>miljøet</span>
-        </div>
-      </div>
-      <div class="info">
-        <h4>Det forberedte miljøet 3–6</h4>
-        <p>Leksjon 4 av 8 · 52% fullført</p>
-      </div>
-    </a>
-
-    <a href="/mia-og-teo" class="course-card course-card-2" style="text-decoration:none;color:inherit;display:block;">
-      <div class="thumb">
-        <div class="thumb-label">
-          <span class="kicker">BARNEBOK</span>
-          <span class="title">De små<br>naturutforskerne</span>
-        </div>
-      </div>
-      <div class="info">
-        <h4>Mia & Teo i skogen</h4>
-        <p>Lest 3 av 7 venner</p>
-      </div>
-    </a>
-
-    <a href="/bookly/" class="course-card course-card-3" style="text-decoration:none;color:inherit;display:block;">
-      <div class="thumb">
-        <div class="thumb-label">
-          <span class="kicker">VERKTØY</span>
-          <span class="title">LME<br>Bookly</span>
-        </div>
-      </div>
-      <div class="info">
-        <h4>Bokbygger-appen</h4>
-        <p>Lagre dine egne historier</p>
-      </div>
-    </a>
-  </div>
-
-  <!-- HVA VIL DU SKAPE -->
-  <section class="create-section">
-    <h2>Hva vil du <em>skape i dag?</em></h2>
-    <p class="lead">Fra arbeidsbøker til workshops, fra Mia & Teo-historier til foreldre­samtaler, vi gir deg verktøyene, malene og veiledningen for å få det til.</p>
-
-    <div class="create-tabs">
-      <button class="tab-arrow" aria-label="Forrige">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-      <div class="tab-pills">
-        <button class="tab-pill active">
-          <svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-          Lead magnet
-        </button>
-        <button class="tab-pill">
-          <svg class="ico" viewBox="0 0 24 24" fill="none"><polygon points="12,2 15,9 22,9.5 17,15 18.5,22 12,18.5 5.5,22 7,15 2,9.5 9,9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-          Arbeidsbok
-        </button>
-        <button class="tab-pill">
-          <svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M12 20l9-7-9-7-9 7 9 7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-          Sosiale medier
-        </button>
-        <button class="tab-pill">
-          <svg class="ico" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
-          Mia & Teo-bok
-        </button>
-        <button class="tab-pill">
-          <svg class="ico" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          Bookingside
-        </button>
-      </div>
-      <button class="tab-arrow" aria-label="Neste">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-    </div>
-
-    <div class="create-card">
-      <div>
-        <span class="kicker">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-          LEAD MAGNET
-        </span>
-        <h3><em>Vokse</em> e-postlisten din på autopilot</h3>
-        <p>Dette er ditt første steg. Du vil tiltrekke de rette familiene, bygge en lojal e-postliste og gjøre fremmede til engasjerte foreldre som elsker Mia & Teo.</p>
-        <a href="/academy/epostliste" class="btn-yellow">Start minikurset →</a>
-      </div>
-      <div class="visual visual-lead">
-        <img src="/images/mia-teo-epostliste.webp" alt="Mia og Teo peker på en voksende e-postliste">
+    <div class="crs-meet">
+      <img class="crs-meet-avatar" src="/images/renate-portrait.jpg" alt="Renate Dahl">
+      <div class="crs-meet-text">
+        <div class="eyebrow">Din lærer</div>
+        <h2>Hei, jeg er Renate 💕</h2>
+        <p>Montessoripedagog med over 20 års erfaring. I dette kurset deler jeg det jeg har lært gjennom årene, varmt og praktisk og rett på sak. La oss dykke ned i det sammen.</p>
       </div>
     </div>
 
-    <div class="create-card is-hidden">
-      <div>
-        <span class="kicker">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polygon points="12,2 15,9 22,9.5 17,15 18.5,22 12,18.5 5.5,22 7,15 2,9.5 9,9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-          ARBEIDSBOK
-        </span>
-        <h3>Lag <em>arbeidsbøker</em> barna elsker</h3>
-        <p>Bygg Montessoribaserte arbeidsbøker med egne oppgaver og illustrasjoner, på norsk og engelsk, klare for utskrift eller salg.</p>
-        <a href="/bookly/" class="btn-yellow">Start i Bookly →</a>
-      </div>
-      <div class="visual visual-workbook">
-        <span class="big">📘</span>
-        <span class="spark s1">✏️</span>
-        <span class="spark s2">⭐</span>
-      </div>
+    <div class="crs-overview">
+      <h3>Hva du lærer i dette kurset</h3>
+      <ul>
+        <li>Hvorfor e-postlisten er den viktigste kanalen du eier</li>
+        <li>Hva en lead magnet er, og hvordan du lager en folk faktisk vil ha</li>
+        <li>Hvordan du setter opp en enkel påmeldingsside</li>
+        <li>Velkomstserien: tre e-poster som bygger tillit på autopilot</li>
+        <li>Hvordan du deler lead magneten din uten å mase</li>
+      </ul>
     </div>
 
-    <div class="create-card is-hidden">
-      <div>
-        <span class="kicker">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 20l9-7-9-7-9 7 9 7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-          SOSIALE MEDIER
-        </span>
-        <h3>Innhold som <em>når frem</em> på 60 sekunder</h3>
-        <p>Lag innlegg, reels og karuseller for Instagram, TikTok og Facebook, med AI-verktøy som vet hvem Mia & Teo er.</p>
-        <a href="https://lme-contentstudio.pages.dev" target="_blank" rel="noopener" class="btn-yellow">Åpne Content Studio ↗</a>
-      </div>
-      <div class="visual visual-social">
-        <span class="big">🎬</span>
-        <span class="spark s1">📱</span>
-        <span class="spark s2">💬</span>
-      </div>
+    <figure class="crs-fig" style="max-width:520px;margin:0 auto 26px;"><img src="/images/mia-teo-brev.webp" alt="Mia og Teo holder en gyllen konvolutt"><figcaption>Lead magneten er en gave: noe fint i bytte mot en e-postadresse.</figcaption></figure>
+
+    <div class="crs-module">Modul 1 · Grunnlaget</div>
+
+    <div class="crs-lesson">
+      <div class="crs-lesson-num">Leksjon 1</div>
+      <h3>E-postlisten er gullet ditt</h3>
+      <p>Instagram og Facebook bestemmer hvem som ser innleggene dine. <strong>E-postlisten er din.</strong> Den kan ikke forsvinne med en algoritme, og den når frem til folk som selv har sagt ja til å høre fra deg.</p>
+      <p>For deg som deler Montessoriinnhold betyr det: familiene som melder seg på, er allerede interessert. Du trenger ikke overbevise dem, bare hjelpe dem videre.</p>
+      <div class="crs-tip">💡 Har du 50 personer på listen, har du 50 familier som har rukket opp hånden og sagt "jeg vil høre mer". Det er mer verdt enn 5000 tilfeldige visninger.</div>
     </div>
 
-    <div class="create-card is-hidden">
-      <div>
-        <span class="kicker">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
-          MIA & TEO-BOK
-        </span>
-        <h3>Skriv din egen <em>Mia & Teo-historie</em></h3>
-        <p>Bruk LME Bookly til å lage en illustrert historie med Mia & Teo, der karakterene ser like ut på hver eneste side.</p>
-        <a href="/bookly/" class="btn-yellow">Bygg boken din →</a>
-      </div>
-      <div class="visual visual-miateo">
-        <img src="/images/mia-teo-brev.webp" alt="Mia og Teo holder en gyllen konvolutt">
-      </div>
+    <div class="crs-lesson">
+      <div class="crs-lesson-num">Leksjon 2</div>
+      <h3>Lag en lead magnet folk faktisk vil ha</h3>
+      <p>En lead magnet er en liten gave du gir bort i bytte mot en e-postadresse: en PDF, en sjekkliste, en mini-guide eller et aktivitetsark.</p>
+      <p>Den beste lead magneten løser <strong>ett lite problem</strong> raskt. Tenk "10 Montessoriaktiviteter med ting du har hjemme" heller enn "alt om Montessori".</p>
+      <div class="crs-tip">🎁 Bruk malene i biblioteket, eller lag arket ditt i Canva. Ferdig er bedre enn perfekt.</div>
     </div>
 
-    <div class="create-card is-hidden">
-      <div>
-        <span class="kicker">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          BOOKINGSIDE
-        </span>
-        <h3>La foreldre <em>booke deg</em> direkte</h3>
-        <p>Sett opp en enkel bookingside for foreldresamtaler, veiledning og workshops, så slipper du all frem og tilbake på e-post.</p>
-        <a href="#" onclick="lmeSoon();return false;" class="btn-yellow">Lær mer →</a>
-      </div>
-      <div class="visual visual-booking">
-        <span class="big">📅</span>
-        <span class="spark s1">🕐</span>
-        <span class="spark s2">✅</span>
-      </div>
+    <div class="crs-lesson">
+      <div class="crs-lesson-num">Leksjon 3</div>
+      <h3>Påmeldingssiden: enkel og tydelig</h3>
+      <p>Påmeldingssiden trenger bare tre ting: en overskrift som sier hva familien får, ett bilde av gaven og ett felt for e-postadressen.</p>
+      <p>Fjern alt annet. Ingen meny, ingen lenker videre, bare ett eneste valg: "Ja takk, send meg den".</p>
+      <div class="crs-tip">✍️ Skriv overskriften som et løfte: "Få 10 rolige Montessoriaktiviteter for regnværsdager", ikke bare "Last ned PDF".</div>
     </div>
 
-    <!-- AI ASSISTENT -->
-    <div class="ai-pill">
-      <div class="avatar">R</div>
-      <p class="text">Vil du at <em>Renate AI</em> skal hjelpe deg å komme i gang?</p>
-      <a href="/spor-renate-ai" class="btn-ai">
-        <span class="avatar">R</span>
-        <span>Spør Renate AI ↗</span>
-      </a>
+    <div class="crs-module">Modul 2 · Autopilot</div>
+
+    <div class="crs-lesson">
+      <div class="crs-lesson-num">Leksjon 4</div>
+      <h3>Velkomstserien: tre e-poster som bygger tillit</h3>
+      <p>Når noen melder seg på, er de mest nysgjerrige de aller første dagene. Da sender du tre korte e-poster: først gaven med en varm velkomst, så historien din og hvorfor du deler Montessori, og til slutt et godt tips pluss en invitasjon videre, for eksempel til butikken eller fellesskapet.</p>
+      <p>Dette setter du opp én gang i e-postverktøyet ditt, for eksempel MailerLite, og etterpå går det av seg selv. Det er dette som er autopiloten.</p>
+      <div class="crs-tip">📬 Skriv som du snakker. Korte e-poster fra et ekte menneske slår perfekte nyhetsbrev hver gang.</div>
     </div>
 
-    <!-- LIVE + REPLAY -->
-    <div class="live-row">
-      <div class="live-col">
-        <div class="head-row">
-          <div>
-            <h3>Live <em>arrangementer</em></h3>
-            <p class="sub">Vi holder de mest magiske live-sesjonene!</p>
-          </div>
-          <a href="/live" class="link-pill">Se alle →</a>
-        </div>
-        <div class="event-card">
-          <div class="date-block">
-            <span class="month">MAI</span>
-            <span class="day">20</span>
-          </div>
-          <div class="event-info">
-            <p class="time">Ons, 19:00 CEST</p>
-            <p class="title">Mia & Teo Live: Vårens små venner</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="live-col">
-        <div class="head-row">
-          <div>
-            <h3>Siste <em>opptak</em></h3>
-            <p class="sub">Gikk du glipp av det? Se opptaket</p>
-          </div>
-          <a href="/replays" class="link-pill">Se alle →</a>
-        </div>
-        <div class="replay-card">
-          <p class="title">April: Det forberedte miljøet 3–6</p>
-          <a href="/replays" class="btn-yellow" style="padding: 10px 18px; font-size: 13px;">Se opptak →</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- RESSURSER -->
-  <section class="resources-section">
-    <div class="center-head">
-      <h2>Ressurser for å <em>lykkes</em></h2>
-      <p>Et bibliotek av maler, lyd-meditasjoner, utskrivbare ark og inspirerende innhold som gjør Montessorihverdagen enklere.</p>
+    <div class="crs-lesson">
+      <div class="crs-lesson-num">Leksjon 5</div>
+      <h3>Del den overalt, rolig og jevnt</h3>
+      <p>Nå som alt er koblet sammen, handler resten om synlighet: lenken i Instagram-profilen, en fast pin på Pinterest og et innlegg i uka som peker til gaven.</p>
+      <p>Du trenger ikke mase. Nevn gaven når det passer naturlig, og la påmeldingssiden gjøre resten. Små drypp over tid bygger listen jevnt og trutt.</p>
+      <div class="crs-tip">🌱 Mål fremgangen månedlig, ikke daglig. 20 nye på listen hver måned er 240 engasjerte familier på et år.</div>
     </div>
 
-    <div class="res-grid">
-      <a href="/academy" class="res-card" style="text-decoration:none;color:inherit;">
-        <div class="visual">📖</div>
-        <div class="body">
-          <h3>Guider</h3>
-          <p>Enkle steg som flytter Montessoripraksisen din fremover</p>
-          <div class="arrow">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-        </div>
-      </a>
-
-      <a href="/biblioteket" class="res-card" style="text-decoration:none;color:inherit;">
-        <div class="visual">🎧</div>
-        <div class="body">
-          <h3>Lyd & visualiseringer</h3>
-          <p>La oss skape ro, klarhet og tro på din egen ro som pedagog</p>
-          <div class="arrow">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-        </div>
-      </a>
-
-      <a href="#" onclick="lmeSoon();return false;" class="res-card" style="text-decoration:none;color:inherit;">
-        <div class="visual">✦</div>
-        <div class="body">
-          <h3>Pedagog-playbooks</h3>
-          <p>Innsikt fra erfarne Montessoripedagoger og ledere</p>
-          <div class="arrow">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-        </div>
-      </a>
+    <div class="crs-next">
+      <h3>Klar til å lage din første lead magnet?</h3>
+      <p>Start med en enkel PDF fra malbiblioteket, eller lag den i Canva. Når gaven er klar, er resten bare å koble sammen.</p>
+      <a href="/maler" class="btn-primary">Se maler →</a>
     </div>
 
-    <div class="center-btn">
-      <a href="/ressurser" class="link-pill">Se alle ressurser →</a>
-    </div>
-  </section>
-
-  <!-- GET CONNECTED -->
-  <section class="connect-section">
-    <div class="center-head">
-      <h2>Bli <em>tilkoblet</em></h2>
-      <p>Å bygge en Montessoripraksis er bedre med venner. Finn likesinnede, ansvarspartnere og pedagoger som forstår deg.</p>
-    </div>
-
-    <div class="connect-grid">
-      <article class="connect-card">
-        <div class="visual">Inner Circle</div>
-        <div>
-          <h3>Bli med i <em>Inner Circle</em></h3>
-          <p>Tospråklig fellesskap for Montessoripedagoger, foreldre og skapere.</p>
-          <a href="/community" class="btn-yellow">Bli med nå →</a>
-        </div>
-      </article>
-
-      <article class="connect-card">
-        <div class="visual">Partnere</div>
-        <div>
-          <h3>Finn din <em>pedagog-partner</em></h3>
-          <p>Match med en annen pedagog for gjensidig støtte og ukentlige sjekker.</p>
-          <a href="/partnere" class="btn-yellow">Finn match →</a>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- EXPLORE LME -->
-  <section class="explore-section">
-    <div class="center-head">
-      <h2>Utforsk <em>Little Montessori Explorers</em></h2>
-    </div>
-
-    <div class="explore-grid">
-      <article class="explore-card">
-        <div class="visual-mini">🎨</div>
-        <div class="body">
-          <h4>LME <em>Studio</em></h4>
-          <p>AI-drevet innholdsverktøy for sosiale medier</p>
-          <a href="https://lme-contentstudio.pages.dev" target="_blank" rel="noopener" class="btn-sm">Åpne →</a>
-        </div>
-      </article>
-
-      <article class="explore-card">
-        <div class="visual-mini">📝</div>
-        <div class="body">
-          <h4>LME <em>Blogg</em></h4>
-          <p data-no="Tanker, tips og historier om Montessori, lek og læring" data-en="Thoughts, tips and stories about Montessori, play and learning">Tanker, tips og historier om Montessori, lek og læring</p>
-          <a href="/blogg" class="btn-sm" data-no="Les bloggen →" data-en="Read the blog →">Les bloggen →</a>
-        </div>
-      </article>
-
-      <article class="explore-card">
-        <div class="visual-mini">📚</div>
-        <div class="body">
-          <h4>LME <em>Butikk</em></h4>
-          <p>Bøker, arbeidsbøker og utskrivbare ressurser</p>
-          <a href="/butikk" class="btn-sm">Se butikk →</a>
-        </div>
-      </article>
-
-      <article class="explore-card">
-        <div class="visual-mini">📱</div>
-        <div class="body">
-          <h4>Last ned <em>LME-appen</em></h4>
-          <p>Ta favoritt-innholdet ditt med på reisen</p>
-          <a href="#" onclick="lmeSoon();return false;" class="btn-sm">Last ned →</a>
-        </div>
-      </article>
-
-      <article class="explore-card">
-        <div class="visual-mini">🛝</div>
-        <div class="body">
-          <h4>Mia &amp; Teo, <em>Lek &amp; Lær</em></h4>
-          <p>Bli med Mia og Teo på lek, læring og naturens eventyr</p>
-          <a href="/mia-og-teo" class="btn-sm">Utforsk →</a>
-        </div>
-      </article>
-
-      <article class="explore-card">
-        <div class="visual-mini">🗂️</div>
-        <div class="body">
-          <h4>LME <em>Maler</em></h4>
-          <p>Ferdige maler og ressurser, med videogjennomgang</p>
-          <a href="/maler" class="btn-sm">Se maler →</a>
-        </div>
-      </article>
-    </div>
   </section>
 
 </main>
@@ -2315,40 +1922,42 @@
     });
   })();
 
-  /* ====== Hero-karusell: flyttet til egen robust blokk nederst (auto-rotasjon) ====== */
+  /* ====== Hero-karusell ====== */
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots = document.querySelectorAll('.hero-dots .dot');
+  let current = 0;
+  let timer;
+
+  function show(idx) {
+    slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    current = idx;
+  }
+
+  function next() { show((current + 1) % slides.length); }
+  function prev() { show((current - 1 + slides.length) % slides.length); }
+
+  function startAuto() {
+    clearInterval(timer);
+    timer = setInterval(next, 6000);
+  }
+
+  document.querySelector('.hero-nav.next').addEventListener('click', () => { next(); startAuto(); });
+  document.querySelector('.hero-nav.prev').addEventListener('click', () => { prev(); startAuto(); });
+  dots.forEach((d, i) => d.addEventListener('click', () => { show(i); startAuto(); }));
+
+  startAuto();
 
   /* ====== Språkbytte ====== */
   
 
   /* ====== Skape-faner ====== */
-  (() => {
-    const pills = Array.from(document.querySelectorAll('.tab-pill'));
-    const cards = Array.from(document.querySelectorAll('.create-card'));
-    const arrows = document.querySelectorAll('.tab-arrow');
-    let current = 0;
-
-    function show(i) {
-      current = (i + pills.length) % pills.length;
-      pills.forEach((p, idx) => p.classList.toggle('active', idx === current));
-      cards.forEach((c, idx) => {
-        const active = idx === current;
-        c.classList.toggle('is-hidden', !active);
-        if (active) {
-          // Restart innslag-animasjonen ved bytte
-          c.style.animation = 'none';
-          void c.offsetWidth;
-          c.style.animation = '';
-        }
-      });
-      pills[current].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-    }
-
-    pills.forEach((p, i) => p.addEventListener('click', () => show(i)));
-    if (arrows.length >= 2) {
-      arrows[0].addEventListener('click', () => show(current - 1));
-      arrows[1].addEventListener('click', () => show(current + 1));
-    }
-  })();
+  document.querySelectorAll('.tab-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.tab-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+    });
+  });
 </script>
 
 
@@ -2381,9 +1990,8 @@
 }
 #lme-floating-lang-btn:hover { transform: scale(1.05) !important; }
 @media (max-width: 600px) {
-  /* Nederst i hjørnet på mobil, så den aldri ligger over topplinjen */
   #lme-floating-lang-btn {
-    top: auto !important; bottom: 14px !important; right: 12px !important;
+    top: 70px !important; right: 10px !important;
     padding: 8px 14px !important; font-size: 12px !important;
   }
 }
@@ -2397,7 +2005,7 @@
 
 <script>
 (function() {
-  window.LME_TRANSLATIONS = {"ARBEIDSBOK": "WORKBOOK", "SOSIALE MEDIER": "SOCIAL MEDIA", "MIA & TEO-BOK": "MIA & TEO BOOK", "BOOKINGSIDE": "BOOKING PAGE", "Lag": "Create", "barna elsker": "children love", "Innhold som": "Content that", "når frem": "lands", "på 60 sekunder": "in 60 seconds", "Skriv din egen": "Write your own", "Mia & Teo-historie": "Mia & Teo story", "La foreldre": "Let parents", "booke deg": "book you", "Bygg Montessoribaserte arbeidsbøker med egne oppgaver og illustrasjoner, på norsk og engelsk, klare for utskrift eller salg.": "Build Montessori-based workbooks with your own exercises and illustrations, in Norwegian and English, ready to print or sell.", "Lag innlegg, reels og karuseller for Instagram, TikTok og Facebook, med AI-verktøy som vet hvem Mia & Teo er.": "Create posts, reels and carousels for Instagram, TikTok and Facebook, with AI tools that know who Mia & Teo are.", "Bruk LME Bookly til å lage en illustrert historie med Mia & Teo, der karakterene ser like ut på hver eneste side.": "Use LME Bookly to create an illustrated story with Mia & Teo, where the characters look the same on every single page.", "Sett opp en enkel bookingside for foreldresamtaler, veiledning og workshops, så slipper du all frem og tilbake på e-post.": "Set up a simple booking page for parent conversations, guidance and workshops, so you can skip all the back and forth over email.", "Start i Bookly →": "Start in Bookly →", "Åpne Content Studio ↗": "Open Content Studio ↗", "Bygg boken din →": "Build your book →", "Start minikurset →": "Start the mini course →", "Mia og Teo peker på en voksende e-postliste": "Mia and Teo pointing at a growing email list", "Mia og Teo holder en gyllen konvolutt": "Mia and Teo holding a golden envelope", "Akademiet": "Academy", "Montessorireisen med Renate": "Renate's Montessori Journey", "Biblioteket": "Library", "Live": "Live", "Replay": "Replay", "Fellesskap": "Community", "Grupper": "Groups", "Inner Circle": "Inner Circle", "Mer": "More", "Butikk": "Shop", "LME Perks": "LME Perks", "Hjelpesenter": "Help Center", "Min konto": "My Account", "🛍️ Butikk": "🛍️ Shop", "✨ Inner Circle": "✨ Inner Circle", "Åpne LME Creative Academy": "Open LME Creative Academy", "Bli med i Inner Circle": "Join Inner Circle", "Dashbord": "Dashboard", "EN": "EN", "NO": "NO", "English": "English", "1: Velkommen til LME": "1: Welcome to LME", "2: 3–6 år": "2: Ages 3–6", "3: 6–9 år": "3: Ages 6–9", "4: 9–12 år": "4: Ages 9–12", "5: Forberedt miljø": "5: Prepared environment", "6: Observasjonskunsten": "6: The art of observation", "3–6": "3–6", "6–9": "6–9", "9–12": "9–12", "3–6:": "3–6:", "3–6: Forberedt miljø": "3–6: Prepared environment", "6–9: Kosmisk utdannelse": "6–9: Cosmic education", "9–12: Det sosiale barnet": "9–12: The social child", "Akademiet — LME": "Academy — LME", "Biblioteket — LME": "Library — LME", "Oppgrader plan — LME": "Upgrade plan — LME", "Oppgrader plan": "Upgrade Plan", "Velkommen tilbake": "Welcome back", "la oss skape magi i dag": "let's create magic today", "BLI MEDLEM": "BECOME A MEMBER", "UTFORSK BUTIKKEN": "EXPLORE THE SHOP", "Bøker & ressurser": "Books & resources", "Tospråklig fellesskap + månedlige live-samtaler med Renate": "Bilingual community + monthly live calls with Renate", "Mia & Teo-bøker, arbeidsbøker og digitale Montessoriressurser": "Mia & Teo books, workbooks, and digital Montessori resources", "Velkommen til LME": "Welcome to LME", "AI-drevet innholdsverktøy for sosiale medier": "AI-powered content tool for social media", "3–6 år (gjentatt)": "Ages 3–6 (repeated)", "6–9 år (gjentatt)": "Ages 6–9 (repeated)", "9–12 år (gjentatt)": "Ages 9–12 (repeated)", "Forberedt miljø": "Prepared environment", "Observasjonskunsten": "The Art of Observation", "Bygg din egen bok": "Build your own book", "Bookly": "Bookly", "Bokbygger-appen": "Book Builder app", "Fortsett der du slapp": "Continue where you left off", "Fortsett": "Continue", "Det forberedte miljøet 3–6": "The Prepared Environment 3–6", "Det forberedte miljøet": "The Prepared Environment", "Det forberedte": "The Prepared", "Leksjon 4 av 12": "Lesson 4 of 12", "Fortsett →": "Continue →", "52% fullført": "52% complete", "MELDT PÅ": "ENROLLED", "Hva vil du skape i dag?": "What do you want to create today?", "Innholdsstudio": "Content Studio", "AI-drevet": "AI-powered", "Lag innhold på 60 sek": "Create content in 60 sec", "Bygg en bok": "Build a book", "Start prosjekt →": "Start project →", "Reel-editor": "Reel editor", "Med musikk": "With music", "Lag reel →": "Create reel →", "Innholdsplan": "Content plan", "30 dager": "30 days", "Last ned →": "Download →", "Live & opptak": "Live & recordings", "Live denne uken": "Live this week", "Mia & Teo Live: Vårens små venner": "Mia & Teo Live: Spring's little friends", "Påmeldt": "Registered", "Påmeld →": "Register →", "Se opptak": "Watch recording", "Se kalender": "View calendar", "Gikk du glipp av det? Se opptaket": "Missed it? Watch the replay", "Siste replays": "Latest replays", "Se alle replays →": "View all replays →", "Hvordan møte den eksplosjon av språk": "How to meet the explosion of language", "April: Det forberedte miljøet 3–6": "April: The Prepared Environment 3–6", "Mars: Going out med 9–12-åringer": "March: Going out with 9–12 year olds", "Sist sett uke 18": "Last watched week 18", "Sist sett uke 17": "Last watched week 17", "Sist sett uke 14": "Last watched week 14", "Ressurser laget for deg": "Resources made for you", "Se hele biblioteket →": "Browse the library →", "Utskrivbare ark": "Printables", "Canva-maler": "Canva templates", "Lyd & meditasjon": "Audio & meditation", "Foreldrebrev": "Parent letters", "67 ressurser": "67 resources", "42 maler": "42 templates", "23 lydspor": "23 audio tracks", "12 maler": "12 templates", "BLI EN AV OSS": "BECOME ONE OF US", "Inner Circle for kvinner som": "Inner Circle for women who", "elsker Montessori": "love Montessori", "Bli med nå →": "Join now →", "Les mer": "Learn more", "Månedlig live med Renate": "Monthly live with Renate", "Tospråklig fellesskap": "Bilingual community", "Direkte tråd til Renate": "Direct thread to Renate", "Ressursbibliotek": "Resource library", "LME Butikk": "LME Shop", "Bøker, arbeidsbøker og utskrivbare ressurser": "Books, workbooks, and printable resources", "Se butikk →": "Visit shop →", "BARNEBOK": "PICTURE BOOK", "De små naturutforskerne": "The Little Nature Explorers", "BESTSELGER": "BESTSELLER", "Kjøp →": "Buy →", "Book hjelpesamtale": "Book help session", "Book hjelpesamtale →": "Book help session →", "Book en hjelpesamtale": "Book a help session", "Trenger du veiledning?": "Need guidance?", "Del din seier": "Share your win", "Vi feirer deg!": "We celebrate you!", "Finn match →": "Find match →", "Enkle steg som flytter Montessoripraksisen din fremover": "Simple steps that move your Montessori practice forward", "Få appen": "Get the app", "FÅ DEN PÅ": "GET IT ON", "Last ned på": "Download on", "VELG DIN LME-PLAN": "CHOOSE YOUR LME PLAN", "Bli en del av": "Become part of", "Montessorireisen": "the Montessori journey", "Start med 7 dager gratis. Avbryt når som helst. Norske og engelske kursmaterialer, månedlige live-samtaler og et tospråklig fellesskap som forstår deg.": "Start with 7 days free. Cancel anytime. Norwegian and English course materials, monthly live calls, and a bilingual community that understands you.", "Månedlig": "Monthly", "Årlig": "Annual", "Spar 17%": "Save 17%", "Vis priser i:": "Show prices in:", "NOK": "NOK", "USD": "USD", "P+F": "P+C", "Start": "Start", "For deg som nettopp har oppdaget Montessori og vil komme i gang.": "For those who have just discovered Montessori and want to get started.", "/måned": "/month", "/år": "/year", "7 dagers gratis prøve": "7-day free trial", "Start gratis →": "Start free →", "Mest populær": "Most popular", "Proff": "Pro", "Det komplette innholdssystemet for aktive pedagoger og skapere.": "The complete content system for active educators and creators.", "Proff + Fellesskap": "Pro + Community", "Alt du trenger, pluss et tospråklig Montessorifellesskap.": "Everything you need, plus a bilingual Montessori community.", "Inkluderer Inner Circle": "Includes Inner Circle", "Bli grunnlegger →": "Become a founder →", "AI-innholdsgenerering på alle formater": "AI content generation in all formats", "Norsk og engelsk innhold": "Norwegian and English content", "Innholdskalender og 30-dagers plan": "Content calendar and 30-day plan", "Publisering til 3 plattformer": "Publishing to 3 platforms", "E-postkurs og introduksjonsguider": "Email courses and intro guides", "Alt i Start, pluss:": "Everything in Start, plus:", "6 plattformer for publisering": "6 platforms for publishing", "DALL-E 3 AI-bildegenerering": "DALL-E 3 AI image generation", "Karakterkonsistens for dine egne figurer": "Character consistency for your own characters", "Autopublisering og Reel-editor": "Auto-publishing and Reel editor", "Story-editor med Canva-import": "Story editor with Canva import", "Prioritert støtte": "Priority support", "Alt i Proff, pluss:": "Everything in Pro, plus:", "8 plattformer for publisering": "8 platforms for publishing", "LME Inner Circle-medlemskap": "LME Inner Circle membership", "Ressursbibliotek med Canva-maler": "Resource library with Canva templates", "Månedlig innholds­utfordring": "Monthly content challenge", "Sammenlign": "Compare", "planene": "the plans", "Alle planer inkluderer 7 dagers gratis prøveperiode og ingen binding.": "All plans include a 7-day free trial and no commitment.", "AI-innholdsgenerering": "AI content generation", "Norsk + engelsk innhold": "Norwegian + English content", "Publiseringsplattformer": "Publishing platforms", "DALL-E 3 bildegenerering": "DALL-E 3 image generation", "Reel-editor med musikk": "Reel editor with music", "Story-editor (Canva-import)": "Story editor (Canva import)", "Autopublisering": "Auto-publishing", "Inner Circle-medlemskap": "Inner Circle membership", "Ressursbibliotek (Canva-maler)": "Resource library (Canva templates)", "Støtteprioritet": "Support priority", "E-post": "Email", "Prioritert": "Priority", "Direkte": "Direct", "Vanlige": "Frequently asked", "spørsmål": "questions", "Hva skjer etter 7-dagers gratis prøveperiode?": "What happens after the 7-day free trial?", "Hvis du ikke avbryter innen 7 dager, fortsetter abonnementet ditt og du blir belastet automatisk. Du kan avbryte når som helst fra Min konto-siden. Du beholder all tilgang ut perioden du har betalt for.": "If you don't cancel within 7 days, your subscription continues and you're charged automatically. You can cancel anytime from the My Account page. You keep all access through the period you've paid for.", "Kan jeg bytte plan senere?": "Can I change plans later?", "Ja, du kan oppgradere eller nedgradere når som helst. Endringer trer i kraft umiddelbart, og prisen justeres pro rata for resten av faktureringsperioden.": "Yes, you can upgrade or downgrade anytime. Changes take effect immediately, and the price is adjusted pro rata for the rest of the billing period.", "Hva er forskjellen på Proff og Proff + Fellesskap?": "What's the difference between Pro and Pro + Community?", "Proff gir deg alle innholdsverktøyene og AI-funksjonene. Proff + Fellesskap legger til medlemskap i LME Inner Circle med månedlige live-samtaler med Renate, ressursbibliotek, og direkte tilgang for spørsmål.": "Pro gives you all the content tools and AI features. Pro + Community adds LME Inner Circle membership with monthly live calls with Renate, resource library, and direct access for questions.", "Får jeg fakturering i norske kroner?": "Will I be billed in Norwegian kroner?", "Ja, hvis du er basert i Norge eller velger NOK som valuta. For brukere utenfor Skandinavia anbefaler vi USD-pris.": "Yes, if you're based in Norway or choose NOK as currency. For users outside Scandinavia, we recommend USD pricing.", "Er det binding?": "Is there a commitment?", "Nei. Du kan avbryte abonnementet ditt når som helst uten gebyr. Du beholder tilgangen ut perioden du har betalt for.": "No. You can cancel your subscription anytime without fees. You keep access through the period you've paid for.", "Hvordan fungerer Karakterkonsistens for dine egne figurer?": "How does Character consistency for your own characters work?", "Kan jeg bruke LME til min egen merkevare?": "Can I use LME for my own brand?", "Ja! Alle planer lar deg lage innhold med dine egne karakterer og merkevare.": "Yes! All plans let you create content with your own characters and brand.", "Montessoripedagog": "Montessori educator", "Renate har 20+ års erfaring som Montessorilærer og rektor.": "Renate has 20+ years of experience as a Montessori teacher and principal.", "Sikker betaling": "Secure payment", "Alle betalinger håndteres av Stripe med bankgrad-sikkerhet.": "All payments are handled by Stripe with bank-grade security.", "Avbryt når som helst": "Cancel anytime", "Ingen binding, ingen skjulte gebyrer. Du har full kontroll.": "No commitment, no hidden fees. You have full control.", "29 kr": "$2.90", "39 kr": "$3.90", "49 kr": "$4.90", "59 kr": "$5.90", "69 kr": "$6.90", "79 kr": "$7.90", "89 kr": "$8.90", "99 kr": "$9.90", "109 kr": "$10.90", "119 kr": "$11.90", "129 kr": "$12.90", "149 kr": "$14.90", "199 kr": "$19.90", "249 kr": "$24.90", "299 kr": "$29.90", "329 kr": "$32.90", "399 kr": "$39.90", "499 kr": "$49.90", "699 kr": "$69.90", "999 kr": "$99.90", "249 kr + frakt": "$24.90 + shipping", "329 kr + frakt": "$32.90 + shipping", "12. juni 2026 — 699 kr": "June 12, 2026 — $69.90", "Kjøpt 12. april 2026 · 89 kr": "Purchased April 12, 2026 · $8.90", "Kjøpt 18. mars 2026 · 79 kr": "Purchased March 18, 2026 · $7.90", "Kjøpt 28. april 2026 · 149 kr": "Purchased April 28, 2026 · $14.90", "AKADEMIET": "ACADEMY", "Dyp læring i": "Deep learning in", "Montessoripedagogikk": "Montessori pedagogy", "Søk i kurs...": "Search courses...", "Alle": "All", "Praktisk liv": "Practical life", "Sansetrening": "Sensorial", "Språk": "Language", "Matematikk": "Mathematics", "Kultur": "Culture", "Verktøykasse": "Toolkit", "Bygg din første Montessoribok": "Build your first Montessori book", "Bruk LME Create til å lage en illustrert bok med dine egne karakterer.": "Use LME Create to make an illustrated book with your own characters.", "De fem store fortellingene, det utvidede sinnet og barnets vandring fra konkret til abstrakt.": "The five great stories, the expanded mind, and the child's journey from concrete to abstract.", "52% fullført · Leksjon 4 av 8": "52% complete · Lesson 4 of 8", "14 min": "14 min", "62 min": "62 min", "48 min": "48 min", "71 min": "71 min", "1 t 30 min": "1h 30 min", "1 t 50 min": "1h 50 min", "2 t 5 min": "2h 5 min", "2 t 40 min": "2h 40 min", "3 t 15 min": "3h 15 min", "3 t 20 min": "3h 20 min", "3 t 30 min": "3h 30 min", "4 t 10 min": "4h 10 min", "FELLESSKAPET": "THE COMMUNITY", "Et tospråklig sted for": "A bilingual place for", "Montessoripedagoger": "Montessori educators", "Bli med i Inner Circle hvor vi støtter hverandre, deler erfaringer fra hverdagen, og lærer av hverandre. Pluss månedlige live-samtaler med Renate.": "Join Inner Circle where we support each other, share daily experiences, and learn from each other. Plus monthly live calls with Renate.", "Hva du får i Inner Circle": "What you get in Inner Circle", "Start medlemskapet ditt →": "Start your membership →", "Alt du får som": "Everything you get as", "Inner Circle-medlem": "Inner Circle member", "Bli med i Inner Circle →": "Join Inner Circle →", "Bli med i": "Join", "Det handler ikke bare om innhold — det handler om mennesker som forstår reisen din.": "It's not just about content — it's about people who understand your journey.", "De første 100 medlemmene får evig låst pris, eget merke og første rad ved alle live-samlinger.": "The first 100 members get permanently locked pricing, a special badge, and front-row access at all live events.", "Egen tråd hvor Renate selv svarer — ikke en chatbot, ikke en assistent. Innenfor 48 timer i hverdager.": "Your own thread where Renate herself answers — not a chatbot, not an assistant. Within 48 hours on weekdays.", "Eksklusivt": "Exclusive", "Brukte LME Bookly til å lage en personlig bok til min datter om hennes": "Used LME Bookly to make a personal book for my daughter about her", "142 medlemmer · 31 aktive i dag": "142 members · 31 active today", "252 medlemmer": "252 members", "37 medlemmer · 9 aktive i dag": "37 members · 9 active today", "64 medlemmer · 18 aktive i dag": "64 members · 18 active today", "98 medlemmer · 24 aktive i dag": "98 members · 24 active today", "2 timer siden · Oslo": "2 hours ago · Oslo", "3 dager siden · Tønsberg": "3 days ago · Tønsberg", "5 dager siden · Bergen": "5 days ago · Bergen", "30 dagers utendørs Montessori": "30-day outdoor Montessori", "\"Observer i 7 dager uten å gripe inn\"": "\"Observe for 7 days without intervening\"", "\"tre kurver i stedet for én\"": "\"three baskets instead of one\"", ". Dag 1 og jeg har allerede bitt meg selv i tunga ti ganger 🙈 Noen andre som er med?": ". Day 1 and I've already bitten my tongue ten times 🙈 Anyone else joining?", "Ditt": "Your", "DIN KONTO": "YOUR ACCOUNT", "Hei": "Hi", "Administrer abonnementet ditt, betalingsinformasjon og kjøp.": "Manage your subscription, payment info, and purchases.", "Oversikt": "Overview", "Abonnement": "Subscription", "Betaling": "Payment", "Kjøp": "Purchases", "Profil": "Profile", "AKTIV": "ACTIVE", "Ditt nåværende abonnement": "Your current subscription", "Neste fakturering": "Next billing", "Beløp": "Amount", "Administrer abonnement →": "Manage subscription →", "Pågående kurs": "Ongoing courses", "Fullførte kurs": "Completed courses", "Lagrede ressurser": "Saved resources", "Siste": "Latest", "aktivitet": "activity", "I dag, 10:32": "Today, 10:32", "I går, 19:14": "Yesterday, 19:14", "3 dager siden": "3 days ago", "5 dager siden": "5 days ago", "Ditt abonnement": "Your subscription", "Plan": "Plan", "Bytt plan": "Change plan", "Status": "Status", "Aktiv": "Active", "Startet": "Started", "Avbryt abonnement": "Cancel subscription", "Du beholder tilgang ut perioden du har betalt for": "You keep access through the period you've paid for", "Avbryt": "Cancel", "Betalingsmetode": "Payment method", "Utløper 11/2028": "Expires 11/2028", "Endre": "Change", "Legg til betalingsmetode": "Add payment method", "+ Legg til betalingsmetode": "+ Add payment method", "Fakturaadresse": "Billing address", "Endre adresse": "Change address", "Lagre endringer": "Save changes", "Passord & sikkerhet": "Password & security", "Passord": "Password", "Sist endret 5. mai 2026": "Last changed May 5, 2026", "Endre passord": "Change password", "To-faktor autentisering": "Two-factor authentication", "Ikke aktivert": "Not enabled", "Aktiver": "Enable", "Farlig sone": "Danger zone", "Slett konto": "Delete account", "Dette kan ikke angres": "This cannot be undone", "Profilinformasjon": "Profile information", "Navn": "Name", "Tidssone": "Timezone", "Europa/Oslo (CEST)": "Europe/Oslo (CEST)", "Last ned faktura ↓": "Download invoice ↓", "Fakturahistorikk": "Invoice history", "↓ Last ned": "↓ Download", "12. april 2026": "April 12, 2026", "12. juni 2026": "June 12, 2026", "28. april 2026": "April 28, 2026", "5. mai 2026": "May 5, 2026", "3117 Tønsberg": "3117 Tønsberg", "Fullførte leksjon 4 av": "Completed lesson 4 of", "Aktivitetspakke · Norsk + engelsk": "Activity package · Norwegian + English", "Arbeidsbok 3–6: Vårens venner": "Workbook 3–6: Spring's friends", "Arbeidsbok · 48 sider · Norsk PDF": "Workbook · 48 pages · Norwegian PDF", "Bok · 24 sider · Norsk PDF": "Book · 24 pages · Norwegian PDF", "Kontakt oss": "Contact us", "LME BUTIKK": "LME SHOP", "Bøker, arbeidsbøker og": "Books, workbooks, and", "Montessorimagi": "Montessori magic", "Mia & Teo-bøker, Montessoribaserte arbeidsbøker og digitale ressurser laget for pedagoger og foreldre som elsker Montessoripedagogikken.": "Mia & Teo books, Montessori-based workbooks, and digital resources made for educators and parents who love Montessori pedagogy.", "Søk i produkter...": "Search products...", "Bilderbøker": "Picture books", "Arbeidsbøker": "Workbooks", "Aktiviteter": "Activities", "Gratis": "Free", "NY UTGIVELSE": "NEW RELEASE", "av Renate Dahl": "by Renate Dahl", "SIGNATUR-BOK · 24 SIDER": "SIGNATURE BOOK · 24 PAGES", "Mia & Teo møter": "Mia & Teo meet", "skogens små venner": "the little friends of the forest", "En vakkert illustrert barnebok i Pixar-stil hvor bestevennene Mia og Teo utforsker skogen og møter syv små venner: sommerfuglen, marihøna, larven, sneglen, mauren, frosken og blåfuglen. En bok som vekker undring og kjærlighet til naturen.": "A beautifully illustrated children's book in Pixar style where best friends Mia and Teo explore the forest and meet seven little friends: the butterfly, ladybug, caterpillar, snail, ant, frog, and bluebird. A book that awakens wonder and love for nature.", "Digital PDF": "Digital PDF", "📦 Forhåndsbestill trykk": "📦 Pre-order print", "Sendt innen 7–10 dager": "Shipped in 7–10 days", "PDF + Forhåndsbestill trykk": "PDF + Pre-order print", "PDF umiddelbart, bok 7–10 dager": "PDF immediately, book 7–10 days", "Legg i handlevogn — 99 kr": "Add to cart — $9.90", "Forhåndsvis →": "Preview →", "Bilder": "Picture", "bøker": "books", "Mia & Teo-fortellinger laget med Montessoriprinsippene i bunn.": "Mia & Teo stories built on Montessori principles.", "Forhåndsbestilling": "Pre-order", "NY": "NEW", "POPULÆR": "POPULAR", "Arbeids": "Work", "Montessoribaserte arbeidsbøker fordelt på utviklingsfaser.": "Montessori-based workbooks divided by developmental phases.", "Klar-til-utskrift pakker for hjemmebruk og klasserom.": "Print-ready packages for home and classroom use.", "Umiddelbar nedlasting": "Instant download", "Digitale produkter sendes på e-post rett etter kjøp": "Digital products are emailed right after purchase", "Norsk og engelsk": "Norwegian and English", "Alle produkter er tospråklige eller finnes i begge språk": "All products are bilingual or available in both languages", "Vipps, kort og Apple/Google Pay via Stripe": "Vipps, card, and Apple/Google Pay via Stripe", "14 dagers angrerett": "14-day return policy", "Ikke fornøyd? Få pengene tilbake — ingen spørsmål": "Not happy? Get your money back — no questions", "3–6 år": "3–6 years", "6–9 år": "6–9 years", "9–12 år": "9–12 years", "3 første": "First 3", "3 bøker · Spar 20% · Norsk PDF": "3 books · Save 20% · Norwegian PDF", "12 redigerbare maler · Norsk + Engelsk": "12 editable templates · Norwegian + English", "24 sider · 3–6 år · Norsk + Engelsk": "24 pages · 3–6 years · Norwegian + English", "28 sider · 3–6 år · Norsk + Engelsk": "28 pages · 3–6 years · Norwegian + English", "30 sider · Skrivbar PDF · Norsk + Engelsk": "30 pages · Writable PDF · Norwegian + English", "42 utskrivbare ark · Norsk + Engelsk": "42 printable sheets · Norwegian + English", "48 sider · 3–6 år · Norsk PDF": "48 pages · 3–6 years · Norwegian PDF", "64 sider · 6–9 år · Norsk PDF": "64 pages · 6–9 years · Norwegian PDF", "72 sider · 9–12 år · Norsk PDF": "72 pages · 9–12 years · Norwegian PDF", "LME BIBLIOTEK": "LME LIBRARY", "Din": "Your", "Montessoriskattekiste": "Montessori treasure chest", "Utskrivbare ark, observasjonsskjemaer, Canva-maler, lydressurser og inspirasjons­materialer — alt du trenger for å berike det forberedte miljøet.": "Printables, observation forms, Canva templates, audio resources, and inspirational materials — everything you need to enrich the prepared environment.", "Søk i biblioteket...": "Search the library...", "Utskrivbare": "Printables", "Observasjon": "Observation", "Ressurser totalt": "Total resources", "Lydspor": "Audio tracks", "Nye denne måneden": "New this month", "Anbefalt": "Recommended", "for deg": "for you", "Basert på din aktivitet": "Based on your activity", "SKJEMA": "FORM", "Observasjons-": "Observation", "journal": "journal", "Daglige observasjonsskjemaer strukturert etter Montessoriprinsippene.": "Daily observation forms structured by Montessori principles.", "Redigerbar": "Editable", "Foreldrebrev — Vår-utgave": "Parent letter — Spring edition", "Redigerbare Canva-maler for månedlige foreldrebrev og informasjon.": "Editable Canva templates for monthly parent letters and information.", "→ Åpne i Canva": "→ Open in Canva", "Hele det norske alfabetet i Sasson-skrift, klar til print og laminering.": "The entire Norwegian alphabet in Sasson script, ready to print and laminate.", "Klar-til-print materialer for klasserommet og hjemmet.": "Print-ready materials for the classroom and home.", "ark": "sheets", "Geometriske former — 3 nivåer": "Geometric shapes — 3 levels", "Botaniske kort — Norges flora": "Botanical cards — Norway's flora", "Tallkort 1–10 000": "Number cards 1–10,000", "Kontinent-kart med flagg": "Continent maps with flags", "Ukekalender — visuell": "Weekly calendar — visual", "Sommerfuglens livssyklus": "Butterfly lifecycle", "Redigerbare maler du kan tilpasse din egen klasse eller familie.": "Editable templates you can customize for your class or family.", "Lyd": "Audio", "& meditasjon": "& meditation", "Lyttepakker for ro, refleksjon og bevisst pedagogikk.": "Listening packages for calm, reflection, and conscious pedagogy.", "Morgensirkel — 7 minutter ro": "Morning circle — 7 minutes of calm", "Guidet pust og oppstart for pedagoger før dagen begynner": "Guided breathing and start for educators before the day begins", "Observasjon uten å gripe inn": "Observation without intervention", "Renate leser om kunsten å bare være tilstede med barnet": "Renate reads about the art of simply being present with the child", "Naturlyder for det forberedte miljøet": "Nature sounds for the prepared environment", "30 minutter med skog, fugler og elv — bakgrunn for klasserom": "30 minutes of forest, birds, and river — classroom background", "Visualisering: Ditt ideelle miljø": "Visualization: Your ideal environment", "10 minutters meditasjon for å se ditt forberedte miljø klart": "10-minute meditation to see your prepared environment clearly", "& kommunikasjon": "& communication", "Ferdige brev for ulike anledninger — bare fyll inn navn og send.": "Ready-made letters for various occasions — just fill in names and send.", "Velkomstbrev til nye familier": "Welcome letter for new families", "Utviklingsrapport — mal": "Progress report — template", "Sesonginvitasjon (4 utgaver)": "Seasonal invitation (4 editions)", "Bekymringsmelding — mal": "Concern report — template", "Nytt": "New", "denne måneden": "this month", "12 nye ressurser lagt til i mai 2026": "12 new resources added in May 2026", "Vil du ha": "Want to get", "tilgang til alt?": "access to everything?", "Inner Circle-medlemmer får ubegrenset tilgang til hele biblioteket — pluss nye ressurser hver måned, månedlige live-samtaler med Renate, og direkte tråd til pedagogisk veiledning.": "Inner Circle members get unlimited access to the entire library — plus new resources every month, monthly live calls with Renate, and a direct thread to pedagogical guidance.", "Sammenlign planer": "Compare plans", "17. mai-pakke (norsk)": "May 17 pack (Norwegian)", "Bursdag-pakke": "Birthday pack", "Bursdagskort": "Birthday cards", "Bokstav-": "Letter", "Aktiviteter, flagg og fest-maler": "Activities, flags, and party templates", "10 redigerbare design": "10 editable designs", "12 redigerbare design": "12 editable designs", "24 etiketter · norsk": "24 labels · Norwegian", "29 kort": "29 cards", "30 sider": "30 pages", "6 maler · A4": "6 templates · A4", "8 maler · 6 språk": "8 templates · 6 languages", "Canva · 12 maler": "Canva · 12 templates", "Canva · vår/sommer/høst/vinter": "Canva · spring/summer/fall/winter", "1. mai": "May 1", "3. mai": "May 3", "8. mai": "May 8", "12. mai": "May 12", "Om Renate": "About Renate", "Tilbakemelding": "Feedback", "Kontakt": "Contact", "Personvern": "Privacy", "Vilkår": "Terms", "Veiledning": "Tutorials", "Guider": "Guides", "Følg oss": "Follow us", "Lær": "Learn", "LME": "LME", "App Store": "App Store", "Google Play": "Google Play", "Little Montessori Explorers — vekker undring og kjærlighet til natur, læring og hverandre. Mia & Teo viser vei.": "Little Montessori Explorers — awakens wonder and love for nature, learning, and each other. Mia & Teo show the way.", "Live arrangementer": "Live events", "Medlemsoversikt": "Member overview", "Onboarding-samtale": "Onboarding call", "Opptak": "Recordings", "Pedagog-partnere": "Educator partners", "VERKTØY": "TOOL", "MONTESSORI": "MONTESSORI", "REPLAY": "REPLAY", "Butikk — LME": "Shop — LME", "Min konto — LME": "My Account — LME", "Inner Circle — LME": "Inner Circle — LME", "LME — Dashbord": "LME — Dashboard", "Hjem": "Home", "Din Montessorireise": "Your Montessori Journey", "LME Musikk": "LME Music", "Lær mer →": "Learn more →", "Maler": "Templates", "Ressurser": "Resources", "Etiketter": "Labels", "Klasser": "Classes", "Spør Renate AI": "Ask Renate AI", "Spør Renate AI ↗": "Ask Renate AI ↗", "Spør Renate": "Ask Renate", "Renate AI": "Renate AI", "Støtte": "Support", "Partnere": "Partners", "Bookingside": "Booking page", "Norge": "Norway", "Norsk (Bokmål)": "Norwegian (Bokmål)", "Norsk og engelsk i samme rom — flere perspektiver, flere ideer, ekte vennskap på tvers av landegrenser.": "Norwegian and English in the same room — more perspectives, more ideas, real friendships across borders.", "Tospråklig": "Bilingual", "Tospråklig fellesskap for Montessoripedagoger, foreldre og skapere.": "Bilingual community for Montessori educators, parents, and creators.", "GRATIS": "FREE", "NYTT": "NEW", "NYTT!": "NEW!", "NYTT KURS": "NEW COURSE", "PAKKE": "PACKAGE", "POPULÆRT": "POPULAR", "LIVE": "LIVE", "INTRO": "INTRO", "OBSERVASJON": "OBSERVATION", "PRAKSIS": "PRACTICE", "PUBLISERING": "PUBLISHING", "RESSURS": "RESOURCE", "SESONGAKTIVITET": "SEASONAL", "WORKSHOP": "WORKSHOP", "CANVA-MALER": "CANVA TEMPLATES", "🎨 CANVA": "🎨 CANVA", "📋 SKJEMA": "📋 FORM", "🖨️ UTSKRIVBAR": "🖨️ PRINTABLE", "STARTPUNKT": "STARTING POINT", "LEAD MAGNET": "LEAD MAGNET", "KOMMER SNART": "COMING SOON", "KOMMER SOMMER 2026": "COMING SUMMER 2026", "FORTSETT DER DU SLAPP": "CONTINUE WHERE YOU LEFT OFF", "PÅGÅR": "ONGOING", "MAI": "MAY", "SLIK KAN VI HJELPE:": "HOW WE CAN HELP:", "FOR FORELDRE": "FOR PARENTS", "FOR PEDAGOGER": "FOR EDUCATORS", "FOR SKAPERE": "FOR CREATORS", "SIGNATURE-KURS": "SIGNATURE COURSE", "SPAR 20%": "SAVE 20%", "LME AKADEMI": "LME ACADEMY", "LME INNER CIRCLE": "LME INNER CIRCLE", "VISA": "VISA", "JUN · ONS 19:00": "JUN · WED 7:00 PM", "JUN · TIR 20:00": "JUN · TUE 8:00 PM", "MAI · ONS 19:00": "MAY · WED 7:00 PM", "Ons, 19:00 CEST": "Wed, 7:00 PM CEST", "I går · Stockholm": "Yesterday · Stockholm", "3 leksjoner": "3 lessons", "4 leksjoner": "4 lessons", "5 leksjoner": "5 lessons", "6 leksjoner": "6 lessons", "7 leksjoner": "7 lessons", "8 leksjoner": "8 lessons", "9 leksjoner": "9 lessons", "10 leksjoner": "10 lessons", "Leksjon 4 av 8 · 52% fullført": "Lesson 4 of 8 · 52% complete", "Renate": "Renate", "Renate Dahl": "Renate Dahl", "Renate Dahl, Montessoripedagog": "Renate Dahl, Montessori educator", "Renate!": "Renate!", "Maria Olsen": "Maria Olsen", "Sara Lund": "Sara Lund", "Karoline Berg": "Karoline Berg", "Ingrid Sørensen": "Ingrid Sørensen", "Mia & Teo": "Mia & Teo", "Mia & Teo Live med Renate": "Mia & Teo Live with Renate", "Mia & Teo Live:": "Mia & Teo Live:", "Mia & Teo i skogen": "Mia & Teo in the forest", "Mia & Teo på stranden": "Mia & Teo on the beach", "Mia & Teo-bok": "Mia & Teo book", "med Mia & Teo": "with Mia & Teo", "Forberedt": "Prepared", "Det sosiale": "The social", "Kosmisk": "Cosmic", "utdannelse": "education", "utforskning": "exploration", "Going": "Going", "out": "out", "Going out, samfunnsforståelse og overgangen til ungdomsfasen.": "Going out, social understanding, and the transition to adolescence.", "Arbeidsbok": "Workbook", "Arbeidsbok: Going out": "Workbook: Going out", "Arbeidsbok: Kosmisk utforskning": "Workbook: Cosmic exploration", "Arbeidsbok: Vårens venner": "Workbook: Spring's friends", "arbeidsbøker": "workbooks", "Bunt: Hele arbeidsbok-serien": "Bundle: Complete workbook series", "De 3 første skrittene i Montessori": "The 3 first steps in Montessori", "Foreldre-": "Parent", "Foreldrebrev — vår": "Parent letter — spring", "Foreldrebrev-pakke (Canva)": "Parent letter pack (Canva)", "brev pakke": "letter pack", "brev-pakke": "letter pack", "Forhåndsbestill →": "Pre-order →", "Forhåndsbestilling · 3–6 år": "Pre-order · 3–6 years", "Påskeaktiviteter 3–5 år": "Easter activities 3–5 years", "Hyllelapper for klasserom": "Shelf labels for classroom", "Sandpapirbokstaver — utskriftsbar versjon": "Sandpaper letters — printable version", "Vårens småkryp — Canva-pakke": "Spring critters — Canva pack", "Observasjonsskjema vårblomster": "Observation form spring flowers", "Observasjonsjournal for pedagoger": "Observation journal for educators", "Observasjonsjournal 3–6 (oppdatert)": "Observation journal 3–6 (updated)", "Observasjonsjournal for 3–6 år": "Observation journal for 3–6 years", "observasjonsjournal": "observation journal", "journalen": "the journal", "Naturutforskerne: Live-lesning": "The nature explorers: Live reading", "Spørretime 3–6": "Q&A 3–6", "Sommerboksen 3–6 år": "Summer box 3–6 years", "Sommerens": "Summer's", "Sommerens eventyr": "Summer's adventure", "Sommer-": "Summer", "Sommer-prosjektet": "Summer project", "boksen": "box", "eventyr": "adventure", "Vårens": "Spring's", "Vårens små venner": "Spring's little friends", "Skogeventyret": "Forest adventure", "Diplom": "Diploma", "Diplomer & sertifikater": "Diplomas & certificates", "Lagre": "Save", "Lagret": "Saved", "Lagre dine egne historier": "Save your own stories", "Studio": "Studio", "LME-appen": "LME app", "Lyd & visualiseringer": "Audio & visualizations", "Lydbok & musikk": "Audiobook & music", "Naturlyder — 30 min skog": "Nature sounds — 30 min forest", "Ny utgave med utvidet sosial-emosjonell del": "New edition with expanded social-emotional section", "Nytt lydspor for bruk i klasserom og hjemme": "New audio track for classroom and home use", "Pedagog-playbooks": "Educator playbooks", "Sett av tid →": "Set time →", "Se opptak →": "Watch replay →", "Se alle →": "View all →", "Se alle 42 Canva-maler →": "View all 42 Canva templates →", "Se alle 67 utskrivbare ressurser →": "View all 67 printable resources →", "Se alle grupper →": "View all groups →", "Se alle ressurser →": "View all resources →", "Se favorittene dine →": "View your favorites →", "Se hvordan du forbereder rommet, materiellet og deg selv for barnet 3–6 år. Lær prinsippene som bærer alt — fra orden til skjønnhet til frihet innenfor rammer.": "See how to prepare the room, materials, and yourself for the child 3–6 years. Learn the principles that carry everything — from order to beauty to freedom within structure.", "Skrev innlegg i": "Wrote post in", "Sosiale medier": "Social media", "Trenger du": "Need", "veiledning?": "guidance?", "Utforsk": "Explore", "Velkommen": "Welcome", "Vokse": "Grow", "Vil du at": "Do you want", "Snakk med Renate først": "Talk to Renate first", "Fortsett kurset →": "Continue the course →", "Lest 3 av 7 venner": "Read 3 of 7 friends", "Klar for april-utfordringen:": "Ready for the April challenge:", "Bli": "Join", "Bygg din": "Build your", "Finn": "Find", "Finn din": "Find your", "Lag din": "Make your", "Ressurser for å": "Resources to", "lykkes": "succeed", "Lær Montessori —": "Learn Montessori —", "steg for steg": "step by step", "Følg": "Follow", "der du slapp": "where you left off", "skape i dag?": "create today?", "Hva vil du": "What do you want to", "barnet": "the child", "miljø": "environment", "miljøet": "the environment", "Mestre Content Studio": "Master Content Studio", "Møt Mia & Teo, finn ut hvordan plattformen virker og bli klar for reisen.": "Meet Mia & Teo, learn how the platform works, and get ready for the journey.", "Enkle endringer i hjemmet som åpner opp for selvstendighet og indre disiplin.": "Simple changes in the home that open up for independence and inner discipline.", "Rommet, materiellet og pedagogens forberedelse for barnehage-alderen.": "The room, materials, and educator's preparation for kindergarten age.", "Lær å se barnet uten å forstyrre — det viktigste verktøyet i Montessoriarbeidet.": "Learn to see the child without interrupting — the most important tool in Montessori work.", "Fra fil til ferdig bok": "From file to finished book", "Print-ready filer for Amazon KDP og BoldBooks/BoD — alt du trenger for å trykke selv.": "Print-ready files for Amazon KDP and BoldBooks/BoD — everything you need to print yourself.", "Lag innhold for Instagram, TikTok og Facebook med AI-verktøy som vet hvem Mia & Teo er.": "Create content for Instagram, TikTok, and Facebook with AI tools that know who Mia & Teo are.", "Vårt AI-system holder dine egne karakterer konsistente, så de ser like ut hver gang, samme klær, samme stil. Dette er unikt for LME og krever ingen oppsett fra din side.": "Our AI system keeps your own characters consistent so they look the same every time — same clothes, same style. This is unique to LME and requires no setup from you.", "Fra de første Montessoriprinsippene til ditt forberedte miljø. Kurs laget for pedagoger, foreldre og deg som vil følge barnets naturlige utvikling.": "From the first Montessori principles to your prepared environment. Courses made for educators, parents, and you who want to follow the child's natural development.", "Et bibliotek av maler, lyd-meditasjoner, utskrivbare ark og inspirerende innhold som gjør Montessorihverdagen enklere.": "A library of templates, audio meditations, printables, and inspiring content that makes everyday Montessori easier.", "Et tospråklig hjem for Montessoripedagoger, foreldre og skapere som vil følge barnets naturlige utvikling — med ekte støtte fra likesinnede og månedlige live-samtaler med Renate.": "A bilingual home for Montessori educators, parents, and creators who want to follow the child's natural development — with real support from like-minded peers and monthly live calls with Renate.", "Et lite glimt fra fellesskapet — slik samtalene faktisk ser ut inne.": "A little glimpse from the community — what the conversations actually look like inside.", "En kveld i måneden samles vi for spørretime, casus-gjennomgang og felles refleksjon — alltid med replay.": "One evening a month we gather for Q&A, case review, and shared reflection — always with replay.", "Innsikt fra erfarne Montessoripedagoger og ledere": "Insights from experienced Montessori educators and leaders", "Match med en annen pedagog for gjensidig støtte og ukentlige sjekker.": "Match with another educator for mutual support and weekly check-ins.", "Praktiske 30-dagers prosjekter som \"Forbered miljøet\", \"Observer i 7 dager\" eller \"Bygg din egen bok\".": "Practical 30-day projects like \"Prepare the environment\", \"Observe for 7 days\" or \"Build your own book\".", "Praktiske spørsmål, ekte svar": "Practical questions, real answers", "Fra arbeidsbøker til workshops, fra Mia & Teo-historier til foreldre­samtaler — vi gir deg verktøyene, malene og veiledningen for å få det til.": "From workbooks to workshops, from Mia & Teo stories to parent conversations — we give you the tools, templates, and guidance to make it happen.", "Dette er ditt første steg. Du vil tiltrekke de rette familiene, bygge en lojal e-postliste og gjøre fremmede til engasjerte foreldre som elsker Mia & Teo.": "This is your first step. You'll attract the right families, build a loyal email list, and turn strangers into engaged parents who love Mia & Teo.", "Spør Renate AI om hvilket kurs som passer akkurat din situasjon — eller book en samtale med Renate for personlig oppfølging.": "Ask Renate AI which course suits your situation — or book a call with Renate for personal guidance.", "La oss skape ro, klarhet og tro på din egen ro som pedagog": "Let's create calm, clarity, and trust in your own calm as an educator", "Få umiddelbart tilgang til fellesskapet, månedlige live-samlinger med Renate, hele ressursbiblioteket og din egen tråd til å spørre om hva som helst.": "Get instant access to the community, monthly live calls with Renate, the entire resource library, and your own thread to ask anything.", "Måtte bare dele: prøvde Renates råd om": "Just wanted to share: tried Renate's advice about", "Vi holder de mest magiske live-sesjonene!": "We hold the most magical live sessions!", "Spørsmål til de som jobber med 6–9 år: hvordan håndterer dere når": "Question for those working with 6–9 years: how do you handle when", "alle vil ha samme materiell samtidig? Vi har bare ett sett av Adderingsslangen 😅": "everyone wants the same material at once? We only have one set of the Addition Snake 😅", "hjemme denne uken — og 4-åringen min ordnet selv frokostbordet i morges. Tårer i øynene. 🌸": "at home this week — and my 4-year-old set the breakfast table by themselves this morning. Tears in my eyes. 🌸", "Å bygge en Montessoripraksis er bedre med venner. Finn likesinnede, ansvarspartnere og pedagoger som forstår deg.": "Building a Montessori practice is better with friends. Find like-minded peers, accountability partners, and educators who understand you.", "i Norge, Sverige og Danmark": "in Norway, Sweden, and Denmark", "Utskrivbare ark, observasjons­skjemaer og Canva-maler du ikke finner andre steder.": "Printables, observation forms, and Canva templates you won't find elsewhere.", "Kurspakken fra de første tre årene til pre-tenåringen — bygget på Montessoripedagogikk.": "The complete course package from the first three years to pre-teen — built on Montessori pedagogy.", "Kurs som lærer deg å bruke LME-verktøyene til å lage egne ressurser.": "Courses that teach you to use LME tools to make your own resources.", "Se hva som": "See what's", "Se hva som inngår": "See what's included", "Wergelands vei 19": "Wergelands vei 19", "•••• •••• •••• 4242": "•••• •••• •••• 4242", "♡ 12": "♡ 12", "♡ 24": "♡ 24", "♡ 38": "♡ 38", "♡ 56": "♡ 56", "💬 8 svar": "💬 8 replies", "💬 14 svar": "💬 14 replies", "💬 17 svar": "💬 17 replies", "💬 22 svar": "💬 22 replies", "Åpne →": "Open →", "Kjøp pakke →": "Buy pack →", "↓ PDF": "↓ PDF", "→ Canva": "→ Canva", "↗ Del": "↗ Share", "PDF · A4": "PDF · A4", "PDF · A4 + A5": "PDF · A4 + A5", "PDF · 4 sider · 3–6 år": "PDF · 4 pages · 3–6 years", "PDF · 6 sider · 3–9 år": "PDF · 6 pages · 3–9 years", "PDF · 18 sider · 6–9 år": "PDF · 18 pages · 6–9 years", "PDF · 24 sider · 3–9 år": "PDF · 24 pages · 3–9 years", "PDF · 36 sider · 3–6 år": "PDF · 36 pages · 3–6 years", "PDF · 48 sider · 6–12 år": "PDF · 48 pages · 6–12 years", "Word · Norsk + Engelsk": "Word · Norwegian + English", "Word + PDF · Norsk + Engelsk": "Word + PDF · Norwegian + English", "Word · Veiledet utfylling": "Word · Guided fill-in", "Gratis e-bok · 16 sider · Norsk + Engelsk": "Free e-book · 16 pages · Norwegian + English", "✓ AI-innholdsgenerering på alle formater": "✓ AI content generation in all formats", "✓ Norsk og engelsk innhold": "✓ Norwegian and English content", "✓ Innholdskalender og 30-dagers plan": "✓ Content calendar and 30-day plan", "✓ Publisering til 3 plattformer": "✓ Publishing to 3 platforms", "✓ E-postkurs og introduksjonsguider": "✓ Email courses and intro guides", "✓ 6 plattformer for publisering": "✓ 6 platforms for publishing", "✓ DALL-E 3 AI-bildegenerering": "✓ DALL-E 3 AI image generation", "✓ Karakterkonsistens for dine egne figurer": "✓ Character consistency for your own characters", "✓ Autopublisering og Reel-editor": "✓ Auto-publishing and Reel editor", "✓ Story-editor med Canva-import": "✓ Story editor with Canva import", "✓ Prioritert støtte": "✓ Priority support", "✓ 8 plattformer for publisering": "✓ 8 platforms for publishing", "✓ LME Inner Circle-medlemskap": "✓ LME Inner Circle membership", "✓ Månedlig live med Renate": "✓ Monthly live with Renate", "✓ Ressursbibliotek med Canva-maler": "✓ Resource library with Canva templates", "✓ Månedlig innholds­utfordring": "✓ Monthly content challenge", "✓ Direkte tråd til Renate": "✓ Direct thread to Renate", "⏰ BARE 17 GRUNNLEGGER-PLASSER IGJEN": "⏰ ONLY 17 FOUNDER SPOTS LEFT", "Proff + Fellesskap (Månedlig)": "Pro + Community (Monthly)", "Proff + Fellesskap (mai)": "Pro + Community (May)", "Grunnlegger-": "Founder", "fordeler": "benefits", "Montessoriutdannet": "Montessori-trained", "7-dagers gratis prøveperiode · Avbryt når som helst · Ingen binding": "7-day free trial · Cancel anytime · No commitment", "+247": "+247", "100%": "100%", "52%": "52%", "Print &": "Print &", "Aktiviteter &": "Activities &", "Ta favoritt-innholdet ditt med på reisen": "Take your favorite content with you on the journey", "Lead magnet": "Lead magnet", "e-postlisten din på autopilot": "your email list on autopilot", "ressursbibliotek": "resource library", "tilkoblet": "connected", "Månedlige": "Monthly", "live med Renate": "live with Renate", "live-samlinger": "live calls", "Last ned": "Download", "publisér": "publish", "kort": "cards", "kunsten": "the art", "skritt": "step", "venner": "friends", "varme": "warm", "verktøykasse": "toolkit", "møter skogen": "meet the forest", "med Renate Dahl": "with Renate Dahl", "fra LME": "from LME", "fellesskap": "community", "Montessori": "Montessori", "Montessori hjemme": "Montessori at home", "Montessori hjemme 0–6": "Montessori at home 0–6", "Montessoribok": "Montessori book", "Montessorifellesskap": "Montessori community", "Montessoriløypa": "The Montessori path", "naturutforskerne": "Nature Explorers", "små venner": "little friends", "på stranden": "on the beach", "til biblioteket. Hun har bedt om å lese den hver kveld i en uke 📚💖": "to the library. She's asked to read it every night for a week 📚💖", "egen bok": "own book", "egen \"going out\"-tur": "own \"going out\" trip", "din gruppe": "your group", "direkte": "directly", "en gruppe på fem": "a group of five", "i LME Bookly": "in LME Bookly", "i dag": "today", "gratis nedlasting": "free download", "første": "first", "hjemme": "at home", "til LME": "to LME", "Kommende": "Upcoming", "skjer i ringen": "happens in the circle", "utfordringer": "challenges", "utskriftsbare": "printable", "arrangementer": "events", "Skal hjelpe deg å komme i gang?": "Will help you get started?", "skal hjelpe deg å komme i gang?": "shall help you get started?", "pedagog-partner": "educator partner", "Little Montessori Explorers": "Little Montessori Explorers", "©2026 Little Montessori Explorers — Renate Dahl · Tønsberg, Norge": "©2026 Little Montessori Explorers — Renate Dahl · Tønsberg, Norway", "opptak": "recordings", "🇬🇧 English": "🇬🇧 English", "🇳🇴": "🇳🇴", "🛍️": "🛍️", "🖨️": "🖨️", "⚠️": "⚠️", "v2-tospråklig-fungerer": "", "De små": "The Little", "Mia & Teo, Lek & Lær": "Mia & Teo, Play & Learn", "Last opp bilde": "Upload image", "3–6 år:": "3–6 years:", "Fra arbeidsbøker til workshops, fra Mia & Teo-historier til foreldre­samtaler, vi gir deg verktøyene, malene og veiledningen for å få det til.": "From workbooks to workshops, from Mia & Teo stories to parent conversations — we give you the tools, templates, and guidance to make it happen.", "Tanker, tips og historier om Montessori, lek og læring": "Thoughts, tips, and stories about Montessori, play, and learning", "Lek & Lær": "Play & Learn", "Bli med Mia og Teo på lek, læring og naturens eventyr": "Join Mia and Teo for play, learning, and nature's adventures", "Ferdige maler og ressurser, med videogjennomgang": "Ready-made templates and resources, with a video walkthrough", "Se maler →": "See templates →", "Little Montessori Explorers, vekker undring og kjærlighet til natur, læring og hverandre. Mia & Teo viser vei.": "Little Montessori Explorers — awakens wonder and love for nature, learning, and each other. Mia & Teo show the way.", "©2026 Little Montessori Explorers, Renate Dahl · Tønsberg, Norge": "©2026 Little Montessori Explorers — Renate Dahl · Tønsberg, Norway", "Søk": "Search", "Om Renate AI": "About Renate AI", "Les bloggen →": "Read the blog →", "Utforsk →": "Explore →", "Blogg": "Blog"};
+  window.LME_TRANSLATIONS = {"Minikurs: Gro e-postlisten din — LME": "Mini course: Grow your email list — LME", "MINIKURS": "MINI COURSE", "Gro": "Grow", "e-postlisten din": "your email list", "Et lite kurs om å bygge en lojal e-postliste med en lead magnet, en enkel påmeldingsside og en velkomstserie som jobber for deg mens du sover.": "A little course about building a loyal email list with a lead magnet, a simple sign-up page and a welcome series that works for you while you sleep.", "Hvorfor e-postlisten er den viktigste kanalen du eier": "Why your email list is the most important channel you own", "Hva en lead magnet er, og hvordan du lager en folk faktisk vil ha": "What a lead magnet is, and how to make one people actually want", "Hvordan du setter opp en enkel påmeldingsside": "How to set up a simple sign-up page", "Velkomstserien: tre e-poster som bygger tillit på autopilot": "The welcome series: three emails that build trust on autopilot", "Hvordan du deler lead magneten din uten å mase": "How to share your lead magnet without nagging", "Mia og Teo holder en gyllen konvolutt": "Mia and Teo holding a golden envelope", "Lead magneten er en gave: noe fint i bytte mot en e-postadresse.": "The lead magnet is a gift: something lovely in exchange for an email address.", "Modul 2 · Autopilot": "Module 2 · Autopilot", "E-postlisten er gullet ditt": "Your email list is gold", "Instagram og Facebook bestemmer hvem som ser innleggene dine.": "Instagram and Facebook decide who sees your posts.", "E-postlisten er din.": "Your email list is yours.", "Den kan ikke forsvinne med en algoritme, og den når frem til folk som selv har sagt ja til å høre fra deg.": "It can't disappear with an algorithm, and it reaches people who have said yes to hearing from you.", "For deg som deler Montessoriinnhold betyr det: familiene som melder seg på, er allerede interessert. Du trenger ikke overbevise dem, bare hjelpe dem videre.": "For you who share Montessori content, that means: the families who sign up are already interested. You don't need to convince them, just help them along.", "💡 Har du 50 personer på listen, har du 50 familier som har rukket opp hånden og sagt \"jeg vil høre mer\". Det er mer verdt enn 5000 tilfeldige visninger.": "💡 If you have 50 people on your list, you have 50 families who have raised their hand and said \"I want to hear more\". That's worth more than 5000 random views.", "Lag en lead magnet folk faktisk vil ha": "Make a lead magnet people actually want", "En lead magnet er en liten gave du gir bort i bytte mot en e-postadresse: en PDF, en sjekkliste, en mini-guide eller et aktivitetsark.": "A lead magnet is a little gift you give away in exchange for an email address: a PDF, a checklist, a mini guide or an activity sheet.", "Den beste lead magneten løser": "The best lead magnet solves", "ett lite problem": "one small problem", "raskt. Tenk \"10 Montessoriaktiviteter med ting du har hjemme\" heller enn \"alt om Montessori\".": "quickly. Think \"10 Montessori activities with things you have at home\" rather than \"everything about Montessori\".", "🎁 Bruk malene i biblioteket, eller lag arket ditt i Canva. Ferdig er bedre enn perfekt.": "🎁 Use the templates in the library, or make your sheet in Canva. Done is better than perfect.", "Påmeldingssiden: enkel og tydelig": "The sign-up page: simple and clear", "Påmeldingssiden trenger bare tre ting: en overskrift som sier hva familien får, ett bilde av gaven og ett felt for e-postadressen.": "The sign-up page only needs three things: a headline that says what the family gets, one picture of the gift and one field for the email address.", "Fjern alt annet. Ingen meny, ingen lenker videre, bare ett eneste valg: \"Ja takk, send meg den\".": "Remove everything else. No menu, no further links, just one single choice: \"Yes please, send it to me\".", "✍️ Skriv overskriften som et løfte: \"Få 10 rolige Montessoriaktiviteter for regnværsdager\", ikke bare \"Last ned PDF\".": "✍️ Write the headline as a promise: \"Get 10 calm Montessori activities for rainy days\", not just \"Download PDF\".", "Velkomstserien: tre e-poster som bygger tillit": "The welcome series: three emails that build trust", "Når noen melder seg på, er de mest nysgjerrige de aller første dagene. Da sender du tre korte e-poster: først gaven med en varm velkomst, så historien din og hvorfor du deler Montessori, og til slutt et godt tips pluss en invitasjon videre, for eksempel til butikken eller fellesskapet.": "When someone signs up, they're most curious in the very first days. That's when you send three short emails: first the gift with a warm welcome, then your story and why you share Montessori, and finally a good tip plus an invitation onwards, for example to the shop or the community.", "Dette setter du opp én gang i e-postverktøyet ditt, for eksempel MailerLite, og etterpå går det av seg selv. Det er dette som er autopiloten.": "You set this up once in your email tool, for example MailerLite, and afterwards it runs by itself. That's the autopilot.", "📬 Skriv som du snakker. Korte e-poster fra et ekte menneske slår perfekte nyhetsbrev hver gang.": "📬 Write like you talk. Short emails from a real person beat perfect newsletters every time.", "Del den overalt, rolig og jevnt": "Share it everywhere, calmly and steadily", "Nå som alt er koblet sammen, handler resten om synlighet: lenken i Instagram-profilen, en fast pin på Pinterest og et innlegg i uka som peker til gaven.": "Now that everything is connected, the rest is about visibility: the link in your Instagram profile, a fixed pin on Pinterest and one post a week pointing to the gift.", "Du trenger ikke mase. Nevn gaven når det passer naturlig, og la påmeldingssiden gjøre resten. Små drypp over tid bygger listen jevnt og trutt.": "You don't need to nag. Mention the gift when it fits naturally, and let the sign-up page do the rest. Small drops over time build the list steadily.", "🌱 Mål fremgangen månedlig, ikke daglig. 20 nye på listen hver måned er 240 engasjerte familier på et år.": "🌱 Measure progress monthly, not daily. 20 new on the list every month is 240 engaged families in a year.", "Klar til å lage din første lead magnet?": "Ready to make your first lead magnet?", "Start med en enkel PDF fra malbiblioteket, eller lag den i Canva. Når gaven er klar, er resten bare å koble sammen.": "Start with a simple PDF from the template library, or make it in Canva. Once the gift is ready, the rest is just connecting the pieces.", "Se maler →": "See templates →", "Leksjon 4": "Lesson 4", "Leksjon 5": "Lesson 5", "← Til akademiet": "← To the academy", "Akademiet": "Academy", "Montessorireisen med Renate": "Renate's Montessori Journey", "Biblioteket": "Library", "Live": "Live", "Replay": "Replay", "Fellesskap": "Community", "Grupper": "Groups", "Inner Circle": "Inner Circle", "Mer": "More", "Butikk": "Shop", "LME Perks": "LME Perks", "Hjelpesenter": "Help Center", "Min konto": "My Account", "🛍️ Butikk": "🛍️ Shop", "✨ Inner Circle": "✨ Inner Circle", "Åpne LME Creative Academy": "Open LME Creative Academy", "Bli med i Inner Circle": "Join Inner Circle", "Dashbord": "Dashboard", "EN": "EN", "NO": "NO", "English": "English", "1: Velkommen til LME": "1: Welcome to LME", "2: 3–6 år": "2: ages 3–6", "3: 6–9 år": "3: ages 6–9", "4: 9–12 år": "4: ages 9–12", "5: Forberedt miljø": "5: Prepared environment", "6: Observasjonskunsten": "6: The art of observation", "3–6": "3–6", "6–9": "6–9", "9–12": "9–12", "3–6:": "3–6:", "3–6: Forberedt miljø": "3–6: Prepared environment", "6–9: Kosmisk utdannelse": "6–9: Cosmic education", "9–12: Det sosiale barnet": "9–12: The social child", "Akademiet — LME": "Academy — LME", "Biblioteket — LME": "Library — LME", "Oppgrader plan — LME": "Upgrade plan — LME", "Oppgrader plan": "Upgrade Plan", "Velkommen tilbake": "Welcome back", "la oss skape magi i dag": "let's create magic today", "BLI MEDLEM": "BECOME A MEMBER", "UTFORSK BUTIKKEN": "EXPLORE THE SHOP", "Bøker & ressurser": "Books & resources", "Tospråklig fellesskap + månedlige live-samtaler med Renate": "Bilingual community + monthly live calls with Renate", "Mia & Teo-bøker, arbeidsbøker og digitale Montessoriressurser": "Mia & Teo books, workbooks, and digital Montessori resources", "Velkommen til LME": "Welcome to LME", "AI-drevet innholdsverktøy for sosiale medier": "AI-powered content tool for social media", "3–6 år": "3–6 years", "6–9 år": "6–9 years", "9–12 år": "9–12 years", "Forberedt miljø": "Prepared environment", "Observasjonskunsten": "The Art of Observation", "Bygg din egen bok": "Build your own book", "Bookly": "Bookly", "Bokbygger-appen": "Book Builder app", "Fortsett der du slapp": "Continue where you left off", "Fortsett": "Continue", "Det forberedte miljøet 3–6": "The Prepared Environment 3–6", "Det forberedte miljøet": "The Prepared Environment", "Det forberedte": "The Prepared", "Leksjon 4 av 12": "Lesson 4 of 12", "Fortsett →": "Continue →", "52% fullført": "52% complete", "MELDT PÅ": "ENROLLED", "Hva vil du skape i dag?": "What do you want to create today?", "Innholdsstudio": "Content Studio", "AI-drevet": "AI-powered", "Lag innhold på 60 sek": "Create content in 60 sec", "Bygg en bok": "Build a book", "Start prosjekt →": "Start project →", "Reel-editor": "Reel editor", "Med musikk": "With music", "Lag reel →": "Create reel →", "Innholdsplan": "Content plan", "30 dager": "30 days", "Last ned →": "Download →", "Live & opptak": "Live & recordings", "Live denne uken": "Live this week", "Mia & Teo Live: Vårens små venner": "Mia & Teo Live: Spring's little friends", "Påmeldt": "Registered", "Påmeld →": "Register →", "Se opptak": "Watch recording", "Se kalender": "View calendar", "Gikk du glipp av det? Se opptaket": "Missed it? Watch the replay", "Siste replays": "Latest replays", "Se alle replays →": "View all replays →", "Hvordan møte den eksplosjon av språk": "How to meet the explosion of language", "April: 3–6 forberedt miljø": "April: 3–6 prepared environment", "Mars: Going out med 9–12-åringer": "March: Going out with 9–12 year olds", "Sist sett uke 18": "Last watched week 18", "Sist sett uke 17": "Last watched week 17", "Sist sett uke 14": "Last watched week 14", "Ressurser laget for deg": "Resources made for you", "Se hele biblioteket →": "Browse the library →", "Utskrivbare ark": "Printables", "Canva-maler": "Canva templates", "Lyd & meditasjon": "Audio & meditation", "Foreldrebrev": "Parent letters", "67 ressurser": "67 resources", "42 maler": "42 templates", "23 lydspor": "23 audio tracks", "12 maler": "12 templates", "BLI EN AV OSS": "BECOME ONE OF US", "Inner Circle for kvinner som": "Inner Circle for women who", "elsker Montessori": "love Montessori", "Bli med nå →": "Join now →", "Les mer": "Learn more", "Månedlig live med Renate": "Monthly live with Renate", "Tospråklig fellesskap": "Bilingual community", "Direkte tråd til Renate": "Direct thread to Renate", "Ressursbibliotek": "Resource library", "LME Butikk": "LME Shop", "Bøker, arbeidsbøker og utskrivbare ressurser": "Books, workbooks, and printable resources", "Se butikk →": "Visit shop →", "BARNEBOK": "PICTURE BOOK", "De små naturutforskerne": "The Little Nature Explorers", "BESTSELGER": "BESTSELLER", "Kjøp →": "Buy →", "Book hjelpesamtale": "Book help session", "Book hjelpesamtale →": "Book help session →", "Book en hjelpesamtale": "Book a help session", "Trenger du veiledning?": "Need guidance?", "Del din seier": "Share your win", "Vi feirer deg!": "We celebrate you!", "Finn match →": "Find match →", "Enkle steg som flytter Montessoripraksisen din fremover": "Simple steps that move your Montessori practice forward", "Få appen": "Get the app", "FÅ DEN PÅ": "GET IT ON", "Last ned på": "Download on", "VELG DIN LME-PLAN": "CHOOSE YOUR LME PLAN", "Bli en del av": "Become part of", "Montessorireisen": "the Montessori journey", "Start med 7 dager gratis. Avbryt når som helst. Norske og engelske kursmaterialer, månedlige live-samtaler og et tospråklig fellesskap som forstår deg.": "Start with 7 days free. Cancel anytime. Norwegian and English course materials, monthly live calls, and a bilingual community that understands you.", "Månedlig": "Monthly", "Årlig": "Annual", "Spar 17%": "Save 17%", "Vis priser i:": "Show prices in:", "NOK": "NOK", "USD": "USD", "P+F": "P+C", "Start": "Start", "For deg som nettopp har oppdaget Montessori og vil komme i gang.": "For those who have just discovered Montessori and want to get started.", "/måned": "/month", "/år": "/year", "7 dagers gratis prøve": "7-day free trial", "Start gratis →": "Start free →", "Mest populær": "Most popular", "Proff": "Pro", "Det komplette innholdssystemet for aktive pedagoger og skapere.": "The complete content system for active educators and creators.", "Proff + Fellesskap": "Pro + Community", "Alt du trenger, pluss et tospråklig Montessorifellesskap.": "Everything you need, plus a bilingual Montessori community.", "Inkluderer Inner Circle": "Includes Inner Circle", "Bli grunnlegger →": "Become a founder →", "AI-innholdsgenerering på alle formater": "AI content generation in all formats", "Norsk og engelsk innhold": "Norwegian and English content", "Innholdskalender og 30-dagers plan": "Content calendar and 30-day plan", "Publisering til 3 plattformer": "Publishing to 3 platforms", "E-postkurs og introduksjonsguider": "Email courses and intro guides", "Alt i Start, pluss:": "Everything in Start, plus:", "6 plattformer for publisering": "6 platforms for publishing", "DALL-E 3 AI-bildegenerering": "DALL-E 3 AI image generation", "Karakterkonsistens for dine egne figurer": "Character consistency for your own characters", "Autopublisering og Reel-editor": "Auto-publishing and Reel editor", "Story-editor med Canva-import": "Story editor with Canva import", "Prioritert støtte": "Priority support", "Alt i Proff, pluss:": "Everything in Pro, plus:", "8 plattformer for publisering": "8 platforms for publishing", "LME Inner Circle-medlemskap": "LME Inner Circle membership", "Ressursbibliotek med Canva-maler": "Resource library with Canva templates", "Månedlig innholds­utfordring": "Monthly content challenge", "Sammenlign": "Compare", "planene": "the plans", "Alle planer inkluderer 7 dagers gratis prøveperiode og ingen binding.": "All plans include a 7-day free trial and no commitment.", "AI-innholdsgenerering": "AI content generation", "Norsk + engelsk innhold": "Norwegian + English content", "Publiseringsplattformer": "Publishing platforms", "DALL-E 3 bildegenerering": "DALL-E 3 image generation", "Reel-editor med musikk": "Reel editor with music", "Story-editor (Canva-import)": "Story editor (Canva import)", "Autopublisering": "Auto-publishing", "Inner Circle-medlemskap": "Inner Circle membership", "Ressursbibliotek (Canva-maler)": "Resource library (Canva templates)", "Støtteprioritet": "Support priority", "E-post": "Email", "Prioritert": "Priority", "Direkte": "Direct", "Vanlige": "Frequently asked", "spørsmål": "questions", "Hva skjer etter 7-dagers gratis prøveperiode?": "What happens after the 7-day free trial?", "Hvis du ikke avbryter innen 7 dager, fortsetter abonnementet ditt og du blir belastet automatisk. Du kan avbryte når som helst fra Min konto-siden. Du beholder all tilgang ut perioden du har betalt for.": "If you don't cancel within 7 days, your subscription continues and you're charged automatically. You can cancel anytime from the My Account page. You keep all access through the period you've paid for.", "Kan jeg bytte plan senere?": "Can I change plans later?", "Ja, du kan oppgradere eller nedgradere når som helst. Endringer trer i kraft umiddelbart, og prisen justeres pro rata for resten av faktureringsperioden.": "Yes, you can upgrade or downgrade anytime. Changes take effect immediately, and the price is adjusted pro rata for the rest of the billing period.", "Hva er forskjellen på Proff og Proff + Fellesskap?": "What's the difference between Pro and Pro + Community?", "Proff gir deg alle innholdsverktøyene og AI-funksjonene. Proff + Fellesskap legger til medlemskap i LME Inner Circle med månedlige live-samtaler med Renate, ressursbibliotek, og direkte tilgang for spørsmål.": "Pro gives you all the content tools and AI features. Pro + Community adds LME Inner Circle membership with monthly live calls with Renate, resource library, and direct access for questions.", "Får jeg fakturering i norske kroner?": "Will I be billed in Norwegian kroner?", "Ja, hvis du er basert i Norge eller velger NOK som valuta. For brukere utenfor Skandinavia anbefaler vi USD-pris.": "Yes, if you're based in Norway or choose NOK as currency. For users outside Scandinavia, we recommend USD pricing.", "Er det binding?": "Is there a commitment?", "Nei. Du kan avbryte abonnementet ditt når som helst uten gebyr. Du beholder tilgangen ut perioden du har betalt for.": "No. You can cancel your subscription anytime without fees. You keep access through the period you've paid for.", "Hvordan fungerer Karakterkonsistens for dine egne figurer?": "How does Character consistency for your own characters work?", "Kan jeg bruke LME til min egen merkevare?": "Can I use LME for my own brand?", "Ja! Alle planer lar deg lage innhold med dine egne karakterer og merkevare.": "Yes! All plans let you create content with your own characters and brand.", "sertifisert Montessoripedagog": "certified Montessori educator", "Renate har 20+ års erfaring som Montessorilærer og rektor.": "Renate has 20+ years of experience as a Montessori teacher and principal.", "Sikker betaling": "Secure payment", "Alle betalinger håndteres av Stripe med bankgrad-sikkerhet.": "All payments are handled by Stripe with bank-grade security.", "Avbryt når som helst": "Cancel anytime", "Ingen binding, ingen skjulte gebyrer. Du har full kontroll.": "No commitment, no hidden fees. You have full control.", "29 kr": "$2.90", "39 kr": "$3.90", "49 kr": "$4.90", "59 kr": "$5.90", "69 kr": "$6.90", "79 kr": "$7.90", "89 kr": "$8.90", "99 kr": "$9.90", "109 kr": "$10.90", "119 kr": "$11.90", "129 kr": "$12.90", "149 kr": "$14.90", "199 kr": "$19.90", "249 kr": "$24.90", "299 kr": "$29.90", "329 kr": "$32.90", "399 kr": "$39.90", "499 kr": "$49.90", "699 kr": "$69.90", "999 kr": "$99.90", "249 kr + frakt": "$24.90 + shipping", "329 kr + frakt": "$32.90 + shipping", "12. juni 2026 — 699 kr": "June 12, 2026 — $69.90", "Kjøpt 12. april 2026 · 89 kr": "Purchased April 12, 2026 · $8.90", "Kjøpt 18. mars 2026 · 79 kr": "Purchased March 18, 2026 · $7.90", "Kjøpt 28. april 2026 · 149 kr": "Purchased April 28, 2026 · $14.90", "AKADEMIET": "ACADEMY", "Dyp læring i": "Deep learning in", "Montessoripedagogikk": "Montessori pedagogy", "Søk i kurs...": "Search courses...", "Alle": "All", "Praktisk liv": "Practical life", "Sansetrening": "Sensorial", "Språk": "Language", "Matematikk": "Mathematics", "Kultur": "Culture", "Verktøykasse": "Toolkit", "Bygg din første Montessoribok": "Build your first Montessori book", "Bruk LME Create til å lage en illustrert bok med dine egne karakterer.": "Use LME Create to make an illustrated book with your own characters.", "De fem store fortellingene, det utvidede sinnet og barnets vandring fra konkret til abstrakt.": "The five great stories, the expanded mind, and the child's journey from concrete to abstract.", "52% fullført · Leksjon 4 av 8": "52% complete · Lesson 4 of 8", "14 min": "14 min", "62 min": "62 min", "48 min": "48 min", "71 min": "71 min", "1 t 30 min": "1h 30 min", "1 t 50 min": "1h 50 min", "2 t 5 min": "2h 5 min", "2 t 40 min": "2h 40 min", "3 t 15 min": "3h 15 min", "3 t 20 min": "3h 20 min", "3 t 30 min": "3h 30 min", "4 t 10 min": "4h 10 min", "FELLESSKAPET": "THE COMMUNITY", "Et tospråklig sted for": "A bilingual place for", "Montessoripedagoger": "Montessori educators", "Bli med i Inner Circle hvor vi støtter hverandre, deler erfaringer fra hverdagen, og lærer av hverandre. Pluss månedlige live-samtaler med Renate.": "Join Inner Circle where we support each other, share daily experiences, and learn from each other. Plus monthly live calls with Renate.", "Hva du får i Inner Circle": "What you get in Inner Circle", "Start medlemskapet ditt →": "Start your membership →", "Alt du får som": "Everything you get as", "Inner Circle-medlem": "Inner Circle member", "Bli med i Inner Circle →": "Join Inner Circle →", "Bli med i": "Join", "Det handler ikke bare om innhold — det handler om mennesker som forstår reisen din.": "It's not just about content — it's about people who understand your journey.", "De første 100 medlemmene får evig låst pris, eget merke og første rad ved alle live-samlinger.": "The first 100 members get permanently locked pricing, a special badge, and front-row access at all live events.", "Egen tråd hvor Renate selv svarer — ikke en chatbot, ikke en assistent. Innenfor 48 timer i hverdager.": "Your own thread where Renate herself answers — not a chatbot, not an assistant. Within 48 hours on weekdays.", "Eksklusivt": "Exclusive", "Brukte LME Bookly til å lage en personlig bok til min datter om hennes": "Used LME Bookly to make a personal book for my daughter about her", "142 medlemmer · 31 aktive i dag": "142 members · 31 active today", "252 medlemmer": "252 members", "37 medlemmer · 9 aktive i dag": "37 members · 9 active today", "64 medlemmer · 18 aktive i dag": "64 members · 18 active today", "98 medlemmer · 24 aktive i dag": "98 members · 24 active today", "2 timer siden · Oslo": "2 hours ago · Oslo", "3 dager siden · Tønsberg": "3 days ago · Tønsberg", "5 dager siden · Bergen": "5 days ago · Bergen", "30 dagers utendørs Montessori": "30-day outdoor Montessori", "\"Observer i 7 dager uten å gripe inn\"": "\"Observe for 7 days without intervening\"", "\"tre kurver i stedet for én\"": "\"three baskets instead of one\"", ". Dag 1 og jeg har allerede bitt meg selv i tunga ti ganger 🙈 Noen andre som er med?": ". Day 1 and I've already bitten my tongue ten times 🙈 Anyone else joining?", "Ditt": "Your", "DIN KONTO": "YOUR ACCOUNT", "Hei": "Hi", "Administrer abonnementet ditt, betalingsinformasjon og kjøp.": "Manage your subscription, payment info, and purchases.", "Oversikt": "Overview", "Abonnement": "Subscription", "Betaling": "Payment", "Kjøp": "Purchases", "Profil": "Profile", "AKTIV": "ACTIVE", "Ditt nåværende abonnement": "Your current subscription", "Neste fakturering": "Next billing", "Beløp": "Amount", "Administrer abonnement →": "Manage subscription →", "Pågående kurs": "Ongoing courses", "Fullførte kurs": "Completed courses", "Lagrede ressurser": "Saved resources", "Siste": "Latest", "aktivitet": "activity", "I dag, 10:32": "Today, 10:32", "I går, 19:14": "Yesterday, 19:14", "3 dager siden": "3 days ago", "5 dager siden": "5 days ago", "Ditt abonnement": "Your subscription", "Plan": "Plan", "Bytt plan": "Change plan", "Status": "Status", "Aktiv": "Active", "Startet": "Started", "Avbryt abonnement": "Cancel subscription", "Du beholder tilgang ut perioden du har betalt for": "You keep access through the period you've paid for", "Avbryt": "Cancel", "Betalingsmetode": "Payment method", "Utløper 11/2028": "Expires 11/2028", "Endre": "Change", "Legg til betalingsmetode": "Add payment method", "+ Legg til betalingsmetode": "+ Add payment method", "Fakturaadresse": "Billing address", "Endre adresse": "Change address", "Lagre endringer": "Save changes", "Passord & sikkerhet": "Password & security", "Passord": "Password", "Sist endret 5. mai 2026": "Last changed May 5, 2026", "Endre passord": "Change password", "To-faktor autentisering": "Two-factor authentication", "Ikke aktivert": "Not enabled", "Aktiver": "Enable", "Farlig sone": "Danger zone", "Slett konto": "Delete account", "Dette kan ikke angres": "This cannot be undone", "Profilinformasjon": "Profile information", "Navn": "Name", "Tidssone": "Timezone", "Europa/Oslo (CEST)": "Europe/Oslo (CEST)", "Last ned faktura ↓": "Download invoice ↓", "Fakturahistorikk": "Invoice history", "↓ Last ned": "↓ Download", "12. april 2026": "April 12, 2026", "12. juni 2026": "June 12, 2026", "28. april 2026": "April 28, 2026", "5. mai 2026": "May 5, 2026", "3117 Tønsberg": "3117 Tønsberg", "Fullførte leksjon 4 av": "Completed lesson 4 of", "Aktivitetspakke · Norsk + engelsk": "Activity package · Norwegian + English", "Arbeidsbok 3–6: Vårens venner": "Workbook 3–6: Spring's friends", "Arbeidsbok · 48 sider · Norsk PDF": "Workbook · 48 pages · Norwegian PDF", "Bok · 24 sider · Norsk PDF": "Book · 24 pages · Norwegian PDF", "Kontakt oss": "Contact us", "LME BUTIKK": "LME SHOP", "Bøker, arbeidsbøker og": "Books, workbooks, and", "Montessorimagi": "Montessori magic", "Mia & Teo-bøker, Montessoribaserte arbeidsbøker og digitale ressurser laget for pedagoger og foreldre som elsker Montessoripedagogikken.": "Mia & Teo books, Montessori-based workbooks, and digital resources made for educators and parents who love Montessori pedagogy.", "Søk i produkter...": "Search products...", "Bilderbøker": "Picture books", "Arbeidsbøker": "Workbooks", "Aktiviteter": "Activities", "Gratis": "Free", "NY UTGIVELSE": "NEW RELEASE", "av Renate Dahl": "by Renate Dahl", "SIGNATUR-BOK · 24 SIDER": "SIGNATURE BOOK · 24 PAGES", "Mia & Teo møter": "Mia & Teo meet", "skogens små venner": "the little friends of the forest", "En vakkert illustrert barnebok i Pixar-stil hvor bestevennene Mia og Teo utforsker skogen og møter syv små venner: sommerfuglen, marihøna, larven, sneglen, mauren, frosken og blåfuglen. En bok som vekker undring og kjærlighet til naturen.": "A beautifully illustrated children's book in Pixar style where best friends Mia and Teo explore the forest and meet seven little friends: the butterfly, ladybug, caterpillar, snail, ant, frog, and bluebird. A book that awakens wonder and love for nature.", "Digital PDF": "Digital PDF", "📦 Forhåndsbestill trykk": "📦 Pre-order print", "Sendt innen 7–10 dager": "Shipped in 7–10 days", "PDF + Forhåndsbestill trykk": "PDF + Pre-order print", "PDF umiddelbart, bok 7–10 dager": "PDF immediately, book 7–10 days", "Legg i handlevogn — 99 kr": "Add to cart — $9.90", "Forhåndsvis →": "Preview →", "Bilder": "Picture", "bøker": "books", "Mia & Teo-fortellinger laget med Montessoriprinsippene i bunn.": "Mia & Teo stories built on Montessori principles.", "Forhåndsbestilling": "Pre-order", "NY": "NEW", "POPULÆR": "POPULAR", "Arbeids": "Work", "Montessoribaserte arbeidsbøker fordelt på utviklingsfaser.": "Montessori-based workbooks divided by developmental phases.", "Klar-til-utskrift pakker for hjemmebruk og klasserom.": "Print-ready packages for home and classroom use.", "Umiddelbar nedlasting": "Instant download", "Digitale produkter sendes på e-post rett etter kjøp": "Digital products are emailed right after purchase", "Norsk og engelsk": "Norwegian and English", "Alle produkter er tospråklige eller finnes i begge språk": "All products are bilingual or available in both languages", "Vipps, kort og Apple/Google Pay via Stripe": "Vipps, card, and Apple/Google Pay via Stripe", "14 dagers angrerett": "14-day return policy", "Ikke fornøyd? Få pengene tilbake — ingen spørsmål": "Not happy? Get your money back — no questions", "3 første": "First 3", "3 bøker · Spar 20% · Norsk PDF": "3 books · Save 20% · Norwegian PDF", "12 redigerbare maler · Norsk + Engelsk": "12 editable templates · Norwegian + English", "24 sider · 3–6 år · Norsk + Engelsk": "24 pages · 3–6 years · Norwegian + English", "28 sider · 3–6 år · Norsk + Engelsk": "28 pages · 3–6 years · Norwegian + English", "30 sider · Skrivbar PDF · Norsk + Engelsk": "30 pages · Writable PDF · Norwegian + English", "42 utskrivbare ark · Norsk + Engelsk": "42 printable sheets · Norwegian + English", "48 sider · 3–6 år · Norsk PDF": "48 pages · 3–6 years · Norwegian PDF", "64 sider · 6–9 år · Norsk PDF": "64 pages · 6–9 years · Norwegian PDF", "72 sider · 9–12 år · Norsk PDF": "72 pages · 9–12 years · Norwegian PDF", "LME BIBLIOTEK": "LME LIBRARY", "Din": "Your", "Montessoriskattekiste": "Montessori treasure chest", "Utskrivbare ark, observasjonsskjemaer, Canva-maler, lydressurser og inspirasjons­materialer — alt du trenger for å berike det forberedte miljøet.": "Printables, observation forms, Canva templates, audio resources, and inspirational materials — everything you need to enrich the prepared environment.", "Søk i biblioteket...": "Search the library...", "Utskrivbare": "Printables", "Observasjon": "Observation", "Ressurser totalt": "Total resources", "Lydspor": "Audio tracks", "Nye denne måneden": "New this month", "Anbefalt": "Recommended", "for deg": "for you", "Basert på din aktivitet": "Based on your activity", "SKJEMA": "FORM", "Observasjons-": "Observation", "journal": "journal", "Daglige observasjonsskjemaer strukturert etter Montessoriprinsippene.": "Daily observation forms structured by Montessori principles.", "Redigerbar": "Editable", "Foreldrebrev — Vår-utgave": "Parent letter — Spring edition", "Redigerbare Canva-maler for månedlige foreldrebrev og informasjon.": "Editable Canva templates for monthly parent letters and information.", "→ Åpne i Canva": "→ Open in Canva", "Hele det norske alfabetet i Sasson-skrift, klar til print og laminering.": "The entire Norwegian alphabet in Sasson script, ready to print and laminate.", "Klar-til-print materialer for klasserommet og hjemmet.": "Print-ready materials for the classroom and home.", "ark": "sheets", "Geometriske former — 3 nivåer": "Geometric shapes — 3 levels", "Botaniske kort — Norges flora": "Botanical cards — Norway's flora", "Tallkort 1–10 000": "Number cards 1–10,000", "Kontinent-kart med flagg": "Continent maps with flags", "Ukekalender — visuell": "Weekly calendar — visual", "Sommerfuglens livssyklus": "Butterfly lifecycle", "Redigerbare maler du kan tilpasse din egen klasse eller familie.": "Editable templates you can customize for your class or family.", "Lyd": "Audio", "& meditasjon": "& meditation", "Lyttepakker for ro, refleksjon og bevisst pedagogikk.": "Listening packages for calm, reflection, and conscious pedagogy.", "Morgensirkel — 7 minutter ro": "Morning circle — 7 minutes of calm", "Guidet pust og oppstart for pedagoger før dagen begynner": "Guided breathing and start for educators before the day begins", "Observasjon uten å gripe inn": "Observation without intervention", "Renate leser om kunsten å bare være tilstede med barnet": "Renate reads about the art of simply being present with the child", "Naturlyder for det forberedte miljøet": "Nature sounds for the prepared environment", "30 minutter med skog, fugler og elv — bakgrunn for klasserom": "30 minutes of forest, birds, and river — classroom background", "Visualisering: Ditt ideelle miljø": "Visualization: Your ideal environment", "10 minutters meditasjon for å se ditt forberedte miljø klart": "10-minute meditation to see your prepared environment clearly", "& kommunikasjon": "& communication", "Ferdige brev for ulike anledninger — bare fyll inn navn og send.": "Ready-made letters for various occasions — just fill in names and send.", "Velkomstbrev til nye familier": "Welcome letter for new families", "Utviklingsrapport — mal": "Progress report — template", "Sesonginvitasjon (4 utgaver)": "Seasonal invitation (4 editions)", "Bekymringsmelding — mal": "Concern report — template", "Nytt": "New", "denne måneden": "this month", "12 nye ressurser lagt til i mai 2026": "12 new resources added in May 2026", "Vil du ha": "Want to get", "tilgang til alt?": "access to everything?", "Inner Circle-medlemmer får ubegrenset tilgang til hele biblioteket — pluss nye ressurser hver måned, månedlige live-samtaler med Renate, og direkte tråd til pedagogisk veiledning.": "Inner Circle members get unlimited access to the entire library — plus new resources every month, monthly live calls with Renate, and a direct thread to pedagogical guidance.", "Sammenlign planer": "Compare plans", "17. mai-pakke (norsk)": "May 17 pack (Norwegian)", "Bursdag-pakke": "Birthday pack", "Bursdagskort": "Birthday cards", "Bokstav-": "Letter", "Aktiviteter, flagg og fest-maler": "Activities, flags, and party templates", "10 redigerbare design": "10 editable designs", "12 redigerbare design": "12 editable designs", "24 etiketter · norsk": "24 labels · Norwegian", "29 kort": "29 cards", "30 sider": "30 pages", "6 maler · A4": "6 templates · A4", "8 maler · 6 språk": "8 templates · 6 languages", "Canva · 12 maler": "Canva · 12 templates", "Canva · vår/sommer/høst/vinter": "Canva · spring/summer/fall/winter", "1. mai": "May 1", "3. mai": "May 3", "8. mai": "May 8", "12. mai": "May 12", "Om Renate": "About Renate", "Tilbakemelding": "Feedback", "Kontakt": "Contact", "Personvern": "Privacy", "Vilkår": "Terms", "Veiledning": "Tutorials", "Guider": "Guides", "Følg oss": "Follow us", "Lær": "Learn", "LME": "LME", "App Store": "App Store", "Google Play": "Google Play", "Little Montessori Explorers — vekker undring og kjærlighet til natur, læring og hverandre. Mia & Teo viser vei.": "Little Montessori Explorers — awakens wonder and love for nature, learning, and each other. Mia & Teo show the way.", "Live arrangementer": "Live events", "Medlemsoversikt": "Member overview", "Onboarding-samtale": "Onboarding call", "Opptak": "Recordings", "Pedagog-partnere": "Educator partners", "VERKTØY": "TOOL", "MONTESSORI": "MONTESSORI", "REPLAY": "REPLAY", "Butikk — LME": "Shop — LME", "Min konto — LME": "My Account — LME", "Inner Circle — LME": "Inner Circle — LME", "LME — Dashbord": "LME — Dashboard", "Hjem": "Home", "Din Montessorireise": "Your Montessori Journey", "LME Musikk": "LME Music", "Lær mer →": "Learn more →", "Maler": "Templates", "Ressurser": "Resources", "Etiketter": "Labels", "Klasser": "Classes", "Spør Renate AI": "Ask Renate AI", "Spør Renate AI ↗": "Ask Renate AI ↗", "Spør Renate": "Ask Renate", "Renate AI": "Renate AI", "Støtte": "Support", "Partnere": "Partners", "Bookingside": "Booking page", "Norge": "Norway", "Norsk (Bokmål)": "Norwegian (Bokmål)", "Norsk og engelsk i samme rom — flere perspektiver, flere ideer, ekte vennskap på tvers av landegrenser.": "Norwegian and English in the same room — more perspectives, more ideas, real friendships across borders.", "Tospråklig": "Bilingual", "Tospråklig fellesskap for Montessoripedagog (Montessoritradisjon)er, foreldre og skapere.": "Bilingual community for Montessori educator (Montessori tradition)s, parents, and creators.", "GRATIS": "FREE", "NYTT": "NEW", "NYTT!": "NEW!", "NYTT KURS": "NEW COURSE", "PAKKE": "PACKAGE", "POPULÆRT": "POPULAR", "LIVE": "LIVE", "INTRO": "INTRO", "OBSERVASJON": "OBSERVATION", "PRAKSIS": "PRACTICE", "PUBLISERING": "PUBLISHING", "RESSURS": "RESOURCE", "SESONGAKTIVITET": "SEASONAL", "WORKSHOP": "WORKSHOP", "CANVA-MALER": "CANVA TEMPLATES", "🎨 CANVA": "🎨 CANVA", "📋 SKJEMA": "📋 FORM", "🖨️ UTSKRIVBAR": "🖨️ PRINTABLE", "STARTPUNKT": "STARTING POINT", "LEAD MAGNET": "LEAD MAGNET", "KOMMER SNART": "COMING SOON", "KOMMER SOMMER 2026": "COMING SUMMER 2026", "FORTSETT DER DU SLAPP": "CONTINUE WHERE YOU LEFT OFF", "PÅGÅR": "ONGOING", "MAI": "MAY", "SLIK KAN VI HJELPE:": "HOW WE CAN HELP:", "FOR FORELDRE": "FOR PARENTS", "FOR PEDAGOGER": "FOR EDUCATORS", "FOR SKAPERE": "FOR CREATORS", "SIGNATURE-KURS": "SIGNATURE COURSE", "SPAR 20%": "SAVE 20%", "LME AKADEMI": "LME ACADEMY", "LME INNER CIRCLE": "LME INNER CIRCLE", "VISA": "VISA", "JUN · ONS 19:00": "JUN · WED 7:00 PM", "JUN · TIR 20:00": "JUN · TUE 8:00 PM", "MAI · ONS 19:00": "MAY · WED 7:00 PM", "Ons, 19:00 CEST": "Wed, 7:00 PM CEST", "I går · Stockholm": "Yesterday · Stockholm", "3 leksjoner": "3 lessons", "4 leksjoner": "4 lessons", "5 leksjoner": "5 lessons", "6 leksjoner": "6 lessons", "7 leksjoner": "7 lessons", "8 leksjoner": "8 lessons", "9 leksjoner": "9 lessons", "10 leksjoner": "10 lessons", "Leksjon 4 av 8 · 52% fullført": "Lesson 4 of 8 · 52% complete", "Renate": "Renate", "Renate Dahl": "Renate Dahl", "Renate Dahl, Montessoripedagog": "Renate Dahl, Montessori educator", "Renate!": "Renate!", "Maria Olsen": "Maria Olsen", "Sara Lund": "Sara Lund", "Karoline Berg": "Karoline Berg", "Ingrid Sørensen": "Ingrid Sørensen", "Mia & Teo": "Mia & Teo", "Mia & Teo Live med Renate": "Mia & Teo Live with Renate", "Mia & Teo Live:": "Mia & Teo Live:", "Mia & Teo i skogen": "Mia & Teo in the forest", "Mia & Teo på stranden": "Mia & Teo on the beach", "Mia & Teo-bok": "Mia & Teo book", "med Mia & Teo": "with Mia & Teo", "Forberedt": "Prepared", "Det sosiale": "The social", "Kosmisk": "Cosmic", "utdannelse": "education", "utforskning": "exploration", "Going": "Going", "out": "out", "Going out, samfunnsforståelse og overgangen til ungdomsfasen.": "Going out, social understanding, and the transition to adolescence.", "Arbeidsbok": "Workbook", "Arbeidsbok: Going out": "Workbook: Going out", "Arbeidsbok: Kosmisk utforskning": "Workbook: Cosmic exploration", "Arbeidsbok: Vårens venner": "Workbook: Spring's friends", "arbeidsbøker": "workbooks", "Bunt: Hele arbeidsbok-serien": "Bundle: Complete workbook series", "De 3 første skrittene i Montessori": "The 3 first steps in Montessori", "Foreldre-": "Parent", "Foreldrebrev — vår": "Parent letter — spring", "Foreldrebrev-pakke (Canva)": "Parent letter pack (Canva)", "brev pakke": "letter pack", "brev-pakke": "letter pack", "Forhåndsbestill →": "Pre-order →", "Forhåndsbestilling · 3–6 år": "Pre-order · 3–6 years", "Påskeaktiviteter 3–5 år": "Easter activities 3–5 years", "Hyllelapper for klasserom": "Shelf labels for classroom", "Sandpapirbokstaver — utskriftsbar versjon": "Sandpaper letters — printable version", "Vårens småkryp — Canva-pakke": "Spring critters — Canva pack", "Observasjonsskjema vårblomster": "Observation form spring flowers", "Observasjonsjournal for pedagoger": "Observation journal for educators", "Observasjonsjournal 3–6 (oppdatert)": "Observation journal 3–6 (updated)", "Observasjonsjournal for 3–6 år": "Observation journal for 3–6 years", "observasjonsjournal": "observation journal", "journalen": "the journal", "Naturutforskerne: Live-lesning": "The nature explorers: Live reading", "Spørretime 3–6": "Q&A 3–6", "Sommerboksen 3–6 år": "Summer box 3–6 years", "Sommerens": "Summer's", "Sommerens eventyr": "Summer's adventure", "Sommer-": "Summer", "Sommer-prosjektet": "Summer project", "boksen": "box", "eventyr": "adventure", "Vårens": "Spring's", "Vårens små venner": "Spring's little friends", "Skogeventyret": "Forest adventure", "Diplom": "Diploma", "Diplomer & sertifikater": "Diplomas & certificates", "Lagre": "Save", "Lagret": "Saved", "Lagre dine egne historier": "Save your own stories", "Studio": "Studio", "LME-appen": "LME app", "Lyd & visualiseringer": "Audio & visualizations", "Lydbok & musikk": "Audiobook & music", "Naturlyder — 30 min skog": "Nature sounds — 30 min forest", "Ny utgave med utvidet sosial-emosjonell del": "New edition with expanded social-emotional section", "Nytt lydspor for bruk i klasserom og hjemme": "New audio track for classroom and home use", "Pedagog-playbooks": "Educator playbooks", "Sett av tid →": "Set time →", "Se opptak →": "Watch replay →", "Se alle →": "View all →", "Se alle 42 Canva-maler →": "View all 42 Canva templates →", "Se alle 67 utskrivbare ressurser →": "View all 67 printable resources →", "Se alle grupper →": "View all groups →", "Se alle ressurser →": "View all resources →", "Se favorittene dine →": "View your favorites →", "Se hvordan du forbereder rommet, materiellet og deg selv for barnet 3–6 år. Lær prinsippene som bærer alt — fra orden til skjønnhet til frihet innenfor rammer.": "See how to prepare the room, materials, and yourself for the child 3–6 years. Learn the principles that carry everything — from order to beauty to freedom within structure.", "Skrev innlegg i": "Wrote post in", "Sosiale medier": "Social media", "Trenger du": "Need", "veiledning?": "guidance?", "Utforsk": "Explore", "Velkommen": "Welcome", "Vokse": "Grow", "Vil du at": "Do you want", "Snakk med Renate først": "Talk to Renate first", "Fortsett kurset →": "Continue the course →", "Lest 3 av 7 venner": "Read 3 of 7 friends", "Klar for april-utfordringen:": "Ready for the April challenge:", "Bli": "Join", "Bygg din": "Build your", "Finn": "Find", "Finn din": "Find your", "Lag din": "Make your", "Ressurser for å": "Resources to", "lykkes": "succeed", "Lær Montessori —": "Learn Montessori —", "steg for steg": "step by step", "Følg": "Follow", "der du slapp": "where you left off", "skape i dag?": "create today?", "Hva vil du": "What do you want to", "barnet": "the child", "miljø": "environment", "miljøet": "the environment", "Mestre Content Studio": "Master Content Studio", "Møt Mia & Teo, finn ut hvordan plattformen virker og bli klar for reisen.": "Meet Mia & Teo, learn how the platform works, and get ready for the journey.", "Enkle endringer i hjemmet som åpner opp for selvstendighet og indre disiplin.": "Simple changes in the home that open up for independence and inner discipline.", "Rommet, materiellet og pedagogens forberedelse for barnehage-alderen.": "The room, materials, and educator's preparation for kindergarten age.", "Lær å se barnet uten å forstyrre — det viktigste verktøyet i Montessoriarbeidet.": "Learn to see the child without interrupting — the most important tool in Montessori work.", "Fra fil til ferdig bok": "From file to finished book", "Print-ready filer for Amazon KDP og BoldBooks/BoD — alt du trenger for å trykke selv.": "Print-ready files for Amazon KDP and BoldBooks/BoD — everything you need to print yourself.", "Lag innhold for Instagram, TikTok og Facebook med AI-verktøy som vet hvem Mia & Teo er.": "Create content for Instagram, TikTok, and Facebook with AI tools that know who Mia & Teo are.", "Vårt AI-system holder dine egne karakterer konsistente, så de ser like ut hver gang, samme klær, samme stil. Dette er unikt for LME og krever ingen oppsett fra din side.": "Our AI system keeps your own characters consistent so they look the same every time — same clothes, same style. This is unique to LME and requires no setup from you.", "Fra de første prinsippene i Montessori til ditt forberedte miljø. Kurs laget for pedagoger, foreldre og deg som vil følge barnets naturlige utvikling.": "From the first principles in Montessori to your prepared environment. Courses made for educators, parents, and you who want to follow the child's natural development.", "Et bibliotek av maler, lyd-meditasjoner, utskrivbare ark og inspirerende innhold som gjør Montessorihverdagen enklere.": "A library of templates, audio meditations, printables, and inspiring content that makes everyday Montessori easier.", "Et tospråklig hjem for Montessoripedagoger, foreldre og skapere som vil følge barnets naturlige utvikling — med ekte støtte fra likesinnede og månedlige live-samtaler med Renate.": "A bilingual home for Montessori educators, parents, and creators who want to follow the child's natural development — with real support from like-minded peers and monthly live calls with Renate.", "Et lite glimt fra fellesskapet — slik samtalene faktisk ser ut inne.": "A little glimpse from the community — what the conversations actually look like inside.", "En kveld i måneden samles vi for spørretime, casus-gjennomgang og felles refleksjon — alltid med replay.": "One evening a month we gather for Q&A, case review, and shared reflection — always with replay.", "Innsikt fra erfarne Montessoripedagoger og ledere": "Insights from experienced Montessori educators and leaders", "Match med en annen pedagog for gjensidig støtte og ukentlige sjekker.": "Match with another educator for mutual support and weekly check-ins.", "Praktiske 30-dagers prosjekter som \"Forbered miljøet\", \"Observer i 7 dager\" eller \"Bygg din egen bok\".": "Practical 30-day projects like \"Prepare the environment\", \"Observe for 7 days\" or \"Build your own book\".", "Praktiske spørsmål, ekte svar": "Practical questions, real answers", "Fra arbeidsbøker til workshops, fra Mia & Teo-historier til foreldre­samtaler — vi gir deg verktøyene, malene og veiledningen for å få det til.": "From workbooks to workshops, from Mia & Teo stories to parent conversations — we give you the tools, templates, and guidance to make it happen.", "Dette er ditt første steg. Du vil tiltrekke de rette familiene, bygge en lojal e-postliste og gjøre fremmede til engasjerte foreldre som elsker Mia & Teo.": "This is your first step. You'll attract the right families, build a loyal email list, and turn strangers into engaged parents who love Mia & Teo.", "Spør Renate AI om hvilket kurs som passer akkurat din situasjon — eller book en samtale med Renate for personlig oppfølging.": "Ask Renate AI which course suits your situation — or book a call with Renate for personal guidance.", "La oss skape ro, klarhet og tro på din egen ro som pedagog": "Let's create calm, clarity, and trust in your own calm as an educator", "Få umiddelbart tilgang til fellesskapet, månedlige live-samlinger med Renate, hele ressursbiblioteket og din egen tråd til å spørre om hva som helst.": "Get instant access to the community, monthly live calls with Renate, the entire resource library, and your own thread to ask anything.", "Måtte bare dele: prøvde Renates råd om": "Just wanted to share: tried Renate's advice about", "Vi holder de mest magiske live-sesjonene!": "We hold the most magical live sessions!", "Spørsmål til de som jobber 6–9: hvordan håndterer dere når": "Question for those working 6–9: how do you handle when", "alle vil ha samme materiell samtidig? Vi har bare ett sett av Adderingsslangen 😅": "everyone wants the same material at once? We only have one set of the Addition Snake 😅", "hjemme denne uken — og 4-åringen min ordnet selv frokostbordet i morges. Tårer i øynene. 🌸": "at home this week — and my 4-year-old set the breakfast table by themselves this morning. Tears in my eyes. 🌸", "Å bygge en Montessoripraksis er bedre med venner. Finn likesinnede, ansvarspartnere og pedagoger som forstår deg.": "Building a Montessori practice is better with friends. Find like-minded peers, accountability partners, and educators who understand you.", "i Norge, Sverige og Danmark": "in Norway, Sweden, and Denmark", "Utskrivbare ark, observasjons­skjemaer og Canva-maler du ikke finner andre steder.": "Printables, observation forms, and Canva templates you won't find elsewhere.", "Kurspakken fra de første tre årene til pre-tenåringen — bygget på Montessoripedagogikk.": "The complete course package from the first three years to pre-teen — built on Montessori pedagogy.", "Kurs som lærer deg å bruke LME-verktøyene til å lage egne ressurser.": "Courses that teach you to use LME tools to make your own resources.", "Se hva som": "See what's", "Se hva som inngår": "See what's included", "Wergelands vei 19": "Wergelands vei 19", "•••• •••• •••• 4242": "•••• •••• •••• 4242", "♡ 12": "♡ 12", "♡ 24": "♡ 24", "♡ 38": "♡ 38", "♡ 56": "♡ 56", "💬 8 svar": "💬 8 replies", "💬 14 svar": "💬 14 replies", "💬 17 svar": "💬 17 replies", "💬 22 svar": "💬 22 replies", "Åpne →": "Open →", "Kjøp pakke →": "Buy pack →", "↓ PDF": "↓ PDF", "→ Canva": "→ Canva", "↗ Del": "↗ Share", "PDF · A4": "PDF · A4", "PDF · A4 + A5": "PDF · A4 + A5", "PDF · 4 sider · 3–6 år": "PDF · 4 pages · 3–6 years", "PDF · 6 sider · 3–9 år": "PDF · 6 pages · 3–9 years", "PDF · 18 sider · 6–9 år": "PDF · 18 pages · 6–9 years", "PDF · 24 sider · 3–9 år": "PDF · 24 pages · 3–9 years", "PDF · 36 sider · 3–6 år": "PDF · 36 pages · 3–6 years", "PDF · 48 sider · 6–12 år": "PDF · 48 pages · 6–12 years", "Word · Norsk + Engelsk": "Word · Norwegian + English", "Word + PDF · Norsk + Engelsk": "Word + PDF · Norwegian + English", "Word · Veiledet utfylling": "Word · Guided fill-in", "Gratis e-bok · 16 sider · Norsk + Engelsk": "Free e-book · 16 pages · Norwegian + English", "✓ AI-innholdsgenerering på alle formater": "✓ AI content generation in all formats", "✓ Norsk og engelsk innhold": "✓ Norwegian and English content", "✓ Innholdskalender og 30-dagers plan": "✓ Content calendar and 30-day plan", "✓ Publisering til 3 plattformer": "✓ Publishing to 3 platforms", "✓ E-postkurs og introduksjonsguider": "✓ Email courses and intro guides", "✓ 6 plattformer for publisering": "✓ 6 platforms for publishing", "✓ DALL-E 3 AI-bildegenerering": "✓ DALL-E 3 AI image generation", "✓ Karakterkonsistens for dine egne figurer": "✓ Character consistency for your own characters", "✓ Autopublisering og Reel-editor": "✓ Auto-publishing and Reel editor", "✓ Story-editor med Canva-import": "✓ Story editor with Canva import", "✓ Prioritert støtte": "✓ Priority support", "✓ 8 plattformer for publisering": "✓ 8 platforms for publishing", "✓ LME Inner Circle-medlemskap": "✓ LME Inner Circle membership", "✓ Månedlig live med Renate": "✓ Monthly live with Renate", "✓ Ressursbibliotek med Canva-maler": "✓ Resource library with Canva templates", "✓ Månedlig innholds­utfordring": "✓ Monthly content challenge", "✓ Direkte tråd til Renate": "✓ Direct thread to Renate", "⏰ BARE 17 GRUNNLEGGER-PLASSER IGJEN": "⏰ ONLY 17 FOUNDER SPOTS LEFT", "Proff + Fellesskap (Månedlig)": "Pro + Community (Monthly)", "Proff + Fellesskap (mai)": "Pro + Community (May)", "Grunnlegger-": "Founder", "fordeler": "benefits", "sertifisert": "certified", "7-dagers gratis prøveperiode · Avbryt når som helst · Ingen binding": "7-day free trial · Cancel anytime · No commitment", "+247": "+247", "100%": "100%", "52%": "52%", "Print &": "Print &", "Aktiviteter &": "Activities &", "Ta favoritt-innholdet ditt med på reisen": "Take your favorite content with you on the journey", "Lead magnet": "Lead magnet", "e-postlisten din på autopilot": "your email list on autopilot", "ressursbibliotek": "resource library", "tilkoblet": "connected", "Månedlige": "Monthly", "live med Renate": "live with Renate", "live-samlinger": "live calls", "Last ned": "Download", "publisér": "publish", "kort": "cards", "kunsten": "the art", "skritt": "step", "venner": "friends", "varme": "warm", "verktøykasse": "toolkit", "møter skogen": "meet the forest", "med Renate Dahl": "with Renate Dahl", "fra LME": "from LME", "fellesskap": "community", "Montessori": "Montessori", "Montessori hjemme": "Montessori at home", "Montessori hjemme 0–6": "Montessori at home 0–6", "Montessoribok": "Montessori book", "Montessorifellesskap": "Montessori community", "Montessoriløypa": "The Montessori path", "naturutforskerne": "Nature Explorers", "små venner": "little friends", "på stranden": "on the beach", "til biblioteket. Hun har bedt om å lese den hver kveld i en uke 📚💖": "to the library. She's asked to read it every night for a week 📚💖", "egen bok": "own book", "egen \"going out\"-tur": "own \"going out\" trip", "din gruppe": "your group", "direkte": "directly", "en gruppe på fem": "a group of five", "i LME Bookly": "in LME Bookly", "i dag": "today", "gratis nedlasting": "free download", "første": "first", "hjemme": "at home", "til LME": "to LME", "Kommende": "Upcoming", "skjer i ringen": "happens in the circle", "utfordringer": "challenges", "utskriftsbare": "printable", "arrangementer": "events", "Skal hjelpe deg å komme i gang?": "Will help you get started?", "skal hjelpe deg å komme i gang?": "shall help you get started?", "pedagog-partner": "educator partner", "Little Montessori Explorers": "Little Montessori Explorers", "©2026 Little Montessori Explorers — Renate Dahl · Tønsberg, Norge": "©2026 Little Montessori Explorers — Renate Dahl · Tønsberg, Norway", "opptak": "recordings", "🇬🇧 English": "🇬🇧 English", "🇳🇴": "🇳🇴", "🛍️": "🛍️", "🖨️": "🖨️", "⚠️": "⚠️", "v2-tospråklig-fungerer": "", "De små": "The Little", "Mia & Teo, Lek & Lær": "Mia & Teo, Play & Learn", "MONTESSORI-REISEN": "THE MONTESSORI JOURNEY", "Lær å se barnet uten å forstyrre, det viktigste verktøyet i Montessoriarbeidet og kjernen i Montessoritradisjonen.": "Learn to see the child without interrupting — the most important tool in Montessori work and the core of the Montessori tradition.", "Din lærer": "Your teacher", "Hei, jeg er Renate 💕": "Hi, I'm Renate 💕", "Montessoripedagog med over 20 års erfaring. I dette kurset deler jeg det jeg har lært gjennom årene, varmt og praktisk og rett på sak. La oss dykke ned i det sammen.": "Montessori educator with over 20 years of experience. In this course I share what I've learned over the years — warmly, practically, and to the point. Let's dive in together.", "Hva du lærer i dette kurset": "What you'll learn in this course", "Hvorfor observasjon er pedagogens viktigste verktøy": "Why observation is the educator's most important tool", "Forskjellen på å se og å tolke": "The difference between seeing and interpreting", "Hva du ser etter, og hvordan du noterer": "What to look for, and how to take notes", "Å observere uten å forstyrre barnets konsentrasjon": "Observing without disturbing the child's concentration", "Leksjon 1": "Lesson 1", "Pedagogens viktigste verktøy": "The educator's most important tool", "Maria Montessori bygde hele metoden sin på": "Maria Montessori built her whole method on", "observasjon": "observation", ". Før du underviser, før du griper inn, ser du. Barnet viser deg selv hva det er klart for, hvis du lar det.": ". Before you teach, before you step in, you watch. The child shows you what they're ready for, if you let them.", "Å observere er å legge bort dine egne antakelser og bare se hva som faktisk skjer.": "To observe is to set aside your own assumptions and just see what actually happens.", "Leksjon 2": "Lesson 2", "Se, ikke tolk (ennå)": "See, don't interpret (yet)", "Det er stor forskjell på å": "There's a big difference between", "(“barnet heller vann fram og tilbake i ti minutter”) og å": "(“the child pours water back and forth for ten minutes”) and to", "(“barnet kjeder seg”). Start alltid med det du faktisk ser, fakta uten dom.": "(“the child is bored”). Always start with what you actually see — facts without judgment.", "Tolkningen kan komme etterpå, men den blir alltid bedre når den hviler på ærlig observasjon.": "Interpretation can come afterward, but it's always better when it rests on honest observation.", "🌿 Prøv dette: Sett deg ned i fem minutter, si ingenting, og bare noter hva barnet": "🌿 Try this: Sit down for five minutes, say nothing, and just note what the child", "gjør": "does", ", ikke hva du tror det føler.": ", not what you think they feel.", "Leksjon 3": "Lesson 3", "Observér uten å forstyrre": "Observe without interrupting", "Det vanskeligste, og viktigste, er å la være å avbryte. Når et barn er dypt konsentrert, er det i en hellig tilstand. Et velment “så flink du er!” kan bryte den.": "The hardest, and most important, thing is to refrain from interrupting. When a child is deeply concentrated, they're in a sacred state. A well-meant “you're so clever!” can break it.", "Trekk deg litt tilbake, vær stille, og la konsentrasjonen få leve. Det er her den ekte læringen skjer.": "Step back a little, be quiet, and let the concentration live. This is where real learning happens.", "💗 Husk: Din ro er en gave til barnet. Jo mindre du forstyrrer, jo mer ser du, og jo dypere får barnet jobbe.": "💗 Remember: Your calm is a gift to the child. The less you disturb, the more you see, and the deeper the child gets to work.", "Klar for neste steg?": "Ready for the next step?", "Du har nå vært gjennom hele Montessorireisen. Gå tilbake til oversikten når du vil repetere.": "You've now been through the entire Montessori Journey. Return to the overview whenever you want to review.", "← Tilbake til Montessorireisen": "← Back to the Montessori Journey", "Little Montessori Explorers, vekker undring og kjærlighet til natur, læring og hverandre. Mia & Teo viser vei.": "Little Montessori Explorers — awakens wonder and love for nature, learning, and each other. Mia & Teo show the way.", "©2026 Little Montessori Explorers, Renate Dahl · Tønsberg, Norge": "©2026 Little Montessori Explorers — Renate Dahl · Tønsberg, Norway", "Søk": "Search", "se": "see", "tolke": "interpret"};
   window.LME_CURRENT_LANG = 'no';
   window.LME_ORIGINALS = new Map();
   
@@ -2476,99 +2084,65 @@
 })();
 </script>
 
-
-
+  <script src="/js/course-editor.js" defer></script>
+<script>function lmeSoon(m){var t=document.createElement("div");t.textContent=m||(window.LME_CURRENT_LANG==="en"?"Coming soon 💛":"Kommer snart 💛");t.style.cssText="position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#2a1e2e;color:#fff;padding:12px 20px;border-radius:999px;z-index:99999;font-weight:700;font-family:inherit;box-shadow:0 8px 24px rgba(0,0,0,.25)";document.body.appendChild(t);setTimeout(function(){t.remove();},2200);}</script>
+<script src="/js/mobile-nav.js?v=5" defer></script>
 <script>
-  // LME Avatar dropdown + bilde-opplastning (delt på tvers av plattform-sider)
-  (function() {
-    const lmeAvatarWrapper = document.getElementById('avatarWrapper');
-    if (!lmeAvatarWrapper) return;
-    const lmeAvatarBtn = document.getElementById('avatarBtn');
-    const lmeAvatarMenu = document.getElementById('avatarMenu');
-    const lmeUploadBtn = document.getElementById('uploadPhotoBtn');
-    const lmeFileInput = document.getElementById('photoInput');
-
-    // Last inn lagret profilbilde
-    const savedPhoto = localStorage.getItem('lme_profile_photo');
-    if (savedPhoto && lmeAvatarBtn) {
-      lmeAvatarBtn.innerHTML = '<img src="' + savedPhoto + '" alt="Profil">';
-    }
-
-    if (lmeAvatarBtn) {
-      lmeAvatarBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        lmeAvatarWrapper.classList.toggle('open');
-      });
-    }
-
-    document.addEventListener('click', function(e) {
-      if (!lmeAvatarWrapper.contains(e.target)) {
-        lmeAvatarWrapper.classList.remove('open');
+/* Sikrer at "Din laerer"-avataren viser Renates portrett, ogsaa naar kurs-editoren
+   laster inn en lagret versjon som fortsatt har tulipan-emojien. */
+(function(){
+  function fix(){
+    document.querySelectorAll('.crs-meet-avatar').forEach(function(el){
+      if(el.tagName!=='IMG' && (el.textContent||'').indexOf('\uD83C\uDF37')!==-1){
+        var img=document.createElement('img');
+        img.className='crs-meet-avatar';
+        img.src='/images/renate-portrait.jpg';
+        img.alt='Renate Dahl';
+        if(el.parentNode) el.parentNode.replaceChild(img, el);
       }
     });
-
-    if (lmeUploadBtn) {
-      lmeUploadBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        lmeFileInput.click();
-      });
-    }
-
-    if (lmeFileInput) {
-      lmeFileInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-        if (file.size > 2 * 1024 * 1024) {
-          alert('Bildet er for stort. Velg et bilde under 2 MB.');
-          return;
-        }
-        const reader = new FileReader();
-        reader.onload = function(ev) {
-          const dataUrl = ev.target.result;
-          localStorage.setItem('lme_profile_photo', dataUrl);
-          lmeAvatarBtn.innerHTML = '<img src="' + dataUrl + '" alt="Profil">';
-          lmeAvatarWrapper.classList.remove('open');
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-  })();
-</script>
-
-<script>function lmeSoon(m){var t=document.createElement("div");t.textContent=m||(window.LME_CURRENT_LANG==="en"?"Coming soon 💛":"Kommer snart 💛");t.style.cssText="position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#2a1e2e;color:#fff;padding:12px 20px;border-radius:999px;z-index:99999;font-weight:700;font-family:inherit;box-shadow:0 8px 24px rgba(0,0,0,.25)";document.body.appendChild(t);setTimeout(function(){t.remove();},2200);}</script>
-<script>
-/* Hero-karusell: egen, robust blokk som alltid kjører (auto-bytte av nyheter). */
-(function () {
-  function initHero() {
-    var hero = document.querySelector('.hero');
-    if (!hero) return;
-    var slides = hero.querySelectorAll('.hero-slide');
-    var dots = hero.querySelectorAll('.hero-dots .dot');
-    if (slides.length < 2) return;
-    var current = 0, timer = null;
-    function show(i) {
-      current = (i + slides.length) % slides.length;
-      slides.forEach(function (s, idx) { s.classList.toggle('active', idx === current); });
-      dots.forEach(function (d, idx) { d.classList.toggle('active', idx === current); });
-    }
-    function next() { show(current + 1); }
-    function start() { clearInterval(timer); timer = setInterval(next, 6000); }
-    var nx = hero.querySelector('.hero-nav.next'), pv = hero.querySelector('.hero-nav.prev');
-    if (nx) nx.addEventListener('click', function () { next(); start(); });
-    if (pv) pv.addEventListener('click', function () { show(current - 1); start(); });
-    dots.forEach(function (d, idx) { d.addEventListener('click', function () { show(idx); start(); }); });
-    hero.addEventListener('mouseenter', function () { clearInterval(timer); });
-    hero.addEventListener('mouseleave', start);
-    show(0); start();
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initHero);
-  else initHero();
+  function start(){
+    fix();
+    var sec=document.querySelector('section.crs');
+    if(sec && window.MutationObserver){
+      var mo=new MutationObserver(fix);
+      mo.observe(sec,{childList:true,subtree:true});
+      setTimeout(function(){mo.disconnect();},8000);
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start);
+  else start();
 })();
 </script>
-<script src="/js/mobile-nav.js?v=5" defer></script>
 <script src="/js/i18n-auto.js" defer></script>
+<script>
+/* Engelske oversettelser for utvidet kursinnhold. */
+Object.assign(window.LME_TRANSLATIONS, {
+ "Hvordan notatene styrer det forberedte miljøet": "How the notes guide the prepared environment",
+ "Ro er observasjonens viktigste redskap, for både barn og voksen.": "Calm is observation\\u2019s most important tool, for child and adult alike.",
+ "Modul 1 · Grunnlaget": "Module 1 · The foundation",
+ "Observasjon er også en gave til deg selv. Fem stille minutter med blikket på barnet gir mer ro og retning enn en time med bekymring.": "Observation is also a gift to yourself. Five quiet minutes with your eyes on the child give more calm and direction than an hour of worrying.",
+ "Hva du ser etter": "What to look for",
+ "Se etter tegnene som betyr noe: konsentrasjon (hvor lenge, og med hva), repetisjon, hvilke aktiviteter barnet velger selv, hvordan det beveger seg, og hvordan det møter andre.": "Look for the signs that matter: concentration (how long, and with what), repetition, which activities the child chooses on their own, how they move, and how they meet others.",
+ "Sammen tegner disse tegnene et kart over hvor barnet er nå, og hva det er klart for.": "Together these signs draw a map of where the child is now, and what they are ready for.",
+ "📔 Bruk gjerne observasjonsjournalen i biblioteket; den har ferdige kolonner for akkurat dette.": "📔 Feel free to use the observation journal in the library; it has ready-made columns for exactly this.",
+ "Modul 2 · I praksis": "Module 2 · In practice",
+ "Slik noterer du": "How to take notes",
+ "Hold det enkelt: dato, klokkeslett, hva barnet gjør, og barnets egne ord der du kan. Korte faktasetninger, skrevet mens det skjer eller rett etterpå.": "Keep it simple: date, time, what the child is doing, and the child\\u2019s own words where you can. Short factual sentences, written as it happens or right after.",
+ "Noter også deg selv: Når grep du inn, og hva skjedde da? Det er ofte der de største oppdagelsene ligger.": "Take notes on yourself too: When did you step in, and what happened then? That is often where the biggest discoveries lie.",
+ "✏️ Fem minutter, ett barn, én blyant. Mer skal ikke til for å komme i gang.": "✏️ Five minutes, one child, one pencil. That is all it takes to get started.",
+ "🪑 Finn deg en fast observasjonsplass litt i utkanten av rommet. Etter noen dager slutter barna å legge merke til deg.": "🪑 Find yourself a regular observation spot at the edge of the room. After a few days the children stop noticing you.",
+ "Fra observasjon til handling": "From observation to action",
+ "Notatene er ikke et arkiv; de er styrefart. Ser du at interessen for helling er mettet, byttes aktiviteten ut. Ser du gryende bokstavinteresse, settes sandpapirbokstavene fram.": "The notes are not an archive; they are steering speed. If you see that the interest in pouring is saturated, the activity is rotated out. If you see budding letter interest, the sandpaper letters come out.",
+ "Slik blir det forberedte miljøet levende: Det følger barnet, ikke kalenderen.": "That is how the prepared environment comes alive: It follows the child, not the calendar.",
+ "🌿 Velg én endring i miljøet hver uke basert på noe du faktisk har sett.": "🌿 Choose one change in the environment each week based on something you have actually seen.",
+ "Modul 3 · Videre": "Module 3 · Going further",
+ "Gjør det til en vane": "Make it a habit",
+ "Observasjon er ferskvare. Fem minutter daglig slår to timer i måneden, og etter noen uker ser du mønstre du aldri har lagt merke til før.": "Observation is perishable. Five minutes daily beats two hours a month, and after a few weeks you see patterns you have never noticed before.",
+ "Vær like mild med deg selv som med barnet. Noen dager blir det ingen notater, og det er helt greit; i morgen sitter du der igjen.": "Be as gentle with yourself as with the child. Some days there will be no notes, and that is perfectly fine; tomorrow you will be sitting there again."
+});
+</script>
 <script src="/js/lme-visibility.js" defer></script>
 </body>
 </html>
