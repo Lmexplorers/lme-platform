@@ -134,8 +134,8 @@ window.LME_BUTIKK = {
       navn:  { no: "NORWAY-bøttehatt, hekleoppskrift", en: "NORWAY bucket hat, crochet pattern" },
       undertittel: { no: "Rød hatt · NORWAY foran · flagg bak · voksen",
                      en: "Red hat · NORWAY front · flag back · adult" },
-      cover:   "/images/oppskrift-norway-hekle.jpg",
-      coverEn: "/images/oppskrift-norway-hekle.jpg",
+      cover:   "/images/oppskrift-norway-hekle.png",
+      coverEn: "/images/oppskrift-norway-hekle.png",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norway-hekle.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
