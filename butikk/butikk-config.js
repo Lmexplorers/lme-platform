@@ -102,7 +102,9 @@ window.LME_BUTIKK = {
       coverEn: "/images/oppskrift-ro-strikk.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/ro-strikk.pdf",
-          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/ro-strikk-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
       ]
     },
 
@@ -114,7 +116,9 @@ window.LME_BUTIKK = {
       coverEn: "/images/oppskrift-ro-hekle.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/ro-hekle.pdf",
-          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/ro-hekle-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
       ]
     },
 
@@ -126,7 +130,9 @@ window.LME_BUTIKK = {
       coverEn: "/images/oppskrift-norway-strikk.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norway-strikk.pdf",
-          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norway-strikk-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
       ]
     },
 
@@ -138,7 +144,9 @@ window.LME_BUTIKK = {
       coverEn: "/images/oppskrift-norway-hekle.png",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norway-hekle.pdf",
-          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norway-hekle-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
       ]
     },
 
@@ -150,7 +158,9 @@ window.LME_BUTIKK = {
       coverEn: "/images/oppskrift-norge-strikk.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-strikk.pdf",
-          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-strikk-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
       ]
     },
 
@@ -162,7 +172,9 @@ window.LME_BUTIKK = {
       coverEn: "/images/oppskrift-norge-blokk.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-blokk.pdf",
-          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-blokk-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
       ]
     },
 
@@ -174,7 +186,9 @@ window.LME_BUTIKK = {
       coverEn: "/images/oppskrift-norge-innstrikket.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-innstrikket.pdf",
-          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-innstrikket-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
       ]
     },
 
@@ -186,7 +200,9 @@ window.LME_BUTIKK = {
       coverEn: "/images/oppskrift-norge-hekle.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-hekle.pdf",
-          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-hekle-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
       ]
     },
 
@@ -230,7 +246,13 @@ window.LME_BUTIKK = {
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-blokk.pdf",
           knapp: { no: "NORGE, blokkbokstaver (PDF)", en: "NORGE, block letters (PDF)" } },
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-innstrikket.pdf",
-          knapp: { no: "NORGE, innstrikket (PDF)", en: "NORGE, knitted in (PDF)" } }
+          knapp: { no: "NORGE, innstrikket (PDF)", en: "NORGE, knitted in (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-strikk-en.pdf",
+          knapp: { no: "NORGE, maskesting (engelsk PDF)", en: "NORGE, duplicate stitch (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-blokk-en.pdf",
+          knapp: { no: "NORGE, blokkbokstaver (engelsk PDF)", en: "NORGE, block letters (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-innstrikket-en.pdf",
+          knapp: { no: "NORGE, innstrikket (engelsk PDF)", en: "NORGE, knitted in (PDF)" } }
       ]
     },
 
@@ -248,7 +270,15 @@ window.LME_BUTIKK = {
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-hekle.pdf",
           knapp: { no: "NORGE-bøttehatt, hekle (PDF)", en: "NORGE bucket hat, crochet (PDF)" } },
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-skaut-hekle.pdf",
-          knapp: { no: "Norge-skaut, hekle (PDF)", en: "Norway kerchief, crochet (PDF)" } }
+          knapp: { no: "Norge-skaut, hekle (PDF)", en: "Norway kerchief, crochet (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/ro-hekle-en.pdf",
+          knapp: { no: "RO-bøttehatt, hekle (engelsk PDF)", en: "RO bucket hat, crochet (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norway-hekle-en.pdf",
+          knapp: { no: "NORWAY-bøttehatt, hekle (engelsk PDF)", en: "NORWAY bucket hat, crochet (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-hekle-en.pdf",
+          knapp: { no: "NORGE-bøttehatt, hekle (engelsk PDF)", en: "NORGE bucket hat, crochet (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-skaut-hekle-en.pdf",
+          knapp: { no: "Norge-skaut, hekle (engelsk PDF)", en: "Norway kerchief, crochet (PDF)" } }
       ]
     },
 
@@ -270,7 +300,19 @@ window.LME_BUTIKK = {
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-innstrikket.pdf",
           knapp: { no: "NORGE, innstrikket (PDF)", en: "NORGE, knitted in (PDF)" } },
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-skaut.pdf",
-          knapp: { no: "Norge-skaut (PDF)", en: "Norway kerchief (PDF)" } }
+          knapp: { no: "Norge-skaut (PDF)", en: "Norway kerchief (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/ro-strikk-en.pdf",
+          knapp: { no: "RO-bøttehatt, strikk (engelsk PDF)", en: "RO bucket hat, knit (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norway-strikk-en.pdf",
+          knapp: { no: "NORWAY-bøttehatt, strikk (engelsk PDF)", en: "NORWAY bucket hat, knit (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-strikk-en.pdf",
+          knapp: { no: "NORGE, maskesting (engelsk PDF)", en: "NORGE, duplicate stitch (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-blokk-en.pdf",
+          knapp: { no: "NORGE, blokkbokstaver (engelsk PDF)", en: "NORGE, block letters (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-innstrikket-en.pdf",
+          knapp: { no: "NORGE, innstrikket (engelsk PDF)", en: "NORGE, knitted in (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-skaut-en.pdf",
+          knapp: { no: "Norge-skaut (engelsk PDF)", en: "Norway kerchief (PDF)" } }
       ]
     }
 
