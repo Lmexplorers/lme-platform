@@ -194,8 +194,8 @@ window.LME_BUTIKK = {
       navn:  { no: "Norge-skaut, strikkeoppskrift", en: "Norway kerchief, knitting pattern" },
       undertittel: { no: "Trekantskaut · flagg foran eller bak · I-cord-snorer",
                      en: "Triangular kerchief · flag front or back · I-cord ties" },
-      cover:   "/images/oppskrift-skaut.jpg",
-      coverEn: "/images/oppskrift-skaut.jpg",
+      cover:   "/images/oppskrift-skaut-strikk.jpg",
+      coverEn: "/images/oppskrift-skaut-strikk.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-skaut.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },

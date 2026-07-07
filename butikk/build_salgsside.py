@@ -372,7 +372,7 @@ PRODUCTS = [
     'h1_no': 'Norge-skaut, <em>strikkeoppskrift</em>', 'h1_en': 'Norway kerchief, <em>knitting pattern</em>',
     'sub_no': 'Et trekantet skaut i rødt bomullsgarn, med bølger og flaggstriper rundt hele kanten og det norske flagget på. I-cord-snorer festes i sidene foran og knytes bak, under spissen. Du velger selv om flagget skal sitte foran eller bak. Passer til bøttehattene.',
     'sub_en': 'A triangular kerchief in red cotton yarn, with waves and flag stripes around the whole edge and the Norwegian flag on it. I-cord ties attach at the front sides and tie at the back, under the point. You choose whether the flag sits at the front or the back. Matches the bucket hats.',
-    'cover': '/images/oppskrift-skaut.jpg',
+    'cover': '/images/oppskrift-skaut-strikk.jpg',
     'cover_no': 'Trekantskaut med bølgekant og flaggstriper rundt hele, og I-cord-snorer til å knyte bak.',
     'cover_en': 'Triangular kerchief with a wavy edge and flag stripes all the way around, and I-cord ties to fasten at the back.',
     'lead_no': 'En komplett strikkeoppskrift i LME-stil, med diagram og steg for steg.',
