@@ -198,7 +198,9 @@ window.LME_BUTIKK = {
       coverEn: "/images/oppskrift-skaut.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-skaut.pdf",
-          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-skaut-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
       ]
     },
 
@@ -210,7 +212,9 @@ window.LME_BUTIKK = {
       coverEn: "/images/oppskrift-skaut-hekle.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-skaut-hekle.pdf",
-          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-skaut-hekle-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
       ]
     },
 
