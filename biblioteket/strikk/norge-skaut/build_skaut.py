@@ -3,7 +3,7 @@
 import base64, html, pathlib
 
 BASE = pathlib.Path(__file__).parent
-PHOTO = pathlib.Path('/root/.claude/uploads/8a2defc1-69f7-5b9a-9a21-28d0d3730f69/a4b9e821-IMG_2679.png')
+PHOTO = pathlib.Path('/root/.claude/uploads/8a2defc1-69f7-5b9a-9a21-28d0d3730f69/049ddb67-1D776597B8634D3C8B8C745077B4BCAD.png')
 
 # ---------- farger ----------
 RED   = '#C8102E'
