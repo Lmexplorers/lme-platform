@@ -192,12 +192,24 @@ window.LME_BUTIKK = {
 
     "norge-skaut": {
       navn:  { no: "Norge-skaut, strikkeoppskrift", en: "Norway kerchief, knitting pattern" },
-      undertittel: { no: "Trekantskaut · bølger og flaggstriper rundt · I-cord-snorer",
-                     en: "Triangular kerchief · waves and flag stripes all around · I-cord ties" },
+      undertittel: { no: "Trekantskaut · flagg foran eller bak · I-cord-snorer",
+                     en: "Triangular kerchief · flag front or back · I-cord ties" },
       cover:   "/images/oppskrift-skaut.jpg",
       coverEn: "/images/oppskrift-skaut.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-skaut.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "norge-skaut-hekle": {
+      navn:  { no: "Norge-skaut, hekleoppskrift", en: "Norway kerchief, crochet pattern" },
+      undertittel: { no: "Trekantskaut · flagg foran eller bak · heklede snorer",
+                     en: "Triangular kerchief · flag front or back · crocheted ties" },
+      cover:   "/images/oppskrift-skaut-hekle.jpg",
+      coverEn: "/images/oppskrift-skaut-hekle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-skaut-hekle.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } }
       ]
     },
@@ -220,8 +232,8 @@ window.LME_BUTIKK = {
 
     "hekle-pakke": {
       navn:  { no: "Alle hekleoppskriftene, pakke", en: "All crochet patterns, bundle" },
-      undertittel: { no: "Pakke · RO + NORWAY + NORGE i hekleutgave",
-                     en: "Bundle · RO + NORWAY + NORGE in crochet" },
+      undertittel: { no: "Pakke · RO + NORWAY + NORGE + skaut i hekleutgave",
+                     en: "Bundle · RO + NORWAY + NORGE + kerchief in crochet" },
       cover:   "/images/oppskrift-ro-hekle.jpg",
       coverEn: "/images/oppskrift-ro-hekle.jpg",
       filer: [
@@ -230,7 +242,9 @@ window.LME_BUTIKK = {
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norway-hekle.pdf",
           knapp: { no: "NORWAY-bøttehatt, hekle (PDF)", en: "NORWAY bucket hat, crochet (PDF)" } },
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-hekle.pdf",
-          knapp: { no: "NORGE-bøttehatt, hekle (PDF)", en: "NORGE bucket hat, crochet (PDF)" } }
+          knapp: { no: "NORGE-bøttehatt, hekle (PDF)", en: "NORGE bucket hat, crochet (PDF)" } },
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-skaut-hekle.pdf",
+          knapp: { no: "Norge-skaut, hekle (PDF)", en: "Norway kerchief, crochet (PDF)" } }
       ]
     },
 
