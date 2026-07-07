@@ -71,7 +71,7 @@ CSS = """
   .buy-box { background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow-md); padding: 26px; position: sticky; top: 20px; }
   .buy-box .tag { display: inline-block; background: var(--lime); border-radius: var(--r-pill);
     font-size: 11px; font-weight: 700; letter-spacing: .1em; padding: 5px 12px; margin-bottom: 12px; }
-  .buy-box .price { font-size: 38px; font-weight: 700; font-family: var(--font-head); }
+  .buy-box .price { font-size: 38px; font-weight: 700; font-family: var(--font-body); }
   .buy-box .price-sub { font-size: 13px; color: var(--ink-muted); margin-bottom: 16px; }
   .pay-label { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
     color: var(--ink-muted); margin: 6px 0 10px; }
