@@ -238,7 +238,7 @@ PRODUCTS = [
     'lead_no': 'En komplett strikkeoppskrift i LME-stil, med mønsterdiagram og steg for steg.',
     'lead_en': 'A complete knitting pattern in LME style, with charts and step by step.',
     'tag_no': 'STRIKKEOPPSKRIFT', 'tag_en': 'KNITTING PATTERN',
-    'pris_no': '99 kr', 'pris_en': '$9',
+    'pris_no': '99 kr', 'pris_en': '99 kr',
     'facts': [('Barn, dame, herre','Child, woman, man'), ('Skriv ut selv','Print at home'), ('Av Renate Dahl','By Renate Dahl')],
     'items': [
       ('🧢','Bøttehatt i tre størrelser','Bucket hat in three sizes',
@@ -273,7 +273,7 @@ PRODUCTS = [
     'lead_no': 'En komplett hekleoppskrift i LME-stil, med mønsterdiagram og steg for steg.',
     'lead_en': 'A complete crochet pattern in LME style, with charts and step by step.',
     'tag_no': 'HEKLEOPPSKRIFT', 'tag_en': 'CROCHET PATTERN',
-    'pris_no': '99 kr', 'pris_en': '$9',
+    'pris_no': '99 kr', 'pris_en': '99 kr',
     'facts': [('Voksen','Adult'), ('Skriv ut selv','Print at home'), ('Av Renate Dahl','By Renate Dahl')],
     'items': [
       ('🧢','Heklet bøttehatt','Crocheted bucket hat',
@@ -308,7 +308,7 @@ PRODUCTS = [
     'lead_no': 'En komplett strikkeoppskrift i LME-stil, med mønsterdiagram og steg for steg.',
     'lead_en': 'A complete knitting pattern in LME style, with charts and step by step.',
     'tag_no': 'STRIKKEOPPSKRIFT', 'tag_en': 'KNITTING PATTERN',
-    'pris_no': '99 kr', 'pris_en': '$9',
+    'pris_no': '99 kr', 'pris_en': '99 kr',
     'facts': [('Barn, dame, herre','Child, woman, man'), ('Skriv ut selv','Print at home'), ('Av Renate Dahl','By Renate Dahl')],
     'items': [
       ('🧢','Bøttehatt i tre størrelser','Bucket hat in three sizes',
@@ -343,7 +343,7 @@ PRODUCTS = [
     'lead_no': 'En komplett hekleoppskrift i LME-stil, med mønsterdiagram og steg for steg.',
     'lead_en': 'A complete crochet pattern in LME style, with charts and step by step.',
     'tag_no': 'HEKLEOPPSKRIFT', 'tag_en': 'CROCHET PATTERN',
-    'pris_no': '99 kr', 'pris_en': '$9',
+    'pris_no': '99 kr', 'pris_en': '99 kr',
     'facts': [('Voksen','Adult'), ('Skriv ut selv','Print at home'), ('Av Renate Dahl','By Renate Dahl')],
     'items': [
       ('🧢','Heklet bøttehatt','Crocheted bucket hat',
@@ -378,7 +378,7 @@ PRODUCTS = [
     'lead_no': 'En komplett strikkeoppskrift i LME-stil, med diagram og steg for steg.',
     'lead_en': 'A complete knitting pattern in LME style, with charts and step by step.',
     'tag_no': 'STRIKKEOPPSKRIFT', 'tag_en': 'KNITTING PATTERN',
-    'pris_no': '99 kr', 'pris_en': '$9',
+    'pris_no': '99 kr', 'pris_en': '99 kr',
     'facts': [('Skaut','Kerchief'), ('Skriv ut selv','Print at home'), ('Av Renate Dahl','By Renate Dahl')],
     'items': [
       ('🧣','Trekantet skaut','Triangular kerchief',
@@ -412,7 +412,7 @@ PRODUCTS = [
     'lead_no': 'En komplett strikkeoppskrift i LME-stil, med mønsterdiagram og steg for steg.',
     'lead_en': 'A complete knitting pattern in LME style, with charts and step by step.',
     'tag_no': 'STRIKKEOPPSKRIFT', 'tag_en': 'KNITTING PATTERN',
-    'pris_no': '99 kr', 'pris_en': '$9',
+    'pris_no': '99 kr', 'pris_en': '99 kr',
     'facts': [('Barn, dame, herre','Child, woman, man'), ('Skriv ut selv','Print at home'), ('Av Renate Dahl','By Renate Dahl')],
     'items': [
       ('🧢','Bøttehatt i tre størrelser','Bucket hat in three sizes',
@@ -446,7 +446,7 @@ PRODUCTS = [
     'lead_no': 'En komplett strikkeoppskrift i LME-stil, med mønsterdiagram og steg for steg.',
     'lead_en': 'A complete knitting pattern in LME style, with charts and step by step.',
     'tag_no': 'STRIKKEOPPSKRIFT', 'tag_en': 'KNITTING PATTERN',
-    'pris_no': '99 kr', 'pris_en': '$9',
+    'pris_no': '99 kr', 'pris_en': '99 kr',
     'facts': [('Barn, dame, herre','Child, woman, man'), ('Skriv ut selv','Print at home'), ('Av Renate Dahl','By Renate Dahl')],
     'items': [
       ('🧢','Bøttehatt i tre størrelser','Bucket hat in three sizes',
@@ -480,7 +480,7 @@ PRODUCTS = [
     'lead_no': 'En komplett strikkeoppskrift i LME-stil, med mønsterdiagram og steg for steg.',
     'lead_en': 'A complete knitting pattern in LME style, with charts and step by step.',
     'tag_no': 'STRIKKEOPPSKRIFT', 'tag_en': 'KNITTING PATTERN',
-    'pris_no': '99 kr', 'pris_en': '$9',
+    'pris_no': '99 kr', 'pris_en': '99 kr',
     'facts': [('Barn, dame, herre','Child, woman, man'), ('Skriv ut selv','Print at home'), ('Av Renate Dahl','By Renate Dahl')],
     'items': [
       ('🧢','Bøttehatt i tre størrelser','Bucket hat in three sizes',
@@ -514,7 +514,7 @@ PRODUCTS = [
     'lead_no': 'En komplett hekleoppskrift i LME-stil, med mønsterdiagram og steg for steg.',
     'lead_en': 'A complete crochet pattern in LME style, with charts and step by step.',
     'tag_no': 'HEKLEOPPSKRIFT', 'tag_en': 'CROCHET PATTERN',
-    'pris_no': '99 kr', 'pris_en': '$9',
+    'pris_no': '99 kr', 'pris_en': '99 kr',
     'facts': [('Voksen','Adult'), ('Skriv ut selv','Print at home'), ('Av Renate Dahl','By Renate Dahl')],
     'items': [
       ('🧢','Heklet bøttehatt','Crocheted bucket hat',
@@ -548,7 +548,7 @@ PRODUCTS = [
     'lead_no': 'Tre komplette strikkeoppskrifter i LME-stil, med diagram og steg for steg.',
     'lead_en': 'Three complete knitting patterns in LME style, with charts and step by step.',
     'tag_no': 'PAKKE, 3 OPPSKRIFTER', 'tag_en': 'BUNDLE, 3 PATTERNS',
-    'pris_no': '149 kr', 'pris_en': '$14',
+    'pris_no': '149 kr', 'pris_en': '149 kr',
     'facts': [('3 oppskrifter','3 patterns'), ('Barn, dame, herre','Child, woman, man'), ('Spar mot enkeltkjøp','Save vs single')],
     'items': [
       ('🪡','Maskesting-varianten','The duplicate-stitch version',
@@ -579,7 +579,7 @@ PRODUCTS = [
     'lead_no': 'Alle hekleoppskriftene i LME-stil, med diagram og steg for steg.',
     'lead_en': 'All the crochet patterns in LME style, with charts and step by step.',
     'tag_no': 'PAKKE, ALLE HEKLE', 'tag_en': 'BUNDLE, ALL CROCHET',
-    'pris_no': '149 kr', 'pris_en': '$14',
+    'pris_no': '149 kr', 'pris_en': '149 kr',
     'facts': [('Alle hekle','All crochet'), ('Voksen','Adult'), ('Spar mot enkeltkjøp','Save vs single')],
     'items': [
       ('⚪','RO-bøttehatt (hvit)','RO bucket hat (white)',
@@ -610,7 +610,7 @@ PRODUCTS = [
     'lead_no': 'Alle strikkeoppskriftene i LME-stil, med diagram og steg for steg.',
     'lead_en': 'All the knitting patterns in LME style, with charts and step by step.',
     'tag_no': 'PAKKE, ALLE STRIKK', 'tag_en': 'BUNDLE, ALL KNITTING',
-    'pris_no': '149 kr', 'pris_en': '$14',
+    'pris_no': '149 kr', 'pris_en': '149 kr',
     'facts': [('6 oppskrifter','6 patterns'), ('Barn, dame, herre','Child, woman, man'), ('Spar mot enkeltkjøp','Save vs single')],
     'items': [
       ('⚪','RO-bøttehatt (hvit)','RO bucket hat (white)',
