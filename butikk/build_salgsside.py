@@ -542,7 +542,7 @@ PRODUCTS = [
     'h1_no': 'NORGE-bøttehatt, <em>hekleoppskrift</em>', 'h1_en': 'NORGE bucket hat, <em>crochet pattern</em>',
     'sub_no': 'Rød bøttehatt heklet i bomull, med "NORGE" i hvite blokkbokstaver foran og det norske flagget. Motivene hekles rett inn med tapestry-hekling. Bølget brem, voksenstørrelse.',
     'sub_en': 'Red bucket hat crocheted in cotton, with "NORGE" in white block letters on the front and the Norwegian flag. The motifs are worked in with tapestry crochet. Wavy brim, adult size.',
-    'cover': '/images/oppskrift-norge-hekle.jpg',
+    'cover': '/images/oppskrift-norge-hekle-foto.jpg',
     'cover_no': 'NORGE heklet i rødt med hvite blokkbokstaver og bølget brem.',
     'cover_en': 'NORGE crocheted in red with white block letters and a wavy brim.',
     'lead_no': 'En komplett hekleoppskrift i LME-stil, med mønsterdiagram og steg for steg.',
