@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mia &amp; Teos Oppdagerøy — Lek &amp; Lær | Little Montessori Explorers</title>
+<meta name="description" content="Et lekent lærespill for barn: språk og matte på Mia og Teos magiske øy. Samle stjerner, finn nye venner og lær mens du leker.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('fonts/SassoonMontessori.woff2') format('woff2'),
+         url('fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    /* LÅST FONTREGEL: Playpen Sans = KUN overskrifter. Sassoon = all annen tekst. */
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+
+    --sky-1: #aee7ff;
+    --sky-2: #7fd4f6;
+    --sea-1: #3fb9e8;
+    --sea-2: #1f97d4;
+    --sand:  #ffe9b8;
+    --grass-1: #9ede6a;
+    --grass-2: #5cb944;
+    --wood-1: #c98d4e;
+    --wood-2: #a86c33;
+    --ink:   #3d2438;
+    --ink-soft: #6b4760;
+    --white: #fffdf8;
+
+    --pink:   #e85a92;
+    --lime:   #8fc23f;
+    --gul:    #ffce3d;
+    --bla:    #6ec1e4;
+    --lilla:  #b07fd4;
+    --oransje:#ff9d5c;
+
+    --shadow-soft: 0 8px 24px rgba(31, 89, 130, 0.18);
+    --shadow-deep: 0 16px 40px rgba(31, 89, 130, 0.28);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--ink);
+    line-height: 1.5;
+    overflow-x: hidden;
+    background:
+      radial-gradient(ellipse 120% 60% at 50% -10%, #d8f4ff, transparent 60%),
+      linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 42%, var(--sea-1) 62%, var(--sea-2) 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4 { font-family: var(--font-head); }
+  button, input, select, textarea { font-family: var(--font-body) !important; }
+  button { cursor: pointer; }
+
+  /* ============ HIMMEL-PYNT ============ */
+  .sky-decor { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .sun {
+    position: absolute; top: 4vh; right: 6vw; width: 90px; height: 90px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fff4c2, #ffd75c 60%, #ffb62e);
+    box-shadow: 0 0 60px 25px rgba(255, 214, 92, 0.45);
+    animation: sunPulse 6s ease-in-out infinite;
+  }
+  @keyframes sunPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+  .cloud {
+    position: absolute; font-size: 3.2rem; opacity: 0.9;
+    filter: drop-shadow(0 6px 10px rgba(60,120,160,.15));
+    animation: drift linear infinite;
+  }
+  @keyframes drift {
+    from { transform: translateX(-15vw); }
+    to   { transform: translateX(115vw); }
+  }
+  .wave-strip {
+    position: fixed; left: 0; right: 0; bottom: -6px; height: 90px; z-index: 0;
+    pointer-events: none; opacity: .5;
+  }
+
+  /* ============ HUD (topplinje som i spill) ============ */
+  .hud {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; gap: .6rem; flex-wrap: wrap;
+    padding: .6rem .9rem;
+    background: linear-gradient(180deg, rgba(20, 90, 140, 0.35), rgba(20, 90, 140, 0.12));
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .hud-avatar {
+    display: flex; align-items: center; gap: .55rem;
+    background: var(--white); border-radius: 999px; padding: .3rem .9rem .3rem .3rem;
+    box-shadow: var(--shadow-soft); border: 3px solid #fff;
+  }
+  .hud-avatar .face {
+    width: 44px; height: 44px; border-radius: 50%; overflow: hidden; flex: 0 0 auto;
+    background: linear-gradient(135deg, #ffd1e1, #ffb3cd);
+    display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+  }
+  .hud-avatar .face img { width: 100%; height: 100%; object-fit: cover; }
+  .hud-avatar .lvl { line-height: 1.15; }
+  .hud-avatar .lvl b { font-size: .95rem; display: block; }
+  .hud-avatar .lvl-bar {
+    width: 92px; height: 8px; border-radius: 99px; background: #eadff0; overflow: hidden;
+  }
+  .hud-avatar .lvl-bar i {
+    display: block; height: 100%; width: 0%;
+    background: linear-gradient(90deg, var(--gul), var(--oransje));
+    border-radius: 99px; transition: width .6s ease;
+  }
+  .hud-pill {
+    display: flex; align-items: center; gap: .4rem;
+    background: var(--white); border-radius: 999px; padding: .42rem .95rem;
+    font-weight: 700; font-size: 1.02rem; box-shadow: var(--shadow-soft);
+    border: 3px solid #fff;
+  }
+  .hud-pill .em { font-size: 1.15rem; }
+  .hud-spacer { flex: 1; }
+  .hud-btn {
+    background: var(--white); border: 3px solid #fff; border-radius: 999px;
+    padding: .42rem .9rem; font-weight: 700; font-size: .95rem;
+    box-shadow: var(--shadow-soft); color: var(--ink);
+    transition: transform .15s ease;
+  }
+  .hud-btn:hover { transform: translateY(-2px); }
+  .hud-btn.home { text-decoration: none; display: inline-flex; align-items: center; gap: .35rem; }
+
+  @keyframes popBump { 0% { transform: scale(1); } 40% { transform: scale(1.25); } 100% { transform: scale(1); } }
+  .bump { animation: popBump .45s ease; }
+
+  /* ============ SCENE / KART ============ */
+  .scene { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 1rem 1rem 6rem; }
+
+  .game-title { text-align: center; margin: .6rem 0 .2rem; }
+  .game-title h1 {
+    font-size: clamp(1.7rem, 5vw, 2.7rem); font-weight: 800; color: #fff;
+    text-shadow: 0 3px 0 rgba(31, 89, 130, .35), 0 8px 22px rgba(31, 89, 130, .35);
+    letter-spacing: .01em;
+  }
+  .game-title p {
+    color: #f2fbff; font-size: 1.06rem; text-shadow: 0 2px 8px rgba(31, 89, 130, .4);
+    margin-top: .15rem;
+  }
+
+  .map-grid {
+    display: grid; grid-template-columns: 280px 1fr; gap: 1.1rem; margin-top: 1.2rem;
+    align-items: start;
+  }
+  @media (max-width: 860px) { .map-grid { grid-template-columns: 1fr; } }
+
+  /* --- Oppgavepanel (som i spill-HUD) --- */
+  .panel {
+    background: linear-gradient(180deg, #fffef9, #fff7e8);
+    border-radius: 22px; padding: 1rem 1.1rem; box-shadow: var(--shadow-deep);
+    border: 4px solid #fff;
+  }
+  .panel h2 {
+    font-size: 1.02rem; font-weight: 800; color: var(--ink);
+    display: flex; align-items: center; gap: .45rem; margin-bottom: .7rem;
+    text-transform: uppercase; letter-spacing: .04em;
+  }
+  .task { display: flex; align-items: center; gap: .6rem; padding: .5rem 0; border-top: 2px dashed #f0e3cc; }
+  .task:first-of-type { border-top: 0; }
+  .task .t-ic {
+    width: 38px; height: 38px; border-radius: 12px; flex: 0 0 auto;
+    display: flex; align-items: center; justify-content: center; font-size: 1.25rem;
+    background: #fff; box-shadow: inset 0 0 0 2px #f2e6d0;
+  }
+  .task .t-txt { flex: 1; font-size: .95rem; line-height: 1.3; }
+  .task .t-progress { font-weight: 800; font-size: .95rem; color: var(--ink-soft); white-space: nowrap; }
+  .task.done .t-progress { color: var(--lime); }
+  .task.done .t-ic { background: #eef7dd; box-shadow: inset 0 0 0 2px var(--lime); }
+  .task.done .t-txt { text-decoration: line-through; opacity: .65; }
+
+  .panel .friends-row { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .3rem; }
+  .friend-slot {
+    width: 52px; height: 52px; border-radius: 16px; font-size: 1.7rem;
+    display: flex; align-items: center; justify-content: center;
+    background: #fff; box-shadow: inset 0 0 0 2px #f2e6d0;
+  }
+  .friend-slot.locked { filter: grayscale(1); opacity: .35; }
+  .friend-slot.new { animation: popBump .6s ease; box-shadow: inset 0 0 0 3px var(--gul); }
+
+  /* --- Øy-soner --- */
+  .zones { display: grid; gap: 1.1rem; }
+  .zone {
+    position: relative; border-radius: 26px; padding: 1.2rem 1.3rem 1.3rem;
+    box-shadow: var(--shadow-deep); border: 5px solid #fff; overflow: hidden;
+  }
+  .zone::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 90% 55% at 50% -10%, rgba(255,255,255,.5), transparent 55%);
+  }
+  .zone.spraak { background: linear-gradient(160deg, var(--grass-1), var(--grass-2)); }
+  .zone.matte  { background: linear-gradient(160deg, #ffe9b8, #ffce7a); }
+  .zone.regnbue { background: linear-gradient(160deg, #c9a6ec, #8f6fd4); }
+
+  .zone-head { display: flex; align-items: center; gap: .9rem; position: relative; z-index: 1; }
+  .zone-emblem {
+    width: 64px; height: 64px; border-radius: 20px; flex: 0 0 auto;
+    background: rgba(255,255,255,.92); box-shadow: var(--shadow-soft);
+    display: flex; align-items: center; justify-content: center; font-size: 2rem;
+    animation: bob 3.4s ease-in-out infinite;
+  }
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  .zone-head h2 {
+    color: #fff; font-size: clamp(1.2rem, 3vw, 1.55rem); font-weight: 800;
+    text-shadow: 0 2px 0 rgba(0,0,0,.14);
+  }
+  .zone-head p { color: rgba(255,255,255,.94); font-size: .98rem; margin-top: .1rem; }
+  .zone-deco { position: absolute; font-size: 2.1rem; opacity: .5; pointer-events: none; }
+
+  .level-row { display: flex; gap: .8rem; margin-top: 1rem; position: relative; z-index: 1; flex-wrap: wrap; }
+  .level-btn {
+    flex: 1; min-width: 150px;
+    background: rgba(255, 255, 255, .95); border: 0; border-radius: 18px;
+    padding: .85rem .8rem .9rem; text-align: center; box-shadow: 0 5px 0 rgba(0,0,0,.15);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .level-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 8px 0 rgba(0,0,0,.15); }
+  .level-btn:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,.15); }
+  .level-btn:disabled { opacity: .55; cursor: not-allowed; filter: saturate(.4); }
+  .level-btn .lv-em { font-size: 1.9rem; display: block; }
+  .level-btn .lv-name { font-weight: 800; font-size: .98rem; display: block; margin-top: .15rem; }
+  .level-btn .lv-stars { display: block; font-size: .9rem; margin-top: .2rem; letter-spacing: .1em; }
+  .level-btn .lv-lock { display: block; font-size: .82rem; color: var(--ink-soft); margin-top: .15rem; }
+
+  .zone-lockbar {
+    position: relative; z-index: 1; margin-top: 1rem; background: rgba(255,255,255,.25);
+    border: 2px dashed rgba(255,255,255,.7); border-radius: 16px; color: #fff;
+    padding: .7rem .9rem; font-weight: 700; text-align: center; font-size: .98rem;
+  }
+
+  /* ============ SPILLSKJERM ============ */
+  .overlay {
+    position: fixed; inset: 0; z-index: 100; display: none;
+    align-items: center; justify-content: center; padding: 1rem;
+    background: rgba(18, 64, 96, .55); backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+  }
+  .overlay.open { display: flex; }
+
+  .play-card {
+    width: min(680px, 100%); max-height: 94vh; overflow-y: auto;
+    background: linear-gradient(180deg, #fffef9, #fdf3e0);
+    border-radius: 28px; border: 6px solid #fff; box-shadow: var(--shadow-deep);
+    padding: 1.1rem 1.2rem 1.4rem; position: relative;
+  }
+  .play-top { display: flex; align-items: center; gap: .7rem; }
+  .play-top h2 { font-size: 1.15rem; font-weight: 800; flex: 1; }
+  .play-close {
+    background: #fff; border: 3px solid #f2e6d0; border-radius: 50%;
+    width: 40px; height: 40px; font-size: 1.2rem; font-weight: 700; color: var(--ink-soft);
+  }
+  .q-dots { display: flex; gap: .4rem; justify-content: center; margin: .7rem 0 .4rem; }
+  .q-dot { width: 14px; height: 14px; border-radius: 50%; background: #eadfcb; }
+  .q-dot.now { background: var(--bla); transform: scale(1.2); }
+  .q-dot.hit { background: var(--gul); }
+
+  .prompt-box {
+    text-align: center; background: #fff; border-radius: 22px; padding: 1.2rem 1rem;
+    box-shadow: inset 0 0 0 3px #f2e6d0; margin-top: .5rem;
+  }
+  .prompt-box .p-say { font-size: 1.06rem; color: var(--ink-soft); }
+  .prompt-box .p-big {
+    font-family: var(--font-head); font-size: clamp(2.6rem, 9vw, 4rem); font-weight: 800;
+    line-height: 1.15; margin-top: .3rem; word-spacing: .3em;
+  }
+  .prompt-box .p-big.emojis { letter-spacing: .12em; font-size: clamp(2rem, 7vw, 3rem); }
+
+  .answers { display: grid; grid-template-columns: repeat(3, 1fr); gap: .8rem; margin-top: 1rem; }
+  @media (max-width: 520px) { .answers { grid-template-columns: 1fr; } }
+  .ans-btn {
+    background: #fff; border: 0; border-radius: 20px; padding: 1rem .6rem 1.05rem;
+    font-size: 1.15rem; font-weight: 700; color: var(--ink);
+    box-shadow: 0 5px 0 #e3d5bb; transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .ans-btn .a-em { display: block; font-size: 2.3rem; margin-bottom: .2rem; }
+  .ans-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 8px 0 #e3d5bb; }
+  .ans-btn:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 2px 0 #e3d5bb; }
+  .ans-btn.correct { background: #e8f6d4; box-shadow: 0 5px 0 var(--lime); animation: popBump .5s ease; }
+  .ans-btn.wrong { background: #ffe9e9; box-shadow: 0 5px 0 #f0b3b3; animation: shake .4s ease; opacity: .6; }
+  .ans-btn:disabled { cursor: default; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-7px); } 75% { transform: translateX(7px); }
+  }
+
+  .cheer {
+    text-align: center; min-height: 2rem; margin-top: .8rem;
+    font-weight: 800; font-size: 1.12rem;
+  }
+  .cheer.good { color: #4c9a1f; }
+  .cheer.oops { color: #c46a3d; }
+
+  /* ============ FEIRING / MODAL ============ */
+  .win-card {
+    width: min(480px, 100%); text-align: center;
+    background: linear-gradient(180deg, #fffef9, #fff3d6);
+    border-radius: 30px; border: 6px solid #fff; box-shadow: var(--shadow-deep);
+    padding: 2rem 1.4rem 1.7rem; position: relative; overflow: hidden;
+  }
+  .win-card .w-big { font-size: 4.2rem; animation: bob 2.4s ease-in-out infinite; }
+  .win-card h2 { font-size: 1.6rem; font-weight: 800; margin-top: .4rem; }
+  .win-card p { color: var(--ink-soft); font-size: 1.05rem; margin-top: .4rem; }
+  .win-card .w-loot {
+    display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; font-weight: 800; font-size: 1.15rem;
+  }
+  .win-card .w-loot span { background: #fff; border-radius: 999px; padding: .45rem 1.1rem; box-shadow: var(--shadow-soft); }
+  .big-btn {
+    margin-top: 1.3rem; border: 0; border-radius: 999px; padding: .85rem 2.2rem;
+    font-size: 1.15rem; font-weight: 800; color: #fff;
+    background: linear-gradient(135deg, var(--pink), #c43d75);
+    box-shadow: 0 6px 0 #8f2a55; transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .big-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 0 #8f2a55; }
+  .big-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #8f2a55; }
+  .big-btn.blue { background: linear-gradient(135deg, var(--bla), #3b8fc0); box-shadow: 0 6px 0 #2a6f97; }
+  .big-btn.blue:hover { box-shadow: 0 8px 0 #2a6f97; }
+  .big-btn.blue:active { box-shadow: 0 2px 0 #2a6f97; }
+
+  /* stjerne som flyr */
+  .fly-star {
+    position: fixed; z-index: 300; font-size: 1.6rem; pointer-events: none;
+    transition: all .9s cubic-bezier(.35,-0.2,.6,1.1); will-change: transform, left, top;
+  }
+
+  /* konfetti */
+  .confetti-bit { position: fixed; z-index: 250; top: -3vh; font-size: 1.4rem; pointer-events: none; animation: confFall linear forwards; }
+  @keyframes confFall {
+    to { transform: translateY(110vh) rotate(720deg); opacity: .8; }
+  }
+
+  footer {
+    position: relative; z-index: 1; text-align: center; color: #eaf7ff; padding: 1.5rem 1rem 2.2rem;
+    font-size: .95rem; text-shadow: 0 1px 6px rgba(31,89,130,.5);
+  }
+  footer a { color: #fff; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- Himmel og hav -->
+<div class="sky-decor" aria-hidden="true">
+  <div class="sun"></div>
+  <div class="cloud" style="top: 8vh; animation-duration: 70s;">☁️</div>
+  <div class="cloud" style="top: 16vh; font-size: 2.2rem; animation-duration: 95s; animation-delay: -30s;">☁️</div>
+  <div class="cloud" style="top: 4vh; font-size: 2.6rem; animation-duration: 110s; animation-delay: -70s;">⛅</div>
+</div>
+<svg class="wave-strip" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,40 C240,90 480,-10 720,40 C960,90 1200,-10 1440,40 L1440,90 L0,90 Z" fill="#1a86c2"/>
+</svg>
+
+<!-- ============ HUD ============ -->
+<header class="hud">
+  <div class="hud-avatar">
+    <div class="face"><img src="images/mia-og-teo.jpg" alt="Mia og Teo" onerror="this.parentNode.textContent='🧭'"></div>
+    <div class="lvl">
+      <b><span data-no="Nivå" data-en="Level">Nivå</span> <span id="hudLevel">1</span></b>
+      <div class="lvl-bar"><i id="hudLevelBar"></i></div>
+    </div>
+  </div>
+  <div class="hud-pill"><span class="em">⭐</span><span id="hudStars">0</span></div>
+  <div class="hud-pill"><span class="em">💎</span><span id="hudGems">0</span></div>
+  <div class="hud-spacer"></div>
+  <button class="hud-btn" id="soundBtn" aria-label="Lyd av/på">🔊</button>
+  <button class="hud-btn" id="langToggle">EN 🌍</button>
+  <a class="hud-btn home" href="/mia-og-teo"><span>🏠</span><span data-no="Tilbake" data-en="Back">Tilbake</span></a>
+</header>
+
+<main class="scene">
+
+  <div class="game-title">
+    <h1 data-no="Mia &amp; Teos Oppdagerøy" data-en="Mia &amp; Teo's Explorer Island">Mia &amp; Teos Oppdagerøy</h1>
+    <p data-no="Lek deg gjennom øya, samle stjerner og finn nye venner!" data-en="Play your way across the island, collect stars and meet new friends!">Lek deg gjennom øya, samle stjerner og finn nye venner!</p>
+  </div>
+
+  <div class="map-grid">
+
+    <!-- Venstre: oppgaver + venner -->
+    <aside>
+      <div class="panel">
+        <h2>📋 <span data-no="Dagens oppgaver" data-en="Today's tasks">Dagens oppgaver</span></h2>
+        <div class="task" id="taskAnswers">
+          <div class="t-ic">✅</div>
+          <div class="t-txt" data-no="Svar riktig 5 ganger" data-en="Answer correctly 5 times">Svar riktig 5 ganger</div>
+          <div class="t-progress"><span class="t-now">0</span>/5</div>
+        </div>
+        <div class="task" id="taskLevel">
+          <div class="t-ic">🗺️</div>
+          <div class="t-txt" data-no="Fullfør et nivå" data-en="Complete a level">Fullfør et nivå</div>
+          <div class="t-progress"><span class="t-now">0</span>/1</div>
+        </div>
+        <div class="task" id="taskStars">
+          <div class="t-ic">⭐</div>
+          <div class="t-txt" data-no="Samle 10 stjerner i dag" data-en="Collect 10 stars today">Samle 10 stjerner i dag</div>
+          <div class="t-progress"><span class="t-now">0</span>/10</div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top: 1rem;">
+        <h2>🐾 <span data-no="Vennesamling" data-en="Friend collection">Vennesamling</span> <span id="friendCount" style="margin-left:auto; color: var(--ink-soft); font-size:.9rem;">0/9</span></h2>
+        <div class="friends-row" id="friendsRow"></div>
+        <p style="font-size:.88rem; color: var(--ink-soft); margin-top:.6rem;"
+           data-no="Fullfør et nivå for å få en ny venn!"
+           data-en="Complete a level to make a new friend!">Fullfør et nivå for å få en ny venn!</p>
+      </div>
+    </aside>
+
+    <!-- Høyre: øyas soner -->
+    <div class="zones">
+
+      <!-- SPRÅKSKOGEN -->
+      <section class="zone spraak">
+        <span class="zone-deco" style="top:.6rem; right:1rem;">🌴</span>
+        <span class="zone-deco" style="bottom:.6rem; right:4rem; font-size:1.6rem;">🌺</span>
+        <span class="zone-deco" style="bottom:1rem; left:.8rem; font-size:1.5rem;">🦋</span>
+        <div class="zone-head">
+          <div class="zone-emblem">🌳</div>
+          <div>
+            <h2 data-no="Språkskogen" data-en="Word Forest">Språkskogen</h2>
+            <p data-no="Bokstaver, ord og rim sammen med Mia" data-en="Letters, words and rhymes with Mia">Bokstaver, ord og rim sammen med Mia</p>
+          </div>
+        </div>
+        <div class="level-row">
+          <button class="level-btn" data-level="s1">
+            <span class="lv-em">🔤</span>
+            <span class="lv-name" data-no="Første lyd" data-en="First sound">Første lyd</span>
+            <span class="lv-stars"></span>
+          </button>
+          <button class="level-btn" data-level="s2">
+            <span class="lv-em">🖼️</span>
+            <span class="lv-name" data-no="Finn ordet" data-en="Find the word">Finn ordet</span>
+            <span class="lv-stars"></span>
+          </button>
+          <button class="level-btn" data-level="s3">
+            <span class="lv-em">🎵</span>
+            <span class="lv-name" data-no="Rimord" data-en="Rhyme time">Rimord</span>
+            <span class="lv-stars"></span>
+          </button>
+        </div>
+      </section>
+
+      <!-- TALLSTRANDA -->
+      <section class="zone matte">
+        <span class="zone-deco" style="top:.6rem; right:1rem;">🐚</span>
+        <span class="zone-deco" style="bottom:.6rem; right:4.2rem; font-size:1.6rem;">⛵</span>
+        <span class="zone-deco" style="bottom:1rem; left:.8rem; font-size:1.5rem;">🦀</span>
+        <div class="zone-head">
+          <div class="zone-emblem">🔢</div>
+          <div>
+            <h2 data-no="Tallstranda" data-en="Number Beach">Tallstranda</h2>
+            <p data-no="Telling og regning sammen med Teo" data-en="Counting and math with Teo">Telling og regning sammen med Teo</p>
+          </div>
+        </div>
+        <div class="level-row">
+          <button class="level-btn" data-level="m1">
+            <span class="lv-em">🍎</span>
+            <span class="lv-name" data-no="Telle" data-en="Counting">Telle</span>
+            <span class="lv-stars"></span>
+          </button>
+          <button class="level-btn" data-level="m2">
+            <span class="lv-em">➕</span>
+            <span class="lv-name" data-no="Pluss" data-en="Adding">Pluss</span>
+            <span class="lv-stars"></span>
+          </button>
+          <button class="level-btn" data-level="m3">
+            <span class="lv-em">🧩</span>
+            <span class="lv-name" data-no="Tall-rekka" data-en="Number line">Tall-rekka</span>
+            <span class="lv-stars"></span>
+          </button>
+        </div>
+      </section>
+
+      <!-- REGNBUEFJELLET -->
+      <section class="zone regnbue">
+        <span class="zone-deco" style="top:.6rem; right:1rem;">🌈</span>
+        <span class="zone-deco" style="bottom:.6rem; right:4.2rem; font-size:1.6rem;">✨</span>
+        <span class="zone-deco" style="bottom:1rem; left:.8rem; font-size:1.5rem;">🦄</span>
+        <div class="zone-head">
+          <div class="zone-emblem">⛰️</div>
+          <div>
+            <h2 data-no="Regnbuefjellet" data-en="Rainbow Mountain">Regnbuefjellet</h2>
+            <p data-no="Litt vanskeligere oppdrag for ekte oppdagere" data-en="Trickier quests for true explorers">Litt vanskeligere oppdrag for ekte oppdagere</p>
+          </div>
+        </div>
+        <div class="level-row" id="rainbowLevels">
+          <button class="level-btn" data-level="r1">
+            <span class="lv-em">➖</span>
+            <span class="lv-name" data-no="Minus" data-en="Take away">Minus</span>
+            <span class="lv-stars"></span>
+          </button>
+          <button class="level-btn" data-level="r2">
+            <span class="lv-em">🔠</span>
+            <span class="lv-name" data-no="Lydjakt" data-en="Sound hunt">Lydjakt</span>
+            <span class="lv-stars"></span>
+          </button>
+          <button class="level-btn" data-level="r3">
+            <span class="lv-em">🌟</span>
+            <span class="lv-name" data-no="Stormiks" data-en="Super mix">Stormiks</span>
+            <span class="lv-stars"></span>
+          </button>
+        </div>
+        <div class="zone-lockbar" id="rainbowLock">
+          🔒 <span data-no="Fullfør Språkskogen og Tallstranda for å åpne fjellet!" data-en="Finish Word Forest and Number Beach to open the mountain!">Fullfør Språkskogen og Tallstranda for å åpne fjellet!</span>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<!-- ============ SPILLSKJERM ============ -->
+<div class="overlay" id="playOverlay" role="dialog" aria-modal="true">
+  <div class="play-card">
+    <div class="play-top">
+      <h2 id="playTitle">Første lyd</h2>
+      <button class="play-close" id="playClose" aria-label="Lukk">×</button>
+    </div>
+    <div class="q-dots" id="qDots"></div>
+    <div class="prompt-box">
+      <p class="p-say" id="pSay"></p>
+      <div class="p-big" id="pBig"></div>
+    </div>
+    <div class="answers" id="answers"></div>
+    <p class="cheer" id="cheer"></p>
+  </div>
+</div>
+
+<!-- ============ NIVÅ FULLFØRT ============ -->
+<div class="overlay" id="winOverlay" role="dialog" aria-modal="true">
+  <div class="win-card">
+    <div class="w-big" id="winEmoji">🎉</div>
+    <h2 id="winTitle">Hurra!</h2>
+    <p id="winText"></p>
+    <div class="w-loot" id="winLoot"></div>
+    <button class="big-btn" id="winBtn">Videre!</button>
+  </div>
+</div>
+
+<footer>
+  <span data-no="En del av" data-en="Part of">En del av</span>
+  <a href="/mia-og-teo">Mia &amp; Teo, Lek &amp; Lær</a> · Little Montessori Explorers 💗
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ============ SPRÅK ============ */
+  var STR = {
+    no: {
+      firstSoundSay: 'Hvilket bilde begynner med lyden …',
+      findWordSay: 'Hvilket ord passer til bildet?',
+      rhymeSay: 'Hva rimer på …',
+      countSay: 'Hvor mange ser du?',
+      plusSay: 'Hvor mange blir det til sammen?',
+      minusSay: 'Hvor mange er igjen?',
+      seqSay: 'Hvilket tall mangler i rekka?',
+      good: ['Riktig! 🌟', 'Supert! 🎉', 'Wow, så flink! 💪', 'Ja, det stemmer! 🥳', 'Kjempebra! ✨'],
+      oops: ['Nesten! Prøv igjen 💗', 'Du klarer det, prøv en gang til!', 'Prøv igjen, du er på sporet!'],
+      levelDone: 'Nivå fullført!',
+      newFriendTitle: 'Ny venn!',
+      newFriendText: 'ble med på laget ditt. Se vennesamlingen din!',
+      winText: 'Du klarte alle oppgavene på',
+      again: 'Videre!',
+      taskDoneTitle: 'Oppgave løst!',
+      titles: { s1: 'Første lyd', s2: 'Finn ordet', s3: 'Rimord', m1: 'Telle', m2: 'Pluss', m3: 'Tall-rekka', r1: 'Minus', r2: 'Lydjakt', r3: 'Stormiks' },
+      docTitle: 'Mia & Teos Oppdagerøy — Lek & Lær | Little Montessori Explorers'
+    },
+    en: {
+      firstSoundSay: 'Which picture starts with the sound …',
+      findWordSay: 'Which word matches the picture?',
+      rhymeSay: 'What rhymes with …',
+      countSay: 'How many can you see?',
+      plusSay: 'How many are there altogether?',
+      minusSay: 'How many are left?',
+      seqSay: 'Which number is missing?',
+      good: ['Correct! 🌟', 'Super! 🎉', 'Wow, well done! 💪', 'Yes, that is right! 🥳', 'Great job! ✨'],
+      oops: ['Almost! Try again 💗', 'You can do it, try once more!', 'Try again, you are so close!'],
+      levelDone: 'Level complete!',
+      newFriendTitle: 'New friend!',
+      newFriendText: 'joined your team. Check your friend collection!',
+      winText: 'You finished every task in',
+      again: 'Continue!',
+      taskDoneTitle: 'Task complete!',
+      titles: { s1: 'First sound', s2: 'Find the word', s3: 'Rhyme time', m1: 'Counting', m2: 'Adding', m3: 'Number line', r1: 'Take away', r2: 'Sound hunt', r3: 'Super mix' },
+      docTitle: "Mia & Teo's Explorer Island — Play & Learn | Little Montessori Explorers"
+    }
+  };
+
+  /* ============ ORDBANK (emoji + norsk + engelsk) ============ */
+  var WORDS = [
+    { e: '🌞', no: 'sol', en: 'sun' },       { e: '🐱', no: 'katt', en: 'cat' },
+    { e: '🐶', no: 'hund', en: 'dog' },      { e: '🍎', no: 'eple', en: 'apple' },
+    { e: '🐟', no: 'fisk', en: 'fish' },     { e: '🏠', no: 'hus', en: 'house' },
+    { e: '🌸', no: 'blomst', en: 'flower' }, { e: '🚗', no: 'bil', en: 'car' },
+    { e: '📖', no: 'bok', en: 'book' },      { e: '🐭', no: 'mus', en: 'mouse' },
+    { e: '🦆', no: 'and', en: 'duck' },      { e: '🥚', no: 'egg', en: 'egg' },
+    { e: '🍌', no: 'banan', en: 'banana' },  { e: '🌙', no: 'måne', en: 'moon' },
+    { e: '⭐', no: 'stjerne', en: 'star' },  { e: '🐘', no: 'elefant', en: 'elephant' },
+    { e: '🦁', no: 'løve', en: 'lion' },     { e: '🌳', no: 'tre', en: 'tree' },
+    { e: '🐸', no: 'frosk', en: 'frog' },    { e: '🧦', no: 'sokk', en: 'sock' },
+    { e: '🎈', no: 'ballong', en: 'balloon' },{ e: '⚽', no: 'ball', en: 'ball' },
+    { e: '🐮', no: 'ku', en: 'cow' },        { e: '🐴', no: 'hest', en: 'horse' },
+    { e: '🧀', no: 'ost', en: 'cheese' },    { e: '🐝', no: 'bie', en: 'bee' },
+    { e: '🦊', no: 'rev', en: 'fox' },       { e: '🐷', no: 'gris', en: 'pig' },
+    { e: '🍦', no: 'is', en: 'ice cream' },  { e: '🎩', no: 'hatt', en: 'hat' }
+  ];
+
+  var RHYMES = {
+    no: [
+      { q: { w: 'katt', e: '🐱' }, a: { w: 'hatt', e: '🎩' } },
+      { q: { w: 'mus', e: '🐭' },  a: { w: 'hus', e: '🏠' } },
+      { q: { w: 'bil', e: '🚗' },  a: { w: 'pil', e: '🏹' } },
+      { q: { w: 'gris', e: '🐷' }, a: { w: 'is', e: '🍦' } },
+      { q: { w: 'sol', e: '🌞' },  a: { w: 'stol', e: '🪑' } },
+      { q: { w: 'egg', e: '🥚' },  a: { w: 'vegg', e: '🧱' } },
+      { q: { w: 'due', e: '🕊️' }, a: { w: 'lue', e: '🧢' } },
+      { q: { w: 'and', e: '🦆' },  a: { w: 'sand', e: '🏖️' } }
+    ],
+    en: [
+      { q: { w: 'cat', e: '🐱' },   a: { w: 'hat', e: '🎩' } },
+      { q: { w: 'mouse', e: '🐭' }, a: { w: 'house', e: '🏠' } },
+      { q: { w: 'star', e: '⭐' },  a: { w: 'car', e: '🚗' } },
+      { q: { w: 'frog', e: '🐸' },  a: { w: 'dog', e: '🐶' } },
+      { q: { w: 'bee', e: '🐝' },   a: { w: 'tree', e: '🌳' } },
+      { q: { w: 'cake', e: '🎂' },  a: { w: 'snake', e: '🐍' } },
+      { q: { w: 'moon', e: '🌙' },  a: { w: 'spoon', e: '🥄' } },
+      { q: { w: 'goat', e: '🐐' },  a: { w: 'boat', e: '⛵' } }
+    ]
+  };
+
+  var COUNT_EMOJI = ['🍎', '🐚', '⭐', '🌸', '🐠', '🦋', '🍓', '🐢'];
+
+  /* ============ VENNER (belønning per nivå) ============ */
+  var FRIENDS = {
+    s1: { e: '🦊', no: 'Fia Rev', en: 'Fia the Fox' },
+    s2: { e: '🦉', no: 'Ugla Ulla', en: 'Ulla the Owl' },
+    s3: { e: '🦜', no: 'Rio Papegøye', en: 'Rio the Parrot' },
+    m1: { e: '🐢', no: 'Tobias Skilpadde', en: 'Toby the Turtle' },
+    m2: { e: '🐬', no: 'Delfi', en: 'Delfi the Dolphin' },
+    m3: { e: '🐨', no: 'Koko Koala', en: 'Koko the Koala' },
+    r1: { e: '🦄', no: 'Stjerna Enhjørning', en: 'Stella the Unicorn' },
+    r2: { e: '🐙', no: 'Otto Blekksprut', en: 'Otto the Octopus' },
+    r3: { e: '🐉', no: 'Draco Drage', en: 'Draco the Dragon' }
+  };
+  var FRIEND_ORDER = ['s1', 's2', 's3', 'm1', 'm2', 'm3', 'r1', 'r2', 'r3'];
+
+  var QUESTIONS_PER_LEVEL = 5;
+  var GEMS_PER_LEVEL = 5;
+
+  /* ============ TILSTAND ============ */
+  var SAVE_KEY = 'lme_oppdageroya_v1';
+  function today() {
+    var d = new Date();
+    return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+  }
+  function defaultState() {
+    return {
+      lang: 'no', stars: 0, gems: 0, sound: true,
+      done: {},                      /* levelId -> beste antall stjerner (1-5) */
+      friends: [],                   /* levelId-er */
+      day: today(),
+      dayAnswers: 0, dayLevels: 0, dayStars: 0,
+      dayRewarded: {}                /* taskId -> true */
+    };
+  }
+  var state = defaultState();
+  try {
+    var raw = localStorage.getItem(SAVE_KEY);
+    if (raw) {
+      var loaded = JSON.parse(raw);
+      for (var k in loaded) state[k] = loaded[k];
+    }
+  } catch (e) { /* privat modus el.l., spillet virker uten lagring */ }
+  if (state.day !== today()) {
+    state.day = today();
+    state.dayAnswers = 0; state.dayLevels = 0; state.dayStars = 0; state.dayRewarded = {};
+  }
+  function save() {
+    try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch (e) { }
+  }
+
+  /* ============ LYD (WebAudio, ingen filer) ============ */
+  var audioCtx = null;
+  function tone(freq, start, dur, type, vol) {
+    var o = audioCtx.createOscillator();
+    var g = audioCtx.createGain();
+    o.type = type || 'sine'; o.frequency.value = freq;
+    g.gain.setValueAtTime(0, audioCtx.currentTime + start);
+    g.gain.linearRampToValueAtTime(vol || 0.18, audioCtx.currentTime + start + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + start + dur);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(audioCtx.currentTime + start); o.stop(audioCtx.currentTime + start + dur + 0.05);
+  }
+  function play(kind) {
+    if (!state.sound) return;
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      if (kind === 'good') { tone(523, 0, .15); tone(659, .1, .15); tone(784, .2, .25); }
+      else if (kind === 'oops') { tone(330, 0, .2, 'triangle', .1); tone(262, .15, .3, 'triangle', .1); }
+      else if (kind === 'click') { tone(440, 0, .08, 'triangle', .08); }
+      else if (kind === 'win') { tone(523, 0, .15); tone(659, .12, .15); tone(784, .24, .15); tone(1047, .38, .4); }
+    } catch (e) { }
+  }
+
+  /* ============ HJELPERE ============ */
+  function $(id) { return document.getElementById(id); }
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  function word(item) { return item[state.lang]; }
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+  function bump(el) {
+    el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump');
+  }
+
+  /* ============ OPPGAVE-GENERATORER ============ */
+  /* Hver returnerer { say, big, bigIsEmoji, options: [{label, em, ok}] } */
+
+  function genFirstSound(optCount) {
+    var n = optCount || 3;
+    var target = pick(WORDS);
+    var letter = word(target).charAt(0).toUpperCase();
+    var wrongs = shuffle(WORDS.filter(function (w) {
+      return word(w).charAt(0).toUpperCase() !== letter;
+    })).slice(0, n - 1);
+    var options = shuffle([{ label: '', em: target.e, ok: true }].concat(
+      wrongs.map(function (w) { return { label: '', em: w.e, ok: false }; })
+    ));
+    return { say: STR[state.lang].firstSoundSay, big: letter, options: options };
+  }
+
+  function genFindWord() {
+    var target = pick(WORDS);
+    var wrongs = shuffle(WORDS.filter(function (w) { return w !== target; })).slice(0, 2);
+    var options = shuffle([{ label: cap(word(target)), em: '', ok: true }].concat(
+      wrongs.map(function (w) { return { label: cap(word(w)), em: '', ok: false }; })
+    ));
+    return { say: STR[state.lang].findWordSay, big: target.e, bigIsEmoji: true, options: options };
+  }
+
+  function genRhyme() {
+    var bank = RHYMES[state.lang];
+    var item = pick(bank);
+    var others = shuffle(bank.filter(function (r) { return r !== item; })).slice(0, 2);
+    var options = shuffle([{ label: cap(item.a.w), em: item.a.e, ok: true }].concat(
+      others.map(function (r) { return { label: cap(r.a.w), em: r.a.e, ok: false }; })
+    ));
+    return { say: STR[state.lang].rhymeSay, big: cap(item.q.w) + ' ' + item.q.e, options: options };
+  }
+
+  function numberOptions(correct, min, max) {
+    var opts = [correct];
+    while (opts.length < 3) {
+      var v = Math.max(min, Math.min(max, correct + (Math.floor(Math.random() * 5) - 2)));
+      if (opts.indexOf(v) === -1) opts.push(v);
+    }
+    return shuffle(opts).map(function (v) {
+      return { label: String(v), em: '', ok: v === correct };
+    });
+  }
+
+  function genCount() {
+    var n = 1 + Math.floor(Math.random() * 9);       /* 1-9 */
+    var em = pick(COUNT_EMOJI);
+    var row = new Array(n + 1).join('x').split('').map(function () { return em; }).join(' ');
+    return { say: STR[state.lang].countSay, big: row, bigIsEmoji: true, options: numberOptions(n, 1, 10) };
+  }
+
+  function genPlus() {
+    var a = 1 + Math.floor(Math.random() * 5);
+    var b = 1 + Math.floor(Math.random() * (9 - a));
+    var em = pick(COUNT_EMOJI);
+    var g1 = new Array(a + 1).join('x').split('').map(function () { return em; }).join('');
+    var g2 = new Array(b + 1).join('x').split('').map(function () { return em; }).join('');
+    return {
+      say: STR[state.lang].plusSay,
+      big: g1 + ' + ' + g2, bigIsEmoji: true,
+      options: numberOptions(a + b, 1, 10)
+    };
+  }
+
+  function genMinus() {
+    var a = 3 + Math.floor(Math.random() * 7);       /* 3-9 */
+    var b = 1 + Math.floor(Math.random() * (a - 1)); /* 1..a-1 */
+    return {
+      say: STR[state.lang].minusSay,
+      big: a + ' − ' + b + ' = ?',
+      options: numberOptions(a - b, 0, 10)
+    };
+  }
+
+  function genSequence() {
+    var start = 1 + Math.floor(Math.random() * 6);   /* 1-6 */
+    var missIdx = 1 + Math.floor(Math.random() * 2); /* posisjon 1 eller 2 av 4 */
+    var parts = [];
+    for (var i = 0; i < 4; i++) parts.push(i === missIdx ? '__' : String(start + i));
+    return {
+      say: STR[state.lang].seqSay,
+      big: parts.join('  '),
+      options: numberOptions(start + missIdx, 1, 12)
+    };
+  }
+
+  function genSoundHunt() { return genFirstSound(6); }
+
+  function genSuperMix() {
+    var gens = [genFirstSound, genFindWord, genRhyme, genPlus, genMinus, genSequence];
+    return pick(gens)();
+  }
+
+  var LEVELS = {
+    s1: genFirstSound, s2: genFindWord, s3: genRhyme,
+    m1: genCount, m2: genPlus, m3: genSequence,
+    r1: genMinus, r2: genSoundHunt, r3: genSuperMix
+  };
+  var LEVEL_ORDER = { s: ['s1', 's2', 's3'], m: ['m1', 'm2', 'm3'], r: ['r1', 'r2', 'r3'] };
+
+  /* ============ HUD & KART ============ */
+  function totalDone() { return Object.keys(state.done).length; }
+  function playerLevel() { return 1 + totalDone(); }
+
+  function refreshHud() {
+    $('hudStars').textContent = state.stars;
+    $('hudGems').textContent = state.gems;
+    $('hudLevel').textContent = playerLevel();
+    var starsInLevel = state.dayStars % 10;
+    $('hudLevelBar').style.width = Math.min(100, (totalDone() / 9) * 100 + (starsInLevel * 0)) + '%';
+    $('soundBtn').textContent = state.sound ? '🔊' : '🔇';
+  }
+
+  function rainbowOpen() {
+    return LEVEL_ORDER.s.concat(LEVEL_ORDER.m).every(function (id) { return state.done[id]; });
+  }
+
+  function levelUnlocked(id) {
+    var group = LEVEL_ORDER[id.charAt(0)];
+    if (id.charAt(0) === 'r' && !rainbowOpen()) return false;
+    var idx = group.indexOf(id);
+    if (idx === 0) return true;
+    return !!state.done[group[idx - 1]];
+  }
+
+  function refreshMap() {
+    document.querySelectorAll('.level-btn').forEach(function (btn) {
+      var id = btn.getAttribute('data-level');
+      var starsEl = btn.querySelector('.lv-stars');
+      var unlocked = levelUnlocked(id);
+      btn.disabled = !unlocked;
+      if (state.done[id]) {
+        var n = state.done[id];
+        starsEl.textContent = '⭐'.repeat(n) + '☆'.repeat(Math.max(0, 5 - n));
+      } else {
+        starsEl.textContent = unlocked ? '🔓' : '🔒';
+      }
+    });
+    $('rainbowLock').style.display = rainbowOpen() ? 'none' : '';
+    $('rainbowLevels').style.opacity = rainbowOpen() ? '1' : '.55';
+  }
+
+  function refreshFriends(newId) {
+    var row = $('friendsRow');
+    row.innerHTML = '';
+    FRIEND_ORDER.forEach(function (id) {
+      var slot = document.createElement('div');
+      slot.className = 'friend-slot';
+      var has = state.friends.indexOf(id) !== -1;
+      if (!has) slot.classList.add('locked');
+      if (id === newId) slot.classList.add('new');
+      slot.textContent = FRIENDS[id].e;
+      slot.title = has ? FRIENDS[id][state.lang] : '???';
+      row.appendChild(slot);
+    });
+    $('friendCount').textContent = state.friends.length + '/9';
+  }
+
+  function refreshTasks() {
+    var defs = [
+      { el: 'taskAnswers', now: Math.min(state.dayAnswers, 5), goal: 5, key: 'answers' },
+      { el: 'taskLevel', now: Math.min(state.dayLevels, 1), goal: 1, key: 'level' },
+      { el: 'taskStars', now: Math.min(state.dayStars, 10), goal: 10, key: 'stars' }
+    ];
+    defs.forEach(function (d) {
+      var el = $(d.el);
+      el.querySelector('.t-now').textContent = d.now;
+      var done = d.now >= d.goal;
+      el.classList.toggle('done', done);
+      if (done && !state.dayRewarded[d.key]) {
+        state.dayRewarded[d.key] = true;
+        state.gems += 10;
+        bump($('hudGems').parentNode);
+        play('win');
+      }
+    });
+  }
+
+  function refreshAll(newFriend) {
+    refreshHud(); refreshMap(); refreshFriends(newFriend); refreshTasks(); save();
+  }
+
+  /* ============ EFFEKTER ============ */
+  function flyStar(fromEl) {
+    var star = document.createElement('div');
+    star.className = 'fly-star'; star.textContent = '⭐';
+    var r = fromEl.getBoundingClientRect();
+    star.style.left = (r.left + r.width / 2) + 'px';
+    star.style.top = (r.top + r.height / 2) + 'px';
+    document.body.appendChild(star);
+    var target = $('hudStars').getBoundingClientRect();
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        star.style.left = target.left + 'px';
+        star.style.top = target.top + 'px';
+        star.style.transform = 'scale(.5)';
+        star.style.opacity = '.4';
+      });
+    });
+    setTimeout(function () {
+      star.remove();
+      bump($('hudStars').parentNode);
+    }, 950);
+  }
+
+  function confetti() {
+    var bits = ['🎉', '⭐', '🌸', '💎', '✨', '🎈'];
+    for (var i = 0; i < 26; i++) {
+      var b = document.createElement('div');
+      b.className = 'confetti-bit';
+      b.textContent = pick(bits);
+      b.style.left = Math.random() * 100 + 'vw';
+      b.style.animationDuration = (1.8 + Math.random() * 1.6) + 's';
+      b.style.animationDelay = (Math.random() * .5) + 's';
+      document.body.appendChild(b);
+      setTimeout(function (el) { return function () { el.remove(); }; }(b), 4200);
+    }
+  }
+
+  /* ============ SPILLFLYT ============ */
+  var run = null; /* { levelId, qIndex, stars, locked } */
+
+  function openLevel(id) {
+    play('click');
+    run = { levelId: id, qIndex: 0, stars: 0, locked: false };
+    $('playTitle').textContent = STR[state.lang].titles[id];
+    var dots = $('qDots');
+    dots.innerHTML = '';
+    for (var i = 0; i < QUESTIONS_PER_LEVEL; i++) {
+      var d = document.createElement('span');
+      d.className = 'q-dot'; dots.appendChild(d);
+    }
+    $('playOverlay').classList.add('open');
+    nextQuestion();
+  }
+
+  function nextQuestion() {
+    var q = LEVELS[run.levelId]();
+    run.current = q;
+    run.firstTry = true;
+    run.locked = false;
+    document.querySelectorAll('.q-dot').forEach(function (d, i) {
+      d.classList.toggle('now', i === run.qIndex);
+    });
+    $('pSay').textContent = q.say;
+    var big = $('pBig');
+    big.textContent = q.big;
+    big.classList.toggle('emojis', !!q.bigIsEmoji);
+    $('cheer').textContent = ''; $('cheer').className = 'cheer';
+    var box = $('answers');
+    box.innerHTML = '';
+    box.style.gridTemplateColumns = q.options.length > 4 ? 'repeat(3, 1fr)' : '';
+    q.options.forEach(function (opt) {
+      var btn = document.createElement('button');
+      btn.className = 'ans-btn';
+      btn.innerHTML = (opt.em ? '<span class="a-em">' + opt.em + '</span>' : '') +
+        (opt.label ? '<span>' + opt.label + '</span>' : '');
+      btn.addEventListener('click', function () { answer(btn, opt.ok); });
+      box.appendChild(btn);
+    });
+  }
+
+  function answer(btn, ok) {
+    if (run.locked) return;
+    var cheer = $('cheer');
+    if (ok) {
+      run.locked = true;
+      btn.classList.add('correct');
+      document.querySelectorAll('.ans-btn').forEach(function (b) { b.disabled = true; });
+      play('good');
+      cheer.textContent = pick(STR[state.lang].good);
+      cheer.className = 'cheer good';
+      state.dayAnswers += 1;
+      if (run.firstTry) {
+        run.stars += 1;
+        state.stars += 1;
+        state.dayStars += 1;
+        flyStar(btn);
+      }
+      document.querySelectorAll('.q-dot')[run.qIndex].classList.add('hit');
+      refreshAll();
+      setTimeout(function () {
+        run.qIndex += 1;
+        if (run.qIndex >= QUESTIONS_PER_LEVEL) finishLevel();
+        else nextQuestion();
+      }, 1100);
+    } else {
+      btn.classList.add('wrong');
+      btn.disabled = true;
+      run.firstTry = false;
+      play('oops');
+      cheer.textContent = pick(STR[state.lang].oops);
+      cheer.className = 'cheer oops';
+    }
+  }
+
+  function finishLevel() {
+    $('playOverlay').classList.remove('open');
+    var id = run.levelId;
+    var isNewFriend = state.friends.indexOf(id) === -1;
+    var prev = state.done[id] || 0;
+    state.done[id] = Math.max(prev, Math.max(1, run.stars));
+    state.gems += GEMS_PER_LEVEL;
+    state.dayLevels += 1;
+    if (isNewFriend) state.friends.push(id);
+    play('win');
+    confetti();
+
+    var f = FRIENDS[id];
+    if (isNewFriend) {
+      $('winEmoji').textContent = f.e;
+      $('winTitle').textContent = STR[state.lang].newFriendTitle;
+      $('winText').textContent = f[state.lang] + ' ' + STR[state.lang].newFriendText;
+    } else {
+      $('winEmoji').textContent = '🎉';
+      $('winTitle').textContent = STR[state.lang].levelDone;
+      $('winText').textContent = STR[state.lang].winText + ' "' + STR[state.lang].titles[id] + '"!';
+    }
+    $('winLoot').innerHTML =
+      '<span>⭐ +' + run.stars + '</span><span>💎 +' + GEMS_PER_LEVEL + '</span>';
+    $('winBtn').textContent = STR[state.lang].again;
+    $('winOverlay').classList.add('open');
+    refreshAll(isNewFriend ? id : null);
+  }
+
+  /* ============ SPRÅKBYTTE ============ */
+  var toggle = $('langToggle');
+  function switchLanguage(lang) {
+    state.lang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      var text = el.getAttribute('data-' + lang);
+      if (text.indexOf('<') !== -1) el.innerHTML = text;
+      else el.textContent = text;
+    });
+    toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    document.title = STR[lang].docTitle;
+    refreshAll();
+  }
+  toggle.addEventListener('click', function () {
+    play('click');
+    switchLanguage(state.lang === 'no' ? 'en' : 'no');
+  });
+
+  /* ============ KNAPPER ============ */
+  document.querySelectorAll('.level-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      openLevel(btn.getAttribute('data-level'));
+    });
+  });
+  $('playClose').addEventListener('click', function () {
+    $('playOverlay').classList.remove('open');
+  });
+  $('winBtn').addEventListener('click', function () {
+    play('click');
+    $('winOverlay').classList.remove('open');
+  });
+  $('soundBtn').addEventListener('click', function () {
+    state.sound = !state.sound;
+    refreshAll();
+    play('click');
+  });
+
+  /* ============ START ============ */
+  switchLanguage(state.lang === 'en' ? 'en' : 'no');
+})();
+</script>
+
+</body>
+</html>
