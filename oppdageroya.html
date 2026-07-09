@@ -210,73 +210,32 @@
     50%     { transform: translate(-50%, -50%) scale(1.25); }
   }
 
-  /* ============ SPILLEREN (chibi-figur: fotoansikt + tegnet kropp) ============ */
+  /* ============ SPILLEREN (Mia og Teo i helfigur) ============ */
   #player {
-    position: absolute; z-index: 20; transform: translate(-50%, -94%);
+    position: absolute; z-index: 20; transform: translate(-50%, -97%);
     display: flex; flex-direction: column; align-items: center;
     pointer-events: none;
   }
   #player .p-fig {
-    display: flex; flex-direction: column; align-items: center;
     transform: scaleX(var(--dir, 1));
   }
-  #player .p-face {
-    width: 56px; height: 56px; border-radius: 50%; z-index: 2;
-    border: 3px solid #fff; box-shadow: 0 8px 16px rgba(20, 60, 90, .3);
-    background-image: url('images/mia-og-teo.jpg');
-    background-size: 300%;
-    background-position: 24% 30%;
+  #player .p-sprite {
+    display: block; height: 118px; width: auto;
+    filter: drop-shadow(0 10px 12px rgba(20, 60, 30, .3));
+    transform-origin: 50% 92%;
   }
-  #player.teo .p-face { background-position: 76% 28%; }
-  /* kropp med 3D-lys: lyset kommer fra oppe til venstre */
-  #player .p-torso {
-    width: 42px; height: 32px; margin-top: -10px; z-index: 1;
-    background:
-      radial-gradient(ellipse 60% 45% at 32% 18%, rgba(255,255,255,.55), rgba(255,255,255,0) 60%),
-      linear-gradient(115deg, #ffb1cb 0%, #ee6d9f 45%, #b83a6e 100%);
-    clip-path: polygon(26% 0, 74% 0, 100% 100%, 0 100%);
-    border-radius: 4px;
-  }
-  #player.teo .p-torso {
-    width: 34px; height: 30px; clip-path: none; border-radius: 10px 10px 4px 4px;
-    background:
-      radial-gradient(ellipse 65% 45% at 32% 16%, rgba(255,255,255,.5), rgba(255,255,255,0) 60%),
-      linear-gradient(115deg, rgba(255,255,255,0) 40%, rgba(120,80,20,.18) 100%),
-      repeating-linear-gradient(180deg, #ffd75c 0 6px, #fff8e4 6px 11px);
-    box-shadow: inset 0 -10px 0 #3b6fb5, inset -3px -10px 0 #2c568c; /* blå shorts med skygge */
-  }
-  #player .p-legs { display: flex; gap: 9px; margin-top: -1px; z-index: 0; }
-  #player .p-leg {
-    width: 9px; height: 15px; border-radius: 4px;
-    background: linear-gradient(100deg, #f9d3ad 20%, #e2a877 90%);
-    position: relative; transform-origin: top center;
-  }
-  #player .p-leg::after {
-    content: ''; position: absolute; bottom: -5px; left: -2px;
-    width: 13px; height: 7px; border-radius: 5px 6px 4px 4px;
-    background: linear-gradient(115deg, #ea7b8e 10%, #c2455e 80%);
-    box-shadow: inset 0 2px 2px rgba(255,255,255,.4);
-  }
-  #player.teo .p-leg::after {
-    background: linear-gradient(115deg, #96613a 10%, #6b3f22 80%);
-    box-shadow: inset 0 2px 2px rgba(255,255,255,.3);
-  }
-  #player.walking .p-fig { animation: hop .38s ease-in-out infinite; }
-  #player.walking .p-leg:first-child { animation: legSwing .38s ease-in-out infinite; }
-  #player.walking .p-leg:last-child { animation: legSwing .38s ease-in-out infinite reverse; }
-  @keyframes hop {
-    0%,100% { transform: scaleX(var(--dir, 1)) translateY(0); }
-    50%     { transform: scaleX(var(--dir, 1)) translateY(-7px); }
-  }
-  @keyframes legSwing {
-    0%   { transform: rotate(24deg); }
-    50%  { transform: rotate(-24deg); }
-    100% { transform: rotate(24deg); }
+  #player.walking .p-sprite { animation: stride .42s ease-in-out infinite; }
+  @keyframes stride {
+    0%   { transform: rotate(-4deg) translateY(0); }
+    25%  { transform: rotate(0deg) translateY(-7px); }
+    50%  { transform: rotate(4deg) translateY(0); }
+    75%  { transform: rotate(0deg) translateY(-7px); }
+    100% { transform: rotate(-4deg) translateY(0); }
   }
   #player .p-shadow {
-    width: 42px; height: 11px; border-radius: 50%;
+    width: 52px; height: 12px; border-radius: 50%;
     background: radial-gradient(ellipse, rgba(20, 60, 30, .35), rgba(20, 60, 30, .05) 70%);
-    margin-top: 4px;
+    margin-top: -4px;
   }
   .walk-target {
     position: absolute; transform: translate(-50%, -50%); z-index: 3;
@@ -1118,13 +1077,13 @@
   var playerEl = document.createElement('div');
   playerEl.id = 'player';
   playerEl.innerHTML =
-    '<div class="p-fig">' +
-      '<div class="p-face"></div>' +
-      '<div class="p-torso"></div>' +
-      '<div class="p-legs"><span class="p-leg"></span><span class="p-leg"></span></div>' +
-    '</div>' +
+    '<div class="p-fig"><img class="p-sprite" src="images/spill/mia-figur.webp" alt=""></div>' +
     '<div class="p-shadow"></div>';
   world.appendChild(playerEl);
+  function refreshSprite() {
+    playerEl.querySelector('.p-sprite').src =
+      state.hero === 'teo' ? 'images/spill/teo-figur.webp' : 'images/spill/mia-figur.webp';
+  }
   var sayEl = document.createElement('div');
   sayEl.id = 'sayBubble';
   world.appendChild(sayEl);
@@ -1211,7 +1170,7 @@
     }
     playerEl.style.left = px + 'px'; playerEl.style.top = py + 'px';
     playerEl.style.zIndex = 20;
-    sayEl.style.left = px + 'px'; sayEl.style.top = (py - 92) + 'px';
+    sayEl.style.left = px + 'px'; sayEl.style.top = (py - 132) + 'px';
     collectPickups();
     var cam = layoutCamera();
     updateGuide(cam);
@@ -1371,6 +1330,7 @@
     $('soundBtn').textContent = state.sound ? '🔊' : '🔇';
     $('musicBtn').textContent = state.music ? '🎵' : '🎵✖';
     $('musicBtn').style.opacity = state.music ? '1' : '.55';
+    refreshSprite();
     playerEl.classList.toggle('teo', state.hero === 'teo');
     document.querySelector('.hud-avatar').classList.toggle('teo', state.hero === 'teo');
   }
