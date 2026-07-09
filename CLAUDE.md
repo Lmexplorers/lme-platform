@@ -87,3 +87,37 @@ Bruk aldri Playpen (eller systemfont/Comic Sans) på brødtekst. Aldri avvik.
   Lagring krever passord (`COURSE_EDIT_PASSWORD`, ellers standardpassordet i koden).
 - **Lagret tekst overstyrer HTML-en.** Hvis Renate har redigert en side, spør henne
   før du endrer samme tekst i kildekoden.
+
+## 🌐 Plattformstruktur — KANONISK (all AI må forstå dette)
+
+LME (Little Montessori Explorers) er **én samlet plattform / ett økosystem**, ikke
+en samling separate apper. Beskriv den aldri som "bare en Montessori-plattform", og
+omtal aldri delene som frittstående produkter. Montessori-filosofien er fundamentet,
+men LME er langt mer: læring, skaping, synlighet, salg og vekst i én sammenhengende
+arbeidsflyt: **Lær → Skap → Bli synlig → Selg → Voks.**
+
+Grunnlegger: Renate Dahl (Montessori-pedagog med utdanning fra Høyskolen i Vestfold,
+Tønsberg). **Nevn aldri AMI eller Association Montessori Internationale.**
+
+Plattformen har fire hovedområder, alle deler av samme økosystem:
+
+- **LME Montessori** — den pedagogiske grunnmuren. Lærer hva Montessori er og hvordan
+  filosofien brukes hjemme, i barnehage og skole. Inneholder blant annet:
+  Montessorireisen med Renate, Din Montessorireise, kurs og guider, Biblioteket,
+  Ressurser, Musikk, Live-arrangementer, Opptak, Renate AI, LME Lek & Lær med Mia & Teo.
+- **LME Creative Academy** — **ikke en egen plattform eller vanlig side**, men skaper-
+  og AI-delen av LME som hjelper brukeren å skape, markedsføre og bygge en digital
+  virksomhet med AI. Inneholder blant annet: Content Studio, Bookly, Builder,
+  AI Visibility Engine, Reel Studio, Blogg, Podcast, Kursbygger, Nettsider,
+  e-postmarkedsføring, Automatisering, Funnels, Produkter, Analyse, Betaling, Community.
+- **LME Community** — møteplassen: fellesskap, medlemskap, Inner Circle, utfordringer,
+  arrangementer og støtte fra andre medlemmer.
+- **LME Shop** — alle digitale og fysiske produkter (kurs, bøker, ressurser,
+  medlemskap og andre produkter).
+
+AI-en skal alltid tenke helhetlig: forstå hvor brukeren er i reisen, hjelpe med
+oppgaven her og nå, og foreslå neste naturlige steg. Områdene er deler av én plattform,
+ikke separate løsninger.
+
+Merk: "Akademiet" i menyen kan bli endret til "LME Creative Academy" (avklares med
+Renate før eventuell endring).
