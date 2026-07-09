@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Mia &amp; Teos Oppdagerøy — Lek &amp; Lær | Little Montessori Explorers</title>
 <meta name="description" content="Et utforskningsspill for barn: gå rundt på Mia og Teos magiske øy, redd dyrevenner og lær språk og matte mens du leker.">
+<meta name="theme-color" content="#45b7e8">
+<link rel="icon" href="images/app/icon-192.png">
+<link rel="apple-touch-icon" href="images/app/apple-touch-icon.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -440,12 +443,21 @@
           <stop offset="100%" stop-color="#a988cf"/>
         </radialGradient>
       </defs>
-      <!-- skumring rundt øya -->
-      <ellipse cx="1000" cy="760" rx="960" ry="615" fill="rgba(255,255,255,.25)"/>
+      <!-- bølgeringer rundt øya -->
+      <ellipse cx="1000" cy="760" rx="1010" ry="655" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="14"/>
+      <ellipse cx="1000" cy="760" rx="985" ry="637" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="8"/>
+      <!-- grunt vann rundt øya -->
+      <ellipse cx="1000" cy="760" rx="960" ry="615" fill="rgba(173, 232, 250, .5)"/>
       <!-- sand -->
       <ellipse cx="1000" cy="760" rx="925" ry="585" fill="#f2d98b"/>
+      <ellipse cx="1000" cy="765" rx="905" ry="565" fill="#f7e2a4"/>
       <!-- gress -->
       <ellipse cx="980" cy="740" rx="855" ry="520" fill="url(#grassGrad)"/>
+      <!-- myke gressflekker for dybde -->
+      <ellipse cx="620" cy="640" rx="220" ry="120" fill="rgba(92, 185, 68, .28)"/>
+      <ellipse cx="880" cy="980" rx="260" ry="130" fill="rgba(92, 185, 68, .22)"/>
+      <ellipse cx="1250" cy="640" rx="230" ry="120" fill="rgba(158, 222, 106, .35)"/>
+      <ellipse cx="450" cy="900" rx="180" ry="100" fill="rgba(158, 222, 106, .3)"/>
       <!-- strand (sør-øst) -->
       <ellipse cx="1340" cy="1060" rx="450" ry="270" fill="url(#beachGrad)"/>
       <!-- fjell (nord-øst) -->
@@ -472,6 +484,7 @@
   <div class="hud-pill">⭐ <span id="hudStars">0</span></div>
   <div class="hud-pill">💎 <span id="hudGems">0</span></div>
   <div class="hud-pill">🐾 <span id="hudRescued">0</span>/9</div>
+  <div class="hud-pill">📖 <span data-no="Kapittel" data-en="Chapter">Kapittel</span>&nbsp;<span id="hudChapter">1</span></div>
   <div class="hud-spacer"></div>
   <button class="hud-btn" id="soundBtn" aria-label="Lyd av/på">🔊</button>
   <button class="hud-btn" id="langToggle">EN 🌍</button>
@@ -535,6 +548,17 @@
   </div>
 </div>
 
+<!-- ============ KAPITTEL FULLFØRT ============ -->
+<div class="overlay" id="chapterOverlay" role="dialog" aria-modal="true">
+  <div class="win-card">
+    <div class="w-big">🌟</div>
+    <h2 id="chapterTitle">Kapittel fullført!</h2>
+    <p id="chapterText"></p>
+    <div class="w-loot"><span>💎 +50</span></div>
+    <button class="big-btn" id="chapterBtn"></button>
+  </div>
+</div>
+
 <!-- ============ DAGENS MÅL NÅDD ============ -->
 <div class="overlay" id="goalOverlay" role="dialog" aria-modal="true">
   <div class="win-card">
@@ -583,12 +607,19 @@
       good: ['Riktig! 🌟', 'Supert! 🎉', 'Wow, så flink! 💪', 'Ja, det stemmer! 🥳', 'Kjempebra! ✨'],
       oops: ['Nesten! Prøv igjen 💗', 'Du klarer det, prøv en gang til!', 'Prøv igjen, du er på sporet!'],
       helpMe: 'Hjelp!',
+      playMe: 'Lek!',
       chest: 'Skattkiste',
       chestSay: 'Løs oppgaven for å åpne kisten!',
       rescueTitle: 'Hjelp {name}!',
       rescueSay: 'Løs {n} oppgaver, så er {name} fri!',
+      playTitle: 'Lek med {name}!',
       freedTitle: 'Du reddet {name}! 🥳',
       freedText: '{name} er fri og blir vennen din. Nå vandrer {name} rundt på øya!',
+      playedTitle: '{name} hadde det så gøy! 🥳',
+      playedText: 'Dere lekte sammen, og {name} er kjempeglad. Hvem vil du leke med nå?',
+      chapterTitle: 'Kapittel {n} fullført! 🎉',
+      chapterText: 'Du har hjulpet alle dyrene på øya. I neste kapittel vil de leke enda mer, og oppgavene blir litt vanskeligere. Klar?',
+      chapterBtn: 'Start kapittel {n}! 🚀',
       chestTitle: 'Skatten er din!',
       chestText: 'Du åpnet kisten. For en fin skatt!',
       taskDone: 'Oppgave løst! +10 💎',
@@ -610,12 +641,19 @@
       good: ['Correct! 🌟', 'Super! 🎉', 'Wow, well done! 💪', 'Yes, that is right! 🥳', 'Great job! ✨'],
       oops: ['Almost! Try again 💗', 'You can do it, try once more!', 'Try again, you are so close!'],
       helpMe: 'Help!',
+      playMe: 'Play!',
       chest: 'Treasure chest',
       chestSay: 'Solve the task to open the chest!',
       rescueTitle: 'Help {name}!',
       rescueSay: 'Solve {n} tasks and {name} is free!',
+      playTitle: 'Play with {name}!',
       freedTitle: 'You rescued {name}! 🥳',
       freedText: '{name} is free and joins you as a friend. Watch {name} explore the island!',
+      playedTitle: '{name} had so much fun! 🥳',
+      playedText: 'You played together and {name} is so happy. Who do you want to play with next?',
+      chapterTitle: 'Chapter {n} complete! 🎉',
+      chapterText: 'You have helped every animal on the island. In the next chapter they want to play even more, and the tasks get a little trickier. Ready?',
+      chapterBtn: 'Start chapter {n}! 🚀',
       chestTitle: 'The treasure is yours!',
       chestText: 'You opened the chest. What a lovely treasure!',
       taskDone: 'Task complete! +10 💎',
@@ -713,13 +751,14 @@
   }
   var state = {
     lang: 'no', hero: 'mia', stars: 0, gems: 0, sound: true, intro: true,
-    freed: [], chests: {}, picked: [],
+    chapter: 1, freed: [], chests: {}, picked: [],
     day: today(), dayAnswers: 0, dayRescues: 0, dayStars: 0, dayRewarded: {}
   };
   try {
     var raw = localStorage.getItem(SAVE_KEY);
     if (raw) { var l = JSON.parse(raw); for (var k in l) state[k] = l[k]; }
   } catch (e) { }
+  if (!state.chapter || state.chapter < 1) state.chapter = 1;
   if (state.day !== today()) {
     state.day = today();
     state.dayAnswers = 0; state.dayRescues = 0; state.dayStars = 0;
@@ -772,12 +811,17 @@
   function bump(el) { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
 
   /* ============ OPPGAVE-GENERATORER ============ */
+  /* Vanskelighet vokser med kapittel: flere svaralternativer og større tall */
+  function optCount() { return state.chapter >= 2 ? 4 : 3; }
+  function maxNum() { return Math.min(20, 8 + state.chapter * 2); }
+  function tasksPerRescue() { return state.chapter >= 3 ? 4 : 3; }
+
   function genFirstSound() {
     var target = pick(WORDS);
     var letter = word(target).charAt(0).toUpperCase();
     var wrongs = shuffle(WORDS.filter(function (w) {
       return word(w).charAt(0).toUpperCase() !== letter;
-    })).slice(0, 2);
+    })).slice(0, optCount() - 1);
     return {
       say: STR[state.lang].firstSoundSay, big: letter,
       options: shuffle([{ em: target.e, ok: true }].concat(
@@ -786,7 +830,7 @@
   }
   function genFindWord() {
     var target = pick(WORDS);
-    var wrongs = shuffle(WORDS.filter(function (w) { return w !== target; })).slice(0, 2);
+    var wrongs = shuffle(WORDS.filter(function (w) { return w !== target; })).slice(0, optCount() - 1);
     return {
       say: STR[state.lang].findWordSay, big: target.e, bigIsEmoji: true,
       options: shuffle([{ label: cap(word(target)), ok: true }].concat(
@@ -796,7 +840,7 @@
   function genRhyme() {
     var bank = RHYMES[state.lang];
     var item = pick(bank);
-    var others = shuffle(bank.filter(function (r) { return r !== item; })).slice(0, 2);
+    var others = shuffle(bank.filter(function (r) { return r !== item; })).slice(0, optCount() - 1);
     return {
       say: STR[state.lang].rhymeSay, big: cap(item.q.w) + ' ' + item.q.e,
       options: shuffle([{ label: cap(item.a.w), em: item.a.e, ok: true }].concat(
@@ -805,8 +849,8 @@
   }
   function numberOptions(correct, min, max) {
     var opts = [correct];
-    while (opts.length < 3) {
-      var v = Math.max(min, Math.min(max, correct + (Math.floor(Math.random() * 5) - 2)));
+    while (opts.length < optCount()) {
+      var v = Math.max(min, Math.min(max, correct + (Math.floor(Math.random() * 7) - 3)));
       if (opts.indexOf(v) === -1) opts.push(v);
     }
     return shuffle(opts).map(function (v) { return { label: String(v), ok: v === correct }; });
@@ -817,38 +861,47 @@
     return out.join(sep === undefined ? ' ' : sep);
   }
   function genCount() {
-    var n = 1 + Math.floor(Math.random() * 9);
+    var lo = state.chapter >= 2 ? 3 : 1;
+    var n = lo + Math.floor(Math.random() * (10 - lo));
     return {
       say: STR[state.lang].countSay, big: emojiRow(n, pick(COUNT_EMOJI)), bigIsEmoji: true,
       options: numberOptions(n, 1, 10)
     };
   }
   function genPlus() {
-    var a = 1 + Math.floor(Math.random() * 5);
-    var b = 1 + Math.floor(Math.random() * (9 - a));
-    var em = pick(COUNT_EMOJI);
+    var sumMax = Math.min(18, 8 + state.chapter * 2);
+    var a = 1 + Math.floor(Math.random() * Math.min(9, sumMax - 1));
+    var b = 1 + Math.floor(Math.random() * Math.min(9, sumMax - a));
+    if (a + b <= 10) {
+      var em = pick(COUNT_EMOJI);
+      return {
+        say: STR[state.lang].plusSay,
+        big: emojiRow(a, em, '') + ' + ' + emojiRow(b, em, ''), bigIsEmoji: true,
+        options: numberOptions(a + b, 1, sumMax)
+      };
+    }
     return {
-      say: STR[state.lang].plusSay,
-      big: emojiRow(a, em, '') + ' + ' + emojiRow(b, em, ''), bigIsEmoji: true,
-      options: numberOptions(a + b, 1, 10)
+      say: STR[state.lang].plusSay, big: a + ' + ' + b + ' = ?',
+      options: numberOptions(a + b, 1, sumMax)
     };
   }
   function genMinus() {
-    var a = 3 + Math.floor(Math.random() * 7);
+    var a = 3 + Math.floor(Math.random() * (maxNum() - 3));
     var b = 1 + Math.floor(Math.random() * (a - 1));
     return {
       say: STR[state.lang].minusSay, big: a + ' − ' + b + ' = ?',
-      options: numberOptions(a - b, 0, 10)
+      options: numberOptions(a - b, 0, maxNum())
     };
   }
   function genSequence() {
-    var start = 1 + Math.floor(Math.random() * 6);
+    var step = state.chapter >= 3 && Math.random() < .4 ? 2 : 1;
+    var start = 1 + Math.floor(Math.random() * Math.max(2, maxNum() - 4 * step));
     var missIdx = 1 + Math.floor(Math.random() * 2);
     var parts = [];
-    for (var i = 0; i < 4; i++) parts.push(i === missIdx ? '__' : String(start + i));
+    for (var i = 0; i < 4; i++) parts.push(i === missIdx ? '__' : String(start + i * step));
     return {
       say: STR[state.lang].seqSay, big: parts.join('  '),
-      options: numberOptions(start + missIdx, 1, 12)
+      options: numberOptions(start + missIdx * step, 1, maxNum() + 4)
     };
   }
   var ZONE_GENS = {
@@ -1196,7 +1249,8 @@
     $('hudStars').textContent = state.stars;
     $('hudGems').textContent = state.gems;
     $('hudRescued').textContent = state.freed.length;
-    $('hudLevel').textContent = 1 + state.freed.length;
+    $('hudLevel').textContent = 1 + state.freed.length + (state.chapter - 1) * 9;
+    $('hudChapter').textContent = state.chapter;
     $('playerName').textContent = state.hero === 'mia' ? 'Mia' : 'Teo';
     $('soundBtn').textContent = state.sound ? '🔊' : '🔇';
     playerEl.classList.toggle('teo', state.hero === 'teo');
@@ -1207,8 +1261,14 @@
       var el = spotEls[id];
       var freed = state.freed.indexOf(id) !== -1;
       el.classList.toggle('freed', freed);
-      if (freed) { el.style.display = 'none'; addRoamer(id); }
-      else el.querySelector('.s-bubble').textContent = STR[state.lang].helpMe;
+      el.style.display = freed ? 'none' : '';
+      if (freed) addRoamer(id);
+      else {
+        el.querySelector('.s-bubble').textContent =
+          state.chapter >= 2 ? STR[state.lang].playMe : STR[state.lang].helpMe;
+        /* bur bare i kapittel 1: senere vil dyrene leke, ikke reddes */
+        el.querySelector('.s-cage').style.display = state.chapter >= 2 ? 'none' : '';
+      }
     });
     Object.keys(CHESTS).forEach(function (id) {
       var el = spotEls[id];
@@ -1309,8 +1369,9 @@
     }
     if (ANIMALS[id]) {
       if (state.freed.indexOf(id) !== -1) return;
-      enc = { kind: 'rescue', id: id, zone: ANIMALS[id].zone, need: TASKS_PER_RESCUE, got: 0 };
-      $('playTitle').textContent = fmt(STR[state.lang].rescueTitle, { name: ANIMALS[id][state.lang] });
+      enc = { kind: 'rescue', id: id, zone: ANIMALS[id].zone, need: tasksPerRescue(), got: 0 };
+      var titleTpl = state.chapter >= 2 ? STR[state.lang].playTitle : STR[state.lang].rescueTitle;
+      $('playTitle').textContent = fmt(titleTpl, { name: ANIMALS[id][state.lang] });
     } else if (CHESTS[id]) {
       if (state.chests[id]) return;
       enc = { kind: 'chest', id: id, zone: CHESTS[id].zone, need: 1, got: 0 };
@@ -1340,6 +1401,7 @@
     $('cheer').textContent = ''; $('cheer').className = 'cheer';
     var box = $('answers');
     box.innerHTML = '';
+    box.style.gridTemplateColumns = q.options.length === 4 ? 'repeat(2, 1fr)' : '';
     q.options.forEach(function (opt) {
       var btn = document.createElement('button');
       btn.className = 'ans-btn';
@@ -1394,11 +1456,25 @@
       $('winEmoji').style.display = 'none';
       $('winImg').src = a.img;
       $('winImg').style.display = 'block';
-      $('winTitle').textContent = fmt(S.freedTitle, { name: a[state.lang] });
-      $('winText').textContent = fmt(S.freedText, { name: a[state.lang].split(' ')[0] });
+      var tTpl = state.chapter >= 2 ? S.playedTitle : S.freedTitle;
+      var xTpl = state.chapter >= 2 ? S.playedText : S.freedText;
+      $('winTitle').textContent = fmt(tTpl, { name: a[state.lang] });
+      $('winText').textContent = fmt(xTpl, { name: a[state.lang].split(' ')[0] });
       $('winLoot').innerHTML = '<span>💎 +' + GEMS_PER_RESCUE + '</span><span>🐾 ' + state.freed.length + '/9</span>';
-      if (state.freed.length === GATE_NEED) {
+      if (state.freed.length === GATE_NEED && state.freed.length < 9) {
         setTimeout(function () { saySomething(S.gateOpen, 3500); play('win'); }, 1600);
+      }
+      /* alle 9 hjulpet: kapittelet er fullført */
+      if (state.freed.length === 9) {
+        state.gems += 50;
+        $('chapterTitle').textContent = fmt(S.chapterTitle, { n: state.chapter });
+        $('chapterText').textContent = S.chapterText;
+        $('chapterBtn').textContent = fmt(S.chapterBtn, { n: state.chapter + 1 });
+        setTimeout(function () {
+          play('win'); confetti();
+          $('chapterOverlay').classList.add('open');
+          refreshHud();
+        }, 1600);
       }
     } else {
       state.chests[enc.id] = true;
@@ -1448,6 +1524,19 @@
   $('goalBtn').addEventListener('click', function () {
     play('click');
     $('goalOverlay').classList.remove('open');
+  });
+  $('chapterBtn').addEventListener('click', function () {
+    play('win');
+    $('chapterOverlay').classList.remove('open');
+    $('winOverlay').classList.remove('open');
+    /* nytt kapittel: dyrene vil leke igjen, kister kommer tilbake */
+    state.chapter += 1;
+    state.freed = [];
+    state.chests = {};
+    Object.keys(roamers).forEach(function (id) { roamers[id].el.remove(); });
+    roamers = {};
+    refreshAll();
+    setTimeout(function () { saySomething(STR[state.lang].welcomeSay, 3000); }, 500);
   });
   $('soundBtn').addEventListener('click', function () {
     state.sound = !state.sound;
