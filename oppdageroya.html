@@ -189,28 +189,62 @@
     50%     { transform: translate(-50%, -50%) scale(1.25); }
   }
 
-  /* ============ SPILLEREN ============ */
+  /* ============ SPILLEREN (chibi-figur: fotoansikt + tegnet kropp) ============ */
   #player {
-    position: absolute; z-index: 20; transform: translate(-50%, -90%);
+    position: absolute; z-index: 20; transform: translate(-50%, -94%);
     display: flex; flex-direction: column; align-items: center;
     pointer-events: none;
   }
+  #player .p-fig {
+    display: flex; flex-direction: column; align-items: center;
+    transform: scaleX(var(--dir, 1));
+  }
   #player .p-face {
-    width: 62px; height: 62px; border-radius: 50%;
-    border: 4px solid #fff; box-shadow: 0 10px 20px rgba(20, 60, 90, .35);
+    width: 56px; height: 56px; border-radius: 50%; z-index: 2;
+    border: 3px solid #fff; box-shadow: 0 8px 16px rgba(20, 60, 90, .3);
     background-image: url('images/mia-og-teo.jpg');
     background-size: 300%;
     background-position: 24% 30%;
   }
   #player.teo .p-face { background-position: 76% 28%; }
-  #player .p-shadow {
-    width: 44px; height: 12px; border-radius: 50%;
-    background: rgba(20, 60, 30, .28); margin-top: 2px;
+  /* kropp */
+  #player .p-torso {
+    width: 42px; height: 32px; margin-top: -10px; z-index: 1;
+    background: linear-gradient(180deg, #ff8ab3, #e85a92);
+    clip-path: polygon(26% 0, 74% 0, 100% 100%, 0 100%);
+    border-radius: 4px;
   }
-  #player.walking .p-face { animation: hop .4s ease-in-out infinite; }
+  #player.teo .p-torso {
+    width: 34px; height: 30px; clip-path: none; border-radius: 10px 10px 4px 4px;
+    background: repeating-linear-gradient(180deg, #ffd75c 0 6px, #fff8e4 6px 11px);
+    box-shadow: inset 0 -10px 0 #3b6fb5; /* blå shorts */
+  }
+  #player .p-legs { display: flex; gap: 9px; margin-top: -1px; z-index: 0; }
+  #player .p-leg {
+    width: 9px; height: 15px; background: #f3c39e; border-radius: 4px;
+    position: relative; transform-origin: top center;
+  }
+  #player .p-leg::after {
+    content: ''; position: absolute; bottom: -5px; left: -2px;
+    width: 13px; height: 7px; border-radius: 5px 6px 4px 4px;
+    background: #d4576b;
+  }
+  #player.teo .p-leg::after { background: #7a4a2b; }
+  #player.walking .p-fig { animation: hop .38s ease-in-out infinite; }
+  #player.walking .p-leg:first-child { animation: legSwing .38s ease-in-out infinite; }
+  #player.walking .p-leg:last-child { animation: legSwing .38s ease-in-out infinite reverse; }
   @keyframes hop {
-    0%,100% { transform: translateY(0); }
-    50%     { transform: translateY(-9px); }
+    0%,100% { transform: scaleX(var(--dir, 1)) translateY(0); }
+    50%     { transform: scaleX(var(--dir, 1)) translateY(-7px); }
+  }
+  @keyframes legSwing {
+    0%   { transform: rotate(24deg); }
+    50%  { transform: rotate(-24deg); }
+    100% { transform: rotate(24deg); }
+  }
+  #player .p-shadow {
+    width: 42px; height: 11px; border-radius: 50%;
+    background: rgba(20, 60, 30, .28); margin-top: 4px;
   }
   .walk-target {
     position: absolute; transform: translate(-50%, -50%); z-index: 3;
@@ -486,6 +520,7 @@
   <div class="hud-pill">🐾 <span id="hudRescued">0</span>/9</div>
   <div class="hud-pill">📖 <span data-no="Kapittel" data-en="Chapter">Kapittel</span>&nbsp;<span id="hudChapter">1</span></div>
   <div class="hud-spacer"></div>
+  <button class="hud-btn" id="musicBtn" aria-label="Musikk av/på">🎵</button>
   <button class="hud-btn" id="soundBtn" aria-label="Lyd av/på">🔊</button>
   <button class="hud-btn" id="langToggle">EN 🌍</button>
   <a class="hud-btn home" href="/mia-og-teo">🏠 <span data-no="Ut av spillet" data-en="Exit game">Ut av spillet</span></a>
@@ -750,7 +785,7 @@
     return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
   }
   var state = {
-    lang: 'no', hero: 'mia', stars: 0, gems: 0, sound: true, intro: true,
+    lang: 'no', hero: 'mia', stars: 0, gems: 0, sound: true, music: true, intro: true,
     chapter: 1, freed: [], chests: {}, picked: [],
     day: today(), dayAnswers: 0, dayRescues: 0, dayStars: 0, dayRewarded: {}
   };
@@ -769,6 +804,13 @@
 
   /* ============ LYD ============ */
   var audioCtx = null;
+  function ensureAudio() {
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return true;
+    } catch (e) { return false; }
+  }
   function tone(freq, start, dur, type, vol) {
     var o = audioCtx.createOscillator(), g = audioCtx.createGain();
     o.type = type || 'sine'; o.frequency.value = freq;
@@ -781,8 +823,7 @@
   function play(kind) {
     if (!state.sound) return;
     try {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
+      if (!ensureAudio()) return;
       if (kind === 'good') { tone(523, 0, .15); tone(659, .1, .15); tone(784, .2, .25); }
       else if (kind === 'oops') { tone(330, 0, .2, 'triangle', .09); tone(262, .15, .3, 'triangle', .09); }
       else if (kind === 'click') { tone(440, 0, .08, 'triangle', .07); }
@@ -791,6 +832,40 @@
       else if (kind === 'sparkle') { tone(1319, 0, .1, 'sine', .1); tone(1760, .08, .18, 'sine', .1); }
     } catch (e) { }
   }
+
+  /* ============ BAKGRUNNSMELODI (myk spilledåse, generert i nettleseren) ============ */
+  var NOTE = { C3: 130.8, F3: 174.6, G3: 196.0, A3: 220.0, C5: 523.3, D5: 587.3, E5: 659.3, G5: 784.0, A5: 880.0, C6: 1046.5 };
+  /* 32 åttendedeler (4 takter), rolig pentaton melodi */
+  var MELODY = {
+    0: 'E5', 2: 'G5', 4: 'A5', 6: 'G5', 8: 'E5', 10: 'D5', 12: 'C5', 14: 'D5',
+    16: 'E5', 18: 'G5', 20: 'A5', 22: 'C6', 24: 'A5', 26: 'G5', 28: 'E5'
+  };
+  var BASSLINE = { 0: 'C3', 4: 'G3', 8: 'A3', 12: 'F3', 16: 'C3', 20: 'G3', 24: 'F3', 28: 'G3' };
+  var MUSIC_STEP = 0.36; /* sekunder per åttendedel */
+
+  function playNote(freq, when, dur, type, vol) {
+    var o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(0, when);
+    g.gain.linearRampToValueAtTime(vol, when + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.0005, when + dur);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(when); o.stop(when + dur + 0.05);
+  }
+
+  var musicNext = 0, musicStep = 0;
+  setInterval(function () {
+    if (!state.music || !audioCtx || audioCtx.state !== 'running') return;
+    if (document.hidden) return;
+    if (musicNext < audioCtx.currentTime) musicNext = audioCtx.currentTime + 0.1;
+    while (musicNext < audioCtx.currentTime + 0.9) {
+      var s = musicStep % 32;
+      if (MELODY[s]) playNote(NOTE[MELODY[s]], musicNext, 1.3, 'sine', 0.05);
+      if (BASSLINE[s]) playNote(NOTE[BASSLINE[s]], musicNext, 1.1, 'triangle', 0.035);
+      musicStep += 1;
+      musicNext += MUSIC_STEP;
+    }
+  }, 250);
 
   /* ============ HJELPERE ============ */
   function $(id) { return document.getElementById(id); }
@@ -1010,7 +1085,13 @@
   /* Spilleren */
   var playerEl = document.createElement('div');
   playerEl.id = 'player';
-  playerEl.innerHTML = '<div class="p-face"></div><div class="p-shadow"></div>';
+  playerEl.innerHTML =
+    '<div class="p-fig">' +
+      '<div class="p-face"></div>' +
+      '<div class="p-torso"></div>' +
+      '<div class="p-legs"><span class="p-leg"></span><span class="p-leg"></span></div>' +
+    '</div>' +
+    '<div class="p-shadow"></div>';
   world.appendChild(playerEl);
   var sayEl = document.createElement('div');
   sayEl.id = 'sayBubble';
@@ -1091,6 +1172,7 @@
       } else {
         px += (dx / dist) * SPEED * dt;
         py += (dy / dist) * SPEED * dt;
+        if (Math.abs(dx) > 4) playerEl.style.setProperty('--dir', dx < 0 ? -1 : 1);
         stepTick += dt;
         if (stepTick > .28) { stepTick = 0; play('step'); }
       }
@@ -1197,6 +1279,7 @@
 
   /* klikk i verden */
   $('viewport').addEventListener('click', function (ev) {
+    if (state.music || state.sound) ensureAudio();
     var spot = ev.target.closest('.spot');
     var cam = layoutCamera();
     if (spot) {
@@ -1253,6 +1336,8 @@
     $('hudChapter').textContent = state.chapter;
     $('playerName').textContent = state.hero === 'mia' ? 'Mia' : 'Teo';
     $('soundBtn').textContent = state.sound ? '🔊' : '🔇';
+    $('musicBtn').textContent = state.music ? '🎵' : '🎵✖';
+    $('musicBtn').style.opacity = state.music ? '1' : '.55';
     playerEl.classList.toggle('teo', state.hero === 'teo');
     document.querySelector('.hud-avatar').classList.toggle('teo', state.hero === 'teo');
   }
@@ -1542,6 +1627,11 @@
     state.sound = !state.sound;
     refreshAll(); play('click');
   });
+  $('musicBtn').addEventListener('click', function () {
+    state.music = !state.music;
+    if (state.music) ensureAudio();
+    refreshAll();
+  });
   $('avatarBtn').addEventListener('click', function () {
     state.hero = state.hero === 'mia' ? 'teo' : 'mia';
     play('click'); refreshAll();
@@ -1555,6 +1645,7 @@
   $('introBtn').addEventListener('click', function () {
     $('introOverlay').classList.remove('open');
     state.intro = false; save();
+    if (state.music) ensureAudio();
     play('win');
     setTimeout(function () { saySomething(STR[state.lang].welcomeSay, 3200); }, 400);
   });
