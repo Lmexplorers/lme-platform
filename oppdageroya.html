@@ -104,6 +104,21 @@
     transition: transform .2s ease;
   }
   .spot:hover .s-img { transform: scale(1.08); }
+  /* 3D-kule: lysrefleks oppe til venstre og skygge nede */
+  .s-orb { position: relative; display: block; }
+  .orb-shine {
+    position: absolute; inset: 4px; border-radius: 50%; pointer-events: none;
+    background:
+      radial-gradient(ellipse 55% 38% at 32% 18%, rgba(255,255,255,.55), rgba(255,255,255,0) 65%),
+      radial-gradient(ellipse 85% 45% at 50% 100%, rgba(25, 50, 90, .28), rgba(25, 50, 90, 0) 60%);
+  }
+  /* kontaktskygge på bakken under alle punkter */
+  .spot::before {
+    content: ''; position: absolute; bottom: -16px; left: 50%;
+    transform: translateX(-50%); width: 58px; height: 15px; border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(20, 60, 30, .3), rgba(20, 60, 30, 0) 70%);
+    pointer-events: none;
+  }
   .spot .s-bubble {
     position: absolute; top: -2.3rem;
     background: var(--white); border-radius: 999px; padding: .2rem .6rem;
@@ -134,6 +149,12 @@
   .roamer img {
     width: 56px; height: 56px; border-radius: 50%; display: block;
     border: 3px solid #fff; object-fit: cover;
+  }
+  .roamer .orb-shine { inset: 3px; }
+  .roamer::before {
+    content: ''; position: absolute; bottom: -12px; left: 50%;
+    transform: translateX(-50%); width: 44px; height: 12px; border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(20, 60, 30, .28), rgba(20, 60, 30, 0) 70%);
   }
   .roamer .r-heart {
     position: absolute; top: -1.1rem; right: -0.6rem; font-size: 1.1rem;
@@ -207,29 +228,39 @@
     background-position: 24% 30%;
   }
   #player.teo .p-face { background-position: 76% 28%; }
-  /* kropp */
+  /* kropp med 3D-lys: lyset kommer fra oppe til venstre */
   #player .p-torso {
     width: 42px; height: 32px; margin-top: -10px; z-index: 1;
-    background: linear-gradient(180deg, #ff8ab3, #e85a92);
+    background:
+      radial-gradient(ellipse 60% 45% at 32% 18%, rgba(255,255,255,.55), rgba(255,255,255,0) 60%),
+      linear-gradient(115deg, #ffb1cb 0%, #ee6d9f 45%, #b83a6e 100%);
     clip-path: polygon(26% 0, 74% 0, 100% 100%, 0 100%);
     border-radius: 4px;
   }
   #player.teo .p-torso {
     width: 34px; height: 30px; clip-path: none; border-radius: 10px 10px 4px 4px;
-    background: repeating-linear-gradient(180deg, #ffd75c 0 6px, #fff8e4 6px 11px);
-    box-shadow: inset 0 -10px 0 #3b6fb5; /* blå shorts */
+    background:
+      radial-gradient(ellipse 65% 45% at 32% 16%, rgba(255,255,255,.5), rgba(255,255,255,0) 60%),
+      linear-gradient(115deg, rgba(255,255,255,0) 40%, rgba(120,80,20,.18) 100%),
+      repeating-linear-gradient(180deg, #ffd75c 0 6px, #fff8e4 6px 11px);
+    box-shadow: inset 0 -10px 0 #3b6fb5, inset -3px -10px 0 #2c568c; /* blå shorts med skygge */
   }
   #player .p-legs { display: flex; gap: 9px; margin-top: -1px; z-index: 0; }
   #player .p-leg {
-    width: 9px; height: 15px; background: #f3c39e; border-radius: 4px;
+    width: 9px; height: 15px; border-radius: 4px;
+    background: linear-gradient(100deg, #f9d3ad 20%, #e2a877 90%);
     position: relative; transform-origin: top center;
   }
   #player .p-leg::after {
     content: ''; position: absolute; bottom: -5px; left: -2px;
     width: 13px; height: 7px; border-radius: 5px 6px 4px 4px;
-    background: #d4576b;
+    background: linear-gradient(115deg, #ea7b8e 10%, #c2455e 80%);
+    box-shadow: inset 0 2px 2px rgba(255,255,255,.4);
   }
-  #player.teo .p-leg::after { background: #7a4a2b; }
+  #player.teo .p-leg::after {
+    background: linear-gradient(115deg, #96613a 10%, #6b3f22 80%);
+    box-shadow: inset 0 2px 2px rgba(255,255,255,.3);
+  }
   #player.walking .p-fig { animation: hop .38s ease-in-out infinite; }
   #player.walking .p-leg:first-child { animation: legSwing .38s ease-in-out infinite; }
   #player.walking .p-leg:last-child { animation: legSwing .38s ease-in-out infinite reverse; }
@@ -244,7 +275,8 @@
   }
   #player .p-shadow {
     width: 42px; height: 11px; border-radius: 50%;
-    background: rgba(20, 60, 30, .28); margin-top: 4px;
+    background: radial-gradient(ellipse, rgba(20, 60, 30, .35), rgba(20, 60, 30, .05) 70%);
+    margin-top: 4px;
   }
   .walk-target {
     position: absolute; transform: translate(-50%, -50%); z-index: 3;
@@ -1038,7 +1070,7 @@
     el.id = 'spot-' + id;
     el.style.left = x + 'px'; el.style.top = y + 'px';
     var faceHtml = face.indexOf('/') !== -1
-      ? '<img class="s-img" src="' + face + '" alt="">'
+      ? '<span class="s-orb"><img class="s-img" src="' + face + '" alt=""><i class="orb-shine"></i></span>'
       : '<span class="s-em">' + face + '</span>';
     el.innerHTML = (cage ? '<span class="s-cage"></span>' : '') +
       faceHtml + '<span class="s-bubble"></span>';
@@ -1311,7 +1343,8 @@
     var a = ANIMALS[id];
     var el = document.createElement('div');
     el.className = 'roamer';
-    el.innerHTML = '<img src="' + a.img + '" alt="">' + '<span class="r-heart">💗</span>';
+    el.innerHTML = '<span class="s-orb"><img src="' + a.img + '" alt=""><i class="orb-shine"></i></span>' +
+      '<span class="r-heart">💗</span>';
     el.style.left = a.x + 'px'; el.style.top = (a.y + 30) + 'px';
     el.querySelector('.r-heart').style.animationDelay = (Math.random() * 4) + 's';
     world.appendChild(el);
