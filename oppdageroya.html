@@ -226,11 +226,20 @@
   }
   #player.walking .p-sprite { animation: stride .42s ease-in-out infinite; }
   @keyframes stride {
-    0%   { transform: rotate(-4deg) translateY(0); }
-    25%  { transform: rotate(0deg) translateY(-7px); }
-    50%  { transform: rotate(4deg) translateY(0); }
-    75%  { transform: rotate(0deg) translateY(-7px); }
-    100% { transform: rotate(-4deg) translateY(0); }
+    0%   { transform: rotate(-5deg) translateY(0) scale(1.02, .98); }
+    25%  { transform: rotate(0deg) translateY(-8px) scale(.99, 1.03); }
+    50%  { transform: rotate(5deg) translateY(0) scale(1.02, .98); }
+    75%  { transform: rotate(0deg) translateY(-8px) scale(.99, 1.03); }
+    100% { transform: rotate(-5deg) translateY(0) scale(1.02, .98); }
+  }
+  .dust {
+    position: absolute; width: 11px; height: 11px; border-radius: 50%;
+    background: rgba(232, 217, 172, .85); pointer-events: none; z-index: 19;
+    transform: translate(-50%, -50%);
+    animation: dustFade .55s ease-out forwards;
+  }
+  @keyframes dustFade {
+    to { transform: translate(-50%, -50%) translate(var(--dx, -10px), -12px) scale(2); opacity: 0; }
   }
   #player .p-shadow {
     width: 52px; height: 12px; border-radius: 50%;
@@ -467,18 +476,180 @@
           <stop offset="0%" stop-color="#d9c2f0"/>
           <stop offset="100%" stop-color="#a988cf"/>
         </radialGradient>
+        <!-- 3D-look: lys fra oppe til venstre -->
+        <radialGradient id="folG" cx="32%" cy="26%" r="85%">
+          <stop offset="0%" stop-color="#c9ef8f"/>
+          <stop offset="55%" stop-color="#84cf56"/>
+          <stop offset="100%" stop-color="#4f9e38"/>
+        </radialGradient>
+        <radialGradient id="folDarkG" cx="35%" cy="30%" r="85%">
+          <stop offset="0%" stop-color="#6cb84a"/>
+          <stop offset="100%" stop-color="#2f7326"/>
+        </radialGradient>
+        <linearGradient id="pineG" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#93d463"/>
+          <stop offset="100%" stop-color="#3a8a2d"/>
+        </linearGradient>
+        <linearGradient id="trunkG" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#bd8d55"/>
+          <stop offset="100%" stop-color="#7a5124"/>
+        </linearGradient>
+        <linearGradient id="strawG" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#f0cc78"/>
+          <stop offset="100%" stop-color="#b3853c"/>
+        </linearGradient>
+        <linearGradient id="wallG" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#e2b57e"/>
+          <stop offset="100%" stop-color="#a97a49"/>
+        </linearGradient>
+        <linearGradient id="roofG" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#e5876a"/>
+          <stop offset="100%" stop-color="#b25640"/>
+        </linearGradient>
+        <radialGradient id="stoneG" cx="35%" cy="25%" r="90%">
+          <stop offset="0%" stop-color="#e3e3da"/>
+          <stop offset="100%" stop-color="#93938a"/>
+        </radialGradient>
+
+        <!-- Løvtre -->
+        <g id="p-tree">
+          <ellipse cx="2" cy="6" rx="46" ry="13" fill="rgba(20,60,30,.20)"/>
+          <path d="M-8,4 C-10,-28 -7,-48 -3,-62 L7,-62 C9,-46 10,-26 8,4 Z" fill="url(#trunkG)"/>
+          <path d="M-3,-42 C-13,-52 -21,-58 -29,-64" stroke="#8a5f2e" stroke-width="7" fill="none" stroke-linecap="round"/>
+          <circle cx="-32" cy="-86" r="33" fill="url(#folDarkG)"/>
+          <circle cx="32" cy="-82" r="31" fill="url(#folDarkG)"/>
+          <circle cx="0" cy="-110" r="37" fill="url(#folDarkG)"/>
+          <circle cx="-24" cy="-92" r="29" fill="url(#folG)"/>
+          <circle cx="24" cy="-88" r="27" fill="url(#folG)"/>
+          <circle cx="0" cy="-108" r="31" fill="url(#folG)"/>
+          <ellipse cx="-32" cy="-104" rx="14" ry="9" fill="rgba(255,255,255,.32)"/>
+          <ellipse cx="-9" cy="-124" rx="15" ry="9" fill="rgba(255,255,255,.28)"/>
+          <ellipse cx="17" cy="-100" rx="11" ry="7" fill="rgba(255,255,255,.22)"/>
+        </g>
+        <!-- Grantre -->
+        <g id="p-pine">
+          <ellipse cx="2" cy="5" rx="34" ry="10" fill="rgba(20,60,30,.20)"/>
+          <rect x="-5" y="-18" width="10" height="24" rx="4" fill="url(#trunkG)"/>
+          <path d="M0,-64 L46,-8 Q0,-24 -46,-8 Z" fill="url(#pineG)"/>
+          <path d="M0,-92 L38,-40 Q0,-54 -38,-40 Z" fill="url(#pineG)"/>
+          <path d="M0,-118 L29,-72 Q0,-84 -29,-72 Z" fill="url(#pineG)"/>
+          <path d="M0,-118 L29,-72 Q14,-78 0,-79 Z" fill="rgba(20,70,20,.25)"/>
+          <path d="M0,-92 L38,-40 Q19,-48 0,-50 Z" fill="rgba(20,70,20,.22)"/>
+          <ellipse cx="-11" cy="-100" rx="8" ry="5" fill="rgba(255,255,255,.3)"/>
+        </g>
+        <!-- Palme -->
+        <g id="p-palm">
+          <ellipse cx="6" cy="5" rx="40" ry="11" fill="rgba(90,70,20,.22)"/>
+          <path d="M-4,2 C-1,-38 8,-76 24,-104" stroke="url(#trunkG)" stroke-width="12" fill="none" stroke-linecap="round"/>
+          <path d="M-1,-22 q8,3 14,1 M4,-48 q8,3 14,0 M12,-74 q8,3 13,-1" stroke="#7a5124" stroke-width="3" fill="none" opacity=".55"/>
+          <path d="M24,-104 Q56,-124 84,-112 Q56,-110 30,-98 Z" fill="url(#folG)"/>
+          <path d="M24,-104 Q-8,-126 -36,-114 Q-6,-110 20,-98 Z" fill="url(#folG)"/>
+          <path d="M24,-104 Q60,-96 76,-76 Q50,-88 22,-96 Z" fill="url(#folDarkG)"/>
+          <path d="M24,-104 Q-12,-98 -28,-78 Q0,-92 24,-96 Z" fill="url(#folDarkG)"/>
+          <path d="M24,-104 Q30,-136 14,-152 Q22,-128 20,-104 Z" fill="url(#folG)"/>
+          <circle cx="18" cy="-98" r="6" fill="#7a5124"/>
+          <circle cx="30" cy="-96" r="5" fill="#8a5f2e"/>
+        </g>
+        <!-- Busk og blomsterbusk -->
+        <g id="p-bush">
+          <ellipse cx="2" cy="3" rx="28" ry="8" fill="rgba(20,60,30,.18)"/>
+          <circle cx="-13" cy="-12" r="15" fill="url(#folDarkG)"/>
+          <circle cx="14" cy="-11" r="13" fill="url(#folDarkG)"/>
+          <circle cx="0" cy="-18" r="16" fill="url(#folG)"/>
+          <circle cx="-14" cy="-10" r="11" fill="url(#folG)"/>
+          <ellipse cx="-8" cy="-22" rx="8" ry="5" fill="rgba(255,255,255,.3)"/>
+        </g>
+        <g id="p-flowerbush">
+          <use href="#p-bush"/>
+          <circle cx="-13" cy="-20" r="4.5" fill="#ff8ab3"/>
+          <circle cx="2" cy="-27" r="4.5" fill="#fff"/>
+          <circle cx="14" cy="-17" r="4.5" fill="#ffd75c"/>
+          <circle cx="-13" cy="-20" r="1.6" fill="#c2455e"/>
+          <circle cx="2" cy="-27" r="1.6" fill="#ffb62e"/>
+          <circle cx="14" cy="-17" r="1.6" fill="#c2455e"/>
+        </g>
+        <!-- Gresstust -->
+        <g id="p-grass">
+          <path d="M0,0 C-2,-7 -6,-11 -10,-13 M0,0 C-1,-9 -1,-15 1,-20 M0,0 C3,-7 7,-10 11,-12 M0,0 C1,-8 4,-13 4,-17"
+                stroke="#3f8c30" stroke-width="3" fill="none" stroke-linecap="round"/>
+        </g>
+        <!-- Stein -->
+        <g id="p-rock">
+          <ellipse cx="4" cy="4" rx="38" ry="10" fill="rgba(40,50,60,.2)"/>
+          <path d="M-30,0 Q-34,-22 -14,-31 Q6,-38 22,-26 Q34,-13 27,0 Z" fill="url(#stoneG)"/>
+          <path d="M18,0 Q20,-14 34,-16 Q46,-16 48,-5 Q49,0 46,0 Z" fill="url(#stoneG)"/>
+          <ellipse cx="-14" cy="-24" rx="11" ry="6" fill="rgba(255,255,255,.4)"/>
+          <path d="M-30,0 Q-10,-8 27,0 Z" fill="rgba(40,50,60,.22)"/>
+        </g>
+        <!-- Stråtakshytte -->
+        <g id="p-hut">
+          <ellipse cx="4" cy="6" rx="62" ry="15" fill="rgba(60,40,20,.25)"/>
+          <path d="M-42,0 L-36,-52 L36,-52 L42,0 Z" fill="url(#wallG)"/>
+          <path d="M-24,-52 L-22,0 M-8,-52 L-8,0 M8,-52 L8,0 M24,-52 L22,0" stroke="rgba(90,60,30,.28)" stroke-width="3"/>
+          <path d="M-12,0 L-12,-28 Q0,-38 12,-28 L12,0 Z" fill="#5f3d1e"/>
+          <path d="M-12,-28 Q0,-38 12,-28" stroke="#8a5f2e" stroke-width="3" fill="none"/>
+          <path d="M0,-122 L-62,-44 Q0,-62 62,-44 Z" fill="url(#strawG)"/>
+          <path d="M0,-122 L62,-44 Q31,-53 0,-56 Z" fill="rgba(120,80,30,.25)"/>
+          <path d="M-46,-58 Q0,-74 46,-58 M-30,-80 Q0,-92 30,-80 M-14,-102 Q0,-108 14,-102" stroke="rgba(120,80,30,.35)" stroke-width="3" fill="none"/>
+          <circle cx="0" cy="-124" r="7" fill="#8a5f2e"/>
+          <path d="M-36,-52 Q0,-64 36,-52 L33,-44 Q0,-56 -33,-44 Z" fill="rgba(60,40,20,.28)"/>
+        </g>
+        <!-- Hus med teglrødt tak -->
+        <g id="p-house">
+          <ellipse cx="4" cy="6" rx="56" ry="14" fill="rgba(60,40,20,.25)"/>
+          <rect x="-40" y="-54" width="80" height="54" rx="4" fill="#f3e3c2"/>
+          <rect x="-40" y="-54" width="80" height="54" rx="4" fill="url(#wallG)" opacity=".25"/>
+          <path d="M-50,-50 L0,-96 L50,-50 Z" fill="url(#roofG)"/>
+          <path d="M0,-96 L50,-50 L38,-50 L0,-86 Z" fill="rgba(90,30,20,.28)"/>
+          <rect x="16" y="-90" width="12" height="22" rx="2" fill="#a97a49"/>
+          <rect x="-16" y="-40" width="30" height="24" rx="4" fill="#ffd98a"/>
+          <path d="M-16,-28 h30 M-1,-40 v24" stroke="#8a5a34" stroke-width="3"/>
+          <rect x="-16" y="-40" width="30" height="24" rx="4" fill="none" stroke="#8a5a34" stroke-width="3"/>
+          <rect x="20" y="-26" width="14" height="26" rx="3" fill="#6e4a20"/>
+          <rect x="-20" y="-14" width="38" height="6" rx="3" fill="#8fc23f"/>
+          <circle cx="-14" cy="-16" r="3.5" fill="#ff8ab3"/><circle cx="-2" cy="-17" r="3.5" fill="#ffd75c"/><circle cx="10" cy="-16" r="3.5" fill="#fff"/>
+        </g>
+        <!-- Tregjerde -->
+        <g id="p-fence">
+          <ellipse cx="0" cy="3" rx="52" ry="6" fill="rgba(60,40,20,.16)"/>
+          <rect x="-50" y="-24" width="100" height="7" rx="3.5" fill="#c99a5f"/>
+          <rect x="-50" y="-12" width="100" height="7" rx="3.5" fill="#b98a4e"/>
+          <rect x="-46" y="-32" width="9" height="34" rx="4" fill="url(#trunkG)"/>
+          <rect x="-4" y="-34" width="9" height="36" rx="4" fill="url(#trunkG)"/>
+          <rect x="38" y="-32" width="9" height="34" rx="4" fill="url(#trunkG)"/>
+          <ellipse cx="-42" cy="-31" rx="4" ry="2.5" fill="rgba(255,255,255,.35)"/>
+          <ellipse cx="0" cy="-33" rx="4" ry="2.5" fill="rgba(255,255,255,.35)"/>
+          <ellipse cx="42" cy="-31" rx="4" ry="2.5" fill="rgba(255,255,255,.35)"/>
+        </g>
+        <!-- Skilt -->
+        <g id="p-sign">
+          <ellipse cx="2" cy="3" rx="18" ry="5" fill="rgba(60,40,20,.2)"/>
+          <rect x="-4" y="-52" width="8" height="54" rx="3" fill="url(#trunkG)"/>
+          <path d="M-26,-50 L20,-50 L30,-42 L20,-34 L-26,-34 Z" fill="#d9a86c" stroke="#8a5f2e" stroke-width="2"/>
+          <path d="M24,-30 L-22,-30 L-32,-22 L-22,-14 L24,-14 Z" fill="#c99a5f" stroke="#8a5f2e" stroke-width="2"/>
+        </g>
+        <!-- Siv og vannlilje -->
+        <g id="p-reed">
+          <path d="M0,0 C-2,-12 -6,-20 -10,-26 M2,0 C2,-14 3,-24 6,-32 M-3,0 C-6,-10 -12,-16 -16,-20"
+                stroke="#4f9e3a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <ellipse cx="6" cy="-33" rx="4" ry="8" fill="#7a5124"/>
+        </g>
+        <g id="p-lily">
+          <ellipse cx="0" cy="0" rx="13" ry="8" fill="#6fce6f"/>
+          <path d="M0,0 L13,-3 L13,3 Z" fill="#7fd4f6"/>
+          <circle cx="-3" cy="-3" r="4" fill="#ffb3cd"/>
+        </g>
       </defs>
+
       <!-- bølgeringer rundt øya -->
       <ellipse cx="1000" cy="760" rx="1010" ry="655" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="14"/>
       <ellipse cx="1000" cy="760" rx="985" ry="637" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="8"/>
-      <!-- grunt vann rundt øya -->
       <ellipse cx="1000" cy="760" rx="960" ry="615" fill="rgba(173, 232, 250, .5)"/>
       <!-- sand -->
       <ellipse cx="1000" cy="760" rx="925" ry="585" fill="#f2d98b"/>
       <ellipse cx="1000" cy="765" rx="905" ry="565" fill="#f7e2a4"/>
       <!-- gress -->
       <ellipse cx="980" cy="740" rx="855" ry="520" fill="url(#grassGrad)"/>
-      <!-- myke gressflekker for dybde -->
       <ellipse cx="620" cy="640" rx="220" ry="120" fill="rgba(92, 185, 68, .28)"/>
       <ellipse cx="880" cy="980" rx="260" ry="130" fill="rgba(92, 185, 68, .22)"/>
       <ellipse cx="1250" cy="640" rx="230" ry="120" fill="rgba(158, 222, 106, .35)"/>
@@ -491,8 +662,88 @@
       <path d="M950 800 C 750 740, 600 700, 430 610" stroke="#efe0ae" stroke-width="26" fill="none" stroke-linecap="round" stroke-dasharray="2 38" opacity=".9"/>
       <path d="M950 800 C 1100 900, 1200 1000, 1320 1080" stroke="#efe0ae" stroke-width="26" fill="none" stroke-linecap="round" stroke-dasharray="2 38" opacity=".9"/>
       <path d="M950 800 C 970 680, 990 590, 1000 520" stroke="#efe0ae" stroke-width="26" fill="none" stroke-linecap="round" stroke-dasharray="2 38" opacity=".9"/>
-      <!-- liten dam -->
-      <ellipse cx="620" cy="1000" rx="110" ry="60" fill="#7fd4f6" stroke="#f2d98b" stroke-width="10"/>
+      <!-- dam -->
+      <ellipse cx="620" cy="1000" rx="110" ry="60" fill="#5fc4ee"/>
+      <ellipse cx="620" cy="1000" rx="110" ry="60" fill="none" stroke="#f2d98b" stroke-width="10"/>
+      <ellipse cx="590" cy="985" rx="40" ry="16" fill="rgba(255,255,255,.35)"/>
+
+      <!-- ============ LANDSKAP (3D-look, sortert bakfra og frem) ============ -->
+      <g id="props">
+        <!-- Språkskogen (vest) -->
+        <use href="#p-tree" transform="translate(300,430) scale(1.15)"/>
+        <use href="#p-pine" transform="translate(215,540) scale(1.05)"/>
+        <use href="#p-tree" transform="translate(500,415) scale(.9)"/>
+        <use href="#p-pine" transform="translate(640,470) scale(.85)"/>
+        <use href="#p-tree" transform="translate(230,700) scale(1.0)"/>
+        <use href="#p-tree" transform="translate(470,690) scale(1.1)"/>
+        <use href="#p-pine" transform="translate(600,760) scale(.95)"/>
+        <use href="#p-tree" transform="translate(360,830) scale(.85)"/>
+        <use href="#p-pine" transform="translate(230,890) scale(.8)"/>
+        <use href="#p-tree" transform="translate(560,930) scale(.9)"/>
+        <use href="#p-bush" transform="translate(420,600) scale(1.0)"/>
+        <use href="#p-flowerbush" transform="translate(540,560) scale(1.0)"/>
+        <use href="#p-flowerbush" transform="translate(300,780) scale(.9)"/>
+        <use href="#p-rock" transform="translate(660,640) scale(.7)"/>
+        <use href="#p-sign" transform="translate(700,660) scale(1.0)"/>
+        <use href="#p-grass" transform="translate(390,520) scale(1.4)"/>
+        <use href="#p-grass" transform="translate(500,640) scale(1.2)"/>
+        <use href="#p-grass" transform="translate(330,650) scale(1.3)"/>
+        <use href="#p-grass" transform="translate(620,850) scale(1.4)"/>
+        <use href="#p-grass" transform="translate(430,760) scale(1.1)"/>
+
+        <!-- Landsbyen (midt) -->
+        <use href="#p-hut" transform="translate(950,720) scale(1.1)"/>
+        <use href="#p-house" transform="translate(1090,800) scale(.95)"/>
+        <use href="#p-fence" transform="translate(850,850) scale(.9)"/>
+        <use href="#p-fence" transform="translate(950,880) scale(.9)"/>
+        <use href="#p-fence" transform="translate(1050,905) scale(.9) rotate(8)"/>
+        <use href="#p-flowerbush" transform="translate(880,760) scale(.95)"/>
+        <use href="#p-bush" transform="translate(1160,850) scale(.85)"/>
+        <use href="#p-grass" transform="translate(900,820) scale(1.3)"/>
+        <use href="#p-grass" transform="translate(1020,760) scale(1.2)"/>
+        <use href="#p-grass" transform="translate(1120,880) scale(1.3)"/>
+        <use href="#p-tree" transform="translate(820,640) scale(.9)"/>
+
+        <!-- Dammen -->
+        <use href="#p-reed" transform="translate(520,980) scale(1.4)"/>
+        <use href="#p-reed" transform="translate(725,995) scale(1.3)"/>
+        <use href="#p-reed" transform="translate(560,1050) scale(1.2)"/>
+        <use href="#p-lily" transform="translate(660,1010) scale(1.1)"/>
+        <use href="#p-lily" transform="translate(585,1020) scale(.8)"/>
+        <use href="#p-tree" transform="translate(790,940) scale(.85)"/>
+
+        <!-- Tallstranda (sør-øst) -->
+        <use href="#p-palm" transform="translate(1180,990) scale(1.05)"/>
+        <use href="#p-palm" transform="translate(1500,1110) scale(.95)"/>
+        <use href="#p-palm" transform="translate(1660,1030) scale(.8)"/>
+        <use href="#p-rock" transform="translate(1400,940) scale(.85)"/>
+        <use href="#p-rock" transform="translate(1620,1150) scale(.6)"/>
+        <use href="#p-bush" transform="translate(1300,970) scale(.8)"/>
+        <use href="#p-grass" transform="translate(1250,1080) scale(1.2)"/>
+        <use href="#p-grass" transform="translate(1450,1060) scale(1.1)"/>
+
+        <!-- Regnbuefjellet (nord-øst) -->
+        <use href="#p-rock" transform="translate(1420,410) scale(1.35)"/>
+        <use href="#p-rock" transform="translate(1130,340) scale(1.0)"/>
+        <use href="#p-rock" transform="translate(1560,300) scale(.9)"/>
+        <use href="#p-pine" transform="translate(1080,240) scale(.85)"/>
+        <use href="#p-pine" transform="translate(1520,200) scale(.75)"/>
+        <use href="#p-flowerbush" transform="translate(1290,420) scale(.95)"/>
+        <use href="#p-flowerbush" transform="translate(1200,330) scale(.8)"/>
+        <use href="#p-grass" transform="translate(1360,380) scale(1.2)"/>
+
+        <!-- gjerde langs fjellstien -->
+        <use href="#p-fence" transform="translate(905,540) scale(.85) rotate(-12)"/>
+        <use href="#p-fence" transform="translate(1105,545) scale(.85) rotate(10)"/>
+
+        <!-- øst-enga -->
+        <use href="#p-tree" transform="translate(1450,680) scale(1.05)"/>
+        <use href="#p-tree" transform="translate(1650,760) scale(.9)"/>
+        <use href="#p-bush" transform="translate(1560,840) scale(.9)"/>
+        <use href="#p-flowerbush" transform="translate(1380,760) scale(.9)"/>
+        <use href="#p-grass" transform="translate(1500,720) scale(1.3)"/>
+        <use href="#p-grass" transform="translate(1600,690) scale(1.2)"/>
+      </g>
     </svg>
   </div>
 </div>
@@ -980,23 +1231,13 @@
   var world = $('world');
   var W = 2000, H = 1400;
 
+  /* Landskapet tegnes i SVG; her ligger bare levende småpynt */
   var DECOR = [
-    /* Språkskogen */
-    ['🌳', 330, 470, 4.2], ['🌳', 500, 430, 3.6], ['🌲', 250, 640, 4.0], ['🌳', 480, 660, 3.4],
-    ['🌲', 640, 720, 3.8], ['🌳', 380, 800, 3.2], ['🌲', 220, 780, 3.5], ['🌳', 560, 900, 3.6],
-    ['🍄', 430, 700, 1.6], ['🌼', 520, 560, 1.4], ['🦋', 350, 620, 1.5], ['🌺', 620, 850, 1.5],
-    ['🪧', 700, 640, 2.4],
-    /* Landsbyen midt på øya */
-    ['🛖', 950, 730, 4.6], ['🏠', 1080, 800, 3.8], ['🌻', 880, 830, 1.6], ['🧺', 1010, 850, 1.7],
-    ['🐓', 1130, 880, 1.7], ['🌷', 850, 760, 1.4],
-    /* Tallstranda */
-    ['🌴', 1180, 1000, 4.2], ['🌴', 1500, 1120, 3.8], ['⛵', 1700, 1130, 3.2], ['🏖️', 1350, 1000, 2.2],
-    ['🐚', 1300, 1200, 1.4], ['⭐', 1170, 1230, 1.3], ['🌺', 1600, 1050, 1.5],
-    /* Regnbuefjellet */
-    ['⛰️', 1370, 240, 5.0], ['🌈', 1220, 160, 4.0], ['✨', 1120, 260, 1.6], ['🪨', 1440, 420, 2.2],
-    ['🌸', 1300, 400, 1.4], ['⭐', 1500, 250, 1.4],
-    /* dammen */
-    ['🦆', 620, 990, 1.8], ['🌾', 720, 1030, 1.8], ['🌾', 520, 1030, 1.8]
+    ['🍄', 430, 705, 1.5], ['🦋', 350, 620, 1.5], ['🦋', 1400, 750, 1.3],
+    ['🧺', 1010, 850, 1.6], ['🐓', 1145, 885, 1.7],
+    ['⛵', 1700, 1130, 3.2], ['🏖️', 1350, 1000, 2.2], ['🐚', 1310, 1200, 1.4], ['⭐', 1170, 1230, 1.3],
+    ['🌈', 1220, 160, 4.0], ['✨', 1120, 260, 1.6], ['⭐', 1500, 250, 1.4],
+    ['🦆', 620, 990, 1.8]
   ];
   DECOR.forEach(function (d) {
     var el = document.createElement('div');
@@ -1165,7 +1406,17 @@
         py += (dy / dist) * SPEED * dt;
         if (Math.abs(dx) > 4) playerEl.style.setProperty('--dir', dx < 0 ? -1 : 1);
         stepTick += dt;
-        if (stepTick > .28) { stepTick = 0; play('step'); }
+        if (stepTick > .24) {
+          stepTick = 0;
+          play('step');
+          var dust = document.createElement('div');
+          dust.className = 'dust';
+          dust.style.left = (px + (Math.random() * 14 - 7)) + 'px';
+          dust.style.top = (py - 2) + 'px';
+          dust.style.setProperty('--dx', ((dx < 0 ? 1 : -1) * (8 + Math.random() * 8)) + 'px');
+          world.appendChild(dust);
+          setTimeout(function (el) { return function () { el.remove(); }; }(dust), 600);
+        }
       }
     }
     playerEl.style.left = px + 'px'; playerEl.style.top = py + 'px';
@@ -1190,7 +1441,7 @@
         play('sparkle');
         if (p.t === 'star') {
           state.stars += 1; state.dayStars += 1;
-          flyStar(playerEl.querySelector('.p-face'));
+          flyStar(playerEl.querySelector('.p-sprite'));
         } else {
           state.gems += 1;
           bump($('hudGems').parentNode);
