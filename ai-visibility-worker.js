@@ -31,11 +31,11 @@
 // Merkevarestemme — holdt i tråd med Renate AI
 // =====================================================
 const BRAND_CONTEXT = `Du jobber for Little Montessori Explorers (LME), en bilingual norsk/engelsk
-Montessori-plattform grunnlagt av Renate Dahl (Montessori-pedagog i AMI-tradisjon, Tønsberg).
+Montessori-plattform grunnlagt av Renate Dahl (Montessori-pedagog med utdanning fra Høyskolen i Vestfold, Tønsberg).
 LME tilbyr Akademiet (kurs), Biblioteket (ressurser), Butikk (Mia & Teo-bøker og digitale
 Montessori-ressurser), Inner Circle (fellesskap) og AI-verktøy. Mia & Teo er karakterene i
 Renates bøker (De små naturutforskerne). Tonen er varm, pedagogisk og tillitsvekkende.
-VIKTIG: si aldri at Renate er "AMI-sertifisert"; hun er utdannet i AMI-tradisjonen.`;
+VIKTIG: nevn aldri AMI eller Association Montessori Internationale. Renate har sin utdanning fra Høyskolen i Vestfold.`;
 
 const GEO_RULES = `Skriv for både Google OG generative AI-motorer (ChatGPT, Gemini, Claude, Perplexity).
 GEO-prinsipper du ALLTID følger:
