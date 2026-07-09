@@ -76,6 +76,17 @@
     0%,100% { transform: translate(-50%, -85%) rotate(-2deg); }
     50%     { transform: translate(-50%, -85%) rotate(2.5deg); }
   }
+  /* malte landskapsbilder (trær, palmer, busker) */
+  .prop-img {
+    position: absolute; transform: translate(-50%, -96%);
+    pointer-events: none; user-select: none;
+    filter: drop-shadow(0 10px 10px rgba(20, 60, 30, .28));
+    animation: propSway 7s ease-in-out infinite; transform-origin: 50% 96%;
+  }
+  @keyframes propSway {
+    0%,100% { transform: translate(-50%, -96%) rotate(-.8deg); }
+    50%     { transform: translate(-50%, -96%) rotate(.8deg); }
+  }
   .wave-em {
     position: absolute; transform: translate(-50%, -50%); pointer-events: none;
     opacity: .7; animation: waveBob 4s ease-in-out infinite;
@@ -219,18 +230,38 @@
   #player .p-fig {
     transform: scaleX(var(--dir, 1));
   }
-  #player .p-sprite {
-    display: block; height: 118px; width: auto;
+  /* Dukke-rigg: kropp + to bein klippes ut av samme figurbilde og animeres hver for seg */
+  #player .p-puppet {
+    position: relative; height: 118px;
     filter: drop-shadow(0 10px 12px rgba(20, 60, 30, .3));
-    transform-origin: 50% 92%;
   }
-  #player.walking .p-sprite { animation: stride .42s ease-in-out infinite; }
-  @keyframes stride {
-    0%   { transform: rotate(-5deg) translateY(0) scale(1.02, .98); }
-    25%  { transform: rotate(0deg) translateY(-8px) scale(.99, 1.03); }
-    50%  { transform: rotate(5deg) translateY(0) scale(1.02, .98); }
-    75%  { transform: rotate(0deg) translateY(-8px) scale(.99, 1.03); }
-    100% { transform: rotate(-5deg) translateY(0) scale(1.02, .98); }
+  #player .p-puppet img {
+    position: absolute; left: 0; top: 0; height: 118px; width: auto; display: block;
+  }
+  /* Mia: beina starter ca. 68 % ned, delt ved 57 % bredde */
+  #player .pp-body { clip-path: polygon(0 0, 100% 0, 100% 72%, 0 72%); z-index: 2; }
+  #player .pp-legL { clip-path: polygon(0 69%, 57% 69%, 57% 100%, 0 100%); transform-origin: 42% 71%; z-index: 1; }
+  #player .pp-legR { clip-path: polygon(57% 69%, 100% 69%, 100% 100%, 57% 100%); transform-origin: 64% 71%; z-index: 1; }
+  /* Teo: samme rigg, andre delelinjer */
+  #player.teo .pp-body { clip-path: polygon(0 0, 100% 0, 100% 73%, 0 73%); }
+  #player.teo .pp-legL { clip-path: polygon(0 70%, 52% 70%, 52% 100%, 0 100%); transform-origin: 32% 72%; }
+  #player.teo .pp-legR { clip-path: polygon(52% 70%, 100% 70%, 100% 100%, 52% 100%); transform-origin: 62% 72%; }
+
+  #player.walking .p-puppet { animation: bodyBob .5s ease-in-out infinite; }
+  #player.walking .pp-legL { animation: stepL .5s ease-in-out infinite; }
+  #player.walking .pp-legR { animation: stepR .5s ease-in-out infinite; }
+  @keyframes bodyBob {
+    0%, 50%, 100% { transform: translateY(0) rotate(0deg); }
+    25%           { transform: translateY(-6px) rotate(2deg); }
+    75%           { transform: translateY(-6px) rotate(-2deg); }
+  }
+  @keyframes stepL {
+    0%, 100% { transform: rotate(16deg); }
+    50%      { transform: rotate(-16deg); }
+  }
+  @keyframes stepR {
+    0%, 100% { transform: rotate(-16deg); }
+    50%      { transform: rotate(16deg); }
   }
   .dust {
     position: absolute; width: 11px; height: 11px; border-radius: 50%;
@@ -667,22 +698,8 @@
       <ellipse cx="620" cy="1000" rx="110" ry="60" fill="none" stroke="#f2d98b" stroke-width="10"/>
       <ellipse cx="590" cy="985" rx="40" ry="16" fill="rgba(255,255,255,.35)"/>
 
-      <!-- ============ LANDSKAP (3D-look, sortert bakfra og frem) ============ -->
+      <!-- ============ LANDSKAP (bygg og småting; trær males som bilder) ============ -->
       <g id="props">
-        <!-- Språkskogen (vest) -->
-        <use href="#p-tree" transform="translate(300,430) scale(1.15)"/>
-        <use href="#p-pine" transform="translate(215,540) scale(1.05)"/>
-        <use href="#p-tree" transform="translate(500,415) scale(.9)"/>
-        <use href="#p-pine" transform="translate(640,470) scale(.85)"/>
-        <use href="#p-tree" transform="translate(230,700) scale(1.0)"/>
-        <use href="#p-tree" transform="translate(470,690) scale(1.1)"/>
-        <use href="#p-pine" transform="translate(600,760) scale(.95)"/>
-        <use href="#p-tree" transform="translate(360,830) scale(.85)"/>
-        <use href="#p-pine" transform="translate(230,890) scale(.8)"/>
-        <use href="#p-tree" transform="translate(560,930) scale(.9)"/>
-        <use href="#p-bush" transform="translate(420,600) scale(1.0)"/>
-        <use href="#p-flowerbush" transform="translate(540,560) scale(1.0)"/>
-        <use href="#p-flowerbush" transform="translate(300,780) scale(.9)"/>
         <use href="#p-rock" transform="translate(660,640) scale(.7)"/>
         <use href="#p-sign" transform="translate(700,660) scale(1.0)"/>
         <use href="#p-grass" transform="translate(390,520) scale(1.4)"/>
@@ -691,56 +708,34 @@
         <use href="#p-grass" transform="translate(620,850) scale(1.4)"/>
         <use href="#p-grass" transform="translate(430,760) scale(1.1)"/>
 
-        <!-- Landsbyen (midt) -->
         <use href="#p-hut" transform="translate(950,720) scale(1.1)"/>
         <use href="#p-house" transform="translate(1090,800) scale(.95)"/>
         <use href="#p-fence" transform="translate(850,850) scale(.9)"/>
         <use href="#p-fence" transform="translate(950,880) scale(.9)"/>
         <use href="#p-fence" transform="translate(1050,905) scale(.9) rotate(8)"/>
-        <use href="#p-flowerbush" transform="translate(880,760) scale(.95)"/>
-        <use href="#p-bush" transform="translate(1160,850) scale(.85)"/>
         <use href="#p-grass" transform="translate(900,820) scale(1.3)"/>
         <use href="#p-grass" transform="translate(1020,760) scale(1.2)"/>
         <use href="#p-grass" transform="translate(1120,880) scale(1.3)"/>
-        <use href="#p-tree" transform="translate(820,640) scale(.9)"/>
 
-        <!-- Dammen -->
         <use href="#p-reed" transform="translate(520,980) scale(1.4)"/>
         <use href="#p-reed" transform="translate(725,995) scale(1.3)"/>
         <use href="#p-reed" transform="translate(560,1050) scale(1.2)"/>
         <use href="#p-lily" transform="translate(660,1010) scale(1.1)"/>
         <use href="#p-lily" transform="translate(585,1020) scale(.8)"/>
-        <use href="#p-tree" transform="translate(790,940) scale(.85)"/>
 
-        <!-- Tallstranda (sør-øst) -->
-        <use href="#p-palm" transform="translate(1180,990) scale(1.05)"/>
-        <use href="#p-palm" transform="translate(1500,1110) scale(.95)"/>
-        <use href="#p-palm" transform="translate(1660,1030) scale(.8)"/>
         <use href="#p-rock" transform="translate(1400,940) scale(.85)"/>
         <use href="#p-rock" transform="translate(1620,1150) scale(.6)"/>
-        <use href="#p-bush" transform="translate(1300,970) scale(.8)"/>
         <use href="#p-grass" transform="translate(1250,1080) scale(1.2)"/>
         <use href="#p-grass" transform="translate(1450,1060) scale(1.1)"/>
 
-        <!-- Regnbuefjellet (nord-øst) -->
         <use href="#p-rock" transform="translate(1420,410) scale(1.35)"/>
         <use href="#p-rock" transform="translate(1130,340) scale(1.0)"/>
         <use href="#p-rock" transform="translate(1560,300) scale(.9)"/>
-        <use href="#p-pine" transform="translate(1080,240) scale(.85)"/>
-        <use href="#p-pine" transform="translate(1520,200) scale(.75)"/>
-        <use href="#p-flowerbush" transform="translate(1290,420) scale(.95)"/>
-        <use href="#p-flowerbush" transform="translate(1200,330) scale(.8)"/>
         <use href="#p-grass" transform="translate(1360,380) scale(1.2)"/>
 
-        <!-- gjerde langs fjellstien -->
         <use href="#p-fence" transform="translate(905,540) scale(.85) rotate(-12)"/>
         <use href="#p-fence" transform="translate(1105,545) scale(.85) rotate(10)"/>
 
-        <!-- øst-enga -->
-        <use href="#p-tree" transform="translate(1450,680) scale(1.05)"/>
-        <use href="#p-tree" transform="translate(1650,760) scale(.9)"/>
-        <use href="#p-bush" transform="translate(1560,840) scale(.9)"/>
-        <use href="#p-flowerbush" transform="translate(1380,760) scale(.9)"/>
         <use href="#p-grass" transform="translate(1500,720) scale(1.3)"/>
         <use href="#p-grass" transform="translate(1600,690) scale(1.2)"/>
       </g>
@@ -1239,6 +1234,33 @@
     ['🌈', 1220, 160, 4.0], ['✨', 1120, 260, 1.6], ['⭐', 1500, 250, 1.4],
     ['🦆', 620, 990, 1.8]
   ];
+  /* Malte trær, palmer og busker (rendret look) */
+  var PROPS_IMG = [
+    ['tre1', 300, 430, 175], ['gran1', 215, 540, 115], ['tre2', 500, 415, 145],
+    ['gran1', 640, 470, 100], ['tre1', 230, 700, 150], ['tre2', 470, 690, 165],
+    ['gran1', 600, 760, 110], ['tre1', 360, 830, 130], ['gran1', 230, 890, 95],
+    ['tre2', 560, 930, 135], ['busk1', 420, 600, 95], ['blomsterbusk1', 540, 560, 105],
+    ['blomsterbusk1', 300, 780, 95],
+    ['tre1', 820, 640, 135], ['blomsterbusk1', 880, 760, 95], ['busk1', 1160, 850, 85],
+    ['tre2', 790, 940, 130],
+    ['palme1', 1180, 990, 150], ['palme1', 1500, 1110, 135], ['palme1', 1660, 1030, 115],
+    ['busk1', 1300, 970, 80],
+    ['gran1', 1080, 240, 100], ['gran1', 1520, 200, 90],
+    ['blomsterbusk1', 1290, 420, 95], ['blomsterbusk1', 1200, 330, 85],
+    ['tre1', 1450, 680, 155], ['tre2', 1650, 760, 130],
+    ['busk1', 1560, 840, 90], ['blomsterbusk1', 1380, 760, 90]
+  ];
+  PROPS_IMG.forEach(function (p, i) {
+    var el = document.createElement('img');
+    el.className = 'prop-img';
+    el.src = 'images/spill/' + p[0] + '.webp';
+    el.style.left = p[1] + 'px'; el.style.top = p[2] + 'px';
+    el.style.width = p[3] + 'px';
+    el.style.zIndex = Math.max(1, Math.floor(p[2] / 100));
+    el.style.animationDelay = (-(i % 7)) + 's';
+    world.appendChild(el);
+  });
+
   DECOR.forEach(function (d) {
     var el = document.createElement('div');
     el.className = 'deco' + (d[0] === '🌳' || d[0] === '🌲' || d[0] === '🌴' ? ' sway' : '');
@@ -1275,6 +1297,7 @@
     el.innerHTML = (cage ? '<span class="s-cage"></span>' : '') +
       faceHtml + '<span class="s-bubble"></span>';
     el.setAttribute('data-spot', id);
+    el.style.zIndex = Math.max(2, Math.floor(y / 100) + 1);
     world.appendChild(el);
     spotEls[id] = el;
     return el;
@@ -1318,12 +1341,21 @@
   var playerEl = document.createElement('div');
   playerEl.id = 'player';
   playerEl.innerHTML =
-    '<div class="p-fig"><img class="p-sprite" src="images/spill/mia-figur.webp" alt=""></div>' +
+    '<div class="p-fig"><div class="p-puppet">' +
+      '<img class="pp-legL" src="images/spill/mia-figur.webp" alt="">' +
+      '<img class="pp-legR" src="images/spill/mia-figur.webp" alt="">' +
+      '<img class="pp-body" src="images/spill/mia-figur.webp" alt="">' +
+    '</div></div>' +
     '<div class="p-shadow"></div>';
   world.appendChild(playerEl);
   function refreshSprite() {
-    playerEl.querySelector('.p-sprite').src =
-      state.hero === 'teo' ? 'images/spill/teo-figur.webp' : 'images/spill/mia-figur.webp';
+    var src = state.hero === 'teo' ? 'images/spill/teo-figur.webp' : 'images/spill/mia-figur.webp';
+    playerEl.querySelectorAll('.p-puppet img').forEach(function (im) {
+      if (im.getAttribute('src') !== src) im.src = src;
+    });
+    /* riggens bredde følger bildets sideforhold */
+    playerEl.querySelector('.p-puppet').style.width =
+      Math.round(118 * (state.hero === 'teo' ? 132 / 320 : 130 / 318)) + 'px';
   }
   var sayEl = document.createElement('div');
   sayEl.id = 'sayBubble';
@@ -1420,7 +1452,8 @@
       }
     }
     playerEl.style.left = px + 'px'; playerEl.style.top = py + 'px';
-    playerEl.style.zIndex = 20;
+    /* dybdesortering: ting lenger sør tegnes foran */
+    playerEl.style.zIndex = Math.max(2, Math.floor(py / 100));
     sayEl.style.left = px + 'px'; sayEl.style.top = (py - 132) + 'px';
     collectPickups();
     var cam = layoutCamera();
@@ -1441,7 +1474,7 @@
         play('sparkle');
         if (p.t === 'star') {
           state.stars += 1; state.dayStars += 1;
-          flyStar(playerEl.querySelector('.p-sprite'));
+          flyStar(playerEl.querySelector('.p-puppet'));
         } else {
           state.gems += 1;
           bump($('hudGems').parentNode);
