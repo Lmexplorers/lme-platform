@@ -2381,11 +2381,11 @@
 }
 #lme-floating-lang-btn:hover { transform: scale(1.05) !important; }
 @media (max-width: 600px) {
-  /* Nede til venstre paa mobil, saa den ikke gjemmes bak "Gjor synlig"-knappen
-     (som ligger nede til hoyre) og aldri ligger over topplinjen */
+  /* Oppe til hoyre som paa alle andre sider, men litt lavere saa den klarer
+     den litt hoyere toppmenyen paa dashbordet (og ikke bak "Gjor synlig") */
   #lme-floating-lang-btn {
-    top: auto !important; bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
-    left: 12px !important; right: auto !important;
+    top: 96px !important; bottom: auto !important;
+    right: 10px !important; left: auto !important;
     padding: 8px 14px !important; font-size: 12px !important;
   }
 }
