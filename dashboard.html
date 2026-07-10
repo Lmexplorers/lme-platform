@@ -2381,13 +2381,16 @@
 }
 #lme-floating-lang-btn:hover { transform: scale(1.05) !important; }
 @media (max-width: 600px) {
-  /* Oppe til hoyre som paa alle andre sider, men litt lavere saa den klarer
-     den litt hoyere toppmenyen paa dashbordet (og ikke bak "Gjor synlig") */
+  /* Dashbordet er bredere enn mobilskjermen, saa "right" skyver knappen ut av
+     syne. Vi fester den til synlig viewport med 100vw (som ignorerer sidebredden),
+     oppe til hoyre og klar av toppmenyen + "Gjor synlig"-knappen. */
   #lme-floating-lang-btn {
-    top: 96px !important; bottom: auto !important;
-    right: 10px !important; left: auto !important;
+    top: 88px !important; bottom: auto !important;
+    left: 50% !important; right: auto !important;
+    transform: translateX(-50%) !important;
     padding: 8px 14px !important; font-size: 12px !important;
   }
+  #lme-floating-lang-btn:hover { transform: translateX(-50%) scale(1.05) !important; }
 }
 
   /* Laast fontregel: Sasson Montessori paa alt unntatt overskrifter */
