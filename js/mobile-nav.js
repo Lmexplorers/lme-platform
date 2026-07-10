@@ -23,13 +23,13 @@
     '  .header .icon-btn { display: none !important; }',
     '  .header-right { flex: 1 1 auto !important; flex-wrap: wrap;',
     '    justify-content: flex-end; min-width: 0; gap: 6px; }',
-    /* Flytende språkknapper: oppe og midt på, klar av toppmenyen og "Gjør synlig" */
-    '  #lme-floating-lang-btn { top: 128px !important; bottom: auto !important;',
-    '    left: 50% !important; right: auto !important; transform: translateX(-50%) !important;',
-    '    padding: 8px 16px !important; font-size: 13px !important; z-index: 2147483600 !important; }',
-    '  #lme-floating-lang-btn:hover { transform: translateX(-50%) scale(1.05) !important; }',
-    '  a.lang-float { top: 150px !important; bottom: auto !important; left: 50% !important;',
-    '    right: auto !important; transform: translateX(-50%) !important; }',
+    /* Flytende språkknapp: på logo-raden, oppe til høyre i det hvite feltet */
+    '  #lme-floating-lang-btn { top: 60px !important; bottom: auto !important;',
+    '    right: 16px !important; left: auto !important; transform: none !important;',
+    '    padding: 8px 14px !important; font-size: 12px !important; z-index: 2147483600 !important; }',
+    '  #lme-floating-lang-btn:hover { transform: scale(1.05) !important; }',
+    '  a.lang-float { top: 60px !important; bottom: auto !important; right: 16px !important;',
+    '    left: auto !important; transform: none !important; }',
     /* Hero-seksjonen: nyhetsliste + banner under hverandre, ikke ved siden av */
     '  .hero-section { grid-template-columns: 1fr !important; gap: 16px; }',
     '  .hero-section .hero { min-height: 250px; aspect-ratio: auto; }',
@@ -72,19 +72,25 @@
       // Oppe, rett under den faktiske toppmenyen (uansett høyde), og
       // midtstilt så knappen alltid faller innenfor skjermen, også i
       // Facebook-nettleseren. Aldri nederst / bak "Gjør synlig".
-      var top = 128;
-      var hdr = document.querySelector('.header');
-      if (hdr) {
-        var r = hdr.getBoundingClientRect();
-        if (r && r.bottom > 20) top = Math.round(r.bottom) - 18;
+      // Legg knappen på logo-raden, oppe til høyre i det hvite toppfeltet,
+      // over den svarte R-knappen. Rett den vertikalt etter logoen.
+      var top = 60;
+      var logo = document.querySelector('.header .logo, .logo');
+      if (logo) {
+        var lr = logo.getBoundingClientRect();
+        if (lr && lr.height) top = Math.round(lr.top + lr.height / 2 - 16);
+      } else {
+        var hdr = document.querySelector('.header');
+        if (hdr) { var r = hdr.getBoundingClientRect(); if (r && r.top > -100) top = Math.round(r.top + 14); }
       }
+      if (top < 8) top = 8;
       b.style.setProperty('top', top + 'px', 'important');
       b.style.setProperty('bottom', 'auto', 'important');
-      b.style.setProperty('left', '50%', 'important');
-      b.style.setProperty('right', 'auto', 'important');
-      b.style.setProperty('transform', 'translateX(-50%)', 'important');
-      b.style.setProperty('padding', '8px 16px', 'important');
-      b.style.setProperty('font-size', '13px', 'important');
+      b.style.setProperty('right', '16px', 'important');
+      b.style.setProperty('left', 'auto', 'important');
+      b.style.setProperty('transform', 'none', 'important');
+      b.style.setProperty('padding', '8px 14px', 'important');
+      b.style.setProperty('font-size', '12px', 'important');
       b.style.setProperty('z-index', '2147483600', 'important');
     } else {
       ['top', 'bottom', 'left', 'right', 'transform', 'padding', 'font-size', 'z-index'].forEach(function (k) {
