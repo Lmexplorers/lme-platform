@@ -23,11 +23,11 @@
     '  .header .icon-btn { display: none !important; }',
     '  .header-right { flex: 1 1 auto !important; flex-wrap: wrap;',
     '    justify-content: flex-end; min-width: 0; gap: 6px; }',
-    /* Flytende språkknapp: på logo-raden, oppe til høyre i det hvite feltet */
+    /* Flytende språkbryter: på logo-raden, oppe til høyre i det hvite feltet */
     '  #lme-floating-lang-btn { top: 60px !important; bottom: auto !important;',
     '    right: 16px !important; left: auto !important; transform: none !important;',
-    '    padding: 8px 14px !important; font-size: 12px !important; z-index: 2147483600 !important; }',
-    '  #lme-floating-lang-btn:hover { transform: scale(1.05) !important; }',
+    '    z-index: 2147483600 !important; }',
+    '  #lme-floating-lang-btn:hover { transform: none !important; }',
     '  a.lang-float { top: 60px !important; bottom: auto !important; right: 16px !important;',
     '    left: auto !important; transform: none !important; }',
     /* Hero-seksjonen: nyhetsliste + banner under hverandre, ikke ved siden av */
@@ -89,11 +89,9 @@
       b.style.setProperty('right', '16px', 'important');
       b.style.setProperty('left', 'auto', 'important');
       b.style.setProperty('transform', 'none', 'important');
-      b.style.setProperty('padding', '8px 14px', 'important');
-      b.style.setProperty('font-size', '12px', 'important');
       b.style.setProperty('z-index', '2147483600', 'important');
     } else {
-      ['top', 'bottom', 'left', 'right', 'transform', 'padding', 'font-size', 'z-index'].forEach(function (k) {
+      ['top', 'bottom', 'left', 'right', 'transform', 'z-index'].forEach(function (k) {
         b.style.removeProperty(k);
       });
     }
@@ -113,6 +111,56 @@
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () { dedupeLang(); placeLangBtn(); });
   }
+
+  /* --- Språkvelger som NO|EN skyvebryter (lik på iMac og mobil) ---
+     Bytter utseendet på #lme-floating-lang-btn fra flagg-pille til en liten
+     skyvebryter med to felt. Bruker den eksisterende lmeToggleLang-logikken. */
+  (function langSlider() {
+    var b = document.getElementById('lme-floating-lang-btn');
+    if (!b) return;
+    var ss = document.createElement('style');
+    ss.textContent = [
+      '#lme-floating-lang-btn.lme-ls { background: #fff !important; border: 2px solid #E91E89 !important;',
+      '  color: #E91E89 !important; padding: 3px !important; display: inline-flex !important;',
+      '  align-items: center; gap: 2px; line-height: 1; box-shadow: 0 4px 12px rgba(233,30,137,.28) !important; }',
+      '#lme-floating-lang-btn.lme-ls .lme-ls-seg { padding: 6px 13px; border-radius: 999px;',
+      '  font-family: "Playpen Sans", system-ui, sans-serif; font-weight: 800; font-size: 12px;',
+      '  color: #E91E89; letter-spacing: .02em; transition: background .15s ease, color .15s ease; }',
+      '#lme-floating-lang-btn.lme-ls .lme-ls-seg.on { background: #E91E89; color: #fff; }',
+      '#lme-floating-lang-btn.lme-ls:hover { transform: none !important; }'
+    ].join('\n');
+    document.head.appendChild(ss);
+
+    function curLang() {
+      var l = window.LME_CURRENT_LANG;
+      if (l !== 'en' && l !== 'no') { try { l = localStorage.getItem('lme_lang') || 'no'; } catch (e) { l = 'no'; } }
+      return l === 'en' ? 'en' : 'no';
+    }
+    function render() {
+      var l = curLang();
+      b.classList.add('lme-ls');
+      b.innerHTML =
+        '<span class="lme-ls-seg lme-ls-no' + (l === 'no' ? ' on' : '') + '">NO</span>' +
+        '<span class="lme-ls-seg lme-ls-en' + (l === 'en' ? ' on' : '') + '">EN</span>';
+      b.setAttribute('aria-label', l === 'en' ? 'Language: English. Switch to Norwegian.' : 'Spraak: norsk. Bytt til engelsk.');
+    }
+    b.removeAttribute('onclick');
+    b.addEventListener('click', function (e) {
+      var t = e.target;
+      var want = (t && t.closest && t.closest('.lme-ls-en')) ? 'en'
+               : (t && t.closest && t.closest('.lme-ls-no')) ? 'no' : null;
+      var cur = curLang();
+      if (want && want === cur) return;            // trykk på aktivt språk: ingen endring
+      if (typeof window.lmeToggleLang === 'function') window.lmeToggleLang();
+      else render();
+    });
+    if (typeof window.lmeToggleLang === 'function') {
+      var orig = window.lmeToggleLang;
+      window.lmeToggleLang = function () { var r = orig.apply(this, arguments); render(); return r; };
+    }
+    render();
+    setTimeout(render, 250);
+  })();
 
   /* --- Gjør topplinjens ikoner (søk, meldinger, varsler) funksjonelle --- */
   (function wireHeaderIcons() {
