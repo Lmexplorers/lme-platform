@@ -24,7 +24,7 @@
     '  .header-right { flex: 1 1 auto !important; flex-wrap: wrap;',
     '    justify-content: flex-end; min-width: 0; gap: 6px; }',
     /* Flytende språkknapper: oppe og midt på, klar av toppmenyen og "Gjør synlig" */
-    '  #lme-floating-lang-btn { top: 150px !important; bottom: auto !important;',
+    '  #lme-floating-lang-btn { top: 128px !important; bottom: auto !important;',
     '    left: 50% !important; right: auto !important; transform: translateX(-50%) !important;',
     '    padding: 8px 16px !important; font-size: 13px !important; z-index: 2147483600 !important; }',
     '  #lme-floating-lang-btn:hover { transform: translateX(-50%) scale(1.05) !important; }',
@@ -72,11 +72,11 @@
       // Oppe, rett under den faktiske toppmenyen (uansett høyde), og
       // midtstilt så knappen alltid faller innenfor skjermen, også i
       // Facebook-nettleseren. Aldri nederst / bak "Gjør synlig".
-      var top = 150;
+      var top = 128;
       var hdr = document.querySelector('.header');
       if (hdr) {
         var r = hdr.getBoundingClientRect();
-        if (r && r.bottom > 20) top = Math.round(r.bottom) + 8;
+        if (r && r.bottom > 20) top = Math.round(r.bottom) - 18;
       }
       b.style.setProperty('top', top + 'px', 'important');
       b.style.setProperty('bottom', 'auto', 'important');
