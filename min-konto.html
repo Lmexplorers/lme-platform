@@ -1477,6 +1477,19 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     </div>
 
     <div class="settings-card" style="margin-top: 20px;">
+      <h3 data-no="Renate AI sitt minne om deg" data-en="Renate AI's memory about you">Renate AI sitt minne om deg</h3>
+      <p style="color:#6a5560;line-height:1.6;margin:0 0 12px;"
+         data-no="Renate AI husker mål, interesser og hvor langt du er kommet, slik at hun kan veilede deg bedre. Du bestemmer over minnet: les, rediger eller slett det når du vil."
+         data-en="Renate AI remembers your goals, interests and progress so she can guide you better. You are in control: read, edit or delete the memory whenever you want.">Renate AI husker mål, interesser og hvor langt du er kommet, slik at hun kan veilede deg bedre. Du bestemmer over minnet: les, rediger eller slett det når du vil.</p>
+      <textarea id="renateMemory" rows="6" maxlength="4000"
+        style="width:100%;border:1px solid rgba(26,26,26,0.12);border-radius:12px;padding:12px 14px;font-family:inherit;font-size:14px;line-height:1.5;resize:vertical;"></textarea>
+      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+        <button type="button" id="renateMemorySave" class="btn-yellow" data-no="Lagre minnet" data-en="Save memory">Lagre minnet</button>
+        <button type="button" id="renateMemoryDelete" class="btn-blue" style="padding: 10px 18px;" data-no="Slett minnet" data-en="Delete memory">Slett minnet</button>
+      </div>
+    </div>
+
+    <div class="settings-card" style="margin-top: 20px;">
       <h3>Passord &amp; sikkerhet</h3>
       <div class="setting-row">
         <div>
@@ -1953,6 +1966,54 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 
     var lo = document.getElementById('logoutLink');
     if (lo) lo.addEventListener('click', function (ev) { ev.preventDefault(); LME.signOut(); });
+  })();
+</script>
+<script>
+  // Renate AI sitt minne: les, rediger og slett (fanen Profil)
+  (function () {
+    var box = document.getElementById('renateMemory');
+    var saveBtn = document.getElementById('renateMemorySave');
+    var delBtn = document.getElementById('renateMemoryDelete');
+    if (!box || !saveBtn || !delBtn) return;
+
+    function msg(no, en) { return window.LME_CURRENT_LANG === 'en' ? en : no; }
+
+    fetch('/api/renate-profile', { credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.loggedIn) return;
+        box.value = d.memory || '';
+        box.placeholder = msg(
+          'Renate AI har ikke lagret noe om deg ennå. Snakk med henne, så bygger hun minnet, eller skriv noe her selv.',
+          'Renate AI has not saved anything about you yet. Talk to her and she will build the memory, or write something here yourself.'
+        );
+      })
+      .catch(function () {});
+
+    function post(text, okNo, okEn) {
+      fetch('/api/renate-profile', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ memory: text })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (d && d.error) lmeSoon(d.error);
+          else lmeSoon(msg(okNo, okEn));
+        })
+        .catch(function () { lmeSoon(msg('Noe gikk galt. Prøv igjen om litt.', 'Something went wrong. Please try again.')); });
+    }
+
+    saveBtn.addEventListener('click', function () {
+      post(box.value.trim(), 'Minnet er lagret 💗', 'Memory saved 💗');
+    });
+    delBtn.addEventListener('click', function () {
+      if (confirm(msg('Slette alt Renate AI husker om deg? Dette kan ikke angres.', 'Delete everything Renate AI remembers about you? This cannot be undone.'))) {
+        box.value = '';
+        post('', 'Minnet er slettet 🌷', 'Memory deleted 🌷');
+      }
+    });
   })();
 </script>
 <script src="/js/mobile-nav.js?v=9" defer></script>

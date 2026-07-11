@@ -86,6 +86,39 @@ const CORS = {
   "Access-Control-Max-Age": "86400",
 };
 
+// ---------- Minne om innloggede brukere ----------
+// Samme sesjon som /api/auth/*. Minnet lagres i KV (renateprofile:<uid>),
+// leses inn før hvert svar og oppdateres av modellen selv via en skjult
+// <minne>-blokk som klippes bort før svaret sendes til brukeren.
+// Brukeren kan se, endre og slette minnet på /min-konto (fanen Profil).
+const MAX_MEMORY = 4000;
+
+function readCookies(request) {
+  const out = {};
+  (request.headers.get("Cookie") || "").split(";").forEach((p) => {
+    const i = p.indexOf("=");
+    if (i > 0) out[p.slice(0, i).trim()] = p.slice(i + 1).trim();
+  });
+  return out;
+}
+
+async function sessionFrom(context) {
+  const { request, env } = context;
+  const sid = readCookies(request)["lme_sess"];
+  if (!sid || !env.BUILDER_KV) return null;
+  const raw = await env.BUILDER_KV.get("sess:" + sid);
+  if (!raw) return null;
+  try { return JSON.parse(raw); } catch (e) { return null; }
+}
+
+const MEMORY_INSTRUCTIONS = `
+MINNE OM BRUKEREN:
+- Brukeren er innlogget, og du har et minne om dem på tvers av samtaler. Det du husker fra før, står i seksjonen "DETTE HUSKER DU OM BRUKEREN" (hvis den finnes).
+- Lærer du noe nytt og varig om brukeren (navn, barnas alder, mål, nisje, hvor langt de er kommet i reisen Lær, Skap, Bli synlig, Selg, Voks, eller tydelige preferanser), avslutt svaret ditt med en oppdatert versjon av HELE minnet mellom <minne> og </minne>. Skriv korte punkter, maks 1500 tegn.
+- Ta bare med det som er nyttig over tid. Lagre aldri sensitiv informasjon (helse, økonomi, personnummer, passord).
+- Er det ingenting nytt å huske, skal du IKKE ta med minne-blokken.
+- Minne-blokken vises aldri til brukeren, så ikke omtal den i selve svaret.`;
+
 function json(data, status) {
   return new Response(JSON.stringify(data), {
     status,
@@ -134,12 +167,24 @@ export async function onRequestPost(context) {
   // Valgfri sidekontekst fra widgeten: hvilken side brukeren står på.
   // Sendes fra nettsiden (ikke fra brukeren), så Renate AI kan veilede der og da.
   let systemPrompt = RENATE_SYSTEM_PROMPT;
-  const context = typeof body.context === "string" ? body.context.slice(0, 800) : "";
-  if (context) {
+  const pageContext = typeof body.context === "string" ? body.context.slice(0, 800) : "";
+  if (pageContext) {
     systemPrompt +=
       "\n\nKONTEKST AKKURAT NÅ (fra nettsiden, ikke fra brukeren):\n" +
-      context +
+      pageContext +
       "\nBruk konteksten til å møte brukeren der de er: hjelp med det denne siden handler om, og foreslå neste naturlige steg.";
+  }
+
+  // Innlogget bruker? Hent minnet og be modellen holde det oppdatert.
+  const sess = await sessionFrom(context);
+  if (sess && sess.uid) {
+    systemPrompt += "\n" + MEMORY_INSTRUCTIONS;
+    const memory = await env.BUILDER_KV.get("renateprofile:" + sess.uid);
+    if (memory) {
+      systemPrompt +=
+        "\n\nDETTE HUSKER DU OM BRUKEREN (fra tidligere samtaler; brukeren kan se og endre det på /min-konto):\n" +
+        memory;
+    }
   }
 
   try {
@@ -152,7 +197,7 @@ export async function onRequestPost(context) {
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-6",
-        max_tokens: 1024,
+        max_tokens: 1500,
         system: systemPrompt,
         messages: messages,
       }),
@@ -175,11 +220,22 @@ export async function onRequestPost(context) {
     }
 
     const data = await res.json();
-    const reply =
+    let reply =
       data.content
         ?.filter((b) => b.type === "text")
         .map((b) => b.text)
         .join("\n") || "";
+
+    // Fang opp og lagre oppdatert minne, og fjern blokken fra svaret.
+    // Fjernes alltid, også for uinnloggede, så den aldri vises til brukeren.
+    const memMatch = reply.match(/<minne>([\s\S]*?)<\/minne>/);
+    reply = reply.replace(/<minne>[\s\S]*?<\/minne>/g, "").replace(/<\/?minne>/g, "").trim();
+    if (memMatch && sess && sess.uid) {
+      const newMemory = memMatch[1].trim().slice(0, MAX_MEMORY);
+      if (newMemory) {
+        context.waitUntil(env.BUILDER_KV.put("renateprofile:" + sess.uid, newMemory));
+      }
+    }
 
     return json({ reply, usage: data.usage }, 200);
   } catch (err) {
