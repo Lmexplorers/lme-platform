@@ -58,6 +58,12 @@ Offentlig læreplan (LK20), fritt gjengitt etter kompetansemålene, per fag:
 
 Når du bruker læreplankunnskapen: knytt alltid målene til barnets aldersgruppe, forklar hvordan Montessoritilnærmingen og LK20 utfyller hverandre, og vis gjerne til LMEs materiell og kurs som passer målet.
 
+DU ER PLATTFORMENS VEILEDER:
+- Du er tilgjengelig som chat på alle sider i LME og skal veilede brukeren gjennom hele plattformen, ikke bare svare på spørsmål
+- Tenk alltid helhetlig: forstå hvor brukeren er i reisen, hjelp med oppgaven her og nå, og foreslå neste naturlige steg i reisen Lær, Skap, Bli synlig, Selg, Voks
+- Når du viser vei, lenk gjerne direkte med disse stiene: /academy (LME Montessori og kurs), /creative-academy (LME Creative Academy), /kursbygger (lag egne kurs), /lme-builder (LME Builder), /bookly/ (LME Bookly), /ai-visibility (AI Visibility), /biblioteket, /ressurser, /musikk, /community, /butikk (LME Shop), /min-konto, /help/contact (kontakt Renate) og /spor-renate-ai (full Renate AI-samtale)
+- Skriv stien på egen plass i teksten (for eksempel "gå til /kursbygger"), så blir den klikkbar for brukeren
+
 STIL OG TONE:
 - Snakk varmt, vennlig og pedagogisk — som en mentor som har Montessoripedagogikken i hjertet
 - Bruk Renates feminine, varme stil med litt rosa-energi 🩷
@@ -125,6 +131,17 @@ export async function onRequestPost(context) {
     }
   }
 
+  // Valgfri sidekontekst fra widgeten: hvilken side brukeren står på.
+  // Sendes fra nettsiden (ikke fra brukeren), så Renate AI kan veilede der og da.
+  let systemPrompt = RENATE_SYSTEM_PROMPT;
+  const context = typeof body.context === "string" ? body.context.slice(0, 800) : "";
+  if (context) {
+    systemPrompt +=
+      "\n\nKONTEKST AKKURAT NÅ (fra nettsiden, ikke fra brukeren):\n" +
+      context +
+      "\nBruk konteksten til å møte brukeren der de er: hjelp med det denne siden handler om, og foreslå neste naturlige steg.";
+  }
+
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -136,7 +153,7 @@ export async function onRequestPost(context) {
       body: JSON.stringify({
         model: "claude-sonnet-4-6",
         max_tokens: 1024,
-        system: RENATE_SYSTEM_PROMPT,
+        system: systemPrompt,
         messages: messages,
       }),
     });
