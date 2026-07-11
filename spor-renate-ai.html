@@ -563,7 +563,57 @@ function saveConversations() {
     console.error('Storage feil:', e);
     showToast('Kunne ikke lagre — kanskje for mange/store vedlegg 💔');
   }
+  scheduleCloudSave();
 }
+
+// ============= SKY-LAGRING =============
+// Innloggede brukere får samtalene lagret i skyen (/api/renate-chats),
+// så Renate AI husker dem på tvers av enheter og økter. Uinnloggede
+// fortsetter med localStorage som før.
+const SYNC_SLOT = 'no';
+let cloudLoggedIn = false;
+let cloudTimer = null;
+
+function scheduleCloudSave() {
+  if (!cloudLoggedIn) return;
+  clearTimeout(cloudTimer);
+  cloudTimer = setTimeout(() => {
+    fetch('/api/renate-chats', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slot: SYNC_SLOT, data: conversations })
+    }).then(r => {
+      if (r.status === 413) showToast('Samtalene er for store for sky-lagring. Slett gamle samtaler eller store vedlegg 💔');
+    }).catch(() => {});
+  }, 800);
+}
+
+// Slår sammen lokal liste og sky-liste: nyeste versjon av hver samtale vinner
+function mergeConversations(localList, cloudList) {
+  const byId = {};
+  cloudList.concat(localList).forEach(c => {
+    if (!c || !c.id) return;
+    const prev = byId[c.id];
+    if (!prev || new Date(c.updatedAt || 0) > new Date(prev.updatedAt || 0)) byId[c.id] = c;
+  });
+  return Object.values(byId).sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0));
+}
+
+fetch('/api/renate-chats?slot=' + SYNC_SLOT, { credentials: 'same-origin' })
+  .then(r => r.json())
+  .then(d => {
+    if (!d || !d.loggedIn) return;
+    cloudLoggedIn = true;
+    if (Array.isArray(d.data) && d.data.length) {
+      conversations = mergeConversations(conversations, d.data);
+      saveConversations();
+      renderConversationsList();
+    } else if (conversations.length) {
+      scheduleCloudSave(); // første synk: last opp de lokale samtalene
+    }
+  })
+  .catch(() => {});
 
 function createNewConversation() {
   const id = 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);

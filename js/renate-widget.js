@@ -6,8 +6,9 @@
    - Viser en flytende Renate AI-knapp nede til høyre
    - Chatten vet hvilken side brukeren står på (sendes som
      kontekst til /renate-ai)
-   - Samtalen huskes så lenge fanen er åpen (sessionStorage),
-     så Renate følger med når brukeren navigerer videre
+   - Samtalen huskes i nettleseren (localStorage), og for
+     innloggede brukere også i skyen via /api/renate-chats,
+     så Renate husker på tvers av enheter og økter
    - Tospråklig: alle tekster har data-no/data-en og følger
      sidens switchLanguage-mønster
    ========================================================= */
@@ -56,16 +57,35 @@
       ' Språket på siden er ' + (lang() === 'en' ? 'engelsk' : 'norsk') + '.';
   }
 
-  // ---------- Samtaleminne (per fane) ----------
+  // ---------- Samtaleminne ----------
+  // Lokalt: localStorage (overlever at nettleseren lukkes).
+  // Innlogget: også i skyen via /api/renate-chats, så samtalen
+  // følger brukeren på tvers av enheter.
+  var cloudLoggedIn = false;
+  var cloudTimer = null;
+
   function loadHistory() {
     try {
-      var raw = sessionStorage.getItem(STORAGE_KEY);
+      var raw = localStorage.getItem(STORAGE_KEY);
       var arr = raw ? JSON.parse(raw) : [];
       return Array.isArray(arr) ? arr : [];
     } catch (e) { return []; }
   }
   function saveHistory(hist) {
-    try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(hist.slice(-30))); } catch (e) {}
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(hist.slice(-30))); } catch (e) {}
+    scheduleCloudSave(hist);
+  }
+  function scheduleCloudSave(hist) {
+    if (!cloudLoggedIn) return;
+    clearTimeout(cloudTimer);
+    cloudTimer = setTimeout(function () {
+      fetch('/api/renate-chats', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slot: 'widget', data: hist.slice(-30) })
+      }).catch(function () {});
+    }, 600);
   }
   var history = loadHistory();
 
@@ -224,12 +244,33 @@
       ));
     }
 
-    // Vis tidligere samtale, ellers velkomst
-    if (history.length) {
-      history.forEach(function (m) { addBubble(m.role, m.content); });
-    } else {
-      showWelcome();
+    function renderAll() {
+      msgsEl.innerHTML = '';
+      if (history.length) {
+        history.forEach(function (m) { addBubble(m.role, m.content); });
+      } else {
+        showWelcome();
+      }
     }
+
+    // Vis tidligere samtale, ellers velkomst
+    renderAll();
+
+    // Innlogget? Hent samtalen fra skyen, den er fasit på tvers av enheter
+    fetch('/api/renate-chats?slot=widget', { credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.loggedIn) return;
+        cloudLoggedIn = true;
+        if (Array.isArray(d.data) && d.data.length) {
+          history = d.data;
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(-30))); } catch (e) {}
+          renderAll();
+        } else if (history.length) {
+          scheduleCloudSave(history); // første synk: last opp det lokale
+        }
+      })
+      .catch(function () {});
 
     var sending = false;
     function send() {
