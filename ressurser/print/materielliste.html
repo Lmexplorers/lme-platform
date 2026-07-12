@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Materielliste 0–12 — Little Montessori Explorers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face{font-family:'Sasson Montessori';src:url('/fonts/SassoonMontessori.woff2') format('woff2'),url('/fonts/SassoonMontessori.ttf') format('truetype');font-weight:normal;font-style:normal;font-display:swap;}
+  :root{--cerise:#E91E89;--pink:#F5A8B8;--soft:#F8D7DA;--ink:#2a1e2e;--lime:#A4D233;--sky:#3FA9F5;--sun:#F7C72E;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;color:var(--ink);background:#faf6f7;}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 20px;background:#fff;box-shadow:0 2px 10px rgba(180,120,140,.12);position:sticky;top:0;z-index:5;}
+  .bar .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--cerise);text-decoration:none;font-size:15px;}
+  .bar .brand img{width:32px;height:32px;object-fit:contain;}
+  .bar .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+  .btn{border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-family:inherit;cursor:pointer;text-decoration:none;font-size:14px;white-space:nowrap;}
+  .btn-print{background:var(--cerise);color:#fff;box-shadow:0 6px 16px rgba(233,30,137,.35);}
+  .btn-back{background:#fff;color:var(--ink);border:1px solid #eedce2;}
+  .sheet{max-width:820px;margin:22px auto;background:#fff;padding:34px 38px;border-radius:14px;box-shadow:0 10px 30px rgba(180,120,140,.14);}
+  .sheet h1{font-size:28px;line-height:1.1;margin-bottom:6px;}
+  .sheet .sub{color:#9a7b85;font-size:14px;margin-bottom:8px;line-height:1.5;}
+  .doc-foot{margin-top:26px;text-align:center;color:#c2a7b0;font-size:11px;letter-spacing:.04em;}
+  .doc h2{font-size:22px;color:var(--cerise);margin:30px 0 4px;}
+  .doc h2 .stage{display:inline-block;background:var(--soft);color:#b13a68;border-radius:999px;font-size:13px;padding:3px 12px;margin-left:8px;vertical-align:middle;font-family:'Playpen Sans',sans-serif;}
+  .doc h3{font-size:16.5px;margin:20px 0 6px;}
+  .doc h4{font-size:13px;color:#b48ba0;text-transform:uppercase;letter-spacing:.08em;margin:12px 0 4px;font-family:'Playpen Sans',sans-serif;}
+  .doc p{font-size:15px;line-height:1.7;margin-bottom:10px;}
+  .doc ul{margin:0 0 12px 20px;}
+  .doc li{font-size:14.5px;line-height:1.6;margin-bottom:4px;}
+  .callout{background:#F4F9E9;border:1px solid #DCEBBE;border-radius:12px;padding:14px 18px;color:#5a6a32;font-size:15px;line-height:1.6;margin:18px 0 4px;font-weight:600;text-align:center;}
+  .note{background:#FCEFF2;border:1px solid #F3D3DD;border-radius:12px;padding:12px 16px;color:#9a5b6e;font-size:14px;line-height:1.6;margin:10px 0 14px;}
+  .shopcta{margin-top:22px;background:linear-gradient(135deg,#FDE7E0,#F8DBE1);border-radius:14px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .shopcta .t{font-size:14.5px;color:#9a5b6e;font-weight:600;}
+  .shopcta a{background:var(--cerise);color:#fff;border-radius:999px;padding:10px 18px;font-weight:700;text-decoration:none;font-size:14px;white-space:nowrap;}
+  @media print{
+    .bar{display:none !important;}
+    body{background:#fff;}
+    .sheet{box-shadow:none;border:0;margin:0;max-width:100%;border-radius:0;padding:0;}
+    .shopcta{display:none !important;}
+    .doc h2{break-after:avoid;}
+    .doc h3,.doc h4{break-after:avoid;}
+    @page{size:A4;margin:16mm;}
+  }
+  h1,h2,h3,h4,h5,h6{font-family:'Playpen Sans',system-ui,sans-serif;}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/ressurser"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <div class="actions">
+      <button class="btn" id="lme-print-lang" type="button" style="background:#FCEFF2;color:#C13D6A;">🇬🇧 English</button>
+      <a class="btn btn-back" href="/ressurser" data-no="‹ Ressurser" data-en="‹ Resources">‹ Ressurser</a>
+      <button class="btn btn-print" onclick="window.print()" data-no="⬇ Lagre som PDF" data-en="⬇ Save as PDF">⬇ Lagre som PDF</button>
+    </div>
+  </div>
+  <div class="sheet">
+    <h1 data-no="Materielliste 0–12" data-en="Materials list 0–12">Materielliste 0–12</h1>
+    <div class="sub" data-no="Materiell det er anbefalt at montessoriskoler og -barnehager har, fordelt etter utviklingstrinn. Listen skiller mellom materiell man kjøper og materiell man kan lage selv." data-en="Materials recommended for Montessori schools and kindergartens, organised by developmental stage. The list distinguishes between purchased materials and materials you can make yourself.">Materiell det er anbefalt at montessoriskoler og -barnehager har, fordelt etter utviklingstrinn. Listen skiller mellom materiell man kjøper og materiell man kan lage selv.</div>
+
+    <div class="doc">
+
+      <h2><span data-no="Småbarnas hus" data-en="The Infant Community">Småbarnas hus</span><span class="stage" data-no="0–3 år" data-en="0–3 years">0–3 år</span></h2>
+
+      <h3 data-no="Materiell for grovmotorikk" data-en="Materials for gross motor skills">Materiell for grovmotorikk</h3>
+      <h4 data-no="Håndlaget materiell" data-en="Handmade materials">Håndlaget materiell</h4>
+      <ul>
+        <li data-no="&quot;Ballettstang&quot; på veggen" data-en="&quot;Ballet bar&quot; on the wall">"Ballettstang" på veggen</li>
+        <li data-no="Speil montert på veggen i barnehøyde" data-en="Mirror mounted on the wall at child height">Speil montert på veggen i barnehøyde</li>
+        <li data-no="Ottoman som støtte for barn som begynner å gå" data-en="Ottoman as support for children learning to walk">Ottoman som støtte for barn som begynner å gå</li>
+        <li data-no="Trappetrinn" data-en="Steps">Trappetrinn</li>
+      </ul>
+
+      <h3 data-no="Øye-hånd-koordinasjon og objektpermanens" data-en="Eye-hand coordination and object permanence">Øye-hånd-koordinasjon og objektpermanens</h3>
+      <h4 data-no="Kjøpt materiell" data-en="Purchased materials">Kjøpt materiell</h4>
+      <ul>
+        <li data-no="Ringer på pinne, geometriske former på pinne og lignende" data-en="Rings on a peg, geometric shapes on a peg and similar">Ringer på pinne, geometriske former på pinne og lignende</li>
+        <li data-no="Puttekasser, skuffer og luker" data-en="Posting boxes, drawers and hatches">Puttekasser, skuffer og luker</li>
+        <li data-no="Knottepuslespill med geometriske former og ulike motiver" data-en="Knobbed puzzles with geometric shapes and various motifs">Knottepuslespill med geometriske former og ulike motiver</li>
+        <li data-no="Geometriske figurer som passer akkurat i beholderen" data-en="Geometric figures that fit exactly in their container">Geometriske figurer som passer akkurat i beholderen</li>
+        <li data-no="Boks med brett og ball" data-en="Box with tray and ball">Boks med brett og ball</li>
+        <li data-no="Boks med skuff og ball" data-en="Box with drawer and ball">Boks med skuff og ball</li>
+        <li data-no="Boks med myke baller til å trykke ned i hull" data-en="Box with soft balls to press through holes">Boks med myke baller til å trykke ned i hull</li>
+        <li data-no="Boks med dører til å åpne, med ulike låser" data-en="Box with doors to open, with different locks">Boks med dører til å åpne, med ulike låser</li>
+      </ul>
+      <h4 data-no="Håndlaget materiell" data-en="Handmade materials">Håndlaget materiell</h4>
+      <ul>
+        <li data-no="Stabletårn" data-en="Stacking tower">Stabletårn</li>
+        <li data-no="Hengelåser med nøkler" data-en="Padlocks with keys">Hengelåser med nøkler</li>
+        <li data-no="Skruer og muttere" data-en="Bolts and nuts">Skruer og muttere</li>
+        <li data-no="Træ perler på snor" data-en="Threading beads on a string">Træ perler på snor</li>
+        <li data-no="&quot;Sparebøsse&quot;" data-en="&quot;Coin box&quot;">"Sparebøsse"</li>
+        <li data-no="Sortering" data-en="Sorting">Sortering</li>
+        <li data-no="Kulebane" data-en="Ball run">Kulebane</li>
+        <li data-no="Mapper eller lommebok med ulike lukkemekanismer, f.eks. glidelås, trykknapp og knapp" data-en="Folders or wallet with different fastenings, e.g. zip, press stud and button">Mapper eller lommebok med ulike lukkemekanismer, f.eks. glidelås, trykknapp og knapp</li>
+      </ul>
+
+      <h3 data-no="Praktiske hverdagsaktiviteter" data-en="Practical life activities">Praktiske hverdagsaktiviteter</h3>
+      <h4 data-no="Kjøpt materiell" data-en="Purchased materials">Kjøpt materiell</h4>
+      <ul>
+        <li data-no="Klesrammer, komplett sett: borrelås, glidelås, knapper, trykknapper, beltespenner, bukseseler og så videre" data-en="Dressing frames, complete set: velcro, zip, buttons, press studs, buckles, braces and so on">Klesrammer, komplett sett: borrelås, glidelås, knapper, trykknapper, beltespenner, bukseseler og så videre</li>
+      </ul>
+      <h4 data-no="Håndlaget materiell" data-en="Handmade materials">Håndlaget materiell</h4>
+      <ul>
+        <li data-no="Materiell for å stelle seg: speil, børste, kam og lommetørkle" data-en="Care of self materials: mirror, brush, comb and handkerchief">Materiell for å stelle seg: speil, børste, kam og lommetørkle</li>
+        <li data-no="Materiell for å vaske hendene" data-en="Hand washing materials">Materiell for å vaske hendene</li>
+        <li data-no="Pusse sko" data-en="Shoe polishing">Pusse sko</li>
+        <li data-no="Pusse speil" data-en="Mirror polishing">Pusse speil</li>
+        <li data-no="Baking" data-en="Baking">Baking</li>
+        <li data-no="Mataktiviteter, f.eks. skjære opp banan, smøre skive, presse mandarinsaft og skrelle eple" data-en="Food activities, e.g. slicing banana, making a sandwich, juicing mandarins and peeling apples">Mataktiviteter, f.eks. skjære opp banan, smøre skive, presse mandarinsaft og skrelle eple</li>
+        <li data-no="Vaske kluter" data-en="Washing cloths">Vaske kluter</li>
+        <li data-no="Vaske opp" data-en="Washing dishes">Vaske opp</li>
+        <li data-no="Vaske plantenes blader" data-en="Washing plant leaves">Vaske plantenes blader</li>
+        <li data-no="Vanne planter" data-en="Watering plants">Vanne planter</li>
+        <li data-no="Sette blomster i vase" data-en="Arranging flowers in a vase">Sette blomster i vase</li>
+        <li data-no="Vaske vinduer" data-en="Washing windows">Vaske vinduer</li>
+        <li data-no="Pusse tre" data-en="Polishing wood">Pusse tre</li>
+        <li data-no="Vaske bord" data-en="Washing tables">Vaske bord</li>
+        <li data-no="Tørke støv" data-en="Dusting">Tørke støv</li>
+        <li data-no="Dekke bordet" data-en="Setting the table">Dekke bordet</li>
+        <li data-no="Koste" data-en="Sweeping">Koste</li>
+        <li data-no="Mopp for å tørke gulvet" data-en="Mop for drying the floor">Mopp for å tørke gulvet</li>
+        <li data-no="Utendørsaktiviteter, f.eks. måke snø, koste, plante, luke, høste og stelle i hagen" data-en="Outdoor activities, e.g. shovelling snow, sweeping, planting, weeding, harvesting and gardening">Utendørsaktiviteter, f.eks. måke snø, koste, plante, luke, høste og stelle i hagen</li>
+        <li data-no="Aktiviteter knyttet til dyr inne og ute, f.eks. mate, rense bur og stelle med dyrene" data-en="Activities with animals indoors and outdoors, e.g. feeding, cleaning cages and caring for the animals">Aktiviteter knyttet til dyr inne og ute, f.eks. mate, rense bur og stelle med dyrene</li>
+      </ul>
+
+      <h3 data-no="Språkaktiviteter" data-en="Language activities">Språkaktiviteter</h3>
+      <h4 data-no="Håndlaget materiell" data-en="Handmade materials">Håndlaget materiell</h4>
+      <ul>
+        <li data-no="Språkaktiviteter med klassifiserte objekter" data-en="Language activities with classified objects">Språkaktiviteter med klassifiserte objekter</li>
+        <li data-no="Språkaktiviteter med objekter og tilsvarende bilder" data-en="Language activities with objects and matching pictures">Språkaktiviteter med objekter og tilsvarende bilder</li>
+        <li data-no="Språkaktiviteter med bilder" data-en="Language activities with pictures">Språkaktiviteter med bilder</li>
+        <li data-no="Småbarnsbøker" data-en="Books for toddlers">Småbarnsbøker</li>
+      </ul>
+
+      <h3 data-no="Forming og musikk" data-en="Art and music">Forming og musikk</h3>
+      <ul>
+        <li data-no="Formingsaktiviteter for individuelt og selvstendig arbeid, f.eks. maling, tegning, sying, tredimensjonalt materiell, klipping og liming" data-en="Art activities for individual, independent work, e.g. painting, drawing, sewing, three-dimensional materials, cutting and gluing">Formingsaktiviteter for individuelt og selvstendig arbeid, f.eks. maling, tegning, sying, tredimensjonalt materiell, klipping og liming</li>
+        <li data-no="Rytmeinstrumenter" data-en="Rhythm instruments">Rytmeinstrumenter</li>
+      </ul>
+
+      <h3 data-no="Annet" data-en="Other">Annet</h3>
+      <ul>
+        <li data-no="Individuelle bord og små gruppebord, høyde 50 cm" data-en="Individual tables and small group tables, height 50 cm">Individuelle bord og små gruppebord, høyde 50 cm</li>
+        <li data-no="Stoler med setehøyde 17 cm" data-en="Chairs with seat height 17 cm">Stoler med setehøyde 17 cm</li>
+        <li data-no="Lave senger eller madrasser på gulvet for soving" data-en="Low beds or floor mattresses for sleeping">Lave senger eller madrasser på gulvet for soving</li>
+        <li data-no="Hyller og spesialbord for materiellet" data-en="Shelves and special tables for the materials">Hyller og spesialbord for materiellet</li>
+        <li data-no="Lesekrok med bokhylle og stoler i barnestørrelse" data-en="Reading corner with bookshelf and child-sized chairs">Lesekrok med bokhylle og stoler i barnestørrelse</li>
+      </ul>
+
+      <h2><span data-no="Barnas hus" data-en="The Children's House">Barnas hus</span><span class="stage" data-no="3–6 år" data-en="3–6 years">3–6 år</span></h2>
+
+      <h3 data-no="Praktiske hverdagsaktiviteter" data-en="Practical life activities">Praktiske hverdagsaktiviteter</h3>
+      <h4 data-no="Kjøpt materiell" data-en="Purchased materials">Kjøpt materiell</h4>
+      <ul>
+        <li data-no="Klesrammene, komplett sett med 12 rammer" data-en="Dressing frames, complete set of 12 frames">Klesrammene, komplett sett med 12 rammer</li>
+      </ul>
+      <h4 data-no="Håndlaget materiell" data-en="Handmade materials">Håndlaget materiell</h4>
+      <ul>
+        <li data-no="Helle tørt og helle vått" data-en="Dry pouring and wet pouring">Helle tørt og helle vått</li>
+        <li data-no="Brette og flette" data-en="Folding and braiding">Brette og flette</li>
+        <li data-no="Vaske hendene" data-en="Hand washing">Vaske hendene</li>
+        <li data-no="Skjære opp frukt og grønt" data-en="Cutting fruit and vegetables">Skjære opp frukt og grønt</li>
+        <li data-no="Pusse sølv, messing og tre" data-en="Polishing silver, brass and wood">Pusse sølv, messing og tre</li>
+        <li data-no="Pusse vindu og speil" data-en="Polishing windows and mirrors">Pusse vindu og speil</li>
+        <li data-no="Pusse sko" data-en="Shoe polishing">Pusse sko</li>
+        <li data-no="Vaske og stryke kluter" data-en="Washing and ironing cloths">Vaske og stryke kluter</li>
+        <li data-no="Vaske opp" data-en="Washing dishes">Vaske opp</li>
+        <li data-no="Vaske bord og stoler" data-en="Washing tables and chairs">Vaske bord og stoler</li>
+        <li data-no="Tørke støv" data-en="Dusting">Tørke støv</li>
+        <li data-no="Stelle og vanne planter" data-en="Caring for and watering plants">Stelle og vanne planter</li>
+        <li data-no="Sette blomster i vase" data-en="Arranging flowers in a vase">Sette blomster i vase</li>
+        <li data-no="Koste" data-en="Sweeping">Koste</li>
+        <li data-no="Moppe og tørke opp søl fra gulvet" data-en="Mopping and wiping up spills from the floor">Moppe og tørke opp søl fra gulvet</li>
+        <li data-no="Utendørsaktiviteter, f.eks. måke snø, koste, plante, luke, høste og stelle i hagen" data-en="Outdoor activities, e.g. shovelling snow, sweeping, planting, weeding, harvesting and gardening">Utendørsaktiviteter, f.eks. måke snø, koste, plante, luke, høste og stelle i hagen</li>
+        <li data-no="Aktiviteter knyttet til dyr inne og ute, f.eks. mate, rense bur og stelle med dyrene" data-en="Activities with animals indoors and outdoors, e.g. feeding, cleaning cages and caring for the animals">Aktiviteter knyttet til dyr inne og ute, f.eks. mate, rense bur og stelle med dyrene</li>
+      </ul>
+
+      <h3 data-no="Sensorisk materiell" data-en="Sensorial materials">Sensorisk materiell</h3>
+      <h4 data-no="Kjøpt materiell" data-en="Purchased materials">Kjøpt materiell</h4>
+      <ul>
+        <li data-no="Sylinderblokkene (4 stk)" data-en="Cylinder blocks (4)">Sylinderblokkene (4 stk)</li>
+        <li data-no="Rosa tårnet" data-en="Pink tower">Rosa tårnet</li>
+        <li data-no="Brune trappa" data-en="Brown stair">Brune trappa</li>
+        <li data-no="Røde lengdestaver" data-en="Red rods">Røde lengdestaver</li>
+        <li data-no="Fargebrikker, boks 1, 2 og 3" data-en="Colour tablets, boxes 1, 2 and 3">Fargebrikker, boks 1, 2 og 3</li>
+        <li data-no="Geometrikommoden med kort" data-en="Geometry cabinet with cards">Geometrikommoden med kort</li>
+        <li data-no="Bladkommoden med kort" data-en="Leaf cabinet with cards">Bladkommoden med kort</li>
+        <li data-no="Stoffbiter, sett 1 og 2 (kan lages selv)" data-en="Fabric pieces, sets 1 and 2 (can be made yourself)">Stoffbiter, sett 1 og 2 (kan lages selv)</li>
+        <li data-no="Følebrett 1, 2 og 3" data-en="Touch boards 1, 2 and 3">Følebrett 1, 2 og 3</li>
+        <li data-no="Følebrikker, ett sett" data-en="Touch tablets, one set">Følebrikker, ett sett</li>
+        <li data-no="Vektbrikker" data-en="Baric tablets">Vektbrikker</li>
+        <li data-no="Temperaturflasker og temperaturbrikker" data-en="Thermic bottles and thermic tablets">Temperaturflasker og temperaturbrikker</li>
+        <li data-no="Smakeflasker (kan lages selv)" data-en="Tasting bottles (can be made yourself)">Smakeflasker (kan lages selv)</li>
+        <li data-no="Lukteflasker (kan lages selv)" data-en="Smelling bottles (can be made yourself)">Lukteflasker (kan lages selv)</li>
+        <li data-no="Lydbokser" data-en="Sound cylinders">Lydbokser</li>
+        <li data-no="Bjellene" data-en="The bells">Bjellene</li>
+        <li data-no="Blå geometriske legemer (10 stk) med kurv, duk og kort" data-en="Blue geometric solids (10) with basket, cloth and cards">Blå geometriske legemer (10 stk) med kurv, duk og kort</li>
+        <li data-no="Konstruktive trekanter (6 esker)" data-en="Constructive triangles (6 boxes)">Konstruktive trekanter (6 esker)</li>
+        <li data-no="Binomisk kube" data-en="Binomial cube">Binomisk kube</li>
+        <li data-no="Trinomisk kube" data-en="Trinomial cube">Trinomisk kube</li>
+        <li data-no="Dekanomialkvadratet" data-en="Decanomial square">Dekanomialkvadratet</li>
+        <li data-no="Fargede sylindre (4 sett, tilsvarer sylinderblokkene)" data-en="Knobless cylinders (4 sets, matching the cylinder blocks)">Fargede sylindre (4 sett, tilsvarer sylinderblokkene)</li>
+        <li data-no="Graderte geometriske figurer" data-en="Graded geometric figures">Graderte geometriske figurer</li>
+        <li data-no="Bind for øynene (ca. 10 per 30 barn)" data-en="Blindfolds (approx. 10 per 30 children)">Bind for øynene (ca. 10 per 30 barn)</li>
+      </ul>
+      <h4 data-no="Håndlaget materiell" data-en="Handmade materials">Håndlaget materiell</h4>
+      <ul>
+        <li data-no="Sorteringsaktiviteter" data-en="Sorting activities">Sorteringsaktiviteter</li>
+        <li data-no="Den hemmelige posen" data-en="The mystery bag">Den hemmelige posen</li>
+      </ul>
+
+      <h3 data-no="Språkmateriell" data-en="Language materials">Språkmateriell</h3>
+      <h4 data-no="Kjøpt materiell" data-en="Purchased materials">Kjøpt materiell</h4>
+      <ul>
+        <li data-no="Metallsjabloner med fargeblyanter, papir 14 x 14 cm, underlag, penneholdere og brett" data-en="Metal insets with coloured pencils, 14 x 14 cm paper, mats, pencil holders and tray">Metallsjabloner med fargeblyanter, papir 14 x 14 cm, underlag, penneholdere og brett</li>
+        <li data-no="Sandpapirbokstaver (små bokstaver, kursiv eller trykte)" data-en="Sandpaper letters (lower case, cursive or print)">Sandpapirbokstaver (små bokstaver, kursiv eller trykte)</li>
+        <li data-no="Tavler for å skrive med kritt: blank, linjer, løkkeskriftlinjer og ruter" data-en="Chalk boards: blank, lined, cursive-lined and squared">Tavler for å skrive med kritt: blank, linjer, løkkeskriftlinjer og ruter</li>
+        <li data-no="Stort bevegelig alfabet, vokaler og konsonanter i hver sin farge, samme bokstavtype som sandpapirbokstavene" data-en="Large movable alphabet, vowels and consonants in separate colours, same letter style as the sandpaper letters">Stort bevegelig alfabet, vokaler og konsonanter i hver sin farge, samme bokstavtype som sandpapirbokstavene</li>
+        <li data-no="Mellomstort bevegelig alfabet, ensfarget" data-en="Medium movable alphabet, single colour">Mellomstort bevegelig alfabet, ensfarget</li>
+        <li data-no="Lite bevegelig alfabet, bokstaver trykt på kort med stor bokstav på baksiden" data-en="Small movable alphabet, letters printed on cards with the capital letter on the back">Lite bevegelig alfabet, bokstaver trykt på kort med stor bokstav på baksiden</li>
+        <li data-no="Grammatikkboks med symboler for substantiv, determinativ, adjektiv, konjunksjon, preposisjon, verb og adverb" data-en="Grammar symbol box with symbols for noun, determiner, adjective, conjunction, preposition, verb and adverb">Grammatikkboks med symboler for substantiv, determinativ, adjektiv, konjunksjon, preposisjon, verb og adverb</li>
+        <li data-no="Bondegården eller lignende materiell for arbeid med ordklasser" data-en="The farm or similar material for work with the parts of speech">Bondegården eller lignende materiell for arbeid med ordklasser</li>
+      </ul>
+      <h4 data-no="Håndlaget materiell" data-en="Handmade materials">Håndlaget materiell</h4>
+      <ul>
+        <li data-no="Klassifiserte kort" data-en="Classified cards">Klassifiserte kort</li>
+        <li data-no="Oppsett med ulike typer papir og skriveutstyr for å øve på skriving" data-en="Set-ups with different papers and writing tools for practising writing">Oppsett med ulike typer papir og skriveutstyr for å øve på skriving</li>
+        <li data-no="Plansjer for håndskrift" data-en="Handwriting charts">Plansjer for håndskrift</li>
+        <li data-no="Sandpapirfonogrammer (grønne, kursiv eller trykt) for sj, kj, ei og au" data-en="Sandpaper phonograms (green, cursive or print) for sj, kj, ei and au">Sandpapirfonogrammer (grønne, kursiv eller trykt) for sj, kj, ei og au</li>
+        <li data-no="Lydrette ord" data-en="Phonetic words">Lydrette ord</li>
+        <li data-no="Lydrette kommandoer og ikke-lydrette kommandoer" data-en="Phonetic commands and non-phonetic commands">Lydrette kommandoer og ikke-lydrette kommandoer</li>
+        <li data-no="Småbøker for ikke-lydrette ord med nøkkellyder og lydkombinasjoner, f.eks. sj, skj, sl og rs" data-en="Booklets for non-phonetic words with key sounds and sound combinations, e.g. sj, skj, sl and rs">Småbøker for ikke-lydrette ord med nøkkellyder og lydkombinasjoner, f.eks. sj, skj, sl og rs</li>
+        <li data-no="Rødt og blått lite bevegelig alfabet, trykte bokstaver, for arbeid med fonogrammer" data-en="Red and blue small movable alphabet, print letters, for phonogram work">Rødt og blått lite bevegelig alfabet, trykte bokstaver, for arbeid med fonogrammer</li>
+        <li data-no="Høyfrekvente og uvanlige ord, flere sett" data-en="High-frequency and unusual words, several sets">Høyfrekvente og uvanlige ord, flere sett</li>
+        <li data-no="Rimord, flere sett" data-en="Rhyming words, several sets">Rimord, flere sett</li>
+        <li data-no="Klassifiserte kort for lesing, flere sett" data-en="Classified reading cards, several sets">Klassifiserte kort for lesing, flere sett</li>
+        <li data-no="Definisjonsmateriell, flere sett" data-en="Definition materials, several sets">Definisjonsmateriell, flere sett</li>
+        <li data-no="Artikkel: objekter og ferdigskrevne lapper" data-en="Article: objects and prepared slips">Artikkel: objekter og ferdigskrevne lapper</li>
+        <li data-no="Adjektiv: ferdigskrevne lapper for bondegården" data-en="Adjective: prepared slips for the farm">Adjektiv: ferdigskrevne lapper for bondegården</li>
+        <li data-no="Konjunksjon: utstyr og ferdigskrevne lapper" data-en="Conjunction: equipment and prepared slips">Konjunksjon: utstyr og ferdigskrevne lapper</li>
+        <li data-no="Preposisjon: utstyr og ferdigskrevne lapper" data-en="Preposition: equipment and prepared slips">Preposisjon: utstyr og ferdigskrevne lapper</li>
+        <li data-no="Verb, sett 1 og 2" data-en="Verb, sets 1 and 2">Verb, sett 1 og 2</li>
+        <li data-no="Adverb, sett 1 og 2" data-en="Adverb, sets 1 and 2">Adverb, sett 1 og 2</li>
+        <li data-no="Kommandoer (verb, sett 3, 4 og 5)" data-en="Commands (verb, sets 3, 4 and 5)">Kommandoer (verb, sett 3, 4 og 5)</li>
+        <li data-no="Setningsanalyse, boks 1 og 2 med piler og symboler" data-en="Sentence analysis, boxes 1 and 2 with arrows and symbols">Setningsanalyse, boks 1 og 2 med piler og symboler</li>
+        <li data-no="Plansje 1 og 2 for setningsanalyse" data-en="Charts 1 and 2 for sentence analysis">Plansje 1 og 2 for setningsanalyse</li>
+        <li data-no="Lister med ferdiglagde setninger for alle stadier i setningsanalysen" data-en="Lists of prepared sentences for every stage of sentence analysis">Lister med ferdiglagde setninger for alle stadier i setningsanalysen</li>
+        <li data-no="Materiell for interpretativ lesing (dramaøvelser)" data-en="Materials for interpretive reading (drama exercises)">Materiell for interpretativ lesing (dramaøvelser)</li>
+        <li data-no="Ordstudier: kort og kontrollplansjer for f.eks. synonymer, antonymer, homofoner, homografer, entall og flertall og sammensatte ord" data-en="Word study: cards and control charts for e.g. synonyms, antonyms, homophones, homographs, singular and plural and compound words">Ordstudier: kort og kontrollplansjer for f.eks. synonymer, antonymer, homofoner, homografer, entall og flertall og sammensatte ord</li>
+        <li data-no="Ordbøker, barnebøker, diktbøker og sangbøker" data-en="Dictionaries, children's books, poetry books and songbooks">Ordbøker, barnebøker, diktbøker og sangbøker</li>
+      </ul>
+
+      <h3 data-no="Matematikk" data-en="Mathematics">Matematikk</h3>
+      <h4 data-no="Kjøpt materiell" data-en="Purchased materials">Kjøpt materiell</h4>
+      <ul>
+        <li data-no="Tellestaver med tallkort" data-en="Number rods with numeral cards">Tellestaver med tallkort</li>
+        <li data-no="Sandpapirtall" data-en="Sandpaper numerals">Sandpapirtall</li>
+        <li data-no="Tellepinner (spolekassene)" data-en="Spindle boxes">Tellepinner (spolekassene)</li>
+        <li data-no="Tall og brikker, oddetall og partall (kan lages selv)" data-en="Cards and counters, odd and even (can be made yourself)">Tall og brikker, oddetall og partall (kan lages selv)</li>
+        <li data-no="Perlebrettet for introduksjonen til desimalsystemet" data-en="Bead tray for the introduction to the decimal system">Perlebrettet for introduksjonen til desimalsystemet</li>
+        <li data-no="Kort for introduksjonen av desimalsystemet (1 til 1000, store)" data-en="Cards for the introduction to the decimal system (1 to 1000, large)">Kort for introduksjonen av desimalsystemet (1 til 1000, store)</li>
+        <li data-no="Det gylne perlemateriellet, komplett sett" data-en="The golden bead material, complete set">Det gylne perlemateriellet, komplett sett</li>
+        <li data-no="Frimerkespillet (2 stk for 30 barn)" data-en="Stamp game (2 per 30 children)">Frimerkespillet (2 stk for 30 barn)</li>
+        <li data-no="Prikkleken" data-en="Dot game">Prikkleken</li>
+        <li data-no="Tierbrett med perler" data-en="Teen boards with beads">Tierbrett med perler</li>
+        <li data-no="Titallsbrett med perler" data-en="Ten boards with beads">Titallsbrett med perler</li>
+        <li data-no="Perlekabinettet med piler, komplett sett" data-en="Bead chain cabinet with arrows, complete set">Perlekabinettet med piler, komplett sett</li>
+        <li data-no="Addisjonsslangen, addisjonsbrettet og addisjonstavler" data-en="Addition snake game, addition strip board and addition charts">Addisjonsslangen, addisjonsbrettet og addisjonstavler</li>
+        <li data-no="Subtraksjonsslangen, subtraksjonsbrettet og subtraksjonstavler" data-en="Subtraction snake game, subtraction strip board and subtraction charts">Subtraksjonsslangen, subtraksjonsbrettet og subtraksjonstavler</li>
+        <li data-no="Perleesken for multiplikasjon (bør ha to esker per gruppe)" data-en="Multiplication bead bar box (two boxes per group recommended)">Perleesken for multiplikasjon (bør ha to esker per gruppe)</li>
+        <li data-no="Multiplikasjonsbrettet og multiplikasjonstavler" data-en="Multiplication board and multiplication charts">Multiplikasjonsbrettet og multiplikasjonstavler</li>
+        <li data-no="Divisjonsbrettet og divisjonstavler" data-en="Division board and division charts">Divisjonsbrettet og divisjonstavler</li>
+        <li data-no="Liten perleramme med perlerammepapir" data-en="Small bead frame with bead frame paper">Liten perleramme med perlerammepapir</li>
+        <li data-no="Stor perleramme med perlerammepapir" data-en="Large bead frame with bead frame paper">Stor perleramme med perlerammepapir</li>
+        <li data-no="Hierarkisk materiell" data-en="Wooden hierarchical material">Hierarkisk materiell</li>
+        <li data-no="Divisjonsrørene, kun for divisjon med enkel divisor" data-en="Racks and tubes, for single-divisor division only">Divisjonsrørene, kun for divisjon med enkel divisor</li>
+        <li data-no="Brøksirkler av metall, to brett" data-en="Metal fraction circles, two trays">Brøksirkler av metall, to brett</li>
+      </ul>
+      <h4 data-no="Håndlaget materiell" data-en="Handmade materials">Håndlaget materiell</h4>
+      <ul>
+        <li data-no="Ferdigskrevne lapper og stykker for brøksirkler" data-en="Prepared slips and problems for the fraction circles">Ferdigskrevne lapper og stykker for brøksirkler</li>
+        <li data-no="Tekstoppgaver for alle regnearter" data-en="Word problems for all four operations">Tekstoppgaver for alle regnearter</li>
+        <li data-no="Tepper til perlekjedene (1 m og 10 m)" data-en="Mats for the bead chains (1 m and 10 m)">Tepper til perlekjedene (1 m og 10 m)</li>
+        <li data-no="Ferdiglagde hefter til tabellarbeid for addisjon, subtraksjon, multiplikasjon og divisjon, med ruteark, blyanter, rødblyanter og linjal" data-en="Prepared booklets for chart work in addition, subtraction, multiplication and division, with squared paper, pencils, red pencils and ruler">Ferdiglagde hefter til tabellarbeid for addisjon, subtraksjon, multiplikasjon og divisjon, med ruteark, blyanter, rødblyanter og linjal</li>
+      </ul>
+
+      <h3 data-no="Kultur og natur" data-en="Culture and nature">Kultur og natur</h3>
+      <h4 data-no="Kjøpt materiell" data-en="Purchased materials">Kjøpt materiell</h4>
+      <ul>
+        <li data-no="Bladkommoden" data-en="Leaf cabinet">Bladkommoden</li>
+        <li data-no="Komplett sett med materiell for notelesing" data-en="Complete set of materials for music reading">Komplett sett med materiell for notelesing</li>
+        <li data-no="Sandpapirglobus og farget globus" data-en="Sandpaper globe and coloured globe">Sandpapirglobus og farget globus</li>
+        <li data-no="Puslekart for verden, hvert kontinent og Norge" data-en="Puzzle maps of the world, each continent and Norway">Puslekart for verden, hvert kontinent og Norge</li>
+        <li data-no="Flagg for Europa" data-en="Flags of Europe">Flagg for Europa</li>
+        <li data-no="Romersk bue" data-en="Roman arch">Romersk bue</li>
+      </ul>
+      <h4 data-no="Håndlaget materiell" data-en="Handmade materials">Håndlaget materiell</h4>
+      <ul>
+        <li data-no="Klassifiserte kort for plantens, bladets og blomstens deler" data-en="Classified cards for the parts of the plant, the leaf and the flower">Klassifiserte kort for plantens, bladets og blomstens deler</li>
+        <li data-no="Utstyr for botanikkeksperimenter, f.eks. plantens behov og stengelens arbeid" data-en="Equipment for botany experiments, e.g. the needs of the plant and the work of the stem">Utstyr for botanikkeksperimenter, f.eks. plantens behov og stengelens arbeid</li>
+        <li data-no="Rytmeplansjer" data-en="Rhythm charts">Rytmeplansjer</li>
+        <li data-no="Land- og vannformer (kan lages selv)" data-en="Land and water forms (can be made yourself)">Land- og vannformer (kan lages selv)</li>
+        <li data-no="Geografimapper og biommapper" data-en="Geography folders and biome folders">Geografimapper og biommapper</li>
+        <li data-no="Skoleatlas og flaggbok" data-en="School atlas and flag book">Skoleatlas og flaggbok</li>
+        <li data-no="Oppsett for å tegne kart og flagg" data-en="Set-up for drawing maps and flags">Oppsett for å tegne kart og flagg</li>
+        <li data-no="Klassifiserte kort og definisjoner for geografi, f.eks. flagg, flaggets deler og land- og vannformer" data-en="Classified cards and definitions for geography, e.g. flags, the parts of the flag and land and water forms">Klassifiserte kort og definisjoner for geografi, f.eks. flagg, flaggets deler og land- og vannformer</li>
+        <li data-no="Relevante faktabøker og andre bøker om verden og verdens folk" data-en="Relevant non-fiction and other books about the world and its people">Relevante faktabøker og andre bøker om verden og verdens folk</li>
+        <li data-no="Kunstmapper" data-en="Art folders">Kunstmapper</li>
+        <li data-no="Klokkemateriell med klassifiserte kort for hele timer, halvtimer og kvarter" data-en="Clock materials with classified cards for whole hours, half hours and quarters">Klokkemateriell med klassifiserte kort for hele timer, halvtimer og kvarter</li>
+        <li data-no="Oppsett for selvstendig formingsarbeid, f.eks. klipping, liming, maling, tegning, sying og veving" data-en="Set-up for independent art work, e.g. cutting, gluing, painting, drawing, sewing and weaving">Oppsett for selvstendig formingsarbeid, f.eks. klipping, liming, maling, tegning, sying og veving</li>
+        <li data-no="Oppsett og utstyr for enkle fysikkeksperimenter" data-en="Set-up and equipment for simple physics experiments">Oppsett og utstyr for enkle fysikkeksperimenter</li>
+      </ul>
+
+      <h3 data-no="Annet, for en gruppe på 30 barn" data-en="Other, for a group of 30 children">Annet, for en gruppe på 30 barn</h3>
+      <ul>
+        <li data-no="3-5 hylleseksjoner for praktiske hverdagsaktiviteter (en hylleseksjon er ca. 100 x 80 x 40 cm med 3-4 hyller)" data-en="3-5 shelf units for practical life (one shelf unit is approx. 100 x 80 x 40 cm with 3-4 shelves)">3-5 hylleseksjoner for praktiske hverdagsaktiviteter (en hylleseksjon er ca. 100 x 80 x 40 cm med 3-4 hyller)</li>
+        <li data-no="6 hylleseksjoner for sensorisk materiell, inkludert naturfag og geografi" data-en="6 shelf units for sensorial materials, including science and geography">6 hylleseksjoner for sensorisk materiell, inkludert naturfag og geografi</li>
+        <li data-no="5 hylleseksjoner for språk" data-en="5 shelf units for language">5 hylleseksjoner for språk</li>
+        <li data-no="7 hylleseksjoner for matematikk" data-en="7 shelf units for mathematics">7 hylleseksjoner for matematikk</li>
+        <li data-no="1 hylleseksjon for forming" data-en="1 shelf unit for art">1 hylleseksjon for forming</li>
+        <li data-no="1 hylleseksjon med annet materiell for oppstartsfasen, f.eks. puslespill, treperler og dominospill" data-en="1 shelf unit with other materials for the settling-in phase, e.g. puzzles, wooden beads and dominoes">1 hylleseksjon med annet materiell for oppstartsfasen, f.eks. puslespill, treperler og dominospill</li>
+        <li data-no="12-15 enkeltbord med stoler" data-en="12-15 individual tables with chairs">12-15 enkeltbord med stoler</li>
+        <li data-no="10-15 matter i nøytrale farger, to av dem må være 1 m lange" data-en="10-15 mats in neutral colours, two of them must be 1 m long">10-15 matter i nøytrale farger, to av dem må være 1 m lange</li>
+        <li data-no="Oppbevaring for matter" data-en="Storage for mats">Oppbevaring for matter</li>
+        <li data-no="Liten bokhylle og barnestoler for bokhjørnet" data-en="Small bookshelf and children's chairs for the book corner">Liten bokhylle og barnestoler for bokhjørnet</li>
+        <li data-no="Små og store planter, bladene bør tilsvare formene fra bladkommoden" data-en="Small and large plants, the leaves should match the shapes from the leaf cabinet">Små og store planter, bladene bør tilsvare formene fra bladkommoden</li>
+        <li data-no="Gjenstander av tre, metall og glass for pussing" data-en="Objects of wood, metal and glass for polishing">Gjenstander av tre, metall og glass for pussing</li>
+        <li data-no="Rytmeinstrumenter" data-en="Rhythm instruments">Rytmeinstrumenter</li>
+      </ul>
+
+      <h2><span data-no="Grunnskolen" data-en="The Elementary School">Grunnskolen</span><span class="stage" data-no="6–12 år" data-en="6–12 years">6–12 år</span></h2>
+      <div class="note" data-no="NB: Man må ha det samme komplette settet for 6-9 og for 9-12 om klassen er delt i to, siden materiell som begynner i småskolen, fortsetter i storskolen." data-en="Note: You need the same complete set for 6-9 and for 9-12 if the class is split in two, since materials introduced in the lower years continue in the upper years.">NB: Man må ha det samme komplette settet for 6-9 og for 9-12 om klassen er delt i to, siden materiell som begynner i småskolen, fortsetter i storskolen.</div>
+
+      <h3 data-no="Språkmateriell" data-en="Language materials">Språkmateriell</h3>
+      <h4 data-no="Kjøpt materiell" data-en="Purchased materials">Kjøpt materiell</h4>
+      <ul>
+        <li data-no="Sandpapirbokstaver (små bokstaver, kursiv eller trykte)" data-en="Sandpaper letters (lower case, cursive or print)">Sandpapirbokstaver (små bokstaver, kursiv eller trykte)</li>
+        <li data-no="3-4 små bevegelige alfabeter i fire ulike farger" data-en="3-4 small movable alphabets in four different colours">3-4 små bevegelige alfabeter i fire ulike farger</li>
+        <li data-no="Grammatikksymboleske med symboler for substantiv, determinativ, adjektiv, konjunksjon, preposisjon, verb, adverb, pronomen og interjeksjon" data-en="Grammar symbol box with symbols for noun, determiner, adjective, conjunction, preposition, verb, adverb, pronoun and interjection">Grammatikksymboleske med symboler for substantiv, determinativ, adjektiv, konjunksjon, preposisjon, verb, adverb, pronomen og interjeksjon</li>
+        <li data-no="Grammatikkbokser, skal ikke ha samme fargekoding som grammatikksymbolene" data-en="Grammar boxes, must not share colour coding with the grammar symbols">Grammatikkbokser, skal ikke ha samme fargekoding som grammatikksymbolene</li>
+        <li data-no="Påfyllesker for grammatikkboksene, komplett sett med setninger" data-en="Filler boxes for the grammar boxes, complete set of sentences">Påfyllesker for grammatikkboksene, komplett sett med setninger</li>
+        <li data-no="Setningsanalysemateriell, piler og symboler i to sett: ett med spørsmål og termer og ett med kun termer" data-en="Sentence analysis material, arrows and symbols in two sets: one with questions and terms and one with terms only">Setningsanalysemateriell, piler og symboler i to sett: ett med spørsmål og termer og ett med kun termer</li>
+        <li data-no="Tavler for å skrive med kritt: blank, linjer, løkkeskriftlinjer og ruter" data-en="Chalk boards: blank, lined, cursive-lined and squared">Tavler for å skrive med kritt: blank, linjer, løkkeskriftlinjer og ruter</li>
+      </ul>
+      <h4 data-no="Håndlaget materiell" data-en="Handmade materials">Håndlaget materiell</h4>
+      <ul>
+        <li data-no="Plansjer for skriftspråkets historie" data-en="Charts for the history of written language">Plansjer for skriftspråkets historie</li>
+        <li data-no="Oppsett med ulike typer papir og skriveutstyr for å øve på skriving" data-en="Set-ups with different papers and writing tools for practising writing">Oppsett med ulike typer papir og skriveutstyr for å øve på skriving</li>
+        <li data-no="Plansjer for håndskrift" data-en="Handwriting charts">Plansjer for håndskrift</li>
+        <li data-no="Sandpapirfonogrammer (grønne, kursiv eller trykt) for sj, kj, ei, au, ai og øy" data-en="Sandpaper phonograms (green, cursive or print) for sj, kj, ei, au, ai and øy">Sandpapirfonogrammer (grønne, kursiv eller trykt) for sj, kj, ei, au, ai og øy</li>
+        <li data-no="Småbøker for ikke-lydrette ord med nøkkellyder og lydkombinasjoner, f.eks. sj, skj, sl og rs" data-en="Booklets for non-phonetic words with key sounds and sound combinations, e.g. sj, skj, sl and rs">Småbøker for ikke-lydrette ord med nøkkellyder og lydkombinasjoner, f.eks. sj, skj, sl og rs</li>
+        <li data-no="Høyfrekvente og uvanlige ord, flere sett" data-en="High-frequency and unusual words, several sets">Høyfrekvente og uvanlige ord, flere sett</li>
+        <li data-no="Konsonantforbindelser, flere sett" data-en="Consonant blends, several sets">Konsonantforbindelser, flere sett</li>
+        <li data-no="Rimord og rimstaving, flere sett" data-en="Rhyming words and rhyme spelling, several sets">Rimord og rimstaving, flere sett</li>
+        <li data-no="Kommandokort som hører sammen med grammatikkboksene, komplett sett" data-en="Command cards belonging to the grammar boxes, complete set">Kommandokort som hører sammen med grammatikkboksene, komplett sett</li>
+        <li data-no="Svart pyramide for substantiv og rød ball for verb" data-en="Black pyramid for the noun and red ball for the verb">Svart pyramide for substantiv og rød ball for verb</li>
+        <li data-no="Substantiv: konkrete og abstrakte substantiver, fellesnavn og egennavn, hankjønn og hunkjønn, entall og flertall" data-en="Noun: concrete and abstract nouns, common and proper nouns, masculine and feminine, singular and plural">Substantiv: konkrete og abstrakte substantiver, fellesnavn og egennavn, hankjønn og hunkjønn, entall og flertall</li>
+        <li data-no="Determinativ: samsvarsbøyning av artikkel og substantiv, klassifisering og den ubestemte artikkelen" data-en="Determiner: agreement of article and noun, classification and the indefinite article">Determinativ: samsvarsbøyning av artikkel og substantiv, klassifisering og den ubestemte artikkelen</li>
+        <li data-no="Adjektiv: samsvarsbøyning for hankjønn, hunkjønn og intetkjønn, gradbøyning 1 og 2, logisk adjektivlek og detektivleken" data-en="Adjective: gender agreement, comparison 1 and 2, the logical adjective game and the detective game">Adjektiv: samsvarsbøyning for hankjønn, hunkjønn og intetkjønn, gradbøyning 1 og 2, logisk adjektivlek og detektivleken</li>
+        <li data-no="Konjunksjon" data-en="Conjunction">Konjunksjon</li>
+        <li data-no="Preposisjon: vanlige preposisjoner" data-en="Preposition: common prepositions">Preposisjon: vanlige preposisjoner</li>
+        <li data-no="Verb: logisk verblek, verb eller substantiv og verbplansje" data-en="Verb: the logical verb game, verb or noun and verb chart">Verb: logisk verblek, verb eller substantiv og verbplansje</li>
+        <li data-no="Adverb: gradbøyning, logisk adverblek og klassifisering" data-en="Adverb: comparison, the logical adverb game and classification">Adverb: gradbøyning, logisk adverblek og klassifisering</li>
+        <li data-no="Pronomen: personlig pronomen, pronomen og bøyning av verb og pronomenplansjer" data-en="Pronoun: personal pronouns, pronouns and verb conjugation and pronoun charts">Pronomen: personlig pronomen, pronomen og bøyning av verb og pronomenplansjer</li>
+        <li data-no="Videre arbeid med verb: materiell for tempus, sterke og svake verb" data-en="Further verb work: materials for tense, strong and weak verbs">Videre arbeid med verb: materiell for tempus, sterke og svake verb</li>
+        <li data-no="Plansje A og B for setningsanalyse" data-en="Charts A and B for sentence analysis">Plansje A og B for setningsanalyse</li>
+        <li data-no="Materiell for interpretativ lesing (dramaøvelser), 6 sett" data-en="Materials for interpretive reading (drama exercises), 6 sets">Materiell for interpretativ lesing (dramaøvelser), 6 sett</li>
+        <li data-no="Ordstudier med plansjer: synonymer, antonymer, homofoner og homografer" data-en="Word study with charts: synonyms, antonyms, homophones and homographs">Ordstudier med plansjer: synonymer, antonymer, homofoner og homografer</li>
+        <li data-no="Materiell for leddsetninger" data-en="Materials for subordinate clauses">Materiell for leddsetninger</li>
+        <li data-no="Klassens bibliotek" data-en="Class library">Klassens bibliotek</li>
+        <li data-no="Ordbøker og grammatikkbøker" data-en="Dictionaries and grammar books">Ordbøker og grammatikkbøker</li>
+        <li data-no="Oppsett med utstyr for å lage egne bøker" data-en="Set-up with equipment for making your own books">Oppsett med utstyr for å lage egne bøker</li>
+        <li data-no="Utstyr for kalligrafi" data-en="Calligraphy equipment">Utstyr for kalligrafi</li>
+      </ul>
+
+      <h3 data-no="Matematikk" data-en="Mathematics">Matematikk</h3>
+      <h4 data-no="Kjøpt materiell" data-en="Purchased materials">Kjøpt materiell</h4>
+      <ul>
+        <li data-no="Sandpapirtall" data-en="Sandpaper numerals">Sandpapirtall</li>
+        <li data-no="Det gylne perlemateriellet, komplett sett" data-en="The golden bead material, complete set">Det gylne perlemateriellet, komplett sett</li>
+        <li data-no="Prikkleken" data-en="Dot game">Prikkleken</li>
+        <li data-no="Frimerkespillet (3-4 stk for 30 barn)" data-en="Stamp game (3-4 per 30 children)">Frimerkespillet (3-4 stk for 30 barn)</li>
+        <li data-no="Perlekabinettet, komplett sett med hvite piler kun for de korte kjedene" data-en="Bead cabinet, complete set with white arrows for the short chains only">Perlekabinettet, komplett sett med hvite piler kun for de korte kjedene</li>
+        <li data-no="Hierarkisk materiell" data-en="Wooden hierarchical material">Hierarkisk materiell</li>
+        <li data-no="Perleesken for multiplikasjon (bør ha 2-3 esker per gruppe)" data-en="Coloured bead bars 1-10 (2-3 boxes per group recommended)">Perleesken for multiplikasjon (bør ha 2-3 esker per gruppe)</li>
+        <li data-no="Hierarkisk dekanomial" data-en="Numerical decanomial">Hierarkisk dekanomial</li>
+        <li data-no="Stor perleramme (4-5 per gruppe) med perlerammepapir" data-en="Large bead frame (4-5 per group) with bead frame paper">Stor perleramme (4-5 per gruppe) med perlerammepapir</li>
+        <li data-no="Flat perleramme med tilhørende tallkort (kortene kan lages selv)" data-en="Flat bead frame with number cards (the cards can be made yourself)">Flat perleramme med tilhørende tallkort (kortene kan lages selv)</li>
+        <li data-no="Bankspillet" data-en="Bank game">Bankspillet</li>
+        <li data-no="Divisjonsrørene, komplett sett for lang divisjon" data-en="Racks and tubes, complete set for long division">Divisjonsrørene, komplett sett for lang divisjon</li>
+        <li data-no="Pluggebrettet" data-en="Peg board">Pluggebrettet</li>
+        <li data-no="Matematisk alfabet" data-en="Mathematical alphabet">Matematisk alfabet</li>
+        <li data-no="Potensen av 2 og 3, kube" data-en="Powers of 2 and 3 cube">Potensen av 2 og 3, kube</li>
+        <li data-no="Kubemateriellet" data-en="Wooden cubing material">Kubemateriellet</li>
+        <li data-no="Boks med 1 cm kuber" data-en="Box of 1 cm cubes">Boks med 1 cm kuber</li>
+        <li data-no="Binomisk kube og trinomisk kube" data-en="Binomial cube and trinomial cube">Binomisk kube og trinomisk kube</li>
+        <li data-no="Hierarkisk kube, også med gjennomsiktige biter for spesielle tilfeller" data-en="Hierarchical cube, also with transparent pieces for special cases">Hierarkisk kube, også med gjennomsiktige biter for spesielle tilfeller</li>
+        <li data-no="Brøksirkelmateriellet i metall" data-en="Fraction circles in metal">Brøksirkelmateriellet i metall</li>
+        <li data-no="Brøkmateriell i plast, i eske" data-en="Fraction material in plastic, in a box">Brøkmateriell i plast, i eske</li>
+        <li data-no="Brøkkjegler" data-en="Fraction skittles">Brøkkjegler</li>
+        <li data-no="Desimalbrøkmateriell med tallkort og perler" data-en="Decimal fraction material with number cards and beads">Desimalbrøkmateriell med tallkort og perler</li>
+        <li data-no="Centesimalramme" data-en="Centesimal frame">Centesimalramme</li>
+        <li data-no="Desimaltallbrettet (det gule brettet)" data-en="Decimal board (the yellow board)">Desimaltallbrettet (det gule brettet)</li>
+        <li data-no="Sjakkbrettet med tilhørende perler og kort" data-en="Checkerboard with beads and cards">Sjakkbrettet med tilhørende perler og kort</li>
+        <li data-no="Desimalsjakkbrettet med tilhørende perler og tallkort" data-en="Decimal checkerboard with beads and number cards">Desimalsjakkbrettet med tilhørende perler og tallkort</li>
+        <li data-no="Perleslangen for negative tall" data-en="Negative snake game">Perleslangen for negative tall</li>
+        <li data-no="Addisjonsslangen, addisjonsbrettet og addisjonstavler" data-en="Addition snake game, addition strip board and addition charts">Addisjonsslangen, addisjonsbrettet og addisjonstavler</li>
+        <li data-no="Subtraksjonsslangen, subtraksjonsbrettet og subtraksjonstavler" data-en="Subtraction snake game, subtraction strip board and subtraction charts">Subtraksjonsslangen, subtraksjonsbrettet og subtraksjonstavler</li>
+        <li data-no="Divisjonsbrettet og divisjonstavler" data-en="Division board and division charts">Divisjonsbrettet og divisjonstavler</li>
+      </ul>
+      <h4 data-no="Håndlaget materiell" data-en="Handmade materials">Håndlaget materiell</h4>
+      <ul>
+        <li data-no="Tallkort for tall 1 til 1 000 000 i svart-hvitt" data-en="Number cards for 1 to 1 000 000 in black and white">Tallkort for tall 1 til 1 000 000 i svart-hvitt</li>
+        <li data-no="Plansjer for tallenes historie" data-en="Charts for the history of numbers">Plansjer for tallenes historie</li>
+        <li data-no="Tall og brikker, oddetall og partall (kan lages selv)" data-en="Cards and counters, odd and even (can be made yourself)">Tall og brikker, oddetall og partall (kan lages selv)</li>
+        <li data-no="Lapper for tallsymboler og tallnavn, inkludert kardinaltall og ordenstall" data-en="Slips for number symbols and number names, including cardinal and ordinal numbers">Lapper for tallsymboler og tallnavn, inkludert kardinaltall og ordenstall</li>
+        <li data-no="Tallsystemplansje og plansje for andre tallsystemer" data-en="Number system chart and chart for other number systems">Tallsystemplansje og plansje for andre tallsystemer</li>
+        <li data-no="Tekstoppgaver for alle regnearter" data-en="Word problems for all four operations">Tekstoppgaver for alle regnearter</li>
+        <li data-no="Tepper til perlekjedene (1 m og 10 m)" data-en="Mats for the bead chains (1 m and 10 m)">Tepper til perlekjedene (1 m og 10 m)</li>
+        <li data-no="Ferdiglagde lapper og regnestykker for brøk" data-en="Prepared slips and problems for fractions">Ferdiglagde lapper og regnestykker for brøk</li>
+        <li data-no="Utstyr for måling, f.eks. målebånd, målebeger, tømmerstokk, desilitermål, måleskjeer, vekt og binders" data-en="Measuring equipment, e.g. tape measure, measuring jug, log, decilitre measure, measuring spoons, scales and paper clips">Utstyr for måling, f.eks. målebånd, målebeger, tømmerstokk, desilitermål, måleskjeer, vekt og binders</li>
+        <li data-no="&quot;Kandelaber&quot; for desimaltallbrettet og desimalvindmølle" data-en="&quot;Candelabra&quot; for the decimal board and decimal windmill">"Kandelaber" for desimaltallbrettet og desimalvindmølle</li>
+        <li data-no="Krone" data-en="Crown">Krone</li>
+        <li data-no="Grå kort med 0 for desimalbrøkmultiplikator" data-en="Grey cards with 0 for the decimal fraction multiplier">Grå kort med 0 for desimalbrøkmultiplikator</li>
+        <li data-no="Løse kvadrater for desimalsjakkbrettet" data-en="Loose squares for the decimal checkerboard">Løse kvadrater for desimalsjakkbrettet</li>
+        <li data-no="Svarte striper til brøk" data-en="Black strips for fractions">Svarte striper til brøk</li>
+        <li data-no="Papirstrimler for multipler på pluggebrettet" data-en="Paper strips for multiples on the peg board">Papirstrimler for multipler på pluggebrettet</li>
+        <li data-no="Lapper for kvadrater og kuber av tallene" data-en="Slips for the squares and cubes of the numbers">Lapper for kvadrater og kuber av tallene</li>
+        <li data-no="Strikker" data-en="Rubber bands">Strikker</li>
+        <li data-no="Lapper for binomisk og trinomisk kube (algebraisk og hierarkisk)" data-en="Slips for the binomial and trinomial cubes (algebraic and hierarchical)">Lapper for binomisk og trinomisk kube (algebraisk og hierarkisk)</li>
+        <li data-no="N/N2- og N/N3-plansjer" data-en="N/N2 and N/N3 charts">N/N2- og N/N3-plansjer</li>
+        <li data-no="Regnestykker for tabellene" data-en="Problems for the charts">Regnestykker for tabellene</li>
+        <li data-no="Esker med hvite og grå tallkort" data-en="Boxes of white and grey number cards">Esker med hvite og grå tallkort</li>
+        <li data-no="Materiell for å introdusere algebra, f.eks. &quot;åker&quot; og spade" data-en="Materials for introducing algebra, e.g. &quot;field&quot; and spade">Materiell for å introdusere algebra, f.eks. "åker" og spade</li>
+        <li data-no="Papirrull for andre tallsystemer" data-en="Paper roll for other number systems">Papirrull for andre tallsystemer</li>
+        <li data-no="Ulike matematikkbøker" data-en="Various mathematics books">Ulike matematikkbøker</li>
+        <li data-no="Brøksirkelplansjer" data-en="Fraction circle charts">Brøksirkelplansjer</li>
+        <li data-no="Termometer" data-en="Thermometer">Termometer</li>
+      </ul>
+
+      <h3 data-no="Geometri" data-en="Geometry">Geometri</h3>
+      <h4 data-no="Kjøpt materiell" data-en="Purchased materials">Kjøpt materiell</h4>
+      <ul>
+        <li data-no="Pinneesken (bør ha 2 per gruppe)" data-en="Geometry stick material (2 per group recommended)">Pinneesken (bør ha 2 per gruppe)</li>
+        <li data-no="Montessori-vinkelmåler" data-en="Montessori protractor">Montessori-vinkelmåler</li>
+        <li data-no="Geometrikommoden med et sett navnelapper" data-en="Geometry cabinet with a set of name slips">Geometrikommoden med et sett navnelapper</li>
+        <li data-no="Konstruktive trekanter: trekantboksen, stor og liten heksagonal boks og boksen med 12 blå trekanter" data-en="Constructive triangles: the triangle box, large and small hexagonal boxes and the box of 12 blue triangles">Konstruktive trekanter: trekantboksen, stor og liten heksagonal boks og boksen med 12 blå trekanter</li>
+        <li data-no="Gult arealmateriell" data-en="Yellow area material">Gult arealmateriell</li>
+        <li data-no="Ekvivalensmateriell" data-en="Insets of equivalence">Ekvivalensmateriell</li>
+        <li data-no="Sjablong for trekant innskrevet i en sirkel" data-en="Template for a triangle inscribed in a circle">Sjablong for trekant innskrevet i en sirkel</li>
+        <li data-no="Pytagoras' og Euklids plater" data-en="Theorem of Pythagoras and Euclid plates">Pytagoras' og Euklids plater</li>
+        <li data-no="Boks med 250 hvite kuber for volum" data-en="Box of 250 white cubes for volume">Boks med 250 hvite kuber for volum</li>
+        <li data-no="Boks med 1000 hvite kuber (1 cm)" data-en="Box of 1000 white cubes (1 cm)">Boks med 1000 hvite kuber (1 cm)</li>
+        <li data-no="Esken med fem gule prismer" data-en="Box of five yellow prisms">Esken med fem gule prismer</li>
+        <li data-no="Metallbeholdere for volum: prisme, pyramide og kube" data-en="Metal volume containers: prism, pyramid and cube">Metallbeholdere for volum: prisme, pyramide og kube</li>
+        <li data-no="Små blå geometriske legemer (10 stk)" data-en="Small blue geometric solids (10)">Små blå geometriske legemer (10 stk)</li>
+        <li data-no="Store blå geometriske legemer (16 stk)" data-en="Large blue geometric solids (16)">Store blå geometriske legemer (16 stk)</li>
+      </ul>
+      <h4 data-no="Håndlaget materiell" data-en="Handmade materials">Håndlaget materiell</h4>
+      <ul>
+        <li data-no="Definisjonsmateriell for begreper i geometri: linjer, vinkler og delene til trekanten, kvadratet, rektangelet, romben, trapeset, parallellogrammet, ulike firkanter, sirkelen og polygonen" data-en="Definition materials for geometry concepts: lines, angles and the parts of the triangle, square, rectangle, rhombus, trapezium, parallelogram, various quadrilaterals, the circle and the polygon">Definisjonsmateriell for begreper i geometri: linjer, vinkler og delene til trekanten, kvadratet, rektangelet, romben, trapeset, parallellogrammet, ulike firkanter, sirkelen og polygonen</li>
+        <li data-no="Oppsett og utstyr for arbeid med punkt, linje, flate og form" data-en="Set-up and equipment for work with point, line, surface and solid">Oppsett og utstyr for arbeid med punkt, linje, flate og form</li>
+        <li data-no="To omriss (20 cm og 12 cm)" data-en="Two outlines (20 cm and 12 cm)">To omriss (20 cm og 12 cm)</li>
+        <li data-no="Hyssing inndelt i 3-4-5" data-en="String divided into 3-4-5">Hyssing inndelt i 3-4-5</li>
+        <li data-no="Hyssing for linjer, med små figurer" data-en="String for lines, with small figures">Hyssing for linjer, med små figurer</li>
+        <li data-no="Kritt" data-en="Chalk">Kritt</li>
+        <li data-no="Stativ for trekanter" data-en="Stand for triangles">Stativ for trekanter</li>
+        <li data-no="Passere, vinkelmålere og linjaler i ulike lengder" data-en="Compasses, protractors and rulers of various lengths">Passere, vinkelmålere og linjaler i ulike lengder</li>
+        <li data-no="Trekantet prisme laget av sugerør" data-en="Triangular prism made of straws">Trekantet prisme laget av sugerør</li>
+        <li data-no="Geometriplansjer og geometribøker" data-en="Geometry charts and geometry books">Geometriplansjer og geometribøker</li>
+      </ul>
+
+      <h3 data-no="Biologi" data-en="Biology">Biologi</h3>
+      <h4 data-no="Håndlaget materiell" data-en="Handmade materials">Håndlaget materiell</h4>
+      <ul>
+        <li data-no="Livets tidslinje" data-en="Timeline of life">Livets tidslinje</li>
+        <li data-no="Komplett sett med plansjer" data-en="Complete set of charts">Komplett sett med plansjer</li>
+        <li data-no="Oppsett og utstyr for planteeksperimenter" data-en="Set-up and equipment for plant experiments">Oppsett og utstyr for planteeksperimenter</li>
+        <li data-no="Oppsett og utstyr for dissekering" data-en="Set-up and equipment for dissection">Oppsett og utstyr for dissekering</li>
+        <li data-no="Faktabøker og enkle lesebøker om interessante temaer innen biologi" data-en="Non-fiction and simple readers on interesting biology topics">Faktabøker og enkle lesebøker om interessante temaer innen biologi</li>
+        <li data-no="Definisjonsmateriell, f.eks. plantens deler, bladets deler, dyrenes deler og indre organer, typer røtter og typer bladnerver" data-en="Definition materials, e.g. the parts of the plant, the leaf, the animals and their internal organs, types of roots and leaf veins">Definisjonsmateriell, f.eks. plantens deler, bladets deler, dyrenes deler og indre organer, typer røtter og typer bladnerver</li>
+        <li data-no="Tekst- og bildemateriell: &quot;Hvem er jeg?&quot;" data-en="Text and picture material: &quot;Who am I?&quot;">Tekst- og bildemateriell: "Hvem er jeg?"</li>
+        <li data-no="Dyremapper om vanlige dyr i Norge" data-en="Animal folders about common animals in Norway">Dyremapper om vanlige dyr i Norge</li>
+        <li data-no="Materiell for dyrenes rike og plantenes rike" data-en="Materials for the animal kingdom and the plant kingdom">Materiell for dyrenes rike og plantenes rike</li>
+        <li data-no="Biommapper" data-en="Biome folders">Biommapper</li>
+        <li data-no="Mikroskop" data-en="Microscope">Mikroskop</li>
+      </ul>
+
+      <h3 data-no="Historie" data-en="History">Historie</h3>
+      <h4 data-no="Håndlaget materiell" data-en="Handmade materials">Håndlaget materiell</h4>
+      <ul>
+        <li data-no="Oppsett og utstyr for &quot;Gud uten hender&quot;" data-en="Set-up and equipment for &quot;God with no hands&quot;">Oppsett og utstyr for "Gud uten hender"</li>
+        <li data-no="Menneskets tidslinjer (2)" data-en="Timelines of humans (2)">Menneskets tidslinjer (2)</li>
+        <li data-no="Mapper og plansjer om fundamentale behov" data-en="Folders and charts on fundamental needs">Mapper og plansjer om fundamentale behov</li>
+        <li data-no="Historiespørsmålsplansjer med kort materiell om noen sivilisasjoner" data-en="History question charts with card material about selected civilisations">Historiespørsmålsplansjer med kort materiell om noen sivilisasjoner</li>
+        <li data-no="Tidslinje for tidsregning med tilhørende materiell" data-en="Timeline for the reckoning of time with accompanying materials">Tidslinje for tidsregning med tilhørende materiell</li>
+        <li data-no="Definisjonsmateriell for ukedagenes og månedenes navn" data-en="Definition materials for the names of the weekdays and months">Definisjonsmateriell for ukedagenes og månedenes navn</li>
+        <li data-no="Kalendere" data-en="Calendars">Kalendere</li>
+        <li data-no="Klokkemateriell, inkludert stempel for klokka" data-en="Clock materials, including a clock stamp">Klokkemateriell, inkludert stempel for klokka</li>
+      </ul>
+
+      <h3 data-no="Geografi" data-en="Geography">Geografi</h3>
+      <h4 data-no="Kjøpt materiell" data-en="Purchased materials">Kjøpt materiell</h4>
+      <ul>
+        <li data-no="Blå og hvit globus" data-en="Blue and white globe">Blå og hvit globus</li>
+      </ul>
+      <h4 data-no="Håndlaget materiell" data-en="Handmade materials">Håndlaget materiell</h4>
+      <ul>
+        <li data-no="Komplett sett med plansjer for geografi" data-en="Complete set of geography charts">Komplett sett med plansjer for geografi</li>
+        <li data-no="Kart over hvert kontinent (svart-hvitt, A3) for arbeid med fysisk geografi" data-en="Maps of each continent (black and white, A3) for physical geography work">Kart over hvert kontinent (svart-hvitt, A3) for arbeid med fysisk geografi</li>
+        <li data-no="Skoleatlas og atlas for voksne" data-en="School atlas and adult atlas">Skoleatlas og atlas for voksne</li>
+        <li data-no="Bøker om flagg og andre relevante temaer" data-en="Books about flags and other relevant topics">Bøker om flagg og andre relevante temaer</li>
+        <li data-no="Oppsett for land- og vannformer med definisjonsmateriell" data-en="Set-up for land and water forms with definition materials">Oppsett for land- og vannformer med definisjonsmateriell</li>
+        <li data-no="Modell for fjellets deler" data-en="Model of the parts of the mountain">Modell for fjellets deler</li>
+        <li data-no="Elvemodellen" data-en="The river model">Elvemodellen</li>
+        <li data-no="Materiell for tidssoner" data-en="Materials for time zones">Materiell for tidssoner</li>
+        <li data-no="Kortmateriell for gjensidig avhengighet" data-en="Card materials for interdependence">Kortmateriell for gjensidig avhengighet</li>
+        <li data-no="Definisjonsmateriell for andre deler av geografien, f.eks. solsystemet og jordas oppbygging" data-en="Definition materials for other parts of geography, e.g. the solar system and the structure of the Earth">Definisjonsmateriell for andre deler av geografien, f.eks. solsystemet og jordas oppbygging</li>
+        <li data-no="Demonstrasjonsmateriell til sol og jord" data-en="Demonstration materials for sun and Earth">Demonstrasjonsmateriell til sol og jord</li>
+        <li data-no="Globus (vanlig type)" data-en="Globe (standard type)">Globus (vanlig type)</li>
+        <li data-no="Oppsett og utstyr for enkle fysikkeksperimenter" data-en="Set-up and equipment for simple physics experiments">Oppsett og utstyr for enkle fysikkeksperimenter</li>
+        <li data-no="Vekt med vektskåler og blylodd" data-en="Scales with pans and lead weights">Vekt med vektskåler og blylodd</li>
+      </ul>
+
+      <h3 data-no="Musikk" data-en="Music">Musikk</h3>
+      <h4 data-no="Kjøpt materiell" data-en="Purchased materials">Kjøpt materiell</h4>
+      <ul>
+        <li data-no="Bjellene (valgfritt)" data-en="The bells (optional)">Bjellene (valgfritt)</li>
+        <li data-no="Klangstaver (må ha)" data-en="Tone bars (required)">Klangstaver (må ha)</li>
+        <li data-no="Utstyr og materiell for notelesing" data-en="Equipment and materials for music reading">Utstyr og materiell for notelesing</li>
+      </ul>
+      <h4 data-no="Håndlaget materiell" data-en="Handmade materials">Håndlaget materiell</h4>
+      <ul>
+        <li data-no="Materiell for kvintsirkelen" data-en="Materials for the circle of fifths">Materiell for kvintsirkelen</li>
+        <li data-no="Tidslinje for musikkhistorie" data-en="Timeline of music history">Tidslinje for musikkhistorie</li>
+        <li data-no="Relevante bøker og musikk" data-en="Relevant books and music">Relevante bøker og musikk</li>
+        <li data-no="Rytmeplansjer og rytmekort" data-en="Rhythm charts and rhythm cards">Rytmeplansjer og rytmekort</li>
+        <li data-no="Skalamønstre" data-en="Scale patterns">Skalamønstre</li>
+        <li data-no="Plansjer for musikkterminologi (piano, forte, adagio og lignende)" data-en="Charts for music terminology (piano, forte, adagio and similar)">Plansjer for musikkterminologi (piano, forte, adagio og lignende)</li>
+      </ul>
+
+      <h3 data-no="Forming" data-en="Art">Forming</h3>
+      <ul>
+        <li data-no="Oppsett og utstyr i klasserommet for individuelle og gruppeaktiviteter med maling, tegning, klipping og liming, sying, veving, strikking, hekling og arbeid med tredimensjonale materialer" data-en="Classroom set-up and equipment for individual and group activities with painting, drawing, cutting and gluing, sewing, weaving, knitting, crocheting and work with three-dimensional materials">Oppsett og utstyr i klasserommet for individuelle og gruppeaktiviteter med maling, tegning, klipping og liming, sying, veving, strikking, hekling og arbeid med tredimensjonale materialer</li>
+      </ul>
+
+      <h3 data-no="Annet, for en klasse på 30 barn" data-en="Other, for a class of 30 children">Annet, for en klasse på 30 barn</h3>
+      <ul>
+        <li data-no="Gruppebord og ett presentasjonsbord" data-en="Group tables and one presentation table">Gruppebord og ett presentasjonsbord</li>
+        <li data-no="Tepper i ulike størrelser for arbeid på gulvet" data-en="Mats in various sizes for floor work">Tepper i ulike størrelser for arbeid på gulvet</li>
+        <li data-no="Oppsett av felles utstyr, f.eks. blyanter, viskelær, spissere, linjaler, fargeblyanter, vinkelmålere, passere, pennesplitt og blekk og fyllepenner" data-en="Shared equipment set-up, e.g. pencils, erasers, sharpeners, rulers, coloured pencils, protractors, compasses, nibs and ink and fountain pens">Oppsett av felles utstyr, f.eks. blyanter, viskelær, spissere, linjaler, fargeblyanter, vinkelmålere, passere, pennesplitt og blekk og fyllepenner</li>
+        <li data-no="Loggbok for hvert barn" data-en="Logbook for each child">Loggbok for hvert barn</li>
+      </ul>
+
+      <div class="callout" data-no="Materiellet går fra konkret til abstrakt. Start der barnet er, og la materiellet vise vei." data-en="The materials move from concrete to abstract. Start where the child is, and let the materials show the way.">Materiellet går fra konkret til abstrakt. Start der barnet er, og la materiellet vise vei.</div>
+    </div>
+
+    <div class="shopcta">
+      <span class="t" data-no="Vil du komme videre med Montessori hjemmefra?" data-en="Want to take Montessori further from home?">Vil du komme videre med Montessori hjemmefra?</span>
+      <a href="/funnel/tripwire/opt-in" data-no="Få gratisguiden →" data-en="Get the free guide →">Få gratisguiden →</a>
+    </div>
+
+    <div class="doc-foot">Little Montessori Explorers · lmexplorers.com</div>
+  </div>
+<script>
+(function(){
+  function apply(lang){
+    window.__lmeLang=lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
+      el.innerHTML = (lang==='en') ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    document.documentElement.lang=lang;
+    var b=document.getElementById('lme-print-lang');
+    if(b) b.textContent = (lang==='en') ? '🇳🇴 Norsk' : '🇬🇧 English';
+    try{localStorage.setItem('lme_lang',lang);}catch(e){}
+  }
+  var saved='no';try{saved=localStorage.getItem('lme_lang')||'no';}catch(e){}
+  var btn=document.getElementById('lme-print-lang');
+  if(btn) btn.addEventListener('click',function(){apply(window.__lmeLang==='en'?'no':'en');});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){apply(saved);});
+  else apply(saved);
+})();
+</script>
+<script src="/js/lme-visibility.js" defer></script>
+</body>
+</html>
