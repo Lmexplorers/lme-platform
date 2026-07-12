@@ -154,8 +154,8 @@ window.LME_BUTIKK = {
       navn:  { no: "NORGE-bøttehatt (maskesting), strikkeoppskrift", en: "NORGE bucket hat (duplicate stitch), knitting pattern" },
       undertittel: { no: "Rød hatt · NORGE og flagg foran · RO og bølger bak · tre størrelser",
                      en: "Red hat · NORGE and flag front · RO and waves back · three sizes" },
-      cover:   "/images/oppskrift-norge-strikk.jpg",
-      coverEn: "/images/oppskrift-norge-strikk.jpg",
+      cover:   "/images/oppskrift-norge-strikk-foto.jpg",
+      coverEn: "/images/oppskrift-norge-strikk-foto.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-strikk.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
@@ -182,8 +182,8 @@ window.LME_BUTIKK = {
       navn:  { no: "NORGE-bøttehatt (innstrikket), strikkeoppskrift", en: "NORGE bucket hat (knitted in), knitting pattern" },
       undertittel: { no: "Rød hatt · NORGE, flagg, RO og bølger innstrikket · tre størrelser",
                      en: "Red hat · NORGE, flag, RO and waves knitted in · three sizes" },
-      cover:   "/images/oppskrift-norge-innstrikket.jpg",
-      coverEn: "/images/oppskrift-norge-innstrikket.jpg",
+      cover:   "/images/oppskrift-norge-strikk-foto.jpg",
+      coverEn: "/images/oppskrift-norge-strikk-foto.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-innstrikket.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
