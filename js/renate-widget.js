@@ -149,7 +149,8 @@
     '@media (max-width: 480px) {',
     '  .rw-root { right: 12px; bottom: 12px; }',
     '  .rw-panel { bottom: 66px; height: min(70vh, calc(100vh - 100px)); }',
-    '}'
+    '}',
+    '@media print { .rw-root { display: none !important; } }'
   ].join('\n');
 
   // ---------- HTML ----------
