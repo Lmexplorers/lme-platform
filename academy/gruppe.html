@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<title>Gruppe — LME</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/gruppe.css">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink: #F8D7DA; --pink-mid: #F5A8B8; --cerise: #E91E89;
+    --lime: #7AAE1F; --yellow: #F7C72E; --cream: #FBF6F0;
+    --ink: #1A1A1A; --grey: #4A4A4A; --line: rgba(26,26,26,0.1);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); color: var(--ink); background: #faf6f7; min-height: 100vh; line-height: 1.6; }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 13px 20px; background: #fff; box-shadow: 0 2px 10px rgba(180,120,140,.12); position: sticky; top: 0; z-index: 5; }
+  .bar .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--cerise); text-decoration: none; font-size: 15px; }
+  .bar .brand img { width: 32px; height: 32px; object-fit: contain; }
+  .bar .actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; align-items: center; }
+  .btn { border: 0; border-radius: 999px; padding: 9px 16px; font-weight: 700; font-family: inherit; cursor: pointer; text-decoration: none; font-size: 13.5px; white-space: nowrap; }
+  .btn-back { background: #fff; color: var(--ink); border: 1px solid #eedce2; }
+  .btn-lang { background: #FCEFF2; color: #C13D6A; }
+  .btn-edit { background: var(--cerise); color: #fff; display: none; }
+  .wrap { max-width: 720px; width: 100%; margin: 0 auto; padding: 26px 18px 60px; }
+  .g-loading { text-align: center; color: #a98b96; padding: 60px 20px; font-size: 15px; }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/academy"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <div class="actions">
+      <button class="btn btn-lang" id="lme-lang" type="button">🇬🇧 English</button>
+      <a class="btn btn-edit" id="g-edit" href="#" data-no="✏️ Rediger" data-en="✏️ Edit">✏️ Rediger</a>
+      <a class="btn btn-back" href="/community" data-no="‹ Fellesskap" data-en="‹ Community">‹ Fellesskap</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div id="g-innhold"><div class="g-loading" data-no="Henter gruppen …" data-en="Loading the group …">Henter gruppen …</div></div>
+  </div>
+
+<script src="/js/gruppe-render.js" defer></script>
+<script>
+(function () {
+  window.LME_CURRENT_LANG = 'no';
+  try { window.LME_CURRENT_LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no'; } catch (e) {}
+
+  var m = location.pathname.match(/^\/g\/([a-z0-9\-]+)\/?$/i);
+  var slug = (m && m[1]) || new URL(location.href).searchParams.get('g') || '';
+  slug = slug.toLowerCase();
+  var group = null;
+  var root = document.getElementById('g-innhold');
+
+  function isEn() { return window.LME_CURRENT_LANG === 'en'; }
+  function pick(v) { if (v && typeof v === 'object') return (isEn() && v.en) ? v.en : (v.no || ''); return v || ''; }
+
+  function applyStatic() {
+    var en = isEn();
+    document.documentElement.lang = en ? 'en' : 'no';
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      el.textContent = en ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    var b = document.getElementById('lme-lang');
+    if (b) b.textContent = en ? '🇳🇴 Norsk' : '🇬🇧 English';
+  }
+
+  function render() {
+    applyStatic();
+    if (!group) {
+      root.innerHTML = '';
+      var box = document.createElement('div');
+      box.className = 'g-next';
+      var h = document.createElement('h2');
+      h.textContent = isEn() ? 'Group not found' : 'Fant ikke gruppen';
+      var p = document.createElement('p');
+      p.textContent = isEn()
+        ? 'A newly saved group can take up to a minute to appear. Try again shortly, or check the address.'
+        : 'En nylagret gruppe kan bruke opptil ett minutt på å dukke opp. Prøv igjen om litt, eller sjekk at adressen stemmer.';
+      var a = document.createElement('a');
+      a.className = 'g-cta'; a.style.maxWidth = '320px'; a.style.margin = '0 auto';
+      a.href = '/community'; a.textContent = isEn() ? '← Community' : '← Fellesskapet';
+      box.appendChild(h); box.appendChild(p); box.appendChild(a);
+      root.appendChild(box);
+      document.title = (isEn() ? 'Group not found' : 'Fant ikke gruppen') + ' — LME';
+      return;
+    }
+    window.LMEGruppe.render(root, group, { en: isEn(), live: false });
+    document.title = (pick(group.title) || (isEn() ? 'Group' : 'Gruppe')) + ' — LME';
+  }
+
+  /* Rediger-knapp: kun for byggeren (setter flagg i localStorage), eller når
+     #rediger står i adressen. Vises aldri for vanlige medlemmer. */
+  function maybeShowEdit() {
+    var on = /(^|[#&?])rediger(=1)?($|[&])/.test(location.hash + location.search);
+    try { on = on || localStorage.getItem('lme-gruppebygger-bruker') === '1'; } catch (e) {}
+    if (on && slug) {
+      var e = document.getElementById('g-edit');
+      e.href = '/gruppebygger#' + slug;
+      e.style.display = '';
+    }
+  }
+
+  document.getElementById('lme-lang').addEventListener('click', function () {
+    window.LME_CURRENT_LANG = isEn() ? 'no' : 'en';
+    try { localStorage.setItem('lme_lang', window.LME_CURRENT_LANG); } catch (e) {}
+    render();
+  });
+
+  applyStatic();
+  maybeShowEdit();
+
+  if (!slug) { render(); return; }
+  fetch('/api/gruppe?slug=' + encodeURIComponent(slug) + '&t=' + Date.now())
+    .then(function (r) { return r.json(); })
+    .then(function (d) { group = (d && d.group) || null; })
+    .catch(function () { group = null; })
+    .then(function () {
+      var run = function () { render(); };
+      if (window.LMEGruppe) run();
+      else { var t = setInterval(function () { if (window.LMEGruppe) { clearInterval(t); run(); } }, 40); }
+    });
+})();
+</script>
+<script src="/js/lme-visibility.js" defer></script>
+<script src="/js/renate-widget.js?v=3" defer></script>
+</body>
+</html>

@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<meta name="robots" content="noindex">
+<title>LME Gruppebygger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/gruppe.css">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink: #F8D7DA; --pink-mid: #F5A8B8; --cerise: #E91E89;
+    --lime: #7AAE1F; --yellow: #F7C72E; --cream: #FBF6F0;
+    --ink: #1A1A1A; --grey: #4A4A4A; --line: rgba(26,26,26,0.1);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); color: var(--ink); background: var(--cream); line-height: 1.6; }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); }
+  button, input, select, textarea { font-family: var(--font-body); font-size: 15px; color: var(--ink); }
+
+  .topbar { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; gap: 14px; background: #fff; border-bottom: 1px solid var(--line); padding: 12px 20px; }
+  .topbar img { height: 36px; display: block; }
+  .topbar h1 { font-size: 20px; flex: 1; }
+  .topbar a, .topbar .lang-btn { text-decoration: none; color: var(--ink); background: var(--cream); border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 700; cursor: pointer; }
+
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 22px 20px 80px; display: grid; grid-template-columns: minmax(340px, 520px) 1fr; gap: 26px; align-items: start; }
+  @media (max-width: 980px) { .wrap { grid-template-columns: 1fr; } .preview-col { position: static !important; } }
+
+  .panel { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 20px 22px; box-shadow: 0 6px 22px rgba(26,26,26,0.05); margin-bottom: 18px; }
+  .panel h2 { font-size: 17px; margin-bottom: 12px; }
+  .hint { font-size: 13px; color: var(--grey); margin-bottom: 10px; }
+
+  .group-list { display: flex; flex-direction: column; gap: 8px; }
+  .group-list button { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; text-align: left; background: var(--cream); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; cursor: pointer; }
+  .group-list button.active { border-color: var(--cerise); background: #FFF4F6; }
+  .group-list .tag { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: var(--lime); background: #F3F8E8; border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+  .group-list .tag.draft { color: #b58a00; background: #FFF8E6; }
+  .new-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+
+  label.f { display: block; font-size: 13px; font-weight: 700; margin: 12px 0 4px; }
+  input[type="text"], input[type="number"], textarea, select { width: 100%; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; }
+  textarea { min-height: 74px; resize: vertical; line-height: 1.55; }
+  input:focus, textarea:focus { outline: 2px solid var(--pink-mid); border-color: transparent; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 460px) { .row2 { grid-template-columns: 1fr; } }
+  .en-field { display: none; margin-top: 6px; }
+  .en-field input, .en-field textarea { border-style: dashed; background: #FBFDF6; }
+  body.en-mode .en-field { display: block; }
+
+  .opts { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; font-size: 14px; }
+  .opts label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
+  .imgrow { display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap; margin-top: 6px; }
+  .imgprev { max-width: 180px; border-radius: 12px; display: block; box-shadow: 0 4px 14px rgba(26,26,26,0.12); }
+  .gallery-prev { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .gallery-prev figure { position: relative; }
+  .gallery-prev img { width: 84px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); display: block; }
+  .gallery-prev button { position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; border-radius: 50%; border: none; background: #c0392b; color: #fff; cursor: pointer; font-size: 12px; line-height: 1; }
+
+  .btn { border: none; border-radius: 999px; padding: 11px 20px; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .btn-pink { background: var(--cerise); color: #fff; }
+  .btn-soft { background: var(--cream); color: var(--ink); border: 1px solid var(--line); }
+  .btn-danger { background: #fff; color: #c0392b; border: 1px solid #c0392b; }
+  .btn[disabled] { opacity: 0.6; cursor: wait; }
+  .icon-btn { background: var(--cream); border: 1px solid var(--line); border-radius: 8px; padding: 5px 10px; cursor: pointer; font-size: 13px; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; align-items: center; }
+  .actions .open-link { font-size: 14px; font-weight: 700; color: var(--cerise); }
+
+  .preview-col { position: sticky; top: 74px; }
+  .preview-frame { background: #faf6f7; border: 1px solid var(--line); border-radius: 20px; padding: 26px 22px; max-height: calc(100vh - 120px); overflow: auto; }
+
+  .toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); background: #2b2b2b; color: #fff; padding: 12px 20px; border-radius: 999px; z-index: 100; font-weight: 700; box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+  .save-fab { position: fixed; right: 22px; bottom: 22px; z-index: 90; display: none; border: none; border-radius: 999px; background: var(--cerise); color: #fff; font-family: var(--font-body); font-size: 15px; font-weight: 700; padding: 14px 22px; cursor: pointer; box-shadow: 0 10px 28px rgba(233,30,137,0.35); }
+  .save-fab:hover { transform: translateY(-1px); }
+  body.editing .save-fab { display: block; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="/dashboard" aria-label="LME Dashbord" title="Til dashbordet"><img src="/images/lme-logo.png" alt="Little Montessori Explorers"></a>
+  <h1 data-no="Gruppebygger 🌸" data-en="Group builder 🌸">Gruppebygger 🌸</h1>
+  <button class="lang-btn" id="langToggle" type="button">EN 🌍</button>
+  <a href="/community" data-no="← Fellesskap" data-en="← Community">← Fellesskap</a>
+</header>
+
+<main class="wrap">
+
+  <!-- VENSTRE: skjema -->
+  <div>
+    <section class="panel">
+      <h2 data-no="Gruppene dine" data-en="Your groups">Gruppene dine</h2>
+      <p class="hint" data-no="Lag en salgsside for et fellesskap eller medlemskap, i samme stil som en Skool-gruppe. Sidene lagres trygt i skyen og får en egen adresse under /g/." data-en="Create a sales page for a community or membership, in the same style as a Skool group. Pages are saved safely in the cloud and get their own address under /g/.">Lag en salgsside for et fellesskap eller medlemskap, i samme stil som en Skool-gruppe. Sidene lagres trygt i skyen og får en egen adresse under /g/.</p>
+      <div class="group-list" id="groupList"></div>
+      <div class="new-row">
+        <button class="btn btn-pink" type="button" onclick="newGroup()" data-no="＋ Ny gruppe" data-en="＋ New group">＋ Ny gruppe</button>
+      </div>
+    </section>
+
+    <section class="panel" id="aboutPanel" style="display:none">
+      <h2 data-no="Om gruppen" data-en="About the group">Om gruppen</h2>
+
+      <label class="f" for="f-title" data-no="Gruppenavn" data-en="Group name">Gruppenavn</label>
+      <input type="text" id="f-title" data-ph-no="F.eks. LME Inner Circle" data-ph-en="E.g. LME Inner Circle">
+      <div class="en-field"><input type="text" id="f-title-en" data-ph-no="Engelsk navn" data-ph-en="English name"></div>
+
+      <label class="f" for="f-slug" data-no="Adresse (lages automatisk fra navnet)" data-en="Address (created automatically from the name)">Adresse (lages automatisk fra navnet)</label>
+      <input type="text" id="f-slug" data-ph-no="lme-inner-circle" data-ph-en="lme-inner-circle">
+      <p class="hint" id="slugPreview"></p>
+
+      <label class="f" for="f-kicker" data-no="Liten overskrift (kicker)" data-en="Small heading (kicker)">Liten overskrift (kicker)</label>
+      <input type="text" id="f-kicker" data-ph-no="F.eks. LME COMMUNITY" data-ph-en="E.g. LME COMMUNITY">
+      <div class="en-field"><input type="text" id="f-kicker-en" data-ph-no="Engelsk kicker" data-ph-en="English kicker"></div>
+
+      <label class="f" for="f-lede" data-no="Kort beskrivelse (under navnet)" data-en="Short description (under the name)">Kort beskrivelse (under navnet)</label>
+      <textarea id="f-lede"></textarea>
+      <div class="en-field"><textarea id="f-lede-en" data-ph-no="Engelsk beskrivelse" data-ph-en="English description"></textarea></div>
+
+      <div class="opts">
+        <label><input type="radio" name="f-privacy" value="privat" checked> <span data-no="🔒 Privat" data-en="🔒 Private">🔒 Privat</span></label>
+        <label><input type="radio" name="f-privacy" value="apen"> <span data-no="🌍 Åpen" data-en="🌍 Open">🌍 Åpen</span></label>
+        <label><input type="checkbox" id="f-published" checked> <span data-no="Publisert" data-en="Published">Publisert</span></label>
+      </div>
+
+      <div class="row2">
+        <div>
+          <label class="f" for="f-host" data-no="Vert (av hvem)" data-en="Host (by whom)">Vert (av hvem)</label>
+          <input type="text" id="f-host" data-ph-no="Renate Dahl" data-ph-en="Renate Dahl">
+          <div class="en-field"><input type="text" id="f-host-en" data-ph-no="Engelsk vertnavn" data-ph-en="English host name"></div>
+        </div>
+        <div>
+          <label class="f" for="f-members" data-no="Antall medlemmer (0 skjuler det)" data-en="Number of members (0 hides it)">Antall medlemmer (0 skjuler det)</label>
+          <input type="number" id="f-members" min="0" value="0">
+        </div>
+      </div>
+
+      <div class="row2">
+        <div>
+          <label class="f" for="f-price" data-no="Pris" data-en="Price">Pris</label>
+          <input type="text" id="f-price" data-ph-no="F.eks. 99 kr/mnd" data-ph-en="E.g. $9/month">
+          <div class="en-field"><input type="text" id="f-price-en" data-ph-no="Engelsk pris" data-ph-en="English price"></div>
+        </div>
+        <div>
+          <label class="f" for="f-pricenote" data-no="Pris-notis (valgfritt)" data-en="Price note (optional)">Pris-notis (valgfritt)</label>
+          <input type="text" id="f-pricenote" data-ph-no="F.eks. 7 dager gratis" data-ph-en="E.g. 7 days free">
+          <div class="en-field"><input type="text" id="f-pricenote-en" data-ph-no="Engelsk notis" data-ph-en="English note"></div>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div>
+          <label class="f" for="f-cta" data-no="Knappetekst" data-en="Button text">Knappetekst</label>
+          <input type="text" id="f-cta" data-ph-no="Bli med" data-ph-en="Join now">
+          <div class="en-field"><input type="text" id="f-cta-en" data-ph-no="Engelsk knappetekst" data-ph-en="English button text"></div>
+        </div>
+        <div>
+          <label class="f" for="f-ctaurl" data-no="Knappen lenker til" data-en="Button links to">Knappen lenker til</label>
+          <input type="text" id="f-ctaurl" data-ph-no="/oppgrader" data-ph-en="/oppgrader">
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="mediaPanel" style="display:none">
+      <h2 data-no="Bilder og trailer" data-en="Images and trailer">Bilder og trailer</h2>
+
+      <label class="f" data-no="Hovedbilde / omslag" data-en="Main image / cover">Hovedbilde / omslag</label>
+      <div class="imgrow">
+        <input type="file" id="f-cover" accept="image/*">
+        <div id="coverWrap" style="display:none">
+          <img class="imgprev" id="coverPrev" alt="">
+          <button type="button" class="icon-btn" id="coverRm" style="margin-top:6px" data-no="🗑 Fjern" data-en="🗑 Remove">🗑 Fjern</button>
+        </div>
+      </div>
+
+      <label class="f" for="f-video" data-no="Trailer-lenke (valgfritt: YouTube, Vimeo eller mp4)" data-en="Trailer link (optional: YouTube, Vimeo or mp4)">Trailer-lenke (valgfritt: YouTube, Vimeo eller mp4)</label>
+      <input type="text" id="f-video" data-ph-no="https://youtu.be/…" data-ph-en="https://youtu.be/…">
+
+      <label class="f" data-no="Bildegalleri (miniatyrstripe)" data-en="Image gallery (thumbnail strip)">Bildegalleri (miniatyrstripe)</label>
+      <input type="file" id="f-gallery" accept="image/*" multiple>
+      <div class="gallery-prev" id="galleryPrev"></div>
+
+      <label class="f" data-no="Vertens portrett (valgfritt)" data-en="Host portrait (optional)">Vertens portrett (valgfritt)</label>
+      <div class="imgrow">
+        <input type="file" id="f-hostimg" accept="image/*">
+        <div id="hostWrap" style="display:none">
+          <img class="imgprev" id="hostPrev" alt="" style="max-width:96px;border-radius:50%">
+          <button type="button" class="icon-btn" id="hostRm" style="margin-top:6px" data-no="🗑 Fjern" data-en="🗑 Remove">🗑 Fjern</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="featuresPanel" style="display:none">
+      <h2 data-no="Dette får du" data-en="What's inside">Dette får du</h2>
+      <p class="hint" data-no="Ett punkt per linje. Vises som en liste med rosa blomster." data-en="One point per line. Shown as a list with pink flowers.">Ett punkt per linje. Vises som en liste med rosa blomster.</p>
+      <textarea id="f-features" style="min-height:120px"></textarea>
+      <div class="en-field"><textarea id="f-features-en" style="min-height:120px" data-ph-no="Engelske punkter, ett per linje" data-ph-en="English points, one per line"></textarea></div>
+    </section>
+
+    <section class="panel" id="aboutTextPanel" style="display:none">
+      <h2 data-no="Om fellesskapet (lengre tekst)" data-en="About the community (longer text)">Om fellesskapet (lengre tekst)</h2>
+      <p class="hint" data-no="Tom linje = nytt avsnitt. Start en linje med ## for en liten rosa overskrift, og skriv **ord** for tykk skrift." data-en="Blank line = new paragraph. Start a line with ## for a small pink heading, and write **word** for bold text.">Tom linje = nytt avsnitt. Start en linje med ## for en liten rosa overskrift, og skriv **ord** for tykk skrift.</p>
+      <textarea id="f-about" style="min-height:150px"></textarea>
+      <div class="en-field"><textarea id="f-about-en" style="min-height:150px" data-ph-no="Engelsk tekst" data-ph-en="English text"></textarea></div>
+    </section>
+
+    <section class="panel" id="outroPanel" style="display:none">
+      <h2 data-no="Avslutning" data-en="Ending">Avslutning</h2>
+
+      <label class="f" for="f-outro-title" data-no="Overskrift" data-en="Heading">Overskrift</label>
+      <input type="text" id="f-outro-title" data-ph-no="F.eks. Bli med oss i dag" data-ph-en="E.g. Join us today">
+      <div class="en-field"><input type="text" id="f-outro-title-en" data-ph-no="Engelsk overskrift" data-ph-en="English heading"></div>
+
+      <label class="f" for="f-outro-text" data-no="Tekst" data-en="Text">Tekst</label>
+      <textarea id="f-outro-text"></textarea>
+      <div class="en-field"><textarea id="f-outro-text-en" data-ph-no="Engelsk tekst" data-ph-en="English text"></textarea></div>
+
+      <div class="actions">
+        <button class="btn btn-soft" type="button" id="enToggle" onclick="toggleEnglish()" data-no="🇬🇧 Vis engelske felt" data-en="🇬🇧 Show English fields">🇬🇧 Vis engelske felt</button>
+        <button class="btn btn-soft" type="button" onclick="autoTranslate(this)" data-no="✨ Oversett til engelsk automatisk" data-en="✨ Translate to English automatically">✨ Oversett til engelsk automatisk</button>
+      </div>
+      <p class="hint" data-no="Automatisk oversetting bruker LME-oversetteren og krever at du er innlogget. Engelske felt kan stå tomme; da vises norsk tekst også på engelsk." data-en="Automatic translation uses the LME translator and requires you to be signed in. English fields can be left empty; the Norwegian text is then shown in English too.">Automatisk oversetting bruker LME-oversetteren og krever at du er innlogget. Engelske felt kan stå tomme; da vises norsk tekst også på engelsk.</p>
+
+      <div class="actions">
+        <button class="btn btn-pink" type="button" id="saveBtn" onclick="saveGroup()" data-no="💾 Lagre gruppen" data-en="💾 Save group">💾 Lagre gruppen</button>
+        <a class="open-link" id="openLink" href="#" target="_blank" rel="noopener" style="display:none" data-no="Åpne gruppesiden ↗" data-en="Open the group page ↗">Åpne gruppesiden ↗</a>
+        <button class="btn btn-danger" type="button" id="deleteBtn" onclick="deleteGroup()" style="display:none" data-no="Slett gruppen" data-en="Delete group">Slett gruppen</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- HØYRE: forhåndsvisning -->
+  <div class="preview-col">
+    <section class="panel" style="margin-bottom:12px; display:flex; align-items:center; gap:10px;">
+      <h2 style="flex:1" data-no="Forhåndsvisning" data-en="Preview">Forhåndsvisning</h2>
+      <span class="hint" style="margin:0" data-no="Slik ser salgssiden ut." data-en="This is how the sales page looks.">Slik ser salgssiden ut.</span>
+    </section>
+    <div class="preview-frame" id="previewFrame">
+      <p class="hint" data-no="Lag en ny gruppe eller velg en, så ser du den her. 🌷" data-en="Create a new group or pick one, and you'll see it here. 🌷">Lag en ny gruppe eller velg en, så ser du den her. 🌷</p>
+    </div>
+  </div>
+
+</main>
+
+<button type="button" class="save-fab" onclick="saveGroup()" data-no="💾 Lagre gruppen" data-en="💾 Save group">💾 Lagre gruppen</button>
+
+<script src="/js/gruppe-render.js"></script>
+<script>
+/* ============================================================
+   LME Gruppebygger — lager og redigerer Skool-stil salgssider
+   for grupper/fellesskap uten kode. Lagres som JSON via
+   /api/gruppe (Cloudflare KV) og vises på /g/<adresse>.
+   ============================================================ */
+
+var currentLang = 'no';
+var pw = null;
+var groups = [];
+var media = { cover: '', hostImg: '', gallery: [] };
+
+function q(id) { return document.getElementById(id); }
+function isEn() { return currentLang === 'en'; }
+function L(no, en) { return isEn() ? en : no; }
+window.LME_CURRENT_LANG = 'no';
+
+/* ---------- Språkbytte (samme mønster som om-renate) ---------- */
+function switchLanguage(lang) {
+  currentLang = lang;
+  window.LME_CURRENT_LANG = lang;
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+    var text = el.getAttribute('data-' + lang);
+    if (text.indexOf('<') !== -1) el.innerHTML = text;
+    else el.textContent = text;
+  });
+  document.querySelectorAll('[data-ph-no][data-ph-en]').forEach(function (el) {
+    el.setAttribute('placeholder', el.getAttribute(lang === 'no' ? 'data-ph-no' : 'data-ph-en'));
+  });
+  q('langToggle').textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+  document.title = lang === 'no' ? 'LME Gruppebygger' : 'LME Group Builder';
+  renderList();
+  renderPreview();
+}
+q('langToggle').addEventListener('click', function () {
+  switchLanguage(currentLang === 'no' ? 'en' : 'no');
+});
+
+/* ---------- Hjelpere ---------- */
+function slugify(s) {
+  return (s || '').toLowerCase()
+    .replace(/æ/g, 'ae').replace(/ø/g, 'oe').replace(/å/g, 'aa')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
+}
+function paras(text) {
+  var out = [];
+  (text || '').split(/\n\s*\n/).forEach(function (block) {
+    var buf = [];
+    block.split('\n').forEach(function (line) {
+      if (/^\s*##\s+/.test(line)) {
+        if (buf.length) { out.push(buf.join('\n')); buf = []; }
+        out.push(line);
+      } else { buf.push(line); }
+    });
+    if (buf.length) out.push(buf.join('\n'));
+  });
+  return out.map(function (s) { return s.trim(); }).filter(Boolean);
+}
+function lines(text) {
+  return (text || '').split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+}
+function pick(v) {
+  if (v && typeof v === 'object') return (isEn() && v.en) ? v.en : (v.no || '');
+  return v || '';
+}
+function toast(msg) {
+  var t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function () { t.remove(); }, 2600);
+}
+
+/* ---------- Gruppeliste ---------- */
+function renderList() {
+  var box = q('groupList');
+  box.innerHTML = '';
+  if (!groups.length) {
+    var p = document.createElement('p');
+    p.className = 'hint';
+    p.textContent = L('Ingen grupper ennå. Lag din første med knappen under! 🌱', 'No groups yet. Create your first with the button below! 🌱');
+    box.appendChild(p);
+    return;
+  }
+  groups.forEach(function (g) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    if (q('f-slug').value === g.slug) b.className = 'active';
+    var name = document.createElement('span');
+    name.textContent = pick(g.title) || g.slug;
+    var tag = document.createElement('span');
+    tag.className = 'tag' + (g.published === false ? ' draft' : '');
+    tag.textContent = g.published === false ? L('Utkast', 'Draft') : (pick(g.price) || L('Publisert', 'Published'));
+    b.appendChild(name);
+    b.appendChild(tag);
+    b.onclick = function () { openGroup(g.slug); };
+    box.appendChild(b);
+  });
+}
+
+function refreshList(then) {
+  fetch('/api/gruppe')
+    .then(function (r) { return r.json(); })
+    .then(function (d) { groups = (d && d.groups) || []; })
+    .catch(function () { groups = []; })
+    .then(function () { renderList(); if (then) then(); });
+}
+
+/* ---------- Ny / åpne gruppe ---------- */
+function newGroup() {
+  var g = {
+    slug: '', published: true, privacy: 'privat',
+    kicker: { no: 'LME COMMUNITY', en: 'LME COMMUNITY' },
+    title: { no: '', en: '' }, lede: { no: '', en: '' },
+    host: { no: 'Renate Dahl', en: 'Renate Dahl' },
+    price: { no: '', en: '' }, priceNote: { no: '', en: '' },
+    cta: { no: 'Bli med', en: 'Join now' }, ctaUrl: '/oppgrader',
+    members: 0, cover: '', videoUrl: '', hostImg: '', gallery: [],
+    features: [], about: [],
+    outro: { title: { no: 'Bli med oss', en: 'Come join us' }, text: { no: '', en: '' } }
+  };
+  loadGroup(g, true);
+  toast(L('Ny gruppe klar. Fyll inn og lagre! 🌸', 'New group ready. Fill it in and save! 🌸'));
+}
+
+function openGroup(slug) {
+  fetch('/api/gruppe?slug=' + encodeURIComponent(slug))
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (d && d.group) loadGroup(d.group, false);
+      else toast(L('Fant ikke gruppen.', 'Could not find the group.'));
+    })
+    .catch(function () { toast(L('Nettverksfeil. Prøv igjen.', 'Network error. Try again.')); });
+}
+
+/* ---------- Skjema <-> gruppeobjekt ---------- */
+function loadGroup(g, isNew) {
+  document.body.classList.add('editing');
+  ['aboutPanel', 'mediaPanel', 'featuresPanel', 'aboutTextPanel', 'outroPanel'].forEach(function (id) { q(id).style.display = ''; });
+  g.kicker = g.kicker || { no: '', en: '' };
+  g.title = g.title || { no: '', en: '' };
+  g.lede = g.lede || { no: '', en: '' };
+  g.host = g.host || { no: '', en: '' };
+  g.price = g.price || { no: '', en: '' };
+  g.priceNote = g.priceNote || { no: '', en: '' };
+  g.cta = g.cta || { no: '', en: '' };
+  g.outro = g.outro || { title: { no: '', en: '' }, text: { no: '', en: '' } };
+  q('f-title').value = g.title.no || '';
+  q('f-title-en').value = g.title.en || '';
+  q('f-slug').value = g.slug || '';
+  q('f-slug').dataset.autoOk = g.slug ? '' : '1';
+  q('f-kicker').value = g.kicker.no || '';
+  q('f-kicker-en').value = g.kicker.en || '';
+  q('f-lede').value = g.lede.no || '';
+  q('f-lede-en').value = g.lede.en || '';
+  q('f-host').value = g.host.no || '';
+  q('f-host-en').value = g.host.en || '';
+  q('f-members').value = g.members || 0;
+  q('f-price').value = g.price.no || '';
+  q('f-price-en').value = g.price.en || '';
+  q('f-pricenote').value = g.priceNote.no || '';
+  q('f-pricenote-en').value = g.priceNote.en || '';
+  q('f-cta').value = g.cta.no || '';
+  q('f-cta-en').value = g.cta.en || '';
+  q('f-ctaurl').value = g.ctaUrl || '';
+  q('f-video').value = g.videoUrl || '';
+  document.querySelectorAll('[name="f-privacy"]').forEach(function (r) { r.checked = r.value === (g.privacy === 'apen' ? 'apen' : 'privat'); });
+  q('f-published').checked = g.published !== false;
+  q('f-features').value = (g.features || []).map(function (x) { return x.no; }).join('\n');
+  q('f-features-en').value = (g.features || []).map(function (x) { return x.en || ''; }).join('\n');
+  q('f-about').value = (g.about || []).map(function (x) { return x.no; }).join('\n\n');
+  q('f-about-en').value = (g.about || []).map(function (x) { return x.en || ''; }).join('\n\n');
+  q('f-outro-title').value = g.outro.title.no || '';
+  q('f-outro-title-en').value = g.outro.title.en || '';
+  q('f-outro-text').value = g.outro.text.no || '';
+  q('f-outro-text-en').value = g.outro.text.en || '';
+  media = { cover: g.cover || '', hostImg: g.hostImg || '', gallery: (g.gallery || []).slice() };
+  paintCover(); paintHost(); paintGallery();
+  q('deleteBtn').style.display = isNew ? 'none' : '';
+  updateOpenLink();
+  renderList();
+  renderPreview();
+  if (isNew) q('f-title').focus();
+}
+
+function collectGroup() {
+  var slug = q('f-slug').value.trim() || slugify(q('f-title').value);
+  var g = {
+    slug: slugify(slug),
+    published: q('f-published').checked,
+    privacy: document.querySelector('[name="f-privacy"]:checked').value,
+    kicker: { no: q('f-kicker').value.trim(), en: q('f-kicker-en').value.trim() },
+    title: { no: q('f-title').value.trim(), en: q('f-title-en').value.trim() },
+    lede: { no: q('f-lede').value.trim(), en: q('f-lede-en').value.trim() },
+    host: { no: q('f-host').value.trim(), en: q('f-host-en').value.trim() },
+    price: { no: q('f-price').value.trim(), en: q('f-price-en').value.trim() },
+    priceNote: { no: q('f-pricenote').value.trim(), en: q('f-pricenote-en').value.trim() },
+    cta: { no: q('f-cta').value.trim(), en: q('f-cta-en').value.trim() },
+    ctaUrl: q('f-ctaurl').value.trim(),
+    members: parseInt(q('f-members').value, 10) || 0,
+    videoUrl: q('f-video').value.trim(),
+    cover: media.cover, hostImg: media.hostImg, gallery: media.gallery.slice(),
+    features: [], about: [],
+    outro: {
+      title: { no: q('f-outro-title').value.trim(), en: q('f-outro-title-en').value.trim() },
+      text: { no: q('f-outro-text').value.trim(), en: q('f-outro-text-en').value.trim() }
+    }
+  };
+  var fNo = lines(q('f-features').value), fEn = lines(q('f-features-en').value);
+  fNo.forEach(function (t, i) { g.features.push({ no: t, en: fEn[i] || '' }); });
+  var aNo = paras(q('f-about').value), aEn = paras(q('f-about-en').value);
+  aNo.forEach(function (t, i) { g.about.push({ no: t, en: aEn[i] || '' }); });
+  return g;
+}
+
+/* ---------- Bilder ---------- */
+function shrinkImage(file, cb) {
+  var reader = new FileReader();
+  reader.onload = function () {
+    var img = new Image();
+    img.onload = function () {
+      var max = 1200;
+      var scale = Math.min(1, max / Math.max(img.width, img.height));
+      var c = document.createElement('canvas');
+      c.width = Math.max(1, Math.round(img.width * scale));
+      c.height = Math.max(1, Math.round(img.height * scale));
+      var gg = c.getContext('2d');
+      gg.fillStyle = '#ffffff';
+      gg.fillRect(0, 0, c.width, c.height);
+      gg.drawImage(img, 0, 0, c.width, c.height);
+      cb(c.toDataURL('image/jpeg', 0.82));
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+function paintCover() {
+  q('coverWrap').style.display = media.cover ? '' : 'none';
+  q('coverPrev').src = media.cover || '';
+}
+function paintHost() {
+  q('hostWrap').style.display = media.hostImg ? '' : 'none';
+  q('hostPrev').src = media.hostImg || '';
+}
+function paintGallery() {
+  var box = q('galleryPrev');
+  box.innerHTML = '';
+  media.gallery.forEach(function (src, i) {
+    var fig = document.createElement('figure');
+    var im = document.createElement('img');
+    im.src = src; im.alt = '';
+    var rm = document.createElement('button');
+    rm.type = 'button'; rm.textContent = '✕';
+    rm.onclick = function () { media.gallery.splice(i, 1); paintGallery(); renderPreview(); };
+    fig.appendChild(im); fig.appendChild(rm);
+    box.appendChild(fig);
+  });
+}
+q('f-cover').addEventListener('change', function () {
+  var f = this.files && this.files[0]; if (!f) return;
+  var input = this;
+  shrinkImage(f, function (d) { media.cover = d; input.value = ''; paintCover(); renderPreview(); });
+});
+q('coverRm').addEventListener('click', function () { media.cover = ''; paintCover(); renderPreview(); });
+q('f-hostimg').addEventListener('change', function () {
+  var f = this.files && this.files[0]; if (!f) return;
+  var input = this;
+  shrinkImage(f, function (d) { media.hostImg = d; input.value = ''; paintHost(); renderPreview(); });
+});
+q('hostRm').addEventListener('click', function () { media.hostImg = ''; paintHost(); renderPreview(); });
+q('f-gallery').addEventListener('change', function () {
+  var files = Array.prototype.slice.call(this.files || []);
+  var input = this;
+  var left = 8 - media.gallery.length;
+  files.slice(0, Math.max(0, left)).forEach(function (f) {
+    shrinkImage(f, function (d) { media.gallery.push(d); paintGallery(); renderPreview(); });
+  });
+  input.value = '';
+});
+
+/* ---------- Engelske felt / oversetting ---------- */
+function toggleEnglish() { document.body.classList.toggle('en-mode'); }
+
+function autoTranslate(btn) {
+  var g = collectGroup();
+  var texts = [];
+  function need(f) { if (f && f.no && !f.en && texts.indexOf(f.no) === -1) texts.push(f.no); }
+  need(g.kicker); need(g.title); need(g.lede); need(g.price); need(g.priceNote); need(g.cta);
+  g.features.forEach(need); g.about.forEach(need);
+  need(g.outro.title); need(g.outro.text);
+  if (!texts.length) { toast(L('Alt har allerede engelsk tekst. 🌟', 'Everything already has English text. 🌟')); return; }
+  btn.disabled = true;
+  var all = {};
+  var batches = [];
+  for (var i = 0; i < texts.length; i += 40) batches.push(texts.slice(i, i + 40));
+  var chain = Promise.resolve();
+  batches.forEach(function (batch) {
+    chain = chain.then(function () {
+      return fetch('/api/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ texts: batch, to: 'en' })
+      }).then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+        .then(function (d) { Object.assign(all, (d && d.translations) || {}); });
+    });
+  });
+  chain.then(function () {
+    fillEnglish(all);
+    document.body.classList.add('en-mode');
+    renderPreview();
+    toast(L('Oversatt! Les gjerne over de engelske feltene.', 'Translated! Do read over the English fields.'));
+  }).catch(function () {
+    toast(L('Fikk ikke oversatt. Er du innlogget som medlem?', 'Could not translate. Are you signed in as a member?'));
+  }).then(function () { btn.disabled = false; });
+}
+
+function fillEnglish(map) {
+  function fill(noId, enId) {
+    var no = q(noId).value.trim();
+    if (no && !q(enId).value.trim() && map[no]) q(enId).value = map[no];
+  }
+  fill('f-kicker', 'f-kicker-en'); fill('f-title', 'f-title-en'); fill('f-lede', 'f-lede-en');
+  fill('f-price', 'f-price-en'); fill('f-pricenote', 'f-pricenote-en'); fill('f-cta', 'f-cta-en');
+  fill('f-outro-title', 'f-outro-title-en'); fill('f-outro-text', 'f-outro-text-en');
+  if (!q('f-features-en').value.trim()) {
+    q('f-features-en').value = lines(q('f-features').value).map(function (t) { return map[t] || ''; }).join('\n');
+  }
+  if (!q('f-about-en').value.trim()) {
+    q('f-about-en').value = paras(q('f-about').value).map(function (t) { return map[t] || ''; }).join('\n\n');
+  }
+}
+
+/* ---------- Forhåndsvisning ---------- */
+function renderPreview() {
+  if (q('aboutPanel').style.display === 'none') return;
+  if (!window.LMEGruppe) return;
+  window.LMEGruppe.render(q('previewFrame'), collectGroup(), { en: isEn(), live: true });
+}
+
+/* ---------- Lagre / slette ---------- */
+function askPassword() {
+  if (pw) return pw;
+  pw = prompt(L('Skriv inn passordet for å lagre:', 'Enter the password to save:'));
+  return pw;
+}
+function updateOpenLink() {
+  var slug = slugify(q('f-slug').value.trim() || slugify(q('f-title').value));
+  var link = q('openLink');
+  if (slug) { link.href = '/g/' + slug; link.style.display = ''; }
+  else link.style.display = 'none';
+  q('slugPreview').textContent = slug ? (location.origin + '/g/' + slug) : '';
+}
+
+function saveGroup() {
+  var g = collectGroup();
+  if (!g.title.no) { toast(L('Gi gruppen et navn først. 🌷', 'Give the group a name first. 🌷')); return; }
+  if (!g.slug) { toast(L('Gruppen trenger en adresse.', 'The group needs an address.')); return; }
+  if (!askPassword()) return;
+  var btn = q('saveBtn');
+  var fab = document.querySelector('.save-fab');
+  btn.disabled = true; if (fab) fab.disabled = true;
+  fetch('/api/gruppe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'save', group: g, password: pw })
+  })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (d && d.ok) {
+        q('f-slug').value = d.slug;
+        q('deleteBtn').style.display = '';
+        updateOpenLink();
+        refreshList();
+        toast(L('☁️ Lagret! Gruppen ligger nå i skyen.', '☁️ Saved! The group is now in the cloud.'));
+      } else if (d && d.error === 'bad_password') {
+        pw = null; alert(L('Feil passord. Prøv igjen.', 'Wrong password. Try again.'));
+      } else if (d && d.error === 'too_large') {
+        alert(L('Siden ble for stor. Bruk færre eller mindre bilder.', 'The page got too large. Use fewer or smaller images.'));
+      } else {
+        alert(L('Kunne ikke lagre: ', 'Could not save: ') + ((d && d.error) || L('ukjent feil', 'unknown error')));
+      }
+    })
+    .catch(function () { alert(L('Nettverksfeil ved lagring. Prøv igjen.', 'Network error while saving. Try again.')); })
+    .then(function () { btn.disabled = false; if (fab) fab.disabled = false; });
+}
+
+function deleteGroup() {
+  var slug = slugify(q('f-slug').value.trim());
+  if (!slug) return;
+  if (!confirm(L('Slette gruppen for godt? Dette kan ikke angres.', 'Delete the group for good? This cannot be undone.'))) return;
+  if (!askPassword()) return;
+  fetch('/api/gruppe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'delete', slug: slug, password: pw })
+  })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (d && d.ok) {
+        document.body.classList.remove('editing');
+        ['aboutPanel', 'mediaPanel', 'featuresPanel', 'aboutTextPanel', 'outroPanel'].forEach(function (id) { q(id).style.display = 'none'; });
+        q('previewFrame').innerHTML = '';
+        refreshList();
+        toast(L('Gruppen er slettet.', 'The group has been deleted.'));
+      } else if (d && d.error === 'bad_password') {
+        pw = null; alert(L('Feil passord. Prøv igjen.', 'Wrong password. Try again.'));
+      } else {
+        alert(L('Kunne ikke slette: ', 'Could not delete: ') + ((d && d.error) || L('ukjent feil', 'unknown error')));
+      }
+    })
+    .catch(function () { alert(L('Nettverksfeil. Prøv igjen.', 'Network error. Try again.')); });
+}
+
+/* ---------- Automatisk adresse + levende forhåndsvisning ---------- */
+q('f-title').addEventListener('input', function () {
+  var slugField = q('f-slug');
+  if (slugField.dataset.autoOk === '1' || !slugField.value.trim()) {
+    slugField.value = slugify(this.value);
+    slugField.dataset.autoOk = '1';
+  }
+  updateOpenLink();
+});
+q('f-slug').addEventListener('input', function () { this.dataset.autoOk = ''; updateOpenLink(); });
+document.addEventListener('input', function (e) {
+  if (e.target.closest && e.target.closest('.wrap')) renderPreview();
+});
+
+/* Husk at denne nettleseren bruker gruppebyggeren, så gruppesidene kan vise
+   en rediger-knapp (kun her, ikke for medlemmer). */
+try { localStorage.setItem('lme-gruppebygger-bruker', '1'); } catch (e) {}
+
+/* /gruppebygger#<adresse> åpner gruppen direkte, f.eks. fra rediger-knappen. */
+function openFromHash() {
+  var hashSlug = slugify((location.hash || '').replace(/^#/, ''));
+  if (hashSlug) openGroup(hashSlug);
+}
+window.addEventListener('hashchange', openFromHash);
+refreshList(openFromHash);
+</script>
+
+<script src="/js/lme-visibility.js" defer></script>
+<script src="/js/renate-widget.js?v=3" defer></script>
+</body>
+</html>

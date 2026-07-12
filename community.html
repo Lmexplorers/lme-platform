@@ -1513,6 +1513,95 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     </div>
   </section>
 
+  <!-- Egne grupper laget med gruppebyggeren (lagret i skyen). Publiserte
+       grupper vises for alle; "Ny gruppe"-inngangen kun i redigeringsmodus. -->
+  <script>
+  (function () {
+    var grid = document.querySelector('.groups-section .groups-grid');
+    if (!grid) return;
+    var built = [];
+    var extra = [];
+
+    function isEn() { return window.LME_CURRENT_LANG === 'en'; }
+    function pick(v) { if (v && typeof v === 'object') return (isEn() && v.en) ? v.en : (v.no || ''); return v || ''; }
+    function editMode() {
+      try {
+        return /(^|[#&?])rediger(=1)?($|[&])/.test(location.hash + location.search) ||
+          localStorage.getItem('lme-gruppebygger-bruker') === '1' ||
+          localStorage.getItem('lme-edit') === '1';
+      } catch (e) { return false; }
+    }
+
+    function coverFor(g) {
+      var cov = document.createElement('div');
+      cov.className = 'cover';
+      if (g.cover) {
+        cov.style.backgroundImage = 'url(' + g.cover + ')';
+        cov.style.backgroundSize = 'cover';
+        cov.style.backgroundPosition = 'center';
+        cov.textContent = '';
+      } else {
+        cov.textContent = (pick(g.title) || '★').trim().charAt(0).toUpperCase();
+      }
+      return cov;
+    }
+
+    function render() {
+      extra.forEach(function (n) { if (n.parentNode) n.parentNode.removeChild(n); });
+      extra = [];
+      built.forEach(function (g) {
+        var a = document.createElement('a');
+        a.className = 'group-card';
+        a.href = '/g/' + g.slug;
+        var body = document.createElement('div');
+        body.className = 'body';
+        var h = document.createElement('h4');
+        h.textContent = pick(g.title);
+        var p = document.createElement('p');
+        p.className = 'meta';
+        p.textContent = g.members > 0
+          ? (g.members.toLocaleString(isEn() ? 'en-US' : 'nb-NO') + (isEn() ? ' members' : ' medlemmer'))
+          : (pick(g.price) || (isEn() ? 'Community' : 'Fellesskap'));
+        body.appendChild(h); body.appendChild(p);
+        a.appendChild(coverFor(g)); a.appendChild(body);
+        grid.appendChild(a); extra.push(a);
+      });
+      if (editMode()) {
+        var b = document.createElement('a');
+        b.className = 'group-card';
+        b.href = '/gruppebygger';
+        var cov = document.createElement('div');
+        cov.className = 'cover'; cov.textContent = '＋';
+        var body2 = document.createElement('div');
+        body2.className = 'body';
+        var h2 = document.createElement('h4');
+        h2.textContent = isEn() ? 'New group' : 'Ny gruppe';
+        var p2 = document.createElement('p');
+        p2.className = 'meta';
+        p2.textContent = isEn() ? 'Open the group builder' : 'Åpne gruppebyggeren';
+        body2.appendChild(h2); body2.appendChild(p2);
+        b.appendChild(cov); b.appendChild(body2);
+        grid.appendChild(b); extra.push(b);
+      }
+    }
+
+    fetch('/api/gruppe')
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        built = ((d && d.groups) || []).filter(function (g) { return g && g.slug && g.published !== false; });
+      })
+      .catch(function () {})
+      .then(function () {
+        render();
+        var orig = window.lmeToggleLang;
+        if (typeof orig === 'function' && !orig.__egneGrupper) {
+          window.lmeToggleLang = function () { orig.apply(this, arguments); render(); };
+          window.lmeToggleLang.__egneGrupper = true;
+        }
+      });
+  })();
+  </script>
+
   <!-- Stor CTA -->
   <section class="join-section">
     <div class="content">

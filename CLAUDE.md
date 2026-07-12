@@ -93,6 +93,15 @@ Bruk aldri Playpen (eller systemfont/Comic Sans) på brødtekst. Aldri avvik.
   og listes automatisk under "Dine egne kurs" på `/academy`.
 - Samme passord som kursredigering. Detaljer i `docs/kursbygger.md`.
 
+### Gruppebygger (for Renate, uten kode)
+- `/gruppebygger` lager salgssider for grupper/fellesskap (Skool-stil) som JSON
+  i KV via `functions/api/gruppe.js`.
+- Sidene vises på `/g/<slug>` (`academy/gruppe.html` + regel i `_redirects`) og
+  listes automatisk under "Finn din gruppe" på `/community`.
+- Delt visning: `js/gruppe-render.js` + `css/gruppe.css` (samme utseende i
+  byggerens forhåndsvisning og på den offentlige siden). Samme passord som
+  kurs. Detaljer i `docs/gruppebygger.md`.
+
 ### Rediger tekst på siden (for Renate, uten kode)
 - `js/page-editor.js` (vanlige sider) og `js/course-editor.js` (akademi-kurs).
 - Bare elementer merket `data-edit="…"` (og `section.crs` på kurs) er redigerbare.
