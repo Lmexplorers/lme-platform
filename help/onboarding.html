@@ -304,7 +304,7 @@
 
   <!-- STEG 1: Hvem er du? -->
   <div class="ob-step active" data-step="1">
-    <span class="ob-kicker">VELKOMMEN TIL LME 🩷</span>
+    <span class="ob-kicker">VELKOMMEN TIL LME 💗</span>
     <h1 class="ob-q">Først — <em>hvem er du?</em></h1>
     <p class="ob-sub">Dette hjelper oss å vise akkurat det innholdet som passer deg best.</p>
     <div class="ob-options grid-2" data-question="role" data-multi="false">
@@ -324,7 +324,7 @@
         <span class="ob-check"></span>
       </button>
       <button class="ob-opt" data-value="caregiver">
-        <span class="ob-emoji">🩷</span>
+        <span class="ob-emoji">💗</span>
         <span class="ob-label"><strong>Annen omsorgsperson</strong><span>Bestemor, tante, dagmamma…</span></span>
         <span class="ob-check"></span>
       </button>
@@ -434,7 +434,7 @@
         <span class="ob-check"></span>
       </button>
       <button class="ob-opt" data-value="community">
-        <span class="ob-emoji">🩷</span>
+        <span class="ob-emoji">💗</span>
         <span class="ob-label"><strong>Bli del av fellesskap</strong><span>Inner Circle og pedagog-partnere</span></span>
         <span class="ob-check"></span>
       </button>
@@ -477,7 +477,7 @@
         <span class="ob-check"></span>
       </button>
       <button class="ob-opt" data-value="none">
-        <span class="ob-emoji">🩷</span>
+        <span class="ob-emoji">💗</span>
         <span class="ob-label"><strong>Ingen plan ennå</strong><span>Jeg utforsker først</span></span>
         <span class="ob-check"></span>
       </button>
@@ -491,7 +491,7 @@
   <!-- RESULTAT -->
   <div class="ob-step" data-step="result">
     <div class="ob-result">
-      <span class="ob-kicker">DIN PERSONLIGE START-PLAN 🩷</span>
+      <span class="ob-kicker">DIN PERSONLIGE START-PLAN 💗</span>
       <h2>Klar til å <em>begynne!</em></h2>
       <p class="ob-summary" id="obSummary">Her er dine tre neste steg.</p>
     </div>
@@ -706,7 +706,7 @@
     if (plan === 'start' && (wantsAdult || wantsTheory)) {
       upsellEl.innerHTML = '<div class="ob-upsell"><div class="ob-upsell-icon">🌸</div><div class="ob-upsell-text"><strong>Oppgrader til Proff for full tilgang</strong><p>Du har valgt voksen-innhold og Academy-kurs — disse låses helt opp på Proff (499 kr/mnd).</p></div><a href="/oppgrader">Se planene</a></div>';
     } else if (plan === 'none') {
-      upsellEl.innerHTML = '<div class="ob-upsell"><div class="ob-upsell-icon">🩷</div><div class="ob-upsell-text"><strong>Velg en plan for å låse opp alt</strong><p>Du kan utforske gratis, men en plan gir deg full tilgang til Academy, Bookly, live og mer.</p></div><a href="/oppgrader">Se planene</a></div>';
+      upsellEl.innerHTML = '<div class="ob-upsell"><div class="ob-upsell-icon">💗</div><div class="ob-upsell-text"><strong>Velg en plan for å låse opp alt</strong><p>Du kan utforske gratis, men en plan gir deg full tilgang til Academy, Bookly, live og mer.</p></div><a href="/oppgrader">Se planene</a></div>';
     } else if (plan === 'proff' && wantsCommunity) {
       upsellEl.innerHTML = '<div class="ob-upsell"><div class="ob-upsell-icon">🌷</div><div class="ob-upsell-text"><strong>Legg til Fellesskap for 200 kr ekstra</strong><p>Du ønsker fellesskap — Inner Circle er hjertet av LME.</p></div><a href="/oppgrader">Oppgrader</a></div>';
     } else {

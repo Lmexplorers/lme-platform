@@ -97,12 +97,19 @@
     "  font-display: swap; }",
     '.rw-root { position: fixed; right: 20px; bottom: 20px; z-index: 99999;',
     "  font-family: 'Sasson Montessori','Playpen Sans',system-ui,sans-serif; }",
-    '.rw-btn { width: 58px; height: 58px; border-radius: 50%; border: none; cursor: pointer;',
+    '.rw-btn { border: none; cursor: pointer; border-radius: 999px; padding: 7px 18px 7px 8px;',
     '  background: linear-gradient(135deg, #E91E89, #EE9CAD); color: #fff;',
-    "  font-family: 'Playpen Sans',system-ui,sans-serif; font-size: 24px; font-weight: 700;",
-    '  box-shadow: 0 6px 20px rgba(233,30,137,0.35); transition: transform .15s ease, box-shadow .15s ease;',
-    '  display: flex; align-items: center; justify-content: center; }',
-    '.rw-btn:hover { transform: translateY(-2px) scale(1.04); box-shadow: 0 10px 26px rgba(233,30,137,0.45); }',
+    '  display: flex; align-items: center; gap: 10px;',
+    "  font-family: 'Sasson Montessori','Playpen Sans',system-ui,sans-serif; font-size: 15px; font-weight: 700;",
+    '  box-shadow: 0 6px 20px rgba(233,30,137,0.35); transition: transform .15s ease, box-shadow .15s ease; }',
+    '.rw-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(233,30,137,0.45); }',
+    '.rw-btn-avatar { position: relative; width: 38px; height: 38px; border-radius: 50%; flex: 0 0 auto;',
+    '  background: rgba(255,255,255,0.25); border: 2px solid rgba(255,255,255,0.85); overflow: hidden;',
+    "  display: flex; align-items: center; justify-content: center; font-family: 'Playpen Sans',system-ui,sans-serif;",
+    '  font-size: 16px; font-weight: 700; color: #fff; }',
+    '.rw-btn-avatar img, .rw-avatar img { position: absolute; inset: 0; width: 100%; height: 100%;',
+    '  object-fit: cover; object-position: center 25%; }',
+    '.rw-btn-label { white-space: nowrap; }',
     '.rw-panel { position: absolute; right: 0; bottom: 72px; width: min(380px, calc(100vw - 32px));',
     '  height: min(560px, calc(100vh - 120px)); background: #fff; border-radius: 20px;',
     '  border: 1px solid rgba(26,26,26,0.08); box-shadow: 0 12px 40px rgba(26,26,26,0.16);',
@@ -110,7 +117,7 @@
     '.rw-root.open .rw-panel { display: flex; }',
     '.rw-head { display: flex; align-items: center; gap: 10px; padding: 14px 16px;',
     '  background: linear-gradient(135deg, #FBF6F0, #F8D7DA); border-bottom: 1px solid rgba(26,26,26,0.06); }',
-    '.rw-avatar { width: 38px; height: 38px; border-radius: 50%; flex: 0 0 auto;',
+    '.rw-avatar { position: relative; width: 38px; height: 38px; border-radius: 50%; flex: 0 0 auto; overflow: hidden;',
     '  background: linear-gradient(135deg, #E91E89, #EE9CAD); color: #fff; display: flex;',
     "  align-items: center; justify-content: center; font-family: 'Playpen Sans',system-ui,sans-serif;",
     '  font-weight: 700; font-size: 17px; }',
@@ -151,7 +158,7 @@
   root.innerHTML =
     '<div class="rw-panel" role="dialog" aria-label="Renate AI">' +
     '  <div class="rw-head">' +
-    '    <div class="rw-avatar">R</div>' +
+    '    <div class="rw-avatar">R<img src="/images/renate-portrait.jpg" alt="" onerror="this.remove()"></div>' +
     '    <div>' +
     '      <h4>Renate AI</h4>' +
     '      <p data-no="Veilederen din på LME" data-en="Your guide on LME">Veilederen din på LME</p>' +
@@ -167,7 +174,10 @@
     '    <a href="/spor-renate-ai" data-no="Åpne hele Renate AI-samtalen" data-en="Open the full Renate AI chat">Åpne hele Renate AI-samtalen</a>' +
     '  </div>' +
     '</div>' +
-    '<button type="button" class="rw-btn" aria-label="Spør Renate AI" title="Spør Renate AI">💗</button>';
+    '<button type="button" class="rw-btn" aria-label="Spør Renate AI" title="Spør Renate AI">' +
+    '  <span class="rw-btn-avatar">R<img src="/images/renate-portrait.jpg" alt="" onerror="this.remove()"></span>' +
+    '  <span class="rw-btn-label" data-no="Spør Renate AI" data-en="Ask Renate AI">Spør Renate AI</span>' +
+    '</button>';
 
   var style = document.createElement('style');
   style.textContent = css;
@@ -239,8 +249,8 @@
 
     function showWelcome() {
       addBubble('bot', t(
-        'Hei! 🩷 Jeg er Renate AI, veilederen din her på LME. Jeg ser hvilken side du er på og hjelper deg videre. Hva lurer du på?',
-        'Hi! 🩷 I am Renate AI, your guide here on LME. I can see which page you are on and help you move forward. What can I help you with?'
+        'Hei! 💗 Jeg er Renate AI, veilederen din her på LME. Jeg ser hvilken side du er på og hjelper deg videre. Hva lurer du på?',
+        'Hi! 💗 I am Renate AI, your guide here on LME. I can see which page you are on and help you move forward. What can I help you with?'
       ));
     }
 
