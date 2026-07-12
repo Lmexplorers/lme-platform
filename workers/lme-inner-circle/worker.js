@@ -1,7 +1,7 @@
 // LME Inner Circle + Auth + Media + Betaling + Affiliate — Worker API v2.0
 // ========================================================================
 // EKTE innlogging: e-post + passord (PBKDF2-hashing), sesjoner.
-// NYTT i v2.0: medlemskapssalg med Stripe (14 dagers prøveperiode),
+// NYTT i v2.0: medlemskapssalg med Stripe (7 dagers prøveperiode),
 // affiliate-program med provisjon, velkomst-epost via MailerLite og
 // admin-dashbord for VIP.
 //
@@ -32,7 +32,7 @@ const PLANS = {
   pro:     { tier:'pro',     navn:'Pro',   belop:29900 },
   vip:     { tier:'vip',     navn:'VIP',   belop:59900 },
 };
-const PROVETID_DAGER = 14;
+const PROVETID_DAGER = 7;
 
 const MEDIESIDE = `<!DOCTYPE html>
 <html lang="no">
@@ -426,7 +426,7 @@ ${SIDE_STIL}
     <span class="kick" data-no="LME Inner Circle" data-en="LME Inner Circle">LME Inner Circle</span>
     <h1 data-no="Bli med i Inner Circle 💛" data-en="Join the Inner Circle 💛">Bli med i Inner Circle 💛</h1>
     <p data-no="Fellesskapet for deg som vil lære, skape og vokse med Montessori og LME. Grupper, live-samlinger, maler og støtte, alt på ett sted." data-en="The community for you who want to learn, create and grow with Montessori and LME. Groups, live sessions, templates and support, all in one place.">Fellesskapet for deg som vil lære, skape og vokse med Montessori og LME. Grupper, live-samlinger, maler og støtte, alt på ett sted.</p>
-    <div class="prove" data-no="🎁 Prøv gratis i 14 dager. Du kan avslutte når som helst i prøveperioden, helt uten kostnad." data-en="🎁 Try free for 14 days. Cancel anytime during the trial, completely free.">🎁 Prøv gratis i 14 dager. Du kan avslutte når som helst i prøveperioden, helt uten kostnad.</div>
+    <div class="prove" data-no="🎁 Prøv gratis i 7 dager. Du kan avslutte når som helst i prøveperioden, helt uten kostnad." data-en="🎁 Try free for 7 days. Cancel anytime during the trial, completely free.">🎁 Prøv gratis i 7 dager. Du kan avslutte når som helst i prøveperioden, helt uten kostnad.</div>
   </div>
 
   <div class="planer">
@@ -437,7 +437,7 @@ ${SIDE_STIL}
         <li data-no="Tilgang til fellesskapet og gruppene" data-en="Access to the community and groups">Tilgang til fellesskapet og gruppene</li>
         <li data-no="Mediebibliotek med 1 GB lagring" data-en="Media library with 1 GB storage">Mediebibliotek med 1 GB lagring</li>
         <li data-no="Nyheter og arrangementer" data-en="News and events">Nyheter og arrangementer</li>
-        <li data-no="14 dager gratis prøvetid" data-en="14 day free trial">14 dager gratis prøvetid</li>
+        <li data-no="7 dager gratis prøvetid" data-en="7 day free trial">7 dager gratis prøvetid</li>
       </ul>
       <button class="knapp knapp-hvit" onclick="velgPlan('regular')" data-no="Velg Basis" data-en="Choose Basis">Velg Basis</button>
     </div>
@@ -450,7 +450,7 @@ ${SIDE_STIL}
         <li data-no="Pro-grupper med kurs og maler" data-en="Pro groups with courses and templates">Pro-grupper med kurs og maler</li>
         <li data-no="Mediebibliotek med 5 GB lagring" data-en="Media library with 5 GB storage">Mediebibliotek med 5 GB lagring</li>
         <li data-no="Live-samlinger og opptak" data-en="Live sessions and replays">Live-samlinger og opptak</li>
-        <li data-no="14 dager gratis prøvetid" data-en="14 day free trial">14 dager gratis prøvetid</li>
+        <li data-no="7 dager gratis prøvetid" data-en="7 day free trial">7 dager gratis prøvetid</li>
       </ul>
       <button class="knapp knapp-rosa" onclick="velgPlan('pro')" data-no="Velg Pro" data-en="Choose Pro">Velg Pro</button>
     </div>
@@ -462,7 +462,7 @@ ${SIDE_STIL}
         <li data-no="VIP-gruppe med tett oppfølging" data-en="VIP group with close follow-up">VIP-gruppe med tett oppfølging</li>
         <li data-no="Mediebibliotek med 20 GB lagring" data-en="Media library with 20 GB storage">Mediebibliotek med 20 GB lagring</li>
         <li data-no="Prioritert hjelp fra Renate" data-en="Priority help from Renate">Prioritert hjelp fra Renate</li>
-        <li data-no="14 dager gratis prøvetid" data-en="14 day free trial">14 dager gratis prøvetid</li>
+        <li data-no="7 dager gratis prøvetid" data-en="7 day free trial">7 dager gratis prøvetid</li>
       </ul>
       <button class="knapp knapp-gul" onclick="velgPlan('vip')" data-no="Velg VIP" data-en="Choose VIP">Velg VIP</button>
     </div>
@@ -484,7 +484,7 @@ ${SIDE_STIL}
     </details>
     <details>
       <summary data-no="Hvordan fungerer prøveperioden?" data-en="How does the trial work?">Hvordan fungerer prøveperioden?</summary>
-      <div class="svar" data-no="Du får full tilgang i 14 dager uten å betale noe. Avslutter du før prøvetiden er over, blir du ikke belastet. Ellers starter medlemskapet automatisk." data-en="You get full access for 14 days without paying anything. If you cancel before the trial ends, you will not be charged. Otherwise the membership starts automatically.">Du får full tilgang i 14 dager uten å betale noe. Avslutter du før prøvetiden er over, blir du ikke belastet. Ellers starter medlemskapet automatisk.</div>
+      <div class="svar" data-no="Du får full tilgang i 7 dager uten å betale noe. Avslutter du før prøvetiden er over, blir du ikke belastet. Ellers starter medlemskapet automatisk." data-en="You get full access for 7 days without paying anything. If you cancel before the trial ends, you will not be charged. Otherwise the membership starts automatically.">Du får full tilgang i 7 dager uten å betale noe. Avslutter du før prøvetiden er over, blir du ikke belastet. Ellers starter medlemskapet automatisk.</div>
     </details>
     <details>
       <summary data-no="Kan jeg si opp når som helst?" data-en="Can I cancel anytime?">Kan jeg si opp når som helst?</summary>
@@ -505,7 +505,7 @@ ${SIDE_STIL}
 <div class="modal-bak skjult" id="modalBak" onclick="if(event.target===this)lukkModal()">
   <div class="modal">
     <h3 id="modalTittel">Start prøveperioden 🌸</h3>
-    <p data-no="Skriv inn e-posten din, så sender vi deg videre til trygg betaling hos Stripe. Du betaler ingenting de første 14 dagene." data-en="Enter your email and we will send you to secure checkout with Stripe. You pay nothing for the first 14 days.">Skriv inn e-posten din, så sender vi deg videre til trygg betaling hos Stripe. Du betaler ingenting de første 14 dagene.</p>
+    <p data-no="Skriv inn e-posten din, så sender vi deg videre til trygg betaling hos Stripe. Du betaler ingenting de første 7 dagene." data-en="Enter your email and we will send you to secure checkout with Stripe. You pay nothing for the first 7 days.">Skriv inn e-posten din, så sender vi deg videre til trygg betaling hos Stripe. Du betaler ingenting de første 7 dagene.</p>
     <input type="email" id="ckEpost" placeholder="E-post" autocomplete="email">
     <button class="knapp knapp-rosa" style="width:100%" id="ckKnapp" onclick="startCheckout()" data-no="Fortsett til betaling" data-en="Continue to checkout">Fortsett til betaling</button>
     <div class="feil" id="ckFeil"></div>

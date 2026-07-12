@@ -1,6 +1,6 @@
 # LME Inner Circle: betaling og partnerprogram
 
-Workeren `lme-inner-circle` har nå salgsside, Stripe-betaling med 14 dagers
+Workeren `lme-inner-circle` har nå salgsside, Stripe-betaling med 7 dagers
 prøvetid, partnerprogram (affiliate) og admin-dashbord.
 
 ## Nye sider
@@ -49,7 +49,7 @@ sendes velkomst-eposten automatisk. E-postene loggføres også i tabellen
 
 ## Slik virker det
 
-- Kjøp: kunden velger plan på `/medlemskap`, betaler hos Stripe og får 14
+- Kjøp: kunden velger plan på `/medlemskap`, betaler hos Stripe og får 7
   dagers gratis prøvetid. Webhooken gir riktig tilgang (tier) automatisk, og
   tilgangen fjernes hvis abonnementet sies opp.
 - Partner: medlemmer registrerer seg på `/affiliate` og får en lenke som
