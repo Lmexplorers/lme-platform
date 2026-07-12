@@ -1,0 +1,21 @@
+name = "lme-inner-circle"
+main = "worker.js"
+compatibility_date = "2026-07-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "lme-inner-circle"
+database_id = "f729d548-afe9-4497-a327-228c8927c4a6"
+
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "lme-platform-html"
+
+[vars]
+AFFILIATE_COMMISSION_PERCENT = "30"
+AFFILIATE_COOKIE_DAYS = "30"
+
+# Secrets (settes med `wrangler secret put <NAVN>` eller i Cloudflare-dashbordet):
+#   STRIPE_SECRET_KEY      sk_live_...
+#   STRIPE_WEBHOOK_SECRET  whsec_...
+#   MAILERLITE_API_KEY     API-nokkel fra MailerLite
