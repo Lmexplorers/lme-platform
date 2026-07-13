@@ -45,6 +45,9 @@ Renate retter ofte disse tingene manuelt. Følg reglene fra start, så slipper h
    - Komma rundt innskutte setninger.
    - Komma i oppramsing, men som hovedregel **ikke** foran siste `og`.
 
+6. **LME er kun Renate (enkeltperson).** Skriv "jeg", ikke "vi/oss", når teksten
+   er fra LME/Renate til leseren. Gjelder også engelsk ("I", ikke "we").
+
 Disse reglene gjelder all norsk tekst jeg skriver: nettsider, kursinnhold,
 e-poster og lignende.
 
