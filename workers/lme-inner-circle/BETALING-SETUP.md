@@ -64,3 +64,21 @@ sendes velkomst-eposten automatisk. E-postene loggføres også i tabellen
 
 - `users` fikk kolonnene `stripe_customer_id`, `stripe_subscription_id` og `referred_by`.
 - Nye tabeller: `payments`, `email_queue`, `affiliates` og `affiliate_sales`.
+
+## Kobling til Content Studio (Pro og VIP)
+
+Pro gir automatisk Content Studio-planen "Proff" (100 bilder, 6 videoklipp per
+måned), og VIP gir "Proff+" (200 bilder, 12 videoklipp). Kredittene fylles på
+ved kjøp og ved hver månedlige fornyelse, og fjernes hvis medlemskapet sies
+opp. Kontoer som har kjøpt Content Studio direkte røres aldri.
+
+Krever én binding på Workeren (gjøres én gang):
+
+1. Finn navnet på Content Studios kontolager: Workers & Pages ->
+   lme-content-studio -> Settings -> Bindings -> se hvilket KV-namespace
+   `ACCOUNTS_KV` peker på.
+2. På Workeren lme-inner-circle: Settings -> Bindings -> Add -> KV namespace.
+   Variabelnavn: `STUDIO_KV`. Velg samme namespace som i steg 1.
+3. Deploy Workeren på nytt.
+
+Uten bindingen virker alt annet som før; koblingen er bare inaktiv.

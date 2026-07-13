@@ -938,6 +938,40 @@ async function trackAffiliateSale(env, kode, kundeEpost, tier, belop){
   return provisjon;
 }
 
+// ---- Content Studio-tilgang ----
+// Pro og VIP inkluderer Content Studio. Kontoene der ligger i KV (STUDIO_KV,
+// samme lager som Content Studios ACCOUNTS_KV), med e-post som nokkel.
+// Kredittene fylles pa ved kjop og hver fornyelse, og fjernes ved oppsigelse.
+const STUDIO_PLANER = {
+  pro: { plan: 'proff',     image: 100, video: 6 },
+  vip: { plan: 'proffplus', image: 200, video: 12 },
+};
+async function giStudioTilgang(env, epost, tier){
+  if(!env.STUDIO_KV) return; // bindingen er valgfri; uten den skjer ingenting
+  epost = String(epost || '').trim().toLowerCase();
+  if(!epost) return;
+  const key = 'user:' + epost;
+  let user = null;
+  const raw = await env.STUDIO_KV.get(key);
+  if(raw){ try { user = JSON.parse(raw); } catch(e) {} }
+  const rett = STUDIO_PLANER[tier];
+  if(rett){
+    if(!user) user = { email: epost, createdAt: Date.now() };
+    user.plan = rett.plan;
+    user.credits = { image: rett.image, video: rett.video };
+    user.viaInnerCircle = true;
+    user.lastPayment = { at: Date.now(), source: 'inner-circle' };
+    await env.STUDIO_KV.put(key, JSON.stringify(user));
+  } else if(user && user.viaInnerCircle){
+    // Bare kontoer som fikk tilgangen via medlemskapet nedgraderes;
+    // noen som har kjopt Content Studio direkte rores ikke.
+    user.plan = 'free';
+    user.credits = { image: 0, video: 0 };
+    user.viaInnerCircle = false;
+    await env.STUDIO_KV.put(key, JSON.stringify(user));
+  }
+}
+
 // ---- Velkomst-epost ----
 // Legger e-posten i email_queue og melder personen inn i MailerLite.
 // Selve utsendingen gjøres av en MailerLite-automasjon (trigger: ny abonnent).
@@ -1124,6 +1158,7 @@ export default {
             .bind(epost, obj.customer||null, obj.subscription||null, tier, belop, belop>0?'paid':'trial', 'month', affKode||null, naa, belop>0?naa:null).run();
           // Provisjon med en gang hvis det ble betalt penger nå (uten prøvetid)
           if(belop > 0 && affKode) await trackAffiliateSale(env, affKode, epost, tier, belop);
+          await giStudioTilgang(env, epost, tier);
           await sendVelkomstEpost(env, epost, epost.split('@')[0], tier);
           return json({ok:true});
         }
@@ -1141,13 +1176,16 @@ export default {
             const alt = await env.DB.prepare(`SELECT id FROM affiliate_sales WHERE customer_email=? LIMIT 1`).bind(epost).first();
             if(!alt) await trackAffiliateSale(env, user.referred_by, epost, tier, belop);
           }
+          await giStudioTilgang(env, epost, tier);
           return json({ok:true});
         }
 
         if(event.type === 'customer.subscription.deleted'){
           const abon = obj.id;
           if(abon){
+            const u = await env.DB.prepare(`SELECT email FROM users WHERE stripe_subscription_id=?`).bind(abon).first();
             await env.DB.prepare(`UPDATE users SET tier='free', stripe_subscription_id=NULL WHERE stripe_subscription_id=?`).bind(abon).run();
+            if(u) await giStudioTilgang(env, u.email, 'free');
           }
           return json({ok:true});
         }
@@ -1157,7 +1195,9 @@ export default {
           const abon = obj.id;
           const tier = obj.metadata?.tier;
           if(abon && tier && (obj.status === 'active' || obj.status === 'trialing')){
+            const u = await env.DB.prepare(`SELECT email FROM users WHERE stripe_subscription_id=?`).bind(abon).first();
             await env.DB.prepare(`UPDATE users SET tier=? WHERE stripe_subscription_id=?`).bind(tier, abon).run();
+            if(u) await giStudioTilgang(env, u.email, tier);
           }
           return json({ok:true});
         }

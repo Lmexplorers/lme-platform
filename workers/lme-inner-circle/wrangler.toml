@@ -19,3 +19,11 @@ AFFILIATE_COOKIE_DAYS = "30"
 #   STRIPE_SECRET_KEY      sk_live_...
 #   STRIPE_WEBHOOK_SECRET  whsec_...
 #   MAILERLITE_API_KEY     API-nokkel fra MailerLite
+
+# Valgfri binding: kobler Pro/VIP-medlemskap til Content Studio.
+# I dashbordet: Settings -> Bindings -> Add -> KV namespace,
+# variabelnavn STUDIO_KV, velg samme namespace som lme-content-studio
+# bruker som ACCOUNTS_KV.
+# [[kv_namespaces]]
+# binding = "STUDIO_KV"
+# id = "<samme id som Content Studios ACCOUNTS_KV>"
