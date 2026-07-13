@@ -959,7 +959,7 @@ async function sendVelkomstEpost(env, epost, navn, tier){
       const res = await fetch('https://connect.mailerlite.com/api/subscribers', {
         method:'POST',
         headers:{'Authorization':'Bearer '+env.MAILERLITE_API_KEY,'Content-Type':'application/json','Accept':'application/json'},
-        body: JSON.stringify({ email: epost, fields: { name: navn || '', lme_plan: planNavn }, status: 'active' }),
+        body: JSON.stringify({ email: epost, fields: { name: navn || '', lme_plan: planNavn }, status: 'active', groups: [env.MAILERLITE_GROUP_ID || '192875174270338867'] }),
       });
       if(res.ok) await env.DB.prepare(`UPDATE email_queue SET status='sent', sent_at=? WHERE id=?`).bind(new Date().toISOString(), r.meta.last_row_id).run();
     } catch(e) { /* køen beholder status 'pending', så ingenting går tapt */ }
