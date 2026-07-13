@@ -24,6 +24,7 @@ AFFILIATE_COOKIE_DAYS = "30"
 # I dashbordet: Settings -> Bindings -> Add -> KV namespace,
 # variabelnavn STUDIO_KV, velg samme namespace som lme-content-studio
 # bruker som ACCOUNTS_KV.
+# Namespacet heter "lme-cs-accounts" i dashbordet.
 # [[kv_namespaces]]
 # binding = "STUDIO_KV"
-# id = "<samme id som Content Studios ACCOUNTS_KV>"
+# id = "1f052cb5be5a477a929aad1c913878f3"
