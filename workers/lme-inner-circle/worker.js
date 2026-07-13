@@ -28,9 +28,9 @@ const html = (h,ekstra={})=>new Response(h,{status:200,headers:{...cors,'Content
 
 // ---- Prisplaner (beløp i øre; endre prisene her) ----
 const PLANS = {
-  regular: { tier:'regular', navn:'Basis', belop:14900 },
-  pro:     { tier:'pro',     navn:'Pro',   belop:29900 },
-  vip:     { tier:'vip',     navn:'VIP',   belop:59900 },
+  regular: { tier:'regular', navn:'Medlem', belop:69700 },
+  pro:     { tier:'pro',     navn:'Pro',    belop:119700 },
+  vip:     { tier:'vip',     navn:'VIP',    belop:199700 },
 };
 const PROVETID_DAGER = 7;
 
@@ -431,38 +431,42 @@ ${SIDE_STIL}
 
   <div class="planer">
     <div class="plan">
-      <h2>Basis</h2>
-      <div class="pris">149 kr<small data-no="/mnd" data-en="/mo">/mnd</small></div>
+      <h2 data-no="Medlem" data-en="Member">Medlem</h2>
+      <div class="pris">697 kr<small data-no="/mnd" data-en="/mo">/mnd</small></div>
       <ul>
-        <li data-no="Tilgang til fellesskapet og gruppene" data-en="Access to the community and groups">Tilgang til fellesskapet og gruppene</li>
-        <li data-no="Mediebibliotek med 1 GB lagring" data-en="Media library with 1 GB storage">Mediebibliotek med 1 GB lagring</li>
-        <li data-no="Nyheter og arrangementer" data-en="News and events">Nyheter og arrangementer</li>
+        <li data-no="Alt innhold: alle kurs, hele biblioteket og ressursene" data-en="All content: every course, the full library and resources">Alt innhold: alle kurs, hele biblioteket og ressursene</li>
+        <li data-no="Alle gruppene og fellesrommet" data-en="All groups and the shared room">Alle gruppene og fellesrommet</li>
+        <li data-no="Renate AI, spør så mye du vil" data-en="Renate AI, ask as much as you want">Renate AI, spør så mye du vil</li>
+        <li data-no="Nye ressurser hver måned" data-en="New resources every month">Nye ressurser hver måned</li>
+        <li data-no="Månedlig medlemssending" data-en="Monthly member broadcast">Månedlig medlemssending</li>
         <li data-no="7 dager gratis prøvetid" data-en="7 day free trial">7 dager gratis prøvetid</li>
       </ul>
-      <button class="knapp knapp-hvit" onclick="velgPlan('regular')" data-no="Velg Basis" data-en="Choose Basis">Velg Basis</button>
+      <button class="knapp knapp-hvit" onclick="velgPlan('regular')" data-no="Velg Medlem" data-en="Choose Member">Velg Medlem</button>
     </div>
     <div class="plan populaer">
       <span class="stjerne" data-no="Mest populær" data-en="Most popular">Mest populær</span>
       <h2>Pro</h2>
-      <div class="pris">299 kr<small data-no="/mnd" data-en="/mo">/mnd</small></div>
+      <div class="pris">1 197 kr<small data-no="/mnd" data-en="/mo">/mnd</small></div>
       <ul>
-        <li data-no="Alt i Basis" data-en="Everything in Basis">Alt i Basis</li>
-        <li data-no="Pro-grupper med kurs og maler" data-en="Pro groups with courses and templates">Pro-grupper med kurs og maler</li>
-        <li data-no="Mediebibliotek med 5 GB lagring" data-en="Media library with 5 GB storage">Mediebibliotek med 5 GB lagring</li>
-        <li data-no="Live-samlinger og opptak" data-en="Live sessions and replays">Live-samlinger og opptak</li>
-        <li data-no="7 dager gratis prøvetid" data-en="7 day free trial">7 dager gratis prøvetid</li>
+        <li data-no="Alt i Medlem" data-en="Everything in Member">Alt i Medlem</li>
+        <li data-no="Skaperverktøyene i LME Creative Academy: Content Studio, Bookly og Kursbygger" data-en="The creator tools in LME Creative Academy: Content Studio, Bookly and Course Builder">Skaperverktøyene i LME Creative Academy: Content Studio, Bookly og Kursbygger</li>
+        <li data-no="AI Visibility og Traffic Engine" data-en="AI Visibility and Traffic Engine">AI Visibility og Traffic Engine</li>
+        <li data-no="Inntektsgenerator" data-en="Income generator">Inntektsgenerator</li>
+        <li data-no="Månedlig AI Challenge" data-en="Monthly AI Challenge">Månedlig AI Challenge</li>
+        <li data-no="Ekstra maler og kreditter" data-en="Extra templates and credits">Ekstra maler og kreditter</li>
       </ul>
       <button class="knapp knapp-rosa" onclick="velgPlan('pro')" data-no="Velg Pro" data-en="Choose Pro">Velg Pro</button>
     </div>
     <div class="plan">
       <h2>VIP</h2>
-      <div class="pris">599 kr<small data-no="/mnd" data-en="/mo">/mnd</small></div>
+      <div class="pris">1 997 kr<small data-no="/mnd" data-en="/mo">/mnd</small></div>
       <ul>
         <li data-no="Alt i Pro" data-en="Everything in Pro">Alt i Pro</li>
-        <li data-no="VIP-gruppe med tett oppfølging" data-en="VIP group with close follow-up">VIP-gruppe med tett oppfølging</li>
-        <li data-no="Mediebibliotek med 20 GB lagring" data-en="Media library with 20 GB storage">Mediebibliotek med 20 GB lagring</li>
-        <li data-no="Prioritert hjelp fra Renate" data-en="Priority help from Renate">Prioritert hjelp fra Renate</li>
-        <li data-no="7 dager gratis prøvetid" data-en="7 day free trial">7 dager gratis prøvetid</li>
+        <li data-no="Tidlig tilgang til alt nytt" data-en="Early access to everything new">Tidlig tilgang til alt nytt</li>
+        <li data-no="VIP-kanal og prioritert support" data-en="VIP channel and priority support">VIP-kanal og prioritert support</li>
+        <li data-no="Kvartalsvis strategisamling i gruppe" data-en="Quarterly group strategy session">Kvartalsvis strategisamling i gruppe</li>
+        <li data-no="Eksklusive masterclasses og beta-testing" data-en="Exclusive masterclasses and beta testing">Eksklusive masterclasses og beta-testing</li>
+        <li data-no="Founder's Updates: innblikk i alt jeg bygger" data-en="Founder's Updates: a look at everything I build">Founder's Updates: innblikk i alt jeg bygger</li>
       </ul>
       <button class="knapp knapp-gul" onclick="velgPlan('vip')" data-no="Velg VIP" data-en="Choose VIP">Velg VIP</button>
     </div>
@@ -515,11 +519,12 @@ ${SIDE_STIL}
 
 <script>
   var valgtPlan = null;
-  var PLAN_NAVN = {regular:'Basis', pro:'Pro', vip:'VIP'};
+  var PLAN_NAVN = {regular:'Medlem', pro:'Pro', vip:'VIP'};
+  var PLAN_NAVN_EN = {regular:'Member', pro:'Pro', vip:'VIP'};
   function velgPlan(p){
     valgtPlan = p;
     var en = (window.__lmeLang==='en');
-    document.getElementById('modalTittel').textContent = (en?'Start your trial of ':'Start prøveperioden på ')+PLAN_NAVN[p]+' 🌸';
+    document.getElementById('modalTittel').textContent = (en?'Start your trial of '+PLAN_NAVN_EN[p]:'Start prøveperioden på '+PLAN_NAVN[p])+' 🌸';
     document.getElementById('ckFeil').textContent='';
     document.getElementById('modalBak').classList.remove('skjult');
   }
@@ -937,7 +942,7 @@ async function trackAffiliateSale(env, kode, kundeEpost, tier, belop){
 // Legger e-posten i email_queue og melder personen inn i MailerLite.
 // Selve utsendingen gjøres av en MailerLite-automasjon (trigger: ny abonnent).
 async function sendVelkomstEpost(env, epost, navn, tier){
-  const planNavn = ({regular:'Basis', pro:'Pro', vip:'VIP'})[tier] || tier;
+  const planNavn = ({regular:'Medlem', pro:'Pro', vip:'VIP'})[tier] || tier;
   const emne = 'Velkommen til LME Inner Circle 💛';
   const kropp = `<div style="font-family:sans-serif;max-width:560px;margin:0 auto;color:#3A3A3A;">
     <h1 style="color:#E0608A;">Velkommen, ${navn || 'utforsker'}! 🌸</h1>
