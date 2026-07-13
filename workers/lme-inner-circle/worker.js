@@ -949,7 +949,7 @@ async function sendVelkomstEpost(env, epost, navn, tier){
       <li>Last opp filene dine i mediebiblioteket.</li>
     </ol>
     <p><a href="https://lmexplorers.com/grupper/inner-circle" style="background:#E0608A;color:#fff;padding:12px 24px;border-radius:99px;text-decoration:none;font-weight:bold;">Gå til Inner Circle</a></p>
-    <p style="color:#8A8A8A;font-size:13px;">Klem fra Renate 💛</p>
+    <p style="color:#8A8A8A;font-size:13px;">Klem fra Renate, LME 💛</p>
   </div>`;
   const naa = new Date().toISOString();
   const r = await env.DB.prepare(`INSERT INTO email_queue (email, subject, html_body, status, created_at) VALUES (?,?,?,'pending',?)`)
