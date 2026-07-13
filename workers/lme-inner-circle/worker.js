@@ -492,7 +492,7 @@ ${SIDE_STIL}
     </details>
     <details>
       <summary data-no="Kan jeg bytte plan senere?" data-en="Can I change plan later?">Kan jeg bytte plan senere?</summary>
-      <div class="svar" data-no="Ja, du kan oppgradere eller nedgradere når som helst. Send oss en melding, så hjelper vi deg med byttet." data-en="Yes, you can upgrade or downgrade at any time. Send us a message and we will help you switch.">Ja, du kan oppgradere eller nedgradere når som helst. Send oss en melding, så hjelper vi deg med byttet.</div>
+      <div class="svar" data-no="Ja, du kan oppgradere eller nedgradere når som helst. Send meg en melding, så hjelper jeg deg med byttet." data-en="Yes, you can upgrade or downgrade at any time. Send me a message and I will help you switch.">Ja, du kan oppgradere eller nedgradere når som helst. Send meg en melding, så hjelper jeg deg med byttet.</div>
     </details>
     <details>
       <summary data-no="Hvordan fungerer partnerprogrammet?" data-en="How does the partner program work?">Hvordan fungerer partnerprogrammet?</summary>
@@ -505,7 +505,7 @@ ${SIDE_STIL}
 <div class="modal-bak skjult" id="modalBak" onclick="if(event.target===this)lukkModal()">
   <div class="modal">
     <h3 id="modalTittel">Start prøveperioden 🌸</h3>
-    <p data-no="Skriv inn e-posten din, så sender vi deg videre til trygg betaling hos Stripe. Du betaler ingenting de første 7 dagene." data-en="Enter your email and we will send you to secure checkout with Stripe. You pay nothing for the first 7 days.">Skriv inn e-posten din, så sender vi deg videre til trygg betaling hos Stripe. Du betaler ingenting de første 7 dagene.</p>
+    <p data-no="Skriv inn e-posten din, så blir du sendt videre til trygg betaling hos Stripe. Du betaler ingenting de første 7 dagene." data-en="Enter your email and you will be sent to secure checkout with Stripe. You pay nothing for the first 7 days.">Skriv inn e-posten din, så blir du sendt videre til trygg betaling hos Stripe. Du betaler ingenting de første 7 dagene.</p>
     <input type="email" id="ckEpost" placeholder="E-post" autocomplete="email">
     <button class="knapp knapp-rosa" style="width:100%" id="ckKnapp" onclick="startCheckout()" data-no="Fortsett til betaling" data-en="Continue to checkout">Fortsett til betaling</button>
     <div class="feil" id="ckFeil"></div>
@@ -582,11 +582,11 @@ ${SIDE_STIL}
   <div class="takk kort">
     <div class="ikon">🎉</div>
     <h1 data-no="Velkommen til Inner Circle!" data-en="Welcome to the Inner Circle!">Velkommen til Inner Circle!</h1>
-    <p data-no="Betalingen er registrert, og prøveperioden din er i gang. Vi har sendt deg en velkomst-epost med alt du trenger." data-en="Your payment is registered and your trial has started. We have sent you a welcome email with everything you need.">Betalingen er registrert, og prøveperioden din er i gang. Vi har sendt deg en velkomst-epost med alt du trenger.</p>
+    <p data-no="Betalingen er registrert, og prøveperioden din er i gang. Jeg har sendt deg en velkomst-epost med alt du trenger." data-en="Your payment is registered and your trial has started. I have sent you a welcome email with everything you need.">Betalingen er registrert, og prøveperioden din er i gang. Jeg har sendt deg en velkomst-epost med alt du trenger.</p>
     <ul class="steg">
       <li>1️⃣ <span data-no="Opprett kontoen din med samme e-post som du betalte med" data-en="Create your account with the same email you paid with">Opprett kontoen din med samme e-post som du betalte med</span></li>
       <li>2️⃣ <span data-no="Logg inn og utforsk gruppene og mediebiblioteket" data-en="Log in and explore the groups and the media library">Logg inn og utforsk gruppene og mediebiblioteket</span></li>
-      <li>3️⃣ <span data-no="Si hei i fellesrommet, vi gleder oss til å møte deg 💛" data-en="Say hi in the shared room, we look forward to meeting you 💛">Si hei i fellesrommet, vi gleder oss til å møte deg 💛</span></li>
+      <li>3️⃣ <span data-no="Si hei i fellesrommet, jeg gleder meg til å møte deg 💛" data-en="Say hi in the shared room, I look forward to meeting you 💛">Si hei i fellesrommet, jeg gleder meg til å møte deg 💛</span></li>
     </ul>
     <a class="knapp knapp-rosa" href="https://lmexplorers.com/grupper/inner-circle" data-no="Gå til Inner Circle" data-en="Go to Inner Circle">Gå til Inner Circle</a>
   </div>
@@ -941,7 +941,7 @@ async function sendVelkomstEpost(env, epost, navn, tier){
   const emne = 'Velkommen til LME Inner Circle 💛';
   const kropp = `<div style="font-family:sans-serif;max-width:560px;margin:0 auto;color:#3A3A3A;">
     <h1 style="color:#E0608A;">Velkommen, ${navn || 'utforsker'}! 🌸</h1>
-    <p>Så glade vi er for å ha deg med i LME Inner Circle på planen <strong>${planNavn}</strong>.</p>
+    <p>Så glad jeg er for å ha deg med i LME Inner Circle på planen <strong>${planNavn}</strong>.</p>
     <p>Slik kommer du i gang:</p>
     <ol>
       <li>Opprett kontoen din (eller logg inn) med denne e-postadressen.</li>
@@ -949,7 +949,7 @@ async function sendVelkomstEpost(env, epost, navn, tier){
       <li>Last opp filene dine i mediebiblioteket.</li>
     </ol>
     <p><a href="https://lmexplorers.com/grupper/inner-circle" style="background:#E0608A;color:#fff;padding:12px 24px;border-radius:99px;text-decoration:none;font-weight:bold;">Gå til Inner Circle</a></p>
-    <p style="color:#8A8A8A;font-size:13px;">Klem fra Renate og LME 💛</p>
+    <p style="color:#8A8A8A;font-size:13px;">Klem fra Renate 💛</p>
   </div>`;
   const naa = new Date().toISOString();
   const r = await env.DB.prepare(`INSERT INTO email_queue (email, subject, html_body, status, created_at) VALUES (?,?,?,'pending',?)`)
