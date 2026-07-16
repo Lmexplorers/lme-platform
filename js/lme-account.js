@@ -72,7 +72,7 @@
   }
   function t(no, en) { return isEn() ? en : no; }
 
-  var state = { loggedIn: false, name: null, email: null, owner: false, proVip: false };
+  var state = { loggedIn: false, name: null, email: null, owner: false, member: false };
 
   /* --- Stiler (selvstendige, kolliderer ikke med sidens egne) --- */
   var css = [
@@ -175,11 +175,11 @@
       html += '<div class="lme-acct-div"></div>';
       html += item('/om-renate', '🌷', 'Om Renate', 'About Renate');
       html += item('/spor-renate-ai', '💬', 'Spør Renate AI', 'Ask Renate AI');
-      // Byggerverktøy. Gruppebygger er kun for eier. Kursbygger er for eier
-      // og Pro/VIP-medlemmer. Vises på alle sider.
-      if (state.owner || state.proVip) {
+      // Byggerverktøy: Gruppebygger og Kursbygger for alle medlemmer
+      // (Medlem, Pro, VIP) og eier. Vises på alle sider.
+      if (state.owner || state.member) {
         html += '<div class="lme-acct-div"></div>';
-        if (state.owner) html += item('/gruppebygger', '🧩', 'Gruppebygger', 'Group builder');
+        html += item('/gruppebygger', '🧩', 'Gruppebygger', 'Group builder');
         html += item('/kursbygger', '🎓', 'Kursbygger', 'Course builder');
       }
       html += '<div class="lme-acct-div"></div>';
@@ -228,11 +228,10 @@
         state.name = d.user.name || null;
         state.email = d.user.email || null;
         state.owner = d.user.role === 'owner';
-        // Pro/VIP (Proff, Proff+, VIP) faar ogsaa byggerverktoeyene. Basis
-        // Inner Circle-medlem ("inner-circle"/"medlem") gjoer det ikke.
+        // Alle medlemmer (Medlem, Pro, VIP med aktivt abonnement) faar
+        // byggerverktoeyene, i tillegg til eier.
         var sub = d.subscription;
-        var active = sub && sub.status && !/cancel|inactive|expired|none/i.test(sub.status);
-        state.proVip = !!(active && /pro|proff|vip/i.test(sub.plan || ''));
+        state.member = !!(sub && sub.status && !/cancel|inactive|expired|none/i.test(sub.status));
         // Kontoens bilde er fasit: speil det til lokal buffer, saa det vises
         // likt paa alle sider (og paa nye enheter etter innlogging).
         if (d.user.avatar) {
