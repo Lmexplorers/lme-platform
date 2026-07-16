@@ -86,6 +86,13 @@ Bruk aldri Playpen (eller systemfont/Comic Sans) på brødtekst. Aldri avvik.
 - Cloudflare Pages + Functions (`functions/`). KV-binding: `BUILDER_KV`.
 - Rene URL-er: `/x` krever `x.html` eller `x/index.html`.
 - Delt sidemeny: `js/sidebar.js`. Merkefarger/typografi i CSS-variabler (Playpen Sans).
+- Delt kontoknapp: `js/lme-account.js` legger bildet + nedtrekksmeny (til egen
+  konto, Logg inn/Logg ut) øverst til høyre på alle sider. Hopper automatisk
+  over sider som har egen `#avatarMenu`. Innlogging er rullerende (økten fornyes
+  ved hvert `/api/auth/me`), så innloggede brukere forblir innlogget.
+- `js/lme-member.js` sjekker medlemsstatus (`/api/group/access`) og bytter
+  "Bli med i Inner Circle"-knapper (merket `data-lme-join` / `data-lme-enter`)
+  til "Gå inn i Inner Circle" for innloggede eiere/medlemmer.
 
 ### Kursbygger (for Renate, uten kode)
 - `/kursbygger` lager mini- og større kurs som JSON i KV via `functions/api/kurs.js`.
