@@ -113,7 +113,20 @@ export async function onRequestGet(context) {
   if (!sess) return json({ user: null }, 200);
   const u = await getUser(env, sess.email);
   if (!u) return json({ user: null }, 200);
-  return json({ user: publicUser(u), subscription: u.subscription || null, purchases: u.purchases || [] });
+  // Rullerende innlogging: hver gang en side sjekker "hvem er jeg", fornyes
+  // økten med nye 30 dager, og cookien settes på nytt. Aktive brukere (som
+  // Renate) forblir da alltid innlogget, akkurat som i FEA. Feiler fornyingen
+  // (f.eks. KV nede et øyeblikk), svarer vi som før uten å logge noen ut.
+  let refresh = {};
+  try {
+    await env.BUILDER_KV.put(
+      "sess:" + sess.sid,
+      JSON.stringify({ uid: sess.uid, email: sess.email, role: sess.role }),
+      { expirationTtl: SESS_TTL }
+    );
+    refresh = { "Set-Cookie": sessionCookie(sess.sid) };
+  } catch (e) { /* behold eksisterende økt */ }
+  return json({ user: publicUser(u), subscription: u.subscription || null, purchases: u.purchases || [] }, 200, refresh);
 }
 
 export async function onRequestPost(context) {

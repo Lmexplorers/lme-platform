@@ -1586,7 +1586,7 @@
           <div class="dropdown-col">
             <h4><span class="ico">♡</span> Fellesskap</h4>
             <ul>
-              <li><a href="/medlemskap">Bli med i Inner Circle</a></li>
+              <li><a href="/medlemskap" data-lme-join>Bli med i Inner Circle</a></li>
               <li><a href="/grupper">Grupper</a></li>
               <li><a href="/medlemmer">Medlemsoversikt</a></li>
               <li><a href="/partnere">Pedagog-partnere</a></li>
@@ -1692,6 +1692,15 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 12c0 4.4-4 8-9 8-1.3 0-2.5-.2-3.6-.7L3 21l1.7-5.4C3.6 14.2 3 12.7 3 11c0-4.4 4-8 9-8s9 3.6 9 8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
             Spør Renate AI
           </a>
+          <div class="divider"></div>
+          <a href="/login?next=/dashboard" data-lme-when="out" hidden>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Logg inn
+          </a>
+          <button type="button" data-lme-logout data-lme-when="in" hidden>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M16 17l5-5-5-5M21 12H9M12 21H5a2 2 0 01-2-2V5a2 2 0 012-2h7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Logg ut
+          </button>
         </div>
       </div>
     </div>
@@ -1716,7 +1725,7 @@
       </div>
       <span class="cta-arrow">→</span>
     </a>
-    <a href="/medlemskap" class="hero-cta-card hero-cta-ic" style="text-decoration:none;color:inherit;">
+    <a href="/medlemskap" data-lme-enter class="hero-cta-card hero-cta-ic" style="text-decoration:none;color:inherit;">
       <span class="cta-icon">✨</span>
       <div class="cta-body">
         <span class="cta-kicker">BLI MEDLEM</span>
@@ -2105,7 +2114,7 @@
         <div>
           <h3>Bli med i <em>Inner Circle</em></h3>
           <p>Tospråklig fellesskap for Montessoripedagoger, foreldre og skapere.</p>
-          <a href="/medlemskap" class="btn-yellow">Bli med nå →</a>
+          <a href="/medlemskap" data-lme-join class="btn-yellow">Bli med nå →</a>
         </div>
       </article>
 
@@ -2580,6 +2589,7 @@
 </script>
 <script src="/js/mobile-nav.js?v=9" defer></script>
 <script src="/js/i18n-auto.js" defer></script>
+<script src="/js/lme-member.js" defer></script>
 <script src="/js/lme-visibility.js" defer></script>
 <script src="/js/renate-widget.js?v=3" defer></script>
 </body>

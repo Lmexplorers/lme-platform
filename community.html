@@ -1190,7 +1190,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           <div class="dropdown-col">
             <h4><span class="ico">♡</span> Fellesskap</h4>
             <ul>
-              <li><a href="/medlemskap">Bli med i Inner Circle</a></li>
+              <li><a href="/medlemskap" data-lme-join>Bli med i Inner Circle</a></li>
               <li><a href="/grupper">Grupper</a></li>
               <li><a href="/medlemmer">Medlemsoversikt</a></li>
               <li><a href="/partnere">Pedagog-partnere</a></li>
@@ -1311,7 +1311,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
       <p>Et tospråklig hjem for Montessoripedagoger, foreldre og skapere som vil følge barnets naturlige utvikling, med ekte støtte fra likesinnede og månedlige live-samtaler med Renate.</p>
 
       <div class="cta-row">
-        <a href="/medlemskap" class="btn-yellow">Bli med i Inner Circle →</a>
+        <a href="/medlemskap" data-lme-join class="btn-yellow">Bli med i Inner Circle →</a>
         <a href="#fordeler" class="btn-blue">Se hva som inngår</a>
       </div>
 
@@ -1615,7 +1615,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
       </div>
 
       <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-        <a href="/medlemskap" class="btn-yellow">Start medlemskapet ditt →</a>
+        <a href="/medlemskap" data-lme-join class="btn-yellow">Start medlemskapet ditt →</a>
         <a href="/spor-renate-ai" class="btn-blue" style="background: rgba(255,255,255,0.1); color: #fff;">Snakk med Renate først</a>
       </div>
 
@@ -1999,6 +1999,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 <script>function lmeSoon(m){var t=document.createElement("div");t.textContent=m||(window.LME_CURRENT_LANG==="en"?"Coming soon 💛":"Kommer snart 💛");t.style.cssText="position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#2a1e2e;color:#fff;padding:12px 20px;border-radius:999px;z-index:99999;font-weight:700;font-family:inherit;box-shadow:0 8px 24px rgba(0,0,0,.25)";document.body.appendChild(t);setTimeout(function(){t.remove();},2200);}</script>
 <script src="/js/mobile-nav.js?v=9" defer></script>
 <script src="/js/i18n-auto.js" defer></script>
+<script src="/js/lme-member.js" defer></script>
 <script src="/js/lme-visibility.js" defer></script>
 <script src="/js/renate-widget.js?v=3" defer></script>
 </body>
