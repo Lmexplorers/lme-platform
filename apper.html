@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<title>Apper — LME</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink: #F8D7DA; --pink-mid: #F5A8B8; --cerise: #E91E89;
+    --lime: #7AAE1F; --yellow: #F7C72E; --cream: #FBF6F0;
+    --ink: #1A1A1A; --grey: #4A4A4A; --line: rgba(26,26,26,0.1);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); color: var(--ink); background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 55%, #F8D7DA 100%); min-height: 100vh; line-height: 1.55; }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); }
+  a { color: inherit; text-decoration: none; }
+
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 13px 20px; background: rgba(255,255,255,0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+  .bar .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--cerise); font-size: 15px; }
+  .bar .brand img { width: 32px; height: 32px; object-fit: contain; }
+  .bar .actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .btn { border: 0; border-radius: 999px; padding: 9px 16px; font-weight: 700; font-family: inherit; cursor: pointer; font-size: 13.5px; white-space: nowrap; }
+  .btn-back { background: #fff; color: var(--ink); border: 1px solid #eedce2; }
+  .btn-lang { background: #FCEFF2; color: #C13D6A; }
+
+  .wrap { max-width: 1040px; width: 100%; margin: 0 auto; padding: 32px 20px 70px; }
+  .head { text-align: center; margin-bottom: 30px; }
+  .head .kick { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cerise); }
+  .head h1 { font-size: 34px; margin: 6px 0 8px; }
+  .head p { color: var(--grey); font-size: 16px; max-width: 560px; margin: 0 auto; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 18px; }
+  .app { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 22px; box-shadow: 0 6px 22px rgba(26,26,26,0.05); transition: transform .18s ease, box-shadow .18s ease; }
+  .app:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(26,26,26,0.09); }
+  .app .ico { width: 54px; height: 54px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 27px; margin-bottom: 14px; }
+  .app.c1 .ico { background: linear-gradient(135deg, #FFE9F5, #F49DC5); }
+  .app.c2 .ico { background: linear-gradient(135deg, #FFF4D6, #F7C72E); }
+  .app.c3 .ico { background: linear-gradient(135deg, #D8EEFF, #3FA9F5); }
+  .app.c4 .ico { background: linear-gradient(135deg, #E8F5D1, #A4D233); }
+  .app.c5 .ico { background: linear-gradient(135deg, #EFE5FF, #B294E8); }
+  .app.c6 .ico { background: linear-gradient(135deg, #FFE1E8, #F5A8B8); }
+  .app h3 { font-size: 18px; margin-bottom: 6px; }
+  .app p { color: var(--grey); font-size: 14px; flex: 1; }
+  .app .go { margin-top: 14px; align-self: flex-start; font-weight: 700; font-size: 14px; color: var(--cerise); }
+  .app .tag { align-self: flex-start; margin-top: 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: #b58a00; background: #FFF8E6; border-radius: 999px; padding: 3px 10px; }
+
+  @media (max-width: 520px) { .head h1 { font-size: 28px; } }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/dashboard"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <div class="actions">
+      <button class="btn btn-lang" id="lme-lang" type="button">🇬🇧 English</button>
+      <a class="btn btn-back" href="/dashboard" data-no="‹ Dashbord" data-en="‹ Dashboard">‹ Dashbord</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="head">
+      <span class="kick" data-no="LME" data-en="LME">LME</span>
+      <h1 data-no="Apper" data-en="Apps">Apper</h1>
+      <p data-no="Alle appene og verktøyene dine på ett sted. Trykk for å åpne." data-en="All your apps and tools in one place. Tap to open.">Alle appene og verktøyene dine på ett sted. Trykk for å åpne.</p>
+    </div>
+
+    <div class="grid">
+      <a class="app c1" href="https://lme-contentstudio.pages.dev" target="_blank" rel="noopener">
+        <div class="ico">🎨</div>
+        <h3>LME Content Studio</h3>
+        <p data-no="AI-drevet innholdsverktøy for sosiale medier. Lag innlegg, reels og karuseller på minutter." data-en="AI-powered content tool for social media. Create posts, reels and carousels in minutes.">AI-drevet innholdsverktøy for sosiale medier. Lag innlegg, reels og karuseller på minutter.</p>
+        <span class="go" data-no="Åpne ↗" data-en="Open ↗">Åpne ↗</span>
+      </a>
+
+      <a class="app c2" href="/bookly/">
+        <div class="ico">📚</div>
+        <h3>LME Bookly</h3>
+        <p data-no="Bygg Montessoribaserte bøker og arbeidsbøker med egne oppgaver og illustrasjoner." data-en="Build Montessori-based books and workbooks with your own exercises and illustrations.">Bygg Montessoribaserte bøker og arbeidsbøker med egne oppgaver og illustrasjoner.</p>
+        <span class="go" data-no="Åpne →" data-en="Open →">Åpne →</span>
+      </a>
+
+      <a class="app c3" href="/lme-builder">
+        <div class="ico">✨</div>
+        <h3>LME Builder</h3>
+        <p data-no="Bygg landingssider, e-postkampanjer og visuelle ressurser med dra-og-slipp." data-en="Build landing pages, email campaigns and visual assets with drag and drop.">Bygg landingssider, e-postkampanjer og visuelle ressurser med dra-og-slipp.</p>
+        <span class="go" data-no="Åpne →" data-en="Open →">Åpne →</span>
+      </a>
+
+      <a class="app c4" href="/ai-visibility">
+        <div class="ico">🔍</div>
+        <h3>AI Visibility Engine</h3>
+        <p data-no="Bli funnet i Google, Pinterest og AI-søk. Søkeord, GEO-artikler, FAQ og schema fra ett tema." data-en="Get found in Google, Pinterest and AI search. Keywords, GEO articles, FAQ and schema from one topic.">Bli funnet i Google, Pinterest og AI-søk. Søkeord, GEO-artikler, FAQ og schema fra ett tema.</p>
+        <span class="go" data-no="Åpne →" data-en="Open →">Åpne →</span>
+      </a>
+
+      <a class="app c5" href="/spor-renate-ai">
+        <div class="ico">💗</div>
+        <h3>Renate AI</h3>
+        <p data-no="Din egen Montessori-assistent. Pedagogisk veiledning, spørsmål og innholdsidéer, døgnet rundt." data-en="Your own Montessori assistant. Educational guidance, questions and content ideas, around the clock.">Din egen Montessori-assistent. Pedagogisk veiledning, spørsmål og innholdsidéer, døgnet rundt.</p>
+        <span class="go" data-no="Åpne →" data-en="Open →">Åpne →</span>
+      </a>
+
+      <span class="app c6">
+        <div class="ico">🎬</div>
+        <h3>Reel Studio</h3>
+        <p data-no="Lag korte videoer med musikk og automatisk publisering." data-en="Create short videos with music and automatic publishing.">Lag korte videoer med musikk og automatisk publisering.</p>
+        <span class="tag" data-no="SNART" data-en="SOON">SNART</span>
+      </span>
+    </div>
+  </div>
+
+<script>
+(function () {
+  window.LME_CURRENT_LANG = 'no';
+  try { window.LME_CURRENT_LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no'; } catch (e) {}
+  function apply() {
+    var en = window.LME_CURRENT_LANG === 'en';
+    document.documentElement.lang = en ? 'en' : 'no';
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      el.textContent = en ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    var b = document.getElementById('lme-lang');
+    if (b) b.textContent = en ? '🇳🇴 Norsk' : '🇬🇧 English';
+    document.title = (en ? 'Apps' : 'Apper') + ' — LME';
+  }
+  window.lmeToggleLang = function () {
+    window.LME_CURRENT_LANG = window.LME_CURRENT_LANG === 'en' ? 'no' : 'en';
+    try { localStorage.setItem('lme_lang', window.LME_CURRENT_LANG); } catch (e) {}
+    apply();
+    try { window.dispatchEvent(new Event('lme-lang')); } catch (e) {}
+  };
+  document.getElementById('lme-lang').addEventListener('click', window.lmeToggleLang);
+  apply();
+})();
+</script>
+<script src="/js/lme-account.js?v=5" defer></script>
+<script src="/js/renate-widget.js?v=3" defer></script>
+</body>
+</html>
