@@ -67,7 +67,7 @@
   }
   function t(no, en) { return isEn() ? en : no; }
 
-  var state = { loggedIn: false, name: null, email: null };
+  var state = { loggedIn: false, name: null, email: null, owner: false };
 
   /* --- Stiler (selvstendige, kolliderer ikke med sidens egne) --- */
   var css = [
@@ -168,6 +168,12 @@
       html += '<div class="lme-acct-div"></div>';
       html += item('/om-renate', '🌷', 'Om Renate', 'About Renate');
       html += item('/spor-renate-ai', '💬', 'Spør Renate AI', 'Ask Renate AI');
+      // Byggerverktøy: kun synlig for deg som eier, på alle sider.
+      if (state.owner) {
+        html += '<div class="lme-acct-div"></div>';
+        html += item('/gruppebygger', '🧩', 'Gruppebygger', 'Group builder');
+        html += item('/kursbygger', '🎓', 'Kursbygger', 'Course builder');
+      }
       html += '<div class="lme-acct-div"></div>';
       html += '<button type="button" id="lme-acct-logout"><span class="lme-acct-ico">🚪</span><span>' +
         t('Logg ut', 'Log out') + '</span></button>';
@@ -213,6 +219,7 @@
         state.loggedIn = true;
         state.name = d.user.name || null;
         state.email = d.user.email || null;
+        state.owner = d.user.role === 'owner';
         // Kontoens bilde er fasit: speil det til lokal buffer, saa det vises
         // likt paa alle sider (og paa nye enheter etter innlogging).
         if (d.user.avatar) {
