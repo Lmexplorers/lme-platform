@@ -12,9 +12,11 @@
    Endre kontoknappen KUN her — den gjelder da alle sidene.
    ========================================================= */
 (function () {
-  // Har siden allerede en egen kontomeny? Da gjør vi ingenting.
-  if (document.getElementById('avatarMenu') || document.querySelector('.avatar-wrapper')) return;
+  // Samme kontoknapp for ALLE medlemmer på ALLE sider. Sider som hadde sin
+  // egen kontomeny får den skjult (CSS under), så alle ser nøyaktig det samme.
   if (document.getElementById('lme-acct')) return; // aldri to
+
+  function getPhoto() { try { return localStorage.getItem('lme_profile_photo') || ''; } catch (e) { return ''; } }
 
   function isEn() {
     var l = window.LME_CURRENT_LANG;
@@ -47,6 +49,8 @@
     '#lme-acct-menu a:hover, #lme-acct-menu button:hover { background: #FCEFF2; color: #c2255c; }',
     '#lme-acct-menu .lme-acct-ico { width: 20px; text-align: center; font-size: 15px; flex: none; }',
     '#lme-acct-menu .lme-acct-div { height: 1px; background: #f3e3e9; margin: 6px 4px; }',
+    /* Skjul sidenes egne kontomenyer, så den delte er den eneste (likt for alle) */
+    '.avatar-wrapper { display: none !important; }',
     '@media (max-width: 768px) { #lme-acct { top: 10px; right: 12px; } }'
   ].join('\n');
   var st = document.createElement('style');
@@ -58,11 +62,24 @@
   wrap.id = 'lme-acct';
   wrap.innerHTML =
     '<button id="lme-acct-btn" type="button" aria-label="' + t('Din konto', 'Your account') + '" aria-expanded="false"></button>' +
-    '<div id="lme-acct-menu" role="menu"></div>';
+    '<div id="lme-acct-menu" role="menu"></div>' +
+    '<input type="file" id="lme-acct-file" accept="image/*" style="display:none">';
   (document.body || document.documentElement).appendChild(wrap);
 
   var btn = wrap.querySelector('#lme-acct-btn');
   var menu = wrap.querySelector('#lme-acct-menu');
+  var fileInput = wrap.querySelector('#lme-acct-file');
+
+  // Bildeopplasting (lagres lokalt, samme nøkkel som før: lme_profile_photo)
+  fileInput.addEventListener('change', function () {
+    var f = this.files && this.files[0];
+    this.value = '';
+    if (!f) return;
+    if (f.size > 2 * 1024 * 1024) { alert(t('Bildet er for stort. Velg et bilde under 2 MB.', 'Image too large. Choose one under 2 MB.')); return; }
+    var reader = new FileReader();
+    reader.onload = function (ev) { try { localStorage.setItem('lme_profile_photo', ev.target.result); } catch (e) {} render(); close(); };
+    reader.readAsDataURL(f);
+  });
 
   function initial() {
     var n = (state.name || state.email || 'R').trim();
@@ -74,7 +91,13 @@
   }
 
   function render() {
-    btn.textContent = state.loggedIn ? initial() : '👤';
+    var photo = getPhoto();
+    if (photo) {
+      btn.innerHTML = '';
+      var im = document.createElement('img'); im.src = photo; im.alt = ''; btn.appendChild(im);
+    } else {
+      btn.textContent = state.loggedIn ? initial() : '👤';
+    }
     btn.setAttribute('aria-label', t('Din konto', 'Your account'));
     var html = '';
     if (state.loggedIn) {
@@ -83,6 +106,8 @@
           (state.email ? '<span>' + esc(state.email) + '</span>' : '') + '</div>';
       }
       html += item('/min-konto', '👤', 'Min konto', 'My account');
+      html += '<button type="button" id="lme-acct-upload"><span class="lme-acct-ico">📷</span><span>' +
+        t('Last opp bilde', 'Upload photo') + '</span></button>';
       html += item('/butikk', '🛍️', 'LME Butikk', 'LME Shop');
       html += item('/perks', '⭐', 'LME Perks', 'LME Perks');
       html += item('/oppgrader', '✨', 'Oppgrader plan', 'Upgrade plan');
@@ -107,6 +132,8 @@
         .then(function () { location.replace('/login'); })
         .catch(function () { location.replace('/login'); });
     });
+    var up = menu.querySelector('#lme-acct-upload');
+    if (up) up.addEventListener('click', function (e) { e.preventDefault(); fileInput.click(); });
   }
 
   function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
