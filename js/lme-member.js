@@ -43,14 +43,16 @@
   function upgradeJoinCtas() {
     if (!state.inside) return;
     var label = isEn() ? "Enter Inner Circle →" : "Gå inn i Inner Circle →";
+    // Medlemsportalen (selve fellesrommet), IKKE salgssiden /community.
+    var PORTAL = "/grupper/inner-circle";
     // Enkle tekst-knapper: bytt både lenke og tekst.
     document.querySelectorAll("[data-lme-join]").forEach(function (a) {
-      if (a.tagName === "A") a.setAttribute("href", "/community");
+      if (a.tagName === "A") a.setAttribute("href", PORTAL);
       a.textContent = label;
     });
     // Store kort med egen layout: bytt bare lenken, la innholdet stå.
     document.querySelectorAll("[data-lme-enter]").forEach(function (a) {
-      if (a.tagName === "A") a.setAttribute("href", "/community");
+      if (a.tagName === "A") a.setAttribute("href", PORTAL);
     });
   }
 

@@ -106,6 +106,7 @@
           (state.email ? '<span>' + esc(state.email) + '</span>' : '') + '</div>';
       }
       html += item('/min-konto', '👤', 'Min konto', 'My account');
+      html += item('/grupper/inner-circle', '🌸', 'Inner Circle', 'Inner Circle');
       html += '<button type="button" id="lme-acct-upload"><span class="lme-acct-ico">📷</span><span>' +
         t('Last opp bilde', 'Upload photo') + '</span></button>';
       html += item('/butikk', '🛍️', 'LME Butikk', 'LME Shop');
