@@ -19,12 +19,10 @@
   function getPhoto() { try { return localStorage.getItem('lme_profile_photo') || ''; } catch (e) { return ''; } }
   function setPhoto(v) { try { if (v) localStorage.setItem('lme_profile_photo', v); else localStorage.removeItem('lme_profile_photo'); } catch (e) {} }
 
-  // Bildet sidens egen (naa skjulte) avatar viste. Brukes som reserve slik at
-  // et bilde aldri forsvinner naar den delte knappen overtar.
-  function pageAvatarSrc() {
-    var im = document.querySelector('#avatarBtn img, .avatar-wrapper img, .avatar-btn img');
-    return (im && im.getAttribute('src')) ? im.getAttribute('src') : '';
-  }
+  // Standardportrettet (samme som toppavatarene brukte). Vises for eier paa
+  // alle sider naar det ikke er lastet opp et eget bilde, saa portrettet er
+  // likt overalt og ikke bare der sidens egen avatar hadde et <img>.
+  var OWNER_DEFAULT_PHOTO = '/images/renate-portrait.jpg';
 
   // Forminsker bildet til et lite kvadrat, saa det er raskt og lite nok til
   // aa lagres paa kontoen (serveren har en grense).
@@ -152,7 +150,7 @@
   }
 
   function render() {
-    var photo = getPhoto() || pageAvatarSrc();
+    var photo = getPhoto() || (state.owner ? OWNER_DEFAULT_PHOTO : '');
     if (photo) {
       btn.innerHTML = '';
       var im = document.createElement('img'); im.src = photo; im.alt = ''; btn.appendChild(im);
