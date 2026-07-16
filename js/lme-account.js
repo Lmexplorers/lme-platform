@@ -17,6 +17,48 @@
   if (document.getElementById('lme-acct')) return; // aldri to
 
   function getPhoto() { try { return localStorage.getItem('lme_profile_photo') || ''; } catch (e) { return ''; } }
+  function setPhoto(v) { try { if (v) localStorage.setItem('lme_profile_photo', v); else localStorage.removeItem('lme_profile_photo'); } catch (e) {} }
+
+  // Forminsker bildet til et lite kvadrat, saa det er raskt og lite nok til
+  // aa lagres paa kontoen (serveren har en grense).
+  function shrink(file, cb) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      var img = new Image();
+      img.onload = function () {
+        var max = 256;
+        var side = Math.min(img.width, img.height);
+        var c = document.createElement('canvas');
+        c.width = max; c.height = max;
+        var g = c.getContext('2d');
+        g.fillStyle = '#fff'; g.fillRect(0, 0, max, max);
+        // midtstilt beskjaering til kvadrat
+        var sx = (img.width - side) / 2, sy = (img.height - side) / 2;
+        g.drawImage(img, sx, sy, side, side, 0, 0, max, max);
+        cb(c.toDataURL('image/jpeg', 0.85));
+      };
+      img.onerror = function () { cb(null); };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // Forminsk et bilde som allerede er en data-URL (brukes til aa overfoere et
+  // tidligere lokalt lagret bilde opp til kontoen).
+  function shrinkSrc(src, cb) {
+    var img = new Image();
+    img.onload = function () {
+      var max = 256, side = Math.min(img.width, img.height);
+      var c = document.createElement('canvas'); c.width = max; c.height = max;
+      var g = c.getContext('2d');
+      g.fillStyle = '#fff'; g.fillRect(0, 0, max, max);
+      var sx = (img.width - side) / 2, sy = (img.height - side) / 2;
+      g.drawImage(img, sx, sy, side, side, 0, 0, max, max);
+      cb(c.toDataURL('image/jpeg', 0.85));
+    };
+    img.onerror = function () { cb(null); };
+    img.src = src;
+  }
 
   function isEn() {
     var l = window.LME_CURRENT_LANG;
@@ -70,15 +112,25 @@
   var menu = wrap.querySelector('#lme-acct-menu');
   var fileInput = wrap.querySelector('#lme-acct-file');
 
-  // Bildeopplasting (lagres lokalt, samme nøkkel som før: lme_profile_photo)
+  // Bildeopplasting: forminskes, vises med en gang (lokal buffer) og lagres
+  // paa kontoen (serveren), saa det foelger deg paa alle sider og enheter.
   fileInput.addEventListener('change', function () {
     var f = this.files && this.files[0];
     this.value = '';
     if (!f) return;
-    if (f.size > 2 * 1024 * 1024) { alert(t('Bildet er for stort. Velg et bilde under 2 MB.', 'Image too large. Choose one under 2 MB.')); return; }
-    var reader = new FileReader();
-    reader.onload = function (ev) { try { localStorage.setItem('lme_profile_photo', ev.target.result); } catch (e) {} render(); close(); };
-    reader.readAsDataURL(f);
+    if (f.size > 8 * 1024 * 1024) { alert(t('Bildet er for stort. Velg et bilde under 8 MB.', 'Image too large. Choose one under 8 MB.')); return; }
+    shrink(f, function (dataUrl) {
+      if (!dataUrl) { alert(t('Kunne ikke lese bildet. Prøv et annet.', 'Could not read the image. Try another.')); return; }
+      setPhoto(dataUrl);
+      render();
+      close();
+      // lagre paa kontoen (best effort; bildet vises uansett lokalt)
+      fetch('/api/auth/avatar', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ avatar: dataUrl })
+      }).catch(function () {});
+    });
   });
 
   function initial() {
@@ -161,6 +213,24 @@
         state.loggedIn = true;
         state.name = d.user.name || null;
         state.email = d.user.email || null;
+        // Kontoens bilde er fasit: speil det til lokal buffer, saa det vises
+        // likt paa alle sider (og paa nye enheter etter innlogging).
+        if (d.user.avatar) {
+          setPhoto(d.user.avatar);
+        } else {
+          // Har kontoen ikke bilde ennaa, men nettleseren har et gammelt lokalt
+          // bilde? Overfoer det (forminsket) til kontoen, saa det foelger deg.
+          var local = getPhoto();
+          if (local) shrinkSrc(local, function (sm) {
+            if (!sm) return;
+            setPhoto(sm); render();
+            fetch('/api/auth/avatar', {
+              method: 'POST', credentials: 'same-origin',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ avatar: sm })
+            }).catch(function () {});
+          });
+        }
       }
       render();
     })

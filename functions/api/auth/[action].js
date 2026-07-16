@@ -102,7 +102,7 @@ async function getUser(env, email) {
   try { return JSON.parse(raw); } catch (e) { return null; }
 }
 function publicUser(u) {
-  return { id: u.id, email: u.email, name: u.name || null, role: u.role || "customer", created_at: u.created_at };
+  return { id: u.id, email: u.email, name: u.name || null, role: u.role || "customer", created_at: u.created_at, avatar: u.avatar || null };
 }
 
 export async function onRequestGet(context) {
@@ -142,6 +142,26 @@ export async function onRequestPost(context) {
   if (!env.BUILDER_KV) return json({ error: "not_configured" }, 200);
   let body;
   try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
+
+  // Profilbilde: lagres paa kontoen (serveren), saa det foelger brukeren
+  // paa alle sider og enheter. Krever innlogging.
+  if (action === "avatar") {
+    const sess = await sessionFrom(context);
+    if (!sess) return json({ error: "not_logged_in" }, 401);
+    const u = await getUser(env, sess.email);
+    if (!u) return json({ error: "no_user" }, 401);
+    const av = body.avatar;
+    if (av === null || av === "") {
+      delete u.avatar;
+    } else if (typeof av === "string" && /^data:image\/(png|jpe?g|webp|gif);base64,/.test(av) && av.length <= 500000) {
+      u.avatar = av;
+    } else {
+      return json({ error: "bad_avatar" }, 400);
+    }
+    await env.BUILDER_KV.put(userKey(u.email), JSON.stringify(u));
+    return json({ ok: true }, 200);
+  }
+
   const email = (body.email || "").trim().toLowerCase();
   const password = body.password || "";
 
