@@ -91,8 +91,10 @@
     '#lme-acct-menu a:hover, #lme-acct-menu button:hover { background: #FCEFF2; color: #c2255c; }',
     '#lme-acct-menu .lme-acct-ico { width: 20px; text-align: center; font-size: 15px; flex: none; }',
     '#lme-acct-menu .lme-acct-div { height: 1px; background: #f3e3e9; margin: 6px 4px; }',
-    /* Skjul sidenes egne kontomenyer, så den delte er den eneste (likt for alle) */
-    '.avatar-wrapper { display: none !important; }',
+    /* Skjul sidenes egne konto-avatarer/menyer, så den delte er den eneste
+       (likt for alle). Gjelder både .avatar-wrapper (med nedtrekk) og løse
+       .avatar-btn (konto-bilde i toppen) som mange sider har. */
+    '.avatar-wrapper, .avatar-btn { display: none !important; }',
     '@media (max-width: 768px) { #lme-acct { top: 10px; right: 12px; } }'
   ].join('\n');
   var st = document.createElement('style');
