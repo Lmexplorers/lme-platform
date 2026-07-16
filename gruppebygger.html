@@ -105,6 +105,7 @@
       <div class="group-list" id="groupList"></div>
       <div class="new-row">
         <button class="btn btn-pink" type="button" onclick="newGroup()" data-no="＋ Ny gruppe" data-en="＋ New group">＋ Ny gruppe</button>
+        <button class="btn btn-soft" type="button" onclick="loadExample()" data-no="🌱 Last inn eksempel" data-en="🌱 Load example">🌱 Last inn eksempel</button>
       </div>
     </section>
 
@@ -379,6 +380,52 @@ function newGroup() {
   };
   loadGroup(g, true);
   toast(L('Ny gruppe klar. Fyll inn og lagre! 🌸', 'New group ready. Fill it in and save! 🌸'));
+}
+
+/* Ferdig utfylt eksempelgruppe. Fyller skjemaet, men lagrer ikke selv, så
+   Renate kan se over, endre pris/medlemstall og legge til bilde/trailer før
+   hun trykker Lagre. Fungerer også som en mal for nye grupper. */
+function loadExample() {
+  var g = {
+    slug: 'montessori-hjemme', published: true, privacy: 'privat',
+    kicker: { no: 'LME COMMUNITY', en: 'LME COMMUNITY' },
+    title: { no: 'Montessori hjemme', en: 'Montessori at Home' },
+    lede: {
+      no: 'Et varmt fellesskap for deg som vil bringe Montessori inn i hjemmet. Her får du månedlige samlinger med meg, nedlastbart materiell og et sted der du aldri står alene med spørsmålene dine.',
+      en: 'A warm community for bringing Montessori into your home. Every month I host live gatherings, share printable materials, and open a space where you never face your questions alone.'
+    },
+    host: { no: 'Renate Dahl', en: 'Renate Dahl' },
+    price: { no: '197 kr/mnd', en: '$19/month' },
+    priceNote: { no: '7 dager gratis prøve', en: '7-day free trial' },
+    cta: { no: 'Bli med', en: 'Join now' }, ctaUrl: '/medlemskap',
+    members: 0, cover: '', videoUrl: '', hostImg: '', gallery: [],
+    features: [
+      { no: 'Månedlige live-samlinger med meg', en: 'Monthly live gatherings with me' },
+      { no: 'Nedlastbart materiell og arbeidsark', en: 'Printable materials and worksheets' },
+      { no: 'Et trygt rom for spørsmål og deling', en: 'A safe space for questions and sharing' },
+      { no: 'Tospråklig fellesskap (NO/EN)', en: 'Bilingual community (NO/EN)' },
+      { no: 'Aldersgrupper for 3 til 12 år', en: 'Age groups for 3 to 12 years' }
+    ],
+    about: [
+      { no: '## Hvorfor Montessori hjemme?', en: '## Why Montessori at home?' },
+      {
+        no: 'Hjemmet er barnets første forberedte miljø. Når du forstår prinsippene, ser du hvor mye som allerede ligger til rette i hverdagen, og hvor lite som skal til for å gi barnet ro, mestring og glede.',
+        en: 'The home is the child’s first prepared environment. Once you understand the principles, you see how much is already there in daily life, and how little it takes to give the child calm, mastery, and joy.'
+      },
+      { no: '## Slik er vi sammen', en: '## How we grow together' },
+      {
+        no: 'Vi møtes hver måned, deler erfaringer og heier på hverandre. Du trenger ikke være ekspert; du trenger bare lyst til å prøve. Jeg deler alt jeg har lært gjennom over 20 år som Montessoripedagog, varmt og **praktisk**.',
+        en: 'We meet every month, share experiences, and cheer each other on. You don’t need to be an expert; you only need the will to try. I share everything I have learned through over 20 years as a Montessori educator, warmly and **practically**.'
+      }
+    ],
+    outro: {
+      title: { no: 'Klar for å begynne?', en: 'Ready to begin?' },
+      text: { no: 'Jeg gleder meg til å ønske deg velkommen på innsiden.', en: 'I look forward to welcoming you inside.' }
+    }
+  };
+  loadGroup(g, true);
+  document.body.classList.add('en-mode');
+  toast(L('Eksempel lastet inn. Se over, og trykk Lagre for å publisere! 🌱', 'Example loaded. Look it over, then press Save to publish! 🌱'));
 }
 
 function openGroup(slug) {
