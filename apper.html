@@ -55,6 +55,12 @@
   .app p { color: var(--grey); font-size: 14px; flex: 1; }
   .app .go { margin-top: 14px; align-self: flex-start; font-weight: 700; font-size: 14px; color: var(--cerise); }
   .app .tag { align-self: flex-start; margin-top: 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: #b58a00; background: #FFF8E6; border-radius: 999px; padding: 3px 10px; }
+  .app .tag.member { color: var(--lime); background: #F3F8E8; }
+
+  /* Byggerverktøyene vises kun for innloggede medlemmer/eier (klassen settes
+     av js/lme-member.js). */
+  .builder-app { display: none; }
+  body.lme-member .builder-app, body.lme-owner .builder-app { display: flex; }
 
   @media (max-width: 520px) { .head h1 { font-size: 28px; } }
 </style>
@@ -111,6 +117,22 @@
         <span class="go" data-no="Åpne →" data-en="Open →">Åpne →</span>
       </a>
 
+      <a class="app c6 builder-app" href="/gruppebygger">
+        <div class="ico">🧩</div>
+        <h3>Gruppebygger</h3>
+        <p data-no="Lag salgssider for grupper og fellesskap (Skool-stil), uten kode." data-en="Build sales pages for groups and communities (Skool-style), no code.">Lag salgssider for grupper og fellesskap (Skool-stil), uten kode.</p>
+        <span class="tag member" data-no="For medlemmer" data-en="For members">For medlemmer</span>
+        <span class="go" data-no="Åpne →" data-en="Open →">Åpne →</span>
+      </a>
+
+      <a class="app c2 builder-app" href="/kursbygger">
+        <div class="ico">🎓</div>
+        <h3>Kursbygger</h3>
+        <p data-no="Lag dine egne minikurs og større kurs, uten kode." data-en="Build your own mini courses and full courses, no code.">Lag dine egne minikurs og større kurs, uten kode.</p>
+        <span class="tag member" data-no="For medlemmer" data-en="For members">For medlemmer</span>
+        <span class="go" data-no="Åpne →" data-en="Open →">Åpne →</span>
+      </a>
+
       <span class="app c6">
         <div class="ico">🎬</div>
         <h3>Reel Studio</h3>
@@ -144,6 +166,7 @@
   apply();
 })();
 </script>
+<script src="/js/lme-member.js?v=7" defer></script>
 <script src="/js/lme-account.js?v=7" defer></script>
 <script src="/js/renate-widget.js?v=3" defer></script>
 </body>
