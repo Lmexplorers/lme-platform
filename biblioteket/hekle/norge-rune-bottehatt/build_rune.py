@@ -45,48 +45,20 @@ WAVE = [
 ]
 WAVE_M = [r[::-1] for r in WAVE]
 
-# ---------- Runeskrift: grov, handhugget stil (Ancientskin-look) ----------
-# Lesbare bokstaver tegnet som fylte, ujevne "hugde" streker i en 0..1-boks.
-RUNES={
- 'N':[[(0.14,1.0),(0.14,0.0)],[(0.14,0.0),(0.86,1.0)],[(0.86,1.0),(0.86,0.0)]],
- 'O':[[(0.5,0.0),(0.9,0.5),(0.5,1.0),(0.1,0.5),(0.5,0.0)]],
- 'R':[[(0.16,1.0),(0.16,0.0),(0.74,0.0),(0.88,0.14),(0.88,0.36),(0.74,0.5),(0.16,0.5)],[(0.5,0.5),(0.9,1.0)]],
- 'G':[[(0.9,0.14),(0.72,0.0),(0.28,0.0),(0.1,0.16),(0.1,0.84),(0.28,1.0),(0.74,1.0),(0.9,0.86),(0.9,0.55),(0.58,0.55)]],
- 'E':[[(0.9,0.0),(0.14,0.0),(0.14,1.0),(0.9,1.0)],[(0.14,0.5),(0.66,0.5)]],
- 'W':[[(0.05,0.0),(0.27,1.0),(0.5,0.35),(0.73,1.0),(0.95,0.0)]],
- 'A':[[(0.1,1.0),(0.5,0.0),(0.9,1.0)],[(0.26,0.62),(0.74,0.62)]],
- 'Y':[[(0.1,0.0),(0.5,0.55),(0.9,0.0)],[(0.5,0.55),(0.5,1.0)]],
-}
-def _rough_stroke(pts, box, w, ox, oy, rnd, stroke=CREAM):
-    # fylt polygon langs streken, med ujevne kanter (hugd/handlaget look)
-    P=[(ox+x*box, oy+y*box*1.28) for x,y in pts]
-    left=[]; right=[]
-    for i,(x,y) in enumerate(P):
-        if i==0: dx,dy=P[1][0]-x,P[1][1]-y
-        elif i==len(P)-1: dx,dy=x-P[i-1][0],y-P[i-1][1]
-        else: dx,dy=P[i+1][0]-P[i-1][0],P[i+1][1]-P[i-1][1]
-        Ln=math.hypot(dx,dy) or 1; nx,ny=-dy/Ln,dx/Ln
-        hw=w*(0.55+rnd.uniform(-0.18,0.22))
-        jx,jy=rnd.uniform(-w*0.18,w*0.18),rnd.uniform(-w*0.18,w*0.18)
-        left.append((x+nx*hw+jx, y+ny*hw+jy))
-        right.append((x-nx*hw+jx, y-ny*hw+jy))
-    poly=left+right[::-1]
-    d='M'+' L'.join(f'{px:.1f},{py:.1f}' for px,py in poly)+' Z'
-    return f'<path d="{d}" fill="{stroke}"/>'
-def rune_glyph(ch, box, sw, ox, oy, seed, stroke=CREAM):
-    rnd=random.Random(seed)
-    return ''.join(_rough_stroke(s, box, sw, ox, oy, rnd, stroke) for s in RUNES[ch])
+# ---------- Runeskrift: satt med den ekte "Norse Bold"-fonten ----------
+# Ordet settes som ekte tekst i Norse-fonten (den Renate ga meg), i kremhvitt
+# paa et roedt panel. Ingen tegnede glyfer lenger.
 def runeword(word, box=48, sw=None, gap=None, pad=14, panel=True, stroke=CREAM):
-    sw=sw or box*0.17; gap=gap if gap is not None else box*0.34
-    H=box*1.28+pad*2
-    x=pad; glyphs=[]
-    for i,ch in enumerate(word):
-        glyphs.append(rune_glyph(ch, box, sw, x, pad, seed=i*17+ord(ch), stroke=stroke))
-        x+=box+gap
-    W=x-gap+pad
-    rect=f'<rect x="0" y="0" width="{W:.0f}" height="{H:.0f}" rx="{box*0.2:.0f}" fill="{RED}"/>' if panel else ''
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W:.0f} {H:.0f}" '
-            f'style="max-width:100%;height:auto">{rect}{"".join(glyphs)}</svg>')
+    fs = box*1.30
+    padx = box*0.55; pady = box*0.34
+    lsp = box*0.05
+    txt = (f"display:inline-block;font-family:'Norse';font-weight:700;color:{stroke};"
+           f"font-size:{fs:.0f}px;line-height:1.02;letter-spacing:{lsp:.0f}px;white-space:nowrap;")
+    if panel:
+        wrap = (f"display:inline-block;background:{RED};border-radius:{box*0.30:.0f}px;"
+                f"padding:{pady:.0f}px {padx:.0f}px;max-width:100%;")
+        return f'<div style="{wrap}"><span style="{txt}">{word}</span></div>'
+    return f'<span style="{txt}">{word}</span>'
 
 
 # Hekles ovenfra og ned: hele mönsteret roteres 180° (som Helene Spillings
@@ -738,6 +710,7 @@ pages.append(page(f'''
 
 # ---------- CSS ----------
 css = f'''
+@font-face {{ font-family:'Norse'; src:url('fonts/Norse-Bold.otf'); font-weight:700; }}
 @font-face {{ font-family:'Sasson Montessori'; src:url('fonts/SassoonMontessori.ttf'); font-weight:normal; }}
 @font-face {{ font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-400.ttf'); font-weight:400; }}
 @font-face {{ font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-600.ttf'); font-weight:600; }}
