@@ -124,8 +124,8 @@ window.LME_BUTIKK = {
 
     "norway-strikk": {
       navn:  { no: "NORWAY-bøttehatt, strikkeoppskrift", en: "NORWAY bucket hat, knitting pattern" },
-      undertittel: { no: "Rød hatt · NORWAY foran · flagg bak · tre størrelser",
-                     en: "Red hat · NORWAY front · flag back · three sizes" },
+      undertittel: { no: "Rød hatt · NORWAY foran · RO og bølger bak · én størrelse (pinnen graderer)",
+                     en: "Red hat · NORWAY front · RO and waves back · one size (needle graded)" },
       cover:   "/images/oppskrift-norway-strikk.jpg",
       coverEn: "/images/oppskrift-norway-strikk.jpg",
       filer: [
@@ -152,8 +152,8 @@ window.LME_BUTIKK = {
 
     "norge-strikk": {
       navn:  { no: "NORGE-bøttehatt (maskesting), strikkeoppskrift", en: "NORGE bucket hat (duplicate stitch), knitting pattern" },
-      undertittel: { no: "Rød hatt · NORGE og flagg foran · RO og bølger bak · tre størrelser",
-                     en: "Red hat · NORGE and flag front · RO and waves back · three sizes" },
+      undertittel: { no: "Rød hatt · NORGE foran · RO og bølger bak · brodert på · én størrelse (pinnen graderer)",
+                     en: "Red hat · NORGE front · RO and waves back · embroidered on · one size (needle graded)" },
       cover:   "/images/oppskrift-norge-strikk-foto.jpg",
       coverEn: "/images/oppskrift-norge-strikk-foto.jpg",
       filer: [
@@ -180,8 +180,8 @@ window.LME_BUTIKK = {
 
     "norge-innstrikket": {
       navn:  { no: "NORGE-bøttehatt (innstrikket), strikkeoppskrift", en: "NORGE bucket hat (knitted in), knitting pattern" },
-      undertittel: { no: "Rød hatt · NORGE, flagg, RO og bølger innstrikket · tre størrelser",
-                     en: "Red hat · NORGE, flag, RO and waves knitted in · three sizes" },
+      undertittel: { no: "Rød hatt · NORGE foran · RO og bølger bak · innstrikket · én størrelse (pinnen graderer)",
+                     en: "Red hat · NORGE front · RO and waves back · knitted in · one size (needle graded)" },
       cover:   "/images/oppskrift-norge-strikk-foto.jpg",
       coverEn: "/images/oppskrift-norge-strikk-foto.jpg",
       filer: [
