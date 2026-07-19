@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<meta name="robots" content="noindex">
+<title>LME Reel-oppskrift</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink: #F8D7DA; --pink-mid: #F5A8B8; --cerise: #E91E89;
+    --lime: #7AAE1F; --yellow: #F7C72E; --cream: #FBF6F0;
+    --ink: #1A1A1A; --grey: #4A4A4A; --line: rgba(26,26,26,0.1);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); color: var(--ink); background: var(--cream); line-height: 1.6; }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); }
+  button, input, select, textarea { font-family: var(--font-body); font-size: 15px; color: var(--ink); }
+
+  .topbar { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; gap: 14px; background: #fff; border-bottom: 1px solid var(--line); padding: 12px 20px; }
+  .topbar img { height: 36px; display: block; }
+  .topbar h1 { font-size: 20px; flex: 1; }
+  .topbar a, .topbar .lang-btn { text-decoration: none; color: var(--ink); background: var(--cream); border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 700; cursor: pointer; }
+
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 22px 20px 90px; display: grid; grid-template-columns: minmax(340px, 500px) 1fr; gap: 26px; align-items: start; }
+  @media (max-width: 980px) { .wrap { grid-template-columns: 1fr; } .preview-col { position: static !important; } }
+
+  .panel { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 20px 22px; box-shadow: 0 6px 22px rgba(26,26,26,0.05); margin-bottom: 18px; }
+  .panel h2 { font-size: 17px; margin-bottom: 6px; }
+  .hint { font-size: 13px; color: var(--grey); margin-bottom: 12px; }
+
+  .sec-group { margin-bottom: 12px; }
+  .sec-group > .sec-title { font-family: var(--font-head); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--lime); margin: 8px 0 6px; }
+  .lib-list { display: flex; flex-direction: column; gap: 6px; }
+  .lib-list button { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; text-align: left; background: var(--cream); border: 1px solid var(--line); border-radius: 12px; padding: 9px 13px; cursor: pointer; font-weight: 600; }
+  .lib-list button:hover { border-color: var(--pink-mid); }
+  .lib-list button.active { border-color: var(--cerise); background: #FFF4F6; }
+  .lib-list .age { font-size: 11px; font-weight: 700; color: var(--lime); background: #F3F8E8; border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+
+  details.custom { margin-top: 4px; }
+  details.custom > summary { cursor: pointer; font-family: var(--font-head); font-weight: 700; font-size: 15px; padding: 6px 0; }
+  label.f { display: block; font-size: 13px; font-weight: 700; margin: 12px 0 4px; }
+  input[type="text"], textarea { width: 100%; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; }
+  textarea { min-height: 70px; resize: vertical; line-height: 1.55; }
+  input:focus, textarea:focus { outline: 2px solid var(--pink-mid); border-color: transparent; }
+  .en-field { display: none; margin-top: 6px; }
+  .en-field input, .en-field textarea { border-style: dashed; background: #FBFDF6; }
+  body.en-mode .en-field { display: block; }
+  .en-badge { font-size: 11px; font-weight: 700; color: var(--lime); }
+
+  .btn { border: none; border-radius: 999px; padding: 11px 20px; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .btn-pink { background: var(--cerise); color: #fff; }
+  .btn-soft { background: var(--cream); color: var(--ink); border: 1px solid var(--line); }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; align-items: center; }
+
+  .preview-col { position: sticky; top: 74px; }
+  .preview-frame { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 24px 24px 28px; max-height: calc(100vh - 110px); overflow: auto; box-shadow: 0 6px 22px rgba(26,26,26,0.05); }
+  .pv-empty { text-align: center; color: var(--grey); padding: 40px 12px; }
+  .pv-empty .big { font-size: 40px; display: block; margin-bottom: 10px; }
+
+  .pv-kick { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: var(--cerise); text-transform: uppercase; }
+  .pv-title { font-size: 26px; margin: 4px 0 2px; }
+  .pv-meta { font-size: 13px; color: var(--grey); margin-bottom: 16px; }
+
+  .blk { border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; margin-bottom: 14px; }
+  .blk h3 { font-size: 13px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--lime); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .blk .copy { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--cerise); background: #FFF4F6; border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+  .script { font-size: 16px; line-height: 1.7; }
+  .script.en { color: var(--grey); }
+
+  .plates { list-style: none; display: grid; gap: 8px; }
+  .plates li { background: var(--cream); border-radius: 10px; padding: 9px 14px; font-family: var(--font-head); font-weight: 700; font-size: 14px; }
+  .plates li .n { color: var(--cerise); margin-right: 8px; }
+
+  .shots { list-style: none; display: grid; gap: 7px; }
+  .shots li { padding-left: 24px; position: relative; font-size: 14.5px; color: var(--grey); }
+  .shots li::before { content: '🎬'; position: absolute; left: 0; font-size: 13px; }
+
+  .note { font-size: 12.5px; color: var(--grey); margin-top: 8px; }
+  .toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); background: #2b2b2b; color: #fff; padding: 12px 20px; border-radius: 999px; z-index: 100; font-weight: 700; box-shadow: 0 8px 24px rgba(0,0,0,0.25); opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="/dashboard" aria-label="LME Dashbord" title="Til dashbordet"><img src="/images/lme-logo.png" alt="Little Montessori Explorers"></a>
+  <h1 data-no="Reel-oppskrift 🎬" data-en="Reel recipe 🎬">Reel-oppskrift 🎬</h1>
+  <button class="lang-btn" id="langToggle" type="button">EN 🌍</button>
+  <a href="/creative-academy" data-no="← Creative Academy" data-en="← Creative Academy">← Creative Academy</a>
+</header>
+
+<main class="wrap">
+
+  <!-- VENSTRE: velg eller lag -->
+  <div>
+    <section class="panel">
+      <h2 data-no="Velg en aktivitet" data-en="Choose an activity">Velg en aktivitet</h2>
+      <p class="hint" data-no="Alle aktivitetene fra praktisk liv-albumet er klare. Trykk på én, så får du manus, tekstplakater og opptaksliste til høyre." data-en="Every activity from the practical life album is ready. Tap one, and you get the script, caption plates and shot list on the right.">Alle aktivitetene fra praktisk liv-albumet er klare. Trykk på én, så får du manus, tekstplakater og opptaksliste til høyre.</p>
+      <div id="library"></div>
+    </section>
+
+    <section class="panel">
+      <details class="custom">
+        <summary data-no="Lag en ny fra din egen aktivitet" data-en="Create a new one from your own activity">Lag en ny fra din egen aktivitet</summary>
+        <p class="hint" style="margin-top:10px" data-no="Lim inn fra albumet ditt, så settes manuset sammen etter samme oppskrift. Slå på EN øverst for å fylle inn engelsk samtidig." data-en="Paste from your album, and the script is assembled by the same recipe. Turn on EN at the top to fill in English at the same time.">Lim inn fra albumet ditt, så settes manuset sammen etter samme oppskrift. Slå på EN øverst for å fylle inn engelsk samtidig.</p>
+
+        <label class="f" data-no="Tittel" data-en="Title">Tittel</label>
+        <input type="text" id="c_title_no" placeholder="Å helle vått">
+        <div class="en-field"><span class="en-badge">EN</span><input type="text" id="c_title_en" placeholder="Pouring water"></div>
+
+        <label class="f" data-no="Alder (fra)" data-en="Age (from)">Alder (fra)</label>
+        <input type="text" id="c_age" placeholder="2,5">
+
+        <label class="f" data-no="Mål" data-en="Aim">Mål</label>
+        <input type="text" id="c_aim_no" placeholder="Selvstendighet, koordinasjon, konsentrasjon">
+        <div class="en-field"><span class="en-badge">EN</span><input type="text" id="c_aim_en" placeholder="Independence, coordination, concentration"></div>
+
+        <label class="f" data-no="Materiell (kort)" data-en="Materials (short)">Materiell (kort)</label>
+        <input type="text" id="c_mat_no" placeholder="en liten mugge, vann og tre små glass">
+        <div class="en-field"><span class="en-badge">EN</span><input type="text" id="c_mat_en" placeholder="a small jug, water and three small glasses"></div>
+
+        <label class="f" data-no="Presentasjon, ett steg per linje" data-en="Presentation, one step per line">Presentasjon, ett steg per linje</label>
+        <textarea id="c_steps_no" placeholder="Sett glassene på rad&#10;Løft muggen og hell til trekvart fullt&#10;Flytt til neste glass og hell videre"></textarea>
+        <div class="en-field"><span class="en-badge">EN</span><textarea id="c_steps_en" placeholder="Set the glasses in a row&#10;Lift the jug and pour until three quarters full&#10;Move to the next glass and pour on"></textarea></div>
+
+        <label class="f" data-no="Spesielle punkter, ett per linje" data-en="Points of interest, one per line">Spesielle punkter, ett per linje</label>
+        <textarea id="c_points_no" placeholder="å stoppe hellingen i tide&#10;å tørke opp søl selv"></textarea>
+        <div class="en-field"><span class="en-badge">EN</span><textarea id="c_points_en" placeholder="stopping the pour in time&#10;wiping up spills on their own"></textarea></div>
+
+        <div class="actions">
+          <button class="btn btn-pink" id="genBtn" data-no="Lag manus" data-en="Build script">Lag manus</button>
+        </div>
+      </details>
+    </section>
+  </div>
+
+  <!-- HØYRE: forhåndsvisning -->
+  <div class="preview-col">
+    <div class="preview-frame" id="preview">
+      <div class="pv-empty">
+        <span class="big">🎬</span>
+        <p data-no="Velg en aktivitet til venstre, så bygges reelen her." data-en="Choose an activity on the left, and the reel appears here.">Velg en aktivitet til venstre, så bygges reelen her.</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- Tekster som gjentar seg ---------- */
+var CTA = { no: "Vil du ha flere øvelser? Last ned min gratis guide.", en: "Want more exercises like this? Download my free guide." };
+var UI = {
+  no: { alt:"Alt du trenger", manus:"Manus", plater:"Tekstplakater", opptak:"Opptaksliste", kopiert:"Kopiert!", kickLib:"Praktisk liv", kickCustom:"Din aktivitet", from:"Fra", years:"år", copyNo:"Kopier norsk", copyEn:"Kopier engelsk", copyPlates:"Kopier plakater", noteCustom:"Utkast satt sammen fra feltene dine. Les gjennom og finpuss før du spiller inn." },
+  en: { alt:"All you need", manus:"Script", plater:"Caption plates", opptak:"Shot list", kopiert:"Copied!", kickLib:"Practical life", kickCustom:"Your activity", from:"From age", years:"", copyNo:"Copy Norwegian", copyEn:"Copy English", copyPlates:"Copy plates", noteCustom:"Draft assembled from your fields. Read through and polish before you record." }
+};
+
+/* ---------- Biblioteket: alle 28 aktivitetene ---------- */
+var SECTIONS = [
+  { no:"Forberedende øvelser", en:"Preparatory exercises" },
+  { no:"Personrelaterte øvelser", en:"Care of self" },
+  { no:"Miljørelaterte øvelser", en:"Care of the environment" },
+  { no:"Harmoni og høflighet", en:"Grace and courtesy" },
+  { no:"Motorisk kontroll", en:"Motor control" }
+];
+
+var LIB = [
+{sec:0, tNo:"Å bære et teppe", tEn:"Carrying a mat", age:"2", matNo:"et lite teppe", matEn:"a small mat", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`En av de aller første tingene barnet lærer, er å bære et teppe. Alt du trenger er et lite teppe. Legg det ned med kanten opp. Vis rolig hvordan du holder, tommel på den ene siden og to fingre på den andre, i begge hender. Reis deg, hold teppet loddrett, og bær det bort og tilbake. Ikke snakk mens du viser, la bevegelsen være tydelig. Så bærer barnet selv. Det øver på selvstendighet, koordinasjon og konsentrasjon. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`One of the very first things a child learns is to carry a mat. All you need is a small mat. Lay it down with the edge facing up. Show calmly how you hold it, thumb on one side and two fingers on the other, in both hands. Stand up, hold the mat upright, and carry it there and back. Don't talk while you show, let the movement be clear. Then the child carries it. They practise independence, coordination and concentration. Want more exercises like this? Download my free guide.`,
+ shNo:["teppet på gulvet med kanten opp","nærbilde av grepet","teppet båret loddrett","teppet lagt ned igjen"],
+ shEn:["the mat on the floor, edge up","close-up of the grip","the mat carried upright","the mat set down again"]},
+
+{sec:0, tNo:"Å rulle et teppe", tEn:"Rolling a mat", age:"2", matNo:"et teppe", matEn:"a mat", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Å rulle et teppe ser enkelt ut, men det gjemmer masse læring. Rull teppet ut foran deg først. Sett hendene ved kanten, tommel under og fingrene på toppen, et lite stykke inn. Brett kanten inn én gang, og rull rolig innover. Flytt fingrene for hver omgang, og bank lett på sidene så rullen holder seg jevn. Til slutt står teppet støtt av seg selv. Barnet øver på å følge etter arbeidet og å holde kantene rette. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`Rolling a mat looks simple, but it holds so much learning. Roll the mat out in front of you first. Place your hands at the edge, thumb underneath and fingers on top, a little way in. Fold the edge in once, and roll calmly inward. Move your fingers with each turn, and tap the sides gently so the roll stays even. In the end the mat stands up on its own. The child practises following the work and keeping the edges straight. Want more exercises like this? Download my free guide.`,
+ shNo:["teppet rulles ut","grep ved kanten","hendene som ruller innover","den ferdige rullen som står"],
+ shEn:["the mat rolled out","grip at the edge","hands rolling inward","the finished roll standing"]},
+
+{sec:0, tNo:"Å bære en stol", tEn:"Carrying a chair", age:"2", matNo:"en barnestol", matEn:"a child's chair", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`En stol er tung og litt klønete for en liten kropp, og nettopp derfor er dette en fin øvelse. Vis hvor du holder: én hånd med tommel på ryggen og fingrene under, den andre rundt setekanten. Løft stolen opp og inn mot magen. Gå rolig bort til stedet, og sett den forsiktig ned. Slipp fingrene først, så tommelen. Ikke snakk mens du viser, la grepet være tydelig. Så prøver barnet selv. Det øver på selvstendighet, koordinasjon og konsentrasjon. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`A chair is heavy and a little awkward for a small body, and that is exactly why this is a lovely exercise. Show where you hold it: one hand with the thumb on the back and fingers underneath, the other around the edge of the seat. Lift the chair up and in toward your tummy. Walk calmly to the spot, and set it down gently. Release your fingers first, then your thumb. Don't talk while you show, let the grip be clear. Then the child tries. They practise independence, coordination and concentration. Want more exercises like this? Download my free guide.`,
+ shNo:["grepet på rygg og setekant","stolen løftet inn mot magen","stolen båret","stolen satt ned"],
+ shEn:["grip on back and seat edge","the chair lifted in to the tummy","the chair carried","the chair set down"]},
+
+{sec:0, tNo:"Å brette kluter", tEn:"Folding cloths", age:"2", matNo:"kluter med innsydde brettelinjer", matEn:"cloths with sewn fold lines", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Denne kluten har en hemmelighet: en sydd strek som viser barnet hvor det skal brette. Legg den første kluten fram og pek på streken. Ta tak i hjørnet med et pinsettgrep, tommel og pekefinger, og brett nøyaktig ned til streken. Stryk over med hånden, og sjekk om bretten ligger på streken. Da vet barnet selv at det ble riktig, uten at jeg trenger å si det. Kluter finnes med ett brett, med kryss og med rett vinkel. Barnet øver på å brette nøyaktig og å stryke glatt. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`This cloth has a secret: a sewn line that shows the child exactly where to fold. Lay the first cloth out and point to the line. Take the corner in a pincer grip, thumb and finger, and fold precisely down to the line. Smooth it over with your hand, and check whether the fold sits on the line. Then the child knows it is right, without me having to say a word. The cloths come with one fold, with a cross, and with a right angle. The child practises folding precisely and smoothing flat. Want more exercises like this? Download my free guide.`,
+ shNo:["kluten med den sydde streken","pinsettgrepet i hjørnet","bretten ned til streken","hånden som stryker glatt"],
+ shEn:["the cloth with the sewn line","the pincer grip on the corner","the fold down to the line","the hand smoothing flat"]},
+
+{sec:0, tNo:"Å helle tørt", tEn:"Pouring dry", age:"2,5", matNo:"to like mugger, den ene med bønner", matEn:"two matching jugs, one with beans", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Før barnet heller vann, øver det med noe som er lettere å samle opp, nemlig tørre bønner. Alt du trenger er et lite brett og to like mugger, den ene trekvart full med bønner. Snu muggene mot hverandre. Hold håndtaket med to fingre og tommelen på toppen. Løft rolig opp og litt inn, rett over den andre muggen, og hell til den er tom. Rett opp muggen, og hell tilbake den andre veien. Søler noe utenfor, ser vi etter det sammen. Barnet øver på å stoppe i tide. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`Before a child pours water, they practise with something easier to gather up, namely dry beans. All you need is a little tray and two matching jugs, one three quarters full of beans. Turn the jugs toward each other. Hold the handle with two fingers and your thumb on top. Lift calmly up and slightly in, right over the other jug, and pour until it is empty. Straighten the jug, and pour back the other way. If something spills, we look for it together. The child practises stopping in time. Want more exercises like this? Download my free guide.`,
+ shNo:["brettet med to mugger og bønner","grepet på håndtaket","bønnene som helles fra mugge til mugge","den tomme muggen"],
+ shEn:["the tray with two jugs and beans","the grip on the handle","the beans poured from jug to jug","the empty jug"]},
+
+{sec:0, tNo:"Å helle vått", tEn:"Pouring water", age:"2,5", matNo:"en liten mugge, vann og tre små glass", matEn:"a small jug, water and three small glasses", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Å helle vann er en av de første øvelsene barnet møter, fra rundt to og et halvt år. Alt du trenger er et lite brett, en liten mugge med vann og tre små glass. Sett glassene på rad, og fyll muggen så det er nok til hvert glass. Vis rolig. Løft muggen, sentrer den over det første glasset, og hell til glasset er trekvart fullt. Rett opp muggen, flytt til neste, og hell videre. Ikke snakk mens du viser, la hendene få all oppmerksomheten. Så heller barnet selv. Søler det, ligger en liten svamp klar, så barnet tørker opp uten hjelp. Det barnet øver på, er selvstendighet, koordinasjon og konsentrasjon. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`Pouring water is one of the first exercises a child meets, from around two and a half years. All you need is a little tray, a small jug of water and three small glasses. Set the glasses in a row, and fill the jug with enough for each glass. Show calmly. Lift the jug, centre it over the first glass, and pour until the glass is three quarters full. Straighten the jug, move to the next, and pour on. Don't talk while you show, let your hands have all the attention. Then the child pours. If they spill, a little sponge is ready, so the child wipes up on their own. What the child practises is independence, coordination and concentration. Want more exercises like this? Download my free guide.`,
+ shNo:["brettet med mugge og tre glass på rad","muggen sentrert over glasset","vannet til trekvart","svampen som tørker opp"],
+ shEn:["the tray with jug and three glasses in a row","the jug centred over the glass","water to three quarters","the sponge wiping up"]},
+
+{sec:0, tNo:"Å brette en støvklut for å rydde den bort", tEn:"Folding a duster to put it away", age:"2,5", matNo:"flanellskluter med et broderi i midten", matEn:"flannel cloths with embroidery in the middle", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Hver støvklut har et lite broderi i midten, og det broderiet er barnets veiviser. La barnet velge en klut. Brett den ut, og pek på broderiet. Så bretter du hver kant inn til broderiet, én om gangen, og stryker glatt etter hver brett. Si gjerne: "Si ifra når jeg skal stoppe." Da får barnet være med og bestemme. Til slutt ligger kluten som et pent kvadrat, klar til å legges bort. Barnet øver på å brette inn til broderiet og å stoppe i tide. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`Every duster has a little embroidery in the middle, and that embroidery is the child's guide. Let the child choose a cloth. Unfold it, and point to the embroidery. Then you fold each edge in to the embroidery, one at a time, smoothing flat after every fold. You can say: "Tell me when to stop." Then the child gets to take part. In the end the cloth lies as a neat square, ready to be put away. The child practises folding in to the embroidery and stopping in time. Want more exercises like this? Download my free guide.`,
+ shNo:["kluten med broderiet","kanten som brettes inn til broderiet","hånden som stryker glatt","den ferdige firkanten"],
+ shEn:["the cloth with the embroidery","the edge folded in to the embroidery","the hand smoothing flat","the finished square"]},
+
+{sec:0, tNo:"Å brette en støvklut for å tørke støv", tEn:"Folding a duster for dusting", age:"2,5", matNo:"en flanellsklut med et broderi", matEn:"a flannel cloth with embroidery", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Denne gangen bretter vi støvkluten på en litt annen måte, slik at den blir god å tørke støv med. La barnet hente en klut og brette den ut. Pek på broderiet i midten. Brett alle hjørnene inn mot broderiet, i retning mot klokka, og hold på midten med den andre hånden. Så bretter du hjørnene en gang til. Til slutt løfter du kluten, tar lett i broderiet og drar forsiktig: "Puff." Nå er kluten myk og klar. Barnet øver på å brette inn til broderiet og å stryke glatt. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`This time we fold the duster a little differently, so it is nice to dust with. Let the child fetch a cloth and unfold it. Point to the embroidery in the middle. Fold all the corners in toward the embroidery, going counterclockwise, and hold the centre with your other hand. Then you fold the corners once more. Finally you lift the cloth, take the embroidery gently and give a soft pull: "Puff." Now the cloth is soft and ready. The child practises folding in to the embroidery and smoothing flat. Want more exercises like this? Download my free guide.`,
+ shNo:["kluten flatt med broderiet","hjørnene inn mot midten","det andre brettet","puff-løftet i broderiet"],
+ shEn:["the cloth flat with the embroidery","corners in toward the middle","the second fold","the puff lift at the embroidery"]},
+
+{sec:1, tNo:"Å vaske hendene", tEn:"Washing hands", age:"2,5", matNo:"balje, mugge, såpe, neglebørste, håndkle og forkle", matEn:"basin, jug, soap, nail brush, towel and apron", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Å vaske hendene er mer enn å bli ren, det er en hel liten selvstendighetsøvelse. Ta på forkle og brett opp ermene. Har barnet smykker, legges de i en liten skål. Barnet henter lunkent vann og heller i baljen. Fukt hendene, såp inn, én hånd om gangen, og skyll. Vis neglebørsten, og børst fingertuppene rolig. Se på det skitne vannet sammen, det viser barnet at jobben er gjort. Til slutt tørker vi, og litt håndkrem. Barnet øver på å lage skum og å ta lite krem. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`Washing hands is more than getting clean, it is a whole little exercise in independence. Put on an apron and roll up your sleeves. If the child has jewellery, it goes in a small dish. The child fetches lukewarm water and pours it into the basin. Wet your hands, soap up, one hand at a time, and rinse. Show the nail brush, and brush the fingertips calmly. Look at the dirty water together, it shows the child the job is done. Finally we dry, and a little hand cream. The child practises making suds and taking just a little cream. Want more exercises like this? Download my free guide.`,
+ shNo:["forkle og oppbrettede ermer","vann som helles i baljen","hendene som såpes","neglebørsten","det skitne vannet"],
+ shEn:["apron and rolled-up sleeves","water poured into the basin","hands being soaped","the nail brush","the dirty water"]},
+
+{sec:1, tNo:"Å pusse sko", tEn:"Polishing shoes", age:"2,5", matNo:"avispapir, skokrem, børster, poleringsklut og forkle", matEn:"newspaper, polish, brushes, cloth and apron", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Å pusse en sko fra matt til blank er magisk for et barn. Rull ut underlaget og ta på forkle. Sett skoen på avispapiret, og børst først bort støv og sand. Ta bare litt skokrem på vattdotten, og smør utover med små, sirkulære bevegelser. Lukk boksen igjen, så kremen ikke tørker. Puss frem og tilbake med børsten, og poler til slutt med kluten rundt hånden. Se på resultatet sammen: "Nå er den ferdig." Barnet øver på å ta lite krem og på sirkulære bevegelser. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`Polishing a shoe from dull to shiny is magic to a child. Roll out the mat and put on an apron. Set the shoe on the newspaper, and first brush away dust and sand. Take only a little polish on the cotton, and rub it over in small, circular movements. Close the tin again, so the polish does not dry out. Buff back and forth with the brush, and finish by polishing with the cloth wrapped around your hand. Look at the result together: "Now it is done." The child practises taking a little polish and using circular movements. Want more exercises like this? Download my free guide.`,
+ shNo:["skoen på avispapir","børsting av støv","litt krem på vatten","sirkulær pussing","den blanke skoen"],
+ shEn:["the shoe on newspaper","brushing off dust","a little polish on the cotton","circular polishing","the shiny shoe"]},
+
+{sec:1, tNo:"Rammen med trykknapper", tEn:"The press-stud frame", age:"2,5", matNo:"en klesramme med trykknapper", matEn:"a dressing frame with press studs", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Klesrammene lar barnet øve på knapping i ro, før det står med det på sin egen jakke. På denne rammen er det trykknapper. Legg rammen slik at klaffen peker bort fra barnet. Begynn øverst, hold trykknappen med et pinsettgrep og legg den andre hånden flatt på stoffet. Dra knappen opp. Vent på lyden. Fortsett nedover, og knepp så igjen fra toppen. Den vesle klikkelyden er halve gleden. Barnet øver på å kjenne klikket og på å sjekke at alt er lukket. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`The dressing frames let a child practise fastening in calm, before they do it on their own jacket. This frame has press studs. Lay the frame so the flap points away from the child. Start at the top, hold the stud in a pincer grip and rest your other hand flat on the fabric. Pull the stud open. Wait for the sound. Continue down, and then fasten again from the top. That little click is half the joy. The child practises hearing the click and checking that everything is closed. Want more exercises like this? Download my free guide.`,
+ shNo:["rammen med klaffen bort","pinsettgrepet på trykknappen","knappen som åpnes","knappene lukket igjen"],
+ shEn:["the frame with the flap away","the pincer grip on the stud","the stud opening","the studs closed again"]},
+
+{sec:1, tNo:"Knapperammen", tEn:"The button frame", age:"2,5", matNo:"en klesramme med knapper", matEn:"a dressing frame with buttons", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Knapper er finmotorikk på sitt fineste, og knapperammen gir barnet god tid. Legg rammen slik at klaffen peker bort fra barnet. Hold knappen mellom tommel og pekefinger, og ta tak i stoffet rundt knapphullet med den andre hånden. Dra knappen lett opp og stikk den i hullet: "Tittei." Ta tak i knappen på den andre siden, og dra den forsiktig gjennom. Fortsett nedover, og knepp så igjen. Barnet øver på å stikke rett knapp i rett hull. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`Buttons are fine motor skills at their finest, and the button frame gives the child plenty of time. Lay the frame so the flap points away from the child. Hold the button between thumb and finger, and take the fabric around the buttonhole with your other hand. Ease the button up and slip it into the hole: "Peekaboo." Take the button on the other side, and draw it gently through. Continue down, and then fasten again. The child practises putting the right button in the right hole. Want more exercises like this? Download my free guide.`,
+ shNo:["rammen med klaffen bort","knappen mellom fingrene","knappen gjennom hullet","klaffene dratt til side"],
+ shEn:["the frame with the flap away","the button between the fingers","the button through the hole","the flaps drawn aside"]},
+
+{sec:1, tNo:"Sløyferammen", tEn:"The bow frame", age:"3", matNo:"en klesramme med sløyfebånd", matEn:"a dressing frame with bow ribbons", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Å knyte sløyfe er en av de store seirene i barnehagen, og sløyferammen gjør veien dit trygg. Åpne først alle sløyfene og knutene, og rett ut båndene. Så bygger vi opp igjen: legg det ene båndet over det andre og dra til en knute. Løft det ene båndet til en løkke, før det andre rundt, og dytt en løkke gjennom åpningen. Stram begge løkkene samtidig til sløyfen sitter. Barnet øver på å lage løkker i passe størrelse og å stramme samtidig. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`Tying a bow is one of the great victories of the early years, and the bow frame makes the road there safe. First open all the bows and knots, and straighten the ribbons. Then we build back up: lay one ribbon over the other and pull it into a knot. Lift one ribbon into a loop, take the other around, and push a loop through the opening. Tighten both loops at the same time until the bow holds. The child practises making loops the right size and tightening evenly. Want more exercises like this? Download my free guide.`,
+ shNo:["rammen med sløyfer","knuten som lages","løkkene","sløyfen som strammes"],
+ shEn:["the frame with bows","the knot being made","the loops","the bow being tightened"]},
+
+{sec:1, tNo:"Å knyte skolisser, V-mønster", tEn:"Lacing, V-pattern", age:"3,5", matNo:"en klesramme med skolisser", matEn:"a dressing frame with laces", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Denne rammen tar barnet enda et steg, mot ekte skolisser. Åpne sløyfen nederst, og dra lissen ut fra hull til hull, og legg den pent til side hver gang. På toppen dras hele lissen ut, og vi finner midten sammen. Så legges lissen diagonalt, og tres inn fra baksiden av hvert hull, i et pent V nedover. Til slutt knyter barnet sløyfen i bunnen. Barnet øver på å finne midten og på å stikke lissen rett vei inn. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`This frame takes the child one step further, toward real shoelaces. Open the bow at the bottom, and draw the lace out from hole to hole, laying it neatly aside each time. At the top the whole lace comes out, and we find the middle together. Then the lace is laid diagonally, and threaded in from the back of each hole, in a neat V going down. Finally the child ties the bow at the bottom. The child practises finding the middle and threading the lace the right way. Want more exercises like this? Download my free guide.`,
+ shNo:["rammen med lissene","lissen som dras ut hull for hull","det diagonale V-mønsteret","sløyfen i bunn"],
+ shEn:["the frame with the laces","the lace drawn out hole by hole","the diagonal V-pattern","the bow at the bottom"]},
+
+{sec:1, tNo:"Klikklås-rammen", tEn:"The buckle frame", age:"3", matNo:"en ramme med klikklåser", matEn:"a frame with buckles", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Klikklåser sitter på sekken, regnbuksen og bilbeltet, så dette er nyttig med en gang. Legg rammen med åpningen mot barnet. Hold den ene siden fast, og klem de to delene sammen med et klypegrep. Her trengs litt kraft i pekefinger og tommel. Dra delen ut og legg den til side. Når du skal lukke igjen, sikter du delen mot midten av låsen: "Det er lettere når man sikter." Press inn til det klikker. Barnet øver på klypegrep og på å sikte mot midten. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`Buckles are on the backpack, the rain trousers and the seatbelt, so this is useful right away. Lay the frame with the opening toward the child. Hold one side steady, and press the two parts together with a pincer grip. This takes a little force in finger and thumb. Pull the part out and set it aside. To close again, you aim the part at the middle of the buckle: "It is easier when you aim." Press in until it clicks. The child practises the pincer grip and aiming for the middle. Want more exercises like this? Download my free guide.`,
+ shNo:["rammen med åpningen mot kamera","klypegrepet på låsen","delen som dras ut","delen som klikkes inn"],
+ shEn:["the frame with the opening toward the camera","the pincer grip on the buckle","the part pulled out","the part clicked in"]},
+
+{sec:2, tNo:"Å tørke støv", tEn:"Dusting", age:"3", matNo:"en støvklut og litt støv", matEn:"a duster and a little dust", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Barn elsker å se at de faktisk får noe rent, og støvtørking gir akkurat den følelsen. Dryss litt "støv" på et bord før du inviterer barnet. Vis det støvete bordet: "Se, her er det støvete." Brett kluten som vi har øvd på. Tørk med parallelle, overlappende strøk, fra venstre til høyre og nedenfra og opp. Vis støvet på kluten innimellom. Til slutt rister vi kluten ute, og snur hodet vekk så vi ikke puster inn støvet. Barnet øver på å se støvet og å samle det i kluten. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`Children love to see that they have truly made something clean, and dusting gives exactly that feeling. Scatter a little "dust" on a table before you invite the child. Show the dusty table: "Look, it is dusty here." Fold the cloth the way we have practised. Wipe with parallel, overlapping strokes, from left to right and from the bottom up. Show the dust on the cloth now and then. Finally we shake the cloth outside, turning our head away so we do not breathe in the dust. The child practises seeing the dust and gathering it in the cloth. Want more exercises like this? Download my free guide.`,
+ shNo:["det støvete bordet","kluten som tørker i strøk","støvet på kluten","klutristing utendørs"],
+ shEn:["the dusty table","the cloth wiping in strokes","the dust on the cloth","shaking the cloth outdoors"]},
+
+{sec:2, tNo:"Å vaske bordet", tEn:"Washing a table", age:"3", matNo:"balje, mugge, såpe, børste, svamp og forkle", matEn:"basin, jug, soap, brush, sponge and apron", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Å vaske et bord har mange steg, og hvert steg er en liten seier. Ta på forkle og rull ut underlaget ved siden av bordet. Legg materiellet i rekkefølgen det brukes: mugge, balje, børste, såpe, svamp, klut. Barnet fyller muggen trekvart og heller i baljen. Dypp børsten, ta såpe, og skrubb i sirkler fra venstre mot høyre. Så tørkes såpen bort med svampen, i rette strøk, og til slutt tørkes bordet med kluten. Se på bordet sammen: er det rent og tørt? Barnet øver på å se det skitne vannet. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`Washing a table has many steps, and each step is a little victory. Put on an apron and roll out the mat beside the table. Lay the materials in the order they are used: jug, basin, brush, soap, sponge, cloth. The child fills the jug three quarters and pours it into the basin. Dip the brush, take soap, and scrub in circles from left to right. Then the soap is wiped away with the sponge, in straight strokes, and finally the table is dried with the cloth. Look at the table together: is it clean and dry? The child practises seeing the dirty water. Want more exercises like this? Download my free guide.`,
+ shNo:["materiellet på rad","børsten som skrubber i sirkler","svampen i rette strøk","det tørkede bordet"],
+ shEn:["the materials in a row","the brush scrubbing in circles","the sponge in straight strokes","the dried table"]},
+
+{sec:2, tNo:"Å pusse sølv", tEn:"Polishing silver", age:"3", matNo:"sølvpuss, vattpinne, skål, vatt, klut og en sølvgjenstand", matEn:"polish, cotton bud, dish, cotton, cloth and a silver piece", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Ingenting viser innsats så tydelig som sølv som blir blankt. Rull ut underlaget, og sett tingene fra venstre til høyre: sølvpuss, vattpinne, skål, vatt, pusseklut. Sølvgjenstanden står i midten. Drypp bare noen få dråper puss i skålen. Dypp vattpinnen, og smør et tynt lag over hele gjenstanden. Gni med vatten i sirkler, og vis den svarte vatten: "Se så svart den ble." Poler til slutt blank med kluten. Barnet øver på å dryppe få dråper og å se gjenstanden bli skinnende. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`Nothing shows effort as clearly as silver turning bright. Roll out the mat, and set the things from left to right: polish, cotton bud, dish, cotton, cloth. The silver piece stands in the middle. Drip only a few drops of polish into the dish. Dip the cotton bud, and spread a thin layer over the whole piece. Rub with the cotton in circles, and show the blackened cotton: "Look how black it turned." Finally polish it bright with the cloth. The child practises using just a few drops and watching the piece grow shiny. Want more exercises like this? Download my free guide.`,
+ shNo:["tingene på rad","dråpene i skålen","det tynne laget som smøres","den svarte vatten","den blanke gjenstanden"],
+ shEn:["the things in a row","the drops in the dish","the thin layer being spread","the blackened cotton","the shining piece"]},
+
+{sec:2, tNo:"Å koste", tEn:"Sweeping", age:"3", matNo:"en liten kost, et klistremerke, kost og feiebrett", matEn:"a small broom, a marker, brush and dustpan", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Med et enkelt triks blir kosting både tydelig og gøy. Strø litt bøss på gulvet, og klistre et lite merke et stykke unna. Merket viser barnet hvor bøsset skal samles. Kost mot merket med rette bevegelser, og jo nærmere du kommer, jo kortere blir taket. Bank kosten lett i gulvet for å riste av det som sitter fast. Hold feiebrettet fast ned, og fei bøsset opp med korte tak. Barnet øver på å koste i riktig retning og å få opp alt. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`With one simple trick, sweeping becomes both clear and fun. Scatter a little dirt on the floor, and stick a small marker a short way off. The marker shows the child where to gather the dirt. Sweep toward the marker with straight strokes, and the closer you come, the shorter the strokes. Tap the broom gently on the floor to shake off what sticks. Hold the dustpan down firmly, and sweep the dirt up with short strokes. The child practises sweeping in the right direction and getting it all up. Want more exercises like this? Download my free guide.`,
+ shNo:["merket på gulvet","kosting mot merket","banking av kosten","bøsset opp i feiebrettet"],
+ shEn:["the marker on the floor","sweeping toward the marker","tapping the broom","the dirt up in the dustpan"]},
+
+{sec:2, tNo:"Å sette blomster i vase", tEn:"Arranging flowers", age:"3", matNo:"mugge, skål, saks, klype, blomster og vaser", matEn:"jug, dish, scissors, tongs, flowers and vases", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Å sette blomster i vase gir barnet noe vakkert å gi videre til rommet. Ta på forkle og legg ut materiellet i riktig rekkefølge. La barnet velge tre blomster og en liten vase. Fyll muggen med vann, og hell i skålen og i vasen. Mål blomsten mot vasen for å se hvor mye stengelen skal kortes. Hold stengelen under vann og klipp på skrå. Fjern de nederste bladene, og sett blomsten i vasen. Til slutt velger barnet hvor vasen skal stå. Barnet øver på å måle blomsten og å kutte på skrå under vann. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`Arranging flowers gives the child something beautiful to give back to the room. Put on an apron and lay out the materials in the right order. Let the child choose three flowers and a small vase. Fill the jug with water, and pour into the dish and the vase. Measure the flower against the vase to see how much the stem should be shortened. Hold the stem under water and cut at an angle. Remove the lowest leaves, and place the flower in the vase. Finally the child chooses where the vase will stand. The child practises measuring the flower and cutting at an angle under water. Want more exercises like this? Download my free guide.`,
+ shNo:["materiellet på rad","blomsten målt mot vasen","stengelen klippet under vann","den ferdige vasen båret på plass"],
+ shEn:["the materials in a row","the flower measured against the vase","the stem cut under water","the finished vase carried into place"]},
+
+{sec:2, tNo:"Å skjære opp frukt og grønnsaker", tEn:"Cutting fruit and vegetables", age:"3", matNo:"skjærefjøl, skreller, kniv, tallerken og forkle", matEn:"cutting board, peeler, knife, plate and apron", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Å skjære sin egen gulrot og gi den til vennene er ekte stolthet for et barn. Legg ut matte og materiell, og vask hendene først. Vis skrelleren rolig: "Den er skarp, så vi passer på." Skrell fra deg, og legg skrellet i avfallsskålen. Vis hvordan du holder gulroten et stykke unna kniven, så fingrene er trygge. Skjær rolig, og legg bitene pent på tallerkenen, én og én. Sett i pinner, og tilby maten til de andre. Barnet øver på å holde kniven riktig og å skjære med nok kraft. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`Cutting their own carrot and giving it to friends is real pride for a child. Lay out the mat and materials, and wash your hands first. Show the peeler calmly: "It is sharp, so we take care." Peel away from you, and put the peel in the waste dish. Show how you hold the carrot away from the knife, so your fingers are safe. Cut calmly, and lay the pieces neatly on the plate, one by one. Add the sticks, and offer the food to the others. The child practises holding the knife correctly and cutting with enough force. Want more exercises like this? Download my free guide.`,
+ shNo:["skjærefjøl og redskaper","skrelling fra seg","det trygge grepet unna kniven","bitene pent på tallerken"],
+ shEn:["cutting board and tools","peeling away from the body","the safe grip away from the knife","the pieces neatly on the plate"]},
+
+{sec:3, tNo:"Å gå rundt et teppe", tEn:"Walking around a mat", age:"2,5", matNo:"et teppe", matEn:"a mat", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Når et barn jobber på et teppe på gulvet, er det viktig at de andre ikke tråkker på arbeidet. Legg et teppe fram, og samle en liten gruppe. Jeg viser hvordan jeg går rundt teppet, med føttene tett inntil kanten og et rolig, tydelig kroppsspråk. Så inviterer jeg ett og ett barn til å prøve. Vi passer godt på så vi ikke kommer bort i noens ting. Barnet øver på å gå sakte og forsiktig, og å unngå å tråkke på teppet. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`When a child works on a mat on the floor, it matters that the others do not step on the work. Lay a mat out, and gather a small group. I show how I walk around the mat, with my feet close to the edge and calm, clear body language. Then I invite the children one by one to try. We take great care not to touch anyone's things. The child practises walking slowly and gently, and not stepping on the mat. Want more exercises like this? Download my free guide.`,
+ shNo:["teppet på gulvet","føttene tett langs kanten","en rolig runde rundt teppet"],
+ shEn:["the mat on the floor","feet close along the edge","a calm walk around the mat"]},
+
+{sec:3, tNo:"Å hilse og introdusere en venn", tEn:"Greeting and introducing a friend", age:"2,5", matNo:"deg selv og barna, forberedt på forhånd", matEn:"you and the children, prepared beforehand", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Å hilse på noen nytt kan kjennes stort, så vi øver på det i trygge former. Jeg samler en liten gruppe og viser: jeg håndhilser, ser barnet i øynene og sier tydelig: "Hei, jeg heter Renate. Hva heter du?" Så får barna prøve med hverandre etter tur. En annen gang øver vi på å introdusere en venn: "Dette er min venn Vaida. Vaida, dette er Birgit." Barnet øver på å hilse slik det passer i vår kultur, og å møte blikket. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`Greeting someone new can feel big, so we practise it in a safe way. I gather a small group and show them: I shake hands, look the child in the eyes and say clearly: "Hello, my name is Renate. What is your name?" Then the children take turns trying with each other. Another time we practise introducing a friend: "This is my friend Vaida. Vaida, this is Birgit." The child practises greeting in the way that suits our culture, and meeting the other's eyes. Want more exercises like this? Download my free guide.`,
+ shNo:["to hender som håndhilser","rolig blikkontakt","en liten gruppe rundt"],
+ shEn:["two hands shaking","calm eye contact","a small group around"]},
+
+{sec:3, tNo:"Å observere andre", tEn:"Observing others", age:"2,5", matNo:"deg selv og barna, forberedt på forhånd", matEn:"you and the children, prepared beforehand", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Nysgjerrighet er fint, men vi lærer barnet å være nysgjerrig uten å forstyrre. Jeg samler en liten gruppe, og ett barn leser i en bok. Jeg viser hvordan jeg spør først: "Kan jeg få se på deg mens du leser?" Så setter jeg meg rolig ved siden av, uten å ta på eller avbryte. Barna bytter på å observere og å bli observert. Barnet øver på å ikke forstyrre den som jobber, og på å godta at noen vil være i fred. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`Curiosity is lovely, but we teach the child to be curious without disturbing. I gather a small group, and one child reads a book. I show how I ask first: "May I watch you while you read?" Then I sit down calmly beside them, without touching or interrupting. The children take turns observing and being observed. The child practises not disturbing the one who is working, and accepting that someone may want to be left alone. Want more exercises like this? Download my free guide.`,
+ shNo:["hender med en bok","noen som setter seg rolig ved siden av","avstand og ro"],
+ shEn:["hands with a book","someone sitting calmly beside","distance and calm"]},
+
+{sec:3, tNo:"Å pusse nesen", tEn:"Blowing your nose", age:"2,5", matNo:"papir, en søppelbøtte og et lite speil", matEn:"paper, a bin and a little mirror", aimNo:"Selvstendighet, koordinasjon, konsentrasjon", aimEn:"Independence, coordination, concentration",
+ sNo:`Om høsten og vinteren renner mange små neser, og også dette kan barnet lære å ta hånd om selv. Jeg samler en liten gruppe og setter fram papir, en bøtte og et lite speil. Jeg viser hvordan man bretter papiret og holder det over nesen. Blås forsiktig, klem sammen, og brett papiret uten å komme bort i det våte. Tørk under nesen, og kast papiret. Så sjekker vi i speilet om alt er rent og pent. Barnet øver på å ta hånd om seg selv med verdighet. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`In autumn and winter many little noses run, and this too the child can learn to handle on their own. I gather a small group and set out paper, a bin and a little mirror. I show how to fold the paper and hold it over the nose. Blow gently, pinch together, and fold the paper without touching the wet part. Wipe under the nose, and throw the paper away. Then we check in the mirror that all is clean and tidy. The child practises caring for themselves with dignity. Want more exercises like this? Download my free guide.`,
+ shNo:["papiret som brettes","papiret holdt over nesen","tørk under nesen","en titt i det lille speilet"],
+ shEn:["the paper being folded","the paper held over the nose","wiping under the nose","a look in the little mirror"]},
+
+{sec:3, tNo:"Å banke på en dør", tEn:"Knocking on a door", age:"2,5", matNo:"en liten gruppe barn og en dør", matEn:"a small group and a door", aimNo:"Selvstendighet, tålmodighet", aimEn:"Independence, patience",
+ sNo:`Å banke på og vente er en liten øvelse i tålmodighet. Jeg samler en liten gruppe, og ett barn står bak en lukket dør. Jeg viser hvordan jeg banker på og venter på svar: "Jeg hørte at noen svarte, og da må jeg vente." Når barnet kommer ut, er det min tur, og jeg går inn og lukker døren rolig. Så får de andre prøve etter tur. Barnet øver på å vente på svar og på å respektere at noen er opptatt. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`Knocking and waiting is a small exercise in patience. I gather a small group, and one child stands behind a closed door. I show how I knock and wait for an answer: "I heard someone answer, so I have to wait." When the child comes out, it is my turn, and I go in and close the door calmly. Then the others take turns trying. The child practises waiting for an answer and respecting that someone is busy. Want more exercises like this? Download my free guide.`,
+ shNo:["en hånd som banker på en dør","ventende kroppsspråk","døren som åpnes rolig"],
+ shEn:["a hand knocking on a door","waiting body language","the door opening calmly"]},
+
+{sec:4, tNo:"Å gå på linja", tEn:"Walking the line", age:"2,5", matNo:"en ellipseformet linje på gulvet", matEn:"an ellipse line on the floor", aimNo:"Balanse og likevekt", aimEn:"Balance and equilibrium",
+ sNo:`Alle barn elsker å balansere på kanter, og linja i barnehagen er akkurat det, satt i system. Linja er en ellipse på gulvet, med både rette strekninger og myke svinger, så bevegelsen aldri stopper. Jeg finner en plass og går på linja uten å se ned på føttene. Så inviterer jeg barna med, ett og ett. Etter hvert øker vi utfordringen: hæl til tå, og så å bære noe, kanskje et flagg, en bjelle eller et glass med vann. Barnet øver på balanse og på å gå med blikket rett fram. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`Every child loves to balance on edges, and the line in the classroom is exactly that, made into a practice. The line is an ellipse on the floor, with both straight stretches and gentle curves, so the movement never stops. I find a spot and walk the line without looking down at my feet. Then I invite the children to join, one by one. Little by little we raise the challenge: heel to toe, and then carrying something, maybe a flag, a bell or a glass of water. The child practises balance and walking with eyes straight ahead. Want more exercises like this? Download my free guide.`,
+ shNo:["den ellipseformede linja på gulvet","føtter som går hæl til tå","hender som bærer et glass vann eller en bjelle"],
+ shEn:["the ellipse line on the floor","feet walking heel to toe","hands carrying a glass of water or a bell"]},
+
+{sec:4, tNo:"Stilleleken", tEn:"The silence game", age:"3", matNo:"en rolig gruppe, gjerne dempet lys", matEn:"a calm group, ideally dimmed light", aimNo:"Stillhet og motorisk kontroll", aimEn:"Silence and motor control",
+ sNo:`Stilleleken oppsto da Montessori pekte på en sovende baby og sa: "Jeg tror ikke noen av dere kan være så stille." Barna elsket utfordringen. Vi gjør ikke dette for å tvinge fram ro, men for å la barna lytte til stillheten. Vi setter oss godt til rette, lukker øynene og puster rolig. Så flytter jeg meg og hvisker ett og ett navn, og barnet kommer helt lydløst bort til meg. Til slutt et lite dikt eller rolig musikk. Barnet øver på å lage stillhet sammen og på å høre lydene i den. Vil du ha flere øvelser? Last ned min gratis guide.`,
+ sEn:`The silence game began when Montessori pointed to a sleeping baby and said: "I do not think any of you can be this quiet." The children loved the challenge. We do not do this to force calm, but to let the children listen to the silence. We settle comfortably, close our eyes and breathe slowly. Then I move away and whisper one name at a time, and the child comes to me without a sound. Finally a little poem or quiet music. The child practises making silence together and hearing the sounds within it. Want more exercises like this? Download my free guide.`,
+ shNo:["barn som sitter rolig med lukkede øyne","dempet lys","en hånd som gir et lett tegn på skulderen"],
+ shEn:["children sitting calmly with closed eyes","dimmed light","a hand giving a gentle touch on the shoulder"]}
+];
+
+/* ---------- Språk ---------- */
+var currentLang = 'no';
+function q(id){ return document.getElementById(id); }
+
+function switchLanguage(lang){
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.body.classList.toggle('en-mode', lang === 'en');
+  document.querySelectorAll('[data-no][data-en]').forEach(function(el){
+    var t = el.getAttribute('data-' + lang);
+    if (t.indexOf('<') > -1) el.innerHTML = t; else el.textContent = t;
+  });
+  q('langToggle').textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+  buildLibrary();
+  if (activeItem) renderReel(activeItem);
+}
+q('langToggle').addEventListener('click', function(){ switchLanguage(currentLang === 'no' ? 'en' : 'no'); });
+
+/* ---------- Bygg biblioteket ---------- */
+function buildLibrary(){
+  var host = q('library');
+  host.innerHTML = '';
+  SECTIONS.forEach(function(sec, si){
+    var items = LIB.filter(function(it){ return it.sec === si; });
+    if (!items.length) return;
+    var g = document.createElement('div');
+    g.className = 'sec-group';
+    var title = document.createElement('div');
+    title.className = 'sec-title';
+    title.textContent = sec[currentLang];
+    g.appendChild(title);
+    var list = document.createElement('div');
+    list.className = 'lib-list';
+    items.forEach(function(it){
+      var b = document.createElement('button');
+      b.type = 'button';
+      var label = document.createElement('span');
+      label.textContent = it['t' + (currentLang === 'no' ? 'No' : 'En')];
+      var age = document.createElement('span');
+      age.className = 'age';
+      age.textContent = (currentLang === 'no' ? 'fra ' + it.age : 'from ' + it.age);
+      b.appendChild(label); b.appendChild(age);
+      b.addEventListener('click', function(){
+        document.querySelectorAll('.lib-list button').forEach(function(x){ x.classList.remove('active'); });
+        b.classList.add('active');
+        renderReel(it);
+      });
+      list.appendChild(b);
+    });
+    g.appendChild(list);
+    host.appendChild(g);
+  });
+}
+
+/* ---------- Vis reelen ---------- */
+var activeItem = null;
+
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function platesFor(it){
+  var u = UI[currentLang];
+  var title = it['t' + (currentLang === 'no' ? 'No' : 'En')];
+  var mat = it['mat' + (currentLang === 'no' ? 'No' : 'En')];
+  var aim = it['aim' + (currentLang === 'no' ? 'No' : 'En')];
+  var ageTxt = currentLang === 'no' ? ('Fra ' + it.age + ' år') : ('From age ' + it.age);
+  var altLine = (currentLang === 'no' ? 'Alt du trenger: ' : 'All you need: ') + mat;
+  var cta = currentLang === 'no' ? 'Last ned min gratis guide' : 'Download my free guide';
+  return [title, ageTxt, altLine, aim, cta];
+}
+
+function renderReel(it){
+  activeItem = it;
+  var u = UI[currentLang];
+  var isNo = currentLang === 'no';
+  var title = it['t' + (isNo ? 'No' : 'En')];
+  var aim = it['aim' + (isNo ? 'No' : 'En')];
+  var script = it['s' + (isNo ? 'No' : 'En')];
+  var scriptOther = it['s' + (isNo ? 'En' : 'No')];
+  var shots = it['sh' + (isNo ? 'No' : 'En')];
+  var plates = platesFor(it);
+  var custom = it.custom;
+
+  var h = '';
+  h += '<div class="pv-kick">' + esc(custom ? u.kickCustom : u.kickLib) + '</div>';
+  h += '<div class="pv-title">' + esc(title) + '</div>';
+  h += '<div class="pv-meta">' + esc(aim) + ' · ' + esc(isNo ? ('fra ' + it.age + ' år') : ('from age ' + it.age)) + '</div>';
+
+  // Manus
+  h += '<div class="blk"><h3>' + esc(u.manus) + ' (' + (isNo ? 'NO' : 'EN') + ')';
+  h += '<button class="copy" data-copy="main">' + esc(isNo ? u.copyNo : u.copyEn) + '</button></h3>';
+  h += '<div class="script">' + esc(script) + '</div></div>';
+
+  // Andre språk
+  h += '<div class="blk"><h3>' + esc(u.manus) + ' (' + (isNo ? 'EN' : 'NO') + ')';
+  h += '<button class="copy" data-copy="other">' + esc(isNo ? u.copyEn : u.copyNo) + '</button></h3>';
+  h += '<div class="script en">' + esc(scriptOther) + '</div></div>';
+
+  // Tekstplakater
+  h += '<div class="blk"><h3>' + esc(u.plater);
+  h += '<button class="copy" data-copy="plates">' + esc(u.copyPlates) + '</button></h3>';
+  h += '<ul class="plates">';
+  plates.forEach(function(p, i){ h += '<li><span class="n">' + (i+1) + '.</span>' + esc(p) + '</li>'; });
+  h += '</ul></div>';
+
+  // Opptaksliste
+  h += '<div class="blk"><h3>' + esc(u.opptak) + '</h3><ul class="shots">';
+  shots.forEach(function(s){ h += '<li>' + esc(s) + '</li>'; });
+  h += '</ul></div>';
+
+  if (custom) h += '<p class="note">' + esc(u.noteCustom) + '</p>';
+
+  var pv = q('preview');
+  pv.innerHTML = h;
+  pv.scrollTop = 0;
+
+  pv.querySelectorAll('.copy').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var kind = btn.getAttribute('data-copy');
+      var text = kind === 'main' ? script : kind === 'other' ? scriptOther : plates.join('\n');
+      copy(text);
+    });
+  });
+}
+
+/* ---------- Lag ny fra felt ---------- */
+function lines(id){ return (q(id).value || '').split('\n').map(function(s){ return s.trim(); }).filter(Boolean); }
+function joinSteps(arr){ return arr.map(function(s){ return /[.!?]$/.test(s) ? s : s + '.'; }).join(' '); }
+function listPhrase(arr, lang){
+  if (!arr.length) return '';
+  if (arr.length === 1) return arr[0];
+  var and = lang === 'no' ? ' og ' : ' and ';
+  return arr.slice(0,-1).join(', ') + and + arr[arr.length-1];
+}
+
+function buildCustom(){
+  var titleNo = (q('c_title_no').value || 'Ny aktivitet').trim();
+  var titleEn = (q('c_title_en').value || titleNo).trim();
+  var age = (q('c_age').value || '3').trim();
+  var aimNo = (q('c_aim_no').value || 'Selvstendighet, koordinasjon, konsentrasjon').trim();
+  var aimEn = (q('c_aim_en').value || 'Independence, coordination, concentration').trim();
+  var matNo = (q('c_mat_no').value || '').trim();
+  var matEn = (q('c_mat_en').value || matNo).trim();
+  var stepsNo = lines('c_steps_no'), stepsEn = lines('c_steps_en');
+  var ptsNo = lines('c_points_no'), ptsEn = lines('c_points_en');
+
+  var hookNo = 'Denne øvelsen gir barnet trening i ' + aimNo.charAt(0).toLowerCase() + aimNo.slice(1) + '.';
+  var hookEn = 'This exercise gives the child practice in ' + aimEn.charAt(0).toLowerCase() + aimEn.slice(1) + '.';
+  var matSentNo = matNo ? ('Alt du trenger er ' + matNo + '.') : '';
+  var matSentEn = matEn ? ('All you need is ' + matEn + '.') : '';
+  var tipNo = ptsNo.length ? ('Barnet øver særlig på ' + listPhrase(ptsNo,'no') + '.') : '';
+  var tipEn = ptsEn.length ? ('The child especially practises ' + listPhrase(ptsEn,'en') + '.') : '';
+
+  var sNo = [hookNo, matSentNo, joinSteps(stepsNo), tipNo, CTA.no].filter(Boolean).join(' ');
+  var sEn = [hookEn, matSentEn, joinSteps(stepsEn), tipEn, CTA.en].filter(Boolean).join(' ');
+
+  var it = { custom:true, sec:-1, tNo:titleNo, tEn:titleEn, age:age, matNo:matNo || '(materiell)', matEn:matEn || '(materials)',
+    aimNo:aimNo, aimEn:aimEn, sNo:sNo, sEn:sEn,
+    shNo: stepsNo.length ? stepsNo : ['film materiellet ovenfra'], shEn: stepsEn.length ? stepsEn : ['film the materials from above'] };
+
+  document.querySelectorAll('.lib-list button').forEach(function(x){ x.classList.remove('active'); });
+  renderReel(it);
+  toast(UI[currentLang].kopiert === 'Kopiert!' ? 'Manus laget 🎬' : 'Script built 🎬');
+}
+q('genBtn').addEventListener('click', buildCustom);
+
+/* ---------- Kopier + toast ---------- */
+function copy(text){
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){ toast(UI[currentLang].kopiert); }, function(){ fallbackCopy(text); });
+  } else { fallbackCopy(text); }
+}
+function fallbackCopy(text){
+  var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); toast(UI[currentLang].kopiert); } catch(e){}
+  document.body.removeChild(ta);
+}
+var toastTimer;
+function toast(msg){
+  var t = q('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 1600);
+}
+
+/* ---------- Start ---------- */
+buildLibrary();
+</script>
+
+<script src="/js/lme-account.js?v=7" defer></script>
+<script src="/js/renate-widget.js?v=3" defer></script>
+</body>
+</html>
