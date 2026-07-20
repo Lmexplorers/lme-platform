@@ -192,6 +192,20 @@ window.LME_BUTIKK = {
       ]
     },
 
+    "norge-rune": {
+      navn:  { no: "NORGE-runehatt, hekleoppskrift", en: "NORWAY rune hat, crochet pattern" },
+      undertittel: { no: "Rød hatt · NORGE/NORWAY i runeskrift · stripet brem · staver · barn til herre",
+                     en: "Red hat · NORGE/NORWAY in runes · striped brim · double crochet · child to man" },
+      cover:   "/images/oppskrift-norge-rune.jpg",
+      coverEn: "/images/oppskrift-norge-rune.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-rune.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-rune-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
     "norge-hekle": {
       navn:  { no: "NORGE-bøttehatt, hekleoppskrift", en: "NORGE bucket hat, crochet pattern" },
       undertittel: { no: "Rød hatt · NORGE i blokkbokstaver · flagg · voksen",
