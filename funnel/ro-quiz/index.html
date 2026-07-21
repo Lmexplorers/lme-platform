@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FBF7F0">
+<title>Hva stjeler roen i hjemmet ditt? · LME</title>
+<link rel="icon" href="/images/lme-logo.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root{
+    --cerise:#E91E89; --cerise-soft:#FCE3F1; --lime:#A4D233; --lime-soft:#E8F5D1;
+    --sun:#F7C72E; --sun-soft:#FFF4D6; --bg:#FBF7F0; --ink:#1F1B24; --ink-soft:#5A5560;
+    --ink-muted:#938E99; --line:rgba(31,27,36,.10); --r-md:18px; --r-lg:26px; --r-xl:36px; --pill:999px;
+    --shadow-md:0 6px 26px rgba(31,27,36,.07); --shadow-lg:0 22px 60px rgba(31,27,36,.10);
+    --font:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+    --font-head:'Playpen Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(1100px 600px at 12% -8%, var(--cerise-soft) 0%, transparent 55%),
+      radial-gradient(900px 520px at 105% 8%, var(--lime-soft) 0%, transparent 50%),
+      radial-gradient(700px 480px at 80% 110%, var(--sun-soft) 0%, transparent 55%),
+      var(--bg);
+    min-height:100vh;}
+  h1,h2,h3{font-family:var(--font-head);line-height:1.15}
+  .wrap{max-width:720px;margin:0 auto;padding:34px 22px 80px}
+  .top{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+  .top img{height:40px;width:auto;display:block}
+  .top b{font-family:var(--font-head);font-size:19px}
+  .langbtn{position:fixed;top:16px;right:16px;z-index:30;display:inline-flex;align-items:center;gap:6px;
+    border:1px solid var(--line);background:#fff;color:var(--ink);font-family:inherit;font-weight:700;
+    font-size:13px;line-height:1;padding:10px 15px;border-radius:var(--pill);box-shadow:var(--shadow-md);cursor:pointer}
+  .card{background:#fff;border-radius:var(--r-xl);box-shadow:var(--shadow-lg);padding:34px 30px}
+  .kicker{display:inline-block;background:var(--cerise-soft);color:var(--cerise);font-weight:700;font-size:13px;
+    letter-spacing:.02em;padding:7px 15px;border-radius:var(--pill);margin-bottom:16px}
+  h1{font-size:clamp(28px,5vw,40px);color:var(--cerise);margin-bottom:14px}
+  .lead{font-size:18px;color:var(--ink-soft);margin-bottom:26px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--cerise);color:#fff;
+    font-family:var(--font-head);font-weight:700;font-size:17px;border:none;border-radius:var(--pill);
+    padding:16px 30px;cursor:pointer;box-shadow:0 10px 30px rgba(233,30,137,.28);transition:transform .12s ease}
+  .btn:hover{transform:translateY(-1px)}
+  .btn.ghost{background:#fff;color:var(--cerise);border:2px solid var(--cerise);box-shadow:none}
+  .prog{height:8px;background:var(--cerise-soft);border-radius:var(--pill);overflow:hidden;margin-bottom:8px}
+  .prog>i{display:block;height:100%;background:var(--cerise);width:0;transition:width .3s ease;border-radius:var(--pill)}
+  .qcount{font-size:13px;color:var(--ink-muted);font-weight:700;margin-bottom:20px}
+  .qtext{font-size:22px;color:var(--ink);margin-bottom:22px}
+  .opts{display:flex;flex-direction:column;gap:12px}
+  .opt{text-align:left;background:#fff;border:2px solid var(--line);border-radius:var(--r-md);padding:16px 18px;
+    font-family:inherit;font-size:16px;color:var(--ink);cursor:pointer;transition:border-color .12s,background .12s,transform .1s}
+  .opt:hover{border-color:var(--cerise);background:var(--cerise-soft);transform:translateY(-1px)}
+  .rlabel{display:inline-block;background:var(--lime-soft);color:#4d6b12;font-weight:700;font-size:13px;
+    padding:7px 15px;border-radius:var(--pill);margin-bottom:14px}
+  .rbody{font-size:17px;color:var(--ink-soft);margin-bottom:22px}
+  form{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+  .fh{font-family:var(--font-head);font-weight:700;font-size:18px;margin-bottom:2px}
+  input{font-family:inherit;font-size:16px;padding:15px 18px;border:2px solid var(--line);border-radius:var(--r-md);width:100%}
+  input:focus{outline:none;border-color:var(--cerise)}
+  .safe{font-size:13px;color:var(--ink-muted);display:flex;align-items:center;gap:6px}
+  .next{margin-top:20px;display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+  .hidden{display:none}
+  .foot{text-align:center;color:var(--ink-muted);font-size:13px;margin-top:26px}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top"><img id="brandLogo" src="/images/lme-logo.png" alt="LME"><b id="brandName">LME</b></div>
+
+    <!-- INTRO -->
+    <section id="scIntro" class="card">
+      <span class="kicker" id="kicker"></span>
+      <h1 id="qTitle"></h1>
+      <p class="lead" id="qIntro"></p>
+      <button class="btn" id="startBtn"></button>
+    </section>
+
+    <!-- QUESTION -->
+    <section id="scQ" class="card hidden">
+      <div class="prog"><i id="progBar"></i></div>
+      <div class="qcount" id="qCount"></div>
+      <div class="qtext" id="qText"></div>
+      <div class="opts" id="qOpts"></div>
+    </section>
+
+    <!-- RESULT -->
+    <section id="scResult" class="card hidden">
+      <span class="rlabel" id="rLabel"></span>
+      <h1 id="rTitle"></h1>
+      <p class="rbody" id="rBody"></p>
+      <form id="rForm">
+        <div class="fh" id="fHeading"></div>
+        <input id="fName" type="text" autocomplete="given-name">
+        <input id="fEmail" type="email" autocomplete="email" required>
+        <button class="btn" id="fBtn" type="submit"></button>
+        <div class="safe">🔒 <span id="fSafe"></span></div>
+      </form>
+      <div id="rDone" class="next hidden">
+        <div class="fh" id="dTitle"></div>
+        <p class="rbody" id="dText"></p>
+        <a class="btn ghost" id="dCta" href="#"></a>
+      </div>
+    </section>
+
+    <div class="foot">© <span id="yr"></span> Little Montessori Explorers</div>
+  </div>
+
+<script>
+/* ===================== QUIZ-INNHOLD (norsk + engelsk) ===================== */
+const QUIZ = {
+  no:{
+    lang:"no",
+    kicker:"Gratis quiz · 1 minutt",
+    title:"Hva stjeler roen i hjemmet ditt?",
+    intro:"Ta den lille quizen og finn den største ro-tyven hjemme hos deg, og hva som hjelper mest akkurat nå. Seks spørsmål, og du får svaret med en gang.",
+    start:"Start quizen",
+    of:"av",
+    questions:[
+      {t:"Når kjenner du deg mest sliten i løpet av en dag?",o:[
+        ["om morgenen, før vi i det hele tatt har kommet oss ut døra","A"],
+        ["når jeg ser meg rundt og alt flyter og roter","B"],
+        ["når jeg må mase og gjenta meg selv for tiende gang","C"],
+        ["hele tiden, jeg føler meg bare tom","D"]]},
+      {t:"Hva utløser oftest dårlig samvittighet?",o:[
+        ["at morgenen starter med kjefting","A"],
+        ["at hjemmet aldri føles ryddig nok","B"],
+        ["at jeg mister tålmodigheten og hever stemmen","C"],
+        ["at jeg ikke har noe igjen til meg selv","D"]]},
+      {t:"Hva ville hjulpet deg mest akkurat nå?",o:[
+        ["en morgen som går rolig av seg selv","A"],
+        ["et hjem der barna finner og rydder selv","B"],
+        ["barn som samarbeider uten mas","C"],
+        ["litt ro og overskudd til deg selv","D"]]},
+      {t:"Når koker det oftest over hjemme hos dere?",o:[
+        ["i den travle timen før vi skal ut","A"],
+        ["når rotet tårner seg opp og ingen rydder","B"],
+        ["i overgangene, som fra skjerm til middag","C"],
+        ["på slutten av dagen, når tanken er tom","D"]]},
+      {t:"Hva drømmer du oftest om?",o:[
+        ["rolige morgener uten stress","A"],
+        ["et hjem som nesten passer seg selv","B"],
+        ["en hverdag uten kamp og mas","C"],
+        ["å kjenne deg som deg selv igjen","D"]]},
+      {t:"Kunne du endret én ting i morgen, ville det vært…",o:[
+        ["morgenrutinen","A"],
+        ["hvordan hjemmet er organisert","B"],
+        ["hvordan jeg snakker med barna i vanskelige øyeblikk","C"],
+        ["hvor mye du tar vare på deg selv","D"]]}
+    ],
+    results:{
+      A:{tag:"ro-tyv-morgen",label:"Din ro-tyv: morgenkaoset",title:"Morgenkaoset stjeler roen din",
+         body:"Morgenene er den tøffeste tida deres, og det er ikke fordi barna er vanskelige, men fordi morgenen mangler faste holdepunkter. Det gode er at dette er noe av det raskeste å endre. Neste steg for deg er å innføre rolige morgenrytmer.",
+         cta:"Få gratis: Rolige morgener-utfordringen",href:"/rolige-morgener"},
+      B:{tag:"ro-tyv-hjem",label:"Din ro-tyv: det overfylte hjemmet",title:"Det overfylte hjemmet stjeler roen din",
+         body:"Når hjemmet er fullt av ting og alt står for høyt, bruker både du og barna energi på å lete, mase og rydde. Et forberedt hjem i barnehøyde løser mer enn du tror. Neste steg for deg er å legge til rette hjemme, rom for rom.",
+         cta:"Se ROLIG-metoden",href:"/academy"},
+      C:{tag:"ro-tyv-mas",label:"Din ro-tyv: maset og kontrollen",title:"Maset og kontrollen stjeler roen din",
+         body:"Du bruker dagen på å gjenta deg selv, korrigere og styre, og det tapper dere begge. Ofte prøver barnet egentlig å mestre noe selv. Neste steg for deg er å observere før du griper inn, og bytte kamp med tillit.",
+         cta:"Se ROLIG-metoden",href:"/academy"},
+      D:{tag:"ro-tyv-batteri",label:"Din ro-tyv: ditt eget tomme batteri",title:"Ditt eget tomme batteri stjeler roen din",
+         body:"Du gir og gir, og det er ingenting igjen til deg. Et barn kjenner roen til mor, så din ro er ikke egoisme, den er fundamentet. Neste steg for deg er små pusterom, helt uten dårlig samvittighet.",
+         cta:"Se ROLIG-metoden",href:"/academy"}
+    },
+    form:{heading:"Vil du ha konkrete grep for akkurat din ro-tyv på e-post? Skriv inn navn og e-post, så sender jeg deg et lite dytt i riktig retning.",
+      name:"Fornavn",email:"Skriv inn e-posten din",btn:"Send meg grepene",safe:"Ingen spam. Meld deg av når som helst.",
+      doneTitle:"Takk, sjekk innboksen 🌸",doneText:"Jeg har notert ro-tyven din, så du får hjelp som passer akkurat deg. Vil du komme i gang med en gang, er neste steg her:"},
+    switchTo:"🇬🇧 English"
+  },
+  en:{
+    lang:"en",
+    kicker:"Free quiz · 1 minute",
+    title:"What's stealing the calm in your home?",
+    intro:"Take this little quiz to find the biggest calm-thief in your home, and what helps most right now. Six questions, and you get your answer straight away.",
+    start:"Start the quiz",
+    of:"of",
+    questions:[
+      {t:"When do you feel most tired during the day?",o:[
+        ["in the morning, before we've even made it out the door","A"],
+        ["when I look around and everything is cluttered and messy","B"],
+        ["when I have to nag and repeat myself for the tenth time","C"],
+        ["all the time, I just feel empty","D"]]},
+      {t:"What most often triggers guilt?",o:[
+        ["that the morning starts with snapping","A"],
+        ["that the home never feels tidy enough","B"],
+        ["that I lose my patience and raise my voice","C"],
+        ["that I have nothing left for myself","D"]]},
+      {t:"What would help you most right now?",o:[
+        ["a morning that runs calmly on its own","A"],
+        ["a home where the children find and tidy things themselves","B"],
+        ["children who cooperate without nagging","C"],
+        ["a little calm and energy for yourself","D"]]},
+      {t:"When does it most often boil over at home?",o:[
+        ["in the busy hour before we have to leave","A"],
+        ["when the clutter piles up and no one tidies","B"],
+        ["in the transitions, like from screen to dinner","C"],
+        ["at the end of the day, when the tank is empty","D"]]},
+      {t:"What do you dream about most often?",o:[
+        ["calm mornings without stress","A"],
+        ["a home that almost runs itself","B"],
+        ["a daily life without battles and nagging","C"],
+        ["feeling like yourself again","D"]]},
+      {t:"If you could change one thing tomorrow, it would be…",o:[
+        ["the morning routine","A"],
+        ["how the home is organised","B"],
+        ["how I talk to the children in hard moments","C"],
+        ["how much you take care of yourself","D"]]}
+    ],
+    results:{
+      A:{tag:"calm-thief-morning",label:"Your calm-thief: morning chaos",title:"Morning chaos is stealing your calm",
+         body:"Mornings are your hardest time, and it's not because the children are difficult, but because the morning lacks steady anchors. The good news is that this is one of the fastest things to change. Your next step is to introduce calm morning rhythms.",
+         cta:"Get free: The Calm Mornings Challenge",href:"/calm-mornings"},
+      B:{tag:"calm-thief-home",label:"Your calm-thief: a cluttered home",title:"A cluttered home is stealing your calm",
+         body:"When the home is full of things and everything is out of reach, both you and the children spend energy searching, nagging and tidying. A prepared home at child height solves more than you'd think. Your next step is to order the home, room by room.",
+         cta:"See the BLOOM Method",href:"/academy"},
+      C:{tag:"calm-thief-nagging",label:"Your calm-thief: nagging and control",title:"Nagging and control are stealing your calm",
+         body:"You spend the day repeating yourself, correcting and steering, and it drains you both. Often the child is really trying to master something on their own. Your next step is to look again before you step in, and swap the battle for trust.",
+         cta:"See the BLOOM Method",href:"/academy"},
+      D:{tag:"calm-thief-battery",label:"Your calm-thief: your own empty battery",title:"Your own empty battery is stealing your calm",
+         body:"You give and give, and there's nothing left for you. A child feels a mother's calm, so your calm isn't selfish, it's the foundation. Your next step is small breathing spaces, completely without guilt.",
+         cta:"See the BLOOM Method",href:"/academy"}
+    },
+    form:{heading:"Want concrete steps for your calm-thief by email? Enter your name and email and I'll send you a little nudge in the right direction.",
+      name:"First name",email:"Enter your email",btn:"Send me the steps",safe:"No spam. Unsubscribe anytime.",
+      doneTitle:"Thank you, check your inbox 🌸",doneText:"I've noted your calm-thief so you get help that fits you. If you'd like to start right away, your next step is here:"},
+    switchTo:"🇳🇴 Norsk"
+  }
+};
+
+/* ===================== MOTOR ===================== */
+const LANG = (()=>{ const q=new URLSearchParams(location.search).get('lang');
+  let l=(q||localStorage.getItem('lme_lang')||'no').toLowerCase();
+  if(l!=='en'&&l!=='no') l='no'; try{localStorage.setItem('lme_lang',l)}catch(e){} return l; })();
+document.documentElement.lang = LANG;
+const C = QUIZ[LANG];
+const $ = id => document.getElementById(id);
+const answers = [];
+
+// Språk-knapp
+(()=>{ const b=document.createElement('button'); b.className='langbtn'; b.textContent=C.switchTo;
+  b.addEventListener('click',()=>{ const n=LANG==='en'?'no':'en'; try{localStorage.setItem('lme_lang',n)}catch(e){}
+    const u=new URL(location.href); u.searchParams.set('lang',n); location.href=u.toString(); });
+  document.body.appendChild(b); })();
+
+$('yr').textContent = new Date().getFullYear();
+$('kicker').textContent = C.kicker;
+$('qTitle').textContent = C.title;
+$('qIntro').textContent = C.intro;
+$('startBtn').textContent = C.start;
+
+$('startBtn').addEventListener('click',()=>{ $('scIntro').classList.add('hidden'); $('scQ').classList.remove('hidden'); render(0); });
+
+function render(i){
+  const q = C.questions[i];
+  $('progBar').style.width = Math.round((i)/C.questions.length*100)+'%';
+  $('qCount').textContent = (i+1)+' '+C.of+' '+C.questions.length;
+  $('qText').textContent = q.t;
+  const box = $('qOpts'); box.innerHTML='';
+  q.o.forEach(([txt,r])=>{ const btn=document.createElement('button'); btn.className='opt'; btn.type='button'; btn.textContent=txt;
+    btn.addEventListener('click',()=>{ answers[i]=r; if(i+1<C.questions.length){ render(i+1); } else { showResult(); }
+      window.scrollTo({top:0,behavior:'smooth'}); });
+    box.appendChild(btn); });
+}
+
+function winner(){ const c={A:0,B:0,C:0,D:0}; answers.forEach(r=>c[r]++);
+  let best='A'; ['A','B','C','D'].forEach(k=>{ if(c[k]>c[best]) best=k; }); return best; }
+
+function showResult(){
+  $('progBar').style.width='100%';
+  $('scQ').classList.add('hidden');
+  const r = C.results[winner()];
+  $('rLabel').textContent = r.label;
+  $('rTitle').textContent = r.title;
+  $('rBody').textContent = r.body;
+  $('fHeading').textContent = C.form.heading;
+  $('fName').placeholder = C.form.name;
+  $('fEmail').placeholder = C.form.email;
+  $('fBtn').textContent = C.form.btn;
+  $('fSafe').textContent = C.form.safe;
+  const cta = $('dCta'); cta.textContent = r.cta; cta.href = r.href;
+  $('dTitle').textContent = C.form.doneTitle;
+  $('dText').textContent = C.form.doneText;
+  $('scResult').classList.remove('hidden');
+
+  $('rForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    const email=$('fEmail').value.trim(), name=$('fName').value.trim();
+    if(!email){ $('fEmail').focus(); return; }
+    try{ const leads=JSON.parse(localStorage.getItem('lme_leads')||'[]');
+      leads.push({email,name,lang:LANG,tag:r.tag,ts:new Date().toISOString()});
+      localStorage.setItem('lme_leads',JSON.stringify(leads)); }catch(err){}
+    try{ fetch('/api/mailerlite/subscribe',{method:'POST',mode:'no-cors',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:new URLSearchParams({email,name,lang:LANG,tag:r.tag})}); }catch(err){}
+    this.classList.add('hidden');
+    $('rDone').classList.remove('hidden');
+  });
+}
+</script>
+<script src="/js/lme-visibility.js" defer></script>
+</body>
+</html>
