@@ -62,9 +62,14 @@ export async function onRequestGet(context) {
       const bin = atob(b64);
       const bytes = new Uint8Array(bin.length);
       for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      // Kjenn igjen bildetype fra de foerste bytene (AI gir png, opplastede foto ofte jpeg).
+      let ct = "image/png";
+      if (bytes[0] === 0xff && bytes[1] === 0xd8) ct = "image/jpeg";
+      else if (bytes[0] === 0x47 && bytes[1] === 0x49 && bytes[2] === 0x46) ct = "image/gif";
+      else if (bytes[8] === 0x57 && bytes[9] === 0x45 && bytes[10] === 0x42 && bytes[11] === 0x50) ct = "image/webp";
       return new Response(bytes, {
         status: 200,
-        headers: { "Content-Type": "image/png", "Cache-Control": "public, max-age=31536000, immutable" },
+        headers: { "Content-Type": ct, "Cache-Control": "public, max-age=31536000, immutable" },
       });
     }
     const raw = await env.BUILDER_KV.get(INDEX_KEY);
@@ -89,6 +94,7 @@ export async function onRequestPost(context) {
 
   if (action === "generate") return generateDraft(body, env);
   if (action === "generate-image") return generateImage(body, env, request);
+  if (action === "upload-image") return uploadImage(body, env);
 
   try {
     let index = [];
@@ -231,6 +237,25 @@ function parseDraft(text) {
   };
   if (!d.titleNo || !d.bodyNo) return null;
   return d;
+}
+
+/* Laster opp Renates eget foto (data-URL fra nettleseren), lagrer det i KV og
+   returnerer en kort bildelenke. Den sikre veien for spesifikt materiell som
+   AI ikke klarer aa lage riktig. */
+async function uploadImage(body, env) {
+  if (!env.BUILDER_KV) return json({ error: "not_configured" }, 200);
+  const dataUrl = typeof body.dataUrl === "string" ? body.dataUrl : "";
+  const m = dataUrl.match(/^data:image\/[a-zA-Z0-9.+-]+;base64,([A-Za-z0-9+/=]+)$/);
+  if (!m) return json({ error: "bad_image" }, 400);
+  const b64 = m[1];
+  if (b64.length > 12 * 1024 * 1024) return json({ error: "image_too_large" }, 200);
+  try {
+    const imgId = "u" + Date.now().toString(36) + Math.floor(Math.random() * 1e6).toString(36);
+    await env.BUILDER_KV.put(IMG_PREFIX + imgId, b64);
+    return json({ ok: true, url: "/api/blog?action=image&id=" + imgId }, 200);
+  } catch (e) {
+    return json({ error: "image_store_failed" }, 200);
+  }
 }
 
 /* Lager toppbilde, lagrer det i KV og returnerer en kort adresse som kan

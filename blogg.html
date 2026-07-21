@@ -272,6 +272,11 @@
             <option value="andre" data-no="Andre barn" data-en="Other children">Andre barn</option>
           </select>
         </div>
+        <div>
+          <label data-no="📷 Eller last opp ditt eget foto (alltid riktig materiell)" data-en="📷 Or upload your own photo (always the right material)">📷 Eller last opp ditt eget foto (alltid riktig materiell)</label>
+          <input type="file" id="f-imgUpload" accept="image/*" style="font-size:13px">
+          <div class="hint" data-no="Ta bilde med telefonen eller velg fra galleriet. Den sikre veien for spesifikt materiell som AI ikke klarer å lage." data-en="Take a photo with your phone or pick from the gallery. The safe route for specific materials AI can't render.">Ta bilde med telefonen eller velg fra galleriet.</div>
+        </div>
       </div>
 
       <div class="hint" id="aiStatus" style="margin:8px 0 0"
@@ -537,6 +542,30 @@
       } else if(d&&d.error==='bad_password'){ pw=null; aiStatus('Feil passord. Prøv igjen.','Wrong password. Try again.'); }
       else { var det=(d&&d.detail)?' ('+d.detail+')':''; aiStatus('Fikk ikke laget bildet: '+((d&&d.error)||'?')+det+'. Prøv igjen.','Could not create the image: '+((d&&d.error)||'?')+det+'. Try again.'); }
     }).catch(function(){ btn.disabled=false; aiStatus('Nettverksfeil. Prøv igjen.','Network error. Try again.'); });
+  });
+
+  /* Last opp eget foto: krymp i nettleseren og lagre via API, sett som bildelenke. */
+  document.getElementById('f-imgUpload').addEventListener('change',function(){
+    var file=this.files&&this.files[0]; var self=this; if(!file) return;
+    var p=ensurePw(); if(!p){ self.value=''; return; }
+    aiStatus('📷 Laster opp bildet …','📷 Uploading the image …');
+    var img=new Image(); var url=URL.createObjectURL(file);
+    img.onload=function(){
+      URL.revokeObjectURL(url);
+      var max=1600, w=img.width, h=img.height;
+      if(w>max||h>max){ if(w>h){ h=Math.round(h*max/w); w=max; } else { w=Math.round(w*max/h); h=max; } }
+      var c=document.createElement('canvas'); c.width=w; c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      var dataUrl=c.toDataURL('image/jpeg',0.85);
+      fetch('/api/blog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'upload-image',password:p,dataUrl:dataUrl})})
+      .then(function(r){return r.json();}).then(function(d){
+        if(d&&d.ok&&d.url){ document.getElementById('f-image').value=d.url; aiStatus('✅ Bildet er lastet opp og lagt inn som bildelenke. Lagre innlegget for å se det.','✅ Image uploaded and set as the image link. Save the post to see it.'); }
+        else if(d&&d.error==='bad_password'){ pw=null; aiStatus('Feil passord. Prøv igjen.','Wrong password. Try again.'); }
+        else { aiStatus('Fikk ikke lastet opp bildet: '+((d&&d.error)||'?'),'Could not upload the image: '+((d&&d.error)||'?')); }
+      }).catch(function(){ aiStatus('Nettverksfeil ved opplasting.','Network error while uploading.'); });
+    };
+    img.onerror=function(){ URL.revokeObjectURL(url); aiStatus('Kunne ikke lese bildefila.','Could not read the image file.'); };
+    img.src=url; self.value='';
   });
 
   /* Materiell-velger: setter en utseende-beskrivelse inn i bildebeskrivelsen. */
