@@ -267,7 +267,10 @@ async function generateImage(body, env, request) {
   let refPart = null;
   if (cast === "mia_teo") {
     castText =
-      " Include the two recurring LME characters, Mia and Teo, exactly matching the attached reference image (same faces, hair, clothes). " +
+      " Feature exactly two children, the recurring LME characters Mia and Teo, matching the attached reference image precisely (same faces, hair and clothes). " +
+      "Mia MUST have golden blonde hair in a HIGH PONYTAIL tied with a PINK BOW, and wear a pink floral dress. " +
+      "Teo MUST have medium brown wavy hair and wear a YELLOW AND WHITE HORIZONTALLY STRIPED shirt with blue shorts. " +
+      "Keep these details exact and clearly visible. No adults and no other children in the image, only Mia and Teo. " +
       MIA + " " + TEO + " They are best friends exploring together, never romantic.";
     // Hent det faste referansebildet, saa figurene blir like hver gang.
     try {
