@@ -220,6 +220,18 @@
                  data-no-ph="F.eks. et barn som heller vann ved et lite kjøkkenbord i morgenlys"
                  data-en-ph="E.g. a child pouring water at a small kitchen table in morning light"
                  placeholder="F.eks. et barn som heller vann ved et lite kjøkkenbord i morgenlys">
+          <select id="f-imgMat" style="margin-top:6px">
+            <option value="" data-no="＋ Sett inn kjent Montessorimateriell …" data-en="＋ Insert a known Montessori material …">＋ Sett inn kjent Montessorimateriell …</option>
+            <option data-desc="det rosa tårnet, ti rosa kuber stablet fra størst nederst til minst øverst">Det rosa tårnet</option>
+            <option data-desc="den brune trappa, ti brune treprismer lagt som en trapp fra tykkest til tynnest">Den brune trappa</option>
+            <option data-desc="de røde stengene, ti røde trestenger i økende lengde lagt fra lengst til kortest">De røde stengene</option>
+            <option data-desc="de røde og blå tallstengene, trestenger delt i vekslende røde og blå felt, lagt fra kortest til lengst">Tallstengene (røde og blå)</option>
+            <option data-desc="en sylinderblokk i tre, en rad sylindere i ulike størrelser, hver med en liten knott å holde i">Sylinderblokkene</option>
+            <option data-desc="det gylne perlematerialet, gylne perler som enkeltperler, tierstenger, hundreflater og en tusenkube lagt pent på en arbeidsmatte">Det gylne perlematerialet</option>
+            <option data-desc="frimerkespillet, mange små firkantede brikker i grønt, blått og rødt lagt i pene rader på en arbeidsmatte, med en flat treboks med rom for brikkene ved siden av">Frimerkespillet</option>
+            <option data-desc="sandpapirbokstaver, kort med enkeltbokstaver skåret i ru sandpapir på rosa og blå bakgrunn, som et barn følger med fingeren">Sandpapirbokstaver</option>
+            <option data-desc="praktisk liv, et lite trebrett med to små mugger for å helle vann, med en liten svamp ved siden av">Praktisk liv, helling</option>
+          </select>
         </div>
         <div>
           <label data-no="Hvem skal være med?" data-en="Who should be in it?">Hvem skal være med?</label>
@@ -493,6 +505,13 @@
       } else if(d&&d.error==='bad_password'){ pw=null; aiStatus('Feil passord. Prøv igjen.','Wrong password. Try again.'); }
       else { var det=(d&&d.detail)?' ('+d.detail+')':''; aiStatus('Fikk ikke laget bildet: '+((d&&d.error)||'?')+det+'. Prøv igjen.','Could not create the image: '+((d&&d.error)||'?')+det+'. Try again.'); }
     }).catch(function(){ btn.disabled=false; aiStatus('Nettverksfeil. Prøv igjen.','Network error. Try again.'); });
+  });
+
+  /* Materiell-velger: setter en utseende-beskrivelse inn i bildebeskrivelsen. */
+  document.getElementById('f-imgMat').addEventListener('change',function(){
+    var d=this.options[this.selectedIndex].getAttribute('data-desc');
+    if(d){ var f=document.getElementById('f-imgDesc'); f.value=f.value.trim()? (f.value.trim().replace(/[.,]\s*$/,'')+', '+d) : d; }
+    this.selectedIndex=0;
   });
 
   document.getElementById('ed-save').addEventListener('click',function(){
