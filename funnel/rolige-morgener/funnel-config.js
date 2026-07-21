@@ -21,6 +21,7 @@ window.LME_FUNNEL = {
       kortnavn: "LME",
       logo: "/images/lme-logo.png",
       optInActionUrl: "/api/mailerlite/subscribe", // sender leads til MailerLite-lista di
+      mailerliteGroup: "193598773523384199", // Rolige morgener-gruppa (trigger for velkomst-automasjonen)
       etterOptIn: "takk.html"
     },
 
@@ -80,6 +81,7 @@ window.LME_FUNNEL = {
       kortnavn: "LME",
       logo: "/images/lme-logo.png",
       optInActionUrl: "/api/mailerlite/subscribe", // sends leads to your MailerLite list
+      mailerliteGroup: "193598773523384199", // Rolige morgener-gruppa (trigger for velkomst-automasjonen)
       etterOptIn: "takk.html"
     },
 

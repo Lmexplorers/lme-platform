@@ -68,15 +68,15 @@ export async function onRequestPost(context) {
   const key = env.MAILERLITE_API_KEY;
   if (!key) return json({ error: "not_configured" }, 200);
 
-  let email = "", name = "", lang = "", tag = "";
+  let email = "", name = "", lang = "", tag = "", group = "";
   try {
     const ct = request.headers.get("Content-Type") || "";
     if (ct.indexOf("application/json") !== -1) {
       const b = await request.json();
-      email = (b.email || "") + ""; name = (b.name || "") + ""; lang = (b.lang || "") + ""; tag = (b.tag || "") + "";
+      email = (b.email || "") + ""; name = (b.name || "") + ""; lang = (b.lang || "") + ""; tag = (b.tag || "") + ""; group = (b.group || "") + "";
     } else {
       const form = new URLSearchParams(await request.text());
-      email = form.get("email") || ""; name = form.get("name") || ""; lang = form.get("lang") || ""; tag = form.get("tag") || "";
+      email = form.get("email") || ""; name = form.get("name") || ""; lang = form.get("lang") || ""; tag = form.get("tag") || ""; group = form.get("group") || "";
     }
   } catch (e) {
     return json({ error: "bad_body" }, 400);
@@ -90,7 +90,12 @@ export async function onRequestPost(context) {
   // Quiz-resultat lagres som eget felt saa lista kan segmenteres (krever et
   // tekstfelt "quiz_result" i MailerLite; ukjente felt ignoreres trygt).
   if (tag.trim()) payload.fields.quiz_result = tag.trim().slice(0, 60);
-  if (env.MAILERLITE_FUNNEL_GROUP) payload.groups = [env.MAILERLITE_FUNNEL_GROUP + ""];
+  // Grupper: en gruppe kan sendes med fra skjemaet (per funnel, f.eks.
+  // "Rolige morgener"), i tillegg til en eventuell standardgruppe fra miljoet.
+  const groups = [];
+  if (group.trim()) groups.push(group.trim().slice(0, 40));
+  if (env.MAILERLITE_FUNNEL_GROUP) groups.push(env.MAILERLITE_FUNNEL_GROUP + "");
+  if (groups.length) payload.groups = groups;
 
   try {
     const res = await fetch(ML + "/subscribers", {
