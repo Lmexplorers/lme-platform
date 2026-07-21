@@ -292,6 +292,8 @@ async function generateImage(body, env, request) {
   const MATERIALS =
     "Keep the setting an authentic Montessori prepared environment: real natural-wood Montessori equipment " +
     "arranged neatly on low open wooden shelves at child height, calm and uncluttered. " +
+    "Every material is solid matte natural wood with a soft real-wood grain, never glossy, never a shiny plastic look, never plastic. " +
+    "Any Montessori mathematics material uses the correct hierarchy colours: green for units, blue for tens, red for hundreds, and green again for thousands. " +
     "Absolutely never generic rainbow stacking toys or rainbow stackers, never Waldorf toys, never plastic toys, " +
     "never random colourful toy blocks and never a colourful board game.";
 
