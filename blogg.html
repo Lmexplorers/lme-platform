@@ -213,6 +213,24 @@
         <button class="btn btn-primary" type="button" id="ai-text" data-no="✨ Skriv innlegget" data-en="✨ Write the post">✨ Skriv innlegget</button>
         <button class="btn btn-ghost" type="button" id="ai-image" data-no="🎨 Lag toppbilde" data-en="🎨 Create header image">🎨 Lag toppbilde</button>
       </div>
+      <div style="margin-top:12px;display:grid;gap:8px">
+        <div>
+          <label data-no="Beskriv toppbildet (hva skal skje i bildet)" data-en="Describe the header image (what happens in it)">Beskriv toppbildet (hva skal skje i bildet)</label>
+          <input id="f-imgDesc" type="text"
+                 data-no-ph="F.eks. et barn som heller vann ved et lite kjøkkenbord i morgenlys"
+                 data-en-ph="E.g. a child pouring water at a small kitchen table in morning light"
+                 placeholder="F.eks. et barn som heller vann ved et lite kjøkkenbord i morgenlys">
+        </div>
+        <div>
+          <label data-no="Hvem skal være med?" data-en="Who should be in it?">Hvem skal være med?</label>
+          <select id="f-imgCast">
+            <option value="ingen" data-no="Ingen figurer, bare scene" data-en="No characters, just the scene">Ingen figurer, bare scene</option>
+            <option value="mia_teo" data-no="Mia og Teo" data-en="Mia and Teo">Mia og Teo</option>
+            <option value="andre" data-no="Andre barn" data-en="Other children">Andre barn</option>
+          </select>
+        </div>
+      </div>
+
       <div class="hint" id="aiStatus" style="margin:8px 0 0"
            data-no="Teksten kommer på både norsk og engelsk, klar til å leses over og lagres."
            data-en="The text arrives in both Norwegian and English, ready to review and save.">Teksten kommer på både norsk og engelsk, klar til å leses over og lagres.</div>
@@ -459,12 +477,14 @@
   });
   document.getElementById('ai-image').addEventListener('click',function(){
     var topic=document.getElementById('f-aiTopic').value.trim();
-    var prompt=lastImagePrompt || document.getElementById('f-titleEn').value.trim() || document.getElementById('f-titleNo').value.trim() || topic;
-    if(!prompt){ alert(lang==='no'?'Skriv et tema eller lag teksten først.':'Write a topic or create the text first.'); return; }
+    var desc=document.getElementById('f-imgDesc').value.trim();
+    var cast=document.getElementById('f-imgCast').value;
+    var prompt=desc || lastImagePrompt || document.getElementById('f-titleEn').value.trim() || document.getElementById('f-titleNo').value.trim() || topic;
+    if(!prompt){ alert(lang==='no'?'Beskriv bildet, eller skriv et tema først.':'Describe the image, or write a topic first.'); return; }
     var p=ensurePw(); if(!p) return;
     var btn=this; btn.disabled=true;
     aiStatus('🎨 Lager toppbildet, det tar gjerne ett minutt …','🎨 Creating the header image, this usually takes a minute …');
-    fetch('/api/blog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'generate-image',password:p,prompt:prompt})})
+    fetch('/api/blog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'generate-image',password:p,prompt:prompt,cast:cast})})
     .then(function(r){return r.json();}).then(function(d){
       btn.disabled=false;
       if(d&&d.ok&&d.url){

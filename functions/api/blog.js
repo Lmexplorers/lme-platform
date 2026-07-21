@@ -88,7 +88,7 @@ export async function onRequestPost(context) {
   const action = body.action || "save";
 
   if (action === "generate") return generateDraft(body, env);
-  if (action === "generate-image") return generateImage(body, env);
+  if (action === "generate-image") return generateImage(body, env, request);
 
   try {
     let index = [];
@@ -236,10 +236,12 @@ function parseDraft(text) {
 /* Lager toppbilde, lagrer det i KV og returnerer en kort adresse som kan
    brukes som bildelenke. Gemini foerst (Renates oppsett, samme kall som
    Bookly), deretter OpenAI og Stability som reserver hvis noekler finnes. */
-async function generateImage(body, env) {
+async function generateImage(body, env, request) {
   if (!env.BUILDER_KV) return json({ error: "not_configured" }, 200);
   const prompt = s(body.prompt, 1200).trim();
   if (!prompt) return json({ error: "missing_prompt" }, 400);
+  // Hvem skal vaere med: "mia_teo" | "andre" | "ingen" (standard: ingen).
+  const cast = s(body.cast, 20).trim().toLowerCase();
 
   const gKey = env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY;
   if (!gKey && !env.OPENAI_API_KEY && !env.STABILITY_API_KEY) {
@@ -247,17 +249,44 @@ async function generateImage(body, env) {
   }
 
   // Laast LME-stil: klar og skarp Pixar/Disney-look, aldri grumsete brunt.
-  // (Mia og Teo tas ikke med her, fordi ren tekst ikke gjenskaper figurene
-  // riktig. En egen versjon med referansebilde kan legges til senere.)
   const STYLE =
     "Premium 3D illustrated children's book style, soft rounded Pixar and Disney look, " +
     "crisp and sharp with clear focus, high detail, bright and vibrant colors, warm cinematic lighting, " +
     "gentle depth of field. LME brand palette: cerise pink, lime green, bright sky blue, lemon yellow, " +
     "soft cream, warm wood tones, nature greens. Never photorealistic, never muddy, dull or brown. " +
     "Absolutely no text, no words, no letters, no numbers, no logos, no watermark anywhere in the image.";
+  const MIA =
+    "Mia is a cheerful fictional cartoon girl: light blue eyes, golden blonde hair in a high ponytail " +
+    "with a pink bow, round Pixar face, small button nose, warm friendly smile, pink floral dress, white socks, pink shoes.";
+  const TEO =
+    "Teo is a friendly fictional cartoon boy: brown eyes, medium brown wavy hair, round Pixar face, " +
+    "warm smile, yellow and white striped shirt, blue shorts, brown shoes.";
+
+  // Figurer i bildet, styrt av valget i redigereren.
+  let castText = "";
+  let refPart = null;
+  if (cast === "mia_teo") {
+    castText =
+      " Include the two recurring LME characters, Mia and Teo, exactly matching the attached reference image (same faces, hair, clothes). " +
+      MIA + " " + TEO + " They are best friends exploring together, never romantic.";
+    // Hent det faste referansebildet, saa figurene blir like hver gang.
+    try {
+      const refUrl = new URL("/brand/references/mia-teo-6-8-final.png", request.url).toString();
+      const rr = await fetch(refUrl);
+      if (rr.ok) {
+        const buf = new Uint8Array(await rr.arrayBuffer());
+        let bin = "";
+        for (let i = 0; i < buf.length; i++) bin += String.fromCharCode(buf[i]);
+        refPart = { inlineData: { mimeType: "image/png", data: btoa(bin) } };
+      }
+    } catch (e) { /* uten referanse faller vi tilbake til bare tekst */ }
+  } else if (cast === "andre") {
+    castText = " Include one or two cheerful young children of varied appearance, naturally engaged in the scene.";
+  }
 
   const full =
-    "Wide landscape blog header illustration for a Montessori parenting blog: " + prompt + ". " + STYLE;
+    "Wide landscape blog header illustration for a Montessori parenting blog. Scene: " + prompt + "." +
+    castText + " " + STYLE;
 
   let b64 = null;
   let lastErr = "";
@@ -266,11 +295,13 @@ async function generateImage(body, env) {
   if (gKey) {
     try {
       const model = env.BOOKLY_GEMINI_MODEL || "gemini-2.5-flash-image";
+      const gParts = [{ text: full }];
+      if (refPart) gParts.push(refPart);
       const res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-goog-api-key": gKey },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: full }] }],
+          contents: [{ parts: gParts }],
           generationConfig: { responseModalities: ["TEXT", "IMAGE"] },
         }),
       });
