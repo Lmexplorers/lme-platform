@@ -202,10 +202,12 @@
 (function () {
   window.LME_CURRENT_LANG = 'no';
   try { window.LME_CURRENT_LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no'; } catch (e) {}
-  // Tillat ?lang=en / ?lang=no i lenken
+  // Tillat ?lang=en / ?lang=no i lenken. Dette styrer BARE visningen av denne
+  // siden (f.eks. /bloom-method), og skal ikke overstyre det globale
+  // plattformspraaket. Kun et bevisst klikk paa knappen lagrer valget.
   try {
     var q = new URLSearchParams(location.search).get('lang');
-    if (q === 'en' || q === 'no') { window.LME_CURRENT_LANG = q; localStorage.setItem('lme_lang', q); }
+    if (q === 'en' || q === 'no') { window.LME_CURRENT_LANG = q; }
   } catch (e) {}
 
   function apply() {
