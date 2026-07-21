@@ -64,7 +64,7 @@ window.LME_FUNNEL = {
       sekundaerLenke: "/creative-academy",
       angre: "Vil du ha ro i hele dagen, ikke bare om morgenen? Rolige morgener er ett av fem steg i ROLIG-metoden, signaturkurset mitt.",
       angreKnapp: "Se ROLIG-metoden",
-      angreLenke: "/academy",
+      angreLenke: "/rolig-metoden",
       butikkTekst: "Vil du utforske mer? Ta gjerne en rolig titt i butikken.",
       butikkKnapp: "Se butikken",
       butikkLenke: "/butikk"
@@ -123,7 +123,7 @@ window.LME_FUNNEL = {
       sekundaerLenke: "/creative-academy",
       angre: "Want calm across the whole day, not just the morning? Calm mornings are one of five steps in the BLOOM Method, my signature course.",
       angreKnapp: "See the BLOOM Method",
-      angreLenke: "/academy",
+      angreLenke: "/bloom-method",
       butikkTekst: "Want to explore more? Take a calm look around the shop.",
       butikkKnapp: "Visit the shop",
       butikkLenke: "/butikk"
