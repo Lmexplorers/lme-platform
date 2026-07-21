@@ -750,10 +750,12 @@
 
 <div class="container">
 
+  <button class="lang-fab" id="lme-lang" type="button" onclick="lmeToggleLang()" style="position:fixed;top:14px;left:16px;z-index:60;border:0;border-radius:999px;padding:9px 15px;font-family:inherit;font-weight:700;font-size:13.5px;cursor:pointer;background:#FCEFF2;color:#C13D6A;box-shadow:0 4px 14px rgba(26,26,26,0.10);">🇬🇧 English</button>
+
   <header class="header">
-    <span class="badge"><span class="badge-dot"></span>LME Inntektskalkulator</span>
-    <h1>Din vei til <em>skalerbar</em><br>inntekt som pedagog</h1>
-    <p class="subtitle">Få en personlig plan for hvordan du kan pakke kunnskapen din og selge den online, basert på din ekspertise og dine inntektsmål.</p>
+    <span class="badge"><span class="badge-dot"></span><span data-no="LME Inntektskalkulator" data-en="LME Income Calculator">LME Inntektskalkulator</span></span>
+    <h1 data-no="Din vei til <em>skalerbar</em><br>inntekt som pedagog" data-en="Your path to <em>scalable</em><br>income as an educator">Din vei til <em>skalerbar</em><br>inntekt som pedagog</h1>
+    <p class="subtitle" data-no="Få en personlig plan for hvordan du kan pakke kunnskapen din og selge den online, basert på din ekspertise og dine inntektsmål." data-en="Get a personal plan for how to package your knowledge and sell it online, based on your expertise and your income goals.">Få en personlig plan for hvordan du kan pakke kunnskapen din og selge den online, basert på din ekspertise og dine inntektsmål.</p>
   </header>
 
   <div class="progress">
@@ -766,17 +768,17 @@
   <!-- STEP 1: Expertise -->
   <div class="step active" id="step1">
     <div class="card">
-      <span class="step-label">💡 Din ekspertise</span>
-      <h2>Fortell om bakgrunnen din</h2>
-      <p class="description">Beskriv kort hva du kan, hva du har erfaring med, og hva du allerede har laget eller drømmer om å lage. Jo mer ærlig og konkret, jo bedre forslag.</p>
+      <span class="step-label" data-no="💡 Din ekspertise" data-en="💡 Your expertise">💡 Din ekspertise</span>
+      <h2 data-no="Fortell om bakgrunnen din" data-en="Tell me about your background">Fortell om bakgrunnen din</h2>
+      <p class="description" data-no="Beskriv kort hva du kan, hva du har erfaring med, og hva du allerede har laget eller drømmer om å lage. Jo mer ærlig og konkret, jo bedre forslag." data-en="Briefly describe what you're good at, what you have experience with, and what you've already made or dream of making. The more honest and specific, the better the suggestions.">Beskriv kort hva du kan, hva du har erfaring med, og hva du allerede har laget eller drømmer om å lage. Jo mer ærlig og konkret, jo bedre forslag.</p>
 
-      <textarea id="expertise" placeholder="F.eks: Jeg er Montessoripedagog med 15 års erfaring fra barnehage og skole. Jeg har laget e-bøker og arbeidsark, og drømmer om å lære andre pedagoger hvordan de kan lage egne digitale læremidler..."></textarea>
+      <textarea id="expertise" data-no-ph="F.eks: Jeg er Montessoripedagog med 15 års erfaring fra barnehage og skole. Jeg har laget e-bøker og arbeidsark, og drømmer om å lære andre pedagoger hvordan de kan lage egne digitale læremidler..." data-en-ph="E.g. I'm a Montessori educator with 15 years of experience from kindergarten and school. I've made e-books and worksheets, and dream of teaching other educators how to create their own digital learning materials..." placeholder="F.eks: Jeg er Montessoripedagog med 15 års erfaring fra barnehage og skole. Jeg har laget e-bøker og arbeidsark, og drømmer om å lære andre pedagoger hvordan de kan lage egne digitale læremidler..."></textarea>
 
       <div class="button-row">
         <span></span>
         <div class="btn-wrap">
-          <button class="btn btn-primary" id="toStep2" disabled>Generer forslag →</button>
-          <span class="btn-hint">Neste: dine personlige tilbudsideer</span>
+          <button class="btn btn-primary" id="toStep2" disabled data-no="Generer forslag →" data-en="Generate suggestions →">Generer forslag →</button>
+          <span class="btn-hint" data-no="Neste: dine personlige tilbudsideer" data-en="Next: your personal offer ideas">Neste: dine personlige tilbudsideer</span>
         </div>
       </div>
     </div>
@@ -785,19 +787,19 @@
   <!-- STEP 2: Offer ideas -->
   <div class="step" id="step2">
     <div class="card">
-      <span class="step-label">✨ Personlig for deg</span>
-      <h2>Her er dine digitale tilbudsideer</h2>
-      <p class="description">Basert på ekspertisen din, slik kan du pakke det og selge det online. Klikk på et kort for detaljer.</p>
+      <span class="step-label" data-no="✨ Personlig for deg" data-en="✨ Personal to you">✨ Personlig for deg</span>
+      <h2 data-no="Her er dine digitale tilbudsideer" data-en="Here are your digital offer ideas">Her er dine digitale tilbudsideer</h2>
+      <p class="description" data-no="Basert på ekspertisen din, slik kan du pakke det og selge det online. Klikk på et kort for detaljer." data-en="Based on your expertise, here's how you can package it and sell it online. Click a card for details.">Basert på ekspertisen din, slik kan du pakke det og selge det online. Klikk på et kort for detaljer.</p>
 
       <div class="offer-grid" id="offerGrid">
         <!-- Generated by JS -->
       </div>
 
       <div class="button-row">
-        <button class="btn btn-back" onclick="goToStep(1)">← Tilbake</button>
+        <button class="btn btn-back" onclick="goToStep(1)" data-no="← Tilbake" data-en="← Back">← Tilbake</button>
         <div class="btn-wrap">
-          <button class="btn btn-primary" onclick="goToStep(3)">Beregn inntektspotensial →</button>
-          <span class="btn-hint">Neste: sett inntektsmål og se hva som skal til</span>
+          <button class="btn btn-primary" onclick="goToStep(3)" data-no="Beregn inntektspotensial →" data-en="Calculate income potential →">Beregn inntektspotensial →</button>
+          <span class="btn-hint" data-no="Neste: sett inntektsmål og se hva som skal til" data-en="Next: set your income goal and see what it takes">Neste: sett inntektsmål og se hva som skal til</span>
         </div>
       </div>
     </div>
@@ -806,14 +808,14 @@
   <!-- STEP 3: Income goal + calculations -->
   <div class="step" id="step3">
     <div class="card">
-      <span class="step-label">🎯 Ditt inntektsmål</span>
-      <h2>Hvor mye vil du tjene?</h2>
-      <p class="description">Dra slideren eller velg et mål. Vi regner ut hvor mange salg du trenger på ulike prisnivåer.</p>
+      <span class="step-label" data-no="🎯 Ditt inntektsmål" data-en="🎯 Your income goal">🎯 Ditt inntektsmål</span>
+      <h2 data-no="Hvor mye vil du tjene?" data-en="How much do you want to earn?">Hvor mye vil du tjene?</h2>
+      <p class="description" data-no="Dra slideren eller velg et mål. Jeg regner ut hvor mange salg du trenger på ulike prisnivåer." data-en="Drag the slider or pick a goal. I'll work out how many sales you need at different price points.">Dra slideren eller velg et mål. Jeg regner ut hvor mange salg du trenger på ulike prisnivåer.</p>
 
       <div style="text-align: center;">
         <div class="toggle-period">
-          <button id="togglePerMonth" class="active" onclick="setPeriod('month')">Per måned</button>
-          <button id="togglePerYear" onclick="setPeriod('year')">Per år</button>
+          <button id="togglePerMonth" class="active" onclick="setPeriod('month')" data-no="Per måned" data-en="Per month">Per måned</button>
+          <button id="togglePerYear" onclick="setPeriod('year')" data-no="Per år" data-en="Per year">Per år</button>
         </div>
 
         <div class="preset-amounts" id="presetAmounts">
@@ -832,23 +834,23 @@
     </div>
 
     <div class="card">
-      <h2 style="font-size: 1.5rem; margin-bottom: 8px;">Slik kan du nå målet</h2>
-      <p class="description">Antall salg per måned ved ulike prisnivåer.</p>
+      <h2 style="font-size: 1.5rem; margin-bottom: 8px;" data-no="Slik kan du nå målet" data-en="How you can reach it">Slik kan du nå målet</h2>
+      <p class="description" data-no="Antall salg per måned ved ulike prisnivåer." data-en="Number of sales per month at different price points.">Antall salg per måned ved ulike prisnivåer.</p>
 
       <div class="calc-grid" id="calcGrid">
         <!-- Generated by JS -->
       </div>
 
       <div class="insight">
-        <div class="insight-title">✨ Det smarte trikset</div>
-        <p>De mest vellykkede online-skaperne baserer seg ikke på <em>ett</em> tilbud. De stabler dem: et kurs som leder inn i et gruppeprogram, med 1-1 coaching som premium oppsalg. Da kan du nå målet ditt med færre salg av hvert tilbud.</p>
+        <div class="insight-title" data-no="✨ Det smarte trikset" data-en="✨ The clever trick">✨ Det smarte trikset</div>
+        <p data-no="De mest vellykkede online-skaperne baserer seg ikke på <em>ett</em> tilbud. De stabler dem: et kurs som leder inn i et gruppeprogram, med 1-1 coaching som premium oppsalg. Da kan du nå målet ditt med færre salg av hvert tilbud." data-en="The most successful online creators don't rely on <em>one</em> offer. They stack them: a course that leads into a group program, with 1-1 coaching as a premium upsell. That way you can reach your goal with fewer sales of each offer.">De mest vellykkede online-skaperne baserer seg ikke på <em>ett</em> tilbud. De stabler dem: et kurs som leder inn i et gruppeprogram, med 1-1 coaching som premium oppsalg. Da kan du nå målet ditt med færre salg av hvert tilbud.</p>
       </div>
 
       <div class="button-row">
-        <button class="btn btn-back" onclick="goToStep(2)">← Tilbake</button>
+        <button class="btn btn-back" onclick="goToStep(2)" data-no="← Tilbake" data-en="← Back">← Tilbake</button>
         <div class="btn-wrap">
-          <button class="btn btn-primary" onclick="goToStep(4)">Se min personlige plan →</button>
-          <span class="btn-hint">Neste: din skreddersydde handlingsplan</span>
+          <button class="btn btn-primary" onclick="goToStep(4)" data-no="Se min personlige plan →" data-en="See my personal plan →">Se min personlige plan →</button>
+          <span class="btn-hint" data-no="Neste: din skreddersydde handlingsplan" data-en="Next: your tailored action plan">Neste: din skreddersydde handlingsplan</span>
         </div>
       </div>
     </div>
@@ -857,19 +859,19 @@
   <!-- STEP 4: Personalised plan -->
   <div class="step" id="step4">
     <div class="card">
-      <span class="step-label">🌸 Din personlige plan</span>
-      <h2>Her er det vi har bygget for deg</h2>
-      <p class="description">Velg det tilbudet du er mest klar til å skape først.</p>
+      <span class="step-label" data-no="🌸 Din personlige plan" data-en="🌸 Your personal plan">🌸 Din personlige plan</span>
+      <h2 data-no="Her er det jeg har bygget for deg" data-en="Here's what I've built for you">Her er det jeg har bygget for deg</h2>
+      <p class="description" data-no="Velg det tilbudet du er mest klar til å skape først." data-en="Choose the offer you're most ready to create first.">Velg det tilbudet du er mest klar til å skape først.</p>
 
       <div class="summary-box">
-        <div class="summary-label">💡 Din ekspertise</div>
+        <div class="summary-label" data-no="💡 Din ekspertise" data-en="💡 Your expertise">💡 Din ekspertise</div>
         <p class="summary-text" id="summaryExpertise"></p>
         <hr class="summary-divider">
-        <div class="summary-label">🎯 Ditt inntektsmål</div>
+        <div class="summary-label" data-no="🎯 Ditt inntektsmål" data-en="🎯 Your income goal">🎯 Ditt inntektsmål</div>
         <p class="summary-text" id="summaryGoal"></p>
       </div>
 
-      <h3 style="font-family: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif; font-size: 1.5rem; font-weight: 500; margin: 32px 0 16px;">Hvilket tilbud frister deg mest?</h3>
+      <h3 style="font-family: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif; font-size: 1.5rem; font-weight: 500; margin: 32px 0 16px;" data-no="Hvilket tilbud frister deg mest?" data-en="Which offer tempts you most?">Hvilket tilbud frister deg mest?</h3>
 
       <div class="offer-grid" id="finalOfferGrid">
         <!-- Generated by JS -->
@@ -882,26 +884,57 @@
       </div>
 
       <div class="button-row">
-        <button class="btn btn-back" onclick="goToStep(3)">← Tilbake</button>
+        <button class="btn btn-back" onclick="goToStep(3)" data-no="← Tilbake" data-en="← Back">← Tilbake</button>
         <div class="btn-wrap">
-          <button class="btn btn-primary" onclick="showPlan()">Vis meg hvordan →</button>
-          <span class="btn-hint">Få din neste handling</span>
+          <button class="btn btn-primary" onclick="showPlan()" data-no="Vis meg hvordan →" data-en="Show me how →">Vis meg hvordan →</button>
+          <span class="btn-hint" data-no="Få din neste handling" data-en="Get your next action">Få din neste handling</span>
         </div>
       </div>
 
       <div class="reset-link">
-        <button onclick="reset()">Start på nytt</button>
+        <button onclick="reset()" data-no="Start på nytt" data-en="Start over">Start på nytt</button>
       </div>
     </div>
   </div>
 
-  <div class="footer">
+  <div class="footer" data-no="Drevet av <span>Little Montessori Explorers</span> · lmexplorers.com" data-en="Powered by <span>Little Montessori Explorers</span> · lmexplorers.com">
     Drevet av <span>Little Montessori Explorers</span> · lmexplorers.com
   </div>
 
 </div>
 
 <script>
+  // ---- Språk (no / en) ----
+  let LANG = 'no';
+  try { LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no'; } catch (e) {}
+  try { var _q = new URLSearchParams(location.search).get('lang'); if (_q === 'en' || _q === 'no') { LANG = _q; localStorage.setItem('lme_lang', _q); } } catch (e) {}
+
+  // Fast UI-tekst per språk (det som lages av JS)
+  const UI = {
+    no: {
+      goalMonth: function (y) { return 'per måned · ' + y + '/år'; },
+      goalYear: function (m) { return 'per år · ' + m + '/mnd'; },
+      salesUnit: 'salg/mnd', membersUnit: 'medlemmer/mnd',
+      toLabel: 'Til', perMoSmall: '/mnd', perMoShort: '/mnd', perYrShort: '/år',
+      ideaLabel: 'DIN PERSONLIGE IDÉ', priceLabel: 'Foreslått pris', perfectLabel: 'Perfekt for',
+      pickFirst: 'Velg et tilbud først 🌸',
+      planMsg: '🌸 Flott valg!\n\nI neste versjon kobles dette til en handlingsplan og dine LME-ressurser. Akkurat nå er dette en demo som viser hvordan kalkulatoren fungerer for deg og medlemmene dine.',
+      cur: 'kr', locale: 'nb-NO'
+    },
+    en: {
+      goalMonth: function (y) { return 'per month · ' + y + '/yr'; },
+      goalYear: function (m) { return 'per year · ' + m + '/mo'; },
+      salesUnit: 'sales/mo', membersUnit: 'members/mo',
+      toLabel: 'At', perMoSmall: '/mo', perMoShort: '/mo', perYrShort: '/yr',
+      ideaLabel: 'YOUR PERSONAL IDEA', priceLabel: 'Suggested price', perfectLabel: 'Perfect for',
+      pickFirst: 'Pick an offer first 🌸',
+      planMsg: '🌸 Great choice!\n\nIn the next version this connects to an action plan and your LME resources. Right now this is a demo showing how the calculator works for you and your members.',
+      cur: 'NOK', locale: 'en-US'
+    }
+  };
+  // Velger no/en-verdi fra et { no, en }-objekt
+  function L(o) { return (o && (o[LANG] !== undefined ? o[LANG] : o.no)); }
+
   // State
   const state = {
     step: 1,
@@ -922,49 +955,49 @@
     year: { min: 100000, max: 12000000 }
   };
 
-  // Offer templates (will be customised based on expertise keywords)
+  // Offer templates (tospråklig)
   const offerTemplates = {
     group: {
       icon: '👥',
-      type: 'GRUPPEPROGRAM',
-      price: '4 997 – 49 997 kr',
-      title: 'Pedagog-akademiet: Bygg din digitale praksis',
-      desc: 'Bli med i et 8-ukers kohortprogram der vi går i dybden på hvordan du kan pakke pedagogisk kunnskap, lage digitale produkter og bygge en bærekraftig online-virksomhet.'
+      type: { no: 'GRUPPEPROGRAM', en: 'GROUP PROGRAM' },
+      price: { no: '4 997 til 49 997 kr', en: '4,997 to 49,997 NOK' },
+      title: { no: 'Pedagog-akademiet: Bygg din digitale praksis', en: 'The Educator Academy: Build your digital practice' },
+      desc: { no: 'Bli med i et 8-ukers kohortprogram der vi går i dybden på hvordan du kan pakke pedagogisk kunnskap, lage digitale produkter og bygge en bærekraftig online-virksomhet.', en: 'Join an 8-week cohort program where we go deep on how to package your teaching knowledge, create digital products and build a sustainable online business.' }
     },
     membership: {
       icon: '👑',
-      type: 'MEDLEMSKAP',
-      price: '297 – 2 997 kr/mnd',
-      title: 'Little Montessori Explorers Community',
-      desc: 'Bli medlem av et levende fellesskap for pedagoger som vil utvikle og selge digitale læremidler. Få tilgang til ressurser, AI-verktøy og månedlige workshops.'
+      type: { no: 'MEDLEMSKAP', en: 'MEMBERSHIP' },
+      price: { no: '297 til 2 997 kr/mnd', en: '297 to 2,997 NOK/mo' },
+      title: { no: 'Little Montessori Explorers Community', en: 'Little Montessori Explorers Community' },
+      desc: { no: 'Bli medlem av et levende fellesskap for pedagoger som vil utvikle og selge digitale læremidler. Få tilgang til ressurser, AI-verktøy og månedlige workshops.', en: 'Become a member of a vibrant community for educators who want to build and sell digital learning materials. Get access to resources, AI tools and monthly workshops.' }
     },
     course: {
       icon: '📚',
-      type: 'NETTKURS',
-      price: '997 – 19 997 kr',
-      title: 'Fra pedagog til digital skaper',
-      desc: 'Et selvstudiekurs designet for pedagoger som vil lære å lage og selge digitale læremidler — fra idé til ferdig produkt og lansering.'
+      type: { no: 'NETTKURS', en: 'ONLINE COURSE' },
+      price: { no: '997 til 19 997 kr', en: '997 to 19,997 NOK' },
+      title: { no: 'Fra pedagog til digital skaper', en: 'From educator to digital creator' },
+      desc: { no: 'Et selvstudiekurs designet for pedagoger som vil lære å lage og selge digitale læremidler, fra idé til ferdig produkt og lansering.', en: 'A self-study course designed for educators who want to learn to create and sell digital learning materials, from idea to finished product and launch.' }
     },
     coaching: {
       icon: '🌷',
-      type: '1-1 COACHING',
-      price: '1 497 – 99 997 kr',
-      title: 'Personlig pedagog-coaching',
-      desc: 'Få 1-1 mentorskap tilpasset din unike stil og nisje, med fokus på hvordan du kan bygge en pedagogisk virksomhet som matcher livet ditt.'
+      type: { no: '1-1 COACHING', en: '1-1 COACHING' },
+      price: { no: '1 497 til 99 997 kr', en: '1,497 to 99,997 NOK' },
+      title: { no: 'Personlig pedagog-coaching', en: 'Personal educator coaching' },
+      desc: { no: 'Få 1-1 mentorskap tilpasset din unike stil og nisje, med fokus på hvordan du kan bygge en pedagogisk virksomhet som matcher livet ditt.', en: 'Get 1-1 mentorship tailored to your unique style and niche, focused on building a teaching business that fits your life.' }
     }
   };
 
-  // Final selection options
+  // Final selection options (tospråklig)
   const finalOffers = [
-    { key: 'group', icon: '👥', title: 'Gruppeprogram', desc: 'Live, kohort-basert, høy transformasjon, premium pris' },
-    { key: 'membership', icon: '👑', title: 'Medlemskap', desc: 'Tilbakevendende inntekt: fellesskap, innhold og støtte' },
-    { key: 'course', icon: '📚', title: 'Nettkurs', desc: 'Selvstudie digitalt produkt, skalerbart uten din tid' },
-    { key: 'coaching', icon: '🌷', title: '1-1 Coaching', desc: 'Høyeste pris, dyp personlig transformasjon' }
+    { key: 'group', icon: '👥', title: { no: 'Gruppeprogram', en: 'Group program' }, desc: { no: 'Live, kohort-basert, høy transformasjon, premium pris', en: 'Live, cohort-based, high transformation, premium price' } },
+    { key: 'membership', icon: '👑', title: { no: 'Medlemskap', en: 'Membership' }, desc: { no: 'Tilbakevendende inntekt: fellesskap, innhold og støtte', en: 'Recurring income: community, content and support' } },
+    { key: 'course', icon: '📚', title: { no: 'Nettkurs', en: 'Online course' }, desc: { no: 'Selvstudie digitalt produkt, skalerbart uten din tid', en: 'Self-study digital product, scalable without your time' } },
+    { key: 'coaching', icon: '🌷', title: { no: '1-1 Coaching', en: '1-1 Coaching' }, desc: { no: 'Høyeste pris, dyp personlig transformasjon', en: 'Highest price, deep personal transformation' } }
   ];
 
-  // Format Norwegian currency
+  // Format valuta etter språk
   function formatKr(amount) {
-    return new Intl.NumberFormat('nb-NO').format(Math.round(amount)) + ' kr';
+    return new Intl.NumberFormat(UI[LANG].locale).format(Math.round(amount)) + ' ' + UI[LANG].cur;
   }
 
   // Update progress bar
@@ -1011,10 +1044,10 @@
       card.className = 'offer-card';
       card.innerHTML = `
         <span class="offer-icon">${o.icon}</span>
-        <div class="offer-type">${o.type}</div>
-        <div class="offer-price">${o.price}</div>
-        <div class="offer-title">${o.title}</div>
-        <p class="offer-desc">${o.desc}</p>
+        <div class="offer-type">${L(o.type)}</div>
+        <div class="offer-price">${L(o.price)}</div>
+        <div class="offer-title">${L(o.title)}</div>
+        <p class="offer-desc">${L(o.desc)}</p>
       `;
       grid.appendChild(card);
     });
@@ -1080,9 +1113,9 @@
   function updateGoalDisplay() {
     document.getElementById('goalAmount').textContent = formatKr(state.goal);
     if (state.period === 'month') {
-      document.getElementById('goalPeriod').textContent = `per måned · ${formatKr(state.goal * 12)}/år`;
+      document.getElementById('goalPeriod').textContent = UI[LANG].goalMonth(formatKr(state.goal * 12));
     } else {
-      document.getElementById('goalPeriod').textContent = `per år · ${formatKr(state.goal / 12)}/mnd`;
+      document.getElementById('goalPeriod').textContent = UI[LANG].goalYear(formatKr(state.goal / 12));
     }
   }
 
@@ -1092,10 +1125,10 @@
     const grid = document.getElementById('calcGrid');
 
     const tiers = {
-      course: { icon: '📚', name: 'Nettkurs', prices: [997, 2997, 4997, 9997] },
-      group: { icon: '👥', name: 'Gruppeprogram', prices: [4997, 9997, 19997, 29997] },
-      membership: { icon: '👑', name: 'Medlemskap (månedlig)', prices: [297, 497, 997, 1997], isMembership: true },
-      coaching: { icon: '🌷', name: '1-1 Coaching', prices: [4997, 14997, 29997, 49997] }
+      course: { icon: '📚', name: { no: 'Nettkurs', en: 'Online course' }, prices: [997, 2997, 4997, 9997] },
+      group: { icon: '👥', name: { no: 'Gruppeprogram', en: 'Group program' }, prices: [4997, 9997, 19997, 29997] },
+      membership: { icon: '👑', name: { no: 'Medlemskap (månedlig)', en: 'Membership (monthly)' }, prices: [297, 497, 997, 1997], isMembership: true },
+      coaching: { icon: '🌷', name: { no: '1-1 Coaching', en: '1-1 Coaching' }, prices: [4997, 14997, 29997, 49997] }
     };
 
     grid.innerHTML = '';
@@ -1105,16 +1138,16 @@
       let rows = '';
       t.prices.forEach(price => {
         const sales = Math.ceil(monthly / price);
-        const unit = t.isMembership ? 'medlemmer/mnd' : 'salg/mnd';
+        const unit = t.isMembership ? UI[LANG].membersUnit : UI[LANG].salesUnit;
         rows += `
           <div class="calc-row">
-            <span class="calc-price"><small>Til</small> ${formatKr(price)}${t.isMembership ? '<small>/mnd</small>' : ''}</span>
+            <span class="calc-price"><small>${UI[LANG].toLabel}</small> ${formatKr(price)}${t.isMembership ? '<small>' + UI[LANG].perMoSmall + '</small>' : ''}</span>
             <span class="calc-sales">${sales} <small>${unit}</small></span>
           </div>
         `;
       });
       card.innerHTML = `
-        <div class="calc-card-title">${t.icon} ${t.name}</div>
+        <div class="calc-card-title">${t.icon} ${L(t.name)}</div>
         ${rows}
       `;
       grid.appendChild(card);
@@ -1124,7 +1157,7 @@
   // Final step (step 4)
   function renderFinalStep() {
     document.getElementById('summaryExpertise').textContent = state.expertise;
-    const periodLabel = state.period === 'month' ? `${formatKr(state.goal)}/mnd` : `${formatKr(state.goal)}/år`;
+    const periodLabel = state.period === 'month' ? `${formatKr(state.goal)}${UI[LANG].perMoShort}` : `${formatKr(state.goal)}${UI[LANG].perYrShort}`;
     document.getElementById('summaryGoal').textContent = periodLabel;
 
     const grid = document.getElementById('finalOfferGrid');
@@ -1135,8 +1168,8 @@
       if (state.selectedOffer === o.key) card.classList.add('selected');
       card.innerHTML = `
         <span class="offer-icon">${o.icon}</span>
-        <div class="offer-title" style="font-size: 20px; margin-bottom: 8px;">${o.title}</div>
-        <p class="offer-desc">${o.desc}</p>
+        <div class="offer-title" style="font-size: 20px; margin-bottom: 8px;">${L(o.title)}</div>
+        <p class="offer-desc">${L(o.desc)}</p>
       `;
       card.onclick = () => {
         state.selectedOffer = o.key;
@@ -1156,24 +1189,24 @@
     const idea = document.getElementById('personalIdea');
 
     const perfectFor = {
-      group: 'Pedagoger og skoleledere som vil bygge en digital virksomhet med høy transformasjon og premium pris.',
-      membership: 'Deg som vil ha forutsigbar tilbakevendende inntekt og bygge et fellesskap rundt din ekspertise.',
-      course: 'Deg som vil skape ett produkt og selge det mange ganger — uten å bytte tid mot penger.',
-      coaching: 'Deg som elsker dyp 1-1 kontakt og vil tjene mest mulig per time med høyt-betalende kunder.'
+      group: { no: 'Pedagoger og skoleledere som vil bygge en digital virksomhet med høy transformasjon og premium pris.', en: 'Educators and school leaders who want to build a digital business with high transformation and premium pricing.' },
+      membership: { no: 'Deg som vil ha forutsigbar tilbakevendende inntekt og bygge et fellesskap rundt din ekspertise.', en: 'You who want predictable recurring income and to build a community around your expertise.' },
+      course: { no: 'Deg som vil skape ett produkt og selge det mange ganger, uten å bytte tid mot penger.', en: 'You who want to create one product and sell it many times, without trading time for money.' },
+      coaching: { no: 'Deg som elsker dyp 1-1 kontakt og vil tjene mest mulig per time med høyt-betalende kunder.', en: 'You who love deep 1-1 connection and want to earn the most per hour with high-paying clients.' }
     };
 
     idea.innerHTML = `
-      <div class="summary-label">DIN PERSONLIGE IDÉ</div>
-      <h3>${o.title}</h3>
-      <p>${o.desc}</p>
+      <div class="summary-label">${UI[LANG].ideaLabel}</div>
+      <h3>${L(o.title)}</h3>
+      <p>${L(o.desc)}</p>
       <div class="idea-meta">
         <div class="idea-meta-item">
-          <div class="idea-meta-label">Foreslått pris</div>
-          <div class="idea-meta-value">${o.price}</div>
+          <div class="idea-meta-label">${UI[LANG].priceLabel}</div>
+          <div class="idea-meta-value">${L(o.price)}</div>
         </div>
         <div class="idea-meta-item">
-          <div class="idea-meta-label">Perfekt for</div>
-          <div class="idea-meta-value">${perfectFor[state.selectedOffer]}</div>
+          <div class="idea-meta-label">${UI[LANG].perfectLabel}</div>
+          <div class="idea-meta-value">${L(perfectFor[state.selectedOffer])}</div>
         </div>
       </div>
     `;
@@ -1182,10 +1215,10 @@
 
   function showPlan() {
     if (!state.selectedOffer) {
-      alert('Velg et tilbud først 🌸');
+      alert(UI[LANG].pickFirst);
       return;
     }
-    alert('🌸 Flott valg!\n\nIneste versjon kobles dette til en handlingsplan og dine LME-ressurser. Akkurat nå er dette en demo som viser hvordan kalkulatoren fungerer for deg og medlemmene dine.');
+    alert(UI[LANG].planMsg);
   }
 
   function reset() {
@@ -1199,8 +1232,34 @@
     goToStep(1);
   }
 
+  // ---- Språkbytte ----
+  function applyLang() {
+    document.documentElement.lang = LANG === 'en' ? 'en' : 'no';
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      el.innerHTML = LANG === 'en' ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    document.querySelectorAll('[data-no-ph][data-en-ph]').forEach(function (el) {
+      el.setAttribute('placeholder', LANG === 'en' ? el.getAttribute('data-en-ph') : el.getAttribute('data-no-ph'));
+    });
+    var b = document.getElementById('lme-lang');
+    if (b) b.textContent = LANG === 'en' ? '🇳🇴 Norsk' : '🇬🇧 English';
+    document.title = LANG === 'en' ? 'LME Income Calculator' : 'LME Inntektskalkulator';
+    // Bygg de JS-genererte delene på nytt i valgt språk
+    renderOffers();
+    renderPresets();
+    renderCalc();
+    updateGoalDisplay();
+    renderFinalStep();
+  }
+  window.lmeToggleLang = function () {
+    LANG = LANG === 'en' ? 'no' : 'en';
+    try { localStorage.setItem('lme_lang', LANG); } catch (e) {}
+    applyLang();
+    try { window.dispatchEvent(new Event('lme-lang')); } catch (e) {}
+  };
+
   // Init
-  renderPresets();
+  applyLang();
 </script>
 
 <script src="/js/lme-visibility.js" defer></script>
