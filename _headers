@@ -1,0 +1,6 @@
+# Redigeringssider skal alltid hentes ferske, saa mobilen ikke viser en
+# gammel mellomlagret versjon etter en oppdatering.
+/blogg
+  Cache-Control: no-store
+/blogg.html
+  Cache-Control: no-store
