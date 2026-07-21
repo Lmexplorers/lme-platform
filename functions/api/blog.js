@@ -246,9 +246,28 @@ async function generateImage(body, env) {
     return json({ error: "image_unavailable", detail: "ingen bildenøkkel (GEMINI_API_KEY) i Cloudflare-innstillingene" }, 200);
   }
 
+  // Laast LME-stil: klar og skarp Pixar/Disney-look, aldri grumsete brunt.
+  // Mia og Teo er med av og til (rundt 45% av gangene), ordrett fra merkevaren.
+  const STYLE =
+    "Premium 3D illustrated children's book style, soft rounded Pixar and Disney look, " +
+    "crisp and sharp with clear focus, high detail, bright and vibrant colors, warm cinematic lighting, " +
+    "gentle depth of field. LME brand palette: cerise pink, lime green, bright sky blue, lemon yellow, " +
+    "soft cream, warm wood tones, nature greens. Never photorealistic, never muddy, dull or brown. " +
+    "Absolutely no text, no words, no letters, no numbers, no logos, no watermark anywhere in the image.";
+  const MIA =
+    "Mia is a cheerful fictional cartoon girl: light blue eyes, golden blonde hair in a high ponytail " +
+    "with a pink bow, round Pixar face, small button nose, warm friendly smile, pink floral dress, " +
+    "white socks, pink shoes.";
+  const TEO =
+    "Teo is a friendly fictional cartoon boy: brown eyes, medium brown wavy hair, round Pixar face, " +
+    "warm smile, yellow and white striped shirt, blue shorts, brown shoes.";
+  const cast = Math.random() < 0.45
+    ? " " + MIA + " " + TEO + " They are best friends exploring together, never romantic."
+    : "";
+
   const full =
-    "Warm, inviting blog header illustration in wide landscape format for a Montessori parenting blog: " + prompt + ". " +
-    "Soft pastel palette with gentle pink and cream tones, cozy and natural, high quality, no text in the image.";
+    "Wide landscape blog header illustration for a Montessori parenting blog: " + prompt + "." +
+    cast + " " + STYLE;
 
   let b64 = null;
   let lastErr = "";
