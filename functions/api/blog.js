@@ -287,9 +287,17 @@ async function generateImage(body, env, request) {
     castText = " Include one or two cheerful young children of varied appearance, naturally engaged in the scene.";
   }
 
+  // Ekte, pedagogisk korrekt Montessorimateriell, aldri generiske regnbueleker.
+  const MATERIALS =
+    "Any learning materials shown must be authentic, pedagogically accurate Montessori materials, " +
+    "for example the pink tower, the brown stair, knobbed cylinder blocks, red rods, the golden bead material, " +
+    "wooden practical-life trays with real objects like a small jug for pouring, sandpaper letters and numbers, " +
+    "arranged neatly on low open wooden shelves at child height. " +
+    "Absolutely never generic rainbow stacking toys, never rainbow stackers, never Waldorf toys, never plastic toys, never random colourful blocks.";
+
   const full =
     "Wide landscape blog header illustration for a Montessori parenting blog. Scene: " + prompt + "." +
-    castText + " " + STYLE;
+    castText + " " + MATERIALS + " " + STYLE;
 
   let b64 = null;
   let lastErr = "";
