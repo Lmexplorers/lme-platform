@@ -133,6 +133,9 @@
   .modal{position:fixed;inset:0;z-index:200;display:none;align-items:flex-start;justify-content:center;
     background:rgba(61,36,56,.45);backdrop-filter:blur(4px);overflow-y:auto;padding:30px 16px;}
   .modal.show{display:flex;}
+  /* Skjul flytende knapper (Spor Renate AI, Gjor synlig) mens redigeringsvinduet er aapent,
+     saa de ikke dekker Lagre-knappen paa mobil. */
+  body.editing .rw-root, body.editing .lme-vis-fab { display:none !important; }
   .sheet{width:100%;max-width:760px;background:var(--warm-white);border-radius:var(--r-lg);
     box-shadow:var(--shadow-med);padding:28px;margin:auto;}
   .sheet h2{font-size:22px;margin-bottom:4px;}
@@ -468,8 +471,9 @@
       if(d&&d.post){document.getElementById('f-bodyNo').innerHTML=d.post.bodyNo||'';document.getElementById('f-bodyEn').innerHTML=d.post.bodyEn||'';} }); }
     document.getElementById('edTitle').textContent = id? (lang==='no'?'Rediger innlegg':'Edit post') : (lang==='no'?'Nytt innlegg':'New post');
     document.getElementById('editor').classList.add('show');
+    document.body.classList.add('editing');
   }
-  function closeEditor(){ document.getElementById('editor').classList.remove('show'); editingId=null; }
+  function closeEditor(){ document.getElementById('editor').classList.remove('show'); document.body.classList.remove('editing'); editingId=null; }
   document.getElementById('newPostBtn').addEventListener('click',function(){openEditor(null);});
   document.getElementById('ed-cancel').addEventListener('click',closeEditor);
 
