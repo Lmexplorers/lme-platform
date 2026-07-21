@@ -207,7 +207,7 @@
          data-en="Fill in Norwegian and English. The image link can be a path like /images/hero_learning_tree.webp or a full URL.">…</div>
 
     <div class="field">
-      <label data-no="🔑 Passord (skriv det inn én gang, for å lagre og laste opp)" data-en="🔑 Password (enter once, to save and upload)">🔑 Passord</label>
+      <label data-no="🔑 Passord (skriv det inn én gang, huskes på denne enheten)" data-en="🔑 Password (enter once, remembered on this device)">🔑 Passord</label>
       <input type="password" id="f-pw" autocomplete="current-password" data-no-ph="Passordet ditt" data-en-ph="Your password" placeholder="Passordet ditt">
     </div>
 
@@ -340,7 +340,7 @@
 
 <script>
 (function(){
-  var lang='no', posts=[], isDemo=false, activeCat='__all__', query='', editingId=null, pw=null;
+  var lang='no', posts=[], isDemo=false, activeCat='__all__', query='', editingId=null, pw=null; try{localStorage.removeItem('lme-edit-pw');}catch(e){}
 
   var DEMO=[
     {id:'demo1',category:'Montessori hjemme',categoryEn:'Montessori at home',readMin:'5 min',date:'2026-06-10',
@@ -472,14 +472,16 @@
   /* editor */
   function ensurePw(){
     if(pw) return pw;
+    try{ var s=localStorage.getItem('lme-edit-pw'); if(s){ pw=s; return pw; } }catch(e){}
     var f=document.getElementById('f-pw'); var v=f&&f.value?f.value.trim():'';
-    if(v){ pw=v; return pw; }
-    aiStatus('🔑 Skriv inn passordet i passord-feltet øverst, og prøv igjen.','🔑 Enter the password in the field at the top, then try again.');
+    if(v){ pw=v; try{ localStorage.setItem('lme-edit-pw',v); }catch(e){} return pw; }
+    aiStatus('🔑 Skriv inn passordet i passord-feltet øverst (det huskes etterpå), og prøv igjen.','🔑 Enter the password in the field at the top (it will be remembered), then try again.');
     if(f){ try{ f.focus(); f.scrollIntoView({block:'center'}); }catch(e){} }
     return null;
   }
   function openEditor(id){
     editingId=id||null; var p={};
+    try{ var _sp=localStorage.getItem('lme-edit-pw'); var _pf=document.getElementById('f-pw'); if(_pf&&_sp&&!_pf.value) _pf.value=_sp; }catch(e){}
     if(id){ for(var i=0;i<posts.length;i++){ if(posts[i].id===id){p=posts[i];break;} } }
     document.getElementById('f-titleNo').value=p.titleNo||'';
     document.getElementById('f-titleEn').value=p.titleEn||'';
@@ -539,7 +541,7 @@
         document.getElementById('f-bodyEn').innerHTML=dr.bodyEn||'';
         lastImagePrompt=dr.imagePrompt||'';
         aiStatus('✅ Utkastet er klart! Les over, juster det du vil, og trykk "Lag toppbilde" om du vil ha bilde.','✅ The draft is ready! Review it, adjust anything, and press "Create header image" if you want one.');
-      } else if(d&&d.error==='bad_password'){ pw=null; aiStatus('Feil passord. Prøv igjen.','Wrong password. Try again.'); }
+      } else if(d&&d.error==='bad_password'){ pw=null; try{localStorage.removeItem('lme-edit-pw');}catch(e){} aiStatus('Feil passord. Prøv igjen.','Wrong password. Try again.'); }
       else { var det2=(d&&d.detail)?' ('+d.detail+')':''; aiStatus('Fikk ikke skrevet innlegget: '+((d&&d.error)||'?')+det2+'. Prøv igjen.','Could not write the post: '+((d&&d.error)||'?')+det2+'. Try again.'); }
     }).catch(function(){ btn.disabled=false; aiStatus('Nettverksfeil. Prøv igjen.','Network error. Try again.'); });
   });
@@ -558,7 +560,7 @@
       if(d&&d.ok&&d.url){
         document.getElementById('f-image').value=d.url;
         aiStatus('✅ Toppbildet er klart og lagt inn som bildelenke. Lagre innlegget for å se det på bloggen.','✅ The header image is ready and set as the image link. Save the post to see it on the blog.');
-      } else if(d&&d.error==='bad_password'){ pw=null; aiStatus('Feil passord. Prøv igjen.','Wrong password. Try again.'); }
+      } else if(d&&d.error==='bad_password'){ pw=null; try{localStorage.removeItem('lme-edit-pw');}catch(e){} aiStatus('Feil passord. Prøv igjen.','Wrong password. Try again.'); }
       else { var det=(d&&d.detail)?' ('+d.detail+')':''; aiStatus('Fikk ikke laget bildet: '+((d&&d.error)||'?')+det+'. Prøv igjen.','Could not create the image: '+((d&&d.error)||'?')+det+'. Try again.'); }
     }).catch(function(){ btn.disabled=false; aiStatus('Nettverksfeil. Prøv igjen.','Network error. Try again.'); });
   });
@@ -580,7 +582,7 @@
       fetch('/api/blog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'upload-image',password:p,dataUrl:dataUrl})})
       .then(function(r){return r.json();}).then(function(d){
         if(d&&d.ok&&d.url){ done(d.url); status('ok'); }
-        else if(d&&d.error==='bad_password'){ pw=null; status('feilpassord'); }
+        else if(d&&d.error==='bad_password'){ pw=null; try{localStorage.removeItem('lme-edit-pw');}catch(e){} status('feilpassord'); }
         else { status('feil',(d&&d.error)||'?'); }
       }).catch(function(){ status('nettfeil'); });
     };
@@ -638,7 +640,7 @@
     .then(function(r){return r.json();}).then(function(d){
       btn.disabled=false; btn.textContent=lang==='no'?'Lagre innlegg':'Save post';
       if(d&&d.ok){ closeEditor(); load(); }
-      else if(d&&d.error==='bad_password'){ pw=null; alert(lang==='no'?'Feil passord.':'Wrong password.'); }
+      else if(d&&d.error==='bad_password'){ pw=null; try{localStorage.removeItem('lme-edit-pw');}catch(e){} alert(lang==='no'?'Feil passord.':'Wrong password.'); }
       else alert((lang==='no'?'Kunne ikke lagre: ':'Could not save: ')+((d&&d.error)||'?'));
     }).catch(function(){btn.disabled=false;btn.textContent='Lagre';alert('Nettverksfeil');});
   });
@@ -647,7 +649,7 @@
     if(!confirm(lang==='no'?'Slette dette innlegget?':'Delete this post?')) return;
     var p=ensurePw(); if(!p) return;
     fetch('/api/blog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'delete',password:p,id:id})})
-    .then(function(r){return r.json();}).then(function(d){ if(d&&d.ok) load(); else if(d&&d.error==='bad_password'){pw=null;alert(lang==='no'?'Feil passord.':'Wrong password.');} else alert('?'); });
+    .then(function(r){return r.json();}).then(function(d){ if(d&&d.ok) load(); else if(d&&d.error==='bad_password'){pw=null; try{localStorage.removeItem('lme-edit-pw');}catch(e){}alert(lang==='no'?'Feil passord.':'Wrong password.');} else alert('?'); });
   }
 
   /* owner reveal */
