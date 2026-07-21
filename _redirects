@@ -5,5 +5,7 @@
 /academy/kurs/*  /academy/kurs.html  200
 /g/*  /academy/gruppe.html  200
 /creative-studio  /creative-academy  301
+/rolige-morgener  /funnel/rolige-morgener/opt-in.html  200
+/calm-mornings  /funnel/rolige-morgener/opt-in.html?lang=en  200
 /brand/*  /dashboard.html  302
 /  /dashboard.html  302
