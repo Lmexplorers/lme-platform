@@ -573,6 +573,8 @@
   if(/(^|[#&?])rediger/.test(location.hash+location.search)) revealOwner();
   try{ if(localStorage.getItem('lme-blog-edit')==='1'||localStorage.getItem('lme-edit')==='1') revealOwner(); }catch(e){}
   document.addEventListener('keydown',function(e){ if((e.ctrlKey||e.metaKey)&&e.shiftKey&&(e.key==='E'||e.key==='e')) revealOwner(); });
+  // Mobil: reveal med en gang naar #rediger legges til, uten aa laste siden paa nytt.
+  window.addEventListener('hashchange',function(){ if(/rediger/.test(location.hash)) revealOwner(); });
 
   applyStatic(); load();
 })();
