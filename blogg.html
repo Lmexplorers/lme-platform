@@ -575,6 +575,18 @@
   document.addEventListener('keydown',function(e){ if((e.ctrlKey||e.metaKey)&&e.shiftKey&&(e.key==='E'||e.key==='e')) revealOwner(); });
   // Mobil: reveal med en gang naar #rediger legges til, uten aa laste siden paa nytt.
   window.addEventListener('hashchange',function(){ if(/rediger/.test(location.hash)) revealOwner(); });
+  // Mobilvennlig: trykk raskt fem ganger paa "Blogg"-overskriften for aa slaa paa redigering.
+  (function(){
+    var h=document.querySelector('.hero h1'); if(!h) return;
+    var taps=0, last=0;
+    h.style.cursor='pointer';
+    h.addEventListener('click',function(){
+      var now=Date.now();
+      if(now-last>1500) taps=0;
+      last=now; taps++;
+      if(taps>=5){ taps=0; revealOwner(); }
+    });
+  })();
 
   applyStatic(); load();
 })();
