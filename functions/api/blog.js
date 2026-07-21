@@ -274,13 +274,13 @@ async function generateImage(body, env, request) {
       MIA + " " + TEO + " They are best friends exploring together, never romantic.";
     // Hent det faste referansebildet, saa figurene blir like hver gang.
     try {
-      const refUrl = new URL("/brand/references/mia-teo-6-8-final.png", request.url).toString();
+      const refUrl = new URL("/bookly/refs/mia-teo-ref-2.jpg", request.url).toString();
       const rr = await fetch(refUrl);
       if (rr.ok) {
         const buf = new Uint8Array(await rr.arrayBuffer());
         let bin = "";
         for (let i = 0; i < buf.length; i++) bin += String.fromCharCode(buf[i]);
-        refPart = { inlineData: { mimeType: "image/png", data: btoa(bin) } };
+        refPart = { inlineData: { mimeType: "image/jpeg", data: btoa(bin) } };
       }
     } catch (e) { /* uten referanse faller vi tilbake til bare tekst */ }
   } else if (cast === "andre") {
@@ -318,26 +318,33 @@ async function generateImage(body, env, request) {
     }
   }
 
-  // 2) OpenAI som reserve
+  // 2) OpenAI som reserve. Rent kall som /api/image, uten response_format/quality
+  // (gpt-image-1 avviser de parameterne). Returnerer b64_json som standard.
   if (!b64 && env.OPENAI_API_KEY) {
-    const forsoek = [
-      { model: env.BOOKLY_IMAGE_MODEL || "gpt-image-1", body: { size: "1536x1024", quality: "medium", n: 1 } },
-      { model: "dall-e-3", body: { size: "1792x1024", response_format: "b64_json", n: 1 } },
-    ];
-    for (const f of forsoek) {
-      try {
-        const res = await fetch("https://api.openai.com/v1/images/generations", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Authorization": "Bearer " + env.OPENAI_API_KEY },
-          body: JSON.stringify(Object.assign({ model: f.model, prompt: full }, f.body)),
-        });
-        const data = await res.json().catch(() => null);
-        const got = data && data.data && data.data[0] && data.data[0].b64_json;
-        if (res.ok && got) { b64 = got; break; }
+    try {
+      const model = env.BOOKLY_IMAGE_MODEL || env.IMAGE_OPENAI_MODEL || "gpt-image-1";
+      const res = await fetch("https://api.openai.com/v1/images/generations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + env.OPENAI_API_KEY },
+        body: JSON.stringify({ model: model, prompt: full, size: "1536x1024", n: 1 }),
+      });
+      const data = await res.json().catch(() => null);
+      const item = data && data.data && data.data[0];
+      if (res.ok && item && item.b64_json) {
+        b64 = item.b64_json;
+      } else if (res.ok && item && item.url) {
+        const ir = await fetch(item.url);
+        if (ir.ok) {
+          const ibuf = new Uint8Array(await ir.arrayBuffer());
+          let ibin = "";
+          for (let i = 0; i < ibuf.length; i++) ibin += String.fromCharCode(ibuf[i]);
+          b64 = btoa(ibin);
+        }
+      } else {
         lastErr = (data && data.error && (data.error.message || data.error)) || ("HTTP " + res.status);
-      } catch (e) {
-        lastErr = String((e && e.message) || e);
       }
+    } catch (e) {
+      lastErr = String((e && e.message) || e);
     }
   }
 
