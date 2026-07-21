@@ -206,6 +206,11 @@
     <div class="hint" data-no="Fyll inn på norsk og engelsk. Bildelenke kan være en sti som /images/hero_learning_tree.webp eller en full nettadresse."
          data-en="Fill in Norwegian and English. The image link can be a path like /images/hero_learning_tree.webp or a full URL.">…</div>
 
+    <div class="field">
+      <label data-no="🔑 Passord (skriv det inn én gang, for å lagre og laste opp)" data-en="🔑 Password (enter once, to save and upload)">🔑 Passord</label>
+      <input type="password" id="f-pw" autocomplete="current-password" data-no-ph="Passordet ditt" data-en-ph="Your password" placeholder="Passordet ditt">
+    </div>
+
     <div class="field" id="aiBox" style="background:#FFF4F6;border:1.5px dashed #F5A8B8;border-radius:14px;padding:14px 16px">
       <label data-no="✨ La KI lage utkastet for deg" data-en="✨ Let AI draft it for you">✨ La KI lage utkastet for deg</label>
       <input id="f-aiTopic" type="text"
@@ -324,7 +329,7 @@
       <div class="rich" id="f-bodyEn" contenteditable="true"></div>
     </div>
 
-    <input type="file" id="bodyImgUpload" accept="image/*" style="display:none">
+    <input type="file" id="bodyImgUpload" accept="image/*" multiple style="display:none">
 
     <div class="sheet-actions">
       <button class="btn btn-ghost" id="ed-cancel" data-no="Avbryt" data-en="Cancel">Avbryt</button>
@@ -465,7 +470,14 @@
   document.getElementById('searchInput').addEventListener('input',function(e){query=e.target.value.trim();activeCat='__all__';render();});
 
   /* editor */
-  function ensurePw(){ if(pw)return pw; pw=prompt(lang==='no'?'Skriv inn passord for å lagre:':'Enter password to save:'); return pw; }
+  function ensurePw(){
+    if(pw) return pw;
+    var f=document.getElementById('f-pw'); var v=f&&f.value?f.value.trim():'';
+    if(v){ pw=v; return pw; }
+    aiStatus('🔑 Skriv inn passordet i passord-feltet øverst, og prøv igjen.','🔑 Enter the password in the field at the top, then try again.');
+    if(f){ try{ f.focus(); f.scrollIntoView({block:'center'}); }catch(e){} }
+    return null;
+  }
   function openEditor(id){
     editingId=id||null; var p={};
     if(id){ for(var i=0;i<posts.length;i++){ if(posts[i].id===id){p=posts[i];break;} } }
@@ -592,13 +604,17 @@
 
   /* Flere bilder i brødteksten, via "🖼 Bilde"-knappen i verktoylinja. */
   document.getElementById('bodyImgUpload').addEventListener('change',function(){
-    var file=this.files&&this.files[0]; var tgt=window._bodyImgTarget; this.value=''; if(!file||!tgt) return;
-    uploadPhoto(file, function(s){
-      if(s==='laster') aiStatus(lang==='no'?'📷 Laster opp bildet …':'📷 Uploading …');
-      else if(s==='ok') aiStatus(lang==='no'?'✅ Bildet er satt inn i teksten.':'✅ Image inserted in the text.');
-      else if(s==='feilpassord') aiStatus(lang==='no'?'Feil passord. Prøv igjen.':'Wrong password. Try again.');
-      else aiStatus(lang==='no'?'Fikk ikke lastet opp bildet.':'Could not upload the image.');
-    }, function(u){ var el=document.getElementById(tgt); el.focus(); document.execCommand('insertHTML',false,'<img src="'+u+'" style="max-width:100%;border-radius:10px">'); });
+    var files=this.files, tgt=window._bodyImgTarget; this.value=''; if(!files||!files.length||!tgt) return;
+    var el=document.getElementById(tgt);
+    Array.prototype.forEach.call(files,function(file){
+      uploadPhoto(file, function(s){
+        if(s==='laster') aiStatus(lang==='no'?'📷 Laster opp bilde …':'📷 Uploading image …');
+        else if(s==='ok') aiStatus(lang==='no'?'✅ Bilde satt inn i teksten.':'✅ Image inserted in the text.');
+        else if(s==='feilpassord') aiStatus(lang==='no'?'Feil passord. Prøv igjen.':'Wrong password. Try again.');
+        else if(s==='lesefeil') aiStatus(lang==='no'?'Kunne ikke lese et bilde (prøv JPG eller PNG).':'Could not read an image (try JPG or PNG).');
+        else if(s!=='avbrutt') aiStatus(lang==='no'?'Fikk ikke lastet opp et bilde.':'Could not upload an image.');
+      }, function(u){ el.focus(); document.execCommand('insertHTML',false,'<img src="'+u+'" style="max-width:100%;border-radius:10px"><br>'); });
+    });
   });
 
   /* Materiell-velger: setter en utseende-beskrivelse inn i bildebeskrivelsen. */
