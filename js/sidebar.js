@@ -33,7 +33,7 @@
     '  <div class="sidebar-group-title"><span class="grp-emoji">💌</span> <span data-no="Markedsføring" data-en="Marketing">Markedsføring</span></div>',
     '  <a href="/forms" class="sidebar-item"><span class="si-icon">📝</span><span class="si-label">Forms</span></a>',
     '  <a href="/surveys" class="sidebar-item"><span class="si-icon">📋</span><span class="si-label">Surveys</span></a>',
-    '  <a href="/quizzes" class="sidebar-item"><span class="si-icon">❓</span><span class="si-label">Quizzes</span></a>',
+    '  <a href="/quizzes" class="sidebar-item"><span class="si-icon">❓</span><span class="si-label" data-no="Quiz" data-en="Quiz">Quiz</span></a>',
     '  <a href="/email" class="sidebar-item"><span class="si-icon">📧</span><span class="si-label">Email</span></a>',
     '  <a href="/automations" class="sidebar-item"><span class="si-icon">⚡</span><span class="si-label">Automations</span></a>',
     '</div>',
