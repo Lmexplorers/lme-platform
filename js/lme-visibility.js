@@ -251,7 +251,9 @@
     resultsEl.innerHTML = "";
     // Hent Blotato-kontoene i parallell så publiser-knappene er klare.
     Promise.all([
-      fetch(BASE + "/ai/repurpose", {
+      // Bruker Pages-funksjonen på samme domene (deployer med siden), ikke den
+      // separate workeren, så "Gjør synlig" alltid er oppdatert og tilgjengelig.
+      fetch("/api/ai/repurpose", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ article: article.slice(0, 6000), lang: lang() }),
       }).then(function (r) { return r.json(); }),
