@@ -109,18 +109,20 @@ async function emailForCustomer(env, customerId) {
    men legge kjøperen i MailerLite-gruppen "Claude-kurs, kjøpere", som
    trigger takke- og oppfølgingsautomasjonen. Betalingslenke-ID-ene under
    er hovedkurs (NO/USD) og mersalg (NO/USD). */
-const CLAUDE_PAYMENT_LINKS = new Set([
-  "plink_1TwFJWLax7B8uQzqsBQjTBxl", // Kom i gang med Claude (NOK)
-  "plink_1TwFJYLax7B8uQzqO1gObkcB", // Get started with Claude (USD)
-  "plink_1TwFJZLax7B8uQzqqjnXtmbR", // Videre med Claude, mersalg (NOK)
-  "plink_1TwFJbLax7B8uQzqB3CNr2yR", // Next Level with Claude, upsell (USD)
-]);
+const CLAUDE_GROUP_NO = "193772564746601912"; // "Claude-kurs, kjøpere"
+const CLAUDE_GROUP_EN = "193773243177371424"; // "Claude course, buyers"
+// Betalingslenke -> språk. NOK-lenker gir norsk automasjon, USD-lenker engelsk.
+const CLAUDE_PAYMENT_LINK_LANG = {
+  "plink_1TwFJWLax7B8uQzqsBQjTBxl": "no", // Kom i gang med Claude (NOK)
+  "plink_1TwFJZLax7B8uQzqqjnXtmbR": "no", // Videre med Claude, mersalg (NOK)
+  "plink_1TwFJYLax7B8uQzqO1gObkcB": "en", // Get started with Claude (USD)
+  "plink_1TwFJbLax7B8uQzqB3CNr2yR": "en", // Next Level with Claude, upsell (USD)
+};
 
-async function addToClaudeGroup(env, email, name) {
+async function addToClaudeGroup(env, email, name, groupId) {
   const key = env.MAILERLITE_API_KEY;
-  if (!key || !email) return;
-  const groupId = (env.MAILERLITE_CLAUDE_GROUP || "193772564746601912") + "";
-  const payload = { email: email.trim(), groups: [groupId] };
+  if (!key || !email || !groupId) return;
+  const payload = { email: email.trim(), groups: [groupId + ""] };
   if (name && name.trim()) payload.fields = { name: name.trim().slice(0, 100) };
   try {
     await fetch("https://connect.mailerlite.com/api/subscribers", {
@@ -156,10 +158,14 @@ export async function onRequestPost(context) {
   switch (event.type) {
     case "checkout.session.completed": {
       const email = (obj.customer_details && obj.customer_details.email) || obj.customer_email;
-      // Claude-kurset: legg kjøperen i MailerLite-gruppen, ikke Inner Circle.
-      if (obj.payment_link && CLAUDE_PAYMENT_LINKS.has(obj.payment_link)) {
+      // Claude-kurset: legg kjøperen i riktig språkgruppe, ikke Inner Circle.
+      const claudeLang = obj.payment_link && CLAUDE_PAYMENT_LINK_LANG[obj.payment_link];
+      if (claudeLang) {
         const name = (obj.customer_details && obj.customer_details.name) || "";
-        await addToClaudeGroup(env, email, name);
+        const groupId = claudeLang === "en"
+          ? (env.MAILERLITE_CLAUDE_GROUP_EN || CLAUDE_GROUP_EN)
+          : (env.MAILERLITE_CLAUDE_GROUP_NO || CLAUDE_GROUP_NO);
+        await addToClaudeGroup(env, email, name, groupId);
         break;
       }
       await grant(env, email, { customer: obj.customer, sub: obj.subscription });
