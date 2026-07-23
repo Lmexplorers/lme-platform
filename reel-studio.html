@@ -176,10 +176,25 @@
   <section class="step" id="step3">
     <div class="step-num"><span>3</span> <span data-i18n="s3-num">Publiser</span></div>
     <h2 data-i18n="s3-h">Legg ut automatisk</h2>
-    <p class="lead" data-i18n="s3-lead">Bruker de samme kontoene som Publiser alle. Er de ikke koblet enda, gjør du det der først.</p>
+    <p class="lead" data-i18n="s3-lead">Bruker Blotato-kontoene dine automatisk. Legg ut nå, eller planlegg til en fremtidig dato.</p>
+    <label style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--ink-soft);cursor:pointer;margin-bottom:4px;">
+      <input type="checkbox" id="schedOn" style="width:auto;" onchange="toggleSched()"> <span data-i18n="s3-sched">📅 Planlegg til senere (90-dagers plan)</span>
+    </label>
+    <div class="row" id="schedFields" style="display:none;margin-bottom:6px;">
+      <div class="grow"><label class="fld" for="schedDate" data-i18n="s3-date">Dato</label><input type="date" id="schedDate"></div>
+      <div class="grow"><label class="fld" for="schedTime" data-i18n="s3-time">Tid</label><input type="time" id="schedTime" value="09:00"></div>
+    </div>
     <button class="btn cerise block" id="igBtn" onclick="publishReel('instagram',this)">📸 <span data-i18n="s3-ig">Publiser til Instagram Reels</span></button>
     <button class="btn cerise block" id="ttBtn" onclick="publishReel('tiktok',this)">🎵 <span data-i18n="s3-tt">Publiser til TikTok</span></button>
     <div class="pubmsg" id="pubmsg"></div>
+  </section>
+
+  <!-- PLANEN -->
+  <section class="step" id="planStep">
+    <div class="step-num"><span>📅</span> <span data-i18n="pl-num">Planen din</span></div>
+    <h2 data-i18n="pl-h">Planlagte reels</h2>
+    <p class="lead" data-i18n="pl-lead">Reels du har planlagt fremover. Blotato legger dem ut automatisk til rett tid. Lagres her, også etter at du lukker siden.</p>
+    <div id="planList"></div>
   </section>
 </main>
 
@@ -196,13 +211,18 @@ const I18N = {
     "s1-src":"Innhold eller idé","s1-ph":"F.eks: Tre enkle Montessori-aktiviteter i kjøkkenet for barn 3-6 år…","s1-len":"Lengde","s1-btn":"🎬 Lag reel",
     "s2-num":"Video","s2-h":"Lag selve videoen","s2-lead":"Bruk b-roll-promptene og voiceover-manuset over i video-motoren din (for eksempel Higgsfield) og lag en vertikal 9:16 video. Lim inn lenken til den ferdige MP4-en her.",
     "s2-url":"Lenke til ferdig video (MP4)","s2-note":"💡 Vil du at reelen skal lages helt automatisk rett her? Da kobler vi en video-motor med server-nøkkel til workeren. Si fra, så setter jeg det opp.",
-    "s3-num":"Publiser","s3-h":"Legg ut automatisk","s3-lead":"Bruker Blotato-kontoene dine automatisk. Ett trykk legger reelen ut.",
+    "s3-num":"Publiser","s3-h":"Legg ut automatisk","s3-lead":"Bruker Blotato-kontoene dine automatisk. Legg ut nå, eller planlegg til en fremtidig dato.",
     "s3-ig":"Publiser til Instagram Reels","s3-tt":"Publiser til TikTok",
+    "s3-sched":"📅 Planlegg til senere (90-dagers plan)","s3-date":"Dato","s3-time":"Tid",
+    "pl-num":"Planen din","pl-h":"Planlagte reels","pl-lead":"Reels du har planlagt fremover. Blotato legger dem ut automatisk til rett tid. Lagres her, også etter at du lukker siden.",
     hook:"HOOK (0-3 s)",vo:"Voiceover",music:"Musikk",caption:"Caption",tags:"Hashtags",scenes:"Scener",broll:"B-roll",
     loading:"Lager reel…",error:"Noe gikk galt. Prøv igjen om litt.",copy:"Kopier",copied:"Kopiert!",
     needVideo:"Lim inn lenken til den ferdige videoen i steg 2 først.",
+    needDate:"Velg en dato for planleggingen.",
     notConnected:"Fant ikke denne kontoen i Blotato.",
-    publishing:"Publiserer…",published:"Lagt ut automatisk 🎉",pubfail:"Klarte ikke å publisere. Sjekk kobling i Publiser alle.",neterr:"Nettverksfeil. Prøv igjen." },
+    publishing:"Publiserer…",scheduling:"Planlegger…",published:"Lagt ut automatisk 🎉",
+    scheduledOk:"Planlagt 🗓️",pubfail:"Klarte ikke å publisere. Sjekk kobling i Publiser alle.",neterr:"Nettverksfeil. Prøv igjen.",
+    planEmpty:"Ingen planlagte reels enda.",remove:"Fjern",plPlatIg:"Instagram Reels",plPlatTt:"TikTok" },
   en:{ back:"To Creative Academy",
     title:'LME <em>Reel Studio</em>',
     subtitle:"From one piece of content to a finished reel. The AI writes the hook, scene-by-scene script, voiceover, b-roll and caption, ready for automatic posting to Instagram and TikTok.",
@@ -210,13 +230,18 @@ const I18N = {
     "s1-src":"Content or idea","s1-ph":"E.g: Three simple Montessori kitchen activities for kids aged 3-6…","s1-len":"Length","s1-btn":"🎬 Create reel",
     "s2-num":"Video","s2-h":"Make the video itself","s2-lead":"Use the b-roll prompts and voiceover script above in your video engine (for example Higgsfield) to make a vertical 9:16 video. Paste the finished MP4 link here.",
     "s2-url":"Link to finished video (MP4)","s2-note":"💡 Want the reel made fully automatically right here? Then we connect a video engine with a server key to the worker. Just say so and I'll set it up.",
-    "s3-num":"Publish","s3-h":"Post automatically","s3-lead":"Uses your connected Blotato accounts automatically. One tap posts the reel.",
+    "s3-num":"Publish","s3-h":"Post automatically","s3-lead":"Uses your connected Blotato accounts automatically. Post now, or schedule for a future date.",
     "s3-ig":"Publish to Instagram Reels","s3-tt":"Publish to TikTok",
+    "s3-sched":"📅 Schedule for later (90-day plan)","s3-date":"Date","s3-time":"Time",
+    "pl-num":"Your plan","pl-h":"Scheduled reels","pl-lead":"Reels you've scheduled ahead. Blotato posts them automatically at the right time. Saved here, even after you close the page.",
     hook:"HOOK (0-3 s)",vo:"Voiceover",music:"Music",caption:"Caption",tags:"Hashtags",scenes:"Scenes",broll:"B-roll",
     loading:"Creating reel…",error:"Something went wrong. Try again shortly.",copy:"Copy",copied:"Copied!",
     needVideo:"Paste the finished video link in step 2 first.",
+    needDate:"Pick a date to schedule.",
     notConnected:"Couldn't find this account in Blotato.",
-    publishing:"Publishing…",published:"Posted automatically 🎉",pubfail:"Could not publish. Check the connection in Publish all.",neterr:"Network error. Try again." }
+    publishing:"Publishing…",scheduling:"Scheduling…",published:"Posted automatically 🎉",
+    scheduledOk:"Scheduled 🗓️",pubfail:"Could not publish. Check the connection in Publish all.",neterr:"Network error. Try again.",
+    planEmpty:"No scheduled reels yet.",remove:"Remove",plPlatIg:"Instagram Reels",plPlatTt:"TikTok" }
 };
 const t = (k) => (I18N[LANG][k] ?? I18N.no[k] ?? k);
 function applyI18n(){
@@ -229,7 +254,7 @@ function applyI18n(){
   document.getElementById('lang-no').classList.toggle('active',LANG==='no');
   document.getElementById('lang-en').classList.toggle('active',LANG==='en');
 }
-function setLang(l){ LANG=l; try{localStorage.setItem('lme_lang',l);localStorage.setItem('lme-lang',l);}catch(e){} applyI18n(); }
+function setLang(l){ LANG=l; try{localStorage.setItem('lme_lang',l);localStorage.setItem('lme-lang',l);}catch(e){} applyI18n(); if(typeof renderPlan==='function') renderPlan(); }
 
 function esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function parseJSON(str){ if(typeof str==='object') return str; const m=str.match(/\{[\s\S]*\}/); return JSON.parse(m?m[0]:str); }
@@ -305,11 +330,23 @@ function fetchAccounts(){
       BL_MAP=map; return map;
     });
 }
+function toggleSched(){
+  document.getElementById('schedFields').style.display=document.getElementById('schedOn').checked?'flex':'none';
+}
 async function publishReel(key,btn){
   const msg=document.getElementById('pubmsg');
   const videoUrl=document.getElementById('videoUrl').value.trim();
   if(!videoUrl){ msg.className='pubmsg err'; msg.textContent='⚠️ '+t('needVideo'); return; }
-  const label=btn.innerHTML; btn.disabled=true; btn.innerHTML='<span class="spinner"></span> '+t('publishing');
+  const scheduled=document.getElementById('schedOn').checked;
+  let dateStr='', timeStr='', scheduledTime=null;
+  if(scheduled){
+    dateStr=document.getElementById('schedDate').value;
+    timeStr=document.getElementById('schedTime').value||'09:00';
+    if(!dateStr){ msg.className='pubmsg err'; msg.textContent='⚠️ '+t('needDate'); return; }
+    scheduledTime=new Date(dateStr+'T'+timeStr+':00').toISOString();
+  }
+  const label=btn.innerHTML; btn.disabled=true;
+  btn.innerHTML='<span class="spinner"></span> '+(scheduled?t('scheduling'):t('publishing'));
   msg.className='pubmsg'; msg.textContent='';
   try{
     const map=await fetchAccounts();
@@ -319,15 +356,44 @@ async function publishReel(key,btn){
     const hashtags=(REEL&&Array.isArray(REEL.hashtags))?REEL.hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' '):'';
     const text=(caption+(hashtags?'\n\n'+hashtags:'')).trim();
     const post={ accountId:conf.accountId, content:{ text:text, platform:key, mediaUrls:[videoUrl] }, target:{ targetType:key } };
+    const item={ label:key, post:post };
+    if(scheduledTime) item.scheduledTime=scheduledTime;
     const d=await fetch(WORKER_BASE+'/ai/blotato/publish',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({items:[{label:key,post:post}]})}).then(function(r){return r.json();});
+      body:JSON.stringify({items:[item]})}).then(function(r){return r.json();});
     const res=d&&d.result&&d.result.results&&d.result.results[0];
-    if(res&&res.ok){ btn.innerHTML='✓'; msg.className='pubmsg'; msg.textContent=t('published'); }
+    if(res&&res.ok){
+      btn.innerHTML='✓';
+      if(scheduled){
+        addPlanItem({ id:key+'-'+dateStr+'-'+timeStr+'-'+Date.now(), platform:key, date:dateStr, time:timeStr,
+          topic:(REEL&&REEL.title)||caption.slice(0,60), videoUrl:videoUrl });
+        msg.className='pubmsg'; msg.textContent=t('scheduledOk')+' '+dateStr+' '+timeStr;
+      } else { msg.className='pubmsg'; msg.textContent=t('published'); }
+    }
     else { btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('pubfail'); }
   }catch(e){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('neterr'); }
 }
 
+/* ---- Varig plan (90 dager), samme idé som Content Studio ---- */
+function loadPlan(){ try{ return JSON.parse(localStorage.getItem('lme-reel-plan-v1')||'[]')||[]; }catch(e){ return []; } }
+function savePlan(p){ try{ localStorage.setItem('lme-reel-plan-v1', JSON.stringify(p)); }catch(e){} }
+function addPlanItem(it){ const p=loadPlan(); p.push(it); p.sort(function(a,b){ return (a.date+ (a.time||'')).localeCompare(b.date+(b.time||'')); }); savePlan(p); renderPlan(); }
+function removePlanItem(id){ savePlan(loadPlan().filter(function(x){ return String(x.id)!==String(id); })); renderPlan(); }
+function renderPlan(){
+  const host=document.getElementById('planList'); if(!host) return;
+  const p=loadPlan();
+  if(!p.length){ host.innerHTML='<p class="lead" style="margin:0">'+t('planEmpty')+'</p>'; return; }
+  host.innerHTML=p.map(function(it){
+    const plat=it.platform==='tiktok'?('🎵 '+t('plPlatTt')):('📸 '+t('plPlatIg'));
+    return '<div class="card" style="display:flex;align-items:center;gap:10px;">'+
+      '<div style="flex:1;"><div style="font-family:var(--font-heading);font-weight:700;font-size:14px;">'+esc(it.topic||plat)+'</div>'+
+      '<div style="font-size:12.5px;color:var(--ink-muted);margin-top:2px;">'+plat+' · 🗓️ '+esc(it.date)+' '+esc(it.time||'')+'</div></div>'+
+      '<button class="copy-btn" style="margin-left:0" onclick="removePlanItem(\''+String(it.id).replace(/'/g,"")+'\')">'+t('remove')+'</button>'+
+      '</div>';
+  }).join('');
+}
+
 applyI18n();
+renderPlan();
 </script>
 <script src="/js/lme-account.js?v=7" defer></script>
 </body>
