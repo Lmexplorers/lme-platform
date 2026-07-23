@@ -266,7 +266,8 @@
       var reelBtn = resultsEl.querySelector("#lmeVisReel");
       if (reelBtn) reelBtn.addEventListener("click", function () {
         try { localStorage.setItem("lme-reel-seed", article.slice(0, 4000)); } catch (e) {}
-        location.href = "/reel-studio";
+        // Fersk URL hver gang, så mobilen aldri åpner en gammel bufret Reel Studio.
+        location.href = "/reel-studio?v=" + Date.now();
       });
       resultsEl.querySelectorAll("[data-copy]").forEach(function (b) {
         b.addEventListener("click", function () {
