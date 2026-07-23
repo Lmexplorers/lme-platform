@@ -209,8 +209,6 @@
   </section>
 </main>
 
-<!-- FFmpeg WASM (kun for video-generering i nettleseren) -->
-<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/umd/ffmpeg.js"></script>
 <script>
 const WORKER_BASE = "https://lme-ai-visibility.lmexplorers.workers.dev";
 
@@ -448,40 +446,55 @@ function fetchAccounts(){
       BL_MAP=map; return map;
     });
 }
-/* ---- Generer video i nettleseren: AI-bilde -> vertikal 9:16 Ken Burns ---- */
-var ffmpegInstance=null, ffmpegLoaded=false, ffmpegLoading=false;
-async function loadFFmpeg(){
-  if(ffmpegLoaded) return ffmpegInstance;
-  if(ffmpegLoading){ while(ffmpegLoading) await new Promise(function(r){setTimeout(r,200);}); return ffmpegInstance; }
-  if(typeof FFmpegWASM==='undefined') throw new Error('FFmpeg ikke lastet');
-  ffmpegLoading=true;
-  try{
-    var FFmpeg=FFmpegWASM.FFmpeg;
-    var ff=new FFmpeg();
-    var toBlobURL=async function(url,type){ var r=await fetch(url,{mode:'cors'}); if(!r.ok) throw new Error('CDN '+r.status); var b=await r.blob(); return URL.createObjectURL(new Blob([b],{type:type})); };
-    var FF='https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/umd';
-    var CORE='https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
-    await ff.load({
-      classWorkerURL: await toBlobURL(FF+'/814.ffmpeg.js','text/javascript'),
-      coreURL: await toBlobURL(CORE+'/ffmpeg-core.js','text/javascript'),
-      wasmURL: await toBlobURL(CORE+'/ffmpeg-core.wasm','application/wasm'),
-    });
-    ffmpegInstance=ff; ffmpegLoaded=true;
-  } finally { ffmpegLoading=false; }
-  return ffmpegInstance;
+/* ---- Generer video i nettleseren: AI-bilde -> vertikal 9:16 Ken Burns ----
+   Bruker canvas + MediaRecorder (ingen FFmpeg/Worker), som er robust på
+   Safari, iOS og mobil. Safari gir MP4, Chrome/Firefox gir WebM. */
+function loadImg(src){
+  return new Promise(function(res,rej){
+    var im=new Image(); im.crossOrigin='anonymous';
+    im.onload=function(){ res(im); }; im.onerror=function(){ rej(new Error('bilde')); };
+    im.src=src;
+  });
+}
+function pickMime(){
+  if(typeof MediaRecorder==='undefined') return null;
+  var c=['video/mp4','video/mp4;codecs=avc1','video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'];
+  for(var i=0;i<c.length;i++){ try{ if(MediaRecorder.isTypeSupported(c[i])) return c[i]; }catch(e){} }
+  return 'video/webm';
 }
 async function imageToVideoBlob(imageUrl){
-  var ff=await loadFFmpeg();
-  var fetchFile=FFmpegWASM.fetchFile;
-  await ff.writeFile('still.png', await fetchFile(imageUrl));
-  var W=1080,H=1920, preW=Math.round(W*1.25), preH=Math.round(H*1.25);
-  var zoomVf="scale="+preW+":"+preH+":force_original_aspect_ratio=increase,crop="+preW+":"+preH+",zoompan=z='min(zoom+0.0010,1.2)':d=200:s="+W+"x"+H+":fps=25,format=yuv420p";
-  var statVf="scale="+W+":"+H+":force_original_aspect_ratio=increase,crop="+W+":"+H+",format=yuv420p";
-  var mk=function(vf){ return ['-loop','1','-i','still.png','-t','8','-vf',vf,'-r','25','-c:v','libx264','-preset','ultrafast','-pix_fmt','yuv420p','-movflags','+faststart','-y','out.mp4']; };
-  try{ await ff.exec(mk(zoomVf)); }catch(e){ await ff.exec(mk(statVf)); }
-  var data=await ff.readFile('out.mp4');
-  try{ ff.deleteFile('still.png'); ff.deleteFile('out.mp4'); }catch(e){}
-  return new Blob([data.buffer],{type:'video/mp4'});
+  var cv=document.createElement('canvas');
+  if(!cv.captureStream || typeof MediaRecorder==='undefined') throw new Error('nettleseren støtter ikke videoopptak');
+  var img=await loadImg(imageUrl);
+  var W=1080,H=1920; cv.width=W; cv.height=H;
+  var ctx=cv.getContext('2d'); ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high';
+  var fps=30, durMs=8000;
+  var stream=cv.captureStream(fps);
+  var mime=pickMime();
+  var rec;
+  try{ rec=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:7000000}); }
+  catch(e){ rec=new MediaRecorder(stream); mime=rec.mimeType||'video/webm'; }
+  var chunks=[]; rec.ondataavailable=function(e){ if(e.data&&e.data.size) chunks.push(e.data); };
+  var stopped=new Promise(function(r){ rec.onstop=r; });
+  var base=Math.max(W/img.width,H/img.height);
+  var ease=function(t){ return t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2; };
+  rec.start();
+  var t0=(typeof performance!=='undefined'&&performance.now)?performance.now():Date.now();
+  await new Promise(function(resolve){
+    (function frame(){
+      var now=(typeof performance!=='undefined'&&performance.now)?performance.now():Date.now();
+      var p=Math.min(1,(now-t0)/durMs), te=ease(p);
+      var z=1.0+0.18*te, sc=base*z, dw=img.width*sc, dh=img.height*sc;
+      var maxY=Math.max(0,(dh-H)/2);
+      ctx.fillStyle='#000'; ctx.fillRect(0,0,W,H);
+      ctx.drawImage(img,(W-dw)/2,(H-dh)/2-(te-0.5)*maxY,dw,dh);
+      if(p<1) requestAnimationFrame(frame);
+      else { setTimeout(function(){ try{ rec.stop(); }catch(e){} }, 150); resolve(); }
+    })();
+  });
+  await stopped;
+  var outType=(mime.indexOf('mp4')>=0)?'video/mp4':'video/webm';
+  return new Blob(chunks,{type:outType});
 }
 function blobToB64(blob){ return new Promise(function(res,rej){ var r=new FileReader(); r.onload=function(e){ res(String(e.target.result).split(',')[1]); }; r.onerror=function(){ rej(new Error('lese fil')); }; r.readAsDataURL(blob); }); }
 async function genVideo(){
@@ -499,7 +512,7 @@ async function genVideo(){
     var blob=await imageToVideoBlob(ir.url);
     btn.innerHTML='<span class="spinner"></span> '+t('vidUploading');
     var vr=await fetch('/api/video',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({data:await blobToB64(blob),contentType:'video/mp4'})}).then(function(r){return r.json();});
+      body:JSON.stringify({data:await blobToB64(blob),contentType:(blob.type||'video/mp4')})}).then(function(r){return r.json();});
     if(!vr||vr.error||!vr.url) throw new Error((vr&&vr.error)||'opplasting');
     document.getElementById('mediaUrl').value=vr.url;
     var v=document.getElementById('vidPreview'); if(v){ v.src=URL.createObjectURL(blob); v.style.display='block'; }
