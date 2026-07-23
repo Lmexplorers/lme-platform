@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<title>LME Reel Studio</title>
+<meta name="description" content="Lag ferdige AI-reels for Instagram og TikTok fra innholdet ditt: hook, scene-for-scene manus, voiceover, b-roll og caption, klar til automatisk publisering.">
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
+  :root {
+    --pink-soft:#F8D7DA; --pink-mid:#F5A8B8; --pink-deep:#EE9CAD;
+    --cream:#FBF6F0; --cream-deep:#F4E9DD;
+    --cerise:#E91E89; --sun:#F7C72E; --sky:#3FA9F5; --lime:#A4D233;
+    --ink:#1A1A1A; --ink-soft:#4A4A4A; --ink-muted:#8A8A8A;
+    --line:rgba(26,26,26,0.08);
+    --shadow-sm:0 1px 3px rgba(26,26,26,0.04),0 1px 2px rgba(26,26,26,0.03);
+    --shadow-md:0 4px 16px rgba(26,26,26,0.06),0 2px 6px rgba(26,26,26,0.04);
+    --r-sm:12px; --r-md:18px; --r-lg:24px; --r-pill:999px;
+    /* LÅST FONTREGEL: Playpen Sans = KUN overskrifter. Sasson Montessori = all annen tekst. */
+    --font-heading:'Playpen Sans',system-ui,sans-serif;
+    --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+  }
+  @font-face{
+    font-family:'Sasson Montessori';
+    src:url('/fonts/SassoonMontessori.woff2') format('woff2'),
+        url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-display:swap;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--font-body); color:var(--ink);
+    background:linear-gradient(180deg,#FDF5F1 0%,#FBEAE9 50%,#F8D7DA 100%);
+    min-height:100vh; line-height:1.55;
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  }
+  h1,h2,h3,h4,h5,h6{font-family:var(--font-heading);}
+  img{max-width:100%;display:block;}
+  a{color:inherit;text-decoration:none;}
+  button,input,select,textarea{font-family:var(--font-body);cursor:pointer;border:none;background:none;}
+
+  /* TOPBAR */
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(253,245,241,0.85);
+    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line);}
+  .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;gap:20px;}
+  .topbar-left{display:flex;align-items:center;gap:16px;}
+  .topbar-logo{font-weight:700;font-size:17px;display:flex;align-items:center;gap:8px;color:var(--ink);}
+  .topbar-logo-img{height:32px;width:auto;display:block;}
+  .topbar-logo .badge{background:linear-gradient(135deg,var(--pink-mid),var(--cerise));color:#fff;
+    font-size:10px;font-weight:700;padding:3px 8px;border-radius:var(--r-pill);letter-spacing:.04em;}
+  .topbar-right{display:flex;align-items:center;gap:8px;}
+  .topbar-back{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--r-pill);
+    font-size:13px;font-weight:600;color:var(--ink-soft);transition:all .18s ease;}
+  .topbar-back:hover{background:rgba(248,215,218,0.5);color:var(--ink);}
+  .lang-toggle{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-pill);overflow:hidden;}
+  .lang-toggle button{padding:6px 12px;font-size:12px;font-weight:700;color:var(--ink-muted);}
+  .lang-toggle button.active{background:var(--cerise);color:#fff;}
+
+  /* MAIN */
+  .main{padding:28px 24px 72px;max-width:900px;margin:0 auto;}
+  .page-header h1{font-size:30px;line-height:1.15;margin-bottom:8px;}
+  .page-header h1 em{color:var(--cerise);font-style:normal;}
+  .page-header p{color:var(--ink-soft);max-width:680px;font-size:15px;}
+
+  .step{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:22px 22px 24px;box-shadow:var(--shadow-md);margin-top:22px;}
+  .step-num{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-heading);
+    font-weight:800;font-size:13px;color:var(--cerise);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;}
+  .step h2{font-size:20px;margin-bottom:6px;}
+  .step .lead{color:var(--ink-soft);font-size:14px;margin-bottom:16px;}
+  label.fld{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin:0 0 6px;}
+  textarea,input,select{width:100%;font-family:inherit;font-size:14px;
+    padding:12px 14px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--cream);color:var(--ink);}
+  textarea{min-height:120px;resize:vertical;}
+  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-top:12px;}
+  .row .grow{flex:1;min-width:180px;}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:#fff;font-weight:700;
+    font-size:14px;padding:12px 20px;border-radius:var(--r-pill);transition:transform .12s ease,opacity .12s ease;}
+  .btn:hover{transform:translateY(-1px);}
+  .btn:disabled{opacity:.5;cursor:default;transform:none;}
+  .btn.cerise{background:linear-gradient(120deg,#e85a92,#c43d75);}
+  .btn.block{width:100%;justify-content:center;margin-top:6px;}
+
+  .out:empty{display:none;}
+  .out{margin-top:20px;}
+  .hook{background:linear-gradient(135deg,#FFF0F5,#FFE1EC);border:1px solid var(--line);
+    border-radius:var(--r-md);padding:18px 20px;text-align:center;margin-bottom:16px;}
+  .hook .lbl{font-size:11px;font-weight:700;color:var(--cerise);text-transform:uppercase;letter-spacing:.08em;}
+  .hook .txt{font-family:var(--font-heading);font-weight:800;font-size:22px;margin-top:6px;color:var(--ink);}
+  .card{background:var(--cream);border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px;margin-bottom:12px;}
+  .card h4{font-size:14px;color:var(--cerise);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+  .card p{font-size:14px;color:var(--ink-soft);white-space:pre-wrap;}
+  .scene{border-left:3px solid var(--pink-mid);}
+  .scene .time{font-size:12px;font-weight:700;color:var(--ink-muted);}
+  .scene .on{font-family:var(--font-heading);font-weight:700;font-size:15px;margin:4px 0;}
+  .scene .vo{font-size:13.5px;color:var(--ink-soft);}
+  .scene .broll{font-size:13px;color:var(--ink-muted);margin-top:6px;font-style:italic;}
+  .tags span{display:inline-block;background:var(--cream-deep);border:1px solid var(--line);border-radius:var(--r-pill);
+    padding:5px 11px;font-size:12.5px;margin:0 6px 8px 0;}
+  .copy-btn{margin-left:auto;font-size:12px;font-weight:700;color:var(--cerise);background:none;}
+  .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);
+    border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .note{background:#FFF8E1;border:1px solid #F7E29A;border-radius:var(--r-sm);padding:12px 14px;
+    font-size:13px;color:#7a5d00;margin-top:14px;}
+  .pubmsg{font-size:13px;color:var(--ink-soft);margin-top:10px;min-height:1em;}
+  .err{color:var(--cerise);}
+  #step2,#step3{opacity:.55;pointer-events:none;}
+  #step2.on,#step3.on{opacity:1;pointer-events:auto;}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar"><div class="topbar-inner">
+  <div class="topbar-left">
+    <a href="/creative-academy" class="topbar-logo">
+      <img src="/images/lme-logo.png" alt="LME" class="topbar-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='inline';">
+      <span class="topbar-logo-text" style="display:none;">LME</span>
+      <span class="badge">REEL STUDIO</span>
+    </a>
+  </div>
+  <div class="topbar-right">
+    <a href="/creative-academy" class="topbar-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="15 18 9 12 15 6"/></svg>
+      <span data-i18n="back">Til Creative Academy</span>
+    </a>
+    <div class="lang-toggle">
+      <button id="lang-no" class="active" onclick="setLang('no')">NO</button>
+      <button id="lang-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</div></div>
+
+<main class="main">
+  <div class="page-header">
+    <h1 data-i18n="title">LME <em>Reel Studio</em></h1>
+    <p data-i18n="subtitle">Fra et innhold til en ferdig reel. AI-en lager hook, scene-for-scene manus, voiceover, b-roll og caption, klar til automatisk publisering på Instagram og TikTok.</p>
+  </div>
+
+  <!-- STEG 1: kilde -->
+  <section class="step" id="step1">
+    <div class="step-num"><span>1</span> <span data-i18n="s1-num">Innhold</span></div>
+    <h2 data-i18n="s1-h">Hva skal reelen handle om?</h2>
+    <p class="lead" data-i18n="s1-lead">Lim inn et tips, en leksjon, et blogginnlegg eller bare en idé. AI-en gjør resten om til en reel.</p>
+    <label class="fld" for="src" data-i18n="s1-src">Innhold eller idé</label>
+    <textarea id="src" data-i18n-ph="s1-ph" placeholder="F.eks: Tre enkle Montessori-aktiviteter i kjøkkenet for barn 3-6 år…"></textarea>
+    <div class="row">
+      <div>
+        <label class="fld" for="secs" data-i18n="s1-len">Lengde</label>
+        <select id="secs">
+          <option value="15">15 s</option>
+          <option value="25" selected>25 s</option>
+          <option value="35">35 s</option>
+          <option value="45">45 s</option>
+        </select>
+      </div>
+      <button class="btn cerise" id="genBtn" onclick="genReel()"><span data-i18n="s1-btn">🎬 Lag reel</span></button>
+    </div>
+    <div class="out" id="out"></div>
+  </section>
+
+  <!-- STEG 2: video -->
+  <section class="step" id="step2">
+    <div class="step-num"><span>2</span> <span data-i18n="s2-num">Video</span></div>
+    <h2 data-i18n="s2-h">Lag selve videoen</h2>
+    <p class="lead" data-i18n="s2-lead">Bruk b-roll-promptene og voiceover-manuset over i video-motoren din (for eksempel Higgsfield) og lag en vertikal 9:16 video. Lim inn lenken til den ferdige MP4-en her.</p>
+    <label class="fld" for="videoUrl" data-i18n="s2-url">Lenke til ferdig video (MP4)</label>
+    <input id="videoUrl" placeholder="https://…/reel.mp4" />
+    <div class="note" data-i18n="s2-note">💡 Vil du at reelen skal lages helt automatisk rett her? Da kobler vi en video-motor med server-nøkkel til workeren. Si fra, så setter jeg det opp.</div>
+  </section>
+
+  <!-- STEG 3: publiser -->
+  <section class="step" id="step3">
+    <div class="step-num"><span>3</span> <span data-i18n="s3-num">Publiser</span></div>
+    <h2 data-i18n="s3-h">Legg ut automatisk</h2>
+    <p class="lead" data-i18n="s3-lead">Bruker de samme kontoene som Publiser alle. Er de ikke koblet enda, gjør du det der først.</p>
+    <button class="btn cerise block" id="igBtn" onclick="publishReel('instagram',this)">📸 <span data-i18n="s3-ig">Publiser til Instagram Reels</span></button>
+    <button class="btn cerise block" id="ttBtn" onclick="publishReel('tiktok',this)">🎵 <span data-i18n="s3-tt">Publiser til TikTok</span></button>
+    <div class="pubmsg" id="pubmsg"></div>
+  </section>
+</main>
+
+<script>
+const WORKER_BASE = "https://lme-ai-visibility.lmexplorers.workers.dev";
+
+/* ---- Språk (samme nøkkel som resten av plattformen) ---- */
+let LANG = (function(){ try { return localStorage.getItem('lme_lang') || localStorage.getItem('lme-lang') || 'no'; } catch(e){ return 'no'; } })();
+const I18N = {
+  no:{ back:"Til Creative Academy",
+    title:'LME <em>Reel Studio</em>',
+    subtitle:"Fra et innhold til en ferdig reel. AI-en lager hook, scene-for-scene manus, voiceover, b-roll og caption, klar til automatisk publisering på Instagram og TikTok.",
+    "s1-num":"Innhold","s1-h":"Hva skal reelen handle om?","s1-lead":"Lim inn et tips, en leksjon, et blogginnlegg eller bare en idé. AI-en gjør resten om til en reel.",
+    "s1-src":"Innhold eller idé","s1-ph":"F.eks: Tre enkle Montessori-aktiviteter i kjøkkenet for barn 3-6 år…","s1-len":"Lengde","s1-btn":"🎬 Lag reel",
+    "s2-num":"Video","s2-h":"Lag selve videoen","s2-lead":"Bruk b-roll-promptene og voiceover-manuset over i video-motoren din (for eksempel Higgsfield) og lag en vertikal 9:16 video. Lim inn lenken til den ferdige MP4-en her.",
+    "s2-url":"Lenke til ferdig video (MP4)","s2-note":"💡 Vil du at reelen skal lages helt automatisk rett her? Da kobler vi en video-motor med server-nøkkel til workeren. Si fra, så setter jeg det opp.",
+    "s3-num":"Publiser","s3-h":"Legg ut automatisk","s3-lead":"Bruker de samme kontoene som Publiser alle. Er de ikke koblet enda, gjør du det der først.",
+    "s3-ig":"Publiser til Instagram Reels","s3-tt":"Publiser til TikTok",
+    hook:"HOOK (0-3 s)",vo:"Voiceover",music:"Musikk",caption:"Caption",tags:"Hashtags",scenes:"Scener",broll:"B-roll",
+    loading:"Lager reel…",error:"Noe gikk galt. Prøv igjen om litt.",copy:"Kopier",copied:"Kopiert!",
+    needVideo:"Lim inn lenken til den ferdige videoen i steg 2 først.",
+    notConnected:"Ikke koblet til enda. Koble kontoene i Publiser alle først.",
+    publishing:"Publiserer…",published:"Lagt ut automatisk 🎉",pubfail:"Klarte ikke å publisere. Sjekk kobling i Publiser alle.",neterr:"Nettverksfeil. Prøv igjen." },
+  en:{ back:"To Creative Academy",
+    title:'LME <em>Reel Studio</em>',
+    subtitle:"From one piece of content to a finished reel. The AI writes the hook, scene-by-scene script, voiceover, b-roll and caption, ready for automatic posting to Instagram and TikTok.",
+    "s1-num":"Content","s1-h":"What should the reel be about?","s1-lead":"Paste a tip, a lesson, a blog post or just an idea. The AI turns the rest into a reel.",
+    "s1-src":"Content or idea","s1-ph":"E.g: Three simple Montessori kitchen activities for kids aged 3-6…","s1-len":"Length","s1-btn":"🎬 Create reel",
+    "s2-num":"Video","s2-h":"Make the video itself","s2-lead":"Use the b-roll prompts and voiceover script above in your video engine (for example Higgsfield) to make a vertical 9:16 video. Paste the finished MP4 link here.",
+    "s2-url":"Link to finished video (MP4)","s2-note":"💡 Want the reel made fully automatically right here? Then we connect a video engine with a server key to the worker. Just say so and I'll set it up.",
+    "s3-num":"Publish","s3-h":"Post automatically","s3-lead":"Uses the same accounts as Publish all. If they aren't connected yet, do that there first.",
+    "s3-ig":"Publish to Instagram Reels","s3-tt":"Publish to TikTok",
+    hook:"HOOK (0-3 s)",vo:"Voiceover",music:"Music",caption:"Caption",tags:"Hashtags",scenes:"Scenes",broll:"B-roll",
+    loading:"Creating reel…",error:"Something went wrong. Try again shortly.",copy:"Copy",copied:"Copied!",
+    needVideo:"Paste the finished video link in step 2 first.",
+    notConnected:"Not connected yet. Connect the accounts in Publish all first.",
+    publishing:"Publishing…",published:"Posted automatically 🎉",pubfail:"Could not publish. Check the connection in Publish all.",neterr:"Network error. Try again." }
+};
+const t = (k) => (I18N[LANG][k] ?? I18N.no[k] ?? k);
+function applyI18n(){
+  document.documentElement.lang = LANG;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const v=t(el.getAttribute('data-i18n'));
+    if(/[<&]/.test(v)) el.innerHTML=v; else el.textContent=v;
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ el.placeholder=t(el.getAttribute('data-i18n-ph')); });
+  document.getElementById('lang-no').classList.toggle('active',LANG==='no');
+  document.getElementById('lang-en').classList.toggle('active',LANG==='en');
+}
+function setLang(l){ LANG=l; try{localStorage.setItem('lme_lang',l);localStorage.setItem('lme-lang',l);}catch(e){} applyI18n(); }
+
+function esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function parseJSON(str){ if(typeof str==='object') return str; const m=str.match(/\{[\s\S]*\}/); return JSON.parse(m?m[0]:str); }
+function copyText(txt,el){ try{navigator.clipboard.writeText(txt);}catch(e){} const o=el.textContent; el.textContent=t('copied'); setTimeout(()=>el.textContent=o,1200); }
+function copyBtn(txt){ return '<button class="copy-btn" onclick=\'copyText('+JSON.stringify(txt)+',this)\'>'+t('copy')+'</button>'; }
+
+/* ---- Steg 1: generer reel-pakken ---- */
+let REEL=null;
+async function genReel(){
+  const source=document.getElementById('src').value.trim();
+  if(!source) return;
+  const seconds=document.getElementById('secs').value;
+  const btn=document.getElementById('genBtn');
+  const label=btn.innerHTML; btn.disabled=true; btn.innerHTML='<span class="spinner"></span> '+t('loading');
+  try{
+    const res=await fetch(WORKER_BASE+'/ai/reel',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({source,seconds,lang:LANG})});
+    if(!res.ok) throw new Error('http '+res.status);
+    const data=await res.json();
+    if(data.error) throw new Error(data.error);
+    REEL=parseJSON(data.result);
+    renderReel(REEL);
+    document.getElementById('step2').classList.add('on');
+    document.getElementById('step3').classList.add('on');
+  }catch(e){
+    console.error('Reel Studio:',e);
+    document.getElementById('out').innerHTML='<p class="err">'+t('error')+'</p>';
+  }finally{ btn.disabled=false; btn.innerHTML=label; }
+}
+
+function renderReel(r){
+  let h='';
+  if(r.hook) h+='<div class="hook"><div class="lbl">'+t('hook')+'</div><div class="txt">'+esc(r.hook)+'</div></div>';
+  if(r.voiceover) h+='<div class="card"><h4>🎙️ '+t('vo')+' '+copyBtn(r.voiceover)+'</h4><p>'+esc(r.voiceover)+'</p></div>';
+  if(Array.isArray(r.scenes)&&r.scenes.length){
+    h+='<div class="card"><h4>🎬 '+t('scenes')+'</h4></div>';
+    r.scenes.forEach(function(s){
+      h+='<div class="card scene">'+
+         (s.time?'<div class="time">'+esc(s.time)+'</div>':'')+
+         (s.onScreen?'<div class="on">'+esc(s.onScreen)+'</div>':'')+
+         (s.voiceover?'<div class="vo">'+esc(s.voiceover)+'</div>':'')+
+         (s.broll?'<div class="broll">'+t('broll')+': '+esc(s.broll)+' '+copyBtn(s.broll)+'</div>':'')+
+         '</div>';
+    });
+  }
+  if(r.musicMood) h+='<div class="card"><h4>🎵 '+t('music')+'</h4><p>'+esc(r.musicMood)+'</p></div>';
+  if(r.caption) h+='<div class="card"><h4>✍️ '+t('caption')+' '+copyBtn(r.caption)+'</h4><p>'+esc(r.caption)+'</p></div>';
+  if(Array.isArray(r.hashtags)&&r.hashtags.length){
+    const tagline=r.hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' ');
+    h+='<div class="card"><h4>#️⃣ '+t('tags')+' '+copyBtn(tagline)+'</h4><div class="tags">'+
+       r.hashtags.map(function(x){return '<span>'+esc(x[0]==='#'?x:'#'+x)+'</span>';}).join('')+'</div></div>';
+  }
+  document.getElementById('out').innerHTML=h;
+}
+
+/* ---- Steg 3: autopubliser via samme Blotato-motor som Publiser alle ---- */
+function loadBl(){ try{ return JSON.parse(localStorage.getItem('lme-vis-blotato')||'{}'); }catch(e){ return {}; } }
+function publishReel(key,btn){
+  const msg=document.getElementById('pubmsg');
+  const videoUrl=document.getElementById('videoUrl').value.trim();
+  if(!videoUrl){ msg.className='pubmsg err'; msg.textContent='⚠️ '+t('needVideo'); return; }
+  const conf=(loadBl()[key])||{};
+  if(!conf.accountId){ msg.className='pubmsg err'; msg.textContent='⚠️ '+t('notConnected'); return; }
+  const caption=(REEL&&REEL.caption)||'';
+  const hashtags=(REEL&&Array.isArray(REEL.hashtags))?REEL.hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' '):'';
+  const text=(caption+(hashtags?'\n\n'+hashtags:'')).trim();
+  const post={ accountId:conf.accountId, content:{ text:text, platform:key, mediaUrls:[videoUrl] }, target:{ targetType:key } };
+  const label=btn.innerHTML; btn.disabled=true; btn.innerHTML='<span class="spinner"></span> '+t('publishing');
+  msg.className='pubmsg'; msg.textContent='';
+  fetch(WORKER_BASE+'/ai/blotato/publish',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({items:[{label:key,post:post}]})})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      const res=d&&d.result&&d.result.results&&d.result.results[0];
+      if(res&&res.ok){ btn.innerHTML='✓'; msg.className='pubmsg'; msg.textContent=t('published'); }
+      else { btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('pubfail'); }
+    })
+    .catch(function(){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('neterr'); });
+}
+
+applyI18n();
+</script>
+<script src="/js/lme-account.js?v=7" defer></script>
+</body>
+</html>
