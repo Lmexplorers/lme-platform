@@ -279,10 +279,17 @@ const I18N = {
 const t = (k) => (I18N[LANG][k] ?? I18N.no[k] ?? k);
 // Leser JSON trygt. Får vi en HTML-side tilbake (f.eks. mens en ny versjon
 // rulles ut), kaster vi en tydelig feil i stedet for "Unexpected token '<'".
-async function readJson(res){
+async function readJson(res, where){
   const body=await res.text();
   try{ return JSON.parse(body); }
-  catch(_){ const e=new Error('server_busy'); e.serverBusy=true; throw e; }
+  catch(_){
+    // Ikke JSON (som regel en HTML-side). Ta med hvor og hvilken status,
+    // så feilen forteller nøyaktig hva som svikter i stedet for å gjette.
+    var snip=(body||'').replace(/\s+/g,' ').trim().slice(0,50);
+    var e=new Error('server_busy'); e.serverBusy=true;
+    e.where=where||''; e.httpStatus=res.status; e.snippet=snip;
+    throw e;
+  }
 }
 function applyI18n(){
   document.documentElement.lang = LANG;
@@ -510,13 +517,13 @@ async function imageToVideoBlob(imageUrl){
 function blobToB64(blob){ return new Promise(function(res,rej){ var r=new FileReader(); r.onload=function(e){ res(String(e.target.result).split(',')[1]); }; r.onerror=function(){ rej(new Error('lese fil')); }; r.readAsDataURL(blob); }); }
 async function higgsfieldVideo(prompt,imageUrl,btn){
   var sub=await fetch('/api/reel-video',{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({prompt:prompt,imageUrl:imageUrl})}).then(readJson);
+    body:JSON.stringify({prompt:prompt,imageUrl:imageUrl})}).then(function(r){return readJson(r,'reel-video');});
   if(sub&&sub.error==='not_configured') return '__fallback__';
   if(!sub||sub.error||(!sub.id&&!sub.statusUrl)) throw new Error((sub&&sub.error)||'higgsfield');
   var q='id='+encodeURIComponent(sub.id||'')+(sub.statusUrl?'&u='+encodeURIComponent(sub.statusUrl):'');
   for(var i=0;i<75;i++){
     await new Promise(function(r){ setTimeout(r,4000); });
-    var st=await fetch('/api/reel-video?'+q).then(readJson).catch(function(){return null;});
+    var st=await fetch('/api/reel-video?'+q).then(function(r){return readJson(r,'reel-video');}).catch(function(){return null;});
     if(st){
       if(st.status==='completed'&&st.url) return st.url;
       if(st.error||st.status==='failed'||st.status==='nsfw') throw new Error(st.error||st.status);
@@ -535,7 +542,7 @@ async function genVideo(){
   try{
     btn.innerHTML='<span class="spinner"></span> '+t('vidImage');
     var ir=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({text:prompt,character:'none',platform:'tiktok',lang:LANG})}).then(readJson);
+      body:JSON.stringify({text:prompt,character:'none',platform:'tiktok',lang:LANG})}).then(function(r){return readJson(r,'image');});
     if(ir&&ir.error==='not_configured') throw new Error(t('imgNotConfigured'));
     if(ir&&ir.error&&/ikke koblet til|not connected|mangler|missing/i.test(ir.error)) throw new Error(t('imgNotConfigured'));
     if(!ir||ir.error||!ir.url) throw new Error((ir&&ir.error)||'bilde');
@@ -547,7 +554,7 @@ async function genVideo(){
       var blob=await imageToVideoBlob(ir.url);
       btn.innerHTML='<span class="spinner"></span> '+t('vidUploading');
       var vr=await fetch('/api/video',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({data:await blobToB64(blob),contentType:(blob.type||'video/mp4')})}).then(readJson);
+        body:JSON.stringify({data:await blobToB64(blob),contentType:(blob.type||'video/mp4')})}).then(function(r){return readJson(r,'video');});
       if(!vr||vr.error||!vr.url) throw new Error((vr&&vr.error)||'opplasting');
       url=vr.url; if(v){ v.src=URL.createObjectURL(blob); v.style.display='block'; }
     }
@@ -556,7 +563,10 @@ async function genVideo(){
     btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg'; msg.textContent=t('vidReady');
   }catch(e){
     btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err';
-    if(e&&e.serverBusy){ msg.textContent='⚠️ '+t('vidServerBusy'); }
+    if(e&&e.serverBusy){
+      var dg=' ['+(e.where||'?')+' '+(e.httpStatus||'?')+(e.snippet?': '+e.snippet:'')+']';
+      msg.textContent='⚠️ '+t('vidServerBusy')+dg;
+    }
     else { msg.textContent='⚠️ '+t('vidFail')+(e&&e.message?' ('+e.message+')':''); }
   }
 }
