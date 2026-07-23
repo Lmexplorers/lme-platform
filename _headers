@@ -4,3 +4,8 @@
   Cache-Control: no-store
 /blogg.html
   Cache-Control: no-store
+# Reel Studio oppdateres ofte og maa aldri vises fra en gammel buffer.
+/reel-studio
+  Cache-Control: no-store
+/reel-studio.html
+  Cache-Control: no-store
