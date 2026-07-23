@@ -104,6 +104,37 @@ async function emailForCustomer(env, customerId) {
   return await env.BUILDER_KV.get(custKey(customerId));
 }
 
+/* ---- Claude-kurset -------------------------------------------------
+   Kjøp via Claude-kursets betalingslenker skal IKKE gi Inner Circle,
+   men legge kjøperen i MailerLite-gruppen "Claude-kurs, kjøpere", som
+   trigger takke- og oppfølgingsautomasjonen. Betalingslenke-ID-ene under
+   er hovedkurs (NO/USD) og mersalg (NO/USD). */
+const CLAUDE_PAYMENT_LINKS = new Set([
+  "plink_1TwFJWLax7B8uQzqsBQjTBxl", // Kom i gang med Claude (NOK)
+  "plink_1TwFJYLax7B8uQzqO1gObkcB", // Get started with Claude (USD)
+  "plink_1TwFJZLax7B8uQzqqjnXtmbR", // Videre med Claude, mersalg (NOK)
+  "plink_1TwFJbLax7B8uQzqB3CNr2yR", // Next Level with Claude, upsell (USD)
+]);
+
+async function addToClaudeGroup(env, email, name) {
+  const key = env.MAILERLITE_API_KEY;
+  if (!key || !email) return;
+  const groupId = (env.MAILERLITE_CLAUDE_GROUP || "193772564746601912") + "";
+  const payload = { email: email.trim(), groups: [groupId] };
+  if (name && name.trim()) payload.fields = { name: name.trim().slice(0, 100) };
+  try {
+    await fetch("https://connect.mailerlite.com/api/subscribers", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + key,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (e) {}
+}
+
 export async function onRequestPost(context) {
   const { request, env } = context;
   if (!env.BUILDER_KV) return json({ error: "not_configured" }, 503);
@@ -125,6 +156,12 @@ export async function onRequestPost(context) {
   switch (event.type) {
     case "checkout.session.completed": {
       const email = (obj.customer_details && obj.customer_details.email) || obj.customer_email;
+      // Claude-kurset: legg kjøperen i MailerLite-gruppen, ikke Inner Circle.
+      if (obj.payment_link && CLAUDE_PAYMENT_LINKS.has(obj.payment_link)) {
+        const name = (obj.customer_details && obj.customer_details.name) || "";
+        await addToClaudeGroup(env, email, name);
+        break;
+      }
       await grant(env, email, { customer: obj.customer, sub: obj.subscription });
       break;
     }
