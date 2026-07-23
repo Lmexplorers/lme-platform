@@ -325,7 +325,7 @@ async function genContent(){
   const btn=document.getElementById('genBtn');
   const label=btn.innerHTML; btn.disabled=true; btn.innerHTML='<span class="spinner"></span> '+t('loading');
   try{
-    const res=await fetch(WORKER_BASE+'/ai/content',{method:'POST',headers:{'Content-Type':'application/json'},
+    const res=await fetch('/api/ai/content',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({format:FMT,source:source,seconds:seconds,lang:LANG})});
     if(!res.ok) throw new Error('http '+res.status);
     const data=await res.json();
