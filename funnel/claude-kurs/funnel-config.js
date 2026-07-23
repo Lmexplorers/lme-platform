@@ -41,7 +41,7 @@ window.LME_FUNNEL = {
 
     /* ---- Salgsside: hovedtilbudet ---- */
     salg: {
-      checkoutUrl: "",                 // Stripe-lenke for hovedkurset (tom = hopp rett til mersalg)
+      checkoutUrl: "https://buy.stripe.com/cNi4gA4NTaftfGBgNN9R615",   // Stripe: hovedkurs 490 kr (tom = hopp rett til mersalg)
       etterKjop: "mersalg.html",       // hit går brukeren etter kjøp
 
       pris: {
@@ -117,7 +117,7 @@ window.LME_FUNNEL = {
 
     /* ---- Mersalg (engangstilbud rett etter kjøp) ---- */
     mersalg: {
-      checkoutUrl: "",                 // Stripe-lenke for mersalget (tom = hopp rett til takk)
+      checkoutUrl: "https://buy.stripe.com/14AfZifsx5ZdamhfJJ9R617",   // Stripe: mersalg 249 kr (tom = hopp rett til takk)
       etterKjop: "takk.html",
       avslo: "takk.html",
 
@@ -181,7 +181,7 @@ window.LME_FUNNEL = {
     },
 
     salg: {
-      checkoutUrl: "",                 // Stripe link for the main course (empty = skip to upsell)
+      checkoutUrl: "https://buy.stripe.com/bJedRa6W1cnB3XT4119R616",   // Stripe: main course $49 (empty = skip to upsell)
       etterKjop: "mersalg.html",
 
       pris: {
@@ -256,7 +256,7 @@ window.LME_FUNNEL = {
     },
 
     mersalg: {
-      checkoutUrl: "",                 // Stripe link for the upsell (empty = skip to thank-you)
+      checkoutUrl: "https://buy.stripe.com/00wfZi6W1cnBgKFapp9R618",   // Stripe: upsell $25 (empty = skip to thank-you)
       etterKjop: "takk.html",
       avslo: "takk.html",
 
