@@ -239,6 +239,11 @@
   function run() {
     var s = (overlay && overlay.__share) || readShare();
     var article = ((s.title ? s.title + ". " : "") + (s.text || "")).trim();
+    // Fjern oppdiktede loefter (garanti, "14 dager", pengene tilbake) fra tekst
+    // som kan komme fra en gammel bufret side, saa de aldri havner i det jeg lager.
+    article = article.replace(/([.!?])\s+/g, "$1\n").split(/\n+/).filter(function (line) {
+      return !/pengene[- ]?tilbake|penger tilbake|money[- ]?back|\b14 dag|garanti|guarantee|angrerett|refusjon|refund/i.test(line);
+    }).join(" ").replace(/\s{2,}/g, " ").trim();
     if (!article) { resultsEl.innerHTML = '<p class="lme-vis-note">' + T("Fant ikke tekst å dele fra denne siden.", "No text found to share from this page.") + "</p>"; return; }
     goBtn.disabled = true;
     var label = goBtn.innerHTML;

@@ -643,9 +643,20 @@ renderFmtChips();
 selectFmt('reel');
 renderPlan();
 
+/* Fjern oppdiktede løfter (f.eks. garanti eller "14 dager") fra tekst som
+   kommer fra en gammel bufret side, så de aldri havner i det jeg genererer. */
+function stripFabricatedPromises(txt){
+  if(!txt) return txt;
+  // Del opp i setninger/linjer uten lookbehind (bred nettleserstøtte, også eldre iOS).
+  var parts=txt.replace(/([.!?])\s+/g,'$1\n').split(/\n+/);
+  return parts.filter(function(s){
+    return !/pengene[- ]?tilbake|penger tilbake|money[- ]?back|\b14 dag|garanti|guarantee|angrerett|refusjon|refund/i.test(s);
+  }).join(' ').replace(/\s{2,}/g,' ').trim();
+}
 /* Kom fra "Gjør synlig" (Lag reel av dette): forhåndsutfyll og lag reelen. */
 (function(){
   var seed=''; try{ seed=localStorage.getItem('lme-reel-seed')||''; localStorage.removeItem('lme-reel-seed'); }catch(e){}
+  seed=stripFabricatedPromises(seed);
   if(seed){
     var src=document.getElementById('src'); if(src) src.value=seed;
     selectFmt('reel');
