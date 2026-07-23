@@ -17,6 +17,7 @@
  *   /ai/schema      { type, data }              -> JSON-LD (FAQ/Article/Product/Course/Org/Breadcrumb)
  *   /ai/pinterest   { title, summary, lang }    -> Pinterest-tittel/beskrivelse/pins/bildeprompt
  *   /ai/repurpose   { article, lang }           -> IG/FB/Pinterest/TikTok/Reel/e-post fra én kilde
+ *   /ai/reel        { source, seconds, lang }    -> full reel-produksjonspakke (hook/scener/voiceover/b-roll)
  *
  * DEPLOY:
  *   1. Cloudflare -> Workers & Pages -> ny Worker "lme-ai-visibility"
@@ -295,6 +296,27 @@ Returner KUN gyldig JSON:
 {"blog":"kort ingress","facebook":"...","instagram":"caption + hashtags","pinterest":"pin-tekst",
  "tiktok":"idé/hook","reelScript":"15-30s manus med scener","email":"emnelinje + kort e-post"}
 Behold LMEs varme, pedagogiske tone. Ingen tekst utenfor JSON.`,
+  },
+
+  // Reel Studio: full produksjonspakke for en kort vertikal video (reel/TikTok),
+  // klar til AI-video-generering (voiceover + scene-for-scene + b-roll-prompter).
+  "/ai/reel": {
+    maxTokens: 3000,
+    system: `${BRAND_CONTEXT}\nDu er LMEs reel-regissør. Du lager korte, vertikale videoer (9:16) for Instagram Reels og TikTok som stopper scrollingen i det første sekundet og gir ekte pedagogisk verdi. Tenk hook, rytme, tekst-på-skjerm og en tydelig avslutning med CTA til riktig LME-område.`,
+    prompt: (b) => `Språk: ${langName(b.lang)}.
+Kilde/tema for reelen: "${(b.source || b.article || "").slice(0, 6000)}".
+Ønsket lengde: ${b.seconds || 25} sekunder. Format: vertikal 9:16.
+Lag en komplett reel-produksjonspakke. Returner KUN gyldig JSON med denne formen:
+{
+ "title":"kort arbeidstittel",
+ "hook":"tekst-på-skjerm de første 2-3 sekundene, maks 8 ord, som stopper scrollingen",
+ "voiceover":"hele voiceover-manuset i sammenheng, naturlig talespråk, ${b.seconds || 25} sekunder",
+ "scenes":[{"time":"0-3s","onScreen":"kort tekst-på-skjerm","voiceover":"det som sies i scenen","broll":"detaljert visuell prompt til AI-video/klipp, i LMEs varme rosa/krem Montessori-stil, vertikal 9:16"}],
+ "musicMood":"stil og stemning på musikken",
+ "caption":"ferdig caption til Instagram/TikTok med naturlig CTA",
+ "hashtags":["8-12 relevante hashtags uten mellomrom"]
+}
+Krav: 4-6 scener som til sammen matcher lengden, answer-first hook, konkret pedagogisk verdi, varm tone. Følg de norske skrivereglene. Ingen tekst utenfor JSON.`,
   },
 };
 

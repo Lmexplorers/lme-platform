@@ -41,19 +41,32 @@
     { key: "email", ico: "✉️", no: "E-post", en: "Email" },
   ];
 
-  // Blotato-kontoene lagres av "Publiser alle"-appen i localStorage. Er de satt,
-  // kan dialogen publisere rett fra siden. Ellers faller vi tilbake til kopier.
-  function loadBl() {
-    try { return JSON.parse(localStorage.getItem("lme-vis-blotato") || "{}"); } catch (e) { return {}; }
+  // Kontoene er allerede koblet i Blotato. Workeren henter dem med sin
+  // server-nøkkel, så dialogen trenger ingen manuell konto-ID.
+  var BL_MAP = null; // plattform -> { accountId, pageId }
+  function fetchBlAccounts() {
+    if (BL_MAP) return Promise.resolve(BL_MAP);
+    return fetch(BASE + "/ai/blotato/accounts", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (res && res.error) throw new Error(res.error);
+        var list = (res && res.result && (res.result.items || res.result.accounts || res.result)) || [];
+        var map = {};
+        (Array.isArray(list) ? list : []).forEach(function (a) {
+          var plat = String(a.platform || a.type || a.targetType || "").toLowerCase();
+          if (!plat || map[plat]) return; // første konto per plattform
+          map[plat] = { accountId: String(a.id || a.accountId || ""), pageId: a.pageId ? String(a.pageId) : undefined };
+        });
+        BL_MAP = map; return map;
+      })
+      .catch(function () { return {}; });
   }
   function buildPost(ch, text, imgUrl) {
-    var conf = (loadBl()[ch.key]) || {};
-    if (!conf.accountId) return { err: T("Ikke koblet til enda", "Not connected yet") };
+    var conf = (BL_MAP && BL_MAP[ch.tt]) || null;
+    if (!conf || !conf.accountId) return { err: T("Fant ikke kontoen i Blotato", "Account not found in Blotato") };
     if (ch.needsMedia && !imgUrl) return { err: T("Mangler bilde på siden", "No image on this page") };
     var target = { targetType: ch.tt };
-    (ch.extra || []).forEach(function (f) { if (conf[f]) target[f] = conf[f]; });
-    if (ch.tt === "facebook" && !target.pageId) return { err: T("Facebook trenger side-ID", "Facebook needs a page ID") };
-    if (ch.tt === "pinterest" && !target.boardId) return { err: T("Pinterest trenger tavle-ID", "Pinterest needs a board ID") };
+    if (ch.tt === "facebook" && conf.pageId) target.pageId = conf.pageId;
     var content = { text: String(text), platform: ch.tt };
     if (imgUrl) content.mediaUrls = [imgUrl];
     return { label: ch.no, post: { accountId: conf.accountId, content: content, target: target } };
@@ -165,17 +178,12 @@
       esc((s.title || T("(uten tittel)", "(no title)"))) +
       (s.text ? '<br><span style="color:#9a8693">' + esc(s.text.slice(0, 160)) + (s.text.length > 160 ? "…" : "") + "</span>" : "");
     resultsEl.innerHTML = "";
-    // Fotnote: forteller om automatisk publisering er koblet til eller ikke.
     var foot = overlay.querySelector("#lmeVisFoot");
     if (foot) {
-      var bl = loadBl();
-      var connected = CHANNELS.some(function (c) { return c.tt && (bl[c.key] || {}).accountId; });
-      foot.textContent = connected
-        ? T("Trykk 📣 Publiser for å legge ut automatisk, eller kopier og lim inn selv.",
-            "Tap 📣 Publish to post automatically, or copy and paste yourself.")
-        : T("Kopier og lim inn der du vil. Vil du publisere automatisk? Koble kontoene i Publiser alle først.",
-            "Copy and paste where you like. Want automatic posting? Connect your accounts in Publish all first.");
+      foot.textContent = T("Kopier og lim inn, eller trykk 📣 Publiser for å legge ut automatisk.",
+        "Copy and paste, or tap 📣 Publish to post automatically.");
     }
+    fetchBlAccounts(); // varm opp kontoene fra Blotato
     overlay.classList.add("show");
     document.body.style.overflow = "hidden";
   }
@@ -184,9 +192,9 @@
   function cardHTML(ch, text) {
     if (!text) return "";
     var name = T(ch.no, ch.en);
-    // Publiser-knapp bare på kanaler som kan autopubliseres OG er koblet til.
+    // Publiser-knapp på kanaler som kan autopubliseres og finnes i Blotato.
     var pub = "";
-    if (ch.tt && (loadBl()[ch.key] || {}).accountId) {
+    if (ch.tt && BL_MAP && BL_MAP[ch.tt] && BL_MAP[ch.tt].accountId) {
       pub = '<button class="lme-vis-pub" data-pub="' + ch.key + '">📣 ' + T("Publiser", "Publish") + '</button>';
     }
     return '<div class="lme-vis-card" data-ch="' + esc(ch.key) + '"><div class="top"><span>' + ch.ico + '</span><b>' + name + '</b>' +
@@ -236,10 +244,15 @@
     var label = goBtn.innerHTML;
     goBtn.innerHTML = '<span class="lme-vis-sp"></span> ' + T("Lager…", "Creating…");
     resultsEl.innerHTML = "";
-    fetch(BASE + "/ai/repurpose", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ article: article.slice(0, 6000), lang: lang() }),
-    }).then(function (r) { return r.json(); }).then(function (d) {
+    // Hent Blotato-kontoene i parallell så publiser-knappene er klare.
+    Promise.all([
+      fetch(BASE + "/ai/repurpose", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ article: article.slice(0, 6000), lang: lang() }),
+      }).then(function (r) { return r.json(); }),
+      fetchBlAccounts(),
+    ]).then(function (arr) {
+      var d = arr[0];
       goBtn.disabled = false; goBtn.innerHTML = label;
       var out = d && d.result;
       if (typeof out === "string") { var m = out.match(/\{[\s\S]*\}/); out = JSON.parse(m ? m[0] : out); }
