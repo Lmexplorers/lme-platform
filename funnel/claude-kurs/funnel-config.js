@@ -163,7 +163,7 @@ window.LME_FUNNEL = {
       knapp: "Åpne Claude-kurset",
       knappLenke: "/academy/claude",
       bonusKnapp: "Last ned oppskriftspakken (PDF)",
-      bonusLenke: "",                  // legg inn PDF-lenke når den er klar (tom = skjult)
+      bonusLenke: "/funnel/nedlasting/LME-Claude-oppskrifter.pdf",   // tospråklig oppskriftspakke
       sekundaerKnapp: "Til Lær med Renate",
       sekundaerLenke: "/academy",
       support: "Spørsmål? Svar på e-posten du nettopp fikk, så hjelper jeg deg."
@@ -301,7 +301,7 @@ window.LME_FUNNEL = {
       knapp: "Open the Claude course",
       knappLenke: "/academy/claude",
       bonusKnapp: "Download the recipe pack (PDF)",
-      bonusLenke: "",
+      bonusLenke: "/funnel/nedlasting/LME-Claude-oppskrifter.pdf",   // bilingual recipe pack
       sekundaerKnapp: "To Learn with Renate",
       sekundaerLenke: "/academy",
       support: "Questions? Just reply to the email you received, and I'll help you."
