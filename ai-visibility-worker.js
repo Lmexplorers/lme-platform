@@ -41,7 +41,8 @@ Plattformen har fire hovedområder, alle deler av samme økosystem:
 - LME Community: møteplassen (fellesskap, medlemskap, Inner Circle, utfordringer, arrangementer).
 - LME Shop: alle digitale og fysiske produkter (kurs, bøker, ressurser, medlemskap).
 Mia & Teo er karakterene i Renates bøker (De små naturutforskerne). Tonen er varm, pedagogisk og tillitsvekkende.
-VIKTIG: nevn aldri AMI eller Association Montessori Internationale. Renate har sin utdanning fra Høyskolen i Vestfold. Beskriv aldri LME som bare en Montessori-plattform, og aldri områdene som frittstående produkter.`;
+VIKTIG: nevn aldri AMI eller Association Montessori Internationale. Renate har sin utdanning fra Høyskolen i Vestfold. Beskriv aldri LME som bare en Montessori-plattform, og aldri områdene som frittstående produkter.
+ALDRI dikt opp garantier, pengene-tilbake-løfter, refusjonsvilkår, priser, rabatter, tall, resultater eller andre påstander som ikke er oppgitt i kilden. Ikke lov noe på vegne av LME. Er ikke noe oppgitt, la det være.`;
 
 const GEO_RULES = `Skriv for både Google OG generative AI-motorer (ChatGPT, Gemini, Claude, Perplexity).
 GEO-prinsipper du ALLTID følger:
