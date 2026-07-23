@@ -228,7 +228,7 @@ const I18N = {
     "s2-url":"Lenke til media","s2-note":"💡 Trykk «Generer video automatisk», så lager AI-en et bilde av innholdet og gjør det om til en vertikal 9:16 video rett her. Eller lim inn lenken til en egen ferdig video.",
     "s2-genvid":"Generer video automatisk",
     needContentFirst:"Lag innhold i steg 1 først.",
-    vidImage:"Lager bilde…",vidMaking:"Lager video…",vidUploading:"Laster opp…",vidReady:"Video klar 🎬 Lagt inn under.",vidFail:"Kunne ikke lage video.",
+    vidImage:"Lager bilde…",vidMaking:"Lager video… (kan ta et par minutter)",vidUploading:"Laster opp…",vidReady:"Video klar 🎬 Lagt inn under.",vidFail:"Kunne ikke lage video.",
     "s3-num":"Publiser","s3-h":"Legg ut automatisk","s3-lead":"Bruker Blotato-kontoene dine automatisk. Legg ut nå, eller planlegg til en fremtidig dato.",
     "s3-sched":"📅 Planlegg til senere (90-dagers plan)","s3-date":"Dato","s3-time":"Tid",
     "pl-num":"Planen din","pl-h":"Planlagt innhold","pl-lead":"Innhold du har planlagt fremover. Blotato legger det ut automatisk til rett tid. Lagres her, også etter at du lukker siden.",
@@ -256,7 +256,7 @@ const I18N = {
     "s2-url":"Media link","s2-note":"💡 Tap “Generate video automatically” and the AI creates an image of your content and turns it into a vertical 9:16 video right here. Or paste a link to your own finished video.",
     "s2-genvid":"Generate video automatically",
     needContentFirst:"Create content in step 1 first.",
-    vidImage:"Creating image…",vidMaking:"Creating video…",vidUploading:"Uploading…",vidReady:"Video ready 🎬 Added below.",vidFail:"Could not create the video.",
+    vidImage:"Creating image…",vidMaking:"Creating video… (may take a couple of minutes)",vidUploading:"Uploading…",vidReady:"Video ready 🎬 Added below.",vidFail:"Could not create the video.",
     "s3-num":"Publish","s3-h":"Post automatically","s3-lead":"Uses your connected Blotato accounts automatically. Post now, or schedule for a future date.",
     "s3-sched":"📅 Schedule for later (90-day plan)","s3-date":"Date","s3-time":"Time",
     "pl-num":"Your plan","pl-h":"Scheduled content","pl-lead":"Content you've scheduled ahead. Blotato posts it automatically at the right time. Saved here, even after you close the page.",
@@ -497,25 +497,49 @@ async function imageToVideoBlob(imageUrl){
   return new Blob(chunks,{type:outType});
 }
 function blobToB64(blob){ return new Promise(function(res,rej){ var r=new FileReader(); r.onload=function(e){ res(String(e.target.result).split(',')[1]); }; r.onerror=function(){ rej(new Error('lese fil')); }; r.readAsDataURL(blob); }); }
+async function higgsfieldVideo(prompt,imageUrl,btn){
+  var sub=await fetch('/api/reel-video',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({prompt:prompt,imageUrl:imageUrl})}).then(function(r){return r.json();});
+  if(sub&&sub.error==='not_configured') return '__fallback__';
+  if(!sub||sub.error||(!sub.id&&!sub.statusUrl)) throw new Error((sub&&sub.error)||'higgsfield');
+  var q='id='+encodeURIComponent(sub.id||'')+(sub.statusUrl?'&u='+encodeURIComponent(sub.statusUrl):'');
+  for(var i=0;i<75;i++){
+    await new Promise(function(r){ setTimeout(r,4000); });
+    var st=await fetch('/api/reel-video?'+q).then(function(r){return r.json();}).catch(function(){return null;});
+    if(st){
+      if(st.status==='completed'&&st.url) return st.url;
+      if(st.error||st.status==='failed'||st.status==='nsfw') throw new Error(st.error||st.status);
+    }
+    if(btn) btn.innerHTML='<span class="spinner"></span> '+t('vidMaking');
+  }
+  throw new Error('timeout');
+}
 async function genVideo(){
   var msg=document.getElementById('genVidMsg'), btn=document.getElementById('genVidBtn');
   var prompt=(REEL&&REEL.imagePrompt) || (REEL&&Array.isArray(REEL.scenes)&&REEL.scenes[0]&&REEL.scenes[0].broll) || (REEL&&REEL.caption) || (document.getElementById('src')&&document.getElementById('src').value) || '';
   if(!prompt){ msg.className='pubmsg err'; msg.textContent='⚠️ '+t('needContentFirst'); return; }
   var label=btn.innerHTML; btn.disabled=true;
   msg.className='pubmsg'; msg.textContent='';
+  var v=document.getElementById('vidPreview'); if(v){ v.style.display='none'; v.removeAttribute('src'); }
   try{
     btn.innerHTML='<span class="spinner"></span> '+t('vidImage');
     var ir=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({text:prompt,character:'none',platform:'tiktok',lang:LANG})}).then(function(r){return r.json();});
     if(!ir||ir.error||!ir.url) throw new Error((ir&&ir.error)||'bilde');
     btn.innerHTML='<span class="spinner"></span> '+t('vidMaking');
-    var blob=await imageToVideoBlob(ir.url);
-    btn.innerHTML='<span class="spinner"></span> '+t('vidUploading');
-    var vr=await fetch('/api/video',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({data:await blobToB64(blob),contentType:(blob.type||'video/mp4')})}).then(function(r){return r.json();});
-    if(!vr||vr.error||!vr.url) throw new Error((vr&&vr.error)||'opplasting');
-    document.getElementById('mediaUrl').value=vr.url;
-    var v=document.getElementById('vidPreview'); if(v){ v.src=URL.createObjectURL(blob); v.style.display='block'; }
+    // 1) Prøv Higgsfield på serveren (virker på alle enheter, også iPhone).
+    var url=await higgsfieldVideo(prompt, ir.url, btn);
+    if(url==='__fallback__'){
+      // 2) Higgsfield ikke koblet til: lag video i nettleseren (kun datamaskin).
+      var blob=await imageToVideoBlob(ir.url);
+      btn.innerHTML='<span class="spinner"></span> '+t('vidUploading');
+      var vr=await fetch('/api/video',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({data:await blobToB64(blob),contentType:(blob.type||'video/mp4')})}).then(function(r){return r.json();});
+      if(!vr||vr.error||!vr.url) throw new Error((vr&&vr.error)||'opplasting');
+      url=vr.url; if(v){ v.src=URL.createObjectURL(blob); v.style.display='block'; }
+    }
+    document.getElementById('mediaUrl').value=url;
+    if(v && !v.src){ v.src=url; v.style.display='block'; }
     btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg'; msg.textContent=t('vidReady');
   }catch(e){
     btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err';
