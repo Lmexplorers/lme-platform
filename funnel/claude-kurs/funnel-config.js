@@ -45,12 +45,12 @@ window.LME_FUNNEL = {
       etterKjop: "mersalg.html",       // hit går brukeren etter kjøp
 
       pris: {
-        belop: 199,
+        belop: 490,                    // lanseringspris
         valuta: "kr",
-        visningFor: "499 kr"           // overstrøket "før"-pris ("" skjuler)
+        visningFor: "990 kr"           // vanlig pris (overstrøket). "" skjuler
       },
 
-      merkelapp: "Nytt kurs",
+      merkelapp: "Lanseringstilbud",
       overskrift: "Kom i gang med Claude, den rolige veien",
       underoverskrift:
         "Et vennlig kurs som lærer deg å bruke Claude som en rolig medhjelper i " +
@@ -122,9 +122,9 @@ window.LME_FUNNEL = {
       avslo: "takk.html",
 
       pris: {
-        belop: 149,
+        belop: 249,                    // lanseringspris for mersalget
         valuta: "kr",
-        visningFor: "399 kr",
+        visningFor: "490 kr",          // vanlig pris (overstrøket)
         timerNedtelling: 24
       },
 
@@ -185,12 +185,12 @@ window.LME_FUNNEL = {
       etterKjop: "mersalg.html",
 
       pris: {
-        belop: 19,
+        belop: 49,                     // launch price
         valuta: "USD",
-        visningFor: "$49"
+        visningFor: "$99"              // regular price (struck through)
       },
 
-      merkelapp: "New course",
+      merkelapp: "Launch offer",
       overskrift: "Get started with Claude, the calm way",
       underoverskrift:
         "A friendly course that teaches you to use Claude as a calm helper in " +
@@ -261,9 +261,9 @@ window.LME_FUNNEL = {
       avslo: "takk.html",
 
       pris: {
-        belop: 14,
+        belop: 25,                     // launch price for the upsell
         valuta: "USD",
-        visningFor: "$39",
+        visningFor: "$49",             // regular price (struck through)
         timerNedtelling: 24
       },
 

@@ -305,7 +305,9 @@
     txt('priceCur', p.valuta);
     const pb = document.getElementById('priceBefore');
     if (p.visningFor) pb.textContent = p.visningFor; else pb.style.display = 'none';
-    txt('priceNote', LANG === 'en' ? 'One-time payment. Lifetime access.' : 'Engangsbeløp. Tilgang for alltid.');
+    txt('priceNote', LANG === 'en'
+      ? 'Launch price for a limited time. One-time payment, lifetime access.'
+      : 'Lanseringspris i en begrenset periode. Engangsbeløp, tilgang for alltid.');
     txt('guarantee', s.garanti);
     txt('social', s.sosialtBevis);
 
