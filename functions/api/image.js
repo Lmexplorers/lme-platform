@@ -130,7 +130,7 @@ async function genOpenAI(env, prompt, size) {
 }
 
 async function genGemini(env, prompt, size) {
-  const key = env.GEMINI_API_KEY || env.GOOGLE_API_KEY;
+  const key = env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY;
   if (!key) return { error: "Gemini er ikke koblet til ennå (GEMINI_API_KEY mangler).", status: 400 };
   const model = env.GEMINI_IMAGE_MODEL || "gemini-2.5-flash-image";
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
@@ -198,7 +198,7 @@ export async function onRequestPost(context) {
     // OpenAI, brukes OpenAI. Et eksplisitt valg i body vinner om det er satt.
     let provider = String(body.provider || "").toLowerCase();
     if (!PROVIDERS[provider]) {
-      const hasGemini = !!(env.GEMINI_API_KEY || env.GOOGLE_API_KEY);
+      const hasGemini = !!(env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY);
       const hasOpenAI = !!(env.OPENAI_API_KEY || env.IMAGE_OPENAI_KEY || env.IMAGE_API_KEY);
       provider = hasGemini ? "gemini" : (hasOpenAI ? "openai" : "gemini");
     }
