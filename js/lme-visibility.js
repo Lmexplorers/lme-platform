@@ -256,7 +256,14 @@
       fetch("/api/ai/repurpose", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ article: article.slice(0, 6000), lang: lang() }),
-      }).then(function (r) { return r.json(); }),
+      }).then(function (r) {
+        return r.text().then(function (t) {
+          var j = null; try { j = JSON.parse(t); } catch (e) {}
+          if (!j) { var e2 = new Error("[repurpose " + r.status + ": " + (t || "").replace(/\s+/g, " ").slice(0, 60) + "]"); throw e2; }
+          if (j.error) throw new Error("[" + (j.error) + (j.detail ? ": " + String(j.detail).slice(0, 80) : "") + "]");
+          return j;
+        });
+      }),
       fetchBlAccounts(),
     ]).then(function (arr) {
       var d = arr[0];
@@ -290,9 +297,10 @@
           if (ch) publishCard(ch, b);
         });
       });
-    }).catch(function () {
+    }).catch(function (e) {
       goBtn.disabled = false; goBtn.innerHTML = label;
-      resultsEl.innerHTML = '<p class="lme-vis-note">' + T("Kunne ikke lage delinger akkurat nå. Prøv igjen om litt.", "Could not create posts right now. Try again shortly.") + "</p>";
+      var why = (e && e.message && e.message !== "bad") ? " " + e.message : "";
+      resultsEl.innerHTML = '<p class="lme-vis-note">' + T("Kunne ikke lage delinger akkurat nå. Prøv igjen om litt.", "Could not create posts right now. Try again shortly.") + why + "</p>";
     });
   }
 
