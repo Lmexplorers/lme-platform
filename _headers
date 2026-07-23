@@ -9,3 +9,15 @@
   Cache-Control: no-store
 /reel-studio.html
   Cache-Control: no-store
+# Salgs- og tilbudssider maa alltid hentes ferske, saa mobilen aldri viser
+# gamle priser eller loefter (f.eks. en fjernet garanti) fra buffer.
+/claude-kurs
+  Cache-Control: no-store
+/claude-course
+  Cache-Control: no-store
+/funnel/claude-kurs/salg.html
+  Cache-Control: no-store
+/funnel/claude-kurs/mersalg.html
+  Cache-Control: no-store
+/funnel/tripwire/tilbud.html
+  Cache-Control: no-store
