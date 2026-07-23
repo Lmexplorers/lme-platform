@@ -545,7 +545,7 @@ async function genVideo(){
       body:JSON.stringify({text:prompt,character:'none',platform:'tiktok',lang:LANG})}).then(function(r){return readJson(r,'image');});
     if(ir&&ir.error==='not_configured') throw new Error(t('imgNotConfigured'));
     if(ir&&ir.error&&/ikke koblet til|not connected|mangler|missing/i.test(ir.error)) throw new Error(t('imgNotConfigured'));
-    if(!ir||ir.error||!ir.url) throw new Error((ir&&ir.error)||'bilde');
+    if(!ir||ir.error||!ir.url) throw new Error(((ir&&ir.error)||'bilde')+((ir&&ir.detail)?': '+ir.detail:''));
     btn.innerHTML='<span class="spinner"></span> '+t('vidMaking');
     // 1) Prøv Higgsfield på serveren (virker på alle enheter, også iPhone).
     var url=await higgsfieldVideo(prompt, ir.url, btn);

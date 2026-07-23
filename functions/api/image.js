@@ -180,52 +180,58 @@ function aspectFor(size) {
 // POST — generer og lagre bilde
 // =====================================================
 export async function onRequestPost(context) {
-  const { request, env } = context;
-  if (!env.BUILDER_KV) return json({ error: "not_configured" }, 200);
-
-  let body;
-  try { body = await request.json(); }
-  catch { return json({ error: "Ugyldig JSON" }, 400); }
-
-  let character = String(body.character || "none").toLowerCase();
-  if (!["none", "mia", "teo", "both"].includes(character)) character = "none";
-
-  let provider = String(body.provider || "openai").toLowerCase();
-  if (!PROVIDERS[provider]) provider = "openai";
-
-  const prompt = buildPrompt(body.text, character);
-  const size = sizeFor(body.platform);
-
-  let out;
+  // Alt er pakket i én ytre try/catch, så en uventet feil alltid gir et JSON-svar
+  // (aldri en 502 med HTML-side). Da ser vi den ekte feilen i stedet for å gjette.
   try {
-    out = await PROVIDERS[provider](env, prompt, size);
-  } catch (e) {
-    return json({ error: "Kom ikke i kontakt med bildemotoren." }, 502);
-  }
-  if (out && out.error) return json({ error: out.error, detail: out.detail }, out.status || 502);
+    const { request, env } = context;
+    if (!env.BUILDER_KV) return json({ error: "not_configured" }, 200);
 
-  let bytes = out.bytes, contentType = out.contentType || "image/png";
-  if (!bytes && out.url) {
+    let body;
+    try { body = await request.json(); }
+    catch { return json({ error: "Ugyldig JSON" }, 400); }
+
+    let character = String(body.character || "none").toLowerCase();
+    if (!["none", "mia", "teo", "both"].includes(character)) character = "none";
+
+    let provider = String(body.provider || "openai").toLowerCase();
+    if (!PROVIDERS[provider]) provider = "openai";
+
+    const prompt = buildPrompt(body.text, character);
+    const size = sizeFor(body.platform);
+
+    let out;
     try {
-      const ir = await fetchTimeout(out.url, {}, 30000);
-      bytes = new Uint8Array(await ir.arrayBuffer());
-      contentType = ir.headers.get("Content-Type") || contentType;
-    } catch (e) { return json({ error: "Klarte ikke å hente bildet fra motoren." }, 502); }
-  }
-  if (!bytes) return json({ error: "Fikk ikke noe bilde tilbake." }, 502);
+      out = await PROVIDERS[provider](env, prompt, size);
+    } catch (e) {
+      return json({ error: "Kom ikke i kontakt med bildemotoren.", detail: String(e && e.message || e).slice(0, 200) }, 200);
+    }
+    if (out && out.error) return json({ error: out.error, detail: out.detail }, 200);
 
-  const id = crypto.randomUUID().replace(/-/g, "");
-  try {
-    await env.BUILDER_KV.put("img:" + id, bytes, {
-      metadata: { ct: contentType },
-      expirationTtl: 60 * 60 * 24 * 30, // 30 dager
-    });
+    let bytes = out.bytes, contentType = out.contentType || "image/png";
+    if (!bytes && out.url) {
+      try {
+        const ir = await fetchTimeout(out.url, {}, 30000);
+        bytes = new Uint8Array(await ir.arrayBuffer());
+        contentType = ir.headers.get("Content-Type") || contentType;
+      } catch (e) { return json({ error: "Klarte ikke å hente bildet fra motoren." }, 200); }
+    }
+    if (!bytes) return json({ error: "Fikk ikke noe bilde tilbake." }, 200);
+
+    const id = crypto.randomUUID().replace(/-/g, "");
+    try {
+      await env.BUILDER_KV.put("img:" + id, bytes, {
+        metadata: { ct: contentType },
+        expirationTtl: 60 * 60 * 24 * 30, // 30 dager
+      });
+    } catch (e) {
+      return json({ error: "Klarte ikke å lagre bildet.", detail: String(e && e.message || e).slice(0, 200) }, 200);
+    }
+
+    const origin = new URL(request.url).origin;
+    return json({ url: `${origin}/api/image?id=${id}` }, 200);
   } catch (e) {
-    return json({ error: "Klarte ikke å lagre bildet." }, 500);
+    return json({ error: "Uventet feil i bildemotoren.", detail: String(e && e.message || e).slice(0, 200) }, 200);
   }
-
-  const origin = new URL(request.url).origin;
-  return json({ url: `${origin}/api/image?id=${id}` }, 200);
 }
 
 // =====================================================
