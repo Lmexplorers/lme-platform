@@ -1,0 +1,20 @@
+name: Ukentlig nyhetsbrev
+
+# Sender neste brev i den evergreen nyhetsbrev-serien til hver abonnent.
+# Kjører en gang i uka (mandag morgen) og kan startes manuelt fra Actions-fanen.
+# Valgfritt: legg repo-hemmeligheten CLAUDE_CRON_TOKEN hvis endepunktet er beskyttet.
+
+on:
+  schedule:
+    - cron: "0 7 * * 1"   # mandag kl. 07:00 UTC
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger nyhetsbrev-utsending
+        env:
+          TOKEN: ${{ secrets.CLAUDE_CRON_TOKEN }}
+        run: |
+          curl -fsS "https://lmexplorers.com/api/cron/newsletter${TOKEN:+?token=$TOKEN}"

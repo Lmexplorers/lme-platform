@@ -17,6 +17,7 @@
  */
 
 import { sendClaudeMail } from "../_lib/claude-mail.js";
+import { registerNewsletter } from "../_lib/newsletter.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -174,6 +175,8 @@ export async function onRequestPost(context) {
           ? (env.MAILERLITE_CLAUDE_GROUP_EN || CLAUDE_GROUP_EN)
           : (env.MAILERLITE_CLAUDE_GROUP_NO || CLAUDE_GROUP_NO);
         await addToClaudeGroup(env, email, name, groupId);
+        // Start også den ukentlige nyhetsbrev-serien for kjøperen.
+        try { await registerNewsletter(env, email, name, claudeLang); } catch (e) {}
         // Hovedkurs: send takkemail nå, og legg 2-dagers oppfølger i kø.
         const mainLang = CLAUDE_MAIN_LINK_LANG[obj.payment_link];
         if (mainLang && email) {
