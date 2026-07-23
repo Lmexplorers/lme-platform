@@ -308,7 +308,9 @@
     txt('priceNote', LANG === 'en'
       ? 'Launch price for a limited time. One-time payment, lifetime access.'
       : 'Lanseringspris i en begrenset periode. Engangsbeløp, tilgang for alltid.');
-    txt('guarantee', s.garanti);
+    // Garanti vises bare hvis den faktisk er satt i config (ikke lov noe du ikke tilbyr).
+    if (s.garanti) { txt('guarantee', s.garanti); }
+    else { const gEl = document.getElementById('guarantee'); const gBox = gEl && gEl.closest('.guarantee'); if (gBox) gBox.style.display = 'none'; }
     txt('social', s.sosialtBevis);
 
     // Kundeuttalelse (vises bare hvis sitat er satt i config)

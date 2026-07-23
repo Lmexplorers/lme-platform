@@ -197,7 +197,8 @@
     document.getElementById('offerHeading').innerHTML = highlightLast(t.overskrift);
     txt('offerSub', t.underoverskrift);
     txt('cdLabel', t.nedtellingTekst);
-    txt('offerGuarantee', t.garanti);
+    if (t.garanti) { txt('offerGuarantee', t.garanti); }
+    else { const gEl = document.getElementById('offerGuarantee'); const gBox = gEl && gEl.closest('.guarantee'); if (gBox) gBox.style.display = 'none'; }
     txt('buyBtn', t.kjopKnapp);
     txt('declineBtn', t.avslaaKnapp);
     txt('offerSocial', t.sosialtBevis);

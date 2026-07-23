@@ -104,7 +104,7 @@ window.LME_FUNNEL = {
         "Du vil helst gjøre alt manuelt og ikke la AI ta noe av det skriftlige"
       ],
 
-      garanti: "14 dagers full pengene-tilbake-garanti, uten spørsmål.",
+      garanti: "",
       kjopKnapp: "Ja takk, gi meg Claude-kurset",
       sosialtBevis:
         "Laget av Renate Dahl, høgskoleutdannet montessoripedagog med over 20 års " +
@@ -141,7 +141,7 @@ window.LME_FUNNEL = {
         "Lær å la Claude følge dine faste arbeidsmåter",
         "Trygge vaner for bygging, uten å måtte lære å kode"
       ],
-      garanti: "Samme 14 dagers garanti gjelder her også.",
+      garanti: "",
       kjopKnapp: "Ja takk, legg til Videre med Claude",
       avslaaKnapp: "Nei takk, jeg fortsetter uten dette",
       sosialtBevis: "Det naturlige neste steget etter nybegynnerkurset.",
@@ -244,7 +244,7 @@ window.LME_FUNNEL = {
         "You'd rather do everything manually and let AI handle none of the writing"
       ],
 
-      garanti: "14-day full money-back guarantee, no questions asked.",
+      garanti: "",
       kjopKnapp: "Yes please, give me the Claude course",
       sosialtBevis:
         "Created by Renate Dahl, a college-educated Montessori educator with 20+ " +
@@ -280,7 +280,7 @@ window.LME_FUNNEL = {
         "Learn to let Claude follow your regular workflows",
         "Safe building habits, without having to learn to code"
       ],
-      garanti: "The same 14-day guarantee applies here too.",
+      garanti: "",
       kjopKnapp: "Yes please, add Next Level with Claude",
       avslaaKnapp: "No thanks, I'll continue without this",
       sosialtBevis: "The natural next step after the beginner course.",

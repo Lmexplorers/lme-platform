@@ -34,7 +34,8 @@ AI-drevet plattform grunnlagt av Renate Dahl (Montessori-pedagog med utdanning f
 LME er ett samlet økosystem, ikke en samling separate apper. Reisen er: lær, skap, bli synlig, selg og voks.
 Montessori-filosofien er fundamentet, men LME er mer enn en Montessori-plattform.
 Mia & Teo er karakterene i Renates bøker (De små naturutforskerne). Tonen er varm, pedagogisk og tillitsvekkende.
-VIKTIG: nevn aldri AMI eller Association Montessori Internationale. Renate har sin utdanning fra Høyskolen i Vestfold.`;
+VIKTIG: nevn aldri AMI eller Association Montessori Internationale. Renate har sin utdanning fra Høyskolen i Vestfold.
+ALDRI dikt opp garantier, pengene-tilbake-løfter, refusjonsvilkår, priser, rabatter, tall, resultater eller andre påstander som ikke er oppgitt i kilden. Ikke lov noe på vegne av LME. Er ikke noe oppgitt, la det være.`;
 
 const langName = (l) => (l === "en" ? "English" : "norsk (bokmål)");
 
