@@ -258,8 +258,16 @@
       if (typeof out === "string") { var m = out.match(/\{[\s\S]*\}/); out = JSON.parse(m ? m[0] : out); }
       if (!out || typeof out !== "object") throw new Error("bad");
       var html = "";
+      // Lag reel automatisk av dette innholdet i Reel Studio.
+      html += '<button class="lme-vis-go" style="margin:0 0 14px;" id="lmeVisReel">🎬 ' +
+        T("Lag reel av dette", "Turn this into a reel") + "</button>";
       CHANNELS.forEach(function (ch) { html += cardHTML(ch, out[ch.key]); });
       resultsEl.innerHTML = html || ('<p class="lme-vis-note">' + T("Ingen forslag denne gangen. Prøv igjen.", "No suggestions this time. Try again.") + "</p>");
+      var reelBtn = resultsEl.querySelector("#lmeVisReel");
+      if (reelBtn) reelBtn.addEventListener("click", function () {
+        try { localStorage.setItem("lme-reel-seed", article.slice(0, 4000)); } catch (e) {}
+        location.href = "/reel-studio";
+      });
       resultsEl.querySelectorAll("[data-copy]").forEach(function (b) {
         b.addEventListener("click", function () {
           var txt = b.closest(".lme-vis-card").querySelector(".txt").innerText;
