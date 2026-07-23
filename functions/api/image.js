@@ -94,16 +94,33 @@ function buildPrompt(text, character) {
 // { bytes, contentType } | { url } | { error, status?, detail? }.
 // Nøklene ligger som hemmelige miljøvariabler på plattformen.
 // =====================================================
+// Fetch med tidsavbrudd, så en treg bildemotor gir en ren feil i stedet for at
+// hele funksjonen drepes av plattformen (502).
+async function fetchTimeout(url, opts, ms) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), ms || 55000);
+  try { return await fetch(url, { ...opts, signal: ctrl.signal }); }
+  finally { clearTimeout(timer); }
+}
+
 async function genOpenAI(env, prompt, size) {
   const key = env.OPENAI_API_KEY || env.IMAGE_OPENAI_KEY || env.IMAGE_API_KEY;
   if (!key) return { error: "OpenAI er ikke koblet til ennå (OPENAI_API_KEY mangler).", status: 400 };
   const base = (env.IMAGE_OPENAI_BASE || env.IMAGE_API_BASE || "https://api.openai.com/v1").replace(/\/$/, "");
   const model = env.IMAGE_OPENAI_MODEL || env.IMAGE_MODEL || "gpt-image-1";
-  const r = await fetch(`${base}/images/generations`, {
-    method: "POST",
-    headers: { "Authorization": `Bearer ${key}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ model, prompt, size, n: 1 }),
-  });
+  // Lav kvalitet er raskt (bakgrunn som uansett animeres til video), og holder
+  // oss innenfor tidsgrensa til plattformen så vi unngår 502.
+  const quality = env.IMAGE_QUALITY || "low";
+  let r;
+  try {
+    r = await fetchTimeout(`${base}/images/generations`, {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ model, prompt, size, n: 1, quality }),
+    }, 55000);
+  } catch (e) {
+    return { error: "Bildemotoren brukte for lang tid. Prøv igjen, eller sett IMAGE_QUALITY=low i Cloudflare.", status: 504 };
+  }
   if (!r.ok) return { error: `OpenAI svarte ${r.status}.`, detail: (await r.text()).slice(0, 300) };
   const data = await r.json();
   const item = data && data.data && data.data[0];
@@ -117,14 +134,19 @@ async function genGemini(env, prompt, size) {
   if (!key) return { error: "Gemini er ikke koblet til ennå (GEMINI_API_KEY mangler).", status: 400 };
   const model = env.GEMINI_IMAGE_MODEL || "gemini-2.5-flash-image";
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
-  const r = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
-      generationConfig: { responseModalities: ["IMAGE"], imageConfig: { aspectRatio: aspectFor(size) } },
-    }),
-  });
+  let r;
+  try {
+    r = await fetchTimeout(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        generationConfig: { responseModalities: ["IMAGE"], imageConfig: { aspectRatio: aspectFor(size) } },
+      }),
+    }, 55000);
+  } catch (e) {
+    return { error: "Bildemotoren brukte for lang tid. Prøv igjen.", status: 504 };
+  }
   if (!r.ok) return { error: `Gemini svarte ${r.status}.`, detail: (await r.text()).slice(0, 300) };
   const data = await r.json();
   const parts = (((data.candidates || [])[0] || {}).content || {}).parts || [];
@@ -185,7 +207,7 @@ export async function onRequestPost(context) {
   let bytes = out.bytes, contentType = out.contentType || "image/png";
   if (!bytes && out.url) {
     try {
-      const ir = await fetch(out.url);
+      const ir = await fetchTimeout(out.url, {}, 30000);
       bytes = new Uint8Array(await ir.arrayBuffer());
       contentType = ir.headers.get("Content-Type") || contentType;
     } catch (e) { return json({ error: "Klarte ikke å hente bildet fra motoren." }, 502); }
