@@ -76,6 +76,11 @@
   textarea{min-height:120px;resize:vertical;}
   .row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-top:12px;}
   .row .grow{flex:1;min-width:180px;}
+  .fmt-chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .fmt-chip{font-family:var(--font-body);font-size:13.5px;font-weight:600;border:1.5px solid var(--line);
+    background:#fff;color:var(--ink-soft);border-radius:var(--r-pill);padding:8px 14px;cursor:pointer;transition:all .14s;width:auto;}
+  .fmt-chip:hover{background:var(--cream-deep);}
+  .fmt-chip.on{background:var(--cerise);border-color:var(--cerise);color:#fff;}
   .btn{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:#fff;font-weight:700;
     font-size:14px;padding:12px 20px;border-radius:var(--r-pill);transition:transform .12s ease,opacity .12s ease;}
   .btn:hover{transform:translateY(-1px);}
@@ -143,12 +148,14 @@
   <!-- STEG 1: kilde -->
   <section class="step" id="step1">
     <div class="step-num"><span>1</span> <span data-i18n="s1-num">Innhold</span></div>
-    <h2 data-i18n="s1-h">Hva skal reelen handle om?</h2>
-    <p class="lead" data-i18n="s1-lead">Lim inn et tips, en leksjon, et blogginnlegg eller bare en idé. AI-en gjør resten om til en reel.</p>
-    <label class="fld" for="src" data-i18n="s1-src">Innhold eller idé</label>
+    <h2 data-i18n="s1-h">Hva skal du lage?</h2>
+    <p class="lead" data-i18n="s1-lead">Velg format, lim inn et tips, en leksjon eller en idé, så lager AI-en innholdet i riktig format.</p>
+    <label class="fld" data-i18n="s1-fmt">Format</label>
+    <div id="fmtChips" class="fmt-chips"></div>
+    <label class="fld" for="src" data-i18n="s1-src" style="margin-top:14px;">Innhold eller idé</label>
     <textarea id="src" data-i18n-ph="s1-ph" placeholder="F.eks: Tre enkle Montessori-aktiviteter i kjøkkenet for barn 3-6 år…"></textarea>
     <div class="row">
-      <div>
+      <div id="secsWrap">
         <label class="fld" for="secs" data-i18n="s1-len">Lengde</label>
         <select id="secs">
           <option value="15">15 s</option>
@@ -157,19 +164,19 @@
           <option value="45">45 s</option>
         </select>
       </div>
-      <button class="btn cerise" id="genBtn" onclick="genReel()"><span data-i18n="s1-btn">🎬 Lag reel</span></button>
+      <button class="btn cerise" id="genBtn" onclick="genContent()"><span id="genLabel" data-i18n="s1-btn">✨ Lag innhold</span></button>
     </div>
     <div class="out" id="out"></div>
   </section>
 
-  <!-- STEG 2: video -->
+  <!-- STEG 2: media -->
   <section class="step" id="step2">
-    <div class="step-num"><span>2</span> <span data-i18n="s2-num">Video</span></div>
-    <h2 data-i18n="s2-h">Lag selve videoen</h2>
-    <p class="lead" data-i18n="s2-lead">Bruk b-roll-promptene og voiceover-manuset over i video-motoren din (for eksempel Higgsfield) og lag en vertikal 9:16 video. Lim inn lenken til den ferdige MP4-en her.</p>
-    <label class="fld" for="videoUrl" data-i18n="s2-url">Lenke til ferdig video (MP4)</label>
-    <input id="videoUrl" placeholder="https://…/reel.mp4" />
-    <div class="note" data-i18n="s2-note">💡 Vil du at reelen skal lages helt automatisk rett her? Da kobler vi en video-motor med server-nøkkel til workeren. Si fra, så setter jeg det opp.</div>
+    <div class="step-num"><span>2</span> <span id="s2num" data-i18n="s2-num">Media</span></div>
+    <h2 id="s2h" data-i18n="s2-h">Legg til media</h2>
+    <p class="lead" id="s2lead" data-i18n="s2-lead">Lim inn lenken til den ferdige videoen eller bildet. Blotato henter og re-hoster den ved publisering.</p>
+    <label class="fld" for="mediaUrl" id="s2label" data-i18n="s2-url">Lenke til media</label>
+    <input id="mediaUrl" placeholder="https://…" />
+    <div class="note" id="s2note" data-i18n="s2-note">💡 For reel og TikTok trengs en vertikal 9:16 video. Vil du at videoen skal lages helt automatisk her? Da kobler vi en video-motor med server-nøkkel til workeren.</div>
   </section>
 
   <!-- STEG 3: publiser -->
@@ -184,8 +191,7 @@
       <div class="grow"><label class="fld" for="schedDate" data-i18n="s3-date">Dato</label><input type="date" id="schedDate"></div>
       <div class="grow"><label class="fld" for="schedTime" data-i18n="s3-time">Tid</label><input type="time" id="schedTime" value="09:00"></div>
     </div>
-    <button class="btn cerise block" id="igBtn" onclick="publishReel('instagram',this)">📸 <span data-i18n="s3-ig">Publiser til Instagram Reels</span></button>
-    <button class="btn cerise block" id="ttBtn" onclick="publishReel('tiktok',this)">🎵 <span data-i18n="s3-tt">Publiser til TikTok</span></button>
+    <div id="pubBtns"></div>
     <div class="pubmsg" id="pubmsg"></div>
   </section>
 
@@ -206,42 +212,54 @@ let LANG = (function(){ try { return localStorage.getItem('lme_lang') || localSt
 const I18N = {
   no:{ back:"Til Creative Academy",
     title:'LME <em>Reel Studio</em>',
-    subtitle:"Fra et innhold til en ferdig reel. AI-en lager hook, scene-for-scene manus, voiceover, b-roll og caption, klar til automatisk publisering på Instagram og TikTok.",
-    "s1-num":"Innhold","s1-h":"Hva skal reelen handle om?","s1-lead":"Lim inn et tips, en leksjon, et blogginnlegg eller bare en idé. AI-en gjør resten om til en reel.",
-    "s1-src":"Innhold eller idé","s1-ph":"F.eks: Tre enkle Montessori-aktiviteter i kjøkkenet for barn 3-6 år…","s1-len":"Lengde","s1-btn":"🎬 Lag reel",
-    "s2-num":"Video","s2-h":"Lag selve videoen","s2-lead":"Bruk b-roll-promptene og voiceover-manuset over i video-motoren din (for eksempel Higgsfield) og lag en vertikal 9:16 video. Lim inn lenken til den ferdige MP4-en her.",
-    "s2-url":"Lenke til ferdig video (MP4)","s2-note":"💡 Vil du at reelen skal lages helt automatisk rett her? Da kobler vi en video-motor med server-nøkkel til workeren. Si fra, så setter jeg det opp.",
+    subtitle:"Velg format og lag ferdig innhold: reel, karusell, story, feed-innlegg, bildetekst, nyhetsbrev eller Pinterest. Klar til automatisk publisering og planlegging.",
+    "s1-num":"Innhold","s1-h":"Hva skal du lage?","s1-lead":"Velg format, lim inn et tips, en leksjon eller en idé, så lager AI-en innholdet i riktig format.",
+    "s1-fmt":"Format",
+    "s1-src":"Innhold eller idé","s1-ph":"F.eks: Tre enkle Montessori-aktiviteter i kjøkkenet for barn 3-6 år…","s1-len":"Lengde","s1-btn":"✨ Lag innhold",
+    "s2-num":"Media","s2-h":"Legg til media","s2-lead":"Lim inn lenken til den ferdige videoen eller bildet.",
+    "s2urlVideo":"Lenke til ferdig video (MP4)","s2urlImage":"Lenke til bilde (valgfritt)",
+    "s2leadVideo":"For reel og TikTok trengs en vertikal 9:16 video. Lim inn lenken til den ferdige MP4-en her.",
+    "s2leadImage":"Legg gjerne ved et bilde (valgfritt for de fleste, kreves for Instagram og Pinterest). Lim inn en bilde-lenke.",
+    "s2-url":"Lenke til media","s2-note":"💡 Vil du at videoen skal lages helt automatisk her? Da kobler vi en video-motor med server-nøkkel til workeren.",
     "s3-num":"Publiser","s3-h":"Legg ut automatisk","s3-lead":"Bruker Blotato-kontoene dine automatisk. Legg ut nå, eller planlegg til en fremtidig dato.",
-    "s3-ig":"Publiser til Instagram Reels","s3-tt":"Publiser til TikTok",
     "s3-sched":"📅 Planlegg til senere (90-dagers plan)","s3-date":"Dato","s3-time":"Tid",
-    "pl-num":"Planen din","pl-h":"Planlagte reels","pl-lead":"Reels du har planlagt fremover. Blotato legger dem ut automatisk til rett tid. Lagres her, også etter at du lukker siden.",
+    "pl-num":"Planen din","pl-h":"Planlagt innhold","pl-lead":"Innhold du har planlagt fremover. Blotato legger det ut automatisk til rett tid. Lagres her, også etter at du lukker siden.",
     hook:"HOOK (0-3 s)",vo:"Voiceover",music:"Musikk",caption:"Caption",tags:"Hashtags",scenes:"Scener",broll:"B-roll",
-    loading:"Lager reel…",error:"Noe gikk galt. Prøv igjen om litt.",copy:"Kopier",copied:"Kopiert!",
+    slide:"Slide",frame:"Frame",imgprompt:"Bilde-prompt",subject:"Emnelinje",preview:"Forhåndstekst",body:"E-post",cta:"Oppfordring",pinTitle:"Pin-tittel",pinDesc:"Pin-beskrivelse",
+    pubIg:"Publiser til Instagram",pubTt:"Publiser til TikTok",pubFb:"Publiser til Facebook",pubPin:"Publiser til Pinterest",
+    loading:"Lager innhold…",error:"Noe gikk galt. Prøv igjen om litt.",copy:"Kopier",copied:"Kopiert!",
     needVideo:"Lim inn lenken til den ferdige videoen i steg 2 først.",
+    needImage:"Legg ved en bilde-lenke i steg 2 for denne plattformen.",
     needDate:"Velg en dato for planleggingen.",
     notConnected:"Fant ikke denne kontoen i Blotato.",
     publishing:"Publiserer…",scheduling:"Planlegger…",published:"Lagt ut automatisk 🎉",
     scheduledOk:"Planlagt 🗓️",pubfail:"Klarte ikke å publisere. Sjekk kobling i Publiser alle.",neterr:"Nettverksfeil. Prøv igjen.",
-    planEmpty:"Ingen planlagte reels enda.",remove:"Fjern",plPlatIg:"Instagram Reels",plPlatTt:"TikTok" },
+    planEmpty:"Ingen planlagt innhold enda.",remove:"Fjern" },
   en:{ back:"To Creative Academy",
     title:'LME <em>Reel Studio</em>',
-    subtitle:"From one piece of content to a finished reel. The AI writes the hook, scene-by-scene script, voiceover, b-roll and caption, ready for automatic posting to Instagram and TikTok.",
-    "s1-num":"Content","s1-h":"What should the reel be about?","s1-lead":"Paste a tip, a lesson, a blog post or just an idea. The AI turns the rest into a reel.",
-    "s1-src":"Content or idea","s1-ph":"E.g: Three simple Montessori kitchen activities for kids aged 3-6…","s1-len":"Length","s1-btn":"🎬 Create reel",
-    "s2-num":"Video","s2-h":"Make the video itself","s2-lead":"Use the b-roll prompts and voiceover script above in your video engine (for example Higgsfield) to make a vertical 9:16 video. Paste the finished MP4 link here.",
-    "s2-url":"Link to finished video (MP4)","s2-note":"💡 Want the reel made fully automatically right here? Then we connect a video engine with a server key to the worker. Just say so and I'll set it up.",
+    subtitle:"Choose a format and create finished content: reel, carousel, story, feed post, caption, newsletter or Pinterest. Ready for automatic posting and scheduling.",
+    "s1-num":"Content","s1-h":"What do you want to create?","s1-lead":"Choose a format, paste a tip, a lesson or an idea, and the AI creates the content in the right format.",
+    "s1-fmt":"Format",
+    "s1-src":"Content or idea","s1-ph":"E.g: Three simple Montessori kitchen activities for kids aged 3-6…","s1-len":"Length","s1-btn":"✨ Create content",
+    "s2-num":"Media","s2-h":"Add media","s2-lead":"Paste the link to the finished video or image.",
+    "s2urlVideo":"Link to finished video (MP4)","s2urlImage":"Image link (optional)",
+    "s2leadVideo":"Reels and TikTok need a vertical 9:16 video. Paste the finished MP4 link here.",
+    "s2leadImage":"Add an image (optional for most, required for Instagram and Pinterest). Paste an image link.",
+    "s2-url":"Media link","s2-note":"💡 Want the video made fully automatically here? Then we connect a video engine with a server key to the worker.",
     "s3-num":"Publish","s3-h":"Post automatically","s3-lead":"Uses your connected Blotato accounts automatically. Post now, or schedule for a future date.",
-    "s3-ig":"Publish to Instagram Reels","s3-tt":"Publish to TikTok",
     "s3-sched":"📅 Schedule for later (90-day plan)","s3-date":"Date","s3-time":"Time",
-    "pl-num":"Your plan","pl-h":"Scheduled reels","pl-lead":"Reels you've scheduled ahead. Blotato posts them automatically at the right time. Saved here, even after you close the page.",
+    "pl-num":"Your plan","pl-h":"Scheduled content","pl-lead":"Content you've scheduled ahead. Blotato posts it automatically at the right time. Saved here, even after you close the page.",
     hook:"HOOK (0-3 s)",vo:"Voiceover",music:"Music",caption:"Caption",tags:"Hashtags",scenes:"Scenes",broll:"B-roll",
-    loading:"Creating reel…",error:"Something went wrong. Try again shortly.",copy:"Copy",copied:"Copied!",
+    slide:"Slide",frame:"Frame",imgprompt:"Image prompt",subject:"Subject",preview:"Preview text",body:"Email",cta:"Call to action",pinTitle:"Pin title",pinDesc:"Pin description",
+    pubIg:"Publish to Instagram",pubTt:"Publish to TikTok",pubFb:"Publish to Facebook",pubPin:"Publish to Pinterest",
+    loading:"Creating content…",error:"Something went wrong. Try again shortly.",copy:"Copy",copied:"Copied!",
     needVideo:"Paste the finished video link in step 2 first.",
+    needImage:"Add an image link in step 2 for this platform.",
     needDate:"Pick a date to schedule.",
     notConnected:"Couldn't find this account in Blotato.",
     publishing:"Publishing…",scheduling:"Scheduling…",published:"Posted automatically 🎉",
     scheduledOk:"Scheduled 🗓️",pubfail:"Could not publish. Check the connection in Publish all.",neterr:"Network error. Try again.",
-    planEmpty:"No scheduled reels yet.",remove:"Remove",plPlatIg:"Instagram Reels",plPlatTt:"TikTok" }
+    planEmpty:"No scheduled content yet.",remove:"Remove" }
 };
 const t = (k) => (I18N[LANG][k] ?? I18N.no[k] ?? k);
 function applyI18n(){
@@ -254,60 +272,145 @@ function applyI18n(){
   document.getElementById('lang-no').classList.toggle('active',LANG==='no');
   document.getElementById('lang-en').classList.toggle('active',LANG==='en');
 }
-function setLang(l){ LANG=l; try{localStorage.setItem('lme_lang',l);localStorage.setItem('lme-lang',l);}catch(e){} applyI18n(); if(typeof renderPlan==='function') renderPlan(); }
+function setLang(l){ LANG=l; try{localStorage.setItem('lme_lang',l);localStorage.setItem('lme-lang',l);}catch(e){} applyI18n(); if(typeof renderFmtChips==='function'){ renderFmtChips(); updateStep2(); } if(typeof updatePubButtons==='function' && curFmt().pub.length && document.getElementById('step3').classList.contains('on')) updatePubButtons(); if(typeof renderPlan==='function') renderPlan(); }
 
 function esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function parseJSON(str){ if(typeof str==='object') return str; const m=str.match(/\{[\s\S]*\}/); return JSON.parse(m?m[0]:str); }
 function copyText(txt,el){ try{navigator.clipboard.writeText(txt);}catch(e){} const o=el.textContent; el.textContent=t('copied'); setTimeout(()=>el.textContent=o,1200); }
 function copyBtn(txt){ return '<button class="copy-btn" onclick=\'copyText('+JSON.stringify(txt)+',this)\'>'+t('copy')+'</button>'; }
 
-/* ---- Steg 1: generer reel-pakken ---- */
+/* ---- Formater (speiler LME Content Studio-appen) ---- */
+var FORMATS=[
+  {id:'reel',ico:'🎬',no:'Reel / TikTok',en:'Reel / TikTok',media:'video',pub:['instagram','tiktok']},
+  {id:'carousel',ico:'🎠',no:'Karusell',en:'Carousel',media:'image',pub:['instagram','facebook']},
+  {id:'story',ico:'🌸',no:'Story',en:'Story',media:'image',pub:['instagram','facebook']},
+  {id:'post',ico:'🌿',no:'Feed-innlegg',en:'Feed post',media:'image',pub:['instagram','facebook']},
+  {id:'caption',ico:'✍️',no:'Lang bildetekst',en:'Long caption',media:'image',pub:['instagram','facebook']},
+  {id:'email',ico:'💌',no:'Nyhetsbrev',en:'Newsletter',media:'none',pub:[]},
+  {id:'pinterest',ico:'📌',no:'Pinterest',en:'Pinterest',media:'image',pub:['pinterest']},
+];
+var FMT='reel';
+function curFmt(){ return FORMATS.filter(function(f){return f.id===FMT;})[0]||FORMATS[0]; }
+function renderFmtChips(){
+  var host=document.getElementById('fmtChips'); if(!host) return;
+  host.innerHTML=FORMATS.map(function(f){
+    return '<button type="button" class="fmt-chip'+(f.id===FMT?' on':'')+'" data-fmt="'+f.id+'" onclick="selectFmt(\''+f.id+'\')">'+f.ico+' '+esc(LANG==='en'?f.en:f.no)+'</button>';
+  }).join('');
+}
+function selectFmt(id){
+  FMT=id; renderFmtChips();
+  var f=curFmt();
+  // Lengde-valg bare for reel
+  var sw=document.getElementById('secsWrap'); if(sw) sw.style.display=f.media==='video'?'block':'none';
+  updateStep2();
+}
+function updateStep2(){
+  var f=curFmt();
+  var step2=document.getElementById('step2');
+  if(f.media==='none'){ step2.style.display='none'; return; }
+  step2.style.display='block';
+  var isVideo=f.media==='video';
+  document.getElementById('s2label').textContent=isVideo?t('s2urlVideo'):t('s2urlImage');
+  document.getElementById('s2lead').textContent=isVideo?t('s2leadVideo'):t('s2leadImage');
+  document.getElementById('s2note').style.display=isVideo?'block':'none';
+  var inp=document.getElementById('mediaUrl'); inp.placeholder=isVideo?'https://…/reel.mp4':'https://…/bilde.jpg';
+}
+
+/* ---- Steg 1: generer innhold i valgt format ---- */
 let REEL=null;
-async function genReel(){
+async function genContent(){
   const source=document.getElementById('src').value.trim();
   if(!source) return;
   const seconds=document.getElementById('secs').value;
   const btn=document.getElementById('genBtn');
   const label=btn.innerHTML; btn.disabled=true; btn.innerHTML='<span class="spinner"></span> '+t('loading');
   try{
-    const res=await fetch(WORKER_BASE+'/ai/reel',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({source,seconds,lang:LANG})});
+    const res=await fetch(WORKER_BASE+'/ai/content',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({format:FMT,source:source,seconds:seconds,lang:LANG})});
     if(!res.ok) throw new Error('http '+res.status);
     const data=await res.json();
     if(data.error) throw new Error(data.error);
     REEL=parseJSON(data.result);
-    renderReel(REEL);
-    document.getElementById('step2').classList.add('on');
-    document.getElementById('step3').classList.add('on');
+    renderContent(FMT,REEL);
+    const f=curFmt();
+    if(f.media!=='none') document.getElementById('step2').classList.add('on');
+    if(f.pub.length){ document.getElementById('step3').classList.add('on'); updatePubButtons(); }
+    else { document.getElementById('step3').classList.remove('on'); }
   }catch(e){
     console.error('Reel Studio:',e);
     document.getElementById('out').innerHTML='<p class="err">'+t('error')+'</p>';
   }finally{ btn.disabled=false; btn.innerHTML=label; }
 }
 
-function renderReel(r){
+function tagsCard(hashtags){
+  if(!Array.isArray(hashtags)||!hashtags.length) return '';
+  const tagline=hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' ');
+  return '<div class="card"><h4>#️⃣ '+t('tags')+' '+copyBtn(tagline)+'</h4><div class="tags">'+
+    hashtags.map(function(x){return '<span>'+esc(x[0]==='#'?x:'#'+x)+'</span>';}).join('')+'</div></div>';
+}
+function capCard(cap){ return cap?'<div class="card"><h4>✍️ '+t('caption')+' '+copyBtn(cap)+'</h4><p>'+esc(cap)+'</p></div>':''; }
+
+function renderContent(fmt,r){
   let h='';
-  if(r.hook) h+='<div class="hook"><div class="lbl">'+t('hook')+'</div><div class="txt">'+esc(r.hook)+'</div></div>';
-  if(r.voiceover) h+='<div class="card"><h4>🎙️ '+t('vo')+' '+copyBtn(r.voiceover)+'</h4><p>'+esc(r.voiceover)+'</p></div>';
-  if(Array.isArray(r.scenes)&&r.scenes.length){
-    h+='<div class="card"><h4>🎬 '+t('scenes')+'</h4></div>';
-    r.scenes.forEach(function(s){
-      h+='<div class="card scene">'+
-         (s.time?'<div class="time">'+esc(s.time)+'</div>':'')+
-         (s.onScreen?'<div class="on">'+esc(s.onScreen)+'</div>':'')+
-         (s.voiceover?'<div class="vo">'+esc(s.voiceover)+'</div>':'')+
-         (s.broll?'<div class="broll">'+t('broll')+': '+esc(s.broll)+' '+copyBtn(s.broll)+'</div>':'')+
-         '</div>';
+  if(fmt==='reel'){
+    if(r.hook) h+='<div class="hook"><div class="lbl">'+t('hook')+'</div><div class="txt">'+esc(r.hook)+'</div></div>';
+    if(r.voiceover) h+='<div class="card"><h4>🎙️ '+t('vo')+' '+copyBtn(r.voiceover)+'</h4><p>'+esc(r.voiceover)+'</p></div>';
+    if(Array.isArray(r.scenes)&&r.scenes.length){
+      h+='<div class="card"><h4>🎬 '+t('scenes')+'</h4></div>';
+      r.scenes.forEach(function(s){
+        h+='<div class="card scene">'+
+           (s.time?'<div class="time">'+esc(s.time)+'</div>':'')+
+           (s.onScreen?'<div class="on">'+esc(s.onScreen)+'</div>':'')+
+           (s.voiceover?'<div class="vo">'+esc(s.voiceover)+'</div>':'')+
+           (s.broll?'<div class="broll">'+t('broll')+': '+esc(s.broll)+' '+copyBtn(s.broll)+'</div>':'')+
+           '</div>';
+      });
+    }
+    if(r.musicMood) h+='<div class="card"><h4>🎵 '+t('music')+'</h4><p>'+esc(r.musicMood)+'</p></div>';
+    h+=capCard(r.caption)+tagsCard(r.hashtags);
+  } else if(fmt==='carousel'){
+    if(Array.isArray(r.slides)) r.slides.forEach(function(s,i){
+      h+='<div class="card scene"><div class="time">'+t('slide')+' '+(i+1)+'</div><div class="on">'+esc(s)+' '+copyBtn(s)+'</div></div>';
     });
-  }
-  if(r.musicMood) h+='<div class="card"><h4>🎵 '+t('music')+'</h4><p>'+esc(r.musicMood)+'</p></div>';
-  if(r.caption) h+='<div class="card"><h4>✍️ '+t('caption')+' '+copyBtn(r.caption)+'</h4><p>'+esc(r.caption)+'</p></div>';
-  if(Array.isArray(r.hashtags)&&r.hashtags.length){
-    const tagline=r.hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' ');
-    h+='<div class="card"><h4>#️⃣ '+t('tags')+' '+copyBtn(tagline)+'</h4><div class="tags">'+
-       r.hashtags.map(function(x){return '<span>'+esc(x[0]==='#'?x:'#'+x)+'</span>';}).join('')+'</div></div>';
+    h+=capCard(r.caption)+tagsCard(r.hashtags);
+  } else if(fmt==='story'){
+    if(Array.isArray(r.frames)) r.frames.forEach(function(fr,i){
+      h+='<div class="card scene"><div class="time">'+t('frame')+' '+(i+1)+'</div>'+
+         (fr.headline?'<div class="on">'+esc(fr.headline)+'</div>':'')+
+         (fr.body?'<div class="vo">'+esc(fr.body)+'</div>':'')+' '+copyBtn((fr.headline||'')+(fr.body?'\n'+fr.body:''))+'</div>';
+    });
+    h+=capCard(r.caption)+tagsCard(r.hashtags);
+  } else if(fmt==='post'||fmt==='caption'){
+    h+=capCard(r.caption)+tagsCard(r.hashtags);
+    if(r.imagePrompt) h+='<div class="card"><h4>🎨 '+t('imgprompt')+' '+copyBtn(r.imagePrompt)+'</h4><p>'+esc(r.imagePrompt)+'</p></div>';
+  } else if(fmt==='email'){
+    if(r.subject) h+='<div class="card"><h4>✉️ '+t('subject')+' '+copyBtn(r.subject)+'</h4><p>'+esc(r.subject)+'</p></div>';
+    if(r.preview) h+='<div class="card"><h4>👀 '+t('preview')+'</h4><p>'+esc(r.preview)+'</p></div>';
+    if(r.body) h+='<div class="card"><h4>💌 '+t('body')+' '+copyBtn(r.body)+'</h4><p>'+esc(r.body)+'</p></div>';
+    if(r.cta) h+='<div class="card"><h4>➡️ '+t('cta')+'</h4><p>'+esc(r.cta)+'</p></div>';
+  } else if(fmt==='pinterest'){
+    if(r.pinTitle) h+='<div class="card"><h4>📌 '+t('pinTitle')+' '+copyBtn(r.pinTitle)+'</h4><p>'+esc(r.pinTitle)+'</p></div>';
+    if(r.pinDescription) h+='<div class="card"><h4>📝 '+t('pinDesc')+' '+copyBtn(r.pinDescription)+'</h4><p>'+esc(r.pinDescription)+'</p></div>';
+    if(r.imagePrompt) h+='<div class="card"><h4>🎨 '+t('imgprompt')+' '+copyBtn(r.imagePrompt)+'</h4><p>'+esc(r.imagePrompt)+'</p></div>';
   }
   document.getElementById('out').innerHTML=h;
+}
+
+/* Bygg publiseringstekst ut fra formatet */
+function buildCaption(){
+  var r=REEL||{};
+  if(FMT==='email') return (r.subject?r.subject+'\n\n':'')+(r.body||'');
+  if(FMT==='pinterest') return (r.pinTitle?r.pinTitle+'\n':'')+(r.pinDescription||'');
+  var cap=r.caption||'';
+  var tags=Array.isArray(r.hashtags)?r.hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' '):'';
+  return (cap+(tags?'\n\n'+tags:'')).trim();
+}
+function updatePubButtons(){
+  var f=curFmt(); var host=document.getElementById('pubBtns'); if(!host) return;
+  var labels={instagram:'📸 '+t('pubIg'),tiktok:'🎵 '+t('pubTt'),facebook:'👍 '+t('pubFb'),pinterest:'📌 '+t('pubPin')};
+  host.innerHTML=f.pub.map(function(p){
+    return '<button class="btn cerise block" onclick="publishReel(\''+p+'\',this)">'+labels[p]+'</button>';
+  }).join('');
 }
 
 /* ---- Steg 3: autopubliser via de tilkoblede Blotato-kontoene ----
@@ -335,8 +438,11 @@ function toggleSched(){
 }
 async function publishReel(key,btn){
   const msg=document.getElementById('pubmsg');
-  const videoUrl=document.getElementById('videoUrl').value.trim();
-  if(!videoUrl){ msg.className='pubmsg err'; msg.textContent='⚠️ '+t('needVideo'); return; }
+  const f=curFmt();
+  const media=(document.getElementById('mediaUrl')&&document.getElementById('mediaUrl').value.trim())||'';
+  // Video-format og media-krevende plattformer (instagram/tiktok/pinterest) trenger media.
+  const needsMedia=(f.media==='video')||key==='instagram'||key==='tiktok'||key==='pinterest';
+  if(needsMedia && !media){ msg.className='pubmsg err'; msg.textContent='⚠️ '+(f.media==='video'?t('needVideo'):t('needImage')); return; }
   const scheduled=document.getElementById('schedOn').checked;
   let dateStr='', timeStr='', scheduledTime=null;
   if(scheduled){
@@ -352,10 +458,10 @@ async function publishReel(key,btn){
     const map=await fetchAccounts();
     const conf=map[key];
     if(!conf||!conf.accountId){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('notConnected'); return; }
-    const caption=(REEL&&REEL.caption)||'';
-    const hashtags=(REEL&&Array.isArray(REEL.hashtags))?REEL.hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' '):'';
-    const text=(caption+(hashtags?'\n\n'+hashtags:'')).trim();
-    const post={ accountId:conf.accountId, content:{ text:text, platform:key, mediaUrls:[videoUrl] }, target:{ targetType:key } };
+    const text=buildCaption();
+    const content={ text:text, platform:key }; if(media) content.mediaUrls=[media];
+    const target={ targetType:key }; if(key==='facebook'&&conf.pageId) target.pageId=conf.pageId;
+    const post={ accountId:conf.accountId, content:content, target:target };
     const item={ label:key, post:post };
     if(scheduledTime) item.scheduledTime=scheduledTime;
     const d=await fetch(WORKER_BASE+'/ai/blotato/publish',{method:'POST',headers:{'Content-Type':'application/json'},
@@ -364,8 +470,8 @@ async function publishReel(key,btn){
     if(res&&res.ok){
       btn.innerHTML='✓';
       if(scheduled){
-        addPlanItem({ id:key+'-'+dateStr+'-'+timeStr+'-'+Date.now(), platform:key, date:dateStr, time:timeStr,
-          topic:(REEL&&REEL.title)||caption.slice(0,60), videoUrl:videoUrl });
+        addPlanItem({ id:key+'-'+dateStr+'-'+timeStr+'-'+Date.now(), platform:key, date:dateStr, time:timeStr, format:FMT,
+          topic:(REEL&&REEL.title)||text.slice(0,60), mediaUrl:media });
         msg.className='pubmsg'; msg.textContent=t('scheduledOk')+' '+dateStr+' '+timeStr;
       } else { msg.className='pubmsg'; msg.textContent=t('published'); }
     }
@@ -382,17 +488,22 @@ function renderPlan(){
   const host=document.getElementById('planList'); if(!host) return;
   const p=loadPlan();
   if(!p.length){ host.innerHTML='<p class="lead" style="margin:0">'+t('planEmpty')+'</p>'; return; }
+  const platIco={instagram:'📸 Instagram',tiktok:'🎵 TikTok',facebook:'👍 Facebook',pinterest:'📌 Pinterest'};
+  const fmtName={reel:'Reel',carousel:'Karusell',story:'Story',post:'Feed',caption:'Bildetekst',email:'Nyhetsbrev',pinterest:'Pinterest'};
   host.innerHTML=p.map(function(it){
-    const plat=it.platform==='tiktok'?('🎵 '+t('plPlatTt')):('📸 '+t('plPlatIg'));
+    const plat=platIco[it.platform]||esc(it.platform||'');
+    const fm=it.format?(' · '+(fmtName[it.format]||it.format)):'';
     return '<div class="card" style="display:flex;align-items:center;gap:10px;">'+
       '<div style="flex:1;"><div style="font-family:var(--font-heading);font-weight:700;font-size:14px;">'+esc(it.topic||plat)+'</div>'+
-      '<div style="font-size:12.5px;color:var(--ink-muted);margin-top:2px;">'+plat+' · 🗓️ '+esc(it.date)+' '+esc(it.time||'')+'</div></div>'+
+      '<div style="font-size:12.5px;color:var(--ink-muted);margin-top:2px;">'+plat+fm+' · 🗓️ '+esc(it.date)+' '+esc(it.time||'')+'</div></div>'+
       '<button class="copy-btn" style="margin-left:0" onclick="removePlanItem(\''+String(it.id).replace(/'/g,"")+'\')">'+t('remove')+'</button>'+
       '</div>';
   }).join('');
 }
 
 applyI18n();
+renderFmtChips();
+selectFmt('reel');
 renderPlan();
 </script>
 <script src="/js/lme-account.js?v=7" defer></script>
