@@ -16,6 +16,8 @@
  * saa "Min konto" viser status.
  */
 
+import { sendClaudeMail } from "../_lib/claude-mail.js";
+
 function json(data, status) {
   return new Response(JSON.stringify(data), {
     status: status || 200,
@@ -118,6 +120,12 @@ const CLAUDE_PAYMENT_LINK_LANG = {
   "plink_1TwFJYLax7B8uQzqO1gObkcB": "en", // Get started with Claude (USD)
   "plink_1TwFJbLax7B8uQzqB3CNr2yR": "en", // Next Level with Claude, upsell (USD)
 };
+// Bare hovedkurset trigger takke- og oppfølgingsmail. Mersalget legges
+// bare i gruppen (kjøperen har alt fått takkemailen fra hovedkjøpet).
+const CLAUDE_MAIN_LINK_LANG = {
+  "plink_1TwFJWLax7B8uQzqsBQjTBxl": "no", // Kom i gang med Claude (NOK)
+  "plink_1TwFJYLax7B8uQzqO1gObkcB": "en", // Get started with Claude (USD)
+};
 
 async function addToClaudeGroup(env, email, name, groupId) {
   const key = env.MAILERLITE_API_KEY;
@@ -166,6 +174,17 @@ export async function onRequestPost(context) {
           ? (env.MAILERLITE_CLAUDE_GROUP_EN || CLAUDE_GROUP_EN)
           : (env.MAILERLITE_CLAUDE_GROUP_NO || CLAUDE_GROUP_NO);
         await addToClaudeGroup(env, email, name, groupId);
+        // Hovedkurs: send takkemail nå, og legg 2-dagers oppfølger i kø.
+        const mainLang = CLAUDE_MAIN_LINK_LANG[obj.payment_link];
+        if (mainLang && email) {
+          await sendClaudeMail(env, { to: email, name: name, lang: mainLang, kind: "takk" });
+          try {
+            await env.BUILDER_KV.put(
+              "claude_fu:" + email.trim().toLowerCase(),
+              JSON.stringify({ email: email, name: name, lang: mainLang, sendAfter: Date.now() + 2 * 24 * 60 * 60 * 1000 })
+            );
+          } catch (e) {}
+        }
         break;
       }
       await grant(env, email, { customer: obj.customer, sub: obj.subscription });

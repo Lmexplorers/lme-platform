@@ -1,0 +1,20 @@
+name: Claude oppfølgingsmail
+
+# Trigger den daglige køen som sender 2-dagers oppfølgingsmail til Claude-kjøpere.
+# Kjører en gang i døgnet og kan også startes manuelt fra Actions-fanen.
+# Valgfritt: legg repo-hemmeligheten CLAUDE_CRON_TOKEN hvis endepunktet er beskyttet.
+
+on:
+  schedule:
+    - cron: "0 9 * * *"   # daglig kl. 09:00 UTC
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger oppfølgings-køen
+        env:
+          TOKEN: ${{ secrets.CLAUDE_CRON_TOKEN }}
+        run: |
+          curl -fsS "https://lmexplorers.com/api/cron/claude-followups${TOKEN:+?token=$TOKEN}"
