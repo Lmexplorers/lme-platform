@@ -174,9 +174,14 @@
     <div class="step-num"><span>2</span> <span id="s2num" data-i18n="s2-num">Media</span></div>
     <h2 id="s2h" data-i18n="s2-h">Legg til media</h2>
     <p class="lead" id="s2lead" data-i18n="s2-lead">Lim inn lenken til den ferdige videoen eller bildet. Blotato henter og re-hoster den ved publisering.</p>
+    <div id="genVideoWrap" style="margin-bottom:14px;">
+      <button class="btn cerise" id="genVidBtn" onclick="genVideo()">🎬 <span data-i18n="s2-genvid">Generer video automatisk</span></button>
+      <div class="pubmsg" id="genVidMsg"></div>
+      <video id="vidPreview" playsinline controls style="display:none;width:170px;border-radius:14px;margin-top:10px;box-shadow:var(--shadow-md);"></video>
+    </div>
     <label class="fld" for="mediaUrl" id="s2label" data-i18n="s2-url">Lenke til media</label>
     <input id="mediaUrl" placeholder="https://…" />
-    <div class="note" id="s2note" data-i18n="s2-note">💡 For reel og TikTok trengs en vertikal 9:16 video. Vil du at videoen skal lages helt automatisk her? Da kobler vi en video-motor med server-nøkkel til workeren.</div>
+    <div class="note" id="s2note" data-i18n="s2-note">💡 Trykk «Generer video automatisk», så lager AI-en et bilde av innholdet og gjør det om til en vertikal 9:16 video rett her. Eller lim inn lenken til en egen ferdig video.</div>
   </section>
 
   <!-- STEG 3: publiser -->
@@ -204,6 +209,8 @@
   </section>
 </main>
 
+<!-- FFmpeg WASM (kun for video-generering i nettleseren) -->
+<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/umd/ffmpeg.js"></script>
 <script>
 const WORKER_BASE = "https://lme-ai-visibility.lmexplorers.workers.dev";
 
@@ -220,7 +227,10 @@ const I18N = {
     "s2urlVideo":"Lenke til ferdig video (MP4)","s2urlImage":"Lenke til bilde (valgfritt)",
     "s2leadVideo":"For reel og TikTok trengs en vertikal 9:16 video. Lim inn lenken til den ferdige MP4-en her.",
     "s2leadImage":"Legg gjerne ved et bilde (valgfritt for de fleste, kreves for Instagram og Pinterest). Lim inn en bilde-lenke.",
-    "s2-url":"Lenke til media","s2-note":"💡 Vil du at videoen skal lages helt automatisk her? Da kobler vi en video-motor med server-nøkkel til workeren.",
+    "s2-url":"Lenke til media","s2-note":"💡 Trykk «Generer video automatisk», så lager AI-en et bilde av innholdet og gjør det om til en vertikal 9:16 video rett her. Eller lim inn lenken til en egen ferdig video.",
+    "s2-genvid":"Generer video automatisk",
+    needContentFirst:"Lag innhold i steg 1 først.",
+    vidImage:"Lager bilde…",vidMaking:"Lager video…",vidUploading:"Laster opp…",vidReady:"Video klar 🎬 Lagt inn under.",vidFail:"Kunne ikke lage video.",
     "s3-num":"Publiser","s3-h":"Legg ut automatisk","s3-lead":"Bruker Blotato-kontoene dine automatisk. Legg ut nå, eller planlegg til en fremtidig dato.",
     "s3-sched":"📅 Planlegg til senere (90-dagers plan)","s3-date":"Dato","s3-time":"Tid",
     "pl-num":"Planen din","pl-h":"Planlagt innhold","pl-lead":"Innhold du har planlagt fremover. Blotato legger det ut automatisk til rett tid. Lagres her, også etter at du lukker siden.",
@@ -245,7 +255,10 @@ const I18N = {
     "s2urlVideo":"Link to finished video (MP4)","s2urlImage":"Image link (optional)",
     "s2leadVideo":"Reels and TikTok need a vertical 9:16 video. Paste the finished MP4 link here.",
     "s2leadImage":"Add an image (optional for most, required for Instagram and Pinterest). Paste an image link.",
-    "s2-url":"Media link","s2-note":"💡 Want the video made fully automatically here? Then we connect a video engine with a server key to the worker.",
+    "s2-url":"Media link","s2-note":"💡 Tap “Generate video automatically” and the AI creates an image of your content and turns it into a vertical 9:16 video right here. Or paste a link to your own finished video.",
+    "s2-genvid":"Generate video automatically",
+    needContentFirst:"Create content in step 1 first.",
+    vidImage:"Creating image…",vidMaking:"Creating video…",vidUploading:"Uploading…",vidReady:"Video ready 🎬 Added below.",vidFail:"Could not create the video.",
     "s3-num":"Publish","s3-h":"Post automatically","s3-lead":"Uses your connected Blotato accounts automatically. Post now, or schedule for a future date.",
     "s3-sched":"📅 Schedule for later (90-day plan)","s3-date":"Date","s3-time":"Time",
     "pl-num":"Your plan","pl-h":"Scheduled content","pl-lead":"Content you've scheduled ahead. Blotato posts it automatically at the right time. Saved here, even after you close the page.",
@@ -313,6 +326,8 @@ function updateStep2(){
   document.getElementById('s2label').textContent=isVideo?t('s2urlVideo'):t('s2urlImage');
   document.getElementById('s2lead').textContent=isVideo?t('s2leadVideo'):t('s2leadImage');
   document.getElementById('s2note').style.display=isVideo?'block':'none';
+  // Automatisk video-generering er kun for video-formater (reel/TikTok).
+  var gv=document.getElementById('genVideoWrap'); if(gv) gv.style.display=isVideo?'block':'none';
   var inp=document.getElementById('mediaUrl'); inp.placeholder=isVideo?'https://…/reel.mp4':'https://…/bilde.jpg';
 }
 
@@ -432,6 +447,67 @@ function fetchAccounts(){
       });
       BL_MAP=map; return map;
     });
+}
+/* ---- Generer video i nettleseren: AI-bilde -> vertikal 9:16 Ken Burns ---- */
+var ffmpegInstance=null, ffmpegLoaded=false, ffmpegLoading=false;
+async function loadFFmpeg(){
+  if(ffmpegLoaded) return ffmpegInstance;
+  if(ffmpegLoading){ while(ffmpegLoading) await new Promise(function(r){setTimeout(r,200);}); return ffmpegInstance; }
+  if(typeof FFmpegWASM==='undefined') throw new Error('FFmpeg ikke lastet');
+  ffmpegLoading=true;
+  try{
+    var FFmpeg=FFmpegWASM.FFmpeg;
+    var ff=new FFmpeg();
+    var toBlobURL=async function(url,type){ var r=await fetch(url,{mode:'cors'}); if(!r.ok) throw new Error('CDN '+r.status); var b=await r.blob(); return URL.createObjectURL(new Blob([b],{type:type})); };
+    var FF='https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/umd';
+    var CORE='https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
+    await ff.load({
+      classWorkerURL: await toBlobURL(FF+'/814.ffmpeg.js','text/javascript'),
+      coreURL: await toBlobURL(CORE+'/ffmpeg-core.js','text/javascript'),
+      wasmURL: await toBlobURL(CORE+'/ffmpeg-core.wasm','application/wasm'),
+    });
+    ffmpegInstance=ff; ffmpegLoaded=true;
+  } finally { ffmpegLoading=false; }
+  return ffmpegInstance;
+}
+async function imageToVideoBlob(imageUrl){
+  var ff=await loadFFmpeg();
+  var fetchFile=FFmpegWASM.fetchFile;
+  await ff.writeFile('still.png', await fetchFile(imageUrl));
+  var W=1080,H=1920, preW=Math.round(W*1.25), preH=Math.round(H*1.25);
+  var zoomVf="scale="+preW+":"+preH+":force_original_aspect_ratio=increase,crop="+preW+":"+preH+",zoompan=z='min(zoom+0.0010,1.2)':d=200:s="+W+"x"+H+":fps=25,format=yuv420p";
+  var statVf="scale="+W+":"+H+":force_original_aspect_ratio=increase,crop="+W+":"+H+",format=yuv420p";
+  var mk=function(vf){ return ['-loop','1','-i','still.png','-t','8','-vf',vf,'-r','25','-c:v','libx264','-preset','ultrafast','-pix_fmt','yuv420p','-movflags','+faststart','-y','out.mp4']; };
+  try{ await ff.exec(mk(zoomVf)); }catch(e){ await ff.exec(mk(statVf)); }
+  var data=await ff.readFile('out.mp4');
+  try{ ff.deleteFile('still.png'); ff.deleteFile('out.mp4'); }catch(e){}
+  return new Blob([data.buffer],{type:'video/mp4'});
+}
+function blobToB64(blob){ return new Promise(function(res,rej){ var r=new FileReader(); r.onload=function(e){ res(String(e.target.result).split(',')[1]); }; r.onerror=function(){ rej(new Error('lese fil')); }; r.readAsDataURL(blob); }); }
+async function genVideo(){
+  var msg=document.getElementById('genVidMsg'), btn=document.getElementById('genVidBtn');
+  var prompt=(REEL&&REEL.imagePrompt) || (REEL&&Array.isArray(REEL.scenes)&&REEL.scenes[0]&&REEL.scenes[0].broll) || (REEL&&REEL.caption) || (document.getElementById('src')&&document.getElementById('src').value) || '';
+  if(!prompt){ msg.className='pubmsg err'; msg.textContent='⚠️ '+t('needContentFirst'); return; }
+  var label=btn.innerHTML; btn.disabled=true;
+  msg.className='pubmsg'; msg.textContent='';
+  try{
+    btn.innerHTML='<span class="spinner"></span> '+t('vidImage');
+    var ir=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:prompt,character:'none',platform:'tiktok',lang:LANG})}).then(function(r){return r.json();});
+    if(!ir||ir.error||!ir.url) throw new Error((ir&&ir.error)||'bilde');
+    btn.innerHTML='<span class="spinner"></span> '+t('vidMaking');
+    var blob=await imageToVideoBlob(ir.url);
+    btn.innerHTML='<span class="spinner"></span> '+t('vidUploading');
+    var vr=await fetch('/api/video',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({data:await blobToB64(blob),contentType:'video/mp4'})}).then(function(r){return r.json();});
+    if(!vr||vr.error||!vr.url) throw new Error((vr&&vr.error)||'opplasting');
+    document.getElementById('mediaUrl').value=vr.url;
+    var v=document.getElementById('vidPreview'); if(v){ v.src=URL.createObjectURL(blob); v.style.display='block'; }
+    btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg'; msg.textContent=t('vidReady');
+  }catch(e){
+    btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err';
+    msg.textContent='⚠️ '+t('vidFail')+(e&&e.message?' ('+e.message+')':'');
+  }
 }
 function toggleSched(){
   document.getElementById('schedFields').style.display=document.getElementById('schedOn').checked?'flex':'none';
