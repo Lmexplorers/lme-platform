@@ -6,6 +6,16 @@
 <meta name="theme-color" content="#FBF7F0">
 <title>Hva stjeler roen i hjemmet ditt? · LME</title>
 <link rel="icon" href="/images/lme-logo.png">
+<meta name="description" content="Ta den lille gratisquizen og finn den største ro-tyven hjemme hos deg, og hva som hjelper mest akkurat nå.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hva stjeler roen i hjemmet ditt?">
+<meta property="og:description" content="Ta den lille gratisquizen og finn den største ro-tyven hjemme hos deg. Seks spørsmål, svar med en gang.">
+<meta property="og:image" content="https://lmexplorers.com/images/banner_rolig_stund.webp">
+<meta property="og:url" content="https://lmexplorers.com/ro-quiz">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hva stjeler roen i hjemmet ditt?">
+<meta name="twitter:description" content="Ta den lille gratisquizen og finn den største ro-tyven hjemme hos deg.">
+<meta name="twitter:image" content="https://lmexplorers.com/images/banner_rolig_stund.webp">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
   @font-face {
@@ -40,6 +50,10 @@
     border:1px solid var(--line);background:#fff;color:var(--ink);font-family:inherit;font-weight:700;
     font-size:13px;line-height:1;padding:10px 15px;border-radius:var(--pill);box-shadow:var(--shadow-md);cursor:pointer}
   .card{background:#fff;border-radius:var(--r-xl);box-shadow:var(--shadow-lg);padding:34px 30px}
+  .hero-img{width:100%;height:230px;object-fit:cover;border-radius:var(--r-lg);margin-bottom:24px;display:block;box-shadow:0 10px 30px rgba(31,27,36,.10)}
+  @media(max-width:520px){.hero-img{height:180px}}
+  .intro-figs{display:flex;gap:12px;margin-top:24px;justify-content:center;flex-wrap:wrap}
+  .intro-figs img{width:120px;height:88px;object-fit:cover;border-radius:var(--r-md);box-shadow:var(--shadow-md)}
   .kicker{display:inline-block;background:var(--cerise-soft);color:var(--cerise);font-weight:700;font-size:13px;
     letter-spacing:.02em;padding:7px 15px;border-radius:var(--pill);margin-bottom:16px}
   h1{font-size:clamp(28px,5vw,40px);color:var(--cerise);margin-bottom:14px}
@@ -76,10 +90,16 @@
 
     <!-- INTRO -->
     <section id="scIntro" class="card">
+      <img class="hero-img" src="/images/banner_rolig_stund.webp" alt="En rolig stund hjemme med Mia og Teo">
       <span class="kicker" id="kicker"></span>
       <h1 id="qTitle"></h1>
       <p class="lead" id="qIntro"></p>
       <button class="btn" id="startBtn"></button>
+      <div class="intro-figs">
+        <img src="/images/mia-og-teo.jpg" alt="Mia og Teo">
+        <img src="/images/banner_laer.webp" alt="Lek og læring">
+        <img src="/images/banner_eventyr.webp" alt="Eventyr og undring">
+      </div>
     </section>
 
     <!-- QUESTION -->
