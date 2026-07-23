@@ -60,11 +60,15 @@ window.LME_FUNNEL = {
       hvaDuLaererTittel: "Dette sitter du igjen med",
       hvaDuLaerer: [
         "Hva Claude er, og hvorfor det er nyttig for deg som jobber med barn",
-        "Hvordan du starter din aller første samtale, uten teknisk bakgrunn",
+        "Hvordan du kommer trygt i gang, satt opp riktig fra start",
+        "Å starte din aller første samtale, uten teknisk bakgrunn",
         "Å skrive gode beskjeder, så du får svar du faktisk kan bruke",
+        "Å gjøre en rotete idé om til tydelig, ferdig tekst på minutter",
+        "En enkel arbeidsflyt fra idé til ferdig, uten å sette deg fast",
         "Å følge opp og justere, så teksten blir akkurat din",
         "Ferdige oppskrifter for foreldrebrev, ukeplaner, aktiviteter og oversettelser",
         "Å gi Claude litt fast kontekst om deg, så du slipper å forklare alt på nytt",
+        "Å holde Claude ryddig, så du lett finner tilbake til det som virker",
         "Trygg og klok bruk: personvern, kildekritikk og sunn fornuft"
       ],
 
@@ -105,6 +109,9 @@ window.LME_FUNNEL = {
       sosialtBevis:
         "Laget av Renate Dahl, høgskoleutdannet montessoripedagog med over 20 års " +
         "erfaring med barn.",
+      // Ekte kundeuttalelse (valgfri). La "sitat" stå tomt til du har en du kan bruke,
+      // da skjules boksen. Ikke dikt opp uttalelser, bruk bare ekte tilbakemeldinger.
+      testimonial: { sitat: "", navn: "", sted: "" },
       bilde: "/images/banner_laer.webp"
     },
 
@@ -193,11 +200,15 @@ window.LME_FUNNEL = {
       hvaDuLaererTittel: "Here's what you'll walk away with",
       hvaDuLaerer: [
         "What Claude is, and why it's useful for you who work with children",
-        "How to start your very first conversation, with no technical background",
+        "How to get started safely, set up the right way from the start",
+        "Starting your very first conversation, with no technical background",
         "Writing good prompts, so you get answers you can actually use",
+        "Turning a messy idea into clear, finished text in minutes",
+        "A simple workflow from idea to done, without getting stuck",
         "Following up and adjusting, so the text becomes exactly yours",
         "Ready-made recipes for parent letters, weekly plans, activities and translations",
         "Giving Claude some steady context about you, so you don't repeat yourself",
+        "Keeping Claude tidy, so you easily find your way back to what works",
         "Safe and wise use: privacy, source-checking and common sense"
       ],
 
@@ -238,6 +249,9 @@ window.LME_FUNNEL = {
       sosialtBevis:
         "Created by Renate Dahl, a college-educated Montessori educator with 20+ " +
         "years working with children.",
+      // Real customer quote (optional). Leave "sitat" empty until you have one you can
+      // use, then the box is hidden. Don't invent quotes, only use genuine feedback.
+      testimonial: { sitat: "", navn: "", sted: "" },
       bilde: "/images/banner_laer.webp"
     },
 
