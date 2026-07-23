@@ -505,6 +505,17 @@ applyI18n();
 renderFmtChips();
 selectFmt('reel');
 renderPlan();
+
+/* Kom fra "Gjør synlig" (Lag reel av dette): forhåndsutfyll og lag reelen. */
+(function(){
+  var seed=''; try{ seed=localStorage.getItem('lme-reel-seed')||''; localStorage.removeItem('lme-reel-seed'); }catch(e){}
+  if(seed){
+    var src=document.getElementById('src'); if(src) src.value=seed;
+    selectFmt('reel');
+    genContent();
+    var s1=document.getElementById('step1'); if(s1) s1.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+})();
 </script>
 <script src="/js/lme-account.js?v=7" defer></script>
 </body>
