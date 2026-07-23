@@ -196,12 +196,12 @@ const I18N = {
     "s1-src":"Innhold eller idé","s1-ph":"F.eks: Tre enkle Montessori-aktiviteter i kjøkkenet for barn 3-6 år…","s1-len":"Lengde","s1-btn":"🎬 Lag reel",
     "s2-num":"Video","s2-h":"Lag selve videoen","s2-lead":"Bruk b-roll-promptene og voiceover-manuset over i video-motoren din (for eksempel Higgsfield) og lag en vertikal 9:16 video. Lim inn lenken til den ferdige MP4-en her.",
     "s2-url":"Lenke til ferdig video (MP4)","s2-note":"💡 Vil du at reelen skal lages helt automatisk rett her? Da kobler vi en video-motor med server-nøkkel til workeren. Si fra, så setter jeg det opp.",
-    "s3-num":"Publiser","s3-h":"Legg ut automatisk","s3-lead":"Bruker de samme kontoene som Publiser alle. Er de ikke koblet enda, gjør du det der først.",
+    "s3-num":"Publiser","s3-h":"Legg ut automatisk","s3-lead":"Bruker Blotato-kontoene dine automatisk. Ett trykk legger reelen ut.",
     "s3-ig":"Publiser til Instagram Reels","s3-tt":"Publiser til TikTok",
     hook:"HOOK (0-3 s)",vo:"Voiceover",music:"Musikk",caption:"Caption",tags:"Hashtags",scenes:"Scener",broll:"B-roll",
     loading:"Lager reel…",error:"Noe gikk galt. Prøv igjen om litt.",copy:"Kopier",copied:"Kopiert!",
     needVideo:"Lim inn lenken til den ferdige videoen i steg 2 først.",
-    notConnected:"Ikke koblet til enda. Koble kontoene i Publiser alle først.",
+    notConnected:"Fant ikke denne kontoen i Blotato.",
     publishing:"Publiserer…",published:"Lagt ut automatisk 🎉",pubfail:"Klarte ikke å publisere. Sjekk kobling i Publiser alle.",neterr:"Nettverksfeil. Prøv igjen." },
   en:{ back:"To Creative Academy",
     title:'LME <em>Reel Studio</em>',
@@ -210,12 +210,12 @@ const I18N = {
     "s1-src":"Content or idea","s1-ph":"E.g: Three simple Montessori kitchen activities for kids aged 3-6…","s1-len":"Length","s1-btn":"🎬 Create reel",
     "s2-num":"Video","s2-h":"Make the video itself","s2-lead":"Use the b-roll prompts and voiceover script above in your video engine (for example Higgsfield) to make a vertical 9:16 video. Paste the finished MP4 link here.",
     "s2-url":"Link to finished video (MP4)","s2-note":"💡 Want the reel made fully automatically right here? Then we connect a video engine with a server key to the worker. Just say so and I'll set it up.",
-    "s3-num":"Publish","s3-h":"Post automatically","s3-lead":"Uses the same accounts as Publish all. If they aren't connected yet, do that there first.",
+    "s3-num":"Publish","s3-h":"Post automatically","s3-lead":"Uses your connected Blotato accounts automatically. One tap posts the reel.",
     "s3-ig":"Publish to Instagram Reels","s3-tt":"Publish to TikTok",
     hook:"HOOK (0-3 s)",vo:"Voiceover",music:"Music",caption:"Caption",tags:"Hashtags",scenes:"Scenes",broll:"B-roll",
     loading:"Creating reel…",error:"Something went wrong. Try again shortly.",copy:"Copy",copied:"Copied!",
     needVideo:"Paste the finished video link in step 2 first.",
-    notConnected:"Not connected yet. Connect the accounts in Publish all first.",
+    notConnected:"Couldn't find this account in Blotato.",
     publishing:"Publishing…",published:"Posted automatically 🎉",pubfail:"Could not publish. Check the connection in Publish all.",neterr:"Network error. Try again." }
 };
 const t = (k) => (I18N[LANG][k] ?? I18N.no[k] ?? k);
@@ -285,29 +285,46 @@ function renderReel(r){
   document.getElementById('out').innerHTML=h;
 }
 
-/* ---- Steg 3: autopubliser via samme Blotato-motor som Publiser alle ---- */
-function loadBl(){ try{ return JSON.parse(localStorage.getItem('lme-vis-blotato')||'{}'); }catch(e){ return {}; } }
-function publishReel(key,btn){
+/* ---- Steg 3: autopubliser via de tilkoblede Blotato-kontoene ----
+   Kontoene er allerede koblet i Blotato. Workeren henter dem med sin
+   server-nøkkel, så her trengs ingen manuell konto-ID. */
+let BL_MAP=null;
+function fetchAccounts(){
+  if(BL_MAP) return Promise.resolve(BL_MAP);
+  return fetch(WORKER_BASE+'/ai/blotato/accounts',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})
+    .then(function(r){return r.json();})
+    .then(function(res){
+      if(res&&res.error) throw new Error(res.error);
+      const list=(res&&res.result&&(res.result.items||res.result.accounts||res.result))||[];
+      const map={};
+      (Array.isArray(list)?list:[]).forEach(function(a){
+        const plat=String(a.platform||a.type||a.targetType||'').toLowerCase();
+        if(!plat||map[plat]) return; // første konto per plattform
+        map[plat]={ accountId:String(a.id||a.accountId||''), pageId:a.pageId?String(a.pageId):undefined };
+      });
+      BL_MAP=map; return map;
+    });
+}
+async function publishReel(key,btn){
   const msg=document.getElementById('pubmsg');
   const videoUrl=document.getElementById('videoUrl').value.trim();
   if(!videoUrl){ msg.className='pubmsg err'; msg.textContent='⚠️ '+t('needVideo'); return; }
-  const conf=(loadBl()[key])||{};
-  if(!conf.accountId){ msg.className='pubmsg err'; msg.textContent='⚠️ '+t('notConnected'); return; }
-  const caption=(REEL&&REEL.caption)||'';
-  const hashtags=(REEL&&Array.isArray(REEL.hashtags))?REEL.hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' '):'';
-  const text=(caption+(hashtags?'\n\n'+hashtags:'')).trim();
-  const post={ accountId:conf.accountId, content:{ text:text, platform:key, mediaUrls:[videoUrl] }, target:{ targetType:key } };
   const label=btn.innerHTML; btn.disabled=true; btn.innerHTML='<span class="spinner"></span> '+t('publishing');
   msg.className='pubmsg'; msg.textContent='';
-  fetch(WORKER_BASE+'/ai/blotato/publish',{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({items:[{label:key,post:post}]})})
-    .then(function(r){return r.json();})
-    .then(function(d){
-      const res=d&&d.result&&d.result.results&&d.result.results[0];
-      if(res&&res.ok){ btn.innerHTML='✓'; msg.className='pubmsg'; msg.textContent=t('published'); }
-      else { btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('pubfail'); }
-    })
-    .catch(function(){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('neterr'); });
+  try{
+    const map=await fetchAccounts();
+    const conf=map[key];
+    if(!conf||!conf.accountId){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('notConnected'); return; }
+    const caption=(REEL&&REEL.caption)||'';
+    const hashtags=(REEL&&Array.isArray(REEL.hashtags))?REEL.hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' '):'';
+    const text=(caption+(hashtags?'\n\n'+hashtags:'')).trim();
+    const post={ accountId:conf.accountId, content:{ text:text, platform:key, mediaUrls:[videoUrl] }, target:{ targetType:key } };
+    const d=await fetch(WORKER_BASE+'/ai/blotato/publish',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({items:[{label:key,post:post}]})}).then(function(r){return r.json();});
+    const res=d&&d.result&&d.result.results&&d.result.results[0];
+    if(res&&res.ok){ btn.innerHTML='✓'; msg.className='pubmsg'; msg.textContent=t('published'); }
+    else { btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('pubfail'); }
+  }catch(e){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('neterr'); }
 }
 
 applyI18n();
