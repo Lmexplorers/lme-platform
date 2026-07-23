@@ -74,10 +74,10 @@ window.LME_FUNNEL = {
         "Komplett promptbibliotek — ferdige prompts du bare kopierer og bruker",
         "Bonus: Mia & Teo-sangen «Kom bli med!» — til kos og bevegelse hjemme"
       ],
-      garanti: "14 dagers full pengene-tilbake-garanti — uten spørsmål.",
+      garanti: "",
       kjopKnapp: "Ja takk — gi meg AI-guiden",
       avslaaKnapp: "Nei takk, jeg vil ikke ha dette tilbudet",
-      sosialtBevis: "Laget av en høgskoleutdannet montessoripedagog med 20+ års erfaring med barn.",
+      sosialtBevis: "Laget av en høgskoleutdannet montessoripedagog.",
       // Levering av gratisguiden rett etter påmelding (banner øverst på tilbudssiden).
       // Tom gratisLenke skjuler banneret.
       gratisLevering: "Takk for påmeldingen! Gratisguiden din er klar:",
@@ -191,10 +191,10 @@ window.LME_FUNNEL = {
         "Complete prompt library — ready-made prompts you just copy and use",
         "Bonus: the Mia & Teo song “Come Along!” — for cuddles and movement at home"
       ],
-      garanti: "14-day full money-back guarantee — no questions asked.",
+      garanti: "",
       kjopKnapp: "Yes please — give me the AI guide",
       avslaaKnapp: "No thanks, I don't want this offer",
-      sosialtBevis: "Created by a college-educated Montessori educator with 20+ years working with children.",
+      sosialtBevis: "Created by a college-educated Montessori educator.",
       // Free-guide delivery banner. Set gratisLenke to the English PDF when ready (empty = hidden).
       gratisLevering: "Thanks for signing up! Your free guide is ready:",
       gratisKnapp: "Download the free guide (PDF)",

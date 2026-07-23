@@ -107,8 +107,7 @@ window.LME_FUNNEL = {
       garanti: "",
       kjopKnapp: "Ja takk, gi meg Claude-kurset",
       sosialtBevis:
-        "Laget av Renate Dahl, høgskoleutdannet montessoripedagog med over 20 års " +
-        "erfaring med barn.",
+        "Laget av Renate Dahl, høgskoleutdannet montessoripedagog.",
       // Ekte kundeuttalelse (valgfri). La "sitat" stå tomt til du har en du kan bruke,
       // da skjules boksen. Ikke dikt opp uttalelser, bruk bare ekte tilbakemeldinger.
       testimonial: { sitat: "", navn: "", sted: "" },
@@ -247,8 +246,7 @@ window.LME_FUNNEL = {
       garanti: "",
       kjopKnapp: "Yes please, give me the Claude course",
       sosialtBevis:
-        "Created by Renate Dahl, a college-educated Montessori educator with 20+ " +
-        "years working with children.",
+        "Created by Renate Dahl, a college-educated Montessori educator.",
       // Real customer quote (optional). Leave "sitat" empty until you have one you can
       // use, then the box is hidden. Don't invent quotes, only use genuine feedback.
       testimonial: { sitat: "", navn: "", sted: "" },
