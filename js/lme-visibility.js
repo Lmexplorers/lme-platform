@@ -30,14 +30,34 @@
   var NO = { no: true };
   function T(no, en) { return lang() === "en" ? en : no; }
 
+  // tt = Blotato-targetType (kan publiseres automatisk). needsMedia = krever
+  // bilde. extra = ekstra felt Blotato trenger. Samme oppsett som "Publiser alle".
   var CHANNELS = [
-    { key: "instagram", ico: "📸", no: "Instagram", en: "Instagram" },
-    { key: "facebook", ico: "👍", no: "Facebook", en: "Facebook" },
-    { key: "pinterest", ico: "📌", no: "Pinterest", en: "Pinterest" },
-    { key: "tiktok", ico: "🎵", no: "TikTok", en: "TikTok" },
+    { key: "instagram", ico: "📸", no: "Instagram", en: "Instagram", tt: "instagram", needsMedia: true },
+    { key: "facebook", ico: "👍", no: "Facebook", en: "Facebook", tt: "facebook", needsMedia: false, extra: ["pageId"] },
+    { key: "pinterest", ico: "📌", no: "Pinterest", en: "Pinterest", tt: "pinterest", needsMedia: true, extra: ["boardId"] },
+    { key: "tiktok", ico: "🎵", no: "TikTok", en: "TikTok", tt: "tiktok", needsMedia: true },
     { key: "reelScript", ico: "🎬", no: "Reel-manus", en: "Reel script" },
     { key: "email", ico: "✉️", no: "E-post", en: "Email" },
   ];
+
+  // Blotato-kontoene lagres av "Publiser alle"-appen i localStorage. Er de satt,
+  // kan dialogen publisere rett fra siden. Ellers faller vi tilbake til kopier.
+  function loadBl() {
+    try { return JSON.parse(localStorage.getItem("lme-vis-blotato") || "{}"); } catch (e) { return {}; }
+  }
+  function buildPost(ch, text, imgUrl) {
+    var conf = (loadBl()[ch.key]) || {};
+    if (!conf.accountId) return { err: T("Ikke koblet til enda", "Not connected yet") };
+    if (ch.needsMedia && !imgUrl) return { err: T("Mangler bilde på siden", "No image on this page") };
+    var target = { targetType: ch.tt };
+    (ch.extra || []).forEach(function (f) { if (conf[f]) target[f] = conf[f]; });
+    if (ch.tt === "facebook" && !target.pageId) return { err: T("Facebook trenger side-ID", "Facebook needs a page ID") };
+    if (ch.tt === "pinterest" && !target.boardId) return { err: T("Pinterest trenger tavle-ID", "Pinterest needs a board ID") };
+    var content = { text: String(text), platform: ch.tt };
+    if (imgUrl) content.mediaUrls = [imgUrl];
+    return { label: ch.no, post: { accountId: conf.accountId, content: content, target: target } };
+  }
 
   /* ---------- hent innholdet paa siden ---------- */
   function readShare() {
@@ -94,6 +114,12 @@
       ".lme-vis-copy{border:1.5px solid #ffd1e1;background:#fff;color:#c43d75;font-family:'Playpen Sans',system-ui,sans-serif;",
       "font-weight:700;font-size:12px;border-radius:999px;padding:6px 12px;cursor:pointer;}",
       ".lme-vis-copy:hover{background:#ffe8f0;}",
+      ".lme-vis-pub{border:none;background:linear-gradient(120deg,#e85a92,#c43d75);color:#fff;",
+      "font-family:'Playpen Sans',system-ui,sans-serif;font-weight:700;font-size:12px;border-radius:999px;",
+      "padding:6px 12px;cursor:pointer;margin-right:6px;}",
+      ".lme-vis-pub:hover{filter:brightness(1.05);}",
+      ".lme-vis-pub:disabled{opacity:.7;cursor:default;}",
+      ".lme-vis-pubmsg{font-size:12.5px;color:#6b4760;margin-top:8px;}",
       ".lme-vis-note{font-size:13px;color:#9a8693;margin:14px 0 0;text-align:center;}",
       ".lme-vis-sp{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.5);",
       "border-top-color:#fff;border-radius:50%;animation:lmevisspin .7s linear infinite;vertical-align:-2px;}",
@@ -119,7 +145,7 @@
       '<div class="lme-vis-src"></div>' +
       '<button class="lme-vis-go">✨ ' + T("Lag ferdige delinger", "Create ready-to-share posts") + '</button>' +
       '<div class="lme-vis-results"></div>' +
-      '<p class="lme-vis-note">' + T("Ingenting deles automatisk. Du kopierer og limer inn der du vil.", "Nothing is shared automatically. You copy and paste where you like.") + '</p>' +
+      '<p class="lme-vis-note" id="lmeVisFoot"></p>' +
       '</div></div>';
     document.body.appendChild(overlay);
     panel = overlay.querySelector(".lme-vis-panel");
@@ -139,6 +165,17 @@
       esc((s.title || T("(uten tittel)", "(no title)"))) +
       (s.text ? '<br><span style="color:#9a8693">' + esc(s.text.slice(0, 160)) + (s.text.length > 160 ? "…" : "") + "</span>" : "");
     resultsEl.innerHTML = "";
+    // Fotnote: forteller om automatisk publisering er koblet til eller ikke.
+    var foot = overlay.querySelector("#lmeVisFoot");
+    if (foot) {
+      var bl = loadBl();
+      var connected = CHANNELS.some(function (c) { return c.tt && (bl[c.key] || {}).accountId; });
+      foot.textContent = connected
+        ? T("Trykk 📣 Publiser for å legge ut automatisk, eller kopier og lim inn selv.",
+            "Tap 📣 Publish to post automatically, or copy and paste yourself.")
+        : T("Kopier og lim inn der du vil. Vil du publisere automatisk? Koble kontoene i Publiser alle først.",
+            "Copy and paste where you like. Want automatic posting? Connect your accounts in Publish all first.");
+    }
     overlay.classList.add("show");
     document.body.style.overflow = "hidden";
   }
@@ -147,9 +184,48 @@
   function cardHTML(ch, text) {
     if (!text) return "";
     var name = T(ch.no, ch.en);
-    return '<div class="lme-vis-card"><div class="top"><span>' + ch.ico + '</span><b>' + name + '</b>' +
+    // Publiser-knapp bare på kanaler som kan autopubliseres OG er koblet til.
+    var pub = "";
+    if (ch.tt && (loadBl()[ch.key] || {}).accountId) {
+      pub = '<button class="lme-vis-pub" data-pub="' + ch.key + '">📣 ' + T("Publiser", "Publish") + '</button>';
+    }
+    return '<div class="lme-vis-card" data-ch="' + esc(ch.key) + '"><div class="top"><span>' + ch.ico + '</span><b>' + name + '</b>' +
+      pub +
       '<button class="lme-vis-copy" data-copy>' + T("Kopier", "Copy") + '</button></div>' +
-      '<div class="txt">' + esc(text) + '</div></div>';
+      '<div class="txt">' + esc(text) + '</div>' +
+      '<div class="lme-vis-pubmsg" hidden></div></div>';
+  }
+
+  // Publiser ett kort automatisk via den eksisterende Blotato-motoren.
+  function publishCard(ch, btn) {
+    var card = btn.closest(".lme-vis-card");
+    var text = card.querySelector(".txt").innerText;
+    var msg = card.querySelector(".lme-vis-pubmsg");
+    var s = (overlay && overlay.__share) || readShare();
+    var built = buildPost(ch, text, s.image || "");
+    if (built.err) {
+      msg.hidden = false; msg.textContent = "⚠️ " + built.err; return;
+    }
+    var old = btn.innerHTML;
+    btn.disabled = true; btn.innerHTML = '<span class="lme-vis-sp"></span> ' + T("Publiserer…", "Publishing…");
+    msg.hidden = true;
+    fetch(BASE + "/ai/blotato/publish", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items: [{ label: built.label, post: built.post }] }),
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      var res = d && d.result && d.result.results && d.result.results[0];
+      if (res && res.ok) {
+        btn.innerHTML = "✓ " + T("Publisert", "Published");
+        msg.hidden = false; msg.textContent = T("Lagt ut automatisk 🎉", "Posted automatically 🎉");
+      } else {
+        btn.disabled = false; btn.innerHTML = old;
+        msg.hidden = false;
+        msg.textContent = "⚠️ " + T("Klarte ikke å publisere. Sjekk kobling i Publiser alle.", "Could not publish. Check the connection in Publish all.");
+      }
+    }).catch(function () {
+      btn.disabled = false; btn.innerHTML = old;
+      msg.hidden = false; msg.textContent = "⚠️ " + T("Nettverksfeil. Prøv igjen.", "Network error. Try again.");
+    });
   }
 
   function run() {
@@ -176,6 +252,13 @@
           var txt = b.closest(".lme-vis-card").querySelector(".txt").innerText;
           try { navigator.clipboard.writeText(txt); } catch (e) {}
           var o = b.textContent; b.textContent = T("Kopiert!", "Copied!"); setTimeout(function () { b.textContent = o; }, 1400);
+        });
+      });
+      resultsEl.querySelectorAll("[data-pub]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var key = b.getAttribute("data-pub");
+          var ch = CHANNELS.filter(function (x) { return x.key === key; })[0];
+          if (ch) publishCard(ch, b);
         });
       });
     }).catch(function () {
