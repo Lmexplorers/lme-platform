@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FBF7F0">
+<title>Kom i gang med Claude · LME</title>
+<link rel="icon" href="/images/lme-logo.png">
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+
+  :root {
+    --lime: #A4D233;
+    --lime-soft: #E8F5D1;
+    --cerise: #E91E89;
+    --cerise-soft: #FCE3F1;
+    --sun: #F7C72E;
+    --sun-soft: #FFF4D6;
+    --bg: #FBF7F0;
+    --bg-2: #FFFFFF;
+    --ink: #1F1B24;
+    --ink-soft: #5A5560;
+    --ink-muted: #938E99;
+    --line: rgba(31, 27, 36, 0.08);
+    --r-md: 18px;
+    --r-lg: 26px;
+    --r-xl: 36px;
+    --r-pill: 999px;
+    --shadow-lg: 0 22px 60px rgba(31, 27, 36, 0.10);
+    --font: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font);
+    color: var(--ink);
+    background:
+      radial-gradient(1000px 560px at 100% -6%, var(--sun-soft) 0%, transparent 52%),
+      radial-gradient(900px 520px at -5% 4%, var(--cerise-soft) 0%, transparent 50%),
+      radial-gradient(800px 520px at 50% 112%, var(--lime-soft) 0%, transparent 55%),
+      var(--bg);
+    min-height: 100vh; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+  .wrap { max-width: 900px; margin: 0 auto; padding: 28px 24px 64px; }
+
+  .brandbar { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 26px; }
+  .brandbar img { height: 34px; width: auto; }
+  .brandbar .brandname { font-weight: 700; font-size: 15px; }
+
+  .topchip {
+    display: block; width: fit-content; margin: 0 auto 18px;
+    background: var(--cerise); color: #fff;
+    font-size: 12.5px; font-weight: 700; letter-spacing: 0.03em;
+    padding: 8px 18px; border-radius: var(--r-pill);
+    box-shadow: 0 8px 20px rgba(233, 30, 137, 0.28);
+  }
+
+  .head { text-align: center; margin-bottom: 30px; }
+  h1 {
+    font-size: clamp(28px, 4.6vw, 44px);
+    font-weight: 800; line-height: 1.14; letter-spacing: -0.02em;
+    max-width: 720px; margin: 0 auto 16px;
+  }
+  h1 .hl { background: linear-gradient(120deg, var(--cerise), var(--sun)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .head p { font-size: 17px; color: var(--ink-soft); max-width: 640px; margin: 0 auto; }
+
+  .hero-fig { margin: 26px auto 0; max-width: 760px; border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--shadow-lg); }
+  .hero-fig img { width: 100%; display: block; }
+
+  .card {
+    background: var(--bg-2); border: 1px solid var(--line);
+    border-radius: var(--r-xl); box-shadow: 0 10px 34px rgba(31,27,36,0.06);
+    padding: 32px 34px; margin: 22px 0;
+  }
+  .card h2 { font-size: clamp(21px, 3vw, 27px); font-weight: 800; margin-bottom: 18px; letter-spacing: -0.01em; }
+
+  .bullets { list-style: none; display: grid; gap: 13px; }
+  .bullets li { display: flex; align-items: flex-start; gap: 12px; font-size: 15.5px; color: var(--ink-soft); }
+  .bullets .tick {
+    flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%;
+    background: var(--lime-soft); color: #5b7d12;
+    display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; margin-top: 1px;
+  }
+
+  /* Bonuser */
+  .bonus-grid { display: grid; gap: 16px; }
+  .bonus {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: var(--sun-soft); border-radius: var(--r-lg); padding: 18px 20px;
+  }
+  .bonus .gift { font-size: 26px; line-height: 1; flex-shrink: 0; }
+  .bonus h3 { font-size: 16.5px; font-weight: 800; margin-bottom: 4px; }
+  .bonus p { font-size: 14.5px; color: var(--ink-soft); }
+
+  /* For / ikke for deg */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .col-for, .col-not {
+    border-radius: var(--r-lg); padding: 24px 26px; border: 1px solid var(--line);
+  }
+  .col-for { background: var(--lime-soft); }
+  .col-not { background: #fff; }
+  .col-for h3, .col-not h3 { font-size: 17px; font-weight: 800; margin-bottom: 14px; }
+  .mini { list-style: none; display: grid; gap: 10px; }
+  .mini li { display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; color: var(--ink-soft); }
+  .mini .mk { flex-shrink: 0; font-weight: 800; margin-top: 1px; }
+  .col-for .mk { color: #5b7d12; }
+  .col-not .mk { color: var(--ink-muted); }
+
+  /* Pris + kjøp */
+  .buybox { text-align: center; }
+  .price-row { display: flex; align-items: baseline; justify-content: center; gap: 12px; margin-bottom: 6px; }
+  .price-now { font-size: 52px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+  .price-cur { font-size: 22px; font-weight: 700; color: var(--ink-soft); }
+  .price-before { font-size: 18px; color: var(--ink-muted); text-decoration: line-through; }
+  .price-note { font-size: 13.5px; color: var(--ink-muted); margin-bottom: 20px; }
+
+  .guarantee {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--sun-soft); border-radius: var(--r-md);
+    padding: 12px 18px; font-size: 13.5px; color: #7a5e00; margin-bottom: 20px;
+  }
+  .guarantee svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--sun); }
+
+  .btn-buy {
+    width: 100%; max-width: 460px; font-size: 17px; font-weight: 800;
+    padding: 18px 22px; border-radius: var(--r-pill);
+    background: linear-gradient(120deg, var(--cerise), #ff5fb0);
+    color: #fff; box-shadow: 0 12px 28px rgba(233, 30, 137, 0.32);
+    transition: transform .16s ease, box-shadow .16s ease;
+  }
+  .btn-buy:hover { transform: translateY(-2px); box-shadow: 0 18px 36px rgba(233, 30, 137, 0.4); }
+
+  .social { text-align: center; margin-top: 26px; font-size: 14px; color: var(--ink-soft); }
+  .social .stars { color: var(--sun); letter-spacing: 2px; font-size: 18px; }
+
+  .quote { max-width: 620px; margin: 0 auto 22px; background: var(--cerise-soft); border-radius: var(--r-lg); padding: 26px 28px; text-align: center; }
+  .quote .stars { color: var(--sun); letter-spacing: 2px; font-size: 17px; margin-bottom: 10px; }
+  .quote p { font-size: 16.5px; color: var(--ink); line-height: 1.6; margin-bottom: 12px; }
+  .quote .who { font-size: 13.5px; font-weight: 700; color: var(--cerise); }
+
+  .footer { text-align: center; margin-top: 50px; font-size: 13px; color: var(--ink-muted); }
+
+  @media (max-width: 720px) {
+    .two-col { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 520px) {
+    .wrap { padding: 22px 16px 48px; }
+    .card { padding: 24px 22px; }
+    .price-now { font-size: 42px; }
+  }
+
+  /* Laast fontregel: Sasson Montessori paa alt unntatt overskrifter */
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); }
+  button, input, select, textarea { font-family: var(--font); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="brandbar" href="/academy" title="Til Lær med Renate" style="color:inherit;text-decoration:none">
+      <img id="brandLogo" src="/images/lme-logo.png" alt="LME" onerror="this.style.display='none'">
+      <span class="brandname" id="brandName">LME</span>
+    </a>
+
+    <span class="topchip" id="topLabel"></span>
+
+    <div class="head">
+      <h1 id="heading"></h1>
+      <p id="sub"></p>
+      <figure class="hero-fig"><img id="heroImg" src="" alt=""></figure>
+    </div>
+
+    <!-- Hva du lærer -->
+    <div class="card">
+      <h2 id="learnTitle"></h2>
+      <ul class="bullets" id="learnList"></ul>
+    </div>
+
+    <!-- Bonuser -->
+    <div class="card">
+      <h2 id="bonusTitle"></h2>
+      <div class="bonus-grid" id="bonusList"></div>
+    </div>
+
+    <!-- For / ikke for deg -->
+    <div class="two-col">
+      <div class="col-for">
+        <h3 id="forTitle"></h3>
+        <ul class="mini" id="forList"></ul>
+      </div>
+      <div class="col-not">
+        <h3 id="notTitle"></h3>
+        <ul class="mini" id="notList"></ul>
+      </div>
+    </div>
+
+    <!-- Kundeuttalelse (vises kun hvis fylt ut i config) -->
+    <div class="quote" id="quoteBox" style="display:none;">
+      <div class="stars">★★★★★</div>
+      <p id="quoteText"></p>
+      <div class="who" id="quoteWho"></div>
+    </div>
+
+    <!-- Pris + kjøp -->
+    <div class="card buybox">
+      <div class="price-row">
+        <span class="price-now" id="priceNow"></span>
+        <span class="price-cur" id="priceCur"></span>
+        <span class="price-before" id="priceBefore"></span>
+      </div>
+      <div class="price-note" id="priceNote"></div>
+      <div class="guarantee">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
+        <span id="guarantee"></span>
+      </div>
+      <div><button class="btn-buy" id="buyBtn"></button></div>
+      <div class="social">
+        <div class="stars">★★★★★</div>
+        <span id="social"></span>
+      </div>
+    </div>
+
+    <div class="footer">© <span id="yr"></span> <span id="brandFooter">LME</span></div>
+  </div>
+
+  <script src="funnel-config.js"></script>
+  <script>
+    // Språk: ?lang=… > localStorage 'lme_lang' (samme som plattformen) > 'no'
+    const LANG = (() => {
+      const q = new URLSearchParams(location.search).get('lang');
+      let l = (q || localStorage.getItem('lme_lang') || 'no').toLowerCase();
+      if (l !== 'en' && l !== 'no') l = 'no';
+      try { localStorage.setItem('lme_lang', l); } catch (e) {}
+      return l;
+    })();
+    document.documentElement.lang = LANG;
+    const C = window.LME_FUNNEL[LANG] || window.LME_FUNNEL.no;
+
+    // Språk-knapp (🇬🇧/🇳🇴)
+    (() => {
+      const b = document.createElement('button');
+      b.textContent = LANG === 'en' ? '🇳🇴 Norsk' : '🇬🇧 English';
+      b.setAttribute('aria-label', 'Bytt språk / Switch language');
+      b.style.cssText = 'position:fixed;top:16px;right:16px;z-index:300;display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(31,27,36,.12);background:#fff;color:#1F1B24;font-family:inherit;font-weight:700;font-size:13px;line-height:1;padding:10px 15px;border-radius:999px;box-shadow:0 6px 20px rgba(31,27,36,.12);cursor:pointer;';
+      b.addEventListener('click', () => {
+        const next = LANG === 'en' ? 'no' : 'en';
+        try { localStorage.setItem('lme_lang', next); } catch (e) {}
+        const u = new URL(location.href); u.searchParams.set('lang', next); location.href = u.toString();
+      });
+      document.body.appendChild(b);
+    })();
+
+    const s = C.salg;
+    const p = s.pris;
+    const txt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+
+    // Branding
+    document.getElementById('brandLogo').src = C.brand.logo;
+    txt('brandName', C.brand.kortnavn);
+    txt('brandFooter', C.brand.navn);
+    txt('yr', new Date().getFullYear());
+
+    // Topp
+    txt('topLabel', s.merkelapp);
+    document.getElementById('heading').innerHTML = highlightLast(s.overskrift);
+    txt('sub', s.underoverskrift);
+    if (s.bilde) { const hi = document.getElementById('heroImg'); hi.src = s.bilde; hi.alt = s.overskrift; }
+    else { document.querySelector('.hero-fig').style.display = 'none'; }
+
+    // Hva du lærer
+    txt('learnTitle', s.hvaDuLaererTittel);
+    fillBullets('learnList', s.hvaDuLaerer);
+
+    // Bonuser
+    txt('bonusTitle', s.bonuserTittel);
+    const bg = document.getElementById('bonusList');
+    (s.bonuser || []).forEach(b => {
+      const d = document.createElement('div');
+      d.className = 'bonus';
+      d.innerHTML = '<span class="gift">🎁</span><div><h3></h3><p></p></div>';
+      d.querySelector('h3').textContent = b.tittel;
+      d.querySelector('p').textContent = b.tekst;
+      bg.appendChild(d);
+    });
+
+    // For / ikke for deg
+    txt('forTitle', s.forDegTittel);
+    txt('notTitle', s.ikkeForDegTittel);
+    fillMini('forList', s.forDeg, '✓');
+    fillMini('notList', s.ikkeForDeg, '×');
+
+    // Pris
+    txt('priceNow', p.belop);
+    txt('priceCur', p.valuta);
+    const pb = document.getElementById('priceBefore');
+    if (p.visningFor) pb.textContent = p.visningFor; else pb.style.display = 'none';
+    txt('priceNote', LANG === 'en'
+      ? 'Launch price for a limited time. One-time payment, lifetime access.'
+      : 'Lanseringspris i en begrenset periode. Engangsbeløp, tilgang for alltid.');
+    txt('guarantee', s.garanti);
+    txt('social', s.sosialtBevis);
+
+    // Kundeuttalelse (vises bare hvis sitat er satt i config)
+    if (s.testimonial && s.testimonial.sitat) {
+      txt('quoteText', '"' + s.testimonial.sitat + '"');
+      const who = [s.testimonial.navn, s.testimonial.sted].filter(Boolean).join(', ');
+      txt('quoteWho', who);
+      document.getElementById('quoteBox').style.display = 'block';
+    }
+
+    // Kjøp
+    const buy = document.getElementById('buyBtn');
+    buy.textContent = s.kjopKnapp;
+    buy.addEventListener('click', () => {
+      if (s.checkoutUrl) { window.location.href = s.checkoutUrl; }
+      else { window.location.href = s.etterKjop; }   // tom checkout = hopp til mersalg (forhåndsvisning)
+    });
+
+    function fillBullets(id, arr) {
+      const ul = document.getElementById(id);
+      (arr || []).forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = '<span class="tick">✓</span><span></span>';
+        li.querySelector('span:last-child').textContent = item;
+        ul.appendChild(li);
+      });
+    }
+    function fillMini(id, arr, mark) {
+      const ul = document.getElementById(id);
+      (arr || []).forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = '<span class="mk"></span><span></span>';
+        li.querySelector('.mk').textContent = mark;
+        li.querySelector('span:last-child').textContent = item;
+        ul.appendChild(li);
+      });
+    }
+    function highlightLast(str) {
+      const words = str.split(' ');
+      if (words.length < 3) return str;
+      const cut = words.length - 2;
+      return words.slice(0, cut).join(' ') + ' <span class="hl">' + words.slice(cut).join(' ') + '</span>';
+    }
+  </script>
+<script src="/js/lme-visibility.js" defer></script>
+</body>
+</html>
