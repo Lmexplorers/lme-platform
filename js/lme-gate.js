@@ -3,12 +3,14 @@
  *
  * En side ber om lås ved å sette (før dette skriptet lastes):
  *   window.LME_REQUIRES = "sub";            // krever aktivt abonnement/medlemskap
+ *   window.LME_MIN_TIER = "pro";            // valgfritt: krev minst dette nivået
  *   window.LME_GATE_TITLE = "Pro-verktøy";  // valgfri overskrift
  *   window.LME_GATE_URL   = "/oppgrader";   // hvor "Se planene" går
  *
- * Er brukeren logget inn med et aktivt abonnement, skjer ingenting.
- * Ellers legges et vennlig låse-lag over siden. Fail-open: ved teknisk
- * feil låses ingenting, så en ekte betalende bruker aldri stenges ute.
+ * Er brukeren logget inn med et aktivt abonnement (og høyt nok nivå), skjer
+ * ingenting. Ellers legges et vennlig låse-lag over siden. Eier slipper alltid
+ * gjennom. Fail-open: ved teknisk feil, eller når nivået ikke er kjent på
+ * Pages-siden, låses ingenting, så en ekte betalende bruker aldri stenges ute.
  */
 (function () {
   if (!window.LME_REQUIRES) return;
@@ -39,13 +41,23 @@
     document.body.appendChild(o);
   }
 
+  var RANK = { medlem: 1, regular: 1, member: 1, pro: 2, vip: 3, owner: 4 };
+
   function start() {
     fetch("/api/access", { credentials: "same-origin" })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (a) {
-        if (!a) return;            // fail-open
-        if (a.active) return;      // har tilgang
-        showGate(!!a.loggedIn);
+        if (!a) return;                 // fail-open
+        if (a.plan === "owner" || a.tier === "owner") return; // eier slipper alltid gjennom
+        if (!a.active) { showGate(!!a.loggedIn); return; }     // ikke innlogget / uten abonnement
+        // Aktiv: sjekk eventuelt nivåkrav. Er nivået ukjent (null), er vi
+        // fail-open, så en ekte betalende bruker aldri stenges ute.
+        var need = window.LME_MIN_TIER ? (RANK[String(window.LME_MIN_TIER).toLowerCase()] || 0) : 0;
+        if (need && a.tier) {
+          var have = RANK[String(a.tier).toLowerCase()] || 0;
+          if (have < need) { showGate(true); return; }
+        }
+        // aktiv og nivå ok (eller ukjent): ingen lås
       })
       .catch(function () { /* fail-open */ });
   }

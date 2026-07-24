@@ -81,14 +81,25 @@ async function subscriptionFor(context, user) {
   return sub;
 }
 
+/* Medlemsnivå (Inner Circle) om det er kjent på Pages-siden. Returnerer
+   "medlem" | "pro" | "vip" eller null når nivået ikke er lagret granulært
+   (to innloggingssystemer, se docs). Klient-gaten er fail-open på null. */
+function tierOf(sub) {
+  if (!sub) return null;
+  const t = String(sub.tier || "").toLowerCase();
+  if (t === "vip" || t === "pro") return t;
+  if (t === "regular" || t === "medlem" || t === "member") return "medlem";
+  return null;
+}
+
 /* For klient-gate og /api/access: hvem er du og har du tilgang. */
 export async function getAccess(context) {
   const user = await sessionUser(context);
-  if (!user) return { loggedIn: false, active: false, plan: null, limits: null };
-  if (isOwner(user)) return { loggedIn: true, active: true, plan: "owner", limits: null };
+  if (!user) return { loggedIn: false, active: false, plan: null, tier: null, limits: null };
+  if (isOwner(user)) return { loggedIn: true, active: true, plan: "owner", tier: "owner", limits: null };
   const sub = await subscriptionFor(context, user);
   const active = !!(sub && sub.status === "active");
-  return { loggedIn: true, active: active, plan: (sub && sub.plan) || null, limits: (sub && sub.limits) || null };
+  return { loggedIn: true, active: active, plan: (sub && sub.plan) || null, tier: tierOf(sub), limits: (sub && sub.limits) || null };
 }
 
 /**
