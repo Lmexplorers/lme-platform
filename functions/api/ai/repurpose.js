@@ -39,27 +39,43 @@ ALDRI dikt opp garantier, pengene-tilbake-løfter, refusjonsvilkår, priser, rab
 
 const langName = (l) => (l === "en" ? "English" : "norsk (bokmål)");
 
+// Prøv modellene i rekkefølge. Går den første ikke (f.eks. ukjent modell),
+// faller vi tilbake til en garantert gyldig modell før vi gir opp.
+const MODELS = ["claude-sonnet-5", "claude-haiku-4-5-20251001"];
+
 async function callClaude(env, system, userPrompt, maxTokens) {
-  const resp = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": env.ANTHROPIC_API_KEY,
-      "anthropic-version": "2023-06-01",
-    },
-    body: JSON.stringify({
-      model: "claude-sonnet-5",
-      max_tokens: maxTokens || 3000,
-      system,
-      messages: [{ role: "user", content: userPrompt }],
-    }),
-  });
-  if (!resp.ok) {
+  let lastErr = "ukjent feil";
+  for (const model of MODELS) {
+    let resp;
+    try {
+      resp = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": env.ANTHROPIC_API_KEY,
+          "anthropic-version": "2023-06-01",
+        },
+        body: JSON.stringify({
+          model,
+          max_tokens: maxTokens || 3000,
+          system,
+          messages: [{ role: "user", content: userPrompt }],
+        }),
+      });
+    } catch (e) {
+      lastErr = "nettverksfeil mot Anthropic (" + model + ")";
+      continue;
+    }
+    if (resp.ok) {
+      const data = await resp.json();
+      return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
+    }
     const t = await resp.text();
-    throw new Error(`Anthropic ${resp.status}: ${t}`);
+    lastErr = "Anthropic " + resp.status + " (" + model + "): " + t.replace(/\s+/g, " ").slice(0, 180);
+    // 401/403 = nøkkel/tilgang, 429/400 om kreditt: samme feil for alle modeller, ikke vits å prøve videre.
+    if (resp.status === 401 || resp.status === 403) break;
   }
-  const data = await resp.json();
-  return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
+  throw new Error(lastErr);
 }
 
 function repurposePrompt(b) {
@@ -85,6 +101,7 @@ export async function onRequestPost(context) {
     const result = await callClaude(env, system, repurposePrompt(body), 3000);
     return json({ result });
   } catch (err) {
-    return json({ error: "AI er midlertidig utilgjengelig. Prøv igjen om litt." }, 502);
+    // Vis den ekte årsaken, så vi ser om det er modell, nøkkel eller kreditt.
+    return json({ error: "AI-feil: " + String((err && err.message) || err).slice(0, 220) }, 502);
   }
 }
