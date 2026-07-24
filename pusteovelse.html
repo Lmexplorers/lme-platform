@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<title>Pusterom — LME</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --cerise: #E91E89; --cerise-d: #C2185B; --pink: #F8D7DA; --pink-soft: #ff5fb0;
+    --lime: #7AAE1F; --cream: #FBF6F0; --ink: #1A1A1A; --grey: #5a4750;
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--font-body); color: var(--ink);
+    background: radial-gradient(1200px 700px at 50% 18%, #FFF4F9 0%, #FBEAF0 42%, #F6DCE7 100%);
+    min-height: 100%; display: flex; flex-direction: column; align-items: center;
+    overflow: hidden;
+  }
+  h1, h2, h3 { font-family: var(--font-head); }
+  a { color: inherit; text-decoration: none; }
+
+  .top { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; }
+  .top .brand { display: flex; align-items: center; gap: 9px; font-weight: 800; color: var(--cerise); font-size: 15px; }
+  .top .brand img { width: 30px; height: 30px; object-fit: contain; }
+  .btn-lang { border: 0; background: #FCEFF2; color: #C13D6A; border-radius: 999px; padding: 8px 15px; font-weight: 700; font-family: inherit; cursor: pointer; font-size: 13px; }
+
+  .stage { flex: 1; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px; padding: 10px 20px 40px; text-align: center; }
+  .kick { font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--cerise); }
+  .lead { color: var(--grey); max-width: 30ch; line-height: 1.6; }
+
+  .ring-wrap { position: relative; width: min(74vw, 340px); height: min(74vw, 340px); display: grid; place-items: center; }
+  .ring, .ring2 { position: absolute; inset: 0; border-radius: 50%; }
+  .ring2 { background: radial-gradient(circle at 50% 40%, rgba(255,95,176,.16), rgba(233,30,137,.05)); }
+  .ring {
+    background: radial-gradient(circle at 50% 38%, #ffd7ea, #ff9ecb 60%, #E91E89 130%);
+    box-shadow: 0 24px 60px rgba(233,30,137,.28), inset 0 0 40px rgba(255,255,255,.35);
+    transform: scale(.62);
+    transition: transform var(--phase, 4s) cubic-bezier(.37,0,.63,1);
+  }
+  .glass { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 4px; color: #fff; text-shadow: 0 2px 10px rgba(180,20,100,.35); }
+  .glass .phase { font-family: var(--font-head); font-weight: 800; font-size: clamp(24px, 7vw, 40px); }
+  .glass .count { font-size: 18px; opacity: .92; }
+
+  .controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: center; }
+  .go { border: 0; cursor: pointer; font-family: var(--font-head); font-weight: 800; font-size: 17px; color: #fff;
+    background: linear-gradient(120deg, var(--cerise), var(--pink-soft)); border-radius: 999px; padding: 14px 34px;
+    box-shadow: 0 12px 28px rgba(233,30,137,.3); }
+  .pat { display: inline-flex; gap: 6px; background: #fff; border-radius: 999px; padding: 5px; box-shadow: 0 6px 18px rgba(26,26,26,.06); }
+  .pat button { border: 0; background: none; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 13.5px; color: var(--grey); border-radius: 999px; padding: 8px 14px; }
+  .pat button.on { background: #FCEFF2; color: var(--cerise-d); }
+
+  .foot { color: var(--grey); font-size: 12.5px; opacity: .8; padding-bottom: 18px; }
+</style>
+</head>
+<body>
+  <div class="top">
+    <a class="brand" href="/"><img src="/images/lme-logo.png" alt="" onerror="this.style.display='none'">🌸 <span data-no="Pusterom" data-en="Breathing room">Pusterom</span></a>
+    <button class="btn-lang" id="lme-lang" type="button">🇬🇧 English</button>
+  </div>
+
+  <div class="stage">
+    <span class="kick" data-no="Pust med oss" data-en="Breathe with us">Pust med oss</span>
+    <p class="lead" id="lead" data-no="Følg sirkelen. Pust rolig inn når den vokser, og slipp ut når den synker. Noen minutter er nok til å kjenne forskjellen." data-en="Follow the circle. Breathe in gently as it grows, and let go as it sinks. A few minutes is enough to feel the difference.">Følg sirkelen. Pust rolig inn når den vokser, og slipp ut når den synker. Noen minutter er nok til å kjenne forskjellen.</p>
+
+    <div class="ring-wrap">
+      <div class="ring2"></div>
+      <div class="ring" id="ring"></div>
+      <div class="glass">
+        <span class="phase" id="phase" data-no="Klar?" data-en="Ready?">Klar?</span>
+        <span class="count" id="count"></span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="pat" id="pat">
+        <button data-p="calm" class="on" data-no="Rolig 4-4-6" data-en="Calm 4-4-6">Rolig 4-4-6</button>
+        <button data-p="box" data-no="Boks 4-4-4-4" data-en="Box 4-4-4-4">Boks 4-4-4-4</button>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="go" id="go" data-no="Start" data-en="Start">Start</button>
+    </div>
+  </div>
+
+  <div class="foot" data-no="Little Montessori Explorers · Pusterom" data-en="Little Montessori Explorers · Breathing room">Little Montessori Explorers · Pusterom</div>
+
+<script>
+(function () {
+  window.LME_CURRENT_LANG = 'no';
+  try { window.LME_CURRENT_LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no'; } catch (e) {}
+  function en() { return window.LME_CURRENT_LANG === 'en'; }
+  function applyLang() {
+    document.documentElement.lang = en() ? 'en' : 'no';
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      // Ikke overskriv fasen mens øvelsen kjører (den styres av JS).
+      if (el.id === 'phase' && running) return;
+      el.textContent = en() ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    var b = document.getElementById('lme-lang'); if (b) b.textContent = en() ? '🇳🇴 Norsk' : '🇬🇧 English';
+    document.title = (en() ? 'Breathing room' : 'Pusterom') + ' — LME';
+  }
+  document.getElementById('lme-lang').addEventListener('click', function () {
+    window.LME_CURRENT_LANG = en() ? 'no' : 'en';
+    try { localStorage.setItem('lme_lang', window.LME_CURRENT_LANG); } catch (e) {}
+    applyLang();
+  });
+
+  var PATTERNS = {
+    calm: [ {k:'in', s:4}, {k:'hold', s:4}, {k:'out', s:6} ],
+    box:  [ {k:'in', s:4}, {k:'hold', s:4}, {k:'out', s:4}, {k:'hold', s:4} ],
+  };
+  var WORDS = {
+    in:   { no:'Pust inn', en:'Breathe in' },
+    hold: { no:'Hold',     en:'Hold' },
+    out:  { no:'Pust ut',  en:'Breathe out' },
+  };
+  var SCALE = { in: 1.0, hold: null, out: 0.62 }; // hold beholder forrige skala
+
+  var ring = document.getElementById('ring');
+  var phaseEl = document.getElementById('phase');
+  var countEl = document.getElementById('count');
+  var goBtn = document.getElementById('go');
+  var running = false, pattern = 'calm', idx = 0, timer = null, tick = null, lastScale = 0.62;
+
+  function setPhase(step) {
+    var w = WORDS[step.k];
+    phaseEl.textContent = en() ? w.en : w.no;
+    ring.style.setProperty('--phase', step.s + 's');
+    var target = SCALE[step.k];
+    if (target === null) target = lastScale; else lastScale = target;
+    // tving en reflow slik at transitionen kjører hver gang
+    void ring.offsetWidth;
+    ring.style.transform = 'scale(' + target + ')';
+    // nedtelling
+    var left = step.s;
+    countEl.textContent = left;
+    clearInterval(tick);
+    tick = setInterval(function () { left -= 1; countEl.textContent = left > 0 ? left : ''; }, 1000);
+  }
+
+  function loop() {
+    var steps = PATTERNS[pattern];
+    setPhase(steps[idx]);
+    timer = setTimeout(function () {
+      idx = (idx + 1) % steps.length;
+      loop();
+    }, steps[idx].s * 1000);
+  }
+
+  function start() {
+    running = true; idx = 0;
+    goBtn.textContent = en() ? 'Stop' : 'Stopp';
+    goBtn.dataset.no = 'Stopp'; goBtn.dataset.en = 'Stop';
+    loop();
+  }
+  function stop() {
+    running = false;
+    clearTimeout(timer); clearInterval(tick);
+    ring.style.setProperty('--phase', '1.2s');
+    void ring.offsetWidth; ring.style.transform = 'scale(.62)'; lastScale = 0.62;
+    phaseEl.setAttribute('data-no', 'Ferdig'); phaseEl.setAttribute('data-en', 'Done');
+    phaseEl.textContent = en() ? 'Done' : 'Ferdig';
+    countEl.textContent = '';
+    goBtn.textContent = en() ? 'Start again' : 'Start igjen';
+    goBtn.dataset.no = 'Start igjen'; goBtn.dataset.en = 'Start again';
+  }
+  goBtn.addEventListener('click', function () { running ? stop() : start(); });
+
+  document.getElementById('pat').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-p]'); if (!b) return;
+    pattern = b.getAttribute('data-p');
+    [].forEach.call(this.querySelectorAll('button'), function (x) { x.classList.toggle('on', x === b); });
+    if (running) { stop(); start(); }
+  });
+
+  applyLang();
+})();
+</script>
+<script src="/js/lme-account.js?v=7" defer></script>
+</body>
+</html>
