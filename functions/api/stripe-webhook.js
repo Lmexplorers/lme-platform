@@ -79,9 +79,12 @@ async function grant(env, email, info) {
   try { const r = await env.BUILDER_KV.get(mkey); if (r) prevM = JSON.parse(r) || {}; } catch (e) {}
   const plan = (info && info.plan) || (prevM.plan && String(prevM.plan).indexOf("cs-") === 0 ? prevM.plan : "inner-circle");
   const limits = (info && info.limits) || prevM.limits || null;
+  // Medlemsnivå (Inner Circle): kommer fra Stripe-metadata (tier), settes av
+  // medlemskaps-checkouten. Beholdes hvis en senere hendelse ikke sender det.
+  const tier = (info && info.tier) || prevM.tier || null;
   const rec = {
     status: "active", source: "stripe", since: prevM.since || Date.now(),
-    plan: plan, limits: limits,
+    plan: plan, tier: tier, limits: limits,
     customer: (info && info.customer) || prevM.customer || null,
     sub: (info && info.sub) || prevM.sub || null,
     updated: Date.now(),
@@ -93,7 +96,7 @@ async function grant(env, email, info) {
   if (uraw) {
     try {
       const u = JSON.parse(uraw);
-      u.subscription = { status: rec.status, plan: rec.plan, limits: rec.limits, source: "stripe", updated: rec.updated };
+      u.subscription = { status: rec.status, plan: rec.plan, tier: rec.tier, limits: rec.limits, source: "stripe", updated: rec.updated };
       await env.BUILDER_KV.put(userKey(email), JSON.stringify(u));
     } catch (e) {}
   }
@@ -205,7 +208,10 @@ export async function onRequestPost(context) {
         }
         break;
       }
-      await grant(env, email, { customer: obj.customer, sub: obj.subscription });
+      await grant(env, email, {
+        customer: obj.customer, sub: obj.subscription,
+        tier: (obj.metadata && obj.metadata.tier) || null,
+      });
       break;
     }
     case "customer.subscription.created":
@@ -221,9 +227,10 @@ export async function onRequestPost(context) {
             const prod = price && (typeof price.product === "string" ? price.product : (price.product && price.product.id));
             cs = prod ? CS_PLANS[prod] : null;
           } catch (e) {}
+          const tier = (obj.metadata && obj.metadata.tier) || null;
           await grant(env, email, cs
-            ? { customer: obj.customer, sub: obj.id, plan: cs.plan, limits: cs.limits }
-            : { customer: obj.customer, sub: obj.id });
+            ? { customer: obj.customer, sub: obj.id, plan: cs.plan, limits: cs.limits, tier: tier }
+            : { customer: obj.customer, sub: obj.id, tier: tier });
         } else { await revoke(env, email); }
       }
       break;

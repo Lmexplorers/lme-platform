@@ -50,14 +50,15 @@
         if (!a) return;                 // fail-open
         if (a.plan === "owner" || a.tier === "owner") return; // eier slipper alltid gjennom
         if (!a.active) { showGate(!!a.loggedIn); return; }     // ikke innlogget / uten abonnement
-        // Aktiv: sjekk eventuelt nivåkrav. Er nivået ukjent (null), er vi
-        // fail-open, så en ekte betalende bruker aldri stenges ute.
+        // Aktiv: krever siden et bestemt nivå (Pro/VIP), slipper bare det
+        // nivået eller høyere gjennom. Uten nivåkrav holder et aktivt
+        // abonnement. Ekte teknisk feil er fanget av .catch under (fail-open).
         var need = window.LME_MIN_TIER ? (RANK[String(window.LME_MIN_TIER).toLowerCase()] || 0) : 0;
-        if (need && a.tier) {
-          var have = RANK[String(a.tier).toLowerCase()] || 0;
+        if (need) {
+          var have = RANK[String(a.tier || "").toLowerCase()] || 0;
           if (have < need) { showGate(true); return; }
         }
-        // aktiv og nivå ok (eller ukjent): ingen lås
+        // aktiv og nivå ok: ingen lås
       })
       .catch(function () { /* fail-open */ });
   }
