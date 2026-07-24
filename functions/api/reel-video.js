@@ -1,3 +1,4 @@
+import { enforceGeneration } from "../_lib/access.js";
 /**
  * LME — server-side AI-video via Higgsfield (image-to-video).
  *
@@ -64,6 +65,9 @@ export async function onRequestOptions() {
 
 // ---- POST: send inn video-jobben ----
 export async function onRequestPost(context) {
+  const gate = await enforceGeneration(context, "video");
+  if (!gate.ok) return json({ error: gate.error }, gate.status);
+
   const { request, env } = context;
   if (!env.HIGGSFIELD_API_KEY || !env.HIGGSFIELD_SECRET) {
     return json({ error: "not_configured" }, 200);

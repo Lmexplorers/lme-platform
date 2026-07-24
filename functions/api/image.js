@@ -1,3 +1,4 @@
+import { enforceGeneration } from "../_lib/access.js";
 /**
  * LME — auto-generert bilde til sosiale innlegg (for Visibility-appen).
  *
@@ -180,6 +181,9 @@ function aspectFor(size) {
 // POST — generer og lagre bilde
 // =====================================================
 export async function onRequestPost(context) {
+  const gate = await enforceGeneration(context, "image");
+  if (!gate.ok) return json({ error: gate.error }, gate.status);
+
   // Alt er pakket i én ytre try/catch, så en uventet feil alltid gir et JSON-svar
   // (aldri en 502 med HTML-side). Da ser vi den ekte feilen i stedet for å gjette.
   try {

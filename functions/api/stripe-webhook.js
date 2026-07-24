@@ -65,6 +65,13 @@ function memberKey(email) { return "member:" + email.trim().toLowerCase(); }
 function custKey(id) { return "scust:" + id; }
 function userKey(email) { return "user:" + email.trim().toLowerCase(); }
 
+/* Content Studio-produkter -> plan og månedskvote (bilder/video). */
+const CS_PLANS = {
+  "prod_UwWlnVHko5a1Dt": { plan: "cs-start", limits: { image: 30,  video: 1  } },
+  "prod_UTtEl6dxkbq4qM": { plan: "cs-proff", limits: { image: 100, video: 6  } },
+  "prod_UwWmmP16D4lT5Z": { plan: "cs-pluss", limits: { image: 250, video: 15 } },
+};
+
 async function grant(env, email, info) {
   if (!email) return;
   const rec = Object.assign(
@@ -78,7 +85,14 @@ async function grant(env, email, info) {
   if (uraw) {
     try {
       const u = JSON.parse(uraw);
-      u.subscription = { status: rec.status, plan: rec.plan, source: "stripe", updated: rec.updated };
+      const prev = (u.subscription && typeof u.subscription === "object") ? u.subscription : {};
+      u.subscription = {
+        status: rec.status,
+        plan: (info && info.plan) || (prev.plan && prev.plan.indexOf("cs-") === 0 ? prev.plan : rec.plan),
+        limits: (info && info.limits) || prev.limits || null,
+        source: "stripe",
+        updated: rec.updated,
+      };
       await env.BUILDER_KV.put(userKey(email), JSON.stringify(u));
     } catch (e) {}
   }
@@ -197,7 +211,20 @@ export async function onRequestPost(context) {
     case "customer.subscription.updated": {
       const email = await emailForCustomer(env, obj.customer);
       const active = obj.status === "active" || obj.status === "trialing";
-      if (email) { if (active) await grant(env, email, { customer: obj.customer, sub: obj.id }); else await revoke(env, email); }
+      if (email) {
+        if (active) {
+          let cs = null;
+          try {
+            const item = obj.items && obj.items.data && obj.items.data[0];
+            const price = item && item.price;
+            const prod = price && (typeof price.product === "string" ? price.product : (price.product && price.product.id));
+            cs = prod ? CS_PLANS[prod] : null;
+          } catch (e) {}
+          await grant(env, email, cs
+            ? { customer: obj.customer, sub: obj.id, plan: cs.plan, limits: cs.limits }
+            : { customer: obj.customer, sub: obj.id });
+        } else { await revoke(env, email); }
+      }
       break;
     }
     case "customer.subscription.deleted": {

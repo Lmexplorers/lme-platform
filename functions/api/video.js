@@ -1,3 +1,4 @@
+import { enforceGeneration } from "../_lib/access.js";
 /**
  * LME — lagrer en generert kort video og gir en offentlig URL (for Blotato).
  *
@@ -32,6 +33,9 @@ function b64ToBytes(b64) {
 const MAX_BYTES = 24 * 1024 * 1024;
 
 export async function onRequestPost(context) {
+  const gate = await enforceGeneration(context, "video");
+  if (!gate.ok) return json({ error: gate.error }, gate.status);
+
   const { request, env } = context;
   if (!env.BUILDER_KV) return json({ error: "not_configured" }, 200);
 
