@@ -33,7 +33,6 @@ export async function onRequest(context) {
 
   const now = Date.now();
   const SIX_DAYS = 6 * 24 * 60 * 60 * 1000;
-  const total = newsletterLength();
   let sent = 0, done = 0, skipped = 0, failed = 0;
 
   let cursor;
@@ -45,6 +44,7 @@ export async function onRequest(context) {
       let sub;
       try { sub = JSON.parse(raw); } catch (e) { continue; }
       if (!sub.active) { skipped++; continue; }
+      const total = newsletterLength(sub.source);
       const idx = sub.weekIndex || 0;
       if (idx >= total) { done++; continue; }               // serien fullført
       if (sub.lastSent && (now - sub.lastSent) < SIX_DAYS) { skipped++; continue; }

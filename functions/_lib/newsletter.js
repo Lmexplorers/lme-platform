@@ -110,10 +110,66 @@ const SERIES = [
   },
 ];
 
-export function newsletterLength() { return SERIES.length; }
+/* Velkomstserie for Montessori mesterklasse (source=montessori-mesterklasse). Varm, vennlig, litt ivrig. */
+const MESTERKLASSE_SERIES = [
+  {
+    no: { subject: "Velkommen! Så glad for at du er her 🌸",
+      html: mk("Hei {name}, hjertelig velkommen!",
+        "Jeg er så glad for at du vil i gang med Montessori hjemme. Du trenger verken en lærerutdanning, et stort budsjett eller mye tid, bare litt lyst og noen enkle steg. Start med den gratis mesterklassen, så tar vi det første steget sammen.",
+        SITE + "/montessori-mesterklasse", "Se den gratis mesterklassen", "Klem fra Renate"),
+      text: "Hei {name}, hjertelig velkommen!\n\nJeg er så glad for at du vil i gang med Montessori hjemme. Start med den gratis mesterklassen:\n" + SITE + "/montessori-mesterklasse\n\nKlem fra Renate" },
+    en: { subject: "Welcome! So glad you are here 🌸",
+      html: mk("Hi {name}, a warm welcome!",
+        "I am so happy that you want to get started with Montessori at home. You need neither a teaching degree, a big budget, nor a lot of time, just a little desire and a few simple steps. Start with the free masterclass, and we will take the first step together.",
+        SITE + "/montessori-mesterklasse", "Watch the free masterclass", "Warm wishes, Renate"),
+      text: "Hi {name}, a warm welcome!\n\nStart with the free masterclass:\n" + SITE + "/montessori-mesterklasse\n\nWarm wishes, Renate" },
+  },
+  {
+    no: { subject: "Ditt aller første steg hjemme",
+      html: mk("Hei {name},",
+        "Det enkleste stedet å begynne er miljøet. Velg én hylle i barnehøyde og legg tre ting barnet kan nå og bruke helt selv. Færre valg gir mer ro, og barnet får kjenne på mestring med en gang. I mesterklassen om det forberedte miljøet viser jeg deg hvordan, steg for steg.",
+        SITE + "/academy/forberedt-miljo", "Se mesterklassen", "Klem fra Renate"),
+      text: "Hei {name},\n\nVelg én hylle i barnehøyde og legg tre ting barnet kan bruke selv. Se mesterklassen om det forberedte miljøet:\n" + SITE + "/academy/forberedt-miljo\n\nKlem fra Renate" },
+    en: { subject: "Your very first step at home",
+      html: mk("Hi {name},",
+        "The easiest place to begin is the environment. Choose one shelf at child height and place three things your child can reach and use all by themselves. Fewer choices bring more calm, and your child feels a sense of mastery right away. In the masterclass on the prepared environment I show you how, step by step.",
+        SITE + "/academy/forberedt-miljo", "Watch the masterclass", "Warm wishes, Renate"),
+      text: "Hi {name},\n\nChoose one shelf at child height with three things your child can use themselves. Watch the masterclass on the prepared environment:\n" + SITE + "/academy/forberedt-miljo\n\nWarm wishes, Renate" },
+  },
+  {
+    no: { subject: "To minutter: hva stjeler roen hjemme?",
+      html: mk("Hei {name},",
+        "Noen ganger er det små ting som forstyrrer roen, uten at vi helt ser dem. Ta den lille Ro-quizen, den tar bare to minutter og gir deg noen enkle tips tilpasset akkurat din hverdag. Det er en fin måte å finne ut hvor du skal begynne.",
+        SITE + "/ro-quiz", "Ta Ro-quizen", "Klem fra Renate"),
+      text: "Hei {name},\n\nTa den lille Ro-quizen, den tar to minutter og gir deg tips tilpasset din hverdag:\n" + SITE + "/ro-quiz\n\nKlem fra Renate" },
+    en: { subject: "Two minutes: what steals the calm at home?",
+      html: mk("Hi {name},",
+        "Sometimes small things disturb the calm without us quite seeing them. Take the little Calm Quiz, it only takes two minutes and gives you a few simple tips matched to your everyday life. It is a lovely way to find out where to begin.",
+        SITE + "/calm-quiz", "Take the Calm Quiz", "Warm wishes, Renate"),
+      text: "Hi {name},\n\nTake the little Calm Quiz, it takes two minutes and gives you tips for your everyday life:\n" + SITE + "/calm-quiz\n\nWarm wishes, Renate" },
+  },
+  {
+    no: { subject: "Klar for mer? Kursene venter på deg",
+      html: mk("Hei {name},",
+        "Hvis du har fått lyst på mer, ligger alle kursene klare for deg, i ditt eget tempo. Der tar jeg deg dypere inn i hver alder og hvert område, rolig og praktisk. Og skulle du ønske deg litt selskap på veien, er du hjertelig velkommen inn i fellesskapet vårt.",
+        SITE + "/academy", "Se alle kursene", "Klem fra Renate"),
+      text: "Hei {name},\n\nAlle kursene ligger klare for deg, i ditt eget tempo:\n" + SITE + "/academy\n\nKlem fra Renate" },
+    en: { subject: "Ready for more? The courses are waiting for you",
+      html: mk("Hi {name},",
+        "If you are hungry for more, all the courses are ready for you, at your own pace. There I take you deeper into each age and each area, calmly and practically. And if you would like some company along the way, you are warmly welcome into our community.",
+        SITE + "/academy", "See all the courses", "Warm wishes, Renate"),
+      text: "Hi {name},\n\nAll the courses are ready for you, at your own pace:\n" + SITE + "/academy\n\nWarm wishes, Renate" },
+  },
+];
 
-export function newsletterEmail(lang, index, name) {
-  const item = SERIES[index];
+function seriesFor(source) {
+  return source === "montessori-mesterklasse" ? MESTERKLASSE_SERIES : SERIES;
+}
+
+export function newsletterLength(source) { return seriesFor(source).length; }
+
+export function newsletterEmail(lang, index, name, source) {
+  const item = seriesFor(source)[index];
   if (!item) return null;
   const l = lang === "en" ? "en" : "no";
   const msg = item[l] || item.no;
@@ -130,7 +186,7 @@ export async function sendNewsletter(env, sub, index) {
   const apiKey = env.MAILERSEND_API_KEY;
   const to = sub && sub.email;
   if (!apiKey || !to) return { ok: false, skipped: true };
-  const msg = newsletterEmail(sub.lang, index, sub.name);
+  const msg = newsletterEmail(sub.lang, index, sub.name, sub.source);
   if (!msg) return { ok: false, done: true };
   try {
     const res = await fetch(MS, {
