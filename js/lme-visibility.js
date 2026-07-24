@@ -22,6 +22,9 @@
   window.__lmeVisibilityLoaded = true;
 
   var BASE = (window.LME_VISIBILITY_BASE || "https://lme-ai-visibility.lmexplorers.workers.dev").replace(/\/$/, "");
+  // Autopublisering styres nå fra plattformen selv (samme-origin), slik at
+  // Renate kan koble til Blotato ved å lime inn nøkkelen i appen, uten Cloudflare.
+  var BL_API = "/api/blotato";
 
   function lang() {
     try { if (localStorage.getItem("lme-lang") === "en") return "en"; } catch (e) {}
@@ -46,7 +49,7 @@
   var BL_MAP = null; // plattform -> { accountId, pageId }
   function fetchBlAccounts() {
     if (BL_MAP) return Promise.resolve(BL_MAP);
-    return fetch(BASE + "/ai/blotato/accounts", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" })
+    return fetch(BL_API + "/accounts", { method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: "{}" })
       .then(function (r) { return r.json(); })
       .then(function (res) {
         if (res && res.error) throw new Error(res.error);
@@ -185,15 +188,79 @@
     }
     fetchBlAccounts().then(function (map) { // varm opp kontoene fra Blotato
       if (foot && (!map || !Object.keys(map).length)) {
-        foot.textContent = T(
-          "⚠️ Autopublisering er ikke koblet til enda (Blotato). Du kan kopiere og lime inn i mellomtiden.",
-          "⚠️ Auto-publishing isn't connected yet (Blotato). You can copy and paste in the meantime.");
+        offerBlotatoSetup(foot);
       }
     });
     overlay.classList.add("show");
     document.body.style.overflow = "hidden";
   }
   function close() { if (overlay) { overlay.classList.remove("show"); document.body.style.overflow = ""; } }
+
+  // Autopublisering er ikke koblet til. Er du eier, får du lime inn Blotato-
+  // nøkkelen her og slå det på med en gang. Ellers en vennlig kopier/lim-melding.
+  function offerBlotatoSetup(foot) {
+    var generic = T(
+      "⚠️ Autopublisering er ikke koblet til enda. Du kan kopiere og lime inn i mellomtiden.",
+      "⚠️ Auto-publishing isn't connected yet. You can copy and paste in the meantime.");
+    foot.textContent = T("Sjekker kobling …", "Checking connection …");
+    fetch(BL_API + "/status", { credentials: "same-origin" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (st) {
+        if (!st || !st.owner) { foot.textContent = generic; return; }
+        if (st.hasKey && !st.connected) {
+          foot.textContent = T(
+            "⚠️ Nøkkelen er lagret, men ingen kontoer er koblet til i Blotato ennå. Koble til Instagram/Facebook/TikTok inne på blotato.com, så er du klar.",
+            "⚠️ The key is saved, but no accounts are connected in Blotato yet. Connect Instagram/Facebook/TikTok inside blotato.com and you're ready.");
+          return;
+        }
+        // Eier, ingen nøkkel: la henne lime den inn her.
+        foot.innerHTML = "";
+        var lbl = document.createElement("div");
+        lbl.style.cssText = "margin-bottom:6px;font-weight:700;color:#C2185B";
+        lbl.textContent = T("Koble til autopublisering", "Connect auto-publishing");
+        var hint = document.createElement("div");
+        hint.style.cssText = "margin-bottom:8px;color:#9a8693;font-size:13px";
+        hint.textContent = T(
+          "Lim inn Blotato-nøkkelen din (blotato.com, under API). Den lagres trygt på serveren.",
+          "Paste your Blotato key (blotato.com, under API). It's stored safely on the server.");
+        var row = document.createElement("div");
+        row.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
+        var inp = document.createElement("input");
+        inp.type = "password"; inp.placeholder = T("Blotato-nøkkel", "Blotato key");
+        inp.style.cssText = "flex:1;min-width:180px;padding:9px 12px;border:1px solid #f0c9d8;border-radius:10px;font-family:inherit";
+        var save = document.createElement("button");
+        save.textContent = T("Lagre og koble til", "Save and connect");
+        save.style.cssText = "background:linear-gradient(120deg,#E91E89,#ff5fb0);color:#fff;font-weight:800;border:0;border-radius:999px;padding:9px 18px;cursor:pointer;font-family:inherit";
+        save.addEventListener("click", function () {
+          var key = (inp.value || "").trim();
+          if (!key) { inp.focus(); return; }
+          save.disabled = true; save.textContent = T("Kobler til …", "Connecting …");
+          fetch(BL_API + "/key", {
+            method: "POST", credentials: "same-origin",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ key: key }),
+          }).then(function (r) { return r.json(); }).then(function (d) {
+            if (d && d.ok && d.connected) {
+              BL_MAP = null; // tving ny henting av kontoer
+              foot.textContent = "✓ " + T("Koblet til! Lukk og åpne denne igjen for Publiser-knappene.",
+                "Connected! Close and reopen this to see the Publish buttons.");
+            } else if (d && d.ok && d.hasKey) {
+              foot.textContent = "✓ " + T(
+                "Nøkkelen er lagret. Koble til kontoene dine inne på blotato.com, så dukker Publiser opp.",
+                "Key saved. Connect your accounts inside blotato.com and Publish will appear.");
+            } else {
+              save.disabled = false; save.textContent = T("Prøv igjen", "Try again");
+              foot.insertBefore(document.createTextNode(""), foot.firstChild);
+            }
+          }).catch(function () {
+            save.disabled = false; save.textContent = T("Prøv igjen", "Try again");
+          });
+        });
+        row.appendChild(inp); row.appendChild(save);
+        foot.appendChild(lbl); foot.appendChild(hint); foot.appendChild(row);
+      })
+      .catch(function () { foot.textContent = generic; });
+  }
 
   function cardHTML(ch, text) {
     if (!text) return "";
@@ -223,8 +290,8 @@
     var old = btn.innerHTML;
     btn.disabled = true; btn.innerHTML = '<span class="lme-vis-sp"></span> ' + T("Publiserer…", "Publishing…");
     msg.hidden = true;
-    fetch(BASE + "/ai/blotato/publish", {
-      method: "POST", headers: { "Content-Type": "application/json" },
+    fetch(BL_API + "/publish", {
+      method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ items: [{ label: built.label, post: built.post }] }),
     }).then(function (r) { return r.json(); }).then(function (d) {
       var res = d && d.result && d.result.results && d.result.results[0];
