@@ -880,6 +880,16 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     font-weight: 700;
     color: var(--ink-muted);
   }
+  .audio-play { border: 0; cursor: pointer; font-family: inherit; }
+  .audio-play.playing { background: var(--cerise-dark, #C2185B); }
+  .audio-prog { display: none; height: 5px; border-radius: 999px; background: rgba(233,30,137,.14); margin-top: 9px; overflow: hidden; }
+  .audio-card.has-audio .audio-prog { display: block; }
+  .audio-prog i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--cerise), #ff5fb0); border-radius: 999px; transition: width .15s linear; }
+  .audio-up { display: none; margin-top: 9px; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .lyd-edit .audio-up { display: flex; }
+  .audio-up label { font-size: 12.5px; font-weight: 700; color: var(--cerise, #E91E89); cursor: pointer; background: #FCEFF2; border-radius: 999px; padding: 6px 13px; }
+  .audio-up .up-msg { font-size: 12px; color: var(--ink-muted); }
+  .audio-up .up-del { font-size: 12px; color: #b23; background: none; border: 0; cursor: pointer; text-decoration: underline; font-family: inherit; }
 
   /* New this month timeline */
   .new-this-month {
@@ -1472,42 +1482,46 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     <h2 class="cat-h2">🎧 <em>Lyd</em> & meditasjon</h2>
     <p class="cat-sub">Lyttepakker for ro, refleksjon og bevisst pedagogikk.</p>
 
-    <div class="audio-list">
+    <div class="audio-list" id="lydList">
 
-      <article class="audio-card">
-        <button class="audio-play" onclick="lmeSoon();return false;">▶</button>
+      <article class="audio-card" data-slot="morgensirkel">
+        <button class="audio-play" type="button">▶</button>
         <div class="audio-info">
           <h4>Morgensirkel, 7 minutter ro</h4>
           <p>Guidet pust og oppstart for pedagoger før dagen begynner</p>
+          <div class="audio-prog"><i></i></div>
         </div>
-        <span class="audio-time">7:14</span>
+        <span class="audio-time" data-dur="7:14">7:14</span>
       </article>
 
-      <article class="audio-card">
-        <button class="audio-play" onclick="lmeSoon();return false;">▶</button>
+      <article class="audio-card" data-slot="observasjon">
+        <button class="audio-play" type="button">▶</button>
         <div class="audio-info">
           <h4>Observasjon uten å gripe inn</h4>
           <p>Renate leser om kunsten å bare være tilstede med barnet</p>
+          <div class="audio-prog"><i></i></div>
         </div>
-        <span class="audio-time">12:03</span>
+        <span class="audio-time" data-dur="12:03">12:03</span>
       </article>
 
-      <article class="audio-card">
-        <button class="audio-play" onclick="lmeSoon();return false;">▶</button>
+      <article class="audio-card" data-slot="naturlyder">
+        <button class="audio-play" type="button">▶</button>
         <div class="audio-info">
           <h4>Naturlyder for det forberedte miljøet</h4>
           <p>30 minutter med skog, fugler og elv, bakgrunn for klasserom</p>
+          <div class="audio-prog"><i></i></div>
         </div>
-        <span class="audio-time">30:00</span>
+        <span class="audio-time" data-dur="30:00">30:00</span>
       </article>
 
-      <article class="audio-card">
-        <button class="audio-play" onclick="lmeSoon();return false;">▶</button>
+      <article class="audio-card" data-slot="visualisering">
+        <button class="audio-play" type="button">▶</button>
         <div class="audio-info">
           <h4>Visualisering: Ditt ideelle miljø</h4>
           <p>10 minutters meditasjon for å se ditt forberedte miljø klart</p>
+          <div class="audio-prog"><i></i></div>
         </div>
-        <span class="audio-time">10:42</span>
+        <span class="audio-time" data-dur="10:42">10:42</span>
       </article>
 
     </div>
@@ -2027,6 +2041,137 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 </script>
 <script>function lmeSoon(m){var t=document.createElement("div");t.textContent=m||(window.LME_CURRENT_LANG==="en"?"Coming soon 💛":"Kommer snart 💛");t.style.cssText="position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#2a1e2e;color:#fff;padding:12px 20px;border-radius:999px;z-index:99999;font-weight:700;font-family:inherit;box-shadow:0 8px 24px rgba(0,0,0,.25)";document.body.appendChild(t);setTimeout(function(){t.remove();},2200);}</script>
 <script src="/js/mobile-nav.js?v=9" defer></script>
+<script>
+/* Lyd & meditasjon: ekte avspiller for de fire kortene, med Range-spoling.
+   Renate kan laste opp egne opptak selv, med #lyd i adressen (owner-passord). */
+(function () {
+  var list = document.getElementById("lydList");
+  if (!list) return;
+  var cards = [].slice.call(list.querySelectorAll(".audio-card[data-slot]"));
+  var current = null; // <audio> som spiller nå
+  var pw = null;      // owner-passord huskes til siden lukkes
+
+  function T(no, en) { return window.LME_CURRENT_LANG === "en" ? en : no; }
+  function fmt(sec) {
+    sec = Math.max(0, Math.floor(sec || 0));
+    var m = Math.floor(sec / 60), s = sec % 60;
+    return m + ":" + (s < 10 ? "0" : "") + s;
+  }
+
+  function wirePlayer(card, slot) {
+    card.classList.add("has-audio");
+    var btn = card.querySelector(".audio-play");
+    var timeEl = card.querySelector(".audio-time");
+    var fill = card.querySelector(".audio-prog i");
+    var dur = timeEl.getAttribute("data-dur") || timeEl.textContent;
+    var audio = null;
+
+    function stopOthers() {
+      if (current && current !== audio) {
+        current.pause();
+        var oc = current.__card;
+        if (oc) { oc.querySelector(".audio-play").textContent = "▶"; oc.querySelector(".audio-play").classList.remove("playing"); }
+      }
+    }
+    btn.addEventListener("click", function () {
+      if (!audio) {
+        audio = new Audio("/api/lyd/" + slot + ".mp3");
+        audio.preload = "none";
+        audio.__card = card;
+        audio.addEventListener("timeupdate", function () {
+          if (audio.duration) fill.style.width = (audio.currentTime / audio.duration * 100) + "%";
+          timeEl.textContent = fmt(audio.currentTime) + " / " + (audio.duration ? fmt(audio.duration) : dur);
+        });
+        audio.addEventListener("ended", function () {
+          btn.textContent = "▶"; btn.classList.remove("playing"); fill.style.width = "0%"; timeEl.textContent = dur;
+        });
+        audio.addEventListener("error", function () {
+          btn.textContent = "▶"; btn.classList.remove("playing");
+          if (window.lmeSoon) lmeSoon(T("Klarte ikke å spille av lyden.", "Could not play the audio."));
+        });
+      }
+      if (audio.paused) {
+        stopOthers();
+        audio.play(); current = audio;
+        btn.textContent = "⏸"; btn.classList.add("playing");
+      } else {
+        audio.pause();
+        btn.textContent = "▶"; btn.classList.remove("playing");
+      }
+    });
+  }
+
+  function wireComingSoon(card) {
+    var btn = card.querySelector(".audio-play");
+    btn.addEventListener("click", function () { if (window.lmeSoon) lmeSoon(); });
+  }
+
+  // Owner-opplasting: bygg en liten opplaster i hvert kort, vist når #lyd i adressen.
+  function buildUploader(card, slot, hasAudio) {
+    var info = card.querySelector(".audio-info");
+    var wrap = document.createElement("div");
+    wrap.className = "audio-up";
+    var id = "up-" + slot;
+    wrap.innerHTML =
+      '<label for="' + id + '">' + (hasAudio ? "🔄 Bytt lyd" : "⬆️ Last opp lyd") + '</label>' +
+      '<input id="' + id + '" type="file" accept="audio/*" style="display:none">' +
+      '<span class="up-msg"></span>' +
+      (hasAudio ? '<button type="button" class="up-del">Fjern</button>' : '');
+    info.appendChild(wrap);
+    var input = wrap.querySelector("input");
+    var msg = wrap.querySelector(".up-msg");
+    input.addEventListener("change", function () {
+      var file = input.files && input.files[0];
+      if (!file) return;
+      if (!pw) { pw = prompt("Skriv inn passordet for å lagre lyd:"); if (!pw) return; }
+      msg.textContent = "Laster opp …";
+      var fd = new FormData();
+      fd.append("slot", slot); fd.append("file", file); fd.append("password", pw);
+      fetch("/api/lyd/upload", { method: "POST", body: fd })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (d && d.ok) { msg.textContent = "Lagret ✓ Last siden på nytt."; }
+          else if (d && d.error === "bad_password") { pw = null; msg.textContent = "Feil passord."; }
+          else if (d && d.error === "too_large") { msg.textContent = d.hint || "Filen er for stor (maks 25 MB)."; }
+          else { msg.textContent = "Noe gikk galt."; }
+        })
+        .catch(function () { msg.textContent = "Nettverksfeil."; });
+    });
+    var del = wrap.querySelector(".up-del");
+    if (del) del.addEventListener("click", function () {
+      if (!pw) { pw = prompt("Skriv inn passordet:"); if (!pw) return; }
+      if (!confirm("Fjerne lyden fra dette kortet?")) return;
+      fetch("/api/lyd/delete", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ slot: slot, password: pw }) })
+        .then(function (r) { return r.json(); })
+        .then(function (d) { msg.textContent = (d && d.ok) ? "Fjernet ✓ Last siden på nytt." : "Noe gikk galt."; });
+    });
+  }
+
+  var editMode = /(^|[#&])lyd\b/.test(location.hash) || /rediger/.test(location.hash);
+  if (editMode) document.body.classList.add("lyd-edit");
+
+  fetch("/api/lyd/list", { credentials: "same-origin" })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (data) {
+      var slots = (data && data.slots) || {};
+      cards.forEach(function (card) {
+        var slot = card.getAttribute("data-slot");
+        var info = slots[slot] || {};
+        if (info.hasAudio) {
+          if (info.duration) card.querySelector(".audio-time").setAttribute("data-dur", info.duration);
+          wirePlayer(card, slot);
+        } else {
+          wireComingSoon(card);
+        }
+        if (editMode) buildUploader(card, slot, !!info.hasAudio);
+      });
+    })
+    .catch(function () {
+      // Uten API: behold kommer-snart på alle.
+      cards.forEach(wireComingSoon);
+    });
+})();
+</script>
 <script src="/js/i18n-auto.js" defer></script>
 <script src="/js/lme-visibility.js?v=6" defer></script>
 <script src="/js/lme-account.js?v=7" defer></script>
