@@ -332,7 +332,14 @@
       }).then(function (r) {
         return r.text().then(function (t) {
           var j = null; try { j = JSON.parse(t); } catch (e) {}
-          if (!j) { var e2 = new Error("[repurpose " + r.status + ": " + (t || "").replace(/\s+/g, " ").slice(0, 60) + "]"); throw e2; }
+          if (!j) {
+            // Ikke JSON = plattform-feil (Cloudflare), ikke vår funksjon. Skjer
+            // typisk hvis genereringen tok for lang tid. Vis en rolig beskjed.
+            var slow = r.status === 502 || r.status === 504 || r.status === 524;
+            throw new Error(slow
+              ? T("Det tok litt for lang tid denne gangen. Prøv en gang til.", "That took a little too long this time. Please try once more.")
+              : "[repurpose " + r.status + "]");
+          }
           if (j.error) throw new Error("[" + (j.error) + (j.detail ? ": " + String(j.detail).slice(0, 80) : "") + "]");
           return j;
         });

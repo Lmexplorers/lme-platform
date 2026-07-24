@@ -39,17 +39,27 @@ ALDRI dikt opp garantier, pengene-tilbake-løfter, refusjonsvilkår, priser, rab
 
 const langName = (l) => (l === "en" ? "English" : "norsk (bokmål)");
 
-// Prøv modellene i rekkefølge. Går den første ikke (f.eks. ukjent modell),
-// faller vi tilbake til en garantert gyldig modell før vi gir opp.
-const MODELS = ["claude-sonnet-5", "claude-haiku-4-5-20251001"];
+// Denne funksjonen ber om SJU kanaler i ett svar. Det er den tyngste
+// AI-genereringen på plattformen, så svaret kan bli tregt. Cloudflare
+// avbryter en Pages-funksjon som holder på for lenge, og da får brukeren
+// en 502 fra plattformen (HTML), ikke vår egen JSON. For å unngå det:
+//  1) rask modell først (haiku), så en garantert gyldig backup (sonnet-5),
+//  2) færre max_tokens (sju korte utdrag trenger ikke mer),
+//  3) hard timeout per kall, så en treg forespørsel blir en ryddig
+//     JSON-feil i stedet for at Cloudflare dreper funksjonen.
+const MODELS = ["claude-haiku-4-5-20251001", "claude-sonnet-5"];
+const CALL_TIMEOUT_MS = 22000;
 
 async function callClaude(env, system, userPrompt, maxTokens) {
   let lastErr = "ukjent feil";
   for (const model of MODELS) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), CALL_TIMEOUT_MS);
     let resp;
     try {
       resp = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
+        signal: ctrl.signal,
         headers: {
           "Content-Type": "application/json",
           "x-api-key": env.ANTHROPIC_API_KEY,
@@ -57,14 +67,18 @@ async function callClaude(env, system, userPrompt, maxTokens) {
         },
         body: JSON.stringify({
           model,
-          max_tokens: maxTokens || 3000,
+          max_tokens: maxTokens || 2200,
           system,
           messages: [{ role: "user", content: userPrompt }],
         }),
       });
     } catch (e) {
-      lastErr = "nettverksfeil mot Anthropic (" + model + ")";
+      lastErr = (e && e.name === "AbortError")
+        ? "Anthropic svarte for sakte (" + model + "), avbrutt etter " + Math.round(CALL_TIMEOUT_MS / 1000) + "s"
+        : "nettverksfeil mot Anthropic (" + model + ")";
       continue;
+    } finally {
+      clearTimeout(timer);
     }
     if (resp.ok) {
       const data = await resp.json();
@@ -72,7 +86,7 @@ async function callClaude(env, system, userPrompt, maxTokens) {
     }
     const t = await resp.text();
     lastErr = "Anthropic " + resp.status + " (" + model + "): " + t.replace(/\s+/g, " ").slice(0, 180);
-    // 401/403 = nøkkel/tilgang, 429/400 om kreditt: samme feil for alle modeller, ikke vits å prøve videre.
+    // 401/403 = nøkkel/tilgang: samme feil for alle modeller, ikke vits å prøve videre.
     if (resp.status === 401 || resp.status === 403) break;
   }
   throw new Error(lastErr);
@@ -98,7 +112,7 @@ export async function onRequestPost(context) {
 
   const system = `${BRAND_CONTEXT}\nDu omformer ÉN kilde til flere kanaler, gjenbruker LME Content Studio-tankegangen.`;
   try {
-    const result = await callClaude(env, system, repurposePrompt(body), 3000);
+    const result = await callClaude(env, system, repurposePrompt(body), 2200);
     return json({ result });
   } catch (err) {
     // Vis den ekte årsaken, så vi ser om det er modell, nøkkel eller kreditt.
