@@ -774,6 +774,11 @@
 
       <textarea id="expertise" data-no-ph="F.eks: Jeg er Montessoripedagog med 15 års erfaring fra barnehage og skole. Jeg har laget e-bøker og arbeidsark, og drømmer om å lære andre pedagoger hvordan de kan lage egne digitale læremidler..." data-en-ph="E.g. I'm a Montessori educator with 15 years of experience from kindergarten and school. I've made e-books and worksheets, and dream of teaching other educators how to create their own digital learning materials..." placeholder="F.eks: Jeg er Montessoripedagog med 15 års erfaring fra barnehage og skole. Jeg har laget e-bøker og arbeidsark, og drømmer om å lære andre pedagoger hvordan de kan lage egne digitale læremidler..."></textarea>
 
+      <div class="calc-lead" style="display:grid;gap:10px;margin:16px 0 2px;max-width:440px">
+        <input id="calcName" type="text" placeholder="Navn" data-no-ph="Navn" data-en-ph="Name" autocomplete="given-name" style="padding:13px 15px;border:1px solid #E4CBD3;border-radius:12px;font-family:inherit;font-size:15px;background:#fff">
+        <input id="calcEmail" type="email" placeholder="E-post" data-no-ph="E-post" data-en-ph="Email" required autocomplete="email" style="padding:13px 15px;border:1px solid #E4CBD3;border-radius:12px;font-family:inherit;font-size:15px;background:#fff">
+        <span class="btn-hint" data-no="Skriv inn e-posten din, så viser vi de personlige forslagene 💌" data-en="Enter your email and we'll show your personal suggestions 💌">Skriv inn e-posten din, så viser vi de personlige forslagene 💌</span>
+      </div>
       <div class="button-row">
         <span></span>
         <div class="btn-wrap">
@@ -1026,13 +1031,24 @@
   const expertiseInput = document.getElementById('expertise');
   const toStep2Btn = document.getElementById('toStep2');
 
-  expertiseInput.addEventListener('input', () => {
+  const calcEmail = document.getElementById('calcEmail');
+  const calcName = document.getElementById('calcName');
+  function calcValidEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((v||'').trim()); }
+  function updateStep1(){
     state.expertise = expertiseInput.value.trim();
-    toStep2Btn.disabled = state.expertise.length < 20;
-  });
+    toStep2Btn.disabled = state.expertise.length < 20 || !calcValidEmail(calcEmail.value);
+  }
+  expertiseInput.addEventListener('input', updateStep1);
+  calcEmail.addEventListener('input', updateStep1);
 
   toStep2Btn.addEventListener('click', () => {
-    if (state.expertise.length >= 20) goToStep(2);
+    if (state.expertise.length < 20 || !calcValidEmail(calcEmail.value)) return;
+    try {
+      var lang = (window.LME_CURRENT_LANG || 'no');
+      fetch('/api/newsletter/subscribe', { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ email: calcEmail.value.trim(), name: (calcName.value||'').trim(), lang: lang, source: 'inntektskalkulator' }) }).catch(function(){});
+    } catch (e) {}
+    goToStep(2);
   });
 
   // Render offer cards (step 2)
