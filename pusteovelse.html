@@ -115,7 +115,18 @@
 <script>
 (function () {
   window.LME_CURRENT_LANG = 'no';
-  try { window.LME_CURRENT_LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no'; } catch (e) {}
+  // Åpne på riktig språk. En delt lenke kan tvinge språk med ?lang=en / ?lang=no
+  // (nyttig når jeg deler den engelske lenken i engelske grupper). Ellers husker
+  // vi forrige valg.
+  try {
+    var _lp = new URLSearchParams(location.search).get('lang');
+    if (_lp === 'en' || _lp === 'no') {
+      window.LME_CURRENT_LANG = _lp;
+      try { localStorage.setItem('lme_lang', _lp); } catch (e) {}
+    } else {
+      window.LME_CURRENT_LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no';
+    }
+  } catch (e) { window.LME_CURRENT_LANG = 'no'; }
   function en() { return window.LME_CURRENT_LANG === 'en'; }
   function applyLang() {
     document.documentElement.lang = en() ? 'en' : 'no';
