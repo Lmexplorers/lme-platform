@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<title>Kjøp kreditt — LME Content Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink: #F8D7DA; --pink-mid: #F5A8B8; --cerise: #E91E89; --cerise-d: #C2185B;
+    --lime: #7AAE1F; --yellow: #F7C72E; --cream: #FBF6F0;
+    --ink: #1A1A1A; --grey: #4A4A4A; --line: rgba(26,26,26,0.1);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); color: var(--ink); background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 55%, #F8D7DA 100%); min-height: 100vh; line-height: 1.55; }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); }
+  a { color: inherit; text-decoration: none; }
+
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 13px 20px; background: rgba(255,255,255,0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+  .bar .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--cerise); font-size: 15px; }
+  .bar .actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .btn { border: 0; border-radius: 999px; padding: 9px 16px; font-weight: 700; font-family: inherit; cursor: pointer; font-size: 13.5px; white-space: nowrap; }
+  .btn-back { background: #fff; color: var(--ink); border: 1px solid #eedce2; }
+  .btn-lang { background: #FCEFF2; color: #C13D6A; }
+
+  .wrap { max-width: 1000px; width: 100%; margin: 0 auto; padding: 32px 20px 70px; }
+  .head { text-align: center; margin-bottom: 22px; }
+  .head .kick { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cerise); }
+  .head h1 { font-size: 34px; margin: 6px 0 8px; }
+  .head p { color: var(--grey); font-size: 16px; max-width: 600px; margin: 0 auto; }
+
+  .ok { display: none; max-width: 620px; margin: 0 auto 20px; background: #F3F8E8; border: 1px solid #cfe6a6; color: #4d6b12; border-radius: 16px; padding: 14px 18px; text-align: center; font-weight: 600; }
+  .ok.show { display: block; }
+
+  .balance { max-width: 620px; margin: 0 auto 26px; background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 16px 20px; text-align: center; box-shadow: 0 6px 22px rgba(26,26,26,0.05); }
+  .balance b { color: var(--cerise-d); }
+  .balance .lite { color: var(--grey); font-size: 13.5px; margin-top: 6px; }
+
+  .sec { margin-top: 30px; }
+  .sec h2 { font-size: 22px; text-align: center; margin-bottom: 4px; }
+  .sec .sub { text-align: center; color: var(--grey); font-size: 14px; margin-bottom: 18px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+  .pack { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 24px 22px; box-shadow: 0 6px 22px rgba(26,26,26,0.05); transition: transform .18s ease, box-shadow .18s ease; }
+  .pack:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(26,26,26,0.09); }
+  .pack.pop { border-color: var(--pink-mid); }
+  .pack .tag { align-self: flex-start; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: var(--cerise-d); background: #FCEFF2; border-radius: 999px; padding: 4px 12px; margin-bottom: 12px; }
+  .pack .ico { font-size: 30px; margin-bottom: 8px; }
+  .pack h3 { font-size: 20px; margin-bottom: 2px; }
+  .pack .unit { color: var(--grey); font-size: 13.5px; flex: 1; }
+  .pack .price { font-size: 30px; font-weight: 800; font-family: var(--font-head); color: var(--ink); margin: 14px 0 4px; }
+  .pack .buy { margin-top: 14px; text-align: center; background: linear-gradient(120deg, var(--cerise), #ff5fb0); color: #fff; font-weight: 800; padding: 12px 18px; border-radius: 999px; box-shadow: 0 10px 24px rgba(233,30,137,.24); }
+
+  .foot { max-width: 640px; margin: 34px auto 0; text-align: center; color: var(--grey); font-size: 13.5px; line-height: 1.7; }
+  .foot a { color: var(--cerise-d); font-weight: 700; }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/">🌸 <span data-no="LME Content Studio" data-en="LME Content Studio">LME Content Studio</span></a>
+    <div class="actions">
+      <button class="btn btn-lang" id="lme-lang" type="button">🇬🇧 English</button>
+      <a class="btn btn-back" href="/oppgrader" data-no="‹ Planer" data-en="‹ Plans">‹ Planer</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="head">
+      <span class="kick" data-no="LME Content Studio" data-en="LME Content Studio">LME Content Studio</span>
+      <h1 data-no="Kjøp mer kreditt" data-en="Buy more credit">Kjøp mer kreditt</h1>
+      <p data-no="Gikk du tom for måneden? Fyll på med bilder eller video uten å oppgradere hele planen. Kreditten utløper ikke, og legges rett på kontoen din." data-en="Ran out this month? Top up with images or video without upgrading your whole plan. Credit never expires and is added straight to your account.">Gikk du tom for måneden? Fyll på med bilder eller video uten å oppgradere hele planen. Kreditten utløper ikke, og legges rett på kontoen din.</p>
+    </div>
+
+    <div class="ok" id="okBanner" data-no="🎉 Takk for kjøpet! Kreditten legges på kontoen din straks betalingen er bekreftet. Last siden på nytt om et lite øyeblikk om du ikke ser den enda." data-en="🎉 Thank you! Your credit is added to your account as soon as the payment is confirmed. Reload in a moment if you don't see it yet.">🎉 Takk for kjøpet! Kreditten legges på kontoen din straks betalingen er bekreftet.</div>
+
+    <div class="balance" id="balance" hidden></div>
+
+    <div class="sec">
+      <h2 data-no="Bildepakker" data-en="Image packs">Bildepakker</h2>
+      <p class="sub" data-no="Ekstra AI-bilder, når du trenger litt mer." data-en="Extra AI images, for when you need a little more.">Ekstra AI-bilder, når du trenger litt mer.</p>
+      <div class="grid">
+        <div class="pack">
+          <div class="ico">🖼️</div>
+          <h3 data-no="25 bilder" data-en="25 images">25 bilder</h3>
+          <div class="unit" data-no="1,96 kr per bilde" data-en="1.96 kr per image">1,96 kr per bilde</div>
+          <div class="price">49 kr</div>
+          <a class="buy" data-base="https://buy.stripe.com/fZufZia8d3R57a52WX9R61f" href="https://buy.stripe.com/fZufZia8d3R57a52WX9R61f" data-no="Kjøp 25 bilder" data-en="Buy 25 images">Kjøp 25 bilder</a>
+        </div>
+        <div class="pack pop">
+          <div class="tag" data-no="Mest solgt" data-en="Most popular">Mest solgt</div>
+          <div class="ico">🖼️</div>
+          <h3 data-no="75 bilder" data-en="75 images">75 bilder</h3>
+          <div class="unit" data-no="1,59 kr per bilde" data-en="1.59 kr per image">1,59 kr per bilde</div>
+          <div class="price">119 kr</div>
+          <a class="buy" data-base="https://buy.stripe.com/aFa3cwdkpevJ3XTdBB9R61g" href="https://buy.stripe.com/aFa3cwdkpevJ3XTdBB9R61g" data-no="Kjøp 75 bilder" data-en="Buy 75 images">Kjøp 75 bilder</a>
+        </div>
+        <div class="pack">
+          <div class="ico">🖼️</div>
+          <h3 data-no="200 bilder" data-en="200 images">200 bilder</h3>
+          <div class="unit" data-no="1,40 kr per bilde" data-en="1.40 kr per image">1,40 kr per bilde</div>
+          <div class="price">279 kr</div>
+          <a class="buy" data-base="https://buy.stripe.com/7sY3cwfsxevJ2TP4119R61h" href="https://buy.stripe.com/7sY3cwfsxevJ2TP4119R61h" data-no="Kjøp 200 bilder" data-en="Buy 200 images">Kjøp 200 bilder</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2 data-no="Videopakker" data-en="Video packs">Videopakker</h2>
+      <p class="sub" data-no="Video koster mer å lage, så disse ligger litt høyere." data-en="Video costs more to make, so these are priced a little higher.">Video koster mer å lage, så disse ligger litt høyere.</p>
+      <div class="grid">
+        <div class="pack">
+          <div class="ico">🎬</div>
+          <h3 data-no="3 videoer" data-en="3 videos">3 videoer</h3>
+          <div class="unit" data-no="33 kr per video" data-en="33 kr per video">33 kr per video</div>
+          <div class="price">99 kr</div>
+          <a class="buy" data-base="https://buy.stripe.com/9B628seotdrF51XgNN9R61i" href="https://buy.stripe.com/9B628seotdrF51XgNN9R61i" data-no="Kjøp 3 videoer" data-en="Buy 3 videos">Kjøp 3 videoer</a>
+        </div>
+        <div class="pack pop">
+          <div class="tag" data-no="Mest solgt" data-en="Most popular">Mest solgt</div>
+          <div class="ico">🎬</div>
+          <h3 data-no="10 videoer" data-en="10 videos">10 videoer</h3>
+          <div class="unit" data-no="27,90 kr per video" data-en="27.90 kr per video">27,90 kr per video</div>
+          <div class="price">279 kr</div>
+          <a class="buy" data-base="https://buy.stripe.com/5kQfZifsxaft8e94119R61j" href="https://buy.stripe.com/5kQfZifsxaft8e94119R61j" data-no="Kjøp 10 videoer" data-en="Buy 10 videos">Kjøp 10 videoer</a>
+        </div>
+        <div class="pack">
+          <div class="ico">🎬</div>
+          <h3 data-no="25 videoer" data-en="25 videos">25 videoer</h3>
+          <div class="unit" data-no="23,96 kr per video" data-en="23.96 kr per video">23,96 kr per video</div>
+          <div class="price">599 kr</div>
+          <a class="buy" data-base="https://buy.stripe.com/7sY3cw5RX4V9dyt1ST9R61k" href="https://buy.stripe.com/7sY3cw5RX4V9dyt1ST9R61k" data-no="Kjøp 25 videoer" data-en="Buy 25 videos">Kjøp 25 videoer</a>
+        </div>
+      </div>
+    </div>
+
+    <p class="foot" id="foot" data-no="Viktig: bruk samme e-post i kassa som du har på LME-kontoen din, så legges kreditten på riktig konto. Trenger du mye hver måned, lønner det seg ofte å oppgradere planen i stedet. Se planene på /oppgrader." data-en="Important: use the same email at checkout as on your LME account, so the credit lands on the right account. If you need a lot every month, upgrading your plan is often better value. See the plans at /oppgrader.">Viktig: bruk samme e-post i kassa som du har på LME-kontoen din, så legges kreditten på riktig konto. Trenger du mye hver måned, lønner det seg ofte å oppgradere planen i stedet. Se planene på /oppgrader.</p>
+  </div>
+
+<script>
+(function () {
+  window.LME_CURRENT_LANG = 'no';
+  try { window.LME_CURRENT_LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no'; } catch (e) {}
+  function apply() {
+    var en = window.LME_CURRENT_LANG === 'en';
+    document.documentElement.lang = en ? 'en' : 'no';
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      el.textContent = en ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    var b = document.getElementById('lme-lang');
+    if (b) b.textContent = en ? '🇳🇴 Norsk' : '🇬🇧 English';
+    document.title = (en ? 'Buy credit' : 'Kjøp kreditt') + ' — LME Content Studio';
+  }
+  window.lmeToggleLang = function () {
+    window.LME_CURRENT_LANG = window.LME_CURRENT_LANG === 'en' ? 'no' : 'en';
+    try { localStorage.setItem('lme_lang', window.LME_CURRENT_LANG); } catch (e) {}
+    apply();
+    try { window.dispatchEvent(new Event('lme-lang')); } catch (e) {}
+  };
+  document.getElementById('lme-lang').addEventListener('click', window.lmeToggleLang);
+  apply();
+
+  function T(no, en) { return window.LME_CURRENT_LANG === 'en' ? en : no; }
+
+  // Suksess-banner etter kjøp (?ok=1)
+  try {
+    if (/[?&]ok=1/.test(location.search)) document.getElementById('okBanner').classList.add('show');
+  } catch (e) {}
+
+  // Er du logget inn, forhåndsfyll e-posten i kassa (riktig konto) og vis saldo.
+  fetch('/api/auth/me', { credentials: 'same-origin' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) {
+      var email = d && d.user && d.user.email;
+      if (email) {
+        document.querySelectorAll('a.buy').forEach(function (a) {
+          var base = a.getAttribute('data-base');
+          a.setAttribute('href', base + (base.indexOf('?') > -1 ? '&' : '?') + 'prefilled_email=' + encodeURIComponent(email));
+        });
+      }
+      return fetch('/api/access', { credentials: 'same-origin' });
+    })
+    .then(function (r) { return r && r.ok ? r.json() : null; })
+    .then(function (a) {
+      if (!a || !a.loggedIn) return;
+      var box = document.getElementById('balance');
+      if (a.plan === 'owner') {
+        box.innerHTML = T('Du er logget inn som eier og har full tilgang.', 'You are logged in as owner with full access.');
+        box.hidden = false; return;
+      }
+      var cr = a.credit || { image: 0, video: 0 };
+      var html = T('Kreditt på kontoen din nå: ', 'Credit on your account now: ') +
+        '<b>' + (cr.image || 0) + '</b> ' + T('bilder', 'images') + ' ' + T('og', 'and') +
+        ' <b>' + (cr.video || 0) + '</b> ' + T('videoer', 'videos') + '.';
+      box.innerHTML = html + '<div class="lite">' +
+        T('Kreditt brukes automatisk når månedskvoten er brukt opp.', 'Credit is used automatically once your monthly quota runs out.') + '</div>';
+      box.hidden = false;
+    })
+    .catch(function () {});
+})();
+</script>
+<script src="/js/lme-account.js?v=7" defer></script>
+<script src="/js/renate-widget.js?v=3" defer></script>
+</body>
+</html>

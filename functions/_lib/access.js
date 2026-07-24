@@ -92,14 +92,24 @@ function tierOf(sub) {
   return null;
 }
 
+/* Kredittpåfyll som ligger på kontoen (utløper ikke). */
+async function creditFor(context, email) {
+  try {
+    const r = await context.env.BUILDER_KV.get("credit:" + email);
+    if (r) { const b = JSON.parse(r); return { image: b.image || 0, video: b.video || 0 }; }
+  } catch (e) {}
+  return { image: 0, video: 0 };
+}
+
 /* For klient-gate og /api/access: hvem er du og har du tilgang. */
 export async function getAccess(context) {
   const user = await sessionUser(context);
-  if (!user) return { loggedIn: false, active: false, plan: null, tier: null, limits: null };
-  if (isOwner(user)) return { loggedIn: true, active: true, plan: "owner", tier: "owner", limits: null };
+  if (!user) return { loggedIn: false, active: false, plan: null, tier: null, limits: null, credit: null };
+  if (isOwner(user)) return { loggedIn: true, active: true, plan: "owner", tier: "owner", limits: null, credit: null };
   const sub = await subscriptionFor(context, user);
   const active = !!(sub && sub.status === "active");
-  return { loggedIn: true, active: active, plan: (sub && sub.plan) || null, tier: tierOf(sub), limits: (sub && sub.limits) || null };
+  const credit = await creditFor(context, user.email);
+  return { loggedIn: true, active: active, plan: (sub && sub.plan) || null, tier: tierOf(sub), limits: (sub && sub.limits) || null, credit: credit };
 }
 
 /**
@@ -127,13 +137,22 @@ export async function enforceGeneration(context, kind) {
   const raw = await env.BUILDER_KV.get(key);
   if (raw) { try { usage = JSON.parse(raw); } catch (e) {} }
   const used = usage[k] || 0;
-  if (used >= limit) {
-    return {
-      ok: false, status: 429,
-      error: "Du har nådd månedskvoten for " + (k === "video" ? "video" : "bilder") + ". Den nullstilles ved månedsskiftet, eller du kan oppgradere planen.",
-    };
+  if (used < limit) {
+    usage[k] = used + 1;
+    await env.BUILDER_KV.put(key, JSON.stringify(usage), { expirationTtl: 60 * 60 * 24 * 70 });
+    return { ok: true, remaining: Math.max(0, limit - usage[k]) };
   }
-  usage[k] = used + 1;
-  await env.BUILDER_KV.put(key, JSON.stringify(usage), { expirationTtl: 60 * 60 * 24 * 70 });
-  return { ok: true, remaining: Math.max(0, limit - usage[k]) };
+  // Månedskvoten er brukt opp. Trekk fra kredittpåfyll (utløper ikke).
+  const ckey = "credit:" + user.email;
+  let bal = { image: 0, video: 0 };
+  try { const braw = await env.BUILDER_KV.get(ckey); if (braw) bal = JSON.parse(braw) || bal; } catch (e) {}
+  if ((bal[k] || 0) > 0) {
+    bal[k] = bal[k] - 1;
+    await env.BUILDER_KV.put(ckey, JSON.stringify(bal));
+    return { ok: true, remaining: 0, credit: bal[k], source: "credit" };
+  }
+  return {
+    ok: false, status: 429,
+    error: "Du har brukt opp månedskvoten for " + (k === "video" ? "video" : "bilder") + ". Kjøp mer kreditt på /kjop-kreditt, eller oppgrader planen. Kvoten nullstilles ved månedsskiftet.",
+  };
 }

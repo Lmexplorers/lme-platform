@@ -72,6 +72,29 @@ const CS_PLANS = {
   "prod_UwWmmP16D4lT5Z": { plan: "cs-pluss", limits: { image: 250, video: 15 } },
 };
 
+/* Kredittpåfyll (engangskjøp) -> antall bilder/video som legges til kontoen.
+   Nøkkelen er betalingslenken (payment_link) fra Stripe. Kreditten utløper
+   ikke, og ligger på credit:<e-post> ved siden av månedskvoten. */
+const CREDIT_PACKS = {
+  "plink_1TwfK1Lax7B8uQzqGggoyx7a": { kind: "image", amount: 25  },
+  "plink_1TwfKELax7B8uQzqRYROpOsk": { kind: "image", amount: 75  },
+  "plink_1TwfKJLax7B8uQzqTyoZShBP": { kind: "image", amount: 200 },
+  "plink_1TwfKOLax7B8uQzqIqnTG1iO": { kind: "video", amount: 3   },
+  "plink_1TwfKYLax7B8uQzqKJDGAEOY": { kind: "video", amount: 10  },
+  "plink_1TwfKdLax7B8uQzqfUOBWqs6": { kind: "video", amount: 25  },
+};
+
+async function addCredit(env, email, kind, amount) {
+  if (!email || !amount) return;
+  email = email.trim().toLowerCase();
+  const key = "credit:" + email;
+  let bal = { image: 0, video: 0 };
+  try { const r = await env.BUILDER_KV.get(key); if (r) bal = JSON.parse(r) || bal; } catch (e) {}
+  const k = kind === "video" ? "video" : "image";
+  bal[k] = (bal[k] || 0) + amount;
+  await env.BUILDER_KV.put(key, JSON.stringify(bal));
+}
+
 async function grant(env, email, info) {
   if (!email) return;
   const mkey = memberKey(email);
@@ -185,6 +208,12 @@ export async function onRequestPost(context) {
   switch (event.type) {
     case "checkout.session.completed": {
       const email = (obj.customer_details && obj.customer_details.email) || obj.customer_email;
+      // Kredittpåfyll: legg bilder/video til kontoen, ikke medlemskap.
+      const pack = obj.payment_link && CREDIT_PACKS[obj.payment_link];
+      if (pack) {
+        if (email) await addCredit(env, email, pack.kind, pack.amount);
+        break;
+      }
       // Claude-kurset: legg kjøperen i riktig språkgruppe, ikke Inner Circle.
       const claudeLang = obj.payment_link && CLAUDE_PAYMENT_LINK_LANG[obj.payment_link];
       if (claudeLang) {
