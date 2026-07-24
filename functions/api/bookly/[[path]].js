@@ -289,7 +289,7 @@ export async function onRequestPost(context) {
             "anthropic-version": "2023-06-01",
           },
           body: JSON.stringify({
-            model: env.BOOKLY_MODEL || "claude-sonnet-4-6",
+            model: env.BOOKLY_MODEL || "claude-sonnet-5",
             max_tokens: maxTokens,
             system: system,
             messages: [{ role: "user", content: prompt }],

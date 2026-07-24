@@ -86,7 +86,7 @@ async function translateToEnglish(env, texts) {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-6",
+          model: "claude-sonnet-5",
           max_tokens: 3000,
           system:
             "You translate short UI/website text for a Montessori brand (Little Montessori Explorers) from Norwegian into natural, warm English. " +

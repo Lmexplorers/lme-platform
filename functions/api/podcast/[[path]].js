@@ -58,7 +58,7 @@ const SHOW = {
   copyright: "Little Montessori Explorers",
 };
 
-const CLAUDE_MODEL = "claude-sonnet-4-6";
+const CLAUDE_MODEL = "claude-sonnet-5";
 
 // Faste launch-episoder (Mia og Teo-sangene, laget med Suno). Lyden ligger som
 // statiske filer i repoet, så de virker uten KV og uten opplasting.

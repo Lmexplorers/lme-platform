@@ -198,7 +198,7 @@ async function generateDraft(body, env) {
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: env.BLOG_TEXT_MODEL || "claude-sonnet-4-6",
+        model: env.BLOG_TEXT_MODEL || "claude-sonnet-5",
         max_tokens: 16000,
         system: system,
         messages: [{ role: "user", content: prompt }],

@@ -84,7 +84,7 @@ export async function onRequestPost(context) {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-6",
+          model: "claude-sonnet-5",
           max_tokens: 2000,
           system: "You are a translator for a Montessori community chat. Translate each item from Norwegian (or whatever language it is) into natural, friendly English. Keep emojis and names as-is. Return ONLY a JSON array of strings, same length and order as the input array, with no extra commentary.",
           messages: [{ role: "user", content: JSON.stringify(need) }],
