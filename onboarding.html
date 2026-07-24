@@ -420,7 +420,7 @@
       </button>
       <button class="ob-opt" data-value="learn-theory">
         <span class="ob-emoji">🎓</span>
-        <span class="ob-label"><strong>Lære Montessoriteori</strong><span>Academy-kurs og fagstoff</span></span>
+        <span class="ob-label"><strong>Lære Montessoriteori</strong><span>Kurs og fagstoff</span></span>
         <span class="ob-check"></span>
       </button>
       <button class="ob-opt" data-value="live-events">
@@ -458,12 +458,12 @@
     <div class="ob-options" data-question="plan" data-multi="false">
       <button class="ob-opt" data-value="start">
         <span class="ob-emoji">🌱</span>
-        <span class="ob-label"><strong>Start, 299 kr/mnd</strong><span>Grunnressurser og begrenset Academy</span></span>
+        <span class="ob-label"><strong>Start, 299 kr/mnd</strong><span>Grunnressurser og begrensede kurs</span></span>
         <span class="ob-check"></span>
       </button>
       <button class="ob-opt" data-value="proff">
         <span class="ob-emoji">🌸</span>
-        <span class="ob-label"><strong>Proff, 499 kr/mnd</strong><span>Full Academy og alle aldersgrupper</span></span>
+        <span class="ob-label"><strong>Proff, 499 kr/mnd</strong><span>Alle kurs og aldersgrupper</span></span>
         <span class="ob-check"></span>
       </button>
       <button class="ob-opt" data-value="proff-community">
@@ -704,9 +704,9 @@
     const wantsTheory = goals.includes('learn-theory');
 
     if (plan === 'start' && (wantsAdult || wantsTheory)) {
-      upsellEl.innerHTML = '<div class="ob-upsell"><div class="ob-upsell-icon">🌸</div><div class="ob-upsell-text"><strong>Oppgrader til Proff for full tilgang</strong><p>Du har valgt voksen-innhold og Academy-kurs — disse låses helt opp på Proff (499 kr/mnd).</p></div><a href="/oppgrader">Se planene</a></div>';
+      upsellEl.innerHTML = '<div class="ob-upsell"><div class="ob-upsell-icon">🌸</div><div class="ob-upsell-text"><strong>Oppgrader til Proff for full tilgang</strong><p>Du har valgt voksen-innhold og kurs — disse låses helt opp på Proff (499 kr/mnd).</p></div><a href="/oppgrader">Se planene</a></div>';
     } else if (plan === 'none') {
-      upsellEl.innerHTML = '<div class="ob-upsell"><div class="ob-upsell-icon">💗</div><div class="ob-upsell-text"><strong>Velg en plan for å låse opp alt</strong><p>Du kan utforske gratis, men en plan gir deg full tilgang til Academy, Bookly, live og mer.</p></div><a href="/oppgrader">Se planene</a></div>';
+      upsellEl.innerHTML = '<div class="ob-upsell"><div class="ob-upsell-icon">💗</div><div class="ob-upsell-text"><strong>Velg en plan for å låse opp alt</strong><p>Du kan utforske gratis, men en plan gir deg full tilgang til Kurs, Bookly, live og mer.</p></div><a href="/oppgrader">Se planene</a></div>';
     } else if (plan === 'proff' && wantsCommunity) {
       upsellEl.innerHTML = '<div class="ob-upsell"><div class="ob-upsell-icon">🌷</div><div class="ob-upsell-text"><strong>Legg til Fellesskap for 200 kr ekstra</strong><p>Du ønsker fellesskap — Inner Circle er hjertet av LME.</p></div><a href="/oppgrader">Oppgrader</a></div>';
     } else {
