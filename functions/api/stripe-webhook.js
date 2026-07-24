@@ -74,25 +74,26 @@ const CS_PLANS = {
 
 async function grant(env, email, info) {
   if (!email) return;
-  const rec = Object.assign(
-    { status: "active", plan: "inner-circle", source: "stripe", since: Date.now() },
-    info || {}, { updated: Date.now() }
-  );
-  await env.BUILDER_KV.put(memberKey(email), JSON.stringify(rec));
+  const mkey = memberKey(email);
+  let prevM = {};
+  try { const r = await env.BUILDER_KV.get(mkey); if (r) prevM = JSON.parse(r) || {}; } catch (e) {}
+  const plan = (info && info.plan) || (prevM.plan && String(prevM.plan).indexOf("cs-") === 0 ? prevM.plan : "inner-circle");
+  const limits = (info && info.limits) || prevM.limits || null;
+  const rec = {
+    status: "active", source: "stripe", since: prevM.since || Date.now(),
+    plan: plan, limits: limits,
+    customer: (info && info.customer) || prevM.customer || null,
+    sub: (info && info.sub) || prevM.sub || null,
+    updated: Date.now(),
+  };
+  await env.BUILDER_KV.put(mkey, JSON.stringify(rec));
   if (info && info.customer) await env.BUILDER_KV.put(custKey(info.customer), email.toLowerCase());
   // Speil til kontoen hvis den finnes
   const uraw = await env.BUILDER_KV.get(userKey(email));
   if (uraw) {
     try {
       const u = JSON.parse(uraw);
-      const prev = (u.subscription && typeof u.subscription === "object") ? u.subscription : {};
-      u.subscription = {
-        status: rec.status,
-        plan: (info && info.plan) || (prev.plan && prev.plan.indexOf("cs-") === 0 ? prev.plan : rec.plan),
-        limits: (info && info.limits) || prev.limits || null,
-        source: "stripe",
-        updated: rec.updated,
-      };
+      u.subscription = { status: rec.status, plan: rec.plan, limits: rec.limits, source: "stripe", updated: rec.updated };
       await env.BUILDER_KV.put(userKey(email), JSON.stringify(u));
     } catch (e) {}
   }

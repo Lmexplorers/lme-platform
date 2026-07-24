@@ -42,6 +42,12 @@ export async function sessionUser(context) {
    lagrer per-plan-grenser (subscription.limits), brukes de i stedet. */
 const DEFAULT_LIMITS = { image: 250, video: 15 };
 
+const OWNER_EMAILS = ["renateshobby@hotmail.com"];
+function isOwner(user) {
+  return !!user && (user.role === "owner" || user.role === "admin" ||
+    OWNER_EMAILS.indexOf((user.email || "").toLowerCase()) !== -1);
+}
+
 function limitsFor(user) {
   const sub = user && user.subscription;
   if (sub && sub.limits && typeof sub.limits === "object") {
@@ -59,6 +65,32 @@ function monthKey(email) {
   return "usage:" + email + ":" + ym;
 }
 
+/* Abonnementet fra member:<e-post> (Stripe, autoritativt), fallback til
+   kontoens speil. Slik funker det uansett om kontoen ble laget før eller
+   etter kjøp. */
+async function subscriptionFor(context, user) {
+  const { env } = context;
+  let sub = null;
+  try {
+    const r = await env.BUILDER_KV.get("member:" + user.email);
+    if (r) sub = JSON.parse(r);
+  } catch (e) {}
+  if (!sub || sub.status !== "active") {
+    sub = (user.subscription && user.subscription.status === "active") ? user.subscription : sub;
+  }
+  return sub;
+}
+
+/* For klient-gate og /api/access: hvem er du og har du tilgang. */
+export async function getAccess(context) {
+  const user = await sessionUser(context);
+  if (!user) return { loggedIn: false, active: false, plan: null, limits: null };
+  if (isOwner(user)) return { loggedIn: true, active: true, plan: "owner", limits: null };
+  const sub = await subscriptionFor(context, user);
+  const active = !!(sub && sub.status === "active");
+  return { loggedIn: true, active: active, plan: (sub && sub.plan) || null, limits: (sub && sub.limits) || null };
+}
+
 /**
  * Sjekk tilgang og tell én generering.
  *   kind: "image" | "video"
@@ -72,12 +104,13 @@ export async function enforceGeneration(context, kind) {
   if (!user) {
     return { ok: false, status: 401, error: "Du må være logget inn for å bruke Content Studio." };
   }
-  const sub = user.subscription;
+  if (isOwner(user)) return { ok: true };
+  const sub = await subscriptionFor(context, user);
   if (!sub || sub.status !== "active") {
     return { ok: false, status: 402, error: "Dette krever et aktivt Content Studio-abonnement. Se planene på /oppgrader." };
   }
   const k = kind === "video" ? "video" : "image";
-  const limit = limitsFor(user)[k] || 0;
+  const limit = (sub.limits && sub.limits[k]) || DEFAULT_LIMITS[k] || 0;
   const key = monthKey(user.email);
   let usage = { image: 0, video: 0 };
   const raw = await env.BUILDER_KV.get(key);
