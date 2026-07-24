@@ -1261,7 +1261,11 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     .mc-hero .kick{display:inline-block;font-family:var(--font-head);font-weight:800;letter-spacing:.12em;font-size:13px;color:#fff;background:#E91E89;border-radius:999px;padding:7px 16px;margin-bottom:14px;}
     .mc-hero h1{font-size:clamp(26px,5vw,36px);margin:0 0 12px;}
     .mc-hero p{color:#5a4750;max-width:48ch;margin:0 auto 20px;line-height:1.6;}
-    .mc-cta{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(120deg,#E91E89,#ff5fb0);color:#fff;font-weight:800;font-size:15px;text-decoration:none;padding:14px 28px;border-radius:999px;box-shadow:0 10px 24px rgba(233,30,137,.28);}
+    .mc-cta{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(120deg,#E91E89,#ff5fb0);color:#fff;font-weight:800;font-size:15px;text-decoration:none;padding:14px 28px;border-radius:999px;box-shadow:0 10px 24px rgba(233,30,137,.28);border:none;cursor:pointer;font-family:var(--font-head);}
+    .mc-form{display:flex;flex-direction:column;gap:12px;max-width:380px;margin:0 auto;}
+    .mc-form input{padding:14px 16px;border:1px solid rgba(26,26,26,.15);border-radius:12px;font-family:var(--font-body);font-size:15px;background:#fff;}
+    .mc-form input:focus{outline:none;border-color:#E91E89;box-shadow:0 0 0 3px rgba(233,30,137,.12);}
+    .mc-done{color:#7AAE1F;font-weight:800;font-family:var(--font-head);}
     .mc-sec{font-family:var(--font-head);font-size:14px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#7AAE1F;margin:30px 4px 14px;}
     .mc-card{display:flex;gap:16px;align-items:center;background:#fff;border:1px solid rgba(26,26,26,.08);border-radius:20px;padding:14px;margin-bottom:14px;box-shadow:0 6px 20px rgba(26,26,26,.05);text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s;}
     .mc-card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(233,30,137,.14);}
@@ -1277,7 +1281,12 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     <span class="kick">GRATIS MESTERKLASSE</span>
     <h1>Montessori mesterklasse</h1>
     <p>Slik kommer du i gang med Montessori hjemme, som travel forelder, med lite budsjett og uten lærerutdanning.</p>
-    <a class="mc-cta" href="/rolige-morgener">Meld deg på gratis →</a>
+    <form id="mcForm" class="mc-form" novalidate>
+      <input id="mcName" type="text" placeholder="Navn" autocomplete="given-name">
+      <input id="mcEmail" type="email" placeholder="E-post" required autocomplete="email">
+      <button type="submit" class="mc-cta">Meld deg på gratis →</button>
+    </form>
+    <p id="mcDone" class="mc-done" style="display:none;margin-top:14px">Takk! Sjekk innboksen din. 💗</p>
   </section>
   <div class="mc-sec">Mesterklasser</div>
       <a class="mc-card" href="/academy/intro">
@@ -1778,12 +1787,35 @@ Object.assign(window.LME_TRANSLATIONS, {
 <script src="/js/lme-account.js?v=7" defer></script>
 <script src="/js/renate-widget.js?v=3" defer></script>
 <script>
+(function(){
+  var f=document.getElementById('mcForm'); if(!f) return;
+  if((window.LME_CURRENT_LANG||'no')==='en'){
+    document.getElementById('mcName').placeholder='Name';
+    document.getElementById('mcEmail').placeholder='Email';
+  }
+  f.addEventListener('submit', function(e){
+    e.preventDefault();
+    var email=(document.getElementById('mcEmail').value||'').trim();
+    var name=(document.getElementById('mcName').value||'').trim();
+    if(!email){ document.getElementById('mcEmail').focus(); return; }
+    var lang=(window.LME_CURRENT_LANG||'no');
+    try{
+      fetch('/api/newsletter/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({email:email,name:name,lang:lang})}).catch(function(){});
+    }catch(err){}
+    f.style.display='none';
+    document.getElementById('mcDone').style.display='block';
+  });
+})();
+</script>
+<script>
 /* Oversettelser: Montessori mesterklasse */
 Object.assign(window.LME_TRANSLATIONS, {
  "GRATIS MESTERKLASSE": "FREE MASTERCLASS",
  "Montessori mesterklasse": "Montessori Masterclass",
  "Slik kommer du i gang med Montessori hjemme, som travel forelder, med lite budsjett og uten lærerutdanning.": "How to get started with Montessori at home, as a busy parent, on a small budget, and with no teaching degree.",
  "Meld deg på gratis →": "Register free →",
+ "Takk! Sjekk innboksen din. 💗": "Thank you! Check your inbox. 💗",
  "Mesterklasser": "Masterclasses",
  "Kom i gang med Montessori": "Getting started with Montessori",
  "Møt LME, forstå barnets utvikling og bli klar for reisen.": "Meet LME, understand child development, and get ready for the journey.",
