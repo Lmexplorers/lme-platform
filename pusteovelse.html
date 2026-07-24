@@ -155,7 +155,8 @@
   // Myk pling ved hver pusteovergang, laget i nettleseren (ingen lydfil).
   function chime(phase) {
     if (!soundOn || !actx) return;
-    var freq = phase === 'in' ? 587 : (phase === 'out' ? 440 : 494);
+    if (phase === 'hold') return; // pling kun når pusten snur (inn/ut), ikke på hold
+    var freq = phase === 'in' ? 587 : 440;
     try {
       var o = actx.createOscillator(), g = actx.createGain();
       o.type = 'sine'; o.frequency.value = freq;
