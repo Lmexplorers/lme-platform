@@ -39,66 +39,77 @@ ALDRI dikt opp garantier, pengene-tilbake-løfter, refusjonsvilkår, priser, rab
 
 const langName = (l) => (l === "en" ? "English" : "norsk (bokmål)");
 
-// Denne funksjonen ber om SJU kanaler i ett svar. Det er den tyngste
-// AI-genereringen på plattformen, så svaret kan bli tregt. Cloudflare
-// avbryter en Pages-funksjon som holder på for lenge, og da får brukeren
-// en 502 fra plattformen (HTML), ikke vår egen JSON. For å unngå det:
-//  1) rask modell først (haiku), så en garantert gyldig backup (sonnet-5),
-//  2) færre max_tokens (sju korte utdrag trenger ikke mer),
-//  3) hard timeout per kall, så en treg forespørsel blir en ryddig
-//     JSON-feil i stedet for at Cloudflare dreper funksjonen.
-const MODELS = ["claude-haiku-4-5-20251001", "claude-sonnet-5"];
-const CALL_TIMEOUT_MS = 22000;
+// Sju kanaler i ETT svar ble for tregt: Cloudflare avbrøt Pages-funksjonen
+// før den rakk å svare, og brukeren fikk en plattform-502 (HTML), ikke vår
+// egen JSON. Løsning: del opp i to KORTERE kall som kjører SAMTIDIG. Da blir
+// hvert svar raskt, veggklokka omtrent halveres, og vi holder oss trygt
+// innenfor tidsgrensen. Rask modell, hard timeout per kall.
+const MODEL = "claude-haiku-4-5-20251001";
+const CALL_TIMEOUT_MS = 20000;
+
+// Feltbeskrivelsene "Gjør synlig" viser, delt i to grupper for to parallelle kall.
+const CH = {
+  blog: '"blog":"kort ingress"',
+  facebook: '"facebook":"ferdig Facebook-innlegg, varm og answer-first"',
+  instagram: '"instagram":"ferdig caption med hashtags"',
+  pinterest: '"pinterest":"pin-tekst med søkbare nøkkelord"',
+  tiktok: '"tiktok":"idé/hook til en kort video"',
+  reelScript: '"reelScript":"15-30s manus med scener"',
+  email: '"email":"emnelinje + kort e-post til lista"',
+};
+const GROUPS = [
+  ["blog", "facebook", "instagram", "pinterest"],
+  ["tiktok", "reelScript", "email"],
+];
 
 async function callClaude(env, system, userPrompt, maxTokens) {
-  let lastErr = "ukjent feil";
-  for (const model of MODELS) {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), CALL_TIMEOUT_MS);
-    let resp;
-    try {
-      resp = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        signal: ctrl.signal,
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": env.ANTHROPIC_API_KEY,
-          "anthropic-version": "2023-06-01",
-        },
-        body: JSON.stringify({
-          model,
-          max_tokens: maxTokens || 2200,
-          system,
-          messages: [{ role: "user", content: userPrompt }],
-        }),
-      });
-    } catch (e) {
-      lastErr = (e && e.name === "AbortError")
-        ? "Anthropic svarte for sakte (" + model + "), avbrutt etter " + Math.round(CALL_TIMEOUT_MS / 1000) + "s"
-        : "nettverksfeil mot Anthropic (" + model + ")";
-      continue;
-    } finally {
-      clearTimeout(timer);
-    }
-    if (resp.ok) {
-      const data = await resp.json();
-      return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
-    }
-    const t = await resp.text();
-    lastErr = "Anthropic " + resp.status + " (" + model + "): " + t.replace(/\s+/g, " ").slice(0, 180);
-    // 401/403 = nøkkel/tilgang: samme feil for alle modeller, ikke vits å prøve videre.
-    if (resp.status === 401 || resp.status === 403) break;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), CALL_TIMEOUT_MS);
+  let resp;
+  try {
+    resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      signal: ctrl.signal,
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": env.ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        max_tokens: maxTokens || 1400,
+        system,
+        messages: [{ role: "user", content: userPrompt }],
+      }),
+    });
+  } catch (e) {
+    throw new Error(e && e.name === "AbortError"
+      ? "Anthropic svarte for sakte (avbrutt etter " + Math.round(CALL_TIMEOUT_MS / 1000) + "s)"
+      : "nettverksfeil mot Anthropic");
+  } finally {
+    clearTimeout(timer);
   }
-  throw new Error(lastErr);
+  if (!resp.ok) {
+    const t = await resp.text();
+    throw new Error("Anthropic " + resp.status + ": " + t.replace(/\s+/g, " ").slice(0, 160));
+  }
+  const data = await resp.json();
+  return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
 }
 
-function repurposePrompt(b) {
+function promptFor(b, keys) {
   const src = (b.article || b.source || "").slice(0, 6000);
+  const fields = keys.map((k) => CH[k]).join(",");
   return `Språk: ${langName(b.lang)}.
 Kilde (artikkel/utdrag): "${src}".
-Omform denne ene kilden til flere ferdige, publiseringsklare kanaler. Returner KUN gyldig JSON med denne formen:
-{"blog":"kort ingress","facebook":"ferdig Facebook-innlegg, varm og answer-first","instagram":"ferdig caption med hashtags","pinterest":"pin-tekst med søkbare nøkkelord","tiktok":"idé/hook til en kort video","reelScript":"15-30s manus med scener","email":"emnelinje + kort e-post til lista"}
+Omform denne ene kilden til ferdige, publiseringsklare kanaler. Returner KUN gyldig JSON med NØYAKTIG disse feltene: {${fields}}.
 Behold LMEs varme, pedagogiske tone. Følg de norske skrivereglene (rette anførselstegn, ingen tankestreker, riktig kolon- og kommabruk). ALDRI dikt opp løfter eller tall som ikke står i kilden. Ingen tekst utenfor JSON.`;
+}
+
+function parseObj(txt) {
+  if (!txt) return {};
+  const m = txt.match(/\{[\s\S]*\}/);
+  try { return JSON.parse(m ? m[0] : txt); } catch (e) { return {}; }
 }
 
 export async function onRequestPost(context) {
@@ -111,11 +122,25 @@ export async function onRequestPost(context) {
   catch { return json({ error: "Ugyldig JSON" }, 400); }
 
   const system = `${BRAND_CONTEXT}\nDu omformer ÉN kilde til flere kanaler, gjenbruker LME Content Studio-tankegangen.`;
-  try {
-    const result = await callClaude(env, system, repurposePrompt(body), 2200);
-    return json({ result });
-  } catch (err) {
-    // Vis den ekte årsaken, så vi ser om det er modell, nøkkel eller kreditt.
-    return json({ error: "AI-feil: " + String((err && err.message) || err).slice(0, 220) }, 502);
+
+  // To kortere kall samtidig. Feiler den ene, beholder vi kanalene fra den
+  // andre (delvis er bedre enn ingenting). Bare hvis begge feiler gir vi 502.
+  const settled = await Promise.all(GROUPS.map(async (keys) => {
+    try {
+      return parseObj(await callClaude(env, system, promptFor(body, keys), 1400));
+    } catch (e) {
+      return { __err: (e && e.message) || "feil" };
+    }
+  }));
+
+  const merged = {};
+  let ok = 0, lastErr = "ukjent feil";
+  for (const part of settled) {
+    if (part && part.__err) { lastErr = part.__err; continue; }
+    Object.assign(merged, part); ok++;
   }
+  if (ok === 0) {
+    return json({ error: "AI-feil: " + String(lastErr).slice(0, 200) }, 502);
+  }
+  return json({ result: JSON.stringify(merged) });
 }
