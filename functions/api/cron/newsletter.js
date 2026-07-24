@@ -11,7 +11,7 @@
  *   GET /api/cron/newsletter
  */
 
-import { sendNewsletter, newsletterLength } from "../../_lib/newsletter.js";
+import { sendNewsletter, newsletterLength, newsletterGapDays } from "../../_lib/newsletter.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -32,7 +32,7 @@ export async function onRequest(context) {
   }
 
   const now = Date.now();
-  const SIX_DAYS = 6 * 24 * 60 * 60 * 1000;
+  const DAY = 24 * 60 * 60 * 1000;
   let sent = 0, done = 0, skipped = 0, failed = 0;
 
   let cursor;
@@ -47,7 +47,7 @@ export async function onRequest(context) {
       const total = newsletterLength(sub.source);
       const idx = sub.weekIndex || 0;
       if (idx >= total) { done++; continue; }               // serien fullført
-      if (sub.lastSent && (now - sub.lastSent) < SIX_DAYS) { skipped++; continue; }
+      if (sub.lastSent && (now - sub.lastSent) < newsletterGapDays(sub.source) * DAY) { skipped++; continue; }
       const res = await sendNewsletter(env, sub, idx);
       if (res && res.ok) {
         sub.weekIndex = idx + 1;

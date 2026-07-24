@@ -168,6 +168,9 @@ function seriesFor(source) {
 
 export function newsletterLength(source) { return seriesFor(source).length; }
 
+/* Dager mellom hver e-post. Mesterklasse-serien går tettere i starten. */
+export function newsletterGapDays(source) { return source === "montessori-mesterklasse" ? 2 : 6; }
+
 export function newsletterEmail(lang, index, name, source) {
   const item = seriesFor(source)[index];
   if (!item) return null;
