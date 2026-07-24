@@ -134,15 +134,16 @@
   });
 
   var PATTERNS = {
-    calm: [ {k:'in', s:3}, {k:'hold', s:2}, {k:'out', s:5} ],
+    calm: [ {k:'in', s:3}, {k:'hold', s:2}, {k:'out', s:5}, {k:'rest', s:2} ],
     box:  [ {k:'in', s:4}, {k:'hold', s:4}, {k:'out', s:4}, {k:'hold', s:4} ],
   };
   var WORDS = {
     in:   { no:'Pust inn', en:'Breathe in' },
     hold: { no:'Hold',     en:'Hold' },
     out:  { no:'Pust ut',  en:'Breathe out' },
+    rest: { no:'Hvil',     en:'Rest' },
   };
-  var SCALE = { in: 1.0, hold: null, out: 0.62 }; // hold beholder forrige skala
+  var SCALE = { in: 1.0, hold: null, out: 0.62, rest: null }; // hold/hvil beholder forrige skala
 
   var ring = document.getElementById('ring');
   var phaseEl = document.getElementById('phase');
@@ -161,7 +162,7 @@
   // Myk pling ved hver pusteovergang, laget i nettleseren (ingen lydfil).
   function chime(phase) {
     if (!soundOn || !actx) return;
-    if (phase === 'hold') return; // pling kun når pusten snur (inn/ut), ikke på hold
+    if (phase !== 'in' && phase !== 'out') return; // pling kun når pusten snur (inn/ut)
     var freq = phase === 'in' ? 587 : 440;
     try {
       var o = actx.createOscillator(), g = actx.createGain();
