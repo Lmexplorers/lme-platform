@@ -183,7 +183,13 @@
       foot.textContent = T("Kopier og lim inn, eller trykk 📣 Publiser for å legge ut automatisk.",
         "Copy and paste, or tap 📣 Publish to post automatically.");
     }
-    fetchBlAccounts(); // varm opp kontoene fra Blotato
+    fetchBlAccounts().then(function (map) { // varm opp kontoene fra Blotato
+      if (foot && (!map || !Object.keys(map).length)) {
+        foot.textContent = T(
+          "⚠️ Autopublisering er ikke koblet til enda (Blotato). Du kan kopiere og lime inn i mellomtiden.",
+          "⚠️ Auto-publishing isn't connected yet (Blotato). You can copy and paste in the meantime.");
+      }
+    });
     overlay.classList.add("show");
     document.body.style.overflow = "hidden";
   }
