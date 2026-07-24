@@ -104,16 +104,20 @@ async function ownerFrom(context) {
   return isOwner(u) ? u : null;
 }
 
-async function setMembership(env, email, status) {
+async function setMembership(env, email, status, tier) {
   email = (email || "").trim().toLowerCase();
   if (!email) return;
-  const rec = { status: status, plan: "inner-circle", source: "manual", since: Date.now(), updated: Date.now() };
+  // Behold et eventuelt tidligere nivå hvis det ikke sendes med.
+  let prev = {};
+  try { const r = await env.BUILDER_KV.get("member:" + email); if (r) prev = JSON.parse(r) || {}; } catch (e) {}
+  const lvl = tier || prev.tier || null;
+  const rec = { status: status, plan: "inner-circle", tier: lvl, source: "manual", since: prev.since || Date.now(), updated: Date.now() };
   await env.BUILDER_KV.put("member:" + email, JSON.stringify(rec));
   const uraw = await env.BUILDER_KV.get("user:" + email);
   if (uraw) {
     try {
       const u = JSON.parse(uraw);
-      u.subscription = { status: status, plan: "inner-circle", source: "manual", updated: Date.now() };
+      u.subscription = { status: status, plan: "inner-circle", tier: lvl, source: "manual", updated: Date.now() };
       await env.BUILDER_KV.put("user:" + email, JSON.stringify(u));
     } catch (e) {}
   }
@@ -390,8 +394,10 @@ export async function onRequestPost(context) {
     try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
     const email = (body.email || "").trim().toLowerCase();
     if (!email || !/.+@.+\..+/.test(email)) return json({ error: "bad_email" }, 400);
-    await setMembership(env, email, parts[1] === "grant" ? "active" : "canceled");
-    return json({ ok: true, email: email, status: parts[1] === "grant" ? "active" : "canceled" });
+    const allowed = { medlem: "medlem", regular: "medlem", pro: "pro", vip: "vip" };
+    const tier = allowed[String(body.tier || "").trim().toLowerCase()] || null;
+    await setMembership(env, email, parts[1] === "grant" ? "active" : "canceled", tier);
+    return json({ ok: true, email: email, status: parts[1] === "grant" ? "active" : "canceled", tier: tier });
   }
 
   // /api/group/notifs/read  -> marker alle varsler som lest

@@ -87,9 +87,14 @@
       '</div>' +
 
       '<div class="card"><h2>Gi tilgang manuelt</h2>' +
-        '<p class="lede" style="font-size:14px;margin-bottom:12px">Trenger du å gi noen gratis tilgang (uten betaling), kan du legge dem inn her.</p>' +
+        '<p class="lede" style="font-size:14px;margin-bottom:12px">Trenger du å gi noen gratis tilgang (uten betaling), kan du legge dem inn her. Velg nivå: Medlem, Pro eller VIP. Pro og VIP låser opp skaperverktøyene (Kursbygger, AI Visibility osv.).</p>' +
         '<div class="row">' +
           '<input type="email" id="email" placeholder="navn@epost.no" autocomplete="off">' +
+          '<select id="tier" style="border:1px solid #eedce2;border-radius:12px;padding:11px 14px;font-family:inherit;font-size:15px;background:#fff">' +
+            '<option value="medlem">Medlem</option>' +
+            '<option value="pro">Pro</option>' +
+            '<option value="vip">VIP</option>' +
+          '</select>' +
           '<button class="btn" id="grant">Gi tilgang</button>' +
         '</div>' +
         '<div class="note" id="note"></div>' +
@@ -171,10 +176,11 @@
   function grant(){
     var input=document.getElementById('email');
     var email=(input.value||'').trim();
+    var tier=(document.getElementById('tier')||{}).value||'medlem';
     if(!email){ note('Skriv inn en e-post.', false); return; }
-    api('admin/grant', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ email:email }) })
+    api('admin/grant', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ email:email, tier:tier }) })
       .then(function(r){
-        if(r.body && r.body.ok){ note('Tilgang gitt til ' + email + ' ✓', true); input.value=''; loadList(); }
+        if(r.body && r.body.ok){ note('Tilgang gitt til ' + email + ' (' + (r.body.tier||tier) + ') ✓', true); input.value=''; loadList(); }
         else if(r.body && r.body.error==='bad_email'){ note('Det ser ikke ut som en gyldig e-post.', false); }
         else if(r.status===403){ note('Du må være innlogget som eier.', false); }
         else { note('Noe gikk galt. Prøv igjen.', false); }
