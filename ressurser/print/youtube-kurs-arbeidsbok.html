@@ -298,7 +298,12 @@
     if(b) b.textContent = (lang==='en') ? '🇳🇴 Norsk' : '🇬🇧 English';
     try{localStorage.setItem('lme_lang',lang);}catch(e){}
   }
-  var saved='no';try{saved=localStorage.getItem('lme_lang')||'no';}catch(e){}
+  var saved='no';
+  try{
+    var qp=new URLSearchParams(location.search).get('lang');
+    if(qp==='en'||qp==='no'){saved=qp;try{localStorage.setItem('lme_lang',qp);}catch(e2){}}
+    else saved=localStorage.getItem('lme_lang')||'no';
+  }catch(e){}
   var btn=document.getElementById('lme-print-lang');
   if(btn) btn.addEventListener('click',function(){apply(window.__lmeLang==='en'?'no':'en');});
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){apply(saved);});

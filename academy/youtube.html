@@ -1746,7 +1746,7 @@
     <figure class="crs-fig"><img src="/images/banner_laer.webp" alt="Utforskning og læring"><figcaption>Å bygge en kanal er som å utforske: velg riktig retning, prøv, mål og juster.</figcaption></figure>
 
     <p style="margin:4px 0 22px">
-      <a href="/ressurser/print/youtube-kurs-arbeidsbok" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;background:#E91E89;color:#fff;font-weight:700;font-size:14px;text-decoration:none">📓 Last ned arbeidsboken som følger kurset →</a>
+      <a href="/ressurser/print/youtube-kurs-arbeidsbok" id="workbookLink" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;background:#E91E89;color:#fff;font-weight:700;font-size:14px;text-decoration:none">📓 Last ned arbeidsboken som følger kurset →</a>
     </p>
 
     <div class="crs-module" id="modul-0">Modul 1 · Tankesett</div>
@@ -2139,6 +2139,14 @@
     });
   }
   
+  // Del av lenke til arbeidsboken skal peke til samme språk som selve
+  // kurssiden, så en engelsk lenke gir engelsk arbeidsbok med en gang.
+  function syncWorkbookLink(lang) {
+    var a = document.getElementById('workbookLink');
+    if (!a) return;
+    a.setAttribute('href', '/ressurser/print/youtube-kurs-arbeidsbok' + (lang === 'en' ? '?lang=en' : ''));
+  }
+
   window.lmeToggleLang = function() {
     const btn = document.getElementById('lme-floating-lang-btn');
     const newLang = window.LME_CURRENT_LANG === 'no' ? 'en' : 'no';
@@ -2170,12 +2178,18 @@
     btn.textContent = newLang === 'en' ? '🇳🇴 Norsk' : '🇬🇧 English';
     document.documentElement.lang = newLang;
     try { localStorage.setItem('lme_lang', newLang); } catch(e) {}
+    syncWorkbookLink(newLang);
   };
-  
+
   function init() {
     captureAll();
     let saved = 'no';
-    try { saved = localStorage.getItem('lme_lang') || 'no'; } catch(e) {}
+    try {
+      var qp = new URLSearchParams(location.search).get('lang');
+      if (qp === 'en' || qp === 'no') { saved = qp; try { localStorage.setItem('lme_lang', qp); } catch(e2) {} }
+      else saved = localStorage.getItem('lme_lang') || 'no';
+    } catch(e) {}
+    syncWorkbookLink(saved);
     if (saved === 'en') {
       setTimeout(window.lmeToggleLang, 100);
     }
