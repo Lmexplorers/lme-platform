@@ -187,9 +187,12 @@
         "Copy and paste, or tap 📣 Publish to post automatically.");
     }
     fetchBlAccounts().then(function (map) { // varm opp kontoene fra Blotato
-      if (foot && (!map || !Object.keys(map).length)) {
-        offerBlotatoSetup(foot);
-      }
+      if (!foot) return;
+      if (!map || !Object.keys(map).length) { offerBlotatoSetup(foot); return; }
+      // Kontoer er koblet til. Publiser-knappene på kortene krever at
+      // "Lag ferdige delinger" har lyktes først, så gi en egen, uavhengig
+      // måte å teste at autopublisering faktisk virker, uten å vente på AI-en.
+      offerTestPost(foot, map);
     });
     overlay.classList.add("show");
     document.body.style.overflow = "hidden";
@@ -261,6 +264,60 @@
       })
       .catch(function () { foot.textContent = generic; });
   }
+
+  // Blotato er koblet til (minst én konto). Gi en helt uavhengig knapp for å
+  // sende ett ekte testinnlegg med en gang, slik at autopublisering kan
+  // oppleves og bekreftes uten å vente på at "Lag ferdige delinger" lykkes.
+  function offerTestPost(foot, map) {
+    foot.textContent = T("Kopier og lim inn, eller trykk 📣 Publiser for å legge ut automatisk.",
+      "Copy and paste, or tap 📣 Publish to post automatically.");
+    // Foretrekk en kanal som ikke krever bilde (Facebook), ellers første
+    // tilkoblede kanal med LME-logoen som bilde.
+    var target = CHANNELS.filter(function (c) { return c.tt && map[c.tt] && !c.needsMedia; })[0] ||
+      CHANNELS.filter(function (c) { return c.tt && map[c.tt]; })[0];
+    if (!target) return;
+    var wrap = document.createElement("div");
+    wrap.style.cssText = "margin-top:10px;padding-top:10px;border-top:1px solid #f5dce8";
+    var hint = document.createElement("div");
+    hint.style.cssText = "margin-bottom:6px;color:#9a8693;font-size:13px";
+    hint.textContent = T(
+      "Blotato er koblet til. Vil du se at autopublisering faktisk virker? Dette legger ut et ekte, synlig testinnlegg på " + T2(target) + " nå (du kan slette det etterpå).",
+      "Blotato is connected. Want to see auto-publishing actually work? This posts a real, visible test post to " + T2(target) + " right now (you can delete it afterwards).");
+    var btn = document.createElement("button");
+    btn.textContent = "🧪 " + T("Send testinnlegg til " + T2(target), "Send test post to " + T2(target));
+    btn.style.cssText = "background:linear-gradient(120deg,#E91E89,#ff5fb0);color:#fff;font-weight:800;border:0;border-radius:999px;padding:9px 18px;cursor:pointer;font-family:inherit";
+    var msg = document.createElement("div");
+    msg.style.cssText = "margin-top:8px;font-size:13px";
+    btn.addEventListener("click", function () {
+      btn.disabled = true; btn.textContent = T("Sender…", "Sending…");
+      var testText = T("🌸 Test fra Little Montessori Explorers, autopublisering er koblet til! (kan slettes)",
+        "🌸 Test from Little Montessori Explorers, auto-publishing is connected! (safe to delete)");
+      var imgUrl = target.needsMedia ? (location.origin + "/images/lme-logo.png") : "";
+      var built = buildPost(target, testText, imgUrl);
+      if (built.err) {
+        btn.disabled = false; btn.textContent = "🧪 " + T("Send testinnlegg til " + T2(target), "Send test post to " + T2(target));
+        msg.textContent = "⚠️ " + built.err; return;
+      }
+      fetch(BL_API + "/publish", {
+        method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: [{ label: built.label, post: built.post }] }),
+      }).then(function (r) { return r.json(); }).then(function (d) {
+        var res = d && d.result && d.result.results && d.result.results[0];
+        btn.disabled = false; btn.textContent = "🧪 " + T("Send testinnlegg til " + T2(target), "Send test post to " + T2(target));
+        if (res && res.ok) {
+          msg.textContent = "✓ " + T("Sendt! Sjekk " + T2(target) + " om et lite øyeblikk.", "Sent! Check " + T2(target) + " in a moment.");
+        } else {
+          msg.textContent = "⚠️ " + T("Klarte ikke å sende. ", "Could not send. ") + ((res && res.error) ? String(res.error).slice(0, 140) : "");
+        }
+      }).catch(function () {
+        btn.disabled = false; btn.textContent = "🧪 " + T("Send testinnlegg til " + T2(target), "Send test post to " + T2(target));
+        msg.textContent = "⚠️ " + T("Nettverksfeil. Prøv igjen.", "Network error. Try again.");
+      });
+    });
+    wrap.appendChild(hint); wrap.appendChild(btn); wrap.appendChild(msg);
+    foot.appendChild(wrap);
+  }
+  function T2(ch) { return T(ch.no, ch.en); }
 
   function cardHTML(ch, text) {
     if (!text) return "";
