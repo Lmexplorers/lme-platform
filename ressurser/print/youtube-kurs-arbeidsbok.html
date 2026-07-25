@@ -28,19 +28,23 @@
 
   .pg-illus{width:100%;height:52mm;object-fit:cover;border-radius:var(--r-md);box-shadow:var(--shadow-sm);margin-bottom:6mm;display:block;}
 
-  .cover-sheet .pg-inner{align-items:center;justify-content:center;text-align:center;}
-  .cover-illus{width:100%;height:70mm;object-fit:cover;border-radius:var(--r-lg);box-shadow:var(--shadow-md);margin-bottom:7mm;display:block;}
-  .cover-kicker{display:inline-block;background:var(--pink-100);color:var(--cerise-deep);font-weight:700;font-size:9.5pt;letter-spacing:.06em;text-transform:uppercase;padding:2mm 5mm;border-radius:999px;margin-bottom:5mm;font-family:var(--font-body);}
-  .cover-title{font-family:var(--font-sasson);font-size:26pt;line-height:1.15;color:var(--ink);margin-bottom:4mm;}
+  /* Ekte Bookly-forside (R.cover i bookly-gen.js): fullbleed gradient i
+     temafargen, ikke hvit bakgrunn. Kicker = merkenavnet, forfatterfelt
+     nederst, akkurat som ekte bøker laget i Bookly. */
+  .bk-sheet.cover-sheet{height:297mm;background:linear-gradient(160deg,var(--pink-200) 0%,var(--pink-50) 60%,var(--pink-200) 100%);}
+  .bk-sheet.cover-sheet .pg-inner{height:100%;align-items:center;justify-content:center;text-align:center;padding:20mm 16mm 14mm;}
+  .cover-logo{width:20mm;height:20mm;object-fit:contain;margin-bottom:5mm;}
+  .cover-kicker{font-family:var(--font-body);font-weight:800;font-size:9.5pt;letter-spacing:.14em;text-transform:uppercase;color:var(--cerise-deep);}
+  .cover-title{font-family:var(--font-display);font-weight:700;font-size:32pt;line-height:1.14;color:var(--ink);margin-top:6mm;}
   .cover-title em{font-style:italic;color:var(--cerise);}
-  .cover-sub{font-size:11.5pt;color:var(--ink-soft);max-width:130mm;margin:0 auto 8mm;line-height:1.6;}
-  .cover-welcome{background:var(--pink-50);border:1px solid var(--line);border-radius:var(--r-md);padding:8mm 10mm;text-align:left;max-width:150mm;margin:0 auto;}
-  .cover-welcome p{font-size:10.5pt;line-height:1.7;margin-bottom:3mm;}
-  .cover-welcome .sign{font-family:var(--font-display);font-style:italic;color:var(--cerise);font-size:12pt;margin-top:2mm;}
-  .cover-tracker{display:flex;gap:4mm;margin-top:8mm;justify-content:center;flex-wrap:wrap;}
-  .cover-tracker span{background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:2mm 5mm;font-size:9pt;font-weight:700;color:var(--cerise-deep);font-family:var(--font-body);}
+  .cover-sub{font-size:12.5pt;color:var(--ink-soft);margin-top:4mm;}
+  .cover-imgframe{flex:1;width:100%;display:flex;align-items:center;justify-content:center;min-height:0;margin:8mm 0 0;}
+  .cover-illus{width:100%;max-width:150mm;height:100%;max-height:150mm;object-fit:cover;border-radius:5mm;box-shadow:0 4mm 10mm rgba(176,36,88,.18);display:block;}
+  .cover-author{font-family:var(--font-body);font-size:12.5pt;font-weight:800;color:var(--cerise-deep);}
 
   .module-kick{font-family:var(--font-body);color:var(--cerise-deep);font-size:9.5pt;font-weight:700;letter-spacing:.05em;text-transform:uppercase;display:block;margin-bottom:1mm;}
+  .pg-foot .brandmark{display:flex;align-items:center;gap:2mm;}
+  .foot-logo{width:6mm;height:6mm;object-fit:contain;}
   .pg-body .recap{font-size:10.5pt;line-height:1.75;color:var(--brown);margin-bottom:6mm;}
 
   .wb-box{border-radius:var(--r-md);padding:6mm 7mm;margin-bottom:5mm;}
@@ -89,25 +93,37 @@
 
   <div class="bk-stage">
 
-    <!-- ===== FORSIDE ===== -->
+    <!-- ===== FORSIDE (ekte Bookly-mal: R.cover) ===== -->
     <div class="bk-sheet cover-sheet"><div class="pg-inner">
-      <img class="cover-illus" src="/images/banner_eventyr.webp" alt="Mia og Teo ved et veiskille i skogen, klare for et nytt eventyr">
-      <div class="cover-kicker" data-no="Arbeidsbok · følger kurset" data-en="Workbook · follows the course">Arbeidsbok · følger kurset</div>
-      <h1 class="cover-title" data-no="Voks på YouTube med <em>AI</em>" data-en="Grow on YouTube with <em>AI</em>">Voks på YouTube med <em>AI</em></h1>
-      <p class="cover-sub" data-no="Din arbeidsbok gjennom kurset. Ett kapittel per del, med refleksjon, sjekkliste og ett konkret steg du kan ta denne uken." data-en="Your workbook through the course. One chapter per part, with reflection, a checklist and one concrete step you can take this week.">Din arbeidsbok gjennom kurset. Ett kapittel per del, med refleksjon, sjekkliste og ett konkret steg du kan ta denne uken.</p>
-      <div class="cover-welcome">
-        <p data-no="Hei, og velkommen inn 💕" data-en="Hi, and welcome in 💕">Hei, og velkommen inn 💕</p>
-        <p data-no="Denne arbeidsboken er tenkt som følgesvennen din gjennom kurset. Ta den frem etter hver del, svar ærlig på spørsmålene, og kryss av etter hvert som du gjør tingene. Det er handling, ikke perfeksjon, som bygger en kanal." data-en="This workbook is meant to be your companion through the course. Pick it up after each part, answer the questions honestly, and check things off as you go. It's action, not perfection, that builds a channel.">Denne arbeidsboken er tenkt som følgesvennen din gjennom kurset. Ta den frem etter hver del, svar ærlig på spørsmålene, og kryss av etter hvert som du gjør tingene. Det er handling, ikke perfeksjon, som bygger en kanal.</p>
-        <p data-no="Du trenger ikke gjøre alt på én gang. Ett kapittel, én uke, ett steg. Det er nok." data-en="You don't need to do everything at once. One chapter, one week, one step. That's enough.">Du trenger ikke gjøre alt på én gang. Ett kapittel, én uke, ett steg. Det er nok.</p>
-        <p class="sign">— Renate</p>
+      <img class="cover-logo" src="/images/lme-logo.png" alt="Little Montessori Explorers">
+      <div class="cover-kicker" data-no="Little Montessori Explorers" data-en="Little Montessori Explorers">Little Montessori Explorers</div>
+      <h1 class="cover-title" data-no="Voks på YouTube <em>med AI</em>" data-en="Grow on YouTube <em>with AI</em>">Voks på YouTube <em>med AI</em></h1>
+      <p class="cover-sub" data-no="Arbeidsbok · følger kurset" data-en="Workbook · follows the course">Arbeidsbok · følger kurset</p>
+      <div class="cover-imgframe"><img class="cover-illus" src="/images/banner_eventyr.webp" alt="Mia og Teo ved et veiskille i skogen, klare for et nytt eventyr"></div>
+      <div class="cover-author">Renate Dahl</div>
+    </div></div>
+
+    <!-- ===== VELKOMMEN / SLIK BRUKER DU BOKEN ===== -->
+    <div class="bk-sheet"><div class="pg-inner">
+      <img class="foot-logo" style="width:10mm;height:10mm;margin-bottom:3mm;" src="/images/lme-logo.png" alt="">
+      <span class="module-kick" data-no="Velkommen" data-en="Welcome">Velkommen</span>
+      <div class="pg-head" data-no="Slik bruker du arbeidsboken" data-en="How to use this workbook">Slik bruker du arbeidsboken</div>
+      <div class="pg-body">
+        <p class="recap" data-no="Hei, og velkommen inn 💕 Denne arbeidsboken er tenkt som følgesvennen din gjennom kurset. Ta den frem etter hver del, svar ærlig på spørsmålene, og kryss av etter hvert som du gjør tingene. Det er handling, ikke perfeksjon, som bygger en kanal." data-en="Hi, and welcome in 💕 This workbook is meant to be your companion through the course. Pick it up after each part, answer the questions honestly, and check things off as you go. It's action, not perfection, that builds a channel.">Hei, og velkommen inn 💕 Denne arbeidsboken er tenkt som følgesvennen din gjennom kurset. Ta den frem etter hver del, svar ærlig på spørsmålene, og kryss av etter hvert som du gjør tingene. Det er handling, ikke perfeksjon, som bygger en kanal.</p>
+        <p class="recap" data-no="Du trenger ikke gjøre alt på én gang. Ett kapittel, én uke, ett steg. Det er nok. Klem fra meg, Renate." data-en="You don't need to do everything at once. One chapter, one week, one step. That's enough. Warm wishes, Renate.">Du trenger ikke gjøre alt på én gang. Ett kapittel, én uke, ett steg. Det er nok. Klem fra meg, Renate.</p>
+
+        <div class="wb-box wb-check">
+          <h3 data-no="🗺️ Fem kapitler, fem uker" data-en="🗺️ Five chapters, five weeks">🗺️ Fem kapitler, fem uker</h3>
+          <ul>
+            <li><span class="wb-chk"></span><span data-no="① Tankesett" data-en="① Mindset">① Tankesett</span></li>
+            <li><span class="wb-chk"></span><span data-no="② Nisje" data-en="② Niche">② Nisje</span></li>
+            <li><span class="wb-chk"></span><span data-no="③ Pakking" data-en="③ Packaging">③ Pakking</span></li>
+            <li><span class="wb-chk"></span><span data-no="④ Produksjon" data-en="④ Production">④ Produksjon</span></li>
+            <li><span class="wb-chk"></span><span data-no="⑤ Skaler og tjen penger" data-en="⑤ Scale and earn">⑤ Skaler og tjen penger</span></li>
+          </ul>
+        </div>
       </div>
-      <div class="cover-tracker">
-        <span data-no="① Tankesett" data-en="① Mindset">① Tankesett</span>
-        <span data-no="② Nisje" data-en="② Niche">② Nisje</span>
-        <span data-no="③ Pakking" data-en="③ Packaging">③ Pakking</span>
-        <span data-no="④ Produksjon" data-en="④ Production">④ Produksjon</span>
-        <span data-no="⑤ Skaler" data-en="⑤ Scale">⑤ Scale</span>
-      </div>
+      <div class="pg-foot"><span class="brandmark"><img class="foot-logo" src="/images/lme-logo.png" alt="">Little Montessori Explorers</span><span></span></div>
     </div></div>
 
     <!-- ===== KAPITTEL 1: TANKESETT ===== -->
@@ -140,7 +156,7 @@
           <p data-no="Skriv ned den ene unnskyldningen du valgte over, og skriv rett under den hvorfor den ikke lenger holder vann." data-en="Write down the one excuse you chose above, and write right below it why it no longer holds up.">Skriv ned den ene unnskyldningen du valgte over, og skriv rett under den hvorfor den ikke lenger holder vann.</p>
         </div>
       </div>
-      <div class="pg-foot"><span>Little Montessori Explorers</span><span>1 / 5</span></div>
+      <div class="pg-foot"><span class="brandmark"><img class="foot-logo" src="/images/lme-logo.png" alt="">Little Montessori Explorers</span><span>1 / 5</span></div>
     </div></div>
 
     <!-- ===== KAPITTEL 2: NISJE ===== -->
@@ -174,7 +190,7 @@
           <p data-no="Lag en fersk kanal uten historikk, søk opp temaet ditt, og skriv ned de tre kanalene YouTube anbefaler deg oftest." data-en="Create a fresh channel with no history, search your topic, and write down the three channels YouTube recommends you most often.">Lag en fersk kanal uten historikk, søk opp temaet ditt, og skriv ned de tre kanalene YouTube anbefaler deg oftest.</p>
         </div>
       </div>
-      <div class="pg-foot"><span>Little Montessori Explorers</span><span>2 / 5</span></div>
+      <div class="pg-foot"><span class="brandmark"><img class="foot-logo" src="/images/lme-logo.png" alt="">Little Montessori Explorers</span><span>2 / 5</span></div>
     </div></div>
 
     <!-- ===== KAPITTEL 3: PAKKING ===== -->
@@ -208,7 +224,7 @@
           <p data-no="Bruk «Pakking»-oppskriften i kurset til å få ti titler og en miniatyr-idé til din første video." data-en="Use the “Packaging” recipe in the course to get ten titles and a thumbnail idea for your first video.">Bruk «Pakking»-oppskriften i kurset til å få ti titler og en miniatyr-idé til din første video.</p>
         </div>
       </div>
-      <div class="pg-foot"><span>Little Montessori Explorers</span><span>3 / 5</span></div>
+      <div class="pg-foot"><span class="brandmark"><img class="foot-logo" src="/images/lme-logo.png" alt="">Little Montessori Explorers</span><span>3 / 5</span></div>
     </div></div>
 
     <!-- ===== KAPITTEL 4: PRODUKSJON ===== -->
@@ -242,7 +258,7 @@
           <p data-no="Skriv det aller første manuset ditt med Claude, og gjør det klart for redigering i LME Reel Studio." data-en="Write your very first script with Claude, and get it ready for editing in LME Reel Studio.">Skriv det aller første manuset ditt med Claude, og gjør det klart for redigering i LME Reel Studio.</p>
         </div>
       </div>
-      <div class="pg-foot"><span>Little Montessori Explorers</span><span>4 / 5</span></div>
+      <div class="pg-foot"><span class="brandmark"><img class="foot-logo" src="/images/lme-logo.png" alt="">Little Montessori Explorers</span><span>4 / 5</span></div>
     </div></div>
 
     <!-- ===== KAPITTEL 5: SKALER OG TJEN PENGER ===== -->
@@ -276,7 +292,7 @@
           <p data-no="Velg nisjen din denne uken. Det er nok til å være i gang." data-en="Choose your niche this week. That's enough to be underway.">Velg nisjen din denne uken. Det er nok til å være i gang.</p>
         </div>
       </div>
-      <div class="pg-foot"><span>Little Montessori Explorers</span><span>5 / 5</span></div>
+      <div class="pg-foot"><span class="brandmark"><img class="foot-logo" src="/images/lme-logo.png" alt="">Little Montessori Explorers</span><span>5 / 5</span></div>
     </div></div>
 
     <!-- ===== AVSLUTNING ===== -->
@@ -290,6 +306,7 @@
         <span class="t" data-no="Klar for verktøyene som gjør produksjonen enklere?" data-en="Ready for the tools that make production easier?">Klar for verktøyene som gjør produksjonen enklere?</span>
         <a href="/oppgrader" data-no="Se verktøyene →" data-en="See the tools →">Se verktøyene →</a>
       </div>
+      <div class="pg-foot"><span class="brandmark"><img class="foot-logo" src="/images/lme-logo.png" alt="">Little Montessori Explorers</span><span></span></div>
     </div></div>
 
   </div>
