@@ -199,8 +199,10 @@
   }
   function close() { if (overlay) { overlay.classList.remove("show"); document.body.style.overflow = ""; } }
 
-  // Autopublisering er ikke koblet til. Er du eier, får du lime inn Blotato-
-  // nøkkelen her og slå det på med en gang. Ellers en vennlig kopier/lim-melding.
+  // Autopublisering er ikke koblet til (eller nøkkelen som er der virker
+  // ikke). Er du eier, får du en forklaring PLUSS boksen for å lime inn en
+  // (ny) nøkkel, alltid synlig samtidig, ikke bare når det ikke fantes noen
+  // nøkkel fra før. Ellers en vennlig kopier/lim-melding.
   function offerBlotatoSetup(foot) {
     var generic = T(
       "⚠️ Autopublisering er ikke koblet til enda. Du kan kopiere og lime inn i mellomtiden.",
@@ -210,69 +212,89 @@
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (st) {
         if (!st || !st.owner) { foot.textContent = generic; return; }
-        // Nøkkelen er der (KV eller Cloudflare-variabel), men Blotato selv
-        // sa nei (feil nøkkel, utløpt, e.l.). Vis den ekte feilen i stedet
-        // for å late som ingenting er koblet til.
+        var note = "";
         if (st.hasKey && st.checkErr) {
-          var src = st.keySource === "env" ? T("Cloudflare-variabelen", "the Cloudflare variable") : T("boksen her i appen", "the box in the app");
-          foot.textContent = "⚠️ " + T(
-            "Fant en nøkkel (fra " + src + "), men Blotato svarte med en feil: " + st.checkErr + ". Sjekk at nøkkelen er riktig kopiert, uten mellomrom.",
-            "Found a key (from " + src + "), but Blotato replied with an error: " + st.checkErr + ". Check that the key was copied correctly, with no extra spaces.");
-          return;
+          // Nøkkelen er der (KV eller Cloudflare-variabel), men Blotato selv
+          // sa nei (feil nøkkel, utløpt, e.l.). Vis den ekte feilen, og la
+          // henne lime inn en fersk nøkkel rett under, uten å måtte lete.
+          var src = st.keySource === "env" ? T("Cloudflare-variabelen", "the Cloudflare variable") : T("boksen under sist", "the box below, last time");
+          note = "⚠️ " + T(
+            "Fant en nøkkel (fra " + src + "), men Blotato svarte med en feil: " + st.checkErr + ". Lim inn en fersk nøkkel fra blotato.com under.",
+            "Found a key (from " + src + "), but Blotato replied with an error: " + st.checkErr + ". Paste a fresh key from blotato.com below.");
+        } else if (st.hasKey && !st.connected) {
+          note = "⚠️ " + T(
+            "Nøkkelen er lagret, men ingen kontoer er koblet til i Blotato ennå. Koble til Instagram/Facebook/TikTok inne på blotato.com, så er du klar.",
+            "The key is saved, but no accounts are connected in Blotato yet. Connect Instagram/Facebook/TikTok inside blotato.com and you're ready.");
         }
-        if (st.hasKey && !st.connected) {
-          foot.textContent = T(
-            "⚠️ Nøkkelen er lagret, men ingen kontoer er koblet til i Blotato ennå. Koble til Instagram/Facebook/TikTok inne på blotato.com, så er du klar.",
-            "⚠️ The key is saved, but no accounts are connected in Blotato yet. Connect Instagram/Facebook/TikTok inside blotato.com and you're ready.");
-          return;
-        }
-        // Eier, ingen nøkkel: la henne lime den inn her.
-        foot.innerHTML = "";
-        var lbl = document.createElement("div");
-        lbl.style.cssText = "margin-bottom:6px;font-weight:700;color:#C2185B";
-        lbl.textContent = T("Koble til autopublisering", "Connect auto-publishing");
-        var hint = document.createElement("div");
-        hint.style.cssText = "margin-bottom:8px;color:#9a8693;font-size:13px";
-        hint.textContent = T(
-          "Lim inn Blotato-nøkkelen din (blotato.com, under API). Den lagres trygt på serveren.",
-          "Paste your Blotato key (blotato.com, under API). It's stored safely on the server.");
-        var row = document.createElement("div");
-        row.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
-        var inp = document.createElement("input");
-        inp.type = "password"; inp.placeholder = T("Blotato-nøkkel", "Blotato key");
-        inp.style.cssText = "flex:1;min-width:180px;padding:9px 12px;border:1px solid #f0c9d8;border-radius:10px;font-family:inherit";
-        var save = document.createElement("button");
-        save.textContent = T("Lagre og koble til", "Save and connect");
-        save.style.cssText = "background:linear-gradient(120deg,#E91E89,#ff5fb0);color:#fff;font-weight:800;border:0;border-radius:999px;padding:9px 18px;cursor:pointer;font-family:inherit";
-        save.addEventListener("click", function () {
-          var key = (inp.value || "").trim();
-          if (!key) { inp.focus(); return; }
-          save.disabled = true; save.textContent = T("Kobler til …", "Connecting …");
-          fetch(BL_API + "/key", {
-            method: "POST", credentials: "same-origin",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ key: key }),
-          }).then(function (r) { return r.json(); }).then(function (d) {
-            if (d && d.ok && d.connected) {
-              BL_MAP = null; // tving ny henting av kontoer
-              foot.textContent = "✓ " + T("Koblet til! Lukk og åpne denne igjen for Publiser-knappene.",
-                "Connected! Close and reopen this to see the Publish buttons.");
-            } else if (d && d.ok && d.hasKey) {
-              foot.textContent = "✓ " + T(
-                "Nøkkelen er lagret. Koble til kontoene dine inne på blotato.com, så dukker Publiser opp.",
-                "Key saved. Connect your accounts inside blotato.com and Publish will appear.");
-            } else {
-              save.disabled = false; save.textContent = T("Prøv igjen", "Try again");
-              foot.insertBefore(document.createTextNode(""), foot.firstChild);
-            }
-          }).catch(function () {
-            save.disabled = false; save.textContent = T("Prøv igjen", "Try again");
-          });
-        });
-        row.appendChild(inp); row.appendChild(save);
-        foot.appendChild(lbl); foot.appendChild(hint); foot.appendChild(row);
+        renderKeyForm(foot, note);
       })
       .catch(function () { foot.textContent = generic; });
+  }
+
+  // Selve boksen for å lime inn (en ny) Blotato-nøkkel. `note` er en
+  // valgfri statuslinje over feltet (feil, mangler kontoer, e.l.).
+  function renderKeyForm(foot, note) {
+    foot.innerHTML = "";
+    if (note) {
+      var noteEl = document.createElement("div");
+      noteEl.style.cssText = "margin-bottom:10px;color:#9a4a63";
+      noteEl.textContent = note;
+      foot.appendChild(noteEl);
+    }
+    var lbl = document.createElement("div");
+    lbl.style.cssText = "margin-bottom:6px;font-weight:700;color:#C2185B";
+    lbl.textContent = T("Koble til autopublisering", "Connect auto-publishing");
+    var hint = document.createElement("div");
+    hint.style.cssText = "margin-bottom:8px;color:#9a8693;font-size:13px";
+    hint.textContent = T(
+      "Lim inn Blotato-nøkkelen din (blotato.com, under API). Den lagres trygt på serveren.",
+      "Paste your Blotato key (blotato.com, under API). It's stored safely on the server.");
+    var row = document.createElement("div");
+    row.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
+    var inp = document.createElement("input");
+    inp.type = "password"; inp.placeholder = T("Blotato-nøkkel", "Blotato key");
+    inp.style.cssText = "flex:1;min-width:180px;padding:9px 12px;border:1px solid #f0c9d8;border-radius:10px;font-family:inherit";
+    var save = document.createElement("button");
+    save.textContent = T("Lagre og koble til", "Save and connect");
+    save.style.cssText = "background:linear-gradient(120deg,#E91E89,#ff5fb0);color:#fff;font-weight:800;border:0;border-radius:999px;padding:9px 18px;cursor:pointer;font-family:inherit";
+    var msg = document.createElement("div");
+    msg.style.cssText = "margin-top:8px;font-size:13px";
+    save.addEventListener("click", function () {
+      var key = (inp.value || "").trim();
+      if (!key) { inp.focus(); return; }
+      save.disabled = true; save.textContent = T("Kobler til …", "Connecting …");
+      fetch(BL_API + "/key", {
+        method: "POST", credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: key }),
+      }).then(function (r) { return r.json(); }).then(function (d) {
+        save.disabled = false; save.textContent = T("Lagre og koble til", "Save and connect");
+        if (d && d.ok && d.connected) {
+          BL_MAP = null; // tving ny henting av kontoer
+          msg.style.color = ""; msg.textContent = "✓ " + T("Koblet til! Lukk og åpne denne igjen for Publiser-knappene.",
+            "Connected! Close and reopen this to see the Publish buttons.");
+        } else if (d && d.ok && d.warn) {
+          // Nøkkelen ble lagret, men Blotato selv avviste den (feil/utløpt).
+          // Ikke si "lagret!" som om alt er bra, vis det ekte problemet.
+          msg.style.color = "#9a4a63";
+          msg.textContent = "⚠️ " + T(d.warn, d.warn);
+        } else if (d && d.ok && d.hasKey) {
+          msg.style.color = ""; msg.textContent = "✓ " + T(
+            "Nøkkelen er lagret. Koble til kontoene dine inne på blotato.com, så dukker Publiser opp.",
+            "Key saved. Connect your accounts inside blotato.com and Publish will appear.");
+        } else {
+          msg.style.color = "#9a4a63";
+          msg.textContent = "⚠️ " + T("Blotato avviste nøkkelen" + (d && d.warn ? ": " + d.warn : "") + ". Prøv å kopiere den på nytt fra blotato.com.",
+            "Blotato rejected the key" + (d && d.warn ? ": " + d.warn : "") + ". Try copying it again from blotato.com.");
+        }
+      }).catch(function () {
+        save.disabled = false; save.textContent = T("Lagre og koble til", "Save and connect");
+        msg.style.color = "#9a4a63";
+        msg.textContent = "⚠️ " + T("Nettverksfeil. Prøv igjen.", "Network error. Try again.");
+      });
+    });
+    row.appendChild(inp); row.appendChild(save);
+    foot.appendChild(lbl); foot.appendChild(hint); foot.appendChild(row); foot.appendChild(msg);
   }
 
   // Blotato er koblet til (minst én konto). Gi en helt uavhengig knapp for å
