@@ -7,7 +7,7 @@
  *
  *   GET  /api/blotato/status    -> { owner, hasKey, connected, count }
  *   POST /api/blotato/key       -> { key }        (kun eier) lagre/fjern nøkkel
- *   POST /api/blotato/accounts  -> proxy til Blotato /accounts (kun eier)
+ *   POST /api/blotato/accounts  -> proxy til Blotato /users/me/accounts (kun eier)
  *   POST /api/blotato/publish   -> proxy til Blotato /posts   (kun eier)
  */
 import { sessionUser } from "../../_lib/access.js";
@@ -50,7 +50,10 @@ async function storedKeyInfo(env) {
 async function storedKey(env) { return (await storedKeyInfo(env)).key; }
 
 async function fetchAccounts(key) {
-  const r = await fetch(`${BLOTATO_BASE}/accounts`, {
+  // Riktig sti er /v2/users/me/accounts, IKKE /v2/accounts (som ikke
+  // finnes). Det gale endepunktet er trolig hvorfor Blotato har svart 401
+  // hele kvelden, uansett hvor riktig nøkkelen har vært.
+  const r = await fetch(`${BLOTATO_BASE}/users/me/accounts`, {
     headers: { "blotato-api-key": key, "Accept": "application/json" },
   });
   const text = await r.text();
