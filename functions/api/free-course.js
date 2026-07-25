@@ -8,6 +8,7 @@
  * etter 7 dager om den aldri bekreftes. Brukes av /gratis-youtube-kurs.
  */
 import { sendConfirmMail, sendDeliverMail, COURSE_URL } from "../_lib/free-course.js";
+import { enqueueYoutubeFollowups } from "../_lib/youtube-course-mail.js";
 
 const TOKEN_TTL = 60 * 60 * 24 * 7; // 7 dager
 
@@ -56,6 +57,8 @@ export async function onRequestGet(context) {
   let sub; try { sub = JSON.parse(raw); } catch (e) { sub = null; }
   if (sub && sub.email) {
     await sendDeliverMail(env, sub.email, sub.name, sub.lang);
+    // Køer 3-ukers oppfølgingsserien (mersalg + jevnlige e-poster fremover).
+    await enqueueYoutubeFollowups(env, sub.email, sub.name, sub.lang);
   }
   // Bekreftet: rett inn i kurset med en gang, i tillegg til e-posten hun får.
   return Response.redirect(COURSE_URL, 302);

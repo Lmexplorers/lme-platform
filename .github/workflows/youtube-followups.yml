@@ -1,0 +1,21 @@
+name: YouTube-kurs oppfølgingsmail
+
+# Trigger den daglige 3-ukers oppfølgingsserien til de som har bekreftet
+# gratis tilgang til YouTube-kurset via /gratis-youtube-kurs.
+# Kjører en gang i døgnet og kan også startes manuelt fra Actions-fanen.
+# Valgfritt: legg repo-hemmeligheten YOUTUBE_CRON_TOKEN hvis endepunktet er beskyttet.
+
+on:
+  schedule:
+    - cron: "15 9 * * *"   # daglig kl. 09:15 UTC
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger oppfølgings-køen
+        env:
+          TOKEN: ${{ secrets.YOUTUBE_CRON_TOKEN }}
+        run: |
+          curl -fsS "https://lmexplorers.com/api/cron/youtube-followups${TOKEN:+?token=$TOKEN}"
