@@ -21,7 +21,7 @@
   }
   body{background:#f2eef0;font-family:var(--font-body);}
   .toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 20px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.06);position:sticky;top:0;z-index:5;}
-  .toolbar .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--g-pink);text-decoration:none;font-size:15px;font-family:var(--font-display);}
+  .toolbar .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--g-pink);text-decoration:none;font-size:15px;font-family:var(--font-body);}
   .toolbar .brand img{width:32px;height:32px;object-fit:contain;}
   .toolbar .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
   .tbtn{border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-family:var(--font-body);cursor:pointer;text-decoration:none;font-size:14px;white-space:nowrap;}
@@ -46,19 +46,21 @@
   .gd-head{position:absolute;top:8mm;left:9mm;right:9mm;text-align:center;}
   .gd-head .l1,.gd-head .l2{font-size:6.5pt;letter-spacing:.22em;text-transform:uppercase;color:var(--g-muted);font-weight:700;font-family:var(--font-body);}
   .gd-head .l2{margin-top:1mm;color:#b9a9b3;}
-  .gd-foot{position:absolute;bottom:7mm;left:0;right:0;text-align:center;font-size:9.5pt;color:#a79fa4;font-family:var(--font-body);}
+  .gd-foot{position:absolute;bottom:7mm;left:0;right:0;text-align:center;font-size:10.5pt;font-weight:700;color:var(--g-pink);font-family:var(--font-body);}
   .gd-inner{position:absolute;top:21mm;left:16mm;right:16mm;bottom:15mm;display:flex;flex-direction:column;}
 
   /* ===== Innholdsbrikker som går igjen ===== */
   .gd-img{width:100%;height:56mm;object-fit:cover;border-radius:4mm;box-shadow:0 3mm 8mm rgba(0,0,0,.14);margin-bottom:5mm;display:block;}
-  .gd-pill{display:block;width:100%;box-sizing:border-box;text-align:center;border-radius:999px;padding:3.5mm 6mm;font-family:var(--font-display);font-weight:700;font-size:14pt;margin-bottom:5mm;}
+  /* gd-pill/gd-label er ekte overskrifter (h2/h3) i markeringen, derfor
+     Playpen Sans her, låst fontregel gjelder kun ekte overskrifter. */
+  .gd-pill{display:block;width:100%;box-sizing:border-box;text-align:center;border-radius:999px;padding:3.5mm 6mm;font-family:var(--font-display);font-weight:700;font-size:14pt;margin:0 0 5mm;}
   .gd-pill.yellow{background:var(--g-yellow);color:var(--g-ink);}
   .gd-pill.teal{background:var(--g-teal);color:#fff;}
   .gd-pill.pink{background:var(--g-pink);color:#fff;}
   .gd-text{font-family:var(--font-body);font-size:10.3pt;line-height:1.65;color:var(--g-body);margin-bottom:5mm;}
   .gd-card{background:#fff;border-radius:4mm;box-shadow:0 2mm 7mm rgba(0,0,0,.07);padding:5.5mm 7mm;margin-bottom:4.5mm;}
   .gd-card.cream{background:var(--g-cream);box-shadow:none;}
-  .gd-label{font-family:var(--font-display);font-weight:700;font-size:11.5pt;margin-bottom:3mm;display:block;}
+  .gd-label{font-family:var(--font-display);font-weight:700;font-size:11.5pt;margin:0 0 3mm;display:block;}
   .gd-label.pink{color:var(--g-pink);}
   .gd-label.teal{color:var(--g-teal);}
   .gd-q{font-size:9.8pt;font-weight:700;color:var(--g-ink);margin:0 0 2mm;}
@@ -75,7 +77,7 @@
   .gd-cover-label{font-size:9pt;letter-spacing:.14em;text-transform:uppercase;color:#9a9a9a;margin-bottom:4mm;font-family:var(--font-body);font-weight:700;}
   .gd-cover-title{font-family:var(--font-display);font-weight:800;font-size:34pt;text-transform:uppercase;line-height:1.16;color:var(--g-ink);margin-bottom:6mm;}
   .gd-cover-title em{font-style:normal;color:var(--g-pink);}
-  .gd-cover-badge{display:inline-block;background:var(--g-yellow);color:var(--g-ink);font-family:var(--font-display);font-weight:700;font-size:12.5pt;border-radius:999px;padding:3.5mm 9mm;margin-bottom:7mm;}
+  .gd-cover-badge{display:inline-block;background:var(--g-yellow);color:var(--g-ink);font-family:var(--font-body);font-weight:700;font-size:12.5pt;border-radius:999px;padding:3.5mm 9mm;margin-bottom:7mm;}
   .gd-cover-img{width:100%;max-width:150mm;height:58mm;object-fit:cover;border-radius:4mm;box-shadow:0 3mm 10mm rgba(0,0,0,.14);margin-bottom:7mm;}
   .gd-cover-card{background:#fff;border-radius:5mm;box-shadow:0 3mm 10mm rgba(0,0,0,.08);padding:6mm 10mm;max-width:150mm;margin-bottom:6mm;}
   .gd-cover-card .sub{font-size:11pt;color:var(--g-body);line-height:1.6;}
@@ -142,9 +144,9 @@
       <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="YouTube-arbeidsbok · Voks på YouTube med AI" data-en="YouTube workbook · Grow on YouTube with AI">YouTube-arbeidsbok · Voks på YouTube med AI</div></div>
       <div class="gd-inner">
         <img class="gd-img" src="/images/mia-teo-brev.webp" alt="Mia og Teo holder en glitrende velkomstbrev sammen">
-        <div class="gd-pill yellow" data-no="Velkommen" data-en="Welcome">Velkommen</div>
+        <h2 class="gd-pill yellow" data-no="Velkommen" data-en="Welcome">Velkommen</h2>
         <div class="gd-text" data-no="Hei, og velkommen inn 💕 Denne arbeidsboken er følgesvennen din gjennom kurset. Ta den frem etter hver del, svar ærlig, og kryss av etter hvert som du gjør tingene. Det er handling, ikke perfeksjon, som bygger en kanal." data-en="Hi, and welcome in 💕 This workbook is your companion through the course. Pick it up after each part, answer honestly, and check things off as you go. It's action, not perfection, that builds a channel.">Hei, og velkommen inn 💕 Denne arbeidsboken er følgesvennen din gjennom kurset. Ta den frem etter hver del, svar ærlig, og kryss av etter hvert som du gjør tingene. Det er handling, ikke perfeksjon, som bygger en kanal.</div>
-        <div class="gd-pill pink" data-no="Fem kapitler, fem uker" data-en="Five chapters, five weeks">Fem kapitler, fem uker</div>
+        <h2 class="gd-pill pink" data-no="Fem kapitler, fem uker" data-en="Five chapters, five weeks">Fem kapitler, fem uker</h2>
         <div class="gd-card">
           <ul class="gd-ul">
             <li><span class="gd-chk"></span><span data-no="① Tankesett: du trenger ikke vise ansikt eller være ekspert." data-en="① Mindset: you don't need to show your face or be an expert.">① Tankesett: du trenger ikke vise ansikt eller være ekspert.</span></li>
@@ -153,6 +155,11 @@
             <li><span class="gd-chk"></span><span data-no="④ Produksjon: la AI ta åtti prosent av jobben." data-en="④ Production: let AI take eighty percent of the job.">④ Produksjon: la AI ta åtti prosent av jobben.</span></li>
             <li><span class="gd-chk"></span><span data-no="⑤ Skaler: gjør tallene til handling og inntekt." data-en="⑤ Scale: turn the numbers into action and income.">⑤ Skaler: gjør tallene til handling og inntekt.</span></li>
           </ul>
+        </div>
+        <div class="gd-card">
+          <h3 class="gd-label pink" data-no="Mitt løfte til meg selv" data-en="My promise to myself">Mitt løfte til meg selv</h3>
+          <p class="gd-q" data-no="Hvorfor vil du starte denne kanalen? Skriv det ned, så du husker det den dagen det føles tungt." data-en="Why do you want to start this channel? Write it down, so you remember it on the day it feels hard.">Hvorfor vil du starte denne kanalen? Skriv det ned, så du husker det den dagen det føles tungt.</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
         </div>
         <div class="gd-card cream">
           <p class="gd-affirm" data-no="Du trenger ikke gjøre alt på én gang. Ett kapittel, én uke, ett steg. Det er nok." data-en="You don't need to do everything at once. One chapter, one week, one step. That's enough.">Du trenger ikke gjøre alt på én gang. Ett kapittel, én uke, ett steg. Det er nok.</p>
@@ -168,26 +175,31 @@
       <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 1 av 5" data-en="Module 1 of 5">Modul 1 av 5</div></div>
       <div class="gd-inner">
         <img class="gd-img" src="/images/banner_rolig_stund.webp" alt="Mia og Teo sitter rolige og trygge sammen i kveldslys">
-        <div class="gd-pill yellow" data-no="Modul 1: Tankesett" data-en="Module 1: Mindset">Modul 1: Tankesett</div>
+        <h2 class="gd-pill yellow" data-no="Modul 1: Tankesett" data-en="Module 1: Mindset">Modul 1: Tankesett</h2>
         <div class="gd-text" data-no="Du trenger ikke vise ansiktet ditt eller være ekspert for å starte en YouTube-kanal. En faceless kanal bruker stemme, bilder og tekst, og AI gjør at én person kan lage det som før krevde et helt team." data-en="You don't need to show your face or be an expert to start a YouTube channel. A faceless channel uses voice, images and text, and AI means one person can make what used to require a whole team.">Du trenger ikke vise ansiktet ditt eller være ekspert for å starte en YouTube-kanal. En faceless kanal bruker stemme, bilder og tekst, og AI gjør at én person kan lage det som før krevde et helt team.</div>
 
         <div class="gd-card">
-          <span class="gd-label pink" data-no="Refleksjon" data-en="Reflection">Refleksjon</span>
+          <h3 class="gd-label pink" data-no="Refleksjon" data-en="Reflection">Refleksjon</h3>
           <p class="gd-q" data-no="Hvilken unnskyldning kjenner du deg mest igjen i, «for overfylt», «kan ikke redigere», «ikke teknisk» eller «har ikke tid»?" data-en="Which excuse do you recognise most in yourself, “too crowded”, “can't edit”, “not technical” or “no time”?">Hvilken unnskyldning kjenner du deg mest igjen i, «for overfylt», «kan ikke redigere», «ikke teknisk» eller «har ikke tid»?</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+          <p class="gd-q" style="margin-top:4mm;" data-no="Hva ville en YouTube-kanal gjøre for deg og LME-reisen din, om den lyktes?" data-en="What would a YouTube channel do for you and your LME journey, if it worked?">Hva ville en YouTube-kanal gjøre for deg og LME-reisen din, om den lyktes?</p>
           <div class="gd-line"></div><div class="gd-line"></div>
         </div>
 
         <div class="gd-card">
-          <span class="gd-label teal" data-no="Sjekkliste" data-en="Checklist">Sjekkliste</span>
+          <h3 class="gd-label teal" data-no="Sjekkliste" data-en="Checklist">Sjekkliste</h3>
           <ul class="gd-ul">
             <li><span class="gd-chk"></span><span data-no="Jeg har sett de to første leksjonene i kurset." data-en="I have watched the first two lessons of the course.">Jeg har sett de to første leksjonene i kurset.</span></li>
-            <li><span class="gd-chk"></span><span data-no="Jeg har svart ærlig på refleksjonsspørsmålet over." data-en="I have answered the reflection question above honestly.">Jeg har svart ærlig på refleksjonsspørsmålet over.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Jeg har svart ærlig på begge refleksjonsspørsmålene over." data-en="I have answered both reflection questions above honestly.">Jeg har svart ærlig på begge refleksjonsspørsmålene over.</span></li>
             <li><span class="gd-chk"></span><span data-no="Jeg har bestemt meg for å ta det første steget." data-en="I have decided to take the first step.">Jeg har bestemt meg for å ta det første steget.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Jeg har satt av tretti minutter denne uken til kanalen." data-en="I have set aside thirty minutes this week for the channel.">Jeg har satt av tretti minutter denne uken til kanalen.</span></li>
           </ul>
         </div>
 
         <div class="gd-card cream">
-          <p class="gd-affirm" data-no="Denne ukens steg: skriv ned unnskyldningen din, og hvorfor den ikke lenger holder vann." data-en="This week's step: write down your excuse, and why it no longer holds up.">Denne ukens steg: skriv ned unnskyldningen din, og hvorfor den ikke lenger holder vann.</p>
+          <h3 class="gd-label teal" data-no="Denne ukens steg" data-en="This week's step">Denne ukens steg</h3>
+          <p class="gd-q" data-no="Skriv ned unnskyldningen din, og hvorfor den ikke lenger holder vann." data-en="Write down your excuse, and why it no longer holds up.">Skriv ned unnskyldningen din, og hvorfor den ikke lenger holder vann.</p>
+          <div class="gd-line"></div>
         </div>
       </div>
       <div class="gd-foot">— 3 —</div>
@@ -200,26 +212,31 @@
       <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 2 av 5" data-en="Module 2 of 5">Modul 2 av 5</div></div>
       <div class="gd-inner">
         <img class="gd-img" src="/images/banner_laer.webp" alt="Mia og Teo utforsker med forstørrelsesglass">
-        <div class="gd-pill yellow" data-no="Modul 2: Finn en lønnsom nisje" data-en="Module 2: Find a profitable niche">Modul 2: Finn en lønnsom nisje</div>
+        <h2 class="gd-pill yellow" data-no="Modul 2: Finn en lønnsom nisje" data-en="Module 2: Find a profitable niche">Modul 2: Finn en lønnsom nisje</h2>
         <div class="gd-text" data-no="Den vanligste grunnen til at nybegynnere mislykkes, er feil nisje. Se på YouTube som en markedsplass, ikke en scene. En lovende nisje har som regel en kanal under hundre tusen abonnenter med en video over hundre tusen visninger, startet de siste seks månedene." data-en="The most common reason beginners fail is the wrong niche. See YouTube as a marketplace, not a stage. A promising niche usually has a channel under a hundred thousand subscribers with a video over a hundred thousand views, started in the last six months.">Den vanligste grunnen til at nybegynnere mislykkes, er feil nisje. Se på YouTube som en markedsplass, ikke en scene. En lovende nisje har som regel en kanal under hundre tusen abonnenter med en video over hundre tusen visninger, startet de siste seks månedene.</div>
 
         <div class="gd-card">
-          <span class="gd-label pink" data-no="Refleksjon" data-en="Reflection">Refleksjon</span>
-          <p class="gd-q" data-no="Skriv ned tre temaer du kunne laget femti videoer om. Hvilket har du sett flest små kanaler vokse raskt i?" data-en="Write down three topics you could make fifty videos about. Which have you seen the most small channels grow quickly in?">Skriv ned tre temaer du kunne laget femti videoer om. Hvilket har du sett flest små kanaler vokse raskt i?</p>
+          <h3 class="gd-label pink" data-no="Refleksjon" data-en="Reflection">Refleksjon</h3>
+          <p class="gd-q" data-no="Skriv ned tre temaer du kunne laget femti videoer om." data-en="Write down three topics you could make fifty videos about.">Skriv ned tre temaer du kunne laget femti videoer om.</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+          <p class="gd-q" style="margin-top:4mm;" data-no="Hvilket av dem har du sett flest små kanaler vokse raskt i den siste tiden?" data-en="Which of them have you seen the most small channels grow quickly in lately?">Hvilket av dem har du sett flest små kanaler vokse raskt i den siste tiden?</p>
           <div class="gd-line"></div><div class="gd-line"></div>
         </div>
 
         <div class="gd-card">
-          <span class="gd-label teal" data-no="Sjekkliste for en god nisje" data-en="Checklist for a good niche">Sjekkliste for en god nisje</span>
+          <h3 class="gd-label teal" data-no="Sjekkliste for en god nisje" data-en="Checklist for a good niche">Sjekkliste for en god nisje</h3>
           <ul class="gd-ul">
             <li><span class="gd-chk"></span><span data-no="Jeg har funnet en kanal under 100 000 abonnenter med en video over 100 000 visninger." data-en="I have found a channel under 100,000 subscribers with a video over 100,000 views.">Jeg har funnet en kanal under 100 000 abonnenter med en video over 100 000 visninger.</span></li>
             <li><span class="gd-chk"></span><span data-no="Kanalen er startet nylig og vokser jevnt." data-en="The channel was started recently and is growing steadily.">Kanalen er startet nylig og vokser jevnt.</span></li>
             <li><span class="gd-chk"></span><span data-no="Innholdet er lett å gjenskape uten å vise ansikt." data-en="The content is easy to recreate without showing your face.">Innholdet er lett å gjenskape uten å vise ansikt.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Andre små kanaler i samme nisje får også visninger." data-en="Other small channels in the same niche are getting views too.">Andre små kanaler i samme nisje får også visninger.</span></li>
           </ul>
         </div>
 
         <div class="gd-card cream">
-          <p class="gd-affirm" data-no="Denne ukens steg: søk opp temaet ditt på en fersk konto, og skriv ned de tre kanalene YouTube anbefaler deg oftest." data-en="This week's step: search your topic on a fresh account, and write down the three channels YouTube recommends you most often.">Denne ukens steg: søk opp temaet ditt på en fersk konto, og skriv ned de tre kanalene YouTube anbefaler deg oftest.</p>
+          <h3 class="gd-label teal" data-no="Denne ukens steg" data-en="This week's step">Denne ukens steg</h3>
+          <p class="gd-q" data-no="Søk opp temaet ditt på en fersk konto, og skriv ned de tre kanalene YouTube anbefaler deg oftest." data-en="Search your topic on a fresh account, and write down the three channels YouTube recommends you most often.">Søk opp temaet ditt på en fersk konto, og skriv ned de tre kanalene YouTube anbefaler deg oftest.</p>
+          <div class="gd-line"></div>
         </div>
       </div>
       <div class="gd-foot">— 4 —</div>
@@ -232,26 +249,31 @@
       <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 3 av 5" data-en="Module 3 of 5">Modul 3 av 5</div></div>
       <div class="gd-inner">
         <img class="gd-img" src="/images/courses/course_farger_og_former.webp" alt="Mia og Teo leker med farger og former">
-        <div class="gd-pill yellow" data-no="Modul 3: Idé og pakking" data-en="Module 3: Idea and packaging">Modul 3: Idé og pakking</div>
+        <h2 class="gd-pill yellow" data-no="Modul 3: Idé og pakking" data-en="Module 3: Idea and packaging">Modul 3: Idé og pakking</h2>
         <div class="gd-text" data-no="Når nisjen er på plass, avgjøres nesten alt av tittelen og miniatyrbildet. Ikke finn opp hjulet, modeller det som allerede har vunnet. Gode titler er brede og under seksti tegn, og gode miniatyrbilder har to til tre fokuspunkter og tydelig kontrast." data-en="Once the niche is in place, almost everything is decided by the title and the thumbnail. Don't reinvent the wheel, model what has already won. Good titles are broad and under sixty characters, and good thumbnails have two to three focal points and clear contrast.">Når nisjen er på plass, avgjøres nesten alt av tittelen og miniatyrbildet. Ikke finn opp hjulet, modeller det som allerede har vunnet. Gode titler er brede og under seksti tegn, og gode miniatyrbilder har to til tre fokuspunkter og tydelig kontrast.</div>
 
         <div class="gd-card">
-          <span class="gd-label pink" data-no="Refleksjon" data-en="Reflection">Refleksjon</span>
-          <p class="gd-q" data-no="Skriv tre titler til din første video. Er de brede nok, og under seksti tegn?" data-en="Write three titles for your first video. Are they broad enough, and under sixty characters?">Skriv tre titler til din første video. Er de brede nok, og under seksti tegn?</p>
+          <h3 class="gd-label pink" data-no="Refleksjon" data-en="Reflection">Refleksjon</h3>
+          <p class="gd-q" data-no="Finn tre miniatyrbilder i nisjen din. Hvilket ville du klikket på, og hvorfor?" data-en="Find three thumbnails in your niche. Which would you click on, and why?">Finn tre miniatyrbilder i nisjen din. Hvilket ville du klikket på, og hvorfor?</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+          <p class="gd-q" style="margin-top:4mm;" data-no="Skriv tre titler til din første video. Er de brede nok, og under seksti tegn?" data-en="Write three titles for your first video. Are they broad enough, and under sixty characters?">Skriv tre titler til din første video. Er de brede nok, og under seksti tegn?</p>
           <div class="gd-line"></div><div class="gd-line"></div>
         </div>
 
         <div class="gd-card">
-          <span class="gd-label teal" data-no="Sjekkliste for god pakking" data-en="Checklist for good packaging">Sjekkliste for god pakking</span>
+          <h3 class="gd-label teal" data-no="Sjekkliste for god pakking" data-en="Checklist for good packaging">Sjekkliste for god pakking</h3>
           <ul class="gd-ul">
             <li><span class="gd-chk"></span><span data-no="Tittelen er bred nok til at mange vil klikke." data-en="The title is broad enough that many will click.">Tittelen er bred nok til at mange vil klikke.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Tittelen er under seksti tegn så den ikke kuttes." data-en="The title is under sixty characters so it doesn't get cut off.">Tittelen er under seksti tegn så den ikke kuttes.</span></li>
             <li><span class="gd-chk"></span><span data-no="Miniatyrbildet har to til tre fokuspunkter og god kontrast." data-en="The thumbnail has two to three focal points and good contrast.">Miniatyrbildet har to til tre fokuspunkter og god kontrast.</span></li>
             <li><span class="gd-chk"></span><span data-no="Tittel og bilde lover én ting, og videoen holder løftet." data-en="The title and image promise one thing, and the video keeps that promise.">Tittel og bilde lover én ting, og videoen holder løftet.</span></li>
           </ul>
         </div>
 
         <div class="gd-card cream">
-          <p class="gd-affirm" data-no="Denne ukens steg: bruk «Pakking»-oppskriften i kurset til å få ti titler og en miniatyr-idé." data-en="This week's step: use the “Packaging” recipe in the course to get ten titles and a thumbnail idea.">Denne ukens steg: bruk «Pakking»-oppskriften i kurset til å få ti titler og en miniatyr-idé.</p>
+          <h3 class="gd-label teal" data-no="Denne ukens steg" data-en="This week's step">Denne ukens steg</h3>
+          <p class="gd-q" data-no="Bruk «Pakking»-oppskriften i kurset til å få ti titler og en miniatyr-idé." data-en="Use the “Packaging” recipe in the course to get ten titles and a thumbnail idea.">Bruk «Pakking»-oppskriften i kurset til å få ti titler og en miniatyr-idé.</p>
+          <div class="gd-line"></div>
         </div>
       </div>
       <div class="gd-foot">— 5 —</div>
@@ -264,26 +286,31 @@
       <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 4 av 5" data-en="Module 4 of 5">Modul 4 av 5</div></div>
       <div class="gd-inner">
         <img class="gd-img" src="/images/courses/course_praktisk_liv.webp" alt="Mia og Teo jobber rolig og metodisk sammen, steg for steg">
-        <div class="gd-pill yellow" data-no="Modul 4: AI og produksjon" data-en="Module 4: AI and production">Modul 4: AI og produksjon</div>
+        <h2 class="gd-pill yellow" data-no="Modul 4: AI og produksjon" data-en="Module 4: AI and production">Modul 4: AI og produksjon</h2>
         <div class="gd-text" data-no="Manus er ryggraden i videoen. Claude skriver et helt manus på tjue minutter når du gir den et vinnende manus som referanse. Stemmen lager du med et AI-verktøy, og bilder henter eller lager du med AI. Åtti prosent av jobben kan nå gjøres med AI." data-en="The script is the backbone of the video. Claude writes a full script in twenty minutes when you give it a winning script as a reference. You make the voice with an AI tool, and source or create images with AI. Eighty percent of the job can now be done with AI.">Manus er ryggraden i videoen. Claude skriver et helt manus på tjue minutter når du gir den et vinnende manus som referanse. Stemmen lager du med et AI-verktøy, og bilder henter eller lager du med AI. Åtti prosent av jobben kan nå gjøres med AI.</div>
 
         <div class="gd-card">
-          <span class="gd-label pink" data-no="Refleksjon" data-en="Reflection">Refleksjon</span>
+          <h3 class="gd-label pink" data-no="Refleksjon" data-en="Reflection">Refleksjon</h3>
           <p class="gd-q" data-no="Hvilket produksjonssteg gruer du deg mest til? Hva kan AI ta av det for deg?" data-en="Which production step do you dread the most? What can AI take off your hands?">Hvilket produksjonssteg gruer du deg mest til? Hva kan AI ta av det for deg?</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+          <p class="gd-q" style="margin-top:4mm;" data-no="Hva er de første femten sekundene i videoen din, kroken din?" data-en="What are the first fifteen seconds of your video, your hook?">Hva er de første femten sekundene i videoen din, kroken din?</p>
           <div class="gd-line"></div><div class="gd-line"></div>
         </div>
 
         <div class="gd-card">
-          <span class="gd-label teal" data-no="Sjekkliste for produksjon" data-en="Checklist for production">Sjekkliste for produksjon</span>
+          <h3 class="gd-label teal" data-no="Sjekkliste for produksjon" data-en="Checklist for production">Sjekkliste for produksjon</h3>
           <ul class="gd-ul">
             <li><span class="gd-chk"></span><span data-no="Jeg har brukt «Manus»-oppskriften og fått et utkast fra Claude." data-en="I have used the “Script” recipe and gotten a draft from Claude.">Jeg har brukt «Manus»-oppskriften og fått et utkast fra Claude.</span></li>
             <li><span class="gd-chk"></span><span data-no="Jeg har testet flere varianter av kroken." data-en="I have tested several variations of the hook.">Jeg har testet flere varianter av kroken.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Jeg har laget en tavle med kolonnene idé, manus, stemme, redigering, publisert." data-en="I have made a board with the columns idea, script, voice, editing, published.">Jeg har laget en tavle med kolonnene idé, manus, stemme, redigering, publisert.</span></li>
             <li><span class="gd-chk"></span><span data-no="Jeg vet hvilke steg jeg gjør selv, og hvilke AI kan ta." data-en="I know which steps I do myself, and which AI can take.">Jeg vet hvilke steg jeg gjør selv, og hvilke AI kan ta.</span></li>
           </ul>
         </div>
 
         <div class="gd-card cream">
-          <p class="gd-affirm" data-no="Denne ukens steg: skriv det aller første manuset ditt med Claude, klart for redigering i LME Reel Studio." data-en="This week's step: write your very first script with Claude, ready for editing in LME Reel Studio.">Denne ukens steg: skriv det aller første manuset ditt med Claude, klart for redigering i LME Reel Studio.</p>
+          <h3 class="gd-label teal" data-no="Denne ukens steg" data-en="This week's step">Denne ukens steg</h3>
+          <p class="gd-q" data-no="Skriv det aller første manuset ditt med Claude, klart for redigering i LME Reel Studio." data-en="Write your very first script with Claude, ready for editing in LME Reel Studio.">Skriv det aller første manuset ditt med Claude, klart for redigering i LME Reel Studio.</p>
+          <div class="gd-line"></div>
         </div>
       </div>
       <div class="gd-foot">— 6 —</div>
@@ -296,26 +323,31 @@
       <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 5 av 5" data-en="Module 5 of 5">Modul 5 av 5</div></div>
       <div class="gd-inner">
         <img class="gd-img" src="/images/courses/course_tall_og_telling.webp" alt="Mia og Teo teller og ser mengden vokse">
-        <div class="gd-pill yellow" data-no="Modul 5: Skaler og tjen penger" data-en="Module 5: Scale and earn money">Modul 5: Skaler og tjen penger</div>
+        <h2 class="gd-pill yellow" data-no="Modul 5: Skaler og tjen penger" data-en="Module 5: Scale and earn money">Modul 5: Skaler og tjen penger</h2>
         <div class="gd-text" data-no="En kanal kan tjene penger på flere måter samtidig: annonser, sponsing og dine egne produkter fra dag én. For deg i LME er det siste ekstra sterkt, kanalen kan sende folk rett til kursene, bøkene og fellesskapet ditt. Start med én nisje, og skaler først når den funker." data-en="A channel can earn money in several ways at once: ads, sponsorships and your own products from day one. For you at LME, that last one is especially powerful, the channel can send people straight to your courses, books and community. Start with one niche, and scale only once it works.">En kanal kan tjene penger på flere måter samtidig: annonser, sponsing og dine egne produkter fra dag én. For deg i LME er det siste ekstra sterkt, kanalen kan sende folk rett til kursene, bøkene og fellesskapet ditt. Start med én nisje, og skaler først når den funker.</div>
 
         <div class="gd-card">
-          <span class="gd-label pink" data-no="Refleksjon" data-en="Reflection">Refleksjon</span>
+          <h3 class="gd-label pink" data-no="Refleksjon" data-en="Reflection">Refleksjon</h3>
           <p class="gd-q" data-no="Hvilket eget produkt eller tjeneste kunne kanalen din sendt folk videre til?" data-en="Which of your own products or services could your channel send people on to?">Hvilket eget produkt eller tjeneste kunne kanalen din sendt folk videre til?</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+          <p class="gd-q" style="margin-top:4mm;" data-no="Om tre måneder, hva er ett tall du vil se ha gått opp?" data-en="In three months, what's one number you want to see go up?">Om tre måneder, hva er ett tall du vil se ha gått opp?</p>
           <div class="gd-line"></div><div class="gd-line"></div>
         </div>
 
         <div class="gd-card">
-          <span class="gd-label teal" data-no="Sjekkliste for å komme i gang" data-en="Checklist to get going">Sjekkliste for å komme i gang</span>
+          <h3 class="gd-label teal" data-no="Sjekkliste for å komme i gang" data-en="Checklist to get going">Sjekkliste for å komme i gang</h3>
           <ul class="gd-ul">
             <li><span class="gd-chk"></span><span data-no="Jeg har valgt min nisje for denne runden." data-en="I have chosen my niche for this round.">Jeg har valgt min nisje for denne runden.</span></li>
             <li><span class="gd-chk"></span><span data-no="Jeg har publisert, eller planlagt, min første video." data-en="I have published, or planned, my first video.">Jeg har publisert, eller planlagt, min første video.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Jeg vet hvor kanalen skal sende folk videre i LME." data-en="I know where the channel should send people on to in LME.">Jeg vet hvor kanalen skal sende folk videre i LME.</span></li>
             <li><span class="gd-chk"></span><span data-no="Jeg har satt en dato for å sjekke tallene igjen." data-en="I have set a date to check the numbers again.">Jeg har satt en dato for å sjekke tallene igjen.</span></li>
           </ul>
         </div>
 
         <div class="gd-card cream">
-          <p class="gd-affirm" data-no="Denne ukens steg: velg nisjen din. Det er nok til å være i gang." data-en="This week's step: choose your niche. That's enough to be underway.">Denne ukens steg: velg nisjen din. Det er nok til å være i gang.</p>
+          <h3 class="gd-label teal" data-no="Denne ukens steg" data-en="This week's step">Denne ukens steg</h3>
+          <p class="gd-q" data-no="Velg nisjen din. Det er nok til å være i gang." data-en="Choose your niche. That's enough to be underway.">Velg nisjen din. Det er nok til å være i gang.</p>
+          <div class="gd-line"></div>
         </div>
       </div>
       <div class="gd-foot">— 7 —</div>
@@ -328,7 +360,7 @@
       <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Veien videre" data-en="What's next">Veien videre</div></div>
       <div class="gd-inner">
         <img class="gd-img" src="/images/hero_learning_tree.webp" alt="Mia og Teo ser utover et vidt landskap fra tretoppen">
-        <div class="gd-pill yellow" data-no="Du har systemet nå 🌸" data-en="You have the system now 🌸">Du har systemet nå 🌸</div>
+        <h2 class="gd-pill yellow" data-no="Du har systemet nå 🌸" data-en="You have the system now 🌸">Du har systemet nå 🌸</h2>
         <div class="gd-text" data-no="Du trenger ikke se hele trappen for å ta det første trinnet. Gå tilbake til denne arbeidsboken når du trenger et lite dytt, og krysse av etter hvert som du går." data-en="You don't need to see the whole staircase to take the first step. Come back to this workbook whenever you need a little push, and check things off as you go.">Du trenger ikke se hele trappen for å ta det første trinnet. Gå tilbake til denne arbeidsboken når du trenger et lite dytt, og krysse av etter hvert som du går.</div>
 
         <div class="gd-close-card teal">
@@ -342,6 +374,11 @@
         <div class="gd-close-card orange">
           <h3 data-no="Jeg heier på deg" data-en="I'm cheering you on">Jeg heier på deg</h3>
           <p data-no="Klem fra meg, Renate." data-en="Warm wishes, Renate.">Klem fra meg, Renate.</p>
+        </div>
+        <div class="gd-card">
+          <h3 class="gd-label pink" data-no="Mitt første steg" data-en="My first step">Mitt første steg</h3>
+          <p class="gd-q" data-no="Skriv ned det ene du vil starte med denne uken." data-en="Write down the one thing you want to start with this week.">Skriv ned det ene du vil starte med denne uken.</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
         </div>
         <div class="gd-card cream" style="margin-top:1mm;">
           <p class="gd-affirm" data-no="Klar for verktøyene som gjør produksjonen enklere? Se dem på lmexplorers.com/oppgrader" data-en="Ready for the tools that make production easier? See them at lmexplorers.com/oppgrader">Klar for verktøyene som gjør produksjonen enklere? Se dem på lmexplorers.com/oppgrader</p>
