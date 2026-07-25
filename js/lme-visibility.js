@@ -322,28 +322,45 @@
     var label = goBtn.innerHTML;
     goBtn.innerHTML = '<span class="lme-vis-sp"></span> ' + T("Lager…", "Creating…");
     resultsEl.innerHTML = "";
-    // Hent Blotato-kontoene i parallell så publiser-knappene er klare.
-    Promise.all([
-      // Bruker Pages-funksjonen på samme domene (deployer med siden), ikke den
-      // separate workeren, så "Gjør synlig" alltid er oppdatert og tilgjengelig.
-      fetch("/api/ai/repurpose", {
+
+    // Bruker Pages-funksjonen på samme domene (deployer med siden), ikke den
+    // separate workeren, så "Gjør synlig" alltid er oppdatert og tilgjengelig.
+    function repurposeOnce() {
+      return fetch("/api/ai/repurpose", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ article: article.slice(0, 6000), lang: lang() }),
       }).then(function (r) {
         return r.text().then(function (t) {
           var j = null; try { j = JSON.parse(t); } catch (e) {}
           if (!j) {
-            // Ikke JSON = plattform-feil (Cloudflare), ikke vår funksjon. Skjer
-            // typisk hvis genereringen tok for lang tid. Vis en rolig beskjed.
+            // Ikke JSON = plattform-feil (Cloudflare eller mobilnettet), ikke vår
+            // funksjon. Skjer typisk ved et treigt/ustabilt nett. Merkes som
+            // "retriable" så vi kan prøve automatisk en gang til under panseret.
             var slow = r.status === 502 || r.status === 504 || r.status === 524;
-            throw new Error(slow
+            var err = new Error(slow
               ? T("Det tok litt for lang tid denne gangen. Prøv en gang til.", "That took a little too long this time. Please try once more.")
               : "[repurpose " + r.status + "]");
+            err.retriable = slow;
+            throw err;
           }
           if (j.error) throw new Error("[" + (j.error) + (j.detail ? ": " + String(j.detail).slice(0, 80) : "") + "]");
           return j;
         });
-      }),
+      });
+    }
+    // Ett stille forsøk til ved en treig/ustabil forbindelse, så ikke hver
+    // eneste liten hikke i nettet tvinger Renate til å trykke på nytt selv.
+    function repurposeWithRetry() {
+      return repurposeOnce().catch(function (e) {
+        if (!e || !e.retriable) throw e;
+        goBtn.innerHTML = '<span class="lme-vis-sp"></span> ' + T("Prøver igjen…", "Trying again…");
+        return new Promise(function (res) { setTimeout(res, 900); }).then(repurposeOnce);
+      });
+    }
+
+    // Hent Blotato-kontoene i parallell så publiser-knappene er klare.
+    Promise.all([
+      repurposeWithRetry(),
       fetchBlAccounts(),
     ]).then(function (arr) {
       var d = arr[0];

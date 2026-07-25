@@ -45,7 +45,11 @@ const langName = (l) => (l === "en" ? "English" : "norsk (bokmål)");
 // hvert svar raskt, veggklokka omtrent halveres, og vi holder oss trygt
 // innenfor tidsgrensen. Rask modell, hard timeout per kall.
 const MODEL = "claude-haiku-4-5-20251001";
-const CALL_TIMEOUT_MS = 20000;
+// Kortere enn før: jo lenger vi venter, jo større sjanse for at NOE i kjeden
+// (Cloudflare, mobilnettet hennes, eller Anthropic) rekker å gi opp først.
+// Bedre å feile raskt og rent (egen JSON) enn å risikere at noen andre
+// avbryter oss stygt (HTML-502) mens vi venter.
+const CALL_TIMEOUT_MS = 14000;
 
 // Feltbeskrivelsene "Gjør synlig" viser, delt i to grupper for to parallelle kall.
 const CH = {
@@ -98,11 +102,14 @@ async function callClaude(env, system, userPrompt, maxTokens) {
 }
 
 function promptFor(b, keys) {
-  const src = (b.article || b.source || "").slice(0, 6000);
+  // Kortere kildetekst = færre input-tokens = raskere første token tilbake.
+  // 6000 var mer enn nok her, det som teller er ingress/poeng, ikke hele
+  // artikkelen ord for ord.
+  const src = (b.article || b.source || "").slice(0, 3000);
   const fields = keys.map((k) => CH[k]).join(",");
   return `Språk: ${langName(b.lang)}.
 Kilde (artikkel/utdrag): "${src}".
-Omform denne ene kilden til ferdige, publiseringsklare kanaler. Returner KUN gyldig JSON med NØYAKTIG disse feltene: {${fields}}.
+Omform denne ene kilden til KORTE, ferdige, publiseringsklare kanaler. Returner KUN gyldig JSON med NØYAKTIG disse feltene: {${fields}}.
 Behold LMEs varme, pedagogiske tone. Følg de norske skrivereglene (rette anførselstegn, ingen tankestreker, riktig kolon- og kommabruk). ALDRI dikt opp løfter eller tall som ikke står i kilden. Ingen tekst utenfor JSON.`;
 }
 
@@ -127,7 +134,7 @@ export async function onRequestPost(context) {
   // andre (delvis er bedre enn ingenting). Bare hvis begge feiler gir vi 502.
   const settled = await Promise.all(GROUPS.map(async (keys) => {
     try {
-      return parseObj(await callClaude(env, system, promptFor(body, keys), 1400));
+      return parseObj(await callClaude(env, system, promptFor(body, keys), 1000));
     } catch (e) {
       return { __err: (e && e.message) || "feil" };
     }
