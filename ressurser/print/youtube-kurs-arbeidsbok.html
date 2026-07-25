@@ -26,12 +26,10 @@
   .bk-sheet{width:210mm;min-height:297mm;height:auto;margin:0 auto 22px;overflow:visible;}
   .bk-sheet .pg-inner{position:static;padding:15mm 15mm 12mm;}
 
-  .icon-badge{width:26mm;height:26mm;border-radius:20%;display:flex;align-items:center;justify-content:center;margin-bottom:5mm;}
-  .icon-badge svg{width:14mm;height:14mm;}
+  .pg-illus{width:100%;height:52mm;object-fit:cover;border-radius:var(--r-md);box-shadow:var(--shadow-sm);margin-bottom:6mm;display:block;}
 
   .cover-sheet .pg-inner{align-items:center;justify-content:center;text-align:center;}
-  .cover-badge{width:38mm;height:38mm;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 8mm;background:var(--pink-100);}
-  .cover-badge svg{width:20mm;height:20mm;}
+  .cover-illus{width:100%;height:70mm;object-fit:cover;border-radius:var(--r-lg);box-shadow:var(--shadow-md);margin-bottom:7mm;display:block;}
   .cover-kicker{display:inline-block;background:var(--pink-100);color:var(--cerise-deep);font-weight:700;font-size:9.5pt;letter-spacing:.06em;text-transform:uppercase;padding:2mm 5mm;border-radius:999px;margin-bottom:5mm;font-family:var(--font-body);}
   .cover-title{font-family:var(--font-sasson);font-size:26pt;line-height:1.15;color:var(--ink);margin-bottom:4mm;}
   .cover-title em{font-style:italic;color:var(--cerise);}
@@ -62,6 +60,7 @@
   .wb-action p{font-size:9.7pt;line-height:1.6;color:var(--brown);font-weight:700;}
 
   .closing-sheet .pg-inner{align-items:center;justify-content:center;text-align:center;}
+  .closing-illus{width:100%;max-width:150mm;height:65mm;object-fit:cover;border-radius:var(--r-lg);box-shadow:var(--shadow-md);margin-bottom:7mm;display:block;}
   .closing-box{background:var(--pink-50);border:1px solid var(--line);border-radius:var(--r-md);padding:10mm 12mm;max-width:150mm;}
   .closing-box h2{font-family:var(--font-sasson);font-size:16pt;color:var(--cerise);margin-bottom:4mm;}
   .closing-box p{font-size:10.5pt;line-height:1.7;}
@@ -92,9 +91,7 @@
 
     <!-- ===== FORSIDE ===== -->
     <div class="bk-sheet cover-sheet"><div class="pg-inner">
-      <div class="cover-badge">
-        <svg viewBox="0 0 48 48" fill="none"><path d="M24 4c6 5 9 12 9 20 0 5-2 9-5 12l-1-7-3 3-3-3-1 7c-3-3-5-7-5-12 0-8 3-15 9-20z" stroke="#d6336c" stroke-width="2.4" stroke-linejoin="round"/><circle cx="24" cy="20" r="3.2" stroke="#d6336c" stroke-width="2.2"/><path d="M14 34l-3 8M34 34l3 8" stroke="#d6336c" stroke-width="2.2" stroke-linecap="round"/></svg>
-      </div>
+      <img class="cover-illus" src="/images/banner_eventyr.webp" alt="Mia og Teo ved et veiskille i skogen, klare for et nytt eventyr">
       <div class="cover-kicker" data-no="Arbeidsbok · følger kurset" data-en="Workbook · follows the course">Arbeidsbok · følger kurset</div>
       <h1 class="cover-title" data-no="Voks på YouTube med <em>AI</em>" data-en="Grow on YouTube with <em>AI</em>">Voks på YouTube med <em>AI</em></h1>
       <p class="cover-sub" data-no="Din arbeidsbok gjennom kurset. Ett kapittel per del, med refleksjon, sjekkliste og ett konkret steg du kan ta denne uken." data-en="Your workbook through the course. One chapter per part, with reflection, a checklist and one concrete step you can take this week.">Din arbeidsbok gjennom kurset. Ett kapittel per del, med refleksjon, sjekkliste og ett konkret steg du kan ta denne uken.</p>
@@ -115,9 +112,7 @@
 
     <!-- ===== KAPITTEL 1: TANKESETT ===== -->
     <div class="bk-sheet"><div class="pg-inner">
-      <div class="icon-badge" style="background:var(--pink-100)">
-        <svg viewBox="0 0 48 48" fill="none"><path d="M24 6a12 12 0 00-6 22c1.4 1 2 2.3 2 4v2h8v-2c0-1.7.6-3 2-4a12 12 0 00-6-22z" stroke="#d6336c" stroke-width="2.3" stroke-linejoin="round"/><path d="M20 40h8M21 36h6" stroke="#d6336c" stroke-width="2.3" stroke-linecap="round"/></svg>
-      </div>
+      <img class="pg-illus" src="/images/banner_rolig_stund.webp" alt="Mia og Teo sitter rolige og trygge sammen i kveldslys">
       <span class="module-kick" data-no="Modul 1" data-en="Module 1">Modul 1</span>
       <div class="pg-head" data-no="Tankesett" data-en="Mindset">Tankesett</div>
       <div class="pg-body">
@@ -150,9 +145,7 @@
 
     <!-- ===== KAPITTEL 2: NISJE ===== -->
     <div class="bk-sheet"><div class="pg-inner">
-      <div class="icon-badge" style="background:var(--blue-100)">
-        <svg viewBox="0 0 48 48" fill="none"><circle cx="22" cy="22" r="13" stroke="#1c6fa8" stroke-width="2.3"/><circle cx="22" cy="22" r="6.5" stroke="#1c6fa8" stroke-width="2.3"/><circle cx="22" cy="22" r="1.6" fill="#1c6fa8"/><path d="M31 31l9 9" stroke="#1c6fa8" stroke-width="2.6" stroke-linecap="round"/></svg>
-      </div>
+      <img class="pg-illus" src="/images/banner_laer.webp" alt="Mia og Teo utforsker med forstørrelsesglass">
       <span class="module-kick" data-no="Pilar 1" data-en="Pillar 1">Pilar 1</span>
       <div class="pg-head" data-no="Finn en lønnsom nisje" data-en="Find a profitable niche">Finn en lønnsom nisje</div>
       <div class="pg-body">
@@ -186,9 +179,7 @@
 
     <!-- ===== KAPITTEL 3: PAKKING ===== -->
     <div class="bk-sheet"><div class="pg-inner">
-      <div class="icon-badge" style="background:var(--lime-100)">
-        <svg viewBox="0 0 48 48" fill="none"><rect x="8" y="18" width="32" height="20" rx="2.5" stroke="#5a7d1a" stroke-width="2.3"/><path d="M8 24h32" stroke="#5a7d1a" stroke-width="2.3"/><path d="M24 18v20M17 18l3-8h8l3 8" stroke="#5a7d1a" stroke-width="2.3" stroke-linejoin="round"/></svg>
-      </div>
+      <img class="pg-illus" src="/images/courses/course_farger_og_former.webp" alt="Mia og Teo leker med farger og former">
       <span class="module-kick" data-no="Pilar 2" data-en="Pillar 2">Pilar 2</span>
       <div class="pg-head" data-no="Idé og pakking" data-en="Idea and packaging">Idé og pakking</div>
       <div class="pg-body">
@@ -222,9 +213,7 @@
 
     <!-- ===== KAPITTEL 4: PRODUKSJON ===== -->
     <div class="bk-sheet"><div class="pg-inner">
-      <div class="icon-badge" style="background:var(--lemon-100)">
-        <svg viewBox="0 0 48 48" fill="none"><rect x="7" y="16" width="34" height="24" rx="2.5" stroke="#8a6d00" stroke-width="2.3"/><path d="M7 22h34M12 16l3-6M22 16l3-6M32 16l3-6" stroke="#8a6d00" stroke-width="2.3" stroke-linejoin="round"/><path d="M20 28l8 5-8 5v-10z" fill="#8a6d00"/></svg>
-      </div>
+      <img class="pg-illus" src="/images/courses/course_praktisk_liv.webp" alt="Mia og Teo jobber rolig og metodisk sammen, steg for steg">
       <span class="module-kick" data-no="Pilar 3" data-en="Pillar 3">Pilar 3</span>
       <div class="pg-head" data-no="AI og produksjon" data-en="AI and production">AI og produksjon</div>
       <div class="pg-body">
@@ -258,9 +247,7 @@
 
     <!-- ===== KAPITTEL 5: SKALER OG TJEN PENGER ===== -->
     <div class="bk-sheet"><div class="pg-inner">
-      <div class="icon-badge" style="background:var(--pink-100)">
-        <svg viewBox="0 0 48 48" fill="none"><path d="M8 38V26M18 38V18M28 38V22M38 38V10" stroke="#d6336c" stroke-width="2.6" stroke-linecap="round"/><path d="M8 20l10-8 10 6 10-12" stroke="#d6336c" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 6h6v6" stroke="#d6336c" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
+      <img class="pg-illus" src="/images/courses/course_tall_og_telling.webp" alt="Mia og Teo teller og ser mengden vokse">
       <span class="module-kick" data-no="Modul 5" data-en="Module 5">Modul 5</span>
       <div class="pg-head" data-no="Skaler og tjen penger" data-en="Scale and earn money">Skaler og tjen penger</div>
       <div class="pg-body">
@@ -294,6 +281,7 @@
 
     <!-- ===== AVSLUTNING ===== -->
     <div class="bk-sheet closing-sheet"><div class="pg-inner">
+      <img class="closing-illus" src="/images/hero_learning_tree.webp" alt="Mia og Teo ser utover et vidt landskap fra tretoppen">
       <div class="closing-box">
         <h2 data-no="Du har systemet nå 🌸" data-en="You have the system now 🌸">Du har systemet nå 🌸</h2>
         <p data-no="Du trenger ikke se hele trappen for å ta det første trinnet. Gå tilbake til denne arbeidsboken når du trenger et lite dytt, og krysse av etter hvert som du går. Jeg heier på deg." data-en="You don't need to see the whole staircase to take the first step. Come back to this workbook whenever you need a little push, and check things off as you go. I'm cheering you on.">Du trenger ikke se hele trappen for å ta det første trinnet. Gå tilbake til denne arbeidsboken når du trenger et lite dytt, og krysse av etter hvert som du går. Jeg heier på deg.</p>
