@@ -4,10 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Arbeidsboken — Voks på YouTube med AI — Little Montessori Explorers</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/bookly/css/bookly.css">
+<style>
+  /* Playpen Sans lastes lokalt her (samme prinsipp som Sasson Montessori i
+     bookly.css). En ekstern Google Fonts-lenke er ikke pålitelig når siden
+     rendres til PDF i et bygg-miljø uten tilgang til fonts.googleapis.com,
+     da faller overskrifter stille tilbake til en systemfont. Selvhostet
+     fil garanterer riktig font uansett hvor siden rendres. */
+  @font-face{font-family:'Playpen Sans';src:url('/fonts/PlaypenSans-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:block;}
+  @font-face{font-family:'Playpen Sans';src:url('/fonts/PlaypenSans-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:block;}
+  @font-face{font-family:'Playpen Sans';src:url('/fonts/PlaypenSans-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:block;}
+</style>
 <style>
   /* Denne siden bruker LMEs faste guide/arbeidsbok-mal (samme design som
      LME AI-Guide): diagonal pastellgradient, regnbue-kant til venstre,
@@ -96,9 +103,11 @@
 
   @media print{
     .toolbar{display:none !important;}
+    #lme-acct{display:none !important;}
     body{background:#fff;}
     .bk-stage{padding:0;}
     .gd-page{box-shadow:none;margin:0;border-radius:0;page-break-after:always;}
+    .gd-page:last-child{page-break-after:auto;}
     @page{size:A4;margin:0;}
   }
 </style>
