@@ -310,7 +310,10 @@
   }
 
   function publishItems(items){
-    return fetch(BASE+'/ai/blotato/publish',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items:items})})
+    // Samme-origin selvbetjenings-endepunkt (samme nøkkel som "Gjør synlig"
+    // på nettsiden bruker), ikke den gamle separate workeren som trengte en
+    // egen hemmelig nøkkel bare på selve workeren.
+    return fetch('/api/blotato/publish',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({items:items})})
       .then(function(r){return r.json();});
   }
 
@@ -363,7 +366,7 @@
   document.getElementById('blSave').addEventListener('click',function(){var ow=document.getElementById('blOwner');try{localStorage.setItem('lme-owner',ow&&ow.checked?'1':'0');}catch(e){}saveBl(readBlFields());closeBl();toast(T('Lagret 💾','Saved 💾'));if(last&&last.lastObj)render(last.lastObj);});
   document.getElementById('blFetch').addEventListener('click',function(){
     var b=this;var lbl=b.textContent;b.textContent=T('Henter…','Fetching…');b.disabled=true;
-    fetch(BASE+'/ai/blotato/accounts',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})
+    fetch('/api/blotato/accounts',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:'{}'})
     .then(function(r){return r.json();}).then(function(res){
       b.disabled=false;b.textContent=lbl;
       if(res&&res.error){toast('⚠️ '+res.error);return;}
@@ -522,7 +525,9 @@
     var go=document.getElementById('go');go.disabled=true;var lbl=go.innerHTML;go.innerHTML='<span class="sp"></span> '+T('Lager…','Creating…');
     document.getElementById('empty')&&(document.getElementById('empty').style.display='none');
     skeletons();
-    fetch(BASE+'/ai/repurpose',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({article:article.slice(0,6000),lang:lang})})
+    // Samme-origin Pages-funksjon (samme som "Gjør synlig" på nettsiden
+    // bruker og som får alle rettelser), ikke den gamle separate workeren.
+    fetch('/api/ai/repurpose',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({article:article.slice(0,6000),lang:lang})})
     .then(function(r){return r.json();}).then(function(res){
       go.disabled=false;go.innerHTML=lbl;
       var o=res&&res.result;if(typeof o==='string'){var m=o.match(/\{[\s\S]*\}/);o=JSON.parse(m?m[0]:o);}

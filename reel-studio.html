@@ -450,7 +450,10 @@ function updatePubButtons(){
 let BL_MAP=null;
 function fetchAccounts(){
   if(BL_MAP) return Promise.resolve(BL_MAP);
-  return fetch(WORKER_BASE+'/ai/blotato/accounts',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})
+  // Samme-origin selvbetjenings-endepunkt (samme nøkkel som "Gjør synlig"
+  // bruker), IKKE den gamle separate workeren, som trengte en egen
+  // hemmelig nøkkel bare på selve workeren.
+  return fetch('/api/blotato/accounts',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:'{}'})
     .then(function(r){return r.json();})
     .then(function(res){
       if(res&&res.error) throw new Error(res.error);
@@ -601,7 +604,7 @@ async function publishReel(key,btn){
     const post={ accountId:conf.accountId, content:content, target:target };
     const item={ label:key, post:post };
     if(scheduledTime) item.scheduledTime=scheduledTime;
-    const d=await fetch(WORKER_BASE+'/ai/blotato/publish',{method:'POST',headers:{'Content-Type':'application/json'},
+    const d=await fetch('/api/blotato/publish',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({items:[item]})}).then(function(r){return r.json();});
     const res=d&&d.result&&d.result.results&&d.result.results[0];
     if(res&&res.ok){
