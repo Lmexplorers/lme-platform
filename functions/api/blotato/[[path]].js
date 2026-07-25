@@ -35,11 +35,16 @@ function isOwner(u) {
 // Returnerer også HVOR nøkkelen kom fra, så statussjekken kan vise det
 // ærlig i stedet for én generisk "ikke koblet til"-melding uansett årsak.
 async function storedKeyInfo(env) {
+  // .trim() er kritisk her: et par usynlige mellomrom eller et linjeskift
+  // (svært vanlig når man limer inn en hemmelighet fra mobilen, f.eks. via
+  // Notater-appen eller Cloudflare-dashbordet) gir en HELT ANNEN streng, og
+  // Blotato avviser den med 401 uten at noe ser feil ut visuelt.
   try {
-    const kv = await env.BUILDER_KV.get(KEY_KV);
+    const kv = (await env.BUILDER_KV.get(KEY_KV) || "").trim();
     if (kv) return { key: kv, source: "kv" };
   } catch (e) {}
-  if (env && env.BLOTATO_API_KEY) return { key: env.BLOTATO_API_KEY, source: "env" };
+  const fromEnv = ((env && env.BLOTATO_API_KEY) || "").trim();
+  if (fromEnv) return { key: fromEnv, source: "env" };
   return { key: "", source: "none" };
 }
 async function storedKey(env) { return (await storedKeyInfo(env)).key; }
