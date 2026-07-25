@@ -29,7 +29,16 @@ function isOwner(u) {
 }
 
 async function storedKey(env) {
-  try { return (await env.BUILDER_KV.get(KEY_KV)) || ""; } catch (e) { return ""; }
+  // Selvbetjenings-boksen i "Gjør synlig" lagrer nøkkelen i KV, det er
+  // hovedveien. Men støtt også en Cloudflare Pages-miljøvariabel
+  // (env.BLOTATO_API_KEY, satt på Pages-prosjektet "lme-platform", samme
+  // sted som ANTHROPIC_API_KEY ligger) som en likeverdig, alternativ vei
+  // for de som heller vil sette den i Cloudflare-dashbordet.
+  try {
+    const kv = await env.BUILDER_KV.get(KEY_KV);
+    if (kv) return kv;
+  } catch (e) {}
+  return (env && env.BLOTATO_API_KEY) || "";
 }
 
 async function fetchAccounts(key) {
