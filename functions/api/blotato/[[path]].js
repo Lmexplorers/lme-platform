@@ -28,18 +28,21 @@ function isOwner(u) {
     OWNER_EMAILS.indexOf((u.email || "").toLowerCase()) !== -1);
 }
 
-async function storedKey(env) {
-  // Selvbetjenings-boksen i "Gjør synlig" lagrer nøkkelen i KV, det er
-  // hovedveien. Men støtt også en Cloudflare Pages-miljøvariabel
-  // (env.BLOTATO_API_KEY, satt på Pages-prosjektet "lme-platform", samme
-  // sted som ANTHROPIC_API_KEY ligger) som en likeverdig, alternativ vei
-  // for de som heller vil sette den i Cloudflare-dashbordet.
+// Selvbetjenings-boksen i "Gjør synlig" lagrer nøkkelen i KV, det er
+// hovedveien. Men støtt også en Cloudflare Pages-miljøvariabel
+// (env.BLOTATO_API_KEY, satt på Pages-prosjektet "lme-platform", samme
+// sted som ANTHROPIC_API_KEY ligger) som en likeverdig, alternativ vei.
+// Returnerer også HVOR nøkkelen kom fra, så statussjekken kan vise det
+// ærlig i stedet for én generisk "ikke koblet til"-melding uansett årsak.
+async function storedKeyInfo(env) {
   try {
     const kv = await env.BUILDER_KV.get(KEY_KV);
-    if (kv) return kv;
+    if (kv) return { key: kv, source: "kv" };
   } catch (e) {}
-  return (env && env.BLOTATO_API_KEY) || "";
+  if (env && env.BLOTATO_API_KEY) return { key: env.BLOTATO_API_KEY, source: "env" };
+  return { key: "", source: "none" };
 }
+async function storedKey(env) { return (await storedKeyInfo(env)).key; }
 
 async function fetchAccounts(key) {
   const r = await fetch(`${BLOTATO_BASE}/accounts`, {
@@ -59,11 +62,13 @@ export async function onRequest(context) {
   const user = await sessionUser(context);
   const owner = isOwner(user);
 
-  /* Status: er nøkkelen satt, og er noen kontoer koblet til? */
+  /* Status: er nøkkelen satt, og er noen kontoer koblet til?
+     Svaret inkluderer nå den ekte årsaken hvis noe svikter (keySource,
+     checkErr), i stedet for at alt kollapser til én generisk melding. */
   if (path === "status" && request.method === "GET") {
     if (!owner) return json({ owner: false, hasKey: false, connected: false, count: 0 });
-    const key = await storedKey(env);
-    let connected = false, count = 0;
+    const { key, source } = await storedKeyInfo(env);
+    let connected = false, count = 0, checkErr = null;
     if (key) {
       try {
         const a = await fetchAccounts(key);
@@ -71,10 +76,14 @@ export async function onRequest(context) {
           const list = (a.data && (a.data.items || a.data.accounts || a.data)) || [];
           count = Array.isArray(list) ? list.length : 0;
           connected = count > 0;
+        } else {
+          checkErr = "Blotato " + a.status + ": " + JSON.stringify(a.data).slice(0, 200);
         }
-      } catch (e) {}
+      } catch (e) {
+        checkErr = "Nettverksfeil mot Blotato: " + String((e && e.message) || e).slice(0, 150);
+      }
     }
-    return json({ owner: true, hasKey: !!key, connected, count });
+    return json({ owner: true, hasKey: !!key, keySource: source, connected, count, checkErr });
   }
 
   /* Lagre eller fjerne Blotato-nøkkelen (kun eier). */

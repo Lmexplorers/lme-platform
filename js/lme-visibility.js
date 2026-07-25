@@ -210,6 +210,16 @@
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (st) {
         if (!st || !st.owner) { foot.textContent = generic; return; }
+        // Nøkkelen er der (KV eller Cloudflare-variabel), men Blotato selv
+        // sa nei (feil nøkkel, utløpt, e.l.). Vis den ekte feilen i stedet
+        // for å late som ingenting er koblet til.
+        if (st.hasKey && st.checkErr) {
+          var src = st.keySource === "env" ? T("Cloudflare-variabelen", "the Cloudflare variable") : T("boksen her i appen", "the box in the app");
+          foot.textContent = "⚠️ " + T(
+            "Fant en nøkkel (fra " + src + "), men Blotato svarte med en feil: " + st.checkErr + ". Sjekk at nøkkelen er riktig kopiert, uten mellomrom.",
+            "Found a key (from " + src + "), but Blotato replied with an error: " + st.checkErr + ". Check that the key was copied correctly, with no extra spaces.");
+          return;
+        }
         if (st.hasKey && !st.connected) {
           foot.textContent = T(
             "⚠️ Nøkkelen er lagret, men ingen kontoer er koblet til i Blotato ennå. Koble til Instagram/Facebook/TikTok inne på blotato.com, så er du klar.",
