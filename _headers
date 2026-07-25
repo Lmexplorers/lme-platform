@@ -21,3 +21,8 @@
   Cache-Control: no-store
 /funnel/tripwire/tilbud.html
   Cache-Control: no-store
+# "Gjør synlig" + autopublisering: denne filen endres ofte og er lenket fra
+# 147+ sider med en ?v=N cache-bust som lett glemmes å oppdatere. Uten dette
+# kan mobilen kjøre en time(r)vis gammel versjon selv etter en frisk utrulling.
+/js/lme-visibility.js
+  Cache-Control: no-store
