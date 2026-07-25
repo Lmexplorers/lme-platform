@@ -29,8 +29,15 @@ function btn(href, label) {
 function mk(intro, body, ctaHref, ctaLabel, sign) {
   return wrap('<p>' + intro + '</p><p>' + body + '</p>' + btn(ctaHref, ctaLabel) + '<p>' + sign + '</p>');
 }
+// To knapper (kurs + arbeidsbok), for leveringsmailen.
+function mk2(intro, body, pairs, sign) {
+  const btns = pairs.map((p) => btn(p[0], p[1])).join('');
+  return wrap('<p>' + intro + '</p><p>' + body + '</p>' + btns + '<p>' + sign + '</p>');
+}
 
 const COURSE_URL = SITE + "/academy/youtube";
+const WORKBOOK_PDF_NO = SITE + "/funnel/nedlasting/LME-YouTube-kurs-arbeidsbok.pdf";
+const WORKBOOK_PDF_EN = SITE + "/funnel/nedlasting/LME-YouTube-kurs-arbeidsbok-EN.pdf";
 
 function confirmTemplate(lang, name, confirmUrl) {
   const hi = name ? (lang === "en" ? "Hi " + name + "," : "Hei " + name + ",") : (lang === "en" ? "Hi," : "Hei,");
@@ -55,16 +62,16 @@ function deliverTemplate(lang, name) {
   if (lang === "en") {
     return {
       subject: "Here's your free course 🌱",
-      html: mk(hi, "Thanks for confirming! Here's your free access to \"Grow on YouTube with AI\", build a channel without ever showing your face, with AI helping on the script, voice and editing.",
-        COURSE_URL, "Open the course", "Warm wishes,<br>Renate"),
-      text: hi + "\n\nHere's your course: " + COURSE_URL + "\n\nWarm wishes,\nRenate",
+      html: mk2(hi, "Thanks for confirming! Here's your free access to \"Grow on YouTube with AI\", build a channel without ever showing your face, with AI helping on the script, voice and editing. I've also attached the workbook that follows the course, with reflection, checklists and one concrete step per part.",
+        [[COURSE_URL, "Open the course"], [WORKBOOK_PDF_EN, "Download the workbook (PDF)"]], "Warm wishes,<br>Renate"),
+      text: hi + "\n\nHere's your course: " + COURSE_URL + "\nWorkbook (PDF): " + WORKBOOK_PDF_EN + "\n\nWarm wishes,\nRenate",
     };
   }
   return {
     subject: "Her er kurset ditt, gratis 🌱",
-    html: mk(hi, "Takk for at du bekreftet! Her er gratis tilgang til \"Voks på YouTube med AI\", bygg en kanal uten å vise ansikt, med AI som hjelper på manus, stemme og redigering.",
-      COURSE_URL, "Åpne kurset", "Klem fra Renate"),
-    text: hi + "\n\nHer er kurset: " + COURSE_URL + "\n\nKlem fra Renate",
+    html: mk2(hi, "Takk for at du bekreftet! Her er gratis tilgang til \"Voks på YouTube med AI\", bygg en kanal uten å vise ansikt, med AI som hjelper på manus, stemme og redigering. Jeg har også lagt ved arbeidsboken som følger kurset, med refleksjon, sjekklister og ett konkret steg per del.",
+      [[COURSE_URL, "Åpne kurset"], [WORKBOOK_PDF_NO, "Last ned arbeidsboken (PDF)"]], "Klem fra Renate"),
+    text: hi + "\n\nHer er kurset: " + COURSE_URL + "\nArbeidsbok (PDF): " + WORKBOOK_PDF_NO + "\n\nKlem fra Renate",
   };
 }
 
