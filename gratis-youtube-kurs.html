@@ -112,9 +112,12 @@
     toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
   }
   toggle.addEventListener('click', function () { switchLanguage(currentLang === 'no' ? 'en' : 'no'); });
-  try { if ((navigator.language || '').slice(0, 2) === 'en') switchLanguage('en'); } catch (e) {}
 
   var params = new URLSearchParams(location.search);
+  var langParam = params.get('lang');
+  if (langParam === 'en' || langParam === 'no') switchLanguage(langParam);
+  else { try { if ((navigator.language || '').slice(0, 2) === 'en') switchLanguage('en'); } catch (e) {} }
+
   function show(id) {
     ['formState', 'sentState', 'expiredState'].forEach(function (s) {
       document.getElementById(s).classList.toggle('show', s === id);
