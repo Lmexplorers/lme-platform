@@ -523,22 +523,26 @@ async function imageToVideoBlob(imageUrl){
   return new Blob(chunks,{type:outType});
 }
 function blobToB64(blob){ return new Promise(function(res,rej){ var r=new FileReader(); r.onload=function(e){ res(String(e.target.result).split(',')[1]); }; r.onerror=function(){ rej(new Error('lese fil')); }; r.readAsDataURL(blob); }); }
+// Prøv Higgsfield (best kvalitet). Klarer den det ikke, uansett grunn (ikke
+// satt opp, ugyldig nøkkel/401, feil eller tidsavbrudd), faller vi tilbake på
+// den gratis videomotoren i nettleseren i stedet for å gi feil.
 async function higgsfieldVideo(prompt,imageUrl,btn){
-  var sub=await fetch('/api/reel-video',{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({prompt:prompt,imageUrl:imageUrl})}).then(function(r){return readJson(r,'reel-video');});
-  if(sub&&sub.error==='not_configured') return '__fallback__';
-  if(!sub||sub.error||(!sub.id&&!sub.statusUrl)) throw new Error((sub&&sub.error)||'higgsfield');
-  var q='id='+encodeURIComponent(sub.id||'')+(sub.statusUrl?'&u='+encodeURIComponent(sub.statusUrl):'');
-  for(var i=0;i<75;i++){
-    await new Promise(function(r){ setTimeout(r,4000); });
-    var st=await fetch('/api/reel-video?'+q).then(function(r){return readJson(r,'reel-video');}).catch(function(){return null;});
-    if(st){
-      if(st.status==='completed'&&st.url) return st.url;
-      if(st.error||st.status==='failed'||st.status==='nsfw') throw new Error(st.error||st.status);
+  try{
+    var sub=await fetch('/api/reel-video',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({prompt:prompt,imageUrl:imageUrl})}).then(function(r){return readJson(r,'reel-video');});
+    if(!sub||sub.error||(!sub.id&&!sub.statusUrl)) return '__fallback__';
+    var q='id='+encodeURIComponent(sub.id||'')+(sub.statusUrl?'&u='+encodeURIComponent(sub.statusUrl):'');
+    for(var i=0;i<75;i++){
+      await new Promise(function(r){ setTimeout(r,4000); });
+      var st=await fetch('/api/reel-video?'+q).then(function(r){return readJson(r,'reel-video');}).catch(function(){return null;});
+      if(st){
+        if(st.status==='completed'&&st.url) return st.url;
+        if(st.error||st.status==='failed'||st.status==='nsfw') return '__fallback__';
+      }
+      if(btn) btn.innerHTML='<span class="spinner"></span> '+t('vidMaking');
     }
-    if(btn) btn.innerHTML='<span class="spinner"></span> '+t('vidMaking');
-  }
-  throw new Error('timeout');
+    return '__fallback__';
+  }catch(e){ return '__fallback__'; }
 }
 async function genVideo(){
   var msg=document.getElementById('genVidMsg'), btn=document.getElementById('genVidBtn');
@@ -558,16 +562,20 @@ async function genVideo(){
     // 1) Prøv Higgsfield på serveren (virker på alle enheter, også iPhone).
     var url=await higgsfieldVideo(prompt, ir.url, btn);
     if(url==='__fallback__'){
-      // 2) Higgsfield ikke koblet til: lag video i nettleseren (kun datamaskin).
+      // 2) Gratis videomotor i nettleseren (datamaskin). Vis videoen med en
+      //    gang, uansett om opplastingen (for en delbar lenke) skulle feile.
       var blob=await imageToVideoBlob(ir.url);
+      if(v){ v.src=URL.createObjectURL(blob); v.style.display='block'; }
       btn.innerHTML='<span class="spinner"></span> '+t('vidUploading');
-      var vr=await fetch('/api/video',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({data:await blobToB64(blob),contentType:(blob.type||'video/mp4')})}).then(function(r){return readJson(r,'video');});
-      if(!vr||vr.error||!vr.url) throw new Error((vr&&vr.error)||'opplasting');
-      url=vr.url; if(v){ v.src=URL.createObjectURL(blob); v.style.display='block'; }
+      url='';
+      try{
+        var vr=await fetch('/api/video',{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({data:await blobToB64(blob),contentType:(blob.type||'video/mp4')})}).then(function(r){return readJson(r,'video');});
+        if(vr&&!vr.error&&vr.url) url=vr.url;
+      }catch(e){ /* opplasting valgfri: forhåndsvisningen vises uansett */ }
     }
-    document.getElementById('mediaUrl').value=url;
-    if(v && !v.src){ v.src=url; v.style.display='block'; }
+    if(url) document.getElementById('mediaUrl').value=url;
+    if(v && url && !v.src){ v.src=url; v.style.display='block'; }
     btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg'; msg.textContent=t('vidReady');
   }catch(e){
     btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err';
