@@ -1,0 +1,19 @@
+# Render Blueprint for whiteboard-video-motoren.
+# For at Render skal oppdage den automatisk: kopier denne fila til repo-roten.
+# Ellers kan du sette opp tjenesten manuelt, se DEPLOY.md (litt enklere).
+services:
+  - type: web
+    name: lme-whiteboard-motor
+    runtime: docker
+    rootDir: whiteboard-engine
+    plan: standard          # Remotion trenger RAM; unngå gratis-nivået (kan gå tom for minne)
+    healthCheckPath: /
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false          # legges inn manuelt i Render (hemmelig)
+      - key: ELEVENLABS_API_KEY
+        sync: false
+      - key: ELEVENLABS_VOICE_ID
+        sync: false
+      - key: PUBLIC_BASE_URL
+        sync: false          # sett til tjenestens Render-URL etter første deploy
