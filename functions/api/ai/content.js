@@ -39,24 +39,42 @@ ALDRI dikt opp garantier, pengene-tilbake-løfter, refusjonsvilkår, priser, rab
 
 const langName = (l) => (l === "en" ? "English" : "norsk (bokmål)");
 
+// Hard timeout per kall. Uten dette kan et tregt Anthropic-svar henge helt
+// til Cloudflare gir opp og sender sin egen HTML-502 (i stedet for vår rene
+// JSON). Bedre å avbryte selv og feile rent og retry-bart. Samme mønster som
+// functions/api/ai/repurpose.js.
+const CALL_TIMEOUT_MS = 14000;
+
 async function callClaude(env, system, userPrompt, maxTokens, model) {
-  const resp = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": env.ANTHROPIC_API_KEY,
-      "anthropic-version": "2023-06-01",
-    },
-    body: JSON.stringify({
-      model: model || "claude-sonnet-5",
-      max_tokens: maxTokens || 3000,
-      system,
-      messages: [{ role: "user", content: userPrompt }],
-    }),
-  });
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), CALL_TIMEOUT_MS);
+  let resp;
+  try {
+    resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      signal: ctrl.signal,
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": env.ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: model || "claude-sonnet-5",
+        max_tokens: maxTokens || 3000,
+        system,
+        messages: [{ role: "user", content: userPrompt }],
+      }),
+    });
+  } catch (e) {
+    throw new Error(e && e.name === "AbortError"
+      ? "Anthropic svarte for sakte (avbrutt etter " + Math.round(CALL_TIMEOUT_MS / 1000) + "s)"
+      : "nettverksfeil mot Anthropic");
+  } finally {
+    clearTimeout(timer);
+  }
   if (!resp.ok) {
     const t = await resp.text();
-    throw new Error(`Anthropic ${resp.status}: ${t}`);
+    throw new Error(`Anthropic ${resp.status}: ${t.replace(/\s+/g, " ").slice(0, 160)}`);
   }
   const data = await resp.json();
   return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
@@ -77,7 +95,7 @@ function contentPrompt(b) {
     explainer: `{"format":"explainer","title":"kort arbeidstittel","level":"hvem videoen passer for, f.eks. foreldre, barnehage 3-6 år, skole","hook":"åpningssetning som skrives på tavla, maks 8 ord","scenes":[{"time":"0-8s","board":"det som tegnes/skrives på whiteboarden i denne scenen, korte stikkord","narration":"det som fortelles med rolig stemme, 1-2 setninger"}],"takeaway":"én setning som oppsummerer det seeren skal huske","caption":"kort delings-caption for Instagram/TikTok","hashtags":["6-10 hashtags"]}`,
   };
   const shape = shapes[fmt] || shapes.post;
-  const extra = fmt === "carousel" ? "3-8 slides." : fmt === "story" ? "3-5 frames." : fmt === "reel" ? "4-6 scener." : fmt === "explainer" ? "6-8 scener som til sammen blir cirka ett minutt. Bygg forklaringen steg for steg, som en tegnet whiteboard-video: hver scene tegner videre på den forrige. Konkret, enkelt og lett å huske." : fmt === "hookreel" ? "4-6 scener, cirka 15-40 sekunder, i stilen til en personlig merkevare-reel: en sterk tekst-hook som stopper scrollingen, deretter en ærlig historie i jeg-form som gir én konkret verdi, og en varm kommentar-basert oppfordring til slutt. Skriv aldri oppdiktede inntekter, tall, resultater eller løfter. Hold det ekte og pedagogisk, i LMEs varme tone." : "";
+  const extra = fmt === "carousel" ? "3-8 slides." : fmt === "story" ? "3-5 frames." : fmt === "reel" ? "4-6 scener." : fmt === "explainer" ? "5-6 scener som til sammen blir cirka ett minutt. Bygg forklaringen steg for steg, som en tegnet whiteboard-video: hver scene tegner videre på den forrige. Konkret, enkelt og lett å huske. Hold hver scene kort." : fmt === "hookreel" ? "4-6 scener, cirka 15-40 sekunder, i stilen til en personlig merkevare-reel: en sterk tekst-hook som stopper scrollingen, deretter en ærlig historie i jeg-form som gir én konkret verdi, og en varm kommentar-basert oppfordring til slutt. Skriv aldri oppdiktede inntekter, tall, resultater eller løfter. Hold det ekte og pedagogisk, i LMEs varme tone." : "";
   return `Språk: ${langName(b.lang)}. Format: ${fmt}.
 Kilde/tema: "${src}".
 Lag ferdig, publiseringsklart innhold i dette formatet. ${extra}
@@ -100,9 +118,11 @@ export async function onRequestPost(context) {
   // modell, slik at kallet holder seg godt innenfor tidsgrensen til funksjonen.
   // De eksisterende formatene beholder modellen de alltid har brukt.
   const fmt = String(body.format || "post");
-  const model = (fmt === "explainer" || fmt === "hookreel") ? "claude-haiku-4-5-20251001" : "claude-sonnet-5";
+  const fast = (fmt === "explainer" || fmt === "hookreel");
+  const model = fast ? "claude-haiku-4-5-20251001" : "claude-sonnet-5";
+  const maxTokens = fast ? 2000 : 3000;
   try {
-    const result = await callClaude(env, system, contentPrompt(body), 3000, model);
+    const result = await callClaude(env, system, contentPrompt(body), maxTokens, model);
     return json({ result });
   } catch (err) {
     return json({ error: "AI er midlertidig utilgjengelig. Prøv igjen om litt." }, 502);
