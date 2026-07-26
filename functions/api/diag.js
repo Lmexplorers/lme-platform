@@ -14,7 +14,7 @@
 import { sessionUser } from "../_lib/access.js";
 
 // Samme eier-logikk som functions/_lib/access.js: rolle ELLER eier-e-post.
-const OWNER_EMAILS = ["renateshobby@hotmail.com"];
+const OWNER_EMAILS = ["renateshobby@hotmail.com", "renate@lmexplorers.com"];
 const isOwner = (u) => !!(u && (u.role === "owner" || u.role === "admin" ||
   OWNER_EMAILS.indexOf(String(u.email || "").toLowerCase()) !== -1));
 
