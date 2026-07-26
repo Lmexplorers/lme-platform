@@ -62,7 +62,7 @@ const openai = new OpenAI({ apiKey: OPENAI_KEY });
 const CLEAN_VOICE = (VOICE_FROM_ENV && !/^sk_/i.test(VOICE_FROM_ENV)) ? VOICE_FROM_ENV : "";
 const DEFAULT_VOICE = CLEAN_VOICE || "21m00Tcm4TlvDq8ikWAM"; // Rachel (multilingual)
 const ELEVEN_MODEL = process.env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2";
-const IMAGE_MODEL = process.env.OPENAI_IMAGE_MODEL || "dall-e-3";
+const IMAGE_MODEL = process.env.OPENAI_IMAGE_MODEL || "gpt-image-1";
 
 const app = express();
 app.use(express.json({ limit: "1mb" }));
@@ -132,27 +132,36 @@ async function lagWhiteboardBilde(temaTekst) {
     String(temaTekst || "").slice(0, 180) +
     ". Clean hand-drawn whiteboard sketch style, thick even strokes, no shading, no gradients, " +
     "no text, centered, lots of white space, friendly and educational.";
-  // Ikke send response_format: gpt-image-1 støtter det ikke (og returnerer b64
-  // uansett), mens dall-e-3 returnerer en URL vi laster ned. Vi håndterer begge.
-  const img = await openai.images.generate({
-    model: IMAGE_MODEL,
-    prompt,
-    n: 1,
-    size: "1024x1024",
-  });
-  const d = img && img.data && img.data[0];
-  if (d && d.b64_json) {
-    const filename = await saveBufferToPublic(Buffer.from(d.b64_json, "base64"), `img_${Date.now()}.png`);
-    return `/public/${filename}`;
+  // Prøv flere bildemodeller til en virker: den nye gpt-image-1 først, saa
+  // dall-e-3, saa dall-e-2 (som er tilgjengelig paa alle kontoer). Ulike
+  // kontoer har ulik tilgang. Ikke send response_format (gpt-image-1 stoetter
+  // det ikke); vi haandterer baade b64_json og url.
+  const models = [];
+  if (IMAGE_MODEL) models.push(IMAGE_MODEL);
+  ["gpt-image-1", "dall-e-3", "dall-e-2"].forEach((m) => { if (models.indexOf(m) < 0) models.push(m); });
+  let lastErr = null;
+  for (const model of models) {
+    try {
+      const img = await openai.images.generate({ model, prompt, n: 1, size: "1024x1024" });
+      const d = img && img.data && img.data[0];
+      let buf = null;
+      if (d && d.b64_json) buf = Buffer.from(d.b64_json, "base64");
+      else if (d && d.url) { const r = await fetch(d.url); if (r.ok) buf = Buffer.from(await r.arrayBuffer()); }
+      if (buf) {
+        const filename = await saveBufferToPublic(buf, `img_${Date.now()}.png`);
+        console.log("Bilde laget med modell:", model);
+        return `/public/${filename}`;
+      }
+      lastErr = new Error("Ingen bildedata fra " + model);
+    } catch (e) {
+      lastErr = e;
+      const msg = String((e && e.message) || e);
+      // Gaa videre til neste modell ved modell-/tilgangsfeil, ellers kast.
+      if (!/does not exist|no such model|model|verified|not have access|unsupported|permission|403|404/i.test(msg)) throw e;
+      console.warn("Bildemodell '" + model + "' feilet, proever neste:", msg.slice(0, 140));
+    }
   }
-  if (d && d.url) {
-    const r = await fetch(d.url);
-    if (!r.ok) throw new Error("Kunne ikke laste ned bildet fra OpenAI.");
-    const buf = Buffer.from(await r.arrayBuffer());
-    const filename = await saveBufferToPublic(buf, `img_${Date.now()}.png`);
-    return `/public/${filename}`;
-  }
-  throw new Error("Bildemotoren ga ingen bildedata.");
+  throw lastErr || new Error("Ingen bildemodell tilgjengelig.");
 }
 
 // 2) ElevenLabs with-timestamps -> lokal MP3 + ord-tidsstempler.
