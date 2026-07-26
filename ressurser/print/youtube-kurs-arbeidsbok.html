@@ -57,7 +57,7 @@
   .gd-inner{position:absolute;top:21mm;left:16mm;right:16mm;bottom:15mm;display:flex;flex-direction:column;}
 
   /* ===== Innholdsbrikker som går igjen ===== */
-  .gd-img{width:100%;height:56mm;object-fit:cover;border-radius:4mm;box-shadow:0 3mm 8mm rgba(0,0,0,.14);margin-bottom:5mm;display:block;}
+  .gd-img{width:100%;height:56mm;object-fit:cover;border-radius:4mm;border:1px solid rgba(0,0,0,.08);margin-bottom:5mm;display:block;}
   /* gd-pill/gd-label er ekte overskrifter (h2/h3) i markeringen, derfor
      Playpen Sans her, låst fontregel gjelder kun ekte overskrifter. */
   .gd-pill{display:block;width:100%;box-sizing:border-box;text-align:center;border-radius:999px;padding:3.5mm 6mm;font-family:var(--font-display);font-weight:700;font-size:14pt;margin:0 0 5mm;}
@@ -65,7 +65,7 @@
   .gd-pill.teal{background:var(--g-teal);color:#fff;}
   .gd-pill.pink{background:var(--g-pink);color:#fff;}
   .gd-text{font-family:var(--font-body);font-size:10.3pt;line-height:1.65;color:var(--g-body);margin-bottom:5mm;}
-  .gd-card{background:#fff;border-radius:4mm;box-shadow:0 2mm 7mm rgba(0,0,0,.07);padding:5.5mm 7mm;margin-bottom:4.5mm;}
+  .gd-card{background:#fff;border-radius:4mm;border:1px solid #f0eef0;padding:5.5mm 7mm;margin-bottom:4.5mm;}
   .gd-card.cream{background:var(--g-cream);box-shadow:none;}
   .gd-label{font-family:var(--font-display);font-weight:700;font-size:11.5pt;margin:0 0 3mm;display:block;}
   .gd-label.pink{color:var(--g-pink);}
@@ -79,14 +79,14 @@
 
   /* ===== Forside ===== */
   .gd-cover .gd-inner{align-items:center;justify-content:center;text-align:center;}
-  .gd-logobox{width:42mm;height:42mm;background:#fff;border-radius:5mm;box-shadow:0 4mm 10mm rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;margin-bottom:6mm;padding:4mm;box-sizing:border-box;}
+  .gd-logobox{width:42mm;height:42mm;background:#fff;border-radius:5mm;border:1px solid rgba(0,0,0,.08);display:flex;align-items:center;justify-content:center;margin-bottom:6mm;padding:4mm;box-sizing:border-box;}
   .gd-logobox img{width:100%;height:100%;object-fit:contain;}
   .gd-cover-label{font-size:9pt;letter-spacing:.14em;text-transform:uppercase;color:#9a9a9a;margin-bottom:4mm;font-family:var(--font-body);font-weight:700;}
   .gd-cover-title{font-family:var(--font-display);font-weight:800;font-size:34pt;text-transform:uppercase;line-height:1.16;color:var(--g-ink);margin-bottom:6mm;}
   .gd-cover-title em{font-style:normal;color:var(--g-pink);}
-  .gd-cover-badge{display:inline-block;background:var(--g-yellow);color:var(--g-ink);font-family:var(--font-body);font-weight:700;font-size:12.5pt;border-radius:999px;padding:3.5mm 9mm;margin-bottom:7mm;}
-  .gd-cover-img{width:100%;max-width:150mm;height:58mm;object-fit:cover;border-radius:4mm;box-shadow:0 3mm 10mm rgba(0,0,0,.14);margin-bottom:7mm;}
-  .gd-cover-card{background:#fff;border-radius:5mm;box-shadow:0 3mm 10mm rgba(0,0,0,.08);padding:6mm 10mm;max-width:150mm;margin-bottom:6mm;}
+  .gd-cover-badge{display:inline-block;background:var(--g-yellow);color:var(--g-ink);font-family:var(--font-body);font-weight:700;font-size:12.5pt;border-radius:999px;padding:3.5mm 9mm;margin-bottom:12mm;}
+  .gd-cover-img{width:100%;max-width:150mm;height:58mm;object-fit:cover;border-radius:4mm;border:1px solid rgba(0,0,0,.08);margin-bottom:7mm;}
+  .gd-cover-card{background:#fff;border-radius:5mm;border:1px solid #f0eef0;padding:6mm 10mm;max-width:150mm;margin-bottom:6mm;}
   .gd-cover-card .sub{font-size:11pt;color:var(--g-body);line-height:1.6;}
   .gd-cover-card .accent{font-family:var(--font-body);font-weight:700;color:var(--g-teal);font-style:italic;margin-top:3mm;font-size:10.5pt;}
   .gd-cover-author{font-family:var(--font-body);font-weight:800;color:var(--g-pink);font-size:12pt;}
