@@ -132,17 +132,27 @@ async function lagWhiteboardBilde(temaTekst) {
     String(temaTekst || "").slice(0, 180) +
     ". Clean hand-drawn whiteboard sketch style, thick even strokes, no shading, no gradients, " +
     "no text, centered, lots of white space, friendly and educational.";
+  // Ikke send response_format: gpt-image-1 støtter det ikke (og returnerer b64
+  // uansett), mens dall-e-3 returnerer en URL vi laster ned. Vi håndterer begge.
   const img = await openai.images.generate({
     model: IMAGE_MODEL,
     prompt,
     n: 1,
     size: "1024x1024",
-    response_format: "b64_json",
   });
-  const b64 = img && img.data && img.data[0] && img.data[0].b64_json;
-  if (!b64) throw new Error("DALL-E ga ingen bildedata.");
-  const filename = await saveBufferToPublic(Buffer.from(b64, "base64"), `img_${Date.now()}.png`);
-  return `/public/${filename}`;
+  const d = img && img.data && img.data[0];
+  if (d && d.b64_json) {
+    const filename = await saveBufferToPublic(Buffer.from(d.b64_json, "base64"), `img_${Date.now()}.png`);
+    return `/public/${filename}`;
+  }
+  if (d && d.url) {
+    const r = await fetch(d.url);
+    if (!r.ok) throw new Error("Kunne ikke laste ned bildet fra OpenAI.");
+    const buf = Buffer.from(await r.arrayBuffer());
+    const filename = await saveBufferToPublic(buf, `img_${Date.now()}.png`);
+    return `/public/${filename}`;
+  }
+  throw new Error("Bildemotoren ga ingen bildedata.");
 }
 
 // 2) ElevenLabs with-timestamps -> lokal MP3 + ord-tidsstempler.
