@@ -61,7 +61,10 @@ const openai = new OpenAI({ apiKey: OPENAI_KEY });
 // voice-id-feltet, ignorer den og bruk en standardstemme i stedet.
 const CLEAN_VOICE = (VOICE_FROM_ENV && !/^sk_/i.test(VOICE_FROM_ENV)) ? VOICE_FROM_ENV : "";
 const DEFAULT_VOICE = CLEAN_VOICE || "21m00Tcm4TlvDq8ikWAM"; // Rachel (multilingual)
-const ELEVEN_MODEL = process.env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2";
+// Turbo v2.5 lar oss tvinge språket (language_code), så norsk tekst ikke blir
+// lest med dansk uttale (norsk og dansk skrives nesten likt, og multilingual
+// v2 gjetter ofte dansk). Kan overstyres med ELEVENLABS_MODEL_ID.
+const ELEVEN_MODEL = process.env.ELEVENLABS_MODEL_ID || "eleven_turbo_v2_5";
 const IMAGE_MODEL = process.env.OPENAI_IMAGE_MODEL || "gpt-image-1";
 
 const app = express();
@@ -199,11 +202,17 @@ async function ensureHandImage() {
 }
 
 // 2) ElevenLabs with-timestamps -> lokal MP3 + ord-tidsstempler.
-async function lagLydMedTidsstempler(manus, voiceId) {
+async function lagLydMedTidsstempler(manus, voiceId, lang) {
   const url =
     "https://api.elevenlabs.io/v1/text-to-speech/" +
     encodeURIComponent(voiceId || DEFAULT_VOICE) +
     "/with-timestamps";
+  const body = {
+    text: manus,
+    model_id: ELEVEN_MODEL,
+    language_code: lang === "en" ? "en" : "no", // tving norsk (ellers dansk uttale)
+    voice_settings: { stability: 0.5, similarity_boost: 0.75 },
+  };
   const r = await fetch(url, {
     method: "POST",
     headers: {
@@ -211,11 +220,7 @@ async function lagLydMedTidsstempler(manus, voiceId) {
       "xi-api-key": ELEVENLABS_API_KEY,
       Accept: "application/json",
     },
-    body: JSON.stringify({
-      text: manus,
-      model_id: ELEVEN_MODEL,
-      voice_settings: { stability: 0.5, similarity_boost: 0.75 },
-    }),
+    body: JSON.stringify(body),
   });
   if (!r.ok) {
     const detalj = await r.text().catch(() => "");
@@ -242,11 +247,11 @@ function gcJobs() {
   for (const [id, j] of jobs) if (now - (j.when || 0) > 60 * 60 * 1000) jobs.delete(id);
 }
 
-async function renderJob(jobId, { manus, voiceId, tema }, publicBase) {
+async function renderJob(jobId, { manus, voiceId, tema, lang }, publicBase) {
   const t0 = Date.now();
   try {
     console.log("1/4  Lyd + tidsstempler (ElevenLabs)...");
-    const { audioPath, words } = await lagLydMedTidsstempler(manus.trim(), voiceId);
+    const { audioPath, words } = await lagLydMedTidsstempler(manus.trim(), voiceId, lang);
     if (!words.length) throw new Error("Fant ingen ord-tidsstempler fra ElevenLabs.");
 
     console.log("2/4  Whiteboard-skisse...");
@@ -292,7 +297,7 @@ async function renderJob(jobId, { manus, voiceId, tema }, publicBase) {
 
 /* ---------- Start jobb (svar med en gang) ---------- */
 app.post("/api/generer-whiteboard", (req, res) => {
-  const { manus, voiceId, tema } = req.body || {};
+  const { manus, voiceId, tema, lang } = req.body || {};
   if (!manus || typeof manus !== "string" || !manus.trim()) {
     return res.status(400).json({ error: "Manus mangler i forespørselen." });
   }
@@ -308,7 +313,7 @@ app.post("/api/generer-whiteboard", (req, res) => {
   jobs.set(jobId, { status: "pending", when: Date.now() });
   res.status(202).json({ jobId, status: "pending" });
   // Kjør i bakgrunnen (ikke await), så forbindelsen ikke må holdes åpen.
-  renderJob(jobId, { manus, voiceId, tema }, publicBase);
+  renderJob(jobId, { manus, voiceId, tema, lang }, publicBase);
 });
 
 /* ---------- Status-polling ---------- */

@@ -502,7 +502,7 @@ async function genVideo(){
   try{
     // Start jobben. Motoren svarer med en gang med en jobb-ID.
     var start=await fetch(WB_ENGINE+'/api/generer-whiteboard',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({ tema:(r.title||''), manus:manus })}).then(function(res){return readJson(res,'whiteboard');});
+      body:JSON.stringify({ tema:(r.title||''), manus:manus, lang:LANG })}).then(function(res){return readJson(res,'whiteboard');});
     if(start&&start.error) throw new Error(start.error);
     var jobId=start&&start.jobId;
     if(!jobId) throw new Error('ingen jobb-id fra motoren');
