@@ -498,14 +498,29 @@ async function genVideo(){
   var v=document.getElementById('vidPreview'); if(v){ v.style.display='none'; v.removeAttribute('src'); }
   msg.className='pubmsg'; msg.textContent=t('vidEngineWait');
   btn.innerHTML='<span class="spinner"></span> '+t('vidMaking');
+  function sleep(ms){ return new Promise(function(res){ setTimeout(res, ms); }); }
   try{
-    var res=await fetch(WB_ENGINE+'/api/generer-whiteboard',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({ tema:(r.title||''), manus:manus })});
-    var data=await readJson(res,'whiteboard');
-    if(!res.ok||(data&&data.error)) throw new Error((data&&data.error)||('http '+res.status));
-    if(!data.videoUrl) throw new Error('ingen video-URL');
-    if(v){ v.src=data.videoUrl; v.style.display='block'; }
-    try{ localStorage.setItem('lme-reel-media', data.videoUrl); }catch(e){}
+    // Start jobben. Motoren svarer med en gang med en jobb-ID.
+    var start=await fetch(WB_ENGINE+'/api/generer-whiteboard',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ tema:(r.title||''), manus:manus })}).then(function(res){return readJson(res,'whiteboard');});
+    if(start&&start.error) throw new Error(start.error);
+    var jobId=start&&start.jobId;
+    if(!jobId) throw new Error('ingen jobb-id fra motoren');
+    // Spør om status hvert 5. sekund til den er ferdig (opptil ~16 min).
+    var done=null;
+    for(var i=0;i<200;i++){
+      await sleep(5000);
+      var st=await fetch(WB_ENGINE+'/api/whiteboard-status?id='+encodeURIComponent(jobId))
+        .then(function(res){return readJson(res,'status');}).catch(function(){return null;});
+      if(st){
+        if(st.status==='done'&&st.videoUrl){ done=st; break; }
+        if(st.status==='error') throw new Error(st.error||'render-feil');
+        if(st.status==='not_found') throw new Error('jobben forsvant (motoren startet kanskje på nytt)');
+      }
+    }
+    if(!done) throw new Error('tidsavbrudd, prøv igjen');
+    if(v){ v.src=done.videoUrl; v.style.display='block'; }
+    try{ localStorage.setItem('lme-reel-media', done.videoUrl); }catch(e){}
     btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg'; msg.textContent=t('vidReady');
   }catch(e){
     btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err';

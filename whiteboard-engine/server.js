@@ -228,29 +228,33 @@ async function lagLydMedTidsstempler(manus, voiceId) {
   return { audioPath: `/public/${filename}`, words };
 }
 
-/* ---------- Endepunkt ---------- */
-app.post("/api/generer-whiteboard", async (req, res) => {
+/* ---------- Jobber (asynkron rendring) ----------
+   Rendring tar flere minutter. I stedet for å holde én lang HTTP-forbindelse
+   åpen (som ryker og gir "Failed to fetch"), starter vi en jobb, svarer med en
+   gang, og lar klienten spørre om status. */
+const jobs = new Map(); // jobId -> { status, videoUrl?, error?, when }
+
+function newJobId() {
+  return "wb_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+function gcJobs() {
+  const now = Date.now();
+  for (const [id, j] of jobs) if (now - (j.when || 0) > 60 * 60 * 1000) jobs.delete(id);
+}
+
+async function renderJob(jobId, { manus, voiceId, tema }, publicBase) {
   const t0 = Date.now();
   try {
-    const { manus, voiceId, tema } = req.body || {};
-    if (!manus || typeof manus !== "string" || !manus.trim()) {
-      return res.status(400).json({ error: "Manus mangler i forespørselen." });
-    }
-    if (!OPENAI_KEY || !ELEVENLABS_API_KEY) {
-      return res.status(500).json({ error: "Server mangler OpenAI- eller ElevenLabs-nøkkel (miljøvariabler)." });
-    }
-
     console.log("1/4  Lyd + tidsstempler (ElevenLabs)...");
     const { audioPath, words } = await lagLydMedTidsstempler(manus.trim(), voiceId);
     if (!words.length) throw new Error("Fant ingen ord-tidsstempler fra ElevenLabs.");
 
-    console.log("2/4  Whiteboard-skisse (DALL-E 3)...");
+    console.log("2/4  Whiteboard-skisse...");
     const imagePath = await lagWhiteboardBilde(tema || manus);
 
-    console.log("3/4  Beregner tidslinje...");
     const fps = 30;
     const sisteSlutt = words[words.length - 1].end || 0;
-    const totalVarighetSekunder = Math.max(3, sisteSlutt + 2); // 2 s haleklipp
+    const totalVarighetSekunder = Math.max(3, sisteSlutt + 2);
     const totalFrames = Math.ceil(totalVarighetSekunder * fps);
 
     const handPath = await ensureHandImage();
@@ -269,35 +273,50 @@ app.post("/api/generer-whiteboard", async (req, res) => {
     const outName = `video_${Date.now()}.mp4`;
     const outputLocation = path.resolve(OUTPUT_DIR, outName);
     await renderMedia({
-      composition,
-      serveUrl,
-      codec: "h264",
-      outputLocation,
-      inputProps,
-      // Render i 720p (2/3 av 1080p): raskere og lettere paa minnet, mer enn
-      // nok for sosiale medier. Samme layout.
-      scale: 2 / 3,
-      jpegQuality: 80,
+      composition, serveUrl, codec: "h264", outputLocation, inputProps,
+      scale: 2 / 3, jpegQuality: 80,
     });
 
-    // Utled offentlig URL fra selve forespørselen (funker uten å sette
-    // PUBLIC_BASE_URL manuelt). Render sender X-Forwarded-Proto/Host.
-    const proto = String(req.headers["x-forwarded-proto"] || req.protocol || "https").split(",")[0].trim();
-    const host = req.get("host");
-    const publicBase = host ? `${proto}://${host}` : PUBLIC_BASE;
-
     console.log(`Ferdig på ${((Date.now() - t0) / 1000).toFixed(1)} s.`);
-    return res.status(200).json({
-      success: true,
+    jobs.set(jobId, {
+      status: "done",
       videoUrl: `${publicBase}/output/${outName}`,
-      videoPath: outputLocation,
       durationSeconds: Number(totalVarighetSekunder.toFixed(1)),
-      words: words.length,
+      when: Date.now(),
     });
   } catch (error) {
     console.error("Feil under prosesseringen:", error);
-    return res.status(500).json({ error: String((error && error.message) || error) });
+    jobs.set(jobId, { status: "error", error: String((error && error.message) || error), when: Date.now() });
   }
+}
+
+/* ---------- Start jobb (svar med en gang) ---------- */
+app.post("/api/generer-whiteboard", (req, res) => {
+  const { manus, voiceId, tema } = req.body || {};
+  if (!manus || typeof manus !== "string" || !manus.trim()) {
+    return res.status(400).json({ error: "Manus mangler i forespørselen." });
+  }
+  if (!OPENAI_KEY || !ELEVENLABS_API_KEY) {
+    return res.status(500).json({ error: "Server mangler OpenAI- eller ElevenLabs-nøkkel (miljøvariabler)." });
+  }
+  gcJobs();
+  const proto = String(req.headers["x-forwarded-proto"] || req.protocol || "https").split(",")[0].trim();
+  const host = req.get("host");
+  const publicBase = host ? `${proto}://${host}` : PUBLIC_BASE;
+
+  const jobId = newJobId();
+  jobs.set(jobId, { status: "pending", when: Date.now() });
+  res.status(202).json({ jobId, status: "pending" });
+  // Kjør i bakgrunnen (ikke await), så forbindelsen ikke må holdes åpen.
+  renderJob(jobId, { manus, voiceId, tema }, publicBase);
+});
+
+/* ---------- Status-polling ---------- */
+app.get("/api/whiteboard-status", (req, res) => {
+  const id = String(req.query.id || "");
+  const j = jobs.get(id);
+  if (!j) return res.status(404).json({ status: "not_found" });
+  return res.json(j);
 });
 
 app.listen(PORT, async () => {
