@@ -131,7 +131,9 @@ async function lagWhiteboardBilde(temaTekst) {
     "Simple black ink line-art icon on a pure white background, single clear subject: " +
     String(temaTekst || "").slice(0, 180) +
     ". Clean hand-drawn whiteboard sketch style, thick even strokes, no shading, no gradients, " +
-    "no text, centered, lots of white space, friendly and educational.";
+    "no text, centered, lots of white space, warm, friendly and child-friendly, educational. " +
+    "Do NOT draw a Rubik's cube. If cubes or blocks are involved, draw simple soft-colored wooden " +
+    "Montessori-style blocks (pastel pink, yellow, sky blue, calm), not a puzzle toy.";
   // Prøv flere bildemodeller til en virker: den nye gpt-image-1 først, saa
   // dall-e-3, saa dall-e-2 (som er tilgjengelig paa alle kontoer). Ulike
   // kontoer har ulik tilgang. Ikke send response_format (gpt-image-1 stoetter
