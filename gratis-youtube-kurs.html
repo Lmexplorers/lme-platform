@@ -113,9 +113,16 @@
   }
   toggle.addEventListener('click', function () { switchLanguage(currentLang === 'no' ? 'en' : 'no'); });
 
+  // Cloudflare Pages sin _redirects-omskriving (status 200) beholder
+  // adresselinjen som den ble spurt om, ?lang=en i _redirects' mål-URL
+  // havner ALDRI i location.search på klientsiden. Derfor må den rene
+  // engelske lenken (/free-youtube-course) gjenkjennes på selve stien,
+  // ikke på en spørrestreng som aldri kommer frem.
   var params = new URLSearchParams(location.search);
   var langParam = params.get('lang');
+  var path = location.pathname.replace(/\/+$/, '');
   if (langParam === 'en' || langParam === 'no') switchLanguage(langParam);
+  else if (path === '/free-youtube-course') switchLanguage('en');
   else { try { if ((navigator.language || '').slice(0, 2) === 'en') switchLanguage('en'); } catch (e) {} }
 
   function show(id) {

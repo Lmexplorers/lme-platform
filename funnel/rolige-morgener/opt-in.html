@@ -204,10 +204,15 @@
 
   <script src="funnel-config.js"></script>
   <script>
-    // Språk: ?lang=… > localStorage 'lme_lang' (samme som plattformen) > 'no'
+    // Språk: ?lang=… > engelsk lenke-alias (/calm-mornings) > localStorage
+    // 'lme_lang' (samme som plattformen) > 'no'. Cloudflare Pages sin
+    // _redirects-omskriving (status 200) beholder adresselinjen som den ble
+    // spurt om, ?lang=en i _redirects' mål-URL havner ALDRI i
+    // location.search på klientsiden, derfor må alias-stien gjenkjennes.
     const LANG = (() => {
       const q = new URLSearchParams(location.search).get('lang');
-      let l = (q || localStorage.getItem('lme_lang') || 'no').toLowerCase();
+      const pathIsEn = location.pathname.replace(/\/+$/, '') === '/calm-mornings';
+      let l = (q || (pathIsEn ? 'en' : null) || localStorage.getItem('lme_lang') || 'no').toLowerCase();
       if (l !== 'en' && l !== 'no') l = 'no';
       try { localStorage.setItem('lme_lang', l); } catch (e) {}
       return l;

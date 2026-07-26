@@ -205,9 +205,15 @@
   // Tillat ?lang=en / ?lang=no i lenken. Dette styrer BARE visningen av denne
   // siden (f.eks. /bloom-method), og skal ikke overstyre det globale
   // plattformspraaket. Kun et bevisst klikk paa knappen lagrer valget.
+  // Cloudflare Pages sin _redirects-omskriving (status 200) beholder
+  // adresselinjen som den ble spurt om, ?lang=en i _redirects' mål-URL
+  // havner ALDRI i location.search på klientsiden, derfor gjenkjennes
+  // alias-stien (/bloom-method) også direkte.
   try {
     var q = new URLSearchParams(location.search).get('lang');
+    var pathIsEn = location.pathname.replace(/\/+$/, '') === '/bloom-method';
     if (q === 'en' || q === 'no') { window.LME_CURRENT_LANG = q; }
+    else if (pathIsEn) { window.LME_CURRENT_LANG = 'en'; }
   } catch (e) {}
 
   function apply() {

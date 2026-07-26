@@ -254,8 +254,12 @@ const QUIZ = {
 };
 
 /* ===================== MOTOR ===================== */
+// Cloudflare Pages sin _redirects-omskriving (status 200) beholder
+// adresselinjen som den ble spurt om, ?lang=en i _redirects' mål-URL havner
+// ALDRI i location.search på klientsiden, derfor gjenkjennes alias-stien.
 const LANG = (()=>{ const q=new URLSearchParams(location.search).get('lang');
-  let l=(q||localStorage.getItem('lme_lang')||'no').toLowerCase();
+  const pathIsEn = location.pathname.replace(/\/+$/,'') === '/calm-quiz';
+  let l=(q||(pathIsEn?'en':null)||localStorage.getItem('lme_lang')||'no').toLowerCase();
   if(l!=='en'&&l!=='no') l='no'; try{localStorage.setItem('lme_lang',l)}catch(e){} return l; })();
 document.documentElement.lang = LANG;
 const C = QUIZ[LANG];
