@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<title>LME Forklaringsvideo</title>
+<meta name="description" content="Gjør et hvilket som helst tema til en tegnet whiteboard-forklaringsvideo på cirka ett minutt. AI-en lager hook, manus scene for scene, det som tegnes på tavla og voiceover, klar til å bli video.">
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
+  :root {
+    --pink-soft:#F8D7DA; --pink-mid:#F5A8B8; --pink-deep:#EE9CAD;
+    --cream:#FBF6F0; --cream-deep:#F4E9DD;
+    --cerise:#E91E89; --sun:#F7C72E; --sky:#3FA9F5; --lime:#A4D233;
+    --ink:#1A1A1A; --ink-soft:#4A4A4A; --ink-muted:#8A8A8A;
+    --line:rgba(26,26,26,0.08);
+    --shadow-sm:0 1px 3px rgba(26,26,26,0.04),0 1px 2px rgba(26,26,26,0.03);
+    --shadow-md:0 4px 16px rgba(26,26,26,0.06),0 2px 6px rgba(26,26,26,0.04);
+    --r-sm:12px; --r-md:18px; --r-lg:24px; --r-pill:999px;
+    /* LÅST FONTREGEL: Playpen Sans = KUN overskrifter. Sasson Montessori = all annen tekst. */
+    --font-heading:'Playpen Sans',system-ui,sans-serif;
+    --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+  }
+  @font-face{
+    font-family:'Sasson Montessori';
+    src:url('/fonts/SassoonMontessori.woff2') format('woff2'),
+        url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-display:swap;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--font-body); color:var(--ink);
+    background:linear-gradient(180deg,#FDF5F1 0%,#FBEAE9 50%,#F8D7DA 100%);
+    min-height:100vh; line-height:1.55;
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  }
+  h1,h2,h3,h4,h5,h6{font-family:var(--font-heading);}
+  img{max-width:100%;display:block;}
+  a{color:inherit;text-decoration:none;}
+  button,input,select,textarea{font-family:var(--font-body);cursor:pointer;border:none;background:none;}
+
+  /* TOPBAR */
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(253,245,241,0.85);
+    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line);}
+  .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;gap:20px;}
+  .topbar-left{display:flex;align-items:center;gap:16px;}
+  .topbar-logo{font-weight:700;font-size:17px;display:flex;align-items:center;gap:8px;color:var(--ink);}
+  .topbar-logo-img{height:32px;width:auto;display:block;}
+  .topbar-logo .badge{background:linear-gradient(135deg,var(--pink-mid),var(--cerise));color:#fff;
+    font-size:10px;font-weight:700;padding:3px 8px;border-radius:var(--r-pill);letter-spacing:.04em;}
+  .topbar-right{display:flex;align-items:center;gap:8px;}
+  .topbar-back{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--r-pill);
+    font-size:13px;font-weight:600;color:var(--ink-soft);transition:all .18s ease;}
+  .topbar-back:hover{background:rgba(248,215,218,0.5);color:var(--ink);}
+  .lang-toggle{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-pill);overflow:hidden;}
+  .lang-toggle button{padding:6px 12px;font-size:12px;font-weight:700;color:var(--ink-muted);}
+  .lang-toggle button.active{background:var(--cerise);color:#fff;}
+
+  /* MAIN */
+  .main{padding:28px 24px 72px;max-width:900px;margin:0 auto;}
+  .page-header h1{font-size:30px;line-height:1.15;margin-bottom:8px;}
+  .page-header h1 em{color:var(--cerise);font-style:normal;}
+  .page-header p{color:var(--ink-soft);max-width:680px;font-size:15px;}
+  .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+  .badges span{background:#fff;border:1px solid var(--line);border-radius:var(--r-pill);
+    padding:6px 12px;font-size:12.5px;font-weight:600;color:var(--ink-soft);box-shadow:var(--shadow-sm);}
+
+  .step{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:22px 22px 24px;box-shadow:var(--shadow-md);margin-top:22px;}
+  .step-num{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-heading);
+    font-weight:800;font-size:13px;color:var(--cerise);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;}
+  .step h2{font-size:20px;margin-bottom:6px;}
+  .step .lead{color:var(--ink-soft);font-size:14px;margin-bottom:16px;}
+  label.fld{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin:0 0 6px;}
+  textarea,input,select{width:100%;font-family:inherit;font-size:14px;
+    padding:12px 14px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--cream);color:var(--ink);}
+  textarea{min-height:110px;resize:vertical;}
+  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-top:12px;}
+  .row .grow{flex:1;min-width:180px;}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:#fff;font-weight:700;
+    font-size:14px;padding:12px 20px;border-radius:var(--r-pill);transition:transform .12s ease,opacity .12s ease;}
+  .btn:hover{transform:translateY(-1px);}
+  .btn:disabled{opacity:.5;cursor:default;transform:none;}
+  .btn.cerise{background:linear-gradient(120deg,#e85a92,#c43d75);}
+  .btn.block{width:100%;justify-content:center;margin-top:6px;}
+
+  .out:empty{display:none;}
+  .out{margin-top:20px;}
+
+  /* Whiteboard-forhåndsvisning */
+  .board{background:#243244;border:1px solid #10161f;border-radius:var(--r-md);
+    padding:22px 22px 24px;box-shadow:var(--shadow-md);margin-bottom:16px;position:relative;}
+  .board::before{content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);
+    width:70px;height:5px;border-radius:5px;background:rgba(255,255,255,0.18);}
+  .board .lbl{font-size:11px;font-weight:700;color:#8fd0ff;text-transform:uppercase;letter-spacing:.08em;margin-top:6px;}
+  .board .hooktxt{font-family:var(--font-heading);font-weight:800;font-size:23px;color:#fff;margin-top:6px;line-height:1.25;}
+  .board .lvl{font-size:12.5px;color:#c7d3e2;margin-top:8px;}
+
+  .card{background:var(--cream);border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px;margin-bottom:12px;}
+  .card h4{font-size:14px;color:var(--cerise);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+  .card p{font-size:14px;color:var(--ink-soft);white-space:pre-wrap;}
+  .scene{border-left:3px solid var(--pink-mid);}
+  .scene .time{font-size:12px;font-weight:700;color:var(--ink-muted);}
+  .scene .on{font-family:var(--font-heading);font-weight:700;font-size:15px;margin:4px 0;color:var(--ink);}
+  .scene .vo{font-size:13.5px;color:var(--ink-soft);}
+  .scene .board-note{font-size:13px;color:var(--sky);margin-top:6px;}
+  .tags span{display:inline-block;background:var(--cream-deep);border:1px solid var(--line);border-radius:var(--r-pill);
+    padding:5px 11px;font-size:12.5px;margin:0 6px 8px 0;}
+  .copy-btn{margin-left:auto;font-size:12px;font-weight:700;color:var(--cerise);background:none;}
+  .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);
+    border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .note{background:#FFF8E1;border:1px solid #F7E29A;border-radius:var(--r-sm);padding:12px 14px;
+    font-size:13px;color:#7a5d00;margin-top:14px;}
+  .pubmsg{font-size:13px;color:var(--ink-soft);margin-top:10px;min-height:1em;}
+  .err{color:var(--cerise);}
+  #step2{opacity:.55;pointer-events:none;}
+  #step2.on{opacity:1;pointer-events:auto;}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar"><div class="topbar-inner">
+  <div class="topbar-left">
+    <a href="/creative-academy" class="topbar-logo">
+      <img src="/images/lme-logo.png" alt="LME" class="topbar-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='inline';">
+      <span class="topbar-logo-text" style="display:none;">LME</span>
+      <span class="badge">FORKLARINGSVIDEO</span>
+    </a>
+  </div>
+  <div class="topbar-right">
+    <a href="/creative-academy" class="topbar-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="15 18 9 12 15 6"/></svg>
+      <span data-i18n="back">Til Creative Academy</span>
+    </a>
+    <div class="lang-toggle">
+      <button id="lang-no" class="active" onclick="setLang('no')">NO</button>
+      <button id="lang-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</div></div>
+
+<main class="main">
+  <div class="page-header">
+    <h1 data-i18n="title">LME <em>Forklaringsvideo</em></h1>
+    <p data-i18n="subtitle">Gjør et hvilket som helst tema om til en tegnet whiteboard-video du faktisk husker. Skriv et tema, så lager AI-en hook, manus scene for scene, det som tegnes på tavla og voiceover, klar til å bli video på cirka ett minutt.</p>
+    <div class="badges">
+      <span data-i18n="b1">✍️ Skriv et tema</span>
+      <span data-i18n="b2">🎬 Se den tegne seg fram</span>
+      <span data-i18n="b3">⏱️ Cirka ett minutt</span>
+      <span data-i18n="b4">🌍 Norsk og engelsk</span>
+    </div>
+  </div>
+
+  <!-- STEG 1: tema -->
+  <section class="step" id="step1">
+    <div class="step-num"><span>1</span> <span data-i18n="s1-num">Tema</span></div>
+    <h2 data-i18n="s1-h">Hva skal vi forklare?</h2>
+    <p class="lead" data-i18n="s1-lead">Skriv et tema, et spørsmål eller lim inn notatene dine. AI-en tegner forklaringen scene for scene, i whiteboard-stil.</p>
+    <label class="fld" for="src" data-i18n="s1-src">Tema eller spørsmål</label>
+    <textarea id="src" data-i18n-ph="s1-ph" placeholder="F.eks: Hva er den forberedte tilretteleggeren i Montessori? Eller: Slik hjelper du et barn å konsentrere seg."></textarea>
+    <div class="row">
+      <div class="grow">
+        <label class="fld" for="level" data-i18n="s1-level">Hvem er den for?</label>
+        <select id="level">
+          <option value="foreldre" data-i18n="lvl-parents">Foreldre hjemme</option>
+          <option value="barnehage 3-6 år" data-i18n="lvl-kg">Barnehage (3-6 år)</option>
+          <option value="skole 6-12 år" data-i18n="lvl-school">Skole (6-12 år)</option>
+          <option value="pedagoger" data-i18n="lvl-teachers">Pedagoger og ansatte</option>
+        </select>
+      </div>
+      <button class="btn cerise" id="genBtn" onclick="genContent()"><span id="genLabel" data-i18n="s1-btn">✨ Lag forklaringen</span></button>
+    </div>
+    <div class="out" id="out"></div>
+  </section>
+
+  <!-- STEG 2: video -->
+  <section class="step" id="step2">
+    <div class="step-num"><span>2</span> <span data-i18n="s2-num">Video</span></div>
+    <h2 data-i18n="s2-h">Gjør den til video</h2>
+    <p class="lead" data-i18n="s2-lead">Lag en vertikal 9:16 video av forklaringen, klar for Instagram, TikTok og Reels. Eller kopier manuset og les det inn selv.</p>
+    <button class="btn cerise" id="genVidBtn" onclick="genVideo()">🎬 <span data-i18n="s2-genvid">Lag video automatisk</span></button>
+    <div class="pubmsg" id="genVidMsg"></div>
+    <video id="vidPreview" playsinline controls style="display:none;width:190px;border-radius:14px;margin-top:12px;box-shadow:var(--shadow-md);"></video>
+    <div class="note" id="s2note" data-i18n="s2-note">💡 Trykk «Lag video automatisk», så lager AI-en et bilde av forklaringen og gjør det om til en vertikal video rett her. Vil du publisere og planlegge den? Ta den med videre til Reel Studio.</div>
+    <a href="/reel-studio" class="btn block" style="margin-top:12px;background:var(--cream-deep);color:var(--ink);border:1px solid var(--line);" data-i18n="s2-toreel">🎬 Publiser og planlegg i Reel Studio</a>
+  </section>
+</main>
+
+<script>
+/* ---- Språk (samme nøkkel som resten av plattformen) ---- */
+let LANG = (function(){ try { return localStorage.getItem('lme_lang') || localStorage.getItem('lme-lang') || 'no'; } catch(e){ return 'no'; } })();
+const I18N = {
+  no:{ back:"Til Creative Academy",
+    title:'LME <em>Forklaringsvideo</em>',
+    subtitle:"Gjør et hvilket som helst tema om til en tegnet whiteboard-video du faktisk husker. Skriv et tema, så lager AI-en hook, manus scene for scene, det som tegnes på tavla og voiceover, klar til å bli video på cirka ett minutt.",
+    b1:"✍️ Skriv et tema",b2:"🎬 Se den tegne seg fram",b3:"⏱️ Cirka ett minutt",b4:"🌍 Norsk og engelsk",
+    "s1-num":"Tema","s1-h":"Hva skal vi forklare?","s1-lead":"Skriv et tema, et spørsmål eller lim inn notatene dine. AI-en tegner forklaringen scene for scene, i whiteboard-stil.",
+    "s1-src":"Tema eller spørsmål","s1-ph":"F.eks: Hva er den forberedte tilretteleggeren i Montessori? Eller: Slik hjelper du et barn å konsentrere seg.",
+    "s1-level":"Hvem er den for?","lvl-parents":"Foreldre hjemme","lvl-kg":"Barnehage (3-6 år)","lvl-school":"Skole (6-12 år)","lvl-teachers":"Pedagoger og ansatte",
+    "s1-btn":"✨ Lag forklaringen",
+    "s2-num":"Video","s2-h":"Gjør den til video","s2-lead":"Lag en vertikal 9:16 video av forklaringen, klar for Instagram, TikTok og Reels. Eller kopier manuset og les det inn selv.",
+    "s2-genvid":"Lag video automatisk","s2-toreel":"🎬 Publiser og planlegg i Reel Studio",
+    "s2-note":"💡 Trykk «Lag video automatisk», så lager AI-en et bilde av forklaringen og gjør det om til en vertikal video rett her. Vil du publisere og planlegge den? Ta den med videre til Reel Studio.",
+    lvl:"Passer for",hook:"PÅ TAVLA (0-3 s)",scenes:"Manus scene for scene",board:"Tegnes på tavla",vo:"Voiceover",takeaway:"Til slutt",fullvo:"Hele voiceoveren",caption:"Caption",tags:"Hashtags",
+    loading:"Tegner forklaringen…",error:"Noe gikk galt. Prøv igjen om litt.",copy:"Kopier",copied:"Kopiert!",
+    needContentFirst:"Lag forklaringen i steg 1 først.",
+    vidImage:"Lager bilde…",vidMaking:"Lager video… (kan ta et par minutter)",vidUploading:"Laster opp…",vidReady:"Video klar 🎬 Lagt inn under.",vidFail:"Kunne ikke lage video.",
+    vidServerBusy:"Serveren svarer ikke som forventet ennå. En ny versjon kan være under utrulling. Last siden på nytt og prøv igjen om et minutt.",
+    imgNotConfigured:"Bildemotoren er ikke koblet til ennå. Legg inn en nøkkel (OPENAI_API_KEY eller GEMINI_API_KEY) i Cloudflare, så lager jeg bildet automatisk." },
+  en:{ back:"To Creative Academy",
+    title:'LME <em>Explainer Video</em>',
+    subtitle:"Turn any topic into a hand-drawn whiteboard video you actually remember. Write a topic and the AI creates the hook, a scene-by-scene script, what gets drawn on the board and the voiceover, ready to become a one-minute video.",
+    b1:"✍️ Write a topic",b2:"🎬 Watch it draw itself",b3:"⏱️ About one minute",b4:"🌍 Norwegian and English",
+    "s1-num":"Topic","s1-h":"What should we explain?","s1-lead":"Write a topic, a question or paste your notes. The AI draws the explanation scene by scene, whiteboard style.",
+    "s1-src":"Topic or question","s1-ph":"E.g: What is the prepared adult in Montessori? Or: How to help a child concentrate.",
+    "s1-level":"Who is it for?","lvl-parents":"Parents at home","lvl-kg":"Preschool (3-6)","lvl-school":"School (6-12)","lvl-teachers":"Teachers and staff",
+    "s1-btn":"✨ Create the explanation",
+    "s2-num":"Video","s2-h":"Turn it into video","s2-lead":"Create a vertical 9:16 video of the explanation, ready for Instagram, TikTok and Reels. Or copy the script and record it yourself.",
+    "s2-genvid":"Create video automatically","s2-toreel":"🎬 Publish and schedule in Reel Studio",
+    "s2-note":"💡 Tap “Create video automatically” and the AI makes an image of the explanation and turns it into a vertical video right here. Want to publish and schedule it? Take it on to Reel Studio.",
+    lvl:"For",hook:"ON THE BOARD (0-3 s)",scenes:"Scene-by-scene script",board:"Drawn on the board",vo:"Voiceover",takeaway:"Finally",fullvo:"The full voiceover",caption:"Caption",tags:"Hashtags",
+    loading:"Drawing the explanation…",error:"Something went wrong. Try again shortly.",copy:"Copy",copied:"Copied!",
+    needContentFirst:"Create the explanation in step 1 first.",
+    vidImage:"Creating image…",vidMaking:"Creating video… (may take a couple of minutes)",vidUploading:"Uploading…",vidReady:"Video ready 🎬 Added below.",vidFail:"Could not create the video.",
+    vidServerBusy:"The server isn't responding as expected yet. A new version may be deploying. Reload the page and try again in a minute.",
+    imgNotConfigured:"The image engine isn't connected yet. Add a key (OPENAI_API_KEY or GEMINI_API_KEY) in Cloudflare and I'll create the image automatically." }
+};
+const t = (k) => (I18N[LANG][k] ?? I18N.no[k] ?? k);
+
+async function readJson(res, where){
+  const body=await res.text();
+  try{ return JSON.parse(body); }
+  catch(_){
+    var snip=(body||'').replace(/\s+/g,' ').trim().slice(0,50);
+    var e=new Error('server_busy'); e.serverBusy=true;
+    e.where=where||''; e.httpStatus=res.status; e.snippet=snip;
+    throw e;
+  }
+}
+function applyI18n(){
+  document.documentElement.lang = LANG;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const v=t(el.getAttribute('data-i18n'));
+    if(/[<&]/.test(v)) el.innerHTML=v; else el.textContent=v;
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ el.placeholder=t(el.getAttribute('data-i18n-ph')); });
+  document.getElementById('lang-no').classList.toggle('active',LANG==='no');
+  document.getElementById('lang-en').classList.toggle('active',LANG==='en');
+}
+function setLang(l){ LANG=l; try{localStorage.setItem('lme_lang',l);localStorage.setItem('lme-lang',l);}catch(e){} applyI18n(); if(EXPL) renderContent(EXPL); }
+
+function esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function parseJSON(str){ if(typeof str==='object') return str; const m=str.match(/\{[\s\S]*\}/); return JSON.parse(m?m[0]:str); }
+function copyText(txt,el){ try{navigator.clipboard.writeText(txt);}catch(e){} const o=el.textContent; el.textContent=t('copied'); setTimeout(()=>el.textContent=o,1200); }
+function copyBtn(txt){ return '<button class="copy-btn" onclick=\'copyText('+JSON.stringify(txt)+',this)\'>'+t('copy')+'</button>'; }
+
+/* ---- Steg 1: generer whiteboard-forklaringen ---- */
+let EXPL=null;
+async function genContent(){
+  const source=document.getElementById('src').value.trim();
+  if(!source) return;
+  const level=document.getElementById('level').value;
+  const btn=document.getElementById('genBtn');
+  const label=btn.innerHTML; btn.disabled=true; btn.innerHTML='<span class="spinner"></span> '+t('loading');
+  try{
+    const res=await fetch('/api/ai/content',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({format:'explainer',source:source+' — nivå: '+level,lang:LANG})});
+    if(!res.ok) throw new Error('http '+res.status);
+    const data=await res.json();
+    if(data.error) throw new Error(data.error);
+    EXPL=parseJSON(data.result);
+    renderContent(EXPL);
+    document.getElementById('step2').classList.add('on');
+  }catch(e){
+    console.error('Forklaringsvideo:',e);
+    document.getElementById('out').innerHTML='<p class="err">'+t('error')+'</p>';
+  }finally{ btn.disabled=false; btn.innerHTML=label; }
+}
+
+function fullVoiceover(r){
+  var parts=[];
+  if(Array.isArray(r.scenes)) r.scenes.forEach(function(s){ if(s.narration) parts.push(s.narration); });
+  if(r.takeaway) parts.push(r.takeaway);
+  return parts.join('\n\n');
+}
+function tagsCard(hashtags){
+  if(!Array.isArray(hashtags)||!hashtags.length) return '';
+  const tagline=hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' ');
+  return '<div class="card"><h4>#️⃣ '+t('tags')+' '+copyBtn(tagline)+'</h4><div class="tags">'+
+    hashtags.map(function(x){return '<span>'+esc(x[0]==='#'?x:'#'+x)+'</span>';}).join('')+'</div></div>';
+}
+
+function renderContent(r){
+  let h='';
+  h+='<div class="board">'+
+     (r.hook?'<div class="lbl">'+t('hook')+'</div><div class="hooktxt">'+esc(r.hook)+'</div>':'')+
+     (r.level?'<div class="lvl">'+t('lvl')+': '+esc(r.level)+'</div>':'')+
+     '</div>';
+  const vo=fullVoiceover(r);
+  if(Array.isArray(r.scenes)&&r.scenes.length){
+    h+='<div class="card"><h4>🎬 '+t('scenes')+' '+copyBtn(vo)+'</h4></div>';
+    r.scenes.forEach(function(s){
+      h+='<div class="card scene">'+
+         (s.time?'<div class="time">'+esc(s.time)+'</div>':'')+
+         (s.board?'<div class="on">'+esc(s.board)+'</div>':'')+
+         (s.narration?'<div class="vo">'+esc(s.narration)+'</div>':'')+
+         '</div>';
+    });
+  }
+  if(r.takeaway) h+='<div class="card"><h4>✅ '+t('takeaway')+'</h4><p>'+esc(r.takeaway)+'</p></div>';
+  if(r.caption) h+='<div class="card"><h4>✍️ '+t('caption')+' '+copyBtn(r.caption)+'</h4><p>'+esc(r.caption)+'</p></div>';
+  h+=tagsCard(r.hashtags);
+  document.getElementById('out').innerHTML=h;
+}
+
+/* ---- Steg 2: lag video (samme robuste pipeline som Reel Studio) ---- */
+function loadImg(src){
+  return new Promise(function(res,rej){
+    var im=new Image(); im.crossOrigin='anonymous';
+    im.onload=function(){ res(im); }; im.onerror=function(){ rej(new Error('bilde')); };
+    im.src=src;
+  });
+}
+function pickMime(){
+  if(typeof MediaRecorder==='undefined') return null;
+  var c=['video/mp4','video/mp4;codecs=avc1','video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'];
+  for(var i=0;i<c.length;i++){ try{ if(MediaRecorder.isTypeSupported(c[i])) return c[i]; }catch(e){} }
+  return 'video/webm';
+}
+async function imageToVideoBlob(imageUrl){
+  var cv=document.createElement('canvas');
+  if(!cv.captureStream || typeof MediaRecorder==='undefined') throw new Error('nettleseren støtter ikke videoopptak');
+  var img=await loadImg(imageUrl);
+  var W=1080,H=1920; cv.width=W; cv.height=H;
+  var ctx=cv.getContext('2d'); ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high';
+  var fps=30, durMs=8000;
+  var stream=cv.captureStream(fps);
+  var mime=pickMime();
+  var rec;
+  try{ rec=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:7000000}); }
+  catch(e){ rec=new MediaRecorder(stream); mime=rec.mimeType||'video/webm'; }
+  var chunks=[]; rec.ondataavailable=function(e){ if(e.data&&e.data.size) chunks.push(e.data); };
+  var stopped=new Promise(function(r){ rec.onstop=r; });
+  var base=Math.max(W/img.width,H/img.height);
+  var ease=function(t){ return t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2; };
+  rec.start();
+  var t0=(typeof performance!=='undefined'&&performance.now)?performance.now():Date.now();
+  await new Promise(function(resolve){
+    (function frame(){
+      var now=(typeof performance!=='undefined'&&performance.now)?performance.now():Date.now();
+      var p=Math.min(1,(now-t0)/durMs), te=ease(p);
+      var z=1.0+0.18*te, sc=base*z, dw=img.width*sc, dh=img.height*sc;
+      var maxY=Math.max(0,(dh-H)/2);
+      ctx.fillStyle='#000'; ctx.fillRect(0,0,W,H);
+      ctx.drawImage(img,(W-dw)/2,(H-dh)/2-(te-0.5)*maxY,dw,dh);
+      if(p<1) requestAnimationFrame(frame);
+      else { setTimeout(function(){ try{ rec.stop(); }catch(e){} }, 150); resolve(); }
+    })();
+  });
+  await stopped;
+  var outType=(mime.indexOf('mp4')>=0)?'video/mp4':'video/webm';
+  return new Blob(chunks,{type:outType});
+}
+function blobToB64(blob){ return new Promise(function(res,rej){ var r=new FileReader(); r.onload=function(e){ res(String(e.target.result).split(',')[1]); }; r.onerror=function(){ rej(new Error('lese fil')); }; r.readAsDataURL(blob); }); }
+async function higgsfieldVideo(prompt,imageUrl,btn){
+  var sub=await fetch('/api/reel-video',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({prompt:prompt,imageUrl:imageUrl})}).then(function(r){return readJson(r,'reel-video');});
+  if(sub&&sub.error==='not_configured') return '__fallback__';
+  if(!sub||sub.error||(!sub.id&&!sub.statusUrl)) throw new Error((sub&&sub.error)||'higgsfield');
+  var q='id='+encodeURIComponent(sub.id||'')+(sub.statusUrl?'&u='+encodeURIComponent(sub.statusUrl):'');
+  for(var i=0;i<75;i++){
+    await new Promise(function(r){ setTimeout(r,4000); });
+    var st=await fetch('/api/reel-video?'+q).then(function(r){return readJson(r,'reel-video');}).catch(function(){return null;});
+    if(st){
+      if(st.status==='completed'&&st.url) return st.url;
+      if(st.error||st.status==='failed'||st.status==='nsfw') throw new Error(st.error||st.status);
+    }
+    if(btn) btn.innerHTML='<span class="spinner"></span> '+t('vidMaking');
+  }
+  throw new Error('timeout');
+}
+function videoPrompt(){
+  var r=EXPL||{};
+  var board=(Array.isArray(r.scenes)&&r.scenes[0]&&r.scenes[0].board)||'';
+  var base=(r.hook?r.hook+'. ':'')+(board?board+'. ':'')+(r.takeaway||'');
+  if(!base) base=(document.getElementById('src')&&document.getElementById('src').value)||'';
+  // Whiteboard-look for bildet
+  return 'Håndtegnet whiteboard-forklaring, enkel svart strektegning med noen få fargeaksenter, ren hvit tavle, luftig og pedagogisk, vertikal 9:16: '+base;
+}
+async function genVideo(){
+  var msg=document.getElementById('genVidMsg'), btn=document.getElementById('genVidBtn');
+  if(!EXPL){ msg.className='pubmsg err'; msg.textContent='⚠️ '+t('needContentFirst'); return; }
+  var prompt=videoPrompt();
+  var label=btn.innerHTML; btn.disabled=true;
+  msg.className='pubmsg'; msg.textContent='';
+  var v=document.getElementById('vidPreview'); if(v){ v.style.display='none'; v.removeAttribute('src'); }
+  try{
+    btn.innerHTML='<span class="spinner"></span> '+t('vidImage');
+    var ir=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:prompt,character:'none',platform:'tiktok',lang:LANG})}).then(function(r){return readJson(r,'image');});
+    if(ir&&ir.error==='not_configured') throw new Error(t('imgNotConfigured'));
+    if(ir&&ir.error&&/ikke koblet til|not connected|mangler|missing/i.test(ir.error)) throw new Error(t('imgNotConfigured'));
+    if(!ir||ir.error||!ir.url) throw new Error(((ir&&ir.error)||'bilde')+((ir&&ir.detail)?': '+ir.detail:''));
+    btn.innerHTML='<span class="spinner"></span> '+t('vidMaking');
+    var url=await higgsfieldVideo(prompt, ir.url, btn);
+    if(url==='__fallback__'){
+      var blob=await imageToVideoBlob(ir.url);
+      btn.innerHTML='<span class="spinner"></span> '+t('vidUploading');
+      var vr=await fetch('/api/video',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({data:await blobToB64(blob),contentType:(blob.type||'video/mp4')})}).then(function(r){return readJson(r,'video');});
+      if(!vr||vr.error||!vr.url) throw new Error((vr&&vr.error)||'opplasting');
+      url=vr.url; if(v){ v.src=URL.createObjectURL(blob); v.style.display='block'; }
+    }
+    if(v){ if(!v.src){ v.src=url; } v.style.display='block'; }
+    // Ta med videoen videre til Reel Studio for publisering
+    try{ localStorage.setItem('lme-reel-media', url); }catch(e){}
+    btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg'; msg.textContent=t('vidReady');
+  }catch(e){
+    btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err';
+    if(e&&e.serverBusy){
+      var dg=' ['+(e.where||'?')+' '+(e.httpStatus||'?')+(e.snippet?': '+e.snippet:'')+']';
+      msg.textContent='⚠️ '+t('vidServerBusy')+dg;
+    }
+    else { msg.textContent='⚠️ '+t('vidFail')+(e&&e.message?' ('+e.message+')':''); }
+  }
+}
+
+applyI18n();
+
+/* Kom fra en annen side med et forhåndsutfylt tema? */
+(function(){
+  var seed=''; try{ seed=localStorage.getItem('lme-explainer-seed')||''; localStorage.removeItem('lme-explainer-seed'); }catch(e){}
+  if(seed){
+    var src=document.getElementById('src'); if(src) src.value=seed;
+    genContent();
+  }
+})();
+</script>
+<script src="/js/lme-account.js?v=7" defer></script>
+<script>window.LME_REQUIRES="sub";window.LME_GATE_TITLE="Forklaringsvideo er en Proff-funksjon";window.LME_GATE_URL="/oppgrader";</script>
+<script src="/js/lme-gate.js" defer></script>
+</body>
+</html>
