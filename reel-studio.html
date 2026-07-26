@@ -311,6 +311,7 @@ function copyBtn(txt){ return '<button class="copy-btn" onclick=\'copyText('+JSO
 /* ---- Formater (speiler LME Content Studio-appen) ---- */
 var FORMATS=[
   {id:'reel',ico:'🎬',no:'Reel / TikTok',en:'Reel / TikTok',media:'video',pub:['instagram','tiktok']},
+  {id:'hookreel',ico:'🪝',no:'Hook-reel',en:'Hook reel',media:'video',pub:['instagram','tiktok']},
   {id:'carousel',ico:'🎠',no:'Karusell',en:'Carousel',media:'image',pub:['instagram','facebook']},
   {id:'story',ico:'🌸',no:'Story',en:'Story',media:'image',pub:['instagram','facebook']},
   {id:'post',ico:'🌿',no:'Feed-innlegg',en:'Feed post',media:'image',pub:['instagram','facebook']},
@@ -383,7 +384,7 @@ function capCard(cap){ return cap?'<div class="card"><h4>✍️ '+t('caption')+'
 
 function renderContent(fmt,r){
   let h='';
-  if(fmt==='reel'){
+  if(fmt==='reel'||fmt==='hookreel'){
     if(r.hook) h+='<div class="hook"><div class="lbl">'+t('hook')+'</div><div class="txt">'+esc(r.hook)+'</div></div>';
     if(r.voiceover) h+='<div class="card"><h4>🎙️ '+t('vo')+' '+copyBtn(r.voiceover)+'</h4><p>'+esc(r.voiceover)+'</p></div>';
     if(Array.isArray(r.scenes)&&r.scenes.length){
@@ -398,6 +399,7 @@ function renderContent(fmt,r){
       });
     }
     if(r.musicMood) h+='<div class="card"><h4>🎵 '+t('music')+'</h4><p>'+esc(r.musicMood)+'</p></div>';
+    if(r.cta) h+='<div class="card"><h4>➡️ '+t('cta')+' '+copyBtn(r.cta)+'</h4><p>'+esc(r.cta)+'</p></div>';
     h+=capCard(r.caption)+tagsCard(r.hashtags);
   } else if(fmt==='carousel'){
     if(Array.isArray(r.slides)) r.slides.forEach(function(s,i){
@@ -433,6 +435,9 @@ function buildCaption(){
   if(FMT==='email') return (r.subject?r.subject+'\n\n':'')+(r.body||'');
   if(FMT==='pinterest') return (r.pinTitle?r.pinTitle+'\n':'')+(r.pinDescription||'');
   var cap=r.caption||'';
+  // Hook-reel: ta med den kommentar-baserte oppfordringen i teksten om den
+  // ikke allerede ligger der.
+  if(r.cta && cap.indexOf(r.cta)===-1) cap=(cap?cap+'\n\n':'')+r.cta;
   var tags=Array.isArray(r.hashtags)?r.hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' '):'';
   return (cap+(tags?'\n\n'+tags:'')).trim();
 }
