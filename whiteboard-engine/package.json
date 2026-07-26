@@ -1,0 +1,29 @@
+{
+  "name": "whiteboard-video-motor",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "server.js",
+  "description": "LME whiteboard-video-motor: manus -> ElevenLabs (lyd + ord-tidsstempler) -> DALL-E 3 (skisse) -> Remotion (MP4 der en hand tegner i takt med stemmen).",
+  "scripts": {
+    "start": "node server.js",
+    "studio": "remotion studio video/Root.tsx",
+    "still": "remotion still video/Root.tsx WhiteboardComposition out/still.png"
+  },
+  "dependencies": {
+    "@remotion/bundler": "^4.0.0",
+    "@remotion/renderer": "^4.0.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "openai": "^4.52.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.0"
+  },
+  "devDependencies": {
+    "@remotion/cli": "^4.0.0",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.0",
+    "@types/react": "^18.3.3",
+    "typescript": "^5.4.5"
+  }
+}
