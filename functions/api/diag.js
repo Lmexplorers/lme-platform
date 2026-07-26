@@ -13,8 +13,10 @@
 
 import { sessionUser } from "../_lib/access.js";
 
+// Samme eier-logikk som functions/_lib/access.js: rolle ELLER eier-e-post.
 const OWNER_EMAILS = ["renateshobby@hotmail.com"];
-const isOwner = (u) => !!(u && OWNER_EMAILS.indexOf(String(u.email || "").toLowerCase()) !== -1);
+const isOwner = (u) => !!(u && (u.role === "owner" || u.role === "admin" ||
+  OWNER_EMAILS.indexOf(String(u.email || "").toLowerCase()) !== -1));
 
 function json(data, status) {
   return new Response(JSON.stringify(data, null, 2), {
@@ -43,7 +45,16 @@ async function probe(url, opts, ms) {
 export async function onRequestGet(context) {
   const { env } = context;
   const user = await sessionUser(context);
-  if (!isOwner(user)) return json({ error: "Kun for eier. Logg inn som Renate og prøv igjen." }, 403);
+  if (!isOwner(user)) {
+    // Vis hva økten faktisk ble gjenkjent som (din egen innloggingsinfo), så
+    // vi ser hvorfor eier-sjekken ikke traff.
+    return json({
+      error: "Ikke gjenkjent som eier.",
+      loggedIn: !!user,
+      seenEmail: user ? (user.email || null) : null,
+      seenRole: user ? (user.role || null) : null,
+    }, 403);
+  }
 
   const KEYS = ["ANTHROPIC_API_KEY", "OPENAI_API_KEY", "GEMINI_API_KEY", "BLOTATO_API_KEY", "HIGGSFIELD_API_KEY", "ELEVENLABS_API_KEY", "MAILERLITE_API_KEY", "STABILITY_API_KEY"];
   const present = {};
