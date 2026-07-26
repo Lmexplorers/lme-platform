@@ -63,6 +63,14 @@ const IMAGE_MODEL = process.env.OPENAI_IMAGE_MODEL || "dall-e-3";
 
 const app = express();
 app.use(express.json({ limit: "1mb" }));
+// CORS: la LME-plattformen (og forhåndsvisning) kalle motoren fra nettleseren.
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+});
 app.use("/public", express.static(PUBLIC_DIR));
 app.use("/output", express.static(OUTPUT_DIR));
 app.get("/", (_req, res) => res.json({ ok: true, service: "whiteboard-video-motor" }));
@@ -210,10 +218,16 @@ app.post("/api/generer-whiteboard", async (req, res) => {
       inputProps,
     });
 
+    // Utled offentlig URL fra selve forespørselen (funker uten å sette
+    // PUBLIC_BASE_URL manuelt). Render sender X-Forwarded-Proto/Host.
+    const proto = String(req.headers["x-forwarded-proto"] || req.protocol || "https").split(",")[0].trim();
+    const host = req.get("host");
+    const publicBase = host ? `${proto}://${host}` : PUBLIC_BASE;
+
     console.log(`Ferdig på ${((Date.now() - t0) / 1000).toFixed(1)} s.`);
     return res.status(200).json({
       success: true,
-      videoUrl: `${PUBLIC_BASE}/output/${outName}`,
+      videoUrl: `${publicBase}/output/${outName}`,
       videoPath: outputLocation,
       durationSeconds: Number(totalVarighetSekunder.toFixed(1)),
       words: words.length,
