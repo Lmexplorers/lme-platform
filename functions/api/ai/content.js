@@ -61,6 +61,10 @@ async function callClaude(env, system, userPrompt, maxTokens, model) {
       body: JSON.stringify({
         model: model || "claude-sonnet-5",
         max_tokens: maxTokens || 3000,
+        // Skru av utvidet tenkning: for innholdsgenerering trenger vi ikke
+        // resonnering, og tenkningen gjorde kallet så tregt at Pages-funksjonen
+        // rakk å gi opp (HTML-502). Uten den svarer modellen raskt og direkte.
+        thinking: { type: "disabled" },
         system,
         messages: [{ role: "user", content: userPrompt }],
       }),
