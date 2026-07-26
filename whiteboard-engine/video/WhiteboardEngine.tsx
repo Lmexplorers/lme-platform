@@ -11,10 +11,18 @@ export interface WordTimestamp {
   end: number;
 }
 
+export interface Drawing {
+  viewBox: string;
+  d: string;
+  length: number;
+  points: { x: number; y: number }[];
+}
+
 export interface WhiteboardProps {
   audioUrl: string;
   imageUrl: string;
   handUrl?: string;
+  drawing?: Drawing | null;
   textTimestamps: WordTimestamp[];
   totalFrames: number;
   fps: number;
@@ -52,7 +60,7 @@ const Marker: React.FC<{ x: number; y: number }> = ({ x, y }) => (
   </div>
 );
 
-export const WhiteboardEngine: React.FC<WhiteboardProps> = ({ audioUrl, imageUrl, handUrl, textTimestamps = [], fps = 30 }) => {
+export const WhiteboardEngine: React.FC<WhiteboardProps> = ({ audioUrl, imageUrl, handUrl, drawing, textTimestamps = [], fps = 30 }) => {
   const frame = useCurrentFrame();
   const t = frame / fps;
   const W = 1920;
@@ -68,19 +76,41 @@ export const WhiteboardEngine: React.FC<WhiteboardProps> = ({ audioUrl, imageUrl
   const firstStart = textTimestamps[0].start;
   const lastEnd = textTimestamps[textTimestamps.length - 1].end;
 
-  // Bilde: tegnes ferdig raskere (over de første ~55 % av fortellingen), så det
-  // ikke bare "prikkes" sakte hele veien.
-  const drawEnd = firstStart + (lastEnd - firstStart) * 0.55;
-  const reveal = interpolate(t, [firstStart, drawEnd], [0, 100], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-
-  const imgW = 460, imgH = 460;
+  const imgW = 480, imgH = 480;
   const imgLeft = (W - imgW) / 2;
-  const imgTop = H - imgH - 90;
+  const imgTop = H - imgH - 80;
 
-  // Markøren tegner ved avdekkingskanten på bildet, med tydelig bevegelse.
-  const tipX = imgLeft + (reveal / 100) * imgW;
-  const tipY = imgTop + imgH * 0.5 + Math.sin(frame * 1.3) * 22;
-  const markerVisible = reveal < 99.5;
+  // Tegningen bygges opp over de første ~60 % av fortellingen.
+  const drawEnd = firstStart + (lastEnd - firstStart) * 0.6;
+  const drawP = interpolate(t, [firstStart, drawEnd], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+  const hasDrawing = !!(drawing && drawing.d && drawing.length > 0);
+
+  // Parse viewBox
+  let vbW = 1024, vbH = 1024;
+  if (hasDrawing) {
+    const parts = String(drawing!.viewBox).split(/\s+/).map(Number);
+    if (parts.length === 4 && parts[2] > 0 && parts[3] > 0) { vbW = parts[2]; vbH = parts[3]; }
+  }
+
+  // Tegnehåndens spiss: følger streken hvis vi har den, ellers avdekkingskanten.
+  let tipX: number, tipY: number, markerVisible: boolean;
+  if (hasDrawing && drawing!.points && drawing!.points.length) {
+    const pts = drawing!.points;
+    const pt = pts[Math.min(pts.length - 1, Math.floor(drawP * (pts.length - 1)))];
+    tipX = imgLeft + (pt.x / vbW) * imgW;
+    tipY = imgTop + (pt.y / vbH) * imgH;
+    markerVisible = drawP < 0.995;
+  } else {
+    const reveal = drawP * 100;
+    tipX = imgLeft + (reveal / 100) * imgW;
+    tipY = imgTop + imgH * 0.5 + Math.sin(frame * 1.3) * 22;
+    markerVisible = reveal < 99.5;
+  }
+
+  const dashOffset = hasDrawing ? drawing!.length * (1 - drawP) : 0;
+  const fillOpacity = interpolate(drawP, [0.82, 1], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const strokeW = Math.max(3, vbW / 200);
 
   return (
     <AbsoluteFill style={{ backgroundColor: "#FBF6F0", fontFamily: LME_FONT }}>
@@ -96,7 +126,7 @@ export const WhiteboardEngine: React.FC<WhiteboardProps> = ({ audioUrl, imageUrl
       </div>
 
       {/* TEKST: én setning om gangen, stor og midtstilt, ord for ord */}
-      <div style={{ position: "absolute", top: 110, left: 150, right: 150, height: 340, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
+      <div style={{ position: "absolute", top: 110, left: 150, right: 150, height: 320, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
         <div style={{ fontSize: 62, fontWeight: 800, lineHeight: 1.32, color: "#1A1A1A" }}>
           {s.words.map((w, i) => {
             const vis = t >= w.start;
@@ -110,18 +140,35 @@ export const WhiteboardEngine: React.FC<WhiteboardProps> = ({ audioUrl, imageUrl
         </div>
       </div>
       {/* cerise understrek under teksten */}
-      <div style={{ position: "absolute", top: 466, left: "50%", transform: "translateX(-50%)", width: 220, height: 8, borderRadius: 8, background: "#E91E89", opacity: 0.9 }} />
+      <div style={{ position: "absolute", top: 452, left: "50%", transform: "translateX(-50%)", width: 220, height: 8, borderRadius: 8, background: "#E91E89", opacity: 0.9 }} />
 
-      {/* BILDE: tegnes fram (venstre -> høyre) */}
-      {imageUrl ? (
-        <div style={{ position: "absolute", top: imgTop, left: imgLeft, width: imgW, height: imgH, clipPath: `inset(0 ${100 - reveal}% 0 0)` }}>
+      {/* TEGNING: ekte strek-for-strek hvis vi har vektorstreker, ellers enkel avdekking */}
+      {hasDrawing ? (
+        <svg
+          style={{ position: "absolute", top: imgTop, left: imgLeft, width: imgW, height: imgH }}
+          viewBox={drawing!.viewBox}
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <path
+            d={drawing!.d}
+            fill="#1A1A1A"
+            fillOpacity={fillOpacity}
+            stroke="#1A1A1A"
+            strokeWidth={strokeW}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeDasharray={drawing!.length}
+            strokeDashoffset={dashOffset}
+          />
+        </svg>
+      ) : imageUrl ? (
+        <div style={{ position: "absolute", top: imgTop, left: imgLeft, width: imgW, height: imgH, clipPath: `inset(0 ${100 - drawP * 100}% 0 0)` }}>
           <Img src={imageUrl} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
         </div>
       ) : null}
 
       {/* Tegnehånd: ekte hånd-bilde hvis vi har det, ellers tegnet markør.
-          Bildet er komponert med tusjspissen nede til venstre, så vi plasserer
-          nedre venstre hjørne omtrent ved tegnepunktet. */}
+          Bildet er komponert med tusjspissen nede til venstre. */}
       {markerVisible ? (
         handUrl ? (
           <img

@@ -8,6 +8,7 @@ const defaultProps: WhiteboardProps = {
   audioUrl: "",
   imageUrl: "",
   handUrl: "",
+  drawing: null,
   textTimestamps: [],
   totalFrames: 900,
   fps: 30,

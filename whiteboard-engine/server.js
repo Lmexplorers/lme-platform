@@ -25,6 +25,8 @@ import { selectComposition, renderMedia, ensureBrowser } from "@remotion/rendere
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import potrace from "potrace";
+import { svgPathProperties } from "svg-path-properties";
 
 dotenv.config();
 
@@ -169,6 +171,47 @@ async function lagWhiteboardBilde(temaTekst) {
   throw lastErr || new Error("Ingen bildemodell tilgjengelig.");
 }
 
+// Spor bildet til vektorstreker (SVG) så det kan tegnes strek for strek.
+// Returnerer { viewBox, d, length, points } eller null (da faller vi tilbake
+// på enkel avdekking).
+function traceToDrawing(pngAbsPath) {
+  return new Promise((resolve) => {
+    try {
+      potrace.trace(
+        pngAbsPath,
+        { threshold: 160, turdSize: 30, optTolerance: 0.4, color: "#1A1A1A", background: "transparent" },
+        (err, svg) => {
+          if (err || !svg) return resolve(null);
+          const vb = svg.match(/viewBox="([^"]+)"/);
+          let viewBox = vb ? vb[1] : null;
+          if (!viewBox) {
+            const w = (svg.match(/width="(\d+)/) || [])[1] || 1024;
+            const h = (svg.match(/height="(\d+)/) || [])[1] || 1024;
+            viewBox = `0 0 ${w} ${h}`;
+          }
+          const ds = Array.from(svg.matchAll(/<path[^>]*\sd="([^"]+)"/g)).map((m) => m[1]);
+          if (!ds.length) return resolve(null);
+          const d = ds.join(" ");
+          let length = 0;
+          const points = [];
+          try {
+            const props = new svgPathProperties(d);
+            length = props.getTotalLength();
+            const N = 80;
+            for (let i = 0; i <= N; i++) {
+              const p = props.getPointAtLength((length * i) / N);
+              points.push({ x: Math.round(p.x), y: Math.round(p.y) });
+            }
+          } catch (e) { /* går uten punkter også */ }
+          resolve({ viewBox, d, length, points });
+        }
+      );
+    } catch (e) {
+      resolve(null);
+    }
+  });
+}
+
 // Lag et ekte hånd-bilde (hånd som holder tusj) én gang, med gjennomsiktig
 // bakgrunn, og gjenbruk det som tegnehånd i videoen.
 let HAND_READY = null; // "/public/hand.png" | false | null(ikke forsøkt)
@@ -256,6 +299,10 @@ async function renderJob(jobId, { manus, voiceId, tema, lang }, publicBase) {
 
     console.log("2/4  Whiteboard-skisse...");
     const imagePath = await lagWhiteboardBilde(tema || manus);
+    // Spor bildet til streker for ekte tegne-animasjon.
+    let drawing = null;
+    try { drawing = await traceToDrawing(path.resolve(PUBLIC_DIR, path.basename(imagePath))); }
+    catch (e) { console.warn("Sporing feilet, bruker enkel avdekking:", e && e.message); }
 
     const fps = 30;
     const sisteSlutt = words[words.length - 1].end || 0;
@@ -267,6 +314,7 @@ async function renderJob(jobId, { manus, voiceId, tema, lang }, publicBase) {
       audioUrl: RENDER_BASE + audioPath,
       imageUrl: RENDER_BASE + imagePath,
       handUrl: handPath ? RENDER_BASE + handPath : "",
+      drawing: drawing || null,
       textTimestamps: words,
       totalFrames,
       fps,
