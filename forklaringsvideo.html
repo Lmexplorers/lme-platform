@@ -268,16 +268,17 @@ async function genContent(){
   const label=btn.innerHTML; btn.disabled=true; btn.innerHTML='<span class="spinner"></span> '+t('loading');
   try{
     const res=await fetch('/api/ai/content',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({format:'explainer',source:source+' — nivå: '+level,lang:LANG})});
-    if(!res.ok) throw new Error('http '+res.status);
-    const data=await res.json();
+      body:JSON.stringify({format:'explainer',source:source+', nivå: '+level,lang:LANG})});
+    const data=await readJson(res,'content');
+    if(!res.ok) throw new Error('http '+res.status+(data&&data.error?': '+data.error:''));
     if(data.error) throw new Error(data.error);
     EXPL=parseJSON(data.result);
     renderContent(EXPL);
     document.getElementById('step2').classList.add('on');
   }catch(e){
     console.error('Forklaringsvideo:',e);
-    document.getElementById('out').innerHTML='<p class="err">'+t('error')+'</p>';
+    var extra = (e&&e.serverBusy) ? (' ['+(e.httpStatus||'?')+(e.snippet?': '+e.snippet:'')+']') : ((e&&e.message)?(' ('+e.message+')'):'');
+    document.getElementById('out').innerHTML='<p class="err">'+esc(t('error')+extra)+'</p>';
   }finally{ btn.disabled=false; btn.innerHTML=label; }
 }
 

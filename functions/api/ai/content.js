@@ -39,7 +39,7 @@ ALDRI dikt opp garantier, pengene-tilbake-løfter, refusjonsvilkår, priser, rab
 
 const langName = (l) => (l === "en" ? "English" : "norsk (bokmål)");
 
-async function callClaude(env, system, userPrompt, maxTokens) {
+async function callClaude(env, system, userPrompt, maxTokens, model) {
   const resp = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
@@ -48,7 +48,7 @@ async function callClaude(env, system, userPrompt, maxTokens) {
       "anthropic-version": "2023-06-01",
     },
     body: JSON.stringify({
-      model: "claude-sonnet-5",
+      model: model || "claude-sonnet-5",
       max_tokens: maxTokens || 3000,
       system,
       messages: [{ role: "user", content: userPrompt }],
@@ -96,8 +96,13 @@ export async function onRequestPost(context) {
   catch { return json({ error: "Ugyldig JSON" }, 400); }
 
   const system = `${BRAND_CONTEXT}\nDu er LMEs innholdsprodusent. Du lager ferdig, publiseringsklart innhold i akkurat det formatet brukeren velger, i LMEs varme, pedagogiske tone.`;
+  // Nye, tyngre formater (whiteboard-forklaring og hook-reel) kjøres på en rask
+  // modell, slik at kallet holder seg godt innenfor tidsgrensen til funksjonen.
+  // De eksisterende formatene beholder modellen de alltid har brukt.
+  const fmt = String(body.format || "post");
+  const model = (fmt === "explainer" || fmt === "hookreel") ? "claude-haiku-4-5-20251001" : "claude-sonnet-5";
   try {
-    const result = await callClaude(env, system, contentPrompt(body), 3000);
+    const result = await callClaude(env, system, contentPrompt(body), 3000, model);
     return json({ result });
   } catch (err) {
     return json({ error: "AI er midlertidig utilgjengelig. Prøv igjen om litt." }, 502);
