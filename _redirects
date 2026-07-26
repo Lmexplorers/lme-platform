@@ -6,13 +6,9 @@
 /g/*  /academy/gruppe.html  200
 /creative-studio  /creative-academy  301
 /rolige-morgener  /funnel/rolige-morgener/opt-in.html  200
-/calm-mornings  /funnel/rolige-morgener/opt-in.html?lang=en  301
 /ro-quiz  /funnel/ro-quiz/index.html  200
-/calm-quiz  /funnel/ro-quiz/index.html?lang=en  301
 /rolig-metoden  /funnel/rolig-metoden/index.html  200
 /blomstrings-metoden  /funnel/rolig-metoden/index.html  200
-/bloom-method  /funnel/rolig-metoden/index.html?lang=en  301
 /claude-kurs  /funnel/claude-kurs/salg.html  200
-/claude-course  /funnel/claude-kurs/salg.html?lang=en  301
 /brand/*  /dashboard.html  302
 /  /dashboard.html  302
