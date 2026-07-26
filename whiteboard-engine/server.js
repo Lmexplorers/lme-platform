@@ -10,11 +10,19 @@
  *      med en hand som "tegner", i takt med stemmen.
  *
  *   POST /api/generer-whiteboard   { manus, voiceId?, tema? }
- *        -> { success, videoUrl, videoPath, durationSeconds }
+ *        -> 202 { jobId }  (poll /api/whiteboard-status?id=)
+ *
+ * I tillegg: den ekte håndtegningen (Claude + Flow-arbeidsflyten, helautomatisk):
+ *   POST /api/generer-veo   { scenes:[{imagePrompt,videoPrompt,narration}], lang }
+ *        -> 202 { jobId }  (samme status-endepunkt)
+ *   Nano Banana (Gemini) lager blyantskissen, Veo lar en hånd tegne den, og
+ *   ElevenLabs legger på norsk stemme. Remotion setter klippene sammen.
  *
  * Krever i .env:  OPENAI_API_KEY, ELEVENLABS_API_KEY
+ *                 GEMINI_API_KEY (for /api/generer-veo: Nano Banana + Veo)
  * Valgfritt:      PORT (3000), PUBLIC_BASE_URL, ELEVENLABS_VOICE_ID,
- *                 ELEVENLABS_MODEL_ID, OPENAI_IMAGE_MODEL
+ *                 ELEVENLABS_MODEL_ID, OPENAI_IMAGE_MODEL,
+ *                 GEMINI_IMAGE_MODEL, VEO_MODEL, VEO_CLIP_SECONDS
  */
 
 import express from "express";
@@ -68,6 +76,27 @@ const DEFAULT_VOICE = CLEAN_VOICE || "21m00Tcm4TlvDq8ikWAM"; // Rachel (multilin
 // v2 gjetter ofte dansk). Kan overstyres med ELEVENLABS_MODEL_ID.
 const ELEVEN_MODEL = process.env.ELEVENLABS_MODEL_ID || "eleven_turbo_v2_5";
 const IMAGE_MODEL = process.env.OPENAI_IMAGE_MODEL || "gpt-image-1";
+
+// Google-nøkkel for Nano Banana (Gemini-bilde) og Veo (video). Samme nøkkel som
+// resten av plattformen bruker til Gemini. Godtar de vanlige navnene.
+const GOOGLE_KEY = pickEnv("GEMINI_API_KEY", "GOOGLE_API_KEY", "GOOGLE_GEMINI_API_KEY", "GEMINI_APT_KEY");
+// Nano Banana = gemini-2.5-flash-image. Nano Banana Pro (om nøkkelen har
+// tilgang): sett GEMINI_IMAGE_MODEL=gemini-3-pro-image-preview.
+const GEMINI_IMAGE_MODEL = process.env.GEMINI_IMAGE_MODEL || "gemini-2.5-flash-image";
+// Veo-modell. Standard er Veo 3 Fast (rimeligst). Sett VEO_MODEL for å bytte
+// (f.eks. veo-3.0-generate-001 for full kvalitet).
+const VEO_MODEL = process.env.VEO_MODEL || "veo-3.0-fast-generate-001";
+// Antatt lengde på et Veo-klipp (sekunder). Brukes til å tilpasse scenelengden.
+const CLIP_SECONDS = Number(process.env.VEO_CLIP_SECONDS || 8);
+
+// Fast whiteboard-stil (samme som steg 3 på plattformen). Brukes bare som
+// reserve hvis klienten ikke sender ferdige prompts.
+const FLOW_IMG_STYLE = "hand-drawn black and white pencil sketch illustration, detailed ink line art, crosshatching shading, editorial illustration style, bold clean outlines, fine interior linework, textured sketch feel, on a pure white background, no color, no grayscale fills, monochrome ink drawing, whiteboard animation style, highly detailed hand-drawn artwork, vintage encyclopedia illustration aesthetic, expressive and slightly rough linework";
+const FLOW_VIDEO_STYLE = "A real human hand holding a black pencil enters the frame from the right side and draws in real time on a plain pure white background, whiteboard animation style, the illustration appears stroke by stroke as the hand moves, detailed ink sketch linework, crosshatching shading technique, the hand reveals the drawing progressively, smooth and natural drawing motion, top-down or slight angle camera view, no color, monochrome black ink on white, clean white surface, educational explainer video style, cinematic close-up of hand and pencil tip, natural pencil scratching motion";
+const flowImagePrompt = (subject) => (String(subject || "").trim() ? String(subject).trim() + ", " : "") + FLOW_IMG_STYLE;
+const flowVideoPrompt = (subject) => (String(subject || "").trim() ? "The hand draws: " + String(subject).trim() + ".\n" : "") + FLOW_VIDEO_STYLE;
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const app = express();
 app.use(express.json({ limit: "1mb" }));
@@ -276,6 +305,173 @@ async function lagLydMedTidsstempler(manus, voiceId, lang) {
   return { audioPath: `/public/${filename}`, words };
 }
 
+/* ================= Nano Banana + Veo (Claude + Flow-arbeidsflyten) =================
+   Samme oppskrift som tutorialen: Nano Banana (Gemini) lager en håndtegnet
+   blyantskisse, og Veo lar en ekte hånd tegne den strek for strek. Vi gjør det
+   scene for scene, legger på norsk stemme (ElevenLabs) og setter alt sammen til
+   én vertikal video med Remotion. */
+
+const GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta";
+
+// Nano Banana: bilde-prompt -> lokal PNG (+ base64, brukes som første bilde i Veo).
+async function lagNanoBananaBilde(imagePrompt, aspect) {
+  if (!GOOGLE_KEY) throw new Error("Google-nøkkel mangler (GEMINI_API_KEY) for Nano Banana.");
+  const url = `${GEMINI_BASE}/models/${GEMINI_IMAGE_MODEL}:generateContent?key=${encodeURIComponent(GOOGLE_KEY)}`;
+  const mk = (withCfg) => ({
+    contents: [{ role: "user", parts: [{ text: imagePrompt }] }],
+    generationConfig: withCfg
+      ? { responseModalities: ["IMAGE"], imageConfig: { aspectRatio: aspect || "9:16" } }
+      : { responseModalities: ["IMAGE"] },
+  });
+  let data = null, lastErr = null;
+  // Prøv med bildeformat først; noen modeller godtar ikke imageConfig, da uten.
+  for (const withCfg of [true, false]) {
+    try {
+      const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(mk(withCfg)) });
+      if (!r.ok) { lastErr = new Error(`Nano Banana ${r.status}: ${(await r.text()).replace(/\s+/g, " ").slice(0, 200)}`); continue; }
+      data = await r.json(); break;
+    } catch (e) { lastErr = e; }
+  }
+  if (!data) throw lastErr || new Error("Nano Banana svarte ikke.");
+  const parts = (((data.candidates || [])[0] || {}).content || {}).parts || [];
+  const img = parts.find((p) => p && p.inlineData && p.inlineData.data);
+  if (!img) throw new Error("Nano Banana ga ikke noe bilde tilbake.");
+  const b64 = img.inlineData.data;
+  const mime = img.inlineData.mimeType || "image/png";
+  const ext = /jpe?g/i.test(mime) ? "jpg" : "png";
+  const filename = await saveBufferToPublic(Buffer.from(b64, "base64"), `nb_${Date.now()}_${Math.random().toString(36).slice(2, 7)}.${ext}`);
+  return { path: `/public/${filename}`, base64: b64, mime };
+}
+
+// Finn video-referansen i et ferdig Veo-svar (feltnavn varierer mellom
+// API-versjoner, så vi går gjennom hele svaret og leter etter base64-bytes
+// eller en nedlastings-URL).
+function findVeoVideo(obj) {
+  let uri = null, bytes = null;
+  (function walk(o) {
+    if (!o || typeof o !== "object") return;
+    for (const k of Object.keys(o)) {
+      const v = o[k];
+      if (v && typeof v === "object") walk(v);
+      else if (typeof v === "string") {
+        if (!bytes && /videoBytes|bytesBase64Encoded/i.test(k) && v.length > 100) bytes = v;
+        if (!uri && /uri|url/i.test(k) && /^https?:/i.test(v) && /(files\/|\.mp4|videos?\/)/i.test(v)) uri = v;
+      }
+    }
+  })(obj);
+  if (bytes) return { bytes };
+  if (uri) return { uri };
+  return null;
+}
+
+async function saveVeoVideo(found, key) {
+  if (found.bytes) {
+    const fn = await saveBufferToPublic(Buffer.from(found.bytes, "base64"), `veo_${Date.now()}_${Math.random().toString(36).slice(2, 7)}.mp4`);
+    return `/public/${fn}`;
+  }
+  let u = found.uri;
+  const headers = {};
+  if (/generativelanguage\.googleapis\.com/i.test(u)) {
+    headers["x-goog-api-key"] = key;
+    if (!/[?&]key=/.test(u)) u += (u.includes("?") ? "&" : "?") + "key=" + encodeURIComponent(key);
+  }
+  const r = await fetch(u, { headers });
+  if (!r.ok) throw new Error(`Nedlasting av Veo-video feilet (${r.status}).`);
+  const buf = Buffer.from(await r.arrayBuffer());
+  const fn = await saveBufferToPublic(buf, `veo_${Date.now()}_${Math.random().toString(36).slice(2, 7)}.mp4`);
+  return `/public/${fn}`;
+}
+
+// Veo: video-prompt + første bilde -> lokal MP4 (der hånden tegner motivet).
+// Veo er en langvarig operasjon: vi starter den og spør om status til den er
+// ferdig (opptil ~10 min per klipp).
+async function lagVeoKlipp(imageB64, mime, videoPrompt, aspect) {
+  if (!GOOGLE_KEY) throw new Error("Google-nøkkel mangler (GEMINI_API_KEY) for Veo.");
+  const startUrl = `${GEMINI_BASE}/models/${VEO_MODEL}:predictLongRunning?key=${encodeURIComponent(GOOGLE_KEY)}`;
+  const instance = { prompt: videoPrompt };
+  if (imageB64) instance.image = { bytesBase64Encoded: imageB64, mimeType: mime || "image/png" };
+  const body = { instances: [instance], parameters: { aspectRatio: aspect || "9:16", personGeneration: "allow_adult", sampleCount: 1 } };
+  const r = await fetch(startUrl, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  if (!r.ok) throw new Error(`Veo start ${r.status}: ${(await r.text()).replace(/\s+/g, " ").slice(0, 250)}`);
+  const op = await r.json();
+  const name = op && op.name;
+  if (!name) throw new Error("Veo ga ingen operasjons-id.");
+  const pollUrl = `${GEMINI_BASE}/${name.replace(/^\//, "")}?key=${encodeURIComponent(GOOGLE_KEY)}`;
+  for (let i = 0; i < 120; i++) { // ~10 min ved 5 s
+    await sleep(5000);
+    let pj;
+    try {
+      const pr = await fetch(pollUrl);
+      if (!pr.ok) continue;
+      pj = await pr.json();
+    } catch (e) { continue; }
+    if (pj && pj.done) {
+      if (pj.error) throw new Error("Veo-feil: " + JSON.stringify(pj.error).slice(0, 250));
+      const found = findVeoVideo(pj);
+      if (!found) throw new Error("Fant ingen video i Veo-svaret.");
+      return await saveVeoVideo(found, GOOGLE_KEY);
+    }
+  }
+  throw new Error("Veo brukte for lang tid (tidsavbrudd).");
+}
+
+async function renderVeoJob(jobId, { scenes, lang, voiceId, aspect }, publicBase) {
+  const t0 = Date.now();
+  const setProg = (p) => jobs.set(jobId, { status: "pending", progress: p, when: Date.now() });
+  try {
+    if (!GOOGLE_KEY) throw new Error("Google-nøkkel mangler (GEMINI_API_KEY). Veo og Nano Banana trenger den.");
+    const list = (Array.isArray(scenes) ? scenes : []).filter((s) => s && (s.imagePrompt || s.videoPrompt || s.illustration));
+    if (!list.length) throw new Error("Ingen scener å lage video av.");
+    const asp = aspect || "9:16";
+    const fps = 30;
+    const outScenes = [];
+    let accFrames = 0;
+    for (let i = 0; i < list.length; i++) {
+      const s = list[i];
+      const imagePrompt = s.imagePrompt || flowImagePrompt(s.illustration);
+      const videoPrompt = s.videoPrompt || flowVideoPrompt(s.illustration);
+      setProg(`Scene ${i + 1}/${list.length}: lager blyantskisse (Nano Banana) …`);
+      const bilde = await lagNanoBananaBilde(imagePrompt, asp);
+      setProg(`Scene ${i + 1}/${list.length}: Veo tegner motivet (kan ta et par minutter) …`);
+      const clipPath = await lagVeoKlipp(bilde.base64, bilde.mime, videoPrompt, asp);
+      let audioUrl = "", audioDur = 0;
+      if (s.narration && ELEVENLABS_API_KEY) {
+        try {
+          setProg(`Scene ${i + 1}/${list.length}: legger på stemme …`);
+          const { audioPath, words } = await lagLydMedTidsstempler(String(s.narration).trim(), voiceId, lang);
+          audioUrl = RENDER_BASE + audioPath;
+          audioDur = words.length ? (words[words.length - 1].end || 0) : 0;
+        } catch (e) { console.warn("TTS feilet for scene " + (i + 1) + ":", e && e.message); }
+      }
+      const sceneSec = Math.max(CLIP_SECONDS, audioDur + 0.4);
+      const durationInFrames = Math.ceil(sceneSec * fps);
+      // Sakk klippet litt ned hvis stemmen er lengre enn klippet, så hånden
+      // tegner gjennom hele scenen (aldri raskere enn ekte tid).
+      const playbackRate = Math.min(1, CLIP_SECONDS / sceneSec);
+      outScenes.push({ videoUrl: RENDER_BASE + clipPath, audioUrl, durationInFrames, playbackRate });
+      accFrames += durationInFrames;
+    }
+    setProg("Setter sammen den ferdige videoen …");
+    const totalFrames = Math.max(1, accFrames);
+    const inputProps = { scenes: outScenes, fps, totalFrames };
+    const serveUrl = await getServeUrl();
+    const composition = await selectComposition({ serveUrl, id: "VeoComposition", inputProps });
+    const outName = `veo_video_${Date.now()}.mp4`;
+    const outputLocation = path.resolve(OUTPUT_DIR, outName);
+    await renderMedia({ composition, serveUrl, codec: "h264", outputLocation, inputProps, jpegQuality: 85 });
+    console.log(`Veo-video ferdig på ${((Date.now() - t0) / 1000).toFixed(1)} s.`);
+    jobs.set(jobId, {
+      status: "done",
+      videoUrl: `${publicBase}/output/${outName}`,
+      durationSeconds: Number((totalFrames / fps).toFixed(1)),
+      when: Date.now(),
+    });
+  } catch (error) {
+    console.error("Veo-jobb feilet:", error);
+    jobs.set(jobId, { status: "error", error: String((error && error.message) || error), when: Date.now() });
+  }
+}
+
 /* ---------- Jobber (asynkron rendring) ----------
    Rendring tar flere minutter. I stedet for å holde én lang HTTP-forbindelse
    åpen (som ryker og gir "Failed to fetch"), starter vi en jobb, svarer med en
@@ -362,6 +558,26 @@ app.post("/api/generer-whiteboard", (req, res) => {
   res.status(202).json({ jobId, status: "pending" });
   // Kjør i bakgrunnen (ikke await), så forbindelsen ikke må holdes åpen.
   renderJob(jobId, { manus, voiceId, tema, lang }, publicBase);
+});
+
+/* ---------- Start Veo-jobb (Nano Banana + Veo, som Flow) ---------- */
+app.post("/api/generer-veo", (req, res) => {
+  const { scenes, lang, voiceId, aspect } = req.body || {};
+  if (!Array.isArray(scenes) || !scenes.length) {
+    return res.status(400).json({ error: "scenes mangler i forespørselen." });
+  }
+  if (!GOOGLE_KEY) {
+    return res.status(500).json({ error: "Server mangler Google-nøkkel (GEMINI_API_KEY) for Nano Banana og Veo." });
+  }
+  gcJobs();
+  const proto = String(req.headers["x-forwarded-proto"] || req.protocol || "https").split(",")[0].trim();
+  const host = req.get("host");
+  const publicBase = host ? `${proto}://${host}` : PUBLIC_BASE;
+
+  const jobId = newJobId();
+  jobs.set(jobId, { status: "pending", progress: "Starter …", when: Date.now() });
+  res.status(202).json({ jobId, status: "pending" });
+  renderVeoJob(jobId, { scenes, lang, voiceId, aspect }, publicBase);
 });
 
 /* ---------- Status-polling ---------- */

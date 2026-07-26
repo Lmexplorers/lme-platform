@@ -118,6 +118,21 @@
   .err{color:var(--cerise);}
   #step2{opacity:.55;pointer-events:none;}
   #step2.on{opacity:1;pointer-events:auto;}
+  #step3{opacity:.55;pointer-events:none;}
+  #step3.on{opacity:1;pointer-events:auto;}
+
+  /* Flow-prompts */
+  .flow-scene{border-left:3px solid var(--sky);}
+  .flow-scene .snum{font-family:var(--font-heading);font-weight:800;font-size:13px;color:var(--sky);
+    text-transform:uppercase;letter-spacing:.05em;}
+  .flow-scene .subj{font-family:var(--font-heading);font-weight:700;font-size:15px;margin:4px 0 10px;color:var(--ink);}
+  .prompt{background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);padding:11px 13px;margin:0 0 10px;}
+  .prompt .plbl{font-size:11px;font-weight:700;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.06em;
+    display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+  .prompt .ptxt{font-size:12.5px;color:var(--ink-soft);line-height:1.5;white-space:pre-wrap;word-break:break-word;}
+  .flow-open{background:linear-gradient(120deg,#4f9df5,#2f7fe0);}
+  .steps-list{margin:2px 0 4px;padding-left:18px;font-size:13.5px;color:var(--ink-soft);}
+  .steps-list li{margin:5px 0;}
 </style>
 </head>
 <body>
@@ -182,11 +197,33 @@
     <div class="step-num"><span>2</span> <span data-i18n="s2-num">Video</span></div>
     <h2 data-i18n="s2-h">Gjør den til video</h2>
     <p class="lead" data-i18n="s2-lead">Lag en vertikal 9:16 video av forklaringen, klar for Instagram, TikTok og Reels. Eller kopier manuset og les det inn selv.</p>
-    <button class="btn cerise" id="genVidBtn" onclick="genVideo()">🎬 <span data-i18n="s2-genvid">Lag video automatisk</span></button>
-    <div class="pubmsg" id="genVidMsg"></div>
-    <video id="vidPreview" playsinline controls style="display:none;width:190px;border-radius:14px;margin-top:12px;box-shadow:var(--shadow-md);"></video>
-    <div class="note" id="s2note" data-i18n="s2-note">💡 Trykk «Lag video automatisk», så lager AI-en et bilde av forklaringen og gjør det om til en vertikal video rett her. Vil du publisere og planlegge den? Ta den med videre til Reel Studio.</div>
+    <button class="btn cerise block" id="genVeoBtn" onclick="genVeoVideo()">🎨 <span data-i18n="s2-genveo">Lag ekte håndtegning (Veo)</span></button>
+    <div class="pubmsg" id="genVeoMsg"></div>
+    <div class="note" id="s2veonote" data-i18n="s2-veonote">💡 Dette er Flow-kvaliteten, men helautomatisk: plattformen lager blyantskissen (Nano Banana) og lar en ekte hånd tegne den (Veo), scene for scene, med norsk stemme. Det tar noen minutter per scene og koster litt per video via Google. La fanen stå åpen.</div>
+
+    <div style="margin-top:18px;padding-top:16px;border-top:1px dashed var(--line);">
+      <button class="btn block" id="genVidBtn" onclick="genVideo()" style="background:var(--cream-deep);color:var(--ink);border:1px solid var(--line);">🎬 <span data-i18n="s2-genvid">Rask gratis-variant (uten Veo)</span></button>
+      <div class="pubmsg" id="genVidMsg"></div>
+      <div class="note" id="s2note" data-i18n="s2-note" style="background:var(--cream);border-color:var(--line);color:var(--ink-soft);">💡 Vil du bare teste raskt og gratis? Denne tegner forklaringen på en enkel tavle med stemme, uten Veo. Enklere utseende, men koster ingenting.</div>
+    </div>
+
+    <video id="vidPreview" playsinline controls style="display:none;width:190px;border-radius:14px;margin-top:14px;box-shadow:var(--shadow-md);"></video>
     <a href="/reel-studio" class="btn block" style="margin-top:12px;background:var(--cream-deep);color:var(--ink);border:1px solid var(--line);" data-i18n="s2-toreel">🎬 Publiser og planlegg i Reel Studio</a>
+  </section>
+
+  <!-- STEG 3: Flow-arbeidsflyt (best kvalitet) -->
+  <section class="step" id="step3">
+    <div class="step-num"><span>3</span> <span data-i18n="s3-num">Flow</span></div>
+    <h2 data-i18n="s3-h">Best kvalitet: tegn den med Google Flow</h2>
+    <p class="lead" data-i18n="s3-lead">Vil du ha en ekte, håndtegnet whiteboard som den i tutorialen? Da lager jeg ferdige prompts for deg, scene for scene. Kopier bilde-prompten og video-prompten inn i Google Flow (Veo), så tegner en ekte hånd motivet strek for strek. Legg klippene etter hverandre og legg på voiceoveren fra steg 1.</p>
+    <ol class="steps-list">
+      <li data-i18n="s3-step1">Åpne Google Flow og logg inn med Google-kontoen din.</li>
+      <li data-i18n="s3-step2">For hver scene under: kopier bilde-prompten og lag bildet først, lim så bildet og video-prompten inn for å få tegne-klippet.</li>
+      <li data-i18n="s3-step3">Last ned klippene, sett dem etter hverandre og legg på voiceoveren. Ta det gjerne videre til Reel Studio.</li>
+    </ol>
+    <a href="https://labs.google/fx/tools/flow" target="_blank" rel="noopener" class="btn block flow-open" data-i18n="s3-open">🎨 Åpne Google Flow</a>
+    <div class="note" data-i18n="s3-note">💡 Promptene er på engelsk med vilje, det gir best resultat i Flow. Motivet i hver scene er tilpasset forklaringen din, resten er den samme håndtegnede whiteboard-stilen hver gang.</div>
+    <div class="out" id="flowOut"></div>
   </section>
 </main>
 
@@ -195,6 +232,13 @@
 let LANG = (function(){ try { return localStorage.getItem('lme_lang') || localStorage.getItem('lme-lang') || 'no'; } catch(e){ return 'no'; } })();
 // LME whiteboard-video-motor (egen tjeneste). Bytt URL her om motoren flyttes.
 var WB_ENGINE = "https://lme-platform.onrender.com";
+// Fast whiteboard-stil for Google Flow (Veo). Motivet limes foran, resten er
+// den samme håndtegnede blyant-stilen hver gang. Alltid på engelsk, det gir
+// best resultat i Flow.
+var FLOW_IMG_STYLE = "hand-drawn black and white pencil sketch illustration, detailed ink line art, crosshatching shading, editorial illustration style, bold clean outlines, fine interior linework, textured sketch feel, on a pure white background, no color, no grayscale fills, monochrome ink drawing, whiteboard animation style, highly detailed hand-drawn artwork, vintage encyclopedia illustration aesthetic, expressive and slightly rough linework";
+var FLOW_VIDEO_STYLE = "A real human hand holding a black pencil enters the frame from the right side and draws in real time on a plain pure white background, whiteboard animation style, the illustration appears stroke by stroke as the hand moves, detailed ink sketch linework, crosshatching shading technique, the hand reveals the drawing progressively, smooth and natural drawing motion, top-down or slight angle camera view, no color, monochrome black ink on white, clean white surface, educational explainer video style, cinematic close-up of hand and pencil tip, natural pencil scratching motion";
+function flowImagePrompt(subject){ var s=String(subject||"").trim(); return (s?s+", ":"")+FLOW_IMG_STYLE; }
+function flowVideoPrompt(subject){ var s=String(subject||"").trim(); return (s?"The hand draws: "+s+".\n":"")+FLOW_VIDEO_STYLE; }
 const I18N = {
   no:{ back:"Til Creative Academy",
     title:'LME <em>Forklaringsvideo</em>',
@@ -205,8 +249,19 @@ const I18N = {
     "s1-level":"Hvem er den for?","lvl-parents":"Foreldre hjemme","lvl-kg":"Barnehage (3-6 år)","lvl-school":"Skole (6-12 år)","lvl-teachers":"Pedagoger og ansatte",
     "s1-btn":"✨ Lag forklaringen",
     "s2-num":"Video","s2-h":"Gjør den til video","s2-lead":"Lag en vertikal 9:16 video av forklaringen, klar for Instagram, TikTok og Reels. Eller kopier manuset og les det inn selv.",
-    "s2-genvid":"Lag video automatisk","s2-toreel":"🎬 Publiser og planlegg i Reel Studio",
-    "s2-note":"💡 Trykk «Lag video automatisk», så tegnes forklaringen scene for scene på en ren tavle, med en ekte stemme som leser den opp, rett her i nettleseren. Virker best på datamaskin. Vil du publisere og planlegge den? Ta den med videre til Reel Studio.",
+    "s2-genvid":"Rask gratis-variant (uten Veo)","s2-toreel":"🎬 Publiser og planlegg i Reel Studio",
+    "s2-genveo":"Lag ekte håndtegning (Veo)",
+    "s2-veonote":"💡 Dette er Flow-kvaliteten, men helautomatisk: plattformen lager blyantskissen (Nano Banana) og lar en ekte hånd tegne den (Veo), scene for scene, med norsk stemme. Det tar noen minutter per scene og koster litt per video via Google. La fanen stå åpen.",
+    "s2-note":"💡 Vil du bare teste raskt og gratis? Denne tegner forklaringen på en enkel tavle med stemme, uten Veo. Enklere utseende, men koster ingenting.",
+    veoStart:"Starter Veo-motoren…",veoScene:"Lager videoen (Nano Banana + Veo). Dette tar noen minutter per scene, la fanen stå åpen…",veoReady:"Video klar 🎨 Ekte håndtegning, scene for scene, med stemme. Lagt inn under.",veoFail:"Kunne ikke lage Veo-videoen.",veoBusy:"Motoren svarer ikke akkurat nå. Den kan fortsatt starte opp, vent et minutt og prøv igjen.",
+    "s3-num":"Flow","s3-h":"Best kvalitet: tegn den med Google Flow",
+    "s3-lead":"Vil du ha en ekte, håndtegnet whiteboard som den i tutorialen? Da lager jeg ferdige prompts for deg, scene for scene. Kopier bilde-prompten og video-prompten inn i Google Flow (Veo), så tegner en ekte hånd motivet strek for strek. Legg klippene etter hverandre og legg på voiceoveren fra steg 1.",
+    "s3-step1":"Åpne Google Flow og logg inn med Google-kontoen din.",
+    "s3-step2":"For hver scene under: kopier bilde-prompten og lag bildet først, lim så bildet og video-prompten inn for å få tegne-klippet.",
+    "s3-step3":"Last ned klippene, sett dem etter hverandre og legg på voiceoveren. Ta det gjerne videre til Reel Studio.",
+    "s3-open":"🎨 Åpne Google Flow",
+    "s3-note":"💡 Promptene er på engelsk med vilje, det gir best resultat i Flow. Motivet i hver scene er tilpasset forklaringen din, resten er den samme håndtegnede whiteboard-stilen hver gang.",
+    flowScene:"Scene",flowImg:"Bilde-prompt (lag bildet først)",flowVid:"Video-prompt (tegner motivet strek for strek)",flowCopyAllImg:"Kopier alle bilde-prompts",
     lvl:"Passer for",hook:"PÅ TAVLA (0-3 s)",scenes:"Manus scene for scene",board:"Tegnes på tavla",vo:"Voiceover",takeaway:"Til slutt",fullvo:"Hele voiceoveren",caption:"Caption",tags:"Hashtags",
     loading:"Tegner forklaringen…",retrying:"Prøver igjen…",error:"Noe gikk galt. Prøv igjen om litt.",copy:"Kopier",copied:"Kopiert!",
     needContentFirst:"Lag forklaringen i steg 1 først.",
@@ -222,8 +277,19 @@ const I18N = {
     "s1-level":"Who is it for?","lvl-parents":"Parents at home","lvl-kg":"Preschool (3-6)","lvl-school":"School (6-12)","lvl-teachers":"Teachers and staff",
     "s1-btn":"✨ Create the explanation",
     "s2-num":"Video","s2-h":"Turn it into video","s2-lead":"Create a vertical 9:16 video of the explanation, ready for Instagram, TikTok and Reels. Or copy the script and record it yourself.",
-    "s2-genvid":"Create video automatically","s2-toreel":"🎬 Publish and schedule in Reel Studio",
-    "s2-note":"💡 Tap “Create video automatically” and the explanation is drawn scene by scene on a clean board, with a real voice reading it aloud, right here in your browser. Works best on a computer. Want to publish and schedule it? Take it on to Reel Studio.",
+    "s2-genvid":"Quick free version (no Veo)","s2-toreel":"🎬 Publish and schedule in Reel Studio",
+    "s2-genveo":"Create real hand-drawing (Veo)",
+    "s2-veonote":"💡 This is the Flow quality, but fully automatic: the platform creates the pencil sketch (Nano Banana) and lets a real hand draw it (Veo), scene by scene, with a Norwegian voice. It takes a few minutes per scene and costs a little per video via Google. Keep the tab open.",
+    "s2-note":"💡 Just want a quick, free test? This draws the explanation on a simple board with a voice, without Veo. Simpler look, but costs nothing.",
+    veoStart:"Starting the Veo engine…",veoScene:"Creating the video (Nano Banana + Veo). This takes a few minutes per scene, keep the tab open…",veoReady:"Video ready 🎨 Real hand-drawing, scene by scene, with narration. Added below.",veoFail:"Could not create the Veo video.",veoBusy:"The engine isn't responding right now. It may still be starting up, wait a minute and try again.",
+    "s3-num":"Flow","s3-h":"Best quality: draw it with Google Flow",
+    "s3-lead":"Want a real, hand-drawn whiteboard like the one in the tutorial? Then I'll make ready-to-use prompts for you, scene by scene. Paste the image prompt and the video prompt into Google Flow (Veo), and a real hand draws the subject stroke by stroke. Line up the clips and add the voiceover from step 1.",
+    "s3-step1":"Open Google Flow and sign in with your Google account.",
+    "s3-step2":"For each scene below: copy the image prompt and make the image first, then paste the image and the video prompt to get the drawing clip.",
+    "s3-step3":"Download the clips, line them up and add the voiceover. Feel free to take it on to Reel Studio.",
+    "s3-open":"🎨 Open Google Flow",
+    "s3-note":"💡 The prompts are in English on purpose, it gives the best result in Flow. The subject in each scene is tailored to your explanation, the rest is the same hand-drawn whiteboard style every time.",
+    flowScene:"Scene",flowImg:"Image prompt (make the image first)",flowVid:"Video prompt (draws the subject stroke by stroke)",flowCopyAllImg:"Copy all image prompts",
     lvl:"For",hook:"ON THE BOARD (0-3 s)",scenes:"Scene-by-scene script",board:"Drawn on the board",vo:"Voiceover",takeaway:"Finally",fullvo:"The full voiceover",caption:"Caption",tags:"Hashtags",
     loading:"Drawing the explanation…",retrying:"Trying again…",error:"Something went wrong. Try again shortly.",copy:"Copy",copied:"Copied!",
     needContentFirst:"Create the explanation in step 1 first.",
@@ -253,7 +319,7 @@ function applyI18n(){
   document.getElementById('lang-no').classList.toggle('active',LANG==='no');
   document.getElementById('lang-en').classList.toggle('active',LANG==='en');
 }
-function setLang(l){ LANG=l; try{localStorage.setItem('lme_lang',l);localStorage.setItem('lme-lang',l);}catch(e){} applyI18n(); if(EXPL) renderContent(EXPL); }
+function setLang(l){ LANG=l; try{localStorage.setItem('lme_lang',l);localStorage.setItem('lme-lang',l);}catch(e){} applyI18n(); if(EXPL){ renderContent(EXPL); renderFlow(EXPL); } }
 
 function esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function parseJSON(str){ if(typeof str==='object') return str; const m=str.match(/\{[\s\S]*\}/); return JSON.parse(m?m[0]:str); }
@@ -283,7 +349,9 @@ async function genContent(){
         if(data.error) throw new Error(data.error);
         EXPL=parseJSON(data.result);
         renderContent(EXPL);
+        renderFlow(EXPL);
         document.getElementById('step2').classList.add('on');
+        document.getElementById('step3').classList.add('on');
         lastErr=null;
         break;
       }catch(e){ lastErr=e; console.error('Forklaringsvideo forsøk '+(attempt+1)+':',e); }
@@ -329,6 +397,38 @@ function renderContent(r){
   if(r.caption) h+='<div class="card"><h4>✍️ '+t('caption')+' '+copyBtn(r.caption)+'</h4><p>'+esc(r.caption)+'</p></div>';
   h+=tagsCard(r.hashtags);
   document.getElementById('out').innerHTML=h;
+}
+
+/* ---- Steg 3: Flow-prompts, scene for scene (Claude + Flow-arbeidsflyten) ----
+   For hver scene bygger vi en bilde-prompt og en video-prompt i den faste
+   håndtegnede whiteboard-stilen, med motivet fra scenen limt foran. Renate
+   kopierer dem inn i Google Flow (Veo). */
+function flowScenes(r){
+  var out=[];
+  (Array.isArray(r.scenes)?r.scenes:[]).forEach(function(s){
+    var subj=(s.illustration||s.board||'').trim();
+    if(subj) out.push(subj);
+  });
+  return out;
+}
+function renderFlow(r){
+  var el=document.getElementById('flowOut'); if(!el) return;
+  var subs=flowScenes(r);
+  if(!subs.length){ el.innerHTML=''; return; }
+  var h='';
+  var allImg=subs.map(function(s){ return flowImagePrompt(s); }).join('\n\n');
+  h+='<div style="margin-bottom:12px">'+
+     '<button class="btn cerise" onclick=\'copyText('+JSON.stringify(allImg)+',this)\' style="font-size:13px;padding:9px 16px">📋 '+esc(t('flowCopyAllImg'))+'</button></div>';
+  subs.forEach(function(subj,i){
+    var ip=flowImagePrompt(subj), vp=flowVideoPrompt(subj);
+    h+='<div class="card flow-scene">'+
+       '<div class="snum">'+esc(t('flowScene'))+' '+(i+1)+'</div>'+
+       '<div class="subj">'+esc(subj)+'</div>'+
+       '<div class="prompt"><div class="plbl">🖼️ '+esc(t('flowImg'))+' '+copyBtn(ip)+'</div><div class="ptxt">'+esc(ip)+'</div></div>'+
+       '<div class="prompt"><div class="plbl">🎬 '+esc(t('flowVid'))+' '+copyBtn(vp)+'</div><div class="ptxt">'+esc(vp)+'</div></div>'+
+       '</div>';
+  });
+  el.innerHTML=h;
 }
 
 /* ---- Steg 2: lag video (samme robuste pipeline som Reel Studio) ---- */
@@ -526,6 +626,59 @@ async function genVideo(){
     btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err';
     if(e&&e.serverBusy){ msg.textContent='⚠️ '+t('vidEngineBusy'); }
     else { msg.textContent='⚠️ '+t('vidFail')+(e&&e.message?' ('+e.message+')':''); }
+  }
+}
+
+/* ---- Steg 2 (Veo): ekte håndtegning via Nano Banana + Veo, scene for scene ----
+   Samme arbeidsflyt som i tutorialen (Claude + Flow), men helautomatisk på
+   plattformen. Sender de samme prompt-ene som steg 3, motoren lager bilde,
+   Veo-klipp og stemme og setter alt sammen. */
+function veoScenes(r){
+  var out=[];
+  (Array.isArray(r.scenes)?r.scenes:[]).forEach(function(s){
+    var subj=(s.illustration||s.board||'').trim();
+    if(!subj) return;
+    out.push({ imagePrompt:flowImagePrompt(subj), videoPrompt:flowVideoPrompt(subj), narration:(s.narration||'').trim() });
+  });
+  return out;
+}
+async function genVeoVideo(){
+  var msg=document.getElementById('genVeoMsg'), btn=document.getElementById('genVeoBtn');
+  if(!EXPL){ msg.className='pubmsg err'; msg.textContent='⚠️ '+t('needContentFirst'); return; }
+  var scenes=veoScenes(EXPL);
+  if(!scenes.length){ msg.className='pubmsg err'; msg.textContent='⚠️ '+t('needContentFirst'); return; }
+  var label=btn.innerHTML; btn.disabled=true;
+  var v=document.getElementById('vidPreview'); if(v){ v.style.display='none'; v.removeAttribute('src'); }
+  msg.className='pubmsg'; msg.textContent=t('veoStart');
+  btn.innerHTML='<span class="spinner"></span> '+t('veoScene');
+  function sleep(ms){ return new Promise(function(res){ setTimeout(res, ms); }); }
+  try{
+    var start=await fetch(WB_ENGINE+'/api/generer-veo',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ scenes:scenes, lang:LANG })}).then(function(res){return readJson(res,'veo');});
+    if(start&&start.error) throw new Error(start.error);
+    var jobId=start&&start.jobId;
+    if(!jobId) throw new Error('ingen jobb-id fra motoren');
+    var done=null;
+    // Veo lager scene for scene og kan ta lang tid, spør om status i opptil ~30 min.
+    for(var i=0;i<360;i++){
+      await sleep(5000);
+      var st=await fetch(WB_ENGINE+'/api/whiteboard-status?id='+encodeURIComponent(jobId))
+        .then(function(res){return readJson(res,'status');}).catch(function(){return null;});
+      if(st){
+        if(st.status==='done'&&st.videoUrl){ done=st; break; }
+        if(st.status==='error') throw new Error(st.error||'render-feil');
+        if(st.status==='not_found') throw new Error('jobben forsvant (motoren startet kanskje på nytt)');
+        if(st.progress) msg.textContent=st.progress;
+      }
+    }
+    if(!done) throw new Error('tidsavbrudd, prøv igjen');
+    if(v){ v.src=done.videoUrl; v.style.display='block'; }
+    try{ localStorage.setItem('lme-reel-media', done.videoUrl); }catch(e){}
+    btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg'; msg.textContent=t('veoReady');
+  }catch(e){
+    btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err';
+    if(e&&e.serverBusy){ msg.textContent='⚠️ '+t('veoBusy'); }
+    else { msg.textContent='⚠️ '+t('veoFail')+(e&&e.message?' ('+e.message+')':''); }
   }
 }
 
