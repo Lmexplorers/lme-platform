@@ -274,6 +274,10 @@ app.post("/api/generer-whiteboard", async (req, res) => {
       codec: "h264",
       outputLocation,
       inputProps,
+      // Render i 720p (2/3 av 1080p): raskere og lettere paa minnet, mer enn
+      // nok for sosiale medier. Samme layout.
+      scale: 2 / 3,
+      jpegQuality: 80,
     });
 
     // Utled offentlig URL fra selve forespørselen (funker uten å sette
