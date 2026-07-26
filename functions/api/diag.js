@@ -56,7 +56,7 @@ export async function onRequestGet(context) {
     }, 403);
   }
 
-  const KEYS = ["ANTHROPIC_API_KEY", "OPENAI_API_KEY", "GEMINI_API_KEY", "BLOTATO_API_KEY", "HIGGSFIELD_API_KEY", "ELEVENLABS_API_KEY", "MAILERLITE_API_KEY", "STABILITY_API_KEY"];
+  const KEYS = ["ANTHROPIC_API_KEY", "OPENAI_API_KEY", "GEMINI_API_KEY", "BLOTATO_API_KEY", "HIGGSFIELD_API_KEY", "HIGGSFIELD_SECRET", "ELEVENLABS_API_KEY", "MAILERLITE_API_KEY", "STABILITY_API_KEY"];
   const present = {};
   KEYS.forEach((k) => { present[k] = !!(env[k] && String(env[k]).trim()); });
 
@@ -75,6 +75,17 @@ export async function onRequestGet(context) {
     tests.blotato = await probe("https://backend.blotato.com/v2/users/me/accounts", {
       method: "GET",
       headers: { "blotato-api-key": env.BLOTATO_API_KEY, "Accept": "application/json" },
+    }, TIMEOUT);
+  }
+
+  // Higgsfield (video). Sender en tom payload bare for å teste innloggingen:
+  // 401 = nøkkel/hemmelighet avvist, 4xx ellers = innlogging OK men payload
+  // mangler (da er det ikke nøkkelen som er problemet). Lager ingen video.
+  if (present.HIGGSFIELD_API_KEY && present.HIGGSFIELD_SECRET) {
+    tests.higgsfield = await probe("https://platform.higgsfield.ai/v1/image2video/dop", {
+      method: "POST",
+      headers: { "Authorization": "Key " + env.HIGGSFIELD_API_KEY + ":" + env.HIGGSFIELD_SECRET, "Content-Type": "application/json", "Accept": "application/json" },
+      body: "{}",
     }, TIMEOUT);
   }
 
