@@ -57,7 +57,10 @@ if (!OPENAI_KEY) console.warn("[advarsel] OpenAI-nøkkel mangler (OPENAI_API_KEY
 if (!ELEVENLABS_API_KEY) console.warn("[advarsel] ElevenLabs-nøkkel mangler (ELEVENLABS_API_KEY).");
 
 const openai = new OpenAI({ apiKey: OPENAI_KEY });
-const DEFAULT_VOICE = VOICE_FROM_ENV || "21m00Tcm4TlvDq8ikWAM"; // Rachel (multilingual)
+// Sikkerhet: hvis noen ved et uhell limte inn en API-nøkkel (sk_...) i
+// voice-id-feltet, ignorer den og bruk en standardstemme i stedet.
+const CLEAN_VOICE = (VOICE_FROM_ENV && !/^sk_/i.test(VOICE_FROM_ENV)) ? VOICE_FROM_ENV : "";
+const DEFAULT_VOICE = CLEAN_VOICE || "21m00Tcm4TlvDq8ikWAM"; // Rachel (multilingual)
 const ELEVEN_MODEL = process.env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2";
 const IMAGE_MODEL = process.env.OPENAI_IMAGE_MODEL || "dall-e-3";
 
