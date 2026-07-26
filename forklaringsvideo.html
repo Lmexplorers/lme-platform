@@ -204,11 +204,11 @@ const I18N = {
     "s1-btn":"✨ Lag forklaringen",
     "s2-num":"Video","s2-h":"Gjør den til video","s2-lead":"Lag en vertikal 9:16 video av forklaringen, klar for Instagram, TikTok og Reels. Eller kopier manuset og les det inn selv.",
     "s2-genvid":"Lag video automatisk","s2-toreel":"🎬 Publiser og planlegg i Reel Studio",
-    "s2-note":"💡 Trykk «Lag video automatisk», så lager AI-en et bilde av forklaringen og gjør det om til en vertikal video rett her. Vil du publisere og planlegge den? Ta den med videre til Reel Studio.",
+    "s2-note":"💡 Trykk «Lag video automatisk», så tegnes forklaringen scene for scene på en ren tavle, med en ekte stemme som leser den opp, rett her i nettleseren. Virker best på datamaskin. Vil du publisere og planlegge den? Ta den med videre til Reel Studio.",
     lvl:"Passer for",hook:"PÅ TAVLA (0-3 s)",scenes:"Manus scene for scene",board:"Tegnes på tavla",vo:"Voiceover",takeaway:"Til slutt",fullvo:"Hele voiceoveren",caption:"Caption",tags:"Hashtags",
     loading:"Tegner forklaringen…",retrying:"Prøver igjen…",error:"Noe gikk galt. Prøv igjen om litt.",copy:"Kopier",copied:"Kopiert!",
     needContentFirst:"Lag forklaringen i steg 1 først.",
-    vidImage:"Lager bilde…",vidMaking:"Lager video… (kan ta et par minutter)",vidUploading:"Laster opp…",vidReady:"Video klar 🎬 Lagt inn under.",vidFail:"Kunne ikke lage video.",
+    vidImage:"Lager bilde…",vidVoice:"Leser inn forklaringen…",vidMaking:"Tegner videoen…",vidUploading:"Laster opp…",vidReady:"Video klar 🎬 Tegnet scene for scene, med stemme. Lagt inn under.",vidReadyNoVoice:"Video klar 🎬 Tegnet scene for scene (uten stemme denne gangen). Lagt inn under.",vidNoRec:"Nettleseren støtter ikke videoopptak. Prøv på en datamaskin (Chrome eller Safari).",vidFail:"Kunne ikke lage video.",
     vidServerBusy:"Serveren svarer ikke som forventet ennå. En ny versjon kan være under utrulling. Last siden på nytt og prøv igjen om et minutt.",
     imgNotConfigured:"Bildemotoren er ikke koblet til ennå. Legg inn en nøkkel (OPENAI_API_KEY eller GEMINI_API_KEY) i Cloudflare, så lager jeg bildet automatisk." },
   en:{ back:"To Creative Academy",
@@ -221,11 +221,11 @@ const I18N = {
     "s1-btn":"✨ Create the explanation",
     "s2-num":"Video","s2-h":"Turn it into video","s2-lead":"Create a vertical 9:16 video of the explanation, ready for Instagram, TikTok and Reels. Or copy the script and record it yourself.",
     "s2-genvid":"Create video automatically","s2-toreel":"🎬 Publish and schedule in Reel Studio",
-    "s2-note":"💡 Tap “Create video automatically” and the AI makes an image of the explanation and turns it into a vertical video right here. Want to publish and schedule it? Take it on to Reel Studio.",
+    "s2-note":"💡 Tap “Create video automatically” and the explanation is drawn scene by scene on a clean board, with a real voice reading it aloud, right here in your browser. Works best on a computer. Want to publish and schedule it? Take it on to Reel Studio.",
     lvl:"For",hook:"ON THE BOARD (0-3 s)",scenes:"Scene-by-scene script",board:"Drawn on the board",vo:"Voiceover",takeaway:"Finally",fullvo:"The full voiceover",caption:"Caption",tags:"Hashtags",
     loading:"Drawing the explanation…",retrying:"Trying again…",error:"Something went wrong. Try again shortly.",copy:"Copy",copied:"Copied!",
     needContentFirst:"Create the explanation in step 1 first.",
-    vidImage:"Creating image…",vidMaking:"Creating video… (may take a couple of minutes)",vidUploading:"Uploading…",vidReady:"Video ready 🎬 Added below.",vidFail:"Could not create the video.",
+    vidImage:"Creating image…",vidVoice:"Recording the narration…",vidMaking:"Drawing the video…",vidUploading:"Uploading…",vidReady:"Video ready 🎬 Drawn scene by scene, with narration. Added below.",vidReadyNoVoice:"Video ready 🎬 Drawn scene by scene (no voice this time). Added below.",vidNoRec:"Your browser can't record video. Try on a computer (Chrome or Safari).",vidFail:"Could not create the video.",
     vidServerBusy:"The server isn't responding as expected yet. A new version may be deploying. Reload the page and try again in a minute.",
     imgNotConfigured:"The image engine isn't connected yet. Add a key (OPENAI_API_KEY or GEMINI_API_KEY) in Cloudflare and I'll create the image automatically." }
 };
@@ -400,54 +400,155 @@ async function higgsfieldVideo(prompt,imageUrl,btn){
     return '__fallback__';
   }catch(e){ return '__fallback__'; }
 }
-function videoPrompt(){
-  var r=EXPL||{};
-  var board=(Array.isArray(r.scenes)&&r.scenes[0]&&r.scenes[0].board)||'';
-  var base=(r.hook?r.hook+'. ':'')+(board?board+'. ':'')+(r.takeaway||'');
-  if(!base) base=(document.getElementById('src')&&document.getElementById('src').value)||'';
-  // Whiteboard-look for bildet
-  return 'Håndtegnet whiteboard-forklaring, enkel svart strektegning med noen få fargeaksenter, ren hvit tavle, luftig og pedagogisk, vertikal 9:16: '+base;
+/* ---- Steg 2: ekte whiteboard-video, scene for scene, med stemme ----
+   Tegner forklaringen på en ren tavle i LME-stil og leser den inn med en
+   ekte stemme (via /api/tts). Alt skjer i nettleseren og fanges som video.
+   Ingen zoom-på-foto. */
+var WB={ W:1080, H:1920 };
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
+}
+function wbWrap(ctx,text,maxW){
+  var words=String(text||'').split(/\s+/).filter(Boolean), lines=[], line='';
+  for(var i=0;i<words.length;i++){
+    var test=line?line+' '+words[i]:words[i];
+    if(ctx.measureText(test).width>maxW && line){ lines.push(line); line=words[i]; }
+    else line=test;
+  }
+  if(line) lines.push(line);
+  return lines;
+}
+function wbCount(lines){ var n=0; for(var i=0;i<lines.length;i++) n+=lines[i].length; return n; }
+function wbDrawReveal(ctx,lines,x,y,lineH,chars){
+  for(var i=0;i<lines.length;i++){
+    if(chars<=0) break;
+    var take=Math.min(chars, lines[i].length);
+    ctx.fillText(lines[i].slice(0,take), x, y);
+    chars-=take; y+=lineH;
+  }
+  return y+ (lines.length? 0:0);
+}
+function wbSegments(){
+  var r=EXPL||{}, segs=[];
+  segs.push({ label:'Intro', heading:r.hook||'', sub:(r.level?(LANG==='en'?'For ':'For ')+r.level:''), body:'', speak:r.hook||'' });
+  (Array.isArray(r.scenes)?r.scenes:[]).forEach(function(s,i){
+    segs.push({ label:'Scene '+(i+1), heading:s.board||'', sub:'', body:s.narration||'', speak:s.narration||s.board||'' });
+  });
+  if(r.takeaway){ var kort=(LANG==='en'?'In short':'Kort sagt'); segs.push({ label:kort, heading:kort, sub:'', body:r.takeaway, speak:r.takeaway }); }
+  return segs;
+}
+function wbDecode(actx,buf){
+  return new Promise(function(res){
+    if(!buf){ res(null); return; }
+    try{
+      var p=actx.decodeAudioData(buf, function(b){res(b);}, function(){res(null);});
+      if(p&&p.then) p.then(res).catch(function(){res(null);});
+    }catch(e){ res(null); }
+  });
+}
+function wbFetchAudio(text){
+  if(!text) return Promise.resolve(null);
+  return fetch('/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:text,lang:LANG})})
+    .then(function(r){ var ct=r.headers.get('Content-Type')||''; if(!r.ok||ct.indexOf('audio')<0) return null; return r.arrayBuffer(); })
+    .catch(function(){ return null; });
+}
+function wbDrawFrame(ctx,seg,progress){
+  var W=WB.W, H=WB.H;
+  ctx.fillStyle='#FBF6F0'; ctx.fillRect(0,0,W,H);
+  var m=64, bx=m, by=200, bw=W-2*m, bh=H-by-150, rad=44;
+  ctx.fillStyle='#FFFFFF'; ctx.strokeStyle='rgba(26,26,26,0.10)'; ctx.lineWidth=2;
+  roundRect(ctx,bx,by,bw,bh,rad); ctx.fill(); ctx.stroke();
+  ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+  ctx.fillStyle='#E91E89'; ctx.font='800 30px "Playpen Sans",sans-serif';
+  ctx.fillText(String(seg.label||'').toUpperCase(), bx+6, by-46);
+  var dots=['#F7C72E','#3FA9F5','#A4D233']; for(var d=0;d<3;d++){ ctx.beginPath(); ctx.fillStyle=dots[d]; ctx.arc(W-bx-16-d*46, by-58, 13, 0, Math.PI*2); ctx.fill(); }
+  var padX=bx+64, innerW=bw-128, y=by+130;
+  var hFont=seg.body? '800 60px "Playpen Sans",sans-serif' : '800 82px "Playpen Sans",sans-serif';
+  var hLineH=seg.body? 76 : 98;
+  ctx.font=hFont; var hLines=wbWrap(ctx, seg.heading, innerW);
+  var bFont='400 42px "Sasson Montessori","Playpen Sans",sans-serif', bLineH=62, bLines=[];
+  if(seg.body){ ctx.font=bFont; bLines=wbWrap(ctx, seg.body, innerW); }
+  var hC=wbCount(hLines), bC=wbCount(bLines);
+  var reveal=Math.floor(Math.min(1,progress/0.82)*(hC+bC));
+  ctx.font=hFont; ctx.fillStyle='#1A1A1A';
+  var yAfter=wbDrawReveal(ctx, hLines, padX, y, hLineH, Math.min(reveal,hC));
+  var lastY=y+(hLines.length? (hLines.length-1)*hLineH:0);
+  ctx.font=hFont; var uMax=Math.min(innerW, (ctx.measureText(hLines[0]||'').width)+30);
+  var uW=Math.min(1,progress/0.25)*uMax;
+  ctx.strokeStyle='#E91E89'; ctx.lineWidth=8; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(padX, lastY+26); ctx.lineTo(padX+uW, lastY+26); ctx.stroke();
+  var yBody=lastY+96;
+  if(seg.sub){ ctx.font='400 34px "Sasson Montessori",sans-serif'; ctx.fillStyle='#8A8A8A'; ctx.fillText(seg.sub, padX, yBody); yBody+=58; }
+  if(bLines.length){ ctx.font=bFont; ctx.fillStyle='#4A4A4A'; wbDrawReveal(ctx, bLines, padX, yBody, bLineH, Math.max(0,reveal-hC)); }
 }
 async function genVideo(){
   var msg=document.getElementById('genVidMsg'), btn=document.getElementById('genVidBtn');
   if(!EXPL){ msg.className='pubmsg err'; msg.textContent='⚠️ '+t('needContentFirst'); return; }
-  var prompt=videoPrompt();
-  var label=btn.innerHTML; btn.disabled=true;
-  msg.className='pubmsg'; msg.textContent='';
+  var label=btn.innerHTML; btn.disabled=true; msg.className='pubmsg'; msg.textContent='';
   var v=document.getElementById('vidPreview'); if(v){ v.style.display='none'; v.removeAttribute('src'); }
   try{
-    btn.innerHTML='<span class="spinner"></span> '+t('vidImage');
-    var ir=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({text:prompt,character:'none',platform:'tiktok',lang:LANG})}).then(function(r){return readJson(r,'image');});
-    if(ir&&ir.error==='not_configured') throw new Error(t('imgNotConfigured'));
-    if(ir&&ir.error&&/ikke koblet til|not connected|mangler|missing/i.test(ir.error)) throw new Error(t('imgNotConfigured'));
-    if(!ir||ir.error||!ir.url) throw new Error(((ir&&ir.error)||'bilde')+((ir&&ir.detail)?': '+ir.detail:''));
+    if(typeof MediaRecorder==='undefined') throw new Error(t('vidNoRec'));
+    try{ await document.fonts.load('800 60px "Playpen Sans"'); await document.fonts.load('400 42px "Sasson Montessori"'); await document.fonts.ready; }catch(e){}
+    var segs=wbSegments();
+    btn.innerHTML='<span class="spinner"></span> '+t('vidVoice');
+    var actx=new (window.AudioContext||window.webkitAudioContext)();
+    try{ await actx.resume(); }catch(e){}
+    var raws=await Promise.all(segs.map(function(s){ return wbFetchAudio(s.speak); }));
+    var anyVoice=false;
+    for(var i=0;i<segs.length;i++){ segs[i].buffer=await wbDecode(actx, raws[i]); if(segs[i].buffer) anyVoice=true; }
+    var total=0;
+    segs.forEach(function(s){
+      var words=String(s.speak||'').split(/\s+/).filter(Boolean).length;
+      s.dur=s.buffer? s.buffer.duration+0.6 : Math.max(2.6, Math.min(9, words*0.34));
+      s.startOffset=total; total+=s.dur;
+    });
     btn.innerHTML='<span class="spinner"></span> '+t('vidMaking');
-    var url=await higgsfieldVideo(prompt, ir.url, btn);
-    if(url==='__fallback__'){
-      // Gratis videomotor i nettleseren. Vis videoen med en gang, uansett om
-      // opplastingen (for en delbar lenke) skulle feile.
-      var blob=await imageToVideoBlob(ir.url);
-      if(v){ v.src=URL.createObjectURL(blob); v.style.display='block'; }
-      btn.innerHTML='<span class="spinner"></span> '+t('vidUploading');
-      url='';
-      try{
-        var vr=await fetch('/api/video',{method:'POST',headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({data:await blobToB64(blob),contentType:(blob.type||'video/mp4')})}).then(function(r){return readJson(r,'video');});
-        if(vr&&!vr.error&&vr.url) url=vr.url;
-      }catch(e){ /* opplasting valgfri: forhåndsvisningen vises uansett */ }
-    }
-    if(v){ if(url && !v.src){ v.src=url; } v.style.display='block'; }
-    // Ta med videoen videre til Reel Studio for publisering (kun hvis vi fikk en delbar lenke)
+    var cv=document.createElement('canvas'); cv.width=WB.W; cv.height=WB.H;
+    var ctx=cv.getContext('2d');
+    if(!cv.captureStream) throw new Error(t('vidNoRec'));
+    var vstream=cv.captureStream(30);
+    var adest=null, tracks=vstream.getVideoTracks();
+    if(anyVoice){ adest=actx.createMediaStreamDestination(); tracks=tracks.concat(adest.stream.getAudioTracks()); }
+    var stream=new MediaStream(tracks);
+    var mime=pickMime(), rec;
+    try{ rec=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:6000000}); }
+    catch(e){ rec=new MediaRecorder(stream); mime=rec.mimeType||'video/webm'; }
+    var chunks=[]; rec.ondataavailable=function(e){ if(e.data&&e.data.size) chunks.push(e.data); };
+    var stopped=new Promise(function(r){ rec.onstop=r; });
+    rec.start();
+    var t0=actx.currentTime+0.25;
+    if(anyVoice){ segs.forEach(function(s){ if(s.buffer){ var src=actx.createBufferSource(); src.buffer=s.buffer; src.connect(adest); try{ src.connect(actx.destination); }catch(e){} src.start(t0+s.startOffset); } }); }
+    await new Promise(function(resolve){
+      (function frame(){
+        var now=actx.currentTime - t0; if(now<0) now=0;
+        var seg=segs[0];
+        for(var k=0;k<segs.length;k++){ if(now>=segs[k].startOffset) seg=segs[k]; }
+        var p=Math.min(1, Math.max(0,(now-seg.startOffset)/seg.dur));
+        wbDrawFrame(ctx, seg, p);
+        if(now<total) requestAnimationFrame(frame);
+        else { setTimeout(function(){ try{ rec.stop(); }catch(e){} }, 250); resolve(); }
+      })();
+    });
+    await stopped;
+    try{ actx.close(); }catch(e){}
+    var outType=(mime.indexOf('mp4')>=0)?'video/mp4':'video/webm';
+    var blob=new Blob(chunks,{type:outType});
+    if(v){ v.src=URL.createObjectURL(blob); v.style.display='block'; }
+    btn.innerHTML='<span class="spinner"></span> '+t('vidUploading');
+    var url='';
+    try{
+      var vr=await fetch('/api/video',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({data:await blobToB64(blob),contentType:outType})}).then(function(r){return readJson(r,'video');});
+      if(vr&&!vr.error&&vr.url) url=vr.url;
+    }catch(e){}
     if(url){ try{ localStorage.setItem('lme-reel-media', url); }catch(e){} }
-    btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg'; msg.textContent=t('vidReady');
+    btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg';
+    msg.textContent = anyVoice? t('vidReady') : t('vidReadyNoVoice');
   }catch(e){
     btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err';
-    if(e&&e.serverBusy){
-      var dg=' ['+(e.where||'?')+' '+(e.httpStatus||'?')+(e.snippet?': '+e.snippet:'')+']';
-      msg.textContent='⚠️ '+t('vidServerBusy')+dg;
-    }
-    else { msg.textContent='⚠️ '+t('vidFail')+(e&&e.message?' ('+e.message+')':''); }
+    msg.textContent='⚠️ '+t('vidFail')+(e&&e.message?' ('+e.message+')':'');
   }
 }
 
