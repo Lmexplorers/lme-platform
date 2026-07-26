@@ -39,12 +39,25 @@ const PUBLIC_DIR = path.resolve(__dirname, "public");
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 for (const d of [PUBLIC_DIR, OUTPUT_DIR]) if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
 
-if (!process.env.OPENAI_API_KEY) console.warn("[advarsel] OPENAI_API_KEY mangler i .env");
-if (!process.env.ELEVENLABS_API_KEY) console.warn("[advarsel] ELEVENLABS_API_KEY mangler i .env");
+// Robust nøkkel-oppslag: godtar den riktige skrivemåten OG vanlige skrivefeil
+// (f.eks. "APT" i stedet for "API"), så et lite uhell i miljøvariablene ikke
+// stopper motoren.
+function pickEnv(...names) {
+  for (const n of names) {
+    const v = process.env[n];
+    if (v && String(v).trim()) return String(v).trim();
+  }
+  return "";
+}
+const OPENAI_KEY = pickEnv("OPENAI_API_KEY", "OPENAI_APT_KEY", "OPENAI_APT_KE", "OPENAI_KEY");
+const ELEVENLABS_API_KEY = pickEnv("ELEVENLABS_API_KEY", "ELEVENLABS_APT_KEY", "ELEVENLABS_APT_KE", "ELEVENLABS_KEY");
+const VOICE_FROM_ENV = pickEnv("ELEVENLABS_VOICE_ID", "ELEVEN_VOICE_ID");
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
-const DEFAULT_VOICE = process.env.ELEVENLABS_VOICE_ID || "21m00Tcm4TlvDq8ikWAM"; // Rachel (multilingual)
+if (!OPENAI_KEY) console.warn("[advarsel] OpenAI-nøkkel mangler (OPENAI_API_KEY).");
+if (!ELEVENLABS_API_KEY) console.warn("[advarsel] ElevenLabs-nøkkel mangler (ELEVENLABS_API_KEY).");
+
+const openai = new OpenAI({ apiKey: OPENAI_KEY });
+const DEFAULT_VOICE = VOICE_FROM_ENV || "21m00Tcm4TlvDq8ikWAM"; // Rachel (multilingual)
 const ELEVEN_MODEL = process.env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2";
 const IMAGE_MODEL = process.env.OPENAI_IMAGE_MODEL || "dall-e-3";
 
@@ -159,8 +172,8 @@ app.post("/api/generer-whiteboard", async (req, res) => {
     if (!manus || typeof manus !== "string" || !manus.trim()) {
       return res.status(400).json({ error: "Manus mangler i forespørselen." });
     }
-    if (!process.env.OPENAI_API_KEY || !ELEVENLABS_API_KEY) {
-      return res.status(500).json({ error: "Server mangler OPENAI_API_KEY eller ELEVENLABS_API_KEY." });
+    if (!OPENAI_KEY || !ELEVENLABS_API_KEY) {
+      return res.status(500).json({ error: "Server mangler OpenAI- eller ElevenLabs-nøkkel (miljøvariabler)." });
     }
 
     console.log("1/4  Lyd + tidsstempler (ElevenLabs)...");
