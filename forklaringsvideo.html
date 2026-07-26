@@ -118,6 +118,21 @@
   .err{color:var(--cerise);}
   #step2{opacity:.55;pointer-events:none;}
   #step2.on{opacity:1;pointer-events:auto;}
+  #step3{opacity:.55;pointer-events:none;}
+  #step3.on{opacity:1;pointer-events:auto;}
+
+  /* Flow-prompts */
+  .flow-scene{border-left:3px solid var(--sky);}
+  .flow-scene .snum{font-family:var(--font-heading);font-weight:800;font-size:13px;color:var(--sky);
+    text-transform:uppercase;letter-spacing:.05em;}
+  .flow-scene .subj{font-family:var(--font-heading);font-weight:700;font-size:15px;margin:4px 0 10px;color:var(--ink);}
+  .prompt{background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);padding:11px 13px;margin:0 0 10px;}
+  .prompt .plbl{font-size:11px;font-weight:700;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.06em;
+    display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+  .prompt .ptxt{font-size:12.5px;color:var(--ink-soft);line-height:1.5;white-space:pre-wrap;word-break:break-word;}
+  .flow-open{background:linear-gradient(120deg,#4f9df5,#2f7fe0);}
+  .steps-list{margin:2px 0 4px;padding-left:18px;font-size:13.5px;color:var(--ink-soft);}
+  .steps-list li{margin:5px 0;}
 </style>
 </head>
 <body>
@@ -188,6 +203,21 @@
     <div class="note" id="s2note" data-i18n="s2-note">💡 Trykk «Lag video automatisk», så lager AI-en et bilde av forklaringen og gjør det om til en vertikal video rett her. Vil du publisere og planlegge den? Ta den med videre til Reel Studio.</div>
     <a href="/reel-studio" class="btn block" style="margin-top:12px;background:var(--cream-deep);color:var(--ink);border:1px solid var(--line);" data-i18n="s2-toreel">🎬 Publiser og planlegg i Reel Studio</a>
   </section>
+
+  <!-- STEG 3: Flow-arbeidsflyt (best kvalitet) -->
+  <section class="step" id="step3">
+    <div class="step-num"><span>3</span> <span data-i18n="s3-num">Flow</span></div>
+    <h2 data-i18n="s3-h">Best kvalitet: tegn den med Google Flow</h2>
+    <p class="lead" data-i18n="s3-lead">Vil du ha en ekte, håndtegnet whiteboard som den i tutorialen? Da lager jeg ferdige prompts for deg, scene for scene. Kopier bilde-prompten og video-prompten inn i Google Flow (Veo), så tegner en ekte hånd motivet strek for strek. Legg klippene etter hverandre og legg på voiceoveren fra steg 1.</p>
+    <ol class="steps-list">
+      <li data-i18n="s3-step1">Åpne Google Flow og logg inn med Google-kontoen din.</li>
+      <li data-i18n="s3-step2">For hver scene under: kopier bilde-prompten og lag bildet først, lim så bildet og video-prompten inn for å få tegne-klippet.</li>
+      <li data-i18n="s3-step3">Last ned klippene, sett dem etter hverandre og legg på voiceoveren. Ta det gjerne videre til Reel Studio.</li>
+    </ol>
+    <a href="https://labs.google/fx/tools/flow" target="_blank" rel="noopener" class="btn block flow-open" data-i18n="s3-open">🎨 Åpne Google Flow</a>
+    <div class="note" data-i18n="s3-note">💡 Promptene er på engelsk med vilje, det gir best resultat i Flow. Motivet i hver scene er tilpasset forklaringen din, resten er den samme håndtegnede whiteboard-stilen hver gang.</div>
+    <div class="out" id="flowOut"></div>
+  </section>
 </main>
 
 <script>
@@ -195,6 +225,13 @@
 let LANG = (function(){ try { return localStorage.getItem('lme_lang') || localStorage.getItem('lme-lang') || 'no'; } catch(e){ return 'no'; } })();
 // LME whiteboard-video-motor (egen tjeneste). Bytt URL her om motoren flyttes.
 var WB_ENGINE = "https://lme-platform.onrender.com";
+// Fast whiteboard-stil for Google Flow (Veo). Motivet limes foran, resten er
+// den samme håndtegnede blyant-stilen hver gang. Alltid på engelsk, det gir
+// best resultat i Flow.
+var FLOW_IMG_STYLE = "hand-drawn black and white pencil sketch illustration, detailed ink line art, crosshatching shading, editorial illustration style, bold clean outlines, fine interior linework, textured sketch feel, on a pure white background, no color, no grayscale fills, monochrome ink drawing, whiteboard animation style, highly detailed hand-drawn artwork, vintage encyclopedia illustration aesthetic, expressive and slightly rough linework";
+var FLOW_VIDEO_STYLE = "A real human hand holding a black pencil enters the frame from the right side and draws in real time on a plain pure white background, whiteboard animation style, the illustration appears stroke by stroke as the hand moves, detailed ink sketch linework, crosshatching shading technique, the hand reveals the drawing progressively, smooth and natural drawing motion, top-down or slight angle camera view, no color, monochrome black ink on white, clean white surface, educational explainer video style, cinematic close-up of hand and pencil tip, natural pencil scratching motion";
+function flowImagePrompt(subject){ var s=String(subject||"").trim(); return (s?s+", ":"")+FLOW_IMG_STYLE; }
+function flowVideoPrompt(subject){ var s=String(subject||"").trim(); return (s?"The hand draws: "+s+".\n":"")+FLOW_VIDEO_STYLE; }
 const I18N = {
   no:{ back:"Til Creative Academy",
     title:'LME <em>Forklaringsvideo</em>',
@@ -207,6 +244,14 @@ const I18N = {
     "s2-num":"Video","s2-h":"Gjør den til video","s2-lead":"Lag en vertikal 9:16 video av forklaringen, klar for Instagram, TikTok og Reels. Eller kopier manuset og les det inn selv.",
     "s2-genvid":"Lag video automatisk","s2-toreel":"🎬 Publiser og planlegg i Reel Studio",
     "s2-note":"💡 Trykk «Lag video automatisk», så tegnes forklaringen scene for scene på en ren tavle, med en ekte stemme som leser den opp, rett her i nettleseren. Virker best på datamaskin. Vil du publisere og planlegge den? Ta den med videre til Reel Studio.",
+    "s3-num":"Flow","s3-h":"Best kvalitet: tegn den med Google Flow",
+    "s3-lead":"Vil du ha en ekte, håndtegnet whiteboard som den i tutorialen? Da lager jeg ferdige prompts for deg, scene for scene. Kopier bilde-prompten og video-prompten inn i Google Flow (Veo), så tegner en ekte hånd motivet strek for strek. Legg klippene etter hverandre og legg på voiceoveren fra steg 1.",
+    "s3-step1":"Åpne Google Flow og logg inn med Google-kontoen din.",
+    "s3-step2":"For hver scene under: kopier bilde-prompten og lag bildet først, lim så bildet og video-prompten inn for å få tegne-klippet.",
+    "s3-step3":"Last ned klippene, sett dem etter hverandre og legg på voiceoveren. Ta det gjerne videre til Reel Studio.",
+    "s3-open":"🎨 Åpne Google Flow",
+    "s3-note":"💡 Promptene er på engelsk med vilje, det gir best resultat i Flow. Motivet i hver scene er tilpasset forklaringen din, resten er den samme håndtegnede whiteboard-stilen hver gang.",
+    flowScene:"Scene",flowImg:"Bilde-prompt (lag bildet først)",flowVid:"Video-prompt (tegner motivet strek for strek)",flowCopyAllImg:"Kopier alle bilde-prompts",
     lvl:"Passer for",hook:"PÅ TAVLA (0-3 s)",scenes:"Manus scene for scene",board:"Tegnes på tavla",vo:"Voiceover",takeaway:"Til slutt",fullvo:"Hele voiceoveren",caption:"Caption",tags:"Hashtags",
     loading:"Tegner forklaringen…",retrying:"Prøver igjen…",error:"Noe gikk galt. Prøv igjen om litt.",copy:"Kopier",copied:"Kopiert!",
     needContentFirst:"Lag forklaringen i steg 1 først.",
@@ -224,6 +269,14 @@ const I18N = {
     "s2-num":"Video","s2-h":"Turn it into video","s2-lead":"Create a vertical 9:16 video of the explanation, ready for Instagram, TikTok and Reels. Or copy the script and record it yourself.",
     "s2-genvid":"Create video automatically","s2-toreel":"🎬 Publish and schedule in Reel Studio",
     "s2-note":"💡 Tap “Create video automatically” and the explanation is drawn scene by scene on a clean board, with a real voice reading it aloud, right here in your browser. Works best on a computer. Want to publish and schedule it? Take it on to Reel Studio.",
+    "s3-num":"Flow","s3-h":"Best quality: draw it with Google Flow",
+    "s3-lead":"Want a real, hand-drawn whiteboard like the one in the tutorial? Then I'll make ready-to-use prompts for you, scene by scene. Paste the image prompt and the video prompt into Google Flow (Veo), and a real hand draws the subject stroke by stroke. Line up the clips and add the voiceover from step 1.",
+    "s3-step1":"Open Google Flow and sign in with your Google account.",
+    "s3-step2":"For each scene below: copy the image prompt and make the image first, then paste the image and the video prompt to get the drawing clip.",
+    "s3-step3":"Download the clips, line them up and add the voiceover. Feel free to take it on to Reel Studio.",
+    "s3-open":"🎨 Open Google Flow",
+    "s3-note":"💡 The prompts are in English on purpose, it gives the best result in Flow. The subject in each scene is tailored to your explanation, the rest is the same hand-drawn whiteboard style every time.",
+    flowScene:"Scene",flowImg:"Image prompt (make the image first)",flowVid:"Video prompt (draws the subject stroke by stroke)",flowCopyAllImg:"Copy all image prompts",
     lvl:"For",hook:"ON THE BOARD (0-3 s)",scenes:"Scene-by-scene script",board:"Drawn on the board",vo:"Voiceover",takeaway:"Finally",fullvo:"The full voiceover",caption:"Caption",tags:"Hashtags",
     loading:"Drawing the explanation…",retrying:"Trying again…",error:"Something went wrong. Try again shortly.",copy:"Copy",copied:"Copied!",
     needContentFirst:"Create the explanation in step 1 first.",
@@ -253,7 +306,7 @@ function applyI18n(){
   document.getElementById('lang-no').classList.toggle('active',LANG==='no');
   document.getElementById('lang-en').classList.toggle('active',LANG==='en');
 }
-function setLang(l){ LANG=l; try{localStorage.setItem('lme_lang',l);localStorage.setItem('lme-lang',l);}catch(e){} applyI18n(); if(EXPL) renderContent(EXPL); }
+function setLang(l){ LANG=l; try{localStorage.setItem('lme_lang',l);localStorage.setItem('lme-lang',l);}catch(e){} applyI18n(); if(EXPL){ renderContent(EXPL); renderFlow(EXPL); } }
 
 function esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function parseJSON(str){ if(typeof str==='object') return str; const m=str.match(/\{[\s\S]*\}/); return JSON.parse(m?m[0]:str); }
@@ -283,7 +336,9 @@ async function genContent(){
         if(data.error) throw new Error(data.error);
         EXPL=parseJSON(data.result);
         renderContent(EXPL);
+        renderFlow(EXPL);
         document.getElementById('step2').classList.add('on');
+        document.getElementById('step3').classList.add('on');
         lastErr=null;
         break;
       }catch(e){ lastErr=e; console.error('Forklaringsvideo forsøk '+(attempt+1)+':',e); }
@@ -329,6 +384,38 @@ function renderContent(r){
   if(r.caption) h+='<div class="card"><h4>✍️ '+t('caption')+' '+copyBtn(r.caption)+'</h4><p>'+esc(r.caption)+'</p></div>';
   h+=tagsCard(r.hashtags);
   document.getElementById('out').innerHTML=h;
+}
+
+/* ---- Steg 3: Flow-prompts, scene for scene (Claude + Flow-arbeidsflyten) ----
+   For hver scene bygger vi en bilde-prompt og en video-prompt i den faste
+   håndtegnede whiteboard-stilen, med motivet fra scenen limt foran. Renate
+   kopierer dem inn i Google Flow (Veo). */
+function flowScenes(r){
+  var out=[];
+  (Array.isArray(r.scenes)?r.scenes:[]).forEach(function(s){
+    var subj=(s.illustration||s.board||'').trim();
+    if(subj) out.push(subj);
+  });
+  return out;
+}
+function renderFlow(r){
+  var el=document.getElementById('flowOut'); if(!el) return;
+  var subs=flowScenes(r);
+  if(!subs.length){ el.innerHTML=''; return; }
+  var h='';
+  var allImg=subs.map(function(s){ return flowImagePrompt(s); }).join('\n\n');
+  h+='<div style="margin-bottom:12px">'+
+     '<button class="btn cerise" onclick=\'copyText('+JSON.stringify(allImg)+',this)\' style="font-size:13px;padding:9px 16px">📋 '+esc(t('flowCopyAllImg'))+'</button></div>';
+  subs.forEach(function(subj,i){
+    var ip=flowImagePrompt(subj), vp=flowVideoPrompt(subj);
+    h+='<div class="card flow-scene">'+
+       '<div class="snum">'+esc(t('flowScene'))+' '+(i+1)+'</div>'+
+       '<div class="subj">'+esc(subj)+'</div>'+
+       '<div class="prompt"><div class="plbl">🖼️ '+esc(t('flowImg'))+' '+copyBtn(ip)+'</div><div class="ptxt">'+esc(ip)+'</div></div>'+
+       '<div class="prompt"><div class="plbl">🎬 '+esc(t('flowVid'))+' '+copyBtn(vp)+'</div><div class="ptxt">'+esc(vp)+'</div></div>'+
+       '</div>';
+  });
+  el.innerHTML=h;
 }
 
 /* ---- Steg 2: lag video (samme robuste pipeline som Reel Studio) ---- */
