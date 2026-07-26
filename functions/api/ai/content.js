@@ -114,15 +114,15 @@ export async function onRequestPost(context) {
   catch { return json({ error: "Ugyldig JSON" }, 400); }
 
   const system = `${BRAND_CONTEXT}\nDu er LMEs innholdsprodusent. Du lager ferdig, publiseringsklart innhold i akkurat det formatet brukeren velger, i LMEs varme, pedagogiske tone.`;
-  // Nye, tyngre formater (whiteboard-forklaring og hook-reel) kjøres på en rask
-  // modell, slik at kallet holder seg godt innenfor tidsgrensen til funksjonen.
-  // De eksisterende formatene beholder modellen de alltid har brukt.
+  // Alle formater bruker samme modell som resten av plattformen (claude-sonnet-5),
+  // den eneste vi vet fungerer med produksjonsnøkkelen. De nye, litt tyngre
+  // formatene får et lavere token-tak, så kallet holder seg raskt og godt
+  // innenfor tidsgrensen til funksjonen.
   const fmt = String(body.format || "post");
-  const fast = (fmt === "explainer" || fmt === "hookreel");
-  const model = fast ? "claude-haiku-4-5-20251001" : "claude-sonnet-5";
-  const maxTokens = fast ? 1400 : 3000;
+  const light = (fmt === "explainer" || fmt === "hookreel");
+  const maxTokens = light ? 2000 : 3000;
   try {
-    const result = await callClaude(env, system, contentPrompt(body), maxTokens, model);
+    const result = await callClaude(env, system, contentPrompt(body), maxTokens, "claude-sonnet-5");
     return json({ result });
   } catch (err) {
     return json({ error: "AI er midlertidig utilgjengelig. Prøv igjen om litt." }, 502);
