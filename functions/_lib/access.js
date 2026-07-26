@@ -42,7 +42,10 @@ export async function sessionUser(context) {
    lagrer per-plan-grenser (subscription.limits), brukes de i stedet. */
 const DEFAULT_LIMITS = { image: 250, video: 15 };
 
-const OWNER_EMAILS = ["renateshobby@hotmail.com"];
+const OWNER_EMAILS = [
+  "renate@lmexplorers.com", "hei@lmexplorers.com", "hello@lmexplorers.com",
+  "support@lmexplorers.com", "renateshobby@hotmail.com",
+];
 function isOwner(user) {
   return !!user && (user.role === "owner" || user.role === "admin" ||
     OWNER_EMAILS.indexOf((user.email || "").toLowerCase()) !== -1);

@@ -12,7 +12,10 @@
  */
 import { sessionUser } from "../../_lib/access.js";
 
-const OWNER_EMAILS = ["renateshobby@hotmail.com"];
+const OWNER_EMAILS = [
+  "renate@lmexplorers.com", "hei@lmexplorers.com", "hello@lmexplorers.com",
+  "support@lmexplorers.com", "renateshobby@hotmail.com",
+];
 const BLOTATO_BASE = "https://backend.blotato.com/v2";
 const KEY_KV = "cfg:blotato_key";
 
