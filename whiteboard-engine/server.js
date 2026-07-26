@@ -83,9 +83,10 @@ const GOOGLE_KEY = pickEnv("GEMINI_API_KEY", "GOOGLE_API_KEY", "GOOGLE_GEMINI_AP
 // Nano Banana = gemini-2.5-flash-image. Nano Banana Pro (om nøkkelen har
 // tilgang): sett GEMINI_IMAGE_MODEL=gemini-3-pro-image-preview.
 const GEMINI_IMAGE_MODEL = process.env.GEMINI_IMAGE_MODEL || "gemini-2.5-flash-image";
-// Veo-modell. Standard er Veo 3 Fast (rimeligst). Sett VEO_MODEL for å bytte
-// (f.eks. veo-3.0-generate-001 for full kvalitet).
-const VEO_MODEL = process.env.VEO_MODEL || "veo-3.0-fast-generate-001";
+// Veo-modell. Modellnavn varierer mellom kontoer og API-versjoner, så vi lar
+// motoren oppdage en gyldig Veo-modell automatisk (se resolveVeoModel). Sett
+// VEO_MODEL bare hvis du vil tvinge en bestemt modell.
+const VEO_MODEL_ENV = (process.env.VEO_MODEL || "").trim();
 // Antatt lengde på et Veo-klipp (sekunder). Brukes til å tilpasse scenelengden.
 const CLIP_SECONDS = Number(process.env.VEO_CLIP_SECONDS || 8);
 
@@ -382,17 +383,57 @@ async function saveVeoVideo(found, key) {
   return `/public/${fn}`;
 }
 
+// Finn en Veo-modell som nøkkelen faktisk har (og som støtter
+// predictLongRunning). Modellnavn skifter mellom nivåer og API-versjoner, så
+// vi spør ListModels i stedet for å gjette. Foretrekker en "fast"-modell
+// (rimeligst), ellers nyeste. Cacher svaret.
+let VEO_MODEL_RESOLVED = null;
+async function resolveVeoModel(force) {
+  if (VEO_MODEL_RESOLVED && !force) return VEO_MODEL_RESOLVED;
+  try {
+    const r = await fetch(`${GEMINI_BASE}/models?key=${encodeURIComponent(GOOGLE_KEY)}&pageSize=1000`);
+    if (!r.ok) return VEO_MODEL_RESOLVED;
+    const data = await r.json();
+    const cands = (data.models || []).filter((m) =>
+      /veo/i.test(m.name || "") &&
+      (m.supportedGenerationMethods || []).some((x) => /predictLongRunning/i.test(x)));
+    if (!cands.length) return VEO_MODEL_RESOLVED;
+    cands.sort((a, b) => {
+      const af = /fast/i.test(a.name) ? 0 : 1, bf = /fast/i.test(b.name) ? 0 : 1;
+      if (af !== bf) return af - bf;                        // foretrekk "fast"
+      return String(b.name).localeCompare(String(a.name));  // ellers nyeste
+    });
+    VEO_MODEL_RESOLVED = cands[0].name.replace(/^models\//, "");
+    console.log("Veo-modell valgt:", VEO_MODEL_RESOLVED);
+    return VEO_MODEL_RESOLVED;
+  } catch (e) { return VEO_MODEL_RESOLVED; }
+}
+
+async function veoStart(model, imageB64, mime, videoPrompt, aspect) {
+  const startUrl = `${GEMINI_BASE}/models/${model}:predictLongRunning?key=${encodeURIComponent(GOOGLE_KEY)}`;
+  const instance = { prompt: videoPrompt };
+  if (imageB64) instance.image = { bytesBase64Encoded: imageB64, mimeType: mime || "image/png" };
+  const body = { instances: [instance], parameters: { aspectRatio: aspect || "9:16", personGeneration: "allow_adult", sampleCount: 1 } };
+  return fetch(startUrl, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+}
+
 // Veo: video-prompt + første bilde -> lokal MP4 (der hånden tegner motivet).
 // Veo er en langvarig operasjon: vi starter den og spør om status til den er
 // ferdig (opptil ~10 min per klipp).
 async function lagVeoKlipp(imageB64, mime, videoPrompt, aspect) {
   if (!GOOGLE_KEY) throw new Error("Google-nøkkel mangler (GEMINI_API_KEY) for Veo.");
-  const startUrl = `${GEMINI_BASE}/models/${VEO_MODEL}:predictLongRunning?key=${encodeURIComponent(GOOGLE_KEY)}`;
-  const instance = { prompt: videoPrompt };
-  if (imageB64) instance.image = { bytesBase64Encoded: imageB64, mimeType: mime || "image/png" };
-  const body = { instances: [instance], parameters: { aspectRatio: aspect || "9:16", personGeneration: "allow_adult", sampleCount: 1 } };
-  const r = await fetch(startUrl, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-  if (!r.ok) throw new Error(`Veo start ${r.status}: ${(await r.text()).replace(/\s+/g, " ").slice(0, 250)}`);
+  let model = VEO_MODEL_ENV || await resolveVeoModel();
+  if (!model) throw new Error("Fant ingen Veo-modell på Google-nøkkelen. Slå på fakturering / Veo-tilgang i Google AI Studio (Veo krever betalt nivå).");
+  let r = await veoStart(model, imageB64, mime, videoPrompt, aspect);
+  if (r.status === 404) {
+    // Modellnavnet fantes ikke, oppdag en gyldig modell og prøv på nytt.
+    const discovered = await resolveVeoModel(true);
+    if (discovered && discovered !== model) {
+      model = discovered;
+      r = await veoStart(model, imageB64, mime, videoPrompt, aspect);
+    }
+  }
+  if (!r.ok) throw new Error(`Veo start ${r.status} (modell ${model}): ${(await r.text()).replace(/\s+/g, " ").slice(0, 220)}`);
   const op = await r.json();
   const name = op && op.name;
   if (!name) throw new Error("Veo ga ingen operasjons-id.");
