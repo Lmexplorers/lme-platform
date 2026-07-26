@@ -166,6 +166,38 @@ async function lagWhiteboardBilde(temaTekst) {
   throw lastErr || new Error("Ingen bildemodell tilgjengelig.");
 }
 
+// Lag et ekte hånd-bilde (hånd som holder tusj) én gang, med gjennomsiktig
+// bakgrunn, og gjenbruk det som tegnehånd i videoen.
+let HAND_READY = null; // "/public/hand.png" | false | null(ikke forsøkt)
+async function ensureHandImage() {
+  if (HAND_READY !== null) return HAND_READY;
+  const p = path.resolve(PUBLIC_DIR, "hand.png");
+  if (fs.existsSync(p)) { HAND_READY = "/public/hand.png"; return HAND_READY; }
+  try {
+    const img = await openai.images.generate({
+      model: "gpt-image-1",
+      prompt:
+        "A realistic human hand holding a black felt-tip marker pen, as if about to draw on a whiteboard. " +
+        "Clean, simple, isolated on a fully transparent background, no shadow, no background at all. " +
+        "The forearm enters from the top-right; the marker points down toward the lower-left, and the pen " +
+        "tip is near the bottom-left area of the frame. Natural skin tone, gentle, friendly.",
+      n: 1,
+      size: "1024x1024",
+      background: "transparent",
+    });
+    const b64 = img && img.data && img.data[0] && img.data[0].b64_json;
+    if (b64) {
+      await fs.promises.writeFile(p, Buffer.from(b64, "base64"));
+      HAND_READY = "/public/hand.png";
+      return HAND_READY;
+    }
+  } catch (e) {
+    console.warn("Kunne ikke lage hånd-bilde (bruker tegnet markør i stedet):", e && e.message);
+  }
+  HAND_READY = false;
+  return HAND_READY;
+}
+
 // 2) ElevenLabs with-timestamps -> lokal MP3 + ord-tidsstempler.
 async function lagLydMedTidsstempler(manus, voiceId) {
   const url =
@@ -221,9 +253,11 @@ app.post("/api/generer-whiteboard", async (req, res) => {
     const totalVarighetSekunder = Math.max(3, sisteSlutt + 2); // 2 s haleklipp
     const totalFrames = Math.ceil(totalVarighetSekunder * fps);
 
+    const handPath = await ensureHandImage();
     const inputProps = {
       audioUrl: RENDER_BASE + audioPath,
       imageUrl: RENDER_BASE + imagePath,
+      handUrl: handPath ? RENDER_BASE + handPath : "",
       textTimestamps: words,
       totalFrames,
       fps,

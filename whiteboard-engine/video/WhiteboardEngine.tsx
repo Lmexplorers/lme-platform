@@ -10,6 +10,7 @@ export interface WordTimestamp {
 export interface WhiteboardProps {
   audioUrl: string;
   imageUrl: string;
+  handUrl?: string;
   textTimestamps: WordTimestamp[];
   totalFrames: number;
   fps: number;
@@ -47,7 +48,7 @@ const Marker: React.FC<{ x: number; y: number }> = ({ x, y }) => (
   </div>
 );
 
-export const WhiteboardEngine: React.FC<WhiteboardProps> = ({ audioUrl, imageUrl, textTimestamps = [], fps = 30 }) => {
+export const WhiteboardEngine: React.FC<WhiteboardProps> = ({ audioUrl, imageUrl, handUrl, textTimestamps = [], fps = 30 }) => {
   const frame = useCurrentFrame();
   const t = frame / fps;
   const W = 1920;
@@ -114,7 +115,19 @@ export const WhiteboardEngine: React.FC<WhiteboardProps> = ({ audioUrl, imageUrl
         </div>
       ) : null}
 
-      {markerVisible ? <Marker x={tipX} y={tipY} /> : null}
+      {/* Tegnehånd: ekte hånd-bilde hvis vi har det, ellers tegnet markør.
+          Bildet er komponert med tusjspissen nede til venstre, så vi plasserer
+          nedre venstre hjørne omtrent ved tegnepunktet. */}
+      {markerVisible ? (
+        handUrl ? (
+          <img
+            src={handUrl}
+            style={{ position: "absolute", left: tipX - 40, top: tipY - 300, width: 340, height: 340, objectFit: "contain", pointerEvents: "none", zIndex: 999, filter: "drop-shadow(0 8px 12px rgba(0,0,0,0.16))" }}
+          />
+        ) : (
+          <Marker x={tipX} y={tipY} />
+        )
+      ) : null}
     </AbsoluteFill>
   );
 };

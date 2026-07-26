@@ -7,6 +7,7 @@ import { WhiteboardEngine, WhiteboardProps } from "./WhiteboardEngine";
 const defaultProps: WhiteboardProps = {
   audioUrl: "",
   imageUrl: "",
+  handUrl: "",
   textTimestamps: [],
   totalFrames: 900,
   fps: 30,
