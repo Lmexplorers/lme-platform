@@ -28,6 +28,8 @@ Docker + nok RAM til Remotion (minst ~2 GB). Under er den enkleste veien.
    - `OPENAI_API_KEY` = din OpenAI-nøkkel
    - `ELEVENLABS_API_KEY` = din ElevenLabs-nøkkel
    - `ELEVENLABS_VOICE_ID` = din norske stemme (valgfritt)
+   - `GEMINI_API_KEY` = din Google/Gemini-nøkkel (kreves for den ekte
+     håndtegningen: Nano Banana + Veo). Nøkkelen må ha tilgang til Veo.
 5. **Create Web Service.** Første bygg tar noen minutter (laster ned Chrome).
 6. Når den er «Live», kopier URL-en (f.eks. `https://lme-whiteboard-motor.onrender.com`)
    og legg den inn som `PUBLIC_BASE_URL` i samme Environment-liste, og lagre.
@@ -38,7 +40,8 @@ Docker + nok RAM til Remotion (minst ~2 GB). Under er den enkleste veien.
 2. I tjeneste-innstillingene: **Root Directory** = `whiteboard-engine`
    (Railway bruker Dockerfile automatisk).
 3. **Variables** → legg til `OPENAI_API_KEY`, `ELEVENLABS_API_KEY`,
-   `ELEVENLABS_VOICE_ID`, og etter første deploy `PUBLIC_BASE_URL` = tjenestens URL.
+   `GEMINI_API_KEY` (for Nano Banana + Veo), `ELEVENLABS_VOICE_ID`, og etter
+   første deploy `PUBLIC_BASE_URL` = tjenestens URL.
 4. Deploy.
 
 ---
