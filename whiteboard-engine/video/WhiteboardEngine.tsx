@@ -1,5 +1,9 @@
 import { AbsoluteFill, Audio, Img, useCurrentFrame, interpolate } from "remotion";
+import { loadFont } from "@remotion/google-fonts/PlaypenSans";
 import React from "react";
+
+// LME sin egen font (håndskrift-stil, passer en tavle).
+const { fontFamily: LME_FONT } = loadFont();
 
 export interface WordTimestamp {
   word: string;
@@ -79,7 +83,7 @@ export const WhiteboardEngine: React.FC<WhiteboardProps> = ({ audioUrl, imageUrl
   const markerVisible = reveal < 99.5;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: "#FBF6F0", fontFamily: "Verdana, Arial, sans-serif" }}>
+    <AbsoluteFill style={{ backgroundColor: "#FBF6F0", fontFamily: LME_FONT }}>
       {audioUrl ? <Audio src={audioUrl} /> : null}
 
       {/* Tavle-ramme */}
