@@ -206,7 +206,7 @@ const I18N = {
     "s2-genvid":"Lag video automatisk","s2-toreel":"🎬 Publiser og planlegg i Reel Studio",
     "s2-note":"💡 Trykk «Lag video automatisk», så lager AI-en et bilde av forklaringen og gjør det om til en vertikal video rett her. Vil du publisere og planlegge den? Ta den med videre til Reel Studio.",
     lvl:"Passer for",hook:"PÅ TAVLA (0-3 s)",scenes:"Manus scene for scene",board:"Tegnes på tavla",vo:"Voiceover",takeaway:"Til slutt",fullvo:"Hele voiceoveren",caption:"Caption",tags:"Hashtags",
-    loading:"Tegner forklaringen…",error:"Noe gikk galt. Prøv igjen om litt.",copy:"Kopier",copied:"Kopiert!",
+    loading:"Tegner forklaringen…",retrying:"Prøver igjen…",error:"Noe gikk galt. Prøv igjen om litt.",copy:"Kopier",copied:"Kopiert!",
     needContentFirst:"Lag forklaringen i steg 1 først.",
     vidImage:"Lager bilde…",vidMaking:"Lager video… (kan ta et par minutter)",vidUploading:"Laster opp…",vidReady:"Video klar 🎬 Lagt inn under.",vidFail:"Kunne ikke lage video.",
     vidServerBusy:"Serveren svarer ikke som forventet ennå. En ny versjon kan være under utrulling. Last siden på nytt og prøv igjen om et minutt.",
@@ -223,7 +223,7 @@ const I18N = {
     "s2-genvid":"Create video automatically","s2-toreel":"🎬 Publish and schedule in Reel Studio",
     "s2-note":"💡 Tap “Create video automatically” and the AI makes an image of the explanation and turns it into a vertical video right here. Want to publish and schedule it? Take it on to Reel Studio.",
     lvl:"For",hook:"ON THE BOARD (0-3 s)",scenes:"Scene-by-scene script",board:"Drawn on the board",vo:"Voiceover",takeaway:"Finally",fullvo:"The full voiceover",caption:"Caption",tags:"Hashtags",
-    loading:"Drawing the explanation…",error:"Something went wrong. Try again shortly.",copy:"Copy",copied:"Copied!",
+    loading:"Drawing the explanation…",retrying:"Trying again…",error:"Something went wrong. Try again shortly.",copy:"Copy",copied:"Copied!",
     needContentFirst:"Create the explanation in step 1 first.",
     vidImage:"Creating image…",vidMaking:"Creating video… (may take a couple of minutes)",vidUploading:"Uploading…",vidReady:"Video ready 🎬 Added below.",vidFail:"Could not create the video.",
     vidServerBusy:"The server isn't responding as expected yet. A new version may be deploying. Reload the page and try again in a minute.",
@@ -266,17 +266,28 @@ async function genContent(){
   const level=document.getElementById('level').value;
   const btn=document.getElementById('genBtn');
   const label=btn.innerHTML; btn.disabled=true; btn.innerHTML='<span class="spinner"></span> '+t('loading');
+  var lastErr=null;
   try{
-    const res=await fetch('/api/ai/content',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({format:'explainer',source:source+', nivå: '+level,lang:LANG})});
-    const data=await readJson(res,'content');
-    if(!res.ok) throw new Error('http '+res.status+(data&&data.error?': '+data.error:''));
-    if(data.error) throw new Error(data.error);
-    EXPL=parseJSON(data.result);
-    renderContent(EXPL);
-    document.getElementById('step2').classList.add('on');
+    // Kallet kan i sjeldne tilfeller bli avbrutt av noe i kjeden (Cloudflare,
+    // Anthropic eller mobilnettet) og gi en stygg feil. Vi prøver derfor opptil
+    // tre ganger med litt pause, så en forbigående feil retter seg selv.
+    for(var attempt=0; attempt<3; attempt++){
+      if(attempt>0){ btn.innerHTML='<span class="spinner"></span> '+t('retrying'); await new Promise(function(r){ setTimeout(r, 1500*attempt); }); }
+      try{
+        const res=await fetch('/api/ai/content',{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({format:'explainer',source:source+', nivå: '+level,lang:LANG})});
+        const data=await readJson(res,'content');
+        if(!res.ok) throw new Error('http '+res.status+(data&&data.error?': '+data.error:''));
+        if(data.error) throw new Error(data.error);
+        EXPL=parseJSON(data.result);
+        renderContent(EXPL);
+        document.getElementById('step2').classList.add('on');
+        lastErr=null;
+        break;
+      }catch(e){ lastErr=e; console.error('Forklaringsvideo forsøk '+(attempt+1)+':',e); }
+    }
+    if(lastErr) throw lastErr;
   }catch(e){
-    console.error('Forklaringsvideo:',e);
     var extra = (e&&e.serverBusy) ? (' ['+(e.httpStatus||'?')+(e.snippet?': '+e.snippet:'')+']') : ((e&&e.message)?(' ('+e.message+')'):'');
     document.getElementById('out').innerHTML='<p class="err">'+esc(t('error')+extra)+'</p>';
   }finally{ btn.disabled=false; btn.innerHTML=label; }

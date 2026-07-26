@@ -95,7 +95,7 @@ function contentPrompt(b) {
     explainer: `{"format":"explainer","title":"kort arbeidstittel","level":"hvem videoen passer for, f.eks. foreldre, barnehage 3-6 år, skole","hook":"åpningssetning som skrives på tavla, maks 8 ord","scenes":[{"time":"0-8s","board":"det som tegnes/skrives på whiteboarden i denne scenen, korte stikkord","narration":"det som fortelles med rolig stemme, 1-2 setninger"}],"takeaway":"én setning som oppsummerer det seeren skal huske","caption":"kort delings-caption for Instagram/TikTok","hashtags":["6-10 hashtags"]}`,
   };
   const shape = shapes[fmt] || shapes.post;
-  const extra = fmt === "carousel" ? "3-8 slides." : fmt === "story" ? "3-5 frames." : fmt === "reel" ? "4-6 scener." : fmt === "explainer" ? "5-6 scener som til sammen blir cirka ett minutt. Bygg forklaringen steg for steg, som en tegnet whiteboard-video: hver scene tegner videre på den forrige. Konkret, enkelt og lett å huske. Hold hver scene kort." : fmt === "hookreel" ? "4-6 scener, cirka 15-40 sekunder, i stilen til en personlig merkevare-reel: en sterk tekst-hook som stopper scrollingen, deretter en ærlig historie i jeg-form som gir én konkret verdi, og en varm kommentar-basert oppfordring til slutt. Skriv aldri oppdiktede inntekter, tall, resultater eller løfter. Hold det ekte og pedagogisk, i LMEs varme tone." : "";
+  const extra = fmt === "carousel" ? "3-8 slides." : fmt === "story" ? "3-5 frames." : fmt === "reel" ? "4-6 scener." : fmt === "explainer" ? "Nøyaktig 5 scener, korte. Til sammen cirka ett minutt. Bygg forklaringen steg for steg, som en tegnet whiteboard-video: hver scene tegner videre på den forrige. Konkret, enkelt og lett å huske. Hold hver narration til én til to setninger og hver board til noen få stikkord." : fmt === "hookreel" ? "4-6 scener, cirka 15-40 sekunder, i stilen til en personlig merkevare-reel: en sterk tekst-hook som stopper scrollingen, deretter en ærlig historie i jeg-form som gir én konkret verdi, og en varm kommentar-basert oppfordring til slutt. Skriv aldri oppdiktede inntekter, tall, resultater eller løfter. Hold det ekte og pedagogisk, i LMEs varme tone." : "";
   return `Språk: ${langName(b.lang)}. Format: ${fmt}.
 Kilde/tema: "${src}".
 Lag ferdig, publiseringsklart innhold i dette formatet. ${extra}
@@ -120,7 +120,7 @@ export async function onRequestPost(context) {
   const fmt = String(body.format || "post");
   const fast = (fmt === "explainer" || fmt === "hookreel");
   const model = fast ? "claude-haiku-4-5-20251001" : "claude-sonnet-5";
-  const maxTokens = fast ? 2000 : 3000;
+  const maxTokens = fast ? 1400 : 3000;
   try {
     const result = await callClaude(env, system, contentPrompt(body), maxTokens, model);
     return json({ result });
