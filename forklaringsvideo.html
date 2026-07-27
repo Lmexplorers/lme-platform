@@ -133,6 +133,16 @@
   .flow-open{background:linear-gradient(120deg,#4f9df5,#2f7fe0);}
   .steps-list{margin:2px 0 4px;padding-left:18px;font-size:13.5px;color:var(--ink-soft);}
   .steps-list li{margin:5px 0;}
+
+  /* Veo scene-galleri (vises mens videoen lages, blir liggende etterpå) */
+  .veo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:12px;margin-top:14px;}
+  .veo-scene{background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);padding:8px;}
+  .veo-scene .vs-num{font-family:var(--font-heading);font-size:11px;font-weight:800;color:var(--sky);
+    text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
+  .veo-scene img,.veo-scene video{width:100%;border-radius:8px;display:block;background:#faf7f2;aspect-ratio:9/16;object-fit:cover;}
+  .veo-scene .vs-wait{font-size:11px;color:var(--ink-soft);margin-top:6px;display:flex;align-items:center;gap:6px;}
+  .veo-scene .vs-links{margin-top:6px;display:flex;gap:10px;}
+  .veo-scene .vs-links a{font-size:11px;font-weight:700;color:var(--cerise);text-decoration:none;}
 </style>
 </head>
 <body>
@@ -199,6 +209,7 @@
     <p class="lead" data-i18n="s2-lead">Lag en vertikal 9:16 video av forklaringen, klar for Instagram, TikTok og Reels. Eller kopier manuset og les det inn selv.</p>
     <button class="btn cerise block" id="genVeoBtn" onclick="genVeoVideo()">🎨 <span data-i18n="s2-genveo">Lag ekte håndtegning (Veo)</span></button>
     <div class="pubmsg" id="genVeoMsg"></div>
+    <div class="out" id="veoScenes"></div>
     <div class="note" id="s2veonote" data-i18n="s2-veonote">💡 Dette er Flow-kvaliteten, men helautomatisk: plattformen lager blyantskissen (Nano Banana) og lar en ekte hånd tegne den (Veo), scene for scene, med norsk stemme. Det tar noen minutter per scene og koster litt per video via Google. La fanen stå åpen.</div>
 
     <div style="margin-top:18px;padding-top:16px;border-top:1px dashed var(--line);">
@@ -254,6 +265,7 @@ const I18N = {
     "s2-veonote":"💡 Dette er Flow-kvaliteten, men helautomatisk: plattformen lager blyantskissen (Nano Banana) og lar en ekte hånd tegne den (Veo), scene for scene, med norsk stemme. Det tar noen minutter per scene og koster litt per video via Google. La fanen stå åpen.",
     "s2-note":"💡 Vil du bare teste raskt og gratis? Denne tegner forklaringen på en enkel tavle med stemme, uten Veo. Enklere utseende, men koster ingenting.",
     veoStart:"Starter Veo-motoren…",veoScene:"Lager videoen (Nano Banana + Veo). Dette tar noen minutter per scene, la fanen stå åpen…",veoReady:"Video klar 🎨 Ekte håndtegning, scene for scene, med stemme. Lagt inn under.",veoFail:"Kunne ikke lage Veo-videoen.",veoBusy:"Motoren svarer ikke akkurat nå. Den kan fortsatt starte opp, vent et minutt og prøv igjen.",
+veoDrawing:"Veo tegner…",veoDlSketch:"Skisse",veoDlClip:"Klipp",veoKept:"Scenene under er lagret. Ryker sammenslåingen, trykk knappen igjen, da gjenbrukes disse uten ny kostnad.",
     "s3-num":"Flow","s3-h":"Best kvalitet: tegn den med Google Flow",
     "s3-lead":"Vil du ha en ekte, håndtegnet whiteboard som den i tutorialen? Da lager jeg ferdige prompts for deg, scene for scene. Kopier bilde-prompten og video-prompten inn i Google Flow (Veo), så tegner en ekte hånd motivet strek for strek. Legg klippene etter hverandre og legg på voiceoveren fra steg 1.",
     "s3-step1":"Åpne Google Flow og logg inn med Google-kontoen din.",
@@ -282,6 +294,7 @@ const I18N = {
     "s2-veonote":"💡 This is the Flow quality, but fully automatic: the platform creates the pencil sketch (Nano Banana) and lets a real hand draw it (Veo), scene by scene, with a Norwegian voice. It takes a few minutes per scene and costs a little per video via Google. Keep the tab open.",
     "s2-note":"💡 Just want a quick, free test? This draws the explanation on a simple board with a voice, without Veo. Simpler look, but costs nothing.",
     veoStart:"Starting the Veo engine…",veoScene:"Creating the video (Nano Banana + Veo). This takes a few minutes per scene, keep the tab open…",veoReady:"Video ready 🎨 Real hand-drawing, scene by scene, with narration. Added below.",veoFail:"Could not create the Veo video.",veoBusy:"The engine isn't responding right now. It may still be starting up, wait a minute and try again.",
+veoDrawing:"Veo drawing…",veoDlSketch:"Sketch",veoDlClip:"Clip",veoKept:"The scenes below are saved. If the final merge fails, press the button again, these are reused at no extra cost.",
     "s3-num":"Flow","s3-h":"Best quality: draw it with Google Flow",
     "s3-lead":"Want a real, hand-drawn whiteboard like the one in the tutorial? Then I'll make ready-to-use prompts for you, scene by scene. Paste the image prompt and the video prompt into Google Flow (Veo), and a real hand draws the subject stroke by stroke. Line up the clips and add the voiceover from step 1.",
     "s3-step1":"Open Google Flow and sign in with your Google account.",
@@ -645,6 +658,28 @@ function veoScenes(r){
   });
   return out;
 }
+// Viser hver scene (blyantskisse + Veo-klipp) etter hvert som den blir klar,
+// og beholder dem. Ingenting forsvinner, selv om noe ryker på slutten.
+function renderVeoScenes(scenes){
+  var el=document.getElementById('veoScenes'); if(!el) return;
+  if(!scenes||!scenes.length){ el.innerHTML=''; return; }
+  var h='<div class="veo-grid">';
+  scenes.forEach(function(sc){
+    h+='<div class="veo-scene"><div class="vs-num">'+esc(t('flowScene'))+' '+(sc.n||'')+'</div>';
+    if(sc.clipUrl){ h+='<video src="'+esc(sc.clipUrl)+'" playsinline controls muted preload="metadata"></video>'; }
+    else if(sc.imageUrl){ h+='<img src="'+esc(sc.imageUrl)+'" alt="">'+'<div class="vs-wait"><span class="spinner"></span> '+esc(t('veoDrawing'))+'</div>'; }
+    var links='';
+    if(sc.imageUrl) links+='<a href="'+esc(sc.imageUrl)+'" target="_blank" rel="noopener" download>'+esc(t('veoDlSketch'))+'</a>';
+    if(sc.clipUrl) links+='<a href="'+esc(sc.clipUrl)+'" target="_blank" rel="noopener" download>'+esc(t('veoDlClip'))+'</a>';
+    if(links) h+='<div class="vs-links">'+links+'</div>';
+    h+='</div>';
+  });
+  h+='</div>';
+  el.innerHTML=h;
+}
+function saveVeo(scenes, videoUrl){
+  try{ localStorage.setItem('lme-forklaring-veo', JSON.stringify({scenes:scenes||[], videoUrl:videoUrl||''})); }catch(e){}
+}
 async function genVeoVideo(){
   var msg=document.getElementById('genVeoMsg'), btn=document.getElementById('genVeoBtn');
   if(!EXPL){ msg.className='pubmsg err'; msg.textContent='⚠️ '+t('needContentFirst'); return; }
@@ -655,6 +690,7 @@ async function genVeoVideo(){
   msg.className='pubmsg'; msg.textContent=t('veoStart');
   btn.innerHTML='<span class="spinner"></span> '+t('veoScene');
   function sleep(ms){ return new Promise(function(res){ setTimeout(res, ms); }); }
+  var lastScenes=[];
   try{
     var start=await fetch(WB_ENGINE+'/api/generer-veo',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({ scenes:scenes, lang:LANG })}).then(function(res){return readJson(res,'veo');});
@@ -668,6 +704,7 @@ async function genVeoVideo(){
       var st=await fetch(WB_ENGINE+'/api/whiteboard-status?id='+encodeURIComponent(jobId))
         .then(function(res){return readJson(res,'status');}).catch(function(){return null;});
       if(st){
+        if(st.scenes&&st.scenes.length){ lastScenes=st.scenes; renderVeoScenes(lastScenes); saveVeo(lastScenes, st.videoUrl||''); }
         if(st.status==='done'&&st.videoUrl){ done=st; break; }
         if(st.status==='error') throw new Error(st.error||'render-feil');
         if(st.status==='not_found') throw new Error('jobben forsvant (motoren startet kanskje på nytt)');
@@ -675,13 +712,18 @@ async function genVeoVideo(){
       }
     }
     if(!done) throw new Error('tidsavbrudd, prøv igjen');
+    if(done.scenes&&done.scenes.length){ lastScenes=done.scenes; renderVeoScenes(lastScenes); }
+    saveVeo(lastScenes, done.videoUrl);
     if(v){ v.src=done.videoUrl; v.style.display='block'; }
     try{ localStorage.setItem('lme-reel-media', done.videoUrl); }catch(e){}
     btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg'; msg.textContent=t('veoReady');
   }catch(e){
     btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err';
-    if(e&&e.serverBusy){ msg.textContent='⚠️ '+t('veoBusy'); }
-    else { msg.textContent='⚠️ '+t('veoFail')+(e&&e.message?' ('+e.message+')':''); }
+    // Behold scenene som alt er laget, så ingenting forsvinner.
+    if(lastScenes.length){ renderVeoScenes(lastScenes); saveVeo(lastScenes, ''); }
+    var tips = lastScenes.length ? (' '+t('veoKept')) : '';
+    if(e&&e.serverBusy){ msg.textContent='⚠️ '+t('veoBusy')+tips; }
+    else { msg.textContent='⚠️ '+t('veoFail')+(e&&e.message?' ('+e.message+')':'')+tips; }
   }
 }
 
@@ -707,6 +749,12 @@ applyI18n();
       document.getElementById('step2').classList.add('on');
       document.getElementById('step3').classList.add('on');
     }
+  }catch(e){}
+  // Hent tilbake Veo-scenene (skisser + klipp) og eventuell ferdig video.
+  try{
+    var veo=JSON.parse(localStorage.getItem('lme-forklaring-veo')||'null');
+    if(veo&&veo.scenes&&veo.scenes.length){ renderVeoScenes(veo.scenes); }
+    if(veo&&veo.videoUrl){ var vp=document.getElementById('vidPreview'); if(vp){ vp.src=veo.videoUrl; vp.style.display='block'; } }
   }catch(e){}
 })();
 </script>
