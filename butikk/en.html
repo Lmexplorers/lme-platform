@@ -20,7 +20,9 @@
     .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;max-width:1120px;margin:0 auto;flex-wrap:wrap;}
     .topbar .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--font-head);font-weight:800;color:var(--ink);}
     .topbar .brand img{width:40px;height:40px;border-radius:9px;}
+    .topbar .lang-badge{font-family:var(--font-head);font-weight:800;font-size:14px;color:#fff;background:var(--pink);border-radius:999px;padding:7px 15px;}
     .topbar .to-no{font-size:14px;text-decoration:none;color:var(--pink-dark);border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;background:#fff;font-weight:700;}
+    .topbar .right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
     .hero{max-width:1120px;margin:0 auto;padding:14px 20px 6px;text-align:center;}
     .hero h1{font-size:34px;line-height:1.15;margin:6px 0 10px;color:var(--ink);font-weight:800;}
     .hero h1 em{color:var(--pink);font-style:normal;}
@@ -49,7 +51,10 @@
 <body>
   <div class="topbar">
     <a class="brand" href="/"><img src="/images/lme-logo.png" alt="Little Montessori Explorers">Little Montessori Explorers</a>
-    <a class="to-no" href="/butikk">🇳🇴 Norsk butikk</a>
+    <div class="right">
+      <span class="lang-badge">🇬🇧 English shop</span>
+      <a class="to-no" href="/butikk">🇳🇴 Til norsk butikk</a>
+    </div>
   </div>
 
   <div class="hero">
