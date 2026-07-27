@@ -98,15 +98,39 @@ const PRODUCT = {
       f("norge-skaut-en.pdf", "", "Norway kerchief, knit") ] } },
 };
 
-/* Bygger nedlastings-HTML: én knapp for enkeltoppskrift, punktliste for pakke. */
+/* Bygger nedlastings-HTML: kjøperens språk først (fremhevet), og den andre
+   språkversjonen rett under, så begge alltid ligger side om side. Slik får en
+   engelsk kjøper alltid den engelske PDF-en, og en norsk alltid den norske. */
 function downloads(prod, lang) {
-  const files = (prod.files[lang] || prod.files.no || []);
-  if (files.length === 1) {
-    return btn(files[0].url, lang === "en" ? "Download the pattern (PDF)" : "Last ned oppskriften (PDF)");
+  const other = lang === "en" ? "no" : "en";
+  const primary = prod.files[lang] || prod.files.no || [];
+  const secondary = prod.files[other] || [];
+  const lbl = (fl, l) => (l === "en" ? fl.en : fl.no) || "PDF";
+
+  let html = "";
+  if (primary.length === 1) {
+    html += btn(primary[0].url, lang === "en" ? "Download the pattern (PDF)" : "Last ned oppskriften (PDF)");
+  } else if (primary.length) {
+    html += '<ul style="padding-left:20px;margin:14px 0;">' +
+      primary.map((fl) => '<li style="margin:6px 0;">' + link(fl.url, lbl(fl, lang)) + '</li>').join("") +
+      '</ul>';
   }
-  const items = files.map((fl) =>
-    '<li style="margin:6px 0;">' + link(fl.url, (lang === "en" ? fl.en : fl.no) || "PDF") + '</li>').join("");
-  return '<ul style="padding-left:20px;margin:14px 0;">' + items + '</ul>';
+
+  if (secondary.length) {
+    const heading = lang === "en"
+      ? "Prefer Norwegian? The Norwegian version is right here:"
+      : "Vil du heller ha den på engelsk? Den engelske versjonen ligger her:";
+    if (secondary.length === 1) {
+      html += '<p style="margin:14px 0 0;font-size:14px;color:#6b6470;">' + esc(heading) + " " +
+        link(secondary[0].url, lang === "en" ? "Download in Norwegian (PDF)" : "Last ned på engelsk (PDF)") + "</p>";
+    } else {
+      html += '<p style="margin:16px 0 4px;font-size:14px;color:#6b6470;">' + esc(heading) + "</p>" +
+        '<ul style="padding-left:20px;margin:4px 0 0;font-size:14px;">' +
+        secondary.map((fl) => '<li style="margin:5px 0;">' + link(fl.url, lbl(fl, other)) + '</li>').join("") +
+        '</ul>';
+    }
+  }
+  return html;
 }
 
 function content(kind, lang, name, pid) {
