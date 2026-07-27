@@ -260,7 +260,7 @@ var MONTESSORI=[
   {a:["gullperler","gullperlene","gyldne perle","golden bead","golden beads"],d:"the Montessori Golden Bead material: a single golden bead (unit), a bar of ten beads (ten), a flat square of one hundred beads (hundred) and a large cube of one thousand golden beads (thousand)"},
   {a:["perletrapp","perlekjede","perletrappa","bead stair","bead chain","coloured bead"],d:"the Montessori Coloured Bead Stair: short bead bars from one to ten, each quantity in its own distinct colour (1 red, 2 green, 3 pink, 4 yellow, 5 light blue, and so on, 10 golden)"},
   {a:["binomialkube","binomial cube","binomialkuben"],d:"the Montessori Binomial Cube: a cube built inside a natural light-wood hinged box with two flaps that fold open, made of one large red cube, one smaller blue cube, three red-and-black square prisms and three blue-and-black square prisms, assembled together as (a+b)³; the box lid shows a flat pattern of one red square, one blue square and two black rectangles"},
-  {a:["trinomialkube","trinomial cube","trinomialkuben"],d:"the Montessori Trinomial Cube: a cube of red, blue and yellow cubes with black-edged prisms representing (a+b+c)³, kept in a hinged wooden box"},
+  {a:["trinomialkube","trinomial cube","trinomialkuben"],d:"the Montessori Trinomial Cube: a larger cube built inside a natural light-wood hinged box with two fold-open flaps, made of 27 cubes and rectangular prisms in red, blue, yellow and black arranged in three layers as (a+b+c)³; the box lid shows a flat pattern of red, blue and yellow squares separated by black rectangles"},
   {a:["sandpapirbokstav","sandpaper letter"],d:"Montessori Sandpaper Letters: single lowercase cursive letters cut from rough sandpaper and mounted on smooth boards, consonants on pink boards and vowels on blue boards"},
   {a:["sandpapirtall","sandpaper number"],d:"Montessori Sandpaper Numbers: single numerals cut from rough sandpaper mounted on green boards"},
   {a:["bevegelige alfabet","movable alphabet"],d:"the Montessori Large Movable Alphabet: a compartmented wooden box of cut-out lowercase letters, consonants in red and vowels in blue"},
@@ -273,7 +273,18 @@ var MONTESSORI=[
   {a:["påkledningsramme","knapperamme","dressing frame","button frame"],d:"a Montessori Dressing Frame: a square wooden frame holding two overlapping flaps of fabric fastened down the middle (buttons, a zip, a bow or a buckle) for practising fastening"},
   {a:["helle","pouring","øse","overføre vann"],d:"a Montessori pouring exercise: two small matching glass jugs on a wooden tray for pouring water from one jug to the other"},
   {a:["konstruktive trekant","constructive triangle"],d:"the Montessori Constructive Triangles: flat coloured wooden triangles in a box that combine along black guide lines to form larger shapes"},
-  {a:["hundretavle","hundred board"],d:"the Montessori Hundred Board: a wooden board with a 10x10 grid and small numbered tiles from 1 to 100 laid out in order"}
+  {a:["hundretavle","hundred board"],d:"the Montessori Hundred Board: a wooden board with a 10x10 grid and small numbered tiles from 1 to 100 laid out in order"},
+  {a:["knappeløse sylindre","knappeløse sylindrene","knobless cylinder"],d:"the Montessori Knobless Cylinders: four sets of ten wooden cylinders without knobs, each set one solid colour (red, blue, green and yellow), graded in size and arranged in stacks or patterns"},
+  {a:["geometriske legemer","geometrisk legeme","geometric solid"],d:"the Montessori Geometric Solids: solid blue-painted wooden three-dimensional shapes, a sphere, ovoid, ellipsoid, cube, rectangular prism, triangular prism, cylinder, cone, square pyramid and triangular pyramid, kept in a basket or on a stand"},
+  {a:["termiske plater","termisk plate","thermic tablet","varmesans"],d:"the Montessori Thermic Tablets: pairs of small tablets made of different materials (felt, wood, cork, metal, glass, stone) that feel warm or cold to the touch, kept in a wooden box"},
+  {a:["termiske flasker","thermic bottle"],d:"the Montessori Thermic Bottles: identical small metal bottles filled with water at different temperatures, matched by warmth"},
+  {a:["bariske plater","barisk","vektsans","baric tablet"],d:"the Montessori Baric Tablets: three sets of small flat wooden tablets of light, medium and dark wood that differ in weight, kept in a wooden box"},
+  {a:["luktebokser","lukteboks","duftbokser","smelling bottle","scent bottle"],d:"the Montessori Smelling Bottles: two matching sets of small opaque bottles, one set with red lids and one with blue lids, holding different scents to match by smell, on a wooden stand"},
+  {a:["smaksflasker","smaksflaske","tasting bottle"],d:"the Montessori Tasting Bottles: small dropper bottles holding sweet, salty, sour and bitter liquids, used with little droppers or spoons to match tastes"},
+  {a:["følebrett","touch board"],d:"the Montessori Touch Boards: flat wooden boards with alternating strips of smooth polished wood and rough sandpaper for feeling smooth versus rough"},
+  {a:["føleplater","føleplate","touch tablet"],d:"the Montessori Touch Tablets: pairs of small wooden tablets faced with grades of sandpaper from rough to smooth, matched by touch, kept in a box"},
+  {a:["følestoff","stoffboks","touch fabric","fabric box"],d:"the Montessori Touch Fabrics: pairs of fabric swatches of different textures kept in a wooden box, matched by touch, often blindfolded"},
+  {a:["mystikkpose","mystery bag","stereognostisk","stereognostic bag","følepose"],d:"a Montessori Mystery Bag: a soft drawstring cloth bag holding small familiar objects that the child names by touch alone without looking"}
 ];
 function enrichMontessori(subject){
   var s=String(subject||""); var low=s.toLowerCase(); var adds=[];
