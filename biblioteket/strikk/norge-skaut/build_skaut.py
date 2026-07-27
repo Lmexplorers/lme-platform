@@ -62,16 +62,15 @@ def mini_flag(w=34):
             f'</svg>')
 
 def flag_rects(fx, fy, fw, fh):
-    u = fw / 16.0
-    vx1 = fx + 4*u
-    vx2 = fx + 5*u
-    hy = fy + fh*3/10.0
-    hb = fy + fh*4/10.0
+    # Norsk flagg, korrekte proporsjoner (13x10): korset forskjovet mot venstre,
+    # med hvit kant paa BEGGE sider av den blaa armen (vertikal og horisontal).
+    ux = fw / 13.0
+    uy = fh / 10.0
     return (f'<rect x="{fx}" y="{fy}" width="{fw}" height="{fh}" fill="{RED}"/>'
-            f'<rect x="{vx1}" y="{fy}" width="{2*u}" height="{fh}" fill="#fff"/>'
-            f'<rect x="{fx}" y="{hy}" width="{fw}" height="{fh*4/10}" fill="#fff"/>'
-            f'<rect x="{vx2}" y="{fy}" width="{u}" height="{fh}" fill="{NAVY}"/>'
-            f'<rect x="{fx}" y="{hb}" width="{fw}" height="{fh*2/10}" fill="{NAVY}"/>'
+            f'<rect x="{fx+3*ux}" y="{fy}" width="{4*ux}" height="{fh}" fill="#fff"/>'
+            f'<rect x="{fx}" y="{fy+3*uy}" width="{fw}" height="{4*uy}" fill="#fff"/>'
+            f'<rect x="{fx+4*ux}" y="{fy}" width="{2*ux}" height="{fh}" fill="{NAVY}"/>'
+            f'<rect x="{fx}" y="{fy+4*uy}" width="{fw}" height="{2*uy}" fill="{NAVY}"/>'
             f'<rect x="{fx}" y="{fy}" width="{fw}" height="{fh}" fill="none" stroke="#8f0a20" stroke-width="1"/>')
 
 def scarf_schematic():
