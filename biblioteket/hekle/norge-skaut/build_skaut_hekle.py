@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-"""Genererer LME-strikkeoppskrift (Norge-skaut), norsk + engelsk. Bruk: python3 build_skaut.py [no|en]"""
+"""Genererer LME-hekleoppskrift (Norge-skaut), norsk + engelsk. Bruk: python3 build_skaut_hekle.py [no|en]"""
 import base64, html, pathlib, sys
 
 BASE = pathlib.Path(__file__).parent
-PHOTO = pathlib.Path(__file__).with_name('skaut-strikk.png')
+PHOTO = pathlib.Path(__file__).with_name('skaut-hekle.png')
 LANG = sys.argv[1] if len(sys.argv) > 1 else 'no'
 def L(no, en): return en if LANG == 'en' else no
 
@@ -101,19 +101,8 @@ def scarf_schematic():
   <text x="240" y="302" text-anchor="middle" font-size="13" font-family="Sasson Montessori, sans-serif" fill="#888">{L('spissen bak i nakken (snorene knytes bak, under den)','the point at the back of the neck (ties fasten behind, under it)')}</text>
 </svg>'''
 
-# ---------- flerfargestrikk-paneler ----------
-def stranded_panels():
-    def darker(c):
-        return {'#C8102E': '#a30d24', '#F8F4EA': '#d9d2be', '#00205B': '#001640', '#ffffff': '#cccccc'}.get(c, '#999')
-    def vrow(colors, sw=21, sh=24, ox=19, oy=34):
-        out = []
-        for i, c in enumerate(colors):
-            x = ox + i*sw; y = oy
-            wpath = (f'M{x+3},{y+sh-2} Q{x+sw*0.30},{y+sh*0.35} {x+sw/2},{y+2} '
-                     f'Q{x+sw*0.70},{y+sh*0.35} {x+sw-3},{y+sh-2}')
-            out.append(f'<path d="{wpath}" fill="none" stroke="{darker(c)}" stroke-width="8" stroke-linecap="round"/>')
-            out.append(f'<path d="{wpath}" fill="none" stroke="{c}" stroke-width="6" stroke-linecap="round"/>')
-        return ''.join(out), ox, sw, oy, sh
+# ---------- tapestry-paneler (heklet flerfarge) ----------
+def tapestry_panels():
     def tag(cx, text, w=None):
         w = w or (len(text)*6.1 + 14)
         x = cx - w/2
@@ -121,33 +110,39 @@ def stranded_panels():
                 f'stroke="{TEAL}" stroke-width="1.5"/>'
                 f'<text x="{cx}" y="18.4" text-anchor="middle" font-size="11" '
                 f'font-family="Sasson Montessori, sans-serif" font-weight="bold" fill="#2e8e8a">{html.escape(text)}</text>')
+    def fm_row(colors, sw=21, ox=19, oy=42, sh=22):
+        out = []
+        for i, c in enumerate(colors):
+            x = ox + i*sw
+            out.append(f'<rect x="{x}" y="{oy}" width="{sw-3}" height="{sh}" rx="4" '
+                       f'fill="{c}" stroke="rgba(0,0,0,.25)" stroke-width="1"/>')
+        return ''.join(out)
     panels = []
-    cols = [RED, RED, CREAM, CREAM, CREAM, RED]
-    g, ox, sw, oy, sh = vrow(cols)
-    g1 = g + tag(78, L('forsiden','front'))
-    panels.append((1, L('Strikk hver maske i fargen diagrammet viser. Rød er bunnen, hvit (eller blå) er mønsteret.',
-                        'Knit each stitch in the colour the chart shows. Red is the background, white (or blue) is the pattern.'), g1))
+    g1 = fm_row([RED, RED, '#fff', '#fff', '#fff', RED]) + tag(78, L('forsiden','front'))
+    panels.append((1, L('Hekle hver fastmaske i fargen ruten viser. Rød er bunnen, hvit eller blå er '
+                        'mønsteret.',
+                        'Crochet each single crochet in the colour the square shows. Red is the '
+                        'background, white or blue is the pattern.'), g1))
     y0 = 40
-    g2 = tag(78, L('baksiden','back'))
+    g2 = tag(78, L('bytt farge','change colour'))
+    g2 += fm_row([RED, RED, RED], ox=19, oy=y0)
+    g2 += fm_row(['#fff', '#fff', '#fff'], ox=82, oy=y0)
+    g2 += f'<circle cx="76" cy="{y0+11}" r="7" fill="none" stroke="{TEAL}" stroke-width="2.5"/>'
+    panels.append((2, L('Bytt farge i siste bevegelse på masken før: hent den nye fargen gjennom de to '
+                        'siste løkkene på nålen. Da blir skiftet reint.',
+                        'Change colour on the last step of the stitch before: pull the new colour '
+                        'through the last two loops on the hook. That keeps the change clean.'), g2))
+    y1 = 44
+    g3 = tag(78, L('tråden inni','yarn inside'))
     for i in range(6):
         x = 20 + i*22
-        g2 += f'<path d="M{x},{y0} q6,-9 12,0" fill="none" stroke="#e2b7c6" stroke-width="4" stroke-linecap="round"/>'
-    g2 += (f'<path d="M22,{y0+22} q11,7 22,0 q11,-7 22,0 q11,7 22,0 q11,-7 22,0 q11,7 22,0" '
-           f'fill="none" stroke="{CREAM}" stroke-width="5" stroke-linecap="round"/>')
-    g2 += (f'<path d="M22,{y0+22} q11,7 22,0 q11,-7 22,0 q11,7 22,0 q11,-7 22,0 q11,7 22,0" '
-           f'fill="none" stroke="#d9d2be" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>')
-    panels.append((2, L('Fargen du ikke strikker med, henger løst på baksiden. Det kalles en flott. Hold den løs, ikke stram!',
-                        'The colour you are not knitting with hangs loosely on the back. It is called a float. Keep it loose, not tight!'), g2))
-    y1 = 40
-    g3 = tag(78, L('lange flott','long floats'))
-    for i in range(6):
-        x = 20 + i*22
-        g3 += f'<path d="M{x},{y1} q6,-9 12,0" fill="none" stroke="#e2b7c6" stroke-width="4" stroke-linecap="round"/>'
-    g3 += (f'<path d="M22,{y1+20} L64,{y1+20} Q78,{y1+30} 92,{y1+20} L134,{y1+20}" '
-           f'fill="none" stroke="{CREAM}" stroke-width="5" stroke-linecap="round"/>')
-    g3 += f'<circle cx="78" cy="{y1+27}" r="5" fill="none" stroke="{TEAL}" stroke-width="2.5"/>'
-    panels.append((3, L('Er det mer enn 5 masker mellom fargene, fanger du den lange flotten under en maske på veien. Da blir den ikke hengende.',
-                        'If there are more than 5 stitches between the colours, catch the long float under a stitch along the way. Then it does not hang loose.'), g3))
+        g3 += f'<rect x="{x}" y="{y1}" width="18" height="20" rx="4" fill="{RED}" stroke="rgba(0,0,0,.2)" stroke-width="1"/>'
+    g3 += (f'<path d="M22,{y1+10} L134,{y1+10}" stroke="#fff" stroke-width="4" '
+           f'stroke-linecap="round" opacity="0.9"/>')
+    panels.append((3, L('Fargen du ikke hekler med, legger du oppå omgangen og hekler rundt. Da ligger '
+                        'den gjemt inni, klar til bruk. Hold den løs, ikke stram.',
+                        'The colour you are not using, lay it on top of the row and crochet around '
+                        'it. Then it stays hidden inside, ready to use. Keep it loose, not tight.'), g3))
     out = ['<div class="dsteps">']
     for n, txt, g in panels:
         out.append(f'''<div class="dstep">
@@ -167,9 +162,9 @@ photo_src = f'data:image/png;base64,{photo_b64}'
 
 # ---------- byggeklosser ----------
 def page(body, num, right_label=None):
-    right_label = right_label or L('LME STRIKK', 'LME KNIT')
-    ph2 = L('LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;NORGE-SKAUT',
-            'LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;NORWAY KERCHIEF')
+    right_label = right_label or L('LME HEKLE', 'LME CROCHET')
+    ph2 = L('LME HEKLEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;NORGE-SKAUT',
+            'LME CROCHET PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;NORWAY KERCHIEF')
     return f'''<div class="page">
   <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
   <div class="rside"><span>{right_label}</span></div>
@@ -195,8 +190,8 @@ pages = []
 
 # ============ SIDE 1: FORSIDE ============
 pages.append(page(f'''
-<div class="coverimg"><img src="{photo_src}" alt="{L('Strikket Norge-skaut med flagg og bølgekant','Knitted Norway kerchief with flag and wavy edge')}"></div>
-<div class="covertag">{L('LME STRIKKEOPPSKRIFT','LME KNITTING PATTERN')}</div>
+<div class="coverimg"><img src="{photo_src}" alt="{L('Heklet Norge-skaut med flagg og bølgekant','Crocheted Norway kerchief with flag and wavy edge')}"></div>
+<div class="covertag">{L('LME HEKLEOPPSKRIFT','LME CROCHET PATTERN')}</div>
 <div class="coverbanner">
   <div class="cflag">{mini_flag(40)}</div>
   <h1 class="covertitle">{L('NORGE-SKAUT','NORWAY KERCHIEF')}</h1>
@@ -204,15 +199,15 @@ pages.append(page(f'''
 </div>
 <div class="subpill">{L('TREKANTSKAUT · FLAGG FORAN ELLER BAK','TRIANGLE KERCHIEF · FLAG FRONT OR BACK')}</div>
 {card(L('<p class="center">Et rødt skaut som passer til hatten. Det er en trekant med bølget '
-        'kant, flaggstriper og et norsk flagg. To snorer knyter du bak i nakken. Lett å strikke, '
+        'kant, flaggstriper og et norsk flagg. To snorer knyter du bak i nakken. Lett å hekle, '
         'og fint å ha på 17. mai og til fotball-VM.</p>'
         '<p class="center"><b>To varianter i én oppskrift:</b> du velger selv om flagget skal sitte '
-        'foran (over pannen) eller bak (nede mot spissen). Resten strikker du helt likt.</p>',
+        'foran (over pannen) eller bak (nede mot spissen). Resten hekler du helt likt.</p>',
         '<p class="center">A red kerchief that matches the hat. It is a triangle with a wavy edge, '
-        'flag stripes and a Norwegian flag. Two ties fasten at the back of the neck. Easy to knit, '
-        'and lovely for the 17th of May and the football World Cup.</p>'
+        'flag stripes and a Norwegian flag. Two ties fasten at the back of the neck. Easy to '
+        'crochet, and lovely for the 17th of May and the football World Cup.</p>'
         '<p class="center"><b>Two versions in one pattern:</b> you choose whether the flag sits at '
-        'the front (over the forehead) or the back (down near the point). The rest is knitted '
+        'the front (over the forehead) or the back (down near the point). The rest is crocheted '
         'exactly the same.</p>'))}
 <div class="byline">
   <div class="by1">{L('Av Renate Dahl','By Renate Dahl')}</div>
@@ -220,9 +215,9 @@ pages.append(page(f'''
   <div class="by3">lmexplorers.com</div>
 </div>
 <div class="notecard"><span class="noteemo">&#129525;</span>
-  <p><i>{L('TIPS: Les hele oppskriften en gang først. Strikk gjerne en liten prøvelapp, så blir '
+  <p><i>{L('TIPS: Les hele oppskriften en gang først. Hekle gjerne en liten prøvelapp, så blir '
            'skautet passe stort.',
-           'TIP: Read the whole pattern through once first. Knit a little gauge swatch, so the '
+           'TIP: Read the whole pattern through once first. Crochet a little gauge swatch, so the '
            'kerchief comes out the right size.')}</i></p>
 </div>
 ''', 1))
@@ -230,26 +225,27 @@ pages.append(page(f'''
 # ============ SIDE 2: FØR DU BEGYNNER ============
 pages.append(page(f'''
 {banner(L('FØR DU BEGYNNER','BEFORE YOU START'))}
-<p>{L('Et skaut er lett å strikke. Du starter nede i spissen med noen få masker. Så øker du litt og '
-      'litt, til trekanten er stor nok. Rundt hele skautet lager du en bølget kant med flaggstriper. '
-      'Vil du, strikker du også inn et flagg på midten. Til slutt lager du to snorer å knyte med.',
-      'A kerchief is easy to knit. You start at the point with just a few stitches. Then you '
+<p>{L('Et skaut er lett å hekle. Du starter nede i spissen med noen få masker. Så øker du litt og '
+      'litt, til trekanten er stor nok. Rundt hele skautet hekler du en bølget kant med '
+      'flaggstriper. Vil du, hekler du også inn et flagg på midten. Til slutt lager du to snorer å '
+      'knyte med.',
+      'A kerchief is easy to crochet. You start at the point with just a few stitches. Then you '
       'increase little by little, until the triangle is big enough. Around the whole kerchief you '
-      'make a wavy edge with flag stripes. If you like, you also knit in a flag in the middle. At '
-      'the end you make two ties to fasten with.')}</p>
+      'crochet a wavy edge with flag stripes. If you like, you also crochet a flag in the middle. '
+      'At the end you make two ties to fasten with.')}</p>
 {tealp(L('DETTE LÆRER DU','WHAT YOU LEARN'))}
 {card(ul([
-  L('Å strikke en trekant','To knit a triangle'),
+  L('Å hekle en trekant med fastmasker','To crochet a triangle in single crochet'),
   L('Å øke masker i sidene','To increase stitches at the sides'),
-  L('Å strikke inn et flagg med to farger (valgfritt)','To knit in a flag in two colours (optional)'),
-  L('Å lage en snor (I-cord)','To make a tie (I-cord)'),
+  L('Å hekle inn et flagg med to farger (valgfritt)','To crochet a flag in two colours (optional)'),
+  L('Å hekle en snor','To crochet a tie'),
   L('Å lage en bølget kant','To make a wavy edge'),
 ]))}
 {pink(L('ER DET VANSKELIG?','IS IT HARD?'))}
-{card(L('<p><b>Nybegynner.</b> Kan du legge opp masker, strikke rett og øke, klarer du dette. '
+{card(L('<p><b>Nybegynner.</b> Kan du hekle luftmasker og fastmasker og øke, klarer du dette. '
         'Alt annet står steg for steg. Spør en voksen hvis du står fast.</p>',
-        '<p><b>Beginner.</b> If you can cast on, knit and increase, you can do this. Everything '
-        'else is given step by step. Ask a grown-up if you get stuck.</p>'))}
+        '<p><b>Beginner.</b> If you can crochet chains and single crochet and increase, you can do '
+        'this. Everything else is given step by step. Ask a grown-up if you get stuck.</p>'))}
 {pink(L('SLIK LESER DU TALLENE','HOW TO READ THE NUMBERS'))}
 {card(L('<p>Skautet kommer i to størrelser. Tallene står slik:</p>'
         '<p class="center bignum">barn (voksen)</p>'
@@ -265,8 +261,9 @@ pages.append(page(f'''
 pages.append(page(f'''
 {banner(L('DETTE TRENGER DU','WHAT YOU NEED'))}
 {tealp(L('GARN','YARN'))}
-{card(L('<p><b>DROPS Paris</b> (100 % bomull). Et tykt, mykt bomullsgarn. Du strikker på pinne 5.</p>',
-        '<p><b>DROPS Paris</b> (100% cotton). A thick, soft cotton yarn. You knit on 5 mm needles.</p>')
+{card(L('<p><b>DROPS Paris</b> (100 % bomull). Et tykt, mykt bomullsgarn. Du hekler med nål 5.</p>',
+        '<p><b>DROPS Paris</b> (100% cotton). A thick, soft cotton yarn. You crochet with a 5 mm '
+        'hook.</p>')
       + '<table class="t"><tr><th>' + L('Farge','Colour') + '</th><th>' + L('Barn','Child')
       + '</th><th>' + L('Voksen','Adult') + '</th></tr>'
       '<tr><td><span class="dot" style="background:'+RED+'"></span> ' + L('Rød','Red')
@@ -277,21 +274,19 @@ pages.append(page(f'''
       + '</td><td>' + L('1 nøste','1 ball') + '</td><td>' + L('1 nøste','1 ball') + '</td></tr></table>')}
 {tealp(L('DETTE OGSÅ','ALSO THIS'))}
 {card(ul([
-  L('<b>rundpinne 5 mm</b> (den er lang, så det er plass til mange masker)',
-    'A <b>5 mm circular needle</b> (it is long, so there is room for many stitches)'),
-  L('To <b>strømpepinner 5 mm</b> til snorene','Two <b>5 mm double-pointed needles</b> for the ties'),
+  L('En <b>heklenål 5 mm</b>','A <b>5 mm crochet hook</b>'),
   L('En <b>maskemarkør</b> (eller en liten trådløkke)','A <b>stitch marker</b> (or a little loop of yarn)'),
   L('En <b>stoppenål</b> med butt spiss','A <b>tapestry needle</b> with a blunt tip'),
   L('Saks','Scissors'),
 ]))}
 {pink(L('PRØVELAPP','GAUGE SWATCH'))}
-{card(L('<p>Strikk en liten lapp først. Legg opp 20 masker og strikk rett fram og tilbake til '
-        'lappen er 10 cm høy. Legg den flatt. Er 10 cm like langt som 17 masker? Da er du klar. '
-        'Er det flere masker, bytt til pinne 5,5. Er det færre, bytt til pinne 4,5.</p>',
-        '<p>Knit a little swatch first. Cast on 20 stitches and knit garter stitch back and forth '
-        'until the swatch is 10 cm tall. Lay it flat. Is 10 cm the same as 17 stitches? Then you '
-        'are ready. If there are more stitches, switch to 5.5 mm needles. If there are fewer, '
-        'switch to 4.5 mm needles.</p>'))}
+{card(L('<p>Hekle en liten lapp først. Hekle 20 fastmasker fram og tilbake til lappen er 10 cm høy. '
+        'Legg den flatt. Er 10 cm like langt som 14 fastmasker? Da er du klar. Er det flere masker, '
+        'bytt til nål 5,5. Er det færre, bytt til nål 4,5.</p>',
+        '<p>Crochet a little swatch first. Crochet 20 single crochet back and forth until the '
+        'swatch is 10 cm tall. Lay it flat. Is 10 cm the same as 14 single crochet? Then you are '
+        'ready. If there are more stitches, switch to a 5.5 mm hook. If there are fewer, switch to '
+        'a 4.5 mm hook.</p>'))}
 ''', 3))
 
 # ============ SIDE 4: STØRRELSER OG MÅL ============
@@ -321,128 +316,142 @@ pages.append(page(f'''
 {banner(L('ORDLISTE','GLOSSARY'))}
 {card('<table class="t tl"><tr><th>' + L('Ord','Term') + '</th><th>' + L('Betyr','Means') + '</th></tr>'
       + L('<tr><td><b>m</b></td><td>maske</td></tr>'
-          '<tr><td><b>r</b></td><td>rett, en vanlig maske</td></tr>'
-          '<tr><td><b>pinne</b></td><td>en rad, når du har strikket bort og tilbake</td></tr>'
-          '<tr><td><b>legge opp</b></td><td>lage de første maskene</td></tr>'
-          '<tr><td><b>øke</b></td><td>lage flere masker. Her: strikk 2 masker i 1 maske, så blir det '
+          '<tr><td><b>lm</b></td><td>luftmaske</td></tr>'
+          '<tr><td><b>fm</b></td><td>fastmaske, den vanligste masken</td></tr>'
+          '<tr><td><b>kjm</b></td><td>kjedemaske, en flat maske som binder sammen</td></tr>'
+          '<tr><td><b>rad</b></td><td>en tur, når du har heklet bort og snudd</td></tr>'
+          '<tr><td><b>øke</b></td><td>lage flere masker. Her: hekle 2 fm i samme maske, så blir det '
           'en maske mer.</td></tr>'
-          '<tr><td><b>felle av</b></td><td>ta maskene av pinnen så strikkingen ikke løser seg opp</td></tr>'
-          '<tr><td><b>I-cord</b></td><td>en liten, rund snor du strikker (side 9)</td></tr>'
-          '<tr><td><b>flott</b></td><td>tråden i fargen du ikke bruker akkurat nå, som ligger bak</td></tr>',
+          '<tr><td><b>snu</b></td><td>vende arbeidet og hekle tilbake den andre veien</td></tr>'
+          '<tr><td><b>tapestry</b></td><td>å hekle inn flere farger, og la fargen du ikke bruker '
+          'ligge gjemt inni</td></tr>',
           '<tr><td><b>st</b></td><td>stitch</td></tr>'
-          '<tr><td><b>k</b></td><td>knit, an ordinary stitch</td></tr>'
-          '<tr><td><b>row</b></td><td>one row, when you have knitted across and back</td></tr>'
-          '<tr><td><b>cast on</b></td><td>make the first stitches</td></tr>'
-          '<tr><td><b>increase</b></td><td>make more stitches. Here: knit 2 stitches in 1 stitch, so '
-          'you get one more stitch.</td></tr>'
-          '<tr><td><b>bind off</b></td><td>take the stitches off the needle so the knitting does not '
-          'unravel</td></tr>'
-          '<tr><td><b>I-cord</b></td><td>a little, round cord you knit (page 9)</td></tr>'
-          '<tr><td><b>float</b></td><td>the yarn in the colour you are not using right now, lying at '
-          'the back</td></tr>')
+          '<tr><td><b>ch</b></td><td>chain</td></tr>'
+          '<tr><td><b>sc</b></td><td>single crochet, the most common stitch</td></tr>'
+          '<tr><td><b>sl st</b></td><td>slip stitch, a flat stitch that joins</td></tr>'
+          '<tr><td><b>row</b></td><td>one pass, when you have crocheted across and turned</td></tr>'
+          '<tr><td><b>increase</b></td><td>make more stitches. Here: crochet 2 sc in the same '
+          'stitch, so you get one more stitch.</td></tr>'
+          '<tr><td><b>turn</b></td><td>turn the work and crochet back the other way</td></tr>'
+          '<tr><td><b>tapestry</b></td><td>crocheting in several colours, letting the colour you '
+          'are not using stay hidden inside</td></tr>')
       + '</table>')}
 {pink(L('SLIK ER SKAUTET BYGGET OPP','HOW THE KERCHIEF IS BUILT UP'))}
 {card(steps([
-  L('<b>Trekanten:</b> Du starter i spissen og øker til trekanten er stor nok. Vil du ha flagg, strikker du det inn litt oppe foran.',
-    '<b>The triangle:</b> You start at the point and increase until the triangle is big enough. If you want a flag, you knit it in the middle.'),
-  L('<b>Bølgekanten:</b> Rundt hele skautet lager du en bølget kant med hvite og blå striper.',
-    '<b>The wavy edge:</b> Around the whole kerchief you make a wavy edge with white and blue stripes.'),
-  L('<b>Snorene:</b> Til slutt lager du to snorer å knyte bak i nakken.',
-    '<b>The ties:</b> At the end you make two ties to fasten at the back of the neck.'),
+  L('<b>Trekanten:</b> Du starter i spissen og øker til trekanten er stor nok. Vil du ha flagg, hekler du det inn midt på.',
+    '<b>The triangle:</b> You start at the point and increase until the triangle is big enough. If you want a flag, you crochet it in the middle.'),
+  L('<b>Bølgekanten:</b> Rundt hele skautet hekler du en bølget kant med hvite og blå striper.',
+    '<b>The wavy edge:</b> Around the whole kerchief you crochet a wavy edge with white and blue stripes.'),
+  L('<b>Snorene:</b> Til slutt hekler du to snorer å knyte bak i nakken.',
+    '<b>The ties:</b> At the end you crochet two ties to fasten at the back of the neck.'),
 ]))}
 ''', 5))
 
-# ============ SIDE 6: FLERFARGESTRIKK ============
+# ============ SIDE 6: FLERFARGE / TAPESTRY ============
 pages.append(page(f'''
-{banner(L('SLIK STRIKKER DU INN FLAGGET','HOW TO KNIT IN THE FLAG'))}
+{banner(L('SLIK HEKLER DU INN FLAGGET','HOW TO CROCHET IN THE FLAG'))}
 <p>{L('Denne siden trenger du bare hvis du vil ha flagget på (den enkle varianten hopper over dette). '
-      'Flagget strikker du inn med to farger på samme pinne. Du strikker med rød der ruten er rød, '
-      'og med hvit eller blå der ruten er hvit eller blå. Fargen du ikke bruker, lar du henge løst '
-      'bak. Flaggdiagrammet står på side 10.',
-      'You only need this page if you want the flag (the simple version skips it). You knit the '
-      'flag in two colours on the same needle. You knit with red where the square is red, and with '
-      'white or blue where the square is white or blue. The colour you are not using, you let hang '
-      'loosely at the back. The flag chart is on page 10.')}</p>
+      'Flagget hekler du inn med to farger med tapestry-teknikk. Du hekler med rød der ruten er rød, '
+      'og med hvit eller blå der ruten er hvit eller blå. Fargen du ikke bruker, legger du oppå '
+      'omgangen og hekler rundt, så den ligger gjemt inni. Flaggdiagrammet står på side 10.',
+      'You only need this page if you want the flag (the simple version skips it). You crochet the '
+      'flag in two colours with the tapestry technique. You crochet with red where the square is '
+      'red, and with white or blue where the square is white or blue. The colour you are not using, '
+      'you lay on top of the row and crochet around, so it stays hidden inside. The flag chart is '
+      'on page 10.')}</p>
 {tealp(L('TRE TING Å HUSKE','THREE THINGS TO REMEMBER'))}
-{card(stranded_panels())}
+{card(tapestry_panels())}
 {pink(L('GODE RÅD','GOOD ADVICE'))}
 {card(ul([
-  L('Hold tråden bak løs. Strammer du for hardt, buler strikken. Heller for løst enn for stramt.',
-    'Keep the yarn at the back loose. If you pull too hard, the knitting bulges. Better too loose than too tight.'),
-  L('Les hver rad nedenfra og opp, og fra høyre mot venstre.',
-    'Read each row from the bottom up, and from right to left.'),
+  L('Hold tråden inni løs. Strammer du for hardt, buler heklingen. Heller for løst enn for stramt.',
+    'Keep the yarn inside loose. If you pull too hard, the crochet bulges. Better too loose than too tight.'),
+  L('Les hver rad nedenfra og opp. Snur du arbeidet, leser du annenhver rad motsatt vei.',
+    'Read each row from the bottom up. When you turn the work, you read every other row the opposite way.'),
   L('Tell rutene i diagrammet og maskene på skautet. Å telle riktig er halve jobben.',
     'Count the squares in the chart and the stitches on the kerchief. Counting right is half the job.'),
-  L('Strikk gjerne en liten prøvelapp med to farger først.',
-    'Knit a little swatch in two colours first if you like.'),
+  L('Hekle gjerne en liten prøvelapp med to farger først.',
+    'Crochet a little swatch in two colours first if you like.'),
 ]))}
 ''', 6))
 
 # ============ SIDE 7: DEL 1 TREKANTEN ============
 pages.append(page(f'''
 {banner(L('DEL 1: TREKANTEN','PART 1: THE TRIANGLE'))}
-<p>{L('Husk: barn (voksen). Du strikker rett fram og tilbake hele tiden.',
-      'Remember: child (adult). You knit garter stitch back and forth the whole time.')}</p>
+<p>{L('Husk: barn (voksen). Du hekler fastmasker fram og tilbake, og snur for hver rad.',
+      'Remember: child (adult). You crochet single crochet back and forth, turning at each row.')}</p>
 {steps([
-  L('Legg opp <b>4 masker</b> med rødt. Dette er spissen. Den havner bak i nakken.',
-    'Cast on <b>4 stitches</b> in red. This is the point. It ends up at the back of the neck.'),
-  L('Strikk 2 pinner rett.','Knit 2 rows.'),
-  L('Nå øker du. På <b>hver 2. pinne</b> øker du 1 maske i hver ende: strikk 1, øk i neste maske, '
-    'strikk til det er 2 masker igjen, øk, strikk 1. Da blir det 2 masker mer hver gang.',
-    'Now you increase. On <b>every 2nd row</b> you increase 1 stitch at each end: knit 1, increase '
-    'in the next stitch, knit until 2 stitches remain, increase, knit 1. That gives 2 more '
-    'stitches each time.'),
-  L('Fortsett slik. Trekanten blir større og større. Strikk til den brede <b>forkanten</b> måler '
+  L('Start i spissen med rødt. Hekle <b>2 luftmasker</b>, og hekle <b>2 fastmasker</b> i den '
+    'første luftmaska. Nå har du 2 masker. Denne spissen havner bak i nakken.',
+    'Start at the point with red. Chain <b>2</b>, and crochet <b>2 single crochet</b> in the first '
+    'chain. Now you have 2 stitches. This point ends up at the back of the neck.'),
+  L('Snu med 1 luftmaske. Hekle 1 fm i hver maske tilbake.',
+    'Turn with 1 chain. Crochet 1 sc in each stitch back.'),
+  L('Nå øker du i begge ender. På hver rad: hekle 1 fm i første maske, <b>2 fm i neste</b> (økning), '
+    'fm bortover til det er 1 maske igjen, <b>2 fm i den siste</b>. Snu med 1 luftmaske. '
+    'Da blir det 2 masker mer for hver rad.',
+    'Now you increase at both ends. On each row: crochet 1 sc in the first stitch, <b>2 sc in the '
+    'next</b> (increase), sc across until 1 stitch remains, <b>2 sc in the last</b>. Turn with 1 '
+    'chain. That gives 2 more stitches each row.'),
+  L('Fortsett slik. Trekanten blir større og større. Hekle til den brede <b>forkanten</b> måler '
     '<b>34 (44) cm</b>. Det er kanten som skal ligge over pannen.',
-    'Keep going like this. The triangle grows bigger and bigger. Knit until the wide <b>front '
+    'Keep going like this. The triangle grows bigger and bigger. Crochet until the wide <b>front '
     'edge</b> measures <b>34 (44) cm</b>. That is the edge that lies over the forehead.'),
-  L('Vil du ha flagg? Velg hvor det skal sitte. <b>Flagg foran:</b> strikk det inn på midten når det '
+  L('Vil du ha flagg? Velg hvor det skal sitte. <b>Flagg foran:</b> hekle det inn på midten når det '
     'er ca. 5 cm igjen før den brede forkanten. Da havner flagget oppe over pannen. <b>Flagg bak:</b> '
-    'strikk det inn på midten litt etter at du startet trekanten, mens den fortsatt er smal (ca. 13 '
+    'hekle det inn på midten litt etter at du startet trekanten, mens den fortsatt er smal (ca. 13 '
     'til 16 masker bred). Da havner flagget nede mot spissen, som ligger bak i nakken. Følg '
     'flaggdiagrammet på side 10. Vil du ha det enkelt, hopper du over flagget.',
-    'Want a flag? Choose where it goes. <b>Flag at the front:</b> knit it in the middle when about '
-    '5 cm remain before the wide front edge. Then the flag ends up high, over the forehead. '
-    '<b>Flag at the back:</b> knit it in the middle a little after you started the triangle, while '
-    'it is still narrow (about 13 to 16 stitches wide). Then the flag ends up down near the point, '
-    'at the back of the neck. Follow the flag chart on page 10. If you want it simple, skip the flag.'),
-  L('Fell av den brede forkanten løst.','Bind off the wide front edge loosely.'),
+    'Want a flag? Choose where it goes. <b>Flag at the front:</b> crochet it in the middle when '
+    'about 5 cm remain before the wide front edge. Then the flag ends up high, over the forehead. '
+    '<b>Flag at the back:</b> crochet it in the middle a little after you started the triangle, '
+    'while it is still narrow (about 13 to 16 stitches wide). Then the flag ends up down near the '
+    'point, at the back of the neck. Follow the flag chart on page 10. If you want it simple, skip '
+    'the flag.'),
+  L('Fest tråden når forkanten er ferdig, eller la masken stå om du går rett videre til kanten.',
+    'Fasten off when the front edge is done, or leave the loop if you go straight on to the edge.'),
 ])}
-{cream('<p class="creamtitle">' + L('Mistet du en maske? Ta det med ro. Løft den opp igjen, eller be en '
-       'voksen om hjelp. Ingenting er ødelagt.',
-       'Dropped a stitch? Take it easy. Lift it back up, or ask a grown-up for help. Nothing is '
-       'ruined.') + '</p>')}
+{cream('<p class="creamtitle">' + L('Mistet du en maske? Ta det med ro. Rekk opp noen masker og hekle '
+       'igjen, eller be en voksen om hjelp. Ingenting er ødelagt.',
+       'Dropped a stitch? Take it easy. Undo a few stitches and crochet again, or ask a grown-up '
+       'for help. Nothing is ruined.') + '</p>')}
 ''', 7))
 
 # ============ SIDE 8: DEL 2 BØLGEKANTEN ============
 pages.append(page(f'''
 {banner(L('DEL 2: BØLGEKANT RUNDT HELE','PART 2: WAVY EDGE ALL AROUND'))}
 <p>{L('Nå lager du den bølgete kanten med flaggstriper <b>rundt hele skautet</b>. Bølgene kommer av '
-      'at du får mange masker på lite plass.',
+      'at du hekler mange masker på lite plass.',
       'Now you make the wavy edge with flag stripes <b>around the whole kerchief</b>. The waves '
-      'come from getting many stitches into a small space.')}</p>
+      'come from crocheting many stitches into a small space.')}</p>
 {steps([
-  L('Plukk opp masker med rundpinnen <b>rundt hele kanten</b>: langs den brede forkanten, ned den '
-    'ene siden til spissen, og opp den andre siden tilbake. Plukk opp ca. 3 masker for hver 4 du '
-    'går forbi. I spissen og i de to fremre hjørnene plukker du opp 1 ekstra, så det ikke strammer.',
-    'Pick up stitches with the circular needle <b>around the whole edge</b>: along the wide front '
-    'edge, down one side to the point, and up the other side back. Pick up about 3 stitches for '
-    'every 4 you pass. At the point and at the two front corners, pick up 1 extra so it does not '
-    'pull tight.'),
-  L('Sett en maskemarkør der du startet, og strikk rundt og rundt. Strikk 1 omgang rødt.',
-    'Place a stitch marker where you started, and knit round and round. Knit 1 round in red.'),
-  L('Øk til <b>dobbelt så mange</b> masker: strikk 1, øk i neste, hele veien rundt. Nå bukter kanten seg.',
-    'Increase to <b>twice as many</b> stitches: knit 1, increase in the next, all the way around. Now the edge ripples.'),
-  L('Strikk striper: <b>2 omganger hvit, 2 omganger marineblå, 2 omganger hvit</b>.',
-    'Knit stripes: <b>2 rounds white, 2 rounds navy blue, 2 rounds white</b>.'),
-  L('Fell av løst med rødt. Strammer du, blir kanten stiv. Løst gir fine bølger.',
-    'Bind off loosely in red. If you pull tight, the edge stiffens. Loose gives nice waves.'),
+  L('Hekle fastmasker med rødt <b>rundt hele kanten</b>: langs den brede forkanten, ned den '
+    'ene siden til spissen, og opp den andre siden tilbake. Hekle ca. 3 masker for hver 4 du '
+    'går forbi. I spissen og i de to fremre hjørnene hekler du 3 fm i samme maske, så det ikke '
+    'strammer. Avslutt omgangen med 1 kjedemaske i den første masken.',
+    'Crochet single crochet in red <b>around the whole edge</b>: along the wide front edge, down '
+    'one side to the point, and up the other side back. Crochet about 3 stitches for every 4 you '
+    'pass. At the point and at the two front corners, crochet 3 sc in the same stitch so it does '
+    'not pull tight. End the round with 1 slip stitch in the first stitch.'),
+  L('Øk til <b>omtrent dobbelt så mange</b> masker: hekle 2 fm i annenhver maske hele veien rundt. '
+    'Nå begynner kanten å bukte seg.',
+    'Increase to <b>about twice as many</b> stitches: crochet 2 sc in every other stitch all the '
+    'way around. Now the edge starts to ripple.'),
+  L('Hekle striper: <b>1 omgang hvit, 1 omgang marineblå, 1 omgang hvit</b>. Bytt farge med en '
+    'kjedemaske på slutten av hver omgang.',
+    'Crochet stripes: <b>1 round white, 1 round navy blue, 1 round white</b>. Change colour with a '
+    'slip stitch at the end of each round.'),
+  L('Bølgeomgang med rødt: <b>3 fm i samme maske, hopp over 1 maske</b>, og gjenta hele veien rundt. '
+    'Da bukter kanten seg fint.',
+    'Wave round in red: <b>3 sc in the same stitch, skip 1 stitch</b>, and repeat all the way '
+    'around. That makes the edge ripple nicely.'),
+  L('Fest tråden godt. Hekle løst, så blir bølgene myke.',
+    'Fasten off well. Crochet loosely, so the waves stay soft.'),
 ])}
 {cream('<p class="creamtitle">' + L('ENKEL VARIANT (fin for de yngste, ca. 8 år):<br>'
-       'Hopp over flagget i Del 1. Strikk bare den røde trekanten, og lag denne bølgekanten med '
+       'Hopp over flagget i Del 1. Hekle bare den røde trekanten, og lag denne bølgekanten med '
        'stripene. Da trenger du aldri to farger på en gang, bare én farge om gangen. Like fint!',
        'SIMPLE VERSION (great for the youngest, about 8 years):<br>'
-       'Skip the flag in Part 1. Knit just the red triangle, and make this wavy edge with the '
+       'Skip the flag in Part 1. Crochet just the red triangle, and make this wavy edge with the '
        'stripes. Then you never need two colours at once, only one colour at a time. Just as '
        'lovely!') + '</p>')}
 ''', 8))
@@ -450,45 +459,45 @@ pages.append(page(f'''
 # ============ SIDE 9: DEL 3 SNORENE ============
 pages.append(page(f'''
 {banner(L('DEL 3: SNORENE TIL Å KNYTE MED','PART 3: THE TIES TO FASTEN WITH'))}
-<p>{L('Snorene heter I-cord. Det er en liten, rund snor. Den er lett å lage når du kan trikset.',
-      'The ties are called I-cord. It is a little, round cord. It is easy to make once you know the trick.')}</p>
-{tealp(L('SLIK LAGER DU EN I-CORD','HOW TO MAKE AN I-CORD'))}
+<p>{L('Snorene er lette å hekle. Du lager to like snorer av luftmasker, en til hvert fremre hjørne.',
+      'The ties are easy to crochet. You make two matching ties of chains, one for each front '
+      'corner.')}</p>
+{tealp(L('SLIK LAGER DU EN SNOR','HOW TO MAKE A TIE'))}
 {card(steps([
-  L('Legg opp <b>3 masker</b> på en strømpepinne.','Cast on <b>3 stitches</b> on a double-pointed needle.'),
-  L('Strikk 3 rett. <b>Ikke snu strikkingen.</b>','Knit 3. <b>Do not turn the work.</b>'),
-  L('Skyv de 3 maskene til den andre enden av pinnen. Ta garnet stramt bak.',
-    'Slide the 3 stitches to the other end of the needle. Pull the yarn tight across the back.'),
-  L('Strikk 3 rett igjen. Gjenta og gjenta. Nå ruller snoren seg rund helt av seg selv!',
-    'Knit 3 again. Repeat and repeat. Now the cord rolls up round all by itself!'),
-  L('Strikk til snoren er <b>30 (35) cm</b>. Fell av. Den skal nå rundt til nakken.',
-    'Knit until the cord is <b>30 (35) cm</b>. Bind off. It needs to reach round to the neck.'),
+  L('Fest rødt garn i det ene <b>fremre hjørnet</b> (der forkanten møter siden).',
+    'Attach red yarn in one <b>front corner</b> (where the front edge meets the side).'),
+  L('Hekle en lang rekke <b>luftmasker</b> til snoren er <b>30 (35) cm</b>.',
+    'Crochet a long row of <b>chains</b> until the tie is <b>30 (35) cm</b>.'),
+  L('Vil du ha en fastere, rundere snor, hekler du 1 kjedemaske tilbake i hver luftmaske. Da blir '
+    'snoren tykkere og fin.',
+    'For a firmer, rounder tie, crochet 1 slip stitch back into each chain. That makes the tie '
+    'thicker and nice.'),
+  L('Fest tråden godt, og sy enden inn med stoppenålen.',
+    'Fasten off well, and sew the end in with the tapestry needle.'),
 ]))}
 {pink(L('SETT SNORENE PÅ','ATTACH THE TIES'))}
 {card(ul([
-  L('Lag <b>to snorer</b>.','Make <b>two ties</b>.'),
-  L('Fest en snor godt i hvert av de to <b>fremre hjørnene</b> (der forkanten møter sidene). Sy '
-    'enden fast med stoppenålen.',
-    'Attach one tie firmly in each of the two <b>front corners</b> (where the front edge meets the '
-    'sides). Sew the end fast with the tapestry needle.'),
+  L('Lag <b>to snorer</b>, en i hvert fremre hjørne.','Make <b>two ties</b>, one in each front corner.'),
   L('Legg skautet på hodet: den brede forkanten over pannen, spissen ned bak i nakken.',
     'Put the kerchief on the head: the wide front edge over the forehead, the point down at the back of the neck.'),
   L('Før de to snorene bak og knyt dem sammen <b>bak, under spissen</b>.',
     'Bring the two ties round the back and tie them together <b>behind, under the point</b>.'),
+  L('Vil du, kan du lage en liten dusk eller knute i enden av hver snor.',
+    'If you like, make a little tassel or knot at the end of each tie.'),
 ]))}
 ''', 9))
 
 # ============ SIDE 10: DIAGRAM FLAGGET ============
 pages.append(page(f'''
 {banner(L('DIAGRAM: FLAGGET','CHART: THE FLAG'))}
-<p>{L('Flagget er valgfritt. Vil du ha det, strikker du det inn på midten av trekanten. En rute er en '
-      'maske. Hvit rute: strikk med hvit. Blå rute: strikk med blå. Rød rute: strikk med rød. Les '
-      'nedenfra og opp, fra høyre mot venstre. Den blå streken i korset skal gå helt gjennom, uten '
-      'brudd.',
-      'The flag is optional. If you want it, you knit it in the middle of the triangle. One square '
-      'is one stitch. White square: knit with white. Blue square: knit with blue. Red square: knit '
-      'with red. Read from the bottom up, from right to left. The blue line in the cross should run '
-      'all the way through, unbroken.')}</p>
-<p style="background:#fdf9e3;border:2px solid #df5f93;border-radius:12px;padding:2.5mm 5mm;font-weight:600;color:#3f3f3f;">{L('Diagrammet vises opp ned, fordi skautet begynner på spissen og strikkes oppover. Strikk etter diagrammet slik det står her, så kommer flagget riktig vei på det ferdige skautet.','The chart is shown upside down, because the kerchief begins at the point and is worked upwards. Knit from the chart as it appears here, and the flag will come out the right way on the finished kerchief.')}</p>
+<p>{L('Flagget er valgfritt. Vil du ha det, hekler du det inn på midten av trekanten. En rute er en '
+      'maske. Hvit rute: hekle med hvit. Blå rute: hekle med blå. Rød rute: hekle med rød. Les '
+      'nedenfra og opp. Den blå streken i korset skal gå helt gjennom, uten brudd.',
+      'The flag is optional. If you want it, you crochet it in the middle of the triangle. One '
+      'square is one stitch. White square: crochet with white. Blue square: crochet with blue. Red '
+      'square: crochet with red. Read from the bottom up. The blue line in the cross should run all '
+      'the way through, unbroken.')}</p>
+<p style="background:#fdf9e3;border:2px solid #df5f93;border-radius:12px;padding:2.5mm 5mm;font-weight:600;color:#3f3f3f;">{L('Diagrammet vises opp ned, fordi skautet begynner på spissen og hekles oppover. Hekle etter diagrammet slik det står her, så kommer flagget riktig vei på det ferdige skautet.','The chart is shown upside down, because the kerchief begins at the point and is worked upwards. Crochet from the chart as it appears here, and the flag will come out the right way on the finished kerchief.')}</p>
 <div class="chartrow">
 {chart_svg(flip180(FLAG), cell=26, numbers=True, title=L('FLAGGET, OPP NED (13 RUTER BREDT, 10 RUTER HØYT)','THE FLAG, UPSIDE DOWN (13 SQUARES WIDE, 10 SQUARES TALL)'))}
 </div>
@@ -497,16 +506,16 @@ pages.append(page(f'''
         'eller bak:</p>',
         '<p>The flag always sits in the middle, between the two sides. You choose whether it goes '
         'at the front or the back:</p>') + ul([
-  L('<b>Flagg foran (over pannen):</b> strikk flagget inn når det er ca. 5 cm igjen før den brede '
+  L('<b>Flagg foran (over pannen):</b> hekle flagget inn når det er ca. 5 cm igjen før den brede '
     'forkanten. Da er trekanten bred nok, og flagget havner høyt oppe.',
-    '<b>Flag at the front (over the forehead):</b> knit the flag in when about 5 cm remain before '
-    'the wide front edge. Then the triangle is wide enough, and the flag sits high up.'),
-  L('<b>Flagg bak (mot spissen):</b> strikk flagget inn tidlig, mens trekanten er ca. 13 til 16 '
+    '<b>Flag at the front (over the forehead):</b> crochet the flag in when about 5 cm remain '
+    'before the wide front edge. Then the triangle is wide enough, and the flag sits high up.'),
+  L('<b>Flagg bak (mot spissen):</b> hekle flagget inn tidlig, mens trekanten er ca. 13 til 16 '
     'masker bred. Da havner flagget nede ved spissen, som ligger bak i nakken.',
-    '<b>Flag at the back (near the point):</b> knit the flag in early, while the triangle is about '
-    '13 to 16 stitches wide. Then the flag sits down near the point, at the back of the neck.'),
-  L('Uansett hvor: strikk rødt under, over og rundt flagget.',
-    'Either way: knit red below, above and around the flag.'),
+    '<b>Flag at the back (near the point):</b> crochet the flag in early, while the triangle is '
+    'about 13 to 16 stitches wide. Then the flag sits down near the point, at the back of the neck.'),
+  L('Uansett hvor: hekle rødt under, over og rundt flagget.',
+    'Either way: crochet red below, above and around the flag.'),
 ]))}
 ''', 10))
 
@@ -527,12 +536,12 @@ pages.append(page(f'''
 {card(ul([
   L('Alle tråder er festet','All ends are woven in'),
   L('Flagget står midt på','The flag sits in the middle'),
-  L('Toppkanten bølger','The top edge ripples'),
+  L('Kanten bølger','The edge ripples'),
   L('De to snorene sitter godt fast','The two ties are firmly attached'),
 ]))}
-{cream('<p class="creamtitle">' + L('Gratulerer! Nå har du strikket ditt eget skaut.<br>'
+{cream('<p class="creamtitle">' + L('Gratulerer! Nå har du heklet ditt eget skaut.<br>'
        'Bruk det sammen med hatten, heia Norge!',
-       'Congratulations! Now you have knitted your very own kerchief.<br>'
+       'Congratulations! Now you have crocheted your very own kerchief.<br>'
        'Wear it with the hat, go Norway!') + '</p>')}
 <div class="endflag">{mini_flag(64)}</div>
 <div class="byline">
@@ -653,13 +662,13 @@ table.tl td:first-child {{ white-space:nowrap; }}
 '''
 
 lang_attr = 'en' if LANG == 'en' else 'no'
-title = L('Norge-skaut, LME strikkeoppskrift', 'Norway kerchief, LME knitting pattern')
+title = L('Norge-skaut, LME hekleoppskrift', 'Norway kerchief, LME crochet pattern')
 doc = f'''<!DOCTYPE html>
 <html lang="{lang_attr}"><head><meta charset="utf-8">
 <title>{title}</title>
 <style>{css}</style></head>
 <body>{''.join(pages)}</body></html>'''
 
-outname = 'skaut_en.html' if LANG == 'en' else 'skaut.html'
+outname = 'skaut_hekle_en.html' if LANG == 'en' else 'skaut_hekle.html'
 (BASE / outname).write_text(doc, encoding='utf-8')
 print('OK', LANG, len(doc), 'tegn ->', outname)
