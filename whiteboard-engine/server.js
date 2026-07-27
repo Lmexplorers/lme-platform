@@ -490,7 +490,13 @@ async function lagVeoKlipp(imageB64, mime, videoPrompt, aspect) {
 
 async function renderVeoJob(jobId, { scenes, lang, voiceId, aspect }, publicBase) {
   const t0 = Date.now();
-  const setProg = (p) => jobs.set(jobId, { status: "pending", progress: p, when: Date.now() });
+  // Vi holder en jobb-tilstand som vokser scene for scene. Hver ferdige scene
+  // (blyantskisse + Veo-klipp) legges inn med en gang, så klienten kan vise og
+  // beholde dem underveis. Ryker jobben på et senere steg, ligger scenene som
+  // alt er laget fortsatt i statusen (ingenting forsvinner).
+  const jobState = { status: "pending", progress: "", scenes: [], when: Date.now() };
+  const save = () => jobs.set(jobId, { ...jobState, scenes: jobState.scenes.slice(), when: Date.now() });
+  const setProg = (p) => { jobState.progress = p; save(); };
   try {
     if (!GOOGLE_KEY) throw new Error("Google-nøkkel mangler (GEMINI_API_KEY). Veo og Nano Banana trenger den.");
     const list = (Array.isArray(scenes) ? scenes : []).filter((s) => s && (s.imagePrompt || s.videoPrompt || s.illustration));
@@ -505,8 +511,15 @@ async function renderVeoJob(jobId, { scenes, lang, voiceId, aspect }, publicBase
       const videoPrompt = s.videoPrompt || flowVideoPrompt(s.illustration);
       setProg(`Scene ${i + 1}/${list.length}: lager blyantskisse (Nano Banana) …`);
       const bilde = await lagNanoBananaBilde(imagePrompt, asp);
+      const imageUrl = publicBase + bilde.path;
+      // Vis skissen umiddelbart (før Veo, som tar lengst tid).
+      jobState.scenes.push({ n: i + 1, imageUrl, clipUrl: "" });
+      save();
       setProg(`Scene ${i + 1}/${list.length}: ${bilde.cached ? "gjenbruker lagret skisse, " : ""}Veo tegner motivet (kan ta et par minutter) …`);
       const clipPath = await lagVeoKlipp(bilde.base64, bilde.mime, videoPrompt, asp);
+      const clipUrl = publicBase + clipPath;
+      jobState.scenes[i].clipUrl = clipUrl; // klippet klart, vis det
+      save();
       let audioUrl = "", audioDur = 0;
       if (s.narration && ELEVENLABS_API_KEY) {
         try {
@@ -543,15 +556,16 @@ async function renderVeoJob(jobId, { scenes, lang, voiceId, aspect }, publicBase
       chromiumOptions: { gl: "swiftshader" },
     });
     console.log(`Veo-video ferdig på ${((Date.now() - t0) / 1000).toFixed(1)} s.`);
-    jobs.set(jobId, {
-      status: "done",
-      videoUrl: `${publicBase}/output/${outName}`,
-      durationSeconds: Number((totalFrames / fps).toFixed(1)),
-      when: Date.now(),
-    });
+    jobState.status = "done";
+    jobState.progress = "";
+    jobState.videoUrl = `${publicBase}/output/${outName}`;
+    jobState.durationSeconds = Number((totalFrames / fps).toFixed(1));
+    save();
   } catch (error) {
     console.error("Veo-jobb feilet:", error);
-    jobs.set(jobId, { status: "error", error: String((error && error.message) || error), when: Date.now() });
+    jobState.status = "error";
+    jobState.error = String((error && error.message) || error);
+    save(); // scenene som alt er laget blir liggende i statusen
   }
 }
 
