@@ -499,7 +499,17 @@ async function renderVeoJob(jobId, { scenes, lang, voiceId, aspect }, publicBase
     const composition = await selectComposition({ serveUrl, id: "VeoComposition", inputProps });
     const outName = `veo_video_${Date.now()}.mp4`;
     const outputLocation = path.resolve(OUTPUT_DIR, outName);
-    await renderMedia({ composition, serveUrl, codec: "h264", outputLocation, inputProps, jpegQuality: 85 });
+    // Sammenslåingen (flere Veo-klipp -> én video) er det tyngste steget for
+    // minne. På en 2 GB-server sprakk prosessen akkurat her. Vi holder minnet
+    // lavt: én ramme om gangen (concurrency 1) og en liten video-buffer, så
+    // den blir litt tregere, men kommer trygt i mål.
+    await renderMedia({
+      composition, serveUrl, codec: "h264", outputLocation, inputProps,
+      jpegQuality: 80,
+      concurrency: 1,
+      offthreadVideoCacheSizeInBytes: 100 * 1024 * 1024,
+      chromiumOptions: { gl: "swiftshader" },
+    });
     console.log(`Veo-video ferdig på ${((Date.now() - t0) / 1000).toFixed(1)} s.`);
     jobs.set(jobId, {
       status: "done",
