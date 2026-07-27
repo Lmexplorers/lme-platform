@@ -248,8 +248,44 @@ var WB_ENGINE = "https://lme-platform.onrender.com";
 // best resultat i Flow.
 var FLOW_IMG_STYLE = "hand-drawn black and white pencil sketch illustration, detailed ink line art, crosshatching shading, editorial illustration style, bold clean outlines, fine interior linework, textured sketch feel, on a pure white background, no color, no grayscale fills, monochrome ink drawing, whiteboard animation style, highly detailed hand-drawn artwork, vintage encyclopedia illustration aesthetic, expressive and slightly rough linework";
 var FLOW_VIDEO_STYLE = "A real human hand holding a black pencil enters the frame from the right side and draws in real time on a plain pure white background, whiteboard animation style, the illustration appears stroke by stroke as the hand moves, detailed ink sketch linework, crosshatching shading technique, the hand reveals the drawing progressively, smooth and natural drawing motion, top-down or slight angle camera view, no color, monochrome black ink on white, clean white surface, educational explainer video style, cinematic close-up of hand and pencil tip, natural pencil scratching motion";
-function flowImagePrompt(subject){ var s=String(subject||"").trim(); return (s?s+", ":"")+FLOW_IMG_STYLE; }
-function flowVideoPrompt(subject){ var s=String(subject||"").trim(); return (s?"The hand draws: "+s+".\n":"")+FLOW_VIDEO_STYLE; }
+// Nøyaktige beskrivelser av ekte Montessori-materiell. En vanlig AI-modell
+// vet ikke hvordan f.eks. det rosa tårnet ser ut, så den gjetter feil. Nevner
+// en scene et kjent materiell (norsk eller engelsk), limer vi på den presise
+// beskrivelsen så bildet blir riktig. Legg gjerne til flere her.
+var MONTESSORI=[
+  {a:["rosa tårn","rosa tårnet","pink tower"],d:"the Montessori Pink Tower: exactly ten smooth pink-painted solid wooden cubes graded in size from 1 cm to 10 cm, stacked vertically from the largest cube at the bottom to the smallest at the top"},
+  {a:["brune trapp","brune trappa","brown stair","broad stair"],d:"the Montessori Brown Stair (Broad Stair): ten brown wooden prisms all the same length, graded in thickness from 1 cm to 10 cm, laid side by side to form an even staircase"},
+  {a:["røde stenger","røde stengene","red rods"],d:"the Montessori Red Rods: ten rods painted solid red, all the same thickness, graded in length from 10 cm to 100 cm, arranged from longest to shortest"},
+  {a:["røde og blå stenger","talltavler","number rods","numicon"],d:"the Montessori Number Rods: ten rods divided into alternating 10 cm red and blue segments, graded in length from 10 cm to 100 cm"},
+  {a:["gullperler","gullperlene","gyldne perle","golden bead","golden beads"],d:"the Montessori Golden Bead material: a single golden bead (unit), a bar of ten beads (ten), a flat square of one hundred beads (hundred) and a large cube of one thousand golden beads (thousand)"},
+  {a:["perletrapp","perlekjede","perletrappa","bead stair","bead chain","coloured bead"],d:"the Montessori Coloured Bead Stair: short bead bars from one to ten, each quantity in its own distinct colour (1 red, 2 green, 3 pink, 4 yellow, 5 light blue, and so on, 10 golden)"},
+  {a:["binomialkube","binomial cube","binomialkuben"],d:"the Montessori Binomial Cube: a cube assembled from red and blue cubes and black-faced rectangular prisms that fit together as (a+b)³, kept in a hinged wooden box"},
+  {a:["trinomialkube","trinomial cube","trinomialkuben"],d:"the Montessori Trinomial Cube: a cube of red, blue and yellow cubes with black-edged prisms representing (a+b+c)³, kept in a hinged wooden box"},
+  {a:["sandpapirbokstav","sandpaper letter"],d:"Montessori Sandpaper Letters: single lowercase cursive letters cut from rough sandpaper and mounted on smooth boards, consonants on pink boards and vowels on blue boards"},
+  {a:["sandpapirtall","sandpaper number"],d:"Montessori Sandpaper Numbers: single numerals cut from rough sandpaper mounted on green boards"},
+  {a:["bevegelige alfabet","movable alphabet"],d:"the Montessori Large Movable Alphabet: a compartmented wooden box of cut-out lowercase letters, consonants in red and vowels in blue"},
+  {a:["spindelboks","spindle box","tellestav"],d:"the Montessori Spindle Box: a wooden box with compartments labelled 0 to 9 holding loose plain wooden spindles"},
+  {a:["sylinderblokk","sylinderblokkene","knobbed cylinder","cylinder block"],d:"the Montessori Knobbed Cylinder Block: a long wooden block with a row of cylinders of graded dimensions, each lifted by a small round knob"},
+  {a:["fargeplater","fargeplatene","colour tablet","color tablet"],d:"the Montessori Colour Tablets: small rectangular colour tablets with thin wooden frames, arranged in smoothly graded shades of one colour"},
+  {a:["geometriskap","geometrisk skap","geometric cabinet"],d:"the Montessori Geometric Cabinet: shallow wooden drawers holding blue geometric shape insets, each inset with a small knob"},
+  {a:["metallinnlegg","metallinnleggene","metal inset"],d:"the Montessori Metal Insets: pink and blue metal geometric frames and insets used with coloured pencils on a small stand for handwriting preparation"},
+  {a:["lydboks","lydsylinder","sound cylinder","sound box"],d:"the Montessori Sound Cylinders: two wooden boxes of cylinders with red lids and blue lids that make graded sounds when shaken"},
+  {a:["påkledningsramme","knapperamme","dressing frame","button frame"],d:"a Montessori Dressing Frame: a square wooden frame holding two overlapping flaps of fabric fastened down the middle (buttons, a zip, a bow or a buckle) for practising fastening"},
+  {a:["helle","pouring","øse","overføre vann"],d:"a Montessori pouring exercise: two small matching glass jugs on a wooden tray for pouring water from one jug to the other"},
+  {a:["konstruktive trekant","constructive triangle"],d:"the Montessori Constructive Triangles: flat coloured wooden triangles in a box that combine along black guide lines to form larger shapes"},
+  {a:["hundretavle","hundred board"],d:"the Montessori Hundred Board: a wooden board with a 10x10 grid and small numbered tiles from 1 to 100 laid out in order"}
+];
+function enrichMontessori(subject){
+  var s=String(subject||""); var low=s.toLowerCase(); var adds=[];
+  MONTESSORI.forEach(function(m){
+    if(m.a.some(function(al){return low.indexOf(al)>=0;})) adds.push(m.d);
+  });
+  if(!adds.length) return s;
+  // Presis beskrivelse + påminnelse om at det skal være ekte, korrekt materiell.
+  return (s?s+". ":"")+adds.join(". ")+". Draw the real Montessori material exactly and accurately, as it truly looks in a Montessori classroom, correct colours, count and proportions";
+}
+function flowImagePrompt(subject){ var s=enrichMontessori(String(subject||"").trim()); return (s?s+", ":"")+FLOW_IMG_STYLE; }
+function flowVideoPrompt(subject){ var s=enrichMontessori(String(subject||"").trim()); return (s?"The hand draws: "+s+".\n":"")+FLOW_VIDEO_STYLE; }
 const I18N = {
   no:{ back:"Til Creative Academy",
     title:'LME <em>Forklaringsvideo</em>',
