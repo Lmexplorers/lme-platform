@@ -643,10 +643,14 @@ pages.append(page(
              'Here are the letters in rune style, both NORGE and NORWAY. Crochet them on in one '
              'continuous line, centred at the front. Each letter is about 5 to 6 cm tall. The bottom '
              'of the letters sits about 3 to 4 cm above the striped brim.') + '</p>'
+  + '<p style="background:#fdf9e3;border:2px solid #df5f93;border-radius:12px;padding:2.5mm 5mm;font-weight:600;color:#3f3f3f;">' + L('Diagrammet vises opp ned, fordi hatten hekles ovenfra og ned. '
+      'Følg bokstavene slik de står her, så kommer de riktig vei på den ferdige hatten.',
+      'The chart is shown upside down, because the hat is crocheted from the top down. '
+      'Follow the letters as they appear here, and they will come out the right way on the finished hat.') + '</p>'
   + pink('NORGE')
-  + card('<div class="stripwrap">' + runeword('NORGE', box=54) + '</div>')
+  + card('<div class="stripwrap" style="transform:rotate(180deg);text-align:center">' + runeword('NORGE', box=54) + '</div>')
   + pink('NORWAY')
-  + card('<div class="stripwrap">' + runeword('NORWAY', box=48) + '</div>')
+  + card('<div class="stripwrap" style="transform:rotate(180deg);text-align:center">' + runeword('NORWAY', box=48) + '</div>')
   + card(ul([
       L('<b>Midt foran:</b> Ordet sentreres midt foran, rett overfor skjøten/markøren midt bak. Alle '
         'bokstavene står på <b>samme linje</b>, aldri delt i to rader.',
