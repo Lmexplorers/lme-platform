@@ -83,6 +83,22 @@ const PATTERN_LINKS = {
   "plink_1TxrS7Lax7B8uQzqGY8kviD5": { p: "norge-pakke", lang: "en" },
   "plink_1TxrS9Lax7B8uQzqIZL2EOrd": { p: "hekle-pakke", lang: "en" },
   "plink_1TxrSBLax7B8uQzqDA7jDjxK": { p: "strikk-pakke", lang: "en" },
+
+  // Egen engelsk butikk (/shop): rene engelske produkter, engelsk-only kasse.
+  "plink_1Txrq1Lax7B8uQzqjdWrx6Bl": { p: "ro-strikk", lang: "en" },
+  "plink_1Txrq3Lax7B8uQzqYl8dOHJz": { p: "ro-hekle", lang: "en" },
+  "plink_1Txrq5Lax7B8uQzqRWkOPQ07": { p: "norway-strikk", lang: "en" },
+  "plink_1Txrq7Lax7B8uQzqo1iHeeXl": { p: "norway-hekle", lang: "en" },
+  "plink_1Txrq9Lax7B8uQzqfS6xHMyB": { p: "norge-strikk", lang: "en" },
+  "plink_1TxrqALax7B8uQzq74PYo73L": { p: "norge-blokk", lang: "en" },
+  "plink_1TxrqCLax7B8uQzq53fOdLHy": { p: "norge-innstrikket", lang: "en" },
+  "plink_1TxrqSLax7B8uQzq2sbB4c71": { p: "norge-rune", lang: "en" },
+  "plink_1TxrqULax7B8uQzq52Cj0HbC": { p: "norge-hekle", lang: "en" },
+  "plink_1TxrqWLax7B8uQzq6gLCuUFb": { p: "norge-skaut", lang: "en" },
+  "plink_1TxrqXLax7B8uQzq2JYnJPzK": { p: "norge-skaut-hekle", lang: "en" },
+  "plink_1TxrqZLax7B8uQzqkad1ruv4": { p: "norge-pakke", lang: "en" },
+  "plink_1TxrqcLax7B8uQzqvG5N7UZ1": { p: "hekle-pakke", lang: "en" },
+  "plink_1TxrqdLax7B8uQzqw2Dy9miq": { p: "strikk-pakke", lang: "en" },
 };
 
 function json(data, status) {
