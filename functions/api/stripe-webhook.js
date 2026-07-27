@@ -66,6 +66,23 @@ const PATTERN_LINKS = {
   // strikk-pakke (299)
   "plink_1TxlerLax7B8uQzq3kWa07U1": { p: "strikk-pakke", lang: "no" },
   "plink_1TxletLax7B8uQzqylxXeWJL": { p: "strikk-pakke", lang: "en" },
+
+  // Nye engelske lenker (tospråklig produktnavn i kassa: norsk · engelsk).
+  // De gamle EN-lenkene over beholdes så eldre lenker i omløp fortsatt virker.
+  "plink_1TxrRlLax7B8uQzqPpCoVfoO": { p: "ro-strikk", lang: "en" },
+  "plink_1TxrRnLax7B8uQzqqrL5tVeg": { p: "ro-hekle", lang: "en" },
+  "plink_1TxrRpLax7B8uQzqe7oMynMt": { p: "norway-strikk", lang: "en" },
+  "plink_1TxrRrLax7B8uQzqrYnmcj3k": { p: "norway-hekle", lang: "en" },
+  "plink_1TxrRsLax7B8uQzqKbcXPYtf": { p: "norge-strikk", lang: "en" },
+  "plink_1TxrQWLax7B8uQzqV0F0wFWd": { p: "norge-blokk", lang: "en" },
+  "plink_1TxrRuLax7B8uQzq4sfhppLa": { p: "norge-innstrikket", lang: "en" },
+  "plink_1TxrRwLax7B8uQzqXGCZRLbA": { p: "norge-rune", lang: "en" },
+  "plink_1TxrS2Lax7B8uQzqRcvpl8BH": { p: "norge-hekle", lang: "en" },
+  "plink_1TxrS4Lax7B8uQzqIS6A7dXx": { p: "norge-skaut", lang: "en" },
+  "plink_1TxrS5Lax7B8uQzqLzPCxlC6": { p: "norge-skaut-hekle", lang: "en" },
+  "plink_1TxrS7Lax7B8uQzqGY8kviD5": { p: "norge-pakke", lang: "en" },
+  "plink_1TxrS9Lax7B8uQzqIZL2EOrd": { p: "hekle-pakke", lang: "en" },
+  "plink_1TxrSBLax7B8uQzqDA7jDjxK": { p: "strikk-pakke", lang: "en" },
 };
 
 function json(data, status) {
