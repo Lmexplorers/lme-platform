@@ -35,6 +35,7 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import potrace from "potrace";
 import { svgPathProperties } from "svg-path-properties";
+import crypto from "crypto";
 
 dotenv.config();
 
@@ -47,7 +48,13 @@ const PUBLIC_BASE = (process.env.PUBLIC_BASE_URL || RENDER_BASE).replace(/\/$/, 
 
 const PUBLIC_DIR = path.resolve(__dirname, "public");
 const OUTPUT_DIR = path.resolve(__dirname, "output");
-for (const d of [PUBLIC_DIR, OUTPUT_DIR]) if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
+// Cache for ferdig-genererte, dyre delresultater (bilder, Veo-klipp, stemme).
+// Nøkkel = hash av prompten, så samme scene gjenbrukes i stedet for å lages
+// (og betales for) på nytt. Overlever prosess-omstart innen samme utrulling,
+// så en jobb som ryker på siste steg kan kjøres om nesten gratis og raskt.
+const CACHE_DIR = path.resolve(__dirname, "cache");
+for (const d of [PUBLIC_DIR, OUTPUT_DIR, CACHE_DIR]) if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
+const hashKey = (s) => crypto.createHash("sha1").update(String(s)).digest("hex").slice(0, 20);
 
 // Robust nøkkel-oppslag: godtar den riktige skrivemåten OG vanlige skrivefeil
 // (f.eks. "APT" i stedet for "API"), så et lite uhell i miljøvariablene ikke
@@ -111,6 +118,7 @@ app.use((req, res, next) => {
 });
 app.use("/public", express.static(PUBLIC_DIR));
 app.use("/output", express.static(OUTPUT_DIR));
+app.use("/cache", express.static(CACHE_DIR));
 app.get("/", (_req, res) => res.json({ ok: true, service: "whiteboard-video-motor" }));
 
 /* ---------- Remotion-bundle (bygges én gang, gjenbrukes) ---------- */
@@ -276,6 +284,17 @@ async function ensureHandImage() {
 
 // 2) ElevenLabs with-timestamps -> lokal MP3 + ord-tidsstempler.
 async function lagLydMedTidsstempler(manus, voiceId, lang) {
+  // Gjenbruk lagret stemme for samme tekst + stemme + språk (sparer
+  // ElevenLabs-kreditter ved omkjøring).
+  const cacheKey = "tts_" + hashKey((voiceId || DEFAULT_VOICE) + "|" + ELEVEN_MODEL + "|" + (lang || "") + "|" + manus);
+  const mp3Path = path.resolve(CACHE_DIR, cacheKey + ".mp3");
+  const jsonPath = path.resolve(CACHE_DIR, cacheKey + ".json");
+  if (fs.existsSync(mp3Path) && fs.existsSync(jsonPath)) {
+    try {
+      const words = JSON.parse(await fs.promises.readFile(jsonPath, "utf8"));
+      return { audioPath: `/cache/${cacheKey}.mp3`, words };
+    } catch (e) { /* ødelagt cache, lag på nytt */ }
+  }
   const url =
     "https://api.elevenlabs.io/v1/text-to-speech/" +
     encodeURIComponent(voiceId || DEFAULT_VOICE) +
@@ -301,9 +320,10 @@ async function lagLydMedTidsstempler(manus, voiceId, lang) {
   }
   const data = await r.json();
   if (!data.audio_base64) throw new Error("ElevenLabs ga ingen lyd (audio_base64 mangler).");
-  const filename = await saveBufferToPublic(Buffer.from(data.audio_base64, "base64"), `audio_${Date.now()}.mp3`);
   const words = buildWordTimestamps(data.alignment);
-  return { audioPath: `/public/${filename}`, words };
+  await fs.promises.writeFile(mp3Path, Buffer.from(data.audio_base64, "base64"));
+  await fs.promises.writeFile(jsonPath, JSON.stringify(words));
+  return { audioPath: `/cache/${cacheKey}.mp3`, words };
 }
 
 /* ================= Nano Banana + Veo (Claude + Flow-arbeidsflyten) =================
@@ -317,6 +337,14 @@ const GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta";
 // Nano Banana: bilde-prompt -> lokal PNG (+ base64, brukes som første bilde i Veo).
 async function lagNanoBananaBilde(imagePrompt, aspect) {
   if (!GOOGLE_KEY) throw new Error("Google-nøkkel mangler (GEMINI_API_KEY) for Nano Banana.");
+  // Gjenbruk lagret bilde for samme prompt (sparer generering og holder Veo-
+  // klippet gyldig ved omkjøring).
+  const cacheKey = "nb_" + hashKey(GEMINI_IMAGE_MODEL + "|" + (aspect || "") + "|" + imagePrompt);
+  const cachedPath = path.resolve(CACHE_DIR, cacheKey + ".png");
+  if (fs.existsSync(cachedPath)) {
+    const buf = await fs.promises.readFile(cachedPath);
+    return { path: `/cache/${cacheKey}.png`, base64: buf.toString("base64"), mime: "image/png", cached: true };
+  }
   const url = `${GEMINI_BASE}/models/${GEMINI_IMAGE_MODEL}:generateContent?key=${encodeURIComponent(GOOGLE_KEY)}`;
   const mk = (withCfg) => ({
     contents: [{ role: "user", parts: [{ text: imagePrompt }] }],
@@ -339,9 +367,8 @@ async function lagNanoBananaBilde(imagePrompt, aspect) {
   if (!img) throw new Error("Nano Banana ga ikke noe bilde tilbake.");
   const b64 = img.inlineData.data;
   const mime = img.inlineData.mimeType || "image/png";
-  const ext = /jpe?g/i.test(mime) ? "jpg" : "png";
-  const filename = await saveBufferToPublic(Buffer.from(b64, "base64"), `nb_${Date.now()}_${Math.random().toString(36).slice(2, 7)}.${ext}`);
-  return { path: `/public/${filename}`, base64: b64, mime };
+  await fs.promises.writeFile(cachedPath, Buffer.from(b64, "base64"));
+  return { path: `/cache/${cacheKey}.png`, base64: b64, mime, cached: false };
 }
 
 // Finn video-referansen i et ferdig Veo-svar (feltnavn varierer mellom
@@ -365,10 +392,11 @@ function findVeoVideo(obj) {
   return null;
 }
 
-async function saveVeoVideo(found, key) {
+async function saveVeoVideo(found, key, cacheKey) {
+  const dest = path.resolve(CACHE_DIR, cacheKey + ".mp4");
   if (found.bytes) {
-    const fn = await saveBufferToPublic(Buffer.from(found.bytes, "base64"), `veo_${Date.now()}_${Math.random().toString(36).slice(2, 7)}.mp4`);
-    return `/public/${fn}`;
+    await fs.promises.writeFile(dest, Buffer.from(found.bytes, "base64"));
+    return `/cache/${cacheKey}.mp4`;
   }
   let u = found.uri;
   const headers = {};
@@ -378,9 +406,8 @@ async function saveVeoVideo(found, key) {
   }
   const r = await fetch(u, { headers });
   if (!r.ok) throw new Error(`Nedlasting av Veo-video feilet (${r.status}).`);
-  const buf = Buffer.from(await r.arrayBuffer());
-  const fn = await saveBufferToPublic(buf, `veo_${Date.now()}_${Math.random().toString(36).slice(2, 7)}.mp4`);
-  return `/public/${fn}`;
+  await fs.promises.writeFile(dest, Buffer.from(await r.arrayBuffer()));
+  return `/cache/${cacheKey}.mp4`;
 }
 
 // Finn en Veo-modell som nøkkelen faktisk har (og som støtter
@@ -422,6 +449,11 @@ async function veoStart(model, imageB64, mime, videoPrompt, aspect) {
 // ferdig (opptil ~10 min per klipp).
 async function lagVeoKlipp(imageB64, mime, videoPrompt, aspect) {
   if (!GOOGLE_KEY) throw new Error("Google-nøkkel mangler (GEMINI_API_KEY) for Veo.");
+  // Gjenbruk et lagret Veo-klipp for samme motiv + prompt (så du slipper å
+  // betale for Veo på nytt hvis en jobb ryker på et senere steg).
+  const cacheKey = "veo_" + hashKey((videoPrompt || "") + "|" + (aspect || "") + "|" + hashKey(imageB64 || ""));
+  const cachedPath = path.resolve(CACHE_DIR, cacheKey + ".mp4");
+  if (fs.existsSync(cachedPath)) return `/cache/${cacheKey}.mp4`;
   let model = VEO_MODEL_ENV || await resolveVeoModel();
   if (!model) throw new Error("Fant ingen Veo-modell på Google-nøkkelen. Slå på fakturering / Veo-tilgang i Google AI Studio (Veo krever betalt nivå).");
   let r = await veoStart(model, imageB64, mime, videoPrompt, aspect);
@@ -450,7 +482,7 @@ async function lagVeoKlipp(imageB64, mime, videoPrompt, aspect) {
       if (pj.error) throw new Error("Veo-feil: " + JSON.stringify(pj.error).slice(0, 250));
       const found = findVeoVideo(pj);
       if (!found) throw new Error("Fant ingen video i Veo-svaret.");
-      return await saveVeoVideo(found, GOOGLE_KEY);
+      return await saveVeoVideo(found, GOOGLE_KEY, cacheKey);
     }
   }
   throw new Error("Veo brukte for lang tid (tidsavbrudd).");
@@ -473,7 +505,7 @@ async function renderVeoJob(jobId, { scenes, lang, voiceId, aspect }, publicBase
       const videoPrompt = s.videoPrompt || flowVideoPrompt(s.illustration);
       setProg(`Scene ${i + 1}/${list.length}: lager blyantskisse (Nano Banana) …`);
       const bilde = await lagNanoBananaBilde(imagePrompt, asp);
-      setProg(`Scene ${i + 1}/${list.length}: Veo tegner motivet (kan ta et par minutter) …`);
+      setProg(`Scene ${i + 1}/${list.length}: ${bilde.cached ? "gjenbruker lagret skisse, " : ""}Veo tegner motivet (kan ta et par minutter) …`);
       const clipPath = await lagVeoKlipp(bilde.base64, bilde.mime, videoPrompt, asp);
       let audioUrl = "", audioDur = 0;
       if (s.narration && ELEVENLABS_API_KEY) {

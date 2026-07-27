@@ -348,6 +348,9 @@ async function genContent(){
         if(!res.ok) throw new Error('http '+res.status+(data&&data.error?': '+data.error:''));
         if(data.error) throw new Error(data.error);
         EXPL=parseJSON(data.result);
+        // Lagre den genererte teksten, så den ikke er borte om du laster siden
+        // på nytt eller kommer tilbake senere.
+        try{ localStorage.setItem('lme-forklaring', JSON.stringify({expl:EXPL, src:source, level:level})); }catch(e){}
         renderContent(EXPL);
         renderFlow(EXPL);
         document.getElementById('step2').classList.add('on');
@@ -684,13 +687,27 @@ async function genVeoVideo(){
 
 applyI18n();
 
-/* Kom fra en annen side med et forhåndsutfylt tema? */
+/* Kom fra en annen side med et forhåndsutfylt tema? Ellers: hent tilbake den
+   sist genererte forklaringen, så den ikke er borte etter en omlasting. */
 (function(){
   var seed=''; try{ seed=localStorage.getItem('lme-explainer-seed')||''; localStorage.removeItem('lme-explainer-seed'); }catch(e){}
   if(seed){
     var src=document.getElementById('src'); if(src) src.value=seed;
     genContent();
+    return;
   }
+  try{
+    var saved=JSON.parse(localStorage.getItem('lme-forklaring')||'null');
+    if(saved&&saved.expl&&Array.isArray(saved.expl.scenes)&&saved.expl.scenes.length){
+      EXPL=saved.expl;
+      var s=document.getElementById('src'); if(s&&saved.src) s.value=saved.src;
+      var lv=document.getElementById('level'); if(lv&&saved.level) lv.value=saved.level;
+      renderContent(EXPL);
+      renderFlow(EXPL);
+      document.getElementById('step2').classList.add('on');
+      document.getElementById('step3').classList.add('on');
+    }
+  }catch(e){}
 })();
 </script>
 <script src="/js/lme-account.js?v=7" defer></script>
