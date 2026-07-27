@@ -18,6 +18,55 @@
 
 import { sendClaudeMail } from "../_lib/claude-mail.js";
 import { registerNewsletter } from "../_lib/newsletter.js";
+import { sendOppskriftMail } from "../_lib/oppskrift-mail.js";
+
+/* Oppskrift-kjøp (bøttehatt/skaut): betalingslenke -> { produkt-id, språk }.
+   NOK-lenker = norsk, USD-lenker = engelsk. Disse skal IKKE gi Inner Circle,
+   men leveringsmail med oppskrift + mersalg, og to oppfølgere i kø. */
+const PATTERN_LINKS = {
+  // ro-strikk
+  "plink_1TqKogLax7B8uQzq2xw0LSkj": { p: "ro-strikk", lang: "no" },
+  "plink_1TqQJQLax7B8uQzqTYsUhiw6": { p: "ro-strikk", lang: "en" },
+  // ro-hekle
+  "plink_1TqKqMLax7B8uQzqqzdIpLFQ": { p: "ro-hekle", lang: "no" },
+  "plink_1TqQJRLax7B8uQzqcH4uvgp1": { p: "ro-hekle", lang: "en" },
+  // norway-strikk
+  "plink_1TqKqNLax7B8uQzqoD0SH4Eu": { p: "norway-strikk", lang: "no" },
+  "plink_1TqQJTLax7B8uQzqr0aWK1ZI": { p: "norway-strikk", lang: "en" },
+  // norway-hekle
+  "plink_1TqKqPLax7B8uQzqFThJKSO0": { p: "norway-hekle", lang: "no" },
+  "plink_1TqQJULax7B8uQzqQEC8Ufr0": { p: "norway-hekle", lang: "en" },
+  // norge-strikk (maskesting)
+  "plink_1TqKqRLax7B8uQzqZ33h4h5J": { p: "norge-strikk", lang: "no" },
+  "plink_1TqQJWLax7B8uQzqMybvRaX0": { p: "norge-strikk", lang: "en" },
+  // norge-blokk
+  "plink_1TqKqSLax7B8uQzqI6IBFKx2": { p: "norge-blokk", lang: "no" },
+  "plink_1TqQJYLax7B8uQzqmY39qwMJ": { p: "norge-blokk", lang: "en" },
+  // norge-innstrikket
+  "plink_1TqKqULax7B8uQzqKE7t9KhT": { p: "norge-innstrikket", lang: "no" },
+  "plink_1TqQJZLax7B8uQzqfnPEL2iV": { p: "norge-innstrikket", lang: "en" },
+  // norge-rune
+  "plink_1Tv4bQLax7B8uQzq4ghj2ZQD": { p: "norge-rune", lang: "no" },
+  "plink_1Tv4baLax7B8uQzq692btr6j": { p: "norge-rune", lang: "en" },
+  // norge-hekle
+  "plink_1TqKqWLax7B8uQzq3zOum7nH": { p: "norge-hekle", lang: "no" },
+  "plink_1TqQJbLax7B8uQzqIRUPmFMG": { p: "norge-hekle", lang: "en" },
+  // norge-skaut (strikk)
+  "plink_1TqKqYLax7B8uQzqYB906yIN": { p: "norge-skaut", lang: "no" },
+  "plink_1TqQJcLax7B8uQzql7E8ODDo": { p: "norge-skaut", lang: "en" },
+  // norge-skaut-hekle
+  "plink_1TqR9WLax7B8uQzqmRsRLibH": { p: "norge-skaut-hekle", lang: "no" },
+  "plink_1TqR9cLax7B8uQzqfJ5Gst5g": { p: "norge-skaut-hekle", lang: "en" },
+  // norge-pakke
+  "plink_1TqKqZLax7B8uQzq6QM3SDtw": { p: "norge-pakke", lang: "no" },
+  "plink_1TqQJeLax7B8uQzqW0TTjWXK": { p: "norge-pakke", lang: "en" },
+  // hekle-pakke (249)
+  "plink_1TxlCHLax7B8uQzqptsW5CFG": { p: "hekle-pakke", lang: "no" },
+  "plink_1TxlCILax7B8uQzqQF0Gx73q": { p: "hekle-pakke", lang: "en" },
+  // strikk-pakke (299)
+  "plink_1TxlerLax7B8uQzq3kWa07U1": { p: "strikk-pakke", lang: "no" },
+  "plink_1TxletLax7B8uQzqylxXeWJL": { p: "strikk-pakke", lang: "en" },
+};
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -234,6 +283,23 @@ export async function onRequestPost(context) {
               JSON.stringify({ email: email, name: name, lang: mainLang, sendAfter: Date.now() + 2 * 24 * 60 * 60 * 1000 })
             );
           } catch (e) {}
+        }
+        break;
+      }
+      // Oppskrifter (bøttehatt/skaut): leveringsmail + oppfølgere, IKKE Inner Circle.
+      const pat = obj.payment_link && PATTERN_LINKS[obj.payment_link];
+      if (pat) {
+        if (email) {
+          const nm = (obj.customer_details && obj.customer_details.name) || "";
+          await sendOppskriftMail(env, { to: email, name: nm, lang: pat.lang, kind: "levering", pid: pat.p });
+          const e = email.trim().toLowerCase();
+          const base = { email: email, name: nm, lang: pat.lang, pid: pat.p };
+          try {
+            await env.BUILDER_KV.put("opp_fu:" + e + ":d3",
+              JSON.stringify(Object.assign({}, base, { kind: "oppfolging_dag", sendAfter: Date.now() + 3 * 24 * 60 * 60 * 1000 })));
+            await env.BUILDER_KV.put("opp_fu:" + e + ":w2",
+              JSON.stringify(Object.assign({}, base, { kind: "oppfolging_uke", sendAfter: Date.now() + 14 * 24 * 60 * 60 * 1000 })));
+          } catch (e2) {}
         }
         break;
       }
