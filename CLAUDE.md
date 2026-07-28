@@ -111,6 +111,14 @@ Bruk aldri Playpen (eller systemfont/Comic Sans) på brødtekst. Aldri avvik.
   byggerens forhåndsvisning og på den offentlige siden). Samme passord som
   kurs. Detaljer i `docs/gruppebygger.md`.
 
+### Mia & Teo Studio (for Renate, uten kode)
+- `/mia-teo-studio` lager og publiserer animerte Mia og Teo læringsepisoder
+  (3D Pixar-stil) som JSON i KV via `functions/api/episode.js`.
+- Episodene vises automatisk i hyllen "Filmer med Mia & Teo" på `/mia-og-teo`
+  (Lek & Lær) og spilles av den eksisterende fullskjermspilleren.
+- Fast utseende for Mia og Teo (master prompt) og en scene-planlegger ligger i
+  selve studioet. Samme passord som kurs/grupper. Detaljer i `docs/mia-teo-studio.md`.
+
 ### Rediger tekst på siden (for Renate, uten kode)
 - `js/page-editor.js` (vanlige sider) og `js/course-editor.js` (akademi-kurs).
 - Bare elementer merket `data-edit="…"` (og `section.crs` på kurs) er redigerbare.
