@@ -706,6 +706,7 @@
 <!-- ============ KATEGORI-CHIPS ============ -->
 <section class="chips-wrap" aria-label="Kategorier">
   <div class="chips">
+    <a class="chip" id="chipFilmer" href="#filmer"><span class="ic">🎬</span><span data-no="Filmer" data-en="Films">Filmer</span></a>
     <a class="chip" href="#sanger"><span class="ic">🎵</span><span data-no="Sanger" data-en="Songs">Sanger</span></a>
     <a class="chip" href="#eventyr"><span class="ic">📖</span><span data-no="Eventyr" data-en="Stories">Eventyr</span></a>
     <a class="chip" href="#laer"><span class="ic">🔤</span><span data-no="Lær" data-en="Learn">Lær</span></a>
@@ -763,7 +764,7 @@
 </section>
 
 <!-- ============ HYLLE: FILMER (dynamisk fra Mia & Teo Studio) ============ -->
-<section class="shelf-wrap" id="filmer" style="display:none;">
+<section class="shelf-wrap" id="filmer">
   <div class="world-head">
     <div class="wbg" style="background-image:url('images/hero_learning_tree.webp')"></div>
     <div class="wscrim"></div>
@@ -773,7 +774,22 @@
     </div>
     <span class="world-tag" data-no="Trykk for å spille" data-en="Tap to play">Trykk for å spille</span>
   </div>
-  <div class="shelf" id="filmerShelf"></div>
+  <div class="shelf" id="filmerShelf">
+    <button class="tile" type="button"
+      data-src="videos/eventyr/pinnsvin.mp4" data-poster="images/eventyr/pinnsvin.webp" data-orient="landscape"
+      data-title-no="Pinnsvinet i hagen" data-title-en="The hedgehog in the garden"
+      data-desc-no="En rolig kveldshistorie om Mia, Teo og et lite pinnsvin." data-desc-en="A calm evening story about Mia, Teo and a little hedgehog.">
+      <div class="tile-thumb">
+        <img class="cover" src="images/eventyr/pinnsvin.webp" alt="Mia og Teo møter et pinnsvin" loading="lazy">
+        <span class="tile-play"><span>▶</span></span>
+        <span class="tile-dur">0:08</span>
+      </div>
+      <div class="tile-body">
+        <h3 data-no="Pinnsvinet i hagen" data-en="The hedgehog in the garden">Pinnsvinet i hagen</h3>
+        <p data-no="🎯 Tålmodighet og omsorg for dyr" data-en="🎯 Patience and caring for animals">🎯 Tålmodighet og omsorg for dyr</p>
+      </div>
+    </button>
+  </div>
 </section>
 
 <!-- ============ HYLLE: EVENTYR (KOMMER SNART) ============ -->
