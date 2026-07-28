@@ -11,6 +11,20 @@
    - Tospråklig: følger window.LME_CURRENT_LANG og språkbytte.
    Endre kontoknappen KUN her — den gjelder da alle sidene.
    ========================================================= */
+
+/* Last den anonyme funnel-sporingen (Ads-funnel) på alle sider.
+   Egen fil, kjører uavhengig av kontoknappen. */
+(function () {
+  try {
+    if (window.__lmeTrackLoaded) return;
+    window.__lmeTrackLoaded = true;
+    var s = document.createElement("script");
+    s.src = "/js/lme-track.js?v=1";
+    s.defer = true;
+    (document.head || document.documentElement).appendChild(s);
+  } catch (e) {}
+})();
+
 (function () {
   // Samme kontoknapp for ALLE medlemmer på ALLE sider. Sider som hadde sin
   // egen kontomeny får den skjult (CSS under), så alle ser nøyaktig det samme.

@@ -767,31 +767,49 @@
       <p data-edit="ph-sub">Se hvordan innholdet, sidene og salget ditt presterer, samlet på ett sted.</p>
     </div>
 
+    <style>
+      .an-funnel { display:flex; flex-direction:column; gap:14px; }
+      .an-fhead { display:flex; justify-content:space-between; align-items:baseline; font-size:14px; margin-bottom:5px; }
+      .an-fhead .n { font-weight:800; font-size:19px; }
+      .an-fbar { height:26px; background:linear-gradient(120deg,#E91E89,#ff8ec4); border-radius:8px; min-width:3px; }
+      .an-fconv { font-size:12px; color:var(--ink-muted); margin-top:4px; }
+      .an-list { display:flex; flex-direction:column; gap:10px; }
+      .an-list .row { display:flex; justify-content:space-between; gap:12px; font-size:14px; }
+      .an-list .row span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+      .an-empty { color:var(--ink-muted); font-size:14px; }
+    </style>
+
+    <!-- Ads-funnel -->
+    <div class="an-card">
+      <h2 data-no="Ads-funnel (siste 30 dager)" data-en="Ads funnel (last 30 days)">Ads-funnel (siste 30 dager)</h2>
+      <p class="sub" data-no="Hvor mange besøker, ser på et produkt, trykker på kjøp og fullfører. Konvertering i hvert steg." data-en="How many visit, view a product, click buy and complete. Conversion at each step.">Hvor mange besøker, ser på et produkt, trykker på kjøp og fullfører. Konvertering i hvert steg.</p>
+      <div id="an-funnel" class="an-funnel"></div>
+      <p class="an-empty" id="an-empty" hidden data-no="Ingen tall ennå. Så snart folk besøker sidene, begynner funnelen å fylle seg. Del en lenke med utm_campaign=navn for å måle en annonse." data-en="No data yet. As soon as people visit, the funnel starts filling. Share a link with utm_campaign=name to measure an ad.">Ingen tall ennå. Så snart folk besøker sidene, begynner funnelen å fylle seg.</p>
+    </div>
+
     <div class="an-stats">
-      <div class="an-stat"><div class="lbl">Besøkende (30 d)</div><div class="val">2 480</div><div class="delta up">▲ 12%</div></div>
-      <div class="an-stat"><div class="lbl">Påmeldinger</div><div class="val">186</div><div class="delta up">▲ 8%</div></div>
-      <div class="an-stat"><div class="lbl">Salg</div><div class="val">42</div><div class="delta up">▲ 5%</div></div>
-      <div class="an-stat"><div class="lbl">Inntekt</div><div class="val">NOK 18 320</div><div class="delta down">▼ 3%</div></div>
+      <div class="an-stat"><div class="lbl" data-no="Besøk (30 d)" data-en="Visits (30 d)">Besøk (30 d)</div><div class="val" id="s-visit">–</div></div>
+      <div class="an-stat"><div class="lbl" data-no="Sidevisninger" data-en="Page views">Sidevisninger</div><div class="val" id="s-pv">–</div></div>
+      <div class="an-stat"><div class="lbl" data-no="Trykk på kjøp" data-en="Buy clicks">Trykk på kjøp</div><div class="val" id="s-checkout">–</div></div>
+      <div class="an-stat"><div class="lbl" data-no="Kjøp" data-en="Purchases">Kjøp</div><div class="val" id="s-purchase">–</div></div>
     </div>
 
     <div class="an-card">
-      <h2>Besøkende siste 30 dager</h2>
-      <p class="sub">Daglige besøk på sidene dine.</p>
-      <svg class="an-chart" viewBox="0 0 600 200" preserveAspectRatio="none" role="img" aria-label="Linjediagram over besøkende siste 30 dager">
-        <path d="M0,150 L50,140 L100,120 L150,130 L200,100 L250,90 L300,110 L350,70 L400,80 L450,60 L500,75 L550,50 L600,55 L600,200 L0,200 Z" fill="rgba(238,156,173,0.18)" />
-        <polyline fill="none" stroke="#E91E89" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="0,150 50,140 100,120 150,130 200,100 250,90 300,110 350,70 400,80 450,60 500,75 550,50 600,55" />
-      </svg>
+      <h2 data-no="Besøk siste 30 dager" data-en="Visits last 30 days">Besøk siste 30 dager</h2>
+      <p class="sub" data-no="Daglige besøk på plattformen." data-en="Daily visits to the platform.">Daglige besøk på plattformen.</p>
+      <svg class="an-chart" id="an-chart" viewBox="0 0 600 200" preserveAspectRatio="none" role="img" aria-label="Besøk siste 30 dager"></svg>
     </div>
 
     <div class="an-card">
-      <h2>Toppsider</h2>
-      <p class="sub">Mest besøkte sider denne måneden.</p>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <div style="display:flex;justify-content:space-between;font-size:14px;"><span>/creative-academy</span><strong>812</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:14px;"><span>/spor-renate-ai</span><strong>540</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:14px;"><span>/butikk</span><strong>388</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:14px;"><span>/biblioteket</span><strong>246</strong></div>
-      </div>
+      <h2 data-no="Kampanjer" data-en="Campaigns">Kampanjer</h2>
+      <p class="sub" data-no="Hvor besøkende kommer fra (UTM-lenker fra annonser)." data-en="Where visitors come from (UTM links from ads).">Hvor besøkende kommer fra (UTM-lenker fra annonser).</p>
+      <div id="an-campaigns" class="an-list"></div>
+    </div>
+
+    <div class="an-card">
+      <h2 data-no="Toppsider" data-en="Top pages">Toppsider</h2>
+      <p class="sub" data-no="Mest besøkte sider siste 30 dager." data-en="Most visited pages, last 30 days.">Mest besøkte sider siste 30 dager.</p>
+      <div id="an-pages" class="an-list"></div>
     </div>
 
   </main>
@@ -872,6 +890,70 @@
     render();
   })();
 </script>
+
+  <script>
+  /* Ads-funnel: hent ekte tall fra /api/track (kun eier) og tegn. */
+  (function(){
+    function en(){ return window.LME_CURRENT_LANG === 'en'; }
+    function fmt(n){ try { return (n||0).toLocaleString(en()?'en-US':'nb-NO'); } catch(e){ return String(n||0); } }
+    function pct(a,b){ if(!b) return ''; return Math.round((a/b)*100)+'%'; }
+    function el(id){ return document.getElementById(id); }
+
+    fetch('/api/track?days=30', { credentials:'same-origin' })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if(!d || !d.totals) return;
+        var t = d.totals;
+        el('s-visit').textContent = fmt(t.visit);
+        el('s-pv').textContent = fmt(t.pv);
+        el('s-checkout').textContent = fmt(t.checkout);
+        el('s-purchase').textContent = fmt(t.purchase);
+
+        var stages = [
+          { label: en()?'Visits':'Besøk', n: t.visit||0 },
+          { label: en()?'Product views':'Produktvisninger', n: t.productview||0 },
+          { label: en()?'Buy clicks':'Trykk på kjøp', n: t.checkout||0 },
+          { label: en()?'Purchases':'Kjøp', n: t.purchase||0 }
+        ];
+        var max = Math.max(1, stages[0].n, stages[1].n, stages[2].n, stages[3].n);
+        var total = t.pv + t.visit + t.checkout + t.purchase;
+        if(!total){ el('an-empty').hidden = false; }
+        var wrap = el('an-funnel'); wrap.innerHTML='';
+        stages.forEach(function(s, i){
+          var conv = i>0 ? pct(s.n, stages[i-1].n) : '';
+          var row = document.createElement('div');
+          row.innerHTML =
+            '<div class="an-fhead"><span>'+s.label+'</span><span class="n">'+fmt(s.n)+'</span></div>'+
+            '<div class="an-fbar" style="width:'+Math.max(3, Math.round((s.n/max)*100))+'%"></div>'+
+            (conv ? '<div class="an-fconv">'+(en()?'converts ':'konverterer ')+conv+(en()?' from previous step':' fra forrige steg')+'</div>' : '');
+          wrap.appendChild(row);
+        });
+
+        var s = d.series || [];
+        if(s.length){
+          var vmax = Math.max(1, Math.max.apply(null, s.map(function(x){ return x.visit||0; })));
+          var W=600, H=200, stepx = s.length>1 ? W/(s.length-1) : W;
+          var pts = s.map(function(x, ix){ var y = H - ((x.visit||0)/vmax)*(H-20) - 10; return (ix*stepx).toFixed(1)+','+y.toFixed(1); });
+          el('an-chart').innerHTML =
+            '<path d="M0,'+H+' L'+pts.join(' L')+' L'+W+','+H+' Z" fill="rgba(238,156,173,0.18)"/>'+
+            '<polyline fill="none" stroke="#E91E89" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="'+pts.join(' ')+'"/>';
+        }
+
+        function list(id, arr, empty){
+          var box = el(id); box.innerHTML='';
+          if(!arr || !arr.length){ box.innerHTML = '<div class="an-empty">'+empty+'</div>'; return; }
+          arr.forEach(function(it){
+            var r = document.createElement('div'); r.className='row';
+            r.innerHTML = '<span>'+(it.key||'')+'</span><strong>'+fmt(it.n)+'</strong>';
+            box.appendChild(r);
+          });
+        }
+        list('an-campaigns', d.campaigns, en()?'No campaign visits yet. Use utm_campaign in your ad links.':'Ingen kampanjebesøk ennå. Bruk utm_campaign i annonselenkene dine.');
+        list('an-pages', d.topPages, en()?'No data yet.':'Ingen data ennå.');
+      })
+      .catch(function(){});
+  })();
+  </script>
 
   <script src="/js/page-editor.js" defer></script>
 <script src="/js/lme-visibility.js?v=8" defer></script>
