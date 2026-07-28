@@ -195,6 +195,48 @@ function content(kind, lang, name, pid) {
 
 export function isOppskrift(pid) { return !!PRODUCT[pid]; }
 
+/* Kort varsel til Renate ved hvert oppskrift-salg. amount i minste enhet. */
+export async function sendOwnerSaleNotice(env, opts) {
+  const apiKey = env.MAILERSEND_API_KEY;
+  if (!apiKey) return { ok: false, skipped: true };
+  const to = env.OWNER_NOTIFY_EMAIL || "renateshobby@hotmail.com";
+  const prod = PRODUCT[opts && opts.pid];
+  const pname = prod ? prod.no : (opts && opts.pid) || "oppskrift";
+  const cur = (opts.currency || "").toLowerCase();
+  const beløp = opts.amount != null
+    ? (cur === "usd" ? "$" + (opts.amount / 100) : (opts.amount / 100) + " kr")
+    : "";
+  const kunde = (opts.name && opts.name.trim()) ? opts.name.trim() : (opts.email || "en kunde");
+  const språk = opts.lang === "en" ? "engelsk" : "norsk";
+  const inner =
+    "<p>Hei Renate,</p>" +
+    "<p>Du har fått et nytt salg 🎉</p>" +
+    '<table role="presentation" style="font-size:15px;line-height:1.7;">' +
+    "<tr><td><b>Oppskrift:</b></td><td style=\"padding-left:10px;\">" + esc(pname) + "</td></tr>" +
+    (beløp ? "<tr><td><b>Beløp:</b></td><td style=\"padding-left:10px;\">" + esc(beløp) + "</td></tr>" : "") +
+    "<tr><td><b>Kunde:</b></td><td style=\"padding-left:10px;\">" + esc(kunde) + (opts.email ? " (" + esc(opts.email) + ")" : "") + "</td></tr>" +
+    "<tr><td><b>Språk:</b></td><td style=\"padding-left:10px;\">" + språk + "</td></tr>" +
+    "</table>" +
+    "<p style=\"color:#6b6470;font-size:14px;\">Kunden har fått leveringsmailen med oppskriften automatisk.</p>";
+  const body = {
+    from: { email: FROM_EMAIL, name: FROM_NAME },
+    to: [{ email: to, name: FROM_NAME }],
+    subject: "🎉 Nytt salg: " + pname + (beløp ? " (" + beløp + ")" : ""),
+    html: wrap(inner),
+    text: "Nytt salg! Oppskrift: " + pname + ". " + (beløp ? "Beløp: " + beløp + ". " : "") + "Kunde: " + kunde + (opts.email ? " (" + opts.email + ")" : "") + ". Språk: " + språk + ".",
+  };
+  try {
+    const res = await fetch(MS, {
+      method: "POST",
+      headers: { Authorization: "Bearer " + apiKey, "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(body),
+    });
+    return { ok: res.ok, status: res.status };
+  } catch (e) {
+    return { ok: false, error: String(e) };
+  }
+}
+
 /* Sender én oppskrift-e-post via MailerSend. kind: levering | oppfolging_dag | oppfolging_uke */
 export async function sendOppskriftMail(env, opts) {
   const to = opts && opts.to;

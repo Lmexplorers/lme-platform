@@ -13,7 +13,7 @@
  * config:stripe_webhook_secret, og leses også her.
  */
 
-import { sendOppskriftMail } from "../_lib/oppskrift-mail.js";
+import { sendOppskriftMail, sendOwnerSaleNotice } from "../_lib/oppskrift-mail.js";
 import { PATTERN_LINKS } from "../_lib/pattern-links.js";
 
 function json(data, status) {
@@ -79,6 +79,13 @@ export async function onRequestPost(context) {
     if (pat && email && obj.payment_status !== "unpaid") {
       const nm = (obj.customer_details && obj.customer_details.name) || "";
       await sendOppskriftMail(env, { to: email, name: nm, lang: pat.lang, kind: "levering", pid: pat.p });
+      // Kort salgs-varsel til Renate.
+      try {
+        await sendOwnerSaleNotice(env, {
+          pid: pat.p, lang: pat.lang, name: nm, email: email,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e3) {}
       const e = email.trim().toLowerCase();
       const base = { email: email, name: nm, lang: pat.lang, pid: pat.p };
       try {
