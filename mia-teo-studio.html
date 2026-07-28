@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Mia &amp; Teo Studio | Little Montessori Explorers</title>
+<meta name="description" content="Lag og publiser animerte Mia og Teo læringsepisoder i 3D Pixar-stil, med fast utseende og norsk/engelsk tekst.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink-50:#fff5f8; --pink-100:#ffe8f0; --pink-200:#ffd1e1; --pink-300:#ffb3cd;
+    --pink-400:#ff8ab3; --pink-500:#e85a92; --pink-600:#c43d75; --pink-700:#8f2a55;
+    --lime:#8fc23f; --gul:#ffce3d; --bla:#6ec1e4; --bla-soft:#dff1f9;
+    --warm-white:#fffcf9; --ink:#3d2438; --ink-soft:#6b4760;
+    --shadow-soft:0 8px 32px rgba(196,61,117,.08);
+    --shadow-med:0 16px 48px rgba(196,61,117,.14);
+    /* LÅST FONTREGEL: Playpen Sans = KUN overskrifter. Sassoon = all annen tekst. */
+    --font-head:'Playpen Sans', system-ui, sans-serif;
+    --font-body:'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body); color: var(--ink); line-height: 1.6; font-weight: 400;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 5%, rgba(255,209,225,.35), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 20%, rgba(255,232,240,.4), transparent 60%),
+      var(--warm-white);
+    min-height: 100vh;
+  }
+  h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.2; }
+  button, input, select, textarea { font-family: var(--font-body) !important; }
+  a { color: var(--pink-600); }
+
+  /* ===== Topbar ===== */
+  .topbar {
+    position: sticky; top: 0; z-index: 100; background: rgba(255,252,249,.92);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--pink-100); padding: .75rem 1.5rem;
+  }
+  .topbar-inner { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; }
+  .brand img { width: 44px; height: 44px; object-fit: contain; }
+  .brand b { font-family: var(--font-head); color: var(--pink-600); font-size: 1.05rem; font-weight: 600; }
+  .brand span { display: block; font-size: .72rem; color: var(--ink-soft); }
+  .top-actions { display: flex; align-items: center; gap: .6rem; }
+  .lang-toggle {
+    background: linear-gradient(135deg, var(--pink-400), var(--pink-500)); color: #fff; border: none;
+    padding: .5rem 1.1rem; border-radius: 999px; font-weight: 600; font-size: .88rem; cursor: pointer; box-shadow: var(--shadow-soft);
+  }
+
+  /* ===== Layout ===== */
+  .wrap { max-width: 1240px; margin: 1.5rem auto 5rem; padding: 0 1.5rem; display: grid; grid-template-columns: 1.15fr .85fr; gap: 1.75rem; align-items: start; }
+  @media (max-width: 940px) { .wrap { grid-template-columns: 1fr; } .right { position: static !important; } }
+  .right { position: sticky; top: 84px; }
+
+  .head { margin-bottom: 1.25rem; }
+  .head .kick { display: inline-flex; align-items: center; gap: .4rem; background: var(--pink-100); color: var(--pink-700); font-weight: 700; font-size: .82rem; padding: .35rem .9rem; border-radius: 999px; }
+  .head h1 { font-size: clamp(1.7rem, 3.4vw, 2.4rem); color: var(--ink); margin: .7rem 0 .35rem; }
+  .head p { color: var(--ink-soft); max-width: 640px; }
+
+  .card { background: #fff; border: 1px solid var(--pink-100); border-radius: 22px; box-shadow: var(--shadow-soft); padding: 1.4rem 1.5rem; margin-bottom: 1.25rem; }
+  .card > h2 { font-size: 1.15rem; color: var(--ink); margin-bottom: .3rem; display: flex; align-items: center; gap: .5rem; }
+  .card > .sub { color: var(--ink-soft); font-size: .9rem; margin-bottom: 1rem; }
+
+  label.field { display: block; margin-bottom: .95rem; }
+  label.field > span { display: block; font-weight: 700; font-size: .9rem; color: var(--ink); margin-bottom: .35rem; }
+  .hint { font-weight: 400 !important; color: var(--ink-soft); font-size: .82rem; }
+  input[type=text], input[type=url], select, textarea {
+    width: 100%; border: 1.5px solid var(--pink-200); border-radius: 14px; padding: .7rem .9rem;
+    font-size: 1rem; color: var(--ink); background: #fff; transition: border-color .2s;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--pink-400); }
+  textarea { resize: vertical; min-height: 84px; }
+  .en-row { margin-top: .5rem; }
+  .en-row input, .en-row textarea { background: var(--bla-soft); border-color: #c7e6f2; }
+  .en-lab { font-size: .78rem; color: #3f7f97; font-weight: 700; margin-bottom: .25rem; display: block; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+  @media (max-width: 520px) { .two { grid-template-columns: 1fr; } }
+
+  .btn {
+    border: none; border-radius: 999px; padding: .8rem 1.5rem; font-weight: 700; font-size: 1rem; cursor: pointer;
+    background: linear-gradient(135deg, var(--pink-500), var(--pink-600)); color: #fff; box-shadow: var(--shadow-soft); transition: transform .15s;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn.ghost { background: #fff; color: var(--pink-600); border: 1.5px solid var(--pink-200); box-shadow: none; }
+  .btn.small { padding: .5rem 1rem; font-size: .88rem; }
+  .btn-row { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; }
+
+  /* ===== Preview tile ===== */
+  .tile-prev { border-radius: 20px; overflow: hidden; border: 1px solid var(--pink-100); box-shadow: var(--shadow-soft); background: #fff; }
+  .tile-prev .thumb { position: relative; width: 100%; aspect-ratio: 16/9; background: linear-gradient(135deg, var(--pink-100), var(--pink-50)); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .tile-prev .thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .tile-prev .thumb .emoji { font-size: 3rem; }
+  .tile-prev .play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 2; }
+  .tile-prev .play span { width: 54px; height: 54px; border-radius: 50%; background: rgba(255,255,255,.94); color: var(--pink-600); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; padding-left: 4px; box-shadow: var(--shadow-soft); }
+  .tile-prev .dur { position: absolute; bottom: .55rem; right: .55rem; z-index: 2; background: rgba(61,36,56,.82); color: #fff; font-size: .76rem; font-weight: 700; padding: .16rem .5rem; border-radius: 999px; }
+  .tile-prev .body { padding: .85rem 1rem 1.05rem; }
+  .tile-prev .body h3 { font-size: 1.05rem; color: var(--ink); }
+  .tile-prev .body p { font-size: .85rem; color: var(--ink-soft); margin-top: .15rem; }
+  .goal-pill { display: inline-block; margin-top: .5rem; font-size: .78rem; font-weight: 700; color: var(--lime); background: #f1f8e4; border: 1px solid #dcecc3; padding: .2rem .6rem; border-radius: 999px; }
+
+  /* ===== List ===== */
+  .ep-list { display: flex; flex-direction: column; gap: .55rem; }
+  .ep-item { display: flex; align-items: center; gap: .7rem; width: 100%; text-align: left; background: #fff; border: 1.5px solid var(--pink-100); border-radius: 14px; padding: .6rem .8rem; cursor: pointer; transition: border-color .2s, transform .15s; }
+  .ep-item:hover { border-color: var(--pink-300); transform: translateY(-1px); }
+  .ep-item .em { font-size: 1.35rem; }
+  .ep-item .meta { flex: 1; min-width: 0; }
+  .ep-item .meta b { display: block; font-size: .95rem; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ep-item .meta small { color: var(--ink-soft); font-size: .78rem; }
+  .ep-item .tag { font-size: .72rem; font-weight: 700; padding: .18rem .55rem; border-radius: 999px; }
+  .tag.pub { background: #edf7e2; color: #5f8f2a; }
+  .tag.draft { background: var(--pink-50); color: var(--pink-700); border: 1px dashed var(--pink-200); }
+  .empty { color: var(--ink-soft); font-size: .9rem; padding: .5rem 0; }
+
+  /* ===== Fast utseende / recipe ===== */
+  .look { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 620px) { .look { grid-template-columns: 1fr; } }
+  .look .who { background: var(--pink-50); border: 1px solid var(--pink-100); border-radius: 16px; padding: .9rem 1rem; }
+  .look .who h4 { font-size: 1rem; color: var(--pink-700); margin-bottom: .35rem; }
+  .look .who ul { margin: 0; padding-left: 1.1rem; font-size: .88rem; color: var(--ink-soft); }
+  .look .who li { margin-bottom: .15rem; }
+  .promptbox { position: relative; margin-top: .3rem; }
+  .promptbox textarea { min-height: 150px; font-size: .86rem; line-height: 1.5; background: #fffdf9; }
+  .copy-btn { position: absolute; top: .5rem; right: .5rem; }
+  .steps { counter-reset: s; list-style: none; padding: 0; margin: .3rem 0 0; }
+  .steps li { position: relative; padding: .35rem 0 .55rem 2.1rem; font-size: .92rem; color: var(--ink); border-bottom: 1px dashed var(--pink-100); }
+  .steps li:last-child { border-bottom: none; }
+  .steps li::before { counter-increment: s; content: counter(s); position: absolute; left: 0; top: .35rem; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--pink-500); color: #fff; font-weight: 700; font-size: .82rem; display: flex; align-items: center; justify-content: center; }
+  .note { background: var(--bla-soft); border: 1px solid #c7e6f2; border-radius: 14px; padding: .8rem 1rem; font-size: .9rem; color: #2f6377; margin-top: .8rem; }
+
+  .toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(30px); background: var(--ink); color: #fff; padding: .7rem 1.2rem; border-radius: 999px; font-weight: 600; font-size: .95rem; opacity: 0; pointer-events: none; transition: all .3s; z-index: 500; box-shadow: var(--shadow-med); }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="/mia-og-teo" class="brand">
+      <img src="/images/lme-logo.png" alt="LME" width="44" height="44">
+      <b>Mia &amp; Teo Studio<span data-no="Lag animerte læringsepisoder" data-en="Make animated learning episodes">Lag animerte læringsepisoder</span></b>
+    </a>
+    <div class="top-actions">
+      <a class="btn ghost small" href="/mia-og-teo" data-no="Se Lek &amp; Lær" data-en="View Play &amp; Learn">Se Lek &amp; Lær</a>
+      <button class="lang-toggle" id="langToggle">EN 🌍</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <!-- ===== Venstre: skjema ===== -->
+  <div class="left">
+    <div class="head">
+      <span class="kick">🎬 <span data-no="Mia &amp; Teo Studio" data-en="Mia &amp; Teo Studio">Mia &amp; Teo Studio</span></span>
+      <h1 data-no="Lag en læringsepisode" data-en="Make a learning episode">Lag en læringsepisode</h1>
+      <p data-no="Lag animerte Mia og Teo filmer i 3D Pixar-stil med et tydelig læringsmål. Fyll ut episoden her, lim inn den ferdige videoen, og den dukker opp i Lek &amp; Lær. Utseendet og oppskriften for å lage klippene ligger lenger nede." data-en="Make animated Mia and Teo films in 3D Pixar style with a clear learning goal. Fill in the episode here, paste the finished video, and it appears in Play &amp; Learn. The fixed look and the recipe for making the clips are further down.">
+        Lag animerte Mia og Teo filmer i 3D Pixar-stil med et tydelig læringsmål. Fyll ut episoden her, lim inn den ferdige videoen, og den dukker opp i Lek &amp; Lær. Utseendet og oppskriften for å lage klippene ligger lenger nede.
+      </p>
+    </div>
+
+    <!-- Skjema -->
+    <div class="card">
+      <h2>📝 <span data-no="Episoden" data-en="The episode">Episoden</span></h2>
+      <div class="sub" data-no="Norsk er obligatorisk. Engelsk er valgfritt og faller tilbake til norsk hvis det står tomt." data-en="Norwegian is required. English is optional and falls back to Norwegian if left empty.">Norsk er obligatorisk. Engelsk er valgfritt og faller tilbake til norsk hvis det står tomt.</div>
+
+      <div class="two">
+        <label class="field">
+          <span data-no="Tema/kategori" data-en="Theme/category">Tema/kategori</span>
+          <select id="f-category">
+            <option value="natur" data-no="🌳 Natur og oppdagelse" data-en="🌳 Nature and discovery">🌳 Natur og oppdagelse</option>
+            <option value="praktisk" data-no="🧺 Praktisk liv" data-en="🧺 Practical life">🧺 Praktisk liv</option>
+            <option value="tall" data-no="🔢 Tall og telling" data-en="🔢 Numbers and counting">🔢 Tall og telling</option>
+            <option value="farger" data-no="🎨 Farger og former" data-en="🎨 Colors and shapes">🎨 Farger og former</option>
+            <option value="vennskap" data-no="💗 Følelser og vennskap" data-en="💗 Feelings and friendship">💗 Følelser og vennskap</option>
+            <option value="rolig" data-no="🌙 Rolig stund" data-en="🌙 Quiet time">🌙 Rolig stund</option>
+          </select>
+        </label>
+        <label class="field">
+          <span data-no="Lengde" data-en="Duration">Lengde <span class="hint">(f.eks. 5:20)</span></span>
+          <input type="text" id="f-duration" placeholder="5:20" maxlength="12">
+        </label>
+      </div>
+
+      <label class="field">
+        <span data-no="Tittel" data-en="Title">Tittel</span>
+        <input type="text" id="f-title" data-ph-no="F.eks. Mia og Teo lærer om tålmodighet" data-ph-en="E.g. Mia and Teo learn about patience" placeholder="F.eks. Mia og Teo lærer om tålmodighet">
+        <div class="en-row"><span class="en-lab">🇬🇧 English</span><input type="text" id="f-title-en" data-ph-no="Engelsk tittel" data-ph-en="English title" placeholder="Engelsk tittel"></div>
+      </label>
+
+      <label class="field">
+        <span data-no="Undertittel" data-en="Subtitle">Undertittel <span class="hint" data-no="(kort linje over tittelen)" data-en="(short line above the title)">(kort linje over tittelen)</span></span>
+        <input type="text" id="f-kicker" data-ph-no="F.eks. Naturutforskerne" data-ph-en="E.g. The nature explorers" placeholder="F.eks. Naturutforskerne">
+        <div class="en-row"><span class="en-lab">🇬🇧 English</span><input type="text" id="f-kicker-en" placeholder=""></div>
+      </label>
+
+      <label class="field">
+        <span data-no="Læringsmål" data-en="Learning goal">Læringsmål <span class="hint" data-no="(hva barnet lærer)" data-en="(what the child learns)">(hva barnet lærer)</span></span>
+        <input type="text" id="f-goal" data-ph-no="F.eks. Å vente på tur og puste rolig" data-ph-en="E.g. To wait your turn and breathe calmly" placeholder="F.eks. Å vente på tur og puste rolig">
+        <div class="en-row"><span class="en-lab">🇬🇧 English</span><input type="text" id="f-goal-en" placeholder=""></div>
+      </label>
+
+      <label class="field">
+        <span data-no="Beskrivelse" data-en="Description">Beskrivelse</span>
+        <textarea id="f-lede" data-ph-no="Kort om hva som skjer i episoden." data-ph-en="Briefly what happens in the episode." placeholder="Kort om hva som skjer i episoden."></textarea>
+        <div class="en-row"><span class="en-lab">🇬🇧 English</span><textarea id="f-lede-en" placeholder=""></textarea></div>
+      </label>
+
+      <div class="btn-row" style="margin: -.3rem 0 1rem;">
+        <button class="btn ghost small" id="translateBtn" type="button">✨ <span data-no="Oversett til engelsk" data-en="Translate to English">Oversett til engelsk</span></button>
+        <span class="hint" data-no="Fyller ut tomme engelske felt automatisk (krever innlogging)." data-en="Fills empty English fields automatically (requires login).">Fyller ut tomme engelske felt automatisk (krever innlogging).</span>
+      </div>
+
+      <div class="two">
+        <label class="field">
+          <span data-no="Videolenke" data-en="Video link">Videolenke <span class="hint">(mp4 / YouTube / Vimeo)</span></span>
+          <input type="url" id="f-video" placeholder="https://…">
+        </label>
+        <label class="field">
+          <span data-no="Format" data-en="Format">Format</span>
+          <select id="f-orient">
+            <option value="landscape" data-no="Liggende (16:9)" data-en="Landscape (16:9)">Liggende (16:9)</option>
+            <option value="portrait" data-no="Stående (9:16)" data-en="Portrait (9:16)">Stående (9:16)</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="field">
+        <span data-no="Plakat/miniatyr" data-en="Poster/thumbnail">Plakat/miniatyr <span class="hint" data-no="(valgfritt bilde)" data-en="(optional image)">(valgfritt bilde)</span></span>
+        <input type="file" id="f-cover" accept="image/*">
+      </label>
+
+      <label class="field" style="display:flex; align-items:center; gap:.6rem;">
+        <input type="checkbox" id="f-published" checked style="width:auto;">
+        <span style="margin:0;" data-no="Publisert (vis i Lek &amp; Lær)" data-en="Published (show in Play &amp; Learn)">Publisert (vis i Lek &amp; Lær)</span>
+      </label>
+
+      <div class="btn-row" style="margin-top:.4rem;">
+        <button class="btn" id="saveBtn" type="button">☁️ <span data-no="Lagre episode" data-en="Save episode">Lagre episode</span></button>
+        <button class="btn ghost" id="newBtn" type="button" data-no="Ny/tøm" data-en="New/clear">Ny/tøm</button>
+        <button class="btn ghost small" id="deleteBtn" type="button" style="margin-left:auto; color:var(--pink-700);" data-no="Slett" data-en="Delete">Slett</button>
+      </div>
+    </div>
+
+    <!-- Fast utseende -->
+    <div class="card">
+      <h2>🔒 <span data-no="Fast utseende (låst)" data-en="Fixed look (locked)">Fast utseende (låst)</span></h2>
+      <div class="sub" data-no="Mia og Teo skal alltid se slik ut. Bruk dette som referanse hver gang." data-en="Mia and Teo must always look like this. Use it as reference every time.">Mia og Teo skal alltid se slik ut. Bruk dette som referanse hver gang.</div>
+      <div class="look">
+        <div class="who">
+          <h4>👧 Mia</h4>
+          <ul>
+            <li data-no="Lyst, gyllent hår i høy hestehale med rosa sløyfe" data-en="Golden-blonde hair in a high ponytail with a pink bow">Lyst, gyllent hår i høy hestehale med rosa sløyfe</li>
+            <li data-no="Store blå øyne" data-en="Big blue eyes">Store blå øyne</li>
+            <li data-no="Rosa blomstrete kjole med belte" data-en="Rose-pink floral dress with a belt">Rosa blomstrete kjole med belte</li>
+            <li data-no="Hvite sokker, rosa joggesko" data-en="White socks, pink sneakers">Hvite sokker, rosa joggesko</li>
+            <li data-no="Flettet kurv med tusenfryd" data-en="Woven basket with a daisy">Flettet kurv med tusenfryd</li>
+          </ul>
+        </div>
+        <div class="who">
+          <h4>👦 Teo</h4>
+          <ul>
+            <li data-no="Bustete, kastanjebrunt hår" data-en="Tousled chestnut-brown hair">Bustete, kastanjebrunt hår</li>
+            <li data-no="Varme brune øyne" data-en="Warm brown eyes">Varme brune øyne</li>
+            <li data-no="Gul stripete t-skjorte" data-en="Yellow striped t-shirt">Gul stripete t-skjorte</li>
+            <li data-no="Blå olashorts, brune joggesko" data-en="Blue denim shorts, brown sneakers">Blå olashorts, brune joggesko</li>
+            <li data-no="Olivengrønn ryggsekk og kikkert" data-en="Olive-green backpack and binoculars">Olivengrønn ryggsekk og kikkert</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top:1rem;">
+        <span class="en-lab" style="color:var(--pink-700);" data-no="Master prompt (engelsk, lim inn i bilde-/videoverktøy):" data-en="Master prompt (English, paste into image/video tool):">Master prompt (engelsk, lim inn i bilde-/videoverktøy):</span>
+        <div class="promptbox">
+          <button class="btn ghost small copy-btn" type="button" data-copy="#masterPrompt" data-no="Kopier" data-en="Copy">Kopier</button>
+          <textarea id="masterPrompt" readonly>3D Pixar / Disney style animated feature-film look, high-detail CGI, soft global illumination, warm natural colors, wholesome and calm children's educational mood, no on-screen text.
+
+MIA (girl, ~5): golden-blonde hair in a high ponytail tied with a pink bow, big bright blue eyes with long lashes, round rosy cheeks, warm smile, rose-pink floral short-sleeve dress with a fabric belt, white ankle socks and pink sneakers, often carrying a small woven wicker basket with a white daisy. Curious and eager.
+
+TEO (boy, ~5): tousled chestnut-brown hair, warm brown eyes, cheerful grin, yellow and pale-yellow horizontal-striped t-shirt, blue denim shorts, white socks and brown sneakers, an olive-green backpack and often binoculars around his neck. Playful and giggly.</textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Oppskrift for riktig utseende -->
+    <div class="card">
+      <h2>🎥 <span data-no="Slik lager du klippene med riktig utseende" data-en="How to make clips with the right look">Slik lager du klippene med riktig utseende</span></h2>
+      <div class="sub" data-no="Viktig: beskriv aldri Mia og Teo bare med ord. Ord bommer på ansiktene. Mat alltid inn det offisielle bildet som referanse." data-en="Important: never describe Mia and Teo with words alone. Words miss the faces. Always feed in the official image as reference.">Viktig: beskriv aldri Mia og Teo bare med ord. Ord bommer på ansiktene. Mat alltid inn det offisielle bildet som referanse.</div>
+      <ol class="steps">
+        <li data-no="Åpne et video-verktøy som tar bilde inn (bilde til video), for eksempel Higgsfield, Runway, Kling, Sora eller Pika." data-en="Open a video tool that accepts an image input (image-to-video), for example Higgsfield, Runway, Kling, Sora or Pika.">Åpne et video-verktøy som tar bilde inn (bilde til video), for eksempel Higgsfield, Runway, Kling, Sora eller Pika.</li>
+        <li data-no="Last opp det offisielle Mia og Teo bildet (logoen eller boktegningen) som referanse eller startbilde." data-en="Upload the official Mia and Teo image (the logo or the book art) as a reference or start frame.">Last opp det offisielle Mia og Teo bildet (logoen eller boktegningen) som referanse eller startbilde.</li>
+        <li data-no="Lim inn master prompten over, og legg til hva som skjer i scenen (handlingen)." data-en="Paste the master prompt above, and add what happens in the scene (the action).">Lim inn master prompten over, og legg til hva som skjer i scenen (handlingen).</li>
+        <li data-no="Lag klippene scene for scene. Bruk samme referansebilde hver gang, så utseendet holder seg likt." data-en="Make the clips scene by scene. Use the same reference image every time so the look stays consistent.">Lag klippene scene for scene. Bruk samme referansebilde hver gang, så utseendet holder seg likt.</li>
+        <li data-no="Sett klippene sammen, legg på norsk stemme og musikk, og last opp den ferdige videoen. Lim inn lenken øverst her." data-en="Stitch the clips together, add Norwegian voice and music, and upload the finished video. Paste the link at the top here.">Sett klippene sammen, legg på norsk stemme og musikk, og last opp den ferdige videoen. Lim inn lenken øverst her.</li>
+      </ol>
+      <div class="note" data-no="Hvorfor bilde og ikke ord? En videomodell som bare får en tekstbeskrivelse gjetter ansiktene og bommer (feil hårfarge, feil øyne). Et referansebilde låser utseendet." data-en="Why image and not words? A video model given only a text description guesses the faces and misses (wrong hair color, wrong eyes). A reference image locks the look.">Hvorfor bilde og ikke ord? En videomodell som bare får en tekstbeskrivelse gjetter ansiktene og bommer (feil hårfarge, feil øyne). Et referansebilde låser utseendet.</div>
+    </div>
+
+    <!-- Scene-planlegger -->
+    <div class="card">
+      <h2>🧩 <span data-no="Scene-planlegger" data-en="Scene planner">Scene-planlegger</span></h2>
+      <div class="sub" data-no="Skriv inn et tema, så lager jeg en scene-for-scene liste med ferdige engelske prompter du kan lime rett inn i video-verktøyet." data-en="Enter a topic, and I make a scene-by-scene list of ready-made English prompts you can paste straight into the video tool.">Skriv inn et tema, så lager jeg en scene-for-scene liste med ferdige engelske prompter du kan lime rett inn i video-verktøyet.</div>
+      <div class="two">
+        <label class="field">
+          <span data-no="Tema for episoden" data-en="Episode topic">Tema for episoden</span>
+          <input type="text" id="plan-topic" data-ph-no="F.eks. å dekke bordet" data-ph-en="E.g. setting the table" placeholder="F.eks. å dekke bordet">
+        </label>
+        <label class="field">
+          <span data-no="Antall scener" data-en="Number of scenes">Antall scener</span>
+          <select id="plan-count">
+            <option>4</option><option selected>5</option><option>6</option><option>7</option><option>8</option>
+          </select>
+        </label>
+      </div>
+      <div class="btn-row">
+        <button class="btn small" id="planBtn" type="button">🪄 <span data-no="Lag prompter" data-en="Make prompts">Lag prompter</span></button>
+      </div>
+      <div class="promptbox" style="margin-top:.9rem;">
+        <button class="btn ghost small copy-btn" type="button" data-copy="#planOut" data-no="Kopier" data-en="Copy">Kopier</button>
+        <textarea id="planOut" readonly placeholder="…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Høyre: forhåndsvisning + liste ===== -->
+  <div class="right">
+    <div class="card">
+      <h2>👁️ <span data-no="Forhåndsvisning" data-en="Preview">Forhåndsvisning</span></h2>
+      <div class="sub" data-no="Slik ser flisen ut i Lek &amp; Lær." data-en="How the tile looks in Play &amp; Learn.">Slik ser flisen ut i Lek &amp; Lær.</div>
+      <div class="tile-prev" id="preview">
+        <div class="thumb"><span class="emoji">🎬</span><span class="play"><span>▶</span></span><span class="dur" id="pvDur" style="display:none;"></span></div>
+        <div class="body">
+          <h3 id="pvTitle" data-no="Episodetittel" data-en="Episode title">Episodetittel</h3>
+          <p id="pvLede" data-no="Beskrivelse kommer her." data-en="Description goes here.">Beskrivelse kommer her.</p>
+          <span class="goal-pill" id="pvGoal" style="display:none;"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📚 <span data-no="Dine episoder" data-en="Your episodes">Dine episoder</span></h2>
+      <div class="ep-list" id="epList"><div class="empty" data-no="Laster…" data-en="Loading…">Laster…</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ===== Språk ===== */
+  var currentLang = (window.LME_CURRENT_LANG === 'en') ? 'en' : 'no';
+  function isEn() { return currentLang === 'en'; }
+  function L(no, en) { return isEn() ? en : no; }
+  function pick(v) { if (!v) return ''; if (typeof v === 'string') return v; return (isEn() && v.en) ? v.en : (v.no || ''); }
+
+  function switchLanguage(lang) {
+    currentLang = lang; window.LME_CURRENT_LANG = lang; document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      var t = el.getAttribute('data-' + lang); if (t === null) return;
+      if (t.indexOf('<') !== -1) el.innerHTML = t; else el.textContent = t;
+    });
+    document.querySelectorAll('[data-ph-no][data-ph-en]').forEach(function (el) {
+      el.setAttribute('placeholder', el.getAttribute(lang === 'no' ? 'data-ph-no' : 'data-ph-en'));
+    });
+    q('langToggle').textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    document.title = lang === 'no' ? 'Mia & Teo Studio | Little Montessori Explorers' : 'Mia & Teo Studio | Little Montessori Explorers';
+    renderPreview(); renderList();
+  }
+  function q(id) { return document.getElementById(id); }
+  q('langToggle').addEventListener('click', function () { switchLanguage(currentLang === 'no' ? 'en' : 'no'); });
+
+  /* ===== Hjelpere ===== */
+  var CAT = {
+    natur:    { em: '🌳', no: 'Natur og oppdagelse', en: 'Nature and discovery' },
+    praktisk: { em: '🧺', no: 'Praktisk liv', en: 'Practical life' },
+    tall:     { em: '🔢', no: 'Tall og telling', en: 'Numbers and counting' },
+    farger:   { em: '🎨', no: 'Farger og former', en: 'Colors and shapes' },
+    vennskap: { em: '💗', no: 'Følelser og vennskap', en: 'Feelings and friendship' },
+    rolig:    { em: '🌙', no: 'Rolig stund', en: 'Quiet time' }
+  };
+  function slugify(s) {
+    return (s || '').toLowerCase()
+      .replace(/æ/g, 'ae').replace(/ø/g, 'oe').replace(/å/g, 'aa')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
+  }
+  function toast(msg) { var t = q('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(function () { t.classList.remove('show'); }, 2600); }
+
+  function shrinkImage(file, cb) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      var img = new Image();
+      img.onload = function () {
+        var max = 1280, w = img.width, h = img.height;
+        if (w > max || h > max) { if (w >= h) { h = Math.round(h * max / w); w = max; } else { w = Math.round(w * max / h); h = max; } }
+        var c = document.createElement('canvas'); c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        cb(c.toDataURL('image/jpeg', 0.82));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /* ===== Skjema-tilstand ===== */
+  var coverData = null;
+  var currentSlug = null; // slug lastet inn til redigering
+
+  function val(id) { return q(id).value.trim(); }
+  function collectEpisode() {
+    var title = val('f-title');
+    return {
+      slug: currentSlug || slugify(title),
+      published: q('f-published').checked,
+      category: q('f-category').value,
+      kicker: { no: val('f-kicker'), en: val('f-kicker-en') },
+      title: { no: title, en: val('f-title-en') },
+      lede: { no: val('f-lede'), en: val('f-lede-en') },
+      learnGoal: { no: val('f-goal'), en: val('f-goal-en') },
+      duration: val('f-duration'),
+      orient: q('f-orient').value,
+      videoUrl: val('f-video'),
+      cover: coverData || undefined
+    };
+  }
+
+  function renderPreview() {
+    var e = collectEpisode();
+    var cat = CAT[e.category] || CAT.natur;
+    var thumb = q('preview').querySelector('.thumb');
+    var existing = thumb.querySelector('img');
+    if (existing) existing.remove();
+    var emoji = thumb.querySelector('.emoji');
+    if (e.cover) {
+      var im = document.createElement('img'); im.src = e.cover; thumb.insertBefore(im, thumb.firstChild);
+      emoji.style.display = 'none';
+    } else { emoji.style.display = ''; emoji.textContent = cat.em; }
+    q('pvTitle').textContent = pick(e.title) || L('Episodetittel', 'Episode title');
+    q('pvLede').textContent = pick(e.lede) || L(cat.no, cat.en);
+    var dur = q('pvDur'); if (e.duration) { dur.style.display = ''; dur.textContent = e.duration; } else dur.style.display = 'none';
+    var goal = q('pvGoal'); var g = pick(e.learnGoal);
+    if (g) { goal.style.display = ''; goal.textContent = '🎯 ' + g; } else goal.style.display = 'none';
+  }
+  ['f-title','f-title-en','f-kicker','f-kicker-en','f-lede','f-lede-en','f-goal','f-goal-en','f-duration','f-category','f-orient','f-video']
+    .forEach(function (id) { q(id).addEventListener('input', renderPreview); });
+  q('f-cover').addEventListener('change', function () {
+    var f = this.files && this.files[0]; if (!f) return;
+    shrinkImage(f, function (d) { coverData = d; renderPreview(); });
+  });
+
+  function clearForm() {
+    currentSlug = null; coverData = null;
+    ['f-title','f-title-en','f-kicker','f-kicker-en','f-lede','f-lede-en','f-goal','f-goal-en','f-duration','f-video'].forEach(function (id) { q(id).value = ''; });
+    q('f-cover').value = ''; q('f-category').value = 'natur'; q('f-orient').value = 'landscape'; q('f-published').checked = true;
+    renderPreview();
+  }
+  q('newBtn').addEventListener('click', clearForm);
+
+  /* ===== API ===== */
+  var pw = null;
+  function askPassword() { if (pw) return pw; pw = prompt(L('Skriv inn passordet for å lagre:', 'Enter the password to save:')); return pw; }
+
+  var episodes = [];
+  function refreshList(then) {
+    fetch('/api/episode')
+      .then(function (r) { return r.json(); })
+      .then(function (d) { episodes = (d && d.episodes) || []; })
+      .catch(function () { episodes = []; })
+      .then(function () { renderList(); if (then) then(); });
+  }
+  function renderList() {
+    var box = q('epList');
+    if (!episodes.length) { box.innerHTML = '<div class="empty">' + L('Ingen episoder ennå. Lag den første!', 'No episodes yet. Make the first one!') + '</div>'; return; }
+    box.innerHTML = '';
+    episodes.forEach(function (e) {
+      var cat = CAT[e.category] || CAT.natur;
+      var b = document.createElement('button'); b.className = 'ep-item'; b.type = 'button';
+      var pub = e.published !== false;
+      b.innerHTML = '<span class="em">' + cat.em + '</span>' +
+        '<span class="meta"><b></b><small>' + (e.duration ? e.duration + ' · ' : '') + (isEn() ? cat.en : cat.no) + '</small></span>' +
+        '<span class="tag ' + (pub ? 'pub' : 'draft') + '">' + (pub ? L('Publisert', 'Live') : L('Utkast', 'Draft')) + '</span>';
+      b.querySelector('b').textContent = pick(e.title) || e.slug;
+      b.addEventListener('click', function () { openEpisode(e.slug); });
+      box.appendChild(b);
+    });
+  }
+  function openEpisode(slug) {
+    fetch('/api/episode?slug=' + encodeURIComponent(slug) + '&t=' + Date.now())
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        var e = d && d.episode; if (!e) return;
+        currentSlug = e.slug; coverData = e.cover || null;
+        q('f-category').value = e.category || 'natur';
+        q('f-duration').value = e.duration || '';
+        q('f-orient').value = e.orient || 'landscape';
+        q('f-video').value = e.videoUrl || '';
+        q('f-published').checked = e.published !== false;
+        q('f-title').value = (e.title && e.title.no) || ''; q('f-title-en').value = (e.title && e.title.en) || '';
+        q('f-kicker').value = (e.kicker && e.kicker.no) || ''; q('f-kicker-en').value = (e.kicker && e.kicker.en) || '';
+        q('f-lede').value = (e.lede && e.lede.no) || ''; q('f-lede-en').value = (e.lede && e.lede.en) || '';
+        q('f-goal').value = (e.learnGoal && e.learnGoal.no) || ''; q('f-goal-en').value = (e.learnGoal && e.learnGoal.en) || '';
+        q('f-cover').value = '';
+        renderPreview();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+  }
+  q('saveBtn').addEventListener('click', function () {
+    var e = collectEpisode();
+    if (!e.title.no) { toast(L('Skriv en tittel først', 'Add a title first')); return; }
+    e.slug = currentSlug || slugify(e.title.no);
+    if (!e.slug || e.slug.length < 3) { toast(L('Tittelen gir ingen gyldig adresse', 'Title gives no valid address')); return; }
+    var p = askPassword(); if (!p) return;
+    fetch('/api/episode', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'save', episode: e, password: p }) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.ok) { currentSlug = d.slug; toast(L('☁️ Lagret! Vises i Lek & Lær om litt.', '☁️ Saved! Appears in Play & Learn shortly.')); refreshList(); }
+        else if (d && d.error === 'bad_password') { pw = null; toast(L('Feil passord', 'Wrong password')); }
+        else if (d && d.error === 'too_large') { toast(L('Bildet er for stort', 'Image too large')); }
+        else { toast(L('Kunne ikke lagre', 'Could not save')); }
+      })
+      .catch(function () { toast(L('Nettverksfeil', 'Network error')); });
+  });
+  q('deleteBtn').addEventListener('click', function () {
+    if (!currentSlug) { toast(L('Ingen episode er åpen', 'No episode open')); return; }
+    if (!confirm(L('Slette denne episoden?', 'Delete this episode?'))) return;
+    var p = askPassword(); if (!p) return;
+    fetch('/api/episode', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'delete', slug: currentSlug, password: p }) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.ok) { toast(L('Slettet', 'Deleted')); clearForm(); refreshList(); }
+        else if (d && d.error === 'bad_password') { pw = null; toast(L('Feil passord', 'Wrong password')); }
+        else { toast(L('Kunne ikke slette', 'Could not delete')); }
+      });
+  });
+
+  /* ===== Oversett (valgfritt, samme /api/translate som resten) ===== */
+  q('translateBtn').addEventListener('click', function () {
+    var pairs = [['f-title','f-title-en'],['f-kicker','f-kicker-en'],['f-goal','f-goal-en'],['f-lede','f-lede-en']];
+    var jobs = pairs.filter(function (p) { return val(p[0]) && !val(p[1]); });
+    if (!jobs.length) { toast(L('Ingenting å oversette', 'Nothing to translate')); return; }
+    var texts = jobs.map(function (p) { return val(p[0]); });
+    toast(L('Oversetter…', 'Translating…'));
+    fetch('/api/translate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ texts: texts, to: 'en' }) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        var tr = d && d.translations;
+        if (!tr) { toast(L('Oversettelse feilet', 'Translation failed')); return; }
+        jobs.forEach(function (p, i) { var t = tr[texts[i]] || tr[i]; if (t) q(p[1]).value = t; });
+        renderPreview(); toast(L('✨ Oversatt', '✨ Translated'));
+      })
+      .catch(function () { toast(L('Oversettelse feilet (krever innlogging)', 'Translation failed (login required)')); });
+  });
+
+  /* ===== Scene-planlegger ===== */
+  var MASTER = document.getElementById('masterPrompt').value;
+  function buildPlan(topic, n) {
+    topic = topic || (isEn() ? 'a small everyday discovery' : 'en liten hverdagsoppdagelse');
+    var beats = [
+      'Opening wide shot: Mia and Teo arrive together, happy and curious, introducing the theme of "' + topic + '".',
+      'Mia notices something about "' + topic + '" and points it out; Teo leans in, intrigued.',
+      'Teo tries it himself, step by step, learning through play (Montessori style, hands-on).',
+      'A gentle mistake or surprise happens; the children stay calm and try again together.',
+      'They succeed and celebrate softly; a ladybug or butterfly shares the little moment.',
+      'Mia and Teo repeat the key idea slowly so it sinks in, looking warmly at the viewer.',
+      'Wind-down: the children tidy up and reflect on what they learned about "' + topic + '".',
+      'Closing shot: Mia and Teo wave goodbye in the sunny meadow, warm and reassuring.'
+    ];
+    var lines = [];
+    lines.push('=== ' + (isEn() ? 'MIA & TEO EPISODE, SHOT LIST' : 'MIA & TEO EPISODE, SCENELISTE') + ' ===');
+    lines.push((isEn() ? 'Topic: ' : 'Tema: ') + topic);
+    lines.push('');
+    lines.push('>> ' + (isEn() ? 'Use the same official reference image for every shot. Paste each block into your image-to-video tool.' : 'Bruk samme offisielle referansebilde for hvert klipp. Lim hver blokk inn i bilde-til-video-verktøyet.'));
+    lines.push('');
+    for (var i = 0; i < n; i++) {
+      var beat = beats[Math.min(i, beats.length - 1)];
+      if (i === n - 1) beat = beats[beats.length - 1];
+      lines.push('----- SCENE ' + (i + 1) + '/' + n + ' -----');
+      lines.push(MASTER);
+      lines.push('');
+      lines.push('SCENE ACTION: ' + beat);
+      lines.push('Camera: gentle, slow moves. Mood: calm, warm, safe. Audio: soft playful score, birdsong. Duration: 6-8s.');
+      lines.push('');
+    }
+    return lines.join('\n');
+  }
+  q('planBtn').addEventListener('click', function () {
+    var n = parseInt(q('plan-count').value, 10) || 5;
+    q('planOut').value = buildPlan(val('plan-topic'), n);
+    toast(L('🪄 Prompter laget', '🪄 Prompts ready'));
+  });
+
+  /* ===== Kopier-knapper ===== */
+  document.querySelectorAll('.copy-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var el = document.querySelector(btn.getAttribute('data-copy')); if (!el) return;
+      el.select(); el.setSelectionRange(0, 999999);
+      try { document.execCommand('copy'); } catch (e) {}
+      if (navigator.clipboard) { navigator.clipboard.writeText(el.value).catch(function () {}); }
+      toast(L('Kopiert', 'Copied'));
+    });
+  });
+
+  /* ===== Init ===== */
+  if (currentLang === 'en') switchLanguage('en');
+  renderPreview();
+  refreshList(function () {
+    var h = (location.hash || '').replace('#', '');
+    if (h) openEpisode(h);
+  });
+  try { localStorage.setItem('lme-mia-teo-studio-bruker', '1'); } catch (e) {}
+</script>
+
+<script src="/js/lme-visibility.js?v=8" defer></script>
+<script src="/js/lme-account.js?v=8" defer></script>
+<script src="/js/renate-widget.js?v=3" defer></script>
+<script>window.LME_REQUIRES="sub";window.LME_GATE_TITLE="Mia & Teo Studio er for medlemmer";window.LME_GATE_URL="/medlemskap";</script>
+<script src="/js/lme-gate.js" defer></script>
+</body>
+</html>

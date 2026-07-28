@@ -762,6 +762,20 @@
   </div>
 </section>
 
+<!-- ============ HYLLE: FILMER (dynamisk fra Mia & Teo Studio) ============ -->
+<section class="shelf-wrap" id="filmer" style="display:none;">
+  <div class="world-head">
+    <div class="wbg" style="background-image:url('images/hero_learning_tree.webp')"></div>
+    <div class="wscrim"></div>
+    <div class="wcopy">
+      <h2 data-no="Filmer med Mia &amp; Teo" data-en="Films with Mia &amp; Teo">Filmer med Mia &amp; Teo</h2>
+      <p data-no="Animerte læringsepisoder i Pixar-stil" data-en="Animated learning episodes in Pixar style">Animerte læringsepisoder i Pixar-stil</p>
+    </div>
+    <span class="world-tag" data-no="Trykk for å spille" data-en="Tap to play">Trykk for å spille</span>
+  </div>
+  <div class="shelf" id="filmerShelf"></div>
+</section>
+
 <!-- ============ HYLLE: EVENTYR (KOMMER SNART) ============ -->
 <section class="shelf-wrap" id="eventyr">
   <div class="world-head">
@@ -1450,6 +1464,79 @@
     tile.addEventListener('click', () => openBook(tile.dataset.book));
   });
 </script>
+
+  <!-- ===== Dynamiske filmer fra Mia & Teo Studio ===== -->
+  <script>
+  (function () {
+    var CATEM = { natur:'🌳', praktisk:'🧺', tall:'🔢', farger:'🎨', vennskap:'💗', rolig:'🌙' };
+    var CATCLS = { natur:'cat-lime', praktisk:'cat-gul', tall:'cat-bla', farger:'cat-pink', vennskap:'cat-pink', rolig:'cat-lilla' };
+    function isPlayable(u) { return /\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(u || ''); }
+    function editMode() { return /[#?&]rediger\b/i.test(location.href); }
+    function esc(s) { return ('' + (s || '')).replace(/[&<>"]/g, function (c) { return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' })[c]; }); }
+
+    fetch('/api/episode')
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        var list = ((d && d.episodes) || []).filter(function (e) { return e && e.slug && e.published !== false; });
+        var section = document.getElementById('filmer');
+        var shelf = document.getElementById('filmerShelf');
+        if (!section || !shelf) return;
+        if (!list.length) { if (editMode()) section.style.display = ''; return; }
+        // Hent hver episode fullt ut (listen mangler videoUrl/plakat)
+        Promise.all(list.map(function (e) {
+          return fetch('/api/episode?slug=' + encodeURIComponent(e.slug) + '&t=' + Date.now())
+            .then(function (r) { return r.json(); })
+            .then(function (d2) { return (d2 && d2.episode) || null; })
+            .catch(function () { return null; });
+        })).then(function (eps) {
+          eps = eps.filter(function (e) { return e && e.videoUrl; });
+          if (!eps.length) { if (editMode()) section.style.display = ''; return; }
+          eps.forEach(function (e) {
+            var em = CATEM[e.category] || '🎬';
+            var titleNo = (e.title && e.title.no) || e.slug;
+            var titleEn = (e.title && e.title.en) || titleNo;
+            var goalNo = (e.learnGoal && e.learnGoal.no) || (e.kicker && e.kicker.no) || '';
+            var goalEn = (e.learnGoal && e.learnGoal.en) || goalNo;
+            var descNo = goalNo ? '🎯 ' + goalNo : '';
+            var descEn = goalEn ? '🎯 ' + goalEn : '';
+            var ledeNo = (e.lede && e.lede.no) || goalNo;
+            var ledeEn = (e.lede && e.lede.en) || descEn || ledeNo;
+
+            var btn = document.createElement('button');
+            btn.className = 'tile'; btn.type = 'button';
+            var thumb = e.cover
+              ? '<div class="tile-thumb"><img class="cover" src="' + esc(e.cover) + '" alt="">'
+              : '<div class="tile-thumb"><div class="tile-cat ' + (CATCLS[e.category] || 'cat-pink') + '">' + em + '</div>';
+            thumb += '<span class="tile-play"><span>▶</span></span>' +
+                     (e.duration ? '<span class="tile-dur">' + esc(e.duration) + '</span>' : '') + '</div>';
+            btn.innerHTML = thumb +
+              '<div class="tile-body">' +
+              '<h3 data-no="' + esc(titleNo) + '" data-en="' + esc(titleEn) + '">' + esc(document.documentElement.lang === 'en' ? titleEn : titleNo) + '</h3>' +
+              '<p data-no="' + esc(descNo || ledeNo) + '" data-en="' + esc(descEn || ledeEn) + '">' + esc(document.documentElement.lang === 'en' ? (descEn || ledeEn) : (descNo || ledeNo)) + '</p>' +
+              '</div>';
+            btn.addEventListener('click', function () {
+              if (isPlayable(e.videoUrl) && typeof window.openPlayer === 'function') {
+                window.openPlayer({ src: e.videoUrl, poster: e.cover, orient: e.orient || 'landscape', titleNo: titleNo, titleEn: titleEn, descNo: ledeNo, descEn: ledeEn });
+              } else if (e.videoUrl) {
+                window.open(e.videoUrl, '_blank', 'noopener');
+              }
+            });
+            shelf.appendChild(btn);
+          });
+          section.style.display = '';
+          // Legg til en snarvei-chip
+          var chips = document.querySelector('.chips');
+          if (chips && !document.getElementById('chipFilmer')) {
+            var a = document.createElement('a');
+            a.className = 'chip'; a.id = 'chipFilmer'; a.href = '#filmer';
+            a.innerHTML = '<span class="ic">🎬</span><span data-no="Filmer" data-en="Films">' + (document.documentElement.lang === 'en' ? 'Films' : 'Filmer') + '</span>';
+            chips.insertBefore(a, chips.firstChild);
+          }
+        });
+      })
+      .catch(function () {});
+  })();
+  </script>
 
   <script src="/js/page-editor.js" defer></script>
 <script src="/js/lme-visibility.js?v=8" defer></script>
