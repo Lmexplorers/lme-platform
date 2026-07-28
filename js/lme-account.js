@@ -12,16 +12,19 @@
    Endre kontoknappen KUN her — den gjelder da alle sidene.
    ========================================================= */
 
-/* Last den anonyme funnel-sporingen (Ads-funnel) på alle sider.
-   Egen fil, kjører uavhengig av kontoknappen. */
+/* Last måling på alle sider: anonym funnel-sporing (lme-track.js) og
+   samtykke-boks som styrer Meta-pixelen (lme-consent.js). Egne filer,
+   kjører uavhengig av kontoknappen. */
 (function () {
   try {
     if (window.__lmeTrackLoaded) return;
     window.__lmeTrackLoaded = true;
-    var s = document.createElement("script");
-    s.src = "/js/lme-track.js?v=1";
-    s.defer = true;
-    (document.head || document.documentElement).appendChild(s);
+    ["/js/lme-track.js?v=1", "/js/lme-consent.js?v=1"].forEach(function (src) {
+      var s = document.createElement("script");
+      s.src = src;
+      s.defer = true;
+      (document.head || document.documentElement).appendChild(s);
+    });
   } catch (e) {}
 })();
 
