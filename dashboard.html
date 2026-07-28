@@ -1628,7 +1628,7 @@
     </nav>
 
     <div class="header-right">
-      <a href="/butikk" class="btn-header-pill">🛍️ Butikk</a>
+      <a href="/butikk" data-en-href="/shop" class="btn-header-pill">🛍️ Butikk</a>
       <a href="/spor-renate-ai" class="btn-ai">
         <span class="avatar">R</span>
         <span>Spør Renate AI ↗</span>
@@ -1720,7 +1720,7 @@
       </div>
       <span class="cta-arrow">→</span>
     </a>
-    <a href="/butikk" class="hero-cta-card hero-cta-shop" style="text-decoration:none;color:inherit;">
+    <a href="/butikk" data-en-href="/shop" class="hero-cta-card hero-cta-shop" style="text-decoration:none;color:inherit;">
       <span class="cta-icon">🛍️</span>
       <div class="cta-body">
         <span class="cta-kicker">UTFORSK BUTIKKEN</span>
@@ -2181,8 +2181,7 @@
         <div class="body">
           <h4>LME <em>Butikk</em></h4>
           <p>Bøker, arbeidsbøker og utskrivbare ressurser</p>
-          <a href="/butikk" class="btn-sm">Se butikk →</a>
-          <a href="/shop" class="btn-sm" style="display:flex;width:fit-content;margin-top:8px;">🇬🇧 English shop →</a>
+          <a href="/butikk" data-en-href="/shop" class="btn-sm">Se butikk →</a>
         </div>
       </article>
 
@@ -2496,6 +2495,11 @@
       } else {
         el.setAttribute(attr, value);
       }
+    });
+    // Bytt butikk-lenker til den engelske butikken (/shop) i engelsk modus.
+    document.querySelectorAll('a[data-en-href]').forEach(function(a){
+      if (!a.dataset.noHref) a.dataset.noHref = a.getAttribute('href');
+      a.setAttribute('href', newLang === 'en' ? a.getAttribute('data-en-href') : a.dataset.noHref);
     });
     window.LME_CURRENT_LANG = newLang;
     btn.textContent = newLang === 'en' ? '🇳🇴 Norsk' : '🇬🇧 English';
