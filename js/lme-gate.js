@@ -19,13 +19,29 @@
     return (window.LME_CURRENT_LANG === "en") ? en : no;
   }
 
+  /* Velg tekst etter språk. Mangler engelsk, faller vi tilbake til norsk. */
+  function pick(no, en) {
+    return (window.LME_CURRENT_LANG === "en") ? (en || no) : no;
+  }
+
   function showGate(loggedIn) {
     if (document.getElementById("lme-gate")) return;
     var url = window.LME_GATE_URL || "/oppgrader";
-    var title = window.LME_GATE_TITLE || txt("Dette er en betalt funksjon", "This is a paid feature");
-    var body = loggedIn
-      ? txt("Verktøyet krever et aktivt abonnement.", "This tool requires an active subscription.")
-      : txt("Logg inn eller velg en plan for å bruke verktøyet.", "Log in or choose a plan to use this tool.");
+    var title = pick(window.LME_GATE_TITLE, window.LME_GATE_TITLE_EN) ||
+      txt("Dette er en betalt funksjon", "This is a paid feature");
+    var body = (window.LME_GATE_BODY || window.LME_GATE_BODY_EN)
+      ? pick(window.LME_GATE_BODY, window.LME_GATE_BODY_EN)
+      : (loggedIn
+        ? txt("Verktøyet krever et aktivt abonnement.", "This tool requires an active subscription.")
+        : txt("Logg inn eller velg en plan for å bruke verktøyet.", "Log in or choose a plan to use this tool."));
+    var cta = pick(window.LME_GATE_CTA, window.LME_GATE_CTA_EN) ||
+      txt("Se planene →", "See the plans →");
+    // Valgfri sekundærlenke (f.eks. "Til butikken" for enkeltkjøp).
+    var altUrl = window.LME_GATE_ALT_URL || "";
+    var altLabel = altUrl ? pick(window.LME_GATE_ALT, window.LME_GATE_ALT_EN) : "";
+    var altHtml = (altUrl && altLabel)
+      ? '<div style="margin-top:14px"><a href="' + altUrl + '" style="color:#E91E89;font-size:15px;font-weight:700;text-decoration:none">' + altLabel + "</a></div>"
+      : "";
     var o = document.createElement("div");
     o.id = "lme-gate";
     o.style.cssText = "position:fixed;inset:0;z-index:99999;background:rgba(255,247,244,.96);display:grid;place-items:center;padding:24px;text-align:center;font-family:inherit;";
@@ -35,7 +51,8 @@
       '<h2 style="font-family:var(--font-head,inherit);color:#E91E89;margin:0 0 8px;font-size:22px">' + title + "</h2>" +
       '<p style="color:#5a4750;line-height:1.6;margin:0 0 22px">' + body + "</p>" +
       '<a href="' + url + '" style="display:inline-block;background:linear-gradient(120deg,#E91E89,#ff5fb0);color:#fff;font-weight:800;text-decoration:none;padding:13px 28px;border-radius:999px;box-shadow:0 10px 24px rgba(233,30,137,.28)">' +
-      txt("Se planene →", "See the plans →") + "</a>" +
+      cta + "</a>" +
+      altHtml +
       '<div style="margin-top:14px"><a href="/dashboard" style="color:#9a8790;font-size:14px;text-decoration:none">' + txt("← Tilbake", "← Back") + "</a></div>" +
       "</div>";
     document.body.appendChild(o);
