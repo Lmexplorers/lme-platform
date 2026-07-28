@@ -15,6 +15,7 @@
 
 import { sendOppskriftMail, sendOwnerSaleNotice } from "../_lib/oppskrift-mail.js";
 import { PATTERN_LINKS } from "../_lib/pattern-links.js";
+import { bumpToday } from "../_lib/track.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -78,6 +79,8 @@ export async function onRequestPost(context) {
     // Bare oppskrift-kjøp håndteres her. Alt annet ignoreres (200 OK).
     if (pat && email && obj.payment_status !== "unpaid") {
       const nm = (obj.customer_details && obj.customer_details.name) || "";
+      // Tell fullført kjøp i funnel-analysen (påvirker ingenting annet).
+      try { await bumpToday(env, { purchase: 1 }, {}); } catch (eA) {}
       await sendOppskriftMail(env, { to: email, name: nm, lang: pat.lang, kind: "levering", pid: pat.p });
       // Kort salgs-varsel til Renate.
       try {

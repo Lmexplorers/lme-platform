@@ -11,6 +11,23 @@
    - Tospråklig: følger window.LME_CURRENT_LANG og språkbytte.
    Endre kontoknappen KUN her — den gjelder da alle sidene.
    ========================================================= */
+
+/* Last måling på alle sider: anonym funnel-sporing (lme-track.js) og
+   samtykke-boks som styrer Meta-pixelen (lme-consent.js). Egne filer,
+   kjører uavhengig av kontoknappen. */
+(function () {
+  try {
+    if (window.__lmeTrackLoaded) return;
+    window.__lmeTrackLoaded = true;
+    ["/js/lme-track.js?v=1", "/js/lme-consent.js?v=1"].forEach(function (src) {
+      var s = document.createElement("script");
+      s.src = src;
+      s.defer = true;
+      (document.head || document.documentElement).appendChild(s);
+    });
+  } catch (e) {}
+})();
+
 (function () {
   // Samme kontoknapp for ALLE medlemmer på ALLE sider. Sider som hadde sin
   // egen kontomeny får den skjult (CSS under), så alle ser nøyaktig det samme.
