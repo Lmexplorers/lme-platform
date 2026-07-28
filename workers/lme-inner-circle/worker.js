@@ -1,7 +1,7 @@
 // LME Inner Circle + Auth + Media + Betaling + Affiliate — Worker API v2.0
 // ========================================================================
 // EKTE innlogging: e-post + passord (PBKDF2-hashing), sesjoner.
-// NYTT i v2.0: medlemskapssalg med Stripe (7 dagers prøveperiode),
+// NYTT i v2.0: medlemskapssalg med Stripe (prøveperiode styres av PROVETID_DAGER, nå 0),
 // affiliate-program med provisjon, velkomst-epost via MailerLite og
 // admin-dashbord for VIP.
 //
@@ -32,7 +32,7 @@ const PLANS = {
   pro:     { tier:'pro',     navn:'Pro',    belop:119700 },
   vip:     { tier:'vip',     navn:'VIP',    belop:199700 },
 };
-const PROVETID_DAGER = 7;
+const PROVETID_DAGER = 0; // 0 = ingen prøveperiode; medlemmer betaler fra dag én
 
 const MEDIESIDE = `<!DOCTYPE html>
 <html lang="no">
@@ -426,7 +426,7 @@ ${SIDE_STIL}
     <span class="kick" data-no="LME Inner Circle" data-en="LME Inner Circle">LME Inner Circle</span>
     <h1 data-no="Bli med i Inner Circle 💛" data-en="Join the Inner Circle 💛">Bli med i Inner Circle 💛</h1>
     <p data-no="Inne i Inner Circle får du hele LME på ett sted: alle kursene, hele biblioteket og ressursene, alle gruppene og fellesrommet, og Renate AI du kan spørre når du vil. Nytt innhold og nye ressurser hver måned, pluss en månedlig medlemssending fra meg. Med Pro får du også skaperverktøyene i Creative Academy, så du kan lære, skape og vokse i samme flyt." data-en="Inside the Inner Circle you get all of LME in one place: every course, the full library and resources, all the groups and the shared room, and Renate AI to ask whenever you like. New content and new resources every month, plus a monthly member broadcast from me. With Pro you also get the creator tools in Creative Academy, so you can learn, create and grow in one flow.">Inne i Inner Circle får du hele LME på ett sted: alle kursene, hele biblioteket og ressursene, alle gruppene og fellesrommet, og Renate AI du kan spørre når du vil. Nytt innhold og nye ressurser hver måned, pluss en månedlig medlemssending fra meg. Med Pro får du også skaperverktøyene i Creative Academy, så du kan lære, skape og vokse i samme flyt.</p>
-    <div class="prove" data-no="🎁 Prøv gratis i 7 dager. Du kan avslutte når som helst i prøveperioden, helt uten kostnad." data-en="🎁 Try free for 7 days. Cancel anytime during the trial, completely free.">🎁 Prøv gratis i 7 dager. Du kan avslutte når som helst i prøveperioden, helt uten kostnad.</div>
+    <div class="prove" data-no="🌸 Full tilgang med en gang. Ingen binding, si opp når du vil." data-en="🌸 Full access right away. No lock-in, cancel whenever you want.">🌸 Full tilgang med en gang. Ingen binding, si opp når du vil.</div>
   </div>
 
   <div class="planer">
@@ -439,7 +439,7 @@ ${SIDE_STIL}
         <li data-no="Renate AI, spør så mye du vil" data-en="Renate AI, ask as much as you want">Renate AI, spør så mye du vil</li>
         <li data-no="Nye ressurser hver måned" data-en="New resources every month">Nye ressurser hver måned</li>
         <li data-no="Månedlig medlemssending" data-en="Monthly member broadcast">Månedlig medlemssending</li>
-        <li data-no="7 dager gratis prøvetid" data-en="7 day free trial">7 dager gratis prøvetid</li>
+        <li data-no="Ingen binding, si opp når du vil" data-en="No lock-in, cancel whenever you want">Ingen binding, si opp når du vil</li>
       </ul>
       <button class="knapp knapp-hvit" onclick="velgPlan('regular')" data-no="Velg Medlem" data-en="Choose Member">Velg Medlem</button>
     </div>
@@ -487,10 +487,6 @@ ${SIDE_STIL}
       <div class="svar" data-no="Inner Circle er medlemsfellesskapet i LME. Her får du grupper for hver aldersgruppe, live-samlinger, maler, ressurser og støtte fra Renate og andre medlemmer." data-en="Inner Circle is the membership community in LME. You get groups for each age range, live sessions, templates, resources and support from Renate and other members.">Inner Circle er medlemsfellesskapet i LME. Her får du grupper for hver aldersgruppe, live-samlinger, maler, ressurser og støtte fra Renate og andre medlemmer.</div>
     </details>
     <details>
-      <summary data-no="Hvordan fungerer prøveperioden?" data-en="How does the trial work?">Hvordan fungerer prøveperioden?</summary>
-      <div class="svar" data-no="Du får full tilgang i 7 dager uten å betale noe. Avslutter du før prøvetiden er over, blir du ikke belastet. Ellers starter medlemskapet automatisk." data-en="You get full access for 7 days without paying anything. If you cancel before the trial ends, you will not be charged. Otherwise the membership starts automatically.">Du får full tilgang i 7 dager uten å betale noe. Avslutter du før prøvetiden er over, blir du ikke belastet. Ellers starter medlemskapet automatisk.</div>
-    </details>
-    <details>
       <summary data-no="Kan jeg si opp når som helst?" data-en="Can I cancel anytime?">Kan jeg si opp når som helst?</summary>
       <div class="svar" data-no="Ja. Medlemskapet fornyes måned for måned, og du kan avslutte når du vil. Da beholder du tilgangen ut perioden du har betalt for." data-en="Yes. The membership renews month by month and you can cancel whenever you want. You keep access for the period you have paid for.">Ja. Medlemskapet fornyes måned for måned, og du kan avslutte når du vil. Da beholder du tilgangen ut perioden du har betalt for.</div>
     </details>
@@ -508,8 +504,8 @@ ${SIDE_STIL}
 <!-- CHECKOUT-MODAL -->
 <div class="modal-bak skjult" id="modalBak" onclick="if(event.target===this)lukkModal()">
   <div class="modal">
-    <h3 id="modalTittel">Start prøveperioden 🌸</h3>
-    <p data-no="Skriv inn e-posten din, så blir du sendt videre til trygg betaling hos Stripe. Du betaler ingenting de første 7 dagene." data-en="Enter your email and you will be sent to secure checkout with Stripe. You pay nothing for the first 7 days.">Skriv inn e-posten din, så blir du sendt videre til trygg betaling hos Stripe. Du betaler ingenting de første 7 dagene.</p>
+    <h3 id="modalTittel">Start medlemskapet 🌸</h3>
+    <p data-no="Skriv inn e-posten din, så blir du sendt videre til trygg betaling hos Stripe." data-en="Enter your email and you will be sent to secure checkout with Stripe.">Skriv inn e-posten din, så blir du sendt videre til trygg betaling hos Stripe.</p>
     <input type="email" id="ckEpost" placeholder="E-post" autocomplete="email">
     <button class="knapp knapp-rosa" style="width:100%" id="ckKnapp" onclick="startCheckout()" data-no="Fortsett til betaling" data-en="Continue to checkout">Fortsett til betaling</button>
     <div class="feil" id="ckFeil"></div>
@@ -524,7 +520,7 @@ ${SIDE_STIL}
   function velgPlan(p){
     valgtPlan = p;
     var en = (window.__lmeLang==='en');
-    document.getElementById('modalTittel').textContent = (en?'Start your trial of '+PLAN_NAVN_EN[p]:'Start prøveperioden på '+PLAN_NAVN[p])+' 🌸';
+    document.getElementById('modalTittel').textContent = (en?'Start your '+PLAN_NAVN_EN[p]+' membership':'Start medlemskapet '+PLAN_NAVN[p])+' 🌸';
     document.getElementById('ckFeil').textContent='';
     document.getElementById('modalBak').classList.remove('skjult');
   }
@@ -587,7 +583,7 @@ ${SIDE_STIL}
   <div class="takk kort">
     <div class="ikon">🎉</div>
     <h1 data-no="Velkommen til Inner Circle!" data-en="Welcome to the Inner Circle!">Velkommen til Inner Circle!</h1>
-    <p data-no="Betalingen er registrert, og prøveperioden din er i gang. Jeg har sendt deg en velkomst-epost med alt du trenger." data-en="Your payment is registered and your trial has started. I have sent you a welcome email with everything you need.">Betalingen er registrert, og prøveperioden din er i gang. Jeg har sendt deg en velkomst-epost med alt du trenger.</p>
+    <p data-no="Betalingen er registrert, og medlemskapet ditt er i gang. Jeg har sendt deg en velkomst-epost med alt du trenger." data-en="Your payment is registered and your membership has started. I have sent you a welcome email with everything you need.">Betalingen er registrert, og medlemskapet ditt er i gang. Jeg har sendt deg en velkomst-epost med alt du trenger.</p>
     <ul class="steg">
       <li>1️⃣ <span data-no="Opprett kontoen din med samme e-post som du betalte med" data-en="Create your account with the same email you paid with">Opprett kontoen din med samme e-post som du betalte med</span></li>
       <li>2️⃣ <span data-no="Logg inn og utforsk gruppene og mediebiblioteket" data-en="Log in and explore the groups and the media library">Logg inn og utforsk gruppene og mediebiblioteket</span></li>
@@ -1108,13 +1104,13 @@ export default {
           'line_items[0][price_data][unit_amount]': String(plan.belop),
           'line_items[0][price_data][recurring][interval]': 'month',
           'line_items[0][price_data][product_data][name]': 'LME Inner Circle – '+plan.navn,
-          'subscription_data[trial_period_days]': String(PROVETID_DAGER),
           'subscription_data[metadata][tier]': plan.tier,
           'allow_promotion_codes': 'true',
           'success_url': url.origin+'/takk?session_id={CHECKOUT_SESSION_ID}',
           'cancel_url': url.origin+'/medlemskap',
           'metadata[tier]': plan.tier,
         };
+        if(PROVETID_DAGER > 0) params['subscription_data[trial_period_days]'] = String(PROVETID_DAGER);
         if(epost && epost.includes('@')) params['customer_email'] = epost;
         if(affKode){
           params['metadata[affiliate_code]'] = affKode;
