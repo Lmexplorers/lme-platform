@@ -13,6 +13,17 @@
  *   sess:<sid>      -> { uid, email, role }   (HttpOnly-cookie lme_sess)
  */
 
+import { sendWelcome } from "../../_lib/welcome-mail.js";
+import { registerNewsletter } from "../../_lib/newsletter.js";
+
+// Velg språk for automatiske e-poster: body.lang hvis satt, ellers nettleseren.
+function pickLang(body, request) {
+  const b = (body && body.lang || "").toString().toLowerCase();
+  if (b === "en" || b === "no") return b;
+  const al = (request.headers.get("accept-language") || "").toLowerCase();
+  return al.startsWith("en") ? "en" : "no";
+}
+
 // E-poster som automatisk blir eier (ikke kunde, uten abonnement).
 // Kan også settes/utvides med env-variabelen OWNER_EMAILS (komma-separert).
 const OWNER_EMAILS = [
@@ -185,6 +196,15 @@ export async function onRequestPost(context) {
     };
     await env.BUILDER_KV.put(userKey(email), JSON.stringify(user));
     const sid = await createSession(env, user);
+    // Automatisk velkomst når en ny kunde registrerer seg: én velkomst-e-post
+    // med en gang, og påmelding til velkomstserien. Kjøres etter svar (waitUntil)
+    // og feiler stille, så registreringen aldri stopper på e-post. Hoppes over
+    // for eiere (Renate m.fl.), så de slipper velkomst til egne testkontoer.
+    if (role !== "owner" && context.waitUntil) {
+      const lang = pickLang(body, request);
+      context.waitUntil(sendWelcome(env, user, lang).catch(() => {}));
+      context.waitUntil(registerNewsletter(env, email, user.name, lang, "register").catch(() => {}));
+    }
     return json({ ok: true, user: publicUser(user) }, 200, { "Set-Cookie": sessionCookie(sid) });
   }
 
