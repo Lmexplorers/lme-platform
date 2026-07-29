@@ -545,7 +545,12 @@ async function handleBlotatoAccounts(env, origin) {
     return json({ error: "Blotato er ikke koblet til ennå (BLOTATO_API_KEY mangler på workeren)." }, 400, origin);
   }
   try {
-    const r = await fetch(`${BLOTATO_BASE}/accounts`, {
+    // Riktig sti er /v2/users/me/accounts, IKKE /v2/accounts (som ikke finnes
+    // og gir 401). Plattform-siden (functions/api/blotato) ble fikset for
+    // lenge siden, men denne workeren, som appen bruker, hang igjen på det
+    // gale endepunktet. Det er derfor autopublisering fra appen aldri fant
+    // kontoene og aldri la ut noe.
+    const r = await fetch(`${BLOTATO_BASE}/users/me/accounts`, {
       headers: { "blotato-api-key": env.BLOTATO_API_KEY, "Accept": "application/json" },
     });
     const text = await r.text();
