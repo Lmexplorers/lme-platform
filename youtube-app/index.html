@@ -366,6 +366,7 @@
   var SECS = '30';
   var VLANG = LANG;      // språket videoen lages på
   var DATA = null;
+  var OWNER = false;     // eier (Renate) slipper rett inn, uten betaling
 
   function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
   function $(id){ return document.getElementById(id); }
@@ -416,10 +417,29 @@
     if (localStorage.getItem('yt_app_unlocked') === '1') { $('onboarding').style.display='none'; $('app').classList.add('show'); }
   } catch(e){}
 
+  // Eier (og innlogget med tilgang) slipper rett inn, uten betalingsskjerm.
+  fetch('/api/access', { credentials: 'same-origin' })
+    .then(function(r){ return r.json(); })
+    .then(function(a){
+      if (a && (a.plan === 'owner' || a.tier === 'owner')) {
+        OWNER = true;
+        try { localStorage.setItem('yt_app_unlocked','1'); } catch(e){}
+        $('onboarding').style.display = 'none';
+        $('app').classList.add('show');
+        updatePlan();
+      }
+    })
+    .catch(function(){});
+
   function updatePlan(){
     var unlocked = false; try{ unlocked = localStorage.getItem('yt_app_unlocked')==='1'; }catch(e){}
-    $('planText').setAttribute('data-no', unlocked ? 'Full tilgang er aktivert. Lag så mange videoer du vil.' : 'Prøveversjon. Lag din første video gratis.');
-    $('planText').setAttribute('data-en', unlocked ? 'Full access is active. Make as many videos as you like.' : 'Trial version. Make your first video for free.');
+    if (OWNER) {
+      $('planText').setAttribute('data-no', 'Eier, full tilgang.');
+      $('planText').setAttribute('data-en', 'Owner, full access.');
+    } else {
+      $('planText').setAttribute('data-no', unlocked ? 'Full tilgang er aktivert. Lag så mange videoer du vil.' : 'Prøveversjon. Lag din første video gratis.');
+      $('planText').setAttribute('data-en', unlocked ? 'Full access is active. Make as many videos as you like.' : 'Trial version. Make your first video for free.');
+    }
     applyLang();
   }
 
