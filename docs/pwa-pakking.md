@@ -55,18 +55,24 @@ mye ekte innhold og funksjon. De enkelte appene (Reel, YouTube) kan bli avvist
 hvis de føles for tynne. Da er planen å sende inn LME-appen som hovedapp, og
 heller markedsføre Reel og YouTube som deler av den.
 
-## Betaling i appene
+## Betaling i appene (viktig)
 
-Betalingsknappen ("Kom i gang for kr 79") bruker Stripe-betalingslenker og
-fungerer likt i den pakkede appen som på nettet. Etter betaling sendes brukeren
-tilbake til appen med `?paid=1` og får full tilgang.
+All betaling skjer på nettsiden via Stripe, aldri som kjøp inne i app-en. Dette
+er et bevisst valg fra Renate: Apple og Google tar normalt opptil 30 % av kjøp
+som gjøres inne i app-en (in-app purchase), og LME skal ikke gi bort noe av
+salget.
 
-Apple og Google tar normalt provisjon (opptil 30 %) på kjøp som skjer inne i
-appen. For digitale kjøp som dette vil de ofte at du bruker deres egen
-betalingsløsning (in-app purchase) i stedet for Stripe. Dette må sjekkes mot
-gjeldende regler før innsending, så vi ikke blir avvist. Det enkleste er ofte å
-la selve kjøpet skje på nettsiden (utenfor appen), og la appen være gratis å
-installere.
+Derfor gjelder følgende, uten unntak:
+
+- App-en er gratis å installere.
+- "Kom i gang"-knappen sender brukeren til betaling på nettet (Stripe), utenfor
+  app-en. Etter betaling kommer de tilbake med `?paid=1` og får full tilgang.
+- Ingen del av salget går gjennom Apple eller Google.
+
+Merk: Apple kan være kritiske til apper som sender brukeren ut for å betale for
+digitalt innhold. Den tryggeste innsendingen er derfor at kjøpet skjer på
+nettsiden (som nå), og at app-en presenteres som et verktøy du logger inn i. Vi
+holder kjøpsflyten på nettet uansett, så hele salget blir ditt.
 
 ## Sjekkliste
 
