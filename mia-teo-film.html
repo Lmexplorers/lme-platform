@@ -162,7 +162,7 @@
   function enc(s){return encodeURIComponent(s||'');}
 
   async function genStill(imagePrompt){
-    var res=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({text:imagePrompt,character:'both',lang:currentLang,platform:'youtube'})}).then(function(r){return r.json();});
+    var res=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({text:imagePrompt,character:'both',lang:currentLang,platform:'film',quality:'medium'})}).then(function(r){return r.json();});
     if(!res||res.error||!res.url) throw new Error((res&&res.error)||'image');
     return res.url;
   }

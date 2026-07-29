@@ -65,6 +65,7 @@ function sizeFor(platform) {
   switch (String(platform || "").toLowerCase()) {
     case "pinterest": return "1024x1536";
     case "tiktok": return "1024x1536";
+    case "film": case "youtube": case "landscape": return "1536x1024"; // kinolerret 16:9
     default: return "1024x1024"; // instagram, facebook, generelt
   }
 }
@@ -108,14 +109,14 @@ async function fetchTimeout(url, opts, ms) {
   finally { clearTimeout(timer); }
 }
 
-async function genOpenAI(env, prompt, size) {
+async function genOpenAI(env, prompt, size, qualityOverride) {
   const key = env.OPENAI_API_KEY || env.IMAGE_OPENAI_KEY || env.IMAGE_API_KEY;
   if (!key) return { error: "OpenAI er ikke koblet til ennå (OPENAI_API_KEY mangler).", status: 400 };
   const base = (env.IMAGE_OPENAI_BASE || env.IMAGE_API_BASE || "https://api.openai.com/v1").replace(/\/$/, "");
   const model = env.IMAGE_OPENAI_MODEL || env.IMAGE_MODEL || "gpt-image-1";
-  // Lav kvalitet er raskt (bakgrunn som uansett animeres til video), og holder
-  // oss innenfor tidsgrensa til plattformen så vi unngår 502.
-  const quality = env.IMAGE_QUALITY || "low";
+  // Lav kvalitet er raskt (bakgrunn som uansett animeres til video). Kalleren kan
+  // be om høyere kvalitet (film) via qualityOverride, innenfor tidsgrensa.
+  const quality = qualityOverride || env.IMAGE_QUALITY || "low";
   let r;
   try {
     r = await fetchTimeout(`${base}/images/generations`, {
@@ -236,10 +237,12 @@ export async function onRequestPost(context) {
 
     const prompt = buildPrompt(body.text, character);
     const size = sizeFor(body.platform);
+    let quality = String(body.quality || "").toLowerCase();
+    if (!["low", "medium", "high"].includes(quality)) quality = "";
 
     let out;
     try {
-      out = await PROVIDERS[provider](env, prompt, size);
+      out = await PROVIDERS[provider](env, prompt, size, quality);
     } catch (e) {
       return json({ error: "Kom ikke i kontakt med bildemotoren.", detail: String(e && e.message || e).slice(0, 200) }, 200);
     }
