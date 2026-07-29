@@ -39,11 +39,18 @@ ALDRI dikt opp garantier, pengene-tilbake-løfter, refusjonsvilkår, priser, rab
 
 const langName = (l) => (l === "en" ? "English" : "norsk (bokmål)");
 
+// Rask modell, samme som "Gjør synlig" (functions/api/ai/repurpose.js), som
+// er bevist å svare raskt nok med produksjonsnøkkelen. Reel Studio brukte før
+// claude-sonnet-5 med en 14s hard timeout, og lengre kilder (som en stor
+// innliming) rakk ikke ferdig i tide, så brukeren fikk "Noe gikk galt".
+// Kan overstyres uten ny utrulling via CONTENT_TEXT_MODEL i Cloudflare.
+const DEFAULT_MODEL = "claude-haiku-4-5-20251001";
+
 // Hard timeout per kall. Uten dette kan et tregt Anthropic-svar henge helt
 // til Cloudflare gir opp og sender sin egen HTML-502 (i stedet for vår rene
 // JSON). Bedre å avbryte selv og feile rent og retry-bart. Samme mønster som
 // functions/api/ai/repurpose.js.
-const CALL_TIMEOUT_MS = 14000;
+const CALL_TIMEOUT_MS = 16000;
 
 async function callClaude(env, system, userPrompt, maxTokens, model) {
   const ctrl = new AbortController();
@@ -59,12 +66,8 @@ async function callClaude(env, system, userPrompt, maxTokens, model) {
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: model || "claude-sonnet-5",
+        model: model || env.CONTENT_TEXT_MODEL || DEFAULT_MODEL,
         max_tokens: maxTokens || 3000,
-        // Skru av utvidet tenkning: for innholdsgenerering trenger vi ikke
-        // resonnering, og tenkningen gjorde kallet så tregt at Pages-funksjonen
-        // rakk å gi opp (HTML-502). Uten den svarer modellen raskt og direkte.
-        thinking: { type: "disabled" },
         system,
         messages: [{ role: "user", content: userPrompt }],
       }),
@@ -82,6 +85,17 @@ async function callClaude(env, system, userPrompt, maxTokens, model) {
   }
   const data = await resp.json();
   return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
+}
+
+// Ett kall kan ryke på en forbigående blipp (timeout, 429/5xx fra Anthropic,
+// nettverk). Prøv en gang til før vi gir opp, så en enkelt hikke ikke gir
+// brukeren "Noe gikk galt".
+async function callClaudeRetry(env, system, userPrompt, maxTokens, model) {
+  try {
+    return await callClaude(env, system, userPrompt, maxTokens, model);
+  } catch (e) {
+    return await callClaude(env, system, userPrompt, maxTokens, model);
+  }
 }
 
 function contentPrompt(b) {
@@ -118,15 +132,14 @@ export async function onRequestPost(context) {
   catch { return json({ error: "Ugyldig JSON" }, 400); }
 
   const system = `${BRAND_CONTEXT}\nDu er LMEs innholdsprodusent. Du lager ferdig, publiseringsklart innhold i akkurat det formatet brukeren velger, i LMEs varme, pedagogiske tone.`;
-  // Alle formater bruker samme modell som resten av plattformen (claude-sonnet-5),
-  // den eneste vi vet fungerer med produksjonsnøkkelen. De nye, litt tyngre
-  // formatene får et lavere token-tak, så kallet holder seg raskt og godt
-  // innenfor tidsgrensen til funksjonen.
+  // Rask modell (samme som "Gjør synlig") for alle formater. De nye, litt
+  // tyngre formatene får et lavere token-tak, så kallet holder seg raskt og
+  // godt innenfor tidsgrensen til funksjonen.
   const fmt = String(body.format || "post");
   const light = (fmt === "explainer" || fmt === "hookreel");
   const maxTokens = light ? 2000 : 3000;
   try {
-    const result = await callClaude(env, system, contentPrompt(body), maxTokens, "claude-sonnet-5");
+    const result = await callClaudeRetry(env, system, contentPrompt(body), maxTokens);
     return json({ result });
   } catch (err) {
     return json({ error: "AI er midlertidig utilgjengelig. Prøv igjen om litt." }, 502);
