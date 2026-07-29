@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<title>Innholdsplan 90 dager — LME</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink: #F8D7DA; --pink-mid: #F5A8B8; --cerise: #E91E89;
+    --lime: #7AAE1F; --yellow: #F7C72E; --cream: #FBF6F0;
+    --ink: #1A1A1A; --grey: #4A4A4A; --line: rgba(26,26,26,0.1);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); color: var(--ink); background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 55%, #F8D7DA 100%); min-height: 100vh; line-height: 1.55; }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); }
+  a { color: inherit; text-decoration: none; }
+
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 13px 20px; background: rgba(255,255,255,0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+  .bar .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--cerise); font-size: 15px; }
+  .bar .brand img { width: 32px; height: 32px; object-fit: contain; }
+  .bar .actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .btn { border: 0; border-radius: 999px; padding: 9px 16px; font-weight: 700; font-family: inherit; cursor: pointer; font-size: 13.5px; white-space: nowrap; }
+  .btn-back { background: #fff; color: var(--ink); border: 1px solid #eedce2; }
+  .btn-lang { background: #FCEFF2; color: #C13D6A; }
+
+  .wrap { max-width: 940px; width: 100%; margin: 0 auto; padding: 32px 20px 70px; }
+  .head { text-align: center; margin-bottom: 30px; }
+  .head .kick { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cerise); }
+  .head h1 { font-size: 34px; margin: 6px 0 8px; }
+  .head p { color: var(--grey); font-size: 16px; max-width: 620px; margin: 0 auto; }
+
+  section.card { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 24px; box-shadow: 0 6px 22px rgba(26,26,26,0.05); margin-bottom: 22px; }
+  section.card > h2 { font-size: 21px; color: var(--cerise); margin-bottom: 4px; }
+  section.card > .sub { color: var(--grey); font-size: 14px; margin-bottom: 16px; }
+
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+  .step { background: var(--cream); border-radius: 14px; padding: 16px; }
+  .step .n { display: inline-flex; width: 26px; height: 26px; border-radius: 50%; background: var(--cerise); color: #fff; font-weight: 700; align-items: center; justify-content: center; font-size: 13px; margin-bottom: 8px; }
+  .step h4 { font-size: 15px; margin-bottom: 4px; }
+  .step p { font-size: 13.5px; color: var(--grey); }
+
+  .rows { display: grid; gap: 10px; }
+  .row { display: grid; grid-template-columns: 120px 1fr; gap: 12px; align-items: start; padding: 12px 14px; background: var(--cream); border-radius: 12px; }
+  .row .k { font-weight: 700; font-family: var(--font-head); font-size: 14px; }
+  .row .v { font-size: 13.5px; color: var(--grey); }
+  @media (max-width: 520px) { .row { grid-template-columns: 1fr; gap: 4px; } }
+
+  .weeks { display: grid; gap: 10px; }
+  .week { display: grid; grid-template-columns: 54px 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; }
+  .week .wn { font-family: var(--font-head); font-weight: 700; color: var(--cerise); font-size: 15px; }
+  .week .wt { font-size: 14.5px; }
+  .week .wg { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+  .wg.find { background: #E8F5D1; color: #4e7a0f; }
+  .wg.sell { background: #FFE1E8; color: #c13d6a; }
+  .wg.build { background: #FFF4D6; color: #a87f00; }
+  .wg.tool { background: #D8EEFF; color: #1f6fae; }
+  @media (max-width: 520px) { .week { grid-template-columns: 40px 1fr; } .week .wg { grid-column: 2; justify-self: start; margin-top: 4px; } }
+
+  .post { border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 12px; }
+  .post .slot { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--cerise); }
+  .post h4 { font-size: 15.5px; margin: 4px 0 6px; }
+  .post .cap { font-size: 14px; color: #2b2b2b; white-space: pre-line; }
+  .post .adapt { font-size: 12.5px; color: var(--grey); margin-top: 8px; border-top: 1px dashed var(--line); padding-top: 8px; }
+  .day-label { font-family: var(--font-head); font-weight: 700; font-size: 16px; margin: 18px 0 10px; color: var(--ink); }
+
+  .promptbox { background: #1f1b24; color: #f4eef7; border-radius: 14px; padding: 16px 18px; font-size: 13.5px; line-height: 1.6; white-space: pre-line; }
+  .temas { display: grid; gap: 6px; margin-top: 12px; }
+  .tema { font-size: 13.5px; color: var(--grey); }
+  .tema b { color: var(--ink); font-family: var(--font-head); }
+
+  .note { font-size: 13px; color: var(--grey); background: #FCEFF2; border-radius: 12px; padding: 12px 14px; }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/dashboard"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <div class="actions">
+      <button class="btn btn-lang" id="lme-lang" type="button">🇬🇧 English</button>
+      <a class="btn btn-back" href="/apper" data-no="‹ Apper" data-en="‹ Apps">‹ Apper</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="head">
+      <span class="kick" data-no="LME" data-en="LME">LME</span>
+      <h1 data-no="Innholdsplan, 90 dager" data-en="Content plan, 90 days">Innholdsplan, 90 dager</h1>
+      <p data-no="Innhold som gjør plattformen synlig og fører folk inn. Lag i Content Studio, gjør søkbart med AI Visibility, publiser til alle plattformene med Blotato." data-en="Content that makes the platform visible and leads people in. Create in Content Studio, make it searchable with AI Visibility, publish to every platform with Blotato.">Innhold som gjør plattformen synlig og fører folk inn. Lag i Content Studio, gjør søkbart med AI Visibility, publiser til alle plattformene med Blotato.</p>
+    </div>
+
+    <section class="card">
+      <h2 data-no="Slik henger det sammen" data-en="How it fits together">Slik henger det sammen</h2>
+      <p class="sub" data-no="Fire deler som jobber sammen. Du lager i batcher, to uker av gangen, så innholdet holder seg ferskt." data-en="Four parts working together. You build in batches, two weeks at a time, so the content stays fresh.">Fire deler som jobber sammen. Du lager i batcher, to uker av gangen, så innholdet holder seg ferskt.</p>
+      <div class="steps">
+        <div class="step"><span class="n">1</span><h4 data-no="Content Studio lager" data-en="Content Studio creates">Content Studio lager</h4><p data-no="Reels, karuseller og innlegg fra planen, på minutter." data-en="Reels, carousels and posts from the plan, in minutes.">Reels, karuseller og innlegg fra planen, på minutter.</p></div>
+        <div class="step"><span class="n">2</span><h4 data-no="AI Visibility gjør søkbart" data-en="AI Visibility makes it findable">AI Visibility gjør søkbart</h4><p data-no="Artikkel, FAQ og schema, så folk finner veien inn fra Google og AI-søk." data-en="Article, FAQ and schema, so people find their way in from Google and AI search.">Artikkel, FAQ og schema, så folk finner veien inn fra Google og AI-søk.</p></div>
+        <div class="step"><span class="n">3</span><h4 data-no="Blotato publiserer" data-en="Blotato publishes">Blotato publiserer</h4><p data-no="Planlegger og legger ut til alle de sju plattformene for deg." data-en="Schedules and posts to all seven platforms for you.">Planlegger og legger ut til alle de sju plattformene for deg.</p></div>
+        <div class="step"><span class="n">4</span><h4 data-no="Du styrer rytmen" data-en="You set the rhythm">Du styrer rytmen</h4><p data-no="Fire innlegg om dagen, i batcher. Kvalitet foran mengde." data-en="Four posts a day, in batches. Quality over quantity.">Fire innlegg om dagen, i batcher. Kvalitet foran mengde.</p></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 data-no="De fire daglige sporene" data-en="The four daily slots">De fire daglige sporene</h2>
+      <p class="sub" data-no="Samme faste struktur hver dag, så det blir lett å lage og lett å følge." data-en="The same fixed structure every day, so it is easy to create and easy to follow.">Samme faste struktur hver dag, så det blir lett å lage og lett å følge.</p>
+      <div class="rows">
+        <div class="row"><span class="k" data-no="Spor 1" data-en="Slot 1">Spor 1</span><span class="v" data-no="Reel eller kort video. Sterk krok, og du lærer bort én liten ting." data-en="Reel or short video. Strong hook, and you teach one small thing.">Reel eller kort video. Sterk krok, og du lærer bort én liten ting.</span></div>
+        <div class="row"><span class="k" data-no="Spor 2" data-en="Slot 2">Spor 2</span><span class="v" data-no="Karusell. Én idé, steg for steg, som folk vil lagre." data-en="Carousel. One idea, step by step, that people want to save.">Karusell. Én idé, steg for steg, som folk vil lagre.</span></div>
+        <div class="row"><span class="k" data-no="Spor 3" data-en="Slot 3">Spor 3</span><span class="v" data-no="Story eller poll. Et spørsmål som skaper engasjement og svar." data-en="Story or poll. A question that sparks engagement and replies.">Story eller poll. Et spørsmål som skaper engasjement og svar.</span></div>
+        <div class="row"><span class="k" data-no="Spor 4" data-en="Slot 4">Spor 4</span><span class="v" data-no="Verdi eller invitasjon. En tanke, et sitat, eller en tydelig oppfordring." data-en="Value or invitation. A thought, a quote, or a clear call to action.">Verdi eller invitasjon. En tanke, et sitat, eller en tydelig oppfordring.</span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 data-no="De sju plattformene og gjenbruk" data-en="The seven platforms and reuse">De sju plattformene og gjenbruk</h2>
+      <p class="sub" data-no="Lag innholdet én gang, tilpass til hver plattform. Ett innhold blir til sju poster." data-en="Make the content once, adapt to each platform. One piece becomes seven posts.">Lag innholdet én gang, tilpass til hver plattform. Ett innhold blir til sju poster.</p>
+      <div class="rows">
+        <div class="row"><span class="k">Instagram</span><span class="v" data-no="Reel, karusell og story. Hjertet i det visuelle." data-en="Reel, carousel and story. The heart of the visuals.">Reel, karusell og story. Hjertet i det visuelle.</span></div>
+        <div class="row"><span class="k">Facebook</span><span class="v" data-no="Samme som Instagram, men litt mer forklarende tekst." data-en="Same as Instagram, but slightly more explanatory text.">Samme som Instagram, men litt mer forklarende tekst.</span></div>
+        <div class="row"><span class="k">TikTok</span><span class="v" data-no="Rå, muntlig, vertikal video. Krok i første sekund." data-en="Raw, spoken, vertical video. Hook in the first second.">Rå, muntlig, vertikal video. Krok i første sekund.</span></div>
+        <div class="row"><span class="k">YouTube</span><span class="v" data-no="Shorts fra samme video, av og til en lengre video." data-en="Shorts from the same video, now and then a longer video.">Shorts fra samme video, av og til en lengre video.</span></div>
+        <div class="row"><span class="k">LinkedIn</span><span class="v" data-no="Proff vinkel. Reisen, lærdommen, bygging av virksomhet." data-en="Professional angle. The journey, the lesson, building a business.">Proff vinkel. Reisen, lærdommen, bygging av virksomhet.</span></div>
+        <div class="row"><span class="k">Threads</span><span class="v" data-no="Kort, samtalepreget tekst. Én tanke om gangen." data-en="Short, conversational text. One thought at a time.">Kort, samtalepreget tekst. Én tanke om gangen.</span></div>
+        <div class="row"><span class="k">X</span><span class="v" data-no="Kort og spisst, av og til. Krok eller ett godt spørsmål." data-en="Short and sharp, now and then. A hook or one good question.">Kort og spisst, av og til. Krok eller ett godt spørsmål.</span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 data-no="90-dagers temaplan" data-en="90-day theme plan">90-dagers temaplan</h2>
+      <p class="sub" data-no="Den første tiden handler om å gjøre plattformen og delene synlige, så folk finner veien inn. App-dagen ligger tidlig som salgsuke." data-en="The early weeks are about making the platform and its parts visible, so people find their way in. The app-day sits early as a sales week.">Den første tiden handler om å gjøre plattformen og delene synlige, så folk finner veien inn. App-dagen ligger tidlig som salgsuke.</p>
+      <div class="weeks">
+        <div class="week"><span class="wn" data-no="Uke 1" data-en="Week 1">Uke 1</span><span class="wt" data-no="Velkommen til LME. Hvem er jeg, og hva er LME som helhet: lær, skap, bli synlig, selg, voks." data-en="Welcome to LME. Who I am, and what LME is as a whole: learn, create, get visible, sell, grow.">Velkommen til LME. Hvem er jeg, og hva er LME som helhet: lær, skap, bli synlig, selg, voks.</span><span class="wg find" data-no="Finn veien inn" data-en="Find the way in">Finn veien inn</span></div>
+        <div class="week"><span class="wn" data-no="Uke 2" data-en="Week 2">Uke 2</span><span class="wt" data-no="App-dagen. Lag din egen app på én dag, uten kode." data-en="The app-day. Build your own app in a day, no code.">App-dagen. Lag din egen app på én dag, uten kode.</span><span class="wg sell" data-no="Selg" data-en="Sell">Selg</span></div>
+        <div class="week"><span class="wn" data-no="Uke 3" data-en="Week 3">Uke 3</span><span class="wt" data-no="LME Montessori. Montessori hjemme, Montessorireisen og kursene." data-en="LME Montessori. Montessori at home, the Montessori journey and the courses.">LME Montessori. Montessori hjemme, Montessorireisen og kursene.</span><span class="wg find" data-no="Finn veien inn" data-en="Find the way in">Finn veien inn</span></div>
+        <div class="week"><span class="wn" data-no="Uke 4" data-en="Week 4">Uke 4</span><span class="wt" data-no="LME Creative Academy. Skap og selg med AI." data-en="LME Creative Academy. Create and sell with AI.">LME Creative Academy. Skap og selg med AI.</span><span class="wg find" data-no="Finn veien inn" data-en="Find the way in">Finn veien inn</span></div>
+        <div class="week"><span class="wn" data-no="Uke 5" data-en="Week 5">Uke 5</span><span class="wt" data-no="Content Studio i praksis. Vis hvor lett innhold blir til." data-en="Content Studio in practice. Show how easily content comes together.">Content Studio i praksis. Vis hvor lett innhold blir til.</span><span class="wg tool" data-no="Vis verktøy" data-en="Show a tool">Vis verktøy</span></div>
+        <div class="week"><span class="wn" data-no="Uke 6" data-en="Week 6">Uke 6</span><span class="wt" data-no="Lek og lær med Mia og Teo. For hele familien." data-en="Play and learn with Mia and Teo. For the whole family.">Lek og lær med Mia og Teo. For hele familien.</span><span class="wg find" data-no="Finn veien inn" data-en="Find the way in">Finn veien inn</span></div>
+        <div class="week"><span class="wn" data-no="Uke 7" data-en="Week 7">Uke 7</span><span class="wt" data-no="Community og Inner Circle. Fellesskapet rundt LME." data-en="Community and Inner Circle. The community around LME.">Community og Inner Circle. Fellesskapet rundt LME.</span><span class="wg build" data-no="Bygg fellesskap" data-en="Build community">Bygg fellesskap</span></div>
+        <div class="week"><span class="wn" data-no="Uke 8" data-en="Week 8">Uke 8</span><span class="wt" data-no="LME Shop. Bøker, arbeidsbøker og ressurser." data-en="LME Shop. Books, workbooks and resources.">LME Shop. Bøker, arbeidsbøker og ressurser.</span><span class="wg sell" data-no="Selg" data-en="Sell">Selg</span></div>
+        <div class="week"><span class="wn" data-no="Uke 9" data-en="Week 9">Uke 9</span><span class="wt" data-no="Bli synlig. AI Visibility, Reel Studio og YouTube." data-en="Get visible. AI Visibility, Reel Studio and YouTube.">Bli synlig. AI Visibility, Reel Studio og YouTube.</span><span class="wg tool" data-no="Vis verktøy" data-en="Show a tool">Vis verktøy</span></div>
+        <div class="week"><span class="wn" data-no="Uke 10" data-en="Week 10">Uke 10</span><span class="wt" data-no="Renate AI. Din hjelper når du står fast." data-en="Renate AI. Your helper when you are stuck.">Renate AI. Din hjelper når du står fast.</span><span class="wg tool" data-no="Vis verktøy" data-en="Show a tool">Vis verktøy</span></div>
+        <div class="week"><span class="wn" data-no="Uke 11" data-en="Week 11">Uke 11</span><span class="wt" data-no="Biblioteket og ressurser. Alt du kan bruke med en gang." data-en="The library and resources. Everything you can use right away.">Biblioteket og ressurser. Alt du kan bruke med en gang.</span><span class="wg find" data-no="Finn veien inn" data-en="Find the way in">Finn veien inn</span></div>
+        <div class="week"><span class="wn" data-no="Uke 12" data-en="Week 12">Uke 12</span><span class="wt" data-no="Live og opptak. Møt meg, still spørsmål, lær sammen." data-en="Live and recordings. Meet me, ask questions, learn together.">Live og opptak. Møt meg, still spørsmål, lær sammen.</span><span class="wg build" data-no="Bygg fellesskap" data-en="Build community">Bygg fellesskap</span></div>
+        <div class="week"><span class="wn" data-no="Uke 13" data-en="Week 13">Uke 13</span><span class="wt" data-no="Bygg din egen virksomhet med LME. Bli med i Inner Circle." data-en="Build your own business with LME. Join the Inner Circle.">Bygg din egen virksomhet med LME. Bli med i Inner Circle.</span><span class="wg sell" data-no="Selg" data-en="Sell">Selg</span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 data-no="Denne uka: app-dagen, klar til å publisere" data-en="This week: the app-day, ready to publish">Denne uka: app-dagen, klar til å publisere</h2>
+      <p class="sub" data-no="Salgsuka, mandag til torsdag. Fire innlegg hver dag. Lim inn i Content Studio for bilde og video, publiser med Blotato." data-en="The sales week, Monday to Thursday. Four posts each day. Paste into Content Studio for image and video, publish with Blotato.">Salgsuka, mandag til torsdag. Fire innlegg hver dag. Lim inn i Content Studio for bilde og video, publiser med Blotato.</p>
+
+      <div class="day-label" data-no="Mandag: kunngjøring" data-en="Monday: announcement">Mandag: kunngjøring</div>
+      <div class="post"><span class="slot" data-no="Spor 1 · Reel" data-en="Slot 1 · Reel">Spor 1 · Reel</span><h4 data-no="Krok: Jeg lagde en app på én dag, uten kode." data-en="Hook: I built an app in a day, with no code.">Krok: Jeg lagde en app på én dag, uten kode.</h4><p class="cap" data-no="Ingen utviklere, ingen dyre byråer. Bare meg, en idé og AI. Nå inviterer jeg deg med på en app-dag der vi bygger sammen. Lenke i bio." data-en="No developers, no expensive agencies. Just me, an idea and AI. Now I am inviting you to an app-day where we build together. Link in bio.">Ingen utviklere, ingen dyre byråer. Bare meg, en idé og AI. Nå inviterer jeg deg med på en app-dag der vi bygger sammen. Lenke i bio.</p><p class="adapt" data-no="Tilpasning: TikTok rå og muntlig, YouTube Shorts med tekst-tittel, LinkedIn som en liten historie om å tørre å skape." data-en="Adapt: TikTok raw and spoken, YouTube Shorts with a text title, LinkedIn as a small story about daring to create.">Tilpasning: TikTok rå og muntlig, YouTube Shorts med tekst-tittel, LinkedIn som en liten historie om å tørre å skape.</p></div>
+      <div class="post"><span class="slot" data-no="Spor 2 · Karusell" data-en="Slot 2 · Carousel">Spor 2 · Karusell</span><h4 data-no="Tre apper du kan lage på én dag" data-en="Three apps you can build in a day">Tre apper du kan lage på én dag</h4><p class="cap" data-no="1: En dagsrytme for barnet. 2: En observasjonsdagbok. 3: En aktivitetsgenerator uten skjerm. Du velger din egen på app-dagen. Lenke i bio." data-en="1: A daily rhythm for your child. 2: An observation journal. 3: A screen-free activity generator. You choose your own on the app-day. Link in bio.">1: En dagsrytme for barnet. 2: En observasjonsdagbok. 3: En aktivitetsgenerator uten skjerm. Du velger din egen på app-dagen. Lenke i bio.</p><p class="adapt" data-no="Tilpasning: samme kort på Facebook, Threads som en kort liste, X som ett spisst spørsmål: hvilken ville du laget?" data-en="Adapt: same cards on Facebook, Threads as a short list, X as one sharp question: which would you build?">Tilpasning: samme kort på Facebook, Threads som en kort liste, X som ett spisst spørsmål: hvilken ville du laget?</p></div>
+      <div class="post"><span class="slot" data-no="Spor 3 · Story" data-en="Slot 3 · Story">Spor 3 · Story</span><h4 data-no="Poll: Har du noen gang ønsket at det fantes en app for din hverdag?" data-en="Poll: Have you ever wished there was an app for your everyday life?">Poll: Har du noen gang ønsket at det fantes en app for din hverdag?</h4><p class="cap" data-no="Ja, mange ganger. Nei, aldri tenkt på det. Svar, så viser jeg deg neste steg." data-en="Yes, many times. No, never thought about it. Answer, and I will show you the next step.">Ja, mange ganger. Nei, aldri tenkt på det. Svar, så viser jeg deg neste steg.</p><p class="adapt" data-no="Tilpasning: poll på Instagram og Facebook, samme spørsmål som tekst på Threads og X." data-en="Adapt: poll on Instagram and Facebook, the same question as text on Threads and X.">Tilpasning: poll på Instagram og Facebook, samme spørsmål som tekst på Threads og X.</p></div>
+      <div class="post"><span class="slot" data-no="Spor 4 · Invitasjon" data-en="Slot 4 · Invitation">Spor 4 · Invitasjon</span><h4 data-no="App-dagen er her" data-en="The app-day is here">App-dagen er her</h4><p class="cap" data-no="En hel dag der du bygger din egen app, steg for steg, med meg. Ingen forkunnskaper. Begrenset med plasser. Lenke i bio." data-en="A whole day where you build your own app, step by step, with me. No prior knowledge needed. Limited spots. Link in bio.">En hel dag der du bygger din egen app, steg for steg, med meg. Ingen forkunnskaper. Begrenset med plasser. Lenke i bio.</p><p class="adapt" data-no="Tilpasning: LinkedIn med vinkelen å lære en fremtidsrettet ferdighet." data-en="Adapt: LinkedIn with the angle of learning a future-ready skill.">Tilpasning: LinkedIn med vinkelen å lære en fremtidsrettet ferdighet.</p></div>
+
+      <div class="day-label" data-no="Tirsdag: hvem passer det for" data-en="Tuesday: who it is for">Tirsdag: hvem passer det for</div>
+      <div class="post"><span class="slot" data-no="Spor 1 · Reel" data-en="Slot 1 · Reel">Spor 1 · Reel</span><h4 data-no="Krok: Du trenger ikke være utvikler for å lage en app." data-en="Hook: You do not need to be a developer to build an app.">Krok: Du trenger ikke være utvikler for å lage en app.</h4><p class="cap" data-no="Du trenger én dag og litt lyst. Foreldre, pedagoger, alle. På app-dagen bygger vi sammen. Lenke i bio." data-en="You need one day and a little curiosity. Parents, educators, everyone. On the app-day we build together. Link in bio.">Du trenger én dag og litt lyst. Foreldre, pedagoger, alle. På app-dagen bygger vi sammen. Lenke i bio.</p><p class="adapt" data-no="Tilpasning: TikTok med den ærlige linjen jeg trodde aldri jeg skulle klare det." data-en="Adapt: TikTok with the honest line I never thought I could do it.">Tilpasning: TikTok med den ærlige linjen jeg trodde aldri jeg skulle klare det.</p></div>
+      <div class="post"><span class="slot" data-no="Spor 2 · Karusell" data-en="Slot 2 · Carousel">Spor 2 · Karusell</span><h4 data-no="Slik foregår app-dagen" data-en="How the app-day works">Slik foregår app-dagen</h4><p class="cap" data-no="Vi møtes på nett, jeg deler skjerm, og du følger med steg for steg. Ved dagens slutt har du din egen ferdige app. Lenke i bio." data-en="We meet online, I share my screen, and you follow along step by step. By the end of the day you have your own finished app. Link in bio.">Vi møtes på nett, jeg deler skjerm, og du følger med steg for steg. Ved dagens slutt har du din egen ferdige app. Lenke i bio.</p><p class="adapt" data-no="Tilpasning: Facebook litt mer forklarende, LinkedIn som en fagvinkel på læring." data-en="Adapt: Facebook a little more explanatory, LinkedIn as a professional angle on learning.">Tilpasning: Facebook litt mer forklarende, LinkedIn som en fagvinkel på læring.</p></div>
+      <div class="post"><span class="slot" data-no="Spor 3 · Story" data-en="Slot 3 · Story">Spor 3 · Story</span><h4 data-no="Spørsmål: Hvilken app ville du laget?" data-en="Question: Which app would you build?">Spørsmål: Hvilken app ville du laget?</h4><p class="cap" data-no="Send meg ideen din, så hjelper jeg deg å forme den på app-dagen." data-en="Send me your idea, and I will help you shape it on the app-day.">Send meg ideen din, så hjelper jeg deg å forme den på app-dagen.</p><p class="adapt" data-no="Tilpasning: spørsmålsboks på Instagram, åpent spørsmål på Threads og X." data-en="Adapt: question box on Instagram, open question on Threads and X.">Tilpasning: spørsmålsboks på Instagram, åpent spørsmål på Threads og X.</p></div>
+      <div class="post"><span class="slot" data-no="Spor 4 · Verdi" data-en="Slot 4 · Value">Spor 4 · Verdi</span><h4 data-no="Det du lærer på app-dagen kan du bruke resten av livet" data-en="What you learn on the app-day you can use for the rest of your life">Det du lærer på app-dagen kan du bruke resten av livet</h4><p class="cap" data-no="Å skape noe eget med AI er en ferdighet som blir verdifull fremover. Bli med. Lenke i bio." data-en="Creating something of your own with AI is a skill that becomes valuable going forward. Join in. Link in bio.">Å skape noe eget med AI er en ferdighet som blir verdifull fremover. Bli med. Lenke i bio.</p><p class="adapt" data-no="Tilpasning: LinkedIn er hovedkanalen for dette innlegget." data-en="Adapt: LinkedIn is the main channel for this post.">Tilpasning: LinkedIn er hovedkanalen for dette innlegget.</p></div>
+
+      <div class="day-label" data-no="Onsdag: bevis og bak kulissene" data-en="Wednesday: proof and behind the scenes">Onsdag: bevis og bak kulissene</div>
+      <div class="post"><span class="slot" data-no="Spor 1 · Reel" data-en="Slot 1 · Reel">Spor 1 · Reel</span><h4 data-no="Krok: Se en app jeg lagde helt selv" data-en="Hook: See an app I built entirely myself">Krok: Se en app jeg lagde helt selv</h4><p class="cap" data-no="Vis appen på skjermen, trykk rundt, og fortell hvor kort tid det tok. På app-dagen lager du din egen. Lenke i bio." data-en="Show the app on screen, tap around, and tell how little time it took. On the app-day you build your own. Link in bio.">Vis appen på skjermen, trykk rundt, og fortell hvor kort tid det tok. På app-dagen lager du din egen. Lenke i bio.</p><p class="adapt" data-no="Tilpasning: skjermopptak funker på alle. TikTok og Shorts elsker bevis." data-en="Adapt: a screen recording works on all. TikTok and Shorts love proof.">Tilpasning: skjermopptak funker på alle. TikTok og Shorts elsker bevis.</p></div>
+      <div class="post"><span class="slot" data-no="Spor 2 · Karusell" data-en="Slot 2 · Carousel">Spor 2 · Karusell</span><h4 data-no="Fra idé til app på noen timer" data-en="From idea to app in a few hours">Fra idé til app på noen timer</h4><p class="cap" data-no="Steg for steg, slik jeg gjorde det. Enklere enn du tror. Bli med og gjør det selv. Lenke i bio." data-en="Step by step, the way I did it. Simpler than you think. Join and do it yourself. Link in bio.">Steg for steg, slik jeg gjorde det. Enklere enn du tror. Bli med og gjør det selv. Lenke i bio.</p><p class="adapt" data-no="Tilpasning: Threads som en kort tråd med de samme stegene." data-en="Adapt: Threads as a short thread with the same steps.">Tilpasning: Threads som en kort tråd med de samme stegene.</p></div>
+      <div class="post"><span class="slot" data-no="Spor 3 · Story" data-en="Slot 3 · Story">Spor 3 · Story</span><h4 data-no="Nedtelling: to dager igjen" data-en="Countdown: two days left">Nedtelling: to dager igjen</h4><p class="cap" data-no="Plassene fylles opp. Skal du være med? Lenke i bio." data-en="The spots are filling up. Are you joining? Link in bio.">Plassene fylles opp. Skal du være med? Lenke i bio.</p><p class="adapt" data-no="Tilpasning: nedtellingsklistremerke på Instagram-story." data-en="Adapt: countdown sticker on the Instagram story.">Tilpasning: nedtellingsklistremerke på Instagram-story.</p></div>
+      <div class="post"><span class="slot" data-no="Spor 4 · Invitasjon" data-en="Slot 4 · Invitation">Spor 4 · Invitasjon</span><h4 data-no="Siste dager for å melde deg på" data-en="Last days to sign up">Siste dager for å melde deg på</h4><p class="cap" data-no="App-dagen nærmer seg, og påmeldingen stenger snart. Sikre plassen din. Lenke i bio." data-en="The app-day is coming, and sign-up closes soon. Secure your spot. Link in bio.">App-dagen nærmer seg, og påmeldingen stenger snart. Sikre plassen din. Lenke i bio.</p><p class="adapt" data-no="Tilpasning: kort og direkte på X." data-en="Adapt: short and direct on X.">Tilpasning: kort og direkte på X.</p></div>
+
+      <div class="day-label" data-no="Torsdag: siste sjanse" data-en="Thursday: last chance">Torsdag: siste sjanse</div>
+      <div class="post"><span class="slot" data-no="Spor 1 · Reel" data-en="Slot 1 · Reel">Spor 1 · Reel</span><h4 data-no="Krok: I dag stenger påmeldingen til app-dagen" data-en="Hook: Sign-up for the app-day closes today">Krok: I dag stenger påmeldingen til app-dagen</h4><p class="cap" data-no="Dette er siste sjanse til å bli med og bygge din egen app. Jeg vil så gjerne se deg der. Lenke i bio." data-en="This is the last chance to join and build your own app. I would love to see you there. Link in bio.">Dette er siste sjanse til å bli med og bygge din egen app. Jeg vil så gjerne se deg der. Lenke i bio.</p><p class="adapt" data-no="Tilpasning: hastefølelse på alle kanaler, men vennlig og varm." data-en="Adapt: a sense of urgency on all channels, but friendly and warm.">Tilpasning: hastefølelse på alle kanaler, men vennlig og varm.</p></div>
+      <div class="post"><span class="slot" data-no="Spor 2 · Karusell" data-en="Slot 2 · Carousel">Spor 2 · Karusell</span><h4 data-no="Dette sitter du igjen med etter app-dagen" data-en="What you walk away with after the app-day">Dette sitter du igjen med etter app-dagen</h4><p class="cap" data-no="Din egen ferdige app, ferdigheten til å lage flere, og troen på at du kan skape selv. Lenke i bio." data-en="Your own finished app, the skill to make more, and the belief that you can create yourself. Link in bio.">Din egen ferdige app, ferdigheten til å lage flere, og troen på at du kan skape selv. Lenke i bio.</p><p class="adapt" data-no="Tilpasning: LinkedIn som en oppsummering av utbytte." data-en="Adapt: LinkedIn as a summary of the takeaways.">Tilpasning: LinkedIn som en oppsummering av utbytte.</p></div>
+      <div class="post"><span class="slot" data-no="Spor 3 · Story" data-en="Slot 3 · Story">Spor 3 · Story</span><h4 data-no="Siste plasser akkurat nå" data-en="Last spots right now">Siste plasser akkurat nå</h4><p class="cap" data-no="Trykk deg inn før det er fullt. Lenke i bio." data-en="Tap in before it fills up. Link in bio.">Trykk deg inn før det er fullt. Lenke i bio.</p><p class="adapt" data-no="Tilpasning: story med en tydelig lenke-knapp." data-en="Adapt: story with a clear link button.">Tilpasning: story med en tydelig lenke-knapp.</p></div>
+      <div class="post"><span class="slot" data-no="Spor 4 · Invitasjon" data-en="Slot 4 · Invitation">Spor 4 · Invitasjon</span><h4 data-no="Siste sjanse, vi starter snart" data-en="Last chance, we start soon">Siste sjanse, vi starter snart</h4><p class="cap" data-no="Jeg gleder meg til å skape sammen med deg. Bli med før døra lukkes. Lenke i bio." data-en="I look forward to creating together with you. Join before the door closes. Link in bio.">Jeg gleder meg til å skape sammen med deg. Bli med før døra lukkes. Lenke i bio.</p><p class="adapt" data-no="Tilpasning: siste innlegg på dagen, samme tekst overalt." data-en="Adapt: the last post of the day, same text everywhere.">Tilpasning: siste innlegg på dagen, samme tekst overalt.</p></div>
+    </section>
+
+    <section class="card">
+      <h2 data-no="Generator-prompt for hver uke" data-en="Generator prompt for each week">Generator-prompt for hver uke</h2>
+      <p class="sub" data-no="Slik lager du resten i batcher. Lim prompten inn i Content Studio, bytt ut tema og mål med uka du vil lage. Da får du hele uka på minutter." data-en="This is how you build the rest in batches. Paste the prompt into Content Studio, swap in the theme and goal for the week you want. You get the whole week in minutes.">Slik lager du resten i batcher. Lim prompten inn i Content Studio, bytt ut tema og mål med uka du vil lage. Da får du hele uka på minutter.</p>
+      <div class="promptbox" data-no="Lag en ukes innhold for LME om temaet: {TEMA}.&#10;Lag fire innlegg per dag i sju dager, altså 28 innlegg, fordelt på de faste sporene: 1) reel eller kort video med sterk krok, 2) karusell steg for steg, 3) story eller poll, 4) verdi eller invitasjon.&#10;For hvert innlegg: gi krok, bildetekst og fem hashtags, pluss en kort tilpasning for Instagram, Facebook, TikTok, YouTube Shorts, LinkedIn, Threads og X.&#10;Skriv alt på norsk og engelsk. Tonen er varm og personlig. Jeg er Renate og skriver som meg selv.&#10;Mål for uka: {MÅL}.&#10;Følg skrivestilen min: rette anførselstegn, ingen tankestreker.&#10;Avslutt salgsinnlegg med en tydelig oppfordring og 'lenke i bio'." data-en="Create one week of content for LME about the theme: {THEME}.&#10;Make four posts per day for seven days, that is 28 posts, across the fixed slots: 1) reel or short video with a strong hook, 2) step-by-step carousel, 3) story or poll, 4) value or invitation.&#10;For each post: give the hook, caption and five hashtags, plus a short adaptation for Instagram, Facebook, TikTok, YouTube Shorts, LinkedIn, Threads and X.&#10;Write everything in Norwegian and English. The tone is warm and personal. I am Renate, writing as myself.&#10;Goal for the week: {GOAL}.&#10;Follow my writing style: straight quotes, no long dashes.&#10;End sales posts with a clear call to action and 'link in bio'.">Lag en ukes innhold for LME om temaet: {TEMA}.
+Lag fire innlegg per dag i sju dager, altså 28 innlegg, fordelt på de faste sporene: 1) reel eller kort video med sterk krok, 2) karusell steg for steg, 3) story eller poll, 4) verdi eller invitasjon.
+For hvert innlegg: gi krok, bildetekst og fem hashtags, pluss en kort tilpasning for Instagram, Facebook, TikTok, YouTube Shorts, LinkedIn, Threads og X.
+Skriv alt på norsk og engelsk. Tonen er varm og personlig. Jeg er Renate og skriver som meg selv.
+Mål for uka: {MÅL}.
+Følg skrivestilen min: rette anførselstegn, ingen tankestreker.
+Avslutt salgsinnlegg med en tydelig oppfordring og 'lenke i bio'.</div>
+      <div class="temas">
+        <p class="tema" data-no="Bytt inn tema fra temaplanen over, for eksempel:" data-en="Swap in a theme from the plan above, for example:">Bytt inn tema fra temaplanen over, for eksempel:</p>
+        <p class="tema" data-no="<b>Uke 3:</b> Montessori hjemme, med Montessorireisen og kursene. Mål: finn veien inn." data-en="<b>Week 3:</b> Montessori at home, with the Montessori journey and the courses. Goal: find the way in."><b>Uke 3:</b> Montessori hjemme, med Montessorireisen og kursene. Mål: finn veien inn.</p>
+        <p class="tema" data-no="<b>Uke 7:</b> Community og Inner Circle. Mål: bygg fellesskap." data-en="<b>Week 7:</b> Community and Inner Circle. Goal: build community."><b>Uke 7:</b> Community og Inner Circle. Mål: bygg fellesskap.</p>
+        <p class="tema" data-no="<b>Uke 8:</b> LME Shop, bøker og ressurser. Mål: selg." data-en="<b>Week 8:</b> LME Shop, books and resources. Goal: sell."><b>Uke 8:</b> LME Shop, bøker og ressurser. Mål: selg.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 data-no="Publisering med Blotato" data-en="Publishing with Blotato">Publisering med Blotato</h2>
+      <p class="sub" data-no="Når batchen er laget, tar Blotato seg av selve utleggingen til alle plattformene." data-en="Once the batch is made, Blotato takes care of the posting to all the platforms.">Når batchen er laget, tar Blotato seg av selve utleggingen til alle plattformene.</p>
+      <div class="rows">
+        <div class="row"><span class="k" data-no="Én gang" data-en="Once">Én gang</span><span class="v" data-no="Koble til de sju kontoene dine i Blotato: Instagram, Facebook, TikTok, YouTube, LinkedIn, Threads og X." data-en="Connect your seven accounts in Blotato: Instagram, Facebook, TikTok, YouTube, LinkedIn, Threads and X.">Koble til de sju kontoene dine i Blotato: Instagram, Facebook, TikTok, YouTube, LinkedIn, Threads og X.</span></div>
+        <div class="row"><span class="k" data-no="Per batch" data-en="Per batch">Per batch</span><span class="v" data-no="Lim inn tekst fra Content Studio, last opp video eller bilde, og velg hvilke plattformer hvert innlegg skal til." data-en="Paste the text from Content Studio, upload the video or image, and choose which platforms each post goes to.">Lim inn tekst fra Content Studio, last opp video eller bilde, og velg hvilke plattformer hvert innlegg skal til.</span></div>
+        <div class="row"><span class="k" data-no="Planlegg" data-en="Schedule">Planlegg</span><span class="v" data-no="Sett tidspunkt for hele uka på en gang, så publiseres alt automatisk mens du gjør annet." data-en="Set the times for the whole week at once, so everything publishes automatically while you do other things.">Sett tidspunkt for hele uka på en gang, så publiseres alt automatisk mens du gjør annet.</span></div>
+      </div>
+      <p class="note" style="margin-top:14px;" data-no="Tips: kjør ukas tema gjennom AI Visibility Engine også. Da lager den en søkbar artikkel og FAQ, så folk finner veien inn fra Google og AI-søk, ikke bare fra sosiale medier." data-en="Tip: run the week's theme through the AI Visibility Engine too. It creates a searchable article and FAQ, so people find their way in from Google and AI search, not only from social media.">Tips: kjør ukas tema gjennom AI Visibility Engine også. Da lager den en søkbar artikkel og FAQ, så folk finner veien inn fra Google og AI-søk, ikke bare fra sosiale medier.</p>
+    </section>
+
+  </div>
+
+<script>
+(function () {
+  window.LME_CURRENT_LANG = 'no';
+  try { window.LME_CURRENT_LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no'; } catch (e) {}
+  function apply() {
+    var en = window.LME_CURRENT_LANG === 'en';
+    document.documentElement.lang = en ? 'en' : 'no';
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      var val = en ? el.getAttribute('data-en') : el.getAttribute('data-no');
+      if (el.classList.contains('promptbox') || (el.classList.contains('tema') && el.querySelector('b'))) {
+        el.innerHTML = val;
+      } else {
+        el.textContent = val;
+      }
+    });
+    var b = document.getElementById('lme-lang');
+    if (b) b.textContent = en ? '🇳🇴 Norsk' : '🇬🇧 English';
+    document.title = (en ? 'Content plan, 90 days' : 'Innholdsplan, 90 dager') + ' — LME';
+  }
+  window.lmeToggleLang = function () {
+    window.LME_CURRENT_LANG = window.LME_CURRENT_LANG === 'en' ? 'no' : 'en';
+    try { localStorage.setItem('lme_lang', window.LME_CURRENT_LANG); } catch (e) {}
+    apply();
+    try { window.dispatchEvent(new Event('lme-lang')); } catch (e) {}
+  };
+  document.getElementById('lme-lang').addEventListener('click', window.lmeToggleLang);
+  apply();
+})();
+</script>
+<script src="/js/lme-member.js?v=7" defer></script>
+<script src="/js/lme-account.js?v=8" defer></script>
+<script src="/js/renate-widget.js?v=3" defer></script>
+</body>
+</html>
