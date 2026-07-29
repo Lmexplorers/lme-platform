@@ -46,6 +46,13 @@
   .chips{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.55rem;}
   .chip{border:1.5px solid var(--pink-200);background:#fff;color:var(--ink-soft);border-radius:999px;padding:.4rem .85rem;font-size:.85rem;font-weight:600;cursor:pointer;}
   .chip:hover{border-color:var(--pink-400);color:var(--pink-600);}
+  .toggle{display:flex;gap:.5rem;margin-bottom:.8rem;}
+  .toggle button{flex:1;border:1.5px solid var(--pink-200);background:#fff;color:var(--ink-soft);border-radius:12px;padding:.55rem;font-weight:700;font-size:.9rem;cursor:pointer;}
+  .toggle button.on{background:var(--pink-500);color:#fff;border-color:var(--pink-500);}
+  .drop{border:2px dashed var(--pink-300);border-radius:16px;background:var(--pink-50);padding:1.1rem;text-align:center;cursor:pointer;}
+  .prev{position:relative;margin-top:.7rem;border-radius:14px;overflow:hidden;display:none;}
+  .prev.show{display:block;}
+  .prev img{width:100%;max-height:320px;object-fit:contain;background:#000;display:block;border-radius:14px;}
   .msg{margin-top:.8rem;padding:.75rem 1rem;border-radius:14px;font-size:.92rem;display:none;}
   .msg.show{display:block;}
   .msg.err{background:#fdeef3;color:var(--pink-700);border:1px solid var(--pink-200);}
@@ -104,6 +111,11 @@
   <div id="studio" class="hidden">
     <div class="card" id="inputCard">
       <h2 data-no="Din filmidé" data-en="Your film idea">Din filmidé</h2>
+      <div class="toggle">
+        <button type="button" id="mDescribe" class="on" data-no="✨ Beskriv idé" data-en="✨ Describe idea">✨ Beskriv idé</button>
+        <button type="button" id="mUpload" data-no="📤 Last opp bilde" data-en="📤 Upload image">📤 Last opp bilde</button>
+      </div>
+      <div id="describeBox">
       <label class="lab" data-no="Hva skal filmen handle om?" data-en="What is the film about?">Hva skal filmen handle om?</label>
       <textarea id="idea" data-ph-no="F.eks. Mia og Teo drar på skattejakt i skogen og lærer å samarbeide." data-ph-en="E.g. Mia and Teo go on a treasure hunt in the forest and learn to cooperate." placeholder="F.eks. Mia og Teo drar på skattejakt i skogen og lærer å samarbeide."></textarea>
       <div class="chips" id="chips">
@@ -114,6 +126,15 @@
       <div class="row">
         <div><label class="lab" data-no="Læringsmål (valgfritt)" data-en="Learning goal (optional)">Læringsmål (valgfritt)</label><input type="text" id="goal" data-ph-no="F.eks. samarbeid" data-ph-en="E.g. cooperation" placeholder="F.eks. samarbeid"></div>
         <div><label class="lab" data-no="Scener" data-en="Scenes">Scener</label><select id="scenes"><option>3</option><option selected>4</option><option>5</option><option>6</option></select></div>
+      </div>
+      </div><!-- /describeBox -->
+      <div id="uploadBox" class="hidden">
+        <label class="lab" data-no="Last opp et Mia og Teo bilde" data-en="Upload a Mia and Teo image">Last opp et Mia og Teo bilde</label>
+        <div class="drop" id="drop"><div style="font-size:1.8rem;">📤</div><p style="color:var(--ink-soft);font-size:.9rem;margin-top:.25rem;" data-no="Trykk for å velge et bilde" data-en="Tap to choose an image">Trykk for å velge et bilde</p></div>
+        <input type="file" id="file" accept="image/*" class="hidden">
+        <div class="prev" id="upPrev"><img id="upImg" alt=""></div>
+        <label class="lab" data-no="Hva skjer i scenen?" data-en="What happens in the scene?">Hva skjer i scenen?</label>
+        <textarea id="motion" data-ph-no="F.eks. Mia vinker og smiler, kamera glir sakte inn." data-ph-en="E.g. Mia waves and smiles, the camera glides slowly in." placeholder="F.eks. Mia vinker og smiler, kamera glir sakte inn."></textarea>
       </div>
       <button class="btn big" id="go" style="margin-top:1rem;"><span data-no="Lag filmen" data-en="Make the film">Lag filmen</span></button>
       <div class="msg info" id="msgInfo"></div>
@@ -156,13 +177,20 @@
   function loadAccess(){return fetch('/api/video-studio',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){access=d||{loggedIn:false};}).catch(function(){access={loggedIn:false};}).then(applyState);}
 
   document.querySelectorAll('#chips .chip').forEach(function(c){c.addEventListener('click',function(){q('idea').value=c.getAttribute('data-set');q('idea').focus();});});
+
+  var mode='describe', uploadUrl=null;
+  q('mDescribe').addEventListener('click',function(){mode='describe';this.classList.add('on');q('mUpload').classList.remove('on');q('describeBox').classList.remove('hidden');q('uploadBox').classList.add('hidden');});
+  q('mUpload').addEventListener('click',function(){mode='upload';this.classList.add('on');q('mDescribe').classList.remove('on');q('uploadBox').classList.remove('hidden');q('describeBox').classList.add('hidden');});
+  q('drop').addEventListener('click',function(){q('file').click();});
+  q('file').addEventListener('change',function(){var f=this.files&&this.files[0];if(!f)return;shrinkImg(f,function(dataUrl){msg('info',L('Laster opp bildet …','Uploading image …'));fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({upload:dataUrl,contentType:'image/jpeg'})}).then(function(r){return r.json();}).then(function(d){if(d&&d.url){uploadUrl=d.url;q('upImg').src=dataUrl;q('upPrev').classList.add('show');clearMsg();}else msg('err',(d&&d.error)||L('Kunne ikke laste opp bildet.','Could not upload the image.'));}).catch(function(){msg('err',L('Nettverksfeil ved opplasting.','Network error while uploading.'));});});});
+  function shrinkImg(file,cb){var reader=new FileReader();reader.onload=function(e){var img=new Image();img.onload=function(){var max=1280,w=img.width,h=img.height;if(w>max||h>max){if(w>=h){h=Math.round(h*max/w);w=max;}else{w=Math.round(w*max/h);h=max;}}var c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);cb(c.toDataURL('image/jpeg',0.85));};img.src=e.target.result;};reader.readAsDataURL(file);}
   function msg(kind,text){var e=q(kind==='err'?'msgErr':'msgInfo');var o=q(kind==='err'?'msgInfo':'msgErr');e.textContent=text;e.classList.add('show');o.classList.remove('show');}
   function clearMsg(){q('msgErr').classList.remove('show');q('msgInfo').classList.remove('show');}
   function sleep(ms){return new Promise(function(r){setTimeout(r,ms);});}
   function enc(s){return encodeURIComponent(s||'');}
 
   async function genStill(imagePrompt){
-    var res=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({text:imagePrompt,character:'both',lang:currentLang,platform:'film',quality:'medium'})}).then(function(r){return r.json();});
+    var res=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({text:imagePrompt,character:'both',lang:currentLang,platform:'film'})}).then(function(r){return r.json();});
     if(!res||res.error||!res.url) throw new Error((res&&res.error)||'image');
     return res.url;
   }
@@ -203,7 +231,23 @@
   function scStill(sc,url){var b=sc.el.querySelector('.sc-body');b.innerHTML='<img src="'+url+'" alt=""><div class="sc-status" style="position:absolute;bottom:.4rem;left:0;right:0;">'+L('Animerer …','Animating …')+'</div>';}
   function scClip(sc,url){var b=sc.el.querySelector('.sc-body');b.innerHTML='<video src="'+url+'" controls playsinline></video>';var f=sc.el.querySelector('.sc-foot');f.classList.remove('hidden');f.querySelector('a').href=url;}
 
+  async function makeFromUpload(){
+    if(!uploadUrl){msg('err',L('Last opp et bilde først.','Upload an image first.'));return;}
+    var motion=q('motion').value.trim()||'gentle cinematic camera movement, soft and calm';
+    busy=true;clearMsg();hide('filmOut');
+    q('go').disabled=true;q('go').innerHTML='<span class="spinner"></span> '+L('Animerer filmen …','Animating the film …');
+    renderStoryboard({titleNo:'Din film',titleEn:'Your film',scenes:[{narrationNo:'',narrationEn:'',imagePrompt:'',motion:motion}]});
+    var sc=scenes[0];
+    try{ scStill(sc,uploadUrl); var clip=await animate(uploadUrl,motion); sc.clip=clip; scClip(sc,clip); }
+    catch(err){ scStatus(sc,L('Denne feilet. ','This failed. ')+(err&&err.message?'('+err.message+')':'')); }
+    busy=false;q('go').disabled=false;q('go').innerHTML='<span>'+L('Lag filmen','Make the film')+'</span>';
+    var okc=scenes.filter(function(s){return s.clip;});
+    if(okc.length){q('playFilm').classList.remove('hidden');msg('info',L('Ferdig! Trykk "Spill hele filmen".','Done! Tap "Play the whole film".'));}
+    else msg('err',L('Kunne ikke lage filmen. Prøv igjen.','Could not make the film.'));
+  }
+
   async function makeFilm(){
+    if(mode==='upload'){ return makeFromUpload(); }
     var idea=q('idea').value.trim();
     if(!idea){msg('err',L('Skriv en idé for filmen.','Write an idea for the film.'));return;}
     busy=true;clearMsg();hide('filmOut');
