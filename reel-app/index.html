@@ -166,6 +166,19 @@
   .again-btn{background:var(--bg-2);border:1.5px solid var(--line);color:var(--ink-soft);}
   .err{color:var(--cerise);font-size:14px;text-align:center;padding:10px;}
 
+  /* PUBLISERING */
+  .pubpanel{margin-top:18px;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 16px;box-shadow:var(--shadow-md);}
+  .pubpanel h3{font-size:16px;font-weight:800;margin-bottom:4px;}
+  .pubpanel .ph{font-size:13px;color:var(--ink-soft);margin-bottom:14px;}
+  .pubimg{width:100%;border-radius:var(--r-md);margin-bottom:12px;display:none;border:1px solid var(--line);}
+  .pubrow{display:flex;gap:8px;flex-wrap:wrap;}
+  .pubrow button{font-size:13.5px;font-weight:700;padding:11px 14px;border-radius:var(--r-pill);border:1.5px solid var(--line);background:#fff;color:var(--ink-soft);}
+  .pubrow button.act{background:var(--grad);color:#fff;border-color:transparent;}
+  .pubrow button.mk{background:var(--cerise-soft);color:var(--cerise);border-color:transparent;}
+  .pubmsg{font-size:13px;color:var(--ink-soft);margin-top:12px;min-height:1em;}
+  .pubmsg.err{color:var(--cerise);}
+  .pubmsg a{color:var(--cerise);font-weight:700;}
+
   .empty{text-align:center;color:var(--ink-muted);padding:44px 20px;}
   .empty .em{font-size:40px;margin-bottom:12px;}
   .empty p{font-size:14px;}
@@ -407,6 +420,8 @@
   var REELLANG = LANG;   // språket innholdet lages på (kan velges uavhengig av app-språket)
   var REEL = null;
   var OWNER = false;     // eier (Renate) slipper rett inn, uten betaling
+  var BL_MAP = null;     // tilkoblede Blotato-kontoer per plattform
+  var MEDIA_URL = '';    // bilde-URL til publisering
 
   function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
   function $(id){ return document.getElementById(id); }
@@ -553,6 +568,95 @@
     var en = {hook:'Hook',vo:'Voiceover',scenes:'Scene by scene',broll:'B-roll',music:'Music',cta:'Call to action',caption:'Caption',tags:'Hashtags',slide:'Slide',frame:'Frame',imgprompt:'Image idea'};
     return (LANG==='no'?no:en)[k];
   }
+  // ---------- PUBLISERING (samme Blotato-flyt som Reel Studio) ----------
+  function fetchAccounts(){
+    if (BL_MAP) return Promise.resolve(BL_MAP);
+    return fetch('/api/blotato/accounts',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:'{}'})
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if (res && res.error) throw new Error(res.error);
+        var list = (res && res.result && (res.result.items || res.result.accounts || res.result)) || [];
+        var map = {};
+        (Array.isArray(list)?list:[]).forEach(function(a){
+          var plat = String(a.platform || a.type || a.targetType || '').toLowerCase();
+          if (!plat || map[plat]) return;
+          map[plat] = { accountId:String(a.id||a.accountId||''), pageId:a.pageId?String(a.pageId):undefined };
+        });
+        BL_MAP = map; return map;
+      });
+  }
+  function buildCaption(r){
+    var cap = r.caption || '';
+    if (r.cta && cap.indexOf(r.cta) === -1) cap = (cap?cap+'\n\n':'') + r.cta;
+    var tags = Array.isArray(r.hashtags) ? r.hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' ') : '';
+    return (cap + (tags?'\n\n'+tags:'')).trim();
+  }
+  function genImage(r, imgEl, statusEl, btn){
+    var prompt = r.imagePrompt || (Array.isArray(r.scenes)&&r.scenes[0]&&r.scenes[0].broll) || r.caption || $('topic').value || '';
+    if (!prompt){ statusEl.className='pubmsg err'; statusEl.textContent = LANG==='no'?'⚠️ Lag innhold først.':'⚠️ Make content first.'; return; }
+    var lbl = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> '+(LANG==='no'?'Lager bilde…':'Making image…');
+    statusEl.className='pubmsg'; statusEl.textContent = '';
+    fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:prompt, character:'none', platform:PLATFORM, lang:REELLANG})})
+      .then(function(r2){ return r2.json(); })
+      .then(function(ir){
+        if (!ir || ir.error || !ir.url) throw new Error((ir&&ir.error)||'bilde');
+        MEDIA_URL = ir.url; imgEl.src = ir.url; imgEl.style.display = 'block';
+        statusEl.className='pubmsg'; statusEl.textContent = LANG==='no'?'Bilde klart. Nå kan du publisere.':'Image ready. Now you can publish.';
+      })
+      .catch(function(e){ statusEl.className='pubmsg err'; statusEl.textContent = (LANG==='no'?'⚠️ Kunne ikke lage bilde':'⚠️ Could not make image')+(e&&e.message?' ('+e.message+')':''); })
+      .finally(function(){ btn.disabled = false; btn.innerHTML = lbl; });
+  }
+  function publishTo(platform, r, statusEl, btn){
+    var needsMedia = (platform === 'instagram' || platform === 'tiktok');
+    if (needsMedia && !MEDIA_URL){ statusEl.className='pubmsg err'; statusEl.textContent = LANG==='no'?'⚠️ Lag et bilde først. Instagram og TikTok krever et bilde eller en video.':'⚠️ Make an image first. Instagram and TikTok need an image or video.'; return; }
+    var lbl = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> '+(LANG==='no'?'Publiserer…':'Publishing…');
+    statusEl.className='pubmsg'; statusEl.textContent = '';
+    fetchAccounts().then(function(map){
+      var conf = map[platform];
+      if (!conf || !conf.accountId) return Promise.reject({ notConnected:true });
+      var content = { text:buildCaption(r), platform:platform }; if (MEDIA_URL) content.mediaUrls = [MEDIA_URL];
+      var target = { targetType:platform }; if (platform === 'facebook' && conf.pageId) target.pageId = conf.pageId;
+      var item = { label:platform, post:{ accountId:conf.accountId, content:content, target:target } };
+      return fetch('/api/blotato/publish',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({items:[item]})}).then(function(r2){ return r2.json(); });
+    }).then(function(d){
+      var res = d && d.result && d.result.results && d.result.results[0];
+      if (res && res.ok){ btn.innerHTML = '✓ '+(LANG==='no'?'Publisert':'Published'); btn.classList.add('act'); statusEl.className='pubmsg'; statusEl.textContent = LANG==='no'?'Publisert til '+platform+'!':'Published to '+platform+'!'; }
+      else { btn.disabled = false; btn.innerHTML = lbl; statusEl.className='pubmsg err'; statusEl.textContent = LANG==='no'?'⚠️ Klarte ikke publisere. Prøv igjen.':'⚠️ Could not publish. Try again.'; }
+    }).catch(function(e){
+      btn.disabled = false; btn.innerHTML = lbl; statusEl.className='pubmsg err';
+      if (e && e.notConnected){ statusEl.innerHTML = (LANG==='no'?'⚠️ Ingen '+platform+'-konto er koblet til ennå. Koble til i ':'⚠️ No '+platform+' account connected yet. Connect it in ')+'<a href="/reel-studio">Reel Studio</a>.'; }
+      else { statusEl.textContent = LANG==='no'?'⚠️ Nettverksfeil, prøv igjen.':'⚠️ Network error, try again.'; }
+    });
+  }
+  function buildPublishPanel(r, fmt){
+    var wrap = document.createElement('div'); wrap.className = 'pubpanel';
+    var h = document.createElement('h3'); h.textContent = LANG==='no'?'Del og publiser':'Share and publish'; wrap.appendChild(h);
+    var ph = document.createElement('div'); ph.className = 'ph';
+    ph.textContent = LANG==='no'?'Lag et bilde, og publiser rett til plattformene dine.':'Make an image, and publish straight to your platforms.';
+    wrap.appendChild(ph);
+    var img = document.createElement('img'); img.className = 'pubimg'; img.alt = ''; wrap.appendChild(img);
+    var status = document.createElement('div'); status.className = 'pubmsg';
+    // Lag bilde
+    var row1 = document.createElement('div'); row1.className = 'pubrow';
+    var imgBtn = document.createElement('button'); imgBtn.className = 'mk'; imgBtn.textContent = LANG==='no'?'🎨 Lag bilde':'🎨 Make image';
+    imgBtn.addEventListener('click', function(){ genImage(r, img, status, imgBtn); });
+    row1.appendChild(imgBtn); wrap.appendChild(row1);
+    // Publiser-knapper
+    var row2 = document.createElement('div'); row2.className = 'pubrow'; row2.style.marginTop = '10px';
+    var plats = [['instagram','📸 Instagram'],['facebook','👍 Facebook'],['tiktok','🎵 TikTok']];
+    plats.forEach(function(p){
+      var b = document.createElement('button');
+      b.textContent = (LANG==='no'?'Publiser til ':'Publish to ')+p[1];
+      b.addEventListener('click', function(){ publishTo(p[0], r, status, b); });
+      row2.appendChild(b);
+    });
+    wrap.appendChild(row2);
+    wrap.appendChild(status);
+    return wrap;
+  }
+
   function tagsCard(out, hashtags){
     if (!Array.isArray(hashtags) || !hashtags.length) return;
     var tagline = hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' ');
@@ -621,6 +725,7 @@
     var again=document.createElement('button'); again.className='again-btn'; again.textContent=LANG==='no'?'↻ Lag ny':'↻ New one';
     again.addEventListener('click', function(){ out.innerHTML=''; $('topic').focus(); window.scrollTo(0,0); });
     actions.appendChild(save); actions.appendChild(again); out.appendChild(actions);
+    out.appendChild(buildPublishPanel(r, fmt));
   }
   function card(title, body, copy){
     var d=document.createElement('div'); d.className='rcard';
@@ -634,6 +739,7 @@
     if (!topic){ $('topic').focus(); return; }
     var btn = $('genBtn'); var label = btn.innerHTML; var fmt = FMT;
     btn.disabled = true; btn.innerHTML='<span class="spinner"></span> '+(LANG==='no'?'Lager innhold…':'Making content…');
+    MEDIA_URL = '';
     $('out').innerHTML='';
     var platName = PLATFORM === 'facebook' ? 'Facebook' : PLATFORM === 'tiktok' ? 'TikTok' : 'Instagram';
     var source = topic + (REELLANG==='no' ? '\n\nPlattform: '+platName : '\n\nPlatform: '+platName);
