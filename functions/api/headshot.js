@@ -1,35 +1,36 @@
 import { enforceHeadshotApp, refundImageCredit, headshotAppAccess } from "../_lib/access.js";
 /**
- * LME AI Headshot, ansiktsbevarende proff-portretter (Higgsfield Soul).
+ * LME AI Headshot, ansiktsbevarende proff-portretter (InstantID via Replicate).
  *
- * Last opp en selfie, velg stil, og få et profesjonelt headshot som fortsatt
- * ligner deg. Egen app for eier (gratis) eller de som har kjøpt bilde-kreditt.
- * Hver headshot trekker én forhåndskjøpt bilde-kreditt, refundert ved feil.
+ * Ett-bilde-identitet (som GIO): last opp én selfie, velg stil, og få et
+ * profesjonelt portrett som beholder ansiktet ditt, uten trening.
+ * Egen app for eier (gratis) eller de som har kjøpt bilde-kreditt. Hver headshot
+ * trekker én forhåndskjøpt bilde-kreditt, refundert ved feil.
  *
  * Ruter:
  *   GET  /api/headshot                          -> { loggedIn, owner, credit }
  *   POST /api/headshot   { imageUrl, style }     -> { id, statusUrl, credit }
  *   GET  /api/headshot?id=<id>[&u=<statusUrl>]   -> { status, url? }
  *
- * Secrets i Cloudflare Pages: HIGGSFIELD_API_KEY, HIGGSFIELD_SECRET.
- * Soul-modus utløses av prompt + reference_image_urls (selfien din).
+ * Secrets i Cloudflare Pages: REPLICATE_API_TOKEN.
+ * Modell kan overstyres med REPLICATE_HEADSHOT_MODEL (standard zsxkib/instant-id).
  */
 
-const HF_BASE = "https://platform.higgsfield.ai";
-const SUBMIT_PATH = "/v1/text2image/soul";
+const RE_BASE = "https://api.replicate.com";
+const DEFAULT_MODEL = "zsxkib/instant-id";
 const JOB_PREFIX = "hsjob:";
 
-// Stil-oppskrifter. Ansiktet beholdes via reference_image_urls; prompten styrer
+// Stil-oppskrifter. Identiteten kommer fra selfien (InstantID); prompten styrer
 // klær, bakgrunn og stemning. Alltid på engelsk for best resultat i modellen.
 const STYLES = {
-  business:  "a polished professional business headshot, wearing a tailored dark blazer, clean neutral studio background, soft flattering studio lighting, confident friendly expression, sharp focus, high-end corporate portrait",
-  linkedin:  "a professional LinkedIn profile headshot, smart business-casual outfit, soft blurred office background, natural window light, warm approachable smile, crisp and clean",
-  portrait:  "an elegant editorial studio portrait, refined lighting with soft shadows, plain warm background, timeless and flattering, magazine quality",
-  bw:        "a classic black and white studio portrait, dramatic soft lighting, plain dark background, timeless elegant look, fine detail",
-  outdoor:   "a natural outdoor lifestyle portrait, soft golden-hour light, gently blurred green background, relaxed warm expression, candid and premium",
-  creative:  "a modern creative portrait with soft colored studio lighting, stylish contemporary look, clean gradient background, vibrant yet tasteful",
+  business:  "professional corporate business headshot portrait, wearing a tailored dark blazer, clean neutral studio background, soft flattering studio lighting, confident friendly expression, sharp focus, high-end",
+  linkedin:  "professional LinkedIn profile headshot, smart business-casual outfit, soft blurred modern office background, natural window light, warm approachable smile, crisp and clean",
+  portrait:  "elegant editorial studio portrait, refined soft lighting with gentle shadows, plain warm background, timeless and flattering, magazine quality",
+  bw:        "classic black and white studio portrait, dramatic soft lighting, plain dark background, timeless elegant look, fine detail, monochrome",
+  outdoor:   "natural outdoor lifestyle portrait, soft golden-hour light, gently blurred green background, relaxed warm expression, candid and premium",
+  creative:  "modern creative portrait with soft colored studio lighting, stylish contemporary look, clean gradient background, vibrant yet tasteful",
 };
-const SAFE_SUFFIX = ", keep the person's real facial identity and likeness, natural realistic skin, tasteful and professional, no nudity, family-friendly";
+const NEG = "deformed, distorted, disfigured, extra fingers, mutated hands, bad anatomy, low quality, blurry, grainy, watermark, text, cartoon, plastic skin";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -37,27 +38,18 @@ function json(data, status) {
     headers: { "Content-Type": "application/json", "Cache-Control": "no-store", "Access-Control-Allow-Origin": "*" },
   });
 }
-function auth(env) { return "Key " + env.HIGGSFIELD_API_KEY + ":" + env.HIGGSFIELD_SECRET; }
+function auth(env) { return "Bearer " + env.REPLICATE_API_TOKEN; }
 
 function findImageUrl(o) {
-  if (!o || typeof o !== "object") return null;
-  if (Array.isArray(o.images) && o.images[0] && o.images[0].url) return o.images[0].url;
-  if (o.image && o.image.url) return o.image.url;
-  if (o.results && o.results.raw && o.results.raw.url) return o.results.raw.url;
-  if (Array.isArray(o.jobs) && o.jobs[0]) {
-    const j = o.jobs[0];
-    if (j.results && j.results.raw && j.results.raw.url) return j.results.raw.url;
-    if (j.result && j.result.url) return j.result.url;
-    if (Array.isArray(j.images) && j.images[0] && j.images[0].url) return j.images[0].url;
+  if (!o) return null;
+  const out = o.output;
+  if (typeof out === "string" && /^https?:\/\//.test(out)) return out;
+  if (Array.isArray(out) && out.length) {
+    const first = out[0];
+    if (typeof first === "string" && /^https?:\/\//.test(first)) return first;
+    if (first && first.url) return first.url;
   }
-  if (Array.isArray(o.results) && o.results[0] && o.results[0].url) return o.results[0].url;
   return null;
-}
-function findStatus(o) {
-  if (!o || typeof o !== "object") return "";
-  if (o.status) return String(o.status).toLowerCase();
-  if (Array.isArray(o.jobs) && o.jobs[0] && o.jobs[0].status) return String(o.jobs[0].status).toLowerCase();
-  return "";
 }
 
 export async function onRequestOptions() {
@@ -70,7 +62,7 @@ export async function onRequestOptions() {
 // ---- POST: send inn headshot-jobben (trekker 1 bilde-kreditt) ----
 export async function onRequestPost(context) {
   const { request, env } = context;
-  if (!env.HIGGSFIELD_API_KEY || !env.HIGGSFIELD_SECRET) return json({ error: "not_configured" }, 200);
+  if (!env.REPLICATE_API_TOKEN) return json({ error: "not_configured" }, 200);
 
   let body;
   try { body = await request.json(); } catch { return json({ error: "Ugyldig JSON" }, 400); }
@@ -80,45 +72,55 @@ export async function onRequestPost(context) {
   const style = STYLES[styleKey] || STYLES.business;
   if (!/^https?:\/\//.test(imageUrl)) return json({ error: "Last opp et bilde av deg selv først." }, 400);
 
-  const prompt = (style + SAFE_SUFFIX).slice(0, 900);
+  const prompt = "a photo of a person, " + style;
 
   // Tilgang + trekk kreditt.
   const gate = await enforceHeadshotApp(context);
   if (!gate.ok) return json({ error: gate.error, needCredits: gate.needCredits || false }, gate.status);
 
+  const model = String(env.REPLICATE_HEADSHOT_MODEL || DEFAULT_MODEL).replace(/[^a-zA-Z0-9._\/-]/g, "");
   const payload = {
-    prompt: prompt,
-    reference_image_urls: [imageUrl],
-    width_and_height: "PORTRAIT_1536x2048",
-    quality: "HD",
-    batch_size: "SINGLE",
+    input: {
+      image: imageUrl,
+      prompt: prompt,
+      negative_prompt: NEG,
+      ip_adapter_scale: 0.8,
+      controlnet_conditioning_scale: 0.8,
+      guidance_scale: 5,
+      num_inference_steps: 30,
+      num_outputs: 1,
+    },
   };
 
   let r, data, text;
   try {
-    r = await fetch(HF_BASE + SUBMIT_PATH, {
+    r = await fetch(RE_BASE + "/v1/models/" + model + "/predictions", {
       method: "POST",
-      headers: { "Authorization": auth(env), "Content-Type": "application/json", "Accept": "application/json" },
+      headers: { "Authorization": auth(env), "Content-Type": "application/json", "Prefer": "respond-async" },
       body: JSON.stringify(payload),
     });
     text = await r.text();
     try { data = JSON.parse(text); } catch { data = null; }
   } catch (e) {
     if (!gate.owner) await refundImageCredit(context, gate.email);
-    return json({ error: "Kom ikke i kontakt med Higgsfield. Kreditten er refundert." }, 502);
+    return json({ error: "Kom ikke i kontakt med bilde-motoren. Kreditten er refundert." }, 502);
   }
   if (!r.ok) {
     if (!gate.owner) await refundImageCredit(context, gate.email);
-    return json({ error: "Higgsfield svarte " + r.status + ". Kreditten er refundert." }, 200);
+    const detail = (data && (data.detail || data.title)) ? " (" + (data.detail || data.title) + ")" : " (" + r.status + ")";
+    return json({ error: "Bilde-motoren svarte med feil" + detail + ". Kreditten er refundert." }, 200);
   }
 
-  const id = data && (data.request_id || data.id || data.generation_id ||
-    (Array.isArray(data.jobs) && data.jobs[0] && data.jobs[0].id));
-  const statusUrl = data && (data.status_url || data.statusUrl);
+  const id = data && data.id;
+  const statusUrl = data && data.urls && data.urls.get;
   if (!id && !statusUrl) {
     if (!gate.owner) await refundImageCredit(context, gate.email);
-    return json({ error: "Fant ingen jobb i Higgsfield-svaret. Kreditten er refundert." }, 200);
+    return json({ error: "Fant ingen jobb i svaret. Kreditten er refundert." }, 200);
   }
+  // Bildet kan allerede være ferdig (sjelden, men mulig).
+  const immediate = findImageUrl(data);
+  if (immediate) return json({ id: id || "", statusUrl: statusUrl || "", credit: gate.credit, url: immediate, status: "completed" });
+
   if (id && !gate.owner) {
     try { await env.BUILDER_KV.put(JOB_PREFIX + id, JSON.stringify({ email: gate.email, refunded: false }), { expirationTtl: 60 * 60 * 2 }); } catch (e) {}
   }
@@ -136,14 +138,14 @@ export async function onRequestGet(context) {
     const acc = await headshotAppAccess(context);
     return json(acc);
   }
-  if (!env.HIGGSFIELD_API_KEY || !env.HIGGSFIELD_SECRET) return json({ error: "not_configured" }, 200);
+  if (!env.REPLICATE_API_TOKEN) return json({ error: "not_configured" }, 200);
 
   if (statusUrl) {
-    try { if (new URL(statusUrl).hostname !== "platform.higgsfield.ai") statusUrl = ""; } catch { statusUrl = ""; }
+    try { if (new URL(statusUrl).hostname !== "api.replicate.com") statusUrl = ""; } catch { statusUrl = ""; }
   }
   if (!statusUrl) {
     if (!/^[A-Za-z0-9_-]{6,}$/.test(id)) return json({ error: "Ugyldig jobb-ID." }, 400);
-    statusUrl = HF_BASE + "/v1/text2image/soul/requests/" + id;
+    statusUrl = RE_BASE + "/v1/predictions/" + id;
   }
 
   let r, data, text;
@@ -154,12 +156,12 @@ export async function onRequestGet(context) {
   } catch (e) {
     return json({ status: "in_progress" });
   }
-  if (!r.ok) return json({ error: "Higgsfield status " + r.status + "." }, 200);
+  if (!r.ok) return json({ error: "Status " + r.status + "." }, 200);
 
-  const status = findStatus(data) || "in_progress";
+  const status = data && data.status ? String(data.status).toLowerCase() : "in_progress";
   const imgUrl = findImageUrl(data);
-  if (imgUrl) return json({ status: "completed", url: imgUrl });
-  if (status === "failed" || status === "nsfw") {
+  if (status === "succeeded" && imgUrl) return json({ status: "completed", url: imgUrl });
+  if (status === "failed" || status === "canceled") {
     if (id) {
       try {
         const raw = await env.BUILDER_KV.get(JOB_PREFIX + id);
@@ -173,7 +175,7 @@ export async function onRequestGet(context) {
         }
       } catch (e) {}
     }
-    return json({ status: status, error: "Bildet kunne ikke lages (" + status + "). Kreditten er refundert." });
+    return json({ status: "failed", error: "Bildet kunne ikke lages (" + (data && data.error ? data.error : status) + "). Kreditten er refundert." });
   }
-  return json({ status: status });
+  return json({ status: "in_progress" });
 }
