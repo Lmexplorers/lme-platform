@@ -262,9 +262,53 @@
       color: var(--grey);
     }
 
+    .challenge-info {
+      background: linear-gradient(135deg, #FFE9F5, #F49DC5);
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .challenge-date {
+      font-size: 13px;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .challenge-duration {
+      font-size: 12px;
+      color: var(--grey);
+    }
+
+    .record-btn {
+      background: linear-gradient(135deg, var(--lime), #5a9616);
+      color: #fff;
+      padding: 16px 32px;
+      border-radius: 999px;
+      border: 0;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 16px rgba(122, 174, 31, 0.2);
+      margin-bottom: 20px;
+      width: 100%;
+    }
+
+    .record-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(122, 174, 31, 0.3);
+    }
+
+    .record-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .stats {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 12px;
       margin-bottom: 20px;
     }
@@ -277,19 +321,29 @@
     }
 
     .stat-label {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--grey);
       margin-bottom: 4px;
     }
 
     .stat-value {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 700;
       color: var(--cerise);
     }
 
     .stat.green .stat-value {
       color: var(--lime);
+    }
+
+    .stat.blue .stat-value {
+      color: #3FA9F5;
+    }
+
+    @media (max-width: 520px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
     }
 
     .wheel-section {
@@ -480,6 +534,14 @@
     </div>
 
     <div class="card">
+      <div class="challenge-info">
+        <div class="challenge-date" data-no="Utfordring startet:" data-en="Challenge started:">Utfordring startet:</div>
+        <div class="challenge-date" id="challengeStartDate" style="font-size: 14px; font-weight: 700;">—</div>
+        <div class="challenge-duration" id="challengeDuration">—</div>
+      </div>
+
+      <button class="record-btn" id="recordBtn" data-no="🎯 REGISTRER SPARE" data-en="🎯 RECORD SAVINGS">🎯 REGISTRER SPARE</button>
+
       <div class="goal-section">
         <div class="goal-amount" id="currentSavings">kr 0</div>
         <div class="goal-label" id="goalDisplay" data-no="av kr 100 000" data-en="of kr 100,000">av kr 100 000</div>
@@ -496,13 +558,17 @@
       </div>
 
       <div class="stats">
+        <div class="stat blue">
+          <div class="stat-label" data-no="Før utfordring" data-en="Before challenge">Før utfordring</div>
+          <div class="stat-value" id="previousSavings">kr 0</div>
+        </div>
         <div class="stat">
-          <div class="stat-label" data-no="Igjen til mål" data-en="Left to goal">Igjen til mål</div>
-          <div class="stat-value" id="leftToGoal">kr 100 000</div>
+          <div class="stat-label" data-no="Denne uken" data-en="This week">Denne uken</div>
+          <div class="stat-value" id="weekSavings">kr 0</div>
         </div>
         <div class="stat green">
-          <div class="stat-label" data-no="Spinn gjenstår" data-en="Spins left">Spinn gjenstår</div>
-          <div class="stat-value" id="spinsLeft">?</div>
+          <div class="stat-label" data-no="Igjen til mål" data-en="Left to goal">Igjen til mål</div>
+          <div class="stat-value" id="leftToGoal">kr 100 000</div>
         </div>
       </div>
     </div>
@@ -548,6 +614,8 @@
 
       <button class="btn btn-primary" id="updateGoalBtn" data-no="Oppdater mål" data-en="Update goal">Oppdater mål</button>
 
+      <button class="reset-btn" id="newChallengeBtn" data-no="Start ny utfordring" data-en="Start new challenge">Start ny utfordring</button>
+
       <button class="reset-btn" id="resetBtn" data-no="Tilbakestill alt" data-en="Reset all">Tilbakestill alt</button>
     </div>
   </div>
@@ -589,7 +657,9 @@
       goal: 100000,
       saved: 0,
       history: [],
-      lastSpin: null
+      lastSpin: null,
+      previousSavings: 0,
+      challengeStartDate: null
     };
 
     // Load state
@@ -622,11 +692,57 @@
       // Translations
       const isEn = window.LME_CURRENT_LANG === 'en';
 
+      // Challenge info
+      if (!state.challengeStartDate) {
+        state.challengeStartDate = new Date().toISOString();
+        saveState();
+      }
+
+      const challengeDate = new Date(state.challengeStartDate);
+      const challengeDateStr = challengeDate.toLocaleDateString(isEn ? 'en-GB' : 'no-NO', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      document.getElementById('challengeStartDate').textContent = challengeDateStr;
+
+      // Calculate challenge duration
+      const now = new Date();
+      const diffMs = now - challengeDate;
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const diffWeeks = Math.floor(diffDays / 7);
+
+      let durationText;
+      if (isEn) {
+        if (diffWeeks > 0) {
+          durationText = diffWeeks + ' week' + (diffWeeks !== 1 ? 's' : '') + ' running';
+        } else {
+          durationText = diffDays + ' day' + (diffDays !== 1 ? 's' : '') + ' running';
+        }
+      } else {
+        if (diffWeeks > 0) {
+          durationText = diffWeeks + ' uke' + (diffWeeks !== 1 ? 'r' : '') + ' i gang';
+        } else {
+          durationText = diffDays + ' dag' + (diffDays !== 1 ? 'er' : '') + ' i gang';
+        }
+      }
+      document.getElementById('challengeDuration').textContent = durationText;
+
+      // Calculate savings this week
+      const weekStart = new Date(now);
+      weekStart.setDate(weekStart.getDate() - weekStart.getDay() + (weekStart.getDay() === 0 ? -6 : 1));
+      weekStart.setHours(0, 0, 0, 0);
+
+      const weekSavings = state.history
+        .filter(item => new Date(item.date) >= weekStart)
+        .reduce((sum, item) => sum + item.amount, 0);
+
       document.getElementById('currentSavings').textContent = 'kr ' + saved.toLocaleString();
       document.getElementById('goalDisplay').textContent = (isEn ? 'of ' : 'av ') + 'kr ' + goal.toLocaleString();
       document.getElementById('progressPercent').textContent = percent + '%';
       document.getElementById('leftToGoal').textContent = 'kr ' + left.toLocaleString();
-      document.getElementById('spinsLeft').textContent = spinsLeft;
+      document.getElementById('previousSavings').textContent = 'kr ' + state.previousSavings.toLocaleString();
+      document.getElementById('weekSavings').textContent = 'kr ' + weekSavings.toLocaleString();
       document.getElementById('goalInput').value = goal;
 
       // Update progress circle
@@ -639,17 +755,20 @@
       // Disable buttons if goal reached
       const spinBtn = document.getElementById('spinBtn');
       const addBtn = document.getElementById('addBtn');
+      const recordBtn = document.getElementById('recordBtn');
       const amountInput = document.getElementById('amountInput');
 
       if (saved >= goal) {
         spinBtn.disabled = true;
         spinBtn.textContent = isEn ? '🎉 GOAL REACHED!' : '🎉 MÅL NÅDD!';
         addBtn.disabled = true;
+        recordBtn.disabled = true;
         amountInput.disabled = true;
       } else {
         spinBtn.disabled = false;
         spinBtn.textContent = isEn ? 'SPIN THE WHEEL' : 'SPIN HJULET';
         addBtn.disabled = false;
+        recordBtn.disabled = false;
         amountInput.disabled = false;
       }
     }
@@ -815,6 +934,13 @@
       if (e.key === 'Enter') addManualAmount();
     });
 
+    document.getElementById('recordBtn').addEventListener('click', function() {
+      const input = document.getElementById('amountInput');
+      const currentValue = input.value;
+      input.focus();
+      input.select();
+    });
+
     document.getElementById('updateGoalBtn').addEventListener('click', function () {
       const newGoal = parseInt(document.getElementById('goalInput').value) || 100000;
       if (newGoal > 0) {
@@ -824,13 +950,31 @@
       }
     });
 
+    document.getElementById('newChallengeBtn').addEventListener('click', function () {
+      const isEn = window.LME_CURRENT_LANG === 'en';
+      const msg = isEn ? 'Start a new challenge? Your current savings will be moved to "Before challenge".' : 'Start ny utfordring? Sparingen din blir lagret som "Før utfordring".';
+      if (confirm(msg)) {
+        state.previousSavings += state.saved;
+        state.saved = 0;
+        state.history = [];
+        state.challengeStartDate = new Date().toISOString();
+        state.lastSpin = null;
+        saveState();
+        updateUI();
+        drawWheel();
+      }
+    });
+
     document.getElementById('resetBtn').addEventListener('click', function () {
-      if (confirm((window.LME_CURRENT_LANG === 'en' ? 'Are you sure?' : 'Er du sikker?'))) {
+      const isEn = window.LME_CURRENT_LANG === 'en';
+      if (confirm(isEn ? 'Are you sure? This will reset everything.' : 'Er du sikker? Dette vil nullstille alt.')) {
         state = {
           goal: 100000,
           saved: 0,
           history: [],
-          lastSpin: null
+          lastSpin: null,
+          previousSavings: 0,
+          challengeStartDate: new Date().toISOString()
         };
         saveState();
         updateUI();
