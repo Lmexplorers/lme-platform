@@ -159,3 +159,59 @@ export async function enforceGeneration(context, kind) {
     error: "Du har brukt opp månedskvoten for " + (k === "video" ? "video" : "bilder") + ". Kjøp mer kreditt på /kjop-kreditt, eller oppgrader planen. Kvoten nullstilles ved månedsskiftet.",
   };
 }
+
+/* =========================================================================
+   Video Studio (egen app): for eier, Pro/VIP (Inner Circle) eller de som har
+   kjøpt appen. INGEN gratis generering. Ren forhåndsbetalt video-kreditt, så
+   Renate aldri dekker andres generering. Tilgang åpner døra, kreditt betaler
+   for maskinen.
+   ========================================================================= */
+
+/* Hvem er du, og har du tilgang til Video Studio (uten å trekke kreditt). */
+export async function videoAppAccess(context) {
+  const user = await sessionUser(context);
+  if (!user) return { loggedIn: false, entitled: false, owner: false, tier: null, credit: { image: 0, video: 0 } };
+  const credit = await creditFor(context, user.email);
+  if (isOwner(user)) return { loggedIn: true, entitled: true, owner: true, tier: "owner", credit: credit };
+  const sub = await subscriptionFor(context, user);
+  const tier = tierOf(sub);
+  const bought = !!(sub && sub.apps && sub.apps.videostudio);
+  return { loggedIn: true, entitled: tier === "pro" || tier === "vip" || bought, owner: false, tier: tier, credit: credit };
+}
+
+/* Sjekk tilgang OG trekk én video-kreditt (forhåndsbetalt, ingen gratis kvote). */
+export async function enforceVideoApp(context) {
+  const { env } = context;
+  if (!env || !env.BUILDER_KV) return { ok: true };
+  const user = await sessionUser(context);
+  if (!user) return { ok: false, status: 401, error: "Logg inn for å bruke Video Studio." };
+  if (isOwner(user)) return { ok: true, email: user.email, owner: true };
+  const sub = await subscriptionFor(context, user);
+  const tier = tierOf(sub);
+  const bought = !!(sub && sub.apps && sub.apps.videostudio);
+  if (!(tier === "pro" || tier === "vip" || bought)) {
+    return { ok: false, status: 403, error: "Video Studio er for Pro og VIP, eller de som har kjøpt appen." };
+  }
+  // Ingen gratis kvote: krev forhåndskjøpt video-kreditt.
+  const ckey = "credit:" + user.email;
+  let bal = { image: 0, video: 0 };
+  try { const r = await env.BUILDER_KV.get(ckey); if (r) bal = JSON.parse(r) || bal; } catch (e) {}
+  if ((bal.video || 0) > 0) {
+    bal.video = bal.video - 1;
+    await env.BUILDER_KV.put(ckey, JSON.stringify(bal));
+    return { ok: true, email: user.email, credit: bal.video };
+  }
+  return { ok: false, status: 402, needCredits: true, error: "Du trenger video-kreditter for å lage video. Kjøp på /kjop-kreditt." };
+}
+
+/* Refunder én video-kreditt (når en generering feiler, så ingen betaler for
+   noe de ikke fikk). */
+export async function refundVideoCredit(context, email) {
+  const { env } = context;
+  if (!env || !env.BUILDER_KV || !email) return;
+  const ckey = "credit:" + email;
+  let bal = { image: 0, video: 0 };
+  try { const r = await env.BUILDER_KV.get(ckey); if (r) bal = JSON.parse(r) || bal; } catch (e) {}
+  bal.video = (bal.video || 0) + 1;
+  await env.BUILDER_KV.put(ckey, JSON.stringify(bal));
+}
