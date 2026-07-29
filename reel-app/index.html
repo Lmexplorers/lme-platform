@@ -308,6 +308,14 @@
         </div>
       </div>
 
+      <div class="field">
+        <label class="lab" data-no="Språk på reelen" data-en="Reel language">Språk på reelen</label>
+        <div class="chips" id="rlangChips">
+          <button class="len-chip" data-rlang="no">🇳🇴 Norsk</button>
+          <button class="len-chip" data-rlang="en">🇬🇧 English</button>
+        </div>
+      </div>
+
       <button class="gen-btn" id="genBtn">
         <span>⚡</span>
         <span data-no="Lag reel" data-en="Make reel">Lag reel</span>
@@ -376,6 +384,7 @@
   try { if (localStorage.getItem('lme_lang') === 'en') LANG = 'en'; } catch(e){}
   var FMT = 'reel';
   var SECS = '15';
+  var REELLANG = LANG;   // språket selve reelen lages på (kan velges uavhengig av app-språket)
   var REEL = null;
 
   function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -397,7 +406,7 @@
     if ($('appLang')) $('appLang').textContent = lbl;
     var st = $('accLangState'); if (st) st.textContent = LANG === 'no' ? 'Norsk' : 'English';
   }
-  function toggleLang(){ LANG = LANG === 'no' ? 'en' : 'no'; try{localStorage.setItem('lme_lang',LANG);}catch(e){} applyLang(); }
+  function toggleLang(){ LANG = LANG === 'no' ? 'en' : 'no'; try{localStorage.setItem('lme_lang',LANG);}catch(e){} applyLang(); if (typeof setReelLang === 'function') setReelLang(LANG); }
   $('obLang').addEventListener('click', toggleLang);
   $('appLang').addEventListener('click', toggleLang);
   $('accLang').addEventListener('click', toggleLang);
@@ -437,9 +446,22 @@
   // ---------- LENGDE ----------
   $('lenChips').addEventListener('click', function(e){
     var c = e.target.closest('.len-chip'); if(!c) return;
-    document.querySelectorAll('.len-chip').forEach(function(x){x.classList.remove('on');});
+    $('lenChips').querySelectorAll('.len-chip').forEach(function(x){x.classList.remove('on');});
     c.classList.add('on'); SECS = c.getAttribute('data-secs');
   });
+
+  // ---------- SPRÅK PÅ REELEN ----------
+  function setReelLang(l){
+    REELLANG = l;
+    $('rlangChips').querySelectorAll('.len-chip').forEach(function(x){
+      x.classList.toggle('on', x.getAttribute('data-rlang') === l);
+    });
+  }
+  $('rlangChips').addEventListener('click', function(e){
+    var c = e.target.closest('.len-chip'); if(!c) return;
+    setReelLang(c.getAttribute('data-rlang'));
+  });
+  setReelLang(LANG);
 
   // ---------- GENERERING ----------
   function parseJSON(str){
@@ -508,7 +530,7 @@
     btn.disabled = true; btn.innerHTML='<span class="spinner"></span> '+(LANG==='no'?'Lager reel…':'Making reel…');
     $('out').innerHTML='';
     fetch('/api/ai/content',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({format:FMT, source:topic, seconds:SECS, lang:LANG})})
+      body:JSON.stringify({format:FMT, source:topic, seconds:SECS, lang:REELLANG})})
       .then(function(res){ if(!res.ok) throw new Error('http '+res.status); return res.json(); })
       .then(function(data){
         if (data.error) throw new Error(data.error);
