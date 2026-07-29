@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>LME Video Studio</title>
+<meta name="description" content="Lag AI-videoer med din egen karakter. Last opp et bilde, beskriv scenen, og få en animert video.">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#e85a92">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'), url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink-50:#fff5f8; --pink-100:#ffe8f0; --pink-200:#ffd1e1; --pink-300:#ffb3cd;
+    --pink-400:#ff8ab3; --pink-500:#e85a92; --pink-600:#c43d75; --pink-700:#8f2a55;
+    --lime:#8fc23f; --bla:#6ec1e4; --bla-soft:#dff1f9;
+    --warm-white:#fffcf9; --ink:#3d2438; --ink-soft:#6b4760;
+    --shadow-soft:0 8px 32px rgba(196,61,117,.10); --shadow-med:0 16px 48px rgba(196,61,117,.16);
+    --font-head:'Playpen Sans', system-ui, sans-serif;
+    --font-body:'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body); color: var(--ink); line-height: 1.55; min-height: 100vh;
+    background:
+      radial-gradient(ellipse 80% 40% at 15% 0%, rgba(255,209,225,.4), transparent 60%),
+      radial-gradient(ellipse 70% 40% at 100% 10%, rgba(223,241,249,.5), transparent 60%),
+      var(--warm-white);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  h1, h2, h3 { font-family: var(--font-head); line-height: 1.2; }
+  button, input, textarea, select { font-family: var(--font-body) !important; }
+  a { color: var(--pink-600); }
+
+  .top { position: sticky; top: 0; z-index: 50; background: rgba(255,252,249,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--pink-100); padding: .6rem 1rem; padding-top: calc(.6rem + env(safe-area-inset-top)); }
+  .top-in { max-width: 680px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: .6rem; }
+  .brand { display: flex; align-items: center; gap: .55rem; text-decoration: none; }
+  .brand img { width: 38px; height: 38px; object-fit: contain; }
+  .brand b { font-family: var(--font-head); color: var(--pink-600); font-size: 1rem; }
+  .lang { background: linear-gradient(135deg, var(--pink-400), var(--pink-500)); color: #fff; border: none; padding: .45rem 1rem; border-radius: 999px; font-weight: 600; font-size: .85rem; cursor: pointer; }
+
+  .wrap { max-width: 680px; margin: 0 auto; padding: 1.1rem 1rem 3rem; }
+  .hero { text-align: center; margin-bottom: 1.2rem; }
+  .hero .badge { display: inline-block; background: var(--pink-100); color: var(--pink-700); font-weight: 700; font-size: .8rem; padding: .3rem .9rem; border-radius: 999px; }
+  .hero h1 { font-size: clamp(1.6rem, 6vw, 2.1rem); color: var(--ink); margin: .6rem 0 .3rem; }
+  .hero p { color: var(--ink-soft); font-size: .98rem; }
+
+  .card { background: #fff; border: 1px solid var(--pink-100); border-radius: 20px; box-shadow: var(--shadow-soft); padding: 1.1rem 1.15rem; margin-bottom: 1rem; }
+  .card h2 { font-size: 1.1rem; margin-bottom: .2rem; display: flex; align-items: center; gap: .45rem; }
+  .card .sub { color: var(--ink-soft); font-size: .9rem; margin-bottom: .8rem; }
+  .step { display: inline-flex; align-items: center; justify-content: center; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--pink-500); color: #fff; font-weight: 700; font-size: .85rem; flex: none; }
+
+  .balance { display: inline-flex; align-items: center; gap: .4rem; background: #f1f8e4; color: #5f8f2a; border: 1px solid #dcecc3; font-weight: 700; font-size: .88rem; padding: .35rem .8rem; border-radius: 999px; }
+  .balance.low { background: var(--pink-50); color: var(--pink-700); border-color: var(--pink-200); }
+
+  label.lab { display: block; font-weight: 700; font-size: .92rem; margin-bottom: .4rem; }
+  textarea, input[type=text] { width: 100%; border: 1.5px solid var(--pink-200); border-radius: 14px; padding: .75rem .9rem; font-size: 1rem; color: var(--ink); background: #fff; }
+  textarea { min-height: 90px; resize: vertical; }
+  textarea:focus, input:focus { outline: none; border-color: var(--pink-400); }
+
+  .drop { border: 2px dashed var(--pink-300); border-radius: 16px; background: var(--pink-50); padding: 1.2rem; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; }
+  .drop:hover { border-color: var(--pink-400); background: #fff; }
+  .drop .ic { font-size: 2rem; }
+  .drop p { color: var(--ink-soft); font-size: .9rem; margin-top: .3rem; }
+  .ref-prev { position: relative; margin-top: .8rem; border-radius: 14px; overflow: hidden; display: none; }
+  .ref-prev.show { display: block; }
+  .ref-prev img { width: 100%; max-height: 320px; object-fit: contain; background: #000; display: block; }
+  .ref-prev button { position: absolute; top: .5rem; right: .5rem; background: rgba(255,255,255,.94); border: none; border-radius: 999px; width: 34px; height: 34px; font-size: 1.1rem; cursor: pointer; box-shadow: var(--shadow-soft); }
+
+  .chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .6rem; }
+  .chip { border: 1.5px solid var(--pink-200); background: #fff; color: var(--ink-soft); border-radius: 999px; padding: .4rem .85rem; font-size: .85rem; font-weight: 600; cursor: pointer; }
+  .chip:hover { border-color: var(--pink-400); color: var(--pink-600); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; width: 100%; border: none; border-radius: 999px; padding: .95rem 1.5rem; font-weight: 700; font-size: 1.05rem; cursor: pointer; background: linear-gradient(135deg, var(--pink-500), var(--pink-600)); color: #fff; box-shadow: var(--shadow-soft); }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .btn.ghost { background: #fff; color: var(--pink-600); border: 1.5px solid var(--pink-200); box-shadow: none; }
+  .spinner { width: 1em; height: 1em; border: 2px solid rgba(255,255,255,.5); border-top-color: #fff; border-radius: 50%; display: inline-block; animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .result { margin-top: 1rem; display: none; }
+  .result.show { display: block; }
+  .result video { width: 100%; border-radius: 16px; background: #000; box-shadow: var(--shadow-med); }
+  .msg { margin-top: .8rem; padding: .8rem 1rem; border-radius: 14px; font-size: .92rem; display: none; }
+  .msg.show { display: block; }
+  .msg.err { background: #fdeef3; color: var(--pink-700); border: 1px solid var(--pink-200); }
+  .msg.info { background: var(--bla-soft); color: #2f6377; border: 1px solid #c7e6f2; }
+
+  .note { background: var(--bla-soft); border: 1px solid #c7e6f2; border-radius: 14px; padding: .8rem 1rem; font-size: .88rem; color: #2f6377; }
+  .gate { text-align: center; padding: 1.4rem 1rem; }
+  .gate .ic { font-size: 2.6rem; }
+  .gate h2 { margin: .5rem 0 .3rem; }
+  .gate p { color: var(--ink-soft); margin-bottom: 1rem; }
+  .gate .btn { max-width: 340px; margin: .4rem auto 0; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-in">
+    <a href="/dashboard" class="brand"><img src="/images/lme-logo.png" alt="LME" width="38" height="38"><b>Video Studio</b></a>
+    <button class="lang" id="langToggle">EN 🌍</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <span class="badge">🎬 <span data-no="LME Video Studio" data-en="LME Video Studio">LME Video Studio</span></span>
+    <h1 data-no="Lag video med din egen karakter" data-en="Make a video with your own character">Lag video med din egen karakter</h1>
+    <p data-no="Last opp en karakter, beskriv hva som skjer, og få en animert AI-video." data-en="Upload a character, describe what happens, and get an animated AI video.">Last opp en karakter, beskriv hva som skjer, og få en animert AI-video.</p>
+  </div>
+
+  <!-- Laster -->
+  <div class="card" id="loading"><div class="sub" style="margin:0;" data-no="Laster …" data-en="Loading …">Laster …</div></div>
+
+  <!-- Ikke innlogget -->
+  <div class="card gate hidden" id="gateLogin">
+    <div class="ic">🔑</div>
+    <h2 data-no="Logg inn for å bruke Video Studio" data-en="Log in to use Video Studio">Logg inn for å bruke Video Studio</h2>
+    <p data-no="Du må være innlogget som medlem." data-en="You need to be logged in as a member.">Du må være innlogget som medlem.</p>
+    <a class="btn" href="/login?next=/video-studio" data-no="Logg inn" data-en="Log in">Logg inn</a>
+  </div>
+
+  <!-- Ingen tilgang -->
+  <div class="card gate hidden" id="gateAccess">
+    <div class="ic">⭐</div>
+    <h2 data-no="Video Studio er for Pro og VIP" data-en="Video Studio is for Pro and VIP">Video Studio er for Pro og VIP</h2>
+    <p data-no="Bli Pro eller VIP i Inner Circle, eller kjøp appen, for å lage videoer med din egen karakter." data-en="Become Pro or VIP in the Inner Circle, or buy the app, to make videos with your own character.">Bli Pro eller VIP i Inner Circle, eller kjøp appen, for å lage videoer med din egen karakter.</p>
+    <a class="btn" href="/oppgrader" data-no="Se medlemskap" data-en="See membership">Se medlemskap</a>
+  </div>
+
+  <!-- Selve studioet -->
+  <div id="studio" class="hidden">
+    <div style="text-align:center; margin-bottom:1rem;">
+      <span class="balance" id="balance"></span>
+    </div>
+
+    <div class="card">
+      <h2><span class="step">1</span> <span data-no="Karakteren din" data-en="Your character">Karakteren din</span></h2>
+      <div class="sub" data-no="Last opp et tydelig bilde av karakteren (tegning, figur eller bilde). Den holder utseendet i videoen." data-en="Upload a clear image of the character (drawing, figure or photo). It keeps the look in the video.">Last opp et tydelig bilde av karakteren (tegning, figur eller bilde). Den holder utseendet i videoen.</div>
+      <div class="drop" id="drop">
+        <div class="ic">📤</div>
+        <p data-no="Trykk for å laste opp bilde" data-en="Tap to upload an image">Trykk for å laste opp bilde</p>
+      </div>
+      <input type="file" id="file" accept="image/*" class="hidden">
+      <div class="ref-prev" id="refPrev"><img id="refImg" alt=""><button id="refClear" aria-label="Fjern">×</button></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="step">2</span> <span data-no="Hva skjer i scenen?" data-en="What happens in the scene?">Hva skjer i scenen?</span></h2>
+      <textarea id="prompt" data-ph-no="F.eks. Karakteren vinker og smiler i en solfylt eng, mens en sommerfugl flyr forbi." data-ph-en="E.g. The character waves and smiles in a sunny meadow while a butterfly flies past." placeholder="F.eks. Karakteren vinker og smiler i en solfylt eng, mens en sommerfugl flyr forbi."></textarea>
+      <div class="chips" id="chips">
+        <button type="button" class="chip" data-add="gentle camera push-in, soft warm light" data-no="Rolig innzoom" data-en="Gentle zoom">Rolig innzoom</button>
+        <button type="button" class="chip" data-add="waving and smiling warmly" data-no="Vinker og smiler" data-en="Waving and smiling">Vinker og smiler</button>
+        <button type="button" class="chip" data-add="walking through a sunny meadow with flowers" data-no="Går i en eng" data-en="Walking in a meadow">Går i en eng</button>
+        <button type="button" class="chip" data-add="playful and happy, dancing gently" data-no="Danser glad" data-en="Dancing happily">Danser glad</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <button class="btn" id="go"><span data-no="Lag video" data-en="Make video">Lag video</span> <span style="opacity:.85;">(1 <span data-no="kreditt" data-en="credit">kreditt</span>)</span></button>
+      <div class="msg info" id="msgInfo"></div>
+      <div class="msg err" id="msgErr"></div>
+      <div class="result" id="result">
+        <video id="video" controls playsinline></video>
+        <div style="margin-top:.7rem; display:flex; gap:.6rem;">
+          <a class="btn ghost" id="download" download="mia-teo-video.mp4" data-no="Last ned" data-en="Download">Last ned</a>
+          <button class="btn ghost" id="again" data-no="Lag en til" data-en="Make another">Lag en til</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="note" data-no="Trygghet: Video Studio er barnevennlig. Ekte personer, skummelt eller voksent innhold er ikke tillatt. Feiler en video, får du kreditten tilbake automatisk." data-en="Safety: Video Studio is child-friendly. Real people, scary or adult content is not allowed. If a video fails, your credit is refunded automatically.">Trygghet: Video Studio er barnevennlig. Ekte personer, skummelt eller voksent innhold er ikke tillatt. Feiler en video, får du kreditten tilbake automatisk.</div>
+  </div>
+</div>
+
+<script>
+  var currentLang = (window.LME_CURRENT_LANG === 'en') ? 'en' : 'no';
+  function q(id) { return document.getElementById(id); }
+  function isEn() { return currentLang === 'en'; }
+  function L(no, en) { return isEn() ? en : no; }
+  function switchLanguage(lang) {
+    currentLang = lang; window.LME_CURRENT_LANG = lang; document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      var t = el.getAttribute('data-' + lang); if (t === null) return;
+      if (t.indexOf('<') !== -1) el.innerHTML = t; else el.textContent = t;
+    });
+    document.querySelectorAll('[data-ph-no][data-ph-en]').forEach(function (el) {
+      el.setAttribute('placeholder', el.getAttribute(lang === 'no' ? 'data-ph-no' : 'data-ph-en'));
+    });
+    q('langToggle').textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    if (access) renderBalance();
+  }
+  q('langToggle').addEventListener('click', function () { switchLanguage(currentLang === 'no' ? 'en' : 'no'); });
+
+  var access = null, refUrl = null, busy = false;
+
+  function show(id) { q(id).classList.remove('hidden'); }
+  function hide(id) { q(id).classList.add('hidden'); }
+
+  function renderBalance() {
+    var v = (access && access.credit && access.credit.video) || 0;
+    var b = q('balance');
+    b.textContent = '🎬 ' + v + ' ' + L('video-kreditter', 'video credits');
+    b.classList.toggle('low', v <= 0);
+  }
+
+  function applyState() {
+    hide('loading'); hide('gateLogin'); hide('gateAccess'); hide('studio');
+    if (!access || !access.loggedIn) { show('gateLogin'); return; }
+    if (!access.entitled) { show('gateAccess'); return; }
+    show('studio'); renderBalance();
+  }
+
+  function loadAccess() {
+    return fetch('/api/video-studio', { credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) { access = d || { loggedIn: false }; })
+      .catch(function () { access = { loggedIn: false }; })
+      .then(applyState);
+  }
+
+  /* ---- Karakter-opplasting ---- */
+  q('drop').addEventListener('click', function () { q('file').click(); });
+  q('file').addEventListener('change', function () {
+    var f = this.files && this.files[0]; if (!f) return;
+    shrink(f, function (dataUrl) {
+      msg('info', L('Laster opp bildet …', 'Uploading image …'));
+      fetch('/api/image', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
+        body: JSON.stringify({ upload: dataUrl, contentType: 'image/jpeg' }) })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (d && d.url) { refUrl = d.url; q('refImg').src = dataUrl; q('refPrev').classList.add('show'); clearMsg(); }
+          else { msg('err', (d && d.error) || L('Kunne ikke laste opp bildet.', 'Could not upload the image.')); }
+        })
+        .catch(function () { msg('err', L('Nettverksfeil ved opplasting.', 'Network error while uploading.')); });
+    });
+  });
+  q('refClear').addEventListener('click', function () { refUrl = null; q('refPrev').classList.remove('show'); q('file').value = ''; });
+
+  function shrink(file, cb) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      var img = new Image();
+      img.onload = function () {
+        var max = 1280, w = img.width, h = img.height;
+        if (w > max || h > max) { if (w >= h) { h = Math.round(h * max / w); w = max; } else { w = Math.round(w * max / h); h = max; } }
+        var c = document.createElement('canvas'); c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        cb(c.toDataURL('image/jpeg', 0.85));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /* ---- Stil-chips ---- */
+  document.querySelectorAll('#chips .chip').forEach(function (c) {
+    c.addEventListener('click', function () {
+      var t = q('prompt'); var add = c.getAttribute('data-add');
+      t.value = (t.value.trim() ? t.value.trim() + ', ' : '') + add;
+      t.focus();
+    });
+  });
+
+  /* ---- Meldinger ---- */
+  function msg(kind, text) { var e = q(kind === 'err' ? 'msgErr' : 'msgInfo'); var o = q(kind === 'err' ? 'msgInfo' : 'msgErr'); e.textContent = text; e.classList.add('show'); o.classList.remove('show'); }
+  function clearMsg() { q('msgErr').classList.remove('show'); q('msgInfo').classList.remove('show'); }
+
+  /* ---- Generering ---- */
+  q('go').addEventListener('click', function () {
+    if (busy) return;
+    if (!refUrl) { msg('err', L('Last opp et karakterbilde først.', 'Upload a character image first.')); return; }
+    var prompt = q('prompt').value.trim();
+    if (!prompt) { msg('err', L('Skriv hva som skjer i scenen.', 'Write what happens in the scene.')); return; }
+    if (((access.credit && access.credit.video) || 0) <= 0 && !access.owner) {
+      msg('err', L('Du har ingen video-kreditter. Kjøp på /kjop-kreditt.', 'You have no video credits. Buy them at /kjop-kreditt.'));
+      return;
+    }
+    busy = true; clearMsg(); q('result').classList.remove('show');
+    setBtn(true);
+    msg('info', L('Sender inn … dette tar gjerne et par minutter.', 'Submitting … this usually takes a couple of minutes.'));
+    fetch('/api/video-studio', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ prompt: prompt, imageUrl: refUrl }) })
+      .then(function (r) { return r.json().then(function (d) { return { s: r.status, d: d }; }); })
+      .then(function (res) {
+        var d = res.d;
+        if (res.s !== 200 || !d || d.error || (!d.id && !d.statusUrl)) {
+          setBtn(false); busy = false;
+          msg('err', (d && d.error) || L('Kunne ikke starte video.', 'Could not start the video.'));
+          if (d && typeof d.credit === 'number') { access.credit.video = d.credit; renderBalance(); }
+          return;
+        }
+        if (typeof d.credit === 'number' && access.credit) { access.credit.video = d.credit; renderBalance(); }
+        poll(d.id || '', d.statusUrl || '', 0);
+      })
+      .catch(function () { setBtn(false); busy = false; msg('err', L('Nettverksfeil.', 'Network error.')); });
+  });
+
+  function poll(id, statusUrl, tries) {
+    if (tries > 80) { setBtn(false); busy = false; msg('err', L('Det tok for lang tid. Prøv igjen.', 'It took too long. Please try again.')); loadAccess(); return; }
+    var qs = 'id=' + encodeURIComponent(id) + (statusUrl ? '&u=' + encodeURIComponent(statusUrl) : '');
+    fetch('/api/video-studio?' + qs, { credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.status === 'completed' && d.url) {
+          setBtn(false); busy = false; clearMsg();
+          q('video').src = d.url; q('download').href = d.url; q('result').classList.add('show');
+          q('result').scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+        if (d && (d.status === 'failed' || d.status === 'nsfw' || d.error)) {
+          setBtn(false); busy = false;
+          msg('err', (d && d.error) || L('Videoen kunne ikke lages.', 'The video could not be made.'));
+          loadAccess(); // oppdater saldo (kreditt refundert)
+          return;
+        }
+        setTimeout(function () { poll(id, statusUrl, tries + 1); }, 4000);
+      })
+      .catch(function () { setTimeout(function () { poll(id, statusUrl, tries + 1); }, 4000); });
+  }
+
+  function setBtn(loading) {
+    var b = q('go');
+    b.disabled = loading;
+    b.innerHTML = loading
+      ? '<span class="spinner"></span> ' + L('Lager video …', 'Making video …')
+      : '<span>' + L('Lag video', 'Make video') + '</span> <span style="opacity:.85;">(1 ' + L('kreditt', 'credit') + ')</span>';
+  }
+  q('again').addEventListener('click', function () { q('result').classList.remove('show'); clearMsg(); q('prompt').focus(); });
+
+  /* ---- Init ---- */
+  if (currentLang === 'en') switchLanguage('en');
+  loadAccess();
+</script>
+
+<script src="/js/lme-account.js?v=8" defer></script>
+</body>
+</html>
