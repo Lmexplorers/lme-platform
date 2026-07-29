@@ -205,7 +205,23 @@
       </label>
 
       <label class="field">
-        <span data-no="Læringsmål" data-en="Learning goal">Læringsmål <span class="hint" data-no="(hva barnet lærer)" data-en="(what the child learns)">(hva barnet lærer)</span></span>
+        <span data-no="Læringsmål" data-en="Learning goal">Læringsmål <span class="hint" data-no="(velg fra menyen eller skriv eget)" data-en="(pick from the menu or write your own)">(velg fra menyen eller skriv eget)</span></span>
+        <select id="f-goal-preset" style="margin-bottom:.5rem;">
+          <option value="" data-no="🎯 Velg et ferdig læringsmål …" data-en="🎯 Choose a ready-made goal …">🎯 Velg et ferdig læringsmål …</option>
+          <option data-no="Å oppdage naturen med alle sansene" data-en="To discover nature using all the senses">Å oppdage naturen med alle sansene</option>
+          <option data-no="Å ta vare på dyr og planter" data-en="To care for animals and plants">Å ta vare på dyr og planter</option>
+          <option data-no="Å klare små oppgaver selv" data-en="To manage small tasks on my own">Å klare små oppgaver selv</option>
+          <option data-no="Å rydde på plass etter seg" data-en="To tidy up after myself">Å rydde på plass etter seg</option>
+          <option data-no="Å telle og kjenne igjen tall" data-en="To count and recognize numbers">Å telle og kjenne igjen tall</option>
+          <option data-no="Å sortere og sammenligne mengder" data-en="To sort and compare amounts">Å sortere og sammenligne mengder</option>
+          <option data-no="Å kjenne igjen farger og former" data-en="To recognize colors and shapes">Å kjenne igjen farger og former</option>
+          <option data-no="Å dele og vente på tur" data-en="To share and wait my turn">Å dele og vente på tur</option>
+          <option data-no="Å sette ord på følelser" data-en="To put feelings into words">Å sette ord på følelser</option>
+          <option data-no="Å være en god venn" data-en="To be a good friend">Å være en god venn</option>
+          <option data-no="Å puste rolig og finne ro" data-en="To breathe calmly and find calm">Å puste rolig og finne ro</option>
+          <option data-no="Å slappe av før leggetid" data-en="To relax before bedtime">Å slappe av før leggetid</option>
+          <option value="__custom__" data-no="✏️ Skriv eget mål" data-en="✏️ Write your own goal">✏️ Skriv eget mål</option>
+        </select>
         <input type="text" id="f-goal" data-ph-no="F.eks. Å vente på tur og puste rolig" data-ph-en="E.g. To wait your turn and breathe calmly" placeholder="F.eks. Å vente på tur og puste rolig">
         <div class="en-row"><span class="en-lab">🇬🇧 English</span><input type="text" id="f-goal-en" placeholder=""></div>
       </label>
@@ -451,6 +467,19 @@ TEO (boy, ~5): tousled chestnut-brown hair, warm brown eyes, cheerful grin, yell
   }
   ['f-title','f-title-en','f-kicker','f-kicker-en','f-lede','f-lede-en','f-goal','f-goal-en','f-duration','f-category','f-orient','f-video']
     .forEach(function (id) { q(id).addEventListener('input', renderPreview); });
+  // Læringsmål-meny: velg et ferdig mål (fyller begge språk), eller skriv eget.
+  q('f-goal-preset').addEventListener('change', function () {
+    var v = this.value;
+    if (v === '') return;
+    if (v === '__custom__') { q('f-goal').value = ''; q('f-goal-en').value = ''; q('f-goal').focus(); }
+    else {
+      var opt = this.options[this.selectedIndex];
+      q('f-goal').value = opt.getAttribute('data-no') || '';
+      q('f-goal-en').value = opt.getAttribute('data-en') || '';
+    }
+    this.selectedIndex = 0;
+    renderPreview();
+  });
   q('f-cover').addEventListener('change', function () {
     var f = this.files && this.files[0]; if (!f) return;
     shrinkImage(f, function (d) { coverData = d; renderPreview(); });
