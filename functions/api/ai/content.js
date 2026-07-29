@@ -39,18 +39,20 @@ ALDRI dikt opp garantier, pengene-tilbake-løfter, refusjonsvilkår, priser, rab
 
 const langName = (l) => (l === "en" ? "English" : "norsk (bokmål)");
 
-// Rask modell, samme som "Gjør synlig" (functions/api/ai/repurpose.js), som
-// er bevist å svare raskt nok med produksjonsnøkkelen. Reel Studio brukte før
-// claude-sonnet-5 med en 14s hard timeout, og lengre kilder (som en stor
-// innliming) rakk ikke ferdig i tide, så brukeren fikk "Noe gikk galt".
-// Kan overstyres uten ny utrulling via CONTENT_TEXT_MODEL i Cloudflare.
-const DEFAULT_MODEL = "claude-haiku-4-5-20251001";
+// Sterk modell for kvalitet. En raskere modell (haiku) ble prøvd for å unngå
+// tidsavbrudd, men den beskrev Montessori-materiellet feil og droppet felter
+// (hook, caption, CTA, hashtags). Denne jobben krever presisjon: riktige navn
+// og utseende på materiellet, og fullstendig JSON. Vi holder den likevel rask
+// og robust med tenkning AV, ett nytt forsøk ved feil, og en romslig
+// tidsgrense. Kan overstyres uten ny utrulling via CONTENT_TEXT_MODEL.
+const DEFAULT_MODEL = "claude-sonnet-5";
 
 // Hard timeout per kall. Uten dette kan et tregt Anthropic-svar henge helt
 // til Cloudflare gir opp og sender sin egen HTML-502 (i stedet for vår rene
-// JSON). Bedre å avbryte selv og feile rent og retry-bart. Samme mønster som
-// functions/api/ai/repurpose.js.
-const CALL_TIMEOUT_MS = 16000;
+// JSON). Bedre å avbryte selv og feile rent og retry-bart. Romsligere enn før
+// (20s) siden sonnet med tenkning av holder seg godt innenfor, og retry tar
+// den sjeldne trege.
+const CALL_TIMEOUT_MS = 20000;
 
 async function callClaude(env, system, userPrompt, maxTokens, model) {
   const ctrl = new AbortController();
@@ -68,6 +70,10 @@ async function callClaude(env, system, userPrompt, maxTokens, model) {
       body: JSON.stringify({
         model: model || env.CONTENT_TEXT_MODEL || DEFAULT_MODEL,
         max_tokens: maxTokens || 3000,
+        // Tenkning AV: for strukturert innholdsgenerering trenger vi ikke
+        // resonnering, og uten den svarer sonnet raskt og direkte, godt
+        // innenfor tidsgrensen.
+        thinking: { type: "disabled" },
         system,
         messages: [{ role: "user", content: userPrompt }],
       }),
@@ -103,13 +109,13 @@ function contentPrompt(b) {
   const src = (b.source || b.article || "").slice(0, 6000);
   const shapes = {
     carousel: `{"format":"carousel","title":"kort arbeidstittel","slides":["3-8 korte slides, hver bygger på forrige, siste er en tydelig CTA"],"caption":"ferdig caption","hashtags":["8-12 hashtags"]}`,
-    reel: `{"format":"reel","title":"kort arbeidstittel","hook":"tekst-på-skjerm 0-3s, maks 8 ord","voiceover":"hele voiceover-manuset","scenes":[{"time":"0-3s","onScreen":"tekst","voiceover":"det som sies","broll":"visuell prompt i LME-stil, 9:16"}],"musicMood":"stil","caption":"caption","hashtags":["8-12 hashtags"]}`,
+    reel: `{"format":"reel","title":"kort arbeidstittel","hook":"tekst-på-skjerm 0-3s, maks 8 ord","voiceover":"hele voiceover-manuset","scenes":[{"time":"0-3s","onScreen":"tekst","voiceover":"det som sies","broll":"ALLTID PÅ ENGELSK: visuell prompt for en vertikal 9:16 scene i LMEs rosa/krem Montessori-stil, ingen tekst i bildet. Handler scenen om et konkret Montessori-materiell, MÅ du navngi det presist med det engelske navnet OG beskrive nøyaktig hvordan det ser ut (riktige farger, antall deler, form og oppsett), f.eks. 'the Pink Tower: ten graduated pink wooden cubes stacked from largest at the bottom to smallest at the top' eller 'the Golden Bead material: a unit bead, a ten-bar, a hundred-square and a thousand-cube in golden beads'. Aldri bare 'a wooden toy'."}],"musicMood":"stil","caption":"caption","hashtags":["8-12 hashtags"]}`,
     story: `{"format":"story","title":"kort arbeidstittel","frames":[{"headline":"kort overskrift på framen","body":"kort tekst"}],"caption":"kort ledetekst","hashtags":["5-8 hashtags"]}`,
     post: `{"format":"post","title":"kort arbeidstittel","caption":"ferdig feed-caption, answer-first, varm CTA","hashtags":["8-12 hashtags"],"imagePrompt":"detaljert bilde-prompt i LMEs rosa/krem Montessori-stil"}`,
     caption: `{"format":"caption","title":"kort arbeidstittel","caption":"dyp, personlig bildetekst, 4-8 avsnitt","hashtags":["6-10 hashtags"]}`,
     email: `{"format":"email","subject":"emnelinje","preview":"forhåndstekst","body":"varm e-post til lista, ren tekst med avsnitt","cta":"kort oppfordring"}`,
     pinterest: `{"format":"pinterest","pinTitle":"søkbar tittel maks 100 tegn","pinDescription":"150-200 tegn med nøkkelord og myk CTA","imagePrompt":"detaljert Canva/bilde-prompt i LME-stil"}`,
-    hookreel: `{"format":"hookreel","title":"kort arbeidstittel","hook":"scroll-stoppende tekst-på-skjerm i de første sekundene, 4-10 ord, skaper nysgjerrighet","voiceover":"hele det personlige manuset i jeg-form, historie som drar leseren inn og gir ekte verdi","scenes":[{"time":"0-3s","onScreen":"tekst-hook","voiceover":"det som sies","broll":"visuell prompt: enten meg som snakker til kamera, eller rolig lifestyle b-roll, vertikal 9:16 i LME-stil"}],"cta":"kommentar-basert oppfordring, f.eks. Kommenter ORDET nedenfor, så sender jeg deg …","caption":"ferdig caption","hashtags":["6-10 hashtags"]}`,
+    hookreel: `{"format":"hookreel","title":"kort arbeidstittel","hook":"scroll-stoppende tekst-på-skjerm i de første sekundene, 4-10 ord, skaper nysgjerrighet","voiceover":"hele det personlige manuset i jeg-form, historie som drar leseren inn og gir ekte verdi","scenes":[{"time":"0-3s","onScreen":"tekst-hook","voiceover":"det som sies","broll":"ALLTID PÅ ENGELSK: visuell prompt for vertikal 9:16 i LME-stil, enten meg som snakker til kamera eller rolig lifestyle b-roll, ingen tekst i bildet. Vises et konkret Montessori-materiell, MÅ du navngi det presist med det engelske navnet OG beskrive nøyaktig utseende (farger, antall deler, form, oppsett), f.eks. 'the Pink Tower: ten graduated pink wooden cubes from largest to smallest'. Aldri bare 'a wooden toy'."}],"cta":"kommentar-basert oppfordring, f.eks. Kommenter ORDET nedenfor, så sender jeg deg …","caption":"ferdig caption","hashtags":["6-10 hashtags"]}`,
     explainer: `{"format":"explainer","title":"kort arbeidstittel","level":"hvem videoen passer for, f.eks. foreldre, barnehage 3-6 år, skole","hook":"åpningssetning som skrives på tavla, maks 8 ord","scenes":[{"time":"0-8s","board":"det som tegnes/skrives på whiteboarden i denne scenen, korte stikkord","narration":"det som fortelles med rolig stemme, 1-2 setninger","illustration":"ALLTID PÅ ENGELSK: ett konkret motiv som kan tegnes som én håndtegnet blyantskisse for denne scenen, f.eks. 'a child concentrating on a wooden puzzle at a small table'. Handler scenen om et konkret Montessori-materiell, MÅ du både navngi det presist med det engelske navnet OG beskrive nøyaktig hvordan det faktisk ser ut, med riktige farger, antall deler, form og oppsett, f.eks. 'the Pink Tower: ten graduated pink wooden cubes stacked from largest at the bottom to smallest at the top' eller 'the Golden Bead material: a unit bead, a ten-bar, a hundred-square and a thousand-cube in golden beads'. Aldri bare 'a wooden toy'. Ett tydelig motiv, ingen tekst i bildet."}],"takeaway":"én setning som oppsummerer det seeren skal huske","caption":"kort delings-caption for Instagram/TikTok","hashtags":["6-10 hashtags"]}`,
   };
   const shape = shapes[fmt] || shapes.post;
@@ -132,12 +138,13 @@ export async function onRequestPost(context) {
   catch { return json({ error: "Ugyldig JSON" }, 400); }
 
   const system = `${BRAND_CONTEXT}\nDu er LMEs innholdsprodusent. Du lager ferdig, publiseringsklart innhold i akkurat det formatet brukeren velger, i LMEs varme, pedagogiske tone.`;
-  // Rask modell (samme som "Gjør synlig") for alle formater. De nye, litt
-  // tyngre formatene får et lavere token-tak, så kallet holder seg raskt og
-  // godt innenfor tidsgrensen til funksjonen.
+  // Nok token-tak til at hele JSON-en kommer med. De tyngre formatene
+  // (explainer, hookreel) har mange felter og flere scener, så de trenger
+  // rikelig rom, ellers kappes svaret og felter som caption, CTA og hashtags
+  // (som står sist) faller bort.
   const fmt = String(body.format || "post");
   const light = (fmt === "explainer" || fmt === "hookreel");
-  const maxTokens = light ? 2000 : 3000;
+  const maxTokens = light ? 3000 : 3200;
   try {
     const result = await callClaudeRetry(env, system, contentPrompt(body), maxTokens);
     return json({ result });

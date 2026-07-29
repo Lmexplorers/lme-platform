@@ -74,15 +74,19 @@ function buildPrompt(text, character) {
   const c = CHAR[character];
   if (c) {
     parts.push(c);
-    const theme = String(text || "").replace(/\s+/g, " ").trim().slice(0, 320);
+    // Nok av beskrivelsen til at et presist navngitt Montessori-materiell (med
+    // farger, antall deler og oppsett) overlever inn i bildet. 320 tegn kappet
+    // vekk akkurat detaljene som gjør materiellet riktig.
+    const theme = String(text || "").replace(/\s+/g, " ").trim().slice(0, 700);
     parts.push(
       theme
         ? `Depict them in a scene that fits this theme (illustrate the mood and activity, do not render any of these words): ${theme}`
         : "Depict them exploring nature and learning together."
     );
   } else {
-    // Ingen karakter: nøytral, trygg Montessori-scene som passer temaet.
-    const theme = String(text || "").replace(/\s+/g, " ").trim().slice(0, 320);
+    // Ingen karakter: nøytral, trygg Montessori-scene som passer temaet. Behold
+    // nok av beskrivelsen til at riktig materiell faktisk kommer med i bildet.
+    const theme = String(text || "").replace(/\s+/g, " ").trim().slice(0, 700);
     parts.push(NEUTRAL_SCENE);
     if (theme) parts.push(`Let the scene fit this theme (do not render any of these words): ${theme}`);
   }
