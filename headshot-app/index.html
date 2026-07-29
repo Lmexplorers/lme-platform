@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0">
+<meta name="theme-color" content="#E91E89">
+<title>LME AI Headshot · proffe portretter av deg</title>
+<meta name="description" content="Proffe AI-portretter av deg selv. Last opp en selfie, velg stil, og få et profesjonelt headshot som fortsatt ligner deg.">
+<link rel="manifest" href="/headshot-app/manifest.webmanifest">
+<link rel="icon" href="/images/lme-logo.png">
+<link rel="apple-touch-icon" href="/images/app/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="LME AI Headshot">
+<meta name="mobile-web-app-capable" content="yes">
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
+  @font-face{ font-family:'Sasson Montessori'; src:url('/fonts/SassoonMontessori.woff2') format('woff2'),url('/fonts/SassoonMontessori.ttf') format('truetype'); font-weight:normal; font-style:normal; font-display:swap; }
+  :root{
+    --lime:#A4D233; --lime-soft:#E8F5D1; --cerise:#E91E89; --cerise-soft:#FCE3F1;
+    --sun:#F7C72E; --sun-soft:#FFF4D6; --bg:#FBF7F0; --bg-2:#FFFFFF;
+    --ink:#1F1B24; --ink-soft:#5A5560; --ink-muted:#938E99; --line:rgba(31,27,36,0.08);
+    --r-sm:12px; --r-md:18px; --r-lg:24px; --r-xl:32px; --r-pill:999px;
+    --shadow-md:0 10px 30px rgba(31,27,36,0.07); --shadow-lg:0 22px 50px rgba(31,27,36,0.12);
+    --font:'Sasson Montessori','Playpen Sans',system-ui,sans-serif; --font-head:'Playpen Sans',system-ui,sans-serif;
+    --grad:linear-gradient(120deg,var(--cerise),#ff5fb0);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{font-family:var(--font);color:var(--ink);background:radial-gradient(700px 420px at 100% -8%,var(--sun-soft) 0%,transparent 55%),radial-gradient(680px 420px at -8% 2%,var(--cerise-soft) 0%,transparent 52%),var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  h1,h2,h3,h4,h5,h6{font-family:var(--font-head);}
+  button,input,select,textarea{font-family:var(--font);}
+  img{max-width:100%;display:block;}
+  a{color:inherit;text-decoration:none;}
+  button{cursor:pointer;border:none;background:none;color:inherit;}
+  .app-shell{max-width:480px;margin:0 auto;min-height:100%;position:relative;}
+
+  #onboarding{padding:24px 20px calc(40px + env(safe-area-inset-bottom));}
+  .ob-brand{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;margin-bottom:18px;}
+  .ob-brand img{height:56px;width:auto;filter:drop-shadow(0 6px 14px rgba(233,30,137,.18));}
+  .ob-brand .name{font-family:var(--font-head);font-weight:800;font-size:20px;}
+  .ob-brand .name b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .chip{display:block;width:fit-content;margin:0 auto 16px;background:var(--cerise);color:#fff;font-size:12px;font-weight:700;padding:7px 15px;border-radius:var(--r-pill);box-shadow:0 8px 18px rgba(233,30,137,.28);}
+  .ob-hero{text-align:center;}
+  .ob-hero h1{font-size:clamp(27px,7.6vw,34px);font-weight:800;line-height:1.14;letter-spacing:-0.02em;margin-bottom:12px;}
+  .ob-hero h1 .hl{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .ob-hero .sub{font-size:15.5px;color:var(--ink-soft);max-width:390px;margin:0 auto 20px;}
+  .ticks{display:grid;gap:10px;max-width:330px;margin:0 auto 22px;text-align:left;}
+  .ticks span{display:flex;align-items:center;gap:10px;font-size:14.5px;color:var(--ink-soft);font-weight:600;}
+  .ticks .t{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--lime-soft);color:#5b7d12;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;}
+  .ob-steps{display:grid;gap:12px;margin:6px 0 24px;}
+  .ob-step{display:flex;gap:14px;align-items:flex-start;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 18px;box-shadow:var(--shadow-md);}
+  .ob-step .n{flex-shrink:0;width:38px;height:38px;border-radius:12px;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:16px;}
+  .ob-step h3{font-size:16px;font-weight:800;margin-bottom:2px;}
+  .ob-step p{font-size:13.5px;color:var(--ink-soft);}
+  .btn-primary{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;font-size:17px;font-weight:800;padding:17px 20px;border-radius:var(--r-pill);background:var(--grad);color:#fff;box-shadow:0 12px 26px rgba(233,30,137,.32);transition:transform .15s ease;}
+  .btn-primary:active{transform:scale(.985);}
+  .ob-note{margin-top:14px;font-size:12.5px;color:var(--ink-muted);text-align:center;}
+  .ob-lang{position:absolute;top:18px;right:18px;border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:700;font-size:12px;padding:7px 12px;border-radius:var(--r-pill);box-shadow:var(--shadow-md);z-index:5;}
+
+  #app{display:none;flex-direction:column;min-height:100%;}
+  #app.show{display:flex;}
+  .appbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(10px + env(safe-area-inset-top)) 18px 10px;background:rgba(251,247,240,0.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);}
+  .appbar .b{display:flex;align-items:center;gap:9px;font-family:var(--font-head);font-weight:800;font-size:16px;}
+  .appbar .b img{height:28px;width:auto;}
+  .appbar .b b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .lang-toggle{border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:700;font-size:12px;padding:7px 11px;border-radius:var(--r-pill);}
+  .screen{flex:1;padding:18px 18px calc(96px + env(safe-area-inset-bottom));display:none;}
+  .screen.active{display:block;}
+  .screen h2.title{font-size:22px;font-weight:800;margin-bottom:4px;}
+  .screen p.lead{font-size:14px;color:var(--ink-soft);margin-bottom:16px;}
+  .field{margin-bottom:14px;}
+  label.lab{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:7px;}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;}
+  .len-chip{font-size:13.5px;font-weight:700;border:1.5px solid var(--line);background:#fff;color:var(--ink-soft);border-radius:var(--r-pill);padding:9px 15px;}
+  .len-chip.on{background:var(--cerise);border-color:var(--cerise);color:#fff;}
+  .drop{width:100%;border:2px dashed #e9a8bf;border-radius:var(--r-lg);background:var(--bg-2);padding:26px 16px;text-align:center;color:var(--ink-soft);}
+  .drop .em{font-size:34px;margin-bottom:8px;} .drop p{font-size:14px;}
+  .twin-preview{display:none;position:relative;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow-md);}
+  .twin-preview img{width:100%;display:block;}
+  .twin-preview .change{position:absolute;top:10px;right:10px;background:rgba(31,27,36,.6);color:#fff;font-size:12px;font-weight:700;padding:7px 12px;border-radius:var(--r-pill);}
+  .hidden{display:none;}
+  .gen-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:8px;font-size:16.5px;font-weight:800;padding:17px;border-radius:var(--r-pill);background:var(--grad);color:#fff;box-shadow:0 12px 26px rgba(233,30,137,.3);transition:transform .15s ease;}
+  .gen-btn:active{transform:scale(.985);} .gen-btn:disabled{opacity:.6;} .gen-btn .cost{opacity:.85;font-weight:700;}
+  .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .msg{font-size:13.5px;margin-top:12px;min-height:1em;} .msg.info{color:var(--ink-soft);} .msg.err{color:var(--cerise);} .msg a{color:var(--cerise);font-weight:700;}
+  .balance{display:inline-flex;align-items:center;gap:8px;background:var(--lime-soft);color:#4d6b0f;border:1px solid #d7e9b5;font-weight:700;font-size:13px;padding:8px 13px;border-radius:var(--r-pill);margin-bottom:14px;}
+  .result{display:none;margin-top:18px;}
+  .result.show{display:block;}
+  .result img{width:100%;border-radius:var(--r-lg);border:1px solid var(--line);box-shadow:var(--shadow-md);}
+  .dlbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:12px;font-size:14.5px;font-weight:800;padding:14px;border-radius:var(--r-pill);background:var(--grad);color:#fff;}
+  .againbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;font-size:14px;font-weight:800;padding:13px;border-radius:var(--r-pill);background:var(--bg-2);border:1.5px solid var(--line);color:var(--ink-soft);}
+  .krow{display:flex;align-items:center;gap:12px;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-md);padding:15px 16px;margin-bottom:11px;box-shadow:var(--shadow-md);}
+  .krow .ic{font-size:20px;} .krow .tx{flex:1;}
+  .krow .tx b{display:block;font-family:var(--font-head);font-size:14.5px;} .krow .tx span{font-size:12.5px;color:var(--ink-muted);}
+  .krow .go{font-size:13px;font-weight:700;color:var(--cerise);}
+  .plan{background:var(--grad);color:#fff;border-radius:var(--r-lg);padding:20px;text-align:center;margin-bottom:16px;box-shadow:var(--shadow-md);}
+  .plan .p1{font-family:var(--font-head);font-weight:800;font-size:18px;} .plan .p2{font-size:13px;opacity:.92;margin-top:3px;}
+  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;max-width:480px;margin:0 auto;display:flex;background:rgba(255,255,255,0.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:8px 8px calc(8px + env(safe-area-inset-bottom));}
+  .tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;font-size:11px;font-weight:700;color:var(--ink-muted);border-radius:14px;}
+  .tabbar button .ti{font-size:20px;line-height:1;} .tabbar button.on{color:var(--cerise);}
+  .install-hint{background:var(--sun-soft);border:1px solid #F1DFA0;border-radius:var(--r-md);padding:13px 15px;font-size:13px;color:#7a5e00;margin-bottom:14px;display:none;}
+  .install-hint.show{display:block;}
+  .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:13px;font-weight:700;padding:11px 18px;border-radius:var(--r-pill);opacity:0;pointer-events:none;transition:opacity .2s;z-index:80;}
+  .toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ONBOARDING -->
+  <section id="onboarding">
+    <button class="ob-lang" id="obLang">EN 🌍</button>
+    <div class="ob-brand">
+      <img src="/images/lme-logo.png" alt="LME" onerror="this.style.display='none'">
+      <div class="name">LME <b>AI Headshot</b></div>
+    </div>
+    <span class="chip" data-no="📸 Proffe portretter av deg" data-en="📸 Pro portraits of you">📸 Proffe portretter av deg</span>
+    <div class="ob-hero">
+      <h1 data-no="Proffe <span class='hl'>headshots</span> på ett trykk" data-en="Pro <span class='hl'>headshots</span> in one tap">Proffe <span class="hl">headshots</span> på ett trykk</h1>
+      <p class="sub" data-no="Last opp en selfie, velg en stil, og få et profesjonelt portrett som fortsatt ligner deg. Perfekt til LinkedIn, CV og profilbilde." data-en="Upload a selfie, pick a style, and get a professional portrait that still looks like you. Perfect for LinkedIn, your CV and profile photo.">Last opp en selfie, velg en stil, og få et profesjonelt portrett som fortsatt ligner deg. Perfekt til LinkedIn, CV og profilbilde.</p>
+      <div class="ticks">
+        <span><span class="t">✓</span><span data-no="Ligner deg, ikke en fremmed" data-en="Looks like you, not a stranger">Ligner deg, ikke en fremmed</span></span>
+        <span><span class="t">✓</span><span data-no="Flere stiler: business, LinkedIn, portrett" data-en="Several styles: business, LinkedIn, portrait">Flere stiler: business, LinkedIn, portrett</span></span>
+        <span><span class="t">✓</span><span data-no="Klart på et par minutter" data-en="Ready in a couple of minutes">Klart på et par minutter</span></span>
+        <span><span class="t">✓</span><span data-no="Last ned i full oppløsning" data-en="Download in full resolution">Last ned i full oppløsning</span></span>
+      </div>
+    </div>
+    <div class="ob-steps">
+      <div class="ob-step"><div class="n">1</div><div><h3 data-no="Last opp en selfie" data-en="Upload a selfie">Last opp en selfie</h3><p data-no="Ett tydelig bilde av ansiktet ditt." data-en="One clear photo of your face.">Ett tydelig bilde av ansiktet ditt.</p></div></div>
+      <div class="ob-step"><div class="n">2</div><div><h3 data-no="Velg stil" data-en="Pick a style">Velg stil</h3><p data-no="Business, LinkedIn, portrett, sort-hvitt og mer." data-en="Business, LinkedIn, portrait, black and white and more.">Business, LinkedIn, portrett, sort-hvitt og mer.</p></div></div>
+      <div class="ob-step"><div class="n">3</div><div><h3 data-no="Få headshotet ditt" data-en="Get your headshot">Få headshotet ditt</h3><p data-no="Klar til nedlasting og deling." data-en="Ready to download and share.">Klar til nedlasting og deling.</p></div></div>
+    </div>
+    <button class="btn-primary" id="startBtn"><span>⚡</span><span data-no="Kom i gang" data-en="Get started">Kom i gang</span></button>
+    <div class="ob-note" data-no="Hvert headshot koster én kreditt. Du logger inn med LME-kontoen din." data-en="Each headshot costs one credit. You log in with your LME account.">Hvert headshot koster én kreditt. Du logger inn med LME-kontoen din.</div>
+  </section>
+
+  <!-- APP -->
+  <div id="app">
+    <div class="appbar">
+      <div class="b"><img src="/images/lme-logo.png" alt="" onerror="this.style.display='none'">LME <b>AI Headshot</b></div>
+      <button class="lang-toggle" id="appLang">EN 🌍</button>
+    </div>
+
+    <section class="screen active" id="s-make">
+      <h2 class="title" data-no="Lag et headshot" data-en="Make a headshot">Lag et headshot</h2>
+      <p class="lead" data-no="Last opp en selfie, velg stil, og la AI-en lage portrettet." data-en="Upload a selfie, pick a style, and let the AI make the portrait.">Last opp en selfie, velg stil, og la AI-en lage portrettet.</p>
+
+      <div class="install-hint" id="installHint"></div>
+      <div id="accessBanner"></div>
+
+      <div class="field">
+        <label class="lab" data-no="1. Selfien din" data-en="1. Your selfie">1. Selfien din</label>
+        <button class="drop" id="drop" type="button"><div class="em">📸</div><p data-no="Trykk for å laste opp et bilde av deg" data-en="Tap to upload a photo of you">Trykk for å laste opp et bilde av deg</p></button>
+        <div class="twin-preview" id="twinPreview"><img id="twinImg" alt=""><span class="change" data-no="Bytt bilde" data-en="Change photo">Bytt bilde</span></div>
+        <input type="file" id="file" accept="image/*" class="hidden">
+      </div>
+
+      <div class="field">
+        <label class="lab" data-no="2. Velg stil" data-en="2. Pick a style">2. Velg stil</label>
+        <div class="chips" id="styleChips">
+          <button class="len-chip on" data-style="business" data-no="💼 Business" data-en="💼 Business">💼 Business</button>
+          <button class="len-chip" data-style="linkedin" data-no="🔷 LinkedIn" data-en="🔷 LinkedIn">🔷 LinkedIn</button>
+          <button class="len-chip" data-style="portrait" data-no="✨ Portrett" data-en="✨ Portrait">✨ Portrett</button>
+          <button class="len-chip" data-style="bw" data-no="🖤 Sort-hvitt" data-en="🖤 Black & white">🖤 Sort-hvitt</button>
+          <button class="len-chip" data-style="outdoor" data-no="🌿 Ute" data-en="🌿 Outdoor">🌿 Ute</button>
+          <button class="len-chip" data-style="creative" data-no="🎨 Kreativ" data-en="🎨 Creative">🎨 Kreativ</button>
+        </div>
+      </div>
+
+      <button class="gen-btn" id="genBtn"><span>⚡</span><span data-no="Lag headshot" data-en="Make headshot">Lag headshot</span> <span class="cost">(1 <span data-no="kreditt" data-en="credit">kreditt</span>)</span></button>
+      <div class="msg" id="msg"></div>
+
+      <div class="result" id="result">
+        <img id="resultImg" alt="">
+        <a class="dlbtn" id="download" download><span>⬇️</span><span data-no="Last ned bildet" data-en="Download the image">Last ned bildet</span></a>
+        <button class="againbtn" id="againBtn"><span>🎨</span><span data-no="Prøv en annen stil" data-en="Try another style">Prøv en annen stil</span></button>
+      </div>
+    </section>
+
+    <section class="screen" id="s-account">
+      <h2 class="title" data-no="Konto" data-en="Account">Konto</h2>
+      <div class="plan"><div class="p1">LME AI Headshot</div><div class="p2" id="planText" data-no="Logg inn for å se kredittene dine." data-en="Log in to see your credits.">Logg inn for å se kredittene dine.</div></div>
+      <button class="krow" id="installBtn" style="width:100%;text-align:left;display:none;">
+        <span class="ic">📲</span>
+        <span class="tx"><b data-no="Installer appen" data-en="Install the app">Installer appen</b><span data-no="Legg LME AI Headshot på hjem-skjermen" data-en="Add LME AI Headshot to your home screen">Legg LME AI Headshot på hjem-skjermen</span></span>
+        <span class="go">→</span>
+      </button>
+      <a class="krow" href="/kjop-kreditt">
+        <span class="ic">💳</span>
+        <span class="tx"><b data-no="Kjøp kreditt" data-en="Buy credit">Kjøp kreditt</b><span data-no="Fyll på bilde-kreditter" data-en="Top up image credits">Fyll på bilde-kreditter</span></span>
+        <span class="go">→</span>
+      </a>
+      <a class="krow" href="/ai-twin-app/">
+        <span class="ic">🧑‍🎤</span>
+        <span class="tx"><b data-no="LME AI Twin" data-en="LME AI Twin">LME AI Twin</b><span data-no="Reels med din egen AI-tvilling" data-en="Reels with your own AI twin">Reels med din egen AI-tvilling</span></span>
+        <span class="go">→</span>
+      </a>
+      <button class="krow" id="accLang" style="width:100%;text-align:left;">
+        <span class="ic">🌍</span>
+        <span class="tx"><b data-no="Språk" data-en="Language">Språk</b><span id="accLangState">Norsk</span></span>
+        <span class="go">→</span>
+      </button>
+    </section>
+
+    <nav class="tabbar">
+      <button class="on" data-screen="s-make"><span class="ti">📸</span><span data-no="Lag" data-en="Make">Lag</span></button>
+      <button data-screen="s-account"><span class="ti">👤</span><span data-no="Konto" data-en="Account">Konto</span></button>
+    </nav>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var LANG='no'; try{ if(localStorage.getItem('lme_lang')==='en') LANG='en'; }catch(e){}
+  var STYLE='business', IMGURL='', BUSY=false, RESULT_URL='';
+  var ACCESS={ loggedIn:false, owner:false, credit:{image:0,video:0} };
+  function $(id){ return document.getElementById(id); }
+  function L(no,en){ return LANG==='no'?no:en; }
+  function toast(m){ var t=$('toast'); t.textContent=m; t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},1600); }
+
+  function applyLang(){
+    document.documentElement.lang=LANG;
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){ var t=el.getAttribute('data-'+LANG); if(t.indexOf('<')!==-1) el.innerHTML=t; else el.textContent=t; });
+    var lbl=LANG==='no'?'EN 🌍':'NO 🇳🇴'; if($('obLang'))$('obLang').textContent=lbl; if($('appLang'))$('appLang').textContent=lbl;
+    var st=$('accLangState'); if(st) st.textContent=LANG==='no'?'Norsk':'English';
+    renderBalance();
+  }
+  function toggleLang(){ LANG=LANG==='no'?'en':'no'; try{localStorage.setItem('lme_lang',LANG);}catch(e){} applyLang(); }
+  $('obLang').addEventListener('click',toggleLang); $('appLang').addEventListener('click',toggleLang); $('accLang').addEventListener('click',toggleLang);
+  $('startBtn').addEventListener('click',function(){ $('onboarding').style.display='none'; $('app').classList.add('show'); loadAccess(); });
+
+  document.querySelectorAll('.tabbar button').forEach(function(b){ b.addEventListener('click',function(){ document.querySelectorAll('.tabbar button').forEach(function(x){x.classList.remove('on');}); b.classList.add('on'); document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');}); $(b.getAttribute('data-screen')).classList.add('active'); window.scrollTo(0,0); }); });
+  $('styleChips').addEventListener('click',function(e){ var c=e.target.closest('.len-chip'); if(!c)return; $('styleChips').querySelectorAll('.len-chip').forEach(function(x){x.classList.remove('on');}); c.classList.add('on'); STYLE=c.getAttribute('data-style'); });
+
+  function loadAccess(){
+    fetch('/api/headshot',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){
+      if(d){ ACCESS.loggedIn=!!d.loggedIn; ACCESS.owner=!!d.owner; ACCESS.credit=d.credit||{image:0,video:0}; }
+      renderBalance(); renderAccessBanner();
+    }).catch(function(){});
+  }
+  function renderBalance(){ var pt=$('planText'); if(!pt)return; if(ACCESS.owner){ pt.textContent=L('Eier, full tilgang. Lag så mange du vil.','Owner, full access. Make as many as you like.'); } else if(ACCESS.loggedIn){ pt.textContent=L('Bilde-kreditter: ','Image credits: ')+((ACCESS.credit&&ACCESS.credit.image)||0); } else { pt.textContent=L('Logg inn for å se kredittene dine.','Log in to see your credits.'); } }
+  function renderAccessBanner(){ var b=$('accessBanner'); b.innerHTML=''; if(ACCESS.owner){ b.innerHTML='<div class="balance">👑 '+L('Eier, gratis','Owner, free')+'</div>'; return; } if(!ACCESS.loggedIn){ b.innerHTML='<div class="msg err">'+L('Logg inn med LME-kontoen din for å lage headshots.','Log in with your LME account to make headshots.')+'</div>'; return; } b.innerHTML='<div class="balance">📸 '+L('Bilde-kreditter: ','Image credits: ')+((ACCESS.credit&&ACCESS.credit.image)||0)+'</div>'; }
+
+  /* Opplasting */
+  $('drop').addEventListener('click',function(){ $('file').click(); });
+  $('twinPreview').addEventListener('click',function(){ $('file').click(); });
+  $('file').addEventListener('change',function(){
+    var f=this.files&&this.files[0]; if(!f) return;
+    downscale(f, function(dataUrl){
+      $('msg').className='msg info'; $('msg').textContent=L('Laster opp bildet …','Uploading image …');
+      fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({upload:dataUrl,contentType:'image/jpeg'})})
+        .then(function(r){return r.json();}).then(function(d){ if(d&&d.url){ IMGURL=d.url; $('twinImg').src=d.url; $('twinPreview').style.display='block'; $('drop').style.display='none'; $('msg').textContent=''; } else { $('msg').className='msg err'; $('msg').textContent=(d&&d.error)||L('Kunne ikke laste opp bildet.','Could not upload the image.'); } })
+        .catch(function(){ $('msg').className='msg err'; $('msg').textContent=L('Nettverksfeil ved opplasting.','Network error while uploading.'); });
+    });
+  });
+  function downscale(file, cb){ var r=new FileReader(); r.onload=function(e){ var img=new Image(); img.onload=function(){ var w=img.width,h=img.height,max=1024; if(w>h&&w>max){h=Math.round(h*max/w);w=max;} else if(h>=w&&h>max){w=Math.round(w*max/h);h=max;} var c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(img,0,0,w,h); cb(c.toDataURL('image/jpeg',0.85)); }; img.src=e.target.result; }; r.readAsDataURL(file); }
+
+  /* Generering */
+  function setBusy(b){ BUSY=b; var g=$('genBtn'); g.disabled=b; if(b){ g.innerHTML='<span class="spinner"></span> '+L('Lager headshot … et par minutter','Making headshot … a couple of minutes'); } else { g.innerHTML='<span>⚡</span><span>'+L('Lag headshot','Make headshot')+'</span> <span class="cost">(1 '+L('kreditt','credit')+')</span>'; } }
+  $('genBtn').addEventListener('click',function(){
+    if(BUSY) return;
+    if(!IMGURL){ $('msg').className='msg err'; $('msg').textContent=L('Last opp en selfie først.','Upload a selfie first.'); return; }
+    if(!ACCESS.owner && ACCESS.loggedIn && (((ACCESS.credit&&ACCESS.credit.image)||0)<=0)){ $('msg').className='msg err'; $('msg').innerHTML=L('Du har ingen bilde-kreditter. Kjøp på ','You have no image credits. Buy them at ')+'<a href="/kjop-kreditt">/kjop-kreditt</a>.'; return; }
+    setBusy(true); $('result').classList.remove('show'); $('msg').className='msg info'; $('msg').textContent=L('Lager headshotet ditt … dette tar gjerne et par minutter.','Making your headshot … this usually takes a couple of minutes.');
+    fetch('/api/headshot',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({imageUrl:IMGURL,style:STYLE})})
+      .then(function(r){return r.json().then(function(d){return {s:r.status,d:d};});})
+      .then(function(res){ var d=res.d; if(res.s!==200||!d||d.error||(!d.id&&!d.statusUrl)){ setBusy(false); $('msg').className='msg err'; $('msg').textContent=(d&&d.error)||L('Kunne ikke starte.','Could not start.'); if(d&&typeof d.credit==='number'&&ACCESS.credit){ACCESS.credit.image=d.credit;renderBalance();renderAccessBanner();} return; } if(d&&typeof d.credit==='number'&&ACCESS.credit){ACCESS.credit.image=d.credit;renderBalance();renderAccessBanner();} poll(d.id||'',d.statusUrl||'',0); })
+      .catch(function(){ setBusy(false); $('msg').className='msg err'; $('msg').textContent=L('Noe gikk galt. Prøv igjen.','Something went wrong. Try again.'); });
+  });
+  function poll(id, statusUrl, tries){
+    if(tries>80){ setBusy(false); $('msg').className='msg err'; $('msg').textContent=L('Det tok for lang tid. Prøv igjen.','It took too long. Please try again.'); loadAccess(); return; }
+    var qs='id='+encodeURIComponent(id)+(statusUrl?'&u='+encodeURIComponent(statusUrl):'');
+    fetch('/api/headshot?'+qs,{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){
+      if(d&&d.status==='completed'&&d.url){ setBusy(false); $('msg').textContent=''; RESULT_URL=d.url; $('resultImg').src=d.url; $('download').href=d.url; $('result').classList.add('show'); $('result').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+      if(d&&(d.status==='failed'||d.status==='nsfw'||d.error)){ setBusy(false); $('msg').className='msg err'; $('msg').textContent=(d&&d.error)||L('Bildet kunne ikke lages.','The image could not be made.'); loadAccess(); return; }
+      setTimeout(function(){ poll(id,statusUrl,tries+1); }, 4000);
+    }).catch(function(){ setTimeout(function(){ poll(id,statusUrl,tries+1); }, 4000); });
+  }
+  $('againBtn').addEventListener('click',function(){ $('result').classList.remove('show'); window.scrollTo({top:0,behavior:'smooth'}); });
+
+  /* Install + init */
+  var deferred=null;
+  window.addEventListener('beforeinstallprompt',function(e){ e.preventDefault(); deferred=e; $('installBtn').style.display='flex'; });
+  $('installBtn').addEventListener('click',function(){ if(deferred){ deferred.prompt(); deferred.userChoice.finally(function(){ deferred=null; $('installBtn').style.display='none'; }); } });
+  (function(){ var isIos=/iphone|ipad|ipod/i.test(navigator.userAgent); var standalone=window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches; if(isIos&&!standalone){ var h=$('installHint'); h.classList.add('show'); h.setAttribute('data-no','📲 Tips: trykk på Del-knappen og velg "Legg til på Hjem-skjerm" for å bruke LME AI Headshot som app.'); h.setAttribute('data-en','📲 Tip: tap the Share button and choose "Add to Home Screen" to use LME AI Headshot as an app.'); } })();
+
+  applyLang();
+  if('serviceWorker' in navigator){ window.addEventListener('load',function(){ navigator.serviceWorker.register('/sw.js').catch(function(){}); }); }
+})();
+</script>
+</body>
+</html>

@@ -215,3 +215,48 @@ export async function refundVideoCredit(context, email) {
   bal.video = (bal.video || 0) + 1;
   await env.BUILDER_KV.put(ckey, JSON.stringify(bal));
 }
+
+/* =========================================================================
+   AI Headshot (egen app): eier gratis, ellers forhåndskjøpt bilde-kreditt.
+   Ansiktsbevarende portretter via Higgsfield Soul. Samme prinsipp som Video
+   Studio: tilgang åpner døra, kreditt betaler for maskinen. Bruker "image"-
+   kreditt (samme som selges på /kjop-kreditt).
+   ========================================================================= */
+
+/* Hvem er du, og kreditt-saldo (uten å trekke). */
+export async function headshotAppAccess(context) {
+  const user = await sessionUser(context);
+  if (!user) return { loggedIn: false, owner: false, credit: { image: 0, video: 0 } };
+  const credit = await creditFor(context, user.email);
+  if (isOwner(user)) return { loggedIn: true, owner: true, credit: credit };
+  return { loggedIn: true, owner: false, credit: credit };
+}
+
+/* Sjekk tilgang OG trekk én bilde-kreditt (forhåndsbetalt, ingen gratis kvote). */
+export async function enforceHeadshotApp(context) {
+  const { env } = context;
+  if (!env || !env.BUILDER_KV) return { ok: true };
+  const user = await sessionUser(context);
+  if (!user) return { ok: false, status: 401, error: "Logg inn for å bruke AI Headshot." };
+  if (isOwner(user)) return { ok: true, email: user.email, owner: true };
+  const ckey = "credit:" + user.email;
+  let bal = { image: 0, video: 0 };
+  try { const r = await env.BUILDER_KV.get(ckey); if (r) bal = JSON.parse(r) || bal; } catch (e) {}
+  if ((bal.image || 0) > 0) {
+    bal.image = bal.image - 1;
+    await env.BUILDER_KV.put(ckey, JSON.stringify(bal));
+    return { ok: true, email: user.email, credit: bal.image };
+  }
+  return { ok: false, status: 402, needCredits: true, error: "Du trenger bilde-kreditter for å lage headshots. Kjøp på /kjop-kreditt." };
+}
+
+/* Refunder én bilde-kreditt (når en generering feiler). */
+export async function refundImageCredit(context, email) {
+  const { env } = context;
+  if (!env || !env.BUILDER_KV || !email) return;
+  const ckey = "credit:" + email;
+  let bal = { image: 0, video: 0 };
+  try { const r = await env.BUILDER_KV.get(ckey); if (r) bal = JSON.parse(r) || bal; } catch (e) {}
+  bal.image = (bal.image || 0) + 1;
+  await env.BUILDER_KV.put(ckey, JSON.stringify(bal));
+}
