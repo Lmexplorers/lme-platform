@@ -3,524 +3,102 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="version" content="2.1">
   <title>Sparemål — LME</title>
-  <meta name="description" content="Spin ukentlig, spar stabilt, nå sparemålet ditt.">
+  <meta name="description" content="Spin ukentlig, spar stabilt, nå sparemålet ditt. Med utfordring, RECORD-knapp og utfordringstracking.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
   <style>
     @font-face {
       font-family: 'Sasson Montessori';
       src: url('/fonts/SassoonMontessori.woff2') format('woff2'), url('/fonts/SassoonMontessori.ttf') format('truetype');
       font-weight: normal; font-style: normal; font-display: swap;
     }
-
     :root {
-      --pink: #F8D7DA;
-      --pink-mid: #F5A8B8;
-      --cerise: #E91E89;
-      --lime: #7AAE1F;
-      --yellow: #F7C72E;
-      --cream: #FBF6F0;
-      --ink: #1A1A1A;
-      --grey: #4A4A4A;
-      --line: rgba(26, 26, 26, 0.1);
+      --pink: #F8D7DA; --pink-mid: #F5A8B8; --cerise: #E91E89;
+      --lime: #7AAE1F; --yellow: #F7C72E; --cream: #FBF6F0;
+      --ink: #1A1A1A; --grey: #4A4A4A; --line: rgba(26,26,26,0.1);
       --font-head: 'Playpen Sans', system-ui, sans-serif;
       --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: var(--font-body);
-      color: var(--ink);
-      background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 55%, #F8D7DA 100%);
-      min-height: 100vh;
-      line-height: 1.55;
-      padding-bottom: env(safe-area-inset-bottom);
-    }
-
-    h1, h2, h3, h4, h5, h6 {
-      font-family: var(--font-head);
-    }
-
-    button, input, textarea, select {
-      font-family: var(--font-body) !important;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-      padding: 13px 20px;
-      background: rgba(255, 255, 255, 0.75);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--line);
-      position: sticky;
-      top: 0;
-      z-index: 5;
-    }
-
-    .bar .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      color: var(--cerise);
-      font-size: 15px;
-    }
-
-    .bar .brand img {
-      width: 32px;
-      height: 32px;
-      object-fit: contain;
-    }
-
-    .bar .actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .btn {
-      border: 0;
-      border-radius: 999px;
-      padding: 9px 16px;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-      font-size: 13.5px;
-      white-space: nowrap;
-      transition: all 0.2s ease;
-    }
-
-    .btn-back {
-      background: #fff;
-      color: var(--ink);
-      border: 1px solid #eedce2;
-    }
-
-    .btn-back:hover {
-      box-shadow: 0 4px 12px rgba(26, 26, 26, 0.08);
-    }
-
-    .btn-lang {
-      background: #FCEFF2;
-      color: #C13D6A;
-    }
-
-    .btn-lang:hover {
-      background: #F8D7DA;
-    }
-
-    .btn-primary {
-      background: var(--cerise);
-      color: #fff;
-      padding: 12px 24px;
-      font-size: 15px;
-      width: 100%;
-    }
-
-    .btn-primary:hover {
-      opacity: 0.9;
-    }
-
-    .btn-primary:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .wrap {
-      max-width: 540px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 32px 20px 70px;
-    }
-
-    .head {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .head .kick {
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--cerise);
-    }
-
-    .head h1 {
-      font-size: 32px;
-      margin: 8px 0 12px;
-    }
-
-    .head p {
-      color: var(--grey);
-      font-size: 15px;
-    }
-
-    .card {
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 24px;
-      margin-bottom: 18px;
-      box-shadow: 0 4px 12px rgba(26, 26, 26, 0.04);
-    }
-
-    .card h2 {
-      font-size: 20px;
-      margin-bottom: 8px;
-    }
-
-    .card .sub {
-      color: var(--grey);
-      font-size: 14px;
-      margin-bottom: 16px;
-    }
-
-    .goal-section {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
-    .goal-amount {
-      font-size: 48px;
-      font-weight: 700;
-      color: var(--cerise);
-      margin-bottom: 4px;
-    }
-
-    .goal-label {
-      font-size: 14px;
-      color: var(--grey);
-    }
-
-    .progress-circle {
-      position: relative;
-      width: 160px;
-      height: 160px;
-      margin: 0 auto 20px;
-    }
-
-    .progress-bg {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: #f0f0f0;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: conic-gradient(var(--pink-mid) 0deg, var(--pink-mid) var(--progress-angle), #f0f0f0 var(--progress-angle), #f0f0f0 360deg);
-      --progress-angle: 0deg;
-    }
-
-    .progress-inner {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: calc(100% - 20px);
-      height: calc(100% - 20px);
-      border-radius: 50%;
-      background: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .progress-percent {
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--cerise);
-    }
-
-    .progress-text {
-      font-size: 12px;
-      color: var(--grey);
-    }
-
-    .challenge-info {
-      background: linear-gradient(135deg, #FFE9F5, #F49DC5);
-      padding: 16px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .challenge-date {
-      font-size: 13px;
-      color: var(--ink);
-      margin-bottom: 8px;
-    }
-
-    .challenge-duration {
-      font-size: 12px;
-      color: var(--grey);
-    }
-
-    .record-btn {
-      background: linear-gradient(135deg, var(--lime), #5a9616);
-      color: #fff;
-      padding: 16px 32px;
-      border-radius: 999px;
-      border: 0;
-      font-weight: 700;
-      font-size: 16px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 6px 16px rgba(122, 174, 31, 0.2);
-      margin-bottom: 20px;
-      width: 100%;
-    }
-
-    .record-btn:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(122, 174, 31, 0.3);
-    }
-
-    .record-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .stat {
-      background: #f8f8f8;
-      padding: 12px;
-      border-radius: 12px;
-      text-align: center;
-    }
-
-    .stat-label {
-      font-size: 11px;
-      color: var(--grey);
-      margin-bottom: 4px;
-    }
-
-    .stat-value {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--cerise);
-    }
-
-    .stat.green .stat-value {
-      color: var(--lime);
-    }
-
-    .stat.blue .stat-value {
-      color: #3FA9F5;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-body); color: var(--ink); background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 55%, #F8D7DA 100%); min-height: 100vh; line-height: 1.55; padding-bottom: env(safe-area-inset-bottom); }
+    h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); }
+    button, input, textarea, select { font-family: var(--font-body) !important; }
+    a { color: inherit; text-decoration: none; }
+    .bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 13px 20px; background: rgba(255,255,255,0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+    .bar .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--cerise); font-size: 15px; }
+    .bar .brand img { width: 32px; height: 32px; object-fit: contain; }
+    .bar .actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .btn { border: 0; border-radius: 999px; padding: 9px 16px; font-weight: 700; font-family: inherit; cursor: pointer; font-size: 13.5px; white-space: nowrap; transition: all 0.2s ease; }
+    .btn-back { background: #fff; color: var(--ink); border: 1px solid #eedce2; }
+    .btn-back:hover { box-shadow: 0 4px 12px rgba(26,26,26,0.08); }
+    .btn-lang { background: #FCEFF2; color: #C13D6A; }
+    .btn-lang:hover { background: #F8D7DA; }
+    .btn-primary { background: var(--cerise); color: #fff; padding: 12px 24px; font-size: 15px; width: 100%; }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .wrap { max-width: 540px; width: 100%; margin: 0 auto; padding: 32px 20px 70px; }
+    .head { text-align: center; margin-bottom: 30px; }
+    .head .kick { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cerise); }
+    .head h1 { font-size: 32px; margin: 8px 0 12px; }
+    .head p { color: var(--grey); font-size: 15px; max-width: 560px; margin: 0 auto; }
+    .card { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 24px; margin-bottom: 18px; box-shadow: 0 4px 12px rgba(26,26,26,0.04); }
+    .card h2 { font-size: 20px; margin-bottom: 8px; }
+    .card .sub { color: var(--grey); font-size: 14px; margin-bottom: 16px; }
+    .challenge-info { background: linear-gradient(135deg, #FFE9F5, #F49DC5); padding: 16px; border-radius: 12px; margin-bottom: 20px; text-align: center; }
+    .challenge-date { font-size: 13px; color: var(--ink); margin-bottom: 8px; }
+    .challenge-duration { font-size: 12px; color: var(--grey); }
+    .record-btn { background: linear-gradient(135deg, var(--lime), #5a9616); color: #fff; padding: 16px 32px; border-radius: 999px; border: 0; font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 6px 16px rgba(122,174,31,0.2); margin-bottom: 20px; width: 100%; }
+    .record-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(122,174,31,0.3); }
+    .record-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .goal-section { text-align: center; margin-bottom: 24px; }
+    .goal-amount { font-size: 48px; font-weight: 700; color: var(--cerise); margin-bottom: 4px; }
+    .goal-label { font-size: 14px; color: var(--grey); }
+    .progress-circle { position: relative; width: 160px; height: 160px; margin: 0 auto 20px; }
+    .progress-bg { width: 100%; height: 100%; border-radius: 50%; background: #f0f0f0; position: relative; overflow: hidden; }
+    .progress-fill { position: absolute; width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(var(--pink-mid) 0deg, var(--pink-mid) var(--progress-angle), #f0f0f0 var(--progress-angle), #f0f0f0 360deg); --progress-angle: 0deg; }
+    .progress-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: calc(100% - 20px); height: calc(100% - 20px); border-radius: 50%; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .progress-percent { font-size: 32px; font-weight: 700; color: var(--cerise); }
+    .progress-text { font-size: 12px; color: var(--grey); }
+    .stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .stat { background: #f8f8f8; padding: 12px; border-radius: 12px; text-align: center; }
+    .stat-label { font-size: 11px; color: var(--grey); margin-bottom: 4px; }
+    .stat-value { font-size: 20px; font-weight: 700; color: var(--cerise); }
+    .stat.green .stat-value { color: var(--lime); }
+    .stat.blue .stat-value { color: #3FA9F5; }
+    .wheel-section { text-align: center; }
+    .wheel-container { margin: 24px 0; position: relative; width: 100%; aspect-ratio: 1; max-width: 300px; margin-left: auto; margin-right: auto; }
+    .wheel-canvas { width: 100%; height: 100%; }
+    .wheel-pointer { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 14px solid var(--cerise); z-index: 10; }
+    .spin-btn { background: linear-gradient(135deg, var(--cerise), #d1166d); color: #fff; padding: 14px 32px; border-radius: 999px; border: 0; font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 6px 16px rgba(233,30,137,0.2); margin-top: 16px; }
+    .spin-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(233,30,137,0.3); }
+    .spin-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .setting-goal { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 8px; color: var(--ink); }
+    .form-input { width: 100%; padding: 12px; border: 1.5px solid var(--line); border-radius: 12px; font-size: 16px; font-family: inherit; }
+    .form-input:focus { outline: none; border-color: var(--cerise); box-shadow: 0 0 0 3px rgba(233,30,137,0.1); }
+    .history { margin-top: 20px; }
+    .history h3 { font-size: 16px; margin-bottom: 12px; color: var(--ink); }
+    .history-list { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column-reverse; }
+    .history-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: #f8f8f8; border-radius: 10px; margin-bottom: 6px; font-size: 14px; }
+    .history-amount { font-weight: 700; color: var(--cerise); }
+    .history-date { font-size: 12px; color: var(--grey); }
+    .reset-btn { width: 100%; padding: 10px; background: #fff; border: 1px solid var(--line); border-radius: 10px; color: var(--grey); font-weight: 600; cursor: pointer; margin-top: 16px; font-size: 14px; }
+    .reset-btn:hover { background: #f8f8f8; }
+    .empty-state { text-align: center; padding: 20px 0; color: var(--grey); }
+    .empty-state p { font-size: 14px; }
     @media (max-width: 520px) {
-      .stats {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .wheel-section {
-      text-align: center;
-    }
-
-    .wheel-container {
-      margin: 24px 0;
-      position: relative;
-      width: 100%;
-      aspect-ratio: 1;
-      max-width: 300px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .wheel-canvas {
-      width: 100%;
-      height: 100%;
-    }
-
-    .wheel-pointer {
-      position: absolute;
-      top: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-top: 14px solid var(--cerise);
-      z-index: 10;
-    }
-
-    .spin-btn {
-      background: linear-gradient(135deg, var(--cerise), #d1166d);
-      color: #fff;
-      padding: 14px 32px;
-      border-radius: 999px;
-      border: 0;
-      font-weight: 700;
-      font-size: 16px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 6px 16px rgba(233, 30, 137, 0.2);
-      margin-top: 16px;
-    }
-
-    .spin-btn:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(233, 30, 137, 0.3);
-    }
-
-    .spin-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .setting-goal {
-      margin-top: 24px;
-      padding-top: 24px;
-      border-top: 1px solid var(--line);
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    .form-label {
-      display: block;
-      font-weight: 700;
-      font-size: 14px;
-      margin-bottom: 8px;
-      color: var(--ink);
-    }
-
-    .form-input {
-      width: 100%;
-      padding: 12px;
-      border: 1.5px solid var(--line);
-      border-radius: 12px;
-      font-size: 16px;
-      font-family: inherit;
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: var(--cerise);
-      box-shadow: 0 0 0 3px rgba(233, 30, 137, 0.1);
-    }
-
-    .history {
-      margin-top: 20px;
-    }
-
-    .history h3 {
-      font-size: 16px;
-      margin-bottom: 12px;
-      color: var(--ink);
-    }
-
-    .history-list {
-      max-height: 200px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column-reverse;
-    }
-
-    .history-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 12px;
-      background: #f8f8f8;
-      border-radius: 10px;
-      margin-bottom: 6px;
-      font-size: 14px;
-    }
-
-    .history-amount {
-      font-weight: 700;
-      color: var(--cerise);
-    }
-
-    .history-date {
-      font-size: 12px;
-      color: var(--grey);
-    }
-
-    .reset-btn {
-      width: 100%;
-      padding: 10px;
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      color: var(--grey);
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 16px;
-      font-size: 14px;
-    }
-
-    .reset-btn:hover {
-      background: #f8f8f8;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 20px 0;
-      color: var(--grey);
-    }
-
-    .empty-state p {
-      font-size: 14px;
-    }
-
-    @media (max-width: 520px) {
-      .head h1 {
-        font-size: 26px;
-      }
-
-      .goal-amount {
-        font-size: 36px;
-      }
-
-      .progress-circle {
-        width: 140px;
-        height: 140px;
-      }
+      .head h1 { font-size: 26px; }
+      .goal-amount { font-size: 36px; }
+      .progress-circle { width: 140px; height: 140px; }
+      .stats { grid-template-columns: 1fr; }
     }
   </style>
 </head>
-
 <body>
   <div class="bar">
-    <!-- VERSION: 2.2 - Challenge tracking enabled -->
     <a class="brand" href="/dashboard"><img src="/images/lme-logo.png" alt="LME">Sparemål</a>
     <div class="actions">
       <button class="btn btn-lang" id="lme-lang" type="button">🇬🇧 English</button>
@@ -623,13 +201,9 @@
   </div>
 
   <script>
-    // Language support
     (function () {
       window.LME_CURRENT_LANG = 'no';
-      try {
-        window.LME_CURRENT_LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no';
-      } catch (e) {}
-
+      try { window.LME_CURRENT_LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no'; } catch (e) {}
       function apply() {
         var en = window.LME_CURRENT_LANG === 'en';
         document.documentElement.lang = en ? 'en' : 'no';
@@ -640,20 +214,15 @@
         if (b) b.textContent = en ? '🇳🇴 Norsk' : '🇬🇧 English';
         document.title = (en ? 'Savings Goal' : 'Sparemål') + ' — LME';
       }
-
       window.lmeToggleLang = function () {
         window.LME_CURRENT_LANG = window.LME_CURRENT_LANG === 'en' ? 'no' : 'en';
-        try {
-          localStorage.setItem('lme_lang', window.LME_CURRENT_LANG);
-        } catch (e) {}
+        try { localStorage.setItem('lme_lang', window.LME_CURRENT_LANG); } catch (e) {}
         apply();
       };
-
       document.getElementById('lme-lang').addEventListener('click', window.lmeToggleLang);
       apply();
     })();
 
-    // App state
     const amounts = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000];
     let state = {
       goal: 100000,
@@ -664,7 +233,6 @@
       challengeStartDate: null
     };
 
-    // Load state
     function loadState() {
       try {
         const saved = localStorage.getItem('sparemaal_state');
@@ -675,26 +243,19 @@
       updateUI();
     }
 
-    // Save state
     function saveState() {
       try {
         localStorage.setItem('sparemaal_state', JSON.stringify(state));
       } catch (e) {}
     }
 
-    // Update all UI
     function updateUI() {
       const saved = state.saved;
       const goal = state.goal;
       const percent = Math.round((saved / goal) * 100);
       const left = Math.max(0, goal - saved);
-      const avgAmount = (50 + 2000) / 2;
-      const spinsLeft = Math.ceil(left / avgAmount);
-
-      // Translations
       const isEn = window.LME_CURRENT_LANG === 'en';
 
-      // Challenge info
       if (!state.challengeStartDate) {
         state.challengeStartDate = new Date().toISOString();
         saveState();
@@ -708,7 +269,6 @@
       });
       document.getElementById('challengeStartDate').textContent = challengeDateStr;
 
-      // Calculate challenge duration
       const now = new Date();
       const diffMs = now - challengeDate;
       const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
@@ -730,7 +290,6 @@
       }
       document.getElementById('challengeDuration').textContent = durationText;
 
-      // Calculate savings this week
       const weekStart = new Date(now);
       weekStart.setDate(weekStart.getDate() - weekStart.getDay() + (weekStart.getDay() === 0 ? -6 : 1));
       weekStart.setHours(0, 0, 0, 0);
@@ -747,14 +306,11 @@
       document.getElementById('weekSavings').textContent = 'kr ' + weekSavings.toLocaleString();
       document.getElementById('goalInput').value = goal;
 
-      // Update progress circle
       const angle = (percent / 100) * 360;
       document.getElementById('progressFill').style.setProperty('--progress-angle', angle + 'deg');
 
-      // Update history
       updateHistory();
 
-      // Disable buttons if goal reached
       const spinBtn = document.getElementById('spinBtn');
       const addBtn = document.getElementById('addBtn');
       const recordBtn = document.getElementById('recordBtn');
@@ -775,7 +331,6 @@
       }
     }
 
-    // Draw wheel
     function drawWheel() {
       const canvas = document.getElementById('wheelCanvas');
       const ctx = canvas.getContext('2d');
@@ -788,16 +343,12 @@
       const radius = Math.min(centerX, centerY) - 8;
       const sliceAngle = (Math.PI * 2) / amounts.length;
 
-      const colors = [
-        '#F8D7DA', '#F5A8B8', '#F9A8C8', '#FCC8D8',
-        '#FFD1E1', '#FFB3CD', '#FF99C8', '#F8A0B8'
-      ];
+      const colors = ['#F8D7DA', '#F5A8B8', '#F9A8C8', '#FCC8D8', '#FFD1E1', '#FFB3CD', '#FF99C8', '#F8A0B8'];
 
       amounts.forEach((amount, i) => {
         const startAngle = i * sliceAngle;
         const endAngle = (i + 1) * sliceAngle;
 
-        // Draw slice
         ctx.beginPath();
         ctx.moveTo(centerX, centerY);
         ctx.arc(centerX, centerY, radius, startAngle, endAngle);
@@ -808,7 +359,6 @@
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        // Draw text
         const textAngle = startAngle + sliceAngle / 2;
         const textX = centerX + Math.cos(textAngle) * (radius * 0.65);
         const textY = centerY + Math.sin(textAngle) * (radius * 0.65);
@@ -825,11 +375,8 @@
       });
     }
 
-    // Spin wheel
     function spinWheel() {
-      if (state.saved >= state.goal) {
-        return;
-      }
+      if (state.saved >= state.goal) return;
 
       const spinBtn = document.getElementById('spinBtn');
       spinBtn.disabled = true;
@@ -838,7 +385,6 @@
       const randomIndex = Math.floor(Math.random() * amounts.length);
       const selectedAmount = amounts[randomIndex];
 
-      // Calculate rotation to land on selected amount
       const sliceAngle = 360 / amounts.length;
       const targetAngle = randomIndex * sliceAngle;
       const spins = 5 + Math.random() * 3;
@@ -852,7 +398,6 @@
         const elapsed = Date.now() - startTime;
         const progress = Math.min(elapsed / duration, 1);
 
-        // Easing: ease-out cubic
         const easeProgress = 1 - Math.pow(1 - progress, 3);
         currentAngle = finalAngle * easeProgress;
 
@@ -861,7 +406,6 @@
         if (progress < 1) {
           requestAnimationFrame(animate);
         } else {
-          // Spin complete
           state.saved += selectedAmount;
           state.history.push({
             amount: selectedAmount,
@@ -877,13 +421,12 @@
       animate();
     }
 
-    // Update history display
     function updateHistory() {
       const list = document.getElementById('historyList');
       const isEn = window.LME_CURRENT_LANG === 'en';
 
       if (state.history.length === 0) {
-        list.innerHTML = '<div class="empty-state"><p>' + (isEn ? 'No spins yet' : 'Ingen spinn ennå') + '</p></div>';
+        list.innerHTML = '<div class="empty-state"><p>' + (isEn ? 'No additions yet' : 'Ingen tillegg ennå') + '</p></div>';
         return;
       }
 
@@ -893,16 +436,10 @@
           month: 'short',
           day: 'numeric'
         });
-        return `
-          <div class="history-item">
-            <span class="history-amount">kr ${item.amount}</span>
-            <span class="history-date">${dateStr}</span>
-          </div>
-        `;
+        return '<div class="history-item"><span class="history-amount">kr ' + item.amount + '</span><span class="history-date">' + dateStr + '</span></div>';
       }).join('');
     }
 
-    // Add manual amount
     function addManualAmount() {
       const input = document.getElementById('amountInput');
       const amount = parseInt(input.value);
@@ -929,7 +466,6 @@
       input.value = '100';
     }
 
-    // Event listeners
     document.getElementById('spinBtn').addEventListener('click', spinWheel);
     document.getElementById('addBtn').addEventListener('click', addManualAmount);
     document.getElementById('amountInput').addEventListener('keypress', function(e) {
@@ -938,7 +474,6 @@
 
     document.getElementById('recordBtn').addEventListener('click', function() {
       const input = document.getElementById('amountInput');
-      const currentValue = input.value;
       input.focus();
       input.select();
     });
@@ -984,20 +519,16 @@
       }
     });
 
-    // Handle window resize
     let resizeTimeout;
     window.addEventListener('resize', function () {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(drawWheel, 200);
     });
 
-    // Initialize
     loadState();
     drawWheel();
 
-    // Redraw on language change
     window.addEventListener('lme-lang', drawWheel);
   </script>
 </body>
-
 </html>
