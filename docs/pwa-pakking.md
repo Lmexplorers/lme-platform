@@ -14,9 +14,13 @@ butikkene. Dette dokumentet er oppskriften.
 | Hele plattformen (LME) | `https://lmexplorers.com/` |
 | LME Reel | `https://lmexplorers.com/reel-app/` |
 | LME YouTube | `https://lmexplorers.com/youtube-app/` |
+| LME Content Studio | `https://lme-contentstudio.pages.dev/` |
 
-Alle tre har allerede manifest, ikoner (192 og 512, vanlige og maskable),
-service worker og `display: standalone`, så de er klare til pakking.
+LME Reel, LME YouTube og hele plattformen har allerede manifest, ikoner (192 og
+512, vanlige og maskable), service worker og `display: standalone`, så de er
+klare til pakking. LME Content Studio er et eget prosjekt (egen adresse), så
+manifest og ikoner må klargjøres der før pakking. Trenger du hjelp med det, gir
+du meg tilgang til det prosjektet.
 
 ## Det du trenger (engangsoppsett)
 
