@@ -508,8 +508,17 @@
     </div>
 
     <div class="card wheel-section">
-      <h2 data-no="Spin hjulet" data-en="Spin the wheel">Spin hjulet</h2>
-      <div class="sub" data-no="Velg hvor mye du skal spare denne uken" data-en="Choose how much to save this week">Velg hvor mye du skal spare denne uken</div>
+      <h2 data-no="Legg til spare" data-en="Add savings">Legg til spare</h2>
+      <div class="sub" data-no="Velg beløp selv eller spin for tilfeldig beløp" data-en="Choose amount yourself or spin for random amount">Velg beløp selv eller spin for tilfeldig beløp</div>
+
+      <div class="form-group" style="margin-top: 20px;">
+        <label class="form-label" data-no="Beløp å spare (kr)" data-en="Amount to save (kr)">Beløp å spare (kr)</label>
+        <input type="number" id="amountInput" class="form-input" min="50" max="2000" step="50" value="100" placeholder="50 - 2000">
+      </div>
+
+      <button class="btn btn-primary" id="addBtn" style="margin-bottom: 16px;" data-no="Legg til beløp" data-en="Add amount">Legg til beløp</button>
+
+      <div style="text-align: center; color: var(--grey); margin: 20px 0; font-size: 14px;" data-no="— eller —" data-en="— or —">— eller —</div>
 
       <div class="wheel-container">
         <div class="wheel-pointer"></div>
@@ -519,10 +528,10 @@
       <button class="spin-btn" id="spinBtn" data-no="SPIN HJULET" data-en="SPIN THE WHEEL">SPIN HJULET</button>
 
       <div class="history">
-        <h3 data-no="Spinn-historikk" data-en="Spin history">Spinn-historikk</h3>
+        <h3 data-no="Historikk" data-en="History">Historikk</h3>
         <div class="history-list" id="historyList">
           <div class="empty-state">
-            <p data-no="Ingen spinn ennå" data-en="No spins yet">Ingen spinn ennå</p>
+            <p data-no="Ingen tillegg ennå" data-en="No additions yet">Ingen tillegg ennå</p>
           </div>
         </div>
       </div>
@@ -627,14 +636,21 @@
       // Update history
       updateHistory();
 
-      // Disable spin if goal reached
+      // Disable buttons if goal reached
       const spinBtn = document.getElementById('spinBtn');
+      const addBtn = document.getElementById('addBtn');
+      const amountInput = document.getElementById('amountInput');
+
       if (saved >= goal) {
         spinBtn.disabled = true;
         spinBtn.textContent = isEn ? '🎉 GOAL REACHED!' : '🎉 MÅL NÅDD!';
+        addBtn.disabled = true;
+        amountInput.disabled = true;
       } else {
         spinBtn.disabled = false;
         spinBtn.textContent = isEn ? 'SPIN THE WHEEL' : 'SPIN HJULET';
+        addBtn.disabled = false;
+        amountInput.disabled = false;
       }
     }
 
@@ -690,6 +706,10 @@
 
     // Spin wheel
     function spinWheel() {
+      if (state.saved >= state.goal) {
+        return;
+      }
+
       const spinBtn = document.getElementById('spinBtn');
       spinBtn.disabled = true;
 
@@ -761,8 +781,39 @@
       }).join('');
     }
 
+    // Add manual amount
+    function addManualAmount() {
+      const input = document.getElementById('amountInput');
+      const amount = parseInt(input.value);
+      const isEn = window.LME_CURRENT_LANG === 'en';
+
+      if (!amount || amount < 50 || amount > 2000) {
+        alert(isEn ? 'Enter amount between 50 and 2000 kr' : 'Skriv inn beløp mellom 50 og 2000 kr');
+        return;
+      }
+
+      if (state.saved >= state.goal) {
+        alert(isEn ? 'Goal already reached!' : 'Målet er allerede nådd!');
+        return;
+      }
+
+      state.saved += amount;
+      state.history.push({
+        amount: amount,
+        date: new Date().toISOString()
+      });
+      state.lastSpin = new Date().toISOString();
+      saveState();
+      updateUI();
+      input.value = '100';
+    }
+
     // Event listeners
     document.getElementById('spinBtn').addEventListener('click', spinWheel);
+    document.getElementById('addBtn').addEventListener('click', addManualAmount);
+    document.getElementById('amountInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') addManualAmount();
+    });
 
     document.getElementById('updateGoalBtn').addEventListener('click', function () {
       const newGoal = parseInt(document.getElementById('goalInput').value) || 100000;
