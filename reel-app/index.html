@@ -309,6 +309,7 @@
         <div class="chips" id="platChips">
           <button class="len-chip on" data-plat="instagram">📸 Instagram</button>
           <button class="len-chip" data-plat="facebook">👍 Facebook</button>
+          <button class="len-chip" data-plat="tiktok">🎵 TikTok</button>
         </div>
       </div>
 
@@ -431,17 +432,31 @@
   $('accLang').addEventListener('click', toggleLang);
 
   // ---------- ONBOARDING → APP ----------
+  // ===== BETALING =====
+  // Lim inn din Stripe- eller Vipps-betalingslenke her (f.eks. en Stripe Payment Link).
+  // Sett gjerne suksess-URL i Stripe til: https://lmexplorers.com/reel-app/?paid=1
+  // Da åpnes appen automatisk med full tilgang etter betaling.
+  // Er feltet tomt, åpner "Kom i gang" appen som prøveversjon (som nå).
+  var CHECKOUT_URL = '';
+
   function enterApp(unlocked){
     if (unlocked) { try{ localStorage.setItem('reel_app_unlocked','1'); }catch(e){} }
     $('onboarding').style.display = 'none';
     $('app').classList.add('show');
     updatePlan();
   }
-  // NB: Koble ekte betaling her (Stripe/Vipps checkout-URL). Nå åpner knappen appen.
-  $('buyBtn').addEventListener('click', function(){ enterApp(true); });
+  $('buyBtn').addEventListener('click', function(){
+    if (CHECKOUT_URL) { window.location.href = CHECKOUT_URL; }  // ekte betaling
+    else { enterApp(true); }                                    // ingen lenke satt: åpne appen
+  });
   $('tryBtn').addEventListener('click', function(){ enterApp(false); });
 
-  try { if (localStorage.getItem('reel_app_unlocked') === '1') { $('onboarding').style.display='none'; $('app').classList.add('show'); } } catch(e){}
+  // Etter betaling: Stripe/Vipps sender brukeren tilbake med ?paid=1 -> full tilgang.
+  try {
+    var paid = new URLSearchParams(location.search).get('paid');
+    if (paid === '1') { localStorage.setItem('reel_app_unlocked','1'); }
+    if (localStorage.getItem('reel_app_unlocked') === '1') { $('onboarding').style.display='none'; $('app').classList.add('show'); }
+  } catch(e){}
 
   function updatePlan(){
     var unlocked = false; try{ unlocked = localStorage.getItem('reel_app_unlocked')==='1'; }catch(e){}
@@ -600,7 +615,7 @@
     var btn = $('genBtn'); var label = btn.innerHTML; var fmt = FMT;
     btn.disabled = true; btn.innerHTML='<span class="spinner"></span> '+(LANG==='no'?'Lager innhold…':'Making content…');
     $('out').innerHTML='';
-    var platName = PLATFORM === 'facebook' ? 'Facebook' : 'Instagram';
+    var platName = PLATFORM === 'facebook' ? 'Facebook' : PLATFORM === 'tiktok' ? 'TikTok' : 'Instagram';
     var source = topic + (REELLANG==='no' ? '\n\nPlattform: '+platName : '\n\nPlatform: '+platName);
     fetch('/api/ai/content',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({format:fmt, source:source, seconds:SECS, lang:REELLANG})})
