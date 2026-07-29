@@ -304,6 +304,16 @@
     return {label:c.pl,post:{accountId:conf.accountId,content:content,target:target}};
   }
 
+  // Lesbar grunn fra Blotato-svaret (backend gir status + `detail` ved feil),
+  // så en publiseringsfeil viser den ekte årsaken i stedet for bare en kode.
+  function blReason(r){
+    if(!r)return '';var parts=[];if(r.status)parts.push('Blotato '+r.status);
+    var d=r.detail,m='';
+    if(d){m=(typeof d==='string')?d:(d.message||d.error||(d.errors&&JSON.stringify(d.errors))||JSON.stringify(d));}
+    else if(r.error){m=String(r.error);}
+    if(m)parts.push(String(m).replace(/\s+/g,' ').trim().slice(0,200));
+    return parts.join(': ');
+  }
   function postText(card){
     var subjEl=card.querySelector('.subj'),txtEl=card.querySelector('.txt');
     var t=txtEl?txtEl.innerText:'';if(subjEl)t=subjEl.innerText+'\n'+t;return t.trim();
@@ -330,7 +340,7 @@
       btn.disabled=false;var r=res&&res.result&&res.result.results&&res.result.results[0];
       if(res&&res.error){st.className='st err';st.textContent='⚠️ '+res.error;return;}
       if(r&&r.ok){st.className='st ok';st.textContent='✓ '+T('Publisert til '+c.pl,'Published to '+c.pl);}
-      else{st.className='st err';st.textContent='⚠️ '+T('Gikk ikke gjennom','Did not go through')+(r&&r.status?' ('+r.status+')':'');}
+      else{st.className='st err';var why=blReason(r);st.textContent='⚠️ '+T('Gikk ikke gjennom','Did not go through')+(why?': '+why:(r&&r.status?' ('+r.status+')':''));}
     }).catch(function(){btn.disabled=false;st.className='st err';st.textContent='⚠️ '+T('Nettverksfeil','Network error');});
   }
 
@@ -354,7 +364,7 @@
       var rs=(res&&res.result&&res.result.results)||[];
       cardFor.forEach(function(card,i){var st=card.querySelector('[data-pubst]');var r=rs[i];if(!st)return;
         if(r&&r.ok){st.className='st ok';st.textContent='✓ '+T('Publisert','Published');}
-        else{st.className='st err';st.textContent='⚠️ '+T('Gikk ikke gjennom','Did not go through')+(r&&r.status?' ('+r.status+')':'');}
+        else{st.className='st err';var why=blReason(r);st.textContent='⚠️ '+T('Gikk ikke gjennom','Did not go through')+(why?': '+why:(r&&r.status?' ('+r.status+')':''));}
       });
       var okN=rs.filter(function(r){return r&&r.ok;}).length;toast(okN+' '+T('publisert','published'));
     }).catch(function(){toast('⚠️ '+T('Nettverksfeil','Network error'));});

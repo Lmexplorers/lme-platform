@@ -64,6 +64,23 @@
       })
       .catch(function () { return {}; });
   }
+  // Trekk ut en lesbar grunn fra Blotato-svaret. Backend gir oss status og
+  // `detail` (Blotatos eget svar) ved feil, men UI-et kastet det før, så alt
+  // ble til en intetsigende "klarte ikke". Nå viser vi den ekte årsaken, så
+  // en feil faktisk kan rettes (mangler bilde, mangler side-ID, osv.).
+  function blotatoReason(res) {
+    if (!res) return "";
+    var parts = [];
+    if (res.status) parts.push("Blotato " + res.status);
+    var d = res.detail;
+    var m = "";
+    if (d) {
+      m = (typeof d === "string") ? d
+        : (d.message || d.error || (d.errors && JSON.stringify(d.errors)) || JSON.stringify(d));
+    } else if (res.error) { m = String(res.error); }
+    if (m) parts.push(String(m).replace(/\s+/g, " ").trim().slice(0, 200));
+    return parts.join(": ");
+  }
   function buildPost(ch, text, imgUrl) {
     var conf = (BL_MAP && BL_MAP[ch.tt]) || null;
     if (!conf || !conf.accountId) return { err: T("Fant ikke kontoen i Blotato", "Account not found in Blotato") };
@@ -339,7 +356,8 @@
         if (res && res.ok) {
           msg.textContent = "✓ " + T("Sendt! Sjekk " + T2(target) + " om et lite øyeblikk.", "Sent! Check " + T2(target) + " in a moment.");
         } else {
-          msg.textContent = "⚠️ " + T("Klarte ikke å sende. ", "Could not send. ") + ((res && res.error) ? String(res.error).slice(0, 140) : "");
+          var why = blotatoReason(res) || ((res && res.error) ? String(res.error).slice(0, 140) : "");
+          msg.textContent = "⚠️ " + T("Klarte ikke å sende. ", "Could not send. ") + why;
         }
       }).catch(function () {
         btn.disabled = false; btn.textContent = "🧪 " + T("Send testinnlegg til " + T2(target), "Send test post to " + T2(target));
@@ -390,7 +408,8 @@
       } else {
         btn.disabled = false; btn.innerHTML = old;
         msg.hidden = false;
-        msg.textContent = "⚠️ " + T("Klarte ikke å publisere. Sjekk kobling i Publiser alle.", "Could not publish. Check the connection in Publish all.");
+        var why = blotatoReason(res);
+        msg.textContent = "⚠️ " + T("Klarte ikke å publisere.", "Could not publish.") + (why ? " " + why : "");
       }
     }).catch(function () {
       btn.disabled = false; btn.innerHTML = old;

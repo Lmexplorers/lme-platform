@@ -589,6 +589,16 @@ async function genVideo(){
 function toggleSched(){
   document.getElementById('schedFields').style.display=document.getElementById('schedOn').checked?'flex':'none';
 }
+/* Lesbar grunn fra Blotato-svaret (status + detail), så en publiseringsfeil
+   viser den ekte årsaken i stedet for bare "klarte ikke". */
+function blotatoReason(res){
+  if(!res)return '';var parts=[];if(res.status)parts.push('Blotato '+res.status);
+  var d=res.detail,m='';
+  if(d){m=(typeof d==='string')?d:(d.message||d.error||(d.errors&&JSON.stringify(d.errors))||JSON.stringify(d));}
+  else if(res.error){m=String(res.error);}
+  if(m)parts.push(String(m).replace(/\s+/g,' ').trim().slice(0,200));
+  return parts.join(': ');
+}
 async function publishReel(key,btn){
   const msg=document.getElementById('pubmsg');
   const f=curFmt();
@@ -628,7 +638,7 @@ async function publishReel(key,btn){
         msg.className='pubmsg'; msg.textContent=t('scheduledOk')+' '+dateStr+' '+timeStr;
       } else { msg.className='pubmsg'; msg.textContent=t('published'); }
     }
-    else { btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('pubfail'); }
+    else { btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; var why=blotatoReason(res); msg.textContent='⚠️ '+t('pubfail')+(why?' '+why:''); }
   }catch(e){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('neterr'); }
 }
 
