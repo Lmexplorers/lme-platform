@@ -185,9 +185,6 @@ function aspectFor(size) {
 // POST — generer og lagre bilde
 // =====================================================
 export async function onRequestPost(context) {
-  const gate = await enforceGeneration(context, "image");
-  if (!gate.ok) return json({ error: gate.error }, gate.status);
-
   // Alt er pakket i én ytre try/catch, så en uventet feil alltid gir et JSON-svar
   // (aldri en 502 med HTML-side). Da ser vi den ekte feilen i stedet for å gjette.
   try {
@@ -197,6 +194,32 @@ export async function onRequestPost(context) {
     let body;
     try { body = await request.json(); }
     catch { return json({ error: "Ugyldig JSON" }, 400); }
+
+    // Direkte opplasting av et eget bilde (ingen AI-generering): lagre bytene og
+    // gi en offentlig URL, akkurat som for et generert bilde. Da kan Renate
+    // bruke sitt eget bilde som referanse/kilde til videoen, eller som media.
+    // Ingen genererings-kvote på dette, det er hennes egen fil.
+    if (body.upload) {
+      let ub = String(body.upload);
+      const c = ub.indexOf(",");
+      if (ub.startsWith("data:") && c !== -1) ub = ub.slice(c + 1);
+      let bytes;
+      try { bytes = b64ToBytes(ub); } catch { return json({ error: "Ugyldig bilde-data." }, 400); }
+      if (!bytes.length) return json({ error: "Ingen bilde-data mottatt." }, 400);
+      if (bytes.length > 24 * 1024 * 1024) return json({ error: "Bildet er for stort (maks 24 MB)." }, 413);
+      const ct = /^image\/(png|jpe?g|webp|gif)$/.test(String(body.contentType || "")) ? body.contentType : "image/png";
+      const upId = crypto.randomUUID().replace(/-/g, "");
+      try {
+        await env.BUILDER_KV.put("img:" + upId, bytes, { metadata: { ct }, expirationTtl: 60 * 60 * 24 * 30 });
+      } catch (e) {
+        return json({ error: "Klarte ikke å lagre bildet.", detail: String(e && e.message || e).slice(0, 200) }, 200);
+      }
+      return json({ url: `${new URL(request.url).origin}/api/image?id=${upId}` }, 200);
+    }
+
+    // Generering (under) krever kvote/innlogging. Opplasting over gjør ikke.
+    const gate = await enforceGeneration(context, "image");
+    if (!gate.ok) return json({ error: gate.error }, gate.status);
 
     let character = String(body.character || "none").toLowerCase();
     if (!["none", "mia", "teo", "both"].includes(character)) character = "none";
