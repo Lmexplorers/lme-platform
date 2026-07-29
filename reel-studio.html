@@ -229,6 +229,10 @@ const I18N = {
     "s2-genvid":"Generer video automatisk",
     needContentFirst:"Lag innhold i steg 1 først.",
     vidImage:"Lager bilde…",vidMaking:"Lager video… (kan ta et par minutter)",vidUploading:"Laster opp…",vidReady:"Video klar 🎬 Lagt inn under.",vidFail:"Kunne ikke lage video.",
+    vidZoomOnly:"Dette ble bare en enkel zoom på et stillbilde, ikke ekte AI-video.",
+    vidEngineOff:"Den ekte video-motoren er ikke koblet til ennå. Legg inn HIGGSFIELD_API_KEY og HIGGSFIELD_SECRET i Cloudflare, så lager jeg ekte video automatisk.",
+    vidEngineSlow:"Video-motoren brukte for lang tid denne gangen. Prøv igjen om litt.",
+    vidEngineErr:"Video-motoren svarte med en feil:",
     vidServerBusy:"Serveren svarer ikke som forventet ennå. En ny versjon kan være under utrulling. Last siden på nytt og prøv igjen om et minutt.",
     imgNotConfigured:"Bildemotoren er ikke koblet til ennå. Legg inn en nøkkel (OPENAI_API_KEY eller GEMINI_API_KEY) i Cloudflare, så lager jeg bildet automatisk.",
     "s3-num":"Publiser","s3-h":"Legg ut automatisk","s3-lead":"Bruker Blotato-kontoene dine automatisk. Legg ut nå, eller planlegg til en fremtidig dato.",
@@ -259,6 +263,10 @@ const I18N = {
     "s2-genvid":"Generate video automatically",
     needContentFirst:"Create content in step 1 first.",
     vidImage:"Creating image…",vidMaking:"Creating video… (may take a couple of minutes)",vidUploading:"Uploading…",vidReady:"Video ready 🎬 Added below.",vidFail:"Could not create the video.",
+    vidZoomOnly:"This is only a simple zoom on a still image, not real AI video.",
+    vidEngineOff:"The real video engine isn't connected yet. Add HIGGSFIELD_API_KEY and HIGGSFIELD_SECRET in Cloudflare and I'll create real video automatically.",
+    vidEngineSlow:"The video engine took too long this time. Please try again shortly.",
+    vidEngineErr:"The video engine returned an error:",
     vidServerBusy:"The server isn't responding as expected yet. A new version may be deploying. Reload the page and try again in a minute.",
     imgNotConfigured:"The image engine isn't connected yet. Add a key (OPENAI_API_KEY or GEMINI_API_KEY) in Cloudflare and I'll create the image automatically.",
     "s3-num":"Publish","s3-h":"Post automatically","s3-lead":"Uses your connected Blotato accounts automatically. Post now, or schedule for a future date.",
@@ -526,22 +534,30 @@ function blobToB64(blob){ return new Promise(function(res,rej){ var r=new FileRe
 // Prøv Higgsfield (best kvalitet). Klarer den det ikke, uansett grunn (ikke
 // satt opp, ugyldig nøkkel/401, feil eller tidsavbrudd), faller vi tilbake på
 // den gratis videomotoren i nettleseren i stedet for å gi feil.
+/* Oversett den tekniske fallback-grunnen til en klar beskjed til Renate. */
+function videoReasonText(reason){
+  reason=String(reason||'').trim();
+  if(!reason) return t('vidEngineOff');
+  if(/not_configured|mangler|missing|ikke koblet/i.test(reason)) return t('vidEngineOff');
+  if(/timeout|for lang tid|too long/i.test(reason)) return t('vidEngineSlow');
+  return t('vidEngineErr')+' '+reason.slice(0,160);
+}
 async function higgsfieldVideo(prompt,imageUrl,btn){
   try{
     var sub=await fetch('/api/reel-video',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({prompt:prompt,imageUrl:imageUrl})}).then(function(r){return readJson(r,'reel-video');});
-    if(!sub||sub.error||(!sub.id&&!sub.statusUrl)) return '__fallback__';
+    if(!sub||sub.error||(!sub.id&&!sub.statusUrl)) return '__fallback__'+((sub&&sub.error)?':'+sub.error:'');
     var q='id='+encodeURIComponent(sub.id||'')+(sub.statusUrl?'&u='+encodeURIComponent(sub.statusUrl):'');
     for(var i=0;i<75;i++){
       await new Promise(function(r){ setTimeout(r,4000); });
       var st=await fetch('/api/reel-video?'+q).then(function(r){return readJson(r,'reel-video');}).catch(function(){return null;});
       if(st){
         if(st.status==='completed'&&st.url) return st.url;
-        if(st.error||st.status==='failed'||st.status==='nsfw') return '__fallback__';
+        if(st.error||st.status==='failed'||st.status==='nsfw') return '__fallback__:'+(st.error||st.status);
       }
       if(btn) btn.innerHTML='<span class="spinner"></span> '+t('vidMaking');
     }
-    return '__fallback__';
+    return '__fallback__:timeout';
   }catch(e){ return '__fallback__'; }
 }
 async function genVideo(){
@@ -560,10 +576,13 @@ async function genVideo(){
     if(!ir||ir.error||!ir.url) throw new Error(((ir&&ir.error)||'bilde')+((ir&&ir.detail)?': '+ir.detail:''));
     btn.innerHTML='<span class="spinner"></span> '+t('vidMaking');
     // 1) Prøv Higgsfield på serveren (virker på alle enheter, også iPhone).
-    var url=await higgsfieldVideo(prompt, ir.url, btn);
-    if(url==='__fallback__'){
-      // 2) Gratis videomotor i nettleseren (datamaskin). Vis videoen med en
-      //    gang, uansett om opplastingen (for en delbar lenke) skulle feile.
+    var vres=await higgsfieldVideo(prompt, ir.url, btn);
+    var fellBack=(typeof vres==='string' && vres.indexOf('__fallback__')===0);
+    var vidReason=fellBack ? vres.replace(/^__fallback__:?/,'') : '';
+    var url=fellBack ? '' : vres;
+    if(fellBack){
+      // 2) Nødløsning i nettleseren: en enkel zoom på stillbildet. Dette er
+      //    IKKE ekte AI-video, så vi merker det tydelig under (vidZoomOnly).
       var blob=await imageToVideoBlob(ir.url);
       if(v){ v.src=URL.createObjectURL(blob); v.style.display='block'; }
       btn.innerHTML='<span class="spinner"></span> '+t('vidUploading');
@@ -576,7 +595,13 @@ async function genVideo(){
     }
     if(url) document.getElementById('mediaUrl').value=url;
     if(v && url && !v.src){ v.src=url; v.style.display='block'; }
-    btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg'; msg.textContent=t('vidReady');
+    btn.disabled=false; btn.innerHTML=label;
+    if(fellBack){
+      // Ærlig beskjed: dette er bare en zoom, og hvorfor den ekte motoren ikke kjørte.
+      msg.className='pubmsg err'; msg.textContent='⚠️ '+t('vidZoomOnly')+' '+videoReasonText(vidReason);
+    } else {
+      msg.className='pubmsg'; msg.textContent=t('vidReady');
+    }
   }catch(e){
     btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err';
     if(e&&e.serverBusy){
