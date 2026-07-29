@@ -4,77 +4,74 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Mia &amp; Teo Filmgenerator</title>
-<meta name="description" content="Beskriv en scene, og få en animert Mia og Teo film i Pixar-stil.">
+<meta name="description" content="Gi en idé, og AI-en lager en hel Mia og Teo film: manus, scener og norsk fortellerstemme.">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#e85a92">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  @font-face { font-family:'Sasson Montessori'; src:url('/fonts/SassoonMontessori.woff2') format('woff2'),url('/fonts/SassoonMontessori.ttf') format('truetype'); font-weight:normal; font-style:normal; font-display:swap; }
-  :root{
-    --pink-50:#fff5f8;--pink-100:#ffe8f0;--pink-200:#ffd1e1;--pink-300:#ffb3cd;--pink-400:#ff8ab3;--pink-500:#e85a92;--pink-600:#c43d75;--pink-700:#8f2a55;
-    --bla:#6ec1e4;--bla-soft:#dff1f9;--warm-white:#fffcf9;--ink:#3d2438;--ink-soft:#6b4760;
-    --shadow-soft:0 8px 32px rgba(196,61,117,.10);--shadow-med:0 16px 48px rgba(196,61,117,.16);
-    --font-head:'Playpen Sans',system-ui,sans-serif;--font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
-  }
+  @font-face{font-family:'Sasson Montessori';src:url('/fonts/SassoonMontessori.woff2') format('woff2'),url('/fonts/SassoonMontessori.ttf') format('truetype');font-weight:normal;font-style:normal;font-display:swap;}
+  :root{--pink-50:#fff5f8;--pink-100:#ffe8f0;--pink-200:#ffd1e1;--pink-300:#ffb3cd;--pink-400:#ff8ab3;--pink-500:#e85a92;--pink-600:#c43d75;--pink-700:#8f2a55;--lime:#8fc23f;--bla:#6ec1e4;--bla-soft:#dff1f9;--warm-white:#fffcf9;--ink:#3d2438;--ink-soft:#6b4760;--shadow-soft:0 8px 32px rgba(196,61,117,.10);--shadow-med:0 16px 48px rgba(196,61,117,.16);--font-head:'Playpen Sans',system-ui,sans-serif;--font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;}
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:var(--font-body);color:var(--ink);line-height:1.55;min-height:100vh;
-    background:radial-gradient(ellipse 80% 40% at 15% 0%,rgba(255,209,225,.4),transparent 60%),radial-gradient(ellipse 70% 40% at 100% 10%,rgba(223,241,249,.5),transparent 60%),var(--warm-white);
-    padding-bottom:env(safe-area-inset-bottom);}
+  body{font-family:var(--font-body);color:var(--ink);line-height:1.55;min-height:100vh;background:radial-gradient(ellipse 80% 40% at 15% 0%,rgba(255,209,225,.4),transparent 60%),radial-gradient(ellipse 70% 40% at 100% 10%,rgba(223,241,249,.5),transparent 60%),var(--warm-white);padding-bottom:env(safe-area-inset-bottom);}
   h1,h2,h3{font-family:var(--font-head);line-height:1.2;}
   button,input,textarea,select{font-family:var(--font-body)!important;}
   a{color:var(--pink-600);}
   .top{position:sticky;top:0;z-index:50;background:rgba(255,252,249,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--pink-100);padding:.6rem 1rem;padding-top:calc(.6rem + env(safe-area-inset-top));}
-  .top-in{max-width:680px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:.6rem;}
+  .top-in{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:.6rem;}
   .brand{display:flex;align-items:center;gap:.55rem;text-decoration:none;}
   .brand img{width:38px;height:38px;object-fit:contain;}
   .brand b{font-family:var(--font-head);color:var(--pink-600);font-size:1rem;}
   .lang{background:linear-gradient(135deg,var(--pink-400),var(--pink-500));color:#fff;border:none;padding:.45rem 1rem;border-radius:999px;font-weight:600;font-size:.85rem;cursor:pointer;}
-  .wrap{max-width:680px;margin:0 auto;padding:1.1rem 1rem 3rem;}
-  .hero{text-align:center;margin-bottom:1.2rem;}
+  .wrap{max-width:720px;margin:0 auto;padding:1.1rem 1rem 3rem;}
+  .hero{text-align:center;margin-bottom:1.1rem;}
   .hero .badge{display:inline-block;background:var(--pink-100);color:var(--pink-700);font-weight:700;font-size:.8rem;padding:.3rem .9rem;border-radius:999px;}
-  .hero h1{font-size:clamp(1.6rem,6vw,2.1rem);margin:.6rem 0 .3rem;}
-  .hero p{color:var(--ink-soft);font-size:.98rem;}
+  .hero h1{font-size:clamp(1.6rem,6vw,2.1rem);margin:.55rem 0 .3rem;}
+  .hero p{color:var(--ink-soft);font-size:.97rem;}
   .card{background:#fff;border:1px solid var(--pink-100);border-radius:20px;box-shadow:var(--shadow-soft);padding:1.1rem 1.15rem;margin-bottom:1rem;}
-  .card h2{font-size:1.1rem;margin-bottom:.2rem;display:flex;align-items:center;gap:.45rem;}
-  .card .sub{color:var(--ink-soft);font-size:.9rem;margin-bottom:.8rem;}
-  .step{display:inline-flex;align-items:center;justify-content:center;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--pink-500);color:#fff;font-weight:700;font-size:.85rem;flex:none;}
-  label.lab{display:block;font-weight:700;font-size:.92rem;margin-bottom:.4rem;}
-  textarea,input[type=text]{width:100%;border:1.5px solid var(--pink-200);border-radius:14px;padding:.75rem .9rem;font-size:1rem;color:var(--ink);background:#fff;}
-  textarea{min-height:90px;resize:vertical;}
-  textarea:focus,input:focus{outline:none;border-color:var(--pink-400);}
-  .chips{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.6rem;}
-  .chip{border:1.5px solid var(--pink-200);background:#fff;color:var(--ink-soft);border-radius:999px;padding:.4rem .85rem;font-size:.85rem;font-weight:600;cursor:pointer;}
-  .chip:hover{border-color:var(--pink-400);color:var(--pink-600);}
+  .card h2{font-size:1.1rem;margin-bottom:.5rem;}
+  label.lab{display:block;font-weight:700;font-size:.92rem;margin:.6rem 0 .35rem;}
+  textarea,input[type=text],select{width:100%;border:1.5px solid var(--pink-200);border-radius:14px;padding:.75rem .9rem;font-size:1rem;color:var(--ink);background:#fff;}
+  textarea{min-height:80px;resize:vertical;}
+  textarea:focus,input:focus,select:focus{outline:none;border-color:var(--pink-400);}
+  .row{display:grid;grid-template-columns:1fr 130px;gap:.7rem;}
+  @media(max-width:480px){.row{grid-template-columns:1fr;}}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;width:100%;border:none;border-radius:999px;padding:.95rem 1.5rem;font-weight:700;font-size:1.05rem;cursor:pointer;background:linear-gradient(135deg,var(--pink-500),var(--pink-600));color:#fff;box-shadow:var(--shadow-soft);}
-  .btn:disabled{opacity:.5;cursor:default;}
+  .btn:disabled{opacity:.55;cursor:default;}
   .btn.ghost{background:#fff;color:var(--pink-600);border:1.5px solid var(--pink-200);box-shadow:none;}
+  .btn.big{font-size:1.1rem;padding:1.05rem;}
   .spinner{width:1em;height:1em;border:2px solid rgba(255,255,255,.5);border-top-color:#fff;border-radius:50%;display:inline-block;animation:spin .8s linear infinite;}
   @keyframes spin{to{transform:rotate(360deg);}}
-  .toggle{display:flex;gap:.5rem;margin-bottom:.8rem;}
-  .toggle button{flex:1;border:1.5px solid var(--pink-200);background:#fff;color:var(--ink-soft);border-radius:12px;padding:.6rem;font-weight:700;font-size:.9rem;cursor:pointer;}
-  .toggle button.on{background:var(--pink-500);color:#fff;border-color:var(--pink-500);}
-  .drop{border:2px dashed var(--pink-300);border-radius:16px;background:var(--pink-50);padding:1.1rem;text-align:center;cursor:pointer;}
-  .drop .ic{font-size:1.8rem;}
-  .drop p{color:var(--ink-soft);font-size:.9rem;margin-top:.25rem;}
-  .prev{position:relative;margin-top:.7rem;border-radius:14px;overflow:hidden;display:none;}
-  .prev.show{display:block;}
-  .prev img,.prev video{width:100%;max-height:340px;object-fit:contain;background:#000;display:block;border-radius:14px;}
-  .stage{margin-top:1rem;display:none;}
-  .stage.show{display:block;}
-  .msg{margin-top:.8rem;padding:.8rem 1rem;border-radius:14px;font-size:.92rem;display:none;}
+  .chips{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.55rem;}
+  .chip{border:1.5px solid var(--pink-200);background:#fff;color:var(--ink-soft);border-radius:999px;padding:.4rem .85rem;font-size:.85rem;font-weight:600;cursor:pointer;}
+  .chip:hover{border-color:var(--pink-400);color:var(--pink-600);}
+  .msg{margin-top:.8rem;padding:.75rem 1rem;border-radius:14px;font-size:.92rem;display:none;}
   .msg.show{display:block;}
   .msg.err{background:#fdeef3;color:var(--pink-700);border:1px solid var(--pink-200);}
   .msg.info{background:var(--bla-soft);color:#2f6377;border:1px solid #c7e6f2;}
+  .film-title{text-align:center;margin:.4rem 0 1rem;}
+  .film-title h2{font-size:1.4rem;color:var(--ink);}
+  .scene{background:#fff;border:1px solid var(--pink-100);border-radius:18px;box-shadow:var(--shadow-soft);overflow:hidden;margin-bottom:.9rem;}
+  .scene .sc-head{display:flex;align-items:center;gap:.6rem;padding:.7rem .9rem;border-bottom:1px solid var(--pink-100);background:var(--pink-50);}
+  .scene .sc-num{width:1.7rem;height:1.7rem;border-radius:50%;background:var(--pink-500);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;font-size:.9rem;}
+  .scene .sc-narr{font-size:.92rem;color:var(--ink);}
+  .scene .sc-body{position:relative;background:#000;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;}
+  .scene .sc-body video,.scene .sc-body img{width:100%;height:100%;object-fit:contain;display:block;}
+  .scene .sc-status{color:#fff;font-size:.9rem;text-align:center;padding:1rem;}
+  .scene .sc-foot{display:flex;gap:.5rem;padding:.6rem .9rem;}
+  .scene .sc-foot a,.scene .sc-foot button{flex:1;font-size:.85rem;padding:.5rem;border-radius:999px;}
+  .player{position:fixed;inset:0;z-index:100;background:rgba(30,18,28,.97);display:none;align-items:center;justify-content:center;padding:1rem;flex-direction:column;gap:1rem;}
+  .player.open{display:flex;}
+  .player video{width:min(100%,900px);border-radius:16px;background:#000;box-shadow:var(--shadow-med);}
+  .player .pmeta{color:#fff;text-align:center;max-width:820px;}
+  .player .pmeta .pnarr{font-size:1.05rem;margin-top:.3rem;opacity:.92;}
+  .player .pclose{position:absolute;top:1rem;right:1rem;background:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:1.4rem;cursor:pointer;color:var(--pink-600);}
   .note{background:var(--bla-soft);border:1px solid #c7e6f2;border-radius:14px;padding:.8rem 1rem;font-size:.88rem;color:#2f6377;}
   .gate{text-align:center;padding:1.4rem 1rem;}
   .gate .ic{font-size:2.6rem;}
-  .gate h2{margin:.5rem 0 .3rem;}
-  .gate p{color:var(--ink-soft);margin-bottom:1rem;}
-  .gate .btn{max-width:340px;margin:.4rem auto 0;}
+  .gate .btn{max-width:340px;margin:.6rem auto 0;}
   .hidden{display:none!important;}
-  .look{font-size:.82rem;color:var(--ink-soft);margin-top:.5rem;}
 </style>
 </head>
 <body>
@@ -86,70 +83,58 @@
 <div class="wrap">
   <div class="hero">
     <span class="badge">🎬 <span data-no="Filmgenerator" data-en="Film generator">Filmgenerator</span></span>
-    <h1 data-no="Lag en Mia og Teo film" data-en="Make a Mia and Teo film">Lag en Mia og Teo film</h1>
-    <p data-no="Beskriv en scene, så lager jeg en animert Mia og Teo film i Pixar-stil." data-en="Describe a scene, and I make an animated Mia and Teo film in Pixar style.">Beskriv en scene, så lager jeg en animert Mia og Teo film i Pixar-stil.</p>
+    <h1 data-no="Gi en idé, få en hel film" data-en="Give an idea, get a whole film">Gi en idé, få en hel film</h1>
+    <p data-no="AI-en skriver manuset, lager hver scene med Mia og Teo, og legger på norsk fortellerstemme." data-en="The AI writes the script, makes each scene with Mia and Teo, and adds Norwegian narration.">AI-en skriver manuset, lager hver scene med Mia og Teo, og legger på norsk fortellerstemme.</p>
   </div>
 
-  <div class="card" id="loading"><div class="sub" style="margin:0;" data-no="Laster …" data-en="Loading …">Laster …</div></div>
+  <div class="card" id="loading"><div style="color:var(--ink-soft);" data-no="Laster …" data-en="Loading …">Laster …</div></div>
 
   <div class="card gate hidden" id="gateLogin">
     <div class="ic">🔑</div>
     <h2 data-no="Logg inn for å lage film" data-en="Log in to make films">Logg inn for å lage film</h2>
     <a class="btn" href="/login?next=/mia-teo-film" data-no="Logg inn" data-en="Log in">Logg inn</a>
   </div>
-
   <div class="card gate hidden" id="gateAccess">
     <div class="ic">⭐</div>
     <h2 data-no="Filmgeneratoren er for Pro og VIP" data-en="The film generator is for Pro and VIP">Filmgeneratoren er for Pro og VIP</h2>
-    <p data-no="Bli Pro eller VIP i Inner Circle for å lage Mia og Teo filmer." data-en="Become Pro or VIP in the Inner Circle to make Mia and Teo films.">Bli Pro eller VIP i Inner Circle for å lage Mia og Teo filmer.</p>
+    <p style="color:var(--ink-soft);margin:.4rem 0 .8rem;" data-no="Bli Pro eller VIP i Inner Circle for å lage Mia og Teo filmer." data-en="Become Pro or VIP in the Inner Circle to make Mia and Teo films.">Bli Pro eller VIP i Inner Circle for å lage Mia og Teo filmer.</p>
     <a class="btn" href="/oppgrader" data-no="Se medlemskap" data-en="See membership">Se medlemskap</a>
   </div>
 
   <div id="studio" class="hidden">
-    <div class="card">
-      <h2><span class="step">1</span> <span data-no="Hva skal filmen handle om?" data-en="What is the film about?">Hva skal filmen handle om?</span></h2>
-      <div class="sub" data-no="Skriv en scene eller et læringstema. Mia og Teo får sitt faste utseende automatisk." data-en="Write a scene or a learning theme. Mia and Teo get their fixed look automatically.">Skriv en scene eller et læringstema. Mia og Teo får sitt faste utseende automatisk.</div>
-
-      <div class="toggle">
-        <button id="modeDescribe" class="on" data-no="Beskriv scenen" data-en="Describe the scene">Beskriv scenen</button>
-        <button id="modeUpload" data-no="Last opp et bilde" data-en="Upload an image">Last opp et bilde</button>
+    <div class="card" id="inputCard">
+      <h2 data-no="Din filmidé" data-en="Your film idea">Din filmidé</h2>
+      <label class="lab" data-no="Hva skal filmen handle om?" data-en="What is the film about?">Hva skal filmen handle om?</label>
+      <textarea id="idea" data-ph-no="F.eks. Mia og Teo drar på skattejakt i skogen og lærer å samarbeide." data-ph-en="E.g. Mia and Teo go on a treasure hunt in the forest and learn to cooperate." placeholder="F.eks. Mia og Teo drar på skattejakt i skogen og lærer å samarbeide."></textarea>
+      <div class="chips" id="chips">
+        <button type="button" class="chip" data-set="Mia og Teo bygger sandslott på stranda og lærer om tålmodighet">🏖️ <span data-no="Stranda" data-en="Beach">Stranda</span></button>
+        <button type="button" class="chip" data-set="Mia og Teo møter et pinnsvin i hagen og lærer å være forsiktige med dyr">🦔 <span data-no="Pinnsvinet" data-en="Hedgehog">Pinnsvinet</span></button>
+        <button type="button" class="chip" data-set="Mia og Teo teller epler i en frukthage og lærer tallene 1 til 5">🍎 <span data-no="Telle epler" data-en="Counting apples">Telle epler</span></button>
       </div>
-
-      <div id="describeBox">
-        <textarea id="scene" data-ph-no="F.eks. Mia og Teo bygger et sandslott på stranda, mens en liten krabbe titter frem." data-ph-en="E.g. Mia and Teo build a sandcastle on the beach while a little crab peeks out." placeholder="F.eks. Mia og Teo bygger et sandslott på stranda, mens en liten krabbe titter frem."></textarea>
-        <div class="chips" id="chips">
-          <button type="button" class="chip" data-add="on a sunny beach building a sandcastle" data-no="På stranda" data-en="At the beach">På stranda</button>
-          <button type="button" class="chip" data-add="in a green forest discovering a hedgehog" data-no="I skogen" data-en="In the forest">I skogen</button>
-          <button type="button" class="chip" data-add="counting apples together at a wooden table" data-no="Teller epler" data-en="Counting apples">Teller epler</button>
-          <button type="button" class="chip" data-add="watering flowers in a spring garden" data-no="Vanner blomster" data-en="Watering flowers">Vanner blomster</button>
-        </div>
-        <div class="look" data-no="Fast utseende: Mia (lyst hår, rosa sløyfe, blå øyne, rosa kjole) og Teo (bustete brunt hår, gul stripete t-skjorte, olivengrønn ryggsekk)." data-en="Fixed look: Mia (blonde hair, pink bow, blue eyes, pink dress) and Teo (tousled brown hair, yellow striped shirt, olive backpack).">Fast utseende: Mia (lyst hår, rosa sløyfe, blå øyne, rosa kjole) og Teo (bustete brunt hår, gul stripete t-skjorte, olivengrønn ryggsekk).</div>
+      <div class="row">
+        <div><label class="lab" data-no="Læringsmål (valgfritt)" data-en="Learning goal (optional)">Læringsmål (valgfritt)</label><input type="text" id="goal" data-ph-no="F.eks. samarbeid" data-ph-en="E.g. cooperation" placeholder="F.eks. samarbeid"></div>
+        <div><label class="lab" data-no="Scener" data-en="Scenes">Scener</label><select id="scenes"><option>3</option><option selected>4</option><option>5</option><option>6</option></select></div>
       </div>
-
-      <div id="uploadBox" class="hidden">
-        <div class="drop" id="drop"><div class="ic">📤</div><p data-no="Trykk for å laste opp et Mia og Teo bilde" data-en="Tap to upload a Mia and Teo image">Trykk for å laste opp et Mia og Teo bilde</p></div>
-        <input type="file" id="file" accept="image/*" class="hidden">
-        <textarea id="scene2" style="margin-top:.7rem;" data-ph-no="Hva skjer i scenen? (bevegelse)" data-ph-en="What happens in the scene? (motion)" placeholder="Hva skjer i scenen? (bevegelse)"></textarea>
-      </div>
-
-      <div class="prev" id="stillPrev"><img id="stillImg" alt=""></div>
-    </div>
-
-    <div class="card">
-      <button class="btn" id="go"><span data-no="Lag film med Mia og Teo" data-en="Make a Mia and Teo film">Lag film med Mia og Teo</span></button>
+      <button class="btn big" id="go" style="margin-top:1rem;"><span data-no="Lag filmen" data-en="Make the film">Lag filmen</span></button>
       <div class="msg info" id="msgInfo"></div>
       <div class="msg err" id="msgErr"></div>
-      <div class="stage" id="stage">
-        <video id="video" controls playsinline></video>
-        <div style="margin-top:.7rem;display:flex;gap:.6rem;">
-          <a class="btn ghost" id="download" download="mia-teo-film.mp4" data-no="Last ned" data-en="Download">Last ned</a>
-          <button class="btn ghost" id="again" data-no="Lag en til" data-en="Make another">Lag en til</button>
-        </div>
-      </div>
     </div>
 
-    <div class="note" data-no="Slik virker det: Først lages et bilde av Mia og Teo i scenen din, så animeres det til en kort film (noen sekunder). Bygg en lengre episode ved å lage flere scener. Barnevennlig innhold." data-en="How it works: First an image of Mia and Teo in your scene is made, then it is animated into a short film (a few seconds). Build a longer episode by making several scenes. Child-friendly content.">Slik virker det: Først lages et bilde av Mia og Teo i scenen din, så animeres det til en kort film (noen sekunder). Bygg en lengre episode ved å lage flere scener. Barnevennlig innhold.</div>
+    <div id="filmOut" class="hidden">
+      <div class="film-title"><h2 id="filmTitle"></h2></div>
+      <button class="btn big hidden" id="playFilm" style="margin-bottom:1rem;">▶ <span data-no="Spill hele filmen" data-en="Play the whole film">Spill hele filmen</span></button>
+      <div id="scenes-list"></div>
+      <button class="btn ghost" id="restart" data-no="Lag en ny film" data-en="Make a new film">Lag en ny film</button>
+    </div>
+
+    <div class="note" style="margin-top:1rem;" data-no="Slik virker det: AI-en skriver manuset, og lager hver scene som en kort animert klipp med norsk fortellerstemme. Å slå alt sammen til én ferdig filmfil med musikk er et eksternt steg foreløpig. Barnevennlig innhold." data-en="How it works: The AI writes the script and makes each scene as a short animated clip with Norwegian narration. Merging everything into one finished film file with music is still an external step. Child-friendly content.">Slik virker det: AI-en skriver manuset, og lager hver scene som en kort animert klipp med norsk fortellerstemme. Å slå alt sammen til én ferdig filmfil med musikk er et eksternt steg foreløpig. Barnevennlig innhold.</div>
   </div>
+</div>
+
+<div class="player" id="player">
+  <button class="pclose" id="pclose">×</button>
+  <video id="pvideo" playsinline></video>
+  <div class="pmeta"><div class="pnarr" id="pnarr"></div></div>
 </div>
 
 <script>
@@ -157,106 +142,123 @@
   function q(id){return document.getElementById(id);}
   function isEn(){return currentLang==='en';}
   function L(no,en){return isEn()?en:no;}
-  function switchLanguage(lang){
-    currentLang=lang;window.LME_CURRENT_LANG=lang;document.documentElement.lang=lang;
+  function switchLanguage(lang){currentLang=lang;window.LME_CURRENT_LANG=lang;document.documentElement.lang=lang;
     document.querySelectorAll('[data-no][data-en]').forEach(function(el){var t=el.getAttribute('data-'+lang);if(t===null)return;if(t.indexOf('<')!==-1)el.innerHTML=t;else el.textContent=t;});
     document.querySelectorAll('[data-ph-no][data-ph-en]').forEach(function(el){el.setAttribute('placeholder',el.getAttribute(lang==='no'?'data-ph-no':'data-ph-en'));});
-    q('langToggle').textContent=lang==='no'?'EN 🌍':'NO 🇳🇴';
-  }
+    q('langToggle').textContent=lang==='no'?'EN 🌍':'NO 🇳🇴';}
   q('langToggle').addEventListener('click',function(){switchLanguage(currentLang==='no'?'en':'no');});
 
-  var access=null, mode='describe', uploadUrl=null, busy=false;
-  function show(id){q(id).classList.remove('hidden');}
-  function hide(id){q(id).classList.add('hidden');}
-  function applyState(){
-    hide('loading');hide('gateLogin');hide('gateAccess');hide('studio');
+  var access=null, scenes=[], busy=false;
+  function show(id){q(id).classList.remove('hidden');}function hide(id){q(id).classList.add('hidden');}
+  function applyState(){hide('loading');hide('gateLogin');hide('gateAccess');hide('studio');
     if(!access||!access.loggedIn){show('gateLogin');return;}
-    if(!access.entitled){show('gateAccess');return;}
-    show('studio');
-  }
-  function loadAccess(){
-    return fetch('/api/video-studio',{credentials:'same-origin'}).then(function(r){return r.json();})
-      .then(function(d){access=d||{loggedIn:false};}).catch(function(){access={loggedIn:false};}).then(applyState);
-  }
+    if(!access.entitled){show('gateAccess');return;}show('studio');}
+  function loadAccess(){return fetch('/api/video-studio',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){access=d||{loggedIn:false};}).catch(function(){access={loggedIn:false};}).then(applyState);}
 
-  // Modusbytte
-  q('modeDescribe').addEventListener('click',function(){mode='describe';this.classList.add('on');q('modeUpload').classList.remove('on');q('describeBox').classList.remove('hidden');q('uploadBox').classList.add('hidden');});
-  q('modeUpload').addEventListener('click',function(){mode='upload';this.classList.add('on');q('modeDescribe').classList.remove('on');q('uploadBox').classList.remove('hidden');q('describeBox').classList.add('hidden');});
-
-  // Chips
-  document.querySelectorAll('#chips .chip').forEach(function(c){c.addEventListener('click',function(){var t=q('scene');var add=c.getAttribute('data-add');t.value=(t.value.trim()?t.value.trim()+', ':'')+add;t.focus();});});
-
-  // Opplasting
-  q('drop').addEventListener('click',function(){q('file').click();});
-  q('file').addEventListener('change',function(){
-    var f=this.files&&this.files[0];if(!f)return;
-    shrink(f,function(dataUrl){
-      msg('info',L('Laster opp bildet …','Uploading image …'));
-      fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({upload:dataUrl,contentType:'image/jpeg'})})
-        .then(function(r){return r.json();}).then(function(d){
-          if(d&&d.url){uploadUrl=d.url;q('stillImg').src=dataUrl;q('stillPrev').classList.add('show');clearMsg();}
-          else msg('err',(d&&d.error)||L('Kunne ikke laste opp bildet.','Could not upload the image.'));
-        }).catch(function(){msg('err',L('Nettverksfeil ved opplasting.','Network error while uploading.'));});
-    });
-  });
-  function shrink(file,cb){var reader=new FileReader();reader.onload=function(e){var img=new Image();img.onload=function(){var max=1280,w=img.width,h=img.height;if(w>max||h>max){if(w>=h){h=Math.round(h*max/w);w=max;}else{w=Math.round(w*max/h);h=max;}}var c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);cb(c.toDataURL('image/jpeg',0.85));};img.src=e.target.result;};reader.readAsDataURL(file);}
-
+  document.querySelectorAll('#chips .chip').forEach(function(c){c.addEventListener('click',function(){q('idea').value=c.getAttribute('data-set');q('idea').focus();});});
   function msg(kind,text){var e=q(kind==='err'?'msgErr':'msgInfo');var o=q(kind==='err'?'msgInfo':'msgErr');e.textContent=text;e.classList.add('show');o.classList.remove('show');}
   function clearMsg(){q('msgErr').classList.remove('show');q('msgInfo').classList.remove('show');}
-  function setBtn(loading,label){var b=q('go');b.disabled=loading;b.innerHTML=loading?'<span class="spinner"></span> '+label:'<span>'+L('Lag film med Mia og Teo','Make a Mia and Teo film')+'</span>';}
+  function sleep(ms){return new Promise(function(r){setTimeout(r,ms);});}
+  function enc(s){return encodeURIComponent(s||'');}
 
-  q('go').addEventListener('click',function(){
-    if(busy)return;
-    if(mode==='describe'){
-      var scene=q('scene').value.trim();
-      if(!scene){msg('err',L('Skriv hva filmen skal handle om.','Write what the film is about.'));return;}
-      busy=true;clearMsg();q('stage').classList.remove('show');q('stillPrev').classList.remove('show');
-      setBtn(true,L('Lager scene med Mia og Teo …','Making the Mia and Teo scene …'));
-      // Steg 1: lag et Mia & Teo bilde av scenen
-      fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({text:scene,character:'both',lang:currentLang,platform:'youtube'})})
-        .then(function(r){return r.json().then(function(d){return {s:r.status,d:d};});})
-        .then(function(res){
-          if(res.s!==200||!res.d||res.d.error||!res.d.url){
-            busy=false;setBtn(false);
-            msg('err',(res.d&&res.d.error)||L('Kunne ikke lage bildet. Prøv modus "Last opp et bilde".','Could not make the image. Try "Upload an image" mode.'));
-            return;
-          }
-          q('stillImg').src=res.d.url;q('stillPrev').classList.add('show');
-          animate(res.d.url,scene);
-        })
-        .catch(function(){busy=false;setBtn(false);msg('err',L('Nettverksfeil.','Network error.'));});
-    } else {
-      if(!uploadUrl){msg('err',L('Last opp et Mia og Teo bilde først.','Upload a Mia and Teo image first.'));return;}
-      var motion=q('scene2').value.trim()||'gentle cinematic camera movement, soft and calm';
-      busy=true;clearMsg();q('stage').classList.remove('show');
-      setBtn(true,L('Animerer filmen …','Animating the film …'));
-      animate(uploadUrl,motion);
+  async function genStill(imagePrompt){
+    var res=await fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({text:imagePrompt,character:'both',lang:currentLang,platform:'youtube'})}).then(function(r){return r.json();});
+    if(!res||res.error||!res.url) throw new Error((res&&res.error)||'image');
+    return res.url;
+  }
+  async function animate(imageUrl,motion){
+    var sub=await fetch('/api/video-studio',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({prompt:motion,imageUrl:imageUrl})}).then(function(r){return r.json();});
+    if(!sub||sub.error||(!sub.id&&!sub.statusUrl)) throw new Error((sub&&sub.error)||'video');
+    for(var i=0;i<80;i++){
+      await sleep(4000);
+      var st=await fetch('/api/video-studio?id='+enc(sub.id)+(sub.statusUrl?'&u='+enc(sub.statusUrl):''),{credentials:'same-origin'}).then(function(r){return r.json();}).catch(function(){return null;});
+      if(st){ if(st.status==='completed'&&st.url) return st.url; if(st.status==='failed'||st.status==='nsfw'||st.error) throw new Error(st.error||'video'); }
     }
-  });
-
-  function animate(imageUrl,prompt){
-    setBtn(true,L('Animerer filmen … dette tar et par minutter.','Animating the film … this takes a couple of minutes.'));
-    msg('info',L('Animerer filmen … dette tar gjerne et par minutter.','Animating the film … this usually takes a couple of minutes.'));
-    fetch('/api/video-studio',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({prompt:prompt,imageUrl:imageUrl})})
-      .then(function(r){return r.json().then(function(d){return {s:r.status,d:d};});})
-      .then(function(res){
-        var d=res.d;
-        if(res.s!==200||!d||d.error||(!d.id&&!d.statusUrl)){busy=false;setBtn(false);msg('err',(d&&d.error)||L('Kunne ikke lage filmen.','Could not make the film.'));return;}
-        poll(d.id||'',d.statusUrl||'',0);
-      })
-      .catch(function(){busy=false;setBtn(false);msg('err',L('Nettverksfeil.','Network error.'));});
+    throw new Error('timeout');
+  }
+  async function genVoice(text){
+    try{
+      var r=await fetch('/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({text:text,lang:currentLang})});
+      if(!r.ok) return null;
+      var b=await r.blob(); if(!b||!b.size) return null;
+      return URL.createObjectURL(b);
+    }catch(e){return null;}
   }
 
-  function poll(id,statusUrl,tries){
-    if(tries>80){busy=false;setBtn(false);msg('err',L('Det tok for lang tid. Prøv igjen.','It took too long. Please try again.'));return;}
-    var qs='id='+encodeURIComponent(id)+(statusUrl?'&u='+encodeURIComponent(statusUrl):'');
-    fetch('/api/video-studio?'+qs,{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){
-      if(d&&d.status==='completed'&&d.url){busy=false;setBtn(false);clearMsg();q('video').src=d.url;q('download').href=d.url;q('stage').classList.add('show');q('stage').scrollIntoView({behavior:'smooth',block:'center'});return;}
-      if(d&&(d.status==='failed'||d.status==='nsfw'||d.error)){busy=false;setBtn(false);msg('err',(d&&d.error)||L('Filmen kunne ikke lages.','The film could not be made.'));return;}
-      setTimeout(function(){poll(id,statusUrl,tries+1);},4000);
-    }).catch(function(){setTimeout(function(){poll(id,statusUrl,tries+1);},4000);});
+  function renderStoryboard(script){
+    q('filmTitle').textContent=isEn()?(script.titleEn||script.titleNo):(script.titleNo||script.titleEn);
+    var list=q('scenes-list'); list.innerHTML='';
+    scenes=script.scenes.map(function(s,i){
+      var el=document.createElement('div'); el.className='scene';
+      el.innerHTML='<div class="sc-head"><span class="sc-num">'+(i+1)+'</span><span class="sc-narr"></span></div>'+
+                   '<div class="sc-body"><div class="sc-status">'+L('Venter …','Waiting …')+'</div></div>'+
+                   '<div class="sc-foot hidden"><a class="btn ghost" download="scene.mp4" data-no="Last ned" data-en="Download">Last ned</a></div>';
+      el.querySelector('.sc-narr').textContent=isEn()?(s.narrationEn||s.narrationNo):(s.narrationNo||s.narrationEn);
+      list.appendChild(el);
+      return {narrationNo:s.narrationNo,narrationEn:s.narrationEn,imagePrompt:s.imagePrompt,motion:s.motion,el:el,clip:null,audio:null};
+    });
+    show('filmOut');
   }
-  q('again').addEventListener('click',function(){q('stage').classList.remove('show');clearMsg();});
+  function scStatus(sc,text){var b=sc.el.querySelector('.sc-body');b.innerHTML='<div class="sc-status">'+text+'</div>';}
+  function scStill(sc,url){var b=sc.el.querySelector('.sc-body');b.innerHTML='<img src="'+url+'" alt=""><div class="sc-status" style="position:absolute;bottom:.4rem;left:0;right:0;">'+L('Animerer …','Animating …')+'</div>';}
+  function scClip(sc,url){var b=sc.el.querySelector('.sc-body');b.innerHTML='<video src="'+url+'" controls playsinline></video>';var f=sc.el.querySelector('.sc-foot');f.classList.remove('hidden');f.querySelector('a').href=url;}
+
+  async function makeFilm(){
+    var idea=q('idea').value.trim();
+    if(!idea){msg('err',L('Skriv en idé for filmen.','Write an idea for the film.'));return;}
+    busy=true;clearMsg();hide('filmOut');
+    q('go').disabled=true;q('go').innerHTML='<span class="spinner"></span> '+L('Skriver manus …','Writing the script …');
+    var script;
+    try{
+      script=await fetch('/api/film-script',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({idea:idea,goal:q('goal').value.trim(),scenes:parseInt(q('scenes').value,10)})}).then(function(r){return r.json();});
+    }catch(e){script=null;}
+    if(!script||script.error||!script.scenes||!script.scenes.length){
+      busy=false;q('go').disabled=false;q('go').innerHTML='<span>'+L('Lag filmen','Make the film')+'</span>';
+      msg('err',(script&&script.error)||L('Klarte ikke å lage manuset. Prøv igjen.','Could not create the script. Please try again.'));
+      return;
+    }
+    renderStoryboard(script);
+    q('inputCard').scrollIntoView({behavior:'smooth',block:'start'});
+    // Lag hver scene i rekkefølge
+    for(var i=0;i<scenes.length;i++){
+      var sc=scenes[i];
+      q('go').innerHTML='<span class="spinner"></span> '+L('Lager scene ','Making scene ')+(i+1)+'/'+scenes.length;
+      try{
+        scStatus(sc,L('Tegner scenen …','Drawing the scene …'));
+        var still=await genStill(sc.imagePrompt);
+        scStill(sc,still);
+        var clip=await animate(still,sc.motion);
+        sc.clip=clip; scClip(sc,clip);
+        sc.audio=await genVoice(isEn()?(sc.narrationEn||sc.narrationNo):(sc.narrationNo||sc.narrationEn));
+      }catch(err){
+        scStatus(sc,L('Denne scenen feilet. ','This scene failed. ')+(err&&err.message?'('+err.message+')':''));
+      }
+    }
+    busy=false;q('go').disabled=false;q('go').innerHTML='<span>'+L('Lag filmen','Make the film')+'</span>';
+    var done=scenes.filter(function(s){return s.clip;});
+    if(done.length){q('playFilm').classList.remove('hidden');msg('info',L('Ferdig! Trykk "Spill hele filmen".','Done! Tap "Play the whole film".'));}
+    else msg('err',L('Ingen scener ble laget. Prøv igjen.','No scenes were made. Please try again.'));
+  }
+  q('go').addEventListener('click',function(){if(!busy)makeFilm();});
+  q('restart').addEventListener('click',function(){hide('filmOut');clearMsg();q('idea').focus();window.scrollTo({top:0,behavior:'smooth'});});
+
+  /* ---- Spill hele filmen ---- */
+  var playIdx=0, playAudio=null;
+  function stopAudio(){if(playAudio){playAudio.pause();playAudio=null;}}
+  function playScene(i){
+    var done=scenes.filter(function(s){return s.clip;});
+    if(i>=done.length){closePlayer();return;}
+    var sc=done[i];
+    q('pnarr').textContent=isEn()?(sc.narrationEn||sc.narrationNo):(sc.narrationNo||sc.narrationEn);
+    var v=q('pvideo'); v.src=sc.clip; v.currentTime=0;
+    stopAudio();
+    if(sc.audio){playAudio=new Audio(sc.audio);playAudio.play().catch(function(){});}
+    v.play().catch(function(){});
+    v.onended=function(){stopAudio();playScene(i+1);};
+  }
+  q('playFilm').addEventListener('click',function(){playIdx=0;q('player').classList.add('open');playScene(0);});
+  function closePlayer(){var v=q('pvideo');v.pause();v.removeAttribute('src');v.load();stopAudio();q('player').classList.remove('open');}
+  q('pclose').addEventListener('click',closePlayer);
 
   if(currentLang==='en')switchLanguage('en');
   loadAccess();
