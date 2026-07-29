@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0">
 <meta name="theme-color" content="#E91E89">
-<title>LME Reel · AI Reel Generator</title>
-<meta name="description" content="Lag ferdige reels med AI på 60 sekunder. Ingen filming. Klar for Instagram og TikTok.">
-<link rel="manifest" href="/reel-app/manifest.webmanifest">
+<title>LME YouTube · AI video og Shorts</title>
+<meta name="description" content="Lag YouTube-videoer og Shorts med AI. Tittel, manus, kapitler, beskrivelse og tags fra ett tema.">
+<link rel="manifest" href="/youtube-app/manifest.webmanifest">
 <link rel="icon" href="/images/lme-logo.png">
 <link rel="apple-touch-icon" href="/images/app/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="LME Reel">
+<meta name="apple-mobile-web-app-title" content="LME YouTube">
 <meta name="mobile-web-app-capable" content="yes">
 
 <style>
@@ -56,7 +56,7 @@
 
   .app-shell{max-width:480px;margin:0 auto;min-height:100%;position:relative;}
 
-  /* ============ ONBOARDING / SALG ============ */
+  /* ONBOARDING */
   #onboarding{padding:24px 20px calc(40px + env(safe-area-inset-bottom));}
   .ob-brand{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;margin-bottom:18px;}
   .ob-brand img{height:56px;width:auto;filter:drop-shadow(0 6px 14px rgba(233,30,137,.18));}
@@ -73,7 +73,6 @@
   .ticks span{display:flex;align-items:center;gap:10px;font-size:14.5px;color:var(--ink-soft);font-weight:600;}
   .ticks .t{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--lime-soft);color:#5b7d12;
     display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;}
-
   .ob-steps{display:grid;gap:12px;margin:6px 0 24px;}
   .ob-step{display:flex;gap:14px;align-items:flex-start;background:var(--bg-2);border:1px solid var(--line);
     border-radius:var(--r-lg);padding:16px 18px;box-shadow:var(--shadow-md);}
@@ -81,7 +80,6 @@
     display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:16px;}
   .ob-step h3{font-size:16px;font-weight:800;margin-bottom:2px;}
   .ob-step p{font-size:13.5px;color:var(--ink-soft);}
-
   .pricebox{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-xl);
     box-shadow:var(--shadow-md);padding:26px 24px;text-align:center;margin-bottom:16px;}
   .pricebox .plabel{display:inline-block;background:var(--sun-soft);color:#7a5e00;font-size:12px;font-weight:700;
@@ -94,36 +92,30 @@
   .guarantee{display:flex;align-items:center;gap:9px;background:var(--sun-soft);border-radius:var(--r-md);
     padding:11px 15px;font-size:12.5px;color:#7a5e00;margin-bottom:18px;text-align:left;}
   .guarantee svg{width:19px;height:19px;flex-shrink:0;color:var(--sun);}
-
   .btn-primary{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;
     font-size:17px;font-weight:800;padding:17px 20px;border-radius:var(--r-pill);
     background:var(--grad);color:#fff;box-shadow:0 12px 26px rgba(233,30,137,.32);
-    transition:transform .15s ease,box-shadow .15s ease;}
+    transition:transform .15s ease;}
   .btn-primary:active{transform:scale(.985);}
-  .btn-ghost{display:block;width:100%;text-align:center;font-size:14.5px;font-weight:700;color:var(--ink-soft);
-    padding:14px;margin-top:6px;}
+  .btn-ghost{display:block;width:100%;text-align:center;font-size:14.5px;font-weight:700;color:var(--ink-soft);padding:14px;margin-top:6px;}
   .trust{margin-top:14px;font-size:12px;color:var(--ink-muted);text-align:center;}
   .ob-lang{position:absolute;top:18px;right:18px;border:1px solid var(--line);background:#fff;color:var(--ink);
     font-weight:700;font-size:12px;padding:7px 12px;border-radius:var(--r-pill);box-shadow:var(--shadow-md);z-index:5;}
 
-  /* ============ APP ============ */
+  /* APP */
   #app{display:none;flex-direction:column;min-height:100%;}
   #app.show{display:flex;}
   .appbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
     gap:12px;padding:calc(10px + env(safe-area-inset-top)) 18px 10px;
-    background:rgba(251,247,240,0.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-    border-bottom:1px solid var(--line);}
+    background:rgba(251,247,240,0.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);}
   .appbar .b{display:flex;align-items:center;gap:9px;font-family:var(--font-head);font-weight:800;font-size:16px;}
   .appbar .b img{height:28px;width:auto;}
   .appbar .b b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
-  .lang-toggle{border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:700;font-size:12px;
-    padding:7px 11px;border-radius:var(--r-pill);}
-
+  .lang-toggle{border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:700;font-size:12px;padding:7px 11px;border-radius:var(--r-pill);}
   .screen{flex:1;padding:18px 18px calc(96px + env(safe-area-inset-bottom));display:none;}
   .screen.active{display:block;}
   .screen h2.title{font-size:22px;font-weight:800;margin-bottom:4px;}
   .screen p.lead{font-size:14px;color:var(--ink-soft);margin-bottom:18px;}
-
   .field{margin-bottom:14px;}
   label.lab{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:7px;}
   textarea,select,input{width:100%;font-family:inherit;font-size:15px;padding:14px;border:1.5px solid var(--line);
@@ -131,28 +123,28 @@
   textarea{min-height:110px;resize:vertical;}
   textarea:focus,select:focus,input:focus{outline:none;border-color:var(--cerise);}
   .chips{display:flex;gap:8px;flex-wrap:wrap;}
-  .len-chip{font-size:13.5px;font-weight:700;border:1.5px solid var(--line);background:#fff;color:var(--ink-soft);
-    border-radius:var(--r-pill);padding:9px 15px;}
+  .len-chip{font-size:13.5px;font-weight:700;border:1.5px solid var(--line);background:#fff;color:var(--ink-soft);border-radius:var(--r-pill);padding:9px 15px;}
   .len-chip.on{background:var(--cerise);border-color:var(--cerise);color:#fff;}
-
   .gen-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:6px;
     font-size:17px;font-weight:800;padding:17px;border-radius:var(--r-pill);background:var(--grad);color:#fff;
     box-shadow:0 12px 26px rgba(233,30,137,.3);transition:transform .15s ease;}
   .gen-btn:active{transform:scale(.985);}
   .gen-btn:disabled{opacity:.6;}
-  .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;
-    animation:spin .7s linear infinite;display:inline-block;}
+  .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
   @keyframes spin{to{transform:rotate(360deg);}}
-
   .out{margin-top:20px;}
   .out:empty{display:none;}
-  .hook{background:linear-gradient(135deg,#FFF0F5,#FFE1EC);border:1px solid var(--line);border-radius:var(--r-md);
-    padding:16px 18px;text-align:center;margin-bottom:14px;}
+  .hook{background:linear-gradient(135deg,#FFF0F5,#FFE1EC);border:1px solid var(--line);border-radius:var(--r-md);padding:16px 18px;text-align:center;margin-bottom:14px;}
   .hook .lbl{font-size:11px;font-weight:700;color:var(--cerise);text-transform:uppercase;letter-spacing:.07em;}
   .hook .txt{font-family:var(--font-head);font-weight:800;font-size:19px;margin-top:5px;}
+  .titlecard{background:var(--grad);color:#fff;border-radius:var(--r-md);padding:16px 18px;margin-bottom:14px;box-shadow:var(--shadow-md);}
+  .titlecard .lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;opacity:.9;}
+  .titlecard .txt{font-family:var(--font-head);font-weight:800;font-size:19px;margin-top:4px;}
   .rcard{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px;margin-bottom:11px;box-shadow:var(--shadow-md);}
   .rcard h4{font-size:13.5px;color:var(--cerise);margin-bottom:6px;display:flex;align-items:center;gap:7px;}
   .rcard p{font-size:14px;color:var(--ink-soft);white-space:pre-wrap;}
+  .rcard ul{margin:4px 0 0 2px;padding-left:16px;}
+  .rcard li{font-size:14px;color:var(--ink-soft);margin-bottom:4px;}
   .scene{border-left:3px solid var(--cerise);}
   .scene .time{font-size:11.5px;font-weight:700;color:var(--ink-muted);}
   .scene .on{font-family:var(--font-head);font-weight:700;font-size:14.5px;margin:3px 0;}
@@ -165,11 +157,9 @@
   .save-btn{background:var(--lime-soft);color:#4d6b0f;}
   .again-btn{background:var(--bg-2);border:1.5px solid var(--line);color:var(--ink-soft);}
   .err{color:var(--cerise);font-size:14px;text-align:center;padding:10px;}
-
   .empty{text-align:center;color:var(--ink-muted);padding:44px 20px;}
   .empty .em{font-size:40px;margin-bottom:12px;}
   .empty p{font-size:14px;}
-
   .saved{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px;margin-bottom:11px;box-shadow:var(--shadow-md);}
   .saved .h{font-family:var(--font-head);font-weight:700;font-size:15px;margin-bottom:3px;}
   .saved .meta{font-size:12px;color:var(--ink-muted);}
@@ -177,9 +167,7 @@
   .saved .row button{font-size:12.5px;font-weight:700;padding:9px 14px;border-radius:var(--r-pill);}
   .saved .open{background:var(--cerise-soft);color:var(--cerise);}
   .saved .del{background:#fff;border:1px solid var(--line);color:var(--ink-muted);}
-
-  .krow{display:flex;align-items:center;gap:12px;background:var(--bg-2);border:1px solid var(--line);
-    border-radius:var(--r-md);padding:15px 16px;margin-bottom:11px;box-shadow:var(--shadow-md);}
+  .krow{display:flex;align-items:center;gap:12px;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-md);padding:15px 16px;margin-bottom:11px;box-shadow:var(--shadow-md);}
   .krow .ic{font-size:20px;}
   .krow .tx{flex:1;}
   .krow .tx b{display:block;font-family:var(--font-head);font-size:14.5px;}
@@ -188,53 +176,42 @@
   .plan{background:var(--grad);color:#fff;border-radius:var(--r-lg);padding:20px;text-align:center;margin-bottom:16px;box-shadow:var(--shadow-md);}
   .plan .p1{font-family:var(--font-head);font-weight:800;font-size:18px;}
   .plan .p2{font-size:13px;opacity:.92;margin-top:3px;}
-
-  /* BOTTOM NAV */
-  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;max-width:480px;margin:0 auto;
-    display:flex;background:rgba(255,255,255,0.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;max-width:480px;margin:0 auto;display:flex;
+    background:rgba(255,255,255,0.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
     border-top:1px solid var(--line);padding:8px 8px calc(8px + env(safe-area-inset-bottom));}
-  .tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;
-    font-size:11px;font-weight:700;color:var(--ink-muted);border-radius:14px;}
+  .tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;font-size:11px;font-weight:700;color:var(--ink-muted);border-radius:14px;}
   .tabbar button .ti{font-size:20px;line-height:1;}
   .tabbar button.on{color:var(--cerise);}
-
-  /* MODAL (view saved reel) */
   .modal{position:fixed;inset:0;z-index:60;background:rgba(31,27,36,.5);display:none;align-items:flex-end;justify-content:center;}
   .modal.show{display:flex;}
-  .modal-in{background:var(--bg);width:100%;max-width:480px;max-height:88vh;overflow-y:auto;
-    border-radius:22px 22px 0 0;padding:22px 18px calc(30px + env(safe-area-inset-bottom));}
+  .modal-in{background:var(--bg);width:100%;max-width:480px;max-height:88vh;overflow-y:auto;border-radius:22px 22px 0 0;padding:22px 18px calc(30px + env(safe-area-inset-bottom));}
   .modal-in .x{float:right;font-size:22px;color:var(--ink-muted);width:34px;height:34px;}
-
-  /* INSTALL banner */
-  .install-hint{background:var(--sun-soft);border:1px solid #F1DFA0;border-radius:var(--r-md);
-    padding:13px 15px;font-size:13px;color:#7a5e00;margin-bottom:14px;display:none;}
+  .install-hint{background:var(--sun-soft);border:1px solid #F1DFA0;border-radius:var(--r-md);padding:13px 15px;font-size:13px;color:#7a5e00;margin-bottom:14px;display:none;}
   .install-hint.show{display:block;}
-  .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:#fff;
-    font-size:13px;font-weight:700;padding:11px 18px;border-radius:var(--r-pill);opacity:0;pointer-events:none;
-    transition:opacity .2s;z-index:80;}
+  .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:13px;font-weight:700;padding:11px 18px;border-radius:var(--r-pill);opacity:0;pointer-events:none;transition:opacity .2s;z-index:80;}
   .toast.show{opacity:1;}
 </style>
 </head>
 <body>
 <div class="app-shell">
 
-  <!-- ================= ONBOARDING / SALG ================= -->
+  <!-- ONBOARDING -->
   <section id="onboarding">
     <button class="ob-lang" id="obLang">EN 🌍</button>
 
     <div class="ob-brand">
       <img src="/images/lme-logo.png" alt="LME" onerror="this.style.display='none'">
-      <div class="name">LME <b>Reel</b></div>
+      <div class="name">LME <b>YouTube</b></div>
     </div>
 
-    <span class="chip" data-no="🎬 AI Reel Generator" data-en="🎬 AI Reel Generator">🎬 AI Reel Generator</span>
+    <span class="chip" data-no="▶️ AI for YouTube" data-en="▶️ AI for YouTube">▶️ AI for YouTube</span>
 
     <div class="ob-hero">
-      <h1 data-no="Lag ferdige reels med AI på <span class='hl'>60 sekunder</span>" data-en="Make finished reels with AI in <span class='hl'>60 seconds</span>">Lag ferdige reels med AI på <span class="hl">60 sekunder</span></h1>
-      <p class="sub" data-no="Ingen filming. Ingen erfaring. Velg format (reel, story, karusell eller innlegg), skriv inn ett tema, og appen lager alt ferdig. Klar for Instagram og Facebook." data-en="No filming. No experience. Pick a format (reel, story, carousel or post), type in one topic, and the app makes it all. Ready for Instagram and Facebook.">Ingen filming. Ingen erfaring. Velg format (reel, story, karusell eller innlegg), skriv inn ett tema, og appen lager alt ferdig. Klar for Instagram og Facebook.</p>
+      <h1 data-no="Lag <span class='hl'>YouTube-videoer</span> og Shorts med AI" data-en="Make <span class='hl'>YouTube videos</span> and Shorts with AI">Lag <span class="hl">YouTube-videoer</span> og Shorts med AI</h1>
+      <p class="sub" data-no="Ingen filming, ingen erfaring. Skriv inn ett tema, og appen lager tittel, manus, kapitler, beskrivelse og tags. Klar for YouTube." data-en="No filming, no experience. Type in one topic, and the app makes the title, script, chapters, description and tags. Ready for YouTube.">Ingen filming, ingen erfaring. Skriv inn ett tema, og appen lager tittel, manus, kapitler, beskrivelse og tags. Klar for YouTube.</p>
       <div class="ticks">
-        <span><span class="t">✓</span><span data-no="Ferdig innhold på under 3 minutter" data-en="Finished content in under 3 minutes">Ferdig innhold på under 3 minutter</span></span>
-        <span><span class="t">✓</span><span data-no="Fungerer på mobil, nettbrett og PC" data-en="Works on phone, tablet and computer">Fungerer på mobil, nettbrett og PC</span></span>
+        <span><span class="t">✓</span><span data-no="Ferdig manus på minutter" data-en="A finished script in minutes">Ferdig manus på minutter</span></span>
+        <span><span class="t">✓</span><span data-no="Både Shorts og lange videoer" data-en="Both Shorts and long videos">Både Shorts og lange videoer</span></span>
         <span><span class="t">✓</span><span data-no="Ingen filming eller redigering" data-en="No filming or editing">Ingen filming eller redigering</span></span>
         <span><span class="t">✓</span><span data-no="Norsk og engelsk" data-en="Norwegian and English">Norsk og engelsk</span></span>
       </div>
@@ -244,17 +221,17 @@
       <div class="ob-step">
         <div class="n">1</div>
         <div><h3 data-no="Velg format og tema" data-en="Pick format and topic">Velg format og tema</h3>
-        <p data-no="Reel, story, karusell eller innlegg, og temaet ditt." data-en="Reel, story, carousel or post, and your topic.">Reel, story, karusell eller innlegg, og temaet ditt.</p></div>
+        <p data-no="Short eller lang video, og temaet ditt." data-en="Short or long video, and your topic.">Short eller lang video, og temaet ditt.</p></div>
       </div>
       <div class="ob-step">
         <div class="n">2</div>
         <div><h3 data-no="Trykk på knappen" data-en="Press the button">Trykk på knappen</h3>
-        <p data-no="Appen lager hook, manus, voiceover og caption." data-en="The app makes the hook, script, voiceover and caption.">Appen lager hook, manus, voiceover og caption.</p></div>
+        <p data-no="Appen lager tittel, manus, kapitler, beskrivelse og tags." data-en="The app makes the title, script, chapters, description and tags.">Appen lager tittel, manus, kapitler, beskrivelse og tags.</p></div>
       </div>
       <div class="ob-step">
         <div class="n">3</div>
-        <div><h3 data-no="Del og bli synlig" data-en="Share and get seen">Del og bli synlig</h3>
-        <p data-no="Legg innholdet ut på Instagram og Facebook." data-en="Post the content to Instagram and Facebook.">Legg innholdet ut på Instagram og Facebook.</p></div>
+        <div><h3 data-no="Last opp og voks" data-en="Upload and grow">Last opp og voks</h3>
+        <p data-no="Legg videoen ut på YouTube og bli funnet." data-en="Post the video to YouTube and get found.">Legg videoen ut på YouTube og bli funnet.</p></div>
       </div>
     </div>
 
@@ -277,57 +254,46 @@
       <div class="trust" data-no="🔒 Trygg betaling · Vipps · Visa · Mastercard" data-en="🔒 Secure payment · Vipps · Visa · Mastercard">🔒 Trygg betaling · Vipps · Visa · Mastercard</div>
     </div>
 
-    <button class="btn-ghost" id="tryBtn" data-no="Prøv å lage én reel først →" data-en="Try making one reel first →">Prøv å lage én reel først →</button>
+    <button class="btn-ghost" id="tryBtn" data-no="Prøv å lage ett manus først →" data-en="Try making one script first →">Prøv å lage ett manus først →</button>
   </section>
 
-  <!-- ================= APP ================= -->
+  <!-- APP -->
   <div id="app">
     <div class="appbar">
-      <div class="b"><img src="/images/lme-logo.png" alt="" onerror="this.style.display='none'">LME <b>Reel</b></div>
+      <div class="b"><img src="/images/lme-logo.png" alt="" onerror="this.style.display='none'">LME <b>YouTube</b></div>
       <button class="lang-toggle" id="appLang">EN 🌍</button>
     </div>
 
-    <!-- SCREEN: LAG INNHOLD -->
     <section class="screen active" id="s-make">
-      <h2 class="title" data-no="Lag innhold" data-en="Make content">Lag innhold</h2>
-      <p class="lead" data-no="Velg format, skriv inn et tema, så lager appen ferdig innhold for deg." data-en="Pick a format, type in a topic, and the app makes finished content for you.">Velg format, skriv inn et tema, så lager appen ferdig innhold for deg.</p>
+      <h2 class="title" data-no="Lag for YouTube" data-en="Make for YouTube">Lag for YouTube</h2>
+      <p class="lead" data-no="Velg format, skriv inn et tema, så lager appen alt for deg." data-en="Pick a format, type in a topic, and the app makes it all for you.">Velg format, skriv inn et tema, så lager appen alt for deg.</p>
 
       <div class="install-hint" id="installHint"></div>
 
       <div class="field">
         <label class="lab" data-no="Format" data-en="Format">Format</label>
         <div class="chips" id="fmtChips">
-          <button class="len-chip on" data-fmt="reel">🎬 <span data-no="Reel" data-en="Reel">Reel</span></button>
-          <button class="len-chip" data-fmt="story">📖 <span data-no="Story" data-en="Story">Story</span></button>
-          <button class="len-chip" data-fmt="carousel">🖼️ <span data-no="Karusell" data-en="Carousel">Karusell</span></button>
-          <button class="len-chip" data-fmt="post">📝 <span data-no="Innlegg" data-en="Post">Innlegg</span></button>
+          <button class="len-chip on" data-fmt="youtube">▶️ <span data-no="Lang video" data-en="Long video">Lang video</span></button>
+          <button class="len-chip" data-fmt="reel">🎬 <span data-no="Short" data-en="Short">Short</span></button>
         </div>
       </div>
 
       <div class="field">
-        <label class="lab" data-no="Plattform" data-en="Platform">Plattform</label>
-        <div class="chips" id="platChips">
-          <button class="len-chip on" data-plat="instagram">📸 Instagram</button>
-          <button class="len-chip" data-plat="facebook">👍 Facebook</button>
-        </div>
+        <label class="lab" data-no="Hva skal videoen handle om?" data-en="What is the video about?">Hva skal videoen handle om?</label>
+        <textarea id="topic" data-no-ph="For eksempel: hvordan lage et forberedt miljø hjemme for barn i alderen 3-6 år" data-en-ph="For example: how to set up a prepared environment at home for kids aged 3-6" placeholder="For eksempel: hvordan lage et forberedt miljø hjemme for barn i alderen 3-6 år"></textarea>
       </div>
 
-      <div class="field">
-        <label class="lab" data-no="Hva skal innholdet handle om?" data-en="What is the content about?">Hva skal innholdet handle om?</label>
-        <textarea id="topic" data-no-ph="For eksempel: tre enkle Montessori-aktiviteter for barn på kjøkkenet" data-en-ph="For example: three simple Montessori activities for kids in the kitchen" placeholder="For eksempel: tre enkle Montessori-aktiviteter for barn på kjøkkenet"></textarea>
-      </div>
-
-      <div class="field" id="lenField">
-        <label class="lab" data-no="Lengde" data-en="Length">Lengde</label>
+      <div class="field" id="lenField" style="display:none;">
+        <label class="lab" data-no="Lengde (Short)" data-en="Length (Short)">Lengde (Short)</label>
         <div class="chips" id="lenChips">
-          <button class="len-chip on" data-secs="15">15s</button>
-          <button class="len-chip" data-secs="30">30s</button>
+          <button class="len-chip on" data-secs="30">30s</button>
+          <button class="len-chip" data-secs="45">45s</button>
           <button class="len-chip" data-secs="60">60s</button>
         </div>
       </div>
 
       <div class="field">
-        <label class="lab" data-no="Språk på innholdet" data-en="Content language">Språk på innholdet</label>
+        <label class="lab" data-no="Språk på videoen" data-en="Video language">Språk på videoen</label>
         <div class="chips" id="rlangChips">
           <button class="len-chip" data-rlang="no">🇳🇴 Norsk</button>
           <button class="len-chip" data-rlang="en">🇬🇧 English</button>
@@ -336,36 +302,34 @@
 
       <button class="gen-btn" id="genBtn">
         <span>⚡</span>
-        <span data-no="Lag innhold" data-en="Make content">Lag innhold</span>
+        <span data-no="Lag for YouTube" data-en="Make for YouTube">Lag for YouTube</span>
       </button>
 
       <div class="out" id="out"></div>
     </section>
 
-    <!-- SCREEN: MINE REELS -->
     <section class="screen" id="s-saved">
-      <h2 class="title" data-no="Mine reels" data-en="My reels">Mine reels</h2>
-      <p class="lead" data-no="Reelene du har lagret ligger her." data-en="The reels you have saved are here.">Reelene du har lagret ligger her.</p>
+      <h2 class="title" data-no="Mine videoer" data-en="My videos">Mine videoer</h2>
+      <p class="lead" data-no="Det du har lagret ligger her." data-en="What you have saved is here.">Det du har lagret ligger her.</p>
       <div id="savedList"></div>
     </section>
 
-    <!-- SCREEN: KONTO -->
     <section class="screen" id="s-account">
       <h2 class="title" data-no="Konto" data-en="Account">Konto</h2>
       <div class="plan">
-        <div class="p1" id="planTitle" data-no="LME Reel" data-en="LME Reel">LME Reel</div>
-        <div class="p2" id="planText" data-no="Du er klar til å lage reels." data-en="You are ready to make reels.">Du er klar til å lage reels.</div>
+        <div class="p1">LME YouTube</div>
+        <div class="p2" id="planText" data-no="Du er klar til å lage videoer." data-en="You are ready to make videos.">Du er klar til å lage videoer.</div>
       </div>
 
       <button class="krow" id="installBtn" style="width:100%;text-align:left;display:none;">
         <span class="ic">📲</span>
-        <span class="tx"><b data-no="Installer appen" data-en="Install the app">Installer appen</b><span data-no="Legg LME Reel på hjem-skjermen" data-en="Add LME Reel to your home screen">Legg LME Reel på hjem-skjermen</span></span>
+        <span class="tx"><b data-no="Installer appen" data-en="Install the app">Installer appen</b><span data-no="Legg LME YouTube på hjem-skjermen" data-en="Add LME YouTube to your home screen">Legg LME YouTube på hjem-skjermen</span></span>
         <span class="go">→</span>
       </button>
 
-      <a class="krow" href="/reel-studio">
-        <span class="ic">🎛️</span>
-        <span class="tx"><b data-no="Full Reel Studio" data-en="Full Reel Studio">Full Reel Studio</b><span data-no="Video, voiceover og automatisk publisering" data-en="Video, voiceover and automatic posting">Video, voiceover og automatisk publisering</span></span>
+      <a class="krow" href="/reel-app/">
+        <span class="ic">🎬</span>
+        <span class="tx"><b data-no="LME Reel" data-en="LME Reel">LME Reel</b><span data-no="Reels, stories, karuseller og innlegg" data-en="Reels, stories, carousels and posts">Reels, stories, karuseller og innlegg</span></span>
         <span class="go">→</span>
       </a>
 
@@ -382,17 +346,15 @@
       </button>
     </section>
 
-    <!-- BOTTOM NAV -->
     <nav class="tabbar">
-      <button class="on" data-screen="s-make"><span class="ti">🎬</span><span data-no="Lag" data-en="Make">Lag</span></button>
-      <button data-screen="s-saved"><span class="ti">📁</span><span data-no="Mine reels" data-en="My reels">Mine reels</span></button>
+      <button class="on" data-screen="s-make"><span class="ti">▶️</span><span data-no="Lag" data-en="Make">Lag</span></button>
+      <button data-screen="s-saved"><span class="ti">📁</span><span data-no="Mine videoer" data-en="My videos">Mine videoer</span></button>
       <button data-screen="s-account"><span class="ti">👤</span><span data-no="Konto" data-en="Account">Konto</span></button>
     </nav>
   </div>
 
 </div>
 
-<!-- MODAL -->
 <div class="modal" id="modal"><div class="modal-in"><button class="x" id="modalX">✕</button><div id="modalBody"></div></div></div>
 <div class="toast" id="toast"></div>
 
@@ -400,17 +362,15 @@
 (function(){
   var LANG = 'no';
   try { if (localStorage.getItem('lme_lang') === 'en') LANG = 'en'; } catch(e){}
-  var FMT = 'reel';      // reel | story | carousel | post
-  var PLATFORM = 'instagram'; // instagram | facebook
-  var SECS = '15';
-  var REELLANG = LANG;   // språket innholdet lages på (kan velges uavhengig av app-språket)
-  var REEL = null;
+  var FMT = 'youtube';   // youtube | reel (short)
+  var SECS = '30';
+  var VLANG = LANG;      // språket videoen lages på
+  var DATA = null;
 
   function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
   function $(id){ return document.getElementById(id); }
   function toast(msg){ var t=$('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},1600); }
 
-  // ---------- SPRÅK ----------
   function applyLang(){
     document.documentElement.lang = LANG;
     document.querySelectorAll('[data-no][data-en]').forEach(function(el){
@@ -425,14 +385,13 @@
     if ($('appLang')) $('appLang').textContent = lbl;
     var st = $('accLangState'); if (st) st.textContent = LANG === 'no' ? 'Norsk' : 'English';
   }
-  function toggleLang(){ LANG = LANG === 'no' ? 'en' : 'no'; try{localStorage.setItem('lme_lang',LANG);}catch(e){} applyLang(); if (typeof setReelLang === 'function') setReelLang(LANG); }
+  function toggleLang(){ LANG = LANG === 'no' ? 'en' : 'no'; try{localStorage.setItem('lme_lang',LANG);}catch(e){} applyLang(); setVLang(LANG); }
   $('obLang').addEventListener('click', toggleLang);
   $('appLang').addEventListener('click', toggleLang);
   $('accLang').addEventListener('click', toggleLang);
 
-  // ---------- ONBOARDING → APP ----------
   function enterApp(unlocked){
-    if (unlocked) { try{ localStorage.setItem('reel_app_unlocked','1'); }catch(e){} }
+    if (unlocked) { try{ localStorage.setItem('yt_app_unlocked','1'); }catch(e){} }
     $('onboarding').style.display = 'none';
     $('app').classList.add('show');
     updatePlan();
@@ -440,17 +399,15 @@
   // NB: Koble ekte betaling her (Stripe/Vipps checkout-URL). Nå åpner knappen appen.
   $('buyBtn').addEventListener('click', function(){ enterApp(true); });
   $('tryBtn').addEventListener('click', function(){ enterApp(false); });
-
-  try { if (localStorage.getItem('reel_app_unlocked') === '1') { $('onboarding').style.display='none'; $('app').classList.add('show'); } } catch(e){}
+  try { if (localStorage.getItem('yt_app_unlocked') === '1') { $('onboarding').style.display='none'; $('app').classList.add('show'); } } catch(e){}
 
   function updatePlan(){
-    var unlocked = false; try{ unlocked = localStorage.getItem('reel_app_unlocked')==='1'; }catch(e){}
-    $('planText').setAttribute('data-no', unlocked ? 'Full tilgang er aktivert. Lag så mange reels du vil.' : 'Prøveversjon. Lag din første reel gratis.');
-    $('planText').setAttribute('data-en', unlocked ? 'Full access is active. Make as many reels as you like.' : 'Trial version. Make your first reel for free.');
+    var unlocked = false; try{ unlocked = localStorage.getItem('yt_app_unlocked')==='1'; }catch(e){}
+    $('planText').setAttribute('data-no', unlocked ? 'Full tilgang er aktivert. Lag så mange videoer du vil.' : 'Prøveversjon. Lag din første video gratis.');
+    $('planText').setAttribute('data-en', unlocked ? 'Full access is active. Make as many videos as you like.' : 'Trial version. Make your first video for free.');
     applyLang();
   }
 
-  // ---------- TABS ----------
   document.querySelectorAll('.tabbar button').forEach(function(b){
     b.addEventListener('click', function(){
       document.querySelectorAll('.tabbar button').forEach(function(x){x.classList.remove('on');});
@@ -462,8 +419,7 @@
     });
   });
 
-  // ---------- FORMAT ----------
-  function updateLenVisibility(){ $('lenField').style.display = (FMT === 'reel' || FMT === 'story') ? '' : 'none'; }
+  function updateLenVisibility(){ $('lenField').style.display = (FMT === 'reel') ? '' : 'none'; }
   $('fmtChips').addEventListener('click', function(e){
     var c = e.target.closest('.len-chip'); if(!c) return;
     $('fmtChips').querySelectorAll('.len-chip').forEach(function(x){x.classList.remove('on');});
@@ -471,41 +427,29 @@
   });
   updateLenVisibility();
 
-  // ---------- PLATTFORM ----------
-  $('platChips').addEventListener('click', function(e){
-    var c = e.target.closest('.len-chip'); if(!c) return;
-    $('platChips').querySelectorAll('.len-chip').forEach(function(x){x.classList.remove('on');});
-    c.classList.add('on'); PLATFORM = c.getAttribute('data-plat');
-  });
-
-  // ---------- LENGDE ----------
   $('lenChips').addEventListener('click', function(e){
     var c = e.target.closest('.len-chip'); if(!c) return;
     $('lenChips').querySelectorAll('.len-chip').forEach(function(x){x.classList.remove('on');});
     c.classList.add('on'); SECS = c.getAttribute('data-secs');
   });
 
-  // ---------- SPRÅK PÅ REELEN ----------
-  function setReelLang(l){
-    REELLANG = l;
-    $('rlangChips').querySelectorAll('.len-chip').forEach(function(x){
-      x.classList.toggle('on', x.getAttribute('data-rlang') === l);
-    });
+  function setVLang(l){
+    VLANG = l;
+    $('rlangChips').querySelectorAll('.len-chip').forEach(function(x){ x.classList.toggle('on', x.getAttribute('data-rlang') === l); });
   }
   $('rlangChips').addEventListener('click', function(e){
     var c = e.target.closest('.len-chip'); if(!c) return;
-    setReelLang(c.getAttribute('data-rlang'));
+    setVLang(c.getAttribute('data-rlang'));
   });
-  setReelLang(LANG);
+  setVLang(LANG);
 
-  // ---------- GENERERING ----------
   function parseJSON(str){
     if (typeof str !== 'string') return str;
     var s = str.trim().replace(/^```(?:json)?/i,'').replace(/```$/,'').trim();
     try { return JSON.parse(s); } catch(e){}
     var a = s.indexOf('{'), b = s.lastIndexOf('}');
     if (a !== -1 && b !== -1) { try { return JSON.parse(s.slice(a,b+1)); } catch(e2){} }
-    return { hook:'', voiceover:s, scenes:[], caption:'', hashtags:[] };
+    return { title:'', hook:s, sections:[], description:'', tags:[] };
   }
   function copyBtn(text){
     var b = document.createElement('button'); b.className='copy-btn';
@@ -514,26 +458,32 @@
     return b;
   }
   function T(k){
-    var no = {hook:'Hook',vo:'Voiceover',scenes:'Scene for scene',broll:'B-roll',music:'Musikk',cta:'Oppfordring',caption:'Caption',tags:'Emneknagger',slide:'Slide',frame:'Frame',imgprompt:'Bilde-idé'};
-    var en = {hook:'Hook',vo:'Voiceover',scenes:'Scene by scene',broll:'B-roll',music:'Music',cta:'Call to action',caption:'Caption',tags:'Hashtags',slide:'Slide',frame:'Frame',imgprompt:'Image idea'};
+    var no = {hook:'Hook / intro',vo:'Voiceover',scenes:'Scene for scene',broll:'B-roll',music:'Musikk',cta:'Oppfordring',caption:'Caption',tags:'Tags',title:'Tittel',desc:'Beskrivelse',thumb:'Thumbnail-tekst',chapters:'Kapitler'};
+    var en = {hook:'Hook / intro',vo:'Voiceover',scenes:'Scene by scene',broll:'B-roll',music:'Music',cta:'Call to action',caption:'Caption',tags:'Tags',title:'Title',desc:'Description',thumb:'Thumbnail text',chapters:'Chapters'};
     return (LANG==='no'?no:en)[k];
   }
-  function tagsCard(out, hashtags){
-    if (!Array.isArray(hashtags) || !hashtags.length) return;
-    var tagline = hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' ');
+  function card(title, body, copy){
     var d=document.createElement('div'); d.className='rcard';
-    var head=document.createElement('h4'); head.textContent='#️⃣ '+T('tags'); head.appendChild(copyBtn(tagline));
+    var h=document.createElement('h4'); h.textContent=title; if(copy) h.appendChild(copyBtn(body));
+    var p=document.createElement('p'); p.textContent=body;
+    d.appendChild(h); d.appendChild(p); return d;
+  }
+  function tagsCard(out, tags){
+    if (!Array.isArray(tags) || !tags.length) return;
+    var line = tags.join(', ');
+    var d=document.createElement('div'); d.className='rcard';
+    var head=document.createElement('h4'); head.textContent='#️⃣ '+T('tags'); head.appendChild(copyBtn(line));
     var tg=document.createElement('div'); tg.className='tags';
-    tg.innerHTML=hashtags.map(function(x){return '<span>'+esc(x[0]==='#'?x:'#'+x)+'</span>';}).join('');
+    tg.innerHTML=tags.map(function(x){return '<span>'+esc(x)+'</span>';}).join('');
     d.appendChild(head); d.appendChild(tg); out.appendChild(d);
   }
   function renderContent(r, out, withActions, fmt){
-    fmt = fmt || 'reel';
+    fmt = fmt || 'youtube';
     out.innerHTML='';
-    if (fmt === 'reel' || fmt === 'hookreel'){
-      if (r.hook){ var h=document.createElement('div'); h.className='hook'; h.innerHTML='<div class="lbl">'+T('hook')+'</div><div class="txt">'+esc(r.hook)+'</div>'; out.appendChild(h); }
+    if (fmt === 'reel'){
+      if (r.hook){ var h=document.createElement('div'); h.className='hook'; h.innerHTML='<div class="lbl">Hook</div><div class="txt">'+esc(r.hook)+'</div>'; out.appendChild(h); }
       if (r.voiceover){ out.appendChild(card('🎙️ '+T('vo'), r.voiceover, true)); }
-      if (Array.isArray(r.scenes) && r.scenes.length){
+      if (Array.isArray(r.scenes)){
         r.scenes.forEach(function(s){
           var d=document.createElement('div'); d.className='rcard scene';
           d.innerHTML=(s.time?'<div class="time">'+esc(s.time)+'</div>':'')+
@@ -543,108 +493,79 @@
           out.appendChild(d);
         });
       }
-      if (r.musicMood){ out.appendChild(card('🎵 '+T('music'), r.musicMood, false)); }
       if (r.cta){ out.appendChild(card('➡️ '+T('cta'), r.cta, true)); }
       if (r.caption){ out.appendChild(card('✍️ '+T('caption'), r.caption, true)); }
-      tagsCard(out, r.hashtags);
-    } else if (fmt === 'carousel'){
-      if (Array.isArray(r.slides)){
-        r.slides.forEach(function(s, i){
-          var text = (typeof s === 'string') ? s : (s.text || s.body || s.headline || '');
+      tagsCard(out, (r.hashtags||[]).map(function(x){return x[0]==='#'?x:'#'+x;}));
+    } else { // youtube
+      if (r.title){ var t=document.createElement('div'); t.className='titlecard'; t.innerHTML='<div class="lbl">'+T('title')+'</div><div class="txt">'+esc(r.title)+'</div>'; t.appendChild(copyBtn(r.title)); out.appendChild(t); }
+      if (r.hook){ out.appendChild(card('🎬 '+T('hook'), r.hook, true)); }
+      if (Array.isArray(r.sections) && r.sections.length){
+        var head=document.createElement('div'); head.className='rcard'; head.innerHTML='<h4>🗂️ '+T('chapters')+'</h4>'; out.appendChild(head);
+        r.sections.forEach(function(sec, i){
           var d=document.createElement('div'); d.className='rcard scene';
-          var head=document.createElement('div'); head.className='time'; head.textContent=T('slide')+' '+(i+1);
-          var on=document.createElement('div'); on.className='on'; on.textContent=text; on.appendChild(copyBtn(text));
-          d.appendChild(head); d.appendChild(on); out.appendChild(d);
-        });
-      }
-      if (r.caption){ out.appendChild(card('✍️ '+T('caption'), r.caption, true)); }
-      tagsCard(out, r.hashtags);
-    } else if (fmt === 'story'){
-      if (Array.isArray(r.frames)){
-        r.frames.forEach(function(fr, i){
-          var d=document.createElement('div'); d.className='rcard scene';
-          var head=document.createElement('div'); head.className='time'; head.textContent=T('frame')+' '+(i+1);
-          d.appendChild(head);
-          if (fr.headline){ var on=document.createElement('div'); on.className='on'; on.textContent=fr.headline; d.appendChild(on); }
-          if (fr.body){ var bo=document.createElement('div'); bo.className='vo'; bo.textContent=fr.body; d.appendChild(bo); }
-          var joined=((fr.headline||'')+(fr.body?'\n'+fr.body:'')).trim();
-          if (joined){ var wrap=document.createElement('div'); wrap.style.marginTop='6px'; wrap.appendChild(copyBtn(joined)); d.appendChild(wrap); }
+          var hd=document.createElement('div'); hd.className='on'; hd.textContent=(i+1)+'. '+(sec.heading||'');
+          d.appendChild(hd);
+          var pts = sec.talkingPoints || sec.points || [];
+          if (Array.isArray(pts) && pts.length){
+            var ul=document.createElement('ul');
+            pts.forEach(function(pt){ var li=document.createElement('li'); li.textContent=pt; ul.appendChild(li); });
+            d.appendChild(ul);
+          } else if (typeof pts === 'string'){ var p=document.createElement('div'); p.className='vo'; p.textContent=pts; d.appendChild(p); }
           out.appendChild(d);
         });
       }
-      if (r.caption){ out.appendChild(card('✍️ '+T('caption'), r.caption, true)); }
-      tagsCard(out, r.hashtags);
-    } else { // post
-      if (r.caption){ out.appendChild(card('✍️ '+T('caption'), r.caption, true)); }
-      tagsCard(out, r.hashtags);
-      if (r.imagePrompt){ out.appendChild(card('🎨 '+T('imgprompt'), r.imagePrompt, true)); }
+      if (r.description){ out.appendChild(card('📝 '+T('desc'), r.description, true)); }
+      tagsCard(out, r.tags||[]);
+      if (r.thumbnailText){ out.appendChild(card('🖼️ '+T('thumb'), r.thumbnailText, true)); }
+      if (r.cta){ out.appendChild(card('➡️ '+T('cta'), r.cta, true)); }
     }
     if (!withActions) return;
     var actions=document.createElement('div'); actions.className='out-actions';
     var save=document.createElement('button'); save.className='save-btn'; save.textContent=LANG==='no'?'💾 Lagre':'💾 Save';
-    save.addEventListener('click', function(){ saveReel(r, fmt); });
+    save.addEventListener('click', function(){ saveItem(r, fmt); });
     var again=document.createElement('button'); again.className='again-btn'; again.textContent=LANG==='no'?'↻ Lag ny':'↻ New one';
     again.addEventListener('click', function(){ out.innerHTML=''; $('topic').focus(); window.scrollTo(0,0); });
     actions.appendChild(save); actions.appendChild(again); out.appendChild(actions);
-  }
-  function card(title, body, copy){
-    var d=document.createElement('div'); d.className='rcard';
-    var h=document.createElement('h4'); h.textContent=title; if(copy) h.appendChild(copyBtn(body));
-    var p=document.createElement('p'); p.textContent=body;
-    d.appendChild(h); d.appendChild(p); return d;
   }
 
   $('genBtn').addEventListener('click', function(){
     var topic = $('topic').value.trim();
     if (!topic){ $('topic').focus(); return; }
     var btn = $('genBtn'); var label = btn.innerHTML; var fmt = FMT;
-    btn.disabled = true; btn.innerHTML='<span class="spinner"></span> '+(LANG==='no'?'Lager innhold…':'Making content…');
+    btn.disabled = true; btn.innerHTML='<span class="spinner"></span> '+(LANG==='no'?'Lager…':'Making…');
     $('out').innerHTML='';
-    var platName = PLATFORM === 'facebook' ? 'Facebook' : 'Instagram';
-    var source = topic + (REELLANG==='no' ? '\n\nPlattform: '+platName : '\n\nPlatform: '+platName);
     fetch('/api/ai/content',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({format:fmt, source:source, seconds:SECS, lang:REELLANG})})
+      body:JSON.stringify({format:fmt, source:topic, seconds:SECS, lang:VLANG})})
       .then(function(res){ if(!res.ok) throw new Error('http '+res.status); return res.json(); })
       .then(function(data){
         if (data.error) throw new Error(data.error);
-        REEL = parseJSON(data.result);
-        renderContent(REEL, $('out'), true, fmt);
+        DATA = parseJSON(data.result);
+        renderContent(DATA, $('out'), true, fmt);
         window.scrollTo({top:$('out').offsetTop-70, behavior:'smooth'});
       })
       .catch(function(e){
-        console.error('LME Reel:', e);
+        console.error('LME YouTube:', e);
         $('out').innerHTML='<p class="err">'+(LANG==='no'?'Noe gikk galt. Prøv igjen om et øyeblikk.':'Something went wrong. Please try again in a moment.')+'</p>';
       })
       .finally(function(){ btn.disabled=false; btn.innerHTML=label; });
   });
 
-  // ---------- LAGREDE REELS ----------
-  function getSaved(){ try{ return JSON.parse(localStorage.getItem('reel_app_saved')||'[]'); }catch(e){ return []; } }
-  function setSaved(a){ try{ localStorage.setItem('reel_app_saved', JSON.stringify(a)); }catch(e){} }
-  function fmtLabel(fmt){
-    var no = {reel:'Reel',story:'Story',carousel:'Karusell',post:'Innlegg'};
-    var en = {reel:'Reel',story:'Story',carousel:'Carousel',post:'Post'};
-    return (LANG==='no'?no:en)[fmt] || 'Reel';
-  }
-  function reelSnippet(r){
-    if (r.hook) return r.hook;
-    if (r.caption) return r.caption;
-    if (Array.isArray(r.slides) && r.slides.length){ var s=r.slides[0]; return typeof s==='string'?s:(s.text||s.headline||''); }
-    if (Array.isArray(r.frames) && r.frames.length){ return r.frames[0].headline || r.frames[0].body || ''; }
-    return '';
-  }
-  function saveReel(r, fmt){
+  function getSaved(){ try{ return JSON.parse(localStorage.getItem('yt_app_saved')||'[]'); }catch(e){ return []; } }
+  function setSaved(a){ try{ localStorage.setItem('yt_app_saved', JSON.stringify(a)); }catch(e){} }
+  function snippet(r){ return r.title || r.hook || r.caption || ''; }
+  function saveItem(r, fmt){
     var a = getSaved();
-    a.unshift({ id: 'c'+a.length+'_'+($('topic').value.length), fmt: fmt||'reel', title: ($('topic').value.trim().slice(0,60)||reelSnippet(r)||fmtLabel(fmt)), reel: r });
+    a.unshift({ id: 'v'+a.length+'_'+($('topic').value.length), fmt: fmt||'youtube', title: ($('topic').value.trim().slice(0,60)||snippet(r)||'YouTube'), data: r });
     setSaved(a); toast(LANG==='no'?'Lagret':'Saved');
   }
+  function fmtLabel(fmt){ return fmt === 'reel' ? 'Short' : (LANG==='no'?'Lang video':'Long video'); }
   function renderSaved(){
     var list = $('savedList'); var a = getSaved();
-    if (!a.length){ list.innerHTML='<div class="empty"><div class="em">📁</div><p>'+(LANG==='no'?'Ingenting lagret ennå. Lag ditt første innhold under "Lag".':'Nothing saved yet. Make your first content under "Make".')+'</p></div>'; return; }
+    if (!a.length){ list.innerHTML='<div class="empty"><div class="em">📁</div><p>'+(LANG==='no'?'Ingenting lagret ennå. Lag din første under "Lag".':'Nothing saved yet. Make your first one under "Make".')+'</p></div>'; return; }
     list.innerHTML='';
     a.forEach(function(item, i){
       var d=document.createElement('div'); d.className='saved';
-      d.innerHTML='<div class="h">'+esc(item.title)+'</div><div class="meta">'+fmtLabel(item.fmt)+' · '+esc(reelSnippet(item.reel||{}).slice(0,60))+'</div>';
+      d.innerHTML='<div class="h">'+esc(item.title)+'</div><div class="meta">'+fmtLabel(item.fmt)+' · '+esc(snippet(item.data||{}).slice(0,60))+'</div>';
       var row=document.createElement('div'); row.className='row';
       var open=document.createElement('button'); open.className='open'; open.textContent=LANG==='no'?'Åpne':'Open';
       open.addEventListener('click', function(){ openModal(item); });
@@ -657,36 +578,30 @@
     var mb = $('modalBody'); mb.innerHTML='';
     var holder = document.createElement('div'); holder.className='out';
     mb.appendChild(holder);
-    renderContent(item.reel, holder, false, item.fmt || 'reel');
+    renderContent(item.data, holder, false, item.fmt || 'youtube');
     $('modal').classList.add('show');
   }
   $('modalX').addEventListener('click', function(){ $('modal').classList.remove('show'); });
   $('modal').addEventListener('click', function(e){ if(e.target===$('modal')) $('modal').classList.remove('show'); });
 
-  // ---------- INSTALL (PWA) ----------
   var deferredPrompt = null;
-  window.addEventListener('beforeinstallprompt', function(e){
-    e.preventDefault(); deferredPrompt = e;
-    $('installBtn').style.display='flex';
-  });
+  window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferredPrompt = e; $('installBtn').style.display='flex'; });
   $('installBtn').addEventListener('click', function(){
     if (deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.finally(function(){ deferredPrompt=null; $('installBtn').style.display='none'; }); }
   });
-  // iOS-hint (Safari støtter ikke beforeinstallprompt)
   (function(){
     var isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
     var standalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
     if (isIos && !standalone){
       var h=$('installHint'); h.classList.add('show');
-      h.setAttribute('data-no','📲 Tips: trykk på Del-knappen og velg "Legg til på Hjem-skjerm" for å bruke LME Reel som app.');
-      h.setAttribute('data-en','📲 Tip: tap the Share button and choose “Add to Home Screen” to use LME Reel as an app.');
+      h.setAttribute('data-no','📲 Tips: trykk på Del-knappen og velg "Legg til på Hjem-skjerm" for å bruke LME YouTube som app.');
+      h.setAttribute('data-en','📲 Tip: tap the Share button and choose "Add to Home Screen" to use LME YouTube as an app.');
     }
   })();
 
   applyLang();
   updatePlan();
 
-  // ---------- SERVICE WORKER ----------
   if ('serviceWorker' in navigator){
     window.addEventListener('load', function(){ navigator.serviceWorker.register('/sw.js').catch(function(){}); });
   }

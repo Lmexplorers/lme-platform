@@ -1,0 +1,20 @@
+{
+  "name": "LME YouTube",
+  "short_name": "LME YouTube",
+  "description": "Lag YouTube-videoer og Shorts med AI. Tittel, manus, kapitler, beskrivelse og tags fra ett tema. Av Little Montessori Explorers.",
+  "id": "/youtube-app/",
+  "start_url": "/youtube-app/",
+  "scope": "/youtube-app/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "lang": "no",
+  "background_color": "#FBF7F0",
+  "theme_color": "#E91E89",
+  "categories": ["productivity", "business", "video"],
+  "icons": [
+    { "src": "/images/app/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/images/app/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/images/app/maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/images/app/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
