@@ -572,20 +572,30 @@ TEO (boy, ~5): tousled chestnut-brown hair, warm brown eyes, cheerful grin, yell
 
   /* ===== Oversett (valgfritt, samme /api/translate som resten) ===== */
   q('translateBtn').addEventListener('click', function () {
+    var btn = this;
+    // Oversett alle felt som har norsk tekst, og fyll (overskriv) engelsk.
     var pairs = [['f-title','f-title-en'],['f-kicker','f-kicker-en'],['f-goal','f-goal-en'],['f-lede','f-lede-en']];
-    var jobs = pairs.filter(function (p) { return val(p[0]) && !val(p[1]); });
-    if (!jobs.length) { toast(L('Ingenting å oversette', 'Nothing to translate')); return; }
+    var jobs = pairs.filter(function (p) { return val(p[0]); });
+    if (!jobs.length) { toast(L('Skriv litt norsk tekst først', 'Write some Norwegian text first')); return; }
     var texts = jobs.map(function (p) { return val(p[0]); });
-    toast(L('Oversetter…', 'Translating…'));
-    fetch('/api/translate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ texts: texts, to: 'en' }) })
-      .then(function (r) { return r.json(); })
-      .then(function (d) {
-        var tr = d && d.translations;
+    var orig = btn.innerHTML;
+    btn.disabled = true; btn.textContent = L('Oversetter …', 'Translating …');
+    fetch('/api/translate', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
+      body: JSON.stringify({ texts: texts, to: 'en' })
+    })
+      .then(function (r) { return r.json().then(function (d) { return { s: r.status, d: d }; }); })
+      .then(function (res) {
+        btn.disabled = false; btn.innerHTML = orig;
+        if (res.s === 403) { toast(L('Du må være innlogget som medlem for å oversette', 'You must be logged in as a member to translate')); return; }
+        var tr = res.d && res.d.translations;
         if (!tr) { toast(L('Oversettelse feilet', 'Translation failed')); return; }
-        jobs.forEach(function (p, i) { var t = tr[texts[i]] || tr[i]; if (t) q(p[1]).value = t; });
-        renderPreview(); toast(L('✨ Oversatt', '✨ Translated'));
+        var n = 0;
+        jobs.forEach(function (p, i) { var t = tr[texts[i]]; if (t) { q(p[1]).value = t; n++; } });
+        renderPreview();
+        toast(n ? L('✨ Oversatt til engelsk', '✨ Translated to English') : L('Ingen oversettelse kom tilbake', 'No translation returned'));
       })
-      .catch(function () { toast(L('Oversettelse feilet (krever innlogging)', 'Translation failed (login required)')); });
+      .catch(function () { btn.disabled = false; btn.innerHTML = orig; toast(L('Nettverksfeil', 'Network error')); });
   });
 
   /* ===== Scene-planlegger ===== */
