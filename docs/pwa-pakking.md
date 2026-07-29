@@ -69,6 +69,13 @@ Derfor gjelder følgende, uten unntak:
   app-en. Etter betaling kommer de tilbake med `?paid=1` og får full tilgang.
 - Ingen del av salget går gjennom Apple eller Google.
 
+Viktig: gratis å installere betyr ikke at du taper inntekt. Inntekten kommer fra
+betalingen på nettet (Stripe), og du beholder hele beløpet, minus bare Stripes
+lille kortgebyr. Tar du i stedet betalt for selve nedlastingen i butikken, tar
+Apple og Google opptil 30 %, og langt færre laster ned. Gratis nedlasting pluss
+betaling på nettet gir deg både flere kunder og hele inntekten. Det er slik
+nesten alle betalte apper gjør det: gratis å laste ned, betaling på nettsiden.
+
 Merk: Apple kan være kritiske til apper som sender brukeren ut for å betale for
 digitalt innhold. Den tryggeste innsendingen er derfor at kjøpet skjer på
 nettsiden (som nå), og at app-en presenteres som et verktøy du logger inn i. Vi
