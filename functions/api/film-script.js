@@ -22,7 +22,7 @@ function json(data, status) {
 const MIA_TEO_LOOK =
   "MIA: girl about 5, golden-blonde hair in a high ponytail with a pink bow, big blue eyes, rose-pink floral dress, white socks and pink sneakers. " +
   "TEO: boy about 5, tousled chestnut-brown hair, brown eyes, yellow striped t-shirt, blue denim shorts, olive-green backpack. " +
-  "3D Pixar/Disney style, warm and wholesome, child-friendly.";
+  "High-end 3D Pixar/Disney animated feature-film still, cinematic wide 16:9 composition, soft volumetric lighting, gentle depth of field, rich detail, expressive faces, warm and wholesome, child-friendly.";
 
 export async function onRequestPost(context) {
   const { request, env } = context;
