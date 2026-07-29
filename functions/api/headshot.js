@@ -72,7 +72,7 @@ export async function onRequestPost(context) {
   const style = STYLES[styleKey] || STYLES.business;
   if (!/^https?:\/\//.test(imageUrl)) return json({ error: "Last opp et bilde av deg selv først." }, 400);
 
-  const prompt = "a photo of a person, " + style;
+  const prompt = "a realistic professional headshot photograph of the same person, keeping the exact same face and identity, photorealistic, natural skin texture, looking at the camera, " + style;
 
   // Tilgang + trekk kreditt.
   const gate = await enforceHeadshotApp(context);
