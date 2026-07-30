@@ -81,7 +81,7 @@ const CONTENT = {
       html: wrap(
         '<p>Hei ' + (name || '') + ',</p>' +
         '<p>Du har nå vært gjennom hele systemet: tankesett, nisje, pakking og produksjon. Herfra er det to naturlige veier videre.</p>' +
-        '<p><strong>Få verktøyene</strong>: oppgrader planen din og lås opp Reel Studio og Content Studio, så AI gjør enda mer av jobben for deg.</p>' +
+        '<p><strong>Få verktøyene</strong>: oppgrader planen din og lås opp Reel Studio og LME Autopilot, så AI gjør enda mer av jobben for deg.</p>' +
         '<p><strong>Videre med YouTube</strong>: fortsettelsen av kurset, om å lese tallene, bygge et system og skalere til flere kanaler.</p>' +
         btnRow([[UPGRADE, "🚀 Få verktøyene"], [NEXT_LEVEL, "Fortsett: Videre med YouTube →"]]) +
         '<p>Klem fra Renate</p>'
@@ -138,7 +138,7 @@ const CONTENT = {
       html: wrap(
         '<p>Hi ' + (name || '') + ',</p>' +
         "<p>You've now been through the whole system: mindset, niche, packaging and production. From here there are two natural paths forward.</p>" +
-        '<p><strong>Get the tools</strong>: upgrade your plan and unlock Reel Studio and Content Studio, so AI does even more of the work for you.</p>' +
+        '<p><strong>Get the tools</strong>: upgrade your plan and unlock Reel Studio and LME Autopilot, so AI does even more of the work for you.</p>' +
         '<p><strong>Next level with YouTube</strong>: the continuation of the course, on reading the numbers, building a system, and scaling to more channels.</p>' +
         btnRow([[UPGRADE, "🚀 Get the tools"], [NEXT_LEVEL + "?lang=en", "Continue: Next level with YouTube →"]]) +
         '<p>Warm wishes, Renate</p>'

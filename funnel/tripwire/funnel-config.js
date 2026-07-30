@@ -48,7 +48,7 @@ window.LME_FUNNEL = {
       punkter: [
         "En realistisk vei fra pedagogikk til inntekt — uten luftslott",
         "Ferdige maler og refleksjonsoppgaver du fyller ut underveis",
-        "Slik bruker du AI og Content Studio for å spare tid"
+        "Slik bruker du AI og LME Autopilot for å spare tid"
       ],
       epostPlaceholder: "Skriv inn e-posten din",
       navnPlaceholder: "Fornavn",
@@ -165,7 +165,7 @@ window.LME_FUNNEL = {
       punkter: [
         "A realistic path from pedagogy to income — no get-rich-quick promises",
         "Ready-made templates and reflection tasks you fill in as you go",
-        "How to use AI and Content Studio to save time"
+        "How to use AI and LME Autopilot to save time"
       ],
       epostPlaceholder: "Enter your email",
       navnPlaceholder: "First name",

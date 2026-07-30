@@ -13,7 +13,7 @@ import { enforceGeneration } from "../_lib/access.js";
  * Bildet lagres i BUILDER_KV slik at Blotato kan hente en offentlig URL.
  *
  * Bildemotor: OpenAI-kompatibelt API. Konfigurerbart via miljøvariabler slik at
- * samme nøkkel som Content Studio kan gjenbrukes, eller byttes uten kodeendring:
+ * samme nøkkel som LME Autopilot kan gjenbrukes, eller byttes uten kodeendring:
  *   IMAGE_API_KEY   (ellers OPENAI_API_KEY)      -- hemmelig nøkkel
  *   IMAGE_API_BASE  (standard https://api.openai.com/v1)
  *   IMAGE_MODEL     (standard gpt-image-1)
