@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boss of Your Own Brain – LME Academy</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;600;700&family=Sasson+Montessori:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-head: 'Playpen Sans', system-ui, sans-serif;
+            --font-body: 'Sasson Montessori', system-ui, sans-serif;
+            --color-green: #2c5f2d;
+            --color-light-green: #f0f7f1;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-head);
+            color: var(--color-green);
+            margin-bottom: 0.5em;
+        }
+
+        .course-header {
+            background: linear-gradient(135deg, var(--color-green) 0%, #1d3f1f 100%);
+            color: white;
+            padding: 60px 30px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .course-header h1 {
+            color: white;
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .course-header .subtitle {
+            font-size: 22px;
+            color: #f0f7f1;
+            margin-bottom: 5px;
+        }
+
+        .course-header .description {
+            font-size: 16px;
+            color: #f0f7f1;
+            margin-top: 20px;
+        }
+
+        .course-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 30px;
+        }
+
+        .download-section {
+            background: var(--color-light-green);
+            border: 2px solid var(--color-green);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .download-section h3 {
+            margin-top: 0;
+            color: var(--color-green);
+            font-size: 24px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: var(--color-green);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 5px;
+            font-family: var(--font-body);
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .download-btn:hover {
+            background: #1d3f1f;
+        }
+
+        .module-section {
+            margin: 50px 0;
+            padding: 30px;
+            background: #f9fdfb;
+            border-radius: 8px;
+            border-left: 5px solid var(--color-green);
+        }
+
+        .module-section h2 {
+            margin-top: 0;
+            font-size: 32px;
+            color: var(--color-green);
+        }
+
+        .module-section h3 {
+            color: #4a7d4e;
+            font-size: 20px;
+            margin-top: 25px;
+        }
+
+        .script-box {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+
+        .script-header {
+            background: var(--color-light-green);
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: var(--color-green);
+            margin-bottom: 15px;
+        }
+
+        .language-toggle {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .lang-btn {
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-size: 14px;
+        }
+
+        .lang-btn.active {
+            background: var(--color-green);
+            color: white;
+            border-color: var(--color-green);
+        }
+
+        .content-no, .content-en {
+            display: none;
+        }
+
+        .content-no.active, .content-en.active {
+            display: block;
+        }
+
+        .module-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 768px) {
+            .module-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 20px;
+            background: var(--color-light-green);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid var(--color-green);
+        }
+
+        .sidebar h3 {
+            margin-top: 0;
+            font-size: 18px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: var(--color-green);
+            text-decoration: none;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+
+        .sidebar a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar"></div>
+    <div id="avatarMenu"></div>
+
+    <div class="course-header">
+        <h1 data-no="Boss of Your Own Brain" data-en="Boss of Your Own Brain">Boss of Your Own Brain</h1>
+        <div class="subtitle" data-no="En 5-modulskurs i mindset-mestring" data-en="A 5-Module Mindset Mastery Course">En 5-modulskurs i mindset-mestring</div>
+        <div class="description" data-no="For gründere, iverksettere og visjonærer" data-en="For entrepreneurs, business builders, and visionaries">For gründere, iverksettere og visjonærer</div>
+        <div class="description" data-no="med Renate Dahl" data-en="with Renate Dahl">med Renate Dahl</div>
+    </div>
+
+    <div class="course-container">
+        <div class="download-section">
+            <h3 data-no="Last ned arbeidsboken" data-en="Download the Workbook">Last ned arbeidsboken</h3>
+            <p data-no="Få den komplette øvelsesarboksboken for alle 5 moduler" data-en="Get the complete workbook with exercises for all 5 modules">Få den komplette øvelsesarboksboken for alle 5 moduler</p>
+            <a href="/assets/Boss-of-Your-Own-Brain-Workbook.pdf" class="download-btn" data-no="Last ned PDF" data-en="Download PDF">Last ned PDF</a>
+        </div>
+
+        <div class="language-toggle">
+            <button class="lang-btn active" onclick="setLanguage('no')" data-no="Norsk" data-en="Norwegian">Norsk</button>
+            <button class="lang-btn" onclick="setLanguage('en')" data-no="English" data-en="English">English</button>
+        </div>
+
+        <!-- MODULE 1 -->
+        <div class="module-section">
+            <h2 data-no="Modul 1: Møt Dine Stemmer" data-en="Module 1: Meet Your Voices">Modul 1: Møt Dine Stemmer</h2>
+
+            <div class="content-no active">
+                <h3>Videomanus – 15 minutter</h3>
+                <p>Dette er det fullstendige manuskriptet for modul 1-videoen. Les det høyt for å få den naturlige stemmefarten og tonen.</p>
+
+                <div class="script-box">
+                    <div class="script-header">Intro – 2 minutter</div>
+                    <p>Hei, og velkommen til "Boss of Your Own Brain." Jeg er Renate, og i dag skal vi gjøre noe som kommer til å forandre hvordan du snakker til deg selv.</p>
+                    <p>Du vet kanskje allerede at du har stemmer i hodet? Ikke stemmer fra universet – jeg snakker om <em>dine</em> tanker. De små kommentarene som dukker opp når du skal gjøre noe nytt, når du skal kjempe for drømmen din, eller når du skal ta en beslutning. "Du klarer ikke det." "Hva hvis du mislykkes?" "Du er ikke god nok."</p>
+                    <p>Jeg kaller disse for <strong>Komitéen</strong> – den negative Komitéen. Og i dag skal vi møte den. Ikke for å bli skremt, men for å <strong>forstå</strong> hva som skjer.</p>
+                </div>
+
+                <div class="script-box">
+                    <div class="script-header">Del 1: Komitéen – 5 minutter</div>
+                    <p>Tenk på når du har forsøkt noe nytt. Kanskje du ville starte en virksomhet, ta et kurs, eller dele noe med verden. Hva var det første du hørte i hodet?</p>
+                    <p>Den negative Komitéen består av flere medlemmer:</p>
+                    <p><strong>1. Kritikeren</strong> – som minner deg på alt som kan gå galt. "Det har jeg gjort før, og det ble ikke bra."</p>
+                    <p><strong>2. Frykten</strong> – som beskytter deg ved å holde deg tilbake. "Hva hvis alle ler av deg?"</p>
+                    <p><strong>3. Tvilen</strong> – som spør: "Hvem tror du at du er?"</p>
+                    <p><strong>4. Skammen</strong> – som sier: "Du burde visst bedre."</p>
+                    <p><strong>5. Sammenligningen</strong> – som peker på alle andre som er bedre enn deg.</p>
+                    <p>Disse stemmene er ikke der for å være onde. De prøver å <em>beskytte</em> deg. Men de holder deg tilbake. Og det er problemet.</p>
+                </div>
+
+                <div class="script-box">
+                    <div class="script-header">Del 2: Din Sanne Stemme – 5 minutter</div>
+                    <p>Men du har også en annen stemme – en som ikke alltid høres. Din <strong>sanne stemme</strong>. Den som sier:</p>
+                    <p>"Jeg kan lære."<br>"Jeg er verdig."<br>"Jeg tørr å prøve."<br>"Hvis det ikke fungerer første gang, prøver jeg igjen."</p>
+                    <p>Din sanne stemme er den som har fått deg hit. Den som pushet deg til å ta det kurset, starte det prosjektet, eller sette den grensen du trengte.</p>
+                    <p>Og det er denne stemmen vi skal høre mer på.</p>
+                </div>
+
+                <div class="script-box">
+                    <div class="script-header">Del 3: Gjør Øvelsen – 3 minutter</div>
+                    <p>Her er dagens øvelse. Ta deg et par minutter, og tenk på noe du gjerne ville gjøre, men som du er usikker på.</p>
+                    <p>Skriv ned:</p>
+                    <p>1. Hva sier Komitéen? (De negative stemmene – hva er deres største argument?)<br>2. Hva sier din sanne stemme? (Hva ville du gjøre hvis du var helt sikker?)</p>
+                    <p>Bare det å <em>se</em> stemmene skriftlig gjør at de mister noe av makten. Du begynner å velge hvilken stemme du skal lytte til – i stedet for at stemmene velger for deg.</p>
+                </div>
+
+                <div class="script-box">
+                    <div class="script-header">Outro – 1 minutt</div>
+                    <p>I den neste leksjonen skal vi lære en øvelse som heter "Glassets øvelse" – som er helt magisk for å skifte perspektiv. Men nå er du på vei. Du vet at du har flere stemmer i hodet, og du vet at du kan velge.</p>
+                    <p>Du er sjef over din egen hjerne. 🧠</p>
+                </div>
+            </div>
+
+            <div class="content-en">
+                <h3>Video Script – 15 Minutes</h3>
+                <p>This is the complete script for Module 1 video. Read it aloud to get the natural pacing and tone.</p>
+
+                <div class="script-box">
+                    <div class="script-header">Intro – 2 minutes</div>
+                    <p>Hi, and welcome to "Boss of Your Own Brain." I'm Renate, and today we're going to do something that will change the way you talk to yourself.</p>
+                    <p>You probably already know that you have voices in your head? Not voices from the universe – I'm talking about <em>your</em> thoughts. Those little comments that pop up when you're about to try something new, when you're fighting for your dream, or when you need to make a decision. "You can't do this." "What if you fail?" "You're not good enough."</p>
+                    <p>I call these the <strong>Committee</strong> – the negative Committee. And today, we're going to meet them. Not to be scared, but to <strong>understand</strong> what's happening.</p>
+                </div>
+
+                <div class="script-box">
+                    <div class="script-header">Part 1: The Committee – 5 minutes</div>
+                    <p>Think about when you tried something new. Maybe you wanted to start a business, take a course, or share something with the world. What was the first thing you heard in your head?</p>
+                    <p>The negative Committee has several members:</p>
+                    <p><strong>1. The Critic</strong> – who reminds you of everything that can go wrong. "I tried that before, and it didn't work."</p>
+                    <p><strong>2. Fear</strong> – who protects you by holding you back. "What if everyone laughs at you?"</p>
+                    <p><strong>3. Doubt</strong> – who asks: "Who do you think you are?"</p>
+                    <p><strong>4. Shame</strong> – who says: "You should have known better."</p>
+                    <p><strong>5. Comparison</strong> – who points out everyone who's better than you.</p>
+                    <p>These voices aren't there to be mean. They're trying to <em>protect</em> you. But they hold you back. And that's the problem.</p>
+                </div>
+
+                <div class="script-box">
+                    <div class="script-header">Part 2: Your True Voice – 5 minutes</div>
+                    <p>But you also have another voice – one that doesn't always get heard. Your <strong>true voice</strong>. The one that says:</p>
+                    <p>"I can learn."<br>"I am worthy."<br>"I dare to try."<br>"If it doesn't work the first time, I'll try again."</p>
+                    <p>Your true voice is the one that got you here. The one that pushed you to take that course, start that project, or set that boundary you needed.</p>
+                    <p>And this is the voice we're going to listen to more.</p>
+                </div>
+
+                <div class="script-box">
+                    <div class="script-header">Part 3: Do the Exercise – 3 minutes</div>
+                    <p>Here's today's exercise. Take a couple of minutes and think about something you'd like to do, but you're unsure about.</p>
+                    <p>Write down:</p>
+                    <p>1. What does the Committee say? (The negative voices – what's their biggest argument?)<br>2. What does your true voice say? (What would you do if you were completely confident?)</p>
+                    <p>Just seeing the voices written down takes away some of their power. You start to choose which voice to listen to – instead of the voices choosing for you.</p>
+                </div>
+
+                <div class="script-box">
+                    <div class="script-header">Outro – 1 minute</div>
+                    <p>In the next lesson, we're going to learn an exercise called the "Glasses Exercise" – which is absolutely magical for shifting perspective. But you're on your way now. You know that you have multiple voices in your head, and you know that you can choose.</p>
+                    <p>You are the boss of your own brain. 🧠</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 2 -->
+        <div class="module-section">
+            <h2 data-no="Modul 2: Glassets Øvelse & Gratitude" data-en="Module 2: The Glasses Exercise & Gratitude">Modul 2: Glassets Øvelse & Gratitude</h2>
+
+            <div class="content-no active">
+                <p>Din perspektiv bestemmer din virkelighet. Med riktige "briller", kan du se mulighetene i stedet for problemene.</p>
+                <p>I denne modulen lærer du hvordan du bevisst kan skifte perspektiv ved å bruke "glasset-øvelsen" – en metafor for å se situasjonen gjennom rosa eller grå briller. Du lærer også den kraftige gratuity-praksis som trener hjernen til å se det som fungerer, ikke bare det som er ødelagt.</p>
+                <p><strong>Øvelser:</strong> Perspektivskifte-øvelse og Daglig Gratitude-praksis</p>
+                <p><strong>Varighet:</strong> ~15 minutter video + 10 minutter øvelse</p>
+            </div>
+
+            <div class="content-en">
+                <p>Your perspective determines your reality. With the right "glasses," you can see opportunities instead of problems.</p>
+                <p>In this module you learn how to consciously shift perspective using the "glasses exercise" – a metaphor for seeing a situation through pink or gray glasses. You also learn the powerful gratitude practice that trains your brain to see what's working, not just what's broken.</p>
+                <p><strong>Exercises:</strong> Perspective Shift Exercise and Daily Gratitude Practice</p>
+                <p><strong>Duration:</strong> ~15 minute video + 10 minute exercise</p>
+            </div>
+        </div>
+
+        <!-- MODULE 3 -->
+        <div class="module-section">
+            <h2 data-no="Modul 3: Money Mindset" data-en="Module 3: Money Mindset">Modul 3: Money Mindset</h2>
+
+            <div class="content-no active">
+                <p>Hva tror du om penger? De svarene styrer hvor mye du tjener og hvor deilig det er å tjene dem.</p>
+                <p>Mange av oss har arvet pengehistorier fra familien eller kulturen som gjør det vanskelig å tjene penger på en måte som føles bra. I denne modulen identifiserer vi dine pengehistorier og skaper en ny relation til rikdom og abundans.</p>
+                <p><strong>Øvelser:</strong> Pengehistorier-identifikasjon og Abundans-bekreftelser</p>
+                <p><strong>Varighet:</strong> ~15 minutter video + 10 minutter øvelse</p>
+            </div>
+
+            <div class="content-en">
+                <p>Your beliefs about money determine how much you earn and how good it feels to earn it.</p>
+                <p>Many of us inherit money stories from family and culture that make it hard to earn money in a way that feels good. In this module, we identify your money stories and create a new relationship with wealth and abundance.</p>
+                <p><strong>Exercises:</strong> Money Stories Identification and Abundance Affirmations</p>
+                <p><strong>Duration:</strong> ~15 minute video + 10 minute exercise</p>
+            </div>
+        </div>
+
+        <!-- MODULE 4 -->
+        <div class="module-section">
+            <h2 data-no="Modul 4: Beslutninger fra Din Sanne Stemme" data-en="Module 4: Decisions from Your True Voice">Modul 4: Beslutninger fra Din Sanne Stemme</h2>
+
+            <div class="content-no active">
+                <p>Hver dag tar du beslutninger. Spørsmålet er: fra hvor kommer de? Fra frykt eller fra din sanne stemme?</p>
+                <p>I denne modulen lærer du de tre spørsmålene som hjelper deg å skille mellom beslutninger fra frykt og beslutninger fra din sanne stemme. Dette endrer hvordan du tar valg.</p>
+                <p><strong>De tre spørsmålene:</strong><br>1. "Hva er det verste som kan skje – og klarer jeg det?"<br>2. "Hvem blir jeg hvis jeg ikke gjør dette?"<br>3. "Hva ville jeg gjøre hvis jeg var helt sikker?"</p>
+                <p><strong>Varighet:</strong> ~15 minutter video + 10 minutter øvelse</p>
+            </div>
+
+            <div class="content-en">
+                <p>Every day you make decisions. The question is: where do they come from? From fear or from your true voice?</p>
+                <p>In this module you learn the three questions that help you distinguish between decisions from fear and decisions from your true voice. This changes how you make choices.</p>
+                <p><strong>The Three Questions:</strong><br>1. "What's the worst that can happen – and can I handle it?"<br>2. "Who do I become if I don't do this?"<br>3. "What would I do if I was completely confident?"</p>
+                <p><strong>Duration:</strong> ~15 minute video + 10 minute exercise</p>
+            </div>
+        </div>
+
+        <!-- MODULE 5 -->
+        <div class="module-section">
+            <h2 data-no="Modul 5: Vedlikehold & Vekst" data-en="Module 5: Maintenance & Growth">Modul 5: Vedlikehold & Vekst</h2>
+
+            <div class="content-no active">
+                <p>Du har møtt stemmene dine. Du har skiftet perspektiv. Du har gjort større beslutninger fra din sanne stemme. Nå er det om å gjøre dette til en daglig praksis.</p>
+                <p>Mestring er ikke én stor endring – det er små, konsistente handlinger. I denne modulen lærer du den daglige praksisen og de fire pilarene som holder deg i gang: søvn, bevegelse, næring, og fellesskap.</p>
+                <p><strong>De fire pilarene:</strong> Søvn, Bevegelse, Næring, Fellesskap</p>
+                <p><strong>Varighet:</strong> ~15 minutter video + vedlikeholds-plan</p>
+            </div>
+
+            <div class="content-en">
+                <p>You've met your voices. You've shifted your perspective. You've made bigger decisions from your true voice. Now it's about making this your daily practice.</p>
+                <p>Mastery is not one big change – it's small, consistent actions. In this module you learn the daily practice and the four pillars that keep you going: sleep, movement, nourishment, and community.</p>
+                <p><strong>The Four Pillars:</strong> Sleep, Movement, Nourishment, Community</p>
+                <p><strong>Duration:</strong> ~15 minute video + maintenance plan</p>
+            </div>
+        </div>
+
+        <div class="download-section" style="margin-top: 60px;">
+            <h3 data-no="Klar for å starte?" data-en="Ready to get started?">Klar for å starte?</h3>
+            <p data-no="Last ned arbeidsboken og begynn med Modul 1 i dag." data-en="Download the workbook and start with Module 1 today.">Last ned arbeidsboken og begynn med Modul 1 i dag.</p>
+            <a href="/assets/Boss-of-Your-Own-Brain-Workbook.pdf" class="download-btn" data-no="Last ned Arbeidsboken" data-en="Download Workbook">Last ned Arbeidsboken</a>
+        </div>
+
+    </div>
+
+    <script src="/js/sidebar.js"></script>
+    <script src="/js/lme-account.js"></script>
+    <script>
+        function setLanguage(lang) {
+            // Toggle content display
+            document.querySelectorAll('.content-no, .content-en').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            if (lang === 'no') {
+                document.querySelectorAll('.content-no').forEach(el => el.classList.add('active'));
+            } else {
+                document.querySelectorAll('.content-en').forEach(el => el.classList.add('active'));
+            }
+
+            // Update button states
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Switch data attributes
+            document.querySelectorAll('[data-no][data-en]').forEach(el => {
+                if (lang === 'no') {
+                    el.textContent = el.getAttribute('data-no');
+                } else {
+                    el.textContent = el.getAttribute('data-en');
+                }
+            });
+        }
+
+        // Set default language based on browser
+        const browserLang = navigator.language.startsWith('no') ? 'no' : 'en';
+        if (browserLang === 'en') {
+            document.querySelectorAll('.content-no').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.content-en').forEach(el => el.classList.add('active'));
+            document.querySelector('[onclick="setLanguage(\'en\')"]').classList.add('active');
+            document.querySelector('[onclick="setLanguage(\'no\')"]').classList.remove('active');
+        }
+    </script>
+</body>
+</html>
