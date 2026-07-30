@@ -17,7 +17,7 @@ import { enforceHeadshotApp, refundImageCredit, headshotAppAccess } from "../_li
  */
 
 const OPENAI_EDITS = "https://api.openai.com/v1/images/edits";
-const MAX_REFS = 6;
+const MAX_REFS = 8;
 
 // Hver stil endrer BARE bakgrunn, antrekk og lys, ikke ansiktet.
 const STYLES = {

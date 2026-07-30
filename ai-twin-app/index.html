@@ -358,7 +358,7 @@
   $('hsDrop').addEventListener('click',function(){ $('hsFile').click(); });
   $('hsFile').addEventListener('change',function(){
     var files=this.files?Array.prototype.slice.call(this.files):[]; if(!files.length) return;
-    files.forEach(function(f){ if(HS_TRAIN.length>=10) return; downscale(f,function(dataUrl){
+    files.forEach(function(f){ if(HS_TRAIN.length>=20) return; downscale(f,function(dataUrl){
       var ph=document.createElement('img'); ph.src=dataUrl; ph.style.opacity='.45'; $('hsThumbs').insertBefore(ph,$('hsThumbs').firstChild);
       fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({upload:dataUrl,contentType:'image/jpeg'})})
         .then(function(r){return r.json();}).then(function(d){ if(d&&d.url){ HS_TRAIN.push(d.url); ph.style.opacity='1'; hsSaveTrain(); hsCount(); } else ph.remove(); }).catch(function(){ ph.remove(); });
@@ -371,7 +371,7 @@
   function hsRestoreTrain(){
     var arr=[]; try{ arr=JSON.parse(localStorage.getItem('hs_train_urls')||'[]'); }catch(e){}
     if(!Array.isArray(arr)) arr=[];
-    HS_TRAIN=arr.filter(function(u){ return typeof u==='string' && /^https?:\/\/|^\//.test(u); }).slice(0,10);
+    HS_TRAIN=arr.filter(function(u){ return typeof u==='string' && /^https?:\/\/|^\//.test(u); }).slice(0,20);
     $('hsThumbs').innerHTML='';
     HS_TRAIN.forEach(function(u){ var im=document.createElement('img'); im.src=u; $('hsThumbs').appendChild(im); });
     if(HS_TRAIN.length) hsCount();
@@ -384,7 +384,7 @@
     if(!HS_TRAIN.length){ $('hsMsg').className='msg err'; $('hsMsg').textContent=L('Last opp minst ett bilde av deg selv først.','Upload at least one photo of yourself first.'); window.scrollTo({top:0,behavior:'smooth'}); return; }
     if(!HS_ACCESS.owner && HS_ACCESS.loggedIn && (((HS_ACCESS.credit&&HS_ACCESS.credit.image)||0)<=0)){ $('hsMsg').className='msg err'; $('hsMsg').innerHTML=L('Du har ingen bilde-kreditter. Kjøp på ','You have no image credits. Buy them at ')+'<a href="/kjop-kreditt">/kjop-kreditt</a>.'; return; }
     hsSetBusy(true); $('hsResult').classList.remove('show'); $('hsMsg').className='msg info'; $('hsMsg').textContent=L('Lager headshotet ditt … dette tar gjerne et minutt.','Making your headshot … this usually takes about a minute.');
-    fetch('/api/headshot',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({style:HS_STYLE,images:HS_TRAIN.slice(0,6)})})
+    fetch('/api/headshot',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({style:HS_STYLE,images:HS_TRAIN.slice(0,8)})})
       .then(function(r){return r.json();})
       .then(function(d){ hsSetBusy(false);
         if(d&&d.status==='completed'&&d.url){ $('hsMsg').textContent=''; $('hsResultImg').src=d.url; $('hsDownload').href=d.url; $('hsResult').classList.add('show'); if(typeof d.credit==='number'&&HS_ACCESS.credit){HS_ACCESS.credit.image=d.credit;renderHsBanner();} $('hsResult').scrollIntoView({behavior:'smooth',block:'center'}); return; }
