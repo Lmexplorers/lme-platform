@@ -31,13 +31,14 @@ const STYLES = {
 };
 const FACE_LOCK =
   " Keep the same person, clearly and unmistakably recognisable as in the reference photo: the same " +
-  "eyes, nose, mouth, warm smile, hairstyle and hair colour. Photograph her the way a top professional " +
-  "headshot photographer would, at her very best: soft, even, flattering lighting, a flattering portrait " +
-  "angle and lens that removes close-up selfie distortion, and gently and professionally retouched skin " +
-  "that looks smooth, healthy and radiant. Make her look naturally beautiful, fresh and a few years " +
-  "younger, while still clearly being herself. Do NOT add wrinkles, and do NOT make her look old, tired, " +
-  "harsh, heavy or fuller in the face than she is. Do not distort the face. Warm, friendly, attractive, " +
-  "polished, photorealistic, head and shoulders, looking at the camera, family-friendly.";
+  "eyes, nose, mouth, warm smile, hairstyle and hair colour. Photograph her the way a professional " +
+  "headshot photographer would, at her best: soft, flattering, diffused lighting, and a natural " +
+  "flattering angle with a portrait lens that removes close-up selfie distortion. Keep her real, " +
+  "natural and roughly the same age, with healthy natural skin. Do NOT exaggerate wrinkles, and do " +
+  "NOT make her look older, heavier or fuller in the face than she is. Do NOT beautify her into a " +
+  "different, younger or smoother person, and do not distort the face. She must still look exactly " +
+  "like herself. Natural, flattering, professional, photorealistic, head and shoulders, looking at " +
+  "the camera, family-friendly.";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
