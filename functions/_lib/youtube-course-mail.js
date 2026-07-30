@@ -18,11 +18,11 @@ const SITE = "https://lmexplorers.com";
 const FROM_EMAIL = "post@lmexplorers.com";
 const FROM_NAME = "Renate fra LME";
 
-const COURSE = SITE + "/academy/youtube";
+const COURSE = SITE + "/kurs/youtube";
 const WORKBOOK = SITE + "/ressurser/print/youtube-kurs-arbeidsbok";
 const CLAUDE_COURSE = SITE + "/claude-kurs";
 const UPGRADE = SITE + "/oppgrader";
-const NEXT_LEVEL = SITE + "/academy/youtube-videre";
+const NEXT_LEVEL = SITE + "/kurs/youtube-videre";
 
 function wrap(inner) {
   return '<!DOCTYPE html><html><body style="margin:0;background:#FBF7F0;font-family:Arial,Helvetica,sans-serif;color:#1F1B24;">' +

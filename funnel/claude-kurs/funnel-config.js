@@ -160,7 +160,7 @@ window.LME_FUNNEL = {
         "Start med leksjon 1, og ta det i ditt eget tempo."
       ],
       knapp: "Åpne Claude-kurset",
-      knappLenke: "/academy/claude",
+      knappLenke: "/kurs/claude",
       bonusKnapp: "Last ned oppskriftspakken (PDF)",
       bonusLenke: "/funnel/nedlasting/LME-Claude-oppskrifter.pdf",   // tospråklig oppskriftspakke
       sekundaerKnapp: "Til kurs",
@@ -297,7 +297,7 @@ window.LME_FUNNEL = {
         "Start with lesson 1, and take it at your own pace."
       ],
       knapp: "Open the Claude course",
-      knappLenke: "/academy/claude",
+      knappLenke: "/kurs/claude",
       bonusKnapp: "Download the recipe pack (PDF)",
       bonusLenke: "/funnel/nedlasting/LME-Claude-oppskrifter.pdf",   // bilingual recipe pack
       sekundaerKnapp: "To Classes",

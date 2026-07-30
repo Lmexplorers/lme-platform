@@ -22,11 +22,12 @@ function json(data, status) {
   });
 }
 
-// Kun gyldige akademi-stier slipper gjennom, og blir til en trygg KV-nøkkel.
+// Kun gyldige kurs-stier slipper gjennom, og blir til en trygg KV-nøkkel.
+// Støtter både /kurs/ og /academy/ (legacy) paths.
 function keyFromId(id) {
   if (typeof id !== "string") return null;
   const clean = id.trim().replace(/\.html$/, "").replace(/\/+$/, "");
-  if (!/^\/academy\/[a-z0-9\-]+$/i.test(clean)) return null;
+  if (!/^\/(kurs|academy)\/[a-z0-9\-]+$/i.test(clean)) return null;
   return "lme-builder:course:" + clean;
 }
 

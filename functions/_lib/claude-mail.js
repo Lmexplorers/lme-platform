@@ -37,7 +37,7 @@ function btn(href, label) {
   return '<p style="margin:22px 0;"><a href="' + href + '" style="background:#E91E89;color:#ffffff;text-decoration:none;font-weight:bold;padding:14px 26px;border-radius:999px;display:inline-block;">' + label + '</a></p>';
 }
 
-const COURSE = SITE + "/academy/claude";
+const COURSE = SITE + "/kurs/claude";
 const PDF = SITE + "/funnel/nedlasting/LME-Claude-oppskrifter.pdf";
 const UPSELL_NO = SITE + "/funnel/claude-kurs/mersalg.html";
 const UPSELL_EN = SITE + "/funnel/claude-kurs/mersalg.html?lang=en";
