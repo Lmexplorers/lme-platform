@@ -1,5 +1,5 @@
 /* =========================================================
-   LME Creative Academy — delt sidemeny
+   LME Studio — delt sidemeny
    Injiseres i <aside class="sidebar" id="sidebar"></aside>.
    Endre menyen KUN her — den gjelder da alle hub-sidene.
    Aktivt punkt settes automatisk ut fra URL-en.

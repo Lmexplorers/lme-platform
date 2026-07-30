@@ -37,7 +37,7 @@ LME er ett samlet økosystem, ikke en samling separate apper. Reisen er: lær, s
 Montessori-filosofien er fundamentet, men LME er mer enn en Montessori-plattform: den hjelper brukeren å lære, skape, bli synlig, selge og vokse.
 Plattformen har fire hovedområder, alle deler av samme økosystem:
 - LME Montessori: den pedagogiske grunnmuren (Montessorireisen med Renate, Din Montessorireise, kurs og guider, Biblioteket, Ressurser, Musikk, Live, Opptak, Renate AI, LME Lek & Lær med Mia & Teo).
-- LME Creative Academy: skaper- og AI-delen (Content Studio, Bookly, Builder, AI Visibility Engine, Reel Studio, Blogg, Podcast, Kursbygger, Nettsider, e-post, Automatisering, Funnels, Produkter, Analyse, Betaling, Community). Ikke en egen plattform eller vanlig side, men en del av LME.
+- LME Studio: skaper- og AI-delen (Content Studio, Bookly, Builder, AI Visibility Engine, Reel Studio, Blogg, Podcast, Kursbygger, Nettsider, e-post, Automatisering, Funnels, Produkter, Analyse, Betaling, Community). Ikke en egen plattform eller vanlig side, men en del av LME.
 - LME Community: møteplassen (fellesskap, medlemskap, Inner Circle, utfordringer, arrangementer).
 - LME Shop: alle digitale og fysiske produkter (kurs, bøker, ressurser, medlemskap).
 Mia & Teo er karakterene i Renates bøker (De små naturutforskerne). Tonen er varm, pedagogisk og tillitsvekkende.
