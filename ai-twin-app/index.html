@@ -253,6 +253,7 @@
           <input type="file" id="hsFile" accept="image/*" multiple class="hidden">
         </div>
         <button class="gen-btn" id="hsTrainBtn"><span>✨</span><span data-no="Tren tvillingen" data-en="Train the twin">Tren tvillingen</span></button>
+        <button class="hslink" id="hsClear" style="display:none;" data-no="Fjern alle bilder" data-en="Remove all photos">Fjern alle bilder</button>
         <div class="msg" id="hsTrainMsg"></div>
       </div>
 
@@ -354,6 +355,7 @@
   var HS_STYLE='business', HS_TRAIN=[], HS_TRAINING=false, HS_BUSY=false, HS_LOADED=false;
   var HS_ACCESS={ loggedIn:false, owner:false, hasSoul:false, credit:{image:0,video:0} };
   function loadHs(){
+    if(!HS_LOADED) hsRestoreTrain();
     fetch('/api/headshot',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){
       if(d){ HS_ACCESS.loggedIn=!!d.loggedIn; HS_ACCESS.owner=!!d.owner; HS_ACCESS.hasSoul=!!d.hasSoul; HS_ACCESS.credit=d.credit||{image:0,video:0}; }
       renderHsBanner(); showHsStage(); HS_LOADED=true;
@@ -368,11 +370,23 @@
     files.forEach(function(f){ if(HS_TRAIN.length>=20) return; downscale(f,function(dataUrl){
       var ph=document.createElement('img'); ph.src=dataUrl; ph.style.opacity='.45'; $('hsThumbs').insertBefore(ph,$('hsThumbs').firstChild);
       fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({upload:dataUrl,contentType:'image/jpeg'})})
-        .then(function(r){return r.json();}).then(function(d){ if(d&&d.url){ HS_TRAIN.push(d.url); ph.style.opacity='1'; hsCount(); } else ph.remove(); }).catch(function(){ ph.remove(); });
+        .then(function(r){return r.json();}).then(function(d){ if(d&&d.url){ HS_TRAIN.push(d.url); ph.style.opacity='1'; hsSaveTrain(); hsCount(); } else ph.remove(); }).catch(function(){ ph.remove(); });
     }); });
     this.value='';
   });
-  function hsCount(){ var host=$('hsThumbs'); var c=host.querySelector('.count'); if(!c){ c=document.createElement('span'); c.className='count'; host.appendChild(c); } c.textContent=HS_TRAIN.length+' '+L('bilder','photos'); }
+  // Husk opplastede bilder lokalt, så de kommer tilbake ved neste besøk/oppdatering.
+  // Adressene er varige (lagret i KV i 30 dager), så vi trenger bare listen.
+  function hsSaveTrain(){ try{ localStorage.setItem('hs_train_urls', JSON.stringify(HS_TRAIN)); }catch(e){} }
+  function hsRestoreTrain(){
+    var arr=[]; try{ arr=JSON.parse(localStorage.getItem('hs_train_urls')||'[]'); }catch(e){}
+    if(!Array.isArray(arr)) arr=[];
+    HS_TRAIN=arr.filter(function(u){ return typeof u==='string' && /^https?:\/\//.test(u); }).slice(0,20);
+    $('hsThumbs').innerHTML='';
+    HS_TRAIN.forEach(function(u){ var im=document.createElement('img'); im.src=u; $('hsThumbs').appendChild(im); });
+    if(HS_TRAIN.length) hsCount();
+  }
+  function hsCount(){ var host=$('hsThumbs'); var c=host.querySelector('.count'); if(!c){ c=document.createElement('span'); c.className='count'; host.appendChild(c); } c.textContent=HS_TRAIN.length+' '+L('bilder','photos'); $('hsClear').style.display=HS_TRAIN.length?'block':'none'; }
+  $('hsClear').addEventListener('click',function(){ HS_TRAIN=[]; try{localStorage.removeItem('hs_train_urls');}catch(e){} $('hsThumbs').innerHTML=''; $('hsClear').style.display='none'; $('hsTrainMsg').textContent=''; });
   $('hsTrainBtn').addEventListener('click',function(){
     if(HS_TRAINING) return;
     if(HS_TRAIN.length<5){ $('hsTrainMsg').className='msg err'; $('hsTrainMsg').textContent=L('Last opp minst 5 bilder (helst 10 til 20).','Upload at least 5 photos (ideally 10 to 20).'); return; }
@@ -390,7 +404,7 @@
     }).catch(function(){ setTimeout(function(){ hsPollTrain(id,tries+1); },6000); });
   }
   function hsEndTrain(ok,err){ HS_TRAINING=false; var b=$('hsTrainBtn'); b.disabled=false; b.innerHTML='<span>✨</span><span>'+L('Tren tvillingen','Train the twin')+'</span>'; if(ok){ $('hsTrainMsg').textContent=''; } else { $('hsTrainMsg').className='msg err'; $('hsTrainMsg').textContent='⚠️ '+(err||''); } }
-  $('hsRetrain').addEventListener('click',function(){ HS_ACCESS.hasSoul=false; HS_TRAIN=[]; $('hsThumbs').innerHTML=''; showHsStage(); window.scrollTo({top:0,behavior:'smooth'}); });
+  $('hsRetrain').addEventListener('click',function(){ HS_ACCESS.hasSoul=false; showHsStage(); hsRestoreTrain(); window.scrollTo({top:0,behavior:'smooth'}); });
   function hsSetBusy(b){ HS_BUSY=b; var g=$('hsGenBtn'); g.disabled=b; if(b){ g.innerHTML='<span class="spinner"></span> '+L('Lager headshot … et par minutter','Making headshot … a couple of minutes'); } else { g.innerHTML='<span>⚡</span><span>'+L('Lag headshot','Make headshot')+'</span> <span class="cost">(1 '+L('kreditt','credit')+')</span>'; } }
   $('hsGenBtn').addEventListener('click',function(){
     if(HS_BUSY) return;
