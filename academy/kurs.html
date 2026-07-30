@@ -1707,7 +1707,7 @@
        Kursets adresse er /academy/kurs/<navn> (omskrevet til denne siden i
        _redirects) eller /academy/kurs?k=<navn>. */
     (function () {
-      var m = location.pathname.match(/^\/academy\/kurs\/([a-z0-9\-]+)\/?$/i);
+      var m = location.pathname.match(/^\/(?:academy\/)?kurs\/([a-z0-9\-]+)\/?$/i);
       var slug = (m && m[1]) || new URL(location.href).searchParams.get('k') || '';
       slug = slug.toLowerCase();
 
