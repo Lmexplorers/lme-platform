@@ -81,6 +81,12 @@
   .twin-preview img{width:100%;display:block;}
   .twin-preview .change{position:absolute;top:10px;right:10px;background:rgba(31,27,36,.6);color:#fff;font-size:12px;font-weight:700;padding:7px 12px;border-radius:var(--r-pill);}
   .hidden{display:none;}
+  .ph2{font-size:13px;color:var(--ink-soft);margin-bottom:10px;}
+  .thumbs{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .thumbs img{width:60px;height:60px;object-fit:cover;border-radius:10px;border:1px solid var(--line);}
+  .thumbs .count{font-size:12.5px;font-weight:700;color:var(--ink-soft);align-self:center;}
+  .soulok{background:var(--lime-soft);color:#4d6b0f;border:1px solid #d7e9b5;border-radius:var(--r-md);padding:12px 15px;font-size:13.5px;font-weight:700;margin-bottom:14px;}
+  .linklike{display:block;width:100%;text-align:center;font-size:13.5px;font-weight:700;color:var(--ink-soft);padding:12px;margin-top:8px;}
   .gen-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:8px;font-size:16.5px;font-weight:800;padding:17px;border-radius:var(--r-pill);background:var(--grad);color:#fff;box-shadow:0 12px 26px rgba(233,30,137,.3);transition:transform .15s ease;}
   .gen-btn:active{transform:scale(.985);} .gen-btn:disabled{opacity:.6;} .gen-btn .cost{opacity:.85;font-weight:700;}
   .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
@@ -120,7 +126,7 @@
     <span class="chip" data-no="📸 Proffe portretter av deg" data-en="📸 Pro portraits of you">📸 Proffe portretter av deg</span>
     <div class="ob-hero">
       <h1 data-no="Proffe <span class='hl'>headshots</span> på ett trykk" data-en="Pro <span class='hl'>headshots</span> in one tap">Proffe <span class="hl">headshots</span> på ett trykk</h1>
-      <p class="sub" data-no="Last opp en selfie, velg en stil, og få et profesjonelt portrett som fortsatt ligner deg. Perfekt til LinkedIn, CV og profilbilde." data-en="Upload a selfie, pick a style, and get a professional portrait that still looks like you. Perfect for LinkedIn, your CV and profile photo.">Last opp en selfie, velg en stil, og få et profesjonelt portrett som fortsatt ligner deg. Perfekt til LinkedIn, CV og profilbilde.</p>
+      <p class="sub" data-no="Tren tvillingen din på noen bilder én gang, og lag deretter proffe portretter i mange stiler som fortsatt ligner deg. Perfekt til LinkedIn, CV og profilbilde." data-en="Train your twin on a few photos once, then make professional portraits in many styles that still look like you. Perfect for LinkedIn, your CV and profile photo.">Tren tvillingen din på noen bilder én gang, og lag deretter proffe portretter i mange stiler som fortsatt ligner deg. Perfekt til LinkedIn, CV og profilbilde.</p>
       <div class="ticks">
         <span><span class="t">✓</span><span data-no="Ligner deg, ikke en fremmed" data-en="Looks like you, not a stranger">Ligner deg, ikke en fremmed</span></span>
         <span><span class="t">✓</span><span data-no="Flere stiler: business, LinkedIn, portrett" data-en="Several styles: business, LinkedIn, portrait">Flere stiler: business, LinkedIn, portrett</span></span>
@@ -129,9 +135,9 @@
       </div>
     </div>
     <div class="ob-steps">
-      <div class="ob-step"><div class="n">1</div><div><h3 data-no="Last opp en selfie" data-en="Upload a selfie">Last opp en selfie</h3><p data-no="Ett tydelig bilde av ansiktet ditt." data-en="One clear photo of your face.">Ett tydelig bilde av ansiktet ditt.</p></div></div>
+      <div class="ob-step"><div class="n">1</div><div><h3 data-no="Tren tvillingen (én gang)" data-en="Train your twin (once)">Tren tvillingen (én gang)</h3><p data-no="Last opp 5 til 20 bilder av ansiktet ditt." data-en="Upload 5 to 20 photos of your face.">Last opp 5 til 20 bilder av ansiktet ditt.</p></div></div>
       <div class="ob-step"><div class="n">2</div><div><h3 data-no="Velg stil" data-en="Pick a style">Velg stil</h3><p data-no="Business, LinkedIn, portrett, sort-hvitt og mer." data-en="Business, LinkedIn, portrait, black and white and more.">Business, LinkedIn, portrett, sort-hvitt og mer.</p></div></div>
-      <div class="ob-step"><div class="n">3</div><div><h3 data-no="Få headshotet ditt" data-en="Get your headshot">Få headshotet ditt</h3><p data-no="Klar til nedlasting og deling." data-en="Ready to download and share.">Klar til nedlasting og deling.</p></div></div>
+      <div class="ob-step"><div class="n">3</div><div><h3 data-no="Få headshotet ditt" data-en="Get your headshot">Få headshotet ditt</h3><p data-no="Ligner deg, klart til nedlasting og deling." data-en="Looks like you, ready to download and share.">Ligner deg, klart til nedlasting og deling.</p></div></div>
     </div>
     <button class="btn-primary" id="startBtn"><span>⚡</span><span data-no="Kom i gang" data-en="Get started">Kom i gang</span></button>
     <div class="ob-note" data-no="Hvert headshot koster én kreditt. Du logger inn med LME-kontoen din." data-en="Each headshot costs one credit. You log in with your LME account.">Hvert headshot koster én kreditt. Du logger inn med LME-kontoen din.</div>
@@ -151,26 +157,37 @@
       <div class="install-hint" id="installHint"></div>
       <div id="accessBanner"></div>
 
-      <div class="field">
-        <label class="lab" data-no="1. Selfien din" data-en="1. Your selfie">1. Selfien din</label>
-        <button class="drop" id="drop" type="button"><div class="em">📸</div><p data-no="Trykk for å laste opp et bilde av deg" data-en="Tap to upload a photo of you">Trykk for å laste opp et bilde av deg</p></button>
-        <div class="twin-preview" id="twinPreview"><img id="twinImg" alt=""><span class="change" data-no="Bytt bilde" data-en="Change photo">Bytt bilde</span></div>
-        <input type="file" id="file" accept="image/*" class="hidden">
-      </div>
-
-      <div class="field">
-        <label class="lab" data-no="2. Velg stil" data-en="2. Pick a style">2. Velg stil</label>
-        <div class="chips" id="styleChips">
-          <button class="len-chip on" data-style="business" data-no="💼 Business" data-en="💼 Business">💼 Business</button>
-          <button class="len-chip" data-style="linkedin" data-no="🔷 LinkedIn" data-en="🔷 LinkedIn">🔷 LinkedIn</button>
-          <button class="len-chip" data-style="portrait" data-no="✨ Portrett" data-en="✨ Portrait">✨ Portrett</button>
-          <button class="len-chip" data-style="bw" data-no="🖤 Sort-hvitt" data-en="🖤 Black & white">🖤 Sort-hvitt</button>
-          <button class="len-chip" data-style="outdoor" data-no="🌿 Ute" data-en="🌿 Outdoor">🌿 Ute</button>
-          <button class="len-chip" data-style="creative" data-no="🎨 Kreativ" data-en="🎨 Creative">🎨 Kreativ</button>
+      <!-- TREN TVILLINGEN (vises til den er trent) -->
+      <div id="trainArea">
+        <div class="field">
+          <label class="lab" data-no="1. Tren tvillingen din (én gang)" data-en="1. Train your twin (once)">1. Tren tvillingen din (én gang)</label>
+          <div class="ph2" data-no="Last opp 5 til 20 tydelige bilder av ansiktet ditt, gjerne ulike vinkler og lys. Da lærer AI-en ansiktet ditt skikkelig, og alle headshots ligner deg." data-en="Upload 5 to 20 clear photos of your face, ideally varied angles and light. Then the AI learns your face properly, and every headshot looks like you.">Last opp 5 til 20 tydelige bilder av ansiktet ditt, gjerne ulike vinkler og lys.</div>
+          <button class="drop" id="drop" type="button"><div class="em">📸</div><p data-no="Trykk for å velge bilder (5 til 20)" data-en="Tap to choose photos (5 to 20)">Trykk for å velge bilder (5 til 20)</p></button>
+          <div class="thumbs" id="thumbs"></div>
+          <input type="file" id="file" accept="image/*" multiple class="hidden">
         </div>
+        <button class="gen-btn" id="trainBtn"><span>✨</span><span data-no="Tren tvillingen" data-en="Train the twin">Tren tvillingen</span></button>
+        <div class="msg" id="trainMsg"></div>
       </div>
 
-      <button class="gen-btn" id="genBtn"><span>⚡</span><span data-no="Lag headshot" data-en="Make headshot">Lag headshot</span> <span class="cost">(1 <span data-no="kreditt" data-en="credit">kreditt</span>)</span></button>
+      <!-- LAG HEADSHOT (vises når tvillingen er trent) -->
+      <div id="genArea" style="display:none;">
+        <div class="soulok" data-no="✅ Tvillingen din er klar. Velg en stil og lag headshots som ligner deg." data-en="✅ Your twin is ready. Pick a style and make headshots that look like you.">✅ Tvillingen din er klar.</div>
+        <div class="field">
+          <label class="lab" data-no="Velg stil" data-en="Pick a style">Velg stil</label>
+          <div class="chips" id="styleChips">
+            <button class="len-chip on" data-style="business" data-no="💼 Business" data-en="💼 Business">💼 Business</button>
+            <button class="len-chip" data-style="linkedin" data-no="🔷 LinkedIn" data-en="🔷 LinkedIn">🔷 LinkedIn</button>
+            <button class="len-chip" data-style="portrait" data-no="✨ Portrett" data-en="✨ Portrait">✨ Portrett</button>
+            <button class="len-chip" data-style="bw" data-no="🖤 Sort-hvitt" data-en="🖤 Black & white">🖤 Sort-hvitt</button>
+            <button class="len-chip" data-style="outdoor" data-no="🌿 Ute" data-en="🌿 Outdoor">🌿 Ute</button>
+            <button class="len-chip" data-style="creative" data-no="🎨 Kreativ" data-en="🎨 Creative">🎨 Kreativ</button>
+          </div>
+        </div>
+        <button class="gen-btn" id="genBtn"><span>⚡</span><span data-no="Lag headshot" data-en="Make headshot">Lag headshot</span> <span class="cost">(1 <span data-no="kreditt" data-en="credit">kreditt</span>)</span></button>
+        <button class="linklike" id="retrainBtn" data-no="Tren på nytt med andre bilder" data-en="Retrain with other photos">Tren på nytt med andre bilder</button>
+      </div>
+
       <div class="msg" id="msg"></div>
 
       <div class="result" id="result">
@@ -216,8 +233,8 @@
 <script>
 (function(){
   var LANG='no'; try{ if(localStorage.getItem('lme_lang')==='en') LANG='en'; }catch(e){}
-  var STYLE='business', IMGURL='', BUSY=false, RESULT_URL='';
-  var ACCESS={ loggedIn:false, owner:false, credit:{image:0,video:0} };
+  var STYLE='business', BUSY=false, RESULT_URL='', TRAIN_URLS=[], TRAINING=false;
+  var ACCESS={ loggedIn:false, owner:false, hasSoul:false, credit:{image:0,video:0} };
   function $(id){ return document.getElementById(id); }
   function L(no,en){ return LANG==='no'?no:en; }
   function toast(m){ var t=$('toast'); t.textContent=m; t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},1600); }
@@ -231,52 +248,94 @@
   }
   function toggleLang(){ LANG=LANG==='no'?'en':'no'; try{localStorage.setItem('lme_lang',LANG);}catch(e){} applyLang(); }
   $('obLang').addEventListener('click',toggleLang); $('appLang').addEventListener('click',toggleLang); $('accLang').addEventListener('click',toggleLang);
-  $('startBtn').addEventListener('click',function(){ $('onboarding').style.display='none'; $('app').classList.add('show'); loadAccess(); });
+  $('startBtn').addEventListener('click',function(){ $('onboarding').style.display='none'; $('app').classList.add('show'); loadState(); });
 
   document.querySelectorAll('.tabbar button').forEach(function(b){ b.addEventListener('click',function(){ document.querySelectorAll('.tabbar button').forEach(function(x){x.classList.remove('on');}); b.classList.add('on'); document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');}); $(b.getAttribute('data-screen')).classList.add('active'); window.scrollTo(0,0); }); });
   $('styleChips').addEventListener('click',function(e){ var c=e.target.closest('.len-chip'); if(!c)return; $('styleChips').querySelectorAll('.len-chip').forEach(function(x){x.classList.remove('on');}); c.classList.add('on'); STYLE=c.getAttribute('data-style'); });
 
-  function loadAccess(){
+  function loadState(){
     fetch('/api/headshot',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){
-      if(d){ ACCESS.loggedIn=!!d.loggedIn; ACCESS.owner=!!d.owner; ACCESS.credit=d.credit||{image:0,video:0}; }
-      renderBalance(); renderAccessBanner();
+      if(d){ ACCESS.loggedIn=!!d.loggedIn; ACCESS.owner=!!d.owner; ACCESS.hasSoul=!!d.hasSoul; ACCESS.credit=d.credit||{image:0,video:0}; }
+      renderBalance(); renderAccessBanner(); showStage();
     }).catch(function(){});
+  }
+  function showStage(){
+    if(ACCESS.hasSoul){ $('trainArea').style.display='none'; $('genArea').style.display='block'; }
+    else { $('trainArea').style.display='block'; $('genArea').style.display='none'; }
   }
   function renderBalance(){ var pt=$('planText'); if(!pt)return; if(ACCESS.owner){ pt.textContent=L('Eier, full tilgang. Lag så mange du vil.','Owner, full access. Make as many as you like.'); } else if(ACCESS.loggedIn){ pt.textContent=L('Bilde-kreditter: ','Image credits: ')+((ACCESS.credit&&ACCESS.credit.image)||0); } else { pt.textContent=L('Logg inn for å se kredittene dine.','Log in to see your credits.'); } }
   function renderAccessBanner(){ var b=$('accessBanner'); b.innerHTML=''; if(ACCESS.owner){ b.innerHTML='<div class="balance">👑 '+L('Eier, gratis','Owner, free')+'</div>'; return; } if(!ACCESS.loggedIn){ b.innerHTML='<div class="msg err">'+L('Logg inn med LME-kontoen din for å lage headshots.','Log in with your LME account to make headshots.')+'</div>'; return; } b.innerHTML='<div class="balance">📸 '+L('Bilde-kreditter: ','Image credits: ')+((ACCESS.credit&&ACCESS.credit.image)||0)+'</div>'; }
 
-  /* Opplasting */
+  /* Opplasting av treningsbilder */
   $('drop').addEventListener('click',function(){ $('file').click(); });
-  $('twinPreview').addEventListener('click',function(){ $('file').click(); });
   $('file').addEventListener('change',function(){
-    var f=this.files&&this.files[0]; if(!f) return;
-    downscale(f, function(dataUrl){
-      $('msg').className='msg info'; $('msg').textContent=L('Laster opp bildet …','Uploading image …');
-      fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({upload:dataUrl,contentType:'image/jpeg'})})
-        .then(function(r){return r.json();}).then(function(d){ if(d&&d.url){ IMGURL=d.url; $('twinImg').src=d.url; $('twinPreview').style.display='block'; $('drop').style.display='none'; $('msg').textContent=''; } else { $('msg').className='msg err'; $('msg').textContent=(d&&d.error)||L('Kunne ikke laste opp bildet.','Could not upload the image.'); } })
-        .catch(function(){ $('msg').className='msg err'; $('msg').textContent=L('Nettverksfeil ved opplasting.','Network error while uploading.'); });
+    var files=this.files?Array.prototype.slice.call(this.files):[]; if(!files.length) return;
+    files.forEach(function(f){
+      if(TRAIN_URLS.length>=20) return;
+      downscale(f, function(dataUrl){
+        var ph=document.createElement('img'); ph.src=dataUrl; ph.style.opacity='.45'; $('thumbs').insertBefore(ph, $('thumbs').firstChild);
+        fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({upload:dataUrl,contentType:'image/jpeg'})})
+          .then(function(r){return r.json();}).then(function(d){ if(d&&d.url){ TRAIN_URLS.push(d.url); ph.style.opacity='1'; updateThumbCount(); } else { ph.remove(); } })
+          .catch(function(){ ph.remove(); });
+      });
     });
+    this.value='';
   });
+  function updateThumbCount(){
+    var host=$('thumbs'); var c=host.querySelector('.count'); if(!c){ c=document.createElement('span'); c.className='count'; host.appendChild(c); }
+    c.textContent=TRAIN_URLS.length+' '+L('bilder','photos');
+  }
   function downscale(file, cb){ var r=new FileReader(); r.onload=function(e){ var img=new Image(); img.onload=function(){ var w=img.width,h=img.height,max=1024; if(w>h&&w>max){h=Math.round(h*max/w);w=max;} else if(h>=w&&h>max){w=Math.round(w*max/h);h=max;} var c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(img,0,0,w,h); cb(c.toDataURL('image/jpeg',0.85)); }; img.src=e.target.result; }; r.readAsDataURL(file); }
+
+  /* Trening av Soul */
+  $('trainBtn').addEventListener('click',function(){
+    if(TRAINING) return;
+    if(TRAIN_URLS.length<5){ $('trainMsg').className='msg err'; $('trainMsg').textContent=L('Last opp minst 5 bilder (helst 10 til 20).','Upload at least 5 photos (ideally 10 to 20).'); return; }
+    TRAINING=true; var b=$('trainBtn'); b.disabled=true; b.innerHTML='<span class="spinner"></span> '+L('Trener tvillingen … dette tar noen minutter','Training the twin … this takes a few minutes');
+    $('trainMsg').className='msg info'; $('trainMsg').textContent=L('Starter trening …','Starting training …');
+    fetch('/api/soul',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({images:TRAIN_URLS})})
+      .then(function(r){return r.json();}).then(function(d){
+        if(!d||d.error||!d.id){ endTrain(false, (d&&d.error)||L('Kunne ikke starte trening.','Could not start training.')); return; }
+        $('trainMsg').textContent=L('Trener … du kan vente her, det tar noen minutter.','Training … you can wait here, it takes a few minutes.');
+        pollTrain(d.id,0);
+      }).catch(function(){ endTrain(false, L('Nettverksfeil.','Network error.')); });
+  });
+  function pollTrain(id, tries){
+    if(tries>60){ endTrain(false, L('Det tok for lang tid. Prøv igjen.','It took too long. Please try again.')); return; }
+    fetch('/api/soul?id='+encodeURIComponent(id),{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){
+      if(d&&d.status==='ready'){ ACCESS.hasSoul=true; endTrain(true); showStage(); toast(L('Tvillingen er klar!','Your twin is ready!')); return; }
+      if(d&&(d.status==='failed'||d.error)){ endTrain(false, (d&&d.error)||L('Treningen feilet.','Training failed.')); return; }
+      setTimeout(function(){ pollTrain(id,tries+1); }, 6000);
+    }).catch(function(){ setTimeout(function(){ pollTrain(id,tries+1); }, 6000); });
+  }
+  function endTrain(ok, err){
+    TRAINING=false; var b=$('trainBtn'); b.disabled=false; b.innerHTML='<span>✨</span><span>'+L('Tren tvillingen','Train the twin')+'</span>';
+    if(ok){ $('trainMsg').className='msg info'; $('trainMsg').textContent=''; } else { $('trainMsg').className='msg err'; $('trainMsg').textContent='⚠️ '+(err||''); }
+  }
+  $('retrainBtn').addEventListener('click',function(){ ACCESS.hasSoul=false; TRAIN_URLS=[]; $('thumbs').innerHTML=''; showStage(); window.scrollTo({top:0,behavior:'smooth'}); });
 
   /* Generering */
   function setBusy(b){ BUSY=b; var g=$('genBtn'); g.disabled=b; if(b){ g.innerHTML='<span class="spinner"></span> '+L('Lager headshot … et par minutter','Making headshot … a couple of minutes'); } else { g.innerHTML='<span>⚡</span><span>'+L('Lag headshot','Make headshot')+'</span> <span class="cost">(1 '+L('kreditt','credit')+')</span>'; } }
   $('genBtn').addEventListener('click',function(){
     if(BUSY) return;
-    if(!IMGURL){ $('msg').className='msg err'; $('msg').textContent=L('Last opp en selfie først.','Upload a selfie first.'); return; }
     if(!ACCESS.owner && ACCESS.loggedIn && (((ACCESS.credit&&ACCESS.credit.image)||0)<=0)){ $('msg').className='msg err'; $('msg').innerHTML=L('Du har ingen bilde-kreditter. Kjøp på ','You have no image credits. Buy them at ')+'<a href="/kjop-kreditt">/kjop-kreditt</a>.'; return; }
     setBusy(true); $('result').classList.remove('show'); $('msg').className='msg info'; $('msg').textContent=L('Lager headshotet ditt … dette tar gjerne et par minutter.','Making your headshot … this usually takes a couple of minutes.');
-    fetch('/api/headshot',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({imageUrl:IMGURL,style:STYLE})})
+    fetch('/api/headshot',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({style:STYLE})})
       .then(function(r){return r.json().then(function(d){return {s:r.status,d:d};});})
-      .then(function(res){ var d=res.d; if(res.s!==200||!d||d.error||(!d.id&&!d.statusUrl)){ setBusy(false); $('msg').className='msg err'; $('msg').textContent=(d&&d.error)||L('Kunne ikke starte.','Could not start.'); if(d&&typeof d.credit==='number'&&ACCESS.credit){ACCESS.credit.image=d.credit;renderBalance();renderAccessBanner();} return; } if(d&&typeof d.credit==='number'&&ACCESS.credit){ACCESS.credit.image=d.credit;renderBalance();renderAccessBanner();} poll(d.id||'',d.statusUrl||'',0); })
+      .then(function(res){ var d=res.d;
+        if(d&&d.needSoul){ setBusy(false); ACCESS.hasSoul=false; showStage(); $('msg').className='msg err'; $('msg').textContent=(d.error)||L('Tren tvillingen din først.','Train your twin first.'); window.scrollTo({top:0,behavior:'smooth'}); return; }
+        if(d&&d.status==='completed'&&d.url){ setBusy(false); $('msg').textContent=''; RESULT_URL=d.url; $('resultImg').src=d.url; $('download').href=d.url; $('result').classList.add('show'); if(typeof d.credit==='number'&&ACCESS.credit){ACCESS.credit.image=d.credit;renderBalance();renderAccessBanner();} $('result').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+        if(res.s!==200||!d||d.error||(!d.id&&!d.statusUrl)){ setBusy(false); $('msg').className='msg err'; $('msg').textContent=(d&&d.error)||L('Kunne ikke starte.','Could not start.'); if(d&&typeof d.credit==='number'&&ACCESS.credit){ACCESS.credit.image=d.credit;renderBalance();renderAccessBanner();} return; }
+        if(d&&typeof d.credit==='number'&&ACCESS.credit){ACCESS.credit.image=d.credit;renderBalance();renderAccessBanner();} poll(d.id||'',d.statusUrl||'',0);
+      })
       .catch(function(){ setBusy(false); $('msg').className='msg err'; $('msg').textContent=L('Noe gikk galt. Prøv igjen.','Something went wrong. Try again.'); });
   });
   function poll(id, statusUrl, tries){
-    if(tries>80){ setBusy(false); $('msg').className='msg err'; $('msg').textContent=L('Det tok for lang tid. Prøv igjen.','It took too long. Please try again.'); loadAccess(); return; }
+    if(tries>80){ setBusy(false); $('msg').className='msg err'; $('msg').textContent=L('Det tok for lang tid. Prøv igjen.','It took too long. Please try again.'); loadState(); return; }
     var qs='id='+encodeURIComponent(id)+(statusUrl?'&u='+encodeURIComponent(statusUrl):'');
     fetch('/api/headshot?'+qs,{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){
       if(d&&d.status==='completed'&&d.url){ setBusy(false); $('msg').textContent=''; RESULT_URL=d.url; $('resultImg').src=d.url; $('download').href=d.url; $('result').classList.add('show'); $('result').scrollIntoView({behavior:'smooth',block:'center'}); return; }
-      if(d&&(d.status==='failed'||d.status==='nsfw'||d.error)){ setBusy(false); $('msg').className='msg err'; $('msg').textContent=(d&&d.error)||L('Bildet kunne ikke lages.','The image could not be made.'); loadAccess(); return; }
+      if(d&&(d.status==='failed'||d.status==='nsfw'||d.error)){ setBusy(false); $('msg').className='msg err'; $('msg').textContent=(d&&d.error)||L('Bildet kunne ikke lages.','The image could not be made.'); loadState(); return; }
       setTimeout(function(){ poll(id,statusUrl,tries+1); }, 4000);
     }).catch(function(){ setTimeout(function(){ poll(id,statusUrl,tries+1); }, 4000); });
   }

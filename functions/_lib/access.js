@@ -226,10 +226,10 @@ export async function refundVideoCredit(context, email) {
 /* Hvem er du, og kreditt-saldo (uten å trekke). */
 export async function headshotAppAccess(context) {
   const user = await sessionUser(context);
-  if (!user) return { loggedIn: false, owner: false, credit: { image: 0, video: 0 } };
+  if (!user) return { loggedIn: false, owner: false, email: "", credit: { image: 0, video: 0 } };
   const credit = await creditFor(context, user.email);
-  if (isOwner(user)) return { loggedIn: true, owner: true, credit: credit };
-  return { loggedIn: true, owner: false, credit: credit };
+  if (isOwner(user)) return { loggedIn: true, owner: true, email: user.email, credit: credit };
+  return { loggedIn: true, owner: false, email: user.email, credit: credit };
 }
 
 /* Sjekk tilgang OG trekk én bilde-kreditt (forhåndsbetalt, ingen gratis kvote). */
