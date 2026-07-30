@@ -14,4 +14,5 @@
 /claude-kurs  /funnel/claude-kurs/salg.html  200
 /sparemaal  /sparemaal-v2.html  200
 /brand/*  /dashboard.html  302
+/admin-setup.html  /admin-setup.html  200
 /  /dashboard.html  302
