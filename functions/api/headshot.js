@@ -35,11 +35,13 @@ const FACE_LOCK =
   "her LIGHT BLONDE hair the exact same light blonde colour, do NOT darken it or turn it brown. Make " +
   "her look like herself on her best, well-rested day: soft flattering diffused lighting, fresh healthy " +
   "rested skin, bright clear eyes, subtle natural makeup, a warm friendly expression, and a flattering " +
-  "portrait angle that removes close-up selfie distortion. Achieve this ONLY by improving the light and " +
-  "the freshness of the skin, NOT by changing her face, her bone structure or her age, and NOT by " +
-  "turning her into a younger, smoother or different person. Do NOT exaggerate wrinkles and do NOT make " +
-  "her look older, heavier or fuller than she is. She must still look exactly like herself. " +
-  "Photorealistic, natural, head and shoulders, looking at the camera, family-friendly.";
+  "portrait angle that removes close-up selfie distortion. Use a flattering, subtly slimming professional " +
+  "headshot angle and lighting: do NOT add any weight, roundness or fullness to her face, cheeks, chin, " +
+  "jaw or neck; keep her face and jawline slim and natural, never rounder or wider than she is. Achieve " +
+  "all of this ONLY by improving the angle, light and the freshness of the skin, NOT by changing her " +
+  "face, her bone structure or her age, and NOT by turning her into a younger, smoother or different " +
+  "person. Do NOT exaggerate wrinkles and do NOT make her look older. She must still look exactly like " +
+  "herself. Photorealistic, natural, head and shoulders, looking at the camera, family-friendly.";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
