@@ -93,7 +93,7 @@ export async function onRequestPost(context) {
   if (!gate.ok) return json({ error: gate.error, needCredits: gate.needCredits || false }, gate.status);
 
   const prompt = ("Create a polished, flattering professional headshot of the person from the reference photo. " + style + FACE_LOCK).slice(0, 980);
-  const size = env.HEADSHOT_IMAGE_SIZE || "1024x1536";
+  const size = env.HEADSHOT_IMAGE_SIZE || "1024x1024";
   const quality = env.HEADSHOT_IMAGE_QUALITY || "medium";
 
   const fd = new FormData();
