@@ -1753,7 +1753,7 @@
             : 'Et nylagret kurs kan bruke opptil ett minutt på å dukke opp. Prøv igjen om litt, eller sjekk at adressen stemmer.';
           root.innerHTML = '';
           var back = el('div', 'crs-next');
-          back.appendChild(el('h3', null, en ? 'Back to the academy' : 'Tilbake til akademiet'));
+          back.appendChild(el('h3', null, en ? 'Back to the classes' : 'Tilbake til kurs'));
           var retry = el('button', 'btn-primary', en ? '🔄 Try again' : '🔄 Prøv igjen');
           retry.type = 'button';
           retry.style.marginRight = '10px';
@@ -1770,7 +1770,7 @@
         }
 
         document.title = (pick(course.title) || 'Kurs') + ' — LME';
-        document.getElementById('kurs-kicker').textContent = pick(course.kicker) || (en ? 'LME ACADEMY' : 'LME AKADEMIET');
+        document.getElementById('kurs-kicker').textContent = pick(course.kicker) || (en ? 'LME CLASSES' : 'LME KURS');
         document.getElementById('kurs-tittel').textContent = pick(course.title);
         document.getElementById('kurs-lede').textContent = pick(course.lede);
 
@@ -1860,7 +1860,7 @@
         next.appendChild(el('h3', null, pick(course.outro && course.outro.title) || (en ? 'Ready for more?' : 'Klar for mer?')));
         var ot = pick(course.outro && course.outro.text);
         if (ot.trim()) next.appendChild(el('p', null, ot));
-        var back2 = el('a', 'btn-primary', en ? '← Back to the academy' : '← Tilbake til akademiet');
+        var back2 = el('a', 'btn-primary', en ? '← Back to the classes' : '← Tilbake til kurs');
         back2.href = '/kurs';
         next.appendChild(back2);
         root.appendChild(next);
@@ -1922,7 +1922,7 @@
               root.appendChild(a);
             });
             var back = el('div', 'crs-next');
-            var ba = el('a', 'btn-primary', en ? '← Back to the academy' : '← Tilbake til akademiet');
+            var ba = el('a', 'btn-primary', en ? '← Back to the classes' : '← Tilbake til kurs');
             ba.href = '/kurs';
             back.appendChild(ba);
             root.appendChild(back);
