@@ -4,6 +4,8 @@
 /butikk/en  /shop  301
 /podkast/feed.xml  /api/podcast/feed.xml  200
 /podkast/feed-en.xml  /api/podcast/feed-en.xml  200
+/academy  /kurs  301
+/academy/*  /kurs/:splat  301
 /g/*  /academy/gruppe.html  200
 /creative-studio  /creative-academy  301
 /rolige-morgener  /funnel/rolige-morgener/opt-in.html  200
