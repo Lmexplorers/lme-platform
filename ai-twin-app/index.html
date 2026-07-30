@@ -572,6 +572,8 @@
     var hsRefreshing=false;
     navigator.serviceWorker.addEventListener('controllerchange',function(){ if(hsRefreshing)return; hsRefreshing=true; location.reload(); });
     window.addEventListener('load',function(){ navigator.serviceWorker.register('/sw.js').then(function(reg){ try{ reg.update(); }catch(e){} }).catch(function(){}); });
+    // Sjekk etter ny versjon hver gang appen kommer i forgrunnen igjen.
+    document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible'){ navigator.serviceWorker.getRegistration().then(function(reg){ if(reg){ try{ reg.update(); }catch(e){} } }); } });
   }
 })();
 </script>
