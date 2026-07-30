@@ -560,7 +560,12 @@
   (function(){ var isIos=/iphone|ipad|ipod/i.test(navigator.userAgent); var standalone=window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches; if(isIos&&!standalone){ var h=$('installHint'); h.classList.add('show'); h.setAttribute('data-no','📲 Tips: trykk på Del-knappen og velg "Legg til på Hjem-skjerm" for å bruke LME AI Twin som app.'); h.setAttribute('data-en','📲 Tip: tap the Share button and choose "Add to Home Screen" to use LME AI Twin as an app.'); } })();
 
   applyLang();
-  if('serviceWorker' in navigator){ window.addEventListener('load',function(){ navigator.serviceWorker.register('/sw.js').catch(function(){}); }); }
+  if('serviceWorker' in navigator){
+    // Når en ny versjon tar over, last siden på nytt så du alltid får siste app.
+    var hsRefreshing=false;
+    navigator.serviceWorker.addEventListener('controllerchange',function(){ if(hsRefreshing)return; hsRefreshing=true; location.reload(); });
+    window.addEventListener('load',function(){ navigator.serviceWorker.register('/sw.js').then(function(reg){ try{ reg.update(); }catch(e){} }).catch(function(){}); });
+  }
 })();
 </script>
 </body>
