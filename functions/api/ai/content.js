@@ -34,6 +34,8 @@ AI-drevet plattform grunnlagt av Renate Dahl (Montessori-pedagog med utdanning f
 LME er ett samlet økosystem, ikke en samling separate apper. Reisen er: lær, skap, bli synlig, selg og voks.
 Montessori-filosofien er fundamentet, men LME er mer enn en Montessori-plattform.
 Mia & Teo er karakterene i Renates bøker (De små naturutforskerne). Tonen er varm, pedagogisk og tillitsvekkende.
+LME er kun Renate (én person). Skriv alltid i jeg-form: jeg, meg, min. Aldri vi, oss eller vår når det er LME/Renate som snakker til leseren. Gjelder også engelsk (I, me, my, ikke we/us/our).
+Norske skriveregler: rette anførselstegn oppe, aldri vinkel-anførselstegn. Ingen tankestreker eller lange bindestreker i teksten.
 VIKTIG: nevn aldri AMI eller Association Montessori Internationale. Renate har sin utdanning fra Høyskolen i Vestfold.
 ALDRI dikt opp garantier, pengene-tilbake-løfter, refusjonsvilkår, priser, rabatter, tall, resultater eller andre påstander som ikke er oppgitt i kilden. Ikke lov noe på vegne av LME. Er ikke noe oppgitt, la det være.`;
 
@@ -199,8 +201,6 @@ export async function onRequestPost(context) {
     const result = await generateText(env, system, contentPrompt(body), maxTokens);
     return json({ result });
   } catch (err) {
-    // Midlertidig: ta med den faktiske årsaken så vi kan feilsøke.
-    const keys = "A:" + (env.ANTHROPIC_API_KEY ? "1" : "0") + " O:" + (env.OPENAI_API_KEY ? "1" : "0");
-    return json({ error: "AI utilgjengelig [" + keys + "] " + String((err && err.message) || err).slice(0, 180) }, 502);
+    return json({ error: "AI er midlertidig utilgjengelig. Prøv igjen om litt." }, 502);
   }
 }

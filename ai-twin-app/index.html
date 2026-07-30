@@ -120,6 +120,10 @@
   .rcard{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px;margin-top:11px;box-shadow:var(--shadow-md);}
   .rcard h4{font-size:13.5px;color:var(--cerise);margin-bottom:6px;display:flex;align-items:center;gap:7px;}
   .rcard p{font-size:14px;color:var(--ink-soft);white-space:pre-wrap;}
+  .rcard p.edit{border:1.5px dashed var(--line);border-radius:var(--r-sm);padding:10px 12px;color:var(--ink);background:var(--bg);outline:none;cursor:text;}
+  .rcard p.edit:focus{border-color:var(--cerise);border-style:solid;background:var(--bg-2);}
+  .edithint{font-size:12.5px;color:var(--ink-muted);margin-top:6px;display:flex;align-items:center;gap:6px;}
+  .edithint::before{content:'✏️';}
   .tags span{display:inline-block;background:var(--cerise-soft);border-radius:var(--r-pill);padding:5px 11px;font-size:12.5px;margin:0 6px 7px 0;}
   .copy-btn{margin-left:auto;font-size:11.5px;font-weight:700;color:var(--cerise);background:none;}
   .dlbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:12px;font-size:14.5px;font-weight:800;padding:14px;border-radius:var(--r-pill);background:var(--bg-2);border:1.5px solid var(--line);color:var(--ink-soft);}
@@ -484,16 +488,20 @@
     return L('Personen ser rett i kameraet og snakker rolig og varmt til seeren, som om hun presenterer: "'+line+'". Naturlig ansiktsbevegelse og lett håndbevegelse, vertikal 9:16, mykt naturlig lys.',
              'The person looks straight at the camera and speaks calmly and warmly to the viewer, as if presenting: "'+line+'". Natural facial movement and gentle hand gesture, vertical 9:16, soft natural light.');
   }
-  function copyBtn(text){ var b=document.createElement('button'); b.className='copy-btn'; b.textContent=L('Kopier','Copy'); b.addEventListener('click',function(){ navigator.clipboard&&navigator.clipboard.writeText(text); toast(L('Kopiert','Copied')); }); return b; }
-  function buildCaption(r){ var cap=r.caption||''; if(r.cta&&cap.indexOf(r.cta)===-1) cap=(cap?cap+'\n\n':'')+r.cta; var tags=Array.isArray(r.hashtags)?r.hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' '):''; return (cap+(tags?'\n\n'+tags:'')).trim(); }
-  function scriptCard(host,icon,title,text){ var d=document.createElement('div'); d.className='rcard'; var h=document.createElement('h4'); h.textContent=icon+' '+title; h.appendChild(copyBtn(text)); var p=document.createElement('p'); p.style.whiteSpace='pre-wrap'; p.textContent=text; d.appendChild(h); d.appendChild(p); host.appendChild(d); }
+  // Kopier-knapp som leser teksten LIVE fra elementet, så dine redigeringer blir med.
+  function copyEl(el){ var b=document.createElement('button'); b.className='copy-btn'; b.textContent=L('Kopier','Copy'); b.addEventListener('click',function(){ var t=(el.textContent||'').trim(); if(navigator.clipboard){navigator.clipboard.writeText(t);} toast(L('Kopiert','Copied')); }); return b; }
+  function cleanTag(x){ return '#'+String(x==null?'':x).replace(/^[#\/\s]+/,'').replace(/\s+/g,''); }
+  function buildCaption(r){ var cap=r.caption||''; if(r.cta&&cap.indexOf(r.cta)===-1) cap=(cap?cap+'\n\n':'')+r.cta; var tags=Array.isArray(r.hashtags)?r.hashtags.map(cleanTag).join(' '):''; return (cap+(tags?'\n\n'+tags:'')).trim(); }
+  // Redigerbart tekstkort: trykk i teksten for å endre den før du kopierer.
+  function scriptCard(host,icon,title,text){ var d=document.createElement('div'); d.className='rcard'; var p=document.createElement('p'); p.className='edit'; p.setAttribute('contenteditable','true'); p.setAttribute('spellcheck','false'); p.style.whiteSpace='pre-wrap'; p.textContent=text; var h=document.createElement('h4'); h.textContent=icon+' '+title; h.appendChild(copyEl(p)); d.appendChild(h); d.appendChild(p); host.appendChild(d); }
   function renderScript(r){
     var host=$('scriptOut'); host.innerHTML=''; if(!r) return;
+    var hint=document.createElement('div'); hint.className='edithint'; hint.textContent=L('Trykk i teksten for å endre den. Kopier tar med endringene dine.','Tap the text to edit it. Copy includes your edits.'); host.appendChild(hint);
     try{ if(r.hook) scriptCard(host,'🎯',L('Hook (tekst på skjerm)','Hook (on-screen text)'),r.hook); }catch(e){}
     try{ if(r.voiceover) scriptCard(host,'🎬',L('Manus','Script'),r.voiceover); }catch(e){}
-    try{ if(r.caption){ var d=document.createElement('div'); d.className='rcard'; var h=document.createElement('h4'); h.textContent='✍️ '+L('Caption','Caption'); h.appendChild(copyBtn(r.caption)); var p=document.createElement('p'); p.textContent=r.caption; d.appendChild(h); d.appendChild(p); host.appendChild(d); } }catch(e){}
-    try{ if(Array.isArray(r.hashtags)&&r.hashtags.length){ var tagline=r.hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' '); var d2=document.createElement('div'); d2.className='rcard'; var h2=document.createElement('h4'); h2.textContent='#️⃣ '+L('Emneknagger','Hashtags'); h2.appendChild(copyBtn(tagline)); var tg=document.createElement('div'); tg.className='tags'; tg.innerHTML=r.hashtags.map(function(x){return '<span>'+esc(x[0]==='#'?x:'#'+x)+'</span>';}).join(''); d2.appendChild(h2); d2.appendChild(tg); host.appendChild(d2); } }catch(e){}
-    if(host.childNodes.length) $('scriptResult').classList.add('show');
+    try{ if(r.caption) scriptCard(host,'✍️',L('Caption','Caption'),r.caption); }catch(e){}
+    try{ if(Array.isArray(r.hashtags)&&r.hashtags.length){ var tagline=r.hashtags.map(cleanTag).join(' '); var d2=document.createElement('div'); d2.className='rcard'; var pt=document.createElement('p'); pt.className='edit'; pt.setAttribute('contenteditable','true'); pt.setAttribute('spellcheck','false'); pt.textContent=tagline; var h2=document.createElement('h4'); h2.textContent='#️⃣ '+L('Emneknagger','Hashtags'); h2.appendChild(copyEl(pt)); d2.appendChild(h2); d2.appendChild(pt); host.appendChild(d2); } }catch(e){}
+    if(host.querySelector('.rcard')) $('scriptResult').classList.add('show');
   }
 
   /* ---- Generering: manus + tvilling-video ---- */
@@ -516,7 +524,7 @@
         if(REEL){ $('msg').className='msg info'; $('msg').textContent=L('Teksten din er klar nedenfor. Prøver å lage video …','Your text is ready below. Trying to make the video …'); startVideo(); }
         else { $('msg').className='msg err'; $('msg').textContent=L('Kunne ikke lese teksten. Prøv igjen.','Could not read the text. Try again.'); }
       })
-      .catch(function(e){ setBusy(false); $('msg').className='msg err'; $('msg').textContent=L('Kunne ikke lage teksten akkurat nå. Prøv igjen.','Could not make the text right now. Try again.')+(e&&e.message?' ('+e.message+')':''); });
+      .catch(function(e){ setBusy(false); $('msg').className='msg err'; $('msg').textContent=L('Kunne ikke lage teksten akkurat nå. Prøv igjen.','Could not make the text right now. Try again.'); });
   });
   // Video er best-effort. Feiler den (f.eks. mangler nøkler), beholder vi teksten
   // og sier bare ifra, uten en skummel generell feil.
