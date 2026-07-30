@@ -29,13 +29,14 @@ const STYLES = {
   creative:  "Restyle only the setting into a modern creative portrait: clean gradient backdrop with soft colored studio lighting, stylish and contemporary.",
 };
 const FACE_LOCK =
-  " Preserve the person's exact face and identity from the reference photo with total fidelity: " +
-  "the same facial features, same eyes, same nose, same mouth, same jawline and face shape, " +
-  "the same age with the same natural skin including its real texture and lines, the same hairstyle " +
-  "and hair colour, and the same warm smile. Do NOT beautify, slim, smooth, retouch, restyle the hair, " +
-  "or make the person look younger or different in any way. The result must be immediately recognisable " +
-  "as the exact same person. Photorealistic, natural skin texture, sharp focus, head and shoulders, " +
-  "looking at the camera, family-friendly.";
+  " Keep the same person, clearly and unmistakably recognisable as in the reference photo: the same " +
+  "eyes, nose, mouth, warm smile, hairstyle and hair colour. Photograph her the way a professional " +
+  "headshot photographer would, at her best: soft, flattering, diffused lighting, and a natural " +
+  "flattering angle with a portrait lens that removes close-up selfie distortion. Keep her real, " +
+  "natural and roughly the same age, with healthy natural skin. Do NOT exaggerate wrinkles, and do " +
+  "NOT make her look older, heavier or fuller in the face than she is. Do not distort the face. " +
+  "Natural, flattering, professional, photorealistic, head and shoulders, looking at the camera, " +
+  "family-friendly.";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -91,7 +92,7 @@ export async function onRequestPost(context) {
   const gate = await enforceHeadshotApp(context);
   if (!gate.ok) return json({ error: gate.error, needCredits: gate.needCredits || false }, gate.status);
 
-  const prompt = ("Keep the person from the reference photo exactly as they are. " + style + FACE_LOCK).slice(0, 950);
+  const prompt = ("Create a polished, flattering professional headshot of the person from the reference photo. " + style + FACE_LOCK).slice(0, 980);
   const size = env.HEADSHOT_IMAGE_SIZE || "1024x1536";
   const quality = env.HEADSHOT_IMAGE_QUALITY || "medium";
 
