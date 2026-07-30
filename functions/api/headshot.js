@@ -46,9 +46,10 @@ const LOOKS = {
   balanced: " Use soft flattering light and a subtly slimming, slightly elevated portrait angle, so she " +
     "looks like herself on a good, well-lit day, while staying fully realistic and the same age. Do not " +
     "add weight or fullness to the face.",
-  glam: " Use flattering light and a gently slimming portrait angle for a slightly slimmer, fresher and " +
-    "a little more youthful impression, while still clearly and recognisably her and fully realistic, " +
-    "never plastic, smoothed or doll-like.",
+  glam: " Make her look noticeably slimmer in the face and clearly a few years younger, like a flattering " +
+    "professional photo of her from a few years ago: a slimmer jawline, fresher and firmer skin and a " +
+    "younger, radiant look, while still clearly and recognisably the same woman. Keep it fully realistic " +
+    "with real skin texture, never plastic, smoothed or doll-like.",
 };
 
 function json(data, status) {
@@ -116,8 +117,10 @@ export async function onRequestPost(context) {
   fd.append("prompt", prompt);
   fd.append("size", size);
   fd.append("quality", quality);
-  // input_fidelity: high bevarer ansiktstrekk fra referansebildet mye bedre.
-  fd.append("input_fidelity", env.HEADSHOT_INPUT_FIDELITY || "high");
+  // input_fidelity high = maks likhet (og dermed reell alder). På "yngre"-nivået
+  // slipper vi til low, så motoren får frihet til å slanke og forynge.
+  const fidelity = env.HEADSHOT_INPUT_FIDELITY || (lookKey === "glam" ? "low" : "high");
+  fd.append("input_fidelity", fidelity);
   fd.append("n", "1");
   refs.forEach((ref, i) => {
     const ext = ref.ct === "image/png" ? ".png" : ref.ct === "image/webp" ? ".webp" : ".jpg";
