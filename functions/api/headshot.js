@@ -37,7 +37,15 @@ function json(data, status) {
     headers: { "Content-Type": "application/json", "Cache-Control": "no-store", "Access-Control-Allow-Origin": "*" },
   });
 }
-function auth(env) { return "Key " + env.HIGGSFIELD_API_KEY + ":" + env.HIGGSFIELD_SECRET; }
+// Send begge autentiseringsskjemaene Higgsfield bruker (V2 "Authorization: Key"
+// for generering, og V1 hf-api-key/hf-secret), så vi unngår 401 uansett rute.
+function hfHeaders(env) {
+  return {
+    "hf-api-key": env.HIGGSFIELD_API_KEY,
+    "hf-secret": env.HIGGSFIELD_SECRET,
+    "Authorization": "Key " + env.HIGGSFIELD_API_KEY + ":" + env.HIGGSFIELD_SECRET,
+  };
+}
 
 async function soulFor(env, email) {
   if (!env.BUILDER_KV || !email) return null;
@@ -106,7 +114,7 @@ export async function onRequestPost(context) {
   try {
     r = await fetch(HF_BASE + SUBMIT_PATH, {
       method: "POST",
-      headers: { "Authorization": auth(env), "Content-Type": "application/json", "Accept": "application/json" },
+      headers: Object.assign({ "Content-Type": "application/json", "Accept": "application/json" }, hfHeaders(env)),
       body: JSON.stringify(payload),
     });
     text = await r.text();
@@ -157,7 +165,7 @@ export async function onRequestGet(context) {
 
   let r, data, text;
   try {
-    r = await fetch(statusUrl, { headers: { "Authorization": auth(env), "Accept": "application/json" } });
+    r = await fetch(statusUrl, { headers: Object.assign({ "Accept": "application/json" }, hfHeaders(env)) });
     text = await r.text();
     try { data = JSON.parse(text); } catch { data = null; }
   } catch (e) { return json({ status: "in_progress" }); }

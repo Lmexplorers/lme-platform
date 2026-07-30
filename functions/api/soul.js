@@ -27,7 +27,17 @@ function json(data, status) {
     headers: { "Content-Type": "application/json", "Cache-Control": "no-store", "Access-Control-Allow-Origin": "*" },
   });
 }
-function auth(env) { return "Key " + env.HIGGSFIELD_API_KEY + ":" + env.HIGGSFIELD_SECRET; }
+// Higgsfield custom-references (Soul-trening) ligger på V1-klienten, som
+// autentiserer med egne hf-api-key/hf-secret-headere, ikke "Authorization: Key".
+// Feil skjema her gir 401 "Invalid credentials". Vi sender begge for å være
+// robuste uansett hvilket endepunkt vi treffer.
+function hfHeaders(env) {
+  return {
+    "hf-api-key": env.HIGGSFIELD_API_KEY,
+    "hf-secret": env.HIGGSFIELD_SECRET,
+    "Authorization": "Key " + env.HIGGSFIELD_API_KEY + ":" + env.HIGGSFIELD_SECRET,
+  };
+}
 
 function findId(o) {
   if (!o || typeof o !== "object") return "";
@@ -67,7 +77,7 @@ export async function onRequestGet(context) {
     const statusPath = env.HIGGSFIELD_SOUL_STATUS_PATH || STATUS_PATH_DEFAULT;
     let r, data;
     try {
-      r = await fetch(HF_BASE + statusPath + encodeURIComponent(id), { headers: { "Authorization": auth(env), "Accept": "application/json" } });
+      r = await fetch(HF_BASE + statusPath + encodeURIComponent(id), { headers: Object.assign({ "Accept": "application/json" }, hfHeaders(env)) });
       const t = await r.text(); try { data = JSON.parse(t); } catch { data = null; }
     } catch (e) { return json({ status: "in_progress" }); }
     if (!r.ok) return json({ status: "in_progress", note: "hf " + r.status });
@@ -112,17 +122,17 @@ export async function onRequestPost(context) {
   if (images.length < 5) return json({ error: "Last opp minst 5 tydelige bilder av ansiktet ditt (5-20)." }, 400);
 
   const createPath = env.HIGGSFIELD_SOUL_CREATE_PATH || CREATE_PATH_DEFAULT;
+  // Kroppen følger Higgsfields SoulIdCreateData: bare name + input_images.
   const payload = {
     name: "lme-" + (body.name ? String(body.name).slice(0, 24) : "twin"),
     input_images: images.map((u) => ({ type: "image_url", image_url: u })),
-    model: "soul-2",
   };
 
   let r, data, text;
   try {
     r = await fetch(HF_BASE + createPath, {
       method: "POST",
-      headers: { "Authorization": auth(env), "Content-Type": "application/json", "Accept": "application/json" },
+      headers: Object.assign({ "Content-Type": "application/json", "Accept": "application/json" }, hfHeaders(env)),
       body: JSON.stringify(payload),
     });
     text = await r.text();
