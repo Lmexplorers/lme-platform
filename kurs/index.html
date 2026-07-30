@@ -1626,6 +1626,21 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
   })();
   </script>
 
+  <script>
+  // Ensure verktøykasse section is visible
+  (function() {
+    setTimeout(function() {
+      var sections = document.querySelectorAll('.courses-section');
+      sections.forEach(function(sec) {
+        if (sec.id !== 'egne-kurs') {
+          sec.style.display = '';
+        }
+      });
+      console.log('✓ Verktøykasse section visibility ensured. Found ' + sections.length + ' sections.');
+    }, 100);
+  })();
+  </script>
+
   <!-- CTA-bånd -->
   <section class="cta-band">
     <div class="content">
