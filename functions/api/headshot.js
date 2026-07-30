@@ -32,20 +32,24 @@ const STYLES = {
 // Felles kjerne: alltid ekte foto, ekte hud, samme person og lyst blondt hår.
 const CORE =
   " This must look like a REAL photograph taken by a professional photographer, absolutely not a render, " +
-  "not AI, not airbrushed and not a doll. Keep natural, realistic skin with real texture, real pores and " +
-  "fine detail; never a waxy, glossy or plastic look. Keep the exact same person, face shape, features " +
-  "and identity as in the reference photo, clearly and unmistakably recognisable as herself. Keep her " +
-  "LIGHT BLONDE hair the exact same light blonde colour, do NOT darken it or turn it brown. Flatter her " +
-  "only through lighting and a flattering camera angle and portrait lens (removing close-up selfie " +
-  "distortion), never by distorting the face. Photorealistic, authentic, natural, head and shoulders, " +
-  "looking at the camera, family-friendly.";
+  "not AI, not airbrushed and not a doll, and never a waxy, glossy or plastic look. Keep the SAME skin as " +
+  "in the reference photo: do NOT smooth it into plastic, but also do NOT add any extra wrinkles, lines, " +
+  "texture, age spots or aging that are not clearly there in the reference. Keep the exact same person, " +
+  "face shape and features as in the reference photo, clearly recognisable as herself, and never make her " +
+  "look older, more tired or worse than she looks in the reference. Keep her LIGHT BLONDE hair the exact " +
+  "same light blonde colour, bright and light, even under studio lighting; do NOT darken it, dull it or " +
+  "turn it brown. Flatter her only through soft lighting and a flattering camera angle and portrait lens " +
+  "(removing close-up selfie distortion), never by distorting the face. Photorealistic, authentic, " +
+  "natural, head and shoulders, looking at the camera, family-friendly.";
 // Nivå brukeren styrer selv (bryteren i appen).
 const LOOKS = {
-  natural: " Stay as true to the reference as possible: keep her exactly as she is, the same age and the " +
-    "same face, and only improve the lighting and the background. Do NOT slim, smooth or beautify her.",
+  natural: " Keep her looking exactly as she does in the reference photo: the same age, the same weight and " +
+    "the same face, no older and no younger, no heavier and no slimmer. Do NOT add any wrinkles, lines, age " +
+    "or fullness. Only change the setting and add soft, flattering, even light. She must look exactly as " +
+    "good as in the reference, never older, heavier or worse.",
   balanced: " Use soft flattering light and a subtly slimming, slightly elevated portrait angle, so she " +
-    "looks like herself on a good, well-lit day, while staying fully realistic and the same age. Do not " +
-    "add weight or fullness to the face.",
+    "looks like herself on a good, well-lit day, while staying realistic and the same age. Do NOT add any " +
+    "wrinkles, weight or fullness, and never make her look older than the reference.",
   glam: " Make her look noticeably slimmer in the face and clearly a few years younger, like a flattering " +
     "professional photo of her from a few years ago: a slimmer jawline, fresher and firmer skin and a " +
     "younger, radiant look, while still clearly and recognisably the same woman. Keep it fully realistic " +
