@@ -104,6 +104,55 @@ async function callClaudeRetry(env, system, userPrompt, maxTokens, model) {
   }
 }
 
+// Reserve: OpenAI (samme nøkkel som Bookly/headshot). Brukes hvis Anthropic
+// feiler (nøkkel, kreditt, rate, timeout), så tekst-genereringen virker så lenge
+// minst én leverandør svarer. Ber om ren JSON.
+async function callOpenAI(env, system, userPrompt, maxTokens) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), CALL_TIMEOUT_MS);
+  let resp;
+  try {
+    resp = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      signal: ctrl.signal,
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + env.OPENAI_API_KEY },
+      body: JSON.stringify({
+        model: env.CONTENT_OPENAI_MODEL || "gpt-4o-mini",
+        max_tokens: maxTokens || 3000,
+        response_format: { type: "json_object" },
+        messages: [
+          { role: "system", content: system },
+          { role: "user", content: userPrompt },
+        ],
+      }),
+    });
+  } catch (e) {
+    throw new Error(e && e.name === "AbortError" ? "OpenAI svarte for sakte" : "nettverksfeil mot OpenAI");
+  } finally {
+    clearTimeout(timer);
+  }
+  if (!resp.ok) {
+    const t = await resp.text();
+    throw new Error(`OpenAI ${resp.status}: ${t.replace(/\s+/g, " ").slice(0, 160)}`);
+  }
+  const data = await resp.json();
+  return (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || "";
+}
+
+// Prøv Anthropic først (med retry), fall tilbake til OpenAI om den feiler.
+async function generateText(env, system, userPrompt, maxTokens) {
+  if (env.ANTHROPIC_API_KEY) {
+    try {
+      return await callClaudeRetry(env, system, userPrompt, maxTokens);
+    } catch (e) {
+      if (env.OPENAI_API_KEY) return await callOpenAI(env, system, userPrompt, maxTokens);
+      throw e;
+    }
+  }
+  if (env.OPENAI_API_KEY) return await callOpenAI(env, system, userPrompt, maxTokens);
+  throw new Error("mangler AI-nøkkel");
+}
+
 function contentPrompt(b) {
   const fmt = String(b.format || "post");
   const src = (b.source || b.article || "").slice(0, 6000);
@@ -131,8 +180,8 @@ Answer-first, konkret pedagogisk verdi, varm tone. Følg de norske skrivereglene
 
 export async function onRequestPost(context) {
   const { request, env } = context;
-  if (!env.ANTHROPIC_API_KEY) {
-    return json({ error: "Server-konfigurasjon mangler (ANTHROPIC_API_KEY)." }, 500);
+  if (!env.ANTHROPIC_API_KEY && !env.OPENAI_API_KEY) {
+    return json({ error: "Server-konfigurasjon mangler (mangler AI-nøkkel)." }, 500);
   }
   let body;
   try { body = await request.json(); }
@@ -147,7 +196,7 @@ export async function onRequestPost(context) {
   const light = (fmt === "explainer" || fmt === "hookreel");
   const maxTokens = light ? 3000 : 3200;
   try {
-    const result = await callClaudeRetry(env, system, contentPrompt(body), maxTokens);
+    const result = await generateText(env, system, contentPrompt(body), maxTokens);
     return json({ result });
   } catch (err) {
     return json({ error: "AI er midlertidig utilgjengelig. Prøv igjen om litt." }, 502);
