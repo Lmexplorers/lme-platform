@@ -19,18 +19,23 @@ import { enforceHeadshotApp, refundImageCredit, headshotAppAccess } from "../_li
 const OPENAI_EDITS = "https://api.openai.com/v1/images/edits";
 const MAX_REFS = 6;
 
+// Hver stil endrer BARE bakgrunn, antrekk og lys, ikke ansiktet.
 const STYLES = {
-  business:  "a professional corporate business headshot, tailored dark blazer, clean neutral studio background, soft flattering studio lighting, confident friendly expression, sharp focus, high-end",
-  linkedin:  "a professional LinkedIn profile headshot, smart business-casual outfit, soft blurred modern office background, natural window light, warm approachable smile, crisp and clean",
-  portrait:  "an elegant editorial studio portrait, refined soft lighting with gentle shadows, plain warm background, timeless and flattering, magazine quality",
-  bw:        "a classic black and white studio portrait, dramatic soft lighting, plain dark background, timeless elegant look, fine detail, monochrome",
-  outdoor:   "a natural outdoor lifestyle portrait, soft golden-hour light, gently blurred green background, relaxed warm expression, candid and premium",
-  creative:  "a modern creative portrait with soft colored studio lighting, stylish contemporary look, clean gradient background, vibrant yet tasteful",
+  business:  "Restyle only the setting into a professional business headshot: replace the background with a clean neutral studio backdrop, dress the person in a smart tailored dark blazer, and apply soft flattering studio lighting.",
+  linkedin:  "Restyle only the setting into a LinkedIn profile headshot: replace the background with a softly blurred modern office, dress the person in smart business-casual, and use soft natural window light.",
+  portrait:  "Restyle only the setting into an elegant editorial studio portrait: plain warm studio backdrop and refined soft lighting with gentle shadows.",
+  bw:        "Restyle only the setting into a classic black and white studio portrait: plain dark background, dramatic soft lighting, timeless monochrome look.",
+  outdoor:   "Restyle only the setting into a natural outdoor lifestyle portrait: softly blurred green background in warm golden-hour light.",
+  creative:  "Restyle only the setting into a modern creative portrait: clean gradient backdrop with soft colored studio lighting, stylish and contemporary.",
 };
-const IDENTITY_LOCK =
-  " Keep the exact same person and face as in the reference photos: same facial features, " +
-  "same eyes, same nose, same mouth, same face shape, same skin tone and same natural hair. " +
-  "Do not beautify or change the identity. Photorealistic, natural skin texture, looking at the camera, family-friendly.";
+const FACE_LOCK =
+  " Preserve the person's exact face and identity from the reference photo with total fidelity: " +
+  "the same facial features, same eyes, same nose, same mouth, same jawline and face shape, " +
+  "the same age with the same natural skin including its real texture and lines, the same hairstyle " +
+  "and hair colour, and the same warm smile. Do NOT beautify, slim, smooth, retouch, restyle the hair, " +
+  "or make the person look younger or different in any way. The result must be immediately recognisable " +
+  "as the exact same person. Photorealistic, natural skin texture, sharp focus, head and shoulders, " +
+  "looking at the camera, family-friendly.";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -86,7 +91,7 @@ export async function onRequestPost(context) {
   const gate = await enforceHeadshotApp(context);
   if (!gate.ok) return json({ error: gate.error, needCredits: gate.needCredits || false }, gate.status);
 
-  const prompt = ("Turn the person in the reference photos into " + style + "." + IDENTITY_LOCK).slice(0, 900);
+  const prompt = ("Keep the person from the reference photo exactly as they are. " + style + FACE_LOCK).slice(0, 950);
   const size = env.HEADSHOT_IMAGE_SIZE || "1024x1536";
   const quality = env.HEADSHOT_IMAGE_QUALITY || "medium";
 
@@ -95,6 +100,8 @@ export async function onRequestPost(context) {
   fd.append("prompt", prompt);
   fd.append("size", size);
   fd.append("quality", quality);
+  // input_fidelity: high bevarer ansiktstrekk fra referansebildet mye bedre.
+  fd.append("input_fidelity", env.HEADSHOT_INPUT_FIDELITY || "high");
   fd.append("n", "1");
   refs.forEach((ref, i) => {
     const ext = ref.ct === "image/png" ? ".png" : ref.ct === "image/webp" ? ".webp" : ".jpg";
