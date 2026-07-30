@@ -248,7 +248,12 @@
   }
   function toggleLang(){ LANG=LANG==='no'?'en':'no'; try{localStorage.setItem('lme_lang',LANG);}catch(e){} applyLang(); }
   $('obLang').addEventListener('click',toggleLang); $('appLang').addEventListener('click',toggleLang); $('accLang').addEventListener('click',toggleLang);
-  $('startBtn').addEventListener('click',function(){ $('onboarding').style.display='none'; $('app').classList.add('show'); loadState(); });
+  var ENTERED=false;
+  function enterApp(){ if(ENTERED) return; ENTERED=true; try{localStorage.setItem('hs_entered','1');}catch(e){} $('onboarding').style.display='none'; $('app').classList.add('show'); loadState(); }
+  $('startBtn').addEventListener('click', enterApp);
+  // Hopp rett inn for de som har vært inne før, og for eier.
+  try{ if(localStorage.getItem('hs_entered')==='1') enterApp(); }catch(e){}
+  fetch('/api/headshot',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){ if(d&&d.owner) enterApp(); }).catch(function(){});
 
   document.querySelectorAll('.tabbar button').forEach(function(b){ b.addEventListener('click',function(){ document.querySelectorAll('.tabbar button').forEach(function(x){x.classList.remove('on');}); b.classList.add('on'); document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');}); $(b.getAttribute('data-screen')).classList.add('active'); window.scrollTo(0,0); }); });
   $('styleChips').addEventListener('click',function(e){ var c=e.target.closest('.len-chip'); if(!c)return; $('styleChips').querySelectorAll('.len-chip').forEach(function(x){x.classList.remove('on');}); c.classList.add('on'); STYLE=c.getAttribute('data-style'); });
