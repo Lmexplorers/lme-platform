@@ -109,13 +109,21 @@ export async function onRequestPost(context) {
     fd.append("image[]", new Blob([ref.bytes], { type: ref.ct }), "ref" + i + ext);
   });
 
-  let res, data;
+  let res, data, timedOut = false;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => { timedOut = true; ctrl.abort(); }, 85000);
   try {
-    res = await fetch(OPENAI_EDITS, { method: "POST", headers: { "Authorization": "Bearer " + env.OPENAI_API_KEY }, body: fd });
-    data = await res.json();
+    res = await fetch(OPENAI_EDITS, { method: "POST", headers: { "Authorization": "Bearer " + env.OPENAI_API_KEY }, body: fd, signal: ctrl.signal });
+    const t = await res.text();
+    try { data = JSON.parse(t); } catch (e) { data = null; }
   } catch (e) {
     if (!gate.owner) await refundImageCredit(context, gate.email);
-    return json({ error: "Kom ikke i kontakt med bildemotoren. Kreditten er refundert." }, 502);
+    const msg = timedOut
+      ? "Bildemotoren brukte for lang tid denne gangen. Kreditten er refundert, prøv en gang til."
+      : "Kom ikke i kontakt med bildemotoren. Kreditten er refundert.";
+    return json({ error: msg }, 200);
+  } finally {
+    clearTimeout(timer);
   }
   const b64 = data && data.data && data.data[0] && data.data[0].b64_json;
   if (!res.ok || !b64) {
