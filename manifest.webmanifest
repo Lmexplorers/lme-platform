@@ -23,8 +23,8 @@
       "icons": [{ "src": "/images/app/icon-192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Akademiet",
-      "url": "/academy",
+      "name": "Kurs",
+      "url": "/kurs",
       "icons": [{ "src": "/images/app/icon-192.png", "sizes": "192x192" }]
     },
     {

@@ -164,7 +164,7 @@ window.LME_FUNNEL = {
       bonusKnapp: "Last ned oppskriftspakken (PDF)",
       bonusLenke: "/funnel/nedlasting/LME-Claude-oppskrifter.pdf",   // tospråklig oppskriftspakke
       sekundaerKnapp: "Til kurs",
-      sekundaerLenke: "/academy",
+      sekundaerLenke: "/kurs",
       support: "Spørsmål? Svar på e-posten du nettopp fikk, så hjelper jeg deg."
     }
   },
@@ -301,7 +301,7 @@ window.LME_FUNNEL = {
       bonusKnapp: "Download the recipe pack (PDF)",
       bonusLenke: "/funnel/nedlasting/LME-Claude-oppskrifter.pdf",   // bilingual recipe pack
       sekundaerKnapp: "To Classes",
-      sekundaerLenke: "/academy",
+      sekundaerLenke: "/kurs",
       support: "Questions? Just reply to the email you received, and I'll help you."
     }
   }
