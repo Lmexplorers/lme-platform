@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LME Admin — Opprett bruker</title>
+  <style>
+    body { font-family: 'Sasson Montessori', system-ui, sans-serif; padding: 20px; max-width: 500px; margin: 0 auto; }
+    h1 { font-family: 'Playpen Sans', system-ui, sans-serif; }
+    .form-group { margin: 20px 0; }
+    label { display: block; font-weight: bold; margin-bottom: 5px; }
+    input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
+    button { background: #4CAF50; color: white; padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+    button:hover { background: #45a049; }
+    .success { background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-top: 20px; }
+    .error { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-top: 20px; }
+    .info { background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <h1>📝 Opprett bruker</h1>
+
+  <div class="info">
+    <strong>Merk:</strong> Du må være logget inn som owner for å bruke denne siden.
+  </div>
+
+  <form id="userForm">
+    <div class="form-group">
+      <label for="name">Navn:</label>
+      <input type="text" id="name" name="name" value="Carrie Green" required>
+    </div>
+
+    <div class="form-group">
+      <label for="email">E-post:</label>
+      <input type="email" id="email" name="email" value="carriegreen@femaleentrepreneurassosiation.com" required>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Passord:</label>
+      <input type="text" id="password" name="password" value="9d9c8ffd59bba211e639eaa4fee4bdbd" required>
+    </div>
+
+    <div class="form-group">
+      <label for="role">Rolle:</label>
+      <select id="role" name="role" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+        <option value="owner">Owner (Full tilgang)</option>
+        <option value="customer">Customer (Normal bruker)</option>
+      </select>
+    </div>
+
+    <button type="submit">Opprett bruker</button>
+  </form>
+
+  <div id="message"></div>
+
+  <script>
+    document.getElementById('userForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const data = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value,
+        role: document.getElementById('role').value
+      };
+
+      try {
+        const response = await fetch('/api/admin/create-user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+          credentials: 'include'
+        });
+
+        const result = await response.json();
+        const msgDiv = document.getElementById('message');
+
+        if (response.ok) {
+          msgDiv.className = 'success';
+          msgDiv.innerHTML = `<strong>✅ Bruker opprettet!</strong><br>
+            E-post: ${result.user.email}<br>
+            Navn: ${result.user.name}<br>
+            Rolle: ${result.user.role}`;
+        } else {
+          msgDiv.className = 'error';
+          msgDiv.innerHTML = `<strong>❌ Feil:</strong> ${result.error}`;
+        }
+      } catch (err) {
+        document.getElementById('message').className = 'error';
+        document.getElementById('message').innerHTML = `<strong>❌ Feil:</strong> ${err.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
