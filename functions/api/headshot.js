@@ -29,18 +29,27 @@ const STYLES = {
   outdoor:   "Restyle only the setting into a natural outdoor lifestyle portrait: softly blurred green background in warm, soft golden-hour light.",
   creative:  "Restyle only the setting into a modern creative portrait: clean gradient backdrop with soft flattering colored studio lighting, stylish and contemporary.",
 };
-const FACE_LOCK =
+// Felles kjerne: alltid ekte foto, ekte hud, samme person og lyst blondt hår.
+const CORE =
   " This must look like a REAL photograph taken by a professional photographer, absolutely not a render, " +
-  "not AI, not airbrushed and not a doll. Keep natural, realistic skin with real texture, real pores, " +
-  "fine lines and natural detail. Do NOT smooth, retouch, airbrush, plasticise or beautify the skin, and " +
-  "never give it a waxy, glossy or doll-like plastic look. Keep the exact same person, face shape, bone " +
-  "structure, age and identity as in the reference photo, clearly and unmistakably recognisable: the same " +
-  "eyes, nose, mouth, warm smile and features. Keep her LIGHT BLONDE hair the exact same light blonde " +
-  "colour, do NOT darken it or turn it brown. Flatter her ONLY through soft, natural professional lighting " +
-  "and a flattering, slightly elevated, subtly slimming camera angle and portrait lens that removes " +
-  "close-up selfie distortion. Do NOT add weight, roundness or fullness to her face, cheeks, chin, jaw or " +
-  "neck, and do NOT change her face or make her younger or different. Photorealistic, authentic, natural, " +
-  "head and shoulders, looking at the camera, family-friendly.";
+  "not AI, not airbrushed and not a doll. Keep natural, realistic skin with real texture, real pores and " +
+  "fine detail; never a waxy, glossy or plastic look. Keep the exact same person, face shape, features " +
+  "and identity as in the reference photo, clearly and unmistakably recognisable as herself. Keep her " +
+  "LIGHT BLONDE hair the exact same light blonde colour, do NOT darken it or turn it brown. Flatter her " +
+  "only through lighting and a flattering camera angle and portrait lens (removing close-up selfie " +
+  "distortion), never by distorting the face. Photorealistic, authentic, natural, head and shoulders, " +
+  "looking at the camera, family-friendly.";
+// Nivå brukeren styrer selv (bryteren i appen).
+const LOOKS = {
+  natural: " Stay as true to the reference as possible: keep her exactly as she is, the same age and the " +
+    "same face, and only improve the lighting and the background. Do NOT slim, smooth or beautify her.",
+  balanced: " Use soft flattering light and a subtly slimming, slightly elevated portrait angle, so she " +
+    "looks like herself on a good, well-lit day, while staying fully realistic and the same age. Do not " +
+    "add weight or fullness to the face.",
+  glam: " Use flattering light and a gently slimming portrait angle for a slightly slimmer, fresher and " +
+    "a little more youthful impression, while still clearly and recognisably her and fully realistic, " +
+    "never plastic, smoothed or doll-like.",
+};
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -79,6 +88,8 @@ export async function onRequestPost(context) {
   try { body = await request.json(); } catch { return json({ error: "Ugyldig JSON" }, 400); }
   const styleKey = String(body.style || "business").toLowerCase();
   const style = STYLES[styleKey] || STYLES.business;
+  const lookKey = String(body.look || "balanced").toLowerCase();
+  const look = LOOKS[lookKey] || LOOKS.balanced;
   const urls = Array.isArray(body.images) ? body.images.filter((u) => /^https?:\/\/|^\//.test(String(u))).slice(0, MAX_REFS) : [];
 
   const acc = await headshotAppAccess(context);
@@ -96,7 +107,7 @@ export async function onRequestPost(context) {
   const gate = await enforceHeadshotApp(context);
   if (!gate.ok) return json({ error: gate.error, needCredits: gate.needCredits || false }, gate.status);
 
-  const prompt = ("Create a polished, flattering professional headshot of the person from the reference photo. " + style + FACE_LOCK).slice(0, 980);
+  const prompt = ("Create a professional headshot of the person from the reference photo. " + style + look + CORE).slice(0, 1000);
   const size = env.HEADSHOT_IMAGE_SIZE || "1024x1536";
   const quality = env.HEADSHOT_IMAGE_QUALITY || "medium";
 

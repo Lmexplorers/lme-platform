@@ -268,6 +268,15 @@
           <button class="len-chip" data-style="creative" data-no="🎨 Kreativ" data-en="🎨 Creative">🎨 Kreativ</button>
         </div>
       </div>
+
+      <div class="field">
+        <label class="lab" data-no="3. Hvor naturlig eller smigrende?" data-en="3. How natural or flattering?">3. Hvor naturlig eller smigrende?</label>
+        <div class="chips" id="hsLookChips">
+          <button class="len-chip" data-look="natural" data-no="Så lik som mulig" data-en="As true as possible">Så lik som mulig</button>
+          <button class="len-chip on" data-look="balanced" data-no="Naturlig og fin" data-en="Natural and nice">Naturlig og fin</button>
+          <button class="len-chip" data-look="glam" data-no="Litt slankere og yngre" data-en="A bit slimmer and younger">Litt slankere og yngre</button>
+        </div>
+      </div>
       <button class="gen-btn" id="hsGenBtn"><span>⚡</span><span data-no="Lag headshot" data-en="Make headshot">Lag headshot</span> <span class="cost">(1 <span data-no="kreditt" data-en="credit">kreditt</span>)</span></button>
 
       <div class="msg" id="hsMsg"></div>
@@ -348,7 +357,7 @@
   });
 
   /* ===== HEADSHOT-FANE (OpenAI gpt-image-1, gjenbruker /api/image + /api/headshot) ===== */
-  var HS_STYLE='business', HS_TRAIN=[], HS_SELECTED='', HS_RESULT_URL='', HS_BUSY=false, HS_LOADED=false;
+  var HS_STYLE='business', HS_LOOK='balanced', HS_TRAIN=[], HS_SELECTED='', HS_RESULT_URL='', HS_BUSY=false, HS_LOADED=false;
   var HS_ACCESS={ loggedIn:false, owner:false, credit:{image:0,video:0} };
   function loadHs(){
     if(!HS_LOADED) hsRestoreTrain();
@@ -359,6 +368,7 @@
   }
   function renderHsBanner(){ var b=$('hsBanner'); if(!b)return; b.innerHTML=''; if(HS_ACCESS.owner){ b.innerHTML='<div class="balance">👑 '+L('Eier, gratis','Owner, free')+'</div>'; return; } if(!HS_ACCESS.loggedIn){ b.innerHTML='<div class="msg err">'+L('Logg inn med LME-kontoen din for å lage headshots.','Log in with your LME account to make headshots.')+'</div>'; return; } b.innerHTML='<div class="balance">📸 '+L('Bilde-kreditter: ','Image credits: ')+((HS_ACCESS.credit&&HS_ACCESS.credit.image)||0)+'</div>'; }
   $('hsStyleChips').addEventListener('click',function(e){ var c=e.target.closest('.len-chip'); if(!c)return; $('hsStyleChips').querySelectorAll('.len-chip').forEach(function(x){x.classList.remove('on');}); c.classList.add('on'); HS_STYLE=c.getAttribute('data-style'); });
+  $('hsLookChips').addEventListener('click',function(e){ var c=e.target.closest('.len-chip'); if(!c)return; $('hsLookChips').querySelectorAll('.len-chip').forEach(function(x){x.classList.remove('on');}); c.classList.add('on'); HS_LOOK=c.getAttribute('data-look'); });
   $('hsDrop').addEventListener('click',function(){ $('hsFile').click(); });
   $('hsFile').addEventListener('change',function(){
     var files=this.files?Array.prototype.slice.call(this.files):[]; if(!files.length) return;
@@ -394,7 +404,7 @@
     var pick=HS_SELECTED||HS_TRAIN[0];
     if(!HS_ACCESS.owner && HS_ACCESS.loggedIn && (((HS_ACCESS.credit&&HS_ACCESS.credit.image)||0)<=0)){ $('hsMsg').className='msg err'; $('hsMsg').innerHTML=L('Du har ingen bilde-kreditter. Kjøp på ','You have no image credits. Buy them at ')+'<a href="/kjop-kreditt">/kjop-kreditt</a>.'; return; }
     hsSetBusy(true); $('hsResult').classList.remove('show'); $('hsMsg').className='msg info'; $('hsMsg').textContent=L('Lager headshotet ditt … dette tar gjerne et minutt.','Making your headshot … this usually takes about a minute.');
-    fetch('/api/headshot',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({style:HS_STYLE,images:[pick]})})
+    fetch('/api/headshot',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({style:HS_STYLE,look:HS_LOOK,images:[pick]})})
       .then(function(r){return r.json();})
       .then(function(d){ hsSetBusy(false);
         if(d&&d.status==='completed'&&d.url){ $('hsMsg').textContent=''; HS_RESULT_URL=d.url; $('hsResultImg').src=d.url; $('hsDownload').href=d.url; $('hsResult').classList.add('show'); if(typeof d.credit==='number'&&HS_ACCESS.credit){HS_ACCESS.credit.image=d.credit;renderHsBanner();} $('hsResult').scrollIntoView({behavior:'smooth',block:'center'}); return; }
