@@ -1,3 +1,5 @@
+/kurs/*  /kurs/:splat  200
+/kurs  /kurs/index.html  200
 /academy/*  /kurs/:splat  301
 /academy  /kurs  301
 /medlemskap  https://lme-inner-circle.lmexplorers.workers.dev/medlemskap  302
