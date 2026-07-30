@@ -11,6 +11,7 @@
     '  <a href="/creative-academy#oversikt" class="sidebar-item"><span class="si-icon">🏡</span><span class="si-label" data-no="Oversikt" data-en="Overview">Oversikt</span></a>',
     '  <a href="/creative-academy#tutorials" class="sidebar-item"><span class="si-icon">🎓</span><span class="si-label">Tutorials</span></a>',
     '  <a href="/utforsk" class="sidebar-item"><span class="si-icon">🧭</span><span class="si-label" data-no="Utforsk" data-en="Explore">Utforsk</span></a>',
+    '  <a href="/roadmap" class="sidebar-item"><span class="si-icon">🗺️</span><span class="si-label" data-no="Veikart" data-en="Roadmap">Veikart</span></a>',
     '</div>',
     '<div class="sidebar-group">',
     '  <div class="sidebar-group-title"><span class="grp-emoji">🛠️</span> <span data-no="Verktøy" data-en="Tools">Verktøy</span></div>',
