@@ -123,7 +123,25 @@ export async function onRequestPost(context) {
     const detail = (data && data.error && data.error.message) ? " (" + String(data.error.message).slice(0, 160) + ")" : "";
     return json({ error: "Bildet kunne ikke lages" + detail + ". Kreditten er refundert." }, 200);
   }
-  return json({ status: "completed", url: "data:image/png;base64," + b64, credit: gate.credit });
+  // Lagre bildet på en ekte adresse (KV, som /api/image) så det kan lastes ned og
+  // deles på mobil. iOS-Safari klarer ikke å laste ned data:-URL-er.
+  let outUrl = "data:image/png;base64," + b64;
+  try {
+    if (env.BUILDER_KV) {
+      const bytes = b64ToBytes(b64);
+      const id = crypto.randomUUID().replace(/-/g, "");
+      await env.BUILDER_KV.put("img:" + id, bytes, { metadata: { ct: "image/png" }, expirationTtl: 60 * 60 * 24 * 30 });
+      outUrl = new URL(request.url).origin + "/api/image?id=" + id;
+    }
+  } catch (e) {}
+  return json({ status: "completed", url: outUrl, credit: gate.credit });
+}
+
+function b64ToBytes(b64) {
+  const bin = atob(b64);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
 }
 
 // ---- GET: tilgang/kreditt ----

@@ -270,7 +270,7 @@
       <div class="msg" id="hsMsg"></div>
       <div class="result" id="hsResult">
         <img id="hsResultImg" alt="" style="width:100%;border-radius:var(--r-lg);border:1px solid var(--line);box-shadow:var(--shadow-md);">
-        <a class="dlbtn" id="hsDownload" download="lme-headshot.png"><span>⬇️</span><span data-no="Last ned bildet" data-en="Download the image">Last ned bildet</span></a>
+        <a class="dlbtn" id="hsDownload" download="lme-headshot.png"><span>⬇️</span><span data-no="Lagre bildet" data-en="Save the image">Lagre bildet</span></a>
       </div>
     </section>
 
@@ -345,7 +345,7 @@
   });
 
   /* ===== HEADSHOT-FANE (OpenAI gpt-image-1, gjenbruker /api/image + /api/headshot) ===== */
-  var HS_STYLE='business', HS_TRAIN=[], HS_SELECTED='', HS_BUSY=false, HS_LOADED=false;
+  var HS_STYLE='business', HS_TRAIN=[], HS_SELECTED='', HS_RESULT_URL='', HS_BUSY=false, HS_LOADED=false;
   var HS_ACCESS={ loggedIn:false, owner:false, credit:{image:0,video:0} };
   function loadHs(){
     if(!HS_LOADED) hsRestoreTrain();
@@ -394,9 +394,26 @@
     fetch('/api/headshot',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({style:HS_STYLE,images:[pick]})})
       .then(function(r){return r.json();})
       .then(function(d){ hsSetBusy(false);
-        if(d&&d.status==='completed'&&d.url){ $('hsMsg').textContent=''; $('hsResultImg').src=d.url; $('hsDownload').href=d.url; $('hsResult').classList.add('show'); if(typeof d.credit==='number'&&HS_ACCESS.credit){HS_ACCESS.credit.image=d.credit;renderHsBanner();} $('hsResult').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+        if(d&&d.status==='completed'&&d.url){ $('hsMsg').textContent=''; HS_RESULT_URL=d.url; $('hsResultImg').src=d.url; $('hsDownload').href=d.url; $('hsResult').classList.add('show'); if(typeof d.credit==='number'&&HS_ACCESS.credit){HS_ACCESS.credit.image=d.credit;renderHsBanner();} $('hsResult').scrollIntoView({behavior:'smooth',block:'center'}); return; }
         $('hsMsg').className='msg err'; $('hsMsg').textContent=(d&&d.error)||L('Bildet kunne ikke lages.','The image could not be made.'); if(d&&typeof d.credit==='number'&&HS_ACCESS.credit){HS_ACCESS.credit.image=d.credit;renderHsBanner();}
       }).catch(function(){ hsSetBusy(false); $('hsMsg').className='msg err'; $('hsMsg').textContent=L('Noe gikk galt. Prøv igjen.','Something went wrong. Try again.'); });
+  });
+  // Mobilvennlig lagring: bruk telefonens delemeny (der "Lagre bilde" ligger) når
+  // den finnes, ellers vanlig nedlasting, ellers åpne bildet i ny fane.
+  $('hsDownload').addEventListener('click',function(e){
+    var url=HS_RESULT_URL||$('hsDownload').getAttribute('href'); if(!url) return;
+    e.preventDefault();
+    (async function(){
+      try{
+        if(navigator.canShare && typeof fetch==='function'){
+          var resp=await fetch(url); var blob=await resp.blob();
+          var file=new File([blob],'lme-headshot.png',{type:blob.type||'image/png'});
+          if(navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:'LME headshot'}); return; }
+        }
+      }catch(err){ if(err&&err.name==='AbortError') return; }
+      try{ var a=document.createElement('a'); a.href=url; a.download='lme-headshot.png'; document.body.appendChild(a); a.click(); a.remove(); }
+      catch(err2){ window.open(url,'_blank'); }
+    })();
   });
 
   $('platChips').addEventListener('click',function(e){ var c=e.target.closest('.len-chip'); if(!c)return; $('platChips').querySelectorAll('.len-chip').forEach(function(x){x.classList.remove('on');}); c.classList.add('on'); PLATFORM=c.getAttribute('data-plat'); });
