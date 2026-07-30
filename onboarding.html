@@ -607,17 +607,17 @@
     const allSteps = [];
 
     if (goals.includes('learn-theory') || exp === 'curious') {
-      const ageRoute = ages.includes('3-6') ? '/academy/3-6'
-                     : ages.includes('6-9') ? '/academy/6-9'
-                     : ages.includes('9-12') ? '/academy/9-12'
-                     : '/academy/intro';
+      const ageRoute = ages.includes('3-6') ? '/kurs/3-6'
+                     : ages.includes('6-9') ? '/kurs/6-9'
+                     : ages.includes('9-12') ? '/kurs/9-12'
+                     : '/kurs/intro';
       allSteps.push({
-        title: 'Start i Academy',
+        title: 'Start i Kurs',
         desc: exp === 'curious'
           ? 'Begynn med introduksjonskurset for å få grunnprinsippene først.'
           : 'Dykk dypere inn i pedagogikken med Renate som veileder.',
         link: ageRoute,
-        linkText: 'Åpne Academy →',
+        linkText: 'Åpne Kurs →',
         locked: !has(exp === 'curious' ? 'academy_basic' : 'academy_full'),
         lockReason: 'Proff'
       });
