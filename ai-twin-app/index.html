@@ -516,7 +516,7 @@
         if(REEL){ $('msg').className='msg info'; $('msg').textContent=L('Teksten din er klar nedenfor. Prøver å lage video …','Your text is ready below. Trying to make the video …'); startVideo(); }
         else { $('msg').className='msg err'; $('msg').textContent=L('Kunne ikke lese teksten. Prøv igjen.','Could not read the text. Try again.'); }
       })
-      .catch(function(e){ setBusy(false); $('msg').className='msg err'; $('msg').textContent=L('Kunne ikke lage teksten akkurat nå. Prøv igjen.','Could not make the text right now. Try again.'); });
+      .catch(function(e){ setBusy(false); $('msg').className='msg err'; $('msg').textContent=L('Kunne ikke lage teksten akkurat nå. Prøv igjen.','Could not make the text right now. Try again.')+(e&&e.message?' ('+e.message+')':''); });
   });
   // Video er best-effort. Feiler den (f.eks. mangler nøkler), beholder vi teksten
   // og sier bare ifra, uten en skummel generell feil.
