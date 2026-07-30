@@ -30,18 +30,17 @@ const STYLES = {
   creative:  "Restyle only the setting into a modern creative portrait: clean gradient backdrop with soft flattering colored studio lighting, stylish and contemporary.",
 };
 const FACE_LOCK =
-  " Keep the exact same person, face shape, bone structure and identity as in the reference photo, " +
-  "clearly and unmistakably recognisable: the same eyes, nose, mouth, warm smile and features. Keep " +
-  "her LIGHT BLONDE hair the exact same light blonde colour, do NOT darken it or turn it brown. Make " +
-  "her look like herself on her best, well-rested day: soft flattering diffused lighting, fresh healthy " +
-  "rested skin, bright clear eyes, subtle natural makeup, a warm friendly expression, and a flattering " +
-  "portrait angle that removes close-up selfie distortion. Use a flattering, subtly slimming professional " +
-  "headshot angle and lighting: do NOT add any weight, roundness or fullness to her face, cheeks, chin, " +
-  "jaw or neck; keep her face and jawline slim and natural, never rounder or wider than she is. Achieve " +
-  "all of this ONLY by improving the angle, light and the freshness of the skin, NOT by changing her " +
-  "face, her bone structure or her age, and NOT by turning her into a younger, smoother or different " +
-  "person. Do NOT exaggerate wrinkles and do NOT make her look older. She must still look exactly like " +
-  "herself. Photorealistic, natural, head and shoulders, looking at the camera, family-friendly.";
+  " This must look like a REAL photograph taken by a professional photographer, absolutely not a render, " +
+  "not AI, not airbrushed and not a doll. Keep natural, realistic skin with real texture, real pores, " +
+  "fine lines and natural detail. Do NOT smooth, retouch, airbrush, plasticise or beautify the skin, and " +
+  "never give it a waxy, glossy or doll-like plastic look. Keep the exact same person, face shape, bone " +
+  "structure, age and identity as in the reference photo, clearly and unmistakably recognisable: the same " +
+  "eyes, nose, mouth, warm smile and features. Keep her LIGHT BLONDE hair the exact same light blonde " +
+  "colour, do NOT darken it or turn it brown. Flatter her ONLY through soft, natural professional lighting " +
+  "and a flattering, slightly elevated, subtly slimming camera angle and portrait lens that removes " +
+  "close-up selfie distortion. Do NOT add weight, roundness or fullness to her face, cheeks, chin, jaw or " +
+  "neck, and do NOT change her face or make her younger or different. Photorealistic, authentic, natural, " +
+  "head and shoulders, looking at the camera, family-friendly.";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
