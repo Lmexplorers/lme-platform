@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+export async function onRequest(context) {
+  const html = `<!DOCTYPE html>
 <html lang="no">
 <head>
   <meta charset="UTF-8">
@@ -9,8 +10,9 @@
     h1 { font-family: 'Playpen Sans', system-ui, sans-serif; }
     .form-group { margin: 20px 0; }
     label { display: block; font-weight: bold; margin-bottom: 5px; }
-    input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
-    button { background: #4CAF50; color: white; padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+    input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; box-sizing: border-box; }
+    select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; box-sizing: border-box; }
+    button { background: #4CAF50; color: white; padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; width: 100%; }
     button:hover { background: #45a049; }
     .success { background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-top: 20px; }
     .error { background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-top: 20px; }
@@ -42,7 +44,7 @@
 
     <div class="form-group">
       <label for="role">Rolle:</label>
-      <select id="role" name="role" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+      <select id="role" name="role">
         <option value="owner">Owner (Full tilgang)</option>
         <option value="customer">Customer (Normal bruker)</option>
       </select>
@@ -77,19 +79,27 @@
 
         if (response.ok) {
           msgDiv.className = 'success';
-          msgDiv.innerHTML = `<strong>✅ Bruker opprettet!</strong><br>
-            E-post: ${result.user.email}<br>
-            Navn: ${result.user.name}<br>
-            Rolle: ${result.user.role}`;
+          msgDiv.innerHTML = \`<strong>✅ Bruker opprettet!</strong><br>
+            E-post: \${result.user.email}<br>
+            Navn: \${result.user.name}<br>
+            Rolle: \${result.user.role}\`;
         } else {
           msgDiv.className = 'error';
-          msgDiv.innerHTML = `<strong>❌ Feil:</strong> ${result.error}`;
+          msgDiv.innerHTML = \`<strong>❌ Feil:</strong> \${result.error}\`;
         }
       } catch (err) {
         document.getElementById('message').className = 'error';
-        document.getElementById('message').innerHTML = `<strong>❌ Feil:</strong> ${err.message}`;
+        document.getElementById('message').innerHTML = \`<strong>❌ Feil:</strong> \${err.message}\`;
       }
     });
   </script>
 </body>
-</html>
+</html>`;
+
+  return new Response(html, {
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': 'no-store'
+    }
+  });
+}
