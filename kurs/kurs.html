@@ -1760,7 +1760,7 @@
           retry.onclick = function () { location.reload(); };
           back.appendChild(retry);
           var a = el('a', 'btn-primary', en ? '← All courses' : '← Alle kurs');
-          a.href = '/academy';
+          a.href = '/kurs';
           back.appendChild(a);
           root.appendChild(back);
           var tek = el('p', null, 'Teknisk: adresse "' + (slug || '(tom)') + '"' + (sistSvar ? ', svar fra skyen: ' + sistSvar : ''));
@@ -1861,7 +1861,7 @@
         var ot = pick(course.outro && course.outro.text);
         if (ot.trim()) next.appendChild(el('p', null, ot));
         var back2 = el('a', 'btn-primary', en ? '← Back to the academy' : '← Tilbake til akademiet');
-        back2.href = '/academy';
+        back2.href = '/kurs';
         next.appendChild(back2);
         root.appendChild(next);
 
@@ -1923,7 +1923,7 @@
             });
             var back = el('div', 'crs-next');
             var ba = el('a', 'btn-primary', en ? '← Back to the academy' : '← Tilbake til akademiet');
-            ba.href = '/academy';
+            ba.href = '/kurs';
             back.appendChild(ba);
             root.appendChild(back);
           })
