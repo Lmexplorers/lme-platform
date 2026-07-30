@@ -5,7 +5,7 @@
      versjoneres med ?v= ved endring).
    - API-kall og alt annet: alltid rett paa nett, aldri hurtiglagret. */
 
-var VERSION = 'lme-sw-v4';
+var VERSION = 'lme-sw-v5';
 var STATIC_CACHE = VERSION + '-static';
 var PAGE_CACHE = VERSION + '-pages';
 
