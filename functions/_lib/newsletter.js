@@ -152,13 +152,13 @@ const MESTERKLASSE_SERIES = [
     no: { subject: "Klar for mer? Kursene venter på deg",
       html: mk("Hei {name},",
         "Hvis du har fått lyst på mer, ligger alle kursene klare for deg, i ditt eget tempo. Der tar jeg deg dypere inn i hver alder og hvert område, rolig og praktisk. Og skulle du ønske deg litt selskap på veien, er du hjertelig velkommen inn i fellesskapet vårt.",
-        SITE + "/academy", "Se alle kursene", "Klem fra Renate"),
-      text: "Hei {name},\n\nAlle kursene ligger klare for deg, i ditt eget tempo:\n" + SITE + "/academy\n\nKlem fra Renate" },
+        SITE + "/kurs", "Se alle kursene", "Klem fra Renate"),
+      text: "Hei {name},\n\nAlle kursene ligger klare for deg, i ditt eget tempo:\n" + SITE + "/kurs\n\nKlem fra Renate" },
     en: { subject: "Ready for more? The courses are waiting for you",
       html: mk("Hi {name},",
         "If you are hungry for more, all the courses are ready for you, at your own pace. There I take you deeper into each age and each area, calmly and practically. And if you would like some company along the way, you are warmly welcome into our community.",
-        SITE + "/academy", "See all the courses", "Warm wishes, Renate"),
-      text: "Hi {name},\n\nAll the courses are ready for you, at your own pace:\n" + SITE + "/academy\n\nWarm wishes, Renate" },
+        SITE + "/kurs", "See all the courses", "Warm wishes, Renate"),
+      text: "Hi {name},\n\nAll the courses are ready for you, at your own pace:\n" + SITE + "/kurs\n\nWarm wishes, Renate" },
   },
 ];
 
