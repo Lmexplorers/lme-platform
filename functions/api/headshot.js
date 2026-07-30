@@ -17,7 +17,9 @@ import { enforceHeadshotApp, refundImageCredit, headshotAppAccess } from "../_li
  */
 
 const RE_BASE = "https://api.replicate.com";
-const DEFAULT_MODEL = "zsxkib/instant-id";
+// PuLID Flux: ett bilde -> identitetsbevarende portrett (som OpenArt). Feltet
+// main_face_image er selfien, id_weight styrer hvor likt det blir deg.
+const DEFAULT_MODEL = "zsxkib/flux-pulid";
 const JOB_PREFIX = "hsjob:";
 
 // Stil-oppskrifter. Identiteten kommer fra selfien (InstantID); prompten styrer
@@ -79,16 +81,23 @@ export async function onRequestPost(context) {
   if (!gate.ok) return json({ error: gate.error, needCredits: gate.needCredits || false }, gate.status);
 
   const model = String(env.REPLICATE_HEADSHOT_MODEL || DEFAULT_MODEL).replace(/[^a-zA-Z0-9._\/-]/g, "");
+  // PuLID Flux-input. id_weight kan finjusteres (høyere = mer likhet), her via
+  // REPLICATE_ID_WEIGHT om ønskelig.
+  const idWeight = Number(env.REPLICATE_ID_WEIGHT) > 0 ? Number(env.REPLICATE_ID_WEIGHT) : 1;
   const payload = {
     input: {
-      image: imageUrl,
+      main_face_image: imageUrl,
       prompt: prompt,
       negative_prompt: NEG,
-      ip_adapter_scale: 0.8,
-      controlnet_conditioning_scale: 0.8,
-      guidance_scale: 5,
-      num_inference_steps: 30,
+      id_weight: idWeight,
+      width: 896,
+      height: 1152,
+      num_steps: 20,
+      guidance_scale: 4,
+      true_cfg: 1,
       num_outputs: 1,
+      output_format: "jpg",
+      output_quality: 92,
     },
   };
 
