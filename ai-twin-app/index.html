@@ -95,6 +95,12 @@
   .twin-preview img{width:100%;display:block;}
   .twin-preview .change{position:absolute;top:10px;right:10px;background:rgba(31,27,36,.6);color:#fff;font-size:12px;font-weight:700;padding:7px 12px;border-radius:var(--r-pill);}
   .hidden{display:none;}
+  .hsph{font-size:13px;color:var(--ink-soft);margin-bottom:10px;}
+  .hsthumbs{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .hsthumbs img{width:58px;height:58px;object-fit:cover;border-radius:10px;border:1px solid var(--line);}
+  .hsthumbs .count{font-size:12.5px;font-weight:700;color:var(--ink-soft);align-self:center;}
+  .hsok{background:var(--lime-soft);color:#4d6b0f;border:1px solid #d7e9b5;border-radius:var(--r-md);padding:12px 15px;font-size:13.5px;font-weight:700;margin-bottom:14px;}
+  .hslink{display:block;width:100%;text-align:center;font-size:13.5px;font-weight:700;color:var(--ink-soft);padding:12px;margin-top:8px;}
 
   .gen-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:8px;font-size:16.5px;font-weight:800;padding:17px;border-radius:var(--r-pill);background:var(--grad);color:#fff;box-shadow:0 12px 26px rgba(233,30,137,.3);transition:transform .15s ease;}
   .gen-btn:active{transform:scale(.985);}
@@ -233,6 +239,47 @@
       </div>
     </section>
 
+    <section class="screen" id="s-headshot">
+      <h2 class="title" data-no="Proffe headshots" data-en="Pro headshots">Proffe headshots</h2>
+      <p class="lead" data-no="Tren tvillingen din én gang, så lager du proffe portretter i mange stiler." data-en="Train your twin once, then make professional portraits in many styles.">Tren tvillingen din én gang, så lager du proffe portretter i mange stiler.</p>
+      <div id="hsBanner"></div>
+
+      <div id="hsTrain">
+        <div class="field">
+          <label class="lab" data-no="1. Tren tvillingen din (én gang)" data-en="1. Train your twin (once)">1. Tren tvillingen din (én gang)</label>
+          <div class="hsph" data-no="Last opp 5 til 20 tydelige bilder av ansiktet ditt, gjerne ulike vinkler og lys." data-en="Upload 5 to 20 clear photos of your face, ideally varied angles and light.">Last opp 5 til 20 tydelige bilder av ansiktet ditt, gjerne ulike vinkler og lys.</div>
+          <button class="drop" id="hsDrop" type="button"><div class="em">📸</div><p data-no="Trykk for å velge bilder (5 til 20)" data-en="Tap to choose photos (5 to 20)">Trykk for å velge bilder (5 til 20)</p></button>
+          <div class="hsthumbs" id="hsThumbs"></div>
+          <input type="file" id="hsFile" accept="image/*" multiple class="hidden">
+        </div>
+        <button class="gen-btn" id="hsTrainBtn"><span>✨</span><span data-no="Tren tvillingen" data-en="Train the twin">Tren tvillingen</span></button>
+        <div class="msg" id="hsTrainMsg"></div>
+      </div>
+
+      <div id="hsGen" style="display:none;">
+        <div class="hsok" data-no="✅ Tvillingen din er klar. Velg en stil og lag headshots som ligner deg." data-en="✅ Your twin is ready. Pick a style and make headshots that look like you.">✅ Tvillingen din er klar.</div>
+        <div class="field">
+          <label class="lab" data-no="Velg stil" data-en="Pick a style">Velg stil</label>
+          <div class="chips" id="hsStyleChips">
+            <button class="len-chip on" data-style="business">💼 Business</button>
+            <button class="len-chip" data-style="linkedin">🔷 LinkedIn</button>
+            <button class="len-chip" data-style="portrait" data-no="✨ Portrett" data-en="✨ Portrait">✨ Portrett</button>
+            <button class="len-chip" data-style="bw" data-no="🖤 Sort-hvitt" data-en="🖤 Black & white">🖤 Sort-hvitt</button>
+            <button class="len-chip" data-style="outdoor" data-no="🌿 Ute" data-en="🌿 Outdoor">🌿 Ute</button>
+            <button class="len-chip" data-style="creative" data-no="🎨 Kreativ" data-en="🎨 Creative">🎨 Kreativ</button>
+          </div>
+        </div>
+        <button class="gen-btn" id="hsGenBtn"><span>⚡</span><span data-no="Lag headshot" data-en="Make headshot">Lag headshot</span> <span class="cost">(1 <span data-no="kreditt" data-en="credit">kreditt</span>)</span></button>
+        <button class="hslink" id="hsRetrain" data-no="Tren på nytt med andre bilder" data-en="Retrain with other photos">Tren på nytt med andre bilder</button>
+      </div>
+
+      <div class="msg" id="hsMsg"></div>
+      <div class="result" id="hsResult">
+        <img id="hsResultImg" alt="" style="width:100%;border-radius:var(--r-lg);border:1px solid var(--line);box-shadow:var(--shadow-md);">
+        <a class="dlbtn" id="hsDownload" download><span>⬇️</span><span data-no="Last ned bildet" data-en="Download the image">Last ned bildet</span></a>
+      </div>
+    </section>
+
     <section class="screen" id="s-account">
       <h2 class="title" data-no="Konto" data-en="Account">Konto</h2>
       <div class="plan"><div class="p1">LME AI Twin</div><div class="p2" id="planText" data-no="Logg inn for å se kredittene dine." data-en="Log in to see your credits.">Logg inn for å se kredittene dine.</div></div>
@@ -260,7 +307,8 @@
     </section>
 
     <nav class="tabbar">
-      <button class="on" data-screen="s-make"><span class="ti">🧑‍🎤</span><span data-no="Lag" data-en="Make">Lag</span></button>
+      <button class="on" data-screen="s-make"><span class="ti">🎬</span><span data-no="Reel" data-en="Reel">Reel</span></button>
+      <button data-screen="s-headshot"><span class="ti">📸</span><span data-no="Headshot" data-en="Headshot">Headshot</span></button>
       <button data-screen="s-account"><span class="ti">👤</span><span data-no="Konto" data-en="Account">Konto</span></button>
     </nav>
   </div>
@@ -297,9 +345,74 @@
     b.addEventListener('click',function(){
       document.querySelectorAll('.tabbar button').forEach(function(x){x.classList.remove('on');}); b.classList.add('on');
       document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');}); $(b.getAttribute('data-screen')).classList.add('active');
+      if(b.getAttribute('data-screen')==='s-headshot') loadHs();
       window.scrollTo(0,0);
     });
   });
+
+  /* ===== HEADSHOT-FANE (trent Higgsfield Soul, gjenbruker /api/soul + /api/headshot) ===== */
+  var HS_STYLE='business', HS_TRAIN=[], HS_TRAINING=false, HS_BUSY=false, HS_LOADED=false;
+  var HS_ACCESS={ loggedIn:false, owner:false, hasSoul:false, credit:{image:0,video:0} };
+  function loadHs(){
+    fetch('/api/headshot',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){
+      if(d){ HS_ACCESS.loggedIn=!!d.loggedIn; HS_ACCESS.owner=!!d.owner; HS_ACCESS.hasSoul=!!d.hasSoul; HS_ACCESS.credit=d.credit||{image:0,video:0}; }
+      renderHsBanner(); showHsStage(); HS_LOADED=true;
+    }).catch(function(){});
+  }
+  function showHsStage(){ if(HS_ACCESS.hasSoul){ $('hsTrain').style.display='none'; $('hsGen').style.display='block'; } else { $('hsTrain').style.display='block'; $('hsGen').style.display='none'; } }
+  function renderHsBanner(){ var b=$('hsBanner'); if(!b)return; b.innerHTML=''; if(HS_ACCESS.owner){ b.innerHTML='<div class="balance">👑 '+L('Eier, gratis','Owner, free')+'</div>'; return; } if(!HS_ACCESS.loggedIn){ b.innerHTML='<div class="msg err">'+L('Logg inn med LME-kontoen din for å lage headshots.','Log in with your LME account to make headshots.')+'</div>'; return; } b.innerHTML='<div class="balance">📸 '+L('Bilde-kreditter: ','Image credits: ')+((HS_ACCESS.credit&&HS_ACCESS.credit.image)||0)+'</div>'; }
+  $('hsStyleChips').addEventListener('click',function(e){ var c=e.target.closest('.len-chip'); if(!c)return; $('hsStyleChips').querySelectorAll('.len-chip').forEach(function(x){x.classList.remove('on');}); c.classList.add('on'); HS_STYLE=c.getAttribute('data-style'); });
+  $('hsDrop').addEventListener('click',function(){ $('hsFile').click(); });
+  $('hsFile').addEventListener('change',function(){
+    var files=this.files?Array.prototype.slice.call(this.files):[]; if(!files.length) return;
+    files.forEach(function(f){ if(HS_TRAIN.length>=20) return; downscale(f,function(dataUrl){
+      var ph=document.createElement('img'); ph.src=dataUrl; ph.style.opacity='.45'; $('hsThumbs').insertBefore(ph,$('hsThumbs').firstChild);
+      fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({upload:dataUrl,contentType:'image/jpeg'})})
+        .then(function(r){return r.json();}).then(function(d){ if(d&&d.url){ HS_TRAIN.push(d.url); ph.style.opacity='1'; hsCount(); } else ph.remove(); }).catch(function(){ ph.remove(); });
+    }); });
+    this.value='';
+  });
+  function hsCount(){ var host=$('hsThumbs'); var c=host.querySelector('.count'); if(!c){ c=document.createElement('span'); c.className='count'; host.appendChild(c); } c.textContent=HS_TRAIN.length+' '+L('bilder','photos'); }
+  $('hsTrainBtn').addEventListener('click',function(){
+    if(HS_TRAINING) return;
+    if(HS_TRAIN.length<5){ $('hsTrainMsg').className='msg err'; $('hsTrainMsg').textContent=L('Last opp minst 5 bilder (helst 10 til 20).','Upload at least 5 photos (ideally 10 to 20).'); return; }
+    HS_TRAINING=true; var b=$('hsTrainBtn'); b.disabled=true; b.innerHTML='<span class="spinner"></span> '+L('Trener tvillingen … noen minutter','Training the twin … a few minutes');
+    $('hsTrainMsg').className='msg info'; $('hsTrainMsg').textContent=L('Starter trening …','Starting training …');
+    fetch('/api/soul',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({images:HS_TRAIN})})
+      .then(function(r){return r.json();}).then(function(d){ if(!d||d.error||!d.id){ hsEndTrain(false,(d&&d.error)||L('Kunne ikke starte trening.','Could not start training.')); return; } $('hsTrainMsg').textContent=L('Trener … vent her, det tar noen minutter.','Training … wait here, it takes a few minutes.'); hsPollTrain(d.id,0); })
+      .catch(function(){ hsEndTrain(false,L('Nettverksfeil.','Network error.')); });
+  });
+  function hsPollTrain(id,tries){ if(tries>60){ hsEndTrain(false,L('Det tok for lang tid. Prøv igjen.','It took too long. Please try again.')); return; }
+    fetch('/api/soul?id='+encodeURIComponent(id),{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){
+      if(d&&d.status==='ready'){ HS_ACCESS.hasSoul=true; hsEndTrain(true); showHsStage(); toast(L('Tvillingen er klar!','Your twin is ready!')); return; }
+      if(d&&(d.status==='failed'||d.error)){ hsEndTrain(false,(d&&d.error)||L('Treningen feilet.','Training failed.')); return; }
+      setTimeout(function(){ hsPollTrain(id,tries+1); },6000);
+    }).catch(function(){ setTimeout(function(){ hsPollTrain(id,tries+1); },6000); });
+  }
+  function hsEndTrain(ok,err){ HS_TRAINING=false; var b=$('hsTrainBtn'); b.disabled=false; b.innerHTML='<span>✨</span><span>'+L('Tren tvillingen','Train the twin')+'</span>'; if(ok){ $('hsTrainMsg').textContent=''; } else { $('hsTrainMsg').className='msg err'; $('hsTrainMsg').textContent='⚠️ '+(err||''); } }
+  $('hsRetrain').addEventListener('click',function(){ HS_ACCESS.hasSoul=false; HS_TRAIN=[]; $('hsThumbs').innerHTML=''; showHsStage(); window.scrollTo({top:0,behavior:'smooth'}); });
+  function hsSetBusy(b){ HS_BUSY=b; var g=$('hsGenBtn'); g.disabled=b; if(b){ g.innerHTML='<span class="spinner"></span> '+L('Lager headshot … et par minutter','Making headshot … a couple of minutes'); } else { g.innerHTML='<span>⚡</span><span>'+L('Lag headshot','Make headshot')+'</span> <span class="cost">(1 '+L('kreditt','credit')+')</span>'; } }
+  $('hsGenBtn').addEventListener('click',function(){
+    if(HS_BUSY) return;
+    if(!HS_ACCESS.owner && HS_ACCESS.loggedIn && (((HS_ACCESS.credit&&HS_ACCESS.credit.image)||0)<=0)){ $('hsMsg').className='msg err'; $('hsMsg').innerHTML=L('Du har ingen bilde-kreditter. Kjøp på ','You have no image credits. Buy them at ')+'<a href="/kjop-kreditt">/kjop-kreditt</a>.'; return; }
+    hsSetBusy(true); $('hsResult').classList.remove('show'); $('hsMsg').className='msg info'; $('hsMsg').textContent=L('Lager headshotet ditt … dette tar gjerne et par minutter.','Making your headshot … this usually takes a couple of minutes.');
+    fetch('/api/headshot',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({style:HS_STYLE})})
+      .then(function(r){return r.json().then(function(d){return {s:r.status,d:d};});})
+      .then(function(res){ var d=res.d;
+        if(d&&d.needSoul){ hsSetBusy(false); HS_ACCESS.hasSoul=false; showHsStage(); $('hsMsg').className='msg err'; $('hsMsg').textContent=(d.error)||L('Tren tvillingen din først.','Train your twin first.'); window.scrollTo({top:0,behavior:'smooth'}); return; }
+        if(d&&d.status==='completed'&&d.url){ hsSetBusy(false); $('hsMsg').textContent=''; $('hsResultImg').src=d.url; $('hsDownload').href=d.url; $('hsResult').classList.add('show'); if(typeof d.credit==='number'&&HS_ACCESS.credit){HS_ACCESS.credit.image=d.credit;renderHsBanner();} $('hsResult').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+        if(res.s!==200||!d||d.error||(!d.id&&!d.statusUrl)){ hsSetBusy(false); $('hsMsg').className='msg err'; $('hsMsg').textContent=(d&&d.error)||L('Kunne ikke starte.','Could not start.'); if(d&&typeof d.credit==='number'&&HS_ACCESS.credit){HS_ACCESS.credit.image=d.credit;renderHsBanner();} return; }
+        if(d&&typeof d.credit==='number'&&HS_ACCESS.credit){HS_ACCESS.credit.image=d.credit;renderHsBanner();} hsPoll(d.id||'',d.statusUrl||'',0);
+      }).catch(function(){ hsSetBusy(false); $('hsMsg').className='msg err'; $('hsMsg').textContent=L('Noe gikk galt. Prøv igjen.','Something went wrong. Try again.'); });
+  });
+  function hsPoll(id,statusUrl,tries){ if(tries>80){ hsSetBusy(false); $('hsMsg').className='msg err'; $('hsMsg').textContent=L('Det tok for lang tid. Prøv igjen.','It took too long. Please try again.'); loadHs(); return; }
+    var qs='id='+encodeURIComponent(id)+(statusUrl?'&u='+encodeURIComponent(statusUrl):'');
+    fetch('/api/headshot?'+qs,{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){
+      if(d&&d.status==='completed'&&d.url){ hsSetBusy(false); $('hsMsg').textContent=''; $('hsResultImg').src=d.url; $('hsDownload').href=d.url; $('hsResult').classList.add('show'); $('hsResult').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+      if(d&&(d.status==='failed'||d.status==='nsfw'||d.error)){ hsSetBusy(false); $('hsMsg').className='msg err'; $('hsMsg').textContent=(d&&d.error)||L('Bildet kunne ikke lages.','The image could not be made.'); loadHs(); return; }
+      setTimeout(function(){ hsPoll(id,statusUrl,tries+1); },4000);
+    }).catch(function(){ setTimeout(function(){ hsPoll(id,statusUrl,tries+1); },4000); });
+  }
 
   $('platChips').addEventListener('click',function(e){ var c=e.target.closest('.len-chip'); if(!c)return; $('platChips').querySelectorAll('.len-chip').forEach(function(x){x.classList.remove('on');}); c.classList.add('on'); PLATFORM=c.getAttribute('data-plat'); });
   function setRLang(l){ REELLANG=l; $('rlangChips').querySelectorAll('.len-chip').forEach(function(x){ x.classList.toggle('on', x.getAttribute('data-rlang')===l); }); }
