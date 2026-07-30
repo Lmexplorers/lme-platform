@@ -37,15 +37,39 @@ function json(data, status) {
     headers: { "Content-Type": "application/json", "Cache-Control": "no-store", "Access-Control-Allow-Origin": "*" },
   });
 }
-// Send begge autentiseringsskjemaene Higgsfield bruker (V2 "Authorization: Key"
-// for generering, og V1 hf-api-key/hf-secret), så vi unngår 401 uansett rute.
-function hfHeaders(env) {
-  return {
-    "hf-api-key": env.HIGGSFIELD_API_KEY,
-    "hf-secret": env.HIGGSFIELD_SECRET,
-    "Authorization": "Key " + env.HIGGSFIELD_API_KEY + ":" + env.HIGGSFIELD_SECRET,
-  };
+// Higgsfield bruker to auth-skjema (V2 "Authorization: Key" for generering, V1
+// hf-api-key/hf-secret for custom-references). Vi prøver skjemaene i rekkefølge
+// og bruker det første som ikke gir 401.
+function authSchemes(env) {
+  const key = env.HIGGSFIELD_API_KEY || "";
+  const secret = env.HIGGSFIELD_SECRET || "";
+  return [
+    { name: "auth", headers: { "Authorization": "Key " + key + ":" + secret } },
+    { name: "hf", headers: { "hf-api-key": key, "hf-secret": secret } },
+    { name: "both", headers: { "hf-api-key": key, "hf-secret": secret, "Authorization": "Key " + key + ":" + secret } },
+  ];
 }
+async function hfRequest(env, url, method, baseHeaders, body) {
+  const tried = [];
+  let last = null;
+  for (const s of authSchemes(env)) {
+    let r, text;
+    try {
+      r = await fetch(url, { method: method, headers: Object.assign({}, baseHeaders, s.headers), body: body });
+      text = await r.text();
+    } catch (e) {
+      tried.push({ name: s.name, status: -1 });
+      last = { ok: false, status: -1, text: "", data: null, tried: tried, network: true };
+      continue;
+    }
+    tried.push({ name: s.name, status: r.status });
+    let data = null; try { data = JSON.parse(text); } catch (e) {}
+    last = { ok: r.ok, status: r.status, text: text, data: data, tried: tried };
+    if (r.status !== 401) return last;
+  }
+  return last;
+}
+function triedStr(tried) { return (tried || []).map(function (t) { return t.name + " " + t.status; }).join(", "); }
 
 async function soulFor(env, email) {
   if (!env.BUILDER_KV || !email) return null;
@@ -110,22 +134,21 @@ export async function onRequestPost(context) {
     batch_size: "SINGLE",
   };
 
-  let r, data, text;
-  try {
-    r = await fetch(HF_BASE + SUBMIT_PATH, {
-      method: "POST",
-      headers: Object.assign({ "Content-Type": "application/json", "Accept": "application/json" }, hfHeaders(env)),
-      body: JSON.stringify(payload),
-    });
-    text = await r.text();
-    try { data = JSON.parse(text); } catch { data = null; }
-  } catch (e) {
+  const res = await hfRequest(env, HF_BASE + SUBMIT_PATH, "POST",
+    { "Content-Type": "application/json", "Accept": "application/json" },
+    JSON.stringify(payload));
+  if (res && res.network) {
     if (!gate.owner) await refundImageCredit(context, gate.email);
     return json({ error: "Kom ikke i kontakt med Higgsfield. Kreditten er refundert." }, 502);
   }
-  if (!r.ok) {
+  const data = res && res.data;
+  if (!res || !res.ok) {
     if (!gate.owner) await refundImageCredit(context, gate.email);
-    return json({ error: "Higgsfield svarte " + r.status + ". Kreditten er refundert.", raw: (text || "").slice(0, 200) }, 200);
+    const allAuth = res && (res.tried || []).every(function (t) { return t.status === 401; });
+    const msg = allAuth
+      ? "Higgsfield godtok ikke nøklene (401). Kreditten er refundert. [" + triedStr(res.tried) + "]"
+      : "Higgsfield svarte " + (res ? res.status : "?") + ". Kreditten er refundert. [" + (res ? triedStr(res.tried) : "") + "]";
+    return json({ error: msg, raw: (res && res.text ? res.text : "").slice(0, 200) }, 200);
   }
   const id = data && (data.request_id || data.id || (Array.isArray(data.jobs) && data.jobs[0] && data.jobs[0].id));
   const statusUrl = data && (data.status_url || data.statusUrl);
@@ -163,13 +186,10 @@ export async function onRequestGet(context) {
     statusUrl = HF_BASE + "/v1/text2image/soul/requests/" + id;
   }
 
-  let r, data, text;
-  try {
-    r = await fetch(statusUrl, { headers: Object.assign({ "Accept": "application/json" }, hfHeaders(env)) });
-    text = await r.text();
-    try { data = JSON.parse(text); } catch { data = null; }
-  } catch (e) { return json({ status: "in_progress" }); }
-  if (!r.ok) return json({ error: "Higgsfield status " + r.status + "." }, 200);
+  const res = await hfRequest(env, statusUrl, "GET", { "Accept": "application/json" }, undefined);
+  if (res && res.network) return json({ status: "in_progress" });
+  if (!res || !res.ok) return json({ error: "Higgsfield status " + (res ? res.status : "?") + "." }, 200);
+  const data = res.data;
 
   const status = findStatus(data) || "in_progress";
   const imgUrl = findImageUrl(data);
