@@ -232,9 +232,12 @@
       <button class="gen-btn" id="genBtn"><span>⚡</span><span data-no="Lag reel med tvillingen" data-en="Make reel with your twin">Lag reel med tvillingen</span> <span class="cost">(1 <span data-no="kreditt" data-en="credit">kreditt</span>)</span></button>
       <div class="msg" id="msg"></div>
 
+      <div class="result" id="scriptResult">
+        <div id="scriptOut"></div>
+      </div>
+
       <div class="result" id="result">
         <video id="video" controls playsinline></video>
-        <div id="scriptOut"></div>
         <a class="dlbtn" id="download" download><span>⬇️</span><span data-no="Last ned videoen" data-en="Download the video">Last ned videoen</span></a>
         <div id="pubHost"></div>
       </div>
@@ -473,10 +476,14 @@
   }
   function copyBtn(text){ var b=document.createElement('button'); b.className='copy-btn'; b.textContent=L('Kopier','Copy'); b.addEventListener('click',function(){ navigator.clipboard&&navigator.clipboard.writeText(text); toast(L('Kopiert','Copied')); }); return b; }
   function buildCaption(r){ var cap=r.caption||''; if(r.cta&&cap.indexOf(r.cta)===-1) cap=(cap?cap+'\n\n':'')+r.cta; var tags=Array.isArray(r.hashtags)?r.hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' '):''; return (cap+(tags?'\n\n'+tags:'')).trim(); }
+  function scriptCard(host,icon,title,text){ var d=document.createElement('div'); d.className='rcard'; var h=document.createElement('h4'); h.textContent=icon+' '+title; h.appendChild(copyBtn(text)); var p=document.createElement('p'); p.style.whiteSpace='pre-wrap'; p.textContent=text; d.appendChild(h); d.appendChild(p); host.appendChild(d); }
   function renderScript(r){
     var host=$('scriptOut'); host.innerHTML='';
+    if(r.hook) scriptCard(host,'🎯',L('Hook (tekst på skjerm)','Hook (on-screen text)'),r.hook);
+    if(r.voiceover) scriptCard(host,'🎬',L('Manus','Script'),r.voiceover);
     if(r.caption){ var d=document.createElement('div'); d.className='rcard'; var h=document.createElement('h4'); h.textContent='✍️ '+L('Caption','Caption'); h.appendChild(copyBtn(r.caption)); var p=document.createElement('p'); p.textContent=r.caption; d.appendChild(h); d.appendChild(p); host.appendChild(d); }
     if(Array.isArray(r.hashtags)&&r.hashtags.length){ var tagline=r.hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' '); var d2=document.createElement('div'); d2.className='rcard'; var h2=document.createElement('h4'); h2.textContent='#️⃣ '+L('Emneknagger','Hashtags'); h2.appendChild(copyBtn(tagline)); var tg=document.createElement('div'); tg.className='tags'; tg.innerHTML=r.hashtags.map(function(x){return '<span>'+esc(x[0]==='#'?x:'#'+x)+'</span>';}).join(''); d2.appendChild(h2); d2.appendChild(tg); host.appendChild(d2); }
+    if(host.childNodes.length) $('scriptResult').classList.add('show');
   }
 
   /* ---- Generering: manus + tvilling-video ---- */
@@ -487,7 +494,7 @@
     var topic=$('topic').value.trim();
     if(!topic){ $('msg').className='msg err'; $('msg').textContent=L('Skriv hva reelen skal handle om.','Write what the reel is about.'); return; }
     if(!ACCESS.owner && ACCESS.loggedIn && (((ACCESS.credit&&ACCESS.credit.video)||0)<=0)){ $('msg').className='msg err'; $('msg').innerHTML=L('Du har ingen video-kreditter. Kjøp på ','You have no video credits. Buy them at ')+'<a href="/kjop-kreditt">/kjop-kreditt</a>.'; return; }
-    setBusy(true); $('result').classList.remove('show'); $('msg').className='msg info'; $('msg').textContent=L('Skriver manus …','Writing script …');
+    setBusy(true); $('result').classList.remove('show'); $('scriptResult').classList.remove('show'); $('msg').className='msg info'; $('msg').textContent=L('Skriver manus …','Writing script …');
     fetch('/api/ai/content',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({format:'reel',source:topic,seconds:'30',lang:REELLANG})})
       .then(function(r){return r.json();}).then(function(data){
         if(data.error) throw new Error(data.error);
@@ -498,7 +505,7 @@
       })
       .then(function(res){
         var d=res.d;
-        if(res.s!==200||!d||d.error||(!d.id&&!d.statusUrl)){ setBusy(false); $('msg').className='msg err'; $('msg').textContent=(d&&d.error)||L('Kunne ikke starte video.','Could not start the video.'); if(d&&typeof d.credit==='number'&&ACCESS.credit){ACCESS.credit.video=d.credit;renderBalance();renderAccessBanner();} return; }
+        if(res.s!==200||!d||d.error||(!d.id&&!d.statusUrl)){ setBusy(false); $('msg').className='msg info'; $('msg').textContent=L('Teksten din er klar nedenfor (hook, manus, caption og emneknagger). Videoen kunne ikke lages akkurat nå.','Your text is ready below (hook, script, caption and hashtags). The video could not be made right now.'); if(d&&typeof d.credit==='number'&&ACCESS.credit){ACCESS.credit.video=d.credit;renderBalance();renderAccessBanner();} return; }
         if(d&&typeof d.credit==='number'&&ACCESS.credit){ACCESS.credit.video=d.credit;renderBalance();renderAccessBanner();}
         poll(d.id||'', d.statusUrl||'', 0);
       })
