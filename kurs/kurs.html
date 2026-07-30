@@ -1891,7 +1891,7 @@
         }
       }
 
-      /* Uten kursnavn i adressen (/academy/kurs) er ikke siden en blindvei:
+      /* Uten kursnavn i adressen (/kurs) er ikke siden en blindvei:
          da viser vi lista over publiserte egne kurs i stedet. */
       function visListe() {
         var en = window.LME_CURRENT_LANG === 'en';
@@ -1908,7 +1908,7 @@
               : (en ? 'No published courses yet. Create one in the course builder!' : 'Ingen publiserte kurs ennå. Lag et i kursbyggeren!');
             list.forEach(function (c) {
               var a = el('a', 'crs-lesson');
-              a.href = '/academy/kurs?k=' + encodeURIComponent(c.slug);
+              a.href = '/kurs?k=' + encodeURIComponent(c.slug);
               a.style.cssText = 'display:block;text-decoration:none;color:inherit';
               a.appendChild(el('div', 'crs-lesson-num', c.size === 'stor' ? (en ? 'FULL COURSE' : 'STORT KURS') : (en ? 'MINI COURSE' : 'MINIKURS')));
               a.appendChild(el('h3', null, pick(c.title) || c.slug));
