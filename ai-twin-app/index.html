@@ -97,8 +97,9 @@
   .hidden{display:none;}
   .hsph{font-size:13px;color:var(--ink-soft);margin-bottom:10px;}
   .hsthumbs{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
-  .hsthumbs img{width:58px;height:58px;object-fit:cover;border-radius:10px;border:1px solid var(--line);}
-  .hsthumbs .count{font-size:12.5px;font-weight:700;color:var(--ink-soft);align-self:center;}
+  .hsthumbs img{width:58px;height:58px;object-fit:cover;border-radius:10px;border:1px solid var(--line);cursor:pointer;}
+  .hsthumbs img.sel{outline:3px solid var(--cerise);outline-offset:1px;border-color:var(--cerise);}
+  .hsthumbs .count{font-size:12.5px;font-weight:700;color:var(--ink-soft);align-self:center;flex-basis:100%;}
   .hsok{background:var(--lime-soft);color:#4d6b0f;border:1px solid #d7e9b5;border-radius:var(--r-md);padding:12px 15px;font-size:13.5px;font-weight:700;margin-bottom:14px;}
   .hslink{display:block;width:100%;text-align:center;font-size:13.5px;font-weight:700;color:var(--ink-soft);padding:12px;margin-top:8px;}
 
@@ -245,8 +246,8 @@
       <div id="hsBanner"></div>
 
       <div class="field">
-        <label class="lab" data-no="1. Last opp bilde(r) av deg" data-en="1. Upload photo(s) of yourself">1. Last opp bilde(r) av deg</label>
-        <div class="hsph" data-no="Ett tydelig ansiktsbilde holder. Flere (3 til 6) gir enda bedre likhet." data-en="One clear face photo is enough. More (3 to 6) gives even better likeness.">Ett tydelig ansiktsbilde holder. Flere (3 til 6) gir enda bedre likhet.</div>
+        <label class="lab" data-no="1. Velg bildet du vil bruke" data-en="1. Choose the photo to use">1. Velg bildet du vil bruke</label>
+        <div class="hsph" data-no="Last opp bilde(r) og trykk på det du vil bruke. Ett tydelig bilde rett forfra, i øyehøyde, gir best likhet." data-en="Upload photo(s) and tap the one to use. One clear photo straight on, at eye level, gives the best likeness.">Last opp bilde(r) og trykk på det du vil bruke. Ett tydelig bilde rett forfra, i øyehøyde, gir best likhet.</div>
         <button class="drop" id="hsDrop" type="button"><div class="em">📸</div><p data-no="Trykk for å velge bilder" data-en="Tap to choose photos">Trykk for å velge bilder</p></button>
         <div class="hsthumbs" id="hsThumbs"></div>
         <input type="file" id="hsFile" accept="image/*" multiple class="hidden">
@@ -344,7 +345,7 @@
   });
 
   /* ===== HEADSHOT-FANE (OpenAI gpt-image-1, gjenbruker /api/image + /api/headshot) ===== */
-  var HS_STYLE='business', HS_TRAIN=[], HS_BUSY=false, HS_LOADED=false;
+  var HS_STYLE='business', HS_TRAIN=[], HS_SELECTED='', HS_BUSY=false, HS_LOADED=false;
   var HS_ACCESS={ loggedIn:false, owner:false, credit:{image:0,video:0} };
   function loadHs(){
     if(!HS_LOADED) hsRestoreTrain();
@@ -361,10 +362,15 @@
     files.forEach(function(f){ if(HS_TRAIN.length>=20) return; downscale(f,function(dataUrl){
       var ph=document.createElement('img'); ph.src=dataUrl; ph.style.opacity='.45'; $('hsThumbs').insertBefore(ph,$('hsThumbs').firstChild);
       fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({upload:dataUrl,contentType:'image/jpeg'})})
-        .then(function(r){return r.json();}).then(function(d){ if(d&&d.url){ HS_TRAIN.push(d.url); ph.style.opacity='1'; hsSaveTrain(); hsCount(); } else ph.remove(); }).catch(function(){ ph.remove(); });
+        .then(function(r){return r.json();}).then(function(d){ if(d&&d.url){ HS_TRAIN.push(d.url); ph.style.opacity='1'; ph.setAttribute('data-url',d.url); if(!HS_SELECTED) hsSelect(d.url); hsSaveTrain(); hsCount(); } else ph.remove(); }).catch(function(){ ph.remove(); });
     }); });
     this.value='';
   });
+  // Velg ett bilde som utgangspunkt. Denne motoren blir best med ett tydelig
+  // bilde, ikke mange, så vi sender bare det valgte.
+  $('hsThumbs').addEventListener('click',function(e){ var im=e.target.closest('img'); if(!im)return; var u=im.getAttribute('data-url'); if(u) hsSelect(u); });
+  function hsSelect(u){ HS_SELECTED=u; hsMarkSel(); }
+  function hsMarkSel(){ Array.prototype.forEach.call($('hsThumbs').querySelectorAll('img'),function(im){ im.classList.toggle('sel', im.getAttribute('data-url')===HS_SELECTED); }); }
   // Husk opplastede bilder lokalt, så de kommer tilbake ved neste besøk/oppdatering.
   // Adressene er varige (lagret i KV i 30 dager), så vi trenger bare listen.
   function hsSaveTrain(){ try{ localStorage.setItem('hs_train_urls', JSON.stringify(HS_TRAIN)); }catch(e){} }
@@ -373,18 +379,19 @@
     if(!Array.isArray(arr)) arr=[];
     HS_TRAIN=arr.filter(function(u){ return typeof u==='string' && /^https?:\/\/|^\//.test(u); }).slice(0,20);
     $('hsThumbs').innerHTML='';
-    HS_TRAIN.forEach(function(u){ var im=document.createElement('img'); im.src=u; $('hsThumbs').appendChild(im); });
-    if(HS_TRAIN.length) hsCount();
+    HS_TRAIN.forEach(function(u){ var im=document.createElement('img'); im.src=u; im.setAttribute('data-url',u); $('hsThumbs').appendChild(im); });
+    if(HS_TRAIN.length){ hsSelect(HS_TRAIN[0]); hsCount(); }
   }
-  function hsCount(){ var host=$('hsThumbs'); var c=host.querySelector('.count'); if(!c){ c=document.createElement('span'); c.className='count'; host.appendChild(c); } c.textContent=HS_TRAIN.length+' '+L('bilder','photos'); $('hsClear').style.display=HS_TRAIN.length?'block':'none'; }
-  $('hsClear').addEventListener('click',function(){ HS_TRAIN=[]; try{localStorage.removeItem('hs_train_urls');}catch(e){} $('hsThumbs').innerHTML=''; $('hsClear').style.display='none'; $('hsMsg').textContent=''; });
+  function hsCount(){ var host=$('hsThumbs'); var c=host.querySelector('.count'); if(!c){ c=document.createElement('span'); c.className='count'; host.appendChild(c); } c.textContent=L('Valgt: 1 av ','Selected: 1 of ')+HS_TRAIN.length; $('hsClear').style.display=HS_TRAIN.length?'block':'none'; }
+  $('hsClear').addEventListener('click',function(){ HS_TRAIN=[]; HS_SELECTED=''; try{localStorage.removeItem('hs_train_urls');}catch(e){} $('hsThumbs').innerHTML=''; $('hsClear').style.display='none'; $('hsMsg').textContent=''; });
   function hsSetBusy(b){ HS_BUSY=b; var g=$('hsGenBtn'); g.disabled=b; if(b){ g.innerHTML='<span class="spinner"></span> '+L('Lager headshot … et lite øyeblikk','Making headshot … just a moment'); } else { g.innerHTML='<span>⚡</span><span>'+L('Lag headshot','Make headshot')+'</span> <span class="cost">(1 '+L('kreditt','credit')+')</span>'; } }
   $('hsGenBtn').addEventListener('click',function(){
     if(HS_BUSY) return;
     if(!HS_TRAIN.length){ $('hsMsg').className='msg err'; $('hsMsg').textContent=L('Last opp minst ett bilde av deg selv først.','Upload at least one photo of yourself first.'); window.scrollTo({top:0,behavior:'smooth'}); return; }
+    var pick=HS_SELECTED||HS_TRAIN[0];
     if(!HS_ACCESS.owner && HS_ACCESS.loggedIn && (((HS_ACCESS.credit&&HS_ACCESS.credit.image)||0)<=0)){ $('hsMsg').className='msg err'; $('hsMsg').innerHTML=L('Du har ingen bilde-kreditter. Kjøp på ','You have no image credits. Buy them at ')+'<a href="/kjop-kreditt">/kjop-kreditt</a>.'; return; }
     hsSetBusy(true); $('hsResult').classList.remove('show'); $('hsMsg').className='msg info'; $('hsMsg').textContent=L('Lager headshotet ditt … dette tar gjerne et minutt.','Making your headshot … this usually takes about a minute.');
-    fetch('/api/headshot',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({style:HS_STYLE,images:HS_TRAIN.slice(0,8)})})
+    fetch('/api/headshot',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({style:HS_STYLE,images:[pick]})})
       .then(function(r){return r.json();})
       .then(function(d){ hsSetBusy(false);
         if(d&&d.status==='completed'&&d.url){ $('hsMsg').textContent=''; $('hsResultImg').src=d.url; $('hsDownload').href=d.url; $('hsResult').classList.add('show'); if(typeof d.credit==='number'&&HS_ACCESS.credit){HS_ACCESS.credit.image=d.credit;renderHsBanner();} $('hsResult').scrollIntoView({behavior:'smooth',block:'center'}); return; }
