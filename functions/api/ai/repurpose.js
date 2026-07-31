@@ -128,7 +128,7 @@ export async function onRequestPost(context) {
   try { body = await request.json(); }
   catch { return json({ error: "Ugyldig JSON" }, 400); }
 
-  const system = `${BRAND_CONTEXT}\nDu omformer ÉN kilde til flere kanaler, gjenbruker LME Content Studio-tankegangen.`;
+  const system = `${BRAND_CONTEXT}\nDu omformer ÉN kilde til flere kanaler, gjenbruker LME Autopilot-tankegangen.`;
 
   // To kortere kall samtidig. Feiler den ene, beholder vi kanalene fra den
   // andre (delvis er bedre enn ingenting). Bare hvis begge feiler gir vi 502.

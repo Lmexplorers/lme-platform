@@ -335,7 +335,7 @@ function parseJSON(str){ if(typeof str==='object') return str; const m=str.match
 function copyText(txt,el){ try{navigator.clipboard.writeText(txt);}catch(e){} const o=el.textContent; el.textContent=t('copied'); setTimeout(()=>el.textContent=o,1200); }
 function copyBtn(txt){ return '<button class="copy-btn" onclick=\'copyText('+JSON.stringify(txt)+',this)\'>'+t('copy')+'</button>'; }
 
-/* ---- Formater (speiler LME Content Studio-appen) ---- */
+/* ---- Formater (speiler LME Autopilot-appen) ---- */
 var FORMATS=[
   {id:'reel',ico:'🎬',no:'Reel / TikTok',en:'Reel / TikTok',media:'video',pub:['instagram','tiktok']},
   {id:'hookreel',ico:'🪝',no:'Hook-reel',en:'Hook reel',media:'video',pub:['instagram','tiktok']},
@@ -737,7 +737,7 @@ async function publishReel(key,btn){
   }catch(e){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('neterr'); }
 }
 
-/* ---- Varig plan (90 dager), samme idé som LME Content Studio ---- */
+/* ---- Varig plan (90 dager), samme idé som LME Autopilot ---- */
 function loadPlan(){ try{ return JSON.parse(localStorage.getItem('lme-reel-plan-v1')||'[]')||[]; }catch(e){ return []; } }
 function savePlan(p){ try{ localStorage.setItem('lme-reel-plan-v1', JSON.stringify(p)); }catch(e){} }
 function addPlanItem(it){ const p=loadPlan(); p.push(it); p.sort(function(a,b){ return (a.date+ (a.time||'')).localeCompare(b.date+(b.time||'')); }); savePlan(p); renderPlan(); }
