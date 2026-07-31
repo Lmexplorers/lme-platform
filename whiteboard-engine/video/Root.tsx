@@ -59,8 +59,8 @@ export const RemotionRoot: React.FC = () => {
         })}
       />
       {/* Slideshow-varianten (YouTube-appen): stillbilder med Ken Burns +
-          stemme per kapittel, ingen Veo-videoklipp. Horisontal 16:9 for
-          lange videoer. */}
+          stemme per kapittel, ingen Veo-videoklipp. Horisontal 16:9 for lange
+          videoer, vertikal 9:16 for Shorts (props.aspect, satt av server.js). */}
       <Composition
         id="SlideshowComposition"
         component={SlideshowVideo}
@@ -72,6 +72,8 @@ export const RemotionRoot: React.FC = () => {
         calculateMetadata={({ props }) => ({
           durationInFrames: Math.max(1, Number(props.totalFrames) || 900),
           fps: Number(props.fps) || 30,
+          width: props.aspect === "9:16" ? 1080 : 1920,
+          height: props.aspect === "9:16" ? 1920 : 1080,
         })}
       />
     </>

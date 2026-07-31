@@ -3,19 +3,31 @@ import { enforceVideoApp, refundVideoCredit } from "../_lib/access.js";
  * LME YouTube-appen — sett sammen manuset til en ferdig video.
  *
  * Tar det manuset brukeren allerede har generert/redigert i youtube-app
- * (tittel, hook, kapitler), lager ett AI-bilde per kapittel (ingen
- * Montessori-/Mia&Teo-låsing, følger temaet fritt, se buildImagePrompt),
- * sender bildene + kapiltekst videre til whiteboard-motoren (egen
- * Render-tjeneste, se whiteboard-engine/) sin nye slideshow-rute for
- * TTS + Ken Burns-rendring, og lagrer den ferdige MP4-en i plattformens
- * egen /api/video slik at Blotato kan hente en offentlig URL og poste den.
+ * (tittel, hook, kapitler/scener), lager ett bilde per kapittel og sender
+ * bildene + kapiltekst videre til whiteboard-motoren (egen Render-tjeneste,
+ * se whiteboard-engine/) sin slideshow-rute for TTS + Ken Burns-rendring,
+ * og lagrer den ferdige MP4-en i plattformens egen /api/video slik at
+ * Blotato kan hente en offentlig URL og poste den. Fungerer for både lange
+ * YouTube-videoer (16:9) og Shorts (9:16, se aspect).
+ *
+ * Bilde per kapittel er, i prioritert rekkefølge:
+ *   1. Et bilde brukeren selv har lastet opp for det kapittelet (sec.imageUpload,
+ *      base64), lagres direkte, ingen AI-generering eller ekstra kostnad.
+ *   2. Mia & Teo med LME sin låste karakterprompt (useMiaTeo:true i body),
+ *      KUN når den innloggede brukeren er eier (Renate). Sjekkes server-side
+ *      via gate.owner fra enforceVideoApp, ikke stolt på fra klienten, slik
+ *      at Mia & Teo aldri kan brukes av andre som eventuelt kjøper appen.
+ *   3. Ellers et fritt, tema-drevet AI-bilde (ingen Montessori-/Mia&Teo-
+ *      låsing, se buildImagePrompt), som før.
  *
  * Trekker én video-kreditt (samme system som Video Studio,
  * functions/_lib/access.js: enforceVideoApp/refundVideoCredit), refundert
- * automatisk ved feil hvor som helst i kjeden.
+ * automatisk ved feil hvor som helst i kjeden. Opplastede bilder koster ikke
+ * noe ekstra (samme prinsipp som opplasting i functions/api/image.js).
  *
  * Ruter:
- *   POST /api/youtube-video   { title, hook, sections:[{heading,talkingPoints}], lang }
+ *   POST /api/youtube-video   { title, hook, sections:[{heading,talkingPoints,imageUpload?}],
+ *                                lang, aspect:"16:9"|"9:16", useMiaTeo? }
  *        -> { id, credit }                     (bildene er laget, rendring er i gang)
  *   GET  /api/youtube-video?id=<id>
  *        -> { status: "pending"|"done"|"error", progress?, videoUrl?, error? }
@@ -25,6 +37,23 @@ import { enforceVideoApp, refundVideoCredit } from "../_lib/access.js";
 
 const ENGINE_DEFAULT = "https://lme-platform.onrender.com";
 const JOB_PREFIX = "ytvid:";
+
+// Låste Mia & Teo-karakterprompter, ordrett fra merkevare-bibelen (samme
+// tekst som functions/api/image.js sin CHAR.both, se docs/mia-teo-studio.md).
+// KUN for eier, se enforcement i onRequestPost.
+const MIA_TEO_STYLE_LOCK =
+  "Premium 3D illustrated children's book style, soft rounded Pixar-like look, " +
+  "warm cinematic lighting, gentle depth of field. LME brand palette: cerise pink, " +
+  "lime green, bright sky blue, lemon yellow, soft cream, warm wood tones, nature greens. " +
+  "Never photorealistic. Absolutely no text, no words, no letters, no numbers, no logos, " +
+  "no watermark anywhere in the image.";
+const MIA_TEO_CHAR =
+  "Mia is a cheerful fictional cartoon girl: light blue eyes, golden blonde hair in a high " +
+  "ponytail with a pink bow, round Pixar face, small button nose, warm friendly smile, " +
+  "pink floral dress, white socks, pink shoes. " +
+  "Teo is a friendly fictional cartoon boy: brown eyes, medium brown wavy hair, round Pixar " +
+  "face, warm smile, yellow and white striped shirt, blue shorts, brown shoes; binoculars in " +
+  "explorer scenes. They are best friends exploring together, never romantic.";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -55,13 +84,30 @@ function engineUrl(env) {
 // Bilde-prompt per kapittel: følger temaet fritt, ingen Montessori-/
 // Mia&Teo-låsing (dette er et generelt YouTube-videoverktøy, se samme
 // prinsipp fastsatt for tekstgenerereren i functions/api/ai/content.js).
-function buildImagePrompt(heading, points, title) {
+function buildImagePrompt(heading, points, title, aspect) {
   const topic = [heading, Array.isArray(points) ? points.join(". ") : ""].filter(Boolean).join(". ").slice(0, 500);
+  const orient = aspect === "9:16" ? "Vertical 9:16" : "Landscape 16:9";
   return (
     "A realistic, warm, high-quality photograph or clean illustration that visually represents this exact topic: " +
     (topic || title || "a YouTube video") +
-    ". Landscape 16:9 composition, no text, no words, no letters, no logos, no watermark anywhere in the image, " +
+    ". " + orient + " composition, no text, no words, no letters, no logos, no watermark anywhere in the image, " +
     "cinematic lighting, professional but approachable feel."
+  );
+}
+
+// Mia & Teo-variant, kun brukt når useMiaTeo er satt OG innlogget bruker er
+// eier (server-side sjekk, se onRequestPost). Samme låste karakteridentitet
+// som functions/api/image.js, temaet styrer bare scenen/aktiviteten, aldri
+// utseendet til Mia og Teo selv.
+function buildCharacterImagePrompt(heading, points, title, aspect) {
+  const topic = [heading, Array.isArray(points) ? points.join(". ") : ""].filter(Boolean).join(". ").slice(0, 400);
+  const orient = aspect === "9:16" ? "Vertical 9:16" : "Landscape 16:9";
+  return (
+    MIA_TEO_CHAR + " " +
+    (topic
+      ? `Depict them in a scene that fits this theme (illustrate the mood and activity, do not render any of these words): ${topic}`
+      : "Depict them exploring nature and learning together.") +
+    " " + orient + " composition. " + MIA_TEO_STYLE_LOCK
   );
 }
 
@@ -81,10 +127,12 @@ function b64ToBytes(b64) {
 
 // Samme bildemotor-kjede (Gemini foretrukket, ellers OpenAI) som
 // functions/api/image.js, men med en fri, tema-drevet prompt i stedet for
-// den låste Mia&Teo/Montessori-prompten (den er laget for et annet formål).
-async function genSceneImage(env, prompt) {
+// den låste Mia&Teo/Montessori-prompten (den er laget for et annet formål,
+// med mindre useMiaTeo er satt, se buildCharacterImagePrompt).
+async function genSceneImage(env, prompt, aspect) {
+  const asp = aspect === "9:16" ? "9:16" : "16:9";
   const hasGemini = !!(env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY);
-  const size = "1536x1024"; // 16:9, samme som image.js sin "youtube"-størrelse
+  const size = asp === "9:16" ? "1024x1536" : "1536x1024"; // samme størrelser som image.js
   if (hasGemini) {
     const key = env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY;
     const model = env.GEMINI_IMAGE_MODEL || "gemini-2.5-flash-image";
@@ -94,7 +142,7 @@ async function genSceneImage(env, prompt) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { responseModalities: ["IMAGE"], imageConfig: { aspectRatio: "16:9" } },
+        generationConfig: { responseModalities: ["IMAGE"], imageConfig: { aspectRatio: asp } },
       }),
     }, 55000);
     if (r.ok) {
@@ -150,10 +198,17 @@ export async function onRequestPost(context) {
   const hook = String(body.hook || "").slice(0, 300).trim();
   const sections = Array.isArray(body.sections) ? body.sections.slice(0, 8) : [];
   const lang = body.lang === "en" ? "en" : "no";
+  const aspect = body.aspect === "9:16" ? "9:16" : "16:9";
   if (!sections.length) return json({ error: "Mangler kapitler å lage video av. Lag manuset først." }, 400);
 
   const gate = await enforceVideoApp(context);
   if (!gate.ok) return json({ error: gate.error, needCredits: gate.needCredits || false }, gate.status);
+
+  // Mia & Teo (låst karakterprompt) er KUN for eier. Ikke stol på klienten:
+  // sjekk gate.owner (server-side, fra sesjonen), ignorer flagget stille for
+  // alle andre i stedet for å feile, så en vanlig bruker bare får det vanlige,
+  // frie temabildet uten å ane at Mia & Teo-alternativet finnes.
+  const useMiaTeo = !!body.useMiaTeo && !!gate.owner;
 
   const origin = new URL(request.url).origin;
 
@@ -163,9 +218,25 @@ export async function onRequestPost(context) {
   try {
     for (let i = 0; i < sections.length; i++) {
       const sec = sections[i];
-      const prompt = buildImagePrompt(sec && sec.heading, sec && sec.talkingPoints, title);
-      const img = await genSceneImage(env, prompt);
-      const imageUrl = await storeImage(env, origin, img.bytes, img.contentType);
+      let imageUrl;
+      const upload = sec && sec.imageUpload ? String(sec.imageUpload) : "";
+      if (upload) {
+        // Brukeren har selv lastet opp et bilde til dette kapittelet: lagre
+        // det direkte, ingen AI-generering og ingen ekstra kostnad.
+        let ub = upload;
+        const c = ub.indexOf(",");
+        if (ub.startsWith("data:") && c !== -1) ub = ub.slice(c + 1);
+        let bytes;
+        try { bytes = b64ToBytes(ub); } catch { throw new Error("Ugyldig bilde-opplasting i kapittel " + (i + 1) + "."); }
+        if (!bytes.length || bytes.length > 15 * 1024 * 1024) throw new Error("Bildet i kapittel " + (i + 1) + " er ugyldig eller for stort (maks 15 MB).");
+        imageUrl = await storeImage(env, origin, bytes, "image/png");
+      } else {
+        const prompt = useMiaTeo
+          ? buildCharacterImagePrompt(sec && sec.heading, sec && sec.talkingPoints, title, aspect)
+          : buildImagePrompt(sec && sec.heading, sec && sec.talkingPoints, title, aspect);
+        const img = await genSceneImage(env, prompt, aspect);
+        imageUrl = await storeImage(env, origin, img.bytes, img.contentType);
+      }
       scenes.push({
         imageUrl,
         narration: narrationFor(sec),
@@ -183,7 +254,7 @@ export async function onRequestPost(context) {
     const r = await fetchTimeout(engineUrl(env) + "/api/generer-slideshow", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ scenes, lang, aspect: "16:9" }),
+      body: JSON.stringify({ scenes, lang, aspect }),
     }, 20000);
     const data = await r.json().catch(() => null);
     if (!r.ok || !data || !data.jobId) {

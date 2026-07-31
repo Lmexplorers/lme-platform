@@ -196,6 +196,12 @@
   .vid-progress p{font-size:14px;color:var(--ink-soft);}
   .vid-video{width:100%;border-radius:var(--r-md);display:block;margin-bottom:14px;background:#000;box-shadow:var(--shadow-md);}
   .vid-note{font-size:12px;color:var(--ink-muted);margin:-6px 0 14px;}
+  .up-row{display:flex;align-items:center;gap:8px;margin-top:8px;}
+  .up-btn{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--ink-soft);background:var(--card-2,#F4EFE6);border-radius:var(--r-pill);padding:6px 12px;cursor:pointer;}
+  .up-btn.on{color:var(--cerise);background:rgba(233,30,137,.1);}
+  .up-thumb{width:26px;height:26px;border-radius:7px;object-fit:cover;display:none;}
+  .mt-toggle{display:flex;align-items:center;gap:9px;background:rgba(233,30,137,.08);border:1px solid rgba(233,30,137,.25);border-radius:var(--r-md);padding:11px 13px;margin-top:10px;font-size:13.5px;font-weight:700;color:var(--ink);}
+  .mt-toggle input{width:18px;height:18px;flex:none;}
   .toast.show{opacity:1;}
 </style>
 </head>
@@ -519,19 +525,47 @@
     tg.innerHTML=tags.map(function(x){return '<span>'+esc(x)+'</span>';}).join('');
     d.appendChild(head); d.appendChild(tg); out.appendChild(d);
   }
+  var CHAPTER_UPLOADS = {};   // index -> base64 bilde brukeren har lastet opp til det kapittelet/scenen
+  var USE_MIA_TEO = false;    // eier-only: bruk Mia & Teo i stedet for et fritt temabilde
+
+  function uploadRow(idx){
+    var wrap=document.createElement('div'); wrap.className='up-row';
+    var inputId = 'up_'+idx+'_'+Math.random().toString(36).slice(2,7);
+    wrap.innerHTML =
+      '<label class="up-btn" for="'+inputId+'"><span>📷</span><span>'+(LANG==='no'?'Last opp bilde':'Upload photo')+'</span></label>'+
+      '<input type="file" accept="image/*" id="'+inputId+'" style="display:none;">'+
+      '<img class="up-thumb">';
+    var btn = wrap.querySelector('.up-btn');
+    var input = wrap.querySelector('input');
+    var thumb = wrap.querySelector('.up-thumb');
+    input.addEventListener('change', function(){
+      var f = input.files && input.files[0]; if (!f) return;
+      var reader = new FileReader();
+      reader.onload = function(){
+        CHAPTER_UPLOADS[idx] = String(reader.result||'');
+        thumb.src = CHAPTER_UPLOADS[idx]; thumb.style.display='inline-block';
+        btn.classList.add('on'); btn.querySelector('span:last-child').textContent = LANG==='no'?'Bilde lagt til ✓':'Photo added ✓';
+      };
+      reader.readAsDataURL(f);
+    });
+    return wrap;
+  }
+
   function renderContent(r, out, withActions, fmt){
     fmt = fmt || 'youtube';
     out.innerHTML='';
+    CHAPTER_UPLOADS = {}; USE_MIA_TEO = false;
     if (fmt === 'reel'){
       if (r.hook){ var h=document.createElement('div'); h.className='hook'; h.innerHTML='<div class="lbl">Hook</div><div class="txt">'+esc(r.hook)+'</div>'; out.appendChild(h); }
       if (r.voiceover){ out.appendChild(card('🎙️ '+T('vo'), r.voiceover, true)); }
       if (Array.isArray(r.scenes)){
-        r.scenes.forEach(function(s){
+        r.scenes.forEach(function(s, i){
           var d=document.createElement('div'); d.className='rcard scene';
           d.innerHTML=(s.time?'<div class="time">'+esc(s.time)+'</div>':'')+
             (s.onScreen?'<div class="on">'+esc(s.onScreen)+'</div>':'')+
             (s.voiceover?'<div class="vo">'+esc(s.voiceover)+'</div>':'')+
             (s.broll?'<div class="broll">'+T('broll')+': '+esc(s.broll)+'</div>':'');
+          d.appendChild(uploadRow(i));
           out.appendChild(d);
         });
       }
@@ -553,6 +587,7 @@
             pts.forEach(function(pt){ var li=document.createElement('li'); li.textContent=pt; ul.appendChild(li); });
             d.appendChild(ul);
           } else if (typeof pts === 'string'){ var p=document.createElement('div'); p.className='vo'; p.textContent=pts; d.appendChild(p); }
+          d.appendChild(uploadRow(i));
           out.appendChild(d);
         });
       }
@@ -564,10 +599,18 @@
       if (r.cta){ out.appendChild(card('➡️ '+T('cta'), r.cta, true)); }
       if (r.caption){ out.appendChild(card('✍️ '+T('caption'), r.caption, true)); }
     }
-    if (fmt === 'youtube' && Array.isArray(r.sections) && r.sections.length){
+    var canMakeVideo = (fmt === 'youtube' && Array.isArray(r.sections) && r.sections.length) ||
+      (fmt === 'reel' && Array.isArray(r.scenes) && r.scenes.length);
+    if (canMakeVideo){
+      if (OWNER){
+        var mt=document.createElement('label'); mt.className='mt-toggle';
+        mt.innerHTML='<input type="checkbox" id="mtToggle"><span>'+(LANG==='no'?'🎭 Bruk Mia & Teo i denne videoen':'🎭 Use Mia & Teo in this video')+'</span>';
+        mt.querySelector('input').addEventListener('change', function(e){ USE_MIA_TEO = !!e.target.checked; });
+        out.appendChild(mt);
+      }
       var vidBtn=document.createElement('button'); vidBtn.className='video-btn';
       vidBtn.innerHTML='<span>🎬</span><span>'+(LANG==='no'?'Lag video (1 video-kreditt)':'Make video (1 video credit)')+'</span>';
-      vidBtn.addEventListener('click', function(){ openVideoModal(r); });
+      vidBtn.addEventListener('click', function(){ openVideoModal(r, fmt); });
       out.appendChild(vidBtn);
     }
     if (!withActions) return;
@@ -587,14 +630,34 @@
   function closeModal(){ $('modal').classList.remove('show'); stopVideoPoll(); }
   $('modalX').addEventListener('click', closeModal);
 
-  function openVideoModal(r){
+  // Ett samlet kapittel/scene-format uansett format (youtube sections | reel
+  // scenes), så /api/youtube-video kan behandle begge likt.
+  function buildVideoSections(r, fmt){
+    var list = fmt === 'reel' ? (r.scenes || []) : (r.sections || []);
+    return list.map(function(item, i){
+      var heading = fmt === 'reel' ? (item.onScreen || item.time || '') : (item.heading || '');
+      var points = fmt === 'reel' ? [item.voiceover || ''] : (item.talkingPoints || item.points || []);
+      var out = { heading: heading, talkingPoints: Array.isArray(points) ? points : [String(points||'')] };
+      if (CHAPTER_UPLOADS[i]) out.imageUpload = CHAPTER_UPLOADS[i];
+      return out;
+    });
+  }
+
+  function openVideoModal(r, fmt){
+    fmt = fmt || 'youtube';
     showModal(
       '<div class="vid-progress"><div class="spin"></div>' +
       '<p id="vidProgText">'+(LANG==='no'?'Lager bildene til videoen …':'Making the images for the video …')+'</p></div>'
     );
     fetch('/api/youtube-video', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ title: r.title, hook: r.hook, sections: r.sections, lang: VLANG })
+      body: JSON.stringify({
+        title: r.title, hook: r.hook,
+        sections: buildVideoSections(r, fmt),
+        lang: VLANG,
+        aspect: fmt === 'reel' ? '9:16' : '16:9',
+        useMiaTeo: USE_MIA_TEO
+      })
     }).then(function(res){ return res.json().then(function(d){ return { ok: res.ok, d: d }; }); })
       .then(function(x){
         if (!x.d || x.d.error) {
@@ -602,7 +665,7 @@
           showVideoError(x.d && x.d.error, needCredits);
           return;
         }
-        pollVideo(x.d.id, r);
+        pollVideo(x.d.id, r, fmt);
       })
       .catch(function(){ showVideoError(LANG==='no'?'Nettverksfeil. Prøv igjen.':'Network error. Please try again.'); });
   }
@@ -614,20 +677,21 @@
     showModal('<p class="err">'+esc(msg || (LANG==='no'?'Noe gikk galt.':'Something went wrong.'))+'</p>'+extra);
   }
 
-  function pollVideo(id, r){
+  function pollVideo(id, r, fmt){
     fetch('/api/youtube-video?id='+encodeURIComponent(id))
       .then(function(res){ return res.json(); })
       .then(function(d){
         if (!d || d.status === 'error'){ showVideoError(d && d.error); return; }
-        if (d.status === 'done' && d.videoUrl){ showVideoPreview(d.videoUrl, r); return; }
+        if (d.status === 'done' && d.videoUrl){ showVideoPreview(d.videoUrl, r, fmt); return; }
         var t = $('vidProgText'); if (t) t.textContent = d.progress || (LANG==='no'?'Rendrer video, kan ta et par minutter …':'Rendering video, can take a couple of minutes …');
-        VIDEO_POLL_TIMER = setTimeout(function(){ pollVideo(id, r); }, 4000);
+        VIDEO_POLL_TIMER = setTimeout(function(){ pollVideo(id, r, fmt); }, 4000);
       })
-      .catch(function(){ VIDEO_POLL_TIMER = setTimeout(function(){ pollVideo(id, r); }, 6000); });
+      .catch(function(){ VIDEO_POLL_TIMER = setTimeout(function(){ pollVideo(id, r, fmt); }, 6000); });
   }
 
-  function showVideoPreview(videoUrl, r){
-    var desc = (r.description || '') + (Array.isArray(r.hashtags) && r.hashtags.length ? ('\n\n' + r.hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' ')) : '');
+  function showVideoPreview(videoUrl, r, fmt){
+    var baseDesc = fmt === 'reel' ? (r.caption || r.voiceover || '') : (r.description || '');
+    var desc = baseDesc + (Array.isArray(r.hashtags) && r.hashtags.length ? ('\n\n' + r.hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' ')) : '');
     showModal(
       '<video class="vid-video" src="'+esc(videoUrl)+'" controls playsinline></video>' +
       '<div class="field"><label class="lab">'+(LANG==='no'?'Tittel':'Title')+'</label><input id="vidTitle" value="'+esc(r.title||'')+'"></div>' +

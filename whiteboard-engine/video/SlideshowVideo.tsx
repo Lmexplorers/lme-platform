@@ -16,6 +16,7 @@ export interface SlideshowProps {
   scenes: SlideshowScene[];
   fps: number;
   totalFrames: number;
+  aspect?: "16:9" | "9:16";
 }
 
 const KenBurnsImage: React.FC<{ src: string; durationInFrames: number; direction: number }> = ({

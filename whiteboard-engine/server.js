@@ -655,7 +655,7 @@ async function renderSlideshowJob(jobId, { scenes, lang, voiceId, aspect }, publ
     }
     setProg("Setter sammen den ferdige videoen …");
     const totalFrames = Math.max(1, accFrames);
-    const inputProps = { scenes: outScenes, fps, totalFrames };
+    const inputProps = { scenes: outScenes, fps, totalFrames, aspect: asp };
     const serveUrl = await getServeUrl();
     const composition = await selectComposition({ serveUrl, id: "SlideshowComposition", inputProps });
     const outName = `slideshow_${Date.now()}.mp4`;
