@@ -493,8 +493,8 @@
     return b;
   }
   function T(k){
-    var no = {hook:'Hook / intro',vo:'Voiceover',scenes:'Scene for scene',broll:'B-roll',music:'Musikk',cta:'Oppfordring',caption:'Caption',tags:'Tags',title:'Tittel',desc:'Beskrivelse',thumb:'Thumbnail-tekst',chapters:'Kapitler'};
-    var en = {hook:'Hook / intro',vo:'Voiceover',scenes:'Scene by scene',broll:'B-roll',music:'Music',cta:'Call to action',caption:'Caption',tags:'Tags',title:'Title',desc:'Description',thumb:'Thumbnail text',chapters:'Chapters'};
+    var no = {hook:'Hook / intro',vo:'Voiceover',scenes:'Scene for scene',broll:'B-roll',music:'Musikk',cta:'Oppfordring',caption:'Caption',tags:'Tags',seo:'SEO-søkeord',hashtags:'Hashtags',title:'Tittel',desc:'Beskrivelse',thumb:'Thumbnail-tekst',chapters:'Kapitler'};
+    var en = {hook:'Hook / intro',vo:'Voiceover',scenes:'Scene by scene',broll:'B-roll',music:'Music',cta:'Call to action',caption:'Caption',tags:'Tags',seo:'SEO keywords',hashtags:'Hashtags',title:'Title',desc:'Description',thumb:'Thumbnail text',chapters:'Chapters'};
     return (LANG==='no'?no:en)[k];
   }
   function card(title, body, copy){
@@ -503,11 +503,11 @@
     var p=document.createElement('p'); p.textContent=body;
     d.appendChild(h); d.appendChild(p); return d;
   }
-  function tagsCard(out, tags){
+  function tagsCard(out, tags, icon, label){
     if (!Array.isArray(tags) || !tags.length) return;
     var line = tags.join(', ');
     var d=document.createElement('div'); d.className='rcard';
-    var head=document.createElement('h4'); head.textContent='#️⃣ '+T('tags'); head.appendChild(copyBtn(line));
+    var head=document.createElement('h4'); head.textContent=(icon||'#️⃣')+' '+(label||T('tags')); head.appendChild(copyBtn(line));
     var tg=document.createElement('div'); tg.className='tags';
     tg.innerHTML=tags.map(function(x){return '<span>'+esc(x)+'</span>';}).join('');
     d.appendChild(head); d.appendChild(tg); out.appendChild(d);
@@ -550,9 +550,12 @@
         });
       }
       if (r.description){ out.appendChild(card('📝 '+T('desc'), r.description, true)); }
-      tagsCard(out, r.tags||[]);
+      tagsCard(out, r.seoKeywords||[], '👀', T('seo'));
+      tagsCard(out, r.tags||[], '🏷️', T('tags'));
+      tagsCard(out, (r.hashtags||[]).map(function(x){return x[0]==='#'?x:'#'+x;}), '#️⃣', T('hashtags'));
       if (r.thumbnailText){ out.appendChild(card('🖼️ '+T('thumb'), r.thumbnailText, true)); }
       if (r.cta){ out.appendChild(card('➡️ '+T('cta'), r.cta, true)); }
+      if (r.caption){ out.appendChild(card('✍️ '+T('caption'), r.caption, true)); }
     }
     if (!withActions) return;
     var actions=document.createElement('div'); actions.className='out-actions';
