@@ -18,6 +18,12 @@
  *   Nano Banana (Gemini) lager blyantskissen, Veo lar en hånd tegne den, og
  *   ElevenLabs legger på norsk stemme. Remotion setter klippene sammen.
  *
+ * I tillegg: rimelig og rask "slideshow"-video for YouTube-appen, stillbilder
+ * med Ken Burns-panorament i stedet for animerte Veo-klipp (ingen Veo, mye
+ * raskere og billigere per scene):
+ *   POST /api/generer-slideshow   { scenes:[{imageUrl|imagePrompt,narration,onScreenText?}], lang, aspect? }
+ *        -> 202 { jobId }  (samme status-endepunkt)
+ *
  * Krever i .env:  OPENAI_API_KEY, ELEVENLABS_API_KEY
  *                 GEMINI_API_KEY (for /api/generer-veo: Nano Banana + Veo)
  * Valgfritt:      PORT (3000), PUBLIC_BASE_URL, ELEVENLABS_VOICE_ID,
@@ -204,6 +210,43 @@ async function lagWhiteboardBilde(temaTekst) {
       // Gaa videre til neste modell ved modell-/tilgangsfeil, ellers kast.
       if (!/does not exist|no such model|model|verified|not have access|unsupported|permission|403|404/i.test(msg)) throw e;
       console.warn("Bildemodell '" + model + "' feilet, proever neste:", msg.slice(0, 140));
+    }
+  }
+  throw lastErr || new Error("Ingen bildemodell tilgjengelig.");
+}
+
+// Generelt scene-bilde for slideshow-videoen (YouTube-appen), ingen
+// whiteboard-skisse-stil og ingen påtvunget Montessori-tema, følger bare
+// prompten scenen faktisk sendte inn. Brukes kun som reserve når klienten
+// ikke allerede har sendt en ferdig imageUrl (plattformen genererer normalt
+// bildene selv via sin egen /api/image, se functions/api/youtube-video.js).
+async function lagSlideBilde(prompt, aspect) {
+  const cacheKey = "slide_" + hashKey((IMAGE_MODEL || "") + "|" + (aspect || "") + "|" + prompt);
+  const cachedPath = path.resolve(CACHE_DIR, cacheKey + ".png");
+  if (fs.existsSync(cachedPath)) return `/cache/${cacheKey}.png`;
+  const size = aspect === "9:16" ? "1024x1536" : "1536x1024";
+  const models = [];
+  if (IMAGE_MODEL) models.push(IMAGE_MODEL);
+  ["gpt-image-1", "dall-e-3", "dall-e-2"].forEach((m) => { if (models.indexOf(m) < 0) models.push(m); });
+  let lastErr = null;
+  for (const model of models) {
+    try {
+      const useSize = model === "dall-e-2" ? "1024x1024" : size;
+      const img = await openai.images.generate({ model, prompt: String(prompt || "").slice(0, 800), n: 1, size: useSize });
+      const d = img && img.data && img.data[0];
+      let buf = null;
+      if (d && d.b64_json) buf = Buffer.from(d.b64_json, "base64");
+      else if (d && d.url) { const r = await fetch(d.url); if (r.ok) buf = Buffer.from(await r.arrayBuffer()); }
+      if (buf) {
+        await fs.promises.writeFile(cachedPath, buf);
+        return `/cache/${cacheKey}.png`;
+      }
+      lastErr = new Error("Ingen bildedata fra " + model);
+    } catch (e) {
+      lastErr = e;
+      const msg = String((e && e.message) || e);
+      if (!/does not exist|no such model|model|verified|not have access|unsupported|permission|403|404/i.test(msg)) throw e;
+      console.warn("Bildemodell '" + model + "' feilet (slideshow), proever neste:", msg.slice(0, 140));
     }
   }
   throw lastErr || new Error("Ingen bildemodell tilgjengelig.");
@@ -569,6 +612,75 @@ async function renderVeoJob(jobId, { scenes, lang, voiceId, aspect }, publicBase
   }
 }
 
+/* ================= Slideshow (stillbilder + Ken Burns, YouTube-appen) =================
+   Enklere og raskere/rimeligere enn Veo-varianten: ett stillbilde per scene
+   (normalt allerede generert av plattformen selv og sendt som imageUrl), med
+   Ken Burns-panorament og ElevenLabs-stemme, satt sammen av Remotion. */
+async function renderSlideshowJob(jobId, { scenes, lang, voiceId, aspect }, publicBase) {
+  const t0 = Date.now();
+  const jobState = { status: "pending", progress: "", scenes: [], when: Date.now() };
+  const save = () => jobs.set(jobId, { ...jobState, scenes: jobState.scenes.slice(), when: Date.now() });
+  const setProg = (p) => { jobState.progress = p; save(); };
+  try {
+    const list = (Array.isArray(scenes) ? scenes : []).filter((s) => s && (s.narration || s.imagePrompt || s.imageUrl));
+    if (!list.length) throw new Error("Ingen scener å lage video av.");
+    if (!ELEVENLABS_API_KEY) throw new Error("Server mangler ElevenLabs-nøkkel (ELEVENLABS_API_KEY).");
+    const asp = aspect === "9:16" ? "9:16" : "16:9";
+    const fps = 30;
+    const outScenes = [];
+    let accFrames = 0;
+    for (let i = 0; i < list.length; i++) {
+      const s = list[i];
+      let imageUrl;
+      if (s.imageUrl) {
+        imageUrl = s.imageUrl; // allerede en offentlig URL (vanligvis fra plattformens egen /api/image)
+      } else {
+        setProg(`Scene ${i + 1}/${list.length}: lager bilde …`);
+        const imgPath = await lagSlideBilde(s.imagePrompt || s.narration, asp);
+        imageUrl = RENDER_BASE + imgPath;
+      }
+      jobState.scenes.push({ n: i + 1, imageUrl });
+      save();
+      let audioUrl = "", audioDur = 0;
+      if (s.narration) {
+        setProg(`Scene ${i + 1}/${list.length}: legger på stemme …`);
+        const { audioPath, words } = await lagLydMedTidsstempler(String(s.narration).trim(), voiceId, lang);
+        audioUrl = RENDER_BASE + audioPath;
+        audioDur = words.length ? (words[words.length - 1].end || 0) : 0;
+      }
+      const sceneSec = Math.max(3, audioDur + 0.6);
+      const durationInFrames = Math.ceil(sceneSec * fps);
+      outScenes.push({ imageUrl, audioUrl, durationInFrames, onScreenText: i === 0 ? (s.onScreenText || "") : "" });
+      accFrames += durationInFrames;
+    }
+    setProg("Setter sammen den ferdige videoen …");
+    const totalFrames = Math.max(1, accFrames);
+    const inputProps = { scenes: outScenes, fps, totalFrames, aspect: asp };
+    const serveUrl = await getServeUrl();
+    const composition = await selectComposition({ serveUrl, id: "SlideshowComposition", inputProps });
+    const outName = `slideshow_${Date.now()}.mp4`;
+    const outputLocation = path.resolve(OUTPUT_DIR, outName);
+    await renderMedia({
+      composition, serveUrl, codec: "h264", outputLocation, inputProps,
+      jpegQuality: 80,
+      concurrency: 1,
+      offthreadVideoCacheSizeInBytes: 100 * 1024 * 1024,
+      chromiumOptions: { gl: "swiftshader" },
+    });
+    console.log(`Slideshow-video ferdig på ${((Date.now() - t0) / 1000).toFixed(1)} s.`);
+    jobState.status = "done";
+    jobState.progress = "";
+    jobState.videoUrl = `${publicBase}/output/${outName}`;
+    jobState.durationSeconds = Number((totalFrames / fps).toFixed(1));
+    save();
+  } catch (error) {
+    console.error("Slideshow-jobb feilet:", error);
+    jobState.status = "error";
+    jobState.error = String((error && error.message) || error);
+    save();
+  }
+}
+
 /* ---------- Jobber (asynkron rendring) ----------
    Rendring tar flere minutter. I stedet for å holde én lang HTTP-forbindelse
    åpen (som ryker og gir "Failed to fetch"), starter vi en jobb, svarer med en
@@ -675,6 +787,26 @@ app.post("/api/generer-veo", (req, res) => {
   jobs.set(jobId, { status: "pending", progress: "Starter …", when: Date.now() });
   res.status(202).json({ jobId, status: "pending" });
   renderVeoJob(jobId, { scenes, lang, voiceId, aspect }, publicBase);
+});
+
+/* ---------- Start slideshow-jobb (stillbilder + Ken Burns, YouTube-appen) ---------- */
+app.post("/api/generer-slideshow", (req, res) => {
+  const { scenes, lang, voiceId, aspect } = req.body || {};
+  if (!Array.isArray(scenes) || !scenes.length) {
+    return res.status(400).json({ error: "scenes mangler i forespørselen." });
+  }
+  if (!ELEVENLABS_API_KEY) {
+    return res.status(500).json({ error: "Server mangler ElevenLabs-nøkkel (miljøvariabel)." });
+  }
+  gcJobs();
+  const proto = String(req.headers["x-forwarded-proto"] || req.protocol || "https").split(",")[0].trim();
+  const host = req.get("host");
+  const publicBase = host ? `${proto}://${host}` : PUBLIC_BASE;
+
+  const jobId = newJobId();
+  jobs.set(jobId, { status: "pending", progress: "Starter …", when: Date.now() });
+  res.status(202).json({ jobId, status: "pending" });
+  renderSlideshowJob(jobId, { scenes, lang, voiceId, aspect }, publicBase);
 });
 
 /* ---------- Status-polling ---------- */
