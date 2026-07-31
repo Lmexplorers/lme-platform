@@ -449,7 +449,7 @@ ${SIDE_STIL}
       <div class="pris">1 197 kr<small data-no="/mnd" data-en="/mo">/mnd</small></div>
       <ul>
         <li data-no="Alt i Medlem" data-en="Everything in Member">Alt i Medlem</li>
-        <li data-no="Skaperverktøyene i LME Studio: LME Autopilot, Bookly og Kursbygger" data-en="The creator tools in LME Studio: LME Autopilot, Bookly and Course Builder">Skaperverktøyene i LME Studio: LME Autopilot, Bookly og Kursbygger</li>
+        <li data-no="Skaperverktøyene i LME Studio: LME Content Studio, Bookly og Kursbygger" data-en="The creator tools in LME Studio: LME Content Studio, Bookly and Course Builder">Skaperverktøyene i LME Studio: LME Content Studio, Bookly og Kursbygger</li>
         <li data-no="AI Visibility og Traffic Engine" data-en="AI Visibility and Traffic Engine">AI Visibility og Traffic Engine</li>
         <li data-no="Inntektsgenerator" data-en="Income generator">Inntektsgenerator</li>
         <li data-no="Månedlig AI Challenge" data-en="Monthly AI Challenge">Månedlig AI Challenge</li>
@@ -934,9 +934,9 @@ async function trackAffiliateSale(env, kode, kundeEpost, tier, belop){
   return provisjon;
 }
 
-// ---- LME Autopilot-tilgang ----
-// Pro og VIP inkluderer LME Autopilot. Kontoene der ligger i KV (STUDIO_KV,
-// samme lager som LME Autopilots ACCOUNTS_KV), med e-post som nokkel.
+// ---- LME Content Studio-tilgang ----
+// Pro og VIP inkluderer LME Content Studio. Kontoene der ligger i KV (STUDIO_KV,
+// samme lager som LME Content Studios ACCOUNTS_KV), med e-post som nokkel.
 // Kredittene fylles pa ved kjop og hver fornyelse, og fjernes ved oppsigelse.
 const STUDIO_PLANER = {
   pro: { plan: 'proff',     image: 100, video: 6 },
@@ -960,7 +960,7 @@ async function giStudioTilgang(env, epost, tier){
     await env.STUDIO_KV.put(key, JSON.stringify(user));
   } else if(user && user.viaInnerCircle){
     // Bare kontoer som fikk tilgangen via medlemskapet nedgraderes;
-    // noen som har kjopt LME Autopilot direkte rores ikke.
+    // noen som har kjopt LME Content Studio direkte rores ikke.
     user.plan = 'free';
     user.credits = { image: 0, video: 0 };
     user.viaInnerCircle = false;
