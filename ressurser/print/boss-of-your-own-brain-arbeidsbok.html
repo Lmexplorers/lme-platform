@@ -48,9 +48,9 @@
   .gd-foot{position:absolute;bottom:7mm;left:0;right:0;text-align:center;font-size:10.5pt;font-weight:700;color:var(--g-ink);font-family:var(--font-body);}
   .gd-inner{position:absolute;top:21mm;left:16mm;right:16mm;bottom:15mm;display:flex;flex-direction:column;}
 
-  /* ===== Ikon-medaljong (erstatter foto der vi ikke har eget kursbilde) === */
-  .gd-icon{width:26mm;height:26mm;border-radius:50%;background:linear-gradient(135deg,var(--g-mint),var(--g-mint-mid));display:flex;align-items:center;justify-content:center;font-size:26pt;margin-bottom:5mm;box-shadow:0 4px 14px rgba(124,196,163,.4);}
-  .gd-icon.gold{background:linear-gradient(135deg,#f7e76b,#f0dd4f);}
+  /* ===== Bilder av Mia &amp; Teo øverst på hver side ===== */
+  .gd-img{width:100%;height:56mm;object-fit:cover;border-radius:4mm;border:1px solid rgba(0,0,0,.08);margin-bottom:5mm;display:block;}
+  .gd-cover-img{width:100%;max-width:150mm;height:58mm;object-fit:cover;border-radius:4mm;border:1px solid rgba(0,0,0,.08);margin-bottom:6mm;display:block;}
 
   /* ===== Innholdsbrikker som går igjen ===== */
   .gd-pill{display:block;width:100%;box-sizing:border-box;text-align:center;border-radius:999px;padding:3.5mm 6mm;font-family:var(--font-display);font-weight:700;font-size:14pt;margin:0 0 5mm;}
@@ -83,7 +83,6 @@
   .gd-cover-label{font-size:9pt;letter-spacing:.14em;text-transform:uppercase;color:#9a9a9a;margin-bottom:4mm;font-family:var(--font-body);font-weight:700;}
   .gd-cover-title{font-family:var(--font-display);font-weight:800;font-size:32pt;text-transform:uppercase;line-height:1.16;color:var(--g-ink);margin-bottom:6mm;}
   .gd-cover-badge{display:inline-block;background:var(--g-yellow);color:var(--g-ink);font-family:var(--font-body);font-weight:700;font-size:12.5pt;border-radius:999px;padding:3.5mm 9mm;margin-bottom:8mm;}
-  .gd-cover-icon{margin-bottom:7mm;}
   .gd-cover-card{background:#fff;border-radius:5mm;border:1px solid #f0eeea;padding:6mm 10mm;max-width:150mm;margin-bottom:6mm;}
   .gd-cover-card .sub{font-size:11pt;color:var(--g-body);line-height:1.6;}
   .gd-cover-card .accent{font-family:var(--font-body);font-weight:700;color:var(--g-rose);font-style:italic;margin-top:3mm;font-size:10.5pt;}
@@ -136,7 +135,7 @@
         <div class="gd-cover-label" data-no="LME-arbeidsbok" data-en="LME workbook">LME-arbeidsbok</div>
         <h1 class="gd-cover-title" data-no="Boss of Your Own Brain" data-en="Boss of Your Own Brain">Boss of Your Own Brain</h1>
         <div class="gd-cover-badge" data-no="Arbeidsbok · 5 moduler" data-en="Workbook · 5 modules">Arbeidsbok · 5 moduler</div>
-        <div class="gd-icon gd-cover-icon">🧠</div>
+        <img class="gd-cover-img" src="/images/banner_eventyr.webp" alt="Mia og Teo starter på en ny sti i skogen, klare for eventyret">
         <div class="gd-cover-card">
           <p class="sub" data-no="Din arbeidsbok gjennom kurset. Ett kapittel per modul, med refleksjon, øvelser og ett konkret steg du kan ta denne uken." data-en="Your workbook through the course. One chapter per module, with reflection, exercises and one concrete step you can take this week.">Din arbeidsbok gjennom kurset. Ett kapittel per modul, med refleksjon, øvelser og ett konkret steg du kan ta denne uken.</p>
           <p class="accent" data-no="· Du er sjefen i ditt eget hode ·" data-en="· You're the boss of your own brain ·">· Du er sjefen i ditt eget hode ·</p>
@@ -155,7 +154,7 @@
       <div class="gd-edge gd-edge-r"><span data-no="Boss of Your Own Brain — Arbeidsbok" data-en="Boss of Your Own Brain — Workbook">Boss of Your Own Brain — Arbeidsbok</span></div>
       <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Arbeidsbok · Boss of Your Own Brain" data-en="Workbook · Boss of Your Own Brain">Arbeidsbok · Boss of Your Own Brain</div></div>
       <div class="gd-inner">
-        <div class="gd-icon">💚</div>
+        <img class="gd-img" src="/images/mia-teo-brev.webp" alt="Mia og Teo holder en glitrende velkomstbrev sammen">
         <h2 class="gd-pill yellow" data-no="Velkommen" data-en="Welcome">Velkommen</h2>
         <div class="gd-text" data-no="Hei! Denne arbeidsboken er til deg som gründer, iverksetter eller visjonær som vil ta kontroll over tankene dine og bygge en virksomhet fra en plass av kraft og selvtillit. Her skriver du ned tankene dine, gjør øvelsene, og oppdager hvordan du selv kan styre hjernen din, i stedet for at den styrer deg." data-en="Hi! This workbook is for you as an entrepreneur, business builder or visionary who wants to take control of your thoughts and build a business from a place of power and self-confidence. Here you write down your thoughts, do the exercises, and discover how you can steer your own brain, instead of it steering you.">Hei! Denne arbeidsboken er til deg som gründer, iverksetter eller visjonær som vil ta kontroll over tankene dine og bygge en virksomhet fra en plass av kraft og selvtillit. Her skriver du ned tankene dine, gjør øvelsene, og oppdager hvordan du selv kan styre hjernen din, i stedet for at den styrer deg.</div>
         <div class="gd-card">
@@ -186,7 +185,7 @@
       <div class="gd-edge gd-edge-r"><span data-no="Boss of Your Own Brain — Arbeidsbok" data-en="Boss of Your Own Brain — Workbook">Boss of Your Own Brain — Arbeidsbok</span></div>
       <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 1 av 5" data-en="Module 1 of 5">Modul 1 av 5</div></div>
       <div class="gd-inner">
-        <div class="gd-icon">🗣️</div>
+        <img class="gd-img" src="/images/courses/course_pusterom.webp" alt="Mia og Teo sitter rolig med hendene på hjertet og øynene lukket">
         <h2 class="gd-pill yellow" data-no="Modul 1: Møt dine stemmer" data-en="Module 1: Meet your voices">Modul 1: Møt dine stemmer</h2>
         <div class="gd-text" data-no="Hva er det du sier til deg selv når du skal gjøre noe vanskelig? Denne modulen handler om å møte Komitéen, de negative stemmene i hodet ditt, slik at du kan begynne å velge hvilke stemmer du skal lytte til. Du har også en sann stemme, den som har fått deg hit." data-en="What do you tell yourself when you're about to do something difficult? This module is about meeting the Committee, the negative voices in your head, so you can start choosing which voices to listen to. You also have a true voice, the one that got you here.">Hva er det du sier til deg selv når du skal gjøre noe vanskelig? Denne modulen handler om å møte Komitéen, de negative stemmene i hodet ditt, slik at du kan begynne å velge hvilke stemmer du skal lytte til. Du har også en sann stemme, den som har fått deg hit.</div>
 
@@ -223,7 +222,7 @@
       <div class="gd-edge gd-edge-r"><span data-no="Boss of Your Own Brain — Arbeidsbok" data-en="Boss of Your Own Brain — Workbook">Boss of Your Own Brain — Arbeidsbok</span></div>
       <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 2 av 5" data-en="Module 2 of 5">Modul 2 av 5</div></div>
       <div class="gd-inner">
-        <div class="gd-icon">👓</div>
+        <img class="gd-img" src="/images/banner_rolig_stund.webp" alt="Mia og Teo koser seg med en bok i skumringen, en rolig og takknemlig stund">
         <h2 class="gd-pill yellow" data-no="Modul 2: Glassets øvelse &amp; gratitude" data-en="Module 2: The glasses exercise &amp; gratitude">Modul 2: Glassets øvelse &amp; gratitude</h2>
         <div class="gd-text" data-no="Ditt perspektiv bestemmer din virkelighet. Med riktige «briller» kan du se mulighetene i stedet for problemene. I denne modulen lærer du den magiske glassets-øvelsen, og hvordan gratitude trener hjernen din til å legge merke til det som allerede går bra." data-en="Your perspective determines your reality. With the right “glasses,” you can see opportunities instead of problems. In this module you learn the magical glasses exercise, and how gratitude trains your brain to notice what's already going well.">Ditt perspektiv bestemmer din virkelighet. Med riktige «briller» kan du se mulighetene i stedet for problemene. I denne modulen lærer du den magiske glassets-øvelsen, og hvordan gratitude trener hjernen din til å legge merke til det som allerede går bra.</div>
 
@@ -255,7 +254,7 @@
       <div class="gd-edge gd-edge-r"><span data-no="Boss of Your Own Brain — Arbeidsbok" data-en="Boss of Your Own Brain — Workbook">Boss of Your Own Brain — Arbeidsbok</span></div>
       <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 3 av 5" data-en="Module 3 of 5">Modul 3 av 5</div></div>
       <div class="gd-inner">
-        <div class="gd-icon">💰</div>
+        <img class="gd-img" src="/images/courses/course_tall_og_telling.webp" alt="Mia og Teo teller med gullperler, mengden vokser">
         <h2 class="gd-pill yellow" data-no="Modul 3: Money mindset" data-en="Module 3: Money mindset">Modul 3: Money mindset</h2>
         <div class="gd-text" data-no="Hva tror du om penger? De svarene bestemmer hvor mye du tjener, og hvor bra det føles. I denne modulen identifiserer du dine pengehistorier, de du har arvet fra familie og kultur, og skaper en ny, frisk relasjon til rikdom." data-en="What do you believe about money? Those answers determine how much you earn, and how good it feels. In this module you identify your money stories, the ones you've inherited from family and culture, and create a new, fresh relationship with wealth.">Hva tror du om penger? De svarene bestemmer hvor mye du tjener, og hvor bra det føles. I denne modulen identifiserer du dine pengehistorier, de du har arvet fra familie og kultur, og skaper en ny, frisk relasjon til rikdom.</div>
 
@@ -287,7 +286,7 @@
       <div class="gd-edge gd-edge-r"><span data-no="Boss of Your Own Brain — Arbeidsbok" data-en="Boss of Your Own Brain — Workbook">Boss of Your Own Brain — Arbeidsbok</span></div>
       <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 4 av 5" data-en="Module 4 of 5">Modul 4 av 5</div></div>
       <div class="gd-inner">
-        <div class="gd-icon">🧭</div>
+        <img class="gd-img" src="/images/courses/course_hopp_og_sprett.webp" alt="Mia og Teo hopper glade mellom putene, klare til å ta steget">
         <h2 class="gd-pill yellow" data-no="Modul 4: Beslutninger fra din sanne stemme" data-en="Module 4: Decisions from your true voice">Modul 4: Beslutninger fra din sanne stemme</h2>
         <div class="gd-text" data-no="Hver dag tar du beslutninger. Spørsmålet er: hvor kommer de fra? Fra frykt, eller fra din sanne stemme? Disse tre spørsmålene hjelper deg å velge fra kraft, ikke fra frykt." data-en="Every day you make decisions. The question is: where do they come from? From fear, or from your true voice? These three questions help you choose from power, not from fear.">Hver dag tar du beslutninger. Spørsmålet er: hvor kommer de fra? Fra frykt, eller fra din sanne stemme? Disse tre spørsmålene hjelper deg å velge fra kraft, ikke fra frykt.</div>
 
@@ -320,7 +319,7 @@
       <div class="gd-edge gd-edge-r"><span data-no="Boss of Your Own Brain — Arbeidsbok" data-en="Boss of Your Own Brain — Workbook">Boss of Your Own Brain — Arbeidsbok</span></div>
       <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 5 av 5" data-en="Module 5 of 5">Modul 5 av 5</div></div>
       <div class="gd-inner">
-        <div class="gd-icon">🌱</div>
+        <img class="gd-img" src="/images/courses/course_praktisk_liv.webp" alt="Mia og Teo hjelper hverandre med en daglig rutine, steg for steg">
         <h2 class="gd-pill yellow" data-no="Modul 5: Vedlikehold &amp; vekst" data-en="Module 5: Maintenance &amp; growth">Modul 5: Vedlikehold &amp; vekst</h2>
         <div class="gd-text" data-no="Mestring er ikke én stor endring, det er små, konsistente handlinger hver dag. De fire pilarene under holder deg i gang, også de dagene tankene dine er vanskeligst." data-en="Mastery is not one big change, it's small, consistent actions every day. The four pillars below keep you going, even on the days your thoughts are hardest.">Mestring er ikke én stor endring, det er små, konsistente handlinger hver dag. De fire pilarene under holder deg i gang, også de dagene tankene dine er vanskeligst.</div>
 
@@ -354,7 +353,7 @@
       <div class="gd-edge gd-edge-r"><span data-no="Boss of Your Own Brain — Arbeidsbok" data-en="Boss of Your Own Brain — Workbook">Boss of Your Own Brain — Arbeidsbok</span></div>
       <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Veien videre" data-en="What's next">Veien videre</div></div>
       <div class="gd-inner">
-        <div class="gd-icon gold">🌸</div>
+        <img class="gd-img" src="/images/hero_learning_tree.webp" alt="Mia og Teo ser utover et vidt landskap fra tretoppen sitt">
         <h2 class="gd-pill yellow" data-no="Du er sjefen i ditt eget hode" data-en="You're the boss of your own brain">Du er sjefen i ditt eget hode</h2>
         <div class="gd-text" data-no="Du trenger ikke gjøre alt på én gang. Gå tilbake til denne arbeidsboken når du trenger et lite dytt, en modul om gangen, ett steg om gangen." data-en="You don't need to do everything at once. Come back to this workbook whenever you need a little push, one module at a time, one step at a time.">Du trenger ikke gjøre alt på én gang. Gå tilbake til denne arbeidsboken når du trenger et lite dytt, en modul om gangen, ett steg om gangen.</div>
 
