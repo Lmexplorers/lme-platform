@@ -4,10 +4,12 @@ Statisk HTML-side (Cloudflare Pages) for Little Montessori Explorers.
 Eier: Renate Dahl. Tekst er som hovedregel på **norsk** (bokmål), med engelsk
 oversettelse via `data-no` / `data-en` der språkbytte finnes.
 
-## 🚫 Navnet er LME Content Studio (aldri "LME Studio")
+## 🚫 Navnet er LME Autopilot (aldri "LME Studio" eller "LME Content Studio")
 
-Verktøyet heter **LME Content Studio**. Skriv aldri "LME Studio", verken i
-tekst, kort, overskrifter eller lenker. (Beskjed fra Renate 17. juli 2026.)
+Verktøyet heter **LME Autopilot**. Skriv aldri "LME Studio" eller "LME
+Content Studio", verken i tekst, kort, overskrifter eller lenker.
+(Omdøpt fra "LME Content Studio" til "LME Autopilot", beskjed fra Renate
+31. juli 2026.)
 
 Selve kortet/verktøyet (bl.a. på forsiden/dashbordet) skal ellers ikke endres,
 "ryddes i" eller få endret lenker/design uten at Renate eksplisitt ber om det.
