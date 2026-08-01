@@ -165,7 +165,17 @@ function contentPrompt(b) {
   const src = (b.source || b.article || "").slice(0, 6000);
 
   // Lag imagePrompt basert på faktisk tema brukeren oppgir
-  const imagePromptBase = `Beskriv et konkret, realistisk motiv som illustrerer innholdet: "${src.slice(0, 300)}". Vises mennesker, beskriv deres miljø og handling. Vises materialer eller objekter, beskriv dem nøyaktig (farger, form, størrelse, antall).`;
+  const imagePromptBase = `Generate a specific, realistic, well-composed photograph that illustrates: "${src.slice(0, 300)}".
+
+COMPOSITION: Wide shot from a stable, realistic angle (never tilted, rotated, or surreal). Consistent perspective. Real lighting.
+
+PHOTOGRAPHY STYLE: Professional, warm, natural lighting. Colors are vibrant and true. No AI artifacts, distortions, or impossible geometry. Everything is exactly where it should be physically.
+
+SUBJECT & SETTING: Clearly depict the theme. If showing people, show them naturally engaged with the scene. If showing objects/materials, show them clearly from a normal viewing angle. No floating objects, weird inversions, or reversed perspectives.
+
+DO NOT: Generate Montessori, educational toys, children's materials, or pedagogical settings. Generate ONLY the requested theme.
+
+Make sure every element is physically realistic and the image could exist as a real photograph.`;
 
   const shapes = {
     carousel: `{"format":"carousel","title":"kort arbeidstittel","slides":["3-8 korte slides, hver bygger på forrige, siste er en tydelig CTA"],"caption":"ferdig caption","hashtags":["8-12 hashtags"]}`,
