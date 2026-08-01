@@ -24,38 +24,11 @@ import { enforceGeneration } from "../_lib/access.js";
  */
 
 const STYLE_LOCK =
-  "⚠️ CRITICAL MANDATORY REQUIREMENTS (EVERY IMAGE MUST FOLLOW THIS) ⚠️\n" +
-  "\n" +
-  "1. ILLUSTRATION STYLE ONLY:\n" +
-  "   - MUST be a 3D animated cartoon illustration (Pixar/Disney style)\n" +
-  "   - NOT a photograph, NOT photorealistic, NOT realistic, NOT AI photo\n" +
-  "   - Soft rounded shapes, warm hand-drawn look, gentle shadows\n" +
-  "\n" +
-  "2. CHARACTER APPEARANCE - MANDATORY DIVERSITY (DO THIS EVERY TIME):\n" +
-  "   🔴 REQUIREMENT: Each image must show DIFFERENT characters with DIFFERENT appearances\n" +
-  "   🔴 HAIR COLOR - ROTATE between: blonde, red, light brown, medium brown, dark brown, black\n" +
-  "   🔴 HAIR TEXTURE - MIX: straight hair, wavy hair, curly hair (but not ALWAYS curly)\n" +
-  "   🔴 SKIN TONE - INCLUDE: light, medium, and dark skin tones in the same image\n" +
-  "   🔴 DO NOT: generate the same character repeatedly\n" +
-  "   🔴 DO NOT: always use dark curly hair (this is WRONG)\n" +
-  "   🔴 DO NOT: use identical features across children\n" +
-  "\n" +
-  "3. COLOR PALETTE:\n" +
-  "   LME colors: cerise pink (#E91E89), lime green (#A4D233), sky blue, lemon yellow, cream, wood tones, nature greens\n" +
-  "\n" +
-  "4. FORBIDDEN ELEMENTS:\n" +
-  "   - No text, words, letters, numbers, or labels\n" +
-  "   - No logos, watermarks, or modern objects\n" +
-  "   - No cameras, phones, or technology\n" +
-  "   - No photorealism or realistic photos\n" +
-  "\n" +
-  "5. FOCUS ON:\n" +
-  "   - Diverse children engaged in learning/nature activities\n" +
-  "   - Natural proportions, friendly expressions, varied appearances\n" +
-  "   - Montessori-inspired peaceful learning environments\n" +
-  "\n" +
-  "🔴 REMEMBER: Diversity is the GOAL. DO NOT default to dark curly hair. VARY EVERY FEATURE. 🔴\n" +
-  "⚠️ END CRITICAL REQUIREMENTS ⚠️";
+  "STYLE: Soft 3D cartoon illustration (Pixar style), NOT a photograph.\n" +
+  "COLORS: Warm, hand-drawn feel. Use LME palette: cerise pink, lime green, sky blue, lemon yellow, soft cream, warm wood tones, nature greens.\n" +
+  "CHARACTERS: Show diverse children with varied appearances. Different hair colors (blonde, red, brown, dark brown). Different hair textures (straight, wavy, curly, not all curly). Different skin tones (light, medium, dark). Different ages and body types.\n" +
+  "FORBIDDEN: No text, words, labels, logos, watermarks, cameras, phones, or photorealism.\n" +
+  "FOCUS: Peaceful learning moment, children engaged in nature or activity, natural proportions, friendly expressions, non-stereotyped diverse appearances.";
 
 // Låste karakterprompter, ordrett fra merkevare-bibelen.
 const MIA =
@@ -109,26 +82,11 @@ function buildPrompt(text, character) {
       parts.push("Depict them exploring nature and learning together with varied appearances.");
     }
   } else if (theme) {
-    parts.push(`CREATE AN ILLUSTRATION (not a photo) showing this theme: ${theme}`);
-    parts.push("🔴 MANDATORY DIVERSITY: Include 2-4 children/people with VISIBLY DIFFERENT appearances:");
-    parts.push("   - At least one with blonde, red, or light brown hair (straight or wavy, NOT curly)");
-    parts.push("   - At least one with medium brown hair");
-    parts.push("   - At least one with dark brown or black hair (can be wavy or curly, but not the ONLY one)");
-    parts.push("   - Mix straight, wavy, and curly hair textures across different characters");
-    parts.push("   - Include light, medium, and dark skin tones");
-    parts.push("   - Show different ages and body types");
-    parts.push("(Do not render these instructions as text. Focus on visual storytelling, activity, and emotion.)");
+    parts.push(`Illustration showing this theme: ${theme}`);
+    parts.push("Include children with diverse appearances: different hair colors and textures, different skin tones, different ages.");
   } else {
-    parts.push("Create an illustration of a peaceful Montessori-inspired learning scene with 2-4 children of VISIBLY DIFFERENT appearances:");
-    parts.push("   - Mix hair colors: blonde, red, light/medium/dark brown, black");
-    parts.push("   - Mix hair textures: straight, wavy, curly (not always curly)");
-    parts.push("   - Mix skin tones: light, medium, dark");
-    parts.push("   - Show different ages and body types");
-    parts.push("Engaged in nature exploration and learning. Do not render the text as labels.");
+    parts.push("Peaceful Montessori learning scene with children of diverse appearances: varied hair colors, varied hair textures, varied skin tones, different ages.");
   }
-
-  // Add STYLE_LOCK AGAIN at the end to reinforce it
-  parts.push("🔴 FINAL REMINDER: SHOW DIVERSE CHARACTERS. NO REPEATED FEATURES. VARIETY IS SUCCESS. NO DARK CURLY HAIR ONLY. 🔴");
 
   return parts.join("\n\n");
 }
