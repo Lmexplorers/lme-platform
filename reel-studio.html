@@ -208,7 +208,7 @@
     <div class="step-num"><span>3</span> <span data-i18n="s3-num">Publiser</span></div>
     <h2 data-i18n="s3-h">Legg ut automatisk</h2>
     <p class="lead" data-i18n="s3-lead">Bruker Blotato-kontoene dine automatisk. Legg ut nå, eller planlegg til en fremtidig dato.</p>
-    <div id="step3-disabled-hint" style="background:rgba(233,30,137,0.1);border:1px solid rgba(233,30,137,0.3);border-radius:var(--r-sm);padding:12px 14px;font-size:13px;color:var(--cerise);margin-bottom:16px;display:none;"><strong>💡 Tip:</strong> Generer først innholdet i steg 1, så aktiveres publiseringsknappene her.</div>
+    <div id="step3-disabled-hint" style="background:rgba(233,30,137,0.1);border:1px solid rgba(233,30,137,0.3);border-radius:var(--r-sm);padding:12px 14px;font-size:13px;color:var(--cerise);margin-bottom:16px;display:none;"><strong>💡 Tip:</strong> <span data-i18n="s3-hint">Generer først innholdet i steg 1, så aktiveres publiseringsknappene her.</span></div>
     <label style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--ink-soft);cursor:pointer;margin-bottom:4px;">
       <input type="checkbox" id="schedOn" style="width:auto;" onchange="toggleSched()"> <span data-i18n="s3-sched">📅 Planlegg til senere (90-dagers plan)</span>
     </label>
@@ -260,7 +260,7 @@ const I18N = {
     vidServerBusy:"Serveren svarer ikke som forventet ennå. En ny versjon kan være under utrulling. Last siden på nytt og prøv igjen om et minutt.",
     imgNotConfigured:"Bildemotoren er ikke koblet til ennå. Legg inn en nøkkel (OPENAI_API_KEY eller GEMINI_API_KEY) i Cloudflare, så lager jeg bildet automatisk.",
     "s3-num":"Publiser","s3-h":"Legg ut automatisk","s3-lead":"Bruker Blotato-kontoene dine automatisk. Legg ut nå, eller planlegg til en fremtidig dato.",
-    "s3-sched":"📅 Planlegg til senere (90-dagers plan)","s3-date":"Dato","s3-time":"Tid",
+    "s3-sched":"📅 Planlegg til senere (90-dagers plan)","s3-date":"Dato","s3-time":"Tid","s3-hint":"Generer først innholdet i steg 1, så aktiveres publiseringsknappene her.",
     "pl-num":"Planen din","pl-h":"Planlagt innhold","pl-lead":"Innhold du har planlagt fremover. Blotato legger det ut automatisk til rett tid. Lagres her, også etter at du lukker siden.",
     hook:"HOOK (0-3 s)",vo:"Voiceover",music:"Musikk",caption:"Caption",tags:"Hashtags",scenes:"Scener",broll:"B-roll",
     slide:"Slide",frame:"Frame",imgprompt:"Bilde-prompt",subject:"Emnelinje",preview:"Forhåndstekst",body:"E-post",cta:"Oppfordring",pinTitle:"Pin-tittel",pinDesc:"Pin-beskrivelse",
@@ -299,7 +299,7 @@ const I18N = {
     vidServerBusy:"The server isn't responding as expected yet. A new version may be deploying. Reload the page and try again in a minute.",
     imgNotConfigured:"The image engine isn't connected yet. Add a key (OPENAI_API_KEY or GEMINI_API_KEY) in Cloudflare and I'll create the image automatically.",
     "s3-num":"Publish","s3-h":"Post automatically","s3-lead":"Uses your connected Blotato accounts automatically. Post now, or schedule for a future date.",
-    "s3-sched":"📅 Schedule for later (90-day plan)","s3-date":"Date","s3-time":"Time",
+    "s3-sched":"📅 Schedule for later (90-day plan)","s3-date":"Date","s3-time":"Time","s3-hint":"Generate content in step 1 first, then the publish buttons will activate here.",
     "pl-num":"Your plan","pl-h":"Scheduled content","pl-lead":"Content you've scheduled ahead. Blotato posts it automatically at the right time. Saved here, even after you close the page.",
     hook:"HOOK (0-3 s)",vo:"Voiceover",music:"Music",caption:"Caption",tags:"Hashtags",scenes:"Scenes",broll:"B-roll",
     slide:"Slide",frame:"Frame",imgprompt:"Image prompt",subject:"Subject",preview:"Preview text",body:"Email",cta:"Call to action",pinTitle:"Pin title",pinDesc:"Pin description",
