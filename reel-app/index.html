@@ -622,6 +622,22 @@
       .catch(function(e){ statusEl.className='pubmsg err'; statusEl.textContent = (LANG==='no'?'⚠️ Kunne ikke lage bilde':'⚠️ Could not make image')+(e&&e.message?' ('+e.message+')':''); })
       .finally(function(){ btn.disabled = false; btn.innerHTML = lbl; });
   }
+  function wrapText(ctx, text, maxWidth, lineHeight){
+    var words = text.split(' ');
+    var lines = [];
+    var currentLine = '';
+    for (var i=0; i<words.length; i++){
+      var testLine = currentLine + (currentLine?' ':'') + words[i];
+      if (ctx.measureText(testLine).width > maxWidth && currentLine){
+        lines.push(currentLine);
+        currentLine = words[i];
+      } else {
+        currentLine = testLine;
+      }
+    }
+    if (currentLine) lines.push(currentLine);
+    return lines;
+  }
   function renderTextOnImage(imageUrl, textLines, slideNum, totalSlides){
     return new Promise(function(resolve, reject){
       var img = new Image();
@@ -633,20 +649,26 @@
         canvas.height = 1080;
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         ctx.fillStyle = 'rgba(255,255,255,0.95)';
-        ctx.font = 'bold 48px Sasson Montessori, sans-serif';
+        ctx.font = 'bold 52px Sasson Montessori, sans-serif';
         ctx.textAlign = 'center';
-        var textBoxHeight = textLines.length * 70 + 60;
+        var wrappedLines = [];
+        textLines.forEach(function(line){
+          var wrapped = wrapText(ctx, line, 900, 80);
+          wrappedLines = wrappedLines.concat(wrapped);
+        });
+        var textBoxHeight = wrappedLines.length * 80 + 80;
         var startY = (canvas.height - textBoxHeight) / 2;
-        var boxX = 40; var boxY = startY - 20; var boxW = canvas.width - 80; var boxH = textBoxHeight;
+        var boxX = 40; var boxY = startY - 30; var boxW = canvas.width - 80; var boxH = textBoxHeight;
         ctx.fillRect(boxX, boxY, boxW, boxH);
         ctx.fillStyle = '#1F1B24';
-        textLines.forEach(function(line, idx){
-          ctx.fillText(line, canvas.width/2, startY + 60 + (idx * 70));
+        ctx.font = 'bold 52px Sasson Montessori, sans-serif';
+        wrappedLines.forEach(function(line, idx){
+          ctx.fillText(line, canvas.width/2, startY + 70 + (idx * 80));
         });
         ctx.fillStyle = 'rgba(255,255,255,0.9)';
-        ctx.font = '36px Sasson Montessori, sans-serif';
+        ctx.font = '42px Sasson Montessori, sans-serif';
         ctx.textAlign = 'right';
-        ctx.fillText((slideNum+1)+'/'+totalSlides, canvas.width - 40, canvas.height - 40);
+        ctx.fillText((slideNum+1)+'/'+totalSlides, canvas.width - 50, canvas.height - 50);
         canvas.toBlob(function(blob){ resolve(URL.createObjectURL(blob)); }, 'image/jpeg', 0.95);
       };
       img.onerror = function(){ reject(new Error('Could not load image')); };
