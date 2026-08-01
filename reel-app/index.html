@@ -784,7 +784,8 @@
   }
   function renderSaved(){
     var list = $('savedList'); var a = getSaved();
-    if (!a.length){ list.innerHTML='<div class="empty"><div class="em">📁</div><p>'+(LANG==='no'?'Ingenting lagret ennå. Lag ditt første innhold under "Lag".':'Nothing saved yet. Make your first content under "Make".')+'</p></div>'; return; }
+    console.log('[reel-app] renderSaved: found', a.length, 'saved reels');
+    if (!a.length){ console.log('[reel-app] No saved reels, showing empty message'); list.innerHTML='<div class="empty"><div class="em">📁</div><p>'+(LANG==='no'?'Ingenting lagret ennå. Lag ditt første innhold under "Lag".':'Nothing saved yet. Make your first content under "Make".')+'</p></div>'; return; }
     list.innerHTML='';
     a.forEach(function(item, i){
       var d=document.createElement('div'); d.className='saved';
