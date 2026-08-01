@@ -69,31 +69,19 @@ function sizeFor(platform) {
 function buildPrompt(text, character) {
   const parts = [];
   const c = CHAR[character];
-  const lowerText = String(text || "").toLowerCase();
-  const isMontessoriTheme = lowerText.includes("montessori") && !lowerText.includes("ikke montessori") && !lowerText.includes("not montessori") && !lowerText.includes("do not");
+  const theme = String(text || "").replace(/\s+/g, " ").trim().slice(0, 700);
 
   if (c) {
     parts.push(c);
-    // Nok av beskrivelsen til at et presist navngitt Montessori-materiell (med
-    // farger, antall deler og oppsett) overlever inn i bildet. 320 tegn kappet
-    // vekk akkurat detaljene som gjør materiellet riktig.
-    const theme = String(text || "").replace(/\s+/g, " ").trim().slice(0, 700);
-    parts.push(
-      theme
-        ? `Depict them in a scene that fits this theme (illustrate the mood and activity, do not render any of these words): ${theme}`
-        : "Depict them exploring nature and learning together."
-    );
-  } else {
-    // Ingen karakter: BARE legge til Montessori-scene hvis temaet eksplisitt handler om Montessori
-    if (isMontessoriTheme) {
-      parts.push("A warm, inviting Montessori scene with real, pedagogically accurate Montessori practical-life materials, natural wood, soft daylight, calm ordered shelves. No recognizable real people.");
+    if (theme) {
+      parts.push(`Depict them in a scene that fits this theme (illustrate the mood and activity, do not render any of these words): ${theme}`);
     } else {
-      // Sterkt avvisning av Montessori for ikke-Montessori-temaer
-      parts.push("ABSOLUTELY NO Montessori. Do NOT render any Montessori shelves, Montessori materials, pedagogical environments, classroom, preschool, or anything Montessori-related. Generate ONLY the requested theme.");
+      parts.push("Depict them exploring nature and learning together.");
     }
-    const theme = String(text || "").replace(/\s+/g, " ").trim().slice(0, 700);
-    if (theme) parts.push(`Illustrate exactly this theme, no generic backgrounds (do not render any of these words): ${theme}`);
+  } else if (theme) {
+    parts.push(`Illustrate exactly this theme, no generic backgrounds (do not render any of these words): ${theme}`);
   }
+
   parts.push(STYLE_LOCK);
   return parts.join(" ");
 }

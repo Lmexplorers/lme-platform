@@ -164,11 +164,8 @@ function contentPrompt(b) {
   const fmt = String(b.format || "post");
   const src = (b.source || b.article || "").slice(0, 6000);
 
-  // Lag dynamiske imagePrompt-instruksjoner med aktuelle tema injisert
-  const isMontessoriTheme = src.toLowerCase().includes("montessori") || src.toLowerCase().includes("pedagogikk");
-  const imagePromptBase = !isMontessoriTheme
-    ? `⚠️ ABSOLUTT INGEN MONTESSORI ⚠️ Generer KUN innhold om: "${src.slice(0, 300)}". IKKE generer: Montessori-hyller, Montessori-materiell, pedagogikk, barnehage, klasserom, rosa/krem/lila farger, eller noe som helst som ligner Montessori eller pedagogisk miljø. Beskriv et konkret, realistisk motiv som illustrerer BARE DETTE TEMAET. Vises mennesker, beskriv deres miljø og handling. Vises materialer/objekter, beskriv dem nøyaktig (farger, form, størrelse).`
-    : `Montessori-tema: "${src.slice(0, 200)}". Beskriv et konkret, realistisk motiv som illustrerer dette Montessori-innholdet. Vises mennesker, beskriv deres miljø og handling. Vises materialer eller objekter, beskriv dem nøyaktig (farger, form, størrelse, antall, materialer).`;
+  // Lag imagePrompt basert på faktisk tema brukeren oppgir
+  const imagePromptBase = `Beskriv et konkret, realistisk motiv som illustrerer innholdet: "${src.slice(0, 300)}". Vises mennesker, beskriv deres miljø og handling. Vises materialer eller objekter, beskriv dem nøyaktig (farger, form, størrelse, antall).`;
 
   const shapes = {
     carousel: `{"format":"carousel","title":"kort arbeidstittel","slides":["3-8 korte slides, hver bygger på forrige, siste er en tydelig CTA"],"caption":"ferdig caption","hashtags":["8-12 hashtags"]}`,
@@ -211,59 +208,6 @@ export async function onRequestPost(context) {
   const maxTokens = light ? 3000 : 3200;
   try {
     let result = await generateText(env, system, contentPrompt(body), maxTokens);
-
-    // Hvis tema IKKE handler om Montessori, fjern alle Montessori-referanser fra imagePrompt og broll
-    const src = String(body.source || body.article || "").toLowerCase();
-    const isMontessoriTheme = src.includes("montessori") || src.includes("pedagogikk") || src.includes("barn") || src.includes("førskolealder");
-
-    if (!isMontessoriTheme && result) {
-      try {
-        const parsed = JSON.parse(result);
-
-        // Fjern Montessori-bias fra imagePrompt
-        if (parsed.imagePrompt) {
-          parsed.imagePrompt = parsed.imagePrompt
-            .replace(/montessori-?/gi, "")
-            .replace(/montessori materiell/gi, "")
-            .replace(/hylle|shelves|hyllene/gi, "")
-            .replace(/rosa|krem|lila|pink|cream|purple/gi, "")
-            .replace(/pedagogisk|pedagogical/gi, "")
-            .replace(/klasserom|classroom/gi, "")
-            .replace(/barnehagemiljø|preschool environment/gi, "");
-        }
-
-        // Fjern Montessori-bias fra broll (reel/hookreel/explainer)
-        if (Array.isArray(parsed.scenes)) {
-          parsed.scenes.forEach(scene => {
-            if (scene.broll) {
-              scene.broll = scene.broll
-                .replace(/montessori-?/gi, "")
-                .replace(/montessori materiell/gi, "")
-                .replace(/hylle|shelves|hyllene/gi, "")
-                .replace(/rosa|krem|lila|pink|cream|purple/gi, "")
-                .replace(/pedagogisk|pedagogical/gi, "")
-                .replace(/klasserom|classroom/gi, "")
-                .replace(/barnehagemiljø|preschool environment/gi, "");
-            }
-            if (scene.illustration) {
-              scene.illustration = scene.illustration
-                .replace(/montessori-?/gi, "")
-                .replace(/montessori materiell/gi, "")
-                .replace(/hylle|shelves|hyllene/gi, "")
-                .replace(/rosa|krem|lila|pink|cream|purple/gi, "")
-                .replace(/pedagogisk|pedagogical/gi, "")
-                .replace(/klasserom|classroom/gi, "")
-                .replace(/barnehagemiljø|preschool environment/gi, "");
-            }
-          });
-        }
-
-        result = JSON.stringify(parsed);
-      } catch (e) {
-        // Hvis JSON-parsing feiler, returner original result
-      }
-    }
-
     return json({ result });
   } catch (err) {
     return json({ error: "AI er midlertidig utilgjengelig. Prøv igjen om litt." }, 502);
