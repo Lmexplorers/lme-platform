@@ -165,7 +165,7 @@ function contentPrompt(b) {
   const src = (b.source || b.article || "").slice(0, 6000);
 
   // Lag imagePrompt basert på faktisk tema brukeren oppgir
-  const imagePromptBase = `Generate a specific, realistic, well-composed photograph that illustrates: "${src.slice(0, 300)}".
+  const imagePromptRaw = `Generate a specific, realistic, well-composed photograph that illustrates: "${src.slice(0, 300)}".
 
 COMPOSITION: Wide shot from a stable, realistic angle (never tilted, rotated, or surreal). Consistent perspective. Real lighting.
 
@@ -176,6 +176,9 @@ SUBJECT & SETTING: Clearly depict the theme. If showing people, show them natura
 DO NOT: Generate Montessori, educational toys, children's materials, or pedagogical settings. Generate ONLY the requested theme. Do NOT bias toward specific physical characteristics.
 
 Make sure every element is physically realistic and the image could exist as a real photograph.`;
+
+  // Escape for JSON embedding
+  const imagePromptBase = imagePromptRaw.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n');
 
   const shapes = {
     carousel: `{"format":"carousel","title":"kort arbeidstittel","slides":["3-8 korte slides, hver bygger på forrige, siste er en tydelig CTA"],"caption":"ferdig caption","hashtags":["8-12 hashtags"]}`,
