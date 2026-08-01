@@ -867,11 +867,41 @@ function renderPlan(){
   }).join('');
 }
 
+// Catch all JavaScript errors for debugging
+window.addEventListener('error', function(event) {
+  console.error('[JS ERROR]', event.message, 'at', event.filename + ':' + event.lineno);
+});
+
+// Test function: manually enable step3 for debugging
+window.debugEnableStep3 = function() {
+  console.log('[DEBUG] Manually enabling step3...');
+  var step3 = document.getElementById('step3');
+  if (step3) {
+    step3.classList.add('on');
+    console.log('[DEBUG] step3 now has class "on"');
+    console.log('[DEBUG] step3 classList:', step3.className);
+    updatePubButtons();
+    console.log('[DEBUG] updatePubButtons() called');
+  } else {
+    console.error('[DEBUG] step3 element not found!');
+  }
+};
+console.log('[reel-studio] To test publishing, type: debugEnableStep3()');
+
+console.log('[reel-studio] Page loading...');
+console.log('[reel-studio] step3 element exists?', !!document.getElementById('step3'));
+console.log('[reel-studio] pubBtns element exists?', !!document.getElementById('pubBtns'));
 applyI18n();
 renderFmtChips();
 selectFmt('reel');
 renderPlan();
 renderSavedReels();
+console.log('[reel-studio] Page loaded! Initial format:', FMT);
+var step3=document.getElementById('step3');
+console.log('[reel-studio] step3 classList:', step3?.className);
+console.log('[reel-studio] step3 opacity:', window.getComputedStyle(step3).opacity);
+console.log('[reel-studio] step3 pointer-events:', window.getComputedStyle(step3).pointerEvents);
+console.log('[reel-studio] Ready to generate content.');
 
 /* Fjern oppdiktede løfter (f.eks. garanti eller "14 dager") fra tekst som
    kommer fra en gammel bufret side, så de aldri havner i det jeg genererer. */
