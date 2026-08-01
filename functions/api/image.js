@@ -28,7 +28,10 @@ const STYLE_LOCK =
   "warm cinematic lighting, gentle depth of field. LME brand palette: cerise pink, " +
   "lime green, bright sky blue, lemon yellow, soft cream, warm wood tones, nature greens. " +
   "Never photorealistic. Absolutely no text, no words, no letters, no numbers, no logos, " +
-  "no watermark anywhere in the image.";
+  "no watermark anywhere in the image. " +
+  "When showing people: varied natural hair colors and textures (blonde, red, brown, curly, straight, wavy); " +
+  "varied skin tones; natural, non-stereotyped appearances. Do not rotate or tilt perspectives unnaturally. " +
+  "Focus on the activity and learning moment, not character appearance.";
 
 // Låste karakterprompter, ordrett fra merkevare-bibelen.
 const MIA =
