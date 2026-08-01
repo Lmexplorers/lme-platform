@@ -203,7 +203,60 @@ export async function onRequestPost(context) {
   const light = (fmt === "explainer" || fmt === "hookreel");
   const maxTokens = light ? 3000 : 3200;
   try {
-    const result = await generateText(env, system, contentPrompt(body), maxTokens);
+    let result = await generateText(env, system, contentPrompt(body), maxTokens);
+
+    // Hvis tema IKKE handler om Montessori, fjern alle Montessori-referanser fra imagePrompt og broll
+    const src = String(body.source || body.article || "").toLowerCase();
+    const isMontessoriTheme = src.includes("montessori") || src.includes("pedagogikk") || src.includes("barn") || src.includes("førskolealder");
+
+    if (!isMontessoriTheme && result) {
+      try {
+        const parsed = JSON.parse(result);
+
+        // Fjern Montessori-bias fra imagePrompt
+        if (parsed.imagePrompt) {
+          parsed.imagePrompt = parsed.imagePrompt
+            .replace(/montessori-?/gi, "")
+            .replace(/montessori materiell/gi, "")
+            .replace(/hylle|shelves|hyllene/gi, "")
+            .replace(/rosa|krem|lila|pink|cream|purple/gi, "")
+            .replace(/pedagogisk|pedagogical/gi, "")
+            .replace(/klasserom|classroom/gi, "")
+            .replace(/barnehagemiljø|preschool environment/gi, "");
+        }
+
+        // Fjern Montessori-bias fra broll (reel/hookreel/explainer)
+        if (Array.isArray(parsed.scenes)) {
+          parsed.scenes.forEach(scene => {
+            if (scene.broll) {
+              scene.broll = scene.broll
+                .replace(/montessori-?/gi, "")
+                .replace(/montessori materiell/gi, "")
+                .replace(/hylle|shelves|hyllene/gi, "")
+                .replace(/rosa|krem|lila|pink|cream|purple/gi, "")
+                .replace(/pedagogisk|pedagogical/gi, "")
+                .replace(/klasserom|classroom/gi, "")
+                .replace(/barnehagemiljø|preschool environment/gi, "");
+            }
+            if (scene.illustration) {
+              scene.illustration = scene.illustration
+                .replace(/montessori-?/gi, "")
+                .replace(/montessori materiell/gi, "")
+                .replace(/hylle|shelves|hyllene/gi, "")
+                .replace(/rosa|krem|lila|pink|cream|purple/gi, "")
+                .replace(/pedagogisk|pedagogical/gi, "")
+                .replace(/klasserom|classroom/gi, "")
+                .replace(/barnehagemiljø|preschool environment/gi, "");
+            }
+          });
+        }
+
+        result = JSON.stringify(parsed);
+      } catch (e) {
+        // Hvis JSON-parsing feiler, returner original result
+      }
+    }
+
     return json({ result });
   } catch (err) {
     return json({ error: "AI er midlertidig utilgjengelig. Prøv igjen om litt." }, 502);
