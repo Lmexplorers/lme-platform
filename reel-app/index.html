@@ -799,7 +799,8 @@
       var uploadCard = document.createElement('div'); uploadCard.className='rcard';
       var uploadHead = document.createElement('h4'); uploadHead.textContent = LANG==='no'?'📸 Last opp bilde':'📸 Upload image';
       var uploadDesc = document.createElement('p'); uploadDesc.textContent = LANG==='no'?'Last opp ett bilde fra Canva eller telefonen din. Teksten legges automatisk oppå bildet på hver slide.':'Upload one image from Canva or your phone. Text will be automatically overlaid on the image for each slide.'; uploadDesc.style.fontSize='14px'; uploadDesc.style.color='var(--ink-soft)';
-      uploadCard.appendChild(uploadHead); uploadCard.appendChild(uploadDesc);
+      var uploadTip = document.createElement('p'); uploadTip.textContent = LANG==='no'?'💡 Tips: Bildet vises på alle slides med ulik tekst på hver. Best for horisontale bilder.':'💡 Tip: The image appears on all slides with different text on each. Works best with horizontal images.'; uploadTip.style.fontSize='12px'; uploadTip.style.color='var(--ink-muted)'; uploadTip.style.marginTop='8px';
+      uploadCard.appendChild(uploadHead); uploadCard.appendChild(uploadDesc); uploadCard.appendChild(uploadTip);
       var uploadDiv = document.createElement('div'); uploadDiv.style.marginTop='12px';
       var fileInput = document.createElement('input'); fileInput.type='file'; fileInput.accept='image/*'; fileInput.style.display='none';
       var uploadBtn = document.createElement('button'); uploadBtn.textContent = LANG==='no'?'Velg bilde':'Choose image'; uploadBtn.className='mk';
@@ -810,10 +811,14 @@
       uploadCard.appendChild(uploadDiv);
       out.appendChild(uploadCard);
       if (Array.isArray(r.slides)){
+        var carouselStats = document.createElement('div'); carouselStats.className='rcard';
+        var statsHead = document.createElement('h4'); statsHead.textContent = LANG==='no'?'📊 Karusell':'📊 Carousel';
+        var statsText = document.createElement('p'); statsText.textContent = (LANG==='no'?'Du har '+r.slides.length+' slides. Hver slide vises med samme bilde og annen tekst.':'You have '+r.slides.length+' slides. Each slide displays the same image with different text.'); statsText.style.fontSize='13.5px';
+        carouselStats.appendChild(statsHead); carouselStats.appendChild(statsText); out.appendChild(carouselStats);
         r.slides.forEach(function(s, i){
           var text = (typeof s === 'string') ? s : (s.text || s.body || s.headline || '');
           var d=document.createElement('div'); d.className='rcard scene';
-          var head=document.createElement('div'); head.className='time'; head.textContent=T('slide')+' '+(i+1);
+          var head=document.createElement('div'); head.className='time'; head.textContent=T('slide')+' '+(i+1)+'/'+r.slides.length;
           var on=document.createElement('div'); on.className='on'; on.textContent=text; on.appendChild(copyBtn(text));
           d.appendChild(head); d.appendChild(on);
           out.appendChild(d);
