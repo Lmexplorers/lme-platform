@@ -210,12 +210,12 @@ export async function onRequestPost(context) {
 
   const system = `${BRAND_CONTEXT}\nDu er LMEs innholdsprodusent. Du lager ferdig, publiseringsklart innhold i akkurat det formatet og om akkurat det temaet brukeren velger, i LMEs varme tone.`;
   // Nok token-tak til at hele JSON-en kommer med. De tyngre formatene
-  // (explainer, hookreel) har mange felter og flere scener, så de trenger
+  // (explainer, hookreel, reel) har mange felter og flere scener, så de trenger
   // rikelig rom, ellers kappes svaret og felter som caption, CTA og hashtags
   // (som står sist) faller bort.
   const fmt = String(body.format || "post");
-  const light = (fmt === "explainer" || fmt === "hookreel");
-  const maxTokens = light ? 3000 : 3200;
+  const heavy = (fmt === "explainer" || fmt === "hookreel" || fmt === "reel");
+  const maxTokens = heavy ? 4000 : 3200;
   try {
     let result = await generateText(env, system, contentPrompt(body), maxTokens);
     return json({ result });
