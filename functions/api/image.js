@@ -24,14 +24,20 @@ import { enforceGeneration } from "../_lib/access.js";
  */
 
 const STYLE_LOCK =
-  "ILLUSTRATION MANDATORY: Premium 3D illustrated children's book, NOT photograph, NOT photorealistic, NOT real people. " +
-  "Soft rounded Pixar/Disney-like style with hand-drawn animated look. Warm cinematic lighting, gentle depth of field. " +
-  "LME brand palette: cerise pink, lime green, bright sky blue, lemon yellow, soft cream, warm wood tones, nature greens. " +
-  "NO photorealistic elements. NO photographs. NO real humans. NO text, no words, no letters, no numbers, no logos, no watermark. " +
-  "When showing people: cartoon style, varied natural hair colors and textures (blonde, red, brown, curly, straight, wavy); " +
-  "varied skin tones; natural proportions, non-stereotyped appearances, friendly expressions. " +
-  "Do not rotate or tilt perspectives unnaturally. Focus on the activity and learning moment, not character appearance. " +
-  "NEGATIVE: avoid photorealism, avoid photographs, avoid real people, avoid cameras, avoid phones, avoid modern objects, avoid realistic textures.";
+  "=== ABSOLUTE STYLE REQUIREMENTS (OVERRIDE ALL ELSE) ===\n" +
+  "1. ILLUSTRATION ONLY: Create a 3D animated illustration (like Pixar/Disney), NOT a photograph, NOT photorealistic, NOT a real person.\n" +
+  "2. STYLE: Soft rounded cartoon style, warm hand-drawn animated look, gentle depth of field, cinematic lighting.\n" +
+  "3. COLORS: LME palette - cerise pink, lime green, bright sky blue, lemon yellow, soft cream, warm wood tones, nature greens.\n" +
+  "4. CHARACTER DIVERSITY IS MANDATORY:\n" +
+  "   - HAIR: MUST show VARIED hair colors and textures\n" +
+  "   - Use blonde, red, brown, dark brown, light brown, curly, straight, wavy, and long hair\n" +
+  "   - NEVER ALWAYS DARK CURLY HAIR - that is the OPPOSITE of what we want\n" +
+  "   - ALWAYS rotate between different hair types and colors in every image\n" +
+  "   - SKIN: Show varied skin tones (light, medium, dark) naturally\n" +
+  "   - AGE/BUILD: Show varied ages and body types, not identical children\n" +
+  "5. FORBIDDEN: photorealism, photographs, real humans, text, words, letters, numbers, logos, watermarks, cameras, phones, modern objects.\n" +
+  "6. FOCUS: Activity, learning moment, natural proportions, friendly expressions, non-stereotyped appearances.\n" +
+  "=== END STYLE LOCK ===";
 
 // Låste karakterprompter, ordrett fra merkevare-bibelen.
 const MIA =
@@ -71,27 +77,31 @@ function sizeFor(platform) {
 
 function buildPrompt(text, character) {
   const parts = [];
-  // STYLE_LOCK MUST come FIRST so API prioritizes it over theme text
+  // STYLE_LOCK comes FIRST and REPEATED to ensure it dominates the prompt
   parts.push(STYLE_LOCK);
 
   const c = CHAR[character];
-  const theme = String(text || "").replace(/\s+/g, " ").trim().slice(0, 700);
+  const theme = String(text || "").replace(/\s+/g, " ").trim().slice(0, 500);
 
   if (c) {
     parts.push(c);
     if (theme) {
-      parts.push(`Depict them in a scene that fits this theme (illustrate the mood and activity, do not render any of these words): ${theme}`);
+      parts.push(`Depict them in a scene that fits this theme (illustrate the mood and activity, do not render any of these words as text): ${theme}`);
     } else {
-      parts.push("Depict them exploring nature and learning together.");
+      parts.push("Depict them exploring nature and learning together with varied appearances.");
     }
   } else if (theme) {
     parts.push(`CREATE AN ILLUSTRATION (not a photo) showing this theme: ${theme}`);
+    parts.push("Include children or people with VARIED hair colors (blonde, red, brown, dark), VARIED hair textures (straight, curly, wavy), and VARIED skin tones.");
     parts.push("(Do not render these words as text. Focus on visual storytelling, activity, and emotion.)");
   } else {
-    parts.push("Create an illustration of a peaceful Montessori-inspired learning scene with children engaged in nature exploration.");
+    parts.push("Create an illustration of a peaceful Montessori-inspired learning scene with children of VARIED appearances (different hair colors, hair textures, skin tones) engaged in nature exploration.");
   }
 
-  return parts.join(" ");
+  // Add STYLE_LOCK AGAIN at the end to reinforce it
+  parts.push("REMINDER: Keep ILLUSTRATION style, VARIED appearances, and NEVER default to dark curly hair.");
+
+  return parts.join("\n\n");
 }
 
 // =====================================================

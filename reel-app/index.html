@@ -607,6 +607,21 @@
       .catch(function(e){ statusEl.className='pubmsg err'; statusEl.textContent = (LANG==='no'?'⚠️ Kunne ikke lage bilde':'⚠️ Could not make image')+(e&&e.message?' ('+e.message+')':''); })
       .finally(function(){ btn.disabled = false; btn.innerHTML = lbl; });
   }
+  function genCarouselSlideImage(prompt, imgEl, statusEl, btn){
+    if (!prompt){ statusEl.className='pubmsg err'; statusEl.textContent = LANG==='no'?'⚠️ Ingen bildeprompt.':'⚠️ No image prompt.'; return; }
+    var lbl = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> '+(LANG==='no'?'Lager bilde…':'Making image…');
+    statusEl.className='pubmsg'; statusEl.textContent = '';
+    fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:prompt, character:'none', platform:'instagram', lang:REELLANG})})
+      .then(function(r2){ return r2.json(); })
+      .then(function(ir){
+        if (!ir || ir.error || !ir.url) throw new Error((ir&&ir.error)||'bilde');
+        imgEl.src = ir.url; imgEl.style.display = 'block';
+        statusEl.className='pubmsg'; statusEl.textContent = LANG==='no'?'Bilde klart ✓':'Image ready ✓';
+      })
+      .catch(function(e){ statusEl.className='pubmsg err'; statusEl.textContent = (LANG==='no'?'⚠️ Kunne ikke lage bilde':'⚠️ Could not make image')+(e&&e.message?' ('+e.message+')':''); })
+      .finally(function(){ btn.disabled = false; btn.innerHTML = lbl; });
+  }
   function publishTo(platform, r, statusEl, btn){
     var needsMedia = (platform === 'instagram' || platform === 'tiktok');
     if (needsMedia && !MEDIA_URL){ statusEl.className='pubmsg err'; statusEl.textContent = LANG==='no'?'⚠️ Lag et bilde først. Instagram og TikTok krever et bilde eller en video.':'⚠️ Make an image first. Instagram and TikTok need an image or video.'; return; }
@@ -691,10 +706,21 @@
       if (Array.isArray(r.slides)){
         r.slides.forEach(function(s, i){
           var text = (typeof s === 'string') ? s : (s.text || s.body || s.headline || '');
+          var imgPrompt = (typeof s === 'object' && s.imagePrompt) ? s.imagePrompt : '';
           var d=document.createElement('div'); d.className='rcard scene';
           var head=document.createElement('div'); head.className='time'; head.textContent=T('slide')+' '+(i+1);
           var on=document.createElement('div'); on.className='on'; on.textContent=text; on.appendChild(copyBtn(text));
-          d.appendChild(head); d.appendChild(on); out.appendChild(d);
+          d.appendChild(head); d.appendChild(on);
+          if (imgPrompt){
+            var imgDiv=document.createElement('div'); imgDiv.style.marginTop='10px';
+            var img=document.createElement('img'); img.style.maxWidth='100%'; img.style.borderRadius='8px';
+            var imgBtn=document.createElement('button'); imgBtn.className='mk' ; imgBtn.textContent=LANG==='no'?'🎨 Lag bilde':'🎨 Make image'; imgBtn.style.marginTop='8px';
+            var status=document.createElement('div'); status.style.marginTop='8px'; status.style.fontSize='12px';
+            imgBtn.addEventListener('click', function(){ genCarouselSlideImage(imgPrompt, img, status, imgBtn); });
+            imgDiv.appendChild(imgBtn); imgDiv.appendChild(status); imgDiv.appendChild(img);
+            d.appendChild(imgDiv);
+          }
+          out.appendChild(d);
         });
       }
       if (r.caption){ out.appendChild(card('✍️ '+T('caption'), r.caption, true)); }
