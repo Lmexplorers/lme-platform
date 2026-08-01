@@ -71,6 +71,9 @@ function sizeFor(platform) {
 
 function buildPrompt(text, character) {
   const parts = [];
+  // STYLE_LOCK MUST come FIRST so API prioritizes it over theme text
+  parts.push(STYLE_LOCK);
+
   const c = CHAR[character];
   const theme = String(text || "").replace(/\s+/g, " ").trim().slice(0, 700);
 
@@ -88,7 +91,6 @@ function buildPrompt(text, character) {
     parts.push("Create an illustration of a peaceful Montessori-inspired learning scene with children engaged in nature exploration.");
   }
 
-  parts.push(STYLE_LOCK);
   return parts.join(" ");
 }
 
