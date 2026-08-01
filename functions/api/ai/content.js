@@ -162,10 +162,14 @@ async function generateText(env, system, userPrompt, maxTokens) {
 
 function contentPrompt(b) {
   const fmt = String(b.format || "post");
+  const lang = String(b.lang || "no");
   const src = (b.source || b.article || "").slice(0, 6000);
 
-  // Lag imagePrompt basert på faktisk tema brukeren oppgir
-  const imagePromptRaw = `Generate a specific, realistic, well-composed photograph that illustrates: "${src.slice(0, 300)}".
+  const isEnglish = lang === "en";
+
+  // Prompts in requested language
+  const imagePromptRaw = isEnglish
+    ? `Generate a specific, realistic, well-composed photograph that illustrates: "${src.slice(0, 300)}".
 
 COMPOSITION: Wide shot from a stable, realistic angle (never tilted, rotated, or surreal). Consistent perspective. Real lighting.
 
@@ -175,9 +179,31 @@ SUBJECT & SETTING: Clearly depict the theme. If showing people, show them natura
 
 DO NOT: Generate Montessori, educational toys, children's materials, or pedagogical settings. Generate ONLY the requested theme. Do NOT bias toward specific physical characteristics.
 
-Make sure every element is physically realistic and the image could exist as a real photograph.`;
+Make sure every element is physically realistic and the image could exist as a real photograph.`
+    : `Lag et spesifikt, realistisk, godt komponert fotografi som illustrerer: "${src.slice(0, 300)}".
 
-  const shapes = {
+KOMPOSISJON: Bred vinkel fra en stabil, realistisk vinkel (aldri vippet, rotert eller surrealistisk). Konsistent perspektiv. Realistisk belysning.
+
+FOTOGRAFI-STIL: Profesjonell, varm, naturlig belysning. Farger er levende og sanne. Ingen AI-artefakter, forvrengninger eller umulig geometri. Alt er nøyaktig hvor det skal være fysisk.
+
+MOTIV OG SETTING: Gjengir temaet klart. Hvis personer vises, vise dem naturlig engasjert i scenen med naturlig varierte fysiske egenskaper (ulike hårfarger, hudtoner, aldre - IKKE alltid mørkt hår). Hvis objekter/materialer vises, vis dem klart fra en normal visningsvinkel. Ingen flytende objekter, merkelige inversjoner eller omvendte perspektiver.
+
+IKKE: Generer Montessori, pedagogiske leker, barnemat eller pedagogiske innstillinger. Generer KUN det forespurte temaet. IKKE bias mot spesifikke fysiske egenskaper.
+
+Sørg for at hvert element er fysisk realistisk og bildet kunne eksistere som et ekte fotografi.`;
+
+  const shapes = isEnglish ? {
+    carousel: `{"format":"carousel","title":"short working title","slides":["3-8 short slides, each builds on the previous, last one is a clear CTA"],"caption":"finished caption","hashtags":["8-12 hashtags"]}`,
+    reel: `{"format":"reel","title":"short working title","hook":"on-screen text 0-3s, max 8 words","voiceover":"full voiceover script","scenes":[{"time":"0-3s","onScreen":"text","voiceover":"what is said","broll":"ALWAYS IN ENGLISH: visual prompt for a vertical 9:16 scene, no text in the image. Generate a specific, realistic, well-composed photograph that illustrates the theme."}],"musicMood":"style","caption":"caption","cta":"warm, clear call to action","keywords":["6-10 search terms people can search for"],"hashtags":["5 relevant hashtags for TikTok (max 5)"]}`,
+    story: `{"format":"story","title":"short working title","frames":[{"headline":"short headline for the frame","body":"short text"}],"caption":"short lead text","hashtags":["5-8 hashtags"]}`,
+    post: `{"format":"post","title":"short working title","caption":"finished feed caption, answer-first, warm CTA","hashtags":["8-12 hashtags"]}`,
+    caption: `{"format":"caption","title":"short working title","caption":"deep, personal image caption, 4-8 paragraphs","hashtags":["6-10 hashtags"]}`,
+    email: `{"format":"email","subject":"subject line","preview":"preview text","body":"warm email to the list, plain text with paragraphs","cta":"short call to action"}`,
+    pinterest: `{"format":"pinterest","pinTitle":"searchable title max 100 characters","pinDescription":"150-200 characters with keywords and soft CTA"}`,
+    hookreel: `{"format":"hookreel","title":"short working title","hook":"scroll-stopping on-screen text in the first seconds, 4-10 words, creates curiosity","voiceover":"full personal script in first-person, a story that draws the reader in and gives real value","scenes":[{"time":"0-3s","onScreen":"text-hook","voiceover":"what is said","broll":"ALWAYS IN ENGLISH: visual prompt for vertical 9:16, either me speaking to camera or calm lifestyle b-roll, no text in the image. Generate a specific, realistic photograph that illustrates the theme."}],"cta":"comment-based call to action, e.g. Comment WORD below, and I'll send you …","caption":"finished caption","hashtags":["5 relevant hashtags for TikTok (max 5)"]}`,
+    explainer: `{"format":"explainer","title":"short working title","level":"who the video is for, based on the theme, e.g. parents, kindergarten 3-6 years, school, or other creators/entrepreneurs","hook":"opening sentence written on the board, max 8 words","scenes":[{"time":"0-8s","board":"what is drawn/written on the whiteboard in this scene, short bullet points","narration":"what is narrated in a calm voice, 1-2 sentences","illustration":"ALWAYS IN ENGLISH: one concrete motif that can be drawn as one hand-drawn pencil sketch for this scene. Generate one clear motif that illustrates the theme, no text in the image."}],"takeaway":"one sentence that sums up what the viewer should remember","caption":"short sharing caption for Instagram/TikTok","hashtags":["6-10 hashtags"]}`,
+    youtube: `{"format":"youtube","title":"clickable, searchable YouTube title, max 70 characters","hook":"first 15 seconds: what you say to capture the viewer and promise value","sections":[{"heading":"short chapter title","talkingPoints":["short points for what you say in this chapter"]}],"description":"finished YouTube description: short intro in a couple of sentences, then a bulleted list of what the video covers, end with CTA","seoKeywords":["8-12 search phrases and keywords for YouTube SEO, what people actually search for on this topic"],"tags":["10-15 YouTube video tags (metadata field in YouTube Studio, not hashtags)"],"hashtags":["3-5 hashtags with # for use in the description/title"],"thumbnailText":"3-5 strong words for the thumbnail","cta":"warm call to action to subscribe and comment","caption":"short sharing caption to announce the video on Instagram/TikTok/Facebook when it goes live"}`,
+  } : {
     carousel: `{"format":"carousel","title":"kort arbeidstittel","slides":["3-8 korte slides, hver bygger på forrige, siste er en tydelig CTA"],"caption":"ferdig caption","hashtags":["8-12 hashtags"]}`,
     reel: `{"format":"reel","title":"kort arbeidstittel","hook":"tekst-på-skjerm 0-3s, maks 8 ord","voiceover":"hele voiceover-manuset","scenes":[{"time":"0-3s","onScreen":"tekst","voiceover":"det som sies","broll":"ALLTID PÅ ENGELSK: visuell prompt for en vertikal 9:16 scene, ingen tekst i bildet. Generer et spesifikt, realistisk, godt komponert fotografi som illustrerer temaet."}],"musicMood":"stil","caption":"caption","cta":"varm, tydelig oppfordring til handling","keywords":["6-10 søkeord folk kan søke etter"],"hashtags":["5 relevante hashtags for TikTok (max 5)"]}`,
     story: `{"format":"story","title":"kort arbeidstittel","frames":[{"headline":"kort overskrift på framen","body":"kort tekst"}],"caption":"kort ledetekst","hashtags":["5-8 hashtags"]}`,
@@ -190,13 +216,26 @@ Make sure every element is physically realistic and the image could exist as a r
     youtube: `{"format":"youtube","title":"klikkverdig, søkbar YouTube-tittel, maks 70 tegn","hook":"de første 15 sekundene: det du sier for å fange seeren og love verdi","sections":[{"heading":"kort kapittel-tittel","talkingPoints":["korte punkter for hva du sier i dette kapittelet"]}],"description":"ferdig YouTube-beskrivelse: kort intro på et par setninger, deretter en punktliste over det videoen dekker, avslutt med CTA","seoKeywords":["8-12 søk-fraser og nøkkelord for YouTube SEO, det folk faktisk søker etter for dette temaet"],"tags":["10-15 YouTube video-tags (metadata-feltet i YouTube Studio, ikke hashtags)"],"hashtags":["3-5 hashtags med # til bruk i beskrivelsen/tittelen"],"thumbnailText":"3-5 kraftige ord til thumbnailen","cta":"varm oppfordring til å abonnere og kommentere","caption":"kort delings-caption for å annonsere videoen på Instagram/TikTok/Facebook når den er ute"}`,
   };
   const shape = shapes[fmt] || shapes.post;
-  const extra = fmt === "carousel" ? "3-8 slides." : fmt === "story" ? "3-5 frames." : fmt === "reel" ? "4-6 scener." : fmt === "explainer" ? "Nøyaktig 5 scener, korte. Til sammen cirka ett minutt. Bygg forklaringen steg for steg, som en tegnet whiteboard-video: hver scene tegner videre på den forrige. Konkret, enkelt og lett å huske. Hold hver narration til én til to setninger og hver board til noen få stikkord. For hver scene skal illustration alltid være på engelsk og beskrive ETT konkret, tegnbart motiv (én håndtegnet blyantskisse) som passer scenen, uten tekst i bildet." : fmt === "hookreel" ? "4-6 scener, cirka 15-40 sekunder, i stilen til en personlig merkevare-reel: en sterk tekst-hook som stopper scrollingen, deretter en ærlig historie i jeg-form som gir én konkret verdi, og en varm kommentar-basert oppfordring til slutt. Skriv aldri oppdiktede inntekter, tall, resultater eller løfter. Hold det ekte, i LMEs varme tone." : fmt === "youtube" ? "4-7 kapitler (sections). En sammenhengende YouTube-video på noen minutter. Bygg innholdet steg for steg, konkret og lett å følge, med en tydelig rød tråd. Hold hvert talking point kort. Skriv aldri oppdiktede tall, resultater eller løfter. VIKTIG: dette YouTube-videoverktøyet er for hva som helst Renate lager videoer om, ikke bare Montessori. Emnet/kilden brukeren har oppgitt over bestemmer INNHOLDET fullstendig. Anta aldri at videoen handler om Montessori, barn, foreldre eller pedagogikk med mindre kilden eksplisitt sier det, den kan like gjerne handle om å bygge en YouTube-kanal med AI, markedsføring, verktøy, forretningstips eller et helt annet tema. Ikke bland inn Montessori-materiell, Mia & Teo eller pedagogisk fagspråk med mindre kilden ber om det. seoKeywords, tags og hashtags er tre ulike ting: seoKeywords er fraser folk faktisk søker etter, tags er enkeltord/korte fraser til YouTubes eget tags-felt, hashtags er 3-5 stykker med # til bruk i selve beskrivelsen." : "";
-  return `Språk: ${langName(b.lang)}. Format: ${fmt}.
+
+  const extra = isEnglish
+    ? fmt === "carousel" ? "3-8 slides." : fmt === "story" ? "3-5 frames." : fmt === "reel" ? "4-6 scenes." : fmt === "explainer" ? "Exactly 5 scenes, short. About a minute total. Build the explanation step by step, like a drawn whiteboard video: each scene draws on the previous one. Concrete, simple and easy to remember. Keep each narration to one to two sentences and each board to a few bullet points. For each scene, illustration should always be in English and describe ONE concrete, drawable motif (one hand-drawn pencil sketch) that fits the scene, no text in the image." : fmt === "hookreel" ? "4-6 scenes, about 15-40 seconds, in the style of a personal brand reel: a strong text hook that stops scrolling, then an honest first-person story that gives one concrete value, and a warm comment-based call to action at the end. Never write made-up income, numbers, results or promises. Keep it real, in LME's warm tone." : fmt === "youtube" ? "4-7 chapters (sections). A coherent YouTube video of a few minutes. Build the content step by step, concrete and easy to follow, with a clear thread. Keep each talking point short. Never write made-up numbers, results or promises. IMPORTANT: this YouTube video tool is for whatever Renate makes videos about, not just Montessori. The topic/source the user specifies above determines the CONTENT completely. Never assume the video is about Montessori, children, parents or education unless the source explicitly says so; it could just as well be about building a YouTube channel with AI, marketing, tools, business tips or any other topic. Don't mix in Montessori materials, Mia & Teo or educational jargon unless the source asks for it. seoKeywords, tags and hashtags are three different things: seoKeywords are phrases people actually search for, tags are single words/short phrases for YouTube's own tags field, hashtags are 3-5 with # for use in the description itself." : ""
+    : fmt === "carousel" ? "3-8 slides." : fmt === "story" ? "3-5 frames." : fmt === "reel" ? "4-6 scener." : fmt === "explainer" ? "Nøyaktig 5 scener, korte. Til sammen cirka ett minutt. Bygg forklaringen steg for steg, som en tegnet whiteboard-video: hver scene tegner videre på den forrige. Konkret, enkelt og lett å huske. Hold hver narration til én til to setninger og hver board til noen få stikkord. For hver scene skal illustration alltid være på engelsk og beskrive ETT konkret, tegnbart motiv (én håndtegnet blyantskisse) som passer scenen, uten tekst i bildet." : fmt === "hookreel" ? "4-6 scener, cirka 15-40 sekunder, i stilen til en personlig merkevare-reel: en sterk tekst-hook som stopper scrollingen, deretter en ærlig historie i jeg-form som gir én konkret verdi, og en varm kommentar-basert oppfordring til slutt. Skriv aldri oppdiktede inntekter, tall, resultater eller løfter. Hold det ekte, i LMEs varme tone." : fmt === "youtube" ? "4-7 kapitler (sections). En sammenhengende YouTube-video på noen minutter. Bygg innholdet steg for steg, konkret og lett å følge, med en tydelig rød tråd. Hold hvert talking point kort. Skriv aldri oppdiktede tall, resultater eller løfter. VIKTIG: dette YouTube-videoverktøyet er for hva som helst Renate lager videoer om, ikke bare Montessori. Emnet/kilden brukeren har oppgitt over bestemmer INNHOLDET fullstendig. Anta aldri at videoen handler om Montessori, barn, foreldre eller pedagogikk med mindre kilden eksplisitt sier det, den kan like gjerne handle om å bygge en YouTube-kanal med AI, markedsføring, verktøy, forretningstips eller et helt annet tema. Ikke bland inn Montessori-materiell, Mia & Teo eller pedagogisk fagspråk med mindre kilden ber om det. seoKeywords, tags og hashtags er tre ulike ting: seoKeywords er fraser folk faktisk søker etter, tags er enkeltord/korte fraser til YouTubes eget tags-felt, hashtags er 3-5 stykker med # til bruk i selve beskrivelsen." : "";
+
+  const instructions = isEnglish
+    ? `Language: ${langName(lang)}. Format: ${fmt}.
+Source/topic: "${src}".
+Create finished, publication-ready content in this format. ${extra}
+Return ONLY valid JSON in this form:
+${shape}
+Answer-first, concrete value, warm tone. Respond ONLY in English. No text outside JSON.`
+    : `Språk: ${langName(lang)}. Format: ${fmt}.
 Kilde/tema: "${src}".
 Lag ferdig, publiseringsklart innhold i dette formatet. ${extra}
 Returner KUN gyldig JSON med denne formen:
 ${shape}
-Answer-first, konkret verdi, varm tone. Følg de norske skrivereglene (rette anførselstegn, ingen tankestreker, riktig kolon- og kommabruk). Ingen tekst utenfor JSON.`;
+Answer-first, konkret verdi, varm tone. Svar KUN på norsk. Ingen tekst utenfor JSON.`;
+
+  return instructions;
 }
 
 export async function onRequestPost(context) {
@@ -208,7 +247,11 @@ export async function onRequestPost(context) {
   try { body = await request.json(); }
   catch { return json({ error: "Ugyldig JSON" }, 400); }
 
-  const system = `${BRAND_CONTEXT}\nDu er LMEs innholdsprodusent. Du lager ferdig, publiseringsklart innhold i akkurat det formatet og om akkurat det temaet brukeren velger, i LMEs varme tone.`;
+  const lang = String(body.lang || "no");
+  const systemInstr = lang === "en"
+    ? "You are LME's content producer. Create finished, publication-ready content in exactly the format and on exactly the topic the user chooses, in LME's warm tone. Respond ONLY in English."
+    : "Du er LMEs innholdsprodusent. Du lager ferdig, publiseringsklart innhold i akkurat det formatet og om akkurat det temaet brukeren velger, i LMEs varme tone. Svar KUN på norsk.";
+  const system = `${BRAND_CONTEXT}\n${systemInstr}`;
   // Nok token-tak til at hele JSON-en kommer med. De tyngre formatene
   // (explainer, hookreel) har mange felter og flere scener, så de trenger
   // rikelig rom, ellers kappes svaret og felter som caption, CTA og hashtags
