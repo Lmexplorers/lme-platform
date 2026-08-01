@@ -226,13 +226,13 @@ export async function onRequestPost(context) {
     if (!["none", "mia", "teo", "both"].includes(character)) character = "none";
 
     // Velg bildemotor automatisk etter hvilken nøkkel som faktisk er koblet til.
-    // Slik slipper Renate å tenke på det: har hun Gemini, brukes Gemini; har hun
-    // OpenAI, brukes OpenAI. Et eksplisitt valg i body vinner om det er satt.
+    // Slik slipper Renate å tenke på det: prioriter OpenAI (mer stabil), fall tilbake
+    // til Gemini. Et eksplisitt valg i body vinner om det er satt.
     let provider = String(body.provider || "").toLowerCase();
     if (!PROVIDERS[provider]) {
       const hasGemini = !!(env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY);
       const hasOpenAI = !!(env.OPENAI_API_KEY || env.IMAGE_OPENAI_KEY || env.IMAGE_API_KEY);
-      provider = hasGemini ? "gemini" : (hasOpenAI ? "openai" : "gemini");
+      provider = hasOpenAI ? "openai" : (hasGemini ? "gemini" : "openai");
     }
 
     const prompt = buildPrompt(body.text, character);
