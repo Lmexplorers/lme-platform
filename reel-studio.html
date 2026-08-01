@@ -486,45 +486,65 @@ function renderContent(fmt,r){
 function getSavedReels(){try{return JSON.parse(localStorage.getItem('lme-reel-saved-v1')||'[]')||[];}catch(e){return [];}}
 function saveSavedReels(r){try{localStorage.setItem('lme-reel-saved-v1',JSON.stringify(r));}catch(e){}}
 function saveCurrentReel(){
-  if(!REEL)return;
+  console.log('[saveCurrentReel] START');
+  if(!REEL){console.log('[saveCurrentReel] No REEL, returning');return;}
   var saved=getSavedReels();
+  console.log('[saveCurrentReel] Current saved count:', saved.length);
   var id='reel-'+(FMT||'?')+'-'+Date.now();
   var title=(REEL.title||(document.getElementById('src')&&document.getElementById('src').value)||'Reel').slice(0,80);
   saved.push({id:id,title:title,format:FMT,saved:new Date().toISOString(),reel:REEL});
   saved=saved.slice(-50);
   saveSavedReels(saved);
+  console.log('[saveCurrentReel] Saved! ID:', id, 'Title:', title, 'Total saved:', saved.length);
   var msg=document.getElementById('pubmsg')||document.getElementById('out');
   if(!msg){msg=document.createElement('div');msg.id='pubmsg';msg.style.marginTop='12px';document.getElementById('out').parentNode.insertBefore(msg,document.getElementById('out').nextSibling);}
-  msg.className='pubmsg';msg.textContent='✓ Lagret!';setTimeout(function(){msg.textContent='';},2500);
+  msg.className='pubmsg';msg.textContent='✓ Lagret! Se "Lagret innhold" under.';setTimeout(function(){msg.textContent='';},3500);
   renderSavedReels();
+  console.log('[saveCurrentReel] COMPLETE');
 }
 function loadSavedReel(id){
+  console.log('[loadSavedReel] Loading reel:', id);
   var saved=getSavedReels();
   var it=saved.find(function(x){return x.id===id;});
-  if(!it)return;
+  if(!it){console.log('[loadSavedReel] Not found!');return;}
+  console.log('[loadSavedReel] Found reel, format:', it.format, 'title:', it.title);
   REEL=it.reel;
   FMT=it.format;
   renderFmtChips();
   renderContent(FMT,REEL);
   var src=document.getElementById('src');if(src)src.value=it.title;
+  // Show feedback that loading worked
+  var msg=document.getElementById('pubmsg')||document.createElement('div');
+  msg.id='pubmsg';msg.className='pubmsg';msg.textContent='✓ Lastet inn: '+it.title;
+  if(!msg.parentNode){document.getElementById('out').parentNode.insertBefore(msg,document.getElementById('out').nextSibling);}
+  setTimeout(function(){msg.textContent='';},2000);
   var step1=document.getElementById('step1');if(step1)step1.scrollIntoView({behavior:'smooth'});
+  console.log('[loadSavedReel] COMPLETE');
 }
 function deleteSavedReel(id){
+  console.log('[deleteSavedReel] Deleting reel:', id);
   if(!confirm('Slett denne reelen?'))return;
-  var saved=getSavedReels().filter(function(x){return x.id!==id;});
+  var allReels=getSavedReels();
+  console.log('[deleteSavedReel] Before delete:', allReels.length, 'reels');
+  var saved=allReels.filter(function(x){return x.id!==id;});
   saveSavedReels(saved);
+  console.log('[deleteSavedReel] After delete:', saved.length, 'reels');
   renderSavedReels();
 }
 function renderSavedReels(){
   var host=document.getElementById('savedReelsHost');if(!host)return;
   var saved=getSavedReels();
+  console.log('[renderSavedReels] Total saved reels:', saved.length);
   if(!saved.length){host.innerHTML='<p class="lead" style="margin:0;color:var(--ink-muted);">'+t('noSavedReels')+'</p>';return;}
-  host.innerHTML=saved.reverse().map(function(it){
+  var html=saved.reverse().map(function(it){
     var date=new Date(it.saved);
     var dateStr=date.toLocaleDateString('no-NO');
     var timeStr=date.toLocaleTimeString('no-NO',{hour:'2-digit',minute:'2-digit'});
-    return '<div class="card" style="display:flex;align-items:center;gap:10px;"><div style="flex:1;"><div style="font-family:var(--font-heading);font-weight:700;font-size:14px;">'+esc(it.title)+'</div><div style="font-size:12.5px;color:var(--ink-muted);margin-top:2px;">'+it.format+' · '+dateStr+' '+timeStr+'</div></div><div style="display:flex;gap:6px;"><button class="copy-btn" onclick="loadSavedReel(\''+it.id+'\')">'+t('load')+'</button><button class="copy-btn" style="background:rgba(233,30,137,0.1);color:var(--cerise);" onclick="deleteSavedReel(\''+it.id+'\')">'+t('delete')+'</button></div></div>';
+    var safeId=String(it.id).replace(/'/g,'\\\'');
+    return '<div class="card" style="display:flex;align-items:center;gap:10px;"><div style="flex:1;"><div style="font-family:var(--font-heading);font-weight:700;font-size:14px;">'+esc(it.title)+'</div><div style="font-size:12.5px;color:var(--ink-muted);margin-top:2px;">'+it.format+' · '+dateStr+' '+timeStr+'</div></div><div style="display:flex;gap:6px;"><button class="copy-btn" onclick="loadSavedReel(\''+safeId+'\'); return false;">'+t('load')+'</button><button class="copy-btn" style="background:rgba(233,30,137,0.1);color:var(--cerise);" onclick="deleteSavedReel(\''+safeId+'\'); return false;">'+t('delete')+'</button></div></div>';
   }).join('');
+  host.innerHTML=html;
+  console.log('[renderSavedReels] Rendered '+saved.length+' saved reels');
 }
 
 function buildCaption(){
