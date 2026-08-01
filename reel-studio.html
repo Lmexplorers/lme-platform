@@ -153,7 +153,7 @@
     <label class="fld" data-i18n="s1-fmt">Format</label>
     <div id="fmtChips" class="fmt-chips"></div>
     <label class="fld" for="src" data-i18n="s1-src" style="margin-top:14px;">Innhold eller idé</label>
-    <textarea id="src" data-i18n-ph="s1-ph" placeholder="F.eks: Tre enkle Montessori-aktiviteter i kjøkkenet for barn 3-6 år…"></textarea>
+    <textarea id="src" data-i18n-ph="s1-ph" placeholder="F.eks: En tips, leksjon, ide eller emne du vil gjøre til en reel…"></textarea>
     <div class="row">
       <div id="secsWrap">
         <label class="fld" for="secs" data-i18n="s1-len">Lengde</label>
@@ -176,7 +176,7 @@
     <p class="lead" id="s2lead" data-i18n="s2-lead">Lim inn lenken til den ferdige videoen eller bildet. Blotato henter og re-hoster den ved publisering.</p>
     <div id="genVideoWrap" style="margin-bottom:14px;">
       <label class="fld" for="imgPromptEdit" data-i18n="s2-imgprompt">Bilde-prompt (kan endres)</label>
-      <textarea id="imgPromptEdit" data-i18n-ph="s2-imgpromptPh" placeholder="Beskriv bildet AI-en skal lage: hvilket Montessori-materiell, farger, stemning…" style="min-height:70px;" oninput="this.dataset.touched='1'"></textarea>
+      <textarea id="imgPromptEdit" data-i18n-ph="s2-imgpromptPh" placeholder="Beskriv bildet/scenen AI-en skal lage: elementer, farger, stemning, stil…" style="min-height:70px;" oninput="this.dataset.touched='1'"></textarea>
       <label class="fld" for="refImgUrl" data-i18n="s2-refimg" style="margin-top:10px;">Referansebilde eller egen fil (valgfritt)</label>
       <input id="refImgUrl" placeholder="https://…/bilde.jpg" />
       <div class="row" style="margin-top:8px;">
@@ -231,14 +231,14 @@ const I18N = {
     subtitle:"Velg format og lag ferdig innhold: reel, karusell, story, feed-innlegg, bildetekst, nyhetsbrev eller Pinterest. Klar til automatisk publisering og planlegging.",
     "s1-num":"Innhold","s1-h":"Hva skal du lage?","s1-lead":"Velg format, lim inn et tips, en leksjon eller en idé, så lager AI-en innholdet i riktig format.",
     "s1-fmt":"Format",
-    "s1-src":"Innhold eller idé","s1-ph":"F.eks: Tre enkle Montessori-aktiviteter i kjøkkenet for barn 3-6 år…","s1-len":"Lengde","s1-btn":"✨ Lag innhold",
+    "s1-src":"Innhold eller idé","s1-ph":"F.eks: En tips, leksjon, ide eller emne du vil gjøre til en reel…","s1-len":"Lengde","s1-btn":"✨ Lag innhold",
     "s2-num":"Media","s2-h":"Legg til media","s2-lead":"Lim inn lenken til den ferdige videoen eller bildet.",
     "s2urlVideo":"Lenke til ferdig video (MP4)","s2urlImage":"Lenke til bilde (valgfritt)",
     "s2leadVideo":"For reel og TikTok trengs en vertikal 9:16 video. Lim inn lenken til den ferdige MP4-en her.",
     "s2leadImage":"Legg gjerne ved et bilde (valgfritt for de fleste, kreves for Instagram og Pinterest). Lim inn en bilde-lenke.",
     "s2-url":"Lenke til media","s2-note":"💡 Trykk «Generer video automatisk», så lager AI-en et bilde av innholdet og gjør det om til en vertikal 9:16 video rett her. Eller lim inn lenken til en egen ferdig video.",
     "s2-genvid":"Generer video automatisk",
-    "s2-imgprompt":"Bilde-prompt (kan endres)","s2-imgpromptPh":"Beskriv bildet AI-en skal lage: hvilket Montessori-materiell, farger, stemning…",
+    "s2-imgprompt":"Bilde-prompt (kan endres)","s2-imgpromptPh":"Beskriv bildet/scenen AI-en skal lage: elementer, farger, stemning, stil…",
     "s2-refimg":"Referansebilde eller egen fil (valgfritt)","s2-upimg":"Last opp bilde","s2-upvid":"Last opp video",
     "s2-refnote":"Lim inn en bilde-lenke eller last opp et bilde, så lager jeg videoen ut fra akkurat det bildet i stedet for et AI-bilde. Du kan også laste opp en helt ferdig video.",
     upLoading:"Laster opp…",upOk:"Lastet opp ✓",upFail:"Opplasting feilet.",upTooBig:"Filen er for stor (maks 24 MB).",upUsingRef:"Bruker ditt eget bilde til videoen.",upVidReady:"Egen video lagt inn ✓",
@@ -269,14 +269,14 @@ const I18N = {
     subtitle:"Choose a format and create finished content: reel, carousel, story, feed post, caption, newsletter or Pinterest. Ready for automatic posting and scheduling.",
     "s1-num":"Content","s1-h":"What do you want to create?","s1-lead":"Choose a format, paste a tip, a lesson or an idea, and the AI creates the content in the right format.",
     "s1-fmt":"Format",
-    "s1-src":"Content or idea","s1-ph":"E.g: Three simple Montessori kitchen activities for kids aged 3-6…","s1-len":"Length","s1-btn":"✨ Create content",
+    "s1-src":"Content or idea","s1-ph":"E.g: A tip, lesson, idea or topic you want to turn into a reel…","s1-len":"Length","s1-btn":"✨ Create content",
     "s2-num":"Media","s2-h":"Add media","s2-lead":"Paste the link to the finished video or image.",
     "s2urlVideo":"Link to finished video (MP4)","s2urlImage":"Image link (optional)",
     "s2leadVideo":"Reels and TikTok need a vertical 9:16 video. Paste the finished MP4 link here.",
     "s2leadImage":"Add an image (optional for most, required for Instagram and Pinterest). Paste an image link.",
     "s2-url":"Media link","s2-note":"💡 Tap “Generate video automatically” and the AI creates an image of your content and turns it into a vertical 9:16 video right here. Or paste a link to your own finished video.",
     "s2-genvid":"Generate video automatically",
-    "s2-imgprompt":"Image prompt (editable)","s2-imgpromptPh":"Describe the image the AI should create: which Montessori material, colours, mood…",
+    "s2-imgprompt":"Image prompt (editable)","s2-imgpromptPh":"Describe the image/scene the AI should create: elements, colours, mood, style…",
     "s2-refimg":"Reference image or your own file (optional)","s2-upimg":"Upload image","s2-upvid":"Upload video",
     "s2-refnote":"Paste an image link or upload an image, and I'll build the video from that exact image instead of an AI image. You can also upload a finished video.",
     upLoading:"Uploading…",upOk:"Uploaded ✓",upFail:"Upload failed.",upTooBig:"File too large (max 24 MB).",upUsingRef:"Using your own image for the video.",upVidReady:"Your video added ✓",
