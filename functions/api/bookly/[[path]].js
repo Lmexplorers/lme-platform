@@ -3,7 +3,7 @@
  *
  * Ruter:
  *   POST /api/bookly/ai        { system, prompt, max_tokens } -> { text }
- *        AI-tekstgenerering. Bruker ANTHROPIC_API_KEY (samme som Renate AI),
+ *        AI-tekstgenerering. Bruker ANTHROPIC_API_KEY (samme som Nathalie AI),
  *        med OPENAI_API_KEY som reserve hvis den finnes.
  *
  *   GET  /api/bookly/library   -> { library } (krever innlogget LME-bruker)

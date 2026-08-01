@@ -26,7 +26,7 @@
     var txt = en()
       ? "I use cookies to measure visits and improve LME, and to see how my ads perform. Anonymous stats always run; the Facebook pixel only if you accept."
       : "Jeg bruker informasjonskapsler for å måle besøk og forbedre LME, og for å se hvordan annonsene virker. Anonym statistikk går alltid; Facebook-pixelen kun hvis du sier ja.";
-    // Skjul de flytende knappene (Spør Renate AI, Gjør synlig) mens boksen
+    // Skjul de flytende knappene (Spør Nathalie AI, Gjør synlig) mens boksen
     // vises, så de ikke dekker Godta/Avvis på mobil.
     if (!document.getElementById("lme-consent-style")) {
       var st = document.createElement("style");
