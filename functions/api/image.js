@@ -24,14 +24,14 @@ import { enforceGeneration } from "../_lib/access.js";
  */
 
 const STYLE_LOCK =
-  "Premium 3D illustrated children's book style, soft rounded Pixar-like look, " +
-  "warm cinematic lighting, gentle depth of field. LME brand palette: cerise pink, " +
-  "lime green, bright sky blue, lemon yellow, soft cream, warm wood tones, nature greens. " +
-  "Never photorealistic. Absolutely no text, no words, no letters, no numbers, no logos, " +
-  "no watermark anywhere in the image. " +
-  "When showing people: varied natural hair colors and textures (blonde, red, brown, curly, straight, wavy); " +
-  "varied skin tones; natural, non-stereotyped appearances. Do not rotate or tilt perspectives unnaturally. " +
-  "Focus on the activity and learning moment, not character appearance.";
+  "ILLUSTRATION MANDATORY: Premium 3D illustrated children's book, NOT photograph, NOT photorealistic, NOT real people. " +
+  "Soft rounded Pixar/Disney-like style with hand-drawn animated look. Warm cinematic lighting, gentle depth of field. " +
+  "LME brand palette: cerise pink, lime green, bright sky blue, lemon yellow, soft cream, warm wood tones, nature greens. " +
+  "NO photorealistic elements. NO photographs. NO real humans. NO text, no words, no letters, no numbers, no logos, no watermark. " +
+  "When showing people: cartoon style, varied natural hair colors and textures (blonde, red, brown, curly, straight, wavy); " +
+  "varied skin tones; natural proportions, non-stereotyped appearances, friendly expressions. " +
+  "Do not rotate or tilt perspectives unnaturally. Focus on the activity and learning moment, not character appearance. " +
+  "NEGATIVE: avoid photorealism, avoid photographs, avoid real people, avoid cameras, avoid phones, avoid modern objects, avoid realistic textures.";
 
 // Låste karakterprompter, ordrett fra merkevare-bibelen.
 const MIA =
@@ -82,7 +82,10 @@ function buildPrompt(text, character) {
       parts.push("Depict them exploring nature and learning together.");
     }
   } else if (theme) {
-    parts.push(`Illustrate exactly this theme, no generic backgrounds (do not render any of these words): ${theme}`);
+    parts.push(`CREATE AN ILLUSTRATION (not a photo) showing this theme: ${theme}`);
+    parts.push("(Do not render these words as text. Focus on visual storytelling, activity, and emotion.)");
+  } else {
+    parts.push("Create an illustration of a peaceful Montessori-inspired learning scene with children engaged in nature exploration.");
   }
 
   parts.push(STYLE_LOCK);
