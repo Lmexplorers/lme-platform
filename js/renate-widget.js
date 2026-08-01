@@ -159,7 +159,7 @@
   root.innerHTML =
     '<div class="rw-panel" role="dialog" aria-label="Nathalie AI">' +
     '  <div class="rw-head">' +
-    '    <div class="rw-avatar">R<img src="/images/renate-portrait.jpg" alt="" onerror="this.remove()"></div>' +
+    '    <div class="rw-avatar">R<img src="/images/nathalie-portrait.jpg" alt="" onerror="this.remove()"></div>' +
     '    <div>' +
     '      <h4>Nathalie AI</h4>' +
     '      <p data-no="Veilederen din på LME" data-en="Your guide on LME">Veilederen din på LME</p>' +
@@ -176,7 +176,7 @@
     '  </div>' +
     '</div>' +
     '<button type="button" class="rw-btn" aria-label="Spør Nathalie AI" title="Spør Nathalie AI">' +
-    '  <span class="rw-btn-avatar">R<img src="/images/renate-portrait.jpg" alt="" onerror="this.remove()"></span>' +
+    '  <span class="rw-btn-avatar">R<img src="/images/nathalie-portrait.jpg" alt="" onerror="this.remove()"></span>' +
     '  <span class="rw-btn-label" data-no="Spør Nathalie AI" data-en="Ask Nathalie AI">Spør Nathalie AI</span>' +
     '</button>';
 
