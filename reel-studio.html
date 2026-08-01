@@ -898,9 +898,11 @@ renderPlan();
 renderSavedReels();
 console.log('[reel-studio] Page loaded! Initial format:', FMT);
 var step3=document.getElementById('step3');
-console.log('[reel-studio] step3 classList:', step3?.className);
-console.log('[reel-studio] step3 opacity:', window.getComputedStyle(step3).opacity);
-console.log('[reel-studio] step3 pointer-events:', window.getComputedStyle(step3).pointerEvents);
+if(step3){
+  console.log('[reel-studio] step3 classList:', step3.className);
+  console.log('[reel-studio] step3 opacity:', window.getComputedStyle(step3).opacity);
+  console.log('[reel-studio] step3 pointer-events:', window.getComputedStyle(step3).pointerEvents);
+}
 console.log('[reel-studio] Ready to generate content.');
 
 /* Fjern oppdiktede løfter (f.eks. garanti eller "14 dager") fra tekst som
