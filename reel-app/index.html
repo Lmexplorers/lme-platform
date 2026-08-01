@@ -761,8 +761,8 @@
   });
 
   // ---------- LAGREDE REELS ----------
-  function getSaved(){ try{ return JSON.parse(localStorage.getItem('reel_app_saved')||'[]'); }catch(e){ return []; } }
-  function setSaved(a){ try{ localStorage.setItem('reel_app_saved', JSON.stringify(a)); }catch(e){} }
+  function getSaved(){ try{ return JSON.parse(localStorage.getItem('reel_app_saved')||'[]'); }catch(e){ console.error('[reel-app] getSaved error:', e); return []; } }
+  function setSaved(a){ try{ localStorage.setItem('reel_app_saved', JSON.stringify(a)); console.log('[reel-app] Saved', a.length, 'reels'); }catch(e){ console.error('[reel-app] setSaved error:', e.message); } }
   function fmtLabel(fmt){
     var no = {reel:'Reel',story:'Story',carousel:'Karusell',post:'Innlegg'};
     var en = {reel:'Reel',story:'Story',carousel:'Carousel',post:'Post'};
@@ -776,9 +776,11 @@
     return '';
   }
   function saveReel(r, fmt){
+    console.log('[reel-app] saveReel called, fmt:', fmt, 'reel object keys:', Object.keys(r||{}));
     var a = getSaved();
     a.unshift({ id: 'c'+a.length+'_'+($('topic').value.length), fmt: fmt||'reel', title: ($('topic').value.trim().slice(0,60)||reelSnippet(r)||fmtLabel(fmt)), reel: r });
     setSaved(a); toast(LANG==='no'?'Lagret':'Saved');
+    console.log('[reel-app] Save completed');
   }
   function renderSaved(){
     var list = $('savedList'); var a = getSaved();
