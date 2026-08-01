@@ -717,13 +717,15 @@ async function publishReel(key,btn){
     const conf=map[key];
     if(!conf||!conf.accountId){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('notConnected'); return; }
     const text=buildCaption();
-    const content={ text:text, platform:key }; if(media) content.mediaUrls=[media];
-    const target={ targetType:key }; if(key==='facebook'&&conf.pageId) target.pageId=conf.pageId;
-    const post={ accountId:conf.accountId, content:content, target:target };
+    const post={ accountId:conf.accountId, text:text, target:{ targetType:key } };
+    if(key==='facebook'&&conf.pageId) post.target.pageId=conf.pageId;
+    if(media) post.mediaUrls=[media];
     const item={ label:key, post:post };
     if(scheduledTime) item.scheduledTime=scheduledTime;
-    const d=await fetch('/api/blotato/publish',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({items:[item]})}).then(function(r){return r.json();});
+    const r=await fetch('/api/blotato/publish',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({items:[item]})});
+    const d=await r.json();
+    console.log('[publishReel] response status:', r.status, 'body:', d);
     const res=d&&d.result&&d.result.results&&d.result.results[0];
     if(res&&res.ok){
       btn.innerHTML='✓';
@@ -733,8 +735,13 @@ async function publishReel(key,btn){
         msg.className='pubmsg'; msg.textContent=t('scheduledOk')+' '+dateStr+' '+timeStr;
       } else { msg.className='pubmsg'; msg.textContent=t('published'); }
     }
-    else { btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; var why=blotatoReason(res); msg.textContent='⚠️ '+t('pubfail')+(why?' '+why:''); }
-  }catch(e){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('neterr'); }
+    else {
+      btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err';
+      var why=blotatoReason(res);
+      if(!why && d&&d.error) why=String(d.error).slice(0,200);
+      msg.textContent='⚠️ '+t('pubfail')+(why?' '+why:'');
+    }
+  }catch(e){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; console.error('[publishReel] error:', e); msg.textContent='⚠️ '+t('neterr'); }
 }
 
 /* ---- Varig plan (90 dager), samme idé som LME Autopilot ---- */
