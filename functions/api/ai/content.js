@@ -168,7 +168,7 @@ function contentPrompt(b) {
   const isMontessoriTheme = src.toLowerCase().includes("montessori") || src.toLowerCase().includes("pedagogikk");
   const imagePromptBase = !isMontessoriTheme
     ? `BILDEKUNST SKAL VISE AKKURAT DETTE TEMAET, IKKE MONTESSORI: "${src.slice(0, 200)}". Beskriv et konkret, realistisk motiv som illustrerer innholdet fra temaet/kilden. Vises mennesker, beskriv deres miljø og handling. Vises materialer eller objekter, beskriv dem nøyaktig (farger, form, størrelse). KRITISK: Ikke generer Montessori-hyller, Montessori-materiell, pedagogikk-miljøer, rosa/krem/lila farger, eller noe som helst som ikke direkte hører til temaet "${src.slice(0, 150)}".`
-    : `Beskriv et konkret, realistisk motiv som illustrerer innholdet. Vises mennesker, beskriv deres miljø og handling. Vises materialer eller objekter, beskriv dem nøyaktig (farger, form, størrelse, antall).`;
+    : `Montessori-tema: "${src.slice(0, 200)}". Beskriv et konkret, realistisk motiv som illustrerer dette Montessori-innholdet. Vises mennesker, beskriv deres miljø og handling. Vises materialer eller objekter, beskriv dem nøyaktig (farger, form, størrelse, antall, materialer).`;
 
   const shapes = {
     carousel: `{"format":"carousel","title":"kort arbeidstittel","slides":["3-8 korte slides, hver bygger på forrige, siste er en tydelig CTA"],"caption":"ferdig caption","hashtags":["8-12 hashtags"]}`,

@@ -45,10 +45,6 @@ const CHAR = {
   both: MIA + " " + TEO + " They are best friends exploring together, never romantic.",
 };
 
-const NEUTRAL_SCENE =
-  "A warm, inviting Montessori scene with real, pedagogically accurate Montessori practical-life " +
-  "materials, natural wood, soft daylight, calm ordered shelves. No recognizable real people.";
-
 function json(data, status) {
   return new Response(JSON.stringify(data), {
     status: status || 200,
@@ -73,6 +69,9 @@ function sizeFor(platform) {
 function buildPrompt(text, character) {
   const parts = [];
   const c = CHAR[character];
+  const lowerText = String(text || "").toLowerCase();
+  const isMontessoriTheme = lowerText.includes("montessori") && !lowerText.includes("ikke montessori") && !lowerText.includes("not montessori") && !lowerText.includes("do not");
+
   if (c) {
     parts.push(c);
     // Nok av beskrivelsen til at et presist navngitt Montessori-materiell (med
@@ -85,11 +84,12 @@ function buildPrompt(text, character) {
         : "Depict them exploring nature and learning together."
     );
   } else {
-    // Ingen karakter: nøytral, trygg Montessori-scene som passer temaet. Behold
-    // nok av beskrivelsen til at riktig materiell faktisk kommer med i bildet.
+    // Ingen karakter: BARE legge til Montessori-scene hvis temaet eksplisitt handler om Montessori
+    if (isMontessoriTheme) {
+      parts.push("A warm, inviting Montessori scene with real, pedagogically accurate Montessori practical-life materials, natural wood, soft daylight, calm ordered shelves. No recognizable real people.");
+    }
     const theme = String(text || "").replace(/\s+/g, " ").trim().slice(0, 700);
-    parts.push(NEUTRAL_SCENE);
-    if (theme) parts.push(`Let the scene fit this theme (do not render any of these words): ${theme}`);
+    if (theme) parts.push(`Illustrate exactly this theme, no generic backgrounds (do not render any of these words): ${theme}`);
   }
   parts.push(STYLE_LOCK);
   return parts.join(" ");
