@@ -399,9 +399,15 @@ async function genContent(){
     renderContent(FMT,REEL);
     fillImgPrompt();
     const f=curFmt();
+    console.log('[genContent] Format:', f.id, 'Media:', f.media, 'Pub platforms:', f.pub);
     if(f.media!=='none') document.getElementById('step2').classList.add('on');
-    if(f.pub.length){ document.getElementById('step3').classList.add('on'); updatePubButtons(); }
-    else { document.getElementById('step3').classList.remove('on'); }
+    if(f.pub.length){
+      console.log('[genContent] Adding "on" class to step3');
+      document.getElementById('step3').classList.add('on');
+      console.log('[genContent] Step3 classList:', document.getElementById('step3').className);
+      updatePubButtons();
+    }
+    else { document.getElementById('step3').classList.remove('on'); console.log('[genContent] Removing "on" class from step3, pub.length=0'); }
   }catch(e){
     console.error('Reel Studio:',e);
     document.getElementById('out').innerHTML='<p class="err">'+t('error')+'</p>';
@@ -522,10 +528,12 @@ function buildCaption(){
 }
 function updatePubButtons(){
   var f=curFmt(); var host=document.getElementById('pubBtns'); if(!host) return;
+  console.log('[updatePubButtons] Format:', f.id, 'Pub platforms:', f.pub);
   var labels={instagram:'📸 '+t('pubIg'),tiktok:'🎵 '+t('pubTt'),facebook:'👍 '+t('pubFb'),pinterest:'📌 '+t('pubPin')};
   host.innerHTML=f.pub.map(function(p){
     return '<button class="btn cerise block" onclick="publishReel(\''+p+'\',this)">'+labels[p]+'</button>';
   }).join('');
+  console.log('[updatePubButtons] Rendered', f.pub.length, 'buttons for step3');
 }
 
 /* ---- Steg 3: autopubliser via de tilkoblede Blotato-kontoene ----
