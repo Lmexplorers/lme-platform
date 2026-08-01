@@ -177,8 +177,8 @@ DO NOT: Generate Montessori, educational toys, children's materials, or pedagogi
 
 Make sure every element is physically realistic and the image could exist as a real photograph.`;
 
-  // Escape for JSON embedding
-  const imagePromptBase = imagePromptRaw.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n');
+  // Escape for JSON embedding using JSON.stringify (safe, standard method)
+  const imagePromptBase = JSON.stringify(imagePromptRaw).slice(1, -1);
 
   const shapes = {
     carousel: `{"format":"carousel","title":"kort arbeidstittel","slides":["3-8 korte slides, hver bygger på forrige, siste er en tydelig CTA"],"caption":"ferdig caption","hashtags":["8-12 hashtags"]}`,
