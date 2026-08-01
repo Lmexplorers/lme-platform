@@ -615,9 +615,10 @@
     fetchAccounts().then(function(map){
       var conf = map[platform];
       if (!conf || !conf.accountId) return Promise.reject({ notConnected:true });
-      var content = { text:buildCaption(r), platform:platform }; if (MEDIA_URL) content.mediaUrls = [MEDIA_URL];
-      var target = { targetType:platform }; if (platform === 'facebook' && conf.pageId) target.pageId = conf.pageId;
-      var item = { label:platform, post:{ accountId:conf.accountId, content:content, target:target } };
+      var post = { accountId:conf.accountId, text:buildCaption(r), target:{ targetType:platform } };
+      if (MEDIA_URL) post.mediaUrls = [MEDIA_URL];
+      if (platform === 'facebook' && conf.pageId) post.target.pageId = conf.pageId;
+      var item = { label:platform, post:post };
       return fetch('/api/blotato/publish',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({items:[item]})}).then(function(r2){ return r2.json(); });
     }).then(function(d){
