@@ -622,20 +622,73 @@
       .catch(function(e){ statusEl.className='pubmsg err'; statusEl.textContent = (LANG==='no'?'⚠️ Kunne ikke lage bilde':'⚠️ Could not make image')+(e&&e.message?' ('+e.message+')':''); })
       .finally(function(){ btn.disabled = false; btn.innerHTML = lbl; });
   }
+  function renderTextOnImage(imageUrl, textLines, slideNum, totalSlides){
+    return new Promise(function(resolve, reject){
+      var img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = function(){
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        canvas.width = 1080;
+        canvas.height = 1080;
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'rgba(255,255,255,0.95)';
+        ctx.font = 'bold 48px Sasson Montessori, sans-serif';
+        ctx.textAlign = 'center';
+        var textBoxHeight = textLines.length * 70 + 60;
+        var startY = (canvas.height - textBoxHeight) / 2;
+        var boxX = 40; var boxY = startY - 20; var boxW = canvas.width - 80; var boxH = textBoxHeight;
+        ctx.fillRect(boxX, boxY, boxW, boxH);
+        ctx.fillStyle = '#1F1B24';
+        textLines.forEach(function(line, idx){
+          ctx.fillText(line, canvas.width/2, startY + 60 + (idx * 70));
+        });
+        ctx.fillStyle = 'rgba(255,255,255,0.9)';
+        ctx.font = '36px Sasson Montessori, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText((slideNum+1)+'/'+totalSlides, canvas.width - 40, canvas.height - 40);
+        canvas.toBlob(function(blob){ resolve(URL.createObjectURL(blob)); }, 'image/jpeg', 0.95);
+      };
+      img.onerror = function(){ reject(new Error('Could not load image')); };
+      img.src = imageUrl;
+    });
+  }
+  var CAROUSEL_UPLOAD_IMAGE = '';
+  function handleCarouselImageUpload(file, statusEl){
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e){ CAROUSEL_UPLOAD_IMAGE = e.target.result; if(statusEl) statusEl.textContent = LANG==='no'?'Bilde lastet opp ✓':'Image uploaded ✓'; };
+    reader.onerror = function(){ if(statusEl) statusEl.textContent = LANG==='no'?'⚠️ Kunne ikke laste opp bilde':'⚠️ Could not upload image'; };
+    reader.readAsDataURL(file);
+  }
+  function generateCarouselSlides(r){
+    if (!CAROUSEL_UPLOAD_IMAGE || !Array.isArray(r.slides) || !r.slides.length) return Promise.reject(new Error('No image or slides'));
+    var promises = r.slides.map(function(s, i){
+      var text = (typeof s==='string')?s:(s.text||s.body||s.headline||'');
+      return renderTextOnImage(CAROUSEL_UPLOAD_IMAGE, [text], i, r.slides.length);
+    });
+    return Promise.all(promises);
+  }
   function publishTo(platform, r, statusEl, btn){
     var needsMedia = (platform === 'instagram' || platform === 'tiktok');
-    if (needsMedia && !MEDIA_URL){ statusEl.className='pubmsg err'; statusEl.textContent = LANG==='no'?'⚠️ Lag et bilde først. Instagram og TikTok krever et bilde eller en video.':'⚠️ Make an image first. Instagram and TikTok need an image or video.'; return; }
+    var isCarousel = (FMT === 'carousel');
+    if (needsMedia && !MEDIA_URL && !isCarousel){ statusEl.className='pubmsg err'; statusEl.textContent = LANG==='no'?'⚠️ Lag et bilde først. Instagram og TikTok krever et bilde eller en video.':'⚠️ Make an image first. Instagram and TikTok need an image or video.'; return; }
+    if (needsMedia && isCarousel && !CAROUSEL_UPLOAD_IMAGE){ statusEl.className='pubmsg err'; statusEl.textContent = LANG==='no'?'⚠️ Last opp et bilde før du publiserer.':'⚠️ Upload an image before publishing.'; return; }
     var lbl = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> '+(LANG==='no'?'Publiserer…':'Publishing…');
     statusEl.className='pubmsg'; statusEl.textContent = '';
-    fetchAccounts().then(function(map){
-      var conf = map[platform];
-      if (!conf || !conf.accountId) return Promise.reject({ notConnected:true });
-      var post = { accountId:conf.accountId, text:buildCaption(r), target:{ targetType:platform } };
-      if (MEDIA_URL) post.mediaUrls = [MEDIA_URL];
-      if (platform === 'facebook' && conf.pageId) post.target.pageId = conf.pageId;
-      var item = { label:platform, post:post };
-      return fetch('/api/blotato/publish',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({items:[item]})}).then(function(r2){ return r2.json(); });
+    var carouselPromise = isCarousel ? generateCarouselSlides(r) : Promise.resolve(null);
+    carouselPromise.then(function(slideUrls){
+      return fetchAccounts().then(function(map){
+        var conf = map[platform];
+        if (!conf || !conf.accountId) return Promise.reject({ notConnected:true });
+        var post = { accountId:conf.accountId, text:buildCaption(r), target:{ targetType:platform } };
+        if (isCarousel && slideUrls && slideUrls.length) post.mediaUrls = slideUrls;
+        else if (MEDIA_URL) post.mediaUrls = [MEDIA_URL];
+        if (platform === 'facebook' && conf.pageId) post.target.pageId = conf.pageId;
+        var item = { label:platform, post:post };
+        return fetch('/api/blotato/publish',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({items:[item]})}).then(function(r2){ return r2.json(); });
+      });
     }).then(function(d){
       var res = d && d.result && d.result.results && d.result.results[0];
       if (res && res.ok){ btn.innerHTML = '✓ '+(LANG==='no'?'Publisert':'Published'); btn.classList.add('act'); statusEl.className='pubmsg'; statusEl.textContent = LANG==='no'?'Publisert til '+platform+'!':'Published to '+platform+'!'; }
@@ -650,15 +703,33 @@
     var wrap = document.createElement('div'); wrap.className = 'pubpanel';
     var h = document.createElement('h3'); h.textContent = LANG==='no'?'Del og publiser':'Share and publish'; wrap.appendChild(h);
     var ph = document.createElement('div'); ph.className = 'ph';
-    ph.textContent = LANG==='no'?'Lag et bilde, og publiser rett til plattformene dine.':'Make an image, and publish straight to your platforms.';
+    ph.textContent = fmt==='carousel'
+      ? (LANG==='no'?'Last opp bildet ditt, og se forhåndsvisningen av karusellen.':'Upload your image, and preview the carousel.')
+      : (LANG==='no'?'Lag et bilde, og publiser rett til plattformene dine.':'Make an image, and publish straight to your platforms.');
     wrap.appendChild(ph);
     var img = document.createElement('img'); img.className = 'pubimg'; img.alt = ''; wrap.appendChild(img);
     var status = document.createElement('div'); status.className = 'pubmsg';
-    // Lag bilde
     var row1 = document.createElement('div'); row1.className = 'pubrow';
-    var imgBtn = document.createElement('button'); imgBtn.className = 'mk'; imgBtn.textContent = LANG==='no'?'🎨 Lag bilde':'🎨 Make image';
-    imgBtn.addEventListener('click', function(){ genImage(r, img, status, imgBtn); });
-    row1.appendChild(imgBtn); wrap.appendChild(row1);
+    if (fmt === 'carousel'){
+      var previewBtn = document.createElement('button'); previewBtn.className = 'mk'; previewBtn.textContent = LANG==='no'?'👁️ Forhåndsvisning':'👁️ Preview';
+      previewBtn.addEventListener('click', function(){
+        if (!CAROUSEL_UPLOAD_IMAGE){ status.className='pubmsg err'; status.textContent = LANG==='no'?'⚠️ Last opp et bilde først.':'⚠️ Upload an image first.'; return; }
+        if (!Array.isArray(r.slides) || !r.slides.length){ status.className='pubmsg err'; status.textContent = LANG==='no'?'⚠️ Ingen slides.':'⚠️ No slides.'; return; }
+        var lbl = previewBtn.innerHTML; previewBtn.disabled = true; previewBtn.innerHTML='<span class="spinner"></span> '+(LANG==='no'?'Lager forhåndsvisning…':'Rendering preview…');
+        status.className='pubmsg'; status.textContent='';
+        var firstSlide = r.slides[0]; var textLine = (typeof firstSlide==='string')?firstSlide:(firstSlide.text||firstSlide.body||firstSlide.headline||'');
+        renderTextOnImage(CAROUSEL_UPLOAD_IMAGE, [textLine], 0, r.slides.length)
+          .then(function(dataUrl){ img.src=dataUrl; img.style.display='block'; status.className='pubmsg'; status.textContent=LANG==='no'?'Slide 1 preview ready. Upload to Instagram to create full carousel.':'Slide 1 preview ready. Upload to Instagram to create full carousel.'; })
+          .catch(function(e){ status.className='pubmsg err'; status.textContent=LANG==='no'?'⚠️ Kunne ikke lage forhåndsvisning.':'⚠️ Could not create preview.'; })
+          .finally(function(){ previewBtn.disabled=false; previewBtn.innerHTML=lbl; });
+      });
+      row1.appendChild(previewBtn);
+    } else {
+      var imgBtn = document.createElement('button'); imgBtn.className = 'mk'; imgBtn.textContent = LANG==='no'?'🎨 Lag bilde':'🎨 Make image';
+      imgBtn.addEventListener('click', function(){ genImage(r, img, status, imgBtn); });
+      row1.appendChild(imgBtn);
+    }
+    wrap.appendChild(row1);
     // Publiser-knapper
     var row2 = document.createElement('div'); row2.className = 'pubrow'; row2.style.marginTop = '10px';
     var plats = [['instagram','📸 Instagram'],['facebook','👍 Facebook'],['tiktok','🎵 TikTok']];
@@ -703,23 +774,26 @@
       if (r.caption){ out.appendChild(card('✍️ '+T('caption'), r.caption, true)); }
       tagsCard(out, r.hashtags);
     } else if (fmt === 'carousel'){
+      var uploadCard = document.createElement('div'); uploadCard.className='rcard';
+      var uploadHead = document.createElement('h4'); uploadHead.textContent = LANG==='no'?'📸 Last opp bilde':'📸 Upload image';
+      var uploadDesc = document.createElement('p'); uploadDesc.textContent = LANG==='no'?'Last opp ett bilde fra Canva eller telefonen din. Teksten legges automatisk oppå bildet på hver slide.':'Upload one image from Canva or your phone. Text will be automatically overlaid on the image for each slide.'; uploadDesc.style.fontSize='14px'; uploadDesc.style.color='var(--ink-soft)';
+      uploadCard.appendChild(uploadHead); uploadCard.appendChild(uploadDesc);
+      var uploadDiv = document.createElement('div'); uploadDiv.style.marginTop='12px';
+      var fileInput = document.createElement('input'); fileInput.type='file'; fileInput.accept='image/*'; fileInput.style.display='none';
+      var uploadBtn = document.createElement('button'); uploadBtn.textContent = LANG==='no'?'Velg bilde':'Choose image'; uploadBtn.className='mk';
+      var uploadStatus = document.createElement('div'); uploadStatus.style.marginTop='8px'; uploadStatus.style.fontSize='12px';
+      uploadBtn.addEventListener('click', function(){ fileInput.click(); });
+      fileInput.addEventListener('change', function(){ if(fileInput.files[0]) handleCarouselImageUpload(fileInput.files[0], uploadStatus); });
+      uploadDiv.appendChild(uploadBtn); uploadDiv.appendChild(uploadStatus);
+      uploadCard.appendChild(uploadDiv);
+      out.appendChild(uploadCard);
       if (Array.isArray(r.slides)){
         r.slides.forEach(function(s, i){
           var text = (typeof s === 'string') ? s : (s.text || s.body || s.headline || '');
-          var imgPrompt = (typeof s === 'object' && s.imagePrompt) ? s.imagePrompt : '';
           var d=document.createElement('div'); d.className='rcard scene';
           var head=document.createElement('div'); head.className='time'; head.textContent=T('slide')+' '+(i+1);
           var on=document.createElement('div'); on.className='on'; on.textContent=text; on.appendChild(copyBtn(text));
           d.appendChild(head); d.appendChild(on);
-          if (imgPrompt){
-            var imgDiv=document.createElement('div'); imgDiv.style.marginTop='10px';
-            var img=document.createElement('img'); img.style.maxWidth='100%'; img.style.borderRadius='8px';
-            var imgBtn=document.createElement('button'); imgBtn.className='mk' ; imgBtn.textContent=LANG==='no'?'🎨 Lag bilde':'🎨 Make image'; imgBtn.style.marginTop='8px';
-            var status=document.createElement('div'); status.style.marginTop='8px'; status.style.fontSize='12px';
-            imgBtn.addEventListener('click', function(){ genCarouselSlideImage(imgPrompt, img, status, imgBtn); });
-            imgDiv.appendChild(imgBtn); imgDiv.appendChild(status); imgDiv.appendChild(img);
-            d.appendChild(imgDiv);
-          }
           out.appendChild(d);
         });
       }
