@@ -160,11 +160,11 @@ window.LME_FUNNEL = {
         "Start med leksjon 1, og ta det i ditt eget tempo."
       ],
       knapp: "Åpne Claude-kurset",
-      knappLenke: "/kurs/claude",
+      knappLenke: "/academy/claude",
       bonusKnapp: "Last ned oppskriftspakken (PDF)",
       bonusLenke: "/funnel/nedlasting/LME-Claude-oppskrifter.pdf",   // tospråklig oppskriftspakke
       sekundaerKnapp: "Til kurs",
-      sekundaerLenke: "/kurs",
+      sekundaerLenke: "/academy",
       support: "Spørsmål? Svar på e-posten du nettopp fikk, så hjelper jeg deg."
     }
   },
@@ -297,11 +297,11 @@ window.LME_FUNNEL = {
         "Start with lesson 1, and take it at your own pace."
       ],
       knapp: "Open the Claude course",
-      knappLenke: "/kurs/claude",
+      knappLenke: "/academy/claude",
       bonusKnapp: "Download the recipe pack (PDF)",
       bonusLenke: "/funnel/nedlasting/LME-Claude-oppskrifter.pdf",   // bilingual recipe pack
       sekundaerKnapp: "To Classes",
-      sekundaerLenke: "/kurs",
+      sekundaerLenke: "/academy",
       support: "Questions? Just reply to the email you received, and I'll help you."
     }
   }

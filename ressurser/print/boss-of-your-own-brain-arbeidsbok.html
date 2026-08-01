@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arbeidsboken — Boss of Your Own Brain — Little Montessori Explorers</title>
+<link rel="stylesheet" href="/bookly/css/bookly.css">
+<style>
+  /* Playpen Sans lastes lokalt her (samme prinsipp som Sasson Montessori i
+     bookly.css). Selvhostet fil garanterer riktig font uansett hvor siden
+     rendres (også ved PDF-bygg uten nett). */
+  @font-face{font-family:'Playpen Sans';src:url('/fonts/PlaypenSans-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:block;}
+  @font-face{font-family:'Playpen Sans';src:url('/fonts/PlaypenSans-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:block;}
+  @font-face{font-family:'Playpen Sans';src:url('/fonts/PlaypenSans-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:block;}
+</style>
+<style>
+  /* Denne siden bruker LMEs faste guide/arbeidsbok-mal (samme oppbygning som
+     YouTube-arbeidsboken): diagonal pastellgradient, kant til venstre,
+     rotert kanttekst, pille-bannere og rammer med skrivelinjer. Fargene er
+     LMEs mint (fra brandpaletten) + gul + fersken, ikke en ny palett.
+     Fontene (Playpen Sans/Sasson Montessori) er LMEs låste fontregel. */
+  :root{
+    --g-ink:#2a2a2a; --g-body:#4a4a4a; --g-muted:#8a9e8a;
+    --g-mint:#b8d8c5; --g-mint-mid:#7cc4a3; --g-green-light:#f0f7f1; --g-yellow:#f7e76b;
+    --g-rose:#c96a72; --g-cream:#fdf5f1;
+  }
+  body{background:#f2eee9;font-family:var(--font-body);margin:0;}
+  .bk-stage{display:block !important;padding:0;}
+
+  /* ===== Sidekropp: gradient + rutepapir + kant + rotert merketekst ===== */
+  .gd-page{position:relative;width:210mm;height:297mm;margin:0 auto;overflow:hidden;
+    background:
+      linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px) 0 0/8mm 8mm,
+      linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px) 0 0/8mm 8mm,
+      linear-gradient(135deg,#fdf5f1 0%,#fbeae9 45%,#f8d7da 100%);
+  }
+  .gd-page{page-break-after:always;}
+  .gd-page:last-child{page-break-after:auto;}
+  .gd-edge{position:absolute;top:0;bottom:0;width:6mm;}
+  .gd-edge-l{left:0;background:linear-gradient(180deg,#7cc4a3,#b8d8c5 55%,#f7e76b);}
+  .gd-edge-r{right:0;}
+  .gd-edge span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-90deg);white-space:nowrap;font-size:6.5pt;letter-spacing:.2em;text-transform:uppercase;font-family:var(--font-body);font-weight:600;}
+  .gd-edge-l span{color:rgba(42,42,42,.75);}
+  .gd-edge-r span{color:#b99a94;}
+  .gd-head{position:absolute;top:8mm;left:9mm;right:9mm;text-align:center;}
+  .gd-head .l1,.gd-head .l2{font-size:7.5pt;letter-spacing:.22em;text-transform:uppercase;color:var(--g-ink);font-weight:700;font-family:var(--font-body);}
+  .gd-head .l2{margin-top:1mm;color:#b98a8f;}
+  .gd-foot{position:absolute;bottom:7mm;left:0;right:0;text-align:center;font-size:12pt;font-weight:700;color:var(--g-ink);font-family:var(--font-body);}
+  .gd-inner{position:absolute;top:21mm;left:16mm;right:16mm;bottom:15mm;display:flex;flex-direction:column;}
+
+  /* ===== Bilder av Mia &amp; Teo øverst på hver side ===== */
+  .gd-img{width:100%;height:42mm;object-fit:cover;border-radius:4mm;border:1px solid rgba(0,0,0,.08);margin-bottom:4mm;display:block;}
+  .gd-cover-img{width:100%;max-width:150mm;height:58mm;object-fit:cover;border-radius:4mm;border:1px solid rgba(0,0,0,.08);margin-bottom:6mm;display:block;}
+
+  /* ===== Innholdsbrikker som går igjen ===== */
+  .gd-pill{display:block;width:100%;box-sizing:border-box;text-align:center;border-radius:999px;padding:3mm 6mm;font-family:var(--font-display);font-weight:700;font-size:16pt;margin:0 0 4mm;}
+  .gd-pill.yellow{background:var(--g-yellow);color:var(--g-ink);}
+  .gd-pill.green{background:var(--g-mint);color:var(--g-ink);}
+  .gd-text{font-family:var(--font-body);font-size:12.5pt;line-height:1.5;color:var(--g-body);margin-bottom:4mm;}
+  .gd-card{background:#fff;border-radius:4mm;border:1px solid #f0eeea;padding:4mm 6.5mm;margin-bottom:3.5mm;}
+  .gd-card.cream{background:var(--g-cream);box-shadow:none;}
+  .gd-label{font-family:var(--font-display);font-weight:700;font-size:14pt;margin:0 0 2.5mm;display:block;}
+  .gd-label.rose{color:var(--g-rose);}
+  .gd-label.green{color:var(--g-ink);}
+  .gd-q{font-size:12pt;font-weight:700;color:var(--g-ink);margin:0 0 2mm;}
+  .gd-ul{list-style:none;margin:0;padding:0;}
+  .gd-ul li{display:flex;align-items:flex-start;gap:3mm;font-size:12pt;line-height:1.35;margin-bottom:2mm;color:var(--g-body);}
+  .gd-ul li strong{color:var(--g-ink);}
+  .gd-chk{flex:0 0 auto;width:4.5mm;height:4.5mm;border-radius:1mm;border:1.3pt solid var(--g-mint-mid);margin-top:0.6mm;}
+  .gd-num{flex:0 0 auto;width:6.2mm;height:6.2mm;border-radius:50%;background:var(--g-mint);color:var(--g-ink);font-weight:700;font-size:10pt;display:flex;align-items:center;justify-content:center;margin-top:0;}
+  .gd-affirm{font-family:var(--font-body);font-weight:700;font-size:13.5pt;color:var(--g-ink);text-align:center;line-height:1.4;}
+
+  /* ===== Skriveramme med blyant: "her skriver du" ===== */
+  .gd-write{border:1.5px dashed var(--g-mint-mid);border-radius:4mm;padding:4mm 6mm 3mm;margin-top:1mm;}
+  .gd-write-label{display:flex;align-items:center;gap:2mm;font-family:var(--font-body);font-weight:700;font-size:10pt;color:var(--g-ink);text-transform:uppercase;letter-spacing:.09em;margin-bottom:2.5mm;}
+  .gd-write-label .pencil{font-size:12.5pt;}
+  .gd-line{border-bottom:1pt solid #d8c9c4;height:7mm;}
+
+  /* ===== Forside ===== */
+  .gd-cover .gd-inner{align-items:center;justify-content:center;text-align:center;}
+  .gd-logobox{width:38mm;height:38mm;background:#fff;border-radius:5mm;border:1px solid rgba(0,0,0,.08);display:flex;align-items:center;justify-content:center;margin-bottom:6mm;padding:4mm;box-sizing:border-box;box-shadow:0 4px 14px rgba(0,0,0,.06);}
+  .gd-logobox img{width:100%;height:100%;object-fit:contain;}
+  .gd-cover-label{font-size:10pt;letter-spacing:.14em;text-transform:uppercase;color:#9a9a9a;margin-bottom:4mm;font-family:var(--font-body);font-weight:700;}
+  .gd-cover-title{font-family:var(--font-display);font-weight:800;font-size:34pt;text-transform:uppercase;line-height:1.16;color:var(--g-ink);margin-bottom:6mm;}
+  .gd-cover-badge{display:inline-block;background:var(--g-yellow);color:var(--g-ink);font-family:var(--font-body);font-weight:700;font-size:14pt;border-radius:999px;padding:3.5mm 9mm;margin-bottom:8mm;}
+  .gd-cover-card{background:#fff;border-radius:5mm;border:1px solid #f0eeea;padding:6mm 10mm;max-width:150mm;margin-bottom:6mm;}
+  .gd-cover-card .sub{font-size:13pt;color:var(--g-body);line-height:1.55;}
+  .gd-cover-card .accent{font-family:var(--font-body);font-weight:700;color:var(--g-rose);font-style:italic;margin-top:3mm;font-size:12pt;}
+  .gd-cover-author{font-family:var(--font-body);font-weight:800;color:var(--g-rose);font-size:13.5pt;}
+  .gd-cover-brand{color:#9a9a9a;font-size:10.5pt;margin-top:1mm;}
+  .gd-cover-domain{color:var(--g-rose);font-size:10.5pt;}
+
+  /* ===== Avslutning ===== */
+  .gd-close-card{background:#fff;border:1.5px solid #f0dede;border-radius:4mm;padding:5mm 7mm;margin-bottom:4mm;}
+  .gd-close-card h3{font-family:var(--font-display);font-weight:700;font-size:13.5pt;margin-bottom:2mm;}
+  .gd-close-card p{font-size:12pt;line-height:1.5;color:var(--g-body);margin:0;}
+  .gd-close-card.green h3{color:var(--g-ink);}
+  .gd-close-card.rose h3{color:var(--g-rose);}
+
+  .toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 20px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.06);position:sticky;top:0;z-index:5;}
+  .toolbar .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--g-ink);text-decoration:none;font-size:15px;font-family:var(--font-body);}
+  .toolbar .brand img{width:32px;height:32px;object-fit:contain;}
+  .toolbar .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+  .tbtn{border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-family:var(--font-body);cursor:pointer;text-decoration:none;font-size:14px;white-space:nowrap;}
+  .tbtn-print{background:var(--g-mint);color:var(--g-ink);box-shadow:0 4px 14px rgba(124,196,163,.5);}
+  .tbtn-back{background:#fff;color:var(--g-ink);border:1.5px solid #eee;}
+  .bk-stage{padding-top:26px;}
+
+  @media print{
+    .toolbar{display:none !important;}
+    #lme-acct{display:none !important;}
+    body{background:#fff;}
+    .bk-stage{padding:0;}
+  }
+  @page{size:A4;margin:0;}
+</style>
+</head>
+<body>
+  <div class="toolbar">
+    <a class="brand" href="/academy/boss-of-your-own-brain"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <div class="actions">
+      <button class="tbtn" id="lme-print-lang" type="button" style="background:#fce9f0;color:#c96a72;">🇬🇧 English</button>
+      <a class="tbtn tbtn-back" href="/academy/boss-of-your-own-brain" data-no="‹ Til kurset" data-en="‹ Back to the course">‹ Til kurset</a>
+      <button class="tbtn tbtn-print" onclick="window.print()" data-no="⬇ Lagre som PDF" data-en="⬇ Save as PDF">⬇ Lagre som PDF</button>
+    </div>
+  </div>
+  <div class="bk-stage">
+
+    <!-- ===== 1: FORSIDE ===== -->
+    <div class="gd-page gd-cover">
+      <div class="gd-edge gd-edge-l"><span data-no="Little Montessori Explorers" data-en="Little Montessori Explorers">Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="Boss of Your Own Brain — Arbeidsbok" data-en="Boss of Your Own Brain — Workbook">Boss of Your Own Brain — Arbeidsbok</span></div>
+      <div class="gd-inner">
+        <div class="gd-logobox"><img src="/images/lme-logo.png" alt="Little Montessori Explorers"></div>
+        <div class="gd-cover-label" data-no="LME-arbeidsbok" data-en="LME workbook">LME-arbeidsbok</div>
+        <h1 class="gd-cover-title" data-no="Boss of Your Own Brain" data-en="Boss of Your Own Brain">Boss of Your Own Brain</h1>
+        <div class="gd-cover-badge" data-no="Arbeidsbok · 5 moduler" data-en="Workbook · 5 modules">Arbeidsbok · 5 moduler</div>
+        <img class="gd-cover-img" src="/images/banner_eventyr.webp" alt="Mia og Teo starter på en ny sti i skogen, klare for eventyret">
+        <div class="gd-cover-card">
+          <p class="sub" data-no="Din arbeidsbok gjennom kurset. Ett kapittel per modul, med refleksjon, øvelser og ett konkret steg du kan ta denne uken." data-en="Your workbook through the course. One chapter per module, with reflection, exercises and one concrete step you can take this week.">Din arbeidsbok gjennom kurset. Ett kapittel per modul, med refleksjon, øvelser og ett konkret steg du kan ta denne uken.</p>
+          <p class="accent" data-no="· Du er sjefen i ditt eget hode ·" data-en="· You're the boss of your own brain ·">· Du er sjefen i ditt eget hode ·</p>
+        </div>
+        <div class="gd-cover-author" data-no="Av Renate Dahl" data-en="By Renate Dahl">Av Renate Dahl</div>
+        <div class="gd-cover-brand">Little Montessori Explorers</div>
+        <div class="gd-cover-domain">lmexplorers.com</div>
+      </div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Boss of Your Own Brain" data-en="Boss of Your Own Brain">Boss of Your Own Brain</div></div>
+      <div class="gd-foot">— 1 —</div>
+    </div>
+
+    <!-- ===== 2: VELKOMMEN ===== -->
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="Boss of Your Own Brain — Arbeidsbok" data-en="Boss of Your Own Brain — Workbook">Boss of Your Own Brain — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Arbeidsbok · Boss of Your Own Brain" data-en="Workbook · Boss of Your Own Brain">Arbeidsbok · Boss of Your Own Brain</div></div>
+      <div class="gd-inner">
+        <img class="gd-img" src="/images/mia-teo-brev.webp" alt="Mia og Teo holder en glitrende velkomstbrev sammen">
+        <h2 class="gd-pill yellow" data-no="Velkommen" data-en="Welcome">Velkommen</h2>
+        <div class="gd-text" data-no="Hei! Denne arbeidsboken er til deg som gründer, iverksetter eller visjonær som vil ta kontroll over tankene dine og bygge en virksomhet fra en plass av kraft og selvtillit. Her skriver du ned tankene dine, gjør øvelsene, og oppdager hvordan du selv kan styre hjernen din, i stedet for at den styrer deg." data-en="Hi! This workbook is for you as an entrepreneur, business builder or visionary who wants to take control of your thoughts and build a business from a place of power and self-confidence. Here you write down your thoughts, do the exercises, and discover how you can steer your own brain, instead of it steering you.">Hei! Denne arbeidsboken er til deg som gründer, iverksetter eller visjonær som vil ta kontroll over tankene dine og bygge en virksomhet fra en plass av kraft og selvtillit. Her skriver du ned tankene dine, gjør øvelsene, og oppdager hvordan du selv kan styre hjernen din, i stedet for at den styrer deg.</div>
+        <div class="gd-card">
+          <h3 class="gd-label green" data-no="Fem moduler" data-en="Five modules">Fem moduler</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-num">1</span><span data-no="Møt dine stemmer — bli kjent med Komitéen i hodet ditt." data-en="Meet your voices — get to know the Committee in your head.">Møt dine stemmer — bli kjent med Komitéen i hodet ditt.</span></li>
+            <li><span class="gd-num">2</span><span data-no="Glassets øvelse & takknemlighet — bytt briller, bytt virkelighet." data-en="The glasses exercise & gratitude — change glasses, change reality.">Glassets øvelse & takknemlighet — bytt briller, bytt virkelighet.</span></li>
+            <li><span class="gd-num">3</span><span data-no="Money mindset — skriv en ny historie om penger." data-en="Money mindset — write a new story about money.">Money mindset — skriv en ny historie om penger.</span></li>
+            <li><span class="gd-num">4</span><span data-no="Beslutninger fra din sanne stemme — tre magiske spørsmål." data-en="Decisions from your true voice — three magic questions.">Beslutninger fra din sanne stemme — tre magiske spørsmål.</span></li>
+            <li><span class="gd-num">5</span><span data-no="Vedlikehold & vekst — de fire pilarene som holder deg i gang." data-en="Maintenance & growth — the four pillars that keep you going.">Vedlikehold & vekst — de fire pilarene som holder deg i gang.</span></li>
+          </ul>
+        </div>
+        <div class="gd-write">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Løftet mitt til meg selv" data-en="My promise to myself">Løftet mitt til meg selv</span></div>
+          <p class="gd-q" data-no="Hvorfor vil du gå gjennom dette kurset akkurat nå? Skriv det ned, så du husker det den dagen det føles tungt." data-en="Why do you want to go through this course right now? Write it down, so you remember it on the day it feels hard.">Hvorfor vil du gå gjennom dette kurset akkurat nå? Skriv det ned, så du husker det den dagen det føles tungt.</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+        </div>
+        <div class="gd-card cream" style="margin-top:4.5mm;">
+          <p class="gd-affirm" data-no="Din hjerne er som en muskel. Jo mer du trener den, desto sterkere blir den. Denne arbeidsboken er din treningspartner." data-en="Your brain is like a muscle. The more you train it, the stronger it gets. This workbook is your training partner.">Din hjerne er som en muskel. Jo mer du trener den, desto sterkere blir den. Denne arbeidsboken er din treningspartner.</p>
+        </div>
+      </div>
+      <div class="gd-foot">— 2 —</div>
+    </div>
+
+    <!-- ===== 3: MODUL 1, MØT DINE STEMMER ===== -->
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="Boss of Your Own Brain — Arbeidsbok" data-en="Boss of Your Own Brain — Workbook">Boss of Your Own Brain — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 1 av 5" data-en="Module 1 of 5">Modul 1 av 5</div></div>
+      <div class="gd-inner">
+        <img class="gd-img" src="/images/courses/course_pusterom.webp" alt="Mia og Teo sitter rolig med hendene på hjertet og øynene lukket">
+        <h2 class="gd-pill yellow" data-no="Modul 1: Møt dine stemmer" data-en="Module 1: Meet your voices">Modul 1: Møt dine stemmer</h2>
+        <div class="gd-text" data-no="Hva er det du sier til deg selv når du skal gjøre noe vanskelig? Denne modulen handler om å møte Komitéen, de negative stemmene i hodet ditt, slik at du kan begynne å velge hvilke stemmer du skal lytte til. Du har også en sann stemme, den som har fått deg hit." data-en="What do you tell yourself when you're about to do something difficult? This module is about meeting the Committee, the negative voices in your head, so you can start choosing which voices to listen to. You also have a true voice, the one that got you here.">Hva er det du sier til deg selv når du skal gjøre noe vanskelig? Denne modulen handler om å møte Komitéen, de negative stemmene i hodet ditt, slik at du kan begynne å velge hvilke stemmer du skal lytte til. Du har også en sann stemme, den som har fått deg hit.</div>
+
+        <div class="gd-card">
+          <h3 class="gd-label green" data-no="Komitéen i hodet ditt" data-en="The committee in your head">Komitéen i hodet ditt</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span data-no="Kritikeren — sier at det du gjør ikke er godt nok." data-en="The Critic — says what you do isn't good enough.">Kritikeren — sier at det du gjør ikke er godt nok.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Frykten — sier at det er tryggest å ikke prøve." data-en="Fear — says it's safest not to try.">Frykten — sier at det er tryggest å ikke prøve.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Tvilen — spør om du egentlig kan dette." data-en="Doubt — asks if you can really do this.">Tvilen — spør om du egentlig kan dette.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Skammen — minner deg på gamle feil." data-en="Shame — reminds you of old mistakes.">Skammen — minner deg på gamle feil.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Sammenligningen — måler deg opp mot alle andre." data-en="Comparison — measures you up against everyone else.">Sammenligningen — måler deg opp mot alle andre.</span></li>
+          </ul>
+        </div>
+
+        <div class="gd-write">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Refleksjon" data-en="Reflection">Refleksjon</span></div>
+          <p class="gd-q" data-no="Hvilken stemme i Komitéen kjenner du best igjen? Hva sier den til deg?" data-en="Which voice in the Committee do you recognise best? What does it say to you?">Hvilken stemme i Komitéen kjenner du best igjen? Hva sier den til deg?</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+          <p class="gd-q" style="margin-top:3mm;" data-no="Hva ville din sanne stemme sagt i stedet?" data-en="What would your true voice say instead?">Hva ville din sanne stemme sagt i stedet?</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+        </div>
+
+        <div class="gd-card cream" style="margin-top:4.5mm;">
+          <h3 class="gd-label green" data-no="Denne ukens steg" data-en="This week's step">Denne ukens steg</h3>
+          <p class="gd-q" data-no="Legg merke til Komitéen neste gang du skal gjøre noe nytt. Skriv ned hva den sier, og velg bevisst hvilken stemme du lytter til." data-en="Notice the Committee next time you're about to do something new. Write down what it says, and consciously choose which voice you listen to.">Legg merke til Komitéen neste gang du skal gjøre noe nytt. Skriv ned hva den sier, og velg bevisst hvilken stemme du lytter til.</p>
+        </div>
+      </div>
+      <div class="gd-foot">— 3 —</div>
+    </div>
+
+    <!-- ===== 4: MODUL 2, GLASSETS ØVELSE & GRATITUDE ===== -->
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="Boss of Your Own Brain — Arbeidsbok" data-en="Boss of Your Own Brain — Workbook">Boss of Your Own Brain — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 2 av 5" data-en="Module 2 of 5">Modul 2 av 5</div></div>
+      <div class="gd-inner">
+        <img class="gd-img" src="/images/banner_rolig_stund.webp" alt="Mia og Teo koser seg med en bok i skumringen, en rolig og takknemlig stund">
+        <h2 class="gd-pill yellow" data-no="Modul 2: Glassets øvelse &amp; takknemlighet" data-en="Module 2: The glasses exercise &amp; gratitude">Modul 2: Glassets øvelse &amp; takknemlighet</h2>
+        <div class="gd-text" data-no="Ditt perspektiv bestemmer din virkelighet. Med riktige «briller» kan du se mulighetene i stedet for problemene. I denne modulen lærer du den magiske glassets-øvelsen, og hvordan takknemlighet trener hjernen din til å legge merke til det som allerede går bra." data-en="Your perspective determines your reality. With the right “glasses,” you can see opportunities instead of problems. In this module you learn the magical glasses exercise, and how gratitude trains your brain to notice what's already going well.">Ditt perspektiv bestemmer din virkelighet. Med riktige «briller» kan du se mulighetene i stedet for problemene. I denne modulen lærer du den magiske glassets-øvelsen, og hvordan takknemlighet trener hjernen din til å legge merke til det som allerede går bra.</div>
+
+        <div class="gd-write">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Refleksjon" data-en="Reflection">Refleksjon</span></div>
+          <p class="gd-q" data-no="Tenk på en utfordring du har akkurat nå. Hvordan ser den ut med grå briller?" data-en="Think of a challenge you have right now. How does it look with grey glasses?">Tenk på en utfordring du har akkurat nå. Hvordan ser den ut med grå briller?</p>
+          <div class="gd-line"></div>
+          <p class="gd-q" style="margin-top:3mm;" data-no="Hvordan ser den samme utfordringen ut med rosa briller?" data-en="How does the same challenge look with pink glasses?">Hvordan ser den samme utfordringen ut med rosa briller?</p>
+          <div class="gd-line"></div>
+        </div>
+
+        <div class="gd-card" style="margin-top:4.5mm;">
+          <h3 class="gd-label rose" data-no="Takknemlighetspraksis" data-en="Gratitude practice">Takknemlighetspraksis</h3>
+          <p class="gd-q" data-no="Skriv tre ting du er takknemlig for akkurat nå, store eller små." data-en="Write three things you're grateful for right now, big or small.">Skriv tre ting du er takknemlig for akkurat nå, store eller små.</p>
+          <div class="gd-line"></div><div class="gd-line"></div><div class="gd-line"></div>
+        </div>
+
+        <div class="gd-card cream">
+          <h3 class="gd-label green" data-no="Denne ukens steg" data-en="This week's step">Denne ukens steg</h3>
+          <p class="gd-q" data-no="Skriv tre ting du er takknemlig for hver morgen denne uken, gjerne i notatboken din." data-en="Write three things you're grateful for every morning this week, in a notebook if you like.">Skriv tre ting du er takknemlig for hver morgen denne uken, gjerne i notatboken din.</p>
+        </div>
+      </div>
+      <div class="gd-foot">— 4 —</div>
+    </div>
+
+    <!-- ===== 5: MODUL 3, MONEY MINDSET ===== -->
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="Boss of Your Own Brain — Arbeidsbok" data-en="Boss of Your Own Brain — Workbook">Boss of Your Own Brain — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 3 av 5" data-en="Module 3 of 5">Modul 3 av 5</div></div>
+      <div class="gd-inner">
+        <img class="gd-img" src="/images/courses/course_tall_og_telling.webp" alt="Mia og Teo teller med gullperler, mengden vokser">
+        <h2 class="gd-pill yellow" data-no="Modul 3: Money mindset" data-en="Module 3: Money mindset">Modul 3: Money mindset</h2>
+        <div class="gd-text" data-no="Hva tror du om penger? De svarene bestemmer hvor mye du tjener, og hvor bra det føles. I denne modulen identifiserer du dine pengehistorier, de du har arvet fra familie og kultur, og skaper en ny, frisk relasjon til rikdom." data-en="What do you believe about money? Those answers determine how much you earn, and how good it feels. In this module you identify your money stories, the ones you've inherited from family and culture, and create a new, fresh relationship with wealth.">Hva tror du om penger? De svarene bestemmer hvor mye du tjener, og hvor bra det føles. I denne modulen identifiserer du dine pengehistorier, de du har arvet fra familie og kultur, og skaper en ny, frisk relasjon til rikdom.</div>
+
+        <div class="gd-write">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Refleksjon" data-en="Reflection">Refleksjon</span></div>
+          <p class="gd-q" data-no="Hva lærte du om penger da du vokste opp? Hvem sa det, og hva sa de?" data-en="What did you learn about money growing up? Who said it, and what did they say?">Hva lærte du om penger da du vokste opp? Hvem sa det, og hva sa de?</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+          <p class="gd-q" style="margin-top:3mm;" data-no="Hvilken pengehistorie er du klar til å legge bak deg?" data-en="Which money story are you ready to leave behind?">Hvilken pengehistorie er du klar til å legge bak deg?</p>
+          <div class="gd-line"></div>
+        </div>
+
+        <div class="gd-card" style="margin-top:4.5mm;">
+          <h3 class="gd-label rose" data-no="Min nye pengehistorie" data-en="My new money story">Min nye pengehistorie</h3>
+          <p class="gd-q" data-no="Skriv en ny, sann bekreftelse om penger som du velger å tro på fra nå av." data-en="Write a new, true affirmation about money that you choose to believe from now on.">Skriv en ny, sann bekreftelse om penger som du velger å tro på fra nå av.</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+        </div>
+
+        <div class="gd-card cream">
+          <h3 class="gd-label green" data-no="Denne ukens steg" data-en="This week's step">Denne ukens steg</h3>
+          <p class="gd-q" data-no="Si din nye pengehistorie høyt hver morgen denne uken, gjerne foran speilet." data-en="Say your new money story out loud every morning this week, in front of the mirror if you like.">Si din nye pengehistorie høyt hver morgen denne uken, gjerne foran speilet.</p>
+        </div>
+      </div>
+      <div class="gd-foot">— 5 —</div>
+    </div>
+
+    <!-- ===== 6: MODUL 4, BESLUTNINGER FRA DIN SANNE STEMME ===== -->
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="Boss of Your Own Brain — Arbeidsbok" data-en="Boss of Your Own Brain — Workbook">Boss of Your Own Brain — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 4 av 5" data-en="Module 4 of 5">Modul 4 av 5</div></div>
+      <div class="gd-inner">
+        <img class="gd-img" src="/images/courses/course_hopp_og_sprett.webp" alt="Mia og Teo hopper glade mellom putene, klare til å ta steget">
+        <h2 class="gd-pill yellow" data-no="Modul 4: Beslutninger fra din sanne stemme" data-en="Module 4: Decisions from your true voice">Modul 4: Beslutninger fra din sanne stemme</h2>
+        <div class="gd-text" data-no="Hver dag tar du beslutninger. Spørsmålet er: hvor kommer de fra? Fra frykt, eller fra din sanne stemme? Disse tre spørsmålene hjelper deg å velge fra kraft, ikke fra frykt." data-en="Every day you make decisions. The question is: where do they come from? From fear, or from your true voice? These three questions help you choose from power, not from fear.">Hver dag tar du beslutninger. Spørsmålet er: hvor kommer de fra? Fra frykt, eller fra din sanne stemme? Disse tre spørsmålene hjelper deg å velge fra kraft, ikke fra frykt.</div>
+
+        <div class="gd-card">
+          <h3 class="gd-label green" data-no="De tre magiske spørsmålene" data-en="The three magic questions">De tre magiske spørsmålene</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-num">1</span><span data-no="Hva er det verste som kan skje, og klarer jeg det?" data-en="What's the worst that can happen, and can I handle it?">Hva er det verste som kan skje, og klarer jeg det?</span></li>
+            <li><span class="gd-num">2</span><span data-no="Hvem blir jeg hvis jeg ikke gjør dette?" data-en="Who do I become if I don't do this?">Hvem blir jeg hvis jeg ikke gjør dette?</span></li>
+            <li><span class="gd-num">3</span><span data-no="Hva ville jeg gjort hvis jeg var helt sikker?" data-en="What would I do if I was completely confident?">Hva ville jeg gjort hvis jeg var helt sikker?</span></li>
+          </ul>
+        </div>
+
+        <div class="gd-write">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Øvelse" data-en="Exercise">Øvelse</span></div>
+          <p class="gd-q" data-no="Tenk på en beslutning du har utsatt. Svar på de tre spørsmålene over." data-en="Think of a decision you've been putting off. Answer the three questions above.">Tenk på en beslutning du har utsatt. Svar på de tre spørsmålene over.</p>
+          <div class="gd-line"></div><div class="gd-line"></div><div class="gd-line"></div>
+        </div>
+
+        <div class="gd-card cream" style="margin-top:4.5mm;">
+          <h3 class="gd-label green" data-no="Denne ukens steg" data-en="This week's step">Denne ukens steg</h3>
+          <p class="gd-q" data-no="Ta én beslutning denne uken fra din sanne stemme, ikke fra frykt." data-en="Make one decision this week from your true voice, not from fear.">Ta én beslutning denne uken fra din sanne stemme, ikke fra frykt.</p>
+        </div>
+      </div>
+      <div class="gd-foot">— 6 —</div>
+    </div>
+
+    <!-- ===== 7: MODUL 5, VEDLIKEHOLD & VEKST ===== -->
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="Boss of Your Own Brain — Arbeidsbok" data-en="Boss of Your Own Brain — Workbook">Boss of Your Own Brain — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 5 av 5" data-en="Module 5 of 5">Modul 5 av 5</div></div>
+      <div class="gd-inner">
+        <img class="gd-img" src="/images/courses/course_praktisk_liv.webp" alt="Mia og Teo hjelper hverandre med en daglig rutine, steg for steg">
+        <h2 class="gd-pill yellow" data-no="Modul 5: Vedlikehold &amp; vekst" data-en="Module 5: Maintenance &amp; growth">Modul 5: Vedlikehold &amp; vekst</h2>
+        <div class="gd-text" data-no="Mestring er ikke én stor endring, det er små, konsistente handlinger hver dag. De fire pilarene under holder deg i gang, også de dagene tankene dine er vanskeligst." data-en="Mastery is not one big change, it's small, consistent actions every day. The four pillars below keep you going, even on the days your thoughts are hardest.">Mestring er ikke én stor endring, det er små, konsistente handlinger hver dag. De fire pilarene under holder deg i gang, også de dagene tankene dine er vanskeligst.</div>
+
+        <div class="gd-card">
+          <h3 class="gd-label green" data-no="De fire pilarene" data-en="The four pillars">De fire pilarene</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span><strong data-no="Søvn" data-en="Sleep">Søvn</strong> — <span data-no="hva hjernen din trenger for å fungere optimalt." data-en="what your brain needs to function optimally.">hva hjernen din trenger for å fungere optimalt.</span></span></li>
+            <li><span class="gd-chk"></span><span><strong data-no="Bevegelse" data-en="Movement">Bevegelse</strong> — <span data-no="hvordan kroppen påvirker tanker og følelser." data-en="how your body affects your thoughts and feelings.">hvordan kroppen påvirker tanker og følelser.</span></span></li>
+            <li><span class="gd-chk"></span><span><strong data-no="Næring" data-en="Nourishment">Næring</strong> — <span data-no="mat som styrker mindsettet ditt." data-en="food that strengthens your mindset.">mat som styrker mindsettet ditt.</span></span></li>
+            <li><span class="gd-chk"></span><span><strong data-no="Fellesskap" data-en="Community">Fellesskap</strong> — <span data-no="rollen tilhørighet spiller for deg." data-en="the role belonging plays for you.">rollen tilhørighet spiller for deg.</span></span></li>
+          </ul>
+        </div>
+
+        <div class="gd-write">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Refleksjon" data-en="Reflection">Refleksjon</span></div>
+          <p class="gd-q" data-no="Hvilken av de fire pilarene trenger mest oppmerksomhet akkurat nå?" data-en="Which of the four pillars needs the most attention right now?">Hvilken av de fire pilarene trenger mest oppmerksomhet akkurat nå?</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+        </div>
+
+        <div class="gd-card cream" style="margin-top:4.5mm;">
+          <h3 class="gd-label green" data-no="Denne ukens steg" data-en="This week's step">Denne ukens steg</h3>
+          <p class="gd-q" data-no="Velg én pilar, og gjør én liten forbedring denne uken." data-en="Choose one pillar, and make one small improvement this week.">Velg én pilar, og gjør én liten forbedring denne uken.</p>
+        </div>
+      </div>
+      <div class="gd-foot">— 7 —</div>
+    </div>
+
+    <!-- ===== 8: AVSLUTNING ===== -->
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="Boss of Your Own Brain — Arbeidsbok" data-en="Boss of Your Own Brain — Workbook">Boss of Your Own Brain — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Veien videre" data-en="What's next">Veien videre</div></div>
+      <div class="gd-inner">
+        <img class="gd-img" src="/images/hero_learning_tree.webp" alt="Mia og Teo ser utover et vidt landskap fra tretoppen sitt">
+        <h2 class="gd-pill yellow" data-no="Du er sjefen i ditt eget hode" data-en="You're the boss of your own brain">Du er sjefen i ditt eget hode</h2>
+        <div class="gd-text" data-no="Du trenger ikke gjøre alt på én gang. Gå tilbake til denne arbeidsboken når du trenger et lite dytt, en modul om gangen, ett steg om gangen." data-en="You don't need to do everything at once. Come back to this workbook whenever you need a little push, one module at a time, one step at a time.">Du trenger ikke gjøre alt på én gang. Gå tilbake til denne arbeidsboken når du trenger et lite dytt, en modul om gangen, ett steg om gangen.</div>
+
+        <div class="gd-close-card green">
+          <h3 data-no="Start i det små" data-en="Start small">Start i det små</h3>
+          <p data-no="Velg én modul, og bruk den denne uken. La det få lov til å være enkelt." data-en="Choose one module, and use it this week. Let it be allowed to be simple.">Velg én modul, og bruk den denne uken. La det få lov til å være enkelt.</p>
+        </div>
+        <div class="gd-close-card rose">
+          <h3 data-no="Bygg videre i LME" data-en="Keep building in LME">Bygg videre i LME</h3>
+          <p data-no="Del refleksjonene dine og feiringene i LME Inner Circle, du trenger ikke gjøre dette alene." data-en="Share your reflections and celebrations in LME Inner Circle, you don't need to do this alone.">Del refleksjonene dine og feiringene i LME Inner Circle, du trenger ikke gjøre dette alene.</p>
+        </div>
+        <div class="gd-close-card green">
+          <h3 data-no="Jeg heier på deg" data-en="I'm cheering you on">Jeg heier på deg</h3>
+          <p data-no="Klem fra meg, Renate." data-en="Warm wishes, Renate.">Klem fra meg, Renate.</p>
+        </div>
+
+        <div class="gd-write" style="margin-top:1mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Mitt første steg" data-en="My first step">Mitt første steg</span></div>
+          <p class="gd-q" data-no="Skriv ned den ene tingen du vil starte med denne uken." data-en="Write down the one thing you want to start with this week.">Skriv ned den ene tingen du vil starte med denne uken.</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+        </div>
+
+        <div class="gd-card cream" style="margin-top:4.5mm;">
+          <p class="gd-affirm" data-no="Din hjerne er din beste ressurs. Nå vet du hvordan du bruker den." data-en="Your brain is your best resource. Now you know how to use it.">Din hjerne er din beste ressurs. Nå vet du hvordan du bruker den.</p>
+        </div>
+      </div>
+      <div class="gd-foot">— 8 —</div>
+    </div>
+
+  </div>
+<script>
+(function(){
+  function apply(lang){
+    window.__lmeLang=lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
+      el.innerHTML = (lang==='en') ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    document.documentElement.lang=lang;
+    var b=document.getElementById('lme-print-lang');
+    if(b) b.textContent = (lang==='en') ? '🇳🇴 Norsk' : '🇬🇧 English';
+    try{localStorage.setItem('lme_lang',lang);}catch(e){}
+  }
+  var saved='no';
+  try{
+    var qp=new URLSearchParams(location.search).get('lang');
+    if(qp==='en'||qp==='no'){saved=qp;try{localStorage.setItem('lme_lang',qp);}catch(e2){}}
+    else saved=localStorage.getItem('lme_lang')||'no';
+  }catch(e){}
+  var btn=document.getElementById('lme-print-lang');
+  if(btn) btn.addEventListener('click',function(){apply(window.__lmeLang==='en'?'no':'en');});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){apply(saved);});
+  else apply(saved);
+})();
+</script>
+</body>
+</html>

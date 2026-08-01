@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#2c5f2d">
+<title>Boss of Your Own Brain — LME</title>
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+@font-face {
+  font-family: 'Playpen Sans';
+  src: url(data:font/woff2;base64,d09GMgABAAAAAQXAABIAAAACS3AAAQVZAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGlAbgdkaHIHnGAZgP1NUQVQuAIMGEQgKhaUshKc/ATYCJAOSGAuJDgAEIAWDdAcgDAcXJBiJDlu7BpIC1mSYXHt9VDcY000GYDmnep+PCHuGGodXH0nYdN68o0jBBh1g27Se2d0qziiVoWb//////5JkMoaWhHIJAUHQ2rXa1f13+30AoJaMEgMZORmZZRRKlCamFWRtNgPrZcyJDGAAOY0+EnN3d7JlHWtiC6Vkxfk1pQ3zDe79Y6p3yrn1x75T5we7bk/wT0rxPQ68wF8HNdBB0y4Yw7krGZ3X6jQ7ubukqpKpekjnT7GhpTYq+wr/E47wvwFnmcvEPN53zt+5Mo/3p+eaO/PohlggnImU3mSkxozU7ArSlJiBjEAKVTNS0FaT4t8jqI5xW17Mo/sNWMpUys7GMusK1mcREAERa6h+rexgkG9lbe9l4yUqjaJe8BTPVivbM3nM92cNs3hcLOwuQa6I51dcdkgv1UBT9ubf3C/T2CYvoSr/yIhhozXsf7hd7DEwGJcfQBNCyix9TGnZM5TjesL3iPbOn1k7fXL3LPKSvIi/JC+qL0FCsBAheGkIFPdSqFCjiPeXGl51yE+N8ikJ1PIpUEjFgQa8APGf3MdXVbdnZiEitCMxIsMPxXs2AvV6gKazi7Vp/KKN+0Vcm6QiRg0pUMwHg4nDxNlgpvD7iTPx35y9zvwH+LX57yLfu3jvCvpoiVSR1Kvmmiuq7jiiBUTaKELCpiwMkEPdXEmocz/mtLe2Vj/m1EUO4GkdaBVACiAlB/g8PTrY/lsbJWiIVwIlEsOUcDJ72C76EfGQTv6DAT377+P0ZZYpFaNJA7YpLncP5vTtScPkzZx/3So5laK6prh3baGVSrdixs7qAbvOOPhAHIgYySf6k5CQ+IgOFSWtRYwkoMeu0T9yoO9+2mKFq00KWmwqWOAmSwY+0JlMeDaRDU/T+ZfkYvfeyXvv7uKNNWmqikWbNG1TFQo1Re2Dz8oQncJMy8RhZr/ATJiYb0s1c2hhO0iAfe39abfTrPH4tAAQhpyrrqk+pDblLoam+uqbXlr9kAAhizDCjMAuUUHFiClN+FB0DwVs7tnjgTQaaLJVS8rrCHLbERrrhETItADjN51zJrtRkyHagliw2z0nkEHg2rw6/S7rh/kAYe90w+LU/Qy3EVnbPWkFcqiRzGndgF1ifwLHjoDZ811959rHGGs1mVuSvewte0mS1aRJmmTvSfaSJnvNcdpL0iRN+k2SJEn6aZK9JP0k6e8l6Sd72UuaNJlj7SWZLzf7yZW+f1sJEEhKECvm9cCazWTazfalslv+e3xzvnGFw2VNbqLsegWpL3iSUXUT2v72WpMA) format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Playpen Sans';
+  src: url(data:font/woff2;base64,d09GMgABAAAAAQb0ABIAAAACSrAAAQYkAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGlAbgdkaHIHnGAZgP1NUQVQuAIMGEQgKhaUshKc/ATYCJAOSGAuJDgAEIAWDdAcgDAcXJBiJDlu7BpIC1mSYXHt9VDcY000GYDmnep+PCHuGGodXH0nYdN68o0jBBh1g27Se2d0qziiVoWb//////5JkMoaWhHIJAUHQ2rXa1f13+30AoJaMEgMZORmZZRRKlCamFWRtNgPrZcyJDGAAOY0+EnN3d7JlHWtiC6Vkxfk1pQ3zDe79Y6p3yrn1x75T5we7bk/wT0rxPQ68wF8HNdBB0y4Yw7krGZ3X6jQ7ubukqpKpekjnT7GhpTYq+wr/E47wvwFnmcvEPN53zt+5Mo/3p+eaO/PohlggnImU3mSkxozU7ArSlJiBjEAKVTNS0FaT4t8jqI5xW17Mo/sNWMpUys7GMusK1mcREAERa6h+rexgkG9lbe9l4yUqjaJe8BTPVivbM3nM92cNs3hcLOwuQa6I51dcdkgv1UBT9ubf3C/T2CYvoSr/yIhhozXsf7hd7DEwGJcfQBNCyix9TGnZM5TjesL3iPbOn1k7fXL3LPKSvIi/JC+qL0FCsBAheGkIFPdSqFCjiPeXGl51yE+N8ikJ1PIpUEjFgQa8APGf3MdXVbdnZiEitCMxIsMPxXs2AvV6gKazi7Vp/KKN+0Vcm6QiRg0pUMwHg4nDxNlgpvD7iTPx35y9zvwH+LX57yLfu3jvCvpoiVSR1Kvmmiuq7jiiBUTaKELCpiwMkEPdXEmocz/mtLe2Vj/m1EUO4GkdaBVACiAlB/g8PTrY/lsbJWiIVwIlEsOUcDJ72C76EfGQTv6DAT377+P0ZZYpFaNJA7YpLncP5vTtScPkzZx/3So5laK6prh3baGVSrdixs7qAbvOOPhAHIgYySf6k5CQ+IgOFSWtRYwkoMeu0T9yoO9+2mKFq00KWmwqWOAmSwY+0JlMeDaRDU/T+ZfkYvfeyXvv7uKNNWmqikWbNG1TFQo1Re2Dz8oQncJMy8RhZr/ATJiYb0s1c2hhO0iAfe39abfTrPH4tAAQhpyrrqk+pDblLoam+uqbXlr9kAAhizDCjMAuUUHFiClN+FB0DwVs7tnjgTQaaLJVS8rrCHLbERrrhETItADjN51zJrtRkyHagliw2z0nkEHg2rw6/S7rh/kAYe90w+LU/Qy3EVnbPWkFcqiRzGndgF1ifwLHjoDZ811959rHGGs1mVuSvewte0mS1aRJmmTvSfaSJnvNcdpL0iRN+k2SJEn6aZK9JP0k6e8l6Sd72UuaNJlj7SWZLzf7yZW+f1sJEEhKECvm9cCazWTazfalslv+e3xzvnGFw2VNbqLsegWpL3iSUXUT2v72WpMA) format('woff2');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Playpen Sans';
+  src: url(data:font/woff2;base64,d09GMgABAAAAAQb8ABIAAAACSrAAAQYwAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGlAbgdkaHIHnGAZgP1NUQVQuAIMGEQgKhaUshKc/ATYCJAOSGAuJDgAEIAWDdAcgDAcXJBiJDlu7BpIC1mSYXHt9VDcY000GYDmnep+PCHuGGodXH0nYdN68o0jBBh1g27Se2d0qziiVoWb//////5JkMoaWhHIJAUHQ2rXa1f13+30AoJaMEgMZORmZZRRKlCamFWRtNgPrZcyJDGAAOY0+EnN3d7JlHWtiC6Vkxfk1pQ3zDe79Y6p3yrn1x75T5we7bk/wT0rxPQ68wF8HNdBB0y4Yw7krGZ3X6jQ7ubukqpKpekjnT7GhpTYq+wr/E47wvwFnmcvEPN53zt+5Mo/3p+eaO/PohlggnImU3mSkxozU7ArSlJiBjEAKVTNS0FaT4t8jqI5xW17Mo/sNWMpUys7GMusK1mcREAERa6h+rexgkG9lbe9l4yUqjaJe8BTPVivbM3nM92cNs3hcLOwuQa6I51dcdkgv1UBT9ubf3C/T2CYvoSr/yIhhozXsf7hd7DEwGJcfQBNCyix9TGnZM5TjesL3iPbOn1k7fXL3LPKSvIi/JC+qL0FCsBAheGkIFPdSqFCjiPeXGl51yE+N8ikJ1PIpUEjFgQa8APGf3MdXVbdnZiEitCMxIsMPxXs2AvV6gKazi7Vp/KKN+0Vcm6QiRg0pUMwHg4nDxNlgpvD7iTPx35y9zvwH+LX57yLfu3jvCvpoiVSR1Kvmmiuq7jiiBUTaKELCpiwMkEPdXEmocz/mtLe2Vj/m1EUO4GkdaBVACiAlB/g8PTrY/lsbJWiIVwIlEsOUcDJ72C76EfGQTv6DAT377+P0ZZYpFaNJA7YpLncP5vTtScPkzZx/3So5laK6prh3baGVSrdixs7qAbvOOPhAHIgYySf6k5CQ+IgOFSWtRYwkoMeu0T9yoO9+2mKFq00KWmwqWOAmSwY+0JlMeDaRDU/T+ZfkYvfeyXvv7uKNNWmqikWbNG1TFQo1Re2Dz8oQncJMy8RhZr/ATJiYb0s1c2hhO0iAfe39abfTrPH4tAAQhpyrrqk+pDblLoam+uqbXlr9kAAhizDCjMAuUUHFiClN+FB0DwVs7tnjgTQaaLJVS8rrCHLbERrrhETItADjN51zJrtRkyHagliw2z0nkEHg2rw6/S7rh/kAYe90w+LU/Qy3EVnbPWkFcqiRzGndgF1ifwLHjoDZ811959rHGGs1mVuSvewte0mS1aRJmmTvSfaSJnvNcdpL0iRN+k2SJEn6aZK9JP0k6e8l6Sd72UuaNJlj7SWZLzf7yZW+f1sJEEhKECvm9cCazWTazfalslv+e3xzvnGFw2VNbqLsegWpL3iSUXUT2v72WpMA) format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+  :root {
+    --ink: #1a1a1a;
+    --ink-soft: #4a4a4a;
+    --ink-softer: #6a6a6a;
+    --ink-muted: #8A8A8A;
+    --line: rgba(26, 26, 26, 0.08);
+    --line-soft: rgba(26, 26, 26, 0.04);
+
+    --btn-yellow: #F7E76B;
+    --btn-yellow-hover: #F0DD4F;
+    --btn-dark: #1A1A1A;
+
+    --shadow-sm: 0 1px 3px rgba(26, 26, 26, 0.04), 0 1px 2px rgba(26, 26, 26, 0.03);
+    --shadow-md: 0 4px 16px rgba(26, 26, 26, 0.06), 0 2px 6px rgba(26, 26, 26, 0.04);
+    --shadow-lg: 0 12px 40px rgba(26, 26, 26, 0.08), 0 4px 12px rgba(26, 26, 26, 0.04);
+
+    --r-sm: 12px;
+    --r-md: 18px;
+    --r-lg: 24px;
+    --r-xl: 32px;
+    --r-pill: 999px;
+
+    --font-display: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+
+    --lme-green: #2c5f2d;
+    --lme-green-light: #f0f7f1;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--ink);
+    background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 50%, #F8D7DA 100%);
+    min-height: 100vh;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* HEADER */
+  .header-wrap {
+    padding: 20px 24px 0;
+    position: sticky;
+    top: 16px;
+    z-index: 100;
+  }
+
+  .header {
+    max-width: 1280px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(20px) saturate(180%);
+    border-radius: var(--r-pill);
+    padding: 10px 16px 10px 28px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+  }
+
+  .logo {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 500;
+    font-style: italic;
+    color: var(--lme-green);
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 80px 24px;
+    text-align: center;
+    margin: 60px auto 0;
+    max-width: 900px;
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 5vw, 56px);
+    font-weight: 700;
+    color: var(--lme-green);
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .hero .subtitle {
+    font-size: 24px;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .hero .description {
+    font-size: 18px;
+    color: var(--ink-softer);
+    line-height: 1.6;
+  }
+
+  /* MODULES */
+  .content-wrap {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 24px;
+  }
+
+  .module {
+    margin: 48px 0;
+    padding: 40px;
+    background: white;
+    border-radius: var(--r-lg);
+    border-left: 6px solid var(--lme-green);
+    box-shadow: var(--shadow-md);
+  }
+
+  .module h2 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--lme-green);
+    margin-bottom: 24px;
+  }
+
+  .module h3 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 24px 0 12px;
+  }
+
+  .module p {
+    margin-bottom: 16px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+
+  .module strong {
+    color: var(--lme-green);
+    font-weight: 600;
+  }
+
+  /* CTA */
+  .cta-section {
+    background: var(--lme-green-light);
+    border: 2px solid var(--lme-green);
+    border-radius: var(--r-lg);
+    padding: 40px;
+    text-align: center;
+    margin: 60px 0;
+  }
+
+  .cta-section h2 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--lme-green);
+    margin-bottom: 16px;
+  }
+
+  .cta-section p {
+    font-size: 18px;
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--lme-green);
+    color: white;
+    padding: 16px 40px;
+    border-radius: var(--r-pill);
+    font-size: 16px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary:hover {
+    background: #1d3f1f;
+    transform: translateY(-2px);
+  }
+
+  /* FOOTER */
+  .footer {
+    padding: 60px 24px;
+    text-align: center;
+    color: var(--ink-softer);
+  }
+
+  @media (max-width: 768px) {
+    .hero { padding: 40px 24px; }
+    .hero h1 { font-size: 32px; }
+    .module { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+  <div id="sidebar"></div>
+  <div id="avatarMenu"></div>
+
+  <div class="header-wrap">
+    <div class="header">
+      <div class="logo">LME</div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1 data-no="Boss of Your Own Brain" data-en="Boss of Your Own Brain">Boss of Your Own Brain</h1>
+    <div class="subtitle" data-no="En 5-modulskurs i mindset-mestring" data-en="A 5-Module Mindset Mastery Course">En 5-modulskurs i mindset-mestring</div>
+    <div class="description">
+      <p data-no="For gründere, iverksettere og visjonærer som vil ta kontroll over tankene sine og bygge en virksomhet fra en plass av kraft og selvtillit." data-en="For entrepreneurs, business builders, and visionaries who want to take control of their thoughts and build a business from a place of power and self-confidence.">For gründere, iverksettere og visjonærer som vil ta kontroll over tankene sine og bygge en virksomhet fra en plass av kraft og selvtillit.</p>
+    </div>
+  </div>
+
+  <div class="content-wrap">
+    <div class="cta-section">
+      <h2 data-no="Last ned arbeidsboken" data-en="Download the Workbook">Last ned arbeidsboken</h2>
+      <p data-no="Få alle øvelsene og worksheetene for alle 5 moduler" data-en="Get all exercises and worksheets for all 5 modules">Få alle øvelsene og worksheetene for alle 5 moduler</p>
+      <a href="/assets/Boss-of-Your-Own-Brain-Workbook.pdf" class="btn-primary" data-no="Last ned PDF" data-en="Download PDF">Last ned PDF</a>
+    </div>
+
+    <!-- MODULE 1 -->
+    <div class="module">
+      <h2 data-no="Modul 1: Møt Dine Stemmer" data-en="Module 1: Meet Your Voices">Modul 1: Møt Dine Stemmer</h2>
+      <div class="content-no active">
+        <p>Hva er det du sier til deg selv når du skal gjøre noe vanskelig? Denne modulen handler om å møte <strong>Komitéen</strong> – de negative stemmene i hodet ditt – slik at du kan begynne å velge hvilke stemmer du skal lytte til.</p>
+        <h3>Innhold:</h3>
+        <p>• Introduksjon til Komitéen (Kritikeren, Frykten, Tvilen, Skammen, Sammenligningen)<br>
+        • Din sanne stemme – den som har fått deg hit<br>
+        • Øvelse: Skriv ned stemmene og velg bevisst<br>
+        • Varighet: ~15 minutter video + 10 minutter øvelse</p>
+      </div>
+      <div class="content-en">
+        <p>What do you tell yourself when you're about to do something difficult? This module is about meeting the <strong>Committee</strong> – the negative voices in your head – so you can start choosing which voices to listen to.</p>
+        <h3>Content:</h3>
+        <p>• Introduction to the Committee (The Critic, Fear, Doubt, Shame, Comparison)<br>
+        • Your true voice – the one that got you here<br>
+        • Exercise: Write down the voices and choose consciously<br>
+        • Duration: ~15 minute video + 10 minute exercise</p>
+      </div>
+    </div>
+
+    <!-- MODULE 2 -->
+    <div class="module">
+      <h2 data-no="Modul 2: Glassets Øvelse & Gratitude" data-en="Module 2: The Glasses Exercise & Gratitude">Modul 2: Glassets Øvelse & Gratitude</h2>
+      <div class="content-no active">
+        <p>Din perspektiv bestemmer din virkelighet. Med riktige "briller" kan du se mulighetene i stedet for problemene. I denne modulen lærer du den magiske glassets-øvelsen og gratitudens kraft.</p>
+        <h3>Innhold:</h3>
+        <p>• Perspektivskifte – fra grå til rosa briller<br>
+        • Gratitude-praksis som trener hjernen din<br>
+        • Øvelse: Daglig dankbarhets-journal<br>
+        • Varighet: ~15 minutter video + 10 minutter øvelse</p>
+      </div>
+      <div class="content-en">
+        <p>Your perspective determines your reality. With the right "glasses," you can see opportunities instead of problems. In this module you learn the magical glasses exercise and the power of gratitude.</p>
+        <h3>Content:</h3>
+        <p>• Perspective shift – from gray to pink glasses<br>
+        • Gratitude practice that trains your brain<br>
+        • Exercise: Daily gratitude journal<br>
+        • Duration: ~15 minute video + 10 minute exercise</p>
+      </div>
+    </div>
+
+    <!-- MODULE 3 -->
+    <div class="module">
+      <h2 data-no="Modul 3: Money Mindset" data-en="Module 3: Money Mindset">Modul 3: Money Mindset</h2>
+      <div class="content-no active">
+        <p>Hva tror du om penger? De svarene bestemmer hvor mye du tjener og hvor bra det føles. I denne modulen identifiserer du dine pengehistorier og skaper en ny, frisk relation til rikdom.</p>
+        <h3>Innhold:</h3>
+        <p>• Identifiser dine pengehistorier (arvet fra familie og kultur)<br>
+        • Bekreftelser for abundans og velstand<br>
+        • Øvelse: Skriv dine nye pengehistorier<br>
+        • Varighet: ~15 minutter video + 10 minutter øvelse</p>
+      </div>
+      <div class="content-en">
+        <p>What do you believe about money? Those answers determine how much you earn and how good it feels. In this module you identify your money stories and create a new, fresh relationship with wealth.</p>
+        <h3>Content:</h3>
+        <p>• Identify your money stories (inherited from family and culture)<br>
+        • Affirmations for abundance and prosperity<br>
+        • Exercise: Write your new money stories<br>
+        • Duration: ~15 minute video + 10 minute exercise</p>
+      </div>
+    </div>
+
+    <!-- MODULE 4 -->
+    <div class="module">
+      <h2 data-no="Modul 4: Beslutninger fra Din Sanne Stemme" data-en="Module 4: Decisions from Your True Voice">Modul 4: Beslutninger fra Din Sanne Stemme</h2>
+      <div class="content-no active">
+        <p>Hver dag tar du beslutninger. Spørsmålet er: fra hvor kommer de? Fra frykt eller fra din sanne stemme? Lær de tre spørsmålene som endrer alt.</p>
+        <h3>De tre magiske spørsmålene:</h3>
+        <p><strong>1. "Hva er det verste som kan skje – og klarer jeg det?"</strong><br>
+        <strong>2. "Hvem blir jeg hvis jeg ikke gjør dette?"</strong><br>
+        <strong>3. "Hva ville jeg gjøre hvis jeg var helt sikker?"</strong><br><br>
+        Varighet: ~15 minutter video + 10 minutter øvelse</p>
+      </div>
+      <div class="content-en">
+        <p>Every day you make decisions. The question is: where do they come from? From fear or from your true voice? Learn the three questions that change everything.</p>
+        <h3>The Three Magic Questions:</h3>
+        <p><strong>1. "What's the worst that can happen – and can I handle it?"</strong><br>
+        <strong>2. "Who do I become if I don't do this?"</strong><br>
+        <strong>3. "What would I do if I was completely confident?"</strong><br><br>
+        Duration: ~15 minute video + 10 minute exercise</p>
+      </div>
+    </div>
+
+    <!-- MODULE 5 -->
+    <div class="module">
+      <h2 data-no="Modul 5: Vedlikehold & Vekst" data-en="Module 5: Maintenance & Growth">Modul 5: Vedlikehold & Vekst</h2>
+      <div class="content-no active">
+        <p>Mestring er ikke én stor endring – det er små, konsistente handlinger hver dag. Lær den daglige praksisen og de fire pilarene som holder deg i gang.</p>
+        <h3>De fire pilarene:</h3>
+        <p><strong>Søvn</strong> – Hva hjernen din trenger for å fungere optimalt<br>
+        <strong>Bevegelse</strong> – Hvordan kroppen påvirker tanker og følelser<br>
+        <strong>Næring</strong> – Mat som styrker ditt mindset<br>
+        <strong>Fellesskap</strong> – Rollen som tilhørighet spiller<br><br>
+        Varighet: ~15 minutter video + vedlikeholds-plan</p>
+      </div>
+      <div class="content-en">
+        <p>Mastery is not one big change – it's small, consistent actions every day. Learn the daily practice and the four pillars that keep you going.</p>
+        <h3>The Four Pillars:</h3>
+        <p><strong>Sleep</strong> – What your brain needs to function optimally<br>
+        <strong>Movement</strong> – How your body affects your thoughts and feelings<br>
+        <strong>Nourishment</strong> – Food that strengthens your mindset<br>
+        <strong>Community</strong> – The role belonging plays<br><br>
+        Duration: ~15 minute video + maintenance plan</p>
+      </div>
+    </div>
+
+    <!-- FINAL CTA -->
+    <div class="cta-section">
+      <h2 data-no="Du er klar til å starte?" data-en="Are you ready to start?">Du er klar til å starte?</h2>
+      <p data-no="Last ned arbeidsboken og begynn på Modul 1 i dag. Du har allerede stemmene – nå lærer du å høre din egen sanne stemme." data-en="Download the workbook and start Module 1 today. You already have the voices – now you'll learn to hear your own true voice.">Last ned arbeidsboken og begynn på Modul 1 i dag. Du har allerede stemmene – nå lærer du å høre din egen sanne stemme.</p>
+      <a href="/assets/Boss-of-Your-Own-Brain-Workbook.pdf" class="btn-primary" data-no="Last ned Arbeidsboken" data-en="Download Workbook">Last ned Arbeidsboken</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p data-no="Boss of Your Own Brain – Et kurs med Renate Dahl" data-en="Boss of Your Own Brain – A course with Renate Dahl">Boss of Your Own Brain – Et kurs med Renate Dahl</p>
+  </div>
+
+  <script src="/js/sidebar.js"></script>
+  <script src="/js/lme-account.js"></script>
+  <script>
+    // Language switching
+    function setLanguage(lang) {
+      document.querySelectorAll('[data-no][data-en]').forEach(el => {
+        if (lang === 'no') {
+          el.textContent = el.getAttribute('data-no');
+        } else {
+          el.textContent = el.getAttribute('data-en');
+        }
+      });
+
+      document.querySelectorAll('.content-no, .content-en').forEach(el => {
+        el.classList.remove('active');
+      });
+
+      if (lang === 'no') {
+        document.querySelectorAll('.content-no').forEach(el => el.classList.add('active'));
+      } else {
+        document.querySelectorAll('.content-en').forEach(el => el.classList.add('active'));
+      }
+    }
+
+    // Auto-detect language
+    const browserLang = navigator.language.startsWith('no') ? 'no' : 'en';
+    if (browserLang === 'en') {
+      setLanguage('en');
+    }
+  </script>
+</body>
+</html>

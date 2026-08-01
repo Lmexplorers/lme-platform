@@ -69,7 +69,7 @@ function memberKey(email) { return "member:" + email.trim().toLowerCase(); }
 function custKey(id) { return "scust:" + id; }
 function userKey(email) { return "user:" + email.trim().toLowerCase(); }
 
-/* Content Studio-produkter -> plan og månedskvote (bilder/video). */
+/* LME Autopilot-produkter -> plan og månedskvote (bilder/video). */
 const CS_PLANS = {
   "prod_UwWlnVHko5a1Dt": { plan: "cs-start", limits: { image: 30,  video: 1  } },
   "prod_UTtEl6dxkbq4qM": { plan: "cs-proff", limits: { image: 100, video: 6  } },

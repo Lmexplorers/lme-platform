@@ -40,6 +40,7 @@
     { key: "facebook", ico: "👍", no: "Facebook", en: "Facebook", tt: "facebook", needsMedia: false, extra: ["pageId"] },
     { key: "pinterest", ico: "📌", no: "Pinterest", en: "Pinterest", tt: "pinterest", needsMedia: true, extra: ["boardId"] },
     { key: "tiktok", ico: "🎵", no: "TikTok", en: "TikTok", tt: "tiktok", needsMedia: true },
+    { key: "youtube", ico: "▶️", no: "YouTube", en: "YouTube", tt: "youtube", needsMedia: true, needsTitle: true },
     { key: "reelScript", ico: "🎬", no: "Reel-manus", en: "Reel script" },
     { key: "email", ico: "✉️", no: "E-post", en: "Email" },
   ];
@@ -81,12 +82,14 @@
     if (m) parts.push(String(m).replace(/\s+/g, " ").trim().slice(0, 200));
     return parts.join(": ");
   }
-  function buildPost(ch, text, imgUrl) {
+  function buildPost(ch, text, imgUrl, title) {
     var conf = (BL_MAP && BL_MAP[ch.tt]) || null;
     if (!conf || !conf.accountId) return { err: T("Fant ikke kontoen i Blotato", "Account not found in Blotato") };
-    if (ch.needsMedia && !imgUrl) return { err: T("Mangler bilde på siden", "No image on this page") };
+    if (ch.needsMedia && !imgUrl) return { err: T("Mangler bilde eller video på siden", "No image or video on this page") };
+    if (ch.needsTitle && !title) return { err: T("Mangler tittel", "Missing title") };
     var target = { targetType: ch.tt };
     if (ch.tt === "facebook" && conf.pageId) target.pageId = conf.pageId;
+    if (ch.tt === "youtube" && title) target.title = String(title).slice(0, 100);
     var content = { text: String(text), platform: ch.tt };
     if (imgUrl) content.mediaUrls = [imgUrl];
     return { label: ch.no, post: { accountId: conf.accountId, content: content, target: target } };

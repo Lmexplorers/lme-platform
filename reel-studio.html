@@ -130,7 +130,7 @@
   <div class="topbar-right">
     <a href="/creative-academy" class="topbar-back">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="15 18 9 12 15 6"/></svg>
-      <span data-i18n="back">Til Creative Academy</span>
+      <span data-i18n="back">Til LME Studio</span>
     </a>
     <div class="lang-toggle">
       <button id="lang-no" class="active" onclick="setLang('no')">NO</button>
@@ -226,7 +226,7 @@ const WORKER_BASE = "https://lme-ai-visibility.lmexplorers.workers.dev";
 /* ---- Språk (samme nøkkel som resten av plattformen) ---- */
 let LANG = (function(){ try { return localStorage.getItem('lme_lang') || localStorage.getItem('lme-lang') || 'no'; } catch(e){ return 'no'; } })();
 const I18N = {
-  no:{ back:"Til Creative Academy",
+  no:{ back:"Til LME Studio",
     title:'LME <em>Reel Studio</em>',
     subtitle:"Velg format og lag ferdig innhold: reel, karusell, story, feed-innlegg, bildetekst, nyhetsbrev eller Pinterest. Klar til automatisk publisering og planlegging.",
     "s1-num":"Innhold","s1-h":"Hva skal du lage?","s1-lead":"Velg format, lim inn et tips, en leksjon eller en idé, så lager AI-en innholdet i riktig format.",
@@ -264,7 +264,7 @@ const I18N = {
     publishing:"Publiserer…",scheduling:"Planlegger…",published:"Lagt ut automatisk 🎉",
     scheduledOk:"Planlagt 🗓️",pubfail:"Klarte ikke å publisere. Sjekk kobling i Publiser alle.",neterr:"Nettverksfeil. Prøv igjen.",
     planEmpty:"Ingen planlagt innhold enda.",remove:"Fjern" },
-  en:{ back:"To Creative Academy",
+  en:{ back:"To LME Studio",
     title:'LME <em>Reel Studio</em>',
     subtitle:"Choose a format and create finished content: reel, carousel, story, feed post, caption, newsletter or Pinterest. Ready for automatic posting and scheduling.",
     "s1-num":"Content","s1-h":"What do you want to create?","s1-lead":"Choose a format, paste a tip, a lesson or an idea, and the AI creates the content in the right format.",
@@ -335,7 +335,7 @@ function parseJSON(str){ if(typeof str==='object') return str; const m=str.match
 function copyText(txt,el){ try{navigator.clipboard.writeText(txt);}catch(e){} const o=el.textContent; el.textContent=t('copied'); setTimeout(()=>el.textContent=o,1200); }
 function copyBtn(txt){ return '<button class="copy-btn" onclick=\'copyText('+JSON.stringify(txt)+',this)\'>'+t('copy')+'</button>'; }
 
-/* ---- Formater (speiler LME Content Studio-appen) ---- */
+/* ---- Formater (speiler LME Autopilot-appen) ---- */
 var FORMATS=[
   {id:'reel',ico:'🎬',no:'Reel / TikTok',en:'Reel / TikTok',media:'video',pub:['instagram','tiktok']},
   {id:'hookreel',ico:'🪝',no:'Hook-reel',en:'Hook reel',media:'video',pub:['instagram','tiktok']},
@@ -737,7 +737,7 @@ async function publishReel(key,btn){
   }catch(e){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('neterr'); }
 }
 
-/* ---- Varig plan (90 dager), samme idé som Content Studio ---- */
+/* ---- Varig plan (90 dager), samme idé som LME Autopilot ---- */
 function loadPlan(){ try{ return JSON.parse(localStorage.getItem('lme-reel-plan-v1')||'[]')||[]; }catch(e){ return []; } }
 function savePlan(p){ try{ localStorage.setItem('lme-reel-plan-v1', JSON.stringify(p)); }catch(e){} }
 function addPlanItem(it){ const p=loadPlan(); p.push(it); p.sort(function(a,b){ return (a.date+ (a.time||'')).localeCompare(b.date+(b.time||'')); }); savePlan(p); renderPlan(); }

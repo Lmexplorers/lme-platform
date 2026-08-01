@@ -1,5 +1,5 @@
 /* =========================================================
-   LME Creative Academy — delt sidemeny
+   LME Studio — delt sidemeny
    Injiseres i <aside class="sidebar" id="sidebar"></aside>.
    Endre menyen KUN her — den gjelder da alle hub-sidene.
    Aktivt punkt settes automatisk ut fra URL-en.
@@ -11,12 +11,13 @@
     '  <a href="/creative-academy#oversikt" class="sidebar-item"><span class="si-icon">🏡</span><span class="si-label" data-no="Oversikt" data-en="Overview">Oversikt</span></a>',
     '  <a href="/creative-academy#tutorials" class="sidebar-item"><span class="si-icon">🎓</span><span class="si-label">Tutorials</span></a>',
     '  <a href="/utforsk" class="sidebar-item"><span class="si-icon">🧭</span><span class="si-label" data-no="Utforsk" data-en="Explore">Utforsk</span></a>',
+    '  <a href="/roadmap" class="sidebar-item"><span class="si-icon">🗺️</span><span class="si-label" data-no="Veikart" data-en="Roadmap">Veikart</span></a>',
     '</div>',
     '<div class="sidebar-group">',
     '  <div class="sidebar-group-title"><span class="grp-emoji">🛠️</span> <span data-no="Verktøy" data-en="Tools">Verktøy</span></div>',
     '  <a href="/lme-builder" class="sidebar-item" data-tool="builder"><span class="si-icon">✨</span><span class="si-label">LME Builder</span></a>',
     '  <a href="/bookly/" class="sidebar-item"><span class="si-icon">📚</span><span class="si-label">LME Bookly</span><span class="si-badge beta" data-no="Ny" data-en="New">Ny</span></a>',
-    '  <a href="https://lme-contentstudio.pages.dev" target="_blank" rel="noopener" class="sidebar-item"><span class="si-icon">🎨</span><span class="si-label">Content Studio</span></a>',
+    '  <a href="https://lme-contentstudio.pages.dev/?key=LME2026" target="_blank" rel="noopener" class="sidebar-item"><span class="si-icon">🎨</span><span class="si-label">LME Autopilot</span></a>',
     '  <a href="/spor-renate-ai" class="sidebar-item"><span class="si-icon">💗</span><span class="si-label">Renate AI</span></a>',
     '  <a href="/ai-visibility" class="sidebar-item"><span class="si-icon">🔍</span><span class="si-label">AI Visibility</span><span class="si-badge beta" data-no="Ny" data-en="New">Ny</span></a>',
     '</div>',

@@ -1,5 +1,5 @@
 /**
- * Delt tilgangssjekk for Content Studio-generering.
+ * Delt tilgangssjekk for LME Autopilot-generering.
  *
  * Krever innlogget bruker (Pages-økt, cookie lme_sess) med et aktivt
  * abonnement, og håndhever en månedlig kvote per bruker som kostnadsvern.
@@ -126,12 +126,12 @@ export async function enforceGeneration(context, kind) {
   if (!env || !env.BUILDER_KV) return { ok: true };
   const user = await sessionUser(context);
   if (!user) {
-    return { ok: false, status: 401, error: "Du må være logget inn for å bruke Content Studio." };
+    return { ok: false, status: 401, error: "Du må være logget inn for å bruke LME Autopilot." };
   }
   if (isOwner(user)) return { ok: true };
   const sub = await subscriptionFor(context, user);
   if (!sub || sub.status !== "active") {
-    return { ok: false, status: 402, error: "Dette krever et aktivt Content Studio-abonnement. Se planene på /oppgrader." };
+    return { ok: false, status: 402, error: "Dette krever et aktivt LME Autopilot-abonnement. Se planene på /oppgrader." };
   }
   const k = kind === "video" ? "video" : "image";
   const limit = (sub.limits && sub.limits[k]) || DEFAULT_LIMITS[k] || 0;

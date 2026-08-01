@@ -37,7 +37,7 @@
   function currentArea() {
     var p = path;
     if (/creative-academy|creator-academy|kursbygger|lme-builder|bookly|blogg|blog\b|podkast|websites|courses|email|automations|forms|surveys|quizzes|subscribers|payments|produkter|pipeline|analytics|ai-visibility|ai-traffic|domener|business-profile|lme-visibility/.test(p)) {
-      return 'LME Creative Academy';
+      return 'LME Studio';
     }
     if (/community|medlemmer|grupper|wins|perks|live|replays|webinars|meldinger|medlem\b/.test(p)) {
       return 'LME Community';

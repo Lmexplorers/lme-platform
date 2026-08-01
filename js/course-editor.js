@@ -52,10 +52,15 @@
 
   var pw = null, original = null, saveBtn = null, cancelBtn = null;
 
+  try {
+    pw = localStorage.getItem("lme-edit-password") || null;
+  } catch (e) {}
+
   editBtn.onclick = function () {
     if (!pw) {
       pw = prompt("Skriv inn passord for å redigere:");
       if (!pw) return;
+      try { localStorage.setItem("lme-edit-password", pw); } catch (e) {}
     }
     startEdit();
   };

@@ -189,6 +189,19 @@
   .install-hint{background:var(--sun-soft);border:1px solid #F1DFA0;border-radius:var(--r-md);padding:13px 15px;font-size:13px;color:#7a5e00;margin-bottom:14px;display:none;}
   .install-hint.show{display:block;}
   .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:13px;font-weight:700;padding:11px 18px;border-radius:var(--r-pill);opacity:0;pointer-events:none;transition:opacity .2s;z-index:80;}
+  .video-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;margin-top:6px;font-size:15.5px;font-weight:800;padding:15px;border-radius:var(--r-pill);background:var(--ink);color:#fff;}
+  .video-btn:disabled{opacity:.6;}
+  .vid-progress{text-align:center;padding:26px 10px 10px;}
+  .vid-progress .spin{width:36px;height:36px;border:3px solid rgba(233,30,137,.2);border-top-color:var(--cerise);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px;}
+  .vid-progress p{font-size:14px;color:var(--ink-soft);}
+  .vid-video{width:100%;border-radius:var(--r-md);display:block;margin-bottom:14px;background:#000;box-shadow:var(--shadow-md);}
+  .vid-note{font-size:12px;color:var(--ink-muted);margin:-6px 0 14px;}
+  .up-row{display:flex;align-items:center;gap:8px;margin-top:8px;}
+  .up-btn{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--ink-soft);background:var(--card-2,#F4EFE6);border-radius:var(--r-pill);padding:6px 12px;cursor:pointer;}
+  .up-btn.on{color:var(--cerise);background:rgba(233,30,137,.1);}
+  .up-thumb{width:26px;height:26px;border-radius:7px;object-fit:cover;display:none;}
+  .mt-toggle{display:flex;align-items:center;gap:9px;background:rgba(233,30,137,.08);border:1px solid rgba(233,30,137,.25);border-radius:var(--r-md);padding:11px 13px;margin-top:10px;font-size:13.5px;font-weight:700;color:var(--ink);}
+  .mt-toggle input{width:18px;height:18px;flex:none;}
   .toast.show{opacity:1;}
 </style>
 </head>
@@ -242,7 +255,7 @@
         <span class="price-cur">kr</span>
         <span class="price-before">249 kr</span>
       </div>
-      <div class="price-note" data-no="Lanseringspris i en begrenset periode. Engangsbeløp for å komme i gang." data-en="Launch price for a limited time. One-time payment to get started.">Lanseringspris i en begrenset periode. Engangsbeløp for å komme i gang.</div>
+      <div class="price-note" data-no="Lanseringspris i en begrenset periode. Engangsbeløp for å komme i gang. Manus, tittel og beskrivelse er ubegrenset. Å faktisk lage videofilen (AI-stemme og AI-bilder) koster én video-kreditt per video, kjøpes på /kjop-kreditt." data-en="Launch price for a limited time. One-time payment to get started. Scripts, titles and descriptions are unlimited. Actually making the video file (AI voice and AI images) costs one video credit per video, purchased at /kjop-kreditt.">Lanseringspris i en begrenset periode. Engangsbeløp for å komme i gang. Manus, tittel og beskrivelse er ubegrenset. Å faktisk lage videofilen (AI-stemme og AI-bilder) koster én video-kreditt per video, kjøpes på /kjop-kreditt.</div>
       <div class="guarantee">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
         <span data-no="30 dagers fornøydgaranti. Er du ikke fornøyd, får du pengene tilbake." data-en="30-day happiness guarantee. If you are not happy, you get your money back.">30 dagers fornøydgaranti. Er du ikke fornøyd, får du pengene tilbake.</span>
@@ -280,7 +293,7 @@
 
       <div class="field">
         <label class="lab" data-no="Hva skal videoen handle om?" data-en="What is the video about?">Hva skal videoen handle om?</label>
-        <textarea id="topic" data-no-ph="For eksempel: hvordan lage et forberedt miljø hjemme for barn i alderen 3-6 år" data-en-ph="For example: how to set up a prepared environment at home for kids aged 3-6" placeholder="For eksempel: hvordan lage et forberedt miljø hjemme for barn i alderen 3-6 år"></textarea>
+        <textarea id="topic" data-no-ph="For eksempel: hvorfor jeg lagde det gratis YouTube-kurset mitt, eller hvordan lage et forberedt miljø hjemme for barn i alderen 3-6 år" data-en-ph="For example: why I made my free YouTube course, or how to set up a prepared environment at home for kids aged 3-6" placeholder="For eksempel: hvorfor jeg lagde det gratis YouTube-kurset mitt, eller hvordan lage et forberedt miljø hjemme for barn i alderen 3-6 år"></textarea>
       </div>
 
       <div class="field" id="lenField" style="display:none;">
@@ -493,8 +506,8 @@
     return b;
   }
   function T(k){
-    var no = {hook:'Hook / intro',vo:'Voiceover',scenes:'Scene for scene',broll:'B-roll',music:'Musikk',cta:'Oppfordring',caption:'Caption',tags:'Tags',title:'Tittel',desc:'Beskrivelse',thumb:'Thumbnail-tekst',chapters:'Kapitler'};
-    var en = {hook:'Hook / intro',vo:'Voiceover',scenes:'Scene by scene',broll:'B-roll',music:'Music',cta:'Call to action',caption:'Caption',tags:'Tags',title:'Title',desc:'Description',thumb:'Thumbnail text',chapters:'Chapters'};
+    var no = {hook:'Hook / intro',vo:'Voiceover',scenes:'Scene for scene',broll:'B-roll',music:'Musikk',cta:'Oppfordring',caption:'Caption',tags:'Tags',seo:'SEO-søkeord',hashtags:'Hashtags',title:'Tittel',desc:'Beskrivelse',thumb:'Thumbnail-tekst',chapters:'Kapitler'};
+    var en = {hook:'Hook / intro',vo:'Voiceover',scenes:'Scene by scene',broll:'B-roll',music:'Music',cta:'Call to action',caption:'Caption',tags:'Tags',seo:'SEO keywords',hashtags:'Hashtags',title:'Title',desc:'Description',thumb:'Thumbnail text',chapters:'Chapters'};
     return (LANG==='no'?no:en)[k];
   }
   function card(title, body, copy){
@@ -503,28 +516,56 @@
     var p=document.createElement('p'); p.textContent=body;
     d.appendChild(h); d.appendChild(p); return d;
   }
-  function tagsCard(out, tags){
+  function tagsCard(out, tags, icon, label){
     if (!Array.isArray(tags) || !tags.length) return;
     var line = tags.join(', ');
     var d=document.createElement('div'); d.className='rcard';
-    var head=document.createElement('h4'); head.textContent='#️⃣ '+T('tags'); head.appendChild(copyBtn(line));
+    var head=document.createElement('h4'); head.textContent=(icon||'#️⃣')+' '+(label||T('tags')); head.appendChild(copyBtn(line));
     var tg=document.createElement('div'); tg.className='tags';
     tg.innerHTML=tags.map(function(x){return '<span>'+esc(x)+'</span>';}).join('');
     d.appendChild(head); d.appendChild(tg); out.appendChild(d);
   }
+  var CHAPTER_UPLOADS = {};   // index -> base64 bilde brukeren har lastet opp til det kapittelet/scenen
+  var USE_MIA_TEO = false;    // eier-only: bruk Mia & Teo i stedet for et fritt temabilde
+
+  function uploadRow(idx){
+    var wrap=document.createElement('div'); wrap.className='up-row';
+    var inputId = 'up_'+idx+'_'+Math.random().toString(36).slice(2,7);
+    wrap.innerHTML =
+      '<label class="up-btn" for="'+inputId+'"><span>📷</span><span>'+(LANG==='no'?'Last opp bilde':'Upload photo')+'</span></label>'+
+      '<input type="file" accept="image/*" id="'+inputId+'" style="display:none;">'+
+      '<img class="up-thumb">';
+    var btn = wrap.querySelector('.up-btn');
+    var input = wrap.querySelector('input');
+    var thumb = wrap.querySelector('.up-thumb');
+    input.addEventListener('change', function(){
+      var f = input.files && input.files[0]; if (!f) return;
+      var reader = new FileReader();
+      reader.onload = function(){
+        CHAPTER_UPLOADS[idx] = String(reader.result||'');
+        thumb.src = CHAPTER_UPLOADS[idx]; thumb.style.display='inline-block';
+        btn.classList.add('on'); btn.querySelector('span:last-child').textContent = LANG==='no'?'Bilde lagt til ✓':'Photo added ✓';
+      };
+      reader.readAsDataURL(f);
+    });
+    return wrap;
+  }
+
   function renderContent(r, out, withActions, fmt){
     fmt = fmt || 'youtube';
     out.innerHTML='';
+    CHAPTER_UPLOADS = {}; USE_MIA_TEO = false;
     if (fmt === 'reel'){
       if (r.hook){ var h=document.createElement('div'); h.className='hook'; h.innerHTML='<div class="lbl">Hook</div><div class="txt">'+esc(r.hook)+'</div>'; out.appendChild(h); }
       if (r.voiceover){ out.appendChild(card('🎙️ '+T('vo'), r.voiceover, true)); }
       if (Array.isArray(r.scenes)){
-        r.scenes.forEach(function(s){
+        r.scenes.forEach(function(s, i){
           var d=document.createElement('div'); d.className='rcard scene';
           d.innerHTML=(s.time?'<div class="time">'+esc(s.time)+'</div>':'')+
             (s.onScreen?'<div class="on">'+esc(s.onScreen)+'</div>':'')+
             (s.voiceover?'<div class="vo">'+esc(s.voiceover)+'</div>':'')+
             (s.broll?'<div class="broll">'+T('broll')+': '+esc(s.broll)+'</div>':'');
+          d.appendChild(uploadRow(i));
           out.appendChild(d);
         });
       }
@@ -546,13 +587,31 @@
             pts.forEach(function(pt){ var li=document.createElement('li'); li.textContent=pt; ul.appendChild(li); });
             d.appendChild(ul);
           } else if (typeof pts === 'string'){ var p=document.createElement('div'); p.className='vo'; p.textContent=pts; d.appendChild(p); }
+          d.appendChild(uploadRow(i));
           out.appendChild(d);
         });
       }
       if (r.description){ out.appendChild(card('📝 '+T('desc'), r.description, true)); }
-      tagsCard(out, r.tags||[]);
+      tagsCard(out, r.seoKeywords||[], '👀', T('seo'));
+      tagsCard(out, r.tags||[], '🏷️', T('tags'));
+      tagsCard(out, (r.hashtags||[]).map(function(x){return x[0]==='#'?x:'#'+x;}), '#️⃣', T('hashtags'));
       if (r.thumbnailText){ out.appendChild(card('🖼️ '+T('thumb'), r.thumbnailText, true)); }
       if (r.cta){ out.appendChild(card('➡️ '+T('cta'), r.cta, true)); }
+      if (r.caption){ out.appendChild(card('✍️ '+T('caption'), r.caption, true)); }
+    }
+    var canMakeVideo = (fmt === 'youtube' && Array.isArray(r.sections) && r.sections.length) ||
+      (fmt === 'reel' && Array.isArray(r.scenes) && r.scenes.length);
+    if (canMakeVideo){
+      if (OWNER){
+        var mt=document.createElement('label'); mt.className='mt-toggle';
+        mt.innerHTML='<input type="checkbox" id="mtToggle"><span>'+(LANG==='no'?'🎭 Bruk Mia & Teo i denne videoen':'🎭 Use Mia & Teo in this video')+'</span>';
+        mt.querySelector('input').addEventListener('change', function(e){ USE_MIA_TEO = !!e.target.checked; });
+        out.appendChild(mt);
+      }
+      var vidBtn=document.createElement('button'); vidBtn.className='video-btn';
+      vidBtn.innerHTML='<span>🎬</span><span>'+(LANG==='no'?'Lag video (1 video-kreditt)':'Make video (1 video credit)')+'</span>';
+      vidBtn.addEventListener('click', function(){ openVideoModal(r, fmt); });
+      out.appendChild(vidBtn);
     }
     if (!withActions) return;
     var actions=document.createElement('div'); actions.className='out-actions';
@@ -561,6 +620,125 @@
     var again=document.createElement('button'); again.className='again-btn'; again.textContent=LANG==='no'?'↻ Lag ny':'↻ New one';
     again.addEventListener('click', function(){ out.innerHTML=''; $('topic').focus(); window.scrollTo(0,0); });
     actions.appendChild(save); actions.appendChild(again); out.appendChild(actions);
+  }
+
+  /* ===== VIDEO: generer, forhåndsvis, post til YouTube ===== */
+  var VIDEO_POLL_TIMER = null;
+  function stopVideoPoll(){ if (VIDEO_POLL_TIMER){ clearTimeout(VIDEO_POLL_TIMER); VIDEO_POLL_TIMER=null; } }
+
+  function showModal(html){ $('modalBody').innerHTML = html; $('modal').classList.add('show'); }
+  function closeModal(){ $('modal').classList.remove('show'); stopVideoPoll(); }
+  $('modalX').addEventListener('click', closeModal);
+
+  // Ett samlet kapittel/scene-format uansett format (youtube sections | reel
+  // scenes), så /api/youtube-video kan behandle begge likt.
+  function buildVideoSections(r, fmt){
+    var list = fmt === 'reel' ? (r.scenes || []) : (r.sections || []);
+    return list.map(function(item, i){
+      var heading = fmt === 'reel' ? (item.onScreen || item.time || '') : (item.heading || '');
+      var points = fmt === 'reel' ? [item.voiceover || ''] : (item.talkingPoints || item.points || []);
+      var out = { heading: heading, talkingPoints: Array.isArray(points) ? points : [String(points||'')] };
+      if (CHAPTER_UPLOADS[i]) out.imageUpload = CHAPTER_UPLOADS[i];
+      return out;
+    });
+  }
+
+  function openVideoModal(r, fmt){
+    fmt = fmt || 'youtube';
+    showModal(
+      '<div class="vid-progress"><div class="spin"></div>' +
+      '<p id="vidProgText">'+(LANG==='no'?'Lager bildene til videoen …':'Making the images for the video …')+'</p></div>'
+    );
+    fetch('/api/youtube-video', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        title: r.title, hook: r.hook,
+        sections: buildVideoSections(r, fmt),
+        lang: VLANG,
+        aspect: fmt === 'reel' ? '9:16' : '16:9',
+        useMiaTeo: USE_MIA_TEO
+      })
+    }).then(function(res){ return res.json().then(function(d){ return { ok: res.ok, d: d }; }); })
+      .then(function(x){
+        if (!x.d || x.d.error) {
+          var needCredits = x.d && x.d.needCredits;
+          showVideoError(x.d && x.d.error, needCredits);
+          return;
+        }
+        pollVideo(x.d.id, r, fmt);
+      })
+      .catch(function(){ showVideoError(LANG==='no'?'Nettverksfeil. Prøv igjen.':'Network error. Please try again.'); });
+  }
+
+  function showVideoError(msg, needCredits){
+    var extra = needCredits
+      ? '<a class="btn-primary" style="display:block;text-decoration:none;margin-top:12px;" href="/kjop-kreditt">'+(LANG==='no'?'Kjøp video-kreditter':'Buy video credits')+'</a>'
+      : '';
+    showModal('<p class="err">'+esc(msg || (LANG==='no'?'Noe gikk galt.':'Something went wrong.'))+'</p>'+extra);
+  }
+
+  function pollVideo(id, r, fmt){
+    fetch('/api/youtube-video?id='+encodeURIComponent(id))
+      .then(function(res){ return res.json(); })
+      .then(function(d){
+        if (!d || d.status === 'error'){ showVideoError(d && d.error); return; }
+        if (d.status === 'done' && d.videoUrl){ showVideoPreview(d.videoUrl, r, fmt); return; }
+        var t = $('vidProgText'); if (t) t.textContent = d.progress || (LANG==='no'?'Rendrer video, kan ta et par minutter …':'Rendering video, can take a couple of minutes …');
+        VIDEO_POLL_TIMER = setTimeout(function(){ pollVideo(id, r, fmt); }, 4000);
+      })
+      .catch(function(){ VIDEO_POLL_TIMER = setTimeout(function(){ pollVideo(id, r, fmt); }, 6000); });
+  }
+
+  function showVideoPreview(videoUrl, r, fmt){
+    var baseDesc = fmt === 'reel' ? (r.caption || r.voiceover || '') : (r.description || '');
+    var desc = baseDesc + (Array.isArray(r.hashtags) && r.hashtags.length ? ('\n\n' + r.hashtags.map(function(x){return x[0]==='#'?x:'#'+x;}).join(' ')) : '');
+    showModal(
+      '<video class="vid-video" src="'+esc(videoUrl)+'" controls playsinline></video>' +
+      '<div class="field"><label class="lab">'+(LANG==='no'?'Tittel':'Title')+'</label><input id="vidTitle" value="'+esc(r.title||'')+'"></div>' +
+      '<div class="field"><label class="lab">'+(LANG==='no'?'Beskrivelse':'Description')+'</label><textarea id="vidDesc" style="min-height:90px;">'+esc(desc)+'</textarea></div>' +
+      '<button class="video-btn" id="postYtBtn"><span>▶️</span><span>'+(LANG==='no'?'Post til YouTube':'Post to YouTube')+'</span></button>' +
+      '<p class="vid-note">'+(LANG==='no'?'Krever at en YouTube-kanal er koblet til i Blotato.':'Requires a YouTube channel connected in Blotato.')+'</p>' +
+      '<div id="postYtStatus"></div>'
+    );
+    $('postYtBtn').addEventListener('click', function(){ postToYouTube(videoUrl); });
+  }
+
+  function postToYouTube(videoUrl){
+    var btn = $('postYtBtn'); var status = $('postYtStatus');
+    var title = $('vidTitle').value.trim();
+    var desc = $('vidDesc').value.trim();
+    if (!title){ status.innerHTML = '<p class="err">'+(LANG==='no'?'Skriv en tittel først.':'Write a title first.')+'</p>'; return; }
+    btn.disabled = true; status.innerHTML = '';
+    fetch('/api/blotato/accounts', { method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'}, body:'{}' })
+      .then(function(res){ return res.json(); })
+      .then(function(res){
+        if (res && res.error) throw new Error(res.error);
+        var list = (res && res.result && (res.result.items || res.result.accounts || res.result)) || [];
+        var acc = (Array.isArray(list) ? list : []).find(function(a){
+          return String(a.platform || a.type || a.targetType || '').toLowerCase() === 'youtube';
+        });
+        if (!acc) throw new Error(LANG==='no'?'Ingen YouTube-konto koblet til i Blotato ennå.':'No YouTube account connected in Blotato yet.');
+        var accountId = String(acc.id || acc.accountId || '');
+        var post = { accountId: accountId, content: { text: desc, platform: 'youtube', mediaUrls: [videoUrl] }, target: { targetType: 'youtube', title: title.slice(0,100) } };
+        return fetch('/api/blotato/publish', {
+          method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ items: [{ label: 'YouTube', post: post }] })
+        }).then(function(r2){ return r2.json().then(function(d2){ return { ok:r2.ok, d:d2 }; }); });
+      })
+      .then(function(x){
+        btn.disabled = false;
+        var one = x && x.d && x.d.result && Array.isArray(x.d.result.results) && x.d.result.results[0];
+        if (!x || !x.ok || (x.d && x.d.error) || (one && !one.ok)){
+          var reason = (x.d && x.d.error) || (one && (one.error || (one.detail && (one.detail.message || JSON.stringify(one.detail))))) || (LANG==='no'?'Klarte ikke å poste.':'Could not post.');
+          status.innerHTML = '<p class="err">'+esc(String(reason).slice(0,300))+'</p>';
+          return;
+        }
+        status.innerHTML = '<p style="color:var(--lime);font-weight:700;text-align:center;">'+(LANG==='no'?'✅ Lagt ut på YouTube!':'✅ Posted to YouTube!')+'</p>';
+      })
+      .catch(function(e){
+        btn.disabled = false;
+        status.innerHTML = '<p class="err">'+esc((e && e.message) || (LANG==='no'?'Klarte ikke å poste.':'Could not post.'))+'</p>';
+      });
   }
 
   $('genBtn').addEventListener('click', function(){
