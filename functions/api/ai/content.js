@@ -214,7 +214,7 @@ export async function onRequestPost(context) {
 
     // Hvis tema IKKE handler om Montessori, fjern alle Montessori-referanser fra imagePrompt og broll
     const src = String(body.source || body.article || "").toLowerCase();
-    const isMontessoriTheme = src.includes("montessori") || src.includes("pedagogikk");
+    const isMontessoriTheme = src.includes("montessori") || src.includes("pedagogikk") || src.includes("barn") || src.includes("førskolealder");
 
     if (!isMontessoriTheme && result) {
       try {
