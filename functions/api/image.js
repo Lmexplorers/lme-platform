@@ -87,6 +87,9 @@ function buildPrompt(text, character) {
     // Ingen karakter: BARE legge til Montessori-scene hvis temaet eksplisitt handler om Montessori
     if (isMontessoriTheme) {
       parts.push("A warm, inviting Montessori scene with real, pedagogically accurate Montessori practical-life materials, natural wood, soft daylight, calm ordered shelves. No recognizable real people.");
+    } else {
+      // Sterkt avvisning av Montessori for ikke-Montessori-temaer
+      parts.push("ABSOLUTELY NO Montessori. Do NOT render any Montessori shelves, Montessori materials, pedagogical environments, classroom, preschool, or anything Montessori-related. Generate ONLY the requested theme.");
     }
     const theme = String(text || "").replace(/\s+/g, " ").trim().slice(0, 700);
     if (theme) parts.push(`Illustrate exactly this theme, no generic backgrounds (do not render any of these words): ${theme}`);
