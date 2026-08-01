@@ -234,13 +234,18 @@ export async function onRequestPost(context) {
     let quality = String(body.quality || "").toLowerCase();
     if (!["low", "medium", "high"].includes(quality)) quality = "";
 
+    console.log('[image] Generating with provider:', provider, 'platform:', body.platform, 'character:', character, 'quality:', quality);
     let out;
     try {
       out = await PROVIDERS[provider](env, prompt, size, quality);
     } catch (e) {
+      console.error('[image] Provider error:', e);
       return json({ error: "Kom ikke i kontakt med bildemotoren.", detail: String(e && e.message || e).slice(0, 200) }, 200);
     }
-    if (out && out.error) return json({ error: out.error, detail: out.detail }, 200);
+    if (out && out.error) {
+      console.error('[image] Provider returned error:', out.error);
+      return json({ error: out.error, detail: out.detail }, 200);
+    }
 
     let bytes = out.bytes, contentType = out.contentType || "image/png";
     if (!bytes && out.url) {
