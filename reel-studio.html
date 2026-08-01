@@ -746,9 +746,11 @@ function blotatoReason(res){
   return parts.join(': ');
 }
 async function publishReel(key,btn){
+  console.log('[publishReel] Starting for platform:', key);
   const msg=document.getElementById('pubmsg');
   const f=curFmt();
   const media=(document.getElementById('mediaUrl')&&document.getElementById('mediaUrl').value.trim())||'';
+  console.log('[publishReel] Format:', f.id, 'Media:', media?'yes':'no');
   // Video-format og media-krevende plattformer (instagram/tiktok/pinterest) trenger media.
   const needsMedia=(f.media==='video')||key==='instagram'||key==='tiktok'||key==='pinterest';
   if(needsMedia && !media){ msg.className='pubmsg err'; msg.textContent='⚠️ '+(f.media==='video'?t('needVideo'):t('needImage')); return; }
@@ -764,20 +766,27 @@ async function publishReel(key,btn){
   btn.innerHTML='<span class="spinner"></span> '+(scheduled?t('scheduling'):t('publishing'));
   msg.className='pubmsg'; msg.textContent='';
   try{
+    console.log('[publishReel] Fetching accounts...');
     const map=await fetchAccounts();
+    console.log('[publishReel] Accounts:', Object.keys(map));
     const conf=map[key];
-    if(!conf||!conf.accountId){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('notConnected'); return; }
+    if(!conf||!conf.accountId){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('notConnected'); console.warn('[publishReel] No account for:', key); return; }
+    console.log('[publishReel] Account found, accountId:', conf.accountId);
     const text=buildCaption();
+    console.log('[publishReel] Caption:', text.slice(0,100));
     const post={ accountId:conf.accountId, text:text, target:{ targetType:key } };
     if(key==='facebook'&&conf.pageId) post.target.pageId=conf.pageId;
     if(media) post.mediaUrls=[media];
     const item={ label:key, post:post };
     if(scheduledTime) item.scheduledTime=scheduledTime;
+    console.log('[publishReel] Payload:', JSON.stringify({items:[item]}).slice(0,200));
     const r=await fetch('/api/blotato/publish',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({items:[item]})});
+    console.log('[publishReel] Fetch response status:', r.status);
     const d=await r.json();
-    console.log('[publishReel] response status:', r.status, 'body:', d);
+    console.log('[publishReel] Response body:', JSON.stringify(d).slice(0,500));
     const res=d&&d.result&&d.result.results&&d.result.results[0];
+    console.log('[publishReel] Result ok?', res&&res.ok);
     if(res&&res.ok){
       btn.innerHTML='✓';
       if(scheduled){
@@ -790,9 +799,10 @@ async function publishReel(key,btn){
       btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err';
       var why=blotatoReason(res);
       if(!why && d&&d.error) why=String(d.error).slice(0,200);
+      console.warn('[publishReel] Publish failed, reason:', why);
       msg.textContent='⚠️ '+t('pubfail')+(why?' '+why:'');
     }
-  }catch(e){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; console.error('[publishReel] error:', e); msg.textContent='⚠️ '+t('neterr'); }
+  }catch(e){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; console.error('[publishReel] Error:', e.message, e.stack); msg.textContent='⚠️ '+t('neterr'); }
 }
 
 /* ---- Varig plan (90 dager), samme idé som LME Autopilot ---- */
