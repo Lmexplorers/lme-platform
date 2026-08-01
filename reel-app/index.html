@@ -638,7 +638,9 @@
     if (currentLine) lines.push(currentLine);
     return lines;
   }
-  function renderTextOnImage(imageUrl, textLines, slideNum, totalSlides){
+  function renderTextOnImage(imageUrl, textLines, slideNum, totalSlides, position, showText){
+    position = position || 'middle';
+    showText = showText !== false;
     return new Promise(function(resolve, reject){
       var img = new Image();
       img.crossOrigin = 'anonymous';
@@ -648,23 +650,32 @@
         canvas.width = 1080;
         canvas.height = 1080;
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = 'rgba(255,255,255,0.95)';
-        ctx.font = 'bold 52px Sasson Montessori, sans-serif';
-        ctx.textAlign = 'center';
-        var wrappedLines = [];
-        textLines.forEach(function(line){
-          var wrapped = wrapText(ctx, line, 900, 80);
-          wrappedLines = wrappedLines.concat(wrapped);
-        });
-        var textBoxHeight = wrappedLines.length * 80 + 80;
-        var startY = (canvas.height - textBoxHeight) / 2;
-        var boxX = 40; var boxY = startY - 30; var boxW = canvas.width - 80; var boxH = textBoxHeight;
-        ctx.fillRect(boxX, boxY, boxW, boxH);
-        ctx.fillStyle = '#1F1B24';
-        ctx.font = 'bold 52px Sasson Montessori, sans-serif';
-        wrappedLines.forEach(function(line, idx){
-          ctx.fillText(line, canvas.width/2, startY + 70 + (idx * 80));
-        });
+        if (showText){
+          ctx.fillStyle = 'rgba(255,255,255,0.95)';
+          ctx.font = 'bold 52px Sasson Montessori, sans-serif';
+          ctx.textAlign = 'center';
+          var wrappedLines = [];
+          textLines.forEach(function(line){
+            var wrapped = wrapText(ctx, line, 900, 80);
+            wrappedLines = wrappedLines.concat(wrapped);
+          });
+          var textBoxHeight = wrappedLines.length * 80 + 80;
+          var startY;
+          if (position === 'top'){
+            startY = 100;
+          } else if (position === 'bottom'){
+            startY = canvas.height - textBoxHeight - 100;
+          } else {
+            startY = (canvas.height - textBoxHeight) / 2;
+          }
+          var boxX = 40; var boxY = startY - 30; var boxW = canvas.width - 80; var boxH = textBoxHeight;
+          ctx.fillRect(boxX, boxY, boxW, boxH);
+          ctx.fillStyle = '#1F1B24';
+          ctx.font = 'bold 52px Sasson Montessori, sans-serif';
+          wrappedLines.forEach(function(line, idx){
+            ctx.fillText(line, canvas.width/2, startY + 70 + (idx * 80));
+          });
+        }
         ctx.fillStyle = 'rgba(255,255,255,0.9)';
         ctx.font = '42px Sasson Montessori, sans-serif';
         ctx.textAlign = 'right';
@@ -675,6 +686,8 @@
       img.src = imageUrl;
     });
   }
+  var CAROUSEL_TEXT_POSITION = 'middle';
+  var CAROUSEL_SHOW_TEXT = true;
   var CAROUSEL_UPLOAD_IMAGE = '';
   function handleCarouselImageUpload(file, statusEl){
     if (!file) return;
@@ -687,7 +700,7 @@
     if (!CAROUSEL_UPLOAD_IMAGE || !Array.isArray(r.slides) || !r.slides.length) return Promise.reject(new Error('No image or slides'));
     var promises = r.slides.map(function(s, i){
       var text = (typeof s==='string')?s:(s.text||s.body||s.headline||'');
-      return renderTextOnImage(CAROUSEL_UPLOAD_IMAGE, [text], i, r.slides.length);
+      return renderTextOnImage(CAROUSEL_UPLOAD_IMAGE, [text], i, r.slides.length, CAROUSEL_TEXT_POSITION, CAROUSEL_SHOW_TEXT);
     });
     return Promise.all(promises);
   }
@@ -740,7 +753,7 @@
         var lbl = previewBtn.innerHTML; previewBtn.disabled = true; previewBtn.innerHTML='<span class="spinner"></span> '+(LANG==='no'?'Lager forhåndsvisning…':'Rendering preview…');
         status.className='pubmsg'; status.textContent='';
         var firstSlide = r.slides[0]; var textLine = (typeof firstSlide==='string')?firstSlide:(firstSlide.text||firstSlide.body||firstSlide.headline||'');
-        renderTextOnImage(CAROUSEL_UPLOAD_IMAGE, [textLine], 0, r.slides.length)
+        renderTextOnImage(CAROUSEL_UPLOAD_IMAGE, [textLine], 0, r.slides.length, CAROUSEL_TEXT_POSITION, CAROUSEL_SHOW_TEXT)
           .then(function(dataUrl){ img.src=dataUrl; img.style.display='block'; status.className='pubmsg'; status.textContent=(LANG==='no'?'Forhåndsvisning av slide 1/'+r.slides.length+'. Klar til å publisere som karusell.':'Preview of slide 1/'+r.slides.length+'. Ready to publish as carousel.'); })
           .catch(function(e){ status.className='pubmsg err'; status.textContent=LANG==='no'?'⚠️ Kunne ikke lage forhåndsvisning.':'⚠️ Could not create preview.'; })
           .finally(function(){ previewBtn.disabled=false; previewBtn.innerHTML=lbl; });
@@ -809,12 +822,51 @@
       fileInput.addEventListener('change', function(){ if(fileInput.files[0]) handleCarouselImageUpload(fileInput.files[0], uploadStatus); });
       uploadDiv.appendChild(uploadBtn); uploadDiv.appendChild(uploadStatus);
       uploadCard.appendChild(uploadDiv);
+      var settingsDiv = document.createElement('div'); settingsDiv.style.marginTop='16px'; settingsDiv.style.paddingTop='12px'; settingsDiv.style.borderTop='1px solid var(--line)';
+      var posLabel = document.createElement('div'); posLabel.style.fontSize='12px'; posLabel.style.fontWeight='700'; posLabel.style.color='var(--ink-soft)'; posLabel.style.marginBottom='8px'; posLabel.textContent = LANG==='no'?'Tekstposisjon':'Text position';
+      var posOptions = ['top', 'middle', 'bottom'];
+      var posLabels = [LANG==='no'?'Topp':'Top', LANG==='no'?'Midten':'Middle', LANG==='no'?'Bunn':'Bottom'];
+      var posDiv = document.createElement('div'); posDiv.style.display='flex'; posDiv.style.gap='8px'; posDiv.style.marginBottom='12px';
+      posOptions.forEach(function(opt, idx){
+        var radio = document.createElement('input'); radio.type='radio'; radio.name='textpos'; radio.value=opt; radio.id='pos'+opt;
+        if (opt === CAROUSEL_TEXT_POSITION) radio.checked=true;
+        radio.addEventListener('change', function(){ CAROUSEL_TEXT_POSITION=opt; });
+        var label = document.createElement('label'); label.htmlFor='pos'+opt; label.textContent=posLabels[idx]; label.style.fontSize='13px'; label.style.cursor='pointer';
+        posDiv.appendChild(radio); posDiv.appendChild(label);
+      });
+      var showTextCheck = document.createElement('input'); showTextCheck.type='checkbox'; showTextCheck.id='showtext'; showTextCheck.checked=CAROUSEL_SHOW_TEXT;
+      showTextCheck.addEventListener('change', function(){ CAROUSEL_SHOW_TEXT=showTextCheck.checked; });
+      var showTextLabel = document.createElement('label'); showTextLabel.htmlFor='showtext'; showTextLabel.textContent = LANG==='no'?'Vis tekst':'Show text'; showTextLabel.style.fontSize='13px'; showTextLabel.style.cursor='pointer'; showTextLabel.style.marginLeft='8px';
+      settingsDiv.appendChild(posLabel); settingsDiv.appendChild(posDiv); settingsDiv.appendChild(showTextCheck); settingsDiv.appendChild(showTextLabel);
+      uploadCard.appendChild(settingsDiv);
       out.appendChild(uploadCard);
       if (Array.isArray(r.slides)){
         var carouselStats = document.createElement('div'); carouselStats.className='rcard';
         var statsHead = document.createElement('h4'); statsHead.textContent = LANG==='no'?'📊 Karusell':'📊 Carousel';
         var statsText = document.createElement('p'); statsText.textContent = (LANG==='no'?'Du har '+r.slides.length+' slides. Hver slide vises med samme bilde og annen tekst.':'You have '+r.slides.length+' slides. Each slide displays the same image with different text.'); statsText.style.fontSize='13.5px';
         carouselStats.appendChild(statsHead); carouselStats.appendChild(statsText); out.appendChild(carouselStats);
+        var galleryCard = document.createElement('div'); galleryCard.className='rcard';
+        var galleryHead = document.createElement('h4'); galleryHead.textContent = LANG==='no'?'🎬 Forhåndsvisning':'🎬 Preview';
+        galleryCard.appendChild(galleryHead);
+        var galleryContainer = document.createElement('div'); galleryContainer.style.position='relative'; galleryContainer.style.marginTop='12px';
+        var galleryImg = document.createElement('img'); galleryImg.style.width='100%'; galleryImg.style.borderRadius='8px'; galleryImg.style.display='block'; galleryImg.style.backgroundColor='#f0f0f0';
+        var galleryNav = document.createElement('div'); galleryNav.style.display='flex'; galleryNav.style.justifyContent='space-between'; galleryNav.style.alignItems='center'; galleryNav.style.marginTop='12px'; galleryNav.style.gap='10px';
+        var prevBtn = document.createElement('button'); prevBtn.textContent='◀'; prevBtn.style.padding='8px 12px'; prevBtn.style.fontSize='16px'; prevBtn.className='mk';
+        var slideCounter = document.createElement('div'); slideCounter.style.fontSize='13px'; slideCounter.style.fontWeight='700'; slideCounter.style.textAlign='center'; slideCounter.style.flex='1';
+        var nextBtn = document.createElement('button'); nextBtn.textContent='▶'; nextBtn.style.padding='8px 12px'; nextBtn.style.fontSize='16px'; nextBtn.className='mk';
+        var currentSlideIdx = 0;
+        var updateGallery = function(){
+          if (!CAROUSEL_UPLOAD_IMAGE || !Array.isArray(r.slides) || !r.slides.length) return;
+          var text = (typeof r.slides[currentSlideIdx]==='string')?r.slides[currentSlideIdx]:(r.slides[currentSlideIdx].text||r.slides[currentSlideIdx].body||r.slides[currentSlideIdx].headline||'');
+          renderTextOnImage(CAROUSEL_UPLOAD_IMAGE, [text], currentSlideIdx, r.slides.length, CAROUSEL_TEXT_POSITION, CAROUSEL_SHOW_TEXT)
+            .then(function(url){ galleryImg.src=url; slideCounter.textContent=(currentSlideIdx+1)+'/'+r.slides.length; });
+        };
+        prevBtn.addEventListener('click', function(){ currentSlideIdx = (currentSlideIdx - 1 + r.slides.length) % r.slides.length; updateGallery(); });
+        nextBtn.addEventListener('click', function(){ currentSlideIdx = (currentSlideIdx + 1) % r.slides.length; updateGallery(); });
+        galleryNav.appendChild(prevBtn); galleryNav.appendChild(slideCounter); galleryNav.appendChild(nextBtn);
+        galleryContainer.appendChild(galleryImg); galleryContainer.appendChild(galleryNav);
+        galleryCard.appendChild(galleryContainer); out.appendChild(galleryCard);
+        if (CAROUSEL_UPLOAD_IMAGE) updateGallery();
         r.slides.forEach(function(s, i){
           var text = (typeof s === 'string') ? s : (s.text || s.body || s.headline || '');
           var d=document.createElement('div'); d.className='rcard scene';
