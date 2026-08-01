@@ -171,9 +171,9 @@ COMPOSITION: Wide shot from a stable, realistic angle (never tilted, rotated, or
 
 PHOTOGRAPHY STYLE: Professional, warm, natural lighting. Colors are vibrant and true. No AI artifacts, distortions, or impossible geometry. Everything is exactly where it should be physically.
 
-SUBJECT & SETTING: Clearly depict the theme. If showing people, show them naturally engaged with the scene. If showing objects/materials, show them clearly from a normal viewing angle. No floating objects, weird inversions, or reversed perspectives.
+SUBJECT & SETTING: Clearly depict the theme. If showing people, show them naturally engaged with the scene with natural, diverse physical characteristics (varied hair colors, skin tones, ages - NOT always dark hair). If showing objects/materials, show them clearly from a normal viewing angle. No floating objects, weird inversions, or reversed perspectives.
 
-DO NOT: Generate Montessori, educational toys, children's materials, or pedagogical settings. Generate ONLY the requested theme.
+DO NOT: Generate Montessori, educational toys, children's materials, or pedagogical settings. Generate ONLY the requested theme. Do NOT bias toward specific physical characteristics.
 
 Make sure every element is physically realistic and the image could exist as a real photograph.`;
 
