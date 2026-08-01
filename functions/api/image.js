@@ -257,6 +257,27 @@ export async function onRequestPost(context) {
       console.error('[image] Provider error:', e);
       return json({ error: "Kom ikke i kontakt med bildemotoren.", detail: String(e && e.message || e).slice(0, 200) }, 200);
     }
+
+    // Fallback: hvis primær-provider feiler (e.g. Gemini 503), prøv alternativ
+    if (out && out.error && out.status >= 500) {
+      console.log('[image] Primary provider failed with', out.status, ', trying fallback...');
+      let fallback = provider === "gemini" ? "openai" : "gemini";
+      const hasOpenAI = !!(env.OPENAI_API_KEY || env.IMAGE_OPENAI_KEY || env.IMAGE_API_KEY);
+      const hasGemini = !!(env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY);
+      if (fallback === "openai" && !hasOpenAI) {
+        console.log('[image] OpenAI fallback not available');
+      } else if (fallback === "gemini" && !hasGemini) {
+        console.log('[image] Gemini fallback not available');
+      } else {
+        console.log('[image] Trying fallback provider:', fallback);
+        try {
+          out = await PROVIDERS[fallback](env, prompt, size, quality);
+        } catch (e) {
+          console.error('[image] Fallback provider error:', e);
+        }
+      }
+    }
+
     if (out && out.error) {
       console.error('[image] Provider returned error:', out.error);
       return json({ error: out.error, detail: out.detail }, 200);
