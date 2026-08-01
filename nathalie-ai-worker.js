@@ -1,5 +1,5 @@
 /**
- * Renate AI — Cloudflare Worker
+ * Nathalie AI — Cloudflare Worker
  *
  * Proxy mellom LME-nettsiden (frontend) og Anthropic Claude API.
  * API-nøkkel ligger som Worker-secret (aldri i frontend).
@@ -18,7 +18,7 @@
  * 4. Klikk "Save and Deploy"
  *
  * 5. Test fra terminal:
- *    curl -X POST https://lme-renate-ai.renateshobby.workers.dev/renate-ai \
+ *    curl -X POST https://lme-renate-ai.renateshobby.workers.dev/nathalie-ai \
  *      -H "Content-Type: application/json" \
  *      -d '{"messages":[{"role":"user","content":"Hei!"}]}'
  */
@@ -26,7 +26,7 @@
 // =====================================================
 // RENATE AI — SYSTEM-PROMPT
 // =====================================================
-const RENATE_SYSTEM_PROMPT = `Du er Renate AI — en AI-assistent som representerer Renate Dahl og Little Montessori Explorers (LME). Du svarer på vegne av Renate, men er ærlig om at du er en AI-versjon og ikke Renate selv.
+const RENATE_SYSTEM_PROMPT = `Du er Nathalie AI — en AI-assistent som representerer Renate Dahl og Little Montessori Explorers (LME). Du svarer på vegne av Renate, men er ærlig om at du er en AI-versjon og ikke Renate selv.
 
 OM RENATE:
 - Renate Dahl er en norsk Montessoripedagog og gründer av Little Montessori Explorers
@@ -39,7 +39,7 @@ OM RENATE:
 OM LME-PLATTFORMEN:
 - LME har tre planer: Start (299 NOK/mnd / $29), Proff (499 NOK/mnd / $49), Proff + Fellesskap (699 NOK/mnd / $69)
 - 7 dagers gratis prøveperiode, ingen binding
-- LME er ett samlet økosystem (ikke en samling separate apper) med fire hovedområder: LME Montessori (den pedagogiske grunnmuren: Montessorireisen med Renate, Din Montessorireise, kurs og guider, Biblioteket, Ressurser, Musikk, Live, Opptak, Renate AI, LME Lek & Lær med Mia & Teo), LME Studio (skaper- og AI-delen: LME Autopilot, Bookly, Builder, AI Visibility Engine, Reel Studio, Blogg, Podcast, Kursbygger, Nettsider, e-post, Automatisering, Funnels, Produkter, Analyse, Betaling, Community), LME Community (fellesskap, medlemskap, Inner Circle, utfordringer, arrangementer) og LME Shop (alle digitale og fysiske produkter). Beskriv aldri LME som bare en Montessori-plattform.
+- LME er ett samlet økosystem (ikke en samling separate apper) med fire hovedområder: LME Montessori (den pedagogiske grunnmuren: Montessorireisen med Renate, Din Montessorireise, kurs og guider, Biblioteket, Ressurser, Musikk, Live, Opptak, Nathalie AI, LME Lek & Lær med Mia & Teo), LME Studio (skaper- og AI-delen: LME Autopilot, Bookly, Builder, AI Visibility Engine, Reel Studio, Blogg, Podcast, Kursbygger, Nettsider, e-post, Automatisering, Funnels, Produkter, Analyse, Betaling, Community), LME Community (fellesskap, medlemskap, Inner Circle, utfordringer, arrangementer) og LME Shop (alle digitale og fysiske produkter). Beskriv aldri LME som bare en Montessori-plattform.
 - Mia & Teo er karakterene i Renates bøker (De små naturutforskerne)
 - LME Bookly er et offentlig verktøy i LME Studio for å lage, designe og eksportere bøker, arbeidsbøker, aktivitetsbøker, flashkort, journaler og planleggere. Læreplan-malene (Montessori/LK20 og FEA-kurshefter) er forbeholdt Renate som eier; vanlige brukere ser resten.
 
@@ -71,7 +71,7 @@ const ALLOWED_ORIGINS = [
 ];
 
 // CORS: speil tilbake hvilken som helst opprinnelse. Workeren er kun en proxy
-// til Renate AI (ingen cookies/innlogging, maks 30 meldinger, maks 4000 tegn),
+// til Nathalie AI (ingen cookies/innlogging, maks 30 meldinger, maks 4000 tegn),
 // så det er trygt å svare alle LME-adresser — inkl. alle GitHub-auto-deploy- og
 // preview-adresser. Dette fjerner "Failed to fetch"/CORS-feil for godt.
 function corsHeaders(origin) {
@@ -114,11 +114,11 @@ export default {
       );
     }
 
-    // Endepunkt-routing — Renate AI svarer på /renate-ai, /spor-renate-ai og /ask-renate-ai
+    // Endepunkt-routing — Nathalie AI svarer på /nathalie-ai, /spor-nathalie-ai og /ask-nathalie-ai
     if (
-      url.pathname === "/renate-ai" ||
-      url.pathname === "/spor-renate-ai" ||
-      url.pathname === "/ask-renate-ai"
+      url.pathname === "/nathalie-ai" ||
+      url.pathname === "/spor-nathalie-ai" ||
+      url.pathname === "/ask-nathalie-ai"
     ) {
       return handleRenateAI(request, env, origin);
     }
@@ -188,7 +188,7 @@ async function handleRenateAI(request, env, origin) {
       console.error("Anthropic API feil:", anthropicResponse.status, errText);
       return jsonResponse(
         {
-          error: "Renate AI er midlertidig utilgjengelig. Prøv igjen om litt.",
+          error: "Nathalie AI er midlertidig utilgjengelig. Prøv igjen om litt.",
         },
         502,
         origin

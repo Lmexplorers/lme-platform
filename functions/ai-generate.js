@@ -4,7 +4,7 @@
  * Erstatter den separate workeren (lme-proxy...workers.dev) som ga «Failed to
  * fetch». Kjører på samme domene som siden (/ai-generate), så ingen CORS og
  * ingen ekstra worker å vedlikeholde. Bruker samme ANTHROPIC_API_KEY som
- * Renate AI (settes i Pages → Settings → Variables and Secrets).
+ * Nathalie AI (settes i Pages → Settings → Variables and Secrets).
  *
  * Tar imot en Anthropic-stil forespørsel { system, messages, max_tokens } og
  * returnerer Anthropic sitt svar { content: [...] } slik byggeren forventer.

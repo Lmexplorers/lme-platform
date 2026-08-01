@@ -1,16 +1,16 @@
 /**
- * Renate AI — lagring av samtaler i skyen (Cloudflare KV)
+ * Nathalie AI — lagring av samtaler i skyen (Cloudflare KV)
  *
- * Gjør at Renate AI husker samtalene dine på tvers av enheter og økter.
+ * Gjør at Nathalie AI husker samtalene dine på tvers av enheter og økter.
  * Krever innlogging (samme lme_sess-cookie som /api/auth/*). Uinnloggede
  * brukere får { loggedIn: false } og fortsetter med lokal lagring i
  * nettleseren, akkurat som før.
  *
  * Lagring i KV (bindingen BUILDER_KV, samme som resten av plattformen):
  *   renatechat:<slot>:<uid>  -> JSON
- *     slot "widget" : samtalen i den flytende Renate AI-widgeten
- *     slot "no"     : samtalelisten på /spor-renate-ai
- *     slot "en"     : samtalelisten på /ask-renate-ai
+ *     slot "widget" : samtalen i den flytende Nathalie AI-widgeten
+ *     slot "no"     : samtalelisten på /spor-nathalie-ai
+ *     slot "en"     : samtalelisten på /ask-nathalie-ai
  *
  * API:
  *   GET  /api/renate-chats?slot=no      -> { loggedIn, data }

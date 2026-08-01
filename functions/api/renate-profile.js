@@ -1,10 +1,10 @@
 /**
- * Renate AI — minne om brukeren (Cloudflare KV)
+ * Nathalie AI — minne om brukeren (Cloudflare KV)
  *
- * Renate AI bygger et lite minne om hver innlogget bruker (mål, nisje,
+ * Nathalie AI bygger et lite minne om hver innlogget bruker (mål, nisje,
  * hvor langt de er kommet i reisen Lær, Skap, Bli synlig, Selg, Voks),
  * slik at hun kan veilede bedre. Minnet oppdateres automatisk av
- * /renate-ai etter samtaler, og brukeren har fullt innsyn her:
+ * /nathalie-ai etter samtaler, og brukeren har fullt innsyn her:
  * les, rediger og slett på /min-konto (fanen Profil).
  *
  * Lagring i KV: renateprofile:<uid> -> ren tekst (maks 4000 tegn)

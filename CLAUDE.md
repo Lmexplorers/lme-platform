@@ -155,7 +155,7 @@ Plattformen har fire hovedområder, alle deler av samme økosystem:
 - **LME Montessori** — den pedagogiske grunnmuren. Lærer hva Montessori er og hvordan
   filosofien brukes hjemme, i barnehage og skole. Inneholder blant annet:
   Montessorireisen med Renate, Din Montessorireise, kurs og guider, Biblioteket,
-  Ressurser, Musikk, Live-arrangementer, Opptak, Renate AI, LME Lek & Lær med Mia & Teo.
+  Ressurser, Musikk, Live-arrangementer, Opptak, Nathalie AI, LME Lek & Lær med Mia & Teo.
 - **LME Creative Academy** — **ikke en egen plattform eller vanlig side**, men skaper-
   og AI-delen av LME som hjelper brukeren å skape, markedsføre og bygge en digital
   virksomhet med AI. Inneholder blant annet: Content Studio, Bookly, Builder,
