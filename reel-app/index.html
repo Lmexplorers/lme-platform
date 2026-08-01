@@ -741,7 +741,7 @@
         status.className='pubmsg'; status.textContent='';
         var firstSlide = r.slides[0]; var textLine = (typeof firstSlide==='string')?firstSlide:(firstSlide.text||firstSlide.body||firstSlide.headline||'');
         renderTextOnImage(CAROUSEL_UPLOAD_IMAGE, [textLine], 0, r.slides.length)
-          .then(function(dataUrl){ img.src=dataUrl; img.style.display='block'; status.className='pubmsg'; status.textContent=LANG==='no'?'Slide 1 preview ready. Upload to Instagram to create full carousel.':'Slide 1 preview ready. Upload to Instagram to create full carousel.'; })
+          .then(function(dataUrl){ img.src=dataUrl; img.style.display='block'; status.className='pubmsg'; status.textContent=(LANG==='no'?'Forhåndsvisning av slide 1/'+r.slides.length+'. Klar til å publisere som karusell.':'Preview of slide 1/'+r.slides.length+'. Ready to publish as carousel.'); })
           .catch(function(e){ status.className='pubmsg err'; status.textContent=LANG==='no'?'⚠️ Kunne ikke lage forhåndsvisning.':'⚠️ Could not create preview.'; })
           .finally(function(){ previewBtn.disabled=false; previewBtn.innerHTML=lbl; });
       });
