@@ -112,8 +112,10 @@
     font-size:13px;color:#7a5d00;margin-top:14px;}
   .pubmsg{font-size:13px;color:var(--ink-soft);margin-top:10px;min-height:1em;}
   .err{color:var(--cerise);}
-  #step2,#step3{opacity:.55;pointer-events:none;}
-  #step2.on,#step3.on{opacity:1;pointer-events:auto;}
+  #step2,#step3{opacity:.55;pointer-events:none;cursor:not-allowed;}
+  #step2.on,#step3.on{opacity:1;pointer-events:auto;cursor:auto;}
+  #step2 button,#step3 button{cursor:not-allowed;opacity:.6;}
+  #step2.on button,#step3.on button{cursor:pointer;opacity:1;}
 </style>
 </head>
 <body>
@@ -384,32 +386,39 @@ function updateStep2(){
 /* ---- Steg 1: generer innhold i valgt format ---- */
 let REEL=null;
 async function genContent(){
+  console.log('[genContent] START');
   const source=document.getElementById('src').value.trim();
-  if(!source) return;
+  if(!source) { console.log('[genContent] No source, returning'); return; }
   const seconds=document.getElementById('secs').value;
   const btn=document.getElementById('genBtn');
   const label=btn.innerHTML; btn.disabled=true; btn.innerHTML='<span class="spinner"></span> '+t('loading');
   try{
+    console.log('[genContent] Fetching from /api/ai/content, format:', FMT);
     const res=await fetch('/api/ai/content',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({format:FMT,source:source,seconds:seconds,lang:LANG})});
     if(!res.ok) throw new Error('http '+res.status);
     const data=await res.json();
     if(data.error) throw new Error(data.error);
+    console.log('[genContent] Got data, parsing...');
     REEL=parseJSON(data.result);
+    console.log('[genContent] REEL parsed, rendering content');
     renderContent(FMT,REEL);
     fillImgPrompt();
     const f=curFmt();
-    console.log('[genContent] Format:', f.id, 'Media:', f.media, 'Pub platforms:', f.pub);
+    console.log('[genContent] Format:', f.id, 'Media:', f.media, 'Pub platforms:', f.pub, 'pub.length:', f.pub.length);
     if(f.media!=='none') document.getElementById('step2').classList.add('on');
     if(f.pub.length){
-      console.log('[genContent] Adding "on" class to step3');
+      console.log('[genContent] pub.length > 0, adding "on" class to step3');
       document.getElementById('step3').classList.add('on');
-      console.log('[genContent] Step3 classList:', document.getElementById('step3').className);
+      console.log('[genContent] Step3 classList after add:', document.getElementById('step3').className);
+      console.log('[genContent] Calling updatePubButtons()');
       updatePubButtons();
+      console.log('[genContent] updatePubButtons() complete');
     }
-    else { document.getElementById('step3').classList.remove('on'); console.log('[genContent] Removing "on" class from step3, pub.length=0'); }
+    else { console.log('[genContent] pub.length=0, removing "on" class from step3'); document.getElementById('step3').classList.remove('on'); }
+    console.log('[genContent] COMPLETE');
   }catch(e){
-    console.error('Reel Studio:',e);
+    console.error('[genContent] ERROR:', e.message, e.stack);
     document.getElementById('out').innerHTML='<p class="err">'+t('error')+'</p>';
   }finally{ btn.disabled=false; btn.innerHTML=label; }
 }
