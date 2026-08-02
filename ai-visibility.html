@@ -586,17 +586,58 @@ async function runSchema(){
 }
 
 /* ---- Pinterest ---- */
+let lastPinterestData=null;
 async function runPinterest(){
   const title=document.getElementById('p-title').value.trim();
   const summary=document.getElementById('p-summary').value.trim();busy('p-btn',true);
   try{
-    const d=parseJSON(await api('/ai/pinterest',{title,summary}));
-    document.getElementById('p-out').innerHTML=
-      `<div class="card-out"><div class="meta-row"><b>Pin-tittel:</b> ${d.pinTitle||''} ${copyBtn(d.pinTitle||'')}</div>
-        <div class="meta-row"><b>Beskrivelse:</b> ${d.pinDescription||''} ${copyBtn(d.pinDescription||'')}</div></div>
-       <div class="card-out"><h4>Pin-idéer</h4><p>${(d.pinIdeas||[]).map(x=>'• '+x).join('\n')}</p></div>
-       <div class="card-out"><h4>Bilde-prompt (Canva) ${copyBtn(d.imagePrompt||'')}</h4><p>${d.imagePrompt||''}</p></div>`;
+    const d=parseJSON(await api('/ai/pinterest',{title,summary}));lastPinterestData=d;
+    let html=`<div class="card-out"><div style="display:grid;gap:8px;">`;
+    html+=`<div><b>Pin-tittel:</b> ${d.pinTitle||''} ${copyBtn(d.pinTitle||'')}</div>`;
+    html+=`<div><b>Beskrivelse:</b> ${d.pinDescription||''} ${copyBtn(d.pinDescription||'')}</div>`;
+    html+=`<div><small style="color:var(--ink-muted);">Bilde-prompt: ${d.imagePrompt||''}</small></div>`;
+    html+=`</div></div>`;
+    html+=`<div class="card-out"><h4>Pin-idéer</h4><p style="white-space:pre-wrap;">${(d.pinIdeas||[]).map(x=>'• '+x).join('\n')}</p></div>`;
+    html+=`<div style="display:flex;gap:8px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--line);">`;
+    html+=`<button class="btn secondary" onclick="genPinterestImage()" style="flex:1;">🎨 ${LANG==='en'?'Generate Pin':'Generer Pin'}</button>`;
+    html+=`<button class="btn secondary" onclick="openCanvaPin()" style="background:#6366F1;flex:1;">📐 Canva</button>`;
+    html+=`<button class="btn secondary" onclick="sharePinterestDirect()" style="background:#E60B69;flex:1;">📌 Del</button>`;
+    html+=`</div>`;
+    document.getElementById('p-out').innerHTML=html;
   }catch(e){fail('p-out',e);}finally{busy('p-btn',false);}
+}
+
+async function genPinterestImage(){
+  if(!lastPinterestData){alert('Generer først');return;}
+  const btn=event.target;btn.disabled=true;btn.textContent='⏳ Genererer...';
+  try{
+    const img=await api('/ai/image',{prompt:lastPinterestData.imagePrompt,style:'pinterest-pin',size:'1000x1500'});
+    const pinUrl=img.url||img.dataUrl;
+    if(pinUrl){
+      const prevImg=document.querySelector('#p-out img');
+      if(prevImg)prevImg.remove();
+      const imgEl=document.createElement('img');
+      imgEl.src=pinUrl;imgEl.style='max-width:300px;border-radius:12px;margin-top:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);';
+      document.getElementById('p-out').insertBefore(imgEl,document.querySelector('.btn'));
+      lastPinterestData.imageUrl=pinUrl;
+    }
+  }catch(e){alert('Bildegenerering feilet: '+e.message);}finally{btn.disabled=false;btn.textContent='🎨 '+(LANG==='en'?'Generate Pin':'Generer Pin');}
+}
+
+function openCanvaPin(){
+  if(!lastPinterestData){alert('Generer først');return;}
+  const title=lastPinterestData.pinTitle||'LME';
+  const desc=lastPinterestData.pinDescription||'';
+  const prompt=lastPinterestData.imagePrompt||'';
+  const url=`https://www.canva.com/create/social-media/pinterest-pin?text=${encodeURIComponent(title)}&description=${encodeURIComponent(desc)}`;
+  window.open(url,'_blank');
+}
+
+function sharePinterestDirect(){
+  if(!lastPinterestData){alert('Generer først');return;}
+  const text=`${lastPinterestData.pinTitle}\n\n${lastPinterestData.pinDescription}\n\n${window.location.origin}/ai-visibility`;
+  const url=`https://pinterest.com/pin/create/button/?description=${encodeURIComponent(text)}&media=${encodeURIComponent(lastPinterestData.imageUrl||'')}`;
+  window.open(url,'_blank','width=600,height=400');
 }
 
 /* ---- Repurpose ---- */
