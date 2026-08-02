@@ -3,7 +3,7 @@
  *
  * Gjenbruker SAMME mønster som renate-ai-worker.js: en tynn proxy foran
  * Anthropic Claude API, med API-nøkkelen som Worker-secret (aldri i frontend).
- * Dette er motoren bak /ai-visibility (Creative Studio).
+ * Dette er motoren bak /ai-visibility (LME Studio).
  *
  * Målet er ikke bare klassisk SEO, men GEO (Generative Engine Optimization):
  * strukturert, sitatvennlig innhold som Google OG AI-søk (ChatGPT, Gemini,

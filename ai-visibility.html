@@ -11,7 +11,7 @@
   @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
   /* =========================================
      LME AI Visibility Engine
-     Bruker SAMME designsystem som Creative Studio
+     Bruker SAMME designsystem som LME Studio
      ========================================= */
   :root {
     --pink-soft:#F8D7DA; --pink-mid:#F5A8B8; --pink-deep:#EE9CAD;
@@ -185,7 +185,7 @@
   <div class="topbar-right">
     <a href="/creative-academy" class="topbar-back">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="15 18 9 12 15 6"/></svg>
-      <span data-i18n="back">Til Creative Studio</span>
+      <span data-i18n="back">Til LME Studio</span>
     </a>
     <div class="lang-toggle">
       <button id="lang-no" class="active" onclick="setLang('no')">NO</button>
@@ -338,7 +338,7 @@ const WORKER_BASE = "https://lme-ai-visibility.lmexplorers.workers.dev";
 /* ---- Språk (gjenbruker lme_lang som resten av plattformen) ---- */
 let LANG = localStorage.getItem('lme_lang') || 'no';
 const I18N = {
-  no:{back:"Til Creative Studio","grp-discover":"Oppdag","grp-create":"Lag innhold","grp-traffic":"Trafikk",
+  no:{back:"Til LME Studio","grp-discover":"Oppdag","grp-create":"Lag innhold","grp-traffic":"Trafikk",
     "t-keywords":"Keyword Discovery","t-questions":"AI-spørsmål","t-article":"Artikkel-generator","t-faq":"FAQ Engine",
     "t-schema":"Schema-generator","t-pinterest":"Pinterest","t-repurpose":"Repurpose",
     "ai-help":"Trenger du strategi for synlighet? Spør Nathalie AI.","ai-cta":"Spør Nathalie AI",
@@ -355,7 +355,7 @@ const I18N = {
     "worker-note":"⚙️ Drives av LME AI Visibility Worker (Cloudflare).",
     loading:"Jobber…",error:"Noe gikk galt. Sjekk at worker-en er deployet.",copy:"Kopier",copied:"Kopiert!",
     use:"Bruk i artikkel",send:"Send til generator"},
-  en:{back:"To Creative Studio","grp-discover":"Discover","grp-create":"Create","grp-traffic":"Traffic",
+  en:{back:"To LME Studio","grp-discover":"Discover","grp-create":"Create","grp-traffic":"Traffic",
     "t-keywords":"Keyword Discovery","t-questions":"AI Questions","t-article":"Article Generator","t-faq":"FAQ Engine",
     "t-schema":"Schema Generator","t-pinterest":"Pinterest","t-repurpose":"Repurpose",
     "ai-help":"Need a visibility strategy? Ask Nathalie AI.","ai-cta":"Ask Nathalie AI",
