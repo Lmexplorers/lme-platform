@@ -100,7 +100,7 @@ Bruk aldri Playpen (eller systemfont/Comic Sans) på brødtekst. Aldri avvik.
 
 ### Kursbygger (for Renate, uten kode)
 - `/kursbygger` lager mini- og større kurs som JSON i KV via `functions/api/kurs.js`.
-- Kursene vises på `/academy/kurs/<slug>` (`academy/kurs.html` + regel i `_redirects`)
+- Kursene vises på `/kurs/<slug>` (`academy/kurs.html` + regel i `_redirects`)
   og listes automatisk under "Dine egne kurs" på `/academy`.
 - Samme passord som kursredigering. Detaljer i `docs/kursbygger.md`.
 

@@ -19,7 +19,7 @@ Lag minikurs og større kurs uten kode, rett i nettleseren.
 4. Se forhåndsvisningen til høyre; den oppdateres mens du skriver.
 5. Trykk **💾 Lagre kurset**. Første gang blir du bedt om passordet (samme som
    for kursredigering, `COURSE_EDIT_PASSWORD`).
-6. Kurset får sin egen side på **`/academy/kurs/<adresse>`** og vises
+6. Kurset får sin egen side på **`/kurs/<adresse>`** og vises
    automatisk under "Dine egne kurs" på akademi-forsiden når det er publisert.
    Merk: rett etter lagring kan skyen bruke opptil ett minutt på å vise kurset
    på lenken; kurssiden prøver selv igjen noen ganger før den gir beskjed.
@@ -42,6 +42,6 @@ sitt og får et utskriftsvennlig kursbevis i LME-stil.
 - **API:** `functions/api/kurs.js` (GET liste, GET `?slug=`, POST
   `save`/`delete` med passord).
 - **Visning:** `academy/kurs.html` rendrer kurset; `_redirects` har regelen
-  `/academy/kurs/* /academy/kurs.html 200`.
+  `/kurs/* /academy/kurs.html 200`.
 - **Avpublisering:** skru av "Publisert" og lagre; kurset forsvinner fra
   forsiden, men adressen virker fortsatt for den som har den.
