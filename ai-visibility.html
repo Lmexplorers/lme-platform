@@ -309,20 +309,22 @@
     </section>
 
     <section class="panel" data-panel="pinterest">
-      <h2 data-i18n="p-h">📌 Pinterest Traffic Generator</h2>
-      <p class="lead" data-i18n="p-lead">Fra en artikkel: Pinterest-tittel, beskrivelse, pin-idéer og en Canva/bilde-prompt i LME-stil.</p>
-      <div class="field"><input id="p-title" placeholder="Tittel / tema" /></div>
-      <div class="field"><textarea id="p-summary" placeholder="Kort sammendrag av artikkelen…"></textarea></div>
-      <button class="btn" onclick="runPinterest()" id="p-btn" data-i18n="p-btn">Lag Pinterest-innhold</button>
-      <div class="out" id="p-out"></div>
+      <h2 data-i18n="p-h">📌 Pinterest</h2>
+      <div class="field" style="display:flex;gap:8px;align-items:flex-end;">
+        <input id="p-title" placeholder="Tittel/tema…" style="flex:1;min-width:120px;" />
+        <textarea id="p-summary" placeholder="Sammendrag…" style="flex:1;min-width:200px;height:40px;resize:none;"></textarea>
+        <button class="btn" onclick="runPinterest()" id="p-btn" data-i18n="p-btn">Lag</button>
+      </div>
+      <div class="out" id="p-out" style="margin-top:16px;"></div>
     </section>
 
     <section class="panel" data-panel="repurpose">
-      <h2 data-i18n="r-h">♻️ LME Autopilot Repurpose</h2>
-      <p class="lead" data-i18n="r-lead">Lim inn en artikkel eller et søkeord → få blogg, Facebook, Instagram, Pinterest, TikTok, Reel-manus og e-post. Alt fra samme kilde.</p>
-      <div class="field"><textarea id="r-src" placeholder="Lim inn artikkel eller idé…"></textarea></div>
-      <button class="btn" onclick="runRepurpose()" id="r-btn" data-i18n="r-btn">Omform til alle kanaler</button>
-      <div class="out" id="r-out"></div>
+      <h2 data-i18n="r-h">♻️ Omform</h2>
+      <div class="field" style="display:flex;gap:8px;align-items:flex-end;">
+        <textarea id="r-src" placeholder="Lim inn artikkel, tekst eller idé…" style="flex:1;height:40px;resize:none;"></textarea>
+        <button class="btn" onclick="runRepurpose()" id="r-btn" data-i18n="r-btn">Omform</button>
+      </div>
+      <div class="out" id="r-out" style="margin-top:16px;"></div>
     </section>
 
     <div class="note" data-i18n="worker-note">⚙️ Drives av LME AI Visibility Worker (Cloudflare).</div>
