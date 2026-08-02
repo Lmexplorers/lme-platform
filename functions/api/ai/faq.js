@@ -29,7 +29,7 @@ const BRAND_CONTEXT = `Du jobber for Little Montessori Explorers (LME), en tospr
 AI-drevet plattform grunnlagt av Renate Dahl. LME er ett samlet økosystem for kreativitet, læring, synlighet og vekst.
 
 LME er laget for deg som ønsker å lære, skape og utvikle deg:
-🌱 For foreldre som ønsker inspirerende, lekne og lærerike aktiviteter for barn – med fokus på nysgjerrighet, mestring og Montessori-inspirert læring.
+🌱 For foreldre som ønsker inspirerende, lekne og lærerike aktiviteter for barn i alderen 0-16 år – med fokus på nysgjerrighet, mestring og Montessori-inspirert læring.
 📚 For lærere og pedagoger som ønsker ressurser, idéer og verktøy som kan gjøre undervisningen mer kreativ, engasjerende og tilpasset barnas utvikling.
 ✨ For kreative skapere som ønsker å bruke AI, digitale verktøy og kreative metoder til å utvikle innhold, produkter og egne prosjekter.
 🚀 For gründere og små bedrifter som ønsker å bygge noe eget online, lære mer om digital synlighet, innholdsproduksjon, e-postlister og hvordan teknologi kan gjøre veien enklere.
