@@ -89,7 +89,7 @@ async function translateToEnglish(env, texts) {
           model: "claude-sonnet-5",
           max_tokens: 3000,
           system:
-            "You translate short UI/website text for a Montessori brand (Little Montessori Explorers) from Norwegian into natural, warm English. " +
+            "You translate short UI/website text for Little Montessori Explorers (LME), a platform for creativity, learning, visibility and growth, from Norwegian into natural, warm English. " +
             "Keep emojis, numbers, arrows and names/brands (LME, Mia & Teo, Renate, Montessori, Bookly, Canva, Vipps, Stripe) exactly as-is. " +
             "If an item is already English or is just a number/symbol/brand, return it unchanged. " +
             "Use straight quotes and avoid long dashes. " +

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title data-no="Nathalie AI — Din AI-assistent på LME Studio" data-en="Nathalie AI — Your AI Assistant on LME Studio">Nathalie AI</title>
-<meta name="description" data-no="Nathalie AI er din personlige guide på hele LME Studio-plattformen. Hjelper med Montessori, branding, innholdskap, produktutvikling, og alt du trenger." data-en="Nathalie AI is your personal guide on the entire LME Studio platform. Helps with Montessori, branding, content, product development, and everything you need.">
+<title data-no="Nathalie AI — din personlige guide på LME Studio" data-en="Nathalie AI — your personal guide on LME Studio">Nathalie AI</title>
+<meta name="description" data-no="Nathalie AI er din personlige assistent på LME Studio. Superekspert på Montessori, branding, innhold, produkter, og alt du trenger for å bygge din virksomhet." data-en="Nathalie AI is your personal assistant on LME Studio. Super expert on Montessori, branding, content, products, and everything you need to build your business.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,7 +37,7 @@
   body{font-family:var(--font-body);color:var(--ink);line-height:1.6;background:
     radial-gradient(ellipse 70% 45% at 15% -5%,rgba(255,209,225,.4),transparent 60%),
     radial-gradient(ellipse 60% 40% at 100% 0,rgba(244,234,215,.5),transparent 55%),
-    var(--cream);min-height:100vh;overflow-x:hidden;}
+    var(--cream);min-height:100vh;display:flex;flex-direction:column;}
   h1,h2,h3,h4{font-family:var(--font-head);font-weight:800;line-height:1.1;color:var(--ink);letter-spacing:-.02em;}
   a{color:var(--pink-600);text-decoration:none;}
 
@@ -58,136 +58,164 @@
   .btn-g{background:var(--cream);border:1.5px solid var(--line);color:var(--ink-soft);}
   .top .btn{padding:9px 18px;font-size:14px;}
 
-  .wrap{max-width:1080px;margin:0 auto;padding:0 26px;}
-  .eyebrow{font-family:var(--font-head);font-weight:700;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--pink-600);display:inline-flex;align-items:center;gap:8px;}
-  .eyebrow::before,.eyebrow::after{content:"";width:22px;height:1px;background:var(--gold);opacity:.7;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 26px;width:100%;}
 
-  /* hero */
-  .hero{padding:70px 0 30px;text-align:center;}
-  .hero h1{font-size:clamp(42px,7vw,72px);font-weight:800;max-width:18ch;margin:20px auto 0;text-wrap:balance;}
+  .hero{padding:70px 0;text-align:center;}
+  .hero h1{font-size:clamp(38px,7vw,62px);font-weight:800;max-width:18ch;margin:20px auto 0;text-wrap:balance;}
   .hero h1 .em{background:linear-gradient(120deg,var(--pink-500),var(--pink-600));-webkit-background-clip:text;background-clip:text;color:transparent;}
-  .hero .lead{font-size:clamp(17px,2.4vw,21px);color:var(--ink-soft);max-width:56ch;margin:20px auto 0;}
-  .hero .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:30px 0 8px;}
-  .hero .fine{font-size:13px;color:var(--ink-muted);}
+  .hero .lead{font-size:clamp(16px,2vw,20px);color:var(--ink-soft);max-width:56ch;margin:20px auto 0;}
+  .hero .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:30px 0;}
 
-  /* sections */
   section.blk{padding:66px 0;}
   .center{text-align:center;}
-  h2.sec{font-size:clamp(28px,4.5vw,42px);max-width:22ch;margin:14px auto 0;text-wrap:balance;}
-  .sec-lead{color:var(--ink-soft);max-width:58ch;margin:16px auto 0;font-size:17px;}
+  h2.sec{font-size:clamp(28px,4vw,40px);max-width:20ch;margin:0 auto;text-wrap:balance;}
+  .sec-lead{color:var(--ink-soft);max-width:56ch;margin:16px auto 0;font-size:16px;}
 
-  /* powers grid */
-  .powers{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;margin-top:44px;}
-  .power{background:var(--cream);border:1px solid var(--line);border-radius:22px;padding:28px 24px;box-shadow:var(--shadow-soft);}
-  .power .ic{font-size:40px;margin-bottom:12px;}
-  .power h3{font-size:20px;margin-bottom:8px;}
-  .power p{color:var(--ink-soft);font-size:15px;}
+  .powers{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;margin-top:44px;}
+  @media(max-width:700px){.powers{grid-template-columns:repeat(2,1fr);}}
+  .power{background:var(--cream);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow-soft);}
+  .power .icon{font-size:32px;margin-bottom:12px;display:block;}
+  .power h3{font-size:18px;margin-bottom:8px;}
+  .power p{color:var(--ink-soft);font-size:14px;}
 
-  /* know card */
-  .know{max-width:820px;margin:0 auto;background:linear-gradient(135deg,rgba(232,90,146,.08),rgba(244,234,215,.08));
-    border:1px solid var(--line);border-radius:26px;padding:44px;text-align:center;}
-  .know h2{font-size:clamp(26px,4vw,38px);margin-bottom:16px;}
-  .know p{color:var(--ink-soft);max-width:54ch;margin:0 auto 28px;font-size:17px;}
-  .know .topics{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
-  .know .topic{font-family:var(--font-head);font-weight:700;font-size:13px;background:rgba(196,61,117,.1);
-    border:1px solid var(--pink-200);border-radius:999px;padding:10px 16px;color:var(--pink-600);}
+  .knows{background:linear-gradient(135deg,rgba(232,90,146,.08),rgba(244,234,215,.08));border:1px solid var(--line);
+    border-radius:20px;padding:40px 32px;margin-top:44px;text-align:center;}
+  .knows h3{font-size:20px;margin-bottom:20px;}
+  .topics{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;}
+  .topic{background:var(--cream);border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;font-size:13px;
+    color:var(--ink-soft);font-family:var(--font-head);font-weight:600;}
 
-  footer{text-align:center;color:var(--ink-muted);font-size:13.5px;padding:50px 26px 70px;border-top:1px solid var(--line);margin-top:40px;}
+  footer{text-align:center;color:var(--ink-muted);font-size:13px;padding:50px 26px 70px;border-top:1px solid var(--line);margin-top:40px;}
 
-  .fade{opacity:0;transition:opacity .5s ease;}
-  .fade.in{opacity:1;}
+  @media(max-width:600px){
+    .hero{padding:50px 0;}
+    .powers{grid-template-columns:1fr;}
+    .topics{grid-template-columns:repeat(auto-fit,minmax(120px,1fr));}
+  }
 </style>
 </head>
 <body>
 
 <div class="top">
-  <a class="brand" href="/dashboard">
+  <a class="brand" href="/ask-nathalie-ai">
     <span class="mk">N</span>
     <b data-no="Nathalie AI" data-en="Nathalie AI">Nathalie AI</b>
   </a>
   <div class="sp"></div>
   <button class="lang" id="lang">EN 🌍</button>
-  <a class="btn btn-p" href="/ask-nathalie-ai" data-no="Spør Nathalie" data-en="Ask Nathalie">Spør Nathalie</a>
+  <a class="btn btn-p" href="/ask-nathalie-ai" data-no="Start samtale" data-en="Start chat">Start samtale</a>
 </div>
 
 <div class="wrap">
 
   <header class="hero">
-    <span class="eyebrow" data-no="Din AI-guide" data-en="Your AI Guide">Din AI-guide</span>
-    <h1 data-no="Hallo, jeg er <span class='em'>Nathalie</span>"
-        data-en="Hello, I'm <span class='em'>Nathalie</span>">Hallo, jeg er <span class="em">Nathalie</span></h1>
-    <p class="lead" data-no="Din personlige AI-assistent på hele LME Studio-plattformen. Jeg kjenner alle kursene, alle appene, og jeg hjelper deg med alt fra Montessori-filosofi til innholdskap, branding, og produktutvikling. Bare spør!"
-       data-en="Your personal AI assistant on the entire LME Studio platform. I know all the courses, all the apps, and I help you with everything from Montessori philosophy to content creation, branding, and product development. Just ask!">Din assistent på hele LME Studio</p>
+    <h1 data-no="Hallo! 👋 Jeg er <span class='em'>Nathalie</span>" data-en="Hello! 👋 I'm <span class='em'>Nathalie</span>">Hallo! 👋 Jeg er <span class="em">Nathalie</span></h1>
+    <p class="lead" data-no="Din personlige AI-assistent på LME Studio. Jeg er superekspert på Montessori, branding, innholdsskap, produktutvikling, og alt du trenger for å bygge din virksomhet. Spør meg om hva som helst."
+       data-en="Your personal AI assistant on LME Studio. I'm a super expert on Montessori, branding, content creation, product development, and everything you need to build your business. Ask me anything.">Din personlige AI-assistent på LME Studio.</p>
     <div class="cta">
-      <a class="btn btn-p" href="/ask-nathalie-ai" data-no="Start samtale" data-en="Start conversation">Start samtale</a>
-      <a class="btn btn-g" href="/" data-no="Se LME Studio" data-en="Explore LME Studio">Se LME Studio</a>
+      <a class="btn btn-p" href="/ask-nathalie-ai" data-no="Start en samtale" data-en="Start a conversation">Start en samtale</a>
     </div>
   </header>
 
-  <section class="blk center fade">
-    <span class="eyebrow" data-no="Meine superkrefter" data-en="My superpowers">Mine superkrefter</span>
-    <h2 class="sec" data-no="7 ting jeg er superbrilliant på" data-en="7 things I'm brilliant at">7 ting jeg er superbrilliant på</h2>
+  <section class="blk center">
+    <h2 class="sec" data-no="7 superkrefter" data-en="7 superpowers">7 superkrefter</h2>
+    <p class="sec-lead" data-no="Det jeg kan hjelpe deg med" data-en="What I can help you with">Det jeg kan hjelpe deg med</p>
     <div class="powers">
-      <div class="power"><div class="ic">📚</div><h3 data-no="Montessori-ekspert" data-en="Montessori Expert">Montessori-ekspert</h3><p data-no="Jeg kjenner hele Montessori-filosofien og praktiske metoder. Spør meg om aktiviteter, miljøet, observasjon, eller hvordan du leder barnet ditt." data-en="I know the entire Montessori philosophy and practical methods. Ask me about activities, the environment, observation, or leading your child.">Filosofi, praktikk og guiding</p></div>
-      <div class="power"><div class="ic">🎨</div><h3 data-no="Branding & posisjonering" data-en="Branding & Positioning">Branding & posisjonering</h3><p data-no="Hjelper deg finne din unike stemme, brand voice, og hvordan du skal framstille deg selv. Jeg vet hva som fungerer." data-en="Help you find your unique voice, brand voice, and positioning. I know what works.">Din personlighet som brand</p></div>
-      <div class="power"><div class="ic">🎬</div><h3 data-no="Innholdsskap" data-en="Content Creation">Innholdsskap</h3><p data-no="Captions, hooks, prompts for reels, stories og posts. Jeg lager innhold som får oppmerksomhet og konvertering." data-en="Captions, hooks, prompts for reels, stories and posts. I create content that gets attention and converts.">Tekst som selger</p></div>
-      <div class="power"><div class="ic">💡</div><h3 data-no="Prompt-generering" data-en="Prompt Generation">Prompt-generering</h3><p data-no="Jeg hjelper deg lage perfect prompts for ChatGPT, Midjourney, Claude og andre AI-verktøy som fungerer for ditt brand." data-en="I help you create perfect prompts for ChatGPT, Midjourney, Claude and other AI tools that work for your brand.">Optimaliserte AI-instruksjoner</p></div>
-      <div class="power"><div class="ic">🏪</div><h3 data-no="Produktutvikling" data-en="Product Development">Produktutvikling</h3><p data-no="Fra idé til launch: produktbeskrivelser, prising, markedsføring, og hvordan du selger. Jeg vet hva som lager resultater." data-en="From idea to launch: product descriptions, pricing, marketing, and how to sell. I know what creates results.">Ideé til salg</p></div>
-      <div class="power"><div class="ic">🎯</div><h3 data-no="Målgruppe-strategi" data-en="Audience Strategy">Målgruppe-strategi</h3><p data-no="Jeg hjelper deg forstå hvem du skal snakke til, hva de trenger, og hvordan du når dem effektivt på alle kanaler." data-en="I help you understand who to talk to, what they need, and how to reach them effectively on all channels.">Rett budskap til rett folk</p></div>
-      <div class="power"><div class="ic">🚀</div><h3 data-no="Vekst-tips" data-en="Growth Tips">Vekst-tips</h3><p data-no="Jeg gir konkrete, praktiske tips for hvordan du bygger din virksomhet, øker engelasement, og skalerer resultater." data-en="I give concrete, practical tips for building your business, increasing engagement, and scaling results.">Fra startup til scale</p></div>
-    </div>
-  </section>
-
-  <section class="blk fade">
-    <div class="know">
-      <h2 data-no="Jeg kjenner hele LME Studio" data-en="I Know All of LME Studio">Jeg kjenner hele LME Studio</h2>
-      <p data-no="Jeg er oppdatert på alle kursene i Academy, alle appene, hele butikken, Community, Builder – alt. Og jeg vet hvordan de henger sammen og jobber for deg." data-en="I'm updated on all Academy courses, all apps, the entire Shop, Community, Builder – everything. And I know how they work together for you.">Komplett plattformkunnskap</p>
-      <div class="topics">
-        <span class="topic" data-no="LME Montessori" data-en="LME Montessori">LME Montessori</span>
-        <span class="topic" data-no="Academy-kursene" data-en="Academy Courses">Academy-kursene</span>
-        <span class="topic" data-no="LME Autopilot" data-en="LME Autopilot">LME Autopilot</span>
-        <span class="topic" data-no="Video Studio" data-en="Video Studio">Video Studio</span>
-        <span class="topic" data-no="LME Visibility" data-en="LME Visibility">LME Visibility</span>
-        <span class="topic" data-no="Builder & Shop" data-en="Builder & Shop">Builder & Shop</span>
-        <span class="topic" data-no="Community" data-en="Community">Community</span>
-        <span class="topic" data-no="Alle integrasjoner" data-en="All Integrations">Alle integrasjoner</span>
+      <div class="power">
+        <span class="icon">📚</span>
+        <h3 data-no="Montessori-ekspert" data-en="Montessori Expert">Montessori-ekspert</h3>
+        <p data-no="Filosofi, aktiviteter, miljø, observasjon, og hvordan lede barnet ditt" data-en="Philosophy, activities, environment, observation, and how to lead your child">Filosofi, aktiviteter, miljø, observasjon</p>
+      </div>
+      <div class="power">
+        <span class="icon">🎨</span>
+        <h3 data-no="Branding & posisjonering" data-en="Branding & positioning">Branding & posisjonering</h3>
+        <p data-no="Din røst, merkevare, unik identitet, og hvordan differensiere deg" data-en="Your voice, brand, unique identity, and how to stand out">Din røst, merkevare, unik identitet</p>
+      </div>
+      <div class="power">
+        <span class="icon">🎬</span>
+        <h3 data-no="Innholdsskap" data-en="Content Creation">Innholdsskap</h3>
+        <p data-no="Captions, hooks, prompts for reels, stories, og posts" data-en="Captions, hooks, prompts for reels, stories, and posts">Captions, hooks, prompts for alle</p>
+      </div>
+      <div class="power">
+        <span class="icon">💡</span>
+        <h3 data-no="Prompt-generering" data-en="Prompt Generation">Prompt-generering</h3>
+        <p data-no="Perfekte prompts for ChatGPT, Midjourney, Claude og andre AI-verktøy" data-en="Perfect prompts for ChatGPT, Midjourney, Claude and other AI tools">Prompts for ChatGPT, Midjourney, Claude</p>
+      </div>
+      <div class="power">
+        <span class="icon">🏪</span>
+        <h3 data-no="Produktutvikling" data-en="Product Development">Produktutvikling</h3>
+        <p data-no="Fra idé til lansering, beskrivelser, prising, markedsføring" data-en="From idea to launch, descriptions, pricing, marketing">Fra idé til lansering og salg</p>
+      </div>
+      <div class="power">
+        <span class="icon">🎯</span>
+        <h3 data-no="Målgruppe-strategi" data-en="Audience Strategy">Målgruppe-strategi</h3>
+        <p data-no="Forstå målgruppen din, nå dem på alle kanaler, og bygge engagement" data-en="Understand your audience, reach them everywhere, and build engagement">Nå din målgruppe overalt</p>
+      </div>
+      <div class="power">
+        <span class="icon">🚀</span>
+        <h3 data-no="Vekst-tips" data-en="Growth Tips">Vekst-tips</h3>
+        <p data-no="Bygge virksomhet, øke engagement, skalere resultater, strategier for vekst" data-en="Build your business, increase engagement, scale results, growth strategies">Bygge virksomhet og skalere</p>
       </div>
     </div>
   </section>
 
-  <section class="blk center fade">
-    <h2 class="sec" data-no="Klar til å chat med Nathalie?" data-en="Ready to chat with Nathalie?">Klar til å chat med Nathalie?</h2>
-    <p class="sec-lead" data-no="Spør om hva som helst – Montessori, branding, innhold, produkter, strategi, eller hvor du skal begynne. Jeg er her for deg." data-en="Ask me anything – Montessori, branding, content, products, strategy, or where to start. I'm here for you.">Jeg venter på deg!</p>
-    <div style="margin-top:24px;"><a class="btn btn-p" href="/ask-nathalie-ai" data-no="Spør Nathalie nå" data-en="Ask Nathalie Now">Spør Nathalie nå</a></div>
+  <section class="blk center">
+    <h2 class="sec" data-no="Jeg kjenner hele LME Studio" data-en="I know the entire LME Studio">Jeg kjenner hele LME Studio</h2>
+    <p class="sec-lead" data-no="Jeg er kjent med alle verktøyene, kursene og mulighetene" data-en="I'm familiar with all the tools, courses and opportunities">Alle verktøyene, alle kursene, hele økosystemet</p>
+    <div class="knows">
+      <h3 data-no="Spørsmål jeg kan svare på:" data-en="Questions I can answer:">Spørsmål jeg kan svare på:</h3>
+      <div class="topics">
+        <div class="topic" data-no="LME Montessori" data-en="LME Montessori">LME Montessori</div>
+        <div class="topic" data-no="Academy-kursene" data-en="Academy courses">Academy-kursene</div>
+        <div class="topic" data-no="LME Autopilot" data-en="LME Autopilot">LME Autopilot</div>
+        <div class="topic" data-no="Video Studio" data-en="Video Studio">Video Studio</div>
+        <div class="topic" data-no="LME Visibility" data-en="LME Visibility">LME Visibility</div>
+        <div class="topic" data-no="Builder & Shop" data-en="Builder & Shop">Builder & Shop</div>
+        <div class="topic" data-no="Community" data-en="Community">Community</div>
+        <div class="topic" data-no="Integrasjoner" data-en="Integrations">Integrasjoner</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk center">
+    <h2 class="sec" data-no="Klar for å starte?" data-en="Ready to get started?">Klar for å starte?</h2>
+    <p class="sec-lead" data-no="Spør meg hva som helst, og jeg hjelper deg videre på LME Studio-reisen din" data-en="Ask me anything, and I'll help you move forward on your LME Studio journey">Spør meg, og jeg hjelper deg</p>
+    <div style="margin-top:24px;">
+      <a class="btn btn-p" href="/ask-nathalie-ai" data-no="Start samtale nå" data-en="Start chatting now">Start samtale nå</a>
+    </div>
   </section>
 
 </div>
 
-<footer data-no="Nathalie AI · Din guide på LME Studio · Laget med kjærlighet av Renate"
-        data-en="Nathalie AI · Your guide on LME Studio · Made with love by Renate">Nathalie AI · LME Studio</footer>
+<footer data-no="Nathalie AI · en del av LME Studio · Laget av Renate"
+        data-en="Nathalie AI · part of LME Studio · Made by Renate">Nathalie AI · LME Studio</footer>
 
 <script>
 (function(){
-  var lang=(localStorage.getItem('lme-lang')==='en')?'en':'no';
+  const langBtn = document.getElementById('lang');
+  let lang = (localStorage.getItem('lme-lang') === 'en') ? 'en' : 'no';
 
-  function applyStatic(){
-    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
-      var t=el.getAttribute('data-'+lang); if(t==null)return;
-      if(/[<&]/.test(t))el.innerHTML=t; else el.textContent=t;
+  function applyLang() {
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no],[data-en]').forEach(el => {
+      const t = el.getAttribute(`data-${lang}`);
+      if (t) {
+        if (/[<&]/.test(t)) el.innerHTML = t;
+        else el.textContent = t;
+      }
     });
   }
-  function setLang(l){lang=l;document.documentElement.lang=l;try{localStorage.setItem('lme-lang',l);}catch(e){}
-    document.getElementById('lang').textContent=l==='no'?'EN 🌍':'NO 🇳🇴';applyStatic();}
-  document.getElementById('lang').addEventListener('click',function(){setLang(lang==='no'?'en':'no');});
 
-  /* fade-in */
-  if(!("IntersectionObserver" in window)){document.querySelectorAll(".fade").forEach(function(el){el.classList.add("in");});}
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in');});},{threshold:.12});
-  document.querySelectorAll('.fade').forEach(function(el){io.observe(el);});
+  function setLang(l) {
+    lang = l;
+    try { localStorage.setItem('lme-lang', l); } catch(e) {}
+    langBtn.textContent = l === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    applyLang();
+  }
 
-  document.getElementById('lang').textContent=lang==='no'?'EN 🌍':'NO 🇳🇴';
-  applyStatic();
+  langBtn.addEventListener('click', () => setLang(lang === 'no' ? 'en' : 'no'));
+  langBtn.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+  applyLang();
 })();
 </script>
 <script src="/js/lme-account.js?v=11" defer></script>

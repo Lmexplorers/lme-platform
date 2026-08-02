@@ -20,7 +20,7 @@ import { enforceGeneration } from "../_lib/access.js";
  *
  * Mia og Teo har LÅST karakteridentitet (se brand/master-creative-bible.md).
  * Ekte personer genereres aldri her; bare de oppdiktede karakterene Mia og Teo
- * eller nøytrale Montessori-scener.
+ * eller generiske læringscener som brukeren spesifiserer.
  */
 
 const STYLE_LOCK =
@@ -85,7 +85,7 @@ function buildPrompt(text, character) {
     parts.push(`Illustration showing this theme: ${theme}`);
     parts.push("Include children with diverse appearances: different hair colors and textures, different skin tones, different ages.");
   } else {
-    parts.push("Peaceful Montessori learning scene with children of diverse appearances: varied hair colors, varied hair textures, varied skin tones, different ages.");
+    parts.push("Peaceful learning scene with children of diverse appearances: varied hair colors, varied hair textures, varied skin tones, different ages.");
   }
 
   return parts.join("\n\n");
