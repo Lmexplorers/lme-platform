@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-no="Spørsmål og svar" data-en="FAQ">Spørsmål og svar — LME</title>
+<meta name="description" data-no="Svar på de mest stilte spørsmålene om LME-plattformen, kreativitet, læring, synlighet og vekst." data-en="Answers to frequently asked questions about LME platform, creativity, learning, visibility and growth.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  @font-face{
+    font-family:'Sasson Montessori';
+    src:url('/fonts/SassoonMontessori.woff2') format('woff2'),
+        url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight:normal;font-style:normal;font-display:swap;
+  }
+  :root{
+    --pink-600:#c43d75;--pink-50:#fff5f8;--gold:#caa46a;--gold-soft:#f4ead7;
+    --cream:#fffcf9;--ink:#3d2438;--ink-soft:#6b4760;--ink-muted:#9a8693;
+    --line:#f0dde6;--shadow-soft:0 10px 40px -18px rgba(196,61,117,.32);
+    --font-head:'Playpen Sans',system-ui,sans-serif;
+    --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{--cream:#170f15;--ink:#f4e9ef;--ink-soft:#c9b3c2;--ink-muted:#977f90;--line:#3a2a38;
+      --pink-50:#241823;--gold-soft:#2a2416;}
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--font-body);color:var(--ink);line-height:1.6;background:
+    radial-gradient(ellipse 70% 45% at 15% -5%,rgba(255,209,225,.4),transparent 60%),
+    radial-gradient(ellipse 60% 40% at 100% 0,rgba(244,234,215,.5),transparent 55%),
+    var(--cream);min-height:100vh;display:flex;flex-direction:column;}
+  h1,h2,h3,h4{font-family:var(--font-head);font-weight:800;line-height:1.1;color:var(--ink);letter-spacing:-.02em;}
+  a{color:var(--pink-600);text-decoration:none;}
+
+  .top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:14px 26px;
+    background:var(--cream);border-bottom:1px solid var(--line);}
+  .top .brand{display:flex;align-items:center;gap:9px;color:var(--ink);}
+  .top .brand .mk{width:30px;height:30px;border-radius:9px;background:linear-gradient(150deg,#e85a92,#c43d75);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-head);font-weight:800;font-size:14px;}
+  .top .brand b{font-family:var(--font-head);font-weight:800;font-size:16px;}
+  .top .sp{flex:1;}
+  .lang{font-family:var(--font-head);font-weight:700;font-size:13px;border:1.5px solid var(--pink-50);
+    background:var(--cream);color:var(--pink-600);border-radius:999px;padding:7px 13px;cursor:pointer;}
+
+  .wrap{max-width:900px;margin:0 auto;padding:40px 26px;}
+  h1{font-size:32px;margin-bottom:8px;}
+  .lead{color:var(--ink-soft);font-size:15px;margin-bottom:32px;max-width:70ch;}
+
+  .faq-list{display:flex;flex-direction:column;gap:16px;}
+  .faq-item{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow-soft);}
+  .faq-item summary{font-family:var(--font-head);font-weight:700;font-size:16px;color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:10px;}
+  .faq-item summary::before{content:'▶';font-size:12px;transition:transform .2s;}
+  .faq-item[open] summary::before{transform:rotate(90deg);}
+  .faq-item[open] summary{color:var(--pink-600);}
+  .faq-item p{margin-top:14px;color:var(--ink-soft);line-height:1.7;}
+
+  .empty{text-align:center;padding:60px 20px;color:var(--ink-muted);}
+  .empty p{font-size:16px;}
+  .share-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:var(--pink-600);
+    color:#fff;border:none;border-radius:8px;cursor:pointer;font-family:var(--font-head);font-weight:600;
+    font-size:14px;transition:all .2s;text-decoration:none;}
+  .share-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(196,61,117,.3);}
+  .share-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;padding-top:24px;border-top:1px solid var(--line);}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <a class="brand" href="/nathalie-ai-info">
+    <span class="mk">N</span>
+    <b>LME</b>
+  </a>
+  <div class="sp"></div>
+  <button class="lang" id="lang">EN 🌍</button>
+</div>
+
+<div class="wrap">
+  <h1 data-no="Spørsmål og svar" data-en="Frequently Asked Questions">Spørsmål og svar</h1>
+  <p class="lead" data-no="Svar på de mest stilte spørsmålene om LME-plattformen, kreativitet, læring, synlighet og vekst." data-en="Answers to your questions about LME platform, creativity, learning, visibility and growth."></p>
+
+  <div class="faq-list" id="faqList">
+    <div class="empty">
+      <p data-no="Laster FAQ-er…" data-en="Loading FAQ…">Laster FAQ-er…</p>
+    </div>
+  </div>
+
+  <div class="share-row" id="shareRow" style="display:none;">
+    <a class="share-btn" id="shareTwitter" target="_blank" rel="noopener">
+      <span>𝕏</span>
+      <span data-no="Del på Twitter" data-en="Share on Twitter">Del på Twitter</span>
+    </a>
+    <a class="share-btn" id="shareLinkedIn" target="_blank" rel="noopener">
+      <span>in</span>
+      <span data-no="Del på LinkedIn" data-en="Share on LinkedIn">Del på LinkedIn</span>
+    </a>
+    <a class="share-btn" id="shareFacebook" target="_blank" rel="noopener">
+      <span>f</span>
+      <span data-no="Del på Facebook" data-en="Share on Facebook">Del på Facebook</span>
+    </a>
+    <a class="share-btn" id="shareWhatsApp" target="_blank" rel="noopener">
+      <span>💬</span>
+      <span data-no="Del på WhatsApp" data-en="Share on WhatsApp">Del på WhatsApp</span>
+    </a>
+    <a class="share-btn" id="shareCopy" onclick="copyShareLink()" style="cursor:pointer;background:var(--gold);">
+      <span>🔗</span>
+      <span data-no="Kopier lenke" data-en="Copy link">Kopier lenke</span>
+    </a>
+  </div>
+</div>
+
+<script>
+let lang = (localStorage.getItem('lme_lang') === 'en') ? 'en' : 'no';
+
+const i18n = {
+  no: { empty: 'Ingen FAQ-er ennå.' },
+  en: { empty: 'No FAQ yet.' }
+};
+
+function setLang(l) {
+  lang = l;
+  document.documentElement.lang = l;
+  localStorage.setItem('lme_lang', l);
+  document.querySelectorAll('[data-no],[data-en]').forEach(el => {
+    const t = el.getAttribute(`data-${lang}`);
+    if (t) el.textContent = t;
+  });
+  document.getElementById('lang').textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+}
+
+async function loadFAQ() {
+  try {
+    const resp = await fetch('/api/faq/list');
+    const data = await resp.json();
+    const faqs = data.faq || [];
+
+    const list = document.getElementById('faqList');
+    if (!faqs.length) {
+      list.innerHTML = `<div class="empty"><p>${i18n[lang].empty}</p></div>`;
+      document.getElementById('shareRow').style.display = 'none';
+      return;
+    }
+
+    list.innerHTML = faqs.map((f, i) => `
+      <details class="faq-item">
+        <summary>${f.q || ''}</summary>
+        <p>${f.a || ''}</p>
+      </details>
+    `).join('');
+
+    updateShareLinks();
+    document.getElementById('shareRow').style.display = 'flex';
+  } catch(e) {
+    document.getElementById('faqList').innerHTML = `<div class="empty"><p>Feil ved lasting av FAQ</p></div>`;
+    document.getElementById('shareRow').style.display = 'none';
+  }
+}
+
+function updateShareLinks() {
+  const url = window.location.href;
+  const title = 'LME — Spørsmål og svar';
+  const encoded = encodeURIComponent(url);
+  const encodedTitle = encodeURIComponent(title);
+
+  document.getElementById('shareTwitter').href = `https://twitter.com/intent/tweet?url=${encoded}&text=${encodedTitle}`;
+  document.getElementById('shareLinkedIn').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encoded}`;
+  document.getElementById('shareFacebook').href = `https://www.facebook.com/sharer/sharer.php?u=${encoded}`;
+  document.getElementById('shareWhatsApp').href = `https://wa.me/?text=${encodedTitle}%20${encoded}`;
+}
+
+function copyShareLink() {
+  const url = window.location.href;
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = document.getElementById('shareCopy');
+    const orig = btn.querySelector('span:last-child').textContent;
+    btn.querySelector('span:last-child').textContent = lang === 'no' ? '✓ Kopiert!' : '✓ Copied!';
+    setTimeout(() => {
+      btn.querySelector('span:last-child').textContent = orig;
+    }, 2000);
+  });
+}
+
+document.getElementById('lang').addEventListener('click', () => setLang(lang === 'no' ? 'en' : 'no'));
+setLang(lang);
+loadFAQ();
+</script>
+<script src="/js/lme-account.js?v=11" defer></script>
+<script src="/js/renate-widget.js?v=5" defer></script>
+</body>
+</html>

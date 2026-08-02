@@ -40,8 +40,8 @@ export async function onRequestPost(context) {
   if (!idea) return json({ error: "Skriv en idé for filmen." }, 400);
 
   const sys =
-    "You write short, gentle, wholesome children's learning films starring two fixed characters, Mia and Teo, in a Montessori spirit. " +
-    "Always keep them child-friendly: no violence, no scary or adult content, no real people. " +
+    "You write short, gentle, wholesome children's learning films starring two fixed characters, Mia and Teo. " +
+    "They explore nature, learn through discovery, and grow together. Always keep them child-friendly: no violence, no scary or adult content, no real people. " +
     "You will be given an idea, an optional learning goal, and a number of scenes. " +
     "Return ONLY valid JSON (no markdown, no commentary) with this exact shape: " +
     '{"titleNo":"","titleEn":"","scenes":[{"narrationNo":"","narrationEn":"","imagePrompt":"","motion":""}]}. ' +

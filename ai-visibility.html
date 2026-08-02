@@ -254,7 +254,7 @@
       <h2 data-i18n="k-h">🔑 Keyword Discovery</h2>
       <p class="lead" data-i18n="k-lead">Finn hovedsøkeord, long-tail og spørsmål rundt et tema. Klikk et søkeord for å sende det rett til artikkel-generatoren.</p>
       <div class="field">
-        <input id="kw-seed" placeholder="Montessori activities for 3 year olds" />
+        <input id="kw-seed" placeholder="How to create engaging content for Instagram" />
         <button class="btn" onclick="runKeywords()" id="kw-btn" data-i18n="k-btn">Finn søkeord</button>
       </div>
       <div class="out" id="kw-out"></div>
@@ -274,7 +274,7 @@
       <h2 data-i18n="a-h">📝 SEO/GEO Artikkel-generator</h2>
       <p class="lead" data-i18n="a-lead">Generer en komplett artikkel med SEO-tittel, meta, H1, H2/H3, FAQ og CTA — optimalisert for både Google og AI-søk.</p>
       <div class="field">
-        <input id="a-kw" placeholder="Montessori language activities" />
+        <input id="a-kw" placeholder="Starting a creative business from home" />
         <button class="btn" onclick="runArticle()" id="a-btn" data-i18n="a-btn">Generer artikkel</button>
       </div>
       <div class="out" id="a-out"></div>
@@ -282,12 +282,13 @@
 
     <section class="panel" data-panel="faq">
       <h2 data-i18n="f-h">💬 FAQ Engine</h2>
-      <p class="lead" data-i18n="f-lead">Lag en FAQ-seksjon som Google og AI lett kan lese. Generer schema med ett klikk etterpå.</p>
-      <div class="field">
-        <input id="f-topic" placeholder="What is Montessori?" />
+      <div class="field" style="display:flex;gap:8px;align-items:flex-end;">
+        <div style="flex:1;">
+          <input id="f-topic" placeholder="LME kurs, Montessori, kreativitet…" style="width:100%;" />
+        </div>
         <button class="btn" onclick="runFaq()" id="f-btn" data-i18n="f-btn">Lag FAQ</button>
       </div>
-      <div class="out" id="f-out"></div>
+      <div class="out" id="f-out" style="margin-top:16px;"></div>
     </section>
 
     <section class="panel" data-panel="schema">
@@ -308,20 +309,22 @@
     </section>
 
     <section class="panel" data-panel="pinterest">
-      <h2 data-i18n="p-h">📌 Pinterest Traffic Generator</h2>
-      <p class="lead" data-i18n="p-lead">Fra en artikkel: Pinterest-tittel, beskrivelse, pin-idéer og en Canva/bilde-prompt i LME-stil.</p>
-      <div class="field"><input id="p-title" placeholder="Tittel / tema" /></div>
-      <div class="field"><textarea id="p-summary" placeholder="Kort sammendrag av artikkelen…"></textarea></div>
-      <button class="btn" onclick="runPinterest()" id="p-btn" data-i18n="p-btn">Lag Pinterest-innhold</button>
-      <div class="out" id="p-out"></div>
+      <h2 data-i18n="p-h">📌 Pinterest</h2>
+      <div class="field" style="display:flex;gap:8px;align-items:flex-end;">
+        <input id="p-title" placeholder="Tittel/tema…" style="flex:1;min-width:120px;" />
+        <textarea id="p-summary" placeholder="Sammendrag…" style="flex:1;min-width:200px;height:40px;resize:none;"></textarea>
+        <button class="btn" onclick="runPinterest()" id="p-btn" data-i18n="p-btn">Lag</button>
+      </div>
+      <div class="out" id="p-out" style="margin-top:16px;"></div>
     </section>
 
     <section class="panel" data-panel="repurpose">
-      <h2 data-i18n="r-h">♻️ LME Autopilot Repurpose</h2>
-      <p class="lead" data-i18n="r-lead">Lim inn en artikkel eller et søkeord → få blogg, Facebook, Instagram, Pinterest, TikTok, Reel-manus og e-post. Alt fra samme kilde.</p>
-      <div class="field"><textarea id="r-src" placeholder="Lim inn artikkel eller idé…"></textarea></div>
-      <button class="btn" onclick="runRepurpose()" id="r-btn" data-i18n="r-btn">Omform til alle kanaler</button>
-      <div class="out" id="r-out"></div>
+      <h2 data-i18n="r-h">♻️ Omform</h2>
+      <div class="field" style="display:flex;gap:8px;align-items:flex-end;">
+        <textarea id="r-src" placeholder="Lim inn artikkel, tekst eller idé…" style="flex:1;height:40px;resize:none;"></textarea>
+        <button class="btn" onclick="runRepurpose()" id="r-btn" data-i18n="r-btn">Omform</button>
+      </div>
+      <div class="out" id="r-out" style="margin-top:16px;"></div>
     </section>
 
     <div class="note" data-i18n="worker-note">⚙️ Drives av LME AI Visibility Worker (Cloudflare).</div>
@@ -343,7 +346,7 @@ const I18N = {
     "t-schema":"Schema-generator","t-pinterest":"Pinterest","t-repurpose":"Repurpose",
     "ai-help":"Trenger du strategi for synlighet? Spør Nathalie AI.","ai-cta":"Spør Nathalie AI",
     title:'LME <em>AI Visibility Engine</em>',
-    subtitle:"Bli funnet i Google, Pinterest og AI-søk — automatisert, GEO-optimalisert innhold som gjør LME til en autoritativ kilde innen Montessori, læring og norskopplæring.",
+    subtitle:"Bli funnet i Google, Pinterest og AI-søk — automatisert, GEO-optimalisert innhold som gjør LME til en autoritativ kilde innen kreativitet, læring, synlighet og vekst.",
     "s-articles":"Artikler","s-faqs":"FAQ-er","s-pages":"Indekserte sider","s-visits":"Organiske besøk","s-score":"AI-readiness",
     "k-h":"🔑 Keyword Discovery","k-lead":"Finn hovedsøkeord, long-tail og spørsmål rundt et tema. Klikk et søkeord for å sende det til artikkel-generatoren.","k-btn":"Finn søkeord",
     "q-h":"❓ AI Question Discovery","q-lead":"Bygg en database over spørsmål folk stiller AI. Råstoff for FAQ og artikler.","q-btn":"Finn spørsmål",
@@ -360,7 +363,7 @@ const I18N = {
     "t-schema":"Schema Generator","t-pinterest":"Pinterest","t-repurpose":"Repurpose",
     "ai-help":"Need a visibility strategy? Ask Nathalie AI.","ai-cta":"Ask Nathalie AI",
     title:'LME <em>AI Visibility Engine</em>',
-    subtitle:"Get found on Google, Pinterest and AI search — automated, GEO-optimized content that makes LME an authoritative source in Montessori, learning and language.",
+    subtitle:"Get found on Google, Pinterest and AI search — automated, GEO-optimized content that makes LME an authoritative source in creativity, learning, visibility and growth.",
     "s-articles":"Articles","s-faqs":"FAQs","s-pages":"Indexed pages","s-visits":"Organic visits","s-score":"AI-readiness",
     "k-h":"🔑 Keyword Discovery","k-lead":"Find head keywords, long-tail and questions around a topic. Click a keyword to send it to the article generator.","k-btn":"Find keywords",
     "q-h":"❓ AI Question Discovery","q-lead":"Build a database of questions people ask AI. Raw material for FAQs and articles.","q-btn":"Find questions",
@@ -504,7 +507,7 @@ async function publishArticle(){
     if(!window._blogPw){ window._blogPw=prompt(LANG==='en'?'Blog password (to list it on /blogg):':'Blogg-passord (for aa vise den i /blogg):')||''; }
     if(window._blogPw){
       const ex=(d.metaDescription||d.intro||'').replace(/<[^>]+>/g,'').slice(0,280);
-      const post={ id:d.slug, titleNo:d.h1||d.seoTitle||'', titleEn:d.h1||d.seoTitle||'', excerptNo:ex, excerptEn:ex, category:'Montessori hjemme', image:'/images/hero_learning_tree.webp', date:new Date().toISOString().slice(0,10), readMin:'5 min', url:'/blog/'+(d.slug||''), bodyNo:'<p>'+ex+'</p>', bodyEn:'<p>'+ex+'</p>' };
+      const post={ id:d.slug, titleNo:d.h1||d.seoTitle||'', titleEn:d.h1||d.seoTitle||'', excerptNo:ex, excerptEn:ex, category:'LME Insights', image:'/images/hero_learning_tree.webp', date:new Date().toISOString().slice(0,10), readMin:'5 min', url:'/blog/'+(d.slug||''), bodyNo:'<p>'+ex+'</p>', bodyEn:'<p>'+ex+'</p>' };
       try{ const br=await fetch('/api/blog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'save',password:window._blogPw,post})}); const bj=await br.json(); if(bj&&bj.ok){ blogMsg=LANG==='en'?' + listed on /blogg':' + lagt i /blogg'; } else if(bj&&bj.error==='bad_password'){ window._blogPw=null; blogMsg=LANG==='en'?' (wrong blog password)':' (feil blogg-passord)'; } }catch(_){}
     }
     st.innerHTML=r.published
@@ -520,11 +523,49 @@ async function runFaq(){
   const topic=document.getElementById('f-topic').value.trim();busy('f-btn',true);
   try{
     const d=parseJSON(await api('/ai/faq',{topic}));lastFaq=d.faq||[];
-    let html=lastFaq.map(f=>`<div class="card-out"><p><b>${f.q}</b><br>${f.a}</p></div>`).join('');
-    const sc=await api('/ai/schema',{type:'faq',data:{faq:lastFaq}});
-    html+=`<div class="card-out"><h4>FAQ Schema (JSON-LD) ${copyBtn(sc.jsonld)}</h4><pre class="code">${esc(sc.jsonld)}</pre></div>`;
+    let html=`<div style="display:grid;gap:12px;">`;
+    html+=lastFaq.map(f=>`<div class="card-out" style="padding:12px;"><p style="margin:0;"><b>${f.q}</b><br><span style="color:var(--ink-soft);font-size:14px;margin-top:6px;display:block;">${f.a}</span></p></div>`).join('');
+    html+=`<div style="display:flex;gap:8px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--line);">`;
+    html+=`<button class="btn secondary" id="pub-faq-btn" onclick="publishFaq()" style="flex:1;min-width:120px;">🚀 ${LANG==='en'?'Publish':'Publiser'}</button>`;
+    html+=`<button class="btn secondary" onclick="shareFaqTwitter()" style="background:#1DA1F2;flex:0.5;">𝕏</button>`;
+    html+=`<button class="btn secondary" onclick="shareFaqLinkedIn()" style="background:#0A66C2;flex:0.5;">in</button>`;
+    html+=`<button class="btn secondary" onclick="copyFaqText()" style="background:#caa46a;color:#3d2438;flex:0.5;">🔗</button>`;
+    html+=`</div></div>`;
     document.getElementById('f-out').innerHTML=html;
   }catch(e){fail('f-out',e);}finally{busy('f-btn',false);bumpScore('faqs');}
+}
+async function publishFaq(){
+  if(!lastFaq||!lastFaq.length){alert('Generer FAQ først');return;}
+  busy('pub-faq-btn',true);
+  const st=document.getElementById('f-out').querySelector('.status')||document.createElement('div');
+  try{
+    const r=await fetch('/api/faq/publish',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({faq:lastFaq})});
+    const j=await r.json();
+    st.innerHTML=`<span style="color:#0a0">${LANG==='en'?'Published!':'Publisert!'} ${j.total} FAQ-er på /faq</span>`;
+    document.getElementById('f-out').appendChild(st);
+  }catch(e){st.innerHTML=`<span style="color:#c43d75">Publisering feilet: ${e.message}</span>`;document.getElementById('f-out').appendChild(st);}
+  finally{busy('pub-faq-btn',false);}
+}
+
+function shareFaqTwitter(){
+  if(!lastFaq||!lastFaq.length){alert('Generer FAQ først');return;}
+  const txt=`${LANG==='en'?'Check out our FAQ at':'Se vår FAQ på'} ${window.location.origin}/faq ${LANG==='en'?'powered by LME':'laget med LME'}`;
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(txt)}`,'_blank');
+}
+
+function shareFaqLinkedIn(){
+  if(!lastFaq||!lastFaq.length){alert('Generer FAQ først');return;}
+  const url=`${window.location.origin}/faq`;
+  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,'_blank');
+}
+
+function copyFaqText(){
+  if(!lastFaq||!lastFaq.length){alert('Generer FAQ først');return;}
+  const txt=lastFaq.map(f=>`Q: ${f.q}\nA: ${f.a}`).join('\n\n');
+  navigator.clipboard.writeText(txt).then(()=>{
+    alert(LANG==='en'?'FAQ copied!':'FAQ kopiert!');
+  });
 }
 
 /* ---- Schema (standalone) ---- */
@@ -532,8 +573,8 @@ async function runSchema(){
   const type=document.getElementById('sc-type').value;busy('sc-btn',true);
   const sample={
     organization:{sameAs:["https://www.pinterest.com/lmexplorers","https://instagram.com/lmexplorers"]},
-    article:{h1:"Montessori-aktiviteter for 3-åringer",metaDescription:"Praktiske Montessori-aktiviteter…",lang:LANG},
-    faq:{faq:lastFaq||[{q:"Hva er Montessori?",a:"Montessori er en pedagogikk…"}]},
+    article:{h1:"How to Build Your Personal Brand Through Content",metaDescription:"Discover proven strategies to establish your authority and grow your audience…",lang:LANG},
+    faq:{faq:lastFaq||[{q:"How can I start creating content?",a:"Begin by identifying your topic and audience, then use LME tools to generate and distribute content across multiple platforms."}]},
     product:{name:"De små naturutforskerne",description:"Mia & Teo-bok, 24 sider",price:"199",currency:"NOK"},
     course:{name:"LME Akademiet 3–6 år",description:"Montessori-kurs for foreldre"},
     breadcrumb:{items:[{name:"Hjem",url:"/"},{name:"Biblioteket",url:"/biblioteket"}]}
@@ -545,17 +586,58 @@ async function runSchema(){
 }
 
 /* ---- Pinterest ---- */
+let lastPinterestData=null;
 async function runPinterest(){
   const title=document.getElementById('p-title').value.trim();
   const summary=document.getElementById('p-summary').value.trim();busy('p-btn',true);
   try{
-    const d=parseJSON(await api('/ai/pinterest',{title,summary}));
-    document.getElementById('p-out').innerHTML=
-      `<div class="card-out"><div class="meta-row"><b>Pin-tittel:</b> ${d.pinTitle||''} ${copyBtn(d.pinTitle||'')}</div>
-        <div class="meta-row"><b>Beskrivelse:</b> ${d.pinDescription||''} ${copyBtn(d.pinDescription||'')}</div></div>
-       <div class="card-out"><h4>Pin-idéer</h4><p>${(d.pinIdeas||[]).map(x=>'• '+x).join('\n')}</p></div>
-       <div class="card-out"><h4>Bilde-prompt (Canva) ${copyBtn(d.imagePrompt||'')}</h4><p>${d.imagePrompt||''}</p></div>`;
+    const d=parseJSON(await api('/ai/pinterest',{title,summary}));lastPinterestData=d;
+    let html=`<div class="card-out"><div style="display:grid;gap:8px;">`;
+    html+=`<div><b>Pin-tittel:</b> ${d.pinTitle||''} ${copyBtn(d.pinTitle||'')}</div>`;
+    html+=`<div><b>Beskrivelse:</b> ${d.pinDescription||''} ${copyBtn(d.pinDescription||'')}</div>`;
+    html+=`<div><small style="color:var(--ink-muted);">Bilde-prompt: ${d.imagePrompt||''}</small></div>`;
+    html+=`</div></div>`;
+    html+=`<div class="card-out"><h4>Pin-idéer</h4><p style="white-space:pre-wrap;">${(d.pinIdeas||[]).map(x=>'• '+x).join('\n')}</p></div>`;
+    html+=`<div style="display:flex;gap:8px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--line);">`;
+    html+=`<button class="btn secondary" onclick="genPinterestImage()" style="flex:1;">🎨 ${LANG==='en'?'Generate Pin':'Generer Pin'}</button>`;
+    html+=`<button class="btn secondary" onclick="openCanvaPin()" style="background:#6366F1;flex:1;">📐 Canva</button>`;
+    html+=`<button class="btn secondary" onclick="sharePinterestDirect()" style="background:#E60B69;flex:1;">📌 Del</button>`;
+    html+=`</div>`;
+    document.getElementById('p-out').innerHTML=html;
   }catch(e){fail('p-out',e);}finally{busy('p-btn',false);}
+}
+
+async function genPinterestImage(){
+  if(!lastPinterestData){alert('Generer først');return;}
+  const btn=event.target;btn.disabled=true;btn.textContent='⏳ Genererer...';
+  try{
+    const img=await api('/ai/image',{prompt:lastPinterestData.imagePrompt,style:'pinterest-pin',size:'1000x1500'});
+    const pinUrl=img.url||img.dataUrl;
+    if(pinUrl){
+      const prevImg=document.querySelector('#p-out img');
+      if(prevImg)prevImg.remove();
+      const imgEl=document.createElement('img');
+      imgEl.src=pinUrl;imgEl.style='max-width:300px;border-radius:12px;margin-top:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);';
+      document.getElementById('p-out').insertBefore(imgEl,document.querySelector('.btn'));
+      lastPinterestData.imageUrl=pinUrl;
+    }
+  }catch(e){alert('Bildegenerering feilet: '+e.message);}finally{btn.disabled=false;btn.textContent='🎨 '+(LANG==='en'?'Generate Pin':'Generer Pin');}
+}
+
+function openCanvaPin(){
+  if(!lastPinterestData){alert('Generer først');return;}
+  const title=lastPinterestData.pinTitle||'LME';
+  const desc=lastPinterestData.pinDescription||'';
+  const prompt=lastPinterestData.imagePrompt||'';
+  const url=`https://www.canva.com/create/social-media/pinterest-pin?text=${encodeURIComponent(title)}&description=${encodeURIComponent(desc)}`;
+  window.open(url,'_blank');
+}
+
+function sharePinterestDirect(){
+  if(!lastPinterestData){alert('Generer først');return;}
+  const text=`${lastPinterestData.pinTitle}\n\n${lastPinterestData.pinDescription}\n\n${window.location.origin}/ai-visibility`;
+  const url=`https://pinterest.com/pin/create/button/?description=${encodeURIComponent(text)}&media=${encodeURIComponent(lastPinterestData.imageUrl||'')}`;
+  window.open(url,'_blank','width=600,height=400');
 }
 
 /* ---- Repurpose ---- */

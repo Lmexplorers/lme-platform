@@ -4,14 +4,20 @@ Statisk HTML-side (Cloudflare Pages) for Little Montessori Explorers.
 Eier: Renate Dahl. Tekst er som hovedregel på **norsk** (bokmål), med engelsk
 oversettelse via `data-no` / `data-en` der språkbytte finnes.
 
-## 🚫 Navnet er LME Autopilot (aldri "LME Studio" eller "LME Content Studio")
+## 🚫 To ulike navn: LME Studio (huben) og LME Autopilot (appen)
 
-Verktøyet heter **LME Autopilot**. Skriv aldri "LME Studio" eller "LME
-Content Studio", verken i tekst, kort, overskrifter eller lenker.
-(Omdøpt fra "LME Content Studio" til "LME Autopilot", beskjed fra Renate
-31. juli 2026.)
+VIKTIG skille (beskjed fra Renate, morgen etter autoposting-fiksen):
 
-Selve kortet/verktøyet (bl.a. på forsiden/dashbordet) skal ellers ikke endres,
+- **LME Studio** = navnet på selve skaper-/AI-**huben**. Dette er det som
+  tidligere het "Creative Academy". Bruk "LME Studio", ikke "Creative Academy".
+- **LME Autopilot** = **appen** inni huben (innholdsstudioet for reels, stories,
+  karuseller). Tidligere "LME Content Studio". Skriv aldri "LME Content Studio".
+
+De to skal **ikke blandes**: huben er LME Studio, appen er LME Autopilot.
+"LME Studio" er altså IKKE forbudt lenger, det er hub-navnet. Ikke "rett" det
+tilbake til Creative Academy eller LME Autopilot.
+
+Selve app-kortet/verktøyet (bl.a. på forsiden/dashbordet) skal ellers ikke endres,
 "ryddes i" eller få endret lenker/design uten at Renate eksplisitt ber om det.
 
 ## 🗺️ Hold roadmapen oppdatert
