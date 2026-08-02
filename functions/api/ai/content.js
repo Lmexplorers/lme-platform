@@ -32,7 +32,7 @@ export async function onRequestOptions() {
 const BRAND_CONTEXT = `Du jobber for Little Montessori Explorers (LME), en tospråklig (norsk/engelsk),
 AI-drevet plattform grunnlagt av Renate Dahl (Montessori-pedagog med utdanning fra Høyskolen i Vestfold, Tønsberg).
 LME er ett samlet økosystem med flere områder, ikke bare Montessori: LME Montessori (pedagogikk, kurs og ressurser
-for foreldre og pedagoger), LME Creative Academy (AI-verktøy for å skape, markedsføre og bygge digital virksomhet,
+for foreldre og pedagoger), LME Studio (AI-verktøy for å skape, markedsføre og bygge digital virksomhet,
 blant annet YouTube-kanalvekst, Claude-bruk og innholdsverktøy), LME Community (fellesskap og medlemskap) og LME Shop
 (produkter). Reisen er: lær, skap, bli synlig, selg og voks.
 Mia & Teo er karakterene i Renates barnebøker (De små naturutforskerne), og hører hjemme i Montessori-innhold, ikke
