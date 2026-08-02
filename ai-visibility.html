@@ -282,12 +282,13 @@
 
     <section class="panel" data-panel="faq">
       <h2 data-i18n="f-h">💬 FAQ Engine</h2>
-      <p class="lead" data-i18n="f-lead">Lag en FAQ-seksjon som Google og AI lett kan lese. Generer schema med ett klikk etterpå.</p>
-      <div class="field">
-        <input id="f-topic" placeholder="How to start a podcast about creativity" />
+      <div class="field" style="display:flex;gap:8px;align-items:flex-end;">
+        <div style="flex:1;">
+          <input id="f-topic" placeholder="LME kurs, Montessori, kreativitet…" style="width:100%;" />
+        </div>
         <button class="btn" onclick="runFaq()" id="f-btn" data-i18n="f-btn">Lag FAQ</button>
       </div>
-      <div class="out" id="f-out"></div>
+      <div class="out" id="f-out" style="margin-top:16px;"></div>
     </section>
 
     <section class="panel" data-panel="schema">
@@ -520,15 +521,14 @@ async function runFaq(){
   const topic=document.getElementById('f-topic').value.trim();busy('f-btn',true);
   try{
     const d=parseJSON(await api('/ai/faq',{topic}));lastFaq=d.faq||[];
-    let html=lastFaq.map(f=>`<div class="card-out"><p><b>${f.q}</b><br>${f.a}</p></div>`).join('');
-    const sc=await api('/ai/schema',{type:'faq',data:{faq:lastFaq}});
-    html+=`<div class="card-out"><h4>FAQ Schema (JSON-LD) ${copyBtn(sc.jsonld)}</h4><pre class="code">${esc(sc.jsonld)}</pre></div>`;
-    html+=`<div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">`;
-    html+=`<button class="btn secondary" id="pub-faq-btn" onclick="publishFaq()" data-i18n="pub-btn">🚀 ${LANG==='en'?'Publish to /faq':'Publiser til /faq'}</button>`;
-    html+=`<button class="btn secondary" onclick="shareFaqTwitter()" style="background:#1DA1F2;">𝕏 ${LANG==='en'?'Share':'Del'}</button>`;
-    html+=`<button class="btn secondary" onclick="shareFaqLinkedIn()" style="background:#0A66C2;">in ${LANG==='en'?'Share':'Del'}</button>`;
-    html+=`<button class="btn secondary" onclick="copyFaqText()" style="background:#caa46a;color:#3d2438;">🔗 ${LANG==='en'?'Copy text':'Kopier tekst'}</button>`;
-    html+=`</div>`;
+    let html=`<div style="display:grid;gap:12px;">`;
+    html+=lastFaq.map(f=>`<div class="card-out" style="padding:12px;"><p style="margin:0;"><b>${f.q}</b><br><span style="color:var(--ink-soft);font-size:14px;margin-top:6px;display:block;">${f.a}</span></p></div>`).join('');
+    html+=`<div style="display:flex;gap:8px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--line);">`;
+    html+=`<button class="btn secondary" id="pub-faq-btn" onclick="publishFaq()" style="flex:1;min-width:120px;">🚀 ${LANG==='en'?'Publish':'Publiser'}</button>`;
+    html+=`<button class="btn secondary" onclick="shareFaqTwitter()" style="background:#1DA1F2;flex:0.5;">𝕏</button>`;
+    html+=`<button class="btn secondary" onclick="shareFaqLinkedIn()" style="background:#0A66C2;flex:0.5;">in</button>`;
+    html+=`<button class="btn secondary" onclick="copyFaqText()" style="background:#caa46a;color:#3d2438;flex:0.5;">🔗</button>`;
+    html+=`</div></div>`;
     document.getElementById('f-out').innerHTML=html;
   }catch(e){fail('f-out',e);}finally{busy('f-btn',false);bumpScore('faqs');}
 }
