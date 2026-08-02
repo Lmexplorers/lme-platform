@@ -1,11 +1,11 @@
 /* =========================================================
-   Renate AI — flytende veileder-widget for hele LME
+   Nathalie AI — flytende veileder-widget for hele LME
    Legges inn på alle sider med:
    <script src="/js/renate-widget.js" defer></script>
 
-   - Viser en flytende Renate AI-knapp nede til høyre
+   - Viser en flytende Nathalie AI-knapp nede til høyre
    - Chatten vet hvilken side brukeren står på (sendes som
-     kontekst til /renate-ai)
+     kontekst til /nathalie-ai)
    - Samtalen huskes i nettleseren (localStorage), og for
      innloggede brukere også i skyen via /api/renate-chats,
      så Renate husker på tvers av enheter og økter
@@ -17,12 +17,12 @@
 
   var path = (location.pathname || '/').replace(/\/+$/, '') || '/';
 
-  // Ikke på selve chat-sidene (der er Renate AI allerede i fullversjon)
-  if (path === '/spor-renate-ai' || path === '/ask-renate-ai') return;
+  // Ikke på selve chat-sidene (der er Nathalie AI allerede i fullversjon)
+  if (path === '/spor-nathalie-ai' || path === '/ask-nathalie-ai') return;
   if (window.__lmeRenateWidget) return;
   window.__lmeRenateWidget = true;
 
-  var API_URL = '/renate-ai';
+  var API_URL = '/nathalie-ai';
   var STORAGE_KEY = 'lme_renate_widget_chat';
   var MAX_HISTORY_SENT = 12;   // backend tillater maks 30 meldinger
   var MAX_INPUT = 4000;        // backend tillater maks 4000 tegn
@@ -157,11 +157,11 @@
   var root = document.createElement('div');
   root.className = 'rw-root';
   root.innerHTML =
-    '<div class="rw-panel" role="dialog" aria-label="Renate AI">' +
+    '<div class="rw-panel" role="dialog" aria-label="Nathalie AI">' +
     '  <div class="rw-head">' +
-    '    <div class="rw-avatar">R<img src="/images/renate-portrait.jpg" alt="" onerror="this.remove()"></div>' +
+    '    <div class="rw-avatar">N<img src="/images/nathalie-portrait.jpg?v=2" alt="" onerror="this.remove()"></div>' +
     '    <div>' +
-    '      <h4>Renate AI</h4>' +
+    '      <h4>Nathalie AI</h4>' +
     '      <p data-no="Veilederen din på LME" data-en="Your guide on LME">Veilederen din på LME</p>' +
     '    </div>' +
     '    <button type="button" class="rw-close" aria-label="Lukk">✕</button>' +
@@ -172,12 +172,12 @@
     '    <button type="button" class="rw-send" aria-label="Send">➤</button>' +
     '  </div>' +
     '  <div class="rw-foot">' +
-    '    <a href="/spor-renate-ai" data-no="Åpne hele Renate AI-samtalen" data-en="Open the full Renate AI chat">Åpne hele Renate AI-samtalen</a>' +
+    '    <a href="/spor-nathalie-ai" data-no="Åpne hele Nathalie AI-samtalen" data-en="Open the full Nathalie AI chat">Åpne hele Nathalie AI-samtalen</a>' +
     '  </div>' +
     '</div>' +
-    '<button type="button" class="rw-btn" aria-label="Spør Renate AI" title="Spør Renate AI">' +
-    '  <span class="rw-btn-avatar">R<img src="/images/renate-portrait.jpg" alt="" onerror="this.remove()"></span>' +
-    '  <span class="rw-btn-label" data-no="Spør Renate AI" data-en="Ask Renate AI">Spør Renate AI</span>' +
+    '<button type="button" class="rw-btn" aria-label="Spør Nathalie AI" title="Spør Nathalie AI">' +
+    '  <span class="rw-btn-avatar">N<img src="/images/nathalie-portrait.jpg?v=2" alt="" onerror="this.remove()"></span>' +
+    '  <span class="rw-btn-label" data-no="Spør Nathalie AI" data-en="Ask Nathalie AI">Spør Nathalie AI</span>' +
     '</button>';
 
   var style = document.createElement('style');
@@ -212,11 +212,11 @@
     var footLink = root.querySelector('.rw-foot a');
 
     function applyLang() {
-      input.placeholder = t('Skriv til Renate AI …', 'Write to Renate AI …');
-      btn.title = t('Spør Renate AI', 'Ask Renate AI');
+      input.placeholder = t('Skriv til Nathalie AI …', 'Write to Nathalie AI …');
+      btn.title = t('Spør Nathalie AI', 'Ask Nathalie AI');
       btn.setAttribute('aria-label', btn.title);
       closeBtn.setAttribute('aria-label', t('Lukk', 'Close'));
-      footLink.href = lang() === 'en' ? '/ask-renate-ai' : '/spor-renate-ai';
+      footLink.href = lang() === 'en' ? '/ask-nathalie-ai' : '/spor-nathalie-ai';
       // data-no/data-en-tekster oppdateres også av sidens eget språkbytte;
       // dette dekker sider uten switchLanguage og widget lastet etter bytte
       root.querySelectorAll('[data-no][data-en]').forEach(function (el) {
@@ -250,8 +250,8 @@
 
     function showWelcome() {
       addBubble('bot', t(
-        'Hei! 💗 Jeg er Renate AI, veilederen din her på LME. Jeg ser hvilken side du er på og hjelper deg videre. Hva lurer du på?',
-        'Hi! 💗 I am Renate AI, your guide here on LME. I can see which page you are on and help you move forward. What can I help you with?'
+        'Hei! 💗 Jeg er Nathalie AI, veilederen din her på LME. Jeg ser hvilken side du er på og hjelper deg videre. Hva lurer du på?',
+        'Hi! 💗 I am Nathalie AI, your guide here on LME. I can see which page you are on and help you move forward. What can I help you with?'
       ));
     }
 
@@ -297,7 +297,7 @@
 
       var typing = document.createElement('div');
       typing.className = 'rw-typing';
-      typing.textContent = t('Renate AI skriver …', 'Renate AI is typing …');
+      typing.textContent = t('Nathalie AI skriver …', 'Nathalie AI is typing …');
       msgsEl.appendChild(typing);
       msgsEl.scrollTop = msgsEl.scrollHeight;
 

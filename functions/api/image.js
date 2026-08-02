@@ -24,11 +24,11 @@ import { enforceGeneration } from "../_lib/access.js";
  */
 
 const STYLE_LOCK =
-  "Premium 3D illustrated children's book style, soft rounded Pixar-like look, " +
-  "warm cinematic lighting, gentle depth of field. LME brand palette: cerise pink, " +
-  "lime green, bright sky blue, lemon yellow, soft cream, warm wood tones, nature greens. " +
-  "Never photorealistic. Absolutely no text, no words, no letters, no numbers, no logos, " +
-  "no watermark anywhere in the image.";
+  "STYLE: Soft 3D cartoon illustration (Pixar style), NOT a photograph.\n" +
+  "COLORS: Warm, hand-drawn feel. Use LME palette: cerise pink, lime green, sky blue, lemon yellow, soft cream, warm wood tones, nature greens.\n" +
+  "CHARACTERS: Show diverse children with varied appearances. Different hair colors (blonde, red, brown, dark brown). Different hair textures (straight, wavy, curly, not all curly). Different skin tones (light, medium, dark). Different ages and body types.\n" +
+  "FORBIDDEN: No text, words, labels, logos, watermarks, cameras, phones, or photorealism.\n" +
+  "FOCUS: Peaceful learning moment, children engaged in nature or activity, natural proportions, friendly expressions, non-stereotyped diverse appearances.";
 
 // Låste karakterprompter, ordrett fra merkevare-bibelen.
 const MIA =
@@ -44,10 +44,6 @@ const CHAR = {
   teo: TEO,
   both: MIA + " " + TEO + " They are best friends exploring together, never romantic.",
 };
-
-const NEUTRAL_SCENE =
-  "A warm, inviting Montessori scene with real, pedagogically accurate Montessori practical-life " +
-  "materials, natural wood, soft daylight, calm ordered shelves. No recognizable real people.";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -72,27 +68,27 @@ function sizeFor(platform) {
 
 function buildPrompt(text, character) {
   const parts = [];
+  // STYLE_LOCK comes FIRST and REPEATED to ensure it dominates the prompt
+  parts.push(STYLE_LOCK);
+
   const c = CHAR[character];
+  const theme = String(text || "").replace(/\s+/g, " ").trim().slice(0, 500);
+
   if (c) {
     parts.push(c);
-    // Nok av beskrivelsen til at et presist navngitt Montessori-materiell (med
-    // farger, antall deler og oppsett) overlever inn i bildet. 320 tegn kappet
-    // vekk akkurat detaljene som gjør materiellet riktig.
-    const theme = String(text || "").replace(/\s+/g, " ").trim().slice(0, 700);
-    parts.push(
-      theme
-        ? `Depict them in a scene that fits this theme (illustrate the mood and activity, do not render any of these words): ${theme}`
-        : "Depict them exploring nature and learning together."
-    );
+    if (theme) {
+      parts.push(`Depict them in a scene that fits this theme (illustrate the mood and activity, do not render any of these words as text): ${theme}`);
+    } else {
+      parts.push("Depict them exploring nature and learning together with varied appearances.");
+    }
+  } else if (theme) {
+    parts.push(`Illustration showing this theme: ${theme}`);
+    parts.push("Include children with diverse appearances: different hair colors and textures, different skin tones, different ages.");
   } else {
-    // Ingen karakter: nøytral, trygg Montessori-scene som passer temaet. Behold
-    // nok av beskrivelsen til at riktig materiell faktisk kommer med i bildet.
-    const theme = String(text || "").replace(/\s+/g, " ").trim().slice(0, 700);
-    parts.push(NEUTRAL_SCENE);
-    if (theme) parts.push(`Let the scene fit this theme (do not render any of these words): ${theme}`);
+    parts.push("Peaceful Montessori learning scene with children of diverse appearances: varied hair colors, varied hair textures, varied skin tones, different ages.");
   }
-  parts.push(STYLE_LOCK);
-  return parts.join(" ");
+
+  return parts.join("\n\n");
 }
 
 // =====================================================
@@ -240,13 +236,39 @@ export async function onRequestPost(context) {
     let quality = String(body.quality || "").toLowerCase();
     if (!["low", "medium", "high"].includes(quality)) quality = "";
 
+    console.log('[image] Generating with provider:', provider, 'platform:', body.platform, 'character:', character, 'quality:', quality);
     let out;
     try {
       out = await PROVIDERS[provider](env, prompt, size, quality);
     } catch (e) {
+      console.error('[image] Provider error:', e);
       return json({ error: "Kom ikke i kontakt med bildemotoren.", detail: String(e && e.message || e).slice(0, 200) }, 200);
     }
-    if (out && out.error) return json({ error: out.error, detail: out.detail }, 200);
+
+    // Fallback: hvis primær-provider feiler (e.g. Gemini 503), prøv alternativ
+    if (out && out.error && out.status >= 500) {
+      console.log('[image] Primary provider failed with', out.status, ', trying fallback...');
+      let fallback = provider === "gemini" ? "openai" : "gemini";
+      const hasOpenAI = !!(env.OPENAI_API_KEY || env.IMAGE_OPENAI_KEY || env.IMAGE_API_KEY);
+      const hasGemini = !!(env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY);
+      if (fallback === "openai" && !hasOpenAI) {
+        console.log('[image] OpenAI fallback not available');
+      } else if (fallback === "gemini" && !hasGemini) {
+        console.log('[image] Gemini fallback not available');
+      } else {
+        console.log('[image] Trying fallback provider:', fallback);
+        try {
+          out = await PROVIDERS[fallback](env, prompt, size, quality);
+        } catch (e) {
+          console.error('[image] Fallback provider error:', e);
+        }
+      }
+    }
+
+    if (out && out.error) {
+      console.error('[image] Provider returned error:', out.error);
+      return json({ error: out.error, detail: out.detail }, 200);
+    }
 
     let bytes = out.bytes, contentType = out.contentType || "image/png";
     if (!bytes && out.url) {

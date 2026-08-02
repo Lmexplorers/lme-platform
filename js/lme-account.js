@@ -40,7 +40,6 @@
   // alle sider naar det ikke er lastet opp et eget bilde, saa portrettet er
   // likt overalt og ikke bare der sidens egen avatar hadde et <img>.
   var OWNER_DEFAULT_PHOTO = '/images/renate-portrait.jpg';
-
   // Forminsker bildet til et lite kvadrat, saa det er raskt og lite nok til
   // aa lagres paa kontoen (serveren har en grense).
   function shrink(file, cb) {
@@ -191,7 +190,7 @@
       html += item('/wins', '💗', 'Del din seier', 'Share your win');
       html += '<div class="lme-acct-div"></div>';
       html += item('/om-renate', '🌷', 'Om Renate', 'About Renate');
-      html += item('/spor-renate-ai', '💬', 'Spør Renate AI', 'Ask Renate AI');
+      html += item('/spor-nathalie-ai', '💬', 'Spør Nathalie AI', 'Ask Nathalie AI');
       // Byggerverktøy: Gruppebygger og Kursbygger for alle medlemmer
       // (Medlem, Pro, VIP) og eier. Vises på alle sider.
       if (state.owner || state.member) {
@@ -207,7 +206,7 @@
       html += '<div class="lme-acct-div"></div>';
       html += item('/om-renate', '🌷', 'Om Renate', 'About Renate');
       html += item('/butikk', '🛍️', 'LME Butikk', 'LME Shop');
-      html += item('/spor-renate-ai', '💬', 'Spør Renate AI', 'Ask Renate AI');
+      html += item('/spor-nathalie-ai', '💬', 'Spør Nathalie AI', 'Ask Nathalie AI');
     }
     menu.innerHTML = html;
     var lo = menu.querySelector('#lme-acct-logout');

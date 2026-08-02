@@ -385,7 +385,7 @@
 
       <a class="krow" href="/creative-academy">
         <span class="ic">✨</span>
-        <span class="tx"><b data-no="LME Studio" data-en="LME Studio">LME Studio</b><span data-no="Alle skaper-verktøyene i LME" data-en="All the creator tools in LME">Alle skaper-verktøyene i LME</span></span>
+        <span class="tx"><b data-no="LME Autopilot" data-en="LME Autopilot">LME Autopilot</b><span data-no="Alle skaper-verktøyene i LME" data-en="All the creator tools in LME">Alle skaper-verktøyene i LME</span></span>
         <span class="go">→</span>
       </a>
 
@@ -607,19 +607,142 @@
       .catch(function(e){ statusEl.className='pubmsg err'; statusEl.textContent = (LANG==='no'?'⚠️ Kunne ikke lage bilde':'⚠️ Could not make image')+(e&&e.message?' ('+e.message+')':''); })
       .finally(function(){ btn.disabled = false; btn.innerHTML = lbl; });
   }
+  function genCarouselSlideImage(prompt, imgEl, statusEl, btn){
+    if (!prompt){ statusEl.className='pubmsg err'; statusEl.textContent = LANG==='no'?'⚠️ Ingen bildeprompt.':'⚠️ No image prompt.'; return; }
+    var lbl = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> '+(LANG==='no'?'Lager bilde…':'Making image…');
+    statusEl.className='pubmsg'; statusEl.textContent = '';
+    fetch('/api/image',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:prompt, character:'none', platform:'instagram', lang:REELLANG})})
+      .then(function(r2){ return r2.json(); })
+      .then(function(ir){
+        if (!ir || ir.error || !ir.url) throw new Error((ir&&ir.error)||'bilde');
+        imgEl.src = ir.url; imgEl.style.display = 'block';
+        statusEl.className='pubmsg'; statusEl.textContent = LANG==='no'?'Bilde klart ✓':'Image ready ✓';
+      })
+      .catch(function(e){ statusEl.className='pubmsg err'; statusEl.textContent = (LANG==='no'?'⚠️ Kunne ikke lage bilde':'⚠️ Could not make image')+(e&&e.message?' ('+e.message+')':''); })
+      .finally(function(){ btn.disabled = false; btn.innerHTML = lbl; });
+  }
+  function wrapText(ctx, text, maxWidth, lineHeight){
+    var words = text.split(' ');
+    var lines = [];
+    var currentLine = '';
+    for (var i=0; i<words.length; i++){
+      var testLine = currentLine + (currentLine?' ':'') + words[i];
+      if (ctx.measureText(testLine).width > maxWidth && currentLine){
+        lines.push(currentLine);
+        currentLine = words[i];
+      } else {
+        currentLine = testLine;
+      }
+    }
+    if (currentLine) lines.push(currentLine);
+    return lines;
+  }
+  function renderTextOnImage(imageUrl, textLines, slideNum, totalSlides, position, showText){
+    position = position || 'middle';
+    showText = showText !== false;
+    return new Promise(function(resolve, reject){
+      var img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = function(){
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        canvas.width = 1080;
+        canvas.height = 1080;
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        if (showText){
+          ctx.fillStyle = 'rgba(255,255,255,0.95)';
+          ctx.font = 'bold 52px Sasson Montessori, sans-serif';
+          ctx.textAlign = 'center';
+          var wrappedLines = [];
+          textLines.forEach(function(line){
+            var wrapped = wrapText(ctx, line, 900, 80);
+            wrappedLines = wrappedLines.concat(wrapped);
+          });
+          var textBoxHeight = wrappedLines.length * 80 + 80;
+          var startY;
+          if (position === 'top'){
+            startY = 100;
+          } else if (position === 'bottom'){
+            startY = canvas.height - textBoxHeight - 100;
+          } else {
+            startY = (canvas.height - textBoxHeight) / 2;
+          }
+          var boxX = 40; var boxY = startY - 30; var boxW = canvas.width - 80; var boxH = textBoxHeight;
+          ctx.fillRect(boxX, boxY, boxW, boxH);
+          ctx.fillStyle = '#1F1B24';
+          ctx.font = 'bold 52px Sasson Montessori, sans-serif';
+          wrappedLines.forEach(function(line, idx){
+            ctx.fillText(line, canvas.width/2, startY + 70 + (idx * 80));
+          });
+        }
+        ctx.fillStyle = 'rgba(255,255,255,0.9)';
+        ctx.font = '42px Sasson Montessori, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText((slideNum+1)+'/'+totalSlides, canvas.width - 50, canvas.height - 50);
+        canvas.toBlob(function(blob){ resolve(URL.createObjectURL(blob)); }, 'image/jpeg', 0.95);
+      };
+      img.onerror = function(){ reject(new Error('Could not load image')); };
+      img.src = imageUrl;
+    });
+  }
+  var CAROUSEL_TEXT_POSITION = 'middle';
+  var CAROUSEL_SHOW_TEXT = true;
+  var CAROUSEL_UPLOAD_IMAGE = '';
+  var CAROUSEL_MUSIC_URL = '';
+  var CAROUSEL_MUSIC_NAME = '';
+  var MUSIC_LIBRARIES = [
+    { key:'yt', no:'YouTube-musikkbibliotek', en:'YouTube Audio Library', url:'https://www.youtube.com/audiolibrary/music', desc_no:'Gratis, lisensfri musikk fra YouTube. God til hverdagsklipp.', desc_en:'Free, royalty-free music from YouTube. Great for everyday clips.' },
+    { key:'pixabay', no:'Pixabay Musikk', en:'Pixabay Music', url:'https://pixabay.com/music/', desc_no:'Stort gratisbibliotek, ingen kreditering påkrevd.', desc_en:'Large free library, no attribution required.' },
+    { key:'fma', no:'Free Music Archive', en:'Free Music Archive', url:'https://freemusicarchive.org/', desc_no:'Creative Commons-musikk, sjekk lisensen på hvert spor.', desc_en:'Creative Commons music, check the license on each track.' }
+  ];
+  function handleCarouselImageUpload(file, statusEl){
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e){ CAROUSEL_UPLOAD_IMAGE = e.target.result; if(statusEl) statusEl.textContent = LANG==='no'?'Bilde lastet opp ✓':'Image uploaded ✓'; };
+    reader.onerror = function(){ if(statusEl) statusEl.textContent = LANG==='no'?'⚠️ Kunne ikke laste opp bilde':'⚠️ Could not upload image'; };
+    reader.readAsDataURL(file);
+  }
+  function handleCarouselMusicUpload(file, statusEl, playerEl, nameEl){
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e){
+      CAROUSEL_MUSIC_URL = e.target.result; CAROUSEL_MUSIC_NAME = file.name;
+      if (statusEl) statusEl.textContent = LANG==='no'?'Musikk lastet opp ✓':'Music uploaded ✓';
+      if (nameEl) nameEl.textContent = file.name;
+      if (playerEl){ playerEl.src = CAROUSEL_MUSIC_URL; playerEl.style.display='block'; }
+    };
+    reader.onerror = function(){ if(statusEl) statusEl.textContent = LANG==='no'?'⚠️ Kunne ikke laste opp musikk':'⚠️ Could not upload music'; };
+    reader.readAsDataURL(file);
+  }
+  function generateCarouselSlides(r){
+    if (!CAROUSEL_UPLOAD_IMAGE || !Array.isArray(r.slides) || !r.slides.length) return Promise.reject(new Error('No image or slides'));
+    var promises = r.slides.map(function(s, i){
+      var text = (typeof s==='string')?s:(s.text||s.body||s.headline||'');
+      return renderTextOnImage(CAROUSEL_UPLOAD_IMAGE, [text], i, r.slides.length, CAROUSEL_TEXT_POSITION, CAROUSEL_SHOW_TEXT);
+    });
+    return Promise.all(promises);
+  }
   function publishTo(platform, r, statusEl, btn){
     var needsMedia = (platform === 'instagram' || platform === 'tiktok');
-    if (needsMedia && !MEDIA_URL){ statusEl.className='pubmsg err'; statusEl.textContent = LANG==='no'?'⚠️ Lag et bilde først. Instagram og TikTok krever et bilde eller en video.':'⚠️ Make an image first. Instagram and TikTok need an image or video.'; return; }
+    var isCarousel = (FMT === 'carousel');
+    if (needsMedia && !MEDIA_URL && !isCarousel){ statusEl.className='pubmsg err'; statusEl.textContent = LANG==='no'?'⚠️ Lag et bilde først. Instagram og TikTok krever et bilde eller en video.':'⚠️ Make an image first. Instagram and TikTok need an image or video.'; return; }
+    if (needsMedia && isCarousel && !CAROUSEL_UPLOAD_IMAGE){ statusEl.className='pubmsg err'; statusEl.textContent = LANG==='no'?'⚠️ Last opp et bilde før du publiserer.':'⚠️ Upload an image before publishing.'; return; }
     var lbl = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> '+(LANG==='no'?'Publiserer…':'Publishing…');
     statusEl.className='pubmsg'; statusEl.textContent = '';
-    fetchAccounts().then(function(map){
-      var conf = map[platform];
-      if (!conf || !conf.accountId) return Promise.reject({ notConnected:true });
-      var content = { text:buildCaption(r), platform:platform }; if (MEDIA_URL) content.mediaUrls = [MEDIA_URL];
-      var target = { targetType:platform }; if (platform === 'facebook' && conf.pageId) target.pageId = conf.pageId;
-      var item = { label:platform, post:{ accountId:conf.accountId, content:content, target:target } };
-      return fetch('/api/blotato/publish',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({items:[item]})}).then(function(r2){ return r2.json(); });
+    var carouselPromise = isCarousel ? generateCarouselSlides(r) : Promise.resolve(null);
+    carouselPromise.then(function(slideUrls){
+      return fetchAccounts().then(function(map){
+        var conf = map[platform];
+        if (!conf || !conf.accountId) return Promise.reject({ notConnected:true });
+        var post = { accountId:conf.accountId, text:buildCaption(r), target:{ targetType:platform } };
+        if (isCarousel && slideUrls && slideUrls.length) post.mediaUrls = slideUrls;
+        else if (MEDIA_URL) post.mediaUrls = [MEDIA_URL];
+        if (platform === 'facebook' && conf.pageId) post.target.pageId = conf.pageId;
+        var item = { label:platform, post:post };
+        return fetch('/api/blotato/publish',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({items:[item]})}).then(function(r2){ return r2.json(); });
+      });
     }).then(function(d){
       var res = d && d.result && d.result.results && d.result.results[0];
       if (res && res.ok){ btn.innerHTML = '✓ '+(LANG==='no'?'Publisert':'Published'); btn.classList.add('act'); statusEl.className='pubmsg'; statusEl.textContent = LANG==='no'?'Publisert til '+platform+'!':'Published to '+platform+'!'; }
@@ -634,15 +757,33 @@
     var wrap = document.createElement('div'); wrap.className = 'pubpanel';
     var h = document.createElement('h3'); h.textContent = LANG==='no'?'Del og publiser':'Share and publish'; wrap.appendChild(h);
     var ph = document.createElement('div'); ph.className = 'ph';
-    ph.textContent = LANG==='no'?'Lag et bilde, og publiser rett til plattformene dine.':'Make an image, and publish straight to your platforms.';
+    ph.textContent = fmt==='carousel'
+      ? (LANG==='no'?'Last opp bildet ditt, og se forhåndsvisningen av karusellen.':'Upload your image, and preview the carousel.')
+      : (LANG==='no'?'Lag et bilde, og publiser rett til plattformene dine.':'Make an image, and publish straight to your platforms.');
     wrap.appendChild(ph);
     var img = document.createElement('img'); img.className = 'pubimg'; img.alt = ''; wrap.appendChild(img);
     var status = document.createElement('div'); status.className = 'pubmsg';
-    // Lag bilde
     var row1 = document.createElement('div'); row1.className = 'pubrow';
-    var imgBtn = document.createElement('button'); imgBtn.className = 'mk'; imgBtn.textContent = LANG==='no'?'🎨 Lag bilde':'🎨 Make image';
-    imgBtn.addEventListener('click', function(){ genImage(r, img, status, imgBtn); });
-    row1.appendChild(imgBtn); wrap.appendChild(row1);
+    if (fmt === 'carousel'){
+      var previewBtn = document.createElement('button'); previewBtn.className = 'mk'; previewBtn.textContent = LANG==='no'?'👁️ Forhåndsvisning':'👁️ Preview';
+      previewBtn.addEventListener('click', function(){
+        if (!CAROUSEL_UPLOAD_IMAGE){ status.className='pubmsg err'; status.textContent = LANG==='no'?'⚠️ Last opp et bilde først.':'⚠️ Upload an image first.'; return; }
+        if (!Array.isArray(r.slides) || !r.slides.length){ status.className='pubmsg err'; status.textContent = LANG==='no'?'⚠️ Ingen slides.':'⚠️ No slides.'; return; }
+        var lbl = previewBtn.innerHTML; previewBtn.disabled = true; previewBtn.innerHTML='<span class="spinner"></span> '+(LANG==='no'?'Lager forhåndsvisning…':'Rendering preview…');
+        status.className='pubmsg'; status.textContent='';
+        var firstSlide = r.slides[0]; var textLine = (typeof firstSlide==='string')?firstSlide:(firstSlide.text||firstSlide.body||firstSlide.headline||'');
+        renderTextOnImage(CAROUSEL_UPLOAD_IMAGE, [textLine], 0, r.slides.length, CAROUSEL_TEXT_POSITION, CAROUSEL_SHOW_TEXT)
+          .then(function(dataUrl){ img.src=dataUrl; img.style.display='block'; status.className='pubmsg'; status.textContent=(LANG==='no'?'Forhåndsvisning av slide 1/'+r.slides.length+'. Klar til å publisere som karusell.':'Preview of slide 1/'+r.slides.length+'. Ready to publish as carousel.'); })
+          .catch(function(e){ status.className='pubmsg err'; status.textContent=LANG==='no'?'⚠️ Kunne ikke lage forhåndsvisning.':'⚠️ Could not create preview.'; })
+          .finally(function(){ previewBtn.disabled=false; previewBtn.innerHTML=lbl; });
+      });
+      row1.appendChild(previewBtn);
+    } else {
+      var imgBtn = document.createElement('button'); imgBtn.className = 'mk'; imgBtn.textContent = LANG==='no'?'🎨 Lag bilde':'🎨 Make image';
+      imgBtn.addEventListener('click', function(){ genImage(r, img, status, imgBtn); });
+      row1.appendChild(imgBtn);
+    }
+    wrap.appendChild(row1);
     // Publiser-knapper
     var row2 = document.createElement('div'); row2.className = 'pubrow'; row2.style.marginTop = '10px';
     var plats = [['instagram','📸 Instagram'],['facebook','👍 Facebook'],['tiktok','🎵 TikTok']];
@@ -687,13 +828,100 @@
       if (r.caption){ out.appendChild(card('✍️ '+T('caption'), r.caption, true)); }
       tagsCard(out, r.hashtags);
     } else if (fmt === 'carousel'){
+      var uploadCard = document.createElement('div'); uploadCard.className='rcard';
+      var uploadHead = document.createElement('h4'); uploadHead.textContent = LANG==='no'?'📸 Last opp bilde':'📸 Upload image';
+      var uploadDesc = document.createElement('p'); uploadDesc.textContent = LANG==='no'?'Last opp ett bilde fra Canva eller telefonen din. Teksten legges automatisk oppå bildet på hver slide.':'Upload one image from Canva or your phone. Text will be automatically overlaid on the image for each slide.'; uploadDesc.style.fontSize='14px'; uploadDesc.style.color='var(--ink-soft)';
+      var uploadTip = document.createElement('p'); uploadTip.textContent = LANG==='no'?'💡 Tips: Bildet vises på alle slides med ulik tekst på hver. Best for horisontale bilder.':'💡 Tip: The image appears on all slides with different text on each. Works best with horizontal images.'; uploadTip.style.fontSize='12px'; uploadTip.style.color='var(--ink-muted)'; uploadTip.style.marginTop='8px';
+      uploadCard.appendChild(uploadHead); uploadCard.appendChild(uploadDesc); uploadCard.appendChild(uploadTip);
+      var uploadDiv = document.createElement('div'); uploadDiv.style.marginTop='12px';
+      var fileInput = document.createElement('input'); fileInput.type='file'; fileInput.accept='image/*'; fileInput.style.display='none';
+      var uploadBtn = document.createElement('button'); uploadBtn.textContent = LANG==='no'?'Velg bilde':'Choose image'; uploadBtn.className='mk';
+      var uploadStatus = document.createElement('div'); uploadStatus.style.marginTop='8px'; uploadStatus.style.fontSize='12px';
+      uploadBtn.addEventListener('click', function(){ fileInput.click(); });
+      fileInput.addEventListener('change', function(){ if(fileInput.files[0]) handleCarouselImageUpload(fileInput.files[0], uploadStatus); });
+      uploadDiv.appendChild(uploadBtn); uploadDiv.appendChild(uploadStatus);
+      uploadCard.appendChild(uploadDiv);
+      var settingsDiv = document.createElement('div'); settingsDiv.style.marginTop='16px'; settingsDiv.style.paddingTop='12px'; settingsDiv.style.borderTop='1px solid var(--line)';
+      var posLabel = document.createElement('div'); posLabel.style.fontSize='12px'; posLabel.style.fontWeight='700'; posLabel.style.color='var(--ink-soft)'; posLabel.style.marginBottom='8px'; posLabel.textContent = LANG==='no'?'Tekstposisjon':'Text position';
+      var posOptions = ['top', 'middle', 'bottom'];
+      var posLabels = [LANG==='no'?'Topp':'Top', LANG==='no'?'Midten':'Middle', LANG==='no'?'Bunn':'Bottom'];
+      var posDiv = document.createElement('div'); posDiv.style.display='flex'; posDiv.style.gap='8px'; posDiv.style.marginBottom='12px';
+      posOptions.forEach(function(opt, idx){
+        var radio = document.createElement('input'); radio.type='radio'; radio.name='textpos'; radio.value=opt; radio.id='pos'+opt;
+        if (opt === CAROUSEL_TEXT_POSITION) radio.checked=true;
+        radio.addEventListener('change', function(){ CAROUSEL_TEXT_POSITION=opt; });
+        var label = document.createElement('label'); label.htmlFor='pos'+opt; label.textContent=posLabels[idx]; label.style.fontSize='13px'; label.style.cursor='pointer';
+        posDiv.appendChild(radio); posDiv.appendChild(label);
+      });
+      var showTextCheck = document.createElement('input'); showTextCheck.type='checkbox'; showTextCheck.id='showtext'; showTextCheck.checked=CAROUSEL_SHOW_TEXT;
+      showTextCheck.addEventListener('change', function(){ CAROUSEL_SHOW_TEXT=showTextCheck.checked; });
+      var showTextLabel = document.createElement('label'); showTextLabel.htmlFor='showtext'; showTextLabel.textContent = LANG==='no'?'Vis tekst':'Show text'; showTextLabel.style.fontSize='13px'; showTextLabel.style.cursor='pointer'; showTextLabel.style.marginLeft='8px';
+      settingsDiv.appendChild(posLabel); settingsDiv.appendChild(posDiv); settingsDiv.appendChild(showTextCheck); settingsDiv.appendChild(showTextLabel);
+      uploadCard.appendChild(settingsDiv);
+      var musicDiv = document.createElement('div'); musicDiv.style.marginTop='16px'; musicDiv.style.paddingTop='12px'; musicDiv.style.borderTop='1px solid var(--line)';
+      var musicLabel = document.createElement('div'); musicLabel.style.fontSize='12px'; musicLabel.style.fontWeight='700'; musicLabel.style.color='var(--ink-soft)'; musicLabel.style.marginBottom='6px'; musicLabel.textContent = LANG==='no'?'🎵 Bakgrunnsmusikk (valgfritt)':'🎵 Background music (optional)';
+      var musicDesc = document.createElement('p'); musicDesc.style.fontSize='12.5px'; musicDesc.style.color='var(--ink-muted)'; musicDesc.style.marginBottom='8px'; musicDesc.textContent = LANG==='no'?'Velg gratis, lovlig musikk fra et av bibliotekene under, last den ned, og last den opp her.':'Pick free, legal music from one of the libraries below, download it, and upload it here.';
+      musicDiv.appendChild(musicLabel); musicDiv.appendChild(musicDesc);
+      var libRow = document.createElement('div'); libRow.style.display='flex'; libRow.style.flexWrap='wrap'; libRow.style.gap='8px'; libRow.style.marginBottom='10px';
+      MUSIC_LIBRARIES.forEach(function(lib){
+        var a = document.createElement('a'); a.href = lib.url; a.target='_blank'; a.rel='noopener noreferrer';
+        a.className = 'mk'; a.style.fontSize='12.5px'; a.style.textDecoration='none'; a.style.display='inline-block';
+        a.textContent = '🔗 '+(LANG==='no'?lib.no:lib.en);
+        a.title = LANG==='no'?lib.desc_no:lib.desc_en;
+        libRow.appendChild(a);
+      });
+      musicDiv.appendChild(libRow);
+      var musicFileInput = document.createElement('input'); musicFileInput.type='file'; musicFileInput.accept='audio/*'; musicFileInput.style.display='none';
+      var musicUploadBtn = document.createElement('button'); musicUploadBtn.textContent = LANG==='no'?'Last opp musikk':'Upload music'; musicUploadBtn.className='mk';
+      var musicStatus = document.createElement('div'); musicStatus.style.marginTop='8px'; musicStatus.style.fontSize='12px';
+      var musicName = document.createElement('div'); musicName.style.marginTop='4px'; musicName.style.fontSize='12.5px'; musicName.style.fontWeight='700'; musicName.textContent = CAROUSEL_MUSIC_NAME || '';
+      var musicPlayer = document.createElement('audio'); musicPlayer.controls = true; musicPlayer.style.marginTop='8px'; musicPlayer.style.width='100%'; musicPlayer.style.display = CAROUSEL_MUSIC_URL ? 'block' : 'none';
+      if (CAROUSEL_MUSIC_URL) musicPlayer.src = CAROUSEL_MUSIC_URL;
+      var musicRemoveBtn = document.createElement('button'); musicRemoveBtn.textContent = LANG==='no'?'Fjern':'Remove'; musicRemoveBtn.className='mk'; musicRemoveBtn.style.marginLeft='8px';
+      musicUploadBtn.addEventListener('click', function(){ musicFileInput.click(); });
+      musicFileInput.addEventListener('change', function(){ if(musicFileInput.files[0]) handleCarouselMusicUpload(musicFileInput.files[0], musicStatus, musicPlayer, musicName); });
+      musicRemoveBtn.addEventListener('click', function(){ CAROUSEL_MUSIC_URL=''; CAROUSEL_MUSIC_NAME=''; musicName.textContent=''; musicPlayer.style.display='none'; musicPlayer.src=''; musicStatus.textContent = LANG==='no'?'Musikk fjernet':'Music removed'; });
+      var musicBtnRow = document.createElement('div');
+      musicBtnRow.appendChild(musicUploadBtn); musicBtnRow.appendChild(musicRemoveBtn);
+      musicDiv.appendChild(musicBtnRow); musicDiv.appendChild(musicStatus); musicDiv.appendChild(musicName); musicDiv.appendChild(musicPlayer);
+      var musicNote = document.createElement('p'); musicNote.style.fontSize='11.5px'; musicNote.style.color='var(--ink-muted)'; musicNote.style.marginTop='8px'; musicNote.textContent = LANG==='no'?'💡 Instagram, Facebook og TikTok støtter ikke musikk lagt til automatisk på en bilde-karusell. Bruk musikken når du redigerer en video selv, eller legg den til manuelt i appen.':'💡 Instagram, Facebook and TikTok don\'t support music attached automatically to a photo carousel. Use the music when editing a video yourself, or add it manually in the app.';
+      musicDiv.appendChild(musicNote);
+      uploadCard.appendChild(musicDiv);
+      out.appendChild(uploadCard);
       if (Array.isArray(r.slides)){
+        var carouselStats = document.createElement('div'); carouselStats.className='rcard';
+        var statsHead = document.createElement('h4'); statsHead.textContent = LANG==='no'?'📊 Karusell':'📊 Carousel';
+        var statsText = document.createElement('p'); statsText.textContent = (LANG==='no'?'Du har '+r.slides.length+' slides. Hver slide vises med samme bilde og annen tekst.':'You have '+r.slides.length+' slides. Each slide displays the same image with different text.'); statsText.style.fontSize='13.5px';
+        carouselStats.appendChild(statsHead); carouselStats.appendChild(statsText); out.appendChild(carouselStats);
+        var galleryCard = document.createElement('div'); galleryCard.className='rcard';
+        var galleryHead = document.createElement('h4'); galleryHead.textContent = LANG==='no'?'🎬 Forhåndsvisning':'🎬 Preview';
+        galleryCard.appendChild(galleryHead);
+        var galleryContainer = document.createElement('div'); galleryContainer.style.position='relative'; galleryContainer.style.marginTop='12px';
+        var galleryImg = document.createElement('img'); galleryImg.style.width='100%'; galleryImg.style.borderRadius='8px'; galleryImg.style.display='block'; galleryImg.style.backgroundColor='#f0f0f0';
+        var galleryNav = document.createElement('div'); galleryNav.style.display='flex'; galleryNav.style.justifyContent='space-between'; galleryNav.style.alignItems='center'; galleryNav.style.marginTop='12px'; galleryNav.style.gap='10px';
+        var prevBtn = document.createElement('button'); prevBtn.textContent='◀'; prevBtn.style.padding='8px 12px'; prevBtn.style.fontSize='16px'; prevBtn.className='mk';
+        var slideCounter = document.createElement('div'); slideCounter.style.fontSize='13px'; slideCounter.style.fontWeight='700'; slideCounter.style.textAlign='center'; slideCounter.style.flex='1';
+        var nextBtn = document.createElement('button'); nextBtn.textContent='▶'; nextBtn.style.padding='8px 12px'; nextBtn.style.fontSize='16px'; nextBtn.className='mk';
+        var currentSlideIdx = 0;
+        var updateGallery = function(){
+          if (!CAROUSEL_UPLOAD_IMAGE || !Array.isArray(r.slides) || !r.slides.length) return;
+          var text = (typeof r.slides[currentSlideIdx]==='string')?r.slides[currentSlideIdx]:(r.slides[currentSlideIdx].text||r.slides[currentSlideIdx].body||r.slides[currentSlideIdx].headline||'');
+          renderTextOnImage(CAROUSEL_UPLOAD_IMAGE, [text], currentSlideIdx, r.slides.length, CAROUSEL_TEXT_POSITION, CAROUSEL_SHOW_TEXT)
+            .then(function(url){ galleryImg.src=url; slideCounter.textContent=(currentSlideIdx+1)+'/'+r.slides.length; });
+        };
+        prevBtn.addEventListener('click', function(){ currentSlideIdx = (currentSlideIdx - 1 + r.slides.length) % r.slides.length; updateGallery(); });
+        nextBtn.addEventListener('click', function(){ currentSlideIdx = (currentSlideIdx + 1) % r.slides.length; updateGallery(); });
+        galleryNav.appendChild(prevBtn); galleryNav.appendChild(slideCounter); galleryNav.appendChild(nextBtn);
+        galleryContainer.appendChild(galleryImg); galleryContainer.appendChild(galleryNav);
+        galleryCard.appendChild(galleryContainer); out.appendChild(galleryCard);
+        if (CAROUSEL_UPLOAD_IMAGE) updateGallery();
         r.slides.forEach(function(s, i){
           var text = (typeof s === 'string') ? s : (s.text || s.body || s.headline || '');
           var d=document.createElement('div'); d.className='rcard scene';
-          var head=document.createElement('div'); head.className='time'; head.textContent=T('slide')+' '+(i+1);
+          var head=document.createElement('div'); head.className='time'; head.textContent=T('slide')+' '+(i+1)+'/'+r.slides.length;
           var on=document.createElement('div'); on.className='on'; on.textContent=text; on.appendChild(copyBtn(text));
-          d.appendChild(head); d.appendChild(on); out.appendChild(d);
+          d.appendChild(head); d.appendChild(on);
+          out.appendChild(d);
         });
       }
       if (r.caption){ out.appendChild(card('✍️ '+T('caption'), r.caption, true)); }
@@ -760,8 +988,8 @@
   });
 
   // ---------- LAGREDE REELS ----------
-  function getSaved(){ try{ return JSON.parse(localStorage.getItem('reel_app_saved')||'[]'); }catch(e){ return []; } }
-  function setSaved(a){ try{ localStorage.setItem('reel_app_saved', JSON.stringify(a)); }catch(e){} }
+  function getSaved(){ try{ return JSON.parse(localStorage.getItem('reel_app_saved')||'[]'); }catch(e){ console.error('[reel-app] getSaved error:', e); return []; } }
+  function setSaved(a){ try{ localStorage.setItem('reel_app_saved', JSON.stringify(a)); console.log('[reel-app] Saved', a.length, 'reels'); }catch(e){ console.error('[reel-app] setSaved error:', e.message); } }
   function fmtLabel(fmt){
     var no = {reel:'Reel',story:'Story',carousel:'Karusell',post:'Innlegg'};
     var en = {reel:'Reel',story:'Story',carousel:'Carousel',post:'Post'};
@@ -775,13 +1003,16 @@
     return '';
   }
   function saveReel(r, fmt){
+    console.log('[reel-app] saveReel called, fmt:', fmt, 'reel object keys:', Object.keys(r||{}));
     var a = getSaved();
     a.unshift({ id: 'c'+a.length+'_'+($('topic').value.length), fmt: fmt||'reel', title: ($('topic').value.trim().slice(0,60)||reelSnippet(r)||fmtLabel(fmt)), reel: r });
     setSaved(a); toast(LANG==='no'?'Lagret':'Saved');
+    console.log('[reel-app] Save completed');
   }
   function renderSaved(){
     var list = $('savedList'); var a = getSaved();
-    if (!a.length){ list.innerHTML='<div class="empty"><div class="em">📁</div><p>'+(LANG==='no'?'Ingenting lagret ennå. Lag ditt første innhold under "Lag".':'Nothing saved yet. Make your first content under "Make".')+'</p></div>'; return; }
+    console.log('[reel-app] renderSaved: found', a.length, 'saved reels');
+    if (!a.length){ console.log('[reel-app] No saved reels, showing empty message'); list.innerHTML='<div class="empty"><div class="em">📁</div><p>'+(LANG==='no'?'Ingenting lagret ennå. Lag ditt første innhold under "Lag".':'Nothing saved yet. Make your first content under "Make".')+'</p></div>'; return; }
     list.innerHTML='';
     a.forEach(function(item, i){
       var d=document.createElement('div'); d.className='saved';

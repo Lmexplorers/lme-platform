@@ -112,8 +112,12 @@
     font-size:13px;color:#7a5d00;margin-top:14px;}
   .pubmsg{font-size:13px;color:var(--ink-soft);margin-top:10px;min-height:1em;}
   .err{color:var(--cerise);}
-  #step2,#step3{opacity:.55;pointer-events:none;}
-  #step2.on,#step3.on{opacity:1;pointer-events:auto;}
+  #step2,#step3{opacity:.55;pointer-events:none;cursor:not-allowed;}
+  #step2.on,#step3.on{opacity:1;pointer-events:auto;cursor:auto;}
+  #step2 button,#step3 button{cursor:not-allowed;opacity:.6;}
+  #step2.on button,#step3.on button{cursor:pointer;opacity:1;}
+  #step3-disabled-hint{display:block !important;}
+  #step3.on #step3-disabled-hint{display:none !important;}
 </style>
 </head>
 <body>
@@ -130,7 +134,7 @@
   <div class="topbar-right">
     <a href="/creative-academy" class="topbar-back">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="15 18 9 12 15 6"/></svg>
-      <span data-i18n="back">Til LME Studio</span>
+      <span data-i18n="back">Til LME Autopilot</span>
     </a>
     <div class="lang-toggle">
       <button id="lang-no" class="active" onclick="setLang('no')">NO</button>
@@ -153,7 +157,7 @@
     <label class="fld" data-i18n="s1-fmt">Format</label>
     <div id="fmtChips" class="fmt-chips"></div>
     <label class="fld" for="src" data-i18n="s1-src" style="margin-top:14px;">Innhold eller idé</label>
-    <textarea id="src" data-i18n-ph="s1-ph" placeholder="F.eks: Tre enkle Montessori-aktiviteter i kjøkkenet for barn 3-6 år…"></textarea>
+    <textarea id="src" data-i18n-ph="s1-ph" placeholder="F.eks: En tips, leksjon, ide eller emne du vil gjøre til en reel…"></textarea>
     <div class="row">
       <div id="secsWrap">
         <label class="fld" for="secs" data-i18n="s1-len">Lengde</label>
@@ -167,6 +171,10 @@
       <button class="btn cerise" id="genBtn" onclick="genContent()"><span id="genLabel" data-i18n="s1-btn">✨ Lag innhold</span></button>
     </div>
     <div class="out" id="out"></div>
+    <div id="savedReelsWrap" style="margin-top:24px;padding:18px;background:var(--cream);border-radius:var(--r-lg);border:1px solid var(--line);">
+      <div style="font-family:var(--font-heading);font-weight:700;font-size:14px;color:var(--cerise);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;" data-i18n="savedReels">📚 Lagret innhold</div>
+      <div id="savedReelsHost"></div>
+    </div>
   </section>
 
   <!-- STEG 2: media -->
@@ -176,7 +184,7 @@
     <p class="lead" id="s2lead" data-i18n="s2-lead">Lim inn lenken til den ferdige videoen eller bildet. Blotato henter og re-hoster den ved publisering.</p>
     <div id="genVideoWrap" style="margin-bottom:14px;">
       <label class="fld" for="imgPromptEdit" data-i18n="s2-imgprompt">Bilde-prompt (kan endres)</label>
-      <textarea id="imgPromptEdit" data-i18n-ph="s2-imgpromptPh" placeholder="Beskriv bildet AI-en skal lage: hvilket Montessori-materiell, farger, stemning…" style="min-height:70px;" oninput="this.dataset.touched='1'"></textarea>
+      <textarea id="imgPromptEdit" data-i18n-ph="s2-imgpromptPh" placeholder="Beskriv bildet/scenen AI-en skal lage: elementer, farger, stemning, stil…" style="min-height:70px;" oninput="this.dataset.touched='1'"></textarea>
       <label class="fld" for="refImgUrl" data-i18n="s2-refimg" style="margin-top:10px;">Referansebilde eller egen fil (valgfritt)</label>
       <input id="refImgUrl" placeholder="https://…/bilde.jpg" />
       <div class="row" style="margin-top:8px;">
@@ -200,6 +208,7 @@
     <div class="step-num"><span>3</span> <span data-i18n="s3-num">Publiser</span></div>
     <h2 data-i18n="s3-h">Legg ut automatisk</h2>
     <p class="lead" data-i18n="s3-lead">Bruker Blotato-kontoene dine automatisk. Legg ut nå, eller planlegg til en fremtidig dato.</p>
+    <div id="step3-disabled-hint" style="background:rgba(233,30,137,0.1);border:1px solid rgba(233,30,137,0.3);border-radius:var(--r-sm);padding:12px 14px;font-size:13px;color:var(--cerise);margin-bottom:16px;display:none;"><strong>💡 Tip:</strong> <span data-i18n="s3-hint">Generer først innholdet i steg 1, så aktiveres publiseringsknappene her.</span></div>
     <label style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--ink-soft);cursor:pointer;margin-bottom:4px;">
       <input type="checkbox" id="schedOn" style="width:auto;" onchange="toggleSched()"> <span data-i18n="s3-sched">📅 Planlegg til senere (90-dagers plan)</span>
     </label>
@@ -226,19 +235,19 @@ const WORKER_BASE = "https://lme-ai-visibility.lmexplorers.workers.dev";
 /* ---- Språk (samme nøkkel som resten av plattformen) ---- */
 let LANG = (function(){ try { return localStorage.getItem('lme_lang') || localStorage.getItem('lme-lang') || 'no'; } catch(e){ return 'no'; } })();
 const I18N = {
-  no:{ back:"Til LME Studio",
+  no:{ back:"Til LME Autopilot",
     title:'LME <em>Reel Studio</em>',
     subtitle:"Velg format og lag ferdig innhold: reel, karusell, story, feed-innlegg, bildetekst, nyhetsbrev eller Pinterest. Klar til automatisk publisering og planlegging.",
     "s1-num":"Innhold","s1-h":"Hva skal du lage?","s1-lead":"Velg format, lim inn et tips, en leksjon eller en idé, så lager AI-en innholdet i riktig format.",
     "s1-fmt":"Format",
-    "s1-src":"Innhold eller idé","s1-ph":"F.eks: Tre enkle Montessori-aktiviteter i kjøkkenet for barn 3-6 år…","s1-len":"Lengde","s1-btn":"✨ Lag innhold",
+    "s1-src":"Innhold eller idé","s1-ph":"F.eks: En tips, leksjon, ide eller emne du vil gjøre til en reel…","s1-len":"Lengde","s1-btn":"✨ Lag innhold",
     "s2-num":"Media","s2-h":"Legg til media","s2-lead":"Lim inn lenken til den ferdige videoen eller bildet.",
     "s2urlVideo":"Lenke til ferdig video (MP4)","s2urlImage":"Lenke til bilde (valgfritt)",
     "s2leadVideo":"For reel og TikTok trengs en vertikal 9:16 video. Lim inn lenken til den ferdige MP4-en her.",
     "s2leadImage":"Legg gjerne ved et bilde (valgfritt for de fleste, kreves for Instagram og Pinterest). Lim inn en bilde-lenke.",
     "s2-url":"Lenke til media","s2-note":"💡 Trykk «Generer video automatisk», så lager AI-en et bilde av innholdet og gjør det om til en vertikal 9:16 video rett her. Eller lim inn lenken til en egen ferdig video.",
     "s2-genvid":"Generer video automatisk",
-    "s2-imgprompt":"Bilde-prompt (kan endres)","s2-imgpromptPh":"Beskriv bildet AI-en skal lage: hvilket Montessori-materiell, farger, stemning…",
+    "s2-imgprompt":"Bilde-prompt (kan endres)","s2-imgpromptPh":"Beskriv bildet/scenen AI-en skal lage: elementer, farger, stemning, stil…",
     "s2-refimg":"Referansebilde eller egen fil (valgfritt)","s2-upimg":"Last opp bilde","s2-upvid":"Last opp video",
     "s2-refnote":"Lim inn en bilde-lenke eller last opp et bilde, så lager jeg videoen ut fra akkurat det bildet i stedet for et AI-bilde. Du kan også laste opp en helt ferdig video.",
     upLoading:"Laster opp…",upOk:"Lastet opp ✓",upFail:"Opplasting feilet.",upTooBig:"Filen er for stor (maks 24 MB).",upUsingRef:"Bruker ditt eget bilde til videoen.",upVidReady:"Egen video lagt inn ✓",
@@ -251,7 +260,7 @@ const I18N = {
     vidServerBusy:"Serveren svarer ikke som forventet ennå. En ny versjon kan være under utrulling. Last siden på nytt og prøv igjen om et minutt.",
     imgNotConfigured:"Bildemotoren er ikke koblet til ennå. Legg inn en nøkkel (OPENAI_API_KEY eller GEMINI_API_KEY) i Cloudflare, så lager jeg bildet automatisk.",
     "s3-num":"Publiser","s3-h":"Legg ut automatisk","s3-lead":"Bruker Blotato-kontoene dine automatisk. Legg ut nå, eller planlegg til en fremtidig dato.",
-    "s3-sched":"📅 Planlegg til senere (90-dagers plan)","s3-date":"Dato","s3-time":"Tid",
+    "s3-sched":"📅 Planlegg til senere (90-dagers plan)","s3-date":"Dato","s3-time":"Tid","s3-hint":"Generer først innholdet i steg 1, så aktiveres publiseringsknappene her.",
     "pl-num":"Planen din","pl-h":"Planlagt innhold","pl-lead":"Innhold du har planlagt fremover. Blotato legger det ut automatisk til rett tid. Lagres her, også etter at du lukker siden.",
     hook:"HOOK (0-3 s)",vo:"Voiceover",music:"Musikk",caption:"Caption",tags:"Hashtags",scenes:"Scener",broll:"B-roll",
     slide:"Slide",frame:"Frame",imgprompt:"Bilde-prompt",subject:"Emnelinje",preview:"Forhåndstekst",body:"E-post",cta:"Oppfordring",pinTitle:"Pin-tittel",pinDesc:"Pin-beskrivelse",
@@ -263,20 +272,21 @@ const I18N = {
     notConnected:"Fant ikke denne kontoen i Blotato.",
     publishing:"Publiserer…",scheduling:"Planlegger…",published:"Lagt ut automatisk 🎉",
     scheduledOk:"Planlagt 🗓️",pubfail:"Klarte ikke å publisere. Sjekk kobling i Publiser alle.",neterr:"Nettverksfeil. Prøv igjen.",
-    planEmpty:"Ingen planlagt innhold enda.",remove:"Fjern" },
-  en:{ back:"To LME Studio",
+    planEmpty:"Ingen planlagt innhold enda.",remove:"Fjern",
+    saveReel:"💾 Lagre denne reelen",savedReels:"📚 Lagret innhold",noSavedReels:"Ingen lagret innhold enda.",load:"Last inn",delete:"Slett" },
+  en:{ back:"To LME Autopilot",
     title:'LME <em>Reel Studio</em>',
     subtitle:"Choose a format and create finished content: reel, carousel, story, feed post, caption, newsletter or Pinterest. Ready for automatic posting and scheduling.",
     "s1-num":"Content","s1-h":"What do you want to create?","s1-lead":"Choose a format, paste a tip, a lesson or an idea, and the AI creates the content in the right format.",
     "s1-fmt":"Format",
-    "s1-src":"Content or idea","s1-ph":"E.g: Three simple Montessori kitchen activities for kids aged 3-6…","s1-len":"Length","s1-btn":"✨ Create content",
+    "s1-src":"Content or idea","s1-ph":"E.g: A tip, lesson, idea or topic you want to turn into a reel…","s1-len":"Length","s1-btn":"✨ Create content",
     "s2-num":"Media","s2-h":"Add media","s2-lead":"Paste the link to the finished video or image.",
     "s2urlVideo":"Link to finished video (MP4)","s2urlImage":"Image link (optional)",
     "s2leadVideo":"Reels and TikTok need a vertical 9:16 video. Paste the finished MP4 link here.",
     "s2leadImage":"Add an image (optional for most, required for Instagram and Pinterest). Paste an image link.",
     "s2-url":"Media link","s2-note":"💡 Tap “Generate video automatically” and the AI creates an image of your content and turns it into a vertical 9:16 video right here. Or paste a link to your own finished video.",
     "s2-genvid":"Generate video automatically",
-    "s2-imgprompt":"Image prompt (editable)","s2-imgpromptPh":"Describe the image the AI should create: which Montessori material, colours, mood…",
+    "s2-imgprompt":"Image prompt (editable)","s2-imgpromptPh":"Describe the image/scene the AI should create: elements, colours, mood, style…",
     "s2-refimg":"Reference image or your own file (optional)","s2-upimg":"Upload image","s2-upvid":"Upload video",
     "s2-refnote":"Paste an image link or upload an image, and I'll build the video from that exact image instead of an AI image. You can also upload a finished video.",
     upLoading:"Uploading…",upOk:"Uploaded ✓",upFail:"Upload failed.",upTooBig:"File too large (max 24 MB).",upUsingRef:"Using your own image for the video.",upVidReady:"Your video added ✓",
@@ -289,7 +299,7 @@ const I18N = {
     vidServerBusy:"The server isn't responding as expected yet. A new version may be deploying. Reload the page and try again in a minute.",
     imgNotConfigured:"The image engine isn't connected yet. Add a key (OPENAI_API_KEY or GEMINI_API_KEY) in Cloudflare and I'll create the image automatically.",
     "s3-num":"Publish","s3-h":"Post automatically","s3-lead":"Uses your connected Blotato accounts automatically. Post now, or schedule for a future date.",
-    "s3-sched":"📅 Schedule for later (90-day plan)","s3-date":"Date","s3-time":"Time",
+    "s3-sched":"📅 Schedule for later (90-day plan)","s3-date":"Date","s3-time":"Time","s3-hint":"Generate content in step 1 first, then the publish buttons will activate here.",
     "pl-num":"Your plan","pl-h":"Scheduled content","pl-lead":"Content you've scheduled ahead. Blotato posts it automatically at the right time. Saved here, even after you close the page.",
     hook:"HOOK (0-3 s)",vo:"Voiceover",music:"Music",caption:"Caption",tags:"Hashtags",scenes:"Scenes",broll:"B-roll",
     slide:"Slide",frame:"Frame",imgprompt:"Image prompt",subject:"Subject",preview:"Preview text",body:"Email",cta:"Call to action",pinTitle:"Pin title",pinDesc:"Pin description",
@@ -301,7 +311,8 @@ const I18N = {
     notConnected:"Couldn't find this account in Blotato.",
     publishing:"Publishing…",scheduling:"Scheduling…",published:"Posted automatically 🎉",
     scheduledOk:"Scheduled 🗓️",pubfail:"Could not publish. Check the connection in Publish all.",neterr:"Network error. Try again.",
-    planEmpty:"No scheduled content yet.",remove:"Remove" }
+    planEmpty:"No scheduled content yet.",remove:"Remove",
+    saveReel:"💾 Save this reel",savedReels:"📚 Saved content",noSavedReels:"No saved content yet.",load:"Load",delete:"Delete" }
 };
 const t = (k) => (I18N[LANG][k] ?? I18N.no[k] ?? k);
 // Leser JSON trygt. Får vi en HTML-side tilbake (f.eks. mens en ny versjon
@@ -378,26 +389,39 @@ function updateStep2(){
 /* ---- Steg 1: generer innhold i valgt format ---- */
 let REEL=null;
 async function genContent(){
+  console.log('[genContent] START');
   const source=document.getElementById('src').value.trim();
-  if(!source) return;
+  if(!source) { console.log('[genContent] No source, returning'); return; }
   const seconds=document.getElementById('secs').value;
   const btn=document.getElementById('genBtn');
   const label=btn.innerHTML; btn.disabled=true; btn.innerHTML='<span class="spinner"></span> '+t('loading');
   try{
+    console.log('[genContent] Fetching from /api/ai/content, format:', FMT);
     const res=await fetch('/api/ai/content',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({format:FMT,source:source,seconds:seconds,lang:LANG})});
     if(!res.ok) throw new Error('http '+res.status);
     const data=await res.json();
     if(data.error) throw new Error(data.error);
+    console.log('[genContent] Got data, parsing...');
     REEL=parseJSON(data.result);
+    console.log('[genContent] REEL parsed, rendering content');
     renderContent(FMT,REEL);
     fillImgPrompt();
     const f=curFmt();
+    console.log('[genContent] Format:', f.id, 'Media:', f.media, 'Pub platforms:', f.pub, 'pub.length:', f.pub.length);
     if(f.media!=='none') document.getElementById('step2').classList.add('on');
-    if(f.pub.length){ document.getElementById('step3').classList.add('on'); updatePubButtons(); }
-    else { document.getElementById('step3').classList.remove('on'); }
+    if(f.pub.length){
+      console.log('[genContent] pub.length > 0, adding "on" class to step3');
+      document.getElementById('step3').classList.add('on');
+      console.log('[genContent] Step3 classList after add:', document.getElementById('step3').className);
+      console.log('[genContent] Calling updatePubButtons()');
+      updatePubButtons();
+      console.log('[genContent] updatePubButtons() complete');
+    }
+    else { console.log('[genContent] pub.length=0, removing "on" class from step3'); document.getElementById('step3').classList.remove('on'); }
+    console.log('[genContent] COMPLETE');
   }catch(e){
-    console.error('Reel Studio:',e);
+    console.error('[genContent] ERROR:', e.message, e.stack);
     document.getElementById('out').innerHTML='<p class="err">'+t('error')+'</p>';
   }finally{ btn.disabled=false; btn.innerHTML=label; }
 }
@@ -454,10 +478,75 @@ function renderContent(fmt,r){
     if(r.pinDescription) h+='<div class="card"><h4>📝 '+t('pinDesc')+' '+copyBtn(r.pinDescription)+'</h4><p>'+esc(r.pinDescription)+'</p></div>';
     if(r.imagePrompt) h+='<div class="card"><h4>🎨 '+t('imgprompt')+' '+copyBtn(r.imagePrompt)+'</h4><p>'+esc(r.imagePrompt)+'</p></div>';
   }
+  h+='<div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap;"><button class="btn" onclick="saveCurrentReel()"><span data-i18n="saveReel">💾 Lagre denne reelen</span></button></div>';
   document.getElementById('out').innerHTML=h;
 }
 
-/* Bygg publiseringstekst ut fra formatet */
+/* Lagre og last reelen fra localStorage */
+function getSavedReels(){try{return JSON.parse(localStorage.getItem('lme-reel-saved-v1')||'[]')||[];}catch(e){return [];}}
+function saveSavedReels(r){try{localStorage.setItem('lme-reel-saved-v1',JSON.stringify(r));}catch(e){}}
+function saveCurrentReel(){
+  console.log('[saveCurrentReel] START');
+  if(!REEL){console.log('[saveCurrentReel] No REEL, returning');return;}
+  var saved=getSavedReels();
+  console.log('[saveCurrentReel] Current saved count:', saved.length);
+  var id='reel-'+(FMT||'?')+'-'+Date.now();
+  var title=(REEL.title||(document.getElementById('src')&&document.getElementById('src').value)||'Reel').slice(0,80);
+  saved.push({id:id,title:title,format:FMT,saved:new Date().toISOString(),reel:REEL});
+  saved=saved.slice(-50);
+  saveSavedReels(saved);
+  console.log('[saveCurrentReel] Saved! ID:', id, 'Title:', title, 'Total saved:', saved.length);
+  var msg=document.getElementById('pubmsg')||document.getElementById('out');
+  if(!msg){msg=document.createElement('div');msg.id='pubmsg';msg.style.marginTop='12px';document.getElementById('out').parentNode.insertBefore(msg,document.getElementById('out').nextSibling);}
+  msg.className='pubmsg';msg.textContent='✓ Lagret! Se "Lagret innhold" under.';setTimeout(function(){msg.textContent='';},3500);
+  renderSavedReels();
+  console.log('[saveCurrentReel] COMPLETE');
+}
+function loadSavedReel(id){
+  console.log('[loadSavedReel] Loading reel:', id);
+  var saved=getSavedReels();
+  var it=saved.find(function(x){return x.id===id;});
+  if(!it){console.log('[loadSavedReel] Not found!');return;}
+  console.log('[loadSavedReel] Found reel, format:', it.format, 'title:', it.title);
+  REEL=it.reel;
+  FMT=it.format;
+  renderFmtChips();
+  renderContent(FMT,REEL);
+  var src=document.getElementById('src');if(src)src.value=it.title;
+  // Show feedback that loading worked
+  var msg=document.getElementById('pubmsg')||document.createElement('div');
+  msg.id='pubmsg';msg.className='pubmsg';msg.textContent='✓ Lastet inn: '+it.title;
+  if(!msg.parentNode){document.getElementById('out').parentNode.insertBefore(msg,document.getElementById('out').nextSibling);}
+  setTimeout(function(){msg.textContent='';},2000);
+  var step1=document.getElementById('step1');if(step1)step1.scrollIntoView({behavior:'smooth'});
+  console.log('[loadSavedReel] COMPLETE');
+}
+function deleteSavedReel(id){
+  console.log('[deleteSavedReel] Deleting reel:', id);
+  if(!confirm('Slett denne reelen?'))return;
+  var allReels=getSavedReels();
+  console.log('[deleteSavedReel] Before delete:', allReels.length, 'reels');
+  var saved=allReels.filter(function(x){return x.id!==id;});
+  saveSavedReels(saved);
+  console.log('[deleteSavedReel] After delete:', saved.length, 'reels');
+  renderSavedReels();
+}
+function renderSavedReels(){
+  var host=document.getElementById('savedReelsHost');if(!host)return;
+  var saved=getSavedReels();
+  console.log('[renderSavedReels] Total saved reels:', saved.length);
+  if(!saved.length){host.innerHTML='<p class="lead" style="margin:0;color:var(--ink-muted);">'+t('noSavedReels')+'</p>';return;}
+  var html=saved.reverse().map(function(it){
+    var date=new Date(it.saved);
+    var dateStr=date.toLocaleDateString('no-NO');
+    var timeStr=date.toLocaleTimeString('no-NO',{hour:'2-digit',minute:'2-digit'});
+    var safeId=String(it.id).replace(/'/g,'\\\'');
+    return '<div class="card" style="display:flex;align-items:center;gap:10px;"><div style="flex:1;"><div style="font-family:var(--font-heading);font-weight:700;font-size:14px;">'+esc(it.title)+'</div><div style="font-size:12.5px;color:var(--ink-muted);margin-top:2px;">'+it.format+' · '+dateStr+' '+timeStr+'</div></div><div style="display:flex;gap:6px;"><button class="copy-btn" onclick="loadSavedReel(\''+safeId+'\'); return false;">'+t('load')+'</button><button class="copy-btn" style="background:rgba(233,30,137,0.1);color:var(--cerise);" onclick="deleteSavedReel(\''+safeId+'\'); return false;">'+t('delete')+'</button></div></div>';
+  }).join('');
+  host.innerHTML=html;
+  console.log('[renderSavedReels] Rendered '+saved.length+' saved reels');
+}
+
 function buildCaption(){
   var r=REEL||{};
   if(FMT==='email') return (r.subject?r.subject+'\n\n':'')+(r.body||'');
@@ -471,10 +560,12 @@ function buildCaption(){
 }
 function updatePubButtons(){
   var f=curFmt(); var host=document.getElementById('pubBtns'); if(!host) return;
+  console.log('[updatePubButtons] Format:', f.id, 'Pub platforms:', f.pub);
   var labels={instagram:'📸 '+t('pubIg'),tiktok:'🎵 '+t('pubTt'),facebook:'👍 '+t('pubFb'),pinterest:'📌 '+t('pubPin')};
   host.innerHTML=f.pub.map(function(p){
     return '<button class="btn cerise block" onclick="publishReel(\''+p+'\',this)">'+labels[p]+'</button>';
   }).join('');
+  console.log('[updatePubButtons] Rendered', f.pub.length, 'buttons for step3');
 }
 
 /* ---- Steg 3: autopubliser via de tilkoblede Blotato-kontoene ----
@@ -695,9 +786,11 @@ function blotatoReason(res){
   return parts.join(': ');
 }
 async function publishReel(key,btn){
+  console.log('[publishReel] Starting for platform:', key);
   const msg=document.getElementById('pubmsg');
   const f=curFmt();
   const media=(document.getElementById('mediaUrl')&&document.getElementById('mediaUrl').value.trim())||'';
+  console.log('[publishReel] Format:', f.id, 'Media:', media?'yes':'no');
   // Video-format og media-krevende plattformer (instagram/tiktok/pinterest) trenger media.
   const needsMedia=(f.media==='video')||key==='instagram'||key==='tiktok'||key==='pinterest';
   if(needsMedia && !media){ msg.className='pubmsg err'; msg.textContent='⚠️ '+(f.media==='video'?t('needVideo'):t('needImage')); return; }
@@ -713,18 +806,27 @@ async function publishReel(key,btn){
   btn.innerHTML='<span class="spinner"></span> '+(scheduled?t('scheduling'):t('publishing'));
   msg.className='pubmsg'; msg.textContent='';
   try{
+    console.log('[publishReel] Fetching accounts...');
     const map=await fetchAccounts();
+    console.log('[publishReel] Accounts:', Object.keys(map));
     const conf=map[key];
-    if(!conf||!conf.accountId){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('notConnected'); return; }
+    if(!conf||!conf.accountId){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('notConnected'); console.warn('[publishReel] No account for:', key); return; }
+    console.log('[publishReel] Account found, accountId:', conf.accountId);
     const text=buildCaption();
-    const content={ text:text, platform:key }; if(media) content.mediaUrls=[media];
-    const target={ targetType:key }; if(key==='facebook'&&conf.pageId) target.pageId=conf.pageId;
-    const post={ accountId:conf.accountId, content:content, target:target };
+    console.log('[publishReel] Caption:', text.slice(0,100));
+    const post={ accountId:conf.accountId, text:text, target:{ targetType:key } };
+    if(key==='facebook'&&conf.pageId) post.target.pageId=conf.pageId;
+    if(media) post.mediaUrls=[media];
     const item={ label:key, post:post };
     if(scheduledTime) item.scheduledTime=scheduledTime;
-    const d=await fetch('/api/blotato/publish',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({items:[item]})}).then(function(r){return r.json();});
+    console.log('[publishReel] Payload:', JSON.stringify({items:[item]}).slice(0,200));
+    const r=await fetch('/api/blotato/publish',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({items:[item]})});
+    console.log('[publishReel] Fetch response status:', r.status);
+    const d=await r.json();
+    console.log('[publishReel] Response body:', JSON.stringify(d).slice(0,500));
     const res=d&&d.result&&d.result.results&&d.result.results[0];
+    console.log('[publishReel] Result ok?', res&&res.ok);
     if(res&&res.ok){
       btn.innerHTML='✓';
       if(scheduled){
@@ -733,8 +835,14 @@ async function publishReel(key,btn){
         msg.className='pubmsg'; msg.textContent=t('scheduledOk')+' '+dateStr+' '+timeStr;
       } else { msg.className='pubmsg'; msg.textContent=t('published'); }
     }
-    else { btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; var why=blotatoReason(res); msg.textContent='⚠️ '+t('pubfail')+(why?' '+why:''); }
-  }catch(e){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; msg.textContent='⚠️ '+t('neterr'); }
+    else {
+      btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err';
+      var why=blotatoReason(res);
+      if(!why && d&&d.error) why=String(d.error).slice(0,200);
+      console.warn('[publishReel] Publish failed, reason:', why);
+      msg.textContent='⚠️ '+t('pubfail')+(why?' '+why:'');
+    }
+  }catch(e){ btn.disabled=false; btn.innerHTML=label; msg.className='pubmsg err'; console.error('[publishReel] Error:', e.message, e.stack); msg.textContent='⚠️ '+t('neterr'); }
 }
 
 /* ---- Varig plan (90 dager), samme idé som LME Autopilot ---- */
@@ -759,10 +867,43 @@ function renderPlan(){
   }).join('');
 }
 
+// Catch all JavaScript errors for debugging
+window.addEventListener('error', function(event) {
+  console.error('[JS ERROR]', event.message, 'at', event.filename + ':' + event.lineno);
+});
+
+// Test function: manually enable step3 for debugging
+window.debugEnableStep3 = function() {
+  console.log('[DEBUG] Manually enabling step3...');
+  var step3 = document.getElementById('step3');
+  if (step3) {
+    step3.classList.add('on');
+    console.log('[DEBUG] step3 now has class "on"');
+    console.log('[DEBUG] step3 classList:', step3.className);
+    updatePubButtons();
+    console.log('[DEBUG] updatePubButtons() called');
+  } else {
+    console.error('[DEBUG] step3 element not found!');
+  }
+};
+console.log('[reel-studio] To test publishing, type: debugEnableStep3()');
+
+console.log('[reel-studio] Page loading...');
+console.log('[reel-studio] step3 element exists?', !!document.getElementById('step3'));
+console.log('[reel-studio] pubBtns element exists?', !!document.getElementById('pubBtns'));
 applyI18n();
 renderFmtChips();
 selectFmt('reel');
 renderPlan();
+renderSavedReels();
+console.log('[reel-studio] Page loaded! Initial format:', FMT);
+var step3=document.getElementById('step3');
+if(step3){
+  console.log('[reel-studio] step3 classList:', step3.className);
+  console.log('[reel-studio] step3 opacity:', window.getComputedStyle(step3).opacity);
+  console.log('[reel-studio] step3 pointer-events:', window.getComputedStyle(step3).pointerEvents);
+}
+console.log('[reel-studio] Ready to generate content.');
 
 /* Fjern oppdiktede løfter (f.eks. garanti eller "14 dager") fra tekst som
    kommer fra en gammel bufret side, så de aldri havner i det jeg genererer. */
@@ -786,7 +927,7 @@ function stripFabricatedPromises(txt){
   }
 })();
 </script>
-<script src="/js/lme-account.js?v=8" defer></script>
+<script src="/js/lme-account.js?v=11" defer></script>
 <script>window.LME_REQUIRES="sub";window.LME_GATE_TITLE="Reel Studio er en Proff-funksjon";window.LME_GATE_URL="/oppgrader";</script>
 <script src="/js/lme-gate.js" defer></script>
 </body>

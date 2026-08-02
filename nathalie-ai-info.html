@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spør Renate AI — LME</title>
+<title>Nathalie AI — en reise vi bygger sammen</title>
 
 <style>
   @font-face {
@@ -43,35 +43,16 @@
     --shadow-lg: 0 10px 40px rgba(0,0,0,0.08);
     --shadow-pill: 0 4px 20px rgba(0,0,0,0.06);
     --r-pill: 999px;
+    --r-lg: 24px;
     --font-display: 'Playpen Sans', system-ui, sans-serif;
     --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; }
-  body {
-    font-family: var(--font-body);
-    background: var(--cream);
-    color: var(--ink);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+  body { font-family: var(--font-body); background: var(--cream); color: var(--ink); min-height: 100vh; line-height: 1.6; }
 
-  /* HEADER */
   .header-wrap { padding: 20px 24px 0; position: sticky; top: 16px; z-index: 100; }
-  .header {
-    max-width: 1280px; margin: 0 auto;
-    background: rgba(255,255,255,0.92);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-radius: var(--r-pill);
-    padding: 12px 20px;
-    box-shadow: var(--shadow-pill);
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 16px;
-    border: 1px solid rgba(255,255,255,0.5);
-  }
+  .header { max-width: 1280px; margin: 0 auto; background: rgba(255,255,255,0.92); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border-radius: var(--r-pill); padding: 12px 20px; box-shadow: var(--shadow-pill); display: flex; align-items: center; justify-content: space-between; gap: 16px; border: 1px solid rgba(255,255,255,0.5); }
   .header-left { display: flex; align-items: center; gap: 28px; }
   .logo {
     display: flex;
@@ -89,6 +70,7 @@
   .nav-pill { padding: 10px 16px; border-radius: var(--r-pill); font-size: 16px; font-weight: 700; color: var(--ink); text-decoration: none; transition: background 0.2s ease; }
   .nav-pill:hover { background: rgba(248, 215, 218, 0.4); }
   .header-right { display: flex; align-items: center; gap: 10px; }
+
   .btn-ai { background: var(--ink); color: white; padding: 6px 16px 6px 6px; border-radius: var(--r-pill); text-decoration: none; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
   .btn-ai .avatar-mini { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--pink-mid), var(--cerise)); display: grid; place-items: center; color: white; font-weight: 700; font-size: 13px; overflow: hidden; }
   .btn-ai .avatar-mini img { width: 100%; height: 100%; object-fit: cover; }
@@ -98,278 +80,56 @@
   .avatar-btn { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; cursor: pointer; border: none; padding: 0; background: linear-gradient(135deg, var(--pink-mid), var(--sun)); }
   .avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
 
-  /* TITTEL */
-  .title-section { text-align: center; padding: 32px 24px 16px; max-width: 1280px; margin: 0 auto; width: 100%; }
-  .title-section h1 { font-family: var(--font-display); font-size: clamp(40px, 5vw, 64px); font-weight: 700; color: var(--ink); letter-spacing: -0.02em; line-height: 1.1; }
-  .title-section h1 em { color: var(--cerise); font-style: italic; }
-  .title-section .tagline { color: var(--ink-soft); font-size: 16px; font-style: italic; margin-top: 12px; }
+  .hero { background: linear-gradient(180deg, #fce7ed 0%, #f8d7da 100%); padding: 80px 24px 100px; text-align: center; margin-top: 24px; }
+  .hero-inner { max-width: 800px; margin: 0 auto; }
+  .hero h1 { font-family: var(--font-display); font-size: clamp(48px, 7vw, 96px); font-weight: 700; color: var(--ink); letter-spacing: -0.02em; line-height: 1; margin-bottom: 16px; }
+  .hero h1 em { color: var(--cerise); font-style: italic; }
+  .hero .hero-tagline { font-size: 14px; color: var(--ink); letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500; margin-top: 8px; }
 
-  /* LAYOUT */
-  .main-layout {
-    flex: 1;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 16px 24px 24px;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: 20px;
-  }
+  .content { max-width: 760px; margin: 0 auto; padding: 64px 24px; }
+  .content p { font-size: 17px; color: var(--ink); margin-bottom: 20px; line-height: 1.75; }
+  .content p strong { font-weight: 700; }
 
-  /* SIDEBAR */
-  .sidebar {
-    background: white;
-    border: 2px solid var(--pink-soft);
-    border-radius: 24px;
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-    height: fit-content;
-    max-height: 700px;
-    position: sticky;
-    top: 100px;
-  }
-  .sidebar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--line-soft); }
-  .sidebar-title { font-size: 15px; font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 8px; }
-  .new-chat-btn { background: linear-gradient(135deg, var(--pink-mid), var(--cerise)); color: white; border: none; border-radius: var(--r-pill); padding: 8px 14px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; }
-  .new-chat-btn:hover { transform: scale(1.05); }
-  .conversations-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
-  .conversations-list::-webkit-scrollbar { width: 6px; }
-  .conversations-list::-webkit-scrollbar-thumb { background: var(--pink-soft); border-radius: 3px; }
-  .conversation-item { padding: 12px 14px; border-radius: 14px; cursor: pointer; border: 1px solid transparent; display: flex; align-items: flex-start; gap: 10px; }
-  .conversation-item:hover { background: var(--pink-soft); border-color: var(--pink-mid); }
-  .conversation-item.active { background: var(--pink-soft); border-color: var(--cerise); }
-  .conversation-content { flex: 1; min-width: 0; }
-  .conversation-title { font-size: 13.5px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
-  .conversation-date { font-size: 11.5px; color: var(--ink-soft); }
-  .conversation-delete { background: none; border: none; cursor: pointer; color: var(--ink-soft); padding: 4px; border-radius: 50%; opacity: 0; display: grid; place-items: center; }
-  .conversation-item:hover .conversation-delete { opacity: 1; }
-  .conversation-delete:hover { background: white; color: var(--cerise); }
-  .no-conversations { text-align: center; color: var(--ink-soft); font-size: 13px; padding: 24px 12px; line-height: 1.5; font-style: italic; }
-  .sidebar-info-link {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid var(--line-soft);
-    text-align: center;
-  }
-  .sidebar-info-link a {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--cerise);
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 600;
-    padding: 8px 14px;
-    border-radius: var(--r-pill);
-    transition: all 0.2s;
-  }
-  .sidebar-info-link a:hover {
-    background: var(--pink-soft);
-  }
+  .section { margin-top: 56px; }
+  .section h2 { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--ink); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .section h2 .emoji { font-size: 28px; }
+  .section ul { list-style: disc; margin: 16px 0 16px 28px; }
+  .section ul li { font-size: 17px; color: var(--ink); margin-bottom: 12px; line-height: 1.7; }
 
+  .cta-section { text-align: center; padding: 32px 24px 48px; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 10px; background: var(--ink); color: white; padding: 14px 28px; border-radius: var(--r-pill); text-decoration: none; font-size: 16px; font-weight: 600; transition: transform 0.2s; }
+  .btn-primary:hover { transform: scale(1.03); }
+  .btn-primary .avatar-mini { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--pink-mid), var(--cerise)); overflow: hidden; }
+  .btn-primary .avatar-mini img { width: 100%; height: 100%; object-fit: cover; }
 
-  /* CHAT VINDU */
-  .chat-window { background: white; border: 2px solid var(--pink-mid); border-radius: 28px; box-shadow: var(--shadow-lg); display: flex; flex-direction: column; min-height: 600px; overflow: hidden; }
-  .chat-bar { padding: 18px 24px; border-bottom: 1px solid var(--line-soft); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .chat-bar-left { display: flex; align-items: center; gap: 14px; }
-  .chat-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--pink-mid), var(--cerise)); overflow: hidden; display: grid; place-items: center; color: white; font-weight: 600; }
-  .chat-avatar img { width: 100%; height: 100%; object-fit: cover; }
-  .chat-name { font-size: 16px; font-weight: 600; color: var(--ink); }
-  .chat-status { font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
-  .chat-bar-actions { display: flex; gap: 6px; }
-  .chat-icon-btn { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: white; display: grid; place-items: center; cursor: pointer; color: var(--ink-soft); }
-  .chat-icon-btn:hover { background: var(--pink-soft); color: var(--cerise); border-color: var(--pink-mid); }
+  .explore { background: white; padding: 64px 24px 80px; margin-top: 32px; }
+  .explore-inner { max-width: 1280px; margin: 0 auto; }
+  .explore h2 { font-family: var(--font-display); font-size: 26px; font-weight: 600; color: var(--ink); text-align: center; margin-bottom: 40px; }
+  .explore h2 em { font-family: var(--font-display); color: var(--cerise); font-style: italic; }
+  .explore-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .explore-card { border-radius: var(--r-lg); padding: 28px; position: relative; overflow: hidden; min-height: 260px; display: flex; flex-direction: column; justify-content: space-between; }
+  .explore-card.studio { background: linear-gradient(135deg, #FCE7F3 0%, #F8D7DA 100%); }
+  .explore-card.community { background: linear-gradient(135deg, #FEF3C7 0%, #FCE7F3 100%); }
+  .explore-card.app { background: linear-gradient(135deg, #FEF9C3 0%, #FDE68A 100%); }
+  .explore-card h3 { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--ink); margin-bottom: 12px; line-height: 1.1; }
+  .explore-card h3 em { color: var(--cerise); font-style: italic; display: block; }
+  .explore-card p { font-size: 14px; color: var(--ink-soft); margin-bottom: 20px; line-height: 1.5; }
+  .explore-card .card-btn { align-self: flex-start; background: var(--sun); color: var(--ink); padding: 10px 20px; border-radius: var(--r-pill); text-decoration: none; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+  .explore-card.community .card-btn { background: var(--pink-mid); color: white; }
 
-  .chat-messages { flex: 1; overflow-y: auto; padding: 32px 40px; display: flex; flex-direction: column; gap: 16px; }
-  .chat-messages::-webkit-scrollbar { width: 8px; }
-  .chat-messages::-webkit-scrollbar-thumb { background: var(--pink-soft); border-radius: 4px; }
-
-  .welcome-mini { text-align: center; color: var(--ink-soft); font-size: 15px; margin: 20px 0; font-style: italic; }
-  .welcome-mini em { color: var(--cerise); }
-
-  .message {
-    max-width: 70%;
-    padding: 14px 20px;
-    border-radius: 18px;
-    line-height: 1.55;
-    font-size: 15px;
-    word-wrap: break-word;
-    white-space: pre-wrap;
-  }
-  .message.bot { background: #fef8fb; border: 1px solid var(--line); color: var(--ink); align-self: flex-start; border-top-left-radius: 4px; }
-  .message.user { background: linear-gradient(135deg, var(--pink-mid), var(--cerise)); color: white; align-self: flex-end; border-top-right-radius: 4px; }
-
-  /* VEDLEGG i meldinger */
-  .message-attachments {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 10px;
-  }
-  .attachment-thumb {
-    border-radius: 12px;
-    overflow: hidden;
-    max-width: 240px;
-    max-height: 240px;
-    border: 1px solid rgba(255,255,255,0.3);
-  }
-  .attachment-thumb img {
-    max-width: 100%;
-    max-height: 240px;
-    display: block;
-  }
-  .attachment-file {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(255,255,255,0.2);
-    padding: 10px 14px;
-    border-radius: 12px;
-    font-size: 13px;
-  }
-  .message.bot .attachment-file {
-    background: var(--cream);
-  }
-  .attachment-file-icon {
-    width: 32px;
-    height: 32px;
-    background: rgba(255,255,255,0.3);
-    border-radius: 8px;
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-  }
-  .message.bot .attachment-file-icon {
-    background: var(--pink-soft);
-    color: var(--cerise);
-  }
-  .attachment-file-name {
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 180px;
-  }
-
-  .quick-prompts { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 8px 0 16px; padding: 0 16px; }
-  .quick-prompt { background: white; border: 1px solid var(--line); border-radius: var(--r-pill); padding: 9px 18px; font-size: 14px; color: var(--ink); cursor: pointer; font-family: var(--font-body); }
-  .quick-prompt:hover { border-color: var(--pink-mid); background: var(--pink-soft); color: var(--cerise); }
-  .quick-prompt em { color: var(--cerise); font-style: italic; }
-
-  .typing-indicator { display: flex; gap: 4px; padding: 14px 20px; background: #fef8fb; border: 1px solid var(--line); border-radius: 18px; border-top-left-radius: 4px; align-self: flex-start; max-width: 80px; }
-  .typing-indicator span { width: 8px; height: 8px; background: var(--pink-mid); border-radius: 50%; animation: typing 1.4s infinite; }
-  .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-  .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes typing { 0%, 60%, 100% { opacity: 0.3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-4px); } }
-
-  /* INPUT */
-  .chat-input-bar { padding: 18px 24px 22px; border-top: 1px solid var(--line-soft); }
-
-  /* Pending vedlegg-forhåndsvisning ovenfor input */
-  .pending-attachments {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-  .pending-attachments:empty { display: none; }
-  .pending-attachment {
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1.5px solid var(--pink-mid);
-    background: var(--cream);
-  }
-  .pending-attachment-image {
-    width: 64px;
-    height: 64px;
-  }
-  .pending-attachment-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .pending-attachment-file {
-    width: 200px;
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-  }
-  .pending-attachment-file-icon {
-    width: 28px;
-    height: 28px;
-    background: var(--pink-soft);
-    color: var(--cerise);
-    border-radius: 6px;
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-  }
-  .pending-attachment-file-name {
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .pending-attachment-remove {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: var(--cerise);
-    color: white;
-    border: 2px solid white;
-    cursor: pointer;
-    display: grid;
-    place-items: center;
-    font-size: 14px;
-    line-height: 1;
-    font-weight: 700;
-  }
-  .pending-attachment-remove:hover { background: var(--ink); }
-
-  .chat-input-wrap { display: flex; align-items: center; gap: 12px; background: var(--cream); border-radius: var(--r-pill); padding: 6px 6px 6px 22px; border: 1px solid var(--line); }
-  .chat-input-wrap:focus-within { border-color: var(--pink-mid); background: white; }
-  .chat-input { flex: 1; border: none; background: none; outline: none; padding: 12px 0; font-size: 15px; font-family: var(--font-body); color: var(--ink); }
-  .chat-input::placeholder { color: var(--ink-soft); }
-  .input-tools { display: flex; align-items: center; gap: 4px; }
-  .tool-btn { width: 36px; height: 36px; border-radius: 50%; background: none; border: none; cursor: pointer; color: var(--ink-soft); display: grid; place-items: center; position: relative; }
-  .tool-btn:hover { color: var(--cerise); background: var(--pink-soft); }
-  .tool-btn.has-attachment { color: var(--cerise); }
-  .lang-pill { font-size: 13px; color: var(--ink-soft); padding: 0 8px; font-weight: 500; }
-  .send-btn { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--pink-mid), var(--cerise)); border: none; cursor: pointer; display: grid; place-items: center; color: white; }
-  .send-btn:hover { transform: scale(1.05); }
-  .send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-  .chat-footer-note { text-align: center; color: var(--ink-soft); font-size: 13.5px; padding: 16px 24px 40px; max-width: 1280px; margin: 0 auto; line-height: 1.7; grid-column: 1 / -1; }
-  .chat-footer-note a { color: var(--cerise); text-decoration: none; font-weight: 500; }
-
-  /* Toast */
-  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--ink); color: white; padding: 12px 24px; border-radius: var(--r-pill); font-size: 14px; box-shadow: var(--shadow-lg); z-index: 200; opacity: 0; transition: all 0.3s; pointer-events: none; }
-  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .footer { padding: 32px 24px; text-align: center; color: var(--ink-soft); font-size: 13.5px; }
 
   @media (max-width: 900px) {
     .nav-pills { display: none; }
     .btn-studio { display: none; }
     .header { padding: 10px 16px; }
-    .main-layout { grid-template-columns: 1fr; padding: 12px 16px 20px; }
-    .sidebar { max-height: 200px; position: static; }
-    .chat-messages { padding: 20px 16px; }
-    .message { max-width: 85%; }
+    .hero { padding: 60px 20px 80px; }
+    .content { padding: 48px 20px; }
+    .explore-grid { grid-template-columns: 1fr; }
   }
   @media (max-width: 600px) {
     .header-wrap { padding: 12px 12px 0; top: 8px; }
-    .chat-window { border-radius: 20px; }
-    .chat-bar { padding: 14px 16px; }
-    .chat-input-bar { padding: 14px 16px 18px; }
-    .input-tools .tool-btn:not(.attach-btn) { display: none; }
-    .input-tools .lang-pill { display: none; }
-    .title-section { padding: 20px 16px 8px; }
+    .icon-btn { display: none; }
   }
 
   /* Flytende språk-veksler i hjørnet */
@@ -410,675 +170,165 @@
 </style>
 </head>
 <body>
-<!-- deploy: 1778709368 -->
-
 
 <div class="header-wrap">
   <header class="header">
     <div class="header-left">
       <a href="/dashboard" class="logo"><img src="/images/lme-logo.png" alt="LME"></a>
       <nav class="nav-pills">
-        <a href="/academy" class="nav-pill">Lær</a>
-        <a href="/community" class="nav-pill">Fellesskap</a>
-        <a href="/biblioteket" class="nav-pill">Mer</a>
+        <a href="/academy" class="nav-pill" data-no="Lær" data-en="Learn">Lær</a>
+        <a href="/community" class="nav-pill" data-no="Fellesskap" data-en="Community">Fellesskap</a>
+        <a href="/biblioteket" class="nav-pill" data-no="Mer" data-en="More">Mer</a>
       </nav>
     </div>
     <div class="header-right">
-      <a href="/spor-renate-ai" class="btn-ai">
+      <a href="/spor-nathalie-ai" class="btn-ai">
         <span class="avatar-mini">
-          <img src="/images/renate-portrait.jpg" alt="R" onerror="this.style.display='none';this.parentElement.textContent='R'">
+          <img src="/images/nathalie-portrait.jpg?v=2" alt="N" onerror="this.style.display='none';this.parentElement.textContent='N'">
         </span>
-        Spør Renate AI ↗
+        <span data-no="Spør Nathalie AI ↗" data-en="Ask Nathalie AI ↗">Spør Nathalie AI ↗</span>
       </a>
-      <a href="/creative-academy" class="btn-studio">Åpne LME Studio</a>
+      <a href="https://lme-contentstudio.pages.dev/?key=LME2026" target="_blank" rel="noopener" class="btn-studio" data-no="Åpne LME Autopilot" data-en="Open LME Autopilot">Åpne LME Autopilot</a>
       <button class="icon-btn" aria-label="Søk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
       <button class="icon-btn" aria-label="Meldinger"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 12c0 4.4-4 8-9 8-1.3 0-2.5-.2-3.6-.7L3 21l1.7-5.4C3.6 14.2 3 12.7 3 11c0-4.4 4-8 9-8s9 3.6 9 8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
       <button class="icon-btn" aria-label="Varsler"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 8a6 6 0 1112 0c0 7 3 8 3 8H3s3-1 3-8M10 21a2 2 0 004 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <button class="avatar-btn" aria-label="Profil"><img src="/images/renate-portrait.jpg" alt="Renate" id="headerAvatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block"></button>
+      <button class="avatar-btn" aria-label="Profil"><img src="/images/nathalie-portrait.jpg?v=2" alt="Nathalie" id="headerAvatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block"></button>
     </div>
   </header>
 </div>
 
-<div class="title-section">
-  <h1>Spør <em>Renate AI</em></h1>
-  <p class="tagline">Hei, jeg er Renate AI ✨ Spør meg, eller last opp et bilde/PDF jeg kan se på 💗</p>
+<section class="hero">
+  <div class="hero-inner">
+    <h1>Nathalie <em>AI</em></h1>
+    <p class="hero-tagline" data-no="EN REISE VI BYGGER SAMMEN 💗" data-en="A JOURNEY WE'RE BUILDING TOGETHER 💗">EN REISE VI BYGGER SAMMEN 💗</p>
+  </div>
+</section>
+
+<div class="content">
+
+  <p data-no="Jeg er så glad for å presentere Nathalie AI for deg, en AI-versjon av meg som er her for å støtte deg med spørsmål om Montessoripedagogikk, Montessoritradisjonen og hvordan du best kommer i gang på reisen din. Dette er noe jeg har drømt om å bygge lenge, og du er her med meg helt fra begynnelsen. 🌷" data-en="I'm so excited to introduce you to Nathalie AI, an AI version of me that's here to support you with questions about Montessori pedagogy, the Montessori tradition, and how to best get started on your journey. This is something I've dreamed of building for a long time, and you're here with me from the very beginning. 🌷">Jeg er så glad for å presentere <strong>Nathalie AI</strong> for deg, en AI-versjon av meg som er her for å støtte deg med spørsmål om Montessoripedagogikk, Montessoritradisjonen og hvordan du best kommer i gang på reisen din. Dette er noe jeg har drømt om å bygge lenge, og du er her med meg helt fra begynnelsen. 🌷</p>
+
+  <p data-no="Fordi Nathalie AI er i beta, betyr det:" data-en="Because Nathalie AI is in beta, this means:">Fordi Nathalie AI er i <strong>beta</strong>, betyr det:</p>
+
+  <ul>
+    <li data-no="Jeg tester, lærer og forbedrer underveis" data-en="We're testing, learning, and improving along the way">Jeg tester, lærer og forbedrer underveis</li>
+    <li data-no="Små uventede feil eller hikke kan forekomme" data-en="Small unexpected errors or hiccups may occur">Små uventede feil eller hikke kan forekomme</li>
+    <li data-no="Jeg kan trenge å justere hvordan ting fungerer mens jeg finner ut hva som er realistisk" data-en="I may need to adjust how things work as we figure out what's realistic">Jeg kan trenge å justere hvordan ting fungerer mens jeg finner ut hva som er realistisk</li>
+  </ul>
+
+  <p data-no="Jeg vil at du skal føle deg som en del av denne reisen med meg, som en bak-kulissene-venn som hjelper meg å forme fremtiden til LME. Tilbakemeldinger, ideer og støtte fra deg betyr alt. 💗" data-en="I want you to feel like you're part of this journey with me, like a behind-the-scenes friend helping me shape the future of LME. Feedback, ideas, and support from you will mean the world. 💗">Jeg vil at du skal føle deg som en del av denne reisen med meg, som en bak-kulissene-venn som hjelper meg å forme fremtiden til LME. Tilbakemeldinger, ideer og støtte fra deg betyr alt. 💗</p>
+
+  <div class="section">
+    <h2><span class="emoji">💡</span> <span data-no="Rettferdig bruk" data-en="Fair usage">Rettferdig bruk</span></h2>
+    <p data-no="Nathalie AI er her for å hjelpe deg å vokse i din Montessorireise med klarhet og ro. For å sikre at alle får en god opplevelse, har jeg noen enkle retningslinjer for bruk:" data-en="Nathalie AI is here to help you grow in your Montessori journey with clarity and calm. To ensure everyone has a good experience, we have some simple guidelines for use:">Nathalie AI er her for å hjelpe deg å vokse i din Montessorireise med klarhet og ro. For å sikre at alle får en god opplevelse, har jeg noen enkle retningslinjer for bruk:</p>
+    <ul>
+      <li data-no="Bruk Nathalie AI til din egen læring og personlige utvikling" data-en="Use Nathalie AI for your own learning and personal development">Bruk Nathalie AI til din egen læring og personlige utvikling</li>
+      <li data-no="Vær bevisst på hvor mye du bruker den, slik at systemet fungerer godt for alle medlemmer (unngå overdreven bruk)" data-en="Be mindful of how much you use it, so the system works well for all members (avoid excessive use)">Vær bevisst på hvor mye du bruker den, slik at systemet fungerer godt for alle medlemmer (unngå overdreven bruk)</li>
+      <li data-no="Forstå at jeg noen ganger kan trenge å sette grenser, pause eller justere bruken for å holde alt rettferdig og bærekraftig. Det betyr at Nathalie AI av og til kan være utilgjengelig, eller kun tilgjengelig med begrenset funksjonalitet. Jeg er ikke ansvarlig for tap eller ulemper knyttet til bruk og tilgjengelighet av Nathalie AI." data-en="Understand that we may occasionally need to set limits, pause, or adjust usage to keep everything fair and sustainable. This means Nathalie AI may sometimes be unavailable, or available only with limited functionality. We are not liable for losses or inconveniences related to the use and availability of Nathalie AI.">Forstå at jeg noen ganger kan trenge å sette grenser, pause eller justere bruken for å holde alt rettferdig og bærekraftig. Det betyr at Nathalie AI av og til kan være utilgjengelig, eller kun tilgjengelig med begrenset funksjonalitet. Jeg er ikke ansvarlig for tap eller ulemper knyttet til bruk og tilgjengelighet av Nathalie AI.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2><span class="emoji">🚀</span> <span data-no="Hvorfor dette betyr noe" data-en="Why this matters">Hvorfor dette betyr noe</span></h2>
+    <p data-no="AI er kraftig, men også ressurskrevende. Jeg vil være helt åpen med deg om at dette er noe jeg eksperimenterer med. Det er kostnader og ukjente faktorer involvert, så disse retningslinjene hjelper meg å balansere nyskapningens magi med realiteten i å gjøre dette bærekraftig på lang sikt." data-en="AI is powerful, but also resource-intensive. I want to be completely open with you that this is something I'm experimenting with. There are costs and unknown factors involved, so this policy helps us balance the magic of innovation with the reality of making this sustainable long-term.">AI er kraftig, men også ressurskrevende. Jeg vil være helt åpen med deg om at dette er noe jeg eksperimenterer med. Det er kostnader og ukjente faktorer involvert, så disse retningslinjene hjelper meg å balansere nyskapningens magi med realiteten i å gjøre dette bærekraftig på lang sikt.</p>
+  </div>
+
+  <div class="section">
+    <h2><span class="emoji">🌟</span> <span data-no="Mitt løfte til deg" data-en="My promise to you">Mitt løfte til deg</span></h2>
+    <p data-no="Jeg vil alltid være ærlig med deg. Hvis jeg må gjøre endringer, forklarer jeg hvorfor. Hvis jeg oppdager noe fantastisk, er du den første som får vite det. Og fremfor alt er min høyeste prioritet å skape den beste mulige opplevelsen for deg mens du bygger din Montessoripraksis, ditt klasserom eller ditt hjem." data-en="I will always be honest with you. If we have to make changes, I'll explain why. If we discover something wonderful, you'll be the first to know. And above all, my highest priority is creating the best possible experience for you as you build your Montessori practice, your classroom, or your home.">Jeg vil alltid være ærlig med deg. Hvis jeg må gjøre endringer, forklarer jeg hvorfor. Hvis jeg oppdager noe fantastisk, er du den første som får vite det. Og fremfor alt er min høyeste prioritet å skape den beste mulige opplevelsen for deg mens du bygger din Montessoripraksis, ditt klasserom eller ditt hjem.</p>
+    <p data-no="Så dykk inn, lek, utforsk, og la Nathalie AI støtte deg. Tusen takk for at du er med på dette spennende eksperimentet med meg! 💗🌷" data-en="So dive in, play, explore, and let Nathalie AI support you. Thank you so much for being part of this exciting experiment with me! 💗🌷">Så dykk inn, lek, utforsk, og la Nathalie AI støtte deg. Tusen takk for at du er med på dette spennende eksperimentet med meg! 💗🌷</p>
+  </div>
+
+  <div class="cta-section">
+    <a href="/spor-nathalie-ai" class="btn-primary">
+      <span class="avatar-mini">
+        <img src="/images/nathalie-portrait.jpg?v=2" alt="N" onerror="this.style.display='none'">
+      </span>
+      <span data-no="Spør Nathalie AI nå ↗" data-en="Ask Nathalie AI now ↗">Spør Nathalie AI nå ↗</span>
+    </a>
+  </div>
+
 </div>
 
-<div class="main-layout">
-
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <div class="sidebar-title">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-        Mine samtaler
-      </div>
-      <button class="new-chat-btn" id="newChatBtn" title="Start ny samtale">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
-        Ny
-      </button>
-    </div>
-    <div class="conversations-list" id="conversationsList"></div>
-    <div class="sidebar-info-link">
-      <a href="/renate-ai-info">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 16v-4M12 8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        Om Renate AI
-      </a>
-    </div>
-  </aside>
-
-  <div class="chat-window">
-    <div class="chat-bar">
-      <div class="chat-bar-left">
-        <div class="chat-avatar"><img src="/images/renate-portrait.jpg" alt="Renate" onerror="this.style.display='none';this.parentElement.textContent='R'"></div>
+<section class="explore">
+  <div class="explore-inner">
+    <h2><span data-no="Utforsk" data-en="Explore">Utforsk</span> <em>Little Montessori Explorers</em></h2>
+    <div class="explore-grid">
+      <div class="explore-card studio">
         <div>
-          <div class="chat-name" id="chatTitle">Spør Renate AI</div>
-          <div class="chat-status">Online · Svarer vanligvis raskt 💗</div>
+          <h3>LME <em>Autopilot</em></h3>
+          <p data-no="Verktøyet ditt for å planlegge og dele Montessoriinnhold med følgerne dine. Tospråklig innholdsplanlegging for sosiale medier." data-en="Your tool for planning and sharing Montessori content with your followers. Bilingual content scheduling for social media.">Verktøyet ditt for å planlegge og dele Montessoriinnhold med følgerne dine. Tospråklig innholdsplanlegging for sosiale medier.</p>
         </div>
+        <a href="https://lme-contentstudio.pages.dev/?key=LME2026" target="_blank" rel="noopener" class="card-btn"><span data-no="Åpne Autopilot →" data-en="Open Autopilot →">Åpne Autopilot →</span></a>
       </div>
-      <div class="chat-bar-actions">
-        <button class="chat-icon-btn" id="downloadBtn" title="Last ned samtale som tekstfil"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <button class="chat-icon-btn" id="resetBtn" title="Slett ALLE lagrede samtaler"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
-      </div>
-    </div>
-
-    <div class="chat-messages" id="chatMessages"></div>
-
-    <div class="chat-input-bar">
-      <!-- Pending vedlegg vises her -->
-      <div class="pending-attachments" id="pendingAttachments"></div>
-      
-      <div class="chat-input-wrap">
-        <input type="text" class="chat-input" id="chatInput" placeholder="Skriv en melding til Renate AI..." autocomplete="off">
-        <div class="input-tools">
-          <!-- Skjult filinput -->
-          <input type="file" id="fileInput" accept="image/jpeg,image/png,image/gif,image/webp,application/pdf" multiple style="display:none">
-          
-          <button class="tool-btn attach-btn" id="attachBtn" aria-label="Legg ved fil" title="Last opp bilde eller PDF (maks 5MB)">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <button class="tool-btn" aria-label="Tale" title="Snakk inn melding (kommer snart)">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <span class="lang-pill">NO ▾</span>
+      <div class="explore-card community">
+        <div>
+          <h3>LME <em>Inner Circle</em></h3>
+          <p data-no="Bli med i fellesskapet av foreldre og pedagoger som lever Montessori i hverdagen. Lær, del og voks sammen." data-en="Join our community of parents and educators living Montessori in everyday life. Learn, share, and grow together.">Bli med i fellesskapet av foreldre og pedagoger som lever Montessori i hverdagen. Lær, del og voks sammen.</p>
         </div>
-        <button class="send-btn" id="sendBtn" aria-label="Send">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-        </button>
+        <a href="/community" class="card-btn"><span data-no="Bli med →" data-en="Join us →">Bli med →</span></a>
+      </div>
+      <div class="explore-card app">
+        <div>
+          <h3><span data-no="Last ned" data-en="Download the">Last ned</span> <em data-no="appen" data-en="app">appen</em></h3>
+          <p data-no="Få LME-plattformen i lomma. Få tilgang til kurs, biblioteket og Nathalie AI uansett hvor du er." data-en="Get the LME platform in your pocket. Access Classes, the Library, and Nathalie AI wherever you are.">Få LME-plattformen i lomma. Få tilgang til kurs, biblioteket og Nathalie AI uansett hvor du er.</p>
+        </div>
+        <a href="#" onclick="lmeSoon();return false;" class="card-btn"><span data-no="Last ned →" data-en="Download →">Last ned →</span></a>
       </div>
     </div>
   </div>
+</section>
 
-  <p class="chat-footer-note">
-    💗 Samtalene dine lagres automatisk i nettleseren. Last opp bilder av Montessorimateriale, klasserom eller PDF-er, Renate AI kan se og hjelpe deg! <a href="/renate-ai-info">Les mer om Renate AI →</a> · For personlig oppfølging, <a href="mailto:renate@lmexplorers.com">kontakt Renate direkte</a>.
-  </p>
-
-</div>
-
-<div class="toast" id="toast"></div>
+<footer class="footer">
+  © 2026 Little Montessori Explorers · <span data-no="Laget med 💗 av Renate Dahl" data-en="Made with 💗 by Renate Dahl">Laget med 💗 av Renate Dahl</span>
+</footer>
 
 <script>
-const WORKER_URL = '/renate-ai';
-const STORAGE_KEY = 'lme_renate_ai_conversations';
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
-
-const savedPhoto = localStorage.getItem('lme_profile_photo');
-if (savedPhoto) {
-  const headerAvatar = document.getElementById('headerAvatar');
-  if (headerAvatar) { headerAvatar.src = savedPhoto; headerAvatar.style.display = 'block'; }
-}
-
-// ============= TILSTAND =============
-let conversations = loadConversations();
-let currentConversationId = null;
-let conversationHistory = []; // sendes til API
-let displayHistory = []; // det vi viser i UI (kan inneholde thumbnail-data for visning)
-let pendingAttachments = []; // filer som ikke er sendt ennå
-
-// ============= DOM =============
-const chatMessages = document.getElementById('chatMessages');
-const chatInput = document.getElementById('chatInput');
-const sendBtn = document.getElementById('sendBtn');
-const resetBtn = document.getElementById('resetBtn');
-const downloadBtn = document.getElementById('downloadBtn');
-const newChatBtn = document.getElementById('newChatBtn');
-const conversationsList = document.getElementById('conversationsList');
-const chatTitle = document.getElementById('chatTitle');
-const toast = document.getElementById('toast');
-const attachBtn = document.getElementById('attachBtn');
-const fileInput = document.getElementById('fileInput');
-const pendingAttachmentsEl = document.getElementById('pendingAttachments');
-
-// ============= STORAGE =============
-function loadConversations() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch (e) { return []; }
-}
-
-function saveConversations() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
-  } catch (e) {
-    console.error('Storage feil:', e);
-    showToast('Kunne ikke lagre — kanskje for mange/store vedlegg 💔');
-  }
-  scheduleCloudSave();
-}
-
-// ============= SKY-LAGRING =============
-// Innloggede brukere får samtalene lagret i skyen (/api/renate-chats),
-// så Renate AI husker dem på tvers av enheter og økter. Uinnloggede
-// fortsetter med localStorage som før.
-const SYNC_SLOT = 'no';
-let cloudLoggedIn = false;
-let cloudTimer = null;
-
-function scheduleCloudSave() {
-  if (!cloudLoggedIn) return;
-  clearTimeout(cloudTimer);
-  cloudTimer = setTimeout(() => {
-    fetch('/api/renate-chats', {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ slot: SYNC_SLOT, data: conversations })
-    }).then(r => {
-      if (r.status === 413) showToast('Samtalene er for store for sky-lagring. Slett gamle samtaler eller store vedlegg 💔');
-    }).catch(() => {});
-  }, 800);
-}
-
-// Slår sammen lokal liste og sky-liste: nyeste versjon av hver samtale vinner
-function mergeConversations(localList, cloudList) {
-  const byId = {};
-  cloudList.concat(localList).forEach(c => {
-    if (!c || !c.id) return;
-    const prev = byId[c.id];
-    if (!prev || new Date(c.updatedAt || 0) > new Date(prev.updatedAt || 0)) byId[c.id] = c;
-  });
-  return Object.values(byId).sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0));
-}
-
-fetch('/api/renate-chats?slot=' + SYNC_SLOT, { credentials: 'same-origin' })
-  .then(r => r.json())
-  .then(d => {
-    if (!d || !d.loggedIn) return;
-    cloudLoggedIn = true;
-    if (Array.isArray(d.data) && d.data.length) {
-      conversations = mergeConversations(conversations, d.data);
-      saveConversations();
-      renderConversationsList();
-    } else if (conversations.length) {
-      scheduleCloudSave(); // første synk: last opp de lokale samtalene
-    }
-  })
-  .catch(() => {});
-
-function createNewConversation() {
-  const id = 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
-  return { id, title: 'Ny samtale', messages: [], displayMessages: [], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
-}
-
-function saveCurrentConversation() {
-  if (!currentConversationId || displayHistory.length === 0) return;
-  const idx = conversations.findIndex(c => c.id === currentConversationId);
-  const now = new Date().toISOString();
-  
-  // Tittel fra første brukermelding (tekst-delen)
-  const firstUserMsg = displayHistory.find(m => m.role === 'user');
-  let title = 'Ny samtale';
-  if (firstUserMsg) {
-    const textPart = firstUserMsg.text || '(vedlegg)';
-    title = textPart.slice(0, 50);
-    if (textPart.length > 50) title += '...';
-  }
-  
-  const data = {
-    id: currentConversationId,
-    title,
-    messages: [...conversationHistory], // API-format
-    displayMessages: [...displayHistory], // visnings-format med thumbnails
-    createdAt: idx >= 0 ? conversations[idx].createdAt : now,
-    updatedAt: now
-  };
-  
-  if (idx >= 0) {
-    conversations[idx] = data;
-  } else {
-    conversations.unshift(data);
-  }
-  
-  saveConversations();
-  renderConversationsList();
-}
-
-// ============= UI =============
-function showToast(message) {
-  toast.textContent = message;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2500);
-}
-
-function formatDate(isoString) {
-  const date = new Date(isoString);
-  const diffMs = new Date() - date;
-  const diffMin = Math.floor(diffMs / 60000);
-  const diffHr = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
-  if (diffMin < 1) return 'Akkurat nå';
-  if (diffMin < 60) return diffMin + ' min siden';
-  if (diffHr < 24) return diffHr + ' t siden';
-  if (diffDays < 7) return diffDays + ' d siden';
-  return date.toLocaleDateString('nb-NO', { day: 'numeric', month: 'short' });
-}
-
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-}
-
-function renderConversationsList() {
-  conversationsList.innerHTML = '';
-  if (conversations.length === 0) {
-    conversationsList.innerHTML = '<div class="no-conversations">Ingen samtaler ennå. Start din første samtale med Renate AI! 💗</div>';
-    return;
-  }
-  const sorted = [...conversations].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-  sorted.forEach(conv => {
-    const item = document.createElement('div');
-    item.className = 'conversation-item' + (conv.id === currentConversationId ? ' active' : '');
-    item.innerHTML = `
-      <div class="conversation-content">
-        <div class="conversation-title">${escapeHtml(conv.title)}</div>
-        <div class="conversation-date">${formatDate(conv.updatedAt)}</div>
-      </div>
-      <button class="conversation-delete" title="Slett samtale" data-id="${conv.id}">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-      </button>
-    `;
-    item.addEventListener('click', (e) => {
-      if (e.target.closest('.conversation-delete')) return;
-      loadConversation(conv.id);
-    });
-    item.querySelector('.conversation-delete').addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (confirm('Slette samtalen "' + conv.title + '"?')) deleteConversation(conv.id);
-    });
-    conversationsList.appendChild(item);
-  });
-}
-
-function showWelcome() {
-  chatMessages.innerHTML = `
-    <div class="welcome-mini">Hva vil du <em>snakke om i dag?</em></div>
-    <div class="message bot">Hei Renate! 💗 Så hyggelig at du er her. Jeg er Renate AI, og jeg er her for å hjelpe deg med spørsmål om Montessoripedagogikk i Montessoritradisjonen, LME-plattformen, og hvordan du best kommer i gang. Du kan også laste opp bilder eller PDF-er jeg kan se på! Hva vil du snakke om i dag? 🌷</div>
-    <div class="quick-prompts">
-      <button class="quick-prompt" data-prompt="Hvilken plan passer for meg?">Hvilken <em>plan</em> passer for meg?</button>
-      <button class="quick-prompt" data-prompt="Forklar 3-6">Forklar <em>3-6</em></button>
-      <button class="quick-prompt" data-prompt="Hvordan bruker jeg LME Autopilot?">Bruke <em>LME Autopilot</em></button>
-      <button class="quick-prompt" data-prompt="Montessori vs andre pedagogiske retninger">Montessori vs andre <em>retninger</em></button>
-      <button class="quick-prompt" data-prompt="Hvordan komme i gang med Montessori hjemme?">Komme i gang <em>hjemme</em></button>
-    </div>
-  `;
-  document.querySelectorAll('.quick-prompt').forEach(btn => {
-    btn.addEventListener('click', () => sendMessage(btn.getAttribute('data-prompt')));
-  });
-}
-
-function startNewChat() {
-  if (displayHistory.length > 0) saveCurrentConversation();
-  currentConversationId = createNewConversation().id;
-  conversationHistory = [];
-  displayHistory = [];
-  pendingAttachments = [];
-  renderPendingAttachments();
-  chatTitle.textContent = 'Spør Renate AI';
-  showWelcome();
-  renderConversationsList();
-  chatInput.focus();
-}
-
-function loadConversation(id) {
-  if (displayHistory.length > 0 && currentConversationId !== id) saveCurrentConversation();
-  const conv = conversations.find(c => c.id === id);
-  if (!conv) return;
-  currentConversationId = id;
-  conversationHistory = [...(conv.messages || [])];
-  displayHistory = [...(conv.displayMessages || [])];
-  chatTitle.textContent = conv.title;
-  chatMessages.innerHTML = '';
-  displayHistory.forEach(msg => renderMessage(msg));
-  renderConversationsList();
-  chatInput.focus();
-}
-
-function deleteConversation(id) {
-  conversations = conversations.filter(c => c.id !== id);
-  saveConversations();
-  if (currentConversationId === id) startNewChat();
-  else renderConversationsList();
-  showToast('Samtale slettet 🌷');
-}
-
-// ============= VEDLEGG =============
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const result = reader.result;
-      // result er "data:image/jpeg;base64,AAAA..."
-      const base64 = result.split(',')[1];
-      resolve(base64);
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-function getFileIcon(mimeType) {
-  if (mimeType === 'application/pdf') return 'PDF';
-  return 'FIL';
-}
-
-function renderPendingAttachments() {
-  pendingAttachmentsEl.innerHTML = '';
-  pendingAttachments.forEach((att, idx) => {
-    const el = document.createElement('div');
-    el.className = 'pending-attachment';
-    
-    if (att.type === 'image') {
-      el.innerHTML = `
-        <div class="pending-attachment-image">
-          <img src="${att.dataUrl}" alt="${escapeHtml(att.name)}">
-        </div>
-        <button class="pending-attachment-remove" title="Fjern" data-idx="${idx}">×</button>
-      `;
-    } else {
-      el.innerHTML = `
-        <div class="pending-attachment-file">
-          <div class="pending-attachment-file-icon">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-          </div>
-          <div class="pending-attachment-file-name">${escapeHtml(att.name)}</div>
-        </div>
-        <button class="pending-attachment-remove" title="Fjern" data-idx="${idx}">×</button>
-      `;
-    }
-    
-    el.querySelector('.pending-attachment-remove').addEventListener('click', () => {
-      pendingAttachments.splice(idx, 1);
-      renderPendingAttachments();
-      updateAttachButton();
-    });
-    
-    pendingAttachmentsEl.appendChild(el);
-  });
-}
-
-function updateAttachButton() {
-  if (pendingAttachments.length > 0) {
-    attachBtn.classList.add('has-attachment');
-  } else {
-    attachBtn.classList.remove('has-attachment');
-  }
-}
-
-attachBtn.addEventListener('click', () => fileInput.click());
-
-fileInput.addEventListener('change', async (e) => {
-  const files = Array.from(e.target.files || []);
-  fileInput.value = ''; // reset så samme fil kan velges igjen
-  
-  for (const file of files) {
-    if (file.size > MAX_FILE_SIZE) {
-      showToast(`"${file.name}" er for stor (maks 5MB) 💔`);
-      continue;
-    }
-    
-    if (pendingAttachments.length >= 5) {
-      showToast('Maks 5 vedlegg per melding 🌷');
-      break;
-    }
-    
-    try {
-      const base64 = await fileToBase64(file);
-      const isImage = file.type.startsWith('image/');
-      const isPdf = file.type === 'application/pdf';
-      
-      if (!isImage && !isPdf) {
-        showToast(`Kan ikke laste opp "${file.name}" — kun bilder og PDF 🌷`);
-        continue;
-      }
-      
-      pendingAttachments.push({
-        type: isImage ? 'image' : 'pdf',
-        mediaType: file.type,
-        name: file.name,
-        base64: base64,
-        dataUrl: 'data:' + file.type + ';base64,' + base64
-      });
-    } catch (err) {
-      showToast(`Feil ved opplasting av "${file.name}" 💔`);
+  const savedPhoto = localStorage.getItem('lme_profile_photo');
+  if (savedPhoto) {
+    const headerAvatar = document.getElementById('headerAvatar');
+    if (headerAvatar) {
+      headerAvatar.src = savedPhoto;
+      headerAvatar.style.display = 'block';
     }
   }
-  
-  renderPendingAttachments();
-  updateAttachButton();
-});
-
-// ============= MELDINGER =============
-function renderMessage(msg) {
-  const div = document.createElement('div');
-  div.className = 'message ' + (msg.role === 'user' ? 'user' : 'bot');
-  
-  // Render vedlegg først
-  if (msg.attachments && msg.attachments.length > 0) {
-    const attDiv = document.createElement('div');
-    attDiv.className = 'message-attachments';
-    msg.attachments.forEach(att => {
-      if (att.type === 'image' && att.dataUrl) {
-        const thumb = document.createElement('div');
-        thumb.className = 'attachment-thumb';
-        thumb.innerHTML = `<img src="${att.dataUrl}" alt="${escapeHtml(att.name || 'bilde')}">`;
-        attDiv.appendChild(thumb);
-      } else {
-        const file = document.createElement('div');
-        file.className = 'attachment-file';
-        file.innerHTML = `
-          <div class="attachment-file-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="attachment-file-name">${escapeHtml(att.name || 'fil.pdf')}</span>
-        `;
-        attDiv.appendChild(file);
-      }
-    });
-    div.appendChild(attDiv);
-  }
-  
-  // Render tekst
-  if (msg.text) {
-    const textDiv = document.createElement('div');
-    textDiv.textContent = msg.text;
-    div.appendChild(textDiv);
-  }
-  
-  chatMessages.appendChild(div);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  return div;
-}
-
-function showTyping() {
-  const typing = document.createElement('div');
-  typing.className = 'typing-indicator';
-  typing.innerHTML = '<span></span><span></span><span></span>';
-  chatMessages.appendChild(typing);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  return typing;
-}
-
-async function sendMessage(text) {
-  text = text ? text.trim() : '';
-  
-  // Sjekk at det er noe å sende (tekst eller vedlegg)
-  if (!text && pendingAttachments.length === 0) return;
-  
-  // Fjern velkomst
-  const welcome = chatMessages.querySelector('.welcome-mini');
-  const quickPrompts = chatMessages.querySelector('.quick-prompts');
-  if (welcome) welcome.remove();
-  if (quickPrompts) quickPrompts.remove();
-  
-  // Bygg API-melding (Anthropic-format)
-  let apiContent;
-  if (pendingAttachments.length === 0) {
-    apiContent = text;
-  } else {
-    apiContent = [];
-    // Vedlegg først
-    pendingAttachments.forEach(att => {
-      if (att.type === 'image') {
-        apiContent.push({
-          type: 'image',
-          source: {
-            type: 'base64',
-            media_type: att.mediaType,
-            data: att.base64
-          }
-        });
-      } else if (att.type === 'pdf') {
-        apiContent.push({
-          type: 'document',
-          source: {
-            type: 'base64',
-            media_type: 'application/pdf',
-            data: att.base64
-          }
-        });
-      }
-    });
-    // Så tekst (selv om tom)
-    if (text) {
-      apiContent.push({ type: 'text', text: text });
-    } else {
-      apiContent.push({ type: 'text', text: 'Hva ser du her?' });
-    }
-  }
-  
-  // Lagre display-versjon (med thumbnails for visning)
-  const displayMsg = {
-    role: 'user',
-    text: text,
-    attachments: pendingAttachments.map(att => ({
-      type: att.type,
-      name: att.name,
-      dataUrl: att.type === 'image' ? att.dataUrl : null
-    }))
-  };
-  
-  // Lagre API-versjon
-  conversationHistory.push({ role: 'user', content: apiContent });
-  displayHistory.push(displayMsg);
-  renderMessage(displayMsg);
-  
-  // Reset input
-  const sentAttachments = pendingAttachments.length;
-  chatInput.value = '';
-  pendingAttachments = [];
-  renderPendingAttachments();
-  updateAttachButton();
-  sendBtn.disabled = true;
-  
-  const typingEl = showTyping();
-  
-  try {
-    const response = await fetch(WORKER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: conversationHistory })
-    });
-    
-    if (!response.ok) {
-      const errData = await response.json().catch(() => ({}));
-      throw new Error(errData.error || ('HTTP ' + response.status));
-    }
-    
-    const data = await response.json();
-    const reply = data.content?.[0]?.text || data.reply || data.message || 'Beklager, jeg fikk ikke svar akkurat nå.';
-    
-    typingEl.remove();
-    const botMsg = { role: 'assistant', text: reply, attachments: [] };
-    conversationHistory.push({ role: 'assistant', content: reply });
-    displayHistory.push(botMsg);
-    renderMessage(botMsg);
-    
-    saveCurrentConversation();
-    
-  } catch (err) {
-    typingEl.remove();
-    const errorMsg = { role: 'assistant', text: 'Beklager, noe gikk galt. Prøv igjen om litt 🌷 (' + err.message + ')', attachments: [] };
-    displayHistory.push(errorMsg);
-    renderMessage(errorMsg);
-  } finally {
-    sendBtn.disabled = false;
-    chatInput.focus();
-  }
-}
-
-// ============= EVENTS =============
-sendBtn.addEventListener('click', () => sendMessage(chatInput.value));
-chatInput.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') sendMessage(chatInput.value);
-});
-
-newChatBtn.addEventListener('click', startNewChat);
-
-resetBtn.addEventListener('click', () => {
-  if (confirm('Vil du slette ALLE lagrede samtaler? Dette kan ikke angres.')) {
-    conversations = [];
-    saveConversations();
-    startNewChat();
-    showToast('Alle samtaler slettet');
-  }
-});
-
-downloadBtn.addEventListener('click', () => {
-  if (displayHistory.length === 0) {
-    showToast('Ingen samtale å laste ned ennå 🌷');
-    return;
-  }
-  const text = displayHistory.map(m => {
-    const prefix = m.role === 'user' ? 'Du: ' : 'Renate AI: ';
-    const attInfo = m.attachments && m.attachments.length > 0 ? ` [${m.attachments.length} vedlegg]` : '';
-    return prefix + (m.text || '(kun vedlegg)') + attInfo;
-  }).join('\n\n');
-  const blob = new Blob([text], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'samtale-med-renate-ai-' + new Date().toISOString().slice(0,10) + '.txt';
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('Samtale lastet ned 💗');
-});
-
-// INIT
-currentConversationId = createNewConversation().id;
-showWelcome();
-renderConversationsList();
-chatInput.focus();
 </script>
 
 
 <!-- Språk-veksler i hjørnet -->
-<a href="/ask-renate-ai" class="lang-float" aria-label="Switch to English" title="Switch to English">
+<button type="button" class="lang-float" id="langToggle" aria-label="Switch to English">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-  English
-</a>
+  EN 🌍
+</button>
 
+<script>
+  let currentLang = 'no';
+  const toggle = document.getElementById('langToggle');
+
+  function switchLanguage(lang) {
+    currentLang = lang;
+    window.LME_CURRENT_LANG = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(el => {
+      const text = el.getAttribute(`data-${lang}`);
+      if (text.includes('<')) el.innerHTML = text;
+      else el.textContent = text;
+    });
+    toggle.textContent = '';
+    toggle.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>' + (lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴');
+    toggle.setAttribute('aria-label', lang === 'no' ? 'Switch to English' : 'Bytt til norsk');
+    document.title = lang === 'no'
+      ? "Nathalie AI — en reise vi bygger sammen"
+      : "Nathalie AI — A Journey We're Building Together";
+  }
+
+  toggle.addEventListener('click', () => switchLanguage(currentLang === 'no' ? 'en' : 'no'));
+</script>
+
+<script>function lmeSoon(m){var t=document.createElement("div");t.textContent=m||(window.LME_CURRENT_LANG==="en"?"Coming soon 💛":"Kommer snart 💛");t.style.cssText="position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#2a1e2e;color:#fff;padding:12px 20px;border-radius:999px;z-index:99999;font-weight:700;font-family:inherit;box-shadow:0 8px 24px rgba(0,0,0,.25)";document.body.appendChild(t);setTimeout(function(){t.remove();},2200);}</script>
 <script src="/js/lme-visibility.js?v=8" defer></script>
-<script src="/js/lme-account.js?v=8" defer></script>
+<script src="/js/lme-account.js?v=11" defer></script>
+<script src="/js/renate-widget.js?v=5" defer></script>
 </body>
 </html>
+<!-- cache bust: 1785614512 -->

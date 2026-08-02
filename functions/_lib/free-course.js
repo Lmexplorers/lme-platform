@@ -35,7 +35,7 @@ function mk2(intro, body, pairs, sign) {
   return wrap('<p>' + intro + '</p><p>' + body + '</p>' + btns + '<p>' + sign + '</p>');
 }
 
-const COURSE_URL = SITE + "/kurs/youtube";
+const COURSE_URL = SITE + "/academy/youtube";
 const WORKBOOK_PDF_NO = SITE + "/funnel/nedlasting/LME-YouTube-kurs-arbeidsbok.pdf";
 const WORKBOOK_PDF_EN = SITE + "/funnel/nedlasting/LME-YouTube-kurs-arbeidsbok-EN.pdf";
 

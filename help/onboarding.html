@@ -440,7 +440,7 @@
       </button>
       <button class="ob-opt" data-value="ask-ai">
         <span class="ob-emoji">💬</span>
-        <span class="ob-label"><strong>Få svar fra Renate AI</strong><span>Stille spørsmål når jeg lurer</span></span>
+        <span class="ob-label"><strong>Få svar fra Nathalie AI</strong><span>Stille spørsmål når jeg lurer</span></span>
         <span class="ob-check"></span>
       </button>
     </div>
@@ -502,7 +502,7 @@
 
     <div class="ob-final-cta">
       <a href="/dashboard" class="btn-primary">Gå til dashbord →</a>
-      <a href="/spor-renate-ai" class="btn-secondary">Spør Renate AI</a>
+      <a href="/spor-nathalie-ai" class="btn-secondary">Spør Nathalie AI</a>
     </div>
     <button class="ob-restart" onclick="obRestart()">Start på nytt</button>
   </div>
@@ -666,10 +666,10 @@
 
     if (goals.includes('ask-ai')) {
       allSteps.push({
-        title: 'Snakk med Renate AI',
+        title: 'Snakk med Nathalie AI',
         desc: 'Still spørsmål om Montessori, observasjon, materiell eller hverdag — når som helst.',
-        link: '/spor-renate-ai',
-        linkText: 'Åpne Renate AI →',
+        link: '/spor-nathalie-ai',
+        linkText: 'Åpne Nathalie AI →',
         locked: !has('ai_limited')
       });
     }
@@ -678,7 +678,7 @@
       allSteps.push(
         { title: 'Utforsk dashbordet', desc: 'Se hva som er nytt og hva som passer for deg.', link: '/dashboard', linkText: 'Gå til dashbord →', locked: false },
         { title: 'Se ressursbiblioteket', desc: 'Bla i printables, observasjonsark og aktiviteter.', link: '/biblioteket', linkText: 'Åpne biblioteket →', locked: false },
-        { title: 'Spør Renate AI', desc: 'Få svar på det du lurer på om Montessori.', link: '/spor-renate-ai', linkText: 'Snakk med Renate →', locked: false }
+        { title: 'Spør Nathalie AI', desc: 'Få svar på det du lurer på om Montessori.', link: '/spor-nathalie-ai', linkText: 'Snakk med Renate →', locked: false }
       );
     }
 
@@ -734,7 +734,7 @@
 </script>
 
 <script src="/js/lme-visibility.js?v=8" defer></script>
-<script src="/js/lme-account.js?v=8" defer></script>
-<script src="/js/renate-widget.js?v=3" defer></script>
+<script src="/js/lme-account.js?v=11" defer></script>
+<script src="/js/renate-widget.js?v=5" defer></script>
 </body>
 </html>

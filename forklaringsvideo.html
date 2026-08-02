@@ -159,7 +159,7 @@
   <div class="topbar-right">
     <a href="/creative-academy" class="topbar-back">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="15 18 9 12 15 6"/></svg>
-      <span data-i18n="back">Til LME Studio</span>
+      <span data-i18n="back">Til LME Autopilot</span>
     </a>
     <div class="lang-toggle">
       <button id="lang-no" class="active" onclick="setLang('no')">NO</button>
@@ -304,7 +304,7 @@ function enrichMontessori(subject){
 function flowImagePrompt(subject){ var s=enrichMontessori(String(subject||"").trim()); return (s?s+", ":"")+FLOW_IMG_STYLE; }
 function flowVideoPrompt(subject){ var s=enrichMontessori(String(subject||"").trim()); return (s?"The hand draws: "+s+".\n":"")+FLOW_VIDEO_STYLE; }
 const I18N = {
-  no:{ back:"Til LME Studio",
+  no:{ back:"Til LME Autopilot",
     title:'LME <em>Forklaringsvideo</em>',
     subtitle:"Gjør et hvilket som helst tema om til en tegnet whiteboard-video du faktisk husker. Skriv et tema, så lager AI-en hook, manus scene for scene, det som tegnes på tavla og voiceover, klar til å bli video på cirka ett minutt.",
     b1:"✍️ Skriv et tema",b2:"🎬 Se den tegne seg fram",b3:"⏱️ Cirka ett minutt",b4:"🌍 Norsk og engelsk",
@@ -333,7 +333,7 @@ veoDrawing:"Veo tegner…",veoDlSketch:"Skisse",veoDlClip:"Klipp",veoKept:"Scene
     vidImage:"Lager bilde…",vidVoice:"Leser inn forklaringen…",vidMaking:"Lager whiteboard-video…",vidEngineWait:"Motoren lager videoen (skisse, stemme og tegning). Dette tar gjerne et par minutter, la fanen stå åpen…",vidEngineBusy:"Motoren svarer ikke akkurat nå. Den kan fortsatt starte opp, vent et minutt og prøv igjen.",vidUploading:"Laster opp…",vidReady:"Video klar 🎬 Tegnet scene for scene, med stemme. Lagt inn under.",vidReadyNoVoice:"Video klar 🎬 Tegnet scene for scene (uten stemme denne gangen). Lagt inn under.",vidNoRec:"Nettleseren støtter ikke videoopptak. Prøv på en datamaskin (Chrome eller Safari).",vidFail:"Kunne ikke lage video.",
     vidServerBusy:"Serveren svarer ikke som forventet ennå. En ny versjon kan være under utrulling. Last siden på nytt og prøv igjen om et minutt.",
     imgNotConfigured:"Bildemotoren er ikke koblet til ennå. Legg inn en nøkkel (OPENAI_API_KEY eller GEMINI_API_KEY) i Cloudflare, så lager jeg bildet automatisk." },
-  en:{ back:"To LME Studio",
+  en:{ back:"To LME Autopilot",
     title:'LME <em>Explainer Video</em>',
     subtitle:"Turn any topic into a hand-drawn whiteboard video you actually remember. Write a topic and the AI creates the hook, a scene-by-scene script, what gets drawn on the board and the voiceover, ready to become a one-minute video.",
     b1:"✍️ Write a topic",b2:"🎬 Watch it draw itself",b3:"⏱️ About one minute",b4:"🌍 Norwegian and English",
@@ -811,7 +811,7 @@ applyI18n();
   }catch(e){}
 })();
 </script>
-<script src="/js/lme-account.js?v=8" defer></script>
+<script src="/js/lme-account.js?v=11" defer></script>
 <script>window.LME_REQUIRES="sub";window.LME_GATE_TITLE="Forklaringsvideo er en Proff-funksjon";window.LME_GATE_URL="/oppgrader";</script>
 <script src="/js/lme-gate.js" defer></script>
 </body>

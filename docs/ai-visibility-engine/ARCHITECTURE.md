@@ -20,7 +20,7 @@ HTML-fil, kombinert med **Cloudflare Workers** for alt som krever en server
 |-----|-----------|----------------|
 | Frontend | Statiske HTML-filer, Cloudflare Pages, "clean URLs" | `dashboard.html` serveres på `/dashboard`; `_redirects` |
 | Designsystem | Inline `:root`-tokens, Playpen Sans, rosa/krem-palett | `--cerise:#E91E89`, `--cream:#FBF6F0` i hver fil |
-| AI-backend | Cloudflare Worker → Anthropic API (nøkkel som Worker-secret) | `renate-ai-worker.js`, `lme-proxy.renateshobby.workers.dev` |
+| AI-backend | Cloudflare Worker → Anthropic API (nøkkel som Worker-secret) | `nathalie-ai-worker.js`, `lme-proxy.renateshobby.workers.dev` |
 | Database | Cloudflare D1 | `lme-bookly`, `lme-inner-circle` (eksisterer) |
 | Filer/PDF | GitHub Releases + `/butikk/nedlasting/` | `host-skoledagbok-pdfs.yml` |
 | Betaling | Stripe (payment links → takkeside) | `butikk/butikk-config.js`, `takk.html?p=<id>` |
@@ -56,14 +56,14 @@ som medlemshjem. Bilingual norsk/engelsk Montessori-plattform.
 - **LME Creative Studio** (`creative-studio.html`) — hub for alle AI-/skaperverktøy.
 - **Content Studio** (ekstern: `lme-contentstudio.pages.dev`) — bilingual sosiale-medier-innhold (AI SaaS).
 - **LME Builder** (`lme-builder.html`) — side-/bok-/ressursbygger (bruker `lme-proxy/ai-generate`).
-- **Renate AI** (`spor-renate-ai.html`, `ask-renate-ai.html`, worker `renate-ai-worker.js`) — pedagogisk AI-assistent.
+- **Nathalie AI** (`spor-nathalie-ai.html`, `ask-nathalie-ai.html`, worker `nathalie-ai-worker.js`) — pedagogisk AI-assistent.
 - **Tripwire-funnel** (`funnel/`) — salgstrakt.
 - **LME Bookly** (D1: `lme-bookly`) — bok-relatert backend.
 - **Mia & Teo Lek & Lær / Skoledagbok** (`skoledagbok/`, `build_book*.py`) — produkter.
 - **Learn Norwegian App** — norskopplæring (produktområde).
 
 ### Eksisterende AI-funksjoner (VIKTIG — må gjenbrukes, ikke dupliseres)
-1. **Renate AI** — Anthropic-proxy med system-prompt (`renate-ai-worker.js`).
+1. **Nathalie AI** — Anthropic-proxy med system-prompt (`nathalie-ai-worker.js`).
 2. **LME Builder `ai-generate`** — generativ tekst via `lme-proxy`.
 3. **Content Studio** — multi-format sosial-innholdsgenerering.
 
@@ -74,7 +74,7 @@ som medlemshjem. Bilingual norsk/engelsk Montessori-plattform.
 
 ### Oppsummerende oversikt
 - **Plattform:** Cloudflare Pages-site, medlemsportal på `/dashboard`.
-- **Apper:** Creative Studio, Content Studio, LME Builder, Renate AI, Tripwire, Bookly, Skoledagbok, Learn Norwegian.
+- **Apper:** Creative Studio, Content Studio, LME Builder, Nathalie AI, Tripwire, Bookly, Skoledagbok, Learn Norwegian.
 - **Verktøy:** AI-generering (proxy), bokbygger, funnel-bygger.
 - **Medlemskap:** Start (299/$29), Proff (499/$49), Proff + Fellesskap (699/$69). 7 dager gratis prøve.
 - **Bibliotek:** kurs (Akademiet), ressurser/printables (Biblioteket), favoritter.

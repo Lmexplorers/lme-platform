@@ -1,6 +1,6 @@
 /* =====================================================================
    LME Bookly™ — skapere: bygger komplette prosjekter fra innstillinger.
-   AI (Renate AI) skriver tekstene når API-nøkkel finnes; ellers brukes
+   AI (Nathalie AI) skriver tekstene når API-nøkkel finnes; ellers brukes
    de innebygde tekstmalene, så alt fungerer uansett.
    + Malbiblioteket (100+ profesjonelle maler).
    ===================================================================== */
@@ -35,8 +35,8 @@
     function build(aiData) {
       if (!aiData) {
         BK.toast(no
-          ? '⚠️ Renate AI svarte ikke, så boka fikk standard maltekst. Prøv å generere på nytt for en original historie.'
-          : '⚠️ Renate AI did not respond, so the book got standard template text. Try generating again for an original story.');
+          ? '⚠️ Nathalie AI svarte ikke, så boka fikk standard maltekst. Prøv å generere på nytt for en original historie.'
+          : '⚠️ Nathalie AI did not respond, so the book got standard template text. Try generating again for an original story.');
       }
       var p = BK.newProject('book', cfg.title, cfg);
       var pages = [];
@@ -96,7 +96,7 @@
         '"objectives":["learning objective", ...],' +
         '"outline":["chapter/section", ...],' +
         '"pages":[' + pageSpec + ', ...exactly ' + inner + ' items]}';
-      prog(no ? 'Renate AI skriver boka…' : 'Renate AI is writing the book…');
+      prog(no ? 'Nathalie AI skriver boka…' : 'Nathalie AI is writing the book…');
       return BK.ai.json(sys, prompt, Math.min(7000, 800 + inner * 170)).then(build, function () { return build(null); });
     }
 

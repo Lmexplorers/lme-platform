@@ -14,7 +14,7 @@
  *       -> { ok:true, url:"/api/blog?action=image&id=..." }
  *
  * Innlegg er tospråklige: titleNo/titleEn, excerptNo/excerptEn, bodyNo/bodyEn.
- * Tekst genereres med ANTHROPIC_API_KEY (samme som Renate AI), bilder med
+ * Tekst genereres med ANTHROPIC_API_KEY (samme som Nathalie AI), bilder med
  * OPENAI_API_KEY (samme som Bookly). Genererte bilder lagres i KV og
  * serveres fra dette API-et, saa bildelenken i innlegget er kort.
  */
@@ -153,7 +153,7 @@ export async function onRequestPost(context) {
 /* ---------- KI-generering ---------- */
 
 /* Skriver et komplett tospråklig utkast med Claude (samme nøkkel som
-   Renate AI). Returnerer et utkast til redigeringsvinduet; ingenting
+   Nathalie AI). Returnerer et utkast til redigeringsvinduet; ingenting
    lagres før Renate trykker "Lagre innlegg". */
 async function generateDraft(body, env) {
   if (!env.ANTHROPIC_API_KEY) return json({ error: "text_unavailable" }, 200);

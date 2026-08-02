@@ -2008,7 +2008,7 @@
     var no = BK.lang() === 'no';
     var sections = no ? [
       ['🚀 Kom i gang', 'Velg en mal under Maler, eller åpne en av skaperne i menyen. Fyll inn detaljene og trykk Generer. Alt lagres automatisk i Prosjekter, og du kan redigere hver side etterpå.'],
-      ['📖 Bokskaperen og AI', 'Bokskaperen bruker Renate AI til å skrive sidetekster, illustrasjonsbeskrivelser og baksidetekst. Hvis AI ikke er tilgjengelig, brukes innebygde tekstmaler, du kan alltid redigere alt etterpå.'],
+      ['📖 Bokskaperen og AI', 'Bokskaperen bruker Nathalie AI til å skrive sidetekster, illustrasjonsbeskrivelser og baksidetekst. Hvis AI ikke er tilgjengelig, brukes innebygde tekstmaler, du kan alltid redigere alt etterpå.'],
       ['🧩 Pusleriene er ekte', 'Ordletinger, kryssord, sudoku (med garantert unik løsning), labyrinter og tallgåter genereres algoritmisk. Bruk "Generer på nytt" på en side for å få en ny variant, og "Vis fasit" for løsningen.'],
       ['🖨️ Slik eksporterer du PDF', 'Trykk "Skriv ut / PDF" i et prosjekt. I utskriftsdialogen velger du "Lagre som PDF" som skriver. Sidestørrelsen settes automatisk til prosjektets format. Velg "Ingen marger" hvis dialogen spør.'],
       ['🖼️ Omslag og rygg', 'Omslagsdesigneren beregner ryggbredden fra sidetall og papirtype. Under cirka 80 sider bør ryggen være uten tekst. Bruk alltid plattformens egen omslagskalkulator for endelige mål.'],
@@ -2017,7 +2017,7 @@
       ['🃏 Skrive ut flashkort', 'Skriv ut på tykt papir (200 g+). Glosekort med bakside er lagt opp for dobbeltsidig utskrift: baksidene er speilvendt slik at de treffer riktig kort.'],
     ] : [
       ['🚀 Getting started', 'Pick a template under Templates, or open one of the creators in the menu. Fill in the details and press Generate. Everything is saved automatically under Projects, and every page can be edited afterwards.'],
-      ['📖 The Book Creator and AI', 'The Book Creator uses Renate AI to write page texts, illustration descriptions and back cover text. If AI is unavailable, built-in templates are used, and you can always edit everything afterwards.'],
+      ['📖 The Book Creator and AI', 'The Book Creator uses Nathalie AI to write page texts, illustration descriptions and back cover text. If AI is unavailable, built-in templates are used, and you can always edit everything afterwards.'],
       ['🧩 The puzzles are real', 'Word searches, crosswords, sudoku (with a guaranteed unique solution), mazes and number riddles are generated algorithmically. Use "Regenerate" on a page for a new variant, and "Show solution" for the answer.'],
       ['🖨️ Exporting PDFs', 'Press "Print / PDF" in a project. In the print dialog, choose "Save as PDF" as the printer. The page size is set automatically to the project format. Choose "No margins" if asked.'],
       ['🖼️ Covers and spines', 'The Cover Designer calculates spine width from page count and paper type. Below about 80 pages, keep the spine free of text. Always use the platform\'s own cover calculator for final dimensions.'],
@@ -2026,14 +2026,14 @@
       ['🃏 Printing flashcards', 'Print on thick paper (200 gsm+). Vocabulary cards with backs are laid out for duplex printing: the backs are mirrored so they line up with the right card.'],
     ];
     root.innerHTML = head('💬 ' + t('nav_help'),
-      no ? 'Korte svar på det viktigste. Trenger du mer hjelp, er Renate AI alltid tilgjengelig.' : 'Short answers to the essentials. Need more help? Renate AI is always available.') +
+      no ? 'Korte svar på det viktigste. Trenger du mer hjelp, er Nathalie AI alltid tilgjengelig.' : 'Short answers to the essentials. Need more help? Nathalie AI is always available.') +
       '<div class="bk-grid c2">' + sections.map(function (s) {
         return '<div class="bk-card"><h3>' + s[0] + '</h3><p style="font-size:13px;color:var(--ink-soft);line-height:1.65">' + esc(s[1]) + '</p></div>';
       }).join('') + '</div>' +
       '<div class="bk-card" style="margin-top:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">' +
       '<div class="bk-avatar" style="width:44px;height:44px">R</div>' +
-      '<div style="flex:1;min-width:200px"><strong>' + (no ? 'Spør Renate AI' : 'Ask Renate AI') + '</strong>' +
+      '<div style="flex:1;min-width:200px"><strong>' + (no ? 'Spør Nathalie AI' : 'Ask Nathalie AI') + '</strong>' +
       '<p style="font-size:12.5px;color:var(--ink-soft)">' + (no ? 'Veiledning om Montessori, bokproduksjon og publisering, døgnet rundt.' : 'Guidance on Montessori, book production and publishing, around the clock.') + '</p></div>' +
-      '<a class="bk-btn primary" href="/spor-renate-ai" target="_blank" rel="noopener">💗 ' + (no ? 'Åpne Renate AI' : 'Open Renate AI') + '</a></div>';
+      '<a class="bk-btn primary" href="/spor-nathalie-ai" target="_blank" rel="noopener">💗 ' + (no ? 'Åpne Nathalie AI' : 'Open Nathalie AI') + '</a></div>';
   });
 })();

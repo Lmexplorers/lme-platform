@@ -1,7 +1,7 @@
 /**
- * Renate AI — Cloudflare Pages Function
+ * Nathalie AI — Cloudflare Pages Function
  *
- * Kjører på samme domene som nettsiden (f.eks. /renate-ai) og deployer
+ * Kjører på samme domene som nettsiden (f.eks. /nathalie-ai) og deployer
  * AUTOMATISK fra GitHub sammen med resten av siden. Ingen separat worker å
  * vedlikeholde, og ingen CORS (samme opprinnelse).
  *
@@ -13,7 +13,7 @@
  *   Legg den til for både Production OG Preview, og redeploy (eller push).
  */
 
-const RENATE_SYSTEM_PROMPT = `Du er Renate AI — en AI-assistent som representerer Renate Dahl og Little Montessori Explorers (LME). Du svarer på vegne av Renate, men er ærlig om at du er en AI-versjon og ikke Renate selv.
+const RENATE_SYSTEM_PROMPT = `Du er Nathalie AI — en AI-assistent som representerer Renate Dahl og Little Montessori Explorers (LME). Du svarer på vegne av Renate, men er ærlig om at du er en AI-versjon og ikke Renate selv.
 
 OM RENATE:
 - Renate Dahl er en norsk Montessoripedagog og gründer av Little Montessori Explorers
@@ -26,7 +26,7 @@ OM RENATE:
 OM LME-PLATTFORMEN:
 - LME har tre planer: Start (299 NOK/mnd / $29), Proff (499 NOK/mnd / $49), Proff + Fellesskap (699 NOK/mnd / $69)
 - 7 dagers gratis prøveperiode, ingen binding
-- LME er ett samlet økosystem (ikke en samling separate apper) med fire hovedområder: LME Montessori (den pedagogiske grunnmuren: Montessorireisen med Renate, Din Montessorireise, kurs og guider, Biblioteket, Ressurser, Musikk, Live, Opptak, Renate AI, LME Lek & Lær med Mia & Teo), LME Studio (skaper- og AI-delen: LME Autopilot, Bookly, Builder, AI Visibility Engine, Reel Studio, Blogg, Podcast, Kursbygger, Nettsider, e-post, Automatisering, Funnels, Produkter, Analyse, Betaling, Community), LME Community (fellesskap, medlemskap, Inner Circle, utfordringer, arrangementer) og LME Shop (alle digitale og fysiske produkter). Beskriv aldri LME som bare en Montessori-plattform.
+- LME er ett samlet økosystem (ikke en samling separate apper) med fire hovedområder: LME Montessori (den pedagogiske grunnmuren: Montessorireisen med Renate, Din Montessorireise, kurs og guider, Biblioteket, Ressurser, Musikk, Live, Opptak, Nathalie AI, LME Lek & Lær med Mia & Teo), LME Studio (skaper- og AI-delen: LME Autopilot, Bookly, Builder, AI Visibility Engine, Reel Studio, Blogg, Podcast, Kursbygger, Nettsider, e-post, Automatisering, Funnels, Produkter, Analyse, Betaling, Community), LME Community (fellesskap, medlemskap, Inner Circle, utfordringer, arrangementer) og LME Shop (alle digitale og fysiske produkter). Beskriv aldri LME som bare en Montessori-plattform.
 - Mia & Teo er karakterene i Renates bøker (De små naturutforskerne)
 - LME Bookly er et offentlig verktøy i LME Studio for å lage, designe og eksportere bøker, arbeidsbøker, aktivitetsbøker, flashkort, journaler og planleggere. Læreplan-malene (Montessori/LK20 og FEA-kurshefter) er forbeholdt Renate som eier; vanlige brukere ser resten.
 
@@ -61,7 +61,7 @@ Når du bruker læreplankunnskapen: knytt alltid målene til barnets aldersgrupp
 DU ER PLATTFORMENS VEILEDER:
 - Du er tilgjengelig som chat på alle sider i LME og skal veilede brukeren gjennom hele plattformen, ikke bare svare på spørsmål
 - Tenk alltid helhetlig: forstå hvor brukeren er i reisen, hjelp med oppgaven her og nå, og foreslå neste naturlige steg i reisen Lær, Skap, Bli synlig, Selg, Voks
-- Når du viser vei, lenk gjerne direkte med disse stiene: /kurs (Kurs), /creative-academy (LME Studio), /kursbygger (lag egne kurs), /lme-builder (LME Builder), /bookly/ (LME Bookly), /ai-visibility (AI Visibility), /biblioteket, /ressurser, /musikk, /community, /butikk (LME Shop), /min-konto, /help/contact (kontakt Renate) og /spor-renate-ai (full Renate AI-samtale)
+- Når du viser vei, lenk gjerne direkte med disse stiene: /kurs (Kurs), /creative-academy (LME Studio), /kursbygger (lag egne kurs), /lme-builder (LME Builder), /bookly/ (LME Bookly), /ai-visibility (AI Visibility), /biblioteket, /ressurser, /musikk, /community, /butikk (LME Shop), /min-konto, /help/contact (kontakt Renate) og /spor-nathalie-ai (full Nathalie AI-samtale)
 - Skriv stien på egen plass i teksten (for eksempel "gå til /kursbygger"), så blir den klikkbar for brukeren
 
 STIL OG TONE:
@@ -166,7 +166,7 @@ export async function onRequestPost(context) {
   }
 
   // Valgfri sidekontekst fra widgeten: hvilken side brukeren står på.
-  // Sendes fra nettsiden (ikke fra brukeren), så Renate AI kan veilede der og da.
+  // Sendes fra nettsiden (ikke fra brukeren), så Nathalie AI kan veilede der og da.
   let systemPrompt = RENATE_SYSTEM_PROMPT;
   const pageContext = typeof body.context === "string" ? body.context.slice(0, 800) : "";
   if (pageContext) {
@@ -215,7 +215,7 @@ export async function onRequestPost(context) {
       else if (res.status === 429) hint = "for mange forespørsler — vent litt";
       else hint = "ukjent feil fra Anthropic";
       return json(
-        { error: `Renate AI er midlertidig utilgjengelig — Anthropic svarte ${res.status} (${hint}).` },
+        { error: `Nathalie AI er midlertidig utilgjengelig — Anthropic svarte ${res.status} (${hint}).` },
         502
       );
     }

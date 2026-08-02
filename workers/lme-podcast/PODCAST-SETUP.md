@@ -46,7 +46,7 @@ Uten noen av disse lages episodene fortsatt (manus + visning + opplesing i
 nettleseren), men de faar ingen lydfil og dukker derfor ikke opp på Apple/Spotify.
 
 `ANTHROPIC_API_KEY` brukes til å skrive manuset og er allerede satt (samme
-noekkel som Renate AI / LME Builder).
+noekkel som Nathalie AI / LME Builder).
 
 Sett også et eget passord for generering (ellers brukes samme standard som
 kurs-redigering):
