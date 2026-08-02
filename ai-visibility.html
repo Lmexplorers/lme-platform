@@ -523,7 +523,12 @@ async function runFaq(){
     let html=lastFaq.map(f=>`<div class="card-out"><p><b>${f.q}</b><br>${f.a}</p></div>`).join('');
     const sc=await api('/ai/schema',{type:'faq',data:{faq:lastFaq}});
     html+=`<div class="card-out"><h4>FAQ Schema (JSON-LD) ${copyBtn(sc.jsonld)}</h4><pre class="code">${esc(sc.jsonld)}</pre></div>`;
+    html+=`<div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">`;
     html+=`<button class="btn secondary" id="pub-faq-btn" onclick="publishFaq()" data-i18n="pub-btn">🚀 ${LANG==='en'?'Publish to /faq':'Publiser til /faq'}</button>`;
+    html+=`<button class="btn secondary" onclick="shareFaqTwitter()" style="background:#1DA1F2;">𝕏 ${LANG==='en'?'Share':'Del'}</button>`;
+    html+=`<button class="btn secondary" onclick="shareFaqLinkedIn()" style="background:#0A66C2;">in ${LANG==='en'?'Share':'Del'}</button>`;
+    html+=`<button class="btn secondary" onclick="copyFaqText()" style="background:#caa46a;color:#3d2438;">🔗 ${LANG==='en'?'Copy text':'Kopier tekst'}</button>`;
+    html+=`</div>`;
     document.getElementById('f-out').innerHTML=html;
   }catch(e){fail('f-out',e);}finally{busy('f-btn',false);bumpScore('faqs');}
 }
@@ -539,6 +544,26 @@ async function publishFaq(){
     document.getElementById('f-out').appendChild(st);
   }catch(e){st.innerHTML=`<span style="color:#c43d75">Publisering feilet: ${e.message}</span>`;document.getElementById('f-out').appendChild(st);}
   finally{busy('pub-faq-btn',false);}
+}
+
+function shareFaqTwitter(){
+  if(!lastFaq||!lastFaq.length){alert('Generer FAQ først');return;}
+  const txt=`${LANG==='en'?'Check out our FAQ at':'Se vår FAQ på'} ${window.location.origin}/faq ${LANG==='en'?'powered by LME':'laget med LME'}`;
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(txt)}`,'_blank');
+}
+
+function shareFaqLinkedIn(){
+  if(!lastFaq||!lastFaq.length){alert('Generer FAQ først');return;}
+  const url=`${window.location.origin}/faq`;
+  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,'_blank');
+}
+
+function copyFaqText(){
+  if(!lastFaq||!lastFaq.length){alert('Generer FAQ først');return;}
+  const txt=lastFaq.map(f=>`Q: ${f.q}\nA: ${f.a}`).join('\n\n');
+  navigator.clipboard.writeText(txt).then(()=>{
+    alert(LANG==='en'?'FAQ copied!':'FAQ kopiert!');
+  });
 }
 
 /* ---- Schema (standalone) ---- */
