@@ -60,6 +60,11 @@
 
   .empty{text-align:center;padding:60px 20px;color:var(--ink-muted);}
   .empty p{font-size:16px;}
+  .share-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:var(--pink-600);
+    color:#fff;border:none;border-radius:8px;cursor:pointer;font-family:var(--font-head);font-weight:600;
+    font-size:14px;transition:all .2s;text-decoration:none;}
+  .share-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(196,61,117,.3);}
+  .share-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;padding-top:24px;border-top:1px solid var(--line);}
 </style>
 </head>
 <body>
@@ -81,6 +86,29 @@
     <div class="empty">
       <p data-no="Laster FAQ-er…" data-en="Loading FAQ…">Laster FAQ-er…</p>
     </div>
+  </div>
+
+  <div class="share-row" id="shareRow" style="display:none;">
+    <a class="share-btn" id="shareTwitter" target="_blank" rel="noopener">
+      <span>𝕏</span>
+      <span data-no="Del på Twitter" data-en="Share on Twitter">Del på Twitter</span>
+    </a>
+    <a class="share-btn" id="shareLinkedIn" target="_blank" rel="noopener">
+      <span>in</span>
+      <span data-no="Del på LinkedIn" data-en="Share on LinkedIn">Del på LinkedIn</span>
+    </a>
+    <a class="share-btn" id="shareFacebook" target="_blank" rel="noopener">
+      <span>f</span>
+      <span data-no="Del på Facebook" data-en="Share on Facebook">Del på Facebook</span>
+    </a>
+    <a class="share-btn" id="shareWhatsApp" target="_blank" rel="noopener">
+      <span>💬</span>
+      <span data-no="Del på WhatsApp" data-en="Share on WhatsApp">Del på WhatsApp</span>
+    </a>
+    <a class="share-btn" id="shareCopy" onclick="copyShareLink()" style="cursor:pointer;background:var(--gold);">
+      <span>🔗</span>
+      <span data-no="Kopier lenke" data-en="Copy link">Kopier lenke</span>
+    </a>
   </div>
 </div>
 
@@ -112,6 +140,7 @@ async function loadFAQ() {
     const list = document.getElementById('faqList');
     if (!faqs.length) {
       list.innerHTML = `<div class="empty"><p>${i18n[lang].empty}</p></div>`;
+      document.getElementById('shareRow').style.display = 'none';
       return;
     }
 
@@ -121,9 +150,37 @@ async function loadFAQ() {
         <p>${f.a || ''}</p>
       </details>
     `).join('');
+
+    updateShareLinks();
+    document.getElementById('shareRow').style.display = 'flex';
   } catch(e) {
     document.getElementById('faqList').innerHTML = `<div class="empty"><p>Feil ved lasting av FAQ</p></div>`;
+    document.getElementById('shareRow').style.display = 'none';
   }
+}
+
+function updateShareLinks() {
+  const url = window.location.href;
+  const title = 'LME — Spørsmål og svar';
+  const encoded = encodeURIComponent(url);
+  const encodedTitle = encodeURIComponent(title);
+
+  document.getElementById('shareTwitter').href = `https://twitter.com/intent/tweet?url=${encoded}&text=${encodedTitle}`;
+  document.getElementById('shareLinkedIn').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encoded}`;
+  document.getElementById('shareFacebook').href = `https://www.facebook.com/sharer/sharer.php?u=${encoded}`;
+  document.getElementById('shareWhatsApp').href = `https://wa.me/?text=${encodedTitle}%20${encoded}`;
+}
+
+function copyShareLink() {
+  const url = window.location.href;
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = document.getElementById('shareCopy');
+    const orig = btn.querySelector('span:last-child').textContent;
+    btn.querySelector('span:last-child').textContent = lang === 'no' ? '✓ Kopiert!' : '✓ Copied!';
+    setTimeout(() => {
+      btn.querySelector('span:last-child').textContent = orig;
+    }, 2000);
+  });
 }
 
 document.getElementById('lang').addEventListener('click', () => setLang(lang === 'no' ? 'en' : 'no'));
