@@ -523,8 +523,22 @@ async function runFaq(){
     let html=lastFaq.map(f=>`<div class="card-out"><p><b>${f.q}</b><br>${f.a}</p></div>`).join('');
     const sc=await api('/ai/schema',{type:'faq',data:{faq:lastFaq}});
     html+=`<div class="card-out"><h4>FAQ Schema (JSON-LD) ${copyBtn(sc.jsonld)}</h4><pre class="code">${esc(sc.jsonld)}</pre></div>`;
+    html+=`<button class="btn secondary" id="pub-faq-btn" onclick="publishFaq()" data-i18n="pub-btn">🚀 ${LANG==='en'?'Publish to /faq':'Publiser til /faq'}</button>`;
     document.getElementById('f-out').innerHTML=html;
   }catch(e){fail('f-out',e);}finally{busy('f-btn',false);bumpScore('faqs');}
+}
+async function publishFaq(){
+  if(!lastFaq||!lastFaq.length){alert('Generer FAQ først');return;}
+  busy('pub-faq-btn',true);
+  const st=document.getElementById('f-out').querySelector('.status')||document.createElement('div');
+  try{
+    const r=await fetch('/api/faq/publish',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({faq:lastFaq})});
+    const j=await r.json();
+    st.innerHTML=`<span style="color:#0a0">${LANG==='en'?'Published!':'Publisert!'} ${j.total} FAQ-er på /faq</span>`;
+    document.getElementById('f-out').appendChild(st);
+  }catch(e){st.innerHTML=`<span style="color:#c43d75">Publisering feilet: ${e.message}</span>`;document.getElementById('f-out').appendChild(st);}
+  finally{busy('pub-faq-btn',false);}
 }
 
 /* ---- Schema (standalone) ---- */
