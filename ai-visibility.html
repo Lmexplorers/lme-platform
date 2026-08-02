@@ -254,7 +254,7 @@
       <h2 data-i18n="k-h">🔑 Keyword Discovery</h2>
       <p class="lead" data-i18n="k-lead">Finn hovedsøkeord, long-tail og spørsmål rundt et tema. Klikk et søkeord for å sende det rett til artikkel-generatoren.</p>
       <div class="field">
-        <input id="kw-seed" placeholder="Montessori activities for 3 year olds" />
+        <input id="kw-seed" placeholder="How to create engaging content for Instagram" />
         <button class="btn" onclick="runKeywords()" id="kw-btn" data-i18n="k-btn">Finn søkeord</button>
       </div>
       <div class="out" id="kw-out"></div>
@@ -274,7 +274,7 @@
       <h2 data-i18n="a-h">📝 SEO/GEO Artikkel-generator</h2>
       <p class="lead" data-i18n="a-lead">Generer en komplett artikkel med SEO-tittel, meta, H1, H2/H3, FAQ og CTA — optimalisert for både Google og AI-søk.</p>
       <div class="field">
-        <input id="a-kw" placeholder="Montessori language activities" />
+        <input id="a-kw" placeholder="Starting a creative business from home" />
         <button class="btn" onclick="runArticle()" id="a-btn" data-i18n="a-btn">Generer artikkel</button>
       </div>
       <div class="out" id="a-out"></div>
@@ -284,7 +284,7 @@
       <h2 data-i18n="f-h">💬 FAQ Engine</h2>
       <p class="lead" data-i18n="f-lead">Lag en FAQ-seksjon som Google og AI lett kan lese. Generer schema med ett klikk etterpå.</p>
       <div class="field">
-        <input id="f-topic" placeholder="What is Montessori?" />
+        <input id="f-topic" placeholder="How to start a podcast about creativity" />
         <button class="btn" onclick="runFaq()" id="f-btn" data-i18n="f-btn">Lag FAQ</button>
       </div>
       <div class="out" id="f-out"></div>
@@ -343,7 +343,7 @@ const I18N = {
     "t-schema":"Schema-generator","t-pinterest":"Pinterest","t-repurpose":"Repurpose",
     "ai-help":"Trenger du strategi for synlighet? Spør Nathalie AI.","ai-cta":"Spør Nathalie AI",
     title:'LME <em>AI Visibility Engine</em>',
-    subtitle:"Bli funnet i Google, Pinterest og AI-søk — automatisert, GEO-optimalisert innhold som gjør LME til en autoritativ kilde innen Montessori, læring og norskopplæring.",
+    subtitle:"Bli funnet i Google, Pinterest og AI-søk — automatisert, GEO-optimalisert innhold som gjør LME til en autoritativ kilde innen kreativitet, læring, synlighet og vekst.",
     "s-articles":"Artikler","s-faqs":"FAQ-er","s-pages":"Indekserte sider","s-visits":"Organiske besøk","s-score":"AI-readiness",
     "k-h":"🔑 Keyword Discovery","k-lead":"Finn hovedsøkeord, long-tail og spørsmål rundt et tema. Klikk et søkeord for å sende det til artikkel-generatoren.","k-btn":"Finn søkeord",
     "q-h":"❓ AI Question Discovery","q-lead":"Bygg en database over spørsmål folk stiller AI. Råstoff for FAQ og artikler.","q-btn":"Finn spørsmål",
@@ -360,7 +360,7 @@ const I18N = {
     "t-schema":"Schema Generator","t-pinterest":"Pinterest","t-repurpose":"Repurpose",
     "ai-help":"Need a visibility strategy? Ask Nathalie AI.","ai-cta":"Ask Nathalie AI",
     title:'LME <em>AI Visibility Engine</em>',
-    subtitle:"Get found on Google, Pinterest and AI search — automated, GEO-optimized content that makes LME an authoritative source in Montessori, learning and language.",
+    subtitle:"Get found on Google, Pinterest and AI search — automated, GEO-optimized content that makes LME an authoritative source in creativity, learning, visibility and growth.",
     "s-articles":"Articles","s-faqs":"FAQs","s-pages":"Indexed pages","s-visits":"Organic visits","s-score":"AI-readiness",
     "k-h":"🔑 Keyword Discovery","k-lead":"Find head keywords, long-tail and questions around a topic. Click a keyword to send it to the article generator.","k-btn":"Find keywords",
     "q-h":"❓ AI Question Discovery","q-lead":"Build a database of questions people ask AI. Raw material for FAQs and articles.","q-btn":"Find questions",
@@ -504,7 +504,7 @@ async function publishArticle(){
     if(!window._blogPw){ window._blogPw=prompt(LANG==='en'?'Blog password (to list it on /blogg):':'Blogg-passord (for aa vise den i /blogg):')||''; }
     if(window._blogPw){
       const ex=(d.metaDescription||d.intro||'').replace(/<[^>]+>/g,'').slice(0,280);
-      const post={ id:d.slug, titleNo:d.h1||d.seoTitle||'', titleEn:d.h1||d.seoTitle||'', excerptNo:ex, excerptEn:ex, category:'Montessori hjemme', image:'/images/hero_learning_tree.webp', date:new Date().toISOString().slice(0,10), readMin:'5 min', url:'/blog/'+(d.slug||''), bodyNo:'<p>'+ex+'</p>', bodyEn:'<p>'+ex+'</p>' };
+      const post={ id:d.slug, titleNo:d.h1||d.seoTitle||'', titleEn:d.h1||d.seoTitle||'', excerptNo:ex, excerptEn:ex, category:'LME Insights', image:'/images/hero_learning_tree.webp', date:new Date().toISOString().slice(0,10), readMin:'5 min', url:'/blog/'+(d.slug||''), bodyNo:'<p>'+ex+'</p>', bodyEn:'<p>'+ex+'</p>' };
       try{ const br=await fetch('/api/blog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'save',password:window._blogPw,post})}); const bj=await br.json(); if(bj&&bj.ok){ blogMsg=LANG==='en'?' + listed on /blogg':' + lagt i /blogg'; } else if(bj&&bj.error==='bad_password'){ window._blogPw=null; blogMsg=LANG==='en'?' (wrong blog password)':' (feil blogg-passord)'; } }catch(_){}
     }
     st.innerHTML=r.published
@@ -532,8 +532,8 @@ async function runSchema(){
   const type=document.getElementById('sc-type').value;busy('sc-btn',true);
   const sample={
     organization:{sameAs:["https://www.pinterest.com/lmexplorers","https://instagram.com/lmexplorers"]},
-    article:{h1:"Montessori-aktiviteter for 3-åringer",metaDescription:"Praktiske Montessori-aktiviteter…",lang:LANG},
-    faq:{faq:lastFaq||[{q:"Hva er Montessori?",a:"Montessori er en pedagogikk…"}]},
+    article:{h1:"How to Build Your Personal Brand Through Content",metaDescription:"Discover proven strategies to establish your authority and grow your audience…",lang:LANG},
+    faq:{faq:lastFaq||[{q:"How can I start creating content?",a:"Begin by identifying your topic and audience, then use LME tools to generate and distribute content across multiple platforms."}]},
     product:{name:"De små naturutforskerne",description:"Mia & Teo-bok, 24 sider",price:"199",currency:"NOK"},
     course:{name:"LME Akademiet 3–6 år",description:"Montessori-kurs for foreldre"},
     breadcrumb:{items:[{name:"Hjem",url:"/"},{name:"Biblioteket",url:"/biblioteket"}]}
