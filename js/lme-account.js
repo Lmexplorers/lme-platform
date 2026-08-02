@@ -40,7 +40,7 @@
   // alle sider naar det ikke er lastet opp et eget bilde, saa portrettet er
   // likt overalt og ikke bare der sidens egen avatar hadde et <img>.
   var isNathalieAIPage = window.location.pathname.includes('nathalie-ai') || window.location.pathname.includes('spor-nathalie-ai') || window.location.pathname.includes('ask-nathalie-ai');
-var OWNER_DEFAULT_PHOTO = isNathalieAIPage ? '/images/nathalie-portrait.jpg' : '/images/renate-portrait.jpg';
+var OWNER_DEFAULT_PHOTO = '/images/renate-portrait.jpg';
 
   // Forminsker bildet til et lite kvadrat, saa det er raskt og lite nok til
   // aa lagres paa kontoen (serveren har en grense).
