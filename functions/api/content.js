@@ -81,7 +81,7 @@ async function translateToEnglish(env, texts) {
           model: "claude-sonnet-5",
           max_tokens: 4000,
           system:
-            "You translate website text for a Montessori brand (Little Montessori Explorers) from Norwegian into natural, warm English. " +
+            "You translate website text for Little Montessori Explorers (LME), a platform for creativity, learning, visibility and growth, from Norwegian into natural, warm English. " +
             "Each input item may contain HTML tags. Preserve every HTML tag, attribute and entity EXACTLY; translate only the human-readable text between them. " +
             "Do not add, remove or reorder tags. Keep emojis, numbers, and names/brands (LME, Mia & Teo, Renate, Montessori) as-is. " +
             "Use straight quotes and avoid long dashes. " +
