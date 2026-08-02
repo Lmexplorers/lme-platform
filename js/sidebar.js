@@ -59,7 +59,7 @@
     '  <a href="/personvern" class="sidebar-item"><span class="si-icon">🔒</span><span class="si-label" data-no="Personvern" data-en="Privacy">Personvern</span></a>',
     '</div>',
     '<div class="sidebar-ai-card">',
-    '  <div class="ai-avatar">R</div>',
+    '  <div class="ai-avatar" style="position:relative;overflow:hidden">N<img src="/images/nathalie-portrait.jpg?v=2" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0" onerror="this.remove()"></div>',
     '  <p data-no="Trenger du veiledning eller hjelp med et verktøy?" data-en="Need guidance or help with a tool?">Trenger du veiledning eller hjelp med et verktøy?</p>',
     '  <a href="/spor-nathalie-ai" data-no="Spør Nathalie AI" data-en="Ask Nathalie AI">Spør Nathalie AI</a>',
     '</div>'

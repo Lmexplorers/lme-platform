@@ -134,7 +134,7 @@
   <div class="topbar-right">
     <a href="/creative-academy" class="topbar-back">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="15 18 9 12 15 6"/></svg>
-      <span data-i18n="back">Til LME Studio</span>
+      <span data-i18n="back">Til LME Autopilot</span>
     </a>
     <div class="lang-toggle">
       <button id="lang-no" class="active" onclick="setLang('no')">NO</button>
@@ -235,7 +235,7 @@ const WORKER_BASE = "https://lme-ai-visibility.lmexplorers.workers.dev";
 /* ---- Språk (samme nøkkel som resten av plattformen) ---- */
 let LANG = (function(){ try { return localStorage.getItem('lme_lang') || localStorage.getItem('lme-lang') || 'no'; } catch(e){ return 'no'; } })();
 const I18N = {
-  no:{ back:"Til LME Studio",
+  no:{ back:"Til LME Autopilot",
     title:'LME <em>Reel Studio</em>',
     subtitle:"Velg format og lag ferdig innhold: reel, karusell, story, feed-innlegg, bildetekst, nyhetsbrev eller Pinterest. Klar til automatisk publisering og planlegging.",
     "s1-num":"Innhold","s1-h":"Hva skal du lage?","s1-lead":"Velg format, lim inn et tips, en leksjon eller en idé, så lager AI-en innholdet i riktig format.",
@@ -274,7 +274,7 @@ const I18N = {
     scheduledOk:"Planlagt 🗓️",pubfail:"Klarte ikke å publisere. Sjekk kobling i Publiser alle.",neterr:"Nettverksfeil. Prøv igjen.",
     planEmpty:"Ingen planlagt innhold enda.",remove:"Fjern",
     saveReel:"💾 Lagre denne reelen",savedReels:"📚 Lagret innhold",noSavedReels:"Ingen lagret innhold enda.",load:"Last inn",delete:"Slett" },
-  en:{ back:"To LME Studio",
+  en:{ back:"To LME Autopilot",
     title:'LME <em>Reel Studio</em>',
     subtitle:"Choose a format and create finished content: reel, carousel, story, feed post, caption, newsletter or Pinterest. Ready for automatic posting and scheduling.",
     "s1-num":"Content","s1-h":"What do you want to create?","s1-lead":"Choose a format, paste a tip, a lesson or an idea, and the AI creates the content in the right format.",
