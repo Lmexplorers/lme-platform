@@ -57,6 +57,34 @@
   @media (max-width: 768px) { .lang-toggle { top: 11px; right: 62px; padding: 8px 13px; font-size: 12.5px; } }
 
   .wrap { max-width: 760px; margin: 0 auto; padding: 26px 18px 70px; }
+  .wrap.wide { max-width: 1060px; }
+  .layout { display: block; }
+  .layout .main { min-width: 0; }
+  @media (min-width: 900px) {
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px; align-items: start; }
+    .sidebar { position: sticky; top: 20px; }
+  }
+
+  /* Sidemeny (høyre) */
+  .sidebar { display: grid; gap: 16px; margin-top: 16px; }
+  @media (min-width: 900px) { .sidebar { margin-top: 0; } }
+  .sidecard { padding: 0; overflow: hidden; }
+  .sidecard-cover { height: 54px; background: linear-gradient(120deg, var(--pink-200), var(--sun)); }
+  .sidecard-body { padding: 16px 18px 18px; }
+  .sidecard .sideavatar { width: 46px; height: 46px; border-radius: 12px; background: #fff; box-shadow: var(--shadow-soft); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-top: -32px; margin-bottom: 8px; }
+  .sidecard h3 { font-size: 15.5px; color: var(--pink-700); margin-bottom: 6px; }
+  .sidecard .sidedesc { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 12px; }
+  .sidestats { display: flex; gap: 18px; padding: 12px 0; border-top: 1px solid var(--pink-100); border-bottom: 1px solid var(--pink-100); margin-bottom: 12px; }
+  .sidestats div { display: flex; flex-direction: column; }
+  .sidestats strong { font-size: 15px; color: var(--ink); }
+  .sidestats span { font-size: 11px; color: var(--ink-muted); }
+  .sideleader-card { padding: 18px; }
+  .sideleader-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; }
+  .sideleader-row .rank { width: 18px; text-align: center; font-size: 12px; font-weight: 800; color: var(--pink-600); }
+  .sideleader-row .avatar { width: 28px; height: 28px; font-size: 11px; }
+  .sideleader-row .nm { flex: 1; font-size: 13px; font-weight: 700; }
+  .sideleader-row .pt { font-size: 11.5px; color: var(--ink-muted); }
+  .sidelink { display: block; width: 100%; text-align: left; background: none; border: none; color: var(--pink-600); font-weight: 700; font-size: 13px; cursor: pointer; padding: 10px 0 0; }
   .brandbar { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 18px; }
   .brandbar img { height: 30px; width: auto; }
   .brandbar .brandname { font-weight: 700; font-size: 14px; color: var(--ink-soft); }
@@ -150,7 +178,7 @@
 
 <button class="lang-toggle" id="langToggle">EN 🌍</button>
 
-<div class="wrap">
+<div class="wrap wide">
   <a class="brandbar" href="/utfordringen" title="Til utfordringen">
     <img src="/images/lme-logo.png" alt="LME" onerror="this.style.display='none'">
     <span class="brandname">Little Montessori Explorers</span>
@@ -172,6 +200,9 @@
     <button class="tab" data-tab="map" data-no="Kart" data-en="Map">Kart</button>
     <button class="tab" data-tab="about" data-no="Om" data-en="About">Om</button>
   </div>
+
+  <div class="layout">
+  <div class="main">
 
   <!-- Bli med -->
   <div class="card" id="joinCard">
@@ -250,6 +281,30 @@
       <p data-no="10 000-visninger-utfordringen er en 30-dagers plan med små, daglige oppgaver, fem minutter om dagen, som skaper ekte fremgang på sosiale medier. Her i fellesskapet møter du de andre som er med, deler det du lager og heier på hverandre." data-en="The 10,000 Views Challenge is a 30-day plan with small daily tasks, five minutes a day, that creates real momentum on social media. Here in the community you meet everyone else doing the challenge, share what you make and cheer each other on." style="margin-bottom:16px;">10 000-visninger-utfordringen er en 30-dagers plan med små, daglige oppgaver, fem minutter om dagen, som skaper ekte fremgang på sosiale medier. Her i fellesskapet møter du de andre som er med, deler det du lager og heier på hverandre.</p>
       <a href="/utfordringen" class="btn-cta" style="display:inline-block;" data-no="Se utfordringen →" data-en="See the challenge →">Se utfordringen →</a>
     </div>
+  </div>
+
+  </div>
+  <!-- ===== Sidemeny (høyre) ===== -->
+  <aside class="sidebar">
+    <div class="card sidecard">
+      <div class="sidecard-cover"></div>
+      <div class="sidecard-body">
+        <div class="sideavatar">🌸</div>
+        <h3 data-no="10 000-visninger-utfordringen" data-en="The 10,000 Views Challenge">10 000-visninger-utfordringen</h3>
+        <p class="sidedesc" data-no="En 30-dagers utfordring for å bli synlig i sosiale medier, fem minutter om dagen." data-en="A 30-day challenge to get visible on social media, five minutes a day.">En 30-dagers utfordring for å bli synlig i sosiale medier, fem minutter om dagen.</p>
+        <div class="sidestats">
+          <div><strong id="sideMemberCount">…</strong><span data-no="Medlemmer" data-en="Members">Medlemmer</span></div>
+          <div><strong>Renate</strong><span data-no="Admin" data-en="Admin">Admin</span></div>
+        </div>
+        <a href="/utfordringen" class="btn-cta" data-no="Se utfordringen →" data-en="See the challenge →">Se utfordringen →</a>
+      </div>
+    </div>
+    <div class="card sideleader-card">
+      <h3 data-no="Ledertavle" data-en="Leaderboard">Ledertavle</h3>
+      <div id="sideLeaderboard"></div>
+      <button class="sidelink" id="sideLeaderboardLink" data-no="Se hele ledertavlen →" data-en="See the full leaderboard →">Se hele ledertavlen →</button>
+    </div>
+  </aside>
   </div>
 
   <div class="footer">© <span id="yr"></span> Little Montessori Explorers</div>
@@ -501,9 +556,34 @@
     const q = activeCategory ? ('?view=posts&category=' + encodeURIComponent(activeCategory)) : '?view=posts';
     fetch(API + q).then(r => r.json()).then(data => {
       renderPosts(data.posts || []);
-      if (typeof data.memberCount === 'number') document.getElementById('memberCountTxt').textContent = data.memberCount;
+      if (typeof data.memberCount === 'number') {
+        document.getElementById('memberCountTxt').textContent = data.memberCount;
+        document.getElementById('sideMemberCount').textContent = data.memberCount;
+      }
     }).catch(() => {});
   }
+  /* ---- Sidemeny (høyre): mini-ledertavle ---- */
+  function loadSideLeaderboard() {
+    fetch(API + '?view=leaderboard').then(r => r.json()).then(data => {
+      const el = document.getElementById('sideLeaderboard');
+      el.innerHTML = '';
+      const medals = ['🥇', '🥈', '🥉'];
+      (data.leaderboard || []).slice(0, 5).forEach((m, i) => {
+        const row = document.createElement('div'); row.className = 'sideleader-row';
+        const rank = document.createElement('div'); rank.className = 'rank'; rank.textContent = medals[i] || (i + 1);
+        const av = document.createElement('div'); av.className = 'avatar'; av.textContent = initials(m.name);
+        const nm = document.createElement('div'); nm.className = 'nm'; nm.textContent = m.name;
+        const pt = document.createElement('div'); pt.className = 'pt'; pt.textContent = m.points + ' p';
+        row.appendChild(rank); row.appendChild(av); row.appendChild(nm); row.appendChild(pt);
+        el.appendChild(row);
+      });
+      if (!(data.leaderboard || []).length) el.innerHTML = '<p class="empty" style="padding:8px 0;">' + (currentLang === 'en' ? 'No activity yet.' : 'Ingen aktivitet ennå.') + '</p>';
+    }).catch(() => {});
+  }
+  document.getElementById('sideLeaderboardLink').addEventListener('click', () => {
+    document.querySelector('.tab[data-tab="leaderboard"]').click();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
   function doLike(postId, btn) {
     if (!me) return;
     fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'like', email: me.email, postId: postId }) })
@@ -544,6 +624,7 @@
 
   /* ---- Ledertavle ---- */
   function loadLeaderboard() {
+    loadSideLeaderboard();
     fetch(API + '?view=leaderboard').then(r => r.json()).then(data => {
       const el = document.getElementById('leaderboardList');
       el.innerHTML = '';
@@ -657,6 +738,7 @@
 
   switchLanguage(currentLang);
   if (me && me.email) enterCommunity();
+  loadSideLeaderboard();
 </script>
 
 <script src="/js/lme-account.js?v=11" defer></script>
