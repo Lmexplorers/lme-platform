@@ -208,25 +208,64 @@ async function genPollinations(env, prompt, size) {
   return last || { error: "Pollinations svarte ikke." };
 }
 
+function hasCloudflareAI(env) {
+  return !!env.AI || !!((env.CF_API_TOKEN || env.CLOUDFLARE_API_TOKEN) && (env.CF_ACCOUNT_ID || env.CLOUDFLARE_ACCOUNT_ID));
+}
+
 async function genCloudflareAI(env, prompt, size) {
   // Cloudflare Workers AI: gratis (innenfor daglig kvote på kontoen), ingen
-  // ekstern nøkkel. Krever en "AI"-binding lagt til på selve Pages-prosjektet
-  // i Cloudflare-dashbordet (Settings → Functions → Bindings → Workers AI).
-  if (!env.AI) return { error: "Cloudflare Workers AI er ikke koblet til (AI-binding mangler i prosjektinnstillingene).", status: 400 };
+  // delt kø slik Pollinations har. To måter å koble til på:
+  //  1) "AI"-binding lagt til på Pages-prosjektet (Settings → Functions → Bindings), eller
+  //  2) CF_API_TOKEN + CF_ACCOUNT_ID som vanlige hemmeligheter (samme sted som OPENAI_API_KEY),
+  //     API-token trenger kun tillatelsen "Workers AI: Edit".
   const [w, h] = String(size || "1024x1024").split("x").map((n) => parseInt(n, 10) || 1024);
-  try {
-    const result = await env.AI.run("@cf/bytedance/stable-diffusion-xl-lightning", {
-      prompt: prompt.slice(0, 2048),
-      width: Math.min(2048, Math.max(256, w)),
-      height: Math.min(2048, Math.max(256, h)),
-      num_steps: 20,
-    });
-    const bytes = new Uint8Array(await new Response(result).arrayBuffer());
-    if (!bytes.length) return { error: "Cloudflare Workers AI ga ikke noe bilde tilbake." };
-    return { bytes, contentType: "image/jpeg" };
-  } catch (e) {
-    return { error: "Cloudflare Workers AI feilet.", detail: String(e && e.message || e).slice(0, 300) };
+  const payload = {
+    prompt: prompt.slice(0, 2048),
+    width: Math.min(2048, Math.max(256, w)),
+    height: Math.min(2048, Math.max(256, h)),
+    num_steps: 20,
+  };
+
+  if (env.AI) {
+    try {
+      const result = await env.AI.run("@cf/bytedance/stable-diffusion-xl-lightning", payload);
+      const bytes = new Uint8Array(await new Response(result).arrayBuffer());
+      if (bytes.length) return { bytes, contentType: "image/jpeg" };
+    } catch (e) {
+      console.error('[cloudflare-ai] Binding failed:', e);
+    }
   }
+
+  const token = env.CF_API_TOKEN || env.CLOUDFLARE_API_TOKEN;
+  const accountId = env.CF_ACCOUNT_ID || env.CLOUDFLARE_ACCOUNT_ID;
+  if (!token || !accountId) {
+    return { error: "Cloudflare Workers AI er ikke koblet til ennå (CF_API_TOKEN/CF_ACCOUNT_ID mangler).", status: 400 };
+  }
+  const url = `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/bytedance/stable-diffusion-xl-lightning`;
+  let r;
+  try {
+    r = await fetchTimeout(url, {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    }, 55000);
+  } catch (e) {
+    return { error: "Cloudflare Workers AI brukte for lang tid.", status: 504 };
+  }
+  if (!r.ok) {
+    let detail = await r.text();
+    try { const j = JSON.parse(detail); detail = (j.errors && j.errors[0] && j.errors[0].message) || detail; } catch (_) {}
+    return { error: `Cloudflare Workers AI svarte ${r.status}.`, status: r.status, detail: detail.slice(0, 300) };
+  }
+  const ct = r.headers.get("Content-Type") || "";
+  if (ct.includes("application/json")) {
+    const data = await r.json();
+    if (data && data.result && data.result.image) return { bytes: b64ToBytes(data.result.image), contentType: "image/jpeg" };
+    return { error: "Cloudflare Workers AI ga et uventet svar.", detail: JSON.stringify(data).slice(0, 300) };
+  }
+  const bytes = new Uint8Array(await r.arrayBuffer());
+  if (!bytes.length) return { error: "Cloudflare Workers AI ga ikke noe bilde tilbake." };
+  return { bytes, contentType: ct || "image/jpeg" };
 }
 
 const PROVIDERS = { openai: genOpenAI, gemini: genGemini, higgsfield: genHiggsfield, pollinations: genPollinations, cloudflare: genCloudflareAI };
@@ -290,7 +329,7 @@ export async function onRequestPost(context) {
     if (!PROVIDERS[provider]) {
       const hasOpenAI = !!(env.OPENAI_API_KEY || env.IMAGE_OPENAI_KEY || env.IMAGE_API_KEY);
       const hasGemini = !!(env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY);
-      const hasCF = !!env.AI;
+      const hasCF = hasCloudflareAI(env);
       provider = hasOpenAI ? "openai" : (hasGemini ? "gemini" : (hasCF ? "cloudflare" : "pollinations"));
     }
 
@@ -314,7 +353,7 @@ export async function onRequestPost(context) {
     if (out && out.error) {
       const hasOpenAI = !!(env.OPENAI_API_KEY || env.IMAGE_OPENAI_KEY || env.IMAGE_API_KEY);
       const hasGemini = !!(env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY);
-      const hasCF = !!env.AI;
+      const hasCF = hasCloudflareAI(env);
       const chain = [];
       if (provider !== "openai" && hasOpenAI) chain.push("openai");
       if (provider !== "gemini" && hasGemini) chain.push("gemini");
