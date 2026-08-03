@@ -628,10 +628,7 @@ async function genPinterestImage(){
 
 function openCanvaPin(){
   if(!lastPinterestData){alert('Generer først');return;}
-  const title=lastPinterestData.pinTitle||'LME';
-  const prompt=lastPinterestData.imagePrompt||'';
-  const text=`${title}\n\n${prompt}`;
-  window.open('https://www.canva.com/create/pinterest-pins/','_blank');
+  window.open('https://www.canva.com/create/pinterest-pin/','_blank');
 }
 
 function sharePinterestDirect(){
