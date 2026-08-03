@@ -28,6 +28,16 @@ Selve app-kortet/verktøyet (bl.a. på forsiden/dashbordet) skal ellers ikke end
 `/roadmap` skal alltid speile plattformen. Når nye moduler, kurs eller verktøy
 lanseres (eller fjernes), oppdater riktig fase på `roadmap.html` i samme slengen.
 
+## 🔗 Alt nytt skal ha et synlig kort/lenke — aldri en gjemt URL
+
+Avtalt med Renate 3. august 2026, etter at 10 000-visninger-utfordringen kun var
+nåbar via direkte URL (`/utfordringen`), ikke lenket fra noe sted i plattformen:
+en ny side, et nytt kurs eller en ny funnel er ikke ferdig før den også er
+lenket fra et synlig sted i plattformen, som et kort i `hero-cta-row` på
+`dashboard.html` (samme mønster som Claude-kurs-kortet) eller et annet naturlig
+sted i navigasjonen. Renate skal aldri måtte huske eller lete etter en URL for
+å finne noe jeg har bygget.
+
 ## ✍️ Skrivestil — VIKTIG (følg alltid når du skriver/redigerer norsk tekst)
 
 Renate retter ofte disse tingene manuelt. Følg reglene fra start, så slipper hun det:
