@@ -1,8 +1,8 @@
 /**
- * Isolert engangsprodukt-webhook — sender leveringsmail/melder inn i
- * MailerLite ved kjøp av frittstående produkter (oppskrifter,
- * 10 000-visninger-utfordringen). Rører aldri medlemskap, Inner Circle,
- * Claude-kurs eller kreditt, så den kan ikke påvirke de andre flytene.
+ * Isolert engangsprodukt-webhook — sender leveringsmail ved kjøp av
+ * frittstående produkter (oppskrifter, 10 000-visninger-utfordringen).
+ * Rører aldri medlemskap, Inner Circle, Claude-kurs eller kreditt, så den
+ * kan ikke påvirke de andre flytene.
  *
  *   POST /api/oppskrift-webhook
  *
@@ -13,39 +13,24 @@
  */
 
 import { sendOppskriftMail, sendOwnerSaleNotice } from "../_lib/oppskrift-mail.js";
+import { sendUtfordringMail } from "../_lib/utfordring-mail.js";
 import { PATTERN_LINKS } from "../_lib/pattern-links.js";
 import { bumpToday } from "../_lib/track.js";
 
 /* ---- 10 000-visninger-utfordringen -------------------------------------
    Eget abonnement, helt uavhengig av Inner Circle (som selges av den
    separate lme-inner-circle-workeren): ingen tilgang, ingen tier, ingen
-   deling av kode eller database. Kjøp legger bare kjøperen i riktig
-   MailerLite-gruppe, som trigger en egen 30-dagers automasjon der. Inner
-   Circle nevnes ingen steder i denne flyten. */
-const UTFORDRING_GROUP_NO = "194770523227423951"; // "10 000-visninger-utfordringen, kjøpere"
-const UTFORDRING_GROUP_EN = "194771238803998196"; // "10,000 Views Challenge, buyers (EN)"
+   deling av kode eller database. Hele 30-dagers-serien sendes rett fra
+   plattformen via MailerSend (_lib/utfordring-mail.js), samme mønster som
+   Claude-kurset, ingen MailerLite-automasjon. Dag 0 sendes med en gang,
+   resten legges i kø (utf_fu:<e-post>:<dag>) og sendes av den daglige
+   cronjobben api/cron/utfordring-followups. */
 const UTFORDRING_PAYMENT_LINK_LANG = {
   "plink_1U0I2WLax7B8uQzqhBB6bAVC": "no", // Utfordringen, 299 kr/mnd (NOK)
   "plink_1U0I2XLax7B8uQzq7e9tzjBh": "en", // The Challenge, $33/mo (USD)
 };
-
-async function addToMailerliteGroup(env, email, name, groupId) {
-  const key = env.MAILERLITE_API_KEY;
-  if (!key || !email || !groupId) return;
-  const payload = { email: email.trim(), groups: [groupId + ""] };
-  if (name && name.trim()) payload.fields = { name: name.trim().slice(0, 100) };
-  try {
-    await fetch("https://connect.mailerlite.com/api/subscribers", {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + key,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-  } catch (e) {}
-}
+const UTFORDRING_DAYS = [1, 3, 7, 14, 21, 30];
+const DAG = 24 * 60 * 60 * 1000;
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -106,14 +91,20 @@ export async function onRequestPost(context) {
     const obj = (event.data && event.data.object) || {};
     const email = (obj.customer_details && obj.customer_details.email) || obj.customer_email;
 
-    // Utfordringen: legg kjøperen i riktig språkgruppe, aldri Inner Circle.
+    // Utfordringen: send dag 0 med en gang, legg resten i kø. Aldri Inner Circle.
     const utfordringLang = obj.payment_link && UTFORDRING_PAYMENT_LINK_LANG[obj.payment_link];
     if (utfordringLang && email && obj.payment_status !== "unpaid") {
       const nm = (obj.customer_details && obj.customer_details.name) || "";
-      const groupId = utfordringLang === "en"
-        ? (env.MAILERLITE_UTFORDRING_GROUP_EN || UTFORDRING_GROUP_EN)
-        : (env.MAILERLITE_UTFORDRING_GROUP_NO || UTFORDRING_GROUP_NO);
-      await addToMailerliteGroup(env, email, nm, groupId);
+      await sendUtfordringMail(env, { to: email, name: nm, lang: utfordringLang, kind: "d0" });
+      const e = email.trim().toLowerCase();
+      try {
+        for (const dag of UTFORDRING_DAYS) {
+          await env.BUILDER_KV.put(
+            "utf_fu:" + e + ":d" + dag,
+            JSON.stringify({ email: email, name: nm, lang: utfordringLang, kind: "d" + dag, sendAfter: Date.now() + dag * DAG })
+          );
+        }
+      } catch (e2) {}
       return json({ ok: true });
     }
 
