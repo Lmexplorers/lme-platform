@@ -174,7 +174,26 @@ async function genHiggsfield(env, prompt, size) {
   return { error: "Higgsfield-koblingen fullføres når nøkkelen er testet. Bruk OpenAI eller Gemini i mellomtiden.", status: 501 };
 }
 
-const PROVIDERS = { openai: genOpenAI, gemini: genGemini, higgsfield: genHiggsfield };
+async function genPollinations(env, prompt, size) {
+  // Pollinations.ai: gratis, ingen nøkkel, ingen kvote. Brukes som fallback
+  // når OpenAI/Gemini mangler nøkkel eller kreditter.
+  const [w, h] = String(size || "1024x1024").split("x").map((n) => parseInt(n, 10) || 1024);
+  const seed = Math.floor(Math.random() * 1e9);
+  const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt.slice(0, 500))}` +
+    `?width=${w}&height=${h}&nologo=true&safe=true&seed=${seed}&model=flux`;
+  let r;
+  try {
+    r = await fetchTimeout(url, {}, 55000);
+  } catch (e) {
+    return { error: "Pollinations brukte for lang tid. Prøv igjen.", status: 504 };
+  }
+  if (!r.ok) return { error: `Pollinations svarte ${r.status}.`, status: r.status, detail: (await r.text()).slice(0, 300) };
+  const bytes = new Uint8Array(await r.arrayBuffer());
+  if (!bytes.length) return { error: "Pollinations ga ikke noe bilde tilbake." };
+  return { bytes, contentType: r.headers.get("Content-Type") || "image/jpeg" };
+}
+
+const PROVIDERS = { openai: genOpenAI, gemini: genGemini, higgsfield: genHiggsfield, pollinations: genPollinations };
 
 function aspectFor(size) {
   switch (size) {
@@ -227,13 +246,14 @@ export async function onRequestPost(context) {
     let character = String(body.character || "none").toLowerCase();
     if (!["none", "mia", "teo", "both"].includes(character)) character = "none";
 
-    // Velg bildemotor automatisk. OpenAI prioriteres (mest stabil),
-    // Gemini som fallback. Et eksplisitt valg i body vinner.
+    // Velg bildemotor automatisk. OpenAI prioriteres (mest stabil), så Gemini,
+    // og til slutt Pollinations (gratis, ingen nøkkel, funker alltid).
+    // Et eksplisitt valg i body vinner.
     let provider = String(body.provider || "").toLowerCase();
     if (!PROVIDERS[provider]) {
       const hasOpenAI = !!(env.OPENAI_API_KEY || env.IMAGE_OPENAI_KEY || env.IMAGE_API_KEY);
       const hasGemini = !!(env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY);
-      provider = hasOpenAI ? "openai" : (hasGemini ? "gemini" : "openai");
+      provider = hasOpenAI ? "openai" : (hasGemini ? "gemini" : "pollinations");
     }
 
     const prompt = buildPrompt(body.text, character);
@@ -250,20 +270,23 @@ export async function onRequestPost(context) {
       return json({ error: "Kom ikke i kontakt med bildemotoren.", detail: String(e && e.message || e).slice(0, 200) }, 200);
     }
 
-    // Fallback: hvis primær-provider feiler (e.g. Gemini 503), prøv alternativ
-    if (out && out.error && out.status >= 500) {
-      console.log('[image] Primary provider failed with', out.status, ', trying fallback...');
-      let fallback = provider === "gemini" ? "openai" : "gemini";
+    // Fallback: hvis primær-provider feiler (feil status, manglende nøkkel,
+    // tomme kreditter osv.), prøv neste i kjeden. Pollinations krever ingen
+    // nøkkel og er alltid tilgjengelig, så den er alltid siste steg.
+    if (out && out.error) {
       const hasOpenAI = !!(env.OPENAI_API_KEY || env.IMAGE_OPENAI_KEY || env.IMAGE_API_KEY);
       const hasGemini = !!(env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY);
-      if (fallback === "openai" && !hasOpenAI) {
-        console.log('[image] OpenAI fallback not available');
-      } else if (fallback === "gemini" && !hasGemini) {
-        console.log('[image] Gemini fallback not available');
-      } else {
-        console.log('[image] Trying fallback provider:', fallback);
+      const chain = [];
+      if (provider !== "openai" && hasOpenAI) chain.push("openai");
+      if (provider !== "gemini" && hasGemini) chain.push("gemini");
+      if (provider !== "pollinations") chain.push("pollinations");
+
+      for (const fallback of chain) {
+        console.log('[image] Primary provider failed, trying fallback:', fallback);
         try {
-          out = await PROVIDERS[fallback](env, prompt, size, quality);
+          const tryOut = await PROVIDERS[fallback](env, prompt, size, quality);
+          if (!tryOut.error) { out = tryOut; break; }
+          out = tryOut;
         } catch (e) {
           console.error('[image] Fallback provider error:', e);
         }
