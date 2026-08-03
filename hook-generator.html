@@ -303,14 +303,14 @@
   <div class="wrap">
     <div class="head">
       <h1 data-no="Hook Generator" data-en="Hook Generator">Hook Generator</h1>
-      <p data-no="Lag Instagram hooks som fanger oppmerksomheten basert på babylets rutine" data-en="Generate Instagram hooks that grab attention based on your baby's routine">Lag Instagram hooks som fanger oppmerksomheten basert på babylets rutine</p>
+      <p data-no="Lag Instagram hooks som fanger oppmerksomheten basert på babyens rutine" data-en="Generate Instagram hooks that grab attention based on your baby's routine">Lag Instagram hooks som fanger oppmerksomheten basert på babyens rutine</p>
     </div>
 
     <div class="error" id="errorMsg"></div>
 
     <form id="hookForm">
       <div class="form-group">
-        <label for="babyName" data-no="Babylets navn (valgfritt)" data-en="Baby's name (optional)">Babylets navn (valgfritt)</label>
+        <label for="babyName" data-no="Babyens navn (valgfritt)" data-en="Baby's name (optional)">Babyens navn (valgfritt)</label>
         <input type="text" id="babyName" placeholder="" data-no-placeholder="f.eks. Ellie" data-en-placeholder="e.g. Ellie">
       </div>
 
@@ -320,12 +320,12 @@
       </div>
 
       <div class="form-group">
-        <label for="age" data-no="Hvor gammel er babylet?" data-en="How old is the baby?">Hvor gammel er babylet?</label>
+        <label for="age" data-no="Hvor gammel er babyen?" data-en="How old is the baby?">Hvor gammel er babyen?</label>
         <input type="number" id="age" min="0" max="60" required>
       </div>
 
       <div class="form-group">
-        <label data-no="Babylets favoritfarger" data-en="Baby's favorite colors">Babylets favoritfarger</label>
+        <label data-no="Babyens favorittfarger" data-en="Baby's favorite colors">Babyens favorittfarger</label>
         <input type="text" id="colors" placeholder="" data-no-placeholder="f.eks. rosa, gul, grønt" data-en-placeholder="e.g. pink, yellow, green">
       </div>
 
@@ -340,7 +340,7 @@
       </div>
 
       <div class="form-group">
-        <label for="wakeTime" data-no="Når våkner babylet vanligvis?" data-en="What time does baby usually wake?">Når våkner babylet vanligvis?</label>
+        <label for="wakeTime" data-no="Når våkner babyen vanligvis?" data-en="What time does baby usually wake?">Når våkner babyen vanligvis?</label>
         <input type="time" id="wakeTime" required>
       </div>
 
@@ -414,7 +414,7 @@
       document.getElementById('hookForm').addEventListener('submit', function (e) {
         e.preventDefault();
 
-        var babyName = document.getElementById('babyName').value || (window.LME_CURRENT_LANG === 'en' ? 'baby' : 'babylet');
+        var babyName = document.getElementById('babyName').value || (window.LME_CURRENT_LANG === 'en' ? 'baby' : 'babyen');
         var topic = document.getElementById('topic').value;
         var age = document.getElementById('age').value;
         var colors = document.getElementById('colors').value || (window.LME_CURRENT_LANG === 'en' ? 'colors' : 'farger');
