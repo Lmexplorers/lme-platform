@@ -715,9 +715,11 @@ add('kolleksjon_lead',
     'Pip is the second figure in "Woodland Dreams", in the same look, yarn choice and colour '
     'palette as Ellie. More woodland friends are on their way over time.')
 add('kolleksjon_liste',
-    ['Ellie, det lille dådyret', 'Ellies smokkelenke', 'Ellies rangle', 'Ellies vognlenke',
+    ['Ellie, det lille dådyret', 'Felix, den lille reven', 'Molly, det lille lammet',
+     'Luna, den lille kaninen', 'Ellies smokkelenke', 'Ellies rangle', 'Ellies vognlenke',
      'Ellies ballerinasko', 'Ellies aktivitetsleke'],
-    ['Ellie, the little fawn', "Ellie's pacifier clip", "Ellie's rattle", "Ellie's stroller toy",
+    ['Ellie, the little fawn', 'Felix, the little fox', 'Molly, the little lamb',
+     'Luna, the little bunny', "Ellie's pacifier clip", "Ellie's rattle", "Ellie's stroller toy",
      "Ellie's ballerina shoes", "Ellie's activity toy"])
 add('pill_copyright', 'COPYRIGHT', 'COPYRIGHT')
 add('copyright_txt',

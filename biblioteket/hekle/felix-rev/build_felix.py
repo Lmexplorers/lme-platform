@@ -723,11 +723,12 @@ add('kolleksjon_lead',
     'Felix is the third figure in "Woodland Dreams", in the same look, yarn choice and colour '
     'palette as Ellie and Pip. More woodland friends are on their way over time.')
 add('kolleksjon_liste',
-    ['Ellie, det lille dådyret', 'Pip, det lille pinnsvinet', 'Ellies smokkelenke',
-     'Ellies rangle', 'Ellies vognlenke', 'Ellies ballerinasko', 'Ellies aktivitetsleke'],
-    ['Ellie, the little fawn', 'Pip, the little hedgehog', "Ellie's pacifier clip",
-     "Ellie's rattle", "Ellie's stroller toy", "Ellie's ballerina shoes",
-     "Ellie's activity toy"])
+    ['Ellie, det lille dådyret', 'Pip, det lille pinnsvinet', 'Molly, det lille lammet',
+     'Luna, den lille kaninen', 'Ellies smokkelenke', 'Ellies rangle', 'Ellies vognlenke',
+     'Ellies ballerinasko', 'Ellies aktivitetsleke'],
+    ['Ellie, the little fawn', 'Pip, the little hedgehog', 'Molly, the little lamb',
+     'Luna, the little bunny', "Ellie's pacifier clip", "Ellie's rattle",
+     "Ellie's stroller toy", "Ellie's ballerina shoes", "Ellie's activity toy"])
 add('pill_copyright', 'COPYRIGHT', 'COPYRIGHT')
 add('copyright_txt',
     'Denne oppskriften er et helt originalt LME-design (c) Renate Dahl, Little Montessori '
