@@ -21,7 +21,7 @@
   :root {
     --pink-50: #fff5f8; --pink-100: #ffe8f0; --pink-200: #ffd1e1;
     --pink-500: #e85a92; --pink-600: #c43d75; --pink-700: #8f2a55;
-    --sun-soft: #FFF4D6; --lime-soft: #E8F5D1;
+    --sun: #F7C72E; --sun-soft: #FFF4D6; --lime-soft: #E8F5D1;
     --warm-white: #fffcf9; --ink: #3d2438; --ink-soft: #6b4760; --ink-muted: #9c7f92;
     --r-md: 16px; --r-lg: 22px; --r-xl: 30px; --r-pill: 999px;
     --shadow-soft: 0 8px 32px rgba(196, 61, 117, 0.08);
@@ -40,7 +40,7 @@
   h1, h2, h3 { font-family: var(--font-head); }
   img { max-width: 100%; display: block; }
   a { color: inherit; text-decoration: none; }
-  button, input, textarea { font-family: var(--font-body); }
+  button, input, textarea, select { font-family: var(--font-body); }
 
   .lang-toggle {
     position: fixed; top: 14px; right: 68px; z-index: 300;
@@ -52,15 +52,29 @@
   }
   @media (max-width: 768px) { .lang-toggle { top: 11px; right: 62px; padding: 8px 13px; font-size: 12.5px; } }
 
-  .wrap { max-width: 640px; margin: 0 auto; padding: 26px 18px 70px; }
-  .brandbar { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 22px; }
-  .brandbar img { height: 32px; width: auto; }
-  .brandbar .brandname { font-weight: 700; font-size: 14.5px; color: var(--ink-soft); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 26px 18px 70px; }
+  .brandbar { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 18px; }
+  .brandbar img { height: 30px; width: auto; }
+  .brandbar .brandname { font-weight: 700; font-size: 14px; color: var(--ink-soft); }
 
-  h1.title { font-size: clamp(24px, 4vw, 32px); text-align: center; color: var(--pink-700); margin-bottom: 6px; }
-  p.sub { text-align: center; color: var(--ink-soft); font-size: 15px; margin-bottom: 26px; }
+  /* Fellesskaps-header */
+  .grouphead {
+    display: flex; align-items: center; gap: 16px; background: #fff;
+    border: 1px solid var(--pink-100); border-radius: var(--r-xl);
+    box-shadow: var(--shadow-soft); padding: 18px 22px; margin-bottom: 16px;
+  }
+  .grouphead .mark { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, var(--pink-200), var(--pink-500)); display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
+  .grouphead .info { flex: 1; min-width: 0; }
+  .grouphead h1 { font-size: 18px; color: var(--pink-700); }
+  .grouphead p { font-size: 12.5px; color: var(--ink-muted); }
 
-  .card { background: #fff; border: 1px solid var(--pink-100); border-radius: var(--r-xl); box-shadow: var(--shadow-soft); padding: 24px; margin-bottom: 18px; }
+  /* Faner */
+  .tabs { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 18px; padding-bottom: 2px; }
+  .tab { flex: none; font-size: 13.5px; font-weight: 700; color: var(--ink-soft); background: #fff; border: 1px solid var(--pink-100); padding: 9px 16px; border-radius: var(--r-pill); cursor: pointer; white-space: nowrap; }
+  .tab.active { background: var(--pink-600); color: #fff; border-color: var(--pink-600); }
+
+  .card { background: #fff; border: 1px solid var(--pink-100); border-radius: var(--r-xl); box-shadow: var(--shadow-soft); padding: 22px; margin-bottom: 16px; }
+  .card h2 { font-size: 17px; color: var(--pink-700); margin-bottom: 10px; }
 
   /* Bli med-kort */
   #joinCard .field { margin-bottom: 12px; }
@@ -71,15 +85,22 @@
   .joinerr { color: var(--pink-600); font-size: 13.5px; margin-top: 8px; display: none; }
   .joinerr.show { display: block; }
 
+  /* Kategori-piller */
+  .pills { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 14px; }
+  .pill { flex: none; font-size: 12.5px; font-weight: 700; padding: 7px 14px; border-radius: var(--r-pill); border: 1px solid var(--pink-200); background: var(--pink-50); color: var(--pink-700); cursor: pointer; }
+  .pill.active { background: var(--pink-600); color: #fff; border-color: var(--pink-600); }
+
   /* Innlegg-boks */
   #composeCard textarea { width: 100%; min-height: 70px; font-size: 15px; padding: 12px 14px; border: 1px solid var(--pink-200); border-radius: var(--r-md); background: var(--pink-50); color: var(--ink); resize: vertical; margin-bottom: 10px; }
-  .composerow { display: flex; justify-content: flex-end; }
+  #composeCard select { padding: 10px 12px; border: 1px solid var(--pink-200); border-radius: var(--r-md); background: var(--pink-50); color: var(--ink); font-size: 13.5px; font-weight: 700; }
+  .composerow { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
   .btn-post { font-size: 14px; font-weight: 800; padding: 10px 22px; border-radius: var(--r-pill); background: linear-gradient(120deg, var(--pink-500), var(--pink-600)); color: #fff; border: none; cursor: pointer; }
   .btn-post:disabled { opacity: .6; }
 
   /* Feed */
   .post { border-bottom: 1px solid var(--pink-100); padding: 16px 0; }
   .post:last-child { border-bottom: none; }
+  .catchip { display: inline-block; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; padding: 3px 9px; border-radius: var(--r-pill); background: var(--sun-soft); color: #8a6900; margin-bottom: 6px; }
   .post .who { font-weight: 700; font-size: 14.5px; color: var(--pink-700); }
   .post .when { font-size: 12px; color: var(--ink-muted); margin-left: 6px; }
   .post .txt { font-size: 15px; margin: 6px 0 10px; white-space: pre-wrap; }
@@ -97,6 +118,26 @@
   .cform button { font-size: 13px; font-weight: 700; padding: 9px 16px; border-radius: var(--r-pill); background: var(--pink-600); color: #fff; border: none; cursor: pointer; }
 
   .empty { text-align: center; color: var(--ink-muted); font-size: 14px; padding: 20px 0; }
+
+  /* Klasserom */
+  .lesson { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--pink-100); }
+  .lesson:last-child { border-bottom: none; }
+  .lesson .num { flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--pink-50); color: var(--pink-700); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+  .lesson h3 { font-size: 15px; margin-bottom: 3px; }
+  .lesson p { font-size: 13.5px; color: var(--ink-soft); }
+
+  /* Medlemmer / ledertavle / kart */
+  .memrow { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--pink-100); }
+  .memrow:last-child { border-bottom: none; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--pink-200), var(--pink-500)); color: #fff; font-weight: 800; font-size: 14px; display: flex; align-items: center; justify-content: center; flex: none; }
+  .memrow .nm { font-weight: 700; font-size: 14.5px; flex: 1; }
+  .memrow .meta { font-size: 12.5px; color: var(--ink-muted); }
+  .rank { width: 26px; text-align: center; font-weight: 800; color: var(--pink-600); }
+
+  .country-group { margin-bottom: 14px; }
+  .country-group h3 { font-size: 14.5px; margin-bottom: 6px; }
+  .country-group p { font-size: 13.5px; color: var(--ink-soft); }
+
   .footer { text-align: center; margin-top: 30px; font-size: 12.5px; color: var(--ink-muted); }
 </style>
 </head>
@@ -110,12 +151,26 @@
     <span class="brandname">Little Montessori Explorers</span>
   </a>
 
-  <h1 class="title" data-no="Fellesskapet" data-en="The community">Fellesskapet</h1>
-  <p class="sub" data-no="Der de som er med i utfordringen møtes, deler og heier på hverandre." data-en="Where everyone in the challenge meets, shares and cheers each other on.">Der de som er med i utfordringen møtes, deler og heier på hverandre.</p>
+  <div class="grouphead">
+    <div class="mark">🌸</div>
+    <div class="info">
+      <h1 data-no="10 000-visninger-utfordringen" data-en="The 10,000 Views Challenge">10 000-visninger-utfordringen</h1>
+      <p><span id="memberCountTxt">…</span> <span data-no="medlemmer" data-en="members">medlemmer</span></p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="community" data-no="Fellesskap" data-en="Community">Fellesskap</button>
+    <button class="tab" data-tab="classroom" data-no="Klasserom" data-en="Classroom">Klasserom</button>
+    <button class="tab" data-tab="members" data-no="Medlemmer" data-en="Members">Medlemmer</button>
+    <button class="tab" data-tab="leaderboard" data-no="Ledertavle" data-en="Leaderboard">Ledertavle</button>
+    <button class="tab" data-tab="map" data-no="Kart" data-en="Map">Kart</button>
+    <button class="tab" data-tab="about" data-no="Om" data-en="About">Om</button>
+  </div>
 
   <!-- Bli med -->
   <div class="card" id="joinCard">
-    <h2 style="font-size:18px;margin-bottom:12px;" data-no="Bli med i fellesskapet" data-en="Join the community">Bli med i fellesskapet</h2>
+    <h2 data-no="Bli med i fellesskapet" data-en="Join the community">Bli med i fellesskapet</h2>
     <div class="field">
       <label data-no="Navnet ditt" data-en="Your name">Navnet ditt</label>
       <input id="joinName" type="text" autocomplete="given-name">
@@ -124,20 +179,71 @@
       <label data-no="E-posten du kjøpte med" data-en="The email you purchased with">E-posten du kjøpte med</label>
       <input id="joinEmail" type="email" autocomplete="email">
     </div>
+    <div class="field">
+      <label data-no="Land (valgfritt)" data-en="Country (optional)">Land (valgfritt)</label>
+      <input id="joinCountry" type="text" autocomplete="country-name">
+    </div>
     <button class="btn-cta" id="joinBtn" data-no="Bli med →" data-en="Join →">Bli med →</button>
     <p class="joinerr" id="joinErr" data-no="Fant ingen kjøp på den e-posten. Bruk samme e-post som du meldte deg på utfordringen med." data-en="No purchase found for that email. Use the same email you joined the challenge with.">Fant ingen kjøp på den e-posten. Bruk samme e-post som du meldte deg på utfordringen med.</p>
   </div>
 
-  <!-- Skriv innlegg (skjult til du er med) -->
-  <div class="card" id="composeCard" style="display:none;">
-    <textarea id="postText" data-no-ph="Del noe med de andre …" data-en-ph="Share something with the others …" placeholder="Del noe med de andre …"></textarea>
-    <div class="composerow"><button class="btn-post" id="postBtn" data-no="Post" data-en="Post">Post</button></div>
+  <!-- ===== Fellesskap-fane ===== -->
+  <div id="tab-community" class="tabpane">
+    <div class="pills" id="pills"></div>
+    <div class="card" id="composeCard" style="display:none;">
+      <textarea id="postText" data-no-ph="Del noe med de andre …" data-en-ph="Share something with the others …" placeholder="Del noe med de andre …"></textarea>
+      <div class="composerow">
+        <select id="postCategory"></select>
+        <button class="btn-post" id="postBtn" data-no="Post" data-en="Post">Post</button>
+      </div>
+    </div>
+    <div class="card" id="feedCard" style="display:none;">
+      <div id="feed"></div>
+      <p class="empty" id="feedEmpty" style="display:none;" data-no="Ingen innlegg ennå. Bli den første til å si hei! 👋" data-en="No posts yet. Be the first to say hi! 👋">Ingen innlegg ennå. Bli den første til å si hei! 👋</p>
+    </div>
   </div>
 
-  <!-- Vegg -->
-  <div class="card" id="feedCard" style="display:none;">
-    <div id="feed"></div>
-    <p class="empty" id="feedEmpty" style="display:none;" data-no="Ingen innlegg ennå. Bli den første til å si hei! 👋" data-en="No posts yet. Be the first to say hi! 👋">Ingen innlegg ennå. Bli den første til å si hei! 👋</p>
+  <!-- ===== Klasserom-fane ===== -->
+  <div id="tab-classroom" class="tabpane" style="display:none;">
+    <div class="card">
+      <h2 data-no="30-dagers-planen" data-en="The 30-day plan">30-dagers-planen</h2>
+      <div id="lessons"></div>
+    </div>
+  </div>
+
+  <!-- ===== Medlemmer-fane ===== -->
+  <div id="tab-members" class="tabpane" style="display:none;">
+    <div class="card">
+      <h2 data-no="Medlemmer" data-en="Members">Medlemmer</h2>
+      <div id="memberList"></div>
+    </div>
+  </div>
+
+  <!-- ===== Ledertavle-fane ===== -->
+  <div id="tab-leaderboard" class="tabpane" style="display:none;">
+    <div class="card">
+      <h2 data-no="Ledertavle" data-en="Leaderboard">Ledertavle</h2>
+      <p style="font-size:13px;color:var(--ink-muted);margin-bottom:12px;" data-no="Poeng for innlegg og kommentarer i fellesskapet." data-en="Points for posts and comments in the community.">Poeng for innlegg og kommentarer i fellesskapet.</p>
+      <div id="leaderboardList"></div>
+    </div>
+  </div>
+
+  <!-- ===== Kart-fane ===== -->
+  <div id="tab-map" class="tabpane" style="display:none;">
+    <div class="card">
+      <h2 data-no="Hvor er vi fra?" data-en="Where are we from?">Hvor er vi fra?</h2>
+      <p style="font-size:13px;color:var(--ink-muted);margin-bottom:14px;" data-no="Et enkelt oversiktskart, gruppert etter land." data-en="A simple overview, grouped by country.">Et enkelt oversiktskart, gruppert etter land.</p>
+      <div id="mapList"></div>
+    </div>
+  </div>
+
+  <!-- ===== Om-fane ===== -->
+  <div id="tab-about" class="tabpane" style="display:none;">
+    <div class="card">
+      <h2 data-no="Om utfordringen" data-en="About the challenge">Om utfordringen</h2>
+      <p data-no="10 000-visninger-utfordringen er en 30-dagers plan med små, daglige oppgaver, fem minutter om dagen, som skaper ekte fremgang på sosiale medier. Her i fellesskapet møter du de andre som er med, deler det du lager og heier på hverandre." data-en="The 10,000 Views Challenge is a 30-day plan with small daily tasks, five minutes a day, that creates real momentum on social media. Here in the community you meet everyone else doing the challenge, share what you make and cheer each other on." style="margin-bottom:16px;">10 000-visninger-utfordringen er en 30-dagers plan med små, daglige oppgaver, fem minutter om dagen, som skaper ekte fremgang på sosiale medier. Her i fellesskapet møter du de andre som er med, deler det du lager og heier på hverandre.</p>
+      <a href="/utfordringen" class="btn-cta" style="display:inline-block;" data-no="Se utfordringen →" data-en="See the challenge →">Se utfordringen →</a>
+    </div>
   </div>
 
   <div class="footer">© <span id="yr"></span> Little Montessori Explorers</div>
@@ -146,26 +252,45 @@
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
 
+  const CATS = [
+    { key: 'velkommen', no: 'Velkommen', en: 'Welcome' },
+    { key: 'utfordring', no: 'Utfordring', en: 'Challenge' },
+    { key: 'seier', no: 'Seier', en: 'Win' },
+    { key: 'hjelp', no: 'Hjelp', en: 'Help' },
+    { key: 'annet', no: 'Annet', en: 'Other' },
+  ];
+  const LESSONS = [
+    { d: 0, no: 'Velkommen', en: 'Welcome', dno: 'Bli kjent med utfordringen og finn rytmen din.', den: 'Get to know the challenge and find your rhythm.' },
+    { d: 1, no: 'Finn nisjen din', en: 'Find your niche', dno: 'Skriv ned tre temaer du kan snakke om i timevis.', den: 'Write down three topics you could talk about for hours.' },
+    { d: 3, no: 'La AI gjøre planleggingen', en: 'Let AI do the planning', dno: 'Bruk et AI-verktøy du allerede har til å foreslå innholdsideer.', den: 'Use an AI tool you already have to suggest content ideas.' },
+    { d: 7, no: 'Første uke i boks', en: 'First week done', dno: 'Se tilbake, lag ett innlegg til, be om tilbakemelding.', den: 'Look back, make one more post, ask for feedback.' },
+    { d: 14, no: 'Halvveis', en: 'Halfway', dno: 'Se på det som fikk mest respons, lag ett til i samme stil.', den: 'Look at what got the most response, make one more like it.' },
+    { d: 21, no: 'Siste spurt', en: 'Final stretch', dno: 'Planlegg innholdet for resten av utfordringen i én økt.', den: 'Plan your content for the rest of the challenge in one sitting.' },
+    { d: 30, no: 'Du klarte det!', en: 'You did it!', dno: '30 dager, fem minutter om dagen. Gratulerer!', den: '30 days, five minutes a day. Congratulations!' },
+  ];
+  const FLAGS = { norge: '🇳🇴', norway: '🇳🇴', sverige: '🇸🇪', sweden: '🇸🇪', danmark: '🇩🇰', denmark: '🇩🇰', usa: '🇺🇸', 'united states': '🇺🇸', england: '🇬🇧', uk: '🇬🇧', 'united kingdom': '🇬🇧', tyskland: '🇩🇪', germany: '🇩🇪' };
+
   let currentLang = 'no';
   const toggle = document.getElementById('langToggle');
   function switchLanguage(lang) {
     currentLang = lang;
     document.documentElement.lang = lang;
-    document.querySelectorAll('[data-no][data-en]').forEach(el => {
-      el.textContent = el.getAttribute('data-' + lang);
-    });
-    document.querySelectorAll('[data-no-ph][data-en-ph]').forEach(el => {
-      el.placeholder = el.getAttribute('data-' + lang + '-ph');
-    });
+    document.querySelectorAll('[data-no][data-en]').forEach(el => { el.textContent = el.getAttribute('data-' + lang); });
+    document.querySelectorAll('[data-no-ph][data-en-ph]').forEach(el => { el.placeholder = el.getAttribute('data-' + lang + '-ph'); });
     toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    buildPills(); buildCategorySelect(); buildLessons();
+    if (currentTab === 'community') loadFeed();
   }
   toggle.addEventListener('click', () => switchLanguage(currentLang === 'no' ? 'en' : 'no'));
-  try { if (localStorage.getItem('lme_lang') === 'en') switchLanguage('en'); } catch (e) {}
+  try { if (localStorage.getItem('lme_lang') === 'en') currentLang = 'en'; } catch (e) {}
 
   const API = '/api/utfordring-community';
   let me = null;
   try { me = JSON.parse(localStorage.getItem('utf_identity') || 'null'); } catch (e) {}
 
+  function initials(name) {
+    return (name || '?').trim().split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  }
   function timeAgo(ts) {
     const s = Math.floor((Date.now() - ts) / 1000);
     if (s < 60) return currentLang === 'en' ? 'just now' : 'nå nettopp';
@@ -174,23 +299,93 @@
     const d = Math.floor(h / 24); return d + (currentLang === 'en' ? 'd ago' : ' d siden');
   }
 
+  /* ---- Faner ---- */
+  let currentTab = 'community';
+  document.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.tabpane').forEach(p => p.style.display = 'none');
+      currentTab = btn.getAttribute('data-tab');
+      document.getElementById('tab-' + currentTab).style.display = 'block';
+      if (currentTab === 'community') loadFeed();
+      else if (currentTab === 'members') loadMembers();
+      else if (currentTab === 'leaderboard') loadLeaderboard();
+      else if (currentTab === 'map') loadMap();
+    });
+  });
+
+  /* ---- Klasserom ---- */
+  function buildLessons() {
+    const el = document.getElementById('lessons');
+    el.innerHTML = '';
+    LESSONS.forEach(l => {
+      const row = document.createElement('div'); row.className = 'lesson';
+      const num = document.createElement('div'); num.className = 'num'; num.textContent = 'D' + l.d;
+      const body = document.createElement('div');
+      const h3 = document.createElement('h3'); h3.textContent = currentLang === 'en' ? l.en : l.no;
+      const p = document.createElement('p'); p.textContent = currentLang === 'en' ? l.den : l.dno;
+      body.appendChild(h3); body.appendChild(p);
+      row.appendChild(num); row.appendChild(body);
+      el.appendChild(row);
+    });
+  }
+  buildLessons();
+
+  /* ---- Kategorier ---- */
+  let activeCategory = '';
+  function buildPills() {
+    const el = document.getElementById('pills');
+    el.innerHTML = '';
+    const allPill = document.createElement('button');
+    allPill.className = 'pill' + (activeCategory === '' ? ' active' : '');
+    allPill.textContent = currentLang === 'en' ? 'All' : 'Alle';
+    allPill.addEventListener('click', () => { activeCategory = ''; buildPills(); loadFeed(); });
+    el.appendChild(allPill);
+    CATS.forEach(c => {
+      const p = document.createElement('button');
+      p.className = 'pill' + (activeCategory === c.key ? ' active' : '');
+      p.textContent = currentLang === 'en' ? c.en : c.no;
+      p.addEventListener('click', () => { activeCategory = c.key; buildPills(); loadFeed(); });
+      el.appendChild(p);
+    });
+  }
+  function buildCategorySelect() {
+    const sel = document.getElementById('postCategory');
+    sel.innerHTML = '';
+    CATS.forEach(c => {
+      const o = document.createElement('option');
+      o.value = c.key; o.textContent = currentLang === 'en' ? c.en : c.no;
+      sel.appendChild(o);
+    });
+  }
+  buildPills(); buildCategorySelect();
+
+  /* ---- Fellesskap-feed ---- */
   function renderPosts(posts) {
     const feed = document.getElementById('feed');
     feed.innerHTML = '';
     document.getElementById('feedEmpty').style.display = posts.length ? 'none' : 'block';
     posts.forEach(p => {
-      const div = document.createElement('div');
-      div.className = 'post';
+      const div = document.createElement('div'); div.className = 'post';
+      const cat = CATS.find(c => c.key === p.category);
+      if (cat) {
+        const chip = document.createElement('span'); chip.className = 'catchip';
+        chip.textContent = currentLang === 'en' ? cat.en : cat.no;
+        div.appendChild(chip); div.appendChild(document.createElement('br'));
+      }
       const who = document.createElement('span'); who.className = 'who'; who.textContent = p.name;
       const when = document.createElement('span'); when.className = 'when'; when.textContent = timeAgo(p.createdAt);
-      const head = document.createElement('div'); head.appendChild(who); head.appendChild(when);
+      div.appendChild(who); div.appendChild(when);
       const txt = document.createElement('div'); txt.className = 'txt'; txt.textContent = p.text;
+      div.appendChild(txt);
       const actions = document.createElement('div'); actions.className = 'actions';
       const likeBtn = document.createElement('button'); likeBtn.className = 'likebtn'; likeBtn.textContent = '🤍 ' + (p.likeCount || 0);
       likeBtn.addEventListener('click', () => doLike(p.id, likeBtn));
       const cToggle = document.createElement('button'); cToggle.className = 'cbtn';
       cToggle.textContent = (currentLang === 'en' ? 'Comment' : 'Kommenter') + ' (' + (p.comments || []).length + ')';
       actions.appendChild(likeBtn); actions.appendChild(cToggle);
+      div.appendChild(actions);
       const comments = document.createElement('div'); comments.className = 'comments'; comments.style.display = 'none';
       (p.comments || []).forEach(c => {
         const cd = document.createElement('div'); cd.className = 'comment';
@@ -199,86 +394,135 @@
         cd.appendChild(cw); cd.appendChild(ct);
         comments.appendChild(cd);
       });
+      div.appendChild(comments);
       const cform = document.createElement('div'); cform.className = 'cform';
       const cinput = document.createElement('input'); cinput.type = 'text';
       cinput.placeholder = currentLang === 'en' ? 'Write a comment …' : 'Skriv en kommentar …';
       const csend = document.createElement('button'); csend.textContent = currentLang === 'en' ? 'Send' : 'Send';
-      csend.addEventListener('click', () => doComment(p.id, cinput, comments, cToggle, p));
+      csend.addEventListener('click', () => doComment(p.id, cinput));
       cform.appendChild(cinput); cform.appendChild(csend);
+      div.appendChild(cform);
       cToggle.addEventListener('click', () => {
         const show = comments.style.display === 'none';
         comments.style.display = show ? 'grid' : 'none';
         cform.classList.toggle('show', show);
       });
-      div.appendChild(head); div.appendChild(txt); div.appendChild(actions); div.appendChild(comments); div.appendChild(cform);
       feed.appendChild(div);
     });
   }
-
   function loadFeed() {
-    fetch(API).then(r => r.json()).then(data => renderPosts(data.posts || [])).catch(() => {});
+    const q = activeCategory ? ('?view=posts&category=' + encodeURIComponent(activeCategory)) : '?view=posts';
+    fetch(API + q).then(r => r.json()).then(data => {
+      renderPosts(data.posts || []);
+      if (typeof data.memberCount === 'number') document.getElementById('memberCountTxt').textContent = data.memberCount;
+    }).catch(() => {});
   }
-
   function doLike(postId, btn) {
     if (!me) return;
     fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'like', email: me.email, postId: postId }) })
-      .then(r => r.json()).then(res => {
-        if (res && res.ok) {
-          btn.textContent = (res.liked ? '💗 ' : '🤍 ') + res.likeCount;
-          btn.classList.toggle('liked', res.liked);
-        }
-      });
+      .then(r => r.json()).then(res => { if (res && res.ok) { btn.textContent = (res.liked ? '💗 ' : '🤍 ') + res.likeCount; btn.classList.toggle('liked', res.liked); } });
   }
-
-  function doComment(postId, input, commentsEl, toggleBtn, post) {
+  function doComment(postId, input) {
     const text = input.value.trim();
     if (!text || !me) return;
     fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'comment', email: me.email, name: me.name, postId: postId, text: text }) })
-      .then(r => r.json()).then(res => {
-        if (res && res.ok) { input.value = ''; loadFeed(); }
-      });
+      .then(r => r.json()).then(res => { if (res && res.ok) { input.value = ''; loadFeed(); } });
   }
-
   document.getElementById('postBtn').addEventListener('click', function () {
     if (!me) return;
     const ta = document.getElementById('postText');
     const text = ta.value.trim();
     if (!text) return;
     this.disabled = true;
-    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'post', email: me.email, name: me.name, text: text }) })
-      .then(r => r.json()).then(res => {
-        this.disabled = false;
-        if (res && res.ok) { ta.value = ''; loadFeed(); }
-      }).catch(() => { this.disabled = false; });
+    const category = document.getElementById('postCategory').value;
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'post', email: me.email, name: me.name, text: text, category: category }) })
+      .then(r => r.json()).then(res => { this.disabled = false; if (res && res.ok) { ta.value = ''; loadFeed(); } }).catch(() => { this.disabled = false; });
   });
 
+  /* ---- Medlemmer ---- */
+  function loadMembers() {
+    fetch(API + '?view=members').then(r => r.json()).then(data => {
+      const el = document.getElementById('memberList');
+      el.innerHTML = '';
+      (data.members || []).forEach(m => {
+        const row = document.createElement('div'); row.className = 'memrow';
+        const av = document.createElement('div'); av.className = 'avatar'; av.textContent = initials(m.name);
+        const nm = document.createElement('div'); nm.className = 'nm'; nm.textContent = m.name;
+        const meta = document.createElement('div'); meta.className = 'meta'; meta.textContent = m.country || '';
+        row.appendChild(av); row.appendChild(nm); row.appendChild(meta);
+        el.appendChild(row);
+      });
+    }).catch(() => {});
+  }
+
+  /* ---- Ledertavle ---- */
+  function loadLeaderboard() {
+    fetch(API + '?view=leaderboard').then(r => r.json()).then(data => {
+      const el = document.getElementById('leaderboardList');
+      el.innerHTML = '';
+      const medals = ['🥇', '🥈', '🥉'];
+      (data.leaderboard || []).forEach((m, i) => {
+        const row = document.createElement('div'); row.className = 'memrow';
+        const rank = document.createElement('div'); rank.className = 'rank'; rank.textContent = medals[i] || (i + 1);
+        const av = document.createElement('div'); av.className = 'avatar'; av.textContent = initials(m.name);
+        const nm = document.createElement('div'); nm.className = 'nm'; nm.textContent = m.name;
+        const meta = document.createElement('div'); meta.className = 'meta'; meta.textContent = m.points + ' p';
+        row.appendChild(rank); row.appendChild(av); row.appendChild(nm); row.appendChild(meta);
+        el.appendChild(row);
+      });
+      if (!(data.leaderboard || []).length) el.innerHTML = '<p class="empty">' + (currentLang === 'en' ? 'No activity yet.' : 'Ingen aktivitet ennå.') + '</p>';
+    }).catch(() => {});
+  }
+
+  /* ---- Kart ---- */
+  function loadMap() {
+    fetch(API + '?view=members').then(r => r.json()).then(data => {
+      const groups = {};
+      (data.members || []).forEach(m => {
+        const c = m.country || (currentLang === 'en' ? 'Not specified' : 'Ikke oppgitt');
+        (groups[c] = groups[c] || []).push(m.name);
+      });
+      const el = document.getElementById('mapList');
+      el.innerHTML = '';
+      Object.keys(groups).sort((a, b) => groups[b].length - groups[a].length).forEach(country => {
+        const flag = FLAGS[country.toLowerCase()] || '🌍';
+        const div = document.createElement('div'); div.className = 'country-group';
+        const h3 = document.createElement('h3'); h3.textContent = flag + ' ' + country + ' (' + groups[country].length + ')';
+        const p = document.createElement('p'); p.textContent = groups[country].join(', ');
+        div.appendChild(h3); div.appendChild(p);
+        el.appendChild(div);
+      });
+      if (!Object.keys(groups).length) el.innerHTML = '<p class="empty">' + (currentLang === 'en' ? 'No members yet.' : 'Ingen medlemmer ennå.') + '</p>';
+    }).catch(() => {});
+  }
+
+  /* ---- Bli med ---- */
   function enterCommunity() {
     document.getElementById('joinCard').style.display = 'none';
     document.getElementById('composeCard').style.display = 'block';
     document.getElementById('feedCard').style.display = 'block';
     loadFeed();
   }
-
   document.getElementById('joinBtn').addEventListener('click', function () {
     const name = document.getElementById('joinName').value.trim();
     const email = document.getElementById('joinEmail').value.trim();
+    const country = document.getElementById('joinCountry').value.trim();
     const err = document.getElementById('joinErr');
     err.classList.remove('show');
     if (!name || !email) return;
     this.disabled = true;
-    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'join', email: email, name: name }) })
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'join', email: email, name: name, country: country }) })
       .then(r => r.json()).then(res => {
         this.disabled = false;
         if (res && res.ok) {
           me = { email: email.trim().toLowerCase(), name: name };
           try { localStorage.setItem('utf_identity', JSON.stringify(me)); } catch (e) {}
           enterCommunity();
-        } else {
-          err.classList.add('show');
-        }
+        } else { err.classList.add('show'); }
       }).catch(() => { this.disabled = false; });
   });
 
+  switchLanguage(currentLang);
   if (me && me.email) enterCommunity();
 </script>
 
