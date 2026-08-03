@@ -609,28 +609,26 @@ async function runPinterest(){
 
 async function genPinterestImage(){
   if(!lastPinterestData){alert('Generer først');return;}
-  const btn=event.target;btn.disabled=true;btn.textContent='⏳ Genererer...';
+  const btn=event.target;btn.disabled=true;const orig=btn.textContent;btn.textContent='⏳ Genererer...';
   try{
-    const img=await api('/ai/image',{prompt:lastPinterestData.imagePrompt,style:'pinterest-pin',size:'1000x1500'});
-    const pinUrl=img.url||img.dataUrl;
-    if(pinUrl){
-      const prevImg=document.querySelector('#p-out img');
-      if(prevImg)prevImg.remove();
-      const imgEl=document.createElement('img');
-      imgEl.src=pinUrl;imgEl.style='max-width:300px;border-radius:12px;margin-top:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);';
-      document.getElementById('p-out').insertBefore(imgEl,document.querySelector('.btn'));
-      lastPinterestData.imageUrl=pinUrl;
-    }
-  }catch(e){alert('Bildegenerering feilet: '+e.message);}finally{btn.disabled=false;btn.textContent='🎨 '+(LANG==='en'?'Generate Pin':'Generer Pin');}
+    const r=await fetch('/api/image',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:lastPinterestData.imagePrompt||'',platform:'pinterest',character:'none'})
+    });
+    const d=await r.json();
+    if(d.error)throw new Error(d.error);
+    lastPinterestData.imageUrl=d.url;
+    btn.textContent='✓ Pin generert';
+    setTimeout(()=>{btn.textContent=orig;btn.disabled=false;},2000);
+  }catch(e){
+    alert(`Bildegenerering feilet: ${e.message}`);btn.textContent=orig;btn.disabled=false;
+  }
 }
 
 function openCanvaPin(){
   if(!lastPinterestData){alert('Generer først');return;}
-  const title=lastPinterestData.pinTitle||'LME';
-  const desc=lastPinterestData.pinDescription||'';
-  const prompt=lastPinterestData.imagePrompt||'';
-  const url=`https://www.canva.com/create/social-media/pinterest-pin?text=${encodeURIComponent(title)}&description=${encodeURIComponent(desc)}`;
-  window.open(url,'_blank');
+  window.open('https://www.canva.com/','_blank');
 }
 
 function sharePinterestDirect(){
