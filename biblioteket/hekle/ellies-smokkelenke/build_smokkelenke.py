@@ -26,12 +26,14 @@ add('covertag', 'LME HEKLEOPPSKRIFT - BABY', 'LME CROCHET PATTERN - BABY')
 add('covertitle', 'ELLIES SMOKKELENKE', "ELLIE'S PACIFIER CLIP")
 add('subpill', 'LME BABY COLLECTION - WOODLAND DREAMS', 'LME BABY COLLECTION - WOODLAND DREAMS')
 add('cover_desc',
-    'En liten smokkelenke med et forenklet dådyrhode inspirert av Ellie, en blomst, et blad og '
-    'noen myke heklede kuler. Heklet i de samme naturfargene som resten av kolleksjonen. Maks '
-    'lengde er satt for å følge gjeldende sikkerhetsanbefaling for smokkeholdere.',
-    "A little pacifier clip with a simplified deer head inspired by Ellie, a flower, a leaf and a "
-    "few soft crocheted balls. Crocheted in the same natural colours as the rest of the "
-    "collection. Maximum length follows current safety guidance for soother holders.")
+    'En liten smokkelenke med et forenklet dådyrhode inspirert av Ellie, med en liten sløyfe '
+    'mellom ørene, en blomst, et blad og noen myke heklede kuler. Heklet i de samme naturfargene '
+    'som resten av kolleksjonen. Maks lengde er satt for å følge gjeldende sikkerhetsanbefaling '
+    'for smokkeholdere.',
+    "A little pacifier clip with a simplified deer head inspired by Ellie, with a little bow "
+    "between the ears, a flower, a leaf and a few soft crocheted balls. Crocheted in the same "
+    "natural colours as the rest of the collection. Maximum length follows current safety "
+    "guidance for soother holders.")
 add('by1', 'Av Renate Dahl', 'By Renate Dahl')
 add('by2', 'Little Montessori Explorers', 'Little Montessori Explorers')
 add('by3', 'lmexplorers.com', 'lmexplorers.com')
@@ -172,7 +174,7 @@ add('oversikt_lead',
     'Four types of pieces are crocheted separately, then threaded or sewn together at the end '
     'along a short cord, or directly to each other:')
 add('oversikt_deler', [
-    ('1. Det lille dådyrhodet', 'forenklet Ellie, én per lenke', '1. The little deer head', 'a simplified Ellie, one per clip'),
+    ('1. Det lille dådyrhodet', 'forenklet Ellie med sløyfe, én per lenke', '1. The little deer head', 'a simplified Ellie with a bow, one per clip'),
     ('2. Blomsten', 'flat, seks kronblad', '2. The flower', 'flat, six petals'),
     ('3. Bladet', 'flatt, salviegrønt', '3. The leaf', 'flat, sage green'),
     ('4. De heklede kulene', 'så mange du trenger for å fylle ut lengden', '4. The crocheted balls', 'as many as you need to fill out the length'),
@@ -181,10 +183,9 @@ add('oversikt_deler', [
 # ---------------------------------------------------------------- SIDE 7: DÅDYRHODET
 add('banner_hode', 'DEL 1: DET LILLE DÅDYRHODET', 'PART 1: THE LITTLE DEER HEAD')
 add('hode_lead',
-    'En forenklet, liten utgave av Ellies hode, uten egne ører eller ansiktsfelt. Hekles i '
-    'spiral, brunt.',
-    "A simplified, small version of Ellie's head, without separate ears or a face patch. "
-    "Crocheted in a spiral, brown.")
+    'En forenklet, liten utgave av Ellies hode, uten eget ansiktsfelt. Hekles i spiral, brunt.',
+    "A simplified, small version of Ellie's head, without a separate face patch. Crocheted in a "
+    "spiral, brown.")
 head3 = {'no': ['Omg', 'Beskrivelse', 'Masker'], 'en': ['Rnd', 'Description', 'Sts']}
 add('hode_rows', [
     ('1', '6 fm i magisk ring', 6),
@@ -223,6 +224,16 @@ add('ansikt_mini_txt',
     'Embroider two small, round eyes in black satin stitch and a tiny triangular nose below. Do '
     'not use plastic safety eyes here, since the clip must be entirely free of hard or loose '
     'parts. See the reference photo from Ellie for inspiration on the expression, in miniature.')
+add('pill_sloyfe_mini', 'DEN LILLE SLØYFEN', 'THE LITTLE BOW')
+add('sloyfe_mini_txt',
+    'Hekle en smal strimmel i pudderrosa: legg opp 10 lm + 1 vendemaske, 1 rad fm (10 fm). Fold '
+    'strimmelen sammen til en liten sløyfeform og sy et lite stykke garn stramt rundt midten '
+    'flere ganger. Sy sløyfen fast permanent og flatt mellom ørene, akkurat som i '
+    'referansebildet.',
+    'Crochet a narrow strip in powder pink: chain 10 + 1 turning chain, 1 row of sc (10 sc). '
+    'Fold the strip together into a small bow shape and wrap a short length of yarn tightly '
+    'around the centre a few times. Sew the bow on permanently and flat, between the ears, just '
+    'like in the reference photo.')
 
 # ---------------------------------------------------------------- SIDE 8: BLOMST OG BLAD
 add('banner_blomst', 'DEL 2: BLOMSTEN OG BLADET', 'PART 2: THE FLOWER AND THE LEAF')
@@ -287,6 +298,7 @@ add('montering_lead',
 add('montering_steg', [
     'Tre eller sy kulene (og eventuelle perler) i ønsket rekkefølge på en kort, sterk bomullssnor '
     'eller direkte sammen med tett heftesting mellom hver del.',
+    'Sy sløyfen fast mellom ørene på dådyrhodet.',
     'Fest dådyrhodet i den ene enden, og sy blomsten og bladet ved siden av det.',
     'Fest en trering (hvis du bruker det) i den andre enden, som festepunkt for smokken.',
     'Mål hele lenken strukket helt ut. Er den lengre enn 22 cm, ta bort en kule eller to.',
@@ -297,6 +309,7 @@ add('montering_steg', [
 add('montering_steg_en', [
     'Thread or sew the balls (and any beads) in the order you want, on a short, strong cotton '
     'cord, or sew them directly together with tight running stitch between each piece.',
+    'Sew the bow on between the ears on the deer head.',
     'Attach the deer head at one end, and sew the flower and leaf on next to it.',
     'Attach a wooden ring (if using one) at the other end, as the pacifier attachment point.',
     'Measure the whole clip fully stretched out. If it is longer than 22 cm, remove a ball or two.',
@@ -495,11 +508,13 @@ def build(lang):
 
     pages.append(pg(f'''
 {banner(t('banner_blomst'))}
-{rosep(t('pill_blomst'))}
+{rosep(t('pill_sloyfe_mini'))}
+{card('<p>' + t('sloyfe_mini_txt') + '</p>')}
+{sagep(t('pill_blomst'))}
 {card('<p>' + t('blomst_txt') + '</p>')}
-{sagep(t('pill_blad'))}
+{rosep(t('pill_blad'))}
 {card('<p>' + t('blad_txt') + '</p>')}
-{rosep(t('pill_montering_motiv'))}
+{sagep(t('pill_montering_motiv'))}
 {cme(t('montering_motiv_txt'))}
 ''', 8))
 

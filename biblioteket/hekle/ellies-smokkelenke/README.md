@@ -4,8 +4,9 @@ Ferdig oppskrift: **`Ellies-smokkelenke-LME.pdf`** (norsk, 14 sider, A4) og
 **`Ellies-smokkelenke-LME-EN.pdf`** (engelsk, 14 sider, A4).
 
 Andre oppskrift i **LME Baby Collection "Woodland Dreams"**, etter
-`../ellie-dadyret/`. Et forenklet dådyrhode inspirert av Ellie, en blomst, et
-blad og heklede kuler, tredd/sydd sammen til en smokkelenke.
+`../ellie-dadyret/`. Et forenklet dådyrhode inspirert av Ellie, med en liten
+sløyfe mellom ørene (lagt til 3. august 2026 etter Renates referansebilde),
+en blomst, et blad og heklede kuler, tredd/sydd sammen til en smokkelenke.
 
 **Sikkerhet er hovedpoenget med denne oppskriften.** Maks total lengde er satt
 til 22 cm, i tråd med prinsippet i den europeiske standarden EN 12586 for

@@ -31,12 +31,13 @@ add('subpill', 'LME BABY COLLECTION - WOODLAND DREAMS', 'LME BABY COLLECTION - W
 add('cover_desc',
     'En myk aktivitetskube, ca. 11 til 12 cm per side, full av ting å utforske på hver av de '
     'seks sidene: Ellie med sløyfe, et babysikkert speil i en blomsterramme, fire enkle former, '
-    'Ellie som titter opp av en liten lomme, og en flettesside med snor og heklede maskehull. '
-    'To hjørneringer i tre og en perlekant på toppen fullfører kuben.',
+    'Ellie som titter opp av en liten lomme, og en knitreside med en liten sky som knitrer når '
+    'man klemmer den. To hjørneringer i tre og en perlekant på toppen fullfører kuben.',
     'A soft activity cube, approx. 11 to 12 cm per side, full of things to explore on each of '
     'the six sides: Ellie with a bow, a baby-safe mirror in a flower frame, four simple shapes, '
-    'Ellie peeking out of a little pocket, and a lacing side with cord and crocheted eyelets. '
-    'Two wooden corner rings and a bead trim along the top complete the cube.')
+    'Ellie peeking out of a little pocket, and a crinkle side with a little cloud that crinkles '
+    'when you squeeze it. Two wooden corner rings and a bead trim along the top complete the '
+    'cube.')
 add('by1', 'Av Renate Dahl', 'By Renate Dahl')
 add('by2', 'Little Montessori Explorers', 'Little Montessori Explorers')
 add('by3', 'lmexplorers.com', 'lmexplorers.com')
@@ -52,30 +53,30 @@ add('pill_historien', 'DEL AV ELLIES VERDEN', "PART OF ELLIE'S WORLD")
 add('om_historien',
     'Ellies aktivitetsleke hører til LME Baby Collection "Woodland Dreams". Kuben samler hele '
     'Ellies verden på seks små sider: Ellie selv med sløyfen sin, speilet der barnet møter sitt '
-    'eget speilbilde, formene fra skogens ting, lommen der Ellie titter frem, og flettesiden som '
-    'øver opp de små fingrene.',
+    'eget speilbilde, formene fra skogens ting, lommen der Ellie titter frem, og skyen som '
+    'knitrer på knitresiden.',
     'Ellie\'s activity toy belongs to the LME Baby Collection "Woodland Dreams". The cube '
     'gathers Ellie\'s whole world across six small sides: Ellie herself with her bow, the '
     'mirror where the child meets their own reflection, shapes from the forest, the pocket '
-    'where Ellie peeks out, and the lacing side that trains little fingers.')
+    'where Ellie peeks out, and the cloud that crinkles on the crinkle side.')
 add('pill_stil', 'STIL OG SANSER', 'STYLE AND SENSES')
 add('om_stil',
     'Skandinavisk og Montessori-inspirert, i de samme naturfargene som resten av kolleksjonen. '
-    'Hver side har sin egen oppgave å utforske, fra å kjenne igjen former til å øve på å flette '
-    'en snor, akkurat den typen praktisk, hands-on lek Montessori-filosofien bygger på.',
+    'Hver side har sin egen oppgave å utforske, fra å kjenne igjen former til å høre en liten '
+    'sky knitre, akkurat den typen sanselige, hands-on lek Montessori-filosofien bygger på.',
     'Scandinavian and Montessori-inspired, in the same natural colours as the rest of the '
-    'collection. Each side has its own task to explore, from recognising shapes to practising '
-    'lacing a cord, exactly the kind of practical, hands-on play the Montessori philosophy is '
-    'built on.')
+    'collection. Each side has its own task to explore, from recognising shapes to hearing a '
+    'little cloud crinkle, exactly the kind of sensory, hands-on play the Montessori philosophy '
+    'is built on.')
 add('pill_sikkerhet_kort', 'VIKTIGST AV ALT: SIKKERHET', 'MOST IMPORTANT OF ALL: SAFETY')
 add('om_sikkerhet_kort',
     'Denne leken har flere små deler enn noen annen oppskrift i kolleksjonen, og inneholder '
-    'også et lite speil, to treringer og en flettesnor. Alt skal sys fast med dobbel styrke, og '
+    'også et lite speil, to treringer og knitrefolie. Alt skal sys fast med dobbel styrke, og '
     'side 18 er viet sikkerhet i sin helhet. Les den siden nøye før du begynner.',
     'This toy has more small parts than any other pattern in the collection, and also includes '
-    'a small mirror, two wooden rings and a lacing cord. Everything must be sewn on with double '
-    'strength, and page 18 is entirely dedicated to safety. Read that page carefully before you '
-    'begin.')
+    'a small mirror, two wooden rings and a crinkle sheet. Everything must be sewn on with '
+    'double strength, and page 18 is entirely dedicated to safety. Read that page carefully '
+    'before you begin.')
 
 # ---------------------------------------------------------------- SIDE 3
 add('banner_mat', 'MATERIALER OG GARNALTERNATIVER', 'MATERIALS AND YARN ALTERNATIVES')
@@ -103,7 +104,8 @@ add('utstyr', [
     ('To trerelaterte teetheringer', 'umalt/BPA-fri, CE-merket, beregnet for barn, til '
      'hjørnene'),
     ('Runde treperler i noen få størrelser', 'BPA-frie, til topphåndtaket og hjørneduskene'),
-    ('Kort flettesnor av bomull, ca. 40 til 50 cm', 'til flettesiden'),
+    ('Knitrefolie beregnet for babyprodukter (liten bit)', 'til knitresiden, se side om '
+     'knitresiden'),
     ('Stoppenål med butt spiss og tvinnet bomullstråd', 'til all somming'),
     ('Saks og målebånd', ''),
 ])
@@ -181,8 +183,8 @@ add('oversikt_deler', [
      'heart, star, circle and triangle'),
     ('5. Lomme-siden', 'miniatyr-Ellie titter opp av en lomme', '5. The pocket side',
      'a miniature Ellie peeking out of a pocket'),
-    ('6. Flette-siden', 'seks heklede maskehull og en snor', '6. The lacing side',
-     'six crocheted eyelets and a cord'),
+    ('6. Knitre-siden', 'en liten sky med knitrefolie inni', '6. The crinkle side',
+     'a little cloud with a crinkle sheet inside'),
     ('7. Bunnen', 'enkel, uten pynt', '7. The bottom', 'plain, without decoration'),
     ('8. Sammensying og stiving', 'de seks sidene syde til en kube', '8. Assembly and stiffening',
      'the six sides sewn into a cube'),
@@ -365,33 +367,34 @@ add('lomme_montering',
     'pocket itself, so that only the head pokes up out of the pocket, as if she is peeking out. '
     'Ellie must be sewn completely onto the panel, not just placed loosely inside the pocket.')
 
-# ---------------------------------------------------------------- SIDE 12: FLETTE-SIDEN
-add('banner_flette', 'DEL 6: FLETTE-SIDEN', 'PART 6: THE LACING SIDE')
+# ---------------------------------------------------------------- SIDE 12: KNITRE-SIDEN
+add('banner_flette', 'DEL 6: KNITRE-SIDEN', 'PART 6: THE CRINKLE SIDE')
 add('flette_lead',
-    'Denne siden øver opp finmotorikken, akkurat som å knyte sko. Seks heklede maskehull og en '
-    'kort snor.',
-    'This side trains fine motor skills, just like tying shoes. Six crocheted eyelets and a '
-    'short cord.')
+    'Denne siden gir en helt annen sans å utforske: lyd. En liten, myk sky med knitrefolie trygt '
+    'sydd inni.',
+    'This side offers a completely different sense to explore: sound. A little, soft cloud with '
+    'a crinkle sheet safely sewn inside.')
 add('flette_hull',
-    'Maskehullene: hekle seks små, faste ringer i lyst brunt, 6 fm i magisk ring, kjm for å '
-    'lukke, fest av med god tråd igjen (hekle 6 stk). Sy hver ring godt fast, tre på hver side '
-    'av panelet, jevnt fordelt som i referansebildet. En heklet ring fungerer som et trygt '
-    'maskehull, uten skarpe kanter. Bruk aldri metallringer eller -nagler her.',
-    'The eyelets: crochet six small, firm rings in light brown, 6 sc in a magic ring, sl st to '
-    'close, fasten off leaving a long tail (make 6). Sew each ring securely on, three on each '
-    'side of the panel, evenly spaced as in the reference photo. A crocheted ring acts as a '
-    'safe eyelet, with no sharp edges. Never use metal eyelets or rivets here.')
+    'Skyen, front og bak: hekle to like sett av tre overlappende sirkler i kremhvitt, samme '
+    'metode som skyen på Ellies vognlenke: (a) 6 fm i magisk ring. (b) 6 fm i magisk ring, økn x '
+    '6 (12). (c) 6 fm i magisk ring, økn x 6 (12), (1 fm, økn) x 6 (18). Overlapp og sy sammen '
+    'de tre sirklene til en skyform. Hekle to like skyer totalt, én for framsiden og én for '
+    'baksiden av puten.',
+    'The cloud, front and back: crochet two matching sets of three overlapping circles in '
+    'cream, the same method as the cloud on Ellie\'s stroller toy: (a) 6 sc in a magic ring. '
+    '(b) 6 sc in a magic ring, inc x 6 (12). (c) 6 sc in a magic ring, inc x 6 (12), (1 sc, inc) '
+    'x 6 (18). Overlap and sew the three circles together into a cloud shape. Crochet two '
+    'matching clouds in total, one for the front and one for the back of the pillow.')
 add('flette_snor',
-    'Fest den korte flettesnoren permanent, med flere sting, i det nederste maskehullet. Flett '
-    'snoren i kryss oppover mellom de resterende maskehullene, akkurat som å snøre en sko, og '
-    'avslutt med en enkel sløyfe øverst. LME anbefaler at total snorlengde, fra det faste '
-    'festet til enden av sløyfen, aldri overstiger ca. 30 cm, og at startpunktet alltid er sydd '
-    'fast, aldri løst.',
-    'Attach the short lacing cord permanently, with several stitches, in the bottom eyelet. '
-    'Lace the cord upward in a crisscross between the remaining eyelets, just like lacing a '
-    'shoe, and finish with a simple bow at the top. LME recommends that the total cord length, '
-    'from the fixed attachment point to the end of the bow, never exceeds approx. 30 cm, and '
-    'that the starting point is always sewn on, never loose.')
+    'Legg et lite ark med knitrefolie beregnet for babyprodukter mellom de to skyene, og sy dem '
+    'sammen rundt hele kanten med tette sting, slik at folien er fullstendig innelukket og ikke '
+    'kan tas ut. Sy den ferdige, fylte skyen godt fast midt på panelet. LME anbefaler at '
+    'knitrefolien aldri ligger løst, kun sydd fast i en helt lukket lomme, akkurat som speilet.',
+    'Place a small sheet of crinkle material intended for baby products between the two clouds, '
+    'and sew them together around the entire edge with tight stitches, so the sheet is fully '
+    'enclosed and cannot be removed. Sew the finished, filled cloud securely onto the middle of '
+    'the panel. LME recommends that the crinkle sheet is never left loose, only sewn into a '
+    'fully closed pocket, just like the mirror.')
 
 # ---------------------------------------------------------------- SIDE 13: SAMMENSYING
 add('banner_sammensying', 'DEL 7: SAMMENSYING TIL KUBE', 'PART 7: ASSEMBLING THE CUBE')
@@ -402,7 +405,7 @@ add('sammensying_lead',
     'colour as the others. Then you sew all six sides together into a cube.')
 add('sammensying_steg', [
     'Legg de seks ferdige panelene ut i den rekkefølgen du vil ha dem: Ellie-siden foran, '
-    'flette-siden bak, speil-siden og form-siden på hver sin side, lomme-siden øverst, og '
+    'knitre-siden bak, speil-siden og form-siden på hver sin side, lomme-siden øverst, og '
     'bunnen nederst.',
     'Sy sammen fem av de seks sømmene med tett kanthekling eller overstingsøm, rett sider ut, '
     'slik at du får en åpen kube med kun ett hull igjen.',
@@ -413,7 +416,7 @@ add('sammensying_steg', [
     'barnehender skal dra og klemme.',
 ], [
     'Lay out the six finished panels in the order you want them: the Ellie side at the front, '
-    'the lacing side at the back, the mirror side and the shapes side on either side, the '
+    'the crinkle side at the back, the mirror side and the shapes side on either side, the '
     'pocket side on top, and the bottom underneath.',
     'Sew together five of the six seams with tight edging stitches or a whip stitch, right '
     'sides out, so you have an open cube with only one hole left.',
@@ -468,29 +471,31 @@ add('dusker_txt',
 add('banner_montering', 'MONTERING, STEG FOR STEG', 'ASSEMBLY, STEP BY STEP')
 add('montering_steg', [
     'Hekle de seks grunnkvadratene og kant dem alle i lyst brunt.',
-    'Hekle Ellie-siden, speil-siden, form-siden, lomme-siden og flette-siden, hver på sitt eget '
+    'Hekle Ellie-siden, speil-siden, form-siden, lomme-siden og knitre-siden, hver på sitt eget '
     'grunnkvadrat. La bunnen være enkel.',
     'Sy fem av sømmene sammen til en åpen kube, sett inn skumkvadratene og litt fyll, og sy '
     'igjen den siste sømmen.',
     'Fest topphåndtaket langs den øverste sømmen.',
     'Fest de to hjørneringene og de to perleduskene i sømmene som flankerer Ellie-siden.',
-    'Fest snoren på flette-siden i det nederste maskehullet, og flett den oppover.',
+    'Sy knitrefolien trygt inn mellom de to skyene, og fest den ferdige skyen midt på '
+    'knitre-siden.',
     'Fest alle løse tråder godt på innsiden av delene, og klipp av det som er igjen.',
-    'Dra forsiktig i hver eneste del, ring, dusk og sømmen på flettesnoren, for å kontrollere at '
-    'ingenting løsner, før leken tas i bruk.',
+    'Dra forsiktig i hver eneste del, ring og dusk, og trykk lett på skyen, for å kontrollere '
+    'at ingenting løsner, før leken tas i bruk.',
 ])
 add('montering_steg_en', [
     'Crochet the six base squares and edge them all in light brown.',
-    'Crochet the Ellie side, the mirror side, the shapes side, the pocket side and the lacing '
+    'Crochet the Ellie side, the mirror side, the shapes side, the pocket side and the crinkle '
     'side, each onto its own base square. Leave the bottom plain.',
     'Sew five of the seams together into an open cube, insert the foam squares and a little '
     'stuffing, and sew the last seam closed.',
     'Attach the top handle along the top seam.',
     'Attach the two corner rings and the two bead tassels into the seams flanking the Ellie '
     'side.',
-    'Attach the cord on the lacing side at the bottom eyelet, and lace it upward.',
+    'Sew the crinkle sheet securely between the two clouds, and attach the finished cloud to '
+    'the middle of the crinkle side.',
     'Fasten every loose end securely on the inside of the pieces, and trim what is left.',
-    'Gently tug on every single part, ring, tassel and the lacing cord\'s attachment point, to '
+    'Gently tug on every single part, ring and tassel, and press lightly on the cloud, to '
     'check that nothing comes loose, before the toy is used.',
 ])
 
@@ -526,15 +531,14 @@ add('regler',
      'lignende.',
      'Bruk kun et babysikkert speil i akryl/plast, aldri ekte glass eller speil beregnet for '
      'voksne.',
-     'Flettesnoren skal alltid være fast sydd i det nederste maskehullet i den ene enden, og '
-     'aldri lengre enn ca. 30 cm totalt. Kutt aldri en lengre snor løst, og la den aldri henge '
-     'fritt rundt halsen.',
+     'Knitrefolien skal alltid være helt innsydd mellom de to skylagene, aldri løs i det '
+     'vanlige fyllet, og aldri tilgjengelig gjennom en åpen søm.',
      'Hjørneringenes perledusker skal aldri være lengre enn ca. 6 til 8 cm, og skal sys fast, '
      'ikke bare tres løst.',
      'Skumkvadratene skal alltid være helt innsydd inni kuben, aldri tilgjengelige eller synlige '
      'i en åpen søm.',
-     'Sjekk leken jevnlig, og spesielt før hver bruk: dra forsiktig i alle motivene, ringene og '
-     'snoren. Kast eller reparer umiddelbart hvis noe er løst.',
+     'Sjekk leken jevnlig, og spesielt før hver bruk: dra forsiktig i alle motivene og ringene, '
+     'og trykk lett på skyen. Kast eller reparer umiddelbart hvis noe er løst.',
      'Denne oppskriften er en veiledning for hjemmebruk. Skal det ferdige produktet selges, må '
      'det alltid kontrolleres, testes og eventuelt merkes i henhold til gjeldende lokale '
      'sikkerhetskrav og regelverk for barneprodukter/leketøy, som stiller strenge krav til '
@@ -545,15 +549,14 @@ add('regler',
      'pins or similar.',
      'Use only a baby-safe acrylic/plastic mirror, never real glass or a mirror intended for '
      'adults.',
-     'The lacing cord must always be fixed with sewing at the bottom eyelet at one end, and '
-     'never more than approx. 30 cm in total. Never leave a longer cord loose, and never let it '
-     'hang freely around a neck.',
+     'The crinkle sheet must always be fully enclosed between the two cloud layers, never loose '
+     'in the regular stuffing, and never accessible through an open seam.',
      'The corner rings\' bead tassels must never be longer than approx. 6 to 8 cm, and must be '
      'sewn on, not just threaded loosely.',
      'The foam squares must always be fully enclosed inside the cube, never accessible or '
      'visible through an open seam.',
-     'Check the toy regularly, and especially before every use: gently tug on every motif, ring '
-     'and the cord. Discard or repair immediately if anything is loose.',
+     'Check the toy regularly, and especially before every use: gently tug on every motif and '
+     'ring, and press lightly on the cloud. Discard or repair immediately if anything is loose.',
      'This pattern is a guide for home use. If the finished product is sold, it must always be '
      'checked, tested and marked as required under current local safety requirements and '
      "regulations for children's products/toys, which set strict requirements specifically for "

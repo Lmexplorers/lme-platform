@@ -1,11 +1,15 @@
 # Ellies ballerinasko (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Ellies-ballerinasko-LME.pdf`** (norsk, 17 sider, A4) og
-**`Ellies-ballerinasko-LME-EN.pdf`** (engelsk, 17 sider, A4).
+Ferdig oppskrift: **`Ellies-ballerinasko-LME.pdf`** (norsk, 18 sider, A4) og
+**`Ellies-ballerinasko-LME-EN.pdf`** (engelsk, 18 sider, A4).
 
 Femte oppskrift i **LME Baby Collection "Woodland Dreams"**. Klassiske
-babyballerinaer med rund tå, T-stropp, picotkant og sløyfe, i fem størrelser
-(prematur, 0-3, 3-6, 6-9, 9-12 måneder), pluss en matchende hårsløyfe.
+babyballerinaer med rund tå, et lite dådyransikt med ører og sløyfe på
+tåpartiet, T-stropp, picotkant og et hjerte brodert på sålen, i fem
+størrelser (prematur, 0-3, 3-6, 6-9, 9-12 måneder), pluss en matchende
+hårsløyfe. Dådyransiktet og hjertet ble lagt til 3. august 2026, etter
+Renates referansebilde, slik at produktbildet i butikken stemmer med
+oppskriften.
 
 Tallene i oppskriften følger samme flerstørrelses-konvensjon som
 `../ro-bottehatt/` og de andre eldre LME-oppskriftene: `prematur (0-3) 3-6

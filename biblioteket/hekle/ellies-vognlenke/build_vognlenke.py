@@ -28,13 +28,14 @@ add('covertitle', 'ELLIES VOGNLENKE', "ELLIE'S STROLLER TOY")
 add('subpill', 'LME BABY COLLECTION - WOODLAND DREAMS', 'LME BABY COLLECTION - WOODLAND DREAMS')
 add('cover_desc',
     'En liten vognlenke med Ellie midt på, omgitt av sky, sol, blad, blomst, stjerne og '
-    'sommerfugl. Festes med to klips eller ringer over barnevognens bøyle. Heklet i de samme '
-    'naturfargene som resten av kolleksjonen, med lengde satt bevisst kort av '
-    'sikkerhetshensyn.',
+    'sommerfugl, pluss to sideringer i tre med en liten heklet kule dinglende inni hver. Festes '
+    'med to klips eller ringer over barnevognens bøyle. Heklet i de samme naturfargene som '
+    'resten av kolleksjonen, med lengde satt bevisst kort av sikkerhetshensyn.',
     "A little stroller toy with Ellie in the middle, surrounded by a cloud, sun, leaf, flower, "
-    "star and butterfly. Attached with two clips or rings across the stroller's bar. Crocheted "
-    "in the same natural colours as the rest of the collection, with a length kept deliberately "
-    "short for safety.")
+    "star and butterfly, plus two wooden side rings with a small crocheted ball dangling inside "
+    "each one. Attached with two clips or rings across the stroller's bar. Crocheted in the "
+    "same natural colours as the rest of the collection, with a length kept deliberately short "
+    "for safety.")
 add('by1', 'Av Renate Dahl', 'By Renate Dahl')
 add('by2', 'Little Montessori Explorers', 'Little Montessori Explorers')
 add('by3', 'lmexplorers.com', 'lmexplorers.com')
@@ -90,6 +91,8 @@ add('utstyr', [
     ('Kort, sterk bomullssnor eller flettet bomullsbånd', 'til selve strengen mellom motivene'),
     ('To feste-punkter: treklips, plastklips eller treringer', 'BPA-frie/CE-merket, se side om '
      'sikkerhet for valg og lengde'),
+    ('To små trerelaterte teetheringer', 'umalt/BPA-fri, CE-merket, beregnet for barn, til '
+     'sideringene med kuler'),
     ('Stoppenål med butt spiss og tvinnet bomullstråd', 'til all somming'),
     ('Saks og målebånd', ''),
 ])
@@ -158,9 +161,9 @@ add('tips',
 add('banner_oversikt', 'SLIK ER VOGNLENKEN BYGGET OPP', 'HOW THE STROLLER TOY IS BUILT')
 add('oversikt_lead',
     'Syv motiver hekles hver for seg og festes tett langs en kort hovedstreng, med Ellie i '
-    'midten:',
+    'midten, pluss to sideringer med kuler:',
     'Seven motifs are crocheted separately and attached close together along a short main '
-    'strand, with Ellie in the middle:')
+    'strand, with Ellie in the middle, plus two side rings with balls:')
 add('oversikt_deler', [
     ('1. Ellie-medaljongen', 'midtmotivet', '1. The Ellie medallion', 'the centre motif'),
     ('2. Skyen', 'kremhvit', '2. The cloud', 'cream'),
@@ -169,6 +172,8 @@ add('oversikt_deler', [
     ('5. Blomsten', 'pudderrosa', '5. The flower', 'powder pink'),
     ('6. Stjernen', 'kremhvit', '6. The star', 'cream'),
     ('7. Sommerfuglen', 'pudderrosa og brunt', '7. The butterfly', 'powder pink and brown'),
+    ('8. Sideringene', 'to treringer med en dinglende kule i hver', '8. The side rings',
+     'two wooden rings with a dangling ball in each'),
 ])
 
 # ---------------------------------------------------------------- SIDE 7: ELLIE-MEDALJONGEN
@@ -262,22 +267,45 @@ add('sommerfugl_txt',
     'body between the two wings and sew everything together in the middle. Embroider two short '
     'antennae in black thread at the top of the body.')
 
-# ---------------------------------------------------------------- SIDE 11: MONTERING
+# ---------------------------------------------------------------- SIDE 11: SIDERINGENE
+add('banner_sideringer', 'DEL 5: SIDERINGENE MED KULER', 'PART 5: THE SIDE RINGS WITH BALLS')
+add('sideringer_lead',
+    'To små treringer med en dinglende, heklet kule inni hver, festet et stykke ut på hver '
+    'side av Ellie-medaljongen.',
+    "Two small wooden rings with a dangling crocheted ball inside each, attached partway along "
+    "the strand on each side of the Ellie medallion.")
+add('sideringer_txt',
+    'Kulene: hekle to kuler, samme oppskrift som på Ellies smokkelenke: 6 fm i magisk ring, '
+    'økn x 6 (12), 12 fm i 2 omganger, mink x 6 (6), fyll lett, fest av med god tråd igjen.',
+    "The balls: crochet two balls, the same pattern as on Ellie's pacifier clip: 6 sc in a "
+    'magic ring, inc x 6 (12), 12 sc for 2 rounds, dec x 6 (6), stuff lightly, fasten off '
+    'leaving a long tail.')
+add('sideringer_ferdig',
+    'Heng hver kule inni en trering på en kort, sydd løkke, maks 6 til 8 cm, aldri løsere. Sy '
+    'selve ringen godt fast tett inntil hovedstrengen på hver side av Ellie, med flere runder '
+    'overstingsøm, ikke bare tredd løst gjennom snoren.',
+    'Hang each ball inside a wooden ring on a short, sewn loop, no more than 6 to 8 cm, never '
+    'looser. Sew the ring itself securely close against the main strand on each side of Ellie, '
+    'with several rounds of whip stitching, not just threaded loosely onto the cord.')
+
+# ---------------------------------------------------------------- SIDE 12: MONTERING
 add('banner_montering', 'MONTERING, STEG FOR STEG', 'ASSEMBLY, STEP BY STEP')
 add('montering_lead',
-    'Legg alle sju motivene ut i den rekkefølgen du vil ha dem, med Ellie i midten, før du '
-    'fester noe permanent.',
-    'Lay out all seven motifs in the order you want, with Ellie in the middle, before you '
-    'attach anything permanently.')
+    'Legg alle sju motivene og de to sideringene ut i den rekkefølgen du vil ha dem, med Ellie '
+    'i midten, før du fester noe permanent.',
+    'Lay out all seven motifs and the two side rings in the order you want, with Ellie in the '
+    'middle, before you attach anything permanently.')
 add('montering_steg', [
     'Klipp en kort, sterk bomullssnor eller flett et bomullsbånd i ønsket lengde (se side om '
     'sikkerhet for maks lengde).',
     'Sy Ellie-medaljongen fast midt på snoren.',
     'Fordel de seks andre motivene jevnt på hver side av Ellie, tett inntil hovedstrengen, og '
     'sy dem godt fast.',
+    'Fest de to sideringene med kulene et stykke lenger ut på hver side, godt fast med '
+    'overstingsøm.',
     'Fest et treklips, plastklips eller en trering i hver ende av snoren.',
-    'Mål hele lenken strukket helt ut en siste gang, og sjekk at ingen motiv henger løsere enn '
-    'anbefalt.',
+    'Mål hele lenken strukket helt ut en siste gang, og sjekk at ingen motiv eller ring henger '
+    'løsere enn anbefalt.',
     'Fest alle løse tråder godt på innsiden av delene, og klipp av det som er igjen.',
 ])
 add('montering_steg_en', [
@@ -286,9 +314,11 @@ add('montering_steg_en', [
     'Sew the Ellie medallion onto the middle of the cord.',
     'Distribute the other six motifs evenly on each side of Ellie, close against the main '
     'strand, and sew them on securely.',
+    'Attach the two side rings with the balls a little further out on each side, securely with '
+    'whip stitching.',
     'Attach a wooden clip, plastic clip or wooden ring to each end of the cord.',
-    'Measure the whole toy fully stretched out one last time, and check that no motif hangs '
-    'looser than recommended.',
+    'Measure the whole toy fully stretched out one last time, and check that no motif or ring '
+    'hangs looser than recommended.',
     'Fasten every loose end securely on the inside of the pieces, and trim what is left.',
 ])
 
@@ -331,8 +361,10 @@ add('regler',
      'eller hals.',
      'Ingen deler limes. Alt sys fast med sterk, tvinnet bomullstråd og mange, tette sting.',
      'Bruk kun festeklips/-ringer som er BPA-frie/CE-merket og beregnet for barneprodukter.',
-     'Sjekk lenken jevnlig for slitasje: løse tråder, motiver som henger løst, eller '
-     'festepunkter som er svekket. Kast lenken umiddelbart hvis noe er galt.',
+     'Kulene i sideringene skal henge på en kort, sydd løkke, maks 6 til 8 cm, aldri løsere, og '
+     'ringene skal sys fast, ikke bare tres løst på snoren.',
+     'Sjekk lenken jevnlig for slitasje: løse tråder, motiver eller sideringer som henger løst, '
+     'eller festepunkter som er svekket. Kast lenken umiddelbart hvis noe er galt.',
      'Denne oppskriften er en veiledning for hjemmebruk. Skal det ferdige produktet selges, må '
      'det alltid kontrolleres, testes og eventuelt merkes i henhold til gjeldende lokale '
      'sikkerhetskrav og regelverk for barneprodukter/leketøy.'],
@@ -344,8 +376,10 @@ add('regler',
      'of tight stitches.',
      'Use only attachment clips/rings that are BPA-free/CE-marked and intended for '
      "children's products.",
-     'Check the toy regularly for wear: loose threads, motifs hanging loose, or weakened '
-     'attachment points. Discard the toy immediately if anything is wrong.',
+     'The balls in the side rings must hang on a short, sewn loop, no more than 6 to 8 cm, '
+     'never looser, and the rings must be sewn on, not just threaded loosely onto the cord.',
+     'Check the toy regularly for wear: loose threads, motifs or side rings hanging loose, or '
+     'weakened attachment points. Discard the toy immediately if anything is wrong.',
      'This pattern is a guide for home use. If the finished product is sold, it must always be '
      'checked, tested and marked as required under current local safety requirements and '
      "regulations for children's products/toys."])
@@ -495,19 +529,26 @@ def build(lang):
 {card('<p>' + t('sommerfugl_txt') + '</p>')}
 ''', 10))
 
+    pages.append(pg(f'''
+{banner(t('banner_sideringer'))}
+<p>{t('sideringer_lead')}</p>
+{card('<p>' + t('sideringer_txt') + '</p>')}
+{cme(t('sideringer_ferdig'))}
+''', 11))
+
     mo_steg = T['montering_steg']['no'] if lang == 'no' else T['montering_steg_en']['no']
     pages.append(pg(f'''
 {banner(t('banner_montering'))}
 <p>{t('montering_lead')}</p>
 {card(steps(mo_steg))}
-''', 11))
+''', 12))
 
     foto_caps = T['foto_captions']['no'] if lang == 'no' else T['foto_captions']['en']
     pages.append(pg(f'''
 {banner(t('banner_foto'))}
 {card('<p class="center">' + t('foto_lead') + '</p>')}
 {photo_row(foto_caps)}
-''', 12))
+''', 13))
 
     regler = T['regler']['no'] if lang == 'no' else T['regler']['en']
     pages.append(pg(f'''
@@ -516,14 +557,14 @@ def build(lang):
 {card('<p>' + t('lengde_txt') + '</p>')}
 {sagep(t('pill_regler'))}
 {card(ul(regler))}
-''', 13))
+''', 14))
 
     pages.append(pg(f'''
 {banner(t('banner_stell'))}
 {cme(t('stell_txt'))}
 {rosep(t('pill_qr'))}
 {qr_placeholder(t('qr_caption'))}
-''', 14))
+''', 15))
 
     kolliste = T['kolleksjon_liste']['no'] if lang == 'no' else T['kolleksjon_liste']['en']
     pages.append(pg(f'''
@@ -536,7 +577,7 @@ def build(lang):
 <div class="byline">
   <div class="by2">{t('by1')} &middot; {t('by2')} &middot; {t('by3')}</div>
 </div>
-''', 15))
+''', 16))
 
     return pages
 

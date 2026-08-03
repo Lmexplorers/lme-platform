@@ -27,12 +27,14 @@ add('covertag', 'LME HEKLEOPPSKRIFT - BABY', 'LME CROCHET PATTERN - BABY')
 add('covertitle', 'ELLIES BALLERINASKO', "ELLIE'S BALLERINA SHOES")
 add('subpill', 'LME BABY COLLECTION - WOODLAND DREAMS', 'LME BABY COLLECTION - WOODLAND DREAMS')
 add('cover_desc',
-    'Søte, klassiske babyballerinaer med rund tå, T-stropp, stor sløyfe og en fin picotkant. '
-    'Fem størrelser, fra prematur til 12 måneder, pluss en matchende hårsløyfe. Heklet i de '
-    'samme naturfargene som resten av Ellie-kolleksjonen.',
-    'Sweet, classic baby ballerina shoes with a round toe, T-bar strap, a big bow and a pretty '
-    'picot edge. Five sizes, from preemie to 12 months, plus a matching hair bow. Crocheted in '
-    'the same natural colours as the rest of the Ellie collection.')
+    'Søte, klassiske babyballerinaer med rund tå, et lite dådyransikt med sløyfe på tåpartiet, '
+    'T-stropp, en fin picotkant og et hjerte brodert på sålen. Fem størrelser, fra prematur til '
+    '12 måneder, pluss en matchende hårsløyfe. Heklet i de samme naturfargene som resten av '
+    'Ellie-kolleksjonen.',
+    'Sweet, classic baby ballerina shoes with a round toe, a little deer face with a bow on the '
+    'toe, a T-bar strap, a pretty picot edge and a heart embroidered on the sole. Five sizes, '
+    'from preemie to 12 months, plus a matching hair bow. Crocheted in the same natural colours '
+    'as the rest of the Ellie collection.')
 add('by1', 'Av Renate Dahl', 'By Renate Dahl')
 add('by2', 'Little Montessori Explorers', 'Little Montessori Explorers')
 add('by3', 'lmexplorers.com', 'lmexplorers.com')
@@ -72,11 +74,13 @@ add('banner_mat', 'MATERIALER OG GARNALTERNATIVER', 'MATERIALS AND YARN ALTERNAT
 add('pill_garn', 'GARN', 'YARN')
 add('garn_txt',
     'Bystrikk Merino eller DROPS Cotton Merino i krem, pudderrosa eller lys brun til selve '
-    'skoen, pluss en liten rest av pudderrosa til sløyfen. Samme garnfamilie som resten av '
+    'skoen, pluss en liten rest av pudderrosa til sløyfen og lys brunt/kremhvitt til '
+    'dådyransiktet (den fargen du ikke bruker på selve skoen). Samme garnfamilie som resten av '
     'Ellie-kolleksjonen.',
     'Bystrikk Merino or DROPS Cotton Merino in cream, powder pink or light brown for the shoe '
-    'itself, plus a small leftover of powder pink for the bow. The same yarn family as the '
-    'rest of the Ellie collection.')
+    'itself, plus a small leftover of powder pink for the bow and light brown/cream for the '
+    'deer face (whichever colour you are not using on the shoe itself). The same yarn family as '
+    'the rest of the Ellie collection.')
 add('garn_alt',
     'Alternativt garn: enhver myk bomullsblanding i DK-tykkelse fungerer fint, for eksempel '
     'DROPS Safran, Hobbii Amigo eller Paintbox Simply DK. Bomull er lettest å holde rent.',
@@ -164,14 +168,15 @@ add('tips',
 # ---------------------------------------------------------------- SIDE 7
 add('banner_oversikt', 'SLIK ER SKOEN BYGGET OPP', 'HOW THE SHOE IS BUILT')
 add('oversikt_lead',
-    'Hver sko har fem deler. Hekle alt to ganger, én gang for hver fot.',
-    'Each shoe has five parts. Crochet everything twice, once for each foot.')
+    'Hver sko har seks deler. Hekle alt to ganger, én gang for hver fot.',
+    'Each shoe has six parts. Crochet everything twice, once for each foot.')
 add('oversikt_deler', [
-    ('1. Sålen', 'oval bunn, egen størrelse for hver fot', '1. The sole', 'oval base, own size for each foot'),
+    ('1. Sålen', 'oval bunn, med et brodert hjerte', '1. The sole', 'oval base, with an embroidered heart'),
     ('2. Overdelen', 'sidene og tåpartiet', '2. The upper', 'the sides and toe'),
-    ('3. T-stroppen', 'med lukking', '3. The T-bar strap', 'with a closure'),
-    ('4. Picotkanten', 'dekorativ kant øverst', '4. The picot edge', 'a decorative trim at the top'),
-    ('5. Sløyfen', 'foran på hver sko', '5. The bow', 'on the front of each shoe'),
+    ('3. Dådyransiktet', 'lite hode med ører på tåpartiet', '3. The deer face', 'a little head with ears on the toe'),
+    ('4. T-stroppen', 'med lukking', '4. The T-bar strap', 'with a closure'),
+    ('5. Picotkanten', 'dekorativ kant øverst', '5. The picot edge', 'a decorative trim at the top'),
+    ('6. Sløyfen', 'mellom ørene på hver sko', '6. The bow', 'between the ears on each shoe'),
 ])
 
 # ---------------------------------------------------------------- SIDE 8: SÅLEN
@@ -202,8 +207,13 @@ add('sale_rows_en', [
     ('2', 'inc evenly in both curved ends (approx. 6 increases in each)', '32 (34) 36 (38) 40'),
 ])
 add('sale_ferdig',
-    'Ikke klipp av. Du fortsetter rett inn i overdelen fra samme tråd.',
-    'Do not cut the yarn. You continue straight into the upper from the same thread.')
+    'Ikke klipp av. Du fortsetter rett inn i overdelen fra samme tråd. Brodér gjerne et lite '
+    'hjerte midt på undersiden av sålen i en kontrastfarge, som i referansebildet, et søtt '
+    'detalj som vises når babyen løfter foten.',
+    'Do not cut the yarn. You continue straight into the upper from the same thread. Feel free '
+    'to embroider a small heart in the middle of the underside of the sole in a contrasting '
+    'colour, as in the reference photo, a sweet detail that shows when the baby lifts their '
+    'foot.')
 
 # ---------------------------------------------------------------- SIDE 9: OVERDELEN
 add('banner_overdel', 'DEL 2: OVERDELEN', 'PART 2: THE UPPER')
@@ -233,8 +243,40 @@ add('overdel_apning',
     "unworked. Fasten off, leaving a long tail. Try the shoe on the foot here, and adjust the "
     "number of rounds on the second shoe if needed, so both match.")
 
-# ---------------------------------------------------------------- SIDE 10: T-STROPP OG LUKKING
-add('banner_tstropp', 'DEL 3: T-STROPPEN OG LUKKINGEN', 'PART 3: THE T-BAR STRAP AND CLOSURE')
+# ---------------------------------------------------------------- SIDE 10: DÅDYRANSIKTET
+add('banner_dadyr', 'DEL 3: DÅDYRANSIKTET', 'PART 3: THE DEER FACE')
+add('dadyr_lead',
+    'Et lite, flatt dådyrhode sys fast på tåpartiet av hver sko, i kontrastfargen til selve '
+    'skoen.',
+    'A little, flat deer head is sewn onto the toe of each shoe, in a colour that contrasts '
+    'with the shoe itself.')
+add('dadyr_rows', [
+    ('1', '6 fm i magisk ring', '6'),
+    ('2', 'økn x 6', '12'),
+    ('3', '(1 fm, økn) x 6', '18'),
+    ('4', '18 fm rett', '18'),
+])
+add('dadyr_rows_en', [
+    ('1', '6 sc in a magic ring', '6'),
+    ('2', 'inc x 6', '12'),
+    ('3', '(1 sc, inc) x 6', '18'),
+    ('4', '18 sc straight', '18'),
+])
+add('dadyr_ferdig',
+    'Fest av med god tråd igjen, og press hodet flatt. Hekle to bittesmå ører (5 fm i magisk '
+    'ring, fest av, hekle 2 stk per sko) og sy dem fast øverst på hodet, med litt av overkanten '
+    'stikkende opp over skoens overkant, akkurat som i referansebildet. Brodér et lite ansikt '
+    '(to øyne, en liten nese og gjerne rosa kinn) med samme teknikk som Ellies andre motiver. '
+    'Sy dådyransiktet godt fast midt på tåpartiet av skoen.',
+    'Fasten off, leaving a long tail, and press the head flat. Crochet two tiny ears (5 sc in a '
+    'magic ring, fasten off, make 2 per shoe) and sew them onto the top of the head, with a bit '
+    'of the top peeking up over the top edge of the shoe, just like in the reference photo. '
+    'Embroider a small face (two eyes, a little nose, and pink cheeks if you like) using the '
+    'same technique as Ellie\'s other motifs. Sew the deer face securely onto the middle of the '
+    'toe of the shoe.')
+
+# ---------------------------------------------------------------- SIDE 11: T-STROPP OG LUKKING
+add('banner_tstropp', 'DEL 4: T-STROPPEN OG LUKKINGEN', 'PART 4: THE T-BAR STRAP AND CLOSURE')
 add('tstropp_lead',
     'T-stroppen går fra midt på tåpartiet, opp og over vristen, til den ene siden.',
     'The T-bar strap runs from the middle of the toe opening, up and over the instep, to one '
@@ -262,8 +304,8 @@ add('lukking_alt',
       'the button. Never use a hard plastic or metal button, and check that the button is '
       'firmly attached before every use.')])
 
-# ---------------------------------------------------------------- SIDE 11: PICOTKANT
-add('banner_picot', 'DEL 4: PICOTKANTEN', 'PART 4: THE PICOT EDGE')
+# ---------------------------------------------------------------- SIDE 12: PICOTKANT
+add('banner_picot', 'DEL 5: PICOTKANTEN', 'PART 5: THE PICOT EDGE')
 add('picot_lead',
     'Picotkanten gir skoen det klassiske, litt kniplingaktige ballerina-utseendet, og hekles '
     'helt til slutt rundt hele den øvre åpningen.',
@@ -277,12 +319,11 @@ add('picot_txt',
     'st back into the first of the three chains (one picot made)*, repeat all the way around '
     'the opening. Finish with a slip stitch and fasten the yarn securely on the inside.')
 
-# ---------------------------------------------------------------- SIDE 12: SLØYFEN
-add('banner_sloyfe', 'DEL 5: SLØYFEN', 'PART 5: THE BOW')
+# ---------------------------------------------------------------- SIDE 13: SLØYFEN
+add('banner_sloyfe', 'DEL 6: SLØYFEN', 'PART 6: THE BOW')
 add('sloyfe_lead',
-    'En liten sløyfe sys fast foran på hver sko, rett over T-stroppens festepunkt.',
-    'A small bow is sewn onto the front of each shoe, right over where the T-bar strap '
-    'attaches.')
+    'En liten sløyfe sys fast mellom ørene, øverst på dådyransiktet på hver sko.',
+    "A small bow is sewn on between the ears, at the top of the deer face on each shoe.")
 add('sloyfe_rows', [
     ('1', '10 lm + 1 vendemaske', '10'),
     ('2 til 5', 'fm i hver maske tilbake, 4 omganger', '10'),
@@ -293,11 +334,11 @@ add('sloyfe_rows_en', [
 ])
 add('sloyfe_ferdig',
     'Klipp av med god tråd igjen. Brett rektangelet sammen på midten og sy et lite stykke '
-    'garn stramt rundt midjen, slik at det blir en liten sløyfeform. Sy sløyfen fast foran på '
-    'skoen.',
+    'garn stramt rundt midjen, slik at det blir en liten sløyfeform. Sy sløyfen fast mellom '
+    'ørene, øverst på dådyransiktet.',
     'Cut, leaving a long tail. Fold the rectangle together in the middle and wrap a short '
-    'length of yarn tightly around the waist, so it forms a small bow shape. Sew the bow onto '
-    'the front of the shoe.')
+    'length of yarn tightly around the waist, so it forms a small bow shape. Sew the bow on '
+    'between the ears, at the top of the deer face.')
 
 # ---------------------------------------------------------------- SIDE 13: HÅRSLØYFEN
 add('banner_harsloyfe', 'DEN MATCHENDE HÅRSLØYFEN', 'THE MATCHING HAIR BOW')
@@ -324,20 +365,24 @@ add('harsloyfe_ferdig',
 # ---------------------------------------------------------------- SIDE 14: MONTERING
 add('banner_montering', 'MONTERING, STEG FOR STEG', 'ASSEMBLY, STEP BY STEP')
 add('montering_steg', [
-    'Hekle sålen og overdelen i ett, for begge skoene.',
+    'Hekle sålen og overdelen i ett, for begge skoene, og brodér gjerne et hjerte på hver såle.',
+    'Hekle dådyransiktene med ører og brodér ansiktene, og sy ett fast på tåpartiet av hver sko.',
     'Hekle T-stroppen på hver sko, og fest med valgt lukking (uten knapp, eller med myk heklet '
     'knapp).',
     'Hekle picotkanten rundt overkanten på begge skoene.',
-    'Hekle to sløyfer og sy dem fast foran på hver sko.',
+    'Hekle to sløyfer og sy dem fast mellom ørene på hvert dådyransikt.',
     'Fest alle løse tråder godt på innsiden, og klipp av det som er igjen.',
     'Prøv begge skoene på foten en siste gang, og sjekk at de er like store og sitter godt.',
 ])
 add('montering_steg_en', [
-    'Crochet the sole and upper as one piece, for both shoes.',
+    'Crochet the sole and upper as one piece, for both shoes, and feel free to embroider a '
+    'heart on each sole.',
+    'Crochet the deer faces with ears and embroider the faces, and sew one onto the toe of '
+    'each shoe.',
     'Crochet the T-bar strap on each shoe, and fasten with your chosen closure (no button, or '
     'a soft crocheted button).',
     'Crochet the picot edge around the top of both shoes.',
-    'Crochet two bows and sew them onto the front of each shoe.',
+    'Crochet two bows and sew them on between the ears on each deer face.',
     'Fasten every loose end securely on the inside, and trim what is left.',
     'Try both shoes on the foot one last time, and check they match in size and fit well.',
 ])
@@ -359,8 +404,8 @@ add('sikkerhet_txt',
     ['Ingen deler limes. Alt sys fast med sterk, tvinnet bomullstråd og mange, tette sting.',
      'Bruk aldri en hard plast- eller metallknapp på de minste størrelsene, velg heller '
      'løkke-løsningen uten knapp.',
-     'Sjekk skoene jevnlig for slitasje: løse tråder, sløyfer eller knapper som sitter løst. '
-     'Kast eller reparer umiddelbart hvis noe er galt.',
+     'Sjekk skoene jevnlig for slitasje: løse tråder, dådyransikt, ører, sløyfer eller knapper '
+     'som sitter løst. Kast eller reparer umiddelbart hvis noe er galt.',
      'Skoene er ment for lek og kos innendørs, ikke som erstatning for såler ved gange '
      'utendørs.',
      'Denne oppskriften er en veiledning for hjemmebruk. Skal det ferdige produktet selges, må '
@@ -370,8 +415,8 @@ add('sikkerhet_txt',
      'of tight stitches.',
      'Never use a hard plastic or metal button on the smallest sizes, choose the button-free '
      'loop closure instead.',
-     'Check the shoes regularly for wear: loose threads, or bows or buttons that feel loose. '
-     'Discard or repair immediately if anything is wrong.',
+     'Check the shoes regularly for wear: loose threads, a loose deer face, ears, bows or '
+     'buttons that feel loose. Discard or repair immediately if anything is wrong.',
      'The shoes are intended for indoor play and cosiness, not as a substitute for soles when '
      'walking outdoors.',
      'This pattern is a guide for home use. If the finished product is sold, it must always be '
@@ -507,6 +552,14 @@ def build(lang):
 {cme(t('overdel_apning'))}
 ''', 9))
 
+    dadyr_rows = T['dadyr_rows']['no'] if lang == 'no' else T['dadyr_rows_en']['no']
+    pages.append(pg(f'''
+{banner(t('banner_dadyr'))}
+<p>{t('dadyr_lead')}</p>
+{card(otab(dadyr_rows, head3[lang]))}
+{cme(t('dadyr_ferdig'))}
+''', 10))
+
     lukking_items = T['lukking_alt']['no'] if lang == 'no' else T['lukking_alt']['en']
     lukking_html = ul([f'<b>{a}:</b> {b}' for a, b in lukking_items])
     pages.append(pg(f'''
@@ -515,13 +568,13 @@ def build(lang):
 {card('<p>' + t('tstropp_txt') + '</p>')}
 {sagep(t('pill_lukking'))}
 {card(lukking_html)}
-''', 10))
+''', 11))
 
     pages.append(pg(f'''
 {banner(t('banner_picot'))}
 <p>{t('picot_lead')}</p>
 {card('<p>' + t('picot_txt') + '</p>')}
-''', 11))
+''', 12))
 
     sl_rows = T['sloyfe_rows']['no'] if lang == 'no' else T['sloyfe_rows_en']['no']
     pages.append(pg(f'''
@@ -529,7 +582,7 @@ def build(lang):
 <p>{t('sloyfe_lead')}</p>
 {card(otab(sl_rows, {'no': ['Rad', 'Beskrivelse', 'Masker'], 'en': ['Row', 'Description', 'Sts']}[lang]))}
 {cme(t('sloyfe_ferdig'))}
-''', 12))
+''', 13))
 
     hs_rows = T['harsloyfe_rows']['no'] if lang == 'no' else T['harsloyfe_rows_en']['no']
     pages.append(pg(f'''
@@ -537,20 +590,20 @@ def build(lang):
 <p>{t('harsloyfe_lead')}</p>
 {card(otab(hs_rows, {'no': ['Rad', 'Beskrivelse', 'Masker'], 'en': ['Row', 'Description', 'Sts']}[lang]))}
 {cme(t('harsloyfe_ferdig'))}
-''', 13))
+''', 14))
 
     mo_steg = T['montering_steg']['no'] if lang == 'no' else T['montering_steg_en']['no']
     pages.append(pg(f'''
 {banner(t('banner_montering'))}
 {card(steps(mo_steg))}
-''', 14))
+''', 15))
 
     foto_caps = T['foto_captions']['no'] if lang == 'no' else T['foto_captions']['en']
     pages.append(pg(f'''
 {banner(t('banner_foto'))}
 {card('<p class="center">' + t('foto_lead') + '</p>')}
 {photo_row(foto_caps)}
-''', 15))
+''', 16))
 
     sik = T['sikkerhet_txt']['no'] if lang == 'no' else T['sikkerhet_txt']['en']
     pages.append(pg(f'''
@@ -559,7 +612,7 @@ def build(lang):
 {card(ul(sik))}
 {sagep(t('pill_stell'))}
 {cme(t('stell_txt'))}
-''', 16))
+''', 17))
 
     kolliste = T['kolleksjon_liste']['no'] if lang == 'no' else T['kolleksjon_liste']['en']
     pages.append(pg(f'''
@@ -572,7 +625,7 @@ def build(lang):
 <div class="byline">
   <div class="by2">{t('by1')} &middot; {t('by2')} &middot; {t('by3')}</div>
 </div>
-''', 17))
+''', 18))
 
     return pages
 

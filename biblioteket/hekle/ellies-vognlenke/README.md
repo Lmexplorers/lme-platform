@@ -1,11 +1,13 @@
 # Ellies vognlenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Ellies-vognlenke-LME.pdf`** (norsk, 15 sider, A4) og
-**`Ellies-vognlenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
+Ferdig oppskrift: **`Ellies-vognlenke-LME.pdf`** (norsk, 16 sider, A4) og
+**`Ellies-vognlenke-LME-EN.pdf`** (engelsk, 16 sider, A4).
 
 Fjerde oppskrift i **LME Baby Collection "Woodland Dreams"**. Sju motiver
 (Ellie-medaljong, sky, sol, blad, blomst, stjerne og sommerfugl) festet langs
-en kort streng, til å feste over en barnevogns bøyle.
+en kort streng, pluss to sideringer i tre med en dinglende, heklet kule i
+hver (side 11, lagt til 3. august 2026 etter Renates referansebilde), til å
+feste over en barnevogns bøyle.
 
 Samme sikkerhetsfokus som `../ellies-smokkelenke/` og `../ellies-rangle/`:
 side 13 forklarer hvorfor lengden holdes kort (generelt EN 71-prinsipp om at

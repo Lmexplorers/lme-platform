@@ -5,17 +5,21 @@ Ferdig oppskrift: **`Ellies-rangle-LME.pdf`** (norsk, 14 sider, A4) og
 
 Tredje oppskrift i **LME Baby Collection "Woodland Dreams"**. Et lite
 dådyrhode (miniatyrutgave av Ellie) på en trering, ca. 13 til 15 cm høyt, med
-en rangleboks trygt gjemt inni hodet.
+sløyfe, volangkrage rundt halsen og en rangleboks trygt gjemt inni hodet.
+Sløyfen og kragen erstattet de tidligere valgfrie "hornene" 3. august 2026,
+etter Renates referansebilde, slik at produktbildet i butikken stemmer med
+oppskriften.
 
 Samme sikkerhetsfokus som `../ellies-smokkelenke/`: en egen side minner om at
 rangleboksen aldri må kunne tas ut, og at ferdig produkt må kontrolleres mot
 gjeldende lokale krav før salg.
 
-- **Garn:** samme Bystrikk Merino som resten av kolleksjonen.
+- **Garn:** samme Bystrikk Merino som resten av kolleksjonen, pluss en liten
+  rest av pudderrosa til sløyfen og kragen.
 - **Fotoveiledning og QR-kode-plassholder:** samme mal som smokkelenken.
-- Forsidebildet bruker Ellie-hovedfigurens eget produktfoto som
-  stiluttrykk-referanse (tydelig merket i bildeteksten), siden rangelen selv
-  ikke er heklet og fotografert ennå.
+- Forsidebildet er et beskjært utsnitt av Renates eget referansebilde for
+  rangelen (tydelig merket "stiluttrykk-referanse" i bildeteksten), siden
+  rangelen selv ikke er heklet og fotografert ennå.
 
 ## Bygge PDF-ene på nytt
 

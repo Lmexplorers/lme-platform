@@ -28,11 +28,11 @@ add('covertitle', 'ELLIES RANGLE', "ELLIE'S RATTLE")
 add('subpill', 'LME BABY COLLECTION - WOODLAND DREAMS', 'LME BABY COLLECTION - WOODLAND DREAMS')
 add('cover_desc',
     'En liten dådyr-rangle på en trering, ca. 13 til 15 cm høy. Hodet er formet som en '
-    'miniatyrutgave av Ellie, med myke ører og en rangleboks trygt gjemt inni. Perfekt for '
-    'små hender å gripe og riste.',
+    'miniatyrutgave av Ellie, med myke ører, en sløyfe, en volangkrage rundt halsen og en '
+    'rangleboks trygt gjemt inni. Perfekt for små hender å gripe og riste.',
     'A little deer rattle on a wooden ring, approx. 13 to 15 cm tall. The head is shaped like a '
-    'miniature version of Ellie, with soft ears and a rattle capsule safely tucked inside. '
-    'Perfect for small hands to grip and shake.')
+    'miniature version of Ellie, with soft ears, a bow, a ruffled collar around the neck and a '
+    'rattle capsule safely tucked inside. Perfect for small hands to grip and shake.')
 add('by1', 'Av Renate Dahl', 'By Renate Dahl')
 add('by2', 'Little Montessori Explorers', 'Little Montessori Explorers')
 add('by3', 'lmexplorers.com', 'lmexplorers.com')
@@ -146,9 +146,10 @@ add('oversikt_lead',
     'Four pieces are crocheted separately, then sewn together around the wooden ring at the end:')
 add('oversikt_deler', [
     ('1. Hodet', 'rommer rangleboksen inni', '1. The head', 'holds the rattle capsule inside'),
-    ('2. Halsen', 'kort tube som sys rundt treringen', '2. The neck', 'a short tube sewn around the wooden ring'),
+    ('2. Halsen og kragen', 'tube med volangkant, sys rundt treringen', '2. The neck and collar',
+     'a tube with a ruffled edge, sewn around the wooden ring'),
     ('3. Ørene', 'to stk, myke, to lag', '3. The ears', 'two, soft, two layers'),
-    ('4. Hornene', 'valgfrie, to små topper', '4. The horns', 'optional, two small nubs'),
+    ('4. Sløyfen', 'mellom ørene', '4. The bow', 'between the ears'),
 ])
 
 # ---------------------------------------------------------------- SIDE 7: HODET
@@ -211,13 +212,21 @@ add('hals_ferdig',
     'Do not cut the yarn. Place the wooden ring inside the neck tube, fold the edge of the tube '
     'over the ring and sew all the way around it with tight, secure stitches, so the ring is '
     'fully enclosed and cannot slide out.')
+add('pill_krage', 'VOLANGKRAGEN', 'THE RUFFLED COLLAR')
+add('krage_txt',
+    'Før du syr hodet fast: fest pudderrosa tråd i halsens øverste kant (12 m). *1 fm i neste '
+    'maske, hopp over 1 maske, 3 stav i neste maske (en liten vifte)*, gjenta rundt hele '
+    'kanten (6 vifter totalt). Fest av og gjem tråden.',
+    'Before sewing the head on: attach powder pink yarn at the top edge of the neck (12 sts). '
+    '*1 sc in the next stitch, skip 1 stitch, 3 dc in the next stitch (a little fan)*, repeat '
+    'all the way around the edge (6 fans in total). Fasten off and weave in the end.')
 add('pill_montering_hode', 'FEST HODET PÅ HALSEN', "ATTACH THE HEAD TO THE NECK")
 add('montering_hode_txt',
     'Sy hodet fast oppå halsen med tette sting hele veien rundt, midt over ringen.',
     'Sew the head onto the neck with tight stitches all the way around, centred over the ring.')
 
-# ---------------------------------------------------------------- SIDE 9: ØRER OG HORN
-add('banner_orer', 'DEL 3: ØRENE OG HORNENE', 'PART 3: THE EARS AND HORNS')
+# ---------------------------------------------------------------- SIDE 9: ØRER OG SLØYFE
+add('banner_orer', 'DEL 3: ØRENE OG SLØYFEN', 'PART 3: THE EARS AND THE BOW')
 add('pill_orer', 'ØRENE (2 STK, TO LAG)', 'THE EARS (MAKE 2, TWO LAYERS)')
 add('orer_txt',
     'Ytterside (brunt): 6 fm i magisk ring, økn x 6 (12), (1 fm, økn) x 6 (18). Avslutt. '
@@ -226,12 +235,16 @@ add('orer_txt',
     'Outside (brown): 6 sc in a magic ring, inc x 6 (12), (1 sc, inc) x 6 (18). Fasten off. '
     'Inside (cream): 6 sc in a magic ring, inc x 6 (12). Fasten off. Sew the light circle onto '
     'the middle of the brown one, and sew the ears onto the top of the head, one on each side.')
-add('pill_horn', 'HORNENE (VALGFRITT, 2 STK)', 'THE HORNS (OPTIONAL, MAKE 2)')
+add('pill_horn', 'SLØYFEN', 'THE BOW')
 add('horn_txt',
-    'Hekle 5 fm i magisk ring, hekle 2 omganger til med 5 fm, avslutt. Fyll lett, og sy de to '
-    'små toppene fast mellom ørene, som to myke, avrundede horn-antydninger.',
-    'Crochet 5 sc in a magic ring, crochet 2 more rounds of 5 sc, fasten off. Stuff lightly, and '
-    'sew the two small nubs onto the head between the ears, as two soft, rounded hints of horns.')
+    'Hekle en smal strimmel i pudderrosa: legg opp 14 lm + 1 vendemaske, fm i hver maske '
+    'tilbake i 3 rader. Klipp av med god tråd igjen. Fold strimmelen sammen til en liten '
+    'sløyfeform og sy et lite stykke garn stramt rundt midten flere ganger. Sy sløyfen fast '
+    'permanent og flatt mellom ørene.',
+    'Crochet a narrow strip in powder pink: chain 14 + 1 turning chain, sc in each stitch back '
+    'across for 3 rows. Cut, leaving a long tail. Fold the strip together into a small bow '
+    'shape and wrap a short length of yarn tightly around the centre a few times. Sew the bow '
+    'on permanently and flat, between the ears.')
 add('pill_ansikt', 'ANSIKTET, BRODERT', 'THE FACE, EMBROIDERED')
 add('ansikt_txt',
     'Brodér to runde øyne i svart satengsting og en liten nese under. Ingen sikkerhetsøyne med '
@@ -248,8 +261,9 @@ add('montering_steg', [
     'Fyll hodet jevnt, legg inn rangleboksen midt inni, godt omgitt av fyll på alle sider, og '
     'lukk de siste omgangene.',
     'Hekle halsen, legg treringen inni, og sy tuben godt rundt hele ringen.',
-    'Sy hodet fast oppå halsen, midt over ringen.',
-    'Sy ørene og de valgfrie hornene fast øverst på hodet.',
+    'Hekle volangkragen rundt halsens øverste kant, før du syr hodet fast.',
+    'Sy hodet fast oppå halsen, midt over ringen og kragen.',
+    'Sy ørene fast øverst på hodet, og sløyfen mellom dem.',
     'Brodér ansiktet.',
     'Fest alle løse tråder godt på innsiden, og klipp av det som er igjen.',
     'Rist rangelen forsiktig og lytt: lyden skal komme jevnt og tydelig, uten at noe skrangler '
@@ -261,8 +275,9 @@ add('montering_steg_en', [
     'on all sides, and close the last rounds.',
     'Crochet the neck, place the wooden ring inside, and sew the tube securely around the whole '
     'ring.',
-    'Sew the head onto the neck, centred over the ring.',
-    'Sew the ears and the optional horns onto the top of the head.',
+    'Crochet the ruffled collar around the top edge of the neck, before sewing the head on.',
+    'Sew the head onto the neck, centred over the ring and the collar.',
+    'Sew the ears onto the top of the head, and the bow between them.',
     'Embroider the face.',
     'Fasten every loose end securely on the inside, and trim what is left.',
     'Gently shake the rattle and listen: the sound should come through evenly and clearly, with '
@@ -438,6 +453,8 @@ def build(lang):
 <p>{t('hals_lead')}</p>
 {card(otab(hals_rows, head3[lang]))}
 {cme(t('hals_ferdig'))}
+{sagep(t('pill_krage'))}
+{card('<p>' + t('krage_txt') + '</p>')}
 {rosep(t('pill_montering_hode'))}
 {card('<p>' + t('montering_hode_txt') + '</p>')}
 ''', 8))
