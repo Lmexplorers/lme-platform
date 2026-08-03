@@ -495,7 +495,16 @@
   function renderPosts(posts) {
     const feed = document.getElementById('feed');
     feed.innerHTML = '';
-    document.getElementById('feedEmpty').style.display = posts.length ? 'none' : 'block';
+    const emptyEl = document.getElementById('feedEmpty');
+    emptyEl.style.display = posts.length ? 'none' : 'block';
+    if (!posts.length) {
+      const cat = CATS.find(c => c.key === activeCategory);
+      emptyEl.textContent = cat
+        ? (currentLang === 'en'
+            ? 'No posts in "' + cat.en + '" yet. Be the first! ' + cat.icon
+            : 'Ingen innlegg i "' + cat.no + '" ennå. Bli den første! ' + cat.icon)
+        : (currentLang === 'en' ? 'No posts yet. Be the first to say hi! 👋' : 'Ingen innlegg ennå. Bli den første til å si hei! 👋');
+    }
     posts.forEach(p => {
       const div = document.createElement('div'); div.className = 'post';
       const cat = CATS.find(c => c.key === p.category);

@@ -298,10 +298,14 @@
     });
   }
 
-  // Allerede med i fellesskapet fra for (samme nettleser)? Da skal denne
-  // siden aldri be deg "bli med" pa nytt, bare sende deg rett til gruppa.
+  // Allerede med (enten faktisk blitt med i fellesskapet, eller betalt via
+  // Stripe fra for i denne nettleseren)? Da skal denne siden aldri be deg
+  // "bli med"/betale pa nytt, bare sende deg rett til gruppa.
   let alreadyJoined = false;
-  try { alreadyJoined = !!JSON.parse(localStorage.getItem('utf_identity') || 'null'); } catch (e) {}
+  try {
+    alreadyJoined = !!JSON.parse(localStorage.getItem('utf_identity') || 'null') ||
+      localStorage.getItem('utf_purchased') === '1';
+  } catch (e) {}
 
   if (alreadyJoined) {
     document.getElementById('buyNormal').style.display = 'none';
