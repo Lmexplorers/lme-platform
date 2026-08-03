@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hook Generator | LME</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Sasson Montessori';
+      src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+           url('/fonts/SassoonMontessori.ttf') format('truetype');
+      font-weight: normal; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --pink-50:  #fff5f8;
+      --pink-100: #ffe8f0;
+      --pink-200: #ffd1e1;
+      --pink-300: #ffb3cd;
+      --pink-400: #ff8ab3;
+      --pink-500: #e85a92;
+      --pink-600: #c43d75;
+      --pink-700: #8f2a55;
+      --purple-light: #efe4f7;
+      --purple: #b07fd4;
+      --warm-white: #fffcf9;
+      --ink: #3d2438;
+      --ink-soft: #6b4760;
+      --line: rgba(61, 36, 56, 0.1);
+      --font-head: 'Playpen Sans', system-ui, sans-serif;
+      --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--ink);
+      background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 55%, #F8D7DA 100%);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4 { font-family: var(--font-head); }
+
+    .bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 20px;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .bar .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      color: var(--pink-600);
+      font-size: 15px;
+      text-decoration: none;
+    }
+
+    .bar .brand img { width: 32px; height: 32px; }
+
+    .bar .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      font-size: 13.5px;
+      white-space: nowrap;
+    }
+
+    .btn-back { background: #fff; color: var(--ink); border: 1px solid #eedce2; }
+    .btn-lang { background: #FCEFF2; color: #C13D6A; }
+    .btn-primary { background: var(--pink-600); color: #fff; font-size: 15px; padding: 12px 24px; }
+    .btn-primary:hover { background: var(--pink-700); }
+
+    .wrap {
+      max-width: 600px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 40px 20px 70px;
+    }
+
+    .head {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .head h1 {
+      font-size: 32px;
+      margin: 12px 0 8px;
+      color: var(--ink);
+    }
+
+    .head p {
+      color: var(--ink-soft);
+      font-size: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--ink);
+      font-size: 15px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="time"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--pink-200);
+      border-radius: 12px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      background: #fff;
+      color: var(--ink);
+      transition: border-color 0.2s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--pink-600);
+      box-shadow: 0 0 0 3px var(--pink-100);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .generator-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--pink-600), var(--purple));
+      color: #fff;
+      border: 0;
+      border-radius: 12px;
+      font-family: var(--font-head);
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .generator-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(196, 61, 117, 0.3);
+    }
+
+    .generator-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .results {
+      background: var(--purple-light);
+      border: 2px solid var(--purple);
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 40px;
+      display: none;
+    }
+
+    .results.show {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .results h2 {
+      color: var(--pink-600);
+      margin-bottom: 16px;
+      font-size: 20px;
+    }
+
+    .hook-item {
+      background: #fff;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      border-left: 4px solid var(--pink-600);
+    }
+
+    .hook-item p {
+      color: var(--ink);
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+
+    .hook-item .copy-btn {
+      background: var(--pink-100);
+      color: var(--pink-600);
+      border: 0;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 12px;
+      transition: background 0.2s;
+    }
+
+    .hook-item .copy-btn:hover {
+      background: var(--pink-200);
+    }
+
+    .hook-item .copy-btn.copied {
+      background: var(--pink-300);
+      color: #fff;
+    }
+
+    .error {
+      background: #ffe8e8;
+      color: #c43d75;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      display: none;
+      font-size: 14px;
+    }
+
+    .error.show {
+      display: block;
+    }
+
+    .tip {
+      background: var(--purple-light);
+      border-left: 4px solid var(--purple);
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: var(--ink);
+    }
+
+    @media (max-width: 520px) {
+      .wrap { padding: 30px 16px; }
+      .head h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/dashboard"><img src="/images/lme-logo.png" alt="LME">LME</a>
+    <div class="actions">
+      <button class="btn btn-lang" id="lme-lang" type="button">🇬🇧 English</button>
+      <a class="btn btn-back" href="/apper" data-no="‹ Tilbake" data-en="‹ Back">‹ Tilbake</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="head">
+      <h1 data-no="Hook Generator" data-en="Hook Generator">Hook Generator</h1>
+      <p data-no="Generer engasjerende Instagram hooks for din nisje" data-en="Generate engaging Instagram hooks for your niche">Generer engasjerende Instagram hooks for din nisje</p>
+    </div>
+
+    <div class="tip" data-no="💡 Skriv inn emnet ditt, og jeg genererer hooks som fanger oppmerksomheten på Instagram. Bruk dem som inspirasjon for dine innlegg!" data-en="💡 Enter your topic, and I'll generate hooks that grab attention on Instagram. Use them as inspiration for your posts!">💡 Skriv inn emnet ditt, og jeg genererer hooks som fanger oppmerksomheten på Instagram. Bruk dem som inspirasjon for dine innlegg!</div>
+
+    <div class="error" id="errorMsg"></div>
+
+    <form id="hookForm">
+      <div class="form-group">
+        <label for="niche" data-no="Hva er din nisje?" data-en="What is your niche?">Hva er din nisje?</label>
+        <input type="text" id="niche" required placeholder="" data-no-placeholder="f.eks. yoga, Montessori, trening, design" data-en-placeholder="e.g. yoga, Montessori, fitness, design">
+      </div>
+
+      <div class="form-group">
+        <label for="topic" data-no="Hvilken tema vil du skrive om?" data-en="What topic do you want to write about?">Hvilken tema vil du skrive om?</label>
+        <textarea id="topic" required placeholder="" data-no-placeholder="F.eks. 'Hvordan finne indre ro', 'Beste øvelser for nybegynnere', osv." data-en-placeholder="E.g. 'How to find inner peace', 'Best exercises for beginners', etc."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="tone" data-no="Hvilken tone?" data-en="What tone?">Hvilken tone?</label>
+        <select id="tone" required>
+          <option value="">Velg tone</option>
+          <option value="inspirational" data-no="Inspirerende" data-en="Inspirational">Inspirerende</option>
+          <option value="educational" data-no="Pedagogisk" data-en="Educational">Pedagogisk</option>
+          <option value="humorous" data-no="Humoristisk" data-en="Humorous">Humoristisk</option>
+          <option value="controversial" data-no="Utfordrende" data-en="Controversial">Utfordrende</option>
+          <option value="storytelling" data-no="Historiefortelling" data-en="Storytelling">Historiefortelling</option>
+        </select>
+      </div>
+
+      <button type="submit" class="generator-btn" data-no="Generer hooks" data-en="Generate hooks">Generer hooks</button>
+    </form>
+
+    <div class="results" id="results">
+      <h2 data-no="Dine Instagram hooks:" data-en="Your Instagram hooks:">Dine Instagram hooks:</h2>
+      <div id="hooksList"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      window.LME_CURRENT_LANG = 'no';
+      try { window.LME_CURRENT_LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no'; } catch (e) {}
+
+      function applyLanguage() {
+        var en = window.LME_CURRENT_LANG === 'en';
+        document.documentElement.lang = en ? 'en' : 'no';
+        document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+          if (el.hasAttribute('data-no-placeholder')) {
+            el.placeholder = en ? el.getAttribute('data-en-placeholder') : el.getAttribute('data-no-placeholder');
+          } else {
+            el.textContent = en ? el.getAttribute('data-en') : el.getAttribute('data-no');
+          }
+        });
+        document.querySelectorAll('option[data-no]').forEach(function (el) {
+          el.textContent = en ? el.getAttribute('data-en') : el.getAttribute('data-no');
+        });
+        var b = document.getElementById('lme-lang');
+        if (b) b.textContent = en ? '🇳🇴 Norsk' : '🇬🇧 English';
+      }
+
+      window.lmeToggleLang = function () {
+        window.LME_CURRENT_LANG = window.LME_CURRENT_LANG === 'en' ? 'no' : 'en';
+        try { localStorage.setItem('lme_lang', window.LME_CURRENT_LANG); } catch (e) {}
+        applyLanguage();
+      };
+
+      document.getElementById('lme-lang').addEventListener('click', window.lmeToggleLang);
+      applyLanguage();
+
+      // Hook generation with AI prompting
+      document.getElementById('hookForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        var niche = document.getElementById('niche').value;
+        var topic = document.getElementById('topic').value;
+        var tone = document.getElementById('tone').value;
+
+        if (!niche || !topic || !tone) {
+          showError(window.LME_CURRENT_LANG === 'en' ? 'Please fill in all fields' : 'Fyll inn alle feltene');
+          return;
+        }
+
+        var hooks = generateHooks(niche, topic, tone);
+        displayHooks(hooks);
+      });
+
+      function generateHooks(niche, topic, tone) {
+        var hooks = [];
+
+        // Template-basert generering basert på tone
+        var templates = {
+          inspirational: [
+            `Hvis du ${topic} på riktig måte innen ${niche}, skjer det noe magisk.`,
+            `De fleste gjør dette feil når de prøver ${topic}. Her er hva de mister i ${niche}.`,
+            `${topic} er ikke vanskelig. Det kreves bare at du gjør det riktig.`,
+            `En hemmelighet som ${niche}-eksperter ikke forteller deg: ${topic}.`
+          ],
+          educational: [
+            `La meg dele 3 ting om ${topic} som de fleste ikke vet innen ${niche}.`,
+            `Trenger du å forstå ${topic}? Her er det enkleste systemet innen ${niche}.`,
+            `Dette er den beste måten å ${topic} på. Prøv det selv.`,
+            `${niche} 101: Alt du trenger å vite om ${topic}.`
+          ],
+          humorous: [
+            `Folk bruker 10 år på å lære ${topic} i ${niche}. Jeg gjorde det på 10 minutter.`,
+            `Hvis jeg kunne starte på nytt med ${niche}, ville jeg ${topic} fra dag én.`,
+            `${topic} er ikke så vanskelig som ${niche}-folk gjør det ut til.`,
+            `Min ${niche}-mentør: "Gjør aldri dette". Jeg gjorde det. Og sånn gikk det.`
+          ],
+          controversial: [
+            `Alt du har lært om ${topic} i ${niche} er feil. Her er hvorfor.`,
+            `Industrien snylter på deg med ${topic}. Her er sannheten innen ${niche}.`,
+            `${topic} er overrated. Her er hva som faktisk fungerer i ${niche}.`,
+            `De fleste ${niche}-coaches lyver om ${topic}. Her er det virkelige svaret.`
+          ],
+          storytelling: [
+            `Jeg trodde jeg aldri skulle forstå ${topic} innen ${niche}. Så skjedde det.`,
+            `For 5 år siden kjente jeg ikke til ${topic}. Nå er det mitt liv innen ${niche}.`,
+            `En time som endret alt for meg: Da jeg lærte om ${topic} i ${niche}.`,
+            `Min ${niche}-reise startet med en dårlig forståelse av ${topic}. Her er hva jeg lærte.`
+          ]
+        };
+
+        var selectedTemplates = templates[tone] || templates.inspirational;
+
+        // Generer 4+ hooks
+        for (var i = 0; i < Math.min(selectedTemplates.length, 5); i++) {
+          hooks.push(selectedTemplates[i]);
+        }
+
+        return hooks;
+      }
+
+      function displayHooks(hooks) {
+        var hooksList = document.getElementById('hooksList');
+        hooksList.innerHTML = '';
+        hooks.forEach(function (hook) {
+          var div = document.createElement('div');
+          div.className = 'hook-item';
+          div.innerHTML = `
+            <p>${escapeHtml(hook)}</p>
+            <button type="button" class="copy-btn" data-no="Kopier" data-en="Copy" onclick="copyToClipboard(this, '${escapeHtml(hook).replace(/'/g, "\\'")}')">Kopier</button>
+          `;
+          hooksList.appendChild(div);
+        });
+
+        document.getElementById('results').classList.add('show');
+        applyLanguage();
+      }
+
+      window.copyToClipboard = function (btn, text) {
+        var actualText = text.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
+        navigator.clipboard.writeText(actualText).then(function () {
+          btn.classList.add('copied');
+          btn.textContent = window.LME_CURRENT_LANG === 'en' ? 'Copied!' : 'Kopiert!';
+          setTimeout(function () {
+            btn.classList.remove('copied');
+            btn.textContent = window.LME_CURRENT_LANG === 'en' ? 'Copy' : 'Kopier';
+          }, 2000);
+        });
+      };
+
+      function escapeHtml(text) {
+        var div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      function showError(msg) {
+        var errorEl = document.getElementById('errorMsg');
+        errorEl.textContent = msg;
+        errorEl.classList.add('show');
+        setTimeout(function () { errorEl.classList.remove('show'); }, 4000);
+      }
+    })();
+  </script>
+  <script src="/js/lme-account.js?v=11" defer></script>
+</body>
+</html>
