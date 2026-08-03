@@ -1,21 +1,51 @@
 /**
- * Oppskrift-webhook (isolert) — sender leveringsmail ved oppskrift-kjøp.
- *
- * Egen, avgrenset Stripe-webhook som KUN håndterer oppskrift-kjøp
- * (bøttehatt/skaut). Den rører aldri medlemskap, Inner Circle, Claude-kurs
- * eller kreditt, så den kan ikke påvirke de andre flytene.
+ * Isolert engangsprodukt-webhook — sender leveringsmail/melder inn i
+ * MailerLite ved kjøp av frittstående produkter (oppskrifter,
+ * 10 000-visninger-utfordringen). Rører aldri medlemskap, Inner Circle,
+ * Claude-kurs eller kreditt, så den kan ikke påvirke de andre flytene.
  *
  *   POST /api/oppskrift-webhook
  *
- * Sett denne URL-en som et eget endepunkt i Stripe (Developers > Webhooks),
- * med hendelsen "checkout.session.completed". Lim signeringsnøkkelen (whsec_…)
- * inn på /grupper/admin (samme felt som ellers). Den lagres i KV som
+ * Satt opp som et eget endepunkt i Stripe (Developers > Webhooks), med
+ * hendelsen "checkout.session.completed". Signeringsnøkkelen (whsec_…)
+ * limes inn på /grupper/admin (samme felt som ellers). Den lagres i KV som
  * config:stripe_webhook_secret, og leses også her.
  */
 
 import { sendOppskriftMail, sendOwnerSaleNotice } from "../_lib/oppskrift-mail.js";
 import { PATTERN_LINKS } from "../_lib/pattern-links.js";
 import { bumpToday } from "../_lib/track.js";
+
+/* ---- 10 000-visninger-utfordringen -------------------------------------
+   Eget abonnement, helt uavhengig av Inner Circle (som selges av den
+   separate lme-inner-circle-workeren): ingen tilgang, ingen tier, ingen
+   deling av kode eller database. Kjøp legger bare kjøperen i riktig
+   MailerLite-gruppe, som trigger en egen 30-dagers automasjon der. Inner
+   Circle nevnes ingen steder i denne flyten. */
+const UTFORDRING_GROUP_NO = "194770523227423951"; // "10 000-visninger-utfordringen, kjøpere"
+const UTFORDRING_GROUP_EN = "194771238803998196"; // "10,000 Views Challenge, buyers (EN)"
+const UTFORDRING_PAYMENT_LINK_LANG = {
+  "plink_1U0I2WLax7B8uQzqhBB6bAVC": "no", // Utfordringen, 299 kr/mnd (NOK)
+  "plink_1U0I2XLax7B8uQzq7e9tzjBh": "en", // The Challenge, $33/mo (USD)
+};
+
+async function addToMailerliteGroup(env, email, name, groupId) {
+  const key = env.MAILERLITE_API_KEY;
+  if (!key || !email || !groupId) return;
+  const payload = { email: email.trim(), groups: [groupId + ""] };
+  if (name && name.trim()) payload.fields = { name: name.trim().slice(0, 100) };
+  try {
+    await fetch("https://connect.mailerlite.com/api/subscribers", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + key,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (e) {}
+}
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -74,8 +104,20 @@ export async function onRequestPost(context) {
 
   if (event.type === "checkout.session.completed") {
     const obj = (event.data && event.data.object) || {};
-    const pat = obj.payment_link && PATTERN_LINKS[obj.payment_link];
     const email = (obj.customer_details && obj.customer_details.email) || obj.customer_email;
+
+    // Utfordringen: legg kjøperen i riktig språkgruppe, aldri Inner Circle.
+    const utfordringLang = obj.payment_link && UTFORDRING_PAYMENT_LINK_LANG[obj.payment_link];
+    if (utfordringLang && email && obj.payment_status !== "unpaid") {
+      const nm = (obj.customer_details && obj.customer_details.name) || "";
+      const groupId = utfordringLang === "en"
+        ? (env.MAILERLITE_UTFORDRING_GROUP_EN || UTFORDRING_GROUP_EN)
+        : (env.MAILERLITE_UTFORDRING_GROUP_NO || UTFORDRING_GROUP_NO);
+      await addToMailerliteGroup(env, email, nm, groupId);
+      return json({ ok: true });
+    }
+
+    const pat = obj.payment_link && PATTERN_LINKS[obj.payment_link];
     // Bare oppskrift-kjøp håndteres her. Alt annet ignoreres (200 OK).
     if (pat && email && obj.payment_status !== "unpaid") {
       const nm = (obj.customer_details && obj.customer_details.name) || "";

@@ -173,21 +173,7 @@ const CLAUDE_MAIN_LINK_LANG = {
   "plink_1TwFJYLax7B8uQzqO1gObkcB": "en", // Get started with Claude (USD)
 };
 
-/* ---- 10 000-visninger-utfordringen -----------------------------------
-   Eget abonnement, helt uavhengig av Inner Circle (som selges av den
-   separate lme-inner-circle-workeren): ingen tilgang, ingen tier, ingen
-   deling av kode eller database. Kjøp legger bare kjøperen i riktig
-   MailerLite-gruppe, som trigger en 30-dagers automasjon der. Inner
-   Circle nevnes ingen steder i denne flyten, det er et mersalg som
-   eventuelt tilbys senere, ikke noe som blandes inn her. */
-const UTFORDRING_GROUP_NO = "194770523227423951"; // "10 000-visninger-utfordringen, kjøpere"
-const UTFORDRING_GROUP_EN = "194771238803998196"; // "10,000 Views Challenge, buyers (EN)"
-const UTFORDRING_PAYMENT_LINK_LANG = {
-  "plink_1U0I2WLax7B8uQzqhBB6bAVC": "no", // Utfordringen, 299 kr/mnd (NOK)
-  "plink_1U0I2XLax7B8uQzq7e9tzjBh": "en", // The Challenge, $33/mo (USD)
-};
-
-async function addToMailerliteGroup(env, email, name, groupId) {
+async function addToClaudeGroup(env, email, name, groupId) {
   const key = env.MAILERLITE_API_KEY;
   if (!key || !email || !groupId) return;
   const payload = { email: email.trim(), groups: [groupId + ""] };
@@ -232,18 +218,6 @@ export async function onRequestPost(context) {
         if (email) await addCredit(env, email, pack.kind, pack.amount);
         break;
       }
-      // Utfordringen: legg kjøperen i riktig språkgruppe, aldri Inner Circle.
-      const utfordringLang = obj.payment_link && UTFORDRING_PAYMENT_LINK_LANG[obj.payment_link];
-      if (utfordringLang) {
-        if (email) {
-          const name = (obj.customer_details && obj.customer_details.name) || "";
-          const groupId = utfordringLang === "en"
-            ? (env.MAILERLITE_UTFORDRING_GROUP_EN || UTFORDRING_GROUP_EN)
-            : (env.MAILERLITE_UTFORDRING_GROUP_NO || UTFORDRING_GROUP_NO);
-          await addToMailerliteGroup(env, email, name, groupId);
-        }
-        break;
-      }
       // Claude-kurset: legg kjøperen i riktig språkgruppe, ikke Inner Circle.
       const claudeLang = obj.payment_link && CLAUDE_PAYMENT_LINK_LANG[obj.payment_link];
       if (claudeLang) {
@@ -251,7 +225,7 @@ export async function onRequestPost(context) {
         const groupId = claudeLang === "en"
           ? (env.MAILERLITE_CLAUDE_GROUP_EN || CLAUDE_GROUP_EN)
           : (env.MAILERLITE_CLAUDE_GROUP_NO || CLAUDE_GROUP_NO);
-        await addToMailerliteGroup(env, email, name, groupId);
+        await addToClaudeGroup(env, email, name, groupId);
         // Start også den ukentlige nyhetsbrev-serien for kjøperen.
         try { await registerNewsletter(env, email, name, claudeLang); } catch (e) {}
         // Hovedkurs: send takkemail nå, og legg 2-dagers oppfølger i kø.
