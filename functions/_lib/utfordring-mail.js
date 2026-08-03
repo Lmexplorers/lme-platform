@@ -13,11 +13,6 @@ const MS = "https://api.mailersend.com/v1/email";
 const SITE = "https://lmexplorers.com";
 const FROM_EMAIL = "renate@lmexplorers.com";
 const FROM_NAME = "Renate Dahl";
-const AUTOPILOT = "https://lme-contentstudio.pages.dev/?key=LME2026";
-
-function esc(s) {
-  return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
 
 function wrap(inner) {
   return '<!DOCTYPE html><html><body style="margin:0;background:#FBF7F0;font-family:Arial,Helvetica,sans-serif;color:#1F1B24;">' +
@@ -28,10 +23,6 @@ function wrap(inner) {
     '</table>' +
     '<div style="max-width:560px;color:#938E99;font-size:12px;padding:16px;">Little Montessori Explorers · Renate Dahl · Tønsberg</div>' +
     '</td></tr></table></body></html>';
-}
-
-function btn(href, label) {
-  return '<p style="margin:22px 0;"><a href="' + href + '" style="background:#E91E89;color:#ffffff;text-decoration:none;font-weight:bold;padding:14px 26px;border-radius:999px;display:inline-block;">' + label + '</a></p>';
 }
 
 const CONTENT = {
@@ -58,11 +49,10 @@ const CONTENT = {
     d3: () => ({
       subject: "Dag 3: la AI gjøre planleggingen",
       html: wrap(
-        '<p>I dag åpner du LME Autopilot og lar AI foreslå tre innholdsideer innenfor nisjen din. Velg den du liker best.</p>' +
-        btn(AUTOPILOT, "Åpne LME Autopilot") +
+        '<p>I dag bruker du fem minutter på å la et AI-verktøy du allerede har (Claude, ChatGPT eller lignende) foreslå tre innholdsideer innenfor nisjen din. Velg den du liker best.</p>' +
         '<p>Klem fra Renate, LME 💛</p>'
       ),
-      text: "Dag 3: åpne LME Autopilot og la AI foreslå tre innholdsideer innenfor nisjen din. " + AUTOPILOT + "\n\nKlem fra Renate, LME",
+      text: "Dag 3: la et AI-verktøy du allerede har foreslå tre innholdsideer innenfor nisjen din. Velg den du liker best.\n\nKlem fra Renate, LME",
     }),
     d7: () => ({
       subject: "Dag 7: første uke i boks",
@@ -86,19 +76,19 @@ const CONTENT = {
       subject: "Dag 21: siste spurt",
       html: wrap(
         '<p>Ni dager igjen. Konsistens slår perfeksjon hver gang, så hold rytmen, selv på dagene du ikke føler for det.</p>' +
-        '<p>Denne uken: planlegg innholdet ditt for resten av utfordringen i én økt med LME Autopilot.</p>' +
+        '<p>Denne uken: planlegg innholdet ditt for resten av utfordringen i én økt.</p>' +
         '<p>Klem fra Renate, LME 💛</p>'
       ),
-      text: "Dag 21: ni dager igjen. Hold rytmen. Planlegg resten av innholdet i én økt med LME Autopilot.\n\nKlem fra Renate, LME",
+      text: "Dag 21: ni dager igjen. Hold rytmen. Planlegg resten av innholdet i én økt.\n\nKlem fra Renate, LME",
     }),
     d30: () => ({
       subject: "Dag 30: du klarte det! 🎉",
       html: wrap(
         '<p>30 dager, fem minutter om dagen, og du er fortsatt her. Det er ikke en selvfølge, og jeg er stolt av deg.</p>' +
-        '<p>Abonnementet ditt fortsetter, så du har fortsatt tilgang til LME Autopilot og alt du har bygget.</p>' +
+        '<p>Abonnementet ditt fortsetter, så du får nye oppgaver i innboksen så lenge du er med.</p>' +
         '<p>Klem fra Renate, LME 💛</p>'
       ),
-      text: "Dag 30: du klarte det! 30 dager, fem minutter om dagen. Abonnementet ditt fortsetter, med fortsatt tilgang til LME Autopilot.\n\nKlem fra Renate, LME",
+      text: "Dag 30: du klarte det! 30 dager, fem minutter om dagen. Abonnementet ditt fortsetter, med nye oppgaver i innboksen så lenge du er med.\n\nKlem fra Renate, LME",
     }),
   },
   en: {
@@ -124,11 +114,10 @@ const CONTENT = {
     d3: () => ({
       subject: "Day 3: let AI do the planning",
       html: wrap(
-        '<p>Today, open LME Autopilot and let AI suggest three content ideas within your niche. Pick the one you like best.</p>' +
-        btn(AUTOPILOT, "Open LME Autopilot") +
+        '<p>Today, spend five minutes letting an AI tool you already have (Claude, ChatGPT or similar) suggest three content ideas within your niche. Pick the one you like best.</p>' +
         '<p>Love, Renate, LME 💛</p>'
       ),
-      text: "Day 3: open LME Autopilot and let AI suggest three content ideas within your niche. " + AUTOPILOT + "\n\nLove, Renate, LME",
+      text: "Day 3: let an AI tool you already have suggest three content ideas within your niche. Pick the one you like best.\n\nLove, Renate, LME",
     }),
     d7: () => ({
       subject: "Day 7: first week done",
@@ -152,19 +141,19 @@ const CONTENT = {
       subject: "Day 21: final stretch",
       html: wrap(
         '<p>Nine days left. Consistency beats perfection every time, so keep the rhythm, even on the days you don\'t feel like it.</p>' +
-        '<p>This week: plan your content for the rest of the challenge in one sitting with LME Autopilot.</p>' +
+        '<p>This week: plan your content for the rest of the challenge in one sitting.</p>' +
         '<p>Love, Renate, LME 💛</p>'
       ),
-      text: "Day 21: nine days left. Keep the rhythm. Plan the rest of your content in one sitting with LME Autopilot.\n\nLove, Renate, LME",
+      text: "Day 21: nine days left. Keep the rhythm. Plan the rest of your content in one sitting.\n\nLove, Renate, LME",
     }),
     d30: () => ({
       subject: "Day 30: you did it! 🎉",
       html: wrap(
         '<p>30 days, five minutes a day, and you\'re still here. That\'s not nothing, and I\'m proud of you.</p>' +
-        '<p>Your subscription continues, so you still have access to LME Autopilot and everything you\'ve built.</p>' +
+        '<p>Your subscription continues, so you\'ll keep getting new tasks in your inbox for as long as you\'re with us.</p>' +
         '<p>Love, Renate, LME 💛</p>'
       ),
-      text: "Day 30: you did it! 30 days, five minutes a day. Your subscription continues, with continued access to LME Autopilot.\n\nLove, Renate, LME",
+      text: "Day 30: you did it! 30 days, five minutes a day. Your subscription continues, with new tasks in your inbox for as long as you're with us.\n\nLove, Renate, LME",
     }),
   },
 };
