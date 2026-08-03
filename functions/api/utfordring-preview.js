@@ -48,8 +48,14 @@ export async function onRequestPost(context) {
     nm = user.display_name || user.name || "";
   }
 
-  await sendUtfordringMail(env, { to: email, name: nm, lang: lang, kind: "d0" });
+  // Idempotent: allerede medlem betyr at velkomstmailen og oppfolgingskoen
+  // allerede er sendt/satt opp en gang. Ikke send den pa nytt hver gang
+  // eieren trykker "Se utfordringen" igjen, det ga mange dobbeltmailer.
   const e = email.trim().toLowerCase();
+  const already = await env.BUILDER_KV.get("utf_member:" + e);
+  if (already) return json({ ok: true, email: email, alreadyMember: true });
+
+  await sendUtfordringMail(env, { to: email, name: nm, lang: lang, kind: "d0" });
   try {
     for (const dag of UTFORDRING_DAYS) {
       await env.BUILDER_KV.put(

@@ -223,6 +223,13 @@
         <a href="/utfordringen-fellesskap" class="btn-cta" style="display:inline-block;margin-top:10px;" data-no="Gå til fellesskapet →" data-en="Go to the community →">Gå til fellesskapet →</a>
       </div>
     </div>
+
+    <!-- Allerede med fra for (denne nettleseren har blitt med i fellesskapet
+         tidligere): hopp rett til gruppa, ikke gjennom "bli med" igjen. -->
+    <div id="alreadyMember" style="display:none;">
+      <p class="lede" data-no="Du er allerede med i utfordringen. Gå rett til fellesskapet." data-en="You're already in the challenge. Go straight to the community.">Du er allerede med i utfordringen. Gå rett til fellesskapet.</p>
+      <a href="/utfordringen-fellesskap" class="btn-cta" style="display:inline-block;" data-no="Gå til fellesskapet →" data-en="Go to the community →">Gå til fellesskapet →</a>
+    </div>
   </div>
 
   <div class="footer">© <span id="yr"></span> Little Montessori Explorers · <span data-no="Laget av Renate Dahl" data-en="Made by Renate Dahl">Laget av Renate Dahl</span></div>
@@ -291,13 +298,23 @@
     });
   }
 
-  const eierNokkel = new URLSearchParams(location.search).get('eier');
-  if (eierNokkel) {
-    showOwnerBox(eierNokkel);
+  // Allerede med i fellesskapet fra for (samme nettleser)? Da skal denne
+  // siden aldri be deg "bli med" pa nytt, bare sende deg rett til gruppa.
+  let alreadyJoined = false;
+  try { alreadyJoined = !!JSON.parse(localStorage.getItem('utf_identity') || 'null'); } catch (e) {}
+
+  if (alreadyJoined) {
+    document.getElementById('buyNormal').style.display = 'none';
+    document.getElementById('alreadyMember').style.display = 'block';
   } else {
-    fetch('/api/access').then(r => r.json()).then(data => {
-      if (data && data.plan === 'owner') showOwnerBox('');
-    }).catch(() => {});
+    const eierNokkel = new URLSearchParams(location.search).get('eier');
+    if (eierNokkel) {
+      showOwnerBox(eierNokkel);
+    } else {
+      fetch('/api/access').then(r => r.json()).then(data => {
+        if (data && data.plan === 'owner') showOwnerBox('');
+      }).catch(() => {});
+    }
   }
 </script>
 
