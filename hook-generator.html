@@ -32,6 +32,12 @@
       --line: rgba(61, 36, 56, 0.1);
       --font-head: 'Playpen Sans', system-ui, sans-serif;
       --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+
+      /* LME sin faktiske rosa (samme som dashbord/butikk/community), ikke
+         den lekne "barbie"-rosa fra pink-200/400-skalaen over. */
+      --lme-pink: #F8D7DA;
+      --lme-pink-mid: #F5A8B8;
+      --lme-cerise: #E91E89;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,7 +45,7 @@
     body {
       font-family: var(--font-body);
       color: var(--ink);
-      background: linear-gradient(160deg, var(--pink-200) 0%, var(--pink-400) 100%);
+      background: linear-gradient(160deg, var(--lme-pink) 0%, var(--lme-pink-mid) 100%);
       min-height: 100vh;
       line-height: 1.6;
     }
