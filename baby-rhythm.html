@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baby Daily Rhythm | LME</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Sasson Montessori';
+      src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+           url('/fonts/SassoonMontessori.ttf') format('truetype');
+      font-weight: normal; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --pink-50:  #fff5f8;
+      --pink-100: #ffe8f0;
+      --pink-200: #ffd1e1;
+      --pink-300: #ffb3cd;
+      --pink-400: #ff8ab3;
+      --pink-500: #e85a92;
+      --pink-600: #c43d75;
+      --pink-700: #8f2a55;
+      --purple-light: #efe4f7;
+      --purple: #b07fd4;
+      --gul-soft: #fff3cf;
+      --gul: #ffce3d;
+      --warm-white: #fffcf9;
+      --ink: #3d2438;
+      --ink-soft: #6b4760;
+      --line: rgba(61, 36, 56, 0.1);
+      --font-head: 'Playpen Sans', system-ui, sans-serif;
+      --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--ink);
+      background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 55%, #F8D7DA 100%);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4 { font-family: var(--font-head); }
+
+    .bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 20px;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .bar .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      color: var(--pink-600);
+      font-size: 15px;
+      text-decoration: none;
+    }
+
+    .bar .brand img { width: 32px; height: 32px; }
+
+    .bar .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      font-size: 13.5px;
+      white-space: nowrap;
+    }
+
+    .btn-back { background: #fff; color: var(--ink); border: 1px solid #eedce2; }
+    .btn-lang { background: #FCEFF2; color: #C13D6A; }
+
+    .wrap {
+      max-width: 700px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 40px 20px 70px;
+    }
+
+    .head {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .head h1 {
+      font-size: 32px;
+      margin: 12px 0 8px;
+      color: var(--ink);
+    }
+
+    .head p {
+      color: var(--ink-soft);
+      font-size: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--ink);
+      font-size: 15px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="time"],
+    select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--pink-200);
+      border-radius: 12px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      background: #fff;
+      color: var(--ink);
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--pink-600);
+      box-shadow: 0 0 0 3px var(--pink-100);
+    }
+
+    .rhythm-card {
+      background: linear-gradient(135deg, var(--purple-light), rgba(255, 243, 207, 0.4));
+      border: 2px solid var(--purple);
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 30px;
+    }
+
+    .rhythm-card h2 {
+      color: var(--pink-600);
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+
+    .activity-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: #fff;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      border-left: 4px solid var(--pink-600);
+    }
+
+    .activity-time {
+      font-weight: 700;
+      color: var(--pink-600);
+      min-width: 80px;
+      font-family: var(--font-head);
+    }
+
+    .activity-name {
+      flex: 1;
+      color: var(--ink);
+    }
+
+    .activity-duration {
+      font-size: 13px;
+      color: var(--ink-soft);
+      min-width: 60px;
+      text-align: right;
+    }
+
+    .cycle-info {
+      background: var(--gul-soft);
+      border: 2px solid var(--gul);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .cycle-info h3 {
+      color: var(--ink);
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .cycle-item {
+      display: flex;
+      gap: 12px;
+      margin: 8px 0;
+      align-items: center;
+    }
+
+    .cycle-item strong {
+      color: var(--pink-600);
+    }
+
+    .input-group {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .input-group .form-group {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 520px) {
+      .wrap { padding: 30px 16px; }
+      .head h1 { font-size: 26px; }
+      .input-group { grid-template-columns: 1fr; }
+      .activity-row { flex-direction: column; align-items: flex-start; }
+      .activity-duration { min-width: auto; text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/dashboard"><img src="/images/lme-logo.png" alt="LME">LME</a>
+    <div class="actions">
+      <button class="btn btn-lang" id="lme-lang" type="button">🇬🇧 English</button>
+      <a class="btn btn-back" href="/mia-og-teo" data-no="‹ Tilbake" data-en="‹ Back">‹ Tilbake</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="head">
+      <h1 data-no="Babylets daglige rytme" data-en="Your Baby's Daily Rhythm">Babylets daglige rytme</h1>
+      <p data-no="Lag en forutsigbar daglig rutine for ditt barn, inspirert av Montessori-filosofien" data-en="Create a predictable daily routine for your child, inspired by Montessori philosophy">Lag en forutsigbar daglig rutine for ditt barn, inspirert av Montessori-filosofien</p>
+    </div>
+
+    <form id="rhythmForm">
+      <div class="input-group">
+        <div class="form-group">
+          <label for="babyName" data-no="Babylets navn" data-en="Baby's name">Babylets navn</label>
+          <input type="text" id="babyName" required placeholder="" data-no-placeholder="f.eks. Ellie" data-en-placeholder="e.g. Ellie">
+        </div>
+        <div class="form-group">
+          <label for="babyAge" data-no="Alder (måneder)" data-en="Age (months)">Alder (måneder)</label>
+          <input type="number" id="babyAge" min="0" max="60" required value="3">
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="form-group">
+          <label for="wakeTime" data-no="Oppvakningstime" data-en="Wake time">Oppvakningstime</label>
+          <input type="time" id="wakeTime" required value="07:00">
+        </div>
+        <div class="form-group">
+          <label for="bedtime" data-no="Leggetid" data-en="Bedtime">Leggetid</label>
+          <input type="time" id="bedtime" required value="19:00">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="feedingType" data-no="Matenavn" data-en="Feeding type">Matenavn</label>
+        <select id="feedingType" required>
+          <option value="" data-no="Velg" data-en="Select">Velg</option>
+          <option value="Amming" data-no="Amming" data-en="Breastfeeding">Amming</option>
+          <option value="Flaske" data-no="Flaske" data-en="Bottle">Flaske</option>
+          <option value="Begge" data-no="Begge" data-en="Both">Begge</option>
+        </select>
+      </div>
+
+      <button type="submit" style="width: 100%; padding: 16px; background: linear-gradient(135deg, var(--pink-600), var(--purple)); color: #fff; border: 0; border-radius: 12px; font-family: var(--font-head); font-size: 18px; font-weight: 700; cursor: pointer; margin-top: 20px;" data-no="Lag daglig rytme" data-en="Create rhythm">Lag daglig rytme</button>
+    </form>
+
+    <div class="rhythm-card" id="rhythmCard" style="display: none;">
+      <h2 id="rhythmTitle"></h2>
+      <div id="rhythmContent"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      // Language system
+      window.LME_CURRENT_LANG = 'no';
+      try { window.LME_CURRENT_LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no'; } catch (e) {}
+
+      function applyLanguage() {
+        var en = window.LME_CURRENT_LANG === 'en';
+        document.documentElement.lang = en ? 'en' : 'no';
+        document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+          if (el.hasAttribute('data-no-placeholder')) {
+            el.placeholder = en ? el.getAttribute('data-en-placeholder') : el.getAttribute('data-no-placeholder');
+          } else if (el.tagName === 'OPTION' || el.tagName === 'BUTTON') {
+            el.textContent = en ? el.getAttribute('data-en') : el.getAttribute('data-no');
+          } else {
+            el.textContent = en ? el.getAttribute('data-en') : el.getAttribute('data-no');
+          }
+        });
+        var b = document.getElementById('lme-lang');
+        if (b) b.textContent = en ? '🇳🇴 Norsk' : '🇬🇧 English';
+      }
+
+      window.lmeToggleLang = function () {
+        window.LME_CURRENT_LANG = window.LME_CURRENT_LANG === 'en' ? 'no' : 'en';
+        try { localStorage.setItem('lme_lang', window.LME_CURRENT_LANG); } catch (e) {}
+        applyLanguage();
+      };
+
+      document.getElementById('lme-lang').addEventListener('click', window.lmeToggleLang);
+      applyLanguage();
+
+      // Rhythm generation
+      document.getElementById('rhythmForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        var babyName = document.getElementById('babyName').value;
+        var wakeTime = document.getElementById('wakeTime').value;
+        var bedtime = document.getElementById('bedtime').value;
+        var feedingType = document.getElementById('feedingType').value;
+
+        var rhythm = generateRhythm(babyName, wakeTime, bedtime, feedingType);
+        displayRhythm(babyName, rhythm);
+      });
+
+      function generateRhythm(name, wakeTime, bedtime, feedingType) {
+        var activities = [];
+        var wake = timeToMinutes(wakeTime);
+        var bed = timeToMinutes(bedtime);
+
+        // Morning routine
+        activities.push({ time: minutesToTime(wake), activity: window.LME_CURRENT_LANG === 'en' ? 'Wake up & greeting' : 'Oppvaking & hilsen', duration: '15 min' });
+        activities.push({ time: minutesToTime(wake + 15), activity: window.LME_CURRENT_LANG === 'en' ? 'Feeding' : 'Mating', duration: '30 min' });
+        activities.push({ time: minutesToTime(wake + 45), activity: window.LME_CURRENT_LANG === 'en' ? 'Awake time & play' : 'Våken tid & lek', duration: '60 min' });
+
+        // First nap
+        activities.push({ time: minutesToTime(wake + 105), activity: window.LME_CURRENT_LANG === 'en' ? 'First nap' : 'Første blunding', duration: '45 min' });
+        activities.push({ time: minutesToTime(wake + 150), activity: window.LME_CURRENT_LANG === 'en' ? 'Feeding' : 'Mating', duration: '30 min' });
+        activities.push({ time: minutesToTime(wake + 180), activity: window.LME_CURRENT_LANG === 'en' ? 'Awake time & activity' : 'Våken tid & aktivitet', duration: '60 min' });
+
+        // Second nap
+        activities.push({ time: minutesToTime(wake + 240), activity: window.LME_CURRENT_LANG === 'en' ? 'Second nap' : 'Andre blunding', duration: '60 min' });
+        activities.push({ time: minutesToTime(wake + 300), activity: window.LME_CURRENT_LANG === 'en' ? 'Feeding' : 'Mating', duration: '30 min' });
+        activities.push({ time: minutesToTime(wake + 330), activity: window.LME_CURRENT_LANG === 'en' ? 'Awake time & social time' : 'Våken tid & sosialt', duration: '90 min' });
+
+        // Evening routine
+        activities.push({ time: minutesToTime(wake + 420), activity: window.LME_CURRENT_LANG === 'en' ? 'Bath & calm activities' : 'Bad & rolige aktiviteter', duration: '45 min' });
+        activities.push({ time: minutesToTime(wake + 465), activity: window.LME_CURRENT_LANG === 'en' ? 'Feeding' : 'Mating', duration: '30 min' });
+        activities.push({ time: minutesToTime(wake + 495), activity: window.LME_CURRENT_LANG === 'en' ? 'Bedtime routine' : 'Leggerutine', duration: '30 min' });
+        activities.push({ time: minutesToTime(bed), activity: window.LME_CURRENT_LANG === 'en' ? 'Lights out & sleep' : 'Lys av & søvn', duration: window.LME_CURRENT_LANG === 'en' ? '10-12 hours' : '10-12 timer' });
+
+        return activities;
+      }
+
+      function timeToMinutes(timeStr) {
+        var parts = timeStr.split(':');
+        return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+      }
+
+      function minutesToTime(mins) {
+        var hours = Math.floor(mins / 60) % 24;
+        var minutes = mins % 60;
+        return (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes;
+      }
+
+      function displayRhythm(name, activities) {
+        var title = window.LME_CURRENT_LANG === 'en' ? 'A rhythm made for ' + name : 'En rytme laget for ' + name;
+        document.getElementById('rhythmTitle').textContent = title;
+
+        var content = '<div>';
+        activities.forEach(function (act) {
+          content += '<div class="activity-row">';
+          content += '<div class="activity-time">' + act.time + '</div>';
+          content += '<div class="activity-name">' + act.activity + '</div>';
+          content += '<div class="activity-duration">' + act.duration + '</div>';
+          content += '</div>';
+        });
+
+        // Cycle info
+        content += '<div class="cycle-info">';
+        content += '<h3>' + (window.LME_CURRENT_LANG === 'en' ? 'The rhythm to remember' : 'Rytmen å huske') + '</h3>';
+        content += '<div class="cycle-item"><strong>' + (window.LME_CURRENT_LANG === 'en' ? 'Feed' : 'Mat') + ':</strong> ' + (window.LME_CURRENT_LANG === 'en' ? 'Nourish your baby' : 'Gi mat til babylet') + '</div>';
+        content += '<div class="cycle-item"><strong>' + (window.LME_CURRENT_LANG === 'en' ? 'Awake' : 'Våken') + ':</strong> ' + (window.LME_CURRENT_LANG === 'en' ? 'Play, explore & learn' : 'Lek, utforsk og lær') + '</div>';
+        content += '<div class="cycle-item"><strong>' + (window.LME_CURRENT_LANG === 'en' ? 'Sleep' : 'Søvn') + ':</strong> ' + (window.LME_CURRENT_LANG === 'en' ? 'Rest & grow (then repeat)' : 'Hvil & vekst (så gjenta)') + '</div>';
+        content += '</div>';
+
+        content += '</div>';
+        document.getElementById('rhythmContent').innerHTML = content;
+        document.getElementById('rhythmCard').style.display = 'block';
+      }
+    })();
+  </script>
+  <script src="/js/lme-account.js?v=11" defer></script>
+</body>
+</html>
