@@ -177,12 +177,15 @@ async function genHiggsfield(env, prompt, size) {
 function sleep(ms) { return new Promise((resolve) => setTimeout(resolve, ms)); }
 
 async function genPollinations(env, prompt, size) {
-  // Pollinations.ai: gratis, ingen nøkkel, ingen kvote. Brukes som fallback
-  // når OpenAI/Gemini mangler nøkkel eller kreditter. Den delte gratis-køen
-  // gir ofte 429 (for mange samtidige forespørsler), så prøv et par ganger
-  // med kort pause før vi gir opp.
+  // Pollinations.ai: gratis, ingen nøkkel, ingen kvote, men den delte
+  // gratis-køen er ofte overbelastet (429 eller veldig treg). Kortere
+  // tidsavbrudd per forsøk gir raskere tilbakemelding i stedet for at
+  // brukeren venter 55 sek. per forsøk før noe som helst skjer.
   const [w, h] = String(size || "1024x1024").split("x").map((n) => parseInt(n, 10) || 1024);
-  const attempts = [{ delay: 0, model: "flux" }, { delay: 2000, model: "turbo" }, { delay: 5000, model: "flux" }];
+  const attempts = [
+    { delay: 0, model: "turbo", timeout: 20000 },
+    { delay: 800, model: "flux", timeout: 25000 },
+  ];
   let last;
   for (let i = 0; i < attempts.length; i++) {
     if (attempts[i].delay) await sleep(attempts[i].delay);
@@ -191,7 +194,7 @@ async function genPollinations(env, prompt, size) {
       `?width=${w}&height=${h}&nologo=true&safe=true&seed=${seed}&model=${attempts[i].model}`;
     let r;
     try {
-      r = await fetchTimeout(url, {}, 55000);
+      r = await fetchTimeout(url, {}, attempts[i].timeout);
     } catch (e) {
       last = { error: "Pollinations brukte for lang tid.", status: 504 };
       continue;
