@@ -610,6 +610,7 @@ async function runPinterest(){
 async function genPinterestImage(){
   if(!lastPinterestData){alert('Generer først');return;}
   const btn=event.target;btn.disabled=true;const orig=btn.textContent;btn.textContent='⏳ Genererer...';
+  let old=document.getElementById('p-img');if(old)old.remove();
   try{
     const r=await fetch('/api/image',{
       method:'POST',
@@ -619,6 +620,10 @@ async function genPinterestImage(){
     const d=await r.json();
     if(d.error)throw new Error(d.error);
     lastPinterestData.imageUrl=d.url;
+    const wrap=document.createElement('div');
+    wrap.id='p-img';wrap.className='card-out';
+    wrap.innerHTML=`<img src="${d.url}" alt="Pinterest-pin" style="max-width:100%;border-radius:12px;display:block;">`;
+    btn.closest('div').insertAdjacentElement('afterend',wrap);
     btn.textContent='✓ Pin generert';
     setTimeout(()=>{btn.textContent=orig;btn.disabled=false;},2000);
   }catch(e){
