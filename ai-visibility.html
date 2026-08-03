@@ -611,13 +611,15 @@ async function genPinterestImage(){
   if(!lastPinterestData){alert('Generer først');return;}
   const btn=event.target;btn.disabled=true;const orig=btn.textContent;btn.textContent='⏳ Genererer...';
   let old=document.getElementById('p-img');if(old)old.remove();
+  let oldErr=document.getElementById('p-img-err');if(oldErr)oldErr.remove();
   try{
     const r=await fetch('/api/image',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({text:lastPinterestData.imagePrompt||'',platform:'pinterest',character:'none'})
     });
-    const d=await r.json();
+    let d;
+    try{ d=await r.json(); }catch(_){ throw new Error(`Uventet svar fra serveren (status ${r.status}).`); }
     if(d.error)throw new Error(d.error);
     lastPinterestData.imageUrl=d.url;
     const wrap=document.createElement('div');
@@ -627,7 +629,12 @@ async function genPinterestImage(){
     btn.textContent='✓ Pin generert';
     setTimeout(()=>{btn.textContent=orig;btn.disabled=false;},2000);
   }catch(e){
-    alert(`Bildegenerering feilet: ${e.message}`);btn.textContent=orig;btn.disabled=false;
+    const err=document.createElement('div');
+    err.id='p-img-err';err.className='card-out';
+    err.style.color='#B3261E';
+    err.textContent=`Bildegenerering feilet: ${e.message}`;
+    btn.closest('div').insertAdjacentElement('afterend',err);
+    btn.textContent=orig;btn.disabled=false;
   }
 }
 
