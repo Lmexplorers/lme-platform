@@ -19,6 +19,10 @@ To trygge lukkingsalternativer for T-stroppen er beskrevet (uten knapp, eller
 med en myk heklet knapp), og sikkerhetssiden fraråder harde plast-/metallknapper
 på de minste størrelsene.
 
+Rettet 3. august 2026: forsiden viste feilaktig et generisk Ellie-bilde
+merket "ikke selve skoene". Byttet til `ballerinasko_ref.jpg`, det
+faktiske sko-referansebildet som allerede brukes i butikken.
+
 ## Bygge PDF-ene på nytt
 
 ```bash

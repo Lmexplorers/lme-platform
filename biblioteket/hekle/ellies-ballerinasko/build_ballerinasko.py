@@ -9,9 +9,9 @@ import lme_pattern_kit as kit
 from lme_pattern_kit import (banner, rosep, sagep, card, cream, cme, ul, steps, otab, abbrtab,
                               photo_row, qr_placeholder)
 
-REF = BASE / 'ellie_ref.png'
+REF = BASE / 'ballerinasko_ref.jpg'
 ref_b64 = base64.b64encode(REF.read_bytes()).decode()
-ref_src = f'data:image/png;base64,{ref_b64}'
+ref_src = f'data:image/jpeg;base64,{ref_b64}'
 
 T = {}
 def add(key, no, en=None):
@@ -463,8 +463,8 @@ def build(lang):
     pages = []
 
     pages.append(pg(f'''
-<div class="coverimg"><img src="{ref_src}" alt="Ellie, referanse for skoenes uttrykk"></div>
-<p class="small center" style="margin-top:-2mm;">{'Bildet viser Ellie, det lille dådyret, som stiluttrykk-referanse, ikke selve skoene.' if lang == 'no' else 'Photo shows Ellie, the little fawn, as a style reference, not the shoes themselves.'}</p>
+<div class="coverimg"><img src="{ref_src}" alt="Ellies ballerinasko, stiluttrykk-referanse"></div>
+<p class="small center" style="margin-top:-2mm;">{'Bildet viser stiluttrykk-referansen for ballerinaskoene, ikke det ferdige heklede produktet.' if lang == 'no' else 'Photo shows the style reference for the ballerina shoes, not the finished crocheted product.'}</p>
 <div class="covertag">{t('covertag')}</div>
 <div class="coverbanner"><h1 class="covertitle">{t('covertitle')}</h1></div>
 <div class="subpill">{t('subpill')}</div>

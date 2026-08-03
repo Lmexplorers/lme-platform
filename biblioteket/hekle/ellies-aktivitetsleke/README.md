@@ -25,6 +25,10 @@ oversikten, DEL 6 i oppskriften) beskriver nå eksplisitt at det er et
 knitrende stoff (knitrefolie) sydd inni skyen som lager knitrelyden når
 barnet klemmer på den, ikke bare at skyen "knitrer".
 
+Rettet samme dag: forsiden viste feilaktig et generisk Ellie-bilde merket
+"ikke selve aktivitetskuben". Byttet til `aktivitetsleke_ref.jpg`, det
+faktiske kube-referansebildet som allerede brukes i butikken.
+
 **Sikkerhet er spesielt viktig her**, siden dette er oppskriften med flest
 påsydde smådeler og flest ulike materialer (garn, tre, speil, knitrefolie)
 i hele kolleksjonen. Speilet og knitrefolien (kun babysikkert akryl/plast,

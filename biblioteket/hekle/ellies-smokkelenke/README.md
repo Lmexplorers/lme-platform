@@ -25,6 +25,10 @@ salg.
 - **QR-kode:** siden om stell/vask har en tom plassholderboks for en
   fremtidig QR-kode til videoveiledning.
 
+Rettet 3. august 2026: forsiden manglet et produktbilde. Har nå fått et
+eget stiluttrykk-referansebilde (`smokkelenke_ref.jpg`, samme bilde som
+brukes i butikken), i stedet for ingenting.
+
 ## Bygge PDF-ene på nytt
 
 ```bash

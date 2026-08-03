@@ -14,6 +14,10 @@ FACE_REF = BASE / 'ellie_face_ref.png'
 face_b64 = base64.b64encode(FACE_REF.read_bytes()).decode()
 face_src = f'data:image/png;base64,{face_b64}'
 
+REF = BASE / 'smokkelenke_ref.jpg'
+ref_b64 = base64.b64encode(REF.read_bytes()).decode()
+ref_src = f'data:image/jpeg;base64,{ref_b64}'
+
 T = {}
 def add(key, no, en=None):
     T[key] = {'no': no, 'en': en if en is not None else no}
@@ -422,6 +426,8 @@ def build(lang):
     pages = []
 
     pages.append(pg(f'''
+<div class="coverimg"><img src="{ref_src}" alt="Ellies smokkelenke, stiluttrykk-referanse"></div>
+<p class="small center" style="margin-top:-2mm;">{'Bildet viser stiluttrykk-referansen for smokkelenken, ikke det ferdige heklede produktet.' if lang == 'no' else 'Photo shows the style reference for the pacifier clip, not the finished crocheted product.'}</p>
 <div class="covertag">{t('covertag')}</div>
 <div class="coverbanner"><h1 class="covertitle">{t('covertitle')}</h1></div>
 <div class="subpill">{t('subpill')}</div>

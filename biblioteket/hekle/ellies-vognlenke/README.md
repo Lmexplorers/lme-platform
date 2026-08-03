@@ -23,6 +23,10 @@ gjentatt oppfordring om å sjekke ferdig produkt mot gjeldende lokale krav.
 - **Fotoveiledning og QR-kode-plassholder:** samme mal som de andre
   tilbehørsoppskriftene.
 
+Rettet 3. august 2026: forsiden viste feilaktig et generisk Ellie-bilde
+merket "ikke selve vognlenken". Byttet til `vognlenke_ref.jpg`, det
+faktiske vognlenke-referansebildet som allerede brukes i butikken.
+
 ## Bygge PDF-ene på nytt
 
 ```bash

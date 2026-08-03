@@ -21,6 +21,10 @@ gjeldende lokale krav før salg.
   rangelen (tydelig merket "stiluttrykk-referanse" i bildeteksten), siden
   rangelen selv ikke er heklet og fotografert ennå.
 
+Rettet 3. august 2026: forsiden viste feilaktig et generisk Ellie-bilde
+merket "ikke selve rangelen". Byttet til `rangle_ref.jpg`, det faktiske
+rangel-referansebildet som allerede brukes i butikken.
+
 ## Bygge PDF-ene på nytt
 
 ```bash
