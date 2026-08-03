@@ -201,14 +201,24 @@
   <!-- Kjop -->
   <div class="card form-card" id="meld-pa">
     <h2 data-no="Bli med i utfordringen" data-en="Join the challenge" data-edit="ch-form-title">Bli med i utfordringen</h2>
-    <div class="price-row">
-      <span class="price-now" data-no="299 kr" data-en="$33" data-edit="ch-price-now">299 kr</span>
-      <span class="price-cur" data-no="/ måned" data-en="/ month" data-edit="ch-price-cur">/ måned</span>
-    </div>
-    <p class="lede" data-no="Trykk under, betal hos Stripe, og rett etterpå får du dag 1 i innboksen din." data-en="Click below, pay with Stripe, and day one lands in your inbox right after." data-edit="ch-form-lede">Trykk under, betal hos Stripe, og rett etterpå får du dag 1 i innboksen din.</p>
 
-    <a href="#" class="btn-cta" id="chBtn" data-no="Bli med for 299 kr/mnd →" data-en="Join for $33/mo →" data-edit="ch-cta2">Bli med for 299 kr/mnd →</a>
-    <p class="form-safe" data-no="299 kr per måned. Avslutt når som helst." data-en="$33 per month. Cancel anytime." data-edit="ch-form-safe">299 kr per måned. Avslutt når som helst.</p>
+    <div id="buyNormal">
+      <div class="price-row">
+        <span class="price-now" data-no="299 kr" data-en="$33" data-edit="ch-price-now">299 kr</span>
+        <span class="price-cur" data-no="/ måned" data-en="/ month" data-edit="ch-price-cur">/ måned</span>
+      </div>
+      <p class="lede" data-no="Trykk under, betal hos Stripe, og rett etterpå får du dag 1 i innboksen din." data-en="Click below, pay with Stripe, and day one lands in your inbox right after." data-edit="ch-form-lede">Trykk under, betal hos Stripe, og rett etterpå får du dag 1 i innboksen din.</p>
+
+      <a href="#" class="btn-cta" id="chBtn" data-no="Bli med for 299 kr/mnd →" data-en="Join for $33/mo →" data-edit="ch-cta2">Bli med for 299 kr/mnd →</a>
+      <p class="form-safe" data-no="299 kr per måned. Avslutt når som helst." data-en="$33 per month. Cancel anytime." data-edit="ch-form-safe">299 kr per måned. Avslutt når som helst.</p>
+    </div>
+
+    <!-- Kun for eier: alltid gratis tilgang, ingen Stripe. -->
+    <div id="buyOwner" style="display:none;">
+      <p class="lede" data-no="Du er eier, du betaler aldri for ditt eget produkt. Trykk under for å starte utfordringen selv." data-en="You're the owner, you never pay for your own product. Click below to start the challenge yourself.">Du er eier, du betaler aldri for ditt eget produkt. Trykk under for å starte utfordringen selv.</p>
+      <button type="button" class="btn-cta" id="ownerBtn" data-no="Se utfordringen (eier, gratis) →" data-en="See the challenge (owner, free) →">Se utfordringen (eier, gratis) →</button>
+      <p class="form-safe" id="ownerDone" style="display:none;" data-no="Du er med! Sjekk innboksen din, dag 1 kommer nå." data-en="You're in! Check your inbox, day one is on its way.">Du er med! Sjekk innboksen din, dag 1 kommer nå.</p>
+    </div>
   </div>
 
   <div class="footer">© <span id="yr"></span> Little Montessori Explorers · <span data-no="Laget av Renate Dahl" data-en="Made by Renate Dahl">Laget av Renate Dahl</span></div>
@@ -245,6 +255,35 @@
   try {
     if (localStorage.getItem('lme_lang') === 'en') switchLanguage('en');
   } catch (e) {}
+
+  // Eier ser aldri Stripe-knappen, bare en gratis "se utfordringen selv"-knapp.
+  fetch('/api/access').then(r => r.json()).then(data => {
+    if (!data || data.plan !== 'owner') return;
+    document.getElementById('buyNormal').style.display = 'none';
+    document.getElementById('buyOwner').style.display = 'block';
+    document.getElementById('ownerBtn').addEventListener('click', function () {
+      const btn = this;
+      btn.disabled = true;
+      const before = btn.textContent;
+      btn.textContent = currentLang === 'en' ? 'One moment …' : 'Et øyeblikk …';
+      fetch('/api/utfordring-preview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lang: currentLang }),
+      })
+        .then(r => r.json())
+        .then(res => {
+          if (res && res.ok) {
+            btn.style.display = 'none';
+            document.getElementById('ownerDone').style.display = 'block';
+          } else {
+            btn.disabled = false;
+            btn.textContent = before;
+          }
+        })
+        .catch(() => { btn.disabled = false; btn.textContent = before; });
+    });
+  }).catch(() => {});
 </script>
 
 <script src="/js/page-editor.js" defer></script>

@@ -23,6 +23,17 @@ Creative Academy, Creative Studio eller LME Autopilot.
 Selve app-kortet/verktøyet (bl.a. på forsiden/dashbordet) skal ellers ikke endres,
 "ryddes i" eller få endret lenker/design uten at Renate eksplisitt ber om det.
 
+## 🔓 Eieren skal alltid ha tilgang til alt
+
+Avtalt med Renate 3. august 2026: Renate (eier) skal aldri måtte betale for sitt
+eget produkt. Alt som selges eller låses på plattformen (kurs, abonnementer,
+apper, utfordringer osv.) skal ha et eier-unntak, samme mønster som
+`isOwner()`/`OWNER_EMAILS` i `functions/_lib/access.js` allerede bruker for
+LME Autopilot, Video Studio og AI Headshot. For nye betalte produkter uten
+egen innlogging (f.eks. en Stripe-betalingslenke-side): sjekk `/api/access`
+(`plan === "owner"`) på siden, og gi eieren en egen gratis vei inn i stedet
+for kjøpsknappen, ikke bare et unntak dypt i betalings-webhooken.
+
 ## 🗺️ Hold roadmapen oppdatert
 
 `/roadmap` skal alltid speile plattformen. Når nye moduler, kurs eller verktøy

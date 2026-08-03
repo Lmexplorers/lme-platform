@@ -46,7 +46,7 @@ const OWNER_EMAILS = [
   "renate@lmexplorers.com", "hei@lmexplorers.com", "hello@lmexplorers.com",
   "support@lmexplorers.com", "renateshobby@hotmail.com",
 ];
-function isOwner(user) {
+export function isOwner(user) {
   return !!user && (user.role === "owner" || user.role === "admin" ||
     OWNER_EMAILS.indexOf((user.email || "").toLowerCase()) !== -1);
 }
