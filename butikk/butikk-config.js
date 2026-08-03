@@ -122,6 +122,20 @@ window.LME_BUTIKK = {
       ]
     },
 
+    "ellie-hekle": {
+      navn:  { no: "Ellie, det lille dådyret - amigurumi", en: "Ellie the Little Fawn - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 18-20 cm · avtakbar sløyfe",
+                     en: "LME Baby Collection · Woodland Dreams · approx. 18-20 cm · removable bow" },
+      cover:   "/images/oppskrift-ellie-hekle.jpg",
+      coverEn: "/images/oppskrift-ellie-hekle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/ellie-hekle.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/ellie-hekle-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
     "norway-strikk": {
       navn:  { no: "NORWAY-bøttehatt, strikkeoppskrift", en: "NORWAY bucket hat, knitting pattern" },
       undertittel: { no: "Rød hatt · NORWAY foran · RO og bølger bak · én størrelse (pinnen graderer)",
