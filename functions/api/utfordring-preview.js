@@ -37,19 +37,26 @@ export async function onRequestPost(context) {
   const suppliedKey = ((body.key || "") + "").trim();
   const keyOk = suppliedKey && suppliedKey === ((env.COURSE_EDIT_PASSWORD || OWNER_KEY_FALLBACK) + "");
 
-  let email, nm;
-  if (keyOk) {
-    email = OWNER_EMAIL;
-    nm = "Renate";
-  } else {
+  if (!keyOk) {
     const user = await sessionUser(context);
     if (!user || !isOwner(user)) return json({ error: "forbidden" }, 403);
-    email = user.email;
-    nm = user.display_name || user.name || "";
   }
+  // Alltid samme, faste eier-identitet her, uansett om tilgangen kom via
+  // ?eier=-nokkelen eller en innlogget okt (som kan vaere registrert med en
+  // annen av OWNER_EMAILS-adressene). Det finnes bare en eier, sa det skal
+  // bare finnes en "allerede med"-status, ellers sendes velkomstmailen pa
+  // nytt hver gang hun kommer inn en annen vei enn sist.
+  const email = OWNER_EMAIL;
+  const nm = "Renate";
+
+  // Idempotent: allerede medlem betyr at velkomstmailen og oppfolgingskoen
+  // allerede er sendt/satt opp en gang. Ikke send den pa nytt hver gang
+  // eieren trykker "Se utfordringen" igjen, det ga mange dobbeltmailer.
+  const e = email.trim().toLowerCase();
+  const already = await env.BUILDER_KV.get("utf_member:" + e);
+  if (already) return json({ ok: true, email: email, alreadyMember: true });
 
   await sendUtfordringMail(env, { to: email, name: nm, lang: lang, kind: "d0" });
-  const e = email.trim().toLowerCase();
   try {
     for (const dag of UTFORDRING_DAYS) {
       await env.BUILDER_KV.put(

@@ -104,6 +104,9 @@
   try {
     if (localStorage.getItem('lme_lang') === 'en') switchLanguage('en');
   } catch (e) {}
+  // Husk at denne nettleseren allerede har betalt, sa /utfordringen aldri
+  // viser kjop-knappen igjen og ber om betaling en gang til.
+  try { localStorage.setItem('utf_purchased', '1'); } catch (e) {}
 </script>
 
 <script src="/js/lme-account.js?v=11" defer></script>
