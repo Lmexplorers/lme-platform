@@ -142,32 +142,15 @@
   }
   .card.bonus .tick { background: var(--sun-soft); color: #8a6900; }
 
-  /* Skjema */
   .form-card { text-align: center; }
   .form-card h2 { text-align: center; }
-  form { max-width: 400px; margin: 0 auto; display: grid; gap: 12px; }
-  .field input {
-    width: 100%; font-size: 15px; padding: 14px 16px;
-    border: 1px solid var(--pink-200); border-radius: var(--r-md);
-    background: var(--pink-50); color: var(--ink);
-  }
-  .field input:focus { outline: 2px solid var(--pink-400); outline-offset: 1px; }
-  .form-safe { font-size: 13px; color: var(--ink-muted); margin-top: 4px; }
-
-  .form-done { display: none; text-align: center; padding: 10px 0; }
-  .form-done.show { display: block; }
-  .form-done .big { font-size: 42px; margin-bottom: 8px; }
-  .form-done h3 { font-size: 20px; font-weight: 800; margin-bottom: 8px; color: var(--pink-700); }
-  .form-done p { color: var(--ink-soft); font-size: 15px; }
+  .form-safe { font-size: 13px; color: var(--ink-muted); margin-top: 12px; }
 
   .footer { text-align: center; margin-top: 46px; font-size: 13px; color: var(--ink-muted); }
 
   .price-row { display: flex; align-items: baseline; justify-content: center; gap: 8px; margin-bottom: 6px; }
   .price-now { font-size: 44px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; color: var(--pink-700); }
   .price-cur { font-size: 18px; font-weight: 700; color: var(--ink-soft); }
-  .form-error { display: none; color: var(--pink-600); font-size: 13.5px; margin-top: 4px; }
-  .form-error.show { display: block; }
-  .btn-cta[disabled] { opacity: 0.7; cursor: default; transform: none; }
 
   @media (max-width: 520px) {
     .wrap { padding: 20px 16px 56px; }
@@ -223,14 +206,10 @@
       <span class="price-now" data-no="299 kr" data-en="$33" data-edit="ch-price-now">299 kr</span>
       <span class="price-cur" data-no="/ måned" data-en="/ month" data-edit="ch-price-cur">/ måned</span>
     </div>
-    <p class="lede" data-no="Skriv inn e-posten din, så tar jeg deg videre til betaling. Rett etterpå får du dag 1 i innboksen din." data-en="Enter your email, and I'll take you to payment. Right after, day one lands in your inbox." data-edit="ch-form-lede">Skriv inn e-posten din, så tar jeg deg videre til betaling. Rett etterpå får du dag 1 i innboksen din.</p>
+    <p class="lede" data-no="Trykk under, betal hos Stripe, og rett etterpå får du dag 1 i innboksen din." data-en="Click below, pay with Stripe, and day one lands in your inbox right after." data-edit="ch-form-lede">Trykk under, betal hos Stripe, og rett etterpå får du dag 1 i innboksen din.</p>
 
-    <form id="chForm" novalidate>
-      <div class="field"><input id="chEmail" type="email" autocomplete="email" required placeholder="din@epost.no"></div>
-      <button type="submit" class="btn-cta" id="chBtn" data-no="Bli med for 299 kr/mnd →" data-en="Join for $33/mo →" data-edit="ch-cta2">Bli med for 299 kr/mnd →</button>
-      <p class="form-safe" data-no="299 kr per måned. Avslutt når som helst." data-en="$33 per month. Cancel anytime." data-edit="ch-form-safe">299 kr per måned. Avslutt når som helst.</p>
-      <p class="form-error" id="chError" data-no="Noe gikk galt. Prøv igjen om litt." data-en="Something went wrong. Please try again shortly.">Noe gikk galt. Prøv igjen om litt.</p>
-    </form>
+    <a href="#" class="btn-cta" id="chBtn" data-no="Bli med for 299 kr/mnd →" data-en="Join for $33/mo →" data-edit="ch-cta2">Bli med for 299 kr/mnd →</a>
+    <p class="form-safe" data-no="299 kr per måned. Avslutt når som helst." data-en="$33 per month. Cancel anytime." data-edit="ch-form-safe">299 kr per måned. Avslutt når som helst.</p>
   </div>
 
   <div class="footer">© <span id="yr"></span> Little Montessori Explorers · <span data-no="Laget av Renate Dahl" data-en="Made by Renate Dahl">Laget av Renate Dahl</span></div>
@@ -240,6 +219,12 @@
   document.getElementById('yr').textContent = new Date().getFullYear();
 
   // Sprakbytte: samme monster som om-renate.html / roadmap.html.
+  // Kjop: rene Stripe-betalingslenker (samme monster som resten av
+  // plattformen, f.eks. Claude-kurset), helt uavhengig av
+  // lme-inner-circle-workeren. NOK for norsk, USD for engelsk.
+  const BUY_LINK_NO = 'https://buy.stripe.com/9B614oa8dgDRgKFbtt9R623';
+  const BUY_LINK_EN = 'https://buy.stripe.com/7sYeVe949cnBdyt5559R624';
+
   let currentLang = 'no';
   const toggle = document.getElementById('langToggle');
   function switchLanguage(lang) {
@@ -251,49 +236,16 @@
       else el.textContent = text;
     });
     toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    document.getElementById('chBtn').href = lang === 'en' ? BUY_LINK_EN : BUY_LINK_NO;
     document.title = lang === 'no'
       ? '10 000-visninger-utfordringen · LME'
       : 'The 10,000 Views Challenge · LME';
   }
   toggle.addEventListener('click', () => switchLanguage(currentLang === 'no' ? 'en' : 'no'));
+  document.getElementById('chBtn').href = BUY_LINK_NO;
   try {
     if (localStorage.getItem('lme_lang') === 'en') switchLanguage('en');
   } catch (e) {}
-
-  // Kjop: oppretter en Stripe-okt hos lme-inner-circle-workeren (samme
-  // betalingsflyt som /medlemskap bruker, egen plan "utfordring") og sender
-  // kunden videre til Stripes betalingsside. Selve tilgangen/e-postserien
-  // starter fra webhooken naar betalingen er bekreftet, ikke herfra.
-  const CHECKOUT_URL = 'https://lme-inner-circle.lmexplorers.workers.dev/checkout/create';
-
-  document.getElementById('chForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const email = document.getElementById('chEmail').value.trim();
-    if (!email) { document.getElementById('chEmail').focus(); return; }
-
-    const btn = document.getElementById('chBtn');
-    const err = document.getElementById('chError');
-    err.classList.remove('show');
-    btn.disabled = true;
-    const before = btn.textContent;
-    btn.textContent = currentLang === 'en' ? 'One moment …' : 'Et øyeblikk …';
-
-    fetch(CHECKOUT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ plan: 'utfordring', email: email, lang: currentLang }),
-    })
-      .then(r => r.json())
-      .then(data => {
-        if (data && data.url) { window.location.href = data.url; return; }
-        throw new Error(data && data.error || 'no_url');
-      })
-      .catch(() => {
-        btn.disabled = false;
-        btn.textContent = before;
-        err.classList.add('show');
-      });
-  });
 </script>
 
 <script src="/js/page-editor.js" defer></script>

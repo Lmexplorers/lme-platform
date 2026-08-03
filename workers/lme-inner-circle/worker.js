@@ -28,19 +28,9 @@ const html = (h,ekstra={})=>new Response(h,{status:200,headers:{...cors,'Content
 
 // ---- Prisplaner (beløp i øre; endre prisene her) ----
 const PLANS = {
-  regular:    { tier:'regular',    navn:'Medlem', belop:69700,  produkt:'LME Inner Circle – Medlem' },
-  pro:        { tier:'pro',        navn:'Pro',    belop:119700, produkt:'LME Inner Circle – Pro' },
-  vip:        { tier:'vip',        navn:'VIP',    belop:199700, produkt:'LME Inner Circle – VIP' },
-  // Eget abonnement, ikke Inner Circle: gir ingen hub-tilgang (TIER_LEVELS
-  // kjenner ikke tieren), bare den 30-dagers e-postserien i MailerLite
-  // (se sendUtfordringVelkomst). Ekte Stripe-priser (opprettet i Stripe,
-  // ikke price_data), én per språk/valuta, product prod_V0IVlR5b0xj7XB:
-  //   NOK 299/mnd  price_1U0HuQLax7B8uQzq3o4o6Pys
-  //   USD 33/mnd   price_1U0HuQLax7B8uQzqVYQcgomI
-  utfordring: {
-    tier:'utfordring', navn:'10 000-visninger-utfordringen',
-    prices: { no:'price_1U0HuQLax7B8uQzq3o4o6Pys', en:'price_1U0HuQLax7B8uQzqVYQcgomI' },
-  },
+  regular: { tier:'regular', navn:'Medlem', belop:69700 },
+  pro:     { tier:'pro',     navn:'Pro',    belop:119700 },
+  vip:     { tier:'vip',     navn:'VIP',    belop:199700 },
 };
 const PROVETID_DAGER = 0; // 0 = ingen prøveperiode; medlemmer betaler fra dag én
 
@@ -607,40 +597,6 @@ ${SPRAK_SKRIPT}
 </html>
 `;
 
-// Egen takkeside for 10 000-visninger-utfordringen (ikke Inner Circle).
-const TAKKSIDE_UTFORDRING = `<!DOCTYPE html>
-<html lang="no">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#F8D7DA">
-<title>Du er med! — 10 000-visninger-utfordringen</title>
-<style>
-${SIDE_STIL}
-  .takk{max-width:560px;margin:60px auto;text-align:center;}
-  .takk .ikon{font-size:56px;margin-bottom:14px;}
-  .takk h1{font-size:30px;color:var(--rosa);margin-bottom:12px;}
-  .takk p{color:var(--graa);font-size:15.5px;line-height:1.6;margin-bottom:12px;}
-</style>
-</head>
-<body>
-<div class="topp">
-  <a class="merke" href="https://lmexplorers.com">🌸 Little Montessori Explorers</a>
-  <button class="knapp knapp-hvit" id="lang-knapp" type="button">🇬🇧 English</button>
-</div>
-<div class="wrap">
-  <div class="takk kort">
-    <div class="ikon">🎉</div>
-    <h1 data-no="Du er med i utfordringen!" data-en="You're in the challenge!">Du er med i utfordringen!</h1>
-    <p data-no="Betalingen er registrert, og abonnementet ditt er i gang. Jeg sender deg dag 1 rett i innboksen, og en ny oppgave gjennom hele de 30 dagene." data-en="Your payment is registered and your subscription has started. I'll send you day one straight to your inbox, and a new task throughout the 30 days.">Betalingen er registrert, og abonnementet ditt er i gang. Jeg sender deg dag 1 rett i innboksen, og en ny oppgave gjennom hele de 30 dagene.</p>
-    <a class="knapp knapp-rosa" href="https://lme-contentstudio.pages.dev/?key=LME2026" data-no="Åpne LME Autopilot" data-en="Open LME Autopilot">Åpne LME Autopilot</a>
-  </div>
-</div>
-${SPRAK_SKRIPT}
-</body>
-</html>
-`;
-
 // ===== AFFILIATE-SIDE =====
 const AFFILIATE_SIDE = `<!DOCTYPE html>
 <html lang="no">
@@ -1045,31 +1001,6 @@ async function sendVelkomstEpost(env, epost, navn, tier){
   }
 }
 
-// Utfordringen har ikke medlemskapets velkomst-epost (den nevner Inner
-// Circle, og de to skal aldri blandes). I stedet meldes kjøperen inn i en
-// egen MailerLite-gruppe, én per språk, som trigger 30-dagers-automasjonen
-// der (begge opprettet i MailerLite, aktiveres derfra):
-//   NO  194770523227423951  "10 000-visninger-utfordringen, kjøpere"
-//   EN  194771238803998196  "10,000 Views Challenge, buyers (EN)"
-const UTFORDRING_GRUPPE = { no:'194770523227423951', en:'194771238803998196' };
-async function sendUtfordringVelkomst(env, epost, navn, lang){
-  if(!env.MAILERLITE_API_KEY) return;
-  const gruppe = (lang === 'en' ? env.MAILERLITE_UTFORDRING_GROUP_EN : env.MAILERLITE_UTFORDRING_GROUP_NO)
-    || UTFORDRING_GRUPPE[lang === 'en' ? 'en' : 'no'];
-  try {
-    await fetch('https://connect.mailerlite.com/api/subscribers', {
-      method:'POST',
-      headers:{'Authorization':'Bearer '+env.MAILERLITE_API_KEY,'Content-Type':'application/json','Accept':'application/json'},
-      body: JSON.stringify({
-        email: epost,
-        fields: { name: navn || '' },
-        status: 'active',
-        groups: [gruppe],
-      }),
-    });
-  } catch(e) { /* betalingen og tilgangen er uansett registrert */ }
-}
-
 export default {
   async fetch(request, env){
     const url = new URL(request.url);
@@ -1089,18 +1020,8 @@ export default {
       }
 
       // ===== TAKKSIDE =====
-      // Sjekker Stripe-økten for å vise riktig side: utfordringen er ikke
-      // Inner Circle, og skal aldri si det til kjøperen.
       if(path === '/takk' && request.method === 'GET'){
-        const sessionId = url.searchParams.get('session_id');
-        let tier = null;
-        if(sessionId && env.STRIPE_SECRET_KEY){
-          try {
-            const okt = await stripeFetch(env, 'checkout/sessions/'+encodeURIComponent(sessionId), null, 'GET');
-            tier = okt?.metadata?.tier || null;
-          } catch(e) { /* ukjent økt: vis standard Inner Circle-takkeside */ }
-        }
-        return html(tier === 'utfordring' ? TAKKSIDE_UTFORDRING : TAKKSIDE);
+        return html(TAKKSIDE);
       }
 
       // ===== AFFILIATE LANDINGSSIDE =====
@@ -1176,30 +1097,19 @@ export default {
         if(!plan) return json({error:'Ukjent plan'},400);
         const epost = (body.email||'').trim().toLowerCase();
         const affKode = saniterKode(body.ref) || getAffiliateCode(request, url);
-        const lang = body.lang === 'en' ? 'en' : 'no';
         const params = {
           'mode': 'subscription',
           'line_items[0][quantity]': '1',
+          'line_items[0][price_data][currency]': 'nok',
+          'line_items[0][price_data][unit_amount]': String(plan.belop),
+          'line_items[0][price_data][recurring][interval]': 'month',
+          'line_items[0][price_data][product_data][name]': 'LME Inner Circle – '+plan.navn,
           'subscription_data[metadata][tier]': plan.tier,
           'allow_promotion_codes': 'true',
           'success_url': url.origin+'/takk?session_id={CHECKOUT_SESSION_ID}',
-          // Utfordringen selges fra en egen side på lmexplorers.com, ikke
-          // fra denne Workerens /medlemskap, så avbrutt betaling skal
-          // sende kunden tilbake dit, ikke til Inner Circle-salgssiden.
-          'cancel_url': plan.tier === 'utfordring' ? 'https://lmexplorers.com/utfordringen' : url.origin+'/medlemskap',
+          'cancel_url': url.origin+'/medlemskap',
           'metadata[tier]': plan.tier,
         };
-        if(plan.prices){
-          // Ekte Stripe-pris, NOK eller USD etter språk (se PLANS.utfordring).
-          params['line_items[0][price]'] = plan.prices[lang] || plan.prices.no;
-          params['metadata[lang]'] = lang;
-          params['subscription_data[metadata][lang]'] = lang;
-        } else {
-          params['line_items[0][price_data][currency]'] = 'nok';
-          params['line_items[0][price_data][unit_amount]'] = String(plan.belop);
-          params['line_items[0][price_data][recurring][interval]'] = 'month';
-          params['line_items[0][price_data][product_data][name]'] = plan.produkt || plan.navn;
-        }
         if(PROVETID_DAGER > 0) params['subscription_data[trial_period_days]'] = String(PROVETID_DAGER);
         if(epost && epost.includes('@')) params['customer_email'] = epost;
         if(affKode){
@@ -1230,16 +1140,11 @@ export default {
           if(!epost || !plan) return json({ok:true, ignorert:'mangler e-post eller plan'});
           const belop = obj.amount_total || 0;
           const affKode = saniterKode(obj.metadata?.affiliate_code);
-          // Opprett eller oppdater brukeren og gi riktig tilgang.
-          // Kjøper noen utfordringen (ikke en Inner Circle-tier) mens de
-          // allerede har et ekte medlemskap, skal ikke det medlemskapet
-          // nedgraderes, users-tabellen har bare én tier-kolonne.
-          const finnes = await env.DB.prepare(`SELECT id, tier, referred_by FROM users WHERE email=?`).bind(epost).first();
+          // Opprett eller oppdater brukeren og gi riktig tilgang
+          const finnes = await env.DB.prepare(`SELECT id, referred_by FROM users WHERE email=?`).bind(epost).first();
           if(finnes){
-            const harInnerCircle = finnes.tier === 'regular' || finnes.tier === 'pro' || finnes.tier === 'vip';
-            const nesteTier = (tier === 'utfordring' && harInnerCircle) ? finnes.tier : tier;
             await env.DB.prepare(`UPDATE users SET tier=?, stripe_customer_id=?, stripe_subscription_id=?, referred_by=COALESCE(referred_by,?) WHERE id=?`)
-              .bind(nesteTier, obj.customer||null, obj.subscription||null, affKode||null, finnes.id).run();
+              .bind(tier, obj.customer||null, obj.subscription||null, affKode||null, finnes.id).run();
           } else {
             await env.DB.prepare(`INSERT INTO users (email, display_name, tier, stripe_customer_id, stripe_subscription_id, referred_by) VALUES (?,?,?,?,?,?)`)
               .bind(epost, epost.split('@')[0], tier, obj.customer||null, obj.subscription||null, affKode||null).run();
@@ -1250,8 +1155,7 @@ export default {
           // Provisjon med en gang hvis det ble betalt penger nå (uten prøvetid)
           if(belop > 0 && affKode) await trackAffiliateSale(env, affKode, epost, tier, belop);
           await giStudioTilgang(env, epost, tier);
-          if(tier === 'utfordring') await sendUtfordringVelkomst(env, epost, epost.split('@')[0], obj.metadata?.lang);
-          else await sendVelkomstEpost(env, epost, epost.split('@')[0], tier);
+          await sendVelkomstEpost(env, epost, epost.split('@')[0], tier);
           return json({ok:true});
         }
 
