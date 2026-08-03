@@ -32,6 +32,22 @@
   Cache-Control: no-store
 /apper.html
   Cache-Control: no-store
+# 10 000-visninger-utfordringen og fellesskapet endres ofte akkurat naa,
+# saa Renate maa alltid faa den ferskeste versjonen naar hun tester knapper.
+/utfordringen
+  Cache-Control: no-store
+/utfordringen.html
+  Cache-Control: no-store
+/funnel/utfordringen/index.html
+  Cache-Control: no-store
+/utfordringen-fellesskap
+  Cache-Control: no-store
+/funnel/utfordringen/fellesskap.html
+  Cache-Control: no-store
+/utfordringen-takk
+  Cache-Control: no-store
+/funnel/utfordringen/takk.html
+  Cache-Control: no-store
 /hook-generator
   Cache-Control: no-store
 /hook-generator.html
