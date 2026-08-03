@@ -40,14 +40,17 @@ Ferdige kopier til nedlasting i butikken ligger i
 
 ## Videre kolleksjon
 
-Samme uttrykk, garnvalg og fargepalett er tenkt videreført i:
+Samme uttrykk, garnvalg og fargepalett er videreført i fem egne oppskrifter,
+alle bygget og lagt i butikken (se `../ellies-smokkelenke/`,
+`../ellies-rangle/`, `../ellies-vognlenke/`, `../ellies-ballerinasko/` og
+`../ellies-aktivitetsleke/`):
 
 - Ellies smokkelenke
-- Ellies aktivitetsleke, med speil, blader og ulike teksturer
 - Ellies rangle
 - Ellies vognlenke
 - Ellies ballerinasko med sløyfe
+- Ellies aktivitetsleke, med speil, blader og ulike teksturer
 
-Disse er ikke bygget ennå (kun navngitt i "Videre kolleksjon" i oppskriften og
-i produktsiden), og bør lages som egne `build_*.py`-skript i samme stil den
-dagen de skal produseres.
+Kjøpsknappene på produktsidene deres viser fortsatt "Kommer snart" til en
+ekte Stripe-betalingslenke er satt opp for hver av dem (se README i hver
+mappe og `butikk/butikk-config.js`).

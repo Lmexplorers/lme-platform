@@ -136,6 +136,76 @@ window.LME_BUTIKK = {
       ]
     },
 
+    "ellies-smokkelenke": {
+      navn:  { no: "Ellies smokkelenke - amigurumi", en: "Ellie's Pacifier Clip - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · maks 22 cm (EN 12586)",
+                     en: "LME Baby Collection · Woodland Dreams · max 22 cm (EN 12586)" },
+      cover:   "/images/oppskrift-ellies-smokkelenke.jpg",
+      coverEn: "/images/oppskrift-ellies-smokkelenke.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/ellies-smokkelenke.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/ellies-smokkelenke-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "ellies-rangle": {
+      navn:  { no: "Ellies rangle - amigurumi", en: "Ellie's Rattle - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 13-15 cm · trering",
+                     en: "LME Baby Collection · Woodland Dreams · approx. 13-15 cm · wooden ring" },
+      cover:   "/images/oppskrift-ellies-rangle.jpg",
+      coverEn: "/images/oppskrift-ellies-rangle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/ellies-rangle.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/ellies-rangle-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "ellies-vognlenke": {
+      navn:  { no: "Ellies vognlenke - amigurumi", en: "Ellie's Stroller Toy - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · sju motiver · maks 35-40 cm",
+                     en: "LME Baby Collection · Woodland Dreams · seven motifs · max 35-40 cm" },
+      cover:   "/images/oppskrift-ellies-vognlenke.jpg",
+      coverEn: "/images/oppskrift-ellies-vognlenke.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/ellies-vognlenke.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/ellies-vognlenke-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "ellies-ballerinasko": {
+      navn:  { no: "Ellies ballerinasko - amigurumi", en: "Ellie's Ballerina Shoes - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · fem størrelser · matchende hårsløyfe",
+                     en: "LME Baby Collection · Woodland Dreams · five sizes · matching hair bow" },
+      cover:   "/images/oppskrift-ellies-ballerinasko.jpg",
+      coverEn: "/images/oppskrift-ellies-ballerinasko.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/ellies-ballerinasko.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/ellies-ballerinasko-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "ellies-aktivitetsleke": {
+      navn:  { no: "Ellies aktivitetsleke - amigurumi", en: "Ellie's Activity Toy - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · babysikkert speil · ca. 16-18 cm",
+                     en: "LME Baby Collection · Woodland Dreams · baby-safe mirror · approx. 16-18 cm" },
+      cover:   "/images/oppskrift-ellies-aktivitetsleke.jpg",
+      coverEn: "/images/oppskrift-ellies-aktivitetsleke.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/ellies-aktivitetsleke.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/ellies-aktivitetsleke-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
     "norway-strikk": {
       navn:  { no: "NORWAY-bøttehatt, strikkeoppskrift", en: "NORWAY bucket hat, knitting pattern" },
       undertittel: { no: "Rød hatt · NORWAY foran · RO og bølger bak · én størrelse (pinnen graderer)",
