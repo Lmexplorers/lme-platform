@@ -114,6 +114,8 @@ async function genOpenAI(env, prompt, size, qualityOverride) {
   // DALL-E 3: quality er "standard" eller "hd". "low" = standard, "high" = hd.
   const quality = (qualityOverride || env.IMAGE_QUALITY || "standard").replace(/^low$/, "standard").replace(/^(high|medium)$/, "hd");
   let r;
+  const payload = { model, prompt: prompt.slice(0, 100), size, n: 1, quality };
+  console.log('[openai] Calling with:', JSON.stringify(payload));
   try {
     r = await fetchTimeout(`${base}/images/generations`, {
       method: "POST",
@@ -123,7 +125,11 @@ async function genOpenAI(env, prompt, size, qualityOverride) {
   } catch (e) {
     return { error: "Bildemotoren brukte for lang tid. Prøv igjen, eller sett IMAGE_QUALITY=low i Cloudflare.", status: 504 };
   }
-  if (!r.ok) return { error: `OpenAI svarte ${r.status}.`, detail: (await r.text()).slice(0, 300) };
+  if (!r.ok) {
+    let errDetail = await r.text();
+    try { const e = JSON.parse(errDetail); errDetail = e.error?.message || errDetail; } catch(_) {}
+    return { error: `OpenAI svarte ${r.status}.`, detail: errDetail.slice(0, 300) };
+  }
   const data = await r.json();
   const item = data && data.data && data.data[0];
   if (item && item.b64_json) return { bytes: b64ToBytes(item.b64_json) };
