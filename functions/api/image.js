@@ -57,11 +57,12 @@ function json(data, status) {
 }
 
 function sizeFor(platform) {
-  // gpt-image-1 støtter 1024x1024, 1024x1536 (portrett), 1536x1024 (landskap).
+  // DALL-E 3 støtter: 1024x1024, 1792x1024 (landskap), 1024x1792 (portrett)
+  // DALL-E 2 / andre støtter: 1024x1024, 1024x1536 (portrett), 1536x1024 (landskap)
   switch (String(platform || "").toLowerCase()) {
-    case "pinterest": return "1024x1536";
-    case "tiktok": return "1024x1536";
-    case "film": case "youtube": case "landscape": return "1536x1024"; // kinolerret 16:9
+    case "pinterest": return "1024x1792"; // portrett
+    case "tiktok": return "1024x1792";   // portrett
+    case "film": case "youtube": case "landscape": return "1792x1024"; // landskap
     default: return "1024x1024"; // instagram, facebook, generelt
   }
 }
@@ -109,10 +110,9 @@ async function genOpenAI(env, prompt, size, qualityOverride) {
   const key = env.OPENAI_API_KEY || env.IMAGE_OPENAI_KEY || env.IMAGE_API_KEY;
   if (!key) return { error: "OpenAI er ikke koblet til ennå (OPENAI_API_KEY mangler).", status: 400 };
   const base = (env.IMAGE_OPENAI_BASE || env.IMAGE_API_BASE || "https://api.openai.com/v1").replace(/\/$/, "");
-  const model = env.IMAGE_OPENAI_MODEL || env.IMAGE_MODEL || "gpt-image-1";
-  // Lav kvalitet er raskt (bakgrunn som uansett animeres til video). Kalleren kan
-  // be om høyere kvalitet (film) via qualityOverride, innenfor tidsgrensa.
-  const quality = qualityOverride || env.IMAGE_QUALITY || "low";
+  const model = env.IMAGE_OPENAI_MODEL || env.IMAGE_MODEL || "dall-e-3";
+  // DALL-E 3 støtter bare "vivid" eller "natural" kvalitet. "low" betyr "natural".
+  const quality = (qualityOverride || env.IMAGE_QUALITY || "natural").replace(/^low$/, "natural").replace(/^(high|medium)$/, "vivid");
   let r;
   try {
     r = await fetchTimeout(`${base}/images/generations`, {
