@@ -3,3 +3,11 @@
 
 # Node-avhengigheter (kun for lokale verktoey, ikke i repoet)
 node_modules/
+
+# Python bytekode-cache
+__pycache__/
+*.pyc
+
+# Mellomsteg-HTML fra hekleoppskrift-byggeskriptene (kun PDF-ene committes)
+biblioteket/hekle/*/*_no.html
+biblioteket/hekle/*/*_en.html
