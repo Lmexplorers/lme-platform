@@ -78,4 +78,18 @@ export const PATTERN_LINKS = {
   "plink_1TxrqZLax7B8uQzqkad1ruv4": { p: "norge-pakke", lang: "en" },
   "plink_1TxrqcLax7B8uQzqvG5N7UZ1": { p: "hekle-pakke", lang: "en" },
   "plink_1TxrqdLax7B8uQzqw2Dy9miq": { p: "strikk-pakke", lang: "en" },
+
+  // LME Baby Collection "Woodland Dreams" (opprettet i Stripe 2026-08-03)
+  "plink_1U0QWGLax7B8uQzqKqTWERfj": { p: "ellie-hekle", lang: "no" },
+  "plink_1U0QWPLax7B8uQzqPGwVxiQn": { p: "ellie-hekle", lang: "en" },
+  "plink_1U0QWXLax7B8uQzqt26aJyuL": { p: "ellies-smokkelenke", lang: "no" },
+  "plink_1U0QWfLax7B8uQzqSvYDEa8n": { p: "ellies-smokkelenke", lang: "en" },
+  "plink_1U0QWlLax7B8uQzq7aQ8a59i": { p: "ellies-rangle", lang: "no" },
+  "plink_1U0QWtLax7B8uQzq2V47xxLO": { p: "ellies-rangle", lang: "en" },
+  "plink_1U0QX4Lax7B8uQzqoHgUDj8k": { p: "ellies-vognlenke", lang: "no" },
+  "plink_1U0QXBLax7B8uQzqJbEsFM2I": { p: "ellies-vognlenke", lang: "en" },
+  "plink_1U0QXJLax7B8uQzqmNxRPXXf": { p: "ellies-ballerinasko", lang: "no" },
+  "plink_1U0QXQLax7B8uQzqCRWIgWQD": { p: "ellies-ballerinasko", lang: "en" },
+  "plink_1U0QXXLax7B8uQzqvDyZWBzf": { p: "ellies-aktivitetsleke", lang: "no" },
+  "plink_1U0QXdLax7B8uQzql5uH0TcP": { p: "ellies-aktivitetsleke", lang: "en" },
 };

@@ -96,6 +96,20 @@ const PRODUCT = {
       f("norge-blokk-en.pdf", "", "NORGE, block letters"),
       f("norge-innstrikket-en.pdf", "", "NORGE, knitted in"),
       f("norge-skaut-en.pdf", "", "Norway kerchief, knit") ] } },
+
+  /* LME Baby Collection "Woodland Dreams" */
+  "ellie-hekle": { no: "Ellie, det lille dådyret", en: "Ellie, the little fawn",
+    files: { no: [f("ellie-hekle.pdf", "Ellie, det lille dådyret", "")], en: [f("ellie-hekle-en.pdf", "", "Ellie, the little fawn")] } },
+  "ellies-smokkelenke": { no: "Ellies smokkelenke", en: "Ellie's pacifier clip",
+    files: { no: [f("ellies-smokkelenke.pdf", "Ellies smokkelenke", "")], en: [f("ellies-smokkelenke-en.pdf", "", "Ellie's pacifier clip")] } },
+  "ellies-rangle": { no: "Ellies rangle", en: "Ellie's rattle",
+    files: { no: [f("ellies-rangle.pdf", "Ellies rangle", "")], en: [f("ellies-rangle-en.pdf", "", "Ellie's rattle")] } },
+  "ellies-vognlenke": { no: "Ellies vognlenke", en: "Ellie's stroller toy",
+    files: { no: [f("ellies-vognlenke.pdf", "Ellies vognlenke", "")], en: [f("ellies-vognlenke-en.pdf", "", "Ellie's stroller toy")] } },
+  "ellies-ballerinasko": { no: "Ellies ballerinasko", en: "Ellie's ballerina shoes",
+    files: { no: [f("ellies-ballerinasko.pdf", "Ellies ballerinasko", "")], en: [f("ellies-ballerinasko-en.pdf", "", "Ellie's ballerina shoes")] } },
+  "ellies-aktivitetsleke": { no: "Ellies aktivitetsleke", en: "Ellie's activity toy",
+    files: { no: [f("ellies-aktivitetsleke.pdf", "Ellies aktivitetsleke", "")], en: [f("ellies-aktivitetsleke-en.pdf", "", "Ellie's activity toy")] } },
 };
 
 /* Bygger nedlastings-HTML: kun kjøperens eget språk. Engelsk kjøper får den
