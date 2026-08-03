@@ -19,7 +19,7 @@
  * ellers standardpassordet under.
  */
 
-const DEFAULT_PASSWORD = "LilleOppdager2026";
+const DEFAULT_PASSWORD = "LME26";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {

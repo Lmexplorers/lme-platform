@@ -19,7 +19,7 @@
  * serveres fra dette API-et, saa bildelenken i innlegget er kort.
  */
 
-const DEFAULT_PASSWORD = "LilleOppdager2026";
+const DEFAULT_PASSWORD = "LME26";
 const INDEX_KEY = "lme-blog:index";
 const POST_PREFIX = "lme-blog:post:";
 const IMG_PREFIX = "lme-blog:img:";

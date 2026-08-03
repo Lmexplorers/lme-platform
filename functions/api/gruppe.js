@@ -40,7 +40,7 @@
  *   }
  */
 
-const DEFAULT_PASSWORD = "LilleOppdager2026";
+const DEFAULT_PASSWORD = "LME26";
 const KEY_PREFIX = "lme-builder:gruppe:";
 const INDEX_KEY = "lme-builder:gruppe-index";
 const MAX_SIZE = 4 * 1024 * 1024; // omslag + galleribilder trenger plass

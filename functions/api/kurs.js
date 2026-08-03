@@ -29,7 +29,7 @@
  *   }
  */
 
-const DEFAULT_PASSWORD = "LilleOppdager2026";
+const DEFAULT_PASSWORD = "LME26";
 const KEY_PREFIX = "lme-builder:kurs:";
 const INDEX_KEY = "lme-builder:kurs-index";
 const MAX_SIZE = 4 * 1024 * 1024; // kurs med leksjonsbilder trenger plass

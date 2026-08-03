@@ -36,7 +36,7 @@
  *   }
  */
 
-const DEFAULT_PASSWORD = "LilleOppdager2026";
+const DEFAULT_PASSWORD = "LME26";
 const KEY_PREFIX = "lme-builder:episode:";
 const INDEX_KEY = "lme-builder:episode-index";
 const MAX_SIZE = 4 * 1024 * 1024; // plakat trenger plass
