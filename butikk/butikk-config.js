@@ -194,8 +194,8 @@ window.LME_BUTIKK = {
 
     "ellies-aktivitetsleke": {
       navn:  { no: "Ellies aktivitetsleke - amigurumi", en: "Ellie's Activity Toy - amigurumi" },
-      undertittel: { no: "LME Baby Collection · Woodland Dreams · babysikkert speil · ca. 16-18 cm",
-                     en: "LME Baby Collection · Woodland Dreams · baby-safe mirror · approx. 16-18 cm" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · babysikkert speil · ca. 11-12 cm",
+                     en: "LME Baby Collection · Woodland Dreams · baby-safe mirror · approx. 11-12 cm" },
       cover:   "/images/oppskrift-ellies-aktivitetsleke.jpg",
       coverEn: "/images/oppskrift-ellies-aktivitetsleke.jpg",
       filer: [
