@@ -599,11 +599,31 @@ async function runPinterest(){
     html+=`</div></div>`;
     html+=`<div class="card-out"><h4>Pin-idéer</h4><p style="white-space:pre-wrap;">${(d.pinIdeas||[]).map(x=>'• '+x).join('\n')}</p></div>`;
     html+=`<div style="display:flex;gap:8px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--line);">`;
+    html+=`<button class="btn secondary" onclick="genPinterestImage()" style="flex:1;">🎨 ${LANG==='en'?'Generate Pin':'Generer Pin'}</button>`;
     html+=`<button class="btn secondary" onclick="openCanvaPin()" style="background:#6366F1;flex:1;">📐 Canva</button>`;
     html+=`<button class="btn secondary" onclick="sharePinterestDirect()" style="background:#E60B69;flex:1;">📌 Del</button>`;
     html+=`</div>`;
     document.getElementById('p-out').innerHTML=html;
   }catch(e){fail('p-out',e);}finally{busy('p-btn',false);}
+}
+
+async function genPinterestImage(){
+  if(!lastPinterestData){alert('Generer først');return;}
+  const btn=event.target;btn.disabled=true;const orig=btn.textContent;btn.textContent='⏳ Genererer...';
+  try{
+    const r=await fetch('/api/image',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:lastPinterestData.imagePrompt||'',platform:'pinterest',character:'none'})
+    });
+    const d=await r.json();
+    if(d.error)throw new Error(d.error);
+    lastPinterestData.imageUrl=d.url;
+    btn.textContent='✓ Pin generert';
+    setTimeout(()=>{btn.textContent=orig;btn.disabled=false;},2000);
+  }catch(e){
+    alert(`Bildegenerering feilet: ${e.message}`);btn.textContent=orig;btn.disabled=false;
+  }
 }
 
 function openCanvaPin(){
