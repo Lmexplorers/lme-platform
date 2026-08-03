@@ -17,11 +17,13 @@
  *   POST { action:"like", email, postId }
  */
 
+import { isOwner } from "../_lib/access.js";
+
 const INDEX_KEY = "utf_wall_index";
 const MAX_POSTS = 300;
 const MAX_POST_LEN = 2000;
 const MAX_COMMENT_LEN = 500;
-const CATEGORIES = ["velkommen", "utfordring", "seier", "hjelp", "annet"];
+const CATEGORIES = ["velkommen", "utfordring", "seier", "sporsmal", "ressurser", "prat", "tilbakemelding", "annet"];
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -132,7 +134,8 @@ export async function onRequestGet(context) {
       posts.push({
         id: p.id, name: p.name, text: p.text, category: p.category || "annet", createdAt: p.createdAt,
         likeCount: (p.likedBy || []).length,
-        comments: (p.comments || []).map((c) => ({ name: c.name, text: c.text, createdAt: c.createdAt })),
+        isAdmin: isOwner({ email: p.email }),
+        comments: (p.comments || []).map((c) => ({ name: c.name, text: c.text, createdAt: c.createdAt, isAdmin: isOwner({ email: c.email }) })),
       });
     } catch (e) {}
   }
