@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>10 000-visninger-utfordringen · LME</title>
-<meta name="description" content="Bli med i min gratis 30-dagers utfordring. Fem minutter om dagen, med AI som gjør grovarbeidet, og LME Autopilot som verktøyet ditt.">
+<meta name="description" content="Bli med i min 30-dagers utfordring. Fem minutter om dagen, med AI som gjør grovarbeidet, og LME Autopilot som verktøyet ditt.">
 <link rel="icon" href="/images/lme-logo.png">
 <meta property="og:title" content="10 000-visninger-utfordringen · LME">
-<meta property="og:description" content="Bli med i min gratis 30-dagers utfordring. Fem minutter om dagen, med AI som gjør grovarbeidet.">
+<meta property="og:description" content="Bli med i min 30-dagers utfordring. Fem minutter om dagen, med AI som gjør grovarbeidet.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://lmexplorers.com/utfordringen">
 <meta property="og:image" content="https://lmexplorers.com/images/lme-logo.png">
@@ -175,6 +175,13 @@
 
   .footer { text-align: center; margin-top: 46px; font-size: 13px; color: var(--ink-muted); }
 
+  .price-row { display: flex; align-items: baseline; justify-content: center; gap: 8px; margin-bottom: 6px; }
+  .price-now { font-size: 44px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; color: var(--pink-700); }
+  .price-cur { font-size: 18px; font-weight: 700; color: var(--ink-soft); }
+  .form-error { display: none; color: var(--pink-600); font-size: 13.5px; margin-top: 4px; }
+  .form-error.show { display: block; }
+  .btn-cta[disabled] { opacity: 0.7; cursor: default; transform: none; }
+
   @media (max-width: 520px) {
     .wrap { padding: 20px 16px 56px; }
     .card { padding: 24px 20px; }
@@ -192,13 +199,13 @@
     <span class="brandname">Little Montessori Explorers</span>
   </a>
 
-  <span class="kicker" data-no="Gratis utfordring, 30 dager" data-en="Free challenge, 30 days" data-edit="ch-kicker">Gratis utfordring, 30 dager</span>
+  <span class="kicker" data-no="Utfordring, 30 dager" data-en="Challenge, 30 days" data-edit="ch-kicker">Utfordring, 30 dager</span>
 
   <div class="hero">
     <h1 data-no="Jeg vil ha deg med i 10 000-visninger-utfordringen" data-en="I want you in the 10,000 Views Challenge" data-edit="ch-h1">Jeg vil ha deg med i 10 000-visninger-utfordringen</h1>
     <p class="sub" data-no="Fem minutter om dagen i 30 dager. Jeg viser deg hvordan du finner nisjen din, planlegger innhold med AI og lager noe som faktisk blir sett, med LME Autopilot som verktøyet ditt." data-en="Five minutes a day for 30 days. I'll show you how to find your niche, plan content with AI and create something that actually gets seen, with LME Autopilot as your tool." data-edit="ch-sub">Fem minutter om dagen i 30 dager. Jeg viser deg hvordan du finner nisjen din, planlegger innhold med AI og lager noe som faktisk blir sett, med LME Autopilot som verktøyet ditt.</p>
-    <a href="#meld-pa" class="btn-cta" data-no="Bli med, det er gratis →" data-en="Join in, it's free →" data-edit="ch-cta1">Bli med, det er gratis →</a>
-    <p class="trust" data-no="Ingen kredittkort. Bare meld deg på, så sender jeg deg utfordringen." data-en="No credit card. Just sign up, and I'll send you the challenge." data-edit="ch-trust">Ingen kredittkort. Bare meld deg på, så sender jeg deg utfordringen.</p>
+    <a href="#meld-pa" class="btn-cta" data-no="Bli med for 299 kr/mnd →" data-en="Join for 299 NOK/mo →" data-edit="ch-cta1">Bli med for 299 kr/mnd →</a>
+    <p class="trust" data-no="299 kr per måned. Avslutt når som helst." data-en="299 NOK per month. Cancel anytime." data-edit="ch-trust">299 kr per måned. Avslutt når som helst.</p>
   </div>
 
   <!-- Slik fungerer det -->
@@ -224,30 +231,28 @@
     </ul>
   </div>
 
-  <!-- Meld deg paa -->
+  <!-- Kjop -->
   <div class="card form-card" id="meld-pa">
-    <h2 data-no="Meld deg på utfordringen" data-en="Sign up for the challenge" data-edit="ch-form-title">Meld deg på utfordringen</h2>
-    <p class="lede" data-no="Fyll ut e-posten din under, så sender jeg utfordringen rett i innboksen din." data-en="Fill in your email below, and I'll send the challenge straight to your inbox." data-edit="ch-form-lede">Fyll ut e-posten din under, så sender jeg utfordringen rett i innboksen din.</p>
+    <h2 data-no="Bli med i utfordringen" data-en="Join the challenge" data-edit="ch-form-title">Bli med i utfordringen</h2>
+    <div class="price-row">
+      <span class="price-now">299 kr</span>
+      <span class="price-cur" data-no="/ måned" data-en="/ month" data-edit="ch-price-cur">/ måned</span>
+    </div>
+    <p class="lede" data-no="Skriv inn e-posten din, så tar jeg deg videre til betaling. Rett etterpå får du dag 1 i innboksen din." data-en="Enter your email, and I'll take you to payment. Right after, day one lands in your inbox." data-edit="ch-form-lede">Skriv inn e-posten din, så tar jeg deg videre til betaling. Rett etterpå får du dag 1 i innboksen din.</p>
 
     <form id="chForm" novalidate>
-      <div class="field"><input id="chName" type="text" autocomplete="given-name"></div>
-      <div class="field"><input id="chEmail" type="email" autocomplete="email" required></div>
-      <button type="submit" class="btn-cta" data-no="Bli med, det er gratis →" data-en="Join in, it's free →" data-edit="ch-cta2">Bli med, det er gratis →</button>
-      <p class="form-safe" data-no="Ingen kredittkort. Du kan melde deg av når som helst." data-en="No credit card. You can unsubscribe anytime." data-edit="ch-form-safe">Ingen kredittkort. Du kan melde deg av når som helst.</p>
+      <div class="field"><input id="chEmail" type="email" autocomplete="email" required placeholder="din@epost.no"></div>
+      <button type="submit" class="btn-cta" id="chBtn" data-no="Bli med for 299 kr/mnd →" data-en="Join for 299 NOK/mo →" data-edit="ch-cta2">Bli med for 299 kr/mnd →</button>
+      <p class="form-safe" data-no="299 kr per måned. Avslutt når som helst." data-en="299 NOK per month. Cancel anytime." data-edit="ch-form-safe">299 kr per måned. Avslutt når som helst.</p>
+      <p class="form-error" id="chError" data-no="Noe gikk galt. Prøv igjen om litt." data-en="Something went wrong. Please try again shortly.">Noe gikk galt. Prøv igjen om litt.</p>
     </form>
-
-    <div class="form-done" id="chDone">
-      <div class="big">🎉</div>
-      <h3 data-no="Du er med!" data-en="You're in!" data-edit="ch-done-title">Du er med!</h3>
-      <p data-no="Sjekk innboksen din, dag én i utfordringen kommer snart." data-en="Check your inbox, day one of the challenge is on its way." data-edit="ch-done-text">Sjekk innboksen din, dag én i utfordringen kommer snart.</p>
-    </div>
   </div>
 
   <!-- Inner Circle-kryssalg -->
   <div class="band">
-    <h2 data-no="Vil du ha alt på ett sted?" data-en="Want it all in one place?" data-edit="ch-ic-title">Vil du ha alt på ett sted?</h2>
-    <p data-no="Utfordringen er gratis for alle. I Inner Circle får du i tillegg hele LME Studio, kursene mine og fellesskapet, samlet på ett sted." data-en="The challenge is free for everyone. In Inner Circle you also get all of LME Studio, my courses and the community, all in one place." data-edit="ch-ic-text">Utfordringen er gratis for alle. I Inner Circle får du i tillegg hele LME Studio, kursene mine og fellesskapet, samlet på ett sted.</p>
-    <a href="/medlemskap" data-lme-join class="btn-ic" data-no="Bli med i Inner Circle →" data-en="Join Inner Circle →" data-edit="ch-ic-cta">Bli med i Inner Circle →</a>
+    <h2 data-no="Vil du ha enda mer?" data-en="Want even more?" data-edit="ch-ic-title">Vil du ha enda mer?</h2>
+    <p data-no="I tillegg til utfordringen har jeg Inner Circle, med hele LME Studio, kursene mine og fellesskapet, samlet på ett sted." data-en="Alongside the challenge, I also have Inner Circle, with all of LME Studio, my courses and the community, all in one place." data-edit="ch-ic-text">I tillegg til utfordringen har jeg Inner Circle, med hele LME Studio, kursene mine og fellesskapet, samlet på ett sted.</p>
+    <a href="/medlemskap" data-lme-join class="btn-ic" data-no="Se Inner Circle →" data-en="See Inner Circle →" data-edit="ch-ic-cta">Se Inner Circle →</a>
   </div>
 
   <div class="footer">© <span id="yr"></span> Little Montessori Explorers · <span data-no="Laget av Renate Dahl" data-en="Made by Renate Dahl">Laget av Renate Dahl</span></div>
@@ -277,28 +282,39 @@
     if (localStorage.getItem('lme_lang') === 'en') switchLanguage('en');
   } catch (e) {}
 
-  // Meld-pa-skjema: sender leaden til MailerLite via samme proxy som resten
-  // av plattformen bruker (funnel/rolige-morgener m.fl.).
-  // Legg gjerne til en gruppe-ID for denne utfordringen her naar den finnes
-  // i MailerLite, saa havner leads i riktig liste/automasjon:
-  const CHALLENGE_GROUP_ID = '';
+  // Kjop: oppretter en Stripe-okt hos lme-inner-circle-workeren (samme
+  // betalingsflyt som /medlemskap bruker, egen plan "utfordring") og sender
+  // kunden videre til Stripes betalingsside. Selve tilgangen/e-postserien
+  // starter fra webhooken naar betalingen er bekreftet, ikke herfra.
+  const CHECKOUT_URL = 'https://lme-inner-circle.lmexplorers.workers.dev/checkout/create';
 
   document.getElementById('chForm').addEventListener('submit', function (e) {
     e.preventDefault();
     const email = document.getElementById('chEmail').value.trim();
-    const name = document.getElementById('chName').value.trim();
     if (!email) { document.getElementById('chEmail').focus(); return; }
 
-    try {
-      fetch('/api/mailerlite/subscribe', {
-        method: 'POST', mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ email, name, lang: currentLang, group: CHALLENGE_GROUP_ID })
-      });
-    } catch (err) {}
+    const btn = document.getElementById('chBtn');
+    const err = document.getElementById('chError');
+    err.classList.remove('show');
+    btn.disabled = true;
+    const before = btn.textContent;
+    btn.textContent = currentLang === 'en' ? 'One moment …' : 'Et øyeblikk …';
 
-    this.style.display = 'none';
-    document.getElementById('chDone').classList.add('show');
+    fetch(CHECKOUT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ plan: 'utfordring', email: email }),
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (data && data.url) { window.location.href = data.url; return; }
+        throw new Error(data && data.error || 'no_url');
+      })
+      .catch(() => {
+        btn.disabled = false;
+        btn.textContent = before;
+        err.classList.add('show');
+      });
   });
 </script>
 

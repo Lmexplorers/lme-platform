@@ -12,6 +12,30 @@ prøvetid, partnerprogram (affiliate) og admin-dashbord.
 
 Prisene endres øverst i `worker.js` (PLANS, beløp i øre).
 
+## 10 000-visninger-utfordringen (eget abonnement, ikke Inner Circle)
+
+Fra 3. august 2026 selger Workeren også et eget abonnement,
+"10 000-visninger-utfordringen", 299 kr/mnd. Det er en helt egen plan
+(`PLANS.utfordring`), ikke en Inner Circle-tier: kjøperen får ingen
+hub-tilgang, bare den 30-dagers e-postserien i MailerLite.
+
+- Salgssiden ligger på `lmexplorers.com/utfordringen`
+  (`funnel/utfordringen/index.html` i hovedrepoet, ikke i denne Workeren),
+  og kaller `POST /checkout/create` med `{plan:"utfordring", email}` her på
+  Workeren, akkurat som `/medlemskap` gjør for Inner Circle.
+- Etter betaling vises en egen takkeside (`TAKKSIDE_UTFORDRING`, ikke
+  "Velkommen til Inner Circle"), og kjøperen meldes inn i MailerLite-gruppen
+  "10 000-visninger-utfordringen, kjøpere" (id `194770523227423951`), som
+  trigger automasjonen "10 000-visninger-utfordringen: velkomstserie"
+  (dashboard.mailerlite.com/automations/194770576975333286).
+- Automasjonen har 7 ferdig tekstede e-poster (dag 0, 1, 3, 7, 14, 21, 30),
+  men MailerlLites API kan ikke sette selve e-post-designet, så hver e-post
+  må åpnes i det visuelle redigeringsverktøyet og bekreftes/lagres der før
+  automasjonen aktiveres. Den er inaktiv til det er gjort.
+- Ingen nye hemmeligheter trengs, den gjenbruker `STRIPE_SECRET_KEY` og
+  `MAILERLITE_API_KEY`. Valgfritt: sett env-variabelen
+  `MAILERLITE_UTFORDRING_GROUP` hvis gruppe-ID-en over noen gang endres.
+
 ## Slik tar du det i bruk (én gang)
 
 ### 1. Deploy Workeren
