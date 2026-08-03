@@ -257,8 +257,10 @@
   } catch (e) {}
 
   // Eier ser aldri Stripe-knappen, bare en gratis "se utfordringen selv"-knapp.
-  fetch('/api/access').then(r => r.json()).then(data => {
-    if (!data || data.plan !== 'owner') return;
+  // To veier inn, uavhengig av om innlogging er aktiv akkurat da:
+  // 1) fast lenke med nokkelen: /utfordringen?eier=LME26 (bookmark denne)
+  // 2) gjenkjent eier-innlogging via /api/access
+  function showOwnerBox(ownerKey) {
     document.getElementById('buyNormal').style.display = 'none';
     document.getElementById('buyOwner').style.display = 'block';
     document.getElementById('ownerBtn').addEventListener('click', function () {
@@ -269,7 +271,7 @@
       fetch('/api/utfordring-preview', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lang: currentLang }),
+        body: JSON.stringify({ lang: currentLang, key: ownerKey || '' }),
       })
         .then(r => r.json())
         .then(res => {
@@ -283,7 +285,16 @@
         })
         .catch(() => { btn.disabled = false; btn.textContent = before; });
     });
-  }).catch(() => {});
+  }
+
+  const eierNokkel = new URLSearchParams(location.search).get('eier');
+  if (eierNokkel) {
+    showOwnerBox(eierNokkel);
+  } else {
+    fetch('/api/access').then(r => r.json()).then(data => {
+      if (data && data.plan === 'owner') showOwnerBox('');
+    }).catch(() => {});
+  }
 </script>
 
 <script src="/js/page-editor.js" defer></script>
