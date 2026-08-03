@@ -174,23 +174,38 @@ async function genHiggsfield(env, prompt, size) {
   return { error: "Higgsfield-koblingen fullføres når nøkkelen er testet. Bruk OpenAI eller Gemini i mellomtiden.", status: 501 };
 }
 
+function sleep(ms) { return new Promise((resolve) => setTimeout(resolve, ms)); }
+
 async function genPollinations(env, prompt, size) {
   // Pollinations.ai: gratis, ingen nøkkel, ingen kvote. Brukes som fallback
-  // når OpenAI/Gemini mangler nøkkel eller kreditter.
+  // når OpenAI/Gemini mangler nøkkel eller kreditter. Den delte gratis-køen
+  // gir ofte 429 (for mange samtidige forespørsler), så prøv et par ganger
+  // med kort pause før vi gir opp.
   const [w, h] = String(size || "1024x1024").split("x").map((n) => parseInt(n, 10) || 1024);
-  const seed = Math.floor(Math.random() * 1e9);
-  const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt.slice(0, 500))}` +
-    `?width=${w}&height=${h}&nologo=true&safe=true&seed=${seed}&model=flux`;
-  let r;
-  try {
-    r = await fetchTimeout(url, {}, 55000);
-  } catch (e) {
-    return { error: "Pollinations brukte for lang tid. Prøv igjen.", status: 504 };
+  const attempts = [{ delay: 0, model: "flux" }, { delay: 2000, model: "turbo" }, { delay: 5000, model: "flux" }];
+  let last;
+  for (let i = 0; i < attempts.length; i++) {
+    if (attempts[i].delay) await sleep(attempts[i].delay);
+    const seed = Math.floor(Math.random() * 1e9);
+    const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt.slice(0, 500))}` +
+      `?width=${w}&height=${h}&nologo=true&safe=true&seed=${seed}&model=${attempts[i].model}`;
+    let r;
+    try {
+      r = await fetchTimeout(url, {}, 55000);
+    } catch (e) {
+      last = { error: "Pollinations brukte for lang tid.", status: 504 };
+      continue;
+    }
+    if (r.status === 429) {
+      last = { error: "Pollinations er overbelastet (429).", status: 429 };
+      continue;
+    }
+    if (!r.ok) return { error: `Pollinations svarte ${r.status}.`, status: r.status, detail: (await r.text()).slice(0, 300) };
+    const bytes = new Uint8Array(await r.arrayBuffer());
+    if (!bytes.length) { last = { error: "Pollinations ga ikke noe bilde tilbake." }; continue; }
+    return { bytes, contentType: r.headers.get("Content-Type") || "image/jpeg" };
   }
-  if (!r.ok) return { error: `Pollinations svarte ${r.status}.`, status: r.status, detail: (await r.text()).slice(0, 300) };
-  const bytes = new Uint8Array(await r.arrayBuffer());
-  if (!bytes.length) return { error: "Pollinations ga ikke noe bilde tilbake." };
-  return { bytes, contentType: r.headers.get("Content-Type") || "image/jpeg" };
+  return last || { error: "Pollinations svarte ikke." };
 }
 
 const PROVIDERS = { openai: genOpenAI, gemini: genGemini, higgsfield: genHiggsfield, pollinations: genPollinations };
