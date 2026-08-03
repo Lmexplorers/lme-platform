@@ -183,8 +183,9 @@ add('oversikt_deler', [
      'heart, star, circle and triangle'),
     ('5. Lomme-siden', 'miniatyr-Ellie titter opp av en lomme', '5. The pocket side',
      'a miniature Ellie peeking out of a pocket'),
-    ('6. Knitre-siden', 'en liten sky med knitrefolie inni', '6. The crinkle side',
-     'a little cloud with a crinkle sheet inside'),
+    ('6. Knitre-siden', 'en liten sky med knitrende stoff inni, som knitrer når man klemmer',
+     '6. The crinkle side', 'a little cloud with crinkling material inside, that crinkles when '
+     'squeezed'),
     ('7. Bunnen', 'enkel, uten pynt', '7. The bottom', 'plain, without decoration'),
     ('8. Sammensying og stiving', 'de seks sidene syde til en kube', '8. Assembly and stiffening',
      'the six sides sewn into a cube'),
@@ -370,10 +371,12 @@ add('lomme_montering',
 # ---------------------------------------------------------------- SIDE 12: KNITRE-SIDEN
 add('banner_flette', 'DEL 6: KNITRE-SIDEN', 'PART 6: THE CRINKLE SIDE')
 add('flette_lead',
-    'Denne siden gir en helt annen sans å utforske: lyd. En liten, myk sky med knitrefolie trygt '
-    'sydd inni.',
-    'This side offers a completely different sense to explore: sound. A little, soft cloud with '
-    'a crinkle sheet safely sewn inside.')
+    'Denne siden gir en helt annen sans å utforske: lyd. Inni den lille, myke skyen legger du et '
+    'knitrende stoff, en knitrefolie beregnet for babyprodukter, trygt sydd helt inne i skyen, '
+    'slik at det knitrer akkurat der barnet klemmer på den.',
+    'This side offers a completely different sense to explore: sound. Inside the little, soft '
+    'cloud you place a crinkling material, a crinkle sheet intended for baby products, safely '
+    'sewn completely inside the cloud, so that it crinkles right where the child squeezes it.')
 add('flette_hull',
     'Skyen, front og bak: hekle to like sett av tre overlappende sirkler i kremhvitt, samme '
     'metode som skyen på Ellies vognlenke: (a) 6 fm i magisk ring. (b) 6 fm i magisk ring, økn x '
@@ -386,15 +389,19 @@ add('flette_hull',
     'x 6 (18). Overlap and sew the three circles together into a cloud shape. Crochet two '
     'matching clouds in total, one for the front and one for the back of the pillow.')
 add('flette_snor',
-    'Legg et lite ark med knitrefolie beregnet for babyprodukter mellom de to skyene, og sy dem '
-    'sammen rundt hele kanten med tette sting, slik at folien er fullstendig innelukket og ikke '
-    'kan tas ut. Sy den ferdige, fylte skyen godt fast midt på panelet. LME anbefaler at '
-    'knitrefolien aldri ligger løst, kun sydd fast i en helt lukket lomme, akkurat som speilet.',
-    'Place a small sheet of crinkle material intended for baby products between the two clouds, '
-    'and sew them together around the entire edge with tight stitches, so the sheet is fully '
-    'enclosed and cannot be removed. Sew the finished, filled cloud securely onto the middle of '
-    'the panel. LME recommends that the crinkle sheet is never left loose, only sewn into a '
-    'fully closed pocket, just like the mirror.')
+    'Legg et lite ark med knitrende stoff, en knitrefolie beregnet for babyprodukter, mellom de '
+    'to skyene, og sy dem sammen rundt hele kanten med tette sting, slik at folien er '
+    'fullstendig innelukket og ikke kan tas ut. Dette er selve knitrelyden: når skyen klemmes '
+    'på, krøller knitrefolien seg inni og lager den sprø, knitrende lyden barnet skal oppdage. '
+    'Sy den ferdige, fylte skyen godt fast midt på panelet. LME anbefaler at knitrefolien aldri '
+    'ligger løst, kun sydd fast i en helt lukket lomme, akkurat som speilet.',
+    'Place a small sheet of crinkling material, a crinkle sheet intended for baby products, '
+    'between the two clouds, and sew them together around the entire edge with tight stitches, '
+    'so the sheet is fully enclosed and cannot be removed. This is what makes the crinkle sound: '
+    'when the cloud is squeezed, the crinkle sheet inside crumples and makes the crisp, '
+    'crinkling sound the child will discover. Sew the finished, filled cloud securely onto the '
+    'middle of the panel. LME recommends that the crinkle sheet is never left loose, only sewn '
+    'into a fully closed pocket, just like the mirror.')
 
 # ---------------------------------------------------------------- SIDE 13: SAMMENSYING
 add('banner_sammensying', 'DEL 7: SAMMENSYING TIL KUBE', 'PART 7: ASSEMBLING THE CUBE')

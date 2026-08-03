@@ -20,6 +20,11 @@ motivet fra `../ellies-vognlenke/`, og kule-motivet fra
 `../ellies-smokkelenke/`, slik at kolleksjonen henger sammen visuelt og
 barnet kjenner igjen formene på tvers av produktene.
 
+Presisert samme dag (3. august 2026): teksten på knitre-siden (side 6 i
+oversikten, DEL 6 i oppskriften) beskriver nå eksplisitt at det er et
+knitrende stoff (knitrefolie) sydd inni skyen som lager knitrelyden når
+barnet klemmer på den, ikke bare at skyen "knitrer".
+
 **Sikkerhet er spesielt viktig her**, siden dette er oppskriften med flest
 påsydde smådeler og flest ulike materialer (garn, tre, speil, knitrefolie)
 i hele kolleksjonen. Speilet og knitrefolien (kun babysikkert akryl/plast,
