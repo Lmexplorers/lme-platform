@@ -111,8 +111,8 @@ async function genOpenAI(env, prompt, size, qualityOverride) {
   if (!key) return { error: "OpenAI er ikke koblet til ennå (OPENAI_API_KEY mangler).", status: 400 };
   const base = (env.IMAGE_OPENAI_BASE || env.IMAGE_API_BASE || "https://api.openai.com/v1").replace(/\/$/, "");
   const model = env.IMAGE_OPENAI_MODEL || env.IMAGE_MODEL || "dall-e-3";
-  // DALL-E 3 støtter bare "vivid" eller "natural" kvalitet. "low" betyr "natural".
-  const quality = (qualityOverride || env.IMAGE_QUALITY || "natural").replace(/^low$/, "natural").replace(/^(high|medium)$/, "vivid");
+  // DALL-E 3: quality er "standard" eller "hd". "low" = standard, "high" = hd.
+  const quality = (qualityOverride || env.IMAGE_QUALITY || "standard").replace(/^low$/, "standard").replace(/^(high|medium)$/, "hd");
   let r;
   try {
     r = await fetchTimeout(`${base}/images/generations`, {
