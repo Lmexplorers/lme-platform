@@ -160,19 +160,6 @@
   .form-done h3 { font-size: 20px; font-weight: 800; margin-bottom: 8px; color: var(--pink-700); }
   .form-done p { color: var(--ink-soft); font-size: 15px; }
 
-  .band {
-    background: linear-gradient(135deg, var(--pink-100), var(--sun-soft));
-    border-radius: var(--r-xl); padding: 30px 32px; text-align: center; margin: 30px 0 10px;
-  }
-  .band h2 { font-size: 20px; margin-bottom: 8px; color: var(--pink-700); }
-  .band p { font-size: 15px; color: var(--ink-soft); max-width: 480px; margin: 0 auto 20px; }
-  .btn-ic {
-    display: inline-block; font-size: 15.5px; font-weight: 800;
-    padding: 14px 26px; border-radius: var(--r-pill);
-    background: linear-gradient(120deg, var(--sun), #F5B301);
-    color: #4a3a00; box-shadow: 0 10px 24px rgba(247, 199, 46, 0.35);
-  }
-
   .footer { text-align: center; margin-top: 46px; font-size: 13px; color: var(--ink-muted); }
 
   .price-row { display: flex; align-items: baseline; justify-content: center; gap: 8px; margin-bottom: 6px; }
@@ -185,7 +172,6 @@
   @media (max-width: 520px) {
     .wrap { padding: 20px 16px 56px; }
     .card { padding: 24px 20px; }
-    .band { padding: 26px 22px; }
   }
 </style>
 </head>
@@ -204,8 +190,8 @@
   <div class="hero">
     <h1 data-no="Jeg vil ha deg med i 10 000-visninger-utfordringen" data-en="I want you in the 10,000 Views Challenge" data-edit="ch-h1">Jeg vil ha deg med i 10 000-visninger-utfordringen</h1>
     <p class="sub" data-no="Fem minutter om dagen i 30 dager. Jeg viser deg hvordan du finner nisjen din, planlegger innhold med AI og lager noe som faktisk blir sett, med LME Autopilot som verktøyet ditt." data-en="Five minutes a day for 30 days. I'll show you how to find your niche, plan content with AI and create something that actually gets seen, with LME Autopilot as your tool." data-edit="ch-sub">Fem minutter om dagen i 30 dager. Jeg viser deg hvordan du finner nisjen din, planlegger innhold med AI og lager noe som faktisk blir sett, med LME Autopilot som verktøyet ditt.</p>
-    <a href="#meld-pa" class="btn-cta" data-no="Bli med for 299 kr/mnd →" data-en="Join for 299 NOK/mo →" data-edit="ch-cta1">Bli med for 299 kr/mnd →</a>
-    <p class="trust" data-no="299 kr per måned. Avslutt når som helst." data-en="299 NOK per month. Cancel anytime." data-edit="ch-trust">299 kr per måned. Avslutt når som helst.</p>
+    <a href="#meld-pa" class="btn-cta" data-no="Bli med for 299 kr/mnd →" data-en="Join for $33/mo →" data-edit="ch-cta1">Bli med for 299 kr/mnd →</a>
+    <p class="trust" data-no="299 kr per måned. Avslutt når som helst." data-en="$33 per month. Cancel anytime." data-edit="ch-trust">299 kr per måned. Avslutt når som helst.</p>
   </div>
 
   <!-- Slik fungerer det -->
@@ -226,8 +212,7 @@
     <ul class="bullets">
       <li><span class="tick">✓</span><span data-no="LME Autopilot, verktøyet som lager tospråklig innhold for deg på under ett minutt" data-en="LME Autopilot, the tool that creates bilingual content for you in under a minute">LME Autopilot, verktøyet som lager tospråklig innhold for deg på under ett minutt</span></li>
       <li><span class="tick">✓</span><span data-no="Maler og manus du kan bruke rett av" data-en="Templates and scripts ready to use">Maler og manus du kan bruke rett av</span></li>
-      <li><span class="tick">✓</span><span data-no="Hele LME Studio, skaper- og AI-delen av LME" data-en="All of LME Studio, the creator and AI side of LME">Hele LME Studio, skaper- og AI-delen av LME</span></li>
-      <li><span class="tick">✓</span><span data-no="Fellesskapet i LME Community, med støtte fra andre som gjør det samme" data-en="The LME Community, with support from others doing the same thing">Fellesskapet i LME Community, med støtte fra andre som gjør det samme</span></li>
+      <li><span class="tick">✓</span><span data-no="En ny oppgave rett i innboksen din, gjennom hele de 30 dagene" data-en="A new task straight to your inbox, throughout all 30 days">En ny oppgave rett i innboksen din, gjennom hele de 30 dagene</span></li>
     </ul>
   </div>
 
@@ -235,24 +220,17 @@
   <div class="card form-card" id="meld-pa">
     <h2 data-no="Bli med i utfordringen" data-en="Join the challenge" data-edit="ch-form-title">Bli med i utfordringen</h2>
     <div class="price-row">
-      <span class="price-now">299 kr</span>
+      <span class="price-now" data-no="299 kr" data-en="$33" data-edit="ch-price-now">299 kr</span>
       <span class="price-cur" data-no="/ måned" data-en="/ month" data-edit="ch-price-cur">/ måned</span>
     </div>
     <p class="lede" data-no="Skriv inn e-posten din, så tar jeg deg videre til betaling. Rett etterpå får du dag 1 i innboksen din." data-en="Enter your email, and I'll take you to payment. Right after, day one lands in your inbox." data-edit="ch-form-lede">Skriv inn e-posten din, så tar jeg deg videre til betaling. Rett etterpå får du dag 1 i innboksen din.</p>
 
     <form id="chForm" novalidate>
       <div class="field"><input id="chEmail" type="email" autocomplete="email" required placeholder="din@epost.no"></div>
-      <button type="submit" class="btn-cta" id="chBtn" data-no="Bli med for 299 kr/mnd →" data-en="Join for 299 NOK/mo →" data-edit="ch-cta2">Bli med for 299 kr/mnd →</button>
-      <p class="form-safe" data-no="299 kr per måned. Avslutt når som helst." data-en="299 NOK per month. Cancel anytime." data-edit="ch-form-safe">299 kr per måned. Avslutt når som helst.</p>
+      <button type="submit" class="btn-cta" id="chBtn" data-no="Bli med for 299 kr/mnd →" data-en="Join for $33/mo →" data-edit="ch-cta2">Bli med for 299 kr/mnd →</button>
+      <p class="form-safe" data-no="299 kr per måned. Avslutt når som helst." data-en="$33 per month. Cancel anytime." data-edit="ch-form-safe">299 kr per måned. Avslutt når som helst.</p>
       <p class="form-error" id="chError" data-no="Noe gikk galt. Prøv igjen om litt." data-en="Something went wrong. Please try again shortly.">Noe gikk galt. Prøv igjen om litt.</p>
     </form>
-  </div>
-
-  <!-- Inner Circle-kryssalg -->
-  <div class="band">
-    <h2 data-no="Vil du ha enda mer?" data-en="Want even more?" data-edit="ch-ic-title">Vil du ha enda mer?</h2>
-    <p data-no="I tillegg til utfordringen har jeg Inner Circle, med hele LME Studio, kursene mine og fellesskapet, samlet på ett sted." data-en="Alongside the challenge, I also have Inner Circle, with all of LME Studio, my courses and the community, all in one place." data-edit="ch-ic-text">I tillegg til utfordringen har jeg Inner Circle, med hele LME Studio, kursene mine og fellesskapet, samlet på ett sted.</p>
-    <a href="/medlemskap" data-lme-join class="btn-ic" data-no="Se Inner Circle →" data-en="See Inner Circle →" data-edit="ch-ic-cta">Se Inner Circle →</a>
   </div>
 
   <div class="footer">© <span id="yr"></span> Little Montessori Explorers · <span data-no="Laget av Renate Dahl" data-en="Made by Renate Dahl">Laget av Renate Dahl</span></div>
@@ -303,7 +281,7 @@
     fetch(CHECKOUT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ plan: 'utfordring', email: email }),
+      body: JSON.stringify({ plan: 'utfordring', email: email, lang: currentLang }),
     })
       .then(r => r.json())
       .then(data => {
@@ -320,7 +298,6 @@
 
 <script src="/js/page-editor.js" defer></script>
 <script src="/js/lme-account.js?v=11" defer></script>
-<script src="/js/lme-member.js?v=7" defer></script>
 <script src="/js/lme-visibility.js?v=8" defer></script>
 </body>
 </html>
