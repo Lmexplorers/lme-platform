@@ -4,18 +4,21 @@ Statisk HTML-side (Cloudflare Pages) for Little Montessori Explorers.
 Eier: Renate Dahl. Tekst er som hovedregel på **norsk** (bokmål), med engelsk
 oversettelse via `data-no` / `data-en` der språkbytte finnes.
 
-## 🚫 To ulike navn: LME Studio (huben) og LME Autopilot (appen)
+## 🚫 To ulike navn: LME Studio og LME Autopilot
 
-VIKTIG skille (beskjed fra Renate, morgen etter autoposting-fiksen):
+VIKTIG skille (beskjed fra Renate, morgen etter autoposting-fiksen, presisert
+3. august 2026 — bruk aldri ordet "hub" om LME Studio, verken som navn eller
+beskrivelse):
 
-- **LME Studio** = navnet på selve skaper-/AI-**huben**. Dette er det som
-  tidligere het "Creative Academy". Bruk "LME Studio", ikke "Creative Academy".
-- **LME Autopilot** = **appen** inni huben (innholdsstudioet for reels, stories,
-  karuseller). Tidligere "LME Content Studio". Skriv aldri "LME Content Studio".
+- **LME Studio** = navnet på selve skaper-/AI-delen av LME. Dette er det som
+  tidligere het "Creative Academy" (og "Creative Studio"). Bruk "LME Studio".
+- **LME Autopilot** = appen inni LME Studio, innholdet på autopilot
+  (reels, stories, karuseller). Tidligere "LME Content Studio". Skriv aldri
+  "LME Content Studio".
 
-De to skal **ikke blandes**: huben er LME Studio, appen er LME Autopilot.
-"LME Studio" er altså IKKE forbudt lenger, det er hub-navnet. Ikke "rett" det
-tilbake til Creative Academy eller LME Autopilot.
+De to skal **ikke blandes**: siden/delen er LME Studio, appen inni er LME
+Autopilot. "LME Studio" er altså IKKE forbudt. Ikke "rett" det tilbake til
+Creative Academy, Creative Studio eller LME Autopilot.
 
 Selve app-kortet/verktøyet (bl.a. på forsiden/dashbordet) skal ellers ikke endres,
 "ryddes i" eller få endret lenker/design uten at Renate eksplisitt ber om det.
@@ -162,11 +165,11 @@ Plattformen har fire hovedområder, alle deler av samme økosystem:
   filosofien brukes hjemme, i barnehage og skole. Inneholder blant annet:
   Montessorireisen med Renate, Din Montessorireise, kurs og guider, Biblioteket,
   Ressurser, Musikk, Live-arrangementer, Opptak, Nathalie AI, LME Lek & Lær med Mia & Teo.
-- **LME Creative Academy** — **ikke en egen plattform eller vanlig side**, men skaper-
-  og AI-delen av LME som hjelper brukeren å skape, markedsføre og bygge en digital
-  virksomhet med AI. Inneholder blant annet: Content Studio, Bookly, Builder,
-  AI Visibility Engine, Reel Studio, Blogg, Podcast, Kursbygger, Nettsider,
-  e-postmarkedsføring, Automatisering, Funnels, Produkter, Analyse, Betaling, Community.
+- **LME Studio** — skaper- og AI-delen av LME som hjelper brukeren å skape,
+  markedsføre og bygge en digital virksomhet med AI. Inneholder blant annet:
+  LME Autopilot, Bookly, Builder, AI Visibility Engine, Reel Studio, Blogg,
+  Podcast, Kursbygger, Nettsider, e-postmarkedsføring, Automatisering, Funnels,
+  Produkter, Analyse, Betaling, Community.
 - **LME Community** — møteplassen: fellesskap, medlemskap, Inner Circle, utfordringer,
   arrangementer og støtte fra andre medlemmer.
 - **LME Shop** — alle digitale og fysiske produkter (kurs, bøker, ressurser,
@@ -176,5 +179,5 @@ AI-en skal alltid tenke helhetlig: forstå hvor brukeren er i reisen, hjelpe med
 oppgaven her og nå, og foreslå neste naturlige steg. Områdene er deler av én plattform,
 ikke separate løsninger.
 
-Merk: "Akademiet" i menyen kan bli endret til "LME Creative Academy" (avklares med
-Renate før eventuell endring).
+"Akademiet" i menyen heter "LME Studio". Ikke "Creative Academy", ikke
+"Creative Studio", og ikke omtal det som en "hub", bare "LME Studio".
