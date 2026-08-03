@@ -39,7 +39,10 @@
     body {
       font-family: var(--font-body);
       color: var(--ink);
-      background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 55%, #F8D7DA 100%);
+      background:
+        radial-gradient(ellipse 75% 50% at 18% 0%, rgba(255, 138, 179, 0.35), transparent 60%),
+        radial-gradient(ellipse 65% 45% at 100% 10%, rgba(255, 179, 205, 0.4), transparent 60%),
+        linear-gradient(180deg, var(--pink-100) 0%, var(--pink-200) 50%, var(--pink-300) 100%);
       min-height: 100vh;
       line-height: 1.6;
     }
