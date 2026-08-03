@@ -716,11 +716,12 @@ add('kolleksjon_lead',
     'palette as Ellie. More woodland friends are on their way over time.')
 add('kolleksjon_liste',
     ['Ellie, det lille dådyret', 'Felix, den lille reven', 'Molly, det lille lammet',
-     'Luna, den lille kaninen', 'Ellies smokkelenke', 'Ellies rangle', 'Ellies vognlenke',
-     'Ellies ballerinasko', 'Ellies aktivitetsleke'],
+     'Luna, den lille kaninen', 'Oliver, den lille bjørnen', 'Ellies smokkelenke',
+     'Ellies rangle', 'Ellies vognlenke', 'Ellies ballerinasko', 'Ellies aktivitetsleke'],
     ['Ellie, the little fawn', 'Felix, the little fox', 'Molly, the little lamb',
-     'Luna, the little bunny', "Ellie's pacifier clip", "Ellie's rattle", "Ellie's stroller toy",
-     "Ellie's ballerina shoes", "Ellie's activity toy"])
+     'Luna, the little bunny', 'Oliver, the little bear', "Ellie's pacifier clip",
+     "Ellie's rattle", "Ellie's stroller toy", "Ellie's ballerina shoes",
+     "Ellie's activity toy"])
 add('pill_copyright', 'COPYRIGHT', 'COPYRIGHT')
 add('copyright_txt',
     'Denne oppskriften er et helt originalt LME-design (c) Renate Dahl, Little Montessori '
