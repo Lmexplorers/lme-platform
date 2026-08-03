@@ -26,3 +26,21 @@
 # kan mobilen kjøre en time(r)vis gammel versjon selv etter en frisk utrulling.
 /js/lme-visibility.js
   Cache-Control: no-store
+# Apper-oversikten og de nye verktøyene endres ofte rett etter lansering,
+# saa de maa aldri vises fra en gammel mellomlagret versjon.
+/apper
+  Cache-Control: no-store
+/apper.html
+  Cache-Control: no-store
+/hook-generator
+  Cache-Control: no-store
+/hook-generator.html
+  Cache-Control: no-store
+/hook-generator-general
+  Cache-Control: no-store
+/hook-generator-general.html
+  Cache-Control: no-store
+/baby-rhythm
+  Cache-Control: no-store
+/baby-rhythm.html
+  Cache-Control: no-store
