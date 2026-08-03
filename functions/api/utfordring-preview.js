@@ -57,6 +57,7 @@ export async function onRequestPost(context) {
         JSON.stringify({ email: email, name: nm, lang: lang, kind: "d" + dag, sendAfter: Date.now() + dag * DAG })
       );
     }
+    await env.BUILDER_KV.put("utf_member:" + e, JSON.stringify({ email: email, name: nm, lang: lang, joinedAt: Date.now() }));
   } catch (e2) {}
 
   return json({ ok: true, email: email });

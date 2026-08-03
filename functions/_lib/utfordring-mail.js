@@ -13,6 +13,11 @@ const MS = "https://api.mailersend.com/v1/email";
 const SITE = "https://lmexplorers.com";
 const FROM_EMAIL = "renate@lmexplorers.com";
 const FROM_NAME = "Renate Dahl";
+const FELLESSKAP = SITE + "/utfordringen-fellesskap";
+
+function btn(href, label) {
+  return '<p style="margin:22px 0;"><a href="' + href + '" style="background:#E91E89;color:#ffffff;text-decoration:none;font-weight:bold;padding:14px 26px;border-radius:999px;display:inline-block;">' + label + '</a></p>';
+}
 
 function wrap(inner) {
   return '<!DOCTYPE html><html><body style="margin:0;background:#FBF7F0;font-family:Arial,Helvetica,sans-serif;color:#1F1B24;">' +
@@ -32,10 +37,12 @@ const CONTENT = {
       html: wrap(
         '<p>Så glad jeg er for å ha deg med i 10 000-visninger-utfordringen. De neste 30 dagene viser jeg deg, fem minutter om dagen, hvordan du finner nisjen din, planlegger innhold med AI og lager noe som faktisk blir sett.</p>' +
         '<p>Du trenger ingen følgere, ingen erfaring og ikke noe dyrt utstyr. Bare fem minutter og litt vilje til å prøve.</p>' +
+        '<p>Bli med i fellesskapet, der de andre som er med møtes og heier på hverandre:</p>' +
+        btn(FELLESSKAP, "Bli med i fellesskapet") +
         '<p>Første oppgave kommer i morgen. Følg med i innboksen din.</p>' +
         '<p>Klem fra Renate, LME 💛</p>'
       ),
-      text: "Så glad jeg er for å ha deg med i 10 000-visninger-utfordringen. Fem minutter om dagen i 30 dager. Første oppgave kommer i morgen.\n\nKlem fra Renate, LME",
+      text: "Så glad jeg er for å ha deg med i 10 000-visninger-utfordringen. Fem minutter om dagen i 30 dager. Bli med i fellesskapet: " + FELLESSKAP + " Første oppgave kommer i morgen.\n\nKlem fra Renate, LME",
     }),
     d1: () => ({
       subject: "Dag 1: finn nisjen din",
@@ -97,10 +104,12 @@ const CONTENT = {
       html: wrap(
         '<p>I\'m so glad to have you in the 10,000 Views Challenge. Over the next 30 days, five minutes a day, I\'ll show you how to find your niche, plan content with AI and create something that actually gets seen.</p>' +
         '<p>You don\'t need followers, experience or expensive equipment. Just five minutes and a bit of willingness to try.</p>' +
+        '<p>Join the community, where everyone else in the challenge meets and cheers each other on:</p>' +
+        btn(FELLESSKAP, "Join the community") +
         '<p>Your first task lands tomorrow. Watch your inbox.</p>' +
         '<p>Love, Renate, LME 💛</p>'
       ),
-      text: "I'm so glad to have you in the 10,000 Views Challenge. Five minutes a day for 30 days. Your first task lands tomorrow.\n\nLove, Renate, LME",
+      text: "I'm so glad to have you in the 10,000 Views Challenge. Five minutes a day for 30 days. Join the community: " + FELLESSKAP + " Your first task lands tomorrow.\n\nLove, Renate, LME",
     }),
     d1: () => ({
       subject: "Day 1: find your niche",

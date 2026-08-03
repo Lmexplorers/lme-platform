@@ -104,6 +104,9 @@ export async function onRequestPost(context) {
             JSON.stringify({ email: email, name: nm, lang: utfordringLang, kind: "d" + dag, sendAfter: Date.now() + dag * DAG })
           );
         }
+        // Medlemskap i fellesskapet (funnel/utfordringen/fellesskap.html),
+        // slik at bare betalende kjøpere kan poste/kommentere der.
+        await env.BUILDER_KV.put("utf_member:" + e, JSON.stringify({ email: email, name: nm, lang: utfordringLang, joinedAt: Date.now() }));
       } catch (e2) {}
       return json({ ok: true });
     }

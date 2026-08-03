@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fellesskapet · 10 000-visninger-utfordringen</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/images/lme-logo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink-50: #fff5f8; --pink-100: #ffe8f0; --pink-200: #ffd1e1;
+    --pink-500: #e85a92; --pink-600: #c43d75; --pink-700: #8f2a55;
+    --sun-soft: #FFF4D6; --lime-soft: #E8F5D1;
+    --warm-white: #fffcf9; --ink: #3d2438; --ink-soft: #6b4760; --ink-muted: #9c7f92;
+    --r-md: 16px; --r-lg: 22px; --r-xl: 30px; --r-pill: 999px;
+    --shadow-soft: 0 8px 32px rgba(196, 61, 117, 0.08);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body); color: var(--ink);
+    background:
+      radial-gradient(1000px 560px at 100% -6%, var(--sun-soft) 0%, transparent 52%),
+      radial-gradient(900px 520px at -5% 4%, var(--pink-100) 0%, transparent 50%),
+      var(--warm-white);
+    min-height: 100vh; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: var(--font-head); }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button, input, textarea { font-family: var(--font-body); }
+
+  .lang-toggle {
+    position: fixed; top: 14px; right: 68px; z-index: 300;
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #fff; color: var(--ink); border: 1px solid var(--pink-200);
+    font-weight: 700; font-size: 13px; line-height: 1;
+    padding: 10px 16px; border-radius: var(--r-pill);
+    box-shadow: var(--shadow-soft); cursor: pointer;
+  }
+  @media (max-width: 768px) { .lang-toggle { top: 11px; right: 62px; padding: 8px 13px; font-size: 12.5px; } }
+
+  .wrap { max-width: 640px; margin: 0 auto; padding: 26px 18px 70px; }
+  .brandbar { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 22px; }
+  .brandbar img { height: 32px; width: auto; }
+  .brandbar .brandname { font-weight: 700; font-size: 14.5px; color: var(--ink-soft); }
+
+  h1.title { font-size: clamp(24px, 4vw, 32px); text-align: center; color: var(--pink-700); margin-bottom: 6px; }
+  p.sub { text-align: center; color: var(--ink-soft); font-size: 15px; margin-bottom: 26px; }
+
+  .card { background: #fff; border: 1px solid var(--pink-100); border-radius: var(--r-xl); box-shadow: var(--shadow-soft); padding: 24px; margin-bottom: 18px; }
+
+  /* Bli med-kort */
+  #joinCard .field { margin-bottom: 12px; }
+  #joinCard label { display: block; font-size: 13px; font-weight: 700; color: var(--ink-soft); margin-bottom: 5px; }
+  #joinCard input { width: 100%; font-size: 15px; padding: 12px 14px; border: 1px solid var(--pink-200); border-radius: var(--r-md); background: var(--pink-50); color: var(--ink); }
+  .btn-cta { display: inline-block; width: 100%; text-align: center; font-size: 15.5px; font-weight: 800; padding: 14px 20px; border-radius: var(--r-pill); background: linear-gradient(120deg, var(--pink-500), var(--pink-600)); color: #fff; border: none; cursor: pointer; box-shadow: 0 10px 24px rgba(196,61,117,0.28); }
+  .btn-cta:disabled { opacity: .6; cursor: default; }
+  .joinerr { color: var(--pink-600); font-size: 13.5px; margin-top: 8px; display: none; }
+  .joinerr.show { display: block; }
+
+  /* Innlegg-boks */
+  #composeCard textarea { width: 100%; min-height: 70px; font-size: 15px; padding: 12px 14px; border: 1px solid var(--pink-200); border-radius: var(--r-md); background: var(--pink-50); color: var(--ink); resize: vertical; margin-bottom: 10px; }
+  .composerow { display: flex; justify-content: flex-end; }
+  .btn-post { font-size: 14px; font-weight: 800; padding: 10px 22px; border-radius: var(--r-pill); background: linear-gradient(120deg, var(--pink-500), var(--pink-600)); color: #fff; border: none; cursor: pointer; }
+  .btn-post:disabled { opacity: .6; }
+
+  /* Feed */
+  .post { border-bottom: 1px solid var(--pink-100); padding: 16px 0; }
+  .post:last-child { border-bottom: none; }
+  .post .who { font-weight: 700; font-size: 14.5px; color: var(--pink-700); }
+  .post .when { font-size: 12px; color: var(--ink-muted); margin-left: 6px; }
+  .post .txt { font-size: 15px; margin: 6px 0 10px; white-space: pre-wrap; }
+  .post .actions { display: flex; gap: 14px; align-items: center; }
+  .likebtn { background: var(--pink-50); border: 1px solid var(--pink-100); border-radius: var(--r-pill); padding: 5px 12px; font-size: 13px; font-weight: 700; color: var(--pink-600); cursor: pointer; }
+  .likebtn.liked { background: var(--pink-600); color: #fff; border-color: var(--pink-600); }
+  .cbtn { background: none; border: none; font-size: 13px; font-weight: 700; color: var(--ink-soft); cursor: pointer; }
+
+  .comments { margin-top: 10px; padding-left: 14px; border-left: 2px solid var(--pink-100); display: grid; gap: 8px; }
+  .comment .who { font-weight: 700; font-size: 13px; color: var(--pink-700); }
+  .comment .txt { font-size: 13.5px; }
+  .cform { display: none; margin-top: 10px; gap: 8px; }
+  .cform.show { display: flex; }
+  .cform input { flex: 1; font-size: 13.5px; padding: 9px 12px; border: 1px solid var(--pink-200); border-radius: var(--r-pill); background: var(--pink-50); }
+  .cform button { font-size: 13px; font-weight: 700; padding: 9px 16px; border-radius: var(--r-pill); background: var(--pink-600); color: #fff; border: none; cursor: pointer; }
+
+  .empty { text-align: center; color: var(--ink-muted); font-size: 14px; padding: 20px 0; }
+  .footer { text-align: center; margin-top: 30px; font-size: 12.5px; color: var(--ink-muted); }
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" id="langToggle">EN 🌍</button>
+
+<div class="wrap">
+  <a class="brandbar" href="/utfordringen" title="Til utfordringen">
+    <img src="/images/lme-logo.png" alt="LME" onerror="this.style.display='none'">
+    <span class="brandname">Little Montessori Explorers</span>
+  </a>
+
+  <h1 class="title" data-no="Fellesskapet" data-en="The community">Fellesskapet</h1>
+  <p class="sub" data-no="Der de som er med i utfordringen møtes, deler og heier på hverandre." data-en="Where everyone in the challenge meets, shares and cheers each other on.">Der de som er med i utfordringen møtes, deler og heier på hverandre.</p>
+
+  <!-- Bli med -->
+  <div class="card" id="joinCard">
+    <h2 style="font-size:18px;margin-bottom:12px;" data-no="Bli med i fellesskapet" data-en="Join the community">Bli med i fellesskapet</h2>
+    <div class="field">
+      <label data-no="Navnet ditt" data-en="Your name">Navnet ditt</label>
+      <input id="joinName" type="text" autocomplete="given-name">
+    </div>
+    <div class="field">
+      <label data-no="E-posten du kjøpte med" data-en="The email you purchased with">E-posten du kjøpte med</label>
+      <input id="joinEmail" type="email" autocomplete="email">
+    </div>
+    <button class="btn-cta" id="joinBtn" data-no="Bli med →" data-en="Join →">Bli med →</button>
+    <p class="joinerr" id="joinErr" data-no="Fant ingen kjøp på den e-posten. Bruk samme e-post som du meldte deg på utfordringen med." data-en="No purchase found for that email. Use the same email you joined the challenge with.">Fant ingen kjøp på den e-posten. Bruk samme e-post som du meldte deg på utfordringen med.</p>
+  </div>
+
+  <!-- Skriv innlegg (skjult til du er med) -->
+  <div class="card" id="composeCard" style="display:none;">
+    <textarea id="postText" data-no-ph="Del noe med de andre …" data-en-ph="Share something with the others …" placeholder="Del noe med de andre …"></textarea>
+    <div class="composerow"><button class="btn-post" id="postBtn" data-no="Post" data-en="Post">Post</button></div>
+  </div>
+
+  <!-- Vegg -->
+  <div class="card" id="feedCard" style="display:none;">
+    <div id="feed"></div>
+    <p class="empty" id="feedEmpty" style="display:none;" data-no="Ingen innlegg ennå. Bli den første til å si hei! 👋" data-en="No posts yet. Be the first to say hi! 👋">Ingen innlegg ennå. Bli den første til å si hei! 👋</p>
+  </div>
+
+  <div class="footer">© <span id="yr"></span> Little Montessori Explorers</div>
+</div>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  let currentLang = 'no';
+  const toggle = document.getElementById('langToggle');
+  function switchLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(el => {
+      el.textContent = el.getAttribute('data-' + lang);
+    });
+    document.querySelectorAll('[data-no-ph][data-en-ph]').forEach(el => {
+      el.placeholder = el.getAttribute('data-' + lang + '-ph');
+    });
+    toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+  }
+  toggle.addEventListener('click', () => switchLanguage(currentLang === 'no' ? 'en' : 'no'));
+  try { if (localStorage.getItem('lme_lang') === 'en') switchLanguage('en'); } catch (e) {}
+
+  const API = '/api/utfordring-community';
+  let me = null;
+  try { me = JSON.parse(localStorage.getItem('utf_identity') || 'null'); } catch (e) {}
+
+  function timeAgo(ts) {
+    const s = Math.floor((Date.now() - ts) / 1000);
+    if (s < 60) return currentLang === 'en' ? 'just now' : 'nå nettopp';
+    const m = Math.floor(s / 60); if (m < 60) return m + (currentLang === 'en' ? 'm ago' : ' min siden');
+    const h = Math.floor(m / 60); if (h < 24) return h + (currentLang === 'en' ? 'h ago' : ' t siden');
+    const d = Math.floor(h / 24); return d + (currentLang === 'en' ? 'd ago' : ' d siden');
+  }
+
+  function renderPosts(posts) {
+    const feed = document.getElementById('feed');
+    feed.innerHTML = '';
+    document.getElementById('feedEmpty').style.display = posts.length ? 'none' : 'block';
+    posts.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'post';
+      const who = document.createElement('span'); who.className = 'who'; who.textContent = p.name;
+      const when = document.createElement('span'); when.className = 'when'; when.textContent = timeAgo(p.createdAt);
+      const head = document.createElement('div'); head.appendChild(who); head.appendChild(when);
+      const txt = document.createElement('div'); txt.className = 'txt'; txt.textContent = p.text;
+      const actions = document.createElement('div'); actions.className = 'actions';
+      const likeBtn = document.createElement('button'); likeBtn.className = 'likebtn'; likeBtn.textContent = '🤍 ' + (p.likeCount || 0);
+      likeBtn.addEventListener('click', () => doLike(p.id, likeBtn));
+      const cToggle = document.createElement('button'); cToggle.className = 'cbtn';
+      cToggle.textContent = (currentLang === 'en' ? 'Comment' : 'Kommenter') + ' (' + (p.comments || []).length + ')';
+      actions.appendChild(likeBtn); actions.appendChild(cToggle);
+      const comments = document.createElement('div'); comments.className = 'comments'; comments.style.display = 'none';
+      (p.comments || []).forEach(c => {
+        const cd = document.createElement('div'); cd.className = 'comment';
+        const cw = document.createElement('span'); cw.className = 'who'; cw.textContent = c.name + ': ';
+        const ct = document.createElement('span'); ct.className = 'txt'; ct.style.display = 'inline'; ct.textContent = c.text;
+        cd.appendChild(cw); cd.appendChild(ct);
+        comments.appendChild(cd);
+      });
+      const cform = document.createElement('div'); cform.className = 'cform';
+      const cinput = document.createElement('input'); cinput.type = 'text';
+      cinput.placeholder = currentLang === 'en' ? 'Write a comment …' : 'Skriv en kommentar …';
+      const csend = document.createElement('button'); csend.textContent = currentLang === 'en' ? 'Send' : 'Send';
+      csend.addEventListener('click', () => doComment(p.id, cinput, comments, cToggle, p));
+      cform.appendChild(cinput); cform.appendChild(csend);
+      cToggle.addEventListener('click', () => {
+        const show = comments.style.display === 'none';
+        comments.style.display = show ? 'grid' : 'none';
+        cform.classList.toggle('show', show);
+      });
+      div.appendChild(head); div.appendChild(txt); div.appendChild(actions); div.appendChild(comments); div.appendChild(cform);
+      feed.appendChild(div);
+    });
+  }
+
+  function loadFeed() {
+    fetch(API).then(r => r.json()).then(data => renderPosts(data.posts || [])).catch(() => {});
+  }
+
+  function doLike(postId, btn) {
+    if (!me) return;
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'like', email: me.email, postId: postId }) })
+      .then(r => r.json()).then(res => {
+        if (res && res.ok) {
+          btn.textContent = (res.liked ? '💗 ' : '🤍 ') + res.likeCount;
+          btn.classList.toggle('liked', res.liked);
+        }
+      });
+  }
+
+  function doComment(postId, input, commentsEl, toggleBtn, post) {
+    const text = input.value.trim();
+    if (!text || !me) return;
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'comment', email: me.email, name: me.name, postId: postId, text: text }) })
+      .then(r => r.json()).then(res => {
+        if (res && res.ok) { input.value = ''; loadFeed(); }
+      });
+  }
+
+  document.getElementById('postBtn').addEventListener('click', function () {
+    if (!me) return;
+    const ta = document.getElementById('postText');
+    const text = ta.value.trim();
+    if (!text) return;
+    this.disabled = true;
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'post', email: me.email, name: me.name, text: text }) })
+      .then(r => r.json()).then(res => {
+        this.disabled = false;
+        if (res && res.ok) { ta.value = ''; loadFeed(); }
+      }).catch(() => { this.disabled = false; });
+  });
+
+  function enterCommunity() {
+    document.getElementById('joinCard').style.display = 'none';
+    document.getElementById('composeCard').style.display = 'block';
+    document.getElementById('feedCard').style.display = 'block';
+    loadFeed();
+  }
+
+  document.getElementById('joinBtn').addEventListener('click', function () {
+    const name = document.getElementById('joinName').value.trim();
+    const email = document.getElementById('joinEmail').value.trim();
+    const err = document.getElementById('joinErr');
+    err.classList.remove('show');
+    if (!name || !email) return;
+    this.disabled = true;
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'join', email: email, name: name }) })
+      .then(r => r.json()).then(res => {
+        this.disabled = false;
+        if (res && res.ok) {
+          me = { email: email.trim().toLowerCase(), name: name };
+          try { localStorage.setItem('utf_identity', JSON.stringify(me)); } catch (e) {}
+          enterCommunity();
+        } else {
+          err.classList.add('show');
+        }
+      }).catch(() => { this.disabled = false; });
+  });
+
+  if (me && me.email) enterCommunity();
+</script>
+
+<script src="/js/lme-account.js?v=11" defer></script>
+</body>
+</html>
