@@ -208,7 +208,28 @@ async function genPollinations(env, prompt, size) {
   return last || { error: "Pollinations svarte ikke." };
 }
 
-const PROVIDERS = { openai: genOpenAI, gemini: genGemini, higgsfield: genHiggsfield, pollinations: genPollinations };
+async function genCloudflareAI(env, prompt, size) {
+  // Cloudflare Workers AI: gratis (innenfor daglig kvote på kontoen), ingen
+  // ekstern nøkkel. Krever en "AI"-binding lagt til på selve Pages-prosjektet
+  // i Cloudflare-dashbordet (Settings → Functions → Bindings → Workers AI).
+  if (!env.AI) return { error: "Cloudflare Workers AI er ikke koblet til (AI-binding mangler i prosjektinnstillingene).", status: 400 };
+  const [w, h] = String(size || "1024x1024").split("x").map((n) => parseInt(n, 10) || 1024);
+  try {
+    const result = await env.AI.run("@cf/bytedance/stable-diffusion-xl-lightning", {
+      prompt: prompt.slice(0, 2048),
+      width: Math.min(2048, Math.max(256, w)),
+      height: Math.min(2048, Math.max(256, h)),
+      num_steps: 20,
+    });
+    const bytes = new Uint8Array(await new Response(result).arrayBuffer());
+    if (!bytes.length) return { error: "Cloudflare Workers AI ga ikke noe bilde tilbake." };
+    return { bytes, contentType: "image/jpeg" };
+  } catch (e) {
+    return { error: "Cloudflare Workers AI feilet.", detail: String(e && e.message || e).slice(0, 300) };
+  }
+}
+
+const PROVIDERS = { openai: genOpenAI, gemini: genGemini, higgsfield: genHiggsfield, pollinations: genPollinations, cloudflare: genCloudflareAI };
 
 function aspectFor(size) {
   switch (size) {
@@ -262,13 +283,15 @@ export async function onRequestPost(context) {
     if (!["none", "mia", "teo", "both"].includes(character)) character = "none";
 
     // Velg bildemotor automatisk. OpenAI prioriteres (mest stabil), så Gemini,
-    // og til slutt Pollinations (gratis, ingen nøkkel, funker alltid).
+    // så Cloudflare Workers AI (gratis på egen konto, ingen delt kø), og til
+    // slutt Pollinations (gratis, ingen nøkkel, men delt kø kan gi 429).
     // Et eksplisitt valg i body vinner.
     let provider = String(body.provider || "").toLowerCase();
     if (!PROVIDERS[provider]) {
       const hasOpenAI = !!(env.OPENAI_API_KEY || env.IMAGE_OPENAI_KEY || env.IMAGE_API_KEY);
       const hasGemini = !!(env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY);
-      provider = hasOpenAI ? "openai" : (hasGemini ? "gemini" : "pollinations");
+      const hasCF = !!env.AI;
+      provider = hasOpenAI ? "openai" : (hasGemini ? "gemini" : (hasCF ? "cloudflare" : "pollinations"));
     }
 
     const prompt = buildPrompt(body.text, character);
@@ -286,14 +309,16 @@ export async function onRequestPost(context) {
     }
 
     // Fallback: hvis primær-provider feiler (feil status, manglende nøkkel,
-    // tomme kreditter osv.), prøv neste i kjeden. Pollinations krever ingen
-    // nøkkel og er alltid tilgjengelig, så den er alltid siste steg.
+    // tomme kreditter osv.), prøv neste i kjeden. Cloudflare Workers AI (egen
+    // konto-kvote) og Pollinations (ingen nøkkel) er alltid siste steg.
     if (out && out.error) {
       const hasOpenAI = !!(env.OPENAI_API_KEY || env.IMAGE_OPENAI_KEY || env.IMAGE_API_KEY);
       const hasGemini = !!(env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY);
+      const hasCF = !!env.AI;
       const chain = [];
       if (provider !== "openai" && hasOpenAI) chain.push("openai");
       if (provider !== "gemini" && hasGemini) chain.push("gemini");
+      if (provider !== "cloudflare" && hasCF) chain.push("cloudflare");
       if (provider !== "pollinations") chain.push("pollinations");
 
       for (const fallback of chain) {
