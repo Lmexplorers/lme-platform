@@ -80,6 +80,24 @@ etter valgt språk). Lag aldri ny norsk-only tekst uten engelsk oversettelse.
 - Push med retry (2s, 4s, 8s, 16s) ved nettverksfeil.
 - Ikke lag pull request med mindre Renate ber om det.
 
+## 📧 Automatiserte e-postserier — bruk MailerSend, ikke MailerLite-automasjoner
+
+Avtalt med Renate 3. august 2026: for e-postserier som skal sendes automatisk
+etter et kjøp eller en hendelse (velkomstserier, oppfølgingsmail, drypp-kampanjer),
+bruk **MailerSend rett fra koden**, samme mønster som Claude-kurset
+(`functions/_lib/claude-mail.js` + `functions/api/cron/claude-followups.js` +
+`.github/workflows/claude-followups.yml`, daglig cron som sender fra en kø i
+`BUILDER_KV`). Skriv all e-post-tekst (norsk og engelsk) direkte i koden, og
+send via `MAILERSEND_API_KEY` (samme hemmelighet er allerede satt opp).
+
+**Ikke** bygg dette som en MailerLite-automasjon (visuell drag-and-drop-serie
+med flere e-poststeg). Grunnen: MailerLites API kan opprette automasjonen og
+utløseren, men kan ikke fylle ut selve e-post-designet, hvert e-poststeg må
+åpnes og lagres manuelt i deres redigeringsvindu før automasjonen kan
+aktiveres. Det er tungvint og tidkrevende for Renate, og hun har bedt om at
+det aldri gjøres sånn igjen. MailerLite er fortsatt fint til enkeltstående
+utsendelser/nyhetsbrev der hun uansett skal inn og se på innholdet selv.
+
 ## 🔤 Fontregler — LÅST (aldri avvik)
 
 LMEs fonter er ikke valgfrie. På alle sider, og i alt jeg genererer (også
