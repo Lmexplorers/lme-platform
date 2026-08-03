@@ -34,6 +34,44 @@
       --line: rgba(61, 36, 56, 0.1);
       --font-head: 'Playpen Sans', system-ui, sans-serif;
       --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+
+      /* Lyseblå palett (gutt-tema) */
+      --blue-50:  #f2fbff;
+      --blue-100: #dff1f9;
+      --blue-200: #c4e8f5;
+      --blue-300: #9ddaef;
+      --blue-400: #6ec1e4;
+      --blue-500: #4aa8d1;
+      --blue-600: #2f8db8;
+      --blue-700: #1f6f95;
+      --blue-secondary: #8fd4e8;
+      --blue-secondary-light: #e4f6fb;
+
+      /* Tema-farge: peker på babyrosa (jente) som standard, byttes til
+         lyseblå (gutt) ved å sette data-theme="blue" på body via JS. */
+      --accent-50:  var(--pink-50);
+      --accent-100: var(--pink-100);
+      --accent-200: var(--pink-200);
+      --accent-300: var(--pink-300);
+      --accent-400: var(--pink-400);
+      --accent-500: var(--pink-500);
+      --accent-600: var(--pink-600);
+      --accent-700: var(--pink-700);
+      --accent-secondary: var(--purple);
+      --accent-secondary-light: var(--purple-light);
+    }
+
+    body[data-theme="blue"] {
+      --accent-50:  var(--blue-50);
+      --accent-100: var(--blue-100);
+      --accent-200: var(--blue-200);
+      --accent-300: var(--blue-300);
+      --accent-400: var(--blue-400);
+      --accent-500: var(--blue-500);
+      --accent-600: var(--blue-600);
+      --accent-700: var(--blue-700);
+      --accent-secondary: var(--blue-secondary);
+      --accent-secondary-light: var(--blue-secondary-light);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,9 +79,10 @@
     body {
       font-family: var(--font-body);
       color: var(--ink);
-      background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 55%, #F8D7DA 100%);
+      background: linear-gradient(180deg, var(--warm-white) 0%, var(--accent-50) 55%, var(--accent-200) 100%);
       min-height: 100vh;
       line-height: 1.6;
+      transition: background 0.3s ease;
     }
 
     h1, h2, h3, h4 { font-family: var(--font-head); }
@@ -135,7 +174,7 @@
     select {
       width: 100%;
       padding: 12px 16px;
-      border: 1px solid var(--pink-200);
+      border: 1px solid var(--accent-200);
       border-radius: 12px;
       font-family: var(--font-body);
       font-size: 15px;
@@ -146,20 +185,62 @@
 
     input:focus, select:focus {
       outline: none;
-      border-color: var(--pink-600);
-      box-shadow: 0 0 0 3px var(--pink-100);
+      border-color: var(--accent-600);
+      box-shadow: 0 0 0 3px var(--accent-100);
     }
 
+    .theme-toggle {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+
+    .theme-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      background: #fff;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .theme-btn:hover { border-color: var(--accent-300); }
+
+    .theme-btn.active {
+      border-color: var(--accent-600);
+      background: var(--accent-50);
+      color: var(--accent-700);
+    }
+
+    .swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .swatch-pink { background: var(--pink-500); }
+    .swatch-blue { background: var(--blue-400); }
+
     .rhythm-card {
-      background: linear-gradient(135deg, var(--purple-light), rgba(255, 243, 207, 0.4));
-      border: 2px solid var(--purple);
+      background: linear-gradient(135deg, var(--accent-secondary-light), rgba(255, 243, 207, 0.4));
+      border: 2px solid var(--accent-secondary);
       border-radius: 16px;
       padding: 24px;
       margin-top: 30px;
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
 
     .rhythm-card h2 {
-      color: var(--pink-600);
+      color: var(--accent-600);
       margin-bottom: 20px;
       font-size: 22px;
     }
@@ -172,12 +253,12 @@
       background: #fff;
       border-radius: 12px;
       margin-bottom: 12px;
-      border-left: 4px solid var(--pink-600);
+      border-left: 4px solid var(--accent-600);
     }
 
     .activity-time {
       font-weight: 700;
-      color: var(--pink-600);
+      color: var(--accent-600);
       min-width: 80px;
       font-family: var(--font-head);
     }
@@ -217,7 +298,7 @@
     }
 
     .cycle-item strong {
-      color: var(--pink-600);
+      color: var(--accent-600);
     }
 
     .input-group {
@@ -237,6 +318,7 @@
       .input-group { grid-template-columns: 1fr; }
       .activity-row { flex-direction: column; align-items: flex-start; }
       .activity-duration { min-width: auto; text-align: left; }
+      .theme-btn { padding: 9px 16px; font-size: 13px; }
     }
   </style>
 </head>
@@ -253,6 +335,17 @@
     <div class="head">
       <h1 data-no="Babyens daglige rytme" data-en="Your Baby's Daily Rhythm">Babyens daglige rytme</h1>
       <p data-no="Lag en forutsigbar daglig rutine for ditt barn på Montessori-biten" data-en="Create a predictable daily routine for your child on Montessori">Lag en forutsigbar daglig rutine for ditt barn på Montessori-biten</p>
+    </div>
+
+    <div class="theme-toggle" id="themeToggle">
+      <button type="button" class="theme-btn active" data-theme="pink" aria-pressed="true">
+        <span class="swatch swatch-pink"></span>
+        <span data-no="Jente" data-en="Girl">Jente</span>
+      </button>
+      <button type="button" class="theme-btn" data-theme="blue" aria-pressed="false">
+        <span class="swatch swatch-blue"></span>
+        <span data-no="Gutt" data-en="Boy">Gutt</span>
+      </button>
     </div>
 
     <form id="rhythmForm">
@@ -288,7 +381,7 @@
         </select>
       </div>
 
-      <button type="submit" style="width: 100%; padding: 16px; background: linear-gradient(135deg, var(--pink-600), var(--purple)); color: #fff; border: 0; border-radius: 12px; font-family: var(--font-head); font-size: 18px; font-weight: 700; cursor: pointer; margin-top: 20px;" data-no="Lag daglig rytme" data-en="Create rhythm">Lag daglig rytme</button>
+      <button type="submit" style="width: 100%; padding: 16px; background: linear-gradient(135deg, var(--accent-600), var(--accent-secondary)); color: #fff; border: 0; border-radius: 12px; font-family: var(--font-head); font-size: 18px; font-weight: 700; cursor: pointer; margin-top: 20px; transition: background 0.3s ease;" data-no="Lag daglig rytme" data-en="Create rhythm">Lag daglig rytme</button>
     </form>
 
     <div class="rhythm-card" id="rhythmCard" style="display: none;">
@@ -327,6 +420,27 @@
 
       document.getElementById('lme-lang').addEventListener('click', window.lmeToggleLang);
       applyLanguage();
+
+      // Farge-tema: babyrosa (jente) eller lyseblå (gutt)
+      var themeToggle = document.getElementById('themeToggle');
+      var savedTheme = 'pink';
+      try { savedTheme = localStorage.getItem('lme_baby_theme') === 'blue' ? 'blue' : 'pink'; } catch (e) {}
+
+      function applyTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        themeToggle.querySelectorAll('.theme-btn').forEach(function (btn) {
+          var isActive = btn.getAttribute('data-theme') === theme;
+          btn.classList.toggle('active', isActive);
+          btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+        try { localStorage.setItem('lme_baby_theme', theme); } catch (e) {}
+      }
+
+      themeToggle.querySelectorAll('.theme-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () { applyTheme(btn.getAttribute('data-theme')); });
+      });
+
+      applyTheme(savedTheme);
 
       // Rhythm generation
       document.getElementById('rhythmForm').addEventListener('submit', function (e) {
