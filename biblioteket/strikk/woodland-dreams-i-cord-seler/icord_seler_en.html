@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Woodland Dreams I-cord Suspenders, LME knitting pattern</title>
+<style>
+@font-face { font-family:'Sasson Montessori'; src:url('fonts/SassoonMontessori.ttf'); font-weight:normal; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-400.ttf'); font-weight:400; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-600.ttf'); font-weight:600; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-700.ttf'); font-weight:700; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-800.ttf'); font-weight:800; }
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --font-head:'Playpen Sans',system-ui,sans-serif;
+  --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+}
+@page { size:A4; margin:0; }
+body { font-family:var(--font-body); color:#4a4a4a; }
+.page {
+  position:relative; width:210mm; height:296.5mm; overflow:hidden;
+  page-break-after:always;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.45) 0, rgba(255,255,255,.45) .4mm, transparent .4mm, transparent 8mm),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.45) 0, rgba(255,255,255,.45) .4mm, transparent .4mm, transparent 8mm),
+    linear-gradient(165deg,#f3e8d8 0%,#f6ecec 45%,#f3dde6 100%);
+}
+.band { position:absolute; left:0; top:0; bottom:0; width:11mm;
+  background:linear-gradient(180deg,#C79A6C,#E48FA6); }
+.band span { position:absolute; left:50%; top:75%; transform:translate(-50%,-50%);
+  writing-mode:vertical-rl; text-orientation:mixed; rotate:180deg;
+  font-family:var(--font-head); font-size:6.5pt; letter-spacing:3.5px; color:#fff; white-space:nowrap; }
+.rside { position:absolute; right:2.5mm; top:40%; }
+.rside span { writing-mode:vertical-rl; font-family:var(--font-head); font-size:6pt;
+  letter-spacing:2.5px; color:#9a9a9a; white-space:nowrap; }
+.phead { text-align:center; padding-top:9mm; }
+.ph1 { font-family:var(--font-head); font-weight:600; font-size:7pt; letter-spacing:4px; color:#8a7460; }
+.ph2 { font-family:var(--font-head); font-weight:600; font-size:6.3pt; letter-spacing:2.4px; color:#E48FA6; margin-top:1.6mm; }
+.content { padding:5mm 16mm 0 20mm; }
+.pfoot { position:absolute; bottom:6.5mm; left:0; right:0; text-align:center;
+  font-family:var(--font-head); font-weight:700; font-size:10pt; color:#8a8a8a; }
+
+.banner { background:#f5e5b2; border-radius:14px; padding:3.6mm 6mm; margin:2mm 0 4.5mm;
+  box-shadow:0 1px 4px rgba(0,0,0,.08); text-align:center; }
+.banner h1 { font-family:var(--font-head); font-weight:800; font-size:16.5pt; color:#4a4a4a;
+  letter-spacing:.4px; text-transform:uppercase; }
+.pillwrap { text-align:center; margin:4.5mm 0 3mm; }
+.pill { display:inline-block; border-radius:999px; padding:2.4mm 9mm;
+  font-family:var(--font-head); font-weight:700; font-size:10.5pt; color:#fff;
+  letter-spacing:.4px; text-transform:uppercase; box-shadow:0 1px 4px rgba(0,0,0,.12); }
+.rosepill { background:#E48FA6; }
+.sagepill { background:#8FA681; }
+.card { background:rgba(255,255,255,.93); border:2px solid #ecd2c0; border-radius:16px;
+  padding:4mm 6mm; margin:0 0 4mm; box-shadow:0 1px 5px rgba(0,0,0,.06); }
+.cream { background:#fbf3e8; border:2px solid #ecd2c0; border-radius:16px;
+  padding:4mm 6mm; margin:4mm 0; text-align:center; }
+.creamtitle { font-family:var(--font-head); font-weight:700; font-size:11pt; color:#8FA681; }
+p { font-size:10.6pt; line-height:1.52; margin-bottom:2.2mm; }
+p.small, .small { font-size:9.5pt; color:#777; }
+p.center { text-align:center; }
+ul.dots { list-style:none; }
+ul.dots li { font-size:10.6pt; line-height:1.48; padding-left:5.5mm; position:relative; margin:1.6mm 0; }
+ul.dots li::before { content:'•'; position:absolute; left:1mm; color:#E48FA6; font-weight:bold; }
+ol.steps { list-style:none; }
+ol.steps li { display:flex; gap:3.5mm; align-items:flex-start; background:rgba(255,255,255,.93);
+  border:2px solid #ecd2c0; border-radius:14px; padding:3mm 5mm; margin-bottom:2.4mm; }
+ol.steps li div { font-size:10.4pt; line-height:1.46; }
+.snum { flex:0 0 auto; width:7.5mm; height:7.5mm; border-radius:50%; background:#E48FA6; color:#fff;
+  font-family:var(--font-head); font-weight:700; font-size:11pt; display:flex;
+  align-items:center; justify-content:center; margin-top:.5mm; }
+table.t { width:100%; border-collapse:collapse; margin:2.5mm 0; }
+table.t th { font-family:var(--font-head); font-weight:700; font-size:9.3pt; color:#E48FA6;
+  text-align:left; padding:1.5mm 2.5mm; border-bottom:2px solid #ecd2c0; }
+table.t td { font-size:9.7pt; padding:1.4mm 2.5mm; border-bottom:1px solid #f2e3d8; line-height:1.38; }
+table.tl td:first-child { white-space:nowrap; }
+.dot { display:inline-block; width:3.5mm; height:3.5mm; border-radius:50%; vertical-align:-0.5mm; margin-right:1.5mm; }
+
+.coverimg { text-align:center; margin:3mm 0 3mm; }
+.coverimg img { width:98mm; border-radius:14px; box-shadow:0 3px 10px rgba(0,0,0,.18);
+  border:3mm solid #fff; }
+.covertag { text-align:center; font-family:var(--font-head); font-size:8pt; letter-spacing:2.6px;
+  color:#8a8a8a; margin:1mm 0 2.5mm; }
+.coverbanner { display:flex; align-items:center; justify-content:center; gap:5mm;
+  background:#f5e5b2; border-radius:16px; padding:3.4mm 6mm; box-shadow:0 1px 5px rgba(0,0,0,.1); }
+.covertitle { font-family:var(--font-head); font-weight:800; font-size:27pt; color:#4a4a4a; letter-spacing:1px; }
+.subpill { margin:3.6mm auto; width:fit-content; background:#fdf9e3; border:2.5px solid #4a4a4a;
+  border-radius:999px; padding:1.8mm 8mm; font-family:var(--font-head); font-weight:700;
+  font-size:10pt; color:#4a4a4a; letter-spacing:.4px; }
+.byline { text-align:center; margin-top:3.5mm; }
+.by1 { font-family:var(--font-head); font-weight:700; font-size:12.5pt; color:#8FA681; }
+.by2 { font-size:10.2pt; color:#8a8a8a; margin-top:.8mm; }
+.by3 { font-family:var(--font-head); font-weight:600; font-size:9.6pt; color:#E48FA6; margin-top:.5mm; }
+.notecard { display:flex; gap:4mm; align-items:center; background:rgba(255,255,255,.8);
+  border-radius:12px; padding:3.2mm 6mm; margin-top:4mm; }
+.notecard p { font-size:9.3pt; color:#777; margin:0; }
+.noteemo { font-size:16pt; }
+
+.twocol { display:flex; gap:6mm; align-items:flex-start; }
+.twocol > div { flex:1; }
+.figwrap { text-align:center; }
+.figwrap img { width:44mm; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,.14); border:2mm solid #fff; }
+.figcap { font-size:9pt; color:#888; text-align:center; margin-top:1.5mm; }
+.schematic { margin:2mm 0 1mm; }
+.deler-grid { display:grid; grid-template-columns:1fr 1fr; gap:2.4mm 6mm; margin:1mm 0 2mm; }
+.deler-grid .di { font-size:10pt; line-height:1.4; padding:1.6mm 0; border-bottom:1px dashed #e6d3c4; }
+.deler-grid .di b { color:#8FA681; font-family:var(--font-head); }
+
+.photorow { display:flex; gap:3mm; flex-wrap:wrap; justify-content:center; margin:2mm 0 3mm; }
+.photoph { aspect-ratio:1/1; max-width:44mm; background:rgba(255,255,255,.7);
+  border:2px dashed #d9bfa8; border-radius:12px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:1.5mm; padding:2mm; }
+.phicon { font-size:17pt; opacity:.45; }
+.phcap { font-size:8.3pt; color:#9a8a7a; text-align:center; line-height:1.3; }
+.qrbox { text-align:center; margin:3mm 0; }
+.qrsquare { width:26mm; height:26mm; margin:0 auto; background:#fff; border:2px dashed #d9bfa8;
+  border-radius:10px; display:flex; align-items:center; justify-content:center; }
+.qricon { font-size:20pt; color:#d9bfa8; }
+.qrcap { font-size:9pt; color:#888; margin-top:1.6mm; }
+</style></head>
+<body><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD SUSPENDERS</div>
+  </div>
+  <div class="content">
+<div class="covertag">LME KNITTING PATTERN - BABY</div>
+<div class="coverbanner"><h1 class="covertitle">WOODLAND DREAMS I-CORD SUSPENDERS</h1></div>
+<div class="subpill">LME BABY COLLECTION - WOODLAND DREAMS</div>
+<div class="card"><p class="center">A pair of simple, adjustable i-cord suspenders, that cross at the back and fasten at the front with small wooden buttons. The suspenders are the signature piece of the collection: they can be worn over trousers, shorts, bloomers or the basisbody, so one single pair can follow the child through several different outfits. Seven sizes, from 0-1 to 18-24 months.</p></div>
+<div class="byline">
+  <div class="by1">By Renate Dahl</div>
+  <div class="by2">Little Montessori Explorers</div>
+  <div class="by3">lmexplorers.com</div>
+</div>
+<div class="notecard"><span class="noteemo">&#129517;</span><p><i>TIP: I-cord does not need an exact gauge to work, but read through the whole pattern and the size chart on page 4 before you start, so you choose the right size from the beginning.</i></p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;1&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD SUSPENDERS</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>ABOUT THE I-CORD SUSPENDERS</h1></div>
+<div class="pillwrap"><div class="pill rosepill">THE SIGNATURE PIECE OF THE COLLECTION</div></div>
+<div class="card"><p>If there is one piece in Woodland Dreams worth a little extra love, it is this one. The i-cord suspenders are the piece that makes the whole collection truly modular. Sew four small wooden buttons onto a pair of bloomers, a pair of shorts or the basisbody itself, and the suspenders can move from garment to garment all season long. One pair of suspenders, many outfits.</p></div>
+<div class="pillwrap"><div class="pill sagepill">A SIMPLE TECHNIQUE, A BEAUTIFUL RESULT</div></div>
+<div class="card"><p>I-cord is one of the simplest techniques in knitting, a narrow, round cord knitted on just a few stitches. That is exactly why it is perfect for suspenders. It is strong, stretchy enough to move with the child, and quick to knit, even if you have never tried the technique before.</p></div>
+<div class="pillwrap"><div class="pill rosepill">USE ACROSS DIFFERENT GARMENTS</div></div>
+<div class="cream"><p class="creamtitle">The suspenders are not sewn to any particular garment. Attach them with wooden buttons to a pair of bloomers one day, switch to shorts the next, or wear them right over the basisbody on a cool walk outside. The idea is a small investment that outlasts any single garment.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;2&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD SUSPENDERS</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>MATERIALS</h1></div>
+<div class="pillwrap"><div class="pill rosepill">YARN</div></div>
+<div class="card"><p>Sandnes Garn Alpakka (100% alpaca), or an equivalent yarn with the same gauge. As the suspenders are an accessory, choose one of the collection's contrast colours for the i-cord itself, for example sage, dusty rose, butter yellow, soft blue, olive or terracotta, for a lovely contrast to the body's calm, neutral colours (cream, linen, sand, oatmeal or beige).</p></div>
+<div class="pillwrap"><div class="pill sagepill">YARN REQUIREMENTS</div></div>
+<div class="card"><p>I-cord uses very little yarn. One 50 g ball of Sandnes Garn Alpakka is more than enough for both suspenders, in any of the seven sizes, even with a few extra centimetres for a gauge swatch and any mistakes.</p></div>
+<div class="pillwrap"><div class="pill rosepill">NEEDLES AND NOTIONS</div></div>
+<div class="card"><p>Two 4 mm double-pointed needles (or a short 4 mm circular needle used as a DPN), for the i-cord itself. A 3 mm crochet hook for crocheting the buttonhole loops. Four small, round wooden buttons, sewn onto the garment the suspenders will attach to, not onto the suspenders themselves. A tapestry needle for weaving in ends, and ideally a tape measure to check the strap length as you go.</p></div>
+<div class="pillwrap"><div class="pill sagepill">ABOUT GAUGE AND THE SWATCH</div></div>
+<div class="cream"><p class="creamtitle">I-cord does not need a precise gauge to fit correctly. The cord will simply end up a little thicker or thinner than expected. The gauge below (see page 5) is still used in this pattern to calculate roughly how many rounds match the correct length for your size, and to keep the suspenders consistent with the rest of the collection. Knit a small gauge swatch in stockinette anyway if you like, and measure your actual strap length as you go with a tape measure rather than blindly counting rounds.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;3&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD SUSPENDERS</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>SIZE CHART</h1></div>
+<p>The suspenders are sized based on the body's measurements for each size, see Woodland Dreams Basisbody. Choose the same size as the body, or the garment the suspenders will attach to.</p>
+<div class="card"><table class="t"><tr><th>Size</th><th>Chest width (ref.)</th><th>Body length (ref.)</th><th>Strap length</th></tr><tr><td><b>0-1 mnd</b></td><td>46.4 cm</td><td>25 cm</td><td>34.0 cm</td></tr><tr><td><b>1-3 mnd</b></td><td>49.1 cm</td><td>27 cm</td><td>36.4 cm</td></tr><tr><td><b>3-6 mnd</b></td><td>51.8 cm</td><td>30 cm</td><td>40.0 cm</td></tr><tr><td><b>6-9 mnd</b></td><td>54.5 cm</td><td>33 cm</td><td>43.6 cm</td></tr><tr><td><b>9-12 mnd</b></td><td>57.3 cm</td><td>36 cm</td><td>47.2 cm</td></tr><tr><td><b>12-18 mnd</b></td><td>60.0 cm</td><td>39 cm</td><td>50.8 cm</td></tr><tr><td><b>18-24 mnd</b></td><td>62.7 cm</td><td>42 cm</td><td>54.4 cm</td></tr></table></div>
+<div class="cream"><p class="creamtitle">Chest width and body length are taken from Woodland Dreams Basisbody, and are given here only as a reference for choosing the right size. Strap length is the suspenders' own finished length, from tip to tip, before the strap is folded over the shoulder.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;4&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD SUSPENDERS</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>GAUGE AND DIFFICULTY LEVEL</h1></div>
+<div class="pillwrap"><div class="pill rosepill">GAUGE</div></div>
+<div class="card"><p>22 stitches and 30 rounds in stockinette stitch = 10 x 10 cm, on 4 mm needles, the same gauge as the rest of the Woodland Dreams collection. In this pattern the gauge is used to calculate an approximate number of rounds for each strap length (see the table on page 8), not to control the i-cord technique itself, which works fine at most gauges.</p></div>
+<div class="pillwrap"><div class="pill sagepill">DIFFICULTY LEVEL</div></div>
+<div class="cream"><p class="creamtitle">Easy. I-cord is one of the simplest techniques in knitting: you only need to be able to knit, and slide the stitches back without turning the work. This pattern makes a great first i-cord project, even if you are still fairly new to knitting.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;5&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD SUSPENDERS</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>ABBREVIATIONS</h1></div>
+<p>Norwegian knitting and crochet terms with the English terms alongside.</p>
+<div class="card"><table class="t tl"><tr><th>Norwegian</th><th>English</th><th>Meaning</th></tr><tr><td><b>r</b></td><td>K</td><td>rett</td></tr><tr><td><b>m</b></td><td>st(s)</td><td>maske(r)</td></tr><tr><td><b>o</b></td><td>rnd</td><td>omgang</td></tr><tr><td><b>legg opp</b></td><td>CO</td><td>legg opp masker</td></tr><tr><td><b>fell av</b></td><td>BO</td><td>fell av / bind off</td></tr><tr><td><b>strømpepinne</b></td><td>DPN</td><td>strømpepinne (dobbeltspiss)</td></tr><tr><td><b>rundpinne</b></td><td>circular needle</td><td>rundpinne</td></tr><tr><td><b>maskemarkør</b></td><td>st marker</td><td>maskemarkør</td></tr><tr><td><b>heklenål</b></td><td>crochet hook</td><td>heklenål</td></tr><tr><td><b>luftmaske / lm</b></td><td>chain / ch</td><td>luftmaske i hekling</td></tr><tr><td><b>kjedemaske</b></td><td>slip stitch / sl st</td><td>kjedemaske i hekling</td></tr><tr><td><b>i-cord</b></td><td>i-cord</td><td>smal, rund strikkesnor på strømpepinne</td></tr></table></div>
+<div class="pillwrap"><div class="pill sagepill">TIPS</div></div>
+<div class="card"><ul class="dots"><li>Knit both suspenders to the same length, count your rounds or measure with a tape measure for each, so they end up the same length.</li><li>Knit the i-cord loosely, a too-tight i-cord becomes stiff and less comfortable against the skin.</li><li>Place a small scrap-yarn marker every 10th round as you knit, it makes it easier to keep track of how far you have come.</li></ul></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;6&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD SUSPENDERS</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>HOW TO KNIT I-CORD</h1></div>
+<p>I-cord is a narrow, round knitted cord worked on double-pointed needles, without knitting in the round the usual way. The technique is simple, but can feel a little unfamiliar the first time, so here it is explained step by step.</p>
+<div class="card"><ol class="steps"><li><span class="snum">1</span><div>Cast on 3 stitches onto a 4 mm double-pointed needle.</div></li><li><span class="snum">2</span><div>Knit all 3 stitches.</div></li><li><span class="snum">3</span><div>Do NOT turn the work. Slide the stitches to the opposite end of the needle, the end you just knitted from.</div></li><li><span class="snum">4</span><div>Pull the yarn firmly across the back of the work, from left to right, and knit the 3 stitches again.</div></li><li><span class="snum">5</span><div>Repeat steps 3 and 4 over and over. After a few rounds the yarn pulls itself into a tight, round cord at the back, with no visible seam.</div></li><li><span class="snum">6</span><div>Continue until the strap length in the table on page 8 is reached for your size. Measure with a tape measure as you go if you like.</div></li></ol></div>
+<div class="notecard"><span class="noteemo">&#129517;</span><p><i>TIP: The first couple of centimetres look a little messy. That is completely normal: the cord tightens itself into a neat, round tube as you keep knitting.</i></p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;7&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD SUSPENDERS</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 1: KNIT THE TWO STRAPS</h1></div>
+<p>Knit two identical suspenders, each worked as one long i-cord. The strap length is calculated from the body's body length for each size, so the strap is long enough to run from the front waistband, over the shoulder, cross at the back and down to the opposite side at the back waistband.</p>
+<div class="card"><p>The strap length is calculated with this simple formula: 2 x (0.6 x the body's body length) + 4 cm. The factor 0.6 is an estimate of the waist-to-shoulder distance, both at the front and the back, and the extra 4 cm covers the crossing at the back plus a little ease for movement. The number is doubled because the strap runs both up the front and down the back, to the opposite side.</p></div>
+<div class="card"><table class="t"><tr><th>Size</th><th>Body length (ref.)</th><th>Strap length</th><th>I-cord rounds (approx.)</th></tr><tr><td><b>0-1 mnd</b></td><td>25 cm</td><td>34.0 cm</td><td>102</td></tr><tr><td><b>1-3 mnd</b></td><td>27 cm</td><td>36.4 cm</td><td>109</td></tr><tr><td><b>3-6 mnd</b></td><td>30 cm</td><td>40.0 cm</td><td>120</td></tr><tr><td><b>6-9 mnd</b></td><td>33 cm</td><td>43.6 cm</td><td>131</td></tr><tr><td><b>9-12 mnd</b></td><td>36 cm</td><td>47.2 cm</td><td>142</td></tr><tr><td><b>12-18 mnd</b></td><td>39 cm</td><td>50.8 cm</td><td>152</td></tr><tr><td><b>18-24 mnd</b></td><td>42 cm</td><td>54.4 cm</td><td>163</td></tr></table></div>
+<p class="small center">The round count is an approximate reference calculated from the gauge on page 5. I-cord length can vary a little from knitter to knitter, always measure the strap length in the cm column for your size, do not just count rounds.</p>
+<div class="card"><ol class="steps"><li><span class="snum">1</span><div>Cast on 3 stitches onto a 4 mm double-pointed needle.</div></li><li><span class="snum">2</span><div>Work i-cord (see page 7) until the strap length in the table above is reached for your size.</div></li><li><span class="snum">3</span><div>Cut the yarn leaving a tail of approx. 15 cm. Thread the tail through the 3 remaining stitches with a tapestry needle, and pull tight.</div></li><li><span class="snum">4</span><div>Knit the second strap exactly the same way, to the same length.</div></li></ol></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;8&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD SUSPENDERS</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 2: BUTTONHOLE LOOPS AND ADJUSTABILITY</h1></div>
+<p>At each end of both straps, three small loops are crocheted, spaced a little apart, so the strap length can be adjusted without any reknitting.</p>
+<div class="card"><ol class="steps"><li><span class="snum">1</span><div>With a 3 mm crochet hook and a loose end of yarn from the i-cord (or new yarn attached at the end), crochet a chain of approx. 5-6 chain stitches.</div></li><li><span class="snum">2</span><div>Fasten the chain to the end of the i-cord with a slip stitch, so it forms a small loop, large enough to fit a wooden button through.</div></li><li><span class="snum">3</span><div>Crochet two more loops on the same end, spaced approx. 1.5 cm apart, along the last 3 cm of the strap.</div></li><li><span class="snum">4</span><div>Repeat on all four ends of the two straps: 2 straps x 2 ends = 4 ends, 3 loops per end, 12 loops in total.</div></li></ol></div>
+<div class="pillwrap"><div class="pill sagepill">HOW TO ADJUST THE LENGTH</div></div>
+<div class="cream"><p class="creamtitle">The three loops at each end give three lengths to choose between. Use the outermost loop, at the very tip, for the longest possible length, and one of the loops further in for a shorter, snugger fit. This way the suspenders can be adjusted as the child grows, or to suit whichever garment they are attached to, without any reknitting.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;9&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD SUSPENDERS</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>HOW THE SUSPENDERS CROSS AT THE BACK</h1></div>
+<div class="card"><p>The suspenders are designed to cross in an X at the back, just like classic braces. Attach the left strap to the left side at the front, bring it up over the left shoulder, let it cross over the back and attach it to the right side at the back waistband. Do the opposite with the other strap: attach it to the right side at the front, over the right shoulder, crossing down to the left side at the back.</p></div>
+<div class="pillwrap"><div class="pill rosepill">STYLING TIP</div></div>
+<div class="cream"><p class="creamtitle">If you prefer a quieter look, the suspenders can just as easily be attached straight down without crossing. They work fine either way. The crossing at the back is what gives the classic, slightly old-fashioned suspender look the collection is inspired by.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;10&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD SUSPENDERS</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>FINISHING</h1></div>
+<div class="card"><ol class="steps"><li><span class="snum">1</span><div>Weave in all loose ends securely on the wrong side of each loop and strap end, and trim them short.</div></li><li><span class="snum">2</span><div>Sew the four wooden buttons onto the garment the suspenders will be used with, bloomers, shorts or the basisbody, in positions that suit the crossing described on the previous page.</div></li><li><span class="snum">3</span><div>Try the suspenders on the child or against the garment before sewing the buttons on fully, and adjust the button positions if needed.</div></li><li><span class="snum">4</span><div>Lightly steam-block the suspenders if you like, to even out the i-cord.</div></li><li><span class="snum">5</span><div>Finally, check that every loop and button is securely attached, and that no loose threads can come undone.</div></li></ol></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;11&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD SUSPENDERS</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>SAFETY AND CARE</h1></div>
+<div class="pillwrap"><div class="pill rosepill">SAFETY</div></div>
+<div class="card"><ul class="dots"><li>Small wooden buttons are a choking hazard. Sew them on with double thread, several times through each hole, and check them regularly, especially after washing.</li><li>Never leave a child alone and unsupervised in the suspenders, whether playing, in a pram or in bed, especially the first few times they are worn.</li><li>Before every wear, check that no loop, strap or loose thread is long or loose enough to wrap around the child's neck. Remove the suspenders completely before the child is put down to sleep.</li><li>Tighten all buttons and loops securely, so a strap cannot come loose and hang freely while the child is moving around.</li><li>All measurements and lengths in this pattern are calculated for a roomy, comfortable fit, not a tight safety fit. Always follow current safety recommendations for children's clothing and accessories with cords or straps.</li></ul></div>
+<div class="pillwrap"><div class="pill sagepill">CARE INSTRUCTIONS</div></div>
+<div class="cream"><p class="creamtitle">Hand wash gently in lukewarm water with wool wash, or machine wash on a wool cycle at 30 degrees, together with the rest of the garment they are attached to. Press out the water, ease the i-cord straight, and dry lying flat on a towel.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;12&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD SUSPENDERS</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>ALL DONE!</h1></div>
+<div class="cream"><p class="creamtitle">Congratulations, your suspenders are finished! They are made to be paired with several different garments in the Woodland Dreams collection, and to follow the child from one outfit to the next.</p></div>
+<div class="pillwrap"><div class="pill sagepill">THE REST OF THE COLLECTION</div></div>
+<div class="card"><ul class="dots"><li>Basisbody, the foundation of the collection, a top-down raglan body in stockinette stitch.</li><li>Lace collar, a loose collar that fastens at the back.</li><li>Ruffle collar, the same fastening, a little more romantic.</li><li>Peter Pan collar, a classic rounded collar.</li><li>Bib, tied with an i-cord or a button.</li><li>Short vest, with wooden buttons at the front, worn over the body.</li><li>Woodland Fluffy Skirt, a crocheted skirt made to match the body.</li></ul></div>
+<div class="pillwrap"><div class="pill rosepill">COPYRIGHT</div></div>
+<div class="card"><p class="small center">(c) Renate Dahl, Little Montessori Explorers. This pattern is a fully original LME design. You are welcome to sell finished garments you make from this pattern, on a small personal scale, provided the finished product is checked against current safety requirements. The pattern itself, its text and images, may not be shared, copied or resold.</p></div>
+<div class="byline">
+  <div class="by2">By Renate Dahl &middot; Little Montessori Explorers &middot; lmexplorers.com</div>
+</div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;13&nbsp;&mdash;</div>
+</div></body></html>
