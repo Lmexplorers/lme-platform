@@ -465,7 +465,7 @@ def build(lang):
 
     pages.append(pg(f'''
 <div class="figwrap"><img src="{face_src}" style="width:98mm;border-radius:14px;box-shadow:0 3px 10px rgba(0,0,0,.18);" alt="Molly, stiluttrykk-referanse"></div>
-<p class="small center" style="margin-top:-2mm;">{'Bildet viser Molly som stiluttrykk-referanse, ikke selve smokkelenken.' if lang == 'no' else 'Photo shows Molly as a style reference, not the pacifier clip itself.'}</p>
+<p class="small center" style="margin-top:-2mm;">{'Stiluttrykk-referanse, ikke det ferdige heklede produktet.' if lang == 'no' else 'Style reference, not the finished crocheted product.'}</p>
 <div class="covertag">{t('covertag')}</div>
 <div class="coverbanner"><h1 class="covertitle">{t('covertitle')}</h1></div>
 <div class="subpill">{t('subpill')}</div>
