@@ -1,17 +1,26 @@
 # Ellies smokkelenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Ellies-smokkelenke-LME.pdf`** (norsk, 14 sider, A4) og
-**`Ellies-smokkelenke-LME-EN.pdf`** (engelsk, 14 sider, A4).
+Ferdig oppskrift: **`Ellies-smokkelenke-LME.pdf`** (norsk, 15 sider, A4) og
+**`Ellies-smokkelenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
 
 Andre oppskrift i **LME Baby Collection "Woodland Dreams"**, etter
 `../ellie-dadyret/`. Et forenklet dådyrhode inspirert av Ellie, med en liten
-sløyfe mellom ørene (lagt til 3. august 2026 etter Renates referansebilde),
-en blomst, et blad og heklede kuler, tredd/sydd sammen til en smokkelenke.
+sløyfe mellom ørene, en blomst, et blad og heklede kuler, tredd/sydd sammen
+til en smokkelenke.
+
+Oppdatert 4. august 2026 etter Renates referansebilder av profesjonelt
+stylede smokkelenker: lagt til en pudderrosa volangkrage rundt halsen (ny
+egen side, "DEL 2"), én stjerneformet treperle blant de heklede kulene, og
+en heklet snorløkke i enden som en kjøpt smokkering/adapterring tres
+gjennom, i stedet for at ringen festes rett på siste kule. Materiallisten
+er også oppdatert: klipsen er nå beskrevet som en tre-kuleklips med
+innkapslet fjærmekanisme kjøpt spesielt til smokkelenker (matcher
+referansebildene), ikke en flat treklype uten fjær.
 
 **Sikkerhet er hovedpoenget med denne oppskriften.** Maks total lengde er satt
 til 22 cm, i tråd med prinsippet i den europeiske standarden EN 12586 for
 smokkeholdere (en enkel klips + snor skal ikke kunne danne en løkke rundt
-barnets hals). Side 12 av 14 er viet sikkerhet, og oppskriften minner flere
+barnets hals). Side 13 av 15 er viet sikkerhet, og oppskriften minner flere
 steder om at ferdig produkt må kontrolleres mot gjeldende lokale krav før
 salg.
 
