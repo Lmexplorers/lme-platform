@@ -7,8 +7,7 @@ import base64, pathlib, sys
 BASE = pathlib.Path(__file__).parent
 sys.path.insert(0, str(BASE.parent / '_shared'))
 import lme_pattern_kit as kit
-from lme_pattern_kit import (banner, rosep, sagep, card, cream, cme, ul, steps, otab, abbrtab,
-                              photo_row, qr_placeholder)
+from lme_pattern_kit import (banner, rosep, sagep, card, cream, cme, ul, steps, otab, abbrtab)
 
 REF = BASE / 'aktivitetsleke_ref.jpg'
 ref_b64 = base64.b64encode(REF.read_bytes()).decode()
@@ -506,17 +505,6 @@ add('montering_steg_en', [
     'check that nothing comes loose, before the toy is used.',
 ])
 
-# ---------------------------------------------------------------- SIDE 17: FOTOVEILEDNING
-add('banner_foto', 'FOTOVEILEDNING', 'PHOTO GUIDE')
-add('foto_lead',
-    'Sett inn egne bilder av hvert steg her når du har heklet aktivitetskuben selv.',
-    'Add your own photos of each step here once you have crocheted the activity cube yourself.')
-add('foto_captions',
-    ['De seks sidene, ferdig heklet', 'Kuben sydd sammen', 'Hjørneringer og topphåndtak',
-     'Ferdig kube'],
-    ['The six sides, crocheted', 'The cube sewn together', 'Corner rings and top handle',
-     'The finished cube'])
-
 # ---------------------------------------------------------------- SIDE 18: SIKKERHET
 add('banner_sikkerhet', 'SIKKERHET, DEN VIKTIGSTE SIDEN', 'SAFETY, THE MOST IMPORTANT PAGE')
 add('pill_smadeler', 'MANGE SMÅ DELER, ÉN REGEL: ALT SYS FAST', 'MANY SMALL PARTS, ONE RULE: SEW EVERYTHING ON')
@@ -580,9 +568,6 @@ add('stell_txt',
     'parts and an inner stiffening. Rinse well. Gently press out the water in a towel, do not '
     'wring. Lay flat to dry, allowing plenty of time for the inner stiffening to dry completely, '
     'and check every seam carefully before using the toy again.')
-add('pill_qr', 'VIDEOVEILEDNING', 'VIDEO GUIDE')
-add('qr_caption', 'QR-kode til videoveiledning (legges til)', 'QR code to video guide (to be added)')
-
 # ---------------------------------------------------------------- SIDE 20: FERDIG
 add('banner_ferdig', 'GRATULERER, AKTIVITETSKUBEN ER FERDIG!', 'CONGRATULATIONS, THE ACTIVITY CUBE IS DONE!')
 add('ferdig_txt',
@@ -762,13 +747,6 @@ def build(lang):
 {card(steps(mo_steg))}
 ''', 17))
 
-    foto_caps = T['foto_captions']['no'] if lang == 'no' else T['foto_captions']['en']
-    pages.append(pg(f'''
-{banner(t('banner_foto'))}
-{card('<p class="center">' + t('foto_lead') + '</p>')}
-{photo_row(foto_caps)}
-''', 18))
-
     regler = T['regler']['no'] if lang == 'no' else T['regler']['en']
     pages.append(pg(f'''
 {banner(t('banner_sikkerhet'))}
@@ -776,14 +754,12 @@ def build(lang):
 {card('<p>' + t('smadeler_txt') + '</p>')}
 {sagep(t('pill_regler'))}
 {card(ul(regler))}
-''', 19))
+''', 18))
 
     pages.append(pg(f'''
 {banner(t('banner_stell'))}
 {cme(t('stell_txt'))}
-{rosep(t('pill_qr'))}
-{qr_placeholder(t('qr_caption'))}
-''', 20))
+''', 19))
 
     kolliste = T['kolleksjon_liste']['no'] if lang == 'no' else T['kolleksjon_liste']['en']
     pages.append(pg(f'''
@@ -796,7 +772,7 @@ def build(lang):
 <div class="byline">
   <div class="by2">{t('by1')} &middot; {t('by2')} &middot; {t('by3')}</div>
 </div>
-''', 21))
+''', 20))
 
     return pages
 

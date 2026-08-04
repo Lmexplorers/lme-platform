@@ -1,7 +1,7 @@
 # Lunas vognlenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Lunas-vognlenke-LME.pdf`** (norsk, 15 sider, A4) og
-**`Lunas-vognlenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
+Ferdig oppskrift: **`Lunas-vognlenke-LME.pdf`** (norsk, 14 sider, A4) og
+**`Lunas-vognlenke-LME-EN.pdf`** (engelsk, 14 sider, A4).
 
 Følger opp `../ellies-vognlenke/`, `../pip-vognlenke/`,
 `../felix-vognlenke/` og `../molly-vognlenke/`, oppdatert 4. august 2026
@@ -14,7 +14,7 @@ en tre-kuleklips med innkapslet fjærmekanisme (samme klipstype som
 smokkelenke-serien). Luna-medaljongen har fortsatt avlange miniatyrører i
 stedet for runde, en miniatyr av signaturuttrykket hennes.
 
-Samme sikkerhetsfokus som `../ellies-vognlenke/`: side 13 forklarer hvorfor
+Samme sikkerhetsfokus som `../ellies-vognlenke/`: side 12 forklarer hvorfor
 lengden holdes kort, med LME-anbefalingen (maks 35-40 cm mellom klipsene,
 ingen del løsere enn 6-8 cm).
 

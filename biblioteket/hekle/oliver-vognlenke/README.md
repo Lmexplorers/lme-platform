@@ -1,7 +1,7 @@
 # Olivers vognlenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Olivers-vognlenke-LME.pdf`** (norsk, 16 sider, A4) og
-**`Olivers-vognlenke-LME-EN.pdf`** (engelsk, 16 sider, A4).
+Ferdig oppskrift: **`Olivers-vognlenke-LME.pdf`** (norsk, 15 sider, A4) og
+**`Olivers-vognlenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
 
 Følger opp `../ellies-vognlenke/`, `../pip-vognlenke/`,
 `../felix-vognlenke/` og `../molly-vognlenke/` med en versjon for Oliver,

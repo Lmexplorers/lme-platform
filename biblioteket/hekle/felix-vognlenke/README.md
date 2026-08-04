@@ -1,7 +1,7 @@
 # Felix' vognlenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Felix-vognlenke-LME.pdf`** (norsk, 15 sider, A4) og
-**`Felix-vognlenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
+Ferdig oppskrift: **`Felix-vognlenke-LME.pdf`** (norsk, 14 sider, A4) og
+**`Felix-vognlenke-LME-EN.pdf`** (engelsk, 14 sider, A4).
 
 Følger opp `../ellies-vognlenke/` og `../pip-vognlenke/`, oppdatert
 4. august 2026 etter Renates referansebilder av profesjonelt stylede
@@ -14,7 +14,7 @@ klipstype som smokkelenke-serien). Felix-medaljongen har fortsatt sine
 todelte, foldede ører (samme teknikk som på ham selv) og en egen miniatyr
 av den tofargede halen hans, sydd til bakhodet.
 
-Samme sikkerhetsfokus som `../ellies-vognlenke/`: side 13 forklarer hvorfor
+Samme sikkerhetsfokus som `../ellies-vognlenke/`: side 12 forklarer hvorfor
 lengden holdes kort, med LME-anbefalingen (maks 35-40 cm mellom klipsene,
 ingen del løsere enn 6-8 cm).
 

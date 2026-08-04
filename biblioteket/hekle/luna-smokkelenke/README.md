@@ -1,7 +1,7 @@
 # Lunas smokkelenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Lunas-smokkelenke-LME.pdf`** (norsk, 15 sider, A4) og
-**`Lunas-smokkelenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
+Ferdig oppskrift: **`Lunas-smokkelenke-LME.pdf`** (norsk, 14 sider, A4) og
+**`Lunas-smokkelenke-LME-EN.pdf`** (engelsk, 14 sider, A4).
 
 Følger opp `../ellies-smokkelenke/`, `../pip-smokkelenke/`,
 `../felix-smokkelenke/` og `../molly-smokkelenke/` med en versjon for

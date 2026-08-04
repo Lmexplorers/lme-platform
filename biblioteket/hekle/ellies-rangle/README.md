@@ -1,7 +1,7 @@
 # Ellies rangle (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Ellies-rangle-LME.pdf`** (norsk, 14 sider, A4) og
-**`Ellies-rangle-LME-EN.pdf`** (engelsk, 14 sider, A4).
+Ferdig oppskrift: **`Ellies-rangle-LME.pdf`** (norsk, 13 sider, A4) og
+**`Ellies-rangle-LME-EN.pdf`** (engelsk, 13 sider, A4).
 
 Tredje oppskrift i **LME Baby Collection "Woodland Dreams"**. Et lite
 dådyrhode (miniatyrutgave av Ellie) på en trering, ca. 13 til 15 cm høyt, med
@@ -16,7 +16,6 @@ gjeldende lokale krav før salg.
 
 - **Garn:** samme Bystrikk Merino som resten av kolleksjonen, pluss en liten
   rest av pudderrosa til sløyfen og kragen.
-- **Fotoveiledning og QR-kode-plassholder:** samme mal som smokkelenken.
 - Forsidebildet er et beskjært utsnitt av Renates eget referansebilde for
   rangelen (tydelig merket "stiluttrykk-referanse" i bildeteksten), siden
   rangelen selv ikke er heklet og fotografert ennå.
@@ -24,6 +23,11 @@ gjeldende lokale krav før salg.
 Rettet 3. august 2026: forsiden viste feilaktig et generisk Ellie-bilde
 merket "ikke selve rangelen". Byttet til `rangle_ref.jpg`, det faktiske
 rangel-referansebildet som allerede brukes i butikken.
+
+Oppdatert 4. august 2026 (Renate): fjernet "Fotoveiledning"-siden og
+"Videoveiledning"-boksen, siden oppskriften er salgsklar og ligger live i
+butikken. Ekte bilder/video legges inn i egne seksjoner den dagen de
+faktisk finnes, ikke som tomme plassholdere før det.
 
 ## Bygge PDF-ene på nytt
 

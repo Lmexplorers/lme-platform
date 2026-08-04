@@ -1,7 +1,7 @@
 # Ellies ballerinasko (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Ellies-ballerinasko-LME.pdf`** (norsk, 18 sider, A4) og
-**`Ellies-ballerinasko-LME-EN.pdf`** (engelsk, 18 sider, A4).
+Ferdig oppskrift: **`Ellies-ballerinasko-LME.pdf`** (norsk, 17 sider, A4) og
+**`Ellies-ballerinasko-LME-EN.pdf`** (engelsk, 17 sider, A4).
 
 Femte oppskrift i **LME Baby Collection "Woodland Dreams"**. Klassiske
 babyballerinaer med rund tå, et lite dådyransikt med ører og sløyfe på
@@ -22,6 +22,11 @@ på de minste størrelsene.
 Rettet 3. august 2026: forsiden viste feilaktig et generisk Ellie-bilde
 merket "ikke selve skoene". Byttet til `ballerinasko_ref.jpg`, det
 faktiske sko-referansebildet som allerede brukes i butikken.
+
+Oppdatert 4. august 2026 (Renate): fjernet "Fotoveiledning"-siden, siden
+oppskriften er salgsklar og ligger live i butikken. Ekte bilder legges inn
+i en egen seksjon den dagen de faktisk finnes, ikke som tomme
+plassholdere før det.
 
 ## Bygge PDF-ene på nytt
 

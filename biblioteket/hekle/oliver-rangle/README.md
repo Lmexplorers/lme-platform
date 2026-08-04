@@ -1,7 +1,7 @@
 # Olivers rangle (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Olivers-rangle-LME.pdf`** (norsk, 14 sider, A4) og
-**`Olivers-rangle-LME-EN.pdf`** (engelsk, 14 sider, A4).
+Ferdig oppskrift: **`Olivers-rangle-LME.pdf`** (norsk, 13 sider, A4) og
+**`Olivers-rangle-LME-EN.pdf`** (engelsk, 13 sider, A4).
 
 Følger opp `../ellies-rangle/`, `../pip-rangle/`, `../felix-rangle/`,
 `../molly-rangle/` og `../luna-rangle/` med en versjon for Oliver, den

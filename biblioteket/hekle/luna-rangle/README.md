@@ -1,7 +1,7 @@
 # Lunas rangle (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Lunas-rangle-LME.pdf`** (norsk, 14 sider, A4) og
-**`Lunas-rangle-LME-EN.pdf`** (engelsk, 14 sider, A4).
+Ferdig oppskrift: **`Lunas-rangle-LME.pdf`** (norsk, 13 sider, A4) og
+**`Lunas-rangle-LME-EN.pdf`** (engelsk, 13 sider, A4).
 
 Følger opp `../ellies-rangle/`, `../pip-rangle/`, `../felix-rangle/` og
 `../molly-rangle/` med en versjon for Luna. Et lite, forenklet kaninhode i

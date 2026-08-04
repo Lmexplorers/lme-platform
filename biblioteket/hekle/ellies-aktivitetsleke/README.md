@@ -1,7 +1,7 @@
 # Ellies aktivitetsleke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Ellies-aktivitetsleke-LME.pdf`** (norsk, 21 sider, A4) og
-**`Ellies-aktivitetsleke-LME-EN.pdf`** (engelsk, 21 sider, A4).
+Ferdig oppskrift: **`Ellies-aktivitetsleke-LME.pdf`** (norsk, 20 sider, A4) og
+**`Ellies-aktivitetsleke-LME-EN.pdf`** (engelsk, 20 sider, A4).
 
 Sjette og mest omfattende oppskrift i **LME Baby Collection "Woodland
 Dreams"**. En myk aktivitetskube, ca. 11-12 cm per side, med seks sider:
@@ -33,8 +33,13 @@ faktiske kube-referansebildet som allerede brukes i butikken.
 påsydde smådeler og flest ulike materialer (garn, tre, speil, knitrefolie)
 i hele kolleksjonen. Speilet og knitrefolien (kun babysikkert akryl/plast,
 aldri glass, og alltid helt innsydd) skal aldri ligge løst, og
-hjørneringenes perledusker skal aldri overstige ca. 6-8 cm. Side 19 av 21
+hjørneringenes perledusker skal aldri overstige ca. 6-8 cm. Side 18 av 20
 er viet sikkerhet i sin helhet.
+
+Oppdatert 4. august 2026 (Renate): fjernet "Fotoveiledning"-siden og
+"Videoveiledning"-boksen, siden oppskriften er salgsklar og ligger live i
+butikken. Ekte bilder/video legges inn i egne seksjoner den dagen de
+faktisk finnes, ikke som tomme plassholdere før det.
 
 ## Bygge PDF-ene på nytt
 

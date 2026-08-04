@@ -1,7 +1,7 @@
 # Felix' smokkelenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Felix-smokkelenke-LME.pdf`** (norsk, 15 sider, A4) og
-**`Felix-smokkelenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
+Ferdig oppskrift: **`Felix-smokkelenke-LME.pdf`** (norsk, 14 sider, A4) og
+**`Felix-smokkelenke-LME-EN.pdf`** (engelsk, 14 sider, A4).
 
 Følger opp `../ellies-smokkelenke/` og `../pip-smokkelenke/` med en versjon
 for Felix. Et lite, forenklet revehode i rustoransje, med to små foldede

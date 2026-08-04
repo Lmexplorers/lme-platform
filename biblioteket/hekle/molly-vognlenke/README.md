@@ -1,7 +1,7 @@
 # Mollys vognlenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Mollys-vognlenke-LME.pdf`** (norsk, 15 sider, A4) og
-**`Mollys-vognlenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
+Ferdig oppskrift: **`Mollys-vognlenke-LME.pdf`** (norsk, 14 sider, A4) og
+**`Mollys-vognlenke-LME-EN.pdf`** (engelsk, 14 sider, A4).
 
 Følger opp `../ellies-vognlenke/`, `../pip-vognlenke/` og
 `../felix-vognlenke/`, oppdatert 4. august 2026 etter Renates
@@ -15,7 +15,7 @@ Molly-medaljongen har fortsatt myke ører, en tett løkkemasket mini
 ulltopp og en liten smørgul sløyfe oppå, samme signaturuttrykk som resten
 av Mollys oppskrifter.
 
-Samme sikkerhetsfokus som `../ellies-vognlenke/`: side 13 forklarer hvorfor
+Samme sikkerhetsfokus som `../ellies-vognlenke/`: side 12 forklarer hvorfor
 lengden holdes kort, med LME-anbefalingen (maks 35-40 cm mellom klipsene,
 ingen del løsere enn 6-8 cm), pluss en påminnelse om å sjekke løkkemaskene
 i ulltoppen jevnlig.

@@ -1,7 +1,7 @@
 # Olivers smokkelenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Olivers-smokkelenke-LME.pdf`** (norsk, 14 sider, A4) og
-**`Olivers-smokkelenke-LME-EN.pdf`** (engelsk, 14 sider, A4).
+Ferdig oppskrift: **`Olivers-smokkelenke-LME.pdf`** (norsk, 13 sider, A4) og
+**`Olivers-smokkelenke-LME-EN.pdf`** (engelsk, 13 sider, A4).
 
 Femte og siste tilbehørsoppskrift i smokkelenke-serien, følger opp
 `../ellies-smokkelenke/`, `../pip-smokkelenke/`, `../felix-smokkelenke/` og

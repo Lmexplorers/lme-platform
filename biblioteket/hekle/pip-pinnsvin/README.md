@@ -1,7 +1,7 @@
 # Pip, det lille pinnsvinet (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Pip-hekleoppskrift-LME.pdf`** (norsk, 21 sider, A4) og
-**`Pip-hekleoppskrift-LME-EN.pdf`** (engelsk, 21 sider, A4).
+Ferdig oppskrift: **`Pip-hekleoppskrift-LME.pdf`** (norsk, 20 sider, A4) og
+**`Pip-hekleoppskrift-LME-EN.pdf`** (engelsk, 20 sider, A4).
 
 Andre figur i **LME Baby Collection "Woodland Dreams"**, etter Ellie. Et lite,
 nysgjerrig pinnsvin, ca. 22 til 24 cm høyt sittende, med spiss snute (ikke

@@ -1,7 +1,7 @@
 # Pips vognlenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Pips-vognlenke-LME.pdf`** (norsk, 15 sider, A4) og
-**`Pips-vognlenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
+Ferdig oppskrift: **`Pips-vognlenke-LME.pdf`** (norsk, 14 sider, A4) og
+**`Pips-vognlenke-LME-EN.pdf`** (engelsk, 14 sider, A4).
 
 Følger opp `../ellies-vognlenke/`, oppdatert 4. august 2026 etter Renates
 referansebilder av profesjonelt stylede vognlenker, samme ombygging som
@@ -13,7 +13,7 @@ innkapslet fjærmekanisme (samme klipstype som smokkelenke-serien).
 Pip-medaljongen har fortsatt sin egen miniatyr av piggstripen hans sydd
 langs midtlinjen bak hodet, i tillegg til de to små mørkebrune ørene.
 
-Samme sikkerhetsfokus som `../ellies-vognlenke/`: side 13 forklarer hvorfor
+Samme sikkerhetsfokus som `../ellies-vognlenke/`: side 12 forklarer hvorfor
 lengden holdes kort, med LME-anbefalingen (maks 35-40 cm mellom klipsene,
 ingen del løsere enn 6-8 cm).
 

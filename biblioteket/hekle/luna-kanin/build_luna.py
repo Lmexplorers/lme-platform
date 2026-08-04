@@ -8,7 +8,7 @@ BASE = pathlib.Path(__file__).parent
 sys.path.insert(0, str(BASE.parent / '_shared'))
 import lme_pattern_kit as kit
 from lme_pattern_kit import (banner, rosep, sagep, card, cream, cme, ul, steps, otab, abbrtab,
-                              photo_row, qr_placeholder, BROWN, BROWN_MID, BROWN_DARK, CREAM,
+                              BROWN, BROWN_MID, BROWN_DARK, CREAM,
                               CREAM_DEEP, ROSE, SAGE, INK)
 
 HERO = BASE / 'luna_hero.jpg'
@@ -609,16 +609,7 @@ add('montering_steg_en', [
     'Fasten every loose end securely on the inside of the pieces, and trim what is left.',
 ])
 
-# ---------------------------------------------------------------- SIDE 19: FOTOVEILEDNING
-add('banner_foto', 'FOTOVEILEDNING', 'PHOTO GUIDE')
-add('foto_lead',
-    'Sett inn egne bilder av hvert steg her når du har heklet Luna selv.',
-    'Add your own photos of each step here once you have crocheted Luna yourself.')
-add('foto_captions',
-    ['Hodet og snuteflekken', 'Ørene, uferdig', 'Ørene sydd på', 'Ferdig Luna'],
-    ['The head and muzzle patch', 'The ears, unfinished', 'The ears sewn on', 'Finished Luna'])
-
-# ---------------------------------------------------------------- SIDE 20: SIKKERHET OG STELL
+# ---------------------------------------------------------------- SIDE 19: SIKKERHET OG STELL
 add('banner_sikkerhet', 'ETTERARBEID, SIKKERHET OG STELL', 'FINISHING, SAFETY AND CARE')
 add('pill_etterarbeid', 'HELT TIL SLUTT', 'FINISHING TOUCHES')
 add('etterarbeid', [
@@ -667,7 +658,7 @@ add('stell_txt',
     'her flat to dry, with the ears laid out straight, not bent, so they dry in the right '
     'shape.')
 
-# ---------------------------------------------------------------- SIDE 21: FERDIG
+# ---------------------------------------------------------------- SIDE 20: FERDIG
 add('banner_ferdig', 'GRATULERER, LUNA ER FERDIG!', 'CONGRATULATIONS, LUNA IS DONE!')
 add('ferdig_txt',
     'Nå har du heklet din helt egen Luna, den lille kaninen. Vis henne gjerne fram i '
@@ -1008,13 +999,6 @@ def build(lang):
 {card(steps(mo_steg))}
 ''', 18))
 
-    foto_caps = T['foto_captions']['no'] if lang == 'no' else T['foto_captions']['en']
-    pages.append(pg(f'''
-{banner(t('banner_foto'))}
-{card('<p class="center">' + t('foto_lead') + '</p>')}
-{photo_row(foto_caps)}
-''', 19))
-
     etterarbeid = T['etterarbeid']['no'] if lang == 'no' else T['etterarbeid']['en']
     sikkerhet = T['sikkerhet_txt']['no'] if lang == 'no' else T['sikkerhet_txt']['en']
     pages.append(pg(f'''
@@ -1025,7 +1009,7 @@ def build(lang):
 {card(ul(sikkerhet))}
 {rosep(t('pill_stell'))}
 {cme(t('stell_txt'))}
-''', 20))
+''', 19))
 
     kolliste = T['kolleksjon_liste']['no'] if lang == 'no' else T['kolleksjon_liste']['en']
     pages.append(pg(f'''
@@ -1039,7 +1023,7 @@ def build(lang):
 <div class="byline">
   <div class="by2">{t('by1')} &middot; {t('by2')} &middot; {t('by3')}</div>
 </div>
-''', 21))
+''', 20))
 
     return pages
 

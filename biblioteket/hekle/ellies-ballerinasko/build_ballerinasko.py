@@ -6,8 +6,7 @@ import base64, pathlib, sys
 BASE = pathlib.Path(__file__).parent
 sys.path.insert(0, str(BASE.parent / '_shared'))
 import lme_pattern_kit as kit
-from lme_pattern_kit import (banner, rosep, sagep, card, cream, cme, ul, steps, otab, abbrtab,
-                              photo_row, qr_placeholder)
+from lme_pattern_kit import (banner, rosep, sagep, card, cream, cme, ul, steps, otab, abbrtab)
 
 REF = BASE / 'ballerinasko_ref.jpg'
 ref_b64 = base64.b64encode(REF.read_bytes()).decode()
@@ -387,16 +386,6 @@ add('montering_steg_en', [
     'Try both shoes on the foot one last time, and check they match in size and fit well.',
 ])
 
-# ---------------------------------------------------------------- SIDE 15: FOTOVEILEDNING
-add('banner_foto', 'FOTOVEILEDNING', 'PHOTO GUIDE')
-add('foto_lead',
-    'Sett inn egne bilder av hvert steg her når du har heklet skoene selv.',
-    'Add your own photos of each step here once you have crocheted the shoes yourself.')
-add('foto_captions',
-    ['Sålen ferdig', 'Overdelen med åpning', 'T-stropp og lukking', 'Ferdige sko med sløyfe'],
-    ['The finished sole', 'The upper with the opening', 'T-bar strap and closure',
-     'Finished shoes with a bow'])
-
 # ---------------------------------------------------------------- SIDE 16: SIKKERHET OG STELL
 add('banner_sikkerhet', 'SIKKERHET OG STELL', 'SAFETY AND CARE')
 add('pill_sikkerhet', 'SIKKERHET', 'SAFETY')
@@ -598,13 +587,6 @@ def build(lang):
 {card(steps(mo_steg))}
 ''', 15))
 
-    foto_caps = T['foto_captions']['no'] if lang == 'no' else T['foto_captions']['en']
-    pages.append(pg(f'''
-{banner(t('banner_foto'))}
-{card('<p class="center">' + t('foto_lead') + '</p>')}
-{photo_row(foto_caps)}
-''', 16))
-
     sik = T['sikkerhet_txt']['no'] if lang == 'no' else T['sikkerhet_txt']['en']
     pages.append(pg(f'''
 {banner(t('banner_sikkerhet'))}
@@ -612,7 +594,7 @@ def build(lang):
 {card(ul(sik))}
 {sagep(t('pill_stell'))}
 {cme(t('stell_txt'))}
-''', 17))
+''', 16))
 
     kolliste = T['kolleksjon_liste']['no'] if lang == 'no' else T['kolleksjon_liste']['en']
     pages.append(pg(f'''
@@ -625,7 +607,7 @@ def build(lang):
 <div class="byline">
   <div class="by2">{t('by1')} &middot; {t('by2')} &middot; {t('by3')}</div>
 </div>
-''', 18))
+''', 17))
 
     return pages
 

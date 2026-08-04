@@ -1,7 +1,7 @@
 # Oliver, den lille bjørnen (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Oliver-hekleoppskrift-LME.pdf`** (norsk, 20 sider, A4) og
-**`Oliver-hekleoppskrift-LME-EN.pdf`** (engelsk, 20 sider, A4).
+Ferdig oppskrift: **`Oliver-hekleoppskrift-LME.pdf`** (norsk, 19 sider, A4) og
+**`Oliver-hekleoppskrift-LME-EN.pdf`** (engelsk, 19 sider, A4).
 
 Sjette figur i **LME Baby Collection "Woodland Dreams"**, etter Ellie, Pip,
 Felix, Molly og Luna. Den rundeste og mykeste i familien: en liten, varmt
@@ -31,12 +31,17 @@ eller oppskrifter.
   SVG-illustrasjoner, bygget og visuelt verifisert i et eget testoppsett før
   de ble lagt inn i oppskriften.
 - Oliver har sju deler (én mindre enn de andre, siden han ikke har noen
-  ekstra sydd-på-del som en hale, sløyfe eller ulltopp) og 20 sider (én
-  kortere enn resten, siden signaturdelen hans deler side med hodet i
-  stedet for å kreve en egen "sett bakfra"-side i tillegg til
-  proporsjonsskissen).
+  ekstra sydd-på-del som en hale, sløyfe eller ulltopp) og 19 sider, siden
+  signaturdelen hans deler side med hodet i stedet for å kreve en egen
+  "sett bakfra"-side i tillegg til proporsjonsskissen.
 - Kolleksjonslisten på siste side inkluderer hele familien laget så langt
   (Ellie, Pip, Felix, Molly, Luna).
+
+Oppdatert 4. august 2026 (Renate): fjernet "Fotoveiledning"-siden, som kun
+inneholdt fire tomme plassholderbokser for bilder som ikke fantes, siden
+oppskriften er salgsklar og ligger live i butikken. Ekte bilder legges inn
+i en egen seksjon den dagen de faktisk finnes, ikke som tomme
+plassholdere før det.
 
 ## Bygge PDF-ene på nytt
 

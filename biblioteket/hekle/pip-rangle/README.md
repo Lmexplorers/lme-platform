@@ -1,7 +1,7 @@
 # Pips rangle (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Pips-rangle-LME.pdf`** (norsk, 14 sider, A4) og
-**`Pips-rangle-LME-EN.pdf`** (engelsk, 14 sider, A4).
+Ferdig oppskrift: **`Pips-rangle-LME.pdf`** (norsk, 13 sider, A4) og
+**`Pips-rangle-LME-EN.pdf`** (engelsk, 13 sider, A4).
 
 Følger opp `../ellies-rangle/` med en versjon for Pip. Et lite,
 forenklet pinnsvinhode i kremhvitt på en trering, med to små todelte ører,

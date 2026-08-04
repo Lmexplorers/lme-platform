@@ -1,7 +1,7 @@
 # Felix, den lille reven (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Felix-hekleoppskrift-LME.pdf`** (norsk, 21 sider, A4) og
-**`Felix-hekleoppskrift-LME-EN.pdf`** (engelsk, 21 sider, A4).
+Ferdig oppskrift: **`Felix-hekleoppskrift-LME.pdf`** (norsk, 20 sider, A4) og
+**`Felix-hekleoppskrift-LME-EN.pdf`** (engelsk, 20 sider, A4).
 
 Tredje figur i **LME Baby Collection "Woodland Dreams"**, etter Ellie og Pip.
 En liten, rolig rev med spisse ører, en flat snuteflekk (som Ellies

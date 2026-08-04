@@ -1,7 +1,7 @@
 # Molly, det lille lammet (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Molly-hekleoppskrift-LME.pdf`** (norsk, 21 sider, A4) og
-**`Molly-hekleoppskrift-LME-EN.pdf`** (engelsk, 21 sider, A4).
+Ferdig oppskrift: **`Molly-hekleoppskrift-LME.pdf`** (norsk, 20 sider, A4) og
+**`Molly-hekleoppskrift-LME-EN.pdf`** (engelsk, 20 sider, A4).
 
 Fjerde figur i **LME Baby Collection "Woodland Dreams"**, etter Ellie, Pip og
 Felix. Et lite, mykt lam med lange, slappe ører og en krøllete ulltopp

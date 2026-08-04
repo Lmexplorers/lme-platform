@@ -1,7 +1,7 @@
 # Ellies vognlenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Ellies-vognlenke-LME.pdf`** (norsk, 15 sider, A4) og
-**`Ellies-vognlenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
+Ferdig oppskrift: **`Ellies-vognlenke-LME.pdf`** (norsk, 14 sider, A4) og
+**`Ellies-vognlenke-LME-EN.pdf`** (engelsk, 14 sider, A4).
 
 Fjerde oppskrift i **LME Baby Collection "Woodland Dreams"**.
 
@@ -15,16 +15,28 @@ tre-kuleklips med innkapslet fjærmekanisme (samme klipstype som
 smokkelenke-serien), i stedet for det tidligere valget mellom treklips,
 plastklips eller trering.
 
+Oppdatert igjen samme dag (Renate): forsidebildet (`vognlenke_ref.jpg`) hadde
+en tydelig blå kule i kjeden, som ikke stemte med noe i materiallisten
+(brunt, kremhvitt, pudderrosa, salviegrønt, ingen blått). Byttet forsidebildet
+til Ellies eget referansebilde (`ellie_ref.png`, samme fil som resten av
+Ellie-kolleksjonen bruker), samme ærlige "stiluttrykk-referanse"-behandling
+som de fem andre karakterenes vognlenke- og smokkelenke-forsider allerede
+har, i stedet for et produktbilde som ikke stemte. Oppdatert i butikken
+(`images/oppskrift-ellies-vognlenke.jpg`) også.
+
 Samme sikkerhetsfokus som `../ellies-smokkelenke/` og `../ellies-rangle/`:
-side 13 forklarer hvorfor lengden holdes kort (generelt EN 71-prinsipp om at
+side 12 forklarer hvorfor lengden holdes kort (generelt EN 71-prinsipp om at
 snorer/kjeder for barn under 36 måneder skal være så korte som praktisk
 mulig), med en tydelig LME-anbefaling (maks 35-40 cm mellom klipsene, ingen
 del løsere enn 6-8 cm), IKKE en påstått eksakt regelsitat, pluss en
 gjentatt oppfordring om å sjekke ferdig produkt mot gjeldende lokale krav.
 
 - **Garn:** samme Bystrikk Merino + rester som resten av kolleksjonen.
-- **Fotoveiledning og QR-kode-plassholder:** samme mal som de andre
-  tilbehørsoppskriftene.
+
+Oppdatert 4. august 2026 (Renate): fjernet "Fotoveiledning"-siden og
+"Videoveiledning"-boksen, siden oppskriften er salgsklar og ligger live i
+butikken. Ekte bilder/video legges inn i egne seksjoner den dagen de
+faktisk finnes, ikke som tomme plassholdere før det.
 
 ## Bygge PDF-ene på nytt
 

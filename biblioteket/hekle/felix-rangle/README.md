@@ -1,7 +1,7 @@
 # Felix' rangle (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Felix-rangle-LME.pdf`** (norsk, 14 sider, A4) og
-**`Felix-rangle-LME-EN.pdf`** (engelsk, 14 sider, A4).
+Ferdig oppskrift: **`Felix-rangle-LME.pdf`** (norsk, 13 sider, A4) og
+**`Felix-rangle-LME-EN.pdf`** (engelsk, 13 sider, A4).
 
 Følger opp `../ellies-rangle/` og `../pip-rangle/` med en versjon for
 Felix. Et lite, forenklet revehode i rustoransje på en trering, med to

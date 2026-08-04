@@ -1,7 +1,7 @@
 # Mollys rangle (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Mollys-rangle-LME.pdf`** (norsk, 14 sider, A4) og
-**`Mollys-rangle-LME-EN.pdf`** (engelsk, 14 sider, A4).
+Ferdig oppskrift: **`Mollys-rangle-LME.pdf`** (norsk, 13 sider, A4) og
+**`Mollys-rangle-LME-EN.pdf`** (engelsk, 13 sider, A4).
 
 Følger opp `../ellies-rangle/`, `../pip-rangle/` og `../felix-rangle/` med en
 versjon for Molly. Et lite, forenklet lammehode i kremhvitt på en trering,

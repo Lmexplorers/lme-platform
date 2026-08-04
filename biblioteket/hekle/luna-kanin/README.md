@@ -1,7 +1,7 @@
 # Luna, den lille kaninen (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Luna-hekleoppskrift-LME.pdf`** (norsk, 21 sider, A4) og
-**`Luna-hekleoppskrift-LME-EN.pdf`** (engelsk, 21 sider, A4).
+Ferdig oppskrift: **`Luna-hekleoppskrift-LME.pdf`** (norsk, 20 sider, A4) og
+**`Luna-hekleoppskrift-LME-EN.pdf`** (engelsk, 20 sider, A4).
 
 Femte figur i **LME Baby Collection "Woodland Dreams"**, etter Ellie, Pip,
 Felix og Molly. En liten, myk kanin med ekstra lange, todelte ører (varmt

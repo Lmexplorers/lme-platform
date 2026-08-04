@@ -1,7 +1,7 @@
 # Pips smokkelenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Pips-smokkelenke-LME.pdf`** (norsk, 15 sider, A4) og
-**`Pips-smokkelenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
+Ferdig oppskrift: **`Pips-smokkelenke-LME.pdf`** (norsk, 14 sider, A4) og
+**`Pips-smokkelenke-LME-EN.pdf`** (engelsk, 14 sider, A4).
 
 Følger opp `../ellies-smokkelenke/` med en versjon for Pip. Et lite,
 forenklet pinnsvinhode i kremhvitt, uten egen snute, med to små brune ører

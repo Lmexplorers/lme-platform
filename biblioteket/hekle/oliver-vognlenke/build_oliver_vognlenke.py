@@ -6,8 +6,7 @@ import base64, pathlib, sys
 BASE = pathlib.Path(__file__).parent
 sys.path.insert(0, str(BASE.parent / '_shared'))
 import lme_pattern_kit as kit
-from lme_pattern_kit import (banner, rosep, sagep, card, cream, cme, ul, steps, otab, abbrtab,
-                              photo_row, qr_placeholder)
+from lme_pattern_kit import (banner, rosep, sagep, card, cream, cme, ul, steps, otab, abbrtab)
 
 REF = BASE / 'oliver_ref.jpg'
 ref_b64 = base64.b64encode(REF.read_bytes()).decode()
@@ -71,10 +70,10 @@ add('om_stil',
 add('pill_sikkerhet_kort', 'VIKTIGST AV ALT: SIKKERHET', 'MOST IMPORTANT OF ALL: SAFETY')
 add('om_sikkerhet_kort',
     'En vognlenke henger over barnet, ofte uten at en voksen ser på hele tiden. Derfor er '
-    'lengden på denne oppskriften bevisst kort, og hele side 14 er viet sikkerhet. Les den '
+    'lengden på denne oppskriften bevisst kort, og hele side 13 er viet sikkerhet. Les den '
     'siden før du hekler videre.',
     "A stroller toy hangs over the child, often without an adult watching all the time. That's "
-    "why this pattern's length is deliberately short, and all of page 14 is dedicated to "
+    "why this pattern's length is deliberately short, and all of page 13 is dedicated to "
     "safety. Read that page before you crochet on.")
 
 # ---------------------------------------------------------------- SIDE 3
@@ -336,17 +335,7 @@ add('montering_steg_en', [
     'Fasten every loose end securely on the inside of the pieces, and trim what is left.',
 ])
 
-# ---------------------------------------------------------------- SIDE 13: FOTOVEILEDNING
-add('banner_foto', 'FOTOVEILEDNING', 'PHOTO GUIDE')
-add('foto_lead',
-    'Sett inn egne bilder av hvert steg her når du har heklet vognlenken selv.',
-    'Add your own photos of each step here once you have crocheted the stroller toy yourself.')
-add('foto_captions',
-    ['Alle sju motivene', 'Oliver midt på snoren', 'Motivene fordelt', 'Ferdig montert lenke'],
-    ['All seven motifs', 'Oliver in the middle of the cord', 'The motifs spread out',
-     'The fully assembled toy'])
-
-# ---------------------------------------------------------------- SIDE 14: SIKKERHET
+# ---------------------------------------------------------------- SIDE 13: SIKKERHET
 add('banner_sikkerhet', 'SIKKERHET', 'SAFETY')
 add('pill_lengde', 'HVORFOR LENGDEN ER SÅ VIKTIG', 'WHY THE LENGTH MATTERS SO MUCH')
 add('lengde_txt',
@@ -398,17 +387,15 @@ add('regler',
      'checked, tested and marked as required under current local safety requirements and '
      "regulations for children's products/toys."])
 
-# ---------------------------------------------------------------- SIDE 15: STELL
+# ---------------------------------------------------------------- SIDE 14: STELL
 add('banner_stell', 'STELL OG VASK', 'CARE AND WASHING')
 add('stell_txt',
     'Håndvask i lunkent vann med litt mild såpe. Skyll godt. Klem forsiktig ut vannet i et '
     'håndkle, ikke vri. Legg til tørk flatt, formet pent, unna direkte sollys.',
     'Hand wash in lukewarm water with a little mild soap. Rinse well. Gently press out the '
     'water in a towel, do not wring. Lay flat to dry, neatly shaped, away from direct sunlight.')
-add('pill_qr', 'VIDEOVEILEDNING', 'VIDEO GUIDE')
-add('qr_caption', 'QR-kode til videoveiledning (legges til)', 'QR code to video guide (to be added)')
 
-# ---------------------------------------------------------------- SIDE 16: FERDIG
+# ---------------------------------------------------------------- SIDE 15: FERDIG
 add('banner_ferdig', 'GRATULERER, VOGNLENKEN ER FERDIG!', 'CONGRATULATIONS, THE STROLLER TOY IS DONE!')
 add('ferdig_txt',
     'Nå har du heklet en liten Oliver-vognlenke. Husk å sjekke lengden en siste gang før den '
@@ -568,13 +555,6 @@ def build(lang):
 {card(steps(mo_steg))}
 ''', 12))
 
-    foto_caps = T['foto_captions']['no'] if lang == 'no' else T['foto_captions']['en']
-    pages.append(pg(f'''
-{banner(t('banner_foto'))}
-{card('<p class="center">' + t('foto_lead') + '</p>')}
-{photo_row(foto_caps)}
-''', 13))
-
     regler = T['regler']['no'] if lang == 'no' else T['regler']['en']
     pages.append(pg(f'''
 {banner(t('banner_sikkerhet'))}
@@ -582,14 +562,12 @@ def build(lang):
 {card('<p>' + t('lengde_txt') + '</p>')}
 {sagep(t('pill_regler'))}
 {card(ul(regler))}
-''', 14))
+''', 13))
 
     pages.append(pg(f'''
 {banner(t('banner_stell'))}
 {cme(t('stell_txt'))}
-{rosep(t('pill_qr'))}
-{qr_placeholder(t('qr_caption'))}
-''', 15))
+''', 14))
 
     kolliste = T['kolleksjon_liste']['no'] if lang == 'no' else T['kolleksjon_liste']['en']
     kolliste_html = ('<ul class="dots" style="columns:2;column-gap:8mm;">'
@@ -604,7 +582,7 @@ def build(lang):
 <div class="byline">
   <div class="by2">{t('by1')} &middot; {t('by2')} &middot; {t('by3')}</div>
 </div>
-''', 16))
+''', 15))
 
     return pages
 

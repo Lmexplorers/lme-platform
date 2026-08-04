@@ -7,8 +7,7 @@ BASE = pathlib.Path(__file__).parent
 sys.path.insert(0, str(BASE.parent / '_shared'))
 import lme_pattern_kit as kit
 from lme_pattern_kit import (BROWN, BROWN_MID, BROWN_DARK, CREAM, CREAM_DEEP, ROSE, SAGE, INK,
-                              banner, rosep, sagep, card, cream, cme, ul, steps, otab, abbrtab,
-                              photo_row, qr_placeholder)
+                              banner, rosep, sagep, card, cream, cme, ul, steps, otab, abbrtab)
 
 REF = BASE / 'oliver_ref.jpg'
 ref_b64 = base64.b64encode(REF.read_bytes()).decode()
@@ -291,18 +290,7 @@ add('montering_steg_en', [
     'with nothing rattling loose.',
 ])
 
-# ---------------------------------------------------------------- SIDE 11: FOTOVEILEDNING
-add('banner_foto', 'FOTOVEILEDNING', 'PHOTO GUIDE')
-add('foto_lead',
-    'Sett inn egne bilder av hvert steg her når du har heklet rangelen selv.',
-    'Add your own photos of each step here once you have crocheted the rattle yourself.')
-add('foto_captions',
-    ['Hodet før lukking', 'Rangleboksen på plass', 'Halsen rundt ringen',
-     'Ferdig montert rangle'],
-    ['The head before closing', 'The rattle capsule in place', 'The neck around the ring',
-     'The fully assembled rattle'])
-
-# ---------------------------------------------------------------- SIDE 12: SIKKERHET
+# ---------------------------------------------------------------- SIDE 11: SIKKERHET
 add('banner_sikkerhet', 'SIKKERHET', 'SAFETY')
 add('pill_rangleboks', 'RANGLEBOKSEN MÅ ALDRI KUNNE TAS UT', 'THE RATTLE CAPSULE MUST NEVER COME OUT')
 add('rangleboks_txt',
@@ -342,7 +330,7 @@ add('regler',
      'be checked, tested and marked as required under current local safety requirements and '
      "regulations for children's products/toys."])
 
-# ---------------------------------------------------------------- SIDE 13: STELL
+# ---------------------------------------------------------------- SIDE 12: STELL
 add('banner_stell', 'STELL OG VASK', 'CARE AND WASHING')
 add('stell_txt',
     'Håndvask i lunkent vann med litt mild såpe. Skyll godt. Klem forsiktig ut vannet i et '
@@ -351,10 +339,8 @@ add('stell_txt',
     'Hand wash in lukewarm water with a little mild soap. Rinse well. Gently press out the '
     'water in a towel, do not wring. Lay flat to dry, and check that the rattle capsule has '
     'not taken on water before using the rattle again.')
-add('pill_qr', 'VIDEOVEILEDNING', 'VIDEO GUIDE')
-add('qr_caption', 'QR-kode til videoveiledning (legges til)', 'QR code to video guide (to be added)')
 
-# ---------------------------------------------------------------- SIDE 14: FERDIG
+# ---------------------------------------------------------------- SIDE 13: FERDIG
 add('banner_ferdig', 'GRATULERER, RANGELEN ER FERDIG!', 'CONGRATULATIONS, THE RATTLE IS DONE!')
 add('ferdig_txt',
     'Nå har du heklet en liten Oliver-rangle. Rist den forsiktig og hør den myke lyden!',
@@ -497,13 +483,6 @@ def build(lang):
 {card(steps(mo_steg))}
 ''', 10))
 
-    foto_caps = T['foto_captions']['no'] if lang == 'no' else T['foto_captions']['en']
-    pages.append(pg(f'''
-{banner(t('banner_foto'))}
-{card('<p class="center">' + t('foto_lead') + '</p>')}
-{photo_row(foto_caps)}
-''', 11))
-
     regler = T['regler']['no'] if lang == 'no' else T['regler']['en']
     pages.append(pg(f'''
 {banner(t('banner_sikkerhet'))}
@@ -511,14 +490,12 @@ def build(lang):
 {card('<p>' + t('rangleboks_txt') + '</p>')}
 {sagep(t('pill_regler'))}
 {card(ul(regler))}
-''', 12))
+''', 11))
 
     pages.append(pg(f'''
 {banner(t('banner_stell'))}
 {cme(t('stell_txt'))}
-{rosep(t('pill_qr'))}
-{qr_placeholder(t('qr_caption'))}
-''', 13))
+''', 12))
 
     kolliste = T['kolleksjon_liste']['no'] if lang == 'no' else T['kolleksjon_liste']['en']
     kolliste_html = ('<ul class="dots" style="columns:2;column-gap:8mm;">'
@@ -533,7 +510,7 @@ def build(lang):
 <div class="byline">
   <div class="by2">{t('by1')} &middot; {t('by2')} &middot; {t('by3')}</div>
 </div>
-''', 14))
+''', 13))
 
     return pages
 

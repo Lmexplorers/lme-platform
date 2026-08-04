@@ -1,7 +1,7 @@
 # Mollys smokkelenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Mollys-smokkelenke-LME.pdf`** (norsk, 15 sider, A4) og
-**`Mollys-smokkelenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
+Ferdig oppskrift: **`Mollys-smokkelenke-LME.pdf`** (norsk, 14 sider, A4) og
+**`Mollys-smokkelenke-LME-EN.pdf`** (engelsk, 14 sider, A4).
 
 Følger opp `../ellies-smokkelenke/`, `../pip-smokkelenke/` og
 `../felix-smokkelenke/` med en versjon for Molly. Et lite, forenklet
