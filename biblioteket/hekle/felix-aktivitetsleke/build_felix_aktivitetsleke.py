@@ -32,16 +32,16 @@ add('cover_desc',
     'En myk aktivitetskube, ca. 11 til 12 cm per side, med alle seks sidene pyntet: Felix selv '
     'med en salviegrønn volangkrage, en stjerneside med en stor pudderrosa stjerne, en side med '
     'fire små motiver (hjerte, blad, speil og sky), et større babysikkert speil i en '
-    'himmelblå takket ramme, Felix som titter opp av en liten himmelblå lomme med en bitte liten '
+    'salviegrønn takket ramme, Felix som titter opp av en liten salviegrønn lomme med en bitte liten '
     'blomst, og en knitreside med en stor, søvnig sky som knitrer når man klemmer den. Kanten '
-    'rundt hver side er himmelblå. To hjørneringer i tre, den ene formet som et lite '
+    'rundt hver side er salviegrønn. To hjørneringer i tre, den ene formet som et lite '
     'blomsterhjul, og en perlekant på toppen fullfører kuben.',
     'A soft activity cube, approx. 11 to 12 cm per side, with all six sides decorated: Felix '
     'himself in a sage green ruffled collar, a star side with a big powder pink star, a side '
     'with four small motifs (a heart, a leaf, a mirror and a cloud), a bigger baby-safe mirror '
-    'in a light sky blue scalloped frame, Felix peeking out of a little light sky blue pocket '
+    'in a sage green scalloped frame, Felix peeking out of a little sage green pocket '
     'with a tiny flower, and a crinkle side with a big, sleepy cloud that crinkles when you '
-    'squeeze it. The edging around every side is light sky blue. Two wooden corner rings, one '
+    'squeeze it. The edging around every side is sage green. Two wooden corner rings, one '
     'shaped like a little flower wheel, and a bead trim along the top complete the cube.')
 add('by1', 'Av Renate Dahl', 'By Renate Dahl')
 add('by2', 'Little Montessori Explorers', 'Little Montessori Explorers')
@@ -68,11 +68,11 @@ add('om_historien',
     "pocket where Felix peeks out, and the cloud that crinkles on the crinkle side.")
 add('pill_stil', 'STIL OG SANSER', 'STYLE AND SENSES')
 add('om_stil',
-    'Skandinavisk og Montessori-inspirert, med himmelblå kanting rundt hver side og '
+    'Skandinavisk og Montessori-inspirert, med salviegrønn kanting rundt hver side og '
     'salviegrønt på Felix sin egen krage. Hver side har sin egen oppgave å utforske, fra å '
     'kjenne igjen former til å høre en liten sky knitre, akkurat den typen sanselige, hands-on '
     'lek Montessori-filosofien bygger på.',
-    'Scandinavian and Montessori-inspired, with light sky blue edging around every side and '
+    'Scandinavian and Montessori-inspired, with sage green edging around every side and '
     "sage green on Felix's own collar. Each side has its own task to explore, from recognising "
     'shapes to hearing a little cloud crinkle, exactly the kind of sensory, hands-on play the '
     'Montessori philosophy is built on.')
@@ -90,11 +90,11 @@ add('om_sikkerhet_kort',
 add('banner_mat', 'MATERIALER OG GARNALTERNATIVER', 'MATERIALS AND YARN ALTERNATIVES')
 add('pill_garn', 'GARN', 'YARN')
 add('garn_txt',
-    'Bystrikk Merino i kremhvitt (kubens sider) og lys himmelblå (kantfarge og speilrammen), '
+    'Bystrikk Merino i kremhvitt (kubens sider) og salviegrønn (kantfarge og speilrammen), '
     'pluss rester av rustoransje til Felix sitt hode, salviegrønt til kragen og bladet, '
     'pudderrosa til stjernen og hjertet, og gult/mustard til den lille speilrammen, samme '
     "garnfamilie som resten av Felix' oppskrift.",
-    "Bystrikk Merino in cream (the cube sides) and light sky blue (the edging colour and the "
+    "Bystrikk Merino in cream (the cube sides) and sage green (the edging colour and the "
     "mirror frame), plus leftover rust orange for Felix's head, sage green for the collar and "
     "the leaf, powder pink for the star and the heart, and yellow/mustard for the little "
     "mirror frame, the same yarn family as the rest of Felix's pattern.")
@@ -183,18 +183,18 @@ add('oversikt_lead',
     "The cube has six sides, and unlike Ellie's cube, Felix's version has something to explore "
     "on every single side, none of them are kept plain and undecorated:")
 add('oversikt_deler', [
-    ('1. Grunnkvadratene', 'seks like paneler med himmelblå kantfarge', '1. The base squares',
-     'six matching panels with a light sky blue edging colour'),
+    ('1. Grunnkvadratene', 'seks like paneler med salviegrønn kantfarge', '1. The base squares',
+     'six matching panels with a sage green edging colour'),
     ('2. Felix-siden', 'forsiden, med salviegrønn volangkrage', '2. The Felix side',
      'the front, with a sage green ruffled collar'),
-    ('3. Speil-siden', 'babysikkert speil i himmelblå takket ramme', '3. The mirror side',
-     'baby-safe mirror in a light sky blue scalloped frame'),
+    ('3. Speil-siden', 'babysikkert speil i salviegrønn takket ramme', '3. The mirror side',
+     'baby-safe mirror in a sage green scalloped frame'),
     ('4. Stjerne-siden', 'en stor pudderrosa stjerne', '4. The star side',
      'a big powder pink star'),
     ('5. Form-siden', 'hjerte, blad, lite speil og liten sky', '5. The shapes side',
      'a heart, a leaf, a small mirror and a small cloud'),
-    ('6. Lomme-siden', 'miniatyr-Felix titter opp av en himmelblå lomme', '6. The pocket side',
-     'a miniature Felix peeking out of a light sky blue pocket'),
+    ('6. Lomme-siden', 'miniatyr-Felix titter opp av en salviegrønn lomme', '6. The pocket side',
+     'a miniature Felix peeking out of a sage green pocket'),
     ('7. Knitre-siden', 'en stor, søvnig sky med knitrende stoff inni, som knitrer når man '
      'klemmer', '7. The crinkle side', 'a big, sleepy cloud with crinkling material inside, '
      'that crinkles when squeezed'),
@@ -221,10 +221,10 @@ add('kvadrat_txt',
     'until the piece is square, approx. 11 x 11 cm, roughly 22 to 24 rows depending on your '
     'gauge. Fasten off. Crochet six matching squares in total.')
 add('kvadrat_kant',
-    'Rund av hvert kvadrat med én omgang fm i lys himmelblå rundt hele kanten (fm jevnt langs '
+    'Rund av hvert kvadrat med én omgang fm i salviegrønn rundt hele kanten (fm jevnt langs '
     'sidene, 3 fm i hvert hjørne for at det skal ligge flatt). Fest av og gjem tråden. Dette gir '
     'den blå kantstripen du ser rundt hver side i referansebildet.',
-    'Edge each square with one round of sc in light sky blue all the way around (sc evenly '
+    'Edge each square with one round of sc in sage green all the way around (sc evenly '
     'along the sides, 3 sc in each corner so it lies flat). Fasten off and weave in the end. '
     'This gives the blue border you see around each side in the reference photo.')
 
@@ -299,12 +299,12 @@ add('speil_txt',
     'very tight stitches, so the mirror is fully enclosed and cannot be removed or slide out '
     'of the pocket.')
 add('speil_ramme',
-    'Den takkede rammen: fest himmelblå tråd direkte i ytterkanten av den innsydde '
+    'Den takkede rammen: fest salviegrønn tråd direkte i ytterkanten av den innsydde '
     'speilsirkelen, og hekle en omgang: 24 fm rundt hele kanten. Fortsett rett inn i takkene, '
     'uten å lukke omgangen: *hopp over 1 m, i neste m: 1 kjm, 2 lm, 3 stav, 2 lm, 1 kjm*, gjenta '
     'til du har åtte takker rundt hele speilet, akkurat som den scalloped rammen i '
     'referansebildet. Fest av og gjem tråden. Sy speilet med rammen godt fast midt på panelet.',
-    'The scalloped frame: attach light sky blue yarn directly into the outer edge of the sewn-in '
+    'The scalloped frame: attach sage green yarn directly into the outer edge of the sewn-in '
     'mirror circle, and crochet one round: 24 sc all the way around. Continue straight into the '
     'scallops, without joining the round: *skip 1 st, in the next st: 1 sl st, 2 ch, 3 dc, 2 ch, '
     '1 sl st*, repeat until you have eight scallops all the way around the mirror, just like '
@@ -367,13 +367,13 @@ add('minispeil_txt',
     'frame around a small baby-safe mirror piece. Fasten off, press flat, place the mirror '
     'piece inside and sew the edge securely closed, just like the big mirror side, only in '
     'miniature.')
-add('pill_minisky', 'DEN LILLE SKYEN (HIMMELBLÅ)', 'THE SMALL CLOUD (SKY BLUE)')
+add('pill_minisky', 'DEN LILLE SKYEN (SALVIEGRØNN)', 'THE SMALL CLOUD (SAGE GREEN)')
 add('minisky_txt',
-    'Hekle tre overlappende sirkler i himmelblå: (a) 6 fm i magisk ring. (b) 6 fm i magisk '
+    'Hekle tre overlappende sirkler i salviegrønn: (a) 6 fm i magisk ring. (b) 6 fm i magisk '
     'ring, økn x 6 (12). (c) 6 fm i magisk ring, økn x 6 (12), (1 fm, økn) x 6 (18). Overlapp og '
     'sy sammen de tre sirklene til en liten skyform. Press flatt og sy fast, gjerne med noen '
     'bittesmå brodert stjerner rundt, som i referansebildet.',
-    'Crochet three overlapping circles in sky blue: (a) 6 sc in a magic ring. (b) 6 sc in a '
+    'Crochet three overlapping circles in sage green: (a) 6 sc in a magic ring. (b) 6 sc in a '
     'magic ring, inc x 6 (12). (c) 6 sc in a magic ring, inc x 6 (12), (1 sc, inc) x 6 (18). '
     'Overlap and sew the three circles together into a small cloud shape. Press flat and sew '
     'on, with a few tiny embroidered stars around it if you like, as in the reference photo.')
@@ -381,16 +381,16 @@ add('minisky_txt',
 # ---------------------------------------------------------------- SIDE 12: LOMME-SIDEN
 add('banner_lomme', 'DEL 6: LOMME-SIDEN', 'PART 6: THE POCKET SIDE')
 add('lomme_lead',
-    'En liten miniatyr-Felix titter opp av en himmelblå lomme nederst på panelet, en liten '
+    'En liten miniatyr-Felix titter opp av en salviegrønn lomme nederst på panelet, en liten '
     'tittelek-overraskelse.',
-    'A tiny miniature Felix peeks up out of a light sky blue pocket at the bottom of the '
+    'A tiny miniature Felix peeks up out of a sage green pocket at the bottom of the '
     'panel, a little peekaboo surprise.')
 add('lomme_txt',
-    'Lommen: legg opp 12 lm + 1 vendemaske i himmelblått. Rad 1: 12 fm. Gjenta rad 1 i 8 rader '
+    'Lommen: legg opp 12 lm + 1 vendemaske i salviegrønt. Rad 1: 12 fm. Gjenta rad 1 i 8 rader '
     'totalt. Fold stykket dobbelt og sy sammen langs de to kortsidene og bunnen, slik at det '
     'blir en liten, åpen lomme. Sy gjerne en bitte liten hvit blomst fast på lommen, som i '
     'referansebildet. Sy lommens bunnkant fast nederst på panelet, med åpningen vendt opp.',
-    'The pocket: chain 12 + 1 turning chain in light sky blue. Row 1: 12 sc. Repeat row 1 for 8 '
+    'The pocket: chain 12 + 1 turning chain in sage green. Row 1: 12 sc. Repeat row 1 for 8 '
     'rows in total. Fold the piece in half and sew together along the two short sides and the '
     'bottom, so it becomes a small, open pocket. Feel free to sew a tiny white flower onto the '
     "pocket, as in the reference photo. Sew the pocket's bottom edge onto the bottom of the "
@@ -489,7 +489,7 @@ add('handtak_txt',
     'Felix-siden og lomme-siden, slik at perlerekken danner en liten bue over toppen, som et '
     'håndtak.',
     "Thread a selection of round wooden beads and yarn-covered balls (powder pink, sage green, "
-    "light sky blue and yellow/mustard, just like in the reference photo) onto a short, sturdy "
+    "sage green and yellow/mustard, just like in the reference photo) onto a short, sturdy "
     "cotton cord, in whatever order you like. Sew both ends of the cord securely along the top "
     "seam, between the Felix side and the pocket side, so the row of beads forms a small arch "
     "over the top, like a handle.")
@@ -526,7 +526,7 @@ add('dusker_txt',
 # ---------------------------------------------------------------- SIDE 17: MONTERING
 add('banner_montering', 'MONTERING, STEG FOR STEG', 'ASSEMBLY, STEP BY STEP')
 add('montering_steg', [
-    'Hekle de seks grunnkvadratene og kant dem alle i lys himmelblå.',
+    'Hekle de seks grunnkvadratene og kant dem alle i salviegrønn.',
     'Hekle Felix-siden, speil-siden, stjerne-siden, form-siden, lomme-siden og knitre-siden, '
     'hver på sitt eget grunnkvadrat.',
     'Sy fem av sømmene sammen til en åpen kube, sett inn skumkvadratene og litt fyll, og sy '
@@ -540,7 +540,7 @@ add('montering_steg', [
     'at ingenting løsner, før leken tas i bruk.',
 ])
 add('montering_steg_en', [
-    'Crochet the six base squares and edge them all in light sky blue.',
+    'Crochet the six base squares and edge them all in sage green.',
     'Crochet the Felix side, the mirror side, the star side, the shapes side, the pocket side '
     'and the crinkle side, each onto its own base square.',
     'Sew five of the seams together into an open cube, insert the foam squares and a little '

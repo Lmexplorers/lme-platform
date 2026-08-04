@@ -10,14 +10,16 @@ til en kube med skumkvadrater inni, perlekant-håndtak på toppen, to
 treringer og perledusker i hjørnene), men med to viktige forskjeller fra
 Ellies versjon, begge bekreftet i referansebildet:
 
-- **Kanten rundt hver side er lys himmelblå**, ikke lyst brunt som på Ellies
-  kube.
+- **Kanten rundt hver side er salviegrønn**, ikke lyst brunt som på Ellies
+  kube. (Rettet 4. august 2026: et tidligere referansebilde viste feilaktig
+  lys himmelblå kant, Renate lastet opp et riktigere bilde som viser at
+  fargen faktisk er salviegrønn, samme farge som Felix' volangkrage.)
 - **Alle seks sidene er pyntet**, det finnes ingen enkel, upyntet bunnside.
   Referansebildet viser tydelig seks ulike, ferdig pyntede sider: Felix selv
   med salviegrønn volangkrage (ingen sløyfe), en egen stjerne-side med en
   stor pudderrosa stjerne, en form-side med fire mini-motiver (hjerte, blad,
-  lite speil, liten sky), en større speil-side med himmelblå takket ramme,
-  en lomme-side med Felix som titter opp av en himmelblå lomme med en liten
+  lite speil, liten sky), en større speil-side med salviegrønn takket ramme,
+  en lomme-side med Felix som titter opp av en salviegrønn lomme med en liten
   hvit blomst, og en knitre-side med en stor, søvnig sky med stjerner og et
   hjerte rundt. Oppskriftens "Del 4: Stjerne-siden" og fordelingen av
   motiver på "Del 5: Form-siden" er derfor lagt om sammenlignet med Ellies
@@ -52,4 +54,4 @@ CHROME=/opt/pw-browsers/chromium-1194/chrome-linux/chrome
 
 Bruker det delte byggesettet i `../_shared/lme_pattern_kit.py`.
 
-Foreløpig kun selve oppskriften, ikke koblet til butikken ennå.
+Lagt til i butikken (`/butikk/felix-aktivitetsleke`) 4. august 2026.

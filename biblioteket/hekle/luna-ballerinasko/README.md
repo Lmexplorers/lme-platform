@@ -44,4 +44,4 @@ CHROME=/opt/pw-browsers/chromium-1194/chrome-linux/chrome
 
 Bruker det delte byggesettet i `../_shared/lme_pattern_kit.py`.
 
-Foreløpig kun selve oppskriften, ikke koblet til butikken ennå.
+Lagt til i butikken (`/butikk/lunas-ballerinasko`) 4. august 2026.

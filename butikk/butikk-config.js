@@ -628,8 +628,8 @@ window.LME_BUTIKK = {
       navn:  { no: "Pips smokkelenke", en: "Pip's pacifier clip" },
       undertittel: { no: "LME Baby Collection · Woodland Dreams · maks 22 cm · 14 sider",
                      en: "LME Baby Collection · Woodland Dreams · max 22 cm · 14 pages" },
-      cover:   "/images/oppskrift-pips-smokkelenke-2.jpg",
-      coverEn: "/images/oppskrift-pips-smokkelenke-2.jpg",
+      cover:   "/images/oppskrift-pips-smokkelenke-3.jpg",
+      coverEn: "/images/oppskrift-pips-smokkelenke-3.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/pips-smokkelenke.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
@@ -642,8 +642,8 @@ window.LME_BUTIKK = {
       navn:  { no: "Felix' smokkelenke", en: "Felix's pacifier clip" },
       undertittel: { no: "LME Baby Collection · Woodland Dreams · maks 22 cm · 14 sider",
                      en: "LME Baby Collection · Woodland Dreams · max 22 cm · 14 pages" },
-      cover:   "/images/oppskrift-felix-smokkelenke-2.jpg",
-      coverEn: "/images/oppskrift-felix-smokkelenke-2.jpg",
+      cover:   "/images/oppskrift-felix-smokkelenke-3.jpg",
+      coverEn: "/images/oppskrift-felix-smokkelenke-3.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/felix-smokkelenke.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
@@ -684,8 +684,8 @@ window.LME_BUTIKK = {
       navn:  { no: "Olivers smokkelenke", en: "Oliver's pacifier clip" },
       undertittel: { no: "LME Baby Collection · Woodland Dreams · maks 22 cm · 13 sider",
                      en: "LME Baby Collection · Woodland Dreams · max 22 cm · 13 pages" },
-      cover:   "/images/oppskrift-olivers-smokkelenke-2.jpg",
-      coverEn: "/images/oppskrift-olivers-smokkelenke-2.jpg",
+      cover:   "/images/oppskrift-olivers-smokkelenke-3.jpg",
+      coverEn: "/images/oppskrift-olivers-smokkelenke-3.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/olivers-smokkelenke.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
