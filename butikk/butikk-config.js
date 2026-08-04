@@ -700,11 +700,17 @@ window.LME_BUTIKK = {
                      en: "LME Baby Collection · Woodland Dreams · 6 characters · 26 patterns" },
       cover:   "/images/oppskrift-woodland-dreams-bundle.jpg",
       coverEn: "/images/oppskrift-woodland-dreams-bundle.jpg",
+      // Pakken er delt i to zip-filer per språk (hver ca. 13-14 MB), fordi Cloudflare Pages
+      // har en grense på 25 MB per fil, og én samlet zip ble for stor (28+ MB).
       filer: [
-        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-no.zip",
-          knapp: { no: "Last ned hele pakken (zip, norsk)", en: "Download the complete bundle (zip, Norwegian)" } },
-        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-en.zip",
-          knapp: { no: "Last ned hele pakken (zip, engelsk)", en: "Download the complete bundle (zip, English)" } }
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del1-no.zip",
+          knapp: { no: "Last ned del 1 av 2 (zip, norsk)", en: "Download part 1 of 2 (zip, Norwegian)" } },
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del2-no.zip",
+          knapp: { no: "Last ned del 2 av 2 (zip, norsk)", en: "Download part 2 of 2 (zip, Norwegian)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del1-en.zip",
+          knapp: { no: "Last ned del 1 av 2 (zip, engelsk)", en: "Download part 1 of 2 (zip, English)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del2-en.zip",
+          knapp: { no: "Last ned del 2 av 2 (zip, engelsk)", en: "Download part 2 of 2 (zip, English)" } }
       ]
     },
 
