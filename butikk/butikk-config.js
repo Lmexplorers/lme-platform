@@ -782,8 +782,8 @@ window.LME_BUTIKK = {
       navn:  { no: "Felix' vognlenke", en: "Felix's stroller toy" },
       undertittel: { no: "LME Baby Collection · Woodland Dreams · maks 35-40 cm · 14 sider",
                      en: "LME Baby Collection · Woodland Dreams · max 35-40 cm · 14 pages" },
-      cover:   "/images/oppskrift-felix-vognlenke-2.jpg",
-      coverEn: "/images/oppskrift-felix-vognlenke-2.jpg",
+      cover:   "/images/oppskrift-felix-vognlenke-3.jpg",
+      coverEn: "/images/oppskrift-felix-vognlenke-3.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/felix-vognlenke.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
