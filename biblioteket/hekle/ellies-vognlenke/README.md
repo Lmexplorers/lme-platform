@@ -1,31 +1,30 @@
 # Ellies vognlenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Ellies-vognlenke-LME.pdf`** (norsk, 16 sider, A4) og
-**`Ellies-vognlenke-LME-EN.pdf`** (engelsk, 16 sider, A4).
+Ferdig oppskrift: **`Ellies-vognlenke-LME.pdf`** (norsk, 15 sider, A4) og
+**`Ellies-vognlenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
 
-Fjerde oppskrift i **LME Baby Collection "Woodland Dreams"**. Sju motiver
-(Ellie-medaljong, sky, sol, blad, blomst, stjerne og sommerfugl) festet langs
-en kort streng, pluss to sideringer i tre med en dinglende, heklet kule i
-hver (side 11, lagt til 3. august 2026 etter Renates referansebilde), til å
-feste over en barnevogns bøyle.
+Fjerde oppskrift i **LME Baby Collection "Woodland Dreams"**.
+
+Oppdatert 4. august 2026 etter Renates referansebilder av profesjonelt
+stylede vognlenker: bygget fullstendig om fra sju flate motiver (sky, sol,
+blad, blomst, stjerne, sommerfugl) til en kjede av heklede kuler og
+tre-mellomperler med Ellie-medaljongen (nå med pudderrosa volangkrage) i
+midten, en blomst og et blad på hver side, og to trering-rangler (trering
++ dinglende heklet kule) barnet kan gripe etter. Festes i hver ende med en
+tre-kuleklips med innkapslet fjærmekanisme (samme klipstype som
+smokkelenke-serien), i stedet for det tidligere valget mellom treklips,
+plastklips eller trering.
 
 Samme sikkerhetsfokus som `../ellies-smokkelenke/` og `../ellies-rangle/`:
 side 13 forklarer hvorfor lengden holdes kort (generelt EN 71-prinsipp om at
-snorer/bånd for barn under 36 måneder skal være så korte som praktisk mulig),
-med en tydelig LME-anbefaling (maks 35-40 cm mellom festepunktene, ingen
-motiv løsere enn 6-8 cm), IKKE en påstått eksakt regelsitat, pluss en
+snorer/kjeder for barn under 36 måneder skal være så korte som praktisk
+mulig), med en tydelig LME-anbefaling (maks 35-40 cm mellom klipsene, ingen
+del løsere enn 6-8 cm), IKKE en påstått eksakt regelsitat, pluss en
 gjentatt oppfordring om å sjekke ferdig produkt mot gjeldende lokale krav.
 
-- **Garn:** samme Bystrikk Merino + rester som resten av kolleksjonen, litt
-  gult til solen.
-- **Oppheng:** treklips, plastklips eller treringer, beskrevet som
-  alternativer på side 3.
+- **Garn:** samme Bystrikk Merino + rester som resten av kolleksjonen.
 - **Fotoveiledning og QR-kode-plassholder:** samme mal som de andre
   tilbehørsoppskriftene.
-
-Rettet 3. august 2026: forsiden viste feilaktig et generisk Ellie-bilde
-merket "ikke selve vognlenken". Byttet til `vognlenke_ref.jpg`, det
-faktiske vognlenke-referansebildet som allerede brukes i butikken.
 
 ## Bygge PDF-ene på nytt
 
