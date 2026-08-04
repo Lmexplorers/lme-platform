@@ -572,8 +572,8 @@ window.LME_BUTIKK = {
       navn:  { no: "Felix' rangle", en: "Felix's rattle" },
       undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 13-15 cm · 13 sider",
                      en: "LME Baby Collection · Woodland Dreams · approx. 13-15 cm · 13 pages" },
-      cover:   "/images/oppskrift-felix-rangle.jpg",
-      coverEn: "/images/oppskrift-felix-rangle.jpg",
+      cover:   "/images/oppskrift-felix-rangle-2.jpg",
+      coverEn: "/images/oppskrift-felix-rangle-2.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/felix-rangle.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
@@ -600,8 +600,8 @@ window.LME_BUTIKK = {
       navn:  { no: "Lunas rangle", en: "Luna's rattle" },
       undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 13-15 cm · 13 sider",
                      en: "LME Baby Collection · Woodland Dreams · approx. 13-15 cm · 13 pages" },
-      cover:   "/images/oppskrift-lunas-rangle.jpg",
-      coverEn: "/images/oppskrift-lunas-rangle.jpg",
+      cover:   "/images/oppskrift-lunas-rangle-2.jpg",
+      coverEn: "/images/oppskrift-lunas-rangle-2.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/lunas-rangle.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
