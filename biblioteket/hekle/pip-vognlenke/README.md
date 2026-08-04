@@ -1,19 +1,25 @@
 # Pips vognlenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Pips-vognlenke-LME.pdf`** (norsk, 16 sider, A4) og
-**`Pips-vognlenke-LME-EN.pdf`** (engelsk, 16 sider, A4).
+Ferdig oppskrift: **`Pips-vognlenke-LME.pdf`** (norsk, 15 sider, A4) og
+**`Pips-vognlenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
 
-Følger opp `../ellies-vognlenke/` med en versjon for Pip. Samme oppbygning
-som Ellies: en liten kremhvit Pip-medaljong midt på en kort snor, omgitt av
-de samme sju universelle naturmotivene (sky, sol, blad, blomst, stjerne,
-sommerfugl) og to sideringer med dinglende kuler. Pip-medaljongen har en
-egen miniatyr av piggstripen hans sydd langs midtlinjen bak hodet, i
-tillegg til de to små mørkebrune ørene.
+Følger opp `../ellies-vognlenke/`, oppdatert 4. august 2026 etter Renates
+referansebilder av profesjonelt stylede vognlenker, samme ombygging som
+Ellies: bygget om fra sju flate motiver til en kjede av heklede kuler og
+tre-mellomperler med Pip-medaljongen (nå med salviegrønn volangkrage) i
+midten, en blomst og et blad på hver side, og to trering-rangler (trering
++ dinglende heklet kule). Festes i hver ende med en tre-kuleklips med
+innkapslet fjærmekanisme (samme klipstype som smokkelenke-serien).
+Pip-medaljongen har fortsatt sin egen miniatyr av piggstripen hans sydd
+langs midtlinjen bak hodet, i tillegg til de to små mørkebrune ørene.
 
-Bygget etter samme mal som Ellies vognlenke (samme struktur, samme
-sikkerhetsside om maks lengde), med Pip sitt eget referansebilde
-(`pip_ref.png`, kopiert fra `../pip-pinnsvin/pip_hero.png`) på forsiden,
-tydelig merket "stiluttrykk-referanse".
+Samme sikkerhetsfokus som `../ellies-vognlenke/`: side 13 forklarer hvorfor
+lengden holdes kort, med LME-anbefalingen (maks 35-40 cm mellom klipsene,
+ingen del løsere enn 6-8 cm).
+
+Bygget etter samme mal som Ellies vognlenke, med Pip sitt eget
+referansebilde (`pip_ref.png`, kopiert fra `../pip-pinnsvin/pip_hero.png`)
+på forsiden, tydelig merket "stiluttrykk-referanse".
 
 ## Bygge PDF-ene på nytt
 
