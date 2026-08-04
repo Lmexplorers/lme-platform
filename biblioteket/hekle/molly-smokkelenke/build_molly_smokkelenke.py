@@ -404,11 +404,13 @@ add('pill_kolleksjon', 'RESTEN AV LME BABY COLLECTION', 'THE REST OF THE LME BAB
 add('kolleksjon_liste',
     ['Ellie, det lille dådyret', 'Pip, det lille pinnsvinet', 'Felix, den lille reven',
      'Molly, det lille lammet', 'Luna, den lille kaninen', 'Oliver, den lille bjørnen',
-     'Ellies smokkelenke', 'Pips smokkelenke', "Felix' smokkelenke", 'Ellies rangle',
-     'Ellies vognlenke', 'Ellies ballerinasko', 'Ellies aktivitetsleke'],
+     'Ellies smokkelenke', 'Pips smokkelenke', "Felix' smokkelenke", 'Lunas smokkelenke',
+     'Olivers smokkelenke', 'Ellies rangle', 'Ellies vognlenke', 'Ellies ballerinasko',
+     'Ellies aktivitetsleke'],
     ['Ellie, the little fawn', 'Pip, the little hedgehog', 'Felix, the little fox',
      'Molly, the little lamb', 'Luna, the little bunny', 'Oliver, the little bear',
-     "Ellie's pacifier clip", "Pip's pacifier clip", "Felix's pacifier clip", "Ellie's rattle",
+     "Ellie's pacifier clip", "Pip's pacifier clip", "Felix's pacifier clip",
+     "Luna's pacifier clip", "Oliver's pacifier clip", "Ellie's rattle",
      "Ellie's stroller toy", "Ellie's ballerina shoes", "Ellie's activity toy"])
 add('pill_copyright', 'COPYRIGHT', 'COPYRIGHT')
 add('copyright_txt',

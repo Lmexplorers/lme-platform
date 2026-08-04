@@ -391,12 +391,13 @@ add('kolleksjon_liste',
     ['Ellie, det lille dådyret', 'Pip, det lille pinnsvinet', 'Felix, den lille reven',
      'Molly, det lille lammet', 'Luna, den lille kaninen', 'Oliver, den lille bjørnen',
      'Ellies smokkelenke', 'Pips smokkelenke', "Felix' smokkelenke", 'Mollys smokkelenke',
-     'Ellies rangle', 'Ellies vognlenke', 'Ellies ballerinasko', 'Ellies aktivitetsleke'],
+     'Olivers smokkelenke', 'Ellies rangle', 'Ellies vognlenke', 'Ellies ballerinasko',
+     'Ellies aktivitetsleke'],
     ['Ellie, the little fawn', 'Pip, the little hedgehog', 'Felix, the little fox',
      'Molly, the little lamb', 'Luna, the little bunny', 'Oliver, the little bear',
      "Ellie's pacifier clip", "Pip's pacifier clip", "Felix's pacifier clip",
-     "Molly's pacifier clip", "Ellie's rattle", "Ellie's stroller toy",
-     "Ellie's ballerina shoes", "Ellie's activity toy"])
+     "Molly's pacifier clip", "Oliver's pacifier clip", "Ellie's rattle",
+     "Ellie's stroller toy", "Ellie's ballerina shoes", "Ellie's activity toy"])
 add('pill_copyright', 'COPYRIGHT', 'COPYRIGHT')
 add('copyright_txt',
     '(c) Renate Dahl, Little Montessori Explorers. Denne oppskriften er et helt originalt '
