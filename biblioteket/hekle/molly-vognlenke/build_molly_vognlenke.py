@@ -427,14 +427,16 @@ add('kolleksjon_liste',
      'Ellies smokkelenke', 'Pips smokkelenke', "Felix' smokkelenke", 'Mollys smokkelenke',
      'Lunas smokkelenke', 'Olivers smokkelenke', 'Pips rangle', "Felix' rangle",
      'Mollys rangle', 'Lunas rangle', 'Olivers rangle', 'Ellies rangle', 'Pips vognlenke',
-     "Felix' vognlenke", 'Ellies vognlenke', 'Ellies ballerinasko', 'Ellies aktivitetsleke'],
+     "Felix' vognlenke", 'Lunas vognlenke', 'Olivers vognlenke', 'Ellies vognlenke',
+     'Ellies ballerinasko', 'Ellies aktivitetsleke'],
     ['Ellie, the little fawn', 'Pip, the little hedgehog', 'Felix, the little fox',
      'Molly, the little lamb', 'Luna, the little bunny', 'Oliver, the little bear',
      "Ellie's pacifier clip", "Pip's pacifier clip", "Felix's pacifier clip",
      "Molly's pacifier clip", "Luna's pacifier clip", "Oliver's pacifier clip",
      "Pip's rattle", "Felix's rattle", "Molly's rattle", "Luna's rattle", "Oliver's rattle",
-     "Ellie's rattle", "Pip's stroller toy", "Felix's stroller toy", "Ellie's stroller toy",
-     "Ellie's ballerina shoes", "Ellie's activity toy"])
+     "Ellie's rattle", "Pip's stroller toy", "Felix's stroller toy", "Luna's stroller toy",
+     "Oliver's stroller toy", "Ellie's stroller toy", "Ellie's ballerina shoes",
+     "Ellie's activity toy"])
 add('pill_copyright', 'COPYRIGHT', 'COPYRIGHT')
 add('copyright_txt',
     '(c) Renate Dahl, Little Montessori Explorers. Denne oppskriften er et helt originalt '
