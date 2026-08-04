@@ -412,7 +412,301 @@ window.LME_BUTIKK = {
         { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-skaut-en.pdf",
           knapp: { no: "Norge-skaut (engelsk PDF)", en: "Norway kerchief (PDF)" } }
       ]
-    }
+    },
+
+    "pip-hekle": {
+      navn:  { no: "Pip, det lille pinnsvinet - amigurumi", en: "Pip the Little Hedgehog - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 18-20 cm · 20 sider",
+                     en: "LME Baby Collection · Woodland Dreams · approx. 18-20 cm · 20 pages" },
+      cover:   "/images/oppskrift-pip-hekle.jpg",
+      coverEn: "/images/oppskrift-pip-hekle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/pip-hekle.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/pip-hekle-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "felix-hekle": {
+      navn:  { no: "Felix, den lille reven - amigurumi", en: "Felix the Little Fox - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 18-20 cm · 20 sider",
+                     en: "LME Baby Collection · Woodland Dreams · approx. 18-20 cm · 20 pages" },
+      cover:   "/images/oppskrift-felix-hekle.jpg",
+      coverEn: "/images/oppskrift-felix-hekle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/felix-hekle.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/felix-hekle-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "molly-hekle": {
+      navn:  { no: "Molly, det lille lammet - amigurumi", en: "Molly the Little Lamb - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 18-20 cm · 20 sider",
+                     en: "LME Baby Collection · Woodland Dreams · approx. 18-20 cm · 20 pages" },
+      cover:   "/images/oppskrift-molly-hekle.jpg",
+      coverEn: "/images/oppskrift-molly-hekle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/molly-hekle.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/molly-hekle-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "luna-hekle": {
+      navn:  { no: "Luna, den lille kaninen - amigurumi", en: "Luna the Little Bunny - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 18-20 cm · 20 sider",
+                     en: "LME Baby Collection · Woodland Dreams · approx. 18-20 cm · 20 pages" },
+      cover:   "/images/oppskrift-luna-hekle.jpg",
+      coverEn: "/images/oppskrift-luna-hekle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/luna-hekle.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/luna-hekle-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "oliver-hekle": {
+      navn:  { no: "Oliver, den lille bjørnen - amigurumi", en: "Oliver the Little Bear - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 18-20 cm · 19 sider",
+                     en: "LME Baby Collection · Woodland Dreams · approx. 18-20 cm · 19 pages" },
+      cover:   "/images/oppskrift-oliver-hekle.jpg",
+      coverEn: "/images/oppskrift-oliver-hekle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/oliver-hekle.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/oliver-hekle-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "pips-smokkelenke": {
+      navn:  { no: "Pips smokkelenke", en: "Pip's pacifier clip" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · maks 22 cm · 14 sider",
+                     en: "LME Baby Collection · Woodland Dreams · max 22 cm · 14 pages" },
+      cover:   "/images/oppskrift-pips-smokkelenke.jpg",
+      coverEn: "/images/oppskrift-pips-smokkelenke.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/pips-smokkelenke.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/pips-smokkelenke-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "felix-smokkelenke": {
+      navn:  { no: "Felix' smokkelenke", en: "Felix's pacifier clip" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · maks 22 cm · 14 sider",
+                     en: "LME Baby Collection · Woodland Dreams · max 22 cm · 14 pages" },
+      cover:   "/images/oppskrift-felix-smokkelenke.jpg",
+      coverEn: "/images/oppskrift-felix-smokkelenke.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/felix-smokkelenke.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/felix-smokkelenke-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "mollys-smokkelenke": {
+      navn:  { no: "Mollys smokkelenke", en: "Molly's pacifier clip" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · maks 22 cm · 14 sider",
+                     en: "LME Baby Collection · Woodland Dreams · max 22 cm · 14 pages" },
+      cover:   "/images/oppskrift-mollys-smokkelenke.jpg",
+      coverEn: "/images/oppskrift-mollys-smokkelenke.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/mollys-smokkelenke.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/mollys-smokkelenke-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "lunas-smokkelenke": {
+      navn:  { no: "Lunas smokkelenke", en: "Luna's pacifier clip" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · maks 22 cm · 14 sider",
+                     en: "LME Baby Collection · Woodland Dreams · max 22 cm · 14 pages" },
+      cover:   "/images/oppskrift-lunas-smokkelenke.jpg",
+      coverEn: "/images/oppskrift-lunas-smokkelenke.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/lunas-smokkelenke.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/lunas-smokkelenke-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "olivers-smokkelenke": {
+      navn:  { no: "Olivers smokkelenke", en: "Oliver's pacifier clip" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · maks 22 cm · 13 sider",
+                     en: "LME Baby Collection · Woodland Dreams · max 22 cm · 13 pages" },
+      cover:   "/images/oppskrift-olivers-smokkelenke.jpg",
+      coverEn: "/images/oppskrift-olivers-smokkelenke.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/olivers-smokkelenke.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/olivers-smokkelenke-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "pips-rangle": {
+      navn:  { no: "Pips rangle", en: "Pip's rattle" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 13-15 cm · 13 sider",
+                     en: "LME Baby Collection · Woodland Dreams · approx. 13-15 cm · 13 pages" },
+      cover:   "/images/oppskrift-pips-rangle.jpg",
+      coverEn: "/images/oppskrift-pips-rangle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/pips-rangle.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/pips-rangle-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "felix-rangle": {
+      navn:  { no: "Felix' rangle", en: "Felix's rattle" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 13-15 cm · 13 sider",
+                     en: "LME Baby Collection · Woodland Dreams · approx. 13-15 cm · 13 pages" },
+      cover:   "/images/oppskrift-felix-rangle.jpg",
+      coverEn: "/images/oppskrift-felix-rangle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/felix-rangle.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/felix-rangle-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "mollys-rangle": {
+      navn:  { no: "Mollys rangle", en: "Molly's rattle" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 13-15 cm · 13 sider",
+                     en: "LME Baby Collection · Woodland Dreams · approx. 13-15 cm · 13 pages" },
+      cover:   "/images/oppskrift-mollys-rangle.jpg",
+      coverEn: "/images/oppskrift-mollys-rangle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/mollys-rangle.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/mollys-rangle-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "lunas-rangle": {
+      navn:  { no: "Lunas rangle", en: "Luna's rattle" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 13-15 cm · 13 sider",
+                     en: "LME Baby Collection · Woodland Dreams · approx. 13-15 cm · 13 pages" },
+      cover:   "/images/oppskrift-lunas-rangle.jpg",
+      coverEn: "/images/oppskrift-lunas-rangle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/lunas-rangle.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/lunas-rangle-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "olivers-rangle": {
+      navn:  { no: "Olivers rangle", en: "Oliver's rattle" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 13-15 cm · 13 sider",
+                     en: "LME Baby Collection · Woodland Dreams · approx. 13-15 cm · 13 pages" },
+      cover:   "/images/oppskrift-olivers-rangle.jpg",
+      coverEn: "/images/oppskrift-olivers-rangle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/olivers-rangle.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/olivers-rangle-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "pips-vognlenke": {
+      navn:  { no: "Pips vognlenke", en: "Pip's stroller toy" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · maks 35-40 cm · 14 sider",
+                     en: "LME Baby Collection · Woodland Dreams · max 35-40 cm · 14 pages" },
+      cover:   "/images/oppskrift-pips-vognlenke.jpg",
+      coverEn: "/images/oppskrift-pips-vognlenke.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/pips-vognlenke.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/pips-vognlenke-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "felix-vognlenke": {
+      navn:  { no: "Felix' vognlenke", en: "Felix's stroller toy" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · maks 35-40 cm · 14 sider",
+                     en: "LME Baby Collection · Woodland Dreams · max 35-40 cm · 14 pages" },
+      cover:   "/images/oppskrift-felix-vognlenke.jpg",
+      coverEn: "/images/oppskrift-felix-vognlenke.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/felix-vognlenke.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/felix-vognlenke-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "mollys-vognlenke": {
+      navn:  { no: "Mollys vognlenke", en: "Molly's stroller toy" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · maks 35-40 cm · 14 sider",
+                     en: "LME Baby Collection · Woodland Dreams · max 35-40 cm · 14 pages" },
+      cover:   "/images/oppskrift-mollys-vognlenke.jpg",
+      coverEn: "/images/oppskrift-mollys-vognlenke.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/mollys-vognlenke.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/mollys-vognlenke-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "lunas-vognlenke": {
+      navn:  { no: "Lunas vognlenke", en: "Luna's stroller toy" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · maks 35-40 cm · 14 sider",
+                     en: "LME Baby Collection · Woodland Dreams · max 35-40 cm · 14 pages" },
+      cover:   "/images/oppskrift-lunas-vognlenke.jpg",
+      coverEn: "/images/oppskrift-lunas-vognlenke.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/lunas-vognlenke.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/lunas-vognlenke-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "olivers-vognlenke": {
+      navn:  { no: "Olivers vognlenke", en: "Oliver's stroller toy" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · maks 35-40 cm · 15 sider",
+                     en: "LME Baby Collection · Woodland Dreams · max 35-40 cm · 15 pages" },
+      cover:   "/images/oppskrift-olivers-vognlenke.jpg",
+      coverEn: "/images/oppskrift-olivers-vognlenke.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/olivers-vognlenke.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/olivers-vognlenke-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "woodland-dreams-bundle": {
+      navn:  { no: "Woodland Dreams, hele kolleksjonen (26 oppskrifter)", en: "Woodland Dreams, the complete collection (26 patterns)" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · 6 karakterer · 26 oppskrifter",
+                     en: "LME Baby Collection · Woodland Dreams · 6 characters · 26 patterns" },
+      cover:   "/images/oppskrift-woodland-dreams-bundle.jpg",
+      coverEn: "/images/oppskrift-woodland-dreams-bundle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-no.zip",
+          knapp: { no: "Last ned hele pakken (zip, norsk)", en: "Download the complete bundle (zip, Norwegian)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-en.zip",
+          knapp: { no: "Last ned hele pakken (zip, engelsk)", en: "Download the complete bundle (zip, English)" } }
+      ]
+    },
 
     // ,"neste-produkt-id": { ... samme mønster ... }
   }
