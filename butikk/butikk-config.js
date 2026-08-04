@@ -558,8 +558,8 @@ window.LME_BUTIKK = {
       navn:  { no: "Pips rangle", en: "Pip's rattle" },
       undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 13-15 cm · 13 sider",
                      en: "LME Baby Collection · Woodland Dreams · approx. 13-15 cm · 13 pages" },
-      cover:   "/images/oppskrift-pips-rangle.jpg",
-      coverEn: "/images/oppskrift-pips-rangle.jpg",
+      cover:   "/images/oppskrift-pips-rangle-2.jpg",
+      coverEn: "/images/oppskrift-pips-rangle-2.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/pips-rangle.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
