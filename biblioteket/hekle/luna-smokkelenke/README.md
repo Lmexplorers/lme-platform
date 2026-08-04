@@ -1,7 +1,7 @@
 # Lunas smokkelenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Lunas-smokkelenke-LME.pdf`** (norsk, 14 sider, A4) og
-**`Lunas-smokkelenke-LME-EN.pdf`** (engelsk, 14 sider, A4).
+Ferdig oppskrift: **`Lunas-smokkelenke-LME.pdf`** (norsk, 15 sider, A4) og
+**`Lunas-smokkelenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
 
 Følger opp `../ellies-smokkelenke/`, `../pip-smokkelenke/`,
 `../felix-smokkelenke/` og `../molly-smokkelenke/` med en versjon for
@@ -9,6 +9,12 @@ Luna. Et lite, forenklet kaninhode i varmt grått, med to små, avlange
 mini-ører (en miniatyr av Lunas signatur, de ekstra lange ørene) og en
 rosa sløyfe mellom ørene. Tres sammen med heklede kuler til en
 smokkelenke, maks 22 cm som resten av kolleksjonen.
+
+Oppdatert 4. august 2026 etter Renates referansebilder av profesjonelt
+stylede smokkelenker: en rosa volangkrage rundt halsen (ny egen side),
+én stjerneformet treperle blant kulene, en heklet snorløkke i enden til
+smokkering, og en oppdatert klipsbeskrivelse (tre-kuleklips med
+innkapslet fjærmekanisme). Samme oppdatering som resten av serien.
 
 Bygget etter samme mal som de andre smokkelenkene, med Luna sitt eget
 referansebilde (`luna_face_ref.jpg`, kopiert fra
