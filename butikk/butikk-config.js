@@ -252,8 +252,8 @@ window.LME_BUTIKK = {
       navn:  { no: "Felix' aktivitetsleke - amigurumi", en: "Felix's Activity Toy - amigurumi" },
       undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 11-12 cm · 20 sider",
                      en: "LME Baby Collection · Woodland Dreams · approx. 11-12 cm · 20 pages" },
-      cover:   "/images/oppskrift-felix-aktivitetsleke.jpg",
-      coverEn: "/images/oppskrift-felix-aktivitetsleke.jpg",
+      cover:   "/images/oppskrift-felix-aktivitetsleke-2.jpg",
+      coverEn: "/images/oppskrift-felix-aktivitetsleke-2.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/felix-aktivitetsleke.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
