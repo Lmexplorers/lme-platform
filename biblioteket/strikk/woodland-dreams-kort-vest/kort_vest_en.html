@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Woodland Dreams Short Vest, LME knitting pattern</title>
+<style>
+@font-face { font-family:'Sasson Montessori'; src:url('fonts/SassoonMontessori.ttf'); font-weight:normal; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-400.ttf'); font-weight:400; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-600.ttf'); font-weight:600; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-700.ttf'); font-weight:700; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-800.ttf'); font-weight:800; }
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --font-head:'Playpen Sans',system-ui,sans-serif;
+  --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+}
+@page { size:A4; margin:0; }
+body { font-family:var(--font-body); color:#4a4a4a; }
+.page {
+  position:relative; width:210mm; height:296.5mm; overflow:hidden;
+  page-break-after:always;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.45) 0, rgba(255,255,255,.45) .4mm, transparent .4mm, transparent 8mm),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.45) 0, rgba(255,255,255,.45) .4mm, transparent .4mm, transparent 8mm),
+    linear-gradient(165deg,#f3e8d8 0%,#f6ecec 45%,#f3dde6 100%);
+}
+.band { position:absolute; left:0; top:0; bottom:0; width:11mm;
+  background:linear-gradient(180deg,#C79A6C,#E48FA6); }
+.band span { position:absolute; left:50%; top:75%; transform:translate(-50%,-50%);
+  writing-mode:vertical-rl; text-orientation:mixed; rotate:180deg;
+  font-family:var(--font-head); font-size:6.5pt; letter-spacing:3.5px; color:#fff; white-space:nowrap; }
+.rside { position:absolute; right:2.5mm; top:40%; }
+.rside span { writing-mode:vertical-rl; font-family:var(--font-head); font-size:6pt;
+  letter-spacing:2.5px; color:#9a9a9a; white-space:nowrap; }
+.phead { text-align:center; padding-top:9mm; }
+.ph1 { font-family:var(--font-head); font-weight:600; font-size:7pt; letter-spacing:4px; color:#8a7460; }
+.ph2 { font-family:var(--font-head); font-weight:600; font-size:6.3pt; letter-spacing:2.4px; color:#E48FA6; margin-top:1.6mm; }
+.content { padding:5mm 16mm 0 20mm; }
+.pfoot { position:absolute; bottom:6.5mm; left:0; right:0; text-align:center;
+  font-family:var(--font-head); font-weight:700; font-size:10pt; color:#8a8a8a; }
+
+.banner { background:#f5e5b2; border-radius:14px; padding:3.6mm 6mm; margin:2mm 0 4.5mm;
+  box-shadow:0 1px 4px rgba(0,0,0,.08); text-align:center; }
+.banner h1 { font-family:var(--font-head); font-weight:800; font-size:16.5pt; color:#4a4a4a;
+  letter-spacing:.4px; text-transform:uppercase; }
+.pillwrap { text-align:center; margin:4.5mm 0 3mm; }
+.pill { display:inline-block; border-radius:999px; padding:2.4mm 9mm;
+  font-family:var(--font-head); font-weight:700; font-size:10.5pt; color:#fff;
+  letter-spacing:.4px; text-transform:uppercase; box-shadow:0 1px 4px rgba(0,0,0,.12); }
+.rosepill { background:#E48FA6; }
+.sagepill { background:#8FA681; }
+.card { background:rgba(255,255,255,.93); border:2px solid #ecd2c0; border-radius:16px;
+  padding:4mm 6mm; margin:0 0 4mm; box-shadow:0 1px 5px rgba(0,0,0,.06); }
+.cream { background:#fbf3e8; border:2px solid #ecd2c0; border-radius:16px;
+  padding:4mm 6mm; margin:4mm 0; text-align:center; }
+.creamtitle { font-family:var(--font-head); font-weight:700; font-size:11pt; color:#8FA681; }
+p { font-size:10.6pt; line-height:1.52; margin-bottom:2.2mm; }
+p.small, .small { font-size:9.5pt; color:#777; }
+p.center { text-align:center; }
+ul.dots { list-style:none; }
+ul.dots li { font-size:10.6pt; line-height:1.48; padding-left:5.5mm; position:relative; margin:1.6mm 0; }
+ul.dots li::before { content:'•'; position:absolute; left:1mm; color:#E48FA6; font-weight:bold; }
+ol.steps { list-style:none; }
+ol.steps li { display:flex; gap:3.5mm; align-items:flex-start; background:rgba(255,255,255,.93);
+  border:2px solid #ecd2c0; border-radius:14px; padding:3mm 5mm; margin-bottom:2.4mm; }
+ol.steps li div { font-size:10.4pt; line-height:1.46; }
+.snum { flex:0 0 auto; width:7.5mm; height:7.5mm; border-radius:50%; background:#E48FA6; color:#fff;
+  font-family:var(--font-head); font-weight:700; font-size:11pt; display:flex;
+  align-items:center; justify-content:center; margin-top:.5mm; }
+table.t { width:100%; border-collapse:collapse; margin:2.5mm 0; }
+table.t th { font-family:var(--font-head); font-weight:700; font-size:9.3pt; color:#E48FA6;
+  text-align:left; padding:1.5mm 2.5mm; border-bottom:2px solid #ecd2c0; }
+table.t td { font-size:9.7pt; padding:1.4mm 2.5mm; border-bottom:1px solid #f2e3d8; line-height:1.38; }
+table.tl td:first-child { white-space:nowrap; }
+.dot { display:inline-block; width:3.5mm; height:3.5mm; border-radius:50%; vertical-align:-0.5mm; margin-right:1.5mm; }
+
+.coverimg { text-align:center; margin:3mm 0 3mm; }
+.coverimg img { width:98mm; border-radius:14px; box-shadow:0 3px 10px rgba(0,0,0,.18);
+  border:3mm solid #fff; }
+.covertag { text-align:center; font-family:var(--font-head); font-size:8pt; letter-spacing:2.6px;
+  color:#8a8a8a; margin:1mm 0 2.5mm; }
+.coverbanner { display:flex; align-items:center; justify-content:center; gap:5mm;
+  background:#f5e5b2; border-radius:16px; padding:3.4mm 6mm; box-shadow:0 1px 5px rgba(0,0,0,.1); }
+.covertitle { font-family:var(--font-head); font-weight:800; font-size:27pt; color:#4a4a4a; letter-spacing:1px; }
+.subpill { margin:3.6mm auto; width:fit-content; background:#fdf9e3; border:2.5px solid #4a4a4a;
+  border-radius:999px; padding:1.8mm 8mm; font-family:var(--font-head); font-weight:700;
+  font-size:10pt; color:#4a4a4a; letter-spacing:.4px; }
+.byline { text-align:center; margin-top:3.5mm; }
+.by1 { font-family:var(--font-head); font-weight:700; font-size:12.5pt; color:#8FA681; }
+.by2 { font-size:10.2pt; color:#8a8a8a; margin-top:.8mm; }
+.by3 { font-family:var(--font-head); font-weight:600; font-size:9.6pt; color:#E48FA6; margin-top:.5mm; }
+.notecard { display:flex; gap:4mm; align-items:center; background:rgba(255,255,255,.8);
+  border-radius:12px; padding:3.2mm 6mm; margin-top:4mm; }
+.notecard p { font-size:9.3pt; color:#777; margin:0; }
+.noteemo { font-size:16pt; }
+
+.twocol { display:flex; gap:6mm; align-items:flex-start; }
+.twocol > div { flex:1; }
+.figwrap { text-align:center; }
+.figwrap img { width:44mm; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,.14); border:2mm solid #fff; }
+.figcap { font-size:9pt; color:#888; text-align:center; margin-top:1.5mm; }
+.schematic { margin:2mm 0 1mm; }
+.deler-grid { display:grid; grid-template-columns:1fr 1fr; gap:2.4mm 6mm; margin:1mm 0 2mm; }
+.deler-grid .di { font-size:10pt; line-height:1.4; padding:1.6mm 0; border-bottom:1px dashed #e6d3c4; }
+.deler-grid .di b { color:#8FA681; font-family:var(--font-head); }
+
+.photorow { display:flex; gap:3mm; flex-wrap:wrap; justify-content:center; margin:2mm 0 3mm; }
+.photoph { aspect-ratio:1/1; max-width:44mm; background:rgba(255,255,255,.7);
+  border:2px dashed #d9bfa8; border-radius:12px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:1.5mm; padding:2mm; }
+.phicon { font-size:17pt; opacity:.45; }
+.phcap { font-size:8.3pt; color:#9a8a7a; text-align:center; line-height:1.3; }
+.qrbox { text-align:center; margin:3mm 0; }
+.qrsquare { width:26mm; height:26mm; margin:0 auto; background:#fff; border:2px dashed #d9bfa8;
+  border-radius:10px; display:flex; align-items:center; justify-content:center; }
+.qricon { font-size:20pt; color:#d9bfa8; }
+.qrcap { font-size:9pt; color:#888; margin-top:1.6mm; }
+</style></head>
+<body><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS SHORT VEST</div>
+  </div>
+  <div class="content">
+<div class="covertag">LME KNITTING PATTERN - BABY</div>
+<div class="coverbanner"><h1 class="covertitle">WOODLAND DREAMS SHORT VEST</h1></div>
+<div class="subpill">LME BABY COLLECTION - WOODLAND DREAMS</div>
+<div class="card"><p class="center">A short, open-front vest with wooden buttons, knitted to be worn over the Woodland Dreams basisbody. Worked flat from neck to hem, no sleeves, simple shoulder-line shaping and a garter stitch border around the neck, hem and armholes. Seven sizes, from 0-1 to 18-24 months. The vest is an accessory piece, and is knitted in one of the collection's colourful shades: sage green, dusty rose, butter yellow, soft blue, olive or terracotta, as a lovely contrast to the body's calm neutral colours.</p></div>
+<div class="byline">
+  <div class="by1">By Renate Dahl</div>
+  <div class="by2">Little Montessori Explorers</div>
+  <div class="by3">lmexplorers.com</div>
+</div>
+<div class="notecard"><span class="noteemo">&#129517;</span><p><i>TIP: Read through the whole pattern and the size chart on page 4 before you start, and knit a 15 x 15 cm gauge swatch to check your tension, before casting on the vest itself. This vest is worked flat throughout, never in the round, since the front stays open from neck to hem.</i></p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;1&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS SHORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>ABOUT THE WOODLAND DREAMS SHORT VEST</h1></div>
+<div class="pillwrap"><div class="pill rosepill">PART OF THE COLLECTION</div></div>
+<div class="card"><p>The short vest is one of six accessory pieces in LME Woodland Dreams, knitted to be worn over the basisbody. Where the body is the quiet, neutral foundation, the vest is the colourful layer lifted on top, a simple, open, sleeveless vest, easy to put on and take off, and lovely to combine with the collection's other pieces.</p></div>
+<div class="pillwrap"><div class="pill sagepill">STYLE</div></div>
+<div class="card"><p>Clean lines, a visible button band down the front and a simple garter stitch border around the neck, hem and armholes. No sleeves, no complicated details, just a small, well-fitting vest that adds an extra splash of colour over the body's calm tones.</p></div>
+<div class="pillwrap"><div class="pill rosepill">A ROOMY FIT, MEANT TO GO OVER</div></div>
+<div class="cream"><p class="creamtitle">The vest is knitted with a little extra width beyond the body's own chest measurement, so it sits nicely on top without pulling tight. It is clearly shorter than the body itself, meant to stop well above the crotch, not cover the whole body, see the size chart for exact measurements and the ratio to the body's own length.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;2&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS SHORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>MATERIALS</h1></div>
+<div class="pillwrap"><div class="pill rosepill">YARN</div></div>
+<div class="card"><p>Sandnes Garn Alpakka (100% alpaca), or an equivalent yarn with the same gauge. The vest is an accessory piece, so choose one of the collection's colourful shades: sage green, dusty rose, butter yellow, soft blue, olive or terracotta, a lovely contrast to the body's neutral cream, linen, sand, oatmeal or beige.</p></div>
+<div class="pillwrap"><div class="pill sagepill">YARN REQUIREMENTS</div></div>
+<div class="card"><table class="t"><tr><th>Size</th><th>Yarn amount</th></tr><tr><td><b>0-1 mnd</b></td><td>40-45 g</td></tr><tr><td><b>1-3 mnd</b></td><td>45-50 g</td></tr><tr><td><b>3-6 mnd</b></td><td>50-60 g</td></tr><tr><td><b>6-9 mnd</b></td><td>60-70 g</td></tr><tr><td><b>9-12 mnd</b></td><td>70-80 g</td></tr><tr><td><b>12-18 mnd</b></td><td>80-90 g</td></tr><tr><td><b>18-24 mnd</b></td><td>90-100 g</td></tr></table></div>
+<div class="pillwrap"><div class="pill rosepill">NEEDLES AND NOTIONS</div></div>
+<div class="cream"><p class="creamtitle">Circular needle 4 mm (40 cm is enough, since the vest is worked flat, not in the round). 3-4 small round wooden buttons (see the number for your size in the table on the next page). Stitch markers (at least 2, for the two shoulder lines), a tapestry needle, and a 3 mm crochet hook for crocheting the buttonhole loops, or a sewing needle for worked buttonholes.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;3&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS SHORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>SIZE CHART</h1></div>
+<p>Finished measurements, measured lying flat. The vest is designed to be worn over the Woodland Dreams basisbody, see the column on the right for how much shorter the vest is than the body in the same size.</p>
+<div class="card"><table class="t"><tr><th>Size</th><th>Chest width (vest)</th><th>Neck opening</th><th>Length (vest)</th><th>Length (body)</th></tr><tr><td><b>0-1 mnd</b></td><td>49.1 cm</td><td>22.0 cm</td><td>14.0 cm</td><td>25 cm</td></tr><tr><td><b>1-3 mnd</b></td><td>52.7 cm</td><td>23.0 cm</td><td>15.0 cm</td><td>27 cm</td></tr><tr><td><b>3-6 mnd</b></td><td>54.5 cm</td><td>24.0 cm</td><td>16.5 cm</td><td>30 cm</td></tr><tr><td><b>6-9 mnd</b></td><td>58.2 cm</td><td>25.0 cm</td><td>18.0 cm</td><td>33 cm</td></tr><tr><td><b>9-12 mnd</b></td><td>60.0 cm</td><td>26.0 cm</td><td>20.0 cm</td><td>36 cm</td></tr><tr><td><b>12-18 mnd</b></td><td>63.6 cm</td><td>27.0 cm</td><td>21.5 cm</td><td>39 cm</td></tr><tr><td><b>18-24 mnd</b></td><td>65.5 cm</td><td>28.0 cm</td><td>23.0 cm</td><td>42 cm</td></tr></table></div>
+<div class="cream"><p class="creamtitle">The chest width is the finished circumference when the vest is buttoned closed at the front, i.e. including the extra width (3 cm more than the body's own chest measurement) that lets the vest sit nicely over the body and a thin layer underneath. The length is calculated as roughly 55% of the body's own neck-to-crotch length in the same size, clearly shorter, as a "short vest" should be.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;4&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS SHORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>GAUGE AND DIFFICULTY LEVEL</h1></div>
+<div class="pillwrap"><div class="pill rosepill">GAUGE</div></div>
+<div class="card"><p>22 stitches and 30 rows in stockinette stitch = 10 x 10 cm, on 4 mm needles, the same gauge as the basisbody. This gauge is used in every calculation in the pattern. Always knit a swatch first: cast on 26 stitches, work stockinette stitch for approx. 12 cm, bind off and block lightly. If your gauge does not match, change to a smaller or larger needle until it does, not just to match the yarn.</p></div>
+<div class="pillwrap"><div class="pill sagepill">DIFFICULTY LEVEL</div></div>
+<div class="cream"><p class="creamtitle">Easy to medium, simpler than the basisbody. The vest is worked flat throughout, with no rounds and no raglan sleeves. You should be comfortable increasing and decreasing, picking up stitches along an edge, and working simple buttonholes.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;5&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS SHORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>ABBREVIATIONS</h1></div>
+<p>Norwegian knitting terms with the English terms alongside.</p>
+<div class="card"><table class="t tl"><tr><th>Norwegian</th><th>English</th><th>Meaning</th></tr><tr><td><b>r</b></td><td>K</td><td>rett</td></tr><tr><td><b>vr</b></td><td>P</td><td>vrangbord/vrang</td></tr><tr><td><b>m</b></td><td>st(s)</td><td>maske(r)</td></tr><tr><td><b>rad</b></td><td>row</td><td>rad</td></tr><tr><td><b>øk</b></td><td>inc</td><td>øk (ta opp én tilleggsmaske)</td></tr><tr><td><b>felle</b></td><td>dec</td><td>felle (strikk to masker sammen)</td></tr><tr><td><b>fell av</b></td><td>BO</td><td>fell av / bind off</td></tr><tr><td><b>legg opp</b></td><td>CO</td><td>legg opp masker</td></tr><tr><td><b>ta opp m</b></td><td>pick up sts</td><td>ta opp masker langs en kant</td></tr><tr><td><b>matstrikk</b></td><td>garter st</td><td>strikk rett på alle rader, begge sider</td></tr><tr><td><b>glattstrikk</b></td><td>St st</td><td>rett på retten, vrang på vrangen</td></tr><tr><td><b>RS/VS</b></td><td>RS/WS</td><td>rettside/vrangside</td></tr><tr><td><b>rundpinne</b></td><td>circular needle</td><td>rundpinne (brukes flatt her)</td></tr><tr><td><b>maskemarkør</b></td><td>st marker</td><td>maskemarkør</td></tr><tr><td><b>knapphull</b></td><td>buttonhole</td><td>knapphull</td></tr></table></div>
+<div class="pillwrap"><div class="pill sagepill">TIPS</div></div>
+<div class="card"><ul class="dots"><li>The vest is worked flat throughout, never in the round. Turn your work at the end of every row, exactly as you are used to from ordinary flat knitting.</li><li>Use two stitch markers for the two shoulder lines, it makes it much easier to keep track of where the increases should happen.</li><li>Count your stitches at every checkpoint in the tables. It is easier to fix a mistake 10 rows back than 40.</li></ul></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;6&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS SHORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>HOW THE VEST IS CONSTRUCTED</h1></div>
+<div class="card"><p>The vest is knitted top-down, flat in one piece, with no sleeves. Five simple parts, in this order:</p><div class="deler-grid"><div class="di"><b>1. The neck edge</b><br>Cast on flat at the neck, work a few rows of garter stitch.</div><div class="di"><b>2. Shoulder-line shaping</b><br>Increase evenly along two shoulder lines (front-back and back-front) until the yoke width is reached.</div><div class="di"><b>3. Divide for the armholes</b><br>Bind off a few stitches on each side for the armholes, dividing into front-left, back and front-right.</div><div class="di"><b>4. Down to the hem</b><br>Knit each of the three panels straight down, finishing all with garter stitch at the hem.</div><div class="di"><b>5. The button band</b><br>Work/pick up a garter stitch band along both front edges, with buttonholes on one side.</div></div></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;7&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS SHORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 1: THE NECK EDGE</h1></div>
+<p>The vest is cast on at the neck and knitted flat, top-down, the whole way, since the front stays open from neck to hem. Work the first few rows in garter stitch before switching to stockinette stitch and starting the shoulder shaping.</p>
+<div class="card"><p><b>Example, 0-1 months:</b> Cast on 44 stitches flat on a 4 mm circular needle (you work back and forth, not in the round, throughout the whole vest). Work 4 rows of garter stitch (knit every row). On the last garter row, place a stitch marker after stitch 11 (the boundary between front-left and back), and another stitch marker after stitch 33 (the boundary between back and front-right).</p></div>
+<p class="small center">The exact stitch count for your size is in the grading table on the next page.</p>
+</div>
+  <div class="pfoot">&mdash;&nbsp;8&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS SHORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 2: SHOULDER-LINE SHAPING</h1></div>
+<p>Switch to stockinette stitch. Now increase evenly along the two shoulder lines, until the yoke width is reached. The vest has no sleeves, so there are only two shoulder lines to increase along, not four raglan lines like on the basisbody. The construction is the same for every size, only the numbers change, see the grading table below.</p>
+<div class="card"><p>Increase row (every 2nd row, always on the right side): increase 2 stitches right before and 2 stitches right after each of the two shoulder markers (8 stitches increased in total per increase row, because with only two lines instead of four, each line needs to increase a little faster to reach the same yoke width in the same number of rows). Knit plain stockinette, with no increases, on the row in between. Front-left therefore only increases along its one inner edge (the front stays straight along the button band edge itself), while the back increases along both of its edges.</p></div>
+<div class="card"><table class="t"><tr><th>Size</th><th>Neck cast-on</th><th>Increase rows</th><th>Rows to yoke depth</th><th>Sts at yoke depth</th></tr><tr><td><b>0-1 mnd</b></td><td>44</td><td>11</td><td>26</td><td>132</td></tr><tr><td><b>1-3 mnd</b></td><td>52</td><td>11</td><td>26</td><td>140</td></tr><tr><td><b>3-6 mnd</b></td><td>56</td><td>11</td><td>26</td><td>144</td></tr><tr><td><b>6-9 mnd</b></td><td>52</td><td>13</td><td>30</td><td>156</td></tr><tr><td><b>9-12 mnd</b></td><td>56</td><td>13</td><td>30</td><td>160</td></tr><tr><td><b>12-18 mnd</b></td><td>56</td><td>14</td><td>32</td><td>168</td></tr><tr><td><b>18-24 mnd</b></td><td>64</td><td>14</td><td>32</td><td>176</td></tr></table></div>
+<div class="cream"><p class="creamtitle">Check: count your stitches. They should match the number in the "Sts at yoke depth" column for your size ("Rows to yoke depth" includes the 4 rows of garter stitch at the neck from part 1). If it does not match, count again before moving on to part 3.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;9&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS SHORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 3: DIVIDE FOR THE ARMHOLES</h1></div>
+<p>Now the yoke is divided into three parts: front-left, back and front-right, with a small armhole bound off on each side. Do this the same way for every size, use your own row's stitch numbers from the table on the previous page.</p>
+<div class="card"><p class="small">Example with numbers for 0-1 months, use your own numbers from the table on the previous page.</p><ul class="dots"><li>Knit across the 11 front-left stitches (the stitches from the edge to the left shoulder marker).</li><li>Bind off 12 stitches for the armhole (these stitches sit right at the underarm).</li><li>Knit across the 22 back stitches (between the two shoulder markers, minus the stitches just bound off).</li><li>Bind off 12 stitches for the second armhole.</li><li>Knit across the remaining stitches for front-right.</li><li>You now have three separate panels on the needle: front-left and front-right with 27 stitches each, and back with 54 stitches. From here on each panel is worked separately, flat, with its own ball or strand of yarn, straight down to the hem.</li></ul></div>
+<div class="cream"><p class="creamtitle">The stitches bound off on each side are split evenly: half are counted from the front panel, half from the back panel, right where they meet at the shoulder marker. This is why front-left/front-right goes from 33 stitches (at yoke depth) down to 27 stitches (after dividing), and back goes from 66 stitches down to 54 stitches, see the grading table on the next page for your own size.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;10&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS SHORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 4: THE PANELS DOWN TO THE HEM</h1></div>
+<p>Knit stockinette stitch straight down on each of the three panels, with no increasing or decreasing, until the vest reaches the desired length. See the table below for how many rows to work for your size.</p>
+<div class="card"><table class="t"><tr><th>Size</th><th>Rows stockinette</th><th>Rows garter at hem</th><th>Finished length</th></tr><tr><td><b>0-1 mnd</b></td><td>10</td><td>6</td><td>14.0 cm</td></tr><tr><td><b>1-3 mnd</b></td><td>13</td><td>6</td><td>15.0 cm</td></tr><tr><td><b>3-6 mnd</b></td><td>18</td><td>6</td><td>16.5 cm</td></tr><tr><td><b>6-9 mnd</b></td><td>18</td><td>6</td><td>18.0 cm</td></tr><tr><td><b>9-12 mnd</b></td><td>24</td><td>6</td><td>20.0 cm</td></tr><tr><td><b>12-18 mnd</b></td><td>27</td><td>6</td><td>21.5 cm</td></tr><tr><td><b>18-24 mnd</b></td><td>31</td><td>6</td><td>23.0 cm</td></tr></table></div>
+<div class="cream"><p class="creamtitle">Switch to garter stitch (knit every row) and work 6 rows. Bind off all stitches loosely. Repeat the same way for the other two panels. All three panels should have exactly the same number of rows, so the hem is even all the way around once the panels are sewn together.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;11&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS SHORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 5: THE BUTTON BAND AND BUTTONHOLES</h1></div>
+<p>Finally, work a simple garter stitch band along both straight front edges, with buttonholes on one side.</p>
+<div class="card"><p class="small">Example with numbers for 0-1 months, use your own numbers from the table on page 4 and the grading table on page 9.</p><ol class="steps"><li><span class="snum">1</span><div>Pick up approx. 32 stitches along the whole front edge, from the hem up to the neck, with the right side facing you. Use the rule of thumb "pick up approx. 3 stitches for every 4 rows" as a starting point, adjust slightly if the edge draws in or ripples.</div></li><li><span class="snum">2</span><div>Work garter stitch (knit every row) for 4-5 rows.</div></li><li><span class="snum">3</span><div>On the buttonhole side (right front for girls, left front for boys, or whichever side suits best): on row 2, work 3 buttonholes, evenly spaced along the edge (bind off 2 stitches for each buttonhole, cast on 2 new stitches over the gap on the next row).</div></li><li><span class="snum">4</span><div>Bind off all stitches loosely in garter stitch. Repeat on the other front edge, with no buttonholes.</div></li><li><span class="snum">5</span><div>Sew 3 wooden buttons onto the button side, directly opposite each buttonhole.</div></li></ol></div>
+<div class="cream"><p class="creamtitle">The number of buttons and how many stitches you pick up along the front edge increase with the size, see the table on page 4 and the stitch counts in the grading table on page 9 (the same row count is used to calculate the front edge pickup). Space the buttons evenly: the first and last button approx. 1.5 cm from the neck and hem, the rest evenly spaced between.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;12&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS SHORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>THE ARMHOLE EDGE</h1></div>
+<p>The armhole gets the same simple garter stitch border as the rest of the vest, so it doesn't curl and sits nicely around the body's own sleeve underneath.</p>
+<div class="card"><p>Pick up stitches all the way around the armhole (along the bound-off edge at the bottom and the two straight sides up towards the shoulder) with the right side facing you, approx. 46 stitches in total for your size (see the table below). Work 3-4 rows of garter stitch. Bind off loosely. Repeat the same way for the other armhole.</p></div>
+<div class="card"><table class="t"><tr><th>Size</th><th>Sts bound off at armhole</th><th>Pick up approx. (all around)</th><th>Body's own sleeve circumf.</th></tr><tr><td><b>0-1 mnd</b></td><td>12</td><td>46</td><td>8.6 cm</td></tr><tr><td><b>1-3 mnd</b></td><td>12</td><td>46</td><td>9.1 cm</td></tr><tr><td><b>3-6 mnd</b></td><td>12</td><td>46</td><td>9.5 cm</td></tr><tr><td><b>6-9 mnd</b></td><td>14</td><td>54</td><td>10.0 cm</td></tr><tr><td><b>9-12 mnd</b></td><td>14</td><td>54</td><td>10.5 cm</td></tr><tr><td><b>12-18 mnd</b></td><td>14</td><td>56</td><td>10.9 cm</td></tr><tr><td><b>18-24 mnd</b></td><td>16</td><td>58</td><td>11.4 cm</td></tr></table></div>
+<div class="cream"><p class="creamtitle">The stitches bound off at the armhole make up 57-64% of the body's own sleeve circumference at the same point (see the table), just enough for the body's sleeve to fit through comfortably along with the yoke above, without the armhole being unnecessarily large. The armhole is an opening, not a tube, so it does not need to fit the whole sleeve circumference.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;13&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS SHORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>FINISHING</h1></div>
+<div class="card"><ol class="steps"><li><span class="snum">1</span><div>Sew the two shoulder seams: place front-left and back, and front-right and back, right sides together, and sew a neat seam along the shoulder line (where the shoulder markers sat during part 2).</div></li><li><span class="snum">2</span><div>Pick up and work the garter stitch border around both armholes, see the previous page.</div></li><li><span class="snum">3</span><div>Pick up and work the button band with buttonholes along one front edge, and a plain garter band with no holes along the other, see part 5.</div></li><li><span class="snum">4</span><div>Sew the buttons on directly opposite the buttonholes.</div></li><li><span class="snum">5</span><div>Weave in all loose ends securely on the wrong side, and trim them short.</div></li><li><span class="snum">6</span><div>Lightly steam-block the vest on the wrong side, avoid pressing directly on the garter stitch borders, they should keep their neat, non-curling structure.</div></li><li><span class="snum">7</span><div>Finally, check that every button is securely attached, and that no loose threads or stitches can come undone.</div></li></ol></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;14&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS SHORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>SAFETY AND CARE</h1></div>
+<div class="pillwrap"><div class="pill rosepill">SAFETY</div></div>
+<div class="card"><ul class="dots"><li>Always use small, securely attached buttons, and sew them on with double thread, several times through each hole.</li><li>Check the buttons regularly, especially after washing, and reattach them at the first sign of looseness.</li><li>This pattern is not intended for children who put small objects in their mouth unsupervised, never leave a baby alone and unsupervised in the vest during the first while of wearing it.</li><li>All measurements and stitch counts in this pattern are calculated for a roomy, comfortable fit, not a tight safety fit, always follow current safety recommendations for children's clothing.</li></ul></div>
+<div class="pillwrap"><div class="pill sagepill">CARE INSTRUCTIONS</div></div>
+<div class="cream"><p class="creamtitle">Hand wash gently in lukewarm water with wool wash, or machine wash on a wool cycle at 30 degrees. Press out the water, ease into shape, and dry lying flat on a towel. Avoid hanging the vest up to dry, alpaca can stretch out of shape.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;15&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS SHORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>ALL DONE!</h1></div>
+<div class="cream"><p class="creamtitle">Congratulations, your short vest is finished! Put it on over the basisbody, button it closed at the front, and you have a whole colourful layer ready, a lovely part of the entire «Woodland Dreams» collection.</p></div>
+<div class="pillwrap"><div class="pill sagepill">THE REST OF THE COLLECTION</div></div>
+<div class="card"><ul class="dots"><li>Basisbody, the neutral foundation the vest is meant to be worn over.</li><li>Lace collar, a loose collar that fastens at the back.</li><li>Ruffle collar, the same fastening, a little more romantic.</li><li>Peter Pan collar, a classic rounded collar.</li><li>Bib, tied with an i-cord or a button.</li><li>I-cord suspenders, the collection's signature piece, adjustable and crossing at the back.</li><li>Woodland Fluffy Skirt, a crocheted skirt made to match the body.</li></ul></div>
+<div class="pillwrap"><div class="pill rosepill">COPYRIGHT</div></div>
+<div class="card"><p class="small center">(c) Renate Dahl, Little Montessori Explorers. This pattern is a fully original LME design. You are welcome to sell finished garments you make from this pattern, on a small personal scale, provided the finished product is checked against current safety requirements. The pattern itself, its text and images, may not be shared, copied or resold.</p></div>
+<div class="byline">
+  <div class="by2">By Renate Dahl &middot; Little Montessori Explorers &middot; lmexplorers.com</div>
+</div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;16&nbsp;&mdash;</div>
+</div></body></html>
