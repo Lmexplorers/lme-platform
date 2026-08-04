@@ -7,8 +7,7 @@ BASE = pathlib.Path(__file__).parent
 sys.path.insert(0, str(BASE.parent / '_shared'))
 import lme_pattern_kit as kit
 from lme_pattern_kit import (BROWN, BROWN_MID, BROWN_DARK, CREAM, CREAM_DEEP, ROSE, SAGE, INK,
-                              banner, rosep, sagep, card, cream, cme, ul, steps, otab, abbrtab,
-                              photo_row, qr_placeholder)
+                              banner, rosep, sagep, card, cream, cme, ul, steps, otab, abbrtab)
 
 FACE_REF = BASE / 'ellie_face_ref.png'
 face_b64 = base64.b64encode(FACE_REF.read_bytes()).decode()
@@ -70,10 +69,10 @@ add('om_stil',
 add('pill_sikkerhet_kort', 'VIKTIGST AV ALT: SIKKERHET', 'MOST IMPORTANT OF ALL: SAFETY')
 add('om_sikkerhet_kort',
     'En smokkelenke er noe barnet har tett på ansiktet, ofte alene i vogn eller seng. Derfor er '
-    'lengden på denne oppskriften bevisst kort, og hele side 13 er viet sikkerhet. Les den siden '
+    'lengden på denne oppskriften bevisst kort, og hele side 12 er viet sikkerhet. Les den siden '
     'før du hekler videre.',
     "A pacifier clip is something a baby has close to their face, often alone in a pram or bed. "
-    "That's why this pattern's length is deliberately short, and all of page 13 is dedicated to "
+    "That's why this pattern's length is deliberately short, and all of page 12 is dedicated to "
     "safety. Read that page before you crochet on.")
 
 # ---------------------------------------------------------------- SIDE 3
@@ -361,18 +360,7 @@ add('montering_steg_en', [
     'Fasten every loose end securely on the inside of the pieces, and trim what is left.',
 ])
 
-# ---------------------------------------------------------------- SIDE 11: FOTOVEILEDNING
-add('banner_foto', 'FOTOVEILEDNING', 'PHOTO GUIDE')
-add('foto_lead',
-    'Sett inn egne bilder av hvert steg her når du har heklet lenken selv, det gjør oppskriften '
-    'enda lettere å følge for neste hekler.',
-    'Add your own photos of each step here once you have crocheted the clip yourself, it makes '
-    'the pattern even easier to follow for the next crocheter.')
-add('foto_captions',
-    ['Dådyrhodet ferdig', 'Blomst og blad', 'Kulene på rekke', 'Ferdig montert lenke'],
-    ['The finished deer head', 'Flower and leaf', 'The balls in a row', 'The fully assembled clip'])
-
-# ---------------------------------------------------------------- SIDE 12: SIKKERHET (kritisk)
+# ---------------------------------------------------------------- SIDE 11: SIKKERHET (kritisk)
 add('banner_sikkerhet', 'SIKKERHET, DEN VIKTIGSTE SIDEN', 'SAFETY, THE MOST IMPORTANT PAGE')
 add('pill_lengde', 'MAKS LENGDE: 22 CM', 'MAX LENGTH: 22 CM')
 add('lengde_txt',
@@ -430,10 +418,8 @@ add('stell_txt',
     'Hand wash in lukewarm water with a little mild soap. Rinse well. Gently press out the '
     'water in a towel, do not wring. Lay flat to dry. Avoid machine washing, since wood and '
     'beads can be damaged.')
-add('pill_qr', 'VIDEOVEILEDNING', 'VIDEO GUIDE')
-add('qr_caption', 'QR-kode til videoveiledning (legges til)', 'QR code to video guide (to be added)')
 
-# ---------------------------------------------------------------- SIDE 14: FERDIG
+# ---------------------------------------------------------------- SIDE 13: FERDIG
 add('banner_ferdig', 'GRATULERER, LENKEN ER FERDIG!', 'CONGRATULATIONS, THE CLIP IS DONE!')
 add('ferdig_txt',
     'Nå har du heklet din egen smokkelenke til Ellie-kolleksjonen. Husk å sjekke lengden en '
@@ -590,13 +576,6 @@ def build(lang):
 {card(steps(mo_steg))}
 ''', 11))
 
-    foto_caps = T['foto_captions']['no'] if lang == 'no' else T['foto_captions']['en']
-    pages.append(pg(f'''
-{banner(t('banner_foto'))}
-{card('<p class="center">' + t('foto_lead') + '</p>')}
-{photo_row(foto_caps)}
-''', 12))
-
     regler = T['regler']['no'] if lang == 'no' else T['regler_en']['no']
     pages.append(pg(f'''
 {banner(t('banner_sikkerhet'))}
@@ -604,14 +583,12 @@ def build(lang):
 {card('<p>' + t('lengde_txt') + '</p>')}
 {sagep(t('pill_regler'))}
 {card(ul(regler))}
-''', 13))
+''', 12))
 
     pages.append(pg(f'''
 {banner(t('banner_stell'))}
 {cme(t('stell_txt'))}
-{rosep(t('pill_qr'))}
-{qr_placeholder(t('qr_caption'))}
-''', 14))
+''', 13))
 
     kolliste = T['kolleksjon_liste']['no'] if lang == 'no' else T['kolleksjon_liste']['en']
     pages.append(pg(f'''
@@ -624,7 +601,7 @@ def build(lang):
 <div class="byline">
   <div class="by2">{t('by1')} &middot; {t('by2')} &middot; {t('by3')}</div>
 </div>
-''', 15))
+''', 14))
 
     return pages
 

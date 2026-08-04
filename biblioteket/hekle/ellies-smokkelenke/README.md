@@ -1,7 +1,7 @@
 # Ellies smokkelenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Ellies-smokkelenke-LME.pdf`** (norsk, 15 sider, A4) og
-**`Ellies-smokkelenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
+Ferdig oppskrift: **`Ellies-smokkelenke-LME.pdf`** (norsk, 14 sider, A4) og
+**`Ellies-smokkelenke-LME-EN.pdf`** (engelsk, 14 sider, A4).
 
 Andre oppskrift i **LME Baby Collection "Woodland Dreams"**, etter
 `../ellie-dadyret/`. Et forenklet dådyrhode inspirert av Ellie, med en liten
@@ -20,7 +20,7 @@ referansebildene), ikke en flat treklype uten fjær.
 **Sikkerhet er hovedpoenget med denne oppskriften.** Maks total lengde er satt
 til 22 cm, i tråd med prinsippet i den europeiske standarden EN 12586 for
 smokkeholdere (en enkel klips + snor skal ikke kunne danne en løkke rundt
-barnets hals). Side 13 av 15 er viet sikkerhet, og oppskriften minner flere
+barnets hals). Side 11 av 14 er viet sikkerhet, og oppskriften minner flere
 steder om at ferdig produkt må kontrolleres mot gjeldende lokale krav før
 salg.
 
@@ -29,14 +29,14 @@ salg.
 - **Nye hekleteknikker i denne oppskriften:** stav og halvstav (til blomst og
   blad), i tillegg til fastmaske/luftmaske/kjedemaske. Forkortelsestabellen
   viser både norske og amerikanske (US) hekletermer, slik designbriefen ba om.
-- **Fotoveiledning:** siden har fire plassholderbokser for egne
-  arbeidsbilder (ikke ekte foto ennå).
-- **QR-kode:** siden om stell/vask har en tom plassholderboks for en
-  fremtidig QR-kode til videoveiledning.
 
-Rettet 3. august 2026: forsiden manglet et produktbilde. Har nå fått et
-eget stiluttrykk-referansebilde (`smokkelenke_ref.jpg`, samme bilde som
-brukes i butikken), i stedet for ingenting.
+Oppdatert 4. august 2026 (Renate): forsidebildet var feil, viste den gamle
+lyseblå smokkelenken i stedet for den korrekte pudderrosa versjonen. Byttet
+til riktig referansebilde, samme fil brukt i butikken
+(`images/oppskrift-ellies-smokkelenke.jpg`). Samtidig fjernet
+"Fotoveiledning"-siden og "Videoveiledning"-boksen, siden oppskriften er
+salgsklar og ligger live i butikken. Ekte bilder/video legges inn i egne
+seksjoner den dagen de faktisk finnes, ikke som tomme plassholdere før det.
 
 ## Bygge PDF-ene på nytt
 
