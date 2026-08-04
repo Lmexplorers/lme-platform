@@ -1,95 +1,166 @@
 /**
- * Oppskrift-kjøp (bøttehatt/skaut): Stripe-betalingslenke -> { produkt-id, språk }.
+ * Oppskrift-kjøp: Stripe-betalingslenke -> { produkt-id, språk }.
  * NOK-lenker = norsk, USD-lenker = engelsk. Delt kilde, brukes av både
  * oppskrift-webhooken (leveringsmail) og hovedwebhooken.
+ *
+ * Generert fra live Stripe-data 4. august 2026 (alle aktive betalingslenker
+ * med redirect til /butikk/takk.html?p=... hentet direkte fra Stripe og
+ * matchet mot produkt-id og språk). Flere plink-ID-er kan peke på samme
+ * produkt (duplikate lenker laget i ulike økter) - det er trygt, alle listes.
  */
 export const PATTERN_LINKS = {
-  // ro-strikk
-  "plink_1TqKogLax7B8uQzq2xw0LSkj": { p: "ro-strikk", lang: "no" },
-  "plink_1TqQJQLax7B8uQzqTYsUhiw6": { p: "ro-strikk", lang: "en" },
-  // ro-hekle
-  "plink_1TqKqMLax7B8uQzqqzdIpLFQ": { p: "ro-hekle", lang: "no" },
-  "plink_1TqQJRLax7B8uQzqcH4uvgp1": { p: "ro-hekle", lang: "en" },
-  // norway-strikk
-  "plink_1TqKqNLax7B8uQzqoD0SH4Eu": { p: "norway-strikk", lang: "no" },
-  "plink_1TqQJTLax7B8uQzqr0aWK1ZI": { p: "norway-strikk", lang: "en" },
-  // norway-hekle
-  "plink_1TqKqPLax7B8uQzqFThJKSO0": { p: "norway-hekle", lang: "no" },
-  "plink_1TqQJULax7B8uQzqQEC8Ufr0": { p: "norway-hekle", lang: "en" },
-  // norge-strikk (maskesting)
-  "plink_1TqKqRLax7B8uQzqZ33h4h5J": { p: "norge-strikk", lang: "no" },
-  "plink_1TqQJWLax7B8uQzqMybvRaX0": { p: "norge-strikk", lang: "en" },
-  // norge-blokk
-  "plink_1TqKqSLax7B8uQzqI6IBFKx2": { p: "norge-blokk", lang: "no" },
-  "plink_1TqQJYLax7B8uQzqmY39qwMJ": { p: "norge-blokk", lang: "en" },
-  // norge-innstrikket
-  "plink_1TqKqULax7B8uQzqKE7t9KhT": { p: "norge-innstrikket", lang: "no" },
-  "plink_1TqQJZLax7B8uQzqfnPEL2iV": { p: "norge-innstrikket", lang: "en" },
-  // norge-rune
-  "plink_1Tv4bQLax7B8uQzq4ghj2ZQD": { p: "norge-rune", lang: "no" },
-  "plink_1Tv4baLax7B8uQzq692btr6j": { p: "norge-rune", lang: "en" },
-  // norge-hekle
-  "plink_1TqKqWLax7B8uQzq3zOum7nH": { p: "norge-hekle", lang: "no" },
-  "plink_1TqQJbLax7B8uQzqIRUPmFMG": { p: "norge-hekle", lang: "en" },
-  // norge-skaut (strikk)
-  "plink_1TqKqYLax7B8uQzqYB906yIN": { p: "norge-skaut", lang: "no" },
-  "plink_1TqQJcLax7B8uQzql7E8ODDo": { p: "norge-skaut", lang: "en" },
-  // norge-skaut-hekle
-  "plink_1TqR9WLax7B8uQzqmRsRLibH": { p: "norge-skaut-hekle", lang: "no" },
-  "plink_1TqR9cLax7B8uQzqfJ5Gst5g": { p: "norge-skaut-hekle", lang: "en" },
-  // norge-pakke
-  "plink_1TqKqZLax7B8uQzq6QM3SDtw": { p: "norge-pakke", lang: "no" },
-  "plink_1TqQJeLax7B8uQzqW0TTjWXK": { p: "norge-pakke", lang: "en" },
-  // hekle-pakke (249)
-  "plink_1TxlCHLax7B8uQzqptsW5CFG": { p: "hekle-pakke", lang: "no" },
-  "plink_1TxlCILax7B8uQzqQF0Gx73q": { p: "hekle-pakke", lang: "en" },
-  // strikk-pakke (299)
-  "plink_1TxlerLax7B8uQzq3kWa07U1": { p: "strikk-pakke", lang: "no" },
-  "plink_1TxletLax7B8uQzqylxXeWJL": { p: "strikk-pakke", lang: "en" },
-
-  // Nye engelske lenker (tospråklig produktnavn i kassa: norsk · engelsk).
-  "plink_1TxrRlLax7B8uQzqPpCoVfoO": { p: "ro-strikk", lang: "en" },
-  "plink_1TxrRnLax7B8uQzqqrL5tVeg": { p: "ro-hekle", lang: "en" },
-  "plink_1TxrRpLax7B8uQzqe7oMynMt": { p: "norway-strikk", lang: "en" },
-  "plink_1TxrRrLax7B8uQzqrYnmcj3k": { p: "norway-hekle", lang: "en" },
-  "plink_1TxrRsLax7B8uQzqKbcXPYtf": { p: "norge-strikk", lang: "en" },
-  "plink_1TxrQWLax7B8uQzqV0F0wFWd": { p: "norge-blokk", lang: "en" },
-  "plink_1TxrRuLax7B8uQzq4sfhppLa": { p: "norge-innstrikket", lang: "en" },
-  "plink_1TxrRwLax7B8uQzqXGCZRLbA": { p: "norge-rune", lang: "en" },
-  "plink_1TxrS2Lax7B8uQzqRcvpl8BH": { p: "norge-hekle", lang: "en" },
-  "plink_1TxrS4Lax7B8uQzqIS6A7dXx": { p: "norge-skaut", lang: "en" },
-  "plink_1TxrS5Lax7B8uQzqLzPCxlC6": { p: "norge-skaut-hekle", lang: "en" },
-  "plink_1TxrS7Lax7B8uQzqGY8kviD5": { p: "norge-pakke", lang: "en" },
-  "plink_1TxrS9Lax7B8uQzqIZL2EOrd": { p: "hekle-pakke", lang: "en" },
-  "plink_1TxrSBLax7B8uQzqDA7jDjxK": { p: "strikk-pakke", lang: "en" },
-
-  // Egen engelsk butikk (/shop): rene engelske produkter, engelsk-only kasse.
+  // Eldre oppskrifter (ro/norway/norge/pakker)
   "plink_1Txrq1Lax7B8uQzqjdWrx6Bl": { p: "ro-strikk", lang: "en" },
+  "plink_1TxrRlLax7B8uQzqPpCoVfoO": { p: "ro-strikk", lang: "en" },
+  "plink_1TqQJQLax7B8uQzqTYsUhiw6": { p: "ro-strikk", lang: "en" },
+  "plink_1TqKogLax7B8uQzq2xw0LSkj": { p: "ro-strikk", lang: "no" },
   "plink_1Txrq3Lax7B8uQzqYl8dOHJz": { p: "ro-hekle", lang: "en" },
+  "plink_1TxrRnLax7B8uQzqqrL5tVeg": { p: "ro-hekle", lang: "en" },
+  "plink_1TqQJRLax7B8uQzqcH4uvgp1": { p: "ro-hekle", lang: "en" },
+  "plink_1TqKqMLax7B8uQzqqzdIpLFQ": { p: "ro-hekle", lang: "no" },
   "plink_1Txrq5Lax7B8uQzqRWkOPQ07": { p: "norway-strikk", lang: "en" },
+  "plink_1TxrRpLax7B8uQzqe7oMynMt": { p: "norway-strikk", lang: "en" },
+  "plink_1TqQJTLax7B8uQzqr0aWK1ZI": { p: "norway-strikk", lang: "en" },
+  "plink_1TqKqNLax7B8uQzqoD0SH4Eu": { p: "norway-strikk", lang: "no" },
   "plink_1Txrq7Lax7B8uQzqo1iHeeXl": { p: "norway-hekle", lang: "en" },
+  "plink_1TxrRrLax7B8uQzqrYnmcj3k": { p: "norway-hekle", lang: "en" },
+  "plink_1TqQJULax7B8uQzqQEC8Ufr0": { p: "norway-hekle", lang: "en" },
+  "plink_1TqKqPLax7B8uQzqFThJKSO0": { p: "norway-hekle", lang: "no" },
   "plink_1Txrq9Lax7B8uQzqfS6xHMyB": { p: "norge-strikk", lang: "en" },
+  "plink_1TxrRsLax7B8uQzqKbcXPYtf": { p: "norge-strikk", lang: "en" },
+  "plink_1TqQJWLax7B8uQzqMybvRaX0": { p: "norge-strikk", lang: "en" },
+  "plink_1TqKqRLax7B8uQzqZ33h4h5J": { p: "norge-strikk", lang: "no" },
   "plink_1TxrqALax7B8uQzq74PYo73L": { p: "norge-blokk", lang: "en" },
+  "plink_1TxrQWLax7B8uQzqV0F0wFWd": { p: "norge-blokk", lang: "en" },
+  "plink_1TqQJYLax7B8uQzqmY39qwMJ": { p: "norge-blokk", lang: "en" },
+  "plink_1TqKqSLax7B8uQzqI6IBFKx2": { p: "norge-blokk", lang: "no" },
   "plink_1TxrqCLax7B8uQzq53fOdLHy": { p: "norge-innstrikket", lang: "en" },
+  "plink_1TxrRuLax7B8uQzq4sfhppLa": { p: "norge-innstrikket", lang: "en" },
+  "plink_1TqQJZLax7B8uQzqfnPEL2iV": { p: "norge-innstrikket", lang: "en" },
+  "plink_1TqKqULax7B8uQzqKE7t9KhT": { p: "norge-innstrikket", lang: "no" },
   "plink_1TxrqSLax7B8uQzq2sbB4c71": { p: "norge-rune", lang: "en" },
+  "plink_1TxrRwLax7B8uQzqXGCZRLbA": { p: "norge-rune", lang: "en" },
+  "plink_1Tv4baLax7B8uQzq692btr6j": { p: "norge-rune", lang: "en" },
+  "plink_1Tv4bQLax7B8uQzq4ghj2ZQD": { p: "norge-rune", lang: "no" },
   "plink_1TxrqULax7B8uQzq52Cj0HbC": { p: "norge-hekle", lang: "en" },
+  "plink_1TxrS2Lax7B8uQzqRcvpl8BH": { p: "norge-hekle", lang: "en" },
+  "plink_1TqQJbLax7B8uQzqIRUPmFMG": { p: "norge-hekle", lang: "en" },
+  "plink_1TqKqWLax7B8uQzq3zOum7nH": { p: "norge-hekle", lang: "no" },
   "plink_1TxrqWLax7B8uQzq6gLCuUFb": { p: "norge-skaut", lang: "en" },
+  "plink_1TxrS4Lax7B8uQzqIS6A7dXx": { p: "norge-skaut", lang: "en" },
+  "plink_1TqQJcLax7B8uQzql7E8ODDo": { p: "norge-skaut", lang: "en" },
+  "plink_1TqKqYLax7B8uQzqYB906yIN": { p: "norge-skaut", lang: "no" },
   "plink_1TxrqXLax7B8uQzq2JYnJPzK": { p: "norge-skaut-hekle", lang: "en" },
+  "plink_1TxrS5Lax7B8uQzqLzPCxlC6": { p: "norge-skaut-hekle", lang: "en" },
+  "plink_1TqR9cLax7B8uQzqfJ5Gst5g": { p: "norge-skaut-hekle", lang: "en" },
+  "plink_1TqR9WLax7B8uQzqmRsRLibH": { p: "norge-skaut-hekle", lang: "no" },
   "plink_1TxrqZLax7B8uQzqkad1ruv4": { p: "norge-pakke", lang: "en" },
+  "plink_1TxrS7Lax7B8uQzqGY8kviD5": { p: "norge-pakke", lang: "en" },
+  "plink_1TqQJeLax7B8uQzqW0TTjWXK": { p: "norge-pakke", lang: "en" },
+  "plink_1TqKqZLax7B8uQzq6QM3SDtw": { p: "norge-pakke", lang: "no" },
   "plink_1TxrqcLax7B8uQzqvG5N7UZ1": { p: "hekle-pakke", lang: "en" },
+  "plink_1TxrS9Lax7B8uQzqIZL2EOrd": { p: "hekle-pakke", lang: "en" },
+  "plink_1TxlCILax7B8uQzqQF0Gx73q": { p: "hekle-pakke", lang: "en" },
+  "plink_1TxlCHLax7B8uQzqptsW5CFG": { p: "hekle-pakke", lang: "no" },
   "plink_1TxrqdLax7B8uQzqw2Dy9miq": { p: "strikk-pakke", lang: "en" },
+  "plink_1TxrSBLax7B8uQzqDA7jDjxK": { p: "strikk-pakke", lang: "en" },
+  "plink_1TxletLax7B8uQzqylxXeWJL": { p: "strikk-pakke", lang: "en" },
+  "plink_1TxlerLax7B8uQzq3kWa07U1": { p: "strikk-pakke", lang: "no" },
+  "plink_1TxlCGLax7B8uQzqzw4oBafe": { p: "strikk-pakke", lang: "no" },
 
-  // LME Baby Collection "Woodland Dreams" (opprettet i Stripe 2026-08-03)
-  "plink_1U0QWGLax7B8uQzqKqTWERfj": { p: "ellie-hekle", lang: "no" },
+  // Andre nedlastingsprodukter (bok, plansjer, tidslinje)
+  "plink_1TeD2nLax7B8uQzq1TEk9Yjh": { p: "naturutforskerne", lang: "no" },
+  "plink_1TUtPLLax7B8uQzq2lAQYpbH": { p: "naturutforskerne", lang: "en" },
+  "plink_1Te9b4Lax7B8uQzqPtiDj2Bx": { p: "plansjer", lang: "en" },
+  "plink_1Te9EzLax7B8uQzqci9x2ZCY": { p: "plansjer", lang: "no" },
+  "plink_1TeAZ0Lax7B8uQzqSoiQ8J73": { p: "tidslinje", lang: "no" },
+  "plink_1Te97jLax7B8uQzqEAfKW7LX": { p: "tidslinje", lang: "en" },
+
+  // LME Baby Collection Woodland Dreams - Ellie
   "plink_1U0QWPLax7B8uQzqPGwVxiQn": { p: "ellie-hekle", lang: "en" },
-  "plink_1U0QWXLax7B8uQzqt26aJyuL": { p: "ellies-smokkelenke", lang: "no" },
+  "plink_1U0QWGLax7B8uQzqKqTWERfj": { p: "ellie-hekle", lang: "no" },
   "plink_1U0QWfLax7B8uQzqSvYDEa8n": { p: "ellies-smokkelenke", lang: "en" },
-  "plink_1U0QWlLax7B8uQzq7aQ8a59i": { p: "ellies-rangle", lang: "no" },
+  "plink_1U0QWXLax7B8uQzqt26aJyuL": { p: "ellies-smokkelenke", lang: "no" },
   "plink_1U0QWtLax7B8uQzq2V47xxLO": { p: "ellies-rangle", lang: "en" },
-  "plink_1U0QX4Lax7B8uQzqoHgUDj8k": { p: "ellies-vognlenke", lang: "no" },
+  "plink_1U0QWlLax7B8uQzq7aQ8a59i": { p: "ellies-rangle", lang: "no" },
   "plink_1U0QXBLax7B8uQzqJbEsFM2I": { p: "ellies-vognlenke", lang: "en" },
-  "plink_1U0QXJLax7B8uQzqmNxRPXXf": { p: "ellies-ballerinasko", lang: "no" },
+  "plink_1U0QX4Lax7B8uQzqoHgUDj8k": { p: "ellies-vognlenke", lang: "no" },
   "plink_1U0QXQLax7B8uQzqCRWIgWQD": { p: "ellies-ballerinasko", lang: "en" },
-  "plink_1U0QXXLax7B8uQzqvDyZWBzf": { p: "ellies-aktivitetsleke", lang: "no" },
+  "plink_1U0QXJLax7B8uQzqmNxRPXXf": { p: "ellies-ballerinasko", lang: "no" },
   "plink_1U0QXdLax7B8uQzql5uH0TcP": { p: "ellies-aktivitetsleke", lang: "en" },
+  "plink_1U0QXXLax7B8uQzqvDyZWBzf": { p: "ellies-aktivitetsleke", lang: "no" },
+
+  // Woodland Dreams - Pip
+  "plink_1U0jSILax7B8uQzq2uUodES8": { p: "pip-hekle", lang: "en" },
+  "plink_1U0jSALax7B8uQzqAsiQum4s": { p: "pip-hekle", lang: "no" },
+  "plink_1U0jUGLax7B8uQzq4Eot2IOu": { p: "pips-smokkelenke", lang: "en" },
+  "plink_1U0jU8Lax7B8uQzq65Lp3LZj": { p: "pips-smokkelenke", lang: "no" },
+  "plink_1U0jXILax7B8uQzqceEQohAH": { p: "pips-rangle", lang: "en" },
+  "plink_1U0jXBLax7B8uQzq2hJDwn0K": { p: "pips-rangle", lang: "no" },
+  "plink_1U0jZ2Lax7B8uQzqVWnk71wW": { p: "pips-vognlenke", lang: "en" },
+  "plink_1U0jYuLax7B8uQzqeE3nLnSV": { p: "pips-vognlenke", lang: "no" },
+  "plink_1U0pwBLax7B8uQzqknHcbDRJ": { p: "pips-ballerinasko", lang: "en" },
+  "plink_1U0pvyLax7B8uQzqEm02KmdC": { p: "pips-ballerinasko", lang: "no" },
+  "plink_1U0pwELax7B8uQzqQ6NjykcK": { p: "pips-aktivitetsleke", lang: "en" },
+  "plink_1U0pwCLax7B8uQzqChPOl9aJ": { p: "pips-aktivitetsleke", lang: "no" },
+
+  // Woodland Dreams - Felix
+  "plink_1U0jSpLax7B8uQzqFeXFFvpQ": { p: "felix-hekle", lang: "en" },
+  "plink_1U0jSkLax7B8uQzqt6VHGKvw": { p: "felix-hekle", lang: "no" },
+  "plink_1U0jUVLax7B8uQzqRj0YVH8z": { p: "felix-smokkelenke", lang: "en" },
+  "plink_1U0jUQLax7B8uQzqAdQmR377": { p: "felix-smokkelenke", lang: "no" },
+  "plink_1U0jXbLax7B8uQzqgU6mujyq": { p: "felix-rangle", lang: "en" },
+  "plink_1U0jXVLax7B8uQzqhPTspEKu": { p: "felix-rangle", lang: "no" },
+  "plink_1U0jZLLax7B8uQzqjhyc8elK": { p: "felix-vognlenke", lang: "en" },
+  "plink_1U0jZFLax7B8uQzqd3zPP1Ju": { p: "felix-vognlenke", lang: "no" },
+  "plink_1U0pwHLax7B8uQzqfaBunFxZ": { p: "felix-ballerinasko", lang: "en" },
+  "plink_1U0pwFLax7B8uQzqqLVpFD4A": { p: "felix-ballerinasko", lang: "no" },
+  "plink_1U0pwRLax7B8uQzq17FEu3yI": { p: "felix-aktivitetsleke", lang: "en" },
+  "plink_1U0pwOLax7B8uQzqbPEaEuj9": { p: "felix-aktivitetsleke", lang: "no" },
+
+  // Woodland Dreams - Molly
+  "plink_1U0jT8Lax7B8uQzqr3jGA3rB": { p: "molly-hekle", lang: "en" },
+  "plink_1U0jT2Lax7B8uQzq3v3UGVIm": { p: "molly-hekle", lang: "no" },
+  "plink_1U0jUyLax7B8uQzqJTOYqkyQ": { p: "mollys-smokkelenke", lang: "en" },
+  "plink_1U0jUnLax7B8uQzqON90We60": { p: "mollys-smokkelenke", lang: "no" },
+  "plink_1U0jY0Lax7B8uQzqcqzTnzSi": { p: "mollys-rangle", lang: "en" },
+  "plink_1U0jXrLax7B8uQzqikJjRiHf": { p: "mollys-rangle", lang: "no" },
+  "plink_1U0jZdLax7B8uQzqdUS38FSk": { p: "mollys-vognlenke", lang: "en" },
+  "plink_1U0jZXLax7B8uQzqGNr3yP0U": { p: "mollys-vognlenke", lang: "no" },
+  "plink_1U0pwULax7B8uQzqs9jnSjxT": { p: "mollys-ballerinasko", lang: "en" },
+  "plink_1U0pwSLax7B8uQzqYVYzdvSn": { p: "mollys-ballerinasko", lang: "no" },
+  "plink_1U0pwaLax7B8uQzq3Hm1NuWJ": { p: "mollys-aktivitetsleke", lang: "en" },
+  "plink_1U0pwVLax7B8uQzq9q8igwkD": { p: "mollys-aktivitetsleke", lang: "no" },
+
+  // Woodland Dreams - Luna
+  "plink_1U0jTULax7B8uQzqa6gmIhOj": { p: "luna-hekle", lang: "en" },
+  "plink_1U0jTMLax7B8uQzqPONvPAjM": { p: "luna-hekle", lang: "no" },
+  "plink_1U0jWXLax7B8uQzqMNp20dx3": { p: "lunas-smokkelenke", lang: "en" },
+  "plink_1U0jWFLax7B8uQzq5x0ZkBKb": { p: "lunas-smokkelenke", lang: "no" },
+  "plink_1U0jYMLax7B8uQzqYhC4Rbu0": { p: "lunas-rangle", lang: "en" },
+  "plink_1U0jYDLax7B8uQzqzxuRcYAY": { p: "lunas-rangle", lang: "no" },
+  "plink_1U0jZuLax7B8uQzqQi2z4DQh": { p: "lunas-vognlenke", lang: "en" },
+  "plink_1U0jZpLax7B8uQzq3TuqVeDw": { p: "lunas-vognlenke", lang: "no" },
+  "plink_1U0pweLax7B8uQzqjQkHaAVR": { p: "lunas-ballerinasko", lang: "en" },
+  "plink_1U0pwcLax7B8uQzqPgmSJMlB": { p: "lunas-ballerinasko", lang: "no" },
+  "plink_1U0pwhLax7B8uQzq6yVn6yfA": { p: "lunas-aktivitetsleke", lang: "en" },
+  "plink_1U0pwgLax7B8uQzqRjjVbGqF": { p: "lunas-aktivitetsleke", lang: "no" },
+
+  // Woodland Dreams - Oliver
+  "plink_1U0jToLax7B8uQzqVYUWh4Xs": { p: "oliver-hekle", lang: "en" },
+  "plink_1U0jTgLax7B8uQzqjhf0qMnu": { p: "oliver-hekle", lang: "no" },
+  "plink_1U0jWsLax7B8uQzqZruUQcXs": { p: "olivers-smokkelenke", lang: "en" },
+  "plink_1U0jWmLax7B8uQzqbzoRPQFe": { p: "olivers-smokkelenke", lang: "no" },
+  "plink_1U0jYgLax7B8uQzqctXIw1MH": { p: "olivers-rangle", lang: "en" },
+  "plink_1U0jYZLax7B8uQzqNyzqKg4b": { p: "olivers-rangle", lang: "no" },
+  "plink_1U0jaCLax7B8uQzqMvlgNz7n": { p: "olivers-vognlenke", lang: "en" },
+  "plink_1U0ja6Lax7B8uQzqzOzefoC8": { p: "olivers-vognlenke", lang: "no" },
+  "plink_1U0pwpLax7B8uQzqcAQquFnE": { p: "olivers-ballerinasko", lang: "en" },
+  "plink_1U0pwoLax7B8uQzq2bqdL3kR": { p: "olivers-ballerinasko", lang: "no" },
+  "plink_1U0pwsLax7B8uQzqjgzsNPwd": { p: "olivers-aktivitetsleke", lang: "en" },
+  "plink_1U0pwrLax7B8uQzqLWSe3rqD": { p: "olivers-aktivitetsleke", lang: "no" },
+
+  // Woodland Dreams - hele kolleksjonen (bundle)
+  "plink_1U0q3RLax7B8uQzqQsWiPkcd": { p: "woodland-dreams-bundle", lang: "en" },
+  "plink_1U0q3PLax7B8uQzqb9zyRcOH": { p: "woodland-dreams-bundle", lang: "no" },
 };
