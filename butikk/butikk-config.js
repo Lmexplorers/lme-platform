@@ -206,6 +206,146 @@ window.LME_BUTIKK = {
       ]
     },
 
+    "pips-ballerinasko": {
+      navn:  { no: "Pips ballerinasko - amigurumi", en: "Pip's Ballerina Shoes - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · fem størrelser · 17 sider",
+                     en: "LME Baby Collection · Woodland Dreams · five sizes · 17 pages" },
+      cover:   "/images/oppskrift-pips-ballerinasko.jpg",
+      coverEn: "/images/oppskrift-pips-ballerinasko.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/pips-ballerinasko.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/pips-ballerinasko-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "pips-aktivitetsleke": {
+      navn:  { no: "Pips aktivitetsleke - amigurumi", en: "Pip's Activity Toy - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 11-12 cm · 21 sider",
+                     en: "LME Baby Collection · Woodland Dreams · approx. 11-12 cm · 21 pages" },
+      cover:   "/images/oppskrift-pips-aktivitetsleke.jpg",
+      coverEn: "/images/oppskrift-pips-aktivitetsleke.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/pips-aktivitetsleke.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/pips-aktivitetsleke-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "felix-ballerinasko": {
+      navn:  { no: "Felix' ballerinasko - amigurumi", en: "Felix's Ballerina Shoes - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · fem størrelser · 17 sider",
+                     en: "LME Baby Collection · Woodland Dreams · five sizes · 17 pages" },
+      cover:   "/images/oppskrift-felix-ballerinasko.jpg",
+      coverEn: "/images/oppskrift-felix-ballerinasko.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/felix-ballerinasko.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/felix-ballerinasko-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "felix-aktivitetsleke": {
+      navn:  { no: "Felix' aktivitetsleke - amigurumi", en: "Felix's Activity Toy - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 11-12 cm · 20 sider",
+                     en: "LME Baby Collection · Woodland Dreams · approx. 11-12 cm · 20 pages" },
+      cover:   "/images/oppskrift-felix-aktivitetsleke.jpg",
+      coverEn: "/images/oppskrift-felix-aktivitetsleke.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/felix-aktivitetsleke.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/felix-aktivitetsleke-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "mollys-ballerinasko": {
+      navn:  { no: "Mollys ballerinasko - amigurumi", en: "Molly's Ballerina Shoes - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · fem størrelser · 17 sider",
+                     en: "LME Baby Collection · Woodland Dreams · five sizes · 17 pages" },
+      cover:   "/images/oppskrift-mollys-ballerinasko.jpg",
+      coverEn: "/images/oppskrift-mollys-ballerinasko.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/mollys-ballerinasko.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/mollys-ballerinasko-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "mollys-aktivitetsleke": {
+      navn:  { no: "Mollys aktivitetsleke - amigurumi", en: "Molly's Activity Toy - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 11-12 cm · 20 sider",
+                     en: "LME Baby Collection · Woodland Dreams · approx. 11-12 cm · 20 pages" },
+      cover:   "/images/oppskrift-mollys-aktivitetsleke.jpg",
+      coverEn: "/images/oppskrift-mollys-aktivitetsleke.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/mollys-aktivitetsleke.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/mollys-aktivitetsleke-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "lunas-ballerinasko": {
+      navn:  { no: "Lunas ballerinasko - amigurumi", en: "Luna's Ballerina Shoes - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · fem størrelser · 17 sider",
+                     en: "LME Baby Collection · Woodland Dreams · five sizes · 17 pages" },
+      cover:   "/images/oppskrift-lunas-ballerinasko.jpg",
+      coverEn: "/images/oppskrift-lunas-ballerinasko.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/lunas-ballerinasko.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/lunas-ballerinasko-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "lunas-aktivitetsleke": {
+      navn:  { no: "Lunas aktivitetsleke - amigurumi", en: "Luna's Activity Toy - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 11-12 cm · 20 sider",
+                     en: "LME Baby Collection · Woodland Dreams · approx. 11-12 cm · 20 pages" },
+      cover:   "/images/oppskrift-lunas-aktivitetsleke.jpg",
+      coverEn: "/images/oppskrift-lunas-aktivitetsleke.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/lunas-aktivitetsleke.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/lunas-aktivitetsleke-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "olivers-ballerinasko": {
+      navn:  { no: "Olivers ballerinasko - amigurumi", en: "Oliver's Ballerina Shoes - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · fem størrelser · 15 sider",
+                     en: "LME Baby Collection · Woodland Dreams · five sizes · 15 pages" },
+      cover:   "/images/oppskrift-olivers-ballerinasko.jpg",
+      coverEn: "/images/oppskrift-olivers-ballerinasko.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/olivers-ballerinasko.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/olivers-ballerinasko-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "olivers-aktivitetsleke": {
+      navn:  { no: "Olivers aktivitetsleke - amigurumi", en: "Oliver's Activity Toy - amigurumi" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 11-12 cm · 20 sider",
+                     en: "LME Baby Collection · Woodland Dreams · approx. 11-12 cm · 20 pages" },
+      cover:   "/images/oppskrift-olivers-aktivitetsleke.jpg",
+      coverEn: "/images/oppskrift-olivers-aktivitetsleke.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/olivers-aktivitetsleke.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/olivers-aktivitetsleke-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
     "norway-strikk": {
       navn:  { no: "NORWAY-bøttehatt, strikkeoppskrift", en: "NORWAY bucket hat, knitting pattern" },
       undertittel: { no: "Rød hatt · NORWAY foran · RO og bølger bak · én størrelse (pinnen graderer)",
