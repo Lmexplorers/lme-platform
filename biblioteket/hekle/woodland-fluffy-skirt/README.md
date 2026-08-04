@@ -26,18 +26,32 @@ reelle, beregnede tall:
 - A-kroppens sluttmasketall = linningmasker x 1,55, avrundet til nærmeste
   faktiske resultat av et helt antall økeomganger (4 masker økt pr
   omgang), ikke bare avrundet i løse luften.
-- Volangens masketall = A-kroppens sluttmasketall x 2,6 (multipliserings-
-  faktoren for et luftig, fluffy fall), avrundet til nærmeste multiplum
-  av 4.
-- Omgangstall (linning/kropp/volang) fordelt fra skjørtlengde x fasthet,
+- Volangenes sluttmasketall (etter alle tre lag) = A-kroppens sluttmasketall
+  x 2,6 (multipliseringsfaktoren for et luftig, fluffy fall, uendret fra
+  første versjon), avrundet til nærmeste multiplum av 4.
+- Omgangstall (linning/kropp/volanglag) fordelt fra skjørtlengde x fasthet,
   med kontroll på at antall økeomganger aldri overstiger antall
   tilgjengelige omganger i kroppsdelen.
 
-Se `sizes.json` for de fulle, verifiserte tallene per størrelse.
-Genereringsskriptet (`grading.py`, kopiert til scratchpad under
-byggingen) inneholder interne konsistenssjekk (`assert`) som bekrefter at
-alle 16 størrelsenes maskeltall er strengt økende og innbyrdes
-konsistente, før tallene noensinne når selve PDF-en.
+**Flere volanglag (revidert etter tilbakemelding "Flere volanger"):**
+Den totale veksten fra A-kroppens sluttmasketall til det ferdige
+hem-masketallet (2,6x, se over) fordeles nå over **tre egne
+multipliseringsomganger** i stedet for én, med noen omganger vanlig stav
+imellom hvert lag (`per_tier_factor = (hem_sts / body_target_sts) ** (1/3)`,
+avrundet til nærmeste multiplum av 4 pr lag, siste lag lander alltid
+nøyaktig på det opprinnelige hem-masketallet). Dette gir tre synlige,
+kaskaderende volanglag i stedet for én stor volang, mens det totale
+masketallet ved fanget (og dermed garnforbruk og fluffy-effekt) er
+identisk med den opprinnelige enkelt-volang-versjonen.
+
+Se `sizes.json` for de fulle, verifiserte tallene per størrelse, inkludert
+et `tiers`-felt (3 lag pr størrelse: start-/sluttmasketall og antall
+omganger vanlig stav for hvert lag). Genereringsskriptet
+(`grading_skirt.py`, i denne mappen) inneholder interne konsistenssjekk
+(`assert`) som bekrefter at alle 16 størrelsenes maskeltall er strengt
+økende og innbyrdes konsistente, at hvert lag har minst 1 synlig omgang,
+og at siste lag alltid lander eksakt på det uavhengig beregnede
+hem-masketallet, før tallene noensinne når selve PDF-en.
 
 ## Konstruksjon, kort
 
@@ -45,10 +59,11 @@ konsistente, før tallene noensinne når selve PDF-en.
    midjemålet.
 2. **A-kroppen**: staver i jevne omganger, med spredte økeomganger (4
    økepunkter pr omgang) som gir den lette A-fasongen.
-3. **Volangen**: maskene multipliseres kraftig over én omgang (ca. 2,6x),
-   deretter noen omganger vanlig stav på det store masketallet, for et
-   luftig fall uten tyngde.
-4. **Avslutningskanten**: en enkel picot-kant.
+3. **De tre volanglagene**: maskene multipliseres i tre egne omganger
+   (ett kaskaderende lag om gangen, ca. 1,37x pr lag i snitt), med noen
+   omganger vanlig stav på det nye masketallet mellom hvert lag, for et
+   luftig, sukkerspinn-aktig fall uten tyngde.
+4. **Avslutningskanten**: en enkel picot-kant nederst på siste volanglag.
 
 Laget for å passe perfekt sammen med Woodland Dreams Basisbody (samme
 garn og fargepalett, midjemålene i størrelsestabellen kan sjekkes mot
@@ -57,6 +72,7 @@ Basisbodyens egen størrelsestabell for et matchende sett).
 ## Bygge PDF-ene på nytt
 
 ```bash
+python3 grading_skirt.py   # skriver sizes.json på nytt (kun nødvendig ved tallendringer)
 python3 build_fluffy_skirt.py
 CHROME=/opt/pw-browsers/chromium-1194/chrome-linux/chrome
 "$CHROME" --headless --no-pdf-header-footer \

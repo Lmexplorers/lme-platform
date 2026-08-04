@@ -4,11 +4,11 @@ HTML, klar for PDF-print med Chromium. Heklet del av strikkekolleksjonen
 LME Woodland Dreams (Basisbody + 6 tilbehørsdeler + dette skjørtet).
 
 Helt original LME-konstruksjon, ikke en kopi av noe eksisterende mønster:
-heklet ovenfra og ned, elastisk linning, lett A-fasong kropp, en stor
-fluffy volang med luftig fall, pyntekant. Fasthet 20 staver = 10 cm /
-30 omganger = 15 cm på heklenål 4 mm, Sandnes Garn Alpakka. Alle
-graderingstall er beregnet og verifisert separat (se sizes.json og
-scratchpad/skirt/grading.py), ikke frihåndstall.
+heklet ovenfra og ned, elastisk linning, lett A-fasong kropp, tre
+kaskaderende fluffy volanglag med luftig fall, pyntekant. Fasthet 20
+staver = 10 cm / 30 omganger = 15 cm på heklenål 4 mm, Sandnes Garn
+Alpakka. Alle graderingstall er beregnet og verifisert separat (se
+sizes.json og grading_skirt.py), ikke frihåndstall.
 """
 import pathlib, sys, json
 
@@ -31,14 +31,14 @@ add('covertag', 'LME HEKLEOPPSKRIFT - BABY OG BARN', 'LME CROCHET PATTERN - BABY
 add('covertitle', 'WOODLAND FLUFFY SKIRT', 'WOODLAND FLUFFY SKIRT')
 add('subpill', 'LME BABY COLLECTION - WOODLAND DREAMS', 'LME BABY COLLECTION - WOODLAND DREAMS')
 add('cover_desc',
-    'Et lett, luftig heklet skjørt med en stor, myk volang og et elegant fall, akkurat som '
-    'sukkerspinn. Heklet ovenfra og ned: en elastisk linning, en lett A-fasong kropp og en stor, '
-    'fluffy volang med en fin pyntekant nederst. Seksten størrelser, fra prematur til 14-16 år, '
+    'Et lett, luftig heklet skjørt med tre myke, kaskaderende volanglag og et elegant fall, akkurat '
+    'som sukkerspinn. Heklet ovenfra og ned: en elastisk linning, en lett A-fasong kropp og tre '
+    'fluffy volanglag med en fin pyntekant nederst. Seksten størrelser, fra prematur til 14-16 år, '
     'laget for å passe perfekt sammen med Woodland Dreams Basisbody.',
-    'A light, airy crocheted skirt with a big, soft ruffle and an elegant fall, just like cotton '
-    'candy. Crocheted top-down: an elastic waistband, a light A-line body and a big, fluffy ruffle '
-    'with a pretty finishing edge at the hem. Sixteen sizes, from preemie to 14-16 years, made to '
-    'fit perfectly together with the Woodland Dreams Basisbody.')
+    'A light, airy crocheted skirt with three soft, cascading ruffle tiers and an elegant fall, '
+    'just like cotton candy. Crocheted top-down: an elastic waistband, a light A-line body and '
+    'three fluffy ruffle tiers with a pretty finishing edge at the hem. Sixteen sizes, from preemie '
+    'to 14-16 years, made to fit perfectly together with the Woodland Dreams Basisbody.')
 add('by1', 'Av Renate Dahl', 'By Renate Dahl')
 add('by2', 'Little Montessori Explorers', 'Little Montessori Explorers')
 add('by3', 'lmexplorers.com', 'lmexplorers.com')
@@ -68,11 +68,13 @@ add('om_stil',
 add('pill_passform', 'PASSFORM', 'FIT')
 add('om_passform',
     'En elastisk linning gjør skjørtet komfortabelt og enkelt å ta på, mens den lette A-fasongen '
-    'gir bevegelsesfrihet. Volangen er heklet luftig med multipliserte masker, ikke tett og tung, '
-    'så fallet blir lett selv i de største størrelsene.',
+    'gir bevegelsesfrihet. De tre volanglagene er hver for seg heklet luftig med multipliserte '
+    'masker, ikke tett og tung, så det kaskaderende fallet blir lett selv i de største '
+    'størrelsene.',
     'An elastic waistband makes the skirt comfortable and easy to put on, while the light A-line '
-    'shape gives freedom of movement. The ruffle is crocheted airily with multiplied stitches, not '
-    'dense and heavy, so the fall stays light even in the largest sizes.')
+    'shape gives freedom of movement. Each of the three ruffle tiers is crocheted airily with '
+    'multiplied stitches, not dense and heavy, so the cascading fall stays light even in the '
+    'largest sizes.')
 
 # ---------------------------------------------------------------- SIDE 3: MATERIALER
 add('banner_mat', 'MATERIALER', 'MATERIALS')
@@ -189,8 +191,8 @@ add('tips', tips_no, tips_en)
 # ---------------------------------------------------------------- SIDE 7: KONSTRUKSJONSOVERSIKT
 add('banner_oversikt', 'SLIK ER SKJØRTET BYGD OPP', 'HOW THE SKIRT IS CONSTRUCTED')
 add('oversikt_lead',
-    'Skjørtet hekles ovenfra og ned, i ett stykke, i tre enkle deler:',
-    'The skirt is crocheted top-down, in one piece, in three simple parts:')
+    'Skjørtet hekles ovenfra og ned, i ett stykke, i fire enkle deler:',
+    'The skirt is crocheted top-down, in one piece, in four simple parts:')
 oversikt_deler = [
     ('1. Linningen', 'En fast, smal fm-kanal for elastikken, heklet litt trangere enn midjemålet.',
      '1. The waistband', 'A firm, narrow sc channel for the elastic, crocheted a little smaller '
@@ -198,9 +200,12 @@ oversikt_deler = [
     ('2. A-kroppen', 'Staver i jevne omganger, med spredte økeomganger som gir skjørtet sin lette '
      'A-fasong.', '2. The A-line body', 'Double crochets in plain rounds, with spread-out increase '
      'rounds that give the skirt its light A-line shape.'),
-    ('3. Volangen og kanten', 'Maskene multipliseres for et luftig, fluffy fall, avsluttet med en '
-     'liten picot-kant.', '3. The ruffle and the edge', 'The stitches are multiplied for an airy, '
-     'fluffy fall, finished with a small picot edge.'),
+    ('3. De tre volanglagene', 'Maskene multipliseres i tre egne omganger, ett kaskaderende lag om '
+     'gangen, for et luftig, fluffy fall.', '3. The three ruffle tiers', 'The stitches are '
+     'multiplied over three separate rounds, one cascading tier at a time, for an airy, fluffy '
+     'fall.'),
+    ('4. Kanten', 'Avsluttes med en liten picot-kant nederst på siste volanglag.', '4. The edge',
+     'Finished with a small picot edge at the bottom of the last ruffle tier.'),
 ]
 add('oversikt_deler_data', oversikt_deler)
 
@@ -264,32 +269,35 @@ add('kropp_ferdig',
     'Check: count your stitches. They should match the number in the "End" column for your size, '
     'before you move on to part 3.')
 
-# ---------------------------------------------------------------- SIDE 10: VOLANGEN
-add('banner_volang', 'DEL 3: VOLANGEN', 'PART 3: THE RUFFLE')
+# ---------------------------------------------------------------- SIDE 10: DE TRE VOLANGLAGENE
+add('banner_volang', 'DEL 3: DE TRE VOLANGLAGENE', 'PART 3: THE THREE RUFFLE TIERS')
 add('volang_lead',
-    'Her skjer det fluffy: maskene multipliseres kraftig over én omgang, slik at volangen får et '
-    'luftig, bølgende fall uten å bli tung. Fortsett så rett ned i staver på det nye, store '
-    'masketallet.',
-    'This is where the fluffy magic happens: the stitches are heavily multiplied over one round, '
-    'so the ruffle gets an airy, wavy fall without becoming heavy. Then continue straight down in '
-    'double crochet on the new, large stitch count.')
+    'Her skjer det fluffy: i stedet for én stor volang hekles tre egne, kaskaderende volanglag '
+    'etter hverandre, akkurat som ekte sukkerspinn. Hvert lag starter med en '
+    'multipliseringsomgang, som gir et luftig, bølgende fall, etterfulgt av noen omganger vanlig '
+    'stav på det nye, større masketallet, før neste lag starter med en ny multipliseringsomgang.',
+    "This is where the fluffy magic happens: instead of one big ruffle, three separate, cascading "
+    'tiers are crocheted one after another, just like real cotton candy. Each tier starts with a '
+    'multiplying round, giving an airy, wavy fall, followed by a few plain rounds of double '
+    'crochet on the new, larger stitch count, before the next tier starts with a new multiplying '
+    'round.')
 add('volang_metode',
     'Multipliseringsomgang: hekle om lag {mult} staver i hver maske rundt (juster med 1 opp eller '
-    'ned pr maske slik at sluttallet stemmer nøyaktig med tabellen), til du har {hem_sts} masker. '
-    'Hekle deretter {hem_rounds_minus} omganger vanlig stav, uten øking, på det store masketallet, '
+    'ned pr maske slik at sluttallet stemmer nøyaktig med tabellen), til du har {end_sts} masker. '
+    'Hekle deretter {plain_rounds} omganger vanlig stav, uten øking, på det nye masketallet. Dette '
+    'er ett volanglag ferdig. Gjenta hele denne oppskriften ({n_tiers} multipliseringsomganger med '
+    'vanlig stav imellom) for de neste lagene, med tallene fra tabellen under for din størrelse, '
     'før avslutningskanten på neste side.',
     'Multiplying round: work approximately {mult} double crochets in each stitch around (adjust '
     'by 1 up or down per stitch so the final count matches the table exactly), until you have '
-    '{hem_sts} stitches. Then work {hem_rounds_minus} plain rounds of double crochet, with no '
-    'increasing, on the large stitch count, before the finishing edge on the next page.')
-volang_head = {'no': ['Størrelse', 'Start (fra kropp)', 'Etter multiplisering', 'Omg. luftig fall'],
-                'en': ['Size', 'Start (from body)', 'After multiplying', 'Rounds of airy fall']}
+    '{end_sts} stitches. Then work {plain_rounds} plain rounds of double crochet, with no '
+    'increasing, on the new stitch count. That is one ruffle tier done. Repeat this same recipe '
+    '({n_tiers} multiplying rounds with plain double crochet in between) for the remaining tiers, '
+    'using the numbers from the table below for your size, before the finishing edge on the next '
+    'page.')
+volang_head = {'no': ['Størrelse', 'Start (fra kropp)', 'Volanglag 1', 'Volanglag 2', 'Volanglag 3 (hem)'],
+                'en': ['Size', 'Start (from body)', 'Ruffle tier 1', 'Ruffle tier 2', 'Ruffle tier 3 (hem)']}
 add('volang_head', volang_head['no'], volang_head['en'])
-volang_rows = []
-for s in SIZES:
-    hem_rounds_minus = max(s['hem_rounds'] - 1, 1)
-    volang_rows.append((s['no'], str(s['body_target_sts']), str(s['hem_sts']), str(hem_rounds_minus)))
-add('volang_rows_data', volang_rows)
 
 # ---------------------------------------------------------------- SIDE 11: AVSLUTNINGSKANTEN
 add('banner_kant', 'AVSLUTNINGSKANTEN', 'THE FINISHING EDGE')
@@ -508,12 +516,24 @@ def build(lang):
 {cme(t('kropp_ferdig'))}
 ''', 9))
 
-    hem_rounds_minus0 = max(s0['hem_rounds'] - 1, 1)
-    volang_txt = t('volang_metode').format(mult=round(s0['hem_sts']/s0['body_target_sts'], 1),
-                                            hem_sts=s0['hem_sts'], hem_rounds_minus=hem_rounds_minus0)
+    t1_0 = s0['tiers'][0]
+    volang_txt = t('volang_metode').format(
+        mult=round(t1_0['end_sts'] / t1_0['start_sts'], 2),
+        end_sts=t1_0['end_sts'], plain_rounds=t1_0['plain_rounds'], n_tiers=s0['n_ruffle_tiers'])
+
+    def tier_cell(tr):
+        return (f"{tr['end_sts']} m ({tr['plain_rounds']} omg)" if lang == 'no'
+                else f"{tr['end_sts']} sts ({tr['plain_rounds']} rnds)")
+
     volang_table = '<table class="t"><tr><th>' + '</th><th>'.join(t('volang_head')) + '</th></tr>' + \
-        ''.join(f'<tr><td><b>{a}</b></td><td>{b}</td><td>{c}</td><td>{d}</td></tr>'
-                for a, b, c, d in T['volang_rows_data']['no']) + '</table>'
+        ''.join(
+            f"<tr><td><b>{s['no'] if lang == 'no' else s['en']}</b></td>"
+            f"<td>{s['body_target_sts']}</td>"
+            f"<td>{tier_cell(s['tiers'][0])}</td>"
+            f"<td>{tier_cell(s['tiers'][1])}</td>"
+            f"<td>{tier_cell(s['tiers'][2])}</td></tr>"
+            for s in SIZES
+        ) + '</table>'
     pages.append(pg(f'''
 {banner(t('banner_volang'))}
 <p>{t('volang_lead')}</p>
