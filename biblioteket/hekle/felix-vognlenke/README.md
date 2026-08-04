@@ -1,20 +1,26 @@
 # Felix' vognlenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Felix-vognlenke-LME.pdf`** (norsk, 16 sider, A4) og
-**`Felix-vognlenke-LME-EN.pdf`** (engelsk, 16 sider, A4).
+Ferdig oppskrift: **`Felix-vognlenke-LME.pdf`** (norsk, 15 sider, A4) og
+**`Felix-vognlenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
 
-Følger opp `../ellies-vognlenke/` og `../pip-vognlenke/` med en versjon for
-Felix. Samme oppbygning som de andre: en liten rustoransje Felix-medaljong
-midt på en kort snor, omgitt av de samme sju universelle naturmotivene
-(sky, sol, blad, blomst, stjerne, sommerfugl) og to sideringer med
-dinglende kuler. Felix-medaljongen har todelte, foldede ører (samme
-teknikk som på ham selv) og en egen miniatyr av den tofargede halen hans,
-sydd til bakhodet.
+Følger opp `../ellies-vognlenke/` og `../pip-vognlenke/`, oppdatert
+4. august 2026 etter Renates referansebilder av profesjonelt stylede
+vognlenker, samme ombygging som de andre: bygget om fra sju flate motiver
+til en kjede av heklede kuler og tre-mellomperler med Felix-medaljongen
+(nå med salviegrønn volangkrage) i midten, en blomst og et blad på hver
+side, og to trering-rangler (trering + dinglende heklet kule). Festes i
+hver ende med en tre-kuleklips med innkapslet fjærmekanisme (samme
+klipstype som smokkelenke-serien). Felix-medaljongen har fortsatt sine
+todelte, foldede ører (samme teknikk som på ham selv) og en egen miniatyr
+av den tofargede halen hans, sydd til bakhodet.
 
-Bygget etter samme mal som Ellies og Pips vognlenke (samme struktur, samme
-sikkerhetsside om maks lengde), med Felix sitt eget referansebilde
-(`felix_ref.jpg`, kopiert fra `../felix-rev/felix_hero.jpg`) på forsiden,
-tydelig merket "stiluttrykk-referanse".
+Samme sikkerhetsfokus som `../ellies-vognlenke/`: side 13 forklarer hvorfor
+lengden holdes kort, med LME-anbefalingen (maks 35-40 cm mellom klipsene,
+ingen del løsere enn 6-8 cm).
+
+Bygget etter samme mal som Ellies og Pips vognlenke, med Felix sitt eget
+referansebilde (`felix_ref.jpg`, kopiert fra `../felix-rev/felix_hero.jpg`)
+på forsiden, tydelig merket "stiluttrykk-referanse".
 
 ## Bygge PDF-ene på nytt
 
