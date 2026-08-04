@@ -8,7 +8,7 @@ sys.path.insert(0, str(BASE.parent / '_shared'))
 import lme_pattern_kit as kit
 from lme_pattern_kit import (banner, rosep, sagep, card, cream, cme, ul, steps, otab, abbrtab)
 
-REF = BASE / 'rangle_ref.jpg'
+REF = BASE / 'rangle_real.jpg'
 ref_b64 = base64.b64encode(REF.read_bytes()).decode()
 ref_src = f'data:image/jpeg;base64,{ref_b64}'
 

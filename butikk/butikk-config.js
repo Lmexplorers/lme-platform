@@ -154,8 +154,8 @@ window.LME_BUTIKK = {
       navn:  { no: "Ellies rangle - amigurumi", en: "Ellie's Rattle - amigurumi" },
       undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 13-15 cm · trering",
                      en: "LME Baby Collection · Woodland Dreams · approx. 13-15 cm · wooden ring" },
-      cover:   "/images/oppskrift-ellies-rangle.jpg",
-      coverEn: "/images/oppskrift-ellies-rangle.jpg",
+      cover:   "/images/oppskrift-ellies-rangle-2.jpg",
+      coverEn: "/images/oppskrift-ellies-rangle-2.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/ellies-rangle.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
@@ -586,8 +586,8 @@ window.LME_BUTIKK = {
       navn:  { no: "Mollys rangle", en: "Molly's rattle" },
       undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 13-15 cm · 13 sider",
                      en: "LME Baby Collection · Woodland Dreams · approx. 13-15 cm · 13 pages" },
-      cover:   "/images/oppskrift-mollys-rangle.jpg",
-      coverEn: "/images/oppskrift-mollys-rangle.jpg",
+      cover:   "/images/oppskrift-mollys-rangle-2.jpg",
+      coverEn: "/images/oppskrift-mollys-rangle-2.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/mollys-rangle.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
