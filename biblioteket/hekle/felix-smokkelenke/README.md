@@ -1,7 +1,7 @@
 # Felix' smokkelenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Felix-smokkelenke-LME.pdf`** (norsk, 14 sider, A4) og
-**`Felix-smokkelenke-LME-EN.pdf`** (engelsk, 14 sider, A4).
+Ferdig oppskrift: **`Felix-smokkelenke-LME.pdf`** (norsk, 15 sider, A4) og
+**`Felix-smokkelenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
 
 Følger opp `../ellies-smokkelenke/` og `../pip-smokkelenke/` med en versjon
 for Felix. Et lite, forenklet revehode i rustoransje, med to små foldede
@@ -9,6 +9,12 @@ for Felix. Et lite, forenklet revehode i rustoransje, med to små foldede
 hans: en liten tofarget "minihale"-kule i stedet for sløyfe. Tres sammen
 med heklede kuler til en smokkelenke, maks 22 cm som resten av
 kolleksjonen.
+
+Oppdatert 4. august 2026 etter Renates referansebilder av profesjonelt
+stylede smokkelenker, samme mønster som Ellies og Pips: en salviegrønn
+volangkrage rundt halsen (ny egen side), én stjerneformet treperle blant
+kulene, en heklet snorløkke i enden til smokkering, og en oppdatert
+klipsbeskrivelse (tre-kuleklips med innkapslet fjærmekanisme).
 
 Bygget etter samme mal som `../ellies-smokkelenke/`, med Felix sitt eget
 referansebilde (`felix_face_ref.jpg`, kopiert fra

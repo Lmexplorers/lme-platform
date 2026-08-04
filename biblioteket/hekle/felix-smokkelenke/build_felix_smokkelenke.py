@@ -29,14 +29,16 @@ add('covertag', 'LME HEKLEOPPSKRIFT - BABY', 'LME CROCHET PATTERN - BABY')
 add('covertitle', "FELIX' SMOKKELENKE", "FELIX'S PACIFIER CLIP")
 add('subpill', 'LME BABY COLLECTION - WOODLAND DREAMS', 'LME BABY COLLECTION - WOODLAND DREAMS')
 add('cover_desc',
-    'En liten smokkelenke med et forenklet revehode inspirert av Felix, med en miniatyr av '
-    'hans tofargede hale som en liten spesialkule, og noen myke heklede kuler. Heklet i de '
-    'samme naturfargene som resten av kolleksjonen. Maks lengde er satt for å følge gjeldende '
-    'sikkerhetsanbefaling for smokkeholdere.',
-    "A little pacifier clip with a simplified fox head inspired by Felix, with a miniature of "
-    "his two-tone tail as a little special ball, and a few soft crocheted balls. Crocheted in "
-    "the same natural colours as the rest of the collection. Maximum length follows current "
-    "safety guidance for soother holders.")
+    'En liten smokkelenke med et forenklet revehode inspirert av Felix, med en salviegrønn '
+    'volangkrage rundt halsen, en miniatyr av hans tofargede hale som en liten spesialkule, '
+    'og noen myke heklede kuler med en stjerneperle. Heklet i de samme naturfargene som '
+    'resten av kolleksjonen. Maks lengde er satt for å følge gjeldende sikkerhetsanbefaling '
+    'for smokkeholdere.',
+    "A little pacifier clip with a simplified fox head inspired by Felix, with a sage green "
+    "ruffled collar around the neck, a miniature of his two-tone tail as a little special "
+    "ball, and a few soft crocheted balls with a star bead. Crocheted in the same natural "
+    "colours as the rest of the collection. Maximum length follows current safety guidance "
+    "for soother holders.")
 add('by1', 'Av Renate Dahl', 'By Renate Dahl')
 add('by2', 'Little Montessori Explorers', 'Little Montessori Explorers')
 add('by3', 'lmexplorers.com', 'lmexplorers.com')
@@ -65,10 +67,10 @@ add('om_stil',
 add('pill_sikkerhet_kort', 'VIKTIGST AV ALT: SIKKERHET', 'MOST IMPORTANT OF ALL: SAFETY')
 add('om_sikkerhet_kort',
     'En smokkelenke er noe barnet har tett på ansiktet, ofte alene i vogn eller seng. Derfor '
-    'er lengden på denne oppskriften bevisst kort, og hele side 12 er viet sikkerhet. Les den '
+    'er lengden på denne oppskriften bevisst kort, og hele side 13 er viet sikkerhet. Les den '
     'siden før du hekler videre.',
     "A pacifier clip is something a baby has close to their face, often alone in a pram or "
-    "bed. That's why this pattern's length is deliberately short, and all of page 12 is "
+    "bed. That's why this pattern's length is deliberately short, and all of page 13 is "
     "dedicated to safety. Read that page before you crochet on.")
 
 # ---------------------------------------------------------------- SIDE 3
@@ -91,8 +93,13 @@ add('utstyr', [
     ('Heklenål 3 eller 3,5 mm', 'litt tettere enn Felix selv, siden delene er små'),
     ('Polyesterfiber til fyll', 'liten mengde'),
     ('Stoppenål med butt spiss', 'til all somming'),
-    ('Rund treklips uten metallfjær', 'BPA-fri, beregnet for barn (se side om sikkerhet)'),
-    ('Trering, ca. 3 cm', 'valgfri, mellom lenken og smokken'),
+    ('Rund tre-kuleklips med smokkelenke-mekanisme', 'kjøpt hos leverandør av '
+     'smokkelenke-tilbehør, med sikker, innkapslet fjærmekanisme, BPA-fri/CE-merket og '
+     'beregnet spesielt for smokkeholdere (se side om sikkerhet)'),
+    ('Én stjerneformet treperle', 'umalt/CE-merket, samme hull-størrelse som de andre '
+     'treperlene'),
+    ('Smokkering eller adapterring', 'BPA-fri, beregnet for smokkeholdere, tres gjennom '
+     'snorløkken i enden'),
     ('Tvinnet bomullstråd og nål', 'til å sy delene godt fast'),
     ('Saks og målebånd', ''),
 ])
@@ -178,10 +185,13 @@ add('oversikt_lead',
 add('oversikt_deler', [
     ('1. Det lille revehodet', 'forenklet Felix, ingen sløyfe', '1. The little fox head',
      'a simplified Felix, no bow'),
-    ('2. Minihalen', 'liten spesialkule i to farger, som en miniatyr av halen',
-     '2. The mini tail', 'a little special two-colour ball, like a miniature of the tail'),
-    ('3. De heklede kulene', 'så mange du trenger for å fylle ut lengden', '3. The crocheted '
-     'balls', 'as many as you need to fill out the length'),
+    ('2. Volangkragen', 'salviegrønn, rundt halsen', '2. The ruffled collar', 'sage green, '
+     'around the neck'),
+    ('3. Minihalen', 'liten spesialkule i to farger, som en miniatyr av halen',
+     '3. The mini tail', 'a little special two-colour ball, like a miniature of the tail'),
+    ('4. De heklede kulene', 'så mange du trenger for å fylle ut lengden, med én stjerneperle',
+     '4. The crocheted balls', 'as many as you need to fill out the length, with one star '
+     'bead'),
 ])
 
 # ---------------------------------------------------------------- SIDE 7: HODET
@@ -232,8 +242,25 @@ add('ansikt_mini_txt',
     "loose parts. See the reference photo from Felix for inspiration on the expression, in "
     "miniature.")
 
-# ---------------------------------------------------------------- SIDE 8: MINIHALEN
-add('banner_hale', 'DEL 2: MINIHALEN', 'PART 2: THE MINI TAIL')
+# ---------------------------------------------------------------- SIDE 8: VOLANGKRAGEN
+add('banner_krage', 'DEL 2: VOLANGKRAGEN', 'PART 2: THE RUFFLED COLLAR')
+add('pill_krage', 'VOLANGKRAGEN (SALVIEGRØNN)', 'THE RUFFLED COLLAR (SAGE GREEN)')
+add('krage_txt',
+    'Fest salviegrønn tråd rundt kanten der hodet er som smalest, nederst. *1 fm i neste '
+    'maske, hopp over 1 maske, 3 stav i neste maske (en liten vifte), hopp over 1 maske*, '
+    'gjenta rundt hele kanten. Fest av og gjem tråden.',
+    'Attach sage green yarn around the edge where the head is narrowest, at the bottom. '
+    '*1 sc in the next stitch, skip 1 stitch, 3 dc in the next stitch (a little fan), skip 1 '
+    'stitch*, repeat all the way around the edge. Fasten off and weave in the end.')
+add('pill_krage_fest', 'PLASSERING', 'PLACEMENT')
+add('krage_fest_txt',
+    'Volangkragen hekles direkte på hodet og trenger ingen ekstra festing, den sitter fast '
+    'som en liten ruflete kant rundt halsen.',
+    'The ruffled collar is crocheted directly onto the head and needs no extra attaching, it '
+    'sits in place as a little ruffled edge around the neck.')
+
+# ---------------------------------------------------------------- SIDE 9: MINIHALEN
+add('banner_hale', 'DEL 3: MINIHALEN', 'PART 3: THE MINI TAIL')
 add('pill_hale', 'MINIHALEN, TO FARGER', 'THE MINI TAIL, TWO COLOURS')
 add('hale_txt',
     'I stedet for en sløyfe får Felix sin smokkelenke en miniatyr av signaturdelen hans: 6 fm '
@@ -249,15 +276,16 @@ add('hale_fest_txt',
     'Attach the mini tail at the end of the clip nearest the fox head, or thread it in among '
     'the other balls, whichever you think looks best.')
 
-# ---------------------------------------------------------------- SIDE 9: KULENE
-add('banner_kuler', 'DEL 3: DE HEKLEDE KULENE', 'PART 3: THE CROCHETED BALLS')
+# ---------------------------------------------------------------- SIDE 10: KULENE
+add('banner_kuler', 'DEL 4: DE HEKLEDE KULENE', 'PART 4: THE CROCHETED BALLS')
 add('kuler_lead',
     'Hekle så mange kuler du trenger for å fylle ut lengden mellom klipsen og revehodet, '
-    'gjerne i en rytme av rustoransje og kremhvitt. Husk: total lengde skal aldri bli mer enn '
-    '22 cm.',
+    'gjerne i en rytme av rustoransje og kremhvitt, med treperler mellom og én stjerneformet '
+    'treperle et sted i rekken. Husk: total lengde skal aldri bli mer enn 22 cm.',
     'Crochet as many balls as you need to fill out the length between the clip and the fox '
-    'head, for example alternating rust orange and cream. Remember: the total length must '
-    'never exceed 22 cm.')
+    'head, for example alternating rust orange and cream, with wooden beads in between and '
+    'one star-shaped wooden bead somewhere in the row. Remember: the total length must never '
+    'exceed 22 cm.')
 add('kuler_rows', [
     ('1', '6 fm i magisk ring', 6),
     ('2', 'økn x 6', 12),
@@ -272,11 +300,22 @@ add('kuler_rows_en', [
 ])
 add('kuler_ferdig',
     'Fyll lett, klipp av med god tråd igjen på hver kule. Diameter ca. 1,5 cm. Antall kuler '
-    'avhenger av hvor stor trering og klips du bruker, tell alltid opp hele lenken før du '
+    'avhenger av hvor stor smokkering og klips du bruker, tell alltid opp hele lenken før du '
     'fester noe permanent.',
     'Stuff lightly, cut with a long tail on each ball. Diameter approx. 1.5 cm. The number of '
-    'balls depends on the size of the wooden ring and clip you use, always lay out the whole '
-    'clip before attaching anything permanently.')
+    'balls depends on the size of the pacifier ring and clip you use, always lay out the '
+    'whole clip before attaching anything permanently.')
+add('pill_lokke', 'SNORLØKKEN TIL SMOKKERINGEN', 'THE CORD LOOP FOR THE PACIFIER RING')
+add('lokke_txt',
+    'I stedet for å feste smokkeringen rett på siste kule, hekler du en kort, fast strimmel i '
+    'kremhvitt: legg opp 16 lm + 1 vendemaske, 1 rad fm tilbake (16 fm). Fold strimmelen på '
+    'langs og sy sammen til en tynn, rund snor. Bøy snoren i en løkke og sy endene godt fast '
+    'til siste kule i enden av lenken. Tre smokkeringen gjennom løkka før du fester det hele.',
+    'Instead of attaching the pacifier ring directly to the last ball, crochet a short, firm '
+    'strip in cream: chain 16 + 1 turning chain, 1 row of sc back (16 sc). Fold the strip '
+    'lengthwise and sew together into a thin, round cord. Bend the cord into a loop and sew '
+    'the ends securely to the last ball at the end of the clip. Thread the pacifier ring '
+    'through the loop before attaching the whole piece.')
 
 # ---------------------------------------------------------------- SIDE 10: MONTERING
 add('banner_montering', 'MONTERING, STEG FOR STEG', 'ASSEMBLY, STEP BY STEP')
@@ -286,25 +325,28 @@ add('montering_lead',
     'Lay out all the pieces in the order you want them, and measure the whole clip fully '
     'stretched out before you sew or tie anything in place.')
 add('montering_steg', [
-    'Tre eller sy kulene og minihalen (og eventuelle perler) i ønsket rekkefølge på en kort, '
-    'sterk bomullssnor eller direkte sammen med tett heftesting mellom hver del.',
+    'Hekle volangkragen rundt nederste kant av revehodet.',
+    'Tre eller sy kulene, stjerneperlen og minihalen (og eventuelle andre perler) i ønsket '
+    'rekkefølge på en kort, sterk bomullssnor eller direkte sammen med tett heftesting mellom '
+    'hver del.',
     'Fest revehodet i den ene enden.',
-    'Fest en trering (hvis du bruker det) i den andre enden, som festepunkt for smokken.',
+    'Hekle snorløkken og sy den godt fast til siste kule i den andre enden, tre smokkeringen '
+    'gjennom løkka.',
     'Mål hele lenken strukket helt ut. Er den lengre enn 22 cm, ta bort en kule eller to.',
-    'Sy den ferdige lenken godt fast i den runde treklipsen, med mange, tette sting eller en '
-    'sikker metallfri festemekanisme beregnet for smokkeholdere.',
+    'Sy den ferdige lenken godt fast i tre-kuleklipsen, med mange, tette sting.',
     'Fest alle løse tråder godt på innsiden av delene, og klipp av det som er igjen.',
 ])
 add('montering_steg_en', [
-    'Thread or sew the balls and the mini tail (and any beads) in the order you want, on a '
-    'short, strong cotton cord, or sew them directly together with tight running stitch '
-    'between each piece.',
+    'Crochet the ruffled collar around the bottom edge of the fox head.',
+    'Thread or sew the balls, the star bead and the mini tail (and any other beads) in the '
+    'order you want, on a short, strong cotton cord, or sew them directly together with '
+    'tight running stitch between each piece.',
     'Attach the fox head at one end.',
-    'Attach a wooden ring (if using one) at the other end, as the pacifier attachment point.',
+    'Crochet the cord loop and sew it securely to the last ball at the other end, thread the '
+    'pacifier ring through the loop.',
     'Measure the whole clip fully stretched out. If it is longer than 22 cm, remove a ball or '
     'two.',
-    'Sew the finished clip securely onto the round wooden clip, with plenty of tight stitches '
-    'or a secure, metal-free fastening mechanism designed for soother holders.',
+    'Sew the finished clip securely onto the wooden ball clip, with plenty of tight stitches.',
     'Fasten every loose end securely on the inside of the pieces, and trim what is left.',
 ])
 
@@ -340,8 +382,9 @@ add('regler', [
     'knute.',
     'Bruk kun umalte/CE-merkede treperler eller BPA-frie silikonperler beregnet for barn, '
     'aldri perler eller pynt beregnet for voksne smykker.',
-    'Bruk en treklips uten metallfjær eller skarpe kanter, og fest lenken til klipsen med '
-    'mange, tette sting.',
+    'Bruk kun en tre-kuleklips kjøpt spesielt til smokkelenker, med innkapslet '
+    'fjærmekanisme, BPA-fri/CE-merket, aldri en generell binders eller kontorklype. Fest '
+    'lenken til klipsen med mange, tette sting.',
     'Sjekk lenken jevnlig for slitasje: løse tråder, sprekker i perler, eller deler som har '
     'blitt myke eller løse. Kast lenken umiddelbart hvis noe er galt.',
     'Denne oppskriften er en veiledning for hjemmebruk. Skal det ferdige produktet selges, må '
@@ -356,8 +399,9 @@ add('regler_en', [
     'a double knot.',
     'Use only unpainted/CE-marked wooden beads or BPA-free silicone beads intended for '
     'children, never beads or trim intended for adult jewellery.',
-    'Use a wooden clip with no metal spring or sharp edges, and attach the clip with plenty '
-    'of tight stitches.',
+    'Use only a wooden ball clip bought specifically for pacifier clips, with an enclosed '
+    'spring mechanism, BPA-free/CE-marked, never a generic binder or office clip. Attach the '
+    'clip with plenty of tight stitches.',
     'Check the clip regularly for wear: loose threads, cracked beads, or parts that have gone '
     'soft or loose. Discard the clip immediately if anything is wrong.',
     'This pattern is a guide for home use. If the finished product is sold, it must always be '
@@ -505,12 +549,20 @@ def build(lang):
 ''', 7))
 
     pages.append(pg(f'''
+{banner(t('banner_krage'))}
+{rosep(t('pill_krage'))}
+{card('<p>' + t('krage_txt') + '</p>')}
+{sagep(t('pill_krage_fest'))}
+{cme(t('krage_fest_txt'))}
+''', 8))
+
+    pages.append(pg(f'''
 {banner(t('banner_hale'))}
 {rosep(t('pill_hale'))}
 {card('<p>' + t('hale_txt') + '</p>')}
 {sagep(t('pill_hale_fest'))}
 {cme(t('hale_fest_txt'))}
-''', 8))
+''', 9))
 
     kuler_rows = T['kuler_rows']['no'] if lang == 'no' else T['kuler_rows_en']['no']
     pages.append(pg(f'''
@@ -518,21 +570,23 @@ def build(lang):
 <p>{t('kuler_lead')}</p>
 {card(otab(kuler_rows, head3[lang]))}
 {cme(t('kuler_ferdig'))}
-''', 9))
+{rosep(t('pill_lokke'))}
+{card('<p>' + t('lokke_txt') + '</p>')}
+''', 10))
 
     mo_steg = T['montering_steg']['no'] if lang == 'no' else T['montering_steg_en']['no']
     pages.append(pg(f'''
 {banner(t('banner_montering'))}
 <p>{t('montering_lead')}</p>
 {card(steps(mo_steg))}
-''', 10))
+''', 11))
 
     foto_caps = T['foto_captions']['no'] if lang == 'no' else T['foto_captions']['en']
     pages.append(pg(f'''
 {banner(t('banner_foto'))}
 {card('<p class="center">' + t('foto_lead') + '</p>')}
 {photo_row(foto_caps)}
-''', 11))
+''', 12))
 
     regler = T['regler']['no'] if lang == 'no' else T['regler_en']['no']
     pages.append(pg(f'''
@@ -541,7 +595,7 @@ def build(lang):
 {card('<p>' + t('lengde_txt') + '</p>')}
 {sagep(t('pill_regler'))}
 {card(ul(regler))}
-''', 12))
+''', 13))
 
     kolliste = T['kolleksjon_liste']['no'] if lang == 'no' else T['kolleksjon_liste']['en']
     pages.append(pg(f'''
@@ -549,7 +603,7 @@ def build(lang):
 {cme(t('stell_txt'))}
 {rosep(t('pill_qr'))}
 {qr_placeholder(t('qr_caption'))}
-''', 13))
+''', 14))
 
     pages.append(pg(f'''
 {banner(t('banner_ferdig'))}
@@ -561,7 +615,7 @@ def build(lang):
 <div class="byline">
   <div class="by2">{t('by1')} &middot; {t('by2')} &middot; {t('by3')}</div>
 </div>
-''', 14))
+''', 15))
 
     return pages
 
