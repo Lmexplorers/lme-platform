@@ -743,16 +743,25 @@ add('ferdig_txt',
 add('pill_kolleksjon', 'RESTEN AV LME BABY COLLECTION', 'THE REST OF THE LME BABY COLLECTION')
 add('kolleksjon_lead',
     'Ellie er den første i "Woodland Dreams", en hel liten samling i samme uttrykk, garnvalg og '
-    'fargepalett. Disse kommer snart som egne oppskrifter:',
-    'Ellie is the first in "Woodland Dreams", a whole little collection in the same look, yarn choice '
-    'and colour palette. These are coming soon as their own patterns:')
-add('kolleksjon_liste', [
-    "Ellies smokkelenke", "Ellies aktivitetsleke, med speil, blader og ulike teksturer",
-    "Ellies rangle", "Ellies vognlenke", "Ellies ballerinasko med sløyfe",
-], [
-    "Ellie's pacifier clip", "Ellie's activity toy, with a mirror, leaves and different textures",
-    "Ellie's rattle", "Ellie's stroller toy", "Ellie's ballerina shoes with a bow",
-])
+    'fargepalett:',
+    'Ellie is the first in "Woodland Dreams", a whole little collection in the same look, yarn '
+    'choice and colour palette:')
+add('kolleksjon_liste',
+    ['Pip, det lille pinnsvinet', 'Felix, den lille reven', 'Molly, det lille lammet',
+     'Luna, den lille kaninen', 'Oliver, den lille bjørnen', 'Ellies smokkelenke',
+     'Pips smokkelenke', "Felix' smokkelenke", 'Mollys smokkelenke', 'Lunas smokkelenke',
+     'Olivers smokkelenke', 'Ellies rangle', 'Pips rangle', "Felix' rangle", 'Mollys rangle',
+     'Lunas rangle', 'Olivers rangle', 'Ellies vognlenke', 'Pips vognlenke',
+     "Felix' vognlenke", 'Mollys vognlenke', 'Lunas vognlenke', 'Olivers vognlenke',
+     'Ellies ballerinasko', 'Ellies aktivitetsleke'],
+    ['Pip, the little hedgehog', 'Felix, the little fox', 'Molly, the little lamb',
+     'Luna, the little bunny', 'Oliver, the little bear', "Ellie's pacifier clip",
+     "Pip's pacifier clip", "Felix's pacifier clip", "Molly's pacifier clip",
+     "Luna's pacifier clip", "Oliver's pacifier clip", "Ellie's rattle", "Pip's rattle",
+     "Felix's rattle", "Molly's rattle", "Luna's rattle", "Oliver's rattle",
+     "Ellie's stroller toy", "Pip's stroller toy", "Felix's stroller toy",
+     "Molly's stroller toy", "Luna's stroller toy", "Oliver's stroller toy",
+     "Ellie's ballerina shoes", "Ellie's activity toy"])
 add('pill_copyright', 'COPYRIGHT', 'COPYRIGHT')
 add('copyright_txt',
     'Denne oppskriften er et helt originalt LME-design (c) Renate Dahl, Little Montessori Explorers. '
@@ -1219,11 +1228,13 @@ def build(lang):
 
     # ---- SIDE 17: FERDIG ----
     kolliste = T['kolleksjon_liste']['no'] if lang == 'no' else T['kolleksjon_liste']['en']
+    kolliste_html = ('<ul class="dots" style="columns:2;column-gap:8mm;">'
+                      + ''.join(f'<li>{i}</li>' for i in kolliste) + '</ul>')
     pages.append(pg(f'''
 {banner(t('banner_ferdig'))}
 {cream('<p class="creamtitle">' + t('ferdig_txt') + '</p>')}
 {sagep(t('pill_kolleksjon'))}
-{card('<p>' + t('kolleksjon_lead') + '</p>' + ul(kolliste))}
+{card('<p>' + t('kolleksjon_lead') + '</p>' + kolliste_html)}
 {rosep(t('pill_copyright'))}
 {card('<p class="small center">' + t('copyright_txt') + '</p>')}
 <div class="byline">
