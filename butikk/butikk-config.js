@@ -835,22 +835,26 @@ window.LME_BUTIKK = {
     },
 
     "woodland-dreams-bundle": {
-      navn:  { no: "Woodland Dreams, hele kolleksjonen (26 oppskrifter)", en: "Woodland Dreams, the complete collection (26 patterns)" },
-      undertittel: { no: "LME Baby Collection · Woodland Dreams · 6 karakterer · 26 oppskrifter",
-                     en: "LME Baby Collection · Woodland Dreams · 6 characters · 26 patterns" },
+      navn:  { no: "Woodland Dreams, hele kolleksjonen (36 oppskrifter)", en: "Woodland Dreams, the complete collection (36 patterns)" },
+      undertittel: { no: "LME Baby Collection · Woodland Dreams · 6 karakterer · 36 oppskrifter",
+                     en: "LME Baby Collection · Woodland Dreams · 6 characters · 36 patterns" },
       cover:   "/images/oppskrift-woodland-dreams-bundle.jpg",
       coverEn: "/images/oppskrift-woodland-dreams-bundle.jpg",
-      // Pakken er delt i to zip-filer per språk (hver ca. 13-14 MB), fordi Cloudflare Pages
+      // Pakken er delt i tre zip-filer per språk (hver ca. 10-11 MB), fordi Cloudflare Pages
       // har en grense på 25 MB per fil, og én samlet zip ble for stor (28+ MB).
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del1-no.zip",
-          knapp: { no: "Last ned del 1 av 2 (zip, norsk)", en: "Download part 1 of 2 (zip, Norwegian)" } },
+          knapp: { no: "Last ned del 1 av 3 (zip, norsk)", en: "Download part 1 of 3 (zip, Norwegian)" } },
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del2-no.zip",
-          knapp: { no: "Last ned del 2 av 2 (zip, norsk)", en: "Download part 2 of 2 (zip, Norwegian)" } },
+          knapp: { no: "Last ned del 2 av 3 (zip, norsk)", en: "Download part 2 of 3 (zip, Norwegian)" } },
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del3-no.zip",
+          knapp: { no: "Last ned del 3 av 3 (zip, norsk)", en: "Download part 3 of 3 (zip, Norwegian)" } },
         { sprak: "en", url: "/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del1-en.zip",
-          knapp: { no: "Last ned del 1 av 2 (zip, engelsk)", en: "Download part 1 of 2 (zip, English)" } },
+          knapp: { no: "Last ned del 1 av 3 (zip, engelsk)", en: "Download part 1 of 3 (zip, English)" } },
         { sprak: "en", url: "/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del2-en.zip",
-          knapp: { no: "Last ned del 2 av 2 (zip, engelsk)", en: "Download part 2 of 2 (zip, English)" } }
+          knapp: { no: "Last ned del 2 av 3 (zip, engelsk)", en: "Download part 2 of 3 (zip, English)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del3-en.zip",
+          knapp: { no: "Last ned del 3 av 3 (zip, engelsk)", en: "Download part 3 of 3 (zip, English)" } }
       ]
     },
 
