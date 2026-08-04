@@ -614,8 +614,8 @@ window.LME_BUTIKK = {
       navn:  { no: "Olivers rangle", en: "Oliver's rattle" },
       undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 13-15 cm · 13 sider",
                      en: "LME Baby Collection · Woodland Dreams · approx. 13-15 cm · 13 pages" },
-      cover:   "/images/oppskrift-olivers-rangle.jpg",
-      coverEn: "/images/oppskrift-olivers-rangle.jpg",
+      cover:   "/images/oppskrift-olivers-rangle-2.jpg",
+      coverEn: "/images/oppskrift-olivers-rangle-2.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/olivers-rangle.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
