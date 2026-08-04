@@ -8,7 +8,7 @@ sys.path.insert(0, str(BASE.parent / '_shared'))
 import lme_pattern_kit as kit
 from lme_pattern_kit import (banner, rosep, sagep, card, cream, cme, ul, steps, otab, abbrtab)
 
-REF = BASE / 'molly_ref.jpg'
+REF = BASE.parent / 'molly-smokkelenke' / 'molly_face_ref.jpg'
 ref_b64 = base64.b64encode(REF.read_bytes()).decode()
 ref_src = f'data:image/jpeg;base64,{ref_b64}'
 
@@ -443,7 +443,7 @@ def build(lang):
 
     pages.append(pg(f'''
 <div class="coverimg"><img src="{ref_src}" alt="Molly, stiluttrykk-referanse"></div>
-<p class="small center" style="margin-top:-2mm;">{'Bildet viser Molly som stiluttrykk-referanse, ikke selve vognlenken.' if lang == 'no' else 'Photo shows Molly as a style reference, not the stroller toy itself.'}</p>
+<p class="small center" style="margin-top:-2mm;">{'Bildet viser Mollys ansikt som stiluttrykk-referanse, ikke selve vognlenken.' if lang == 'no' else "Photo shows Molly's face as a style reference, not the stroller toy itself."}</p>
 <div class="covertag">{t('covertag')}</div>
 <div class="coverbanner"><h1 class="covertitle">{t('covertitle')}</h1></div>
 <div class="subpill">{t('subpill')}</div>

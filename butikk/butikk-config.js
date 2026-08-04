@@ -168,8 +168,8 @@ window.LME_BUTIKK = {
       navn:  { no: "Ellies vognlenke - amigurumi", en: "Ellie's Stroller Toy - amigurumi" },
       undertittel: { no: "LME Baby Collection · Woodland Dreams · sju motiver · maks 35-40 cm",
                      en: "LME Baby Collection · Woodland Dreams · seven motifs · max 35-40 cm" },
-      cover:   "/images/oppskrift-ellies-vognlenke.jpg",
-      coverEn: "/images/oppskrift-ellies-vognlenke.jpg",
+      cover:   "/images/oppskrift-ellies-vognlenke-2.jpg",
+      coverEn: "/images/oppskrift-ellies-vognlenke-2.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/ellies-vognlenke.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },

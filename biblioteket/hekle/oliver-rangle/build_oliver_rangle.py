@@ -9,7 +9,7 @@ import lme_pattern_kit as kit
 from lme_pattern_kit import (BROWN, BROWN_MID, BROWN_DARK, CREAM, CREAM_DEEP, ROSE, SAGE, INK,
                               banner, rosep, sagep, card, cream, cme, ul, steps, otab, abbrtab)
 
-REF = BASE / 'oliver_ref.jpg'
+REF = BASE.parent / 'oliver-smokkelenke' / 'oliver_face_ref.jpg'
 ref_b64 = base64.b64encode(REF.read_bytes()).decode()
 ref_src = f'data:image/jpeg;base64,{ref_b64}'
 
@@ -384,7 +384,7 @@ def build(lang):
 
     pages.append(pg(f'''
 <div class="coverimg"><img src="{ref_src}" alt="Oliver, stiluttrykk-referanse"></div>
-<p class="small center" style="margin-top:-2mm;">{'Bildet viser Oliver som stiluttrykk-referanse, ikke selve rangelen.' if lang == 'no' else 'Photo shows Oliver as a style reference, not the rattle itself.'}</p>
+<p class="small center" style="margin-top:-2mm;">{'Bildet viser Olivers ansikt som stiluttrykk-referanse, ikke selve rangelen.' if lang == 'no' else "Photo shows Oliver's face as a style reference, not the rattle itself."}</p>
 <div class="covertag">{t('covertag')}</div>
 <div class="coverbanner"><h1 class="covertitle">{t('covertitle')}</h1></div>
 <div class="subpill">{t('subpill')}</div>
