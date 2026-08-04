@@ -19,6 +19,14 @@ tydelig merket "stiluttrykk-referanse".
 Med denne er alle fem skogvenn-smokkelenkene (Pip, Felix, Molly, Luna,
 Oliver) ferdige, i tillegg til Ellies opprinnelige.
 
+Oppdatert 4. august 2026 etter Renates referansebilder av profesjonelt
+stylede smokkelenker: én stjerneformet treperle blant kulene, en heklet
+snorløkke i enden til smokkering, og en oppdatert klipsbeskrivelse
+(tre-kuleklips med innkapslet fjærmekanisme). Oliver hadde allerede en
+egen minikrage som eneste pynt, så ingen ny side var nødvendig her, i
+motsetning til de andre fire som fikk en egen volangkrage-side i tillegg
+til sitt eksisterende signaturuttrykk.
+
 ## Bygge PDF-ene på nytt
 
 ```bash
