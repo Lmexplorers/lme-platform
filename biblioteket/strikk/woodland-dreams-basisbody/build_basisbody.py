@@ -32,12 +32,12 @@ add('subpill', 'LME BABY COLLECTION - WOODLAND DREAMS', 'LME BABY COLLECTION - W
 add('cover_desc',
     'En tidløs, unisex basisbody i glattstrikk: rund hals, raglanermer, ribb i hals, mansjett og '
     'legg, og knapper i skrittet for enkelt bleiebytte. Syv størrelser, fra 0-1 til 18-24 måneder. '
-    'Basisbodyen er selve grunnmuren i «Woodland Dreams»-kolleksjonen, og er laget for å kunne '
+    'Basisbodyen er selve grunnmuren i "Woodland Dreams"-kolleksjonen, og er laget for å kunne '
     'kombineres med alle seks tilbehørsdelene: blondekrage, rysjekrage, Peter Pan-krage, smekke, '
     'i-cord-seler og kort vest.',
     'A timeless, unisex basisbody in stockinette stitch: round neck, raglan sleeves, ribbing at the '
     'neck, cuffs and hem, and buttons at the crotch for easy nappy changes. Seven sizes, from 0-1 to '
-    '18-24 months. The basisbody is the foundation of the «Woodland Dreams» collection, designed to '
+    '18-24 months. The basisbody is the foundation of the "Woodland Dreams" collection, designed to '
     'be combined with all six accessory patterns: lace collar, ruffle collar, Peter Pan collar, bib, '
     'i-cord suspenders and short vest.')
 add('by1', 'Av Renate Dahl', 'By Renate Dahl')
@@ -448,10 +448,10 @@ add('stell_txt',
 # ---------------------------------------------------------------- SIDE 16: FERDIG
 add('banner_ferdig', 'FERDIG!', 'ALL DONE!')
 add('ferdig_txt',
-    'Gratulerer, basisbodyen din er ferdig! Den er laget for å bli grunnmuren i hele «Woodland '
-    'Dreams»-kolleksjonen, klar til å kombineres med kragene, smekken, selene eller vesten.',
+    'Gratulerer, basisbodyen din er ferdig! Den er laget for å bli grunnmuren i hele "Woodland '
+    'Dreams"-kolleksjonen, klar til å kombineres med kragene, smekken, selene eller vesten.',
     'Congratulations, your basisbody is finished! It is made to be the foundation of the whole '
-    '«Woodland Dreams» collection, ready to be combined with the collars, the bib, the suspenders '
+    '"Woodland Dreams" collection, ready to be combined with the collars, the bib, the suspenders '
     'or the vest.')
 add('pill_kolleksjon', 'RESTEN AV KOLLEKSJONEN', 'THE REST OF THE COLLECTION')
 kolliste_no = [

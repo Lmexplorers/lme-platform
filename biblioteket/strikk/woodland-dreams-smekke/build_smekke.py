@@ -422,9 +422,9 @@ add('stell_txt',
 add('banner_ferdig', 'FERDIG!', 'ALL DONE!')
 add('ferdig_txt',
     'Gratulerer, smekken din er ferdig! Den er laget for å passe sammen med basisbodyen, og for å '
-    'bli en del av hele «Woodland Dreams»-kolleksjonen.',
+    'bli en del av hele "Woodland Dreams"-kolleksjonen.',
     'Congratulations, your bib is finished! It is made to fit together with the basisbody, and to '
-    'be part of the whole «Woodland Dreams» collection.')
+    'be part of the whole "Woodland Dreams" collection.')
 add('pill_kolleksjon', 'RESTEN AV KOLLEKSJONEN', 'THE REST OF THE COLLECTION')
 kolliste_no = [
     'Basisbody, grunnmuren i kolleksjonen, en tidløs, unisex body i glattstrikk.',

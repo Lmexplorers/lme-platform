@@ -149,7 +149,7 @@ add('storrelse_note',
     'Brystvidden er ferdig omkrets når vesten er knappet igjen foran, altså inkludert den ekstra '
     'vidden (3 cm mer enn bodyens egen brystvidde) som gjør at vesten går fint utenpå bodyen og '
     'et tynt lag under. Lengden er regnet som ca. 55 % av bodyens egen hals-til-skritt-lengde i '
-    'samme størrelse, tydelig kortere, som en «kort vest» skal være.',
+    'samme størrelse, tydelig kortere, som en "kort vest" skal være.',
     'The chest width is the finished circumference when the vest is buttoned closed at the front, '
     "i.e. including the extra width (3 cm more than the body's own chest measurement) that lets "
     'the vest sit nicely over the body and a thin layer underneath. The length is calculated as '
@@ -532,10 +532,10 @@ add('stell_txt',
 add('banner_ferdig', 'FERDIG!', 'ALL DONE!')
 add('ferdig_txt',
     'Gratulerer, kort vest-en din er ferdig! Ta den på utenpå basisbodyen, knapp den igjen foran, '
-    'og du har et helt fargerikt lag klart, en fin del av hele «Woodland Dreams»-kolleksjonen.',
+    'og du har et helt fargerikt lag klart, en fin del av hele "Woodland Dreams"-kolleksjonen.',
     'Congratulations, your short vest is finished! Put it on over the basisbody, button it closed '
     'at the front, and you have a whole colourful layer ready, a lovely part of the entire '
-    '«Woodland Dreams» collection.')
+    '"Woodland Dreams" collection.')
 add('pill_kolleksjon', 'RESTEN AV KOLLEKSJONEN', 'THE REST OF THE COLLECTION')
 kolliste_no = [
     'Basisbody, den nøytrale grunnmuren vesten skal tas utenpå.',

@@ -118,8 +118,7 @@ body {{ font-family:var(--font-body); color:#4a4a4a; }}
   position:relative; width:210mm; height:296.5mm; overflow:hidden;
   page-break-after:always;
   background:
-    repeating-linear-gradient(0deg, rgba(255,255,255,.45) 0, rgba(255,255,255,.45) .4mm, transparent .4mm, transparent 8mm),
-    repeating-linear-gradient(90deg, rgba(255,255,255,.45) 0, rgba(255,255,255,.45) .4mm, transparent .4mm, transparent 8mm),
+    url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAArUlEQVR42u3VUQkAIAxFUSfWt4wNTDYD6LcgnhvhHcYiM0fZm0VXqiYAAEAAvq2dHm5EdNO4AAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAAC8GILoF0Gg4kZ4kUAAAAASUVORK5CYII=) 0 0/8mm 8mm repeat,
     linear-gradient(165deg,#f3e8d8 0%,#f6ecec 45%,#f3dde6 100%);
 }}
 .band {{ position:absolute; left:0; top:0; bottom:0; width:11mm;
