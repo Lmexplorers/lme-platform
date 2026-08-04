@@ -374,12 +374,14 @@ add('kolleksjon_liste',
      'Molly, det lille lammet', 'Luna, den lille kaninen', 'Oliver, den lille bjørnen',
      'Ellies smokkelenke', 'Pips smokkelenke', "Felix' smokkelenke", 'Mollys smokkelenke',
      'Lunas smokkelenke', 'Olivers smokkelenke', 'Pips rangle', "Felix' rangle",
-     'Ellies rangle', 'Ellies vognlenke', 'Ellies ballerinasko', 'Ellies aktivitetsleke'],
+     'Lunas rangle', 'Olivers rangle', 'Ellies rangle', 'Ellies vognlenke',
+     'Ellies ballerinasko', 'Ellies aktivitetsleke'],
     ['Ellie, the little fawn', 'Pip, the little hedgehog', 'Felix, the little fox',
      'Molly, the little lamb', 'Luna, the little bunny', 'Oliver, the little bear',
      "Ellie's pacifier clip", "Pip's pacifier clip", "Felix's pacifier clip",
      "Molly's pacifier clip", "Luna's pacifier clip", "Oliver's pacifier clip",
-     "Pip's rattle", "Felix's rattle", "Ellie's rattle", "Ellie's stroller toy",
+     "Pip's rattle", "Felix's rattle", "Luna's rattle", "Oliver's rattle",
+     "Ellie's rattle", "Ellie's stroller toy",
      "Ellie's ballerina shoes", "Ellie's activity toy"])
 add('pill_copyright', 'COPYRIGHT', 'COPYRIGHT')
 add('copyright_txt',
@@ -530,11 +532,13 @@ def build(lang):
 ''', 13))
 
     kolliste = T['kolleksjon_liste']['no'] if lang == 'no' else T['kolleksjon_liste']['en']
+    kolliste_html = ('<ul class="dots" style="columns:2;column-gap:8mm;">'
+                      + ''.join(f'<li>{i}</li>' for i in kolliste) + '</ul>')
     pages.append(pg(f'''
 {banner(t('banner_ferdig'))}
 {cream('<p class="creamtitle">' + t('ferdig_txt') + '</p>')}
 {sagep(t('pill_kolleksjon'))}
-{card(ul(kolliste))}
+{card(kolliste_html)}
 {rosep(t('pill_copyright'))}
 {card('<p class="small center">' + t('copyright_txt') + '</p>')}
 <div class="byline">
