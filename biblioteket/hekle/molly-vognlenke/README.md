@@ -1,20 +1,28 @@
 # Mollys vognlenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Mollys-vognlenke-LME.pdf`** (norsk, 16 sider, A4) og
-**`Mollys-vognlenke-LME-EN.pdf`** (engelsk, 16 sider, A4).
+Ferdig oppskrift: **`Mollys-vognlenke-LME.pdf`** (norsk, 15 sider, A4) og
+**`Mollys-vognlenke-LME-EN.pdf`** (engelsk, 15 sider, A4).
 
 Følger opp `../ellies-vognlenke/`, `../pip-vognlenke/` og
-`../felix-vognlenke/` med en versjon for Molly. Samme oppbygning som de
-andre: en liten kremhvit Molly-medaljong midt på en kort snor, omgitt av
-de samme sju universelle naturmotivene (sky, sol, blad, blomst, stjerne,
-sommerfugl) og to sideringer med dinglende kuler. Molly-medaljongen har
-myke ører, en tett løkkemasket mini ulltopp og en liten smørgul sløyfe
-oppå, samme signaturuttrykk som resten av Mollys oppskrifter.
+`../felix-vognlenke/`, oppdatert 4. august 2026 etter Renates
+referansebilder av profesjonelt stylede vognlenker, samme ombygging som
+de andre: bygget om fra sju flate motiver til en kjede av heklede kuler
+og tre-mellomperler med Molly-medaljongen (nå med smørgul volangkrage) i
+midten, en blomst og et blad på hver side, og to trering-rangler (trering
++ dinglende heklet kule). Festes i hver ende med en tre-kuleklips med
+innkapslet fjærmekanisme (samme klipstype som smokkelenke-serien).
+Molly-medaljongen har fortsatt myke ører, en tett løkkemasket mini
+ulltopp og en liten smørgul sløyfe oppå, samme signaturuttrykk som resten
+av Mollys oppskrifter.
 
-Bygget etter samme mal som de andre vognlenkene (samme struktur, samme
-sikkerhetsside om maks lengde), med Molly sitt eget referansebilde
-(`molly_ref.jpg`, kopiert fra `../molly-lam/molly_hero.jpg`) på forsiden,
-tydelig merket "stiluttrykk-referanse".
+Samme sikkerhetsfokus som `../ellies-vognlenke/`: side 13 forklarer hvorfor
+lengden holdes kort, med LME-anbefalingen (maks 35-40 cm mellom klipsene,
+ingen del løsere enn 6-8 cm), pluss en påminnelse om å sjekke løkkemaskene
+i ulltoppen jevnlig.
+
+Bygget etter samme mal som de andre vognlenkene, med Molly sitt eget
+referansebilde (`molly_ref.jpg`, kopiert fra `../molly-lam/molly_hero.jpg`)
+på forsiden, tydelig merket "stiluttrykk-referanse".
 
 ## Bygge PDF-ene på nytt
 
