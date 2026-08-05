@@ -3,11 +3,15 @@
 som HTML, klar for PDF-print med Chromium. Første del av strikkekolleksjonen
 LME Woodland Dreams (basisbody + 6 tilbehørsdeler + Woodland Fluffy Skirt).
 
-Helt original LME-konstruksjon: topp-ned raglan, rund hals, glattstrikk,
-ribb i hals/erme/legg, knapper i skrittet, skulderåpning med knapper på de
-tre minste størrelsene. Fasthet 22 m = 10 cm / 30 o = 10 cm på 4 mm pinne,
-Sandnes Garn Alpakka. Graderingstallene er beregnet og verifisert separat
-(se scratchpad/basisbody/grading3.py), ikke frihåndstall.
+v2, redesignet etter tilbakemelding: lett, enkel body i glattstrikk, INGEN
+ribb noe sted (i-cord-kanter i stedet ved hals, ermekant og beinåpning),
+korte, innebygde erme (ikke lange, ikke løse stropper), skulderåpning med
+knapper på ALLE 7 størrelser (ikke bare de 3 minste, siden i-cord ikke
+strekker som ribb). Topp-ned raglan, rund hals. Fasthet 22 m = 10 cm /
+30 o = 10 cm på 4 mm pinne, Sandnes Garn Alpakka. Graderingstallene er
+beregnet og verifisert separat (se grading_basisbody.py), ikke
+frihåndstall. Helt original LME-konstruksjon, ikke en kopi av noe
+eksisterende mønster eller oppskrift.
 """
 import pathlib, sys, json
 
@@ -16,7 +20,7 @@ sys.path.insert(0, str(BASE.parent.parent / 'hekle' / '_shared'))
 import lme_pattern_kit as kit
 from lme_pattern_kit import (banner, rosep, sagep, card, cream, cme, ul, steps, otab, abbrtab)
 
-SIZES = json.loads(BASE.joinpath('sizes.json').read_text(encoding='utf-8')) if BASE.joinpath('sizes.json').exists() else None
+SIZES = json.loads(BASE.joinpath('sizes.json').read_text(encoding='utf-8'))
 
 T = {}
 def add(key, no, en=None):
@@ -30,16 +34,18 @@ add('covertag', 'LME STRIKKEOPPSKRIFT - BABY', 'LME KNITTING PATTERN - BABY')
 add('covertitle', 'WOODLAND DREAMS BASISBODY', 'WOODLAND DREAMS BASISBODY')
 add('subpill', 'LME BABY COLLECTION - WOODLAND DREAMS', 'LME BABY COLLECTION - WOODLAND DREAMS')
 add('cover_desc',
-    'En tidløs, unisex basisbody i glattstrikk: rund hals, raglanermer, ribb i hals, mansjett og '
-    'legg, og knapper i skrittet for enkelt bleiebytte. Syv størrelser, fra 0-1 til 18-24 måneder. '
+    'En lett, enkel unisex basisbody i glattstrikk: rund hals, korte erme, ingen ribb noe sted, kun '
+    'myke i-cord-kanter ved hals, ermer og beinåpning. Skulderåpning med knapper på alle størrelser, '
+    'og knapper i skrittet for enkelt bleiebytte. Syv størrelser, fra 0-1 til 18-24 måneder. '
     'Basisbodyen er selve grunnmuren i "Woodland Dreams"-kolleksjonen, og er laget for å kunne '
     'kombineres med alle seks tilbehørsdelene: blondekrage, rysjekrage, Peter Pan-krage, smekke, '
     'i-cord-seler og kort vest.',
-    'A timeless, unisex basisbody in stockinette stitch: round neck, raglan sleeves, ribbing at the '
-    'neck, cuffs and hem, and buttons at the crotch for easy nappy changes. Seven sizes, from 0-1 to '
-    '18-24 months. The basisbody is the foundation of the "Woodland Dreams" collection, designed to '
-    'be combined with all six accessory patterns: lace collar, ruffle collar, Peter Pan collar, bib, '
-    'i-cord suspenders and short vest.')
+    'A light, simple, unisex basisbody in stockinette stitch: round neck, short sleeves, no ribbing '
+    'anywhere, only soft i-cord edges at the neck, sleeves and leg openings. A button shoulder '
+    'opening on every size, and buttons at the crotch for easy nappy changes. Seven sizes, from 0-1 '
+    'to 18-24 months. The basisbody is the foundation of the "Woodland Dreams" collection, designed '
+    'to be combined with all six accessory patterns: lace collar, ruffle collar, Peter Pan collar, '
+    'bib, i-cord suspenders and short vest.')
 add('by1', 'Av Renate Dahl', 'By Renate Dahl')
 add('by2', 'Little Montessori Explorers', 'Little Montessori Explorers')
 add('by3', 'lmexplorers.com', 'lmexplorers.com')
@@ -54,29 +60,35 @@ add('banner_om', 'OM WOODLAND DREAMS BASISBODY', 'ABOUT THE WOODLAND DREAMS BASI
 add('pill_kolleksjon0', 'GRUNNMUREN I KOLLEKSJONEN', 'THE FOUNDATION OF THE COLLECTION')
 add('om_kolleksjon0',
     'Basisbodyen er den første delen i LME Woodland Dreams, en modulær strikkekolleksjon i '
-    'skandinavisk, tidløs stil. Tanken er enkel: én godt sittende body, som kan bygges videre på '
-    'med ulike krager, en smekke, seler eller en liten vest, uten å måtte strikke en ny body for '
+    'skandinavisk, tidløs stil. Tanken er enkel: én godt sittende, lett body, som kan bygges videre '
+    'på med ulike krager, en smekke, seler eller en liten vest, uten å måtte strikke en ny body for '
     'hvert antrekk.',
     'The basisbody is the first piece in LME Woodland Dreams, a modular knitting collection in a '
-    'Scandinavian, timeless style. The idea is simple: one well-fitting body, that can be built on '
-    'with different collars, a bib, suspenders or a little vest, without knitting a new body for '
-    'every outfit.')
+    'Scandinavian, timeless style. The idea is simple: one well-fitting, light body, that can be '
+    'built on with different collars, a bib, suspenders or a little vest, without knitting a new '
+    'body for every outfit.')
 add('pill_stil', 'STIL', 'STYLE')
 add('om_stil',
     'Rene linjer, myke overganger og rolige naturfarger: krem, lin, sand, havre og beige. Ingen '
-    'fast kant eller pynt på selve bodyen, den skal være det stillferdige grunnlaget som fargen og '
-    'formen i tilbehøret får lov til å løfte.',
+    'ribb noe sted, bare glattstrikk og en myk, avrundet i-cord-kant der bodyen åpner seg: ved hals, '
+    'ermer og beinåpning. Enklest mulig, uten fast kant eller pynt utover dette, det stillferdige '
+    'grunnlaget som fargen og formen i tilbehøret får lov til å løfte.',
     'Clean lines, soft transitions and calm natural colours: cream, linen, sand, oatmeal and beige. '
-    'No fixed trim or decoration on the body itself, it is meant to be the quiet foundation that '
-    'the colour and shape of the accessories are allowed to lift.')
-add('pill_passform', 'ROMSLIG, BLEIEVENNLIG PASSFORM', 'A ROOMY, NAPPY-FRIENDLY FIT')
+    'No ribbing anywhere, only stockinette stitch and a soft, rounded i-cord edge wherever the body '
+    'opens: at the neck, sleeves and leg openings. As simple as possible, with no other fixed trim '
+    'or decoration, the quiet foundation that the colour and shape of the accessories are allowed '
+    'to lift.')
+add('pill_passform', 'LETT OG BLEIEVENNLIG PASSFORM', 'A LIGHT, NAPPY-FRIENDLY FIT')
 add('om_passform',
-    'Strikket med litt ekstra vidde over brystet og god lengde i kroppen, så det er plass til '
-    'bleie uten at bodyen strammer. Lange ermer året rundt, og et sett med knapper i skrittet gjør '
-    'bleiebytte raskt, uten å kle av hele barnet.',
+    'Strikket med litt ekstra vidde over brystet og god lengde i kroppen, så det er plass til bleie '
+    'uten at bodyen strammer. Korte erme, ikke lange, for et lett og luftig uttrykk hele året. '
+    'Skulderåpning med knapper på alle størrelser gjør det raskt å ta bodyen av og på, og et sett '
+    'med knapper i skrittet gjør bleiebytte raskt, uten å kle av hele barnet.',
     'Knitted with a little extra width over the chest and good body length, so there is room for a '
-    'nappy without the body pulling tight. Long sleeves all year round, and a set of buttons at the '
-    'crotch make nappy changes quick, without undressing the whole baby.')
+    'nappy without the body pulling tight. Short sleeves, not long, for a light and airy feel all '
+    'year round. A button shoulder opening on every size makes the body quick to put on and take '
+    'off, and a set of buttons at the crotch make nappy changes quick, without undressing the whole '
+    'baby.')
 
 # ---------------------------------------------------------------- SIDE 3: MATERIALER
 add('banner_mat', 'MATERIALER', 'MATERIALS')
@@ -88,23 +100,22 @@ add('garn_txt',
     "the collection's calm natural colours for the body itself: cream, linen, sand, oatmeal or "
     'beige.')
 GARNFORBRUK = [
-    ('0-1 mnd', '90-100 g'), ('1-3 mnd', '105-115 g'), ('3-6 mnd', '120-135 g'),
-    ('6-9 mnd', '140-155 g'), ('9-12 mnd', '160-175 g'), ('12-18 mnd', '180-200 g'),
-    ('18-24 mnd', '210-230 g'),
+    ('0-1 mnd', '85-95 g'), ('1-3 mnd', '100-110 g'), ('3-6 mnd', '110-125 g'),
+    ('6-9 mnd', '130-145 g'), ('9-12 mnd', '150-165 g'), ('12-18 mnd', '170-190 g'),
+    ('18-24 mnd', '195-215 g'),
 ]
 add('pill_forbruk', 'GARNFORBRUK', 'YARN REQUIREMENTS')
 add('pill_pinner', 'PINNER OG TILBEHØR', 'NEEDLES AND NOTIONS')
 add('pinner_txt',
-    'Rundpinne 4 mm (40 cm og 60 cm), pluss strømpepinner eller en kort rundpinne 4 mm til '
-    'ermene. Tre små, runde treknapper til skrittet (og to ekstra små treknapper til '
-    'skulderåpningen på de tre minste størrelsene). Maskemarkører (minst 4, gjerne i fire ulike '
-    'farger til de fire raglanlinjene), synål, og en heklenål 3 mm til å hekle løkker for '
-    'knapphullene.',
-    'Circular needle 4 mm (40 cm and 60 cm), plus double-pointed needles or a short circular '
-    'needle 4 mm for the sleeves. Three small round wooden buttons for the crotch (and two extra '
-    'small wooden buttons for the shoulder opening on the three smallest sizes). Stitch markers '
-    '(at least 4, ideally in four different colours for the four raglan lines), a tapestry needle, '
-    'and a 3 mm crochet hook for crocheting the buttonhole loops.')
+    'Rundpinne 4 mm (40 cm og 60 cm), pluss strømpepinner eller en kort rundpinne 4 mm til de korte '
+    'ermene. Fem små, runde treknapper: tre til skrittet og to til skulderåpningen. '
+    'Maskemarkører (minst 4, gjerne i fire ulike farger til de fire raglanlinjene), synål, og en '
+    'heklenål 3 mm til å hekle løkker for knapphullene.',
+    'Circular needle 4 mm (40 cm and 60 cm), plus double-pointed needles or a short circular needle '
+    '4 mm for the short sleeves. Five small round wooden buttons: three for the crotch and two for '
+    'the shoulder opening. Stitch markers (at least 4, ideally in four different colours for the '
+    'four raglan lines), a tapestry needle, and a 3 mm crochet hook for crocheting the buttonhole '
+    'loops.')
 
 # ---------------------------------------------------------------- SIDE 4: STØRRELSESTABELL
 add('banner_storrelse', 'STØRRELSESTABELL', 'SIZE CHART')
@@ -123,9 +134,11 @@ for s in SIZES:
 add('storrelse_rows_data', storrelse_rows)
 add('storrelse_note',
     'Målene er ferdig brystvidde (hel omkrets), altså inkludert den romslige passformen '
-    'oppskriften er beregnet med, ikke barnets faktiske brystmål.',
+    'oppskriften er beregnet med, ikke barnets faktiske brystmål. Ermelengden er målt fra der '
+    'ermet deles fra kroppen (skulderlinjen) til mansjettkanten.',
     "The measurements are the finished chest width (full circumference), i.e. including the roomy "
-    "fit the pattern is calculated with, not the baby's actual chest measurement.")
+    "fit the pattern is calculated with, not the baby's actual chest measurement. The sleeve length "
+    "is measured from where the sleeve divides from the body (the shoulder line) to the cuff edge.")
 
 # ---------------------------------------------------------------- SIDE 5: FASTHET
 add('banner_fasthet', 'STRIKKEFASTHET OG VANSKELIGHETSGRAD', 'GAUGE AND DIFFICULTY LEVEL')
@@ -141,11 +154,12 @@ add('fasthet_txt',
     'match, change to a smaller or larger needle until it does, not just to match the yarn.')
 add('pill_vanskelig', 'VANSKELIGHETSGRAD', 'DIFFICULTY LEVEL')
 add('vanskelig_txt',
-    'Middels. Du bør beherske å strikke i rundt, øke og felle, ta opp masker, og strikke enkle '
-    'knapphull. Ingen kompliserte mønster, hele bodyen er glattstrikk og ribb.',
+    'Middels. Du bør beherske å strikke i rundt, øke og felle, ta opp masker, strikke enkle '
+    'knapphull og i-cord-avfelling. Ingen kompliserte mønster, hele bodyen er glattstrikk, kun '
+    'kantene er i-cord.',
     'Medium. You should be comfortable knitting in the round, increasing and decreasing, picking '
-    'up stitches, and working simple buttonholes. No complicated stitch patterns, the whole body is '
-    'stockinette stitch and rib.')
+    'up stitches, working simple buttonholes and an i-cord bind-off. No complicated stitch '
+    'patterns, the whole body is stockinette stitch, only the edges are i-cord.')
 
 # ---------------------------------------------------------------- SIDE 6: FORKORTELSER
 add('banner_ord', 'FORKORTELSER', 'ABBREVIATIONS')
@@ -156,7 +170,7 @@ ord_head = {'no': ['Norsk', 'Engelsk', 'Betyr'], 'en': ['Norwegian', 'English', 
 add('ord_head', ord_head['no'], ord_head['en'])
 ord_rows = [
     ('r', 'K', 'rett'),
-    ('vr', 'P', 'vrangbord/vrang'),
+    ('vr', 'P', 'vrang'),
     ('m', 'st(s)', 'maske(r)'),
     ('o', 'rnd', 'omgang'),
     ('øk', 'inc', 'øk (ta opp én tilleggsmaske)'),
@@ -166,6 +180,7 @@ ord_rows = [
     ('ta opp m', 'pick up sts', 'ta opp masker langs en kant'),
     ('fell av', 'BO', 'fell av / bind off'),
     ('legg opp', 'CO', 'legg opp masker'),
+    ('i-cord', 'i-cord', 'strikket rørformet kant/snor, se side 8'),
     ('rettpinne', 'straight needle', 'rett/enkeltpinne'),
     ('rundpinne', 'circular needle', 'rundpinne'),
     ('strømpepinne', 'DPN', 'strømpepinne (dobbeltspiss)'),
@@ -194,77 +209,114 @@ add('tips', tips_no, tips_en)
 # ---------------------------------------------------------------- SIDE 7: KONSTRUKSJONSOVERSIKT
 add('banner_oversikt', 'SLIK ER BODYEN BYGD OPP', 'HOW THE BODY IS CONSTRUCTED')
 add('oversikt_lead',
-    'Bodyen strikkes ovenfra og ned, i ett stykke, med raglanermer. Fire enkle deler, i denne '
+    'Bodyen strikkes ovenfra og ned, i ett stykke, med korte raglanermer. Fem enkle deler, i denne '
     'rekkefølgen:',
-    'The body is knitted top-down, in one piece, with raglan sleeves. Four simple parts, in this '
-    'order:')
+    'The body is knitted top-down, in one piece, with short raglan sleeves. Five simple parts, in '
+    'this order:')
 oversikt_deler = [
-    ('1. Halskant og bæreparti', 'Legg opp i halsen, strikk ribb, øk fire raglanlinjer jevnt til '
-     'bæreamål er nådd.', '1. Neck and yoke', 'Cast on at the neck, work rib, increase four raglan '
+    ('1. Halskant og skulderåpning', 'Legg opp flatt i halsen med en liten åpning ved venstre '
+     'skulder, øk fire raglanlinjer jevnt til bæremålet er nådd.', '1. Neck opening and shoulder',
+     'Cast on flat at the neck with a small opening at the left shoulder, increase four raglan '
      'lines evenly until the yoke width is reached.'),
     ('2. Del til erme og kropp', 'Sett ermemaskene til hvile på en tråd, legg opp noen få nye '
      'masker under hver arm, fortsett rundt på kroppen alene.', '2. Divide for sleeves and body',
      'Put the sleeve stitches on hold, cast on a few new stitches under each arm, continue in the '
      'round on the body alone.'),
-    ('3. Kroppen ned til skrittet', 'Strikk glattstrikk rett ned, avslutt med ribb og en '
-     'knappeløsning i skrittet.', '3. The body down to the crotch', 'Knit stockinette straight '
-     'down, finish with rib and a button opening at the crotch.'),
-    ('4. Ermene ned til mansjett', 'Ta ermemaskene av tråden, strikk rundt nedover armen, avslutt '
-     'med ribb i mansjetten.', '4. The sleeves down to the cuff', 'Put the sleeve stitches back on '
-     'the needle, knit around down the arm, finish with rib at the cuff.'),
+    ('3. Kroppen ned til skrittet', 'Strikk glattstrikk rett ned, avslutt med i-cord-avfelling og '
+     'en knappeløsning i skrittet.', '3. The body down to the crotch', 'Knit stockinette straight '
+     'down, finish with an i-cord bind-off and a button opening at the crotch.'),
+    ('4. De korte ermene', 'Ta ermemaskene av tråden, strikk noen få omganger nedover, avslutt med '
+     'i-cord-avfelling.', '4. The short sleeves', 'Put the sleeve stitches back on the needle, '
+     'knit a few rounds down, finish with an i-cord bind-off.'),
+    ('5. Halskanten', 'Til slutt: ta opp masker langs hele halskanten og avslutt med samme '
+     'i-cord-avfelling som resten av bodyen.', '5. The neck edge', 'Finally: pick up stitches all '
+     'the way around the neck opening and finish with the same i-cord bind-off as the rest of the '
+     'body.'),
 ]
 add('oversikt_deler_data', oversikt_deler)
 
-# ---------------------------------------------------------------- SIDE 8: HALSKANT
-add('banner_hals', 'DEL 1: HALSKANT', 'PART 1: THE NECK OPENING')
+# ---------------------------------------------------------------- SIDE 8: I-CORD-TEKNIKKEN
+add('banner_icord', 'I-CORD-TEKNIKKEN', 'THE I-CORD TECHNIQUE')
+add('icord_lead',
+    'Bodyen har ingen ribb noe sted. I stedet avsluttes alle åpne kanter (beinåpning, ermekant og '
+    'til slutt halskanten) med den samme, myke i-cord-avfellingen. Lær teknikken én gang her, den '
+    'brukes tre ganger i oppskriften.',
+    'The body has no ribbing anywhere. Instead, every open edge (leg opening, sleeve cuff, and '
+    'finally the neck opening) is finished with the same soft i-cord bind-off. Learn the technique '
+    'once here, it is used three times in the pattern.')
+add('icord_metode',
+    'Legg opp 3 nye masker på venstre pinne, rett foran de levende maskene som skal avfelles. '
+    '*Strikk 2 r av de 3 nye maskene. Strikk maske 3 sammen med den neste levende masken, vridd '
+    'rett sammen (gjennom bakre masketråd), og sett alle 3 maskene på pinnen tilbake på venstre '
+    'pinne*. Gjenta fra * til * hele veien rundt eller langs kanten, til alle de opprinnelige, '
+    'levende maskene er avfelt. Fell til slutt av de 3 gjenværende i-cord-maskene på vanlig måte.',
+    'Cast on 3 new stitches onto the left needle, right before the live stitches to be bound off. '
+    '*Knit 2 of the 3 new stitches. Knit stitch 3 together with the next live stitch, through the '
+    'back loop, and slip all 3 stitches back onto the left needle*. Repeat from * to * all the way '
+    'around or along the edge, until every original, live stitch has been bound off. Finally, bind '
+    'off the 3 remaining i-cord stitches as normal.')
+add('icord_tips',
+    'Resultatet er en liten, rund, myk snor langs hele kanten, ikke en flat avfelling. Stram '
+    'jevnt, men ikke for hardt, i-cord-kanten skal ligge mykt og avrundet, ikke krølle seg.',
+    'The result is a small, round, soft cord all along the edge, not a flat bind-off. Pull evenly, '
+    'but not too tight, the i-cord edge should sit soft and rounded, not curl up.')
+
+# ---------------------------------------------------------------- SIDE 9: HALSKANT OG SKULDERÅPNING
+add('banner_hals', 'DEL 1: HALSKANT OG SKULDERÅPNING', 'PART 1: NECK OPENING AND SHOULDER')
 add('hals_lead',
-    'Bodyen legges opp i halsen og strikkes ovenfra og ned. På de tre minste størrelsene (0-1, '
-    '1-3 og 3-6 måneder) legges det opp flatt, med en liten åpning ved venstre skulder som lukkes '
-    'med to knapper, slik at hodet lettere kommer gjennom. På de fire største størrelsene '
-    '(6-9 til 18-24 måneder) legges det opp rundt, uten åpning, siden halsen da er stor nok i seg '
-    'selv.',
-    'The body is cast on at the neck and knitted top-down. On the three smallest sizes (0-1, 1-3 '
-    'and 3-6 months) it is cast on flat, with a small opening at the left shoulder that closes with '
-    'two buttons, so the head passes through more easily. On the four largest sizes (6-9 to 18-24 '
-    'months) it is cast on in the round, with no opening, since the neck is then wide enough on its '
-    'own.')
-add('hals_smaa_txt',
-    'De tre minste størrelsene: legg opp {neck_co} masker flatt på rundpinne 4 mm (jobb fram og '
-    'tilbake, ikke rundt, de første {rib_rows} omgangene). Sett en maskemarkør etter maske {mk1}, '
-    'etter maske {mk2}, etter maske {mk3} og etter maske {mk4}, disse markerer de fire '
-    'raglanlinjene (bak-venstre erme, venstre erme-front, front-høyre erme, høyre erme-bak).',
-    'The three smallest sizes: cast on {neck_co} stitches flat on a 4 mm circular needle (work back '
-    'and forth, not in the round, for the first {rib_rows} rows). Place a stitch marker after '
+    'Bodyen legges opp i halsen og strikkes ovenfra og ned. Alle syv størrelser legges opp flatt, '
+    'med en liten åpning ved venstre skulder som lukkes med to knapper, slik at hodet lettere '
+    'kommer gjennom, siden i-cord-kanten (i motsetning til ribb) ikke strekker seg noe særlig.',
+    'The body is cast on at the neck and knitted top-down. All seven sizes are cast on flat, with a '
+    'small opening at the left shoulder that closes with two buttons, so the head passes through '
+    'more easily, since the i-cord edge (unlike ribbing) does not stretch to speak of.')
+add('hals_txt',
+    'Legg opp {neck_co} masker flatt på rundpinne 4 mm (jobb fram og tilbake, ikke rundt, de første '
+    '4 omgangene, dette blir skulderåpningen). Sett en maskemarkør etter maske {mk1}, etter maske '
+    '{mk2}, etter maske {mk3} og etter maske {mk4}, disse markerer de fire raglanlinjene '
+    '(bak-venstre erme, venstre erme-front, front-høyre erme, høyre erme-bak).',
+    'Cast on {neck_co} stitches flat on a 4 mm circular needle (work back and forth, not in the '
+    'round, for the first 4 rows, this becomes the shoulder opening). Place a stitch marker after '
     'stitch {mk1}, after stitch {mk2}, after stitch {mk3} and after stitch {mk4}, these mark the '
     'four raglan lines (back-left sleeve, left sleeve-front, front-right sleeve, right sleeve-'
     'back).')
-add('hals_store_txt',
-    'De fire største størrelsene: legg opp {neck_co} masker rundt på rundpinne 4 mm, sett en '
-    'markør for start av omgang. Sett en maskemarkør etter maske {mk1}, etter maske {mk2}, etter '
-    'maske {mk3} og etter maske {mk4}, som over.',
-    'The four largest sizes: cast on {neck_co} stitches in the round on a 4 mm circular needle, '
-    'place a marker for the start of the round. Place a stitch marker after stitch {mk1}, after '
-    'stitch {mk2}, after stitch {mk3} and after stitch {mk4}, as above.')
-add('hals_ribb_txt',
-    'Strikk vrangbord r1 vr1 i {rib_rows} omganger/rader.',
-    'Work k1, p1 rib for {rib_rows} rounds/rows.')
+add('hals_apning_txt',
+    'Strikk glattstrikk fram og tilbake i 4 rader (dette er skulderåpningen). Fest deretter '
+    'maskene til å strikkes rundt (sett en markør for start av omgang), og fortsett direkte til '
+    'raglanøkingen på neste side. Halskanten selv strikkes ikke ferdig her, den avsluttes med '
+    'i-cord til slutt, se del 5.',
+    'Knit stockinette back and forth for 4 rows (this is the shoulder opening). Then join to knit '
+    'in the round (place a marker for the start of the round), and continue straight on to the '
+    'raglan increases on the next page. The neck edge itself is not finished here, it is finished '
+    'with i-cord at the very end, see part 5.')
+add('pill_skulder', 'SKULDERÅPNINGEN, FERDIGSTILLING', 'THE SHOULDER OPENING, FINISHING')
+add('skulder_txt',
+    'Når hele bodyen er ferdig strikket (se montering på side 15): kant begge sider av '
+    'skulderåpningen med 1 omgang fastmaske-lignende kantmasker eller la i-cord-kanten fra '
+    'halsavslutningen løpe helt ut i åpningen. Hekle to små løkker (knapphull) på fremre kant med '
+    'heklenål 3 mm, og sy to treknapper på bakre kant, rett overfor løkkene.',
+    'Once the whole body is finished (see finishing on page 15): edge both sides of the shoulder '
+    'opening with 1 round of neat edge stitches, or let the i-cord edge from the neck finish run '
+    'all the way out into the opening. Crochet two small loops (buttonholes) on the front edge with '
+    'a 3 mm crochet hook, and sew two wooden buttons onto the back edge, directly opposite the '
+    'loops.')
 
-# ---------------------------------------------------------------- SIDE 9: RAGLANØKING
+# ---------------------------------------------------------------- SIDE 10: RAGLANØKING
 add('banner_raglan', 'DEL 2: RAGLANØKING', 'PART 2: RAGLAN INCREASES')
 add('raglan_lead',
-    'Bytt til glattstrikk. Nå økes det jevnt langs alle fire raglanlinjer, til bæreamålet er nådd. '
-    'Konstruksjonen er lik for alle størrelser, det er bare tallene som endrer seg, se '
-    'graderingstabellen under.',
-    'Switch to stockinette stitch. Now increase evenly along all four raglan lines, until the yoke '
-    'width is reached. The construction is the same for every size, only the numbers change, see '
-    'the grading table below.')
+    'Nå økes det jevnt langs alle fire raglanlinjer, til bæremålet er nådd. Antall økeomganger er '
+    'det samme for alle syv størrelser her, det er halsoppligget som gjør størrelsesforskjellen, '
+    'se graderingstabellen under.',
+    'Now increase evenly along all four raglan lines, until the yoke width is reached. The number '
+    'of increase rounds is the same for all seven sizes here, it is the neck cast-on that makes the '
+    'size difference, see the grading table below.')
 add('raglan_metode',
-    'Økeomgang (hver 2. omgang/rad): øk 1 maske rett før og 1 maske rett etter hver av de fire '
-    'raglanmarkørene (8 masker økt totalt pr økeomgang). Strikk vanlig, uten øking, på omgangen/'
-    'raden mellom.',
-    'Increase round (every 2nd round/row): increase 1 stitch right before and 1 stitch right after '
+    'Økeomgang (hver 2. omgang): øk 1 maske rett før og 1 maske rett etter hver av de fire '
+    'raglanmarkørene (8 masker økt totalt pr økeomgang). Strikk vanlig, uten øking, på omgangen '
+    'mellom.',
+    'Increase round (every 2nd round): increase 1 stitch right before and 1 stitch right after '
     'each of the four raglan markers (8 stitches increased in total per increase round). Knit '
-    'plain, with no increases, on the round/row in between.')
+    'plain, with no increases, on the round in between.')
 raglan_head = {'no': ['Størrelse', 'Legg opp i hals', 'Antall økeomg.', 'Omg. til bæremål', 'Masker ved bærde'],
                 'en': ['Size', 'Neck cast-on', 'Increase rounds', 'Rounds to yoke depth', 'Sts at yoke depth']}
 add('raglan_head', raglan_head['no'], raglan_head['en'])
@@ -279,7 +331,7 @@ add('raglan_ferdig',
     'Check: count your stitches. They should match the number in the "Sts at yoke depth" column for '
     'your size, before you move on to part 3.')
 
-# ---------------------------------------------------------------- SIDE 10: DEL TIL KROPP OG ERME
+# ---------------------------------------------------------------- SIDE 11: DEL TIL KROPP OG ERME
 add('banner_del', 'DEL 3: DEL TIL ERME OG KROPP', 'PART 3: DIVIDE FOR SLEEVES AND BODY')
 add('del_lead',
     'Nå deles bæret i to ermer og en kropp. Gjør dette likt for alle størrelser, følg din egen '
@@ -310,7 +362,7 @@ del_steps_en = [
 ]
 add('del_steps', del_steps_no, del_steps_en)
 
-# ---------------------------------------------------------------- SIDE 11: KROPPEN
+# ---------------------------------------------------------------- SIDE 12: KROPPEN
 add('banner_kropp', 'DEL 4: KROPPEN NED TIL SKRITTET', 'PART 4: THE BODY DOWN TO THE CROTCH')
 add('kropp_lead',
     'Strikk glattstrikk rett ned, i rundt, uten øking eller felling, til bodyen har ønsket lengde. '
@@ -318,83 +370,85 @@ add('kropp_lead',
     'Knit stockinette stitch straight down, in the round, with no increasing or decreasing, until '
     "the body reaches the desired length. See the table below for how many rounds to work for "
     'your size.')
-kropp_head = {'no': ['Størrelse', 'Masker på kroppen', 'Omg. glattstrikk', 'Omg. ribb i legg', 'Ferdig lengde'],
-               'en': ['Size', 'Body stitches', 'Rounds stockinette', 'Rounds rib at hem', 'Finished length']}
+kropp_head = {'no': ['Størrelse', 'Masker på kroppen', 'Omg. glattstrikk', 'Ferdig lengde'],
+               'en': ['Size', 'Body stitches', 'Rounds stockinette', 'Finished length']}
 add('kropp_head', kropp_head['no'], kropp_head['en'])
 kropp_rows = []
 for s in SIZES:
     body_total = s['body_after_divide']
-    plain_rows = s['body_rows_below_underarm'] - 7
-    kropp_rows.append((s['no'], str(body_total), str(plain_rows), '7', f"{s['body_length_cm']} cm"))
+    kropp_rows.append((s['no'], str(body_total), str(s['body_rows_below_underarm']),
+                        f"{s['body_length_cm']} cm"))
 add('kropp_rows_data', kropp_rows)
-add('kropp_ribb',
-    'Bytt til vrangbord r1 vr1 og strikk 7 omganger. Fell av alle masker løst i vrangbordmønster, '
-    'slik at leggkanten forblir elastisk.',
-    'Switch to k1, p1 rib and work 7 rounds. Bind off all stitches loosely in rib pattern, so the '
-    'hem edge stays stretchy.')
+add('kropp_icord',
+    'Når kroppen har ønsket lengde: strikk fram og tilbake (ikke rundt) i 4-5 cm midt front, rett '
+    'over stedet der splitten skal være (se knapper i skrittet under), for å lage åpningen. '
+    'Avfell alle maskene rundt hele beinåpningen med i-cord-avfelling, som beskrevet på side 8.',
+    'Once the body has the desired length: knit back and forth (not in the round) for 4-5 cm at '
+    'centre front, right over where the placket should be (see buttons at the crotch below), to '
+    'create the opening. Bind off all stitches all the way around the leg opening with an i-cord '
+    'bind-off, as described on page 8.')
 add('pill_skritt', 'KNAPPER I SKRITTET', 'BUTTONS AT THE CROTCH')
 add('skritt_txt',
-    'Legg en 4-5 cm lang splitt midt front, rett over ribbekanten, ved å strikke fram og tilbake i '
-    'stedet for rundt de siste omgangene før avfelling. Kant begge sider av splitten med 2 omganger '
-    'r, hekle så tre små løkker (knapphull) på den ene siden med heklenål 3 mm, og sy på tre '
-    'treknapper på den andre siden, rett overfor løkkene. Splitten gjør det raskt å bytte bleie '
-    'uten å kle av barnet.',
-    'Work a 4-5 cm long placket at centre front, right above the rib hem, by knitting back and forth '
-    'instead of in the round for the last few rounds before binding off. Edge both sides of the '
-    'placket with 2 rows of garter stitch, then crochet three small loops (buttonholes) on one side '
-    'with a 3 mm crochet hook, and sew three wooden buttons onto the other side, directly opposite '
-    'the loops. The placket makes nappy changes quick without undressing the baby.')
+    'Kant begge sider av den 4-5 cm lange splitten midt front med 2 omganger r. Hekle så tre små '
+    'løkker (knapphull) på den ene siden med heklenål 3 mm, og sy på tre treknapper på den andre '
+    'siden, rett overfor løkkene. Splitten gjør det raskt å bytte bleie uten å kle av barnet.',
+    'Edge both sides of the 4-5 cm long placket at centre front with 2 rounds of garter stitch. '
+    'Then crochet three small loops (buttonholes) on one side with a 3 mm crochet hook, and sew '
+    'three wooden buttons onto the other side, directly opposite the loops. The placket makes '
+    'nappy changes quick without undressing the baby.')
 
-# ---------------------------------------------------------------- SIDE 12: ERMENE
-add('banner_erme', 'DEL 5: ERMENE', 'PART 5: THE SLEEVES')
+# ---------------------------------------------------------------- SIDE 13: DE KORTE ERMENE
+add('banner_erme', 'DEL 5: DE KORTE ERMENE', 'PART 5: THE SHORT SLEEVES')
 add('erme_lead',
     'Ta ermemaskene tilbake fra tråden/hvilepinnen, ett erme om gangen. Ta i tillegg opp de 2 '
-    'maskene som ble lagt opp under armen i del 3, slik at du strikker rundt i ett stykke.',
+    'maskene som ble lagt opp under armen i del 3, slik at du strikker rundt i ett stykke. Ermene '
+    'er korte, bare noen få omganger ned fra bæret.',
     'Put the sleeve stitches back onto the needle from the holder, one sleeve at a time. Also pick '
     'up the 2 stitches that were cast on under the arm in part 3, so you knit in the round in one '
-    'piece.')
-erme_head = {'no': ['Størrelse', 'Masker pr erme', 'Omg. glattstrikk', 'Omg. ribb i mansjett', 'Ferdig ermelengde'],
-              'en': ['Size', 'Sts per sleeve', 'Rounds stockinette', 'Rounds rib at cuff', 'Finished sleeve length']}
+    'piece. The sleeves are short, just a few rounds down from the yoke.')
+erme_head = {'no': ['Størrelse', 'Masker pr erme', 'Omg. glattstrikk', 'Ferdig ermelengde'],
+              'en': ['Size', 'Sts per sleeve', 'Rounds stockinette', 'Finished sleeve length']}
 add('erme_head', erme_head['no'], erme_head['en'])
 erme_rows = []
 for s in SIZES:
     sleeve_total = s['sleeve_after_divide']
-    plain_rows = s['sleeve_rows_total'] - 6
-    erme_rows.append((s['no'], str(sleeve_total), str(plain_rows), '6', f"{s['sleeve_length_cm']} cm"))
+    erme_rows.append((s['no'], str(sleeve_total), str(s['sleeve_rows_total']),
+                       f"{s['sleeve_length_cm']} cm"))
 add('erme_rows_data', erme_rows)
 add('erme_ferdig',
-    'Bytt til vrangbord r1 vr1 og strikk 6 omganger. Fell av løst i vrangbordmønster. Gjenta likt '
-    'for det andre ermet.',
-    'Switch to k1, p1 rib and work 6 rounds. Bind off loosely in rib pattern. Repeat the same way '
-    'for the other sleeve.')
+    'Avfell alle maskene med i-cord-avfelling, som beskrevet på side 8. Gjenta likt for det andre '
+    'ermet.',
+    'Bind off all stitches with an i-cord bind-off, as described on page 8. Repeat the same way for '
+    'the other sleeve.')
 
-# ---------------------------------------------------------------- SIDE 13: SKULDERÅPNING
-add('banner_skulder', 'SKULDERÅPNING (0-1, 1-3 OG 3-6 MÅNEDER)', 'SHOULDER OPENING (0-1, 1-3 AND 3-6 MONTHS)')
-add('skulder_lead',
-    'Bare for de tre minste størrelsene. De fire største størrelsene hoppes rett fra ermene til '
-    'montering på neste side.',
-    'Only for the three smallest sizes. The four largest sizes skip straight from the sleeves to '
-    'finishing on the next page.')
-add('skulder_txt',
-    'Åpningen ved venstre skulder (fra halskanten flatstrikking i del 1) kantes med 2 omganger r '
-    'på hver side. Hekle to små løkker (knapphull) på fremre kant med heklenål 3 mm, og sy to '
-    'treknapper på bakre kant, rett overfor løkkene. Kne knappene igjennom når bodyen er ferdig '
-    'strikket og skal tas på.',
-    'The opening at the left shoulder (from the flat neck knitting in part 1) is edged with 2 rows '
-    'of garter stitch on each side. Crochet two small loops (buttonholes) on the front edge with a '
-    '3 mm crochet hook, and sew two wooden buttons onto the back edge, directly opposite the loops. '
-    'Button the shoulder closed once the body is finished and ready to put on.')
+# ---------------------------------------------------------------- SIDE 14: HALSKANTEN
+add('banner_halsferdig', 'HALSKANTEN, SISTE STEG', 'THE NECK EDGE, THE FINAL STEP')
+add('halsferdig_lead',
+    'Til slutt, når resten av bodyen er ferdig strikket og montert (se montering på neste side): '
+    'ta opp 1 maske i hver maske langs hele oppleggskanten i halsen, inkludert langs '
+    'skulderåpningens to kanter, med rundpinne 4 mm.',
+    'Finally, once the rest of the body is finished and assembled (see finishing on the next page): '
+    'pick up 1 stitch in each stitch all the way around the neck cast-on edge, including along both '
+    'edges of the shoulder opening, with a 4 mm circular needle.')
+add('halsferdig_txt',
+    'Strikk 1 omgang glattstrikk rett, uten øking eller felling. Avfell deretter alle maskene med '
+    'i-cord-avfelling, som beskrevet på side 8. Dette gir halsen den samme myke, avrundede kanten '
+    'som beinåpningen og ermene.',
+    'Knit 1 round of plain stockinette, with no increasing or decreasing. Then bind off all '
+    'stitches with an i-cord bind-off, as described on page 8. This gives the neck the same soft, '
+    'rounded edge as the leg opening and the sleeves.')
 
-# ---------------------------------------------------------------- SIDE 14: MONTERING
+# ---------------------------------------------------------------- SIDE 15: MONTERING
 add('banner_montering', 'MONTERING', 'FINISHING')
 montering_no = [
     'Sy sammen de 2 maskene som ble lagt opp under hver arm, med en liten, tett søm, så det ikke '
     'blir hull.',
     'Fest alle løse tråder godt på vrangen, og klipp dem korte.',
-    'Sy på knappene i skrittet og (for de tre minste størrelsene) ved skulderen, se del 4 og '
-    'skulderåpning-siden.',
-    'Damp press bodyen lett på vrangen, unngå å presse direkte på ribbekantene, de skal beholde '
-    'strekket sitt.',
+    'Ta opp masker og strikk i-cord-kanten rundt halsen, som beskrevet på side 14.',
+    'Sy på knappene i skrittet (del 4) og ved skulderen (del 1), og hekle knapphullsløkkene om du '
+    'ikke gjorde det underveis.',
+    'Damp press bodyen lett på vrangen, unngå å presse direkte på i-cord-kantene, de skal beholde '
+    'den runde formen sin.',
     'Kontroller til slutt at alle knapper sitter godt fast, og at ingen løse tråder eller masker '
     'kan løsne.',
 ]
@@ -402,16 +456,17 @@ montering_en = [
     'Sew together the 2 stitches that were cast on under each arm, with a small, neat seam, so no '
     'hole is left.',
     'Weave in all loose ends securely on the wrong side, and trim them short.',
-    'Sew on the buttons at the crotch and (for the three smallest sizes) at the shoulder, see part '
-    '4 and the shoulder opening page.',
-    'Lightly steam-block the body on the wrong side, avoid pressing directly on the ribbed edges, '
-    'they should keep their stretch.',
+    'Pick up stitches and knit the i-cord edge around the neck, as described on page 14.',
+    'Sew on the buttons at the crotch (part 4) and at the shoulder (part 1), and crochet the '
+    'buttonhole loops if you did not do so along the way.',
+    'Lightly steam-block the body on the wrong side, avoid pressing directly on the i-cord edges, '
+    'they should keep their rounded shape.',
     'Finally, check that every button is securely attached, and that no loose threads or stitches '
     'can come undone.',
 ]
 add('montering_steg', montering_no, montering_en)
 
-# ---------------------------------------------------------------- SIDE 15: SIKKERHET OG STELL
+# ---------------------------------------------------------------- SIDE 16: SIKKERHET OG STELL
 add('banner_sikkerhet', 'SIKKERHET OG STELL', 'SAFETY AND CARE')
 add('pill_sikkerhet', 'SIKKERHET', 'SAFETY')
 sik_no = [
@@ -445,7 +500,7 @@ add('stell_txt',
     'degrees. Press out the water, ease into shape, and dry lying flat on a towel. Avoid hanging '
     'the body up to dry, alpaca can stretch out of shape.')
 
-# ---------------------------------------------------------------- SIDE 16: FERDIG
+# ---------------------------------------------------------------- SIDE 17: FERDIG
 add('banner_ferdig', 'FERDIG!', 'ALL DONE!')
 add('ferdig_txt',
     'Gratulerer, basisbodyen din er ferdig! Den er laget for å bli grunnmuren i hele "Woodland '
@@ -492,7 +547,7 @@ def sized_text(template, s, **extra):
     # raglanøkingen), ikke etter de ferdige maskene ved bæremålet.
     body_total = s['body_after_divide']
     sf, ss, sb = s['start_front'], s['start_sleeve'], s['start_back']
-    vals = dict(neck_co=s['neck_co'], rib_rows=7,
+    vals = dict(neck_co=s['neck_co'],
                 mk1=sf, mk2=sf + ss, mk3=sf + ss + sb, mk4=sf + ss + sb + ss,
                 front=s['front'], back=s['back'], sleeve=s['S'], body_total=body_total)
     vals.update(extra)
@@ -579,21 +634,24 @@ def build(lang):
 {card('<p>' + t('oversikt_lead') + '</p>' + deler_html)}
 ''', 7))
 
-    # side 8: halskant, felles tekst m/eksempel-tall for 0-1 mnd (base-størrelse)
+    pages.append(pg(f'''
+{banner(t('banner_icord'))}
+<p>{t('icord_lead')}</p>
+{card('<p>' + t('icord_metode') + '</p>')}
+{cme(t('icord_tips'))}
+''', 8))
+
+    # side 9: halskant + skulderåpning, felles tekst m/eksempel-tall for 0-1 mnd
     s0 = SIZES[0]
-    hals_smaa = sized_text(t('hals_smaa_txt'), s0)
-    hals_store = sized_text(t('hals_store_txt'), SIZES[3])
-    hals_ribb = t('hals_ribb_txt').format(rib_rows=7)
-    hals_note = {'no': 'Nøyaktig masketall for din størrelse finner du i graderingstabellen på neste side.',
-                 'en': 'The exact stitch count for your size is in the grading table on the next page.'}[lang]
+    hals_ex = sized_text(t('hals_txt'), s0)
     pages.append(pg(f'''
 {banner(t('banner_hals'))}
 <p>{t('hals_lead')}</p>
-{card('<p><b>' + {'no':'Eksempel, 0-1 mnd:','en':'Example, 0-1 months:'}[lang] + '</b> ' + hals_smaa + '</p>')}
-{card('<p><b>' + {'no':'Eksempel, 6-9 mnd:','en':'Example, 6-9 months:'}[lang] + '</b> ' + hals_store + '</p>')}
-{cme(hals_ribb)}
-<p class="small center">{hals_note}</p>
-''', 8))
+{card('<p><b>' + {'no':'Eksempel, 0-1 mnd:','en':'Example, 0-1 months:'}[lang] + '</b> ' + hals_ex + '</p>')}
+{cme(t('hals_apning_txt'))}
+{rosep(t('pill_skulder'))}
+{card('<p>' + t('skulder_txt') + '</p>')}
+''', 9))
 
     raglan_table = '<table class="t"><tr><th>' + '</th><th>'.join(t('raglan_head')) + '</th></tr>' + \
         ''.join(f'<tr><td><b>{a}</b></td><td>{b}</td><td>{c}</td><td>{d}</td><td>{e}</td></tr>'
@@ -604,7 +662,7 @@ def build(lang):
 {card('<p>' + t('raglan_metode') + '</p>')}
 {card(raglan_table)}
 {cme(t('raglan_ferdig'))}
-''', 9))
+''', 10))
 
     s_ex = SIZES[0]
     del_html = ul([step.format(front=s_ex['front'], back=s_ex['back'], sleeve=s_ex['S'],
@@ -614,40 +672,40 @@ def build(lang):
 {banner(t('banner_del'))}
 <p>{t('del_lead')}</p>
 {card('<p class="small">' + {'no':'Eksempel med tall for 0-1 mnd, bruk dine egne tall fra tabellen på forrige side.','en':'Example with numbers for 0-1 months, use your own numbers from the table on the previous page.'}[lang] + '</p>' + del_html)}
-''', 10))
+''', 11))
 
     kropp_table = '<table class="t"><tr><th>' + '</th><th>'.join(t('kropp_head')) + '</th></tr>' + \
-        ''.join(f'<tr><td><b>{a}</b></td><td>{b}</td><td>{c}</td><td>{d}</td><td>{e}</td></tr>'
-                for a, b, c, d, e in T['kropp_rows_data']['no']) + '</table>'
+        ''.join(f'<tr><td><b>{a}</b></td><td>{b}</td><td>{c}</td><td>{d}</td></tr>'
+                for a, b, c, d in T['kropp_rows_data']['no']) + '</table>'
     pages.append(pg(f'''
 {banner(t('banner_kropp'))}
 <p>{t('kropp_lead')}</p>
 {card(kropp_table)}
-{cme(t('kropp_ribb'))}
+{cme(t('kropp_icord'))}
 {rosep(t('pill_skritt'))}
 {card('<p>' + t('skritt_txt') + '</p>')}
-''', 11))
+''', 12))
 
     erme_table = '<table class="t"><tr><th>' + '</th><th>'.join(t('erme_head')) + '</th></tr>' + \
-        ''.join(f'<tr><td><b>{a}</b></td><td>{b}</td><td>{c}</td><td>{d}</td><td>{e}</td></tr>'
-                for a, b, c, d, e in T['erme_rows_data']['no']) + '</table>'
+        ''.join(f'<tr><td><b>{a}</b></td><td>{b}</td><td>{c}</td><td>{d}</td></tr>'
+                for a, b, c, d in T['erme_rows_data']['no']) + '</table>'
     pages.append(pg(f'''
 {banner(t('banner_erme'))}
 <p>{t('erme_lead')}</p>
 {card(erme_table)}
 {cme(t('erme_ferdig'))}
-''', 12))
+''', 13))
 
     pages.append(pg(f'''
-{banner(t('banner_skulder'))}
-<p>{t('skulder_lead')}</p>
-{card('<p>' + t('skulder_txt') + '</p>')}
-''', 13))
+{banner(t('banner_halsferdig'))}
+<p>{t('halsferdig_lead')}</p>
+{card('<p>' + t('halsferdig_txt') + '</p>')}
+''', 14))
 
     pages.append(pg(f'''
 {banner(t('banner_montering'))}
 {card(steps(t('montering_steg')))}
-''', 14))
+''', 15))
 
     pages.append(pg(f'''
 {banner(t('banner_sikkerhet'))}
@@ -655,7 +713,7 @@ def build(lang):
 {card(ul(t('sikkerhet_txt')))}
 {sagep(t('pill_stell'))}
 {cme(t('stell_txt'))}
-''', 15))
+''', 16))
 
     pages.append(pg(f'''
 {banner(t('banner_ferdig'))}
@@ -667,7 +725,7 @@ def build(lang):
 <div class="byline">
   <div class="by2">{t('by1')} &middot; {t('by2')} &middot; {t('by3')}</div>
 </div>
-''', 16))
+''', 17))
 
     return pages
 

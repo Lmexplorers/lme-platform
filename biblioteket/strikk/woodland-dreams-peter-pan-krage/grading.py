@@ -111,14 +111,14 @@ def compute():
     # garnforbruk (samme fasthet/garn), i stedet for et oppdiktet tall: vi
     # regner ut "maske-rader" (masker x rader, summert over bæreparti, kropp
     # og begge ermer) for 0-1-mnd-bodyen fra sizes.json, deler bodyens
-    # oppgitte garnforbruk (midtpunkt 90-100 g) pa det, og bruker samme
-    # gram-pr-1000-maskerader-rate for kragen.
+    # oppgitte garnforbruk (midtpunkt 85-95 g, basisbody v2 med korte erme)
+    # pa det, og bruker samme gram-pr-1000-maskerader-rate for kragen.
     b0 = BODY_SIZES[0]
     body_yoke_sr = round((b0['neck_co'] + b0['underarm_total']) / 2) * b0['rows_neck_to_underarm']
     body_below_sr = b0['body_after_divide'] * b0['body_rows_below_underarm']
     body_sleeve_sr = b0['sleeve_after_divide'] * b0['sleeve_rows_total'] * 2
     body_total_sr = body_yoke_sr + body_below_sr + body_sleeve_sr
-    body_yarn_mid_g = (90 + 100) / 2
+    body_yarn_mid_g = (85 + 95) / 2
     g_per_1000_sr = body_yarn_mid_g / body_total_sr * 1000
 
     for r in results:
