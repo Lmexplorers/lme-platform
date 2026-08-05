@@ -199,8 +199,8 @@ async function genPollinations(env, prompt, size) {
       last = { error: "Pollinations brukte for lang tid.", status: 504 };
       continue;
     }
-    if (r.status === 429) {
-      last = { error: "Pollinations er overbelastet (429).", status: 429 };
+    if (r.status === 429 || r.status >= 500) {
+      last = { error: `Pollinations svarte ${r.status}.`, status: r.status };
       continue;
     }
     if (!r.ok) return { error: `Pollinations svarte ${r.status}.`, status: r.status, detail: (await r.text()).slice(0, 300) };
