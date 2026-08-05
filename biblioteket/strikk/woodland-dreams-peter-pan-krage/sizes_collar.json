@@ -41,7 +41,7 @@
     "finished_depth_total_cm": 6.3,
     "total_stitchrows": 780,
     "yarn_g_low": 12,
-    "yarn_g_high": 13
+    "yarn_g_high": 14
   },
   {
     "no": "3-6 mnd",
@@ -107,7 +107,7 @@
     "finished_depth_total_cm": 6.9,
     "total_stitchrows": 944,
     "yarn_g_low": 14,
-    "yarn_g_high": 16
+    "yarn_g_high": 17
   },
   {
     "no": "12-18 mnd",
@@ -150,7 +150,7 @@
     "stitch_rows_per_half": 309,
     "finished_depth_total_cm": 7.2,
     "total_stitchrows": 1018,
-    "yarn_g_low": 15,
-    "yarn_g_high": 17
+    "yarn_g_low": 16,
+    "yarn_g_high": 18
   }
 ]
