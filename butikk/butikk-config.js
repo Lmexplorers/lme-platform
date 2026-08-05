@@ -140,8 +140,8 @@ window.LME_BUTIKK = {
       navn:  { no: "Ellies smokkelenke - amigurumi", en: "Ellie's Pacifier Clip - amigurumi" },
       undertittel: { no: "LME Baby Collection · Woodland Dreams · maks 22 cm (EN 12586)",
                      en: "LME Baby Collection · Woodland Dreams · max 22 cm (EN 12586)" },
-      cover:   "/images/oppskrift-ellies-smokkelenke.jpg",
-      coverEn: "/images/oppskrift-ellies-smokkelenke.jpg",
+      cover:   "/images/oppskrift-ellies-smokkelenke-2.jpg",
+      coverEn: "/images/oppskrift-ellies-smokkelenke-2.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/ellies-smokkelenke.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
@@ -182,8 +182,8 @@ window.LME_BUTIKK = {
       navn:  { no: "Ellies ballerinasko - amigurumi", en: "Ellie's Ballerina Shoes - amigurumi" },
       undertittel: { no: "LME Baby Collection · Woodland Dreams · fem størrelser · matchende hårsløyfe",
                      en: "LME Baby Collection · Woodland Dreams · five sizes · matching hair bow" },
-      cover:   "/images/oppskrift-ellies-ballerinasko.jpg",
-      coverEn: "/images/oppskrift-ellies-ballerinasko.jpg",
+      cover:   "/images/oppskrift-ellies-ballerinasko-2.jpg",
+      coverEn: "/images/oppskrift-ellies-ballerinasko-2.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/ellies-ballerinasko.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
@@ -196,8 +196,8 @@ window.LME_BUTIKK = {
       navn:  { no: "Ellies aktivitetsleke - amigurumi", en: "Ellie's Activity Toy - amigurumi" },
       undertittel: { no: "LME Baby Collection · Woodland Dreams · babysikkert speil · ca. 11-12 cm",
                      en: "LME Baby Collection · Woodland Dreams · baby-safe mirror · approx. 11-12 cm" },
-      cover:   "/images/oppskrift-ellies-aktivitetsleke.jpg",
-      coverEn: "/images/oppskrift-ellies-aktivitetsleke.jpg",
+      cover:   "/images/oppskrift-ellies-aktivitetsleke-2.jpg",
+      coverEn: "/images/oppskrift-ellies-aktivitetsleke-2.jpg",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/ellies-aktivitetsleke.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
