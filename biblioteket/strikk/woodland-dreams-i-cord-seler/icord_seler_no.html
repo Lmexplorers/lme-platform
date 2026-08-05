@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="no"><head><meta charset="utf-8">
+<title>Woodland Dreams I-cord-seler, LME strikkeoppskrift</title>
+<style>
+@font-face { font-family:'Sasson Montessori'; src:url('fonts/SassoonMontessori.ttf'); font-weight:normal; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-400.ttf'); font-weight:400; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-600.ttf'); font-weight:600; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-700.ttf'); font-weight:700; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-800.ttf'); font-weight:800; }
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --font-head:'Playpen Sans',system-ui,sans-serif;
+  --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+}
+@page { size:A4; margin:0; }
+body { font-family:var(--font-body); color:#4a4a4a; }
+.page {
+  position:relative; width:210mm; height:296.5mm; overflow:hidden;
+  page-break-after:always;
+  background:
+    url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAArUlEQVR42u3VUQkAIAxFUSfWt4wNTDYD6LcgnhvhHcYiM0fZm0VXqiYAAEAAvq2dHm5EdNO4AAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAAC8GILoF0Gg4kZ4kUAAAAASUVORK5CYII=) 0 0/8mm 8mm repeat,
+    linear-gradient(165deg,#f3e8d8 0%,#f6ecec 45%,#f3dde6 100%);
+}
+.band { position:absolute; left:0; top:0; bottom:0; width:11mm;
+  background:linear-gradient(180deg,#C79A6C,#E48FA6); }
+.band span { position:absolute; left:50%; top:75%; transform:translate(-50%,-50%);
+  writing-mode:vertical-rl; text-orientation:mixed; rotate:180deg;
+  font-family:var(--font-head); font-size:6.5pt; letter-spacing:3.5px; color:#fff; white-space:nowrap; }
+.rside { position:absolute; right:2.5mm; top:40%; }
+.rside span { writing-mode:vertical-rl; font-family:var(--font-head); font-size:6pt;
+  letter-spacing:2.5px; color:#9a9a9a; white-space:nowrap; }
+.phead { text-align:center; padding-top:9mm; }
+.ph1 { font-family:var(--font-head); font-weight:600; font-size:7pt; letter-spacing:4px; color:#8a7460; }
+.ph2 { font-family:var(--font-head); font-weight:600; font-size:6.3pt; letter-spacing:2.4px; color:#E48FA6; margin-top:1.6mm; }
+.content { padding:5mm 16mm 0 20mm; }
+.pfoot { position:absolute; bottom:6.5mm; left:0; right:0; text-align:center;
+  font-family:var(--font-head); font-weight:700; font-size:10pt; color:#8a8a8a; }
+
+.banner { background:#f5e5b2; border-radius:14px; padding:3.6mm 6mm; margin:2mm 0 4.5mm;
+  box-shadow:0 1px 4px rgba(0,0,0,.08); text-align:center; }
+.banner h1 { font-family:var(--font-head); font-weight:800; font-size:16.5pt; color:#4a4a4a;
+  letter-spacing:.4px; text-transform:uppercase; }
+.pillwrap { text-align:center; margin:4.5mm 0 3mm; }
+.pill { display:inline-block; border-radius:999px; padding:2.4mm 9mm;
+  font-family:var(--font-head); font-weight:700; font-size:10.5pt; color:#fff;
+  letter-spacing:.4px; text-transform:uppercase; box-shadow:0 1px 4px rgba(0,0,0,.12); }
+.rosepill { background:#E48FA6; }
+.sagepill { background:#8FA681; }
+.card { background:rgba(255,255,255,.93); border:2px solid #ecd2c0; border-radius:16px;
+  padding:4mm 6mm; margin:0 0 4mm; box-shadow:0 1px 5px rgba(0,0,0,.06); }
+.cream { background:#fbf3e8; border:2px solid #ecd2c0; border-radius:16px;
+  padding:4mm 6mm; margin:4mm 0; text-align:center; }
+.creamtitle { font-family:var(--font-head); font-weight:700; font-size:11pt; color:#8FA681; }
+p { font-size:10.6pt; line-height:1.52; margin-bottom:2.2mm; }
+p.small, .small { font-size:9.5pt; color:#777; }
+p.center { text-align:center; }
+ul.dots { list-style:none; }
+ul.dots li { font-size:10.6pt; line-height:1.48; padding-left:5.5mm; position:relative; margin:1.6mm 0; }
+ul.dots li::before { content:'•'; position:absolute; left:1mm; color:#E48FA6; font-weight:bold; }
+ol.steps { list-style:none; }
+ol.steps li { display:flex; gap:3.5mm; align-items:flex-start; background:rgba(255,255,255,.93);
+  border:2px solid #ecd2c0; border-radius:14px; padding:3mm 5mm; margin-bottom:2.4mm; }
+ol.steps li div { font-size:10.4pt; line-height:1.46; }
+.snum { flex:0 0 auto; width:7.5mm; height:7.5mm; border-radius:50%; background:#E48FA6; color:#fff;
+  font-family:var(--font-head); font-weight:700; font-size:11pt; display:flex;
+  align-items:center; justify-content:center; margin-top:.5mm; }
+table.t { width:100%; border-collapse:collapse; margin:2.5mm 0; }
+table.t th { font-family:var(--font-head); font-weight:700; font-size:9.3pt; color:#E48FA6;
+  text-align:left; padding:1.5mm 2.5mm; border-bottom:2px solid #ecd2c0; }
+table.t td { font-size:9.7pt; padding:1.4mm 2.5mm; border-bottom:1px solid #f2e3d8; line-height:1.38; }
+table.tl td:first-child { white-space:nowrap; }
+.dot { display:inline-block; width:3.5mm; height:3.5mm; border-radius:50%; vertical-align:-0.5mm; margin-right:1.5mm; }
+
+.coverimg { text-align:center; margin:3mm 0 3mm; }
+.coverimg img { width:98mm; border-radius:14px; box-shadow:0 3px 10px rgba(0,0,0,.18);
+  border:3mm solid #fff; }
+.covertag { text-align:center; font-family:var(--font-head); font-size:8pt; letter-spacing:2.6px;
+  color:#8a8a8a; margin:1mm 0 2.5mm; }
+.coverbanner { display:flex; align-items:center; justify-content:center; gap:5mm;
+  background:#f5e5b2; border-radius:16px; padding:3.4mm 6mm; box-shadow:0 1px 5px rgba(0,0,0,.1); }
+.covertitle { font-family:var(--font-head); font-weight:800; font-size:27pt; color:#4a4a4a; letter-spacing:1px; }
+.subpill { margin:3.6mm auto; width:fit-content; background:#fdf9e3; border:2.5px solid #4a4a4a;
+  border-radius:999px; padding:1.8mm 8mm; font-family:var(--font-head); font-weight:700;
+  font-size:10pt; color:#4a4a4a; letter-spacing:.4px; }
+.byline { text-align:center; margin-top:3.5mm; }
+.by1 { font-family:var(--font-head); font-weight:700; font-size:12.5pt; color:#8FA681; }
+.by2 { font-size:10.2pt; color:#8a8a8a; margin-top:.8mm; }
+.by3 { font-family:var(--font-head); font-weight:600; font-size:9.6pt; color:#E48FA6; margin-top:.5mm; }
+.notecard { display:flex; gap:4mm; align-items:center; background:rgba(255,255,255,.8);
+  border-radius:12px; padding:3.2mm 6mm; margin-top:4mm; }
+.notecard p { font-size:9.3pt; color:#777; margin:0; }
+.noteemo { font-size:16pt; }
+
+.twocol { display:flex; gap:6mm; align-items:flex-start; }
+.twocol > div { flex:1; }
+.figwrap { text-align:center; }
+.figwrap img { width:44mm; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,.14); border:2mm solid #fff; }
+.figcap { font-size:9pt; color:#888; text-align:center; margin-top:1.5mm; }
+.schematic { margin:2mm 0 1mm; }
+.deler-grid { display:grid; grid-template-columns:1fr 1fr; gap:2.4mm 6mm; margin:1mm 0 2mm; }
+.deler-grid .di { font-size:10pt; line-height:1.4; padding:1.6mm 0; border-bottom:1px dashed #e6d3c4; }
+.deler-grid .di b { color:#8FA681; font-family:var(--font-head); }
+
+.photorow { display:flex; gap:3mm; flex-wrap:wrap; justify-content:center; margin:2mm 0 3mm; }
+.photoph { aspect-ratio:1/1; max-width:44mm; background:rgba(255,255,255,.7);
+  border:2px dashed #d9bfa8; border-radius:12px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:1.5mm; padding:2mm; }
+.phicon { font-size:17pt; opacity:.45; }
+.phcap { font-size:8.3pt; color:#9a8a7a; text-align:center; line-height:1.3; }
+.qrbox { text-align:center; margin:3mm 0; }
+.qrsquare { width:26mm; height:26mm; margin:0 auto; background:#fff; border:2px dashed #d9bfa8;
+  border-radius:10px; display:flex; align-items:center; justify-content:center; }
+.qricon { font-size:20pt; color:#d9bfa8; }
+.qrcap { font-size:9pt; color:#888; margin-top:1.6mm; }
+</style></head>
+<body><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD-SELER</div>
+  </div>
+  <div class="content">
+<div class="covertag">LME STRIKKEOPPSKRIFT - BABY</div>
+<div class="coverbanner"><h1 class="covertitle">WOODLAND DREAMS I-CORD-SELER</h1></div>
+<div class="subpill">LME BABY COLLECTION - WOODLAND DREAMS</div>
+<div class="card"><p class="center">Et par enkle, justerbare seler i i-cord, som krysser bak og festes foran med små treknapper. Selene er kolleksjonens signaturdel: de kan brukes over bukse, shorts, bloomers eller basisbodyen, og gjør at ett og samme par seler kan følge barnet gjennom flere ulike antrekk. Syv størrelser, fra 0-1 til 18-24 måneder.</p></div>
+<div class="byline">
+  <div class="by1">Av Renate Dahl</div>
+  <div class="by2">Little Montessori Explorers</div>
+  <div class="by3">lmexplorers.com</div>
+</div>
+<div class="notecard"><span class="noteemo">&#129517;</span><p><i>TIPS: I-cord krever ikke en helt nøyaktig strikkefasthet for å fungere, men les gjennom hele oppskriften og størrelsestabellen på side 4 før du starter, slik at du velger riktig størrelse fra start.</i></p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;1&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD-SELER</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>OM I-CORD-SELENE</h1></div>
+<div class="pillwrap"><div class="pill rosepill">KOLLEKSJONENS SIGNATURDEL</div></div>
+<div class="card"><p>Om det er én del av Woodland Dreams som er verdt en liten ekstra kjærlighet, er det denne. I-cord-selene er den delen som gjør hele kolleksjonen virkelig modulær. Sy fire små treknapper på et par bloomers, et par shorts eller på selve basisbodyen, og selene kan flyttes fra plagg til plagg gjennom hele sesongen. Ett par seler, mange antrekk.</p></div>
+<div class="pillwrap"><div class="pill sagepill">ENKEL TEKNIKK, VAKKERT RESULTAT</div></div>
+<div class="card"><p>I-cord er en av de enkleste teknikkene i strikking, en smal, rund snor som strikkes på bare noen få masker. Nettopp derfor egner den seg perfekt til seler. Den er sterk, elastisk nok til å bevege seg med barnet, og rask å strikke, selv om du aldri har prøvd teknikken før.</p></div>
+<div class="pillwrap"><div class="pill rosepill">BRUK PÅ TVERS AV PLAGG</div></div>
+<div class="cream"><p class="creamtitle">Selene er ikke sydd fast til noe bestemt plagg. Fest dem med treknapper på et par bloomers en dag, bytt til shorts neste, eller bruk dem rett over basisbodyen på en kjølig tur ute. Løsningen er tenkt som en liten investering som varer lenger enn ett enkelt plagg.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;2&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD-SELER</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>MATERIALER</h1></div>
+<div class="pillwrap"><div class="pill rosepill">GARN</div></div>
+<div class="card"><p>Sandnes Garn Alpakka (100 % alpakka), eller et tilsvarende garn med samme fasthet. Siden selene er tilbehør, velges en av kolleksjonens kontrastfarger til selve i-corden, for eksempel salvie, støvrosa, smørgul, lyseblå, oliven eller terrakotta, som en fin kontrast til bodyens rolige, nøytrale farger (krem, lin, sand, havre eller beige).</p></div>
+<div class="pillwrap"><div class="pill sagepill">GARNFORBRUK</div></div>
+<div class="card"><p>I-cord bruker svært lite garn. Ett nøste på 50 g Sandnes Garn Alpakka er mer enn nok til begge selene, i alle syv størrelser, selv med noen ekstra centimeter til prøvelapp og feilstrikking.</p></div>
+<div class="pillwrap"><div class="pill rosepill">PINNER OG TILBEHØR</div></div>
+<div class="card"><p>To strømpepinner 4 mm (eller en kort rundpinne 4 mm brukt som strømpepinne), til selve i-corden. Heklenål 3 mm til å hekle knapphullsløkkene. Fire små, runde treknapper, som sys på plagget selene skal festes til, ikke på selve selene. Synål til å feste tråder, og gjerne et målebånd for å måle strap-lengden underveis.</p></div>
+<div class="pillwrap"><div class="pill sagepill">OM STRIKKEFASTHET OG PRØVELAPP</div></div>
+<div class="cream"><p class="creamtitle">I-cord trenger ikke en presis strikkefasthet for å sitte riktig. Snoren blir bare litt tykkere eller tynnere enn ventet. Fasthetsangivelsen (se side 5) brukes likevel i denne oppskriften for å beregne omtrent hvor mange omganger som tilsvarer riktig lengde for din størrelse, og for å holde selene i tråd med resten av kolleksjonen. Strikk gjerne en liten prøvelapp i glattstrikk uansett, og mål heller strap-lengden din underveis med målebånd enn å telle omganger blindt.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;3&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD-SELER</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>STØRRELSESTABELL</h1></div>
+<p>Selene er beregnet ut fra bodyens mål for hver størrelse, se Woodland Dreams Basisbody. Velg samme størrelse som bodyen, eller det plagget selene skal festes til.</p>
+<div class="card"><table class="t"><tr><th>Størrelse</th><th>Brystvidde (ref.)</th><th>Kroppslengde (ref.)</th><th>Strap-lengde</th></tr><tr><td><b>0-1 mnd</b></td><td>46.4 cm</td><td>25 cm</td><td>34.0 cm</td></tr><tr><td><b>1-3 mnd</b></td><td>49.1 cm</td><td>27 cm</td><td>36.4 cm</td></tr><tr><td><b>3-6 mnd</b></td><td>51.8 cm</td><td>30 cm</td><td>40.0 cm</td></tr><tr><td><b>6-9 mnd</b></td><td>54.5 cm</td><td>33 cm</td><td>43.6 cm</td></tr><tr><td><b>9-12 mnd</b></td><td>57.3 cm</td><td>36 cm</td><td>47.2 cm</td></tr><tr><td><b>12-18 mnd</b></td><td>60.0 cm</td><td>39 cm</td><td>50.8 cm</td></tr><tr><td><b>18-24 mnd</b></td><td>62.7 cm</td><td>42 cm</td><td>54.4 cm</td></tr></table></div>
+<div class="cream"><p class="creamtitle">Brystvidde og kroppslengde er hentet fra Woodland Dreams Basisbody, og oppgis her kun som referanse for å velge riktig størrelse. Strap-lengden er selenes egen ferdige lengde, fra tupp til tupp, før selen bøyes over skulderen.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;4&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD-SELER</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>STRIKKEFASTHET OG VANSKELIGHETSGRAD</h1></div>
+<div class="pillwrap"><div class="pill rosepill">FASTHET</div></div>
+<div class="card"><p>22 masker og 30 omganger glattstrikk = 10 x 10 cm, på pinne 4 mm, samme fasthet som resten av Woodland Dreams-kolleksjonen. I denne oppskriften brukes fastheten til å regne ut et omtrentlig antall omganger for hver strap-lengde (se tabellen på side 8), ikke til å styre selve i-cord-teknikken, som fungerer fint på de fleste fastheter.</p></div>
+<div class="pillwrap"><div class="pill sagepill">VANSKELIGHETSGRAD</div></div>
+<div class="cream"><p class="creamtitle">Lett. I-cord er en av de aller enkleste teknikkene i strikking: du trenger bare å beherske å strikke rett, og å skyve maskene tilbake uten å snu arbeidet. Denne oppskriften passer godt som en første i-cord-øvelse, selv for deg som er relativt ny i strikking.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;5&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD-SELER</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>FORKORTELSER</h1></div>
+<p>Norske strikke- og hekleuttrykk med engelske termer ved siden av.</p>
+<div class="card"><table class="t tl"><tr><th>Norsk</th><th>Engelsk</th><th>Betyr</th></tr><tr><td><b>r</b></td><td>K</td><td>rett</td></tr><tr><td><b>m</b></td><td>st(s)</td><td>maske(r)</td></tr><tr><td><b>o</b></td><td>rnd</td><td>omgang</td></tr><tr><td><b>legg opp</b></td><td>CO</td><td>legg opp masker</td></tr><tr><td><b>fell av</b></td><td>BO</td><td>fell av / bind off</td></tr><tr><td><b>strømpepinne</b></td><td>DPN</td><td>strømpepinne (dobbeltspiss)</td></tr><tr><td><b>rundpinne</b></td><td>circular needle</td><td>rundpinne</td></tr><tr><td><b>maskemarkør</b></td><td>st marker</td><td>maskemarkør</td></tr><tr><td><b>heklenål</b></td><td>crochet hook</td><td>heklenål</td></tr><tr><td><b>luftmaske / lm</b></td><td>chain / ch</td><td>luftmaske i hekling</td></tr><tr><td><b>kjedemaske</b></td><td>slip stitch / sl st</td><td>kjedemaske i hekling</td></tr><tr><td><b>i-cord</b></td><td>i-cord</td><td>smal, rund strikkesnor på strømpepinne</td></tr></table></div>
+<div class="pillwrap"><div class="pill sagepill">TIPS</div></div>
+<div class="card"><ul class="dots"><li>Strikk begge selene like langt, tell omgangene dine eller mål med målebånd for hver, slik at de blir like lange.</li><li>Bruk en løs strikkemåte på i-corden, en for stram i-cord blir stiv og lite behagelig mot huden.</li><li>Sett gjerne en liten trådmarkør for hver 10. omgang mens du strikker, det gjør det enklere å holde styr på hvor langt du har kommet.</li></ul></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;6&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD-SELER</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>SLIK STRIKKES I-CORD</h1></div>
+<p>I-cord er en smal, rund strikkesnor som strikkes på strømpepinner, uten å strikke rundt på vanlig vis. Teknikken er enkel, men kan virke litt uvant første gang, så her er den forklart steg for steg.</p>
+<div class="card"><ol class="steps"><li><span class="snum">1</span><div>Legg opp 3 masker på en strømpepinne 4 mm.</div></li><li><span class="snum">2</span><div>Strikk alle 3 maskene rett.</div></li><li><span class="snum">3</span><div>IKKE snu arbeidet. Skyv maskene til motsatt ende av pinnen, den enden du nettopp strikket fra.</div></li><li><span class="snum">4</span><div>Stram garnet bak over ryggen av arbeidet, fra venstre til høyre, og strikk de 3 maskene rett igjen.</div></li><li><span class="snum">5</span><div>Gjenta trinn 3 og 4 om og om igjen. Etter noen omganger strammer garnet seg til en tett, rund snor bak, uten synlig søm.</div></li><li><span class="snum">6</span><div>Fortsett til strap-lengden i tabellen på side 8 er nådd for din størrelse. Mål gjerne underveis med målebånd.</div></li></ol></div>
+<div class="notecard"><span class="noteemo">&#129517;</span><p><i>TIPS: De første par centimeterne ser litt rotete ut. Det er helt normalt; snoren strammer seg selv til en jevn, rund form etter hvert som du strikker videre.</i></p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;7&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD-SELER</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>DEL 1: STRIKK DE TO SELENE</h1></div>
+<p>Strikk to like seler, hver strikket som én lang i-cord-snor. Strap-lengden er beregnet fra bodyens kroppslengde for hver størrelse, slik at selen er lang nok til å gå fra forkant, over skulderen, krysse bak og ned til motsatt side i midjekanten bak.</p>
+<div class="card"><p>Strap-lengden er beregnet med denne enkle formelen: 2 x (0,6 x bodyens kroppslengde) + 4 cm. Faktoren 0,6 er et anslag på avstanden fra midje til skulder, både foran og bak, og de 4 ekstra centimeterne dekker selve krysningen bak, pluss litt bevegelsesvidde. Tallet dobles fordi selen går både opp foran og ned bak, til motsatt side.</p></div>
+<div class="card"><table class="t"><tr><th>Størrelse</th><th>Kroppslengde (ref.)</th><th>Strap-lengde</th><th>Omg. i-cord (ca.)</th></tr><tr><td><b>0-1 mnd</b></td><td>25 cm</td><td>34.0 cm</td><td>102</td></tr><tr><td><b>1-3 mnd</b></td><td>27 cm</td><td>36.4 cm</td><td>109</td></tr><tr><td><b>3-6 mnd</b></td><td>30 cm</td><td>40.0 cm</td><td>120</td></tr><tr><td><b>6-9 mnd</b></td><td>33 cm</td><td>43.6 cm</td><td>131</td></tr><tr><td><b>9-12 mnd</b></td><td>36 cm</td><td>47.2 cm</td><td>142</td></tr><tr><td><b>12-18 mnd</b></td><td>39 cm</td><td>50.8 cm</td><td>152</td></tr><tr><td><b>18-24 mnd</b></td><td>42 cm</td><td>54.4 cm</td><td>163</td></tr></table></div>
+<p class="small center">Omgangstallet er en omtrentlig referanse regnet ut fra fastheten på side 5. I-cord kan variere litt i lengde fra strikker til strikker, mål alltid strap-lengden i cm-kolonnen for din størrelse, ikke bare tell omganger.</p>
+<div class="card"><ol class="steps"><li><span class="snum">1</span><div>Legg opp 3 masker på strømpepinne 4 mm.</div></li><li><span class="snum">2</span><div>Strikk i-cord (se side 7) til strap-lengden i tabellen over er nådd for din størrelse.</div></li><li><span class="snum">3</span><div>Klipp av garnet med en hale på ca. 15 cm. Tre halen gjennom de 3 gjenværende maskene med synål, og stram godt til.</div></li><li><span class="snum">4</span><div>Strikk den andre selen på nøyaktig samme måte, med samme lengde.</div></li></ol></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;8&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD-SELER</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>DEL 2: KNAPPHULLSLØKKER OG JUSTERING</h1></div>
+<p>I hver ende av begge selene hekles tre små løkker, med litt avstand mellom seg, slik at selen kan justeres i lengde uten å strikkes om.</p>
+<div class="card"><ol class="steps"><li><span class="snum">1</span><div>Med heklenål 3 mm og en løs tråd fra i-corden (eller ny tråd festet i enden), hekle en luftmaskekjede på ca. 5-6 luftmasker.</div></li><li><span class="snum">2</span><div>Fest kjeden til enden av i-corden med en kjedemaske, slik at den danner en liten løkke, stor nok til å tre en treknapp gjennom.</div></li><li><span class="snum">3</span><div>Hekle to løkker til på samme ende, med ca. 1,5 cm avstand mellom hver løkke, langs de siste 3 cm av selen.</div></li><li><span class="snum">4</span><div>Gjenta på alle fire endene av de to selene: 2 seler x 2 ender = 4 ender, 3 løkker pr ende, 12 løkker totalt.</div></li></ol></div>
+<div class="pillwrap"><div class="pill sagepill">SLIK JUSTERES LENGDEN</div></div>
+<div class="cream"><p class="creamtitle">De tre løkkene i hver ende gir tre lengder å velge mellom. Bruk den ytterste løkken, lengst ute på tuppen, for lengst mulig lengde, og en av løkkene lenger inn for en kortere, strammere passform. Slik kan selene justeres etter hvert som barnet vokser, eller etter hvilket plagg de festes til, uten at du trenger å strikke om noe.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;9&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD-SELER</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>SLIK KRYSSER SELENE BAK</h1></div>
+<div class="card"><p>Selene er designet for å krysses i en X bak, akkurat som klassiske bukseseler. Fest den venstre selen til venstre side foran, før den opp over venstre skulder, la den krysse over ryggen og fest den til høyre side bak i midjekanten. Gjør det motsatte med den andre selen: fest den til høyre side foran, over høyre skulder, kryssende ned til venstre side bak.</p></div>
+<div class="pillwrap"><div class="pill rosepill">STYLINGTIPS</div></div>
+<div class="cream"><p class="creamtitle">Foretrekker du et roligere uttrykk, kan selene like gjerne festes rett ned uten å krysses. De fungerer fint begge veier. Krysningen bak er det som gir den klassiske, litt gammeldagse selelooken kolleksjonen er inspirert av.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;10&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD-SELER</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>MONTERING</h1></div>
+<div class="card"><ol class="steps"><li><span class="snum">1</span><div>Fest alle løse tråder godt på vrangen av hver løkke og strap-ende, og klipp dem korte.</div></li><li><span class="snum">2</span><div>Sy de fire treknappene fast på plagget selene skal brukes sammen med, bloomers, shorts eller basisbodyen, i posisjoner som passer til krysningen beskrevet på forrige side.</div></li><li><span class="snum">3</span><div>Prøv selene på barnet eller mot plagget før knappene sys helt fast, og juster knappeposisjonen om nødvendig.</div></li><li><span class="snum">4</span><div>Damp press selene lett, om ønskelig, for å jevne ut i-corden.</div></li><li><span class="snum">5</span><div>Kontroller til slutt at alle løkker og knapper sitter godt fast, og at ingen løse tråder kan løsne.</div></li></ol></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;11&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD-SELER</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>SIKKERHET OG STELL</h1></div>
+<div class="pillwrap"><div class="pill rosepill">SIKKERHET</div></div>
+<div class="card"><ul class="dots"><li>Små treknapper er en kvelningsfare. Sy dem fast med dobbel tråd, flere ganger gjennom hvert hull, og kontroller dem jevnlig, spesielt etter vask.</li><li>La aldri et barn være alene og uten tilsyn i selene, verken i lek, i vogn eller i seng, spesielt de første gangene selene brukes.</li><li>Kontroller før hver bruk at ingen løkke, strap eller løs tråd er lang eller løs nok til å kunne vikle seg rundt barnets hals. Ta av selene helt før barnet legges til å sove.</li><li>Stram alle knapper og løkker godt, slik at en strap ikke kan løsne og henge fritt mens barnet er i bevegelse.</li><li>Alle mål og lengder i denne oppskriften er beregnet for en romslig, komfortabel passform, ikke en stram sikkerhetspassform. Følg alltid gjeldende sikkerhetsanbefalinger for barneklær og tilbehør med snorer eller bånd.</li></ul></div>
+<div class="pillwrap"><div class="pill sagepill">VASKERÅD</div></div>
+<div class="cream"><p class="creamtitle">Håndvask forsiktig i lunkent vann med ullvask, eller maskinvask på ullprogram 30 grader, sammen med resten av plagget de er festet til. Press ut vannet, trekk i-corden rett i fasong og tørk liggende flatt på et håndkle.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;12&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS I-CORD-SELER</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>FERDIG!</h1></div>
+<div class="cream"><p class="creamtitle">Gratulerer, selene dine er ferdige! De er laget for å bindes sammen med flere ulike plagg i Woodland Dreams-kolleksjonen, og for å følge barnet fra det ene antrekket til det neste.</p></div>
+<div class="pillwrap"><div class="pill sagepill">RESTEN AV KOLLEKSJONEN</div></div>
+<div class="card"><ul class="dots"><li>Basisbody, kolleksjonens grunnmur, en topp-ned raglan-body i glattstrikk.</li><li>Blondekrage, en løs krage som hekter bak.</li><li>Rysjekrage, samme feste, litt mer romantisk.</li><li>Peter Pan-krage, en klassisk avrundet krage.</li><li>Smekke, som knytes med i-cord eller en knapp.</li><li>Kort vest, med treknapper foran, brukes utenpå bodyen.</li><li>Woodland Fluffy Skirt, et heklet skjørt laget for å matche bodyen.</li></ul></div>
+<div class="pillwrap"><div class="pill rosepill">OPPHAVSRETT</div></div>
+<div class="card"><p class="small center">(c) Renate Dahl, Little Montessori Explorers. Denne oppskriften er et helt originalt LME-design. Du står fritt til å selge ferdige plagg du lager etter denne oppskriften, i liten, personlig skala, forutsatt at det ferdige produktet er sjekket mot gjeldende sikkerhetskrav. Selve oppskriften, teksten og bildene, kan ikke deles, kopieres eller selges videre.</p></div>
+<div class="byline">
+  <div class="by2">Av Renate Dahl &middot; Little Montessori Explorers &middot; lmexplorers.com</div>
+</div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;13&nbsp;&mdash;</div>
+</div></body></html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="no"><head><meta charset="utf-8">
+<title>Woodland Dreams Kort Vest, LME strikkeoppskrift</title>
+<style>
+@font-face { font-family:'Sasson Montessori'; src:url('fonts/SassoonMontessori.ttf'); font-weight:normal; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-400.ttf'); font-weight:400; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-600.ttf'); font-weight:600; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-700.ttf'); font-weight:700; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-800.ttf'); font-weight:800; }
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --font-head:'Playpen Sans',system-ui,sans-serif;
+  --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+}
+@page { size:A4; margin:0; }
+body { font-family:var(--font-body); color:#4a4a4a; }
+.page {
+  position:relative; width:210mm; height:296.5mm; overflow:hidden;
+  page-break-after:always;
+  background:
+    url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAArUlEQVR42u3VUQkAIAxFUSfWt4wNTDYD6LcgnhvhHcYiM0fZm0VXqiYAAEAAvq2dHm5EdNO4AAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAAC8GILoF0Gg4kZ4kUAAAAASUVORK5CYII=) 0 0/8mm 8mm repeat,
+    linear-gradient(165deg,#f3e8d8 0%,#f6ecec 45%,#f3dde6 100%);
+}
+.band { position:absolute; left:0; top:0; bottom:0; width:11mm;
+  background:linear-gradient(180deg,#C79A6C,#E48FA6); }
+.band span { position:absolute; left:50%; top:75%; transform:translate(-50%,-50%);
+  writing-mode:vertical-rl; text-orientation:mixed; rotate:180deg;
+  font-family:var(--font-head); font-size:6.5pt; letter-spacing:3.5px; color:#fff; white-space:nowrap; }
+.rside { position:absolute; right:2.5mm; top:40%; }
+.rside span { writing-mode:vertical-rl; font-family:var(--font-head); font-size:6pt;
+  letter-spacing:2.5px; color:#9a9a9a; white-space:nowrap; }
+.phead { text-align:center; padding-top:9mm; }
+.ph1 { font-family:var(--font-head); font-weight:600; font-size:7pt; letter-spacing:4px; color:#8a7460; }
+.ph2 { font-family:var(--font-head); font-weight:600; font-size:6.3pt; letter-spacing:2.4px; color:#E48FA6; margin-top:1.6mm; }
+.content { padding:5mm 16mm 0 20mm; }
+.pfoot { position:absolute; bottom:6.5mm; left:0; right:0; text-align:center;
+  font-family:var(--font-head); font-weight:700; font-size:10pt; color:#8a8a8a; }
+
+.banner { background:#f5e5b2; border-radius:14px; padding:3.6mm 6mm; margin:2mm 0 4.5mm;
+  box-shadow:0 1px 4px rgba(0,0,0,.08); text-align:center; }
+.banner h1 { font-family:var(--font-head); font-weight:800; font-size:16.5pt; color:#4a4a4a;
+  letter-spacing:.4px; text-transform:uppercase; }
+.pillwrap { text-align:center; margin:4.5mm 0 3mm; }
+.pill { display:inline-block; border-radius:999px; padding:2.4mm 9mm;
+  font-family:var(--font-head); font-weight:700; font-size:10.5pt; color:#fff;
+  letter-spacing:.4px; text-transform:uppercase; box-shadow:0 1px 4px rgba(0,0,0,.12); }
+.rosepill { background:#E48FA6; }
+.sagepill { background:#8FA681; }
+.card { background:rgba(255,255,255,.93); border:2px solid #ecd2c0; border-radius:16px;
+  padding:4mm 6mm; margin:0 0 4mm; box-shadow:0 1px 5px rgba(0,0,0,.06); }
+.cream { background:#fbf3e8; border:2px solid #ecd2c0; border-radius:16px;
+  padding:4mm 6mm; margin:4mm 0; text-align:center; }
+.creamtitle { font-family:var(--font-head); font-weight:700; font-size:11pt; color:#8FA681; }
+p { font-size:10.6pt; line-height:1.52; margin-bottom:2.2mm; }
+p.small, .small { font-size:9.5pt; color:#777; }
+p.center { text-align:center; }
+ul.dots { list-style:none; }
+ul.dots li { font-size:10.6pt; line-height:1.48; padding-left:5.5mm; position:relative; margin:1.6mm 0; }
+ul.dots li::before { content:'•'; position:absolute; left:1mm; color:#E48FA6; font-weight:bold; }
+ol.steps { list-style:none; }
+ol.steps li { display:flex; gap:3.5mm; align-items:flex-start; background:rgba(255,255,255,.93);
+  border:2px solid #ecd2c0; border-radius:14px; padding:3mm 5mm; margin-bottom:2.4mm; }
+ol.steps li div { font-size:10.4pt; line-height:1.46; }
+.snum { flex:0 0 auto; width:7.5mm; height:7.5mm; border-radius:50%; background:#E48FA6; color:#fff;
+  font-family:var(--font-head); font-weight:700; font-size:11pt; display:flex;
+  align-items:center; justify-content:center; margin-top:.5mm; }
+table.t { width:100%; border-collapse:collapse; margin:2.5mm 0; }
+table.t th { font-family:var(--font-head); font-weight:700; font-size:9.3pt; color:#E48FA6;
+  text-align:left; padding:1.5mm 2.5mm; border-bottom:2px solid #ecd2c0; }
+table.t td { font-size:9.7pt; padding:1.4mm 2.5mm; border-bottom:1px solid #f2e3d8; line-height:1.38; }
+table.tl td:first-child { white-space:nowrap; }
+.dot { display:inline-block; width:3.5mm; height:3.5mm; border-radius:50%; vertical-align:-0.5mm; margin-right:1.5mm; }
+
+.coverimg { text-align:center; margin:3mm 0 3mm; }
+.coverimg img { width:98mm; border-radius:14px; box-shadow:0 3px 10px rgba(0,0,0,.18);
+  border:3mm solid #fff; }
+.covertag { text-align:center; font-family:var(--font-head); font-size:8pt; letter-spacing:2.6px;
+  color:#8a8a8a; margin:1mm 0 2.5mm; }
+.coverbanner { display:flex; align-items:center; justify-content:center; gap:5mm;
+  background:#f5e5b2; border-radius:16px; padding:3.4mm 6mm; box-shadow:0 1px 5px rgba(0,0,0,.1); }
+.covertitle { font-family:var(--font-head); font-weight:800; font-size:27pt; color:#4a4a4a; letter-spacing:1px; }
+.subpill { margin:3.6mm auto; width:fit-content; background:#fdf9e3; border:2.5px solid #4a4a4a;
+  border-radius:999px; padding:1.8mm 8mm; font-family:var(--font-head); font-weight:700;
+  font-size:10pt; color:#4a4a4a; letter-spacing:.4px; }
+.byline { text-align:center; margin-top:3.5mm; }
+.by1 { font-family:var(--font-head); font-weight:700; font-size:12.5pt; color:#8FA681; }
+.by2 { font-size:10.2pt; color:#8a8a8a; margin-top:.8mm; }
+.by3 { font-family:var(--font-head); font-weight:600; font-size:9.6pt; color:#E48FA6; margin-top:.5mm; }
+.notecard { display:flex; gap:4mm; align-items:center; background:rgba(255,255,255,.8);
+  border-radius:12px; padding:3.2mm 6mm; margin-top:4mm; }
+.notecard p { font-size:9.3pt; color:#777; margin:0; }
+.noteemo { font-size:16pt; }
+
+.twocol { display:flex; gap:6mm; align-items:flex-start; }
+.twocol > div { flex:1; }
+.figwrap { text-align:center; }
+.figwrap img { width:44mm; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,.14); border:2mm solid #fff; }
+.figcap { font-size:9pt; color:#888; text-align:center; margin-top:1.5mm; }
+.schematic { margin:2mm 0 1mm; }
+.deler-grid { display:grid; grid-template-columns:1fr 1fr; gap:2.4mm 6mm; margin:1mm 0 2mm; }
+.deler-grid .di { font-size:10pt; line-height:1.4; padding:1.6mm 0; border-bottom:1px dashed #e6d3c4; }
+.deler-grid .di b { color:#8FA681; font-family:var(--font-head); }
+
+.photorow { display:flex; gap:3mm; flex-wrap:wrap; justify-content:center; margin:2mm 0 3mm; }
+.photoph { aspect-ratio:1/1; max-width:44mm; background:rgba(255,255,255,.7);
+  border:2px dashed #d9bfa8; border-radius:12px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:1.5mm; padding:2mm; }
+.phicon { font-size:17pt; opacity:.45; }
+.phcap { font-size:8.3pt; color:#9a8a7a; text-align:center; line-height:1.3; }
+.qrbox { text-align:center; margin:3mm 0; }
+.qrsquare { width:26mm; height:26mm; margin:0 auto; background:#fff; border:2px dashed #d9bfa8;
+  border-radius:10px; display:flex; align-items:center; justify-content:center; }
+.qricon { font-size:20pt; color:#d9bfa8; }
+.qrcap { font-size:9pt; color:#888; margin-top:1.6mm; }
+</style></head>
+<body><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS KORT VEST</div>
+  </div>
+  <div class="content">
+<div class="covertag">LME STRIKKEOPPSKRIFT - BABY</div>
+<div class="coverbanner"><h1 class="covertitle">WOODLAND DREAMS KORT VEST</h1></div>
+<div class="subpill">LME BABY COLLECTION - WOODLAND DREAMS</div>
+<div class="card"><p class="center">En kort, åpen vest med treknapper foran, strikket for å tas utenpå Woodland Dreams-basisbodyen. Flatt fra hals til legg, ingen ermer, enkel skulderlinje-øking og en matstrikk-kant rundt hals, legg og ermehull. Syv størrelser, fra 0-1 til 18-24 måneder. Vesten er tilbehør, og strikkes i en av kolleksjonens fargerike toner: salviegrønn, gammelrosa, smørgul, dueblå, oliven eller terrakotta, som en fin kontrast til bodyens rolige nøytrale farger.</p></div>
+<div class="byline">
+  <div class="by1">Av Renate Dahl</div>
+  <div class="by2">Little Montessori Explorers</div>
+  <div class="by3">lmexplorers.com</div>
+</div>
+<div class="notecard"><span class="noteemo">&#129517;</span><p><i>TIPS: Les hele oppskriften og størrelsestabellen på side 4 før du starter, og strikk en prøvelapp på 15 x 15 cm for å sjekke strikkefastheten din, før du legger opp til selve vesten. Denne vesten strikkes flatt hele veien, aldri i rundt, siden fronten skal være åpen fra hals til legg.</i></p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;1&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS KORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>OM WOODLAND DREAMS KORT VEST</h1></div>
+<div class="pillwrap"><div class="pill rosepill">DEL AV KOLLEKSJONEN</div></div>
+<div class="card"><p>Kort vest er en av seks tilbehørsdeler i LME Woodland Dreams, strikket for å tas utenpå basisbodyen. Der bodyen er det stillferdige, nøytrale grunnlaget, er vesten det fargerike laget som løftes utenpå, en enkel, åpen vest uten ermer, lett å ta av og på, og fin å kombinere med kolleksjonens andre deler.</p></div>
+<div class="pillwrap"><div class="pill sagepill">STIL</div></div>
+<div class="card"><p>Rette linjer, en synlig knappekant foran og en enkel matstrikk-kant rundt hals, legg og ermehull. Ingen ermer, ingen kompliserte detaljer, bare en liten, godt sittende vest som gir et ekstra fargeklatt utenpå bodyens rolige toner.</p></div>
+<div class="pillwrap"><div class="pill rosepill">ROMSLIG PASSFORM, MENT FOR UTENPÅ</div></div>
+<div class="cream"><p class="creamtitle">Vesten er strikket med litt ekstra vidde utover bodyens egen brystvidde, slik at den ligger fint utenpå uten å klemme. Den er tydelig kortere enn bodyen selv, den skal stoppe godt over skrittet, ikke dekke hele kroppen, se størrelsestabellen for nøyaktige mål og forholdet til bodyens egen lengde.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;2&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS KORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>MATERIALER</h1></div>
+<div class="pillwrap"><div class="pill rosepill">GARN</div></div>
+<div class="card"><p>Sandnes Garn Alpakka (100 % alpakka), eller et tilsvarende garn med samme fasthet. Vesten er et tilbehør, så velg en av kolleksjonens fargerike toner: salviegrønn, gammelrosa, smørgul, dueblå, oliven eller terrakotta, en fin kontrast til bodyens nøytrale krem, lin, sand, havre eller beige.</p></div>
+<div class="pillwrap"><div class="pill sagepill">GARNFORBRUK</div></div>
+<div class="card"><table class="t"><tr><th>Størrelse</th><th>Garnforbruk</th></tr><tr><td><b>0-1 mnd</b></td><td>40-45 g</td></tr><tr><td><b>1-3 mnd</b></td><td>45-50 g</td></tr><tr><td><b>3-6 mnd</b></td><td>50-60 g</td></tr><tr><td><b>6-9 mnd</b></td><td>60-70 g</td></tr><tr><td><b>9-12 mnd</b></td><td>70-80 g</td></tr><tr><td><b>12-18 mnd</b></td><td>80-90 g</td></tr><tr><td><b>18-24 mnd</b></td><td>90-100 g</td></tr></table></div>
+<div class="pillwrap"><div class="pill rosepill">PINNER OG TILBEHØR</div></div>
+<div class="cream"><p class="creamtitle">Rundpinne 4 mm (40 cm er nok, siden vesten strikkes flatt, ikke rundt). 3-4 små, runde treknapper (se antall for din størrelse i tabellen på neste side). Maskemarkører (minst 2, til de to skulderlinjene), synål, og en heklenål 3 mm til å hekle løkker for knapphullene, eller en synål til sydde knapphull.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;3&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS KORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>STØRRELSESTABELL</h1></div>
+<p>Ferdige mål, målt flatt liggende. Vesten er beregnet til å gå utenpå Woodland Dreams-basisbodyen, se kolonnen til høyre for hvor mye kortere vesten er enn bodyen i samme størrelse.</p>
+<div class="card"><table class="t"><tr><th>Størrelse</th><th>Brystvidde (vest)</th><th>Halsåpning</th><th>Lengde (vest)</th><th>Lengde (body)</th></tr><tr><td><b>0-1 mnd</b></td><td>49.1 cm</td><td>22.0 cm</td><td>14.0 cm</td><td>25 cm</td></tr><tr><td><b>1-3 mnd</b></td><td>52.7 cm</td><td>23.0 cm</td><td>15.0 cm</td><td>27 cm</td></tr><tr><td><b>3-6 mnd</b></td><td>54.5 cm</td><td>24.0 cm</td><td>16.5 cm</td><td>30 cm</td></tr><tr><td><b>6-9 mnd</b></td><td>58.2 cm</td><td>25.0 cm</td><td>18.0 cm</td><td>33 cm</td></tr><tr><td><b>9-12 mnd</b></td><td>60.0 cm</td><td>26.0 cm</td><td>20.0 cm</td><td>36 cm</td></tr><tr><td><b>12-18 mnd</b></td><td>63.6 cm</td><td>27.0 cm</td><td>21.5 cm</td><td>39 cm</td></tr><tr><td><b>18-24 mnd</b></td><td>65.5 cm</td><td>28.0 cm</td><td>23.0 cm</td><td>42 cm</td></tr></table></div>
+<div class="cream"><p class="creamtitle">Brystvidden er ferdig omkrets når vesten er knappet igjen foran, altså inkludert den ekstra vidden (3 cm mer enn bodyens egen brystvidde) som gjør at vesten går fint utenpå bodyen og et tynt lag under. Lengden er regnet som ca. 55 % av bodyens egen hals-til-skritt-lengde i samme størrelse, tydelig kortere, som en "kort vest" skal være.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;4&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS KORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>STRIKKEFASTHET OG VANSKELIGHETSGRAD</h1></div>
+<div class="pillwrap"><div class="pill rosepill">FASTHET</div></div>
+<div class="card"><p>22 masker og 30 omganger glattstrikk = 10 x 10 cm, på pinne 4 mm, samme fasthet som basisbodyen. Denne fastheten er brukt i alle beregninger i oppskriften. Strikk alltid en prøvelapp først: legg opp 26 masker, strikk glattstrikk i ca. 12 cm, fell av og press lett. Stemmer ikke fastheten din, bytt til tynnere eller tykkere pinne til den stemmer, ikke bare til garnet.</p></div>
+<div class="pillwrap"><div class="pill sagepill">VANSKELIGHETSGRAD</div></div>
+<div class="cream"><p class="creamtitle">Lett til middels, enklere enn basisbodyen. Vesten strikkes flatt hele veien, uten runde omganger, og uten raglanermer. Du bør beherske å øke og felle, plukke opp masker langs en kant, og strikke enkle knapphull.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;5&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS KORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>FORKORTELSER</h1></div>
+<p>Norske strikkeuttrykk med engelske termer ved siden av.</p>
+<div class="card"><table class="t tl"><tr><th>Norsk</th><th>Engelsk</th><th>Betyr</th></tr><tr><td><b>r</b></td><td>K</td><td>rett</td></tr><tr><td><b>vr</b></td><td>P</td><td>vrangbord/vrang</td></tr><tr><td><b>m</b></td><td>st(s)</td><td>maske(r)</td></tr><tr><td><b>rad</b></td><td>row</td><td>rad</td></tr><tr><td><b>øk</b></td><td>inc</td><td>øk (ta opp én tilleggsmaske)</td></tr><tr><td><b>felle</b></td><td>dec</td><td>felle (strikk to masker sammen)</td></tr><tr><td><b>fell av</b></td><td>BO</td><td>fell av / bind off</td></tr><tr><td><b>legg opp</b></td><td>CO</td><td>legg opp masker</td></tr><tr><td><b>ta opp m</b></td><td>pick up sts</td><td>ta opp masker langs en kant</td></tr><tr><td><b>matstrikk</b></td><td>garter st</td><td>strikk rett på alle rader, begge sider</td></tr><tr><td><b>glattstrikk</b></td><td>St st</td><td>rett på retten, vrang på vrangen</td></tr><tr><td><b>RS/VS</b></td><td>RS/WS</td><td>rettside/vrangside</td></tr><tr><td><b>rundpinne</b></td><td>circular needle</td><td>rundpinne (brukes flatt her)</td></tr><tr><td><b>maskemarkør</b></td><td>st marker</td><td>maskemarkør</td></tr><tr><td><b>knapphull</b></td><td>buttonhole</td><td>knapphull</td></tr></table></div>
+<div class="pillwrap"><div class="pill sagepill">TIPS</div></div>
+<div class="card"><ul class="dots"><li>Vesten strikkes flatt hele veien, aldri i rundt. Snu arbeidet ved slutten av hver rad, akkurat som du er vant til fra vanlig flatstrikking.</li><li>Bruk to maskemarkører til de to skulderlinjene, det gjør det mye enklere å holde styr på hvor økingene skal skje.</li><li>Tell maskene dine ved hvert kontrollpunkt i tabellene. Det er lettere å rette en feil på 10 rader enn på 40.</li></ul></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;6&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS KORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>SLIK ER VESTEN BYGD OPP</h1></div>
+<div class="card"><p>Vesten strikkes ovenfra og ned, flatt i ett stykke, uten ermer. Fem enkle deler, i denne rekkefølgen:</p><div class="deler-grid"><div class="di"><b>1. Halskant</b><br>Legg opp flatt i halsen, strikk noen rader matstrikk.</div><div class="di"><b>2. Skulderlinje-øking</b><br>Øk jevnt langs to skulderlinjer (front-bak og bak-front) til bæremålet er nådd.</div><div class="di"><b>3. Del til ermehull</b><br>Fell av noen få masker på hver side for ermehullene, del i front-venstre, bak og front-høyre.</div><div class="di"><b>4. Ned til legg</b><br>Strikk hver av de tre delene rett ned, avslutt alle med matstrikk i leggkanten.</div><div class="di"><b>5. Knappekant</b><br>Strikk/ta opp en matstrikk-kant langs begge fronter, med knapphull på den ene siden.</div></div></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;7&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS KORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>DEL 1: HALSKANT</h1></div>
+<p>Vesten legges opp i halsen og strikkes flatt ovenfra og ned, hele veien, siden fronten skal være åpen fra hals til legg. Strikk halskanten i matstrikk før du bytter til glattstrikk og begynner skulderøkingen.</p>
+<div class="card"><p><b>Eksempel, 0-1 mnd:</b> Legg opp 44 masker flatt på rundpinne 4 mm (du strikker fram og tilbake, ikke rundt, gjennom hele vesten). Strikk 4 rader matstrikk (rett på alle rader). På den siste matstrikk-raden setter du en maskemarkør etter maske 11 (dette er skillet mellom front-venstre og bak), og en til maskemarkør etter maske 33 (skillet mellom bak og front-høyre).</p></div>
+<p class="small center">Nøyaktig masketall for din størrelse finner du i graderingstabellen på neste side.</p>
+</div>
+  <div class="pfoot">&mdash;&nbsp;8&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS KORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>DEL 2: SKULDERLINJE-ØKING</h1></div>
+<p>Bytt til glattstrikk. Nå økes det jevnt langs de to skulderlinjene, til bæremålet er nådd. Vesten har ingen ermer, så det er bare to skulderlinjer å øke langs, ikke fire raglanlinjer som på basisbodyen. Konstruksjonen er lik for alle størrelser, det er bare tallene som endrer seg, se graderingstabellen under.</p>
+<div class="card"><p>Økerad (hver 2. rad, alltid på rettsiden): øk 2 masker rett før og 2 masker rett etter hver av de to skuldermarkørene (8 masker økt totalt pr økerad, fordi det bare er to linjer i stedet for fire, må hver linje øke litt raskere for å nå samme bæremål på like mange rader). Strikk vanlig glattstrikk, uten øking, på raden mellom. Front-venstre øker altså bare langs sin ene, indre kant (fronten holder seg rett langs selve knappekanten), mens bak øker langs begge sine kanter.</p></div>
+<div class="card"><table class="t"><tr><th>Størrelse</th><th>Legg opp i hals</th><th>Antall økerader</th><th>Rader til bæremål</th><th>Masker ved bæremål</th></tr><tr><td><b>0-1 mnd</b></td><td>44</td><td>11</td><td>26</td><td>132</td></tr><tr><td><b>1-3 mnd</b></td><td>52</td><td>11</td><td>26</td><td>140</td></tr><tr><td><b>3-6 mnd</b></td><td>56</td><td>11</td><td>26</td><td>144</td></tr><tr><td><b>6-9 mnd</b></td><td>52</td><td>13</td><td>30</td><td>156</td></tr><tr><td><b>9-12 mnd</b></td><td>56</td><td>13</td><td>30</td><td>160</td></tr><tr><td><b>12-18 mnd</b></td><td>56</td><td>14</td><td>32</td><td>168</td></tr><tr><td><b>18-24 mnd</b></td><td>64</td><td>14</td><td>32</td><td>176</td></tr></table></div>
+<div class="cream"><p class="creamtitle">Kontroll: tell maskene dine. De skal stemme med tallet i kolonnen "Masker ved bæremål" for din størrelse ("Rader til bæremål" inkluderer de 4 radene matstrikk i halskanten fra del 1). Stemmer det ikke, tell på nytt før du går videre til del 3.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;9&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS KORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>DEL 3: DEL TIL ERMEHULL</h1></div>
+<p>Nå deles bæret i tre deler: front-venstre, bak og front-høyre, med et lite ermehull avfelt på hver side. Gjør dette likt for alle størrelser, følg din egen rad for masketallene, se tabellen på forrige side.</p>
+<div class="card"><p class="small">Eksempel med tall for 0-1 mnd, bruk dine egne tall fra tabellen på forrige side.</p><ul class="dots"><li>Strikk over de 11 maskene til front-venstre (maskene fra kanten til venstre skuldermarkør).</li><li>Fell av 12 masker for ermehullet (disse maskene tas rett over armhulen).</li><li>Strikk over de 22 maskene til bak (mellom de to skuldermarkørene, minus de nettopp avfelte maskene).</li><li>Fell av 12 masker for det andre ermehullet.</li><li>Strikk over de resterende maskene til front-høyre.</li><li>Du har nå tre atskilte deler på pinnen: front-venstre og front-høyre med 27 masker hver, og bak med 54 masker. Fra nå av strikkes hver del for seg, flatt, med en egen nøste eller tråd garn, rett ned til leggen.</li></ul></div>
+<div class="cream"><p class="creamtitle">De 6 maskene som felles av på hver side, fordeles slik: halvparten regnes bort fra front-delen, halvparten fra bak-delen, akkurat der de møtes ved skuldermarkøren. Det er derfor front-venstre/front-høyre går fra 33 masker (ved bæremålet) ned til 27 masker (etter delingen), og bak går fra 66 masker ned til 54 masker, se graderingstabellen på neste side for din egen størrelse.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;10&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS KORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>DEL 4: DELENE NED TIL LEGGEN</h1></div>
+<p>Strikk glattstrikk rett ned på hver av de tre delene, uten øking eller felling, til vesten har ønsket lengde. Se tabellen under for hvor mange rader som skal strikkes for din størrelse.</p>
+<div class="card"><table class="t"><tr><th>Størrelse</th><th>Rader glattstrikk</th><th>Rader matstrikk i legg</th><th>Ferdig lengde</th></tr><tr><td><b>0-1 mnd</b></td><td>10</td><td>6</td><td>14.0 cm</td></tr><tr><td><b>1-3 mnd</b></td><td>13</td><td>6</td><td>15.0 cm</td></tr><tr><td><b>3-6 mnd</b></td><td>18</td><td>6</td><td>16.5 cm</td></tr><tr><td><b>6-9 mnd</b></td><td>18</td><td>6</td><td>18.0 cm</td></tr><tr><td><b>9-12 mnd</b></td><td>24</td><td>6</td><td>20.0 cm</td></tr><tr><td><b>12-18 mnd</b></td><td>27</td><td>6</td><td>21.5 cm</td></tr><tr><td><b>18-24 mnd</b></td><td>31</td><td>6</td><td>23.0 cm</td></tr></table></div>
+<div class="cream"><p class="creamtitle">Bytt til matstrikk (rett på alle rader) og strikk 6 rader. Fell av alle masker løst. Gjenta likt for de to andre delene. Alle tre deler skal ha nøyaktig samme antall rader, slik at leggen blir jevn hele veien rundt når delene monteres sammen.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;11&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS KORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>DEL 5: KNAPPEKANT OG KNAPPHULL</h1></div>
+<p>Til slutt lages en enkel matstrikk-kant langs begge de rette fremkantene, med knapphull på den ene siden.</p>
+<div class="card"><p class="small">Eksempel med tall for 0-1 mnd, bruk dine egne tall fra tabellen på side 4 og graderingstabellen på side 9.</p><ol class="steps"><li><span class="snum">1</span><div>Ta opp ca. 32 masker langs hele fremkanten, fra leggen og opp til halsen, med rettsiden ut. Bruk regelen "ta opp ca. 3 masker for hver 4 rader" som utgangspunkt, juster litt om kanten drar seg sammen eller bølger.</div></li><li><span class="snum">2</span><div>Strikk matstrikk (rett på alle rader) i 4-5 rader.</div></li><li><span class="snum">3</span><div>På knapphullssiden (høyre front for jenter, venstre front for gutter, eller den siden som passer best): på 2. raden lager du 3 knapphull, jevnt fordelt langs kanten (fell av 2 masker for hvert knapphull, legg opp 2 nye masker over hullet på neste rad).</div></li><li><span class="snum">4</span><div>Fell av alle masker løst i matstrikk. Gjenta på den andre fremkanten, uten knapphull.</div></li><li><span class="snum">5</span><div>Sy på 3 treknapper på knappesiden, rett overfor hvert knapphull.</div></li></ol></div>
+<div class="cream"><p class="creamtitle">Antall knapper og hvor mange masker du tar opp langs fremkanten, øker med størrelsen, se tabellen på side 4 og masketallene i graderingstabellen på side 9 (samme radtall brukes til å beregne opptak langs fremkanten). Fordel knappene jevnt: første og siste knapp ca. 1,5 cm fra hals og legg, resten jevnt fordelt mellom.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;12&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS KORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>ERMEHULL-KANT</h1></div>
+<p>Ermehullet får samme enkle matstrikk-kant som resten av vesten, slik at det ikke ruller seg og passer fint rundt bodyens erme som går under.</p>
+<div class="card"><p>Ta opp masker rundt hele ermehullet (langs den avfelte kanten nederst og langs de to rette sidene opp mot skulderen) med rettsiden ut, ca. 46 masker totalt for din størrelse (se tabellen under). Strikk 3-4 rader matstrikk. Fell av løst. Gjenta likt for det andre ermehullet.</p></div>
+<div class="card"><table class="t"><tr><th>Størrelse</th><th>Avfelte m. i ermehull</th><th>Ta opp ca. (rundt hele)</th><th>Bodyens ermeomkrets</th></tr><tr><td><b>0-1 mnd</b></td><td>12</td><td>46</td><td>8.6 cm</td></tr><tr><td><b>1-3 mnd</b></td><td>12</td><td>46</td><td>9.1 cm</td></tr><tr><td><b>3-6 mnd</b></td><td>12</td><td>46</td><td>9.5 cm</td></tr><tr><td><b>6-9 mnd</b></td><td>14</td><td>54</td><td>10.0 cm</td></tr><tr><td><b>9-12 mnd</b></td><td>14</td><td>54</td><td>10.5 cm</td></tr><tr><td><b>12-18 mnd</b></td><td>14</td><td>56</td><td>10.9 cm</td></tr><tr><td><b>18-24 mnd</b></td><td>16</td><td>58</td><td>11.4 cm</td></tr></table></div>
+<div class="cream"><p class="creamtitle">De avfelte maskene i ermehullet utgjør 57-64 % av bodyens egen ermeomkrets på det samme stedet (se tabellen), akkurat nok til at bodyens erme går fint gjennom sammen med bæret over, uten at ermehullet blir unødvendig stort. Ermehullet er en åpning, ikke et rør, så det trenger ikke romme hele ermeomkretsen.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;13&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS KORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>MONTERING</h1></div>
+<div class="card"><ol class="steps"><li><span class="snum">1</span><div>Sy sammen de to skulderkantene: legg front-venstre og bak, og front-høyre og bak, med rettsidene mot hverandre, og sy en tett søm langs skulderlinjen (der skuldermarkørene satt under del 2).</div></li><li><span class="snum">2</span><div>Ta opp og strikk matstrikk-kanten rundt begge ermehullene, se forrige side.</div></li><li><span class="snum">3</span><div>Ta opp og strikk knappekanten med knapphull langs den ene fremkanten, og en ren matstrikk-kant uten hull langs den andre, se del 5.</div></li><li><span class="snum">4</span><div>Sy på knappene rett overfor knapphullene.</div></li><li><span class="snum">5</span><div>Fest alle løse tråder godt på vrangen, og klipp dem korte.</div></li><li><span class="snum">6</span><div>Damp press vesten lett på vrangen, unngå å presse direkte på matstrikk-kantene, de skal beholde sin fine, ikke-rullende struktur.</div></li><li><span class="snum">7</span><div>Kontroller til slutt at alle knapper sitter godt fast, og at ingen løse tråder eller masker kan løsne.</div></li></ol></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;14&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS KORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>SIKKERHET OG STELL</h1></div>
+<div class="pillwrap"><div class="pill rosepill">SIKKERHET</div></div>
+<div class="card"><ul class="dots"><li>Bruk alltid små, godt festede knapper, og sy dem fast med dobbel tråd, flere ganger gjennom hvert hull.</li><li>Kontroller knappene jevnlig, spesielt etter vask, og fest dem på nytt ved første tegn til løshet.</li><li>Denne oppskriften er ikke ment for barn som putter små gjenstander i munnen uten tilsyn, la aldri barnet være alene med vesten på uten oppsyn den første tiden.</li><li>Alle mål og masketall i denne oppskriften er beregnet for en romslig, komfortabel passform, ikke en stram sikkerhetspassform, følg alltid gjeldende sikkerhetsanbefalinger for barneklær.</li></ul></div>
+<div class="pillwrap"><div class="pill sagepill">VASKERÅD</div></div>
+<div class="cream"><p class="creamtitle">Håndvask forsiktig i lunkent vann med ullvask, eller maskinvask på ullprogram 30 grader. Press ut vannet, trekk i fasong, og tørk liggende flatt på et håndkle. Unngå å henge vesten til tørk, alpakka kan strekke seg.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;15&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME STRIKKING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS KORT VEST</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>FERDIG!</h1></div>
+<div class="cream"><p class="creamtitle">Gratulerer, kort vest-en din er ferdig! Ta den på utenpå basisbodyen, knapp den igjen foran, og du har et helt fargerikt lag klart, en fin del av hele "Woodland Dreams"-kolleksjonen.</p></div>
+<div class="pillwrap"><div class="pill sagepill">RESTEN AV KOLLEKSJONEN</div></div>
+<div class="card"><ul class="dots"><li>Basisbody, den nøytrale grunnmuren vesten skal tas utenpå.</li><li>Blondekrage, en løs krage som hekter bak.</li><li>Rysjekrage, samme feste, litt mer romantisk.</li><li>Peter Pan-krage, en klassisk avrundet krage.</li><li>Smekke, som knytes med i-cord eller en knapp.</li><li>I-cord-seler, kolleksjonens signaturdel, justerbare og krysser bak.</li><li>Woodland Fluffy Skirt, et heklet skjørt laget for å matche bodyen.</li></ul></div>
+<div class="pillwrap"><div class="pill rosepill">OPPHAVSRETT</div></div>
+<div class="card"><p class="small center">(c) Renate Dahl, Little Montessori Explorers. Denne oppskriften er et helt originalt LME-design. Du står fritt til å selge ferdige plagg du lager etter denne oppskriften, i liten, personlig skala, forutsatt at det ferdige produktet er sjekket mot gjeldende sikkerhetskrav. Selve oppskriften, teksten og bildene, kan ikke deles, kopieres eller selges videre.</p></div>
+<div class="byline">
+  <div class="by2">Av Renate Dahl &middot; Little Montessori Explorers &middot; lmexplorers.com</div>
+</div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;16&nbsp;&mdash;</div>
+</div></body></html>

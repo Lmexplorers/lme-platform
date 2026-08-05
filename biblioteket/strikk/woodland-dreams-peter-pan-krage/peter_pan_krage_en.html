@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Woodland Dreams Peter Pan Collar, LME knitting pattern</title>
+<style>
+@font-face { font-family:'Sasson Montessori'; src:url('fonts/SassoonMontessori.ttf'); font-weight:normal; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-400.ttf'); font-weight:400; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-600.ttf'); font-weight:600; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-700.ttf'); font-weight:700; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-800.ttf'); font-weight:800; }
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --font-head:'Playpen Sans',system-ui,sans-serif;
+  --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+}
+@page { size:A4; margin:0; }
+body { font-family:var(--font-body); color:#4a4a4a; }
+.page {
+  position:relative; width:210mm; height:296.5mm; overflow:hidden;
+  page-break-after:always;
+  background:
+    url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAArUlEQVR42u3VUQkAIAxFUSfWt4wNTDYD6LcgnhvhHcYiM0fZm0VXqiYAAEAAvq2dHm5EdNO4AAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAAC8GILoF0Gg4kZ4kUAAAAASUVORK5CYII=) 0 0/8mm 8mm repeat,
+    linear-gradient(165deg,#f3e8d8 0%,#f6ecec 45%,#f3dde6 100%);
+}
+.band { position:absolute; left:0; top:0; bottom:0; width:11mm;
+  background:linear-gradient(180deg,#C79A6C,#E48FA6); }
+.band span { position:absolute; left:50%; top:75%; transform:translate(-50%,-50%);
+  writing-mode:vertical-rl; text-orientation:mixed; rotate:180deg;
+  font-family:var(--font-head); font-size:6.5pt; letter-spacing:3.5px; color:#fff; white-space:nowrap; }
+.rside { position:absolute; right:2.5mm; top:40%; }
+.rside span { writing-mode:vertical-rl; font-family:var(--font-head); font-size:6pt;
+  letter-spacing:2.5px; color:#9a9a9a; white-space:nowrap; }
+.phead { text-align:center; padding-top:9mm; }
+.ph1 { font-family:var(--font-head); font-weight:600; font-size:7pt; letter-spacing:4px; color:#8a7460; }
+.ph2 { font-family:var(--font-head); font-weight:600; font-size:6.3pt; letter-spacing:2.4px; color:#E48FA6; margin-top:1.6mm; }
+.content { padding:5mm 16mm 0 20mm; }
+.pfoot { position:absolute; bottom:6.5mm; left:0; right:0; text-align:center;
+  font-family:var(--font-head); font-weight:700; font-size:10pt; color:#8a8a8a; }
+
+.banner { background:#f5e5b2; border-radius:14px; padding:3.6mm 6mm; margin:2mm 0 4.5mm;
+  box-shadow:0 1px 4px rgba(0,0,0,.08); text-align:center; }
+.banner h1 { font-family:var(--font-head); font-weight:800; font-size:16.5pt; color:#4a4a4a;
+  letter-spacing:.4px; text-transform:uppercase; }
+.pillwrap { text-align:center; margin:4.5mm 0 3mm; }
+.pill { display:inline-block; border-radius:999px; padding:2.4mm 9mm;
+  font-family:var(--font-head); font-weight:700; font-size:10.5pt; color:#fff;
+  letter-spacing:.4px; text-transform:uppercase; box-shadow:0 1px 4px rgba(0,0,0,.12); }
+.rosepill { background:#E48FA6; }
+.sagepill { background:#8FA681; }
+.card { background:rgba(255,255,255,.93); border:2px solid #ecd2c0; border-radius:16px;
+  padding:4mm 6mm; margin:0 0 4mm; box-shadow:0 1px 5px rgba(0,0,0,.06); }
+.cream { background:#fbf3e8; border:2px solid #ecd2c0; border-radius:16px;
+  padding:4mm 6mm; margin:4mm 0; text-align:center; }
+.creamtitle { font-family:var(--font-head); font-weight:700; font-size:11pt; color:#8FA681; }
+p { font-size:10.6pt; line-height:1.52; margin-bottom:2.2mm; }
+p.small, .small { font-size:9.5pt; color:#777; }
+p.center { text-align:center; }
+ul.dots { list-style:none; }
+ul.dots li { font-size:10.6pt; line-height:1.48; padding-left:5.5mm; position:relative; margin:1.6mm 0; }
+ul.dots li::before { content:'•'; position:absolute; left:1mm; color:#E48FA6; font-weight:bold; }
+ol.steps { list-style:none; }
+ol.steps li { display:flex; gap:3.5mm; align-items:flex-start; background:rgba(255,255,255,.93);
+  border:2px solid #ecd2c0; border-radius:14px; padding:3mm 5mm; margin-bottom:2.4mm; }
+ol.steps li div { font-size:10.4pt; line-height:1.46; }
+.snum { flex:0 0 auto; width:7.5mm; height:7.5mm; border-radius:50%; background:#E48FA6; color:#fff;
+  font-family:var(--font-head); font-weight:700; font-size:11pt; display:flex;
+  align-items:center; justify-content:center; margin-top:.5mm; }
+table.t { width:100%; border-collapse:collapse; margin:2.5mm 0; }
+table.t th { font-family:var(--font-head); font-weight:700; font-size:9.3pt; color:#E48FA6;
+  text-align:left; padding:1.5mm 2.5mm; border-bottom:2px solid #ecd2c0; }
+table.t td { font-size:9.7pt; padding:1.4mm 2.5mm; border-bottom:1px solid #f2e3d8; line-height:1.38; }
+table.tl td:first-child { white-space:nowrap; }
+.dot { display:inline-block; width:3.5mm; height:3.5mm; border-radius:50%; vertical-align:-0.5mm; margin-right:1.5mm; }
+
+.coverimg { text-align:center; margin:3mm 0 3mm; }
+.coverimg img { width:98mm; border-radius:14px; box-shadow:0 3px 10px rgba(0,0,0,.18);
+  border:3mm solid #fff; }
+.covertag { text-align:center; font-family:var(--font-head); font-size:8pt; letter-spacing:2.6px;
+  color:#8a8a8a; margin:1mm 0 2.5mm; }
+.coverbanner { display:flex; align-items:center; justify-content:center; gap:5mm;
+  background:#f5e5b2; border-radius:16px; padding:3.4mm 6mm; box-shadow:0 1px 5px rgba(0,0,0,.1); }
+.covertitle { font-family:var(--font-head); font-weight:800; font-size:27pt; color:#4a4a4a; letter-spacing:1px; }
+.subpill { margin:3.6mm auto; width:fit-content; background:#fdf9e3; border:2.5px solid #4a4a4a;
+  border-radius:999px; padding:1.8mm 8mm; font-family:var(--font-head); font-weight:700;
+  font-size:10pt; color:#4a4a4a; letter-spacing:.4px; }
+.byline { text-align:center; margin-top:3.5mm; }
+.by1 { font-family:var(--font-head); font-weight:700; font-size:12.5pt; color:#8FA681; }
+.by2 { font-size:10.2pt; color:#8a8a8a; margin-top:.8mm; }
+.by3 { font-family:var(--font-head); font-weight:600; font-size:9.6pt; color:#E48FA6; margin-top:.5mm; }
+.notecard { display:flex; gap:4mm; align-items:center; background:rgba(255,255,255,.8);
+  border-radius:12px; padding:3.2mm 6mm; margin-top:4mm; }
+.notecard p { font-size:9.3pt; color:#777; margin:0; }
+.noteemo { font-size:16pt; }
+
+.twocol { display:flex; gap:6mm; align-items:flex-start; }
+.twocol > div { flex:1; }
+.figwrap { text-align:center; }
+.figwrap img { width:44mm; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,.14); border:2mm solid #fff; }
+.figcap { font-size:9pt; color:#888; text-align:center; margin-top:1.5mm; }
+.schematic { margin:2mm 0 1mm; }
+.deler-grid { display:grid; grid-template-columns:1fr 1fr; gap:2.4mm 6mm; margin:1mm 0 2mm; }
+.deler-grid .di { font-size:10pt; line-height:1.4; padding:1.6mm 0; border-bottom:1px dashed #e6d3c4; }
+.deler-grid .di b { color:#8FA681; font-family:var(--font-head); }
+
+.photorow { display:flex; gap:3mm; flex-wrap:wrap; justify-content:center; margin:2mm 0 3mm; }
+.photoph { aspect-ratio:1/1; max-width:44mm; background:rgba(255,255,255,.7);
+  border:2px dashed #d9bfa8; border-radius:12px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:1.5mm; padding:2mm; }
+.phicon { font-size:17pt; opacity:.45; }
+.phcap { font-size:8.3pt; color:#9a8a7a; text-align:center; line-height:1.3; }
+.qrbox { text-align:center; margin:3mm 0; }
+.qrsquare { width:26mm; height:26mm; margin:0 auto; background:#fff; border:2px dashed #d9bfa8;
+  border-radius:10px; display:flex; align-items:center; justify-content:center; }
+.qricon { font-size:20pt; color:#d9bfa8; }
+.qrcap { font-size:9pt; color:#888; margin-top:1.6mm; }
+</style></head>
+<body><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS PETER PAN COLLAR</div>
+  </div>
+  <div class="content">
+<div class="covertag">LME KNITTING PATTERN - ACCESSORY</div>
+<div class="coverbanner"><h1 class="covertitle">PETER PAN COLLAR</h1></div>
+<div class="subpill">LME BABY COLLECTION - WOODLAND DREAMS</div>
+<div class="card"><p class="center">A classic, rounded collar in stockinette stitch with a garter-stitch border: knitted in two matching rounded halves that meet at centre front, and fastens at the back with a small wooden button and a crocheted loop. The collar is loose, not close-fitting, and sits over the neck and shoulders of the Woodland Dreams basisbody. Seven sizes, from 0-1 to 18-24 months, matched to the basisbody's own neck width in every size.</p></div>
+<div class="byline">
+  <div class="by1">By Renate Dahl</div>
+  <div class="by2">Little Montessori Explorers</div>
+  <div class="by3">lmexplorers.com</div>
+</div>
+<div class="notecard"><span class="noteemo">&#129517;</span><p><i>TIP: Read through the whole pattern and the size chart on page 4 before you start, and knit a 15 x 15 cm gauge swatch to check your tension, since every size in this pattern is calculated directly from this gauge.</i></p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;1&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS PETER PAN COLLAR</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>ABOUT THE PETER PAN COLLAR</h1></div>
+<div class="pillwrap"><div class="pill rosepill">PART OF THE COLLECTION</div></div>
+<div class="card"><p>The Peter Pan collar is the third piece in LME Woodland Dreams, after the basisbody and the lace collar. It is the most classic of the collars in the collection: a flat, rounded shape with two soft lobes meeting at centre front, the same silhouette as a traditional shirt collar on childrenswear.</p></div>
+<div class="pillwrap"><div class="pill sagepill">STYLE</div></div>
+<div class="card"><p>Calm and timeless, with no ruffles or lace pattern, just the clean, rounded shape itself. The collar is knitted in one of the collection's accessory colours, as a contrast to the basisbody's calm neutral shades.</p></div>
+<div class="pillwrap"><div class="pill rosepill">A LOOSE FIT, FASTENS AT THE BACK</div></div>
+<div class="cream"><p class="creamtitle">The collar is not knitted close-fitting around the neck, it is loose and rests over the shoulders, just like a collar layered on top of a garment. It closes at the back with a small wooden button and a crocheted loop, so it is easy to put on and take off without pulling it over the baby's head.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;2&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS PETER PAN COLLAR</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>MATERIALS</h1></div>
+<div class="pillwrap"><div class="pill rosepill">YARN AND COLOUR</div></div>
+<div class="card"><p>Sandnes Garn Alpakka (100% alpaca), or an equivalent yarn with the same gauge, the same yarn as the basisbody. Since the collar is an accessory, it is knitted in one of the collection's accessory colours: sage green, dusty rose, butter yellow, soft blue, olive or terracotta, as a nice contrast to the body's calm neutral shades (cream, linen, sand, oatmeal or beige).</p></div>
+<div class="pillwrap"><div class="pill sagepill">YARN REQUIREMENTS</div></div>
+<div class="card"><table class="t"><tr><th>Size</th><th>Yarn amount</th></tr><tr><td><b>0-1 mnd</b></td><td>11-13 g</td></tr><tr><td><b>1-3 mnd</b></td><td>12-13 g</td></tr><tr><td><b>3-6 mnd</b></td><td>12-14 g</td></tr><tr><td><b>6-9 mnd</b></td><td>13-15 g</td></tr><tr><td><b>9-12 mnd</b></td><td>14-16 g</td></tr><tr><td><b>12-18 mnd</b></td><td>15-17 g</td></tr><tr><td><b>18-24 mnd</b></td><td>15-17 g</td></tr></table></div>
+<div class="pillwrap"><div class="pill rosepill">NEEDLES AND NOTIONS</div></div>
+<div class="card"><p>Straight needles or a circular needle 4 mm (the collar is worked flat, back and forth). One small, round wooden button. A 3 mm crochet hook for the button loop. A tapestry needle for seaming and attaching the button. Stitch markers are not needed, there are no rounds to keep track of.</p></div>
+<div class="pillwrap"><div class="pill sagepill">GAUGE SWATCH</div></div>
+<div class="cream"><p class="creamtitle">Cast on 26 stitches, work stockinette stitch for approx. 12 cm, bind off and block lightly. Count your stitches over 10 cm. If your gauge does not match 22 sts = 10 cm, change to a smaller or larger needle until it does.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;3&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS PETER PAN COLLAR</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>SIZE CHART</h1></div>
+<p>The collar is matched to the neck width of the Woodland Dreams basisbody in the same size. Choose the same size for the collar as for the body it will be worn with.</p>
+<div class="card"><table class="t"><tr><th>Size</th><th>Body's neck width</th><th>Finished collar depth</th><th>Rows per half</th></tr><tr><td><b>0-1 mnd</b></td><td>21 cm</td><td>6.2 cm</td><td>32</td></tr><tr><td><b>1-3 mnd</b></td><td>22 cm</td><td>6.3 cm</td><td>33</td></tr><tr><td><b>3-6 mnd</b></td><td>23 cm</td><td>6.5 cm</td><td>34</td></tr><tr><td><b>6-9 mnd</b></td><td>24 cm</td><td>6.7 cm</td><td>36</td></tr><tr><td><b>9-12 mnd</b></td><td>25 cm</td><td>6.9 cm</td><td>38</td></tr><tr><td><b>12-18 mnd</b></td><td>26 cm</td><td>7.1 cm</td><td>39</td></tr><tr><td><b>18-24 mnd</b></td><td>27 cm</td><td>7.2 cm</td><td>40</td></tr></table></div>
+<div class="cream"><p class="creamtitle">The collar depth is measured from the neck edge to the outer edge, including the garter-stitch border. The collar is loose and should not pull tight around the neck, so the measurements are not a "snug fit" but the loose, draped collar's own measurements.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;4&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS PETER PAN COLLAR</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>GAUGE AND DIFFICULTY LEVEL</h1></div>
+<div class="pillwrap"><div class="pill rosepill">GAUGE</div></div>
+<div class="card"><p>22 stitches and 30 rows in stockinette stitch = 10 x 10 cm, on 4 mm needles, the same gauge as the rest of the Woodland Dreams collection. This gauge is used in every calculation in the pattern, both the stitch counts on each row and the number of rows per collar half. Always knit a swatch first, see the materials page.</p></div>
+<div class="pillwrap"><div class="pill sagepill">DIFFICULTY LEVEL</div></div>
+<div class="cream"><p class="creamtitle">Easy to medium. You should be comfortable knitting and decreasing in stockinette stitch flat, back and forth, picking up stitches along an edge, and crocheting a simple chain loop. No stitch pattern, the collar is stockinette stitch and garter stitch.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;5&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS PETER PAN COLLAR</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>ABBREVIATIONS</h1></div>
+<p>Norwegian knitting and crochet terms with the English terms alongside.</p>
+<div class="card"><table class="t tl"><tr><th>Norwegian</th><th>English</th><th>Meaning</th></tr><tr><td><b>r</b></td><td>K</td><td>rett</td></tr><tr><td><b>vr</b></td><td>P</td><td>vrang</td></tr><tr><td><b>garterstrikk</b></td><td>garter st</td><td>rett på alle rader (både RS og VS)</td></tr><tr><td><b>m</b></td><td>st(s)</td><td>maske(r)</td></tr><tr><td><b>rad</b></td><td>row</td><td>rad</td></tr><tr><td><b>RS</b></td><td>RS</td><td>rettsiden av arbeidet</td></tr><tr><td><b>VS</b></td><td>WS</td><td>vrangsiden av arbeidet</td></tr><tr><td><b>øk</b></td><td>inc</td><td>øk (ta opp én tilleggsmaske)</td></tr><tr><td><b>felle</b></td><td>dec</td><td>felle (strikk to masker sammen)</td></tr><tr><td><b>ta opp m</b></td><td>pick up sts</td><td>ta opp masker langs en kant</td></tr><tr><td><b>fell av</b></td><td>BO</td><td>fell av / bind off</td></tr><tr><td><b>legg opp</b></td><td>CO</td><td>legg opp masker</td></tr><tr><td><b>luftmaske</b></td><td>chain (ch)</td><td>heklet luftmaske</td></tr><tr><td><b>heklenål</b></td><td>crochet hook</td><td>heklenål</td></tr></table></div>
+<div class="pillwrap"><div class="pill sagepill">TIPS</div></div>
+<div class="card"><ul class="dots"><li>Knit both collar halves one after another and lay them side by side before weaving in ends, so you can see right away if they match in size.</li><li>The row counts in the tables are exact from the grading calculation, but always count your stitches at the widest point (see the check in part 1) before you start decreasing, it is easier to fix there than after the edge is finished.</li><li>Use a contrasting scrap of yarn to mark every 10th row while you knit the increase section, it makes it quick to count your place without starting from the beginning every time.</li></ul></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;6&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS PETER PAN COLLAR</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>HOW THE COLLAR IS CONSTRUCTED</h1></div>
+<div class="card"><p>The collar is knitted flat, in two matching halves, "sideways": every row you knit follows the neck edge (from centre back towards centre front), and the number of stitches on the row is the collar's DEPTH at that exact point, not the length along the neck. It is this growth and shrinkage in stitch count, not row count, that creates the rounded lobe shape. Five simple parts, in this order:</p><div class="deler-grid"><div class="di"><b>1. Cast on and increase</b><br>Cast on at the back-neck edge, increase evenly at the outer edge until the widest point (at the shoulder).</div><div class="di"><b>2. Widest point and decrease</b><br>Knit a few rows even, then decrease evenly back down towards centre front.</div><div class="di"><b>3. Second half</b><br>Knit an identical second half, sew the two together at centre front.</div><div class="di"><b>4. Border around the outer edge</b><br>Pick up stitches along the whole outer edge, knit a garter-stitch border, bind off.</div><div class="di"><b>5. Back closure</b><br>Sew a button onto one back-neck edge, crochet a loop onto the other.</div></div></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;7&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS PETER PAN COLLAR</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 1: CAST ON AND INCREASE</h1></div>
+<p>Cast on 3 stitches (the same for every size). This is the small, straight edge that sits at the back neck. Work flat, back and forth, in stockinette stitch (k on RS, p on WS).</p>
+<div class="card"><p>Row 1 (RS): knit plain, with no increase. Then repeat the increase section: increase row (RS): increase 1 stitch at the end at the OUTER EDGE (the one short side of the row, not the neck-edge side), knit the rest of the row plain; row in between (WS): knit/purl plain, with no increase. The neck-edge side is kept straight the whole time, with no increase or decrease, it is the edge that sits innermost.</p></div>
+<div class="pillwrap"><div class="pill rosepill">NUMBER OF INCREASES PER SIZE</div></div>
+<div class="card"><table class="t"><tr><th>Size</th><th>Cast on</th><th>Number of increases</th><th>Sts at widest point</th></tr><tr><td><b>0-1 mnd</b></td><td>3</td><td>7</td><td>10</td></tr><tr><td><b>1-3 mnd</b></td><td>3</td><td>7</td><td>10</td></tr><tr><td><b>3-6 mnd</b></td><td>3</td><td>8</td><td>11</td></tr><tr><td><b>6-9 mnd</b></td><td>3</td><td>8</td><td>11</td></tr><tr><td><b>9-12 mnd</b></td><td>3</td><td>8</td><td>11</td></tr><tr><td><b>12-18 mnd</b></td><td>3</td><td>9</td><td>12</td></tr><tr><td><b>18-24 mnd</b></td><td>3</td><td>9</td><td>12</td></tr></table></div>
+<div class="cream"><p class="creamtitle">Check: once you have repeated the increase section the correct number of times for your size, you should have exactly as many stitches on the needle as shown in the "Sts at widest point" column above.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;8&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS PETER PAN COLLAR</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 2: WIDEST POINT AND DECREASE</h1></div>
+<p>This point is the shoulder of the collar, the widest place between the neck edge and the outer edge. Knit a few rows even, with no shaping, before you start decreasing back down towards centre front.</p>
+<div class="card"><p>The decrease section mirrors the increase section in part 1: decrease row (RS): decrease 1 stitch at the end at the outer edge (knit 2 together), knit the rest of the row plain; row in between (WS): knit/purl plain, with no decrease. Repeat until you have 3 stitches left, the same number you cast on with in part 1.</p></div>
+<div class="card"><table class="t"><tr><th>Size</th><th>Rows worked even</th><th>Number of decreases</th><th>Total rows per half</th></tr><tr><td><b>0-1 mnd</b></td><td>3</td><td>7</td><td>32</td></tr><tr><td><b>1-3 mnd</b></td><td>4</td><td>7</td><td>33</td></tr><tr><td><b>3-6 mnd</b></td><td>1</td><td>8</td><td>34</td></tr><tr><td><b>6-9 mnd</b></td><td>3</td><td>8</td><td>36</td></tr><tr><td><b>9-12 mnd</b></td><td>5</td><td>8</td><td>38</td></tr><tr><td><b>12-18 mnd</b></td><td>2</td><td>9</td><td>39</td></tr><tr><td><b>18-24 mnd</b></td><td>3</td><td>9</td><td>40</td></tr></table></div>
+<div class="cream"><p class="creamtitle">Bind off the last 3 stitches. This small point is the centre front of this collar half. The row count in the last column above is the check number for the whole half, from the cast-on row to the bind-off.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;9&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS PETER PAN COLLAR</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 3: SECOND HALF AND SEAMING</h1></div>
+<p>Knit one more, completely identical half, follow part 1 and part 2 again for your size. The two halves are mirror images in use, but are knitted exactly the same way, it is the seaming that turns them into a mirror image of each other.</p>
+<div class="card"><p>Lay the two finished halves side by side, with the narrow bind-off points (centre front) against each other and the neck-edge sides facing the same way. Sew the 3 bound-off stitches from each half together with a neat seam (mattress stitch), working from the outer edge in towards the neck edge. This small point becomes the collar's centre-front tip.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;10&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS PETER PAN COLLAR</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 4: BORDER AROUND THE OUTER EDGE</h1></div>
+<p>Now stitches are picked up along the whole outer edge, from the back-neck edge of one half, around centre front, to the back-neck edge of the other half, and a garter-stitch border is worked. Garter stitch lies flat and does not curl, giving the collar a clean, defined outer edge.</p>
+<div class="card"><p>With the right side facing out, pick up 1 stitch for every row along the outer edge (the curved edge where the increases and decreases were worked), first along one half, then on around the other. Work garter stitch (knit every row, both RS and WS) for 5 rows. Bind off all stitches loosely, so the edge does not pull tight.</p></div>
+<div class="card"><table class="t"><tr><th>Size</th><th>Picked up per half</th><th>Total sts around the edge</th><th>Border rows</th></tr><tr><td><b>0-1 mnd</b></td><td>32</td><td>64</td><td>5</td></tr><tr><td><b>1-3 mnd</b></td><td>33</td><td>66</td><td>5</td></tr><tr><td><b>3-6 mnd</b></td><td>34</td><td>68</td><td>5</td></tr><tr><td><b>6-9 mnd</b></td><td>36</td><td>72</td><td>5</td></tr><tr><td><b>9-12 mnd</b></td><td>38</td><td>76</td><td>5</td></tr><tr><td><b>12-18 mnd</b></td><td>39</td><td>78</td><td>5</td></tr><tr><td><b>18-24 mnd</b></td><td>40</td><td>80</td><td>5</td></tr></table></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;11&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS PETER PAN COLLAR</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>BACK CLOSURE: BUTTON AND LOOP</h1></div>
+<p>The two back-neck edges (the cast-on edges from part 1, one on each half) sit side by side at the back of the baby's neck, without being sewn together. The collar fastens there with a small wooden button on one side and a crocheted loop on the other.</p>
+<div class="card"><ol class="steps"><li><span class="snum">1</span><div>Sew a small, round wooden button securely onto the back-neck edge of one collar half, about 0.5 cm in from the edge itself.</div></li><li><span class="snum">2</span><div>With a 3 mm crochet hook and a short length of yarn, secure the yarn end at the back-neck edge of the other half, crochet a chain loop of about 8-10 chain stitches (test it against the button as you go, it should just slide through without being loose), fasten off with a slip stitch.</div></li><li><span class="snum">3</span><div>Check that the button and loop meet neatly when the collar is placed at the back of the baby's neck, adjust the number of chain stitches if needed for your button.</div></li></ol></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;12&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS PETER PAN COLLAR</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>FINISHING</h1></div>
+<div class="card"><ol class="steps"><li><span class="snum">1</span><div>Weave in all loose ends securely on the wrong side, and trim them short.</div></li><li><span class="snum">2</span><div>Lightly steam-block the collar on the wrong side, avoid pressing the garter-stitch border flat, it should keep a little texture.</div></li><li><span class="snum">3</span><div>Sew on the button and crochet the loop, see the previous page.</div></li><li><span class="snum">4</span><div>Finally, check that the button is securely attached, that the loop is not too loose, and that no loose threads or stitches can come undone.</div></li><li><span class="snum">5</span><div>Place the collar over the neck and shoulders of the finished Woodland Dreams basisbody in the same size, and close the button at the back.</div></li></ol></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;13&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS PETER PAN COLLAR</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>SAFETY AND CARE</h1></div>
+<div class="pillwrap"><div class="pill rosepill">SAFETY</div></div>
+<div class="card"><ul class="dots"><li>Always use a small, securely attached button, and sew it on with double thread, several times through each hole.</li><li>Check the button and loop regularly, especially after washing, and reattach them at the first sign of looseness.</li><li>This pattern is not intended for children who put small objects in their mouth unsupervised, never leave a baby alone and unsupervised in the collar during the first while of wearing it.</li><li>Because the collar is loose and fastens with just one button at the back, it must never be tightened around the neck or used as anything a baby could get caught on, always follow current safety recommendations for children's clothing.</li></ul></div>
+<div class="pillwrap"><div class="pill sagepill">CARE INSTRUCTIONS</div></div>
+<div class="cream"><p class="creamtitle">Hand wash gently in lukewarm water with wool wash, or machine wash on a wool cycle at 30 degrees. Press out the water, ease into shape, and dry lying flat on a towel. Avoid hanging the collar up to dry, alpaca can stretch out of shape.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;14&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS PETER PAN COLLAR</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>ALL DONE!</h1></div>
+<div class="cream"><p class="creamtitle">Congratulations, your Peter Pan collar is finished! Place it over the neck and shoulders of the Woodland Dreams basisbody for a classic, rounded detail that matches the whole collection.</p></div>
+<div class="pillwrap"><div class="pill sagepill">THE REST OF THE COLLECTION</div></div>
+<div class="card"><ul class="dots"><li>Basisbody, the foundation of the collection.</li><li>Lace collar, a loose collar that fastens at the back.</li><li>Ruffle collar, the same fastening, a little more romantic.</li><li>Bib, tied with an i-cord or a button.</li><li>I-cord suspenders, the collection's signature piece, adjustable and crossing at the back.</li><li>Short vest, with wooden buttons at the front, worn over the body.</li><li>Woodland Fluffy Skirt, a crocheted skirt made to match the body.</li></ul></div>
+<div class="pillwrap"><div class="pill rosepill">COPYRIGHT</div></div>
+<div class="card"><p class="small center">(c) Renate Dahl, Little Montessori Explorers. This pattern is a fully original LME design. You are welcome to sell finished garments you make from this pattern, on a small personal scale, provided the finished product is checked against current safety requirements. The pattern itself, its text and images, may not be shared, copied or resold.</p></div>
+<div class="byline">
+  <div class="by2">By Renate Dahl &middot; Little Montessori Explorers &middot; lmexplorers.com</div>
+</div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;15&nbsp;&mdash;</div>
+</div></body></html>

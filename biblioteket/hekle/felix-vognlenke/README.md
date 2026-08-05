@@ -1,0 +1,38 @@
+# Felix' vognlenke (LME Baby Collection, Woodland Dreams)
+
+Ferdig oppskrift: **`Felix-vognlenke-LME.pdf`** (norsk, 14 sider, A4) og
+**`Felix-vognlenke-LME-EN.pdf`** (engelsk, 14 sider, A4).
+
+Følger opp `../ellies-vognlenke/` og `../pip-vognlenke/`, oppdatert
+4. august 2026 etter Renates referansebilder av profesjonelt stylede
+vognlenker, samme ombygging som de andre: bygget om fra sju flate motiver
+til en kjede av heklede kuler og tre-mellomperler med Felix-medaljongen
+(nå med salviegrønn volangkrage) i midten, en blomst og et blad på hver
+side, og to trering-rangler (trering + dinglende heklet kule). Festes i
+hver ende med en tre-kuleklips med innkapslet fjærmekanisme (samme
+klipstype som smokkelenke-serien). Felix-medaljongen har fortsatt sine
+todelte, foldede ører (samme teknikk som på ham selv) og en egen miniatyr
+av den tofargede halen hans, sydd til bakhodet.
+
+Samme sikkerhetsfokus som `../ellies-vognlenke/`: side 12 forklarer hvorfor
+lengden holdes kort, med LME-anbefalingen (maks 35-40 cm mellom klipsene,
+ingen del løsere enn 6-8 cm).
+
+Bygget etter samme mal som Ellies og Pips vognlenke, med Felix sitt eget
+referansebilde (`felix_ref.jpg`, kopiert fra `../felix-rev/felix_hero.jpg`)
+på forsiden, tydelig merket "stiluttrykk-referanse".
+
+## Bygge PDF-ene på nytt
+
+```bash
+python3 build_felix_vognlenke.py
+CHROME=/opt/pw-browsers/chromium-1194/chrome-linux/chrome
+"$CHROME" --headless --no-pdf-header-footer \
+  --print-to-pdf=Felix-vognlenke-LME.pdf vognlenke_no.html
+"$CHROME" --headless --no-pdf-header-footer \
+  --print-to-pdf=Felix-vognlenke-LME-EN.pdf vognlenke_en.html
+```
+
+Bruker det delte byggesettet i `../_shared/lme_pattern_kit.py`.
+
+Foreløpig kun selve oppskriften, ikke koblet til butikken ennå.

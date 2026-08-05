@@ -83,6 +83,16 @@
         var hdr = document.querySelector('.header');
         if (hdr) { var r = hdr.getBoundingClientRect(); if (r && r.top > -100) top = Math.round(r.top + 14); }
       }
+      // Ikke havn oppå "Åpne LME Studio"-knappen når siden har en i toppen:
+      // dropp språkbryteren under den i stedet for å dekke den.
+      var studioBtn = document.querySelector('.btn-studio');
+      if (studioBtn) {
+        var sr = studioBtn.getBoundingClientRect();
+        if (sr && sr.height && sr.bottom > 0) {
+          var below = Math.round(sr.bottom + 8);
+          if (below > top) top = below;
+        }
+      }
       if (top < 8) top = 8;
       b.style.setProperty('top', top + 'px', 'important');
       b.style.setProperty('bottom', 'auto', 'important');

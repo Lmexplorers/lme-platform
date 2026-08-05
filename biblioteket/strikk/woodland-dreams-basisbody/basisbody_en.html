@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Woodland Dreams Basisbody, LME knitting pattern</title>
+<style>
+@font-face { font-family:'Sasson Montessori'; src:url('fonts/SassoonMontessori.ttf'); font-weight:normal; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-400.ttf'); font-weight:400; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-600.ttf'); font-weight:600; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-700.ttf'); font-weight:700; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-800.ttf'); font-weight:800; }
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --font-head:'Playpen Sans',system-ui,sans-serif;
+  --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+}
+@page { size:A4; margin:0; }
+body { font-family:var(--font-body); color:#4a4a4a; }
+.page {
+  position:relative; width:210mm; height:296.5mm; overflow:hidden;
+  page-break-after:always;
+  background:
+    url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAArUlEQVR42u3VUQkAIAxFUSfWt4wNTDYD6LcgnhvhHcYiM0fZm0VXqiYAAEAAvq2dHm5EdNO4AAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAAC8GILoF0Gg4kZ4kUAAAAASUVORK5CYII=) 0 0/8mm 8mm repeat,
+    linear-gradient(165deg,#f3e8d8 0%,#f6ecec 45%,#f3dde6 100%);
+}
+.band { position:absolute; left:0; top:0; bottom:0; width:11mm;
+  background:linear-gradient(180deg,#C79A6C,#E48FA6); }
+.band span { position:absolute; left:50%; top:75%; transform:translate(-50%,-50%);
+  writing-mode:vertical-rl; text-orientation:mixed; rotate:180deg;
+  font-family:var(--font-head); font-size:6.5pt; letter-spacing:3.5px; color:#fff; white-space:nowrap; }
+.rside { position:absolute; right:2.5mm; top:40%; }
+.rside span { writing-mode:vertical-rl; font-family:var(--font-head); font-size:6pt;
+  letter-spacing:2.5px; color:#9a9a9a; white-space:nowrap; }
+.phead { text-align:center; padding-top:9mm; }
+.ph1 { font-family:var(--font-head); font-weight:600; font-size:7pt; letter-spacing:4px; color:#8a7460; }
+.ph2 { font-family:var(--font-head); font-weight:600; font-size:6.3pt; letter-spacing:2.4px; color:#E48FA6; margin-top:1.6mm; }
+.content { padding:5mm 16mm 0 20mm; }
+.pfoot { position:absolute; bottom:6.5mm; left:0; right:0; text-align:center;
+  font-family:var(--font-head); font-weight:700; font-size:10pt; color:#8a8a8a; }
+
+.banner { background:#f5e5b2; border-radius:14px; padding:3.6mm 6mm; margin:2mm 0 4.5mm;
+  box-shadow:0 1px 4px rgba(0,0,0,.08); text-align:center; }
+.banner h1 { font-family:var(--font-head); font-weight:800; font-size:16.5pt; color:#4a4a4a;
+  letter-spacing:.4px; text-transform:uppercase; }
+.pillwrap { text-align:center; margin:4.5mm 0 3mm; }
+.pill { display:inline-block; border-radius:999px; padding:2.4mm 9mm;
+  font-family:var(--font-head); font-weight:700; font-size:10.5pt; color:#fff;
+  letter-spacing:.4px; text-transform:uppercase; box-shadow:0 1px 4px rgba(0,0,0,.12); }
+.rosepill { background:#E48FA6; }
+.sagepill { background:#8FA681; }
+.card { background:rgba(255,255,255,.93); border:2px solid #ecd2c0; border-radius:16px;
+  padding:4mm 6mm; margin:0 0 4mm; box-shadow:0 1px 5px rgba(0,0,0,.06); }
+.cream { background:#fbf3e8; border:2px solid #ecd2c0; border-radius:16px;
+  padding:4mm 6mm; margin:4mm 0; text-align:center; }
+.creamtitle { font-family:var(--font-head); font-weight:700; font-size:11pt; color:#8FA681; }
+p { font-size:10.6pt; line-height:1.52; margin-bottom:2.2mm; }
+p.small, .small { font-size:9.5pt; color:#777; }
+p.center { text-align:center; }
+ul.dots { list-style:none; }
+ul.dots li { font-size:10.6pt; line-height:1.48; padding-left:5.5mm; position:relative; margin:1.6mm 0; }
+ul.dots li::before { content:'•'; position:absolute; left:1mm; color:#E48FA6; font-weight:bold; }
+ol.steps { list-style:none; }
+ol.steps li { display:flex; gap:3.5mm; align-items:flex-start; background:rgba(255,255,255,.93);
+  border:2px solid #ecd2c0; border-radius:14px; padding:3mm 5mm; margin-bottom:2.4mm; }
+ol.steps li div { font-size:10.4pt; line-height:1.46; }
+.snum { flex:0 0 auto; width:7.5mm; height:7.5mm; border-radius:50%; background:#E48FA6; color:#fff;
+  font-family:var(--font-head); font-weight:700; font-size:11pt; display:flex;
+  align-items:center; justify-content:center; margin-top:.5mm; }
+table.t { width:100%; border-collapse:collapse; margin:2.5mm 0; }
+table.t th { font-family:var(--font-head); font-weight:700; font-size:9.3pt; color:#E48FA6;
+  text-align:left; padding:1.5mm 2.5mm; border-bottom:2px solid #ecd2c0; }
+table.t td { font-size:9.7pt; padding:1.4mm 2.5mm; border-bottom:1px solid #f2e3d8; line-height:1.38; }
+table.tl td:first-child { white-space:nowrap; }
+.dot { display:inline-block; width:3.5mm; height:3.5mm; border-radius:50%; vertical-align:-0.5mm; margin-right:1.5mm; }
+
+.coverimg { text-align:center; margin:3mm 0 3mm; }
+.coverimg img { width:98mm; border-radius:14px; box-shadow:0 3px 10px rgba(0,0,0,.18);
+  border:3mm solid #fff; }
+.covertag { text-align:center; font-family:var(--font-head); font-size:8pt; letter-spacing:2.6px;
+  color:#8a8a8a; margin:1mm 0 2.5mm; }
+.coverbanner { display:flex; align-items:center; justify-content:center; gap:5mm;
+  background:#f5e5b2; border-radius:16px; padding:3.4mm 6mm; box-shadow:0 1px 5px rgba(0,0,0,.1); }
+.covertitle { font-family:var(--font-head); font-weight:800; font-size:27pt; color:#4a4a4a; letter-spacing:1px; }
+.subpill { margin:3.6mm auto; width:fit-content; background:#fdf9e3; border:2.5px solid #4a4a4a;
+  border-radius:999px; padding:1.8mm 8mm; font-family:var(--font-head); font-weight:700;
+  font-size:10pt; color:#4a4a4a; letter-spacing:.4px; }
+.byline { text-align:center; margin-top:3.5mm; }
+.by1 { font-family:var(--font-head); font-weight:700; font-size:12.5pt; color:#8FA681; }
+.by2 { font-size:10.2pt; color:#8a8a8a; margin-top:.8mm; }
+.by3 { font-family:var(--font-head); font-weight:600; font-size:9.6pt; color:#E48FA6; margin-top:.5mm; }
+.notecard { display:flex; gap:4mm; align-items:center; background:rgba(255,255,255,.8);
+  border-radius:12px; padding:3.2mm 6mm; margin-top:4mm; }
+.notecard p { font-size:9.3pt; color:#777; margin:0; }
+.noteemo { font-size:16pt; }
+
+.twocol { display:flex; gap:6mm; align-items:flex-start; }
+.twocol > div { flex:1; }
+.figwrap { text-align:center; }
+.figwrap img { width:44mm; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,.14); border:2mm solid #fff; }
+.figcap { font-size:9pt; color:#888; text-align:center; margin-top:1.5mm; }
+.schematic { margin:2mm 0 1mm; }
+.deler-grid { display:grid; grid-template-columns:1fr 1fr; gap:2.4mm 6mm; margin:1mm 0 2mm; }
+.deler-grid .di { font-size:10pt; line-height:1.4; padding:1.6mm 0; border-bottom:1px dashed #e6d3c4; }
+.deler-grid .di b { color:#8FA681; font-family:var(--font-head); }
+
+.photorow { display:flex; gap:3mm; flex-wrap:wrap; justify-content:center; margin:2mm 0 3mm; }
+.photoph { aspect-ratio:1/1; max-width:44mm; background:rgba(255,255,255,.7);
+  border:2px dashed #d9bfa8; border-radius:12px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:1.5mm; padding:2mm; }
+.phicon { font-size:17pt; opacity:.45; }
+.phcap { font-size:8.3pt; color:#9a8a7a; text-align:center; line-height:1.3; }
+.qrbox { text-align:center; margin:3mm 0; }
+.qrsquare { width:26mm; height:26mm; margin:0 auto; background:#fff; border:2px dashed #d9bfa8;
+  border-radius:10px; display:flex; align-items:center; justify-content:center; }
+.qricon { font-size:20pt; color:#d9bfa8; }
+.qrcap { font-size:9pt; color:#888; margin-top:1.6mm; }
+</style></head>
+<body><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BASISBODY</div>
+  </div>
+  <div class="content">
+<div class="covertag">LME KNITTING PATTERN - BABY</div>
+<div class="coverbanner"><h1 class="covertitle">WOODLAND DREAMS BASISBODY</h1></div>
+<div class="subpill">LME BABY COLLECTION - WOODLAND DREAMS</div>
+<div class="card"><p class="center">A timeless, unisex basisbody in stockinette stitch: round neck, raglan sleeves, ribbing at the neck, cuffs and hem, and buttons at the crotch for easy nappy changes. Seven sizes, from 0-1 to 18-24 months. The basisbody is the foundation of the "Woodland Dreams" collection, designed to be combined with all six accessory patterns: lace collar, ruffle collar, Peter Pan collar, bib, i-cord suspenders and short vest.</p></div>
+<div class="byline">
+  <div class="by1">By Renate Dahl</div>
+  <div class="by2">Little Montessori Explorers</div>
+  <div class="by3">lmexplorers.com</div>
+</div>
+<div class="notecard"><span class="noteemo">&#129517;</span><p><i>TIP: Read through the whole pattern and the size chart on page 4 before you start, and knit a 15 x 15 cm gauge swatch to check your tension, before casting on the body itself.</i></p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;1&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BASISBODY</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>ABOUT THE WOODLAND DREAMS BASISBODY</h1></div>
+<div class="pillwrap"><div class="pill rosepill">THE FOUNDATION OF THE COLLECTION</div></div>
+<div class="card"><p>The basisbody is the first piece in LME Woodland Dreams, a modular knitting collection in a Scandinavian, timeless style. The idea is simple: one well-fitting body, that can be built on with different collars, a bib, suspenders or a little vest, without knitting a new body for every outfit.</p></div>
+<div class="pillwrap"><div class="pill sagepill">STYLE</div></div>
+<div class="card"><p>Clean lines, soft transitions and calm natural colours: cream, linen, sand, oatmeal and beige. No fixed trim or decoration on the body itself, it is meant to be the quiet foundation that the colour and shape of the accessories are allowed to lift.</p></div>
+<div class="pillwrap"><div class="pill rosepill">A ROOMY, NAPPY-FRIENDLY FIT</div></div>
+<div class="cream"><p class="creamtitle">Knitted with a little extra width over the chest and good body length, so there is room for a nappy without the body pulling tight. Long sleeves all year round, and a set of buttons at the crotch make nappy changes quick, without undressing the whole baby.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;2&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BASISBODY</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>MATERIALS</h1></div>
+<div class="pillwrap"><div class="pill rosepill">YARN</div></div>
+<div class="card"><p>Sandnes Garn Alpakka (100% alpaca), or an equivalent yarn with the same gauge. Choose one of the collection's calm natural colours for the body itself: cream, linen, sand, oatmeal or beige.</p></div>
+<div class="pillwrap"><div class="pill sagepill">YARN REQUIREMENTS</div></div>
+<div class="card"><table class="t"><tr><th>Size</th><th>Yarn amount</th></tr><tr><td><b>0-1 mnd</b></td><td>90-100 g</td></tr><tr><td><b>1-3 mnd</b></td><td>105-115 g</td></tr><tr><td><b>3-6 mnd</b></td><td>120-135 g</td></tr><tr><td><b>6-9 mnd</b></td><td>140-155 g</td></tr><tr><td><b>9-12 mnd</b></td><td>160-175 g</td></tr><tr><td><b>12-18 mnd</b></td><td>180-200 g</td></tr><tr><td><b>18-24 mnd</b></td><td>210-230 g</td></tr></table></div>
+<div class="pillwrap"><div class="pill rosepill">NEEDLES AND NOTIONS</div></div>
+<div class="cream"><p class="creamtitle">Circular needle 4 mm (40 cm and 60 cm), plus double-pointed needles or a short circular needle 4 mm for the sleeves. Three small round wooden buttons for the crotch (and two extra small wooden buttons for the shoulder opening on the three smallest sizes). Stitch markers (at least 4, ideally in four different colours for the four raglan lines), a tapestry needle, and a 3 mm crochet hook for crocheting the buttonhole loops.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;3&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BASISBODY</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>SIZE CHART</h1></div>
+<p>Finished measurements, measured lying flat. Choose size by chest measurement, or one size up for extra room to grow.</p>
+<div class="card"><table class="t"><tr><th>Size</th><th>Chest width</th><th>Neck-to-crotch length</th><th>Sleeve length</th><th>Neck opening</th></tr><tr><td><b>0-1 mnd</b></td><td>46.4 cm</td><td>25 cm</td><td>8.5 cm</td><td>21 cm</td></tr><tr><td><b>1-3 mnd</b></td><td>49.1 cm</td><td>27 cm</td><td>9.5 cm</td><td>22 cm</td></tr><tr><td><b>3-6 mnd</b></td><td>51.8 cm</td><td>30 cm</td><td>10.5 cm</td><td>23 cm</td></tr><tr><td><b>6-9 mnd</b></td><td>54.5 cm</td><td>33 cm</td><td>11.5 cm</td><td>24 cm</td></tr><tr><td><b>9-12 mnd</b></td><td>57.3 cm</td><td>36 cm</td><td>12.5 cm</td><td>25 cm</td></tr><tr><td><b>12-18 mnd</b></td><td>60.0 cm</td><td>39 cm</td><td>13.5 cm</td><td>26 cm</td></tr><tr><td><b>18-24 mnd</b></td><td>62.7 cm</td><td>42 cm</td><td>14.5 cm</td><td>27 cm</td></tr></table></div>
+<div class="cream"><p class="creamtitle">The measurements are the finished chest width (full circumference), i.e. including the roomy fit the pattern is calculated with, not the baby's actual chest measurement.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;4&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BASISBODY</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>GAUGE AND DIFFICULTY LEVEL</h1></div>
+<div class="pillwrap"><div class="pill rosepill">GAUGE</div></div>
+<div class="card"><p>22 stitches and 30 rounds in stockinette stitch = 10 x 10 cm, on 4 mm needles. This gauge is used in every calculation in the pattern. Always knit a swatch first: cast on 26 stitches, work stockinette stitch for approx. 12 cm, bind off and block lightly. If your gauge does not match, change to a smaller or larger needle until it does, not just to match the yarn.</p></div>
+<div class="pillwrap"><div class="pill sagepill">DIFFICULTY LEVEL</div></div>
+<div class="cream"><p class="creamtitle">Medium. You should be comfortable knitting in the round, increasing and decreasing, picking up stitches, and working simple buttonholes. No complicated stitch patterns, the whole body is stockinette stitch and rib.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;5&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BASISBODY</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>ABBREVIATIONS</h1></div>
+<p>Norwegian knitting terms with the English terms alongside.</p>
+<div class="card"><table class="t tl"><tr><th>Norwegian</th><th>English</th><th>Meaning</th></tr><tr><td><b>r</b></td><td>K</td><td>rett</td></tr><tr><td><b>vr</b></td><td>P</td><td>vrangbord/vrang</td></tr><tr><td><b>m</b></td><td>st(s)</td><td>maske(r)</td></tr><tr><td><b>o</b></td><td>rnd</td><td>omgang</td></tr><tr><td><b>øk</b></td><td>inc</td><td>øk (ta opp én tilleggsmaske)</td></tr><tr><td><b>felle</b></td><td>dec</td><td>felle (strikk to masker sammen)</td></tr><tr><td><b>r-felling</b></td><td>k2tog</td><td>strikk 2 r sammen (hellende høyre)</td></tr><tr><td><b>vr-felling</b></td><td>ssk</td><td>løft av, løft av, strikk sammen (hellende venstre)</td></tr><tr><td><b>ta opp m</b></td><td>pick up sts</td><td>ta opp masker langs en kant</td></tr><tr><td><b>fell av</b></td><td>BO</td><td>fell av / bind off</td></tr><tr><td><b>legg opp</b></td><td>CO</td><td>legg opp masker</td></tr><tr><td><b>rettpinne</b></td><td>straight needle</td><td>rett/enkeltpinne</td></tr><tr><td><b>rundpinne</b></td><td>circular needle</td><td>rundpinne</td></tr><tr><td><b>strømpepinne</b></td><td>DPN</td><td>strømpepinne (dobbeltspiss)</td></tr><tr><td><b>maskemarkør</b></td><td>st marker</td><td>maskemarkør</td></tr></table></div>
+<div class="pillwrap"><div class="pill sagepill">TIPS</div></div>
+<div class="card"><ul class="dots"><li>Use four stitch markers in different colours for the four raglan lines, it makes it much easier to keep track as you go.</li><li>Always knit a swatch, even if you "usually" get this gauge, alpaca behaves a little differently from wool.</li><li>Count your stitches at every checkpoint marked in the pattern. It is easier to fix a mistake 10 rounds back than 40.</li></ul></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;6&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BASISBODY</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>HOW THE BODY IS CONSTRUCTED</h1></div>
+<div class="card"><p>The body is knitted top-down, in one piece, with raglan sleeves. Four simple parts, in this order:</p><div class="deler-grid"><div class="di"><b>1. Neck and yoke</b><br>Cast on at the neck, work rib, increase four raglan lines evenly until the yoke width is reached.</div><div class="di"><b>2. Divide for sleeves and body</b><br>Put the sleeve stitches on hold, cast on a few new stitches under each arm, continue in the round on the body alone.</div><div class="di"><b>3. The body down to the crotch</b><br>Knit stockinette straight down, finish with rib and a button opening at the crotch.</div><div class="di"><b>4. The sleeves down to the cuff</b><br>Put the sleeve stitches back on the needle, knit around down the arm, finish with rib at the cuff.</div></div></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;7&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BASISBODY</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 1: THE NECK OPENING</h1></div>
+<p>The body is cast on at the neck and knitted top-down. On the three smallest sizes (0-1, 1-3 and 3-6 months) it is cast on flat, with a small opening at the left shoulder that closes with two buttons, so the head passes through more easily. On the four largest sizes (6-9 to 18-24 months) it is cast on in the round, with no opening, since the neck is then wide enough on its own.</p>
+<div class="card"><p><b>Example, 0-1 months:</b> The three smallest sizes: cast on 38 stitches flat on a 4 mm circular needle (work back and forth, not in the round, for the first 7 rows). Place a stitch marker after stitch 18, after stitch 19, after stitch 37 and after stitch 38, these mark the four raglan lines (back-left sleeve, left sleeve-front, front-right sleeve, right sleeve-back).</p></div>
+<div class="card"><p><b>Example, 6-9 months:</b> The four largest sizes: cast on 40 stitches in the round on a 4 mm circular needle, place a marker for the start of the round. Place a stitch marker after stitch 20, after stitch 20, after stitch 40 and after stitch 40, as above.</p></div>
+<div class="cream"><p class="creamtitle">Work k1, p1 rib for 7 rounds/rows.</p></div>
+<p class="small center">The exact stitch count for your size is in the grading table on the next page.</p>
+</div>
+  <div class="pfoot">&mdash;&nbsp;8&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BASISBODY</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 2: RAGLAN INCREASES</h1></div>
+<p>Switch to stockinette stitch. Now increase evenly along all four raglan lines, until the yoke width is reached. The construction is the same for every size, only the numbers change, see the grading table below.</p>
+<div class="card"><p>Increase round (every 2nd round/row): increase 1 stitch right before and 1 stitch right after each of the four raglan markers (8 stitches increased in total per increase round). Knit plain, with no increases, on the round/row in between.</p></div>
+<div class="card"><table class="t"><tr><th>Size</th><th>Neck cast-on</th><th>Increase rounds</th><th>Rounds to yoke depth</th><th>Sts at yoke depth</th></tr><tr><td><b>0-1 mnd</b></td><td>38</td><td>8</td><td>16</td><td>102</td></tr><tr><td><b>1-3 mnd</b></td><td>36</td><td>9</td><td>18</td><td>108</td></tr><tr><td><b>3-6 mnd</b></td><td>42</td><td>9</td><td>18</td><td>114</td></tr><tr><td><b>6-9 mnd</b></td><td>40</td><td>10</td><td>20</td><td>120</td></tr><tr><td><b>9-12 mnd</b></td><td>46</td><td>10</td><td>20</td><td>126</td></tr><tr><td><b>12-18 mnd</b></td><td>44</td><td>11</td><td>22</td><td>132</td></tr><tr><td><b>18-24 mnd</b></td><td>50</td><td>11</td><td>22</td><td>138</td></tr></table></div>
+<div class="cream"><p class="creamtitle">Check: count your stitches. They should match the number in the "Sts at yoke depth" column for your size, before you move on to part 3.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;9&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BASISBODY</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 3: DIVIDE FOR SLEEVES AND BODY</h1></div>
+<p>Now the yoke is divided into two sleeves and a body. Do this the same way for every size, use your own row's stitch numbers from the table on the previous page.</p>
+<div class="card"><p class="small">Example with numbers for 0-1 months, use your own numbers from the table on the previous page.</p><ul class="dots"><li>Knit across the 34 front stitches (stitches between the left and right raglan markers, front section).</li><li>Put the next 17 stitches (left sleeve) on a holder or spare needle, to rest.</li><li>Cast on 2 new stitches right over the sleeve gap, these give a little extra ease under the arm.</li><li>Knit across the 34 back stitches.</li><li>Put the next 17 stitches (right sleeve) on a holder or spare needle, to rest.</li><li>Cast on 2 new stitches over the other sleeve gap.</li><li>You now have 72 stitches on the needle, in the round, the body alone. Place a marker for the start of the round at centre back.</li></ul></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;10&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BASISBODY</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 4: THE BODY DOWN TO THE CROTCH</h1></div>
+<p>Knit stockinette stitch straight down, in the round, with no increasing or decreasing, until the body reaches the desired length. See the table below for how many rounds to work for your size.</p>
+<div class="card"><table class="t"><tr><th>Size</th><th>Body stitches</th><th>Rounds stockinette</th><th>Rounds rib at hem</th><th>Finished length</th></tr><tr><td><b>0-1 mnd</b></td><td>72</td><td>52</td><td>7</td><td>25 cm</td></tr><tr><td><b>1-3 mnd</b></td><td>76</td><td>56</td><td>7</td><td>27 cm</td></tr><tr><td><b>3-6 mnd</b></td><td>80</td><td>65</td><td>7</td><td>30 cm</td></tr><tr><td><b>6-9 mnd</b></td><td>84</td><td>72</td><td>7</td><td>33 cm</td></tr><tr><td><b>9-12 mnd</b></td><td>88</td><td>81</td><td>7</td><td>36 cm</td></tr><tr><td><b>12-18 mnd</b></td><td>92</td><td>88</td><td>7</td><td>39 cm</td></tr><tr><td><b>18-24 mnd</b></td><td>96</td><td>97</td><td>7</td><td>42 cm</td></tr></table></div>
+<div class="cream"><p class="creamtitle">Switch to k1, p1 rib and work 7 rounds. Bind off all stitches loosely in rib pattern, so the hem edge stays stretchy.</p></div>
+<div class="pillwrap"><div class="pill rosepill">BUTTONS AT THE CROTCH</div></div>
+<div class="card"><p>Work a 4-5 cm long placket at centre front, right above the rib hem, by knitting back and forth instead of in the round for the last few rounds before binding off. Edge both sides of the placket with 2 rows of garter stitch, then crochet three small loops (buttonholes) on one side with a 3 mm crochet hook, and sew three wooden buttons onto the other side, directly opposite the loops. The placket makes nappy changes quick without undressing the baby.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;11&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BASISBODY</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 5: THE SLEEVES</h1></div>
+<p>Put the sleeve stitches back onto the needle from the holder, one sleeve at a time. Also pick up the 2 stitches that were cast on under the arm in part 3, so you knit in the round in one piece.</p>
+<div class="card"><table class="t"><tr><th>Size</th><th>Sts per sleeve</th><th>Rounds stockinette</th><th>Rounds rib at cuff</th><th>Finished sleeve length</th></tr><tr><td><b>0-1 mnd</b></td><td>19</td><td>20</td><td>6</td><td>8.5 cm</td></tr><tr><td><b>1-3 mnd</b></td><td>20</td><td>22</td><td>6</td><td>9.5 cm</td></tr><tr><td><b>3-6 mnd</b></td><td>21</td><td>26</td><td>6</td><td>10.5 cm</td></tr><tr><td><b>6-9 mnd</b></td><td>22</td><td>28</td><td>6</td><td>11.5 cm</td></tr><tr><td><b>9-12 mnd</b></td><td>23</td><td>32</td><td>6</td><td>12.5 cm</td></tr><tr><td><b>12-18 mnd</b></td><td>24</td><td>34</td><td>6</td><td>13.5 cm</td></tr><tr><td><b>18-24 mnd</b></td><td>25</td><td>38</td><td>6</td><td>14.5 cm</td></tr></table></div>
+<div class="cream"><p class="creamtitle">Switch to k1, p1 rib and work 6 rounds. Bind off loosely in rib pattern. Repeat the same way for the other sleeve.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;12&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BASISBODY</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>SHOULDER OPENING (0-1, 1-3 AND 3-6 MONTHS)</h1></div>
+<p>Only for the three smallest sizes. The four largest sizes skip straight from the sleeves to finishing on the next page.</p>
+<div class="card"><p>The opening at the left shoulder (from the flat neck knitting in part 1) is edged with 2 rows of garter stitch on each side. Crochet two small loops (buttonholes) on the front edge with a 3 mm crochet hook, and sew two wooden buttons onto the back edge, directly opposite the loops. Button the shoulder closed once the body is finished and ready to put on.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;13&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BASISBODY</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>FINISHING</h1></div>
+<div class="card"><ol class="steps"><li><span class="snum">1</span><div>Sew together the 2 stitches that were cast on under each arm, with a small, neat seam, so no hole is left.</div></li><li><span class="snum">2</span><div>Weave in all loose ends securely on the wrong side, and trim them short.</div></li><li><span class="snum">3</span><div>Sew on the buttons at the crotch and (for the three smallest sizes) at the shoulder, see part 4 and the shoulder opening page.</div></li><li><span class="snum">4</span><div>Lightly steam-block the body on the wrong side, avoid pressing directly on the ribbed edges, they should keep their stretch.</div></li><li><span class="snum">5</span><div>Finally, check that every button is securely attached, and that no loose threads or stitches can come undone.</div></li></ol></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;14&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BASISBODY</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>SAFETY AND CARE</h1></div>
+<div class="pillwrap"><div class="pill rosepill">SAFETY</div></div>
+<div class="card"><ul class="dots"><li>Always use small, securely attached buttons, and sew them on with double thread, several times through each hole.</li><li>Check the buttons regularly, especially after washing, and reattach them at the first sign of looseness.</li><li>This pattern is not intended for children who put small objects in their mouth unsupervised, never leave a baby alone and unsupervised in the body during the first while of wearing it.</li><li>All measurements and stitch counts in this pattern are calculated for a roomy, comfortable fit, not a tight safety fit, always follow current safety recommendations for children's clothing.</li></ul></div>
+<div class="pillwrap"><div class="pill sagepill">CARE INSTRUCTIONS</div></div>
+<div class="cream"><p class="creamtitle">Hand wash gently in lukewarm water with wool wash, or machine wash on a wool cycle at 30 degrees. Press out the water, ease into shape, and dry lying flat on a towel. Avoid hanging the body up to dry, alpaca can stretch out of shape.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;15&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BASISBODY</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>ALL DONE!</h1></div>
+<div class="cream"><p class="creamtitle">Congratulations, your basisbody is finished! It is made to be the foundation of the whole "Woodland Dreams" collection, ready to be combined with the collars, the bib, the suspenders or the vest.</p></div>
+<div class="pillwrap"><div class="pill sagepill">THE REST OF THE COLLECTION</div></div>
+<div class="card"><ul class="dots"><li>Lace collar, a loose collar that fastens at the back.</li><li>Ruffle collar, the same fastening, a little more romantic.</li><li>Peter Pan collar, a classic rounded collar.</li><li>Bib, tied with an i-cord or a button.</li><li>I-cord suspenders, the collection's signature piece, adjustable and crossing at the back.</li><li>Short vest, with wooden buttons at the front, worn over the body.</li><li>Woodland Fluffy Skirt, a crocheted skirt made to match the body.</li></ul></div>
+<div class="pillwrap"><div class="pill rosepill">COPYRIGHT</div></div>
+<div class="card"><p class="small center">(c) Renate Dahl, Little Montessori Explorers. This pattern is a fully original LME design. You are welcome to sell finished garments you make from this pattern, on a small personal scale, provided the finished product is checked against current safety requirements. The pattern itself, its text and images, may not be shared, copied or resold.</p></div>
+<div class="byline">
+  <div class="by2">By Renate Dahl &middot; Little Montessori Explorers &middot; lmexplorers.com</div>
+</div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;16&nbsp;&mdash;</div>
+</div></body></html>

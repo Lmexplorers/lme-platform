@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Woodland Dreams Bib, LME knitting pattern</title>
+<style>
+@font-face { font-family:'Sasson Montessori'; src:url('fonts/SassoonMontessori.ttf'); font-weight:normal; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-400.ttf'); font-weight:400; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-600.ttf'); font-weight:600; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-700.ttf'); font-weight:700; }
+@font-face { font-family:'Playpen Sans'; src:url('fonts/PlaypenSans-800.ttf'); font-weight:800; }
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --font-head:'Playpen Sans',system-ui,sans-serif;
+  --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+}
+@page { size:A4; margin:0; }
+body { font-family:var(--font-body); color:#4a4a4a; }
+.page {
+  position:relative; width:210mm; height:296.5mm; overflow:hidden;
+  page-break-after:always;
+  background:
+    url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAArUlEQVR42u3VUQkAIAxFUSfWt4wNTDYD6LcgnhvhHcYiM0fZm0VXqiYAAEAAvq2dHm5EdNO4AAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAAC8GILoF0Gg4kZ4kUAAAAASUVORK5CYII=) 0 0/8mm 8mm repeat,
+    linear-gradient(165deg,#f3e8d8 0%,#f6ecec 45%,#f3dde6 100%);
+}
+.band { position:absolute; left:0; top:0; bottom:0; width:11mm;
+  background:linear-gradient(180deg,#C79A6C,#E48FA6); }
+.band span { position:absolute; left:50%; top:75%; transform:translate(-50%,-50%);
+  writing-mode:vertical-rl; text-orientation:mixed; rotate:180deg;
+  font-family:var(--font-head); font-size:6.5pt; letter-spacing:3.5px; color:#fff; white-space:nowrap; }
+.rside { position:absolute; right:2.5mm; top:40%; }
+.rside span { writing-mode:vertical-rl; font-family:var(--font-head); font-size:6pt;
+  letter-spacing:2.5px; color:#9a9a9a; white-space:nowrap; }
+.phead { text-align:center; padding-top:9mm; }
+.ph1 { font-family:var(--font-head); font-weight:600; font-size:7pt; letter-spacing:4px; color:#8a7460; }
+.ph2 { font-family:var(--font-head); font-weight:600; font-size:6.3pt; letter-spacing:2.4px; color:#E48FA6; margin-top:1.6mm; }
+.content { padding:5mm 16mm 0 20mm; }
+.pfoot { position:absolute; bottom:6.5mm; left:0; right:0; text-align:center;
+  font-family:var(--font-head); font-weight:700; font-size:10pt; color:#8a8a8a; }
+
+.banner { background:#f5e5b2; border-radius:14px; padding:3.6mm 6mm; margin:2mm 0 4.5mm;
+  box-shadow:0 1px 4px rgba(0,0,0,.08); text-align:center; }
+.banner h1 { font-family:var(--font-head); font-weight:800; font-size:16.5pt; color:#4a4a4a;
+  letter-spacing:.4px; text-transform:uppercase; }
+.pillwrap { text-align:center; margin:4.5mm 0 3mm; }
+.pill { display:inline-block; border-radius:999px; padding:2.4mm 9mm;
+  font-family:var(--font-head); font-weight:700; font-size:10.5pt; color:#fff;
+  letter-spacing:.4px; text-transform:uppercase; box-shadow:0 1px 4px rgba(0,0,0,.12); }
+.rosepill { background:#E48FA6; }
+.sagepill { background:#8FA681; }
+.card { background:rgba(255,255,255,.93); border:2px solid #ecd2c0; border-radius:16px;
+  padding:4mm 6mm; margin:0 0 4mm; box-shadow:0 1px 5px rgba(0,0,0,.06); }
+.cream { background:#fbf3e8; border:2px solid #ecd2c0; border-radius:16px;
+  padding:4mm 6mm; margin:4mm 0; text-align:center; }
+.creamtitle { font-family:var(--font-head); font-weight:700; font-size:11pt; color:#8FA681; }
+p { font-size:10.6pt; line-height:1.52; margin-bottom:2.2mm; }
+p.small, .small { font-size:9.5pt; color:#777; }
+p.center { text-align:center; }
+ul.dots { list-style:none; }
+ul.dots li { font-size:10.6pt; line-height:1.48; padding-left:5.5mm; position:relative; margin:1.6mm 0; }
+ul.dots li::before { content:'•'; position:absolute; left:1mm; color:#E48FA6; font-weight:bold; }
+ol.steps { list-style:none; }
+ol.steps li { display:flex; gap:3.5mm; align-items:flex-start; background:rgba(255,255,255,.93);
+  border:2px solid #ecd2c0; border-radius:14px; padding:3mm 5mm; margin-bottom:2.4mm; }
+ol.steps li div { font-size:10.4pt; line-height:1.46; }
+.snum { flex:0 0 auto; width:7.5mm; height:7.5mm; border-radius:50%; background:#E48FA6; color:#fff;
+  font-family:var(--font-head); font-weight:700; font-size:11pt; display:flex;
+  align-items:center; justify-content:center; margin-top:.5mm; }
+table.t { width:100%; border-collapse:collapse; margin:2.5mm 0; }
+table.t th { font-family:var(--font-head); font-weight:700; font-size:9.3pt; color:#E48FA6;
+  text-align:left; padding:1.5mm 2.5mm; border-bottom:2px solid #ecd2c0; }
+table.t td { font-size:9.7pt; padding:1.4mm 2.5mm; border-bottom:1px solid #f2e3d8; line-height:1.38; }
+table.tl td:first-child { white-space:nowrap; }
+.dot { display:inline-block; width:3.5mm; height:3.5mm; border-radius:50%; vertical-align:-0.5mm; margin-right:1.5mm; }
+
+.coverimg { text-align:center; margin:3mm 0 3mm; }
+.coverimg img { width:98mm; border-radius:14px; box-shadow:0 3px 10px rgba(0,0,0,.18);
+  border:3mm solid #fff; }
+.covertag { text-align:center; font-family:var(--font-head); font-size:8pt; letter-spacing:2.6px;
+  color:#8a8a8a; margin:1mm 0 2.5mm; }
+.coverbanner { display:flex; align-items:center; justify-content:center; gap:5mm;
+  background:#f5e5b2; border-radius:16px; padding:3.4mm 6mm; box-shadow:0 1px 5px rgba(0,0,0,.1); }
+.covertitle { font-family:var(--font-head); font-weight:800; font-size:27pt; color:#4a4a4a; letter-spacing:1px; }
+.subpill { margin:3.6mm auto; width:fit-content; background:#fdf9e3; border:2.5px solid #4a4a4a;
+  border-radius:999px; padding:1.8mm 8mm; font-family:var(--font-head); font-weight:700;
+  font-size:10pt; color:#4a4a4a; letter-spacing:.4px; }
+.byline { text-align:center; margin-top:3.5mm; }
+.by1 { font-family:var(--font-head); font-weight:700; font-size:12.5pt; color:#8FA681; }
+.by2 { font-size:10.2pt; color:#8a8a8a; margin-top:.8mm; }
+.by3 { font-family:var(--font-head); font-weight:600; font-size:9.6pt; color:#E48FA6; margin-top:.5mm; }
+.notecard { display:flex; gap:4mm; align-items:center; background:rgba(255,255,255,.8);
+  border-radius:12px; padding:3.2mm 6mm; margin-top:4mm; }
+.notecard p { font-size:9.3pt; color:#777; margin:0; }
+.noteemo { font-size:16pt; }
+
+.twocol { display:flex; gap:6mm; align-items:flex-start; }
+.twocol > div { flex:1; }
+.figwrap { text-align:center; }
+.figwrap img { width:44mm; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,.14); border:2mm solid #fff; }
+.figcap { font-size:9pt; color:#888; text-align:center; margin-top:1.5mm; }
+.schematic { margin:2mm 0 1mm; }
+.deler-grid { display:grid; grid-template-columns:1fr 1fr; gap:2.4mm 6mm; margin:1mm 0 2mm; }
+.deler-grid .di { font-size:10pt; line-height:1.4; padding:1.6mm 0; border-bottom:1px dashed #e6d3c4; }
+.deler-grid .di b { color:#8FA681; font-family:var(--font-head); }
+
+.photorow { display:flex; gap:3mm; flex-wrap:wrap; justify-content:center; margin:2mm 0 3mm; }
+.photoph { aspect-ratio:1/1; max-width:44mm; background:rgba(255,255,255,.7);
+  border:2px dashed #d9bfa8; border-radius:12px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:1.5mm; padding:2mm; }
+.phicon { font-size:17pt; opacity:.45; }
+.phcap { font-size:8.3pt; color:#9a8a7a; text-align:center; line-height:1.3; }
+.qrbox { text-align:center; margin:3mm 0; }
+.qrsquare { width:26mm; height:26mm; margin:0 auto; background:#fff; border:2px dashed #d9bfa8;
+  border-radius:10px; display:flex; align-items:center; justify-content:center; }
+.qricon { font-size:20pt; color:#d9bfa8; }
+.qrcap { font-size:9pt; color:#888; margin-top:1.6mm; }
+</style></head>
+<body><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BIB</div>
+  </div>
+  <div class="content">
+<div class="covertag">LME KNITTING PATTERN - BABY</div>
+<div class="coverbanner"><h1 class="covertitle">WOODLAND DREAMS BIB</h1></div>
+<div class="subpill">LME BABY COLLECTION - WOODLAND DREAMS</div>
+<div class="card"><p class="center">A soft, rounded bib in stockinette stitch with a garter-stitch border all the way around: knitted flat, top-down, from the neck edge out to a rounded, chest-covering section. Closes either with two i-cord ties tied in a bow at the back of the neck, or with a single wooden button and loop for quick on and off. Seven sizes, from 0-1 to 18-24 months, each fitted to the neck size of the Woodland Dreams basisbody. The bib is accessory piece number four in the collection, knitted in one of the collection's bolder accessory colours, as a nice contrast to the basisbody's calm natural colours.</p></div>
+<div class="byline">
+  <div class="by1">By Renate Dahl</div>
+  <div class="by2">Little Montessori Explorers</div>
+  <div class="by3">lmexplorers.com</div>
+</div>
+<div class="notecard"><span class="noteemo">&#129517;</span><p><i>TIP: Read through the whole pattern and the size chart on page 4 before you start, and knit a 15 x 15 cm gauge swatch to check your tension, before casting on the bib itself.</i></p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;1&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BIB</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>ABOUT THE WOODLAND DREAMS BIB</h1></div>
+<div class="pillwrap"><div class="pill rosepill">PART OF THE COLLECTION</div></div>
+<div class="card"><p>The bib is knitted to fit right over the Woodland Dreams basisbody, the neck edge is matched to the basisbody's neck measurement for each of the seven sizes, so the bib sits neatly around the neck without pulling tight or gaping.</p></div>
+<div class="pillwrap"><div class="pill sagepill">STYLE</div></div>
+<div class="card"><p>A simple, rounded trapezoid shape with no pattern or decoration, just stockinette stitch with an even garter-stitch border all the way around. The shape is soft and playfully rounded at the two lower corners, instead of sharp corners.</p></div>
+<div class="pillwrap"><div class="pill rosepill">TWO WAYS TO CLOSE IT</div></div>
+<div class="cream"><p class="creamtitle">Choose how the bib should close at the back of the neck: two i-cord ties tied in a bow, or a single wooden button with a loop, for a quicker on and off. Both options are described in detail later in the pattern, together with a dedicated section on safety around neck ties and buttons.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;2&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BIB</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>MATERIALS</h1></div>
+<div class="pillwrap"><div class="pill rosepill">YARN</div></div>
+<div class="card"><p>Sandnes Garn Alpakka (100% alpaca), or an equivalent yarn with the same gauge. The bib is an accessory piece, so choose one of the collection's bolder accessory colours: sage, dusty rose, butter yellow, soft blue, olive or terracotta, ideally one that contrasts with the colour of the basisbody.</p></div>
+<div class="pillwrap"><div class="pill sagepill">YARN REQUIREMENTS</div></div>
+<div class="card"><table class="t"><tr><th>Size</th><th>Yarn amount</th></tr><tr><td><b>0-1 mo</b></td><td>20-30 g</td></tr><tr><td><b>1-3 mo</b></td><td>23-33 g</td></tr><tr><td><b>3-6 mo</b></td><td>26-36 g</td></tr><tr><td><b>6-9 mo</b></td><td>29-39 g</td></tr><tr><td><b>9-12 mo</b></td><td>33-43 g</td></tr><tr><td><b>12-18 mo</b></td><td>36-46 g</td></tr><tr><td><b>18-24 mo</b></td><td>41-51 g</td></tr></table></div>
+<div class="pillwrap"><div class="pill rosepill">NEEDLES AND NOTIONS</div></div>
+<div class="card"><p>Straight needles or a short circular needle 4 mm (the bib is knitted flat, back and forth, never in the round). A tapestry needle for finishing. For the button-and-loop closure: one small, round wooden button (approx. 12-15 mm in diameter) and a 3 mm crochet hook to crochet the loop. A stitch marker is optional, but handy for marking the start of the corner rounding.</p></div>
+<div class="pillwrap"><div class="pill sagepill">GAUGE SWATCH</div></div>
+<div class="cream"><p class="creamtitle">Cast on 26 stitches, work stockinette stitch for approx. 12 cm, bind off and block lightly. If your gauge does not match 22 stitches and 30 rows = 10 x 10 cm, change to a smaller or larger needle until it does, see page 5.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;3&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BIB</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>SIZE CHART</h1></div>
+<p>Finished measurements, measured lying flat. Choose size according to which basisbody size the bib will be worn with, the neck measurement in the table below is the same as the neck measurement on the matching basisbody size.</p>
+<div class="card"><table class="t"><tr><th>Size</th><th>Width at chest</th><th>Finished length</th><th>Width at top edge</th><th>Neck size (basisbody)</th></tr><tr><td><b>0-1 mnd</b></td><td>28.2 cm</td><td>19.5 cm</td><td>10.0 cm</td><td>21 cm</td></tr><tr><td><b>1-3 mnd</b></td><td>30.0 cm</td><td>20.6 cm</td><td>10.0 cm</td><td>22 cm</td></tr><tr><td><b>3-6 mnd</b></td><td>30.9 cm</td><td>21.8 cm</td><td>10.9 cm</td><td>23 cm</td></tr><tr><td><b>6-9 mnd</b></td><td>32.7 cm</td><td>22.9 cm</td><td>10.9 cm</td><td>24 cm</td></tr><tr><td><b>9-12 mnd</b></td><td>34.5 cm</td><td>24.1 cm</td><td>11.8 cm</td><td>25 cm</td></tr><tr><td><b>12-18 mnd</b></td><td>36.4 cm</td><td>25.2 cm</td><td>11.8 cm</td><td>26 cm</td></tr><tr><td><b>18-24 mnd</b></td><td>38.2 cm</td><td>26.3 cm</td><td>12.7 cm</td><td>27 cm</td></tr></table></div>
+<div class="cream"><p class="creamtitle">The width at the chest is approx. 60% of the basisbody's chest width for the matching size, the bib is meant to cover the front of the chest, not go all the way around.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;4&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BIB</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>GAUGE AND DIFFICULTY LEVEL</h1></div>
+<div class="pillwrap"><div class="pill rosepill">GAUGE</div></div>
+<div class="card"><p>22 stitches and 30 rows in stockinette stitch = 10 x 10 cm, on 4 mm needles, the same gauge as the Woodland Dreams basisbody. This gauge is used in every calculation in the pattern. Always knit a swatch first, see page 3. If your gauge does not match, change to a smaller or larger needle until it does, not just to match the yarn.</p></div>
+<div class="pillwrap"><div class="pill sagepill">DIFFICULTY LEVEL</div></div>
+<div class="cream"><p class="creamtitle">Easy to medium. The bib has no complicated shaping, you only need to be comfortable with stockinette stitch, garter stitch, simple increasing and decreasing, and knitting back and forth on straight needles. A nice beginner project to follow the basisbody.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;5&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BIB</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>ABBREVIATIONS</h1></div>
+<p>Norwegian knitting terms with the English terms alongside.</p>
+<div class="card"><table class="t tl"><tr><th>Norwegian</th><th>English</th><th>Meaning</th></tr><tr><td><b>r</b></td><td>K</td><td>rett</td></tr><tr><td><b>rettstrikk</b></td><td>garter st</td><td>strikk rett på begge sider (rader)</td></tr><tr><td><b>glattstrikk</b></td><td>stockinette st</td><td>r på retten, vr på vrangen</td></tr><tr><td><b>m</b></td><td>st(s)</td><td>maske(r)</td></tr><tr><td><b>rad</b></td><td>row</td><td>rad (fram-og-tilbake-strikking)</td></tr><tr><td><b>øk</b></td><td>inc/M1</td><td>øk (ta opp én tilleggsmaske)</td></tr><tr><td><b>felle</b></td><td>dec</td><td>felle (strikk to masker sammen)</td></tr><tr><td><b>r-felling</b></td><td>k2tog</td><td>strikk 2 r sammen (hellende høyre)</td></tr><tr><td><b>vr-felling</b></td><td>ssk</td><td>løft av, løft av, strikk sammen (hellende venstre)</td></tr><tr><td><b>i-cord</b></td><td>i-cord</td><td>strikket "snor" på 3-4 masker, strikket rett hver rad, aldri snudd</td></tr><tr><td><b>fell av</b></td><td>BO</td><td>fell av / bind off</td></tr><tr><td><b>legg opp</b></td><td>CO</td><td>legg opp masker</td></tr><tr><td><b>rettpinne</b></td><td>straight needle</td><td>rett/enkeltpinne</td></tr><tr><td><b>rundpinne</b></td><td>circular needle</td><td>rundpinne</td></tr><tr><td><b>maskemarkør</b></td><td>st marker</td><td>maskemarkør</td></tr></table></div>
+<div class="pillwrap"><div class="pill sagepill">TIPS</div></div>
+<div class="card"><ul class="dots"><li>Keep the outermost stitches on each side in garter stitch through the whole bib, no matter which section you are in, that is what gives the flat, non-curling border.</li><li>Always increase or decrease just inside the border stitches, never in the border itself, that way the border keeps the same width from top to bottom.</li><li>Count your stitches at every checkpoint in the tables. It is easier to fix a mistake 4 rows back than 40.</li></ul></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;6&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BIB</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>HOW THE BIB IS CONSTRUCTED</h1></div>
+<div class="card"><p>The bib is knitted flat, in one piece, top-down. Four simple parts, in this order:</p><div class="deler-grid"><div class="di"><b>1. Top edge</b><br>Cast on at the neck edge, work a few rows of garter stitch.</div><div class="di"><b>2. Increase to the widest point</b><br>Increase evenly on each side, every row, until the bib covers the chest.</div><div class="di"><b>3. Straight section and corner rounding</b><br>Knit straight, then round off the two lower corners and bind off.</div><div class="di"><b>4. Closure</b><br>Attach i-cord ties at the top corners, or knit a button-and-loop closure at the back of the neck.</div></div></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;7&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BIB</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 1: THE TOP EDGE</h1></div>
+<p>The bib is cast on at the top, at the neck edge, and knitted flat, back and forth, never in the round. Cast on the stitch count for your size from the table on the next page. The outermost 3 stitches on each side are worked in garter stitch through the WHOLE bib, no matter which section you are in, these border stitches are what gives the flat, non-curling finish around the whole piece.</p>
+<div class="card"><p>Example, 0-1 mo: cast on 22 stitches. Knit plain for 4 rows (garter stitch), this becomes the top edge that meets the neck.</p></div>
+<p class="small center">The exact stitch count for your size is in the grading table on the next page.</p>
+</div>
+  <div class="pfoot">&mdash;&nbsp;8&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BIB</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 2: INCREASE TO THE WIDEST POINT</h1></div>
+<p>Switch to stockinette stitch over the centre section, but keep the 3 border stitches on each side in garter stitch. Now increase evenly on each side, until the bib is wide enough to cover the chest. The construction is the same for every size, only the numbers change, see the grading table below.</p>
+<div class="card"><p>Increase row (every row, both the right and wrong side): work the border stitches, increase 1 stitch, knit until the same number of stitches as the border width remain, increase 1 more stitch, work the border stitches. So 1 stitch is increased on each side, every single row, with no plain rows in between, this gives a smooth, diagonal edge line with no stair-stepping.</p></div>
+<div class="card"><table class="t"><tr><th>Size</th><th>Cast on at top</th><th>Increase rows</th><th>Sts at widest point</th><th>Width at widest point</th></tr><tr><td><b>0-1 mnd</b></td><td>22</td><td>20</td><td>62</td><td>28.2 cm</td></tr><tr><td><b>1-3 mnd</b></td><td>22</td><td>22</td><td>66</td><td>30.0 cm</td></tr><tr><td><b>3-6 mnd</b></td><td>24</td><td>22</td><td>68</td><td>30.9 cm</td></tr><tr><td><b>6-9 mnd</b></td><td>24</td><td>24</td><td>72</td><td>32.7 cm</td></tr><tr><td><b>9-12 mnd</b></td><td>26</td><td>25</td><td>76</td><td>34.5 cm</td></tr><tr><td><b>12-18 mnd</b></td><td>26</td><td>27</td><td>80</td><td>36.4 cm</td></tr><tr><td><b>18-24 mnd</b></td><td>28</td><td>28</td><td>84</td><td>38.2 cm</td></tr></table></div>
+<div class="cream"><p class="creamtitle">Check: count your stitches. They should match the number in the "Sts at widest point" column for your size, before you move on to part 3.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;9&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BIB</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>PART 3: STRAIGHT SECTION, CORNER ROUNDING AND BIND-OFF</h1></div>
+<p>Now knit straight, with no increasing or decreasing, for the number of rows given in the table for your size. This is the section that covers most of the chest.</p>
+<div class="card"><p>Corner rounding: decrease 1 stitch just inside the border stitches on each side, every row, for the number of rows given in the table. This rounds off the two lower corners of the bib, instead of sharp right angles.</p></div>
+<div class="card"><table class="t"><tr><th>Size</th><th>Rows straight</th><th>Rows corner rounding</th><th>Sts after rounding</th><th>Rows at bottom edge</th><th>Finished length</th></tr><tr><td><b>0-1 mnd</b></td><td>26</td><td>4</td><td>54</td><td>4</td><td>19.5 cm</td></tr><tr><td><b>1-3 mnd</b></td><td>28</td><td>4</td><td>58</td><td>4</td><td>20.6 cm</td></tr><tr><td><b>3-6 mnd</b></td><td>31</td><td>4</td><td>60</td><td>4</td><td>21.8 cm</td></tr><tr><td><b>6-9 mnd</b></td><td>33</td><td>4</td><td>64</td><td>4</td><td>22.9 cm</td></tr><tr><td><b>9-12 mnd</b></td><td>35</td><td>4</td><td>68</td><td>4</td><td>24.1 cm</td></tr><tr><td><b>12-18 mnd</b></td><td>37</td><td>4</td><td>72</td><td>4</td><td>25.2 cm</td></tr><tr><td><b>18-24 mnd</b></td><td>39</td><td>4</td><td>76</td><td>4</td><td>26.3 cm</td></tr></table></div>
+<div class="cream"><p class="creamtitle">Finally knit plain for the number of rows given in the "Rows at bottom edge" column, this becomes a garter-stitch border along the bottom, in addition to the side borders. Bind off all stitches knitwise, not too tightly, so the bottom edge lies flat.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;10&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BIB</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>CLOSURE: I-CORD TIES OR BUTTON AND LOOP</h1></div>
+<p>Choose one of the two options below. Both are attached to the two top corners of the bib (where the cast-on was), right at the neck edge. Always read the safety section on page 13 before deciding, especially if the bib will be worn unsupervised for short periods.</p>
+<div class="pillwrap"><div class="pill rosepill">OPTION A: I-CORD TIES</div></div>
+<div class="card"><p>Pick up 3 stitches at each of the two top corners. Work i-cord (knit, slide the stitches back to the left needle tip without turning the work, knit again, repeat) until the tie measures the length given in the table below for your size. Bind off. Repeat at the other corner. The ties are tied in a simple bow at the back of the neck when the bib is put on.</p><table class="t"><tr><th>Size</th><th>Recommended length per tie</th><th>Neck size (basisbody)</th></tr><tr><td><b>0-1 mnd</b></td><td>12 cm</td><td>21 cm</td></tr><tr><td><b>1-3 mnd</b></td><td>13 cm</td><td>22 cm</td></tr><tr><td><b>3-6 mnd</b></td><td>13 cm</td><td>23 cm</td></tr><tr><td><b>6-9 mnd</b></td><td>14 cm</td><td>24 cm</td></tr><tr><td><b>9-12 mnd</b></td><td>14 cm</td><td>25 cm</td></tr><tr><td><b>12-18 mnd</b></td><td>14 cm</td><td>26 cm</td></tr><tr><td><b>18-24 mnd</b></td><td>14 cm</td><td>27 cm</td></tr></table></div>
+<div class="pillwrap"><div class="pill sagepill">OPTION B: BUTTON AND LOOP</div></div>
+<div class="cream"><p class="creamtitle">Quick to put on and take off, nice for everyday use. At one of the top corners, crochet a small loop (approx. 2.5 cm) with a 3 mm crochet hook, large enough to fit around the wooden button. At the other top corner, sew on one small, round wooden button. The loop and button meet at the back of the neck when the bib is put on. The same loop size is used for every size, it is sized to the button, not to the size of the child.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;11&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BIB</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>FINISHING</h1></div>
+<div class="card"><ol class="steps"><li><span class="snum">1</span><div>Weave in all loose ends securely on the wrong side, and trim them short.</div></li><li><span class="snum">2</span><div>Attach the i-cord ties or sew on the button and loop, see the previous page for your chosen option.</div></li><li><span class="snum">3</span><div>Lightly steam-block the bib on the wrong side, avoid pressing directly on the garter-stitch borders, they should keep their flat, non-curling finish.</div></li><li><span class="snum">4</span><div>Finally, check that the button (if used) is securely attached, and that the i-cord ties (if used) are firmly fastened at both corners.</div></li></ol></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;12&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BIB</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>SAFETY AND CARE</h1></div>
+<div class="pillwrap"><div class="pill rosepill">SAFETY</div></div>
+<div class="card"><ul class="dots"><li>A garment that ties or fastens around the neck is NEVER meant to be worn unsupervised, whether during play, in a stroller, in a car seat, in bed, or during sleep/rest. Always remove the bib before the baby is put down to sleep or left alone.</li><li>The i-cord ties should never be tied tighter than you can easily fit two fingers between the tie and the neck, and the bow should always be loose enough to be pulled open again in one motion if something happens.</li><li>If you prefer an option without long ties that could tangle or tighten, choose the button-and-loop option instead of the i-cord ties.</li><li>Always use a small, securely attached wooden button, sew it on with double thread, several times through each hole, and check it regularly, especially after washing.</li><li>This pattern is not intended for children who put small objects in their mouth unsupervised. Never leave a baby alone and unsupervised while wearing the bib.</li><li>All measurements and stitch counts in this pattern are calculated for a comfortable fit, not a safety-tested fit, always follow current safety recommendations for children's clothing and garments that fasten around the neck.</li></ul></div>
+<div class="pillwrap"><div class="pill sagepill">CARE INSTRUCTIONS</div></div>
+<div class="cream"><p class="creamtitle">Hand wash gently in lukewarm water with wool wash, or machine wash on a wool cycle at 30 degrees. Press out the water, ease into shape, and dry lying flat on a towel. Avoid hanging the bib up to dry, alpaca can stretch out of shape.</p></div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;13&nbsp;&mdash;</div>
+</div><div class="page">
+  <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
+  <div class="rside"><span>LME KNITTING</span></div>
+  <div class="phead">
+    <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
+    <div class="ph2">LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;WOODLAND DREAMS BIB</div>
+  </div>
+  <div class="content">
+<div class="banner"><h1>ALL DONE!</h1></div>
+<div class="cream"><p class="creamtitle">Congratulations, your bib is finished! It is made to fit together with the basisbody, and to be part of the whole "Woodland Dreams" collection.</p></div>
+<div class="pillwrap"><div class="pill sagepill">THE REST OF THE COLLECTION</div></div>
+<div class="card"><ul class="dots"><li>Basisbody, the foundation of the collection, a timeless, unisex body in stockinette stitch.</li><li>Lace collar, a loose collar that fastens at the back.</li><li>Ruffle collar, the same fastening, a little more romantic.</li><li>Peter Pan collar, a classic rounded collar.</li><li>I-cord suspenders, the collection's signature piece, adjustable and crossing at the back.</li><li>Short vest, with wooden buttons at the front, worn over the body.</li><li>Woodland Fluffy Skirt, a crocheted skirt made to match the body.</li></ul></div>
+<div class="pillwrap"><div class="pill rosepill">COPYRIGHT</div></div>
+<div class="card"><p class="small center">(c) Renate Dahl, Little Montessori Explorers. This pattern is a fully original LME design. You are welcome to sell finished garments you make from this pattern, on a small personal scale, provided the finished product is checked against current safety requirements. The pattern itself, its text and images, may not be shared, copied or resold.</p></div>
+<div class="byline">
+  <div class="by2">By Renate Dahl &middot; Little Montessori Explorers &middot; lmexplorers.com</div>
+</div>
+</div>
+  <div class="pfoot">&mdash;&nbsp;14&nbsp;&mdash;</div>
+</div></body></html>
