@@ -29,7 +29,7 @@ const UTFORDRING_PAYMENT_LINK_LANG = {
   "plink_1U0I2WLax7B8uQzqhBB6bAVC": "no", // Utfordringen, 299 kr/mnd (NOK)
   "plink_1U0I2XLax7B8uQzq7e9tzjBh": "en", // The Challenge, $33/mo (USD)
 };
-const UTFORDRING_DAYS = [1, 3, 7, 14, 21, 30];
+const UTFORDRING_DAYS = Array.from({ length: 30 }, (_, i) => i + 1);
 const DAG = 24 * 60 * 60 * 1000;
 
 function json(data, status) {

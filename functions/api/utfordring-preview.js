@@ -23,7 +23,7 @@ function json(data, status) {
   });
 }
 
-const UTFORDRING_DAYS = [1, 3, 7, 14, 21, 30];
+const UTFORDRING_DAYS = Array.from({ length: 30 }, (_, i) => i + 1);
 const DAG = 24 * 60 * 60 * 1000;
 const OWNER_KEY_FALLBACK = "LME26";
 const OWNER_EMAIL = "renateshobby@hotmail.com";
