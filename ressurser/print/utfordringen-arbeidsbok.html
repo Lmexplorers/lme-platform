@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arbeidsboken — 10 000-visninger-utfordringen — Little Montessori Explorers</title>
+<link rel="stylesheet" href="/bookly/css/bookly.css">
+<style>
+  /* Playpen Sans lastes lokalt her (samme prinsipp som Sasson Montessori i
+     bookly.css). En ekstern Google Fonts-lenke er ikke pålitelig når siden
+     rendres til PDF i et bygg-miljø uten tilgang til fonts.googleapis.com,
+     da faller overskrifter stille tilbake til en systemfont. Selvhostet
+     fil garanterer riktig font uansett hvor siden rendres. */
+  @font-face{font-family:'Playpen Sans';src:url('/fonts/PlaypenSans-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:block;}
+  @font-face{font-family:'Playpen Sans';src:url('/fonts/PlaypenSans-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:block;}
+  @font-face{font-family:'Playpen Sans';src:url('/fonts/PlaypenSans-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:block;}
+</style>
+<style>
+  /* Denne siden bruker LMEs faste guide/arbeidsbok-mal (samme design som
+     LME AI-Guide og YouTube-arbeidsboken): diagonal pastellgradient,
+     regnbue-kant til venstre, rotert kanttekst, og pille-bannere. Samme
+     klasser og farger som ressurser/print/youtube-kurs-arbeidsbok.html,
+     ikke en ny palett. Fontene (Playpen Sans/Sasson Montessori) er LMEs
+     låste fontregel. */
+  :root{
+    --g-ink:#3a3a3a; --g-body:#4a494a; --g-muted:#8fb0bb;
+    --g-teal:#6eb5b8; --g-pink:#df6089; --g-orange:#efa93e;
+    --g-yellow:#f4e8a8; --g-cream:#fff6f2;
+  }
+  body{background:#f2eef0;font-family:var(--font-body);}
+  .toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 20px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.06);position:sticky;top:0;z-index:5;}
+  .toolbar .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--g-pink);text-decoration:none;font-size:15px;font-family:var(--font-body);}
+  .toolbar .brand img{width:32px;height:32px;object-fit:contain;}
+  .toolbar .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+  .tbtn{border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-family:var(--font-body);cursor:pointer;text-decoration:none;font-size:14px;white-space:nowrap;}
+  .tbtn-print{background:var(--g-pink);color:#fff;box-shadow:0 4px 14px rgba(223,96,137,.35);}
+  .tbtn-back{background:#fff;color:var(--g-ink);border:1.5px solid #eee;}
+
+  .bk-stage{padding:26px 16px 60px;}
+
+  /* ===== Sidekropp: gradient + rutepapir + kant + rotert merketekst ===== */
+  .gd-page{position:relative;width:210mm;height:297mm;margin:0 auto 22px;overflow:hidden;border-radius:2mm;box-shadow:0 6px 30px rgba(0,0,0,.10);
+    background:
+      linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px) 0 0/8mm 8mm,
+      linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px) 0 0/8mm 8mm,
+      linear-gradient(135deg,#a8d9e3 0%,#dceef4 24%,#eef0ee 50%,#eccbd6 76%,#f6c7d6 100%);
+  }
+  .gd-edge{position:absolute;top:0;bottom:0;width:6mm;}
+  .gd-edge-l{left:0;background:linear-gradient(180deg,#8ecdd6,#d9a8ba 55%,#f4e8a8);}
+  .gd-edge-r{right:0;}
+  .gd-edge span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-90deg);white-space:nowrap;font-size:6.5pt;letter-spacing:.2em;text-transform:uppercase;font-family:var(--font-body);font-weight:600;}
+  .gd-edge-l span{color:rgba(255,255,255,.9);}
+  .gd-edge-r span{color:#c7c2c4;}
+  .gd-head{position:absolute;top:8mm;left:9mm;right:9mm;text-align:center;}
+  .gd-head .l1,.gd-head .l2{font-size:6.5pt;letter-spacing:.22em;text-transform:uppercase;color:var(--g-muted);font-weight:700;font-family:var(--font-body);}
+  .gd-head .l2{margin-top:1mm;color:#b9a9b3;}
+  .gd-foot{position:absolute;bottom:7mm;left:0;right:0;text-align:center;font-size:10.5pt;font-weight:700;color:var(--g-pink);font-family:var(--font-body);}
+  .gd-inner{position:absolute;top:21mm;left:16mm;right:16mm;bottom:15mm;display:flex;flex-direction:column;}
+
+  /* ===== Innholdsbrikker som går igjen ===== */
+  .gd-img{width:100%;height:56mm;object-fit:cover;border-radius:4mm;border:1px solid rgba(0,0,0,.08);margin-bottom:5mm;display:block;}
+  /* gd-pill/gd-label er ekte overskrifter (h2/h3) i markeringen, derfor
+     Playpen Sans her, låst fontregel gjelder kun ekte overskrifter. */
+  .gd-pill{display:block;width:100%;box-sizing:border-box;text-align:center;border-radius:999px;padding:3.5mm 6mm;font-family:var(--font-display);font-weight:700;font-size:14pt;margin:0 0 5mm;}
+  .gd-pill.yellow{background:var(--g-yellow);color:var(--g-ink);}
+  .gd-pill.teal{background:var(--g-teal);color:#fff;}
+  .gd-pill.pink{background:var(--g-pink);color:#fff;}
+  .gd-text{font-family:var(--font-body);font-size:10.3pt;line-height:1.65;color:var(--g-body);margin-bottom:5mm;}
+  .gd-card{background:#fff;border-radius:4mm;border:1px solid #f0eef0;padding:5.5mm 7mm;margin-bottom:4.5mm;}
+  .gd-card.cream{background:var(--g-cream);box-shadow:none;}
+  .gd-label{font-family:var(--font-display);font-weight:700;font-size:11.5pt;margin:0 0 3mm;display:block;}
+  .gd-label.pink{color:var(--g-pink);}
+  .gd-label.teal{color:var(--g-teal);}
+  .gd-q{font-size:9.8pt;font-weight:700;color:var(--g-ink);margin:0 0 2mm;}
+  .gd-line{border-bottom:1pt solid #e2dfe0;height:6.5mm;}
+  .gd-ul{list-style:none;}
+  .gd-ul li{display:flex;align-items:flex-start;gap:3mm;font-size:9.8pt;line-height:1.5;margin-bottom:2.3mm;color:var(--g-body);}
+  .gd-chk{flex:0 0 auto;width:4mm;height:4mm;border-radius:1mm;border:1.3pt solid var(--g-teal);margin-top:0.6mm;}
+  .gd-affirm{font-family:var(--font-body);font-weight:700;font-size:11pt;color:var(--g-teal);text-align:center;line-height:1.5;}
+
+  /* ===== Forside ===== */
+  .gd-cover .gd-inner{align-items:center;justify-content:center;text-align:center;}
+  .gd-logobox{width:42mm;height:42mm;background:#fff;border-radius:5mm;border:1px solid rgba(0,0,0,.08);display:flex;align-items:center;justify-content:center;margin-bottom:6mm;padding:4mm;box-sizing:border-box;}
+  .gd-logobox img{width:100%;height:100%;object-fit:contain;}
+  .gd-cover-label{font-size:9pt;letter-spacing:.14em;text-transform:uppercase;color:#9a9a9a;margin-bottom:4mm;font-family:var(--font-body);font-weight:700;}
+  .gd-cover-title{font-family:var(--font-display);font-weight:800;font-size:32pt;text-transform:uppercase;line-height:1.16;color:var(--g-ink);margin-bottom:6mm;}
+  .gd-cover-title em{font-style:normal;color:var(--g-pink);}
+  .gd-cover-badge{display:inline-block;background:var(--g-yellow);color:var(--g-ink);font-family:var(--font-body);font-weight:700;font-size:12.5pt;border-radius:999px;padding:3.5mm 9mm;margin-bottom:12mm;}
+  .gd-cover-img{width:100%;max-width:150mm;height:58mm;object-fit:cover;border-radius:4mm;border:1px solid rgba(0,0,0,.08);margin-bottom:7mm;}
+  .gd-cover-card{background:#fff;border-radius:5mm;border:1px solid #f0eef0;padding:6mm 10mm;max-width:150mm;margin-bottom:6mm;}
+  .gd-cover-card .sub{font-size:11pt;color:var(--g-body);line-height:1.6;}
+  .gd-cover-card .accent{font-family:var(--font-body);font-weight:700;color:var(--g-teal);font-style:italic;margin-top:3mm;font-size:10.5pt;}
+  .gd-cover-author{font-family:var(--font-body);font-weight:800;color:var(--g-pink);font-size:12pt;}
+  .gd-cover-brand{color:#9a9a9a;font-size:9.5pt;margin-top:1mm;}
+  .gd-cover-domain{color:var(--g-pink);font-size:9.5pt;}
+
+  /* ===== Avslutning ===== */
+  .gd-close-card{background:#fff;border:1.5px solid #f2dde5;border-radius:4mm;padding:5mm 7mm;margin-bottom:4mm;}
+  .gd-close-card h3{font-family:var(--font-display);font-weight:700;font-size:11.5pt;margin-bottom:2mm;}
+  .gd-close-card p{font-size:9.8pt;line-height:1.55;color:var(--g-body);}
+  .gd-close-card.teal h3{color:var(--g-teal);}
+  .gd-close-card.pink h3{color:var(--g-pink);}
+  .gd-close-card.orange h3{color:var(--g-orange);}
+
+  @media print{
+    .toolbar{display:none !important;}
+    #lme-acct{display:none !important;}
+    body{background:#fff;}
+    .bk-stage{padding:0;}
+    .gd-page{box-shadow:none;margin:0;border-radius:0;page-break-after:always;}
+    .gd-page:last-child{page-break-after:auto;}
+    @page{size:A4;margin:0;}
+  }
+</style>
+</head>
+<body>
+  <div class="toolbar">
+    <a class="brand" href="/utfordringen-fellesskap"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <div class="actions">
+      <button class="tbtn" id="lme-print-lang" type="button" style="background:#fce9f0;color:var(--g-pink);">🇬🇧 English</button>
+      <a class="tbtn tbtn-back" href="/utfordringen-fellesskap" data-no="‹ Til fellesskapet" data-en="‹ Back to the community">‹ Til fellesskapet</a>
+      <button class="tbtn tbtn-print" onclick="window.print()" data-no="⬇ Lagre som PDF" data-en="⬇ Save as PDF">⬇ Lagre som PDF</button>
+    </div>
+  </div>
+
+  <div class="bk-stage">
+
+    <!-- ===== 1: FORSIDE ===== -->
+    <div class="gd-page gd-cover">
+      <div class="gd-edge gd-edge-l"><span data-no="Little Montessori Explorers" data-en="Little Montessori Explorers">Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="Utfordring-arbeidsbok" data-en="Challenge workbook">Utfordring-arbeidsbok</span></div>
+      <div class="gd-inner">
+        <div class="gd-logobox"><img src="/images/lme-logo.png" alt="Little Montessori Explorers"></div>
+        <div class="gd-cover-label" data-no="LME UTFORDRING-ARBEIDSBOK" data-en="LME CHALLENGE WORKBOOK">LME UTFORDRING-ARBEIDSBOK</div>
+        <h1 class="gd-cover-title" data-no="10 000 visninger <em>på 30 dager</em>" data-en="10,000 views <em>in 30 days</em>">10 000 visninger <em>på 30 dager</em></h1>
+        <div class="gd-cover-badge" data-no="Arbeidsbok · 4 uker" data-en="Workbook · 4 weeks">Arbeidsbok · 4 uker</div>
+        <img class="gd-cover-img" src="/images/banner_eventyr.webp" alt="Mia og Teo ved et veiskille i skogen, klare for et nytt eventyr">
+        <div class="gd-cover-card">
+          <p class="sub" data-no="Din arbeidsbok gjennom utfordringen. Ett kapittel per uke, med refleksjon, sjekkliste og ett konkret steg du kan ta denne uken." data-en="Your workbook through the challenge. One chapter per week, with reflection, a checklist and one concrete step you can take this week.">Din arbeidsbok gjennom utfordringen. Ett kapittel per uke, med refleksjon, sjekkliste og ett konkret steg du kan ta denne uken.</p>
+          <p class="accent" data-no="· Fem minutter om dagen, i 30 dager ·" data-en="· Five minutes a day, for 30 days ·">· Fem minutter om dagen, i 30 dager ·</p>
+        </div>
+        <div class="gd-cover-author" data-no="Av Renate Dahl" data-en="By Renate Dahl">Av Renate Dahl</div>
+        <div class="gd-cover-brand">Little Montessori Explorers</div>
+        <div class="gd-cover-domain">lmexplorers.com</div>
+      </div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Utfordring-arbeidsbok" data-en="Challenge workbook">Utfordring-arbeidsbok</div></div>
+      <div class="gd-foot">— 1 —</div>
+    </div>
+
+    <!-- ===== 2: VELKOMMEN ===== -->
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span data-no="Little Montessori Explorers" data-en="Little Montessori Explorers">Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="Utfordring-arbeidsbok" data-en="Challenge workbook">Utfordring-arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Utfordring-arbeidsbok · 10 000-visninger-utfordringen" data-en="Challenge workbook · The 10,000 Views Challenge">Utfordring-arbeidsbok · 10 000-visninger-utfordringen</div></div>
+      <div class="gd-inner">
+        <img class="gd-img" src="/images/mia-teo-brev.webp" alt="Mia og Teo holder en glitrende velkomstbrev sammen">
+        <h2 class="gd-pill yellow" data-no="Velkommen" data-en="Welcome">Velkommen</h2>
+        <div class="gd-text" data-no="Hei, og velkommen inn i utfordringen 💕 Denne arbeidsboken er følgesvennen din gjennom de 30 dagene. Ta den frem hver uke, svar ærlig, og kryss av etter hvert som du gjør tingene. Det er konsistens, ikke perfeksjon, som gir deg de første 10 000 visningene." data-en="Hi, and welcome to the challenge 💕 This workbook is your companion through the 30 days. Pick it up each week, answer honestly, and check things off as you go. It's consistency, not perfection, that gets you your first 10,000 views.">Hei, og velkommen inn i utfordringen 💕 Denne arbeidsboken er følgesvennen din gjennom de 30 dagene. Ta den frem hver uke, svar ærlig, og kryss av etter hvert som du gjør tingene. Det er konsistens, ikke perfeksjon, som gir deg de første 10 000 visningene.</div>
+        <h2 class="gd-pill pink" data-no="Fire uker, tretti dager" data-en="Four weeks, thirty days">Fire uker, tretti dager</h2>
+        <div class="gd-card">
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span data-no="① Grunnmuren: finn nisjen og målgruppen din." data-en="① The foundation: find your niche and your audience.">① Grunnmuren: finn nisjen og målgruppen din.</span></li>
+            <li><span class="gd-chk"></span><span data-no="② Systemer og AI: la AI gjøre planleggingen, og se på tallene." data-en="② Systems and AI: let AI do the planning, and look at your numbers.">② Systemer og AI: la AI gjøre planleggingen, og se på tallene.</span></li>
+            <li><span class="gd-chk"></span><span data-no="③ Konsistens og format: publiser jevnlig, selv når det ikke er perfekt." data-en="③ Consistency and format: publish regularly, even when it's not perfect.">③ Konsistens og format: publiser jevnlig, selv når det ikke er perfekt.</span></li>
+            <li><span class="gd-chk"></span><span data-no="④ Refleksjon og vekst: se hvor langt du har kommet, og planlegg veien videre." data-en="④ Reflection and growth: see how far you've come, and plan what's next.">④ Refleksjon og vekst: se hvor langt du har kommet, og planlegg veien videre.</span></li>
+          </ul>
+        </div>
+        <div class="gd-card">
+          <h3 class="gd-label pink" data-no="Mitt løfte til meg selv" data-en="My promise to myself">Mitt løfte til meg selv</h3>
+          <p class="gd-q" data-no="Hvorfor vil du bli mer synlig? Skriv det ned, så du husker det på dagene det føles tungt." data-en="Why do you want to get more visible? Write it down, so you remember it on the days it feels hard.">Hvorfor vil du bli mer synlig? Skriv det ned, så du husker det på dagene det føles tungt.</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+        </div>
+        <div class="gd-card cream">
+          <p class="gd-affirm" data-no="Du trenger ikke gjøre alt på én gang. Én uke, ett steg om gangen. Det er nok." data-en="You don't need to do everything at once. One week, one step at a time. That's enough.">Du trenger ikke gjøre alt på én gang. Én uke, ett steg om gangen. Det er nok.</p>
+        </div>
+      </div>
+      <div class="gd-foot">— 2 —</div>
+    </div>
+
+    <!-- ===== 3: UKE 1, GRUNNMUREN ===== -->
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="Utfordring-arbeidsbok" data-en="Challenge workbook">Utfordring-arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Uke 1 av 4 · Dag 1–7" data-en="Week 1 of 4 · Day 1–7">Uke 1 av 4 · Dag 1–7</div></div>
+      <div class="gd-inner">
+        <img class="gd-img" src="/images/banner_laer.webp" alt="Mia og Teo utforsker med forstørrelsesglass">
+        <h2 class="gd-pill yellow" data-no="Uke 1: Grunnmuren" data-en="Week 1: The foundation">Uke 1: Grunnmuren</h2>
+        <div class="gd-text" data-no="De første syv dagene handler om å finne nisjen din og forstå hvem du lager innhold for. Finn temaet du kan snakke om i timevis, la AI foreslå ideer innenfor det, og beskriv personen som skal se det. Da blir resten av utfordringen mye lettere." data-en="The first seven days are about finding your niche and understanding who you're creating content for. Find the topic you could talk about for hours, let AI suggest ideas within it, and describe the person who will see it. That makes the rest of the challenge much easier.">De første syv dagene handler om å finne nisjen din og forstå hvem du lager innhold for. Finn temaet du kan snakke om i timevis, la AI foreslå ideer innenfor det, og beskriv personen som skal se det. Da blir resten av utfordringen mye lettere.</div>
+
+        <div class="gd-card">
+          <h3 class="gd-label pink" data-no="Refleksjon" data-en="Reflection">Refleksjon</h3>
+          <p class="gd-q" data-no="Hvilke tre temaer skrev du ned på dag 1? Kjennes de fortsatt riktige?" data-en="Which three topics did you write down on day 1? Do they still feel right?">Hvilke tre temaer skrev du ned på dag 1? Kjennes de fortsatt riktige?</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+          <p class="gd-q" style="margin-top:4mm;" data-no="Hvem er personen du beskrev på dag 2, og hva sliter hun med akkurat nå?" data-en="Who is the person you described on day 2, and what is she struggling with right now?">Hvem er personen du beskrev på dag 2, og hva sliter hun med akkurat nå?</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+        </div>
+
+        <div class="gd-card">
+          <h3 class="gd-label teal" data-no="Sjekkliste for uke 1" data-en="Checklist for week 1">Sjekkliste for uke 1</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span data-no="Dag 1–2: Jeg har funnet nisjen og målgruppen min." data-en="Day 1–2: I have found my niche and my audience.">Dag 1–2: Jeg har funnet nisjen og målgruppen min.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Dag 3–4: Jeg har latt AI foreslå ideer, og valgt hovedplattform." data-en="Day 3–4: I have let AI suggest ideas, and picked my main platform.">Dag 3–4: Jeg har latt AI foreslå ideer, og valgt hovedplattform.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Dag 5–6: Jeg har studert andre skapere, og laget et utkast." data-en="Day 5–6: I have studied other creators, and made a draft.">Dag 5–6: Jeg har studert andre skapere, og laget et utkast.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Dag 7: Jeg har laget mitt første ekte innlegg." data-en="Day 7: I have made my first real post.">Dag 7: Jeg har laget mitt første ekte innlegg.</span></li>
+          </ul>
+        </div>
+
+        <div class="gd-card cream">
+          <h3 class="gd-label teal" data-no="Denne ukens steg" data-en="This week's step">Denne ukens steg</h3>
+          <p class="gd-q" data-no="Publiser det aller første innlegget ditt, selv om det ikke er perfekt." data-en="Publish your very first post, even if it's not perfect.">Publiser det aller første innlegget ditt, selv om det ikke er perfekt.</p>
+          <div class="gd-line"></div>
+        </div>
+      </div>
+      <div class="gd-foot">— 3 —</div>
+    </div>
+
+    <!-- ===== 4: UKE 2, SYSTEMER OG AI ===== -->
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="Utfordring-arbeidsbok" data-en="Challenge workbook">Utfordring-arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Uke 2 av 4 · Dag 8–14" data-en="Week 2 of 4 · Day 8–14">Uke 2 av 4 · Dag 8–14</div></div>
+      <div class="gd-inner">
+        <img class="gd-img" src="/images/courses/course_farger_og_former.webp" alt="Mia og Teo leker med farger og former">
+        <h2 class="gd-pill yellow" data-no="Uke 2: Systemer og AI" data-en="Week 2: Systems and AI">Uke 2: Systemer og AI</h2>
+        <div class="gd-text" data-no="Nå bygger du systemer som gjør det lettere å holde ut: en god åpning, flere innlegg planlagt i én økt, og AI som strammer opp teksten din. Se på tallene dine, snakk direkte til seeren, og gjenbruk det som allerede fungerer." data-en="Now you build systems that make it easier to keep going: a strong opening, several posts planned in one sitting, and AI that tightens your text. Look at your numbers, talk straight to the viewer, and reuse what's already working.">Nå bygger du systemer som gjør det lettere å holde ut: en god åpning, flere innlegg planlagt i én økt, og AI som strammer opp teksten din. Se på tallene dine, snakk direkte til seeren, og gjenbruk det som allerede fungerer.</div>
+
+        <div class="gd-card">
+          <h3 class="gd-label pink" data-no="Refleksjon" data-en="Reflection">Refleksjon</h3>
+          <p class="gd-q" data-no="Hvilken åpningssetning fra dag 8 fungerte best, og hvorfor?" data-en="Which opening line from day 8 worked best, and why?">Hvilken åpningssetning fra dag 8 fungerte best, og hvorfor?</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+          <p class="gd-q" style="margin-top:4mm;" data-no="Hva forteller tallene dine fra dag 11 om hva som fungerer?" data-en="What do your numbers from day 11 tell you about what's working?">Hva forteller tallene dine fra dag 11 om hva som fungerer?</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+        </div>
+
+        <div class="gd-card">
+          <h3 class="gd-label teal" data-no="Sjekkliste for uke 2" data-en="Checklist for week 2">Sjekkliste for uke 2</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span data-no="Dag 8–9: Jeg har øvd på åpninger, og planlagt flere innlegg." data-en="Day 8–9: I have practiced openings, and planned several posts.">Dag 8–9: Jeg har øvd på åpninger, og planlagt flere innlegg.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Dag 10–11: Jeg har latt AI skjerpe en tekst, og sett på tallene mine." data-en="Day 10–11: I have let AI sharpen a text, and looked at my numbers.">Dag 10–11: Jeg har latt AI skjerpe en tekst, og sett på tallene mine.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Dag 12–13: Jeg har skrevet direkte til seeren, og gjenbrukt noe som fungerte." data-en="Day 12–13: I have written directly to the viewer, and reused something that worked.">Dag 12–13: Jeg har skrevet direkte til seeren, og gjenbrukt noe som fungerte.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Dag 14: Jeg har tatt en halvveis-pause og sett hva som har endret seg." data-en="Day 14: I have taken a halfway pause and noticed what's changed.">Dag 14: Jeg har tatt en halvveis-pause og sett hva som har endret seg.</span></li>
+          </ul>
+        </div>
+
+        <div class="gd-card cream">
+          <h3 class="gd-label teal" data-no="Denne ukens steg" data-en="This week's step">Denne ukens steg</h3>
+          <p class="gd-q" data-no="Se på innlegget som fikk mest respons så langt, og lag ett til i samme stil." data-en="Look at the post that got the most response so far, and make one more in the same style.">Se på innlegget som fikk mest respons så langt, og lag ett til i samme stil.</p>
+          <div class="gd-line"></div>
+        </div>
+      </div>
+      <div class="gd-foot">— 4 —</div>
+    </div>
+
+    <!-- ===== 5: UKE 3, KONSISTENS OG FORMAT ===== -->
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="Utfordring-arbeidsbok" data-en="Challenge workbook">Utfordring-arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Uke 3 av 4 · Dag 15–21" data-en="Week 3 of 4 · Day 15–21">Uke 3 av 4 · Dag 15–21</div></div>
+      <div class="gd-inner">
+        <img class="gd-img" src="/images/courses/course_hopp_og_sprett.webp" alt="Mia og Teo hopper og spretter av glede">
+        <h2 class="gd-pill yellow" data-no="Uke 3: Konsistens og format" data-en="Week 3: Consistency and format">Uke 3: Konsistens og format</h2>
+        <div class="gd-text" data-no="Konsistens slår perfeksjon hver gang. Denne uken publiserer du selv når det ikke føles ferdig, leser kommentarene dine, nevner andre i nisjen, deler en personlig historie og tester et nytt format. Ni dager igjen, så hold rytmen." data-en="Consistency beats perfection every time. This week you publish even when it doesn't feel finished, read your comments, mention others in your niche, share a personal story and try a new format. Nine days left, so keep the rhythm.">Konsistens slår perfeksjon hver gang. Denne uken publiserer du selv når det ikke føles ferdig, leser kommentarene dine, nevner andre i nisjen, deler en personlig historie og tester et nytt format. Ni dager igjen, så hold rytmen.</div>
+
+        <div class="gd-card">
+          <h3 class="gd-label pink" data-no="Refleksjon" data-en="Reflection">Refleksjon</h3>
+          <p class="gd-q" data-no="Hva spør folk om i kommentarene dine? Er det ditt neste innlegg?" data-en="What are people asking about in your comments? Is that your next post?">Hva spør folk om i kommentarene dine? Er det ditt neste innlegg?</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+          <p class="gd-q" style="margin-top:4mm;" data-no="Hvilket nytt format testet du på dag 19, og hvordan gikk det?" data-en="Which new format did you try on day 19, and how did it go?">Hvilket nytt format testet du på dag 19, og hvordan gikk det?</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+        </div>
+
+        <div class="gd-card">
+          <h3 class="gd-label teal" data-no="Sjekkliste for uke 3" data-en="Checklist for week 3">Sjekkliste for uke 3</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span data-no="Dag 15–16: Jeg har publisert noe imperfekt, og lest kommentarene mine." data-en="Day 15–16: I have published something imperfect, and read my comments.">Dag 15–16: Jeg har publisert noe imperfekt, og lest kommentarene mine.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Dag 17–18: Jeg har nevnt noen andre, og delt en personlig historie." data-en="Day 17–18: I have mentioned someone else, and shared a personal story.">Dag 17–18: Jeg har nevnt noen andre, og delt en personlig historie.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Dag 19–20: Jeg har testet et nytt format, og ryddet i profilen min." data-en="Day 19–20: I have tried a new format, and tidied up my profile.">Dag 19–20: Jeg har testet et nytt format, og ryddet i profilen min.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Dag 21: Jeg har planlagt innholdet for resten av utfordringen." data-en="Day 21: I have planned my content for the rest of the challenge.">Dag 21: Jeg har planlagt innholdet for resten av utfordringen.</span></li>
+          </ul>
+        </div>
+
+        <div class="gd-card cream">
+          <h3 class="gd-label teal" data-no="Denne ukens steg" data-en="This week's step">Denne ukens steg</h3>
+          <p class="gd-q" data-no="Planlegg innholdet ditt for resten av utfordringen i én økt." data-en="Plan your content for the rest of the challenge in one sitting.">Planlegg innholdet ditt for resten av utfordringen i én økt.</p>
+          <div class="gd-line"></div>
+        </div>
+      </div>
+      <div class="gd-foot">— 5 —</div>
+    </div>
+
+    <!-- ===== 6: UKE 4, REFLEKSJON OG VEKST ===== -->
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="Utfordring-arbeidsbok" data-en="Challenge workbook">Utfordring-arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Uke 4 av 4 · Dag 22–30" data-en="Week 4 of 4 · Day 22–30">Uke 4 av 4 · Dag 22–30</div></div>
+      <div class="gd-inner">
+        <img class="gd-img" src="/images/courses/course_pusterom.webp" alt="Mia og Teo tar seg et rolig pusterom sammen">
+        <h2 class="gd-pill yellow" data-no="Uke 4: Refleksjon og vekst" data-en="Week 4: Reflection and growth">Uke 4: Refleksjon og vekst</h2>
+        <div class="gd-text" data-no="Siste uken handler om å se tilbake og planlegge fremover. Sammenlign med dag 1, del en lærdom, inviter en venn med, og finn ut hvilket innlegg som fungerte best. Så, på dag 30: du klarte det." data-en="The final week is about looking back and planning ahead. Compare with day 1, share a lesson, invite a friend along, and find out which post worked best. Then, on day 30: you did it.">Siste uken handler om å se tilbake og planlegge fremover. Sammenlign med dag 1, del en lærdom, inviter en venn med, og finn ut hvilket innlegg som fungerte best. Så, på dag 30: du klarte det.</div>
+
+        <div class="gd-card">
+          <h3 class="gd-label pink" data-no="Refleksjon" data-en="Reflection">Refleksjon</h3>
+          <p class="gd-q" data-no="Sammenlign innlegget fra dag 1 med det du lager nå. Hva har endret seg?" data-en="Compare your day 1 post with what you're making now. What has changed?">Sammenlign innlegget fra dag 1 med det du lager nå. Hva har endret seg?</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+          <p class="gd-q" style="margin-top:4mm;" data-no="Hva vil du fortsette med etter at utfordringen er over?" data-en="What do you want to keep doing after the challenge is over?">Hva vil du fortsette med etter at utfordringen er over?</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+        </div>
+
+        <div class="gd-card">
+          <h3 class="gd-label teal" data-no="Sjekkliste for uke 4" data-en="Checklist for week 4">Sjekkliste for uke 4</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span data-no="Dag 22–24: Jeg har planlagt neste uke, stilt et spørsmål, og funnet stemmen min." data-en="Day 22–24: I have planned next week, asked a question, and found my voice.">Dag 22–24: Jeg har planlagt neste uke, stilt et spørsmål, og funnet stemmen min.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Dag 25–27: Jeg har delt en lærdom, sammenlignet med dag 1, og invitert en venn." data-en="Day 25–27: I have shared a lesson, compared with day 1, and invited a friend.">Dag 25–27: Jeg har delt en lærdom, sammenlignet med dag 1, og invitert en venn.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Dag 28–29: Jeg har funnet min beste dag, og planlagt veien videre." data-en="Day 28–29: I have found my best day, and planned the road ahead.">Dag 28–29: Jeg har funnet min beste dag, og planlagt veien videre.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Dag 30: Jeg klarte det, alle 30 dagene." data-en="Day 30: I did it, all 30 days.">Dag 30: Jeg klarte det, alle 30 dagene.</span></li>
+          </ul>
+        </div>
+
+        <div class="gd-card cream">
+          <h3 class="gd-label teal" data-no="Denne ukens steg" data-en="This week's step">Denne ukens steg</h3>
+          <p class="gd-q" data-no="Del utfordringen med en venn som også ønsker å bli mer synlig." data-en="Share the challenge with a friend who also wants to get more visible.">Del utfordringen med en venn som også ønsker å bli mer synlig.</p>
+          <div class="gd-line"></div>
+        </div>
+      </div>
+      <div class="gd-foot">— 6 —</div>
+    </div>
+
+    <!-- ===== 7: VEIEN VIDERE ===== -->
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="Utfordring-arbeidsbok" data-en="Challenge workbook">Utfordring-arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Veien videre" data-en="What's next">Veien videre</div></div>
+      <div class="gd-inner">
+        <img class="gd-img" src="/images/hero_learning_tree.webp" alt="Mia og Teo ser utover et vidt landskap fra tretoppen">
+        <h2 class="gd-pill yellow" data-no="Du har systemet nå 🌸" data-en="You have the system now 🌸">Du har systemet nå 🌸</h2>
+        <div class="gd-text" data-no="Du trenger ikke se hele trappen for å ta det første trinnet. Gå tilbake til denne arbeidsboken når du trenger et lite dytt, og krysse av etter hvert som du går." data-en="You don't need to see the whole staircase to take the first step. Come back to this workbook whenever you need a little push, and check things off as you go.">Du trenger ikke se hele trappen for å ta det første trinnet. Gå tilbake til denne arbeidsboken når du trenger et lite dytt, og krysse av etter hvert som du går.</div>
+
+        <div class="gd-close-card teal">
+          <h3 data-no="Start i det små" data-en="Start small">Start i det små</h3>
+          <p data-no="Velg én uke, og bruk den denne uken. La det få lov til å være enkelt." data-en="Choose one week, and use it this week. Let it be allowed to be simple.">Velg én uke, og bruk den denne uken. La det få lov til å være enkelt.</p>
+        </div>
+        <div class="gd-close-card pink">
+          <h3 data-no="Bli med i fellesskapet" data-en="Join the community">Bli med i fellesskapet</h3>
+          <p data-no="Del det du lager, og heia på de andre som er med i utfordringen, i fellesskapet på lmexplorers.com/utfordringen-fellesskap." data-en="Share what you make, and cheer on the others in the challenge, in the community at lmexplorers.com/utfordringen-fellesskap.">Del det du lager, og heia på de andre som er med i utfordringen, i fellesskapet på lmexplorers.com/utfordringen-fellesskap.</p>
+        </div>
+        <div class="gd-close-card orange">
+          <h3 data-no="Jeg heier på deg" data-en="I'm cheering you on">Jeg heier på deg</h3>
+          <p data-no="Klem fra meg, Renate." data-en="Warm wishes, Renate.">Klem fra meg, Renate.</p>
+        </div>
+        <div class="gd-card">
+          <h3 class="gd-label pink" data-no="Mitt neste steg" data-en="My next step">Mitt neste steg</h3>
+          <p class="gd-q" data-no="Skriv ned det ene du vil fortsette med etter utfordringen." data-en="Write down the one thing you want to keep doing after the challenge.">Skriv ned det ene du vil fortsette med etter utfordringen.</p>
+          <div class="gd-line"></div><div class="gd-line"></div>
+        </div>
+      </div>
+      <div class="gd-foot">— 7 —</div>
+    </div>
+
+  </div>
+<script>
+(function(){
+  function apply(lang){
+    window.__lmeLang=lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
+      el.innerHTML = (lang==='en') ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    document.documentElement.lang=lang;
+    var b=document.getElementById('lme-print-lang');
+    if(b) b.textContent = (lang==='en') ? '🇳🇴 Norsk' : '🇬🇧 English';
+    try{localStorage.setItem('lme_lang',lang);}catch(e){}
+  }
+  var saved='no';
+  try{
+    var qp=new URLSearchParams(location.search).get('lang');
+    if(qp==='en'||qp==='no'){saved=qp;try{localStorage.setItem('lme_lang',qp);}catch(e2){}}
+    else saved=localStorage.getItem('lme_lang')||'no';
+  }catch(e){}
+  var btn=document.getElementById('lme-print-lang');
+  if(btn) btn.addEventListener('click',function(){apply(window.__lmeLang==='en'?'no':'en');});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){apply(saved);});
+  else apply(saved);
+})();
+</script>
+<script src="/js/lme-account.js?v=11" defer></script>
+</body>
+</html>
