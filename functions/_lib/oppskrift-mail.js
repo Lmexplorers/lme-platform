@@ -291,7 +291,7 @@ export function isOppskrift(pid) { return !!PRODUCT[pid]; }
 export async function sendOwnerSaleNotice(env, opts) {
   const apiKey = env.MAILERSEND_API_KEY;
   if (!apiKey) return { ok: false, skipped: true };
-  const to = env.OWNER_NOTIFY_EMAIL || "renateshobby@hotmail.com";
+  const to = env.OWNER_NOTIFY_EMAIL || "renate@lmexplorers.com";
   const prod = PRODUCT[opts && opts.pid];
   const pname = (opts && opts.pname) || (prod ? prod.no : (opts && opts.pid) || "produkt");
   const cur = (opts.currency || "").toLowerCase();
