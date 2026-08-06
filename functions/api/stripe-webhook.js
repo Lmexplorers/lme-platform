@@ -1,15 +1,21 @@
 /**
- * LME Stripe-webhook — gir Inner Circle-tilgang automatisk ved betaling.
+ * LME Stripe-webhook — IKKE registrert i Stripe, kjører ALDRI i produksjon.
  *
- * Stripe sender hit naar noen betaler (Payment Link / Checkout). Vi
- * verifiserer signaturen, finner e-posten og skriver medlemskap til KV slik
- * at gruppe-chatten (isMember) slipper dem inn. Ved oppsigelse fjernes det.
+ * Verifisert direkte mot Stripe sin liste over webhook-endepunkter
+ * (GET /v1/webhook_endpoints) 6. august 2026: denne URL-en
+ * (/api/stripe-webhook) finnes ikke blant de aktive endepunktene. De to som
+ * faktisk mottar hendelser er functions/api/oppskrift-webhook.js (denne
+ * plattformen) og lme-inner-circle.lmexplorers.workers.dev/webhook/stripe
+ * (egen worker for Inner Circle/medlemskap, utenfor dette repoet).
  *
- *   POST /api/stripe-webhook   (sett denne URL-en i Stripe > Developers >
- *                               Webhooks, og lim signeringsnoekkelen inn som
- *                               env-variabelen STRIPE_WEBHOOK_SECRET)
+ * Kredittpåfyll- og Claude-kurs-logikken herfra er derfor flyttet til
+ * functions/api/oppskrift-webhook.js (via den delte functions/_lib/purchase-links.js),
+ * som er der de faktisk kjører nå. Denne filen ligger igjen som referanse
+ * for Inner Circle-medlemskapslogikken (grant/revoke/CS_PLANS) i tilfelle
+ * den skal kobles til et fremtidig, faktisk registrert endepunkt her, men
+ * IKKE stol på at koden under kjører før den er verifisert live i Stripe.
  *
- * Lagring i KV:
+ * Lagring i KV (hvis/når denne noen gang blir live):
  *   member:<e-post>   -> { status, plan, source:"stripe", customer, sub, since, updated }
  *   scust:<kunde-id>  -> <e-post>     (for aa kunne fjerne ved oppsigelse)
  * I tillegg speiles abonnementet inn paa user:<e-post> hvis kontoen finnes,
@@ -21,6 +27,10 @@ import { registerNewsletter } from "../_lib/newsletter.js";
 import { sendOppskriftMail, sendOwnerSaleNotice } from "../_lib/oppskrift-mail.js";
 import { PATTERN_LINKS } from "../_lib/pattern-links.js";
 import { bumpToday } from "../_lib/track.js";
+import {
+  CREDIT_PACKS, addCredit,
+  CLAUDE_GROUP_NO, CLAUDE_GROUP_EN, CLAUDE_PAYMENT_LINK_LANG, CLAUDE_MAIN_LINK_LANG, addToClaudeGroup,
+} from "../_lib/purchase-links.js";
 
 /* PATTERN_LINKS: delt kilde i ../_lib/pattern-links.js */
 
@@ -77,29 +87,6 @@ const CS_PLANS = {
   "prod_UwWmmP16D4lT5Z": { plan: "cs-pluss", limits: { image: 250, video: 15 } },
 };
 
-/* Kredittpåfyll (engangskjøp) -> antall bilder/video som legges til kontoen.
-   Nøkkelen er betalingslenken (payment_link) fra Stripe. Kreditten utløper
-   ikke, og ligger på credit:<e-post> ved siden av månedskvoten. */
-const CREDIT_PACKS = {
-  "plink_1TwfK1Lax7B8uQzqGggoyx7a": { kind: "image", amount: 25  },
-  "plink_1TwfKELax7B8uQzqRYROpOsk": { kind: "image", amount: 75  },
-  "plink_1TwfKJLax7B8uQzqTyoZShBP": { kind: "image", amount: 200 },
-  "plink_1TwfKOLax7B8uQzqIqnTG1iO": { kind: "video", amount: 3   },
-  "plink_1TwfKYLax7B8uQzqKJDGAEOY": { kind: "video", amount: 10  },
-  "plink_1TwfKdLax7B8uQzqfUOBWqs6": { kind: "video", amount: 25  },
-};
-
-async function addCredit(env, email, kind, amount) {
-  if (!email || !amount) return;
-  email = email.trim().toLowerCase();
-  const key = "credit:" + email;
-  let bal = { image: 0, video: 0 };
-  try { const r = await env.BUILDER_KV.get(key); if (r) bal = JSON.parse(r) || bal; } catch (e) {}
-  const k = kind === "video" ? "video" : "image";
-  bal[k] = (bal[k] || 0) + amount;
-  await env.BUILDER_KV.put(key, JSON.stringify(bal));
-}
-
 async function grant(env, email, info) {
   if (!email) return;
   const mkey = memberKey(email);
@@ -151,45 +138,6 @@ async function revoke(env, email) {
 async function emailForCustomer(env, customerId) {
   if (!customerId) return null;
   return await env.BUILDER_KV.get(custKey(customerId));
-}
-
-/* ---- Claude-kurset -------------------------------------------------
-   Kjøp via Claude-kursets betalingslenker skal IKKE gi Inner Circle,
-   men legge kjøperen i MailerLite-gruppen "Claude-kurs, kjøpere", som
-   trigger takke- og oppfølgingsautomasjonen. Betalingslenke-ID-ene under
-   er hovedkurs (NO/USD) og mersalg (NO/USD). */
-const CLAUDE_GROUP_NO = "193772564746601912"; // "Claude-kurs, kjøpere"
-const CLAUDE_GROUP_EN = "193773243177371424"; // "Claude course, buyers"
-// Betalingslenke -> språk. NOK-lenker gir norsk automasjon, USD-lenker engelsk.
-const CLAUDE_PAYMENT_LINK_LANG = {
-  "plink_1TwFJWLax7B8uQzqsBQjTBxl": "no", // Kom i gang med Claude (NOK)
-  "plink_1TwFJZLax7B8uQzqqjnXtmbR": "no", // Videre med Claude, mersalg (NOK)
-  "plink_1TwFJYLax7B8uQzqO1gObkcB": "en", // Get started with Claude (USD)
-  "plink_1TwFJbLax7B8uQzqB3CNr2yR": "en", // Next Level with Claude, upsell (USD)
-};
-// Bare hovedkurset trigger takke- og oppfølgingsmail. Mersalget legges
-// bare i gruppen (kjøperen har alt fått takkemailen fra hovedkjøpet).
-const CLAUDE_MAIN_LINK_LANG = {
-  "plink_1TwFJWLax7B8uQzqsBQjTBxl": "no", // Kom i gang med Claude (NOK)
-  "plink_1TwFJYLax7B8uQzqO1gObkcB": "en", // Get started with Claude (USD)
-};
-
-async function addToClaudeGroup(env, email, name, groupId) {
-  const key = env.MAILERLITE_API_KEY;
-  if (!key || !email || !groupId) return;
-  const payload = { email: email.trim(), groups: [groupId + ""] };
-  if (name && name.trim()) payload.fields = { name: name.trim().slice(0, 100) };
-  try {
-    await fetch("https://connect.mailerlite.com/api/subscribers", {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + key,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-  } catch (e) {}
 }
 
 export async function onRequestPost(context) {
