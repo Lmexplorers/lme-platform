@@ -1,8 +1,16 @@
 /**
- * Isolert engangsprodukt-webhook — sender leveringsmail ved kjøp av
- * frittstående produkter (oppskrifter, 10 000-visninger-utfordringen).
- * Rører aldri medlemskap, Inner Circle, Claude-kurs eller kreditt, så den
- * kan ikke påvirke de andre flytene.
+ * Dette ER det faktisk aktive Stripe-webhook-endepunktet for plattformen
+ * (verifisert direkte mot Stripe sin liste over webhook-endepunkter
+ * 6. august 2026 — se functions/api/stripe-webhook.js, som viste seg å
+ * ALDRI være registrert). Rører aldri Inner Circle/medlemskap, som
+ * håndteres av den separate lme-inner-circle-workeren (eget Stripe-
+ * webhook-endepunkt, utenfor dette repoet).
+ *
+ * Håndterer alle frittstående kjøp: oppskrifter, 10 000-visninger-
+ * utfordringen, kredittpåfyll (bilder/video) og Claude-kurset. Kreditt- og
+ * Claude-logikken lå tidligere kun i stripe-webhook.js og kjørte derfor
+ * aldri i produksjon; flyttet hit 6. august 2026 via den delte
+ * functions/_lib/purchase-links.js.
  *
  *   POST /api/oppskrift-webhook
  *
@@ -14,8 +22,14 @@
 
 import { sendOppskriftMail, sendOwnerSaleNotice } from "../_lib/oppskrift-mail.js";
 import { sendUtfordringMail } from "../_lib/utfordring-mail.js";
+import { sendClaudeMail } from "../_lib/claude-mail.js";
+import { registerNewsletter } from "../_lib/newsletter.js";
 import { PATTERN_LINKS } from "../_lib/pattern-links.js";
 import { bumpToday } from "../_lib/track.js";
+import {
+  CREDIT_PACKS, addCredit,
+  CLAUDE_GROUP_NO, CLAUDE_GROUP_EN, CLAUDE_PAYMENT_LINK_LANG, CLAUDE_MAIN_LINK_LANG, addToClaudeGroup,
+} from "../_lib/purchase-links.js";
 
 /* ---- 10 000-visninger-utfordringen -------------------------------------
    Eget abonnement, helt uavhengig av Inner Circle (som selges av den
@@ -90,6 +104,51 @@ export async function onRequestPost(context) {
   if (event.type === "checkout.session.completed") {
     const obj = (event.data && event.data.object) || {};
     const email = (obj.customer_details && obj.customer_details.email) || obj.customer_email;
+
+    // Kredittpåfyll: legg bilder/video til kontoen, ikke medlemskap.
+    const pack = obj.payment_link && CREDIT_PACKS[obj.payment_link];
+    if (pack && email && obj.payment_status !== "unpaid") {
+      await addCredit(env, email, pack.kind, pack.amount);
+      const nm = (obj.customer_details && obj.customer_details.name) || "";
+      const kindLabel = pack.kind === "video" ? "videokreditt" : "bildekreditt";
+      try {
+        await sendOwnerSaleNotice(env, {
+          pname: pack.amount + " " + kindLabel, name: nm, email: email,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e3) {}
+      return json({ ok: true });
+    }
+
+    // Claude-kurset: legg kjøperen i riktig språkgruppe, ikke Inner Circle.
+    const claudeLang = obj.payment_link && CLAUDE_PAYMENT_LINK_LANG[obj.payment_link];
+    if (claudeLang && email && obj.payment_status !== "unpaid") {
+      const name = (obj.customer_details && obj.customer_details.name) || "";
+      const groupId = claudeLang === "en"
+        ? (env.MAILERLITE_CLAUDE_GROUP_EN || CLAUDE_GROUP_EN)
+        : (env.MAILERLITE_CLAUDE_GROUP_NO || CLAUDE_GROUP_NO);
+      await addToClaudeGroup(env, email, name, groupId);
+      // Start også den ukentlige nyhetsbrev-serien for kjøperen.
+      try { await registerNewsletter(env, email, name, claudeLang); } catch (e) {}
+      // Hovedkurs: send takkemail nå, og legg 2-dagers oppfølger i kø.
+      const mainLang = CLAUDE_MAIN_LINK_LANG[obj.payment_link];
+      if (mainLang) {
+        await sendClaudeMail(env, { to: email, name: name, lang: mainLang, kind: "takk" });
+        try {
+          await env.BUILDER_KV.put(
+            "claude_fu:" + email.trim().toLowerCase(),
+            JSON.stringify({ email: email, name: name, lang: mainLang, sendAfter: Date.now() + 2 * 24 * 60 * 60 * 1000 })
+          );
+        } catch (e) {}
+      }
+      try {
+        await sendOwnerSaleNotice(env, {
+          pname: mainLang ? "Claude-kurset" : "Claude-kurset, mersalg", lang: claudeLang,
+          name: name, email: email, amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e3) {}
+      return json({ ok: true });
+    }
 
     // Utfordringen: send dag 0 med en gang, legg resten i kø. Aldri Inner Circle.
     const utfordringLang = obj.payment_link && UTFORDRING_PAYMENT_LINK_LANG[obj.payment_link];
