@@ -267,6 +267,8 @@ export async function onRequestPost(context) {
     let result = await generateText(env, system, contentPrompt(body), maxTokens);
     return json({ result });
   } catch (err) {
-    return json({ error: "AI er midlertidig utilgjengelig. Prøv igjen om litt." }, 502);
+    // Midlertidig: ta med faktisk årsak og hvilke nøkler som finnes for feilsøking.
+    const keys = "A:" + (env.ANTHROPIC_API_KEY ? "1" : "0") + " O:" + (env.OPENAI_API_KEY ? "1" : "0");
+    return json({ error: "AI utilgjengelig [" + keys + "] " + String((err && err.message) || err).slice(0, 200) }, 502);
   }
 }
