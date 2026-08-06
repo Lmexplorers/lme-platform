@@ -285,13 +285,15 @@ function content(kind, lang, name, pid) {
 
 export function isOppskrift(pid) { return !!PRODUCT[pid]; }
 
-/* Kort varsel til Renate ved hvert oppskrift-salg. amount i minste enhet. */
+/* Kort varsel til Renate ved hvert salg (oppskrift, kreditt, Claude-kurs,
+   Inner Circle). amount i minste enhet. opts.pname overstyrer produktnavnet
+   når salget ikke er en oppskrift (da er opts.pid ikke en nøkkel i PRODUCT). */
 export async function sendOwnerSaleNotice(env, opts) {
   const apiKey = env.MAILERSEND_API_KEY;
   if (!apiKey) return { ok: false, skipped: true };
   const to = env.OWNER_NOTIFY_EMAIL || "renateshobby@hotmail.com";
   const prod = PRODUCT[opts && opts.pid];
-  const pname = prod ? prod.no : (opts && opts.pid) || "oppskrift";
+  const pname = (opts && opts.pname) || (prod ? prod.no : (opts && opts.pid) || "produkt");
   const cur = (opts.currency || "").toLowerCase();
   const beløp = opts.amount != null
     ? (cur === "usd" ? "$" + (opts.amount / 100) : (opts.amount / 100) + " kr")
@@ -302,12 +304,12 @@ export async function sendOwnerSaleNotice(env, opts) {
     "<p>Hei Renate,</p>" +
     "<p>Du har fått et nytt salg 🎉</p>" +
     '<table role="presentation" style="font-size:15px;line-height:1.7;">' +
-    "<tr><td><b>Oppskrift:</b></td><td style=\"padding-left:10px;\">" + esc(pname) + "</td></tr>" +
+    "<tr><td><b>Produkt:</b></td><td style=\"padding-left:10px;\">" + esc(pname) + "</td></tr>" +
     (beløp ? "<tr><td><b>Beløp:</b></td><td style=\"padding-left:10px;\">" + esc(beløp) + "</td></tr>" : "") +
     "<tr><td><b>Kunde:</b></td><td style=\"padding-left:10px;\">" + esc(kunde) + (opts.email ? " (" + esc(opts.email) + ")" : "") + "</td></tr>" +
     "<tr><td><b>Språk:</b></td><td style=\"padding-left:10px;\">" + språk + "</td></tr>" +
     "</table>" +
-    "<p style=\"color:#6b6470;font-size:14px;\">Kunden har fått leveringsmailen med oppskriften automatisk.</p>";
+    "<p style=\"color:#6b6470;font-size:14px;\">Kunden har fått bekreftelsen sin automatisk.</p>";
   const body = {
     from: { email: FROM_EMAIL, name: FROM_NAME },
     to: [{ email: to, name: FROM_NAME }],

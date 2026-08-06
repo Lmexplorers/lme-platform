@@ -18,8 +18,9 @@
 
 import { sendClaudeMail } from "../_lib/claude-mail.js";
 import { registerNewsletter } from "../_lib/newsletter.js";
-import { sendOppskriftMail } from "../_lib/oppskrift-mail.js";
+import { sendOppskriftMail, sendOwnerSaleNotice } from "../_lib/oppskrift-mail.js";
 import { PATTERN_LINKS } from "../_lib/pattern-links.js";
+import { bumpToday } from "../_lib/track.js";
 
 /* PATTERN_LINKS: delt kilde i ../_lib/pattern-links.js */
 
@@ -215,7 +216,17 @@ export async function onRequestPost(context) {
       // Kredittpåfyll: legg bilder/video til kontoen, ikke medlemskap.
       const pack = obj.payment_link && CREDIT_PACKS[obj.payment_link];
       if (pack) {
-        if (email) await addCredit(env, email, pack.kind, pack.amount);
+        if (email) {
+          await addCredit(env, email, pack.kind, pack.amount);
+          const nm = (obj.customer_details && obj.customer_details.name) || "";
+          const kindLabel = pack.kind === "video" ? "videokreditt" : "bildekreditt";
+          try {
+            await sendOwnerSaleNotice(env, {
+              pname: pack.amount + " " + kindLabel, name: nm, email: email,
+              amount: obj.amount_total, currency: obj.currency,
+            });
+          } catch (e3) {}
+        }
         break;
       }
       // Claude-kurset: legg kjøperen i riktig språkgruppe, ikke Inner Circle.
@@ -239,6 +250,12 @@ export async function onRequestPost(context) {
             );
           } catch (e) {}
         }
+        try {
+          await sendOwnerSaleNotice(env, {
+            pname: mainLang ? "Claude-kurset" : "Claude-kurset, mersalg", lang: claudeLang,
+            name: name, email: email, amount: obj.amount_total, currency: obj.currency,
+          });
+        } catch (e3) {}
         break;
       }
       // Oppskrifter (bøttehatt/skaut): leveringsmail + oppfølgere, IKKE Inner Circle.
@@ -246,7 +263,16 @@ export async function onRequestPost(context) {
       if (pat) {
         if (email) {
           const nm = (obj.customer_details && obj.customer_details.name) || "";
+          // Tell fullført kjøp i funnel-analysen (påvirker ingenting annet).
+          try { await bumpToday(env, { purchase: 1 }, {}); } catch (eA) {}
           await sendOppskriftMail(env, { to: email, name: nm, lang: pat.lang, kind: "levering", pid: pat.p });
+          // Kort salgs-varsel til Renate, så hun ikke bare oppdager det via Stripe-utbetalinger.
+          try {
+            await sendOwnerSaleNotice(env, {
+              pid: pat.p, lang: pat.lang, name: nm, email: email,
+              amount: obj.amount_total, currency: obj.currency,
+            });
+          } catch (e3) {}
           const e = email.trim().toLowerCase();
           const base = { email: email, name: nm, lang: pat.lang, pid: pat.p };
           try {
@@ -258,10 +284,15 @@ export async function onRequestPost(context) {
         }
         break;
       }
-      await grant(env, email, {
-        customer: obj.customer, sub: obj.subscription,
-        tier: (obj.metadata && obj.metadata.tier) || null,
-      });
+      const tier = (obj.metadata && obj.metadata.tier) || null;
+      await grant(env, email, { customer: obj.customer, sub: obj.subscription, tier: tier });
+      try {
+        const nm = (obj.customer_details && obj.customer_details.name) || "";
+        await sendOwnerSaleNotice(env, {
+          pname: "Inner Circle" + (tier ? " (" + tier + ")" : ""), name: nm, email: email,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e3) {}
       break;
     }
     case "customer.subscription.created":
