@@ -118,6 +118,14 @@ async function fetchTimeout(url, opts, ms) {
   finally { clearTimeout(timer); }
 }
 
+function sleep(ms) { return new Promise((res) => setTimeout(res, ms)); }
+
+// Egen feiltype for rate-limit (HTTP 429) fra bildemotoren, så vi kan gi
+// brukeren en tydelig, vennlig beskjed i stedet for en rå statuskode.
+class RateLimitError extends Error {
+  constructor(msg) { super(msg || "rate_limit"); this.name = "RateLimitError"; }
+}
+
 function b64ToBytes(b64) {
   const bin = atob(b64);
   const out = new Uint8Array(bin.length);
@@ -157,12 +165,27 @@ async function genSceneImage(env, prompt, aspect) {
   if (!key) throw new Error("Ingen bildemotor koblet til (GEMINI_API_KEY eller OPENAI_API_KEY mangler).");
   const base = (env.IMAGE_OPENAI_BASE || env.IMAGE_API_BASE || "https://api.openai.com/v1").replace(/\/$/, "");
   const model = env.IMAGE_OPENAI_MODEL || env.IMAGE_MODEL || "gpt-image-1";
-  const r = await fetchTimeout(`${base}/images/generations`, {
-    method: "POST",
-    headers: { "Authorization": `Bearer ${key}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ model, prompt, size, n: 1, quality: env.IMAGE_QUALITY || "low" }),
-  }, 55000);
-  if (!r.ok) throw new Error(`Bildemotoren svarte ${r.status}.`);
+  // gpt-image-1 har en lav grense for bilder per minutt, og en video med
+  // flere kapitler lager flere bilder rett etter hverandre. Ved 429 (for mange
+  // forespørsler) eller en midlertidig 5xx, vent og prøv igjen noen ganger,
+  // og respekter Retry-After-headeren når den finnes.
+  let r;
+  for (let attempt = 0; attempt < 4; attempt++) {
+    r = await fetchTimeout(`${base}/images/generations`, {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ model, prompt, size, n: 1, quality: env.IMAGE_QUALITY || "low" }),
+    }, 55000);
+    if (r.ok) break;
+    const retryable = r.status === 429 || r.status === 500 || r.status === 502 || r.status === 503;
+    if (!retryable || attempt === 3) {
+      if (r.status === 429) throw new RateLimitError("Bildemotoren svarte 429.");
+      throw new Error(`Bildemotoren svarte ${r.status}.`);
+    }
+    const ra = parseInt(r.headers.get("retry-after") || "", 10);
+    const waitMs = Math.min((Number.isFinite(ra) && ra > 0 ? ra * 1000 : 0) || (3000 * (attempt + 1)), 12000);
+    await sleep(waitMs);
+  }
   const data = await r.json();
   const item = data && data.data && data.data[0];
   if (item && item.b64_json) return { bytes: b64ToBytes(item.b64_json), contentType: "image/png" };
@@ -234,6 +257,9 @@ export async function onRequestPost(context) {
         const prompt = useMiaTeo
           ? buildCharacterImagePrompt(sec && sec.heading, sec && sec.talkingPoints, title, aspect)
           : buildImagePrompt(sec && sec.heading, sec && sec.talkingPoints, title, aspect);
+        // Liten pause mellom hvert AI-bilde (ikke før det første) for å jevne ut
+        // forespørslene og unngå å slå i bildemotorens grense per minutt.
+        if (i > 0) await sleep(1200);
         const img = await genSceneImage(env, prompt, aspect);
         imageUrl = await storeImage(env, origin, img.bytes, img.contentType);
       }
@@ -245,6 +271,13 @@ export async function onRequestPost(context) {
     }
   } catch (e) {
     if (!gate.owner) await refundVideoCredit(context, gate.email);
+    if (e instanceof RateLimitError) {
+      return json({
+        error: lang === "en"
+          ? "The image engine is busy right now (too many requests). Wait a minute and try again. Your credit has been refunded."
+          : "Bildemotoren er opptatt akkurat nå (for mange forespørsler). Vent ett minutt og prøv igjen. Kreditten er refundert.",
+      }, 200);
+    }
     return json({ error: "Klarte ikke å lage bildene til videoen. Kreditten er refundert.", detail: String((e && e.message) || e).slice(0, 200) }, 200);
   }
 
