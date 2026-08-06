@@ -689,7 +689,7 @@
   }
 
   function pollVideo(id, r, fmt){
-    fetch('/api/youtube-video?id='+encodeURIComponent(id))
+    fetch('/api/youtube-video?id='+encodeURIComponent(id)+'&lang='+encodeURIComponent(VLANG))
       .then(function(res){ return res.json(); })
       .then(function(d){
         if (!d || d.status === 'error'){ showVideoError((d&&d.error||'')+(d&&d.detail?' ('+d.detail+')':'')); return; }

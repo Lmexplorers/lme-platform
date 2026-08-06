@@ -202,6 +202,27 @@ async function storeImage(env, origin, bytes, contentType) {
   return `${origin}/api/image?id=${id}`;
 }
 
+// Gjør en rå feilmelding fra rendringsmotoren (kan inneholde JSON og engelske
+// leverandørmeldinger) om til en kort, tydelig beskjed på riktig språk. Fanger
+// særlig ElevenLabs-betalingsfeil, som Renate må ordne i ElevenLabs-kontoen sin.
+function friendlyEngineError(raw, lang) {
+  const s = String(raw || "");
+  const low = s.toLowerCase();
+  const en = lang === "en";
+  if (low.includes("elevenlabs") || low.includes("payment_issue") || low.includes("payment_required")) {
+    if (low.includes("payment") || low.includes("401") || low.includes("invoice") || low.includes("quota") || low.includes("credit")) {
+      return en
+        ? "The voice engine (ElevenLabs) is paused because a payment did not go through. Open your ElevenLabs account, complete the latest invoice, and try again."
+        : "Stemme-motoren (ElevenLabs) er satt på pause fordi en betaling ikke gikk gjennom. Gå inn i ElevenLabs-kontoen din, fullfør siste faktura, og prøv igjen.";
+    }
+    return en
+      ? "The voice engine (ElevenLabs) could not make the narration right now. Try again in a little while."
+      : "Stemme-motoren (ElevenLabs) klarte ikke å lage fortellerstemmen akkurat nå. Prøv igjen om litt.";
+  }
+  // Ukjent motorfeil: gi en nøytral beskjed, ikke dump rå JSON til brukeren.
+  return en ? "The video could not be made." : "Videoen kunne ikke lages.";
+}
+
 function narrationFor(section) {
   const heading = String((section && section.heading) || "").trim();
   const points = Array.isArray(section && section.talkingPoints) ? section.talkingPoints : [];
@@ -312,6 +333,7 @@ export async function onRequestGet(context) {
   const { request, env } = context;
   const url = new URL(request.url);
   const id = url.searchParams.get("id") || "";
+  const lang = url.searchParams.get("lang") === "en" ? "en" : "no";
   if (!id) return json({ error: "Mangler id." }, 400);
   if (!/^[A-Za-z0-9_-]{6,60}$/.test(id)) return json({ error: "Ugyldig jobb-ID." }, 400);
 
@@ -336,7 +358,8 @@ export async function onRequestGet(context) {
         }
       }
     } catch (e) {}
-    return json({ status: "error", error: (data.error || "Videoen kunne ikke lages.") + " Kreditten er refundert." });
+    const refundNote = lang === "en" ? " Your credit has been refunded." : " Kreditten er refundert.";
+    return json({ status: "error", error: friendlyEngineError(data.error, lang) + refundNote });
   }
 
   if (data.status !== "done" || !data.videoUrl) {
