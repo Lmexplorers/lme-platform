@@ -32,25 +32,44 @@ export async function onRequest(context) {
   }
 
   const now = Date.now();
-  let sent = 0, pending = 0, failed = 0;
+  let sent = 0, pending = 0, failed = 0, errored = 0;
 
   let cursor;
   do {
     const list = await env.BUILDER_KV.list({ prefix: "utf_fu:", cursor: cursor });
     for (const k of list.keys) {
-      const raw = await env.BUILDER_KV.get(k.name);
-      if (!raw) continue;
-      let job;
-      try { job = JSON.parse(raw); } catch (e) { await env.BUILDER_KV.delete(k.name); continue; }
-      if (job.sendAfter && job.sendAfter > now) { pending++; continue; }
-      const res = await sendUtfordringMail(env, {
-        to: job.email, name: job.name, lang: job.lang, kind: job.kind,
-      });
-      if (res && res.ok) { await env.BUILDER_KV.delete(k.name); sent++; }
-      else { failed++; }
+      // En feil på ett enkelt varsel (f.eks. en forbigående KV-feil) skal
+      // aldri stoppe resten av køen eller kræsje hele kjøringen. Uten dette
+      // ville en feilet delete() etter en vellykket sending la varselet bli
+      // liggende igjen med samme (fortidige) sendAfter, og sende samme
+      // e-post på nytt neste dag, akkurat det som skjedde med dag 1-mailen.
+      try {
+        const raw = await env.BUILDER_KV.get(k.name);
+        if (!raw) continue;
+        let job;
+        try { job = JSON.parse(raw); } catch (e) { await env.BUILDER_KV.delete(k.name); continue; }
+        if (job.sendAfter && job.sendAfter > now) { pending++; continue; }
+        const res = await sendUtfordringMail(env, {
+          to: job.email, name: job.name, lang: job.lang, kind: job.kind,
+        });
+        if (res && res.ok) {
+          sent++;
+          try {
+            await env.BUILDER_KV.delete(k.name);
+          } catch (delErr) {
+            // Prøv én gang til med en gang, i stedet for å la den forbigåtte
+            // feilen stå igjen til i morgen.
+            await env.BUILDER_KV.delete(k.name);
+          }
+        } else {
+          failed++;
+        }
+      } catch (keyErr) {
+        errored++;
+      }
     }
     cursor = list.list_complete ? null : list.cursor;
   } while (cursor);
 
-  return json({ ok: true, sent: sent, pending: pending, failed: failed });
+  return json({ ok: true, sent: sent, pending: pending, failed: failed, errored: errored });
 }
