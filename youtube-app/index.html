@@ -662,7 +662,9 @@
       .then(function(x){
         if (!x.d || x.d.error) {
           var needCredits = x.d && x.d.needCredits;
-          showVideoError(x.d && x.d.error, needCredits);
+          var em = (x.d && x.d.error) || '';
+          if (x.d && x.d.detail) em += ' (' + x.d.detail + ')';
+          showVideoError(em, needCredits);
           return;
         }
         pollVideo(x.d.id, r, fmt);
@@ -681,7 +683,7 @@
     fetch('/api/youtube-video?id='+encodeURIComponent(id))
       .then(function(res){ return res.json(); })
       .then(function(d){
-        if (!d || d.status === 'error'){ showVideoError(d && d.error); return; }
+        if (!d || d.status === 'error'){ showVideoError((d&&d.error||'')+(d&&d.detail?' ('+d.detail+')':'')); return; }
         if (d.status === 'done' && d.videoUrl){ showVideoPreview(d.videoUrl, r, fmt); return; }
         var t = $('vidProgText'); if (t) t.textContent = d.progress || (LANG==='no'?'Rendrer video, kan ta et par minutter …':'Rendering video, can take a couple of minutes …');
         VIDEO_POLL_TIMER = setTimeout(function(){ pollVideo(id, r, fmt); }, 4000);
