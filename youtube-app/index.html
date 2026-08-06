@@ -758,7 +758,7 @@
       })
       .catch(function(e){
         console.error('LME YouTube:', e);
-        $('out').innerHTML='<p class="err">'+(LANG==='no'?'Noe gikk galt. Prøv igjen om et øyeblikk.':'Something went wrong. Please try again in a moment.')+(e&&e.message?' ('+esc(e.message)+')':'')+'</p>';
+        $('out').innerHTML='<p class="err">'+(LANG==='no'?'Noe gikk galt. Prøv igjen om et øyeblikk.':'Something went wrong. Please try again in a moment.')+'</p>';
       })
       .finally(function(){ btn.disabled=false; btn.innerHTML=label; });
   });
