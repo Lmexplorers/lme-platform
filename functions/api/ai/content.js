@@ -144,17 +144,23 @@ async function callOpenAI(env, system, userPrompt, maxTokens) {
   return (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || "";
 }
 
-// Prøv Anthropic først (med retry), fall tilbake til OpenAI om den feiler.
+// Prøv Anthropic først, fall tilbake til OpenAI om den feiler. Når OpenAI-reserven
+// finnes, gjør vi bare ETT Anthropic-forsøk, så vi ikke bruker for lang tid (to
+// trege Anthropic-forsøk + reserve kan overskride tidsgrensen på store formater
+// som YouTube). Uten reserve beholder vi retry for robusthet.
 async function generateText(env, system, userPrompt, maxTokens) {
+  const hasOpenAI = !!env.OPENAI_API_KEY;
   if (env.ANTHROPIC_API_KEY) {
     try {
-      return await callClaudeRetry(env, system, userPrompt, maxTokens);
+      return hasOpenAI
+        ? await callClaude(env, system, userPrompt, maxTokens)
+        : await callClaudeRetry(env, system, userPrompt, maxTokens);
     } catch (e) {
-      if (env.OPENAI_API_KEY) return await callOpenAI(env, system, userPrompt, maxTokens);
+      if (hasOpenAI) return await callOpenAI(env, system, userPrompt, maxTokens);
       throw e;
     }
   }
-  if (env.OPENAI_API_KEY) return await callOpenAI(env, system, userPrompt, maxTokens);
+  if (hasOpenAI) return await callOpenAI(env, system, userPrompt, maxTokens);
   throw new Error("mangler AI-nøkkel");
 }
 

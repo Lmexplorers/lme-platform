@@ -118,6 +118,14 @@ async function fetchTimeout(url, opts, ms) {
   finally { clearTimeout(timer); }
 }
 
+function sleep(ms) { return new Promise((res) => setTimeout(res, ms)); }
+
+// Egen feiltype for rate-limit (HTTP 429) fra bildemotoren, så vi kan gi
+// brukeren en tydelig, vennlig beskjed i stedet for en rå statuskode.
+class RateLimitError extends Error {
+  constructor(msg) { super(msg || "rate_limit"); this.name = "RateLimitError"; }
+}
+
 function b64ToBytes(b64) {
   const bin = atob(b64);
   const out = new Uint8Array(bin.length);
@@ -157,12 +165,27 @@ async function genSceneImage(env, prompt, aspect) {
   if (!key) throw new Error("Ingen bildemotor koblet til (GEMINI_API_KEY eller OPENAI_API_KEY mangler).");
   const base = (env.IMAGE_OPENAI_BASE || env.IMAGE_API_BASE || "https://api.openai.com/v1").replace(/\/$/, "");
   const model = env.IMAGE_OPENAI_MODEL || env.IMAGE_MODEL || "gpt-image-1";
-  const r = await fetchTimeout(`${base}/images/generations`, {
-    method: "POST",
-    headers: { "Authorization": `Bearer ${key}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ model, prompt, size, n: 1, quality: env.IMAGE_QUALITY || "low" }),
-  }, 55000);
-  if (!r.ok) throw new Error(`Bildemotoren svarte ${r.status}.`);
+  // gpt-image-1 har en lav grense for bilder per minutt, og en video med
+  // flere kapitler lager flere bilder rett etter hverandre. Ved 429 (for mange
+  // forespørsler) eller en midlertidig 5xx, vent og prøv igjen noen ganger,
+  // og respekter Retry-After-headeren når den finnes.
+  let r;
+  for (let attempt = 0; attempt < 4; attempt++) {
+    r = await fetchTimeout(`${base}/images/generations`, {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ model, prompt, size, n: 1, quality: env.IMAGE_QUALITY || "low" }),
+    }, 55000);
+    if (r.ok) break;
+    const retryable = r.status === 429 || r.status === 500 || r.status === 502 || r.status === 503;
+    if (!retryable || attempt === 3) {
+      if (r.status === 429) throw new RateLimitError("Bildemotoren svarte 429.");
+      throw new Error(`Bildemotoren svarte ${r.status}.`);
+    }
+    const ra = parseInt(r.headers.get("retry-after") || "", 10);
+    const waitMs = Math.min((Number.isFinite(ra) && ra > 0 ? ra * 1000 : 0) || (3000 * (attempt + 1)), 12000);
+    await sleep(waitMs);
+  }
   const data = await r.json();
   const item = data && data.data && data.data[0];
   if (item && item.b64_json) return { bytes: b64ToBytes(item.b64_json), contentType: "image/png" };
@@ -177,6 +200,27 @@ async function storeImage(env, origin, bytes, contentType) {
   const id = crypto.randomUUID().replace(/-/g, "");
   await env.BUILDER_KV.put("img:" + id, bytes, { metadata: { ct: contentType || "image/png" }, expirationTtl: 60 * 60 * 24 * 30 });
   return `${origin}/api/image?id=${id}`;
+}
+
+// Gjør en rå feilmelding fra rendringsmotoren (kan inneholde JSON og engelske
+// leverandørmeldinger) om til en kort, tydelig beskjed på riktig språk. Fanger
+// særlig ElevenLabs-betalingsfeil, som Renate må ordne i ElevenLabs-kontoen sin.
+function friendlyEngineError(raw, lang) {
+  const s = String(raw || "");
+  const low = s.toLowerCase();
+  const en = lang === "en";
+  if (low.includes("elevenlabs") || low.includes("payment_issue") || low.includes("payment_required")) {
+    if (low.includes("payment") || low.includes("401") || low.includes("invoice") || low.includes("quota") || low.includes("credit")) {
+      return en
+        ? "The voice engine (ElevenLabs) is paused because a payment did not go through. Open your ElevenLabs account, complete the latest invoice, and try again."
+        : "Stemme-motoren (ElevenLabs) er satt på pause fordi en betaling ikke gikk gjennom. Gå inn i ElevenLabs-kontoen din, fullfør siste faktura, og prøv igjen.";
+    }
+    return en
+      ? "The voice engine (ElevenLabs) could not make the narration right now. Try again in a little while."
+      : "Stemme-motoren (ElevenLabs) klarte ikke å lage fortellerstemmen akkurat nå. Prøv igjen om litt.";
+  }
+  // Ukjent motorfeil: gi en nøytral beskjed, ikke dump rå JSON til brukeren.
+  return en ? "The video could not be made." : "Videoen kunne ikke lages.";
 }
 
 function narrationFor(section) {
@@ -234,6 +278,9 @@ export async function onRequestPost(context) {
         const prompt = useMiaTeo
           ? buildCharacterImagePrompt(sec && sec.heading, sec && sec.talkingPoints, title, aspect)
           : buildImagePrompt(sec && sec.heading, sec && sec.talkingPoints, title, aspect);
+        // Liten pause mellom hvert AI-bilde (ikke før det første) for å jevne ut
+        // forespørslene og unngå å slå i bildemotorens grense per minutt.
+        if (i > 0) await sleep(1200);
         const img = await genSceneImage(env, prompt, aspect);
         imageUrl = await storeImage(env, origin, img.bytes, img.contentType);
       }
@@ -245,6 +292,13 @@ export async function onRequestPost(context) {
     }
   } catch (e) {
     if (!gate.owner) await refundVideoCredit(context, gate.email);
+    if (e instanceof RateLimitError) {
+      return json({
+        error: lang === "en"
+          ? "The image engine is busy right now (too many requests). Wait a minute and try again. Your credit has been refunded."
+          : "Bildemotoren er opptatt akkurat nå (for mange forespørsler). Vent ett minutt og prøv igjen. Kreditten er refundert.",
+      }, 200);
+    }
     return json({ error: "Klarte ikke å lage bildene til videoen. Kreditten er refundert.", detail: String((e && e.message) || e).slice(0, 200) }, 200);
   }
 
@@ -279,6 +333,7 @@ export async function onRequestGet(context) {
   const { request, env } = context;
   const url = new URL(request.url);
   const id = url.searchParams.get("id") || "";
+  const lang = url.searchParams.get("lang") === "en" ? "en" : "no";
   if (!id) return json({ error: "Mangler id." }, 400);
   if (!/^[A-Za-z0-9_-]{6,60}$/.test(id)) return json({ error: "Ugyldig jobb-ID." }, 400);
 
@@ -303,7 +358,8 @@ export async function onRequestGet(context) {
         }
       }
     } catch (e) {}
-    return json({ status: "error", error: (data.error || "Videoen kunne ikke lages.") + " Kreditten er refundert." });
+    const refundNote = lang === "en" ? " Your credit has been refunded." : " Kreditten er refundert.";
+    return json({ status: "error", error: friendlyEngineError(data.error, lang) + refundNote });
   }
 
   if (data.status !== "done" || !data.videoUrl) {

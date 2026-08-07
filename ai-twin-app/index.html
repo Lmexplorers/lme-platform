@@ -342,7 +342,7 @@
     document.documentElement.lang=LANG;
     document.querySelectorAll('[data-no][data-en]').forEach(function(el){ var t=el.getAttribute('data-'+LANG); if(t.indexOf('<')!==-1) el.innerHTML=t; else el.textContent=t; });
     document.querySelectorAll('[data-no-ph][data-en-ph]').forEach(function(el){ el.setAttribute('placeholder', el.getAttribute('data-'+LANG+'-ph')); });
-    var lbl=LANG==='no'?'EN 🌍':'NO 🇳🇴'; if($('obLang'))$('obLang').textContent=lbl; if($('appLang'))$('appLang').textContent=lbl;
+    var lbl=LANG==='no'?'🇳🇴 Norsk':'🇬🇧 English'; if($('obLang'))$('obLang').textContent=lbl; if($('appLang'))$('appLang').textContent=lbl;
     var st=$('accLangState'); if(st) st.textContent=LANG==='no'?'Norsk':'English';
     renderBalance();
   }
