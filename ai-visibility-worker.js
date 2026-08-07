@@ -171,7 +171,7 @@ async function handlePing(env, origin) {
     worker: "lme-ai-visibility",
     hasAnthropicKey: !!env.ANTHROPIC_API_KEY,
     hasGithubToken: !!env.GITHUB_TOKEN,
-    hasMailerlite: !!(env.MAILERLITE_TOKEN && env.MAILERLITE_GROUP_ID),
+    hasMailersend: !!env.MAILERSEND_API_KEY,
     hasBlotato: !!env.BLOTATO_API_KEY,
     anthropic: env.ANTHROPIC_API_KEY ? "tester…" : "MANGLER nøkkel",
   };
@@ -453,8 +453,9 @@ async function handleSchema(request, origin) {
 // 2) Committer den rett til repoet via GitHub Contents API -> Cloudflare Pages
 //    deployer automatisk. Krever Worker-secret GITHUB_TOKEN (Contents: R/W).
 //    Valgfritt: GITHUB_REPO (default Lmexplorers/lme-platform), GITHUB_BRANCH (default main).
-// 3) Valgfritt: sender et MailerLite-kampanjeutkast direkte hvis MAILERLITE_TOKEN
-//    og MAILERLITE_GROUP_ID er satt. Ingen Make, ingen webhook.
+// 3) Valgfritt: sender en e-postvarsling via MailerSend (plattformens
+//    e-postsystem, samme moenster som claude-mail.js) hvis MAILERSEND_API_KEY
+//    er satt. Varselet gaar til NOTIFY_EMAIL (default renate@lmexplorers.com).
 async function handlePublish(request, env, origin) {
   let body;
   try { body = await request.json(); }
@@ -505,30 +506,28 @@ async function handlePublish(request, env, origin) {
     }
   }
 
-  // 2) Valgfritt: MailerLite-kampanjeutkast direkte fra workeren
+  // 2) Valgfritt: e-postvarsling via MailerSend (plattformens e-postsystem,
+  //    samme moenster som functions/_lib/claude-mail.js)
   let mailStatus = null;
-  if (env.MAILERLITE_TOKEN && env.MAILERLITE_GROUP_ID) {
+  if (env.MAILERSEND_API_KEY) {
     try {
-      const r = await fetch("https://connect.mailerlite.com/api/campaigns", {
+      const to = env.NOTIFY_EMAIL || "renate@lmexplorers.com";
+      const r = await fetch("https://api.mailersend.com/v1/email", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${env.MAILERLITE_TOKEN}`,
+          "Authorization": `Bearer ${env.MAILERSEND_API_KEY}`,
           "Content-Type": "application/json",
           "Accept": "application/json",
         },
         body: JSON.stringify({
-          name: `AI Visibility: ${a.seoTitle || a.h1}`,
-          type: "regular",
-          groups: [env.MAILERLITE_GROUP_ID],
-          emails: [{
-            subject: a.seoTitle || a.h1,
-            from_name: "Little Montessori Explorers",
-            from: env.MAILERLITE_FROM || "post@lmexplorers.com",
-            content: `<h1>${esc(a.h1)}</h1><p>${esc(a.intro || "")}</p><p><a href="${url}">Les hele artikkelen</a></p>`,
-          }],
+          from: { email: "renate@lmexplorers.com", name: "Little Montessori Explorers" },
+          to: [{ email: to }],
+          subject: `Ny artikkel publisert: ${a.seoTitle || a.h1}`,
+          html: `<h1>${esc(a.h1)}</h1><p>${esc(a.intro || "")}</p><p><a href="${url}">Se artikkelen: ${url}</a></p>`,
+          text: `Ny artikkel publisert: ${a.h1}\n${a.intro || ""}\n${url}`,
         }),
       });
-      mailStatus = r.status; // utkast opprettes; sending skjer manuelt i MailerLite
+      mailStatus = r.status;
     } catch (e) {
       mailStatus = "error";
     }
