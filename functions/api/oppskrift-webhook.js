@@ -30,8 +30,11 @@ import {
   CREDIT_PACKS, addCredit,
   CLAUDE_GROUP_NO, CLAUDE_GROUP_EN, CLAUDE_PAYMENT_LINK_LANG, CLAUDE_MAIN_LINK_LANG, addToClaudeGroup,
   AUTOPILOT_PAYMENT_LINKS, AUTOPILOT_PRODUCT_PLANS, grantAutopilot, revokeAutopilot, emailForStripeCustomer,
+  COURSE_PAYMENT_LINKS, COURSE_INFO,
 } from "../_lib/purchase-links.js";
 import { sendAutopilotMail } from "../_lib/autopilot-mail.js";
+import { grantCourseAccess } from "../_lib/course-access.js";
+import { sendCourseDeliveryMail } from "../_lib/course-mail.js";
 
 /* ---- 10 000-visninger-utfordringen -------------------------------------
    Eget abonnement, helt uavhengig av Inner Circle (som selges av den
@@ -133,6 +136,24 @@ export async function onRequestPost(context) {
       try {
         await sendOwnerSaleNotice(env, {
           pname: auto.planLabel, lang: auto.lang, name: nm, email: email,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e3) {}
+      return json({ ok: true });
+    }
+
+    // Låste enkeltkurs (YouTube, Videre med YouTube, KI for pedagoger):
+    // engangskjøp, tilgang for alltid via personlig lenke (course-access.js).
+    const course = obj.payment_link && COURSE_PAYMENT_LINKS[obj.payment_link];
+    if (course && email && obj.payment_status !== "unpaid") {
+      const nm = (obj.customer_details && obj.customer_details.name) || "";
+      const info = COURSE_INFO[course.courseId];
+      const courseName = info.name[course.lang] || info.name.no;
+      const token = await grantCourseAccess(env, course.courseId, email, nm);
+      try { await sendCourseDeliveryMail(env, email, nm, course.lang, courseName, info.url, token, true); } catch (e1) {}
+      try {
+        await sendOwnerSaleNotice(env, {
+          pname: courseName + " (" + course.tier + ")", lang: course.lang, name: nm, email: email,
           amount: obj.amount_total, currency: obj.currency,
         });
       } catch (e3) {}

@@ -160,3 +160,41 @@ export async function revokeAutopilot(env, email) {
     } catch (e) {}
   }
 }
+
+/* ---- Låste enkeltkurs (YouTube, Videre med YouTube, KI for pedagoger) ----
+   Ikke Inner Circle, ikke abonnement: engangskjøp, tilgang for alltid via
+   en personlig lenke i leveringsmailen (se _lib/course-access.js). Hvert
+   kurs har en "launch"-pris (i dag) og en "full"-pris (fra en senere dato),
+   samme betalingslenke-mønster som resten av filen. */
+export const COURSE_PAYMENT_LINKS = {
+  // Voks på YouTube med AI
+  "plink_1U1ro3Lax7B8uQzqrOlk5h4w": { courseId: "youtube", tier: "launch", lang: "no" },
+  "plink_1U1ro8Lax7B8uQzqdP7TkfBY": { courseId: "youtube", tier: "launch", lang: "en" },
+  "plink_1U1roDLax7B8uQzq2YNSJ5ZM": { courseId: "youtube", tier: "full",   lang: "no" },
+  "plink_1U1roHLax7B8uQzq4erjXa5Q": { courseId: "youtube", tier: "full",   lang: "en" },
+  // Videre med YouTube
+  "plink_1U1roNLax7B8uQzqDMRVRv0S": { courseId: "youtube-videre", tier: "launch", lang: "no" },
+  "plink_1U1roTLax7B8uQzqdR3O7LPO": { courseId: "youtube-videre", tier: "launch", lang: "en" },
+  "plink_1U1roYLax7B8uQzq1Gz0QTdR": { courseId: "youtube-videre", tier: "full",   lang: "no" },
+  "plink_1U1rocLax7B8uQzqV05mnxvI": { courseId: "youtube-videre", tier: "full",   lang: "en" },
+  // KI for pedagoger
+  "plink_1U1roiLax7B8uQzqnBcnb7LH": { courseId: "ki-pedagoger", tier: "launch", lang: "no" },
+  "plink_1U1ronLax7B8uQzqPAtyjLaz": { courseId: "ki-pedagoger", tier: "launch", lang: "en" },
+  "plink_1U1rorLax7B8uQzqDVl9503R": { courseId: "ki-pedagoger", tier: "full",   lang: "no" },
+  "plink_1U1rovLax7B8uQzqQQKKxMdB": { courseId: "ki-pedagoger", tier: "full",   lang: "en" },
+};
+
+export const COURSE_INFO = {
+  "youtube": {
+    name: { no: "Voks på YouTube med AI", en: "Grow on YouTube with AI" },
+    url: "https://lmexplorers.com/academy/youtube",
+  },
+  "youtube-videre": {
+    name: { no: "Videre med YouTube", en: "Next Level with YouTube" },
+    url: "https://lmexplorers.com/academy/youtube-videre",
+  },
+  "ki-pedagoger": {
+    name: { no: "KI for pedagoger", en: "AI for Educators" },
+    url: "https://lmexplorers.com/academy/ki-for-pedagoger",
+  },
+};
