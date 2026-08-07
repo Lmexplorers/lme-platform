@@ -29,7 +29,9 @@ import { bumpToday } from "../_lib/track.js";
 import {
   CREDIT_PACKS, addCredit,
   CLAUDE_GROUP_NO, CLAUDE_GROUP_EN, CLAUDE_PAYMENT_LINK_LANG, CLAUDE_MAIN_LINK_LANG, addToClaudeGroup,
+  AUTOPILOT_PAYMENT_LINKS, AUTOPILOT_PRODUCT_PLANS, grantAutopilot, revokeAutopilot, emailForStripeCustomer,
 } from "../_lib/purchase-links.js";
+import { sendAutopilotMail } from "../_lib/autopilot-mail.js";
 
 /* ---- 10 000-visninger-utfordringen -------------------------------------
    Eget abonnement, helt uavhengig av Inner Circle (som selges av den
@@ -120,6 +122,23 @@ export async function onRequestPost(context) {
       return json({ ok: true });
     }
 
+    // LME Autopilot (Start/Proff/VIP): gir abonnement, ikke Inner Circle.
+    // Var tidligere kun i den aldri-registrerte stripe-webhook.js, så
+    // betalende kunder fikk verken tilgang eller e-post. Se purchase-links.js.
+    const auto = obj.payment_link && AUTOPILOT_PAYMENT_LINKS[obj.payment_link];
+    if (auto && email && obj.payment_status !== "unpaid") {
+      const nm = (obj.customer_details && obj.customer_details.name) || "";
+      await grantAutopilot(env, email, { customer: obj.customer, sub: obj.subscription, plan: auto.plan, limits: auto.limits });
+      try { await sendAutopilotMail(env, email, nm, auto.lang, auto.planLabel); } catch (e1) {}
+      try {
+        await sendOwnerSaleNotice(env, {
+          pname: auto.planLabel, lang: auto.lang, name: nm, email: email,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e3) {}
+      return json({ ok: true });
+    }
+
     // Claude-kurset: legg kjøperen i riktig språkgruppe, ikke Inner Circle.
     const claudeLang = obj.payment_link && CLAUDE_PAYMENT_LINK_LANG[obj.payment_link];
     if (claudeLang && email && obj.payment_status !== "unpaid") {
@@ -199,6 +218,35 @@ export async function onRequestPost(context) {
           JSON.stringify(Object.assign({}, base, { kind: "oppfolging_uke", sendAfter: Date.now() + 14 * 24 * 60 * 60 * 1000 })));
       } catch (e2) {}
     }
+    return json({ ok: true });
+  }
+
+  // Holder LME Autopilot-abonnementet riktig ved fornyelse/oppsigelse.
+  // Rører aldri Inner Circle: den egne lme-inner-circle-workeren har sitt
+  // eget webhook-endepunkt og håndterer sine egne abonnement-hendelser.
+  // Her sjekkes produktet på abonnementet, og alt som ikke er en kjent
+  // Autopilot-plan (prod_… i AUTOPILOT_PRODUCT_PLANS) ignoreres stille.
+  if (event.type === "customer.subscription.updated" || event.type === "customer.subscription.deleted") {
+    const obj = (event.data && event.data.object) || {};
+    let prod = null;
+    try {
+      const item = obj.items && obj.items.data && obj.items.data[0];
+      const price = item && item.price;
+      prod = price && (typeof price.product === "string" ? price.product : (price.product && price.product.id));
+    } catch (e) {}
+    const plan = prod && AUTOPILOT_PRODUCT_PLANS[prod];
+    if (!plan) return json({ ok: true }); // ikke en Autopilot-plan, ikke vårt bord
+
+    const email = await emailForStripeCustomer(env, obj.customer);
+    if (!email) return json({ ok: true });
+
+    const active = event.type === "customer.subscription.updated" && (obj.status === "active" || obj.status === "trialing");
+    if (active) {
+      await grantAutopilot(env, email, { customer: obj.customer, sub: obj.id, plan: plan.plan, limits: plan.limits });
+    } else {
+      await revokeAutopilot(env, email);
+    }
+    return json({ ok: true });
   }
 
   return json({ ok: true });

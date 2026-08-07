@@ -75,3 +75,88 @@ export async function addToClaudeGroup(env, email, name, groupId) {
     });
   } catch (e) {}
 }
+
+/* ---- LME Autopilot-abonnement (Start/Proff/VIP), solgt fra /oppgrader ----
+   IKKE Inner Circle (som håndteres av den separate lme-inner-circle-workeren).
+   Betalingslenkene under ble tidligere kun håndtert i den aldri-registrerte
+   stripe-webhook.js (se CS_PLANS der), så betalende kunder fikk verken
+   e-post eller faktisk tilgang. Verifisert 1:1 mot knappene på /oppgrader
+   og mot Stripe sin liste over betalingslenker samme dag som denne flyttingen. */
+export const AUTOPILOT_PAYMENT_LINKS = {
+  "plink_1Ty9NeLax7B8uQzqIlM5RCuB": { plan: "cs-start", limits: { image: 30,  video: 1  }, planLabel: "LME Autopilot – Start", lang: "no" },
+  "plink_1Ty9NlLax7B8uQzqrRrPUgkr": { plan: "cs-start", limits: { image: 30,  video: 1  }, planLabel: "LME Autopilot – Start", lang: "en" },
+  "plink_1TxaxbLax7B8uQzq9nJeLLHB": { plan: "cs-proff", limits: { image: 100, video: 6  }, planLabel: "LME Autopilot – Proff", lang: "no" },
+  "plink_1TxaxcLax7B8uQzqQWSj2nuD": { plan: "cs-proff", limits: { image: 100, video: 6  }, planLabel: "LME Autopilot – Proff", lang: "en" },
+  "plink_1TxaxeLax7B8uQzqhpvfmUta": { plan: "cs-pluss", limits: { image: 250, video: 15 }, planLabel: "LME Autopilot – VIP",   lang: "no" },
+  "plink_1TxaxfLax7B8uQzq0VIMveFM": { plan: "cs-pluss", limits: { image: 250, video: 15 }, planLabel: "LME Autopilot – VIP",   lang: "en" },
+  "plink_1TxaxhLax7B8uQzqYOEHA6O9": { plan: "cs-pluss", limits: { image: 250, video: 15 }, planLabel: "LME Autopilot – VIP (årlig)", lang: "no" },
+  "plink_1TxaxiLax7B8uQzqCSt5zYag": { plan: "cs-pluss", limits: { image: 250, video: 15 }, planLabel: "LME Autopilot – VIP (årlig)", lang: "en" },
+};
+
+function memberKey(email) { return "member:" + email.trim().toLowerCase(); }
+function custKey(id) { return "scust:" + id; }
+function userKey(email) { return "user:" + email.trim().toLowerCase(); }
+
+/* Gir/oppdaterer et LME Autopilot-abonnement i KV, lest av enforceGeneration
+   i _lib/access.js (member:<e-post>, speilet til user:<e-post> hvis kontoen
+   finnes). Samme lagringsformat som Inner Circle bruker, plan/limits skiller dem. */
+export async function grantAutopilot(env, email, info) {
+  if (!email) return;
+  const mkey = memberKey(email);
+  let prevM = {};
+  try { const r = await env.BUILDER_KV.get(mkey); if (r) prevM = JSON.parse(r) || {}; } catch (e) {}
+  const rec = {
+    status: "active", source: "stripe", since: prevM.since || Date.now(),
+    plan: info.plan, tier: prevM.tier || null, limits: info.limits,
+    customer: info.customer || prevM.customer || null,
+    sub: info.sub || prevM.sub || null,
+    updated: Date.now(),
+  };
+  await env.BUILDER_KV.put(mkey, JSON.stringify(rec));
+  if (info.customer) await env.BUILDER_KV.put(custKey(info.customer), email.trim().toLowerCase());
+  const uraw = await env.BUILDER_KV.get(userKey(email));
+  if (uraw) {
+    try {
+      const u = JSON.parse(uraw);
+      u.subscription = { status: rec.status, plan: rec.plan, tier: rec.tier, limits: rec.limits, source: "stripe", updated: rec.updated };
+      await env.BUILDER_KV.put(userKey(email), JSON.stringify(u));
+    } catch (e) {}
+  }
+}
+
+/* Samme plan/limits som AUTOPILOT_PAYMENT_LINKS over, men nøkkelen er
+   Stripe-produktet (ikke betalingslenken), siden abonnements-hendelser
+   (customer.subscription.updated/deleted) refererer til produktet på
+   prisen, ikke lenken kjøpet startet fra. Brukes til å holde tilgangen
+   riktig ved fornyelse/oppsigelse, ikke bare ved selve kjøpet. */
+export const AUTOPILOT_PRODUCT_PLANS = {
+  "prod_UwWlnVHko5a1Dt": { plan: "cs-start", limits: { image: 30,  video: 1  } },
+  "prod_UTtEl6dxkbq4qM": { plan: "cs-proff", limits: { image: 100, video: 6  } },
+  "prod_UwWmmP16D4lT5Z": { plan: "cs-pluss", limits: { image: 250, video: 15 } },
+};
+
+export async function emailForStripeCustomer(env, customerId) {
+  if (!customerId) return null;
+  return await env.BUILDER_KV.get(custKey(customerId));
+}
+
+/* Fjerner et LME Autopilot-abonnement (oppsigelse/betaling feilet).
+   Rører kun status, ikke plan/limits, i tilfelle hun vil se hva de hadde. */
+export async function revokeAutopilot(env, email) {
+  if (!email) return;
+  const mkey = memberKey(email);
+  const raw = await env.BUILDER_KV.get(mkey);
+  let rec = { status: "canceled", source: "stripe" };
+  if (raw) { try { rec = JSON.parse(raw) || rec; } catch (e) {} }
+  rec.status = "canceled";
+  rec.updated = Date.now();
+  await env.BUILDER_KV.put(mkey, JSON.stringify(rec));
+  const uraw = await env.BUILDER_KV.get(userKey(email));
+  if (uraw) {
+    try {
+      const u = JSON.parse(uraw);
+      if (u.subscription) { u.subscription.status = "canceled"; u.subscription.updated = Date.now(); }
+      await env.BUILDER_KV.put(userKey(email), JSON.stringify(u));
+    } catch (e) {}
+  }
+}
