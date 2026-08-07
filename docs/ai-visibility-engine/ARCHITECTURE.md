@@ -70,7 +70,7 @@ som medlemshjem. Bilingual norsk/engelsk Montessori-plattform.
 ### Trafikk- og markedsføringsfunksjoner
 - Tripwire-funnel, Stripe payment links, takkesider.
 - Markedsføringsseksjon i Creative Studio (Forms/Email/Automations — i dag "Snart").
-- MailerLite tilgjengelig som integrasjon (kalles direkte fra workeren ved behov).
+- MailerSend er plattformens e-postsystem (kalles direkte fra kode, samme moenster som claude-mail.js).
 
 ### Oppsummerende oversikt
 - **Plattform:** Cloudflare Pages-site, medlemsportal på `/dashboard`.
@@ -142,7 +142,7 @@ ai-visibility-worker.js  (Cloudflare Worker — gjenbruker Anthropic-proxy + D1)
 | **Blogg/innhold** | Artikler publiseres som Pages-HTML i samme designsystem; FAQ/Schema injiseres | Ny CMS |
 | **AI-verktøy** | Bruker `lme-proxy`-Anthropic-proxyen + Renate-system-prompten (merkevarestemme) | Ny AI-integrasjon |
 | **Content Studio** | "Repurpose"-endepunkt gjenbruker artikkel → IG/TikTok/Pin/e-post | Ny multi-format-motor |
-| **Automasjoner** | Workeren committer rett til GitHub (Pages-deploy) + kaller MailerLite direkte. Alt i Cloudflare, ingen mellomledd | Ny automasjonsmotor |
+| **Automasjoner** | Workeren committer rett til GitHub (Pages-deploy) + varsler via MailerSend. Alt i Cloudflare, ingen mellomledd | Ny automasjonsmotor |
 | **Butikk-register** | Product/Course Schema genereres fra `butikk-config.js`-mønsteret | Nytt produktregister |
 | **Stripe** | Premium-gating av modulen via eksisterende plan-lenker | Ny betalingsflyt |
 
@@ -160,7 +160,7 @@ ai-visibility-worker.js  (Cloudflare Worker — gjenbruker Anthropic-proxy + D1)
 ### Fase 2 — Utvidelse  *(levert)*
 - Auto-publisering: `/ai/publish` rendrer artikkel og committer rett til repoet
   via GitHub Contents API → Cloudflare Pages deployer. Se `PUBLISH_SETUP.md`.
-- MailerLite-utsendelse kalles direkte fra workeren (valgfri, kampanjeutkast).
+- MailerSend-varsel sendes direkte fra workeren (valgfritt, plattformens e-postsystem).
 - Persistér genererte keywords/artikler i D1 via worker (`POST /ai/save`).
 - Google Search Console: sitemap-innsending + URL-inspeksjon (Worker + OAuth-secret).
 
