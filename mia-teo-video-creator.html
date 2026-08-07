@@ -440,6 +440,10 @@
     q('projectView').style.display = '';
     q('qcResults').innerHTML = ''; q('renderResults').innerHTML = '';
     renderProject();
+    if (project.render) {
+      renderRenderState(project.render);
+      if (project.render.status === 'rendering') pollRender();
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   q('backBtn').addEventListener('click', function () {
@@ -609,16 +613,47 @@
     });
   });
 
+  var renderPollTimer = null;
+  function renderRenderState(r) {
+    var box = q('renderResults'); box.innerHTML = '';
+    if (!r || r.status === 'not_started') return;
+    if (r.status === 'rendering') {
+      var n = document.createElement('div'); n.className = 'note';
+      n.textContent = '🎬 ' + L('Setter sammen episoden …', 'Assembling the episode …') + (r.progress ? ' (' + r.progress + ')' : '');
+      box.appendChild(n);
+    } else if (r.status === 'ready' && r.videoUrl) {
+      var ok = document.createElement('div'); ok.className = 'note';
+      ok.innerHTML = '<b>✅ ' + L('Ferdig episode', 'Finished episode') + '</b> (' + (r.durationSeconds || 0).toFixed(0) + 's)<br>' +
+        '<video src="' + r.videoUrl + '" controls style="width:100%;border-radius:12px;margin-top:.5rem;"></video>' +
+        '<div class="hint" style="margin-top:.4rem;">' + L('Midlertidig lagret på rendringsmotoren, ikke permanent lagring ennå. Last ned og ta vare på den hvis du vil beholde den. Ingen musikk eller undertekster ennå, kun dialog/fortelling.', 'Temporarily stored on the render engine, not permanent storage yet. Download and keep a copy if you want to keep it. No music or subtitles yet, dialogue/narration only.') + '</div>';
+      box.appendChild(ok);
+    } else if (r.status === 'failed') {
+      var err = document.createElement('div'); err.className = 'issue error';
+      err.textContent = r.error || L('Sammenstillingen feilet.', 'Assembly failed.');
+      box.appendChild(err);
+    }
+  }
+  function pollRender() {
+    if (renderPollTimer) clearInterval(renderPollTimer);
+    var tries = 0;
+    renderPollTimer = setInterval(function () {
+      tries++;
+      api('/api/miateo/render?projectId=' + encodeURIComponent(currentProject.id)).then(function (res) {
+        var r = res.data && res.data.render; if (!r) return;
+        renderRenderState(r);
+        if (r.status === 'ready' || r.status === 'failed' || tries > 120) clearInterval(renderPollTimer);
+      }).catch(function () {});
+    }, 5000);
+  }
   q('renderBtn').addEventListener('click', function () {
     post('/api/miateo/render', { projectId: currentProject.id }).then(function (res) {
-      var box = q('renderResults'); box.innerHTML = '';
       var d = res.data || {};
-      if (d.requiresInfrastructure) {
-        var n = document.createElement('div'); n.className = 'note gold';
-        n.innerHTML = '<b>' + L('Alle shot er klare, men sammenstilling er ikke bygget ennå', 'All shots are ready, but assembly is not built yet') + '</b><br>' + d.detail + '<br><br>' + d.manualWorkaround;
-        box.appendChild(n);
-      } else if (d.missingShotIds) {
+      if (d.missingShotIds) {
         toast(L('Ikke alle shot har ferdig video ennå (' + d.missingShotIds.length + ' mangler).', 'Not all shots have finished video yet (' + d.missingShotIds.length + ' missing).'));
+      } else if (d.ok && d.status === 'rendering') {
+        toast(L('🎬 Setter sammen episoden …', '🎬 Assembling the episode …'));
+        renderRenderState({ status: 'rendering' });
+        pollRender();
       } else if (d.error) { toast(d.error); }
     });
   });
