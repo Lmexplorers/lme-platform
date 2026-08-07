@@ -623,9 +623,12 @@
       box.appendChild(n);
     } else if (r.status === 'ready' && r.videoUrl) {
       var ok = document.createElement('div'); ok.className = 'note';
+      var storageNote = r.stored
+        ? L('Lagret permanent i R2.', 'Stored permanently in R2.')
+        : L('Midlertidig lagret på rendringsmotoren, ikke permanent lagring ennå. Last ned og ta vare på den hvis du vil beholde den.', 'Temporarily stored on the render engine, not permanent storage yet. Download and keep a copy if you want to keep it.');
       ok.innerHTML = '<b>✅ ' + L('Ferdig episode', 'Finished episode') + '</b> (' + (r.durationSeconds || 0).toFixed(0) + 's)<br>' +
         '<video src="' + r.videoUrl + '" controls style="width:100%;border-radius:12px;margin-top:.5rem;"></video>' +
-        '<div class="hint" style="margin-top:.4rem;">' + L('Midlertidig lagret på rendringsmotoren, ikke permanent lagring ennå. Last ned og ta vare på den hvis du vil beholde den. Ingen musikk eller undertekster ennå, kun dialog/fortelling.', 'Temporarily stored on the render engine, not permanent storage yet. Download and keep a copy if you want to keep it. No music or subtitles yet, dialogue/narration only.') + '</div>';
+        '<div class="hint" style="margin-top:.4rem;">' + storageNote + ' ' + L('Ingen musikk eller undertekster ennå, kun dialog/fortelling.', 'No music or subtitles yet, dialogue/narration only.') + '</div>';
       box.appendChild(ok);
     } else if (r.status === 'failed') {
       var err = document.createElement('div'); err.className = 'issue error';

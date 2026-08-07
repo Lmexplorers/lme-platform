@@ -84,10 +84,17 @@ ut ved neste push til `main`, ingen ny tjeneste, ingen ny regning.
   flagger dette nå, se under).
 - Hvis summen av stemmelyd i ett shot er lengre enn selve klippet, fortsetter
   lyden etter at klippet er ferdig (QC flagger dette også).
-- Den ferdige MP4-en ligger på rendringsmotorens egen disk, som ikke er
-  garantert å overleve en omstart/ny utrulling av tjenesten. Last ned og ta
-  vare på episoden hvis du vil beholde den, permanent lagring (R2) er
-  fortsatt ikke koblet til.
+- Permanent lagring: `functions/api/miateo/render.js` kopierer den ferdige
+  MP4-en til R2 (`functions/api/miateo/media.js` server den ut igjen) idet
+  rendringen er ferdig, i stedet for å la den ligge på rendringsmotorens
+  egen (ikke-varige) disk. Dette krever en R2-bøtte koblet til
+  lme-platform-Pages-prosjektet med variabelnavn `MIATEO_EPISODES`
+  (Cloudflare-dashbordet: lme-platform → Settings → Functions → R2 bucket
+  bindings). Renate har allerede R2-bøtter i kontoen (`lme-bruker-filer`,
+  `lme-platform-html`), men ingen av dem er koblet til DENNE Pages-
+  Functions-koden ennå, det er et eget steg fra å ha en bøtte i kontoen.
+  Til bindingen er lagt til, faller koden automatisk tilbake til å bruke
+  rendringsmotorens egen midlertidige URL (fungerer, bare ikke varig).
 
 ## Undersøkelse før bygging
 

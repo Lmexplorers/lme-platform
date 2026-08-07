@@ -20,10 +20,13 @@
  *     episode plays with dialogue/narration audio only).
  *   - Burned-in subtitles.
  *   - Crossfades/transitions (hard cuts between shots).
- *   - Permanent storage: the finished MP4 is served from the render
- *     engine's own disk (may not survive a redeploy), not yet copied to
- *     durable storage (R2). Download and keep a copy of anything you want
- *     to publish.
+ *
+ * Permanent storage: once the render engine finishes, the finished MP4 is
+ * copied into R2 (functions/api/miateo/media.js serves it back out) instead
+ * of staying only on the engine's own non-durable disk. This requires an R2
+ * bucket bound to this Pages project as MIATEO_EPISODES; until that binding
+ * is added in the Cloudflare dashboard, this falls back to serving straight
+ * from the render engine (works, just not durable long-term).
  *
  * POST /api/miateo/render { projectId }
  *   -> not all shots ready:  { ok:false, ready:false, missingShotIds }
@@ -106,7 +109,24 @@ export async function onRequestGet(context) {
   if (!data) return json({ render: r }, 200);
 
   if (data.status === "done" && data.videoUrl) {
-    project.render = { status: "ready", videoUrl: data.videoUrl, durationSeconds: data.durationSeconds || 0, jobId: r.jobId, finishedAt: Date.now() };
+    let videoUrl = data.videoUrl;
+    let stored = false;
+    if (env.MIATEO_EPISODES) {
+      try {
+        const origin = new URL(request.url).origin;
+        const key = "miateo/episodes/" + project.id + "/" + Date.now() + ".mp4";
+        const vr = await fetchTimeout(data.videoUrl, {}, 55000);
+        if (vr.ok && vr.body) {
+          await env.MIATEO_EPISODES.put(key, vr.body, { httpMetadata: { contentType: "video/mp4" } });
+          videoUrl = origin + "/api/miateo/media?key=" + encodeURIComponent(key);
+          stored = true;
+        }
+      } catch (e) { /* R2-kopiering feilet, bruk motorens URL som reserve under */ }
+    }
+    project.render = {
+      status: "ready", videoUrl, engineVideoUrl: data.videoUrl, stored,
+      durationSeconds: data.durationSeconds || 0, jobId: r.jobId, finishedAt: Date.now(),
+    };
     project.status = "ready";
     await saveProject(env, project);
     return json({ render: project.render }, 200);
