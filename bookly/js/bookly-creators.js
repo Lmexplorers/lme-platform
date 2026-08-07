@@ -915,7 +915,13 @@
   T.forEach(function (tp) {
     if (BK.OWNER_TPL_CATS[tp.cat] || tp.name[0].indexOf('FEA') !== -1) tp.own = true;
   });
-  BK.isOwner = function () { return !!(BK.state.user && BK.state.user.role === 'owner'); };
+  // Samme e-postliste som isOwner() i functions/_lib/access.js. role er
+  // ikke alltid satt til nøyaktig 'owner' på kontoen.
+  var OWNER_EMAILS = ['renate@lmexplorers.com', 'hei@lmexplorers.com', 'hello@lmexplorers.com', 'support@lmexplorers.com', 'renateshobby@hotmail.com'];
+  BK.isOwner = function () {
+    var u = BK.state.user;
+    return !!(u && (u.role === 'owner' || u.role === 'admin' || OWNER_EMAILS.indexOf((u.email || '').toLowerCase()) !== -1));
+  };
   BK.visibleTemplates = function () {
     var own = BK.isOwner();
     return T.filter(function (tp) { return !tp.own || own; });
