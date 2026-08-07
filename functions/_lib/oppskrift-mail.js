@@ -329,6 +329,46 @@ export async function sendOwnerSaleNotice(env, opts) {
   }
 }
 
+/**
+ * Kort varsel til Renate ved GRATIS registreringer (gratiskurs, lead
+ * magnet/nyhetsbrev osv.), samme mønster som sendOwnerSaleNotice over,
+ * men uten beløp, siden ingenting er kjøpt.
+ * opts: { what, name, email, lang }
+ */
+export async function sendOwnerSignupNotice(env, opts) {
+  const apiKey = env.MAILERSEND_API_KEY;
+  if (!apiKey) return { ok: false, skipped: true };
+  const to = env.OWNER_NOTIFY_EMAIL || "renate@lmexplorers.com";
+  const what = (opts && opts.what) || "noe gratis";
+  const person = (opts.name && opts.name.trim()) ? opts.name.trim() : (opts.email || "en ny person");
+  const språk = opts.lang === "en" ? "engelsk" : "norsk";
+  const inner =
+    "<p>Hei Renate,</p>" +
+    "<p>Ny gratis registrering 🌱</p>" +
+    '<table role="presentation" style="font-size:15px;line-height:1.7;">' +
+    "<tr><td><b>Hva:</b></td><td style=\"padding-left:10px;\">" + esc(what) + "</td></tr>" +
+    "<tr><td><b>Person:</b></td><td style=\"padding-left:10px;\">" + esc(person) + (opts.email ? " (" + esc(opts.email) + ")" : "") + "</td></tr>" +
+    "<tr><td><b>Språk:</b></td><td style=\"padding-left:10px;\">" + språk + "</td></tr>" +
+    "</table>";
+  const body = {
+    from: { email: FROM_EMAIL, name: FROM_NAME },
+    to: [{ email: to, name: FROM_NAME }],
+    subject: "🌱 Ny påmelding: " + what,
+    html: wrap(inner),
+    text: "Ny gratis registrering! " + what + ". Person: " + person + (opts.email ? " (" + opts.email + ")" : "") + ". Språk: " + språk + ".",
+  };
+  try {
+    const res = await fetch(MS, {
+      method: "POST",
+      headers: { Authorization: "Bearer " + apiKey, "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(body),
+    });
+    return { ok: res.ok, status: res.status };
+  } catch (e) {
+    return { ok: false, error: String(e) };
+  }
+}
+
 /* Sender én oppskrift-e-post via MailerSend. kind: levering | oppfolging_dag | oppfolging_uke */
 export async function sendOppskriftMail(env, opts) {
   const to = opts && opts.to;

@@ -75,11 +75,24 @@ export async function onRequestPost(context) {
       push(shot.id, "warning", "keyframe_not_approved", "Nøkkelbildet er laget, men ikke godkjent ennå.");
     }
     // DIALOGUE CHECK
+    let voicedSec = 0, unvoicedCount = 0;
     (shot.dialogue || []).forEach((line, i) => {
       if (!line.no && !line.en) push(shot.id, "error", "empty_dialogue", "Replikk " + (i + 1) + " mangler tekst.");
       else if (!line.no || !line.en) push(shot.id, "warning", "missing_translation", "Replikk " + (i + 1) + " mangler norsk eller engelsk versjon.");
       if (hasUnsafe(line.no) || hasUnsafe(line.en)) push(shot.id, "error", "unsafe_language", "Replikk " + (i + 1) + " inneholder ord som ikke passer i en barnevennlig app.");
+      if (line.audioAssetId) voicedSec += Number(line.durationSec) || 0; else if (line.no || line.en) unvoicedCount++;
     });
+    if (shot.narration && shot.narration.audioAssetId) voicedSec += Number(shot.narration.durationSec) || 0;
+    else if (shot.narration && (shot.narration.no || shot.narration.en)) unvoicedCount++;
+    // DIALOGUE TIMING CHECK: the assembled episode plays each line back to
+    // back starting at 0, so if the voiced lines add up to more than the
+    // shot's own clip length, the audio will run past the end of the video.
+    if (voicedSec > (shot.durationSec || 6)) {
+      push(shot.id, "warning", "dialogue_longer_than_shot", "Stemmelydene i dette shotet (" + voicedSec.toFixed(1) + "s) er lengre enn selve klippet (" + (shot.durationSec || 6) + "s). Lyden vil fortsette etter at klippet er ferdig i den ferdige episoden.");
+    }
+    if (unvoicedCount > 0) {
+      push(shot.id, "info", "unvoiced_lines", unvoicedCount + " replikk(er) i dette shotet har ingen stemme laget ennå. De spilles stille i den sammensatte episoden til du genererer dem.");
+    }
     if (hasUnsafe(shot.action)) push(shot.id, "error", "unsafe_action", "Handlingsbeskrivelsen inneholder ord som ikke passer i en barnevennlig app.");
     // CONTINUITY CHECK: a "drops" event for an item never established as held.
     const state = before.get(shot.id);

@@ -24,6 +24,15 @@
  *   POST /api/generer-slideshow   { scenes:[{imageUrl|imagePrompt,narration,onScreenText?}], lang, aspect? }
  *        -> 202 { jobId }  (samme status-endepunkt)
  *
+ * I tillegg: sluttsammenstilling for Mia & Teo Video Creator. Tar imot
+ * FERDIGE shot-klipp (allerede animert av Higgsfield, se functions/api/
+ * miateo/shot-video.js) og ferdig stemmelyd per replikk (ElevenLabs, se
+ * functions/api/miateo/voice.js), og setter dem sammen til ÉN episode.
+ * Ingen nye AI-kall her, bare Remotion-rendring på denne allerede kjørende
+ * tjenesten:
+ *   POST /api/generer-episode   { shots:[{videoUrl,durationSec,audio:[{url,startSec,durationSec}]}], aspect? }
+ *        -> 202 { jobId }  (samme status-endepunkt)
+ *
  * Krever i .env:  OPENAI_API_KEY, ELEVENLABS_API_KEY
  *                 GEMINI_API_KEY (for /api/generer-veo: Nano Banana + Veo)
  * Valgfritt:      PORT (3000), PUBLIC_BASE_URL, ELEVENLABS_VOICE_ID,
@@ -681,6 +690,63 @@ async function renderSlideshowJob(jobId, { scenes, lang, voiceId, aspect }, publ
   }
 }
 
+/* ================= Episode (Mia & Teo Video Creator sluttsammenstilling) =================
+   Setter allerede genererte shot-klipp (video) og replikk-lyd (audio) sammen
+   til én episode. Ingen egne AI-kall her, kun Remotion-rendring: pengene er
+   allerede brukt (Higgsfield/ElevenLabs) idet dette kalles, dette steget
+   koster bare rendrings-tid på denne serveren. */
+async function renderEpisodeJob(jobId, { shots, aspect }, publicBase) {
+  const t0 = Date.now();
+  const jobState = { status: "pending", progress: "", when: Date.now() };
+  const save = () => jobs.set(jobId, { ...jobState, when: Date.now() });
+  const setProg = (p) => { jobState.progress = p; save(); };
+  try {
+    const list = (Array.isArray(shots) ? shots : []).filter((s) => s && s.videoUrl);
+    if (!list.length) throw new Error("Ingen shot å sette sammen til en episode.");
+    const asp = aspect === "9:16" ? "9:16" : "16:9";
+    const fps = 30;
+    setProg(`Setter sammen ${list.length} shot til én episode …`);
+    let accFrames = 0;
+    const outShots = list.map((s) => {
+      const durSec = Math.max(0.5, Number(s.durationSec) || 6);
+      const durationInFrames = Math.ceil(durSec * fps);
+      accFrames += durationInFrames;
+      const audio = (Array.isArray(s.audio) ? s.audio : [])
+        .filter((a) => a && a.url)
+        .map((a) => ({
+          url: a.url,
+          startInFrames: Math.max(0, Math.round((Number(a.startSec) || 0) * fps)),
+          durationInFrames: Math.max(1, Math.ceil((Number(a.durationSec) || durSec) * fps)),
+        }));
+      return { videoUrl: s.videoUrl, durationInFrames, audio };
+    });
+    const totalFrames = Math.max(1, accFrames);
+    const inputProps = { shots: outShots, fps, totalFrames, aspect: asp };
+    const serveUrl = await getServeUrl();
+    const composition = await selectComposition({ serveUrl, id: "EpisodeComposition", inputProps });
+    const outName = `episode_${Date.now()}.mp4`;
+    const outputLocation = path.resolve(OUTPUT_DIR, outName);
+    await renderMedia({
+      composition, serveUrl, codec: "h264", outputLocation, inputProps,
+      jpegQuality: 80,
+      concurrency: 1,
+      offthreadVideoCacheSizeInBytes: 100 * 1024 * 1024,
+      chromiumOptions: { gl: "swiftshader" },
+    });
+    console.log(`Episode ferdig på ${((Date.now() - t0) / 1000).toFixed(1)} s.`);
+    jobState.status = "done";
+    jobState.progress = "";
+    jobState.videoUrl = `${publicBase}/output/${outName}`;
+    jobState.durationSeconds = Number((totalFrames / fps).toFixed(1));
+    save();
+  } catch (error) {
+    console.error("Episode-jobb feilet:", error);
+    jobState.status = "error";
+    jobState.error = String((error && error.message) || error);
+    save();
+  }
+}
+
 /* ---------- Jobber (asynkron rendring) ----------
    Rendring tar flere minutter. I stedet for å holde én lang HTTP-forbindelse
    åpen (som ryker og gir "Failed to fetch"), starter vi en jobb, svarer med en
@@ -807,6 +873,23 @@ app.post("/api/generer-slideshow", (req, res) => {
   jobs.set(jobId, { status: "pending", progress: "Starter …", when: Date.now() });
   res.status(202).json({ jobId, status: "pending" });
   renderSlideshowJob(jobId, { scenes, lang, voiceId, aspect }, publicBase);
+});
+
+/* ---------- Start episode-jobb (Mia & Teo Video Creator sluttsammenstilling) ---------- */
+app.post("/api/generer-episode", (req, res) => {
+  const { shots, aspect } = req.body || {};
+  if (!Array.isArray(shots) || !shots.length) {
+    return res.status(400).json({ error: "shots mangler i forespørselen." });
+  }
+  gcJobs();
+  const proto = String(req.headers["x-forwarded-proto"] || req.protocol || "https").split(",")[0].trim();
+  const host = req.get("host");
+  const publicBase = host ? `${proto}://${host}` : PUBLIC_BASE;
+
+  const jobId = newJobId();
+  jobs.set(jobId, { status: "pending", progress: "Starter …", when: Date.now() });
+  res.status(202).json({ jobId, status: "pending" });
+  renderEpisodeJob(jobId, { shots, aspect }, publicBase);
 });
 
 /* ---------- Status-polling ---------- */

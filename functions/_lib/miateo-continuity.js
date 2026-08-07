@@ -75,7 +75,7 @@ function applyEvent(state, ev) {
  * shots whose scene can't be found, so a malformed doc still produces a
  * deterministic result instead of throwing).
  */
-function orderedShots(project) {
+export function orderedShots(project) {
   const sceneOrder = new Map();
   (project.scenes || []).forEach((sc) => sceneOrder.set(sc.id, sc.index || 0));
   return (project.shots || []).slice().sort((a, b) => {

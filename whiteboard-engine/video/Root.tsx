@@ -2,6 +2,7 @@ import { registerRoot, Composition } from "remotion";
 import { WhiteboardEngine, WhiteboardProps } from "./WhiteboardEngine";
 import { VeoComposition, VeoProps } from "./VeoComposition";
 import { SlideshowVideo, SlideshowProps } from "./SlideshowVideo";
+import { EpisodeComposition, EpisodeProps } from "./EpisodeComposition";
 
 // Standardverdier brukes i Remotion Studio (forhåndsvisning). Under kjøring
 // sender server.js inn ekte inputProps, og calculateMetadata setter riktig
@@ -24,6 +25,12 @@ const veoDefaults: VeoProps = {
 
 const slideshowDefaults: SlideshowProps = {
   scenes: [],
+  fps: 30,
+  totalFrames: 900,
+};
+
+const episodeDefaults: EpisodeProps = {
+  shots: [],
   fps: 30,
   totalFrames: 900,
 };
@@ -69,6 +76,24 @@ export const RemotionRoot: React.FC = () => {
         width={1920}
         height={1080}
         defaultProps={slideshowDefaults}
+        calculateMetadata={({ props }) => ({
+          durationInFrames: Math.max(1, Number(props.totalFrames) || 900),
+          fps: Number(props.fps) || 30,
+          width: props.aspect === "9:16" ? 1080 : 1920,
+          height: props.aspect === "9:16" ? 1920 : 1080,
+        })}
+      />
+      {/* Mia & Teo Video Creator, final assembly: approved shot clips +
+          dialogue/narration audio, sequenced into one finished episode.
+          16:9 by default (Mia & Teo's primary format), 9:16 optional. */}
+      <Composition
+        id="EpisodeComposition"
+        component={EpisodeComposition}
+        durationInFrames={900}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={episodeDefaults}
         calculateMetadata={({ props }) => ({
           durationInFrames: Math.max(1, Number(props.totalFrames) || 900),
           fps: Number(props.fps) || 30,

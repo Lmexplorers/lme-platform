@@ -1,39 +1,22 @@
 /* =====================================================================
    LME — Salgstrakt for "KI for pedagoger" · konfigurasjon
    ---------------------------------------------------------------------
-   Samme mønster som funnel/claude-kurs. Samme prising som Claude-kurset
-   (490 kr lanseringspris, 990 kr vanlig pris), etter avtale med Renate.
-
-   Trakten har to steg:
-     salg.html   → salgsside for "KI for pedagoger" (pris + kjøp)
-     takk.html   → takkeside med tilgang
-
-   Slik kobler du på ekte betaling:
-     Lag en betalingslenke i Stripe og lim den inn i "checkoutUrl" under.
-     La feltet stå tomt så lenge du bare vil forhåndsvise trakten.
-
-   Kun norsk foreløpig, se funnel/youtube-kurs/funnel-config.js for hvordan
-   en engelsk versjon evt. kan legges til senere.
+   Samme mønster som funnel/youtube-kurs. Lanseringspris 299 kr/$30,
+   ingen fast dato for prisøkning ennå (kan gå til 599 kr/$60 senere,
+   si ifra når det skal skje så setter jeg opp samme automatiske
+   dato-bytte som YouTube-kursene).
    ===================================================================== */
 
 window.LME_FUNNEL = {
 
   no: {
-    brand: {
-      navn: "Little Montessori Explorers",
-      kortnavn: "LME",
-      logo: "/images/lme-logo.png"
-    },
+    brand: { navn: "Little Montessori Explorers", kortnavn: "LME", logo: "/images/lme-logo.png" },
 
     salg: {
-      checkoutUrl: "",   // Stripe: lim inn betalingslenken for 490 kr her (tom = hopp rett til takk)
+      checkoutUrl: "https://buy.stripe.com/4gM5kEgwBgDR9id0OP9R63t",
       etterKjop: "takk.html",
 
-      pris: {
-        belop: 490,
-        valuta: "kr",
-        visningFor: "990 kr"
-      },
+      pris: { belop: 299, valuta: "kr", visningFor: "599 kr" },
 
       merkelapp: "Lanseringstilbud",
       overskrift: "KI for pedagoger",
@@ -55,14 +38,8 @@ window.LME_FUNNEL = {
 
       bonuserTittel: "Bonuser du får med",
       bonuser: [
-        {
-          tittel: "Firekukers-planen",
-          tekst: "En konkret, rolig plan for å komme godt i gang, uke for uke."
-        },
-        {
-          tittel: "Ferdige oppskrifter",
-          tekst: "Klare prompter for ukeplaner, foreldrebrev og materiell."
-        }
+        { tittel: "Firekukers-planen", tekst: "En konkret, rolig plan for å komme godt i gang, uke for uke." },
+        { tittel: "Ferdige oppskrifter", tekst: "Klare prompter for ukeplaner, foreldrebrev og materiell." }
       ],
 
       forDegTittel: "Dette kurset er for deg hvis",
@@ -90,12 +67,10 @@ window.LME_FUNNEL = {
     takk: {
       merkelapp: "Kjøpet er bekreftet",
       overskrift: "Tusen takk, du er i gang! 🎉",
-      underoverskrift:
-        "Så gøy å ha deg med. Kurset er låst opp for deg, og du finner alt du " +
-        "trenger rett under.",
+      underoverskrift: "Så gøy å ha deg med. Sjekk innboksen din, den personlige kurslenken din er på vei dit.",
       steg: [
-        "Sjekk innboksen din, kvittering og tilgang er på vei.",
-        "Trykk på knappen under for å åpne kurset med en gang.",
+        "Sjekk innboksen din, kvittering og din personlige kurslenke er på vei.",
+        "Trykk på lenken i e-posten for å åpne kurset.",
         "Start med leksjon 1, og ta det i ditt eget tempo."
       ],
       knapp: "Åpne kurset",
@@ -105,6 +80,80 @@ window.LME_FUNNEL = {
       sekundaerKnapp: "Til kurs",
       sekundaerLenke: "/academy",
       support: "Spørsmål? Svar på e-posten du nettopp fikk, så hjelper jeg deg."
+    }
+  },
+
+  en: {
+    brand: { navn: "Little Montessori Explorers", kortnavn: "LME", logo: "/images/lme-logo.png" },
+
+    salg: {
+      checkoutUrl: "https://buy.stripe.com/5kQ9AU8051IX2TPbtt9R63u",
+      etterKjop: "takk.html",
+
+      pris: { belop: 30, valuta: "$", visningFor: "$60" },
+
+      merkelapp: "Launch offer",
+      overskrift: "AI for Educators",
+      underoverskrift:
+        "A calm, practical introduction to the AI tools everyone's talking about, made for " +
+        "you who works with children. You learn what the tools do, how to ask, and " +
+        "how to use them safely in everyday life.",
+
+      hvaDuLaererTittel: "What you'll learn in this course",
+      hvaDuLaerer: [
+        "What AI is, and what it means for you as an educator",
+        "How to ask questions that get good answers",
+        "The most important tools: ChatGPT, Claude, Gemini, image tools, Copilot and Perplexity",
+        "A simple workflow for weekly plans, parent letters and materials",
+        "Safe and ethical use, with children's privacy first",
+        "Canva, automation and your own AI helper",
+        "A four-week plan to get off to a good start"
+      ],
+
+      bonuserTittel: "Bonuses included",
+      bonuser: [
+        { tittel: "The four-week plan", tekst: "A concrete, calm plan to get started well, week by week." },
+        { tittel: "Ready-made recipes", tekst: "Ready prompts for weekly plans, parent letters and materials." }
+      ],
+
+      forDegTittel: "This course is for you if",
+      forDeg: [
+        "You've heard of AI but have no idea where to start",
+        "You work with children and want to use AI safely and wisely",
+        "You want to spend less time on the practical and more time with the children",
+        "You want a simple workflow you can use from day one"
+      ],
+
+      ikkeForDegTittel: "This course is not for you if",
+      ikkeForDeg: [
+        "You want a heavy technical course with coding",
+        "You're already an experienced AI user looking for advanced content",
+        "You'd rather do everything manually and not use AI at all"
+      ],
+
+      garanti: "",
+      kjopKnapp: "Yes please, give me AI for Educators",
+      sosialtBevis: "Made by Renate Dahl, college-educated Montessori teacher.",
+      testimonial: { sitat: "", navn: "", sted: "" },
+      bilde: "/images/banner_laer.webp"
+    },
+
+    takk: {
+      merkelapp: "Purchase confirmed",
+      overskrift: "Thank you, you're in! 🎉",
+      underoverskrift: "So glad to have you. Check your inbox, your personal course link is on its way there.",
+      steg: [
+        "Check your inbox, your receipt and personal course link are on the way.",
+        "Click the link in the email to open the course.",
+        "Start with lesson 1, and take it at your own pace."
+      ],
+      knapp: "Open the course",
+      knappLenke: "/academy/ki-for-pedagoger",
+      bonusKnapp: "",
+      bonusLenke: "",
+      sekundaerKnapp: "To classes",
+      sekundaerLenke: "/academy",
+      support: "Questions? Reply to the email you just got, and I'll help you."
     }
   }
 };

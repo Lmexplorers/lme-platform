@@ -1925,7 +1925,12 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
       var n = document.getElementById('pfName'); if (n) n.value = u.name || '';
       var e = document.getElementById('pfEmail'); if (e) e.value = u.email;
 
-      if (u.role === 'owner') {
+      // Samme e-postliste som isOwner() i functions/_lib/access.js. role
+      // er ikke alltid satt til nøyaktig 'owner' på kontoen, så uten
+      // e-postfallbacken kunne eieren selv miste eier-visningen her.
+      var OWNER_EMAILS = ['renate@lmexplorers.com', 'hei@lmexplorers.com', 'hello@lmexplorers.com', 'support@lmexplorers.com', 'renateshobby@hotmail.com'];
+      var isOwnerAcct = u.role === 'owner' || u.role === 'admin' || OWNER_EMAILS.indexOf((u.email || '').toLowerCase()) !== -1;
+      if (isOwnerAcct) {
         setHTML('.status-card',
           '<span class="status-badge" style="background:#A4D233;color:#2a1e2e;">EIER</span>' +
           '<h3>Eier-konto</h3>' +

@@ -1417,69 +1417,6 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
         </div>
       </a>
 
-      <a href="https://lme-contentstudio.pages.dev/?key=LME2026" target="_blank" rel="noopener" class="course-tile">
-        <span class="badge-new">NYTT</span>
-        <div class="thumb thumb-lime">
-          <div class="thumb-content">
-            <div class="kicker">VERKTØY</div>
-            <div class="title">LME<br>Autopilot</div>
-          </div>
-        </div>
-        <div class="body">
-          <div class="meta">FOR SKAPERE</div>
-          <h4>Mestre LME Autopilot</h4>
-          <p class="desc">Lag innhold for Instagram, TikTok og Facebook med AI-verktøy som vet hvem Mia & Teo er.</p>
-          <div class="footer-meta">
-            <span class="lessons">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" stroke="currentColor" stroke-width="2"/></svg>
-              7 leksjoner
-            </span>
-            <span>2 t 40 min</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="/lme-builder" class="course-tile">
-        <div class="thumb thumb-deep">
-          <div class="thumb-content">
-            <div class="kicker">VERKTØY</div>
-            <div class="title">Lag din<br>egen bok</div>
-          </div>
-        </div>
-        <div class="body">
-          <div class="meta">FOR PEDAGOGER</div>
-          <h4>Bygg din første Montessoribok</h4>
-          <p class="desc">Bruk LME Create til å lage en illustrert bok med dine egne karakterer.</p>
-          <div class="footer-meta">
-            <span class="lessons">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" stroke="currentColor" stroke-width="2"/></svg>
-              9 leksjoner
-            </span>
-            <span>3 t 15 min</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="/lme-builder" class="course-tile">
-        <div class="thumb thumb-soft">
-          <div class="thumb-content">
-            <div class="kicker">VERKTØY</div>
-            <div class="title">Print &<br>publisér</div>
-          </div>
-        </div>
-        <div class="body">
-          <div class="meta">PUBLISERING</div>
-          <h4>Fra fil til ferdig bok</h4>
-          <p class="desc">Print-ready filer for Amazon KDP og BoldBooks/BoD, alt du trenger for å trykke selv.</p>
-          <div class="footer-meta">
-            <span class="lessons">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" stroke="currentColor" stroke-width="2"/></svg>
-              4 leksjoner
-            </span>
-            <span>1 t 30 min</span>
-          </div>
-        </div>
-      </a>
     </div>
   </section>
 
@@ -1513,13 +1450,38 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
       } catch (e) { return false; }
     }
 
+    // Eier skal aldri sendes til Stripe for å åpne sine egne betalte kurs.
+    var isOwner = false;
+    var OWNER_EMAILS = ['renate@lmexplorers.com', 'hei@lmexplorers.com', 'hello@lmexplorers.com', 'support@lmexplorers.com', 'renateshobby@hotmail.com'];
+    fetch('/api/auth/me', { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (me) {
+      var u = me && me.user;
+      isOwner = !!(u && (u.role === 'owner' || u.role === 'admin' || OWNER_EMAILS.indexOf((u.email || '').toLowerCase()) !== -1));
+      render();
+    }).catch(function () { render(); });
+
+    // Betalte Kursbygger-kurs: samme slugs som PAID_KURSBYGGER_SLUGS i
+    // functions/_lib/purchase-links.js. Kortet lenker rett til Stripe i
+    // stedet for til det nå låste kurset, og viser prisen.
+    var PAID_COURSES = {
+      'lme-markedsfoering-med-claude': {
+        price: { no: '399 kr', en: '$40' },
+        checkout: { no: 'https://buy.stripe.com/eVq6oIgwB5ZdbqleFF9R63x', en: 'https://buy.stripe.com/4gMbJ28051IXgKF5559R63y' }
+      },
+      'lag-ditt-foerste-digitale-minikurs': {
+        price: { no: '699 kr', en: '$70' },
+        checkout: { no: 'https://buy.stripe.com/4gMaEYa8d73hbqldBB9R63z', en: 'https://buy.stripe.com/28E3cw805evJgKFdBB9R63A' }
+      }
+    };
+
     function render() {
       var en = window.LME_CURRENT_LANG === 'en';
+      var lang = en ? 'en' : 'no';
       grid.innerHTML = '';
       courses.forEach(function (c, i) {
+        var paid = isOwner ? null : PAID_COURSES[c.slug];
         var a = document.createElement('a');
         a.className = 'course-tile';
-        a.href = '/kurs?k=' + encodeURIComponent(c.slug || '');
+        a.href = paid ? paid.checkout[lang] : ('/kurs?k=' + encodeURIComponent(c.slug || ''));
         a.innerHTML =
           '<div class="thumb ' + thumbs[i % thumbs.length] + '"><div class="thumb-content">' +
           '<div class="kicker"></div><div class="title"></div></div></div>' +
@@ -1527,7 +1489,8 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           '<div class="footer-meta"><span class="lessons"></span></div></div>';
         a.querySelector('.kicker').textContent = pick(c.kicker) || (en ? 'MY COURSE' : 'MITT KURS');
         a.querySelector('.title').textContent = pick(c.title);
-        a.querySelector('.meta').textContent = (c.size === 'stor') ? (en ? 'FULL COURSE' : 'STORT KURS') : (en ? 'MINI COURSE' : 'MINIKURS');
+        var metaLabel = (c.size === 'stor') ? (en ? 'FULL COURSE' : 'STORT KURS') : (en ? 'MINI COURSE' : 'MINIKURS');
+        a.querySelector('.meta').textContent = paid ? metaLabel + ' · ' + paid.price[lang] : metaLabel;
         a.querySelector('h4').textContent = pick(c.title);
         a.querySelector('.desc').textContent = pick(c.lede);
         a.querySelector('.lessons').textContent = (c.lessonCount || 0) + (en ? ' lessons' : ' leksjoner');

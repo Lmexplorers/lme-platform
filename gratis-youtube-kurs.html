@@ -87,6 +87,7 @@
       </form>
       <p class="err" id="fcErr" style="display:none"></p>
       <p class="note" data-no="Du får én e-post med en bekreftelseslenke. Klikker du på den, får du kurset med en gang." data-en="You'll get one email with a confirmation link. Click it and you'll get the course right away.">Du får én e-post med en bekreftelseslenke. Klikker du på den, får du kurset med en gang.</p>
+      <p class="note" style="color:var(--cerise);font-weight:700;" data-no="⏳ Gratis kun ut i dag, deretter tar prisen over." data-en="⏳ Free only through today, then the price kicks in.">⏳ Gratis kun ut i dag, deretter tar prisen over.</p>
     </div>
     <div class="state" id="sentState">
       <div class="big-emoji">💌</div>
@@ -97,6 +98,12 @@
       <div class="big-emoji">🌸</div>
       <h1 data-no="Lenken har gått ut" data-en="That link has expired">Lenken har gått ut</h1>
       <p class="lead" data-no="Skriv inn e-posten din på nytt under, så sender jeg deg en fersk lenke." data-en="Enter your email again below, and I'll send you a fresh link.">Skriv inn e-posten din på nytt under, så sender jeg deg en fersk lenke.</p>
+    </div>
+    <div class="state" id="closedState">
+      <div class="big-emoji">🌱</div>
+      <h1 data-no="Gratis-tilbudet er stengt" data-en="The free offer has closed">Gratis-tilbudet er stengt</h1>
+      <p class="lead" data-no="Men kurset er fortsatt her, og du får det til lanseringspris en liten stund til." data-en="But the course is still here, and you can get it at the launch price for a little while longer.">Men kurset er fortsatt her, og du får det til lanseringspris en liten stund til.</p>
+      <p class="lead"><a href="/youtube-kurs" style="color:var(--cerise);font-weight:700;" data-no="Se kurset →" data-en="See the course →">Se kurset →</a></p>
     </div>
   </div>
   <footer>
@@ -131,11 +138,17 @@
   else { try { if ((navigator.language || '').slice(0, 2) === 'en') switchLanguage('en'); } catch (e) {} }
 
   function show(id) {
-    ['formState', 'sentState', 'expiredState'].forEach(function (s) {
+    ['formState', 'sentState', 'expiredState', 'closedState'].forEach(function (s) {
       document.getElementById(s).classList.toggle('show', s === id);
     });
   }
-  if (params.get('utlopt') === '1') show('expiredState');
+  // Samme frist som functions/api/free-course.js (midnatt natt til 8. august
+  // 2026, norsk tid). Skjuler skjemaet med en gang etter fristen, i stedet
+  // for at noen fyller det ut og først da får vite at det er stengt.
+  var FREE_DEADLINE = Date.parse('2026-08-07T22:00:00Z');
+  var closed = Date.now() >= FREE_DEADLINE;
+  if (closed) show('closedState');
+  else if (params.get('utlopt') === '1') show('expiredState');
   else if (params.get('feil') === '1') { /* stille tilbake til skjema */ }
 
   var form = document.getElementById('freeForm');
@@ -153,8 +166,9 @@
     fetch('/api/free-course', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: email, name: name, lang: currentLang }),
-    }).then(function (r) { return r.json(); }).then(function (d) {
-      if (d && d.ok) { show('sentState'); return; }
+    }).then(function (r) { return r.json().then(function (d) { return { status: r.status, d: d }; }); }).then(function (res) {
+      if (res.d && res.d.ok) { show('sentState'); return; }
+      if (res.status === 410) { show('closedState'); return; }
       btn.disabled = false; btn.textContent = lbl;
       err.style.display = 'block';
       err.textContent = currentLang === 'en' ? 'Something went wrong. Please try again.' : 'Noe gikk galt. Prøv igjen.';

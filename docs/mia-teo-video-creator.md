@@ -2,7 +2,8 @@
 
 Dedikert produksjonsstudio for å lage komplette, animerte Mia og Teo-episoder
 fra én idé: idé → manus → storyboard → nøkkelbilder → animerte shots →
-stemmer → (sammenstilling, se gap under) → publisering. Dette er IKKE
+stemmer → **automatisk sammenstilling til én ferdig episodefil** →
+publisering (siste steg ikke koblet ennå, se under). Dette er IKKE
 Filmgeneratoren (`mia-teo-film.html`) eller YouTube-appen, de er urørt.
 Bygget etter en fullstendig kodegjennomgang av eksisterende LME-
 infrastruktur, se "Undersøkelse før bygging" under.
@@ -27,23 +28,73 @@ plattformen:
 - Nøkkelbilde-generering per shot (OpenAI/Gemini + karakterbibel)
 - Shot-animasjon (Higgsfield image-to-video), async jobb/poll
 - Stemmelinjer per replikk (ElevenLabs, faste Mia/Teo/Forteller-stemmer)
-- Regelbasert kvalitetssjekk (sikkerhet, kontinuitet, dialog, alder)
+- Regelbasert kvalitetssjekk (sikkerhet, kontinuitet, dialog, alder, dialog-timing)
+- Automatisk sammenstilling til én ferdig episodefil (via `whiteboard-engine`,
+  ingen ny betalt infrastruktur, se "Sammenstilling" under)
 - Bibliotek med statusflik (Idé/Manus/Storyboard/Godkjent/Genererer/Klar/Publisert)
 - Synlig kort på dashbordet, sidemeny-lenke, roadmap-oppføring
+
+**Oppdatert (samme dag, etter tilbakemelding om at hele poenget var en
+FERDIG film, ikke en haug med klipp)**: automatisk sammenstilling til én
+episodefil ER nå bygget, se "Sammenstilling" under. Alt annet i listen
+under står fortsatt ved lag.
 
 **Bevisst IKKE bygget ennå** (se "Infrastrukturgap" og "Faser" under, dette
 er ikke scope kuttet i det stille, det er eksplisitt flagget):
 
-- Automatisk sammenstilling til én ferdig episodefil (trenger ny infrastruktur)
 - Leppesynk
-- Musikk-/SFX-generering (kun en tekstlig lydplan per shot foreløpig)
-- Undertekstfil-generering (.vtt/.srt)
-- 9:16-reframing (ikke bare beskjæring)
+- Musikk-/SFX-generering og -miksing (kun en tekstlig lydplan per shot,
+  selve episodesammenstillingen spiller foreløpig kun dialog/fortelling)
+- Undertekstfil-generering (.vtt/.srt) eller innbrente undertekster
+- Overganger/crossfades mellom shot (rene klipp i dag)
+- 9:16-reframing (ikke bare beskjæring, komposisjonen støtter 9:16-canvas,
+  men selve smart-reframingen er ikke bygget)
+- Permanent lagring av ferdig episode (ligger på rendringsmotorens egen
+  disk, ikke kopiert til varig lagring/R2 ennå, se "Sammenstilling")
 - Publisering til Lek & Lær / YouTube (metadata-felt finnes i datamodellen,
   selve publiseringsknappene er ikke koblet til `episode.js` ennå)
 - AI-basert visuell QC (ansikt/hender/kontinuitet i selve bildet)
 - Referanse-bilde-conditioning inn i Higgsfield (se punkt 9)
 - Aldersbånd utover 6-9 (arkitekturen støtter dem, promptene er ikke tunet)
+
+### Sammenstilling (ny, ingen ny betalt infrastruktur)
+
+`whiteboard-engine/` (Render.com-tjenesten som allerede kjører for YouTube-
+appens slideshow-video) har fått en ny rute og Remotion-komposisjon:
+
+- `whiteboard-engine/video/EpisodeComposition.tsx`: setter godkjente
+  shot-klipp etter hverandre, med hver replikk/fortellerlinjes lyd lagt på
+  ved riktig tidspunkt inni shotet.
+- `whiteboard-engine/server.js`: `POST /api/generer-episode` (ny jobb-type,
+  samme async jobb/poll-mønster som `/api/generer-slideshow`).
+- `functions/api/miateo/render.js`: bygger shot- og lyd-listen (rekkefølge
+  fra kontinuitetsmotoren), sender den til motoren, og poller til episoden
+  er ferdig. Ingen nye AI-kall her i det hele tatt, kun rendring av
+  allerede genererte og allerede betalte klipp/lydfiler, derfor er denne
+  ruten IKKE `confirm`-gated slik generering er.
+
+Siden `whiteboard-engine/` allerede er koblet til dette GitHub-repoet på
+Render (se `whiteboard-engine/DEPLOY.md`), ruller denne endringen automatisk
+ut ved neste push til `main`, ingen ny tjeneste, ingen ny regning.
+
+Ærlige begrensninger på selve sammenstillingen akkurat nå:
+- Ingen musikk/SFX (ikke en manglende funksjon i koden, det finnes rett og
+  slett ingen musikk-leverandør koblet til ennå).
+- Replikker som ikke har fått generert stemme ennå, spilles stille (QC
+  flagger dette nå, se under).
+- Hvis summen av stemmelyd i ett shot er lengre enn selve klippet, fortsetter
+  lyden etter at klippet er ferdig (QC flagger dette også).
+- Permanent lagring: `functions/api/miateo/render.js` kopierer den ferdige
+  MP4-en til R2 (`functions/api/miateo/media.js` server den ut igjen) idet
+  rendringen er ferdig, i stedet for å la den ligge på rendringsmotorens
+  egen (ikke-varige) disk. Dette krever en R2-bøtte koblet til
+  lme-platform-Pages-prosjektet med variabelnavn `MIATEO_EPISODES`
+  (Cloudflare-dashbordet: lme-platform → Settings → Functions → R2 bucket
+  bindings). Renate har allerede R2-bøtter i kontoen (`lme-bruker-filer`,
+  `lme-platform-html`), men ingen av dem er koblet til DENNE Pages-
+  Functions-koden ennå, det er et eget steg fra å ha en bøtte i kontoen.
+  Til bindingen er lagt til, faller koden automatisk tilbake til å bruke
+  rendringsmotorens egen midlertidige URL (fungerer, bare ikke varig).
 
 ## Undersøkelse før bygging
 
@@ -134,7 +185,7 @@ med Runway/Veo/Kling senere uten å røre noen av rutene over.
 | Musikk | Nei | - | - | Se gap |
 | Lydeffekter | Nei | - | - | Se gap |
 | Undertekster | Delvis | Timing finnes per replikk, ingen fil-generator ennå | - | Se gap |
-| Rendring/sammenstilling | Delvis | `whiteboard-engine` (Remotion), men kun Ken Burns-lysbildeserie, ikke klipp+lyd-sammenstilling | Nei for dette formålet | Se gap |
+| Rendring/sammenstilling | Ja | `whiteboard-engine` (Remotion), ny `EpisodeComposition` + `/api/generer-episode` | Ja for klipp+dialog, IKKE for musikk/SFX/undertekster | Bygget (se "Sammenstilling") |
 | Media-lagring | Delvis | KV blob (`img:`/`vid:`), 25MB-grense per verdi | Fungerer for bilder/lyd, for smalt for ferdig episode | Se gap (R2) |
 | Async jobbkø | Ja | KV-jobbrecord + klient-polling (samme mønster som Video Studio) | Ja | Gjenbrukt |
 | Publisering | Delvis | `episode.js` finnes og virker, ikke koblet til denne appen ennå | - | Fase 2 |
@@ -272,10 +323,11 @@ shot-liste, med full kostnadskontroll. Ingen betalte kall er kjørt under
 utviklingen.
 
 **Fase 2 (krever din bekreftelse på ny infrastruktur/kostnad)**:
-- R2-bucket for episodefiler.
-- Ekte sammenstilling (ny Remotion-komposisjon på `whiteboard-engine`, eller
-  en frittstående FFmpeg-rendrer): join klipp, miks lyd, undertekster,
-  overganger, intro/outro, 16:9-render.
+- ~~Ekte sammenstilling~~ Bygget (se "Sammenstilling" over), gjenbrukte
+  eksisterende `whiteboard-engine` i stedet for ny infrastruktur.
+- R2-bucket for permanent lagring av ferdige episoder (i dag: motorens egen
+  disk, ikke garantert varig).
+- Musikk-/SFX-miksing, overganger, intro/outro.
 - Koble `project.publish.lekOgLaer` til `episode.js` (ett klikk-publisering).
 - YouTube-forberedelse (tittel/beskrivelse/kapitler/SEO, gjenbruk
   `youtube-video.js` sitt mønster for barnerettet metadata).
