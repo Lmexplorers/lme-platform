@@ -198,6 +198,7 @@
     <button class="tab" data-tab="members" data-no="Medlemmer" data-en="Members">Medlemmer</button>
     <button class="tab" data-tab="leaderboard" data-no="Ledertavle" data-en="Leaderboard">Ledertavle</button>
     <button class="tab" data-tab="map" data-no="Kart" data-en="Map">Kart</button>
+    <button class="tab" data-tab="feedback" data-no="Tilbakemelding" data-en="Feedback">Tilbakemelding</button>
     <button class="tab" data-tab="about" data-no="Om" data-en="About">Om</button>
   </div>
 
@@ -272,6 +273,26 @@
       <p style="font-size:13px;color:var(--ink-muted);margin-bottom:14px;" data-no="Et ekte verdenskart, med en prikk for hvert medlem." data-en="A real world map, with a dot for every member.">Et ekte verdenskart, med en prikk for hvert medlem.</p>
       <div id="mapSvgWrap" style="border-radius:14px;overflow:hidden;background:#EAF4FB;margin-bottom:16px;height:340px;"></div>
       <div id="mapList"></div>
+    </div>
+  </div>
+
+  <!-- ===== Tilbakemelding-fane ===== -->
+  <div id="tab-feedback" class="tabpane" style="display:none;">
+    <div class="card">
+      <h2 data-no="Direkte AI-tilbakemelding" data-en="Direct AI feedback">Direkte AI-tilbakemelding</h2>
+      <p style="font-size:13px;color:var(--ink-muted);margin-bottom:14px;" data-no="Lim inn en hook, en bio eller et helt innlegg, og få konkret tilbakemelding med en gang." data-en="Paste in a hook, a bio or a full post, and get concrete feedback right away.">Lim inn en hook, en bio eller et helt innlegg, og få konkret tilbakemelding med en gang.</p>
+      <div class="field" style="margin-bottom:12px;">
+        <label style="display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:5px;" data-no="Hva er dette?" data-en="What is this?">Hva er dette?</label>
+        <select id="fbKind" style="width:100%;font-size:15px;padding:12px 14px;border:1px solid var(--pink-200);border-radius:var(--r-md);background:var(--pink-50);color:var(--ink);">
+          <option value="hook" data-no="En åpningssetning (hook)" data-en="An opening line (a hook)">En åpningssetning (hook)</option>
+          <option value="bio" data-no="En bio" data-en="A bio">En bio</option>
+          <option value="post" selected data-no="Et helt innlegg" data-en="A full post">Et helt innlegg</option>
+        </select>
+      </div>
+      <textarea id="fbText" style="width:100%;min-height:110px;font-size:15px;padding:12px 14px;border:1px solid var(--pink-200);border-radius:var(--r-md);background:var(--pink-50);color:var(--ink);resize:vertical;margin-bottom:10px;" data-no-ph="Lim inn teksten din her …" data-en-ph="Paste your text here …" placeholder="Lim inn teksten din her …"></textarea>
+      <button class="btn-cta" id="fbBtn" data-no="Få tilbakemelding →" data-en="Get feedback →">Få tilbakemelding →</button>
+      <p class="joinerr" id="fbErr" data-no="Bli med i fellesskapet først (over), så kan du bruke dette." data-en="Join the community first (above), then you can use this.">Bli med i fellesskapet først (over), så kan du bruke dette.</p>
+      <div id="fbResult" style="display:none;margin-top:16px;background:var(--pink-50);border:1px solid var(--pink-100);border-radius:var(--r-md);padding:16px 18px;font-size:14.5px;line-height:1.6;white-space:pre-wrap;"></div>
     </div>
   </div>
 
@@ -638,6 +659,42 @@
     const category = document.getElementById('postCategory').value;
     fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'post', email: me.email, name: me.name, text: text, category: category }) })
       .then(r => r.json()).then(res => { this.disabled = false; if (res && res.ok) { ta.value = ''; loadFeed(); } }).catch(() => { this.disabled = false; });
+  });
+
+  /* ---- Direkte AI-tilbakemelding ---- */
+  document.getElementById('fbBtn').addEventListener('click', function () {
+    const err = document.getElementById('fbErr');
+    const result = document.getElementById('fbResult');
+    err.classList.remove('show');
+    result.style.display = 'none';
+    if (!me) { err.classList.add('show'); return; }
+    const text = document.getElementById('fbText').value.trim();
+    if (!text) return;
+    const kind = document.getElementById('fbKind').value;
+    const btn = this;
+    const before = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = currentLang === 'en' ? 'Thinking …' : 'Tenker …';
+    fetch('/api/utfordring-feedback', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: me.email, text: text, kind: kind, lang: currentLang }),
+    })
+      .then(r => r.json())
+      .then(res => {
+        btn.disabled = false; btn.textContent = before;
+        if (res && res.feedback) {
+          result.textContent = res.feedback;
+          result.style.display = 'block';
+        } else {
+          err.textContent = currentLang === 'en' ? 'Something went wrong, try again in a moment.' : 'Noe gikk galt, prøv igjen om et øyeblikk.';
+          err.classList.add('show');
+        }
+      })
+      .catch(() => {
+        btn.disabled = false; btn.textContent = before;
+        err.textContent = currentLang === 'en' ? 'Something went wrong, try again in a moment.' : 'Noe gikk galt, prøv igjen om et øyeblikk.';
+        err.classList.add('show');
+      });
   });
 
   /* ---- Medlemmer ---- */
