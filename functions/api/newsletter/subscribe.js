@@ -7,6 +7,7 @@
  */
 
 import { registerNewsletter } from "../../_lib/newsletter.js";
+import { sendOwnerSignupNotice } from "../../_lib/oppskrift-mail.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -36,5 +37,11 @@ export async function onRequestPost(context) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: "bad_email" }, 400);
 
   await registerNewsletter(env, email, name.trim().slice(0, 100), lang, source);
+  try {
+    await sendOwnerSignupNotice(env, {
+      what: source ? "Nyhetsbrev/gratisprodukt: " + source : "Nyhetsbrev-påmelding",
+      name: name.trim(), email, lang,
+    });
+  } catch (e) {}
   return json({ ok: true });
 }

@@ -167,6 +167,12 @@ export async function onRequestPost(context) {
         // slik at bare betalende kjøpere kan poste/kommentere der.
         await env.BUILDER_KV.put("utf_member:" + e, JSON.stringify({ email: email, name: nm, lang: utfordringLang, joinedAt: Date.now() }));
       } catch (e2) {}
+      try {
+        await sendOwnerSaleNotice(env, {
+          pname: "10 000-visninger-utfordringen", lang: utfordringLang,
+          name: nm, email: email, amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e3) {}
       return json({ ok: true });
     }
 
