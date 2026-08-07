@@ -829,6 +829,107 @@
   /* Laast fontregel: Sasson Montessori paa alt unntatt overskrifter */
   h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); }
   button, input, select, textarea { font-family: var(--font-body); }
+
+  /* ============ REISEN, VIDEO-KJØRETUR ============ */
+  .journey-drive {
+    max-width: 900px;
+    margin: 0 auto 3.5rem;
+  }
+  .drive-panel {
+    position: relative;
+    border-radius: 28px;
+    overflow: hidden;
+    background: #16110f;
+    box-shadow: var(--shadow-deep);
+    border: 1px solid var(--pink-100);
+    height: clamp(300px, 52vw, 520px);
+  }
+  .drive-video {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; background: #16110f;
+  }
+  .drive-scrim {
+    position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(180deg, rgba(0,0,0,.14) 0%, rgba(0,0,0,0) 22%, rgba(0,0,0,0) 66%, rgba(0,0,0,.26) 100%);
+  }
+  .drive-loading {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: .9rem; background: #16110f;
+  }
+  .drive-caption {
+    position: absolute; left: 18px; top: 16px;
+    background: rgba(255,255,255,.9); backdrop-filter: blur(3px);
+    border-radius: 14px; padding: 8px 14px; font-size: .85rem; color: var(--ink);
+    box-shadow: var(--shadow-soft);
+  }
+  .drive-caption strong { color: var(--pink-600); }
+  .drive-btn-wrap { position: absolute; left: 0; right: 0; bottom: 18px; display: flex; justify-content: center; }
+  .drive-btn {
+    background: linear-gradient(135deg, var(--pink-400), var(--pink-500));
+    color: #fff; border: none; border-radius: 999px; padding: 0.85rem 1.8rem;
+    font-family: var(--font-body); font-weight: 700; font-size: .98rem; cursor: pointer;
+    box-shadow: 0 14px 30px -10px rgba(0,0,0,.5);
+    display: inline-flex; align-items: center; gap: .5rem;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .drive-btn:hover { transform: translateY(-1px); box-shadow: 0 16px 34px -8px rgba(0,0,0,.55); }
+  .drive-btn[disabled] { opacity: .6; cursor: default; }
+
+  .drive-dust { position: absolute; bottom: 8%; border-radius: 50%; background: rgba(255,255,255,.55); pointer-events: none; opacity: 0; }
+  .drive-dust.puff { animation: driveDustPuff .6s ease-out forwards; }
+  @keyframes driveDustPuff { 0% { opacity:.7; transform: scale(.3) translateX(0);} 100% { opacity:0; transform: scale(1.6) translateX(-30px);} }
+  .drive-speedline { position: absolute; height: 3px; background: rgba(255,255,255,.5); border-radius: 3px; opacity: 0; pointer-events: none; }
+  .drive-speedline.go { animation: driveSpeedGo .45s linear forwards; }
+  @keyframes driveSpeedGo { 0% { opacity:.8; transform: translateX(0) scaleX(1);} 100% { opacity:0; transform: translateX(-90px) scaleX(1.6);} }
+
+  .drive-status {
+    display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+    margin: 1.1rem 0 .3rem;
+  }
+  .drive-status-pill {
+    background: #fff; border: 1px solid var(--pink-100); border-radius: 999px;
+    padding: .5rem 1rem; font-size: .85rem; box-shadow: var(--shadow-soft);
+    display: flex; align-items: center; gap: .4rem;
+  }
+  .drive-status-pill strong { color: var(--pink-600); }
+  .drive-progress-track { flex: 1 1 140px; height: 8px; border-radius: 999px; background: var(--pink-100); overflow: hidden; }
+  .drive-progress-fill { height: 100%; background: linear-gradient(90deg, var(--pink-400), var(--pink-600)); width: 0%; transition: width .6s cubic-bezier(.4,0,.2,1); }
+  .drive-reset {
+    border: 1px solid var(--pink-300); background: #fff; color: var(--pink-600);
+    border-radius: 999px; padding: .5rem 1rem; font-size: .82rem; cursor: pointer; font-family: var(--font-body);
+  }
+  .drive-reset:hover { background: var(--pink-50); }
+
+  .drive-dots { display: flex; align-items: center; justify-content: center; gap: .6rem; margin-top: 1rem; flex-wrap: wrap; }
+  .drive-dot {
+    width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--pink-300);
+    background: #fff; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; cursor: pointer; transition: box-shadow .2s;
+  }
+  .drive-dot.current { border-color: var(--pink-500); box-shadow: 0 0 0 4px var(--pink-100); }
+  .drive-dot.done { background: var(--pink-500); border-color: var(--pink-600); }
+  .drive-dot.locked { opacity: .5; cursor: not-allowed; }
+  .drive-dot-sep { width: 18px; height: 2px; background: var(--pink-100); }
+
+  .drive-note { text-align: center; color: var(--ink-soft); font-size: .85rem; margin-top: .8rem; }
+
+  .phase-arrived { animation: phaseArrived 1.8s ease; }
+  @keyframes phaseArrived {
+    0% { box-shadow: var(--shadow-soft); }
+    25% { box-shadow: 0 0 0 6px var(--pink-200), var(--shadow-deep); }
+    100% { box-shadow: var(--shadow-soft); }
+  }
+
+  .drive-confetti { position: fixed; top: -20px; font-size: 20px; pointer-events: none; z-index: 200; animation: driveConfettiFall linear forwards; }
+  @keyframes driveConfettiFall { to { transform: translateY(110vh) rotate(340deg); opacity: .2; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .drive-dust, .drive-speedline, .drive-confetti { animation: none !important; opacity: 0; }
+    .phase-arrived { animation: none; }
+  }
+  @media (max-width: 640px) {
+    .drive-caption { left: 10px; top: 10px; font-size: .78rem; padding: 6px 10px; }
+  }
 </style>
 </head>
 <body>
@@ -882,9 +983,36 @@
     </p>
   </div>
 
+  <div class="journey-drive reveal">
+    <div class="drive-panel" id="drivePanel">
+      <video class="drive-video" id="driveVideo" muted playsinline preload="auto">
+        <source src="videos/roadmap-reise.mp4" type="video/mp4">
+      </video>
+      <div class="drive-loading" id="driveLoading" data-no="Laster reisen …" data-en="Loading the journey …">Laster reisen …</div>
+      <div class="drive-scrim"></div>
+      <div class="drive-caption"><span data-no="Stopp" data-en="Stop">Stopp</span> <span id="driveCapIndex">1</span>/5 · <strong id="driveCapName">Frøet</strong></div>
+      <div class="drive-btn-wrap">
+        <button class="drive-btn" id="driveBtn" type="button">
+          <span>🚗</span>
+          <span id="driveBtnLabel" data-no="Kjør videre" data-en="Drive on">Kjør videre</span>
+        </button>
+      </div>
+    </div>
+    <div class="drive-status">
+      <div class="drive-status-pill">
+        <span data-no="Du er ved" data-en="You're at">Du er ved</span>
+        <strong id="driveStatusName">Frøet</strong>
+      </div>
+      <div class="drive-progress-track"><div class="drive-progress-fill" id="driveProgressFill"></div></div>
+      <button class="drive-reset" id="driveReset" type="button" data-no="Nullstill reisen" data-en="Reset journey">Nullstill reisen</button>
+    </div>
+    <div class="drive-dots" id="driveDots"></div>
+    <p class="drive-note" data-no="Trykk Kjør videre for å se bilen kjøre til neste fase nedenfor." data-en="Press Drive on to watch the car drive to the next phase below.">Trykk Kjør videre for å se bilen kjøre til neste fase nedenfor.</p>
+  </div>
+
   <div class="timeline">
 
-    <article class="phase reveal">
+    <article class="phase reveal" id="fase-froet">
       <div class="phase-card">
         <div class="phase-number" data-no="Fase 01" data-en="Phase 01">Fase 01</div>
         <h3 class="phase-title" data-no="Frøet" data-en="The Seed">Frøet</h3>
@@ -905,7 +1033,7 @@
       <div class="phase-spacer"></div>
     </article>
 
-    <article class="phase reveal">
+    <article class="phase reveal" id="fase-spiren">
       <div class="phase-spacer"></div>
       <div class="phase-icon">🌿</div>
       <div class="phase-card">
@@ -929,7 +1057,7 @@
       </div>
     </article>
 
-    <article class="phase reveal">
+    <article class="phase reveal" id="fase-blomsten">
       <div class="phase-card">
         <div class="phase-number" data-no="Fase 03" data-en="Phase 03">Fase 03</div>
         <h3 class="phase-title" data-no="Blomsten" data-en="The Bloom">Blomsten</h3>
@@ -953,7 +1081,7 @@
       <div class="phase-spacer"></div>
     </article>
 
-    <article class="phase reveal">
+    <article class="phase reveal" id="fase-treet">
       <div class="phase-spacer"></div>
       <div class="phase-icon">🌳</div>
       <div class="phase-card">
@@ -976,7 +1104,7 @@
       </div>
     </article>
 
-    <article class="phase reveal">
+    <article class="phase reveal" id="fase-frukten">
       <div class="phase-card">
         <div class="phase-number" data-no="Fase 05" data-en="Phase 05">Fase 05</div>
         <h3 class="phase-title" data-no="Frukten" data-en="The Fruit">Frukten</h3>
@@ -1064,6 +1192,225 @@
   }, { threshold: 0.05, rootMargin: "50px" });
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+<script>
+(function(){
+  var STOPS = [
+    { emoji:'🌱', t:0, anchor:'fase-froet' },
+    { emoji:'🌿', t:3, anchor:'fase-spiren' },
+    { emoji:'🌸', t:6, anchor:'fase-blomsten' },
+    { emoji:'🌳', t:9, anchor:'fase-treet' },
+    { emoji:'🍎', t:12, anchor:'fase-frukten' }
+  ];
+  var FINISH_T = 15;
+  var PROGRESS_KEY = 'lme_roadmap_progress';
+
+  var video = document.getElementById('driveVideo');
+  if (!video) return;
+
+  var driveLoading = document.getElementById('driveLoading');
+  var driveBtn = document.getElementById('driveBtn');
+  var driveBtnLabel = document.getElementById('driveBtnLabel');
+  var driveDots = document.getElementById('driveDots');
+  var driveProgressFill = document.getElementById('driveProgressFill');
+  var driveStatusName = document.getElementById('driveStatusName');
+  var driveCapIndex = document.getElementById('driveCapIndex');
+  var driveCapName = document.getElementById('driveCapName');
+  var driveReset = document.getElementById('driveReset');
+  var drivePanel = document.getElementById('drivePanel');
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var progress = parseInt(localStorage.getItem(PROGRESS_KEY) || '0', 10);
+  if (isNaN(progress) || progress < 0) progress = 0;
+  if (progress > STOPS.length) progress = STOPS.length;
+  var shownIndex = Math.min(progress, STOPS.length - 1);
+
+  function curLang(){ return document.documentElement.lang === 'en' ? 'en' : 'no'; }
+  function stopTitle(i){
+    if (i >= STOPS.length) return curLang() === 'en' ? 'the finish' : 'målet';
+    var el = document.getElementById(STOPS[i].anchor);
+    var h3 = el ? el.querySelector('.phase-title') : null;
+    return h3 ? h3.textContent : '';
+  }
+  function timeFor(i){ return i >= STOPS.length ? FINISH_T : STOPS[i].t; }
+
+  function updateStatus(){
+    var pct = Math.round((Math.min(progress, STOPS.length) / STOPS.length) * 100);
+    driveProgressFill.style.width = pct + '%';
+    driveStatusName.textContent = stopTitle(Math.min(progress, STOPS.length));
+    driveBtnLabel.textContent = progress >= STOPS.length
+      ? (curLang() === 'en' ? 'You have arrived 🎉' : 'Du er i mål 🎉')
+      : (curLang() === 'en' ? 'Drive on' : 'Kjør videre');
+  }
+  function updateCaption(){
+    driveCapIndex.textContent = String(shownIndex + 1);
+    driveCapName.textContent = stopTitle(shownIndex);
+  }
+
+  function buildDots(){
+    driveDots.innerHTML = '';
+    for (var i = 0; i <= STOPS.length; i++){
+      var isGoal = i === STOPS.length;
+      var d = document.createElement('div');
+      d.className = 'drive-dot' + (i < progress ? ' done' : i === progress ? ' current' : ' locked');
+      d.textContent = isGoal ? '🏁' : STOPS[i].emoji;
+      d.title = isGoal ? (curLang() === 'en' ? 'Finish' : 'Mål') : stopTitle(i);
+      d.setAttribute('role', 'button');
+      d.setAttribute('tabindex', '0');
+      (function(idx){
+        d.addEventListener('click', function(){ onDotActivate(idx); });
+        d.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') onDotActivate(idx); });
+      })(i);
+      driveDots.appendChild(d);
+      if (i < STOPS.length){
+        var sep = document.createElement('div');
+        sep.className = 'drive-dot-sep';
+        driveDots.appendChild(sep);
+      }
+    }
+  }
+
+  function onDotActivate(i){
+    if (i > progress) return;
+    if (i === STOPS.length){ scrollToFinish(); return; }
+    scrollToPhase(i);
+  }
+  function scrollToPhase(i){
+    var el = document.getElementById(STOPS[i].anchor);
+    if (!el) return;
+    el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+    el.classList.remove('phase-arrived');
+    void el.offsetWidth;
+    el.classList.add('phase-arrived');
+  }
+  function scrollToFinish(){
+    var cta = document.querySelector('.cta-section');
+    if (cta) cta.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+  }
+
+  var dustTimer = null;
+  function startEffects(){
+    if (reduceMotion) return;
+    dustTimer = setInterval(function(){
+      var line = document.createElement('div');
+      line.className = 'drive-speedline go';
+      line.style.width = (18 + Math.random()*22) + 'px';
+      line.style.left = (42 + Math.random()*8) + '%';
+      line.style.bottom = (12 + Math.random()*28) + '%';
+      drivePanel.appendChild(line);
+      setTimeout(function(){ line.remove(); }, 500);
+
+      var dust = document.createElement('div');
+      dust.className = 'drive-dust puff';
+      var s = 6 + Math.random()*8;
+      dust.style.width = s + 'px'; dust.style.height = s + 'px';
+      dust.style.left = '46%';
+      drivePanel.appendChild(dust);
+      setTimeout(function(){ dust.remove(); }, 650);
+    }, 90);
+  }
+  function stopEffects(){ if (dustTimer){ clearInterval(dustTimer); dustTimer = null; } }
+
+  function spawnConfetti(){
+    if (reduceMotion) return;
+    var emojis = ['🎉','✨','🌟','🍎','🎊'];
+    for (var k = 0; k < 26; k++){
+      (function(k){
+        setTimeout(function(){
+          var el = document.createElement('div');
+          el.className = 'drive-confetti';
+          el.textContent = emojis[k % emojis.length];
+          el.style.left = (Math.random() * 100) + 'vw';
+          el.style.animationDuration = (2.2 + Math.random() * 1.4) + 's';
+          document.body.appendChild(el);
+          setTimeout(function(){ el.remove(); }, 4000);
+        }, k * 40);
+      })(k);
+    }
+  }
+
+  function seekTo(t){ try { video.currentTime = t; } catch(e){} }
+
+  function driveTo(targetIndex, done){
+    driveBtn.disabled = true;
+    startEffects();
+    var toT = timeFor(targetIndex);
+
+    if (reduceMotion){
+      seekTo(toT);
+      finish();
+      return;
+    }
+    function onTimeUpdate(){
+      if (video.currentTime >= toT - 0.03){
+        video.pause();
+        seekTo(toT);
+        video.removeEventListener('timeupdate', onTimeUpdate);
+        finish();
+      }
+    }
+    video.addEventListener('timeupdate', onTimeUpdate);
+    var p = video.play();
+    if (p && p.catch) p.catch(function(){
+      seekTo(toT);
+      video.removeEventListener('timeupdate', onTimeUpdate);
+      finish();
+    });
+    function finish(){
+      shownIndex = targetIndex;
+      updateCaption();
+      stopEffects();
+      driveBtn.disabled = false;
+      done();
+    }
+  }
+
+  driveBtn.addEventListener('click', function(){
+    if (progress >= STOPS.length){ scrollToFinish(); return; }
+    var target = progress + 1;
+    var displayTarget = Math.min(target, STOPS.length - 1);
+    driveTo(displayTarget, function(){
+      progress = target;
+      localStorage.setItem(PROGRESS_KEY, String(progress));
+      updateStatus(); buildDots();
+      if (progress >= STOPS.length){
+        seekTo(FINISH_T);
+        spawnConfetti();
+        scrollToFinish();
+      } else {
+        scrollToPhase(progress);
+      }
+    });
+  });
+
+  driveReset.addEventListener('click', function(){
+    progress = 0; shownIndex = 0;
+    localStorage.setItem(PROGRESS_KEY, '0');
+    seekTo(0);
+    updateStatus(); buildDots(); updateCaption();
+  });
+
+  video.addEventListener('loadeddata', function(){
+    driveLoading.style.display = 'none';
+    seekTo(timeFor(shownIndex));
+  });
+  video.addEventListener('canplay', function(){
+    driveLoading.style.display = 'none';
+  });
+
+  var langToggleBtn = document.getElementById('langToggle');
+  if (langToggleBtn){
+    langToggleBtn.addEventListener('click', function(){
+      setTimeout(function(){ buildDots(); updateStatus(); updateCaption(); }, 0);
+    });
+  }
+
+  buildDots();
+  updateStatus();
+  updateCaption();
+})();
 </script>
 
   <script src="/js/page-editor.js" defer></script>
