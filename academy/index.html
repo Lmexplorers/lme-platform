@@ -1450,13 +1450,38 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
       } catch (e) { return false; }
     }
 
+    // Eier skal aldri sendes til Stripe for å åpne sine egne betalte kurs.
+    var isOwner = false;
+    var OWNER_EMAILS = ['renate@lmexplorers.com', 'hei@lmexplorers.com', 'hello@lmexplorers.com', 'support@lmexplorers.com', 'renateshobby@hotmail.com'];
+    fetch('/api/auth/me', { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (me) {
+      var u = me && me.user;
+      isOwner = !!(u && (u.role === 'owner' || u.role === 'admin' || OWNER_EMAILS.indexOf((u.email || '').toLowerCase()) !== -1));
+      render();
+    }).catch(function () { render(); });
+
+    // Betalte Kursbygger-kurs: samme slugs som PAID_KURSBYGGER_SLUGS i
+    // functions/_lib/purchase-links.js. Kortet lenker rett til Stripe i
+    // stedet for til det nå låste kurset, og viser prisen.
+    var PAID_COURSES = {
+      'lme-markedsfoering-med-claude': {
+        price: { no: '399 kr', en: '$40' },
+        checkout: { no: 'https://buy.stripe.com/eVq6oIgwB5ZdbqleFF9R63x', en: 'https://buy.stripe.com/4gMbJ28051IXgKF5559R63y' }
+      },
+      'lag-ditt-foerste-digitale-minikurs': {
+        price: { no: '699 kr', en: '$70' },
+        checkout: { no: 'https://buy.stripe.com/4gMaEYa8d73hbqldBB9R63z', en: 'https://buy.stripe.com/28E3cw805evJgKFdBB9R63A' }
+      }
+    };
+
     function render() {
       var en = window.LME_CURRENT_LANG === 'en';
+      var lang = en ? 'en' : 'no';
       grid.innerHTML = '';
       courses.forEach(function (c, i) {
+        var paid = isOwner ? null : PAID_COURSES[c.slug];
         var a = document.createElement('a');
         a.className = 'course-tile';
-        a.href = '/kurs?k=' + encodeURIComponent(c.slug || '');
+        a.href = paid ? paid.checkout[lang] : ('/kurs?k=' + encodeURIComponent(c.slug || ''));
         a.innerHTML =
           '<div class="thumb ' + thumbs[i % thumbs.length] + '"><div class="thumb-content">' +
           '<div class="kicker"></div><div class="title"></div></div></div>' +
@@ -1464,7 +1489,8 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           '<div class="footer-meta"><span class="lessons"></span></div></div>';
         a.querySelector('.kicker').textContent = pick(c.kicker) || (en ? 'MY COURSE' : 'MITT KURS');
         a.querySelector('.title').textContent = pick(c.title);
-        a.querySelector('.meta').textContent = (c.size === 'stor') ? (en ? 'FULL COURSE' : 'STORT KURS') : (en ? 'MINI COURSE' : 'MINIKURS');
+        var metaLabel = (c.size === 'stor') ? (en ? 'FULL COURSE' : 'STORT KURS') : (en ? 'MINI COURSE' : 'MINIKURS');
+        a.querySelector('.meta').textContent = paid ? metaLabel + ' · ' + paid.price[lang] : metaLabel;
         a.querySelector('h4').textContent = pick(c.title);
         a.querySelector('.desc').textContent = pick(c.lede);
         a.querySelector('.lessons').textContent = (c.lessonCount || 0) + (en ? ' lessons' : ' leksjoner');

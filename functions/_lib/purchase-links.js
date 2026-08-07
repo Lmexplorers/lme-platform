@@ -182,6 +182,12 @@ export const COURSE_PAYMENT_LINKS = {
   "plink_1U1ronLax7B8uQzqPAtyjLaz": { courseId: "ki-pedagoger", tier: "launch", lang: "en" },
   "plink_1U1rorLax7B8uQzqDVl9503R": { courseId: "ki-pedagoger", tier: "full",   lang: "no" },
   "plink_1U1rovLax7B8uQzqQQKKxMdB": { courseId: "ki-pedagoger", tier: "full",   lang: "en" },
+  // Kursbygger-kurs (lagret i KV, vist på academy/kurs.html?k=<slug>). Fast
+  // pris, ingen lanserings-/fullpris-splitt.
+  "plink_1U1sDiLax7B8uQzqqHGOPBAe": { courseId: "lme-markedsfoering-med-claude", tier: "standard", lang: "no" },
+  "plink_1U1sDnLax7B8uQzqjYHNAZui": { courseId: "lme-markedsfoering-med-claude", tier: "standard", lang: "en" },
+  "plink_1U1sDvLax7B8uQzqUmjOAMbN": { courseId: "lag-ditt-foerste-digitale-minikurs", tier: "standard", lang: "no" },
+  "plink_1U1sDzLax7B8uQzqZRyfpuwu": { courseId: "lag-ditt-foerste-digitale-minikurs", tier: "standard", lang: "en" },
 };
 
 export const COURSE_INFO = {
@@ -197,4 +203,20 @@ export const COURSE_INFO = {
     name: { no: "KI for pedagoger", en: "AI for Educators" },
     url: "https://lmexplorers.com/academy/ki-for-pedagoger",
   },
+  "lme-markedsfoering-med-claude": {
+    name: { no: "LME Markedsføring med Claude", en: "LME Marketing with Claude" },
+    url: "https://lmexplorers.com/academy/kurs?k=lme-markedsfoering-med-claude",
+  },
+  "lag-ditt-foerste-digitale-minikurs": {
+    name: { no: "Lag ditt første digitale minikurs", en: "Create your first digital mini-course" },
+    url: "https://lmexplorers.com/academy/kurs?k=lag-ditt-foerste-digitale-minikurs",
+  },
 };
+
+/* Kursbygger-slugs som krever kjøp for å lese innholdet (academy/kurs.html
+   sjekker denne listen mot URL-slugen). Fri liste å utvide når flere kurs
+   skal prises, uendret struktur ellers. */
+export const PAID_KURSBYGGER_SLUGS = [
+  "lme-markedsfoering-med-claude",
+  "lag-ditt-foerste-digitale-minikurs",
+];
