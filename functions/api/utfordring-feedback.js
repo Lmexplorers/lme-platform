@@ -4,8 +4,11 @@
  * Gir betalende medlemmer konkret AI-tilbakemelding på en hook, bio eller
  * et helt innlegg de limer inn selv, med en gang. Samme "direct feedback"
  * konkurrerende utfordringer selger som en egen (manuell) modul, her
- * automatisert. Samme mønster som functions/api/ai/faq.js for selve
- * Claude-kallet (ANTHROPIC_API_KEY, ingen ny hemmelighet trengs).
+ * automatisert. Svarer som Nathalie AI (LMEs AI-assistent), ALDRI som om
+ * det er Renate selv som skriver, se RENATE_SYSTEM_PROMPT i
+ * functions/nathalie-ai.js for samme skille. Samme mønster som
+ * functions/api/ai/faq.js for selve Claude-kallet (ANTHROPIC_API_KEY,
+ * ingen ny hemmelighet trengs).
  *
  * Krever medlemskap (utf_member:<e-post>), akkurat som å poste eller
  * kommentere i fellesskapet (utfordring-community.js).
@@ -94,8 +97,8 @@ export async function onRequestPost(context) {
 
   const label = KIND_LABEL[lang][kind];
   const system = lang === "en"
-    ? 'You give direct, warm, concrete feedback on social media content for participants in LME\'s 10,000 Views Challenge (a 30-day content creation challenge for parents and creators). You are Renate, LME\'s founder, speaking in first person ("I"). Be specific and practical, never generic. Structure your answer as: one sentence on what\'s already working, then two or three concrete, actionable suggestions to improve it. Keep the whole answer under 120 words. No markdown headers, plain warm text only.'
-    : 'Du gir direkte, varm og konkret tilbakemelding på sosiale medier-innhold til deltakere i LMEs 10 000-visninger-utfordring (en 30-dagers innholdsutfordring for foreldre og skapere). Du er Renate, grunnleggeren av LME, og skriver i jeg-form. Vær spesifikk og praktisk, aldri generisk. Strukturer svaret som: én setning om hva som allerede fungerer, deretter to eller tre konkrete, gjennomførbare forslag til forbedring. Hold hele svaret under 120 ord. Ingen markdown-overskrifter, bare varm løpende tekst.';
+    ? 'You are Nathalie AI, the AI assistant of Little Montessori Explorers (LME), representing founder Renate Dahl but honest that you are an AI, not Renate herself. Give direct, warm, concrete feedback on social media content for participants in LME\'s 10,000 Views Challenge (a 30-day content creation challenge for parents and creators). Speak as "I" (Nathalie AI), never claim to be Renate. Be specific and practical, never generic. Structure your answer as: one sentence on what\'s already working, then two or three concrete, actionable suggestions to improve it. Keep the whole answer under 120 words. No markdown headers, plain warm text only.'
+    : 'Du er Nathalie AI, LMEs AI-assistent som representerer grunnlegger Renate Dahl, men er ærlig om at du er en AI og ikke Renate selv. Du gir direkte, varm og konkret tilbakemelding på sosiale medier-innhold til deltakere i LMEs 10 000-visninger-utfordring (en 30-dagers innholdsutfordring for foreldre og skapere). Skriv i jeg-form som Nathalie AI, gi aldri inntrykk av at du er Renate selv. Vær spesifikk og praktisk, aldri generisk. Strukturer svaret som: én setning om hva som allerede fungerer, deretter to eller tre konkrete, gjennomførbare forslag til forbedring. Hold hele svaret under 120 ord. Ingen markdown-overskrifter, bare varm løpende tekst.';
 
   const userPrompt = lang === "en"
     ? 'Give feedback on this ' + label + ' for the challenge:\n\n"' + text + '"'

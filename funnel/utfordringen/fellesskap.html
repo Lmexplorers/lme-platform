@@ -279,8 +279,8 @@
   <!-- ===== Tilbakemelding-fane ===== -->
   <div id="tab-feedback" class="tabpane" style="display:none;">
     <div class="card">
-      <h2 data-no="Direkte AI-tilbakemelding" data-en="Direct AI feedback">Direkte AI-tilbakemelding</h2>
-      <p style="font-size:13px;color:var(--ink-muted);margin-bottom:14px;" data-no="Lim inn en hook, en bio eller et helt innlegg, og få konkret tilbakemelding med en gang." data-en="Paste in a hook, a bio or a full post, and get concrete feedback right away.">Lim inn en hook, en bio eller et helt innlegg, og få konkret tilbakemelding med en gang.</p>
+      <h2 data-no="Direkte tilbakemelding fra Nathalie AI" data-en="Direct feedback from Nathalie AI">Direkte tilbakemelding fra Nathalie AI</h2>
+      <p style="font-size:13px;color:var(--ink-muted);margin-bottom:14px;" data-no="Lim inn en hook, en bio eller et helt innlegg, og få konkret tilbakemelding fra Nathalie AI med en gang." data-en="Paste in a hook, a bio or a full post, and get concrete feedback from Nathalie AI right away.">Lim inn en hook, en bio eller et helt innlegg, og få konkret tilbakemelding fra Nathalie AI med en gang.</p>
       <div class="field" style="margin-bottom:12px;">
         <label style="display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:5px;" data-no="Hva er dette?" data-en="What is this?">Hva er dette?</label>
         <select id="fbKind" style="width:100%;font-size:15px;padding:12px 14px;border:1px solid var(--pink-200);border-radius:var(--r-md);background:var(--pink-50);color:var(--ink);">
@@ -292,7 +292,10 @@
       <textarea id="fbText" style="width:100%;min-height:110px;font-size:15px;padding:12px 14px;border:1px solid var(--pink-200);border-radius:var(--r-md);background:var(--pink-50);color:var(--ink);resize:vertical;margin-bottom:10px;" data-no-ph="Lim inn teksten din her …" data-en-ph="Paste your text here …" placeholder="Lim inn teksten din her …"></textarea>
       <button class="btn-cta" id="fbBtn" data-no="Få tilbakemelding →" data-en="Get feedback →">Få tilbakemelding →</button>
       <p class="joinerr" id="fbErr" data-no="Bli med i fellesskapet først (over), så kan du bruke dette." data-en="Join the community first (above), then you can use this.">Bli med i fellesskapet først (over), så kan du bruke dette.</p>
-      <div id="fbResult" style="display:none;margin-top:16px;background:var(--pink-50);border:1px solid var(--pink-100);border-radius:var(--r-md);padding:16px 18px;font-size:14.5px;line-height:1.6;white-space:pre-wrap;"></div>
+      <div id="fbResult" style="display:none;margin-top:16px;background:var(--pink-50);border:1px solid var(--pink-100);border-radius:var(--r-md);padding:16px 18px;">
+        <div style="font-size:11.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--pink-500);margin-bottom:6px;">Nathalie AI</div>
+        <div id="fbResultText" style="font-size:14.5px;line-height:1.6;white-space:pre-wrap;"></div>
+      </div>
     </div>
   </div>
 
@@ -683,7 +686,7 @@
       .then(res => {
         btn.disabled = false; btn.textContent = before;
         if (res && res.feedback) {
-          result.textContent = res.feedback;
+          document.getElementById('fbResultText').textContent = res.feedback;
           result.style.display = 'block';
         } else {
           err.textContent = currentLang === 'en' ? 'Something went wrong, try again in a moment.' : 'Noe gikk galt, prøv igjen om et øyeblikk.';
