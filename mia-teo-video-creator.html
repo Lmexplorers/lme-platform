@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Mia &amp; Teo Video Creator | Little Montessori Explorers</title>
+<meta name="description" content="Skriv en idé, og få en komplett Mia og Teo-episode: manus, storyboard, nøkkelbilder, video, stemmer og musikk-plan, med full kostnadskontroll.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink-50:#fff5f8; --pink-100:#ffe8f0; --pink-200:#ffd1e1; --pink-300:#ffb3cd;
+    --pink-400:#ff8ab3; --pink-500:#e85a92; --pink-600:#c43d75; --pink-700:#8f2a55;
+    --lime:#8fc23f; --gul:#ffce3d; --bla:#6ec1e4; --bla-soft:#dff1f9;
+    --warm-white:#fffcf9; --ink:#3d2438; --ink-soft:#6b4760;
+    --shadow-soft:0 8px 32px rgba(196,61,117,.08);
+    --shadow-med:0 16px 48px rgba(196,61,117,.14);
+    --font-head:'Playpen Sans', system-ui, sans-serif;
+    --font-body:'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body); color: var(--ink); line-height: 1.6; font-weight: 400;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 5%, rgba(255,209,225,.35), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 20%, rgba(255,232,240,.4), transparent 60%),
+      var(--warm-white);
+    min-height: 100vh;
+  }
+  h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.2; }
+  button, input, select, textarea { font-family: var(--font-body) !important; }
+  a { color: var(--pink-600); }
+
+  .topbar { position: sticky; top: 0; z-index: 100; background: rgba(255,252,249,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--pink-100); padding: .75rem 1.5rem; }
+  .topbar-inner { max-width: 1320px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; }
+  .brand img { width: 44px; height: 44px; object-fit: contain; }
+  .brand b { font-family: var(--font-head); color: var(--pink-600); font-size: 1.05rem; font-weight: 600; }
+  .brand span { display: block; font-size: .72rem; color: var(--ink-soft); }
+  .top-actions { display: flex; align-items: center; gap: .6rem; }
+  .lang-toggle { background: linear-gradient(135deg, var(--pink-400), var(--pink-500)); color: #fff; border: none; padding: .5rem 1.1rem; border-radius: 999px; font-weight: 600; font-size: .88rem; cursor: pointer; box-shadow: var(--shadow-soft); }
+
+  .wrap { max-width: 1320px; margin: 1.5rem auto 5rem; padding: 0 1.5rem; }
+  .head { margin-bottom: 1.25rem; }
+  .head .kick { display: inline-flex; align-items: center; gap: .4rem; background: var(--pink-100); color: var(--pink-700); font-weight: 700; font-size: .82rem; padding: .35rem .9rem; border-radius: 999px; }
+  .head h1 { font-size: clamp(1.7rem, 3.4vw, 2.4rem); color: var(--ink); margin: .7rem 0 .35rem; }
+  .head p { color: var(--ink-soft); max-width: 720px; }
+
+  .card { background: #fff; border: 1px solid var(--pink-100); border-radius: 22px; box-shadow: var(--shadow-soft); padding: 1.4rem 1.5rem; margin-bottom: 1.25rem; }
+  .card > h2 { font-size: 1.15rem; color: var(--ink); margin-bottom: .3rem; display: flex; align-items: center; gap: .5rem; }
+  .card > .sub { color: var(--ink-soft); font-size: .9rem; margin-bottom: 1rem; }
+
+  label.field { display: block; margin-bottom: .95rem; }
+  label.field > span { display: block; font-weight: 700; font-size: .9rem; color: var(--ink); margin-bottom: .35rem; }
+  .hint { font-weight: 400 !important; color: var(--ink-soft); font-size: .82rem; }
+  input[type=text], input[type=url], select, textarea {
+    width: 100%; border: 1.5px solid var(--pink-200); border-radius: 14px; padding: .7rem .9rem;
+    font-size: 1rem; color: var(--ink); background: #fff; transition: border-color .2s;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--pink-400); }
+  textarea { resize: vertical; min-height: 84px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+  .four { display: grid; grid-template-columns: repeat(4,1fr); gap: .9rem; }
+  @media (max-width: 820px) { .two, .four { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .two, .four { grid-template-columns: 1fr; } }
+
+  .btn { border: none; border-radius: 999px; padding: .8rem 1.5rem; font-weight: 700; font-size: 1rem; cursor: pointer; background: linear-gradient(135deg, var(--pink-500), var(--pink-600)); color: #fff; box-shadow: var(--shadow-soft); transition: transform .15s; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+  .btn.ghost { background: #fff; color: var(--pink-600); border: 1.5px solid var(--pink-200); box-shadow: none; }
+  .btn.small { padding: .5rem 1rem; font-size: .88rem; }
+  .btn.gold { background: linear-gradient(135deg, #ffb238, #ff8f38); }
+  .btn-row { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; }
+
+  .tabs { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1.1rem; }
+  .tab { border: 1.5px solid var(--pink-200); background: #fff; color: var(--ink-soft); padding: .5rem 1rem; border-radius: 999px; font-weight: 700; font-size: .86rem; cursor: pointer; }
+  .tab.active { background: var(--pink-600); border-color: var(--pink-600); color: #fff; }
+
+  .proj-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); gap: 1rem; }
+  .proj-card { background: #fff; border: 1.5px solid var(--pink-100); border-radius: 18px; padding: 1rem; cursor: pointer; transition: transform .15s, border-color .2s; }
+  .proj-card:hover { transform: translateY(-2px); border-color: var(--pink-300); }
+  .proj-card .thumb { aspect-ratio: 16/9; border-radius: 12px; background: linear-gradient(135deg, var(--pink-100), var(--pink-50)); display:flex; align-items:center; justify-content:center; font-size: 2rem; overflow:hidden; margin-bottom:.6rem; }
+  .proj-card .thumb img { width:100%; height:100%; object-fit:cover; }
+  .proj-card h4 { font-size: .98rem; color: var(--ink); }
+  .proj-card .meta { font-size: .78rem; color: var(--ink-soft); margin-top:.2rem; }
+  .status-pill { display:inline-block; font-size:.7rem; font-weight:700; padding:.15rem .55rem; border-radius:999px; margin-top:.4rem; }
+  .status-idea, .status-story { background:#fff3e0; color:#a3620c; }
+  .status-storyboard { background:var(--bla-soft); color:#2f6377; }
+  .status-approved, .status-generating { background:#f1e6fb; color:#6a3fa0; }
+  .status-ready { background:#edf7e2; color:#5f8f2a; }
+  .status-published { background:#e2f7ea; color:#1e8a4c; }
+  .empty { color: var(--ink-soft); font-size: .95rem; padding: 1.2rem 0; text-align:center; }
+
+  /* ===== Storyboard shot cards ===== */
+  .scene-block { margin-bottom: 1.6rem; }
+  .scene-title { font-family: var(--font-head); color: var(--pink-700); font-size: 1.05rem; margin-bottom: .6rem; display:flex; align-items:center; gap:.5rem; }
+  .shot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 1rem; }
+  .shot-card { background:#fff; border:1.5px solid var(--pink-100); border-radius:18px; overflow:hidden; box-shadow: var(--shadow-soft); }
+  .shot-frame { aspect-ratio: 16/9; background: linear-gradient(135deg, var(--pink-100), var(--pink-50)); display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+  .shot-frame img, .shot-frame video { width:100%; height:100%; object-fit:cover; }
+  .shot-frame .ph { color: var(--pink-400); font-size:2rem; }
+  .shot-approved-badge { position:absolute; top:.5rem; left:.5rem; background:#1e8a4c; color:#fff; font-size:.7rem; font-weight:700; padding:.15rem .5rem; border-radius:999px; }
+  .shot-body { padding: .9rem 1rem 1.1rem; }
+  .shot-body .num { font-size:.72rem; font-weight:700; color: var(--pink-500); text-transform:uppercase; letter-spacing:.03em; }
+  .shot-body textarea, .shot-body input { font-size: .85rem; margin-bottom: .4rem; }
+  .shot-body label.mini { display:block; font-size:.72rem; font-weight:700; color: var(--ink-soft); margin: .3rem 0 .15rem; }
+  .dialogue-line { border: 1px dashed var(--pink-200); border-radius: 10px; padding: .5rem .6rem; margin-bottom: .4rem; }
+  .dialogue-line .speaker { font-size: .72rem; font-weight: 700; color: var(--pink-600); text-transform: uppercase; margin-bottom:.25rem; display:flex; justify-content:space-between; align-items:center; gap:.4rem; }
+  .dialogue-line input { font-size: .82rem; margin-bottom: .25rem; }
+  .shot-actions { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.5rem; }
+
+  .issue { border-radius: 12px; padding: .6rem .8rem; margin-bottom: .5rem; font-size: .88rem; }
+  .issue.error { background: #fdeaea; color: #a3241f; border: 1px solid #f6c8c6; }
+  .issue.warning { background: #fff3e0; color: #a3620c; border: 1px solid #ffe0ad; }
+  .issue.info { background: var(--bla-soft); color: #2f6377; border: 1px solid #c7e6f2; }
+
+  .note { background: var(--bla-soft); border: 1px solid #c7e6f2; border-radius: 14px; padding: .8rem 1rem; font-size: .9rem; color: #2f6377; margin-top: .8rem; }
+  .note.gold { background:#fff6e5; border-color:#ffe0ad; color:#8a5a10; }
+
+  /* ===== Cost confirm modal ===== */
+  .modal-bg { position: fixed; inset: 0; background: rgba(61,36,56,.55); display: none; align-items: center; justify-content: center; z-index: 900; padding: 1rem; }
+  .modal-bg.show { display: flex; }
+  .modal { background: #fff; border-radius: 22px; max-width: 560px; width: 100%; max-height: 86vh; overflow: auto; padding: 1.5rem; box-shadow: var(--shadow-med); }
+  .modal h3 { color: var(--pink-700); margin-bottom: .5rem; }
+  .cost-box { background: #fff6e5; border: 1.5px solid #ffe0ad; border-radius: 14px; padding: .8rem 1rem; margin: .8rem 0; }
+  .cost-box b { color: #8a5a10; font-size: 1.15rem; }
+  .modal pre { background: #fdf6f2; border-radius: 12px; padding: .8rem; font-size: .78rem; white-space: pre-wrap; max-height: 220px; overflow: auto; margin-top: .5rem; }
+
+  .toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(30px); background: var(--ink); color: #fff; padding: .7rem 1.2rem; border-radius: 999px; font-weight: 600; font-size: .95rem; opacity: 0; pointer-events: none; transition: all .3s; z-index: 500; box-shadow: var(--shadow-med); }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="/mia-og-teo" class="brand">
+      <img src="/images/lme-logo.png" alt="LME" width="44" height="44">
+      <b>Mia &amp; Teo Video Creator<span data-no="Fra idé til ferdig episode" data-en="From idea to finished episode">Fra idé til ferdig episode</span></b>
+    </a>
+    <div class="top-actions">
+      <a class="btn ghost small" href="/mia-teo-studio" data-no="Mia &amp; Teo Studio (publisering)" data-en="Mia &amp; Teo Studio (publishing)">Mia &amp; Teo Studio (publisering)</a>
+      <button class="lang-toggle" id="langToggle">EN 🌍</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="head">
+    <span class="kick">🎬 <span data-no="Mia &amp; Teo Video Creator" data-en="Mia &amp; Teo Video Creator">Mia &amp; Teo Video Creator</span></span>
+    <h1 data-no="Bring Mia og Teo til live" data-en="Bring Mia &amp; Teo to Life">Bring Mia og Teo til live</h1>
+    <p data-no="Skriv en idé, og få manus, storyboard, nøkkelbilder, video og stemmer, klart til godkjenning steg for steg. Ingenting som koster penger skjer uten at du bekrefter det først." data-en="Write an idea, and get a script, storyboard, keyframes, video and voices, ready for approval step by step. Nothing that costs money happens without your confirmation first.">
+      Skriv en idé, og få manus, storyboard, nøkkelbilder, video og stemmer, klart til godkjenning steg for steg. Ingenting som koster penger skjer uten at du bekrefter det først.
+    </p>
+  </div>
+
+  <div class="note gold" id="providerNote" style="display:none;"></div>
+
+  <!-- ===== LIBRARY VIEW ===== -->
+  <div id="libraryView">
+    <div class="card">
+      <h2>💡 <span data-no="Ny episode-idé" data-en="New episode idea">Ny episode-idé</span></h2>
+      <div class="sub" data-no="Hva skal Mia og Teo oppleve i dag?" data-en="What should Mia &amp; Teo explore today?">Hva skal Mia og Teo oppleve i dag?</div>
+      <label class="field">
+        <span data-no="Idé" data-en="Idea">Idé</span>
+        <textarea id="in-idea" placeholder="Mia og Teo oppdager en mystisk dør inne i et gammelt tre og lærer hvordan et skogøkosystem fungerer."></textarea>
+      </label>
+      <div class="four">
+        <label class="field">
+          <span data-no="Alder" data-en="Age">Alder</span>
+          <select id="in-age"></select>
+        </label>
+        <label class="field">
+          <span data-no="Språk" data-en="Language">Språk</span>
+          <select id="in-lang">
+            <option value="no" data-no="Norsk" data-en="Norwegian">Norsk</option>
+            <option value="en" data-no="Engelsk" data-en="English">Engelsk</option>
+          </select>
+        </label>
+        <label class="field">
+          <span data-no="Type" data-en="Video type">Type</span>
+          <select id="in-type"></select>
+        </label>
+        <label class="field">
+          <span data-no="Lengde" data-en="Length">Lengde</span>
+          <select id="in-length">
+            <option value="short" data-no="Kort" data-en="Short">Kort</option>
+            <option value="2-3">2-3 min</option>
+            <option value="4-5" selected>4-5 min</option>
+            <option value="6-8">6-8 min</option>
+            <option value="10plus">10+ min</option>
+          </select>
+        </label>
+      </div>
+      <div class="btn-row">
+        <button class="btn" id="createBtn" type="button">🪄 <span data-no="Lag episode" data-en="Create episode">Lag episode</span></button>
+      </div>
+    </div>
+
+    <div class="tabs" id="statusTabs"></div>
+    <div class="proj-list" id="projList"><div class="empty" data-no="Laster …" data-en="Loading …">Laster …</div></div>
+  </div>
+
+  <!-- ===== PROJECT / STORYBOARD VIEW ===== -->
+  <div id="projectView" style="display:none;">
+    <button class="btn ghost small" id="backBtn" type="button">← <span data-no="Til biblioteket" data-en="Back to library">Til biblioteket</span></button>
+
+    <div class="card" style="margin-top:1rem;">
+      <h2 id="pTitle">…</h2>
+      <div class="sub" id="pMeta"></div>
+      <div class="btn-row">
+        <button class="btn ghost small" id="regenStoryBtn" type="button">🔄 <span data-no="Lag manus på nytt" data-en="Regenerate script">Lag manus på nytt</span></button>
+        <button class="btn ghost small" id="saveEditsBtn" type="button">💾 <span data-no="Lagre endringer" data-en="Save changes">Lagre endringer</span></button>
+        <button class="btn ghost small" id="qcBtn" type="button">✅ <span data-no="Kjør kvalitetssjekk" data-en="Run quality check">Kjør kvalitetssjekk</span></button>
+        <button class="btn gold small" id="approveBtn" type="button">🔒 <span data-no="Godkjenn storyboard" data-en="Approve storyboard">Godkjenn storyboard</span></button>
+        <button class="btn ghost small" id="renderBtn" type="button">🎞️ <span data-no="Sett sammen episode" data-en="Assemble episode">Sett sammen episode</span></button>
+      </div>
+      <div id="qcResults"></div>
+      <div id="renderResults"></div>
+    </div>
+
+    <div id="scenesContainer"></div>
+  </div>
+</div>
+
+<!-- ===== Cost confirm modal ===== -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h3 id="modalTitle" data-no="Dette koster penger" data-en="This costs money">Dette koster penger</h3>
+    <p id="modalDesc" style="color:var(--ink-soft); font-size:.92rem;"></p>
+    <div class="cost-box">
+      <div data-no="Leverandør" data-en="Provider"><span id="modalProvider"></span></div>
+      <div style="margin-top:.3rem;"><b id="modalCost"></b> <span id="modalCostNote" class="hint"></span></div>
+    </div>
+    <pre id="modalPromptPreview" style="display:none;"></pre>
+    <div class="btn-row" style="margin-top:1rem;">
+      <button class="btn gold" id="modalConfirmBtn" type="button">✅ <span data-no="Ja, generer (koster penger)" data-en="Yes, generate (costs money)">Ja, generer (koster penger)</span></button>
+      <button class="btn ghost" id="modalCancelBtn" type="button" data-no="Avbryt" data-en="Cancel">Avbryt</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  /* ===== Språk ===== */
+  var currentLang = (window.LME_CURRENT_LANG === 'en') ? 'en' : 'no';
+  function isEn() { return currentLang === 'en'; }
+  function L(no, en) { return isEn() ? en : no; }
+  function q(id) { return document.getElementById(id); }
+
+  function switchLanguage(lang) {
+    currentLang = lang; window.LME_CURRENT_LANG = lang; document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      var t = el.getAttribute('data-' + lang); if (t === null) return;
+      if (t.indexOf('<') !== -1) el.innerHTML = t; else el.textContent = t;
+    });
+    q('langToggle').textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    renderStatusTabs(); renderProjList();
+  }
+  q('langToggle').addEventListener('click', function () { switchLanguage(currentLang === 'no' ? 'en' : 'no'); });
+
+  function toast(msg) { var t = q('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(function () { t.classList.remove('show'); }, 2800); }
+
+  /* ===== Konstanter ===== */
+  var AGE_BANDS = [
+    { id: '0-3', no: '0-3 år', en: '0-3 years', tuned: false },
+    { id: '3-6', no: '3-6 år', en: '3-6 years', tuned: false },
+    { id: '6-9', no: '6-9 år', en: '6-9 years', tuned: true },
+    { id: '9-12', no: '9-12 år', en: '9-12 years', tuned: false },
+    { id: '12-16', no: '12-16 år', en: '12-16 years', tuned: false },
+  ];
+  var VIDEO_TYPES = ['adventure','mystery','learn-discover','story','science','nature','animals','space','geography','history','math','language','quiz','experiment','creative','what-if'];
+  var VIDEO_TYPE_LABEL = {
+    adventure:['Eventyr','Adventure'], mystery:['Mysterium','Mystery'], 'learn-discover':['Lær og oppdag','Learn & Discover'],
+    story:['Fortelling','Story'], science:['Vitenskap','Science'], nature:['Natur','Nature'], animals:['Dyr','Animals'],
+    space:['Verdensrommet','Space'], geography:['Geografi','Geography'], history:['Historie','History'], math:['Matte','Math'],
+    language:['Språk','Language'], quiz:['Quiz','Quiz'], experiment:['Eksperiment','Experiment'], creative:['Kreativ','Creative'], 'what-if':['Hva hvis …?','What If…?'],
+  };
+  var STATUSES = ['idea','story','storyboard','approved','generating','ready','published'];
+  var STATUS_LABEL = {
+    idea:['Idé','Idea'], story:['Manus','Script'], storyboard:['Storyboard','Storyboard'], approved:['Godkjent','Approved'],
+    generating:['Genererer','Generating'], ready:['Klar','Ready'], published:['Publisert','Published'],
+  };
+
+  AGE_BANDS.forEach(function (a) {
+    var opt = document.createElement('option'); opt.value = a.id;
+    opt.setAttribute('data-no', a.no + (a.tuned ? '' : ' (ikke finjustert ennå)'));
+    opt.setAttribute('data-en', a.en + (a.tuned ? '' : ' (not tuned yet)'));
+    opt.textContent = a.no; if (a.id === '6-9') opt.selected = true;
+    q('in-age').appendChild(opt);
+  });
+  VIDEO_TYPES.forEach(function (t) {
+    var opt = document.createElement('option'); opt.value = t;
+    opt.setAttribute('data-no', VIDEO_TYPE_LABEL[t][0]); opt.setAttribute('data-en', VIDEO_TYPE_LABEL[t][1]);
+    opt.textContent = VIDEO_TYPE_LABEL[t][0]; q('in-type').appendChild(opt);
+  });
+
+  /* ===== API-hjelpere ===== */
+  function api(url, opts) {
+    return fetch(url, Object.assign({ credentials: 'same-origin', headers: { 'Content-Type': 'application/json' } }, opts || {}))
+      .then(function (r) { return r.json().then(function (d) { return { status: r.status, data: d }; }); });
+  }
+  function post(url, body) { return api(url, { method: 'POST', body: JSON.stringify(body || {}) }); }
+
+  function checkProviderStatus() {
+    api('/api/miateo/project?kind=status').then(function (res) {
+      var p = res.data && res.data.providers; if (!p) return;
+      var missing = [];
+      if (!p.text.configured) missing.push(L('manus (Anthropic)', 'script (Anthropic)'));
+      if (!p.image.configured) missing.push(L('nøkkelbilder (OpenAI/Gemini)', 'keyframes (OpenAI/Gemini)'));
+      if (!p.video.configured) missing.push(L('video (Higgsfield)', 'video (Higgsfield)'));
+      if (!p.voice.configured) missing.push(L('stemmer (ElevenLabs)', 'voices (ElevenLabs)'));
+      var note = q('providerNote');
+      if (missing.length) {
+        note.style.display = '';
+        note.textContent = L('⚠️ Ikke koblet til ennå: ', '⚠️ Not connected yet: ') + missing.join(', ') + '. ' + L('De aktuelle stegene vil feile til nøkkelen er lagt inn.', 'Those steps will fail until the key is added.');
+      } else { note.style.display = 'none'; }
+    }).catch(function () {});
+  }
+
+  /* ===== Kostnad-bekreft modal ===== */
+  var pendingConfirm = null;
+  function showConfirmModal(opts) {
+    q('modalDesc').textContent = opts.desc || '';
+    q('modalProvider').textContent = opts.provider || '';
+    var c = opts.estimatedCost || {};
+    var costText = '';
+    if (typeof c.estimatedUsd === 'number') costText = '~$' + c.estimatedUsd.toFixed(2);
+    else if (c.videoCredits) costText = c.videoCredits + ' ' + L('video-kreditt', 'video credit');
+    else costText = L('ukjent kostnad', 'unknown cost');
+    q('modalCost').textContent = costText;
+    q('modalCostNote').textContent = c.note || '';
+    if (opts.promptPreview) { q('modalPromptPreview').style.display = ''; q('modalPromptPreview').textContent = opts.promptPreview; }
+    else { q('modalPromptPreview').style.display = 'none'; }
+    pendingConfirm = opts.onConfirm;
+    q('modalBg').classList.add('show');
+  }
+  q('modalCancelBtn').addEventListener('click', function () { q('modalBg').classList.remove('show'); pendingConfirm = null; });
+  q('modalConfirmBtn').addEventListener('click', function () {
+    var fn = pendingConfirm; q('modalBg').classList.remove('show'); pendingConfirm = null;
+    if (fn) fn();
+  });
+
+  /* Kjør en dry-run (confirm:false), vis kostnad, og send confirm:true bare hvis Renate trykker "Ja". */
+  function paidAction(url, body, desc, onDone) {
+    post(url, Object.assign({}, body, { confirm: false })).then(function (res) {
+      if (res.data && res.data.error) { toast(res.data.error); return; }
+      if (!res.data || !res.data.paid) { toast(L('Uventet svar', 'Unexpected response')); return; }
+      showConfirmModal({
+        desc: desc, provider: res.data.provider, estimatedCost: res.data.estimatedCost,
+        promptPreview: res.data.systemPrompt ? (res.data.systemPrompt + '\n\n---\n\n' + res.data.userPrompt) : (res.data.prompt || res.data.motionPrompt || res.data.text),
+        onConfirm: function () {
+          toast(L('Genererer …', 'Generating …'));
+          post(url, Object.assign({}, body, { confirm: true })).then(function (r2) {
+            if (r2.data && r2.data.error) { toast(r2.data.error); return; }
+            onDone(r2.data);
+          }).catch(function () { toast(L('Nettverksfeil', 'Network error')); });
+        },
+      });
+    }).catch(function () { toast(L('Nettverksfeil', 'Network error')); });
+  }
+
+  /* ===== Bibliotek ===== */
+  var projects = []; var activeStatus = 'all';
+  function renderStatusTabs() {
+    var box = q('statusTabs'); box.innerHTML = '';
+    var all = document.createElement('button'); all.className = 'tab' + (activeStatus === 'all' ? ' active' : ''); all.type = 'button';
+    all.textContent = L('Alle', 'All'); all.addEventListener('click', function () { activeStatus = 'all'; renderStatusTabs(); renderProjList(); });
+    box.appendChild(all);
+    STATUSES.forEach(function (s) {
+      var b = document.createElement('button'); b.className = 'tab' + (activeStatus === s ? ' active' : ''); b.type = 'button';
+      b.textContent = L(STATUS_LABEL[s][0], STATUS_LABEL[s][1]);
+      b.addEventListener('click', function () { activeStatus = s; renderStatusTabs(); renderProjList(); });
+      box.appendChild(b);
+    });
+  }
+  function renderProjList() {
+    var box = q('projList');
+    var list = activeStatus === 'all' ? projects : projects.filter(function (p) { return p.status === activeStatus; });
+    if (!list.length) { box.innerHTML = '<div class="empty">' + L('Ingen episoder her ennå.', 'No episodes here yet.') + '</div>'; return; }
+    box.innerHTML = '';
+    list.forEach(function (p) {
+      var card = document.createElement('div'); card.className = 'proj-card';
+      var thumb = p.thumbnailUrl ? '<img src="' + p.thumbnailUrl + '" alt="">' : '🎬';
+      card.innerHTML =
+        '<div class="thumb">' + thumb + '</div>' +
+        '<h4></h4>' +
+        '<div class="meta"></div>' +
+        '<span class="status-pill status-' + p.status + '"></span>';
+      card.querySelector('h4').textContent = p.title || '(uten tittel)';
+      card.querySelector('.meta').textContent = p.ageBand + ' · ' + (p.lang === 'en' ? 'EN' : 'NO') + ' · ' + p.shotCount + ' shot';
+      card.querySelector('.status-pill').textContent = L(STATUS_LABEL[p.status][0], STATUS_LABEL[p.status][1]);
+      card.addEventListener('click', function () { openProject(p.id); });
+      box.appendChild(card);
+    });
+  }
+  function refreshProjects() {
+    api('/api/miateo/project').then(function (res) {
+      projects = (res.data && res.data.projects) || [];
+      if (res.status === 401 || res.status === 403) { q('projList').innerHTML = '<div class="empty">' + (res.data.error || L('Ingen tilgang', 'No access')) + '</div>'; return; }
+      renderStatusTabs(); renderProjList();
+    });
+  }
+
+  q('createBtn').addEventListener('click', function () {
+    var idea = q('in-idea').value.trim();
+    if (!idea) { toast(L('Skriv en idé først', 'Write an idea first')); return; }
+    var body = { idea: idea, ageBand: q('in-age').value, lang: q('in-lang').value, videoType: q('in-type').value, length: q('in-length').value };
+    paidAction('/api/miateo/story', body, L('Dette skriver manus og storyboard for hele episoden med Claude.', 'This writes the script and storyboard for the whole episode with Claude.'), function (data) {
+      toast(L('🪄 Manus laget!', '🪄 Script ready!'));
+      refreshProjects();
+      openProjectDoc(data.project);
+    });
+  });
+
+  /* ===== Prosjektvisning / storyboard ===== */
+  var currentProject = null;
+
+  function openProject(id) {
+    api('/api/miateo/project?id=' + encodeURIComponent(id)).then(function (res) {
+      if (!res.data || !res.data.project) { toast(L('Fant ikke episoden', 'Episode not found')); return; }
+      openProjectDoc(res.data.project);
+    });
+  }
+  function openProjectDoc(project) {
+    currentProject = project;
+    q('libraryView').style.display = 'none';
+    q('projectView').style.display = '';
+    q('qcResults').innerHTML = ''; q('renderResults').innerHTML = '';
+    renderProject();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  q('backBtn').addEventListener('click', function () {
+    q('projectView').style.display = 'none'; q('libraryView').style.display = ''; refreshProjects();
+  });
+
+  function charLabel(c) { return c === 'mia' ? 'Mia' : c === 'teo' ? 'Teo' : 'Forteller'; }
+
+  function shotFrame(shot) {
+    if (shot.video && shot.video.status === 'ready' && shot.video.assetUrl) {
+      return '<video src="' + shot.video.assetUrl + '" controls muted loop></video>';
+    }
+    if (shot.keyframe && shot.keyframe.assetUrl) {
+      return '<img src="' + shot.keyframe.assetUrl + '" alt="">' + (shot.keyframe.approved ? '<span class="shot-approved-badge">✓ ' + L('Godkjent', 'Approved') + '</span>' : '');
+    }
+    return '<span class="ph">🖼️</span>';
+  }
+
+  function renderProject() {
+    var p = currentProject;
+    q('pTitle').textContent = (p.story && p.story.titleNo) || p.input.idea.slice(0, 60) || L('Uten tittel', 'Untitled');
+    q('pMeta').textContent = p.input.ageBand + ' · ' + (p.input.lang === 'en' ? 'EN' : 'NO') + ' · ' + p.input.videoType + ' · ' + p.status;
+
+    var container = q('scenesContainer'); container.innerHTML = '';
+    if (!p.scenes.length) {
+      container.innerHTML = '<div class="card"><div class="empty">' + L('Ingen storyboard ennå. Lag manuset over.', 'No storyboard yet. Generate the script above.') + '</div></div>';
+      return;
+    }
+    p.scenes.slice().sort(function (a, b) { return a.index - b.index; }).forEach(function (scene) {
+      var block = document.createElement('div'); block.className = 'scene-block';
+      var title = document.createElement('div'); title.className = 'scene-title';
+      title.textContent = '🎬 ' + L('Scene', 'Scene') + ' ' + (scene.index + 1) + (scene.title ? ': ' + scene.title : '') + (scene.location ? ' — ' + scene.location : '');
+      block.appendChild(title);
+      var grid = document.createElement('div'); grid.className = 'shot-grid';
+      var shots = p.shots.filter(function (s) { return s.sceneId === scene.id; }).sort(function (a, b) { return a.index - b.index; });
+      shots.forEach(function (shot) { grid.appendChild(renderShotCard(shot)); });
+      block.appendChild(grid);
+      container.appendChild(block);
+    });
+  }
+
+  function renderShotCard(shot) {
+    var card = document.createElement('div'); card.className = 'shot-card'; card.dataset.shotId = shot.id;
+    var frame = document.createElement('div'); frame.className = 'shot-frame'; frame.innerHTML = shotFrame(shot);
+    card.appendChild(frame);
+
+    var body = document.createElement('div'); body.className = 'shot-body';
+    body.innerHTML =
+      '<div class="num">' + L('Shot', 'Shot') + ' ' + (shot.index + 1) + ' · ' + shot.characters.map(charLabel).join(' + ') + '</div>' +
+      '<label class="mini">' + L('Handling', 'Action') + '</label><textarea data-f="action" rows="2"></textarea>' +
+      '<label class="mini">' + L('Kamera', 'Camera') + '</label><input data-f="cameraMovement" type="text">' +
+      '<div id="dlg-' + shot.id + '"></div>' +
+      '<div class="shot-actions"></div>';
+    body.querySelector('[data-f=action]').value = shot.action || '';
+    body.querySelector('[data-f=cameraMovement]').value = shot.cameraMovement || '';
+
+    var dlgBox = body.querySelector('#dlg-' + shot.id);
+    (shot.dialogue || []).forEach(function (line, i) {
+      var d = document.createElement('div'); d.className = 'dialogue-line';
+      d.innerHTML =
+        '<div class="speaker"><span>' + charLabel(line.speaker) + '</span>' +
+        '<button class="btn ghost small voice-btn" type="button" data-line="' + i + '">🔊 ' + (line.audioAssetId ? L('Spill av / lag på nytt', 'Play / regenerate') : L('Lag stemme', 'Generate voice')) + '</button></div>' +
+        '<input data-dlg-no="' + i + '" type="text" placeholder="Norsk">' +
+        '<input data-dlg-en="' + i + '" type="text" placeholder="English">' +
+        (line.audioAssetId ? '<audio controls src="/api/miateo/voice?audioId=' + line.audioAssetId + '" style="width:100%;margin-top:.3rem;"></audio>' : '');
+      d.querySelector('[data-dlg-no]').value = line.no || '';
+      d.querySelector('[data-dlg-en]').value = line.en || '';
+      d.querySelector('.voice-btn').addEventListener('click', function () {
+        paidAction('/api/miateo/voice', { projectId: currentProject.id, shotId: shot.id, lineKind: 'dialogue', lineIndex: i, lang: currentProject.input.lang },
+          L('Dette leser inn replikken med ElevenLabs.', 'This reads the line aloud with ElevenLabs.'),
+          function (data) { toast(L('🔊 Stemme laget!', '🔊 Voice ready!')); patchShot(data.shot); });
+      });
+      dlgBox.appendChild(d);
+    });
+
+    var actions = body.querySelector('.shot-actions');
+    var kfBtn = document.createElement('button'); kfBtn.className = 'btn small'; kfBtn.type = 'button';
+    kfBtn.textContent = '🖼️ ' + (shot.keyframe && shot.keyframe.assetUrl ? L('Lag nøkkelbilde på nytt', 'Regenerate keyframe') : L('Lag nøkkelbilde', 'Generate keyframe'));
+    kfBtn.addEventListener('click', function () {
+      paidAction('/api/miateo/keyframe', { projectId: currentProject.id, shotId: shot.id },
+        L('Dette lager et bilde av dette shotet med Mia/Teo sin låste karakterbeskrivelse.', "This generates one image of this shot with Mia/Teo's locked character description."),
+        function (data) { toast(L('🖼️ Nøkkelbilde laget!', '🖼️ Keyframe ready!')); patchShot(data.shot); });
+    });
+    actions.appendChild(kfBtn);
+
+    if (shot.keyframe && shot.keyframe.assetUrl && !shot.keyframe.approved) {
+      var apBtn = document.createElement('button'); apBtn.className = 'btn ghost small'; apBtn.type = 'button';
+      apBtn.textContent = '✅ ' + L('Godkjenn bildet', 'Approve image');
+      apBtn.addEventListener('click', function () {
+        post('/api/miateo/keyframe', { projectId: currentProject.id, shotId: shot.id, approve: true }).then(function (res) {
+          if (res.data && res.data.error) { toast(res.data.error); return; }
+          toast(L('Godkjent', 'Approved')); patchShot(res.data.shot);
+        });
+      });
+      actions.appendChild(apBtn);
+    }
+
+    var vidBtn = document.createElement('button'); vidBtn.className = 'btn ghost small'; vidBtn.type = 'button';
+    var kfApproved = shot.keyframe && shot.keyframe.approved;
+    vidBtn.disabled = !kfApproved;
+    vidBtn.textContent = '🎥 ' + (shot.video && shot.video.status === 'generating' ? L('Genererer video …', 'Generating video …') : L('Animer shot', 'Animate shot'));
+    vidBtn.addEventListener('click', function () {
+      paidAction('/api/miateo/shot-video', { projectId: currentProject.id, shotId: shot.id },
+        L('Dette animerer det godkjente bildet til en videoklipp med Higgsfield.', 'This animates the approved image into a video clip with Higgsfield.'),
+        function (data) { toast(L('🎥 Video startet, sjekker status …', '🎥 Video started, checking status …')); patchShot(data.shot); pollShotVideo(shot.id); });
+    });
+    actions.appendChild(vidBtn);
+
+    body.querySelector('[data-f=action]').addEventListener('change', function () { shot.action = this.value; });
+    body.querySelector('[data-f=cameraMovement]').addEventListener('change', function () { shot.cameraMovement = this.value; });
+    dlgBox.querySelectorAll('[data-dlg-no]').forEach(function (el) { el.addEventListener('change', function () { shot.dialogue[+this.getAttribute('data-dlg-no')].no = this.value; }); });
+    dlgBox.querySelectorAll('[data-dlg-en]').forEach(function (el) { el.addEventListener('change', function () { shot.dialogue[+this.getAttribute('data-dlg-en')].en = this.value; }); });
+
+    card.appendChild(body);
+    return card;
+  }
+
+  function patchShot(updatedShot) {
+    var idx = currentProject.shots.findIndex(function (s) { return s.id === updatedShot.id; });
+    if (idx !== -1) currentProject.shots[idx] = updatedShot;
+    renderProject();
+  }
+
+  function pollShotVideo(shotId) {
+    var tries = 0;
+    var timer = setInterval(function () {
+      tries++;
+      api('/api/miateo/shot-video?projectId=' + encodeURIComponent(currentProject.id) + '&shotId=' + encodeURIComponent(shotId)).then(function (res) {
+        if (!res.data) return;
+        if (res.data.shot) patchShot(res.data.shot);
+        if (res.data.status === 'ready' || res.data.status === 'failed' || tries > 90) clearInterval(timer);
+      }).catch(function () {});
+    }, 4000);
+  }
+
+  q('regenStoryBtn').addEventListener('click', function () {
+    if (!confirm(L('Dette skriver et helt nytt manus og storyboard, og overskriver det som er der nå. Fortsette?', 'This writes a brand new script and storyboard, overwriting what is there now. Continue?'))) return;
+    var body = { idea: currentProject.input.idea, ageBand: currentProject.input.ageBand, lang: currentProject.input.lang, videoType: currentProject.input.videoType, length: currentProject.input.length, projectId: currentProject.id };
+    paidAction('/api/miateo/story', body, L('Dette skriver manuset på nytt med Claude.', 'This rewrites the script with Claude.'), function (data) {
+      toast(L('🪄 Nytt manus laget!', '🪄 New script ready!')); openProjectDoc(data.project);
+    });
+  });
+
+  q('saveEditsBtn').addEventListener('click', function () {
+    post('/api/miateo/project', { action: 'save', project: currentProject }).then(function (res) {
+      if (res.data && res.data.error) { toast(res.data.error); return; }
+      currentProject = res.data.project; toast(L('💾 Lagret', '💾 Saved')); renderProject();
+    });
+  });
+
+  q('qcBtn').addEventListener('click', function () {
+    post('/api/miateo/qc', { projectId: currentProject.id }).then(function (res) {
+      var box = q('qcResults'); box.innerHTML = '';
+      if (!res.data || !res.data.issues) { toast(L('Kunne ikke kjøre sjekken', 'Could not run the check')); return; }
+      if (!res.data.issues.length) { box.innerHTML = '<div class="note">' + L('✅ Ingen problemer funnet.', '✅ No issues found.') + '</div>'; return; }
+      res.data.issues.forEach(function (i) {
+        var d = document.createElement('div'); d.className = 'issue ' + i.severity; d.textContent = (i.shotId ? '[' + i.shotId.slice(0, 10) + '] ' : '') + i.message;
+        box.appendChild(d);
+      });
+    });
+  });
+
+  q('approveBtn').addEventListener('click', function () {
+    post('/api/miateo/project', { action: 'approve', id: currentProject.id }).then(function (res) {
+      if (res.data && res.data.error) { toast(res.data.error); return; }
+      currentProject = res.data.project; toast(L('🔒 Storyboard godkjent', '🔒 Storyboard approved')); renderProject();
+    });
+  });
+
+  q('renderBtn').addEventListener('click', function () {
+    post('/api/miateo/render', { projectId: currentProject.id }).then(function (res) {
+      var box = q('renderResults'); box.innerHTML = '';
+      var d = res.data || {};
+      if (d.requiresInfrastructure) {
+        var n = document.createElement('div'); n.className = 'note gold';
+        n.innerHTML = '<b>' + L('Alle shot er klare, men sammenstilling er ikke bygget ennå', 'All shots are ready, but assembly is not built yet') + '</b><br>' + d.detail + '<br><br>' + d.manualWorkaround;
+        box.appendChild(n);
+      } else if (d.missingShotIds) {
+        toast(L('Ikke alle shot har ferdig video ennå (' + d.missingShotIds.length + ' mangler).', 'Not all shots have finished video yet (' + d.missingShotIds.length + ' missing).'));
+      } else if (d.error) { toast(d.error); }
+    });
+  });
+
+  /* ===== Init ===== */
+  if (currentLang === 'en') switchLanguage('en');
+  refreshProjects();
+  checkProviderStatus();
+})();
+</script>
+</body>
+</html>

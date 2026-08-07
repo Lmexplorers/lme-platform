@@ -18,6 +18,7 @@
     '  <a href="/lme-builder" class="sidebar-item" data-tool="builder"><span class="si-icon">✨</span><span class="si-label">LME Builder</span></a>',
     '  <a href="/bookly/" class="sidebar-item"><span class="si-icon">📚</span><span class="si-label">LME Bookly</span><span class="si-badge beta" data-no="Ny" data-en="New">Ny</span></a>',
     '  <a href="https://lme-contentstudio.pages.dev/?key=LME2026" target="_blank" rel="noopener" class="sidebar-item"><span class="si-icon">🎨</span><span class="si-label">LME Autopilot</span></a>',
+    '  <a href="/mia-teo-video-creator" class="sidebar-item"><span class="si-icon">🎬</span><span class="si-label">Mia &amp; Teo Video Creator</span><span class="si-badge beta" data-no="Ny" data-en="New">Ny</span></a>',
     '  <a href="/spor-nathalie-ai" class="sidebar-item"><span class="si-icon">💗</span><span class="si-label">Nathalie AI</span></a>',
     '  <a href="/ai-visibility" class="sidebar-item"><span class="si-icon">🔍</span><span class="si-label">AI Visibility</span><span class="si-badge beta" data-no="Ny" data-en="New">Ny</span></a>',
     '</div>',
