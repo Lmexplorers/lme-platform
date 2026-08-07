@@ -17,6 +17,16 @@
   if (window.__lmeAutoI18n) return;
   window.__lmeAutoI18n = true;
 
+  // Del direkte til engelsk: ?lang=en i lenken setter språket FØR siden
+  // rekker å vise seg (dette skriptet kjører med defer, altså før
+  // DOMContentLoaded og dermed før sidens egen init() leser lagret språk),
+  // slik at en delt lenke faktisk åpner på engelsk for mottakeren.
+  var urlLang = null;
+  try {
+    var q = new URLSearchParams(location.search).get("lang");
+    if (q === "en" || q === "no") { urlLang = q; localStorage.setItem("lme_lang", q); }
+  } catch (e) {}
+
   var PATH = location.pathname.replace(/\.html$/, "").replace(/\/+$/, "");
   if (PATH === "") PATH = "/index";
 
@@ -83,6 +93,12 @@
   }
 
   function start() {
+    // Selvhelbredende: hvis sidens egen init() av en eller annen grunn
+    // allerede rakk å kjøre før ?lang= ble satt her, tving språket likevel.
+    if (urlLang && window.LME_CURRENT_LANG !== urlLang && typeof window.lmeToggleLang === "function") {
+      window.lmeToggleLang();
+    }
+
     // 1) Hent og slå inn sidens huskede overlay.
     fetch("/api/page-i18n?id=" + encodeURIComponent(PATH))
       .then(function (r) { return r.json(); })
