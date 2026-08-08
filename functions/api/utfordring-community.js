@@ -17,6 +17,7 @@
  *   POST { action:"comment", email, name, postId, text }
  *   POST { action:"like", email, postId }
  *   POST { action:"complete_day", email, name, day, done }
+ *   POST { action:"save_note", email, name, day, text }
  *
  * Poeng/merker (samme tabell som i curriculumet): 10 poeng for hver
  * fullførte dag, 3 poeng for hvert fellesskap-innlegg ("del refleksjon
@@ -34,6 +35,7 @@ const INDEX_KEY = "utf_wall_index";
 const MAX_POSTS = 300;
 const MAX_POST_LEN = 2000;
 const MAX_COMMENT_LEN = 500;
+const MAX_NOTE_LEN = 3000;
 const CATEGORIES = ["velkommen", "utfordring", "seier", "sporsmal", "ressurser", "prat", "tilbakemelding", "annet"];
 
 const POINTS_PER_POST = 3;
@@ -113,13 +115,16 @@ async function allPosts(env) {
 function progressKey(email) { return "utf_progress:" + email; }
 
 async function readProgress(env, email) {
-  if (!email) return {};
+  if (!email) return { days: {}, notes: {} };
   try {
     const raw = await env.BUILDER_KV.get(progressKey(email));
     const p = raw ? JSON.parse(raw) : null;
-    return (p && p.days && typeof p.days === "object") ? p.days : {};
+    return {
+      days: (p && p.days && typeof p.days === "object") ? p.days : {},
+      notes: (p && p.notes && typeof p.notes === "object") ? p.notes : {},
+    };
   } catch (e) {
-    return {};
+    return { days: {}, notes: {} };
   }
 }
 
@@ -214,9 +219,9 @@ export async function onRequestGet(context) {
 
   if (view === "progress") {
     const email = cleanEmail(url.searchParams.get("email"));
-    const days = await readProgress(env, email);
-    const stats = dayStats(days);
-    return json({ days: days, points: stats.points, badges: stats.badges, doneCount: stats.doneCount });
+    const progress = await readProgress(env, email);
+    const stats = dayStats(progress.days);
+    return json({ days: progress.days, notes: progress.notes, points: stats.points, badges: stats.badges, doneCount: stats.doneCount });
   }
 
   // view === "posts" (standard)
@@ -292,11 +297,21 @@ export async function onRequestPost(context) {
   if (action === "complete_day") {
     const day = parseInt(body.day, 10);
     if (!Number.isFinite(day) || day < 0 || day > 30) return json({ error: "bad_day" }, 400);
-    const days = await readProgress(env, email);
-    if (body.done === false) delete days[day]; else days[day] = true;
-    await env.BUILDER_KV.put(progressKey(email), JSON.stringify({ days: days, updatedAt: Date.now() }));
-    const stats = dayStats(days);
-    return json({ ok: true, days: days, points: stats.points, badges: stats.badges, doneCount: stats.doneCount });
+    const progress = await readProgress(env, email);
+    if (body.done === false) delete progress.days[day]; else progress.days[day] = true;
+    await env.BUILDER_KV.put(progressKey(email), JSON.stringify({ days: progress.days, notes: progress.notes, updatedAt: Date.now() }));
+    const stats = dayStats(progress.days);
+    return json({ ok: true, days: progress.days, notes: progress.notes, points: stats.points, badges: stats.badges, doneCount: stats.doneCount });
+  }
+
+  if (action === "save_note") {
+    const day = parseInt(body.day, 10);
+    if (!Number.isFinite(day) || day < 0 || day > 30) return json({ error: "bad_day" }, 400);
+    const text = cleanText(body.text, MAX_NOTE_LEN);
+    const progress = await readProgress(env, email);
+    if (text) progress.notes[day] = text; else delete progress.notes[day];
+    await env.BUILDER_KV.put(progressKey(email), JSON.stringify({ days: progress.days, notes: progress.notes, updatedAt: Date.now() }));
+    return json({ ok: true, notes: progress.notes });
   }
 
   if (action === "like") {
