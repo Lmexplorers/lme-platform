@@ -1733,6 +1733,8 @@
     .crs-cardgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; margin: 0 0 34px; }
     .crs-mcard { display: block; text-align: left; background: #fff; border: 1px solid rgba(26,26,26,0.08); border-radius: 20px; overflow: hidden; box-shadow: 0 6px 20px rgba(26,26,26,0.06); cursor: pointer; transition: transform .2s ease, box-shadow .2s ease; padding: 0; font-family: inherit; }
     .crs-mcard:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(26,26,26,0.12); }
+    .crs-mcard.active { border-color: #E91E89; box-shadow: 0 0 0 2px #F5A8B8, 0 14px 30px rgba(233,30,137,0.18); }
+    .crs-module-content { min-height: 40px; }
     .crs-mcard-thumb { aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; font-size: 34px; color: #fff; position: relative; }
     .crs-mcard-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .crs-mcard-lock { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,.95); color: #8f2a55; font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; }
@@ -1828,6 +1830,7 @@
       }
 
       var moduleAccess = { owner: false, member: false, unlocked: {}, ready: false };
+      var wantModuleSlug = null; // satt hvis siden ble åpnet rett fra en modul-kjøp-lenke (?mk=)
 
       function groupByModule(lessons) {
         var groups = [];
@@ -1867,6 +1870,7 @@
           var mt = u.searchParams.get('mt');
           var mk = u.searchParams.get('mk');
           if (mt && mk) {
+            wantModuleSlug = moduleSlug(mk);
             stored[moduleSlug(mk)] = mt;
             try { localStorage.setItem(lsKey, JSON.stringify(stored)); } catch (e2) {}
             u.searchParams.delete('mt'); u.searchParams.delete('mk');
@@ -2016,6 +2020,16 @@
         var totalLessons = (course.lessons || []).length;
         var progress = loadProgress(course.slug || slug); // Set av globale leksjon-indekser (0-basert)
 
+        // Globale leksjon-indekser per modul, uavhengig av om gruppen er navngitt.
+        var groupStarts = [];
+        (function () {
+          var running = 0;
+          groups.forEach(function (group) {
+            groupStarts.push(running);
+            running += group.lessons.length;
+          });
+        })();
+
         // ---- Fremdrift, samlet ----
         var overallTxt, overallFill;
         if (totalLessons) {
@@ -2029,15 +2043,107 @@
           root.appendChild(sum);
         }
 
-        // ---- Modul-kortgrid: klikk et kort for å starte akkurat der ----
+        function countDone(start, count) {
+          var n = 0;
+          for (var k = start; k < start + count; k++) if (progress.has(k)) n++;
+          return n;
+        }
+        var cardRefs = []; // { fillEl, pctEl, locked, count }
+        function refreshProgressUI() {
+          var doneTotal = 0;
+          for (var k = 0; k < totalLessons; k++) if (progress.has(k)) doneTotal++;
+          if (overallTxt) {
+            var pct = totalLessons ? Math.round((doneTotal / totalLessons) * 100) : 0;
+            overallTxt.textContent = (en ? 'Progress: ' : 'Fremdrift: ') + doneTotal + '/' + totalLessons + ' (' + pct + '%)';
+            overallFill.style.width = pct + '%';
+          }
+          cardRefs.forEach(function (c) {
+            var d = countDone(c.start, c.count);
+            var p = c.count ? Math.round((d / c.count) * 100) : 0;
+            c.fillEl.style.width = p + '%';
+            c.pctEl.textContent = c.locked ? (en ? 'Locked' : 'Låst') : (d + '/' + c.count + ' · ' + p + '%');
+          });
+        }
+
+        // Bygger DOM-en for én leksjon (brukes både i kortgrid-visning og i
+        // den enkle, sekvensielle visningen for kurs uten navngitte moduler).
+        function renderLessonBox(l, i) {
+          try {
+            var box = el('div', 'crs-lesson');
+            box.appendChild(el('div', 'crs-lesson-num', (en ? 'Lesson ' : 'Leksjon ') + (i + 1)));
+            box.appendChild(el('h3', null, pick(l.title)));
+            if (l.img) {
+              var fg = el('figure', 'crs-lessonfig');
+              var fim = el('img');
+              fim.src = l.img;
+              fim.alt = pick(l.title) || '';
+              fim.loading = 'lazy';
+              fg.appendChild(fim);
+              box.appendChild(fg);
+            }
+            (l.body || []).forEach(function (p) {
+              var t = pick(p);
+              if (t.trim()) box.appendChild(richPara(t));
+            });
+            if (l.tip && pick(l.tip).trim()) box.appendChild(el('div', 'crs-tip', pick(l.tip)));
+            var doneRow = el('div', 'crs-lesson-done-row');
+            var doneBtn = document.createElement('button');
+            doneBtn.type = 'button';
+            doneBtn.className = 'crs-lesson-done-btn';
+            (function (idx, btn) {
+              function paint() {
+                var isDone = progress.has(idx);
+                btn.classList.toggle('done', isDone);
+                btn.textContent = isDone ? (en ? '✓ Completed' : '✓ Fullført') : (en ? '☐ Mark as done' : '☐ Merk som fullført');
+              }
+              btn.onclick = function () {
+                if (progress.has(idx)) progress.delete(idx); else progress.add(idx);
+                saveProgress(course.slug || slug, progress);
+                paint();
+                refreshProgressUI();
+              };
+              paint();
+            })(i, doneBtn);
+            doneRow.appendChild(doneBtn);
+            box.appendChild(doneRow);
+            return box;
+          } catch (e) {
+            return el('div', 'crs-lesson', 'Leksjon ' + (i + 1) + ' kunne ikke vises. Teknisk: ' + (e && e.message));
+          }
+        }
+
+        // Bygger modul-overskrift + (låst kort ELLER leksjonene) inn i en gitt beholder.
+        function renderGroupInto(container, group, gi) {
+          if (group.meta) {
+            var row = el('div', 'crs-module-row');
+            row.appendChild(el('div', 'crs-module', pick(group.meta)));
+            if (group.meta.lock === 'member') row.appendChild(el('span', 'crs-lock-badge member', en ? '🔒 Member' : '🔒 Medlem'));
+            else if (group.meta.lock === 'paid') row.appendChild(el('span', 'crs-lock-badge paid', '🔒 ' + (pick(group.meta.price) || (en ? 'Paid' : 'Betalt'))));
+            container.appendChild(row);
+          }
+          if (group.meta && !isModuleUnlocked(group.meta)) {
+            container.appendChild(lockCard(group.meta));
+            return;
+          }
+          group.lessons.forEach(function (l, j) {
+            container.appendChild(renderLessonBox(l, groupStarts[gi] + j));
+          });
+        }
+
+        // ---- Modul-kortgrid: klikk et kort for å ÅPNE akkurat den modulen ----
+        // (bare den valgte modulens innhold vises, ikke alt på én gang).
         var namedGroups = groups.filter(function (g) { return !!g.meta; });
-        var cardRefs = []; // { start, count, fillEl, pctEl }
         if (namedGroups.length > 1) {
           var grid = el('div', 'crs-cardgrid');
-          var runningStart = 0;
+          var contentArea = el('div', 'crs-module-content');
+          var cardEls = [];
+          function showGroup(gi) {
+            contentArea.innerHTML = '';
+            renderGroupInto(contentArea, groups[gi], gi);
+            cardEls.forEach(function (c, idx) { c.classList.toggle('active', idx === gi); });
+            contentArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
           groups.forEach(function (group, gi) {
-            var start = runningStart;
-            runningStart += group.lessons.length;
             if (!group.meta) return;
             var card = document.createElement('button');
             card.type = 'button';
@@ -2067,102 +2173,28 @@
             var ppct = el('div', 'crs-mcard-pct', '');
             body.appendChild(ppct);
             card.appendChild(body);
-            var anchorId = 'mod-' + moduleSlug(pick(group.meta)) + '-' + gi;
-            card.onclick = function () {
-              var target = document.getElementById(anchorId);
-              if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            };
+            card.onclick = function () { showGroup(gi); };
             grid.appendChild(card);
-            cardRefs.push({ start: start, count: group.lessons.length, fillEl: pfill, pctEl: ppct, anchorId: anchorId, locked: locked });
+            cardEls.push(card);
+            cardRefs.push({ start: groupStarts[gi], count: group.lessons.length, fillEl: pfill, pctEl: ppct, locked: locked });
           });
           root.appendChild(grid);
+          root.appendChild(contentArea);
+          refreshProgressUI();
+          // Åpne modulen som akkurat ble kjøpt/låst opp (?mk=), hvis den finnes
+          // og faktisk er ulåst nå. Ellers første ulåste modul, så siden
+          // aldri er tom ved besøk.
+          var wantIdx = wantModuleSlug
+            ? groups.findIndex(function (g) { return g.meta && moduleSlug(pick(g.meta)) === wantModuleSlug && isModuleUnlocked(g.meta); })
+            : -1;
+          var firstOpen = wantIdx !== -1 ? wantIdx : groups.findIndex(function (g) { return g.meta && isModuleUnlocked(g.meta); });
+          showGroup(firstOpen === -1 ? groups.findIndex(function (g) { return !!g.meta; }) : firstOpen);
+        } else {
+          // Enkle kurs uten navngitte moduler: samme flate, sekvensielle
+          // visning som før, ingen kortgrid.
+          refreshProgressUI();
+          groups.forEach(function (group, gi) { renderGroupInto(root, group, gi); });
         }
-
-        function countDone(start, count) {
-          var n = 0;
-          for (var k = start; k < start + count; k++) if (progress.has(k)) n++;
-          return n;
-        }
-        function refreshProgressUI() {
-          var doneTotal = 0;
-          for (var k = 0; k < totalLessons; k++) if (progress.has(k)) doneTotal++;
-          if (overallTxt) {
-            var pct = totalLessons ? Math.round((doneTotal / totalLessons) * 100) : 0;
-            overallTxt.textContent = (en ? 'Progress: ' : 'Fremdrift: ') + doneTotal + '/' + totalLessons + ' (' + pct + '%)';
-            overallFill.style.width = pct + '%';
-          }
-          cardRefs.forEach(function (c) {
-            var d = countDone(c.start, c.count);
-            var p = c.count ? Math.round((d / c.count) * 100) : 0;
-            c.fillEl.style.width = p + '%';
-            c.pctEl.textContent = c.locked ? (en ? 'Locked' : 'Låst') : (d + '/' + c.count + ' · ' + p + '%');
-          });
-        }
-        refreshProgressUI();
-
-        var lessonNum = 0;
-        groups.forEach(function (group, gi) {
-          if (group.meta) {
-            var row = el('div', 'crs-module-row');
-            row.id = 'mod-' + moduleSlug(pick(group.meta)) + '-' + gi;
-            row.appendChild(el('div', 'crs-module', pick(group.meta)));
-            if (group.meta.lock === 'member') row.appendChild(el('span', 'crs-lock-badge member', en ? '🔒 Member' : '🔒 Medlem'));
-            else if (group.meta.lock === 'paid') row.appendChild(el('span', 'crs-lock-badge paid', '🔒 ' + (pick(group.meta.price) || (en ? 'Paid' : 'Betalt'))));
-            root.appendChild(row);
-          }
-          if (group.meta && !isModuleUnlocked(group.meta)) {
-            root.appendChild(lockCard(group.meta));
-            lessonNum += group.lessons.length;
-            return;
-          }
-          group.lessons.forEach(function (l) {
-            lessonNum++;
-            var i = lessonNum - 1;
-            try {
-              var box = el('div', 'crs-lesson');
-              box.appendChild(el('div', 'crs-lesson-num', (en ? 'Lesson ' : 'Leksjon ') + (i + 1)));
-              box.appendChild(el('h3', null, pick(l.title)));
-              if (l.img) {
-                var fg = el('figure', 'crs-lessonfig');
-                var fim = el('img');
-                fim.src = l.img;
-                fim.alt = pick(l.title) || '';
-                fim.loading = 'lazy';
-                fg.appendChild(fim);
-                box.appendChild(fg);
-              }
-              (l.body || []).forEach(function (p) {
-                var t = pick(p);
-                if (t.trim()) box.appendChild(richPara(t));
-              });
-              if (l.tip && pick(l.tip).trim()) box.appendChild(el('div', 'crs-tip', pick(l.tip)));
-              var doneRow = el('div', 'crs-lesson-done-row');
-              var doneBtn = document.createElement('button');
-              doneBtn.type = 'button';
-              doneBtn.className = 'crs-lesson-done-btn';
-              (function (idx, btn) {
-                function paint() {
-                  var isDone = progress.has(idx);
-                  btn.classList.toggle('done', isDone);
-                  btn.textContent = isDone ? (en ? '✓ Completed' : '✓ Fullført') : (en ? '☐ Mark as done' : '☐ Merk som fullført');
-                }
-                btn.onclick = function () {
-                  if (progress.has(idx)) progress.delete(idx); else progress.add(idx);
-                  saveProgress(course.slug || slug, progress);
-                  paint();
-                  refreshProgressUI();
-                };
-                paint();
-              })(i, doneBtn);
-              doneRow.appendChild(doneBtn);
-              box.appendChild(doneRow);
-              root.appendChild(box);
-            } catch (e) {
-              var feil = el('div', 'crs-lesson', 'Leksjon ' + (i + 1) + ' kunne ikke vises. Teknisk: ' + (e && e.message));
-              root.appendChild(feil);
-            }
-          });
-        });
 
         // Kursbevis
         if (course.cert !== false) {
