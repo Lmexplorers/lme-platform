@@ -220,3 +220,17 @@ export const PAID_KURSBYGGER_SLUGS = [
   "lme-markedsfoering-med-claude",
   "lag-ditt-foerste-digitale-minikurs",
 ];
+
+/* ---- Lås opp ENKELTMODUL (Skool-stil) -----------------------------------
+   I tillegg til å kjøpe hele kurset (COURSE_PAYMENT_LINKS over) kan en
+   modul merkes "paid" i Kursbygger med sin egen pris og betalingslenke
+   (functions/api/kurs.js: lesson.module.lock/price/paylink). Når en slik
+   modul faktisk skal selges, opprett et Stripe-produkt/betalingslenke
+   (samme fremgangsmåte som resten av filen) og legg den inn her, nøyaktig
+   som COURSE_PAYMENT_LINKS: { courseId, moduleKey } — moduleKey må være
+   IDENTISK med modulnavnet (norsk) skrevet inn i Kursbygger, siden det
+   brukes til å slå opp riktig modul på kurssiden.
+   Tom liste = ingen enkeltmoduler til salgs ennå. */
+export const MODULE_PAYMENT_LINKS = {
+  // "plink_...": { courseId: "eksempel-kurs", moduleKey: "Modul 2 · Tema", lang: "no" },
+};

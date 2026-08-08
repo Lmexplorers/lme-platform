@@ -425,8 +425,17 @@ function collectCourse() {
     var g = function (sel) { return card.querySelector(sel).value.trim(); };
     var bodyNo = paras(card.querySelector('.lc-body').value);
     var bodyEn = paras(card.querySelector('.lc-body-en').value);
+    var mod = null;
+    if (g('.lc-module')) {
+      mod = { no: g('.lc-module'), en: g('.lc-module-en'), lock: card.querySelector('.lc-mod-lock').value };
+      if (mod.lock === 'paid') {
+        mod.price = { no: g('.lc-mod-price'), en: g('.lc-mod-price-en') };
+        mod.paylink = { no: g('.lc-mod-paylink'), en: g('.lc-mod-paylink-en') };
+      }
+      if (card._modThumb) mod.thumb = card._modThumb;
+    }
     var lesson = {
-      module: g('.lc-module') ? { no: g('.lc-module'), en: g('.lc-module-en') } : null,
+      module: mod,
       title: { no: g('.lc-title'), en: g('.lc-title-en') },
       body: bodyNo.map(function (t, i) { return { no: t, en: bodyEn[i] || '' }; }),
       tip: g('.lc-tip') ? { no: g('.lc-tip'), en: g('.lc-tip-en') } : null,
@@ -453,6 +462,28 @@ function addLesson(l) {
     '<label class="f" for="lc-module-' + id + '" data-no="Modul (valgfritt)" data-en="Module (optional)"></label>' +
     '<input type="text" id="lc-module-' + id + '" class="lc-module">' +
     '<div class="en-field"><input type="text" class="lc-module-en" data-ph-no="Engelsk modulnavn" data-ph-en="English module name"></div>' +
+    '<div class="lc-modmeta" style="display:none;margin-top:10px;padding:12px 14px;background:#FBF6F0;border-radius:12px;border:1px solid var(--line);">' +
+      '<label class="f" style="margin-top:0" data-no="Tilgang til denne modulen" data-en="Access to this module"></label>' +
+      '<select class="lc-mod-lock">' +
+        '<option value="free" data-no="Gratis (åpen for alle som har kurset)" data-en="Free (open to everyone with the course)"></option>' +
+        '<option value="member" data-no="Krever Inner Circle-medlemskap" data-en="Requires Inner Circle membership"></option>' +
+        '<option value="paid" data-no="Kjøp denne modulen separat" data-en="Buy this module separately"></option>' +
+      '</select>' +
+      '<div class="lc-mod-paid" style="display:none;margin-top:8px;">' +
+        '<label class="f" data-no="Pris, vises til brukeren (f.eks. 97 kr)" data-en="Price, shown to the user (e.g. $10)"></label>' +
+        '<input type="text" class="lc-mod-price" placeholder="97 kr">' +
+        '<div class="en-field"><input type="text" class="lc-mod-price-en" placeholder="$10"></div>' +
+        '<label class="f" data-no="Stripe-betalingslenke (norsk)" data-en="Stripe payment link (Norwegian)"></label>' +
+        '<input type="text" class="lc-mod-paylink" placeholder="https://buy.stripe.com/...">' +
+        '<div class="en-field"><input type="text" class="lc-mod-paylink-en" placeholder="https://buy.stripe.com/..."></div>' +
+      '</div>' +
+      '<label class="f" data-no="Modul-forsidebilde (valgfritt, vises på kortet)" data-en="Module cover image (optional, shown on the card)"></label>' +
+      '<input type="file" class="lc-modimgfile" accept="image/*">' +
+      '<div class="lc-modimgwrap" style="display:none;margin-top:8px">' +
+        '<img class="lc-modimgprev" alt="" style="max-width:180px;border-radius:12px;display:block;box-shadow:0 4px 14px rgba(26,26,26,0.12)">' +
+        '<button type="button" class="icon-btn lc-modimgrm" style="margin-top:6px" data-no="🗑 Fjern bildet" data-en="🗑 Remove image">🗑 Fjern bildet</button>' +
+      '</div>' +
+    '</div>' +
     '<label class="f" for="lc-title-' + id + '" data-no="Leksjonstittel" data-en="Lesson title"></label>' +
     '<input type="text" id="lc-title-' + id + '" class="lc-title">' +
     '<div class="en-field"><input type="text" class="lc-title-en" data-ph-no="Engelsk tittel" data-ph-en="English title"></div>' +
@@ -474,6 +505,47 @@ function addLesson(l) {
   });
   card.querySelector('.lc-module').value = (l.module && l.module.no) || '';
   card.querySelector('.lc-module-en').value = (l.module && l.module.en) || '';
+
+  /* ---- Modul-tilgang (lås/pris/betalingslenke/forsidebilde) ---- */
+  var modMeta = card.querySelector('.lc-modmeta');
+  var modLock = card.querySelector('.lc-mod-lock');
+  var modPaidBox = card.querySelector('.lc-mod-paid');
+  function syncModMeta() {
+    modMeta.style.display = card.querySelector('.lc-module').value.trim() ? '' : 'none';
+    modPaidBox.style.display = modLock.value === 'paid' ? '' : 'none';
+  }
+  card.querySelector('.lc-module').addEventListener('input', syncModMeta);
+  modLock.addEventListener('change', function () { syncModMeta(); renderPreview(); });
+  modLock.value = (l.module && l.module.lock) || 'free';
+  card.querySelector('.lc-mod-price').value = (l.module && l.module.price && l.module.price.no) || '';
+  card.querySelector('.lc-mod-price-en').value = (l.module && l.module.price && l.module.price.en) || '';
+  card.querySelector('.lc-mod-paylink').value = (l.module && l.module.paylink && l.module.paylink.no) || '';
+  card.querySelector('.lc-mod-paylink-en').value = (l.module && l.module.paylink && l.module.paylink.en) || '';
+  card._modThumb = (l.module && l.module.thumb) || '';
+  var modImgWrap = card.querySelector('.lc-modimgwrap');
+  function paintModImg() {
+    modImgWrap.style.display = card._modThumb ? '' : 'none';
+    card.querySelector('.lc-modimgprev').src = card._modThumb || '';
+  }
+  paintModImg();
+  card.querySelector('.lc-modimgfile').addEventListener('change', function () {
+    var file = this.files && this.files[0];
+    if (!file) return;
+    var input = this;
+    shrinkImage(file, function (dataUrl) {
+      card._modThumb = dataUrl;
+      input.value = '';
+      paintModImg();
+      renderPreview();
+    });
+  });
+  card.querySelector('.lc-modimgrm').onclick = function () {
+    card._modThumb = '';
+    paintModImg();
+    renderPreview();
+  };
+  syncModMeta();
+
   card.querySelector('.lc-title').value = l.title.no || '';
   card.querySelector('.lc-title-en').value = l.title.en || '';
   card.querySelector('.lc-body').value = (l.body || []).map(function (p) { return p.no; }).join('\n\n');
@@ -688,7 +760,27 @@ function renderPreview() {
   var lastModule = '';
   c.lessons.forEach(function (l, i) {
     var mod = l.module ? pick(l.module) : '';
-    if (mod && mod !== lastModule) { crs.appendChild(el('div', 'crs-module', mod)); lastModule = mod; }
+    if (mod && mod !== lastModule) {
+      var modRow = el('div');
+      modRow.style.cssText = 'display:flex;align-items:center;gap:8px;margin:20px 0 14px;';
+      modRow.appendChild(el('div', 'crs-module', mod)).style.margin = '0';
+      if (l.module.lock === 'member') {
+        var mb = el('span', null, L('🔒 Medlem', '🔒 Member'));
+        mb.style.cssText = 'font-size:11px;font-weight:700;color:#8f2a55;background:#FFE8F0;border-radius:999px;padding:5px 12px;';
+        modRow.appendChild(mb);
+      } else if (l.module.lock === 'paid') {
+        var pb = el('span', null, '🔒 ' + (pick(l.module.price) || L('Betalt', 'Paid')));
+        pb.style.cssText = 'font-size:11px;font-weight:700;color:#8a6400;background:#FFF3D2;border-radius:999px;padding:5px 12px;';
+        modRow.appendChild(pb);
+        if (!(l.module.paylink && /^https:\/\//.test(l.module.paylink.no))) {
+          var warn = el('span', null, L('⚠️ mangler betalingslenke', '⚠️ missing payment link'));
+          warn.style.cssText = 'font-size:11px;font-weight:700;color:#c0392b;';
+          modRow.appendChild(warn);
+        }
+      }
+      crs.appendChild(modRow);
+      lastModule = mod;
+    }
     var box = el('div', 'crs-lesson');
     box.appendChild(el('div', 'crs-lesson-num', L('Leksjon ', 'Lesson ') + (i + 1)));
     box.appendChild(el('h3', null, pick(l.title)));
