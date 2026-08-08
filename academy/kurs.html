@@ -1731,6 +1731,7 @@
     .crs-progress-track { flex: 1; height: 8px; border-radius: 999px; background: #F1E4E8; overflow: hidden; }
     .crs-progress-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #A4D233, #7AAE1F); width: 0%; transition: width .3s ease; }
     .crs-cardgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; margin: 0 0 34px; }
+    .crs-cardgrid[hidden] { display: none; }
     .crs-mcard { display: block; text-align: left; background: #fff; border: 1px solid rgba(26,26,26,0.08); border-radius: 20px; overflow: hidden; box-shadow: 0 6px 20px rgba(26,26,26,0.06); cursor: pointer; transition: transform .2s ease, box-shadow .2s ease; padding: 0; font-family: inherit; }
     .crs-mcard:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(26,26,26,0.12); }
     .crs-mcard.active { border-color: #E91E89; box-shadow: 0 0 0 2px #F5A8B8, 0 14px 30px rgba(233,30,137,0.18); }
@@ -1738,6 +1739,7 @@
     .crs-back-to-modules { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1px solid rgba(26,26,26,0.1); color: #E91E89; font-weight: 700; font-size: 14px; border-radius: 999px; padding: 10px 18px; margin-bottom: 20px; cursor: pointer; font-family: inherit; }
     .crs-back-to-modules:hover { background: #FFF4F6; }
     .crs-lesson-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .crs-lesson-list[hidden] { display: none; }
     .crs-lesson-row { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; background: #fff; border: 1px solid rgba(26,26,26,0.08); border-radius: 16px; padding: 16px 20px; cursor: pointer; font-family: inherit; box-shadow: 0 4px 14px rgba(26,26,26,0.04); transition: transform .15s ease, box-shadow .15s ease; }
     .crs-lesson-row:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(26,26,26,0.1); border-color: #F5A8B8; }
     .crs-lesson-row-num { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #E91E89; flex: none; }
