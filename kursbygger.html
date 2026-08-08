@@ -99,6 +99,7 @@
   .crs-lesson-num { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cerise); }
   .crs-lesson h3 { font-size: 19px; margin: 4px 0 10px; }
   .crs-lesson p { color: var(--grey); font-size: 14.5px; margin-bottom: 10px; }
+  .crs-lesson p a { color: var(--cerise); font-weight: 700; text-decoration: underline; }
   .crs-sub { font-family: var(--font-head); font-size: 15px; font-weight: 700; color: var(--cerise); margin: 12px 0 4px; }
   .crs-lessonfig { margin: 10px 0 14px; border-radius: 14px; overflow: hidden; }
   .crs-lessonfig img { width: 100%; display: block; }
@@ -618,17 +619,26 @@ function shrinkImage(file, cb) {
 }
 
 /* Avsnitt med enkel formatering: "## " gir liten rosa overskrift,
-   **ord** gir tykk skrift. Bygges som DOM-noder, aldri som raa HTML. */
+   **ord** gir tykk skrift, [tekst](https://...) gir en klikkbar lenke.
+   Bygges som DOM-noder, aldri som raa HTML. */
 function richPara(text) {
   if (/^##\s+/.test(text)) {
     return el('h4', 'crs-sub', text.replace(/^##\s+/, ''));
   }
   var p = el('p');
-  String(text).split(/(\*\*[^*]+\*\*)/g).forEach(function (part) {
+  String(text).split(/(\*\*[^*]+\*\*|\[[^\]]+\]\(https?:\/\/[^\s)]+\))/g).forEach(function (part) {
+    var link = /^\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)$/.exec(part);
     if (/^\*\*[^*]+\*\*$/.test(part)) {
       var b = document.createElement('strong');
       b.textContent = part.slice(2, -2);
       p.appendChild(b);
+    } else if (link) {
+      var a = document.createElement('a');
+      a.href = link[2];
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.textContent = link[1];
+      p.appendChild(a);
     } else if (part) {
       p.appendChild(document.createTextNode(part));
     }

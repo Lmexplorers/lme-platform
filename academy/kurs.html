@@ -1698,6 +1698,8 @@
     .crs-lesson h3 { font-size: 22px; margin: 6px 0 14px; line-height: 1.25; }
     .crs-lesson p { color: #4A4A4A; line-height: 1.75; margin-bottom: 14px; }
     .crs-lesson p:last-child { margin-bottom: 0; }
+    .crs-lesson p a { color: #E91E89; font-weight: 700; text-decoration: underline; }
+    .crs-lesson p a:hover { color: #C43D75; }
     .crs-lesson strong { color: #1A1A1A; }
     .crs-sub { font-size: 16px; font-weight: 700; color: #E91E89; margin: 16px 0 6px; }
     .crs-lessonfig { margin: 12px 0 18px; border-radius: 16px; overflow: hidden; }
@@ -1742,17 +1744,25 @@
         return e;
       }
       /* Avsnitt med enkel formatering: "## tekst" gir en liten rosa
-         overskrift, og **ord** gir tykk skrift. Samme regler som i
-         kursbyggeren. */
+         overskrift, **ord** gir tykk skrift, og [tekst](https://...) gir
+         en klikkbar lenke. Samme regler som i kursbyggeren. */
       function richPara(text) {
         text = String(text || '');
         if (/^##\s+/.test(text)) return el('h4', 'crs-sub', text.replace(/^##\s+/, ''));
         var p = el('p');
-        text.split(/(\*\*[^*]+\*\*)/g).forEach(function (part) {
+        text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\(https?:\/\/[^\s)]+\))/g).forEach(function (part) {
+          var link = /^\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)$/.exec(part);
           if (/^\*\*[^*]+\*\*$/.test(part)) {
             var b = document.createElement('strong');
             b.textContent = part.slice(2, -2);
             p.appendChild(b);
+          } else if (link) {
+            var a = document.createElement('a');
+            a.href = link[2];
+            a.target = '_blank';
+            a.rel = 'noopener';
+            a.textContent = link[1];
+            p.appendChild(a);
           } else if (part) {
             p.appendChild(document.createTextNode(part));
           }
