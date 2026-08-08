@@ -1737,6 +1737,8 @@
     .crs-module-content { min-height: 40px; }
     .crs-mcard-thumb { aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; font-size: 34px; color: #fff; position: relative; }
     .crs-mcard-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .crs-mcard-logo { width: 56px; height: 56px; border-radius: 16px; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(26,26,26,0.14); }
+    .crs-mcard-logo img { width: 40px; height: 40px; object-fit: contain; }
     .crs-mcard-lock { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,.95); color: #8f2a55; font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; }
     .crs-mcard-lock.paid { color: #8a6400; }
     .crs-mcard-body { padding: 14px 16px 16px; }
@@ -2157,7 +2159,11 @@
               thumb.textContent = '';
               thumb.appendChild(timg);
             } else {
-              thumb.textContent = '📘';
+              var logoWrap = el('div', 'crs-mcard-logo');
+              var logoImg = document.createElement('img');
+              logoImg.src = '/images/lme-logo.png'; logoImg.alt = '';
+              logoWrap.appendChild(logoImg);
+              thumb.appendChild(logoWrap);
             }
             var locked = !isModuleUnlocked(group.meta);
             if (group.meta.lock === 'member') thumb.appendChild(el('span', 'crs-mcard-lock', en ? '🔒 Member' : '🔒 Medlem'));
