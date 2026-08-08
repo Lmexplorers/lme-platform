@@ -1735,6 +1735,8 @@
     .crs-mcard:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(26,26,26,0.12); }
     .crs-mcard.active { border-color: #E91E89; box-shadow: 0 0 0 2px #F5A8B8, 0 14px 30px rgba(233,30,137,0.18); }
     .crs-module-content { min-height: 40px; }
+    .crs-back-to-modules { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1px solid rgba(26,26,26,0.1); color: #E91E89; font-weight: 700; font-size: 14px; border-radius: 999px; padding: 10px 18px; margin-bottom: 20px; cursor: pointer; font-family: inherit; }
+    .crs-back-to-modules:hover { background: #FFF4F6; }
     .crs-mcard-thumb { aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; font-size: 34px; color: #fff; position: relative; }
     .crs-mcard-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .crs-mcard-logo { width: 56px; height: 56px; border-radius: 16px; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(26,26,26,0.14); }
@@ -2138,12 +2140,22 @@
         if (namedGroups.length > 1) {
           var grid = el('div', 'crs-cardgrid');
           var contentArea = el('div', 'crs-module-content');
+          contentArea.hidden = true;
           var cardEls = [];
+          function showGrid() {
+            grid.hidden = false;
+            contentArea.hidden = true;
+            contentArea.innerHTML = '';
+          }
           function showGroup(gi) {
             contentArea.innerHTML = '';
+            var back = el('button', 'crs-back-to-modules', en ? '← All modules' : '← Alle moduler');
+            back.type = 'button';
+            back.onclick = showGrid;
+            contentArea.appendChild(back);
             renderGroupInto(contentArea, groups[gi], gi);
-            cardEls.forEach(function (c, idx) { c.classList.toggle('active', idx === gi); });
-            contentArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            grid.hidden = true;
+            contentArea.hidden = false;
           }
           groups.forEach(function (group, gi) {
             if (!group.meta) return;
@@ -2187,14 +2199,13 @@
           root.appendChild(grid);
           root.appendChild(contentArea);
           refreshProgressUI();
-          // Åpne modulen som akkurat ble kjøpt/låst opp (?mk=), hvis den finnes
-          // og faktisk er ulåst nå. Ellers første ulåste modul, så siden
-          // aldri er tom ved besøk.
+          // Som standard vises kun kortene, du velger selv hvor du vil starte.
+          // Unntak: kommer du rett fra en enkeltmodul-kjøpslenke (?mk=), åpnes
+          // akkurat den modulen automatisk, siden det er det du klikket for.
           var wantIdx = wantModuleSlug
             ? groups.findIndex(function (g) { return g.meta && moduleSlug(pick(g.meta)) === wantModuleSlug && isModuleUnlocked(g.meta); })
             : -1;
-          var firstOpen = wantIdx !== -1 ? wantIdx : groups.findIndex(function (g) { return g.meta && isModuleUnlocked(g.meta); });
-          showGroup(firstOpen === -1 ? groups.findIndex(function (g) { return !!g.meta; }) : firstOpen);
+          if (wantIdx !== -1) showGroup(wantIdx); else showGrid();
         } else {
           // Enkle kurs uten navngitte moduler: samme flate, sekvensielle
           // visning som før, ingen kortgrid.
