@@ -144,6 +144,12 @@ export default {
       return handlePublish(request, env, origin);
     }
 
+    // Dagens artikkel: kalles av GitHub Actions-cron hver morgen (Fase 2).
+    // Velger tema selv, skriver GEO-artikkel, publiserer og oppdaterer sitemap.
+    if (url.pathname === "/ai/daily") {
+      return handleDaily(request, env, origin);
+    }
+
     const route = ROUTES[url.pathname];
     if (!route) {
       return json({ error: "Ukjent endepunkt." }, 404, origin);
@@ -467,22 +473,32 @@ async function handlePublish(request, env, origin) {
     return json({ error: "Mangler artikkeldata (slug/h1)." }, 400, origin);
   }
 
+  const result = await publishToRepo(env, a, lang);
+  return json({ result }, 200, origin);
+}
+
+function ghHeaders(env) {
+  return {
+    "Authorization": `Bearer ${env.GITHUB_TOKEN}`,
+    "Accept": "application/vnd.github+json",
+    "User-Agent": "LME-AI-Visibility",
+    "Content-Type": "application/json",
+  };
+}
+
+// Felles publiseringskjerne: render -> commit -> sitemap -> e-postvarsel.
+async function publishToRepo(env, a, lang) {
   const html = renderArticleHTML(a, lang);
   const path = `blog/${a.slug}.html`;
   const url = `https://lmexplorers.com/${path.replace(/\.html$/, "")}`;
 
   // 1) Commit rett til GitHub (utløser Pages-deploy)
-  let published = false, githubStatus = null;
+  let published = false, githubStatus = null, sitemapStatus = null;
   if (env.GITHUB_TOKEN) {
     const repo = env.GITHUB_REPO || "Lmexplorers/lme-platform";
     const branch = env.GITHUB_BRANCH || "main";
     const api = `https://api.github.com/repos/${repo}/contents/${path}`;
-    const gh = {
-      "Authorization": `Bearer ${env.GITHUB_TOKEN}`,
-      "Accept": "application/vnd.github+json",
-      "User-Agent": "LME-AI-Visibility",
-      "Content-Type": "application/json",
-    };
+    const gh = ghHeaders(env);
     try {
       // Finn eksisterende sha (for oppdatering); 404 = ny fil
       let sha;
@@ -504,9 +520,14 @@ async function handlePublish(request, env, origin) {
     } catch (e) {
       githubStatus = "error";
     }
+
+    // 2) Automatisk sitemap: legg den nye URL-en inn i sitemap.xml
+    if (published) {
+      sitemapStatus = await addToSitemap(env, repo, branch, url);
+    }
   }
 
-  // 2) Valgfritt: e-postvarsling via MailerSend (plattformens e-postsystem,
+  // 3) Valgfritt: e-postvarsling via MailerSend (plattformens e-postsystem,
   //    samme moenster som functions/_lib/claude-mail.js)
   let mailStatus = null;
   if (env.MAILERSEND_API_KEY) {
@@ -533,7 +554,100 @@ async function handlePublish(request, env, origin) {
     }
   }
 
-  return json({ result: { slug: a.slug, url, html, published, githubStatus, mailStatus } }, 200, origin);
+  return { slug: a.slug, url, html, published, githubStatus, sitemapStatus, mailStatus };
+}
+
+// Legger en URL inn i sitemap.xml (hopper over hvis den finnes fra foer).
+async function addToSitemap(env, repo, branch, url) {
+  try {
+    const api = `https://api.github.com/repos/${repo}/contents/sitemap.xml`;
+    const gh = ghHeaders(env);
+    const res = await fetch(`${api}?ref=${branch}`, { headers: gh });
+    if (!res.ok) return `hent-feil ${res.status}`;
+    const file = await res.json();
+    const xml = new TextDecoder().decode(
+      Uint8Array.from(atob(file.content.replace(/\n/g, "")), (c) => c.charCodeAt(0))
+    );
+    if (xml.includes(`<loc>${url}</loc>`)) return "fantes";
+    const entry = `  <url><loc>${url}</loc><priority>0.7</priority></url>\n</urlset>`;
+    const updated = xml.replace(/<\/urlset>\s*$/, entry);
+    const put = await fetch(api, {
+      method: "PUT",
+      headers: gh,
+      body: JSON.stringify({
+        message: `Sitemap: legg til ${url}`,
+        branch,
+        content: b64utf8(updated),
+        sha: file.sha,
+      }),
+    });
+    return put.ok ? "oppdatert" : `skriv-feil ${put.status}`;
+  } catch (e) {
+    return "error";
+  }
+}
+
+// =====================================================
+// Dagens artikkel — kalles av GitHub Actions-cron (Fase 2)
+// =====================================================
+// Beskyttet med DAILY_KEY (Worker-secret, samme verdi som GitHub-secreten).
+// Velger selv et nytt tema (unngaar temaer som allerede er dekket i /blog),
+// veksler mellom norsk og engelsk, publiserer og oppdaterer sitemap.
+async function handleDaily(request, env, origin) {
+  const key = request.headers.get("X-Daily-Key") || "";
+  if (!env.DAILY_KEY || key !== env.DAILY_KEY) {
+    return json({ error: "Ugyldig eller manglende X-Daily-Key." }, 401, origin);
+  }
+  if (!env.GITHUB_TOKEN) {
+    return json({ error: "GITHUB_TOKEN mangler paa workeren." }, 500, origin);
+  }
+
+  const repo = env.GITHUB_REPO || "Lmexplorers/lme-platform";
+  const branch = env.GITHUB_BRANCH || "main";
+
+  // Eksisterende artikler, saa vi ikke gjentar tema
+  let slugs = [];
+  try {
+    const list = await fetch(`https://api.github.com/repos/${repo}/contents/blog?ref=${branch}`, {
+      headers: ghHeaders(env),
+    });
+    if (list.ok) slugs = (await list.json()).map((f) => f.name.replace(/\.html$/, ""));
+  } catch (e) { /* tom liste er greit */ }
+
+  // Veksle spraak: partalls-dato = engelsk, oddetall = norsk
+  const lang = new Date().getUTCDate() % 2 === 0 ? "en" : "no";
+
+  const prompt = `Språk: ${langName(lang)}.
+Velg SELV ett nytt, søkbart tema for LME-bloggen innen: Montessori hjemme,
+Montessori-aktiviteter etter alder, norskopplæring for barn, tospråklige barn,
+natur og barn, eller Mia & Teo-universet. Temaet skal IKKE overlappe med disse
+eksisterende artiklene: ${slugs.join(", ") || "(ingen ennå)"}.
+Skriv deretter en komplett, GEO-optimalisert artikkel. Returner KUN gyldig JSON:
+{
+ "seoTitle":"max 60 tegn",
+ "metaDescription":"max 155 tegn",
+ "slug":"kebab-case, unik",
+ "h1":"...",
+ "intro":"answer-first, 2-3 setninger",
+ "sections":[{"h2":"...","body":"2-4 avsnitt","h3":[]}],
+ "faq":[{"q":"...","a":"..."}],
+ "cta":{"text":"...","area":"academy|library|shop|innercircle","url":"/biblioteket"}
+}
+Krav: minst 4 seksjoner, minst 4 FAQ, naturlig tone, faktabasert. Ingen tekst utenfor JSON.`;
+
+  try {
+    const raw = await callClaude(env, `${BRAND_CONTEXT}\n${GEO_RULES}\nDu er LMEs innholdsforfatter.`, prompt, 4096);
+    const a = JSON.parse((raw.match(/\{[\s\S]*\}/) || [raw])[0]);
+    if (!a.slug || !a.h1) {
+      return json({ error: "AI-svaret manglet slug/h1.", raw: raw.slice(0, 300) }, 502, origin);
+    }
+    if (slugs.includes(a.slug)) a.slug = `${a.slug}-2`;
+
+    const result = await publishToRepo(env, a, lang);
+    return json({ result }, 200, origin);
+  } catch (e) {
+    return json({ error: "Dagens artikkel feilet: " + String(e).slice(0, 200) }, 502, origin);
+  }
 }
 
 // =====================================================

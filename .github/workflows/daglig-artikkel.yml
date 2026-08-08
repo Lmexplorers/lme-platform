@@ -1,0 +1,38 @@
+name: Daglig AI-artikkel
+
+# Vekker AI Visibility-workeren hver morgen. Workeren velger selv et nytt tema,
+# skriver en GEO-optimalisert artikkel (veksler norsk/engelsk), publiserer den
+# til /blog/ og oppdaterer sitemap.xml. Helt automatisk, ingen manuelle steg.
+#
+# Oppsett (en gang):
+#   1. Cloudflare-workeren "lme-ai-visibility" maa ha secreten DAILY_KEY.
+#   2. GitHub-repoet maa ha samme verdi som Actions-secret DAILY_KEY
+#      (Settings -> Secrets and variables -> Actions -> New repository secret).
+# Kan ogsaa kjoeres manuelt: Actions -> "Daglig AI-artikkel" -> Run workflow.
+
+on:
+  schedule:
+    - cron: "23 5 * * *"   # 07:23 norsk sommertid (06:23 vintertid)
+  workflow_dispatch:
+
+jobs:
+  publiser:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Be workeren skrive og publisere dagens artikkel
+        run: |
+          if [ -z "${{ secrets.DAILY_KEY }}" ]; then
+            echo "::error::Actions-secreten DAILY_KEY er ikke satt. Legg den inn under Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+          resp=$(curl -sS -X POST "https://lme-ai-visibility.lmexplorers.workers.dev/ai/daily" \
+            -H "X-Daily-Key: ${{ secrets.DAILY_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{}' \
+            -w "\nHTTP_STATUS:%{http_code}")
+          echo "$resp" | sed 's/HTTP_STATUS:.*//'
+          status=$(echo "$resp" | grep -o 'HTTP_STATUS:[0-9]*' | cut -d: -f2)
+          if [ "$status" != "200" ]; then
+            echo "::error::Workeren svarte med HTTP $status"
+            exit 1
+          fi
