@@ -2279,6 +2279,14 @@
         next.appendChild(el('h3', null, pick(course.outro && course.outro.title) || (en ? 'Ready for more?' : 'Klar for mer?')));
         var ot = pick(course.outro && course.outro.text);
         if (ot.trim()) next.appendChild(el('p', null, ot));
+        var outroCta = course.outro && course.outro.cta;
+        var ctaLabel = outroCta && pick(outroCta.label);
+        if (ctaLabel && ctaLabel.trim() && outroCta.href) {
+          var ctaBtn = el('a', 'btn-primary', ctaLabel);
+          ctaBtn.href = outroCta.href;
+          ctaBtn.style.marginRight = '10px';
+          next.appendChild(ctaBtn);
+        }
         var back2 = el('a', 'btn-primary', en ? '← Back to the classes' : '← Tilbake til kurs');
         back2.href = '/kurs';
         next.appendChild(back2);

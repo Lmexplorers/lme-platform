@@ -29,7 +29,7 @@
  *                  tip: {no,en}|null, img: dataURL|undefined } ],
  * (module er satt paa foerste leksjon i hver modul-gruppe; lock/price/
  *  paylink/thumb gjelder for hele modulen den aapner)
- *     outro: { title, text }
+ *     outro: { title, text, cta?: { label, href:"https://..." } }
  *   }
  */
 
@@ -87,6 +87,11 @@ export function sanitizeCourse(raw) {
     },
     updated: Date.now(),
   };
+  const ctaLabel = langField(raw.outro && raw.outro.cta && raw.outro.cta.label, 60);
+  const ctaHref = (((raw.outro && raw.outro.cta && raw.outro.cta.href) || "") + "").trim();
+  if (ctaLabel.no.trim() && /^(\/|https:\/\/)/.test(ctaHref)) {
+    course.outro.cta = { label: ctaLabel, href: ctaHref };
+  }
   (Array.isArray(raw.learn) ? raw.learn : []).slice(0, 12).forEach((li) => {
     const f = langField(li, 300);
     if (f.no.trim()) course.learn.push(f);

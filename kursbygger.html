@@ -194,6 +194,12 @@
       <textarea id="f-outro-text"></textarea>
       <div class="en-field"><textarea id="f-outro-text-en" data-ph-no="Engelsk tekst" data-ph-en="English text"></textarea></div>
 
+      <label class="f" for="f-outro-cta-label" data-no="Knapp (valgfritt)" data-en="Button (optional)">Knapp (valgfritt)</label>
+      <input type="text" id="f-outro-cta-label" data-ph-no="F.eks. Se Montessori Masterclass →" data-ph-en="E.g. See Montessori Masterclass →">
+      <div class="en-field"><input type="text" id="f-outro-cta-label-en" data-ph-no="Engelsk knappetekst" data-ph-en="English button text"></div>
+      <input type="text" id="f-outro-cta-href" data-ph-no="Lenke, f.eks. /montessori-mesterklasse" data-ph-en="Link, e.g. /montessori-mesterklasse">
+      <p class="hint" data-no="Vises som en ekstra knapp nederst i kurset, ved siden av «Tilbake til kurs». Stå tomt for ingen knapp." data-en="Shown as an extra button at the bottom of the course, next to \"Back to classes\". Leave empty for no button.">Vises som en ekstra knapp nederst i kurset, ved siden av «Tilbake til kurs». Stå tomt for ingen knapp.</p>
+
       <div class="actions">
         <button class="btn btn-soft" type="button" id="enToggle" onclick="toggleEnglish()" data-no="🇬🇧 Vis engelske felt" data-en="🇬🇧 Show English fields">🇬🇧 Vis engelske felt</button>
         <button class="btn btn-soft" type="button" onclick="autoTranslate(this)" data-no="✨ Oversett til engelsk automatisk" data-en="✨ Translate to English automatically">✨ Oversett til engelsk automatisk</button>
@@ -391,6 +397,9 @@ function loadCourse(c, isNew) {
   q('f-outro-title-en').value = (c.outro && c.outro.title.en) || '';
   q('f-outro-text').value = (c.outro && c.outro.text.no) || '';
   q('f-outro-text-en').value = (c.outro && c.outro.text.en) || '';
+  q('f-outro-cta-label').value = (c.outro && c.outro.cta && c.outro.cta.label.no) || '';
+  q('f-outro-cta-label-en').value = (c.outro && c.outro.cta && c.outro.cta.label.en) || '';
+  q('f-outro-cta-href').value = (c.outro && c.outro.cta && c.outro.cta.href) || '';
   q('lessonList').innerHTML = '';
   (c.lessons || []).forEach(function (l) { addLesson(l); });
   q('deleteBtn').style.display = isNew ? 'none' : '';
@@ -415,7 +424,11 @@ function collectCourse() {
     lessons: [],
     outro: {
       title: { no: q('f-outro-title').value.trim(), en: q('f-outro-title-en').value.trim() },
-      text: { no: q('f-outro-text').value.trim(), en: q('f-outro-text-en').value.trim() }
+      text: { no: q('f-outro-text').value.trim(), en: q('f-outro-text-en').value.trim() },
+      cta: {
+        label: { no: q('f-outro-cta-label').value.trim(), en: q('f-outro-cta-label-en').value.trim() },
+        href: q('f-outro-cta-href').value.trim()
+      }
     }
   };
   var learnNo = lines(q('f-learn').value);
@@ -608,7 +621,7 @@ function autoTranslate(btn) {
   need(c.title); need(c.kicker); need(c.lede);
   c.learn.forEach(need);
   c.lessons.forEach(function (l) { need(l.module); need(l.title); need(l.tip); (l.body || []).forEach(need); });
-  need(c.outro.title); need(c.outro.text);
+  need(c.outro.title); need(c.outro.text); need(c.outro.cta && c.outro.cta.label);
   if (!texts.length) { toast(L('Alt har allerede engelsk tekst. 🌟', 'Everything already has English text. 🌟')); return; }
   btn.disabled = true;
   var all = {};
@@ -644,6 +657,7 @@ function fillEnglish(map) {
   }
   fill('f-title', 'f-title-en'); fill('f-kicker', 'f-kicker-en'); fill('f-lede', 'f-lede-en');
   fill('f-outro-title', 'f-outro-title-en'); fill('f-outro-text', 'f-outro-text-en');
+  fill('f-outro-cta-label', 'f-outro-cta-label-en');
   if (!q('f-learn-en').value.trim()) {
     q('f-learn-en').value = lines(q('f-learn').value).map(function (t) { return map[t] || ''; }).join('\n');
   }
@@ -808,6 +822,12 @@ function renderPreview() {
   var next = el('div', 'crs-next');
   next.appendChild(el('h3', null, pick(c.outro.title) || L('Klar for mer?', 'Ready for more?')));
   if (pick(c.outro.text)) next.appendChild(el('p', null, pick(c.outro.text)));
+  if (c.outro.cta && pick(c.outro.cta.label) && c.outro.cta.href) {
+    var ctaBtn = el('a', 'btn-primary', pick(c.outro.cta.label));
+    ctaBtn.href = c.outro.cta.href;
+    ctaBtn.style.display = 'inline-block';
+    next.appendChild(ctaBtn);
+  }
   crs.appendChild(next);
 
   frame.appendChild(crs);
