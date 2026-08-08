@@ -2083,10 +2083,10 @@
         <li><strong>Sjekkliste før lansering:</strong> en samlet sjekkliste fra idé til publisert og testet system</li>
       </ul>
       <div class="crs-bonus-downloads">
-        <a class="crs-bonus-dl" href="/funnel/nedlasting/LME-Voks-epostlisten-arbeidsbok.pdf" download>Last ned arbeidsboken</a>
-        <a class="crs-bonus-dl" href="/funnel/nedlasting/LME-Voks-epostlisten-tekstmaler.pdf" download>Last ned tekstmalene</a>
-        <a class="crs-bonus-dl" href="/funnel/nedlasting/LME-Voks-epostlisten-idebank.pdf" download>Last ned idébanken</a>
-        <a class="crs-bonus-dl" href="/funnel/nedlasting/LME-Voks-epostlisten-sjekkliste.pdf" download>Last ned sjekklisten</a>
+        <a class="crs-bonus-dl" href="/funnel/nedlasting/LME-Voks-epostlisten-arbeidsbok.pdf" data-en-href="/funnel/nedlasting/LME-Voks-epostlisten-arbeidsbok-EN.pdf" download>Last ned arbeidsboken</a>
+        <a class="crs-bonus-dl" href="/funnel/nedlasting/LME-Voks-epostlisten-tekstmaler.pdf" data-en-href="/funnel/nedlasting/LME-Voks-epostlisten-tekstmaler-EN.pdf" download>Last ned tekstmalene</a>
+        <a class="crs-bonus-dl" href="/funnel/nedlasting/LME-Voks-epostlisten-idebank.pdf" data-en-href="/funnel/nedlasting/LME-Voks-epostlisten-idebank-EN.pdf" download>Last ned idébanken</a>
+        <a class="crs-bonus-dl" href="/funnel/nedlasting/LME-Voks-epostlisten-sjekkliste.pdf" data-en-href="/funnel/nedlasting/LME-Voks-epostlisten-sjekkliste-EN.pdf" download>Last ned sjekklisten</a>
       </div>
     </div>
 
@@ -2382,6 +2382,11 @@
       } else {
         el.setAttribute(attr, value);
       }
+    });
+    // LME: bytt nedlastingslenker til engelsk PDF-versjon i engelsk modus.
+    document.querySelectorAll('a[data-en-href]').forEach(function(a){
+      if (!a.dataset.noHref) a.dataset.noHref = a.getAttribute('href');
+      a.setAttribute('href', newLang === 'en' ? a.getAttribute('data-en-href') : a.dataset.noHref);
     });
     window.LME_CURRENT_LANG = newLang;
     btn.textContent = newLang === 'en' ? '🇳🇴 Norsk' : '🇬🇧 English';

@@ -1936,7 +1936,7 @@
         <li><strong>Arbeidsbok:</strong> plass til å planlegge ditt eget prosjekt, modul for modul, med refleksjonsspørsmål og en sjekkliste for hver del</li>
       </ul>
       <div class="crs-bonus-downloads">
-        <a class="crs-bonus-dl" href="/funnel/nedlasting/LME-Claude-Code-arbeidsbok.pdf" download>Last ned arbeidsboken</a>
+        <a class="crs-bonus-dl" href="/funnel/nedlasting/LME-Claude-Code-arbeidsbok.pdf" data-en-href="/funnel/nedlasting/LME-Claude-Code-arbeidsbok-EN.pdf" download>Last ned arbeidsboken</a>
       </div>
     </div>
 
@@ -2233,6 +2233,11 @@
       } else {
         el.setAttribute(attr, value);
       }
+    });
+    // LME: bytt nedlastingslenker til engelsk PDF-versjon i engelsk modus.
+    document.querySelectorAll('a[data-en-href]').forEach(function(a){
+      if (!a.dataset.noHref) a.dataset.noHref = a.getAttribute('href');
+      a.setAttribute('href', newLang === 'en' ? a.getAttribute('data-en-href') : a.dataset.noHref);
     });
     window.LME_CURRENT_LANG = newLang;
     btn.textContent = newLang === 'en' ? '🇳🇴 Norsk' : '🇬🇧 English';
