@@ -64,7 +64,7 @@ export const PLATTFORM_KURS = {
           "en": ""
         },
         {
-          "no": "Jeg heter Renate Dahl og er Montessori-pedagog, utdannet ved Høyskolen i Vestfold i Tønsberg. LME er bygget av meg alene, ut fra det jeg selv har lært om barn, læring og det å bygge noe eget.",
+          "no": "Jeg heter Renate Dahl og er Montessoripedagog, utdannet ved Høyskolen i Vestfold i Tønsberg. LME er bygget av meg alene, ut fra det jeg selv har lært om barn, læring og det å bygge noe eget.",
           "en": ""
         },
         {

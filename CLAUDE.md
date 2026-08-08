@@ -82,6 +82,11 @@ Renate retter ofte disse tingene manuelt. Følg reglene fra start, så slipper h
 6. **LME er kun Renate (enkeltperson).** Skriv "jeg", ikke "vi/oss", når teksten
    er fra LME/Renate til leseren. Gjelder også engelsk ("I", ikke "we").
 
+7. **Norske sammensatte ord skrives i ett ord, ikke med bindestrek.**
+   Eksempel: `Montessoripedagog`, ikke `Montessori-pedagog`. Bindestrek i
+   sammensetninger er engelsk mønster, ikke norsk. Gjelder alle sammensatte
+   ord jeg skriver, ikke bare Montessori-eksemplene.
+
 Disse reglene gjelder all norsk tekst jeg skriver: nettsider, kursinnhold,
 e-poster og lignende.
 
@@ -195,7 +200,7 @@ omtal aldri delene som frittstående produkter. Montessori-filosofien er fundame
 men LME er langt mer: læring, skaping, synlighet, salg og vekst i én sammenhengende
 arbeidsflyt: **Lær → Skap → Bli synlig → Selg → Voks.**
 
-Grunnlegger: Renate Dahl (Montessori-pedagog med utdanning fra Høyskolen i Vestfold,
+Grunnlegger: Renate Dahl (Montessoripedagog med utdanning fra Høyskolen i Vestfold,
 Tønsberg). **Nevn aldri AMI eller Association Montessori Internationale.**
 
 Plattformen har fire hovedområder, alle deler av samme økosystem:
