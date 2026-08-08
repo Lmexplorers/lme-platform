@@ -19,7 +19,7 @@ export const PLATTFORM_KURS = {
     "en": ""
   },
   "lede": {
-    "no": "Alt du trenger for å finne deg til rette på LME, fra Montessori-grunnmuren til hvert eneste verktøy i LME Studio, fellesskapet og butikken. Ta det i din egen takt, kom tilbake når du trenger det.",
+    "no": "Alt du trenger for å finne deg til rette på LME, fra Montessorigrunnmuren til hvert eneste verktøy i LME Studio, fellesskapet og butikken. Ta det i din egen takt, kom tilbake når du trenger det.",
     "en": ""
   },
   "learn": [
@@ -68,7 +68,7 @@ export const PLATTFORM_KURS = {
           "en": ""
         },
         {
-          "no": "LME er ikke bare en Montessori-plattform. Montessori-filosofien er grunnmuren, men LME er langt mer: læring, skaping, synlighet, salg og vekst i én sammenhengende arbeidsflyt. Jeg kaller den Lær → Skap → Bli synlig → Selg → Voks, og du kommer til å se den reisen igjen og igjen gjennom dette kurset.",
+          "no": "LME er ikke bare en Montessoriplattform. Montessorifilosofien er grunnmuren, men LME er langt mer: læring, skaping, synlighet, salg og vekst i én sammenhengende arbeidsflyt. Jeg kaller den Lær → Skap → Bli synlig → Selg → Voks, og du kommer til å se den reisen igjen og igjen gjennom dette kurset.",
           "en": ""
         },
         {
@@ -1029,7 +1029,7 @@ export const PLATTFORM_KURS = {
           "en": ""
         },
         {
-          "no": "Du har nå vært gjennom hele plattformen, fra Montessori-grunnmuren, gjennom hele LME Studio, til fellesskapet og butikken. Du trenger ikke huske alt, du vet nå hvor du finner det igjen.",
+          "no": "Du har nå vært gjennom hele plattformen, fra Montessorigrunnmuren, gjennom hele LME Studio, til fellesskapet og butikken. Du trenger ikke huske alt, du vet nå hvor du finner det igjen.",
           "en": ""
         }
       ],

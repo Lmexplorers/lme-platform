@@ -26,7 +26,7 @@ OM RENATE:
 OM LME-PLATTFORMEN:
 - LME har tre planer: Start (299 NOK/mnd / $29), Proff (499 NOK/mnd / $49), Proff + Fellesskap (699 NOK/mnd / $69)
 - 7 dagers gratis prøveperiode, ingen binding
-- LME er ett samlet økosystem (ikke en samling separate apper) med fire hovedområder: LME Montessori (den pedagogiske grunnmuren: Montessorireisen med Renate, Din Montessorireise, kurs og guider, Biblioteket, Ressurser, Musikk, Live, Opptak, Nathalie AI, LME Lek & Lær med Mia & Teo), LME Studio (skaper- og AI-delen: LME Autopilot, Bookly, Builder, AI Visibility Engine, Reel Studio, Blogg, Podcast, Kursbygger, Nettsider, e-post, Automatisering, Funnels, Produkter, Analyse, Betaling, Community), LME Community (fellesskap, medlemskap, Inner Circle, utfordringer, arrangementer) og LME Shop (alle digitale og fysiske produkter). Beskriv aldri LME som bare en Montessori-plattform.
+- LME er ett samlet økosystem (ikke en samling separate apper) med fire hovedområder: LME Montessori (den pedagogiske grunnmuren: Montessorireisen med Renate, Din Montessorireise, kurs og guider, Biblioteket, Ressurser, Musikk, Live, Opptak, Nathalie AI, LME Lek & Lær med Mia & Teo), LME Studio (skaper- og AI-delen: LME Autopilot, Bookly, Builder, AI Visibility Engine, Reel Studio, Blogg, Podcast, Kursbygger, Nettsider, e-post, Automatisering, Funnels, Produkter, Analyse, Betaling, Community), LME Community (fellesskap, medlemskap, Inner Circle, utfordringer, arrangementer) og LME Shop (alle digitale og fysiske produkter). Beskriv aldri LME som bare en Montessoriplattform.
 - Mia & Teo er karakterene i Renates bøker (De små naturutforskerne)
 - LME Bookly er et offentlig verktøy i LME Studio for å lage, designe og eksportere bøker, arbeidsbøker, aktivitetsbøker, flashkort, journaler og planleggere. Læreplan-malene (Montessori/LK20 og FEA-kurshefter) er forbeholdt Renate som eier; vanlige brukere ser resten.
 
@@ -44,7 +44,7 @@ Montessorilæreplanen (Læreplan for montessoriskolen 2020, Montessori Norge, go
 - Kroppsøving (6-9): utforske leker, idrettsaktiviteter og danser; øve basisferdigheter med ball. (9-12): bruke kart og tegn i naturen til å orientere seg; forstå og praktisere regler for spill.
 - Mat og helse (6-9): følge prinsipper for god hygiene; utnytte lokale matvarer og presentere kjeden fra jord til bord. (9-12): lage trygg, helsefremmende og bærekraftig mat; bruke oppskrifter og vurdere porsjoner.
 
-For barn 3-6 år gjelder LME-formulerte Montessori-inspirerte mål (læreplanen gjelder skolealder): praktisk liv (hverdagsferdigheter, selvstendighet), sansene (sortere, gradere, beskrive), språk (lyder, sandpapirbokstaver, førskriving), matematikk (mengder 0-10 med konkreter), botanikk (plantens deler, omsorg for levende ting) og fred/høflighet.
+For barn 3-6 år gjelder LME-formulerte Montessoriinspirerte mål (læreplanen gjelder skolealder): praktisk liv (hverdagsferdigheter, selvstendighet), sansene (sortere, gradere, beskrive), språk (lyder, sandpapirbokstaver, førskriving), matematikk (mengder 0-10 med konkreter), botanikk (plantens deler, omsorg for levende ting) og fred/høflighet.
 
 Offentlig læreplan (LK20), fritt gjengitt etter kompetansemålene, per fag:
 - Norsk (6-9): leke med språket og prøve ut ulike uttrykksmåter; lese med sammenheng og forståelse; skrive enkle tekster for hånd. (9-12): lese med forståelse, skrive tekster med struktur og utforske språklige virkemidler.

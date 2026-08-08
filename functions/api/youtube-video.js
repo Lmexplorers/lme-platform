@@ -135,7 +135,7 @@ function b64ToBytes(b64) {
 
 // Samme bildemotor-kjede (Gemini foretrukket, ellers OpenAI) som
 // functions/api/image.js, men med en fri, tema-drevet prompt i stedet for
-// den låste Mia&Teo/Montessori-prompten (den er laget for et annet formål,
+// den låste Mia&Teo/Montessoriprompten (den er laget for et annet formål,
 // med mindre useMiaTeo er satt, se buildCharacterImagePrompt).
 async function genSceneImage(env, prompt, aspect) {
   const asp = aspect === "9:16" ? "9:16" : "16:9";

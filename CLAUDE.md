@@ -85,7 +85,7 @@ Renate retter ofte disse tingene manuelt. Følg reglene fra start, så slipper h
 7. **Norske sammensatte ord skrives i ett ord, ikke med bindestrek.**
    Eksempel: `Montessoripedagog`, ikke `Montessori-pedagog`. Bindestrek i
    sammensetninger er engelsk mønster, ikke norsk. Gjelder alle sammensatte
-   ord jeg skriver, ikke bare Montessori-eksemplene.
+   ord jeg skriver, ikke bare Montessorieksemplene.
 
 Disse reglene gjelder all norsk tekst jeg skriver: nettsider, kursinnhold,
 e-poster og lignende.
@@ -195,8 +195,8 @@ Bruk aldri Playpen (eller systemfont/Comic Sans) på brødtekst. Aldri avvik.
 ## 🌐 Plattformstruktur — KANONISK (all AI må forstå dette)
 
 LME (Little Montessori Explorers) er **én samlet plattform / ett økosystem**, ikke
-en samling separate apper. Beskriv den aldri som "bare en Montessori-plattform", og
-omtal aldri delene som frittstående produkter. Montessori-filosofien er fundamentet,
+en samling separate apper. Beskriv den aldri som "bare en Montessoriplattform", og
+omtal aldri delene som frittstående produkter. Montessorifilosofien er fundamentet,
 men LME er langt mer: læring, skaping, synlighet, salg og vekst i én sammenhengende
 arbeidsflyt: **Lær → Skap → Bli synlig → Selg → Voks.**
 
