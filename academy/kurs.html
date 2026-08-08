@@ -1737,6 +1737,12 @@
     .crs-module-content { min-height: 40px; }
     .crs-back-to-modules { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1px solid rgba(26,26,26,0.1); color: #E91E89; font-weight: 700; font-size: 14px; border-radius: 999px; padding: 10px 18px; margin-bottom: 20px; cursor: pointer; font-family: inherit; }
     .crs-back-to-modules:hover { background: #FFF4F6; }
+    .crs-lesson-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .crs-lesson-row { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; background: #fff; border: 1px solid rgba(26,26,26,0.08); border-radius: 16px; padding: 16px 20px; cursor: pointer; font-family: inherit; box-shadow: 0 4px 14px rgba(26,26,26,0.04); transition: transform .15s ease, box-shadow .15s ease; }
+    .crs-lesson-row:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(26,26,26,0.1); border-color: #F5A8B8; }
+    .crs-lesson-row-num { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #E91E89; flex: none; }
+    .crs-lesson-row-title { flex: 1; font-size: 15.5px; font-weight: 700; color: #1A1A1A; }
+    .crs-lesson-row-check { flex: none; color: #7AAE1F; font-weight: 700; font-size: 16px; width: 20px; text-align: center; }
     .crs-mcard-thumb { aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; font-size: 34px; color: #fff; position: relative; }
     .crs-mcard-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .crs-mcard-logo { width: 56px; height: 56px; border-radius: 16px; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(26,26,26,0.14); }
@@ -2129,8 +2135,46 @@
             container.appendChild(lockCard(group.meta));
             return;
           }
+
+          // Leksjonene i modulen ligger som en klikkbar liste, ikke alle
+          // åpne på én gang. Klikk en leksjon for å åpne den, "Tilbake"
+          // fører deg tilbake til listen.
+          var listWrap = el('div', 'crs-lesson-list');
+          var detailWrap = el('div', 'crs-lesson-detail');
+          detailWrap.hidden = true;
+          container.appendChild(listWrap);
+          container.appendChild(detailWrap);
+          var rowChecks = [];
+
+          function showList() {
+            rowChecks.forEach(function (rc) { rc.el.textContent = progress.has(rc.idx) ? '✓' : ''; });
+            listWrap.hidden = false;
+            detailWrap.hidden = true;
+            detailWrap.innerHTML = '';
+          }
+          function showLesson(l, globalIdx) {
+            detailWrap.innerHTML = '';
+            var back = el('button', 'crs-back-to-modules', en ? '← Lessons' : '← Leksjonene');
+            back.type = 'button';
+            back.onclick = showList;
+            detailWrap.appendChild(back);
+            detailWrap.appendChild(renderLessonBox(l, globalIdx));
+            listWrap.hidden = true;
+            detailWrap.hidden = false;
+          }
+
           group.lessons.forEach(function (l, j) {
-            container.appendChild(renderLessonBox(l, groupStarts[gi] + j));
+            var globalIdx = groupStarts[gi] + j;
+            var rowBtn = document.createElement('button');
+            rowBtn.type = 'button';
+            rowBtn.className = 'crs-lesson-row';
+            rowBtn.appendChild(el('span', 'crs-lesson-row-num', (en ? 'Lesson ' : 'Leksjon ') + (globalIdx + 1)));
+            rowBtn.appendChild(el('span', 'crs-lesson-row-title', pick(l.title)));
+            var check = el('span', 'crs-lesson-row-check', progress.has(globalIdx) ? '✓' : '');
+            rowBtn.appendChild(check);
+            rowBtn.onclick = function () { showLesson(l, globalIdx); };
+            listWrap.appendChild(rowBtn);
+            rowChecks.push({ idx: globalIdx, el: check });
           });
         }
 
