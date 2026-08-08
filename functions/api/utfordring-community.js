@@ -1,6 +1,6 @@
 /**
  * 10 000-visninger-utfordringen — fellesskap (innlegg, kommentarer,
- * kategorier, medlemmer og ledertavle).
+ * kategorier, medlemmer, fremdrift og ledertavle).
  *
  * Enkelt, isolert fellesskap for betalende medlemmer av utfordringen,
  * helt uavhengig av Inner Circle. Medlemskap sjekkes mot
@@ -11,10 +11,21 @@
  *   GET  /api/utfordring-community?view=posts[&category=welcome]
  *   GET  /api/utfordring-community?view=members
  *   GET  /api/utfordring-community?view=leaderboard
+ *   GET  /api/utfordring-community?view=progress&email=<e-post>
  *   POST { action:"join", email, name, country }
  *   POST { action:"post", email, name, text, category }
  *   POST { action:"comment", email, name, postId, text }
  *   POST { action:"like", email, postId }
+ *   POST { action:"complete_day", email, name, day, done }
+ *
+ * Poeng/merker (samme tabell som i curriculumet): 10 poeng for hver
+ * fullførte dag, 3 poeng for hvert fellesskap-innlegg ("del refleksjon
+ * eller resultat"), 2 poeng for hver kommentar ("gi tilbakemelding"),
+ * 20 bonuspoeng for å fullføre en hel uke, 50 bonuspoeng for å fullføre
+ * alle 30 dagene. "Publisere dagens innlegg" (5 poeng i curriculumet) er
+ * IKKE tellet separat, siden selve publiseringen skjer utenfor
+ * plattformen (Instagram/TikTok/YouTube) og ikke kan verifiseres herfra;
+ * fullført dag-poenget dekker den daglige handlingen i praksis.
  */
 
 import { isOwner } from "../_lib/access.js";
@@ -24,6 +35,20 @@ const MAX_POSTS = 300;
 const MAX_POST_LEN = 2000;
 const MAX_COMMENT_LEN = 500;
 const CATEGORIES = ["velkommen", "utfordring", "seier", "sporsmal", "ressurser", "prat", "tilbakemelding", "annet"];
+
+const POINTS_PER_POST = 3;
+const POINTS_PER_COMMENT = 2;
+const POINTS_PER_DAY = 10;
+const POINTS_PER_WEEK = 20;
+const POINTS_FOR_FULL_COMPLETION = 50;
+const CHALLENGE_DAYS = Array.from({ length: 30 }, (_, i) => i + 1); // 1..30, dag 0 er forberedelse, ikke en "utfordringsdag"
+const WEEKS = [
+  { days: [1, 2, 3, 4, 5, 6, 7], badge: { no: "Retningen er satt", en: "Direction set" } },
+  { days: [8, 9, 10, 11, 12, 13, 14], badge: { no: "Innholdstester", en: "Content tester" } },
+  { days: [15, 16, 17, 18, 19, 20, 21], badge: { no: "Relasjonsbygger", en: "Relationship builder" } },
+  { days: [22, 23, 24, 25, 26, 27, 28, 29], badge: { no: "Tydelig stemme", en: "Clear voice" } },
+];
+const COMPLETE_BADGE = { no: "Challenge fullført", en: "Challenge complete" };
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -85,6 +110,56 @@ async function allPosts(env) {
   return out;
 }
 
+function progressKey(email) { return "utf_progress:" + email; }
+
+async function readProgress(env, email) {
+  if (!email) return {};
+  try {
+    const raw = await env.BUILDER_KV.get(progressKey(email));
+    const p = raw ? JSON.parse(raw) : null;
+    return (p && p.days && typeof p.days === "object") ? p.days : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+async function allProgress(env) {
+  const out = {};
+  let cursor;
+  do {
+    const list = await env.BUILDER_KV.list({ prefix: "utf_progress:", cursor: cursor });
+    for (const k of list.keys) {
+      const email = k.name.slice("utf_progress:".length);
+      const raw = await env.BUILDER_KV.get(k.name);
+      if (!raw) continue;
+      try {
+        const p = JSON.parse(raw);
+        out[email] = (p && p.days && typeof p.days === "object") ? p.days : {};
+      } catch (e) {}
+    }
+    cursor = list.list_complete ? null : list.cursor;
+  } while (cursor);
+  return out;
+}
+
+/* Poeng og merker fra dag-fullføringer: 10 p/dag, 20 p bonus per fullført
+   uke (alle dagene i WEEKS-gruppen krysset av), 50 p bonus for alle 30
+   dagene. Merker er rent avledet av dagene, ikke lagret separat. */
+function dayStats(daysMap) {
+  const done = new Set(Object.keys(daysMap || {}).filter((k) => daysMap[k]).map((k) => parseInt(k, 10)));
+  let points = done.size * POINTS_PER_DAY;
+  const badges = [];
+  WEEKS.forEach((w) => {
+    if (w.days.every((d) => done.has(d))) {
+      points += POINTS_PER_WEEK;
+      badges.push(w.badge);
+    }
+  });
+  if (done.has(30)) badges.push(COMPLETE_BADGE);
+  if (CHALLENGE_DAYS.every((d) => done.has(d))) points += POINTS_FOR_FULL_COMPLETION;
+  return { doneCount: done.size, points: points, badges: badges };
+}
+
 export async function onRequestGet(context) {
   const { env, request } = context;
   if (!env.BUILDER_KV) return json({ error: "not_configured", posts: [] }, 200);
@@ -104,21 +179,44 @@ export async function onRequestGet(context) {
     const posts = await allPosts(env);
     const points = {};
     const names = {};
+    const badgesByKey = {};
     posts.forEach((p) => {
       const key = (p.email || p.name || "").toLowerCase();
       names[key] = p.name;
-      points[key] = (points[key] || 0) + 3;
+      points[key] = (points[key] || 0) + POINTS_PER_POST;
       (p.comments || []).forEach((c) => {
         const ck = (c.email || c.name || "").toLowerCase();
         names[ck] = c.name;
-        points[ck] = (points[ck] || 0) + 1;
+        points[ck] = (points[ck] || 0) + POINTS_PER_COMMENT;
       });
     });
+    const progress = await allProgress(env);
+    Object.keys(progress).forEach((email) => {
+      const key = email.toLowerCase();
+      const stats = dayStats(progress[email]);
+      points[key] = (points[key] || 0) + stats.points;
+      badgesByKey[key] = stats.badges;
+      if (!names[key]) names[key] = ""; // navn fylles inn under om medlemmet ikke har postet ennå
+    });
+    // Fyll inn navn for medlemmer med fremdrift, men ingen innlegg ennå.
+    if (Object.keys(progress).length) {
+      const members = await allMembers(env);
+      const byEmail = {};
+      members.forEach((m) => { if (m && m.email) byEmail[m.email.toLowerCase()] = m.name; });
+      Object.keys(names).forEach((k) => { if (!names[k] && byEmail[k]) names[k] = byEmail[k]; });
+    }
     const board = Object.keys(points)
-      .map((k) => ({ name: names[k], points: points[k] }))
+      .map((k) => ({ name: names[k] || "Utforsker", points: points[k], badges: badgesByKey[k] || [] }))
       .sort((a, b) => b.points - a.points)
       .slice(0, 50);
     return json({ leaderboard: board });
+  }
+
+  if (view === "progress") {
+    const email = cleanEmail(url.searchParams.get("email"));
+    const days = await readProgress(env, email);
+    const stats = dayStats(days);
+    return json({ days: days, points: stats.points, badges: stats.badges, doneCount: stats.doneCount });
   }
 
   // view === "posts" (standard)
@@ -189,6 +287,16 @@ export async function onRequestPost(context) {
     post.comments.push({ name: name, email: email, text: text, createdAt: Date.now() });
     await env.BUILDER_KV.put("utf_wall_post:" + postId, JSON.stringify(post));
     return json({ ok: true });
+  }
+
+  if (action === "complete_day") {
+    const day = parseInt(body.day, 10);
+    if (!Number.isFinite(day) || day < 0 || day > 30) return json({ error: "bad_day" }, 400);
+    const days = await readProgress(env, email);
+    if (body.done === false) delete days[day]; else days[day] = true;
+    await env.BUILDER_KV.put(progressKey(email), JSON.stringify({ days: days, updatedAt: Date.now() }));
+    const stats = dayStats(days);
+    return json({ ok: true, days: days, points: stats.points, badges: stats.badges, doneCount: stats.doneCount });
   }
 
   if (action === "like") {
