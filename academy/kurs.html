@@ -1725,16 +1725,31 @@
     .crs-next .btn-primary { display: inline-block; }
     .crs-empty { text-align: center; color: #4A4A4A; padding: 40px 20px; }
 
-    /* ---- Modul-kortgrid: start hvor du vil, se fremdrift ---- */
+    /* ---- Fremdrift, samlet ---- */
     .crs-progress-summary { display: flex; align-items: center; gap: 12px; margin: 6px 0 20px; }
     .crs-progress-summary .txt { font-size: 13px; font-weight: 700; color: #6a5560; white-space: nowrap; }
     .crs-progress-track { flex: 1; height: 8px; border-radius: 999px; background: #F1E4E8; overflow: hidden; }
     .crs-progress-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #A4D233, #7AAE1F); width: 0%; transition: width .3s ease; }
-    .crs-cardgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; margin: 0 0 34px; }
-    .crs-mcard { display: block; text-align: left; background: #fff; border: 1px solid rgba(26,26,26,0.08); border-radius: 20px; overflow: hidden; box-shadow: 0 6px 20px rgba(26,26,26,0.06); cursor: pointer; transition: transform .2s ease, box-shadow .2s ease; padding: 0; font-family: inherit; }
-    .crs-mcard:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(26,26,26,0.12); }
-    .crs-mcard.active { border-color: #E91E89; box-shadow: 0 0 0 2px #F5A8B8, 0 14px 30px rgba(233,30,137,0.18); }
-    .crs-module-content { min-height: 40px; }
+
+    /* ---- Klassisk kurs-oppsett: fast sidemeny (uker/moduler) + innhold ---- */
+    .crs-shell { display: grid; grid-template-columns: 300px minmax(0,1fr); gap: 24px; align-items: start; margin-bottom: 28px; }
+    .crs-sidebar { position: sticky; top: 16px; display: flex; flex-direction: column; gap: 8px; background: #fff; border: 1px solid rgba(26,26,26,0.08); border-radius: 20px; padding: 14px; box-shadow: 0 6px 20px rgba(26,26,26,0.05); max-height: calc(100vh - 32px); overflow-y: auto; }
+    .crs-sidebar-sec { border-radius: 14px; overflow: hidden; }
+    .crs-sidebar-sec-head { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: none; border: none; padding: 11px 10px; cursor: pointer; font-family: inherit; border-radius: 12px; }
+    .crs-sidebar-sec-head:hover { background: #FFF4F6; }
+    .crs-sidebar-chev { flex: none; font-size: 14px; font-weight: 700; color: #E91E89; width: 14px; text-align: center; transition: transform .15s ease; }
+    .crs-sidebar-sec-head.open .crs-sidebar-chev { transform: rotate(90deg); }
+    .crs-sidebar-sec-title { flex: 1; font-size: 12.5px; font-weight: 800; letter-spacing: .03em; text-transform: uppercase; color: #1A1A1A; }
+    .crs-sidebar-sec-pct { flex: none; font-size: 11px; font-weight: 700; color: #9a8b90; }
+    .crs-sidebar-sec-body { display: flex; flex-direction: column; gap: 2px; padding: 2px 0 8px; }
+    .crs-sidebar-row { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: none; border: none; padding: 9px 10px 9px 26px; cursor: pointer; font-family: inherit; border-radius: 10px; font-size: 14px; color: #4A4A4A; }
+    .crs-sidebar-row:hover { background: #F8F0F2; }
+    .crs-sidebar-row.active { background: #FFF3D2; color: #1A1A1A; font-weight: 700; }
+    .crs-sidebar-row-check { flex: none; width: 16px; height: 16px; border-radius: 50%; border: 2px solid #dcccd1; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #fff; }
+    .crs-sidebar-row-check.done { background: #7AAE1F; border-color: #7AAE1F; }
+    .crs-sidebar-row-title { flex: 1; line-height: 1.35; }
+    .crs-sidebar-row-lock { flex: none; font-size: 12px; }
+    .crs-pane { min-width: 0; }
     .crs-back-to-modules { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1px solid rgba(26,26,26,0.1); color: #E91E89; font-weight: 700; font-size: 14px; border-radius: 999px; padding: 10px 18px; margin-bottom: 20px; cursor: pointer; font-family: inherit; }
     .crs-back-to-modules:hover { background: #FFF4F6; }
     .crs-lesson-acc-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
@@ -1748,22 +1763,10 @@
     .crs-lesson-acc-check { flex: none; color: #7AAE1F; font-weight: 700; font-size: 16px; width: 20px; text-align: center; }
     .crs-lesson-acc-body { padding: 0 20px 20px; }
     .crs-lesson-acc-body .crs-lesson { margin-bottom: 0; box-shadow: none; border-color: rgba(26,26,26,0.06); }
-    .crs-mcard-thumb { aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; font-size: 34px; color: #fff; position: relative; }
-    .crs-mcard-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .crs-mcard-logo { width: 56px; height: 56px; border-radius: 16px; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(26,26,26,0.14); }
-    .crs-mcard-logo img { width: 40px; height: 40px; object-fit: contain; }
-    .crs-mcard-lock { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,.95); color: #8f2a55; font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; }
-    .crs-mcard-lock.paid { color: #8a6400; }
-    .crs-mcard-body { padding: 14px 16px 16px; }
-    .crs-mcard-tag { font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #7AAE1F; margin-bottom: 4px; }
-    .crs-mcard-title { font-size: 15px; font-weight: 700; color: #1A1A1A; line-height: 1.3; margin-bottom: 10px; }
-    .crs-mcard-track { height: 6px; border-radius: 999px; background: #F1E4E8; overflow: hidden; margin-bottom: 6px; }
-    .crs-mcard-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #A4D233, #7AAE1F); width: 0%; }
-    .crs-mcard-pct { font-size: 11px; color: #9a8b90; font-weight: 700; }
     .crs-lesson-done-row { display: flex; justify-content: flex-end; margin-top: 10px; }
     .crs-lesson-done-btn { display: inline-flex; align-items: center; gap: 6px; background: #F3F8E8; color: #5a7a1a; border: 1px solid #dcecc0; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
     .crs-lesson-done-btn.done { background: #7AAE1F; color: #fff; border-color: #7AAE1F; }
-    @media (max-width: 560px) { .crs-cardgrid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; } }
+    @media (max-width: 780px) { .crs-shell { grid-template-columns: 1fr; } .crs-sidebar { position: static; max-height: none; } }
   </style>
 
   <section class="crs" id="kurs-innhold" data-source-wins>
@@ -2075,8 +2078,8 @@
           cardRefs.forEach(function (c) {
             var d = countDone(c.start, c.count);
             var p = c.count ? Math.round((d / c.count) * 100) : 0;
-            c.fillEl.style.width = p + '%';
-            c.pctEl.textContent = c.locked ? (en ? 'Locked' : 'Låst') : (d + '/' + c.count + ' · ' + p + '%');
+            if (c.fillEl) c.fillEl.style.width = p + '%';
+            c.pctEl.textContent = c.locked ? (en ? 'Locked' : 'Låst') : (d + '/' + c.count);
           });
         }
 
@@ -2180,81 +2183,138 @@
           });
         }
 
-        // ---- Modul-kortgrid: klikk et kort for å ÅPNE akkurat den modulen ----
-        // (bare den valgte modulens innhold vises, ikke alt på én gang).
+        // ---- Fast sidemeny (uker/moduler, alltid synlig) + innhold til høyre ----
+        // Klikk en leksjon i menyen for å vise den i ruten til høyre, uten at
+        // siden hopper eller ruller. Låste moduler viser et opplåsingskort i
+        // stedet for innholdet når du klikker dem.
         var namedGroups = groups.filter(function (g) { return !!g.meta; });
         if (namedGroups.length > 1) {
-          var grid = el('div', 'crs-cardgrid');
-          var contentArea = el('div', 'crs-module-content');
-          contentArea.hidden = true;
-          var cardEls = [];
-          function showGrid() {
-            grid.hidden = false;
-            contentArea.hidden = true;
-            contentArea.innerHTML = '';
+          var shell = el('div', 'crs-shell');
+          var sidebar = el('nav', 'crs-sidebar');
+          var pane = el('div', 'crs-pane');
+          shell.appendChild(sidebar);
+          shell.appendChild(pane);
+
+          var sectionRefs = []; // { gi, headEl, bodyEl, locked }
+          var rowRefs = []; // { gi, globalIdx, rowEl, checkEl }
+
+          function collapseAllExcept(openGi) {
+            sectionRefs.forEach(function (s) {
+              var open = s.gi === openGi;
+              s.bodyEl.hidden = !open;
+              s.headEl.classList.toggle('open', open);
+            });
           }
-          function showGroup(gi) {
-            contentArea.innerHTML = '';
-            var back = el('button', 'crs-back-to-modules', en ? '← All modules' : '← Alle moduler');
-            back.type = 'button';
-            back.onclick = showGrid;
-            contentArea.appendChild(back);
-            renderGroupInto(contentArea, groups[gi], gi);
-            grid.hidden = true;
-            contentArea.hidden = false;
+          function markActiveRow(globalIdx) {
+            rowRefs.forEach(function (r) { r.rowEl.classList.toggle('active', r.globalIdx === globalIdx); });
           }
+          function syncRowCheck(globalIdx) {
+            rowRefs.forEach(function (r) {
+              if (r.globalIdx !== globalIdx) return;
+              r.checkEl.textContent = progress.has(globalIdx) ? '✓' : '';
+              r.checkEl.classList.toggle('done', progress.has(globalIdx));
+            });
+          }
+          function paneModuleHeader(group) {
+            if (!group.meta) return null;
+            var row = el('div', 'crs-module-row');
+            row.appendChild(el('div', 'crs-module', pick(group.meta)));
+            if (group.meta.lock === 'member') row.appendChild(el('span', 'crs-lock-badge member', en ? '🔒 Member' : '🔒 Medlem'));
+            else if (group.meta.lock === 'paid') row.appendChild(el('span', 'crs-lock-badge paid', '🔒 ' + (pick(group.meta.price) || (en ? 'Paid' : 'Betalt'))));
+            return row;
+          }
+          function selectLesson(gi, j) {
+            var group = groups[gi];
+            var l = group.lessons[j];
+            var globalIdx = groupStarts[gi] + j;
+            pane.innerHTML = '';
+            var header = paneModuleHeader(group);
+            if (header) pane.appendChild(header);
+            pane.appendChild(renderLessonBox(l, globalIdx, function () { syncRowCheck(globalIdx); }));
+            collapseAllExcept(gi);
+            markActiveRow(globalIdx);
+          }
+          function selectLockedModule(gi) {
+            var group = groups[gi];
+            pane.innerHTML = '';
+            var header = paneModuleHeader(group);
+            if (header) pane.appendChild(header);
+            pane.appendChild(lockCard(group.meta));
+            collapseAllExcept(gi);
+            markActiveRow(-1);
+          }
+
           groups.forEach(function (group, gi) {
-            if (!group.meta) return;
-            var card = document.createElement('button');
-            card.type = 'button';
-            card.className = 'crs-mcard';
-            var thumb = el('div', 'crs-mcard-thumb');
-            var palette = ['#F5A8B8,#E91E89', '#A4D233,#7AAE1F', '#F7C72E,#e0a800', '#3FA9F5,#1f7fc4', '#EE9CAD,#E91E89'];
-            thumb.style.background = 'linear-gradient(135deg,' + palette[gi % palette.length] + ')';
-            if (group.meta.thumb) {
-              var timg = document.createElement('img');
-              timg.src = group.meta.thumb; timg.alt = '';
-              thumb.textContent = '';
-              thumb.appendChild(timg);
-            } else {
-              var logoWrap = el('div', 'crs-mcard-logo');
-              var logoImg = document.createElement('img');
-              logoImg.src = '/images/lme-logo.png'; logoImg.alt = '';
-              logoWrap.appendChild(logoImg);
-              thumb.appendChild(logoWrap);
+            if (!group.meta) {
+              // Leksjoner uten modulnavn (f.eks. en innledning) ligger flatt
+              // øverst i menyen, uten egen ukeoverskrift.
+              group.lessons.forEach(function (l, j) {
+                var globalIdx = groupStarts[gi] + j;
+                var rowBtn = document.createElement('button');
+                rowBtn.type = 'button';
+                rowBtn.className = 'crs-sidebar-row';
+                var check = el('span', 'crs-sidebar-row-check', '');
+                rowBtn.appendChild(check);
+                rowBtn.appendChild(el('span', 'crs-sidebar-row-title', pick(l.title)));
+                rowBtn.onclick = function () { selectLesson(gi, j); };
+                sidebar.appendChild(rowBtn);
+                rowRefs.push({ gi: gi, globalIdx: globalIdx, rowEl: rowBtn, checkEl: check });
+              });
+              return;
             }
             var locked = !isModuleUnlocked(group.meta);
-            if (group.meta.lock === 'member') thumb.appendChild(el('span', 'crs-mcard-lock', en ? '🔒 Member' : '🔒 Medlem'));
-            else if (group.meta.lock === 'paid') thumb.appendChild(el('span', 'crs-mcard-lock paid', '🔒 ' + (pick(group.meta.price) || (en ? 'Paid' : 'Betalt'))));
-            card.appendChild(thumb);
-            var body = el('div', 'crs-mcard-body');
-            body.appendChild(el('div', 'crs-mcard-tag', (en ? 'Module ' : 'Modul ') + (namedGroups.indexOf(group) + 1) + ' av ' + namedGroups.length));
-            body.appendChild(el('div', 'crs-mcard-title', pick(group.meta).replace(/^Modul\s+\d+\s*[·:.-]\s*/i, '')));
-            var ptrack = el('div', 'crs-mcard-track');
-            var pfill = el('div', 'crs-mcard-fill');
-            ptrack.appendChild(pfill);
-            body.appendChild(ptrack);
-            var ppct = el('div', 'crs-mcard-pct', '');
-            body.appendChild(ppct);
-            card.appendChild(body);
-            card.onclick = function () { showGroup(gi); };
-            grid.appendChild(card);
-            cardEls.push(card);
-            cardRefs.push({ start: groupStarts[gi], count: group.lessons.length, fillEl: pfill, pctEl: ppct, locked: locked });
+            var sec = el('div', 'crs-sidebar-sec');
+            var head = document.createElement('button');
+            head.type = 'button';
+            head.className = 'crs-sidebar-sec-head';
+            var chev = el('span', 'crs-sidebar-chev', '›');
+            head.appendChild(chev);
+            head.appendChild(el('span', 'crs-sidebar-sec-title', pick(group.meta).replace(/^Modul\s+\d+\s*[·:.-]\s*/i, '')));
+            if (locked) head.appendChild(el('span', 'crs-sidebar-row-lock', group.meta.lock === 'paid' ? '🔒' : '🔒'));
+            var pct = el('span', 'crs-sidebar-sec-pct', '');
+            head.appendChild(pct);
+            sec.appendChild(head);
+            var body = el('div', 'crs-sidebar-sec-body');
+            body.hidden = true;
+            group.lessons.forEach(function (l, j) {
+              var globalIdx = groupStarts[gi] + j;
+              var rowBtn = document.createElement('button');
+              rowBtn.type = 'button';
+              rowBtn.className = 'crs-sidebar-row';
+              var check = el('span', 'crs-sidebar-row-check', '');
+              rowBtn.appendChild(check);
+              rowBtn.appendChild(el('span', 'crs-sidebar-row-title', pick(l.title)));
+              rowBtn.onclick = locked ? function () { selectLockedModule(gi); } : function () { selectLesson(gi, j); };
+              body.appendChild(rowBtn);
+              rowRefs.push({ gi: gi, globalIdx: globalIdx, rowEl: rowBtn, checkEl: check });
+            });
+            sec.appendChild(body);
+            head.onclick = function () {
+              if (locked) { selectLockedModule(gi); return; }
+              var willOpen = body.hidden;
+              collapseAllExcept(willOpen ? gi : -1);
+            };
+            sidebar.appendChild(sec);
+            sectionRefs.push({ gi: gi, headEl: head, bodyEl: body, locked: locked });
+            cardRefs.push({ start: groupStarts[gi], count: group.lessons.length, pctEl: pct, locked: locked });
           });
-          root.appendChild(grid);
-          root.appendChild(contentArea);
+
+          root.appendChild(shell);
           refreshProgressUI();
-          // Som standard vises kun kortene, du velger selv hvor du vil starte.
-          // Unntak: kommer du rett fra en enkeltmodul-kjøpslenke (?mk=), åpnes
-          // akkurat den modulen automatisk, siden det er det du klikket for.
+          rowRefs.forEach(function (r) { syncRowCheck(r.globalIdx); });
+
+          // Standard: første leksjon i første (åpne) modul, med mindre du
+          // kommer rett fra en enkeltmodul-kjøpslenke (?mk=), da åpnes den.
           var wantIdx = wantModuleSlug
             ? groups.findIndex(function (g) { return g.meta && moduleSlug(pick(g.meta)) === wantModuleSlug && isModuleUnlocked(g.meta); })
             : -1;
-          if (wantIdx !== -1) showGroup(wantIdx); else showGrid();
+          var startGi = wantIdx !== -1 ? wantIdx : 0;
+          var startGroup = groups[startGi];
+          if (startGroup.meta && !isModuleUnlocked(startGroup.meta)) selectLockedModule(startGi);
+          else selectLesson(startGi, 0);
         } else {
-          // Enkle kurs uten navngitte moduler: samme flate, sekvensielle
-          // visning som før, ingen kortgrid.
+          // Enkle kurs uten navngitte moduler: samme flate, nedtrekkbare
+          // liste som før, ingen sidemeny.
           refreshProgressUI();
           groups.forEach(function (group, gi) { renderGroupInto(root, group, gi); });
         }
