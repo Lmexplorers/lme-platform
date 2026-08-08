@@ -2058,8 +2058,8 @@
             else if (group.meta.lock === 'paid') thumb.appendChild(el('span', 'crs-mcard-lock paid', '🔒 ' + (pick(group.meta.price) || (en ? 'Paid' : 'Betalt'))));
             card.appendChild(thumb);
             var body = el('div', 'crs-mcard-body');
-            body.appendChild(el('div', 'crs-mcard-tag', (en ? 'Module ' : 'Modul ') + (namedGroups.indexOf(group) + 1) + ' / ' + namedGroups.length));
-            body.appendChild(el('div', 'crs-mcard-title', pick(group.meta)));
+            body.appendChild(el('div', 'crs-mcard-tag', (en ? 'Module ' : 'Modul ') + (namedGroups.indexOf(group) + 1) + ' av ' + namedGroups.length));
+            body.appendChild(el('div', 'crs-mcard-title', pick(group.meta).replace(/^Modul\s+\d+\s*[·:.-]\s*/i, '')));
             var ptrack = el('div', 'crs-mcard-track');
             var pfill = el('div', 'crs-mcard-fill');
             ptrack.appendChild(pfill);
