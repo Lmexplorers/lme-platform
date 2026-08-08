@@ -1141,10 +1141,6 @@ def build(lang):
 </div>
 {sagep(t('pill_resten'))}
 {card(ul(resten_items))}
-<div class="twocol">
-  <div class="figwrap"><img src="{face_src}" alt="Ellie ansikt"><div class="figcap">{t('ansikt_bilde_caption')}</div></div>
-  <div class="figwrap"><img src="{back_src}" alt="Ellie bakfra"><div class="figcap">{t('prikker_bilde_caption')}</div></div>
-</div>
 ''', 9))
 
     # ---- SIDE 10: KROPPEN ----
@@ -1156,6 +1152,10 @@ def build(lang):
 {rosep(t('pill_kropp'))}
 {card(otab(kr_rows, head3))}
 {cme(t('kropp_ferdig'))}
+<div class="twocol" style="margin-top:1mm">
+  <div class="figwrap"><img src="{face_src}" alt="Ellie ansikt" style="width:36mm"><div class="figcap">{t('ansikt_bilde_caption')}</div></div>
+  <div class="figwrap"><img src="{back_src}" alt="Ellie bakfra" style="width:36mm"><div class="figcap">{t('prikker_bilde_caption')}</div></div>
+</div>
 ''', 10))
 
     # ---- SIDE 11: MAGEPANELET ----
