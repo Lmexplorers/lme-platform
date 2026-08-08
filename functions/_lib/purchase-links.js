@@ -193,6 +193,8 @@ export const COURSE_PAYMENT_LINKS = {
   "plink_1U1sDnLax7B8uQzqjYHNAZui": { courseId: "lme-markedsfoering-med-claude", tier: "standard", lang: "en" },
   "plink_1U1sDvLax7B8uQzqUmjOAMbN": { courseId: "lag-ditt-foerste-digitale-minikurs", tier: "standard", lang: "no" },
   "plink_1U1sDzLax7B8uQzqZRyfpuwu": { courseId: "lag-ditt-foerste-digitale-minikurs", tier: "standard", lang: "en" },
+  "plink_1U2I9tLax7B8uQzqCYi2ntGG": { courseId: "montessori-masterclass", tier: "standard", lang: "no" },
+  "plink_1U2I9uLax7B8uQzqYzTq1jUw": { courseId: "montessori-masterclass", tier: "standard", lang: "en" },
 };
 
 export const COURSE_INFO = {
@@ -220,6 +222,10 @@ export const COURSE_INFO = {
     name: { no: "Lag ditt første digitale minikurs", en: "Create your first digital mini-course" },
     url: "https://lmexplorers.com/academy/kurs?k=lag-ditt-foerste-digitale-minikurs",
   },
+  "montessori-masterclass": {
+    name: { no: "Montessori Masterclass", en: "Montessori Masterclass" },
+    url: "https://lmexplorers.com/academy/kurs?k=montessori-masterclass",
+  },
 };
 
 /* Kursbygger-slugs som krever kjøp for å lese innholdet (academy/kurs.html
@@ -228,6 +234,7 @@ export const COURSE_INFO = {
 export const PAID_KURSBYGGER_SLUGS = [
   "lme-markedsfoering-med-claude",
   "lag-ditt-foerste-digitale-minikurs",
+  "montessori-masterclass",
 ];
 
 /* ---- Lås opp ENKELTMODUL (Skool-stil) -----------------------------------

@@ -8,6 +8,12 @@
 /kurs  /academy/kurs.html  200
 /kurs/*  /academy/kurs.html  200
 /creative-studio  /creative-academy  301
+/academy/intro  /kurs/montessori-kom-i-gang  301
+/academy/3-6  /kurs/montessori-masterclass  301
+/academy/6-9  /kurs/montessori-masterclass  301
+/academy/9-12  /kurs/montessori-masterclass  301
+/academy/forberedt-miljo  /kurs/montessori-masterclass  301
+/academy/observasjon  /kurs/montessori-masterclass  301
 /rolige-morgener  /funnel/rolige-morgener/opt-in.html  200
 /ro-quiz  /funnel/ro-quiz/index.html  200
 /rolig-metoden  /funnel/rolig-metoden/index.html  200

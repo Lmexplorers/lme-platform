@@ -12,7 +12,7 @@
 // bygges) så innholdet skjules umiddelbart for et låst kurs, samme mønster
 // som js/course-gate.js bruker på de faste kurssidene.
 (function () {
-  var PAID = ["lme-markedsfoering-med-claude", "lag-ditt-foerste-digitale-minikurs"];
+  var PAID = ["lme-markedsfoering-med-claude", "lag-ditt-foerste-digitale-minikurs", "montessori-masterclass"];
   var m = location.pathname.match(/^\/kurs\/([a-z0-9\-]+)\/?$/i);
   var slug = (m && m[1]) || new URL(location.href).searchParams.get('k') || '';
   if (PAID.indexOf(slug) === -1) return;
