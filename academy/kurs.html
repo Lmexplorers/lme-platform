@@ -2079,6 +2079,7 @@
           return n;
         }
         var cardRefs = []; // { fillEl, pctEl, locked, count }
+        var certEl = null, nextEl = null;
         function refreshProgressUI() {
           var doneTotal = 0;
           for (var k = 0; k < totalLessons; k++) if (progress.has(k)) doneTotal++;
@@ -2093,6 +2094,11 @@
             c.fillEl.style.width = p + '%';
             c.pctEl.textContent = c.locked ? (en ? 'Locked' : 'Låst') : (d + '/' + c.count + ' · ' + p + '%');
           });
+          // Kursbevis og avslutning skal først vises når ALLE leksjonene i
+          // kurset (siste leksjon i siste modul) er markert som fullført.
+          var allDone = totalLessons > 0 && doneTotal === totalLessons;
+          if (certEl) certEl.hidden = !allDone;
+          if (nextEl) nextEl.hidden = !allDone;
         }
 
         // Bygger DOM-en for én leksjon (brukes både i kortgrid-visning og i
@@ -2290,6 +2296,7 @@
           btn.onclick = function () { lmeKursbevis(course.title.no || '', course.title.en || ''); };
           cert.appendChild(btn);
           root.appendChild(cert);
+          certEl = cert;
         }
 
         // Avslutning
@@ -2309,6 +2316,8 @@
         back2.href = '/kurs';
         next.appendChild(back2);
         root.appendChild(next);
+        nextEl = next;
+        refreshProgressUI();
 
         /* Rediger-knapp for Renate: vises bare i nettlesere som har brukt
            kursbyggeren (eller med #rediger). Hopper rett inn i byggeren
