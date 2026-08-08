@@ -55,6 +55,35 @@ export const PLATTFORM_KURS = {
         "en": ""
       },
       "title": {
+        "no": "Hva er LME?",
+        "en": ""
+      },
+      "body": [
+        {
+          "no": "LME står for **Little Montessori Explorers**. Det er navnet på hele plattformen du er inne på nå, og alt jeg bygger, samler seg under det samme navnet.",
+          "en": ""
+        },
+        {
+          "no": "Jeg heter Renate Dahl og er Montessori-pedagog, utdannet ved Høyskolen i Vestfold i Tønsberg. LME er bygget av meg alene, ut fra det jeg selv har lært om barn, læring og det å bygge noe eget.",
+          "en": ""
+        },
+        {
+          "no": "LME er ikke bare en Montessori-plattform. Montessori-filosofien er grunnmuren, men LME er langt mer: læring, skaping, synlighet, salg og vekst i én sammenhengende arbeidsflyt. Jeg kaller den Lær → Skap → Bli synlig → Selg → Voks, og du kommer til å se den reisen igjen og igjen gjennom dette kurset.",
+          "en": ""
+        },
+        {
+          "no": "Enten du er her for å lære mer om Montessori hjemme, skape og selge dine egne kurs og produkter, eller bli en del av fellesskapet, er du på rett sted. Resten av dette kurset viser deg nøyaktig hvor alt er.",
+          "en": ""
+        }
+      ],
+      "tip": {
+        "no": "🌸 Kom tilbake hit når du trenger å huske hvorfor LME finnes: å hjelpe deg lære, skape og vokse, med Montessori som grunnmur.",
+        "en": ""
+      }
+    },
+    {
+      "module": null,
+      "title": {
         "no": "Hvordan LME henger sammen",
         "en": ""
       },
