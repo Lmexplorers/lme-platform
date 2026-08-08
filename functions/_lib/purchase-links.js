@@ -182,6 +182,11 @@ export const COURSE_PAYMENT_LINKS = {
   "plink_1U1ronLax7B8uQzqPAtyjLaz": { courseId: "ki-pedagoger", tier: "launch", lang: "en" },
   "plink_1U1rorLax7B8uQzqDVl9503R": { courseId: "ki-pedagoger", tier: "full",   lang: "no" },
   "plink_1U1rovLax7B8uQzqQQKKxMdB": { courseId: "ki-pedagoger", tier: "full",   lang: "en" },
+  // Voks e-postlisten din
+  "plink_1U2H3gLax7B8uQzqgARx4SGb": { courseId: "epostliste", tier: "launch", lang: "no" },
+  "plink_1U2H3iLax7B8uQzqTsSkr9a0": { courseId: "epostliste", tier: "launch", lang: "en" },
+  "plink_1U2H3hLax7B8uQzquNbVhZEW": { courseId: "epostliste", tier: "full",   lang: "no" },
+  "plink_1U2H3jLax7B8uQzqsue9AdYd": { courseId: "epostliste", tier: "full",   lang: "en" },
   // Kursbygger-kurs (lagret i KV, vist på academy/kurs.html?k=<slug>). Fast
   // pris, ingen lanserings-/fullpris-splitt.
   "plink_1U1sDiLax7B8uQzqqHGOPBAe": { courseId: "lme-markedsfoering-med-claude", tier: "standard", lang: "no" },
@@ -202,6 +207,10 @@ export const COURSE_INFO = {
   "ki-pedagoger": {
     name: { no: "KI for pedagoger", en: "AI for Educators" },
     url: "https://lmexplorers.com/academy/ki-for-pedagoger",
+  },
+  "epostliste": {
+    name: { no: "Voks e-postlisten din", en: "Grow your email list" },
+    url: "https://lmexplorers.com/academy/epostliste",
   },
   "lme-markedsfoering-med-claude": {
     name: { no: "LME Markedsføring med Claude", en: "LME Marketing with Claude" },
