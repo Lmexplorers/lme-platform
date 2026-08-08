@@ -30,8 +30,8 @@ def add(key, no, en=None):
 add('caption_alle_sider', 'Stiluttrykk-referanse for alle sidene, ikke det ferdige heklede produktet.',
     'Style reference for all the sides, not the finished crocheted product.')
 add('caption_speil', 'Speil-siden, stiluttrykk-referanse.', 'The mirror side, style reference.')
-add('caption_form', 'Stjernemotivet på form-siden, stiluttrykk-referanse.',
-    'The star motif on the shapes side, style reference.')
+add('caption_form', 'Form-siden med alle fire formene, stiluttrykk-referanse.',
+    'The shapes side with all four shapes, style reference.')
 add('caption_lomme', 'Lomme-siden med miniatyr-Ellie, stiluttrykk-referanse.',
     'The pocket side with miniature Ellie, style reference.')
 add('caption_knitre', 'Knitre-siden, stiluttrykk-referanse.', 'The crinkle side, style reference.')
@@ -719,7 +719,7 @@ def build(lang):
 {card('<p>' + t('hjerte_txt') + '</p>')}
 {sagep(t('pill_stjerne_form'))}
 {card('<p>' + t('stjerne_form_txt') + '</p>')}
-<div class="figwrap"><img src="{form_src}" alt="Form-siden, stjerne" style="width:44mm"><div class="figcap">{t('caption_form')}</div></div>
+<div class="figwrap"><img src="{form_src}" alt="Form-siden, alle fire formene" style="width:44mm"><div class="figcap">{t('caption_form')}</div></div>
 ''', 10))
 
     pages.append(pg(f'''
