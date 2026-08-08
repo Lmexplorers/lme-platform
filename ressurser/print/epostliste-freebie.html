@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5 lead magnet-idéer — Little Montessori Explorers</title>
+<link rel="stylesheet" href="/bookly/css/bookly.css">
+<style>
+  @font-face{font-family:'Playpen Sans';src:url('/fonts/PlaypenSans-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:block;}
+  @font-face{font-family:'Playpen Sans';src:url('/fonts/PlaypenSans-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:block;}
+  @font-face{font-family:'Playpen Sans';src:url('/fonts/PlaypenSans-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:block;}
+</style>
+<style>
+  :root{
+    --g-ink:#3a3a3a; --g-body:#4a494a; --g-muted:#8fb0bb;
+    --g-teal:#6eb5b8; --g-pink:#df6089; --g-orange:#efa93e;
+    --g-yellow:#f4e8a8; --g-cream:#fff6f2;
+  }
+  body{background:#f2eef0;font-family:var(--font-body);}
+  .toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 20px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.06);position:sticky;top:0;z-index:5;}
+  .toolbar .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--g-pink);text-decoration:none;font-size:15px;font-family:var(--font-body);}
+  .toolbar .brand img{width:32px;height:32px;object-fit:contain;}
+  .toolbar .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+  .tbtn{border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-family:var(--font-body);cursor:pointer;text-decoration:none;font-size:14px;white-space:nowrap;}
+  .tbtn-print{background:var(--g-pink);color:#fff;box-shadow:0 4px 14px rgba(223,96,137,.35);}
+  .tbtn-back{background:#fff;color:var(--g-ink);border:1.5px solid #eee;}
+
+  .bk-stage{padding:26px 16px 60px;}
+
+  .gd-page{position:relative;width:210mm;height:297mm;margin:0 auto 22px;overflow:hidden;border-radius:2mm;box-shadow:0 6px 30px rgba(0,0,0,.10);
+    background:
+      linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px) 0 0/8mm 8mm,
+      linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px) 0 0/8mm 8mm,
+      linear-gradient(135deg,#a8d9e3 0%,#dceef4 24%,#eef0ee 50%,#eccbd6 76%,#f6c7d6 100%);
+  }
+  .gd-edge{position:absolute;top:0;bottom:0;width:6mm;}
+  .gd-edge-l{left:0;background:linear-gradient(180deg,#8ecdd6,#d9a8ba 55%,#f4e8a8);}
+  .gd-edge-r{right:0;}
+  .gd-edge span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-90deg);white-space:nowrap;font-size:6.5pt;letter-spacing:.2em;text-transform:uppercase;font-family:var(--font-body);font-weight:600;}
+  .gd-edge-l span{color:rgba(255,255,255,.9);}
+  .gd-edge-r span{color:#c7c2c4;}
+  .gd-head{position:absolute;top:8mm;left:9mm;right:9mm;text-align:center;}
+  .gd-head .l1,.gd-head .l2{font-size:6.5pt;letter-spacing:.22em;text-transform:uppercase;color:var(--g-muted);font-weight:700;font-family:var(--font-body);}
+  .gd-head .l2{margin-top:1mm;color:#b9a9b3;}
+  .gd-foot{position:absolute;bottom:7mm;left:0;right:0;text-align:center;font-size:10.5pt;font-weight:700;color:var(--g-pink);font-family:var(--font-body);}
+  .gd-inner{position:absolute;top:21mm;left:16mm;right:16mm;bottom:15mm;display:flex;flex-direction:column;}
+
+  .gd-img{width:100%;height:56mm;object-fit:cover;border-radius:4mm;border:1px solid rgba(0,0,0,.08);margin-bottom:5mm;display:block;}
+  .gd-pill{display:block;width:100%;box-sizing:border-box;text-align:center;border-radius:999px;padding:3.5mm 6mm;font-family:var(--font-display);font-weight:700;font-size:14pt;margin:0 0 5mm;}
+  .gd-pill.yellow{background:var(--g-yellow);color:var(--g-ink);}
+  .gd-pill.teal{background:var(--g-teal);color:#fff;}
+  .gd-pill.pink{background:var(--g-pink);color:#fff;}
+  .gd-text{font-family:var(--font-body);font-size:10.3pt;line-height:1.65;color:var(--g-body);margin-bottom:5mm;}
+  .gd-card{background:#fff;border-radius:4mm;border:1px solid #f0eef0;padding:5.5mm 7mm;margin-bottom:4.5mm;}
+  .gd-card.cream{background:var(--g-cream);box-shadow:none;}
+  .gd-label{font-family:var(--font-display);font-weight:700;font-size:11.5pt;margin:0 0 3mm;display:block;}
+  .gd-label.pink{color:var(--g-pink);}
+  .gd-label.teal{color:var(--g-teal);}
+  .gd-q{font-size:9.8pt;font-weight:700;color:var(--g-ink);margin:0 0 2mm;}
+  .gd-ul{list-style:none;}
+  .gd-ul li{display:flex;align-items:flex-start;gap:3mm;font-size:9.8pt;line-height:1.5;margin-bottom:2.3mm;color:var(--g-body);}
+  .gd-chk{flex:0 0 auto;width:4mm;height:4mm;border-radius:1mm;border:1.3pt solid var(--g-teal);margin-top:0.6mm;}
+  .gd-affirm{font-family:var(--font-body);font-weight:700;font-size:11pt;color:var(--g-teal);text-align:center;line-height:1.5;}
+
+  .gd-cover .gd-inner{align-items:center;justify-content:center;text-align:center;}
+  .gd-logobox{width:42mm;height:42mm;background:#fff;border-radius:5mm;border:1px solid rgba(0,0,0,.08);display:flex;align-items:center;justify-content:center;margin-bottom:6mm;padding:4mm;box-sizing:border-box;}
+  .gd-logobox img{width:100%;height:100%;object-fit:contain;}
+  .gd-cover-label{font-size:9pt;letter-spacing:.14em;text-transform:uppercase;color:#9a9a9a;margin-bottom:4mm;font-family:var(--font-body);font-weight:700;}
+  .gd-cover-title{font-family:var(--font-display);font-weight:800;font-size:32pt;text-transform:uppercase;line-height:1.16;color:var(--g-ink);margin-bottom:6mm;}
+  .gd-cover-title em{font-style:normal;color:var(--g-pink);}
+  .gd-cover-badge{display:inline-block;background:var(--g-yellow);color:var(--g-ink);font-family:var(--font-body);font-weight:700;font-size:12.5pt;border-radius:999px;padding:3.5mm 9mm;margin-bottom:12mm;}
+  .gd-cover-img{width:100%;max-width:150mm;height:58mm;object-fit:cover;border-radius:4mm;border:1px solid rgba(0,0,0,.08);margin-bottom:7mm;}
+  .gd-cover-card{background:#fff;border-radius:5mm;border:1px solid #f0eef0;padding:6mm 10mm;max-width:150mm;margin-bottom:6mm;}
+  .gd-cover-card .sub{font-size:11pt;color:var(--g-body);line-height:1.6;}
+  .gd-cover-card .accent{font-family:var(--font-body);font-weight:700;color:var(--g-teal);font-style:italic;margin-top:3mm;font-size:10.5pt;}
+  .gd-cover-author{font-family:var(--font-body);font-weight:800;color:var(--g-pink);font-size:12pt;}
+  .gd-cover-brand{color:#9a9a9a;font-size:9.5pt;margin-top:1mm;}
+  .gd-cover-domain{color:var(--g-pink);font-size:9.5pt;}
+
+  .gd-close-card{background:#fff;border:1.5px solid #f2dde5;border-radius:4mm;padding:5mm 7mm;margin-bottom:4mm;}
+  .gd-close-card h3{font-family:var(--font-display);font-weight:700;font-size:11.5pt;margin-bottom:2mm;}
+  .gd-close-card p{font-size:9.8pt;line-height:1.55;color:var(--g-body);}
+  .gd-close-card.teal h3{color:var(--g-teal);}
+  .gd-close-card.pink h3{color:var(--g-pink);}
+  .gd-close-card.orange h3{color:var(--g-orange);}
+
+  @media print{
+    .toolbar{display:none !important;}
+    #lme-acct{display:none !important;}
+    body{background:#fff;}
+    .bk-stage{padding:0;}
+    .gd-page{box-shadow:none;margin:0;border-radius:0;page-break-after:always;}
+    .gd-page:last-child{page-break-after:auto;}
+    @page{size:A4;margin:0;}
+  }
+</style>
+</head>
+<body>
+  <div class="toolbar">
+    <a class="brand" href="/academy/epostliste"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <div class="actions">
+      <button class="tbtn" id="lme-print-lang" type="button" style="background:#fce9f0;color:var(--g-pink);">🇬🇧 English</button>
+      <a class="tbtn tbtn-back" href="/academy/epostliste" data-no="‹ Til kurset" data-en="‹ Back to the course">‹ Til kurset</a>
+      <button class="tbtn tbtn-print" onclick="window.print()" data-no="⬇ Lagre som PDF" data-en="⬇ Save as PDF">⬇ Lagre som PDF</button>
+    </div>
+  </div>
+
+  <div class="bk-stage">
+
+    <!-- ===== 1: FORSIDE ===== -->
+    <div class="gd-page gd-cover">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="Gratis guide" data-en="Free guide">Gratis guide</span></div>
+      <div class="gd-inner">
+        <div class="gd-logobox"><img src="/images/lme-logo.png" alt="Little Montessori Explorers"></div>
+        <div class="gd-cover-label" data-no="LME gratisguide" data-en="LME free guide">LME gratisguide</div>
+        <h1 class="gd-cover-title" data-no="5 lead magnet-<em>idéer</em>" data-en="5 lead magnet <em>ideas</em>">5 lead magnet-<em>idéer</em></h1>
+        <div class="gd-cover-badge" data-no="For deg som vil starte e-postlisten din" data-en="For you who want to start your email list">For deg som vil starte e-postlisten din</div>
+        <img class="gd-cover-img" src="/images/mia-teo-brev.webp" alt="Mia og Teo holder en gyllen konvolutt">
+        <div class="gd-cover-card">
+          <p class="sub" data-no="Fem konkrete idéer til den aller første gaven du kan tilby i bytte mot en e-postadresse, pluss hvordan du velger den som passer deg." data-en="Five concrete ideas for the very first gift you can offer in exchange for an email address, plus how to choose the one that fits you.">Fem konkrete idéer til den aller første gaven du kan tilby i bytte mot en e-postadresse, pluss hvordan du velger den som passer deg.</p>
+          <p class="accent" data-no="· Velg én, lag den enkelt, kom i gang ·" data-en="· Pick one, keep it simple, get started ·">· Velg én, lag den enkelt, kom i gang ·</p>
+        </div>
+        <div class="gd-cover-author" data-no="Av Renate Dahl" data-en="By Renate Dahl">Av Renate Dahl</div>
+        <div class="gd-cover-brand">Little Montessori Explorers</div>
+        <div class="gd-cover-domain">lmexplorers.com</div>
+      </div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Gratis guide" data-en="Free guide">Gratis guide</div></div>
+      <div class="gd-foot">— 1 —</div>
+    </div>
+
+    <!-- ===== 2: FEM IDÉER ===== -->
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="Gratis guide" data-en="Free guide">Gratis guide</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="5 lead magnet-idéer" data-en="5 lead magnet ideas">5 lead magnet-idéer</div></div>
+      <div class="gd-inner">
+        <img class="gd-img" src="/images/banner_laer.webp" alt="Mia og Teo utforsker med forstørrelsesglass">
+        <h2 class="gd-pill yellow" data-no="En lead magnet er en gave" data-en="A lead magnet is a gift">En lead magnet er en gave</h2>
+        <div class="gd-text" data-no="Den beste lead magneten løser ett konkret problem, raskt. Ikke tenk «hele kurset mitt gratis», tenk «den ene tingen folk sliter mest med akkurat nå». Her er fem formater som fungerer godt, uansett hva du driver med." data-en="The best lead magnet solves one concrete problem, fast. Don't think “my whole course for free”, think “the one thing people struggle with most right now”. Here are five formats that work well, whatever you do.">Den beste lead magneten løser ett konkret problem, raskt. Ikke tenk «hele kurset mitt gratis», tenk «den ene tingen folk sliter mest med akkurat nå». Her er fem formater som fungerer godt, uansett hva du driver med.</div>
+
+        <div class="gd-card">
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span data-no="① Sjekklisten: en kort, konkret liste som løser ett problem på under fem minutter. Lettest å lage, raskest å bruke." data-en="① The checklist: a short, concrete list that solves one problem in under five minutes. Easiest to make, fastest to use.">① Sjekklisten: en kort, konkret liste som løser ett problem på under fem minutter. Lettest å lage, raskest å bruke.</span></li>
+            <li><span class="gd-chk"></span><span data-no="② Mini-guiden: to til fire sider som forklarer «hvordan», med noen få bilder eller eksempler." data-en="② The mini-guide: two to four pages that explain “how”, with a few images or examples.">② Mini-guiden: to til fire sider som forklarer «hvordan», med noen få bilder eller eksempler.</span></li>
+            <li><span class="gd-chk"></span><span data-no="③ Utfordringen: tre til fem dager med én liten e-post og ett lite steg hver dag. Bygger vane og tillit samtidig." data-en="③ The challenge: three to five days with one small email and one small step each day. Builds habit and trust at the same time.">③ Utfordringen: tre til fem dager med én liten e-post og ett lite steg hver dag. Bygger vane og tillit samtidig.</span></li>
+            <li><span class="gd-chk"></span><span data-no="④ Malen: et ferdig oppsett folk bare fyller inn selv, som en ukeplan eller et skjema." data-en="④ The template: a ready-made setup people simply fill in themselves, like a weekly plan or a form.">④ Malen: et ferdig oppsett folk bare fyller inn selv, som en ukeplan eller et skjema.</span></li>
+            <li><span class="gd-chk"></span><span data-no="⑤ Den korte lyd- eller videoøkten: ti til femten minutter som gir én «aha»-opplevelse, uten å kreve mye redigering." data-en="⑤ The short audio or video session: ten to fifteen minutes that gives one “aha” moment, without requiring much editing.">⑤ Den korte lyd- eller videoøkten: ti til femten minutter som gir én «aha»-opplevelse, uten å kreve mye redigering.</span></li>
+          </ul>
+        </div>
+
+        <div class="gd-card">
+          <h3 class="gd-label pink" data-no="Velg din" data-en="Choose yours">Velg din</h3>
+          <p class="gd-q" data-no="Hvilket problem ser du oftest hos dem du snakker med, og hvilket av de fem formatene over passer det problemet best?" data-en="Which problem do you see most often in the people you talk to, and which of the five formats above fits that problem best?">Hvilket problem ser du oftest hos dem du snakker med, og hvilket av de fem formatene over passer det problemet best?</p>
+        </div>
+
+        <div class="gd-card cream">
+          <p class="gd-affirm" data-no="Du trenger ikke den perfekte idéen, bare én god nok til å starte med i dag." data-en="You don't need the perfect idea, just a good enough one to start with today.">Du trenger ikke den perfekte idéen, bare én god nok til å starte med i dag.</p>
+        </div>
+      </div>
+      <div class="gd-foot">— 2 —</div>
+    </div>
+
+    <!-- ===== 3: VEIEN VIDERE ===== -->
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="Gratis guide" data-en="Free guide">Gratis guide</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Veien videre" data-en="What's next">Veien videre</div></div>
+      <div class="gd-inner">
+        <img class="gd-img" src="/images/hero_learning_tree.webp" alt="Mia og Teo ser utover et vidt landskap fra tretoppen">
+        <h2 class="gd-pill yellow" data-no="Du har idéen, nå bygger du systemet" data-en="You have the idea, now build the system">Du har idéen, nå bygger du systemet</h2>
+        <div class="gd-text" data-no="En god idé alene bygger ingen liste. Neste steg er å lage gaven ferdig, sette opp en enkel påmeldingsside, og skrive en velkomstserie som bygger tillit automatisk. Det er akkurat det du lærer, steg for steg, i «Voks e-postlisten din»." data-en="A good idea alone doesn't build a list. The next step is finishing the gift, setting up a simple sign-up page, and writing a welcome series that builds trust automatically. That's exactly what you learn, step by step, in “Grow your email list”.">En god idé alene bygger ingen liste. Neste steg er å lage gaven ferdig, sette opp en enkel påmeldingsside, og skrive en velkomstserie som bygger tillit automatisk. Det er akkurat det du lærer, steg for steg, i «Voks e-postlisten din».</div>
+
+        <div class="gd-close-card teal">
+          <h3 data-no="Hele systemet, ti moduler" data-en="The whole system, ten modules">Hele systemet, ti moduler</h3>
+          <p data-no="Fra idé til lead magnet, påmeldingsside, velkomstserie og videre vekst, alt i ditt eget tempo." data-en="From idea to lead magnet, sign-up page, welcome series and further growth, all at your own pace.">Fra idé til lead magnet, påmeldingsside, velkomstserie og videre vekst, alt i ditt eget tempo.</p>
+        </div>
+        <div class="gd-close-card pink">
+          <h3 data-no="Med arbeidsbok og maler" data-en="With workbook and templates">Med arbeidsbok og maler</h3>
+          <p data-no="Ferdige tekstmaler, en idébank og en sjekkliste følger med, så du slipper å starte på blankt ark." data-en="Ready-made text templates, an idea bank and a checklist come with it, so you don't have to start from a blank page.">Ferdige tekstmaler, en idébank og en sjekkliste følger med, så du slipper å starte på blankt ark.</p>
+        </div>
+        <div class="gd-close-card orange">
+          <h3 data-no="Jeg heier på deg" data-en="I'm cheering you on">Jeg heier på deg</h3>
+          <p data-no="Klem fra meg, Renate." data-en="Warm wishes, Renate.">Klem fra meg, Renate.</p>
+        </div>
+        <div class="gd-card cream" style="margin-top:1mm;">
+          <p class="gd-affirm" data-no="Klar for å bygge hele systemet? Se «Voks e-postlisten din» på lmexplorers.com/epostliste-kurs" data-en="Ready to build the whole system? See “Grow your email list” at lmexplorers.com/epostliste-kurs">Klar for å bygge hele systemet? Se «Voks e-postlisten din» på lmexplorers.com/epostliste-kurs</p>
+        </div>
+      </div>
+      <div class="gd-foot">— 3 —</div>
+    </div>
+
+  </div>
+<script>
+(function(){
+  function apply(lang){
+    window.__lmeLang=lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
+      el.innerHTML = (lang==='en') ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    document.documentElement.lang=lang;
+    var b=document.getElementById('lme-print-lang');
+    if(b) b.textContent = (lang==='en') ? '🇳🇴 Norsk' : '🇬🇧 English';
+    try{localStorage.setItem('lme_lang',lang);}catch(e){}
+  }
+  var saved='no';
+  try{
+    var qp=new URLSearchParams(location.search).get('lang');
+    if(qp==='en'||qp==='no'){saved=qp;try{localStorage.setItem('lme_lang',qp);}catch(e2){}}
+    else saved=localStorage.getItem('lme_lang')||'no';
+  }catch(e){}
+  var btn=document.getElementById('lme-print-lang');
+  if(btn) btn.addEventListener('click',function(){apply(window.__lmeLang==='en'?'no':'en');});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){apply(saved);});
+  else apply(saved);
+})();
+</script>
+<script src="/js/lme-account.js?v=11" defer></script>
+</body>
+</html>
