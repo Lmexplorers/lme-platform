@@ -3,7 +3,6 @@
 import base64, html, pathlib, sys, math, random
 
 BASE = pathlib.Path(__file__).parent
-PHOTO = pathlib.Path('/root/.claude/uploads/8a2defc1-69f7-5b9a-9a21-28d0d3730f69/07bb5622-IMG_2697.png')
 LANG = sys.argv[1] if len(sys.argv) > 1 else 'no'
 def L(no, en): return en if LANG == 'en' else no
 
@@ -133,7 +132,7 @@ def strip_svg(parts, total_label):
 def mini_flag(w=34):
     h = round(w*10/13)
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 20" '
-            f'style="width:{w}px;height:{h}px;border-radius:3px;box-shadow:0 1px 3px rgba(0,0,0,.25)">'
+            f'style="width:{w}px;height:{h}px;border-radius:3px">'
             f'<rect width="26" height="20" fill="{RED}"/>'
             f'<rect x="6" width="6" height="20" fill="#fff"/><rect y="7" width="26" height="6" fill="#fff"/>'
             f'<rect x="7.5" width="3" height="20" fill="{NAVY}"/><rect y="8.5" width="26" height="3" fill="{NAVY}"/>'
@@ -333,10 +332,6 @@ def dupstitch_panels():
 </div>''')
     out.append('</div>')
     return ''.join(out)
-
-# ---------- foto ----------
-photo_b64 = base64.b64encode(PHOTO.read_bytes()).decode()
-photo_src = f'data:image/png;base64,{photo_b64}'
 
 # ---------- byggeklosser ----------
 def page(body, num, right_label=None):
@@ -750,18 +745,17 @@ body {{ font-family:var(--font-body); color:#4a4a4a; }}
 .pfoot {{ position:absolute; bottom:6.5mm; left:0; right:0; text-align:center;
   font-family:var(--font-body); font-weight:700; font-size:10pt; color:#8a8a8a; }}
 
-.banner {{ background:#f5efb2; border-radius:14px; padding:3.6mm 6mm; margin:2mm 0 4.5mm;
-  box-shadow:0 1px 4px rgba(0,0,0,.08); text-align:center; }}
+.banner {{ background:#f5efb2; border-radius:14px; padding:3.6mm 6mm; margin:2mm 0 4.5mm; text-align:center; }}
 .banner h1 {{ font-family:var(--font-head); font-weight:800; font-size:17.5pt; color:{INK};
   letter-spacing:.5px; text-transform:uppercase; }}
 .pillwrap {{ text-align:center; margin:4.5mm 0 3mm; }}
 .pill {{ display:inline-block; border-radius:999px; padding:2.4mm 9mm;
   font-family:var(--font-body); font-weight:700; font-size:11pt; color:#fff;
-  letter-spacing:.5px; text-transform:uppercase; box-shadow:0 1px 4px rgba(0,0,0,.12); }}
+  letter-spacing:.5px; text-transform:uppercase; }}
 .pinkpill {{ background:{PINK}; }}
 .tealpill {{ background:{TEAL}; }}
 .card {{ background:rgba(255,255,255,.93); border:2px solid #f2bfd4; border-radius:16px;
-  padding:4mm 6mm; margin:0 0 4mm; box-shadow:0 1px 5px rgba(0,0,0,.06); }}
+  padding:4mm 6mm; margin:0 0 4mm; }}
 .cream {{ background:#fdf3ec; border:2px solid #f2bfd4; border-radius:16px;
   padding:4mm 6mm; margin:4mm 0; text-align:center; }}
 .creamtitle {{ font-family:var(--font-body); font-weight:700; font-size:11.5pt; color:{TEAL}; }}
@@ -793,12 +787,12 @@ table.tl td:first-child {{ white-space:nowrap; }}
 .runelab {{ font-family:var(--font-body); font-size:10pt; color:#777; margin-top:1mm; }}
 .flagbig {{ text-align:center; margin:3mm 0; }}
 .coverimg {{ text-align:center; margin:3mm 0 3mm; }}
-.coverimg img {{ width:104mm; border-radius:14px; box-shadow:0 3px 10px rgba(0,0,0,.18);
+.coverimg img {{ width:104mm; border-radius:14px;
   border:3mm solid #fff; }}
 .covertag {{ text-align:center; font-family:var(--font-body); font-size:8pt; letter-spacing:3px;
   color:#8a8a8a; margin:1mm 0 2.5mm; }}
 .coverbanner {{ display:flex; align-items:center; justify-content:center; gap:5mm;
-  background:#f5efb2; border-radius:16px; padding:4mm 6mm; box-shadow:0 1px 5px rgba(0,0,0,.1); }}
+  background:#f5efb2; border-radius:16px; padding:4mm 6mm; }}
 .covertitle {{ font-family:var(--font-head); font-weight:800; font-size:26pt; color:{INK}; letter-spacing:1px; }}
 .subpill {{ margin:4mm auto; width:fit-content; background:#fdf9e3; border:2.5px solid {INK};
   border-radius:999px; padding:2.2mm 10mm; font-family:var(--font-body); font-weight:700;
@@ -825,7 +819,7 @@ table.tl td:first-child {{ white-space:nowrap; }}
 .dstep p {{ font-size:9.3pt; line-height:1.45; margin-top:1.5mm; text-align:left; }}
 .dnum {{ position:absolute; top:-2.5mm; left:-1.5mm; width:7mm; height:7mm; border-radius:50%;
   background:{PINK}; color:#fff; font-family:var(--font-body); font-weight:700; font-size:10.5pt;
-  display:flex; align-items:center; justify-content:center; box-shadow:0 1px 3px rgba(0,0,0,.2); }}
+  display:flex; align-items:center; justify-content:center; }}
 .endflag {{ text-align:center; margin:4mm 0 2mm; }}
 '''
 
