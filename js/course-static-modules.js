@@ -31,7 +31,31 @@
     if (text != null) e.textContent = text;
     return e;
   }
-  var en = false; // disse sidene har foreløpig ikke språkbytte på kursteksten
+  function en() { return window.LME_CURRENT_LANG === 'en'; } // leses på nytt hver gang, ikke fastlåst ved skriptstart
+
+  // Siden bygger denne visningen (kort, leksjonsliste, åpnet leksjon) etter
+  // at sidens egen språkbytte-skript allerede har lest av all norsk tekst på
+  // siden én gang ved lasting (window.LME_ORIGINALS). Uten dette ville nytt
+  // innhold vi setter inn her aldri bli fanget opp, og forbli usett av
+  // engelsk-oversettelsen. Fanger derfor opp nye tekstnoder selv, og
+  // oversetter dem med en gang hvis siden allerede står på engelsk.
+  function i18nCapture(node) {
+    if (!node || !window.LME_ORIGINALS) return;
+    var isEn = window.LME_CURRENT_LANG === 'en';
+    var dict = window.LME_TRANSLATIONS || {};
+    var walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, null);
+    var n;
+    while ((n = walker.nextNode())) {
+      var p = n.parentElement;
+      if (!p || p.tagName === 'SCRIPT' || p.tagName === 'STYLE') continue;
+      if (n.textContent.trim().length === 0) continue;
+      if (!window.LME_ORIGINALS.has(n)) window.LME_ORIGINALS.set(n, n.textContent);
+      if (isEn) {
+        var trimmed = n.textContent.trim();
+        if (dict[trimmed]) n.textContent = n.textContent.replace(trimmed, dict[trimmed]);
+      }
+    }
+  }
 
   function init() {
     var wrap = document.querySelector('.crs-flatlessons');
@@ -79,7 +103,7 @@
       var doneTotal = 0;
       for (var k = 0; k < totalLessons; k++) if (progress.has(k)) doneTotal++;
       var pct = totalLessons ? Math.round((doneTotal / totalLessons) * 100) : 0;
-      overallTxt.textContent = (en ? 'Progress: ' : 'Fremdrift: ') + doneTotal + '/' + totalLessons + ' (' + pct + '%)';
+      overallTxt.textContent = (en() ? 'Progress: ' : 'Fremdrift: ') + doneTotal + '/' + totalLessons + ' (' + pct + '%)';
       overallFill.style.width = pct + '%';
       cardRefs.forEach(function (c) {
         var d = countDone(c.start, c.count);
@@ -98,7 +122,7 @@
       function paint() {
         var isDone = progress.has(globalIdx);
         doneBtn.classList.toggle('done', isDone);
-        doneBtn.textContent = isDone ? (en ? '✓ Completed' : '✓ Fullført') : (en ? '☐ Mark as done' : '☐ Merk som fullført');
+        doneBtn.textContent = isDone ? (en() ? '✓ Completed' : '✓ Fullført') : (en() ? '☐ Mark as done' : '☐ Merk som fullført');
       }
       doneBtn.onclick = function () {
         if (progress.has(globalIdx)) progress.delete(globalIdx); else progress.add(globalIdx);
@@ -140,7 +164,7 @@
       }
       function showLesson(lessonEl, globalIdx, check) {
         detailWrap.innerHTML = '';
-        var back = el('button', 'crs-back-to-modules', en ? '← Lessons' : '← Leksjonene');
+        var back = el('button', 'crs-back-to-modules', en() ? '← Lessons' : '← Leksjonene');
         back.type = 'button';
         back.onclick = showList;
         detailWrap.appendChild(back);
@@ -148,6 +172,7 @@
         detailWrap.appendChild(lessonEl);
         listWrap.hidden = true;
         detailWrap.hidden = false;
+        i18nCapture(detailWrap);
       }
 
       group.lessons.forEach(function (lessonEl, j) {
@@ -157,7 +182,7 @@
         var rowBtn = document.createElement('button');
         rowBtn.type = 'button';
         rowBtn.className = 'crs-lesson-row';
-        rowBtn.appendChild(el('span', 'crs-lesson-row-num', (en ? 'Lesson ' : 'Leksjon ') + (globalIdx + 1)));
+        rowBtn.appendChild(el('span', 'crs-lesson-row-num', (en() ? 'Lesson ' : 'Leksjon ') + (globalIdx + 1)));
         rowBtn.appendChild(el('span', 'crs-lesson-row-title', titleTxt));
         var check = el('span', 'crs-lesson-row-check', progress.has(globalIdx) ? '✓' : '');
         rowBtn.appendChild(check);
@@ -168,13 +193,14 @@
 
     function showGroup(gi) {
       contentArea.innerHTML = '';
-      var back = el('button', 'crs-back-to-modules', en ? '← All modules' : '← Alle moduler');
+      var back = el('button', 'crs-back-to-modules', en() ? '← All modules' : '← Alle moduler');
       back.type = 'button';
       back.onclick = showGrid;
       contentArea.appendChild(back);
       renderGroupInto(contentArea, groups[gi], gi);
       grid.hidden = true;
       contentArea.hidden = false;
+      i18nCapture(contentArea);
     }
 
     var palette = ['#F5A8B8,#E91E89', '#A4D233,#7AAE1F', '#F7C72E,#e0a800', '#3FA9F5,#1f7fc4', '#EE9CAD,#E91E89'];
@@ -191,7 +217,7 @@
       thumb.appendChild(logoWrap);
       card.appendChild(thumb);
       var body = el('div', 'crs-mcard-body');
-      body.appendChild(el('div', 'crs-mcard-tag', (en ? 'Module ' : 'Modul ') + (gi + 1) + ' av ' + groups.length));
+      body.appendChild(el('div', 'crs-mcard-tag', (en() ? 'Module ' : 'Modul ') + (gi + 1) + ' av ' + groups.length));
       body.appendChild(el('div', 'crs-mcard-title', group.title.replace(/^Modul\s+\d+\s*[·:.-]\s*/i, '')));
       var ptrack = el('div', 'crs-mcard-track');
       var pfill = el('div', 'crs-mcard-fill');
@@ -211,6 +237,7 @@
     wrap.appendChild(root);
     refreshProgressUI();
     showGrid();
+    i18nCapture(root);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
