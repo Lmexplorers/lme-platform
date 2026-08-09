@@ -307,6 +307,14 @@
     var buyBtn = el("a", "lv-cta");
     function applyBuyOption(o) {
       var isFreeBase = o.isBase && r.priceType === "gratis";
+      /* Eieren skal aldri måtte betale for sitt eget produkt (fast regel,
+         se CLAUDE.md): vis en gratis nedlastingsknapp i stedet for
+         kjøpsknappen når /api/access sier plan/tier === "owner". */
+      if (opts.isOwner && r.priceType === "betalt") {
+        buyBtn.textContent = en ? "Download for free (owner)" : "Last ned gratis (eier)";
+        buyBtn.href = r.fileUrl || o.buyUrl || "#";
+        return;
+      }
       buyBtn.textContent = isFreeBase ? (en ? "Download for free" : "Last ned gratis") : (en ? "Buy / add to cart" : "Kjøp / legg i handlekurv");
       buyBtn.href = (isFreeBase ? (r.fileUrl || o.buyUrl) : o.buyUrl) || (isFreeBase ? "#" : "/butikk");
     }

@@ -260,5 +260,15 @@ export const MODULE_PAYMENT_LINKS = {
    sporet Stripe-kjøp ennå (gratisressurser trenger ikke dette, de lenker
    rett til fila). */
 export const LAERINGSVERKSTED_PAYMENT_LINKS = {
-  // "plink_...": { slug: "eksempel-ressurs-slug", license: "privat", lang: "no" },
+  // Mia & Teo – Følelser og sosial kompetanse (Renate, 9. august 2026).
+  // Opprettet direkte via Stripe (produkt + pris + betalingslenke) i samme
+  // økt som ressursene ble lagt inn, se seed-laeringsverksted-data.js.
+  "plink_1U2ZQrLax7B8uQzqJRKmbwYG": { slug: "mia-teo-utforsker-folelsene", license: "privat", lang: "no" },
+  "plink_1U2ZQsLax7B8uQzq7wX3Pdc4": { slug: "mia-teo-situasjonskort", license: "privat", lang: "no" },
+  "plink_1U2ZQtLax7B8uQzqY5pl66U0": { slug: "mia-teo-snakke-om-folelser", license: "privat", lang: "no" },
+  "plink_1U2ZQuLax7B8uQzqfo48xZlf": { slug: "mia-teo-folelsene-i-kroppen-3-6", license: "privat", lang: "no" },
+  "plink_1U2ZQwLax7B8uQzqNkanwBIS": { slug: "mia-teo-folelsene-i-kroppen-6-9", license: "privat", lang: "no" },
+  "plink_1U2ZQxLax7B8uQzqC6WWz3a9": { slug: "mia-teo-min-folelsesbok-3-6", license: "privat", lang: "no" },
+  "plink_1U2ZQyLax7B8uQzqJztVUHcQ": { slug: "mia-teo-min-folelsesbok-6-9", license: "privat", lang: "no" },
+  "plink_1U2ZQzLax7B8uQzqJUhIWZKR": { slug: "mia-teo-folelser-serien-komplett", license: "privat", lang: "no" },
 };

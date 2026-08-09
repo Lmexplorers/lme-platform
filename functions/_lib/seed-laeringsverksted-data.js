@@ -295,7 +295,7 @@ export const SKOLEDAGBOK_4_7_TRINN = {
    ressurs, ikke en fritt tilgjengelig lenke. */
 export const MIA_TEO_FOLELSER = {
   slug: "mia-teo-utforsker-folelsene",
-  published: false,
+  published: true,
   featured: false,
   title: { no: "Mia & Teo utforsker følelsene", en: "" },
   subtitle: {
@@ -353,9 +353,9 @@ export const MIA_TEO_FOLELSER = {
   },
   license: "privat",
   priceType: "betalt",
-  price: { no: "", en: "" },
+  price: { no: "129 kr", en: "" },
   memberPrice: { no: "", en: "" },
-  buyUrl: "",
+  buyUrl: "https://buy.stripe.com/14A9AUfsx5Zd1PLfJJ9R63H",
   fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-folelseskort-no.pdf",
   licenseOptions: [],
   bundle: false,
@@ -367,6 +367,7 @@ export const MIA_TEO_FOLELSER = {
     "mia-teo-folelsene-i-kroppen-6-9",
     "mia-teo-min-folelsesbok-3-6",
     "mia-teo-min-folelsesbok-6-9",
+    "mia-teo-folelser-serien-komplett",
   ],
   bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
   stats: { views: 0, downloads: 0, favorites: 0 },
@@ -382,7 +383,7 @@ export const MIA_TEO_FOLELSER = {
    pris og betalingsmåte ikke er bestemt ennå. */
 export const MIA_TEO_KROPP_3_6 = {
   slug: "mia-teo-folelsene-i-kroppen-3-6",
-  published: false,
+  published: true,
   featured: false,
   title: { no: "Følelsene i kroppen, aktivitetshefte 3–6 år", en: "" },
   subtitle: {
@@ -438,9 +439,9 @@ export const MIA_TEO_KROPP_3_6 = {
   },
   license: "privat",
   priceType: "betalt",
-  price: { no: "", en: "" },
+  price: { no: "89 kr", en: "" },
   memberPrice: { no: "", en: "" },
-  buyUrl: "",
+  buyUrl: "https://buy.stripe.com/cNicN6805drFamhcxx9R63K",
   fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-folelsene-i-kroppen-3-6-no.pdf",
   licenseOptions: [],
   bundle: false,
@@ -452,6 +453,7 @@ export const MIA_TEO_KROPP_3_6 = {
     "mia-teo-folelsene-i-kroppen-6-9",
     "mia-teo-min-folelsesbok-3-6",
     "mia-teo-min-folelsesbok-6-9",
+    "mia-teo-folelser-serien-komplett",
   ],
   bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
   stats: { views: 0, downloads: 0, favorites: 0 },
@@ -459,7 +461,7 @@ export const MIA_TEO_KROPP_3_6 = {
 
 export const MIA_TEO_KROPP_6_9 = {
   slug: "mia-teo-folelsene-i-kroppen-6-9",
-  published: false,
+  published: true,
   featured: false,
   title: { no: "Følelsene i kroppen, aktivitetshefte 6–9 år", en: "" },
   subtitle: {
@@ -515,9 +517,9 @@ export const MIA_TEO_KROPP_6_9 = {
   },
   license: "privat",
   priceType: "betalt",
-  price: { no: "", en: "" },
+  price: { no: "99 kr", en: "" },
   memberPrice: { no: "", en: "" },
-  buyUrl: "",
+  buyUrl: "https://buy.stripe.com/4gM00kcglfzN2TPcxx9R63L",
   fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-folelsene-i-kroppen-6-9-no.pdf",
   licenseOptions: [],
   bundle: false,
@@ -529,6 +531,7 @@ export const MIA_TEO_KROPP_6_9 = {
     "mia-teo-folelsene-i-kroppen-3-6",
     "mia-teo-min-folelsesbok-3-6",
     "mia-teo-min-folelsesbok-6-9",
+    "mia-teo-folelser-serien-komplett",
   ],
   bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
   stats: { views: 0, downloads: 0, favorites: 0 },
@@ -540,7 +543,7 @@ export const MIA_TEO_KROPP_6_9 = {
    og betalingsmåte ikke er bestemt ennå. */
 export const MIA_TEO_SITUASJONSKORT = {
   slug: "mia-teo-situasjonskort",
-  published: false,
+  published: true,
   featured: false,
   title: { no: "Hva skjedde? Mia & Teo situasjonskort", en: "" },
   subtitle: {
@@ -597,9 +600,9 @@ export const MIA_TEO_SITUASJONSKORT = {
   },
   license: "privat",
   priceType: "betalt",
-  price: { no: "", en: "" },
+  price: { no: "119 kr", en: "" },
   memberPrice: { no: "", en: "" },
-  buyUrl: "",
+  buyUrl: "https://buy.stripe.com/cNi9AU5RX9bp8e92WX9R63I",
   fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-situasjonskort-no.pdf",
   licenseOptions: [],
   bundle: false,
@@ -611,6 +614,7 @@ export const MIA_TEO_SITUASJONSKORT = {
     "mia-teo-folelsene-i-kroppen-6-9",
     "mia-teo-min-folelsesbok-3-6",
     "mia-teo-min-folelsesbok-6-9",
+    "mia-teo-folelser-serien-komplett",
   ],
   bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
   stats: { views: 0, downloads: 0, favorites: 0 },
@@ -622,7 +626,7 @@ export const MIA_TEO_SITUASJONSKORT = {
    og betalingsmåte ikke er bestemt ennå. */
 export const MIA_TEO_SNAKKE_OM_FOLELSER = {
   slug: "mia-teo-snakke-om-folelser",
-  published: false,
+  published: true,
   featured: false,
   title: { no: "La oss snakke om følelser, Mia & Teo samtalekort", en: "" },
   subtitle: {
@@ -678,9 +682,9 @@ export const MIA_TEO_SNAKKE_OM_FOLELSER = {
   },
   license: "privat",
   priceType: "betalt",
-  price: { no: "", en: "" },
+  price: { no: "119 kr", en: "" },
   memberPrice: { no: "", en: "" },
-  buyUrl: "",
+  buyUrl: "https://buy.stripe.com/14A00k0xD3R5amhbtt9R63J",
   fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-snakke-om-folelser-no.pdf",
   licenseOptions: [],
   bundle: false,
@@ -692,6 +696,7 @@ export const MIA_TEO_SNAKKE_OM_FOLELSER = {
     "mia-teo-folelsene-i-kroppen-6-9",
     "mia-teo-min-folelsesbok-3-6",
     "mia-teo-min-folelsesbok-6-9",
+    "mia-teo-folelser-serien-komplett",
   ],
   bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
   stats: { views: 0, downloads: 0, favorites: 0 },
@@ -704,7 +709,7 @@ export const MIA_TEO_SNAKKE_OM_FOLELSER = {
    UPUBLISERT UTKAST siden pris og betalingsmåte ikke er bestemt ennå. */
 export const MIA_TEO_BOK_3_6 = {
   slug: "mia-teo-min-folelsesbok-3-6",
-  published: false,
+  published: true,
   featured: false,
   title: { no: "Min følelsesbok med Mia & Teo, 3–6 år", en: "" },
   subtitle: {
@@ -760,9 +765,9 @@ export const MIA_TEO_BOK_3_6 = {
   },
   license: "privat",
   priceType: "betalt",
-  price: { no: "", en: "" },
+  price: { no: "89 kr", en: "" },
   memberPrice: { no: "", en: "" },
-  buyUrl: "",
+  buyUrl: "https://buy.stripe.com/8x25kEgwBgDRcup5559R63M",
   fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-min-folelsesbok-3-6-no.pdf",
   licenseOptions: [],
   bundle: false,
@@ -774,6 +779,7 @@ export const MIA_TEO_BOK_3_6 = {
     "mia-teo-folelsene-i-kroppen-3-6",
     "mia-teo-folelsene-i-kroppen-6-9",
     "mia-teo-min-folelsesbok-6-9",
+    "mia-teo-folelser-serien-komplett",
   ],
   bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
   stats: { views: 0, downloads: 0, favorites: 0 },
@@ -781,7 +787,7 @@ export const MIA_TEO_BOK_3_6 = {
 
 export const MIA_TEO_BOK_6_9 = {
   slug: "mia-teo-min-folelsesbok-6-9",
-  published: false,
+  published: true,
   featured: false,
   title: { no: "Min følelsesbok med Mia & Teo, 6–9 år", en: "" },
   subtitle: {
@@ -838,9 +844,9 @@ export const MIA_TEO_BOK_6_9 = {
   },
   license: "privat",
   priceType: "betalt",
-  price: { no: "", en: "" },
+  price: { no: "99 kr", en: "" },
   memberPrice: { no: "", en: "" },
-  buyUrl: "",
+  buyUrl: "https://buy.stripe.com/cNi28s5RX0ET2TP2WX9R63N",
   fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-min-folelsesbok-6-9-no.pdf",
   licenseOptions: [],
   bundle: false,
@@ -852,7 +858,91 @@ export const MIA_TEO_BOK_6_9 = {
     "mia-teo-folelsene-i-kroppen-3-6",
     "mia-teo-folelsene-i-kroppen-6-9",
     "mia-teo-min-folelsesbok-3-6",
+    "mia-teo-folelser-serien-komplett",
   ],
+  bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
+  stats: { views: 0, downloads: 0, favorites: 0 },
+};
+
+/* Samlepakke for hele "Mia & Teo – Følelser og sosial kompetanse"-serien
+   (Renate, 9. august 2026). Pris og Stripe-betalingslenke opprettet direkte
+   i denne økten (ekte produkt/pris/betalingslenke, se
+   functions/_lib/purchase-links.js). fileUrl peker til en egen
+   leveringsside (ikke én enkelt PDF) som lenker til alle syv PDF-ene i
+   serien, samme mønster som butikk/takk.html brukes for andre samlepakker.
+   bundleItems er kun til visning/dokumentasjon, ikke koblet til noen egen
+   opplåsingslogikk i kjøpsloggen. */
+export const MIA_TEO_SERIE_KOMPLETT = {
+  slug: "mia-teo-folelser-serien-komplett",
+  published: true,
+  featured: true,
+  title: { no: "Mia & Teo, Følelser og sosial kompetanse, hele serien", en: "" },
+  subtitle: {
+    no: "Samlepakke · alle 7 ressurser · 3–9 år · digital nedlasting",
+    en: "",
+  },
+  description: {
+    no: "Hele serien samlet: trepartskort, situasjonskort, samtalekort, to aldersdelte aktivitetshefter og to personlige følelsesbøker. Alt du trenger for å jobbe med følelser og sosial kompetanse hjemme, i barnehagen eller på skolen, for barn fra 3 til 9 år.",
+    en: "",
+  },
+  cover: "https://lmexplorers.com/images/laeringsverksted/mia-teo-folelser-cover.jpg",
+  gallery: [
+    "https://lmexplorers.com/images/laeringsverksted/mia-teo-situasjonskort-eksempel.jpg",
+    "https://lmexplorers.com/images/laeringsverksted/mia-teo-snakkekort-eksempel.jpg",
+    "https://lmexplorers.com/images/laeringsverksted/mia-teo-kropp-6-9-eksempel.jpg",
+  ],
+  audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
+  ageBands: ["3-6", "m3-6", "m6-9", "1-2trinn", "3-4trinn"],
+  direction: "begge",
+  subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
+  resourceType: ["samlepakke", "trepartskort", "aktivitetskort", "arbeidshefte", "larerveiledning"],
+  competencyGoals: [
+    { no: "Barnet kan gjenkjenne, navngi og utforske følelser og kroppssignaler, øve på perspektivtaking og problemløsing, og utvikle trygge strategier for selvregulering.", en: "" },
+  ],
+  contains: [
+    { no: "Mia & Teo utforsker følelsene: 24 trepartskort", en: "" },
+    { no: "Hva skjedde? Situasjonskort: 24 åpne kort", en: "" },
+    { no: "La oss snakke om følelser: 36 samtalekort i tre nivåer", en: "" },
+    { no: "Følelsene i kroppen, aktivitetshefte 3–6 år og 6–9 år", en: "" },
+    { no: "Min følelsesbok, personlig følelsesbok 3–6 år og 6–9 år", en: "" },
+  ],
+  pageCount: 142,
+  language: ["nb"],
+  fileFormat: ["pdf"],
+  editable: false,
+  usageTips: {
+    no: "Begynn med følelseskortene for et felles følelsesspråk, og bygg videre med situasjonskortene, samtalekortene og de aldersdelte heftene etter hvert som barnet er klar for dem.",
+    en: "",
+  },
+  prep: { no: "Se hver enkelt ressurs for egne forberedelsestips.", en: "" },
+  differentiation: { no: "Velg ressursene som passer barnets alder, fra 3 til 9 år. Se hver enkelt ressurs for tilpasning.", en: "" },
+  montessoriArea: {
+    area: { no: "Sansene / språk: følelser og sosial kompetanse, hele serien", en: "" },
+    presentation: {},
+    prerequisites: {},
+    directPurpose: {},
+    indirectPurpose: {},
+    controlOfError: {},
+    extension: {},
+  },
+  license: "privat",
+  priceType: "betalt",
+  price: { no: "449 kr", en: "" },
+  memberPrice: { no: "", en: "" },
+  buyUrl: "https://buy.stripe.com/9B6cN64NT3R52TP8hh9R63O",
+  fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-folelser-serien-komplett.html",
+  licenseOptions: [],
+  bundle: true,
+  bundleItems: [
+    "mia-teo-utforsker-folelsene",
+    "mia-teo-situasjonskort",
+    "mia-teo-snakke-om-folelser",
+    "mia-teo-folelsene-i-kroppen-3-6",
+    "mia-teo-folelsene-i-kroppen-6-9",
+    "mia-teo-min-folelsesbok-3-6",
+    "mia-teo-min-folelsesbok-6-9",
+  ],
+  related: [],
   bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
   stats: { views: 0, downloads: 0, favorites: 0 },
 };
