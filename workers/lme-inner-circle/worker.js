@@ -40,8 +40,10 @@ const PLANS = {
   // selve utfordringen (dag 0-e-post, 30-dagers kø, fellesskap) via
   // api/utfordring-pro-enroll.js i hovedrepoet, se webhooken under.
   // beløpUsd: cent, for engelskspråklige kjøpere (samme mønster som den
-  // gamle frittstående utfordring-planen: NOK/USD etter språk).
-  proUtfordring: { tier:'pro', navn:'Pro (grunnleggermedlem, 10 000-visninger-utfordringen)', belop:79900, belopUsd:8900, utfordring:true },
+  // gamle frittstående utfordring-planen: NOK/USD etter språk). $97 er satt
+  // direkte etter Renates eget FEA-medlemskap (samme normalpris hun selv
+  // betaler der), 899 kr er nærmeste avrundede NOK-motstykke.
+  proUtfordring: { tier:'pro', navn:'Pro (grunnleggermedlem, 10 000-visninger-utfordringen)', belop:89900, belopUsd:9700, utfordring:true },
 };
 const PROVETID_DAGER = 0; // 0 = ingen prøveperiode; medlemmer betaler fra dag én
 
