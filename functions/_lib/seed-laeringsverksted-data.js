@@ -1298,3 +1298,154 @@ export const MIA_TEO_DAG_6_9 = {
   bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
   stats: { views: 0, downloads: 0, favorites: 0 },
 };
+
+/* Ny, egen serie (ikke en del av "Følelser og sosial kompetanse" eller
+   "Min dag"): "Sosiale historier med Mia & Teo", vennskap, grenser og
+   gode valg, 3-6 år og 6-9 år (Renate, 9. august 2026). Ekte innhold og
+   bilder fra PDF-ene. Lagt inn som UPUBLISERT UTKAST: pris er ikke
+   bekreftet for denne serien ennå (foreslått 119 kr, samme nivå som
+   situasjonskort/samtalekort i Følelser-serien siden omfanget er
+   sammenlignbart: 12 historier + samtalekort + valgkort + arbeidsark). */
+export const MIA_TEO_HISTORIER_3_6 = {
+  slug: "mia-teo-sosiale-historier-3-6",
+  published: false,
+  featured: false,
+  title: { no: "Sosiale historier med Mia & Teo, vennskap, grenser og gode valg, 3–6 år", en: "" },
+  subtitle: {
+    no: "12 sosiale historier, samtalekort og valgkort · 3–6 år",
+    en: "",
+  },
+  description: {
+    no: "Tolv korte sosiale historier med Mia og Teo, om å hilse, vente på tur, dele, si nei, be om hjelp og reparere etter et uhell. Historiene åpner for samtale, de skal ikke brukes som fasit eller krav om lydighet.",
+    en: "",
+  },
+  cover: "https://lmexplorers.com/images/laeringsverksted/mia-teo-historier-3-6-cover.jpg",
+  gallery: ["https://lmexplorers.com/images/laeringsverksted/mia-teo-historier-3-6-eksempel.jpg"],
+  audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
+  ageBands: ["3-6", "m3-6"],
+  direction: "begge",
+  subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
+  resourceType: ["larerveiledning", "aktivitetskort"],
+  competencyGoals: [
+    { no: "Barnet kan gjenkjenne trygge måter å hilse, vente, dele og sette grenser på, øve på å be om hjelp, og forstå at et uhell kan repareres.", en: "" },
+  ],
+  contains: [
+    { no: "Tolv sosiale historier: hilse, bli med, vente på tur, dele og bytte, si og høre nei, be om hjelp, stopp betyr stopp, rydde sammen, reparere et uhell, bli hentet, når planen endres, og finne en løsning", en: "" },
+    { no: "Tolv samtalekort (tre ark) med ett åpent spørsmål per historie", en: "" },
+    { no: "Tre \"hva kan jeg gjøre\"-valgkort med tre konkrete alternativer hver", en: "" },
+    { no: "Fire arbeidsark: min stopp-hånd, slik ber jeg om hjelp, vi bytter på, slik reparerer jeg", en: "" },
+  ],
+  pageCount: 25,
+  language: ["nb"],
+  fileFormat: ["pdf"],
+  editable: false,
+  usageTips: {
+    no: "Les i rolige stunder. Se på bildet, les teksten, og la barnet få god tid til å tenke. Vær nysgjerrig på hva barnet legger merke til, flere tanker og løsninger kan være riktige. Et barn skal aldri presses til nærhet, deling eller unnskyldning.",
+    en: "",
+  },
+  prep: {
+    no: "Skriv ut i faktisk størrelse på A4, og laminer samtale- og valgkort ved behov.",
+    en: "",
+  },
+  differentiation: {
+    no: "For 3–6 år: bruk korte setninger og ett spørsmål om gangen. Bytt gjerne ut ord slik at de passer barnets egne uttrykk og kommunikasjon, og øv konkret med rollespill og pekekort.",
+    en: "",
+  },
+  montessoriArea: {
+    area: { no: "Sansene / språk: sosial forståelse og vennskap", en: "" },
+    presentation: {
+      no: "Les én historie om gangen, og bruk samtalekortet til å utforske hva barnet legger merke til. La barnet foreslå hva Mia eller Teo kan prøve, uten å kreve ett riktig svar.",
+      en: "",
+    },
+    prerequisites: { no: "Ingen spesielle forkunnskaper. Kan gjerne kombineres med de andre Mia & Teo-produktene om følelser og sosial kompetanse.", en: "" },
+    directPurpose: { no: "Gjenkjenne trygge sosiale handlinger som å hilse, vente, dele, si nei og be om hjelp.", en: "" },
+    indirectPurpose: { no: "Bygge vennskap, grensesetting og evne til å reparere etter et uhell.", en: "" },
+    controlOfError: { no: "Ingen fasit. Flere tanker og løsninger kan være riktige.", en: "" },
+    extension: { no: "Øv historiene som rollespill, eller lag egne historier om situasjoner barnet kjenner igjen.", en: "" },
+  },
+  license: "privat",
+  priceType: "betalt",
+  price: { no: "", en: "" },
+  memberPrice: { no: "", en: "" },
+  memberPromoCode: "",
+  buyUrl: "",
+  fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-sosiale-historier-3-6-no.pdf",
+  licenseOptions: [],
+  bundle: false,
+  bundleItems: [],
+  related: ["mia-teo-sosiale-historier-6-9"],
+  bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
+  stats: { views: 0, downloads: 0, favorites: 0 },
+};
+
+export const MIA_TEO_HISTORIER_6_9 = {
+  slug: "mia-teo-sosiale-historier-6-9",
+  published: false,
+  featured: false,
+  title: { no: "Sosiale historier med Mia & Teo, vennskap, grenser og gode valg, 6–9 år", en: "" },
+  subtitle: {
+    no: "12 sosiale historier, samtalekort og valgkort · 6–9 år",
+    en: "",
+  },
+  description: {
+    no: "Tolv sosiale historier med Mia og Teo som utforsker intensjon, virkning, alternativer og reparasjon: å bli med i en gruppe, sette grenser, håndtere press, reparere en misforståelse og være trygg ved meldinger. Historiene åpner for samtale, de skal ikke brukes som fasit.",
+    en: "",
+  },
+  cover: "https://lmexplorers.com/images/laeringsverksted/mia-teo-historier-6-9-cover.jpg",
+  gallery: ["https://lmexplorers.com/images/laeringsverksted/mia-teo-historier-6-9-eksempel.jpg"],
+  audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
+  ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
+  direction: "begge",
+  subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "sprakutvikling"],
+  resourceType: ["larerveiledning", "aktivitetskort"],
+  competencyGoals: [
+    { no: "Barnet kan gjenkjenne signaler, sette og respektere grenser, håndtere press og uenighet, reparere etter en misforståelse, og bruke trygge strategier ved digitale meldinger.", en: "" },
+  ],
+  contains: [
+    { no: "Tolv sosiale historier: bli med i gruppen, se etter signaler, uenighet, sette grenser, håndtere press, reparere en misforståelse, konflikt og valg, be om pause, reparasjon, invitere uten å presse, samarbeid, og trygghet ved meldinger", en: "" },
+    { no: "Tolv samtalekort (tre ark) med ett åpent spørsmål per historie", en: "" },
+    { no: "Tre \"hva kan jeg gjøre\"-valgkort med tre konkrete alternativer hver", en: "" },
+    { no: "Fire arbeidsark: mine grenser, press og egne valg, fra misforståelse til klarhet, og digital trygghet", en: "" },
+  ],
+  pageCount: 25,
+  language: ["nb"],
+  fileFormat: ["pdf"],
+  editable: false,
+  usageTips: {
+    no: "Les i rolige stunder, og utforsk intensjon, virkning, alternativer og hvordan en situasjon kan repareres. Vær nysgjerrig på hva barnet legger merke til. Et barn skal aldri presses til nærhet, deling eller unnskyldning.",
+    en: "",
+  },
+  prep: {
+    no: "Skriv ut i faktisk størrelse på A4, og laminer samtale- og valgkort ved behov.",
+    en: "",
+  },
+  differentiation: {
+    no: "For 6–9 år: utforsk intensjon, virkning, alternativer og reparasjon i dybden. Bytt gjerne ut ord slik at de passer barnets egne uttrykk, og øv konkret med rollespill.",
+    en: "",
+  },
+  montessoriArea: {
+    area: { no: "Sansene / språk: sosial forståelse, grenser og digital trygghet", en: "" },
+    presentation: {
+      no: "Les én historie om gangen, og bruk samtalekortet til å utforske intensjon og virkning. La barnet foreslå alternative handlinger og hvordan en situasjon kan repareres.",
+      en: "",
+    },
+    prerequisites: { no: "Kan brukes alene eller som en videreføring av «Sosiale historier 3–6 år».", en: "" },
+    directPurpose: { no: "Gjenkjenne signaler, sette grenser, og finne trygge alternativer ved press eller konflikt.", en: "" },
+    indirectPurpose: { no: "Bygge empati, grensesetting og digital trygghet.", en: "" },
+    controlOfError: { no: "Ingen fasit. Flere tanker og løsninger kan være riktige.", en: "" },
+    extension: { no: "Øv historiene som rollespill, eller diskuter lignende situasjoner barnet har opplevd selv.", en: "" },
+  },
+  license: "privat",
+  priceType: "betalt",
+  price: { no: "", en: "" },
+  memberPrice: { no: "", en: "" },
+  memberPromoCode: "",
+  buyUrl: "",
+  fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-sosiale-historier-6-9-no.pdf",
+  licenseOptions: [],
+  bundle: false,
+  bundleItems: [],
+  related: ["mia-teo-sosiale-historier-3-6"],
+  bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
+  stats: { views: 0, downloads: 0, favorites: 0 },
+};
