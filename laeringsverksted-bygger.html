@@ -184,13 +184,52 @@
           <div><label>Medlemspris, norsk</label><input type="text" id="f-mprice"></div>
           <div><label>Member price, English</label><input type="text" id="f-mprice-en"></div>
         </div>
-        <label>Kjøpslenke (Stripe-betalingslenke eller intern sti)</label>
-        <input type="text" id="f-buyurl" placeholder="https://buy.stripe.com/… eller /butikk/…">
+        <label>Kjøpslenke (Stripe-betalingslenke for betalte ressurser, eller direkte fillenke for gratisressurser)</label>
+        <input type="text" id="f-buyurl" placeholder="https://buy.stripe.com/… eller https://…/fil.pdf">
+        <label>Fillenke for levering etter kjøp (kun betalte ressurser — sendes i leveringsmailen når kjøpet er registrert, se hjelpeteksten under Bookly-feltene)</label>
+        <input type="text" id="f-fileurl" placeholder="https://…/fil.pdf">
         <label><input type="checkbox" id="f-bundle"> Dette er en samlepakke</label>
         <label>Ressurser i pakken (kommaseparerte slugs)</label>
         <input type="text" id="f-bundleitems">
         <label>Relaterte ressurser (kommaseparerte slugs)</label>
         <input type="text" id="f-related">
+      </fieldset>
+
+      <fieldset>
+        <legend>Flere lisensnivåer (valgfritt)</legend>
+        <p class="hint">Fyll ut pris og kjøpslenke for de lisensnivåene ressursen skal kunne kjøpes med, i tillegg til standardprisen over. La en rad stå tom for å ikke tilby den lisensen. Kjøperen får en nedtrekksmeny med de utfylte nivåene på produktsiden.</p>
+        <div class="row2">
+          <div><label>Privatlisens (én familie), pris norsk</label><input type="text" id="f-lic-privat-price"></div>
+          <div><label>Privatlisens, kjøpslenke</label><input type="text" id="f-lic-privat-url" placeholder="https://buy.stripe.com/…"></div>
+        </div>
+        <div class="row2">
+          <div><label>Privatlisens, pris English</label><input type="text" id="f-lic-privat-price-en"></div>
+          <div></div>
+        </div>
+        <div class="row2">
+          <div><label>Pedagoglisens, pris norsk</label><input type="text" id="f-lic-pedagog-price"></div>
+          <div><label>Pedagoglisens, kjøpslenke</label><input type="text" id="f-lic-pedagog-url" placeholder="https://buy.stripe.com/…"></div>
+        </div>
+        <div class="row2">
+          <div><label>Pedagoglisens, pris English</label><input type="text" id="f-lic-pedagog-price-en"></div>
+          <div></div>
+        </div>
+        <div class="row2">
+          <div><label>Barnehagelisens, pris norsk</label><input type="text" id="f-lic-barnehage-price"></div>
+          <div><label>Barnehagelisens, kjøpslenke</label><input type="text" id="f-lic-barnehage-url" placeholder="https://buy.stripe.com/…"></div>
+        </div>
+        <div class="row2">
+          <div><label>Barnehagelisens, pris English</label><input type="text" id="f-lic-barnehage-price-en"></div>
+          <div></div>
+        </div>
+        <div class="row2">
+          <div><label>Skolelisens, pris norsk</label><input type="text" id="f-lic-skole-price"></div>
+          <div><label>Skolelisens, kjøpslenke</label><input type="text" id="f-lic-skole-url" placeholder="https://buy.stripe.com/…"></div>
+        </div>
+        <div class="row2">
+          <div><label>Skolelisens, pris English</label><input type="text" id="f-lic-skole-price-en"></div>
+          <div></div>
+        </div>
       </fieldset>
 
       <fieldset>
@@ -211,6 +250,8 @@
           <div><label>Læreplan-aldersnøkkel (f.eks. 6-9)</label><input type="text" id="f-bk-alder"></div>
         </div>
       </fieldset>
+
+      <p class="hint" style="margin:-6px 0 16px;">💡 For at et betalt kjøp skal telles i kjøpsloggen og utløse leveringsmail med fillenken over, må den samme Stripe-betalingslenken også registreres i koden (<code>LAERINGSVERKSTED_PAYMENT_LINKS</code> i <code>functions/_lib/purchase-links.js</code>), på samme måte som andre betalte produkter i LME. Be Claude om å legge den inn når du har opprettet betalingslenken i Stripe.</p>
 
       <div class="actions-row">
         <button class="btn btn-primary" id="btnSave" type="button">💾 Lagre</button>
@@ -294,7 +335,8 @@
       competencyGoals: [], contains: [], pageCount: 0, language: ['nb'], fileFormat: ['pdf'], editable: false,
       usageTips: { no: '', en: '' }, prep: { no: '', en: '' }, differentiation: { no: '', en: '' },
       montessoriArea: { area: {}, presentation: {}, prerequisites: {}, directPurpose: {}, indirectPurpose: {}, controlOfError: {}, extension: {} },
-      license: 'gratis', priceType: 'gratis', price: { no: '', en: '' }, memberPrice: { no: '', en: '' }, buyUrl: '',
+      license: 'gratis', priceType: 'gratis', price: { no: '', en: '' }, memberPrice: { no: '', en: '' }, buyUrl: '', fileUrl: '',
+      licenseOptions: [],
       bundle: false, bundleItems: [], related: [],
       bookly: { type: '', category: '', topic: '', age: '', plan: '', fag: '', alder: '' },
       stats: { views: 0, downloads: 0, favorites: 0 },
@@ -371,9 +413,18 @@
     q('f-mprice').value = (r.memberPrice && r.memberPrice.no) || '';
     q('f-mprice-en').value = (r.memberPrice && r.memberPrice.en) || '';
     q('f-buyurl').value = r.buyUrl || '';
+    q('f-fileurl').value = r.fileUrl || '';
     q('f-bundle').checked = !!r.bundle;
     q('f-bundleitems').value = (r.bundleItems || []).join(',');
     q('f-related').value = (r.related || []).join(',');
+    var licByType = {};
+    (r.licenseOptions || []).forEach(function (o) { licByType[o.license] = o; });
+    ['privat', 'pedagog', 'barnehage', 'skole'].forEach(function (lic) {
+      var o = licByType[lic] || {};
+      q('f-lic-' + lic + '-price').value = (o.price && o.price.no) || '';
+      q('f-lic-' + lic + '-price-en').value = (o.price && o.price.en) || '';
+      q('f-lic-' + lic + '-url').value = o.buyUrl || '';
+    });
     var bk = r.bookly || {};
     q('f-bk-type').value = bk.type || '';
     q('f-bk-category').value = bk.category || '';
@@ -451,6 +502,10 @@
       price: lf('f-price', 'f-price-en'),
       memberPrice: lf('f-mprice', 'f-mprice-en'),
       buyUrl: q('f-buyurl').value.trim(),
+      fileUrl: q('f-fileurl').value.trim(),
+      licenseOptions: ['privat', 'pedagog', 'barnehage', 'skole'].map(function (lic) {
+        return { license: lic, price: lf('f-lic-' + lic + '-price', 'f-lic-' + lic + '-price-en'), buyUrl: q('f-lic-' + lic + '-url').value.trim() };
+      }).filter(function (o) { return o.price.no.trim() || o.buyUrl; }),
       bundle: q('f-bundle').checked,
       bundleItems: csv(q('f-bundleitems').value),
       related: csv(q('f-related').value),

@@ -1990,6 +1990,38 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
             card('Kjøp', 'Du har ingen kjøp ennå. <a href="/butikk" style="color:#E91E89;font-weight:700;">Utforsk butikken →</a>'));
         }
       }
+
+      /* Ekte kjøpshistorikk (functions/api/purchases.js), på tvers av alle
+         produkttyper. Overskriver kun de statiske eksempelkortene når det
+         faktisk finnes registrerte kjøp, så "ingen kjøp ennå"-meldingen
+         over (eller eierens egen melding) fortsatt gjelder ellers. */
+      if (!isOwnerAcct) {
+        function escHtml(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        var TYPE_ICON = { oppskrift: '🧶', kurs: '🎓', modul: '🎬', kreditt: '✨', autopilot: '🎨', claude: '💬', laeringsverksted: '📘' };
+        fetch('/api/purchases', { credentials: 'include' })
+          .then(function (r) { return r.json(); })
+          .then(function (pd) {
+            var list = (pd && pd.purchases) || [];
+            if (!list.length) return;
+            var en = window.LME_CURRENT_LANG === 'en';
+            var html = list.map(function (p) {
+              var when = new Date(p.date || Date.now());
+              var dateStr = when.toLocaleDateString(en ? 'en-US' : 'nb-NO', { day: 'numeric', month: 'long', year: 'numeric' });
+              var amountStr = (typeof p.amount === 'number' && p.currency) ? (p.amount / 100).toFixed(0) + ' ' + p.currency.toUpperCase() : '';
+              return '<article class="purchase-item">' +
+                '<div class="purchase-thumb" style="background: linear-gradient(135deg, #A4D233, #3FA9F5);">' + (TYPE_ICON[p.type] || '🛍️') + '</div>' +
+                '<div class="purchase-body">' +
+                '<h4>' + escHtml(p.title || p.id || '') + '</h4>' +
+                '<p class="purchase-date">' + (en ? 'Purchased ' : 'Kjøpt ') + dateStr + (amountStr ? ' · ' + amountStr : '') + '</p>' +
+                '</div>' +
+                '<div class="purchase-actions">' +
+                (p.url ? '<a href="' + p.url + '" class="btn-yellow">' + (en ? 'Open →' : 'Åpne →') + '</a>' : '') +
+                '</div></article>';
+            }).join('');
+            setHTML('.purchases-list', html);
+          })
+          .catch(function () {});
+      }
     });
 
     var lo = document.getElementById('logoutLink');
@@ -2045,10 +2077,11 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
   })();
 </script>
 <script src="/js/laeringsverksted-render.js" defer></script>
+<script src="/js/laeringsverksted-favorites.js" defer></script>
 <script>
 (function () {
   function en() { return window.LME_CURRENT_LANG === 'en'; }
-  var FAV_KEY = 'lv_favorites', RECENT_KEY = 'lv_recent';
+  var RECENT_KEY = 'lv_recent';
   function readLocal(key) { try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch (e) { return []; } }
 
   function fetchResources(slugs) {
@@ -2109,7 +2142,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
   }
 
   function loadFavoritesAndRecent(all) {
-    var favSlugs = readLocal(FAV_KEY);
+    var favSlugs = window.LMEFavorites.getAll();
     var recentSlugs = readLocal(RECENT_KEY);
     fetchResources(favSlugs).then(function (list) {
       renderInto('lvFavorites', list, en() ? 'No favorites saved yet — the heart icon in the catalog saves one here.' : 'Ingen favoritter lagret ennå, hjerte-ikonet i katalogen lagrer én her.');
@@ -2141,14 +2174,23 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 
   function boot() {
     loadBooklyProjects();
-    fetch('/api/laeringsverksted?t=' + Date.now())
-      .then(function (r) { return r.json(); })
-      .then(function (d) { return (d && d.resources) || []; })
-      .catch(function () { return []; })
-      .then(function (all) { loadFavoritesAndRecent(all); });
+    window.LMEFavorites.init(function () {
+      fetch('/api/laeringsverksted?t=' + Date.now())
+        .then(function (r) { return r.json(); })
+        .then(function (d) { return (d && d.resources) || []; })
+        .catch(function () { return []; })
+        .then(function (all) { loadFavoritesAndRecent(all); });
+    });
   }
-  if (window.LMELaeringsverksted) boot();
-  else { var t = setInterval(function () { if (window.LMELaeringsverksted) { clearInterval(t); boot(); } }, 40); }
+  var started = false;
+  function maybeBoot() {
+    if (started || !window.LMELaeringsverksted || !window.LMEFavorites) return;
+    started = true;
+    clearInterval(pollTimer);
+    boot();
+  }
+  var pollTimer = setInterval(maybeBoot, 40);
+  maybeBoot();
 })();
 </script>
 <script src="/js/mobile-nav.js?v=9" defer></script>

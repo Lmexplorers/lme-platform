@@ -250,3 +250,15 @@ export const PAID_KURSBYGGER_SLUGS = [
 export const MODULE_PAYMENT_LINKS = {
   // "plink_...": { courseId: "eksempel-kurs", moduleKey: "Modul 2 · Tema", lang: "no" },
 };
+
+/* ---- LME Læringsverksted: enkeltressurser og samlepakker ----------------
+   Samme mønster som MODULE_PAYMENT_LINKS over. Renate setter Stripe-
+   betalingslenken som "Kjøpslenke" på ressursen i /laeringsverksted-bygger;
+   når den ressursen faktisk skal telles i kjøpsloggen og utløse en
+   leveringsmail med fillenken (ressursens "fileUrl"), legg den samme
+   lenken inn her med ressursens slug. Tom liste = ingen ressurser med
+   sporet Stripe-kjøp ennå (gratisressurser trenger ikke dette, de lenker
+   rett til fila). */
+export const LAERINGSVERKSTED_PAYMENT_LINKS = {
+  // "plink_...": { slug: "eksempel-ressurs-slug", license: "privat", lang: "no" },
+};

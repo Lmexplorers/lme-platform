@@ -138,6 +138,7 @@
   </div>
 
 <script src="/js/laeringsverksted-render.js" defer></script>
+<script src="/js/laeringsverksted-favorites.js" defer></script>
 <script>
 (function () {
   window.LME_CURRENT_LANG = 'no';
@@ -145,18 +146,8 @@
   function isEn() { return window.LME_CURRENT_LANG === 'en'; }
 
   var all = [];
-  var FAV_KEY = 'lv_favorites';
-  function getFavs() { try { return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); } catch (e) { return []; } }
-  function isFavorite(slug) { return getFavs().indexOf(slug) !== -1; }
-  function toggleFavorite(slug) {
-    var favs = getFavs();
-    var i = favs.indexOf(slug);
-    var track = { slug: slug, kind: '' };
-    if (i === -1) { favs.push(slug); track.kind = 'favorite'; } else { favs.splice(i, 1); track.kind = 'unfavorite'; }
-    try { localStorage.setItem(FAV_KEY, JSON.stringify(favs)); } catch (e) {}
-    fetch('/api/laeringsverksted', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'track', slug: track.slug, kind: track.kind }) }).catch(function () {});
-    return i === -1;
-  }
+  function isFavorite(slug) { return window.LMEFavorites.isFavorite(slug); }
+  function toggleFavorite(slug) { return window.LMEFavorites.toggle(slug); }
 
   function applyStatic() {
     var en = isEn();
@@ -263,15 +254,21 @@
   }
 
   applyStatic();
+  var resourcesReady = false, started = false, pollTimer;
   fetch('/api/laeringsverksted?t=' + Date.now())
     .then(function (r) { return r.json(); })
     .then(function (d) { all = (d && d.resources) || []; })
     .catch(function () { all = []; })
-    .then(function () {
-      var run = function () { boot(); };
-      if (window.LMELaeringsverksted) run();
-      else { var t = setInterval(function () { if (window.LMELaeringsverksted) { clearInterval(t); run(); } }, 40); }
-    });
+    .then(function () { resourcesReady = true; maybeStart(); });
+
+  function maybeStart() {
+    if (started || !resourcesReady || !window.LMELaeringsverksted || !window.LMEFavorites) return;
+    started = true;
+    if (pollTimer) clearInterval(pollTimer);
+    window.LMEFavorites.init(function () { boot(); });
+  }
+  pollTimer = setInterval(maybeStart, 40);
+  maybeStart();
 })();
 </script>
 <script src="/js/lme-visibility.js?v=8" defer></script>

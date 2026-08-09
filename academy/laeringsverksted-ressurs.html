@@ -53,6 +53,7 @@
   </div>
 
 <script src="/js/laeringsverksted-render.js" defer></script>
+<script src="/js/laeringsverksted-favorites.js" defer></script>
 <script>
 (function () {
   window.LME_CURRENT_LANG = 'no';
@@ -65,7 +66,6 @@
   var related = [];
   var root = document.getElementById('lv-innhold');
   var VIEWED_KEY = 'lv_recent';
-  var FAV_KEY = 'lv_favorites';
 
   function isEn() { return window.LME_CURRENT_LANG === 'en'; }
   function pick(v) { if (v && typeof v === 'object') return (isEn() && v.en) ? v.en : (v.no || ''); return v || ''; }
@@ -80,17 +80,8 @@
     if (b) b.textContent = en ? '🇳🇴 Norsk' : '🇬🇧 English';
   }
 
-  function getFavs() { try { return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); } catch (e) { return []; } }
-  function isFavorite(s) { return getFavs().indexOf(s) !== -1; }
-  function toggleFavorite(s) {
-    var favs = getFavs();
-    var i = favs.indexOf(s);
-    var kind;
-    if (i === -1) { favs.push(s); kind = 'favorite'; } else { favs.splice(i, 1); kind = 'unfavorite'; }
-    try { localStorage.setItem(FAV_KEY, JSON.stringify(favs)); } catch (e) {}
-    fetch('/api/laeringsverksted', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'track', slug: s, kind: kind }) }).catch(function () {});
-    return i === -1;
-  }
+  function isFavorite(s) { return window.LMEFavorites.isFavorite(s); }
+  function toggleFavorite(s) { return window.LMEFavorites.toggle(s); }
 
   function recordViewed(s) {
     try {
@@ -151,9 +142,15 @@
     })
     .catch(function () { resource = null; })
     .then(function () {
-      var run = function () { render(); };
-      if (window.LMELaeringsverksted) run();
-      else { var t = setInterval(function () { if (window.LMELaeringsverksted) { clearInterval(t); run(); } }, 40); }
+      var started = false;
+      function maybeStart() {
+        if (started || !window.LMELaeringsverksted || !window.LMEFavorites) return;
+        started = true;
+        clearInterval(pollTimer);
+        window.LMEFavorites.init(function () { render(); });
+      }
+      var pollTimer = setInterval(maybeStart, 40);
+      maybeStart();
     });
 })();
 </script>

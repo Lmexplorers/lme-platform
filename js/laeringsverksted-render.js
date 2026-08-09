@@ -301,15 +301,39 @@
     if (pick(r.memberPrice, en) && r.priceType === "betalt") {
       buyBox.appendChild(el("span", "lv-memberprice", (en ? "Member price: " : "Medlemspris: ") + pick(r.memberPrice, en)));
     }
-    var actions = el("div", "lv-actions");
-    var buyBtn;
-    if (r.priceType === "gratis") {
-      buyBtn = el("a", "lv-cta", en ? "Download for free" : "Last ned gratis");
-      buyBtn.href = r.buyUrl || "#";
-    } else {
-      buyBtn = el("a", "lv-cta", en ? "Buy / add to cart" : "Kjøp / legg i handlekurv");
-      buyBtn.href = r.buyUrl || "/butikk";
+
+    var buyBtn = el("a", "lv-cta");
+    function applyBuyOption(o) {
+      var isFreeBase = o.isBase && r.priceType === "gratis";
+      buyBtn.textContent = isFreeBase ? (en ? "Download for free" : "Last ned gratis") : (en ? "Buy / add to cart" : "Kjøp / legg i handlekurv");
+      buyBtn.href = (isFreeBase ? (r.fileUrl || o.buyUrl) : o.buyUrl) || (isFreeBase ? "#" : "/butikk");
     }
+    /* Flere kjøpbare lisensnivåer (privat/pedagog/barnehage/skole): vis en
+       velger som bytter kjøpsknappens lenke, i tillegg til standardprisen
+       øverst i lv-buybox. Uten licenseOptions oppfører knappen seg som før. */
+    var licenseOptions = r.licenseOptions || [];
+    if (licenseOptions.length) {
+      var allOptions = [{ license: r.license || "gratis", price: r.price, buyUrl: r.buyUrl, isBase: true }].concat(licenseOptions);
+      var licWrap = el("div", "lv-license-picker");
+      licWrap.appendChild(el("label", "lv-license-label", en ? "Choose a license" : "Velg lisens"));
+      var licSelect = document.createElement("select");
+      licSelect.className = "lv-license-select";
+      allOptions.forEach(function (o, i) {
+        var priceTxt = pick(o.price, en) || (o.isBase && r.priceType === "gratis" ? (en ? "Free" : "Gratis") : "");
+        var opt = document.createElement("option");
+        opt.value = String(i);
+        opt.textContent = label("license", o.license, en) + (priceTxt ? " — " + priceTxt : "");
+        licSelect.appendChild(opt);
+      });
+      licSelect.addEventListener("change", function () { applyBuyOption(allOptions[parseInt(licSelect.value, 10)]); });
+      licWrap.appendChild(licSelect);
+      buyBox.appendChild(licWrap);
+      applyBuyOption(allOptions[0]);
+    } else {
+      applyBuyOption({ license: r.license || "gratis", price: r.price, buyUrl: r.buyUrl, isBase: true });
+    }
+
+    var actions = el("div", "lv-actions");
     if (opts.onDownload) buyBtn.addEventListener("click", function () { opts.onDownload(r.slug); });
     actions.appendChild(buyBtn);
     if (r.bookly && r.bookly.type) {
