@@ -31,7 +31,7 @@
  *     title, subtitle, description: {no,en},
  *     cover: dataURL|undefined, gallery: [dataURL,...],
  *     audience: ["foreldre"|"pedagog"|"montessoripedagog"|"spesialpedagog"|"hjemme"],
- *     ageBands: ["0-3","3-6","1-2trinn","3-4trinn","5-7trinn","8-10trinn","vgs","m6-9","m9-12","m12-16"],
+ *     ageBands: ["0-3","3-6","1-2trinn","3-4trinn","5-7trinn","8-10trinn","vgs","m0-3","m3-6","m6-9","m9-12","m12-16"],
  *     direction: "montessori"|"offentlig"|"begge"|"ingen",
  *     subjects: ["norsk","matematikk","engelsk",...],   // fag/områder, frie nøkler
  *     resourceType: ["arbeidsark","plakat","trepartskort",...],
@@ -51,10 +51,10 @@
  *   }
  */
 
-const DEFAULT_PASSWORD = "LME26";
-const KEY_PREFIX = "lme-builder:lv:";
-const INDEX_KEY = "lme-builder:lv-index";
-const MAX_SIZE = 4 * 1024 * 1024;
+export const DEFAULT_PASSWORD = "LME26";
+export const KEY_PREFIX = "lme-builder:lv:";
+export const INDEX_KEY = "lme-builder:lv-index";
+export const MAX_SIZE = 4 * 1024 * 1024;
 const MAX_IMG = 900000;
 
 function json(data, status) {
@@ -164,7 +164,7 @@ function licenseOptionList(v) {
   return PAID_LICENSES.map((l) => byLicense[l]).filter(Boolean);
 }
 
-function sanitizeResource(raw) {
+export function sanitizeResource(raw) {
   if (!raw || typeof raw !== "object") return null;
   const slug = cleanSlug(raw.slug);
   if (!slug) return null;
@@ -239,7 +239,7 @@ function sanitizeResource(raw) {
   return resource;
 }
 
-function indexEntry(r) {
+export function indexEntry(r) {
   return {
     slug: r.slug,
     title: r.title,
@@ -263,7 +263,7 @@ function indexEntry(r) {
   };
 }
 
-async function readIndex(env) {
+export async function readIndex(env) {
   try {
     const raw = await env.BUILDER_KV.get(INDEX_KEY);
     const list = raw ? JSON.parse(raw) : [];
