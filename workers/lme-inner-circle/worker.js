@@ -32,13 +32,13 @@ const PLANS = {
   pro:     { tier:'pro',     navn:'Pro',    belop:119700 },
   vip:     { tier:'vip',     navn:'VIP',    belop:199700 },
   // Grunnleggerpris for kjøpere av 10 000-visninger-utfordringen: full
-  // Inner Circle Pro-tilgang (inkl. 100 bilder + 6 videoer i LME Autopilot
-  // per måned, se STUDIO_PLANER) til en lavere, låst pris. Stripe endrer
-  // aldri prisen på et løpende abonnement av seg selv, så denne prisen
-  // følger kjøperen så lenge abonnementet er aktivt, selv om Pro sin
-  // ordinære pris endres senere. utfordring:true trigger innmelding i
-  // selve utfordringen (dag 0-e-post, 30-dagers kø, fellesskap) via
-  // api/utfordring-pro-enroll.js i hovedrepoet, se webhooken under.
+  // Inner Circle Pro-tilgang (fellesskap, moduler osv., IKKE Autopilot-
+  // kreditter, se giStudioTilgang-kallet i webhooken under) til en lavere,
+  // låst pris. Stripe endrer aldri prisen på et løpende abonnement av seg
+  // selv, så denne prisen følger kjøperen så lenge abonnementet er aktivt,
+  // selv om Pro sin ordinære pris endres senere. utfordring:true trigger
+  // innmelding i selve utfordringen (dag 0-e-post, 30-dagers kø,
+  // fellesskap) via api/utfordring-pro-enroll.js i hovedrepoet.
   // beløpUsd: cent, for engelskspråklige kjøpere (samme mønster som den
   // gamle frittstående utfordring-planen: NOK/USD etter språk). $97 er satt
   // direkte etter Renates eget FEA-medlemskap (samme normalpris hun selv
@@ -1203,7 +1203,13 @@ export default {
             .bind(epost, obj.customer||null, obj.subscription||null, tier, belop, belop>0?'paid':'trial', 'month', affKode||null, naa, belop>0?naa:null).run();
           // Provisjon med en gang hvis det ble betalt penger nå (uten prøvetid)
           if(belop > 0 && affKode) await trackAffiliateSale(env, affKode, epost, tier, belop);
-          await giStudioTilgang(env, epost, tier);
+          // LME Autopilot har egne, uavhengige kredittabonnement (Start/
+          // Pro/VIP, se AUTOPILOT_* i _lib/purchase-links.js i hovedrepoet)
+          // siden appen ble skilt ut som eget produkt fra Inner Circle.
+          // Utfordringens grunnleggertilbud skal derfor IKKE gi Autopilot-
+          // kreditter, kun selve Inner Circle Pro-medlemskapet (se
+          // PLANS.proUtfordring over og salgsteksten på /utfordringen).
+          if(!plan.utfordring) await giStudioTilgang(env, epost, tier);
           if(plan.utfordring){
             // Utfordring-delen (dag 0-e-post, 30-dagers kø, fellesskap) lever
             // i hovedrepoets BUILDER_KV, ikke her, så den meldes inn via et

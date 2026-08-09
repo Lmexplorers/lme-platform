@@ -3,10 +3,11 @@
  * (dag 0-e-post + 30-dagers kø + fellesskaps-medlemskap), kalt på tvers fra
  * den separate lme-inner-circle-workeren rett etter et fullført kjøp av
  * "utfordring + Inner Circle Pro" (grunnleggerpris, se PLANS.proUtfordring
- * i workers/lme-inner-circle/worker.js). Selve Pro-medlemskapet og
- * Autopilot-kredittene gis av workeren selv (egen D1-database og
- * STUDIO_KV, ingen av delene er tilgjengelig herfra), denne ruten gjør kun
- * utfordrings-delen, som lever i dette repoets BUILDER_KV.
+ * i workers/lme-inner-circle/worker.js). Selve Pro-medlemskapet gis av
+ * workeren selv (egen D1-database, ikke tilgjengelig herfra, og gir IKKE
+ * Autopilot-kreditter for dette kjøpet, se giStudioTilgang-kallet der),
+ * denne ruten gjør kun utfordrings-delen, som lever i dette repoets
+ * BUILDER_KV.
  *
  *   POST /api/utfordring-pro-enroll
  *   Header: X-Internal-Secret: <UTFORDRING_ENROLL_SECRET>
