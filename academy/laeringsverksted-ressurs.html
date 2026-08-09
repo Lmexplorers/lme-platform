@@ -64,6 +64,7 @@
   slug = slug.toLowerCase();
   var resource = null;
   var related = [];
+  var isOwnerUser = false;
   var root = document.getElementById('lv-innhold');
   var VIEWED_KEY = 'lv_recent';
 
@@ -98,6 +99,7 @@
       en: isEn(),
       isFavorite: isFavorite,
       onFavorite: toggleFavorite,
+      isOwner: isOwnerUser,
       relatedResources: related,
       onDownload: function (s) {
         fetch('/api/laeringsverksted', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'track', slug: s, kind: 'download' }) }).catch(function () {});
@@ -124,6 +126,19 @@
 
   applyStatic();
   maybeShowEdit();
+
+  /* Eieren skal aldri måtte betale for sitt eget produkt (CLAUDE.md).
+     Fail-open: en feilet /api/access-sjekk lar bare kjøpsknappen stå som
+     vanlig, den låser aldri noe ekstra. */
+  fetch('/api/access', { credentials: 'same-origin' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (a) {
+      if (a && (a.plan === 'owner' || a.tier === 'owner')) {
+        isOwnerUser = true;
+        if (resource) render();
+      }
+    })
+    .catch(function () {});
 
   if (!slug) { render(); return; }
   fetch('/api/laeringsverksted?slug=' + encodeURIComponent(slug) + '&t=' + Date.now())
