@@ -18,6 +18,7 @@ import {
   SKOLEDAGBOK_1_3_TRINN, SKOLEDAGBOK_4_7_TRINN, MIA_TEO_FOLELSER, MIA_TEO_SITUASJONSKORT,
   MIA_TEO_SNAKKE_OM_FOLELSER, MIA_TEO_KROPP_3_6, MIA_TEO_KROPP_6_9,
   MIA_TEO_BOK_3_6, MIA_TEO_BOK_6_9, MIA_TEO_SERIE_KOMPLETT,
+  MIA_TEO_TERMOMETER_3_6, MIA_TEO_TERMOMETER_6_9,
 } from "../_lib/seed-laeringsverksted-data.js";
 
 function json(data, status) {
@@ -37,7 +38,7 @@ export async function onRequestGet(context) {
   if (pw !== expected) return json({ error: "bad_password" }, 401);
 
   const results = [];
-  for (const raw of [LIVETS_TIDSLINJE, PLANSJER_OG_KORTSETT, DE_SMA_NATURUTFORSKERNE, SKOLEDAGBOK_1_3_TRINN, SKOLEDAGBOK_4_7_TRINN, MIA_TEO_FOLELSER, MIA_TEO_SITUASJONSKORT, MIA_TEO_SNAKKE_OM_FOLELSER, MIA_TEO_KROPP_3_6, MIA_TEO_KROPP_6_9, MIA_TEO_BOK_3_6, MIA_TEO_BOK_6_9, MIA_TEO_SERIE_KOMPLETT]) {
+  for (const raw of [LIVETS_TIDSLINJE, PLANSJER_OG_KORTSETT, DE_SMA_NATURUTFORSKERNE, SKOLEDAGBOK_1_3_TRINN, SKOLEDAGBOK_4_7_TRINN, MIA_TEO_FOLELSER, MIA_TEO_SITUASJONSKORT, MIA_TEO_SNAKKE_OM_FOLELSER, MIA_TEO_KROPP_3_6, MIA_TEO_KROPP_6_9, MIA_TEO_BOK_3_6, MIA_TEO_BOK_6_9, MIA_TEO_SERIE_KOMPLETT, MIA_TEO_TERMOMETER_3_6, MIA_TEO_TERMOMETER_6_9]) {
     const resource = sanitizeResource(raw);
     if (!resource) { results.push({ error: "bad_resource_data", slug: raw && raw.slug }); continue; }
     const payload = JSON.stringify(resource);
