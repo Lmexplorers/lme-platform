@@ -360,7 +360,82 @@ export const MIA_TEO_FOLELSER = {
   licenseOptions: [],
   bundle: false,
   bundleItems: [],
-  related: [],
+  related: ["mia-teo-situasjonskort"],
+  bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
+  stats: { views: 0, downloads: 0, favorites: 0 },
+};
+
+/* Andre produkt i serien "Mia & Teo – Følelser og sosial kompetanse"
+   (Renate, 9. august 2026). Samme status som MIA_TEO_FOLELSER: ekte
+   innhold og bilder fra PDF-en, lagt inn som UPUBLISERT UTKAST siden pris
+   og betalingsmåte ikke er bestemt ennå. */
+export const MIA_TEO_SITUASJONSKORT = {
+  slug: "mia-teo-situasjonskort",
+  published: false,
+  featured: false,
+  title: { no: "Hva skjedde? Mia & Teo situasjonskort", en: "" },
+  subtitle: {
+    no: "Følelser og sosial kompetanse · 24 åpne situasjonskort · 3–9 år",
+    en: "",
+  },
+  description: {
+    no: "Situasjonskortene inviterer barnet til å undersøke en hendelse uten at én følelse eller løsning blir presentert som fasit. Samme situasjon kan oppleves forskjellig av ulike mennesker. Målet er språk, perspektivtaking, empati og problemløsing, ikke å teste barnet.",
+    en: "",
+  },
+  cover: "https://lmexplorers.com/images/laeringsverksted/mia-teo-situasjonskort-cover.jpg",
+  gallery: ["https://lmexplorers.com/images/laeringsverksted/mia-teo-situasjonskort-eksempel.jpg"],
+  audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
+  ageBands: ["3-6", "m3-6", "m6-9", "1-2trinn"],
+  direction: "begge",
+  subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
+  resourceType: ["aktivitetskort", "larerveiledning"],
+  competencyGoals: [
+    { no: "Barnet kan observere en situasjon, sette ord på følelser og kroppsspråk, utforske ulike perspektiver, og foreslå mulige handlinger eller løsninger.", en: "" },
+  ],
+  contains: [
+    { no: "24 nummererte bildekort med situasjoner", en: "" },
+    { no: "Pedagogisk veiledning med åpne spørsmål", en: "" },
+    { no: "Forslag til mulige følelsesord per situasjon (ikke fasit)", en: "" },
+    { no: "Aktivitetsforslag: fortelling, perspektivbytte, rollespill og sortering", en: "" },
+  ],
+  pageCount: 19,
+  language: ["nb"],
+  fileFormat: ["pdf"],
+  editable: false,
+  usageTips: {
+    no: "Lag en fortelling: velg et kort og finn på hva som skjedde før, under og etter. Bytt perspektiv: fortell først fra Mias side, så fra Teos. Finn tre muligheter: foreslå tre trygge handlinger og sammenlign hva som kan skje. Rollespill: øv på setninger som «Stopp», «Kan jeg være med?» og «Vil du ha hjelp?». Sorter kortene etter tema: uhell, venting, hjelp, grenser, mestring, nye situasjoner eller sterke sanseinntrykk.",
+    en: "",
+  },
+  prep: {
+    no: "Skriv ut i faktisk størrelse på A4, gjerne på kraftig papir, og klipp langs de fargede ytterkantene. Laminer ved behov. Velg få kort om gangen og legg dem i en liten kurv eller på et ryddig underlag.",
+    en: "",
+  },
+  differentiation: {
+    no: "3–6 år: bruk ett kort og to til tre konkrete spørsmål, og tilby følelsesord uten å korrigere. 6–9 år: sammenlign perspektiver, intensjon og virkning, og utforsk forskjellen mellom uhell og handling med vilje. Barn som trenger mer støtte: reduser antall spørsmål, bruk konkrete alternativer, og la barnet svare ved å peke eller velge et følelseskort, uten krav om øyekontakt eller muntlig forklaring.",
+    en: "",
+  },
+  montessoriArea: {
+    area: { no: "Sansene / språk: sosial forståelse og perspektivtaking", en: "" },
+    presentation: {
+      no: "Legg frem ett kort. Vent litt, og spør: Hva ser du? Hvem er med? Hva har kanskje skjedd? Se deretter på ansikt, blikk, hender og kropp, og utforsk om personen kan kjenne mer enn én følelse. Spør til slutt hva som kan skje videre, og hvem som kan hjelpe.",
+      en: "",
+    },
+    prerequisites: { no: "Kan gjerne brukes sammen med «Mia & Teo utforsker følelsene» for et felles følelsesspråk, men er ikke en forutsetning.", en: "" },
+    directPurpose: { no: "Observere en situasjon og sette ord på mulige følelser, tanker og handlinger.", en: "" },
+    indirectPurpose: { no: "Utvikle perspektivtaking, empati og evne til å tenke gjennom trygge løsninger.", en: "" },
+    controlOfError: { no: "Ingen fasit. Kontrollen ligger i samtalen: barnets tolkning godtas når den kan begrunnes i bildet.", en: "" },
+    extension: { no: "Kombiner med følelseskortene, lag egne fortellinger, eller spill situasjonen som rollespill.", en: "" },
+  },
+  license: "privat",
+  priceType: "betalt",
+  price: { no: "", en: "" },
+  memberPrice: { no: "", en: "" },
+  buyUrl: "",
+  fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-situasjonskort-no.pdf",
+  licenseOptions: [],
+  bundle: false,
+  bundleItems: [],
+  related: ["mia-teo-utforsker-folelsene"],
   bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
   stats: { views: 0, downloads: 0, favorites: 0 },
 };

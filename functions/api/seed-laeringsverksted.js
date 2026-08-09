@@ -15,7 +15,7 @@ import {
 } from "./laeringsverksted.js";
 import {
   LIVETS_TIDSLINJE, PLANSJER_OG_KORTSETT, DE_SMA_NATURUTFORSKERNE,
-  SKOLEDAGBOK_1_3_TRINN, SKOLEDAGBOK_4_7_TRINN, MIA_TEO_FOLELSER,
+  SKOLEDAGBOK_1_3_TRINN, SKOLEDAGBOK_4_7_TRINN, MIA_TEO_FOLELSER, MIA_TEO_SITUASJONSKORT,
 } from "../_lib/seed-laeringsverksted-data.js";
 
 function json(data, status) {
@@ -35,7 +35,7 @@ export async function onRequestGet(context) {
   if (pw !== expected) return json({ error: "bad_password" }, 401);
 
   const results = [];
-  for (const raw of [LIVETS_TIDSLINJE, PLANSJER_OG_KORTSETT, DE_SMA_NATURUTFORSKERNE, SKOLEDAGBOK_1_3_TRINN, SKOLEDAGBOK_4_7_TRINN, MIA_TEO_FOLELSER]) {
+  for (const raw of [LIVETS_TIDSLINJE, PLANSJER_OG_KORTSETT, DE_SMA_NATURUTFORSKERNE, SKOLEDAGBOK_1_3_TRINN, SKOLEDAGBOK_4_7_TRINN, MIA_TEO_FOLELSER, MIA_TEO_SITUASJONSKORT]) {
     const resource = sanitizeResource(raw);
     if (!resource) { results.push({ error: "bad_resource_data", slug: raw && raw.slug }); continue; }
     const payload = JSON.stringify(resource);
