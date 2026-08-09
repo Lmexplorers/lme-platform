@@ -7,6 +7,7 @@
 /g/*  /academy/gruppe.html  200
 /kurs  /academy/kurs.html  200
 /kurs/*  /academy/kurs.html  200
+/lv/*  /academy/laeringsverksted-ressurs.html  200
 /creative-studio  /creative-academy  301
 /academy/intro  /kurs/montessori-kom-i-gang  301
 /academy/3-6  /kurs/montessori-masterclass  301

@@ -460,6 +460,36 @@
     },
   };
 
+  /* =====================================================================
+     DYPLENKE FRA LME LÆRINGSVERKSTED
+     En ressursside kan lenke inn med ?lv=1&type=<skapertype>&... for å åpne
+     riktig skaper med fag, trinn og læreplanmål forhåndsvalgt. Bruker samme
+     BK.pendingTemplate-mekanisme som malbiblioteket (BK.useTemplate), så
+     dette er ingen ny vei inn, bare et annet sted forhåndsoppsettet kommer
+     fra. Kjøres én gang ved oppstart, før BK.boot() dispatcher ruten.
+     ===================================================================== */
+  (function () {
+    var qs;
+    try { qs = new URLSearchParams(location.search); } catch (e) { return; }
+    if (qs.get('lv') !== '1') return;
+    var type = qs.get('type');
+    var def = FORMS[type];
+    if (!def) return;
+    var cfg = {};
+    def.fields.forEach(function (f) {
+      var name = f[0];
+      if (qs.has(name)) cfg[name] = qs.get(name);
+    });
+    var plan = qs.get('plan'), fag = qs.get('fag'), alder = qs.get('alder');
+    if (plan && fag && alder && BK.CURRICULUM && BK.CURRICULUM[plan] && BK.CURRICULUM[plan].fag[fag]) {
+      cfg.goals = BK.curriculumGoal(plan, fag, alder, BK.lang() === 'no' ? 'no' : 'en');
+    }
+    var title = qs.get('title') || '';
+    BK.pendingTemplate = { type: type, name: [title, title], cfg: cfg };
+    location.hash = '#/create/' + type;
+    try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {}
+  })();
+
   BK.route('/create', function (root, rest) {
     var type = rest[0] || 'book';
     var def = FORMS[type] || FORMS.book;
