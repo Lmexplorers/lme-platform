@@ -301,7 +301,11 @@
     var buyBox = el("div", "lv-buybox");
     buyBox.appendChild(priceNode(r, en));
     if (pick(r.memberPrice, en) && r.priceType === "betalt") {
-      buyBox.appendChild(el("span", "lv-memberprice", (en ? "Member price: " : "Medlemspris: ") + pick(r.memberPrice, en)));
+      var mpTxt = (en ? "Member price: " : "Medlemspris: ") + pick(r.memberPrice, en);
+      if (r.memberPromoCode) {
+        mpTxt += en ? " (code " + r.memberPromoCode + " at checkout)" : " (kode " + r.memberPromoCode + " i kassen)";
+      }
+      buyBox.appendChild(el("span", "lv-memberprice", mpTxt));
     }
 
     var buyBtn = el("a", "lv-cta");

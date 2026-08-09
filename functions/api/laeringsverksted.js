@@ -193,6 +193,10 @@ export function sanitizeResource(raw) {
     priceType: PRICE_TYPES.includes(raw.priceType) ? raw.priceType : "gratis",
     price: langField(raw.price, 40),
     memberPrice: langField(raw.memberPrice, 40),
+    /* Valgfri Stripe-rabattkode kjøperen selv taster inn i kassen (Stripe
+       "allow_promotion_codes" på betalingslenken). Ren visningstekst, ikke
+       koblet til noen egen medlems-only kjøpslenke. */
+    memberPromoCode: String(raw.memberPromoCode || "").trim().slice(0, 40),
     buyUrl: cleanLink(raw.buyUrl, 400),
     /* Selve fila (PDF e.l.) som skal leveres etter kjøp/nedlasting. For
        gratisressurser holder buyUrl alene (som før); for betalte ressurser
@@ -255,6 +259,7 @@ export function indexEntry(r) {
     priceType: r.priceType,
     price: r.price,
     memberPrice: r.memberPrice,
+    memberPromoCode: r.memberPromoCode,
     bundle: r.bundle,
     featured: r.featured,
     published: r.published,
