@@ -21,7 +21,6 @@
  */
 
 import { sendOppskriftMail, sendOwnerSaleNotice } from "../_lib/oppskrift-mail.js";
-import { enrollUtfordringMember } from "../_lib/utfordring-mail.js";
 import { sendClaudeMail } from "../_lib/claude-mail.js";
 import { registerNewsletter } from "../_lib/newsletter.js";
 import { PATTERN_LINKS } from "../_lib/pattern-links.js";
@@ -36,17 +35,6 @@ import {
 import { sendAutopilotMail } from "../_lib/autopilot-mail.js";
 import { grantCourseAccess, grantModuleAccess } from "../_lib/course-access.js";
 import { sendCourseDeliveryMail, sendModuleDeliveryMail } from "../_lib/course-mail.js";
-
-/* ---- 10 000-visninger-utfordringen (gamle, frittstående abonnementet) --
-   De som kjøpte via denne betalingslenken (299 kr/$33, ingen Inner Circle-
-   tilgang) beholdes uendret på denne planen inntil videre. Nye kjøp bruker
-   nå i stedet "utfordring + Inner Circle Pro" via lme-inner-circle-workeren,
-   se api/utfordring-pro-enroll.js. Innmeldingslogikken (dag 0 + 30-dagers
-   kø + fellesskaps-medlemskap) er delt via enrollUtfordringMember(). */
-const UTFORDRING_PAYMENT_LINK_LANG = {
-  "plink_1U0I2WLax7B8uQzqhBB6bAVC": "no", // Utfordringen, 299 kr/mnd (NOK)
-  "plink_1U0I2XLax7B8uQzq7e9tzjBh": "en", // The Challenge, $33/mo (USD)
-};
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -203,20 +191,6 @@ export async function onRequestPost(context) {
         await sendOwnerSaleNotice(env, {
           pname: mainLang ? "Claude-kurset" : "Claude-kurset, mersalg", lang: claudeLang,
           name: name, email: email, amount: obj.amount_total, currency: obj.currency,
-        });
-      } catch (e3) {}
-      return json({ ok: true });
-    }
-
-    // Utfordringen: send dag 0 med en gang, legg resten i kø. Aldri Inner Circle.
-    const utfordringLang = obj.payment_link && UTFORDRING_PAYMENT_LINK_LANG[obj.payment_link];
-    if (utfordringLang && email && obj.payment_status !== "unpaid") {
-      const nm = (obj.customer_details && obj.customer_details.name) || "";
-      await enrollUtfordringMember(env, { email, name: nm, lang: utfordringLang });
-      try {
-        await sendOwnerSaleNotice(env, {
-          pname: "10 000-visninger-utfordringen", lang: utfordringLang,
-          name: nm, email: email, amount: obj.amount_total, currency: obj.currency,
         });
       } catch (e3) {}
       return json({ ok: true });
