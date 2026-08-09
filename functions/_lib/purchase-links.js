@@ -287,4 +287,7 @@ export const LAERINGSVERKSTED_PAYMENT_LINKS = {
   "plink_1U2bbMLax7B8uQzq1wOPa1Yo": { slug: "mia-teo-sosiale-historier-6-9", license: "privat", lang: "no" },
   "plink_1U2bbNLax7B8uQzqovubG0g6": { slug: "mia-teo-jeg-kan-selv-3-6", license: "privat", lang: "no" },
   "plink_1U2bbOLax7B8uQzqJ7EdlPJF": { slug: "mia-teo-jeg-kan-selv-6-9", license: "privat", lang: "no" },
+  // Fjerde frittstående serie: Språklek (Renate, 9. august 2026).
+  "plink_1U2cNyLax7B8uQzqj1DNOWdW": { slug: "mia-teo-spraklek-3-6", license: "privat", lang: "no" },
+  "plink_1U2cNzLax7B8uQzqmKC7F8np": { slug: "mia-teo-spraklek-6-9", license: "privat", lang: "no" },
 };
