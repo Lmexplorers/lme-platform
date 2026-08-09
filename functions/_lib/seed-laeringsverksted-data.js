@@ -903,7 +903,7 @@ export const MIA_TEO_SERIE_KOMPLETT = {
     en: "",
   },
   description: {
-    no: "Hele serien samlet: trepartskort, situasjonskort, samtalekort, to aldersdelte aktivitetshefter, to personlige følelsesbøker og to aldersdelte følelsestermometer-/ro-strategihefter. Alt du trenger for å jobbe med følelser og sosial kompetanse hjemme, i barnehagen eller på skolen, for barn fra 3 til 9 år.",
+    no: "Hele serien samlet: trepartskort, situasjonskort, samtalekort, to aldersdelte aktivitetshefter, to personlige følelsesbøker og to aldersdelte følelsestermometer-/ro-strategihefter. Alt du trenger for å jobbe med følelser og sosial kompetanse hjemme, i barnehagen eller på skolen, for barn fra 3 til 9 år. Kjøpt enkeltvis koster de ni ressursene til sammen 931 kr, i samlepakken sparer du 382 kr.",
     en: "",
   },
   cover: "https://lmexplorers.com/images/laeringsverksted/mia-teo-folelser-cover.jpg",
