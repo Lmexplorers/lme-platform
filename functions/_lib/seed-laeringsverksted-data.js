@@ -360,7 +360,170 @@ export const MIA_TEO_FOLELSER = {
   licenseOptions: [],
   bundle: false,
   bundleItems: [],
-  related: ["mia-teo-situasjonskort", "mia-teo-snakke-om-folelser"],
+  related: [
+    "mia-teo-situasjonskort",
+    "mia-teo-snakke-om-folelser",
+    "mia-teo-folelsene-i-kroppen-3-6",
+    "mia-teo-folelsene-i-kroppen-6-9",
+  ],
+  bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
+  stats: { views: 0, downloads: 0, favorites: 0 },
+};
+
+/* Fjerde og femte produkt i serien "Mia & Teo – Følelser og sosial
+   kompetanse" (Renate, 9. august 2026): to egne, aldersdelte
+   aktivitetshefter, "Følelsene i kroppen" for 3-6 år og 6-9 år. Renate har
+   presisert (skjermbilde 9. august 2026) at egne pedagogisk tilpassede
+   hefter per aldersgruppe blir fast praksis videre i serien, derfor to
+   separate ressurser her, ikke én kombinert. Samme status som de tre
+   foregående: ekte innhold og bilder fra PDF-ene, UPUBLISERT UTKAST siden
+   pris og betalingsmåte ikke er bestemt ennå. */
+export const MIA_TEO_KROPP_3_6 = {
+  slug: "mia-teo-folelsene-i-kroppen-3-6",
+  published: false,
+  featured: false,
+  title: { no: "Følelsene i kroppen, aktivitetshefte 3–6 år", en: "" },
+  subtitle: {
+    no: "Følelser og sosial kompetanse · aktivitetshefte med Mia & Teo · 3–6 år",
+    en: "",
+  },
+  description: {
+    no: "Et lekent aktivitetshefte der barnet peker, fargelegger og tegner sammen med en trygg voksen for å utforske hvor og hvordan følelser kan kjennes i kroppen. Skriving er aldri nødvendig, og Mia og Teo brukes som eksempel slik at barnet slipper å måtte fortelle om seg selv.",
+    en: "",
+  },
+  cover: "https://lmexplorers.com/images/laeringsverksted/mia-teo-kropp-3-6-cover.jpg",
+  gallery: ["https://lmexplorers.com/images/laeringsverksted/mia-teo-kropp-3-6-eksempel.jpg"],
+  audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
+  ageBands: ["3-6", "m3-6"],
+  direction: "begge",
+  subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
+  resourceType: ["arbeidshefte", "larerveiledning"],
+  competencyGoals: [
+    { no: "Barnet kan legge merke til og peke på kroppssignaler som hører til ulike følelser, uttrykke seg gjennom tegning og farger, og oppdage enkle ting som kan hjelpe kroppen.", en: "" },
+  ],
+  contains: [
+    { no: "Veiledning til den voksne om lekent og trygt arbeid uten fasitsvar", en: "" },
+    { no: "Kroppskart og arbeidsark for følelsene glad, trist, sint, redd, rolig og \"trenger en pause\"", en: "" },
+    { no: "Følelsestermometer, rolig pust-øvelse og en enkel pauseplan", en: "" },
+  ],
+  pageCount: 15,
+  language: ["nb"],
+  fileFormat: ["pdf"],
+  editable: false,
+  usageTips: {
+    no: "Velg én side om gangen og la barnet styre tempoet. Bruk Mia eller Teo som eksempel når temaet føles nært, og skriv gjerne ned barnets egne ord om barnet ønsker det. Barnet kan alltid hoppe over en side eller stoppe.",
+    en: "",
+  },
+  prep: {
+    no: "Skriv ut i faktisk størrelse på A4. Arbeidssidene kan brukes flere ganger dersom de lamineres eller legges i plastlomme og fylles ut med whiteboardtusj.",
+    en: "",
+  },
+  differentiation: {
+    no: "Følg barnets eget uttrykk: noen barn peker, andre fargelegger, tegner eller viser med kroppen. Samme følelse kan kjennes forskjellig fra gang til gang, så la gjerne barnet svare med \"kanskje\" eller finne på noe annet.",
+    en: "",
+  },
+  montessoriArea: {
+    area: { no: "Sansene / kroppsbevissthet: følelser i kroppen", en: "" },
+    presentation: {
+      no: "Se sammen på Mia eller Teo, og la barnet peke, fargelegge eller tegne mulige kroppssignaler. Spør hva kroppen kanskje trenger, og la barnet velge blant konkrete alternativer som ro, bevegelse, nærhet eller hjelp.",
+      en: "",
+    },
+    prerequisites: { no: "Ingen spesielle forkunnskaper. Kan gjerne kombineres med «Mia & Teo utforsker følelsene» for et felles følelsesspråk.", en: "" },
+    directPurpose: { no: "Oppdage og sette ord på kroppssignaler som hører til ulike følelser.", en: "" },
+    indirectPurpose: { no: "Bygge kroppsbevissthet og tidlige, trygge strategier for selvregulering.", en: "" },
+    controlOfError: { no: "Ingen fasit. Den voksne bekrefter at flere svar kan være riktige.", en: "" },
+    extension: { no: "Kombiner med følelseskortene, situasjonskortene eller samtalekortene for en helhetlig samtale om følelser.", en: "" },
+  },
+  license: "privat",
+  priceType: "betalt",
+  price: { no: "", en: "" },
+  memberPrice: { no: "", en: "" },
+  buyUrl: "",
+  fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-folelsene-i-kroppen-3-6-no.pdf",
+  licenseOptions: [],
+  bundle: false,
+  bundleItems: [],
+  related: [
+    "mia-teo-utforsker-folelsene",
+    "mia-teo-situasjonskort",
+    "mia-teo-snakke-om-folelser",
+    "mia-teo-folelsene-i-kroppen-6-9",
+  ],
+  bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
+  stats: { views: 0, downloads: 0, favorites: 0 },
+};
+
+export const MIA_TEO_KROPP_6_9 = {
+  slug: "mia-teo-folelsene-i-kroppen-6-9",
+  published: false,
+  featured: false,
+  title: { no: "Følelsene i kroppen, aktivitetshefte 6–9 år", en: "" },
+  subtitle: {
+    no: "Følelser og sosial kompetanse · aktivitetshefte med Mia & Teo · 6–9 år",
+    en: "",
+  },
+  description: {
+    no: "Et aktivitetshefte der barnet utforsker, skriver og oppdager egne mønstre i hvordan følelser kjennes i kroppen, og bygger trygge strategier for regulering. Barnet kan arbeide alene på enkelte sider, men refleksjon om vanskelige opplevelser møtes best av en tilgjengelig voksen.",
+    en: "",
+  },
+  cover: "https://lmexplorers.com/images/laeringsverksted/mia-teo-kropp-6-9-cover.jpg",
+  gallery: ["https://lmexplorers.com/images/laeringsverksted/mia-teo-kropp-6-9-eksempel.jpg"],
+  audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
+  ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
+  direction: "begge",
+  subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
+  resourceType: ["arbeidshefte", "larerveiledning"],
+  competencyGoals: [
+    { no: "Barnet kan oppdage tidlige kroppssignaler før en følelse blir svært sterk, knytte signaler til realistiske støttebehov, og utvikle egne trygge strategier for regulering.", en: "" },
+  ],
+  contains: [
+    { no: "Veiledning til den voksne om å gå fra signal til strategi uten fasitsvar", en: "" },
+    { no: "To kroppskart og arbeidsark for ni følelser: glad, trist, sint, redd, bekymret, rolig, spent, frustrert og sliten", en: "" },
+    { no: "Følelsestermometer, \"før - under - etter\", fem sanser-øvelse, rolig pust og en pauseplan", en: "" },
+  ],
+  pageCount: 22,
+  language: ["nb"],
+  fileFormat: ["pdf"],
+  editable: false,
+  usageTips: {
+    no: "Hjelp barnet å oppdage de tidligste kroppssignalene, før følelsen blir svært sterk, og utforsk sammen hvilke strategier som faktisk hjelper. Unngå å presentere ett kroppssignal som bevis på én bestemt følelse, og gi barnet mulighet til å velge bort spørsmål eller be om pause.",
+    en: "",
+  },
+  prep: {
+    no: "Skriv ut i faktisk størrelse på A4. Arbeidssidene kan brukes flere ganger dersom de lamineres eller legges i plastlomme og fylles ut med whiteboardtusj.",
+    en: "",
+  },
+  differentiation: {
+    no: "Barnet kan arbeide mer selvstendig enn i 3–6 års-heftet, men refleksjon rundt vanskelige opplevelser bør fortsatt møtes av en tilgjengelig og trygg voksen. La barnet bruke Mia eller Teo som eksempel dersom egne svar føles for nære.",
+    en: "",
+  },
+  montessoriArea: {
+    area: { no: "Sansene / kroppsbevissthet: følelser i kroppen og selvregulering", en: "" },
+    presentation: {
+      no: "Utforsk sammen hvilke signaler kroppen sender ved ulike følelser, og hjelp barnet å knytte signalene til en realistisk strategi. Bruk «Før - under - etter» og følelsestermometeret til å oppdage mønstre over tid.",
+      en: "",
+    },
+    prerequisites: { no: "Kan brukes alene eller som en videreføring av «Følelsene i kroppen 3–6 år» og de andre produktene i serien.", en: "" },
+    directPurpose: { no: "Oppdage kroppssignaler, intensitet og mønstre, og knytte dem til egne, trygge strategier.", en: "" },
+    indirectPurpose: { no: "Bygge selvregulering og et nyansert språk for egne kroppsopplevelser.", en: "" },
+    controlOfError: { no: "Ingen fasit. Nyanser og flere muligheter utforskes fremfor ett riktig svar.", en: "" },
+    extension: { no: "Kombiner med følelseskortene, situasjonskortene eller samtalekortene for en helhetlig samtale om følelser.", en: "" },
+  },
+  license: "privat",
+  priceType: "betalt",
+  price: { no: "", en: "" },
+  memberPrice: { no: "", en: "" },
+  buyUrl: "",
+  fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-folelsene-i-kroppen-6-9-no.pdf",
+  licenseOptions: [],
+  bundle: false,
+  bundleItems: [],
+  related: [
+    "mia-teo-utforsker-folelsene",
+    "mia-teo-situasjonskort",
+    "mia-teo-snakke-om-folelser",
+    "mia-teo-folelsene-i-kroppen-3-6",
+  ],
   bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
   stats: { views: 0, downloads: 0, favorites: 0 },
 };
@@ -435,7 +598,12 @@ export const MIA_TEO_SITUASJONSKORT = {
   licenseOptions: [],
   bundle: false,
   bundleItems: [],
-  related: ["mia-teo-utforsker-folelsene", "mia-teo-snakke-om-folelser"],
+  related: [
+    "mia-teo-utforsker-folelsene",
+    "mia-teo-snakke-om-folelser",
+    "mia-teo-folelsene-i-kroppen-3-6",
+    "mia-teo-folelsene-i-kroppen-6-9",
+  ],
   bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
   stats: { views: 0, downloads: 0, favorites: 0 },
 };
@@ -509,7 +677,12 @@ export const MIA_TEO_SNAKKE_OM_FOLELSER = {
   licenseOptions: [],
   bundle: false,
   bundleItems: [],
-  related: ["mia-teo-utforsker-folelsene", "mia-teo-situasjonskort"],
+  related: [
+    "mia-teo-utforsker-folelsene",
+    "mia-teo-situasjonskort",
+    "mia-teo-folelsene-i-kroppen-3-6",
+    "mia-teo-folelsene-i-kroppen-6-9",
+  ],
   bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
   stats: { views: 0, downloads: 0, favorites: 0 },
 };
