@@ -1449,3 +1449,155 @@ export const MIA_TEO_HISTORIER_6_9 = {
   bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
   stats: { views: 0, downloads: 0, favorites: 0 },
 };
+
+/* Ny, egen serie: "Jeg kan selv med Mia & Teo", praktisk liv og
+   selvstendighet, 3-6 år og 6-9 år (Renate, 9. august 2026). Ekte
+   Montessori-praktisk-liv-innhold og bilder fra PDF-ene: tolv ekte
+   hverdagsaktiviteter per aldersgruppe med materialliste, nummererte
+   trinn og voksenstøtte-notat, samme oppbygning som en klassisk
+   Montessori-presentasjon. Lagt inn som UPUBLISERT UTKAST: pris er ikke
+   bekreftet for denne serien ennå (foreslått 89/99 kr, samme nivå som
+   Følelsene i kroppen- og Min dag-heftene). */
+export const MIA_TEO_PRAKTISK_3_6 = {
+  slug: "mia-teo-jeg-kan-selv-3-6",
+  published: false,
+  featured: false,
+  title: { no: "Jeg kan selv med Mia & Teo, praktisk liv og selvstendighet, 3–6 år", en: "" },
+  subtitle: {
+    no: "Montessori praktisk liv · 12 hverdagsaktiviteter · 3–6 år",
+    en: "",
+  },
+  description: {
+    no: "Tolv ekte hverdagsaktiviteter fra Montessoris praktiske liv: helle vann, vaske hender, dekke på, lage banansnack og mer. Hver aktivitet har materialliste, tre nummererte trinn og et voksenstøtte-notat, akkurat som en ekte Montessori-presentasjon.",
+    en: "",
+  },
+  cover: "https://lmexplorers.com/images/laeringsverksted/mia-teo-praktisk-3-6-cover.jpg",
+  gallery: ["https://lmexplorers.com/images/laeringsverksted/mia-teo-praktisk-3-6-eksempel.jpg"],
+  audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
+  ageBands: ["3-6", "m3-6"],
+  direction: "begge",
+  subjects: ["praktisk-liv", "livsmestring", "barnehage", "spesialpedagogikk"],
+  resourceType: ["aktivitetskort", "larerveiledning"],
+  competencyGoals: [
+    { no: "Barnet kan gjennomføre enkle hverdagsaktiviteter selv, med økende koordinasjon, konsentrasjon og selvstendighet.", en: "" },
+  ],
+  contains: [
+    { no: "Tolv aktiviteter: helle vann, øse fra bolle til bolle, bære et brett, vaske hendene, tørke søl, feie opp, dekke på, lage banansnack, vanne en plante, brette en klut, kneppe selv, og sette på plass", en: "" },
+    { no: "Tolv aktivitetskort (tre ark) til å velge og klippe ut", en: "" },
+    { no: "\"Slik gjør jeg det\"-arbeidsark med fire trinn, og en sjekkliste for mestring", en: "" },
+    { no: "Veiledning til den voksne om å vise langsomt og bruke ekte redskaper", en: "" },
+  ],
+  pageCount: 21,
+  language: ["nb"],
+  fileFormat: ["pdf"],
+  editable: false,
+  usageTips: {
+    no: "Presenter ett trinn om gangen med rolige og tydelige bevegelser. Vent før du hjelper, og grip bare inn ved fare. Søl og ujevne resultater er en naturlig del av læringen, vis heller hvordan man rydder opp.",
+    en: "",
+  },
+  prep: {
+    no: "Skriv ut i faktisk størrelse på A4, og laminer aktivitetskort og sjekklister ved behov. Bruk ekte, funksjonelle redskaper i en størrelse og vekt barnet kan håndtere trygt, og gjør klart alt på et brett.",
+    en: "",
+  },
+  differentiation: {
+    no: "For 3–6 år: vis korte sekvenser, gjør klart alt på forhånd, og la barnet prøve i eget tempo. Tilpass alltid redskaper og oppgaver til barnets ferdigheter og sikkerhet.",
+    en: "",
+  },
+  montessoriArea: {
+    area: { no: "Praktisk liv: omsorg for seg selv og miljøet", en: "" },
+    presentation: {
+      no: "Vis aktiviteten langsomt med tydelige bevegelser, ett trinn om gangen. La barnet observere hele sekvensen før det prøver selv, og vent med å hjelpe til barnet ber om det eller det oppstår fare.",
+      en: "",
+    },
+    prerequisites: { no: "Ingen spesielle forkunnskaper. Tilpass redskapenes størrelse og vekt til barnets ferdigheter.", en: "" },
+    directPurpose: { no: "Mestre en konkret hverdagsaktivitet fra start til slutt.", en: "" },
+    indirectPurpose: { no: "Utvikle koordinasjon, konsentrasjon, orden og selvstendighet.", en: "" },
+    controlOfError: { no: "Aktiviteten viser selv om den er utført riktig, for eksempel om vannet er sølt eller bordet dekket stødig.", en: "" },
+    extension: { no: "Kombiner flere aktiviteter etter hverandre, eller la barnet vise aktiviteten til et annet barn.", en: "" },
+  },
+  license: "privat",
+  priceType: "betalt",
+  price: { no: "", en: "" },
+  memberPrice: { no: "", en: "" },
+  memberPromoCode: "",
+  buyUrl: "",
+  fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-jeg-kan-selv-3-6-no.pdf",
+  licenseOptions: [],
+  bundle: false,
+  bundleItems: [],
+  related: ["mia-teo-jeg-kan-selv-6-9"],
+  bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
+  stats: { views: 0, downloads: 0, favorites: 0 },
+};
+
+export const MIA_TEO_PRAKTISK_6_9 = {
+  slug: "mia-teo-jeg-kan-selv-6-9",
+  published: false,
+  featured: false,
+  title: { no: "Jeg kan selv med Mia & Teo, praktisk liv og selvstendighet, 6–9 år", en: "" },
+  subtitle: {
+    no: "Montessori praktisk liv · 12 hverdagsaktiviteter · 6–9 år",
+    en: "",
+  },
+  description: {
+    no: "Tolv hverdagsaktiviteter som bygger videre på selvstendighet gjennom planlegging, gjennomføring og kontroll: pakke sekken, lage kald frokost, sortere klesvask, sy i en knapp og mer. Barnet planlegger, gjennomfører, kontrollerer og rydder selv etter hver aktivitet.",
+    en: "",
+  },
+  cover: "https://lmexplorers.com/images/laeringsverksted/mia-teo-praktisk-6-9-cover.jpg",
+  gallery: ["https://lmexplorers.com/images/laeringsverksted/mia-teo-praktisk-6-9-eksempel.jpg"],
+  audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
+  ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
+  direction: "begge",
+  subjects: ["praktisk-liv", "livsmestring", "spesialpedagogikk"],
+  resourceType: ["aktivitetskort", "larerveiledning"],
+  competencyGoals: [
+    { no: "Barnet kan planlegge, gjennomføre og kontrollere en hverdagsaktivitet selv, og rydde etterpå.", en: "" },
+  ],
+  contains: [
+    { no: "Tolv aktiviteter: sjekke oppgaver, pakke sekken, lage kald frokost, skjære trygt, sette i oppvaskmaskinen, sortere klesvask, brette klær, organisere arbeidsplassen, rydde etter måltidet, stelle en plante, forberede morgendagen, og sy i en knapp", en: "" },
+    { no: "Tolv aktivitetskort (tre ark) til å velge og klippe ut", en: "" },
+    { no: "\"Slik gjør jeg det\"-arbeidsark med fire trinn, og en sjekkliste for mestring", en: "" },
+    { no: "Veiledning til den voksne om å la barnet planlegge, gjennomføre, kontrollere og rydde", en: "" },
+  ],
+  pageCount: 21,
+  language: ["nb"],
+  fileFormat: ["pdf"],
+  editable: false,
+  usageTips: {
+    no: "La barnet planlegge, gjennomføre, kontrollere og rydde etter aktiviteten selv. Grip bare inn ved fare, og la ujevne resultater være informasjon barnet kan lære av, ikke noe som må rettes med en gang.",
+    en: "",
+  },
+  prep: {
+    no: "Skriv ut i faktisk størrelse på A4, og laminer aktivitetskort og sjekklister ved behov. Vurder redskaper og materialer nøye før barnet får prøve selv, spesielt ved aktiviteter med kniv, nål eller varmt servise.",
+    en: "",
+  },
+  differentiation: {
+    no: "La barnet velge rekkefølge og system selv der det er mulig. Noen aktiviteter (som å sy i en knapp eller skjære) krever tettere voksentilsyn enn andre.",
+    en: "",
+  },
+  montessoriArea: {
+    area: { no: "Praktisk liv: ansvar, planlegging og selvstendighet", en: "" },
+    presentation: {
+      no: "La barnet se gjennom hele aktiviteten før det starter, og planlegge egne steg. Den voksne hjelper barnet å prioritere og vurderer sikkerhet, uten å overta oppgaven.",
+      en: "",
+    },
+    prerequisites: { no: "Kan brukes alene eller som en videreføring av «Jeg kan selv 3–6 år».", en: "" },
+    directPurpose: { no: "Planlegge, gjennomføre og kontrollere en hverdagsaktivitet fra start til slutt.", en: "" },
+    indirectPurpose: { no: "Bygge ansvar, arbeidsvaner og tillit til egen mestring.", en: "" },
+    controlOfError: { no: "Aktiviteten viser selv om den er utført riktig, og barnet kontrollerer eget arbeid.", en: "" },
+    extension: { no: "La barnet lære bort aktiviteten til et yngre søsken, eller ta ansvar for aktiviteten fast en periode.", en: "" },
+  },
+  license: "privat",
+  priceType: "betalt",
+  price: { no: "", en: "" },
+  memberPrice: { no: "", en: "" },
+  memberPromoCode: "",
+  buyUrl: "",
+  fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-jeg-kan-selv-6-9-no.pdf",
+  licenseOptions: [],
+  bundle: false,
+  bundleItems: [],
+  related: ["mia-teo-jeg-kan-selv-3-6"],
+  bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
+  stats: { views: 0, downloads: 0, favorites: 0 },
+};
