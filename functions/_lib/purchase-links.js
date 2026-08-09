@@ -270,5 +270,12 @@ export const LAERINGSVERKSTED_PAYMENT_LINKS = {
   "plink_1U2ZQwLax7B8uQzqNkanwBIS": { slug: "mia-teo-folelsene-i-kroppen-6-9", license: "privat", lang: "no" },
   "plink_1U2ZQxLax7B8uQzqC6WWz3a9": { slug: "mia-teo-min-folelsesbok-3-6", license: "privat", lang: "no" },
   "plink_1U2ZQyLax7B8uQzqJztVUHcQ": { slug: "mia-teo-min-folelsesbok-6-9", license: "privat", lang: "no" },
-  "plink_1U2ZQzLax7B8uQzqJUhIWZKR": { slug: "mia-teo-folelser-serien-komplett", license: "privat", lang: "no" },
+  // Åttende og niende produkt lagt til i samlepakken 9. august 2026.
+  // Samlepakken fikk da ny pris (549 kr) og dermed ny betalingslenke;
+  // den gamle lenken (plink_1U2ZQzLax7B8uQzqJUhIWZKR, 449 kr) er satt
+  // inaktiv i Stripe, ikke bare fjernet herfra, i tilfelle et gammelt
+  // kjøp fortsatt refereres til den et sted.
+  "plink_1U2a8ULax7B8uQzqxi9o1YSm": { slug: "mia-teo-folelsestermometer-3-6", license: "privat", lang: "no" },
+  "plink_1U2a8WLax7B8uQzqvZNdtYOh": { slug: "mia-teo-folelsestermometer-6-9", license: "privat", lang: "no" },
+  "plink_1U2a8hLax7B8uQzqH7Zx4cDl": { slug: "mia-teo-folelser-serien-komplett", license: "privat", lang: "no" },
 };
