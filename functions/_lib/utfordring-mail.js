@@ -1,17 +1,16 @@
 /**
  * 10 000-visninger-utfordringen — automatiske e-poster via MailerSend.
  *
- * Sender hele 30-dagers-serien rett fra plattformen, samme mønster som
- * Claude-kurset (_lib/claude-mail.js). Ingen MailerLite-automasjon eller
- * -redigering nødvendig, alt ligger som HTML-tekst her i koden.
+ * Sender hele 31-dagers-serien (dag 0 til dag 30) rett fra plattformen,
+ * samme mønster som Claude-kurset (_lib/claude-mail.js). Ingen
+ * MailerLite-automasjon eller -redigering nødvendig, alt ligger som
+ * HTML-tekst her i koden.
  *
- * Ekte daglig serie: én e-post per dag i 30 dager (d1 til d30), pluss
- * velkomstmailen (d0) med en gang man blir med. De fleste dagene er en
- * fem-minutters-oppgave med en kort forklaring på hvorfor den er nyttig
- * (simpleDay), noen få er lengre, ukentlige oppsummeringer (d7, d14, d21,
- * d30), som også har en myk nevning av Inner Circle som neste steg for
- * de som vil ha tettere støtte (mersalg, aldri en teknisk sammenblanding
- * med selve utfordringen).
+ * Innholdet under (DAY_CONTENT) er hentet fra Renates fulle 31-dagers
+ * curriculum (leksjon, 5-minuttersoppgave, AI-prompt og dagens resultat
+ * per dag), kondensert til e-postlengde. Den fulle versjonen, inkludert
+ * frivillig fordypning og "del i fellesskapet", finnes i "Klasserom"-fanen
+ * på /utfordringen-fellesskap.
  *
  * Bruker samme MAILERSEND_API_KEY-hemmelighet som Claude-kurset allerede
  * har i Cloudflare, ingen nytt oppsett trengs.
@@ -46,264 +45,194 @@ function wrap(inner) {
 const PS_NO = 'P.S. Vil du ha enda tettere støtte, og flere folk å dele fremgangen med underveis? <a href="' + MEDLEMSKAP + '" style="color:#E91E89;">Inner Circle</a> er neste steg når du er klar for det.';
 const PS_EN = 'P.S. Want even closer support, and more people to share your progress with along the way? <a href="' + MEDLEMSKAP + '" style="color:#E91E89;">Inner Circle</a> is the next step when you\'re ready for it.';
 
-function exampleBox(text) {
-  return '<p style="background:#FBF0F5;border-left:3px solid #E91E89;padding:10px 14px;border-radius:8px;font-size:14.5px;color:#5a4750;margin:14px 0;"><strong>Eksempel: </strong>' + text + '</p>';
+function taskBox(label, text) {
+  return '<p style="background:#FBF0F5;border-left:3px solid #E91E89;padding:10px 14px;border-radius:8px;font-size:14.5px;color:#5a4750;margin:14px 0;"><strong>' + label + ': </strong>' + text + '</p>';
 }
-function exampleBoxEn(text) {
-  return '<p style="background:#FBF0F5;border-left:3px solid #E91E89;padding:10px 14px;border-radius:8px;font-size:14.5px;color:#5a4750;margin:14px 0;"><strong>Example: </strong>' + text + '</p>';
+function aiPromptBox(label, text) {
+  return '<p style="background:#F3F0FF;border-left:3px solid #7B61FF;padding:12px 14px;border-radius:8px;font-size:13.5px;color:#4a3f6b;margin:14px 0;line-height:1.55;"><strong>' + label + ':</strong><br>' + text + '</p>';
+}
+function resultBox(label, text) {
+  return '<p style="font-size:14px;color:#4c6b16;margin:14px 0;"><strong>' + label + ':</strong> ' + text + '</p>';
 }
 
-/* Enkel dag: ett avsnitt med dagens fem-minutters-oppgave, en kort
-   forklaring på hvorfor den er nyttig, og et konkret eksempel, samme
-   oppbygning på alle slike dager (bare teksten er unik per dag). Samme
-   myke Inner Circle-nevning som milepæl-dagene, så alle 30 dagene har
-   like mye innhold, ikke bare de 6 opprinnelige. */
-function simpleDay(day, no, en) {
+/* Alt daginnhold (dag 0 til dag 30), hentet fra Renates fulle curriculum.
+   Se toppkommentaren for hvor den fulle versjonen (med fordypning og
+   fellesskap-oppfordring) ligger. */
+const DAY_CONTENT = {
+  0: {
+    no: { subject: "velkommen og gjør deg klar", body: "10 000 visninger kommer sjelden fra ett perfekt innlegg. Det kommer oftere fra flere forsøk, tydelige budskap og vilje til å lære av responsen. De neste 30 dagene handler ikke om å bevise at du er flink, men om å samle informasjon om hva målgruppen din stopper opp ved. Velg et mål som passer utgangspunktet ditt, for eksempel 10 000 samlede visninger, 20 publiseringer, 30 relevante kommentarer eller å bli tryggere foran kamera. Innsatsen er det du kan kontrollere. Visningene er bare tilbakemelding.", task: "Skriv ferdig fem setninger: hvorfor du deltar, hva du ønsker å ha oppnådd etter 30 dager, hovedplattformen din, når på dagen du setter av fem minutter, og hva du gjør når motivasjonen svikter.", aiPrompt: "Jeg skal delta i en 30-dagers synlighetschallenge. Jeg jobber med [tema/virksomhet], målgruppen min er foreløpig [målgruppe], og hovedplattformen er [plattform]. Hjelp meg å formulere ett realistisk innsatsmål, ett synlighetsmål og én enkel regel som gjør at jeg fullfører.", result: "Du har valgt mål, plattform og tidspunkt, og registrert utgangspunktet ditt." },
+    en: { subject: "welcome and get ready", body: "10,000 views rarely come from one perfect post. They usually come from several attempts, clear messages and a willingness to learn from the response. The next 30 days aren't about proving you're good at this, but about gathering information on what makes your audience stop scrolling. Choose a goal that fits where you are right now, for example 10,000 total views, 20 posts, 30 relevant comments, or becoming more confident on camera. The effort is what you can control. The views are just feedback.", task: "Finish five sentences: why you're taking part, what you want to have achieved after 30 days, your main platform, when each day you set aside five minutes, and what you'll do when motivation dips.", aiPrompt: "I'm about to take part in a 30-day visibility challenge. I work with [topic/business], my audience is currently [audience], and my main platform is [platform]. Help me formulate one realistic effort goal, one visibility goal and one simple rule that will help me follow through.", result: "You've chosen your goal, platform and time, and logged your starting point." },
+  },
+  1: {
+    no: { subject: "finn nisjen din", body: "En nisje er ikke bare temaet ditt, men kombinasjonen av hvem du hjelper, hva du hjelper dem med og hvordan du gjør det. \"Trening\" er et tema. \"Enkel styrketrening hjemme for travle småbarnsforeldre\" er en tydeligere retning. Du trenger ikke velge bort hele deg, men velg én hovedretning for disse 30 dagene, slik at publikum raskt forstår hvorfor de bør følge med.", task: "Skriv ned tre temaer, tre problemer du kan løse og tre av dine styrker. Sett ring rundt kombinasjonen som interesserer deg mest og er nyttig for andre, og fyll ut malen: \"Jeg hjelper [person] med [problem] gjennom [din metode].\"", aiPrompt: "Mine tre favorittemaer er [liste]. Problemene jeg kan hjelpe med er [liste]. Mine erfaringer og styrker er [liste]. Foreslå fem tydelige nisjer. De skal være konkrete, menneskelige og ikke gjøre tilbudet mitt unødvendig smalt.", result: "Du har én foreløpig nisjesetning som skal testes gjennom challengen." },
+    en: { subject: "find your niche", body: "A niche isn't just your topic, it's the combination of who you help, what you help them with and how you do it. \"Fitness\" is a topic. \"Simple strength training at home for busy parents of young kids\" is a clearer direction. You don't have to give up the rest of who you are, but choose one main direction for these 30 days, so your audience quickly understands why they should follow you.", task: "Write down three topics, three problems you could solve and three of your strengths. Circle the combination that interests you most and is useful to others, then fill in the template: \"I help [person] with [problem] through [your method].\"", aiPrompt: "My three favorite topics are [list]. The problems I can help with are [list]. My experiences and strengths are [list]. Suggest five clear niches. They should be concrete, human, and not make my offer unnecessarily narrow.", result: "You have one draft niche sentence that you'll test throughout the challenge." },
+  },
+  2: {
+    no: { subject: "finn målgruppen din", body: "Innhold blir tydeligere når du ser for deg ett menneske, ikke \"alle som kan være interessert\". Du trenger ikke finne opp et avansert kundekort med favorittfarge og bilmerke. Det viktige er situasjonen personen står i akkurat nå: hva hun prøver å få til, hva som frustrerer henne, hva hun allerede har forsøkt og hvilke ord hun selv bruker.", task: "Beskriv én person konkret: hvem hun er, hva hun prøver å få til akkurat nå, det vanskeligste for henne, hva hun allerede har forsøkt, og hvilke ord hun ville søkt etter.", aiPrompt: "Jeg hjelper [målgruppe] med [resultat]. Lag en konkret målgruppebeskrivelse basert på situasjon, frustrasjoner, ønsker, tidligere forsøk og ordene personen sannsynligvis bruker. Unngå stereotype eller oppdiktede detaljer.", result: "Du vet hvem det neste innlegget ditt skal snakke til." },
+    en: { subject: "find your audience", body: "Content becomes clearer when you picture one person, not \"anyone who might be interested\". You don't need to invent an elaborate customer profile with a favorite color and car brand. What matters is the situation the person is in right now: what she's trying to achieve, what frustrates her, what she has already tried, and the words she uses herself.", task: "Describe one person concretely: who she is, what she's trying to achieve right now, the hardest part for her, what she has already tried, and the words she would have searched for.", aiPrompt: "I help [audience] with [outcome]. Create a concrete audience description based on situation, frustrations, wishes, previous attempts and the words the person is likely to use. Avoid stereotypical or invented details.", result: "You know who your next post needs to speak to." },
+  },
+  3: {
+    no: { subject: "la ai hjelpe med planleggingen", body: "AI gir best forslag når den får tydelig kontekst. \"Gi meg 30 innholdsideer\" gir ofte flate svar. Fortell heller hvem du hjelper, hva du vil bli kjent for, hvilke problemer publikum har, hvilken plattform du bruker og hva du selv har erfart. AI skal hjelpe deg å sortere og utvikle tanker, ikke late som den har erfaringene dine. Fakta må kontrolleres, og personlige historier må komme fra deg.", task: "Be AI om ideer fordelt på fire pilarer: lær bort noe, vis prosessen, del en historie og inviter til samtale. Velg de fem ideene du faktisk kunne publisert.", aiPrompt: "Jeg lager innhold for [målgruppe] som ønsker [resultat], men strever med [problem]. Jeg vil bli kjent for [tema]. Lag 20 konkrete innholdsideer fordelt likt på: læring, prosess, personlig erfaring og samtale. Hver idé skal løse ett lite problem og kunne forklares enkelt. Ikke finn opp personlige historier for meg; marker hvor jeg bør legge inn min erfaring.", result: "Du har minst fem relevante innholdsideer." },
+    en: { subject: "let ai help with the planning", body: "AI gives its best suggestions when it gets clear context. \"Give me 30 content ideas\" often produces flat answers. Instead, tell it who you help, what you want to be known for, what problems your audience has, which platform you use and what you've experienced yourself. AI should help you sort and develop your thoughts, not pretend it has your experiences. Facts must be checked, and personal stories must come from you.", task: "Ask AI for ideas split across four pillars: teach something, show the process, share a story and invite conversation. Choose the five ideas you could actually publish.", aiPrompt: "I create content for [audience] who want [outcome], but struggle with [problem]. I want to be known for [topic]. Create 20 concrete content ideas split evenly between: learning, process, personal experience and conversation. Each idea should solve one small problem and be easy to explain. Don't invent personal stories for me; mark where I should add my own experience.", result: "You have at least five relevant content ideas." },
+  },
+  4: {
+    no: { subject: "velg hovedplattformen din", body: "Den beste hovedplattformen er ikke nødvendigvis den største. Velg stedet der målgruppen faktisk befinner seg, formatet passer deg, og du har kapasitet til å være konsekvent. Du kan gjenbruke innhold andre steder, men én plattform skal være læringslaboratoriet ditt. Vurder plattformene ut fra målgruppe, format, søkbarhet, samtalemuligheter og hvor lett det er å publisere jevnlig.", task: "Gi aktuelle plattformer poeng fra 1 til 5 på målgruppe, format, publiseringsevne, oppdagbarhet og om de støtter målet ditt. Velg plattformen med best totalscore.", aiPrompt: "Målgruppen min er [målgruppe], innholdet mitt handler om [tema], jeg liker best å lage [format], og målet mitt er [mål]. Sammenlign Instagram, TikTok, YouTube og LinkedIn etter målgruppe, oppdagbarhet, arbeidsmengde og levetid. Anbefal én hovedplattform og forklar valget kort.", result: "Du har valgt hovedplattform og hovedformat for de neste 26 dagene." },
+    en: { subject: "choose your main platform", body: "The best main platform isn't necessarily the biggest one. Choose the place where your audience actually is, where the format suits you, and where you have the capacity to be consistent. You can repurpose content elsewhere, but one platform should be your learning lab. Judge the platforms by audience, format, searchability, opportunities for conversation and how easy it is to publish regularly.", task: "Score the platforms you're considering from 1 to 5 on audience, format, ability to publish, discoverability and whether they support your goal. Choose the platform with the best total score.", aiPrompt: "My audience is [audience], my content is about [topic], I most enjoy creating [format], and my goal is [goal]. Compare Instagram, TikTok, YouTube and LinkedIn by audience, discoverability, workload and content lifespan. Recommend one main platform and briefly explain the choice.", result: "You've chosen your main platform and main format for the next 26 days." },
+  },
+  5: {
+    no: { subject: "studer tre skapere du liker", body: "Ikke studer bare store kontoer. Velg gjerne én stor, én mellomstor og én mindre skaper i eller nær nisjen din. Se etter mønstre: hvordan de åpner, hvor raskt poenget kommer, hvordan de bruker eksempler, hva som får folk til å kommentere og hvilke temaer som gjentas. Målet er å forstå prinsippene, ikke kopiere ord, design eller personlighet.", task: "Velg tre skapere og noter for hver: hva som får deg til å stoppe, hvilken hook de bruker, hvordan innholdet er bygget opp, og ett prinsipp du kan bruke på din egen måte.", aiPrompt: "Her er min beskrivelse av tre innlegg jeg liker: [beskriv innleggene]. Finn strukturelle fellestrekk i hook, tempo, verdi, historiefortelling og CTA. Gi meg fem prinsipper jeg kan bruke uten å kopiere formuleringer eller konsepter.", result: "Du har en liten liste over dokumenterte grep som fungerer i din nisje." },
+    en: { subject: "study three creators you like", body: "Don't only study big accounts. Pick one large, one mid-sized and one smaller creator in or near your niche. Look for patterns: how they open, how quickly they get to the point, how they use examples, what makes people comment and which topics keep recurring. The goal is to understand the principles, not copy words, design or personality.", task: "Choose three creators and note for each: what makes you stop scrolling, what hook they use, how the content is structured, and one principle you can use in your own way.", aiPrompt: "Here's my description of three posts I like: [describe the posts]. Find structural common traits in hook, pacing, value, storytelling and CTA. Give me five principles I can use without copying the wording or the concepts.", result: "You have a short list of documented techniques that work in your niche." },
+  },
+  6: {
+    no: { subject: "lag det første utkastet", body: "Et godt innlegg trenger bare én hovedidé. Hvis du prøver å forklare alt du vet, blir budskapet ofte uklart. Velg ett lite problem og før mottakeren fra \"dette kjenner jeg meg igjen i\" til \"nå vet jeg hva jeg kan gjøre\".", task: "Skriv et utkast etter malen hook, problem, verdi (ett til tre poeng), eksempel og en enkel CTA. Ikke tenk på å finpusse.", aiPrompt: "Hjelp meg å strukturere et innlegg om [idé] for [målgruppe]. Behold mine ord og min erfaring. Bruk strukturen hook, problem, tre konkrete poeng, eksempel og én naturlig CTA. Ikke legg til påstander jeg ikke har gitt deg.", result: "Du har et publiserbart utkast." },
+    en: { subject: "make your first draft", body: "A good post only needs one main idea. If you try to explain everything you know, the message often becomes unclear. Choose one small problem and take the reader from \"I recognize this\" to \"now I know what to do\".", task: "Write a draft using the template hook, problem, value (one to three points), example and a simple CTA. Don't worry about polishing it.", aiPrompt: "Help me structure a post about [idea] for [audience]. Keep my words and my experience. Use the structure hook, problem, three concrete points, example and one natural CTA. Don't add claims I haven't given you.", result: "You have a publishable draft." },
+  },
+  7: {
+    no: { subject: "første uke i boks", body: "Den første uken har handlet om retning. Nå trenger du kontakt med virkeligheten, for et utkast gir ingen publikumsdata før det deles. Publiser selv om du fortsatt ser ting du kunne forbedret. Be om konkret tilbakemelding: ikke bare \"Hva synes du?\", men om budskapet var tydelig, om åpningen skapte nysgjerrighet, eller hvilket punkt som var mest nyttig.", task: "Publiser innlegget fra dag 6, eller en forbedret versjon av noe du allerede har delt, og svar på de første reaksjonene du får.", aiPrompt: "Her er utkastet mitt: [tekst]. Vurder bare tre ting: Er målgruppen tydelig? Kommer hovedpoenget raskt nok? Er CTA-en enkel? Foreslå minimale endringer og behold stemmen min.", result: "Første uke er fullført, og du har publisert minst ett gjennomarbeidet innlegg." },
+    en: { subject: "first week done", body: "The first week has been about direction. Now you need contact with reality, because a draft gives you no audience data until it's shared. Publish even if you still see things you could improve. Ask for specific feedback: not just \"What do you think?\", but whether the message was clear, whether the opening sparked curiosity, or which point was most useful.", task: "Publish the post from day 6, or an improved version of something you've already shared, and respond to the first reactions you get.", aiPrompt: "Here's my draft: [text]. Just assess three things: Is the audience clear? Does the main point come across quickly enough? Is the CTA simple? Suggest minimal changes and keep my voice.", result: "Your first week is complete, and you've published at least one well-crafted post." },
+  },
+  8: {
+    no: { subject: "øv på en sterk åpning", body: "En hook er den aller første setningen, teksten på skjermen eller det første visuelle øyeblikket i innlegget ditt. Jobben til en hook er å skape relevant nysgjerrighet, ikke å love noe du ikke kan holde. De beste hookene peker på et problem, et ønsket resultat, en vanlig feil, en kontrast eller en konkret historie. Dropp tomme fraser som \"du kommer ikke til å tro dette\", og si heller rett ut hva innholdet faktisk handler om.", task: "Skriv tre hooks til samme innlegg, en som peker på et problem, en som viser ønsket resultat og en som bruker kontrast, og velg den som raskest forteller riktig person at innholdet er relevant.", aiPrompt: "Lag 15 tydelige hooks til et innlegg om [tema] for [målgruppe]. Fordel dem på problem, ønsket resultat, vanlig feil, kontrast og personlig historie. Ingen clickbait, garantier eller generiske formuleringer. Maks 12 ord per hook.", result: "Du har valgt én sterk åpning til neste innlegg." },
+    en: { subject: "practice a strong opening", body: "A hook is the very first sentence, the text on screen, or the first visual moment of your post. Its job is to create relevant curiosity, not to promise something you can't deliver. The best hooks point to a problem, a desired outcome, a common mistake, a contrast or a concrete story. Skip empty phrases like \"you won't believe this\" and instead say straight out what the content is actually about.", task: "Write three hooks for the same post, one pointing to a problem, one showing the desired result and one using contrast, and pick the one that fastest tells the right person the content is relevant.", aiPrompt: "Create 15 clear hooks for a post about [topic] for [target audience]. Distribute them across problem, desired outcome, common mistake, contrast and personal story. No clickbait, guarantees or generic phrasing. Max 12 words per hook.", result: "You have chosen one strong opening for your next post." },
+  },
+  9: {
+    no: { subject: "planlegg flere innlegg samtidig", body: "Du trenger ikke finne opp et helt nytt tema hver gang du skal publisere. Ett hovedtema kan bli til flere innlegg: en vanlig feil, en enkel fremgangsmåte, en personlig erfaring, et eksempel og et spørsmål. Når du planlegger flere innlegg fra samme tema samtidig, skaper det gjenkjennelse hos følgerne dine og gjør produksjonen langt lettere for deg.", task: "Velg ett hovedtema og lag tre innlegg: ett som setter ord på problemet, ett som lærer bort en liten løsning, og ett som viser erfaring, prosess eller resultat.", aiPrompt: "Gjør temaet [tema] om til en serie på fem innlegg for [målgruppe]. Serien skal inneholde problembevissthet, praktisk tips, vanlig feil, personlig/prosessbasert innlegg og spørsmål. Gi hvert innlegg én idé, én hook og én CTA.", result: "Du har minst tre sammenhengende innlegg klare til produksjon." },
+    en: { subject: "plan several posts at once", body: "You don't have to invent a brand new topic every single time you post. One main theme can become several posts: a common mistake, a simple method, a personal experience, an example and a question. When you plan several posts from the same theme at once, it builds recognition with your followers and makes production far easier for you.", task: "Choose one main theme and create three posts: one that names the problem, one that teaches a small solution, and one that shows experience, process or result.", aiPrompt: "Turn the topic [topic] into a series of five posts for [target audience]. The series should include problem awareness, a practical tip, a common mistake, a personal/process-based post and a question. Give each post one idea, one hook and one CTA.", result: "You have at least three connected posts ready for production." },
+  },
+  10: {
+    no: { subject: "la ai skjerpe teksten din", body: "Å skjerpe en tekst handler oftest om å fjerne gjentakelser, flytte hovedpoenget lenger opp og gjøre abstrakte ord konkrete. En kortere tekst er ikke automatisk bedre, den skal først og fremst være lettere å forstå. Les teksten din høyt. Hvis du snubler i en setning, vil leseren ofte gjøre det samme.", task: "Ta et utkast og fjern en unødvendig innledning, del opp lange setninger, bytt ut ett vagt ord med et konkret eksempel, og flytt det viktigste poenget nærmere starten.", aiPrompt: "Skjerp teksten under. Behold meningen, tonen og alle faktiske opplysninger. Gjør åpningen tydeligere, fjern gjentakelser og bruk enklere språk. Ikke gjør teksten upersonlig eller legg til nye påstander. Vis først en forbedret versjon og deretter tre korte forklaringer på endringene. Tekst: [lim inn].", result: "Du har en tydeligere og mer leservennlig tekst." },
+    en: { subject: "let ai sharpen your text", body: "Sharpening a text is mostly about removing repetition, moving the main point higher up and making abstract words concrete. A shorter text isn't automatically better, it should first and foremost be easier to understand. Read your text out loud. If you stumble over a sentence, your reader often will too.", task: "Take a draft and remove one unnecessary introduction, break up long sentences, swap one vague word for a concrete example, and move the most important point closer to the start.", aiPrompt: "Sharpen the text below. Keep the meaning, the tone and all factual details. Make the opening clearer, remove repetition and use simpler language. Don't make the text impersonal or add new claims. Show an improved version first, then three short explanations of the changes. Text: [paste in].", result: "You have a clearer, more reader-friendly text." },
+  },
+  11: {
+    no: { subject: "se på tallene dine", body: "Visninger viser hvor mange ganger innholdet ble sett, mens seertid og fullføringsgrad sier mer om innholdet faktisk holdt på oppmerksomheten. Lagringer kan vise nytte, delinger relevans, kommentarer samtale og profilbesøk nysgjerrighet. Ett tall alene forteller sjelden hele historien, så sammenlign helst egne innlegg med dine tidligere innlegg, ikke med store kontoer.", task: "Finn de tre siste innleggene dine og noter visninger, kommentarer, lagringer, delinger og profilbesøk, og skriv ned én mulig forklaring på resultatet.", aiPrompt: "Her er tallene fra mine siste innlegg: [data]. Hjelp meg å finne mønstre i tema, format, hook og respons. Skill tydelig mellom det dataene viser og mulige hypoteser. Foreslå tre små tester – ikke bastante konklusjoner.", result: "Du har valgt én databasert ting du vil teste videre." },
+    en: { subject: "look at your numbers", body: "Views show how many times your content was seen, while watch time and completion rate say more about whether it actually held attention. Saves can show usefulness, shares relevance, comments conversation, and profile visits curiosity. A single number rarely tells the whole story, so start by comparing your own posts to your own past posts, not to large accounts.", task: "Find your three latest posts and note views, comments, saves, shares and profile visits, and write down one possible explanation for the result.", aiPrompt: "Here are the numbers from my latest posts: [data]. Help me find patterns in topic, format, hook and response. Clearly separate what the data shows from possible hypotheses. Suggest three small tests, not firm conclusions.", result: "You have chosen one data-based thing you want to keep testing." },
+  },
+  12: {
+    no: { subject: "snakk direkte til seeren", body: "Direkte språk gjør at mottakeren lettere kjenner seg igjen. Bruk \"du\" og beskriv en konkret situasjon: \"Når du sitter med ti ideer, men ikke vet hvilken du skal starte med\" er mer levende enn \"mange opplever utfordringer med idéutvikling.\" Direkte betyr ikke påtrengende, det betyr konkret og menneskelig.", task: "Skriv om ett avsnitt slik at det bruker \"du\", nevner en gjenkjennelig situasjon, viser en følelse eller tanke, og gir ett konkret neste steg.", aiPrompt: "Skriv om teksten som om jeg snakker rolig og direkte til én [målgruppe] i situasjonen [situasjon]. Bruk «du», konkrete ord og korte setninger. Behold min varme tone og unngå salgsspråk. Tekst: [lim inn].", result: "Du har et innlegg som føles skrevet til én tydelig mottaker." },
+    en: { subject: "speak directly to the viewer", body: "Direct language makes it easier for the reader to recognize themselves. Use \"you\" and describe a concrete situation: \"When you're sitting with ten ideas but don't know which one to start with\" is more alive than \"many people struggle with idea development.\" Direct doesn't mean pushy, it means concrete and human.", task: "Rewrite one paragraph so it uses \"you,\" mentions one recognizable situation, shows one feeling or thought, and gives one concrete next step.", aiPrompt: "Rewrite the text as if I'm speaking calmly and directly to one [target audience] in the situation [situation]. Use \"you,\" concrete words and short sentences. Keep my warm tone and avoid sales language. Text: [paste in].", result: "You have a post that feels written to one clear recipient." },
+  },
+  13: {
+    no: { subject: "gjenbruk noe som fungerte", body: "De fleste følgerne dine ser ikke alt du publiserer, så et sterkt budskap tåler godt å bli gjentatt i ny form. Gjenbruk kan bety ny hook, nytt eksempel, annet format, kortere versjon, oppdatert innsikt eller en ny målgruppevinkel. Ikke kopier innlegget rett av, behold kjernen og forbedre leveringen.", task: "Velg innlegget som fikk mest relevant respons, og lag en ny versjon der du endrer minst to av disse: hook, format, eksempel, lengde, CTA eller perspektiv.", aiPrompt: "Dette innlegget fungerte godt: [innhold og gjerne resultater]. Lag fem forslag til videreutvikling med ny hook, nytt eksempel eller nytt format. Behold hovedbudskapet, men unngå ren kopiering.", result: "Du har publisert eller klargjort en forbedret variant av et dokumentert tema." },
+    en: { subject: "reuse something that worked", body: "Most of your followers don't see everything you publish, so a strong message can easily bear repeating in a new form. Reuse can mean a new hook, a new example, a different format, a shorter version, updated insight, or a new audience angle. Don't just copy the post, keep the core and improve the delivery.", task: "Choose the post that got the most relevant response, and create a new version by changing at least two of these: hook, format, example, length, CTA or perspective.", aiPrompt: "This post worked well: [content and preferably results]. Give me five suggestions for further development with a new hook, a new example or a new format. Keep the main message, but avoid pure copying.", result: "You have published or prepared an improved variant of a documented topic." },
+  },
+  14: {
+    no: { subject: "halvveis: gjør mer av det som virker", body: "Halvveis er tidspunktet for justering, ikke for å starte helt på nytt. Se etter kombinasjonen av tall, respons og gjennomførbarhet, ikke bare på ett tall alene. Et innlegg med litt færre visninger, men flere relevante kommentarer eller klikk, kan faktisk være mer verdifullt enn et bredt innlegg uten videre handling.", task: "Svar på hvilket tema som fikk mest relevant respons, hvilken hook som fungerte best, hvilket format som var lettest å gjennomføre, og hva du vil slutte, starte og fortsette med. Velg ett vinnerprinsipp og lag ett nytt innlegg med samme prinsipp.", aiPrompt: "Her er min halvveisoppsummering: [data og observasjoner]. Hjelp meg å velge én innholdsretning å forsterke i uke 3 og én ting jeg bør forenkle. Begrunn anbefalingen ut fra relevante signaler, ikke bare høyeste visningstall.", result: "Du har en tydelig, databasert plan for andre halvdel." },
+    en: { subject: "halfway: do more of what works", body: "Halfway is the time for adjustment, not for starting all over. Look at the combination of numbers, response and feasibility, not just one number alone. A post with slightly fewer views but more relevant comments or clicks can actually be more valuable than a broad post with no further action.", task: "Answer which topic got the most relevant response, which hook worked best, which format was easiest to carry out, and what you want to stop, start and continue doing. Choose one winning principle and create one new post using the same principle.", aiPrompt: "Here is my halfway summary: [data and observations]. Help me choose one content direction to strengthen in week 3 and one thing I should simplify. Base the recommendation on relevant signals, not just the highest view count.", result: "You have a clear, data-based plan for the second half." },
+  },
+  15: {
+    no: { subject: "publiser, selv om det ikke er perfekt", body: "Kvalitet handler ikke om at alt er feilfritt, men om at innholdet er forståelig, nyttig og sant. I dag lager du din egen \"godt nok\"-regel: riktig informasjon, tydelig lyd eller lesbar tekst, én hovedidé og én relevant CTA. Når disse fire er på plass, er innholdet klart til å publiseres, resten er finpuss du kan la ligge.", task: "Finn utkastet du har utsatt, sjekk at det er sant, tydelig, lesbart eller hørbart og relevant, rett bare det som hindrer forståelsen, og publiser.", aiPrompt: "Vurder dette utkastet etter fire kriterier: faktuelt trygt, tydelig hovedidé, lett å forstå og relevant CTA. Fortell bare hva som må rettes før publisering. Ikke foreslå kosmetiske forbedringer. [utkast]", result: "Du har publisert uten å la perfeksjonismen bestemme." },
+    en: { subject: "post it, even if it's not perfect", body: "Quality doesn't mean everything is flawless, it means the content is understandable, useful and true. Today you'll make your own \"good enough\" rule: correct information, clear audio or readable text, one main idea and one relevant CTA. Once those four are in place, the content is ready to post, everything else is polish you can leave for later.", task: "Find the draft you've been putting off, check that it's true, clear, readable or audible, and relevant, fix only what blocks understanding, and publish it.", aiPrompt: "Assess this draft against four criteria: factually safe, clear main idea, easy to understand and a relevant CTA. Only tell me what needs to be fixed before publishing. Don't suggest cosmetic improvements. [draft]", result: "You've published without letting perfectionism decide." },
+  },
+  16: {
+    no: { subject: "les kommentarene som innholdsresearch", body: "Kommentarene dine er gratis innholdsresearch. De viser hva folk forstår, misforstår, ønsker mer av eller er uenige i, og et ekte spørsmål er ofte en bedre idé enn et tilfeldig trendforslag. Selv en kort kommentar kan følges opp med et spørsmål tilbake, som \"hva er vanskeligst med dette for deg?\" Husk personvernet: ikke eksponer private meldinger eller navn uten samtykke.", task: "Gå gjennom kommentarer og meldinger, sorter dem i spørsmål, gjentatte problemer og ord målgruppen bruker, og velg ett spørsmål som neste innlegg.", aiPrompt: "Her er anonymiserte kommentarer og spørsmål fra publikum: [liste]. Sorter dem i temaer og foreslå ett konkret innlegg per tema. Bruk publikums språk, men ikke finn opp sitater eller personopplysninger.", result: "Du har én publikumsstyrt idé og en voksende FAQ-bank." },
+    en: { subject: "read the comments as content research", body: "Your comments are free content research. They show what people understand, misunderstand, want more of or disagree with, and a genuine question is often a better idea than a random trend suggestion. Even a short comment can be followed up with a question back, like \"what's hardest about this for you?\" Remember privacy: don't expose private messages or names without consent.", task: "Go through your comments and messages, sort them into questions, recurring problems and words your audience uses, and pick one question as your next post.", aiPrompt: "Here are anonymized comments and questions from my audience: [list]. Sort them into themes and suggest one concrete post per theme. Use the audience's own language, but don't invent quotes or personal information.", result: "You have one audience-driven idea and a growing FAQ bank." },
+  },
+  17: {
+    no: { subject: "løft frem noen andre i nisjen din", body: "Synlighet handler ikke bare om konkurranse. I dag nevner du en fagperson, bok, konto, metode eller ressurs som faktisk har hjulpet deg, og forklarer hvorfor den er relevant og hva du selv tok med deg. Det bygger ekte relasjoner og gir publikum verdi. Ikke tagg tilfeldige store kontoer bare for å låne oppmerksomhet.", task: "Velg én person eller ressurs og skriv hva du lærte av dem, hvordan det endret det du gjør, og hvorfor det er verdt å utforske for din målgruppe.", aiPrompt: "Jeg vil anbefale [person/ressurs] fordi [min ekte grunn]. Hjelp meg å skrive et kort innlegg som gir kreditering, forklarer min lærdom og gir publikum verdi. Unngå overdreven ros og ikke antyd samarbeid.", result: "Du har publisert et relasjonsbyggende og relevant innlegg." },
+    en: { subject: "shine a light on someone else in your niche", body: "Visibility isn't only about competition. Today you'll mention a professional, book, account, method or resource that has genuinely helped you, and explain why it's relevant and what you personally took from it. It builds real relationships and gives your audience value. Don't tag random big accounts just to borrow attention.", task: "Pick one person or resource and write what you learned from them, how it changed what you do, and why it's worth exploring for your audience.", aiPrompt: "I want to recommend [person/resource] because [my genuine reason]. Help me write a short post that gives credit, explains my takeaway and gives the audience value. Avoid excessive praise and don't imply a collaboration.", result: "You've published a relationship-building and relevant post." },
+  },
+  18: {
+    no: { subject: "fortell en liten personlig historie", body: "En god innholdshistorie trenger ikke være dramatisk. Den kan handle om et øyeblikk da du oppdaget noe, gjorde en feil, endret mening eller fikk et lite gjennombrudd. Historien skal ha en hensikt for mottakeren, ikke bare handle om deg. Bruk strukturen: før, øyeblikket, endringen, lærdommen, og relevansen for leseren.", task: "Fullfør setningene: Før trodde jeg ..., så skjedde ..., jeg oppdaget ..., nå gjør jeg ..., og hvis du står i det samme, kan du ...", aiPrompt: "Hjelp meg å strukturere denne sanne erfaringen: [notater]. Bruk før, konkret øyeblikk, endring, lærdom og relevans for [målgruppe]. Ikke dramatiser, pynt på historien eller finn opp detaljer.", result: "Du har laget et personlig, men målgrupperelevant innlegg." },
+    en: { subject: "tell a small personal story", body: "A good content story doesn't have to be dramatic. It can be about a moment you discovered something, made a mistake, changed your mind or had a small breakthrough. The story should serve the reader, not just be about you. Use the structure: before, the moment, the change, the lesson, and why it matters to the reader.", task: "Finish the sentences: Before I believed ..., then ... happened, I discovered ..., now I do ..., and if you're in the same spot, you can ...", aiPrompt: "Help me structure this true experience: [notes]. Use before, concrete moment, change, lesson and relevance for [audience]. Don't dramatize, embellish the story or invent details.", result: "You've created a personal but audience-relevant post." },
+  },
+  19: {
+    no: { subject: "test et nytt format", body: "Formatet påvirker hvordan innholdet oppleves: video skaper nærhet, karusell forklarer steg, bilde stopper blikket, og tekst gir rom for refleksjon. I dag tester du bare én ny variabel om gangen, slik at du faktisk vet hva du lærer av forsøket.", task: "Velg et tidligere tema og gjør det om til et annet format, for eksempel tekstinnlegg til video eller video til lysbilder, mens du beholder hovedbudskapet omtrent likt.", aiPrompt: "Gjør dette innholdet om til [nytt format]. Behold hovedbudskapet og min tone. Tilpass struktur og lengde til formatet, og foreslå hva som skal vises visuelt. [innhold]", result: "Du har testet ett nytt format med en tydelig hypotese." },
+    en: { subject: "test a new format", body: "Format shapes how content is experienced: video creates closeness, a carousel explains steps, an image stops the scroll, and text gives room for reflection. Today you test only one new variable at a time, so you actually know what you're learning from the experiment.", task: "Pick a topic you've covered before and turn it into a different format, for example a text post into a video or a video into slides, while keeping the main message roughly the same.", aiPrompt: "Turn this content into [new format]. Keep the main message and my tone. Adapt the structure and length to the format, and suggest what should be shown visually. [content]", result: "You've tested one new format with a clear hypothesis." },
+  },
+  20: {
+    no: { subject: "rydd i profilen din", body: "Godt innhold skaper profilbesøk, men profilen må fullføre jobben. Navn, profilbilde, bio, lenke og festet innhold bør peke i samme retning. En bio trenger vanligvis: hvem du hjelper, hva du hjelper med, en troverdighetsmarkør når relevant og én tydelig CTA.", task: "Se på profilen din som en fremmed og svar på hvem den er for, hva de får der og hva de kan gjøre videre, og rett opp den mest uklare delen.", aiPrompt: "Skriv fem bioforslag for [plattform] på maks [tegn]. Jeg hjelper [målgruppe] med [resultat], min relevante bakgrunn er [bakgrunn], og neste steg er [CTA/lenke]. Tonen skal være [tone]. Unngå vage slagord.", result: "Profilen din kommuniserer tydeligere og leder videre til én handling." },
+    en: { subject: "clean up your profile", body: "Good content brings people to your profile, but the profile has to finish the job. Your name, profile picture, bio, link and pinned content should all point in the same direction. A bio usually needs: who you help, what you help them with, a credibility marker where relevant, and one clear CTA.", task: "Look at your profile like a stranger and answer who it's for, what they get there and what they can do next, then fix the most unclear part.", aiPrompt: "Write five bio options for [platform] at a maximum of [characters]. I help [audience] with [outcome], my relevant background is [background], and the next step is [CTA/link]. The tone should be [tone]. Avoid vague slogans.", result: "Your profile communicates more clearly and leads to one action." },
+  },
+  21: {
+    no: { subject: "siste spurt: planlegg resten samlet", body: "Planlegging skal gjøre publiseringen lettere, ikke bli en ny form for utsettelse. Bruk det du allerede har lært denne måneden: vinnertema, beste hooktype, gjennomførbart format og spørsmål fra publikum, og sett dem sammen til en enkel plan for resten av challengen.", task: "Bestem tema og format for dag 22 til 30, og marker hvilke dager som krever nytt innhold og hvilke som bruker analyse, sammenligning eller gjenbruk.", aiPrompt: "Lag en enkel plan for de siste ni dagene basert på dette: målgruppe [ ], beste tema [ ], beste format [ ], spørsmål fra publikum [ ], kapasitet [ ]. Bruk eksisterende ideer først. Planen skal være realistisk og ha variasjon mellom verdi, relasjon, samtale og refleksjon.", result: "Du vet hva du skal gjøre hver dag resten av challengen." },
+    en: { subject: "final stretch: plan the rest in one go", body: "Planning should make publishing easier, not become a new form of procrastination. Use what you've already learned this month: your winning topic, best hook type, doable format and questions from your audience, and put them together into a simple plan for the rest of the challenge.", task: "Decide on the topic and format for days 22 to 30, and mark which days need new content and which ones use analysis, comparison or reuse.", aiPrompt: "Make a simple plan for the last nine days based on this: audience [ ], best topic [ ], best format [ ], audience questions [ ], capacity [ ]. Use existing ideas first. The plan should be realistic and vary between value, relationship, conversation and reflection.", result: "You know what to do every day for the rest of the challenge." },
+  },
+  22: {
+    no: { subject: "planlegg tre ideer for neste uke", body: "En god idébank er mer enn overskrifter. Hver idé trenger et målgruppeproblem, et hovedpoeng og en ønsket handling. I dag henter du ideene fra egne resultater, spørsmål og erfaringer, ikke bare fra trender, slik at banken din holder seg levende lenge etter at challengen er over.", task: "Skriv tre ideer etter malen: \"Målgruppen strever med [problem]. Jeg vil vise [poeng] gjennom [format]. Etterpå skal de kunne [lite resultat].\"", aiPrompt: "Basert på disse publikumsproblemene og tidligere resultatene [liste], foreslå 12 konkrete ideer fordelt på fire innholdspilarer. Hver idé skal ha problem, hovedpoeng, format og CTA. Unngå å gjenta samme budskap med nye ord.", result: "Du har minst tre konkrete innlegg å lage etter challengen." },
+    en: { subject: "plan three ideas for next week", body: "A good idea bank is more than headlines. Each idea needs a target-audience problem, a main point and a desired action. Today you'll draw your ideas from your own results, questions and experiences, not just trends, so your bank keeps you going long after the challenge ends.", task: "Write three ideas using the template: \"My audience struggles with [problem]. I want to show [point] through [format]. Afterwards they should be able to [small result].\"", aiPrompt: "Based on these audience problems and past results [list], suggest 12 concrete ideas spread across four content pillars. Each idea should include a problem, main point, format and CTA. Avoid repeating the same message in new words.", result: "You now have at least three concrete posts to make after the challenge." },
+  },
+  23: {
+    no: { subject: "still et spørsmål som starter en samtale", body: "Brede spørsmål som \"Hva tenker du?\" krever mye av publikum. De gode spørsmålene er enkle å forstå, trygge å svare på og knyttet til noe målgruppen faktisk bryr seg om. I dag bruker du valg, erfaring, utfordring eller prioritering, og svarer på kommentarene som kommer.", task: "Velg én spørsmålsmal (for eksempel \"Hva er vanskeligst med [tema] akkurat nå: A, B eller C?\"), publiser den og svar på alle relevante kommentarer.", aiPrompt: "Lag ti enkle, relevante spørsmål til [målgruppe] om [tema]. De skal være lette å svare på og gi meg reell innsikt, ikke bare skape tomt engasjement. Bland flervalg, erfaring og ønsket innhold.", result: "Du har startet en samtale og samlet målgruppeinnsikt." },
+    en: { subject: "ask a question that starts a conversation", body: "Broad questions like \"What do you think?\" ask a lot of your audience. The good questions are easy to understand, safe to answer and tied to something your audience actually cares about. Today you'll use choice, experience, challenge or priority, and reply to the comments that come in.", task: "Pick one question template (for example \"What's hardest about [topic] right now: A, B or C?\"), post it and reply to every relevant comment.", aiPrompt: "Create ten simple, relevant questions for [audience] about [topic]. They should be easy to answer and give me real insight, not just create empty engagement. Mix multiple choice, experience and desired-content questions.", result: "You've started a conversation and gathered audience insight." },
+  },
+  24: {
+    no: { subject: "finn stemmen din", body: "Stemmen din er mønsteret i ordvalg, rytme, perspektiv, verdier og eksempler. Den trenger ikke være høylytt, men den bør være gjenkjennelig og sann mot hvordan du faktisk kommuniserer. I dag velger du tre egenskaper stemmen din skal ha og tre den ikke skal ha, for eksempel varm og konkret, ikke belærende eller upersonlig.", task: "Fullfør setningene: Jeg vil at folk skal føle …; tre ord for stemmen min er …; jeg vil aldri høres …", aiPrompt: "Analyser disse tre tekstene jeg selv har skrevet: [tekster]. Beskriv stemmen min med fem konkrete observasjoner om tone, rytme, ordvalg, perspektiv og verdier. Lag deretter en kort stemmeguide. Ikke omskriv stemmen min til generisk markedsføringsspråk.", result: "Du har en enkel stemmeguide du kan bruke selv og gi til AI." },
+    en: { subject: "find your voice", body: "Your voice is the pattern in your word choice, rhythm, perspective, values and examples. It doesn't need to be loud, but it should be recognizable and true to how you actually communicate. Today you'll choose three qualities your voice should have and three it shouldn't, for example warm and concrete, not preachy or impersonal.", task: "Complete the sentences: I want people to feel …; three words for my voice are …; I never want to sound …", aiPrompt: "Analyze these three texts I've written myself: [texts]. Describe my voice with five concrete observations about tone, rhythm, word choice, perspective and values. Then create a short voice guide. Don't rewrite my voice into generic marketing language.", result: "You have a simple voice guide you can use yourself and give to AI." },
+  },
+  25: {
+    no: { subject: "del en lærdom", body: "Lærdomsinnhold bygger tillit når det er konkret og ærlig. I dag velger du én ting du faktisk har oppdaget i løpet av challengen, og viser hva du gjorde før, hva du observerte og hva du vil gjøre annerledes. Husk å ikke gjøre én erfaring til en universell regel.", task: "Skriv: \"Én ting disse ukene har lært meg om [tema], er … Jeg trodde …, men da jeg testet …, la jeg merke til … Fremover vil jeg …\"", aiPrompt: "Hjelp meg å gjøre denne ekte lærdommen om til et tydelig innlegg: [notater]. Skill mellom hva jeg observerte og hva jeg antar. Ta med før, test, observasjon, lærdom og neste steg. Behold min tone.", result: "Du har publisert et erfaringsbasert innlegg som bygger troverdighet." },
+    en: { subject: "share a lesson learned", body: "Lesson-learned content builds trust when it's concrete and honest. Today you'll pick one thing you've actually discovered during the challenge, and show what you did before, what you observed and what you'll do differently. Remember not to turn one experience into a universal rule.", task: "Write: \"One thing these weeks have taught me about [topic] is … I believed …, but when I tested …, I noticed … Going forward I will …\"", aiPrompt: "Help me turn this real lesson into a clear post: [notes]. Separate what I observed from what I'm assuming. Include before, test, observation, lesson and next step. Keep my tone.", result: "You've published an experience-based post that builds credibility." },
+  },
+  26: {
+    no: { subject: "sammenlign med dag 1", body: "Fremgang er mer enn følgertall. I dag sammenligner du hook, tydelighet, produksjonstid, trygghet, respons og hvor lett du finner ideer nå, mot den aller første versjonen. Den første er verdifull nettopp fordi den viser hvor du startet.", task: "Finn ditt første innlegg og et nylig innlegg, og sammenlign om målgruppen er tydeligere, poenget kommer raskere og CTA-en er enklere.", aiPrompt: "Sammenlign disse to innleggene fra dag 1 og dag 26: [innlegg]. Vurder målgruppetydelighet, hook, struktur, konkret verdi, stemme og CTA. Pek på dokumenterbar fremgang og én ferdighet jeg fortsatt kan trene på.", result: "Du har dokumentert fremgangen din og valgt neste utviklingspunkt." },
+    en: { subject: "compare with day 1", body: "Progress is more than follower count. Today you'll compare your hook, clarity, production time, confidence, response and how easily you find ideas now, against your very first version. The first one is valuable precisely because it shows where you started.", task: "Find your first post and a recent post, and compare whether the audience is clearer, the point lands faster and the CTA is simpler.", aiPrompt: "Compare these two posts from day 1 and day 26: [posts]. Assess audience clarity, hook, structure, concrete value, voice and CTA. Point out documentable progress and one skill I can still train.", result: "You've documented your progress and chosen your next development point." },
+  },
+  27: {
+    no: { subject: "inviter en venn med", body: "Det er lettere å holde på en vane når noen vet hva du prøver å få til. I dag inviterer du én relevant person til å følge challengen din, gi tilbakemelding eller gjøre en liten syvdagers synlighetsrunde sammen med deg. Hold invitasjonen personlig og helt uten press.", task: "Send en melding: \"Jeg har jobbet med en 30-dagers synlighetschallenge og lært mye. Har du lyst til å gjøre en enkel syvdagers runde sammen med meg, eller være min ansvarspartner neste uke?\"", aiPrompt: "Hjelp meg å skrive en kort, varm og uforpliktende invitasjon til [relasjon/person]. Jeg vil invitere til [ansvarspartner/liten challenge], fordi [ekte grunn]. Ingen salgspress eller skyldfølelse.", result: "Du har invitert til støtte, samarbeid eller felles gjennomføring." },
+    en: { subject: "invite a friend along", body: "It's easier to keep up a habit when someone knows what you're trying to do. Today you'll invite one relevant person to follow your challenge, give feedback or do a small seven-day visibility round together with you. Keep the invitation personal and completely pressure-free.", task: "Send a message: \"I've been working on a 30-day visibility challenge and learned a lot. Would you like to do a simple seven-day round together with me, or be my accountability partner next week?\"", aiPrompt: "Help me write a short, warm and no-pressure invitation to [relationship/person]. I want to invite them to [accountability partner/small challenge], because [real reason]. No sales pressure or guilt.", result: "You've invited support, collaboration or doing this together." },
+  },
+  28: {
+    no: { subject: "finn din beste dag", body: "\"Beste\" bør vurderes ut fra målet ditt. Høyest visninger er best for oppdagelse, flest lagringer er best for nytte, og flest relevante samtaler eller klikk er best for tillit og salg. I dag finner du både en synlighetsvinner og en kvalitetsvinner, hvis de er ulike.", task: "Finn innlegget med flest visninger, innlegget med mest relevant respons og innlegget du helst vil lage mer av, og noter tema, hook, format og mulig årsak.", aiPrompt: "Her er data og innhold fra mine tre sterkeste innlegg: [data]. Finn fellestrekk og forskjeller. Lag en repeterbar innholdsoppskrift, men marker tydelig hva som er observasjon og hva som bare er en hypotese.", result: "Du har definert en innholdsoppskrift basert på egne resultater." },
+    en: { subject: "find your best day", body: "\"Best\" should be judged against your goal. The highest views is best for discovery, the most saves is best for usefulness, and the most relevant conversations or clicks is best for trust and sales. Today you'll find both a visibility winner and a quality winner, if they differ.", task: "Find the post with the most views, the post with the most relevant response and the post you'd most like to make more of, and note the topic, hook, format and likely reason.", aiPrompt: "Here is data and content from my three strongest posts: [data]. Find common traits and differences. Create a repeatable content recipe, but clearly mark what's observation and what's just a hypothesis.", result: "You've defined a content recipe based on your own results." },
+  },
+  29: {
+    no: { subject: "planlegg veien videre", body: "Ikke viderefør challengens tempo automatisk. Velg heller den laveste rytmen du realistisk kan holde over tid. I dag lager du en enkel plan med publiseringsfrekvens, innholdspilarer, produksjonstid, analysetid og en fast plass å samle ideer på.", task: "Bestem hvor mange ganger i uken du publiserer, dine tre hovedtemaer og når du planlegger, produserer og analyserer resultatene.", aiPrompt: "Lag en bærekraftig 30-dagers innholdsrutine for meg. Jeg har kapasitet til [tid], ønsker å publisere [antall], mine beste temaer er [ ], beste format er [ ], og målet mitt er [ ]. Inkluder planlegging, produksjon, publisering, samtale og analyse. Ikke fyll alle dager.", result: "Du har en realistisk plan som kan fortsette etter challengen." },
+    en: { subject: "plan the road ahead", body: "Don't automatically carry the challenge's pace forward. Instead, choose the lowest rhythm you can realistically keep up over time. Today you'll create a simple plan with publishing frequency, content pillars, production time, analysis time and a fixed place to store ideas.", task: "Decide how many times a week you'll publish, your three main topics, and when you plan, produce and analyze your results.", aiPrompt: "Create a sustainable 30-day content routine for me. I have capacity for [time], want to publish [number], my best topics are [ ], best format is [ ], and my goal is [ ]. Include planning, production, publishing, conversation and analysis. Don't fill every single day.", result: "You have a realistic plan that can continue after the challenge." },
+  },
+  30: {
+    no: { subject: "du klarte det! 🎉", body: "Gratulerer, du er i mål! Dette handler ikke bare om du traff nøyaktig 10 000 visninger. Du har bygget et ekte grunnlag: tydeligere retning, målgruppeinnsikt, innholdsideer, analysevaner og erfaring med å publisere jevnlig. Visningene viser hvor langt innholdet reiste, men læringen din er det som tar deg videre herfra.", task: "Registrer slutttallene dine og fullfør: Jeg publiserte … innlegg, jeg fikk totalt … visninger, og min viktigste lærdom er …", aiPrompt: "Hjelp meg å skrive en ærlig oppsummering av challengen basert på disse faktaene: [tall, antall innlegg, lærdommer, utfordringer og neste mål]. Feir gjennomføringen uten å overdrive resultatet. Inkluder én lærdom som hjelper publikum og én naturlig invitasjon til å følge veien videre.", result: "Du har fullført challengen, dokumentert utviklingen og valgt neste steg." },
+    en: { subject: "you did it! 🎉", body: "Congratulations, you made it! This isn't just about whether you hit exactly 10,000 views. You've built a real foundation: clearer direction, audience insight, content ideas, analysis habits and experience publishing regularly. The views show how far your content traveled, but your learning is what carries you forward from here.", task: "Record your final numbers and complete: I published … posts, I got a total of … views, and my most important lesson is …", aiPrompt: "Help me write an honest summary of the challenge based on these facts: [numbers, number of posts, lessons, challenges and next goal]. Celebrate finishing without overstating the result. Include one lesson that helps the audience and one natural invitation to keep following along.", result: "You've completed the challenge, documented your progress and chosen your next step." },
+  },
+};
+
+const CTA_DAYS = [0]; // dager som i tillegg får en "bli med i fellesskapet"-knapp
+
+function dayEmail(day) {
+  const c = DAY_CONTENT[day];
   return {
     no: () => ({
-      subject: "Dag " + day + ": " + no.subject,
-      html: wrap('<p>' + no.body + '</p>' + exampleBox(no.example) + '<p>Klem fra Renate, LME 💛</p>' + ps(PS_NO)),
-      text: "Dag " + day + ": " + no.body + "\n\nEksempel: " + no.example + "\n\nKlem fra Renate, LME",
+      subject: (day === 0 ? "" : "Dag " + day + ": ") + c.no.subject,
+      html: wrap(
+        '<p>' + c.no.body + '</p>' +
+        (CTA_DAYS.indexOf(day) !== -1 ? btn(FELLESSKAP, "Bli med i fellesskapet") : '') +
+        taskBox("Dagens 5-minuttersoppgave", c.no.task) +
+        aiPromptBox("AI-prompt du kan bruke", c.no.aiPrompt) +
+        resultBox("Dagens resultat", c.no.result) +
+        '<p>Klem fra Renate, LME 💛</p>' +
+        ps(PS_NO)
+      ),
+      text: (day === 0 ? "" : "Dag " + day + ": ") + c.no.subject + "\n\n" + c.no.body +
+        "\n\nDagens 5-minuttersoppgave: " + c.no.task +
+        "\n\nAI-prompt: " + c.no.aiPrompt +
+        "\n\nDagens resultat: " + c.no.result +
+        "\n\nKlem fra Renate, LME",
     }),
     en: () => ({
-      subject: "Day " + day + ": " + en.subject,
-      html: wrap('<p>' + en.body + '</p>' + exampleBoxEn(en.example) + '<p>Love, Renate, LME 💛</p>' + ps(PS_EN)),
-      text: "Day " + day + ": " + en.body + "\n\nExample: " + en.example + "\n\nLove, Renate, LME",
+      subject: (day === 0 ? "" : "Day " + day + ": ") + c.en.subject,
+      html: wrap(
+        '<p>' + c.en.body + '</p>' +
+        (CTA_DAYS.indexOf(day) !== -1 ? btn(FELLESSKAP, "Join the community") : '') +
+        taskBox("Today's 5-minute task", c.en.task) +
+        aiPromptBox("AI prompt you can use", c.en.aiPrompt) +
+        resultBox("Today's result", c.en.result) +
+        '<p>Love, Renate, LME 💛</p>' +
+        ps(PS_EN)
+      ),
+      text: (day === 0 ? "" : "Day " + day + ": ") + c.en.subject + "\n\n" + c.en.body +
+        "\n\nToday's 5-minute task: " + c.en.task +
+        "\n\nAI prompt: " + c.en.aiPrompt +
+        "\n\nToday's result: " + c.en.result +
+        "\n\nLove, Renate, LME",
     }),
   };
 }
 
-const SIMPLE_DAYS = [
-  simpleDay(2,
-    { subject: "finn målgruppen din", body: "I dag bruker du fem minutter på å beskrive én bestemt person i målgruppen din. Hva bryr hun seg om, og hva sliter hun med akkurat nå? Snakk som om du skriver et brev til henne, ikke til alle på én gang.", example: "en trøtt mamma til en toåring, som vil ha råd hun faktisk rekker å bruke." },
-    { subject: "find your audience", body: "Today, spend five minutes describing one specific person in your audience. What does she care about, and what is she struggling with right now? Write as if you're speaking directly to her, not to everyone at once.", example: "a tired mum of a two-year-old, who wants advice she'll actually have time to use." }),
-  simpleDay(4,
-    { subject: "velg hovedplattformen din", body: "I dag bruker du fem minutter på å velge én plattform å fokusere på denne måneden. Der målgruppen din allerede er, er der du bør være. Du kan alltid utvide til flere plattformer senere, når den første sitter.", example: "Instagram Reels, hvis målgruppen din helst scroller der." },
-    { subject: "pick your main platform", body: "Today, spend five minutes picking one platform to focus on this month. Wherever your audience already is, that's where you should be. You can always expand to more platforms later, once the first one is working.", example: "Instagram Reels, if that's where your audience scrolls the most." }),
-  simpleDay(5,
-    { subject: "studer tre skapere du liker", body: "I dag bruker du fem minutter på å se på tre skapere innenfor nisjen din. Hva gjør innholdet deres bra? Skriv ned tre observasjoner. Du skal ikke kopiere dem, bare forstå hvorfor det fungerer.", example: "Legg merke til hvordan de åpner videoene sine, det er sjelden tilfeldig." },
-    { subject: "study three creators you like", body: "Today, spend five minutes looking at three creators in your niche. What makes their content work? Write down three observations. You're not copying them, just understanding why it works.", example: "Notice how they open their videos, it's rarely an accident." }),
-  simpleDay(6,
-    { subject: "lag et utkast, ikke publiser ennå", body: "I dag bruker du fem minutter på å skrive et utkast til innlegget ditt. Ikke publiser det ennå, bare få ideen ut av hodet og ned på papiret. Et ferdig utkast slår et perfekt innlegg som aldri blir skrevet.", example: "Skriv gjerne bare stikkord først, fullstendige setninger kan komme senere." },
-    { subject: "make a draft, don't publish yet", body: "Today, spend five minutes writing a draft of your post. Don't publish it yet, just get the idea out of your head and onto paper. A finished draft beats a perfect post that never gets written.", example: "Jot down keywords first if that's easier, full sentences can come later." }),
-  simpleDay(8,
-    { subject: "øv på en god åpning", body: "De første tre sekundene avgjør om noen blir eller scroller videre. I dag bruker du fem minutter på å skrive tre ulike åpningssetninger til samme innhold, og velger den beste. En god åpning stiller et løfte, resten av innlegget holder det.", example: '"Dette gjorde jeg feil i to år" fanger mer enn "hei, i dag skal jeg vise deg".' },
-    { subject: "practice a strong opening", body: "The first three seconds decide whether someone stays or scrolls on. Today, spend five minutes writing three different opening lines for the same piece of content, and pick the strongest one. A strong opening makes a promise, the rest of the post keeps it.", example: '"I did this wrong for two years" grabs more attention than "hi, today I\'ll show you".' }),
-  simpleDay(9,
-    { subject: "planlegg flere innlegg i én økt", body: "I dag bruker du fem minutter på å skrive ned ideer til tre innlegg, ikke bare ett. Da har du noe å ta av resten av uken, selv på de travle dagene. Det er lettere å være kreativ når du ikke også må finne på noe fra bunnen hver dag.", example: "Tre overskrifter er nok akkurat nå, resten av innholdet kan du fylle inn etter hvert." },
-    { subject: "plan several posts at once", body: "Today, spend five minutes writing down ideas for three posts, not just one. That way you have something to draw on for the rest of the week, even on the busy days. It's easier to be creative when you don't also have to start from scratch every day.", example: "Three headlines are enough for now, you can fill in the rest as you go." }),
-  simpleDay(10,
-    { subject: "la AI skjerpe teksten din", body: "I dag bruker du fem minutter på å lime inn teksten fra et av innleggene dine i et AI-verktøy, og be om en kortere, skarpere versjon. Behold din egen stemme, bare stram opp språket. AI er verktøyet, du er fortsatt den som bestemmer hva som skal sies.", example: '"Gjør denne teksten tretti prosent kortere, men behold tonen."' },
-    { subject: "let AI sharpen your text", body: "Today, spend five minutes pasting the text from one of your posts into an AI tool, and ask for a shorter, sharper version. Keep your own voice, just tighten the language. AI is the tool, you're still the one who decides what gets said.", example: '"Make this text thirty percent shorter, but keep the tone."' }),
-  simpleDay(11,
-    { subject: "se på tallene dine", body: "I dag bruker du fem minutter på å se gjennom visninger og engasjement på det du har laget så langt. Hva forteller tallene deg om hva som fungerer? Tallene lyver aldri, selv når de ikke er det du håpet på.", example: "Se spesielt på hvor lenge folk blir, ikke bare hvor mange som ser." },
-    { subject: "look at your numbers", body: "Today, spend five minutes looking through the views and engagement on what you've made so far. What do the numbers tell you about what's working? The numbers never lie, even when they're not what you hoped for.", example: "Look especially at how long people stay, not just how many see it." }),
-  simpleDay(12,
-    { subject: "snakk direkte til seeren", body: 'I dag bruker du fem minutter på å skrive teksten din som om du snakker til én person. Bruk "du", ikke "man" eller "de". Det gjør innholdet varmere, og lettere å kjenne seg igjen i.', example: '"Du trenger ikke gjøre alt riktig" slår "man trenger ikke gjøre alt riktig".' },
-    { subject: "talk straight to the viewer", body: 'Today, spend five minutes rewriting your text as if you\'re talking to one single person. Use "you", not "people" or "one". It makes the content warmer, and easier to recognise yourself in.', example: '"You don\'t need to get everything right" lands better than "one doesn\'t need to get everything right".' }),
-  simpleDay(13,
-    { subject: "gjenbruk noe som fungerte", body: "I dag bruker du fem minutter på å finne innlegget ditt med mest respons, og lage en ny versjon av det. Det som fungerte én gang, fungerer ofte igjen. Det er ikke jugsing, det er å gi flere sjansen til å se det.", example: "Bytt ut eksemplet eller vinkelen, men behold strukturen som fungerte." },
-    { subject: "reuse something that worked", body: "Today, spend five minutes finding your post with the most response, and making a new version of it. What worked once often works again. It's not cheating, it's giving more people the chance to see it.", example: "Swap the example or the angle, but keep the structure that worked." }),
-  simpleDay(15,
-    { subject: "publiser, selv om det ikke er perfekt", body: "I dag bruker du fem minutter på å publisere noe, selv om det ikke føles helt ferdig. Konsistens slår perfeksjon hver gang. Det innlegget du er mest usikker på, er ofte det som treffer best.", example: 'Det er lov å skrive det rett ut: "Dette er ikke perfekt, men jeg deler det uansett."' },
-    { subject: "post it, even if it's not perfect", body: "Today, spend five minutes publishing something, even if it doesn't feel quite finished. Consistency beats perfection, every time. The post you're most unsure about is often the one that lands best.", example: 'It\'s fine to say it outright: "This isn\'t perfect, but I\'m sharing it anyway."' }),
-  simpleDay(16,
-    { subject: "les gjennom kommentarene dine", body: "I dag bruker du fem minutter på å lese gjennom tilbakemeldingene du har fått så langt. Hva spør folk om? Det er ofte ditt neste innlegg. Publikum forteller deg alltid hva de vil ha mer av, om du lytter.", example: "Spør tre personer om det samme, er det gjerne et tegn, ikke en tilfeldighet." },
-    { subject: "read through your comments", body: "Today, spend five minutes reading through the feedback you've gotten so far. What are people asking about? That's often your next post. Your audience always tells you what they want more of, if you listen.", example: "If three people ask the same thing, that's usually a sign, not a coincidence." }),
-  simpleDay(17,
-    { subject: "nevn noen andre i nisjen din", body: "I dag bruker du fem minutter på å nevne eller tagge noen andre i nisjen din i et innlegg. Fellesskap slår konkurranse, og det åpner dører. De fleste svarer positivt på å bli lagt merke til.", example: 'Et enkelt "har du sett @..." er nok, det trenger ikke være stort.' },
-    { subject: "mention someone else in your niche", body: "Today, spend five minutes mentioning or tagging someone else in your niche in a post. Community beats competition, and it opens doors. Most people respond well to being noticed.", example: 'A simple "have you seen @..." is enough, it doesn\'t need to be a big deal.' }),
-  simpleDay(18,
-    { subject: "fortell en liten personlig historie", body: "I dag bruker du fem minutter på å dele noe personlig knyttet til temaet ditt. Folk husker historier bedre enn råd. Du trenger ikke dele alt, bare nok til at det føles ekte.", example: "En liten detalj, som noe barnet ditt sa i går, er ofte nok." },
-    { subject: "tell a small personal story", body: "Today, spend five minutes sharing something personal connected to your topic. People remember stories better than advice. You don't need to share everything, just enough for it to feel real.", example: "One small detail, like something your child said yesterday, is often enough." }),
-  simpleDay(19,
-    { subject: "test et nytt format", body: "I dag bruker du fem minutter på å planlegge noe i et format du ikke har prøvd før, video, karusell eller ren tekst. Du vet aldri hva som treffer før du tester. Den beste måten å finne formatet ditt på, er å prøve flere.", example: "Har du bare laget bilder til nå? Prøv en kort video denne gangen." },
-    { subject: "try a new format", body: "Today, spend five minutes planning something in a format you haven't tried before, video, carousel or plain text. You never know what lands until you test it. The best way to find your format is to try several.", example: "Only made images so far? Try a short video this time." }),
-  simpleDay(20,
-    { subject: "rydd i profilen din", body: "I dag bruker du fem minutter på å sjekke bio og profilbilde. Viser de tydelig hva du driver med, og hvorfor noen bør følge deg? Dette er ofte det aller første noen ser, før de leser et eneste innlegg.", example: "Les bioen din høyt for deg selv, gir den mening på fem sekunder?" },
-    { subject: "tidy up your profile", body: "Today, spend five minutes checking your bio and profile picture. Do they clearly show what you do, and why someone should follow you? This is often the very first thing someone sees, before reading a single post.", example: "Read your bio out loud, does it make sense in five seconds?" }),
-  simpleDay(22,
-    { subject: "planlegg tre ideer for neste uke", body: "I dag bruker du fem minutter på å skrive ned tre ideer for uken som kommer. Da slipper du å stå fast når det er tid for å lage innhold. Fem minutter nå sparer deg for en hel travel morgen senere.", example: "Skriv dem som stikkord, du trenger ikke ha alt utformet ennå." },
-    { subject: "plan three ideas for next week", body: "Today, spend five minutes writing down three ideas for the week ahead. That way you won't get stuck when it's time to create. Five minutes now saves you a whole busy morning later.", example: "Write them as keywords, you don't need to have it all figured out yet." }),
-  simpleDay(23,
-    { subject: "still et spørsmål", body: "I dag bruker du fem minutter på å stille et konkret spørsmål i innlegget ditt. Spørsmål gir svar, og svar gir samtaler. Jo enklere spørsmålet, jo flere svarer.", example: '"Hva sliter du mest med akkurat nå?" er nok til å starte en samtale.' },
-    { subject: "ask a question", body: "Today, spend five minutes asking a concrete question in your post. Questions get answers, and answers start conversations. The simpler the question, the more people answer.", example: '"What are you struggling with most right now?" is enough to start a conversation.' }),
-  simpleDay(24,
-    { subject: "finn din stemme", body: "I dag bruker du fem minutter på å skrive ned hva som gjør innholdet ditt annerledes enn andres i samme nisje. Det er stemmen din, ikke bare temaet, som folk husker. Det er lov å høres ut som deg selv, selv når andre gjør det annerledes.", example: "Er du den varme, den ærlige eller den humoristiske? Det er ofte tydeligere for andre enn for deg selv." },
-    { subject: "find your voice", body: "Today, spend five minutes writing down what makes your content different from others in the same niche. It's your voice, not just the topic, that people remember. It's okay to sound like yourself, even when others do it differently.", example: "Are you the warm one, the honest one, or the funny one? It's often clearer to others than to yourself." }),
-  simpleDay(25,
-    { subject: "del en lærdom", body: "I dag bruker du fem minutter på å dele én ting du har lært om innhold denne måneden. Det du selv har lært, hjelper ofte andre lengst på vei. Du trenger ikke være ferdig lært for å dele det du vet så langt.", example: '"Jeg lærte at korte innlegg fungerer bedre for meg" er mer enn nok.' },
-    { subject: "share a lesson", body: "Today, spend five minutes sharing one thing you've learned about content this month. What you've learned yourself often helps others the furthest. You don't need to be fully done learning to share what you know so far.", example: '"I learned that shorter posts work better for me" is more than enough.' }),
-  simpleDay(26,
-    { subject: "sammenlign med dag 1", body: "I dag bruker du fem minutter på å se tilbake på det aller første innlegget du laget i utfordringen. Se hvor langt du har kommet. Fremgang er lettest å se når du ser tilbake, ikke fremover.", example: "Legg merke til både innholdet og selvtilliten, begge deler har som regel vokst." },
-    { subject: "compare with day 1", body: "Today, spend five minutes looking back at the very first post you made in the challenge. See how far you've come. Progress is easiest to see when you look back, not forward.", example: "Notice both the content and the confidence, both have usually grown." }),
-  simpleDay(27,
-    { subject: "inviter en venn med", body: "I dag bruker du fem minutter på å dele utfordringen med en venn som også ønsker å bli mer synlig. Det er lettere å holde ut sammen med noen. Det gjør også fellesskapet i utfordringen litt større.", example: '"Jeg gjør denne utfordringen, bli med?" er nok av en melding.' },
-    { subject: "invite a friend", body: "Today, spend five minutes sharing the challenge with a friend who also wants to get more visible. It's easier to keep going together. It also makes the community in the challenge a little bigger.", example: '"I\'m doing this challenge, want to join?" is message enough.' }),
-  simpleDay(28,
-    { subject: "finn din beste dag", body: "I dag bruker du fem minutter på å finne innlegget som fikk mest respons denne måneden. Hvorfor tror du akkurat det fungerte? Det du finner der, kan du bruke om igjen resten av utfordringen.", example: "Var det tidspunktet, temaet eller formatet som gjorde forskjellen?" },
-    { subject: "find your best day", body: "Today, spend five minutes finding the post that got the most response this month. Why do you think that one worked? What you find there, you can use again for the rest of the challenge.", example: "Was it the timing, the topic, or the format that made the difference?" }),
-  simpleDay(29,
-    { subject: "planlegg veien videre", body: "I dag bruker du fem minutter på å skrive ned hva du vil fortsette med etter utfordringen. De gode vanene er verdt å beholde. Utfordringen tar slutt om en dag, vanene dine trenger ikke å gjøre det.", example: "Kanskje det er selve rytmen, ikke bare innholdet, du vil beholde." },
-    { subject: "plan the road ahead", body: "Today, spend five minutes writing down what you want to keep doing after the challenge. The good habits are worth keeping. The challenge ends in a day, your habits don't have to.", example: "Maybe it's the rhythm itself, not just the content, you want to keep." }),
-];
-
-const CONTENT = {
-  no: {
-    d0: () => ({
-      subject: "Velkommen inn i utfordringen 🌸",
-      html: wrap(
-        '<p>Så glad jeg er for å ha deg med i 10 000-visninger-utfordringen. De neste 30 dagene viser jeg deg, fem minutter om dagen, hvordan du finner nisjen din, planlegger innhold med AI og lager noe som faktisk blir sett.</p>' +
-        '<p>Du trenger ingen følgere, ingen erfaring og ikke noe dyrt utstyr. Bare fem minutter og litt vilje til å prøve.</p>' +
-        '<p>Bli med i fellesskapet, der de andre som er med møtes og heier på hverandre:</p>' +
-        btn(FELLESSKAP, "Bli med i fellesskapet") +
-        '<p>Første oppgave kommer i morgen. Følg med i innboksen din.</p>' +
-        '<p>Klem fra Renate, LME 💛</p>'
-      ),
-      text: "Så glad jeg er for å ha deg med i 10 000-visninger-utfordringen. Fem minutter om dagen i 30 dager. Bli med i fellesskapet: " + FELLESSKAP + " Første oppgave kommer i morgen.\n\nKlem fra Renate, LME",
-    }),
-    d1: () => ({
-      subject: "Dag 1: finn nisjen din",
-      html: wrap(
-        '<p>I dag bruker du fem minutter på én ting: Skriv ned tre temaer du kan snakke om i timevis, uten å bli lei. Det er nisjen din.</p>' +
-        '<p>Ikke tenk for mye. Den første tanken er ofte den riktige. Nisjen din trenger ikke være unik, den trenger bare å være ekte for deg, det er det som gjør at du holder ut når det blir travelt.</p>' +
-        '<p>Klem fra Renate, LME 💛</p>' +
-        ps(PS_NO)
-      ),
-      text: "Dag 1: Skriv ned tre temaer du kan snakke om i timevis, uten å bli lei. Det er nisjen din. Ikke tenk for mye, den første tanken er ofte den riktige.\n\nKlem fra Renate, LME",
-    }),
-    d3: () => ({
-      subject: "Dag 3: la AI gjøre planleggingen",
-      html: wrap(
-        '<p>I dag bruker du fem minutter på å la et AI-verktøy du allerede har (Claude, ChatGPT eller lignende) foreslå tre innholdsideer innenfor nisjen din. Velg den du liker best.</p>' +
-        '<p>Du trenger ikke starte fra et blankt ark. AI er godt til akkurat dette: å gi deg noe å reagere på, så du slipper å finne opp alt selv.</p>' +
-        '<p>Klem fra Renate, LME 💛</p>' +
-        ps(PS_NO)
-      ),
-      text: "Dag 3: La et AI-verktøy du allerede har foreslå tre innholdsideer innenfor nisjen din. Velg den du liker best. Du trenger ikke starte fra et blankt ark.\n\nKlem fra Renate, LME",
-    }),
-    d7: () => ({
-      subject: "Dag 7: første uke i boks",
-      html: wrap(
-        '<p>Se tilbake på det du har laget så langt. Det trenger ikke være perfekt, det trenger bare å være ekte.</p>' +
-        '<p>Denne uken: Lag ett innlegg til, og be gjerne noen du kjenner om ærlig tilbakemelding. Den første uken er ofte den tyngste, du har lagt grunnmuren nå.</p>' +
-        '<p>Klem fra Renate, LME 💛</p>' +
-        ps(PS_NO)
-      ),
-      text: "Dag 7: Se tilbake på det du har laget så langt. Denne uken: Lag ett innlegg til, og be om ærlig tilbakemelding. Den første uken er ofte den tyngste.\n\nKlem fra Renate, LME",
-    }),
-    d14: () => ({
-      subject: "Dag 14: halvveis, og det går bra",
-      html: wrap(
-        '<p>Du er halvveis i utfordringen. Ta en liten pause og legg merke til hva som har endret seg siden dag 1.</p>' +
-        '<p>Denne uken: Se på innlegget som fikk mest respons, og lag ett til i samme stil. De fleste gir opp rundt nå, bare det at du fortsatt er her, setter deg foran de fleste.</p>' +
-        '<p>Klem fra Renate, LME 💛</p>' +
-        ps(PS_NO)
-      ),
-      text: "Dag 14: Du er halvveis. Se på innlegget som fikk mest respons, og lag ett til i samme stil. De fleste gir opp rundt nå, du er fortsatt her.\n\nKlem fra Renate, LME",
-    }),
-    d21: () => ({
-      subject: "Dag 21: siste spurt",
-      html: wrap(
-        '<p>Ni dager igjen. Konsistens slår perfeksjon hver gang, så hold rytmen, selv på dagene du ikke føler for det.</p>' +
-        '<p>Denne uken: Planlegg innholdet ditt for resten av utfordringen i én økt. Da trenger du ikke ta den avgjørelsen på nytt hver eneste dag.</p>' +
-        '<p>Klem fra Renate, LME 💛</p>' +
-        ps(PS_NO)
-      ),
-      text: "Dag 21: ni dager igjen. Hold rytmen. Denne uken: Planlegg resten av innholdet i én økt.\n\nKlem fra Renate, LME",
-    }),
-    d30: () => ({
-      subject: "Dag 30: du klarte det! 🎉",
-      html: wrap(
-        '<p>30 dager, fem minutter om dagen, og du er fortsatt her. Det er ikke en selvfølge, og jeg er stolt av deg.</p>' +
-        '<p>Abonnementet ditt fortsetter, så du får nye oppgaver i innboksen så lenge du er med. Bruk arbeidsboken og fellesskapet til å holde rytmen videre.</p>' +
-        '<p>Klem fra Renate, LME 💛</p>' +
-        ps(PS_NO)
-      ),
-      text: "Dag 30: Du klarte det! 30 dager, fem minutter om dagen. Abonnementet ditt fortsetter, med nye oppgaver i innboksen så lenge du er med.\n\nKlem fra Renate, LME",
-    }),
-  },
-  en: {
-    d0: () => ({
-      subject: "Welcome to the challenge 🌸",
-      html: wrap(
-        '<p>I\'m so glad to have you in the 10,000 Views Challenge. Over the next 30 days, five minutes a day, I\'ll show you how to find your niche, plan content with AI and create something that actually gets seen.</p>' +
-        '<p>You don\'t need followers, experience or expensive equipment. Just five minutes and a bit of willingness to try.</p>' +
-        '<p>Join the community, where everyone else in the challenge meets and cheers each other on:</p>' +
-        btn(FELLESSKAP, "Join the community") +
-        '<p>Your first task lands tomorrow. Watch your inbox.</p>' +
-        '<p>Love, Renate, LME 💛</p>'
-      ),
-      text: "I'm so glad to have you in the 10,000 Views Challenge. Five minutes a day for 30 days. Join the community: " + FELLESSKAP + " Your first task lands tomorrow.\n\nLove, Renate, LME",
-    }),
-    d1: () => ({
-      subject: "Day 1: find your niche",
-      html: wrap(
-        '<p>Today, spend five minutes on one thing: write down three topics you could talk about for hours without getting bored. That\'s your niche.</p>' +
-        '<p>Don\'t overthink it. The first thought is usually the right one. Your niche doesn\'t need to be unique, it just needs to be real to you, that\'s what keeps you going when things get busy.</p>' +
-        '<p>Love, Renate, LME 💛</p>' +
-        ps(PS_EN)
-      ),
-      text: "Day 1: write down three topics you could talk about for hours without getting bored. That's your niche. Don't overthink it, the first thought is usually the right one.\n\nLove, Renate, LME",
-    }),
-    d3: () => ({
-      subject: "Day 3: let AI do the planning",
-      html: wrap(
-        '<p>Today, spend five minutes letting an AI tool you already have (Claude, ChatGPT or similar) suggest three content ideas within your niche. Pick the one you like best.</p>' +
-        '<p>You don\'t need to start from a blank page. This is exactly what AI is good for: giving you something to react to, so you don\'t have to invent everything yourself.</p>' +
-        '<p>Love, Renate, LME 💛</p>' +
-        ps(PS_EN)
-      ),
-      text: "Day 3: let an AI tool you already have suggest three content ideas within your niche. Pick the one you like best. You don't need to start from a blank page.\n\nLove, Renate, LME",
-    }),
-    d7: () => ({
-      subject: "Day 7: first week done",
-      html: wrap(
-        '<p>Look back at what you\'ve made so far. It doesn\'t need to be perfect, it just needs to be real.</p>' +
-        '<p>This week: make one more post, and ask someone you know for honest feedback. The first week is often the hardest, you\'ve laid the foundation now.</p>' +
-        '<p>Love, Renate, LME 💛</p>' +
-        ps(PS_EN)
-      ),
-      text: "Day 7: look back at what you've made so far. This week: make one more post, and ask for honest feedback. The first week is often the hardest.\n\nLove, Renate, LME",
-    }),
-    d14: () => ({
-      subject: "Day 14: halfway, and doing fine",
-      html: wrap(
-        '<p>You\'re halfway through the challenge. Take a small pause and notice what\'s changed since day 1.</p>' +
-        '<p>This week: look at the post that got the most response, and make one more in the same style. Most people quit around now, just being still here already puts you ahead.</p>' +
-        '<p>Love, Renate, LME 💛</p>' +
-        ps(PS_EN)
-      ),
-      text: "Day 14: you're halfway there. Look at the post that got the most response, and make one more like it. Most people quit around now, you're still here.\n\nLove, Renate, LME",
-    }),
-    d21: () => ({
-      subject: "Day 21: final stretch",
-      html: wrap(
-        '<p>Nine days left. Consistency beats perfection every time, so keep the rhythm, even on the days you don\'t feel like it.</p>' +
-        '<p>This week: plan your content for the rest of the challenge in one sitting. That way you don\'t have to make the decision all over again every single day.</p>' +
-        '<p>Love, Renate, LME 💛</p>' +
-        ps(PS_EN)
-      ),
-      text: "Day 21: nine days left. Keep the rhythm. This week: plan the rest of your content in one sitting.\n\nLove, Renate, LME",
-    }),
-    d30: () => ({
-      subject: "Day 30: you did it! 🎉",
-      html: wrap(
-        '<p>30 days, five minutes a day, and you\'re still here. That\'s not nothing, and I\'m proud of you.</p>' +
-        '<p>Your subscription continues, so you\'ll keep getting new tasks in your inbox for as long as you\'re with us. Use the workbook and the community to keep the rhythm going.</p>' +
-        '<p>Love, Renate, LME 💛</p>' +
-        ps(PS_EN)
-      ),
-      text: "Day 30: you did it! 30 days, five minutes a day. Your subscription continues, with new tasks in your inbox for as long as you're with us.\n\nLove, Renate, LME",
-    }),
-  },
-};
-
-SIMPLE_DAYS.forEach((d, i) => {
-  const day = [2, 4, 5, 6, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 22, 23, 24, 25, 26, 27, 28, 29][i];
+const CONTENT = { no: {}, en: {} };
+for (let day = 0; day <= 30; day++) {
+  const d = dayEmail(day);
   CONTENT.no["d" + day] = d.no;
   CONTENT.en["d" + day] = d.en;
-});
+}
 
 export function utfordringEmail(lang, kind) {
   const l = lang === "en" ? "en" : "no";
@@ -340,4 +269,32 @@ export async function sendUtfordringMail(env, opts) {
   } catch (e) {
     return { ok: false, error: String(e) };
   }
+}
+
+const UTFORDRING_DAYS = Array.from({ length: 30 }, (_, i) => i + 1);
+const DAG = 24 * 60 * 60 * 1000;
+
+/* Melder en kjøper inn i utfordringen: dag 0 sendes med en gang, resten
+ * (dag 1–30) legges i kø for den daglige cronjobben
+ * (api/cron/utfordring-followups), og kjøperen får tilgang til fellesskapet
+ * (funnel/utfordringen/fellesskap.html). Delt av oppskrift-webhook.js (kjøp
+ * via egen betalingslenke) og api/utfordring-pro-enroll.js (kjøp av
+ * "utfordring + Inner Circle Pro"-varianten, kalt fra den separate
+ * lme-inner-circle-workeren etter fullført betaling der). */
+export async function enrollUtfordringMember(env, { email, name, lang }) {
+  const e = (email || "").trim().toLowerCase();
+  if (!e) return { ok: false, error: "missing_email" };
+  await sendUtfordringMail(env, { to: email, name, lang, kind: "d0" });
+  try {
+    for (const dag of UTFORDRING_DAYS) {
+      await env.BUILDER_KV.put(
+        "utf_fu:" + e + ":d" + dag,
+        JSON.stringify({ email, name, lang, kind: "d" + dag, sendAfter: Date.now() + dag * DAG })
+      );
+    }
+    await env.BUILDER_KV.put("utf_member:" + e, JSON.stringify({ email, name, lang, joinedAt: Date.now() }));
+  } catch (e2) {
+    return { ok: false, error: String(e2) };
+  }
+  return { ok: true };
 }

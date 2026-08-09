@@ -76,13 +76,13 @@ export async function onRequestGet(context) {
     return Response.redirect("https://lmexplorers.com/youtube-kurs", 302);
   }
   const info = COURSE_INFO.youtube;
-  const token = await grantCourseAccess(env, "youtube", sub.email, sub.name);
-  await sendCourseDeliveryMail(env, sub.email, sub.name, sub.lang, info.name[sub.lang] || info.name.no, info.url, token, false);
+  const accessToken = await grantCourseAccess(env, "youtube", sub.email, sub.name);
+  await sendCourseDeliveryMail(env, sub.email, sub.name, sub.lang, info.name[sub.lang] || info.name.no, info.url, accessToken, false);
   // Køer 3-ukers oppfølgingsserien (mersalg + jevnlige e-poster fremover).
   await enqueueYoutubeFollowups(env, sub.email, sub.name, sub.lang);
   try {
     await sendOwnerSignupNotice(env, { what: "Gratis YouTube-kurs", name: sub.name, email: sub.email, lang: sub.lang });
   } catch (e) {}
   // Bekreftet: rett inn i kurset med en gang (med tilgangstoken), i tillegg til e-posten hun får.
-  return Response.redirect(COURSE_URL + "?t=" + encodeURIComponent(token), 302);
+  return Response.redirect(COURSE_URL + "?t=" + encodeURIComponent(accessToken), 302);
 }

@@ -137,17 +137,17 @@ body {{ font-family:var(--font-body); color:#4a4a4a; }}
   font-family:var(--font-head); font-weight:700; font-size:10pt; color:#8a8a8a; }}
 
 .banner {{ background:#f5e5b2; border-radius:14px; padding:3.6mm 6mm; margin:2mm 0 4.5mm;
-  box-shadow:0 1px 4px rgba(0,0,0,.08); text-align:center; }}
+  text-align:center; }}
 .banner h1 {{ font-family:var(--font-head); font-weight:800; font-size:16.5pt; color:{INK};
   letter-spacing:.4px; text-transform:uppercase; }}
 .pillwrap {{ text-align:center; margin:4.5mm 0 3mm; }}
 .pill {{ display:inline-block; border-radius:999px; padding:2.4mm 9mm;
   font-family:var(--font-head); font-weight:700; font-size:10.5pt; color:#fff;
-  letter-spacing:.4px; text-transform:uppercase; box-shadow:0 1px 4px rgba(0,0,0,.12); }}
+  letter-spacing:.4px; text-transform:uppercase; }}
 .rosepill {{ background:{ROSE}; }}
 .sagepill {{ background:{SAGE}; }}
 .card {{ background:rgba(255,255,255,.93); border:2px solid #ecd2c0; border-radius:16px;
-  padding:4mm 6mm; margin:0 0 4mm; box-shadow:0 1px 5px rgba(0,0,0,.06); }}
+  padding:4mm 6mm; margin:0 0 4mm; }}
 .cream {{ background:#fbf3e8; border:2px solid #ecd2c0; border-radius:16px;
   padding:4mm 6mm; margin:4mm 0; text-align:center; }}
 .creamtitle {{ font-family:var(--font-head); font-weight:700; font-size:11pt; color:{SAGE}; }}
@@ -172,12 +172,12 @@ table.tl td:first-child {{ white-space:nowrap; }}
 .dot {{ display:inline-block; width:3.5mm; height:3.5mm; border-radius:50%; vertical-align:-0.5mm; margin-right:1.5mm; }}
 
 .coverimg {{ text-align:center; margin:3mm 0 3mm; }}
-.coverimg img {{ width:98mm; border-radius:14px; box-shadow:0 3px 10px rgba(0,0,0,.18);
+.coverimg img {{ width:98mm; border-radius:14px;
   border:3mm solid #fff; }}
 .covertag {{ text-align:center; font-family:var(--font-head); font-size:8pt; letter-spacing:2.6px;
   color:#8a8a8a; margin:1mm 0 2.5mm; }}
 .coverbanner {{ display:flex; align-items:center; justify-content:center; gap:5mm;
-  background:#f5e5b2; border-radius:16px; padding:3.4mm 6mm; box-shadow:0 1px 5px rgba(0,0,0,.1); }}
+  background:#f5e5b2; border-radius:16px; padding:3.4mm 6mm; }}
 .covertitle {{ font-family:var(--font-head); font-weight:800; font-size:27pt; color:{INK}; letter-spacing:1px; }}
 .subpill {{ margin:3.6mm auto; width:fit-content; background:#fdf9e3; border:2.5px solid {INK};
   border-radius:999px; padding:1.8mm 8mm; font-family:var(--font-head); font-weight:700;
@@ -194,7 +194,7 @@ table.tl td:first-child {{ white-space:nowrap; }}
 .twocol {{ display:flex; gap:6mm; align-items:flex-start; }}
 .twocol > div {{ flex:1; }}
 .figwrap {{ text-align:center; }}
-.figwrap img {{ width:44mm; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,.14); border:2mm solid #fff; }}
+.figwrap img {{ width:44mm; border-radius:12px; border:2mm solid #fff; }}
 .figcap {{ font-size:9pt; color:#888; text-align:center; margin-top:1.5mm; }}
 .schematic {{ margin:2mm 0 1mm; }}
 .deler-grid {{ display:grid; grid-template-columns:1fr 1fr; gap:2.4mm 6mm; margin:1mm 0 2mm; }}

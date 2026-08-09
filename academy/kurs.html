@@ -12,7 +12,7 @@
 // bygges) så innholdet skjules umiddelbart for et låst kurs, samme mønster
 // som js/course-gate.js bruker på de faste kurssidene.
 (function () {
-  var PAID = ["lme-markedsfoering-med-claude", "lag-ditt-foerste-digitale-minikurs"];
+  var PAID = ["lme-markedsfoering-med-claude", "lag-ditt-foerste-digitale-minikurs", "montessori-masterclass"];
   var m = location.pathname.match(/^\/kurs\/([a-z0-9\-]+)\/?$/i);
   var slug = (m && m[1]) || new URL(location.href).searchParams.get('k') || '';
   if (PAID.indexOf(slug) === -1) return;
@@ -1566,7 +1566,6 @@
             <h4><span class="ico">✦</span> Lær</h4>
             <ul>
               <li><a href="/academy">Kurs <span class="arrow">›</span></a></li>
-              <li><a href="/montessori-mesterklasse"><span data-no="Montessori mesterklasse" data-en="Montessori Masterclass">Montessori mesterklasse</span> <span class="arrow">›</span></a></li>
               <li><a href="/montessorireisen"><span data-no="Montessorireisen" data-en="The Montessori Journey">Montessorireisen</span> <span class="arrow">›</span></a></li>
               <li><a href="/roadmap">Din Montessorireise <span class="arrow">›</span></a></li>
               <li><a href="/musikk">LME Musikk <span class="arrow">›</span></a></li>
@@ -1693,11 +1692,26 @@
     .crs-overview li { padding-left: 28px; position: relative; color: #4A4A4A; line-height: 1.55; }
     .crs-overview li::before { content: '🌸'; position: absolute; left: 0; }
     .crs-module { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #7AAE1F; background: #F3F8E8; border-radius: 999px; padding: 8px 18px; display: inline-block; margin: 26px 0 18px; }
+    .crs-module-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 26px 0 18px; }
+    .crs-module-row .crs-module { margin: 0; }
+    .crs-lock-badge { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; border-radius: 999px; padding: 6px 14px; white-space: nowrap; }
+    .crs-lock-badge.member { color: #8f2a55; background: #FFE8F0; }
+    .crs-lock-badge.paid { color: #8a6400; background: #FFF3D2; }
+    .crs-lock-card { background: #fff; border: 1px dashed rgba(26,26,26,0.16); border-radius: 22px; padding: 28px 30px; margin-bottom: 22px; text-align: center; }
+    .crs-lock-card .lock-ico { font-size: 30px; margin-bottom: 10px; }
+    .crs-lock-card h4 { font-size: 18px; margin-bottom: 8px; }
+    .crs-lock-card p { color: #6a5560; font-size: 14.5px; margin-bottom: 16px; }
+    .crs-lock-card img.crs-lock-thumb { width: 100%; max-width: 320px; border-radius: 16px; margin: 0 auto 16px; display: block; box-shadow: 0 8px 22px rgba(26,26,26,0.1); }
     .crs-lesson { background: #fff; border: 1px solid rgba(26,26,26,0.08); border-radius: 22px; padding: 30px 32px; box-shadow: 0 6px 22px rgba(26,26,26,0.05); margin-bottom: 22px; }
     .crs-lesson-num { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #E91E89; }
     .crs-lesson h3 { font-size: 22px; margin: 6px 0 14px; line-height: 1.25; }
     .crs-lesson p { color: #4A4A4A; line-height: 1.75; margin-bottom: 14px; }
     .crs-lesson p:last-child { margin-bottom: 0; }
+    .crs-lesson p a { color: #E91E89; font-weight: 700; text-decoration: underline; }
+    .crs-lesson p a:hover { color: #C43D75; }
+    .crs-lesson .crs-list { color: #4A4A4A; line-height: 1.75; margin: 0 0 14px 22px; }
+    .crs-lesson .crs-list li { margin-bottom: 6px; }
+    .crs-lesson .crs-list a { color: #E91E89; font-weight: 700; text-decoration: underline; }
     .crs-lesson strong { color: #1A1A1A; }
     .crs-sub { font-size: 16px; font-weight: 700; color: #E91E89; margin: 16px 0 6px; }
     .crs-lessonfig { margin: 12px 0 18px; border-radius: 16px; overflow: hidden; }
@@ -1712,12 +1726,50 @@
     .crs-next p { color: #6a3a44; margin-bottom: 18px; }
     .crs-next .btn-primary { display: inline-block; }
     .crs-empty { text-align: center; color: #4A4A4A; padding: 40px 20px; }
+
+    /* ---- Modul-kortgrid: start hvor du vil, se fremdrift ---- */
+    .crs-progress-summary { display: flex; align-items: center; gap: 12px; margin: 6px 0 20px; }
+    .crs-progress-summary .txt { font-size: 13px; font-weight: 700; color: #6a5560; white-space: nowrap; }
+    .crs-progress-track { flex: 1; height: 8px; border-radius: 999px; background: #F1E4E8; overflow: hidden; }
+    .crs-progress-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #A4D233, #7AAE1F); width: 0%; transition: width .3s ease; }
+    .crs-cardgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; margin: 0 0 34px; }
+    .crs-cardgrid[hidden] { display: none; }
+    .crs-mcard { display: block; text-align: left; background: #fff; border: 1px solid rgba(26,26,26,0.08); border-radius: 20px; overflow: hidden; box-shadow: 0 6px 20px rgba(26,26,26,0.06); cursor: pointer; transition: transform .2s ease, box-shadow .2s ease; padding: 0; font-family: inherit; }
+    .crs-mcard:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(26,26,26,0.12); }
+    .crs-mcard.active { border-color: #E91E89; box-shadow: 0 0 0 2px #F5A8B8, 0 14px 30px rgba(233,30,137,0.18); }
+    .crs-module-content { min-height: 40px; }
+    .crs-back-to-modules { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1px solid rgba(26,26,26,0.1); color: #E91E89; font-weight: 700; font-size: 14px; border-radius: 999px; padding: 10px 18px; margin-bottom: 20px; cursor: pointer; font-family: inherit; }
+    .crs-back-to-modules:hover { background: #FFF4F6; }
+    .crs-lesson-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .crs-lesson-list[hidden] { display: none; }
+    .crs-lesson-row { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; background: #fff; border: 1px solid rgba(26,26,26,0.08); border-radius: 16px; padding: 16px 20px; cursor: pointer; font-family: inherit; box-shadow: 0 4px 14px rgba(26,26,26,0.04); transition: transform .15s ease, box-shadow .15s ease; }
+    .crs-lesson-row:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(26,26,26,0.1); border-color: #F5A8B8; }
+    .crs-lesson-row-num { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #E91E89; flex: none; }
+    .crs-lesson-row-title { flex: 1; font-size: 15.5px; font-weight: 700; color: #1A1A1A; }
+    .crs-lesson-row-check { flex: none; color: #7AAE1F; font-weight: 700; font-size: 16px; width: 20px; text-align: center; }
+    .crs-mcard-thumb { aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; font-size: 34px; color: #fff; position: relative; }
+    .crs-mcard-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .crs-mcard-logo { width: 56px; height: 56px; border-radius: 16px; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(26,26,26,0.14); }
+    .crs-mcard-logo img { width: 40px; height: 40px; object-fit: contain; }
+    .crs-mcard-lock { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,.95); color: #8f2a55; font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; }
+    .crs-mcard-lock.paid { color: #8a6400; }
+    .crs-mcard-body { padding: 14px 16px 16px; }
+    .crs-mcard-tag { font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #7AAE1F; margin-bottom: 4px; }
+    .crs-mcard-title { font-size: 15px; font-weight: 700; color: #1A1A1A; line-height: 1.3; margin-bottom: 10px; }
+    .crs-mcard-track { height: 6px; border-radius: 999px; background: #F1E4E8; overflow: hidden; margin-bottom: 6px; }
+    .crs-mcard-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #A4D233, #7AAE1F); width: 0%; }
+    .crs-mcard-pct { font-size: 11px; color: #9a8b90; font-weight: 700; }
+    .crs-lesson-done-row { display: flex; justify-content: flex-end; margin-top: 10px; }
+    .crs-lesson-done-btn { display: inline-flex; align-items: center; gap: 6px; background: #F3F8E8; color: #5a7a1a; border: 1px solid #dcecc0; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .crs-lesson-done-btn.done { background: #7AAE1F; color: #fff; border-color: #7AAE1F; }
+    @media (max-width: 560px) { .crs-cardgrid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; } }
   </style>
 
   <section class="crs" id="kurs-innhold" data-source-wins>
     <div class="crs-empty" id="kurs-status">Henter kursinnholdet …</div>
   </section>
 
+  <script src="/js/lme-member.js?v=1" defer></script>
   <script>
     /* Kursvisning: henter kurs-JSON fra /api/kurs og bygger siden i LME-stil.
        Kursets adresse er /kurs/<navn> eller /kurs?k=<navn>. */
@@ -1742,22 +1794,189 @@
         return e;
       }
       /* Avsnitt med enkel formatering: "## tekst" gir en liten rosa
-         overskrift, og **ord** gir tykk skrift. Samme regler som i
-         kursbyggeren. */
-      function richPara(text) {
-        text = String(text || '');
-        if (/^##\s+/.test(text)) return el('h4', 'crs-sub', text.replace(/^##\s+/, ''));
-        var p = el('p');
-        text.split(/(\*\*[^*]+\*\*)/g).forEach(function (part) {
+         overskrift, **ord** gir tykk skrift, og [tekst](https://...) gir
+         en klikkbar lenke. Samme regler som i kursbyggeren. */
+      function richInline(container, text) {
+        text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\(https?:\/\/[^\s)]+\))/g).forEach(function (part) {
+          var link = /^\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)$/.exec(part);
           if (/^\*\*[^*]+\*\*$/.test(part)) {
             var b = document.createElement('strong');
             b.textContent = part.slice(2, -2);
-            p.appendChild(b);
+            container.appendChild(b);
+          } else if (link) {
+            var a = document.createElement('a');
+            a.href = link[2];
+            a.target = '_blank';
+            a.rel = 'noopener';
+            a.textContent = link[1];
+            container.appendChild(a);
           } else if (part) {
-            p.appendChild(document.createTextNode(part));
+            container.appendChild(document.createTextNode(part));
           }
         });
+      }
+      function richPara(text) {
+        text = String(text || '');
+        if (/^##\s+/.test(text)) return el('h4', 'crs-sub', text.replace(/^##\s+/, ''));
+        var lines = text.split('\n').filter(function (l) { return l.trim(); });
+        var isBullets = lines.length > 1 && lines.every(function (l) { return /^-\s+/.test(l.trim()); });
+        var isNumbered = lines.length > 1 && lines.every(function (l) { return /^\d+\.\s+/.test(l.trim()); });
+        if (isBullets || isNumbered) {
+          var list = el(isNumbered ? 'ol' : 'ul', 'crs-list');
+          lines.forEach(function (l) {
+            var li = document.createElement('li');
+            richInline(li, l.trim().replace(/^-\s+/, '').replace(/^\d+\.\s+/, ''));
+            list.appendChild(li);
+          });
+          return list;
+        }
+        var p = el('p');
+        richInline(p, text);
         return p;
+      }
+
+      /* ---- Modul-tilgang (Skool-stil: lås per modul, ikke bare hele kurset) ----
+         Samme regel som moduleSlug() i functions/_lib/course-access.js, må
+         matche nøyaktig siden begge sider slår opp på denne nøkkelen. */
+      function moduleSlug(key) {
+        return String(key || '').toLowerCase().trim()
+          .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'modul';
+      }
+
+      /* Fremdrift ("fullført")-status, rent i denne nettleseren (ingen
+         innlogging). Nøkkelen er leksjonens plass i kurset (0-basert), saa
+         ombytting av leksjonsrekkefølgen kan nullstille enkelte merker. */
+      function loadProgress(courseSlug) {
+        try {
+          var arr = JSON.parse(localStorage.getItem('lesson_progress:' + courseSlug) || '[]');
+          return new Set(Array.isArray(arr) ? arr : []);
+        } catch (e) {
+          return new Set();
+        }
+      }
+      function saveProgress(courseSlug, set) {
+        try { localStorage.setItem('lesson_progress:' + courseSlug, JSON.stringify(Array.from(set))); } catch (e) {}
+      }
+
+      var moduleAccess = { owner: false, member: false, unlocked: {}, ready: false };
+      var wantModuleSlug = null; // satt hvis siden ble åpnet rett fra en modul-kjøp-lenke (?mk=)
+
+      function groupByModule(lessons) {
+        var groups = [];
+        var leading = { meta: null, lessons: [] };
+        var current = null;
+        (lessons || []).forEach(function (l) {
+          if (l.module) {
+            current = { meta: l.module, lessons: [l] };
+            groups.push(current);
+          } else if (current) {
+            current.lessons.push(l);
+          } else {
+            leading.lessons.push(l);
+          }
+        });
+        if (leading.lessons.length) groups.unshift(leading);
+        return groups;
+      }
+
+      function isModuleUnlocked(meta) {
+        if (!meta || meta.lock === 'free' || !meta.lock) return true;
+        if (moduleAccess.owner) return true;
+        if (meta.lock === 'member') return moduleAccess.member;
+        if (meta.lock === 'paid') return !!moduleAccess.unlocked[moduleSlug(pick(meta))];
+        return true;
+      }
+
+      /* Henter modul-tokens fra URL (?mt=&mk=, rett etter kjøp av enkeltmodul)
+         og fra localStorage, sjekker dem mot serveren, og setter moduleAccess.
+         Kjøres én gang før første render(). */
+      function prepareModuleAccess(courseObj, cb) {
+        var lsKey = 'module_access:' + (courseObj && courseObj.slug || slug);
+        var stored = {};
+        try { stored = JSON.parse(localStorage.getItem(lsKey) || '{}') || {}; } catch (e) { stored = {}; }
+        try {
+          var u = new URL(location.href);
+          var mt = u.searchParams.get('mt');
+          var mk = u.searchParams.get('mk');
+          if (mt && mk) {
+            wantModuleSlug = moduleSlug(mk);
+            stored[moduleSlug(mk)] = mt;
+            try { localStorage.setItem(lsKey, JSON.stringify(stored)); } catch (e2) {}
+            u.searchParams.delete('mt'); u.searchParams.delete('mk');
+            try { history.replaceState(null, '', u.pathname + (u.search ? u.search : '') + u.hash); } catch (e3) {}
+          }
+        } catch (e) {}
+
+        var courseTokenKey = 'course_access:' + (courseObj && courseObj.slug || slug);
+        var courseToken = null;
+        try { courseToken = localStorage.getItem(courseTokenKey); } catch (e) {}
+
+        var modules = Object.keys(stored).map(function (k) { return { key: k, token: stored[k] }; });
+
+        function finishMember() {
+          var mem = window.LME_MEMBER;
+          moduleAccess.owner = !!(mem && mem.owner);
+          moduleAccess.member = !!(mem && mem.inside);
+          moduleAccess.ready = true;
+          cb();
+        }
+        function withMember() {
+          if (window.LME_MEMBER) { finishMember(); return; }
+          var done = false;
+          window.addEventListener('lme-member', function once() {
+            if (done) return; done = true;
+            window.removeEventListener('lme-member', once);
+            finishMember();
+          });
+          setTimeout(function () { if (!done) { done = true; finishMember(); } }, 4000);
+        }
+
+        if (!modules.length) { withMember(); return; }
+        fetch('/api/course-access', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ course: courseObj && courseObj.slug || slug, t: courseToken || undefined, modules: modules }),
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (d) {
+            (d && d.unlockedModules || []).forEach(function (k) { moduleAccess.unlocked[k] = true; });
+          })
+          .catch(function () {})
+          .then(withMember);
+      }
+
+      function lockCard(meta) {
+        var en = window.LME_CURRENT_LANG === 'en';
+        var card = el('div', 'crs-lock-card');
+        if (meta.thumb) {
+          var img = el('img', 'crs-lock-thumb');
+          img.src = meta.thumb; img.alt = '';
+          card.appendChild(img);
+        }
+        card.appendChild(el('div', 'lock-ico', '🔒'));
+        card.appendChild(el('h4', null, pick(meta)));
+        if (meta.lock === 'member') {
+          card.appendChild(el('p', null, en
+            ? 'This module is for Inner Circle members.'
+            : 'Denne modulen er for Inner Circle-medlemmer.'));
+          var joinBtn = el('a', 'btn-primary', en ? 'Join Inner Circle' : 'Bli med i Inner Circle');
+          joinBtn.href = '/community';
+          card.appendChild(joinBtn);
+        } else if (meta.lock === 'paid') {
+          var priceTxt = pick(meta.price);
+          card.appendChild(el('p', null, en
+            ? 'This module is sold separately' + (priceTxt ? ', ' + priceTxt + '.' : '.')
+            : 'Denne modulen kjøpes separat' + (priceTxt ? ', ' + priceTxt + '.' : '.')));
+          var link = meta.paylink && pick(meta.paylink);
+          if (link) {
+            var buyBtn = el('a', 'btn-primary', (en ? 'Unlock' : 'Lås opp') + (priceTxt ? ' – ' + priceTxt : ''));
+            buyBtn.href = link;
+            card.appendChild(buyBtn);
+          } else {
+            card.appendChild(el('p', null, en ? 'Coming soon.' : 'Kommer snart.'));
+          }
+        }
+        return card;
       }
 
       function render() {
@@ -1822,16 +2041,69 @@
           root.appendChild(ov);
         }
 
-        // Leksjoner (med valgfrie modul-merker). Hver leksjon rendres for seg,
-        // saa en enkelt leksjon med rare data aldri stopper resten av kurset.
-        var lastModule = '';
-        (course.lessons || []).forEach(function (l, i) {
+        // Leksjoner gruppert i moduler. Hver leksjon rendres for seg, saa en
+        // enkelt leksjon med rare data aldri stopper resten av kurset. En
+        // modul merket "member" eller "paid" vises som et låst kort i stedet
+        // for innholdet, med mindre du er eier/medlem/har kjøpt akkurat den.
+        var groups = groupByModule(course.lessons || []);
+        var totalLessons = (course.lessons || []).length;
+        var progress = loadProgress(course.slug || slug); // Set av globale leksjon-indekser (0-basert)
+
+        // Globale leksjon-indekser per modul, uavhengig av om gruppen er navngitt.
+        var groupStarts = [];
+        (function () {
+          var running = 0;
+          groups.forEach(function (group) {
+            groupStarts.push(running);
+            running += group.lessons.length;
+          });
+        })();
+
+        // ---- Fremdrift, samlet ----
+        var overallTxt, overallFill;
+        if (totalLessons) {
+          var sum = el('div', 'crs-progress-summary');
+          overallTxt = el('span', 'txt', '');
+          var track = el('div', 'crs-progress-track');
+          overallFill = el('div', 'crs-progress-fill');
+          track.appendChild(overallFill);
+          sum.appendChild(overallTxt);
+          sum.appendChild(track);
+          root.appendChild(sum);
+        }
+
+        function countDone(start, count) {
+          var n = 0;
+          for (var k = start; k < start + count; k++) if (progress.has(k)) n++;
+          return n;
+        }
+        var cardRefs = []; // { fillEl, pctEl, locked, count }
+        var certEl = null, nextEl = null;
+        function refreshProgressUI() {
+          var doneTotal = 0;
+          for (var k = 0; k < totalLessons; k++) if (progress.has(k)) doneTotal++;
+          if (overallTxt) {
+            var pct = totalLessons ? Math.round((doneTotal / totalLessons) * 100) : 0;
+            overallTxt.textContent = (en ? 'Progress: ' : 'Fremdrift: ') + doneTotal + '/' + totalLessons + ' (' + pct + '%)';
+            overallFill.style.width = pct + '%';
+          }
+          cardRefs.forEach(function (c) {
+            var d = countDone(c.start, c.count);
+            var p = c.count ? Math.round((d / c.count) * 100) : 0;
+            c.fillEl.style.width = p + '%';
+            c.pctEl.textContent = c.locked ? (en ? 'Locked' : 'Låst') : (d + '/' + c.count + ' · ' + p + '%');
+          });
+          // Kursbevis og avslutning skal først vises når ALLE leksjonene i
+          // kurset (siste leksjon i siste modul) er markert som fullført.
+          var allDone = totalLessons > 0 && doneTotal === totalLessons;
+          if (certEl) certEl.hidden = !allDone;
+          if (nextEl) nextEl.hidden = !allDone;
+        }
+
+        // Bygger DOM-en for én leksjon (brukes både i kortgrid-visning og i
+        // den enkle, sekvensielle visningen for kurs uten navngitte moduler).
+        function renderLessonBox(l, i) {
           try {
-            var mod = l.module ? pick(l.module) : '';
-            if (mod && mod !== lastModule) {
-              root.appendChild(el('div', 'crs-module', mod));
-              lastModule = mod;
-            }
             var box = el('div', 'crs-lesson');
             box.appendChild(el('div', 'crs-lesson-num', (en ? 'Lesson ' : 'Leksjon ') + (i + 1)));
             box.appendChild(el('h3', null, pick(l.title)));
@@ -1849,12 +2121,166 @@
               if (t.trim()) box.appendChild(richPara(t));
             });
             if (l.tip && pick(l.tip).trim()) box.appendChild(el('div', 'crs-tip', pick(l.tip)));
-            root.appendChild(box);
+            var doneRow = el('div', 'crs-lesson-done-row');
+            var doneBtn = document.createElement('button');
+            doneBtn.type = 'button';
+            doneBtn.className = 'crs-lesson-done-btn';
+            (function (idx, btn) {
+              function paint() {
+                var isDone = progress.has(idx);
+                btn.classList.toggle('done', isDone);
+                btn.textContent = isDone ? (en ? '✓ Completed' : '✓ Fullført') : (en ? '☐ Mark as done' : '☐ Merk som fullført');
+              }
+              btn.onclick = function () {
+                if (progress.has(idx)) progress.delete(idx); else progress.add(idx);
+                saveProgress(course.slug || slug, progress);
+                paint();
+                refreshProgressUI();
+              };
+              paint();
+            })(i, doneBtn);
+            doneRow.appendChild(doneBtn);
+            box.appendChild(doneRow);
+            return box;
           } catch (e) {
-            var feil = el('div', 'crs-lesson', 'Leksjon ' + (i + 1) + ' kunne ikke vises. Teknisk: ' + (e && e.message));
-            root.appendChild(feil);
+            return el('div', 'crs-lesson', 'Leksjon ' + (i + 1) + ' kunne ikke vises. Teknisk: ' + (e && e.message));
           }
-        });
+        }
+
+        // Bygger modul-overskrift + (låst kort ELLER leksjonene) inn i en gitt beholder.
+        function renderGroupInto(container, group, gi) {
+          if (group.meta) {
+            var row = el('div', 'crs-module-row');
+            row.appendChild(el('div', 'crs-module', pick(group.meta)));
+            if (group.meta.lock === 'member') row.appendChild(el('span', 'crs-lock-badge member', en ? '🔒 Member' : '🔒 Medlem'));
+            else if (group.meta.lock === 'paid') row.appendChild(el('span', 'crs-lock-badge paid', '🔒 ' + (pick(group.meta.price) || (en ? 'Paid' : 'Betalt'))));
+            container.appendChild(row);
+          }
+          if (group.meta && !isModuleUnlocked(group.meta)) {
+            container.appendChild(lockCard(group.meta));
+            return;
+          }
+
+          // Leksjonene i modulen ligger som en klikkbar liste, ikke alle
+          // åpne på én gang. Klikk en leksjon for å åpne den, "Tilbake"
+          // fører deg tilbake til listen.
+          var listWrap = el('div', 'crs-lesson-list');
+          var detailWrap = el('div', 'crs-lesson-detail');
+          detailWrap.hidden = true;
+          container.appendChild(listWrap);
+          container.appendChild(detailWrap);
+          var rowChecks = [];
+
+          function showList() {
+            rowChecks.forEach(function (rc) { rc.el.textContent = progress.has(rc.idx) ? '✓' : ''; });
+            listWrap.hidden = false;
+            detailWrap.hidden = true;
+            detailWrap.innerHTML = '';
+          }
+          function showLesson(l, globalIdx) {
+            detailWrap.innerHTML = '';
+            var back = el('button', 'crs-back-to-modules', en ? '← Lessons' : '← Leksjonene');
+            back.type = 'button';
+            back.onclick = showList;
+            detailWrap.appendChild(back);
+            detailWrap.appendChild(renderLessonBox(l, globalIdx));
+            listWrap.hidden = true;
+            detailWrap.hidden = false;
+          }
+
+          group.lessons.forEach(function (l, j) {
+            var globalIdx = groupStarts[gi] + j;
+            var rowBtn = document.createElement('button');
+            rowBtn.type = 'button';
+            rowBtn.className = 'crs-lesson-row';
+            rowBtn.appendChild(el('span', 'crs-lesson-row-num', (en ? 'Lesson ' : 'Leksjon ') + (globalIdx + 1)));
+            rowBtn.appendChild(el('span', 'crs-lesson-row-title', pick(l.title)));
+            var check = el('span', 'crs-lesson-row-check', progress.has(globalIdx) ? '✓' : '');
+            rowBtn.appendChild(check);
+            rowBtn.onclick = function () { showLesson(l, globalIdx); };
+            listWrap.appendChild(rowBtn);
+            rowChecks.push({ idx: globalIdx, el: check });
+          });
+        }
+
+        // ---- Modul-kortgrid: klikk et kort for å ÅPNE akkurat den modulen ----
+        // (bare den valgte modulens innhold vises, ikke alt på én gang).
+        var namedGroups = groups.filter(function (g) { return !!g.meta; });
+        if (namedGroups.length > 1) {
+          var grid = el('div', 'crs-cardgrid');
+          var contentArea = el('div', 'crs-module-content');
+          contentArea.hidden = true;
+          var cardEls = [];
+          function showGrid() {
+            grid.hidden = false;
+            contentArea.hidden = true;
+            contentArea.innerHTML = '';
+          }
+          function showGroup(gi) {
+            contentArea.innerHTML = '';
+            var back = el('button', 'crs-back-to-modules', en ? '← All modules' : '← Alle moduler');
+            back.type = 'button';
+            back.onclick = showGrid;
+            contentArea.appendChild(back);
+            renderGroupInto(contentArea, groups[gi], gi);
+            grid.hidden = true;
+            contentArea.hidden = false;
+          }
+          groups.forEach(function (group, gi) {
+            if (!group.meta) return;
+            var card = document.createElement('button');
+            card.type = 'button';
+            card.className = 'crs-mcard';
+            var thumb = el('div', 'crs-mcard-thumb');
+            var palette = ['#F5A8B8,#E91E89', '#A4D233,#7AAE1F', '#F7C72E,#e0a800', '#3FA9F5,#1f7fc4', '#EE9CAD,#E91E89'];
+            thumb.style.background = 'linear-gradient(135deg,' + palette[gi % palette.length] + ')';
+            if (group.meta.thumb) {
+              var timg = document.createElement('img');
+              timg.src = group.meta.thumb; timg.alt = '';
+              thumb.textContent = '';
+              thumb.appendChild(timg);
+            } else {
+              var logoWrap = el('div', 'crs-mcard-logo');
+              var logoImg = document.createElement('img');
+              logoImg.src = '/images/lme-logo.png'; logoImg.alt = '';
+              logoWrap.appendChild(logoImg);
+              thumb.appendChild(logoWrap);
+            }
+            var locked = !isModuleUnlocked(group.meta);
+            if (group.meta.lock === 'member') thumb.appendChild(el('span', 'crs-mcard-lock', en ? '🔒 Member' : '🔒 Medlem'));
+            else if (group.meta.lock === 'paid') thumb.appendChild(el('span', 'crs-mcard-lock paid', '🔒 ' + (pick(group.meta.price) || (en ? 'Paid' : 'Betalt'))));
+            card.appendChild(thumb);
+            var body = el('div', 'crs-mcard-body');
+            body.appendChild(el('div', 'crs-mcard-tag', (en ? 'Module ' : 'Modul ') + (namedGroups.indexOf(group) + 1) + ' av ' + namedGroups.length));
+            body.appendChild(el('div', 'crs-mcard-title', pick(group.meta).replace(/^Modul\s+\d+\s*[·:.-]\s*/i, '')));
+            var ptrack = el('div', 'crs-mcard-track');
+            var pfill = el('div', 'crs-mcard-fill');
+            ptrack.appendChild(pfill);
+            body.appendChild(ptrack);
+            var ppct = el('div', 'crs-mcard-pct', '');
+            body.appendChild(ppct);
+            card.appendChild(body);
+            card.onclick = function () { showGroup(gi); };
+            grid.appendChild(card);
+            cardEls.push(card);
+            cardRefs.push({ start: groupStarts[gi], count: group.lessons.length, fillEl: pfill, pctEl: ppct, locked: locked });
+          });
+          root.appendChild(grid);
+          root.appendChild(contentArea);
+          refreshProgressUI();
+          // Som standard vises kun kortene, du velger selv hvor du vil starte.
+          // Unntak: kommer du rett fra en enkeltmodul-kjøpslenke (?mk=), åpnes
+          // akkurat den modulen automatisk, siden det er det du klikket for.
+          var wantIdx = wantModuleSlug
+            ? groups.findIndex(function (g) { return g.meta && moduleSlug(pick(g.meta)) === wantModuleSlug && isModuleUnlocked(g.meta); })
+            : -1;
+          if (wantIdx !== -1) showGroup(wantIdx); else showGrid();
+        } else {
+          // Enkle kurs uten navngitte moduler: samme flate, sekvensielle
+          // visning som før, ingen kortgrid.
+          refreshProgressUI();
+          groups.forEach(function (group, gi) { renderGroupInto(root, group, gi); });
+        }
 
         // Kursbevis
         if (course.cert !== false) {
@@ -1869,6 +2295,7 @@
           btn.onclick = function () { lmeKursbevis(course.title.no || '', course.title.en || ''); };
           cert.appendChild(btn);
           root.appendChild(cert);
+          certEl = cert;
         }
 
         // Avslutning
@@ -1876,10 +2303,20 @@
         next.appendChild(el('h3', null, pick(course.outro && course.outro.title) || (en ? 'Ready for more?' : 'Klar for mer?')));
         var ot = pick(course.outro && course.outro.text);
         if (ot.trim()) next.appendChild(el('p', null, ot));
+        var outroCta = course.outro && course.outro.cta;
+        var ctaLabel = outroCta && pick(outroCta.label);
+        if (ctaLabel && ctaLabel.trim() && outroCta.href) {
+          var ctaBtn = el('a', 'btn-primary', ctaLabel);
+          ctaBtn.href = outroCta.href;
+          ctaBtn.style.marginRight = '10px';
+          next.appendChild(ctaBtn);
+        }
         var back2 = el('a', 'btn-primary', en ? '← Back to the classes' : '← Tilbake til kurs');
         back2.href = '/kurs';
         next.appendChild(back2);
         root.appendChild(next);
+        nextEl = next;
+        refreshProgressUI();
 
         /* Rediger-knapp for Renate: vises bare i nettlesere som har brukt
            kursbyggeren (eller med #rediger). Hopper rett inn i byggeren
@@ -1979,15 +2416,19 @@
               setTimeout(function () { hent(forsok + 1); }, 2500);
               return;
             }
-            try {
-              render();
-            } catch (e) {
-              var st = document.getElementById('kurs-status');
-              var melding = 'Noe gikk galt da kurset skulle vises. Teknisk: ' + (e && e.message);
-              if (st) st.textContent = melding;
-              else root.appendChild(el('p', 'crs-empty', melding));
+            function safeRender() {
+              try {
+                render();
+              } catch (e) {
+                var st = document.getElementById('kurs-status');
+                var melding = 'Noe gikk galt da kurset skulle vises. Teknisk: ' + (e && e.message);
+                if (st) st.textContent = melding;
+                else root.appendChild(el('p', 'crs-empty', melding));
+              }
+              hook();
             }
-            hook();
+            if (course) prepareModuleAccess(course, safeRender);
+            else safeRender();
           });
       }
       hent(1);

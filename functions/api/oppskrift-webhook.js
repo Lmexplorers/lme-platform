@@ -21,7 +21,6 @@
  */
 
 import { sendOppskriftMail, sendOwnerSaleNotice } from "../_lib/oppskrift-mail.js";
-import { sendUtfordringMail } from "../_lib/utfordring-mail.js";
 import { sendClaudeMail } from "../_lib/claude-mail.js";
 import { registerNewsletter } from "../_lib/newsletter.js";
 import { PATTERN_LINKS } from "../_lib/pattern-links.js";
@@ -31,25 +30,11 @@ import {
   CLAUDE_GROUP_NO, CLAUDE_GROUP_EN, CLAUDE_PAYMENT_LINK_LANG, CLAUDE_MAIN_LINK_LANG, addToClaudeGroup,
   AUTOPILOT_PAYMENT_LINKS, AUTOPILOT_PRODUCT_PLANS, grantAutopilot, revokeAutopilot, emailForStripeCustomer,
   COURSE_PAYMENT_LINKS, COURSE_INFO,
+  MODULE_PAYMENT_LINKS,
 } from "../_lib/purchase-links.js";
 import { sendAutopilotMail } from "../_lib/autopilot-mail.js";
-import { grantCourseAccess } from "../_lib/course-access.js";
-import { sendCourseDeliveryMail } from "../_lib/course-mail.js";
-
-/* ---- 10 000-visninger-utfordringen -------------------------------------
-   Eget abonnement, helt uavhengig av Inner Circle (som selges av den
-   separate lme-inner-circle-workeren): ingen tilgang, ingen tier, ingen
-   deling av kode eller database. Hele 30-dagers-serien sendes rett fra
-   plattformen via MailerSend (_lib/utfordring-mail.js), samme mønster som
-   Claude-kurset, ingen MailerLite-automasjon. Dag 0 sendes med en gang,
-   resten legges i kø (utf_fu:<e-post>:<dag>) og sendes av den daglige
-   cronjobben api/cron/utfordring-followups. */
-const UTFORDRING_PAYMENT_LINK_LANG = {
-  "plink_1U0I2WLax7B8uQzqhBB6bAVC": "no", // Utfordringen, 299 kr/mnd (NOK)
-  "plink_1U0I2XLax7B8uQzq7e9tzjBh": "en", // The Challenge, $33/mo (USD)
-};
-const UTFORDRING_DAYS = Array.from({ length: 30 }, (_, i) => i + 1);
-const DAG = 24 * 60 * 60 * 1000;
+import { grantCourseAccess, grantModuleAccess } from "../_lib/course-access.js";
+import { sendCourseDeliveryMail, sendModuleDeliveryMail } from "../_lib/course-mail.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -160,6 +145,27 @@ export async function onRequestPost(context) {
       return json({ ok: true });
     }
 
+    // Lås opp enkeltmodul (Skool-stil): samme mønster som hele-kurset over,
+    // men gir bare tilgang til den ene modulen (course-access.js: modul-token).
+    const modulePurchase = obj.payment_link && MODULE_PAYMENT_LINKS[obj.payment_link];
+    if (modulePurchase && email && obj.payment_status !== "unpaid") {
+      const nm = (obj.customer_details && obj.customer_details.name) || "";
+      const info = COURSE_INFO[modulePurchase.courseId];
+      const courseName = (info && info.name[modulePurchase.lang]) || (info && info.name.no) || modulePurchase.courseId;
+      const moduleLabel = courseName + " – " + modulePurchase.moduleKey;
+      const moduleToken = await grantModuleAccess(env, modulePurchase.courseId, modulePurchase.moduleKey, email, nm);
+      try {
+        await sendModuleDeliveryMail(env, email, nm, modulePurchase.lang, moduleLabel, info.url, moduleToken, modulePurchase.moduleKey);
+      } catch (e1) {}
+      try {
+        await sendOwnerSaleNotice(env, {
+          pname: moduleLabel + " (enkeltmodul)", lang: modulePurchase.lang, name: nm, email: email,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e3) {}
+      return json({ ok: true });
+    }
+
     // Claude-kurset: legg kjøperen i riktig språkgruppe, ikke Inner Circle.
     const claudeLang = obj.payment_link && CLAUDE_PAYMENT_LINK_LANG[obj.payment_link];
     if (claudeLang && email && obj.payment_status !== "unpaid") {
@@ -185,32 +191,6 @@ export async function onRequestPost(context) {
         await sendOwnerSaleNotice(env, {
           pname: mainLang ? "Claude-kurset" : "Claude-kurset, mersalg", lang: claudeLang,
           name: name, email: email, amount: obj.amount_total, currency: obj.currency,
-        });
-      } catch (e3) {}
-      return json({ ok: true });
-    }
-
-    // Utfordringen: send dag 0 med en gang, legg resten i kø. Aldri Inner Circle.
-    const utfordringLang = obj.payment_link && UTFORDRING_PAYMENT_LINK_LANG[obj.payment_link];
-    if (utfordringLang && email && obj.payment_status !== "unpaid") {
-      const nm = (obj.customer_details && obj.customer_details.name) || "";
-      await sendUtfordringMail(env, { to: email, name: nm, lang: utfordringLang, kind: "d0" });
-      const e = email.trim().toLowerCase();
-      try {
-        for (const dag of UTFORDRING_DAYS) {
-          await env.BUILDER_KV.put(
-            "utf_fu:" + e + ":d" + dag,
-            JSON.stringify({ email: email, name: nm, lang: utfordringLang, kind: "d" + dag, sendAfter: Date.now() + dag * DAG })
-          );
-        }
-        // Medlemskap i fellesskapet (funnel/utfordringen/fellesskap.html),
-        // slik at bare betalende kjøpere kan poste/kommentere der.
-        await env.BUILDER_KV.put("utf_member:" + e, JSON.stringify({ email: email, name: nm, lang: utfordringLang, joinedAt: Date.now() }));
-      } catch (e2) {}
-      try {
-        await sendOwnerSaleNotice(env, {
-          pname: "10 000-visninger-utfordringen", lang: utfordringLang,
-          name: nm, email: email, amount: obj.amount_total, currency: obj.currency,
         });
       } catch (e3) {}
       return json({ ok: true });

@@ -638,7 +638,7 @@
       },
     },
     lme36: {
-      navn: ['LME-mål 3-6 år (Montessori-inspirert)', 'LME goals ages 3-6 (Montessori-inspired)'],
+      navn: ['LME-mål 3-6 år (Montessoriinspirert)', 'LME goals ages 3-6 (Montessori-inspired)'],
       kilde: ['LME-formulerte mål for førskolealder. Montessorilæreplanen gjelder skolealder; disse dekker 3-6 år i Montessoriånd.',
               'LME-formulated goals for preschool age, in the Montessori spirit.'],
       fag: {
@@ -776,7 +776,7 @@
   tpl('edu', '🔢', 'tint-blue', 'Tallene 1 til 10', 'Numbers 1 to 10', 'Telle-bok med konkreter fra hverdagen.', 'Counting book with everyday objects.', 'book', { bookType: 'educational book', topic: 'tallene 1 til 10 med ting fra hverdagen', age: '3-6', pages: 24, goals: 'tallforståelse 1 til 10' });
   tpl('edu', '🔤', 'tint-pink', 'Alfabetreisen', 'The Alphabet Journey', 'En bokstav per oppslag, med lyder og ord.', 'One letter per spread, with sounds and words.', 'book', { bookType: 'educational book', topic: 'alfabetet med en bokstav per side', age: '3-6', pages: 32, goals: 'bokstavkunnskap og språklyder' });
   tpl('edu', '🕐', 'tint-lemon', 'Klokka og tiden', 'The Clock and Time', 'Lær klokka steg for steg.', 'Learn to tell the time step by step.', 'book', { bookType: 'educational book', topic: 'klokka, timer og dagsrytme', age: '6-9', pages: 24, goals: 'lese klokka, hel og halv time' });
-  tpl('edu', '🌍', 'tint-lime', 'Verdensdelene', 'The Continents', 'Montessori-inspirert reise rundt jorda.', 'Montessori-inspired trip around the globe.', 'book', { bookType: 'educational book', topic: 'de sju verdensdelene og dyrene der', age: '6-9', pages: 32, goals: 'kjenne igjen verdensdelene' });
+  tpl('edu', '🌍', 'tint-lime', 'Verdensdelene', 'The Continents', 'Montessoriinspirert reise rundt jorda.', 'Montessori-inspired trip around the globe.', 'book', { bookType: 'educational book', topic: 'de sju verdensdelene og dyrene der', age: '6-9', pages: 32, goals: 'kjenne igjen verdensdelene' });
   tpl('edu', '🌦️', 'tint-blue', 'Været rundt oss', 'The Weather Around Us', 'Sol, regn, vind og skyer forklart enkelt.', 'Sun, rain, wind and clouds explained simply.', 'book', { bookType: 'educational book', topic: 'værtyper og hvordan vær blir til', age: '6-9', pages: 24 });
   tpl('edu', '🫀', 'tint-pink', 'Kroppen min', 'My Body', 'Kroppens deler og hva de gjør.', 'The parts of the body and what they do.', 'book', { bookType: 'educational book', topic: 'kroppens deler og funksjoner', age: '3-6', pages: 24 });
   tpl('edu', '♻️', 'tint-lime', 'Vi tar vare på jorda', 'We Care for the Earth', 'Gjenbruk og miljø for de minste.', 'Recycling and the environment for young children.', 'book', { bookType: 'educational book', topic: 'kildesortering, gjenbruk og å ta vare på naturen', age: '3-6', pages: 24 });
@@ -791,7 +791,7 @@
   tpl('workbooks', '🧪', 'tint-lemon', 'Naturfagsboka', 'The Science Workbook', 'Utforskende oppgaver om naturen.', 'Exploratory tasks about nature.', 'workbook', { category: 'science', topic: 'naturen rundt oss', age: '6-9', count: 8 });
   tpl('workbooks', '🗺️', 'tint-lime', 'Geografi for nysgjerrige', 'Geography for the Curious', 'Kart, land og verdensdeler.', 'Maps, countries and continents.', 'workbook', { category: 'geography', topic: 'kart og verdensdeler', age: '9-12', count: 8 });
   tpl('workbooks', '🎒', 'tint-pink', 'Klar for skolen', 'Ready for School', 'Førskolepakke: tall, bokstaver og mønster.', 'Preschool pack: numbers, letters and patterns.', 'workbook', { category: 'literacy', topic: 'skoleforberedelse', age: '3-6', count: 12 });
-  tpl('workbooks', '🌸', 'tint-pink', 'Montessori hjemme', 'Montessori at Home', 'Montessori-inspirerte oppgaver for hjemmebruk.', 'Montessori-inspired tasks for home.', 'workbook', { category: 'montessori', topic: 'praktisk liv og sansene', age: '3-6', count: 10 });
+  tpl('workbooks', '🌸', 'tint-pink', 'Montessori hjemme', 'Montessori at Home', 'Montessoriinspirerte oppgaver for hjemmebruk.', 'Montessori-inspired tasks for home.', 'workbook', { category: 'montessori', topic: 'praktisk liv og sansene', age: '3-6', count: 10 });
 
   /* Flashkort (8) */
   tpl('flashcards', '🐱', 'tint-pink', 'Dyrekort', 'Animal Cards', 'Trepartskort med dyr, Montessoristil.', 'Three-part animal cards, Montessori style.', 'flashcards', { mode: 'threepart', theme: 'dyr' });
