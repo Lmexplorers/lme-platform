@@ -282,3 +282,85 @@ export const SKOLEDAGBOK_4_7_TRINN = {
   bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
   stats: { views: 0, downloads: 0, favorites: 0 },
 };
+
+/* Første produkt i den nye serien "Mia & Teo – Følelser og sosial
+   kompetanse" (Renate, 9. august 2026). PDF-en er laget av Renate selv (via
+   en ChatGPT-arbeidsflyt) og lagt rett inn, tekst og bilder er ekte, ikke
+   funnet på. Lagt inn som UPUBLISERT UTKAST (published:false): pris og
+   Stripe-betalingslenke er ikke bestemt ennå, så den vises ikke i
+   katalogen og buyUrl/fileUrl-nedlastingen er ikke lenket fra noe sted før
+   Renate har bestemt pris og hvordan betaling skal skje. Selve PDF-en og
+   forsidebildet er lastet opp til repoet (laeringsverksted-filer/nedlasting/
+   og images/laeringsverksted/), men ligger altså bak en upublisert
+   ressurs, ikke en fritt tilgjengelig lenke. */
+export const MIA_TEO_FOLELSER = {
+  slug: "mia-teo-utforsker-folelsene",
+  published: false,
+  featured: false,
+  title: { no: "Mia & Teo utforsker følelsene", en: "" },
+  subtitle: {
+    no: "Følelser og sosial kompetanse · 24 Montessori-inspirerte følelseskort · 3–9 år",
+    en: "",
+  },
+  description: {
+    no: "Følelser er en naturlig del av livet. Når barn får språk for det de opplever, blir det lettere å forstå seg selv, tolke andre og be om støtte. Materiellet gir et konkret og visuelt utgangspunkt for samtaler, matching, sortering og selvrefleksjon.",
+    en: "",
+  },
+  cover: "https://lmexplorers.com/images/laeringsverksted/mia-teo-folelser-cover.jpg",
+  gallery: ["https://lmexplorers.com/images/laeringsverksted/mia-teo-folelser-bildekort.jpg"],
+  audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
+  ageBands: ["3-6", "m3-6", "m6-9", "1-2trinn"],
+  direction: "begge",
+  subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
+  resourceType: ["trepartskort", "begrepskort", "larerveiledning"],
+  competencyGoals: [
+    { no: "Barnet kan øve på å gjenkjenne og navngi følelser, legge merke til ansiktsuttrykk og kroppsspråk, beskrive hvordan følelser kan kjennes, og utvikle et mer nyansert følelsesspråk.", en: "" },
+  ],
+  contains: [
+    { no: "24 kombinerte bilde- og ordkort", en: "" },
+    { no: "24 bildekort", en: "" },
+    { no: "24 ordkort", en: "" },
+    { no: "Kontrolloversikt (kontroll av feil)", en: "" },
+    { no: "Pedagogisk veiledning: forberedelse, presentasjon, aktiviteter og tilpasning", en: "" },
+  ],
+  pageCount: 29,
+  language: ["nb"],
+  fileFormat: ["pdf"],
+  editable: false,
+  usageTips: {
+    no: "Finn et par: legg bildekortene på bordet og la barnet finne riktig ordkort. Sorter: sorter følelser etter barnets egne kategorier, for eksempel behagelige, ubehagelige, rolige eller energiske. Vis med kroppen: utforsk hvordan kroppen kan se ut når man kjenner en følelse. Når kan vi føle dette?: finn en trygg hverdagssituasjon der noen kan kjenne følelsen. Hva kan hjelpe?: snakk om støttestrategier som nærhet, pause, bevegelse eller hjelp fra en voksen.",
+    en: "",
+  },
+  prep: {
+    no: "Skriv ut i faktisk størrelse på A4, gjerne på litt kraftig papir. Klipp langs ytterkanten av kortene, og laminer ved behov, særlig når materiellet skal brukes av mange barn. Begynn med fire til seks tydelig ulike følelser (for eksempel glad, trist, sint, redd, rolig og overrasket), og legg til flere kort når barnet er fortrolig med ordene.",
+    en: "",
+  },
+  differentiation: {
+    no: "For 3–6 år: bruk få kort, konkrete ord og korte samtaler, og arbeid først med matching og navngiving. For 6–9 år: bruk flere nyanser, sammenlign lignende følelser og la barnet begrunne egne tolkninger. Tilpasset opplæring: reduser antall valg, bruk faste rutiner og gi god tid; barnet kan peke, matche eller bruke kortet uten å måtte forklare muntlig.",
+    en: "",
+  },
+  montessoriArea: {
+    area: { no: "Sansene / språk: følelser og sosial kompetanse", en: "" },
+    presentation: {
+      no: "Inviter barnet til et rolig sted. Legg frem tre bildekort og navngi én følelse om gangen. Spør barnet om å gjenkjenne og etter hvert huske følelsen. Når ordene er kjente, kobles bildekort, ordkort og kortet med bilde og ord sammen, med kontrolloversikten som selvkontroll.",
+      en: "",
+    },
+    prerequisites: { no: "Ingen spesielle forkunnskaper, men barnet bør kunne peke, velge eller flytte et kort.", en: "" },
+    directPurpose: { no: "Gjenkjenne og navngi følelser, og utvikle et mer nyansert følelsesspråk.", en: "" },
+    indirectPurpose: { no: "Forberede selvregulering, empati og trygg kommunikasjon om egne og andres følelser.", en: "" },
+    controlOfError: { no: "Kontrolloversikten (kontrollkort) viser om koblingen mellom bilde og ord stemmer.", en: "" },
+    extension: { no: "Sorter følelser etter egne kategorier, vis følelsen med kroppen, eller snakk om hverdagssituasjoner og støttestrategier.", en: "" },
+  },
+  license: "privat",
+  priceType: "betalt",
+  price: { no: "", en: "" },
+  memberPrice: { no: "", en: "" },
+  buyUrl: "",
+  fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-folelseskort-no.pdf",
+  licenseOptions: [],
+  bundle: false,
+  bundleItems: [],
+  related: [],
+  bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
+  stats: { views: 0, downloads: 0, favorites: 0 },
+};
