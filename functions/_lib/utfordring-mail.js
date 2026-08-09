@@ -270,3 +270,31 @@ export async function sendUtfordringMail(env, opts) {
     return { ok: false, error: String(e) };
   }
 }
+
+const UTFORDRING_DAYS = Array.from({ length: 30 }, (_, i) => i + 1);
+const DAG = 24 * 60 * 60 * 1000;
+
+/* Melder en kjøper inn i utfordringen: dag 0 sendes med en gang, resten
+ * (dag 1–30) legges i kø for den daglige cronjobben
+ * (api/cron/utfordring-followups), og kjøperen får tilgang til fellesskapet
+ * (funnel/utfordringen/fellesskap.html). Delt av oppskrift-webhook.js (kjøp
+ * via egen betalingslenke) og api/utfordring-pro-enroll.js (kjøp av
+ * "utfordring + Inner Circle Pro"-varianten, kalt fra den separate
+ * lme-inner-circle-workeren etter fullført betaling der). */
+export async function enrollUtfordringMember(env, { email, name, lang }) {
+  const e = (email || "").trim().toLowerCase();
+  if (!e) return { ok: false, error: "missing_email" };
+  await sendUtfordringMail(env, { to: email, name, lang, kind: "d0" });
+  try {
+    for (const dag of UTFORDRING_DAYS) {
+      await env.BUILDER_KV.put(
+        "utf_fu:" + e + ":d" + dag,
+        JSON.stringify({ email, name, lang, kind: "d" + dag, sendAfter: Date.now() + dag * DAG })
+      );
+    }
+    await env.BUILDER_KV.put("utf_member:" + e, JSON.stringify({ email, name, lang, joinedAt: Date.now() }));
+  } catch (e2) {
+    return { ok: false, error: String(e2) };
+  }
+  return { ok: true };
+}
