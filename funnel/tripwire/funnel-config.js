@@ -41,7 +41,7 @@ window.LME_FUNNEL = {
 
     optIn: {
       merkelapp: "Gratis guide",
-      overskrift: "Slik bygger du en Montessori-inntekt hjemmefra — med hjerte, strategi og AI",
+      overskrift: "Slik bygger du en Montessoriinntekt hjemmefra — med hjerte, strategi og AI",
       underoverskrift:
         "Last ned vår gratis guide og få en realistisk, varm og konkret vei fra " +
         "Montessoripedagogikk til en inntekt du kan bygge i ditt eget tempo — hjemmefra.",
@@ -115,7 +115,7 @@ window.LME_FUNNEL = {
       overskrift: "Helt i orden — her er gratisguiden din 💛",
       underoverskrift:
         "Du trenger ikke kjøpe noe for å komme i gang. Last ned gratisguiden med en gang " +
-        "under, og ta det første steget mot en Montessori-inntekt i dag.",
+        "under, og ta det første steget mot en Montessoriinntekt i dag.",
       steg: [
         "Trykk på knappen under for å laste ned gratisguiden (PDF) med en gang.",
         "Lagre filen så du alltid har den for hånden.",

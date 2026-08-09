@@ -46,7 +46,7 @@ window.LME_FUNNEL = {
 
       hvaDuLaererTittel: "Hva du lærer i dette kurset",
       hvaDuLaerer: [
-        "Å lese YouTube-tallene som faktisk betyr noe: klikkrate, seetid og seerbevaring",
+        "Å lese YouTube-tallene som faktisk betyr noe: klikkrate, seertid og seerbevaring",
         "Hvordan du tester og forbedrer titler og miniatyrbilder",
         "Å bygge et enkelt team og system, så du slipper å gjøre alt selv",
         "Hvordan du skalerer til flere kanaler uten å brenne ut",

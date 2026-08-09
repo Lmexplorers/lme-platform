@@ -182,12 +182,19 @@ export const COURSE_PAYMENT_LINKS = {
   "plink_1U1ronLax7B8uQzqPAtyjLaz": { courseId: "ki-pedagoger", tier: "launch", lang: "en" },
   "plink_1U1rorLax7B8uQzqDVl9503R": { courseId: "ki-pedagoger", tier: "full",   lang: "no" },
   "plink_1U1rovLax7B8uQzqQQKKxMdB": { courseId: "ki-pedagoger", tier: "full",   lang: "en" },
+  // Voks e-postlisten din
+  "plink_1U2H3gLax7B8uQzqgARx4SGb": { courseId: "epostliste", tier: "launch", lang: "no" },
+  "plink_1U2H3iLax7B8uQzqTsSkr9a0": { courseId: "epostliste", tier: "launch", lang: "en" },
+  "plink_1U2H3hLax7B8uQzquNbVhZEW": { courseId: "epostliste", tier: "full",   lang: "no" },
+  "plink_1U2H3jLax7B8uQzqsue9AdYd": { courseId: "epostliste", tier: "full",   lang: "en" },
   // Kursbygger-kurs (lagret i KV, vist på academy/kurs.html?k=<slug>). Fast
   // pris, ingen lanserings-/fullpris-splitt.
   "plink_1U1sDiLax7B8uQzqqHGOPBAe": { courseId: "lme-markedsfoering-med-claude", tier: "standard", lang: "no" },
   "plink_1U1sDnLax7B8uQzqjYHNAZui": { courseId: "lme-markedsfoering-med-claude", tier: "standard", lang: "en" },
   "plink_1U1sDvLax7B8uQzqUmjOAMbN": { courseId: "lag-ditt-foerste-digitale-minikurs", tier: "standard", lang: "no" },
   "plink_1U1sDzLax7B8uQzqZRyfpuwu": { courseId: "lag-ditt-foerste-digitale-minikurs", tier: "standard", lang: "en" },
+  "plink_1U2I9tLax7B8uQzqCYi2ntGG": { courseId: "montessori-masterclass", tier: "standard", lang: "no" },
+  "plink_1U2I9uLax7B8uQzqYzTq1jUw": { courseId: "montessori-masterclass", tier: "standard", lang: "en" },
 };
 
 export const COURSE_INFO = {
@@ -203,6 +210,10 @@ export const COURSE_INFO = {
     name: { no: "KI for pedagoger", en: "AI for Educators" },
     url: "https://lmexplorers.com/academy/ki-for-pedagoger",
   },
+  "epostliste": {
+    name: { no: "Voks e-postlisten din", en: "Grow your email list" },
+    url: "https://lmexplorers.com/academy/epostliste",
+  },
   "lme-markedsfoering-med-claude": {
     name: { no: "LME Markedsføring med Claude", en: "LME Marketing with Claude" },
     url: "https://lmexplorers.com/academy/kurs?k=lme-markedsfoering-med-claude",
@@ -210,6 +221,10 @@ export const COURSE_INFO = {
   "lag-ditt-foerste-digitale-minikurs": {
     name: { no: "Lag ditt første digitale minikurs", en: "Create your first digital mini-course" },
     url: "https://lmexplorers.com/academy/kurs?k=lag-ditt-foerste-digitale-minikurs",
+  },
+  "montessori-masterclass": {
+    name: { no: "Montessori mesterklasse", en: "Montessori Masterclass" },
+    url: "https://lmexplorers.com/academy/kurs?k=montessori-masterclass",
   },
 };
 
@@ -219,4 +234,19 @@ export const COURSE_INFO = {
 export const PAID_KURSBYGGER_SLUGS = [
   "lme-markedsfoering-med-claude",
   "lag-ditt-foerste-digitale-minikurs",
+  "montessori-masterclass",
 ];
+
+/* ---- Lås opp ENKELTMODUL (Skool-stil) -----------------------------------
+   I tillegg til å kjøpe hele kurset (COURSE_PAYMENT_LINKS over) kan en
+   modul merkes "paid" i Kursbygger med sin egen pris og betalingslenke
+   (functions/api/kurs.js: lesson.module.lock/price/paylink). Når en slik
+   modul faktisk skal selges, opprett et Stripe-produkt/betalingslenke
+   (samme fremgangsmåte som resten av filen) og legg den inn her, nøyaktig
+   som COURSE_PAYMENT_LINKS: { courseId, moduleKey } — moduleKey må være
+   IDENTISK med modulnavnet (norsk) skrevet inn i Kursbygger, siden det
+   brukes til å slå opp riktig modul på kurssiden.
+   Tom liste = ingen enkeltmoduler til salgs ennå. */
+export const MODULE_PAYMENT_LINKS = {
+  // "plink_...": { courseId: "eksempel-kurs", moduleKey: "Modul 2 · Tema", lang: "no" },
+};

@@ -54,22 +54,25 @@ const COPY = {
 };
 
 /* paid: true|false — bare tekst, tilgangen er den samme i begge tilfeller. */
-export function courseDeliveryEmail(lang, name, courseName, courseUrl, token, paid) {
+function renderDeliveryEmail(lang, name, courseName, link, paid) {
   const l = lang === "en" ? "en" : "no";
   const c = COPY[l];
   const nm = name || c.fallbackName;
   const intro = (paid ? c.introPaid : c.introFree).replace("{name}", esc(nm)).replace("{course}", esc(courseName));
   const subject = (paid ? c.subjectPaid : c.subjectFree).replace("{course}", courseName);
-  const link = courseUrl + "?t=" + encodeURIComponent(token);
   const html = wrap('<p>' + intro + '</p><p>' + c.body + '</p>' + btn(link, c.cta) + '<p>' + c.sign + '</p>');
   const text = intro + "\n\n" + c.body + "\n\n" + link + "\n\n" + c.sign;
   return { subject, html, text };
 }
 
-export async function sendCourseDeliveryMail(env, to, name, lang, courseName, courseUrl, token, paid) {
+export function courseDeliveryEmail(lang, name, courseName, courseUrl, token, paid) {
+  const link = courseUrl + "?t=" + encodeURIComponent(token);
+  return renderDeliveryEmail(lang, name, courseName, link, paid);
+}
+
+async function sendViaMailerSend(env, to, name, msg) {
   const apiKey = env.MAILERSEND_API_KEY;
   if (!apiKey || !to) return { ok: false, skipped: true };
-  const msg = courseDeliveryEmail(lang, name, courseName, courseUrl, token, paid);
   try {
     const res = await fetch(MS, {
       method: "POST",
@@ -85,4 +88,20 @@ export async function sendCourseDeliveryMail(env, to, name, lang, courseName, co
   } catch (e) {
     return { ok: false, error: String(e) };
   }
+}
+
+export async function sendCourseDeliveryMail(env, to, name, lang, courseName, courseUrl, token, paid) {
+  const msg = courseDeliveryEmail(lang, name, courseName, courseUrl, token, paid);
+  return sendViaMailerSend(env, to, name, msg);
+}
+
+/* Samme leveringsmail, men lenken peker til en låst opp ENKELTMODUL
+ * (?mt=<modul-token>&mk=<modul-nøkkel>) i stedet for hele kurset (?t=).
+ * Brukt når noen kjøper "lås opp denne modulen" i stedet for hele kurset. */
+export async function sendModuleDeliveryMail(env, to, name, lang, moduleLabel, courseUrl, moduleToken, moduleKey) {
+  const link = courseUrl
+    + (courseUrl.indexOf("?") === -1 ? "?" : "&")
+    + "mt=" + encodeURIComponent(moduleToken) + "&mk=" + encodeURIComponent(moduleKey);
+  const msg = renderDeliveryEmail(lang, name, moduleLabel, link, true);
+  return sendViaMailerSend(env, to, name, msg);
 }

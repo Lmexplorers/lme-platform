@@ -14,9 +14,30 @@ REF = BASE / 'felix_aktivitetsleke_real.jpg'
 ref_b64 = base64.b64encode(REF.read_bytes()).decode()
 ref_src = f'data:image/jpeg;base64,{ref_b64}'
 
+def img_src(filename):
+    data = (BASE / filename).read_bytes()
+    return f'data:image/jpeg;base64,{base64.b64encode(data).decode()}'
+
+alle_sider_src = img_src('felix_alle_sider.jpg')
+speil_src = img_src('felix_speil.jpg')
+form_src = img_src('felix_form.jpg')
+form_full_src = img_src('felix_form_full.jpg')
+lomme_src = img_src('felix_lomme.jpg')
+knitre_src = img_src('felix_knitre.jpg')
+
 T = {}
 def add(key, no, en=None):
     T[key] = {'no': no, 'en': en if en is not None else no}
+
+add('caption_alle_sider', 'Stiluttrykk-referanse for alle sidene, ikke det ferdige heklede produktet.',
+    'Style reference for all the sides, not the finished crocheted product.')
+add('caption_speil', 'Speil-siden, stiluttrykk-referanse.', 'The mirror side, style reference.')
+add('caption_form', 'Stjernen, stiluttrykk-referanse.', 'The star, style reference.')
+add('caption_form_full', 'Form-siden med hjerte, blad, minispeil og minisky, stiluttrykk-referanse.',
+    'The shapes side with heart, leaf, mini mirror and mini cloud, style reference.')
+add('caption_lomme', 'Lomme-siden med miniatyr-Felix, stiluttrykk-referanse.',
+    'The pocket side with miniature Felix, style reference.')
+add('caption_knitre', 'Knitre-siden, stiluttrykk-referanse.', 'The crinkle side, style reference.')
 
 head3 = {'no': ['Omg', 'Beskrivelse', 'Masker'], 'en': ['Rnd', 'Description', 'Sts']}
 rowhead = {'no': ['Rad', 'Beskrivelse', 'Masker'], 'en': ['Row', 'Description', 'Sts']}
@@ -715,6 +736,7 @@ def build(lang):
     pages.append(pg(f'''
 {banner(t('banner_oversikt'))}
 {card('<p>' + t('oversikt_lead') + '</p>' + deler_html)}
+<div class="figwrap"><img src="{alle_sider_src}" alt="Felix aktivitetsleke, alle sidene" style="width:100mm"><div class="figcap">{t('caption_alle_sider')}</div></div>
 ''', 6))
 
     pages.append(pg(f'''
@@ -741,12 +763,14 @@ def build(lang):
 {card('<p>' + t('speil_txt') + '</p>')}
 {card('<p>' + t('speil_ramme') + '</p>')}
 {cme(t('speil_note'))}
+<div class="figwrap"><img src="{speil_src}" alt="Speil-siden" style="width:44mm"><div class="figcap">{t('caption_speil')}</div></div>
 ''', 9))
 
     pages.append(pg(f'''
 {banner(t('banner_stjerne'))}
 <p>{t('stjerne_lead')}</p>
 {card('<p>' + t('stjerne_txt') + '</p>')}
+<div class="figwrap"><img src="{form_src}" alt="Stjernen" style="width:44mm"><div class="figcap">{t('caption_form')}</div></div>
 ''', 10))
 
     pages.append(pg(f'''
@@ -760,6 +784,7 @@ def build(lang):
 {card('<p>' + t('minispeil_txt') + '</p>')}
 {rosep(t('pill_minisky'))}
 {card('<p>' + t('minisky_txt') + '</p>')}
+<div class="figwrap" style="margin-top:1mm"><img src="{form_full_src}" alt="Form-siden" style="width:34mm"><div class="figcap">{t('caption_form_full')}</div></div>
 ''', 11))
 
     pages.append(pg(f'''
@@ -768,6 +793,7 @@ def build(lang):
 {card('<p>' + t('lomme_txt') + '</p>')}
 {card('<p>' + t('lomme_felix') + '</p>')}
 {cme(t('lomme_montering'))}
+<div class="figwrap"><img src="{lomme_src}" alt="Lomme-siden" style="width:44mm"><div class="figcap">{t('caption_lomme')}</div></div>
 ''', 12))
 
     pages.append(pg(f'''
@@ -775,6 +801,7 @@ def build(lang):
 <p>{t('flette_lead')}</p>
 {card('<p>' + t('flette_hull') + '</p>')}
 {cme(t('flette_snor'))}
+<div class="figwrap"><img src="{knitre_src}" alt="Knitre-siden" style="width:44mm"><div class="figcap">{t('caption_knitre')}</div></div>
 ''', 13))
 
     ss_steg = T['sammensying_steg']['no'] if lang == 'no' else T['sammensying_steg']['en']

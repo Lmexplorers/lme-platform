@@ -1,0 +1,39 @@
+/* Delt modul-kortgrid + klikkbar leksjonsliste for de "løse", håndbygde
+   kurssidene i academy/ (de som ikke går via Kursbygger/kurs.html).
+   Brukes sammen med js/course-static-modules.js, som pakker om den flate
+   .crs-module/.crs-lesson-rekken i .crs-flatlessons til samme
+   trykk-inn-i-modul-opplevelse som de Kursbygger-lagde kursene har.
+   Klassene speiler academy/kurs.html sine, inkludert [hidden]-fiksen
+   (uten den blir ikke .crs-cardgrid/.crs-lesson-list faktisk usynlige,
+   siden display:grid/flex overstyrer nettleserens standard [hidden]-regel). */
+.crs-progress-summary { display: flex; align-items: center; gap: 12px; margin: 6px 0 20px; }
+.crs-progress-summary .txt { font-size: 13px; font-weight: 700; color: #6a5560; white-space: nowrap; }
+.crs-progress-track { flex: 1; height: 8px; border-radius: 999px; background: #F1E4E8; overflow: hidden; }
+.crs-progress-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #A4D233, #7AAE1F); width: 0%; transition: width .3s ease; }
+.crs-cardgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; margin: 0 0 34px; }
+.crs-cardgrid[hidden] { display: none; }
+.crs-mcard { display: block; text-align: left; background: #fff; border: 1px solid rgba(26,26,26,0.08); border-radius: 20px; overflow: hidden; box-shadow: 0 6px 20px rgba(26,26,26,0.06); cursor: pointer; transition: transform .2s ease, box-shadow .2s ease; padding: 0; font-family: inherit; }
+.crs-mcard:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(26,26,26,0.12); }
+.crs-module-content { min-height: 40px; }
+.crs-back-to-modules { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1px solid rgba(26,26,26,0.1); color: #E91E89; font-weight: 700; font-size: 14px; border-radius: 999px; padding: 10px 18px; margin-bottom: 20px; cursor: pointer; font-family: inherit; }
+.crs-back-to-modules:hover { background: #FFF4F6; }
+.crs-lesson-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.crs-lesson-list[hidden] { display: none; }
+.crs-lesson-row { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; background: #fff; border: 1px solid rgba(26,26,26,0.08); border-radius: 16px; padding: 16px 20px; cursor: pointer; font-family: inherit; box-shadow: 0 4px 14px rgba(26,26,26,0.04); transition: transform .15s ease, box-shadow .15s ease; }
+.crs-lesson-row:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(26,26,26,0.1); border-color: #F5A8B8; }
+.crs-lesson-row-num { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #E91E89; flex: none; }
+.crs-lesson-row-title { flex: 1; font-size: 15.5px; font-weight: 700; color: #1A1A1A; }
+.crs-lesson-row-check { flex: none; color: #7AAE1F; font-weight: 700; font-size: 16px; width: 20px; text-align: center; }
+.crs-mcard-thumb { aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; font-size: 34px; color: #fff; position: relative; }
+.crs-mcard-logo { width: 56px; height: 56px; border-radius: 16px; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(26,26,26,0.14); }
+.crs-mcard-logo img { width: 40px; height: 40px; object-fit: contain; }
+.crs-mcard-body { padding: 14px 16px 16px; }
+.crs-mcard-tag { font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #7AAE1F; margin-bottom: 4px; }
+.crs-mcard-title { font-size: 15px; font-weight: 700; color: #1A1A1A; line-height: 1.3; margin-bottom: 10px; }
+.crs-mcard-track { height: 6px; border-radius: 999px; background: #F1E4E8; overflow: hidden; margin-bottom: 6px; }
+.crs-mcard-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #A4D233, #7AAE1F); width: 0%; }
+.crs-mcard-pct { font-size: 11px; color: #9a8b90; font-weight: 700; }
+.crs-lesson-done-row { display: flex; justify-content: flex-end; margin-top: 10px; }
+.crs-lesson-done-btn { display: inline-flex; align-items: center; gap: 6px; background: #F3F8E8; color: #5a7a1a; border: 1px solid #dcecc0; border-radius: 999px; padding: 7px 14px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.crs-lesson-done-btn.done { background: #7AAE1F; color: #fff; border-color: #7AAE1F; }
+@media (max-width: 560px) { .crs-cardgrid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; } }

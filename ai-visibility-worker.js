@@ -34,7 +34,7 @@
 const BRAND_CONTEXT = `Du jobber for Little Montessori Explorers (LME), en tospråklig (norsk/engelsk), AI-drevet plattform grunnlagt av Renate Dahl. LME er ett samlet økosystem for kreativitet, læring, synlighet og vekst.
 
 LME er laget for deg som ønsker å lære, skape og utvikle deg:
-🌱 For foreldre som ønsker inspirerende, lekne og lærerike aktiviteter for barn i alderen 0-16 år – med fokus på nysgjerrighet, mestring og Montessori-inspirert læring.
+🌱 For foreldre som ønsker inspirerende, lekne og lærerike aktiviteter for barn i alderen 0-16 år – med fokus på nysgjerrighet, mestring og Montessoriinspirert læring.
 📚 For lærere og pedagoger som ønsker ressurser, idéer og verktøy som kan gjøre undervisningen mer kreativ, engasjerende og tilpasset barnas utvikling.
 ✨ For kreative skapere som ønsker å bruke AI, digitale verktøy og kreative metoder til å utvikle innhold, produkter og egne prosjekter.
 🚀 For gründere og små bedrifter som ønsker å bygge noe eget online, lære mer om digital synlighet, innholdsproduksjon, e-postlister og hvordan teknologi kan gjøre veien enklere.
@@ -42,11 +42,11 @@ LME er laget for deg som ønsker å lære, skape og utvikle deg:
 
 LME samler ressurser, apper, kurs, fellesskap og kreative verktøy på ett sted – slik at du kan utforske, skape og vokse i ditt eget tempo.
 
-⚠️ KRITISK REGEL ⚠️ kilden/temaet brukeren oppgir BESTEMMER INNHOLDET HELT OG FULLSTENDIG. Anta ALDRI at emnet handler om Montessori. Hvis brukeren sier "YouTube-kurs" eller noe annet enn eksplisitt Montessori, skal innholdet være 100% om AKKURAT DET TEMAET. IKKE generer Montessori-referanser, pedagogisk innhold eller barn-fokusert materiale med mindre kilden virkelig ber om det.
-VIKTIG: Montessori nevnes KUN når det spesifikt handler om Montessori-filosofi eller pedagogikk.
+⚠️ KRITISK REGEL ⚠️ kilden/temaet brukeren oppgir BESTEMMER INNHOLDET HELT OG FULLSTENDIG. Anta ALDRI at emnet handler om Montessori. Hvis brukeren sier "YouTube-kurs" eller noe annet enn eksplisitt Montessori, skal innholdet være 100% om AKKURAT DET TEMAET. IKKE generer Montessorireferanser, pedagogisk innhold eller barn-fokusert materiale med mindre kilden virkelig ber om det.
+VIKTIG: Montessori nevnes KUN når det spesifikt handler om Montessorifilosofi eller pedagogikk.
 
 Tonen er varm, pedagogisk og tillitsvekkende. LME er kun Renate (én person). Skriv ALLTID i jeg-form: jeg, meg, min, mitt, mine.
-VIKTIG: aldri AMI eller Association Montessori Internationale. Beskriv aldri LME som bare Montessori-plattform.
+VIKTIG: aldri AMI eller Association Montessori Internationale. Beskriv aldri LME som bare Montessoriplattform.
 ALDRI dikt opp garantier, pengene-tilbake-løfter, refusjonsvilkår, priser, rabatter, tall, resultater eller påstander som ikke er oppgitt i kilden.`;
 
 const GEO_RULES = `Skriv for både Google OG generative AI-motorer (ChatGPT, Gemini, Claude, Perplexity).
@@ -290,12 +290,12 @@ answer-first. Alt på ${langName(b.lang)}. Ingen tekst utenfor JSON.`,
 
   "/ai/pinterest": {
     maxTokens: 1500,
-    system: `${BRAND_CONTEXT}\nDu er Pinterest-strateg for en Montessori-merkevare. Pinterest er en visuell søkemotor.`,
+    system: `${BRAND_CONTEXT}\nDu er Pinterest-strateg for en Montessorimerkevare. Pinterest er en visuell søkemotor.`,
     prompt: (b) => `Språk: ${langName(b.lang)}.
 Artikkeltittel: "${b.title || ""}". Sammendrag: "${b.summary || ""}".
 Returner KUN gyldig JSON:
 {"pinTitle":"max 100 tegn, søkbar","pinDescription":"150-200 tegn med naturlige nøkkelord og myk CTA",
- "pinIdeas":["5 ulike pin-vinkler"],"imagePrompt":"detaljert Canva/bilde-prompt i LMEs varme rosa/krem Montessori-stil"}
+ "pinIdeas":["5 ulike pin-vinkler"],"imagePrompt":"detaljert Canva/bilde-prompt i LMEs varme rosa/krem Montessoristil"}
 Ingen tekst utenfor JSON.`,
   },
 
@@ -323,7 +323,7 @@ Lag en komplett reel-produksjonspakke. Returner KUN gyldig JSON med denne formen
  "title":"kort arbeidstittel",
  "hook":"tekst-på-skjerm de første 2-3 sekundene, maks 8 ord, som stopper scrollingen",
  "voiceover":"hele voiceover-manuset i sammenheng, naturlig talespråk, ${b.seconds || 25} sekunder",
- "scenes":[{"time":"0-3s","onScreen":"kort tekst-på-skjerm","voiceover":"det som sies i scenen","broll":"detaljert visuell prompt til AI-video/klipp, i LMEs varme rosa/krem Montessori-stil, vertikal 9:16"}],
+ "scenes":[{"time":"0-3s","onScreen":"kort tekst-på-skjerm","voiceover":"det som sies i scenen","broll":"detaljert visuell prompt til AI-video/klipp, i LMEs varme rosa/krem Montessoristil, vertikal 9:16"}],
  "musicMood":"stil og stemning på musikken",
  "caption":"ferdig caption til Instagram/TikTok med naturlig CTA",
  "hashtags":["8-12 relevante hashtags uten mellomrom"]
@@ -344,7 +344,7 @@ Krav: 4-6 scener som til sammen matcher lengden, answer-first hook, konkret peda
         carousel: `{"format":"carousel","title":"kort arbeidstittel","slides":["3-8 korte slides, hver bygger på forrige, siste er en tydelig CTA"],"caption":"ferdig caption","hashtags":["8-12 hashtags"]}`,
         reel: `{"format":"reel","title":"kort arbeidstittel","hook":"tekst-på-skjerm 0-3s, maks 8 ord","voiceover":"hele voiceover-manuset","scenes":[{"time":"0-3s","onScreen":"tekst","voiceover":"det som sies","broll":"visuell prompt i LME-stil, 9:16"}],"musicMood":"stil","caption":"caption","hashtags":["8-12 hashtags"]}`,
         story: `{"format":"story","title":"kort arbeidstittel","frames":[{"headline":"kort overskrift på framen","body":"kort tekst"}],"caption":"kort ledetekst","hashtags":["5-8 hashtags"]}`,
-        post: `{"format":"post","title":"kort arbeidstittel","caption":"ferdig feed-caption, answer-first, varm CTA","hashtags":["8-12 hashtags"],"imagePrompt":"detaljert bilde-prompt i LMEs rosa/krem Montessori-stil"}`,
+        post: `{"format":"post","title":"kort arbeidstittel","caption":"ferdig feed-caption, answer-first, varm CTA","hashtags":["8-12 hashtags"],"imagePrompt":"detaljert bilde-prompt i LMEs rosa/krem Montessoristil"}`,
         caption: `{"format":"caption","title":"kort arbeidstittel","caption":"dyp, personlig bildetekst, 4-8 avsnitt","hashtags":["6-10 hashtags"]}`,
         email: `{"format":"email","subject":"emnelinje","preview":"forhåndstekst","body":"varm e-post til lista, ren tekst med avsnitt","cta":"kort oppfordring"}`,
         pinterest: `{"format":"pinterest","pinTitle":"søkbar tittel maks 100 tegn","pinDescription":"150-200 tegn med nøkkelord og myk CTA","imagePrompt":"detaljert Canva/bilde-prompt i LME-stil"}`,
