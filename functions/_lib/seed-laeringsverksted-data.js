@@ -360,7 +360,7 @@ export const MIA_TEO_FOLELSER = {
   licenseOptions: [],
   bundle: false,
   bundleItems: [],
-  related: ["mia-teo-situasjonskort"],
+  related: ["mia-teo-situasjonskort", "mia-teo-snakke-om-folelser"],
   bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
   stats: { views: 0, downloads: 0, favorites: 0 },
 };
@@ -435,7 +435,81 @@ export const MIA_TEO_SITUASJONSKORT = {
   licenseOptions: [],
   bundle: false,
   bundleItems: [],
-  related: ["mia-teo-utforsker-folelsene"],
+  related: ["mia-teo-utforsker-folelsene", "mia-teo-snakke-om-folelser"],
+  bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
+  stats: { views: 0, downloads: 0, favorites: 0 },
+};
+
+/* Tredje produkt i serien "Mia & Teo – Følelser og sosial kompetanse"
+   (Renate, 9. august 2026). Samme status som de to foregående: ekte
+   innhold og bilder fra PDF-en, lagt inn som UPUBLISERT UTKAST siden pris
+   og betalingsmåte ikke er bestemt ennå. */
+export const MIA_TEO_SNAKKE_OM_FOLELSER = {
+  slug: "mia-teo-snakke-om-folelser",
+  published: false,
+  featured: false,
+  title: { no: "La oss snakke om følelser, Mia & Teo samtalekort", en: "" },
+  subtitle: {
+    no: "Følelser og sosial kompetanse · 36 samtalekort i tre nivåer · 3–9 år",
+    en: "",
+  },
+  description: {
+    no: "Kortene gir voksne og barn et rolig utgangspunkt for samtaler om følelser, behov, grenser og relasjoner. Tre nivåer: rosa kort utforsker følelsesuttrykk og kroppsspråk, blå kort inviterer til selvinnsikt uten krav om private svar, og grønne kort handler om perspektivtaking, grenser og mulige løsninger.",
+    en: "",
+  },
+  cover: "https://lmexplorers.com/images/laeringsverksted/mia-teo-snakkekort-cover.jpg",
+  gallery: ["https://lmexplorers.com/images/laeringsverksted/mia-teo-snakkekort-eksempel.jpg"],
+  audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
+  ageBands: ["3-6", "m3-6", "m6-9", "1-2trinn"],
+  direction: "begge",
+  subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
+  resourceType: ["aktivitetskort", "larerveiledning"],
+  competencyGoals: [
+    { no: "Barnet kan utvide følelsesspråket, oppdage signaler i kropp og ansikt, uttrykke egne behov, lytte til andres perspektiver og utforske trygge handlingsmuligheter.", en: "" },
+  ],
+  contains: [
+    { no: "36 samtalekort i tre fargenivåer: rosa (følelsesuttrykk og kroppsspråk), blå (selvinnsikt) og grønn (perspektivtaking, grenser og løsninger)", en: "" },
+    { no: "Pedagogisk veiledning med forslag til bruk og oppfølgingsspørsmål", en: "" },
+    { no: "Tilpasningsforslag for 3–6 år og 6–9 år", en: "" },
+  ],
+  pageCount: 15,
+  language: ["nb"],
+  fileFormat: ["pdf"],
+  editable: false,
+  usageTips: {
+    no: "Trekk et kort: bruk ett tilfeldig kort i samlingsstund, ved måltidet eller som rolig avslutning på dagen. Koble produkter: match kortet med «Mia & Teo utforsker følelsene», eller finn et situasjonskort fra «Hva skjedde?» som passer til samtalen. Tegn eller spill: barnet kan tegne et svar, bruke figurer eller lage en kort fortelling.",
+    en: "",
+  },
+  prep: {
+    no: "Skriv ut i faktisk størrelse på A4, gjerne på kraftig papir, og klipp langs de fargede ytterkantene. Laminer ved behov. Oppbevar kortene i tre fargemerkede konvolutter eller samlet i en liten eske.",
+    en: "",
+  },
+  differentiation: {
+    no: "3–6 år: forkort spørsmålet, tilby to konkrete alternativer, og bruk illustrasjonen aktivt, ett godt svar er nok. 6–9 år: utforsk nyanser og flere perspektiver, og la barnet formulere egne oppfølgingsspørsmål. Barnet kan alltid si pass, velge et annet kort eller avslutte.",
+    en: "",
+  },
+  montessoriArea: {
+    area: { no: "Sansene / språk: følelsesspråk og selvinnsikt", en: "" },
+    presentation: {
+      no: "Velg ett til tre kort om gangen, gjerne rosa kort først. Les spørsmålet langsomt og la det være stille, barnet trenger ikke svare med én gang. Den voksne kan gi et enkelt eksempel uten å definere barnets opplevelse, og følge opp med «Hva får deg til å tenke det?» eller «Kan det finnes en annen mulighet?»",
+      en: "",
+    },
+    prerequisites: { no: "Kan brukes alene eller sammen med «Mia & Teo utforsker følelsene» og «Hva skjedde?»-situasjonskortene.", en: "" },
+    directPurpose: { no: "Utvide følelsesspråket og øve på å sette ord på egne og andres opplevelser.", en: "" },
+    indirectPurpose: { no: "Bygge selvinnsikt, empati og trygghet i å snakke om vanskelige temaer.", en: "" },
+    controlOfError: { no: "Ingen fasit. Barnet kan alltid si pass; den voksne retter aldri barnets opplevelse.", en: "" },
+    extension: { no: "Kombiner med følelseskortene eller situasjonskortene, eller la barnet tegne eller dramatisere et svar.", en: "" },
+  },
+  license: "privat",
+  priceType: "betalt",
+  price: { no: "", en: "" },
+  memberPrice: { no: "", en: "" },
+  buyUrl: "",
+  fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-snakke-om-folelser-no.pdf",
+  licenseOptions: [],
+  bundle: false,
+  bundleItems: [],
+  related: ["mia-teo-utforsker-folelsene", "mia-teo-situasjonskort"],
   bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
   stats: { views: 0, downloads: 0, favorites: 0 },
 };
