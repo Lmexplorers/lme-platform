@@ -142,7 +142,27 @@ function safeInt(v, min, max, def) {
 
 const PRICE_TYPES = ["gratis", "betalt", "medlem"];
 const LICENSES = ["gratis", "privat", "pedagog", "barnehage", "skole"];
+const PAID_LICENSES = ["privat", "pedagog", "barnehage", "skole"];
 const DIRECTIONS = ["montessori", "offentlig", "begge", "ingen"];
+
+/* Flere kjøpbare lisensnivåer på samme ressurs (f.eks. privatlisens for én
+   familie vs. skolelisens for hele skolen), hver med egen pris og egen
+   Stripe-betalingslenke. Valgfritt: en ressurs uten dette bruker fortsatt
+   bare de vanlige price/buyUrl-feltene (bakoverkompatibelt). Maks ett
+   oppføring per lisenstype; siste oppføring for en gitt lisens vinner. */
+function licenseOptionList(v) {
+  if (!Array.isArray(v)) return [];
+  const byLicense = {};
+  for (const item of v.slice(0, PAID_LICENSES.length)) {
+    if (!item || typeof item !== "object") continue;
+    if (!PAID_LICENSES.includes(item.license)) continue;
+    const price = langField(item.price, 60);
+    const buyUrl = cleanLink(item.buyUrl, 400);
+    if (!price.no.trim() && !buyUrl) continue;
+    byLicense[item.license] = { license: item.license, price, buyUrl };
+  }
+  return PAID_LICENSES.map((l) => byLicense[l]).filter(Boolean);
+}
 
 function sanitizeResource(raw) {
   if (!raw || typeof raw !== "object") return null;
@@ -174,6 +194,13 @@ function sanitizeResource(raw) {
     price: langField(raw.price, 40),
     memberPrice: langField(raw.memberPrice, 40),
     buyUrl: cleanLink(raw.buyUrl, 400),
+    /* Selve fila (PDF e.l.) som skal leveres etter kjøp/nedlasting. For
+       gratisressurser holder buyUrl alene (som før); for betalte ressurser
+       er buyUrl Stripe-betalingslenken, så fileUrl er nedlastingslenken
+       leveringsmailen sender etter et registrert kjøp (se
+       LAERINGSVERKSTED_PAYMENT_LINKS i functions/_lib/purchase-links.js). */
+    fileUrl: cleanLink(raw.fileUrl, 400),
+    licenseOptions: licenseOptionList(raw.licenseOptions),
     bundle: !!raw.bundle,
     bundleItems: slugList(raw.bundleItems, 20),
     related: slugList(raw.related, 8),
@@ -364,6 +391,10 @@ function exampleResources() {
       price: { no: "149 kr", en: "$15" },
       memberPrice: { no: "99 kr", en: "$10" },
       buyUrl: "",
+      licenseOptions: [
+        { license: "pedagog", price: { no: "249 kr", en: "$25" }, buyUrl: "" },
+        { license: "barnehage", price: { no: "449 kr", en: "$45" }, buyUrl: "" },
+      ],
       bundle: false,
       bundleItems: [],
       related: [],

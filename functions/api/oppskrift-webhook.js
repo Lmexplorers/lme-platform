@@ -31,10 +31,17 @@ import {
   AUTOPILOT_PAYMENT_LINKS, AUTOPILOT_PRODUCT_PLANS, grantAutopilot, revokeAutopilot, emailForStripeCustomer,
   COURSE_PAYMENT_LINKS, COURSE_INFO,
   MODULE_PAYMENT_LINKS,
+  LAERINGSVERKSTED_PAYMENT_LINKS,
 } from "../_lib/purchase-links.js";
 import { sendAutopilotMail } from "../_lib/autopilot-mail.js";
 import { grantCourseAccess, grantModuleAccess } from "../_lib/course-access.js";
 import { sendCourseDeliveryMail, sendModuleDeliveryMail } from "../_lib/course-mail.js";
+import { recordPurchase } from "../_lib/purchases.js";
+import { sendResourceDeliveryMail } from "../_lib/laeringsverksted-mail.js";
+
+// Må matche KEY_PREFIX i functions/api/laeringsverksted.js (samme
+// dupliseringsmønster som OWNER_EMAILS andre steder i kodebasen).
+const LV_KEY_PREFIX = "lme-builder:lv:";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -107,6 +114,12 @@ export async function onRequestPost(context) {
           amount: obj.amount_total, currency: obj.currency,
         });
       } catch (e3) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "kreditt", id: pack.kind, title: pack.amount + " " + kindLabel,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e4) {}
       return json({ ok: true });
     }
 
@@ -124,6 +137,12 @@ export async function onRequestPost(context) {
           amount: obj.amount_total, currency: obj.currency,
         });
       } catch (e3) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "autopilot", id: auto.plan, title: auto.planLabel,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e4) {}
       return json({ ok: true });
     }
 
@@ -142,6 +161,12 @@ export async function onRequestPost(context) {
           amount: obj.amount_total, currency: obj.currency,
         });
       } catch (e3) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "kurs", id: course.courseId, title: courseName,
+          amount: obj.amount_total, currency: obj.currency, url: info.url,
+        });
+      } catch (e4) {}
       return json({ ok: true });
     }
 
@@ -163,6 +188,12 @@ export async function onRequestPost(context) {
           amount: obj.amount_total, currency: obj.currency,
         });
       } catch (e3) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "modul", id: modulePurchase.courseId + ":" + modulePurchase.moduleKey, title: moduleLabel,
+          amount: obj.amount_total, currency: obj.currency, url: info && info.url,
+        });
+      } catch (e4) {}
       return json({ ok: true });
     }
 
@@ -193,6 +224,12 @@ export async function onRequestPost(context) {
           name: name, email: email, amount: obj.amount_total, currency: obj.currency,
         });
       } catch (e3) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "claude", id: "claude-kurset", title: mainLang ? "Claude-kurset" : "Claude-kurset, mersalg",
+          amount: obj.amount_total, currency: obj.currency, url: "/claude-kurs",
+        });
+      } catch (e4) {}
       return json({ ok: true });
     }
 
@@ -218,6 +255,50 @@ export async function onRequestPost(context) {
         await env.BUILDER_KV.put("opp_fu:" + e + ":w2",
           JSON.stringify(Object.assign({}, base, { kind: "oppfolging_uke", sendAfter: Date.now() + 14 * 24 * 60 * 60 * 1000 })));
       } catch (e2) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "oppskrift", id: pat.p, title: pat.p,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e4) {}
+    }
+
+    // LME Læringsverksted: enkeltressurser og samlepakker solgt via Stripe.
+    // Tom liste (LAERINGSVERKSTED_PAYMENT_LINKS) inntil Renate oppretter og
+    // registrerer en ekte betalingslenke for en betalt ressurs, se
+    // purchase-links.js og hjelpeteksten i /laeringsverksted-bygger.
+    const lvItem = obj.payment_link && LAERINGSVERKSTED_PAYMENT_LINKS[obj.payment_link];
+    if (lvItem && email && obj.payment_status !== "unpaid") {
+      const nm = (obj.customer_details && obj.customer_details.name) || "";
+      let resource = null;
+      try {
+        const raw = await env.BUILDER_KV.get(LV_KEY_PREFIX + lvItem.slug);
+        if (raw) resource = JSON.parse(raw);
+      } catch (eR) {}
+      const title = (resource && resource.title && (resource.title[lvItem.lang] || resource.title.no)) || lvItem.slug;
+      const downloadUrl = (resource && resource.fileUrl) || "";
+      const resourceUrl = "https://lmexplorers.com/lv/" + lvItem.slug;
+      try { await sendResourceDeliveryMail(env, { to: email, name: nm, lang: lvItem.lang, title: title, downloadUrl: downloadUrl, resourceUrl: resourceUrl }); } catch (e1) {}
+      try {
+        await sendOwnerSaleNotice(env, {
+          pname: title + " (" + lvItem.license + ")", lang: lvItem.lang, name: nm, email: email,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e3) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "laeringsverksted", id: lvItem.slug, title: title,
+          amount: obj.amount_total, currency: obj.currency, url: resourceUrl,
+        });
+      } catch (e4) {}
+      // Tell nedlastingen i ressursens egen statistikk (best effort, aldri blokkerende).
+      try {
+        if (resource) {
+          resource.stats = resource.stats || { views: 0, downloads: 0, favorites: 0 };
+          resource.stats.downloads = (resource.stats.downloads || 0) + 1;
+          await env.BUILDER_KV.put(LV_KEY_PREFIX + lvItem.slug, JSON.stringify(resource));
+        }
+      } catch (e5) {}
     }
     return json({ ok: true });
   }

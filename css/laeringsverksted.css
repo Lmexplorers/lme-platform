@@ -51,6 +51,9 @@
 
 .lv-buybox { background: linear-gradient(135deg, #FFF4F6, #FBF6F0); border-radius: 18px; padding: 20px 22px; margin-bottom: 22px; }
 .lv-memberprice { display: block; font-size: 13px; color: var(--grey, #4A4A4A); margin-top: 6px; }
+.lv-license-picker { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; max-width: 340px; }
+.lv-license-label { font-size: 12px; font-weight: 700; color: var(--cerise, #E91E89); text-transform: uppercase; letter-spacing: .04em; }
+.lv-license-select { font-family: inherit; font-size: 14.5px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line, rgba(26,26,26,0.15)); background: #fff; }
 .lv-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
 .lv-cta { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; border: none; cursor: pointer; background: linear-gradient(135deg, var(--yellow, #F7C72E), #F5B301); color: #4a3a00; font-family: var(--font-body, 'Sasson Montessori', system-ui, sans-serif); font-size: 15px; font-weight: 700; border-radius: 999px; padding: 13px 22px; box-shadow: 0 8px 22px rgba(247,199,46,0.35); }
 .lv-cta:hover { transform: translateY(-1px); }
