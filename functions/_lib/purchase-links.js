@@ -223,7 +223,7 @@ export const COURSE_INFO = {
     url: "https://lmexplorers.com/academy/kurs?k=lag-ditt-foerste-digitale-minikurs",
   },
   "montessori-masterclass": {
-    name: { no: "Montessori Masterclass", en: "Montessori Masterclass" },
+    name: { no: "Montessori mesterklasse", en: "Montessori Masterclass" },
     url: "https://lmexplorers.com/academy/kurs?k=montessori-masterclass",
   },
 };

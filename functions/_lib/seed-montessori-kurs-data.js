@@ -430,12 +430,12 @@ export const MONTESSORI_KOM_I_GANG = {
       "en": "Ready to go deeper? 🌸"
     },
     "text": {
-      "no": "Dette var den gratis starten. Montessori Masterclass tar deg videre med fem fulle moduler: 3–6 år, 6–9 år, 9–12 år, det forberedte miljøet og observasjonskunsten.",
+      "no": "Dette var den gratis starten. Montessori mesterklasse tar deg videre med fem fulle moduler: 3–6 år, 6–9 år, 9–12 år, det forberedte miljøet og observasjonskunsten.",
       "en": "That was the free start. The Montessori Masterclass takes you further with five full modules: ages 3–6, 6–9, 9–12, the prepared environment and the art of observation."
     },
     "cta": {
       "label": {
-        "no": "Se Montessori Masterclass →",
+        "no": "Se Montessori mesterklasse →",
         "en": "See the Montessori Masterclass →"
       },
       "href": "/montessori-mesterklasse"
@@ -450,11 +450,11 @@ export const MONTESSORI_MASTERCLASS = {
   "cert": true,
   "meet": false,
   "kicker": {
-    "no": "MONTESSORI MASTERCLASS",
+    "no": "MONTESSORI MESTERKLASSE",
     "en": "MONTESSORI MASTERCLASS"
   },
   "title": {
-    "no": "Montessori Masterclass",
+    "no": "Montessori mesterklasse",
     "en": "Montessori Masterclass"
   },
   "lede": {
