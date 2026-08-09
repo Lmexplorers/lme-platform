@@ -184,6 +184,8 @@
           <div><label>Medlemspris, norsk</label><input type="text" id="f-mprice"></div>
           <div><label>Member price, English</label><input type="text" id="f-mprice-en"></div>
         </div>
+        <label>Rabattkode (valgfri — vises ved siden av medlemsprisen. Må også skrus på som "Enables user redeemable promotion codes" på selve Stripe-betalingslenken for at koden faktisk skal virke i kassen)</label>
+        <input type="text" id="f-mpromo" placeholder="f.eks. FOLELSER20">
         <label>Kjøpslenke (Stripe-betalingslenke for betalte ressurser, eller direkte fillenke for gratisressurser)</label>
         <input type="text" id="f-buyurl" placeholder="https://buy.stripe.com/… eller https://…/fil.pdf">
         <label>Fillenke for levering etter kjøp (kun betalte ressurser — sendes i leveringsmailen når kjøpet er registrert, se hjelpeteksten under Bookly-feltene)</label>
@@ -335,7 +337,7 @@
       competencyGoals: [], contains: [], pageCount: 0, language: ['nb'], fileFormat: ['pdf'], editable: false,
       usageTips: { no: '', en: '' }, prep: { no: '', en: '' }, differentiation: { no: '', en: '' },
       montessoriArea: { area: {}, presentation: {}, prerequisites: {}, directPurpose: {}, indirectPurpose: {}, controlOfError: {}, extension: {} },
-      license: 'gratis', priceType: 'gratis', price: { no: '', en: '' }, memberPrice: { no: '', en: '' }, buyUrl: '', fileUrl: '',
+      license: 'gratis', priceType: 'gratis', price: { no: '', en: '' }, memberPrice: { no: '', en: '' }, memberPromoCode: '', buyUrl: '', fileUrl: '',
       licenseOptions: [],
       bundle: false, bundleItems: [], related: [],
       bookly: { type: '', category: '', topic: '', age: '', plan: '', fag: '', alder: '' },
@@ -412,6 +414,7 @@
     q('f-price-en').value = (r.price && r.price.en) || '';
     q('f-mprice').value = (r.memberPrice && r.memberPrice.no) || '';
     q('f-mprice-en').value = (r.memberPrice && r.memberPrice.en) || '';
+    q('f-mpromo').value = r.memberPromoCode || '';
     q('f-buyurl').value = r.buyUrl || '';
     q('f-fileurl').value = r.fileUrl || '';
     q('f-bundle').checked = !!r.bundle;
@@ -501,6 +504,7 @@
       priceType: q('f-priceType').value,
       price: lf('f-price', 'f-price-en'),
       memberPrice: lf('f-mprice', 'f-mprice-en'),
+      memberPromoCode: q('f-mpromo').value.trim(),
       buyUrl: q('f-buyurl').value.trim(),
       fileUrl: q('f-fileurl').value.trim(),
       licenseOptions: ['privat', 'pedagog', 'barnehage', 'skole'].map(function (lic) {
