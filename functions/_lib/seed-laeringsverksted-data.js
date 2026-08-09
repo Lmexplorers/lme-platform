@@ -1,13 +1,15 @@
 /**
- * To ekte, allerede solgte produkter flyttet inn i LME Læringsverksted fra
- * butikken (butikk/tidslinje.html og butikk/plansjer.html), på Renates
- * ønske. Tekst, priser og Stripe-betalingslenker er hentet ordrett/1:1 fra
- * de eksisterende butikksidene, ikke funnet på. Fillevering skjer fortsatt
- * via den eksisterende /butikk/takk.html?p=<id>-siden (samme som butikken
- * alltid har brukt), IKKE via LAERINGSVERKSTED_PAYMENT_LINKS, siden vi ikke
- * har de faktiske Stripe plink_-API-ID-ene (kun de offentlige
- * buy.stripe.com-lenkene) — se hjelpeteksten i /laeringsverksted-bygger for
- * hvordan man kobler det på senere om ønskelig.
+ * Ekte, allerede solgte produkter flyttet inn i LME Læringsverksted fra
+ * butikken (butikk/tidslinje.html, butikk/plansjer.html,
+ * butikk/naturutforskerne.html, butikk/skoledagbok.html), på Renates ønske.
+ * Tekst, priser og Stripe-betalingslenker er hentet ordrett/1:1 fra de
+ * eksisterende butikksidene, ikke funnet på. Fillevering skjer fortsatt via
+ * de eksisterende mekanismene (butikk-config.js/takk.html der det finnes,
+ * ellers Stripe sin egen vedlagte fil på betalingslenken), IKKE via
+ * LAERINGSVERKSTED_PAYMENT_LINKS, siden vi ikke har de faktiske Stripe
+ * plink_-API-ID-ene (kun de offentlige buy.stripe.com-lenkene) — se
+ * hjelpeteksten i /laeringsverksted-bygger for hvordan man kobler det på
+ * senere om ønskelig.
  *
  * Brukt av functions/api/seed-laeringsverksted.js.
  */
@@ -124,6 +126,159 @@ export const PLANSJER_OG_KORTSETT = {
   bundle: false,
   bundleItems: [],
   related: ["livets-tidslinje"],
+  bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
+  stats: { views: 0, downloads: 0, favorites: 0 },
+};
+
+export const DE_SMA_NATURUTFORSKERNE = {
+  slug: "de-sma-naturutforskerne",
+  published: true,
+  featured: true,
+  title: { no: "De små naturutforskerne", en: "The Little Nature Explorers" },
+  subtitle: {
+    no: "Signaturbok · 24 sider · 3–6 år · digital nedlasting",
+    en: "Signature book · 24 pages · Ages 3-6 · digital download",
+  },
+  description: {
+    no: "En vakkert illustrert bildebok i Pixar-stil, der bestevennene Mia og Teo utforsker skogen og møter syv små venner: sommerfuglen, marihøna, larven, sneglen, mauren, frosken og blåfuglen. En bok som vekker undring og kjærlighet til naturen.",
+    en: "A beautifully illustrated picture book in Pixar style, where best friends Mia and Teo explore the forest and meet seven little friends: the butterfly, the ladybug, the caterpillar, the snail, the ant, the frog and the bluebird. A book that awakens wonder and a love for nature.",
+  },
+  cover: "https://lmexplorers.com/images/bok-cover.jpg",
+  gallery: [],
+  audience: ["foreldre", "pedagog", "hjemme"],
+  ageBands: ["3-6"],
+  direction: "montessori",
+  subjects: ["naturfag", "lesing-skriving"],
+  resourceType: ["minibok", "lesetekst"],
+  competencyGoals: [],
+  contains: [
+    { no: "24 illustrerte sider: gjennomillustrert fortelling i varm Pixar-stil, laget med Montessoriprinsippene i bunn.", en: "24 illustrated pages: a fully illustrated story in a warm Pixar style, made with Montessori principles at its core." },
+    { no: "Syv små venner: Mia og Teo møter sommerfuglen, marihøna, larven, sneglen, mauren, frosken og blåfuglen.", en: "Seven little friends: Mia and Teo meet the butterfly, the ladybug, the caterpillar, the snail, the ant, the frog and the bluebird." },
+    { no: "Norsk og engelsk utgave: du får boka som PDF på begge språk, fint for tospråklige familier og klasserom.", en: "Norwegian and English edition: you get the book as a PDF in both languages, great for bilingual families and classrooms." },
+    { no: "Undring og samtale: fortellingen inviterer til samtale om de små vennene barnet selv kan finne ute i naturen.", en: "Wonder and conversation: the story invites conversation about the little friends the child can find outdoors in nature." },
+  ],
+  pageCount: 24,
+  language: ["nb", "en"],
+  fileFormat: ["pdf"],
+  editable: false,
+  usageTips: {},
+  prep: {},
+  differentiation: {},
+  montessoriArea: {
+    area: {}, presentation: {}, prerequisites: {}, directPurpose: {}, indirectPurpose: {}, controlOfError: {}, extension: {},
+  },
+  license: "privat",
+  priceType: "betalt",
+  price: { no: "99 kr", en: "$9.90" },
+  memberPrice: {},
+  buyUrl: "https://buy.stripe.com/00weVedkp3R5gKFbtt9R60q",
+  fileUrl: "https://lmexplorers.com/butikk/takk.html?p=naturutforskerne",
+  licenseOptions: [],
+  bundle: false,
+  bundleItems: [],
+  related: [],
+  bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
+  stats: { views: 0, downloads: 0, favorites: 0 },
+};
+
+export const SKOLEDAGBOK_1_3_TRINN = {
+  slug: "skoledagbok-1-3-trinn",
+  published: true,
+  featured: true,
+  title: { no: "Mia & Teo skoledagbok, 1.–3. trinn", en: "Mia & Teo School Diary, Grades 1-3" },
+  subtitle: {
+    no: "358 sider · 5–9 år · Norsk + Engelsk · digital PDF",
+    en: "358 pages · Ages 5-9 · Norwegian + English · digital PDF",
+  },
+  description: {
+    no: "Én side per dag gjennom hele skoleåret 2026/2027, i Montessoriånd. 358 sider i A5-format, laget av Montessoripedagog Renate Dahl, med barnets egen refleksjon i sentrum.",
+    en: "One page per day through the whole 2026/2027 school year, in the Montessori spirit. 358 pages in A5 format, made by Montessori educator Renate Dahl, with the child's own reflection at the centre.",
+  },
+  cover: "https://lmexplorers.com/images/skoledagbok/cover-1-3-no.png",
+  gallery: [],
+  audience: ["foreldre", "pedagog", "hjemme"],
+  ageBands: ["1-2trinn", "3-4trinn"],
+  direction: "montessori",
+  subjects: ["livsmestring", "sosial-kompetanse"],
+  resourceType: ["planleggingsverktoy"],
+  competencyGoals: [],
+  contains: [
+    { no: "Én side per dag: 358 sider som følger skoleåret 2026/2027, dag for dag.", en: "One page per day: 358 pages following the 2026/2027 school year, day by day." },
+    { no: "I Montessoriånd: laget av Montessoripedagog Renate Dahl, med barnets egen refleksjon i sentrum.", en: "In the Montessori spirit: made by Montessori educator Renate Dahl, with the child's own reflection at the centre." },
+    { no: "A5-format, klar til utskrift: digital PDF i A5. Skriv ut hele boka, eller sidene dere trenger.", en: "A5 format, ready to print: digital PDF in A5. Print the whole book, or just the pages you need." },
+    { no: "Norsk og engelsk utgave: du får dagboka på begge språk, fint for tospråklige familier og klasserom.", en: "Norwegian and English edition: you get the diary in both languages, great for bilingual families and classrooms." },
+  ],
+  pageCount: 358,
+  language: ["nb", "en"],
+  fileFormat: ["pdf"],
+  editable: false,
+  usageTips: {},
+  prep: {},
+  differentiation: {},
+  montessoriArea: {
+    area: {}, presentation: {}, prerequisites: {}, directPurpose: {}, indirectPurpose: {}, controlOfError: {}, extension: {},
+  },
+  license: "privat",
+  priceType: "betalt",
+  price: { no: "299 kr", en: "$29" },
+  memberPrice: {},
+  buyUrl: "https://buy.stripe.com/28EdRa2FL5Zd7a5fJJ9R60r",
+  fileUrl: "",
+  licenseOptions: [],
+  bundle: false,
+  bundleItems: [],
+  related: ["skoledagbok-4-7-trinn"],
+  bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
+  stats: { views: 0, downloads: 0, favorites: 0 },
+};
+
+export const SKOLEDAGBOK_4_7_TRINN = {
+  slug: "skoledagbok-4-7-trinn",
+  published: true,
+  featured: false,
+  title: { no: "Mia & Teo skoledagbok, 4.–7. trinn", en: "Mia & Teo School Diary, Grades 4-7" },
+  subtitle: {
+    no: "358 sider · 9–13 år · Norsk + Engelsk · digital PDF",
+    en: "358 pages · Ages 9-13 · Norwegian + English · digital PDF",
+  },
+  description: {
+    no: "Én side per dag gjennom hele skoleåret 2026/2027, i Montessoriånd. 358 sider i A5-format, laget av Montessoripedagog Renate Dahl, med barnets egen refleksjon i sentrum.",
+    en: "One page per day through the whole 2026/2027 school year, in the Montessori spirit. 358 pages in A5 format, made by Montessori educator Renate Dahl, with the child's own reflection at the centre.",
+  },
+  cover: "https://lmexplorers.com/images/skoledagbok/cover-4-7-no.png",
+  gallery: [],
+  audience: ["foreldre", "pedagog", "hjemme"],
+  ageBands: ["3-4trinn", "5-7trinn"],
+  direction: "montessori",
+  subjects: ["livsmestring", "sosial-kompetanse"],
+  resourceType: ["planleggingsverktoy"],
+  competencyGoals: [],
+  contains: [
+    { no: "Én side per dag: 358 sider som følger skoleåret 2026/2027, dag for dag.", en: "One page per day: 358 pages following the 2026/2027 school year, day by day." },
+    { no: "I Montessoriånd: laget av Montessoripedagog Renate Dahl, med barnets egen refleksjon i sentrum.", en: "In the Montessori spirit: made by Montessori educator Renate Dahl, with the child's own reflection at the centre." },
+    { no: "A5-format, klar til utskrift: digital PDF i A5. Skriv ut hele boka, eller sidene dere trenger.", en: "A5 format, ready to print: digital PDF in A5. Print the whole book, or just the pages you need." },
+    { no: "Norsk og engelsk utgave: du får dagboka på begge språk, fint for tospråklige familier og klasserom.", en: "Norwegian and English edition: you get the diary in both languages, great for bilingual families and classrooms." },
+  ],
+  pageCount: 358,
+  language: ["nb", "en"],
+  fileFormat: ["pdf"],
+  editable: false,
+  usageTips: {},
+  prep: {},
+  differentiation: {},
+  montessoriArea: {
+    area: {}, presentation: {}, prerequisites: {}, directPurpose: {}, indirectPurpose: {}, controlOfError: {}, extension: {},
+  },
+  license: "privat",
+  priceType: "betalt",
+  price: { no: "299 kr", en: "$29" },
+  memberPrice: {},
+  buyUrl: "https://buy.stripe.com/fZu6oI949gDRbqlgNN9R60t",
+  fileUrl: "",
+  licenseOptions: [],
+  bundle: false,
+  bundleItems: [],
+  related: ["skoledagbok-1-3-trinn"],
   bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
   stats: { views: 0, downloads: 0, favorites: 0 },
 };

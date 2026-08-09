@@ -13,7 +13,10 @@
 import {
   sanitizeResource, indexEntry, readIndex, KEY_PREFIX, INDEX_KEY, MAX_SIZE, DEFAULT_PASSWORD,
 } from "./laeringsverksted.js";
-import { LIVETS_TIDSLINJE, PLANSJER_OG_KORTSETT } from "../_lib/seed-laeringsverksted-data.js";
+import {
+  LIVETS_TIDSLINJE, PLANSJER_OG_KORTSETT, DE_SMA_NATURUTFORSKERNE,
+  SKOLEDAGBOK_1_3_TRINN, SKOLEDAGBOK_4_7_TRINN,
+} from "../_lib/seed-laeringsverksted-data.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data, null, 2), {
@@ -32,7 +35,7 @@ export async function onRequestGet(context) {
   if (pw !== expected) return json({ error: "bad_password" }, 401);
 
   const results = [];
-  for (const raw of [LIVETS_TIDSLINJE, PLANSJER_OG_KORTSETT]) {
+  for (const raw of [LIVETS_TIDSLINJE, PLANSJER_OG_KORTSETT, DE_SMA_NATURUTFORSKERNE, SKOLEDAGBOK_1_3_TRINN, SKOLEDAGBOK_4_7_TRINN]) {
     const resource = sanitizeResource(raw);
     if (!resource) { results.push({ error: "bad_resource_data", slug: raw && raw.slug }); continue; }
     const payload = JSON.stringify(resource);
