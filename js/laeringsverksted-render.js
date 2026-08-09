@@ -42,6 +42,8 @@
       "5-7trinn": ["5.–7. trinn", "Grades 5-7"],
       "8-10trinn": ["8.–10. trinn", "Grades 8-10"],
       vgs: ["Videregående", "Upper secondary"],
+      "m0-3": ["Montessori 0–3", "Montessori 0-3"],
+      "m3-6": ["Montessori 3–6", "Montessori 3-6"],
       "m6-9": ["Montessori 6–9", "Montessori 6-9"],
       "m9-12": ["Montessori 9–12", "Montessori 9-12"],
       "m12-16": ["Montessori 12–16", "Montessori 12-16"],
