@@ -1155,7 +1155,7 @@ export const MIA_TEO_TERMOMETER_6_9 = {
    runde med Følelser-serien. */
 export const MIA_TEO_DAG_3_6 = {
   slug: "mia-teo-min-dag-3-6",
-  published: false,
+  published: true,
   featured: false,
   title: { no: "Min dag med Mia & Teo, visuell dagsplan og rutinekort, 3–6 år", en: "" },
   subtitle: {
@@ -1213,10 +1213,10 @@ export const MIA_TEO_DAG_3_6 = {
   },
   license: "privat",
   priceType: "betalt",
-  price: { no: "", en: "" },
+  price: { no: "89 kr", en: "" },
   memberPrice: { no: "", en: "" },
   memberPromoCode: "",
-  buyUrl: "",
+  buyUrl: "https://buy.stripe.com/4gM8wQdkp9bpbqldBB9R63S",
   fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-min-dag-3-6-no.pdf",
   licenseOptions: [],
   bundle: false,
@@ -1228,7 +1228,7 @@ export const MIA_TEO_DAG_3_6 = {
 
 export const MIA_TEO_DAG_6_9 = {
   slug: "mia-teo-min-dag-6-9",
-  published: false,
+  published: true,
   featured: false,
   title: { no: "Min dag med Mia & Teo, visuell dagsplan og rutinekort, 6–9 år", en: "" },
   subtitle: {
@@ -1286,10 +1286,10 @@ export const MIA_TEO_DAG_6_9 = {
   },
   license: "privat",
   priceType: "betalt",
-  price: { no: "", en: "" },
+  price: { no: "99 kr", en: "" },
   memberPrice: { no: "", en: "" },
   memberPromoCode: "",
-  buyUrl: "",
+  buyUrl: "https://buy.stripe.com/7sY28s2FL9bpdyt0OP9R63T",
   fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-min-dag-6-9-no.pdf",
   licenseOptions: [],
   bundle: false,
@@ -1308,7 +1308,7 @@ export const MIA_TEO_DAG_6_9 = {
    sammenlignbart: 12 historier + samtalekort + valgkort + arbeidsark). */
 export const MIA_TEO_HISTORIER_3_6 = {
   slug: "mia-teo-sosiale-historier-3-6",
-  published: false,
+  published: true,
   featured: false,
   title: { no: "Sosiale historier med Mia & Teo, vennskap, grenser og gode valg, 3–6 år", en: "" },
   subtitle: {
@@ -1365,10 +1365,10 @@ export const MIA_TEO_HISTORIER_3_6 = {
   },
   license: "privat",
   priceType: "betalt",
-  price: { no: "", en: "" },
+  price: { no: "119 kr", en: "" },
   memberPrice: { no: "", en: "" },
   memberPromoCode: "",
-  buyUrl: "",
+  buyUrl: "https://buy.stripe.com/3cIdRa1BH3R51PLfJJ9R63U",
   fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-sosiale-historier-3-6-no.pdf",
   licenseOptions: [],
   bundle: false,
@@ -1380,7 +1380,7 @@ export const MIA_TEO_HISTORIER_3_6 = {
 
 export const MIA_TEO_HISTORIER_6_9 = {
   slug: "mia-teo-sosiale-historier-6-9",
-  published: false,
+  published: true,
   featured: false,
   title: { no: "Sosiale historier med Mia & Teo, vennskap, grenser og gode valg, 6–9 år", en: "" },
   subtitle: {
@@ -1437,10 +1437,10 @@ export const MIA_TEO_HISTORIER_6_9 = {
   },
   license: "privat",
   priceType: "betalt",
-  price: { no: "", en: "" },
+  price: { no: "119 kr", en: "" },
   memberPrice: { no: "", en: "" },
   memberPromoCode: "",
-  buyUrl: "",
+  buyUrl: "https://buy.stripe.com/3cI7sM1BH73h7a5btt9R63V",
   fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-sosiale-historier-6-9-no.pdf",
   licenseOptions: [],
   bundle: false,
@@ -1460,7 +1460,7 @@ export const MIA_TEO_HISTORIER_6_9 = {
    Følelsene i kroppen- og Min dag-heftene). */
 export const MIA_TEO_PRAKTISK_3_6 = {
   slug: "mia-teo-jeg-kan-selv-3-6",
-  published: false,
+  published: true,
   featured: false,
   title: { no: "Jeg kan selv med Mia & Teo, praktisk liv og selvstendighet, 3–6 år", en: "" },
   subtitle: {
@@ -1517,10 +1517,10 @@ export const MIA_TEO_PRAKTISK_3_6 = {
   },
   license: "privat",
   priceType: "betalt",
-  price: { no: "", en: "" },
+  price: { no: "89 kr", en: "" },
   memberPrice: { no: "", en: "" },
   memberPromoCode: "",
-  buyUrl: "",
+  buyUrl: "https://buy.stripe.com/cNidRa9493R5dyt4119R63W",
   fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-jeg-kan-selv-3-6-no.pdf",
   licenseOptions: [],
   bundle: false,
@@ -1532,7 +1532,7 @@ export const MIA_TEO_PRAKTISK_3_6 = {
 
 export const MIA_TEO_PRAKTISK_6_9 = {
   slug: "mia-teo-jeg-kan-selv-6-9",
-  published: false,
+  published: true,
   featured: false,
   title: { no: "Jeg kan selv med Mia & Teo, praktisk liv og selvstendighet, 6–9 år", en: "" },
   subtitle: {
@@ -1589,10 +1589,10 @@ export const MIA_TEO_PRAKTISK_6_9 = {
   },
   license: "privat",
   priceType: "betalt",
-  price: { no: "", en: "" },
+  price: { no: "99 kr", en: "" },
   memberPrice: { no: "", en: "" },
   memberPromoCode: "",
-  buyUrl: "",
+  buyUrl: "https://buy.stripe.com/4gM3cw6W1gDR7a52WX9R63X",
   fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-jeg-kan-selv-6-9-no.pdf",
   licenseOptions: [],
   bundle: false,

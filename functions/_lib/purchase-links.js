@@ -278,4 +278,13 @@ export const LAERINGSVERKSTED_PAYMENT_LINKS = {
   "plink_1U2a8ULax7B8uQzqxi9o1YSm": { slug: "mia-teo-folelsestermometer-3-6", license: "privat", lang: "no" },
   "plink_1U2a8WLax7B8uQzqvZNdtYOh": { slug: "mia-teo-folelsestermometer-6-9", license: "privat", lang: "no" },
   "plink_1U2a8hLax7B8uQzqH7Zx4cDl": { slug: "mia-teo-folelser-serien-komplett", license: "privat", lang: "no" },
+  // Tre nye, frittstående serier (ikke en del av "Følelser og sosial
+  // kompetanse"-samlepakken): Min dag, Sosiale historier, Jeg kan selv
+  // (Renate, 9. august 2026, priser bekreftet samme dag).
+  "plink_1U2bbILax7B8uQzq3YJ79hx5": { slug: "mia-teo-min-dag-3-6", license: "privat", lang: "no" },
+  "plink_1U2bbJLax7B8uQzqge9Wc04v": { slug: "mia-teo-min-dag-6-9", license: "privat", lang: "no" },
+  "plink_1U2bbLLax7B8uQzqNAvqGrDA": { slug: "mia-teo-sosiale-historier-3-6", license: "privat", lang: "no" },
+  "plink_1U2bbMLax7B8uQzq1wOPa1Yo": { slug: "mia-teo-sosiale-historier-6-9", license: "privat", lang: "no" },
+  "plink_1U2bbNLax7B8uQzqovubG0g6": { slug: "mia-teo-jeg-kan-selv-3-6", license: "privat", lang: "no" },
+  "plink_1U2bbOLax7B8uQzqJ7EdlPJF": { slug: "mia-teo-jeg-kan-selv-6-9", license: "privat", lang: "no" },
 };
