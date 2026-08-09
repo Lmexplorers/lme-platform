@@ -32,4 +32,6 @@
 /sparemaal  /sparemaal-v2.html  200
 /brand/*  /dashboard.html  302
 /admin-setup.html  /admin-setup.html  200
-/  /dashboard.html  302
+/spor-renate-ai  /spor-nathalie-ai  301
+/ask-renate-ai  /ask-nathalie-ai  301
+/renate-ai-info  /nathalie-ai-info  301
