@@ -913,22 +913,70 @@
 
   .drive-note { text-align: center; color: var(--ink-soft); font-size: .85rem; margin-top: .8rem; }
 
-  .phase-arrived { animation: phaseArrived 1.8s ease; }
-  @keyframes phaseArrived {
-    0% { box-shadow: var(--shadow-soft); }
-    25% { box-shadow: 0 0 0 6px var(--pink-200), var(--shadow-deep); }
-    100% { box-shadow: var(--shadow-soft); }
-  }
-
-  .drive-confetti { position: fixed; top: -20px; font-size: 20px; pointer-events: none; z-index: 200; animation: driveConfettiFall linear forwards; }
+  .drive-confetti { position: fixed; top: -20px; font-size: 20px; pointer-events: none; z-index: 220; animation: driveConfettiFall linear forwards; }
   @keyframes driveConfettiFall { to { transform: translateY(110vh) rotate(340deg); opacity: .2; } }
+
+  /* ============ REISEN, STOPP-PANEL ============ */
+  .drive-drawer-backdrop {
+    position: fixed; inset: 0; background: rgba(61,36,56,.4);
+    opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 200;
+  }
+  .drive-drawer-backdrop.open { opacity: 1; pointer-events: auto; }
+  .drive-drawer {
+    position: fixed; right: 0; top: 0; bottom: 0; width: min(420px, 92vw);
+    background: var(--warm-white); box-shadow: var(--shadow-deep);
+    transform: translateX(100%); transition: transform .35s cubic-bezier(.4,0,.2,1);
+    z-index: 201; display: flex; flex-direction: column; padding: 1.5rem 1.5rem 1.75rem; overflow-y: auto;
+  }
+  .drive-drawer.open { transform: translateX(0); }
+  .drive-drawer-close {
+    align-self: flex-end; background: none; border: none; color: var(--ink-soft);
+    font-size: 1.2rem; cursor: pointer; padding: 4px 8px; line-height: 1;
+  }
+  .drive-drawer-eyebrow {
+    font-family: var(--font-display); font-style: italic; font-size: .85rem;
+    color: var(--pink-500); margin-bottom: .3rem;
+  }
+  .drive-drawer-head { display: flex; align-items: center; gap: .8rem; margin: .3rem 0 .5rem; }
+  .drive-drawer-icon {
+    width: 52px; height: 52px; border-radius: 50%; background: var(--pink-50);
+    display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex: none;
+  }
+  .drive-drawer h3 { font-family: var(--font-sasson); font-size: 1.4rem; color: var(--ink); }
+  .drive-drawer-tagline {
+    font-family: var(--font-display); font-style: italic; color: var(--pink-600);
+    font-size: 1rem; margin-top: .2rem;
+  }
+  .drive-drawer-body { margin-top: 1rem; font-size: .95rem; color: var(--ink-soft); line-height: 1.6; }
+  .drive-drawer-list { list-style: none; padding: 0; margin: 1rem 0; }
+  .drive-drawer-list li { padding: .35rem 0; display: flex; gap: .5rem; align-items: flex-start; font-size: .9rem; }
+  .drive-drawer-list li::before { content: '✿'; color: var(--pink-400); font-size: .8rem; margin-top: .2rem; flex-shrink: 0; }
+  .drive-drawer-tag {
+    display: inline-flex; align-items: center; gap: .4rem; background: var(--pink-50); color: var(--pink-700);
+    padding: .5rem 1rem; border-radius: 999px; font-size: .85rem; font-weight: 600; text-decoration: none;
+    border: 1px solid var(--pink-200);
+  }
+  .drive-drawer-actions { margin-top: auto; padding-top: 1.2rem; display: flex; flex-direction: column; gap: .6rem; }
+  .drive-drawer-btn-primary {
+    background: linear-gradient(135deg, var(--pink-400), var(--pink-500)); color: #fff; border: none;
+    border-radius: 999px; padding: .85rem 1.2rem; font-family: var(--font-body); font-weight: 700;
+    font-size: .95rem; cursor: pointer; box-shadow: var(--shadow-soft);
+  }
+  .drive-drawer-btn-ghost {
+    background: none; border: none; color: var(--ink-soft); font-size: .85rem; cursor: pointer;
+    text-align: center; font-family: var(--font-body);
+  }
+  .drive-drawer-done-tag {
+    display: inline-flex; align-items: center; gap: .4rem; background: var(--pink-50); color: var(--pink-600);
+    border-radius: 999px; padding: .5rem 1rem; font-size: .82rem; width: fit-content;
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .drive-dust, .drive-speedline, .drive-confetti { animation: none !important; opacity: 0; }
-    .phase-arrived { animation: none; }
   }
   @media (max-width: 640px) {
     .drive-caption { left: 10px; top: 10px; font-size: .78rem; padding: 6px 10px; }
+    .drive-drawer { width: 100%; }
   }
 </style>
 </head>
@@ -1007,8 +1055,27 @@
       <button class="drive-reset" id="driveReset" type="button" data-no="Nullstill reisen" data-en="Reset journey">Nullstill reisen</button>
     </div>
     <div class="drive-dots" id="driveDots"></div>
-    <p class="drive-note" data-no="Trykk Kjør videre for å se bilen kjøre til neste fase nedenfor." data-en="Press Drive on to watch the car drive to the next phase below.">Trykk Kjør videre for å se bilen kjøre til neste fase nedenfor.</p>
+    <p class="drive-note" data-no="Trykk Kjør videre for å åpne stoppet du er ved nå." data-en="Press Drive on to open the stop you are at now.">Trykk Kjør videre for å åpne stoppet du er ved nå.</p>
   </div>
+
+  <div class="drive-drawer-backdrop" id="driveDrawerBackdrop"></div>
+  <aside class="drive-drawer" id="driveDrawer" aria-hidden="true">
+    <button class="drive-drawer-close" id="driveDrawerClose" aria-label="Lukk" data-no-title="Lukk" data-en-title="Close">✕</button>
+    <div class="drive-drawer-eyebrow" id="driveDrawerEyebrow"></div>
+    <div class="drive-drawer-head">
+      <div class="drive-drawer-icon" id="driveDrawerIcon"></div>
+      <div>
+        <h3 id="driveDrawerTitle"></h3>
+        <div class="drive-drawer-tagline" id="driveDrawerTagline"></div>
+      </div>
+    </div>
+    <div class="drive-drawer-body">
+      <p id="driveDrawerDesc"></p>
+      <ul class="drive-drawer-list" id="driveDrawerList"></ul>
+      <a class="drive-drawer-tag" id="driveDrawerTag" href="#"></a>
+    </div>
+    <div class="drive-drawer-actions" id="driveDrawerActions"></div>
+  </aside>
 
   <div class="timeline">
 
@@ -1220,6 +1287,18 @@
   var driveReset = document.getElementById('driveReset');
   var drivePanel = document.getElementById('drivePanel');
 
+  var drawer = document.getElementById('driveDrawer');
+  var drawerBackdrop = document.getElementById('driveDrawerBackdrop');
+  var drawerClose = document.getElementById('driveDrawerClose');
+  var drawerEyebrow = document.getElementById('driveDrawerEyebrow');
+  var drawerIcon = document.getElementById('driveDrawerIcon');
+  var drawerTitle = document.getElementById('driveDrawerTitle');
+  var drawerTagline = document.getElementById('driveDrawerTagline');
+  var drawerDesc = document.getElementById('driveDrawerDesc');
+  var drawerList = document.getElementById('driveDrawerList');
+  var drawerTag = document.getElementById('driveDrawerTag');
+  var drawerActions = document.getElementById('driveDrawerActions');
+
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var progress = parseInt(localStorage.getItem(PROGRESS_KEY) || '0', 10);
@@ -1235,6 +1314,35 @@
     return h3 ? h3.textContent : '';
   }
   function timeFor(i){ return i >= STOPS.length ? FINISH_T : STOPS[i].t; }
+
+  function readPhase(i){
+    var el = document.getElementById(STOPS[i].anchor);
+    if (!el) return null;
+    var tag = el.querySelector('.phase-tag');
+    return {
+      emoji: STOPS[i].emoji,
+      title: (el.querySelector('.phase-title') || {}).textContent || '',
+      tagline: (el.querySelector('.phase-tagline') || {}).textContent || '',
+      desc: (el.querySelector('.phase-desc') || {}).textContent.trim() || '',
+      items: Array.prototype.map.call(el.querySelectorAll('.phase-items li'), function(li){ return li.textContent; }),
+      tagHref: tag ? tag.getAttribute('href') : null,
+      tagLabel: tag ? tag.textContent : null
+    };
+  }
+  function readFinish(){
+    var cta = document.querySelector('.cta-section');
+    if (!cta) return null;
+    var h2 = cta.querySelector('h2');
+    var spans = h2 ? h2.querySelectorAll('span') : [];
+    var btn = cta.querySelector('.cta-btn');
+    return {
+      title: spans[0] ? spans[0].textContent : '',
+      tagline: spans[1] ? spans[1].textContent : '',
+      desc: (cta.querySelector('p') || {}).textContent.trim() || '',
+      btnHref: btn ? btn.getAttribute('href') : '/medlemskap',
+      btnLabel: btn ? btn.textContent : ''
+    };
+  }
 
   function updateStatus(){
     var pct = Math.round((Math.min(progress, STOPS.length) / STOPS.length) * 100);
@@ -1274,21 +1382,85 @@
 
   function onDotActivate(i){
     if (i > progress) return;
-    if (i === STOPS.length){ scrollToFinish(); return; }
-    scrollToPhase(i);
+    openDrawer(i);
   }
-  function scrollToPhase(i){
-    var el = document.getElementById(STOPS[i].anchor);
-    if (!el) return;
-    el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
-    el.classList.remove('phase-arrived');
-    void el.offsetWidth;
-    el.classList.add('phase-arrived');
+
+  var openIndex = null;
+  function openDrawer(i){
+    openIndex = i;
+    drawerActions.innerHTML = '';
+    if (i === STOPS.length){
+      var fin = readFinish();
+      drawerEyebrow.textContent = curLang() === 'en' ? 'Finish' : 'Mål';
+      drawerIcon.textContent = '🏁';
+      drawerTitle.textContent = fin ? fin.title : '';
+      drawerTagline.textContent = fin ? fin.tagline : '';
+      drawerDesc.textContent = fin ? fin.desc : '';
+      drawerList.innerHTML = '';
+      drawerTag.style.display = 'none';
+      var link = document.createElement('a');
+      link.className = 'drive-drawer-btn-primary';
+      link.style.textAlign = 'center';
+      link.style.textDecoration = 'none';
+      link.style.display = 'block';
+      link.href = fin ? fin.btnHref : '/medlemskap';
+      link.textContent = fin ? fin.btnLabel : '';
+      drawerActions.appendChild(link);
+    } else {
+      var s = readPhase(i);
+      if (!s) return;
+      drawerEyebrow.textContent = (curLang() === 'en' ? 'Stop ' : 'Stopp ') + (i + 1) + ' / ' + STOPS.length;
+      drawerIcon.textContent = s.emoji;
+      drawerTitle.textContent = s.title;
+      drawerTagline.textContent = s.tagline;
+      drawerDesc.textContent = s.desc;
+      drawerList.innerHTML = '';
+      s.items.forEach(function(t){
+        var li = document.createElement('li');
+        li.textContent = t;
+        drawerList.appendChild(li);
+      });
+      if (s.tagHref){
+        drawerTag.style.display = 'inline-flex';
+        drawerTag.href = s.tagHref;
+        drawerTag.textContent = s.tagLabel;
+      } else {
+        drawerTag.style.display = 'none';
+      }
+      if (i < progress){
+        var doneTag = document.createElement('div');
+        doneTag.className = 'drive-drawer-done-tag';
+        doneTag.textContent = '✓ ' + (curLang() === 'en' ? 'Completed' : 'Fullført');
+        drawerActions.appendChild(doneTag);
+      } else {
+        var btn = document.createElement('button');
+        btn.className = 'drive-drawer-btn-primary';
+        var isLast = i === STOPS.length - 1;
+        btn.textContent = isLast
+          ? (curLang() === 'en' ? 'Done, cross the finish line →' : 'Fullført, kryss målstreken →')
+          : (curLang() === 'en' ? 'Done, drive on →' : 'Fullført, kjør videre →');
+        btn.addEventListener('click', function(){ closeDrawer(); advanceFrom(i); });
+        drawerActions.appendChild(btn);
+      }
+    }
+    var ghost = document.createElement('button');
+    ghost.className = 'drive-drawer-btn-ghost';
+    ghost.textContent = curLang() === 'en' ? 'Close' : 'Lukk';
+    ghost.addEventListener('click', closeDrawer);
+    drawerActions.appendChild(ghost);
+
+    drawer.classList.add('open');
+    drawer.setAttribute('aria-hidden', 'false');
+    drawerBackdrop.classList.add('open');
   }
-  function scrollToFinish(){
-    var cta = document.querySelector('.cta-section');
-    if (cta) cta.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+  function closeDrawer(){
+    drawer.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+    drawerBackdrop.classList.remove('open');
+    openIndex = null;
   }
+  drawerClose.addEventListener('click', closeDrawer);
+  drawerBackdrop.addEventListener('click', closeDrawer);
 
   var dustTimer = null;
   function startEffects(){
@@ -1367,9 +1539,8 @@
     }
   }
 
-  driveBtn.addEventListener('click', function(){
-    if (progress >= STOPS.length){ scrollToFinish(); return; }
-    var target = progress + 1;
+  function advanceFrom(i){
+    var target = i + 1;
     var displayTarget = Math.min(target, STOPS.length - 1);
     driveTo(displayTarget, function(){
       progress = target;
@@ -1378,16 +1549,21 @@
       if (progress >= STOPS.length){
         seekTo(FINISH_T);
         spawnConfetti();
-        scrollToFinish();
+        openDrawer(STOPS.length);
       } else {
-        scrollToPhase(progress);
+        openDrawer(progress);
       }
     });
+  }
+
+  driveBtn.addEventListener('click', function(){
+    openDrawer(Math.min(progress, STOPS.length));
   });
 
   driveReset.addEventListener('click', function(){
     progress = 0; shownIndex = 0;
     localStorage.setItem(PROGRESS_KEY, '0');
+    closeDrawer();
     seekTo(0);
     updateStatus(); buildDots(); updateCaption();
   });
@@ -1403,7 +1579,10 @@
   var langToggleBtn = document.getElementById('langToggle');
   if (langToggleBtn){
     langToggleBtn.addEventListener('click', function(){
-      setTimeout(function(){ buildDots(); updateStatus(); updateCaption(); }, 0);
+      setTimeout(function(){
+        buildDots(); updateStatus(); updateCaption();
+        if (drawer.classList.contains('open') && openIndex !== null) openDrawer(openIndex);
+      }, 0);
     });
   }
 
