@@ -1145,3 +1145,156 @@ export const MIA_TEO_TERMOMETER_6_9 = {
   bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
   stats: { views: 0, downloads: 0, favorites: 0 },
 };
+
+/* Ny, egen serie (ikke en del av "Følelser og sosial kompetanse"):
+   "Min dag med Mia & Teo", visuell dagsplan og rutinekort, 3-6 år og
+   6-9 år (Renate, 9. august 2026). Ekte innhold og bilder fra PDF-ene.
+   Lagt inn som UPUBLISERT UTKAST: pris er ikke bekreftet for denne serien
+   ennå (foreslått 89/99 kr, samme nivå som Følelsene i kroppen-heftene,
+   men ikke bekreftet av Renate), samme forsiktighetsprinsipp som første
+   runde med Følelser-serien. */
+export const MIA_TEO_DAG_3_6 = {
+  slug: "mia-teo-min-dag-3-6",
+  published: false,
+  featured: false,
+  title: { no: "Min dag med Mia & Teo, visuell dagsplan og rutinekort, 3–6 år", en: "" },
+  subtitle: {
+    no: "Visuell dagsplan og rutinekort · 3–6 år",
+    en: "",
+  },
+  description: {
+    no: "Et hefte med rutinekort og enkle dagsplan-oppsett som gir barnet oversikt og trygghet gjennom dagen, uten å bli en kontrollerende plan. Barnet kan flytte, snu eller legge bort kort selv når en aktivitet er ferdig.",
+    en: "",
+  },
+  cover: "https://lmexplorers.com/images/laeringsverksted/mia-teo-dag-3-6-cover.jpg",
+  gallery: ["https://lmexplorers.com/images/laeringsverksted/mia-teo-dag-3-6-eksempel.jpg"],
+  audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
+  ageBands: ["3-6", "m3-6"],
+  direction: "begge",
+  subjects: ["livsmestring", "spesialpedagogikk", "barnehage", "praktisk-liv"],
+  resourceType: ["aktivitetskort", "larerveiledning"],
+  competencyGoals: [
+    { no: "Barnet kan følge en visuell rutine gjennom dagen, forberede seg på overganger, og delta selv ved å flytte eller fjerne kort etter hvert som noe er ferdig.", en: "" },
+  ],
+  contains: [
+    { no: "Seksten rutinekort (fire ark) for morgen, dag og kveld", en: "" },
+    { no: "\"Først - så\" og \"Nå - neste - ferdig\"-oppsett for enkle sekvenser", en: "" },
+    { no: "\"Min morgen\" og \"Min dag\" med tre steg hver, og en side for når planen endres", en: "" },
+    { no: "Små støttekort (\"jeg trenger hjelp\", \"jeg trenger en pause\" med flere)", en: "" },
+    { no: "Tomme \"mine egne rutinekort\" til å tilpasse egen hverdag", en: "" },
+  ],
+  pageCount: 14,
+  language: ["nb"],
+  fileFormat: ["pdf"],
+  editable: false,
+  usageTips: {
+    no: "Start med få kort. Se på planen sammen før et skifte, og gi barnet tid til å avslutte det det holder på med. En plan er støtte, ikke et løfte om at alt blir akkurat slik, så vis endringer tydelig når de skjer.",
+    en: "",
+  },
+  prep: {
+    no: "Skriv ut i faktisk størrelse på A4, og laminer kortene ved behov. Fest dem med borrelås, magneter, eller legg dem i rekkefølge på bordet.",
+    en: "",
+  },
+  differentiation: {
+    no: "Noen barn trenger bilder hele dagen, andre bare ved krevende overganger. Bruk korte sekvenser og ett steg om gangen for de yngste.",
+    en: "",
+  },
+  montessoriArea: {
+    area: { no: "Praktisk liv: rutiner og selvstendighet", en: "" },
+    presentation: {
+      no: "Velg rutinekortene dere trenger sammen med barnet, og la barnet selv flytte eller snu kortet når aktiviteten er ferdig. Bruk «nå - neste - ferdig» for å gjøre rekkefølgen konkret.",
+      en: "",
+    },
+    prerequisites: { no: "Ingen spesielle forkunnskaper.", en: "" },
+    directPurpose: { no: "Skape oversikt og forutsigbarhet gjennom dagens rutiner.", en: "" },
+    indirectPurpose: { no: "Bygge selvstendighet og trygghet i overganger.", en: "" },
+    controlOfError: { no: "Ingen fasit. Planen tilpasses familiens eller gruppens egen hverdag.", en: "" },
+    extension: { no: "Lag egne rutinekort på de tomme malene for aktiviteter som ikke står i heftet.", en: "" },
+  },
+  license: "privat",
+  priceType: "betalt",
+  price: { no: "", en: "" },
+  memberPrice: { no: "", en: "" },
+  memberPromoCode: "",
+  buyUrl: "",
+  fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-min-dag-3-6-no.pdf",
+  licenseOptions: [],
+  bundle: false,
+  bundleItems: [],
+  related: ["mia-teo-min-dag-6-9"],
+  bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
+  stats: { views: 0, downloads: 0, favorites: 0 },
+};
+
+export const MIA_TEO_DAG_6_9 = {
+  slug: "mia-teo-min-dag-6-9",
+  published: false,
+  featured: false,
+  title: { no: "Min dag med Mia & Teo, visuell dagsplan og rutinekort, 6–9 år", en: "" },
+  subtitle: {
+    no: "Visuell dagsplan og rutinekort · 6–9 år",
+    en: "",
+  },
+  description: {
+    no: "Et hefte som støtter selvstendighet, prioritering og refleksjon gjennom skoledagen: rutinekort, en morgenplan, en ukeoversikt og en enkel «slik gikk dagen»-refleksjon.",
+    en: "",
+  },
+  cover: "https://lmexplorers.com/images/laeringsverksted/mia-teo-dag-6-9-cover.jpg",
+  gallery: ["https://lmexplorers.com/images/laeringsverksted/mia-teo-dag-6-9-eksempel.jpg"],
+  audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
+  ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
+  direction: "begge",
+  subjects: ["livsmestring", "spesialpedagogikk", "praktisk-liv"],
+  resourceType: ["aktivitetskort", "larerveiledning"],
+  competencyGoals: [
+    { no: "Barnet kan planlegge morgen og ettermiddag i prioritert rekkefølge, følge en ukeoversikt, og reflektere kort over hvordan dagen gikk.", en: "" },
+  ],
+  contains: [
+    { no: "Seksten rutinekort (fire ark) tilpasset skolehverdagen", en: "" },
+    { no: "\"Først - så\" og \"Nå - neste - ferdig\"-oppsett", en: "" },
+    { no: "\"Min morgenplan\" og \"Etter skolen\" med fire prioriterte steg hver", en: "" },
+    { no: "\"Min uke\" og \"Slik gikk dagen\"-refleksjon", en: "" },
+    { no: "Små støttekort og tomme \"mine egne rutinekort\" til å tilpasse egen hverdag", en: "" },
+  ],
+  pageCount: 16,
+  language: ["nb"],
+  fileFormat: ["pdf"],
+  editable: false,
+  usageTips: {
+    no: "Bruk planen som støtte for selvstendighet og prioritering, ikke som en fasit barnet må følge slavisk. Se på planen sammen før et skifte, og bruk «slik gikk dagen» til en kort, rolig oppsummering på slutten av dagen.",
+    en: "",
+  },
+  prep: {
+    no: "Skriv ut i faktisk størrelse på A4, og laminer kortene ved behov. Fest dem med borrelås, magneter, eller legg dem i rekkefølge på bordet.",
+    en: "",
+  },
+  differentiation: {
+    no: "La barnet delta i å velge og prioritere egne steg. Noen barn trenger visuell støtte hele dagen, andre bare ved krevende overganger.",
+    en: "",
+  },
+  montessoriArea: {
+    area: { no: "Praktisk liv: rutiner, selvstendighet og refleksjon", en: "" },
+    presentation: {
+      no: "La barnet sjekke planen selv, prioritere morgenens steg, og bruke ukeoversikten til å se hva som kommer. Avslutt gjerne dagen med «slik gikk dagen».",
+      en: "",
+    },
+    prerequisites: { no: "Kan brukes alene eller som en videreføring av «Min dag 3–6 år».", en: "" },
+    directPurpose: { no: "Planlegge og prioritere egne rutiner gjennom skoledagen.", en: "" },
+    indirectPurpose: { no: "Bygge selvstendighet, tidsforståelse og evne til å reflektere over egen dag.", en: "" },
+    controlOfError: { no: "Ingen fasit. Planen tilpasses barnets egen hverdag.", en: "" },
+    extension: { no: "Lag egne rutinekort på de tomme malene for aktiviteter som ikke står i heftet.", en: "" },
+  },
+  license: "privat",
+  priceType: "betalt",
+  price: { no: "", en: "" },
+  memberPrice: { no: "", en: "" },
+  memberPromoCode: "",
+  buyUrl: "",
+  fileUrl: "https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-min-dag-6-9-no.pdf",
+  licenseOptions: [],
+  bundle: false,
+  bundleItems: [],
+  related: ["mia-teo-min-dag-3-6"],
+  bookly: { type: "", category: "", topic: "", age: "", plan: "", fag: "", alder: "" },
+  stats: { views: 0, downloads: 0, favorites: 0 },
+};
