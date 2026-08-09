@@ -13,7 +13,12 @@
 export const MONTESSORI_KOM_I_GANG = {
   "slug": "montessori-kom-i-gang",
   "size": "mini",
-  "published": true,
+  // Kun tilgjengelig via /gratis-montessori-kurs (e-post-registrering),
+  // aldri listet direkte i "Dine egne kurs" på /academy eller i kurs.html
+  // sine egne kurslister (som begge filtrerer på published !== false).
+  // Direktelenken via slug (brukt av takk.html etter registrering) virker
+  // fortsatt, siden /api/kurs?slug=... ikke filtrerer på published.
+  "published": false,
   "cert": false,
   "meet": false,
   "kicker": {
