@@ -44,7 +44,7 @@ export async function onRequest(context) {
       let job;
       try { job = JSON.parse(raw); } catch (e) { await env.BUILDER_KV.delete(k.name); continue; }
       if (job.sendAfter && job.sendAfter > now) { pending++; continue; }
-      const res = await sendClaudeMail(env, { to: job.email, name: job.name, lang: job.lang, kind: "oppfolging" });
+      const res = await sendClaudeMail(env, { to: job.email, name: job.name, lang: job.lang, kind: "oppfolging", token: job.token });
       if (res && res.ok) { await env.BUILDER_KV.delete(k.name); sent++; }
       else { failed++; }
     }

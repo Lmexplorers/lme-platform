@@ -207,16 +207,23 @@ export async function onRequestPost(context) {
       await addToClaudeGroup(env, email, name, groupId);
       // Start også den ukentlige nyhetsbrev-serien for kjøperen.
       try { await registerNewsletter(env, email, name, claudeLang); } catch (e) {}
-      // Hovedkurs: send takkemail nå, og legg 2-dagers oppfølger i kø.
+      // Hovedkurset og "Videre med Claude" er hver sin låste kursside
+      // (js/course-gate.js), samme mønster som course-access.js ellers i
+      // filen. Gir en personlig tilgangsnøkkel og sender riktig takkemail
+      // med lenken, uansett om det er hoved- eller mersalgkjøpet.
       const mainLang = CLAUDE_MAIN_LINK_LANG[obj.payment_link];
+      const claudeCourseId = mainLang ? "claude" : "claude-videre";
+      const claudeToken = await grantCourseAccess(env, claudeCourseId, email, name);
       if (mainLang) {
-        await sendClaudeMail(env, { to: email, name: name, lang: mainLang, kind: "takk" });
+        await sendClaudeMail(env, { to: email, name: name, lang: mainLang, kind: "takk", token: claudeToken });
         try {
           await env.BUILDER_KV.put(
             "claude_fu:" + email.trim().toLowerCase(),
-            JSON.stringify({ email: email, name: name, lang: mainLang, sendAfter: Date.now() + 2 * 24 * 60 * 60 * 1000 })
+            JSON.stringify({ email: email, name: name, lang: mainLang, token: claudeToken, sendAfter: Date.now() + 2 * 24 * 60 * 60 * 1000 })
           );
         } catch (e) {}
+      } else {
+        await sendClaudeMail(env, { to: email, name: name, lang: claudeLang, kind: "takk-videre", token: claudeToken });
       }
       try {
         await sendOwnerSaleNotice(env, {
