@@ -290,4 +290,10 @@ export const LAERINGSVERKSTED_PAYMENT_LINKS = {
   // Fjerde frittstående serie: Språklek (Renate, 9. august 2026).
   "plink_1U2cNyLax7B8uQzqj1DNOWdW": { slug: "mia-teo-spraklek-3-6", license: "privat", lang: "no" },
   "plink_1U2cNzLax7B8uQzqmKC7F8np": { slug: "mia-teo-spraklek-6-9", license: "privat", lang: "no" },
+  // Femte og sjette frittstående serie: Matematikklek og Bokstavverksted
+  // (Renate, 10. august 2026).
+  "plink_1U2grWLax7B8uQzqDqXL79mu": { slug: "mia-teo-matematikklek-3-6", license: "privat", lang: "no" },
+  "plink_1U2grYLax7B8uQzqwnON43se": { slug: "mia-teo-matematikklek-6-9", license: "privat", lang: "no" },
+  "plink_1U2grZLax7B8uQzqG3pNqsLF": { slug: "mia-teo-bokstavverksted-3-6", license: "privat", lang: "no" },
+  "plink_1U2grZLax7B8uQzqluKHsm4w": { slug: "mia-teo-bokstavverksted-6-9", license: "privat", lang: "no" },
 };
