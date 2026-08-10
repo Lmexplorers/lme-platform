@@ -296,4 +296,7 @@ export const LAERINGSVERKSTED_PAYMENT_LINKS = {
   "plink_1U2grYLax7B8uQzqwnON43se": { slug: "mia-teo-matematikklek-6-9", license: "privat", lang: "no" },
   "plink_1U2grZLax7B8uQzqG3pNqsLF": { slug: "mia-teo-bokstavverksted-3-6", license: "privat", lang: "no" },
   "plink_1U2grZLax7B8uQzqluKHsm4w": { slug: "mia-teo-bokstavverksted-6-9", license: "privat", lang: "no" },
+  // Syvende og åttende frittstående serie: Naturverksted (Renate, 10. august 2026).
+  "plink_1U2h06Lax7B8uQzqyh1ykDGD": { slug: "mia-teo-naturverksted-3-6", license: "privat", lang: "no" },
+  "plink_1U2h06Lax7B8uQzqMsP3BrMz": { slug: "mia-teo-naturverksted-6-9", license: "privat", lang: "no" },
 };
