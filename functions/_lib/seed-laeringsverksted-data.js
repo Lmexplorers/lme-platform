@@ -1325,7 +1325,7 @@ export const MIA_TEO_HISTORIER_3_6 = {
   ageBands: ["3-6", "m3-6"],
   direction: "begge",
   subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
-  resourceType: ["larerveiledning", "aktivitetskort"],
+  resourceType: ["arbeidshefte", "aktivitetskort", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan gjenkjenne trygge måter å hilse, vente, dele og sette grenser på, øve på å be om hjelp, og forstå at et uhell kan repareres.", en: "The child can recognise safe ways to greet, wait, share and set boundaries, practise asking for help, and understand that an accident can be repaired." },
   ],
@@ -1397,7 +1397,7 @@ export const MIA_TEO_HISTORIER_6_9 = {
   ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
   direction: "begge",
   subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "sprakutvikling"],
-  resourceType: ["larerveiledning", "aktivitetskort"],
+  resourceType: ["arbeidshefte", "aktivitetskort", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan gjenkjenne signaler, sette og respektere grenser, håndtere press og uenighet, reparere etter en misforståelse, og bruke trygge strategier ved digitale meldinger.", en: "The child can recognise signals, set and respect boundaries, handle pressure and disagreement, repair after a misunderstanding, and use safe strategies with digital messages." },
   ],
@@ -1620,7 +1620,7 @@ export const MIA_TEO_SPRAKLEK_3_6 = {
   audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
   ageBands: ["3-6", "m3-6"],
   direction: "begge",
-  subjects: ["sprak", "norsk", "barnehage", "spesialpedagogikk"],
+  subjects: ["sprakutvikling", "norsk", "barnehage", "spesialpedagogikk"],
   resourceType: ["aktivitetskort", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan leke med rim, stavelser og lyder i ord, og bruke enkle begreper for plassering, motsetning og rekkefølge muntlig.", en: "The child can play with rhyme, syllables and sounds in words, and use simple concepts for position, opposites and sequence orally." },
@@ -1691,7 +1691,7 @@ export const MIA_TEO_SPRAKLEK_6_9 = {
   audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
   ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
   direction: "begge",
-  subjects: ["sprak", "norsk", "lesing", "skriving", "spesialpedagogikk"],
+  subjects: ["sprakutvikling", "norsk", "lesing-skriving", "spesialpedagogikk"],
   resourceType: ["aktivitetskort", "larerveiledning"],
   competencyGoals: [
     { no: "Eleven kan bruke ordklasser, synonymer og antonymer, bygge og utvide setninger, og lese og skrive med økende forståelse og struktur.", en: "The pupil can use word classes, synonyms and antonyms, build and expand sentences, and read and write with increasing understanding and structure." },
@@ -1762,7 +1762,7 @@ export const MIA_TEO_MATTE_3_6 = {
   audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
   ageBands: ["3-6", "m3-6"],
   direction: "montessori",
-  subjects: ["matematikk", "aritmetikk", "barnehage", "spesialpedagogikk"],
+  subjects: ["matematikk", "barnehage", "spesialpedagogikk"],
   resourceType: ["aktivitetskort", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan sammenligne lengder, telle med én-til-én-korrespondanse, gjenkjenne og forme tallene 0–10, og koble tallsymbol til riktig mengde.", en: "The child can compare lengths, count with one-to-one correspondence, recognise and form the numbers 0-10, and link a number symbol to the correct quantity." },
@@ -1834,7 +1834,7 @@ export const MIA_TEO_MATTE_6_9 = {
   audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
   ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
   direction: "montessori",
-  subjects: ["matematikk", "aritmetikk", "spesialpedagogikk"],
+  subjects: ["matematikk", "spesialpedagogikk"],
   resourceType: ["aktivitetskort", "larerveiledning"],
   competencyGoals: [
     { no: "Eleven kan lese og bygge tall til 100, forstå enere og tiere, sammenligne tall, finne tiervenner, og løse enkel addisjon, subtraksjon og en kort tekstoppgave.", en: "The pupil can read and build numbers up to 100, understand ones and tens, compare numbers, find number bonds to ten, and solve simple addition, subtraction and a short word problem." },
@@ -1906,7 +1906,7 @@ export const MIA_TEO_BOKSTAV_3_6 = {
   audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
   ageBands: ["3-6", "m3-6"],
   direction: "montessori",
-  subjects: ["sprak", "norsk", "lesing-skriving", "barnehage", "spesialpedagogikk"],
+  subjects: ["sprakutvikling", "norsk", "lesing-skriving", "barnehage", "spesialpedagogikk"],
   resourceType: ["aktivitetskort", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan lytte etter enkeltlyder i ord, koble lyd til bokstavform gjennom berøring og bevegelse, og bygge korte lydrette ord med det bevegelige alfabetet.", en: "The child can listen for individual sounds in words, link sound to letter shape through touch and movement, and build short phonetic words with the movable alphabet." },
@@ -1978,7 +1978,7 @@ export const MIA_TEO_BOKSTAV_6_9 = {
   audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
   ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
   direction: "montessori",
-  subjects: ["sprak", "norsk", "lesing-skriving", "spesialpedagogikk"],
+  subjects: ["sprakutvikling", "norsk", "lesing-skriving", "spesialpedagogikk"],
   resourceType: ["aktivitetskort", "larerveiledning"],
   competencyGoals: [
     { no: "Eleven kan trekke lyder sammen til ord, lese og skrive korte lydrette ord og setninger, dele ord i stavelser, og bruke stor bokstav og punktum riktig.", en: "The pupil can blend sounds into words, read and write short phonetic words and sentences, divide words into syllables, and use capital letters and full stops correctly." },
