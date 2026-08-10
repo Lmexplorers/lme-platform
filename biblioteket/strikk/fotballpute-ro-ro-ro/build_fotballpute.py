@@ -94,17 +94,21 @@ photo_b64 = base64.b64encode(PHOTO.read_bytes()).decode()
 photo_src = f'data:image/jpeg;base64,{photo_b64}'
 
 # ---------- byggeklosser ----------
-def page(body, num, right_label='LME STRIKK'):
-    return f'''<div class="page">
+def make_page(ph2, right_label='LME STRIKK'):
+    def _page(body, num):
+        return f'''<div class="page">
   <div class="band"><span>LITTLE MONTESSORI EXPLORERS</span></div>
   <div class="rside"><span>{right_label}</span></div>
   <div class="phead">
     <div class="ph1">LITTLE MONTESSORI EXPLORERS</div>
-    <div class="ph2">LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;FOTBALLPUTE RO RO RO</div>
+    <div class="ph2">{ph2}</div>
   </div>
   <div class="content">{body}</div>
   <div class="pfoot">&mdash;&nbsp;{num}&nbsp;&mdash;</div>
 </div>'''
+    return _page
+
+page = make_page('LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;FOTBALLPUTE RO RO RO', 'LME STRIKK')
 
 def banner(t):    return f'<div class="banner"><h1>{t}</h1></div>'
 def pink(t):       return f'<div class="pillwrap"><div class="pill pinkpill">{t}</div></div>'
@@ -388,6 +392,285 @@ bruk. Oppskriften og diagrammene kan ikke kopieres, deles, videreselges eller pu
 Ferdige produkter kan selges i liten skala med kreditering til Little Montessori Explorers.</p>
 ''', 12))
 
+pages_no = pages
+
+# ===========================================================================
+# ENGELSK VERSJON
+# ===========================================================================
+pages = []
+page = make_page('LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;RO RO RO FOOTBALL CUSHION', 'LME KNIT')
+
+# ============ PAGE 1: COVER ============
+pages.append(page(f'''
+<div class="coverimg"><img src="{photo_src}" alt="Teal football cushion with RO RO RO, football net and green terraces"></div>
+<div class="covertag">LME KNITTING PATTERN</div>
+<div class="coverbanner">
+  <span class="cball">&#9917;</span>
+  <h1 class="covertitle">RO RO RO<br>FOOTBALL CUSHION</h1>
+  <span class="cball">&#9917;</span>
+</div>
+<div class="subpill">TEAL WITH FOOTBALL NET AND GREEN TERRACES</div>
+{card('<p class="center">A soft supporter&rsquo;s cushion with a football net, green terraces and &laquo;RO RO RO&raquo; '
+      'knitted all the way around the cushion. The pattern runs right round, so both sides come out the same.</p>')}
+<div class="byline">
+  <div class="by1">By Renate Dahl</div>
+  <div class="by2">Little Montessori Explorers</div>
+  <div class="by3">lmexplorers.com</div>
+</div>
+<p class="rekonstruert">Reconstructed from an original cushion knitted by Renate&rsquo;s mum</p>
+{tip('Read the whole pattern through before you start. Knit a gauge swatch, especially when you '
+     'switch yarn, because cotton and acrylic can behave differently.')}
+''', 1))
+
+# ============ PAGE 2: BEFORE YOU START ============
+pages.append(page(f'''
+{banner('BEFORE YOU START')}
+<p>The cushion cover is knitted in the round on a circular needle, from the bottom up. First you
+knit a plain flap about 12 cm long. Then comes the lower RO band, the football net, the green
+terrace tops and the upper RO band. The pattern runs all the way round the cushion, so both
+sides come out the same.</p>
+{tealp('WHAT YOU LEARN')}
+{card(ul([
+  'To knit a cushion cover in the round on a circular needle',
+  'To combine cotton and acrylic of the same thickness',
+  'To follow simple colour charts',
+  'To knit vertical and horizontal lines that form a football net',
+  'To make a practical cushion opening with an inner flap',
+]))}
+{pink('HOW HARD IS IT?')}
+{card('<p>A little practised. You should be able to cast on, knit stockinette in the round, '
+      'change colour and follow a chart. The long stretches in the net need the floats kept loose.</p>')}
+{pink('ABOUT THE RECONSTRUCTION')}
+{card('<p>The original pattern took shape as the cushion was being knitted. The pattern has '
+      'therefore been reconstructed from the finished cushion and information from the person '
+      'who knitted it. Always measure as you go and fit the height to your inner cushion pad.</p>')}
+{cream('<p class="creamtitle">Place a marker at the start of the round and a second marker after '
+       '80 stitches. Then you can always see where each side of the cushion begins.</p>')}
+''', 2))
+
+# ============ PAGE 3: WHAT YOU NEED ============
+pages.append(page(f'''
+{banner('WHAT YOU NEED')}
+{tealp('YARN')}
+{card('<p><b>Reynolds Saucy</b>, 100% mercerised cotton. American yarn made in Brazil. The '
+      'original yarn&rsquo;s label recommends 5 mm needles. The original cushion is knitted on '
+      '4.5 mm because the knitter knits a little loosely.</p>'
+      '<table class="t"><tr><th>Colour</th><th>Use</th></tr>'
+      f'<tr><td><span class="dot" style="background:{TEAL}"></span> Teal</td><td>main colour</td></tr>'
+      f'<tr><td><span class="dot" style="background:{GREEN}"></span> Green</td><td>terraces and football net</td></tr>'
+      f'<tr><td><span class="dot" style="background:{YELLOW}"></span> Pale yellow</td><td>RO bands</td></tr></table>'
+      '<p><b>Holly from Rusta</b>, 100% acrylic, 50 g, in white. The yarn is soft, lint-free and '
+      'about the same thickness as Saucy. It is used for the football net and the little white dots.</p>'
+      '<p class="small">The yarn amount from the original piece was not recorded. Have plenty of '
+      'teal main colour and at least one ball of each pattern colour. If you sell yarn kits, the '
+      'usage must be checked by a test swatch and weighed first.</p>')}
+{pink('ALTERNATIVE YARN')}
+{card('<p>Use a smooth cotton or acrylic yarn that gives the same gauge. Choose a yarn meant for '
+      '4.5&ndash;5 mm needles. All the colours should be about the same thickness.</p>')}
+{tealp('NEEDLES AND KIT')}
+{card(ul([
+  '4.5 mm circular needle, 80 cm',
+  'Tapestry needle, scissors and tape measure',
+  'Two stitch markers',
+  '45 &times; 45 cm inner cushion pad',
+  'Optional: 2&ndash;3 snap fasteners or yarn for crocheted ties',
+  'Optional: ready-made football badge',
+]))}
+{cream('<p class="creamtitle">The yarn label recommends 5 mm needles, but 4.5 mm gave the right '
+       'look in the original. If you knit tightly, 5 mm may suit you better.</p>')}
+''', 3))
+
+# ============ PAGE 4: GAUGE AND MEASUREMENTS ============
+pages.append(page(f'''
+{banner('GAUGE AND MEASUREMENTS')}
+{tealp('GAUGE, THE SECRET KEY')}
+{card('<p>About 18 stitches = 10 cm in stockinette in the round. With 80 stitches on each side '
+      'the cushion cover comes out about 44&ndash;45 cm wide.</p>'
+      '<p>Knit a swatch at least 12 &times; 12 cm. Wash and dry it the way you plan to treat the '
+      'cushion cover. Then measure across the middle of the swatch.</p>'
+      + ul([
+          'More than 18 stitches over 10 cm: try 5 mm needles.',
+          'Fewer than 18 stitches over 10 cm: try 4 mm needles.',
+          'About 18 stitches: use 4.5 mm needles and get going.',
+      ]))}
+{card('<table class="t"><tr><th>Measurement</th><th>Value</th></tr>'
+  '<tr><td>Inner cushion pad</td><td>45 &times; 45 cm</td></tr>'
+  '<tr><td>Width, each side</td><td>approx. 44&ndash;45 cm</td></tr>'
+  '<tr><td>Visible height</td><td>approx. 45 cm</td></tr>'
+  '<tr><td>Inner flap</td><td>approx. 12 cm</td></tr>'
+  '<tr><td>Stitches around</td><td>160 st = 80 st per side</td></tr></table>')}
+{cream('<p class="creamtitle">Measure the height while the cover lies flat. Stop when the visible '
+       'part from the fold edge to the top is 45 cm.</p>')}
+''', 4))
+
+# ============ PAGE 5: GLOSSARY AND STRUCTURE ============
+pages.append(page(f'''
+{banner('GLOSSARY AND STRUCTURE')}
+{card('<table class="t tl"><tr><th>Term</th><th>Means</th></tr>'
+      '<tr><td><b>st</b></td><td>stitch</td></tr>'
+      '<tr><td><b>round</b></td><td>one whole lap around</td></tr>'
+      '<tr><td><b>k</b></td><td>knit</td></tr>'
+      '<tr><td><b>p</b></td><td>purl</td></tr>'
+      '<tr><td><b>MC</b></td><td>teal main colour</td></tr>'
+      '<tr><td><b>float</b></td><td>the thread that runs on the back when the colour is not in use</td></tr>'
+      '<tr><td><b>repeat</b></td><td>the stitches or rounds that are repeated</td></tr></table>')}
+{pink('HOW THE CUSHION IS BUILT UP')}
+{card(steps([
+  '12 cm plain flap for the cushion opening',
+  'Lower teal field with pale yellow RO motifs',
+  'Green football net with white squares',
+  'Green terrace tops against a teal background',
+  'Upper pale yellow band with teal RO motifs',
+  'Teal top, decreased or seamed together',
+]))}
+''', 5))
+
+# ============ PAGE 6: PART 1 FLAP AND LOWER EDGE ============
+pages.append(page(f'''
+{banner('PART 1: FLAP AND LOWER EDGE')}
+{steps([
+  'Cast on 160 stitches in teal on a 4.5 mm circular needle.',
+  'Check that the cast-on edge is not twisted. Join in the round and place a marker at the '
+  'start of the round.',
+  'Knit 80 stitches, and place a second marker. The work is now divided into two matching '
+  'sides of 80 stitches each.',
+  'Knit stockinette in the round in teal until the work measures about 12 cm. This becomes '
+  'the flap on the inside of the cushion cover.',
+  'Knit 1 round purl as a fold edge. From here the visible part of the cushion is measured.',
+  'Knit 2 rounds knit in teal.',
+])}
+{pink('THE OPENING AT THE BOTTOM')}
+{card('<p>When the cushion is finished, the plain 12 cm section is folded inward. Fasten the flap '
+      'with a few stitches on each side. You can also sew on snap fasteners or crochet ties.</p>')}
+{cream('<p class="creamtitle">Do not sew the whole lower edge shut. The cover should be removable '
+       'and used like an ordinary cushion cover.</p>')}
+''', 6))
+
+# ============ PAGE 7: PART 2 LOWER RO BAND ============
+pages.append(page(f'''
+{banner('PART 2: LOWER RO BAND')}
+<p>The letters are knitted in pale yellow on a teal background. Each RO motif is 8 stitches wide
+and 7 rounds tall.</p>
+{tealp('PLACEMENT ON EACH SIDE')}
+{card('<p>10 teal st &ndash; RO &ndash; 5 teal st &ndash; RO &ndash; 5 teal st &ndash; RO &ndash; '
+      '5 teal st &ndash; RO &ndash; 5 teal st &ndash; RO &ndash; 10 teal st</p>'
+      '<p>That comes to exactly 80 stitches. Repeat the same placement on the other side.</p>')}
+{tealp('CHART: PALE YELLOW RO ON TEAL')}
+<div class="chartrow">{chart_svg(RO_LOWER, CMAP_RO, cell=26, numbers=True)}</div>
+<p>Read the chart from the bottom up. Because you are knitting in the round, each round is read
+from right to left.</p>
+{pink('AFTER THE BAND')}
+{card('<p>Knit 1 round teal, 1 round alternating 1 pale yellow and 1 teal stitch, then teal until '
+      'the section above the letters measures about 7&ndash;8 cm.</p>')}
+{cream('<p class="creamtitle">Catch the floats if they run longer than five stitches. Keep them '
+       'loose, or the cushion will pull itself in.</p>')}
+''', 7))
+
+# ============ PAGE 8: PART 3 THE FOOTBALL NET ============
+pages.append(page(f'''
+{banner('PART 3: THE FOOTBALL NET')}
+<p>Switch to green. Knit 2 rounds green, then 1 round white and 1 round green.</p>
+{tealp('NET REPEAT')}
+{card('<p>The repeat is 5 stitches wide and 5 rounds tall. Repeat it 32 times around and 6 times '
+      'in height.</p>')}
+<div class="chartrow">{chart_svg(NET, CMAP_NET, cell=30, numbers=True)}</div>
+<p>On the four bottom rounds of each repeat, knit 1 white, 4 green all the way round. On the fifth
+round, knit every stitch white. This forms one horizontal net line.</p>
+<p>Repeat these five rounds six times, or until the net section measures about 13&ndash;14 cm.</p>
+<p>Finish with 1 round of 1 white/4 green, 1 round white and 2 rounds green.</p>
+{cream('<p class="creamtitle">The white, vertical stitches sit directly above one another. Count '
+       'from the start of the round so the net does not shift.</p>')}
+''', 8))
+
+# ============ PAGE 9: PART 4 TERRACES AND DOT BAND ============
+pages.append(page(f'''
+{banner('PART 4: TERRACES AND DOT BAND')}
+<p>Above the net you knit green tops against a teal background. The repeat runs over 10 stitches
+and is repeated 16 times around.</p>
+{tealp('CHART: GREEN TOPS')}
+<div class="chartrow">{chart_svg(STANDS, CMAP_STANDS, cell=26, numbers=True)}</div>
+<p>Knit the chart from the bottom up. To get the handmade, uneven look of the original cushion,
+you can knit every other top one round taller.</p>
+{pink('CONTINUE IN TEAL')}
+{card('<p>Knit 8&ndash;10 rounds teal. Then knit a dot band: 1 white stitch, 3 teal stitches '
+      'around. Knit a further 5&ndash;6 rounds teal.</p>'
+      '<p>Lay the work flat and check the height before you start the upper RO band.</p>')}
+''', 9))
+
+# ============ PAGE 10: PART 5 UPPER RO BAND ============
+pages.append(page(f'''
+{banner('PART 5: UPPER RO BAND')}
+<p>Now the colours swap: the letters are knitted in teal on a pale yellow background.</p>
+{tealp('PLACEMENT ON EACH SIDE')}
+{card('<p>10 pale yellow st &ndash; RO &ndash; 5 pale yellow st &ndash; RO &ndash; 5 pale yellow '
+      'st &ndash; RO &ndash; 5 pale yellow st &ndash; RO &ndash; 5 pale yellow st &ndash; RO '
+      '&ndash; 10 pale yellow st</p>'
+      '<p>Repeat the same placement on side number two.</p>')}
+{tealp('CHART: TEAL RO ON PALE YELLOW')}
+<div class="chartrow">{chart_svg(RO_UPPER, CMAP_RO, cell=26, numbers=True)}</div>
+<p>After the chart, knit 2 rounds pale yellow, 2 rounds teal and 1 dot band with 1 pale yellow and
+3 teal stitches around.</p>
+<p>Carry on in teal until the visible section, measured from the purl round at the fold edge, is
+about 45 cm.</p>
+''', 10))
+
+# ============ PAGE 11: PART 6 FINISHING AND ASSEMBLY ============
+pages.append(page(f'''
+{banner('PART 6: FINISHING AND ASSEMBLY')}
+{steps([
+  'Cast off loosely across all 160 stitches. Leave a long tail for seaming.',
+  'Lay the cover flat with the markers on each side. Check that 80 stitches lie on the front '
+  'and 80 on the back.',
+  'Seam the top with mattress stitch. You can also graft the top together if the stitches are '
+  'still live on the needles.',
+  'Weave in all loose ends on the inside. Check that the floats lie loose and do not pull the '
+  'pattern in.',
+  'Fold the plain section, about 12 cm, into the cushion cover.',
+  'Insert the cushion pad. Fasten the flap with a few stitches on each side, so the cushion '
+  'stays in place.',
+])}
+{pink('OPTIONAL CLOSURE')}
+{card('<p>Sew on 2&ndash;3 snap fasteners at the bottom, or crochet 2&ndash;3 pairs of ties and '
+      'sew them to the inside of the opening.</p>')}
+{pink('OPTIONAL BADGE')}
+{card('<p>The original cushion has a ready-made football badge with the Norwegian flag sewn onto '
+      'one side. The badge is decoration and is not part of the knitting pattern itself.</p>')}
+''', 11))
+
+# ============ PAGE 12: CARE AND FINAL CHECK ============
+pages.append(page(f'''
+{banner('CARE AND FINAL CHECK')}
+{tealp('CARE')}
+{card('<p>Because the cushion combines mercerised cotton and acrylic, it should be washed '
+      'following the gentlest yarn&rsquo;s recommendation. Wash the cover separately on a gentle '
+      'cycle, about 30&deg;C. Use a wash bag. Do not tumble dry. Shape the cover and let it dry '
+      'flat.</p>')}
+{pink('CHECKLIST')}
+{card(check([
+  'The cover measures about 45 &times; 45 cm without the flap',
+  'The pattern runs all the way round and matches on both sides',
+  'There are five RO motifs on each side in both bands',
+  'The football net has straight, white lines',
+  'The floats lie loose on the inside',
+  'The top is neatly seamed or grafted',
+  'The flap is fastened at the sides and the opening works',
+]))}
+{cream('<p class="creamtitle">Before the pattern goes on sale, one test knit of the charts and a '
+       'weigh-in of the yarn usage is recommended. Then exact yarn amounts can be added to the '
+       'next edition.</p>')}
+<div class="congrats">Congratulations, you have knitted your very own football cushion!</div>
+<div class="byline">
+  <div class="by1">Renate Dahl</div>
+  <div class="by2">Little Montessori Explorers</div>
+  <div class="by3">lmexplorers.com</div>
+</div>
+<p class="copyright">&copy; 2026 Little Montessori Explorers. This pattern is for personal use
+only. The pattern and charts may not be copied, shared, resold or published. Finished items may
+be sold on a small scale with credit to Little Montessori Explorers.</p>
+''', 12))
+
+pages_en = pages
+
 # ---------- CSS ----------
 css = f'''
 @font-face {{ font-family:'Sasson Montessori'; src:url('fonts/SassoonMontessori.ttf'); font-weight:normal; }}
@@ -495,11 +778,18 @@ table.tl td:first-child {{ white-space:nowrap; }}
 .copyright {{ font-size:8pt; color:#9a9a9a; text-align:center; margin-top:6mm; line-height:1.5; }}
 '''
 
-doc = f'''<!DOCTYPE html>
+doc_no = f'''<!DOCTYPE html>
 <html lang="no"><head><meta charset="utf-8">
 <title>Fotballpute RO RO RO, LME strikkeoppskrift</title>
 <style>{css}</style></head>
-<body>{''.join(pages)}</body></html>'''
+<body>{''.join(pages_no)}</body></html>'''
 
-(BASE / 'fotballpute_ro.html').write_text(doc, encoding='utf-8')
-print('OK', len(doc), 'tegn')
+doc_en = f'''<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>RO RO RO Football Cushion, LME knitting pattern</title>
+<style>{css}</style></head>
+<body>{''.join(pages_en)}</body></html>'''
+
+(BASE / 'fotballpute_ro_no.html').write_text(doc_no, encoding='utf-8')
+(BASE / 'fotballpute_ro_en.html').write_text(doc_en, encoding='utf-8')
+print('OK', len(doc_no), 'tegn (no),', len(doc_en), 'tegn (en)')
