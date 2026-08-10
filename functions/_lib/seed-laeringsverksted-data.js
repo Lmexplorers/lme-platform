@@ -33,7 +33,7 @@ export const LIVETS_TIDSLINJE = {
   ageBands: ["m3-6", "m6-9"],
   direction: "montessori",
   subjects: ["naturfag", "historie", "kultur", "zoologi"],
-  resourceType: ["tidslinje", "begrepskort", "larerveiledning"],
+  resourceType: ["samlepakke", "tidslinje", "begrepskort", "larerveiledning"],
   competencyGoals: [],
   contains: [
     { no: "Ferdig tidslinje: hele livets tidslinje med alle epoker, illustrasjoner og forklaringer, klar til å henge opp.", en: "Finished timeline: the complete timeline of life with all eras, illustrations and explanations, ready to hang up." },
