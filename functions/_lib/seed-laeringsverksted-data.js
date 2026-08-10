@@ -403,7 +403,7 @@ export const MIA_TEO_KROPP_3_6 = {
   ageBands: ["3-6", "m3-6"],
   direction: "begge",
   subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
-  resourceType: ["arbeidshefte", "larerveiledning"],
+  resourceType: ["arbeidshefte", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan legge merke til og peke på kroppssignaler som hører til ulike følelser, uttrykke seg gjennom tegning og farger, og oppdage enkle ting som kan hjelpe kroppen.", en: "The child can notice and point to body signals linked to different feelings, express themselves through drawing and colour, and discover simple things that can help the body." },
   ],
@@ -484,7 +484,7 @@ export const MIA_TEO_KROPP_6_9 = {
   ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
   direction: "begge",
   subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
-  resourceType: ["arbeidshefte", "larerveiledning"],
+  resourceType: ["arbeidshefte", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan oppdage tidlige kroppssignaler før en følelse blir svært sterk, knytte signaler til realistiske støttebehov, og utvikle egne trygge strategier for regulering.", en: "The child can notice early body signals before a feeling becomes very strong, link signals to realistic support needs, and develop their own safe strategies for regulation." },
   ],
@@ -741,7 +741,7 @@ export const MIA_TEO_BOK_3_6 = {
   ageBands: ["3-6", "m3-6"],
   direction: "begge",
   subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
-  resourceType: ["arbeidshefte", "larerveiledning"],
+  resourceType: ["arbeidshefte", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan uttrykke egne følelser gjennom tegning og enkle valg, gjenkjenne mennesker og steder som kan hjelpe, og bli kjent med et eget pausetegn.", en: "The child can express their own feelings through drawing and simple choices, recognise people and places that can help, and become familiar with their own break signal." },
   ],
@@ -822,7 +822,7 @@ export const MIA_TEO_BOK_6_9 = {
   ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
   direction: "begge",
   subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
-  resourceType: ["arbeidshefte", "larerveiledning"],
+  resourceType: ["arbeidshefte", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan utvide følelsesspråket, gjenkjenne tidlige kroppssignaler, koble hendelse, tanke, følelse og handling, sette egne grenser og be om hjelp, og utvikle strategier som faktisk hjelper.", en: "The child can expand their emotional vocabulary, recognise early body signals, link event, thought, feeling and action, set their own boundaries and ask for help, and develop strategies that actually help." },
   ],
@@ -916,7 +916,7 @@ export const MIA_TEO_SERIE_KOMPLETT = {
   ageBands: ["3-6", "m3-6", "m6-9", "1-2trinn", "3-4trinn"],
   direction: "begge",
   subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
-  resourceType: ["samlepakke", "trepartskort", "aktivitetskort", "arbeidshefte", "larerveiledning"],
+  resourceType: ["samlepakke", "trepartskort", "aktivitetskort", "arbeidshefte", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan gjenkjenne, navngi og utforske følelser og kroppssignaler, øve på perspektivtaking og problemløsing, og utvikle trygge strategier for selvregulering.", en: "The child can recognise, name and explore feelings and body signals, practise perspective-taking and problem-solving, and develop safe strategies for self-regulation." },
   ],
@@ -998,7 +998,7 @@ export const MIA_TEO_TERMOMETER_3_6 = {
   ageBands: ["3-6", "m3-6"],
   direction: "begge",
   subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
-  resourceType: ["arbeidshefte", "aktivitetskort", "larerveiledning"],
+  resourceType: ["arbeidshefte", "aktivitetskort", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan peke på hvor sterk en følelse kjennes, be om hjelp, pause, plass eller ro med et kort, og velge blant kjente strategier sammen med en voksen.", en: "The child can point to how strong a feeling is, ask for help, a break, space or calm using a card, and choose among familiar strategies together with an adult." },
   ],
@@ -1081,7 +1081,7 @@ export const MIA_TEO_TERMOMETER_6_9 = {
   ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
   direction: "begge",
   subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
-  resourceType: ["arbeidshefte", "aktivitetskort", "larerveiledning"],
+  resourceType: ["arbeidshefte", "aktivitetskort", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan legge merke til tidlige kroppssignaler, vurdere styrken i en følelse fra 1 til 5, velge og teste egne strategier, og lage en personlig reguleringsplan.", en: "The child can notice early body signals, rate the strength of a feeling from 1 to 5, choose and test their own strategies, and create a personal regulation plan." },
   ],
@@ -1172,7 +1172,7 @@ export const MIA_TEO_DAG_3_6 = {
   ageBands: ["3-6", "m3-6"],
   direction: "begge",
   subjects: ["livsmestring", "spesialpedagogikk", "barnehage", "praktisk-liv"],
-  resourceType: ["aktivitetskort", "larerveiledning"],
+  resourceType: ["aktivitetskort", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan følge en visuell rutine gjennom dagen, forberede seg på overganger, og delta selv ved å flytte eller fjerne kort etter hvert som noe er ferdig.", en: "The child can follow a visual routine through the day, prepare for transitions, and take part themselves by moving or removing cards as things are finished." },
   ],
@@ -1245,7 +1245,7 @@ export const MIA_TEO_DAG_6_9 = {
   ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
   direction: "begge",
   subjects: ["livsmestring", "spesialpedagogikk", "praktisk-liv"],
-  resourceType: ["aktivitetskort", "larerveiledning"],
+  resourceType: ["aktivitetskort", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan planlegge morgen og ettermiddag i prioritert rekkefølge, følge en ukeoversikt, og reflektere kort over hvordan dagen gikk.", en: "The child can plan the morning and afternoon in order of priority, follow a weekly overview, and briefly reflect on how the day went." },
   ],
@@ -1325,7 +1325,7 @@ export const MIA_TEO_HISTORIER_3_6 = {
   ageBands: ["3-6", "m3-6"],
   direction: "begge",
   subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
-  resourceType: ["arbeidshefte", "aktivitetskort", "larerveiledning"],
+  resourceType: ["arbeidshefte", "aktivitetskort", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan gjenkjenne trygge måter å hilse, vente, dele og sette grenser på, øve på å be om hjelp, og forstå at et uhell kan repareres.", en: "The child can recognise safe ways to greet, wait, share and set boundaries, practise asking for help, and understand that an accident can be repaired." },
   ],
@@ -1397,7 +1397,7 @@ export const MIA_TEO_HISTORIER_6_9 = {
   ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
   direction: "begge",
   subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "sprakutvikling"],
-  resourceType: ["arbeidshefte", "aktivitetskort", "larerveiledning"],
+  resourceType: ["arbeidshefte", "aktivitetskort", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan gjenkjenne signaler, sette og respektere grenser, håndtere press og uenighet, reparere etter en misforståelse, og bruke trygge strategier ved digitale meldinger.", en: "The child can recognise signals, set and respect boundaries, handle pressure and disagreement, repair after a misunderstanding, and use safe strategies with digital messages." },
   ],
@@ -1477,7 +1477,7 @@ export const MIA_TEO_PRAKTISK_3_6 = {
   ageBands: ["3-6", "m3-6"],
   direction: "begge",
   subjects: ["praktisk-liv", "livsmestring", "barnehage", "spesialpedagogikk"],
-  resourceType: ["aktivitetskort", "larerveiledning"],
+  resourceType: ["aktivitetskort", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan gjennomføre enkle hverdagsaktiviteter selv, med økende koordinasjon, konsentrasjon og selvstendighet.", en: "The child can carry out simple everyday activities independently, with increasing coordination, concentration and independence." },
   ],
@@ -1549,7 +1549,7 @@ export const MIA_TEO_PRAKTISK_6_9 = {
   ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
   direction: "begge",
   subjects: ["praktisk-liv", "livsmestring", "spesialpedagogikk"],
-  resourceType: ["aktivitetskort", "larerveiledning"],
+  resourceType: ["aktivitetskort", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan planlegge, gjennomføre og kontrollere en hverdagsaktivitet selv, og rydde etterpå.", en: "The child can plan, carry out and check an everyday activity themselves, and tidy up afterwards." },
   ],
@@ -1621,7 +1621,7 @@ export const MIA_TEO_SPRAKLEK_3_6 = {
   ageBands: ["3-6", "m3-6"],
   direction: "begge",
   subjects: ["sprakutvikling", "norsk", "barnehage", "spesialpedagogikk"],
-  resourceType: ["aktivitetskort", "larerveiledning"],
+  resourceType: ["aktivitetskort", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan leke med rim, stavelser og lyder i ord, og bruke enkle begreper for plassering, motsetning og rekkefølge muntlig.", en: "The child can play with rhyme, syllables and sounds in words, and use simple concepts for position, opposites and sequence orally." },
   ],
@@ -1692,7 +1692,7 @@ export const MIA_TEO_SPRAKLEK_6_9 = {
   ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
   direction: "begge",
   subjects: ["sprakutvikling", "norsk", "lesing-skriving", "spesialpedagogikk"],
-  resourceType: ["aktivitetskort", "larerveiledning"],
+  resourceType: ["aktivitetskort", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Eleven kan bruke ordklasser, synonymer og antonymer, bygge og utvide setninger, og lese og skrive med økende forståelse og struktur.", en: "The pupil can use word classes, synonyms and antonyms, build and expand sentences, and read and write with increasing understanding and structure." },
   ],
@@ -1763,7 +1763,7 @@ export const MIA_TEO_MATTE_3_6 = {
   ageBands: ["3-6", "m3-6"],
   direction: "montessori",
   subjects: ["matematikk", "barnehage", "spesialpedagogikk"],
-  resourceType: ["aktivitetskort", "larerveiledning"],
+  resourceType: ["aktivitetskort", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan sammenligne lengder, telle med én-til-én-korrespondanse, gjenkjenne og forme tallene 0–10, og koble tallsymbol til riktig mengde.", en: "The child can compare lengths, count with one-to-one correspondence, recognise and form the numbers 0-10, and link a number symbol to the correct quantity." },
   ],
@@ -1835,7 +1835,7 @@ export const MIA_TEO_MATTE_6_9 = {
   ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
   direction: "montessori",
   subjects: ["matematikk", "spesialpedagogikk"],
-  resourceType: ["aktivitetskort", "larerveiledning"],
+  resourceType: ["aktivitetskort", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Eleven kan lese og bygge tall til 100, forstå enere og tiere, sammenligne tall, finne tiervenner, og løse enkel addisjon, subtraksjon og en kort tekstoppgave.", en: "The pupil can read and build numbers up to 100, understand ones and tens, compare numbers, find number bonds to ten, and solve simple addition, subtraction and a short word problem." },
   ],
@@ -1907,7 +1907,7 @@ export const MIA_TEO_BOKSTAV_3_6 = {
   ageBands: ["3-6", "m3-6"],
   direction: "montessori",
   subjects: ["sprakutvikling", "norsk", "lesing-skriving", "barnehage", "spesialpedagogikk"],
-  resourceType: ["aktivitetskort", "larerveiledning"],
+  resourceType: ["aktivitetskort", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan lytte etter enkeltlyder i ord, koble lyd til bokstavform gjennom berøring og bevegelse, og bygge korte lydrette ord med det bevegelige alfabetet.", en: "The child can listen for individual sounds in words, link sound to letter shape through touch and movement, and build short phonetic words with the movable alphabet." },
   ],
@@ -1979,7 +1979,7 @@ export const MIA_TEO_BOKSTAV_6_9 = {
   ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
   direction: "montessori",
   subjects: ["sprakutvikling", "norsk", "lesing-skriving", "spesialpedagogikk"],
-  resourceType: ["aktivitetskort", "larerveiledning"],
+  resourceType: ["aktivitetskort", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Eleven kan trekke lyder sammen til ord, lese og skrive korte lydrette ord og setninger, dele ord i stavelser, og bruke stor bokstav og punktum riktig.", en: "The pupil can blend sounds into words, read and write short phonetic words and sentences, divide words into syllables, and use capital letters and full stops correctly." },
   ],
@@ -2051,7 +2051,7 @@ export const MIA_TEO_NATUR_3_6 = {
   ageBands: ["3-6", "m3-6"],
   direction: "montessori",
   subjects: ["naturfag", "barnehage", "spesialpedagogikk", "praktisk-liv"],
-  resourceType: ["aktivitetskort", "larerveiledning"],
+  resourceType: ["aktivitetskort", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan bruke sansene til å observere naturen, sammenligne og sortere naturfunn, og sette enkle ord på vær og årstid.", en: "The child can use their senses to observe nature, compare and sort natural finds, and put simple words to weather and season." },
   ],
@@ -2123,7 +2123,7 @@ export const MIA_TEO_NATUR_6_9 = {
   ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
   direction: "montessori",
   subjects: ["naturfag", "spesialpedagogikk"],
-  resourceType: ["aktivitetskort", "larerveiledning"],
+  resourceType: ["aktivitetskort", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Eleven kan observere som en forsker, føre en feltjournal, kjenne igjen kjennetegn ved planter, dyr og vær, og gjennomføre en enkel undersøkelse med eget spørsmål.", en: "The pupil can observe like a scientist, keep a field journal, recognise characteristics of plants, animals and weather, and carry out a simple investigation with their own question." },
   ],
