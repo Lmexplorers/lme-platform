@@ -163,4 +163,8 @@ export const PATTERN_LINKS = {
   // Woodland Dreams - hele kolleksjonen (bundle)
   "plink_1U0q3RLax7B8uQzqQsWiPkcd": { p: "woodland-dreams-bundle", lang: "en" },
   "plink_1U0q3PLax7B8uQzqb9zyRcOH": { p: "woodland-dreams-bundle", lang: "no" },
+
+  // Fotballpute RO RO RO
+  "plink_1U34N1Lax7B8uQzqUTV9yDUo": { p: "fotballpute-ro-strikk", lang: "en" },
+  "plink_1U34MtLax7B8uQzqTsFXyYUv": { p: "fotballpute-ro-strikk", lang: "no" },
 };

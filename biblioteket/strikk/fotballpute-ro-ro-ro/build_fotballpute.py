@@ -3,7 +3,7 @@
 import base64, html, pathlib
 
 BASE = pathlib.Path(__file__).parent
-PHOTO = BASE / 'fotballpute_ref.jpg'
+PHOTO = BASE / 'fotballpute_ref_grid.jpg'
 LOGO = BASE / 'lme-logo.png'
 
 # ---------- farger ----------
