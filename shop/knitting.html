@@ -83,6 +83,17 @@
     <p>Norwegian bucket hats, kerchiefs and a football pillow, as knit patterns in LME style. Digital PDF, instant download.</p>
   </div>
 
+  <style>
+    .tabbtn3{background:#fff;border:1.5px solid var(--line);color:var(--ink);text-decoration:none;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;}
+    .tabbtn3.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+  </style>
+
+  <div class="subtabs" role="tablist" style="display:flex;gap:8px;flex-wrap:wrap;max-width:1120px;margin:14px auto 0;padding:0 20px;">
+    <a href="#" class="tabbtn3 active" data-panel="bottehatt">Bucket hats &amp; kerchiefs</a>
+    <a href="#" class="tabbtn3" data-panel="ragnhild">Ragnhild&rsquo;s designs</a>
+  </div>
+
+  <div id="panel-bottehatt" class="tabpanel">
   <p class="note" style="padding-top:0;"><a href="/butikk/strikk" style="color:var(--pink-dark);font-weight:700;">🇳🇴 Handler du på norsk? Gå til den norske butikken →</a></p>
 
   <div class="grid">
@@ -154,11 +165,18 @@
 
 
   </div>
+  </div>
 
-
+  <div id="panel-ragnhild" class="tabpanel" style="display:none;">
   <h2 class="h2b">Ragnhild&rsquo;s <em>designs</em></h2>
-  <p style="max-width:1120px;margin:6px auto 0;padding:0 20px;color:#6b4760;font-size:15px;">Patterns designed and knitted by Renate&rsquo;s mum Ragnhild, written up in LME style by Renate. Real home-knit designs, tested in practice.</p>
+  <p class="subb">Patterns designed and knitted by Renate&rsquo;s mum Ragnhild, written up in LME style by Renate. Real home-knit designs, tested in practice.</p>
 
+  <div class="subtabs2" role="tablist" style="display:flex;gap:8px;flex-wrap:wrap;max-width:1120px;margin:0 auto;padding:0 20px;">
+    <a href="#" class="tabbtn3 active" data-sub="putetrekk">Cushion covers</a>
+    <a href="#" class="tabbtn3" data-sub="gensere">Sweaters</a>
+  </div>
+
+  <div id="ragnhild-putetrekk">
   <div class="grid">
 
     <article class="card">
@@ -170,11 +188,52 @@
       </div>
     </article>
   </div>
+  </div>
+
+  <div id="ragnhild-gensere" style="display:none;">
+    <h2 class="h2b">Ragnhild&rsquo;s <em>sweaters</em></h2>
+    <p class="subb">The next design from Ragnhild is on the way. The pattern will be written up as soon as the finished garment is knitted and photographed.</p>
+    <div class="grid">
+      <div class="cat-card" style="background:linear-gradient(135deg,#3FA9F5,#6B2D5C);">
+        <div class="ov"><span class="kicker">RAGNHILD&rsquo;S DESIGNS &middot; COMING SOON</span><span class="title">Sweater</span><span class="desc">Designed and knitted by Renate&rsquo;s mum Ragnhild</span></div>
+      </div>
+    </div>
+  </div>
+  </div>
 
   <p class="note">Secure checkout with card, Link, Apple Pay, Google Pay or PayPal. Pattern PDFs are delivered to your email right after purchase.</p>
 
   <footer>
     Little Montessori Explorers · by Renate Dahl · Tønsberg · <a href="/butikk">Norsk butikk</a>
   </footer>
+
+<script>
+(function () {
+  var panels = { bottehatt: document.getElementById('panel-bottehatt'), ragnhild: document.getElementById('panel-ragnhild') };
+  document.querySelectorAll('.subtabs [data-panel]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.querySelectorAll('.subtabs [data-panel]').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var target = btn.getAttribute('data-panel');
+      Object.keys(panels).forEach(function (key) {
+        if (panels[key]) panels[key].style.display = (key === target) ? '' : 'none';
+      });
+    });
+  });
+  var subpanels = { putetrekk: document.getElementById('ragnhild-putetrekk'), gensere: document.getElementById('ragnhild-gensere') };
+  document.querySelectorAll('.subtabs2 [data-sub]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.querySelectorAll('.subtabs2 [data-sub]').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var target = btn.getAttribute('data-sub');
+      Object.keys(subpanels).forEach(function (key) {
+        if (subpanels[key]) subpanels[key].style.display = (key === target) ? '' : 'none';
+      });
+    });
+  });
+})();
+</script>
 </body>
 </html>
