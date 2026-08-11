@@ -95,7 +95,7 @@ def mood():
     F=[('#4A4A4A',"M7 13 Q11 17 15 13"),('#4A4A4A',"M7 14 L15 14"),('#4A4A4A',"M7 15 Q11 11 15 15")]
     return "".join(f'<svg class="face" viewBox="0 0 22 22"><circle cx="11" cy="11" r="9.2" fill="none" stroke="{c}" stroke-width="1.6"/><circle cx="8" cy="9" r="1.1" fill="{c}"/><circle cx="14" cy="9" r="1.1" fill="{c}"/><path d="{m}" fill="none" stroke="{c}" stroke-width="1.6" stroke-linecap="round"/></svg>' for c,m in F)
 def lines(n): return '<div class="lines">'+''.join('<span></span>' for _ in range(n))+'</div>'
-def band(title,sub): return f'<div class="band"><div class="left"><div class="dn">{title}</div><div class="sub">{sub}</div></div><img class="logo" src="file://{A}/lme-logo.png"></div>'
+def band(title,sub): return f'<div class="band"><div class="left"><div class="dn">{title}</div><div class="sub">{sub}</div></div><img class="logo" src="file://{A}/lme-logo-bw.png"></div>'
 def moodrow(): return f'<div class="moodrow"><span class="mlabel">Humør i dag</span><div class="faces">{mood()}</div></div>'
 
 def cover():
