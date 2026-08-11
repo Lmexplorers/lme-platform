@@ -112,6 +112,7 @@ def cover():
 
 def kolofon():
     return f'''<div class="page kolofon">
+      <img class="klogo" src="file://{A}/lme-logo.png">
       <div class="ktext">
         <p>Automatisert analyse av verket for å innhente informasjon, særlig om mønstre, trender og sammenhenger ("tekst- og datautvinning"), er forbudt.</p>
         <p class="kgap">© 2026 Renate Dahl</p>
@@ -615,7 +616,9 @@ html,body {{ font-family:'Sassoon'; color:#3B332B; }}
 .mcal {{ width:100%; border-collapse:collapse; font-family:'Sassoon'; }}
 .mcal th {{ font-size:6.5pt; color:#B7AE9E; font-weight:normal; padding:0.3mm 0; }}
 .mcal td {{ font-size:7pt; color:#6b6450; text-align:center; padding:0.5mm 0; height:4mm; }}
-.kolofon {{ justify-content:flex-end; }}
+.kolofon {{ align-items:center; }}
+.kolofon .klogo {{ height:22mm; margin-top:10mm; }}
+.kolofon .ktext {{ margin-top:auto; align-self:stretch; }}
 .kolofon .ktext p {{ font-family:'Sassoon'; font-size:8.5pt; color:#6b6450; line-height:1.5; margin-bottom:2mm; }}
 .kolofon .ktext p.kgap {{ margin-top:3mm; }}
 /* forside */
