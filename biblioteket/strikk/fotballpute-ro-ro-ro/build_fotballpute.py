@@ -4,6 +4,7 @@ import base64, html, pathlib
 
 BASE = pathlib.Path(__file__).parent
 PHOTO = BASE / 'fotballpute_ref.jpg'
+LOGO = BASE / 'lme-logo.png'
 
 # ---------- farger ----------
 TEAL   = '#2FA8AC'   # turkis hovedfarge
@@ -13,6 +14,7 @@ WHITE  = '#FFFFFF'   # hvit (nett, prikker)
 CREAM  = '#F8F4EA'
 INK    = '#3f3f3f'
 PINK   = '#df5f93'
+CERISE = '#E91E89'   # LME sin faste merkefarge, brukes til logosignaturen nederst
 
 # ---------- diagramdata ----------
 # DEL 2: nederste RO-bord, lysegult RO på turkis (8 m bredt, 7 omg høyt)
@@ -92,6 +94,8 @@ def chart_svg(rows, cmap, cell=22, numbers=False, title=None):
 # ---------- foto ----------
 photo_b64 = base64.b64encode(PHOTO.read_bytes()).decode()
 photo_src = f'data:image/jpeg;base64,{photo_b64}'
+logo_b64 = base64.b64encode(LOGO.read_bytes()).decode()
+logo_src = f'data:image/png;base64,{logo_b64}'
 
 # ---------- byggeklosser ----------
 def make_page(ph2, right_label='LME STRIKK'):
@@ -122,6 +126,13 @@ def steps(items, start=1):
         f'<li><span class="snum">{start+i}</span><div>{t}</div></li>' for i, t in enumerate(items)) + '</ol>'
 def tip(text):
     return f'<div class="notecard"><span class="noteemo">&#9917;</span><p><i>TIPS: {text}</i></p></div>'
+def byline(name_line, company='Little Montessori Explorers', site='lmexplorers.com'):
+    return f'''<div class="byline">
+  <img class="logo" src="{logo_src}" alt="Little Montessori Explorers">
+  <div class="by1">{name_line}</div>
+  <div class="by2">{company}</div>
+  <div class="by3">{site}</div>
+</div>'''
 
 pages = []
 
@@ -137,11 +148,7 @@ pages.append(page(f'''
 <div class="subpill">TURKIS MED FOTBALLNETT OG GRØNNE TRIBUNER</div>
 {card('<p class="center">En myk supporterpute med fotballnett, grønne tribuner og &laquo;RO RO RO&raquo; strikket '
       'rundt hele puten. Mønsteret går rundt, slik at begge sider blir like.</p>')}
-<div class="byline">
-  <div class="by1">Av Renate Dahl</div>
-  <div class="by2">Little Montessori Explorers</div>
-  <div class="by3">lmexplorers.com</div>
-</div>
+{byline('Av Renate Dahl')}
 <p class="rekonstruert">Rekonstruert etter originalpute strikket av Renates mamma</p>
 {tip('Les hele oppskriften før du begynner. Strikk en prøvelapp, særlig når du bytter garn, '
      'fordi bomull og akryl kan oppføre seg ulikt.')}
@@ -382,11 +389,7 @@ pages.append(page(f'''
        'diagrammene og veiing av garnforbruket. Da kan eksakte garnmengder føres inn i neste '
        'utgave.</p>')}
 <div class="congrats">Gratulerer, du har strikket din egen fotballpute!</div>
-<div class="byline">
-  <div class="by1">Renate Dahl</div>
-  <div class="by2">Little Montessori Explorers</div>
-  <div class="by3">lmexplorers.com</div>
-</div>
+{byline('Renate Dahl')}
 <p class="copyright">&copy; 2026 Little Montessori Explorers. Oppskriften er kun til personlig
 bruk. Oppskriften og diagrammene kan ikke kopieres, deles, videreselges eller publiseres.
 Ferdige produkter kan selges i liten skala med kreditering til Little Montessori Explorers.</p>
@@ -412,11 +415,7 @@ pages.append(page(f'''
 <div class="subpill">TEAL WITH FOOTBALL NET AND GREEN TERRACES</div>
 {card('<p class="center">A soft supporter&rsquo;s cushion with a football net, green terraces and &laquo;RO RO RO&raquo; '
       'knitted all the way around the cushion. The pattern runs right round, so both sides come out the same.</p>')}
-<div class="byline">
-  <div class="by1">By Renate Dahl</div>
-  <div class="by2">Little Montessori Explorers</div>
-  <div class="by3">lmexplorers.com</div>
-</div>
+{byline('By Renate Dahl')}
 <p class="rekonstruert">Reconstructed from an original cushion knitted by Renate&rsquo;s mum</p>
 {tip('Read the whole pattern through before you start. Knit a gauge swatch, especially when you '
      'switch yarn, because cotton and acrylic can behave differently.')}
@@ -659,11 +658,7 @@ pages.append(page(f'''
        'weigh-in of the yarn usage is recommended. Then exact yarn amounts can be added to the '
        'next edition.</p>')}
 <div class="congrats">Congratulations, you have knitted your very own football cushion!</div>
-<div class="byline">
-  <div class="by1">Renate Dahl</div>
-  <div class="by2">Little Montessori Explorers</div>
-  <div class="by3">lmexplorers.com</div>
-</div>
+{byline('Renate Dahl')}
 <p class="copyright">&copy; 2026 Little Montessori Explorers. This pattern is for personal use
 only. The pattern and charts may not be copied, shared, resold or published. Finished items may
 be sold on a small scale with credit to Little Montessori Explorers.</p>
@@ -759,9 +754,10 @@ table.tl td:first-child {{ white-space:nowrap; }}
   border-radius:999px; padding:1.8mm 8mm; font-family:var(--font-head); font-weight:700;
   font-size:9.5pt; color:{INK}; letter-spacing:.4px; text-align:center; }}
 .byline {{ text-align:center; margin-top:3.5mm; }}
-.by1 {{ font-family:var(--font-head); font-weight:700; font-size:12.5pt; color:{GREEN}; }}
+.byline .logo {{ width:13mm; height:13mm; object-fit:contain; margin-bottom:1.5mm; }}
+.by1 {{ font-family:var(--font-head); font-weight:700; font-size:12.5pt; color:{CERISE}; }}
 .by2 {{ font-size:10.2pt; color:#8a8a8a; margin-top:.8mm; }}
-.by3 {{ font-family:var(--font-head); font-weight:600; font-size:9.6pt; color:{PINK}; margin-top:.5mm; }}
+.by3 {{ font-family:var(--font-head); font-weight:600; font-size:9.6pt; color:{CERISE}; margin-top:.5mm; }}
 .rekonstruert {{ text-align:center; font-size:9pt; color:#9a9a9a; font-style:italic; margin-top:1.5mm; }}
 .notecard {{ display:flex; gap:4mm; align-items:center; background:rgba(255,255,255,.8);
   border-radius:12px; padding:3.2mm 6mm; margin-top:4mm; }}
