@@ -623,9 +623,9 @@ html,body {{ font-family:'Sassoon'; color:#2A2A2A; }}
 /* forside */
 .cover {{ align-items:center; justify-content:flex-start; text-align:center; padding:14mm 13mm 16mm; gap:0; }}
 .cover .ctitle {{ font-family:'PlaypenX'; font-size:40pt; line-height:1; }}
-.cover .ctitle .cm {{ color:#2A2A2A; }}
-.cover .ctitle .camp {{ color:#2A2A2A; }}
-.cover .ctitle .ct {{ color:#2A2A2A; }}
+.cover .ctitle .cm {{ color:#F12F7C; }}
+.cover .ctitle .camp {{ color:#A1C606; }}
+.cover .ctitle .ct {{ color:#0489E8; }}
 .cover .csub {{ font-family:'PlaypenX'; font-size:20pt; color:#2A2A2A; margin-top:3mm; }}
 .cover .cgrade {{ font-family:'PlaypenX'; font-size:24pt; color:#2A2A2A; margin-top:4mm; }}
 .cover .cage {{ font-family:'Sassoon'; font-size:12pt; color:#6E6E6E; margin-top:1mm; }}
