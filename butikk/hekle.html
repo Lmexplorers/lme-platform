@@ -1216,6 +1216,12 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 
   <p style="margin:-10px 0 28px;"><a href="/shop/crochet" style="display:inline-block;background:#fff;border:1.5px solid #f0dde6;color:#c43d75;font-weight:700;text-decoration:none;padding:8px 16px;border-radius:999px;font-size:14px;">🇬🇧 Shopping in English? Go to the English shop →</a></p>
 
+  <div class="subtabs" role="tablist" style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 28px;">
+    <button type="button" class="filter-pill active" data-panel="bottehatt">Bøttehatter og skaut</button>
+    <button type="button" class="filter-pill" data-panel="woodland">Woodland Dreams babyserie</button>
+  </div>
+
+  <div id="panel-bottehatt" class="tabpanel">
   <section class="shop-section">
     <h2>NORGE og RO, <em>heklet</em></h2>
     <p class="section-sub">Bøttehatter og skaut fra Norgeserien, heklet i LME-stil.</p>
@@ -1322,13 +1328,22 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     </div>
   </section>
 
+  </div>
+
+  <div id="panel-woodland" class="tabpanel" style="display:none;">
+  <div class="subtabs2" role="tablist" style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px;">
+    <button type="button" class="filter-pill active" data-cat="alle">Alle</button>
+    <button type="button" class="filter-pill" data-cat="leker">Leker</button>
+    <button type="button" class="filter-pill" data-cat="klaer">Klær</button>
+  </div>
+
   <section class="shop-section">
     <h2>LME Woodland Dreams <em>Baby Collection</em></h2>
     <p class="section-sub">Amigurumi-oppskrifter i LME-stil: Ellie og fem nye skogvenner, hver med dukke, smokkelenke, rangle og vognlenke, pluss ballerinasko og aktivitetsleke for Ellie. Kjøp enkeltvis eller som samlepakke.</p>
 
     <div class="product-grid">
 
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/ellie-hekle" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
 
@@ -1344,7 +1359,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/ellies-smokkelenke" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
 
@@ -1360,7 +1375,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/ellies-rangle" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
 
@@ -1376,7 +1391,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/ellies-vognlenke" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
 
@@ -1392,7 +1407,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="klaer">
         <a href="/butikk/ellies-ballerinasko" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
 
@@ -1408,7 +1423,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/ellies-aktivitetsleke" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
 
@@ -1424,7 +1439,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/pip-hekle" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-pip-hekle.jpg" alt="Pip, det lille pinnsvinet, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1439,7 +1454,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/pips-smokkelenke" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-pips-smokkelenke-3.jpg" alt="Pips smokkelenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1454,7 +1469,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/pips-rangle" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-pips-rangle-2.jpg" alt="Pips rangle, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1469,7 +1484,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/pips-vognlenke" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-pips-vognlenke-2.jpg" alt="Pips vognlenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1484,7 +1499,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="klaer">
         <a href="/butikk/pips-ballerinasko" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-pips-ballerinasko.jpg" alt="Pips ballerinasko, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1499,7 +1514,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/pips-aktivitetsleke" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-pips-aktivitetsleke.jpg" alt="Pips aktivitetsleke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1514,7 +1529,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/felix-hekle" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-felix-hekle.jpg" alt="Felix, den lille reven, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1529,7 +1544,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/felix-smokkelenke" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-felix-smokkelenke-3.jpg" alt="Felix' smokkelenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1544,7 +1559,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/felix-rangle" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-felix-rangle-2.jpg" alt="Felix' rangle, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1559,7 +1574,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/felix-vognlenke" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-felix-vognlenke-3.jpg" alt="Felix' vognlenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1574,7 +1589,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="klaer">
         <a href="/butikk/felix-ballerinasko" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-felix-ballerinasko.jpg" alt="Felix' ballerinasko, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1589,7 +1604,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/felix-aktivitetsleke" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-felix-aktivitetsleke-2.jpg" alt="Felix' aktivitetsleke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1604,7 +1619,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/molly-hekle" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-molly-hekle.jpg" alt="Molly, det lille lammet, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1619,7 +1634,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/mollys-smokkelenke" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-mollys-smokkelenke-2.jpg" alt="Mollys smokkelenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1634,7 +1649,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/mollys-rangle" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-mollys-rangle-2.jpg" alt="Mollys rangle, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1649,7 +1664,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/mollys-vognlenke" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-mollys-vognlenke-2.jpg" alt="Mollys vognlenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1664,7 +1679,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="klaer">
         <a href="/butikk/mollys-ballerinasko" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-mollys-ballerinasko.jpg" alt="Mollys ballerinasko, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1679,7 +1694,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/mollys-aktivitetsleke" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-mollys-aktivitetsleke.jpg" alt="Mollys aktivitetsleke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1694,7 +1709,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/luna-hekle" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-luna-hekle.jpg" alt="Luna, den lille kaninen, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1709,7 +1724,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/lunas-smokkelenke" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-lunas-smokkelenke-2.jpg" alt="Lunas smokkelenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1724,7 +1739,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/lunas-rangle" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-lunas-rangle-2.jpg" alt="Lunas rangle, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1739,7 +1754,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/lunas-vognlenke" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-lunas-vognlenke-2.jpg" alt="Lunas vognlenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1754,7 +1769,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="klaer">
         <a href="/butikk/lunas-ballerinasko" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-lunas-ballerinasko.jpg" alt="Lunas ballerinasko, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1769,7 +1784,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/lunas-aktivitetsleke" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-lunas-aktivitetsleke.jpg" alt="Lunas aktivitetsleke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1784,7 +1799,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/oliver-hekle" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-oliver-hekle.jpg" alt="Oliver, den lille bjørnen, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1799,7 +1814,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/olivers-smokkelenke" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-olivers-smokkelenke-3.jpg" alt="Olivers smokkelenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1814,7 +1829,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/olivers-rangle" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-olivers-rangle-2.jpg" alt="Olivers rangle, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1829,7 +1844,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/olivers-vognlenke" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-olivers-vognlenke-2.jpg" alt="Olivers vognlenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1844,7 +1859,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="klaer">
         <a href="/butikk/olivers-ballerinasko" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-olivers-ballerinasko.jpg" alt="Olivers ballerinasko, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1859,7 +1874,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker">
         <a href="/butikk/olivers-aktivitetsleke" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <img src="/images/oppskrift-olivers-aktivitetsleke.jpg" alt="Olivers aktivitetsleke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -1874,7 +1889,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </div>
       </article>
-      <article class="product-card">
+      <article class="product-card" data-cat="leker klaer">
         <a href="/butikk/woodland-dreams-bundle" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
             <span class="product-tag">PAKKE</span>
@@ -1892,6 +1907,9 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
       </article>
     </div>
   </section>
+  <div class="cream" id="klaer-soon" style="display:none;margin:0 0 40px;"><p class="creamtitle">Flere klesplagg er på vei</p><p>Body, kort vest, smekke, tre ulike kraver, i-cord-seler og et heklet skjørt, pluss gensere og en heldrakt etter hvert. Følg med, de legges ut fortløpende.</p></div>
+  </div>
+
   <section class="shop-trust">
     <div class="trust-cell">
       <div class="trust-num">📥</div>
@@ -2208,5 +2226,34 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 <script src="/js/lme-visibility.js?v=8" defer></script>
 <script src="/js/lme-account.js?v=11" defer></script>
 <script src="/js/renate-widget.js?v=5" defer></script>
+
+<script>
+(function () {
+  var panels = { bottehatt: document.getElementById('panel-bottehatt'), woodland: document.getElementById('panel-woodland') };
+  document.querySelectorAll('.subtabs [data-panel]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.subtabs [data-panel]').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var target = btn.getAttribute('data-panel');
+      Object.keys(panels).forEach(function (key) {
+        if (panels[key]) panels[key].style.display = (key === target) ? '' : 'none';
+      });
+    });
+  });
+  var soon = document.getElementById('klaer-soon');
+  document.querySelectorAll('.subtabs2 [data-cat]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.subtabs2 [data-cat]').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var cat = btn.getAttribute('data-cat');
+      document.querySelectorAll('#panel-woodland .product-card').forEach(function (card) {
+        var cardCats = (card.getAttribute('data-cat') || '').split(' ');
+        card.style.display = (cat === 'alle' || cardCats.indexOf(cat) !== -1) ? '' : 'none';
+      });
+      if (soon) soon.style.display = (cat === 'klaer' || cat === 'alle') ? '' : 'none';
+    });
+  });
+})();
+</script>
 </body>
 </html>
