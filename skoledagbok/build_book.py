@@ -525,8 +525,6 @@ while d<=END:
     d+=datetime.timedelta(days=1)
 
 # ---------- avsluttende sider ----------
-pages.append(notat("Notater", "Plass til alt du vil skrive"))
-pages.append(notat("Notater", "Plass til alt du vil skrive"))
 pages.append(notat("Min egen side", "Tegn akkurat det du har lyst til", tegn=True))
 pages.append(notat("Nå er det sommerferie!", "Skriv hva du har lyst til å gjøre i sommer", tegn=False))
 pages.append(notat("Tegn et sommerønske", "Noe du gleder deg til i sommer", tegn=True))
