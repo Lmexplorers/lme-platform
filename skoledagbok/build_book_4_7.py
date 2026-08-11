@@ -90,7 +90,7 @@ WUNDRING=[
 ]
 
 def mood():
-    F=[('#6FAE72',"M7 13 Q11 17 15 13"),('#E0A23A',"M7 14 L15 14"),('#D98C8C',"M7 15 Q11 11 15 15")]
+    F=[('#4A4A4A',"M7 13 Q11 17 15 13"),('#4A4A4A',"M7 14 L15 14"),('#4A4A4A',"M7 15 Q11 11 15 15")]
     return "".join(f'<svg class="face" viewBox="0 0 22 22"><circle cx="11" cy="11" r="9.2" fill="none" stroke="{c}" stroke-width="1.6"/><circle cx="8" cy="9" r="1.1" fill="{c}"/><circle cx="14" cy="9" r="1.1" fill="{c}"/><path d="{m}" fill="none" stroke="{c}" stroke-width="1.6" stroke-linecap="round"/></svg>' for c,m in F)
 def lines(n): return '<div class="lines">'+''.join('<span></span>' for _ in range(n))+'</div>'
 def band(title,sub): return f'<div class="band"><div class="left"><div class="dn">{title}</div><div class="sub">{sub}</div></div><img class="logo" src="file://{A}/lme-logo.png"></div>'
@@ -98,7 +98,7 @@ def moodrow(): return f'<div class="moodrow"><span class="mlabel">Humør i dag</
 
 def moodrow_voksen():
     # gradering 1-5 som paa ungdomsskolen: barnet ringer rundt tallet
-    dots="".join(f'<svg class="mdot" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7.2" fill="none" stroke="#C2A86E" stroke-width="1.2"/><text x="9" y="12.3" text-anchor="middle" font-family="Sassoon" font-size="8" fill="#8C8275">{n}</text></svg>' for n in range(1,6))
+    dots="".join(f'<svg class="mdot" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7.2" fill="none" stroke="#8A8A8A" stroke-width="1.2"/><text x="9" y="12.3" text-anchor="middle" font-family="Sassoon" font-size="8" fill="#6E6E6E">{n}</text></svg>' for n in range(1,6))
     return f'<div class="moodrow voksen"><span class="mlabel">Dagsform</span><div class="mgroup"><span class="mhint">1 = tung dag</span><div class="mscale">{dots}</div><span class="mhint">5 = topp</span></div></div>'
 
 def cover():
@@ -249,7 +249,7 @@ BINGO={
  "sommer":["En blomst med insekt på","Noe varmt fra sola","Et bær","Gress høyere enn hånda di","En sommerfugl","Noe blått","En skygge å sitte i","Noe som svømmer","En sky som ligner på noe"],
 }
 def p_utebingo(s):
-    cells="".join(f'<div class="bcell"><svg class="bring" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5" fill="none" stroke="#C2A86E" stroke-width="1.6"/></svg><span class="btxt">{t}</span></div>' for t in BINGO[s])
+    cells="".join(f'<div class="bcell"><svg class="bring" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5" fill="none" stroke="#8A8A8A" stroke-width="1.6"/></svg><span class="btxt">{t}</span></div>' for t in BINGO[s])
     return f'''<div class="page">
       {band("Utebingo","Ut på oppdagelse med Mia &amp; Teo")}
       <div class="intro">Gå ut og se hva du finner. Fargelegg sirkelen når du har oppdaget noe. Klarer du hele brettet?</div>
@@ -355,7 +355,7 @@ TASKS={
  "sommer":["Gå barbeint i gresset","Let etter en marihøne","Bygg noe av pinner","Drikk kaldt vann ute i sola","Del noe godt med en venn"],
 }
 def p_utfordring(s):
-    items="".join(f'<div class="titem"><svg class="tring" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5" fill="none" stroke="#C2A86E" stroke-width="1.6"/></svg><span class="ttext">{t}</span></div>' for t in TASKS[s])
+    items="".join(f'<div class="titem"><svg class="tring" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5" fill="none" stroke="#8A8A8A" stroke-width="1.6"/></svg><span class="ttext">{t}</span></div>' for t in TASKS[s])
     return f'''<div class="page">
       {band("Ukens oppdrag","Velg ett eller flere denne uka")}
       <div class="intro">Fargelegg sirkelen når du har gjort oppdraget. Du bestemmer selv hvor mange.</div>
@@ -382,7 +382,7 @@ def p_tegn(s):
 
 def p_gjerninger(s):
     tasks=["Hjelp til med noe hjemme","Si noe snilt til noen","Del noe med en venn","Rydd opp etter deg selv","Trøst noen som er lei seg"]
-    items="".join(f'<div class="titem"><svg class="tring" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5" fill="none" stroke="#C2A86E" stroke-width="1.6"/></svg><span class="ttext">{t}</span></div>' for t in tasks)
+    items="".join(f'<div class="titem"><svg class="tring" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5" fill="none" stroke="#8A8A8A" stroke-width="1.6"/></svg><span class="ttext">{t}</span></div>' for t in tasks)
     return f'''<div class="page">
       {band("Ukas gode gjerninger","Små ting som gjør en forskjell")}
       <div class="intro">Fargelegg sirkelen når du har gjort en god gjerning. Hvor mange klarer du denne uka?</div>
@@ -410,7 +410,7 @@ TELLE_TIPS=["Å telle ute er ekte matematikk. Hjernen din øver hver gang du tel
  "Prøv å gjette først, og tell etterpå. Var du nære?",
  "Det er lurt å telle i grupper, for eksempel to og to. Da går det fortere."]
 def p_telle(s, tip=0):
-    rows="".join(f'<div class="countrow"><span class="clab2">{t}</span><svg class="cbox" viewBox="0 0 40 26"><rect x="1.2" y="1.2" width="37.6" height="23.6" rx="5" fill="none" stroke="#C2A86E" stroke-width="1.4"/></svg></div>' for t in COUNT[s])
+    rows="".join(f'<div class="countrow"><span class="clab2">{t}</span><svg class="cbox" viewBox="0 0 40 26"><rect x="1.2" y="1.2" width="37.6" height="23.6" rx="5" fill="none" stroke="#8A8A8A" stroke-width="1.4"/></svg></div>' for t in COUNT[s])
     return f'''<div class="page">
       {band("Tell i naturen","Lille matematiker ute")}
       <div class="intro">Gå ut og tell. Skriv tallet i ruta. Gjett gjerne først.</div>
@@ -595,111 +595,111 @@ CSS=f"""
 @font-face {{ font-family:'PlaypenX'; src:url('file://{A}/PlaypenSans-ExtraBold.ttf'); }}
 @page {{ size:A5 portrait; margin:0; }}
 * {{ box-sizing:border-box; margin:0; padding:0; }}
-html,body {{ font-family:'Sassoon'; color:#3B332B; }}
-.page {{ width:148mm; height:210mm; background:#FCF4DA; padding:10mm 11mm 11mm 13mm; display:flex; flex-direction:column; gap:4mm; break-before:page; position:relative; }}
-.pagenum {{ position:absolute; bottom:4.5mm; left:0; right:0; text-align:center; font-family:'Sassoon'; font-size:8.5pt; color:#B7AE9E; }}
+html,body {{ font-family:'Sassoon'; color:#2A2A2A; }}
+.page {{ width:148mm; height:210mm; background:#FFFFFF; padding:10mm 11mm 11mm 13mm; display:flex; flex-direction:column; gap:4mm; break-before:page; position:relative; }}
+.pagenum {{ position:absolute; bottom:4.5mm; left:0; right:0; text-align:center; font-family:'Sassoon'; font-size:8.5pt; color:#9A9A9A; }}
 .page:first-of-type {{ break-before:auto; }}
 .band {{ display:flex; align-items:flex-start; justify-content:space-between; }}
-.band .dn {{ font-family:'PlaypenX'; font-size:25pt; color:#3B332B; line-height:0.95; }}
-.band .sub {{ font-family:'Sassoon'; font-size:10.5pt; color:#8C8275; margin-top:2.5mm; }}
+.band .dn {{ font-family:'PlaypenX'; font-size:25pt; color:#2A2A2A; line-height:0.95; }}
+.band .sub {{ font-family:'Sassoon'; font-size:10.5pt; color:#6E6E6E; margin-top:2.5mm; }}
 .band .logo {{ height:18mm; }}
-.moodrow {{ display:flex; align-items:center; gap:3mm; background:#E8EDD9; border-radius:4mm; padding:2.6mm 6mm; }}
-.moodrow .mlabel {{ font-family:'Playpen'; font-size:11pt; color:#3B332B; }}
+.moodrow {{ display:flex; align-items:center; gap:3mm; background:#F0F0F0; border-radius:4mm; padding:2.6mm 6mm; }}
+.moodrow .mlabel {{ font-family:'Playpen'; font-size:11pt; color:#2A2A2A; }}
 .moodrow .faces {{ display:flex; gap:3mm; margin-left:auto; }}
-.moodrow.voksen {{ background:#EFEAD8; }}
+.moodrow.voksen {{ background:#F0F0F0; }}
 .moodrow.voksen .mgroup {{ display:flex; align-items:center; margin-left:auto; }}
 .moodrow.voksen .mscale {{ display:flex; flex-shrink:0; }}
-.moodrow.voksen .mhint {{ font-family:'Sassoon'; font-size:8.5pt; color:#8C8275; white-space:nowrap; flex-shrink:0; }}
+.moodrow.voksen .mhint {{ font-family:'Sassoon'; font-size:8.5pt; color:#6E6E6E; white-space:nowrap; flex-shrink:0; }}
 .moodrow.voksen .mhint:first-child {{ margin-right:4mm; }}
 .moodrow.voksen .mhint:last-child {{ margin-left:4mm; }}
 .moodrow.voksen .mdot {{ width:5.5mm; height:5.5mm; margin-right:2.4mm; }}
 .moodrow.voksen .mdot:last-child {{ margin-right:0; }}
 .moodrow.voksen .mlabel {{ margin-right:1mm; }}
 .maalstripe {{ display:flex; align-items:center; gap:3mm; padding:0 2mm; flex-shrink:0; }}
-.maalstripe .ml {{ font-family:'Playpen'; font-size:10pt; color:#3B332B; white-space:nowrap; }}
-.maalstripe .rline {{ flex:1; border-bottom:1.4px dotted #C2A86E; height:5mm; }}
-.hint {{ font-family:'Sassoon'; font-size:9.5pt; color:#8C8275; margin:-1mm 0 2mm; }}
+.maalstripe .ml {{ font-family:'Playpen'; font-size:10pt; color:#2A2A2A; white-space:nowrap; }}
+.maalstripe .rline {{ flex:1; border-bottom:1.4px dotted #8A8A8A; height:5mm; }}
+.hint {{ font-family:'Sassoon'; font-size:9.5pt; color:#6E6E6E; margin:-1mm 0 2mm; }}
 .face {{ width:7.4mm; height:7.4mm; }}
-.card {{ background:#fff; border:1.4px solid #ECDBA6; border-radius:5mm; padding:3.4mm 4.5mm 4mm; }}
-.flabel {{ font-family:'Playpen'; font-size:11pt; color:#3B332B; margin-bottom:2.6mm; }}
+.card {{ background:#fff; border:1.4px solid #C9C9C9; border-radius:5mm; padding:3.4mm 4.5mm 4mm; }}
+.flabel {{ font-family:'Playpen'; font-size:11pt; color:#2A2A2A; margin-bottom:2.6mm; }}
 .lines {{ display:flex; flex-direction:column; gap:0; }}
-.lines span {{ display:block; border-bottom:1.3px dotted #E2D2A0; height:0; margin-bottom:7mm; }}
+.lines span {{ display:block; border-bottom:1.3px dotted #CFCFCF; height:0; margin-bottom:7mm; }}
 .lines span:last-child {{ margin-bottom:0; }}
 .school {{ flex:1; }}
 .draw {{ flex:1; }}
 .reflect {{ display:flex; flex-direction:column; gap:5mm; }}
 .reflect.tight {{ gap:4mm; }}
 .reflect .rrow .flabel {{ margin-bottom:1.5mm; }}
-.reflect .rline {{ display:block; border-bottom:1.3px dotted #E2D2A0; height:7mm; }}
-.undring {{ background:#DEE7CF; border:1.4px solid #BCCBA1; border-radius:5mm; padding:3.6mm 4.5mm; display:flex; gap:3mm; align-items:center; }}
+.reflect .rline {{ display:block; border-bottom:1.3px dotted #CFCFCF; height:7mm; }}
+.undring {{ background:#EDEDED; border:1.4px solid #C9C9C9; border-radius:5mm; padding:3.6mm 4.5mm; display:flex; gap:3mm; align-items:center; }}
 .undring .txt {{ flex:1; }}
-.undring .ut {{ font-family:'PlaypenX'; font-size:13pt; color:#3B332B; margin-bottom:1.8mm; }}
-.undring .q {{ font-family:'Sassoon'; font-size:11pt; color:#3B332B; line-height:1.35; }}
+.undring .ut {{ font-family:'PlaypenX'; font-size:13pt; color:#2A2A2A; margin-bottom:1.8mm; }}
+.undring .q {{ font-family:'Sassoon'; font-size:11pt; color:#2A2A2A; line-height:1.35; }}
 .undring img {{ height:28mm; align-self:flex-end; }}
-.undring.tip {{ background:#E8EDD9; border-color:#CCD8B2; flex-shrink:0; }}
-.undring.tip .ut {{ color:#3B332B; }} .undring.tip .q {{ color:#3B332B; }}
+.undring.tip {{ background:#F0F0F0; border-color:#C9C9C9; flex-shrink:0; }}
+.undring.tip .ut {{ color:#2A2A2A; }} .undring.tip .q {{ color:#2A2A2A; }}
 .undring.tip img {{ height:24mm; }}
-.intro {{ font-family:'Sassoon'; font-size:11pt; color:#3B332B; line-height:1.35; }}
+.intro {{ font-family:'Sassoon'; font-size:11pt; color:#2A2A2A; line-height:1.35; }}
 .lrow {{ display:flex; align-items:flex-end; gap:3mm; margin-bottom:5mm; }}
-.lrow .lnum {{ flex:0 0 6mm; width:6mm; height:6mm; border:1.4px solid #C2A86E; border-radius:3px; overflow:hidden; }}
-.lrow .lbok {{ flex:1; border-bottom:1.3px dotted #E2D2A0; height:6mm; }}
+.lrow .lnum {{ flex:0 0 6mm; width:6mm; height:6mm; border:1.4px solid #8A8A8A; border-radius:3px; overflow:hidden; }}
+.lrow .lbok {{ flex:1; border-bottom:1.3px dotted #CFCFCF; height:6mm; }}
 .bingo {{ flex:1; min-height:0; display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(3,1fr); gap:3mm; }}
-.bcell {{ background:#fff; border:1.4px solid #ECDBA6; border-radius:4mm; padding:2.8mm; display:flex; flex-direction:column; gap:2mm; }}
+.bcell {{ background:#fff; border:1.4px solid #C9C9C9; border-radius:4mm; padding:2.8mm; display:flex; flex-direction:column; gap:2mm; }}
 .bcell .bring {{ width:6mm; height:6mm; display:block; flex-shrink:0; }}
-.bcell .btxt {{ font-family:'Sassoon'; font-size:9.5pt; color:#3B332B; line-height:1.22; }}
+.bcell .btxt {{ font-family:'Sassoon'; font-size:9.5pt; color:#2A2A2A; line-height:1.22; }}
 .obsrow {{ display:flex; gap:3mm; }}
-.obs {{ flex:1; background:#fff; border:1.4px solid #ECDBA6; border-radius:4mm; height:42mm; padding:2.6mm; }}
+.obs {{ flex:1; background:#fff; border:1.4px solid #C9C9C9; border-radius:4mm; height:42mm; padding:2.6mm; }}
 .obs.big {{ height:auto; }}
-.obs .obl {{ font-family:'Playpen'; font-size:9.5pt; color:#3B332B; }}
+.obs .obl {{ font-family:'Playpen'; font-size:9.5pt; color:#2A2A2A; }}
 .treegrid {{ flex:1; min-height:0; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:3mm; }}
 .treegrid .obs {{ height:auto; }}
 .facts {{ display:flex; flex-direction:column; gap:3mm; }}
-.fact {{ background:#fff; border:1.4px solid #ECDBA6; border-radius:4mm; padding:3mm 4mm; font-family:'Sassoon'; font-size:11pt; color:#3B332B; line-height:1.3; }}
+.fact {{ background:#fff; border:1.4px solid #C9C9C9; border-radius:4mm; padding:3mm 4mm; font-family:'Sassoon'; font-size:11pt; color:#2A2A2A; line-height:1.3; }}
 .gate {{ flex-shrink:0; }}
 .treebox {{ flex:1; }}
 .qbox {{ flex-shrink:0; }}
-.qbox .bigq {{ font-family:'Sassoon'; font-size:13pt; color:#3B332B; line-height:1.3; }}
-.gate .gq {{ font-family:'Sassoon'; font-size:12pt; color:#3B332B; }}
-.gatesvar {{ position:absolute; bottom:13mm; left:13mm; right:11mm; text-align:center; font-family:'Sassoon'; font-size:8.5pt; color:#B7AE9E; }}
+.qbox .bigq {{ font-family:'Sassoon'; font-size:13pt; color:#2A2A2A; line-height:1.3; }}
+.gate .gq {{ font-family:'Sassoon'; font-size:12pt; color:#2A2A2A; }}
+.gatesvar {{ position:absolute; bottom:13mm; left:13mm; right:11mm; text-align:center; font-family:'Sassoon'; font-size:8.5pt; color:#9A9A9A; }}
 .tasklist {{ display:flex; flex-direction:column; gap:3mm; }}
-.titem {{ display:flex; align-items:center; gap:3mm; background:#fff; border:1.4px solid #ECDBA6; border-radius:4mm; padding:3mm 4mm; }}
+.titem {{ display:flex; align-items:center; gap:3mm; background:#fff; border:1.4px solid #C9C9C9; border-radius:4mm; padding:3mm 4mm; }}
 .titem .tring {{ width:6mm; height:6mm; flex-shrink:0; }}
-.titem .ttext {{ font-family:'Sassoon'; font-size:11pt; color:#3B332B; }}
+.titem .ttext {{ font-family:'Sassoon'; font-size:11pt; color:#2A2A2A; }}
 .countlist {{ display:flex; flex-direction:column; gap:3mm; }}
-.countrow {{ display:flex; align-items:center; gap:3mm; background:#fff; border:1.4px solid #ECDBA6; border-radius:4mm; padding:3mm 4mm; }}
-.countrow .clab2 {{ font-family:'Sassoon'; font-size:11pt; color:#3B332B; flex:1; }}
+.countrow {{ display:flex; align-items:center; gap:3mm; background:#fff; border:1.4px solid #C9C9C9; border-radius:4mm; padding:3mm 4mm; }}
+.countrow .clab2 {{ font-family:'Sassoon'; font-size:11pt; color:#2A2A2A; flex:1; }}
 .countrow .cbox {{ width:14mm; height:9mm; flex-shrink:0; }}
 .notat {{ flex:1; }}
 .klasse {{ flex-shrink:0; justify-content:space-around; gap:1mm; }}
 .klassefoto {{ flex:1; }}
 .klasseliste {{ flex:1; display:flex; flex-direction:column; justify-content:space-between; }}
 .navnrad {{ display:flex; align-items:flex-end; gap:4mm; }}
-.navnrad .portrett {{ flex:0 0 16mm; width:16mm; height:16mm; border:1.4px solid #C2A86E; border-radius:3mm; overflow:hidden; }}
+.navnrad .portrett {{ flex:0 0 16mm; width:16mm; height:16mm; border:1.4px solid #8A8A8A; border-radius:3mm; overflow:hidden; }}
 .navnrad .navnfelt {{ flex:1; }}
-.navnrad .navnfelt .rline {{ display:block; border-bottom:1.3px dotted #E2D2A0; height:9mm; }}
+.navnrad .navnfelt .rline {{ display:block; border-bottom:1.3px dotted #CFCFCF; height:9mm; }}
 .calgrid {{ flex:1; display:grid; grid-template-columns:1fr 1fr 1fr; gap:4mm 4mm; align-content:start; }}
 .mmonth {{ break-inside:avoid; }}
-.mmonth .mtitle {{ font-family:'Playpen'; font-size:9.5pt; color:#3B332B; margin-bottom:1.5mm; }}
+.mmonth .mtitle {{ font-family:'Playpen'; font-size:9.5pt; color:#2A2A2A; margin-bottom:1.5mm; }}
 .mcal {{ width:100%; border-collapse:collapse; font-family:'Sassoon'; }}
-.mcal th {{ font-size:6.5pt; color:#B7AE9E; font-weight:normal; padding:0.3mm 0; }}
-.mcal td {{ font-size:7pt; color:#6b6450; text-align:center; padding:0.5mm 0; height:4mm; }}
+.mcal th {{ font-size:6.5pt; color:#9A9A9A; font-weight:normal; padding:0.3mm 0; }}
+.mcal td {{ font-size:7pt; color:#6E6E6E; text-align:center; padding:0.5mm 0; height:4mm; }}
 .kolofon {{ justify-content:flex-end; }}
-.kolofon .ktext p {{ font-family:'Sassoon'; font-size:8.5pt; color:#6b6450; line-height:1.5; margin-bottom:2mm; }}
+.kolofon .ktext p {{ font-family:'Sassoon'; font-size:8.5pt; color:#6E6E6E; line-height:1.5; margin-bottom:2mm; }}
 .kolofon .ktext p.kgap {{ margin-top:3mm; }}
 /* forside */
 .cover {{ align-items:center; justify-content:flex-start; text-align:center; padding:14mm 13mm 16mm; gap:0; }}
 .cover .ctitle {{ font-family:'PlaypenX'; font-size:40pt; line-height:1; }}
-.cover .ctitle .cm {{ color:#F12F7C; }}
-.cover .ctitle .camp {{ color:#A1C606; }}
-.cover .ctitle .ct {{ color:#0489E8; }}
-.cover .csub {{ font-family:'PlaypenX'; font-size:20pt; color:#3B332B; margin-top:3mm; }}
-.cover .cgrade {{ font-family:'PlaypenX'; font-size:24pt; color:#3B332B; margin-top:4mm; }}
-.cover .cage {{ font-family:'Sassoon'; font-size:12pt; color:#8C8275; margin-top:1mm; }}
-.cover .cyear {{ font-family:'Sassoon'; font-size:13pt; color:#8C8275; margin-top:4mm; }}
+.cover .ctitle .cm {{ color:#2A2A2A; }}
+.cover .ctitle .camp {{ color:#2A2A2A; }}
+.cover .ctitle .ct {{ color:#2A2A2A; }}
+.cover .csub {{ font-family:'PlaypenX'; font-size:20pt; color:#2A2A2A; margin-top:3mm; }}
+.cover .cgrade {{ font-family:'PlaypenX'; font-size:24pt; color:#2A2A2A; margin-top:4mm; }}
+.cover .cage {{ font-family:'Sassoon'; font-size:12pt; color:#6E6E6E; margin-top:1mm; }}
+.cover .cyear {{ font-family:'Sassoon'; font-size:13pt; color:#6E6E6E; margin-top:4mm; }}
 .cover .chero {{ height:70mm; margin:6mm 0; }}
-.cover .cowner {{ font-family:'Playpen'; font-size:12pt; color:#3B332B; display:flex; align-items:flex-end; justify-content:center; gap:3mm; margin-top:auto; }}
+.cover .cowner {{ font-family:'Playpen'; font-size:12pt; color:#2A2A2A; display:flex; align-items:flex-end; justify-content:center; gap:3mm; margin-top:auto; }}
 .cover .cowner .clab {{ white-space:nowrap; }}
-.cover .cowner .cline {{ display:inline-block; width:46mm; border-bottom:1.4px dotted #C2A86E; }}
+.cover .cowner .cline {{ display:inline-block; width:46mm; border-bottom:1.4px dotted #8A8A8A; }}
 .cover .clogo {{ height:24mm; margin-bottom:6mm; }}
 """
 DOC=f"""<!doctype html><html lang="no"><head><meta charset="utf-8"><style>{CSS}</style></head><body>{''.join(pages)}</body></html>"""
