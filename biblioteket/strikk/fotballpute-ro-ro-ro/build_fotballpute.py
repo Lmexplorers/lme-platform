@@ -754,7 +754,7 @@ table.tl td:first-child {{ white-space:nowrap; }}
   border-radius:999px; padding:1.8mm 8mm; font-family:var(--font-head); font-weight:700;
   font-size:9.5pt; color:{INK}; letter-spacing:.4px; text-align:center; }}
 .byline {{ text-align:center; margin-top:3.5mm; }}
-.byline .logo {{ width:13mm; height:13mm; object-fit:contain; margin-bottom:1.5mm; }}
+.byline .logo {{ width:26mm; height:26mm; object-fit:contain; margin-bottom:1.5mm; }}
 .by1 {{ font-family:var(--font-head); font-weight:700; font-size:12.5pt; color:{CERISE}; }}
 .by2 {{ font-size:10.2pt; color:#8a8a8a; margin-top:.8mm; }}
 .by3 {{ font-family:var(--font-head); font-weight:600; font-size:9.6pt; color:{CERISE}; margin-top:.5mm; }}
