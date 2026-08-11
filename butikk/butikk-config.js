@@ -129,9 +129,9 @@ window.LME_BUTIKK = {
       cover:   "/images/oppskrift-fotballpute-ro-strikk.jpg?v=2",
       coverEn: "/images/oppskrift-fotballpute-ro-strikk.jpg?v=2",
       filer: [
-        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/fotballpute-ro-strikk.pdf?v=2",
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/fotballpute-ro-strikk.pdf?v=3",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
-        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/fotballpute-ro-strikk-en.pdf?v=2",
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/fotballpute-ro-strikk-en.pdf?v=3",
           knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
       ]
     },

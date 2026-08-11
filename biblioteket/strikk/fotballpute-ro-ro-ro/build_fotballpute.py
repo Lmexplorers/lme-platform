@@ -224,25 +224,26 @@ pages.append(page(f'''
       f'<tr><td><span class="dot" style="background:{YARN_WHITE}"></span> Hvit</td><td>hovedfarge</td></tr>'
       f'<tr><td><span class="dot" style="background:{YARN_NAVY}"></span> Marineblå</td><td>RO-bokstavene og fotballnettet</td></tr>'
       f'<tr><td><span class="dot" style="background:{YARN_RED}"></span> Rød</td><td>tribunetoppene og prikkbord</td></tr></table>'
-      '<p><b>Holly fra Rusta</b>, 100 % akryl, 50 g. Mykt, nuppefritt garn, omtrent like tykt som '
-      'Saucy. Fint å bruke til en av mønsterfargene hvis du vil blande inn litt akryl.</p>'
+      '<p><b>Holly fra Rusta</b>, 100 % akryl, 50 g, omtrent like tykt som Saucy, fint til en av '
+      'mønsterfargene hvis du vil blande inn litt akryl.</p>'
       '<p class="small">Garnmengden fra originalarbeidet ble ikke notert. Ha rikelig av hvit '
       'hovedfarge og minst ett nøste av hver mønsterfarge. Ved salg av garnpakker må forbruket '
       'kontrollstrikkes og veies først.</p>')}
 {pink('ALTERNATIVT GARN')}
-{card('<p>Bruk et glatt bomulls- eller akrylgarn som gir samme strikkefasthet. Velg gjerne et garn '
-      'beregnet for pinne 4,5&ndash;5 mm. Alle fargene bør være omtrent like tykke.</p>')}
+{card('<p>Finner du ikke Reynolds Saucy, se etter et annet glatt bomullsgarn i aran-tykkelse (pinne '
+      '4,5&ndash;5 mm), i hvitt, marineblått og rødt, for eksempel <b>Rico Design Creative Cotton '
+      'Aran</b>, <b>Hobbii Amigo</b> eller <b>DROPS Paris</b> (litt tynnere, strikk gjerne to tråder '
+      'sammen). Ulike garn strikker seg forskjellig, strikk alltid en prøvelapp uansett valg.</p>')}
 {tealp('PINNER OG UTSTYR')}
 {card(ul([
   'Rundpinne 4,5 mm, 80 cm',
   'Stoppenål, saks og målebånd',
   'To maskemarkører',
   'Innerpute 45 &times; 45 cm',
-  'Valgfritt, til lukkingen: trykknapper, bånd (kjøpt eller heklet), eller bare tråd og nål',
+  'Valgfritt: trykknapper, bånd eller bare tråd og nål til lukkingen',
   'Valgfritt: ferdig fotballmerke',
 ]))}
-{cream('<p class="creamtitle">Garnet anbefaler pinne 5, men pinne 4,5 mm ga riktig uttrykk i '
-       'originalen. Strikker du fast, kan 5 mm passe bedre.</p>')}
+{cream('<p class="creamtitle">Garnet anbefaler pinne 5, men 4,5 mm ga riktig uttrykk i originalen.</p>')}
 ''', 4))
 
 # ============ SIDE 4: STRIKKEFASTHET OG MÅL ============
@@ -516,19 +517,20 @@ pages.append(page(f'''
       'white main colour and at least one ball of each pattern colour. If you sell yarn kits, the '
       'usage must be checked by a test swatch and weighed first.</p>')}
 {pink('ALTERNATIVE YARN')}
-{card('<p>Use a smooth cotton or acrylic yarn that gives the same gauge. Choose a yarn meant for '
-      '4.5&ndash;5 mm needles. All the colours should be about the same thickness.</p>')}
+{card('<p>Can&rsquo;t find Reynolds Saucy? Look for another smooth, aran-weight cotton yarn (4.5'
+      '&ndash;5 mm needles), in white, navy and red, for example <b>Rico Design Creative Cotton '
+      'Aran</b>, <b>Hobbii Amigo</b> or <b>DROPS Paris</b> (thinner, hold two strands together). '
+      'Always swatch whichever yarn you choose.</p>')}
 {tealp('NEEDLES AND KIT')}
 {card(ul([
   '4.5 mm circular needle, 80 cm',
   'Tapestry needle, scissors and tape measure',
   'Two stitch markers',
   '45 &times; 45 cm inner cushion pad',
-  'Optional, for closing: snap fasteners, ribbon (bought or crocheted), or just needle and thread',
+  'Optional: snap fasteners, ribbon, or just needle and thread for closing',
   'Optional: ready-made football badge',
 ]))}
-{cream('<p class="creamtitle">The yarn label recommends 5 mm needles, but 4.5 mm gave the right '
-       'look in the original. If you knit tightly, 5 mm may suit you better.</p>')}
+{cream('<p class="creamtitle">The yarn label recommends 5 mm needles, but 4.5 mm gave the right look in the original.</p>')}
 ''', 4))
 
 # ============ PAGE 4: GAUGE AND MEASUREMENTS ============
