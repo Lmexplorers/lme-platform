@@ -641,7 +641,7 @@ html,body {{ font-family:'Sassoon'; color:#3B332B; }}
 .undring.tip img {{ height:24mm; }}
 .intro {{ font-family:'Sassoon'; font-size:11pt; color:#3B332B; line-height:1.35; }}
 .lrow {{ display:flex; align-items:flex-end; gap:3mm; margin-bottom:5mm; }}
-.lrow .lnum {{ flex:0 0 6mm; height:6mm; border:1.4px solid #C2A86E; border-radius:3px; }}
+.lrow .lnum {{ flex:0 0 6mm; width:6mm; height:6mm; border:1.4px solid #C2A86E; border-radius:3px; overflow:hidden; }}
 .lrow .lbok {{ flex:1; border-bottom:1.3px dotted #E2D2A0; height:6mm; }}
 .bingo {{ flex:1; min-height:0; display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(3,1fr); gap:3mm; }}
 .bcell {{ background:#fff; border:1.4px solid #ECDBA6; border-radius:4mm; padding:2.8mm; display:flex; flex-direction:column; gap:2mm; }}
