@@ -1,7 +1,7 @@
 # Fotballpute RO RO RO, strikkeoppskrift (LME-stil)
 
 Ferdige oppskrifter: **`Fotballpute-RO-RO-RO-LME.pdf`** (norsk) og
-**`Fotballpute-RO-RO-RO-LME-EN.pdf`** (engelsk), 12 sider, A4.
+**`Fotballpute-RO-RO-RO-LME-EN.pdf`** (engelsk), 13 sider, A4.
 
 En myk turkis supporterpute med grønt fotballnett, grønne tribunetopper og "RO RO RO" strikket
 rundt hele puten i lysegult/turkis. Mønsteret går rundt på rundpinne, slik at begge sider blir

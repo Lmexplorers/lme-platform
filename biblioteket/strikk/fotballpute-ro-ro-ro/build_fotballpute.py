@@ -5,6 +5,8 @@ import base64, html, pathlib
 BASE = pathlib.Path(__file__).parent
 PHOTO = BASE / 'fotballpute_ref.jpg'
 LOGO = BASE / 'lme-logo.png'
+ALT_RWB = BASE / 'fotballpute_alt_rwb.jpg'
+ALT_WNR = BASE / 'fotballpute_alt_wnr.jpg'
 
 # ---------- farger ----------
 TEAL   = '#4aa7a4'   # turkis hovedfarge (LME-merkefargen, samme som i bøttehatt-oppskriftene)
@@ -96,6 +98,8 @@ photo_b64 = base64.b64encode(PHOTO.read_bytes()).decode()
 photo_src = f'data:image/jpeg;base64,{photo_b64}'
 logo_b64 = base64.b64encode(LOGO.read_bytes()).decode()
 logo_src = f'data:image/png;base64,{logo_b64}'
+alt_rwb_src = f'data:image/jpeg;base64,{base64.b64encode(ALT_RWB.read_bytes()).decode()}'
+alt_wnr_src = f'data:image/jpeg;base64,{base64.b64encode(ALT_WNR.read_bytes()).decode()}'
 
 # ---------- byggeklosser ----------
 def make_page(ph2, right_label='LME STRIKK'):
@@ -172,15 +176,27 @@ blir like.</p>
 {pink('HVOR VANSKELIG ER DET?')}
 {card('<p>Litt øvet. Du bør kunne legge opp, strikke glattstrikk rundt, bytte farge og følge et '
       'diagram. De lange partiene i nettet krever at flottene holdes løse.</p>')}
-{pink('OM REKONSTRUKSJONEN')}
-{card('<p>Originalmønsteret ble til underveis mens puten ble strikket. Oppskriften er derfor '
-      'rekonstruert fra den ferdige puten og opplysningene fra den som strikket den. Mål alltid '
-      'underveis og tilpass høyden til innerputen.</p>')}
 {cream('<p class="creamtitle">Sett en markør ved omgangens begynnelse og en ny markør etter 80 masker. '
        'Da ser du tydelig hvor hver puteside begynner.</p>')}
 ''', 2))
 
-# ============ SIDE 3: DETTE TRENGER DU ============
+# ============ SIDE 3: OM REKONSTRUKSJONEN OG FARGER ============
+pages.append(page(f'''
+{banner('OM REKONSTRUKSJONEN OG FARGER')}
+{pink('OM REKONSTRUKSJONEN')}
+{card('<p>Originalmønsteret ble til underveis mens puten ble strikket. Oppskriften er derfor '
+      'rekonstruert fra den ferdige puten og opplysningene fra den som strikket den. Mål alltid '
+      'underveis og tilpass høyden til innerputen.</p>')}
+{tealp('ANDRE FARGEKOMBINASJONER')}
+<div class="colorrow">
+  <img src="{alt_rwb_src}" alt="Fotballpute i rødt, hvitt og blått">
+  <img src="{alt_wnr_src}" alt="Fotballpute i hvitt, marineblått og rødt">
+</div>
+<p class="colorcap">Mønsteret er strikket i turkis her, men fungerer like fint i andre farger, for
+eksempel rødt, hvitt og blått som de norske flaggfargene.</p>
+''', 3))
+
+# ============ SIDE 4: DETTE TRENGER DU ============
 pages.append(page(f'''
 {banner('DETTE TRENGER DU')}
 {tealp('GARN')}
@@ -210,7 +226,7 @@ pages.append(page(f'''
 ]))}
 {cream('<p class="creamtitle">Garnet anbefaler pinne 5, men pinne 4,5 mm ga riktig uttrykk i '
        'originalen. Strikker du fast, kan 5 mm passe bedre.</p>')}
-''', 3))
+''', 4))
 
 # ============ SIDE 4: STRIKKEFASTHET OG MÅL ============
 pages.append(page(f'''
@@ -233,7 +249,7 @@ pages.append(page(f'''
   '<tr><td>Masker rundt</td><td>160 m = 80 m per side</td></tr></table>')}
 {cream('<p class="creamtitle">Mål høyden mens trekket ligger flatt. Stopp når den synlige delen fra '
        'brettekanten til toppen er 45 cm.</p>')}
-''', 4))
+''', 5))
 
 # ============ SIDE 5: ORDLISTE OG OPPBYGGING ============
 pages.append(page(f'''
@@ -255,7 +271,7 @@ pages.append(page(f'''
   'Øverste lysegule bord med turkise RO-motiver',
   'Turkis topp som felles eller sys sammen',
 ]))}
-''', 5))
+''', 6))
 
 # ============ SIDE 6: DEL 1 INNBRETT OG NEDERKANT ============
 pages.append(page(f'''
@@ -276,7 +292,7 @@ pages.append(page(f'''
       'noen sting i hver side. Du kan i tillegg sy i trykknapper eller hekle knyteb&aring;nd.</p>')}
 {cream('<p class="creamtitle">Ikke sy igjen hele nederkanten. Trekket skal kunne tas av og '
        'brukes som et vanlig putevar.</p>')}
-''', 6))
+''', 7))
 
 # ============ SIDE 7: DEL 2 NEDERSTE RO-BORD ============
 pages.append(page(f'''
@@ -296,7 +312,7 @@ mot venstre.</p>
       'til feltet over bokstavene m&aring;ler ca. 7&ndash;8 cm.</p>')}
 {cream('<p class="creamtitle">Fang flottene dersom de blir lengre enn fem masker. Hold dem l&oslash;se, '
        'ellers trekker puten seg sammen.</p>')}
-''', 7))
+''', 8))
 
 # ============ SIDE 8: DEL 3 FOTBALLNETTET ============
 pages.append(page(f'''
@@ -312,7 +328,7 @@ den femte omgangen strikkes alle maskene hvite. Dette danner &eacute;n vannrett 
 <p>Avslutt med 1 omgang 1 hvit/4 gr&oslash;nne, 1 omgang hvit og 2 omganger gr&oslash;nt.</p>
 {cream('<p class="creamtitle">De hvite, loddrette maskene ligger rett over hverandre. Tell fra '
        'omgangens begynnelse, s&aring; forskyves ikke nettet.</p>')}
-''', 8))
+''', 9))
 
 # ============ SIDE 9: DEL 4 TRIBUNER OG PRIKKBORD ============
 pages.append(page(f'''
@@ -327,7 +343,7 @@ originalputa kan annenhver topp strikkes &eacute;n omgang h&oslash;yere.</p>
 {card('<p>Strikk 8&ndash;10 omganger turkis. Strikk deretter en prikkbord: 1 hvit maske, 3 turkise '
       'masker rundt. Strikk videre 5&ndash;6 omganger turkis.</p>'
       '<p>Legg arbeidet flatt og kontroller h&oslash;yden f&oslash;r du starter &oslash;verste RO-bord.</p>')}
-''', 9))
+''', 10))
 
 # ============ SIDE 10: DEL 5 ØVERSTE RO-BORD ============
 pages.append(page(f'''
@@ -343,7 +359,7 @@ pages.append(page(f'''
 og 3 turkise masker rundt.</p>
 <p>Fortsett med turkis til den synlige delen, m&aring;lt fra vrangomgangen ved brettekanten, er
 ca. 45 cm.</p>
-''', 10))
+''', 11))
 
 # ============ SIDE 11: DEL 6 AVSLUTNING OG MONTERING ============
 pages.append(page(f'''
@@ -365,7 +381,7 @@ pages.append(page(f'''
 {pink('VALGFRITT MERKE')}
 {card('<p>Originalputa har et ferdig fotballmerke med norsk flagg sydd p&aring; den ene siden. '
       'Merket er dekorasjon og inng&aring;r ikke i selve strikkem&oslash;nsteret.</p>')}
-''', 11))
+''', 12))
 
 # ============ SIDE 12: STELL OG SISTE SJEKK ============
 pages.append(page(f'''
@@ -393,7 +409,7 @@ pages.append(page(f'''
 <p class="copyright">&copy; 2026 Little Montessori Explorers. Oppskriften er kun til personlig
 bruk. Oppskriften og diagrammene kan ikke kopieres, deles, videreselges eller publiseres.
 Ferdige produkter kan selges i liten skala med kreditering til Little Montessori Explorers.</p>
-''', 12))
+''', 13))
 
 pages_no = pages
 
@@ -439,15 +455,27 @@ sides come out the same.</p>
 {pink('HOW HARD IS IT?')}
 {card('<p>A little practised. You should be able to cast on, knit stockinette in the round, '
       'change colour and follow a chart. The long stretches in the net need the floats kept loose.</p>')}
-{pink('ABOUT THE RECONSTRUCTION')}
-{card('<p>The original pattern took shape as the cushion was being knitted. The pattern has '
-      'therefore been reconstructed from the finished cushion and information from the person '
-      'who knitted it. Always measure as you go and fit the height to your inner cushion pad.</p>')}
 {cream('<p class="creamtitle">Place a marker at the start of the round and a second marker after '
        '80 stitches. Then you can always see where each side of the cushion begins.</p>')}
 ''', 2))
 
-# ============ PAGE 3: WHAT YOU NEED ============
+# ============ PAGE 3: ABOUT THE RECONSTRUCTION AND COLOURS ============
+pages.append(page(f'''
+{banner('ABOUT THE RECONSTRUCTION AND COLOURS')}
+{pink('ABOUT THE RECONSTRUCTION')}
+{card('<p>The original pattern took shape as the cushion was being knitted. The pattern has '
+      'therefore been reconstructed from the finished cushion and information from the person '
+      'who knitted it. Always measure as you go and fit the height to your inner cushion pad.</p>')}
+{tealp('OTHER COLOUR COMBINATIONS')}
+<div class="colorrow">
+  <img src="{alt_rwb_src}" alt="Football cushion in red, white and blue">
+  <img src="{alt_wnr_src}" alt="Football cushion in white, navy and red">
+</div>
+<p class="colorcap">The sample here is knitted in teal, but the pattern works just as well in
+other colours, for example red, white and blue like the Norwegian flag.</p>
+''', 3))
+
+# ============ PAGE 4: WHAT YOU NEED ============
 pages.append(page(f'''
 {banner('WHAT YOU NEED')}
 {tealp('YARN')}
@@ -477,7 +505,7 @@ pages.append(page(f'''
 ]))}
 {cream('<p class="creamtitle">The yarn label recommends 5 mm needles, but 4.5 mm gave the right '
        'look in the original. If you knit tightly, 5 mm may suit you better.</p>')}
-''', 3))
+''', 4))
 
 # ============ PAGE 4: GAUGE AND MEASUREMENTS ============
 pages.append(page(f'''
@@ -500,7 +528,7 @@ pages.append(page(f'''
   '<tr><td>Stitches around</td><td>160 st = 80 st per side</td></tr></table>')}
 {cream('<p class="creamtitle">Measure the height while the cover lies flat. Stop when the visible '
        'part from the fold edge to the top is 45 cm.</p>')}
-''', 4))
+''', 5))
 
 # ============ PAGE 5: GLOSSARY AND STRUCTURE ============
 pages.append(page(f'''
@@ -522,7 +550,7 @@ pages.append(page(f'''
   'Upper pale yellow band with teal RO motifs',
   'Teal top, decreased or seamed together',
 ]))}
-''', 5))
+''', 6))
 
 # ============ PAGE 6: PART 1 FLAP AND LOWER EDGE ============
 pages.append(page(f'''
@@ -543,7 +571,7 @@ pages.append(page(f'''
       'with a few stitches on each side. You can also sew on snap fasteners or crochet ties.</p>')}
 {cream('<p class="creamtitle">Do not sew the whole lower edge shut. The cover should be removable '
        'and used like an ordinary cushion cover.</p>')}
-''', 6))
+''', 7))
 
 # ============ PAGE 7: PART 2 LOWER RO BAND ============
 pages.append(page(f'''
@@ -563,7 +591,7 @@ from right to left.</p>
       'the section above the letters measures about 7&ndash;8 cm.</p>')}
 {cream('<p class="creamtitle">Catch the floats if they run longer than five stitches. Keep them '
        'loose, or the cushion will pull itself in.</p>')}
-''', 7))
+''', 8))
 
 # ============ PAGE 8: PART 3 THE FOOTBALL NET ============
 pages.append(page(f'''
@@ -579,7 +607,7 @@ round, knit every stitch white. This forms one horizontal net line.</p>
 <p>Finish with 1 round of 1 white/4 green, 1 round white and 2 rounds green.</p>
 {cream('<p class="creamtitle">The white, vertical stitches sit directly above one another. Count '
        'from the start of the round so the net does not shift.</p>')}
-''', 8))
+''', 9))
 
 # ============ PAGE 9: PART 4 TERRACES AND DOT BAND ============
 pages.append(page(f'''
@@ -594,7 +622,7 @@ you can knit every other top one round taller.</p>
 {card('<p>Knit 8&ndash;10 rounds teal. Then knit a dot band: 1 white stitch, 3 teal stitches '
       'around. Knit a further 5&ndash;6 rounds teal.</p>'
       '<p>Lay the work flat and check the height before you start the upper RO band.</p>')}
-''', 9))
+''', 10))
 
 # ============ PAGE 10: PART 5 UPPER RO BAND ============
 pages.append(page(f'''
@@ -611,7 +639,7 @@ pages.append(page(f'''
 3 teal stitches around.</p>
 <p>Carry on in teal until the visible section, measured from the purl round at the fold edge, is
 about 45 cm.</p>
-''', 10))
+''', 11))
 
 # ============ PAGE 11: PART 6 FINISHING AND ASSEMBLY ============
 pages.append(page(f'''
@@ -634,7 +662,7 @@ pages.append(page(f'''
 {pink('OPTIONAL BADGE')}
 {card('<p>The original cushion has a ready-made football badge with the Norwegian flag sewn onto '
       'one side. The badge is decoration and is not part of the knitting pattern itself.</p>')}
-''', 11))
+''', 12))
 
 # ============ PAGE 12: CARE AND FINAL CHECK ============
 pages.append(page(f'''
@@ -662,7 +690,7 @@ pages.append(page(f'''
 <p class="copyright">&copy; 2026 Little Montessori Explorers. This pattern is for personal use
 only. The pattern and charts may not be copied, shared, resold or published. Finished items may
 be sold on a small scale with credit to Little Montessori Explorers.</p>
-''', 12))
+''', 13))
 
 pages_en = pages
 
@@ -763,6 +791,10 @@ table.tl td:first-child {{ white-space:nowrap; }}
   border-radius:12px; padding:2.2mm 5mm; margin-top:2.4mm; }}
 .notecard p {{ font-size:13pt; color:#777; margin:0; }}
 .noteemo {{ font-size:16pt; }}
+.colorrow {{ display:flex; gap:5mm; justify-content:center; margin:2.4mm 0 1.6mm; }}
+.colorrow img {{ width:56mm; border-radius:12px; border:2mm solid #fff;
+  box-shadow:0 3px 10px rgba(0,0,0,.12); }}
+.colorcap {{ font-size:11.5pt; color:#777; text-align:center; margin-top:1mm; }}
 
 .chartrow {{ display:flex; gap:6mm; justify-content:center; align-items:flex-end;
   flex-wrap:wrap; margin:1.6mm 0 2.4mm; }}
