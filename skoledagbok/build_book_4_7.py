@@ -674,7 +674,7 @@ html,body {{ font-family:'Sassoon'; color:#3B332B; }}
 .klassefoto {{ flex:1; }}
 .klasseliste {{ flex:1; display:flex; flex-direction:column; justify-content:space-between; }}
 .navnrad {{ display:flex; align-items:flex-end; gap:4mm; }}
-.navnrad .portrett {{ flex:0 0 16mm; height:16mm; border:1.4px solid #C2A86E; border-radius:3mm; }}
+.navnrad .portrett {{ flex:0 0 16mm; width:16mm; height:16mm; border:1.4px solid #C2A86E; border-radius:3mm; overflow:hidden; }}
 .navnrad .navnfelt {{ flex:1; }}
 .navnrad .navnfelt .rline {{ display:block; border-bottom:1.3px dotted #E2D2A0; height:9mm; }}
 .calgrid {{ flex:1; display:grid; grid-template-columns:1fr 1fr 1fr; gap:4mm 4mm; align-content:start; }}
