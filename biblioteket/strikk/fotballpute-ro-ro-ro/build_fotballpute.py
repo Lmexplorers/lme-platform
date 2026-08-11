@@ -696,82 +696,82 @@ body {{ font-family:var(--font-body); color:#4a4a4a; }}
 .rside {{ position:absolute; right:2.5mm; top:40%; }}
 .rside span {{ writing-mode:vertical-rl; font-family:var(--font-head); font-size:6pt;
   letter-spacing:2.5px; color:#9a9a9a; white-space:nowrap; }}
-.phead {{ text-align:center; padding-top:9mm; }}
-.ph1 {{ font-family:var(--font-head); font-weight:600; font-size:7pt; letter-spacing:4px; color:#7f96a8; }}
-.ph2 {{ font-family:var(--font-head); font-weight:600; font-size:6.3pt; letter-spacing:2.6px; color:{PINK}; margin-top:1.6mm; }}
-.content {{ padding:5mm 16mm 0 20mm; }}
-.pfoot {{ position:absolute; bottom:6.5mm; left:0; right:0; text-align:center;
-  font-family:var(--font-head); font-weight:700; font-size:10pt; color:#8a8a8a; }}
+.phead {{ text-align:center; padding-top:8mm; }}
+.ph1 {{ font-family:var(--font-head); font-weight:600; font-size:8pt; letter-spacing:4px; color:#7f96a8; }}
+.ph2 {{ font-family:var(--font-head); font-weight:600; font-size:7.5pt; letter-spacing:2.6px; color:{PINK}; margin-top:1.6mm; }}
+.content {{ padding:4mm 14mm 0 18mm; }}
+.pfoot {{ position:absolute; bottom:5mm; left:0; right:0; text-align:center;
+  font-family:var(--font-head); font-weight:700; font-size:11.5pt; color:#8a8a8a; }}
 
-.banner {{ background:#f5efb2; border-radius:14px; padding:3.6mm 6mm; margin:2mm 0 4.5mm; text-align:center; }}
-.banner h1 {{ font-family:var(--font-head); font-weight:800; font-size:16.5pt; color:{INK};
+.banner {{ background:#f5efb2; border-radius:14px; padding:3mm 6mm; margin:1.5mm 0 3.5mm; text-align:center; }}
+.banner h1 {{ font-family:var(--font-head); font-weight:800; font-size:19pt; color:{INK};
   letter-spacing:.4px; text-transform:uppercase; }}
-.pillwrap {{ text-align:center; margin:4.5mm 0 3mm; }}
-.pill {{ display:inline-block; border-radius:999px; padding:2.4mm 9mm;
-  font-family:var(--font-head); font-weight:700; font-size:10.5pt; color:#fff;
+.pillwrap {{ text-align:center; margin:3.5mm 0 2.5mm; }}
+.pill {{ display:inline-block; border-radius:999px; padding:2mm 8mm;
+  font-family:var(--font-head); font-weight:700; font-size:12.5pt; color:#fff;
   letter-spacing:.4px; text-transform:uppercase; }}
 .pinkpill {{ background:{PINK}; }}
 .tealpill {{ background:{TEAL}; }}
 .card {{ background:rgba(255,255,255,.93); border:2px solid #f2bfd4; border-radius:16px;
-  padding:4mm 6mm; margin:0 0 4mm; }}
+  padding:3.2mm 5.5mm; margin:0 0 3.2mm; }}
 .cream {{ background:{CREAM}; border:2px solid #f2bfd4; border-radius:16px;
-  padding:4mm 6mm; margin:4mm 0; text-align:center; }}
-.creamtitle {{ font-family:var(--font-head); font-weight:700; font-size:11pt; color:{TEAL}; }}
-p {{ font-size:10.8pt; line-height:1.53; margin-bottom:2.2mm; }}
-p.small, .small {{ font-size:9.5pt; color:#777; }}
+  padding:3.2mm 5.5mm; margin:3.2mm 0; text-align:center; }}
+.creamtitle {{ font-family:var(--font-head); font-weight:700; font-size:13.5pt; color:{TEAL}; }}
+p {{ font-size:13.5pt; line-height:1.42; margin-bottom:1.8mm; }}
+p.small, .small {{ font-size:11.5pt; color:#777; }}
 p.center {{ text-align:center; }}
 ul.dots {{ list-style:none; }}
-ul.dots li {{ font-size:10.8pt; line-height:1.48; padding-left:5.5mm; position:relative; margin:1.6mm 0; }}
+ul.dots li {{ font-size:13.5pt; line-height:1.38; padding-left:5.5mm; position:relative; margin:1.2mm 0; }}
 ul.dots li::before {{ content:'•'; position:absolute; left:1mm; color:{PINK}; font-weight:bold; }}
 ul.checks {{ list-style:none; }}
-ul.checks li {{ font-size:10.8pt; line-height:1.48; padding-left:7mm; position:relative; margin:1.8mm 0; }}
-ul.checks li::before {{ content:'\\2610'; position:absolute; left:0; color:{TEAL}; font-size:12pt; }}
+ul.checks li {{ font-size:13.5pt; line-height:1.38; padding-left:7mm; position:relative; margin:1.3mm 0; }}
+ul.checks li::before {{ content:'\\2610'; position:absolute; left:0; color:{TEAL}; font-size:13.5pt; }}
 ol.steps {{ list-style:none; }}
-ol.steps li {{ display:flex; gap:3.5mm; align-items:flex-start; background:rgba(255,255,255,.93);
-  border:2px solid #f2bfd4; border-radius:14px; padding:3mm 5mm; margin-bottom:2.4mm; }}
-ol.steps li div {{ font-size:10.4pt; line-height:1.46; }}
+ol.steps li {{ display:flex; gap:3mm; align-items:flex-start; background:rgba(255,255,255,.93);
+  border:2px solid #f2bfd4; border-radius:14px; padding:2.4mm 4.5mm; margin-bottom:1.8mm; }}
+ol.steps li div {{ font-size:13pt; line-height:1.35; }}
 .snum {{ flex:0 0 auto; width:7.5mm; height:7.5mm; border-radius:50%; background:{PINK}; color:#fff;
-  font-family:var(--font-head); font-weight:700; font-size:11pt; display:flex;
+  font-family:var(--font-head); font-weight:700; font-size:12.5pt; display:flex;
   align-items:center; justify-content:center; margin-top:.5mm; }}
-table.t {{ width:100%; border-collapse:collapse; margin:2.5mm 0; }}
-table.t th {{ font-family:var(--font-head); font-weight:700; font-size:9.3pt; color:{PINK};
-  text-align:left; padding:1.5mm 2.5mm; border-bottom:2px solid #f2bfd4; }}
-table.t td {{ font-size:9.7pt; padding:1.4mm 2.5mm; border-bottom:1px solid #f6dbe7; line-height:1.38; }}
+table.t {{ width:100%; border-collapse:collapse; margin:1.8mm 0; }}
+table.t th {{ font-family:var(--font-head); font-weight:700; font-size:11.5pt; color:{PINK};
+  text-align:left; padding:1.2mm 2.2mm; border-bottom:2px solid #f2bfd4; }}
+table.t td {{ font-size:12pt; padding:1.1mm 2.2mm; border-bottom:1px solid #f6dbe7; line-height:1.3; }}
 table.tl td:first-child {{ white-space:nowrap; }}
 .dot {{ display:inline-block; width:3.5mm; height:3.5mm; border-radius:50%; vertical-align:-0.5mm;
   margin-right:1.5mm; border:1px solid rgba(0,0,0,.15); }}
 
 .coverimg {{ text-align:center; margin:3mm 0 3mm; }}
-.coverimg img {{ width:96mm; border-radius:14px; border:3mm solid #fff; }}
-.covertag {{ text-align:center; font-family:var(--font-head); font-size:8pt; letter-spacing:2.6px;
+.coverimg img {{ width:88mm; border-radius:14px; border:3mm solid #fff; }}
+.covertag {{ text-align:center; font-family:var(--font-head); font-size:9.5pt; letter-spacing:2.6px;
   color:#8a8a8a; margin:1mm 0 2.5mm; }}
 .coverbanner {{ display:flex; align-items:center; justify-content:center; gap:5mm;
   background:#f5efb2; border-radius:16px; padding:3mm 6mm; }}
-.covertitle {{ font-family:var(--font-head); font-weight:800; font-size:21pt; color:{INK};
-  letter-spacing:.5px; text-align:center; line-height:1.25; }}
+.covertitle {{ font-family:var(--font-head); font-weight:800; font-size:23pt; color:{INK};
+  letter-spacing:.5px; text-align:center; line-height:1.22; }}
 .cball {{ font-size:22pt; line-height:1; }}
-.subpill {{ margin:3.6mm auto; width:fit-content; background:#fdf9e3; border:2.5px solid {INK};
-  border-radius:999px; padding:1.8mm 8mm; font-family:var(--font-head); font-weight:700;
-  font-size:9.5pt; color:{INK}; letter-spacing:.4px; text-align:center; }}
-.byline {{ text-align:center; margin-top:3.5mm; }}
-.byline .logo {{ width:38mm; height:38mm; object-fit:contain; margin-bottom:1.5mm; }}
+.subpill {{ margin:3mm auto; width:fit-content; background:#fdf9e3; border:2.5px solid {INK};
+  border-radius:999px; padding:1.6mm 8mm; font-family:var(--font-head); font-weight:700;
+  font-size:11.5pt; color:{INK}; letter-spacing:.4px; text-align:center; }}
+.byline {{ text-align:center; margin-top:2mm; }}
+.byline .logo {{ width:34mm; height:34mm; object-fit:contain; margin-bottom:1.5mm; }}
 .by1 {{ font-family:var(--font-head); font-weight:700; font-size:18pt; color:{CERISE}; }}
 .by2 {{ font-size:14pt; color:#8a8a8a; margin-top:1.2mm; }}
 .by3 {{ font-family:var(--font-head); font-weight:600; font-size:13pt; color:{CERISE}; margin-top:.8mm; }}
-.rekonstruert {{ text-align:center; font-size:9pt; color:#9a9a9a; font-style:italic; margin-top:1.5mm; }}
-.notecard {{ display:flex; gap:4mm; align-items:center; background:rgba(255,255,255,.8);
-  border-radius:12px; padding:3.2mm 6mm; margin-top:4mm; }}
-.notecard p {{ font-size:9.3pt; color:#777; margin:0; }}
+.rekonstruert {{ text-align:center; font-size:10.5pt; color:#9a9a9a; font-style:italic; margin-top:1.5mm; }}
+.notecard {{ display:flex; gap:3.5mm; align-items:center; background:rgba(255,255,255,.8);
+  border-radius:12px; padding:2.6mm 5.5mm; margin-top:3mm; }}
+.notecard p {{ font-size:11.5pt; color:#777; margin:0; }}
 .noteemo {{ font-size:16pt; }}
 
 .chartrow {{ display:flex; gap:6mm; justify-content:center; align-items:flex-end;
-  flex-wrap:wrap; margin:2.5mm 0 4mm; }}
+  flex-wrap:wrap; margin:2mm 0 3mm; }}
 .chartbox {{ text-align:center; }}
-.chartttl {{ font-family:var(--font-head); font-weight:700; font-size:9pt; color:{PINK};
+.chartttl {{ font-family:var(--font-head); font-weight:700; font-size:10.5pt; color:{PINK};
   margin-bottom:1.5mm; letter-spacing:.3px; }}
-.congrats {{ font-family:var(--font-head); font-weight:800; font-size:15pt; color:{INK};
-  text-align:center; margin:5mm 0 2mm; }}
-.copyright {{ font-size:8pt; color:#9a9a9a; text-align:center; margin-top:6mm; line-height:1.5; }}
+.congrats {{ font-family:var(--font-head); font-weight:800; font-size:17pt; color:{INK};
+  text-align:center; margin:2.5mm 0 1.5mm; }}
+.copyright {{ font-size:9pt; color:#9a9a9a; text-align:center; margin-top:2.5mm; line-height:1.35; }}
 '''
 
 doc_no = f'''<!DOCTYPE html>
