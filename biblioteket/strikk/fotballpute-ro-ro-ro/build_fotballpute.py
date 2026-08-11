@@ -7,7 +7,7 @@ PHOTO = BASE / 'fotballpute_ref.jpg'
 LOGO = BASE / 'lme-logo.png'
 
 # ---------- farger ----------
-TEAL   = '#2FA8AC'   # turkis hovedfarge
+TEAL   = '#4aa7a4'   # turkis hovedfarge (LME-merkefargen, samme som i bøttehatt-oppskriftene)
 GREEN  = '#6FAE6A'   # grønn (tribuner, nett)
 YELLOW = '#F5DE86'   # lysegul (RO-bordene)
 WHITE  = '#FFFFFF'   # hvit (nett, prikker)
@@ -686,10 +686,10 @@ body {{ font-family:var(--font-body); color:#4a4a4a; }}
   background:
     repeating-linear-gradient(0deg, rgba(255,255,255,.45) 0, rgba(255,255,255,.45) .4mm, transparent .4mm, transparent 8mm),
     repeating-linear-gradient(90deg, rgba(255,255,255,.45) 0, rgba(255,255,255,.45) .4mm, transparent .4mm, transparent 8mm),
-    linear-gradient(165deg,#d8eeee 0%,#eaf3e2 45%,#fbf3d9 100%);
+    linear-gradient(165deg,#cde8ef 0%,#e3ddea 45%,#f5d2de 100%);
 }}
 .band {{ position:absolute; left:0; top:0; bottom:0; width:11mm;
-  background:linear-gradient(180deg,{TEAL},{GREEN}); }}
+  background:linear-gradient(180deg,#9fd4dd,#f0b9ca); }}
 .band span {{ position:absolute; left:50%; top:75%; transform:translate(-50%,-50%);
   writing-mode:vertical-rl; text-orientation:mixed; rotate:180deg;
   font-family:var(--font-head); font-size:6.5pt; letter-spacing:3.5px; color:#fff; white-space:nowrap; }}
@@ -712,11 +712,11 @@ body {{ font-family:var(--font-body); color:#4a4a4a; }}
   letter-spacing:.4px; text-transform:uppercase; }}
 .pinkpill {{ background:{PINK}; }}
 .tealpill {{ background:{TEAL}; }}
-.card {{ background:rgba(255,255,255,.93); border:2px solid #cdeceb; border-radius:16px;
+.card {{ background:rgba(255,255,255,.93); border:2px solid #f2bfd4; border-radius:16px;
   padding:4mm 6mm; margin:0 0 4mm; }}
-.cream {{ background:{CREAM}; border:2px solid #cdeceb; border-radius:16px;
+.cream {{ background:{CREAM}; border:2px solid #f2bfd4; border-radius:16px;
   padding:4mm 6mm; margin:4mm 0; text-align:center; }}
-.creamtitle {{ font-family:var(--font-head); font-weight:700; font-size:11pt; color:{GREEN}; }}
+.creamtitle {{ font-family:var(--font-head); font-weight:700; font-size:11pt; color:{TEAL}; }}
 p {{ font-size:10.8pt; line-height:1.53; margin-bottom:2.2mm; }}
 p.small, .small {{ font-size:9.5pt; color:#777; }}
 p.center {{ text-align:center; }}
@@ -728,15 +728,15 @@ ul.checks li {{ font-size:10.8pt; line-height:1.48; padding-left:7mm; position:r
 ul.checks li::before {{ content:'\\2610'; position:absolute; left:0; color:{TEAL}; font-size:12pt; }}
 ol.steps {{ list-style:none; }}
 ol.steps li {{ display:flex; gap:3.5mm; align-items:flex-start; background:rgba(255,255,255,.93);
-  border:2px solid #cdeceb; border-radius:14px; padding:3mm 5mm; margin-bottom:2.4mm; }}
+  border:2px solid #f2bfd4; border-radius:14px; padding:3mm 5mm; margin-bottom:2.4mm; }}
 ol.steps li div {{ font-size:10.4pt; line-height:1.46; }}
 .snum {{ flex:0 0 auto; width:7.5mm; height:7.5mm; border-radius:50%; background:{PINK}; color:#fff;
   font-family:var(--font-head); font-weight:700; font-size:11pt; display:flex;
   align-items:center; justify-content:center; margin-top:.5mm; }}
 table.t {{ width:100%; border-collapse:collapse; margin:2.5mm 0; }}
 table.t th {{ font-family:var(--font-head); font-weight:700; font-size:9.3pt; color:{PINK};
-  text-align:left; padding:1.5mm 2.5mm; border-bottom:2px solid #cdeceb; }}
-table.t td {{ font-size:9.7pt; padding:1.4mm 2.5mm; border-bottom:1px solid #e4f3f2; line-height:1.38; }}
+  text-align:left; padding:1.5mm 2.5mm; border-bottom:2px solid #f2bfd4; }}
+table.t td {{ font-size:9.7pt; padding:1.4mm 2.5mm; border-bottom:1px solid #f6dbe7; line-height:1.38; }}
 table.tl td:first-child {{ white-space:nowrap; }}
 .dot {{ display:inline-block; width:3.5mm; height:3.5mm; border-radius:50%; vertical-align:-0.5mm;
   margin-right:1.5mm; border:1px solid rgba(0,0,0,.15); }}
