@@ -126,8 +126,8 @@ window.LME_BUTIKK = {
       navn:  { no: "Fotballpute RO RO RO, strikkeoppskrift", en: "RO RO RO football cushion, knitting pattern" },
       undertittel: { no: "Turkis · fotballnett · grønne tribuner · RO RO RO · 45×45 cm",
                      en: "Teal · football net · green terraces · RO RO RO · 45×45 cm" },
-      cover:   "/images/oppskrift-fotballpute-ro-strikk.jpg",
-      coverEn: "/images/oppskrift-fotballpute-ro-strikk.jpg",
+      cover:   "/images/oppskrift-fotballpute-ro-strikk.jpg?v=2",
+      coverEn: "/images/oppskrift-fotballpute-ro-strikk.jpg?v=2",
       filer: [
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/fotballpute-ro-strikk.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
