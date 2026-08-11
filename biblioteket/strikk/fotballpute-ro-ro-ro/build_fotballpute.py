@@ -7,6 +7,7 @@ PHOTO = BASE / 'fotballpute_ref.jpg'
 LOGO = BASE / 'lme-logo.png'
 ALT_RWB = BASE / 'fotballpute_alt_rwb.jpg'
 ALT_WNR = BASE / 'fotballpute_alt_wnr.jpg'
+ALT_BWR = BASE / 'fotballpute_alt_bwr.jpg'
 
 # ---------- farger ----------
 TEAL   = '#4aa7a4'   # turkis hovedfarge (LME-merkefargen, samme som i bøttehatt-oppskriftene)
@@ -100,6 +101,7 @@ logo_b64 = base64.b64encode(LOGO.read_bytes()).decode()
 logo_src = f'data:image/png;base64,{logo_b64}'
 alt_rwb_src = f'data:image/jpeg;base64,{base64.b64encode(ALT_RWB.read_bytes()).decode()}'
 alt_wnr_src = f'data:image/jpeg;base64,{base64.b64encode(ALT_WNR.read_bytes()).decode()}'
+alt_bwr_src = f'data:image/jpeg;base64,{base64.b64encode(ALT_BWR.read_bytes()).decode()}'
 
 # ---------- byggeklosser ----------
 def make_page(ph2, right_label='LME STRIKK'):
@@ -191,6 +193,7 @@ pages.append(page(f'''
 <div class="colorrow">
   <img src="{alt_rwb_src}" alt="Fotballpute i rødt, hvitt og blått">
   <img src="{alt_wnr_src}" alt="Fotballpute i hvitt, marineblått og rødt">
+  <img src="{alt_bwr_src}" alt="Fotballpute i blått, rødt og hvitt">
 </div>
 <p class="colorcap">Mønsteret er strikket i turkis her, men fungerer like fint i andre farger, for
 eksempel rødt, hvitt og blått som de norske flaggfargene.</p>
@@ -470,6 +473,7 @@ pages.append(page(f'''
 <div class="colorrow">
   <img src="{alt_rwb_src}" alt="Football cushion in red, white and blue">
   <img src="{alt_wnr_src}" alt="Football cushion in white, navy and red">
+  <img src="{alt_bwr_src}" alt="Football cushion in blue, red and white">
 </div>
 <p class="colorcap">The sample here is knitted in teal, but the pattern works just as well in
 other colours, for example red, white and blue like the Norwegian flag.</p>
@@ -791,8 +795,8 @@ table.tl td:first-child {{ white-space:nowrap; }}
   border-radius:12px; padding:2.2mm 5mm; margin-top:2.4mm; }}
 .notecard p {{ font-size:13pt; color:#777; margin:0; }}
 .noteemo {{ font-size:16pt; }}
-.colorrow {{ display:flex; gap:5mm; justify-content:center; margin:2.4mm 0 1.6mm; }}
-.colorrow img {{ width:56mm; border-radius:12px; border:2mm solid #fff;
+.colorrow {{ display:flex; gap:4mm; justify-content:center; margin:2.4mm 0 1.6mm; flex-wrap:wrap; }}
+.colorrow img {{ width:47mm; border-radius:12px; border:2mm solid #fff;
   box-shadow:0 3px 10px rgba(0,0,0,.12); }}
 .colorcap {{ font-size:11.5pt; color:#777; text-align:center; margin-top:1mm; }}
 
