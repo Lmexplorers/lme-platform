@@ -755,9 +755,9 @@ table.tl td:first-child {{ white-space:nowrap; }}
   font-size:9.5pt; color:{INK}; letter-spacing:.4px; text-align:center; }}
 .byline {{ text-align:center; margin-top:3.5mm; }}
 .byline .logo {{ width:38mm; height:38mm; object-fit:contain; margin-bottom:1.5mm; }}
-.by1 {{ font-family:var(--font-head); font-weight:700; font-size:12.5pt; color:{CERISE}; }}
-.by2 {{ font-size:10.2pt; color:#8a8a8a; margin-top:.8mm; }}
-.by3 {{ font-family:var(--font-head); font-weight:600; font-size:9.6pt; color:{CERISE}; margin-top:.5mm; }}
+.by1 {{ font-family:var(--font-head); font-weight:700; font-size:18pt; color:{CERISE}; }}
+.by2 {{ font-size:14pt; color:#8a8a8a; margin-top:1.2mm; }}
+.by3 {{ font-family:var(--font-head); font-weight:600; font-size:13pt; color:{CERISE}; margin-top:.8mm; }}
 .rekonstruert {{ text-align:center; font-size:9pt; color:#9a9a9a; font-style:italic; margin-top:1.5mm; }}
 .notecard {{ display:flex; gap:4mm; align-items:center; background:rgba(255,255,255,.8);
   border-radius:12px; padding:3.2mm 6mm; margin-top:4mm; }}
