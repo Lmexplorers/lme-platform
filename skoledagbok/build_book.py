@@ -626,14 +626,14 @@ html,body {{ font-family:'Sassoon'; color:#2A2A2A; }}
 .cover .ctitle .cm {{ color:#F12F7C; }}
 .cover .ctitle .camp {{ color:#A1C606; }}
 .cover .ctitle .ct {{ color:#0489E8; }}
-.cover .csub {{ font-family:'PlaypenX'; font-size:20pt; color:#2A2A2A; margin-top:3mm; }}
-.cover .cgrade {{ font-family:'PlaypenX'; font-size:24pt; color:#2A2A2A; margin-top:4mm; }}
-.cover .cage {{ font-family:'Sassoon'; font-size:12pt; color:#6E6E6E; margin-top:1mm; }}
-.cover .cyear {{ font-family:'Sassoon'; font-size:13pt; color:#6E6E6E; margin-top:4mm; }}
+.cover .csub {{ font-family:'PlaypenX'; font-size:20pt; color:#3B332B; margin-top:3mm; }}
+.cover .cgrade {{ font-family:'PlaypenX'; font-size:24pt; color:#3B332B; margin-top:4mm; }}
+.cover .cage {{ font-family:'Sassoon'; font-size:12pt; color:#8C8275; margin-top:1mm; }}
+.cover .cyear {{ font-family:'Sassoon'; font-size:13pt; color:#8C8275; margin-top:4mm; }}
 .cover .chero {{ height:70mm; margin:6mm 0; }}
-.cover .cowner {{ font-family:'Playpen'; font-size:12pt; color:#2A2A2A; display:flex; align-items:flex-end; justify-content:center; gap:3mm; margin-top:auto; }}
+.cover .cowner {{ font-family:'Playpen'; font-size:12pt; color:#3B332B; display:flex; align-items:flex-end; justify-content:center; gap:3mm; margin-top:auto; }}
 .cover .cowner .clab {{ white-space:nowrap; }}
-.cover .cowner .cline {{ display:inline-block; width:46mm; border-bottom:1.4px dotted #8A8A8A; }}
+.cover .cowner .cline {{ display:inline-block; width:46mm; border-bottom:1.4px dotted #C2A86E; }}
 .cover .clogo {{ height:24mm; margin-bottom:6mm; }}
 """
 DOC=f"""<!doctype html><html lang="no"><head><meta charset="utf-8"><style>{CSS}</style></head><body>{''.join(pages)}</body></html>"""
