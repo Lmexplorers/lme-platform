@@ -3,10 +3,10 @@
 import base64, html, pathlib
 
 BASE = pathlib.Path(__file__).parent
-PHOTO = BASE / 'fotballpute_ref.jpg'
+PHOTO = BASE / 'fotballpute_alt_wnr.jpg'
+ORIG_PHOTO = BASE / 'fotballpute_ref.jpg'
 LOGO = BASE / 'lme-logo.png'
 ALT_RWB = BASE / 'fotballpute_alt_rwb.jpg'
-ALT_WNR = BASE / 'fotballpute_alt_wnr.jpg'
 ALT_BWR = BASE / 'fotballpute_alt_bwr.jpg'
 
 # ---------- farger ----------
@@ -97,10 +97,10 @@ def chart_svg(rows, cmap, cell=22, numbers=False, title=None):
 # ---------- foto ----------
 photo_b64 = base64.b64encode(PHOTO.read_bytes()).decode()
 photo_src = f'data:image/jpeg;base64,{photo_b64}'
+orig_photo_src = f'data:image/jpeg;base64,{base64.b64encode(ORIG_PHOTO.read_bytes()).decode()}'
 logo_b64 = base64.b64encode(LOGO.read_bytes()).decode()
 logo_src = f'data:image/png;base64,{logo_b64}'
 alt_rwb_src = f'data:image/jpeg;base64,{base64.b64encode(ALT_RWB.read_bytes()).decode()}'
-alt_wnr_src = f'data:image/jpeg;base64,{base64.b64encode(ALT_WNR.read_bytes()).decode()}'
 alt_bwr_src = f'data:image/jpeg;base64,{base64.b64encode(ALT_BWR.read_bytes()).decode()}'
 
 # ---------- byggeklosser ----------
@@ -144,16 +144,18 @@ pages = []
 
 # ============ SIDE 1: FORSIDE ============
 pages.append(page(f'''
-<div class="coverimg"><img src="{photo_src}" alt="Turkis fotballpute med RO RO RO, fotballnett og grønne tribuner"></div>
+<div class="coverimg"><img src="{photo_src}" alt="Fotballpute RO RO RO i hvitt, marineblått og rødt"></div>
 <div class="covertag">LME STRIKKEOPPSKRIFT</div>
 <div class="coverbanner">
   <span class="cball">&#9917;</span>
   <h1 class="covertitle">FOTBALLPUTE<br>RO RO RO</h1>
   <span class="cball">&#9917;</span>
 </div>
-<div class="subpill">TURKIS MED FOTBALLNETT OG GRØNNE TRIBUNER</div>
-{card('<p class="center">En myk supporterpute med fotballnett, grønne tribuner og &laquo;RO RO RO&raquo; strikket '
-      'rundt hele puten. Mønsteret går rundt, slik at begge sider blir like.</p>')}
+<div class="subpill">FOTBALLNETT, TRIBUNER OG RO RO RO</div>
+{card('<p class="center">En myk supporterpute med fotballnett, tribuner og &laquo;RO RO RO&raquo; strikket '
+      'rundt hele puten. Mønsteret går rundt, slik at begge sider blir like. Vist her i hvitt, '
+      'marineblått og rødt, oppskriften under er skrevet for turkis. Se side 3 for flere '
+      'fargekombinasjoner.</p>')}
 {byline('Av Renate Dahl')}
 <p class="rekonstruert">Rekonstruert etter originalpute strikket av Renates mamma</p>
 {tip('Les hele oppskriften før du begynner. Strikk en prøvelapp, særlig når du bytter garn, '
@@ -191,12 +193,13 @@ pages.append(page(f'''
       'underveis og tilpass høyden til innerputen.</p>')}
 {tealp('ANDRE FARGEKOMBINASJONER')}
 <div class="colorrow">
+  <img src="{orig_photo_src}" alt="Fotballpute i turkis, oppskriftens fargevalg">
   <img src="{alt_rwb_src}" alt="Fotballpute i rødt, hvitt og blått">
-  <img src="{alt_wnr_src}" alt="Fotballpute i hvitt, marineblått og rødt">
   <img src="{alt_bwr_src}" alt="Fotballpute i blått, rødt og hvitt">
 </div>
-<p class="colorcap">Mønsteret er strikket i turkis her, men fungerer like fint i andre farger, for
-eksempel rødt, hvitt og blått som de norske flaggfargene.</p>
+<p class="colorcap">Forsiden viser puten i hvitt, marineblått og rødt, men mønsteret fungerer like
+fint i turkis (fargene oppskriften er skrevet for) eller andre kombinasjoner, for eksempel rødt,
+hvitt og blått som de norske flaggfargene.</p>
 ''', 3))
 
 # ============ SIDE 4: DETTE TRENGER DU ============
@@ -424,16 +427,18 @@ page = make_page('LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;RO RO RO FOOTBALL
 
 # ============ PAGE 1: COVER ============
 pages.append(page(f'''
-<div class="coverimg"><img src="{photo_src}" alt="Teal football cushion with RO RO RO, football net and green terraces"></div>
+<div class="coverimg"><img src="{photo_src}" alt="Football cushion RO RO RO in white, navy and red"></div>
 <div class="covertag">LME KNITTING PATTERN</div>
 <div class="coverbanner">
   <span class="cball">&#9917;</span>
   <h1 class="covertitle">RO RO RO<br>FOOTBALL CUSHION</h1>
   <span class="cball">&#9917;</span>
 </div>
-<div class="subpill">TEAL WITH FOOTBALL NET AND GREEN TERRACES</div>
-{card('<p class="center">A soft supporter&rsquo;s cushion with a football net, green terraces and &laquo;RO RO RO&raquo; '
-      'knitted all the way around the cushion. The pattern runs right round, so both sides come out the same.</p>')}
+<div class="subpill">FOOTBALL NET, TERRACES AND RO RO RO</div>
+{card('<p class="center">A soft supporter&rsquo;s cushion with a football net, terraces and &laquo;RO RO RO&raquo; '
+      'knitted all the way around the cushion. The pattern runs right round, so both sides come out the same. '
+      'Shown here in white, navy and red, the pattern below is written for teal. See page 3 for more '
+      'colour combinations.</p>')}
 {byline('By Renate Dahl')}
 <p class="rekonstruert">Reconstructed from an original cushion knitted by Renate&rsquo;s mum</p>
 {tip('Read the whole pattern through before you start. Knit a gauge swatch, especially when you '
@@ -471,12 +476,13 @@ pages.append(page(f'''
       'who knitted it. Always measure as you go and fit the height to your inner cushion pad.</p>')}
 {tealp('OTHER COLOUR COMBINATIONS')}
 <div class="colorrow">
+  <img src="{orig_photo_src}" alt="Football cushion in teal, the pattern's written colourway">
   <img src="{alt_rwb_src}" alt="Football cushion in red, white and blue">
-  <img src="{alt_wnr_src}" alt="Football cushion in white, navy and red">
   <img src="{alt_bwr_src}" alt="Football cushion in blue, red and white">
 </div>
-<p class="colorcap">The sample here is knitted in teal, but the pattern works just as well in
-other colours, for example red, white and blue like the Norwegian flag.</p>
+<p class="colorcap">The cover shows the cushion in white, navy and red, but the pattern works just
+as well in teal (the colours it is written for) or other combinations, for example red, white and
+blue like the Norwegian flag.</p>
 ''', 3))
 
 # ============ PAGE 4: WHAT YOU NEED ============
