@@ -1216,6 +1216,12 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 
   <p style="margin:-10px 0 28px;"><a href="/shop/knitting" style="display:inline-block;background:#fff;border:1.5px solid #f0dde6;color:#c43d75;font-weight:700;text-decoration:none;padding:8px 16px;border-radius:999px;font-size:14px;">🇬🇧 Shopping in English? Go to the English shop →</a></p>
 
+  <div class="subtabs" role="tablist" style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 28px;">
+    <button type="button" class="filter-pill active" data-panel="bottehatt">Bøttehatter og skaut</button>
+    <button type="button" class="filter-pill" data-panel="ragnhild">Ragnhild sine design</button>
+  </div>
+
+  <div id="panel-bottehatt" class="tabpanel">
   <div class="product-grid">
 
       <article class="product-card">
@@ -1347,7 +1353,14 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
         </div>
       </article>
   </div>
+  </div>
 
+  <div id="panel-ragnhild" class="tabpanel" style="display:none;">
+  <div class="subtabs2" role="tablist" style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px;">
+    <button type="button" class="filter-pill active" data-cat="alle">Alle</button>
+    <button type="button" class="filter-pill" data-cat="putetrekk">Putetrekk</button>
+    <button type="button" class="filter-pill" data-cat="gensere">Gensere</button>
+  </div>
 
   <section class="shop-section" style="margin-top:8px;">
     <h2>Ragnhild sine <em>design</em></h2>
@@ -1355,7 +1368,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 
     <div class="product-grid">
 
-      <article class="product-card">
+      <article class="product-card" data-cat="putetrekk">
         <a href="/butikk/fotballpute-ro-strikk" style="display:block;text-decoration:none;color:inherit;">
           <div class="product-image" style="background:#F8D7DA;">
 
@@ -1373,6 +1386,28 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
       </article>
     </div>
   </section>
+
+  <section class="shop-section" id="gensere-soon" style="margin-top:8px;">
+    <h2>Ragnhild sine <em>gensere</em></h2>
+    <p class="section-sub">Håndstrikkede gensere fra Ragnhild, skrevet ut i LME-stil. På vei, ikke klare for salg ennå.</p>
+
+    <div class="product-grid">
+      <article class="product-card">
+        <div class="product-image" style="background: linear-gradient(135deg, #FDE7E0, #F5A8B8); color: var(--ink);">
+          <span class="product-tag new">KOMMER SNART</span>
+          <div class="product-title-overlay" style="text-shadow:none;">
+            <span class="kicker" style="color:var(--ink);">STRIKK</span>
+            <span class="title" style="color:var(--ink);">Genser</span>
+          </div>
+        </div>
+        <div class="product-info">
+          <h4>Genser</h4>
+          <p class="product-meta">Ragnhilds egen genseroppskrift &middot; strikket &middot; flere størrelser</p>
+        </div>
+      </article>
+    </div>
+  </section>
+  </div>
 
   <section class="shop-trust">
     <div class="trust-cell">
@@ -1690,5 +1725,34 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 <script src="/js/lme-visibility.js?v=8" defer></script>
 <script src="/js/lme-account.js?v=11" defer></script>
 <script src="/js/renate-widget.js?v=5" defer></script>
+
+<script>
+(function () {
+  var panels = { bottehatt: document.getElementById('panel-bottehatt'), ragnhild: document.getElementById('panel-ragnhild') };
+  document.querySelectorAll('.subtabs [data-panel]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.subtabs [data-panel]').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var target = btn.getAttribute('data-panel');
+      Object.keys(panels).forEach(function (key) {
+        if (panels[key]) panels[key].style.display = (key === target) ? '' : 'none';
+      });
+    });
+  });
+  var soon = document.getElementById('gensere-soon');
+  document.querySelectorAll('.subtabs2 [data-cat]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.subtabs2 [data-cat]').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var cat = btn.getAttribute('data-cat');
+      document.querySelectorAll('#panel-ragnhild .product-card').forEach(function (card) {
+        var cardCats = (card.getAttribute('data-cat') || '').split(' ');
+        card.style.display = (cat === 'alle' || cardCats.indexOf(cat) !== -1) ? '' : 'none';
+      });
+      if (soon) soon.style.display = (cat === 'gensere' || cat === 'alle') ? '' : 'none';
+    });
+  });
+})();
+</script>
 </body>
 </html>
