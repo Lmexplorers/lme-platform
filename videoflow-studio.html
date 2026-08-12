@@ -351,6 +351,13 @@
     });
     actions.appendChild(imgBtn);
 
+    if (scene.image && scene.image.assetUrl) {
+      var dlImgBtn = document.createElement('a'); dlImgBtn.className = 'btn ghost small'; dlImgBtn.href = scene.image.assetUrl;
+      dlImgBtn.setAttribute('download', 'scene-' + (scene.index + 1) + '.png'); dlImgBtn.target = '_blank'; dlImgBtn.rel = 'noopener';
+      dlImgBtn.textContent = '⬇️ ' + L('Last ned bilde', 'Download image');
+      actions.appendChild(dlImgBtn);
+    }
+
     var voiceBtn = document.createElement('button'); voiceBtn.className = 'btn ghost small'; voiceBtn.type = 'button';
     voiceBtn.textContent = '🔊 ' + (scene.voice && scene.voice.assetUrl ? L('Lag stemme på nytt', 'Regenerate voice') : L('Lag stemme', 'Generate voice'));
     voiceBtn.addEventListener('click', function () {

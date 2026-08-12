@@ -533,6 +533,19 @@
     });
     actions.appendChild(kfBtn);
 
+    if (shot.keyframe && shot.keyframe.assetUrl) {
+      var dlImgBtn = document.createElement('a'); dlImgBtn.className = 'btn ghost small'; dlImgBtn.href = shot.keyframe.assetUrl;
+      dlImgBtn.setAttribute('download', 'shot-' + (shot.index + 1) + '.png'); dlImgBtn.target = '_blank'; dlImgBtn.rel = 'noopener';
+      dlImgBtn.textContent = '⬇️ ' + L('Last ned bilde', 'Download image');
+      actions.appendChild(dlImgBtn);
+    }
+    if (shot.video && shot.video.status === 'ready' && shot.video.assetUrl) {
+      var dlVidBtn = document.createElement('a'); dlVidBtn.className = 'btn ghost small'; dlVidBtn.href = shot.video.assetUrl;
+      dlVidBtn.setAttribute('download', 'shot-' + (shot.index + 1) + '.mp4'); dlVidBtn.target = '_blank'; dlVidBtn.rel = 'noopener';
+      dlVidBtn.textContent = '⬇️ ' + L('Last ned video', 'Download video');
+      actions.appendChild(dlVidBtn);
+    }
+
     if (shot.keyframe && shot.keyframe.assetUrl && !shot.keyframe.approved) {
       var apBtn = document.createElement('button'); apBtn.className = 'btn ghost small'; apBtn.type = 'button';
       apBtn.textContent = '✅ ' + L('Godkjenn bildet', 'Approve image');
