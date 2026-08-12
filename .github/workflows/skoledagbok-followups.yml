@@ -1,0 +1,21 @@
+name: Skoledagbok oppfølgingsmail
+
+# Trigger den daglige køen som sender oppfølgingsmail til skoledagbok-kjøpere
+# (dag 3 og uke 2, med mersalg fra resten av plattformen). Kjører en gang i
+# døgnet og kan startes manuelt fra Actions. Valgfritt: legg repo-hemmeligheten
+# OPPSKRIFT_CRON_TOKEN hvis endepunktet er beskyttet (samme som oppskriftene).
+
+on:
+  schedule:
+    - cron: "20 9 * * *"   # daglig kl. 09:20 UTC
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger oppfølgings-køen
+        env:
+          TOKEN: ${{ secrets.OPPSKRIFT_CRON_TOKEN }}
+        run: |
+          curl -fsS "https://lmexplorers.com/api/cron/skoledagbok-followups${TOKEN:+?token=$TOKEN}"

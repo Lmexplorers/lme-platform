@@ -200,16 +200,18 @@ export async function onRequestPost(context) {
     }
 
     // Mia & Teo skoledagbok: engangskjøp, leveringsmail med BEGGE språk-PDF-ene
-    // (norsk + engelsk), uansett hvilken språklenke/pris kunden brukte. Se
-    // purchase-links.js: SKOLEDAGBOK_PAYMENT_LINKS/SKOLEDAGBOK_INFO. Fantes
-    // ikke før 11. august 2026, så kjøpere fikk ingen leveringsmail i det hele tatt.
+    // (norsk + engelsk), uansett hvilken språklenke/pris kunden brukte, pluss
+    // to oppfølgere med mersalg fra resten av plattformen (dag 3 og uke 2,
+    // sendt fra functions/api/cron/skoledagbok-followups.js), samme mønster
+    // som oppskriftene (opp_fu:-køen). Se purchase-links.js:
+    // SKOLEDAGBOK_PAYMENT_LINKS/SKOLEDAGBOK_INFO. Fantes ikke før 11. august
+    // 2026, så kjøpere fikk ingen leveringsmail i det hele tatt.
     const diary = obj.payment_link && SKOLEDAGBOK_PAYMENT_LINKS[obj.payment_link];
     if (diary && email && obj.payment_status !== "unpaid") {
       const nm = (obj.customer_details && obj.customer_details.name) || "";
       const info = SKOLEDAGBOK_INFO[diary.book];
       const bookName = (info && info.name[diary.lang]) || (info && info.name.no) || "Mia & Teo Skoledagbok";
-      const files = (info && info.files) || {};
-      try { await sendSkoledagbokMail(env, { to: email, name: nm, lang: diary.lang, book: diary.book, bookName: bookName, files: files }); } catch (e1) {}
+      try { await sendSkoledagbokMail(env, { to: email, name: nm, lang: diary.lang, book: diary.book, kind: "levering" }); } catch (e1) {}
       try {
         await sendOwnerSaleNotice(env, {
           pname: bookName, lang: diary.lang, name: nm, email: email,
@@ -222,6 +224,14 @@ export async function onRequestPost(context) {
           amount: obj.amount_total, currency: obj.currency,
         });
       } catch (e4) {}
+      try {
+        const e = email.trim().toLowerCase();
+        const base = { email: email, name: nm, lang: diary.lang, book: diary.book };
+        await env.BUILDER_KV.put("skole_fu:" + e + ":d3",
+          JSON.stringify(Object.assign({}, base, { kind: "oppfolging_dag", sendAfter: Date.now() + 3 * 24 * 60 * 60 * 1000 })));
+        await env.BUILDER_KV.put("skole_fu:" + e + ":w2",
+          JSON.stringify(Object.assign({}, base, { kind: "oppfolging_uke", sendAfter: Date.now() + 14 * 24 * 60 * 60 * 1000 })));
+      } catch (e2) {}
       return json({ ok: true });
     }
 
