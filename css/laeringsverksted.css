@@ -88,8 +88,8 @@
 .lv-result-count { font-size: 13.5px; color: var(--grey, #4A4A4A); margin: 0 0 14px; }
 
 @media (max-width: 720px) {
-  .lv-filter-toggle { display: inline-block; }
-  .lv-filters { display: none; }
-  .lv-filters.lv-filters-open { display: flex; }
+  .lv-filter-toggle { display: none; }
+  .lv-filters { display: flex; flex-direction: column; gap: 14px; }
+  .lv-filter-group { min-width: 0; }
   .lv-title { font-size: 24px; }
 }
