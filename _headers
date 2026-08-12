@@ -64,3 +64,25 @@
   Cache-Control: no-store
 /lme-inntektskalkulator.html
   Cache-Control: no-store
+# Læringsverksted (katalog, produktside, bygger) endres ofte akkurat naa
+# mens nye Mia & Teo-serier legges til, og delte css/js-filer manglet
+# versjonsnummer helt til nylig, saa mobilen kan sitte igjen med en
+# time(r)vis gammel utgave selv etter en frisk utrulling.
+/laeringsverksted
+  Cache-Control: no-store
+/laeringsverksted.html
+  Cache-Control: no-store
+/academy/laeringsverksted-ressurs
+  Cache-Control: no-store
+/academy/laeringsverksted-ressurs.html
+  Cache-Control: no-store
+/laeringsverksted-bygger
+  Cache-Control: no-store
+/laeringsverksted-bygger.html
+  Cache-Control: no-store
+/css/laeringsverksted.css
+  Cache-Control: no-store
+/js/laeringsverksted-render.js
+  Cache-Control: no-store
+/js/laeringsverksted-favorites.js
+  Cache-Control: no-store
