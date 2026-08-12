@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#2c5f2d">
+<meta name="theme-color" content="#F8D7DA">
 <title>Boss of Your Own Brain — LME</title>
 
 <style>
@@ -54,8 +54,9 @@
     --font-display: 'Playpen Sans', system-ui, sans-serif;
     --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
 
-    --lme-green: #2c5f2d;
-    --lme-green-light: #f0f7f1;
+    --cerise: #E91E89;
+    --cerise-dark: #C13D6A;
+    --accent-light: #FDE7F1;
   }
 
   * {
@@ -115,7 +116,7 @@
     font-size: 28px;
     font-weight: 500;
     font-style: italic;
-    color: var(--lme-green);
+    color: var(--cerise);
     letter-spacing: -0.02em;
     flex-shrink: 0;
   }
@@ -144,7 +145,7 @@
     font-family: var(--font-display);
     font-size: clamp(46px, 6vw, 68px);
     font-weight: 700;
-    color: var(--lme-green);
+    color: var(--cerise);
     margin-bottom: 18px;
     letter-spacing: -0.02em;
   }
@@ -174,7 +175,7 @@
     padding: 40px;
     background: white;
     border-radius: var(--r-lg);
-    border-left: 6px solid var(--lme-green);
+    border-left: 6px solid var(--cerise);
     box-shadow: var(--shadow-md);
   }
 
@@ -182,7 +183,7 @@
     font-family: var(--font-display);
     font-size: 38px;
     font-weight: 700;
-    color: var(--lme-green);
+    color: var(--cerise);
     margin-bottom: 26px;
   }
 
@@ -202,14 +203,14 @@
   }
 
   .module strong {
-    color: var(--lme-green);
+    color: var(--cerise);
     font-weight: 600;
   }
 
   /* CTA */
   .cta-section {
-    background: var(--lme-green-light);
-    border: 2px solid var(--lme-green);
+    background: var(--accent-light);
+    border: 2px solid var(--cerise);
     border-radius: var(--r-lg);
     padding: 40px;
     text-align: center;
@@ -220,7 +221,7 @@
     font-family: var(--font-display);
     font-size: 38px;
     font-weight: 700;
-    color: var(--lme-green);
+    color: var(--cerise);
     margin-bottom: 18px;
   }
 
@@ -232,7 +233,7 @@
 
   .btn-primary {
     display: inline-block;
-    background: var(--lme-green);
+    background: var(--cerise);
     color: white;
     padding: 18px 44px;
     border-radius: var(--r-pill);
@@ -243,7 +244,7 @@
   }
 
   .btn-primary:hover {
-    background: #1d3f1f;
+    background: var(--cerise-dark);
     transform: translateY(-2px);
   }
 
