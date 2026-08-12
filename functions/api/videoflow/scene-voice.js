@@ -63,7 +63,10 @@ export async function onRequestPost(context) {
     if (!gate.owner) await refundVideoFlow(context, gate.email, creditCost);
     scene.voice.status = "failed";
     await saveProject(env, project);
-    return json({ error: "Klarte ikke å lage stemmen.", detail: String((e && e.message) || e).slice(0, 200) }, 200);
+    // voiceGenerateLine already throws a user-facing, Norwegian message
+    // (e.g. "ElevenLabs-kontoen har ikke nok kreditter …"), surface it
+    // directly instead of a generic wrapper so the real cause is visible.
+    return json({ error: String((e && e.message) || e).slice(0, 300) }, 200);
   }
 
   const audioId = crypto.randomUUID().replace(/-/g, "");

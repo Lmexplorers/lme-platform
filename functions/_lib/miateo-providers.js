@@ -231,15 +231,35 @@ export function estimateVoiceCost(text) {
   return { characters: chars, estimatedUsd: Math.round(chars * 0.00018 * 100) / 100, note: "Rough estimate, ElevenLabs bills per character on your plan, verify in your ElevenLabs account." };
 }
 
+// Turns a raw ElevenLabs failure into a message that actually tells the
+// user what to do, instead of just "elevenlabs_401". Same idea as
+// functions/api/youtube-video.js friendlyEngineError.
+function friendlyElevenLabsError(status, bodyText) {
+  const low = String(bodyText || "").toLowerCase();
+  if (status === 401 || status === 402 || /quota|credit|payment|insufficient/i.test(low)) {
+    return "ElevenLabs-kontoen har ikke nok kreditter eller mangler betaling. Fyll på hos ElevenLabs og prøv igjen.";
+  }
+  if (status === 429) {
+    return "ElevenLabs er opptatt akkurat nå (for mange forespørsler). Vent litt og prøv igjen.";
+  }
+  if (status === 400 && /voice/i.test(low)) {
+    return "Den valgte stemmen finnes ikke på ElevenLabs-kontoen din.";
+  }
+  return "Stemme-motoren (ElevenLabs) svarte med en feil (" + status + "). Prøv igjen om litt.";
+}
+
 /** PAID CALL. voiceId from miateo-bible.js voiceIdFor(env, speakerId). */
 export async function voiceGenerateLine(env, text, voiceId) {
-  if (!env.ELEVENLABS_API_KEY || !voiceId) throw new Error("missing_elevenlabs_voice");
+  if (!env.ELEVENLABS_API_KEY || !voiceId) throw new Error("ElevenLabs-stemme mangler i oppsettet (ELEVENLABS_API_KEY / stemme-ID).");
   const r = await fetchTimeout("https://api.elevenlabs.io/v1/text-to-speech/" + voiceId, {
     method: "POST",
     headers: { "xi-api-key": env.ELEVENLABS_API_KEY, "Content-Type": "application/json", Accept: "audio/mpeg" },
     body: JSON.stringify({ text: String(text || "").slice(0, 600), model_id: env.ELEVENLABS_MODEL_ID || VOICE_PROVIDER.model, voice_settings: { stability: 0.45, similarity_boost: 0.8, style: 0.25 } }),
   }, 20000);
-  if (!r.ok) throw new Error("elevenlabs_" + r.status);
+  if (!r.ok) {
+    const bodyText = await r.text().catch(() => "");
+    throw new Error(friendlyElevenLabsError(r.status, bodyText));
+  }
   const buf = await r.arrayBuffer();
   // Rough duration estimate (no ffprobe in Workers): ~150 wpm natural speech.
   const words = String(text || "").trim().split(/\s+/).filter(Boolean).length;

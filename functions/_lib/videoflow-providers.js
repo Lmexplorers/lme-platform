@@ -160,16 +160,37 @@ function buildWordTimestamps(alignment) {
   return words;
 }
 
+// Turns a raw ElevenLabs failure (status + body, which is often opaque JSON)
+// into a message that actually tells the user what to do, instead of just
+// "elevenlabs_401". Same idea as functions/api/youtube-video.js
+// friendlyEngineError, kept local here since the wording differs per app.
+function friendlyElevenLabsError(status, bodyText) {
+  const low = String(bodyText || "").toLowerCase();
+  if (status === 401 || status === 402 || /quota|credit|payment|insufficient/i.test(low)) {
+    return "ElevenLabs-kontoen har ikke nok kreditter eller mangler betaling. Fyll på hos ElevenLabs og prøv igjen.";
+  }
+  if (status === 429) {
+    return "ElevenLabs er opptatt akkurat nå (for mange forespørsler). Vent litt og prøv igjen.";
+  }
+  if (status === 400 && /voice/i.test(low)) {
+    return "Den valgte stemmen finnes ikke på ElevenLabs-kontoen din. Prøv en annen stemme.";
+  }
+  return "Stemme-motoren (ElevenLabs) svarte med en feil (" + status + "). Prøv igjen om litt.";
+}
+
 /** PAID CALL (estimateVoiceCredits(text)). Returns {bytes, contentType, words, durationSec}. */
 export async function voiceGenerateLine(env, text, voiceId, lang) {
-  if (!env.ELEVENLABS_API_KEY) throw new Error("missing_elevenlabs_key");
+  if (!env.ELEVENLABS_API_KEY) throw new Error("ElevenLabs-nøkkel mangler i oppsettet (ELEVENLABS_API_KEY).");
   const vid = voiceId || env.ELEVENLABS_VOICE_ID || DEFAULT_VOICE_ID;
   const r = await fetchTimeout("https://api.elevenlabs.io/v1/text-to-speech/" + encodeURIComponent(vid) + "/with-timestamps", {
     method: "POST",
     headers: { "xi-api-key": env.ELEVENLABS_API_KEY, "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify({ text: String(text || "").slice(0, 900), model_id: env.ELEVENLABS_MODEL_ID || "eleven_turbo_v2_5", language_code: lang === "no" ? "no" : "en", voice_settings: { stability: 0.5, similarity_boost: 0.75 } }),
   }, 30000);
-  if (!r.ok) throw new Error("elevenlabs_" + r.status);
+  if (!r.ok) {
+    const bodyText = await r.text().catch(() => "");
+    throw new Error(friendlyElevenLabsError(r.status, bodyText));
+  }
   const data = await r.json();
   if (!data.audio_base64) throw new Error("elevenlabs_no_audio");
   const words = buildWordTimestamps(data.alignment);

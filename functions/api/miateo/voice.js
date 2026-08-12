@@ -79,7 +79,10 @@ export async function onRequestPost(context) {
   try {
     out = await voiceGenerateLine(env, line.text, voiceId);
   } catch (e) {
-    return json({ error: "Klarte ikke å lage stemmelyden.", detail: String((e && e.message) || e).slice(0, 200) }, 200);
+    // voiceGenerateLine already throws a user-facing, Norwegian message
+    // (e.g. "ElevenLabs-kontoen har ikke nok kreditter …"), surface it
+    // directly instead of a generic wrapper so the real cause is visible.
+    return json({ error: String((e && e.message) || e).slice(0, 300) }, 200);
   }
 
   const audioId = crypto.randomUUID().replace(/-/g, "");
