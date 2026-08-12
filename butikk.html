@@ -759,6 +759,18 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     gap: 20px;
   }
 
+  /* Kategori-kortene på forsiden av butikken: eget grid (auto-fit) så alle
+     5 kortene (Bøker/Materiell/Strikk/Hekle/Læremidler) fordeler seg jevnt
+     i én rad på brede skjermer, i stedet for en låst 4-kolonners rad med
+     ett kort alene på rad to. Kortene selv gjenbruker .product-card. */
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  @media (max-width: 1024px) { .cat-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .cat-grid { grid-template-columns: 1fr; } }
+
   .product-card {
     background: #fff;
     border-radius: var(--r-md);
@@ -1201,11 +1213,27 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
   <section class="page-hero">
     <span class="kicker">LME BUTIKK</span>
     <h1>Velg det som <em>passer deg</em></h1>
-    <p>Bøker, Montessorimateriell og strikke- og hekleoppskrifter i LME-stil. Alt er digitalt og klart for nedlasting rett etter kjøp.</p>
+    <p>Bøker, læremidler, Montessorimateriell og strikke- og hekleoppskrifter i LME-stil. Alt er digitalt og klart for nedlasting rett etter kjøp.</p>
   </section>
 
+  <!-- Featuret produkt -->
+  <article class="featured-product">
+    <div class="featured-image" style="padding:32px;background:linear-gradient(135deg,#FCF4DA,#F5A8B8);">
+      <img src="/images/skoledagbok/cover-1-3-no.png" alt="Mia &amp; Teo skoledagbok, forside" style="position:relative;z-index:1;max-height:340px;width:auto;border-radius:14px;box-shadow:0 20px 40px -18px rgba(26,26,26,0.35);">
+      <span class="badge-new" style="position:absolute;top:18px;left:18px;z-index:2;">NYHET</span>
+    </div>
+    <div class="featured-body">
+      <span class="kicker">SKOLEÅRET 2026/2027 · 358 SIDER</span>
+      <h3>Mia &amp; Teo <em>skoledagbok</em></h3>
+      <p>Én side per dag, hele skoleåret, i Montessoriånd. Digital PDF på både norsk og engelsk, for 1.–3. eller 4.–7. trinn.</p>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <a href="/butikk/skoledagbok" class="btn-yellow">Se skoledagboka, fra 299 kr</a>
+      </div>
+    </div>
+  </article>
+
   <section class="shop-section">
-    <div class="product-grid">
+    <div class="cat-grid">
 
       <article class="product-card">
         <a href="/butikk/boker" style="display:block;text-decoration:none;color:inherit;">
