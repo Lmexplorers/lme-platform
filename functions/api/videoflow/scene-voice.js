@@ -16,7 +16,7 @@
 import { sessionUser } from "../../_lib/access.js";
 import { enforceVideoFlow, refundVideoFlow } from "../../_lib/videoflow-access.js";
 import { voiceGenerateLine, voiceProviderConfigured, estimateVoiceCredits, DEFAULT_VOICE_ID } from "../../_lib/videoflow-providers.js";
-import { readProject, saveProject, sceneById } from "../../_lib/videoflow-store.js";
+import { readProject, sceneById, updateScene } from "../../_lib/videoflow-store.js";
 
 const AUDIO_PREFIX = "vf:audio:";
 
@@ -61,8 +61,11 @@ export async function onRequestPost(context) {
     out = await voiceGenerateLine(env, text, project.input.voiceId || DEFAULT_VOICE_ID, project.input.lang);
   } catch (e) {
     if (!gate.owner) await refundVideoFlow(context, gate.email, creditCost);
-    scene.voice.status = "failed";
-    await saveProject(env, project);
+    // Re-read fresh before writing (see updateScene doc comment in
+    // videoflow-store.js): the slow ElevenLabs call above is exactly the
+    // window another scene's generation could have saved in, so writing
+    // back the stale `project` we read at the top would erase it.
+    await updateScene(env, body.projectId, body.sceneId, (s) => { s.voice.status = "failed"; });
     // voiceGenerateLine already throws a user-facing, Norwegian message
     // (e.g. "ElevenLabs-kontoen har ikke nok kreditter …"), surface it
     // directly instead of a generic wrapper so the real cause is visible.
@@ -72,9 +75,12 @@ export async function onRequestPost(context) {
   const audioId = crypto.randomUUID().replace(/-/g, "");
   await env.BUILDER_KV.put(AUDIO_PREFIX + audioId, out.bytes, { metadata: { ct: out.contentType }, expirationTtl: 60 * 60 * 24 * 30 });
   const origin = new URL(request.url).origin;
-  scene.voice = { assetUrl: origin + "/api/videoflow/scene-voice?audioId=" + audioId, words: out.words, durationSec: out.durationSec, status: "ready" };
-  await saveProject(env, project);
-  return json({ ok: true, scene, balance: gate.owner ? null : gate.balance }, 200);
+  const audioUrl = origin + "/api/videoflow/scene-voice?audioId=" + audioId;
+  const result = await updateScene(env, body.projectId, body.sceneId, (s) => {
+    s.voice = { assetUrl: audioUrl, words: out.words, durationSec: out.durationSec, status: "ready" };
+  });
+  if (!result) return json({ error: "not_found" }, 404);
+  return json({ ok: true, scene: result.scene, balance: gate.owner ? null : gate.balance }, 200);
 }
 
 export async function onRequestGet(context) {

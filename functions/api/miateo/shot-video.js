@@ -20,7 +20,7 @@
  * Owner-only.
  */
 import { requireOwner } from "../../_lib/miateo-access.js";
-import { readProject, saveProject, shotById } from "../../_lib/miateo-store.js";
+import { readProject, shotById, updateShot } from "../../_lib/miateo-store.js";
 import { continuityNoteForShot } from "../../_lib/miateo-continuity.js";
 import { buildMotionPrompt } from "../../_lib/miateo-bible.js";
 import { videoGenerateSubmit, videoGeneratePoll, estimateVideoCost, videoProviderConfigured } from "../../_lib/miateo-providers.js";
@@ -68,10 +68,15 @@ export async function onRequestPost(context) {
     return json({ error: "Klarte ikke å starte videogenereringen.", detail: String((e && e.message) || e).slice(0, 200) }, 200);
   }
 
-  shot.video = { assetUrl: null, prompt: motionPrompt, provider: "higgsfield", model: "dop-turbo", jobId: job.id, statusUrl: job.statusUrl, status: "generating" };
-  project.status = "generating";
-  await saveProject(env, project);
-  return json({ ok: true, shot }, 200);
+  // Re-read fresh before writing (see updateShot doc comment in miateo-
+  // store.js): the Higgsfield submit call above is a network round trip,
+  // during which another shot's generation could have saved.
+  const result = await updateShot(env, body.projectId, body.shotId, (s, p) => {
+    s.video = { assetUrl: null, prompt: motionPrompt, provider: "higgsfield", model: "dop-turbo", jobId: job.id, statusUrl: job.statusUrl, status: "generating" };
+    p.status = "generating";
+  });
+  if (!result) return json({ error: "not_found" }, 404);
+  return json({ ok: true, shot: result.shot }, 200);
 }
 
 export async function onRequestGet(context) {
@@ -99,15 +104,17 @@ export async function onRequestGet(context) {
     return json({ status: "generating", shot }, 200);
   }
   if (poll.status === "completed" && poll.url) {
-    shot.video.assetUrl = poll.url;
-    shot.video.status = "ready";
-    await saveProject(env, project);
-    return json({ status: "ready", shot }, 200);
+    const result = await updateShot(env, projectId, shotId, (s) => {
+      s.video.assetUrl = poll.url;
+      s.video.status = "ready";
+    });
+    if (!result) return json({ error: "not_found" }, 404);
+    return json({ status: "ready", shot: result.shot }, 200);
   }
   if (poll.status === "failed" || poll.status === "nsfw") {
-    shot.video.status = "failed";
-    await saveProject(env, project);
-    return json({ status: "failed", shot, error: "Videoen kunne ikke lages (" + poll.status + ")." }, 200);
+    const result = await updateShot(env, projectId, shotId, (s) => { s.video.status = "failed"; });
+    if (!result) return json({ error: "not_found" }, 404);
+    return json({ status: "failed", shot: result.shot, error: "Videoen kunne ikke lages (" + poll.status + ")." }, 200);
   }
   return json({ status: "generating", shot }, 200);
 }

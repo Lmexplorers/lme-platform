@@ -27,7 +27,7 @@
  * Owner-only.
  */
 import { requireOwner } from "../../_lib/miateo-access.js";
-import { readProject, saveProject, shotById } from "../../_lib/miateo-store.js";
+import { readProject, shotById, updateShot } from "../../_lib/miateo-store.js";
 import { continuityNoteForShot } from "../../_lib/miateo-continuity.js";
 import { buildKeyframePrompt } from "../../_lib/miateo-bible.js";
 import { imageGenerateKeyframe, estimateImageCost, imageProviderConfigured } from "../../_lib/miateo-providers.js";
@@ -61,10 +61,12 @@ export async function onRequestPost(context) {
 
   if (body.approve === true) {
     if (!shot.keyframe || !shot.keyframe.assetUrl) return json({ error: "Ingen nøkkelbilde å godkjenne ennå." }, 400);
-    shot.keyframe.approved = true;
-    project.status = project.status === "idea" || project.status === "story" ? "storyboard" : project.status;
-    await saveProject(env, project);
-    return json({ ok: true, shot }, 200);
+    const result = await updateShot(env, body.projectId, body.shotId, (s, p) => {
+      s.keyframe.approved = true;
+      if (p.status === "idea" || p.status === "story") p.status = "storyboard";
+    });
+    if (!result) return json({ error: "not_found" }, 404);
+    return json({ ok: true, shot: result.shot }, 200);
   }
 
   const size = body.size === "9:16" ? "1024x1536" : "1536x1024";
@@ -84,17 +86,21 @@ export async function onRequestPost(context) {
   try {
     out = await imageGenerateKeyframe(env, prompt, size);
   } catch (e) {
-    shot.keyframe.status = "failed";
-    await saveProject(env, project);
+    // Re-read fresh before writing (see updateShot doc comment in
+    // miateo-store.js): the slow image call above is exactly the window
+    // another shot's generation could have saved in.
+    await updateShot(env, body.projectId, body.shotId, (s) => { s.keyframe.status = "failed"; });
     return json({ error: "Klarte ikke å lage nøkkelbildet.", detail: String((e && e.message) || e).slice(0, 200) }, 200);
   }
 
   const origin = new URL(request.url).origin;
   const assetUrl = await storeImage(env, origin, out.bytes, out.contentType);
-  shot.keyframe = { assetUrl, prompt, provider: "openai/gemini", model: null, status: "ready", approved: false };
-  project.status = project.status === "idea" || project.status === "story" ? "storyboard" : project.status;
-  await saveProject(env, project);
-  return json({ ok: true, shot }, 200);
+  const result = await updateShot(env, body.projectId, body.shotId, (s, p) => {
+    s.keyframe = { assetUrl, prompt, provider: "openai/gemini", model: null, status: "ready", approved: false };
+    if (p.status === "idea" || p.status === "story") p.status = "storyboard";
+  });
+  if (!result) return json({ error: "not_found" }, 404);
+  return json({ ok: true, shot: result.shot }, 200);
 }
 
 export async function onRequestOptions() {

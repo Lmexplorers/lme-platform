@@ -24,7 +24,7 @@
  * future render step to fetch the file, same openness as /api/image GET).
  */
 import { requireOwner } from "../../_lib/miateo-access.js";
-import { readProject, saveProject, shotById } from "../../_lib/miateo-store.js";
+import { readProject, shotById, updateShot } from "../../_lib/miateo-store.js";
 import { voiceIdFor } from "../../_lib/miateo-bible.js";
 import { voiceGenerateLine, estimateVoiceCost, voiceProviderConfigured } from "../../_lib/miateo-providers.js";
 
@@ -90,10 +90,20 @@ export async function onRequestPost(context) {
   const origin = new URL(request.url).origin;
   const audioUrl = origin + "/api/miateo/voice?audioId=" + audioId;
 
-  line.target.audioAssetId = audioId;
-  line.target.durationSec = out.durationSecEstimate;
-  await saveProject(env, project);
-  return json({ ok: true, shot, audioUrl, durationSec: out.durationSecEstimate }, 200);
+  // Re-read fresh before writing (see updateShot doc comment in miateo-
+  // store.js): the ElevenLabs call above is exactly the window another
+  // shot's (or another line's) generation could have saved in. Re-resolve
+  // the line against the FRESH shot, not the stale `line` from the top of
+  // this request, since `line.target` points into the old object.
+  const result = await updateShot(env, body.projectId, body.shotId, (freshShot) => {
+    const freshLine = findLine(freshShot, body);
+    if (freshLine && freshLine.target) {
+      freshLine.target.audioAssetId = audioId;
+      freshLine.target.durationSec = out.durationSecEstimate;
+    }
+  });
+  if (!result) return json({ error: "not_found" }, 404);
+  return json({ ok: true, shot: result.shot, audioUrl, durationSec: out.durationSecEstimate }, 200);
 }
 
 export async function onRequestGet(context) {

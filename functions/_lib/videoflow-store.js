@@ -111,3 +111,25 @@ export function newScene(index) {
 export function sceneById(project, sceneId) {
   return (project.scenes || []).find((s) => s.id === sceneId) || null;
 }
+
+/**
+ * Read-modify-write a single scene, re-reading the project FRESH from KV
+ * right before the write. Generation endpoints (scene-image.js, scene-
+ * voice.js) call this only AFTER their slow external API call finishes, so
+ * the only thing sitting between this read and this write is a fast local
+ * mutation, not a multi-second AI call. Without this, generating images for
+ * two scenes back to back could lose one: both requests read the project
+ * before either had written, so whichever wrote second silently overwrote
+ * the first scene's new image with its own stale copy. Still theoretically
+ * racy (KV has no transactions), but the window shrinks from "as long as
+ * the AI call takes" to "a few milliseconds".
+ */
+export async function updateScene(env, projectId, sceneId, mutator) {
+  const project = await readProject(env, projectId);
+  if (!project) return null;
+  const scene = sceneById(project, sceneId);
+  if (!scene) return null;
+  mutator(scene, project);
+  await saveProject(env, project);
+  return { project, scene };
+}

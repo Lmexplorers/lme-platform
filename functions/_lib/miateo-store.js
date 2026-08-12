@@ -252,3 +252,23 @@ export function newShot(sceneId, index) {
 export function shotById(project, shotId) {
   return (project.shots || []).find((s) => s.id === shotId) || null;
 }
+
+/**
+ * Read-modify-write a single shot, re-reading the project FRESH from KV
+ * right before the write. Generation endpoints (keyframe.js, shot-video.js,
+ * voice.js) call this only AFTER their slow external API call finishes, so
+ * the gap between this read and this write is a fast local mutation, not a
+ * multi-second AI call. Without this, generating keyframes for two shots
+ * back to back could lose one: both requests read the project before either
+ * had written, so whichever wrote second silently overwrote the first
+ * shot's new keyframe with its own stale copy.
+ */
+export async function updateShot(env, projectId, shotId, mutator) {
+  const project = await readProject(env, projectId);
+  if (!project) return null;
+  const shot = shotById(project, shotId);
+  if (!shot) return null;
+  mutator(shot, project);
+  await saveProject(env, project);
+  return { project, shot };
+}

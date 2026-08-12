@@ -16,7 +16,7 @@ import { sessionUser } from "../../_lib/access.js";
 import { enforceVideoFlow, refundVideoFlow } from "../../_lib/videoflow-access.js";
 import { imageGenerateScene, imageProviderConfigured, CREDIT_COSTS } from "../../_lib/videoflow-providers.js";
 import { styleById, AVOID_LIST, SAFE_SUFFIX } from "../../_lib/videoflow-styles.js";
-import { readProject, saveProject, sceneById } from "../../_lib/videoflow-store.js";
+import { readProject, sceneById, updateScene } from "../../_lib/videoflow-store.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -69,17 +69,22 @@ export async function onRequestPost(context) {
     out = await imageGenerateScene(env, prompt, "1536x1024");
   } catch (e) {
     if (!gate.owner) await refundVideoFlow(context, gate.email, CREDIT_COSTS.image);
-    scene.image.status = "failed";
-    await saveProject(env, project);
+    // Re-read the project fresh here (see updateScene doc comment): the slow
+    // API call above is exactly the window where another scene's generation
+    // could have saved in the meantime, writing back the stale `project`
+    // object we read at the top of this request would silently erase it.
+    await updateScene(env, body.projectId, body.sceneId, (s) => { s.image.status = "failed"; });
     return json({ error: "Klarte ikke å lage bildet.", detail: String((e && e.message) || e).slice(0, 200) }, 200);
   }
 
   const origin = new URL(request.url).origin;
   const assetUrl = await storeImage(env, origin, out.bytes, out.contentType);
-  scene.image = { assetUrl, prompt, status: "ready" };
-  project.status = project.status === "idea" ? "script" : project.status;
-  await saveProject(env, project);
-  return json({ ok: true, scene, balance: gate.owner ? null : gate.balance }, 200);
+  const result = await updateScene(env, body.projectId, body.sceneId, (s, p) => {
+    s.image = { assetUrl, prompt, status: "ready" };
+    if (p.status === "idea") p.status = "script";
+  });
+  if (!result) return json({ error: "not_found" }, 404);
+  return json({ ok: true, scene: result.scene, balance: gate.owner ? null : gate.balance }, 200);
 }
 
 export async function onRequestOptions() {
