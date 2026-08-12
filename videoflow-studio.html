@@ -153,6 +153,7 @@
       <h2 id="pTitle">…</h2>
       <div class="btn-row">
         <button class="btn ghost small" id="saveEditsBtn" type="button">💾 <span data-no="Lagre endringer" data-en="Save changes">Lagre endringer</span></button>
+        <span class="hint" id="saveStatus"></span>
         <button class="btn gold small" id="renderBtn" type="button">🎬 <span data-no="Lag ferdig video" data-en="Assemble finished video">Lag ferdig video</span></button>
       </div>
       <div id="renderResults"></div>
@@ -298,7 +299,9 @@
     });
   }
   function openProjectDoc(project) {
+    if (saveTimer) { clearTimeout(saveTimer); saveTimer = null; }
     currentProject = project;
+    setSaveStatus('');
     q('libraryView').style.display = 'none'; q('projectView').style.display = '';
     q('renderResults').innerHTML = '';
     renderProject();
@@ -306,7 +309,10 @@
     else if (project.render) renderRenderState(project.render);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-  q('backBtn').addEventListener('click', function () { q('projectView').style.display = 'none'; q('libraryView').style.display = ''; refreshProjects(); });
+  q('backBtn').addEventListener('click', function () {
+    if (saveTimer) { clearTimeout(saveTimer); saveTimer = null; saveProjectNow(); }
+    q('projectView').style.display = 'none'; q('libraryView').style.display = ''; refreshProjects();
+  });
 
   function renderProject() {
     var p = currentProject;
@@ -331,9 +337,9 @@
     body.querySelector('[data-f=narration]').value = scene.narration || '';
     body.querySelector('[data-f=caption]').value = scene.caption || '';
     body.querySelector('[data-f=visualDescription]').value = scene.visualDescription || '';
-    body.querySelector('[data-f=narration]').addEventListener('change', function () { scene.narration = this.value; });
-    body.querySelector('[data-f=caption]').addEventListener('change', function () { scene.caption = this.value; });
-    body.querySelector('[data-f=visualDescription]').addEventListener('change', function () { scene.visualDescription = this.value; });
+    body.querySelector('[data-f=narration]').addEventListener('input', function () { scene.narration = this.value; markDirty(); });
+    body.querySelector('[data-f=caption]').addEventListener('input', function () { scene.caption = this.value; markDirty(); });
+    body.querySelector('[data-f=visualDescription]').addEventListener('input', function () { scene.visualDescription = this.value; markDirty(); });
 
     var actions = body.querySelector('.scene-actions');
     var imgBtn = document.createElement('button'); imgBtn.className = 'btn small'; imgBtn.type = 'button';
@@ -364,12 +370,29 @@
     renderProject();
   }
 
-  q('saveEditsBtn').addEventListener('click', function () {
+  /* ===== Automatisk lagring av kladd =====
+     Ingen full re-rendering av scenekortene her: det ville flyttet fokus/
+     markør mens du fortsatt skriver. */
+  var saveTimer = null;
+  function setSaveStatus(text) { var el = q('saveStatus'); if (el) el.textContent = text; }
+  function saveProjectNow() {
+    if (!currentProject) return;
+    setSaveStatus(L('Lagrer …', 'Saving …'));
     post('/api/videoflow/project', { action: 'save', project: currentProject }).then(function (res) {
-      if (res.data && res.data.error) { toast(res.data.error); return; }
-      currentProject = res.data.project; toast(L('💾 Lagret', '💾 Saved')); renderProject();
-    });
+      if (res.data && res.data.error) { setSaveStatus(L('Kunne ikke lagre', 'Could not save')); return; }
+      setSaveStatus(L('Lagret ✓', 'Saved ✓'));
+    }).catch(function () { setSaveStatus(L('Nettverksfeil', 'Network error')); });
+  }
+  function markDirty() {
+    setSaveStatus(L('Ulagrede endringer …', 'Unsaved changes …'));
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveProjectNow, 1200);
+  }
+  q('saveEditsBtn').addEventListener('click', function () {
+    if (saveTimer) { clearTimeout(saveTimer); saveTimer = null; }
+    saveProjectNow();
   });
+  window.addEventListener('beforeunload', function () { if (saveTimer) saveProjectNow(); });
 
   var renderPollTimer = null;
   function renderRenderState(r) {

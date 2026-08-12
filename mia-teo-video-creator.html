@@ -221,6 +221,7 @@
       <div class="btn-row">
         <button class="btn ghost small" id="regenStoryBtn" type="button">🔄 <span data-no="Lag manus på nytt" data-en="Regenerate script">Lag manus på nytt</span></button>
         <button class="btn ghost small" id="saveEditsBtn" type="button">💾 <span data-no="Lagre endringer" data-en="Save changes">Lagre endringer</span></button>
+        <span class="hint" id="saveStatus"></span>
         <button class="btn ghost small" id="qcBtn" type="button">✅ <span data-no="Kjør kvalitetssjekk" data-en="Run quality check">Kjør kvalitetssjekk</span></button>
         <button class="btn gold small" id="approveBtn" type="button">🔒 <span data-no="Godkjenn storyboard" data-en="Approve storyboard">Godkjenn storyboard</span></button>
         <button class="btn ghost small" id="renderBtn" type="button">🎞️ <span data-no="Sett sammen episode" data-en="Assemble episode">Sett sammen episode</span></button>
@@ -435,7 +436,9 @@
     });
   }
   function openProjectDoc(project) {
+    if (saveTimer) { clearTimeout(saveTimer); saveTimer = null; }
     currentProject = project;
+    setSaveStatus('');
     q('libraryView').style.display = 'none';
     q('projectView').style.display = '';
     q('qcResults').innerHTML = ''; q('renderResults').innerHTML = '';
@@ -447,6 +450,7 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   q('backBtn').addEventListener('click', function () {
+    if (saveTimer) { clearTimeout(saveTimer); saveTimer = null; saveProjectNow(); }
     q('projectView').style.display = 'none'; q('libraryView').style.display = ''; refreshProjects();
   });
 
@@ -552,10 +556,10 @@
     });
     actions.appendChild(vidBtn);
 
-    body.querySelector('[data-f=action]').addEventListener('change', function () { shot.action = this.value; });
-    body.querySelector('[data-f=cameraMovement]').addEventListener('change', function () { shot.cameraMovement = this.value; });
-    dlgBox.querySelectorAll('[data-dlg-no]').forEach(function (el) { el.addEventListener('change', function () { shot.dialogue[+this.getAttribute('data-dlg-no')].no = this.value; }); });
-    dlgBox.querySelectorAll('[data-dlg-en]').forEach(function (el) { el.addEventListener('change', function () { shot.dialogue[+this.getAttribute('data-dlg-en')].en = this.value; }); });
+    body.querySelector('[data-f=action]').addEventListener('input', function () { shot.action = this.value; markDirty(); });
+    body.querySelector('[data-f=cameraMovement]').addEventListener('input', function () { shot.cameraMovement = this.value; markDirty(); });
+    dlgBox.querySelectorAll('[data-dlg-no]').forEach(function (el) { el.addEventListener('input', function () { shot.dialogue[+this.getAttribute('data-dlg-no')].no = this.value; markDirty(); }); });
+    dlgBox.querySelectorAll('[data-dlg-en]').forEach(function (el) { el.addEventListener('input', function () { shot.dialogue[+this.getAttribute('data-dlg-en')].en = this.value; markDirty(); }); });
 
     card.appendChild(body);
     return card;
@@ -587,12 +591,31 @@
     });
   });
 
-  q('saveEditsBtn').addEventListener('click', function () {
+  /* ===== Automatisk lagring av kladd =====
+     Redigering av handling/kamera/dialog lagres automatisk et lite øyeblikk
+     etter siste tastetrykk, ikke bare når du trykker "Lagre endringer".
+     Ingen full re-rendering av kortene her: det ville flyttet fokus/markør
+     mens du fortsatt skriver. */
+  var saveTimer = null;
+  function setSaveStatus(text) { var el = q('saveStatus'); if (el) el.textContent = text; }
+  function saveProjectNow() {
+    if (!currentProject) return;
+    setSaveStatus(L('Lagrer …', 'Saving …'));
     post('/api/miateo/project', { action: 'save', project: currentProject }).then(function (res) {
-      if (res.data && res.data.error) { toast(res.data.error); return; }
-      currentProject = res.data.project; toast(L('💾 Lagret', '💾 Saved')); renderProject();
-    });
+      if (res.data && res.data.error) { setSaveStatus(L('Kunne ikke lagre', 'Could not save')); return; }
+      setSaveStatus(L('Lagret ✓', 'Saved ✓'));
+    }).catch(function () { setSaveStatus(L('Nettverksfeil', 'Network error')); });
+  }
+  function markDirty() {
+    setSaveStatus(L('Ulagrede endringer …', 'Unsaved changes …'));
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveProjectNow, 1200);
+  }
+  q('saveEditsBtn').addEventListener('click', function () {
+    if (saveTimer) { clearTimeout(saveTimer); saveTimer = null; }
+    saveProjectNow();
   });
+  window.addEventListener('beforeunload', function () { if (saveTimer) saveProjectNow(); });
 
   q('qcBtn').addEventListener('click', function () {
     post('/api/miateo/qc', { projectId: currentProject.id }).then(function (res) {
