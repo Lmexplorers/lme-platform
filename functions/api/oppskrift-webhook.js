@@ -32,12 +32,14 @@ import {
   COURSE_PAYMENT_LINKS, COURSE_INFO,
   MODULE_PAYMENT_LINKS,
   LAERINGSVERKSTED_PAYMENT_LINKS,
+  SKOLEDAGBOK_PAYMENT_LINKS, SKOLEDAGBOK_INFO,
 } from "../_lib/purchase-links.js";
 import { sendAutopilotMail } from "../_lib/autopilot-mail.js";
 import { grantCourseAccess, grantModuleAccess } from "../_lib/course-access.js";
 import { sendCourseDeliveryMail, sendModuleDeliveryMail } from "../_lib/course-mail.js";
 import { recordPurchase } from "../_lib/purchases.js";
 import { sendResourceDeliveryMail } from "../_lib/laeringsverksted-mail.js";
+import { sendSkoledagbokMail } from "../_lib/skoledagbok-mail.js";
 
 // Må matche KEY_PREFIX i functions/api/laeringsverksted.js (samme
 // dupliseringsmønster som OWNER_EMAILS andre steder i kodebasen).
@@ -192,6 +194,32 @@ export async function onRequestPost(context) {
         await recordPurchase(env, email, {
           type: "modul", id: modulePurchase.courseId + ":" + modulePurchase.moduleKey, title: moduleLabel,
           amount: obj.amount_total, currency: obj.currency, url: info && info.url,
+        });
+      } catch (e4) {}
+      return json({ ok: true });
+    }
+
+    // Mia & Teo skoledagbok: engangskjøp, leveringsmail med BEGGE språk-PDF-ene
+    // (norsk + engelsk), uansett hvilken språklenke/pris kunden brukte. Se
+    // purchase-links.js: SKOLEDAGBOK_PAYMENT_LINKS/SKOLEDAGBOK_INFO. Fantes
+    // ikke før 11. august 2026, så kjøpere fikk ingen leveringsmail i det hele tatt.
+    const diary = obj.payment_link && SKOLEDAGBOK_PAYMENT_LINKS[obj.payment_link];
+    if (diary && email && obj.payment_status !== "unpaid") {
+      const nm = (obj.customer_details && obj.customer_details.name) || "";
+      const info = SKOLEDAGBOK_INFO[diary.book];
+      const bookName = (info && info.name[diary.lang]) || (info && info.name.no) || "Mia & Teo Skoledagbok";
+      const files = (info && info.files) || {};
+      try { await sendSkoledagbokMail(env, { to: email, name: nm, lang: diary.lang, book: diary.book, bookName: bookName, files: files }); } catch (e1) {}
+      try {
+        await sendOwnerSaleNotice(env, {
+          pname: bookName, lang: diary.lang, name: nm, email: email,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e3) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "skoledagbok", id: "skoledagbok-" + diary.book, title: bookName,
+          amount: obj.amount_total, currency: obj.currency,
         });
       } catch (e4) {}
       return json({ ok: true });

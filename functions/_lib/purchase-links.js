@@ -300,3 +300,36 @@ export const LAERINGSVERKSTED_PAYMENT_LINKS = {
   "plink_1U2h06Lax7B8uQzqyh1ykDGD": { slug: "mia-teo-naturverksted-3-6", license: "privat", lang: "no" },
   "plink_1U2h06Lax7B8uQzqMsP3BrMz": { slug: "mia-teo-naturverksted-6-9", license: "privat", lang: "no" },
 };
+
+/* ---- Mia & Teo skoledagbok (butikk/skoledagbok.html + shop/books.html) --
+   Hvert kjøp (uansett hvilken språk-lenke/pris kunden brukte) leverer BEGGE
+   språk av samme trinn, siden produktbeskrivelsen på Stripe lover "digital
+   nedlasting på norsk og engelsk" i ett kjøp. "lang" styrer kun hvilket
+   språk selve leveringsmailen skrives på. Verifisert direkte mot Stripe
+   11. august 2026 (samme plink-ID-er som data-no-href/data-en-href i
+   butikk/skoledagbok.html og knappene på shop/books.html). Fantes IKKE i
+   denne fila før, så kjøpere fikk ingen leveringsmail i det hele tatt. */
+export const SKOLEDAGBOK_PAYMENT_LINKS = {
+  "plink_1TeiNwLax7B8uQzqZQapSIuh": { book: "1-3", lang: "no" },
+  "plink_1TeiO1Lax7B8uQzqxIRhXLMv": { book: "1-3", lang: "en" },
+  "plink_1TeiO7Lax7B8uQzqLDGdL9KI": { book: "4-7", lang: "no" },
+  "plink_1TeiOFLax7B8uQzqhLt2NsdA": { book: "4-7", lang: "en" },
+};
+
+const DL_SKOLEDAGBOK = "https://lmexplorers.com/butikk/nedlasting/skoledagbok/";
+export const SKOLEDAGBOK_INFO = {
+  "1-3": {
+    name: { no: "Mia & Teo Skoledagbok, 1.–3. trinn", en: "Mia & Teo School Diary, Grades 1–3" },
+    files: {
+      no: DL_SKOLEDAGBOK + "skoledagbok-1-3-trinn.pdf",
+      en: DL_SKOLEDAGBOK + "skoledagbok-1-3-trinn-en.pdf",
+    },
+  },
+  "4-7": {
+    name: { no: "Mia & Teo Skoledagbok, 4.–7. trinn", en: "Mia & Teo School Diary, Grades 4–7" },
+    files: {
+      no: DL_SKOLEDAGBOK + "skoledagbok-4-7-trinn.pdf",
+      en: DL_SKOLEDAGBOK + "skoledagbok-4-7-trinn-en.pdf",
+    },
+  },
+};
