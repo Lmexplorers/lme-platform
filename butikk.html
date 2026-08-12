@@ -1259,89 +1259,22 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           </div>
         </a>
       </article>
+      <article class="product-card">
+        <a href="/laeringsverksted" style="display:block;text-decoration:none;color:inherit;">
+          <div class="product-image" style="background: linear-gradient(135deg, #F7C72E, #A4D233);">
+            <div class="product-title-overlay">
+              <span class="kicker">KATEGORI</span>
+              <span class="title">Læremidler</span>
+            </div>
+          </div>
+          <div class="product-info">
+            <p class="product-meta" style="margin-bottom:0;">Arbeidsark, tredelte kort, plakater og samlepakker fra LME Læringsverksted</p>
+          </div>
+        </a>
+      </article>
 
     </div>
   </section>
-
-  <!-- Læremidler og pedagogiske ressurser (LME Læringsverksted). Denne siden
-       (butikk.html) har ikke et fungerende språkbytte i dag (norsk butikk =
-       denne filen, engelsk butikk = /shop med et eget, mindre utvalg), så
-       denne seksjonens faste tekst er norsk som resten av butikk.html.
-       Selve ressurskortene hentes fra /api/laeringsverksted, som alltid har
-       both {no,en}-felt, og lenker videre til /laeringsverksted som har et
-       ekte, fungerende språkbytte. -->
-  <section class="shop-section" id="laremidler">
-    <h2>Læremidler og <em>pedagogiske ressurser</em></h2>
-    <p class="section-sub">Arbeidsark, tredelte kort, plakater og samlepakker for barnehage, skole og hjem, fra LME Læringsverksted.</p>
-
-    <div class="lv-filters" id="lm-filters" style="margin-bottom:16px;">
-      <div class="lv-filter-group">
-        <label>Alder / trinn</label>
-        <select id="lm-fAge"><option value="">Alle</option></select>
-      </div>
-      <div class="lv-filter-group">
-        <label>Fag / område</label>
-        <select id="lm-fSubject"><option value="">Alle</option></select>
-      </div>
-      <div class="lv-filter-group">
-        <label>Pris</label>
-        <select id="lm-fPrice">
-          <option value="">Alle</option>
-          <option value="gratis">Gratis</option>
-          <option value="medlem">Inkludert i medlemskap</option>
-          <option value="betalt">Betalt</option>
-        </select>
-      </div>
-    </div>
-    <div id="lm-grid" class="lv-grid"><div class="lv-empty"><p>Henter ressurser …</p></div></div>
-    <p style="margin-top:14px;"><a href="/laeringsverksted" style="font-weight:700;color:#c43d75;text-decoration:none;">Se hele Læringsverksted, med søk og filtre →</a></p>
-  </section>
-  <script src="/js/laeringsverksted-render.js" defer></script>
-  <script>
-  (function () {
-    function isEn() { try { return localStorage.getItem('lme_lang') === 'en'; } catch (e) { return false; } }
-    function fillSelect(sel, group) {
-      var tax = window.LMELaeringsverksted.TAXONOMY[group];
-      var en = isEn();
-      Object.keys(tax).forEach(function (key) {
-        var opt = document.createElement('option');
-        opt.value = key; opt.textContent = en ? tax[key][1] : tax[key][0];
-        sel.appendChild(opt);
-      });
-    }
-    var all = [];
-    function draw() {
-      var age = document.getElementById('lm-fAge').value;
-      var subject = document.getElementById('lm-fSubject').value;
-      var price = document.getElementById('lm-fPrice').value;
-      var list = all.filter(function (r) {
-        if (r.published === false) return false;
-        if (age && (r.ageBands || []).indexOf(age) === -1) return false;
-        if (subject && (r.subjects || []).indexOf(subject) === -1) return false;
-        if (price && r.priceType !== price) return false;
-        return true;
-      });
-      window.LMELaeringsverksted.renderGrid(document.getElementById('lm-grid'), list.slice(0, 8), { en: isEn() });
-    }
-    function boot() {
-      fillSelect(document.getElementById('lm-fAge'), 'ageBands');
-      fillSelect(document.getElementById('lm-fSubject'), 'subjects');
-      ['lm-fAge', 'lm-fSubject', 'lm-fPrice'].forEach(function (id) {
-        document.getElementById(id).addEventListener('change', draw);
-      });
-      draw();
-    }
-    fetch('/api/laeringsverksted?t=' + Date.now())
-      .then(function (r) { return r.json(); })
-      .then(function (d) { all = (d && d.resources) || []; })
-      .catch(function () { all = []; })
-      .then(function () {
-        var run = function () { boot(); };
-        if (window.LMELaeringsverksted) run();
-        else { var t = setInterval(function () { if (window.LMELaeringsverksted) { clearInterval(t); run(); } }, 40); }
-      });
-  })();
-  </script>
 
   <section class="shop-trust">
     <div class="trust-cell">

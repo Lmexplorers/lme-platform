@@ -124,7 +124,7 @@
         <h3 data-no="Lag materiell i Bookly" data-en="Create materials in Bookly">Lag materiell i Bookly</h3>
         <p data-no="Utforsk aktiviteter, eller lag dine egne læringsressurser med KI-hjelp." data-en="Explore activities, or create your own learning resources with AI help.">Utforsk aktiviteter, eller lag dine egne læringsressurser med KI-hjelp.</p>
       </a>
-      <a class="lv-entry-card lv-entry-3" href="/butikk#laremidler" data-en-href="/shop#laremidler">
+      <a class="lv-entry-card lv-entry-3" href="/laeringsverksted?type=samlepakke" data-en-href="/laeringsverksted?type=samlepakke">
         <span class="lv-entry-icon">🛍️</span>
         <h3 data-no="Utforsk samlepakker" data-en="Explore bundles">Utforsk samlepakker</h3>
         <p data-no="Kjøp enkeltressurser eller samlepakker i LME Butikk." data-en="Buy single resources or bundles in the LME Shop.">Kjøp enkeltressurser eller samlepakker i LME Butikk.</p>
@@ -240,6 +240,8 @@
        et prisfilter: /laeringsverksted?pris=gratis */
     var presetPris = new URL(location.href).searchParams.get('pris');
     if (presetPris) document.getElementById('fPrice').value = presetPris;
+    var presetType = new URL(location.href).searchParams.get('type');
+    if (presetType) document.getElementById('fType').value = presetType;
     var presetSok = new URL(location.href).searchParams.get('sok');
     if (presetSok) document.getElementById('lvSearch').value = presetSok;
     renderList();
