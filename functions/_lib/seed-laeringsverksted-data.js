@@ -32,7 +32,7 @@ export const LIVETS_TIDSLINJE = {
   audience: ["foreldre", "montessoripedagog", "pedagog", "hjemme"],
   ageBands: ["m3-6", "m6-9"],
   direction: "montessori",
-  subjects: ["naturfag", "historie", "kultur", "zoologi"],
+  subjects: ["naturfag", "historie", "kultur", "zoologi", "botanikk"],
   resourceType: ["samlepakke", "tidslinje", "begrepskort", "larerveiledning"],
   competencyGoals: [],
   contains: [
@@ -148,7 +148,7 @@ export const DE_SMA_NATURUTFORSKERNE = {
   audience: ["foreldre", "pedagog", "hjemme"],
   ageBands: ["3-6"],
   direction: "montessori",
-  subjects: ["naturfag", "lesing-skriving"],
+  subjects: ["naturfag", "lesing-skriving", "zoologi"],
   resourceType: ["minibok", "lesetekst"],
   competencyGoals: [],
   contains: [
@@ -483,7 +483,7 @@ export const MIA_TEO_KROPP_6_9 = {
   audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
   ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
   direction: "begge",
-  subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
+  subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "sprakutvikling"],
   resourceType: ["arbeidshefte", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan oppdage tidlige kroppssignaler før en følelse blir svært sterk, knytte signaler til realistiske støttebehov, og utvikle egne trygge strategier for regulering.", en: "The child can notice early body signals before a feeling becomes very strong, link signals to realistic support needs, and develop their own safe strategies for regulation." },
@@ -821,7 +821,7 @@ export const MIA_TEO_BOK_6_9 = {
   audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
   ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
   direction: "begge",
-  subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
+  subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "sprakutvikling"],
   resourceType: ["arbeidshefte", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan utvide følelsesspråket, gjenkjenne tidlige kroppssignaler, koble hendelse, tanke, følelse og handling, sette egne grenser og be om hjelp, og utvikle strategier som faktisk hjelper.", en: "The child can expand their emotional vocabulary, recognise early body signals, link event, thought, feeling and action, set their own boundaries and ask for help, and develop strategies that actually help." },
@@ -1080,7 +1080,7 @@ export const MIA_TEO_TERMOMETER_6_9 = {
   audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
   ageBands: ["m6-9", "1-2trinn", "3-4trinn"],
   direction: "begge",
-  subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "barnehage", "sprakutvikling"],
+  subjects: ["sosial-kompetanse", "livsmestring", "spesialpedagogikk", "sprakutvikling"],
   resourceType: ["arbeidshefte", "aktivitetskort", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan legge merke til tidlige kroppssignaler, vurdere styrken i en følelse fra 1 til 5, velge og teste egne strategier, og lage en personlig reguleringsplan.", en: "The child can notice early body signals, rate the strength of a feeling from 1 to 5, choose and test their own strategies, and create a personal regulation plan." },
@@ -2050,7 +2050,7 @@ export const MIA_TEO_NATUR_3_6 = {
   audience: ["foreldre", "pedagog", "montessoripedagog", "spesialpedagog", "hjemme"],
   ageBands: ["3-6", "m3-6"],
   direction: "montessori",
-  subjects: ["naturfag", "barnehage", "spesialpedagogikk", "praktisk-liv"],
+  subjects: ["naturfag", "barnehage", "spesialpedagogikk"],
   resourceType: ["aktivitetskort", "arbeidsark", "larerveiledning"],
   competencyGoals: [
     { no: "Barnet kan bruke sansene til å observere naturen, sammenligne og sortere naturfunn, og sette enkle ord på vær og årstid.", en: "The child can use their senses to observe nature, compare and sort natural finds, and put simple words to weather and season." },
