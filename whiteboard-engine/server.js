@@ -33,6 +33,15 @@
  *   POST /api/generer-episode   { shots:[{videoUrl,durationSec,audio:[{url,startSec,durationSec}]}], aspect? }
  *        -> 202 { jobId }  (samme status-endepunkt)
  *
+ * I tillegg: sluttsammenstilling for LME VideoFlow. Tar imot ferdige
+ * scene-bilder (allerede stylede, se functions/api/videoflow/scene-image.js)
+ * og ferdig stemmelyd + ord-tidsstempler per scene (ElevenLabs with-
+ * timestamps, se functions/api/videoflow/scene-voice.js), og setter dem
+ * sammen til én Ken Burns-video med karaoke-undertekster brent inn. Samme
+ * "ingen nye AI-kall"-prinsipp som episode-ruten over:
+ *   POST /api/generer-videoflow   { scenes:[{imageUrl,audioUrl,durationSec,words:[{word,start,end}]}], aspect? }
+ *        -> 202 { jobId }  (samme status-endepunkt)
+ *
  * Krever i .env:  OPENAI_API_KEY, ELEVENLABS_API_KEY
  *                 GEMINI_API_KEY (for /api/generer-veo: Nano Banana + Veo)
  * Valgfritt:      PORT (3000), PUBLIC_BASE_URL, ELEVENLABS_VOICE_ID,
@@ -747,6 +756,56 @@ async function renderEpisodeJob(jobId, { shots, aspect }, publicBase) {
   }
 }
 
+/* ================= VideoFlow (LME VideoFlow sluttsammenstilling) =================
+   Setter allerede genererte scene-bilder og stemmelyd (med ord-tidsstempler)
+   sammen til én Ken Burns-video med karaoke-undertekster. Ingen egne AI-kall
+   her heller, kun Remotion-rendring. */
+async function renderVideoflowJob(jobId, { scenes, aspect }, publicBase) {
+  const t0 = Date.now();
+  const jobState = { status: "pending", progress: "", when: Date.now() };
+  const save = () => jobs.set(jobId, { ...jobState, when: Date.now() });
+  const setProg = (p) => { jobState.progress = p; save(); };
+  try {
+    const list = (Array.isArray(scenes) ? scenes : []).filter((s) => s && s.imageUrl);
+    if (!list.length) throw new Error("Ingen scener å sette sammen til en video.");
+    const asp = aspect === "9:16" ? "9:16" : "16:9";
+    const fps = 30;
+    setProg(`Setter sammen ${list.length} scener …`);
+    let accFrames = 0;
+    const outScenes = list.map((s) => {
+      const durSec = Math.max(1, Number(s.durationSec) || 5);
+      const durationInFrames = Math.ceil(durSec * fps);
+      accFrames += durationInFrames;
+      const words = Array.isArray(s.words) ? s.words.map((w) => ({ word: String((w && w.word) || ""), start: Number((w && w.start) || 0), end: Number((w && w.end) || 0) })) : [];
+      return { imageUrl: s.imageUrl, audioUrl: s.audioUrl || "", durationInFrames, words };
+    });
+    const totalFrames = Math.max(1, accFrames);
+    const inputProps = { scenes: outScenes, fps, totalFrames, aspect: asp };
+    const serveUrl = await getServeUrl();
+    const composition = await selectComposition({ serveUrl, id: "CaptionedSlideshowComposition", inputProps });
+    const outName = `videoflow_${Date.now()}.mp4`;
+    const outputLocation = path.resolve(OUTPUT_DIR, outName);
+    await renderMedia({
+      composition, serveUrl, codec: "h264", outputLocation, inputProps,
+      jpegQuality: 80,
+      concurrency: 1,
+      offthreadVideoCacheSizeInBytes: 100 * 1024 * 1024,
+      chromiumOptions: { gl: "swiftshader" },
+    });
+    console.log(`VideoFlow-video ferdig på ${((Date.now() - t0) / 1000).toFixed(1)} s.`);
+    jobState.status = "done";
+    jobState.progress = "";
+    jobState.videoUrl = `${publicBase}/output/${outName}`;
+    jobState.durationSeconds = Number((totalFrames / fps).toFixed(1));
+    save();
+  } catch (error) {
+    console.error("VideoFlow-jobb feilet:", error);
+    jobState.status = "error";
+    jobState.error = String((error && error.message) || error);
+    save();
+  }
+}
+
 /* ---------- Jobber (asynkron rendring) ----------
    Rendring tar flere minutter. I stedet for å holde én lang HTTP-forbindelse
    åpen (som ryker og gir "Failed to fetch"), starter vi en jobb, svarer med en
@@ -890,6 +949,23 @@ app.post("/api/generer-episode", (req, res) => {
   jobs.set(jobId, { status: "pending", progress: "Starter …", when: Date.now() });
   res.status(202).json({ jobId, status: "pending" });
   renderEpisodeJob(jobId, { shots, aspect }, publicBase);
+});
+
+/* ---------- Start VideoFlow-jobb (LME VideoFlow sluttsammenstilling) ---------- */
+app.post("/api/generer-videoflow", (req, res) => {
+  const { scenes, aspect } = req.body || {};
+  if (!Array.isArray(scenes) || !scenes.length) {
+    return res.status(400).json({ error: "scenes mangler i forespørselen." });
+  }
+  gcJobs();
+  const proto = String(req.headers["x-forwarded-proto"] || req.protocol || "https").split(",")[0].trim();
+  const host = req.get("host");
+  const publicBase = host ? `${proto}://${host}` : PUBLIC_BASE;
+
+  const jobId = newJobId();
+  jobs.set(jobId, { status: "pending", progress: "Starter …", when: Date.now() });
+  res.status(202).json({ jobId, status: "pending" });
+  renderVideoflowJob(jobId, { scenes, aspect }, publicBase);
 });
 
 /* ---------- Status-polling ---------- */

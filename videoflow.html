@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LME VideoFlow | Little Montessori Explorers</title>
+<meta name="description" content="Turn any idea, text or audio into a ready-to-post video with AI. From idea to finished video.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'), url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink-50:#fff5f8; --pink-100:#ffe8f0; --pink-200:#ffd1e1; --pink-300:#ffb3cd;
+    --pink-400:#ff8ab3; --pink-500:#e85a92; --pink-600:#c43d75; --pink-700:#8f2a55;
+    --ink:#1e1a24; --ink-soft:#5c5568; --warm-white:#fbfaff;
+    --violet-50:#f5f0ff; --violet-100:#ece0ff; --violet-500:#7c4dff; --violet-600:#6a3fe0; --violet-700:#5730b8;
+    --shadow-soft:0 8px 32px rgba(90,50,160,.10); --shadow-med:0 16px 48px rgba(90,50,160,.16);
+    --font-head:'Playpen Sans', system-ui, sans-serif;
+    --font-body:'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body); color: var(--ink); line-height: 1.6;
+    background: radial-gradient(ellipse 70% 45% at 15% 0%, var(--violet-50), transparent 60%), radial-gradient(ellipse 60% 40% at 100% 15%, var(--pink-50), transparent 60%), var(--warm-white);
+  }
+  h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.15; }
+  a { color: var(--violet-600); }
+
+  .topbar { position: sticky; top: 0; z-index: 100; background: rgba(251,250,255,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--violet-100); padding: .75rem 1.5rem; }
+  .topbar-inner { max-width: 1180px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: .6rem; text-decoration: none; font-family: var(--font-head); font-weight: 700; color: var(--violet-700); font-size: 1.1rem; }
+  .top-actions { display: flex; align-items: center; gap: .6rem; }
+  .lang-toggle { background: linear-gradient(135deg, var(--violet-500), var(--violet-600)); color: #fff; border: none; padding: .5rem 1.1rem; border-radius: 999px; font-weight: 600; font-size: .88rem; cursor: pointer; box-shadow: var(--shadow-soft); }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 1.5rem; }
+  .hero { text-align: center; padding: 4.5rem 0 3rem; }
+  .hero .kick { display: inline-flex; align-items: center; gap: .4rem; background: var(--violet-100); color: var(--violet-700); font-weight: 700; font-size: .85rem; padding: .4rem 1rem; border-radius: 999px; margin-bottom: 1rem; }
+  .hero h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); margin-bottom: .8rem; background: linear-gradient(135deg, var(--violet-600), var(--pink-600)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p.pitch { font-size: clamp(1.05rem, 2vw, 1.3rem); color: var(--ink-soft); max-width: 640px; margin: 0 auto 2rem; }
+  .btn { display: inline-flex; align-items: center; gap: .5rem; border: none; border-radius: 999px; padding: 1rem 2.1rem; font-weight: 700; font-size: 1.05rem; cursor: pointer; background: linear-gradient(135deg, var(--violet-500), var(--violet-600)); color: #fff; box-shadow: var(--shadow-med); text-decoration: none; transition: transform .15s; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn.ghost { background: #fff; color: var(--violet-600); border: 1.5px solid var(--violet-200,#ece0ff); box-shadow: none; }
+  .hint-row { color: var(--ink-soft); font-size: .85rem; margin-top: .9rem; }
+
+  .section { padding: 3rem 0; }
+  .section h2 { text-align: center; font-size: clamp(1.6rem, 3vw, 2.1rem); margin-bottom: .5rem; }
+  .section .sub { text-align: center; color: var(--ink-soft); max-width: 560px; margin: 0 auto 2.4rem; }
+
+  .steps4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
+  @media (max-width: 880px) { .steps4 { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .steps4 { grid-template-columns: 1fr; } }
+  .step-card { background: #fff; border: 1px solid var(--violet-100); border-radius: 20px; padding: 1.5rem 1.3rem; box-shadow: var(--shadow-soft); }
+  .step-card .num { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--violet-500), var(--pink-500)); color: #fff; font-weight: 800; margin-bottom: .8rem; }
+  .step-card h3 { font-size: 1.05rem; margin-bottom: .35rem; }
+  .step-card p { color: var(--ink-soft); font-size: .92rem; }
+
+  .style-gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: .9rem; }
+  @media (max-width: 780px) { .style-gallery { grid-template-columns: repeat(2, 1fr); } }
+  .style-chip { background: #fff; border: 1px solid var(--violet-100); border-radius: 16px; padding: 1rem; text-align: center; font-weight: 700; color: var(--violet-700); box-shadow: var(--shadow-soft); }
+  .style-chip span { display: block; font-weight: 400; color: var(--ink-soft); font-size: .8rem; margin-top: .25rem; }
+
+  .price-card { max-width: 420px; margin: 0 auto; background: #fff; border: 2px solid var(--violet-500); border-radius: 26px; padding: 2.2rem; text-align: center; box-shadow: var(--shadow-med); position: relative; }
+  .price-card .badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, var(--violet-500), var(--pink-500)); color: #fff; font-weight: 700; font-size: .78rem; padding: .3rem 1rem; border-radius: 999px; }
+  .price-card .amount { font-family: var(--font-head); font-size: 3.2rem; font-weight: 800; color: var(--ink); margin: 1rem 0 .2rem; }
+  .price-card .amount span { font-size: 1.1rem; font-weight: 600; color: var(--ink-soft); }
+  .price-card .credits { color: var(--violet-600); font-weight: 700; margin-bottom: 1.2rem; }
+  .price-card ul { list-style: none; text-align: left; margin: 1.2rem 0; }
+  .price-card li { padding: .4rem 0; color: var(--ink-soft); font-size: .94rem; display: flex; gap: .5rem; align-items: flex-start; }
+  .price-card li::before { content: "✓"; color: var(--violet-600); font-weight: 800; }
+
+  .note { background: var(--violet-50); border: 1px solid var(--violet-100); border-radius: 16px; padding: 1rem 1.2rem; font-size: .92rem; color: var(--violet-700); max-width: 640px; margin: 2rem auto 0; text-align: center; }
+
+  footer { text-align: center; padding: 3rem 0 4rem; color: var(--ink-soft); font-size: .88rem; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="/videoflow" class="brand">🎞️ LME VideoFlow</a>
+    <div class="top-actions">
+      <a class="btn ghost" style="padding:.55rem 1.2rem;font-size:.9rem;" href="/videoflow-studio" data-no="Åpne studio" data-en="Open studio">Åpne studio</a>
+      <button class="lang-toggle" id="langToggle">EN 🌍</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <section class="hero">
+    <span class="kick">🎬 <span data-no="Ny app" data-en="New app">Ny app</span></span>
+    <h1 data-no="Fra idé til ferdig video" data-en="From idea to finished video">Fra idé til ferdig video</h1>
+    <p class="pitch" data-no="Gjør enhver idé, tekst eller lydopptak om til en ferdig, klar-til-å-poste video med AI." data-en="Turn any idea, text or audio into a ready-to-post video with AI.">Gjør enhver idé, tekst eller lydopptak om til en ferdig, klar-til-å-poste video med AI.</p>
+    <a class="btn" href="/videoflow-studio">🪄 <span data-no="Lag din første video" data-en="Make my first video">Lag din første video</span></a>
+    <div class="hint-row" data-no="$8/mo · avbryt når som helst · full kommersiell bruksrett" data-en="$8/mo · cancel any time · full commercial rights">$8/mo · avbryt når som helst · full kommersiell bruksrett</div>
+  </section>
+
+  <section class="section">
+    <h2 data-no="Slik funker det" data-en="How it works">Slik funker det</h2>
+    <p class="sub" data-no="Fire steg, du styrer hvert eneste ett før noe koster kreditter." data-en="Four steps, you control every one before it costs credits.">Fire steg, du styrer hvert eneste ett før noe koster kreditter.</p>
+    <div class="steps4">
+      <div class="step-card"><span class="num">1</span><h3 data-no="Skriv en idé" data-en="Write an idea">Skriv en idé</h3><p data-no="Ett tema eller manus, du velger visuell stil og stemme." data-en="One topic or script, you pick the visual style and voice.">Ett tema eller manus, du velger visuell stil og stemme.</p></div>
+      <div class="step-card"><span class="num">2</span><h3 data-no="AI skriver manus" data-en="AI writes the script">AI skriver manus</h3><p data-no="Scene for scene, med replikk og bildebeskrivelse for hver." data-en="Scene by scene, with narration and a visual description for each.">Scene for scene, med replikk og bildebeskrivelse for hver.</p></div>
+      <div class="step-card"><span class="num">3</span><h3 data-no="Bilder og stemme" data-en="Images and voice">Bilder og stemme</h3><p data-no="Hver scene får sitt eget stylede bilde og ekte AI-stemme." data-en="Each scene gets its own styled image and real AI voice.">Hver scene får sitt eget stylede bilde og ekte AI-stemme.</p></div>
+      <div class="step-card"><span class="num">4</span><h3 data-no="Ferdig video" data-en="Finished video">Ferdig video</h3><p data-no="Alt settes sammen automatisk, med undertekster brent inn." data-en="Everything is assembled automatically, with captions burned in.">Alt settes sammen automatisk, med undertekster brent inn.</p></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 data-no="Enhver stil, byttet på sekunder" data-en="Any look, swapped in seconds">Enhver stil, byttet på sekunder</h2>
+    <p class="sub" data-no="Samme manus, helt forskjellig uttrykk." data-en="Same script, completely different look.">Samme manus, helt forskjellig uttrykk.</p>
+    <div class="style-gallery">
+      <div class="style-chip">🎬 Cinematic</div>
+      <div class="style-chip">🧸 3D Pixar</div>
+      <div class="style-chip">🎌 Anime</div>
+      <div class="style-chip">🧱 Claymation</div>
+      <div class="style-chip">💥 Comic book</div>
+      <div class="style-chip">📜 Vintage</div>
+      <div class="style-chip">📷 Photoreal</div>
+      <div class="style-chip">✏️ Whiteboard</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 data-no="Enkel pris" data-en="Simple pricing">Enkel pris</h2>
+    <p class="sub" data-no="Start i det små, og oppgrader når du vokser." data-en="Start small, upgrade as you grow.">Start i det små, og oppgrader når du vokser.</p>
+    <div class="price-card">
+      <span class="badge" data-no="Kom i gang" data-en="Get started">Kom i gang</span>
+      <div class="amount">$8<span>/mo</span></div>
+      <div class="credits" data-no="2000 kreditter i måneden" data-en="2000 credits a month">2000 kreditter i måneden</div>
+      <ul>
+        <li data-no="Manus, bilder og stemme, alt inkludert" data-en="Script, images and voice, all included">Manus, bilder og stemme, alt inkludert</li>
+        <li data-no="Full kommersiell bruksrett" data-en="Full commercial rights">Full kommersiell bruksrett</li>
+        <li data-no="Avbryt når som helst" data-en="Cancel any time">Avbryt når som helst</li>
+        <li data-no="Oppgrader til større plan når du trenger mer" data-en="Step up to a bigger plan whenever you need more">Oppgrader til større plan når du trenger mer</li>
+      </ul>
+      <a class="btn" style="width:100%;justify-content:center;" href="/videoflow-studio" data-no="Kom i gang" data-en="Get started">Kom i gang</a>
+    </div>
+    <div class="note" data-no="Betaling/abonnement er ikke koblet til ennå (fase 1 av utviklingen). Eieren har alltid gratis og ubegrenset tilgang." data-en="Payment/subscription isn't wired up yet (phase 1 of development). The owner always has free, unlimited access.">Betaling/abonnement er ikke koblet til ennå (fase 1 av utviklingen). Eieren har alltid gratis og ubegrenset tilgang.</div>
+  </section>
+</div>
+
+<footer>
+  <span data-no="LME VideoFlow er en del av Little Montessori Explorers." data-en="LME VideoFlow is part of Little Montessori Explorers.">LME VideoFlow er en del av Little Montessori Explorers.</span>
+</footer>
+
+<script>
+  var currentLang = (window.LME_CURRENT_LANG === 'en') ? 'en' : 'no';
+  function switchLanguage(lang) {
+    currentLang = lang; window.LME_CURRENT_LANG = lang; document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      var t = el.getAttribute('data-' + lang); if (t === null) return;
+      if (t.indexOf('<') !== -1) el.innerHTML = t; else el.textContent = t;
+    });
+    document.getElementById('langToggle').textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+  }
+  document.getElementById('langToggle').addEventListener('click', function () { switchLanguage(currentLang === 'no' ? 'en' : 'no'); });
+  if (currentLang === 'en') switchLanguage('en');
+</script>
+</body>
+</html>
