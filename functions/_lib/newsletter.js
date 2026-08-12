@@ -214,14 +214,18 @@ export async function sendNewsletter(env, sub, index) {
   }
 }
 
-/* Registrer / oppdater en nyhetsbrev-abonnent i KV. */
-export async function registerNewsletter(env, email, name, lang, source) {
+/* Registrer / oppdater en nyhetsbrev-abonnent i KV. "tag" er valgfri ekstra
+   kontekst (f.eks. et quiz-resultat) som ikke styrer selve serien, bare
+   lagres for oversikt. */
+export async function registerNewsletter(env, email, name, lang, source, tag) {
   if (!env.BUILDER_KV || !email) return;
   const key = "nl:" + email.trim().toLowerCase();
   const existing = await env.BUILDER_KV.get(key);
   if (existing) return; // ikke nullstill en som allerede er i gang
-  await env.BUILDER_KV.put(key, JSON.stringify({
+  const rec = {
     email: email.trim(), name: name || "", lang: lang === "en" ? "en" : "no",
     weekIndex: 0, active: true, joined: Date.now(), lastSent: 0, source: (source || "").toString().slice(0, 60),
-  }));
+  };
+  if (tag) rec.tag = String(tag).slice(0, 60);
+  await env.BUILDER_KV.put(key, JSON.stringify(rec));
 }

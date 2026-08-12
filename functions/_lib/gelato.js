@@ -1,7 +1,7 @@
 /**
  * Gelato print-on-demand — automatisk trykk + frakt for fysiske produkter
  * (Skoledagbøkene, planleggere, Plansjer/Tidslinje), samme mønster som
- * resten av plattformens integrasjoner (Stripe, MailerSend, MailerLite):
+ * resten av plattformens integrasjoner (Stripe, MailerSend):
  * ett fetch()-kall rett fra Cloudflare Functions, ingen mellomtjeneste.
  *
  * Krever miljøvariabelen GELATO_API_KEY (Cloudflare Pages -> Settings ->

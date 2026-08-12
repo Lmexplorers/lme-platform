@@ -769,58 +769,27 @@
 
     <div class="page-header">
       <h1 data-edit="ph-title">Automations</h1>
-      <p data-edit="ph-sub">E-postautomasjoner fra MailerLite, velkomstsekvenser og oppfølging som går av seg selv.</p>
+      <p data-edit="ph-sub">E-postautomasjoner bygget rett i kildekoden med MailerSend, velkomstsekvenser og oppfølging som går av seg selv. Ikke lenger MailerLite.</p>
     </div>
 
     <div class="ml-top">
-      <span class="count" id="autCount">Laster …</span>
-      <a href="https://dashboard.mailerlite.com/automations" target="_blank" rel="noopener" class="ml-cta">Åpne i MailerLite ↗</a>
+      <span class="count" id="autCount">8 automasjoner</span>
+      <a href="/email" class="ml-cta">Se abonnenter ↗</a>
     </div>
 
-    <div id="autBody"><div class="ml-state">Henter automasjoner fra MailerLite …</div></div>
-
-    <script>
-    (function(){
-      var body = document.getElementById('autBody');
-      var count = document.getElementById('autCount');
-
-      fetch('/api/mailerlite/automations').then(function(r){return r.json();}).then(function(d){
-        if (d && d.error === 'not_configured') return setup();
-        if (!d || d.error) return fail();
-        var list = d.data || d.automations || [];
-        count.textContent = list.length + (list.length === 1 ? ' automasjon' : ' automasjoner');
-        if (!list.length) {
-          body.innerHTML = '<div class="ml-state">Ingen automasjoner ennå. Lag din første velkomstsekvens i MailerLite.</div>';
-          return;
-        }
-        var html = '<div class="ml-list">';
-        list.forEach(function(a){
-          var on = a.enabled === true;
-          var steps = Array.isArray(a.steps) ? a.steps.length : (a.steps_count != null ? a.steps_count : null);
-          var meta = (steps != null ? steps + ' steg' : 'Automasjon');
-          html += '<div class="ml-row"><div class="ml-icon">⚡</div>'
-            + '<div class="ml-main"><div class="name">'+esc(a.name)+'</div><div class="meta">'+meta+'</div></div>'
-            + '<span class="ml-badge '+(on?'on':'off')+'">'+(on?'Aktiv':'Av')+'</span>'
-            + '<a class="ml-link" target="_blank" rel="noopener" href="https://dashboard.mailerlite.com/automations/'+encodeURIComponent(a.id)+'">Åpne ↗</a>'
-            + '</div>';
-        });
-        html += '</div>';
-        body.innerHTML = html;
-      }).catch(fail);
-
-      function esc(s){ var d=document.createElement('div'); d.textContent=s==null?'':s; return d.innerHTML; }
-      function setup(){
-        count.textContent = 'Ikke koblet til';
-        body.innerHTML = '<div class="ml-state"><strong>Koble til MailerLite for å se automasjonene dine.</strong><br><br>'
-          + 'Legg til API-nøkkelen i Cloudflare: Workers &amp; Pages → prosjektet → Settings → Variables and Secrets → '
-          + '<code>MAILERLITE_API_KEY</code> (hentes i MailerLite → Integrations → API). Legg den til for både Production og Preview, og redeploy.</div>';
-      }
-      function fail(){
-        count.textContent = 'Kunne ikke laste';
-        body.innerHTML = '<div class="ml-state">Klarte ikke å hente automasjoner fra MailerLite akkurat nå. Prøv igjen senere.</div>';
-      }
-    })();
-    </script>
+    <div id="autBody">
+      <div class="ml-list">
+        <div class="ml-row"><div class="ml-icon">⚡</div><div class="ml-main"><div class="name">Ukentlig nyhetsbrev</div><div class="meta">6 uker, evergreen</div></div><span class="ml-badge on">Aktiv</span></div>
+        <div class="ml-row"><div class="ml-icon">⚡</div><div class="ml-main"><div class="name">Montessori mesterklasse, velkomstserie</div><div class="meta">4 steg</div></div><span class="ml-badge on">Aktiv</span></div>
+        <div class="ml-row"><div class="ml-icon">⚡</div><div class="ml-main"><div class="name">Claude-kurset, oppfølging</div><div class="meta">Takk + 2-dagers oppfølger</div></div><span class="ml-badge on">Aktiv</span></div>
+        <div class="ml-row"><div class="ml-icon">⚡</div><div class="ml-main"><div class="name">Oppskrifter, leveringsserie</div><div class="meta">Levering + 2 oppfølgere</div></div><span class="ml-badge on">Aktiv</span></div>
+        <div class="ml-row"><div class="ml-icon">⚡</div><div class="ml-main"><div class="name">Skoledagbok, leveringsserie</div><div class="meta">Levering + 2 oppfølgere</div></div><span class="ml-badge on">Aktiv</span></div>
+        <div class="ml-row"><div class="ml-icon">⚡</div><div class="ml-main"><div class="name">Mia &amp; Teo følelser, gratisserie</div><div class="meta">5 steg</div></div><span class="ml-badge on">Aktiv</span></div>
+        <div class="ml-row"><div class="ml-icon">⚡</div><div class="ml-main"><div class="name">Læringsverksted, leveringsmail</div><div class="meta">1 steg</div></div><span class="ml-badge on">Aktiv</span></div>
+        <div class="ml-row"><div class="ml-icon">⚡</div><div class="ml-main"><div class="name">31-dagersutfordringen</div><div class="meta">Daglig drypp</div></div><span class="ml-badge on">Aktiv</span></div>
+      </div>
+      <p style="margin-top:14px;color:var(--ink-muted,#8A8A8A);font-size:13px;">Disse kjører direkte fra plattformens kode via MailerSend, ikke som eksterne automasjoner i et tredjepartsverktøy. Be Claude Code om å legge til eller endre en serie.</p>
+    </div>
 
   </main>
 </div>

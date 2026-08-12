@@ -744,11 +744,11 @@ export const PLATTFORM_KURS = {
       },
       "body": [
         {
-          "no": "Email samler e-postkampanjene og nyhetsbrevene dine, hentet direkte fra MailerLite-kontoen din. Automations er e-postautomasjonene derfra: velkomstsekvenser og oppfølging som går av seg selv, uten at du må sende noe manuelt hver gang.",
+          "no": "Email viser abonnentene dine, hentet direkte fra plattformens egen liste. Automations er e-postautomasjonene: velkomstsekvenser og oppfølging som går av seg selv, uten at du må sende noe manuelt hver gang.",
           "en": ""
         },
         {
-          "no": "For de faste, viktige e-postseriene (som følger et kjøp eller en hendelse) bruker jeg MailerSend rett fra koden i stedet for MailerLite-automasjoner. MailerLite er fortsatt fint til enkeltstående utsendelser og nyhetsbrev der du uansett skal inn og se på innholdet selv.",
+          "no": "Alle e-postseriene (nyhetsbrev, velkomstserier, oppfølging etter et kjøp eller en hendelse) sendes med MailerSend rett fra koden. Vi bruker ikke MailerLite lenger noe sted på plattformen, alt er samlet ett sted i din egen kode.",
           "en": ""
         }
       ],

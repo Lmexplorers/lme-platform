@@ -7,7 +7,7 @@
    egen, ny gratis-inngang til e-postliste-temaet, atskilt fra den
    eksisterende "5 lead magnet-idéer"-guiden i funnel/epostliste-freebie/.
 
-   Flyten: opt-in.html  ->  (MailerLite)  ->  takk.html (åpne minikurset)
+   Flyten: opt-in.html  ->  (plattformens egen liste)  ->  takk.html (åpne minikurset)
    ===================================================================== */
 
 window.LME_FUNNEL = {
@@ -20,8 +20,8 @@ window.LME_FUNNEL = {
       navn: "Little Montessori Explorers",
       kortnavn: "LME",
       logo: "/images/lme-logo.png",
-      optInActionUrl: "/api/mailerlite/subscribe",
-      mailerliteGroup: "195275235280291047", // Epostliste minikurs, gratis leads
+      optInActionUrl: "/api/subscribe",
+      newsletterSource: "epostliste-minikurs-no", // Epostliste minikurs, gratis leads
       etterOptIn: "takk.html"
     },
 
@@ -78,8 +78,8 @@ window.LME_FUNNEL = {
       navn: "Little Montessori Explorers",
       kortnavn: "LME",
       logo: "/images/lme-logo.png",
-      optInActionUrl: "/api/mailerlite/subscribe",
-      mailerliteGroup: "195275286458140641", // Email list mini-course, free leads (EN)
+      optInActionUrl: "/api/subscribe",
+      newsletterSource: "epostliste-minikurs-en", // Email list mini-course, free leads (EN)
       etterOptIn: "takk.html"
     },
 

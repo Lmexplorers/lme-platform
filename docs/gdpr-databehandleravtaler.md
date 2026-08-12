@@ -12,7 +12,7 @@ som er en del av vilkårene du allerede har akseptert.
 |---|---|---|
 | **Cloudflare** | Drift, lagring (KV), sikkerhet | Dashboard, Manage Account, Configurations, Data Protection / DPA. Innebygd i vilkårene, kan lastes ned signert. |
 | **Stripe** | Betaling, kunde- og kjøpsdata | DPA er del av Stripe Services Agreement (automatisk). Signert kopi: Dashboard, Settings, Legal / Compliance. |
-| **MailerLite** | E-post, navn, nyhetsbrev | Konto, Integrations / Legal. DPA ligger under vilkår, godtas ved bruk. Egen signering: kontakt support ved behov. |
+| **MailerSend** | E-post, navn, nyhetsbrev | Konto, Legal / DPA-side. DPA ligger under vilkår, godtas ved bruk. Egen signering: kontakt support ved behov. |
 | **Anthropic** | AI-tekst (Nathalie AI, oversettelse) | Del av Commercial Terms. DPA: trust.anthropic.com eller be om via support. Bruk kommersielle vilkår, ikke forbruker. |
 | **OpenAI** | AI-bilder (valgt motor) | platform.openai.com, Settings, Organization. DPA ligger tilgjengelig for signering der. Slå av bruk til trening. |
 | **Google (Gemini)** | AI-bilder (valgt motor) | Google Cloud / AI Studio-vilkår inneholder DPA (Cloud Data Processing Addendum). |
@@ -22,7 +22,7 @@ som er en del av vilkårene du allerede har akseptert.
 
 - [ ] Cloudflare DPA bekreftet
 - [ ] Stripe DPA bekreftet
-- [ ] MailerLite DPA bekreftet
+- [ ] MailerSend DPA bekreftet
 - [ ] Anthropic kommersielle vilkår / DPA bekreftet
 - [ ] OpenAI DPA bekreftet, trening avslått
 - [ ] Google Cloud DPA bekreftet

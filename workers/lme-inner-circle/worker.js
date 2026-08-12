@@ -2,7 +2,7 @@
 // ========================================================================
 // EKTE innlogging: e-post + passord (PBKDF2-hashing), sesjoner.
 // NYTT i v2.0: medlemskapssalg med Stripe (prøveperiode styres av PROVETID_DAGER, nå 0),
-// affiliate-program med provisjon, velkomst-epost via MailerLite og
+// affiliate-program med provisjon, velkomst-epost via MailerSend og
 // admin-dashbord for VIP.
 //
 // BINDINGS:
@@ -13,7 +13,7 @@
 // SECRETS (wrangler secret put ...):
 //   STRIPE_SECRET_KEY      sk_live_...
 //   STRIPE_WEBHOOK_SECRET  whsec_...
-//   MAILERLITE_API_KEY     API-nokkel fra MailerLite
+//   MAILERSEND_API_KEY     API-nokkel fra MailerSend (samme som hovedplattformen)
 // VARS (wrangler.toml):
 //   AFFILIATE_COMMISSION_PERCENT = "30"
 //   AFFILIATE_COOKIE_DAYS        = "30"
@@ -963,8 +963,11 @@ async function meldInnUtfordring(env, epost, navn, lang){
 }
 
 // ---- Velkomst-epost ----
-// Legger e-posten i email_queue og melder personen inn i MailerLite.
-// Selve utsendingen gjøres av en MailerLite-automasjon (trigger: ny abonnent).
+// Legger e-posten i email_queue (logg/historikk) og sender rett fra koden
+// med MailerSend. Fram til 12. august 2026 ble utsendingen gjort av en
+// MailerLite-automasjon (trigger: ny abonnent) — fjernet da Renate ba om å
+// rydde MailerLite helt ut av plattformen, samme mønster som resten av
+// koden (_lib/*-mail.js i hovedrepoet bruker alle MailerSend direkte).
 async function sendVelkomstEpost(env, epost, navn, tier){
   const planNavn = ({regular:'Medlem', pro:'Pro', vip:'VIP'})[tier] || tier;
   const emne = 'Velkommen til LME Inner Circle 💛';
@@ -983,12 +986,19 @@ async function sendVelkomstEpost(env, epost, navn, tier){
   const naa = new Date().toISOString();
   const r = await env.DB.prepare(`INSERT INTO email_queue (email, subject, html_body, status, created_at) VALUES (?,?,?,'pending',?)`)
     .bind(epost, emne, kropp, naa).run();
-  if(env.MAILERLITE_API_KEY){
+  if(env.MAILERSEND_API_KEY){
     try {
-      const res = await fetch('https://connect.mailerlite.com/api/subscribers', {
+      const res = await fetch('https://api.mailersend.com/v1/email', {
         method:'POST',
-        headers:{'Authorization':'Bearer '+env.MAILERLITE_API_KEY,'Content-Type':'application/json','Accept':'application/json'},
-        body: JSON.stringify({ email: epost, fields: { name: navn || '', lme_plan: planNavn }, status: 'active', groups: [env.MAILERLITE_GROUP_ID || '192875174270338867'] }),
+        headers:{'Authorization':'Bearer '+env.MAILERSEND_API_KEY,'Content-Type':'application/json','Accept':'application/json'},
+        body: JSON.stringify({
+          from: { email: 'renate@lmexplorers.com', name: 'Renate Dahl' },
+          reply_to: { email: 'renate@lmexplorers.com', name: 'Renate Dahl' },
+          to: [{ email: epost, name: navn || undefined }],
+          subject: emne,
+          html: kropp,
+          text: `Velkommen, ${navn || 'utforsker'}! Så glad jeg er for å ha deg med i LME Inner Circle på planen ${planNavn}. Gå til Inner Circle: https://lmexplorers.com/grupper/inner-circle`,
+        }),
       });
       if(res.ok) await env.DB.prepare(`UPDATE email_queue SET status='sent', sent_at=? WHERE id=?`).bind(new Date().toISOString(), r.meta.last_row_id).run();
     } catch(e) { /* køen beholder status 'pending', så ingenting går tapt */ }

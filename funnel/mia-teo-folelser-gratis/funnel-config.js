@@ -6,7 +6,7 @@
    år) pluss et mykt tilbud om hele "Følelser og sosial kompetanse"-
    serien (samlepakken). Ingen betaling i selve funnelen.
 
-   Flyten: opt-in.html -> (MailerLite + MailerSend-kø) -> takk.html
+   Flyten: opt-in.html -> (plattformens egen liste + MailerSend-kø) -> takk.html
    (begge PDF-ene + tilbud om samlepakken)
 
    Fem oppfølgingsmailer sendes automatisk via MailerSend (IKKE en

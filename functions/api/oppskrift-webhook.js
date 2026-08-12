@@ -27,7 +27,7 @@ import { PATTERN_LINKS } from "../_lib/pattern-links.js";
 import { bumpToday } from "../_lib/track.js";
 import {
   CREDIT_PACKS, addCredit,
-  CLAUDE_GROUP_NO, CLAUDE_GROUP_EN, CLAUDE_PAYMENT_LINK_LANG, CLAUDE_MAIN_LINK_LANG, addToClaudeGroup,
+  CLAUDE_PAYMENT_LINK_LANG, CLAUDE_MAIN_LINK_LANG,
   AUTOPILOT_PAYMENT_LINKS, AUTOPILOT_PRODUCT_PLANS, grantAutopilot, revokeAutopilot, emailForStripeCustomer,
   COURSE_PAYMENT_LINKS, COURSE_INFO,
   MODULE_PAYMENT_LINKS,
@@ -235,14 +235,10 @@ export async function onRequestPost(context) {
       return json({ ok: true });
     }
 
-    // Claude-kurset: legg kjøperen i riktig språkgruppe, ikke Inner Circle.
+    // Claude-kurset: gir kursets egen takke-/oppfølgingsmail, ikke Inner Circle.
     const claudeLang = obj.payment_link && CLAUDE_PAYMENT_LINK_LANG[obj.payment_link];
     if (claudeLang && email && obj.payment_status !== "unpaid") {
       const name = (obj.customer_details && obj.customer_details.name) || "";
-      const groupId = claudeLang === "en"
-        ? (env.MAILERLITE_CLAUDE_GROUP_EN || CLAUDE_GROUP_EN)
-        : (env.MAILERLITE_CLAUDE_GROUP_NO || CLAUDE_GROUP_NO);
-      await addToClaudeGroup(env, email, name, groupId);
       // Start også den ukentlige nyhetsbrev-serien for kjøperen.
       try { await registerNewsletter(env, email, name, claudeLang); } catch (e) {}
       // Hovedkurset og "Videre med Claude" er hver sin låste kursside

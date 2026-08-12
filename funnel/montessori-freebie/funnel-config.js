@@ -6,7 +6,7 @@
    betaling. Erstatter den tidligere åpne lenken rett til kurset, som lå
    synlig gratis uten noen registrering, se avtale med Renate 8. august 2026.
 
-   Flyten: opt-in.html  ->  (MailerLite)  ->  takk.html (åpne kurset)
+   Flyten: opt-in.html  ->  (plattformens egen liste)  ->  takk.html (åpne kurset)
    ===================================================================== */
 
 window.LME_FUNNEL = {
@@ -15,8 +15,8 @@ window.LME_FUNNEL = {
       navn: "Little Montessori Explorers",
       kortnavn: "LME",
       logo: "/images/lme-logo.png",
-      optInActionUrl: "/api/mailerlite/subscribe",
-      mailerliteGroup: "195273757668935352", // Montessori mesterklasse, gratis leads
+      optInActionUrl: "/api/subscribe",
+      newsletterSource: "montessori-freebie", // Montessori mesterklasse, gratis leads
       etterOptIn: "takk.html"
     },
 

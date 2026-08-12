@@ -319,9 +319,9 @@ function showResult(){
     try{ const leads=JSON.parse(localStorage.getItem('lme_leads')||'[]');
       leads.push({email,name,lang:LANG,tag:r.tag,ts:new Date().toISOString()});
       localStorage.setItem('lme_leads',JSON.stringify(leads)); }catch(err){}
-    try{ fetch('/api/mailerlite/subscribe',{method:'POST',mode:'no-cors',
+    try{ fetch('/api/subscribe',{method:'POST',mode:'no-cors',
       headers:{'Content-Type':'application/x-www-form-urlencoded'},
-      body:new URLSearchParams({email,name,lang:LANG,tag:r.tag})}); }catch(err){}
+      body:new URLSearchParams({email,name,lang:LANG,tag:r.tag,group:'ro-quiz'})}); }catch(err){}
     this.classList.add('hidden');
     $('rDone').classList.remove('hidden');
   });

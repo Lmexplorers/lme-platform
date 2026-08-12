@@ -271,9 +271,10 @@
       return words.slice(0, cut).join(' ') + ' <span class="hl">' + words.slice(cut).join(' ') + '</span>';
     }
 
-    // Skjema — fanger e-posten, starter MailerLite + MailerSend-oppfølgingskøen
-    // (functions/api/mia-teo-optin.js), og sender brukeren rett videre til
-    // takkesiden der begge gratisheftene ligger klare.
+    // Skjema — fanger e-posten, registrerer i plattformens egen liste og
+    // starter MailerSend-oppfølgingskøen (functions/api/mia-teo-optin.js),
+    // og sender brukeren rett videre til takkesiden der begge gratisheftene
+    // ligger klare.
     document.getElementById('optForm').addEventListener('submit', function (e) {
       e.preventDefault();
       const email = document.getElementById('optEmail').value.trim();

@@ -244,7 +244,7 @@
   document.getElementById('lme-lang').addEventListener('click', window.lmeToggleLang);
   apply();
 
-  // Venteliste-opt-in til MailerLite (samme endepunkt som funnelene)
+  // Venteliste-opt-in til plattformens egen liste (samme endepunkt som funnelene)
   var form = document.getElementById('waitlist');
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -253,10 +253,10 @@
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { document.getElementById('wl-email').focus(); return; }
     document.getElementById('cta').classList.add('sent'); // vis takk med en gang
     try {
-      fetch('/api/mailerlite/subscribe', {
+      fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, name: name, lang: window.LME_CURRENT_LANG, tag: 'rolig-metoden-venteliste' })
+        body: JSON.stringify({ email: email, name: name, lang: window.LME_CURRENT_LANG, tag: 'rolig-metoden-venteliste', group: 'rolig-metoden' })
       });
     } catch (e2) {}
   });

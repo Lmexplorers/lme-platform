@@ -56,7 +56,7 @@ export async function onRequestGet(context) {
     }, 403);
   }
 
-  const KEYS = ["ANTHROPIC_API_KEY", "OPENAI_API_KEY", "GEMINI_API_KEY", "BLOTATO_API_KEY", "HIGGSFIELD_API_KEY", "HIGGSFIELD_SECRET", "ELEVENLABS_API_KEY", "MAILERLITE_API_KEY", "STABILITY_API_KEY"];
+  const KEYS = ["ANTHROPIC_API_KEY", "OPENAI_API_KEY", "GEMINI_API_KEY", "BLOTATO_API_KEY", "HIGGSFIELD_API_KEY", "HIGGSFIELD_SECRET", "ELEVENLABS_API_KEY", "MAILERSEND_API_KEY", "STABILITY_API_KEY"];
   const present = {};
   KEYS.forEach((k) => { present[k] = !!(env[k] && String(env[k]).trim()); });
 

@@ -26,7 +26,7 @@ erstatt alt -> Deploy. (Eller kjør `wrangler deploy` fra denne mappen.)
 | --- | --- |
 | `STRIPE_SECRET_KEY` | `sk_live_...` fra Stripe -> Developers -> API keys |
 | `STRIPE_WEBHOOK_SECRET` | `whsec_...` fra steg 3 |
-| `MAILERLITE_API_KEY` | API-nøkkelen fra MailerLite -> Integrations -> API |
+| `MAILERSEND_API_KEY` | API-nøkkelen fra MailerSend (samme nøkkel som hovedplattformen bruker) |
 
 `AFFILIATE_COMMISSION_PERCENT` (30) og `AFFILIATE_COOKIE_DAYS` (30) ligger
 allerede som vanlige variabler og kan endres der.
@@ -40,12 +40,11 @@ allerede som vanlige variabler og kan endres der.
 4. Kopier "Signing secret" (`whsec_...`) og legg den inn som
    `STRIPE_WEBHOOK_SECRET` i steg 2.
 
-### 4. Velkomst-epost i MailerLite
+### 4. Velkomst-epost
 
-Workeren melder nye medlemmer inn i MailerLite (feltet `lme_plan` sier hvilken
-plan de valgte). Lag en automasjon i MailerLite med trigger "ny abonnent", så
-sendes velkomst-eposten automatisk. E-postene loggføres også i tabellen
-`email_queue` i D1.
+Workeren sender velkomst-eposten direkte med MailerSend når `MAILERSEND_API_KEY`
+er satt (steg 2), ingen automasjon å sette opp noe sted. E-postene loggføres
+også i tabellen `email_queue` i D1.
 
 ## Slik virker det
 

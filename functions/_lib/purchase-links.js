@@ -38,43 +38,28 @@ export async function addCredit(env, email, kind, amount) {
 }
 
 /* ---- Claude-kurset -------------------------------------------------
-   Kjøp via Claude-kursets betalingslenker skal IKKE gi Inner Circle,
-   men legge kjøperen i MailerLite-gruppen "Claude-kurs, kjøpere", som
-   trigger takke- og oppfølgingsautomasjonen. Betalingslenke-ID-ene under
-   er hovedkurs (NO/USD) og mersalg (NO/USD). */
-export const CLAUDE_GROUP_NO = "193772564746601912"; // "Claude-kurs, kjøpere"
-export const CLAUDE_GROUP_EN = "193773243177371424"; // "Claude course, buyers"
-// Betalingslenke -> språk. NOK-lenker gir norsk automasjon, USD-lenker engelsk.
+   Kjøp via Claude-kursets betalingslenker skal IKKE gi Inner Circle.
+   Takke- og oppfølgingsmailen sendes direkte fra koden med MailerSend
+   (_lib/claude-mail.js, kalt fra oppskrift-webhook.js), og kjøperen legges
+   i plattformens egen nyhetsbrev-liste (_lib/newsletter.js, registerNewsletter).
+   Tidligere ble kjøperen i tillegg meldt inn i en MailerLite-gruppe "for
+   CRM-oversikt", fjernet 12. august 2026 (rydding av all MailerLite-bruk):
+   den ga ingen egen automasjon lenger (bare synlighet Renate allerede har
+   via kjøpsloggen/nyhetsbrev-lista), og var derfor rent vestigialt.
+   Betalingslenke-ID-ene under er hovedkurs (NO/USD) og mersalg (NO/USD). */
+// Betalingslenke -> språk. NOK-lenker gir norsk e-post, USD-lenker engelsk.
 export const CLAUDE_PAYMENT_LINK_LANG = {
   "plink_1TwFJWLax7B8uQzqsBQjTBxl": "no", // Kom i gang med Claude (NOK)
   "plink_1TwFJZLax7B8uQzqqjnXtmbR": "no", // Videre med Claude, mersalg (NOK)
   "plink_1TwFJYLax7B8uQzqO1gObkcB": "en", // Get started with Claude (USD)
   "plink_1TwFJbLax7B8uQzqB3CNr2yR": "en", // Next Level with Claude, upsell (USD)
 };
-// Bare hovedkurset trigger takke- og oppfølgingsmail. Mersalget legges
-// bare i gruppen (kjøperen har alt fått takkemailen fra hovedkjøpet).
+// Bare hovedkurset trigger takke- og oppfølgingsmail. Mersalget sender ingen
+// egen takkemail (kjøperen har alt fått den fra hovedkjøpet).
 export const CLAUDE_MAIN_LINK_LANG = {
   "plink_1TwFJWLax7B8uQzqsBQjTBxl": "no", // Kom i gang med Claude (NOK)
   "plink_1TwFJYLax7B8uQzqO1gObkcB": "en", // Get started with Claude (USD)
 };
-
-export async function addToClaudeGroup(env, email, name, groupId) {
-  const key = env.MAILERLITE_API_KEY;
-  if (!key || !email || !groupId) return;
-  const payload = { email: email.trim(), groups: [groupId + ""] };
-  if (name && name.trim()) payload.fields = { name: name.trim().slice(0, 100) };
-  try {
-    await fetch("https://connect.mailerlite.com/api/subscribers", {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + key,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-  } catch (e) {}
-}
 
 /* ---- LME Autopilot-abonnement (Start/Proff/VIP), solgt fra /oppgrader ----
    IKKE Inner Circle (som håndteres av den separate lme-inner-circle-workeren).

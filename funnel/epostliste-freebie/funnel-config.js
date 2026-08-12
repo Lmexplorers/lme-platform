@@ -6,12 +6,12 @@
    den manglende registreringen for "Voks e-postlisten din", som helt
    frem til nå var en helt åpen side uten noe skjema i det hele tatt.
 
-   Flyten: opt-in.html  ->  (MailerLite)  ->  takk.html (nedlasting)
+   Flyten: opt-in.html  ->  (plattformens egen liste, api/subscribe.js)  ->  takk.html (nedlasting)
 
-   Selve velkomstserien/oppfølgingsmail (om det lages senere) skal IKKE
-   bygges som en MailerLite-automasjon, men rett fra kode via MailerSend,
-   samme mønster som Claude-kursets oppfølging (se _lib/claude-mail.js).
-   Denne funnelen gjør foreløpig bare selve registreringen og leveringen.
+   Leaden går rett inn i plattformens egen nyhetsbrev-liste (BUILDER_KV,
+   _lib/newsletter.js) og får den ukentlige evergreen-serien via MailerSend,
+   IKKE en MailerLite-automasjon, samme mønster som Claude-kursets
+   oppfølging (se _lib/claude-mail.js).
    ===================================================================== */
 
 window.LME_FUNNEL = {
@@ -24,8 +24,8 @@ window.LME_FUNNEL = {
       navn: "Little Montessori Explorers",
       kortnavn: "LME",
       logo: "/images/lme-logo.png",
-      optInActionUrl: "/api/mailerlite/subscribe", // sender leads til MailerLite-lista di
-      mailerliteGroup: "195270463632442472", // Voks e-postlisten, gratis leads (NO)
+      optInActionUrl: "/api/subscribe", // sender leads til plattformens egen liste
+      newsletterSource: "epostliste-freebie-no", // Voks e-postlisten, gratis leads (NO)
       etterOptIn: "takk.html"
     },
 
@@ -83,8 +83,8 @@ window.LME_FUNNEL = {
       navn: "Little Montessori Explorers",
       kortnavn: "LME",
       logo: "/images/lme-logo.png",
-      optInActionUrl: "/api/mailerlite/subscribe",
-      mailerliteGroup: "195270464091718805", // Grow your email list, free leads (EN)
+      optInActionUrl: "/api/subscribe",
+      newsletterSource: "epostliste-freebie-en", // Grow your email list, free leads (EN)
       etterOptIn: "takk.html"
     },
 

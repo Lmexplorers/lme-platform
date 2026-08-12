@@ -25,7 +25,8 @@ window.LME_FUNNEL = {
       navn: "Little Montessori Explorers",
       kortnavn: "LME",
       logo: "/images/lme-logo.png",
-      optInActionUrl: "/api/mailerlite/subscribe", // sender leads til MailerLite-lista di
+      optInActionUrl: "/api/subscribe", // sender leads til plattformens egen liste
+      newsletterSource: "tripwire",
       etterOptIn: "tilbud.html",
       checkoutUrl: "https://buy.stripe.com/00wfZidkpaft1PLgNN9R60f",  // Stripe (99 kr NOK)
       etterKjop: "takk-kjoper.html",
@@ -142,7 +143,8 @@ window.LME_FUNNEL = {
       navn: "Little Montessori Explorers",
       kortnavn: "LME",
       logo: "/images/lme-logo.png",
-      optInActionUrl: "/api/mailerlite/subscribe", // sends leads to your MailerLite list
+      optInActionUrl: "/api/subscribe", // sends leads to the platform's own list
+      newsletterSource: "tripwire",
       etterOptIn: "tilbud.html",
       checkoutUrl: "https://buy.stripe.com/cNicN64NT0ET7a5app9R60g",  // Stripe (9.99 USD)
       etterKjop: "takk-kjoper.html",
