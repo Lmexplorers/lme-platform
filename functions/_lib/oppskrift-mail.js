@@ -186,6 +186,8 @@ const PRODUCT = {
     files: { no: [f2("https://lmexplorers.com/butikk/nedlasting/oppskrifter/olivers-vognlenke.pdf", "Last ned oppskriften (PDF)", "Download the pattern (PDF)")], en: [f2("https://lmexplorers.com/butikk/nedlasting/oppskrifter/olivers-vognlenke-en.pdf", "Last ned oppskriften (engelsk PDF)", "Download the pattern (PDF)")] } },
   "woodland-dreams-bundle": { no: "Woodland Dreams, hele kolleksjonen (36 oppskrifter)", en: "Woodland Dreams, the complete collection (36 patterns)",
     files: { no: [f2("https://lmexplorers.com/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del1-no.zip", "Last ned del 1 av 3 (zip, norsk)", "Download part 1 of 3 (zip, Norwegian)"), f2("https://lmexplorers.com/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del2-no.zip", "Last ned del 2 av 3 (zip, norsk)", "Download part 2 of 3 (zip, Norwegian)"), f2("https://lmexplorers.com/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del3-no.zip", "Last ned del 3 av 3 (zip, norsk)", "Download part 3 of 3 (zip, Norwegian)")], en: [f2("https://lmexplorers.com/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del1-en.zip", "Last ned del 1 av 3 (zip, engelsk)", "Download part 1 of 3 (zip, English)"), f2("https://lmexplorers.com/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del2-en.zip", "Last ned del 2 av 3 (zip, engelsk)", "Download part 2 of 3 (zip, English)"), f2("https://lmexplorers.com/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del3-en.zip", "Last ned del 3 av 3 (zip, engelsk)", "Download part 3 of 3 (zip, English)")] } },
+  "fotballpute-ro-strikk": { no: "Fotballpute RO RO RO, strikk", en: "RO RO RO football cushion, knit",
+    files: { no: [f("fotballpute-ro-strikk.pdf?v=3", "Fotballpute RO RO RO, strikk", "")], en: [f("fotballpute-ro-strikk-en.pdf?v=3", "", "RO RO RO football cushion, knit")] } },
 };
 
 /* Bygger nedlastings-HTML: kun kjøperens eget språk. Engelsk kjøper får den
@@ -316,6 +318,46 @@ export async function sendOwnerSaleNotice(env, opts) {
     subject: "🎉 Nytt salg: " + pname + (beløp ? " (" + beløp + ")" : ""),
     html: wrap(inner),
     text: "Nytt salg! Oppskrift: " + pname + ". " + (beløp ? "Beløp: " + beløp + ". " : "") + "Kunde: " + kunde + (opts.email ? " (" + opts.email + ")" : "") + ". Språk: " + språk + ".",
+  };
+  try {
+    const res = await fetch(MS, {
+      method: "POST",
+      headers: { Authorization: "Bearer " + apiKey, "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(body),
+    });
+    return { ok: res.ok, status: res.status };
+  } catch (e) {
+    return { ok: false, error: String(e) };
+  }
+}
+
+/**
+ * Kort varsel til Renate ved GRATIS registreringer (gratiskurs, lead
+ * magnet/nyhetsbrev osv.), samme mønster som sendOwnerSaleNotice over,
+ * men uten beløp, siden ingenting er kjøpt.
+ * opts: { what, name, email, lang }
+ */
+export async function sendOwnerSignupNotice(env, opts) {
+  const apiKey = env.MAILERSEND_API_KEY;
+  if (!apiKey) return { ok: false, skipped: true };
+  const to = env.OWNER_NOTIFY_EMAIL || "renate@lmexplorers.com";
+  const what = (opts && opts.what) || "noe gratis";
+  const person = (opts.name && opts.name.trim()) ? opts.name.trim() : (opts.email || "en ny person");
+  const språk = opts.lang === "en" ? "engelsk" : "norsk";
+  const inner =
+    "<p>Hei Renate,</p>" +
+    "<p>Ny gratis registrering 🌱</p>" +
+    '<table role="presentation" style="font-size:15px;line-height:1.7;">' +
+    "<tr><td><b>Hva:</b></td><td style=\"padding-left:10px;\">" + esc(what) + "</td></tr>" +
+    "<tr><td><b>Person:</b></td><td style=\"padding-left:10px;\">" + esc(person) + (opts.email ? " (" + esc(opts.email) + ")" : "") + "</td></tr>" +
+    "<tr><td><b>Språk:</b></td><td style=\"padding-left:10px;\">" + språk + "</td></tr>" +
+    "</table>";
+  const body = {
+    from: { email: FROM_EMAIL, name: FROM_NAME },
+    to: [{ email: to, name: FROM_NAME }],
+    subject: "🌱 Ny påmelding: " + what,
+    html: wrap(inner),
+    text: "Ny gratis registrering! " + what + ". Person: " + person + (opts.email ? " (" + opts.email + ")" : "") + ". Språk: " + språk + ".",
   };
   try {
     const res = await fetch(MS, {

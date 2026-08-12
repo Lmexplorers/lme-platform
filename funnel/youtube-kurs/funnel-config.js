@@ -9,19 +9,36 @@
      takk.html   → takkeside med tilgang
 
    Flyt:
-     salg → (Stripe-checkout) → takk
+     salg → (Stripe-checkout) → takk → e-post med personlig kurslenke
+     (webhooken, ikke denne siden, gir den faktiske tilgangen — se
+     functions/api/oppskrift-webhook.js og _lib/course-access.js)
 
-   Slik kobler du på ekte betaling:
-     Lag en betalingslenke i Stripe og lim den inn i "checkoutUrl" under.
-     La feltet stå tomt så lenge du bare vil forhåndsvise trakten, da hopper
-     knappen rett videre til takkesiden uten betaling.
-
-   Kun norsk foreløpig (samme fallback-mønster som claude-kurs, så en
-   engelsk versjon kan legges til senere ved å legge en "en"-nøkkel til
-   under, uten å endre salg.html/takk.html).
-
-   Rediger bare verdiene under, lagre, og last sidene på nytt.
+   Pris bytter seg selv automatisk ved fristen (ingen manuell oppdatering
+   nødvendig): lanseringspris frem til 1. september 2026, deretter full pris.
+   Selve betalingslenkene er faste Stripe-lenker, én per pris og valuta.
    ===================================================================== */
+
+(function () {
+  var FULL_FROM = Date.parse("2026-09-01T00:00:00+02:00");
+  var launch = Date.now() < FULL_FROM;
+
+  var LINKS = {
+    no: { launch: "https://buy.stripe.com/5kQbJ24NTevJgKFgNN9R63l", full: "https://buy.stripe.com/4gMbJ26W13R5cup9ll9R63n" },
+    en: { launch: "https://buy.stripe.com/4gMbJ2bchcnB0LHdBB9R63m", full: "https://buy.stripe.com/aFadRabchfzNdyt6999R63o" },
+  };
+
+  function priceFor(lang) {
+    return launch
+      ? { belop: 497, valuta: lang === "en" ? "$" : "kr", visningFor: lang === "en" ? "$150" : "1497 kr" }
+      : { belop: lang === "en" ? 150 : 1497, valuta: lang === "en" ? "$" : "kr", visningFor: "" };
+  }
+  function checkoutFor(lang) {
+    return launch ? LINKS[lang].launch : LINKS[lang].full;
+  }
+  function merkelapp(lang) {
+    if (launch) return lang === "en" ? "Launch offer" : "Lanseringstilbud";
+    return lang === "en" ? "Full course" : "Fullt kurs";
+  }
 
 window.LME_FUNNEL = {
 
@@ -34,16 +51,12 @@ window.LME_FUNNEL = {
 
     /* ---- Salgsside ---- */
     salg: {
-      checkoutUrl: "",   // Stripe: lim inn betalingslenken for 497 kr her (tom = hopp rett til takk)
+      checkoutUrl: checkoutFor("no"),
       etterKjop: "takk.html",
 
-      pris: {
-        belop: 497,                    // lanseringspris (etter gratis-uken)
-        valuta: "kr",
-        visningFor: "1497 kr"          // vanlig pris (overstrøket)
-      },
+      pris: priceFor("no"),
 
-      merkelapp: "Lanseringstilbud",
+      merkelapp: merkelapp("no"),
       overskrift: "Voks på YouTube med AI",
       underoverskrift:
         "Et komplett norsk kurs i å bygge en YouTube-kanal uten å vise ansikt, med AI " +
@@ -104,11 +117,10 @@ window.LME_FUNNEL = {
       merkelapp: "Kjøpet er bekreftet",
       overskrift: "Tusen takk, du er i gang! 🎉",
       underoverskrift:
-        "Så gøy å ha deg med. Kurset er låst opp for deg, og du finner alt du " +
-        "trenger rett under.",
+        "Så gøy å ha deg med. Sjekk innboksen din, den personlige kurslenken din er på vei dit.",
       steg: [
-        "Sjekk innboksen din, kvittering og tilgang er på vei.",
-        "Trykk på knappen under for å åpne kurset med en gang.",
+        "Sjekk innboksen din, kvittering og din personlige kurslenke er på vei.",
+        "Trykk på lenken i e-posten for å åpne kurset.",
         "Start med leksjon 1, og ta det i ditt eget tempo."
       ],
       knapp: "Åpne kurset",
@@ -119,5 +131,94 @@ window.LME_FUNNEL = {
       sekundaerLenke: "/academy",
       support: "Spørsmål? Svar på e-posten du nettopp fikk, så hjelper jeg deg."
     }
+  },
+
+  en: {
+    brand: {
+      navn: "Little Montessori Explorers",
+      kortnavn: "LME",
+      logo: "/images/lme-logo.png"
+    },
+
+    salg: {
+      checkoutUrl: checkoutFor("en"),
+      etterKjop: "takk.html",
+
+      pris: priceFor("en"),
+
+      merkelapp: merkelapp("en"),
+      overskrift: "Grow on YouTube with AI",
+      underoverskrift:
+        "A complete course in building a YouTube channel without ever showing your face, with AI " +
+        "helping on script, voice and editing. You learn the same system the pros use, adapted " +
+        "for you who want to create, get visible and earn money.",
+
+      hvaDuLaererTittel: "What you'll learn in this course",
+      hvaDuLaerer: [
+        "How to find a profitable niche before you make a single video",
+        "Packaging videos with titles and thumbnails that actually get clicks",
+        "Writing scripts with Claude, voice with ElevenLabs and finished videos with AI",
+        "How to systematize production, without doing everything yourself",
+        "Making money from the channel: ads, sponsorships and your own products",
+        "Ready-made recipes you can copy straight into Claude"
+      ],
+
+      bonuserTittel: "Bonuses included",
+      bonuser: [
+        {
+          tittel: "The workbook",
+          tekst:
+            "The workbook that follows the course, with reflection, checklists and one " +
+            "concrete step per part."
+        },
+        {
+          tittel: "Ready-made recipes",
+          tekst:
+            "Script, title and thumbnail recipes you can copy straight into Claude."
+        }
+      ],
+
+      forDegTittel: "This course is for you if",
+      forDeg: [
+        "You want to start a YouTube channel but don't want to be on camera",
+        "You've heard AI can do a lot of the work, but don't know where to start",
+        "You want to build something that grows over time, not chase viral one-offs",
+        "You want to use your time wisely, with a clear system to follow",
+        "You dream of extra income from something you own yourself"
+      ],
+
+      ikkeForDegTittel: "This course is not for you if",
+      ikkeForDeg: [
+        "You want to be on camera and show your face",
+        "You're looking for a shortcut with no work",
+        "You want a finished channel handed to you, not to learn the system yourself"
+      ],
+
+      garanti: "",
+      kjopKnapp: "Yes please, give me the YouTube course",
+      sosialtBevis: "Made by Renate Dahl, who has built LME into a full platform.",
+      testimonial: { sitat: "", navn: "", sted: "" },
+      bilde: "/images/banner_laer.webp"
+    },
+
+    takk: {
+      merkelapp: "Purchase confirmed",
+      overskrift: "Thank you, you're in! 🎉",
+      underoverskrift:
+        "So glad to have you. Check your inbox, your personal course link is on its way there.",
+      steg: [
+        "Check your inbox, your receipt and personal course link are on the way.",
+        "Click the link in the email to open the course.",
+        "Start with lesson 1, and take it at your own pace."
+      ],
+      knapp: "Open the course",
+      knappLenke: "/academy/youtube",
+      bonusKnapp: "Download the workbook (PDF)",
+      bonusLenke: "/ressurser/print/youtube-kurs-arbeidsbok",
+      sekundaerKnapp: "To classes",
+      sekundaerLenke: "/academy",
+      support: "Questions? Reply to the email you just got, and I'll help you."
+    }
   }
 };
+})();

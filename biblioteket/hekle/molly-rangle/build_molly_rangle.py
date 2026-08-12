@@ -9,7 +9,7 @@ import lme_pattern_kit as kit
 from lme_pattern_kit import (BROWN, BROWN_MID, BROWN_DARK, CREAM, CREAM_DEEP, ROSE, SAGE, INK,
                               banner, rosep, sagep, card, cream, cme, ul, steps, otab, abbrtab)
 
-REF = BASE.parent / 'molly-smokkelenke' / 'molly_face_ref.jpg'
+REF = BASE / 'molly_rangle_real.jpg'
 ref_b64 = base64.b64encode(REF.read_bytes()).decode()
 ref_src = f'data:image/jpeg;base64,{ref_b64}'
 

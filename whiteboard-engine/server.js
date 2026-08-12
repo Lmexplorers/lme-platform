@@ -234,7 +234,7 @@ async function lagWhiteboardBilde(temaTekst) {
 }
 
 // Generelt scene-bilde for slideshow-videoen (YouTube-appen), ingen
-// whiteboard-skisse-stil og ingen påtvunget Montessori-tema, følger bare
+// whiteboard-skisse-stil og ingen påtvunget Montessoritema, følger bare
 // prompten scenen faktisk sendte inn. Brukes kun som reserve når klienten
 // ikke allerede har sendt en ferdig imageUrl (plattformen genererer normalt
 // bildene selv via sin egen /api/image, se functions/api/youtube-video.js).

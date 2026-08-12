@@ -1,0 +1,206 @@
+/**
+ * Vipps ePayment — delt bibliotek for LME Butikk/Læringsverksted.
+ *
+ * Bruker Vipps MobilePay sitt gjeldende ePayment API (ikke den utfasede
+ * "eCom"-APIen). Ligger her (ikke i den separate workers/vipps-payment/)
+ * fordi selve leveringen av kjøpet (sendResourceDeliveryMail,
+ * sendOwnerSaleNotice, recordPurchase) allerede lever i denne
+ * kodebasen, og skal gjenbrukes uendret, ikke dupliseres i en egen worker.
+ *
+ * SECRETS (Cloudflare Pages -> Settings -> Variables and secrets):
+ *   VIPPS_CLIENT_ID
+ *   VIPPS_CLIENT_SECRET
+ *   VIPPS_SUBSCRIPTION_KEY
+ *   VIPPS_MERCHANT_SERIAL_NUMBER
+ *   VIPPS_WEBHOOK_SECRET   (satt automatisk av vipps-register-webhook.js)
+ * VARS:
+ *   VIPPS_ENV = "test" | "production" (standard: "test")
+ */
+
+export function vippsBaseUrl(env) {
+  return env.VIPPS_ENV === "production" ? "https://api.vipps.no" : "https://apitest.vipps.no";
+}
+
+function vippsSystemHeaders() {
+  return {
+    "Vipps-System-Name": "lme-plattform",
+    "Vipps-System-Version": "1.0.0",
+    "Vipps-System-Plugin-Name": "lme-butikk",
+    "Vipps-System-Plugin-Version": "1.0.0",
+  };
+}
+
+export async function getVippsAccessToken(env) {
+  const res = await fetch(vippsBaseUrl(env) + "/accessToken/get", {
+    method: "POST",
+    headers: {
+      client_id: env.VIPPS_CLIENT_ID,
+      client_secret: env.VIPPS_CLIENT_SECRET,
+      "Ocp-Apim-Subscription-Key": env.VIPPS_SUBSCRIPTION_KEY,
+      "Merchant-Serial-Number": env.VIPPS_MERCHANT_SERIAL_NUMBER,
+      ...vippsSystemHeaders(),
+    },
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.access_token) throw new Error("vipps_token_failed: " + res.status);
+  return data.access_token;
+}
+
+/* Oppretter en betaling. Se opts i workers/vipps-payment/index.js sin
+   JSDoc, samme kontrakt. Returnerer { ok, redirectUrl, reference }. */
+export async function createVippsPayment(env, opts) {
+  if (!opts || !opts.amount || !opts.reference || !opts.returnUrl) {
+    return { ok: false, error: "missing_required_fields" };
+  }
+  let accessToken;
+  try {
+    accessToken = await getVippsAccessToken(env);
+  } catch (e) {
+    return { ok: false, error: String(e) };
+  }
+  const body = {
+    amount: { currency: opts.currency || "NOK", value: opts.amount },
+    paymentMethod: { type: "WALLET" },
+    reference: opts.reference,
+    returnUrl: opts.returnUrl,
+    userFlow: "WEB_REDIRECT",
+    paymentDescription: opts.description || "Kjøp hos Little Montessori Explorers",
+  };
+  if (opts.phoneNumber) body.customer = { phoneNumber: opts.phoneNumber };
+  try {
+    const res = await fetch(vippsBaseUrl(env) + "/epayment/v1/payments", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + accessToken,
+        "Ocp-Apim-Subscription-Key": env.VIPPS_SUBSCRIPTION_KEY,
+        "Merchant-Serial-Number": env.VIPPS_MERCHANT_SERIAL_NUMBER,
+        "Idempotency-Key": opts.reference,
+        ...vippsSystemHeaders(),
+      },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) return { ok: false, error: (data && (data.detail || data.title)) || "vipps_payment_failed", status: res.status };
+    return { ok: true, redirectUrl: data.redirectUrl, reference: data.reference || opts.reference };
+  } catch (e) {
+    return { ok: false, error: String(e) };
+  }
+}
+
+/* Fanger opp (tar betalt) et allerede godkjent (AUTHORIZED) beløp. Kalles
+   fra webhooken rett etter at kjøperen har godkjent betalingen i appen,
+   slik at pengene faktisk trekkes med en gang, samme opplevelse som et
+   Stripe-kjøp (ingen egen "fang opp betaling senere"-jobb for Renate). */
+export async function captureVippsPayment(env, reference, amount, currency) {
+  let accessToken;
+  try {
+    accessToken = await getVippsAccessToken(env);
+  } catch (e) {
+    return { ok: false, error: String(e) };
+  }
+  try {
+    const res = await fetch(vippsBaseUrl(env) + "/epayment/v1/payments/" + encodeURIComponent(reference) + "/capture", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + accessToken,
+        "Ocp-Apim-Subscription-Key": env.VIPPS_SUBSCRIPTION_KEY,
+        "Merchant-Serial-Number": env.VIPPS_MERCHANT_SERIAL_NUMBER,
+        "Idempotency-Key": reference + "-capture",
+        ...vippsSystemHeaders(),
+      },
+      body: JSON.stringify({ modificationAmount: { currency: currency || "NOK", value: amount } }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) return { ok: false, error: (data && (data.detail || data.title)) || "vipps_capture_failed", status: res.status };
+    return { ok: true, raw: data };
+  } catch (e) {
+    return { ok: false, error: String(e) };
+  }
+}
+
+/* Registrerer et webhook-abonnement hos Vipps. Kjøres ÉN gang (via
+   vipps-register-webhook.js), gir tilbake en `secret` som må lagres som
+   VIPPS_WEBHOOK_SECRET for at verifiseringen under skal fungere. */
+export async function registerVippsWebhook(env, callbackUrl, events) {
+  let accessToken;
+  try {
+    accessToken = await getVippsAccessToken(env);
+  } catch (e) {
+    return { ok: false, error: String(e) };
+  }
+  try {
+    const res = await fetch(vippsBaseUrl(env) + "/webhooks/v1/webhooks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + accessToken,
+        "Ocp-Apim-Subscription-Key": env.VIPPS_SUBSCRIPTION_KEY,
+        "Merchant-Serial-Number": env.VIPPS_MERCHANT_SERIAL_NUMBER,
+        ...vippsSystemHeaders(),
+      },
+      body: JSON.stringify({ url: callbackUrl, events: events || ["epayments.payment.authorized.v1"] }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) return { ok: false, error: (data && (data.detail || data.title)) || "vipps_webhook_register_failed", status: res.status };
+    return { ok: true, id: data.id, secret: data.secret };
+  } catch (e) {
+    return { ok: false, error: String(e) };
+  }
+}
+
+/* ---- Webhook-signaturverifisering (HMAC-SHA256) --------------------
+   Vipps signerer hvert webhook-kall slik:
+     streng-å-signere = "POST\n<path+query>\n<x-ms-date>;<host>;<x-ms-content-sha256>"
+     signatur = base64(HMAC-SHA256(streng-å-signere, secret))
+   Header "Authorization" inneholder signaturen, se dokumentasjonssøk
+   (fikk ikke hentet Vipps sin egen referanseside direkte i dette miljøet,
+   nettleseren min ble blokkert, så dette er bygget på søkeresultater +
+   generell kunnskap om formatet, ikke dobbeltbekreftet ord for ord). Test
+   grundig mot et ekte testmiljø-webhook-kall før dette stoler på i
+   produksjon; logg gjerne alle headerne ved første reelle kall for å
+   sammenligne mot det som faktisk kommer inn. */
+async function hmacSha256Base64(secret, message) {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey("raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const sig = await crypto.subtle.sign("HMAC", key, enc.encode(message));
+  return btoa(String.fromCharCode(...new Uint8Array(sig)));
+}
+
+async function sha256Base64(message) {
+  const enc = new TextEncoder();
+  const digest = await crypto.subtle.digest("SHA-256", enc.encode(message));
+  return btoa(String.fromCharCode(...new Uint8Array(digest)));
+}
+
+export async function verifyVippsWebhookSignature(request, rawBody, secret) {
+  if (!secret) return false;
+  const authHeader = request.headers.get("authorization") || "";
+  const msDate = request.headers.get("x-ms-date") || "";
+  const contentSha = request.headers.get("x-ms-content-sha256") || "";
+  const host = request.headers.get("host") || new URL(request.url).host;
+  if (!authHeader || !msDate || !contentSha) return false;
+
+  const expectedContentSha = await sha256Base64(rawBody);
+  if (expectedContentSha !== contentSha) return false;
+
+  const url = new URL(request.url);
+  const pathAndQuery = url.pathname + (url.search || "");
+  const stringToSign = "POST\n" + pathAndQuery + "\n" + msDate + ";" + host + ";" + contentSha;
+  const expectedSig = await hmacSha256Base64(secret, stringToSign);
+
+  const sigMatch = authHeader.match(/Signature=([^&\s]+)/);
+  const gotSig = sigMatch ? sigMatch[1] : authHeader;
+  return gotSig === expectedSig;
+}
+
+/* Parser LME sine "499 kr"/"199 kr"-prisstrenger til øre (49900). Støtter
+   kun NOK, siden Vipps kun tar betalt i NOK. */
+export function parseNokPriceToOre(priceStr) {
+  if (!priceStr) return null;
+  const cleaned = String(priceStr).replace(/[^\d.,]/g, "").replace(",", ".");
+  const kr = parseFloat(cleaned);
+  if (!kr || Number.isNaN(kr)) return null;
+  return Math.round(kr * 100);
+}

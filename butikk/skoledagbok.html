@@ -132,6 +132,23 @@
   .fine { font-size: 12.5px; color: var(--ink-muted); line-height: 1.5; }
   .fine li { margin: 6px 0 0 18px; }
 
+  .btn-vipps {
+    display: block; width: 100%; text-align: center; background: #FF5B24; color: #fff;
+    border: none; border-radius: var(--r-pill); padding: 13px 18px; font-size: 15px; font-weight: 700;
+    cursor: pointer; box-shadow: var(--shadow-sm); transition: all .2s ease; margin-top: 8px;
+    font-family: inherit;
+  }
+  .btn-vipps:hover { background: #e64f1c; transform: translateY(-1px); }
+  .btn-vipps:disabled { opacity: .6; cursor: default; transform: none; }
+  .vipps-form { display: none; margin-top: 10px; gap: 8px; flex-direction: column; }
+  .vipps-form.open { display: flex; }
+  .vipps-form input {
+    border: 1px solid var(--line, #e2e2e2); border-radius: 10px; padding: 10px 12px; font-size: 14px;
+    font-family: inherit;
+  }
+  .vipps-error { color: var(--cerise); font-size: 12.5px; display: none; }
+  .vipps-error.show { display: block; }
+
   footer { text-align: center; padding: 26px 20px 44px; font-size: 13px; color: var(--ink-muted); }
   footer a { color: var(--cerise); }
 
@@ -223,7 +240,17 @@
         <h3 data-no="Skoledagbok 1.–3. trinn" data-en="School diary, grades 1–3">Skoledagbok 1.–3. trinn</h3>
         <p class="age" data-no="5–9 år · 358 sider · Norsk + Engelsk" data-en="Ages 5–9 · 358 pages · Norwegian + English">5–9 år · 358 sider · Norsk + Engelsk</p>
         <div class="price" data-no="299 kr" data-en="$29">299 kr</div>
-        <a class="btn-buy" href="https://buy.stripe.com/28EdRa2FL5Zd7a5fJJ9R60r" data-no-href="https://buy.stripe.com/28EdRa2FL5Zd7a5fJJ9R60r" data-en-href="https://buy.stripe.com/5kQfZigwB2N1fGB4119R60s" data-no="Kjøp nå, 299 kr →" data-en="Buy now, $29 →">Kjøp nå, 299 kr →</a>
+        <div class="owner-free" data-book="1-3" hidden>
+          <a class="btn-buy" href="/butikk/nedlasting/skoledagbok/skoledagbok-1-3-trinn.pdf" data-no="Last ned norsk PDF (eier) →" data-en="Download Norwegian PDF (owner) →">Last ned norsk PDF (eier) →</a>
+          <a class="btn-buy" style="margin-top:8px;" href="/butikk/nedlasting/skoledagbok/skoledagbok-1-3-trinn-en.pdf" data-no="Last ned engelsk PDF (eier) →" data-en="Download English PDF (owner) →">Last ned engelsk PDF (eier) →</a>
+        </div>
+        <a class="btn-buy buy-cta" href="https://buy.stripe.com/28EdRa2FL5Zd7a5fJJ9R60r" data-no-href="https://buy.stripe.com/28EdRa2FL5Zd7a5fJJ9R60r" data-en-href="https://buy.stripe.com/5kQfZigwB2N1fGB4119R60s" data-no="Kjøp nå, 299 kr →" data-en="Buy now, $29 →">Kjøp nå, 299 kr →</a>
+        <button type="button" class="btn-vipps buy-cta" data-vipps-slug="skoledagbok-1-3-trinn" data-vipps-toggle data-no="Betal med Vipps" data-en="Pay with Vipps">Betal med Vipps</button>
+        <form class="vipps-form buy-cta" data-vipps-form data-vipps-slug="skoledagbok-1-3-trinn">
+          <input type="email" required placeholder="E-post" data-no-placeholder="E-post" data-en-placeholder="Email" data-vipps-email>
+          <button type="submit" class="btn-vipps" data-vipps-submit data-no="Gå til Vipps →" data-en="Continue to Vipps →">Gå til Vipps →</button>
+          <p class="vipps-error" data-vipps-error data-no="Noe gikk galt. Prøv igjen." data-en="Something went wrong. Please try again.">Noe gikk galt. Prøv igjen.</p>
+        </form>
       </div>
 
       <div class="buy-box">
@@ -231,7 +258,17 @@
         <h3 data-no="Skoledagbok 4.–7. trinn" data-en="School diary, grades 4–7">Skoledagbok 4.–7. trinn</h3>
         <p class="age" data-no="9–13 år · 358 sider · Norsk + Engelsk" data-en="Ages 9–13 · 358 pages · Norwegian + English">9–13 år · 358 sider · Norsk + Engelsk</p>
         <div class="price" data-no="299 kr" data-en="$29">299 kr</div>
-        <a class="btn-buy" href="https://buy.stripe.com/fZu6oI949gDRbqlgNN9R60t" data-no-href="https://buy.stripe.com/fZu6oI949gDRbqlgNN9R60t" data-en-href="https://buy.stripe.com/4gM3cwgwBbjx0LHeFF9R60u" data-no="Kjøp nå, 299 kr →" data-en="Buy now, $29 →">Kjøp nå, 299 kr →</a>
+        <div class="owner-free" data-book="4-7" hidden>
+          <a class="btn-buy" href="/butikk/nedlasting/skoledagbok/skoledagbok-4-7-trinn.pdf" data-no="Last ned norsk PDF (eier) →" data-en="Download Norwegian PDF (owner) →">Last ned norsk PDF (eier) →</a>
+          <a class="btn-buy" style="margin-top:8px;" href="/butikk/nedlasting/skoledagbok/skoledagbok-4-7-trinn-en.pdf" data-no="Last ned engelsk PDF (eier) →" data-en="Download English PDF (owner) →">Last ned engelsk PDF (eier) →</a>
+        </div>
+        <a class="btn-buy buy-cta" href="https://buy.stripe.com/fZu6oI949gDRbqlgNN9R60t" data-no-href="https://buy.stripe.com/fZu6oI949gDRbqlgNN9R60t" data-en-href="https://buy.stripe.com/4gM3cwgwBbjx0LHeFF9R60u" data-no="Kjøp nå, 299 kr →" data-en="Buy now, $29 →">Kjøp nå, 299 kr →</a>
+        <button type="button" class="btn-vipps buy-cta" data-vipps-slug="skoledagbok-4-7-trinn" data-vipps-toggle data-no="Betal med Vipps" data-en="Pay with Vipps">Betal med Vipps</button>
+        <form class="vipps-form buy-cta" data-vipps-form data-vipps-slug="skoledagbok-4-7-trinn">
+          <input type="email" required placeholder="E-post" data-no-placeholder="E-post" data-en-placeholder="Email" data-vipps-email>
+          <button type="submit" class="btn-vipps" data-vipps-submit data-no="Gå til Vipps →" data-en="Continue to Vipps →">Gå til Vipps →</button>
+          <p class="vipps-error" data-vipps-error data-no="Noe gikk galt. Prøv igjen." data-en="Something went wrong. Please try again.">Noe gikk galt. Prøv igjen.</p>
+        </form>
       </div>
 
       <ul class="fine">
@@ -266,6 +303,9 @@
     document.querySelectorAll('[data-no-href][data-en-href]').forEach(el => {
       el.href = el.getAttribute('data-' + lang + '-href');
     });
+    document.querySelectorAll('[data-no-placeholder][data-en-placeholder]').forEach(el => {
+      el.placeholder = el.getAttribute('data-' + lang + '-placeholder');
+    });
     toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
     document.title = lang === 'no'
       ? 'Mia & Teo skoledagbok 2026/2027 | LME Butikk'
@@ -282,10 +322,60 @@
     const lang = urlLang || saved;
     if (lang === 'en') switchLanguage('en');
   })();
+
+  // Eieren skal aldri måtte betale for sitt eget produkt (avtalt med Renate
+  // 3. august 2026): logget inn som eier -> bytt kjøpsknappene ut med gratis
+  // nedlastingslenker i stedet for et unntak dypt i betalings-webhooken.
+  fetch('/api/access', { credentials: 'same-origin' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (a) {
+      if (!a || a.plan !== 'owner') return;
+      document.querySelectorAll('.buy-cta').forEach(function (el) { el.hidden = true; });
+      document.querySelectorAll('.owner-free').forEach(function (el) { el.hidden = false; });
+    })
+    .catch(function () {});
 </script>
 
 <script src="/js/lme-visibility.js?v=8" defer></script>
 <script src="/js/lme-account.js?v=11" defer></script>
 <script src="/js/renate-widget.js?v=5" defer></script>
+
+<script>
+  // Vipps-betaling: knappen åpner et lite e-postfelt (trengs for å kunne
+  // sende varen etterpå, siden selve Vipps-betalingen ikke gir oss det),
+  // så sender vi kjøperen videre til Vipps-appen.
+  document.querySelectorAll('[data-vipps-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const form = btn.nextElementSibling;
+      if (form && form.hasAttribute('data-vipps-form')) form.classList.toggle('open');
+    });
+  });
+
+  document.querySelectorAll('[data-vipps-form]').forEach(form => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const slug = form.getAttribute('data-vipps-slug');
+      const emailInput = form.querySelector('[data-vipps-email]');
+      const submitBtn = form.querySelector('[data-vipps-submit]');
+      const errorEl = form.querySelector('[data-vipps-error]');
+      errorEl.classList.remove('show');
+      submitBtn.disabled = true;
+      const original = submitBtn.textContent;
+      submitBtn.textContent = currentLang === 'en' ? 'One moment …' : 'Ett øyeblikk …';
+      try {
+        const res = await fetch('/api/vipps-pay', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug, email: emailInput.value, lang: currentLang }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (data && data.ok && data.redirectUrl) { window.location.href = data.redirectUrl; return; }
+      } catch (err) {}
+      errorEl.classList.add('show');
+      submitBtn.disabled = false;
+      submitBtn.textContent = original;
+    });
+  });
+</script>
 </body>
 </html>

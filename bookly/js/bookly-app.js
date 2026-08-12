@@ -340,7 +340,7 @@
   var IMG_STYLES = {
     pixar:      { name: ['Pixar/Disney 3D (merkestil)', 'Pixar/Disney 3D (brand)'], txt: 'Pixar inspired 3D render, Disney style, soft global illumination, rounded friendly shapes, expressive big eyes, warm cinematic lighting, kid friendly, high detail' },
     watercolor: { name: ['Akvarell', 'Watercolor'], txt: 'soft watercolor illustration, gentle washes, visible paper texture, pastel palette, storybook charm' },
-    montessori: { name: ['Montessori-realistisk', 'Montessori realistic'], txt: 'realistic calm educational illustration, accurate natural details, muted natural colors, no fantasy elements, clean composition' },
+    montessori: { name: ['Montessorirealistisk', 'Montessori realistic'], txt: 'realistic calm educational illustration, accurate natural details, muted natural colors, no fantasy elements, clean composition' },
     clipart:    { name: ['Clipart', 'Clipart'], txt: 'clean vector clipart, bold outlines, flat bright colors, simple shapes, white background, sticker style' },
     cartoon:    { name: ['Tegneserie', 'Cartoon'], txt: 'playful cartoon illustration, bold clean linework, cel shading, cheerful colors' },
     coloring:   { name: ['Linjekunst (fargelegging)', 'Line art (coloring)'], txt: 'black and white coloring book line art, clean bold outlines, no shading, no color fills, white background, printable' },
@@ -376,7 +376,7 @@
             'A workbook with cover, introduction, worksheets, answer key and certificate. Math sheets get real problems and a real answer key.'],
       fields: [
         ['title', 'text', ['Tittel', 'Title'], { req: 1 }],
-        ['category', 'select', ['Kategori', 'Category'], { opts: [['literacy', ['Lese og skrive', 'Literacy']], ['reading', ['Lesing', 'Reading']], ['writing', ['Skriving', 'Writing']], ['mathematics', ['Matematikk', 'Mathematics']], ['science', ['Naturfag', 'Science']], ['geography', ['Geografi', 'Geography']], ['language', ['Språklæring', 'Language learning']], ['montessori', ['Montessori-inspirert', 'Montessori inspired']]] }],
+        ['category', 'select', ['Kategori', 'Category'], { opts: [['literacy', ['Lese og skrive', 'Literacy']], ['reading', ['Lesing', 'Reading']], ['writing', ['Skriving', 'Writing']], ['mathematics', ['Matematikk', 'Mathematics']], ['science', ['Naturfag', 'Science']], ['geography', ['Geografi', 'Geography']], ['language', ['Språklæring', 'Language learning']], ['montessori', ['Montessoriinspirert', 'Montessori inspired']]] }],
         ['topic', 'text', ['Tema', 'Topic'], {}],
         ['age', 'select', ['Aldersgruppe', 'Age group'], { opts: [['3-6', ['3-6 år (førskole)', 'Ages 3-6 (preschool)']], ['6-9', ['6-9 år', 'Ages 6-9']], ['9-12', ['9-12 år', 'Ages 9-12']]], def: '6-9' }],
         ['goals', 'text', ['Læringsmål (fra læreplanen)', 'Learning goals (from the curriculum)'], { ph: ['Fylles automatisk fra malene, eller skriv egne mål', 'Prefilled by templates, or write your own goals'] }],
@@ -459,6 +459,36 @@
       ],
     },
   };
+
+  /* =====================================================================
+     DYPLENKE FRA LME LÆRINGSVERKSTED
+     En ressursside kan lenke inn med ?lv=1&type=<skapertype>&... for å åpne
+     riktig skaper med fag, trinn og læreplanmål forhåndsvalgt. Bruker samme
+     BK.pendingTemplate-mekanisme som malbiblioteket (BK.useTemplate), så
+     dette er ingen ny vei inn, bare et annet sted forhåndsoppsettet kommer
+     fra. Kjøres én gang ved oppstart, før BK.boot() dispatcher ruten.
+     ===================================================================== */
+  (function () {
+    var qs;
+    try { qs = new URLSearchParams(location.search); } catch (e) { return; }
+    if (qs.get('lv') !== '1') return;
+    var type = qs.get('type');
+    var def = FORMS[type];
+    if (!def) return;
+    var cfg = {};
+    def.fields.forEach(function (f) {
+      var name = f[0];
+      if (qs.has(name)) cfg[name] = qs.get(name);
+    });
+    var plan = qs.get('plan'), fag = qs.get('fag'), alder = qs.get('alder');
+    if (plan && fag && alder && BK.CURRICULUM && BK.CURRICULUM[plan] && BK.CURRICULUM[plan].fag[fag]) {
+      cfg.goals = BK.curriculumGoal(plan, fag, alder, BK.lang() === 'no' ? 'no' : 'en');
+    }
+    var title = qs.get('title') || '';
+    BK.pendingTemplate = { type: type, name: [title, title], cfg: cfg };
+    location.hash = '#/create/' + type;
+    try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {}
+  })();
 
   BK.route('/create', function (root, rest) {
     var type = rest[0] || 'book';
@@ -1516,7 +1546,7 @@
     var STYLES = {
       pixar: { name: ['Pixar-inspirert 3D', 'Pixar-inspired 3D'], txt: 'Pixar-inspired 3D render, soft global illumination, rounded friendly shapes, expressive big eyes, subsurface skin, cinematic warm lighting, high detail' },
       watercolor: { name: ['Akvarell', 'Watercolor'], txt: 'soft watercolor illustration, gentle washes, visible paper texture, pastel palette, loose expressive brushwork, storybook charm' },
-      montessori: { name: ['Montessori-inspirert', 'Montessori inspired'], txt: 'realistic and calm educational illustration, accurate natural details, muted natural colors, no fantasy elements, animals behave naturally, clean composition on white' },
+      montessori: { name: ['Montessoriinspirert', 'Montessori inspired'], txt: 'realistic and calm educational illustration, accurate natural details, muted natural colors, no fantasy elements, animals behave naturally, clean composition on white' },
       clipart: { name: ['Clipart', 'Clipart'], txt: 'clean vector clipart, bold outlines, flat bright colors, simple shapes, white background, sticker style' },
       cartoon: { name: ['Tegneserie', 'Cartoon'], txt: 'playful cartoon illustration, bold clean linework, cel shading, cheerful colors, dynamic poses' },
       realistic: { name: ['Realistisk', 'Realistic'], txt: 'realistic detailed illustration, natural lighting, lifelike textures, soft depth of field' },

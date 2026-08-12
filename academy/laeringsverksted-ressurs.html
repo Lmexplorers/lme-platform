@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<title>Ressurs — LME Læringsverksted</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/laeringsverksted.css?v=2">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink: #F8D7DA; --pink-mid: #F5A8B8; --cerise: #E91E89;
+    --lime: #7AAE1F; --yellow: #F7C72E; --cream: #FBF6F0;
+    --ink: #1A1A1A; --grey: #4A4A4A; --line: rgba(26,26,26,0.1);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); color: var(--ink); background: #faf6f7; min-height: 100vh; line-height: 1.6; }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 13px 64px 13px 20px; background: #fff; box-shadow: 0 2px 10px rgba(180,120,140,.12); position: sticky; top: 0; z-index: 5; }
+  .bar .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--cerise); text-decoration: none; font-size: 15px; }
+  .bar .brand img { width: 32px; height: 32px; object-fit: contain; }
+  .bar .actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; align-items: center; }
+  .btn { border: 0; border-radius: 999px; padding: 9px 16px; font-weight: 700; font-family: inherit; cursor: pointer; text-decoration: none; font-size: 13.5px; white-space: nowrap; }
+  .btn-back { background: #fff; color: var(--ink); border: 1px solid #eedce2; }
+  .btn-lang { background: #FCEFF2; color: #C13D6A; }
+  .btn-edit { background: var(--cerise); color: #fff; display: none; }
+  .wrap { max-width: 780px; width: 100%; margin: 0 auto; padding: 26px 18px 60px; }
+  .lv-loading { text-align: center; color: #a98b96; padding: 60px 20px; font-size: 15px; }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/laeringsverksted"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <div class="actions">
+      <button class="btn btn-lang" id="lv-lang" type="button">🇬🇧 English</button>
+      <a class="btn btn-edit" id="lv-edit" href="#" data-no="✏️ Rediger" data-en="✏️ Edit">✏️ Rediger</a>
+      <a class="btn btn-back" href="/laeringsverksted" data-no="‹ Læringsverksted" data-en="‹ Learning Workshop">‹ Læringsverksted</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div id="lv-innhold"><div class="lv-loading" data-no="Henter ressursen …" data-en="Loading the resource …">Henter ressursen …</div></div>
+  </div>
+
+<script src="/js/laeringsverksted-render.js?v=2" defer></script>
+<script src="/js/laeringsverksted-favorites.js?v=2" defer></script>
+<script>
+(function () {
+  window.LME_CURRENT_LANG = 'no';
+  try { window.LME_CURRENT_LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no'; } catch (e) {}
+
+  var m = location.pathname.match(/^\/lv\/([a-z0-9\-]+)\/?$/i);
+  var slug = (m && m[1]) || new URL(location.href).searchParams.get('r') || '';
+  slug = slug.toLowerCase();
+  var resource = null;
+  var related = [];
+  var isOwnerUser = false;
+  var root = document.getElementById('lv-innhold');
+  var VIEWED_KEY = 'lv_recent';
+
+  function isEn() { return window.LME_CURRENT_LANG === 'en'; }
+  function pick(v) { if (v && typeof v === 'object') return (isEn() && v.en) ? v.en : (v.no || ''); return v || ''; }
+
+  function applyStatic() {
+    var en = isEn();
+    document.documentElement.lang = en ? 'en' : 'no';
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      el.textContent = en ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    var b = document.getElementById('lv-lang');
+    if (b) b.textContent = en ? '🇳🇴 Norsk' : '🇬🇧 English';
+  }
+
+  function isFavorite(s) { return window.LMEFavorites.isFavorite(s); }
+  function toggleFavorite(s) { return window.LMEFavorites.toggle(s); }
+
+  function recordViewed(s) {
+    try {
+      var recent = JSON.parse(localStorage.getItem(VIEWED_KEY) || '[]');
+      recent = recent.filter(function (x) { return x !== s; });
+      recent.unshift(s);
+      localStorage.setItem(VIEWED_KEY, JSON.stringify(recent.slice(0, 12)));
+    } catch (e) {}
+  }
+
+  function render() {
+    applyStatic();
+    window.LMELaeringsverksted.renderDetail(root, resource, {
+      en: isEn(),
+      isFavorite: isFavorite,
+      onFavorite: toggleFavorite,
+      isOwner: isOwnerUser,
+      relatedResources: related,
+      onDownload: function (s) {
+        fetch('/api/laeringsverksted', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'track', slug: s, kind: 'download' }) }).catch(function () {});
+      },
+    });
+    document.title = (resource ? pick(resource.title) : (isEn() ? 'Resource not found' : 'Fant ikke ressursen')) + ' — LME Læringsverksted';
+  }
+
+  function maybeShowEdit() {
+    var on = /(^|[#&?])rediger(=1)?($|[&])/.test(location.hash + location.search);
+    try { on = on || localStorage.getItem('lme-laeringsverksted-bruker') === '1'; } catch (e) {}
+    if (on && slug) {
+      var e = document.getElementById('lv-edit');
+      e.href = '/laeringsverksted-bygger#' + slug;
+      e.style.display = '';
+    }
+  }
+
+  document.getElementById('lv-lang').addEventListener('click', function () {
+    window.LME_CURRENT_LANG = isEn() ? 'no' : 'en';
+    try { localStorage.setItem('lme_lang', window.LME_CURRENT_LANG); } catch (e) {}
+    render();
+  });
+
+  applyStatic();
+  maybeShowEdit();
+
+  /* Eieren skal aldri måtte betale for sitt eget produkt (CLAUDE.md).
+     Fail-open: en feilet /api/access-sjekk lar bare kjøpsknappen stå som
+     vanlig, den låser aldri noe ekstra. */
+  fetch('/api/access', { credentials: 'same-origin' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (a) {
+      if (a && (a.plan === 'owner' || a.tier === 'owner')) {
+        isOwnerUser = true;
+        if (resource) render();
+      }
+    })
+    .catch(function () {});
+
+  if (!slug) { render(); return; }
+  fetch('/api/laeringsverksted?slug=' + encodeURIComponent(slug) + '&t=' + Date.now())
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      resource = (d && d.resource) || null;
+      if (resource && !resource.example) {
+        recordViewed(slug);
+        fetch('/api/laeringsverksted', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'track', slug: slug, kind: 'view' }) }).catch(function () {});
+      }
+      if (resource && resource.related && resource.related.length) {
+        return Promise.all(resource.related.slice(0, 4).map(function (s) {
+          return fetch('/api/laeringsverksted?slug=' + encodeURIComponent(s)).then(function (r) { return r.json(); }).then(function (d2) { return d2 && d2.resource; }).catch(function () { return null; });
+        })).then(function (list) { related = list.filter(Boolean); });
+      }
+    })
+    .catch(function () { resource = null; })
+    .then(function () {
+      var started = false;
+      function maybeStart() {
+        if (started || !window.LMELaeringsverksted || !window.LMEFavorites) return;
+        started = true;
+        clearInterval(pollTimer);
+        window.LMEFavorites.init(function () { render(); });
+      }
+      var pollTimer = setInterval(maybeStart, 40);
+      maybeStart();
+    });
+})();
+</script>
+<script src="/js/lme-visibility.js?v=8" defer></script>
+<script src="/js/lme-account.js?v=11" defer></script>
+<script src="/js/renate-widget.js?v=5" defer></script>
+</body>
+</html>

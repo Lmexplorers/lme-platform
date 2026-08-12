@@ -115,26 +115,26 @@ const MESTERKLASSE_SERIES = [
   {
     no: { subject: "Velkommen! Så glad for at du er her 🌸",
       html: mk("Hei {name}, hjertelig velkommen!",
-        "Jeg er så glad for at du vil i gang med Montessori hjemme. Du trenger verken en lærerutdanning, et stort budsjett eller mye tid, bare litt lyst og noen enkle steg. Start med den gratis mesterklassen, så tar vi det første steget sammen.",
-        SITE + "/montessori-mesterklasse", "Se den gratis mesterklassen", "Klem fra Renate"),
-      text: "Hei {name}, hjertelig velkommen!\n\nJeg er så glad for at du vil i gang med Montessori hjemme. Start med den gratis mesterklassen:\n" + SITE + "/montessori-mesterklasse\n\nKlem fra Renate" },
+        "Jeg er så glad for at du vil i gang med Montessori hjemme. Du trenger verken en lærerutdanning, et stort budsjett eller mye tid, bare litt lyst og noen enkle steg. Mesterklassen tar deg gjennom fem fulle moduler, steg for steg, i ditt eget tempo.",
+        "https://buy.stripe.com/7sYeVe2FL0ET661eFF9R63F", "Kjøp mesterklassen", "Klem fra Renate"),
+      text: "Hei {name}, hjertelig velkommen!\n\nJeg er så glad for at du vil i gang med Montessori hjemme. Kjøp mesterklassen:\nhttps://buy.stripe.com/7sYeVe2FL0ET661eFF9R63F\n\nKlem fra Renate" },
     en: { subject: "Welcome! So glad you are here 🌸",
       html: mk("Hi {name}, a warm welcome!",
-        "I am so happy that you want to get started with Montessori at home. You need neither a teaching degree, a big budget, nor a lot of time, just a little desire and a few simple steps. Start with the free masterclass, and we will take the first step together.",
-        SITE + "/montessori-mesterklasse", "Watch the free masterclass", "Warm wishes, Renate"),
-      text: "Hi {name}, a warm welcome!\n\nStart with the free masterclass:\n" + SITE + "/montessori-mesterklasse\n\nWarm wishes, Renate" },
+        "I am so happy that you want to get started with Montessori at home. You need neither a teaching degree, a big budget, nor a lot of time, just a little desire and a few simple steps. The masterclass takes you through five full modules, step by step, at your own pace.",
+        "https://buy.stripe.com/cNi8wQ6W12N1amhcxx9R63G", "Buy the masterclass", "Warm wishes, Renate"),
+      text: "Hi {name}, a warm welcome!\n\nBuy the masterclass:\nhttps://buy.stripe.com/cNi8wQ6W12N1amhcxx9R63G\n\nWarm wishes, Renate" },
   },
   {
     no: { subject: "Ditt aller første steg hjemme",
       html: mk("Hei {name},",
         "Det enkleste stedet å begynne er miljøet. Velg én hylle i barnehøyde og legg tre ting barnet kan nå og bruke helt selv. Færre valg gir mer ro, og barnet får kjenne på mestring med en gang. I mesterklassen om det forberedte miljøet viser jeg deg hvordan, steg for steg.",
-        SITE + "/kurs/forberedt-miljo", "Se mesterklassen", "Klem fra Renate"),
-      text: "Hei {name},\n\nVelg én hylle i barnehøyde og legg tre ting barnet kan bruke selv. Se mesterklassen om det forberedte miljøet:\n" + SITE + "/kurs/forberedt-miljo\n\nKlem fra Renate" },
+        SITE + "/kurs/montessori-masterclass", "Se mesterklassen", "Klem fra Renate"),
+      text: "Hei {name},\n\nVelg én hylle i barnehøyde og legg tre ting barnet kan bruke selv. Se mesterklassen om det forberedte miljøet:\n" + SITE + "/kurs/montessori-masterclass\n\nKlem fra Renate" },
     en: { subject: "Your very first step at home",
       html: mk("Hi {name},",
         "The easiest place to begin is the environment. Choose one shelf at child height and place three things your child can reach and use all by themselves. Fewer choices bring more calm, and your child feels a sense of mastery right away. In the masterclass on the prepared environment I show you how, step by step.",
-        SITE + "/kurs/forberedt-miljo", "Watch the masterclass", "Warm wishes, Renate"),
-      text: "Hi {name},\n\nChoose one shelf at child height with three things your child can use themselves. Watch the masterclass on the prepared environment:\n" + SITE + "/kurs/forberedt-miljo\n\nWarm wishes, Renate" },
+        SITE + "/kurs/montessori-masterclass", "Watch the masterclass", "Warm wishes, Renate"),
+      text: "Hi {name},\n\nChoose one shelf at child height with three things your child can use themselves. Watch the masterclass on the prepared environment:\n" + SITE + "/kurs/montessori-masterclass\n\nWarm wishes, Renate" },
   },
   {
     no: { subject: "To minutter: hva stjeler roen hjemme?",
@@ -214,14 +214,18 @@ export async function sendNewsletter(env, sub, index) {
   }
 }
 
-/* Registrer / oppdater en nyhetsbrev-abonnent i KV. */
-export async function registerNewsletter(env, email, name, lang, source) {
+/* Registrer / oppdater en nyhetsbrev-abonnent i KV. "tag" er valgfri ekstra
+   kontekst (f.eks. et quiz-resultat) som ikke styrer selve serien, bare
+   lagres for oversikt. */
+export async function registerNewsletter(env, email, name, lang, source, tag) {
   if (!env.BUILDER_KV || !email) return;
   const key = "nl:" + email.trim().toLowerCase();
   const existing = await env.BUILDER_KV.get(key);
   if (existing) return; // ikke nullstill en som allerede er i gang
-  await env.BUILDER_KV.put(key, JSON.stringify({
+  const rec = {
     email: email.trim(), name: name || "", lang: lang === "en" ? "en" : "no",
     weekIndex: 0, active: true, joined: Date.now(), lastSent: 0, source: (source || "").toString().slice(0, 60),
-  }));
+  };
+  if (tag) rec.tag = String(tag).slice(0, 60);
+  await env.BUILDER_KV.put(key, JSON.stringify(rec));
 }

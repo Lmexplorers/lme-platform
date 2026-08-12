@@ -1,0 +1,21 @@
+name: Mia & Teo følelser oppfølgingsmail
+
+# Trigger den daglige køen som sender den 5-stegs e-postserien til leads fra
+# gratisheftet "Mitt første følelsesverktøy" (funnel/mia-teo-folelser-gratis).
+# Kjører en gang i døgnet og kan også startes manuelt fra Actions-fanen.
+# Valgfritt: legg repo-hemmeligheten MIA_TEO_CRON_TOKEN hvis endepunktet er beskyttet.
+
+on:
+  schedule:
+    - cron: "0 10 * * *"   # daglig kl. 10:00 UTC
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger oppfølgings-køen
+        env:
+          TOKEN: ${{ secrets.MIA_TEO_CRON_TOKEN }}
+        run: |
+          curl -fsS "https://lmexplorers.com/api/cron/mia-teo-followups${TOKEN:+?token=$TOKEN}"

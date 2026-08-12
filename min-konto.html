@@ -1004,6 +1004,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     .lang-float { top: 70px; right: 16px; padding: 6px 14px; font-size: 13px; }
   }
 </style>
+<link rel="stylesheet" href="/css/laeringsverksted.css">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/images/app/apple-touch-icon.png">
 <script>
@@ -1033,7 +1034,6 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
             <h4><span class="ico">✦</span> Lær</h4>
             <ul>
               <li><a href="/academy">Kurs <span class="arrow">›</span></a></li>
-              <li><a href="/montessori-mesterklasse"><span data-no="Montessori mesterklasse" data-en="Montessori Masterclass">Montessori mesterklasse</span> <span class="arrow">›</span></a></li>
               <li><a href="/montessorireisen"><span data-no="Montessorireisen" data-en="The Montessori Journey">Montessorireisen</span> <span class="arrow">›</span></a></li>
               <li><a href="/roadmap">Din Montessorireise <span class="arrow">›</span></a></li>
               <li><a href="/musikk">LME Musikk <span class="arrow">›</span></a></li>
@@ -1204,6 +1204,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     <button class="tab" data-tab="subscription">Abonnement</button>
     <button class="tab" data-tab="payment">Betaling</button>
     <button class="tab" data-tab="purchases">Kjøp</button>
+    <button class="tab" data-tab="laringsverksted">Læringsverksted</button>
     <button class="tab" data-tab="profile">Profil</button>
   </div>
 
@@ -1440,6 +1441,36 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     </div>
   </div>
 
+  <!-- Læringsverksted tab. "Mine kjøp" av læremidler krever et ekte
+       kjøpsregister på tvers av plattformen (finnes ikke ennå, se rapport),
+       så denne fanen viser det som allerede kan kobles til ekte data i dag:
+       Bookly-prosjekter (fra /api/bookly/library), favoritter og nylig
+       åpnet (lagret lokalt i nettleseren), og enkle anbefalinger. -->
+  <div class="tab-content" data-content="laringsverksted">
+    <div class="settings-card">
+      <h3>Mine Bookly-prosjekter</h3>
+      <div id="lvBooklyProjects"><p class="setting-label">Logg inn for å se dine Bookly-prosjekter.</p></div>
+      <a href="/bookly/" class="invoice-link">Åpne Bookly →</a>
+    </div>
+    <div class="settings-card">
+      <h3>Mine favoritter</h3>
+      <div id="lvFavorites"></div>
+    </div>
+    <div class="settings-card">
+      <h3>Nylig åpnet</h3>
+      <div id="lvRecent"></div>
+    </div>
+    <div class="settings-card">
+      <h3>Gratisressurser</h3>
+      <p class="setting-label">Alle gratis læringsressurser samlet på ett sted.</p>
+      <a href="/laeringsverksted?pris=gratis" class="invoice-link">Utforsk gratisressurser →</a>
+    </div>
+    <div class="settings-card">
+      <h3>Anbefalt for deg</h3>
+      <div id="lvRecommended"></div>
+    </div>
+  </div>
+
   <!-- Profil tab -->
   <div class="tab-content" data-content="profile">
     <div class="settings-card">
@@ -1594,7 +1625,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     </div>
 
     <div class="footer-bottom">
-      ©2026 Little Montessori Explorers, Renate Dahl · Tønsberg, Norge
+      ©2026 Little Montessori Explorers, Renate Dahl · Tønsberg, Norge · <a href="/personvern" style="color:inherit">Personvern</a> · <a href="/kjopsvilkar" style="color:inherit">Kjøpsvilkår</a>
     </div>
   </div>
 </footer>
@@ -1925,7 +1956,12 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
       var n = document.getElementById('pfName'); if (n) n.value = u.name || '';
       var e = document.getElementById('pfEmail'); if (e) e.value = u.email;
 
-      if (u.role === 'owner') {
+      // Samme e-postliste som isOwner() i functions/_lib/access.js. role
+      // er ikke alltid satt til nøyaktig 'owner' på kontoen, så uten
+      // e-postfallbacken kunne eieren selv miste eier-visningen her.
+      var OWNER_EMAILS = ['renate@lmexplorers.com', 'hei@lmexplorers.com', 'hello@lmexplorers.com', 'support@lmexplorers.com', 'renateshobby@hotmail.com'];
+      var isOwnerAcct = u.role === 'owner' || u.role === 'admin' || OWNER_EMAILS.indexOf((u.email || '').toLowerCase()) !== -1;
+      if (isOwnerAcct) {
         setHTML('.status-card',
           '<span class="status-badge" style="background:#A4D233;color:#2a1e2e;">EIER</span>' +
           '<h3>Eier-konto</h3>' +
@@ -1953,6 +1989,38 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
           setHTML('.tab-content[data-content="purchases"]',
             card('Kjøp', 'Du har ingen kjøp ennå. <a href="/butikk" style="color:#E91E89;font-weight:700;">Utforsk butikken →</a>'));
         }
+      }
+
+      /* Ekte kjøpshistorikk (functions/api/purchases.js), på tvers av alle
+         produkttyper. Overskriver kun de statiske eksempelkortene når det
+         faktisk finnes registrerte kjøp, så "ingen kjøp ennå"-meldingen
+         over (eller eierens egen melding) fortsatt gjelder ellers. */
+      if (!isOwnerAcct) {
+        function escHtml(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        var TYPE_ICON = { oppskrift: '🧶', kurs: '🎓', modul: '🎬', kreditt: '✨', autopilot: '🎨', claude: '💬', laeringsverksted: '📘' };
+        fetch('/api/purchases', { credentials: 'include' })
+          .then(function (r) { return r.json(); })
+          .then(function (pd) {
+            var list = (pd && pd.purchases) || [];
+            if (!list.length) return;
+            var en = window.LME_CURRENT_LANG === 'en';
+            var html = list.map(function (p) {
+              var when = new Date(p.date || Date.now());
+              var dateStr = when.toLocaleDateString(en ? 'en-US' : 'nb-NO', { day: 'numeric', month: 'long', year: 'numeric' });
+              var amountStr = (typeof p.amount === 'number' && p.currency) ? (p.amount / 100).toFixed(0) + ' ' + p.currency.toUpperCase() : '';
+              return '<article class="purchase-item">' +
+                '<div class="purchase-thumb" style="background: linear-gradient(135deg, #A4D233, #3FA9F5);">' + (TYPE_ICON[p.type] || '🛍️') + '</div>' +
+                '<div class="purchase-body">' +
+                '<h4>' + escHtml(p.title || p.id || '') + '</h4>' +
+                '<p class="purchase-date">' + (en ? 'Purchased ' : 'Kjøpt ') + dateStr + (amountStr ? ' · ' + amountStr : '') + '</p>' +
+                '</div>' +
+                '<div class="purchase-actions">' +
+                (p.url ? '<a href="' + p.url + '" class="btn-yellow">' + (en ? 'Open →' : 'Åpne →') + '</a>' : '') +
+                '</div></article>';
+            }).join('');
+            setHTML('.purchases-list', html);
+          })
+          .catch(function () {});
       }
     });
 
@@ -2007,6 +2075,123 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
       }
     });
   })();
+</script>
+<script src="/js/laeringsverksted-render.js" defer></script>
+<script src="/js/laeringsverksted-favorites.js" defer></script>
+<script>
+(function () {
+  function en() { return window.LME_CURRENT_LANG === 'en'; }
+  var RECENT_KEY = 'lv_recent';
+  function readLocal(key) { try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch (e) { return []; } }
+
+  function fetchResources(slugs) {
+    return Promise.all(slugs.map(function (s) {
+      return fetch('/api/laeringsverksted?slug=' + encodeURIComponent(s)).then(function (r) { return r.json(); }).then(function (d) { return d && d.resource; }).catch(function () { return null; });
+    })).then(function (list) { return list.filter(Boolean); });
+  }
+
+  function renderInto(id, resources, emptyText) {
+    var box = document.getElementById(id);
+    if (!box) return;
+    if (window.LMELaeringsverksted) window.LMELaeringsverksted.renderGrid(box, resources, { en: en(), emptyText: emptyText });
+  }
+
+  function loadBooklyProjects() {
+    var box = document.getElementById('lvBooklyProjects');
+    if (!box) return;
+    fetch('/api/bookly/library', { credentials: 'include' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || d.error === 'not_logged_in') {
+          box.innerHTML = '';
+          var p = document.createElement('p');
+          p.className = 'setting-label';
+          p.textContent = en() ? 'Log in to see your Bookly projects.' : 'Logg inn for å se dine Bookly-prosjekter.';
+          box.appendChild(p);
+          return;
+        }
+        var projects = (d.library && d.library.projects) || [];
+        box.innerHTML = '';
+        if (!projects.length) {
+          var e = document.createElement('p');
+          e.className = 'setting-label';
+          e.textContent = en() ? 'No Bookly projects yet.' : 'Ingen Bookly-prosjekter ennå.';
+          box.appendChild(e);
+          return;
+        }
+        projects.slice(0, 8).forEach(function (proj) {
+          var row = document.createElement('div');
+          row.className = 'invoice-row';
+          var left = document.createElement('div');
+          var t = document.createElement('p'); t.className = 'setting-value'; t.textContent = proj.title || (en() ? 'Untitled project' : 'Uten tittel');
+          var d2 = new Date(proj.updated || Date.now());
+          var sub = document.createElement('p'); sub.className = 'setting-label'; sub.textContent = d2.toLocaleDateString(en() ? 'en-US' : 'nb-NO');
+          left.appendChild(t); left.appendChild(sub);
+          var a = document.createElement('a'); a.className = 'invoice-link'; a.href = '/bookly/#/project/' + proj.id; a.textContent = (en() ? 'Open' : 'Åpne') + ' →';
+          row.appendChild(left); row.appendChild(a);
+          box.appendChild(row);
+        });
+      })
+      .catch(function () {
+        box.innerHTML = '';
+        var p = document.createElement('p');
+        p.className = 'setting-label';
+        p.textContent = en() ? 'Could not load Bookly projects right now.' : 'Fikk ikke hentet Bookly-prosjekter nå.';
+        box.appendChild(p);
+      });
+  }
+
+  function loadFavoritesAndRecent(all) {
+    var favSlugs = window.LMEFavorites.getAll();
+    var recentSlugs = readLocal(RECENT_KEY);
+    fetchResources(favSlugs).then(function (list) {
+      renderInto('lvFavorites', list, en() ? 'No favorites saved yet — the heart icon in the catalog saves one here.' : 'Ingen favoritter lagret ennå, hjerte-ikonet i katalogen lagrer én her.');
+    });
+    fetchResources(recentSlugs.slice(0, 6)).then(function (list) {
+      renderInto('lvRecent', list, en() ? 'Resources you open will show up here.' : 'Ressurser du åpner dukker opp her.');
+    });
+    /* Enkel anbefaling: samme fag/alder som favoritter og nylig åpnet,
+       ellers utvalgte og nyeste ressurser. */
+    var seedSlugs = favSlugs.concat(recentSlugs);
+    fetchResources(seedSlugs).then(function (seed) {
+      var subjects = {}, ages = {};
+      seed.forEach(function (r) {
+        (r.subjects || []).forEach(function (s) { subjects[s] = 1; });
+        (r.ageBands || []).forEach(function (a) { ages[a] = 1; });
+      });
+      var seenSlugs = seed.map(function (r) { return r.slug; });
+      var pool = (all || []).filter(function (r) { return r.published !== false && seenSlugs.indexOf(r.slug) === -1; });
+      var scored = pool.map(function (r) {
+        var score = 0;
+        (r.subjects || []).forEach(function (s) { if (subjects[s]) score += 2; });
+        (r.ageBands || []).forEach(function (a) { if (ages[a]) score += 2; });
+        if (r.featured) score += 1;
+        return { r: r, score: score };
+      }).sort(function (a, b) { return b.score - a.score || (b.r.updated || 0) - (a.r.updated || 0); });
+      renderInto('lvRecommended', scored.slice(0, 4).map(function (s) { return s.r; }), en() ? 'Browse the Learning Workshop to get recommendations.' : 'Bla i Læringsverksted for å få anbefalinger.');
+    });
+  }
+
+  function boot() {
+    loadBooklyProjects();
+    window.LMEFavorites.init(function () {
+      fetch('/api/laeringsverksted?t=' + Date.now())
+        .then(function (r) { return r.json(); })
+        .then(function (d) { return (d && d.resources) || []; })
+        .catch(function () { return []; })
+        .then(function (all) { loadFavoritesAndRecent(all); });
+    });
+  }
+  var started = false;
+  function maybeBoot() {
+    if (started || !window.LMELaeringsverksted || !window.LMEFavorites) return;
+    started = true;
+    clearInterval(pollTimer);
+    boot();
+  }
+  var pollTimer = setInterval(maybeBoot, 40);
+  maybeBoot();
+})();
 </script>
 <script src="/js/mobile-nav.js?v=9" defer></script>
 <script src="/js/i18n-auto.js" defer></script>

@@ -224,7 +224,7 @@
   <div class="sheet">
     <h3 data-no="Koble til Blotato" data-en="Connect Blotato">Koble til Blotato</h3>
     <p class="lead" data-no="Lim inn konto-ID-en fra Blotato for hver app du vil publisere til. Du finner dem i Blotato under «Accounts». Nøkkelen din ligger trygt på serveren, den lagres aldri her." data-en="Paste the account ID from Blotato for each app you want to publish to. Find them in Blotato under “Accounts”. Your key stays safely on the server, never stored here.">Lim inn konto-ID fra Blotato for hver app.</p>
-    <label class="own"><input type="checkbox" id="blOwner"><span data-no="Jeg er Renate. Vis karaktervalg for Mia og Teo når jeg lager bilder. (Andre brukere får kun nøytrale Montessori-bilder.)" data-en="I am Renate. Show the Mia and Teo character choices when I create images. (Other users only get neutral Montessori images.)">Jeg er Renate. Vis karaktervalg for Mia og Teo.</span></label>
+    <label class="own"><input type="checkbox" id="blOwner"><span data-no="Jeg er Renate. Vis karaktervalg for Mia og Teo når jeg lager bilder. (Andre brukere får kun nøytrale Montessoribilder.)" data-en="I am Renate. Show the Mia and Teo character choices when I create images. (Other users only get neutral Montessori images.)">Jeg er Renate. Vis karaktervalg for Mia og Teo.</span></label>
     <div id="blFields"></div>
     <button class="chip" id="blFetch" style="margin-bottom:6px" data-no="↺ Hent kontoene mine fra Blotato" data-en="↺ Fetch my accounts from Blotato">↺ Hent kontoene mine fra Blotato</button>
     <div class="row">
@@ -460,7 +460,7 @@
   // Bilde-verktøy: karaktervalg (kun for Renate) + bildemotor + «Lag bilde» + forhåndsvisning + URL-felt.
   function imgTool(c){
     var owner=isOwner();
-    var opts='<option value="none">'+T('Uten karakter (Montessori-scene)','No character (Montessori scene)')+'</option>';
+    var opts='<option value="none">'+T('Uten karakter (Montessoriscene)','No character (Montessori scene)')+'</option>';
     if(owner){
       opts+='<option value="mia">'+T('Mia','Mia')+'</option>'+
             '<option value="teo">'+T('Teo','Teo')+'</option>'+

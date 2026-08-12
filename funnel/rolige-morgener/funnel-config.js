@@ -4,7 +4,7 @@
    En enkel gratis-funnel: opt-in-side som fanger e-posten, og en
    takkeside der utfordringen (PDF) lastes ned. Ingen betaling.
 
-   Flyten: opt-in.html  ->  (MailerLite)  ->  takk.html (nedlasting)
+   Flyten: opt-in.html  ->  (plattformens egen liste)  ->  takk.html (nedlasting)
 
    Rediger bare verdiene under, lagre, og last sidene på nytt.
    Tips: tekst i "anførselstegn", tall uten. Komma etter hver linje.
@@ -20,8 +20,8 @@ window.LME_FUNNEL = {
       navn: "Little Montessori Explorers",
       kortnavn: "LME",
       logo: "/images/lme-logo.png",
-      optInActionUrl: "/api/mailerlite/subscribe", // sender leads til MailerLite-lista di
-      mailerliteGroup: "193598773523384199", // Rolige morgener-gruppa (trigger for velkomst-automasjonen)
+      optInActionUrl: "/api/subscribe", // sender leads til plattformens egen liste
+      newsletterSource: "rolige-morgener",
       etterOptIn: "takk.html"
     },
 
@@ -80,8 +80,8 @@ window.LME_FUNNEL = {
       navn: "Little Montessori Explorers",
       kortnavn: "LME",
       logo: "/images/lme-logo.png",
-      optInActionUrl: "/api/mailerlite/subscribe", // sends leads to your MailerLite list
-      mailerliteGroup: "193598773523384199", // Rolige morgener-gruppa (trigger for velkomst-automasjonen)
+      optInActionUrl: "/api/subscribe", // sends leads to the platform's own list
+      newsletterSource: "rolige-morgener",
       etterOptIn: "takk.html"
     },
 

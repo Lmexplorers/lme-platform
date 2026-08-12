@@ -29,7 +29,7 @@ import { PATTERN_LINKS } from "../_lib/pattern-links.js";
 import { bumpToday } from "../_lib/track.js";
 import {
   CREDIT_PACKS, addCredit,
-  CLAUDE_GROUP_NO, CLAUDE_GROUP_EN, CLAUDE_PAYMENT_LINK_LANG, CLAUDE_MAIN_LINK_LANG, addToClaudeGroup,
+  CLAUDE_PAYMENT_LINK_LANG, CLAUDE_MAIN_LINK_LANG,
 } from "../_lib/purchase-links.js";
 
 /* PATTERN_LINKS: delt kilde i ../_lib/pattern-links.js */
@@ -177,14 +177,10 @@ export async function onRequestPost(context) {
         }
         break;
       }
-      // Claude-kurset: legg kjøperen i riktig språkgruppe, ikke Inner Circle.
+      // Claude-kurset: gir kursets egen takke-/oppfølgingsmail, ikke Inner Circle.
       const claudeLang = obj.payment_link && CLAUDE_PAYMENT_LINK_LANG[obj.payment_link];
       if (claudeLang) {
         const name = (obj.customer_details && obj.customer_details.name) || "";
-        const groupId = claudeLang === "en"
-          ? (env.MAILERLITE_CLAUDE_GROUP_EN || CLAUDE_GROUP_EN)
-          : (env.MAILERLITE_CLAUDE_GROUP_NO || CLAUDE_GROUP_NO);
-        await addToClaudeGroup(env, email, name, groupId);
         // Start også den ukentlige nyhetsbrev-serien for kjøperen.
         try { await registerNewsletter(env, email, name, claudeLang); } catch (e) {}
         // Hovedkurs: send takkemail nå, og legg 2-dagers oppfølger i kø.

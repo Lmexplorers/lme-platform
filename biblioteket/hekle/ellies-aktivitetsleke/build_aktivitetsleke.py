@@ -13,9 +13,28 @@ REF = BASE / 'aktivitetsleke_ref.jpg'
 ref_b64 = base64.b64encode(REF.read_bytes()).decode()
 ref_src = f'data:image/jpeg;base64,{ref_b64}'
 
+def img_src(filename):
+    data = (BASE / filename).read_bytes()
+    return f'data:image/jpeg;base64,{base64.b64encode(data).decode()}'
+
+alle_sider_src = img_src('aktivitetsleke_alle_sider.jpg')
+speil_src = img_src('aktivitetsleke_speil.jpg')
+form_src = img_src('aktivitetsleke_form.jpg')
+lomme_src = img_src('aktivitetsleke_lomme.jpg')
+knitre_src = img_src('aktivitetsleke_knitre.jpg')
+
 T = {}
 def add(key, no, en=None):
     T[key] = {'no': no, 'en': en if en is not None else no}
+
+add('caption_alle_sider', 'Stiluttrykk-referanse for alle sidene, ikke det ferdige heklede produktet.',
+    'Style reference for all the sides, not the finished crocheted product.')
+add('caption_speil', 'Speil-siden, stiluttrykk-referanse.', 'The mirror side, style reference.')
+add('caption_form', 'Form-siden med alle fire formene, stiluttrykk-referanse.',
+    'The shapes side with all four shapes, style reference.')
+add('caption_lomme', 'Lomme-siden med miniatyr-Ellie, stiluttrykk-referanse.',
+    'The pocket side with miniature Ellie, style reference.')
+add('caption_knitre', 'Knitre-siden, stiluttrykk-referanse.', 'The crinkle side, style reference.')
 
 head3 = {'no': ['Omg', 'Beskrivelse', 'Masker'], 'en': ['Rnd', 'Description', 'Sts']}
 rowhead = {'no': ['Rad', 'Beskrivelse', 'Masker'], 'en': ['Row', 'Description', 'Sts']}
@@ -664,6 +683,7 @@ def build(lang):
     pages.append(pg(f'''
 {banner(t('banner_oversikt'))}
 {card('<p>' + t('oversikt_lead') + '</p>' + deler_html)}
+<div class="figwrap"><img src="{alle_sider_src}" alt="Ellies aktivitetsleke, alle sidene" style="width:100mm"><div class="figcap">{t('caption_alle_sider')}</div></div>
 ''', 6))
 
     pages.append(pg(f'''
@@ -689,6 +709,7 @@ def build(lang):
 {card('<p>' + t('speil_txt') + '</p>')}
 {card('<p>' + t('speil_ramme') + '</p>')}
 {cme(t('speil_note'))}
+<div class="figwrap"><img src="{speil_src}" alt="Speil-siden" style="width:44mm"><div class="figcap">{t('caption_speil')}</div></div>
 ''', 9))
 
     pages.append(pg(f'''
@@ -698,6 +719,7 @@ def build(lang):
 {card('<p>' + t('hjerte_txt') + '</p>')}
 {sagep(t('pill_stjerne_form'))}
 {card('<p>' + t('stjerne_form_txt') + '</p>')}
+<div class="figwrap"><img src="{form_src}" alt="Form-siden, alle fire formene" style="width:44mm"><div class="figcap">{t('caption_form')}</div></div>
 ''', 10))
 
     pages.append(pg(f'''
@@ -713,6 +735,7 @@ def build(lang):
 {card('<p>' + t('lomme_txt') + '</p>')}
 {card('<p>' + t('lomme_ellie') + '</p>')}
 {cme(t('lomme_montering'))}
+<div class="figwrap"><img src="{lomme_src}" alt="Lomme-siden" style="width:44mm"><div class="figcap">{t('caption_lomme')}</div></div>
 ''', 12))
 
     pages.append(pg(f'''
@@ -720,6 +743,7 @@ def build(lang):
 <p>{t('flette_lead')}</p>
 {card('<p>' + t('flette_hull') + '</p>')}
 {cme(t('flette_snor'))}
+<div class="figwrap"><img src="{knitre_src}" alt="Knitre-siden" style="width:44mm"><div class="figcap">{t('caption_knitre')}</div></div>
 ''', 13))
 
     ss_steg = T['sammensying_steg']['no'] if lang == 'no' else T['sammensying_steg']['en']

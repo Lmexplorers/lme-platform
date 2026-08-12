@@ -113,6 +113,20 @@ def cover():
       <div class="cowner"><span class="clab">Denne boka tilhører</span><span class="cline"></span></div>
     </div>'''
 
+def kolofon():
+    return f'''<div class="page kolofon">
+      <img class="klogo" src="file://{A}/lme-logo.png">
+      <div class="ktext">
+        <p>Automatisert analyse av verket for å innhente informasjon, særlig om mønstre, trender og sammenhenger ("tekst- og datautvinning"), er forbudt.</p>
+        <p class="kgap">© 2026 Renate Dahl</p>
+        <p>Rettelse: Renate Dahl</p>
+        <p>Korrekturlesing: Renate Dahl</p>
+        <p>Andre bidragsytere: Renate Dahl</p>
+        <p class="kgap">Forlag: BoD · Books on Demand GmbH, Postboks 354 Sentrum, 0101 Oslo, bod@bod.no</p>
+        <p>Trykk: Libri Plureos GmbH, Friedensallee 273, 22763 Hamburg, Tyskland</p>
+      </div>
+    </div>'''
+
 def om_meg():
     rows=[("Navnet mitt",),("Jeg er ___ år gammel",),("Klassen min",),("Det jeg liker aller best å gjøre",),
           ("Favorittplassen min ute",),("Noe jeg har lyst til å lære i år",),("Dyret jeg liker best",)]
@@ -513,7 +527,7 @@ def date_kind(d):
     return ("helg", None)
 
 # ---------- bygg sideliste ----------
-pages=[cover(), om_meg(), kalender(), klassevenner(), gruppefoto()]
+pages=[cover(), kolofon(), om_meg(), kalender(), klassevenner(), gruppefoto()]
 uidx=0; widx=0; feidx=0; wrot=0; gidx=0; fidx=0; lidx=0; lese_month=0; prev_season=None; tre_first=True; forsker_aar=None
 d=START
 while d<=END:
@@ -562,8 +576,6 @@ while d<=END:
     d+=datetime.timedelta(days=1)
 
 # ---------- avsluttende sider ----------
-pages.append(notat("Notater", "Plass til alt du vil skrive"))
-pages.append(notat("Notater", "Plass til alt du vil skrive"))
 pages.append(notat("Min egen side", "Tegn akkurat det du har lyst til", tegn=True))
 pages.append(notat("Nå er det sommerferie!", "Skriv hva du har lyst til å gjøre i sommer", tegn=False))
 pages.append(notat("Tegn et sommerønske", "Noe du gleder deg til i sommer", tegn=True))
@@ -628,7 +640,7 @@ html,body {{ font-family:'Sassoon'; color:#3B332B; }}
 .undring.tip img {{ height:24mm; }}
 .intro {{ font-family:'Sassoon'; font-size:11pt; color:#3B332B; line-height:1.35; }}
 .lrow {{ display:flex; align-items:flex-end; gap:3mm; margin-bottom:5mm; }}
-.lrow .lnum {{ flex:0 0 6mm; height:6mm; border:1.4px solid #C2A86E; border-radius:3px; }}
+.lrow .lnum {{ flex:0 0 6mm; width:6mm; height:6mm; border:1.4px solid #C2A86E; border-radius:3px; overflow:hidden; }}
 .lrow .lbok {{ flex:1; border-bottom:1.3px dotted #E2D2A0; height:6mm; }}
 .bingo {{ flex:1; min-height:0; display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(3,1fr); gap:3mm; }}
 .bcell {{ background:#fff; border:1.4px solid #ECDBA6; border-radius:4mm; padding:2.8mm; display:flex; flex-direction:column; gap:2mm; }}
@@ -661,7 +673,7 @@ html,body {{ font-family:'Sassoon'; color:#3B332B; }}
 .klassefoto {{ flex:1; }}
 .klasseliste {{ flex:1; display:flex; flex-direction:column; justify-content:space-between; }}
 .navnrad {{ display:flex; align-items:flex-end; gap:4mm; }}
-.navnrad .portrett {{ flex:0 0 16mm; height:16mm; border:1.4px solid #C2A86E; border-radius:3mm; }}
+.navnrad .portrett {{ flex:0 0 16mm; width:16mm; height:16mm; border:1.4px solid #C2A86E; border-radius:3mm; overflow:hidden; }}
 .navnrad .navnfelt {{ flex:1; }}
 .navnrad .navnfelt .rline {{ display:block; border-bottom:1.3px dotted #E2D2A0; height:9mm; }}
 .calgrid {{ flex:1; display:grid; grid-template-columns:1fr 1fr 1fr; gap:4mm 4mm; align-content:start; }}
@@ -670,6 +682,11 @@ html,body {{ font-family:'Sassoon'; color:#3B332B; }}
 .mcal {{ width:100%; border-collapse:collapse; font-family:'Sassoon'; }}
 .mcal th {{ font-size:6.5pt; color:#B7AE9E; font-weight:normal; padding:0.3mm 0; }}
 .mcal td {{ font-size:7pt; color:#6b6450; text-align:center; padding:0.5mm 0; height:4mm; }}
+.kolofon {{ align-items:center; }}
+.kolofon .klogo {{ height:22mm; margin-top:10mm; }}
+.kolofon .ktext {{ margin-top:auto; align-self:stretch; }}
+.kolofon .ktext p {{ font-family:'Sassoon'; font-size:8.5pt; color:#6b6450; line-height:1.5; margin-bottom:2mm; }}
+.kolofon .ktext p.kgap {{ margin-top:3mm; }}
 /* forside */
 .cover {{ align-items:center; justify-content:flex-start; text-align:center; padding:14mm 13mm 16mm; gap:0; }}
 .cover .ctitle {{ font-family:'PlaypenX'; font-size:40pt; line-height:1; }}

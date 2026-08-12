@@ -18,7 +18,7 @@ AFFILIATE_COOKIE_DAYS = "30"
 # Secrets (settes med `wrangler secret put <NAVN>` eller i Cloudflare-dashbordet):
 #   STRIPE_SECRET_KEY      sk_live_...
 #   STRIPE_WEBHOOK_SECRET  whsec_...
-#   MAILERLITE_API_KEY     API-nokkel fra MailerLite
+#   MAILERSEND_API_KEY     API-nokkel fra MailerSend (samme som hovedplattformen)
 
 # Valgfri binding: kobler Pro/VIP-medlemskap til Content Studio.
 # I dashbordet: Settings -> Bindings -> Add -> KV namespace,
