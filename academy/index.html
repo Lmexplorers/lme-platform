@@ -1475,11 +1475,10 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     // Eier skal aldri sendes til Stripe for å åpne sine egne betalte kurs.
     var isOwner = false;
     var OWNER_EMAILS = ['renate@lmexplorers.com', 'hei@lmexplorers.com', 'hello@lmexplorers.com', 'support@lmexplorers.com', 'renateshobby@hotmail.com'];
-    fetch('/api/auth/me', { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (me) {
+    var authPromise = fetch('/api/auth/me', { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (me) {
       var u = me && me.user;
       isOwner = !!(u && (u.role === 'owner' || u.role === 'admin' || OWNER_EMAILS.indexOf((u.email || '').toLowerCase()) !== -1));
-      render();
-    }).catch(function () { render(); });
+    }).catch(function () {});
 
     // Betalte Kursbygger-kurs: samme slugs som PAID_KURSBYGGER_SLUGS i
     // functions/_lib/purchase-links.js. Kortet lenker rett til Stripe i
@@ -1538,21 +1537,26 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
       section.style.display = (courses.length || editMode()) ? '' : 'none';
     }
 
-    fetch('/api/kurs')
+    var coursesPromise = fetch('/api/kurs')
       .then(function (r) { return r.json(); })
       .then(function (d) {
         courses = ((d && d.courses) || []).filter(function (c) { return c && c.slug && c.published !== false; });
       })
-      .catch(function () {})
-      .then(function () {
-        render();
-        window.addEventListener('hashchange', render);
-        var orig = window.lmeToggleLang;
-        if (typeof orig === 'function' && !orig.__egneKurs) {
-          window.lmeToggleLang = function () { orig(); render(); };
-          window.lmeToggleLang.__egneKurs = true;
-        }
-      });
+      .catch(function () {});
+
+    // Vent på BEGGE kallene før første tegning: eierstatus må være kjent
+    // før et betalt kurskort noensinne får en Stripe-lenke, ellers kan
+    // eieren rekke å trykke på et kort med feil lenke i det korte
+    // vinduet før /api/auth/me svarer (skjedde i produksjon 13. august 2026).
+    Promise.all([authPromise, coursesPromise]).then(function () {
+      render();
+      window.addEventListener('hashchange', render);
+      var orig = window.lmeToggleLang;
+      if (typeof orig === 'function' && !orig.__egneKurs) {
+        window.lmeToggleLang = function () { orig(); render(); };
+        window.lmeToggleLang.__egneKurs = true;
+      }
+    });
   })();
   </script>
 
