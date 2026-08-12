@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/laeringsverksted.css">
+<link rel="stylesheet" href="/css/laeringsverksted.css?v=2">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/images/app/apple-touch-icon.png">
 <style>
@@ -45,13 +45,13 @@
   .lv-hero-strip h1 { font-size: 34px; line-height: 1.2; margin-bottom: 10px; }
   .lv-hero-strip p { font-size: 16px; color: var(--grey); }
 
-  .lv-entry-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 26px 0 34px; }
+  .lv-search-heading { font-size: 18px; margin: 0 0 12px; }
+  .lv-entry-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 34px 0 34px; }
   .lv-entry-card { display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: inherit; background: #fff; border-radius: 18px; padding: 20px; box-shadow: 0 6px 20px rgba(26,26,26,0.08); transition: transform .15s ease; }
   .lv-entry-card:hover { transform: translateY(-3px); }
   .lv-entry-icon { font-size: 26px; }
   .lv-entry-card h3 { font-size: 17px; }
   .lv-entry-card p { font-size: 13.5px; color: var(--grey); margin: 0; }
-  .lv-entry-1 { background: linear-gradient(135deg, #FFF4F6, #fff); }
   .lv-entry-2 { background: linear-gradient(135deg, #FFF8E4, #fff); }
   .lv-entry-3 { background: linear-gradient(135deg, #F2FBE6, #fff); }
 
@@ -76,28 +76,10 @@
       <p data-no="Ferdige og tilpassbare læringsressurser for barnehage, skole og hjem, inspirert av Montessori og knyttet til norske læreplaner." data-en="Ready-made and customizable learning resources for kindergarten, school and home, inspired by Montessori and linked to Norwegian curricula.">Ferdige og tilpassbare læringsressurser for barnehage, skole og hjem, inspirert av Montessori og knyttet til norske læreplaner.</p>
     </div>
 
-    <div class="lv-entry-row">
-      <a class="lv-entry-card lv-entry-1" href="#katalog">
-        <span class="lv-entry-icon">🔎</span>
-        <h3 data-no="Finn læringsressurser" data-en="Find learning resources">Finn læringsressurser</h3>
-        <p data-no="Søk og filtrer i ferdige ressurser etter alder, fag og type." data-en="Search and filter ready-made resources by age, subject and type.">Søk og filtrer i ferdige ressurser etter alder, fag og type.</p>
-      </a>
-      <a class="lv-entry-card lv-entry-2" href="/bookly/" data-en-href="/bookly/">
-        <span class="lv-entry-icon">📚</span>
-        <h3 data-no="Lag materiell i Bookly" data-en="Create materials in Bookly">Lag materiell i Bookly</h3>
-        <p data-no="Utforsk aktiviteter, eller lag dine egne læringsressurser med KI-hjelp." data-en="Explore activities, or create your own learning resources with AI help.">Utforsk aktiviteter, eller lag dine egne læringsressurser med KI-hjelp.</p>
-      </a>
-      <a class="lv-entry-card lv-entry-3" href="/butikk#laremidler" data-en-href="/shop#laremidler">
-        <span class="lv-entry-icon">🛍️</span>
-        <h3 data-no="Utforsk samlepakker" data-en="Explore bundles">Utforsk samlepakker</h3>
-        <p data-no="Kjøp enkeltressurser eller samlepakker i LME Butikk." data-en="Buy single resources or bundles in the LME Shop.">Kjøp enkeltressurser eller samlepakker i LME Butikk.</p>
-      </a>
-    </div>
-
     <div id="katalog">
+      <h2 class="lv-search-heading" data-no="Søk og filtrer" data-en="Search and filter">Søk og filtrer</h2>
       <div class="lv-toolbar">
         <input type="search" class="lv-search" id="lvSearch" data-no-ph="Søk i ressurser …" data-en-ph="Search resources …" placeholder="Søk i ressurser …" aria-label="Søk i ressurser">
-        <button class="lv-filter-toggle" id="lvFilterToggle" type="button" data-no="Filtre ▾" data-en="Filters ▾">Filtre ▾</button>
       </div>
 
       <form class="lv-filters" id="lvFilters">
@@ -135,10 +117,23 @@
       <p class="lv-result-count" id="lvCount"></p>
       <div id="lvGrid"><div class="lv-empty"><div class="lv-empty-icon">⏳</div><p data-no="Henter ressurser …" data-en="Loading resources …">Henter ressurser …</p></div></div>
     </div>
+
+    <div class="lv-entry-row">
+      <a class="lv-entry-card lv-entry-2" href="/bookly/" data-en-href="/bookly/">
+        <span class="lv-entry-icon">📚</span>
+        <h3 data-no="Lag materiell i Bookly" data-en="Create materials in Bookly">Lag materiell i Bookly</h3>
+        <p data-no="Utforsk aktiviteter, eller lag dine egne læringsressurser med KI-hjelp." data-en="Explore activities, or create your own learning resources with AI help.">Utforsk aktiviteter, eller lag dine egne læringsressurser med KI-hjelp.</p>
+      </a>
+      <a class="lv-entry-card lv-entry-3" href="/butikk#laremidler" data-en-href="/shop#laremidler">
+        <span class="lv-entry-icon">🛍️</span>
+        <h3 data-no="Utforsk samlepakker" data-en="Explore bundles">Utforsk samlepakker</h3>
+        <p data-no="Kjøp enkeltressurser eller samlepakker i LME Butikk." data-en="Buy single resources or bundles in the LME Shop.">Kjøp enkeltressurser eller samlepakker i LME Butikk.</p>
+      </a>
+    </div>
   </div>
 
-<script src="/js/laeringsverksted-render.js" defer></script>
-<script src="/js/laeringsverksted-favorites.js" defer></script>
+<script src="/js/laeringsverksted-render.js?v=2" defer></script>
+<script src="/js/laeringsverksted-favorites.js?v=2" defer></script>
 <script>
 (function () {
   window.LME_CURRENT_LANG = 'no';
@@ -225,9 +220,6 @@
   ['lvSearch'].forEach(function (id) { document.getElementById(id).addEventListener('input', renderList); });
   ['fAudience', 'fAge', 'fDirection', 'fSubject', 'fType', 'fPrice'].forEach(function (id) {
     document.getElementById(id).addEventListener('change', renderList);
-  });
-  document.getElementById('lvFilterToggle').addEventListener('click', function () {
-    document.getElementById('lvFilters').classList.toggle('lv-filters-open');
   });
   document.getElementById('lv-lang').addEventListener('click', function () {
     window.LME_CURRENT_LANG = isEn() ? 'no' : 'en';

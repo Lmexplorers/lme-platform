@@ -80,7 +80,6 @@
 /* -------- Filterpanel (katalog) -------- */
 .lv-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 18px; }
 .lv-search { flex: 1 1 240px; padding: 12px 16px; border-radius: 999px; border: 1px solid var(--line, rgba(26,26,26,0.15)); font-family: inherit; font-size: 14.5px; }
-.lv-filter-toggle { display: none; border: 1px solid var(--line, rgba(26,26,26,0.15)); background: #fff; border-radius: 999px; padding: 10px 18px; font-weight: 700; font-family: inherit; cursor: pointer; }
 .lv-filters { display: flex; flex-wrap: wrap; gap: 16px 22px; background: #fff; border-radius: 16px; padding: 16px 18px; margin-bottom: 20px; box-shadow: 0 4px 14px rgba(26,26,26,0.06); }
 .lv-filter-group { display: flex; flex-direction: column; gap: 6px; min-width: 150px; flex: 1 1 150px; }
 .lv-filter-group label { font-size: 12px; font-weight: 700; color: var(--cerise, #E91E89); text-transform: uppercase; letter-spacing: .04em; }
@@ -88,7 +87,6 @@
 .lv-result-count { font-size: 13.5px; color: var(--grey, #4A4A4A); margin: 0 0 14px; }
 
 @media (max-width: 720px) {
-  .lv-filter-toggle { display: none; }
   .lv-filters { display: flex; flex-direction: column; gap: 14px; }
   .lv-filter-group { min-width: 0; }
   .lv-title { font-size: 24px; }
