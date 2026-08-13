@@ -1,4 +1,4 @@
-import { AbsoluteFill, Audio, Img, Sequence, useCurrentFrame, interpolate } from "remotion";
+import { AbsoluteFill, Audio, Img, OffthreadVideo, Sequence, useCurrentFrame, interpolate } from "remotion";
 import React from "react";
 
 // LME VideoFlow: one scene = one styled still image (Ken Burns pan/zoom) +
@@ -6,10 +6,16 @@ import React from "react";
 // with-timestamps data (functions/_lib/videoflow-providers.js
 // voiceGenerateLine). Reuses the same Ken Burns approach as
 // SlideshowVideo.tsx (YouTube app), captions are the new part.
+//
+// Premium tier (functions/api/videoflow/scene-video.js): a scene can
+// optionally carry a ready Higgsfield-animated clip instead of its still.
+// When videoUrl is present we play that (muted, its own voiceover Audio
+// track still layered on top) instead of the Ken Burns pan/zoom.
 export interface CaptionWord { word: string; start: number; end: number; }
 
 export interface CaptionedScene {
   imageUrl: string;
+  videoUrl?: string;
   audioUrl?: string;
   durationInFrames: number;
   words?: CaptionWord[];
@@ -104,7 +110,11 @@ export const CaptionedSlideshow: React.FC<CaptionedProps> = ({ scenes = [], fps 
         return (
           <Sequence key={i} from={start} durationInFrames={dur}>
             <AbsoluteFill>
-              <KenBurnsImage src={s.imageUrl} durationInFrames={dur} direction={i % 2 === 0 ? 1 : -1} />
+              {s.videoUrl ? (
+                <OffthreadVideo src={s.videoUrl} muted style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              ) : (
+                <KenBurnsImage src={s.imageUrl} durationInFrames={dur} direction={i % 2 === 0 ? 1 : -1} />
+              )}
               {s.words && s.words.length ? <Captions words={s.words} fps={fps} /> : null}
             </AbsoluteFill>
             {s.audioUrl ? <Audio src={s.audioUrl} /> : null}

@@ -379,6 +379,7 @@
     renderProject();
     if (project.render && project.render.status === 'rendering') pollRender();
     else if (project.render) renderRenderState(project.render);
+    (project.scenes || []).forEach(function (s) { if (s.video && s.video.status === 'generating') pollSceneVideo(s.id); });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   q('backBtn').addEventListener('click', function () {
@@ -425,7 +426,13 @@
       if (draggedId) reorderScenes(draggedId, scene.id);
     });
     var frame = document.createElement('div'); frame.className = 'scene-frame';
-    frame.innerHTML = scene.image && scene.image.assetUrl ? '<img src="' + scene.image.assetUrl + '">' : '🖼️';
+    if (scene.video && scene.video.status === 'ready' && scene.video.assetUrl) {
+      frame.innerHTML = '<video src="' + scene.video.assetUrl + '" muted loop autoplay playsinline style="width:100%;height:100%;object-fit:cover;"></video>';
+    } else if (scene.image && scene.image.assetUrl) {
+      frame.innerHTML = '<img src="' + scene.image.assetUrl + '">';
+    } else {
+      frame.innerHTML = '🖼️';
+    }
     card.appendChild(frame);
     var body = document.createElement('div'); body.className = 'scene-body';
     body.innerHTML =
@@ -468,8 +475,43 @@
     });
     actions.appendChild(voiceBtn);
 
+    var videoBtn = document.createElement('button'); videoBtn.className = 'btn ghost small'; videoBtn.type = 'button';
+    var vStatus = scene.video && scene.video.status;
+    if (vStatus === 'generating') {
+      videoBtn.disabled = true;
+      videoBtn.textContent = '🎥 ' + L('Animerer …', 'Animating …');
+    } else {
+      videoBtn.textContent = '🎥 ' + (vStatus === 'ready' ? L('Animer på nytt (premium)', 'Re-animate (premium)') : L('Animer scene (premium)', 'Animate scene (premium)'));
+      videoBtn.addEventListener('click', function () {
+        if (!scene.image || scene.image.status !== 'ready' || !scene.image.assetUrl) {
+          toast(L('Lag et bilde for scenen først.', 'Generate an image for this scene first.'));
+          return;
+        }
+        paidAction('/api/videoflow/scene-video', { projectId: currentProject.id, sceneId: scene.id },
+          L('Dette gjør bildet om til en kort animert klipp med Higgsfield (premium, koster mer enn et stillbilde).', 'This turns the image into a short animated clip with Higgsfield (premium, costs more than a still image).'),
+          function (data) { toast(L('🎥 Animasjon startet …', '🎥 Animation started …')); patchScene(data.scene); pollSceneVideo(data.scene.id); });
+      });
+    }
+    actions.appendChild(videoBtn);
+
     card.appendChild(body);
     return card;
+  }
+
+  var sceneVideoPollTimers = {};
+  function pollSceneVideo(sceneId) {
+    if (sceneVideoPollTimers[sceneId]) clearInterval(sceneVideoPollTimers[sceneId]);
+    var tries = 0;
+    sceneVideoPollTimers[sceneId] = setInterval(function () {
+      tries++;
+      if (!currentProject) { clearInterval(sceneVideoPollTimers[sceneId]); return; }
+      api('/api/videoflow/scene-video?projectId=' + encodeURIComponent(currentProject.id) + '&sceneId=' + encodeURIComponent(sceneId)).then(function (res) {
+        var d = res.data; if (!d) return;
+        if (d.scene) patchScene(d.scene);
+        if (d.status === 'ready') { clearInterval(sceneVideoPollTimers[sceneId]); toast(L('🎥 Scenen er animert!', '🎥 Scene animated!')); }
+        else if (d.status === 'failed' || tries > 60) { clearInterval(sceneVideoPollTimers[sceneId]); if (d.status === 'failed') toast(d.error || L('Animasjonen feilet.', 'Animation failed.')); }
+      }).catch(function () {});
+    }, 5000);
   }
 
   function patchScene(updated) {

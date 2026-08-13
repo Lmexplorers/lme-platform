@@ -19,7 +19,7 @@
  */
 import { sessionUser } from "../../_lib/access.js";
 import { videoflowAccess } from "../../_lib/videoflow-access.js";
-import { readProject, saveProject, deleteProject, listProjects, cleanId, STATUSES } from "../../_lib/videoflow-store.js";
+import { readProject, saveProject, deleteProject, listProjects, cleanId, STATUSES, defaultSceneVideo } from "../../_lib/videoflow-store.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -83,7 +83,7 @@ export async function onRequestPost(context) {
             visualDescription: clampStr(s.visualDescription, 400),
             durationSec: Math.min(15, Math.max(3, parseInt(s.durationSec, 10) || base.durationSec || 5)),
             // Generation state is server-authoritative, never accept it from the client.
-            image: base.image, voice: base.voice,
+            image: base.image, voice: base.voice, video: base.video || defaultSceneVideo(),
           };
         });
     }

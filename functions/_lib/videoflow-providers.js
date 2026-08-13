@@ -37,6 +37,11 @@ export const CREDIT_COSTS = {
   voicePerChar: 0.08, // ElevenLabs, per character of the line being read
   voiceMin: 3,
   transcribe: 15,     // one audio note transcribed into an idea (flat, max 3 min)
+  // Premium tier (spec: "affordable baseline is stills, premium tier is
+  // full moving footage"): animating one scene into an actual video clip
+  // instead of a Ken Burns still. Priced 8x a still image, this is the
+  // expensive ingredient real per-video-generator economics warn about.
+  video: 120,
 };
 
 export function estimateVoiceCredits(text) {
@@ -123,6 +128,76 @@ export async function imageGenerateScene(env, prompt, size) {
   if (out.error) out = await genGeminiImage(env, prompt, sz);
   if (out.error) throw new Error(out.error);
   return out;
+}
+
+// ===========================================================================
+// VIDEO — premium tier, animates a scene's already-generated image into a
+// short clip via Higgsfield (dop-turbo), same engine and adapter shape as
+// functions/_lib/miateo-providers.js, kept as its own copy here rather than
+// a shared import (see this file's header: VideoFlow intentionally shares
+// no code with the Mia & Teo adapters, so the two apps can evolve
+// independently and neither can break the other by accident).
+// ===========================================================================
+export const VIDEO_PROVIDER = { id: "higgsfield", label: "Higgsfield (dop-turbo)", model: "dop-turbo" };
+const HF_BASE = "https://platform.higgsfield.ai";
+const HF_SUBMIT_PATH = "/v1/image2video/dop";
+
+export function videoProviderConfigured(env) {
+  return !!(env && env.HIGGSFIELD_API_KEY && env.HIGGSFIELD_SECRET);
+}
+
+function hfAuth(env) { return "Key " + env.HIGGSFIELD_API_KEY + ":" + env.HIGGSFIELD_SECRET; }
+
+function findVideoUrl(o) {
+  if (!o || typeof o !== "object") return null;
+  if (o.video && o.video.url) return o.video.url;
+  if (o.results && o.results.raw && o.results.raw.url) return o.results.raw.url;
+  if (Array.isArray(o.jobs) && o.jobs[0]) {
+    const j = o.jobs[0];
+    if (j.results && j.results.raw && j.results.raw.url) return j.results.raw.url;
+    if (j.result && j.result.url) return j.result.url;
+    if (j.video && j.video.url) return j.video.url;
+  }
+  if (Array.isArray(o.results) && o.results[0] && o.results[0].url) return o.results[0].url;
+  return null;
+}
+function findStatus(o) {
+  if (!o || typeof o !== "object") return "";
+  if (o.status) return String(o.status).toLowerCase();
+  if (Array.isArray(o.jobs) && o.jobs[0] && o.jobs[0].status) return String(o.jobs[0].status).toLowerCase();
+  return "";
+}
+
+/** PAID CALL (CREDIT_COSTS.video). imageUrl must be a publicly reachable https URL (the scene's generated image). */
+export async function videoGenerateSubmit(env, imageUrl, motionPrompt) {
+  if (!videoProviderConfigured(env)) throw new Error("missing_higgsfield_keys");
+  const r = await fetchTimeout(HF_BASE + HF_SUBMIT_PATH, {
+    method: "POST",
+    headers: { Authorization: hfAuth(env), "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({ input: { model: VIDEO_PROVIDER.model, prompt: motionPrompt, input_images: [{ type: "image_url", image_url: imageUrl }] } }),
+  }, 20000);
+  const text = await r.text();
+  let data; try { data = JSON.parse(text); } catch (e) { data = null; }
+  if (!r.ok) throw new Error("higgsfield_" + r.status);
+  const id = data && (data.request_id || data.id || data.generation_id || (Array.isArray(data.jobs) && data.jobs[0] && data.jobs[0].id));
+  const statusUrl = data && (data.status_url || data.statusUrl);
+  if (!id && !statusUrl) throw new Error("higgsfield_no_job");
+  return { id: id || "", statusUrl: statusUrl || (id ? HF_BASE + HF_SUBMIT_PATH + "/requests/" + id : "") };
+}
+
+/** Poll only (free): checks status of an already-submitted job. */
+export async function videoGeneratePoll(env, statusUrl) {
+  let url = statusUrl;
+  try { if (new URL(url).hostname !== "platform.higgsfield.ai") url = ""; } catch (e) { url = ""; }
+  if (!url) throw new Error("bad_status_url");
+  const r = await fetchTimeout(url, { headers: { Authorization: hfAuth(env), Accept: "application/json" } }, 20000);
+  const text = await r.text();
+  let data; try { data = JSON.parse(text); } catch (e) { data = null; }
+  if (!r.ok) throw new Error("higgsfield_status_" + r.status);
+  const status = findStatus(data) || "in_progress";
+  const videoUrl = findVideoUrl(data);
+  if (videoUrl) return { status: "completed", url: videoUrl };
+  return { status };
 }
 
 // ===========================================================================
@@ -229,5 +304,6 @@ export function providerStatus(env) {
     image: { configured: imageProviderConfigured(env) },
     voice: { configured: voiceProviderConfigured(env) },
     transcribe: { configured: transcribeProviderConfigured(env) },
+    video: { configured: videoProviderConfigured(env) },
   };
 }

@@ -105,7 +105,16 @@ export function newScene(index) {
     // project's style later can re-render images without a new script call.
     image: { assetUrl: null, prompt: "", status: "none" },
     voice: { assetUrl: null, words: [], durationSec: 0, status: "none" },
+    // Optional premium tier (functions/api/videoflow/scene-video.js):
+    // animates `image` into a clip via Higgsfield. Purely additive, a scene
+    // with video.status !== "ready" just keeps using its Ken Burns still.
+    video: { assetUrl: null, prompt: "", jobId: null, status: "none" },
   };
+}
+
+/** Default video sub-object for scenes saved before this field existed. */
+export function defaultSceneVideo() {
+  return { assetUrl: null, prompt: "", jobId: null, status: "none" };
 }
 
 export function sceneById(project, sceneId) {

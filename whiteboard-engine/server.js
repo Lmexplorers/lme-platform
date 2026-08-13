@@ -777,7 +777,7 @@ async function renderVideoflowJob(jobId, { scenes, aspect }, publicBase) {
       const durationInFrames = Math.ceil(durSec * fps);
       accFrames += durationInFrames;
       const words = Array.isArray(s.words) ? s.words.map((w) => ({ word: String((w && w.word) || ""), start: Number((w && w.start) || 0), end: Number((w && w.end) || 0) })) : [];
-      return { imageUrl: s.imageUrl, audioUrl: s.audioUrl || "", durationInFrames, words };
+      return { imageUrl: s.imageUrl, videoUrl: s.videoUrl || undefined, audioUrl: s.audioUrl || "", durationInFrames, words };
     });
     const totalFrames = Math.max(1, accFrames);
     const inputProps = { scenes: outScenes, fps, totalFrames, aspect: asp };

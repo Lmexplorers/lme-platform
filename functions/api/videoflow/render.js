@@ -105,8 +105,12 @@ export async function onRequestPost(context) {
     return json({ ok: false, ready: false, missingSceneIds: notReady.map((s) => s.id), detail: notReady.length + " av " + project.scenes.length + " scener mangler bilde eller stemme ennå." }, 200);
   }
 
+  // Premium tier: a scene with a ready animated clip (functions/api/
+  // videoflow/scene-video.js) uses that instead of its Ken Burns still.
+  // Purely opportunistic, never blocks rendering on video still generating.
   const scenes = project.scenes.map((s) => ({
     imageUrl: s.image.assetUrl,
+    videoUrl: (s.video && s.video.status === "ready" && s.video.assetUrl) || undefined,
     audioUrl: s.voice.assetUrl,
     durationSec: Math.max(s.durationSec || 5, s.voice.durationSec || 0),
     words: s.voice.words || [],

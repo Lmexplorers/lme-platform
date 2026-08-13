@@ -46,16 +46,22 @@ the two products can evolve independently).
   credits can only be granted manually (`grantCredits` in
   `videoflow-credits.js`), there is no self-serve purchase flow. Do not
   present this as "you can sell it today", the payment plumbing isn't there.
-- **Image-to-video premium tier.** Phase 1 only does Ken Burns stills, no
-  Higgsfield-animated clips (matches FacelessGenie's own "affordable
-  baseline is stills, premium tier is full moving footage" split). Could
-  reuse the exact same Higgsfield adapter pattern from
-  `functions/_lib/miateo-providers.js` if/when built.
+- ~~Image-to-video premium tier~~ Built: `functions/api/videoflow/scene-
+  video.js` (Higgsfield `dop-turbo`, adapter duplicated on purpose into
+  `functions/_lib/videoflow-providers.js` rather than imported, keeping the
+  two apps' provider code independent). Optional, per-scene, priced well
+  above a still image (`CREDIT_COSTS.video`, 8x `CREDIT_COSTS.image`,
+  matches FacelessGenie's own affordable-stills-vs-premium-footage split).
+  Requires the scene's image to already be ready. `functions/api/videoflow/
+  render.js` opportunistically uses a scene's animated clip instead of its
+  Ken Burns still whenever one is ready, never blocks the render waiting
+  for one. Rendered in `whiteboard-engine/video/CaptionedSlideshow.tsx` via
+  `OffthreadVideo` (same approach as Mia & Teo's `EpisodeComposition.tsx`).
+  "🎥 Animer scene (premium)" button + poll in `videoflow-studio.html`.
 - ~~Scene reordering~~ Built: drag-and-drop scene cards in
   `videoflow-studio.html` (native HTML5 drag/drop, no library), reassigns
-  `scene.index` and autosaves. Still missing: trimming and swapping
-  individual clips (there are no clips yet in phase 1, only Ken Burns
-  stills, this becomes relevant once the image-to-video tier exists).
+  `scene.index` and autosaves. Trimming/swapping individual animated clips
+  is still not built (only full re-animate-this-scene).
 - ~~Style-swap re-render UI~~ Built: `functions/api/videoflow/restyle.js` +
   the style picker/button in `videoflow-studio.html`. Regenerates every
   scene's image in a new style from the stored `visualDescription`, no new
@@ -81,15 +87,22 @@ picked deliberately for easy comparison). Costs in
 | Script (whole project, one Claude call) | 20 credits |
 | One scene image | 15 credits |
 | One scene voice line | ~0.08 credits/character (min 3) |
+| Audio idea transcription (Whisper) | 15 credits |
+| One scene animated to video (premium, optional) | 120 credits |
 
 A typical 6-scene video: ~20 + 6×15 + 6×~10 ≈ 160-180 credits, so 2000
-credits covers roughly 10-12 videos a month. These are launch estimates,
-not measured against real usage yet, revisit once real videos have been made.
+credits covers roughly 10-12 videos a month (more if scenes are animated
+with the premium video tier, which is priced deliberately high since a
+Higgsfield clip costs far more than a still image). These are launch
+estimates, not measured against real usage yet, revisit once real videos
+have been made.
 
 ## Infrastructure requirements
 
 - Same provider keys as the rest of the platform: `ANTHROPIC_API_KEY`,
-  `OPENAI_API_KEY`/`GEMINI_API_KEY`, `ELEVENLABS_API_KEY`. No new secrets.
+  `OPENAI_API_KEY`/`GEMINI_API_KEY`, `ELEVENLABS_API_KEY`, and (for the
+  premium image-to-video tier) `HIGGSFIELD_API_KEY`/`HIGGSFIELD_SECRET`,
+  already set up for Mia & Teo Video Creator. No new secrets.
 - **R2 binding** `VIDEOFLOW_MEDIA` on the lme-platform Pages project
   (Settings → Functions → R2 bucket bindings), for permanent storage of
   finished videos (`functions/api/videoflow/media.js`). Can point at the
@@ -124,8 +137,11 @@ functions/api/videoflow/
   project.js         CRUD/library + balance endpoint
   scene-image.js      per-scene styled image, credit-gated
   scene-voice.js       per-scene voice + timestamps, credit-gated, serves audio
+  scene-video.js         per-scene premium image-to-video (Higgsfield), credit-gated
+  restyle.js               batch style-swap re-render, credit-gated
+  transcribe.js              audio idea upload -> Whisper transcript, credit-gated
   render.js            starts/polls assembly, copies result to R2
   media.js              serves finished videos from R2
-whiteboard-engine/video/CaptionedSlideshow.tsx   Ken Burns + karaoke captions
+whiteboard-engine/video/CaptionedSlideshow.tsx   Ken Burns/OffthreadVideo + karaoke captions
 whiteboard-engine/server.js                       + /api/generer-videoflow route
 ```
