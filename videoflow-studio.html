@@ -119,6 +119,12 @@
         <span data-no="Idé eller tema" data-en="Idea or topic">Idé eller tema</span>
         <textarea id="in-idea" placeholder="Why the deepest place on Earth is scarier than space"></textarea>
       </label>
+      <div class="btn-row" style="margin: -.4rem 0 1rem;">
+        <input type="file" id="audioFile" accept="audio/*" style="display:none;">
+        <button class="btn ghost small" id="audioUploadBtn" type="button">📁 <span data-no="Last opp lydidé" data-en="Upload audio idea">Last opp lydidé</span></button>
+        <button class="btn ghost small" id="audioRecordBtn" type="button">🎙️ <span data-no="Ta opp lydidé" data-en="Record audio idea">Ta opp lydidé</span></button>
+        <span class="hint" id="audioStatus"></span>
+      </div>
       <div class="three">
         <label class="field">
           <span data-no="Stil" data-en="Style">Stil</span>
@@ -294,6 +300,64 @@
       refreshProjects();
       openProjectDoc(data.project);
     });
+  });
+
+  /* ===== Lydidé: last opp eller ta opp, transkriber med Whisper ===== */
+  function transcribeAndFill(fileOrBlob, filename) {
+    var fd0 = new FormData(); fd0.append('confirm', 'false');
+    fetch('/api/videoflow/transcribe', { method: 'POST', credentials: 'same-origin', body: fd0 })
+      .then(function (r) { return r.json(); })
+      .then(function (pre) {
+        if (pre.error) { toast(pre.error); return; }
+        showConfirmModal({
+          desc: L('Dette leser opp lydnotatet med Whisper og fyller inn idéfeltet.', 'This transcribes the audio note with Whisper and fills in the idea field.'),
+          creditCost: pre.creditCost, note: pre.note,
+          onConfirm: function () {
+            var fd = new FormData();
+            fd.append('audio', fileOrBlob, filename || (fileOrBlob.name || 'audio.webm'));
+            fd.append('confirm', 'true');
+            q('audioStatus').textContent = L('Transkriberer …', 'Transcribing …');
+            fetch('/api/videoflow/transcribe', { method: 'POST', credentials: 'same-origin', body: fd })
+              .then(function (r) { return r.json(); })
+              .then(function (d) {
+                q('audioStatus').textContent = '';
+                if (d.error) { toast(d.error); if (d.needCredits) refreshBalance(); return; }
+                q('in-idea').value = d.text;
+                toast(L('🎙️ Transkribert!', '🎙️ Transcribed!'));
+                refreshBalance();
+              })
+              .catch(function () { q('audioStatus').textContent = ''; toast(L('Nettverksfeil', 'Network error')); });
+          },
+        });
+      })
+      .catch(function () { toast(L('Nettverksfeil', 'Network error')); });
+  }
+  q('audioUploadBtn').addEventListener('click', function () { q('audioFile').click(); });
+  q('audioFile').addEventListener('change', function () {
+    var f = this.files && this.files[0];
+    if (f) transcribeAndFill(f);
+    this.value = '';
+  });
+  var mediaRecorder = null, recordedChunks = [];
+  q('audioRecordBtn').addEventListener('click', function () {
+    if (mediaRecorder && mediaRecorder.state === 'recording') { mediaRecorder.stop(); return; }
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      toast(L('Opptak støttes ikke i denne nettleseren, last opp en fil i stedet.', 'Recording is not supported in this browser, upload a file instead.'));
+      return;
+    }
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+      recordedChunks = [];
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.ondataavailable = function (e) { if (e.data.size > 0) recordedChunks.push(e.data); };
+      mediaRecorder.onstop = function () {
+        stream.getTracks().forEach(function (t) { t.stop(); });
+        q('audioRecordBtn').innerHTML = '🎙️ <span>' + L('Ta opp lydidé', 'Record audio idea') + '</span>';
+        var blob = new Blob(recordedChunks, { type: 'audio/webm' });
+        transcribeAndFill(blob, 'opptak.webm');
+      };
+      mediaRecorder.start();
+      q('audioRecordBtn').innerHTML = '⏹️ <span>' + L('Stopp opptak', 'Stop recording') + '</span>';
+    }).catch(function () { toast(L('Fikk ikke tilgang til mikrofonen', 'Could not access the microphone')); });
   });
 
   var currentProject = null;

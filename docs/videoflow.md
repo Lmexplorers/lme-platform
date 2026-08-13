@@ -60,8 +60,11 @@ the two products can evolve independently).
 - **Analytics dashboard**, scheduled/automated daily video generation,
   multi-platform auto-posting. All real FacelessGenie features, all
   explicitly out of scope for this first pass.
-- **Audio-upload input** (the tagline promises "idea, text OR audio", only
-  idea/text is wired up so far).
+- ~~Audio-upload input~~ Built: `functions/api/videoflow/transcribe.js`
+  (OpenAI Whisper, flat `CREDIT_COSTS.transcribe`) + upload/record buttons
+  in `videoflow-studio.html`'s idea form (MediaRecorder for in-browser
+  recording, falls back to a plain file upload if unsupported). Fills the
+  idea field with the transcript, same as typing.
 
 ## Credit economy
 

@@ -36,6 +36,7 @@ export const CREDIT_COSTS = {
   image: 15,         // one styled scene image
   voicePerChar: 0.08, // ElevenLabs, per character of the line being read
   voiceMin: 3,
+  transcribe: 15,     // one audio note transcribed into an idea (flat, max 3 min)
 };
 
 export function estimateVoiceCredits(text) {
@@ -198,10 +199,35 @@ export async function voiceGenerateLine(env, text, voiceId, lang) {
   return { bytes: b64ToBytes(data.audio_base64), contentType: "audio/mpeg", words, durationSec };
 }
 
+// ===========================================================================
+// TRANSCRIBE — OpenAI Whisper, turns an uploaded/recorded audio note into
+// the idea text, matching the tagline ("idea, text or audio"). Reuses
+// OPENAI_API_KEY, no new secret.
+// ===========================================================================
+export function transcribeProviderConfigured(env) { return !!(env && env.OPENAI_API_KEY); }
+
+/** PAID CALL (CREDIT_COSTS.transcribe). audioFile: a Blob/File from FormData. Returns transcript text. */
+export async function transcribeAudio(env, audioFile) {
+  if (!env.OPENAI_API_KEY) throw new Error("missing_openai_key");
+  const fd = new FormData();
+  fd.append("file", audioFile, audioFile.name || "note.webm");
+  fd.append("model", env.OPENAI_TRANSCRIBE_MODEL || "whisper-1");
+  const r = await fetchTimeout("https://api.openai.com/v1/audio/transcriptions", {
+    method: "POST",
+    headers: { Authorization: "Bearer " + env.OPENAI_API_KEY },
+    body: fd,
+  }, 60000);
+  if (!r.ok) throw new Error("openai_transcribe_" + r.status);
+  const data = await r.json();
+  if (!data.text) throw new Error("openai_transcribe_no_text");
+  return String(data.text).slice(0, 2000);
+}
+
 export function providerStatus(env) {
   return {
     text: { configured: textProviderConfigured(env) },
     image: { configured: imageProviderConfigured(env) },
     voice: { configured: voiceProviderConfigured(env) },
+    transcribe: { configured: transcribeProviderConfigured(env) },
   };
 }
