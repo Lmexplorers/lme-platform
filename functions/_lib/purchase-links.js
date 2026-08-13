@@ -125,6 +125,69 @@ export async function emailForStripeCustomer(env, customerId) {
   return await env.BUILDER_KV.get(custKey(customerId));
 }
 
+/* ---- LME VideoFlow subscription ($8/mo, 2000 credits/mo) ---------------
+   Live Stripe setup, created 13. august 2026 (Renate: "Live modus, opprett,
+   du vet jo prisene", 2000 credits for $8/mo matching FacelessGenie).
+   One product/price (USD, recurring monthly), two payment links (no/en,
+   same price, only differ in which mail language the buyer gets, same
+   pattern as AUTOPILOT_PAYMENT_LINKS above). Credits are granted/reset by
+   functions/api/oppskrift-webhook.js on checkout + each renewal, never
+   here (this file only tracks IDs, see functions/_lib/videoflow-credits.js
+   for the actual balance logic). */
+export const VIDEOFLOW_PRODUCT_ID = "prod_V4D12UtsHgmMld";
+export const VIDEOFLOW_PRICE_ID = "price_1U44bSLax7B8uQzqahgfMCP4";
+export const VIDEOFLOW_PAYMENT_LINKS = {
+  "plink_1U44bjLax7B8uQzqZuEoO2dT": { lang: "no", url: "https://buy.stripe.com/dRm28s8055Zd51XgNN9R700" },
+  "plink_1U44bpLax7B8uQzqcoo98yaj": { lang: "en", url: "https://buy.stripe.com/28E3cw6W11IX7a5cxx9R701" },
+};
+
+/** Live checkout URL for a given site language, used by the studio/landing UI and by videoflow-mail.js reminders. */
+export function videoFlowCheckoutUrl(lang) {
+  const wanted = lang === "en" ? "en" : "no";
+  const entry = Object.values(VIDEOFLOW_PAYMENT_LINKS).find((v) => v.lang === wanted);
+  return (entry && entry.url) || Object.values(VIDEOFLOW_PAYMENT_LINKS)[0].url;
+}
+
+const vfSubKey = (email) => "vf-sub:" + email.trim().toLowerCase();
+
+/* Gir/oppdaterer VideoFlow-abonnementsstatus i KV (vf-sub:<e-post>), lest
+   av functions/_lib/videoflow-access.js for å vise status i appen. Rører
+   ALDRI selve kredittsaldoen (vf-credit:<e-post>), det gjør webhooken
+   direkte via videoflow-credits.js sin setMonthlyCredits(). */
+export async function grantVideoFlowSub(env, email, info) {
+  if (!email) return;
+  const key = vfSubKey(email);
+  let prev = {};
+  try { const r = await env.BUILDER_KV.get(key); if (r) prev = JSON.parse(r) || {}; } catch (e) {}
+  const rec = {
+    status: "active", since: prev.since || Date.now(),
+    customer: (info && info.customer) || prev.customer || null,
+    sub: (info && info.sub) || prev.sub || null,
+    updated: Date.now(),
+  };
+  await env.BUILDER_KV.put(key, JSON.stringify(rec));
+  if (info && info.customer) await env.BUILDER_KV.put(custKey(info.customer), email.trim().toLowerCase());
+}
+
+export async function revokeVideoFlowSub(env, email) {
+  if (!email) return;
+  const key = vfSubKey(email);
+  const raw = await env.BUILDER_KV.get(key);
+  let rec = { status: "canceled" };
+  if (raw) { try { rec = JSON.parse(raw) || rec; } catch (e) {} }
+  rec.status = "canceled";
+  rec.updated = Date.now();
+  await env.BUILDER_KV.put(key, JSON.stringify(rec));
+}
+
+export async function getVideoFlowSub(env, email) {
+  if (!email) return null;
+  try {
+    const raw = await env.BUILDER_KV.get(vfSubKey(email));
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) { return null; }
+}
+
 /* Fjerner et LME Autopilot-abonnement (oppsigelse/betaling feilet).
    Rører kun status, ikke plan/limits, i tilfelle hun vil se hva de hadde. */
 export async function revokeAutopilot(env, email) {

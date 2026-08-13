@@ -40,6 +40,21 @@ export async function grantCredits(env, email, amount) {
   return next;
 }
 
+/**
+ * Subscription credit refill (functions/api/oppskrift-webhook.js, on
+ * checkout.session.completed AND every invoice.paid renewal for the
+ * VideoFlow subscription). RESETS to `amount` rather than adding, since the
+ * plan is "2000 credits a month", not a stacking top-up, unlike
+ * grantCredits() above (used by the platform's other, additive credit
+ * packs). Safe to call more than once for the same billing cycle (e.g. if
+ * both checkout.session.completed and an immediate invoice.paid fire for
+ * the same first payment): resetting to 2000 twice in a row is a no-op.
+ */
+export async function setMonthlyCredits(env, email, amount) {
+  await setBalance(env, email, amount);
+  return amount;
+}
+
 /** Debit credits if the balance covers it. Returns {ok, balance, needCredits?}. */
 export async function debitCredits(env, email, amount) {
   const bal = await getBalance(env, email);

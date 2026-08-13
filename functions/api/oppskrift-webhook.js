@@ -33,6 +33,7 @@ import {
   MODULE_PAYMENT_LINKS,
   LAERINGSVERKSTED_PAYMENT_LINKS,
   SKOLEDAGBOK_PAYMENT_LINKS, SKOLEDAGBOK_INFO,
+  VIDEOFLOW_PAYMENT_LINKS, VIDEOFLOW_PRODUCT_ID, grantVideoFlowSub, revokeVideoFlowSub,
 } from "../_lib/purchase-links.js";
 import { sendAutopilotMail } from "../_lib/autopilot-mail.js";
 import { grantCourseAccess, grantModuleAccess } from "../_lib/course-access.js";
@@ -40,6 +41,25 @@ import { sendCourseDeliveryMail, sendModuleDeliveryMail } from "../_lib/course-m
 import { recordPurchase } from "../_lib/purchases.js";
 import { sendResourceDeliveryMail } from "../_lib/laeringsverksted-mail.js";
 import { sendSkoledagbokMail } from "../_lib/skoledagbok-mail.js";
+import { setMonthlyCredits } from "../_lib/videoflow-credits.js";
+import { sendVideoFlowWelcomeMail } from "../_lib/videoflow-mail.js";
+
+const VIDEOFLOW_MONTHLY_CREDITS = 2000;
+
+/* Rydder unna en eventuell "du er tom for kreditter"-påminnelseskø
+   (videoflow-access.js sin queueEmptyCreditsReminder) når kontoen nettopp
+   har fått fulle kreditter igjen, ellers kan påminnelsen komme selv om
+   personen alt har abonnert på nytt. Cronjobben sjekker riktignok saldo på
+   nytt før den sender, så dette er en ekstra opprydding, ikke en nødvendighet. */
+async function clearVideoFlowReminderQueue(env, email) {
+  if (!email) return;
+  const e = email.trim().toLowerCase();
+  try {
+    await env.BUILDER_KV.delete("vf_fu:" + e + ":d3");
+    await env.BUILDER_KV.delete("vf_fu:" + e + ":d7");
+    await env.BUILDER_KV.delete("vf_fu:" + e + ":d14");
+  } catch (e2) {}
+}
 
 // Må matche KEY_PREFIX i functions/api/laeringsverksted.js (samme
 // dupliseringsmønster som OWNER_EMAILS andre steder i kodebasen).
@@ -143,6 +163,32 @@ export async function onRequestPost(context) {
         await recordPurchase(env, email, {
           type: "autopilot", id: auto.plan, title: auto.planLabel,
           amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e4) {}
+      return json({ ok: true });
+    }
+
+    // LME VideoFlow ($8/mo, 2000 kreditter/mnd): eget abonnement, egen
+    // kredittvaluta (vf-credit:<e-post>, functions/_lib/videoflow-credits.js),
+    // ikke Inner Circle og ikke Autopilot-planene over. Opprettet live
+    // 13. august 2026 (Renate: "Live modus, opprett, du vet jo prisene").
+    const vfLink = obj.payment_link && VIDEOFLOW_PAYMENT_LINKS[obj.payment_link];
+    if (vfLink && email && obj.payment_status !== "unpaid") {
+      const nm = (obj.customer_details && obj.customer_details.name) || "";
+      await grantVideoFlowSub(env, email, { customer: obj.customer, sub: obj.subscription });
+      await setMonthlyCredits(env, email, VIDEOFLOW_MONTHLY_CREDITS);
+      await clearVideoFlowReminderQueue(env, email);
+      try { await sendVideoFlowWelcomeMail(env, email, nm, vfLink.lang); } catch (e1) {}
+      try {
+        await sendOwnerSaleNotice(env, {
+          pname: "LME VideoFlow (" + VIDEOFLOW_MONTHLY_CREDITS + " kreditter/mnd)", lang: vfLink.lang,
+          name: nm, email: email, amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e3) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "videoflow", id: "videoflow-abonnement", title: "LME VideoFlow",
+          amount: obj.amount_total, currency: obj.currency, url: "/videoflow-studio",
         });
       } catch (e4) {}
       return json({ ok: true });
@@ -358,16 +404,52 @@ export async function onRequestPost(context) {
       prod = price && (typeof price.product === "string" ? price.product : (price.product && price.product.id));
     } catch (e) {}
     const plan = prod && AUTOPILOT_PRODUCT_PLANS[prod];
-    if (!plan) return json({ ok: true }); // ikke en Autopilot-plan, ikke vårt bord
-
-    const email = await emailForStripeCustomer(env, obj.customer);
-    if (!email) return json({ ok: true });
-
     const active = event.type === "customer.subscription.updated" && (obj.status === "active" || obj.status === "trialing");
-    if (active) {
-      await grantAutopilot(env, email, { customer: obj.customer, sub: obj.id, plan: plan.plan, limits: plan.limits });
-    } else {
-      await revokeAutopilot(env, email);
+
+    if (plan) {
+      const email = await emailForStripeCustomer(env, obj.customer);
+      if (email) {
+        if (active) await grantAutopilot(env, email, { customer: obj.customer, sub: obj.id, plan: plan.plan, limits: plan.limits });
+        else await revokeAutopilot(env, email);
+      }
+      return json({ ok: true });
+    }
+
+    // LME VideoFlow: holder abonnementsstatus riktig ved oppsigelse/betaling
+    // feilet (status i vf-sub:<e-post>, lest av UI-en for å vise "abonner på
+    // nytt"). Kredittsaldoen (vf-credit:<e-post>) fylles IKKE her, det skjer
+    // kun i invoice.paid under, siden denne hendelsen fyres for mye mer enn
+    // bare fornyelse (f.eks. betalingsmetode oppdatert).
+    if (prod === VIDEOFLOW_PRODUCT_ID) {
+      const email = await emailForStripeCustomer(env, obj.customer);
+      if (email) {
+        if (active) await grantVideoFlowSub(env, email, { customer: obj.customer, sub: obj.id });
+        else await revokeVideoFlowSub(env, email);
+      }
+      return json({ ok: true });
+    }
+
+    return json({ ok: true }); // ikke en kjent Autopilot- eller VideoFlow-plan, ikke vårt bord
+  }
+
+  // LME VideoFlow: fyller på 2000 kreditter ved hver fornyelse. Trygt å
+  // kjøre flere ganger for samme faktura (setMonthlyCredits SETTER saldoen,
+  // legger ikke til), så ingen fare for dobbel-tildeling selv om denne og
+  // checkout.session.completed begge fyrer for samme første betaling.
+  if (event.type === "invoice.paid") {
+    const obj = (event.data && event.data.object) || {};
+    let prod = null;
+    try {
+      const line = obj.lines && obj.lines.data && obj.lines.data[0];
+      const price = line && line.price;
+      prod = price && (typeof price.product === "string" ? price.product : (price.product && price.product.id));
+    } catch (e) {}
+    if (prod === VIDEOFLOW_PRODUCT_ID) {
+      const email = obj.customer_email || (await emailForStripeCustomer(env, obj.customer));
+      if (email) {
+        await setMonthlyCredits(env, email, VIDEOFLOW_MONTHLY_CREDITS);
+        await clearVideoFlowReminderQueue(env, email);
+      }
     }
     return json({ ok: true });
   }

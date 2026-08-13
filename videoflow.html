@@ -140,9 +140,9 @@
         <li data-no="Avbryt når som helst" data-en="Cancel any time">Avbryt når som helst</li>
         <li data-no="Oppgrader til større plan når du trenger mer" data-en="Step up to a bigger plan whenever you need more">Oppgrader til større plan når du trenger mer</li>
       </ul>
-      <a class="btn" style="width:100%;justify-content:center;" href="/videoflow-studio" data-no="Kom i gang" data-en="Get started">Kom i gang</a>
+      <a class="btn" style="width:100%;justify-content:center;" href="https://buy.stripe.com/dRm28s8055Zd51XgNN9R700" data-no-href="https://buy.stripe.com/dRm28s8055Zd51XgNN9R700" data-en-href="https://buy.stripe.com/28E3cw6W11IX7a5cxx9R701" data-no="Abonner nå" data-en="Subscribe now">Abonner nå</a>
     </div>
-    <div class="note" data-no="Betaling/abonnement er ikke koblet til ennå (fase 1 av utviklingen). Eieren har alltid gratis og ubegrenset tilgang." data-en="Payment/subscription isn't wired up yet (phase 1 of development). The owner always has free, unlimited access.">Betaling/abonnement er ikke koblet til ennå (fase 1 av utviklingen). Eieren har alltid gratis og ubegrenset tilgang.</div>
+    <div class="note" data-no="Sikker betaling via Stripe. Fornyes automatisk hver måned, avbryt når som helst. Eieren har alltid gratis og ubegrenset tilgang." data-en="Secure payment via Stripe. Renews automatically every month, cancel any time. The owner always has free, unlimited access.">Sikker betaling via Stripe. Fornyes automatisk hver måned, avbryt når som helst. Eieren har alltid gratis og ubegrenset tilgang.</div>
   </section>
 </div>
 
@@ -157,6 +157,9 @@
     document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
       var t = el.getAttribute('data-' + lang); if (t === null) return;
       if (t.indexOf('<') !== -1) el.innerHTML = t; else el.textContent = t;
+    });
+    document.querySelectorAll('[data-no-href][data-en-href]').forEach(function (el) {
+      el.href = el.getAttribute('data-' + lang + '-href');
     });
     document.getElementById('langToggle').textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
   }

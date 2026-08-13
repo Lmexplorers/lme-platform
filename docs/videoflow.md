@@ -39,13 +39,9 @@ the two products can evolve independently).
 
 ## Deliberately NOT built yet (phased, not silently cut)
 
-- **Stripe subscription/checkout automation.** This is real billing and
-  needs its own careful pass: creating the $8/mo product/price, a checkout
-  route, a webhook that grants 2000 credits on successful payment and
-  resets them monthly, handling cancellations/failed payments. Right now
-  credits can only be granted manually (`grantCredits` in
-  `videoflow-credits.js`), there is no self-serve purchase flow. Do not
-  present this as "you can sell it today", the payment plumbing isn't there.
+- **Analytics dashboard**, scheduled/automated daily video generation,
+  multi-platform auto-posting. All real FacelessGenie features, all
+  explicitly out of scope for this first pass.
 - ~~Image-to-video premium tier~~ Built: `functions/api/videoflow/scene-
   video.js` (Higgsfield `dop-turbo`, adapter duplicated on purpose into
   `functions/_lib/videoflow-providers.js` rather than imported, keeping the
@@ -67,14 +63,69 @@ the two products can evolve independently).
   scene's image in a new style from the stored `visualDescription`, no new
   script call, credits debited once for the whole batch upfront (not N
   separate debits, avoids a credit-ledger race across parallel calls).
-- **Analytics dashboard**, scheduled/automated daily video generation,
-  multi-platform auto-posting. All real FacelessGenie features, all
-  explicitly out of scope for this first pass.
 - ~~Audio-upload input~~ Built: `functions/api/videoflow/transcribe.js`
   (OpenAI Whisper, flat `CREDIT_COSTS.transcribe`) + upload/record buttons
   in `videoflow-studio.html`'s idea form (MediaRecorder for in-browser
   recording, falls back to a plain file upload if unsupported). Fills the
   idea field with the transcript, same as typing.
+- ~~Stripe subscription/checkout automation~~ Built, see the dedicated
+  section below.
+
+## Stripe subscription (live, built 13. august 2026)
+
+Real, live-mode billing (Renate: "Live modus, opprett, du vet jo prisene",
+"Sett i gang med alt"). $8/mo, USD, recurring monthly, 2000 credits/mo,
+matches the FacelessGenie numbers on `videoflow.html`.
+
+- **Product/price**: `prod_V4D12UtsHgmMld` / `price_1U44bSLax7B8uQzqahgfMCP4`,
+  created directly via the Stripe API (live mode).
+- **Payment links** (same price, only differ in which language the buyer's
+  emails are sent in, same pattern as `AUTOPILOT_PAYMENT_LINKS`):
+  - no: `plink_1U44bjLax7B8uQzqZuEoO2dT` → https://buy.stripe.com/dRm28s8055Zd51XgNN9R700
+  - en: `plink_1U44bpLax7B8uQzqcoo98yaj` → https://buy.stripe.com/28E3cw6W11IX7a5cxx9R701
+  Both registered in `functions/_lib/purchase-links.js`
+  (`VIDEOFLOW_PAYMENT_LINKS`, `videoFlowCheckoutUrl(lang)`). Linked from the
+  pricing card on `videoflow.html` and from a "⚡ Fyll på kreditter" /
+  "Abonner, $8/mnd" button in `videoflow-studio.html`'s topbar, shown
+  whenever the balance hits 0 or there's no active subscription.
+- **Webhook**: reuses the platform's one already-live Stripe endpoint
+  (`functions/api/oppskrift-webhook.js`, `/api/oppskrift-webhook`, the same
+  one Autopilot/courses/oppskrifter use), not a new endpoint. Added
+  `invoice.paid` to that endpoint's `enabled_events` in Stripe (it only had
+  `checkout.session.completed`/`customer.subscription.updated`/`.deleted`
+  before), since VideoFlow's monthly credit refill depends on it.
+  - `checkout.session.completed` (first payment): `grantVideoFlowSub` +
+    `setMonthlyCredits(env, email, 2000)` + welcome mail
+    (`functions/_lib/videoflow-mail.js`) + owner sale notice + purchase record.
+  - `customer.subscription.updated`/`.deleted`: keeps `vf-sub:<email>`
+    status in sync (active/canceled), does **not** touch the credit
+    balance, since this event fires for more than just renewal (e.g.
+    payment method updates).
+  - `invoice.paid`: the actual renewal trigger, resets credits to exactly
+    2000 (`setMonthlyCredits`, a reset not an add, so accidental double
+    delivery of the same invoice event is harmless). Matched on the
+    invoice's line-item product (`VIDEOFLOW_PRODUCT_ID`).
+- **Blocking on empty credits**: already-existing behavior
+  (`functions/_lib/videoflow-access.js` `enforceVideoFlow`, unchanged
+  logic), a debit that would go negative returns `needCredits:true` and the
+  generation is refused with a 402, before this Stripe work and after it.
+- **Reminder emails, day 3/7/14 after credits run out** (Renate: "Påminnelse
+  etter 3, 7, 14 dager?"): the *first* time a generation is blocked for lack
+  of credits, `enforceVideoFlow` queues `vf_fu:<email>:d3/d7/d14` in KV
+  (guarded so it only queues once per empty period, not on every blocked
+  click). `functions/api/cron/videoflow-followups.js` (daily via
+  `.github/workflows/videoflow-followups.yml`) sends
+  `videoflowEmptyCreditsEmail` for whichever are due, re-checking the
+  balance immediately before sending and silently dropping the job if the
+  person already topped up/resubscribed. Known limitation: there's no
+  stored per-user language preference for VideoFlow accounts yet, so these
+  reminder emails always go out in Norwegian regardless of which payment
+  link (no/en) the person originally used; the welcome mail right after
+  checkout does use the correct language, since the payment link ID is
+  known at that moment.
+- Not built: a self-serve "manage/cancel my subscription" page (Stripe's
+  own customer portal isn't wired in), proration/plan changes (there's only
+  one plan), and per-user language preference for VideoFlow (see above).
 
 ## Credit economy
 
@@ -102,7 +153,13 @@ have been made.
 - Same provider keys as the rest of the platform: `ANTHROPIC_API_KEY`,
   `OPENAI_API_KEY`/`GEMINI_API_KEY`, `ELEVENLABS_API_KEY`, and (for the
   premium image-to-video tier) `HIGGSFIELD_API_KEY`/`HIGGSFIELD_SECRET`,
-  already set up for Mia & Teo Video Creator. No new secrets.
+  already set up for Mia & Teo Video Creator. `MAILERSEND_API_KEY` for the
+  welcome/reminder emails, already set up platform-wide. No new secrets.
+- **Stripe**: uses the platform's existing live account and existing
+  webhook endpoint (`we_1Txx1mLax7B8uQzqfUrRrHea`, `/api/oppskrift-webhook`).
+  No new `STRIPE_*` secret needed. Optional: repo secret
+  `VIDEOFLOW_CRON_TOKEN` to protect `/api/cron/videoflow-followups`, same
+  pattern as `CLAUDE_CRON_TOKEN`.
 - **R2 binding** `VIDEOFLOW_MEDIA` on the lme-platform Pages project
   (Settings → Functions → R2 bucket bindings), for permanent storage of
   finished videos (`functions/api/videoflow/media.js`). Can point at the
@@ -119,7 +176,12 @@ KV documents (`BUILDER_KV`), scoped per user:
 - `vf:project:<id>` → full project (input, scenes, render state)
 - `vf:project-index:<email>` → light index for that user's library
 - `vf:audio:<id>` → generated voice-line audio blobs
-- `vf-credit:<email>` → credit balance
+- `vf-credit:<email>` → credit balance (integer, reset to 2000 on subscribe/renew)
+- `vf-sub:<email>` → subscription status `{status, customer, sub, since, updated}`
+- `scust:<stripe-customer-id>` → email (shared with the rest of the
+  platform's Stripe webhook, see `functions/_lib/purchase-links.js`)
+- `vf_fu:<email>:d3`/`:d7`/`:d14` → queued "credits ran out" reminder jobs,
+  consumed and deleted by `functions/api/cron/videoflow-followups.js`
 
 ## Files
 
@@ -129,9 +191,12 @@ videoflow-studio.html                   Creator app
 functions/_lib/
   videoflow-styles.js                   8 style presets, avoid/safety lists
   videoflow-providers.js                Text/image/voice adapters + credit costs
-  videoflow-credits.js                  Credit ledger
-  videoflow-access.js                   Owner-free-else-credits gate
+  videoflow-credits.js                  Credit ledger (+ setMonthlyCredits reset)
+  videoflow-access.js                   Owner-free-else-credits gate (+ reminder queueing)
   videoflow-store.js                    Per-user KV data model
+  videoflow-mail.js                     Welcome + credits-empty reminder emails
+  purchase-links.js                     Shared with rest of platform: VIDEOFLOW_PAYMENT_LINKS,
+                                         grantVideoFlowSub/revokeVideoFlowSub/getVideoFlowSub
 functions/api/videoflow/
   script.js         idea -> scenes (Claude), credit-gated
   project.js         CRUD/library + balance endpoint
@@ -142,6 +207,8 @@ functions/api/videoflow/
   transcribe.js              audio idea upload -> Whisper transcript, credit-gated
   render.js            starts/polls assembly, copies result to R2
   media.js              serves finished videos from R2
+functions/api/cron/videoflow-followups.js   Daily: sends due day-3/7/14 empty-credits reminders
+functions/api/oppskrift-webhook.js          Shared Stripe webhook: VideoFlow checkout/renewal/cancel
 whiteboard-engine/video/CaptionedSlideshow.tsx   Ken Burns/OffthreadVideo + karaoke captions
 whiteboard-engine/server.js                       + /api/generer-videoflow route
 ```

@@ -103,6 +103,7 @@
     <a href="/videoflow" class="brand">🎞️ LME VideoFlow</a>
     <div class="top-actions">
       <span class="balance-pill" id="balancePill">…</span>
+      <a class="btn ghost small" id="buyBtn" style="display:none;" target="_blank" rel="noopener" data-no-href="https://buy.stripe.com/dRm28s8055Zd51XgNN9R700" data-en-href="https://buy.stripe.com/28E3cw6W11IX7a5cxx9R701" href="https://buy.stripe.com/dRm28s8055Zd51XgNN9R700"></a>
       <button class="lang-toggle" id="langToggle">EN 🌍</button>
     </div>
   </div>
@@ -203,6 +204,9 @@
       var t = el.getAttribute('data-' + lang); if (t === null) return;
       if (t.indexOf('<') !== -1) el.innerHTML = t; else el.textContent = t;
     });
+    document.querySelectorAll('[data-no-href][data-en-href]').forEach(function (el) {
+      el.href = el.getAttribute('data-' + lang + '-href');
+    });
     q('langToggle').textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
     renderProjList();
   }
@@ -229,8 +233,20 @@
   function refreshBalance() {
     api('/api/videoflow/project?balance=1').then(function (res) {
       var d = res.data || {};
-      if (!d.loggedIn) { q('balancePill').textContent = L('Logg inn', 'Log in'); return; }
-      q('balancePill').textContent = d.owner ? L('Eier · ubegrenset', 'Owner · unlimited') : d.balance + ' ' + L('kreditter', 'credits');
+      var buyBtn = q('buyBtn');
+      if (!d.loggedIn) { q('balancePill').textContent = L('Logg inn', 'Log in'); buyBtn.style.display = 'none'; return; }
+      if (d.owner) { q('balancePill').textContent = L('Eier · ubegrenset', 'Owner · unlimited'); buyBtn.style.display = 'none'; return; }
+      q('balancePill').textContent = d.balance + ' ' + L('kreditter', 'credits');
+      var subActive = d.subscription && d.subscription.status === 'active';
+      if (d.balance <= 0) {
+        buyBtn.textContent = L('⚡ Fyll på kreditter', '⚡ Refill credits');
+        buyBtn.style.display = '';
+      } else if (!subActive) {
+        buyBtn.textContent = L('Abonner, $8/mnd', 'Subscribe, $8/mo');
+        buyBtn.style.display = '';
+      } else {
+        buyBtn.style.display = 'none';
+      }
     });
   }
 
