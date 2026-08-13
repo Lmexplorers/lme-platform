@@ -51,7 +51,11 @@ the two products can evolve independently).
   baseline is stills, premium tier is full moving footage" split). Could
   reuse the exact same Higgsfield adapter pattern from
   `functions/_lib/miateo-providers.js` if/when built.
-- **Timeline editor** (trim/reorder/swap individual clips after generation).
+- ~~Scene reordering~~ Built: drag-and-drop scene cards in
+  `videoflow-studio.html` (native HTML5 drag/drop, no library), reassigns
+  `scene.index` and autosaves. Still missing: trimming and swapping
+  individual clips (there are no clips yet in phase 1, only Ken Burns
+  stills, this becomes relevant once the image-to-video tier exists).
 - ~~Style-swap re-render UI~~ Built: `functions/api/videoflow/restyle.js` +
   the style picker/button in `videoflow-studio.html`. Regenerates every
   scene's image in a new style from the stored `visualDescription`, no new
