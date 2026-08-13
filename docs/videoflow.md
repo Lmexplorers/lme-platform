@@ -52,9 +52,11 @@ the two products can evolve independently).
   reuse the exact same Higgsfield adapter pattern from
   `functions/_lib/miateo-providers.js` if/when built.
 - **Timeline editor** (trim/reorder/swap individual clips after generation).
-- **Style-swap re-render** UI (the data model supports it, per-scene
-  `visualDescription` is style-agnostic, but there's no "regenerate every
-  scene's image in a new style" button yet).
+- ~~Style-swap re-render UI~~ Built: `functions/api/videoflow/restyle.js` +
+  the style picker/button in `videoflow-studio.html`. Regenerates every
+  scene's image in a new style from the stored `visualDescription`, no new
+  script call, credits debited once for the whole batch upfront (not N
+  separate debits, avoids a credit-ledger race across parallel calls).
 - **Analytics dashboard**, scheduled/automated daily video generation,
   multi-platform auto-posting. All real FacelessGenie features, all
   explicitly out of scope for this first pass.

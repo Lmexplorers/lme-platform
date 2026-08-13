@@ -156,6 +156,10 @@
         <span class="hint" id="saveStatus"></span>
         <button class="btn gold small" id="renderBtn" type="button">🎬 <span data-no="Lag ferdig video" data-en="Assemble finished video">Lag ferdig video</span></button>
       </div>
+      <div class="btn-row" style="margin-top:.7rem;">
+        <select id="restyleSelect"></select>
+        <button class="btn ghost small" id="restyleBtn" type="button">🎨 <span data-no="Bytt stil på alle bilder" data-en="Swap style on all images">Bytt stil på alle bilder</span></button>
+      </div>
       <div id="renderResults"></div>
     </div>
     <div class="scene-grid" id="sceneGrid"></div>
@@ -205,6 +209,7 @@
   ];
   STYLES.forEach(function (s) { var o = document.createElement('option'); o.value = s[0]; o.textContent = s[1]; q('in-style').appendChild(o); });
   VOICES.forEach(function (v) { var o = document.createElement('option'); o.value = v[0]; o.textContent = v[1]; q('in-voice').appendChild(o); });
+  STYLES.forEach(function (s) { var o = document.createElement('option'); o.value = s[0]; o.textContent = s[1]; q('restyleSelect').appendChild(o); });
 
   function api(url, opts) {
     return fetch(url, Object.assign({ credentials: 'same-origin', headers: { 'Content-Type': 'application/json' } }, opts || {}))
@@ -441,6 +446,17 @@
       else if (d.ok && d.status === 'rendering') { toast(L('🎬 Setter sammen …', '🎬 Assembling …')); renderRenderState({ status: 'rendering' }); pollRender(); }
       else if (d.error) { toast(d.error); }
     });
+  });
+
+  q('restyleBtn').addEventListener('click', function () {
+    var style = q('restyleSelect').value;
+    paidAction('/api/videoflow/restyle', { projectId: currentProject.id, style: style },
+      L('Dette lager et nytt bilde i den valgte stilen for HVER scene i videoen.', 'This generates a new image in the chosen style for EVERY scene in the video.'),
+      function (data) {
+        currentProject = data.project;
+        toast(L('🎨 Stil byttet (' + data.succeeded + ' av ' + (data.succeeded + data.failed) + ' bilder).', '🎨 Style swapped (' + data.succeeded + ' of ' + (data.succeeded + data.failed) + ' images).'));
+        renderProject();
+      });
   });
 
   if (currentLang === 'en') switchLanguage('en');
