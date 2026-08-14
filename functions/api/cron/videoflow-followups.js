@@ -8,6 +8,11 @@
  * abonnert/fylt på igjen, droppes jobben stille i stedet for å sende en
  * misvisende "du er tom"-mail.
  *
+ * Mail-språk: leses fra vf-sub:<e-post>.lang (satt ved selve kjøpet ut fra
+ * hvilken betalingslenke, no/en, som ble brukt, se purchase-links.js
+ * grantVideoFlowSub). Faller tilbake til norsk hvis kontoen aldri har hatt
+ * et abonnement (f.eks. eieren, eller en gammel testkonto).
+ *
  * Kalles daglig av GitHub Actions (.github/workflows/videoflow-followups.yml).
  * Valgfri beskyttelse: sett env VIDEOFLOW_CRON_TOKEN, så kreves ?token=... .
  *
@@ -16,6 +21,7 @@
 
 import { getBalance } from "../../_lib/videoflow-credits.js";
 import { sendVideoFlowEmptyCreditsMail } from "../../_lib/videoflow-mail.js";
+import { getVideoFlowSub } from "../../_lib/purchase-links.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -52,7 +58,8 @@ export async function onRequest(context) {
       const balance = await getBalance(env, job.email);
       if (balance > 0) { await env.BUILDER_KV.delete(k.name); skipped++; continue; }
 
-      const lang = "no"; // ingen lagret språkpreferanse per konto ennå, se docs/videoflow.md
+      const sub = await getVideoFlowSub(env, job.email);
+      const lang = (sub && sub.lang === "en") ? "en" : "no";
       const res = await sendVideoFlowEmptyCreditsMail(env, job.email, "", lang, job.day || 3);
       if (res && res.ok) { await env.BUILDER_KV.delete(k.name); sent++; }
       else { failed++; }

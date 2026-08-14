@@ -151,9 +151,15 @@ export function videoFlowCheckoutUrl(lang) {
 const vfSubKey = (email) => "vf-sub:" + email.trim().toLowerCase();
 
 /* Gir/oppdaterer VideoFlow-abonnementsstatus i KV (vf-sub:<e-post>), lest
-   av functions/_lib/videoflow-access.js for å vise status i appen. Rører
-   ALDRI selve kredittsaldoen (vf-credit:<e-post>), det gjør webhooken
-   direkte via videoflow-credits.js sin setMonthlyCredits(). */
+   av functions/_lib/videoflow-access.js for å vise status i appen, OG av
+   functions/api/cron/videoflow-followups.js for å velge riktig mail-språk
+   på dag 3/7/14-påminnelsene (Renate, 14. august 2026: "påfølgende mail til
+   engelskspråklig må få oppfølgingsmail på engelsk"). `info.lang` settes
+   kun ved selve kjøpet (obj.payment_link forteller oss no/en der), og
+   beholdes uendret ved senere fornyelser (customer.subscription.updated
+   sender ikke lang, så prev.lang vinner). Rører ALDRI selve kredittsaldoen
+   (vf-credit:<e-post>), det gjør webhooken direkte via videoflow-credits.js
+   sin setMonthlyCredits(). */
 export async function grantVideoFlowSub(env, email, info) {
   if (!email) return;
   const key = vfSubKey(email);
@@ -163,6 +169,7 @@ export async function grantVideoFlowSub(env, email, info) {
     status: "active", since: prev.since || Date.now(),
     customer: (info && info.customer) || prev.customer || null,
     sub: (info && info.sub) || prev.sub || null,
+    lang: (info && info.lang) || prev.lang || "no",
     updated: Date.now(),
   };
   await env.BUILDER_KV.put(key, JSON.stringify(rec));

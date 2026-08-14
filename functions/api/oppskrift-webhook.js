@@ -175,7 +175,7 @@ export async function onRequestPost(context) {
     const vfLink = obj.payment_link && VIDEOFLOW_PAYMENT_LINKS[obj.payment_link];
     if (vfLink && email && obj.payment_status !== "unpaid") {
       const nm = (obj.customer_details && obj.customer_details.name) || "";
-      await grantVideoFlowSub(env, email, { customer: obj.customer, sub: obj.subscription });
+      await grantVideoFlowSub(env, email, { customer: obj.customer, sub: obj.subscription, lang: vfLink.lang });
       await setMonthlyCredits(env, email, VIDEOFLOW_MONTHLY_CREDITS);
       await clearVideoFlowReminderQueue(env, email);
       try { await sendVideoFlowWelcomeMail(env, email, nm, vfLink.lang); } catch (e1) {}

@@ -110,22 +110,23 @@ matches the FacelessGenie numbers on `videoflow.html`.
   logic), a debit that would go negative returns `needCredits:true` and the
   generation is refused with a 402, before this Stripe work and after it.
 - **Reminder emails, day 3/7/14 after credits run out** (Renate: "Påminnelse
-  etter 3, 7, 14 dager?"): the *first* time a generation is blocked for lack
-  of credits, `enforceVideoFlow` queues `vf_fu:<email>:d3/d7/d14` in KV
-  (guarded so it only queues once per empty period, not on every blocked
-  click). `functions/api/cron/videoflow-followups.js` (daily via
-  `.github/workflows/videoflow-followups.yml`) sends
-  `videoflowEmptyCreditsEmail` for whichever are due, re-checking the
+  etter 3, 7, 14 dager?", and 14. august 2026: "påfølgende mail til
+  engelskspråklig må få oppfølgingsmail på engelsk"): the *first* time a
+  generation is blocked for lack of credits, `enforceVideoFlow` queues
+  `vf_fu:<email>:d3/d7/d14` in KV (guarded so it only queues once per empty
+  period, not on every blocked click). `functions/api/cron/videoflow-
+  followups.js` (daily via `.github/workflows/videoflow-followups.yml`)
+  sends `videoflowEmptyCreditsEmail` for whichever are due, re-checking the
   balance immediately before sending and silently dropping the job if the
-  person already topped up/resubscribed. Known limitation: there's no
-  stored per-user language preference for VideoFlow accounts yet, so these
-  reminder emails always go out in Norwegian regardless of which payment
-  link (no/en) the person originally used; the welcome mail right after
-  checkout does use the correct language, since the payment link ID is
-  known at that moment.
+  person already topped up/resubscribed. Language: `grantVideoFlowSub`
+  stores which payment link (no/en) the person bought through as
+  `vf-sub:<email>.lang`, kept unchanged on renewal (renewal events don't
+  carry a language, so the original purchase language sticks); both the
+  welcome mail and every reminder mail read that field, so an English buyer
+  gets English mail throughout, not just at checkout.
 - Not built: a self-serve "manage/cancel my subscription" page (Stripe's
-  own customer portal isn't wired in), proration/plan changes (there's only
-  one plan), and per-user language preference for VideoFlow (see above).
+  own customer portal isn't wired in), and proration/plan changes (there's
+  only one plan).
 
 ## Credit economy
 
