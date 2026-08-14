@@ -175,8 +175,10 @@ export default {
 async function handlePing(env, origin) {
   const out = {
     worker: "lme-ai-visibility",
+    versjon: "v2026-08-14 med dagens-artikkel-motor",
     hasAnthropicKey: !!env.ANTHROPIC_API_KEY,
     hasGithubToken: !!env.GITHUB_TOKEN,
+    hasDailyKey: !!env.DAILY_KEY,
     hasMailersend: !!env.MAILERSEND_API_KEY,
     hasBlotato: !!env.BLOTATO_API_KEY,
     anthropic: env.ANTHROPIC_API_KEY ? "tester…" : "MANGLER nøkkel",
