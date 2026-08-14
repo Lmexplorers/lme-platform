@@ -146,6 +146,7 @@
 
   let lang = (localStorage.getItem('lme-lang') === 'en') ? 'en' : 'no';
   let messages = [];
+  let started = false; // true etter første melding, så vi ikke sletter samtalen ved språkbytte
 
   const intro = {
     no: {
@@ -158,7 +159,8 @@
         "Produktutvikling 101",
         "Hvordan starte?",
         "Prompts for innhold"
-      ]
+      ],
+      powers: ["📚 Montessori", "🎨 Branding", "🎬 Innhold", "💡 Prompts", "🏪 Produkter", "🎯 Målgruppe", "🚀 Vekst"]
     },
     en: {
       title: "Hello! 👋 I'm Nathalie",
@@ -170,7 +172,8 @@
         "Product development 101",
         "How to get started?",
         "Content prompts"
-      ]
+      ],
+      powers: ["📚 Montessori", "🎨 Branding", "🎬 Content", "💡 Prompts", "🏪 Products", "🎯 Audience", "🚀 Growth"]
     }
   };
 
@@ -191,6 +194,9 @@
     try { localStorage.setItem('lme-lang', l); } catch(e) {}
     langBtn.textContent = l === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
     applyLang();
+    // Samtalen er allerede i gang: ikke slett den, bare bytt språk på det statiske.
+    // Fortsatt ingen meldinger sendt: gjenoppbygg intro-kortet på riktig språk.
+    if (!started) showIntro();
   }
 
   function showIntro() {
@@ -207,13 +213,7 @@
           ${intData.suggestions.map(s => `<button class="suggestion">${s}</button>`).join('')}
         </div>
         <div class="powers-badge">
-          <span class="power-tag">📚 Montessori</span>
-          <span class="power-tag">🎨 Branding</span>
-          <span class="power-tag">🎬 Innhold</span>
-          <span class="power-tag">💡 Prompts</span>
-          <span class="power-tag">🏪 Produkter</span>
-          <span class="power-tag">🎯 Målgruppe</span>
-          <span class="power-tag">🚀 Vekst</span>
+          ${intData.powers.map(p => `<span class="power-tag">${p}</span>`).join('')}
         </div>
       </div>
     `;
@@ -254,6 +254,7 @@
     const text = inputEl.value.trim();
     if (!text) return;
 
+    started = true;
     inputEl.value = '';
     addMessage(text, true);
     sendBtn.disabled = true;
@@ -283,8 +284,7 @@
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
   });
 
-  applyLang();
-  showIntro();
+  setLang(lang);
 })();
 </script>
 <script src="/js/lme-account.js?v=11" defer></script>
