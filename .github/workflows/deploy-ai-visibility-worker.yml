@@ -22,12 +22,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Sjekk at CLOUDFLARE_API_TOKEN er satt
+        id: sjekk
         run: |
           if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
-            echo "::error::Actions-secreten CLOUDFLARE_API_TOKEN mangler. Lag token i Cloudflare (mal: Edit Cloudflare Workers) og legg den inn under Settings -> Secrets and variables -> Actions."
-            exit 1
+            echo "::warning::Actions-secreten CLOUDFLARE_API_TOKEN mangler ennaa. Hopper stille over (ingen feil-e-post). Deploy skjer automatisk naar den er lagt inn."
+            echo "klar=nei" >> "$GITHUB_OUTPUT"
+          else
+            echo "klar=ja" >> "$GITHUB_OUTPUT"
           fi
       - name: Deploy med wrangler
+        if: steps.sjekk.outputs.klar == 'ja'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
