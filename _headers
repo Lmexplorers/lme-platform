@@ -86,3 +86,9 @@
   Cache-Control: no-store
 /js/laeringsverksted-favorites.js
   Cache-Control: no-store
+# Nathalie AI-chatten oppdateres nettopp for spraakbytte-feilen, og mobilen
+# viste fortsatt den gamle, ufiksede versjonen etter utrullingen.
+/ask-nathalie-ai
+  Cache-Control: no-store
+/ask-nathalie-ai.html
+  Cache-Control: no-store
