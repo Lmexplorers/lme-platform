@@ -156,7 +156,7 @@ const MEDIESIDE = `<!DOCTYPE html>
 <div id="bibliotek" class="skjult">
   <div class="topp">
     <h1>📁 Mine medier</h1>
-    <p id="hilsen">Bildene, PDF-ene og filene dine – lagret trygt i plattformen.</p>
+    <p id="hilsen">Bildene, PDF-ene og filene dine, lagret trygt i plattformen.</p>
   </div>
   <div class="wrap">
     <div class="verktoylinje">
@@ -172,7 +172,7 @@ const MEDIESIDE = `<!DOCTYPE html>
     <div class="dropp" id="dropp">
       <div class="ikon">🌷</div>
       <strong>Klikk eller dra filer hit</strong>
-      <span>Bilder, PDF, lyd, video – opptil 50 MB per fil</span>
+      <span>Bilder, PDF, lyd og video, opptil 50 MB per fil</span>
     </div>
     <input type="file" id="filinput" multiple class="skjult">
 
@@ -437,7 +437,7 @@ ${SIDE_STIL}
   <div class="hero">
     <span class="kick" data-no="LME Inner Circle" data-en="LME Inner Circle">LME Inner Circle</span>
     <h1 data-no="Bli med i Inner Circle 💛" data-en="Join the Inner Circle 💛">Bli med i Inner Circle 💛</h1>
-    <p data-no="Inne i Inner Circle får du hele LME på ett sted: Alle kursene, hele biblioteket og ressursene, alle gruppene og fellesrommet. Også Nathalie AI, som du kan spørre når du vil. Nytt innhold og nye ressurser hver måned, pluss en månedlig medlemssending fra meg. Med Pro får du også skaperverktøyene i LME Studio, så du kan lære, skape og vokse i samme flyt." data-en="Inside the Inner Circle you get all of LME in one place: all the courses, the full library and resources, all the groups and the shared room. Plus Nathalie AI, which you can ask whenever you like. New content and new resources every month, plus a monthly member broadcast from me. With Pro you also get the creator tools in LME Studio, so you can learn, create and grow in one flow.">Inne i Inner Circle får du hele LME på ett sted: Alle kursene, hele biblioteket og ressursene, alle gruppene og fellesrommet. Også Nathalie AI, som du kan spørre når du vil. Nytt innhold og nye ressurser hver måned, pluss en månedlig medlemssending fra meg. Med Pro får du også skaperverktøyene i LME Studio, så du kan lære, skape og vokse i samme flyt.</p>
+    <p data-no="Inne i Inner Circle får du hele LME på ett sted: alle kursene, hele biblioteket og ressursene, alle gruppene og fellesrommet. Også Nathalie AI, som du kan spørre når du vil. Nytt innhold og nye ressurser hver måned, pluss en månedlig medlemssending fra meg. Med Pro får du også skaperverktøyene i LME Studio, så du kan lære, skape og vokse i samme flyt." data-en="Inside the Inner Circle you get all of LME in one place: all the courses, the full library and resources, all the groups and the shared room. Plus Nathalie AI, which you can ask whenever you like. New content and new resources every month, plus a monthly member broadcast from me. With Pro you also get the creator tools in LME Studio, so you can learn, create and grow in one flow.">Inne i Inner Circle får du hele LME på ett sted: alle kursene, hele biblioteket og ressursene, alle gruppene og fellesrommet. Også Nathalie AI, som du kan spørre når du vil. Nytt innhold og nye ressurser hver måned, pluss en månedlig medlemssending fra meg. Med Pro får du også skaperverktøyene i LME Studio, så du kan lære, skape og vokse i samme flyt.</p>
     <div class="prove" data-no="🌸 Full tilgang med en gang. Ingen binding, si opp når du vil." data-en="🌸 Full access right away. No lock-in, cancel whenever you want.">🌸 Full tilgang med en gang. Ingen binding, si opp når du vil.</div>
   </div>
 
