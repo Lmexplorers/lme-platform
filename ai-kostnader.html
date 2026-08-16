@@ -207,6 +207,14 @@
       </section>
 
       <section class="panel">
+        <h2 data-no="Hva Nathalie kan om kursene dine" data-en="What Nathalie knows about your courses">Hva Nathalie kan om kursene dine</h2>
+        <p class="sub" data-no="Nathalie slår opp i kursene dine når noen spør, og svarer med det som faktisk står der. Bygg indeksen på nytt når du har endret eller lagt til et kurs." data-en="Nathalie looks things up in your courses when someone asks, and answers with what is actually written there. Rebuild the index when you have changed or added a course.">Nathalie slår opp i kursene dine når noen spør, og svarer med det som faktisk står der. Bygg indeksen på nytt når du har endret eller lagt til et kurs.</p>
+        <div id="kbStatus"></div>
+        <button class="btn" id="kbBuild" type="button" style="margin-top:12px"
+                data-no="Bygg kunnskapen på nytt" data-en="Rebuild the knowledge">Bygg kunnskapen på nytt</button>
+      </section>
+
+      <section class="panel">
         <h2 data-no="Drift akkurat nå" data-en="Running right now">Drift akkurat nå</h2>
         <p class="sub" data-no="Hvilken modell som brukes til hver oppgave, og hva som står klart bak den hvis den svikter." data-en="Which model handles each task, and what stands ready behind it if that one fails.">Hvilken modell som brukes til hver oppgave, og hva som står klart bak den hvis den svikter.</p>
         <div id="routeStatus"></div>
@@ -234,6 +242,14 @@
     unknown:  { no: '(ukjent)',  en: '(unknown)' },
     connected:{ no: 'koblet til', en: 'connected' },
     missing:  { no: 'mangler nøkkel', en: 'key missing' },
+    kbNone:   { no: 'Kunnskapen er ikke bygget ennå. Nathalie svarer om LME, men ikke fra kursene dine.',
+                en: 'The knowledge has not been built yet. Nathalie answers about LME, but not from your courses.' },
+    kbBuilt:  { no: 'avsnitt fra kursene dine, sist bygget',
+                en: 'excerpts from your courses, last built' },
+    kbWorking:{ no: 'Leser kursene dine …', en: 'Reading your courses …' },
+    kbFailed: { no: 'Klarte ikke å bygge kunnskapen. Prøv igjen om litt.',
+                en: 'Could not build the knowledge. Try again shortly.' },
+    kbCourses:{ no: 'Kurs som er med', en: 'Courses included' },
     fallback: { no: 'reserve', en: 'fallback' },
     noModel:  { no: 'ingen modell tilgjengelig', en: 'no model available' },
     paused:   { no: 'satt på pause', en: 'paused' },
@@ -365,6 +381,51 @@
     box.innerHTML = html;
   }
 
+  // Kunnskapsindeksen til Nathalie. Egen henting, feiler stille, samme
+  // grunn som driftspanelet: den skal ikke kunne ta med seg kostnadstallene.
+  var kb = null;
+
+  function renderKb() {
+    var box = document.getElementById('kbStatus');
+    if (!box) return;
+    if (!kb) { box.textContent = ''; return; }
+    if (!kb.built) { box.innerHTML = '<span class="pill off">' + esc(t('kbNone')) + '</span>'; return; }
+
+    var dato = new Date(kb.builtAt).toLocaleDateString(lang === 'en' ? 'en-GB' : 'nb-NO', {
+      day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit',
+    });
+    var html = '<div><strong>' + kb.chunks + '</strong> ' + esc(t('kbBuilt')) + ' ' + esc(dato) + '</div>';
+    if (kb.titles && kb.titles.length) {
+      html += '<p class="sub" style="margin-top:10px">' + esc(t('kbCourses')) + ': ' +
+              kb.titles.map(esc).join(' · ') + '</p>';
+    }
+    box.innerHTML = html;
+  }
+
+  function loadKb() {
+    fetch('/api/ai-core/knowledge', { credentials: 'same-origin' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { if (j) { kb = j; renderKb(); } })
+      .catch(function () { /* kunnskapspanelet er en bonus */ });
+  }
+
+  document.getElementById('kbBuild').addEventListener('click', function () {
+    var btn = this;
+    btn.disabled = true;
+    document.getElementById('kbStatus').textContent = t('kbWorking');
+    fetch('/api/ai-core/knowledge', { method: 'POST', credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        btn.disabled = false;
+        if (!j || !j.ok) { document.getElementById('kbStatus').innerHTML = '<span class="pill off">' + esc(t('kbFailed')) + '</span>'; return; }
+        loadKb();
+      })
+      .catch(function () {
+        btn.disabled = false;
+        document.getElementById('kbStatus').innerHTML = '<span class="pill off">' + esc(t('kbFailed')) + '</span>';
+      });
+  });
+
   function loadStatus() {
     fetch('/api/ai-core/status', { credentials: 'same-origin' })
       .then(function (r) { return r.ok ? r.json() : null; })
@@ -402,6 +463,7 @@
       : 'AI costs | Little Montessori Explorers';
     if (data) render();
     renderRoutes();
+    renderKb();
   }
 
   function fail(msg) {
@@ -449,6 +511,7 @@
   applyLang();
   load('');
   loadStatus();
+  loadKb();
 })();
 </script>
 

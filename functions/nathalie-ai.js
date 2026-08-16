@@ -1,6 +1,8 @@
 import { logUsage, anthropicUnits } from "./_lib/ai-core/usage.js";
 import { nathalieTier } from "./_lib/ai-core/tier.js";
 import { checkLimit, callerKey, limitMessage } from "./_lib/ai-core/ratelimit.js";
+import { priceBlock } from "./_lib/plans.js";
+import { search as searchKnowledge, knowledgeBlock } from "./_lib/ai-core/knowledge.js";
 /**
  * Nathalie AI — Cloudflare Pages Function
  *
@@ -27,8 +29,9 @@ OM RENATE:
 - Hennes barn heter Nikolai (f. 2005) og Ida Vendelin (f. 2009) — IKKE Mia og Teo. Mia og Teo er karakterene i bøkene hennes, ikke barna hennes
 
 OM LME-PLATTFORMEN:
-- LME har tre planer: Start (299 NOK/mnd / $29), Proff (499 NOK/mnd / $49), Proff + Fellesskap (699 NOK/mnd / $69)
-- 7 dagers gratis prøveperiode, ingen binding
+- Prisene står IKKE her. De settes inn nedenfor fra functions/_lib/plans.js,
+  som er den ene kilden til hva ting koster. Ikke gjett, og ikke bruk priser
+  du måtte huske fra et annet sted i denne samtalen.
 - LME er ett samlet økosystem (ikke en samling separate apper) med fire hovedområder: LME Montessori (den pedagogiske grunnmuren: Montessorireisen med Renate, Din Montessorireise, kurs og guider, Biblioteket, Ressurser, Musikk, Live, Opptak, Nathalie AI, LME Lek & Lær med Mia & Teo), LME Studio (skaper- og AI-delen: LME Autopilot, Bookly, Builder, AI Visibility Engine, Reel Studio, Blogg, Podcast, Kursbygger, Nettsider, e-post, Automatisering, Funnels, Produkter, Analyse, Betaling, Community), LME Community (fellesskap, medlemskap, Inner Circle, utfordringer, arrangementer) og LME Shop (alle digitale og fysiske produkter). Beskriv aldri LME som bare en Montessoriplattform.
 - Mia & Teo er karakterene i Renates bøker (De små naturutforskerne)
 - LME Bookly er et offentlig verktøy i LME Studio for å lage, designe og eksportere bøker, arbeidsbøker, aktivitetsbøker, flashkort, journaler og planleggere. Læreplan-malene (Montessori/LK20 og FEA-kurshefter) er forbeholdt Renate som eier; vanlige brukere ser resten.
@@ -191,6 +194,8 @@ export async function onRequestPost(context) {
     }
   }
 
+  const lang = body && body.lang === "en" ? "en" : "no";
+
   // Hvem spør, og hvor mange spørsmål gir nivået deres per døgn.
   // Nathalie er åpen for alle, også uten konto, men hvert nivå har en
   // romslig grense så én person ikke kan tømme AI-budsjettet.
@@ -202,13 +207,16 @@ export async function onRequestPost(context) {
     hours: 24,
   });
   if (!gate.ok) {
-    const lang = body && body.lang === "en" ? "en" : "no";
     return json({ error: limitMessage(gate, lang), rateLimited: true }, 429);
   }
 
   // Valgfri sidekontekst fra widgeten: hvilken side brukeren står på.
   // Sendes fra nettsiden (ikke fra brukeren), så Nathalie AI kan veilede der og da.
-  let systemPrompt = RENATE_SYSTEM_PROMPT;
+  //
+  // Prisene settes inn her, fra functions/_lib/plans.js, i stedet for å stå
+  // skrevet inn i systemprompten. De sto der før, og ble aldri oppdatert da
+  // planene ble endret, så Nathalie oppga gamle priser til alle som spurte.
+  let systemPrompt = RENATE_SYSTEM_PROMPT + "\n\n" + priceBlock(lang);
   if (tier.sharpened) systemPrompt += "\n" + SHARPENED_INSTRUCTIONS;
   const pageContext = typeof body.context === "string" ? body.context.slice(0, 800) : "";
   if (pageContext) {
@@ -216,6 +224,26 @@ export async function onRequestPost(context) {
       "\n\nKONTEKST AKKURAT NÅ (fra nettsiden, ikke fra brukeren):\n" +
       pageContext +
       "\nBruk konteksten til å møte brukeren der de er: hjelp med det denne siden handler om, og foreslå neste naturlige steg.";
+  }
+
+  // Renates eget kursinnhold. Vi slår opp på det brukeren nettopp spurte
+  // om, og legger inn de få avsnittene som faktisk ligner. Finner søket
+  // ingenting godt nok, legges ingenting inn, og Nathalie svarer som før i
+  // stedet for å bli dyttet mot et tilfeldig kursavsnitt.
+  //
+  // Fail-open og fire-and-forget: er ikke indeksen bygget ennå, eller
+  // svarer ikke KV, går svaret uendret videre. Kunnskap er et pluss, ikke
+  // en forutsetning for at Nathalie skal virke.
+  try {
+    const siste = messages[messages.length - 1];
+    const sporsmal = typeof (siste && siste.content) === "string" ? siste.content : "";
+    if (sporsmal) {
+      const treff = await searchKnowledge(env, sporsmal);
+      const kunnskap = knowledgeBlock(treff, lang);
+      if (kunnskap) systemPrompt += "\n\n" + kunnskap;
+    }
+  } catch (e) {
+    // Med vilje stille.
   }
 
   // Innlogget bruker? Hent minnet og be modellen holde det oppdatert.

@@ -164,6 +164,57 @@ det betalte kallet, og ingen av dem endrer den vanlige veien gjennom:
 
 Alt er fail-open. Svarer ikke KV, trer begge til side og kallet går som før.
 
+### `functions/_lib/plans.js`, én kilde for priser
+
+Nathalie AI oppga i lang tid 299, 499 og 699 kr som LMEs tre planer, til hver
+eneste besøkende på 51 sider. Det var de gamle prisene, skrevet rett inn i
+systemprompten hennes, og ingenting koblet dem til det som faktisk lå i
+Stripe. Nå står prisene i denne filen, og prompten settes sammen fra den.
+
+Tallene er lest fra Stripe 16. august 2026 og verifisert mot hvilken pris
+hver levende betalingslenke faktisk peker på, ikke bare mot hvilke priser som
+finnes. Det er en viktig forskjell: flere gamle priser ligger fortsatt aktive
+ved siden av de nye, og VIP viste seg å være 999 kr, ikke 899.
+
+Skal en pris endres, endres den her og i Stripe. `priceBlock(lang)` gir
+prislisten som tekst på norsk eller engelsk, og den ber modellen uttrykkelig
+om aldri å finne på en pris som ikke står i listen.
+
+`FREE_TRIAL_DAYS` står på 0. Prompten påsto "7 dagers gratis prøveperiode",
+og jeg fant ingen prøveperiode på de levende lenkene, men rakk ikke å lese
+alle. Så lenge den står på 0, sier Nathalie ingenting om prøveperiode, som er
+tryggere enn å love noe som kanskje ikke finnes.
+
+### `functions/_lib/ai-core/knowledge.js`, Nathalie leser kursene
+
+Nathalie visste mye om LME, men ingenting fra kursene. Hun kunne si at "Voks
+på YouTube med AI" finnes, ikke hva som står i det. Det er forskjellen på en
+assistent som kan brosjyren og en som kan produktet.
+
+Indeksen bygges av Kursbygger-kursene i KV (upubliserte kurs holdes utenfor)
+og kurssidene i akademiet, hentet som HTML og strippet til tekst. Ved hvert
+spørsmål plukkes de fire avsnittene som ligner mest, og de legges inn i
+systemprompten sammen med hvilket kurs de kommer fra.
+
+Søket er ordbasert med BM25-lignende vekting, ikke vektorsøk. Innholdet er
+noen hundre avsnitt, og vektorsøk ville krevd en ny binding, en
+innbyggingsmodell og en kostnad per spørsmål for en gevinst som ikke merkes
+på denne størrelsen. Skal det byttes senere, er det bare `searchIndex()` som
+må skiftes ut.
+
+To ting er med vilje:
+
+- **Er ingenting relevant nok, legges ingenting inn.** Terskelen hindrer at
+  Nathalie blir dyttet mot et tilfeldig kursavsnitt når spørsmålet handler om
+  noe helt annet.
+- **Alt er fail-open.** Er indeksen ikke bygget, eller svarer ikke KV, går
+  svaret uendret videre. Kunnskap er et pluss, ikke en forutsetning.
+
+Bygges på nytt fra knappen på `/ai-kostnader`, eller med
+`POST /api/ai-core/knowledge`. Gjør det når du har endret eller lagt til et
+kurs. `GET /api/ai-core/knowledge?q=...` viser hva hun ville funnet på et gitt
+spørsmål, som er den raskeste måten å se om indeksen er god nok.
+
 ### `/ai-kostnader`
 
 Administrasjonssiden. Totaler øverst, deretter tabeller per app, bruker,
@@ -265,6 +316,29 @@ publisering.
 Fase 4 er bygget, men bare tatt i bruk av `/api/videoflow/script`. De andre
 betalte rutene kan legge på det samme vernet én om gangen, uten at noe annet
 må endres.
+
+### Oppryddingen i Stripe som IKKE er gjort
+
+Dette må gjøres i Stripe selv, og er ikke kode. Ingen kunder rammes: det
+finnes null aktive abonnementer (sjekket 16. august 2026, det eneste som
+noensinne er opprettet var en webhook-test).
+
+1. **Ni produkter heter fortsatt "LME Content Studio".** Navnet vises på
+   kassesiden og kvitteringen. Seks kredittpakker
+   (`prod_UwYQlSgMdK7TCE`, `prod_UwYQGpu9AsbkCW`, `prod_UwYQsKsbKIepzQ`,
+   `prod_UwYQGmTvyCU1WV`, `prod_UwYQvzzQIBxWTZ`, `prod_UwYQrssZgCpy0V`)
+   skal hete "LME Autopilot" i stedet.
+2. **Tre gamle abonnementsprodukter** (`prod_UTtEhohyPJdQHW`,
+   `prod_UTtEAkoZtrPA0r`, `prod_UTtE2cPsgHzX0x`) er ikke nådd fra noen side
+   og står ikke i `AUTOPILOT_PRODUCT_PLANS`, så en fornyelse på dem ville
+   ikke gitt tilgang. De bør arkiveres.
+3. **Seks duplikatpriser** kan deaktiveres. Verifisert at ingen levende
+   betalingslenke peker på dem: `price_1TUvSiLax7B8uQzq6CpxJSum` ($49),
+   `price_1TUvS3Lax7B8uQzqQcZAW8Dx` (499 kr),
+   `price_1TwdiqLax7B8uQzqWwk0pwA7` ($89),
+   `price_1TwdioLax7B8uQzq00IRqkqs` (899 kr),
+   `price_1TwdisLax7B8uQzqmS5N32K0` ($890),
+   `price_1TwdisLax7B8uQzqmrRtsOnJ` (8990 kr).
 
 To ting venter fortsatt på Renate:
 
