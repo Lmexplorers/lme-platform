@@ -317,28 +317,40 @@ Fase 4 er bygget, men bare tatt i bruk av `/api/videoflow/script`. De andre
 betalte rutene kan legge på det samme vernet én om gangen, uten at noe annet
 må endres.
 
-### Oppryddingen i Stripe som IKKE er gjort
+### Oppryddingen i Stripe, gjort 16. august 2026
 
-Dette må gjøres i Stripe selv, og er ikke kode. Ingen kunder rammes: det
-finnes null aktive abonnementer (sjekket 16. august 2026, det eneste som
-noensinne er opprettet var en webhook-test).
+Ingen kunder ble rammet: det finnes null aktive abonnementer, det eneste som
+noensinne er opprettet var en webhook-test.
 
-1. **Ni produkter heter fortsatt "LME Content Studio".** Navnet vises på
-   kassesiden og kvitteringen. Seks kredittpakker
-   (`prod_UwYQlSgMdK7TCE`, `prod_UwYQGpu9AsbkCW`, `prod_UwYQsKsbKIepzQ`,
-   `prod_UwYQGmTvyCU1WV`, `prod_UwYQvzzQIBxWTZ`, `prod_UwYQrssZgCpy0V`)
-   skal hete "LME Autopilot" i stedet.
-2. **Tre gamle abonnementsprodukter** (`prod_UTtEhohyPJdQHW`,
-   `prod_UTtEAkoZtrPA0r`, `prod_UTtE2cPsgHzX0x`) er ikke nådd fra noen side
-   og står ikke i `AUTOPILOT_PRODUCT_PLANS`, så en fornyelse på dem ville
-   ikke gitt tilgang. De bør arkiveres.
-3. **Seks duplikatpriser** kan deaktiveres. Verifisert at ingen levende
-   betalingslenke peker på dem: `price_1TUvSiLax7B8uQzq6CpxJSum` ($49),
-   `price_1TUvS3Lax7B8uQzqQcZAW8Dx` (499 kr),
+**Gjort:**
+
+1. **Seks kredittpakker døpt om** fra "LME Content Studio" til "LME
+   Autopilot" (`prod_UwYQlSgMdK7TCE`, `prod_UwYQGpu9AsbkCW`,
+   `prod_UwYQsKsbKIepzQ`, `prod_UwYQGmTvyCU1WV`, `prod_UwYQvzzQIBxWTZ`,
+   `prod_UwYQrssZgCpy0V`). Navnet vises på kassesiden og kvitteringen, så
+   dette var kundevendt.
+2. **De tre gamle abonnementsproduktene er arkivert.**
+   `prod_UTtEAkoZtrPA0r` og `prod_UTtE2cPsgHzX0x` ble arkivert nå.
+   `prod_UTtEhohyPJdQHW` viste seg å ha vært arkivert fra før.
+   Ingen av dem sto i `AUTOPILOT_PRODUCT_PLANS`, så en fornyelse på dem
+   ville ikke gitt tilgang.
+3. **Fem av seks duplikatpriser deaktivert:**
+   `price_1TUvSiLax7B8uQzq6CpxJSum` ($49),
    `price_1TwdiqLax7B8uQzqWwk0pwA7` ($89),
    `price_1TwdioLax7B8uQzq00IRqkqs` (899 kr),
    `price_1TwdisLax7B8uQzqmS5N32K0` ($890),
    `price_1TwdisLax7B8uQzqmrRtsOnJ` (8990 kr).
+   For hver av dem er det verifisert at ingen levende betalingslenke peker
+   dit, ved å lese `line_items` på lenkene `/oppgrader` faktisk tilbyr.
+
+**Står igjen:** `price_1TUvS3Lax7B8uQzqQcZAW8Dx` (499 kr, Proff) er fortsatt
+aktiv ved siden av 549 kr. Deaktiveringen ble blokkert av sikkerhetsfilteret,
+to ganger, mens de fem andre gikk gjennom. Den må settes inaktiv manuelt.
+
+Bekreftet underveis: beskrivelsen på det arkiverte produktet
+`prod_UTtEhohyPJdQHW` lovet "7-dagers gratis prøveperiode". Prøveperioden
+hørte altså til de gamle Content Studio-planene, ikke til dagens Autopilot,
+og det støtter at `FREE_TRIAL_DAYS` står på 0 i `functions/_lib/plans.js`.
 
 To ting venter fortsatt på Renate:
 
