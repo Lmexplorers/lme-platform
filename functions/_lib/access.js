@@ -6,6 +6,10 @@
  * Brukes av bilde-, video- og reel-genereringen.
  */
 
+// payg.js er en bladfil og importerer ingenting herfra, så det oppstår
+// ingen sirkel selv om ai-core/ledger.js importerer denne filen.
+import { paygEnabled, logTx, offMessage } from "./ai-core/payg.js";
+
 function readCookies(request) {
   const out = {};
   (request.headers.get("Cookie") || "").split(";").forEach((p) => {
@@ -145,13 +149,25 @@ export async function enforceGeneration(context, kind) {
     await env.BUILDER_KV.put(key, JSON.stringify(usage), { expirationTtl: 60 * 60 * 24 * 70 });
     return { ok: true, email: user.email, remaining: Math.max(0, limit - usage[k]) };
   }
-  // Månedskvoten er brukt opp. Trekk fra kredittpåfyll (utløper ikke).
+  // Månedskvoten er brukt opp. Kredittpåfyllet kan ta over, men BARE hvis
+  // kunden har valgt det (se functions/_lib/ai-core/payg.js). Uten den
+  // bryteren ville 25 videoer kjøpt til et bestemt prosjekt kunne bli spist
+  // opp av tilfeldige testbilder. Bryteren slås på automatisk ved kjøp, så
+  // den er aldri i veien for den som nettopp betalte.
   const ckey = "credit:" + user.email;
   let bal = { image: 0, video: 0 };
   try { const braw = await env.BUILDER_KV.get(ckey); if (braw) bal = JSON.parse(braw) || bal; } catch (e) {}
+
   if ((bal[k] || 0) > 0) {
+    if (!(await paygEnabled(env, user.email))) {
+      return { ok: false, status: 429, error: offMessage(k, "no"), paygOff: true, credit: bal[k] };
+    }
     bal[k] = bal[k] - 1;
     await env.BUILDER_KV.put(ckey, JSON.stringify(bal));
+    await logTx(env, user.email, {
+      kind: "spend", unit: k, amount: 1, balance: bal[k], app: "autopilot",
+      note: k === "video" ? "Video etter kvoten" : "Bilde etter kvoten",
+    });
     return { ok: true, email: user.email, remaining: 0, credit: bal[k], source: "credit" };
   }
   return {

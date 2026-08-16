@@ -246,6 +246,37 @@ Vises via `/api/ai-core/prices` (åpen, det er butikkvinduet) og
 Bygger siden kort etter lasting, kall `window.lmePriceRefresh()`. Feiler
 oppslaget, står feltet tomt i stedet for at det står feil pris.
 
+### `functions/_lib/ai-core/payg.js`, fortsett forbi grensen
+
+Etter mønster fra NexLev, som Renate testet 16. august 2026. Kvoten i planen
+er veggen. Kunden kan selv velge å fortsette forbi den med forhåndskjøpt
+kreditt. Renate ligger aldri ute med noe, fordi kreditten er betalt på
+forhånd.
+
+**Forskjellen fra NexLev:** hos dem trekkes kortet når du går forbi grensen,
+og derfor MÅ det være avslått som standard. Hos LME er kreditten kjøpt på
+forhånd, så det finnes ingen overraskende trekk. Bryteren er derfor til for
+det motsatte: å beskytte saldoen, slik at 25 videoer kjøpt til et bestemt
+prosjekt ikke blir spist opp av tilfeldige testbilder.
+
+Reglene, i den rekkefølgen de gjelder:
+
+1. **Avslått som standard.** Ingen kreditt brukes uten at kunden har valgt det.
+2. **Kjøp av påfyll slår den på**, siden det er grunnen til at kunden kjøpte.
+3. **Har kunden selv tatt et valg, står det.** `explicit` husker det, så et
+   senere kjøp ikke opphever en bevisst avskruing. Dette ble oppdaget av at
+   et testnavn lovet mer enn koden holdt.
+4. **Alt føres i kvitteringen**: kjøp, forbruk, saldo etterpå, og hver gang
+   bryteren endres. `payg-tx:<e-post>`, maks 200 linjer.
+5. **Feiler genereringen, refunderes kreditten.** Det gjorde koden allerede.
+6. **Startkreditt gis én gang**, `grantStarterOnce()` er idempotent.
+
+Meldingen når kvoten er brukt opp og bryteren er av sier at kreditten er
+spart, ikke oppbrukt, og ber ikke kunden kjøpe noe hun allerede har.
+
+Vises via `/api/ai-core/payg` (GET for status og kvittering, POST for å slå
+av og på). Wired inn i `enforceGeneration()` i `functions/_lib/access.js`.
+
 ### `/ai-kostnader`
 
 Administrasjonssiden. Totaler øverst, deretter tabeller per app, bruker,
