@@ -215,6 +215,37 @@ Bygges på nytt fra knappen på `/ai-kostnader`, eller med
 kurs. `GET /api/ai-core/knowledge?q=...` viser hva hun ville funnet på et gitt
 spørsmål, som er den raskeste måten å se om indeksen er god nok.
 
+### `functions/_lib/ai-core/prices.js`, hva en generering koster brukeren
+
+Sidene skal kunne si "å lage videoen koster 1 video-kreditt (ca. 24 kr)" uten
+at tallet skrives inn på hver side. Grunnen står i filen: prisene ble skrevet
+inn for hånd én gang før, i systemprompten til Nathalie, og da sto det gamle
+priser på 51 sider.
+
+Filen beskriver **dagens** priser, altså det som faktisk trekkes mens de fire
+valutaene fortsatt finnes. Kronetallene er hentet fra det kredittpakkene
+selges for, ikke fra leverandørkostnad, siden det er prisen kunden har betalt.
+
+`PLANLAGT` nederst i filen holder den felles valutaen som er besluttet men
+ikke tatt i bruk: 1 kreditt = 20 øre, bilde 14, tekst 2, stemme 31 per tusen
+tegn, **video 150**. Video står til 150 og ikke 120 fordi 120 var regnet på
+Higgsfields årspris, og Renate kan ikke binde seg årlig før firmaet har
+inntekt. På månedlig betaling koster en video omtrent det dobbelte.
+
+En egen test slår fast at `PLANLAGT` ikke er tatt i bruk noe sted ennå.
+
+Vises via `/api/ai-core/prices` (åpen, det er butikkvinduet) og
+`js/lme-price.js`. Å legge en pris på en side er da ett attributt:
+
+```html
+<span data-lme-price="reel-video"
+      data-lme-price-mal="Å lage videoen koster {pris}."
+      data-lme-price-mal-en="Making the video costs {pris}."></span>
+```
+
+Bygger siden kort etter lasting, kall `window.lmePriceRefresh()`. Feiler
+oppslaget, står feltet tomt i stedet for at det står feil pris.
+
 ### `/ai-kostnader`
 
 Administrasjonssiden. Totaler øverst, deretter tabeller per app, bruker,
