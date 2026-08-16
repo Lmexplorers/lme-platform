@@ -1,3 +1,4 @@
+import { sessionUser } from "../../_lib/access.js";
 import { logUsage, anthropicUnits } from "../../_lib/ai-core/usage.js";
 /**
  * LME Schema Generator — Cloudflare Pages Function
@@ -29,7 +30,7 @@ export async function onRequestOptions() {
 const DEFAULT_MODEL = "claude-sonnet-5";
 const CALL_TIMEOUT_MS = 20000;
 
-async function callClaude(env, system, userPrompt) {
+async function callClaude(env, system, userPrompt, email) {
   const t0 = Date.now();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), CALL_TIMEOUT_MS);
@@ -65,13 +66,23 @@ async function callClaude(env, system, userPrompt) {
   const data = await resp.json();
   await logUsage(env, {
     app: "schema", task: "text", modelId: env.CONTENT_TEXT_MODEL || DEFAULT_MODEL,
-    units: anthropicUnits(data), ms: Date.now() - t0, status: "ok",
+    email: email || "", units: anthropicUnits(data), ms: Date.now() - t0, status: "ok",
   });
   return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
 }
 
 export async function onRequestPost(context) {
   const { request, env } = context;
+
+  // Innlogging kreves. Ingen side i plattformen kaller denne ruten i dag
+  // (AI Visibility-appen bruker den separate workeren, se
+  // ai-visibility-worker.js), men ruten var likevel åpen og kunne bruke
+  // plattformens Anthropic-nøkkel. Se docs/ai-core.md.
+  const user = await sessionUser(context);
+  if (!user) {
+    return json({ error: "Logg inn for å bruke denne funksjonen.", jsonld: "" }, 401);
+  }
+
   if (!env.ANTHROPIC_API_KEY) {
     return json({ error: "Server-konfigurasjon mangler", jsonld: "" }, 500);
   }
@@ -128,7 +139,7 @@ JSON-LD må være gyldig, komplett og optimalisert for søkemotorer og AI-indeks
   const userPrompt = prompts[type] || "";
 
   try {
-    const result = await callClaude(env, systemInstr, userPrompt);
+    const result = await callClaude(env, systemInstr, userPrompt, user.email);
     let parsed = { jsonld: "" };
     try {
       const match = result.match(/\{[\s\S]*\}/);
