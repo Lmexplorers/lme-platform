@@ -1,3 +1,4 @@
+import { sessionUser } from "../../_lib/access.js";
 import { logUsage, anthropicUnits } from "../../_lib/ai-core/usage.js";
 /**
  * LME "Gjør synlig" — omform én kilde til flere kanaler. Cloudflare Pages Function.
@@ -68,7 +69,7 @@ const GROUPS = [
   ["tiktok", "reelScript", "email"],
 ];
 
-async function callClaude(env, system, userPrompt, maxTokens) {
+async function callClaude(env, system, userPrompt, maxTokens, email) {
   const t0 = Date.now();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), CALL_TIMEOUT_MS);
@@ -102,7 +103,7 @@ async function callClaude(env, system, userPrompt, maxTokens) {
   }
   const data = await resp.json();
   await logUsage(env, {
-    app: "autopilot", task: "text", modelId: MODEL,
+    app: "autopilot", task: "text", modelId: MODEL, email: email || "",
     units: anthropicUnits(data), ms: Date.now() - t0, status: "ok",
   });
   return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
@@ -131,6 +132,13 @@ export async function onRequestPost(context) {
   if (!env.ANTHROPIC_API_KEY) {
     return json({ error: "Server-konfigurasjon mangler (ANTHROPIC_API_KEY)." }, 500);
   }
+  // Innlogging kreves. Ruten gjør ekte, betalte AI-kall, og var tidligere
+  // åpen for alle som fant adressen. Appene som bruker den er innloggede
+  // flater, så dette stenger ingen ekte bruker ute.
+  const user = await sessionUser(context);
+  if (!user) {
+    return json({ error: "Logg inn for å bruke denne funksjonen." }, 401);
+  }
   let body;
   try { body = await request.json(); }
   catch { return json({ error: "Ugyldig JSON" }, 400); }
@@ -141,7 +149,7 @@ export async function onRequestPost(context) {
   // andre (delvis er bedre enn ingenting). Bare hvis begge feiler gir vi 502.
   const settled = await Promise.all(GROUPS.map(async (keys) => {
     try {
-      return parseObj(await callClaude(env, system, promptFor(body, keys), 1000));
+      return parseObj(await callClaude(env, system, promptFor(body, keys), 1000, user.email));
     } catch (e) {
       return { __err: (e && e.message) || "feil" };
     }

@@ -4,7 +4,7 @@ Det felles laget som binder sammen AI-bruken på tvers av LME-appene. Denne
 filen beskriver det som faktisk er bygget. Planen og begrunnelsen for hele
 arbeidet ligger i `docs/ai-core-arkitektur.md`.
 
-Status: fase 1 og 2 er ferdige. Fase 3 til 7 gjenstår.
+Status: fase 1, 2 og 3 er ferdige. Fase 4 til 7 gjenstår.
 
 ---
 
@@ -59,6 +59,46 @@ KV-nøkkel: `ai:usage:<år-måned>:<tidsstempel>-<tilfeldig>`, 400 dagers leveti
 `GET /api/ai-core/usage?month=2026-08`. Kun for eier. Summerer måneden per
 app, bruker, leverandør, modell og innholdstype, og returnerer den sammen med
 registerstatusen. Gjør ingen AI-kall og koster ingenting.
+
+### `functions/_lib/ai-core/ratelimit.js` og `tier.js`
+
+En dør stenger folk ute, en grense gjør det ikke. Nathalie AI ligger på 51
+sider og er ofte det første møtet noen har med LME, så hun skal være åpen for
+alle, også uten konto. Men "åpen for alle" kan ikke bety "uten tak".
+
+`ratelimit.js` teller kall i et fast døgnvindu, med én KV-skriving per kall.
+Den er alltid fail-open: svarer ikke KV, slipper brukeren gjennom. En
+kostnadsgrense skal aldri kunne bli grunnen til at plattformen føles ødelagt.
+
+`tier.js` avgjør hvilket nivå den som spør hører til, og hvor mange spørsmål
+nivået gir per døgn:
+
+| Nivå | Grense per døgn | Tilspisset Nathalie |
+| --- | --- | --- |
+| eier | ingen | ja |
+| kurs (kjøpt signaturkurset) | 200 | ja |
+| innlogget | 60 | nei |
+| gjest | 20 | nei |
+
+Alle tre grensene kan justeres uten kodeendring, via `NATHALIE_LIMIT_GUEST`,
+`NATHALIE_LIMIT_USER` og `NATHALIE_LIMIT_COURSE`.
+
+### Tilspisset Nathalie for kjøpere av signaturkurset
+
+Kjøpere får en Nathalie som er spisset mot det kurset handler om, å skape noe
+eget og få det solgt. Hun antar at den hun snakker med har bestemt seg, betalt
+og vil ha konkret hjelp til å komme i mål, ikke en introduksjon til LME.
+
+**To ting må gjøres før dette virker:**
+
+1. **Sett `SIGNATURE_COURSE_IDS`** i Pages-innstillingene, en kommaseparert
+   liste med kursets id slik den lagres i `purchases:<e-post>`. Er variabelen
+   ikke satt, finnes "kurs"-nivået rett og slett ikke, og kjøpere behandles
+   som vanlige innloggede brukere. Det er med vilje: da kan ingen bli
+   feilaktig oppgradert av en gjetning, og ingen blir stengt ute.
+2. **Les gjennom `SHARPENED_INSTRUCTIONS`** i `functions/nathalie-ai.js`.
+   Teksten der er et utgangspunkt, ikke Renates egne ord, og bør gjøres til
+   hennes og tilpasses det kurset faktisk lover.
 
 ### `/ai-kostnader`
 
@@ -127,17 +167,22 @@ Eneste unntak er `/api/diag`, helsesjekken. Den gjør et bittelite testkall for
 
 ## Ting som ble endret utenfor AI Core
 
-Fase 1 rørte tre ting utenfor den nye mappen:
+Fase 1 og 3 rørte fire ting utenfor den nye mappen:
 
 1. **`/ai-generate` krever nå innlogging.** Ruten svarte tidligere på alle
    opphav uten sesjonssjekk, så hvem som helst som fant adressen kunne bruke
    plattformens Anthropic-nøkkel. LME Builder kaller alltid med en innlogget
    økt.
-2. **`enforceGeneration()` i `functions/_lib/access.js` returnerer nå også
+2. **`/api/ai/content` og `/api/ai/repurpose` krever nå innlogging.** Begge
+   gjorde ekte, betalte AI-kall uten noen sesjonssjekk. Appene som bruker
+   dem er innloggede flater. Merk at `/forklaringsvideo` også kaller
+   `/api/ai/content`, og den siden lå som et vanlig verktøykort i LME Studio
+   uten sperre, så den krever nå innlogging for å generere.
+3. **`enforceGeneration()` i `functions/_lib/access.js` returnerer nå også
    e-posten** til den innloggede brukeren på ok-svar, slik at
    Autopilot-rutene kan knytte kostnaden til riktig konto uten et ekstra
    KV-oppslag. Tilgangslogikken er ellers uendret.
-3. **Provider-funksjonene i `_lib/videoflow-providers.js` og
+4. **Provider-funksjonene i `_lib/videoflow-providers.js` og
    `_lib/miateo-providers.js` tar et valgfritt siste `meta`-argument**
    `{ email }`. Det er bakoverkompatibelt: uten det logges kallet uten e-post.
 
@@ -147,7 +192,7 @@ Ingen eksisterende KV-nøkkel er endret, og ingen kredittsaldo er flyttet.
 
 ## Det som gjenstår
 
-Fase 3 til 7 i `docs/ai-core-arkitektur.md`: kreditt-fasaden, ruteren med
+Fase 4 til 7 i `docs/ai-core-arkitektur.md`: ruteren med
 reservemodell og dobbeltkall-vern, det felles filbiblioteket, migreringen av
 de fire målappene, og til slutt den sammenhengende arbeidsflyten fra idé til
 publisering.

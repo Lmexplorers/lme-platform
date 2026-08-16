@@ -1,4 +1,6 @@
 import { logUsage, anthropicUnits } from "./_lib/ai-core/usage.js";
+import { nathalieTier } from "./_lib/ai-core/tier.js";
+import { checkLimit, callerKey, limitMessage } from "./_lib/ai-core/ratelimit.js";
 /**
  * Nathalie AI — Cloudflare Pages Function
  *
@@ -123,6 +125,27 @@ MINNE OM BRUKEREN:
 - Er det ingenting nytt å huske, skal du IKKE ta med minne-blokken.
 - Minne-blokken vises aldri til brukeren, så ikke omtal den i selve svaret.`;
 
+/* ---------------------------------------------------------------------------
+ * TILSPISSET NATHALIE, for de som har kjøpt signaturkurset.
+ *
+ * Vanlig Nathalie svarer bredt: Montessori, plattformen, og litt av alt.
+ * Denne varianten er spisset mot det kurset faktisk handler om, å skape noe
+ * eget og få det solgt. Hun antar at den hun snakker med har bestemt seg,
+ * betalt, og vil ha konkret hjelp til å komme i mål, ikke en introduksjon.
+ *
+ * MERK: teksten under er et utgangspunkt jeg har skrevet, ikke Renates egne
+ * ord. Den bør leses gjennom og gjøres til hennes, og tilpasses det kurset
+ * faktisk lover. Se docs/ai-core.md.
+ * ------------------------------------------------------------------------ */
+const SHARPENED_INSTRUCTIONS = `
+DU SNAKKER MED EN SOM HAR KJØPT SIGNATURKURSET:
+- Hun har bestemt seg og betalt. Ikke selg kurset til henne på nytt, og ikke forklar hva LME er. Hjelp henne videre i det hun holder på med.
+- Vær konkret. Foretrekk ett tydelig neste steg framfor en liste over muligheter, og si hva du ville gjort først.
+- Hold deg til det praktiske: finne ideen, forme tilbudet, skrive teksten, sette prisen, få det ut, og få de første kjøperne.
+- Bruk verktøyene på plattformen når de faktisk hjelper her og nå, og si hvilket og hvorfor. Ikke ram opp alt som finnes.
+- Er noe utenfor det du kan svare godt på, si det rett ut og pek videre, heller enn å gjette.
+- Montessoripedagogikken er grunnmuren hennes, ikke temaet. Trekk den inn bare når hun spør om barn eller pedagogikk.`;
+
 function json(data, status) {
   return new Response(JSON.stringify(data), {
     status,
@@ -168,9 +191,25 @@ export async function onRequestPost(context) {
     }
   }
 
+  // Hvem spør, og hvor mange spørsmål gir nivået deres per døgn.
+  // Nathalie er åpen for alle, også uten konto, men hvert nivå har en
+  // romslig grense så én person ikke kan tømme AI-budsjettet.
+  const tier = await nathalieTier(context);
+  const gate = await checkLimit(env, {
+    area: "nathalie",
+    who: callerKey(request, tier.email),
+    limit: tier.limit,
+    hours: 24,
+  });
+  if (!gate.ok) {
+    const lang = body && body.lang === "en" ? "en" : "no";
+    return json({ error: limitMessage(gate, lang), rateLimited: true }, 429);
+  }
+
   // Valgfri sidekontekst fra widgeten: hvilken side brukeren står på.
   // Sendes fra nettsiden (ikke fra brukeren), så Nathalie AI kan veilede der og da.
   let systemPrompt = RENATE_SYSTEM_PROMPT;
+  if (tier.sharpened) systemPrompt += "\n" + SHARPENED_INSTRUCTIONS;
   const pageContext = typeof body.context === "string" ? body.context.slice(0, 800) : "";
   if (pageContext) {
     systemPrompt +=
@@ -227,6 +266,7 @@ export async function onRequestPost(context) {
     const data = await res.json();
     await logUsage(env, {
       app: "nathalie-ai", task: "text", modelId: "claude-sonnet-5",
+      email: tier.email, note: "nivaa:" + tier.tier,
       units: anthropicUnits(data), ms: Date.now() - t0,
       status: data ? "ok" : "error", error: data ? "" : "claude_" + res.status,
     });
