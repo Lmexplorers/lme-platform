@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-kostnader | Little Montessori Explorers</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Oversikt over hva AI koster på LME-plattformen, fordelt på app, bruker, leverandør, modell og innholdstype.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+    --pink-50:  #fff5f8;
+    --pink-200: #ffd1e1;
+    --pink-500: #ff5fa2;
+    --ink:      #2d2a32;
+    --muted:    #6f6a77;
+    --line:     #ece8f0;
+    --card:     #ffffff;
+    --bg:       #fdfbfe;
+    --lime:     #b8e986;
+    --sky:      #8ecae6;
+    --lemon:    #ffe66d;
+    --r-lg:     20px;
+    --r-sm:     12px;
+    --shadow:   0 4px 18px rgba(45,42,50,0.07);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); margin: 0 0 10px; }
+  h1 { font-size: 34px; }
+  h2 { font-size: 22px; }
+  h3 { font-size: 17px; }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  .page-head {
+    display: flex; flex-wrap: wrap; gap: 16px;
+    align-items: flex-end; justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .lede { color: var(--muted); margin: 0 0 24px; max-width: 62ch; }
+
+  .controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  select, .btn {
+    font-family: var(--font-body);
+    font-size: 15px;
+    padding: 9px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .btn-lang { background: var(--pink-50); border-color: var(--pink-200); }
+
+  .totals { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin: 8px 0 28px; }
+  .tile {
+    background: var(--card); border-radius: var(--r-lg);
+    padding: 18px 20px; box-shadow: var(--shadow); border: 1px solid var(--line);
+  }
+  .tile .k { font-size: 13px; color: var(--muted); letter-spacing: .02em; }
+  .tile .v { font-family: var(--font-head); font-size: 28px; line-height: 1.25; margin-top: 4px; }
+  .tile.accent { background: linear-gradient(135deg, var(--pink-50), #fff); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
+  .panel {
+    background: var(--card); border-radius: var(--r-lg);
+    border: 1px solid var(--line); box-shadow: var(--shadow);
+    padding: 20px 22px;
+  }
+  .panel h2 { margin-bottom: 4px; }
+  .panel .sub { color: var(--muted); font-size: 14px; margin: 0 0 14px; }
+
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); }
+  th { font-family: var(--font-head); font-size: 13px; color: var(--muted); font-weight: 500; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  .bar { height: 6px; border-radius: 99px; background: var(--pink-200); margin-top: 5px; }
+
+  .pill {
+    display: inline-block; font-size: 12px; padding: 2px 9px;
+    border-radius: 999px; background: var(--pink-50); color: var(--muted);
+    border: 1px solid var(--pink-200);
+  }
+  .pill.ok { background: #f2fbe9; border-color: #d8f0c0; }
+  .pill.off { background: #f6f5f8; border-color: var(--line); }
+
+  .note {
+    margin-top: 26px; padding: 16px 18px;
+    background: #fffdf2; border: 1px solid #f4ecc4; border-radius: var(--r-sm);
+    font-size: 14.5px; color: #5f5a3f;
+  }
+  .state { padding: 40px 0; color: var(--muted); text-align: center; }
+  .hide { display: none !important; }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 27px; }
+    .wrap { padding: 22px 14px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="page-head">
+    <div>
+      <h1 data-no="AI-kostnader" data-en="AI costs">AI-kostnader</h1>
+    </div>
+    <div class="controls">
+      <select id="monthSel" aria-label="Måned"></select>
+      <button class="btn btn-lang" id="langBtn" type="button">EN 🌍</button>
+    </div>
+  </div>
+
+  <p class="lede"
+     data-no="Alt AI-forbruket på plattformen, samlet ett sted: hva som ble brukt, av hvem, hos hvilken leverandør, og hva det kostet."
+     data-en="All AI use on the platform in one place: what was used, by whom, from which provider, and what it cost.">
+    Alt AI-forbruket på plattformen, samlet ett sted: hva som ble brukt, av hvem, hos hvilken leverandør, og hva det kostet.
+  </p>
+
+  <div id="loading" class="state"
+       data-no="Henter tallene …" data-en="Loading the numbers …">Henter tallene …</div>
+  <div id="error" class="state hide"></div>
+
+  <div id="content" class="hide">
+
+    <div class="totals">
+      <div class="tile accent">
+        <div class="k" data-no="Beregnet kostnad" data-en="Estimated cost">Beregnet kostnad</div>
+        <div class="v" id="totCost">…</div>
+      </div>
+      <div class="tile">
+        <div class="k" data-no="Antall kall" data-en="Number of calls">Antall kall</div>
+        <div class="v" id="totCalls">…</div>
+      </div>
+      <div class="tile">
+        <div class="k" data-no="Mislykkede kall" data-en="Failed calls">Mislykkede kall</div>
+        <div class="v" id="totErrors">…</div>
+      </div>
+      <div class="tile">
+        <div class="k" data-no="Uten kjent pris" data-en="No known price">Uten kjent pris</div>
+        <div class="v" id="totUnknown">…</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section class="panel">
+        <h2 data-no="Per app" data-en="Per app">Per app</h2>
+        <p class="sub" data-no="Hvilken del av plattformen pengene går til." data-en="Which part of the platform the money goes to.">Hvilken del av plattformen pengene går til.</p>
+        <div class="tbl-scroll"><table id="tblApp"></table></div>
+      </section>
+
+      <section class="panel">
+        <h2 data-no="Per bruker" data-en="Per user">Per bruker</h2>
+        <p class="sub" data-no="Hvem som genererer. Tomt felt betyr et kall uten innlogging." data-en="Who is generating. An empty field means a call without a login.">Hvem som genererer. Tomt felt betyr et kall uten innlogging.</p>
+        <div class="tbl-scroll"><table id="tblUser"></table></div>
+      </section>
+
+      <section class="panel">
+        <h2 data-no="Per leverandør" data-en="Per provider">Per leverandør</h2>
+        <p class="sub" data-no="Hvilke regninger dette blir til slutt." data-en="Which bills this eventually becomes.">Hvilke regninger dette blir til slutt.</p>
+        <div class="tbl-scroll"><table id="tblProvider"></table></div>
+      </section>
+
+      <section class="panel">
+        <h2 data-no="Per modell" data-en="Per model">Per modell</h2>
+        <p class="sub" data-no="Den enkelte modellen, ikke bare leverandøren." data-en="The individual model, not just the provider.">Den enkelte modellen, ikke bare leverandøren.</p>
+        <div class="tbl-scroll"><table id="tblModel"></table></div>
+      </section>
+
+      <section class="panel">
+        <h2 data-no="Per innholdstype" data-en="Per content type">Per innholdstype</h2>
+        <p class="sub" data-no="Tekst, bilde, stemme, video og transkribering." data-en="Text, image, voice, video and transcription.">Tekst, bilde, stemme, video og transkribering.</p>
+        <div class="tbl-scroll"><table id="tblTask"></table></div>
+      </section>
+
+      <section class="panel">
+        <h2 data-no="Leverandører som er koblet til" data-en="Providers that are connected">Leverandører som er koblet til</h2>
+        <p class="sub" data-no="Om nøkkelen finnes i oppsettet. Selve nøkkelen vises aldri." data-en="Whether the key exists in the setup. The key itself is never shown.">Om nøkkelen finnes i oppsettet. Selve nøkkelen vises aldri.</p>
+        <div id="provStatus"></div>
+      </section>
+    </div>
+
+    <div class="note" id="priceNote"></div>
+  </div>
+</div>
+
+<script src="/js/lme-account.js?v=11" defer></script>
+<script>
+(function () {
+  var lang = (localStorage.getItem('lme_lang') === 'en') ? 'en' : 'no';
+  var data = null;
+
+  var T = {
+    calls:    { no: 'Kall',      en: 'Calls' },
+    cost:     { no: 'Kostnad',   en: 'Cost' },
+    failed:   { no: 'Feil',      en: 'Failed' },
+    name:     { no: 'Navn',      en: 'Name' },
+    none:     { no: 'Ingen AI-kall er logget denne måneden ennå.',
+                en: 'No AI calls have been logged this month yet.' },
+    anon:     { no: '(ikke innlogget)', en: '(not logged in)' },
+    unknown:  { no: '(ukjent)',  en: '(unknown)' },
+    connected:{ no: 'koblet til', en: 'connected' },
+    missing:  { no: 'mangler nøkkel', en: 'key missing' },
+    noAccess: { no: 'Denne siden er kun for eieren. Logg inn med eierkontoen din.',
+                en: 'This page is for the owner only. Log in with your owner account.' },
+    failedLoad:{ no: 'Klarte ikke å hente tallene. Prøv igjen om litt.',
+                 en: 'Could not load the numbers. Try again shortly.' },
+    priceNote:{
+      no: 'Om tallene: kostnaden er beregnet fra prislisten i koden, ikke hentet fra leverandørenes fakturaer, så den er et godt anslag og ikke en kvittering. Anthropic-prisene er verifiserte. De andre er kvalifiserte anslag, merket med et grått stempel i modelltabellen, og bør sjekkes mot leverandørens eget dashbord før du stoler på et krontall. Noen kall har ingen kjent pris i det hele tatt, for eksempel video hos Higgsfield, som prises i forhåndskjøpte video-kreditter i stedet. De telles for seg under "Uten kjent pris". Prisene ble sist sjekket ',
+      en: 'About these numbers: the cost is calculated from the price list in the code, not pulled from the providers\' invoices, so it is a good estimate and not a receipt. The Anthropic prices are verified. The others are informed estimates, marked with a grey badge in the model table, and should be checked against the provider\'s own dashboard before you trust a figure. Some calls have no known price at all, for example video from Higgsfield, which is priced in prepaid video credits instead. Those are counted separately under "No known price". Prices were last checked '
+    }
+  };
+
+  function t(key) { return T[key][lang]; }
+
+  function money(n) {
+    if (typeof n !== 'number') return '…';
+    if (n === 0) return '$0';
+    if (n < 0.01) return '$' + n.toFixed(4);
+    return '$' + n.toFixed(2);
+  }
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  // Sorterer en bøtte fra API-et til rader, dyreste først.
+  function rows(bucket) {
+    return Object.keys(bucket || {})
+      .map(function (k) {
+        var v = bucket[k];
+        return { name: k, calls: v.calls, errors: v.errors, cost: v.costUsd };
+      })
+      .sort(function (a, b) { return (b.cost - a.cost) || (b.calls - a.calls); });
+  }
+
+  function renderTable(el, bucket, opts) {
+    var list = rows(bucket);
+    if (!list.length) {
+      el.innerHTML = '<tbody><tr><td style="color:var(--muted)">' + esc(t('none')) + '</td></tr></tbody>';
+      return;
+    }
+    var max = list.reduce(function (m, r) { return Math.max(m, r.cost); }, 0) || 1;
+    var head = '<thead><tr><th>' + esc(t('name')) + '</th>' +
+      '<th class="num">' + esc(t('calls')) + '</th>' +
+      '<th class="num">' + esc(t('failed')) + '</th>' +
+      '<th class="num">' + esc(t('cost')) + '</th></tr></thead>';
+    var body = list.map(function (r) {
+      var label = r.name;
+      if (!label || label === '(ukjent)') label = (opts && opts.userTable) ? t('anon') : t('unknown');
+      var pct = Math.round((r.cost / max) * 100);
+      var badge = '';
+      if (opts && opts.modelTable) {
+        var m = (data.registry.models || []).filter(function (x) { return x.id === r.name; })[0];
+        if (m && !m.verified) badge = ' <span class="pill off">' + (lang === 'no' ? 'anslag' : 'estimate') + '</span>';
+      }
+      return '<tr><td>' + esc(label) + badge +
+        '<div class="bar" style="width:' + pct + '%"></div></td>' +
+        '<td class="num">' + r.calls + '</td>' +
+        '<td class="num">' + (r.errors || 0) + '</td>' +
+        '<td class="num">' + money(r.cost) + '</td></tr>';
+    }).join('');
+    el.innerHTML = head + '<tbody>' + body + '</tbody>';
+  }
+
+  function renderProviders() {
+    var list = (data.registry.providers || []).slice().sort(function (a, b) {
+      return (b.configured - a.configured) || a.label.localeCompare(b.label);
+    });
+    document.getElementById('provStatus').innerHTML = list.map(function (p) {
+      var cls = p.configured ? 'pill ok' : 'pill off';
+      var txt = p.configured ? t('connected') : t('missing');
+      return '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:7px 0;border-bottom:1px solid var(--line)">' +
+        '<span>' + esc(p.label) + '</span><span class="' + cls + '">' + esc(txt) + '</span></div>';
+    }).join('');
+  }
+
+  function render() {
+    var s = data.summary;
+    document.getElementById('totCost').textContent = money(s.costUsd);
+    document.getElementById('totCalls').textContent = s.calls;
+    document.getElementById('totErrors').textContent = s.errors;
+    document.getElementById('totUnknown').textContent = s.unknownCost;
+
+    renderTable(document.getElementById('tblApp'), s.byApp, {});
+    renderTable(document.getElementById('tblUser'), s.byUser, { userTable: true });
+    renderTable(document.getElementById('tblProvider'), s.byProvider, {});
+    renderTable(document.getElementById('tblModel'), s.byModel, { modelTable: true });
+    renderTable(document.getElementById('tblTask'), s.byTask, {});
+    renderProviders();
+
+    document.getElementById('priceNote').textContent = t('priceNote') + data.pricesChecked + '.';
+    document.getElementById('content').classList.remove('hide');
+  }
+
+  function applyLang() {
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      var txt = el.getAttribute('data-' + lang);
+      if (txt.indexOf('<') !== -1) el.innerHTML = txt; else el.textContent = txt;
+    });
+    document.getElementById('langBtn').textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    document.title = lang === 'no'
+      ? 'AI-kostnader | Little Montessori Explorers'
+      : 'AI costs | Little Montessori Explorers';
+    if (data) render();
+  }
+
+  function fail(msg) {
+    document.getElementById('loading').classList.add('hide');
+    var e = document.getElementById('error');
+    e.textContent = msg;
+    e.classList.remove('hide');
+  }
+
+  function load(month) {
+    document.getElementById('loading').classList.remove('hide');
+    document.getElementById('error').classList.add('hide');
+    var url = '/api/ai-core/usage' + (month ? '?month=' + encodeURIComponent(month) : '');
+    fetch(url, { credentials: 'same-origin' })
+      .then(function (r) {
+        if (r.status === 401 || r.status === 403) { fail(t('noAccess')); return null; }
+        if (!r.ok) { fail(t('failedLoad')); return null; }
+        return r.json();
+      })
+      .then(function (j) {
+        if (!j) return;
+        data = j;
+        var sel = document.getElementById('monthSel');
+        if (!sel.options.length) {
+          sel.innerHTML = (j.months || [j.month]).map(function (m) {
+            return '<option value="' + m + '">' + m + '</option>';
+          }).join('');
+        }
+        sel.value = j.month;
+        document.getElementById('loading').classList.add('hide');
+        render();
+      })
+      .catch(function () { fail(t('failedLoad')); });
+  }
+
+  document.getElementById('langBtn').addEventListener('click', function () {
+    lang = (lang === 'no') ? 'en' : 'no';
+    localStorage.setItem('lme_lang', lang);
+    applyLang();
+  });
+  document.getElementById('monthSel').addEventListener('change', function () {
+    load(this.value);
+  });
+
+  applyLang();
+  load('');
+})();
+</script>
+
+</body>
+</html>
