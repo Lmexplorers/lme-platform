@@ -54,7 +54,7 @@ export async function onRequestPost(context) {
 
   let text;
   try {
-    text = await transcribeAudio(env, file);
+    text = await transcribeAudio(env, file, { email: user.email });
   } catch (e) {
     if (!gate.owner) await refundVideoFlow(context, gate.email, CREDIT_COSTS.transcribe);
     return json({ error: "Klarte ikke å transkribere lydnotatet.", detail: String((e && e.message) || e).slice(0, 200) }, 200);

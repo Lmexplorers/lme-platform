@@ -1,3 +1,4 @@
+import { logUsage, anthropicUnits } from "./_lib/ai-core/usage.js";
 /**
  * Nathalie AI — Cloudflare Pages Function
  *
@@ -191,6 +192,7 @@ export async function onRequestPost(context) {
   }
 
   try {
+    const t0 = Date.now();
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
@@ -223,6 +225,11 @@ export async function onRequestPost(context) {
     }
 
     const data = await res.json();
+    await logUsage(env, {
+      app: "nathalie-ai", task: "text", modelId: "claude-sonnet-5",
+      units: anthropicUnits(data), ms: Date.now() - t0,
+      status: data ? "ok" : "error", error: data ? "" : "claude_" + res.status,
+    });
     let reply =
       data.content
         ?.filter((b) => b.type === "text")

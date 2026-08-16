@@ -1,3 +1,4 @@
+import { logUsage, anthropicUnits } from "../../_lib/ai-core/usage.js";
 /**
  * LME FAQ Generator — Cloudflare Pages Function
  *
@@ -46,6 +47,7 @@ const DEFAULT_MODEL = "claude-sonnet-5";
 const CALL_TIMEOUT_MS = 20000;
 
 async function callClaude(env, system, userPrompt) {
+  const t0 = Date.now();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), CALL_TIMEOUT_MS);
   let resp;
@@ -78,6 +80,10 @@ async function callClaude(env, system, userPrompt) {
     throw new Error(`Anthropic ${resp.status}: ${t.replace(/\s+/g, " ").slice(0, 160)}`);
   }
   const data = await resp.json();
+  await logUsage(env, {
+    app: "faq", task: "text", modelId: env.CONTENT_TEXT_MODEL || DEFAULT_MODEL,
+    units: anthropicUnits(data), ms: Date.now() - t0, status: "ok",
+  });
   return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
 }
 

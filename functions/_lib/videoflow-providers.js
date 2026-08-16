@@ -13,6 +13,15 @@
  * like the Mia & Teo routes require confirm:true before spending real money.
  */
 
+import { logUsage, anthropicUnits } from "./ai-core/usage.js";
+
+// Hver *Generate*-funksjon under logger forbruket sitt til AI Core
+// (functions/_lib/ai-core/usage.js) etter at kallet er ferdig. Loggingen kan
+// aldri kaste, og endrer ingenting i hva funksjonene returnerer. Det siste,
+// valgfrie `meta`-argumentet bærer { email } slik at kostnaden kan knyttes
+// til riktig bruker; utelates det, logges kallet uten e-post.
+const APP = "videoflow";
+
 function fetchTimeout(url, opts, ms) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), ms || 55000);
@@ -57,14 +66,20 @@ export const TEXT_MODEL = "claude-sonnet-5";
 export function textProviderConfigured(env) { return !!(env && env.ANTHROPIC_API_KEY); }
 
 /** PAID CALL (CREDIT_COSTS.script). Returns parsed JSON from Claude, or throws. */
-export async function textGenerateJSON(env, { system, user, maxTokens }) {
+export async function textGenerateJSON(env, { system, user, maxTokens }, meta) {
   if (!env.ANTHROPIC_API_KEY) throw new Error("missing_anthropic_key");
+  const t0 = Date.now();
   const res = await fetchTimeout("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "Content-Type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
     body: JSON.stringify({ model: TEXT_MODEL, max_tokens: maxTokens || 3000, system, messages: [{ role: "user", content: user }] }),
   }, 55000);
   const data = await res.json().catch(() => null);
+  await logUsage(env, {
+    app: APP, task: "text", modelId: TEXT_MODEL, email: (meta && meta.email) || "",
+    units: anthropicUnits(data), ms: Date.now() - t0,
+    status: res.ok && data ? "ok" : "error", error: res.ok ? "" : "claude_" + res.status,
+  });
   if (!res.ok || !data) throw new Error("claude_" + res.status);
   const txt = Array.isArray(data.content) ? data.content.map((c) => c.text || "").join("") : "";
   let t = txt.trim().replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "").trim();
@@ -122,10 +137,21 @@ async function genGeminiImage(env, prompt, size) {
 }
 
 /** PAID CALL (CREDIT_COSTS.image). size defaults to 16:9. */
-export async function imageGenerateScene(env, prompt, size) {
+export async function imageGenerateScene(env, prompt, size, meta) {
   const sz = size || "1536x1024";
+  const t0 = Date.now();
+  const openaiModel = env.IMAGE_OPENAI_MODEL || env.IMAGE_MODEL || "gpt-image-1";
+  let modelId = openaiModel;
   let out = await genOpenAIImage(env, prompt, sz);
-  if (out.error) out = await genGeminiImage(env, prompt, sz);
+  if (out.error) {
+    modelId = env.GEMINI_IMAGE_MODEL || "gemini-2.5-flash-image";
+    out = await genGeminiImage(env, prompt, sz);
+  }
+  await logUsage(env, {
+    app: APP, task: "image", modelId: modelId, email: (meta && meta.email) || "",
+    units: { images: 1 }, ms: Date.now() - t0,
+    status: out.error ? "error" : "ok", error: out.error || "",
+  });
   if (out.error) throw new Error(out.error);
   return out;
 }
@@ -169,8 +195,9 @@ function findStatus(o) {
 }
 
 /** PAID CALL (CREDIT_COSTS.video). imageUrl must be a publicly reachable https URL (the scene's generated image). */
-export async function videoGenerateSubmit(env, imageUrl, motionPrompt) {
+export async function videoGenerateSubmit(env, imageUrl, motionPrompt, meta) {
   if (!videoProviderConfigured(env)) throw new Error("missing_higgsfield_keys");
+  const t0 = Date.now();
   const r = await fetchTimeout(HF_BASE + HF_SUBMIT_PATH, {
     method: "POST",
     headers: { Authorization: hfAuth(env), "Content-Type": "application/json", Accept: "application/json" },
@@ -178,6 +205,11 @@ export async function videoGenerateSubmit(env, imageUrl, motionPrompt) {
   }, 20000);
   const text = await r.text();
   let data; try { data = JSON.parse(text); } catch (e) { data = null; }
+  await logUsage(env, {
+    app: APP, task: "video", modelId: VIDEO_PROVIDER.model, email: (meta && meta.email) || "",
+    units: { clips: 1 }, ms: Date.now() - t0,
+    status: r.ok ? "ok" : "error", error: r.ok ? "" : "higgsfield_" + r.status,
+  });
   if (!r.ok) throw new Error("higgsfield_" + r.status);
   const id = data && (data.request_id || data.id || data.generation_id || (Array.isArray(data.jobs) && data.jobs[0] && data.jobs[0].id));
   const statusUrl = data && (data.status_url || data.statusUrl);
@@ -255,14 +287,22 @@ function friendlyElevenLabsError(status, bodyText) {
 }
 
 /** PAID CALL (estimateVoiceCredits(text)). Returns {bytes, contentType, words, durationSec}. */
-export async function voiceGenerateLine(env, text, voiceId, lang) {
+export async function voiceGenerateLine(env, text, voiceId, lang, meta) {
   if (!env.ELEVENLABS_API_KEY) throw new Error("ElevenLabs-nøkkel mangler i oppsettet (ELEVENLABS_API_KEY).");
   const vid = voiceId || env.ELEVENLABS_VOICE_ID || DEFAULT_VOICE_ID;
+  const t0 = Date.now();
+  const spoken = String(text || "").slice(0, 900);
+  const voiceModel = env.ELEVENLABS_MODEL_ID || "eleven_turbo_v2_5";
   const r = await fetchTimeout("https://api.elevenlabs.io/v1/text-to-speech/" + encodeURIComponent(vid) + "/with-timestamps", {
     method: "POST",
     headers: { "xi-api-key": env.ELEVENLABS_API_KEY, "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({ text: String(text || "").slice(0, 900), model_id: env.ELEVENLABS_MODEL_ID || "eleven_turbo_v2_5", language_code: lang === "no" ? "no" : "en", voice_settings: { stability: 0.5, similarity_boost: 0.75 } }),
+    body: JSON.stringify({ text: spoken, model_id: voiceModel, language_code: lang === "no" ? "no" : "en", voice_settings: { stability: 0.5, similarity_boost: 0.75 } }),
   }, 30000);
+  await logUsage(env, {
+    app: APP, task: "voice", modelId: voiceModel, email: (meta && meta.email) || "",
+    units: { chars: spoken.length }, ms: Date.now() - t0,
+    status: r.ok ? "ok" : "error", error: r.ok ? "" : "elevenlabs_" + r.status,
+  });
   if (!r.ok) {
     const bodyText = await r.text().catch(() => "");
     throw new Error(friendlyElevenLabsError(r.status, bodyText));
@@ -282,16 +322,24 @@ export async function voiceGenerateLine(env, text, voiceId, lang) {
 export function transcribeProviderConfigured(env) { return !!(env && env.OPENAI_API_KEY); }
 
 /** PAID CALL (CREDIT_COSTS.transcribe). audioFile: a Blob/File from FormData. Returns transcript text. */
-export async function transcribeAudio(env, audioFile) {
+export async function transcribeAudio(env, audioFile, meta) {
   if (!env.OPENAI_API_KEY) throw new Error("missing_openai_key");
+  const t0 = Date.now();
+  const model = env.OPENAI_TRANSCRIBE_MODEL || "whisper-1";
   const fd = new FormData();
   fd.append("file", audioFile, audioFile.name || "note.webm");
-  fd.append("model", env.OPENAI_TRANSCRIBE_MODEL || "whisper-1");
+  fd.append("model", model);
   const r = await fetchTimeout("https://api.openai.com/v1/audio/transcriptions", {
     method: "POST",
     headers: { Authorization: "Bearer " + env.OPENAI_API_KEY },
     body: fd,
   }, 60000);
+  await logUsage(env, {
+    app: APP, task: "transcribe", modelId: model, email: (meta && meta.email) || "",
+    // Lydnoten er begrenset til 3 minutter i ruten, så det er taket vi priser mot.
+    units: { minutes: 3 }, ms: Date.now() - t0,
+    status: r.ok ? "ok" : "error", error: r.ok ? "" : "openai_transcribe_" + r.status,
+  });
   if (!r.ok) throw new Error("openai_transcribe_" + r.status);
   const data = await r.json();
   if (!data.text) throw new Error("openai_transcribe_no_text");

@@ -1,3 +1,4 @@
+import { logUsage, anthropicUnits } from "../_lib/ai-core/usage.js";
 /**
  * LME oversetting — oversetter brukerskrevet chat-innhold til engelsk i
  * farten, slik at gruppene/feeden kan leses paa engelsk. Bruker samme
@@ -80,6 +81,7 @@ export async function onRequestPost(context) {
   // 2) oversett resten med Anthropic (i én forespørsel)
   if (need.length && env.ANTHROPIC_API_KEY) {
     try {
+      const t0 = Date.now();
       const res = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
@@ -91,6 +93,11 @@ export async function onRequestPost(context) {
         }),
       });
       const data = await res.json().catch(() => null);
+      await logUsage(env, {
+        app: "oversettelse", task: "text", modelId: "claude-sonnet-5",
+        units: anthropicUnits(data), ms: Date.now() - t0,
+        status: data ? "ok" : "error", error: data ? "" : "claude_" + res.status,
+      });
       const txt = data && data.content && data.content[0] && data.content[0].text;
       if (txt) {
         let arr = null;

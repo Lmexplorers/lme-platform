@@ -77,7 +77,7 @@ export async function onRequestPost(context) {
 
   let out;
   try {
-    out = await voiceGenerateLine(env, line.text, voiceId);
+    out = await voiceGenerateLine(env, line.text, voiceId, { email: gate.user.email });
   } catch (e) {
     // voiceGenerateLine already throws a user-facing, Norwegian message
     // (e.g. "ElevenLabs-kontoen har ikke nok kreditter …"), surface it

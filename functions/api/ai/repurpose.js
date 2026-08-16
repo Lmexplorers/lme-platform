@@ -1,3 +1,4 @@
+import { logUsage, anthropicUnits } from "../../_lib/ai-core/usage.js";
 /**
  * LME "Gjør synlig" — omform én kilde til flere kanaler. Cloudflare Pages Function.
  *
@@ -68,6 +69,7 @@ const GROUPS = [
 ];
 
 async function callClaude(env, system, userPrompt, maxTokens) {
+  const t0 = Date.now();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), CALL_TIMEOUT_MS);
   let resp;
@@ -99,6 +101,10 @@ async function callClaude(env, system, userPrompt, maxTokens) {
     throw new Error("Anthropic " + resp.status + ": " + t.replace(/\s+/g, " ").slice(0, 160));
   }
   const data = await resp.json();
+  await logUsage(env, {
+    app: "autopilot", task: "text", modelId: MODEL,
+    units: anthropicUnits(data), ms: Date.now() - t0, status: "ok",
+  });
   return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
 }
 

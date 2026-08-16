@@ -92,7 +92,7 @@ export async function onRequestPost(context) {
 
   let raw;
   try {
-    raw = await textGenerateJSON(env, { system: sys, user: usr, maxTokens: 2500 });
+    raw = await textGenerateJSON(env, { system: sys, user: usr, maxTokens: 2500 }, { email: user.email });
   } catch (e) {
     if (!gate.owner) await refundVideoFlow(context, gate.email, CREDIT_COSTS.script);
     return json({ error: "Klarte ikke å lage manuset.", detail: String((e && e.message) || e).slice(0, 200) }, 200);

@@ -1,3 +1,4 @@
+import { logUsage, anthropicUnits } from "../_lib/ai-core/usage.js";
 import { sessionUser } from "../_lib/access.js";
 /**
  * LME Film-orkestrator, steg 1: manus.
@@ -54,6 +55,7 @@ export async function onRequestPost(context) {
   const usr = "Idea: " + idea + "\nLearning goal: " + (goal || "(gentle everyday learning)") + "\nNumber of scenes: " + n;
 
   let data;
+  const t0 = Date.now();
   try {
     const r = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -66,6 +68,11 @@ export async function onRequestPost(context) {
       }),
     });
     data = await r.json().catch(() => null);
+    await logUsage(env, {
+      app: "film-manus", task: "text", modelId: "claude-sonnet-5", email: (user && user.email) || "",
+      units: anthropicUnits(data), ms: Date.now() - t0,
+      status: data ? "ok" : "error", error: data ? "" : "claude_" + r.status,
+    });
   } catch (e) {
     return json({ error: "Kom ikke i kontakt med manus-modellen." }, 502);
   }

@@ -20,6 +20,15 @@
  * not an invoice, and check the provider dashboard for the real figure.
  */
 
+import { logUsage, anthropicUnits } from "./ai-core/usage.js";
+
+// Hver *Generate*-funksjon under logger forbruket sitt til AI Core
+// (functions/_lib/ai-core/usage.js) etter at kallet er ferdig. Loggingen kan
+// aldri kaste, og endrer ingenting i hva funksjonene returnerer. Det siste,
+// valgfrie `meta`-argumentet bærer { email } slik at kostnaden kan knyttes
+// til riktig bruker; utelates det, logges kallet uten e-post.
+const APP = "mia-teo";
+
 function fetchTimeout(url, opts, ms) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), ms || 55000);
@@ -52,14 +61,20 @@ export function estimateTextCost(maxTokens) {
 }
 
 /** PAID CALL. Returns parsed JSON from Claude, or throws. */
-export async function textGenerateJSON(env, { system, user, maxTokens }) {
+export async function textGenerateJSON(env, { system, user, maxTokens }, meta) {
   if (!env.ANTHROPIC_API_KEY) throw new Error("missing_anthropic_key");
+  const t0 = Date.now();
   const res = await fetchTimeout("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "Content-Type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
     body: JSON.stringify({ model: TEXT_PROVIDER.model, max_tokens: maxTokens || 4000, system, messages: [{ role: "user", content: user }] }),
   }, 55000);
   const data = await res.json().catch(() => null);
+  await logUsage(env, {
+    app: APP, task: "text", modelId: TEXT_PROVIDER.model, email: (meta && meta.email) || "",
+    units: anthropicUnits(data), ms: Date.now() - t0,
+    status: res.ok && data ? "ok" : "error", error: res.ok ? "" : "claude_" + res.status,
+  });
   if (!res.ok || !data) throw new Error("claude_" + res.status);
   const txt = Array.isArray(data.content) ? data.content.map((c) => c.text || "").join("") : "";
   let t = txt.trim().replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "").trim();
@@ -131,10 +146,20 @@ async function genGeminiImage(env, prompt, size) {
 }
 
 /** PAID CALL. size: "1536x1024" (16:9 keyframe, default) | "1024x1536" (9:16) | "1024x1024". */
-export async function imageGenerateKeyframe(env, prompt, size) {
+export async function imageGenerateKeyframe(env, prompt, size, meta) {
   const sz = size || "1536x1024";
+  const t0 = Date.now();
+  let modelId = env.IMAGE_OPENAI_MODEL || env.IMAGE_MODEL || "gpt-image-1";
   let out = await genOpenAIImage(env, prompt, sz);
-  if (out.error) out = await genGeminiImage(env, prompt, sz);
+  if (out.error) {
+    modelId = env.GEMINI_IMAGE_MODEL || "gemini-2.5-flash-image";
+    out = await genGeminiImage(env, prompt, sz);
+  }
+  await logUsage(env, {
+    app: APP, task: "image", modelId: modelId, email: (meta && meta.email) || "",
+    units: { images: 1 }, ms: Date.now() - t0,
+    status: out.error ? "error" : "ok", error: out.error || "",
+  });
   if (out.error) throw new Error(out.error);
   return out; // { bytes, contentType }
 }
@@ -182,8 +207,9 @@ function findStatus(o) {
 }
 
 /** PAID CALL. imageUrl must be a publicly reachable https URL (the approved keyframe). */
-export async function videoGenerateSubmit(env, imageUrl, motionPrompt) {
+export async function videoGenerateSubmit(env, imageUrl, motionPrompt, meta) {
   if (!videoProviderConfigured(env)) throw new Error("missing_higgsfield_keys");
+  const t0 = Date.now();
   const r = await fetchTimeout(HF_BASE + HF_SUBMIT_PATH, {
     method: "POST",
     headers: { Authorization: hfAuth(env), "Content-Type": "application/json", Accept: "application/json" },
@@ -191,6 +217,11 @@ export async function videoGenerateSubmit(env, imageUrl, motionPrompt) {
   }, 20000);
   const text = await r.text();
   let data; try { data = JSON.parse(text); } catch (e) { data = null; }
+  await logUsage(env, {
+    app: APP, task: "video", modelId: VIDEO_PROVIDER.model, email: (meta && meta.email) || "",
+    units: { clips: 1 }, ms: Date.now() - t0,
+    status: r.ok ? "ok" : "error", error: r.ok ? "" : "higgsfield_" + r.status,
+  });
   if (!r.ok) throw new Error("higgsfield_" + r.status);
   const id = data && (data.request_id || data.id || data.generation_id || (Array.isArray(data.jobs) && data.jobs[0] && data.jobs[0].id));
   const statusUrl = data && (data.status_url || data.statusUrl);
@@ -249,13 +280,21 @@ function friendlyElevenLabsError(status, bodyText) {
 }
 
 /** PAID CALL. voiceId from miateo-bible.js voiceIdFor(env, speakerId). */
-export async function voiceGenerateLine(env, text, voiceId) {
+export async function voiceGenerateLine(env, text, voiceId, meta) {
   if (!env.ELEVENLABS_API_KEY || !voiceId) throw new Error("ElevenLabs-stemme mangler i oppsettet (ELEVENLABS_API_KEY / stemme-ID).");
+  const t0 = Date.now();
+  const spoken = String(text || "").slice(0, 600);
+  const voiceModel = env.ELEVENLABS_MODEL_ID || VOICE_PROVIDER.model;
   const r = await fetchTimeout("https://api.elevenlabs.io/v1/text-to-speech/" + voiceId, {
     method: "POST",
     headers: { "xi-api-key": env.ELEVENLABS_API_KEY, "Content-Type": "application/json", Accept: "audio/mpeg" },
-    body: JSON.stringify({ text: String(text || "").slice(0, 600), model_id: env.ELEVENLABS_MODEL_ID || VOICE_PROVIDER.model, voice_settings: { stability: 0.45, similarity_boost: 0.8, style: 0.25 } }),
+    body: JSON.stringify({ text: spoken, model_id: voiceModel, voice_settings: { stability: 0.45, similarity_boost: 0.8, style: 0.25 } }),
   }, 20000);
+  await logUsage(env, {
+    app: APP, task: "voice", modelId: voiceModel, email: (meta && meta.email) || "",
+    units: { chars: spoken.length }, ms: Date.now() - t0,
+    status: r.ok ? "ok" : "error", error: r.ok ? "" : "elevenlabs_" + r.status,
+  });
   if (!r.ok) {
     const bodyText = await r.text().catch(() => "");
     throw new Error(friendlyElevenLabsError(r.status, bodyText));
