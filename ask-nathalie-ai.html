@@ -250,6 +250,11 @@
     return div.innerHTML;
   }
 
+  // Samtalen så langt. Nathalie får hele tråden, ikke bare siste spørsmål,
+  // så hun kan svare på oppfølgingsspørsmål ("og hva med de yngste?").
+  // Vi holder på de siste 20, som er godt innenfor det endepunktet godtar.
+  const historikk = [];
+
   async function send() {
     const text = inputEl.value.trim();
     if (!text) return;
@@ -259,15 +264,29 @@
     addMessage(text, true);
     sendBtn.disabled = true;
 
+    historikk.push({ role: 'user', content: text });
+    if (historikk.length > 20) historikk.splice(0, historikk.length - 20);
+
     try {
-      const response = await fetch('/api/ask-nathalie', {
+      const response = await fetch('/ask-nathalie-ai', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: text, lang: lang })
+        body: JSON.stringify({ messages: historikk, lang: lang })
       });
       const data = await response.json();
-      if (data.answer) addMessage(data.answer, false);
+      if (data.reply) {
+        addMessage(data.reply, false);
+        historikk.push({ role: 'assistant', content: data.reply });
+      } else if (data.error) {
+        // Vis den ekte beskjeden, for eksempel at døgngrensen er nådd.
+        // Før sto det bare "prøv igjen om litt", uansett hva som var galt.
+        addMessage(data.error, false);
+        historikk.pop();
+      } else {
+        throw new Error('tomt svar');
+      }
     } catch(e) {
+      historikk.pop();
       const errMsg = lang === 'no'
         ? 'Beklager, jeg kunne ikke svare akkurat nå. Prøv igjen om litt.'
         : 'Sorry, I couldn\'t respond right now. Try again in a moment.';

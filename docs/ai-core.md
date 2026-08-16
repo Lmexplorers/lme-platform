@@ -81,7 +81,42 @@ prosent billigere per svar**. Ingen endring i hva Nathalie svarer.
 Regnestykket i `registry.js` teller bufrede tokens for seg, så
 `/ai-kostnader` fortsatt viser sannheten: `cacheReadTokens` prises til 0,1
 ganger vanlig inndata, `cacheWriteTokens` til 1,25 ganger. Uten det ville
-cachede kall sett billigere ut enn de er.
+cachede kall sett billigere ut enn de er. Det gjelder alle Claude-kall på
+plattformen, siden alle logger via `anthropicUnits()`.
+
+#### Alle 18 Claude-kallene, gjennomgått
+
+Caching lønner seg bare når den faste starten er stor nok til at Anthropic
+i det hele tatt buffrer den. Grensen er 1 024 tokens på Sonnet 5 og 4 096 på
+Haiku 4.5. Er prompten kortere, ignoreres merket, og gevinsten er null. Alle
+kallene ble målt:
+
+| Sted | Fast start | Cachet |
+|---|---|---|
+| `functions/nathalie-ai.js` | ~2 750 tokens | **Ja**, 51 prosent billigere |
+| `ai-visibility-worker.js` | ~1 000 tokens (`BRAND_CONTEXT` + `GEO_RULES`) | **Ja**, se nedenfor |
+| `api/ai/content.js`, `api/ai/faq.js`, `api/ai/repurpose.js` | ~640 (`BRAND_CONTEXT`) | Nei, under grensen |
+| `api/podcast`, `api/utfordring-feedback`, `api/bookly`, `api/film-script` | 310 til 625 | Nei |
+| `api/blog`, `api/content`, `api/page-i18n`, `api/translate`, `api/ai/schema`, `ai-generate`, videoflow- og miateo-providers | 30 til 253 | Nei |
+
+De som står som "nei" er ikke glemt, de er for korte til at caching gjør noe.
+Vokser en av dem forbi tusen tokens, er dette tabellen å se på igjen.
+
+### Promptcache i AI Visibility-workeren
+
+Workeren kjører åtte eller flere oppgaver rett etter hverandre i én kjøring,
+og hver eneste av dem starter systemprompten med `BRAND_CONTEXT`. Tre legger
+`GEO_RULES` rett etter. Uten cache betales den samme merkevareteksten åtte
+ganger på under et minutt.
+
+`systemBlocks()` i `callClaude()` kjenner igjen den delte starten og skiller
+den ut som en bufret blokk, med den oppgavespesifikke setningen etter. Ett
+sted i koden, ingen av de åtte oppgavene måtte endres. Kjenner den ikke igjen
+starten, sendes prompten uendret videre, så en fremtidig oppgave med en annen
+form mister bare besparelsen i stedet for å gå i stykker.
+
+Merk: workeren logger ikke til den felles forbruksloggen, så disse kallene
+vises ikke på `/ai-kostnader`. Det er en egen mangel, ikke noe caching endrer.
 
 ### `functions/api/ai-core/usage.js`
 
