@@ -6,16 +6,24 @@
  * "tilgjengelig for alle" kan ikke bety "gratis uten tak", så hvert nivå har
  * sin egen romslige grense.
  *
- * Fire nivåer:
+ * Fem nivåer:
  *
  *   eier       Renate. Ingen grense, i tråd med regelen om at eier aldri
  *              betaler for sitt eget produkt.
+ *   medlem     Betaler for Inner Circle. Salgssiden lover "Nathalie AI,
+ *              spør så mye du vil", og da må grensen være så høy at et
+ *              menneske aldri treffer den. Uten dette fikk et betalende
+ *              medlem nøyaktig samme grense som en gratis konto, altså 60
+ *              spørsmål i døgnet, og lovnaden på salgssiden var ikke sann.
  *   kurs       Har kjøpt signaturkurset. Høy grense og en tilspisset
  *              Nathalie som er rettet mot å skape og selge, ikke bare
  *              Montessori.
  *   innlogget  Har konto. God grense.
  *   gjest      Ikke innlogget. Romslig nok til at ingen ekte leser merker
  *              den, lav nok til at et skript ikke tømmer budsjettet.
+ *
+ * Er du både medlem og kurskjøper, får du den høyeste grensen OG den
+ * tilspissede Nathalie. Nivåene utelukker ikke hverandre.
  *
  * ==========================================================================
  * SETT OPP SIGNATURKURSET FØR "kurs"-NIVÅET VIRKER
@@ -30,12 +38,13 @@
  *   NATHALIE_LIMIT_GUEST   (standard 20 per døgn)
  *   NATHALIE_LIMIT_USER    (standard 60)
  *   NATHALIE_LIMIT_COURSE  (standard 200)
+ *   NATHALIE_LIMIT_MEMBER  (standard 300)
  */
 
-import { sessionUser, isOwner } from "../access.js";
+import { sessionUser, isOwner, getAccess } from "../access.js";
 import { getPurchases } from "../purchases.js";
 
-const DEFAULTS = { guest: 20, user: 60, course: 200 };
+const DEFAULTS = { guest: 20, user: 60, course: 200, member: 300 };
 
 function num(v, fallback) {
   const n = parseInt(v, 10);
@@ -65,6 +74,18 @@ export async function hasSignatureCourse(env, email) {
   }
 }
 
+/** Betaler denne brukeren for Inner Circle akkurat nå. */
+export async function isMember(context) {
+  try {
+    const access = await getAccess(context);
+    return !!(access && access.active && access.tier);
+  } catch (e) {
+    // Klarer vi ikke lese medlemskapet, behandler vi henne som innlogget.
+    // Da får hun en litt lavere grense, ikke en stengt dør.
+    return false;
+  }
+}
+
 /**
  * Hvilket nivå denne forespørselen hører til, og hvor mange spørsmål nivået
  * gir per døgn.
@@ -78,6 +99,7 @@ export async function nathalieTier(context) {
     guest: num(env && env.NATHALIE_LIMIT_GUEST, DEFAULTS.guest),
     user: num(env && env.NATHALIE_LIMIT_USER, DEFAULTS.user),
     course: num(env && env.NATHALIE_LIMIT_COURSE, DEFAULTS.course),
+    member: num(env && env.NATHALIE_LIMIT_MEMBER, DEFAULTS.member),
   };
 
   let user = null;
@@ -89,8 +111,18 @@ export async function nathalieTier(context) {
   if (isOwner(user)) {
     return { tier: "eier", email: user.email, limit: 0, sharpened: true };
   }
-  if (await hasSignatureCourse(env, user.email)) {
-    return { tier: "kurs", email: user.email, limit: limits.course, sharpened: true };
-  }
-  return { tier: "innlogget", email: user.email, limit: limits.user, sharpened: false };
+
+  // Medlemskap og kurskjøp utelukker ikke hverandre. Vi sjekker begge, tar
+  // den høyeste grensen, og lar kurset avgjøre om Nathalie skal tilspisses.
+  const [kurs, medlem] = await Promise.all([
+    hasSignatureCourse(env, user.email),
+    isMember(context),
+  ]);
+
+  let tier = "innlogget";
+  let limit = limits.user;
+  if (medlem && limits.member > limit) { tier = "medlem"; limit = limits.member; }
+  if (kurs && limits.course > limit) { tier = "kurs"; limit = limits.course; }
+
+  return { tier: tier, email: user.email, limit: limit, sharpened: kurs };
 }
