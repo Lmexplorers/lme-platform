@@ -117,13 +117,26 @@ uten noen som helst måling: `/ai-generate`, `/nathalie-ai`,
 `/api/bookly/*`, `/api/podcast/generate`, `/api/film-script`, `/api/tts`,
 `/api/utfordring-feedback`, `/api/episode`.
 
-To ting i system E bør nevnes eksplisitt, ikke fordi noe er ødelagt, men fordi
-det er en åpen kostnadsdør:
+Fire ting i system E bør nevnes eksplisitt, ikke fordi noe er ødelagt, men
+fordi det er en åpen kostnadsdør:
 
-1. `/ai-generate` har ingen innloggingssjekk og `Access-Control-Allow-Origin: *`.
-   Hvem som helst som finner adressen kan bruke plattformens Anthropic-nøkkel.
-2. `/api/ai/content`, `/api/ai/repurpose` og `/api/blog` (POST) har heller
-   ingen sesjonssjekk.
+1. `/ai-generate` hadde ingen innloggingssjekk og `Access-Control-Allow-Origin: *`.
+   Hvem som helst som fant adressen kunne bruke plattformens Anthropic-nøkkel.
+   **Lukket i fase 1.**
+2. `/api/ai/faq` og `/api/ai/schema` hadde ingen sesjonssjekk, og det viste
+   seg i fase 3 at ingen side i plattformen kaller dem i det hele tatt:
+   AI Visibility-appen bruker den separate workeren (`ai-visibility-worker.js`).
+   De er altså foreldreløse duplikater som likevel kunne bruke nøkkelen.
+   **Lukket i fase 3.**
+3. `/api/ai/content` og `/api/ai/repurpose` har fortsatt ingen sesjonssjekk.
+4. `/nathalie-ai` er offentlig med vilje og er lagt inn på 51 sider. Den er
+   ikke en glipp, men den har heller ingen grense.
+
+**Rettelse til en tidligere versjon av dette dokumentet:** `/api/blog` (POST)
+ble her først listet som uten sesjonssjekk. Det var upresist. Ruten krever
+redigeringspassordet (`COURSE_EDIT_PASSWORD`) for alle handlinger, inkludert
+`generate`, så den har passordbeskyttelse, ikke sesjonsbeskyttelse. Det er en
+svakere beskyttelse enn innlogging, men den er ikke åpen.
 
 Ingen av systemene logger hva et kall faktisk kostet. Det finnes ingen sted i
 kodebasen som skriver ned kroner, dollar eller tokenforbruk. Kostnaden er bare
@@ -490,8 +503,7 @@ tekst.
 
 1. **Går vi for planen slik den står?** Fase 1 og 2 gir kostnadsoversikt uten
    å røre noen fungerende app, og er trygge å starte med uansett.
-2. **Skal `/ai-generate` få innloggingskrav?** Jeg anbefaler ja, men med
-   logging først i noen dager, så vi ser hvem som bruker den.
+2. **Skal `/ai-generate` få innloggingskrav?** Ja, gjort i fase 1.
 3. **Én ny R2-bøtte `AI_LIBRARY`, eller gjenbruk av `VIDEOFLOW_MEDIA`?**
    Gjenbruk er raskest, egen bøtte er ryddigst.
 4. **Hvilken musikkleverandør?** Dette er det eneste nye abonnementet planen
