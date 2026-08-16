@@ -100,12 +100,77 @@ og vil ha konkret hjelp til å komme i mål, ikke en introduksjon til LME.
    Teksten der er et utgangspunkt, ikke Renates egne ord, og bør gjøres til
    hennes og tilpasses det kurset faktisk lover.
 
+### `functions/_lib/ai-core/guard.js`, vern mot dobbeltkall
+
+Det dyreste som skjer er ikke en generering, men den samme genereringen to
+ganger: et dobbelttrykk, en treg mobil som sender skjemaet på nytt, en "prøv
+igjen" mens det første kallet fortsatt går. Hver av dem koster full pris og
+gir nøyaktig samme svar.
+
+Filen gir to nivåer, med vilje forskjellige:
+
+| Nivå | Vindu | Nøkkel | Hva den stopper |
+| --- | --- | --- | --- |
+| Kort | 90 sekunder | fingeravtrykk av bruker og inndata | dobbelttrykket |
+| Langt | 24 timer | `idempotencyKey` fra appen | uttrykkelig samme forsøk |
+
+Det korte vinduet er valgt bevisst. En bevisst ny generering et minutt senere
+er en helt legitim ting å ville gjøre, og skal ikke stoppes.
+
+Tre tilstander: `new` (gå videre), `running` (et likt kall pågår, svar 409) og
+`done` (vi har svaret fra sist, gi det tilbake gratis). Et mislykket kall
+kaller `releaseCall` og kan prøves på nytt umiddelbart, ellers ville vernet
+blitt en felle.
+
+### `functions/_lib/ai-core/breaker.js`, strømbryter per leverandør
+
+Når en leverandør er nede, er det verste vi kan gjøre å fortsette å kalle den.
+Fire feil på rad setter leverandøren på pause i fem minutter, og ruteren går
+rett til reserven i stedet.
+
+Viktig detalj: `isProviderFault()` skiller mellom en leverandør som er nede og
+et dårlig svar. Ugyldig JSON fra modellen, manglende nøkkel og 4xx teller
+ikke. Ellers kunne ett dårlig prompt i én app satt Claude på pause for hele
+plattformen. Bare tidsavbrudd, nettverksfeil, 429 og 5xx teller.
+
+### `functions/_lib/ai-core/router.js`, primær og reserve
+
+`pick(env, oppgave)` gir listen over modeller som bør prøves, i rekkefølge.
+Modeller uten nøkkel faller ut, og det samme gjør leverandører med åpen
+strømbryter. Er alt utilgjengelig, får kalleren likevel listen tilbake med
+`degraded: true`: å prøve en leverandør som kanskje er nede er bedre enn å
+nekte brukeren å prøve i det hele tatt.
+
+Ruteren velger ikke noe nytt. Den beskriver rekkefølgen som allerede står i
+koden, samlet ett sted, i `CHAINS`.
+
+### `functions/_lib/ai-core/jobs.js`, felles jobbstatus
+
+Én jobb, én id, én tilstand (`pending`, `running`, `done`, `failed`), uansett
+hvilken app som startet genereringen. Erstatter ingenting i dag: rutene som
+allerede poller fortsetter som før, og skriver i tillegg hit etter hvert som
+de tas i bruk. Dette er grunnlaget den sammenhengende arbeidsflyten trenger
+for å vise framdrift på tvers av apper.
+
+### Første rute på vernet: `/api/videoflow/script`
+
+Fase 4 er tatt i bruk av én rute først, slik planen sier. To ting sitter foran
+det betalte kallet, og ingen av dem endrer den vanlige veien gjennom:
+
+1. Strømbryteren sjekkes **før** kreditten trekkes. Er Anthropic nede, får
+   brukeren beskjed uten å bli belastet.
+2. Dobbeltkall-vernet gjør to trykk til én generering. Trykk nummer to får
+   samme prosjekt tilbake, merket `reused: true`, i stedet for en ny regning.
+
+Alt er fail-open. Svarer ikke KV, trer begge til side og kallet går som før.
+
 ### `/ai-kostnader`
 
 Administrasjonssiden. Totaler øverst, deretter tabeller per app, bruker,
 leverandør, modell og innholdstype, sortert med det dyreste først. Nederst en
 oversikt over hvilke leverandører som har nøkkel i oppsettet (selve nøkkelen
-vises aldri).
+vises aldri), og et driftspanel som viser hvilken modell som brukes til hver
+oppgave, hva som står klart bak den, og om noen leverandør er satt på pause.
 
 Tospråklig med `data-no` / `data-en` og samme `lme_lang`-nøkkel som resten av
 plattformen. Playpen Sans på overskrifter, Sasson Montessori på all annen
@@ -192,7 +257,22 @@ Ingen eksisterende KV-nøkkel er endret, og ingen kredittsaldo er flyttet.
 
 ## Det som gjenstår
 
-Fase 4 til 7 i `docs/ai-core-arkitektur.md`: ruteren med
-reservemodell og dobbeltkall-vern, det felles filbiblioteket, migreringen av
-de fire målappene, og til slutt den sammenhengende arbeidsflyten fra idé til
+Fase 5 til 7 i `docs/ai-core-arkitektur.md`: det felles fil- og
+prosjektbiblioteket med `handoff` mellom apper, migreringen av de fire
+målappene, og til slutt den sammenhengende arbeidsflyten fra idé til
 publisering.
+
+Fase 4 er bygget, men bare tatt i bruk av `/api/videoflow/script`. De andre
+betalte rutene kan legge på det samme vernet én om gangen, uten at noe annet
+må endres.
+
+To ting venter fortsatt på Renate:
+
+- `SIGNATURE_COURSE_IDS` må settes i Cloudflare-innstillingene før den
+  tilspissede Nathalie kan slå inn.
+- `SHARPENED_INSTRUCTIONS` i `functions/nathalie-ai.js` er et utkast og bør
+  bli hennes egne ord.
+
+Og én beslutning er tatt, men ikke utført: de fire kredittvalutaene skal bli
+én. Det er billigst å gjøre nå, mens ingen har saldo, men det tar borti
+Stripe-webhooken og prissidene, så det gjøres ikke uten et eget ja.

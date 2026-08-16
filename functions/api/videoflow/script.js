@@ -8,18 +8,30 @@
  * see scene-image.js) so switching a project's visual style doesn't need a
  * new script call.
  *
- * POST /api/videoflow/script   { idea, style, voiceId, lang, projectId?, confirm }
+ * POST /api/videoflow/script   { idea, style, voiceId, lang, projectId?, confirm, idempotencyKey? }
  *   confirm !== true -> dry run: { paid:true, creditCost, systemPrompt, userPrompt }
  *   confirm === true -> real Claude call, debits CREDIT_COSTS.script credits
  *                     -> { ok:true, project }
  *
  * Any logged-in user (this is a sellable, multi-user app, not owner-only).
+ *
+ * This is the first route on AI Core's fase 4 protection (see
+ * docs/ai-core-arkitektur.md). Two things sit in front of the paid call and
+ * neither changes the happy path:
+ *   - the circuit breaker (functions/_lib/ai-core/breaker.js) is checked
+ *     BEFORE credits are debited, so an Anthropic outage costs nothing;
+ *   - double-call protection (functions/_lib/ai-core/guard.js) collapses a
+ *     double-tap into one generation, answering the second one with the
+ *     same project ({ reused: true }) instead of charging for it twice.
+ * Both are fail-open: if KV is unavailable they step aside.
  */
 import { sessionUser } from "../../_lib/access.js";
 import { enforceVideoFlow, refundVideoFlow } from "../../_lib/videoflow-access.js";
 import { textGenerateJSON, textProviderConfigured, CREDIT_COSTS } from "../../_lib/videoflow-providers.js";
 import { styleById, DEFAULT_STYLE } from "../../_lib/videoflow-styles.js";
 import { newProject, newScene, saveProject, readProject } from "../../_lib/videoflow-store.js";
+import { fingerprint, beginCall, finishCall, releaseCall, busyMessage, SHORT_WINDOW } from "../../_lib/ai-core/guard.js";
+import { providerHealthy, noteFailure, noteSuccess, isProviderFault } from "../../_lib/ai-core/breaker.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -87,18 +99,57 @@ export async function onRequestPost(context) {
 
   if (!textProviderConfigured(env)) return json({ error: "not_configured", detail: "ANTHROPIC_API_KEY mangler." }, 200);
 
+  // Strømbryteren sjekkes FØR kreditten trekkes: er Anthropic nede, skal
+  // brukeren få vite det uten å betale for et kall vi vet vil feile.
+  const health = await providerHealthy(env, "anthropic");
+  if (!health.ok) {
+    return json({
+      error: lang === "en"
+        ? "The script service is not responding right now. Try again in about " + Math.ceil(health.retryInSeconds / 60) + " minutes, nothing has been charged."
+        : "Manustjenesten svarer ikke akkurat nå. Prøv igjen om cirka " + Math.ceil(health.retryInSeconds / 60) + " minutter, du er ikke belastet.",
+      retryInSeconds: health.retryInSeconds,
+    }, 503);
+  }
+
+  // Vern mot dobbeltkall. Nøkkelen er brukeren pluss nøyaktig det som ble
+  // bedt om, med et kort vindu: to trykk på samme knapp koster én
+  // generering, mens en bevisst ny runde et minutt senere går som før.
+  const idemKey = body.idempotencyKey
+    ? await fingerprint(["vf-script", user.email, String(body.idempotencyKey).slice(0, 120)])
+    : await fingerprint(["vf-script", user.email, idea, style, lang, body.projectId || ""]);
+  const slot = await beginCall(env, idemKey, SHORT_WINDOW);
+  if (slot.state === "running") {
+    return json({ error: busyMessage(lang), busy: true }, 409);
+  }
+  if (slot.state === "done" && slot.result && slot.result.projectId) {
+    const cached = await readProject(env, slot.result.projectId);
+    if (cached && cached.ownerEmail === user.email) {
+      return json({ ok: true, project: cached, reused: true }, 200);
+    }
+  }
+
   const gate = await enforceVideoFlow(context, CREDIT_COSTS.script);
-  if (!gate.ok) return json({ error: gate.error, needCredits: gate.needCredits || false, balance: gate.balance }, gate.status);
+  if (!gate.ok) {
+    await releaseCall(env, idemKey);
+    return json({ error: gate.error, needCredits: gate.needCredits || false, balance: gate.balance }, gate.status);
+  }
 
   let raw;
   try {
     raw = await textGenerateJSON(env, { system: sys, user: usr, maxTokens: 2500 }, { email: user.email });
+    await noteSuccess(env, "anthropic");
   } catch (e) {
+    // Bare ekte leverandørfeil teller mot strømbryteren. Et ugyldig
+    // modellsvar er promptets skyld, ikke Anthropics, og skal ikke kunne
+    // sette Claude på pause for resten av plattformen.
+    if (isProviderFault(e)) await noteFailure(env, "anthropic", (e && e.message) || e);
+    await releaseCall(env, idemKey);
     if (!gate.owner) await refundVideoFlow(context, gate.email, CREDIT_COSTS.script);
     return json({ error: "Klarte ikke å lage manuset.", detail: String((e && e.message) || e).slice(0, 200) }, 200);
   }
   const script = sanitizeScript(raw);
   if (!script) {
+    await releaseCall(env, idemKey);
     if (!gate.owner) await refundVideoFlow(context, gate.email, CREDIT_COSTS.script);
     return json({ error: "Fikk et ugyldig manus tilbake. Prøv igjen." }, 200);
   }
@@ -118,6 +169,7 @@ export async function onRequestPost(context) {
   });
   project.status = "script";
   await saveProject(env, project);
+  await finishCall(env, idemKey, { projectId: project.id }, SHORT_WINDOW);
 
   return json({ ok: true, project, balance: gate.owner ? null : gate.balance }, 200);
 }

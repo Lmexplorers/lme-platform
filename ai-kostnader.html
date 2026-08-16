@@ -205,6 +205,12 @@
         <p class="sub" data-no="Om nøkkelen finnes i oppsettet. Selve nøkkelen vises aldri." data-en="Whether the key exists in the setup. The key itself is never shown.">Om nøkkelen finnes i oppsettet. Selve nøkkelen vises aldri.</p>
         <div id="provStatus"></div>
       </section>
+
+      <section class="panel">
+        <h2 data-no="Drift akkurat nå" data-en="Running right now">Drift akkurat nå</h2>
+        <p class="sub" data-no="Hvilken modell som brukes til hver oppgave, og hva som står klart bak den hvis den svikter." data-en="Which model handles each task, and what stands ready behind it if that one fails.">Hvilken modell som brukes til hver oppgave, og hva som står klart bak den hvis den svikter.</p>
+        <div id="routeStatus"></div>
+      </section>
     </div>
 
     <div class="note" id="priceNote"></div>
@@ -228,6 +234,17 @@
     unknown:  { no: '(ukjent)',  en: '(unknown)' },
     connected:{ no: 'koblet til', en: 'connected' },
     missing:  { no: 'mangler nøkkel', en: 'key missing' },
+    fallback: { no: 'reserve', en: 'fallback' },
+    noModel:  { no: 'ingen modell tilgjengelig', en: 'no model available' },
+    paused:   { no: 'satt på pause', en: 'paused' },
+    allWell:  { no: 'Ingen leverandører er satt på pause. Alt går som det skal.',
+                en: 'No providers are paused. Everything is running normally.' },
+    pausedBox:{ no: 'Disse leverandørene er midlertidig hoppet over etter gjentatte feil. De prøves automatisk igjen.',
+                en: 'These providers are temporarily skipped after repeated failures. They are retried automatically.' },
+    taskNames:{
+      no: { text: 'Tekst og manus', image: 'Bilder', voice: 'Stemmer', transcribe: 'Transkribering', video: 'Video', render: 'Ferdig video', publish: 'Publisering' },
+      en: { text: 'Text and scripts', image: 'Images', voice: 'Voices', transcribe: 'Transcription', video: 'Video', render: 'Finished video', publish: 'Publishing' }
+    },
     noAccess: { no: 'Denne siden er kun for eieren. Logg inn med eierkontoen din.',
                 en: 'This page is for the owner only. Log in with your owner account.' },
     failedLoad:{ no: 'Klarte ikke å hente tallene. Prøv igjen om litt.',
@@ -304,6 +321,57 @@
     }).join('');
   }
 
+  // Driftsbildet kommer fra /api/ai-core/status og er uavhengig av
+  // måneden man ser på, så det hentes for seg og feiler stille: er
+  // statusruten nede, skal ikke kostnadstallene forsvinne av det.
+  var status = null;
+
+  function renderRoutes() {
+    var box = document.getElementById('routeStatus');
+    if (!box) return;
+    if (!status) { box.innerHTML = ''; return; }
+
+    var names = T.taskNames[lang];
+    var routes = status.routes || {};
+    var html = Object.keys(routes).map(function (task) {
+      var r = routes[task];
+      var line;
+      if (!r.primary) {
+        line = '<span class="pill off">' + esc(t('noModel')) + '</span>';
+      } else {
+        line = '<strong>' + esc(r.primary) + '</strong>';
+        if (r.fallbacks && r.fallbacks.length) {
+          line += ' <span class="pill">' + esc(t('fallback')) + ': ' +
+                  esc(r.fallbacks.join(', ')) + '</span>';
+        }
+      }
+      return '<div style="display:flex;justify-content:space-between;align-items:center;' +
+        'gap:12px;padding:7px 0;border-bottom:1px solid var(--line);flex-wrap:wrap">' +
+        '<span>' + esc(names[task] || task) + '</span><span>' + line + '</span></div>';
+    }).join('');
+
+    var breakers = status.breakers || {};
+    var paused = Object.keys(breakers).filter(function (p) { return breakers[p].ok === false; });
+    if (paused.length) {
+      html += '<div class="note" style="margin-top:16px">' + esc(t('pausedBox')) + '<br>' +
+        paused.map(function (p) {
+          var mins = Math.ceil((breakers[p].retryInSeconds || 0) / 60);
+          return '<strong>' + esc(p) + '</strong> <span class="pill off">' + esc(t('paused')) +
+                 ', ' + mins + ' min</span>';
+        }).join('<br>') + '</div>';
+    } else {
+      html += '<p class="sub" style="margin-top:14px">' + esc(t('allWell')) + '</p>';
+    }
+    box.innerHTML = html;
+  }
+
+  function loadStatus() {
+    fetch('/api/ai-core/status', { credentials: 'same-origin' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { if (j) { status = j; renderRoutes(); } })
+      .catch(function () { /* driftsbildet er en bonus, ikke et krav */ });
+  }
+
   function render() {
     var s = data.summary;
     document.getElementById('totCost').textContent = money(s.costUsd);
@@ -333,6 +401,7 @@
       ? 'AI-kostnader | Little Montessori Explorers'
       : 'AI costs | Little Montessori Explorers';
     if (data) render();
+    renderRoutes();
   }
 
   function fail(msg) {
@@ -379,6 +448,7 @@
 
   applyLang();
   load('');
+  loadStatus();
 })();
 </script>
 
