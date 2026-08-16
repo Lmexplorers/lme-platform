@@ -1,3 +1,4 @@
+import { logUsage, anthropicUnits, openaiUnits } from "../../_lib/ai-core/usage.js";
 /**
  * LME Bookly™ — backend (Cloudflare Pages Functions)
  *
@@ -149,6 +150,8 @@ export async function onRequestPost(context) {
         const data = await res.json();
         const outParts = (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) || [];
         const imgPart = outParts.find((pt) => (pt.inlineData && pt.inlineData.data) || (pt.inline_data && pt.inline_data.data));
+        await logUsage(env, { app: "bookly", task: "image", modelId: model, units: { images: 1 },
+          status: res.ok && imgPart ? "ok" : "error" });
         if (res.ok && imgPart) return (imgPart.inlineData || imgPart.inline_data).data;
         throw new Error((data.error && data.error.message) || ("HTTP " + res.status));
       }
@@ -175,6 +178,8 @@ export async function onRequestPost(context) {
           body: fd,
         });
         const data = await res.json();
+        await logUsage(env, { app: "bookly", task: "image", modelId: "stable-image-core",
+          units: { images: 1 }, status: res.ok && data.image ? "ok" : "error" });
         if (res.ok && data.image) return data.image;
         throw new Error((data.errors && data.errors.join("; ")) || data.message || ("HTTP " + res.status));
       }
@@ -216,6 +221,9 @@ export async function onRequestPost(context) {
           });
           const data = await res.json();
           const b64s = ((data && data.data) || []).map((x) => x && x.b64_json).filter(Boolean);
+          await logUsage(env, { app: "bookly", task: "image",
+            modelId: env.BOOKLY_IMAGE_MODEL || env.IMAGE_OPENAI_MODEL || "gpt-image-1",
+            units: { images: b64s.length || 1 }, status: res.ok && b64s.length ? "ok" : "error" });
           if (res.ok && b64s.length) return json({ b64: b64s[0], b64s }, 200);
           lastErr = (data && data.error && data.error.message) || ("HTTP " + res.status);
           return json({ error: "image_failed", detail: String(lastErr || "").slice(0, 300) }, 200);
@@ -243,6 +251,9 @@ export async function onRequestPost(context) {
       });
       const data = await res.json();
       const b64s = ((data && data.data) || []).map((x) => x && x.b64_json).filter(Boolean);
+      await logUsage(env, { app: "bookly", task: "image",
+        modelId: env.BOOKLY_IMAGE_MODEL || env.IMAGE_OPENAI_MODEL || "gpt-image-1",
+        units: { images: b64s.length || 1 }, status: res.ok && b64s.length ? "ok" : "error" });
       if (res.ok && b64s.length) return json({ b64: b64s[0], b64s }, 200);
       lastErr = (data && data.error && data.error.message) || ("HTTP " + res.status);
     } catch (e) { lastErr = String((e && e.message) || e); }
@@ -265,6 +276,8 @@ export async function onRequestPost(context) {
       });
       const data = await res.json();
       const b64 = data && data.data && data.data[0] && data.data[0].b64_json;
+      await logUsage(env, { app: "bookly", task: "image", modelId: "dall-e-3",
+        units: { images: 1 }, status: res.ok && b64 ? "ok" : "error" });
       if (res.ok && b64) return json({ b64 }, 200);
       lastErr = (data && data.error && data.error.message) || lastErr || ("HTTP " + res.status);
     } catch (e) { lastErr = lastErr || String((e && e.message) || e); }
@@ -296,6 +309,8 @@ export async function onRequestPost(context) {
           }),
         });
         const data = await res.json();
+        await logUsage(env, { app: "bookly", task: "text", modelId: env.BOOKLY_MODEL || "claude-sonnet-5",
+          units: anthropicUnits(data), status: res.ok ? "ok" : "error" });
         if (res.ok && data.content && data.content[0] && data.content[0].text) {
           return json({ text: data.content[0].text }, 200);
         }
@@ -322,6 +337,8 @@ export async function onRequestPost(context) {
         });
         const data = await res.json();
         const text = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+        await logUsage(env, { app: "bookly", task: "text", modelId: env.BOOKLY_OPENAI_MODEL || "gpt-4o-mini",
+          units: openaiUnits(data), status: res.ok && text ? "ok" : "error" });
         if (res.ok && text) return json({ text }, 200);
       } catch (e) { /* gi opp */ }
     }

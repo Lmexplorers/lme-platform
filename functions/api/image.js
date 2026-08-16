@@ -1,3 +1,4 @@
+import { logUsage } from "../_lib/ai-core/usage.js";
 import { enforceGeneration } from "../_lib/access.js";
 /**
  * LME — auto-generert bilde til sosiale innlegg (for Visibility-appen).
@@ -104,6 +105,15 @@ async function fetchTimeout(url, opts, ms) {
   const timer = setTimeout(() => ctrl.abort(), ms || 55000);
   try { return await fetch(url, { ...opts, signal: ctrl.signal }); }
   finally { clearTimeout(timer); }
+}
+
+// Hvilken modell hver bildemotor faktisk kjører, til forbruksloggen.
+function modelIdFor(env, provider) {
+  if (provider === "openai") return env.IMAGE_OPENAI_MODEL || env.IMAGE_MODEL || "gpt-image-1";
+  if (provider === "gemini") return env.GEMINI_IMAGE_MODEL || "gemini-2.5-flash-image";
+  if (provider === "cloudflare") return "@cf/bytedance/stable-diffusion-xl-lightning";
+  if (provider === "higgsfield") return "dop-turbo";
+  return "pollinations";
 }
 
 async function genOpenAI(env, prompt, size, qualityOverride) {
@@ -343,6 +353,8 @@ export async function onRequestPost(context) {
 
     console.log('[image] Generating with provider:', provider, 'platform:', body.platform, 'character:', character, 'quality:', quality);
     let out;
+    let served = provider;
+    const t0 = Date.now();
     try {
       out = await PROVIDERS[provider](env, prompt, size, quality);
     } catch (e) {
@@ -367,6 +379,7 @@ export async function onRequestPost(context) {
         console.log('[image] Primary provider failed, trying fallback:', fallback);
         try {
           const tryOut = await PROVIDERS[fallback](env, prompt, size, quality);
+          served = fallback;
           if (!tryOut.error) { out = tryOut; break; }
           out = tryOut;
         } catch (e) {
@@ -374,6 +387,12 @@ export async function onRequestPost(context) {
         }
       }
     }
+
+    await logUsage(env, {
+      app: "autopilot", task: "image", modelId: modelIdFor(env, served),
+      email: gate.email || "", units: { images: 1 }, ms: Date.now() - t0,
+      status: out && out.error ? "error" : "ok", error: (out && out.error) || "",
+    });
 
     if (out && out.error) {
       console.error('[image] Provider returned error:', out.error);

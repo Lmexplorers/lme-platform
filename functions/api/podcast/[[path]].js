@@ -1,3 +1,4 @@
+import { logUsage, anthropicUnits } from "../../_lib/ai-core/usage.js";
 /**
  * LME Podkast, en helautomatisk podkast-serie som lager seg selv og
  * publiserer en ny episode hver dag. Innholdet handler om hele LME-systemet:
@@ -297,6 +298,7 @@ function parseModelJson(txt) {
 
 async function callClaude(env, topic, num) {
   if (!env.ANTHROPIC_API_KEY) throw new Error("missing_anthropic_key");
+  const t0 = Date.now();
   const { sys, user } = buildPrompt(topic, num);
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -313,6 +315,11 @@ async function callClaude(env, topic, num) {
     }),
   });
   const data = await res.json().catch(() => null);
+  await logUsage(env, {
+    app: "podcast", task: "text", modelId: CLAUDE_MODEL,
+    units: anthropicUnits(data), ms: Date.now() - t0,
+    status: res.ok && data ? "ok" : "error", error: res.ok ? "" : "claude_" + res.status,
+  });
   if (!res.ok || !data) throw new Error("claude_" + res.status);
   const txt = Array.isArray(data.content) ? data.content.map((c) => c.text || "").join("") : "";
   const parsed = parseModelJson(txt);
@@ -323,6 +330,7 @@ async function callClaude(env, topic, num) {
 // Generisk Claude-kall som returnerer parset JSON (brukt av Mia og Teo-eventyr).
 async function callClaudeJson(env, sys, user, maxTokens) {
   if (!env.ANTHROPIC_API_KEY) throw new Error("missing_anthropic_key");
+  const t0 = Date.now();
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
@@ -338,6 +346,11 @@ async function callClaudeJson(env, sys, user, maxTokens) {
     }),
   });
   const data = await res.json().catch(() => null);
+  await logUsage(env, {
+    app: "podcast", task: "text", modelId: CLAUDE_MODEL,
+    units: anthropicUnits(data), ms: Date.now() - t0,
+    status: res.ok && data ? "ok" : "error", error: res.ok ? "" : "claude_" + res.status,
+  });
   if (!res.ok || !data) throw new Error("claude_" + res.status);
   const txt = Array.isArray(data.content) ? data.content.map((c) => c.text || "").join("") : "";
   const parsed = parseModelJson(txt);
@@ -356,6 +369,7 @@ function voiceFor(env, speaker) {
 
 async function elevenTTS(env, text, voiceId) {
   if (!env.ELEVENLABS_API_KEY || !voiceId) return null;
+  const t0 = Date.now();
   try {
     const res = await fetch("https://api.elevenlabs.io/v1/text-to-speech/" + voiceId, {
       method: "POST",
@@ -369,6 +383,11 @@ async function elevenTTS(env, text, voiceId) {
         model_id: env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2",
         voice_settings: { stability: 0.45, similarity_boost: 0.8, style: 0.25 },
       }),
+    });
+    await logUsage(env, {
+      app: "podcast", task: "voice", modelId: env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2",
+      units: { chars: s(text, 600).length }, ms: Date.now() - t0,
+      status: res.ok ? "ok" : "error", error: res.ok ? "" : "elevenlabs_" + res.status,
     });
     if (!res.ok) return null;
     return await res.arrayBuffer();

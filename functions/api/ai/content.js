@@ -1,3 +1,4 @@
+import { logUsage, anthropicUnits, openaiUnits } from "../../_lib/ai-core/usage.js";
 /**
  * LME innholdsgenerering — Cloudflare Pages Function.
  *
@@ -60,6 +61,7 @@ const DEFAULT_MODEL = "claude-sonnet-5";
 const CALL_TIMEOUT_MS = 20000;
 
 async function callClaude(env, system, userPrompt, maxTokens, model) {
+  const t0 = Date.now();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), CALL_TIMEOUT_MS);
   let resp;
@@ -95,6 +97,10 @@ async function callClaude(env, system, userPrompt, maxTokens, model) {
     throw new Error(`Anthropic ${resp.status}: ${t.replace(/\s+/g, " ").slice(0, 160)}`);
   }
   const data = await resp.json();
+  await logUsage(env, {
+    app: "autopilot", task: "text", modelId: model || env.CONTENT_TEXT_MODEL || "claude-sonnet-5",
+    units: anthropicUnits(data), ms: Date.now() - t0, status: "ok",
+  });
   return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
 }
 
@@ -113,6 +119,7 @@ async function callClaudeRetry(env, system, userPrompt, maxTokens, model) {
 // feiler (nøkkel, kreditt, rate, timeout), så tekst-genereringen virker så lenge
 // minst én leverandør svarer. Ber om ren JSON.
 async function callOpenAI(env, system, userPrompt, maxTokens) {
+  const t0 = Date.now();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), CALL_TIMEOUT_MS);
   let resp;
@@ -141,6 +148,10 @@ async function callOpenAI(env, system, userPrompt, maxTokens) {
     throw new Error(`OpenAI ${resp.status}: ${t.replace(/\s+/g, " ").slice(0, 160)}`);
   }
   const data = await resp.json();
+  await logUsage(env, {
+    app: "autopilot", task: "text", modelId: env.CONTENT_OPENAI_MODEL || "gpt-4o-mini",
+    units: openaiUnits(data), ms: Date.now() - t0, status: "ok",
+  });
   return (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || "";
 }
 

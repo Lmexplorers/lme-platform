@@ -128,7 +128,7 @@ export async function enforceGeneration(context, kind) {
   if (!user) {
     return { ok: false, status: 401, error: "Du må være logget inn for å bruke LME Autopilot." };
   }
-  if (isOwner(user)) return { ok: true };
+  if (isOwner(user)) return { ok: true, email: user.email, owner: true };
   const sub = await subscriptionFor(context, user);
   if (!sub || sub.status !== "active") {
     return { ok: false, status: 402, error: "Dette krever et aktivt LME Autopilot-abonnement. Se planene på /oppgrader." };
@@ -143,7 +143,7 @@ export async function enforceGeneration(context, kind) {
   if (used < limit) {
     usage[k] = used + 1;
     await env.BUILDER_KV.put(key, JSON.stringify(usage), { expirationTtl: 60 * 60 * 24 * 70 });
-    return { ok: true, remaining: Math.max(0, limit - usage[k]) };
+    return { ok: true, email: user.email, remaining: Math.max(0, limit - usage[k]) };
   }
   // Månedskvoten er brukt opp. Trekk fra kredittpåfyll (utløper ikke).
   const ckey = "credit:" + user.email;
@@ -152,7 +152,7 @@ export async function enforceGeneration(context, kind) {
   if ((bal[k] || 0) > 0) {
     bal[k] = bal[k] - 1;
     await env.BUILDER_KV.put(ckey, JSON.stringify(bal));
-    return { ok: true, remaining: 0, credit: bal[k], source: "credit" };
+    return { ok: true, email: user.email, remaining: 0, credit: bal[k], source: "credit" };
   }
   return {
     ok: false, status: 429,
