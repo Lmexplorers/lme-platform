@@ -135,12 +135,22 @@ export async function trackUsage(env, entry, fn) {
   }
 }
 
-/** Trekker ut tokenbruk fra et Anthropic-svar. Tåler at feltet mangler. */
+/**
+ * Trekker ut tokenbruk fra et Anthropic-svar. Tåler at feltet mangler.
+ *
+ * Med promptcache teller Anthropic de bufrede tokenene for seg:
+ * input_tokens er da BARE de ferske tokenene, mens de bufrede ligger i
+ * cache_read_input_tokens (billige) og cache_creation_input_tokens (litt
+ * dyrere enn vanlig inndata). Tar vi ikke med de to, ser regnestykket på
+ * /ai-kostnader billigere ut enn virkeligheten.
+ */
 export function anthropicUnits(data) {
   const u = (data && data.usage) || {};
   return {
     inputTokens: Number(u.input_tokens) || 0,
     outputTokens: Number(u.output_tokens) || 0,
+    cacheReadTokens: Number(u.cache_read_input_tokens) || 0,
+    cacheWriteTokens: Number(u.cache_creation_input_tokens) || 0,
   };
 }
 

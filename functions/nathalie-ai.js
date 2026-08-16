@@ -216,7 +216,12 @@ export async function onRequestPost(context) {
   // Prisene settes inn her, fra functions/_lib/plans.js, i stedet for å stå
   // skrevet inn i systemprompten. De sto der før, og ble aldri oppdatert da
   // planene ble endret, så Nathalie oppga gamle priser til alle som spurte.
-  let systemPrompt = RENATE_SYSTEM_PROMPT + "\n\n" + priceBlock(lang);
+  //
+  // Systemprompten er delt i to med vilje, se PROMPTCACHE nedenfor: den
+  // faste delen ligger i `fast` og buffres hos Anthropic, alt som varierer
+  // fra spørsmål til spørsmål legges i `variabelt` og kommer etter.
+  const fast = RENATE_SYSTEM_PROMPT + "\n\n" + priceBlock(lang);
+  let systemPrompt = "";
   if (tier.sharpened) systemPrompt += "\n" + SHARPENED_INSTRUCTIONS;
   const pageContext = typeof body.context === "string" ? body.context.slice(0, 800) : "";
   if (pageContext) {
@@ -258,6 +263,28 @@ export async function onRequestPost(context) {
     }
   }
 
+  // ==========================================================================
+  // PROMPTCACHE: hvorfor systemprompten sendes som to blokker
+  // ==========================================================================
+  // Nathalie har rundt 2 700 tokens med fast instruks og priser som ellers
+  // ville blitt sendt og betalt for på nytt ved hvert eneste spørsmål. Med
+  // cache_control betales den fulle prisen bare første gang, og deretter en
+  // tidel så lenge cachen lever (fem minutter, fornyet ved hver bruk).
+  //
+  // Rekkefølgen er hele poenget. Anthropic buffrer et prefiks, altså alt fra
+  // starten og fram til merket, og treffer bare når prefikset er tegn for
+  // tegn likt forrige gang. Derfor må alt som varierer, tilspisset Nathalie,
+  // hvilken side brukeren står på, minnet om brukeren og oppslaget i Renates
+  // kursinnhold, komme ETTER merket. Flyttes noe av det inn i den faste
+  // blokken, bommer cachen hver gang og caching-en er verdiløs.
+  //
+  // Grensen for at det i det hele tatt buffres er 1 024 tokens på Sonnet 5.
+  // Den faste blokken ligger godt over.
+  const systemBlocks = [
+    { type: "text", text: fast, cache_control: { type: "ephemeral" } },
+  ];
+  if (systemPrompt.trim()) systemBlocks.push({ type: "text", text: systemPrompt });
+
   try {
     const t0 = Date.now();
     const res = await fetch("https://api.anthropic.com/v1/messages", {
@@ -270,7 +297,7 @@ export async function onRequestPost(context) {
       body: JSON.stringify({
         model: "claude-sonnet-5",
         max_tokens: 1500,
-        system: systemPrompt,
+        system: systemBlocks,
         messages: messages,
       }),
     });

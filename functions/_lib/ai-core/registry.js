@@ -308,6 +308,9 @@ export function findModel(modelId) {
  * Returnerer null når prisen ikke er kjent (f.eks. Higgsfield, som prises i
  * kreditter). Null betyr "vet ikke", ikke "gratis", og skal vises deretter.
  */
+const CACHE_READ_RATE = 0.1;
+const CACHE_WRITE_RATE = 1.25;
+
 export function costFor(modelId, units) {
   const m = findModel(modelId);
   if (!m || !m.price) return null;
@@ -316,7 +319,18 @@ export function costFor(modelId, units) {
     case "tokens": {
       const inTok = Number(u.inputTokens) || 0;
       const outTok = Number(u.outputTokens) || 0;
-      return round6((inTok / 1e6) * m.price.inPerM + (outTok / 1e6) * m.price.outPerM);
+      // Bufret inndata prises annerledes enn fersk inndata: å lese fra
+      // cachen koster en tidel, å skrive til den koster 25 prosent ekstra.
+      // Er tallene ikke med (alt annet enn Anthropic), blir de null og
+      // regnestykket er som før.
+      const cacheRead = Number(u.cacheReadTokens) || 0;
+      const cacheWrite = Number(u.cacheWriteTokens) || 0;
+      return round6(
+        (inTok / 1e6) * m.price.inPerM +
+          (cacheRead / 1e6) * m.price.inPerM * CACHE_READ_RATE +
+          (cacheWrite / 1e6) * m.price.inPerM * CACHE_WRITE_RATE +
+          (outTok / 1e6) * m.price.outPerM
+      );
     }
     case "image": {
       if (m.price.perUnit == null) return null;

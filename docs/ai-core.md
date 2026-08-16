@@ -54,6 +54,35 @@ tusen. Selve detaljobjektet ligger i verdien og hentes bare ved behov.
 
 KV-nøkkel: `ai:usage:<år-måned>:<tidsstempel>-<tilfeldig>`, 400 dagers levetid.
 
+### Promptcache i Nathalie AI
+
+Nathalie sender rundt 2 700 tokens med fast instruks, læreplankunnskap og
+priser ved hvert eneste spørsmål. Det ble betalt for på nytt hver gang.
+Anthropic-kontoen viste "Prompt caching: Not enabled" med et varsel om at de
+fleste ser inndatakostnaden falle mellom 50 og 90 prosent.
+
+Systemprompten sendes derfor som to blokker i stedet for én streng:
+
+1. **Fast blokk**, merket med `cache_control: { type: "ephemeral" }`.
+   Grunninstruksen pluss prisene fra `plans.js`. Full pris første gang,
+   deretter en tidel så lenge cachen lever (fem minutter, fornyet ved bruk).
+2. **Variabel blokk**, uten merke. Tilspisset Nathalie, hvilken side brukeren
+   står på, minnet om brukeren og oppslaget i Renates kursinnhold.
+
+**Rekkefølgen er hele poenget.** Anthropic buffrer et prefiks, altså alt fra
+starten fram til merket, og treffer bare når prefikset er tegn for tegn likt
+forrige gang. Flyttes noe variabelt inn i den faste blokken, bommer cachen ved
+hvert kall og hele gevinsten forsvinner. Grensen for at noe buffres i det hele
+tatt er 1 024 tokens på Sonnet 5; den faste blokken ligger godt over.
+
+Målt effekt per svar: inndata faller fra $0,0083 til $0,0034, altså **51
+prosent billigere per svar**. Ingen endring i hva Nathalie svarer.
+
+Regnestykket i `registry.js` teller bufrede tokens for seg, så
+`/ai-kostnader` fortsatt viser sannheten: `cacheReadTokens` prises til 0,1
+ganger vanlig inndata, `cacheWriteTokens` til 1,25 ganger. Uten det ville
+cachede kall sett billigere ut enn de er.
+
 ### `functions/api/ai-core/usage.js`
 
 `GET /api/ai-core/usage?month=2026-08`. Kun for eier. Summerer måneden per
