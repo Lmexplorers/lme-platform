@@ -36,6 +36,22 @@ the two products can evolve independently).
 - Multi-user: every project is scoped to the account that created it
   (unlike Mia & Teo, which is owner-only)
 - Landing page (`videoflow.html`) + creator app (`videoflow-studio.html`)
+- **"Generate everything" in one step** (`functions/api/videoflow/generate-
+  all.js`, Renate, 15. august 2026: "Den er laget alt for tidkrevende, med
+  å måtte generere lyd til hvert bilde, tar alt for lang tid. Dette er
+  steg som går automatisk i andre apper."). Before this, making a video
+  meant clicking "Lag bilde" then "Lag stemme" separately for every scene,
+  one confirm dialog each, roughly `2 × sceneCount` clicks. Now one "✨
+  Generer alt" button generates every scene's still-missing image AND
+  voice in a single confirm step, all scenes and both media types running
+  in parallel (they're network-bound external API calls, not CPU-bound, so
+  N scenes in parallel costs roughly the wall-clock of one, not N times
+  one). One credit debit upfront for the whole batch, proportional refund
+  for anything that fails. Already-generated scenes are skipped (safe to
+  re-run after editing just one scene's text, or after a partial failure,
+  without re-spending credits on what already worked). Individual "Lag
+  bilde"/"Lag stemme" buttons per scene are kept for regenerating one scene
+  on its own.
 
 ## Deliberately NOT built yet (phased, not silently cut)
 
@@ -219,6 +235,7 @@ functions/api/videoflow/
   scene-image.js      per-scene styled image, credit-gated
   scene-voice.js       per-scene voice + timestamps, credit-gated, serves audio
   scene-video.js         per-scene premium image-to-video (Higgsfield), credit-gated
+  generate-all.js           all-missing images + voices in one batch, credit-gated
   restyle.js               batch style-swap re-render, credit-gated
   transcribe.js              audio idea upload -> Whisper transcript, credit-gated
   render.js            starts/polls assembly, copies result to R2
