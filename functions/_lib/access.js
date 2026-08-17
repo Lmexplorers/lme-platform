@@ -6,6 +6,10 @@
  * Brukes av bilde-, video- og reel-genereringen.
  */
 
+// payg.js er en bladfil og importerer ingenting herfra, så det oppstår
+// ingen sirkel selv om ai-core/ledger.js importerer denne filen.
+import { paygEnabled, logTx, offMessage } from "./ai-core/payg.js";
+
 function readCookies(request) {
   const out = {};
   (request.headers.get("Cookie") || "").split(";").forEach((p) => {
@@ -42,6 +46,50 @@ export async function sessionUser(context) {
    lagrer per-plan-grenser (subscription.limits), brukes de i stedet. */
 const DEFAULT_LIMITS = { image: 250, video: 15 };
 
+/**
+ * Inner Circle skriver ingen grenser på medlemskapet, bare `tier`. Uten
+ * dette falt alle tre nivåene tilbake på DEFAULT_LIMITS, altså 250 bilder og
+ * 15 videoer i måneden. Et Medlem til 697 kr fikk da nøyaktig samme mengde
+ * som VIP til 1997 kr, og 250 bilder koster rundt 210 kr, altså 30 % av det
+ * medlemmet betaler. Det var ingenting salgssiden lovet, det var bare det
+ * koden gjorde.
+ *
+ * Nivåene under følger salgssiden: Medlem får innholdet og fellesskapet,
+ * skaperverktøyene kommer først med Pro.
+ *
+ * Video er 0 på alle nivåer med vilje. Det finnes ingen videokapasitet kjøpt
+ * inn, og video skal kjøpes som kreditt i stedet for å følge med i en plan.
+ * Da står Renate aldri for andres bruk.
+ */
+const INNER_CIRCLE_LIMITS = {
+  regular: { image: 0, video: 0 },
+  medlem: { image: 0, video: 0 },
+  member: { image: 0, video: 0 },
+  pro: { image: 150, video: 0 },
+  vip: { image: 300, video: 0 },
+};
+
+/**
+ * Månedsgrensene som gjelder for ett abonnement.
+ *
+ * Rekkefølgen er viktig:
+ *   1. Grenser skrevet av webhooken (Autopilot Start/Proff/VIP) vinner alltid.
+ *   2. Ellers, er dette et Inner Circle-medlemskap, følger vi nivået der.
+ *   3. Til slutt standarden, som nå bare gjelder gamle poster uten begge deler.
+ */
+export function planLimits(sub) {
+  if (!sub) return { image: 0, video: 0 };
+  if (sub.limits && typeof sub.limits === "object") {
+    return {
+      image: sub.limits.image || 0,
+      video: sub.limits.video || 0,
+    };
+  }
+  const t = String(sub.tier || "").toLowerCase();
+  if (INNER_CIRCLE_LIMITS[t]) return INNER_CIRCLE_LIMITS[t];
+  return DEFAULT_LIMITS;
+}
+
 const OWNER_EMAILS = [
   "renate@lmexplorers.com", "hei@lmexplorers.com", "hello@lmexplorers.com",
   "support@lmexplorers.com", "renateshobby@hotmail.com",
@@ -52,14 +100,7 @@ export function isOwner(user) {
 }
 
 function limitsFor(user) {
-  const sub = user && user.subscription;
-  if (sub && sub.limits && typeof sub.limits === "object") {
-    return {
-      image: sub.limits.image || DEFAULT_LIMITS.image,
-      video: sub.limits.video || DEFAULT_LIMITS.video,
-    };
-  }
-  return DEFAULT_LIMITS;
+  return planLimits(user && user.subscription);
 }
 
 function monthKey(email) {
@@ -128,13 +169,17 @@ export async function enforceGeneration(context, kind) {
   if (!user) {
     return { ok: false, status: 401, error: "Du må være logget inn for å bruke LME Autopilot." };
   }
-  if (isOwner(user)) return { ok: true };
+  if (isOwner(user)) return { ok: true, email: user.email, owner: true };
   const sub = await subscriptionFor(context, user);
   if (!sub || sub.status !== "active") {
     return { ok: false, status: 402, error: "Dette krever et aktivt LME Autopilot-abonnement. Se planene på /oppgrader." };
   }
   const k = kind === "video" ? "video" : "image";
-  const limit = (sub.limits && sub.limits[k]) || DEFAULT_LIMITS[k] || 0;
+  const limit = planLimits(sub)[k] || 0;
+  // Har planen i det hele tatt en kvote for dette. Skillet betyr noe to
+  // steder under: hvilken beskjed hun får, og om kredittbryteren gjelder.
+  const harKvote = limit > 0;
+
   const key = monthKey(user.email);
   let usage = { image: 0, video: 0 };
   const raw = await env.BUILDER_KV.get(key);
@@ -143,16 +188,44 @@ export async function enforceGeneration(context, kind) {
   if (used < limit) {
     usage[k] = used + 1;
     await env.BUILDER_KV.put(key, JSON.stringify(usage), { expirationTtl: 60 * 60 * 24 * 70 });
-    return { ok: true, remaining: Math.max(0, limit - usage[k]) };
+    return { ok: true, email: user.email, remaining: Math.max(0, limit - usage[k]) };
   }
-  // Månedskvoten er brukt opp. Trekk fra kredittpåfyll (utløper ikke).
+  // Månedskvoten er brukt opp. Kredittpåfyllet kan ta over, men BARE hvis
+  // kunden har valgt det (se functions/_lib/ai-core/payg.js). Uten den
+  // bryteren ville 25 videoer kjøpt til et bestemt prosjekt kunne bli spist
+  // opp av tilfeldige testbilder. Bryteren slås på automatisk ved kjøp, så
+  // den er aldri i veien for den som nettopp betalte.
   const ckey = "credit:" + user.email;
   let bal = { image: 0, video: 0 };
   try { const braw = await env.BUILDER_KV.get(ckey); if (braw) bal = JSON.parse(braw) || bal; } catch (e) {}
+
   if ((bal[k] || 0) > 0) {
+    // Bryteren gjelder bare når det FANTES en kvote å gå forbi. Har planen
+    // ingen kvote, er kreditten hennes eneste vei, og da gir det ingen
+    // mening å kreve at hun først skrur på "fortsett forbi grensen".
+    if (harKvote && !(await paygEnabled(env, user.email))) {
+      return { ok: false, status: 429, error: offMessage(k, "no"), paygOff: true, credit: bal[k] };
+    }
     bal[k] = bal[k] - 1;
     await env.BUILDER_KV.put(ckey, JSON.stringify(bal));
-    return { ok: true, remaining: 0, credit: bal[k], source: "credit" };
+    await logTx(env, user.email, {
+      kind: "spend", unit: k, amount: 1, balance: bal[k], app: "autopilot",
+      note: harKvote
+        ? (k === "video" ? "Video etter kvoten" : "Bilde etter kvoten")
+        : (k === "video" ? "Video, kjøpt kreditt" : "Bilde, kjøpt kreditt"),
+    });
+    return { ok: true, email: user.email, remaining: 0, credit: bal[k], source: "credit" };
+  }
+
+  // Ingen kvote og ingen kreditt: hun har aldri hatt en kvote å bruke opp,
+  // så "kvoten er brukt opp" ville vært feil beskjed.
+  if (!harKvote) {
+    return {
+      ok: false, status: 402, needCredits: true,
+      error: k === "video"
+        ? "Video følger ikke med i planen din. Kjøp videokreditt på /kjop-kreditt, så kan du lage så mange du vil."
+        : "Bildegenerering følger ikke med i planen din. Oppgrader til Pro på /oppgrader, eller kjøp bildekreditt på /kjop-kreditt.",
+    };
   }
   return {
     ok: false, status: 429,

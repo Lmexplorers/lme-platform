@@ -1,3 +1,4 @@
+import { logUsage } from "../_lib/ai-core/usage.js";
 import { enforceHeadshotApp, refundImageCredit, headshotAppAccess } from "../_lib/access.js";
 /**
  * LME AI Headshot, ansiktsbevarende proff-portretter via OpenAI-bildemotoren
@@ -134,10 +135,16 @@ export async function onRequestPost(context) {
   let res, data, timedOut = false;
   const ctrl = new AbortController();
   const timer = setTimeout(() => { timedOut = true; ctrl.abort(); }, 85000);
+  const t0 = Date.now();
   try {
     res = await fetch(OPENAI_EDITS, { method: "POST", headers: { "Authorization": "Bearer " + env.OPENAI_API_KEY }, body: fd, signal: ctrl.signal });
     const t = await res.text();
     try { data = JSON.parse(t); } catch (e) { data = null; }
+    await logUsage(env, {
+      app: "headshot", task: "image", modelId: env.HEADSHOT_IMAGE_MODEL || "gpt-image-1",
+      email: gate.email || "", units: { images: 1 }, ms: Date.now() - t0,
+      status: res.ok ? "ok" : "error", error: res.ok ? "" : "openai_" + res.status,
+    });
   } catch (e) {
     if (!gate.owner) await refundImageCredit(context, gate.email);
     const msg = timedOut

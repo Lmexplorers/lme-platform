@@ -1,3 +1,5 @@
+import { sessionUser } from "../../_lib/access.js";
+import { logUsage, anthropicUnits, openaiUnits } from "../../_lib/ai-core/usage.js";
 /**
  * LME innholdsgenerering — Cloudflare Pages Function.
  *
@@ -59,7 +61,8 @@ const DEFAULT_MODEL = "claude-sonnet-5";
 // den sjeldne trege.
 const CALL_TIMEOUT_MS = 20000;
 
-async function callClaude(env, system, userPrompt, maxTokens, model) {
+async function callClaude(env, system, userPrompt, maxTokens, model, email) {
+  const t0 = Date.now();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), CALL_TIMEOUT_MS);
   let resp;
@@ -95,24 +98,29 @@ async function callClaude(env, system, userPrompt, maxTokens, model) {
     throw new Error(`Anthropic ${resp.status}: ${t.replace(/\s+/g, " ").slice(0, 160)}`);
   }
   const data = await resp.json();
+  await logUsage(env, {
+    app: "autopilot", task: "text", modelId: model || env.CONTENT_TEXT_MODEL || "claude-sonnet-5", email: email || "",
+    units: anthropicUnits(data), ms: Date.now() - t0, status: "ok",
+  });
   return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
 }
 
 // Ett kall kan ryke på en forbigående blipp (timeout, 429/5xx fra Anthropic,
 // nettverk). Prøv en gang til før vi gir opp, så en enkelt hikke ikke gir
 // brukeren "Noe gikk galt".
-async function callClaudeRetry(env, system, userPrompt, maxTokens, model) {
+async function callClaudeRetry(env, system, userPrompt, maxTokens, model, email) {
   try {
-    return await callClaude(env, system, userPrompt, maxTokens, model);
+    return await callClaude(env, system, userPrompt, maxTokens, model, email);
   } catch (e) {
-    return await callClaude(env, system, userPrompt, maxTokens, model);
+    return await callClaude(env, system, userPrompt, maxTokens, model, email);
   }
 }
 
 // Reserve: OpenAI (samme nøkkel som Bookly/headshot). Brukes hvis Anthropic
 // feiler (nøkkel, kreditt, rate, timeout), så tekst-genereringen virker så lenge
 // minst én leverandør svarer. Ber om ren JSON.
-async function callOpenAI(env, system, userPrompt, maxTokens) {
+async function callOpenAI(env, system, userPrompt, maxTokens, email) {
+  const t0 = Date.now();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), CALL_TIMEOUT_MS);
   let resp;
@@ -141,6 +149,10 @@ async function callOpenAI(env, system, userPrompt, maxTokens) {
     throw new Error(`OpenAI ${resp.status}: ${t.replace(/\s+/g, " ").slice(0, 160)}`);
   }
   const data = await resp.json();
+  await logUsage(env, {
+    app: "autopilot", task: "text", modelId: env.CONTENT_OPENAI_MODEL || "gpt-4o-mini", email: email || "",
+    units: openaiUnits(data), ms: Date.now() - t0, status: "ok",
+  });
   return (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || "";
 }
 
@@ -148,19 +160,19 @@ async function callOpenAI(env, system, userPrompt, maxTokens) {
 // finnes, gjør vi bare ETT Anthropic-forsøk, så vi ikke bruker for lang tid (to
 // trege Anthropic-forsøk + reserve kan overskride tidsgrensen på store formater
 // som YouTube). Uten reserve beholder vi retry for robusthet.
-async function generateText(env, system, userPrompt, maxTokens) {
+async function generateText(env, system, userPrompt, maxTokens, email) {
   const hasOpenAI = !!env.OPENAI_API_KEY;
   if (env.ANTHROPIC_API_KEY) {
     try {
       return hasOpenAI
-        ? await callClaude(env, system, userPrompt, maxTokens)
-        : await callClaudeRetry(env, system, userPrompt, maxTokens);
+        ? await callClaude(env, system, userPrompt, maxTokens, undefined, email)
+        : await callClaudeRetry(env, system, userPrompt, maxTokens, undefined, email);
     } catch (e) {
-      if (hasOpenAI) return await callOpenAI(env, system, userPrompt, maxTokens);
+      if (hasOpenAI) return await callOpenAI(env, system, userPrompt, maxTokens, email);
       throw e;
     }
   }
-  if (hasOpenAI) return await callOpenAI(env, system, userPrompt, maxTokens);
+  if (hasOpenAI) return await callOpenAI(env, system, userPrompt, maxTokens, email);
   throw new Error("mangler AI-nøkkel");
 }
 
@@ -247,6 +259,13 @@ export async function onRequestPost(context) {
   if (!env.ANTHROPIC_API_KEY && !env.OPENAI_API_KEY) {
     return json({ error: "Server-konfigurasjon mangler (mangler AI-nøkkel)." }, 500);
   }
+  // Innlogging kreves. Ruten gjør ekte, betalte AI-kall, og var tidligere
+  // åpen for alle som fant adressen. Appene som bruker den er innloggede
+  // flater, så dette stenger ingen ekte bruker ute.
+  const user = await sessionUser(context);
+  if (!user) {
+    return json({ error: "Logg inn for å bruke denne funksjonen." }, 401);
+  }
   let body;
   try { body = await request.json(); }
   catch { return json({ error: "Ugyldig JSON" }, 400); }
@@ -264,7 +283,7 @@ export async function onRequestPost(context) {
   const heavy = (fmt === "explainer" || fmt === "hookreel" || fmt === "reel");
   const maxTokens = heavy ? 4000 : 3200;
   try {
-    let result = await generateText(env, system, contentPrompt(body), maxTokens);
+    let result = await generateText(env, system, contentPrompt(body), maxTokens, user.email);
     return json({ result });
   } catch (err) {
     return json({ error: "AI er midlertidig utilgjengelig. Prøv igjen om litt." }, 502);

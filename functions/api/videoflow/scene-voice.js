@@ -58,7 +58,7 @@ export async function onRequestPost(context) {
 
   let out;
   try {
-    out = await voiceGenerateLine(env, text, project.input.voiceId || DEFAULT_VOICE_ID, project.input.lang);
+    out = await voiceGenerateLine(env, text, project.input.voiceId || DEFAULT_VOICE_ID, project.input.lang, { email: user.email });
   } catch (e) {
     if (!gate.owner) await refundVideoFlow(context, gate.email, creditCost);
     // Re-read fresh before writing (see updateScene doc comment in

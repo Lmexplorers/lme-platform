@@ -241,7 +241,7 @@ export async function onRequestPost(context) {
 
   let raw;
   try {
-    raw = await textGenerateJSON(env, { system: sys, user: usr, maxTokens });
+    raw = await textGenerateJSON(env, { system: sys, user: usr, maxTokens }, { email: gate.user.email });
   } catch (e) {
     return json({ error: "Klarte ikke å lage manuset.", detail: String((e && e.message) || e).slice(0, 200) }, 200);
   }

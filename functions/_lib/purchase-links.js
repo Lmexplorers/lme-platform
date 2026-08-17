@@ -35,6 +35,13 @@ export async function addCredit(env, email, kind, amount) {
   const k = kind === "video" ? "video" : "image";
   bal[k] = (bal[k] || 0) + amount;
   await env.BUILDER_KV.put(key, JSON.stringify(bal));
+  // Slår på "fortsett forbi grensen" og fører kjøpet i kvitteringen. Den som
+  // nettopp kjøpte påfyll skal kunne bruke det uten å lete etter en bryter.
+  // Feiler dette, er kreditten likevel lagt til over, og det er det viktige.
+  try {
+    const { onCreditPurchase } = await import("./ai-core/payg.js");
+    await onCreditPurchase(env, email, k, amount, bal[k]);
+  } catch (e) { /* med vilje stille */ }
 }
 
 /* ---- Claude-kurset -------------------------------------------------

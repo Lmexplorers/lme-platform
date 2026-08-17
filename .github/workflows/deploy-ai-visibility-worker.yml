@@ -1,0 +1,38 @@
+name: Deploy AI Visibility-worker
+
+# Deployer ai-visibility-worker.js automatisk til Cloudflare hver gang koden
+# endres paa main. Ingen mer manuell inn-liming av worker-kode.
+#
+# Engangsoppsett: legg Cloudflare API-token som Actions-secret
+# CLOUDFLARE_API_TOKEN (token-mal "Edit Cloudflare Workers" i Cloudflare:
+# My Profile -> API Tokens -> Create Token).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "ai-visibility-worker.js"
+      - "workers/lme-ai-visibility/wrangler.toml"
+      - ".github/workflows/deploy-ai-visibility-worker.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sjekk at CLOUDFLARE_API_TOKEN er satt
+        id: sjekk
+        run: |
+          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+            echo "::warning::Actions-secreten CLOUDFLARE_API_TOKEN mangler ennaa. Hopper stille over (ingen feil-e-post). Deploy skjer automatisk naar den er lagt inn."
+            echo "klar=nei" >> "$GITHUB_OUTPUT"
+          else
+            echo "klar=ja" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Deploy med wrangler
+        if: steps.sjekk.outputs.klar == 'ja'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: workers/lme-ai-visibility

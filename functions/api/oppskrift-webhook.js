@@ -130,10 +130,25 @@ export async function onRequestPost(context) {
       await addCredit(env, email, pack.kind, pack.amount);
       const nm = (obj.customer_details && obj.customer_details.name) || "";
       const kindLabel = pack.kind === "video" ? "videokreditt" : "bildekreditt";
+      // Videokreditt er det ENESTE salget som krever at Renate gjør noe:
+      // bildene går på løpende regning hos OpenAI og virker med en gang,
+      // mens video trenger et Higgsfield-abonnement som må være kjøpt før
+      // kunden kan generere. Derfor står det i e-posten hva hun skal gjøre,
+      // i stedet for at hun må huske det eller oppdage det når kunden klager.
+      const action = pack.kind === "video" ? {
+        title: "Dette må du gjøre nå: kjøp videokapasitet",
+        body: "Kunden har betalt for " + pack.amount + " videoer, men det finnes ingen " +
+              "Higgsfield-plan bak dem ennå, så genereringen vil feile (kreditten " +
+              "refunderes automatisk, så kunden taper ingen penger). Kjøp en plan, " +
+              "så virker det med en gang. Ultra gir 133 videoer i måneden og er " +
+              "den billigste per video. Bildekjøp trenger ingenting av dette.",
+        url: "https://higgsfield.ai/pricing",
+      } : null;
       try {
         await sendOwnerSaleNotice(env, {
           pname: pack.amount + " " + kindLabel, name: nm, email: email,
           amount: obj.amount_total, currency: obj.currency,
+          action: action,
         });
       } catch (e3) {}
       try {

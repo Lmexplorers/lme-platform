@@ -146,6 +146,7 @@
 
   let lang = (localStorage.getItem('lme-lang') === 'en') ? 'en' : 'no';
   let messages = [];
+  let started = false; // true etter første melding, så vi ikke sletter samtalen ved språkbytte
 
   const intro = {
     no: {
@@ -158,7 +159,8 @@
         "Produktutvikling 101",
         "Hvordan starte?",
         "Prompts for innhold"
-      ]
+      ],
+      powers: ["📚 Montessori", "🎨 Branding", "🎬 Innhold", "💡 Prompts", "🏪 Produkter", "🎯 Målgruppe", "🚀 Vekst"]
     },
     en: {
       title: "Hello! 👋 I'm Nathalie",
@@ -170,7 +172,8 @@
         "Product development 101",
         "How to get started?",
         "Content prompts"
-      ]
+      ],
+      powers: ["📚 Montessori", "🎨 Branding", "🎬 Content", "💡 Prompts", "🏪 Products", "🎯 Audience", "🚀 Growth"]
     }
   };
 
@@ -191,6 +194,9 @@
     try { localStorage.setItem('lme-lang', l); } catch(e) {}
     langBtn.textContent = l === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
     applyLang();
+    // Samtalen er allerede i gang: ikke slett den, bare bytt språk på det statiske.
+    // Fortsatt ingen meldinger sendt: gjenoppbygg intro-kortet på riktig språk.
+    if (!started) showIntro();
   }
 
   function showIntro() {
@@ -207,13 +213,7 @@
           ${intData.suggestions.map(s => `<button class="suggestion">${s}</button>`).join('')}
         </div>
         <div class="powers-badge">
-          <span class="power-tag">📚 Montessori</span>
-          <span class="power-tag">🎨 Branding</span>
-          <span class="power-tag">🎬 Innhold</span>
-          <span class="power-tag">💡 Prompts</span>
-          <span class="power-tag">🏪 Produkter</span>
-          <span class="power-tag">🎯 Målgruppe</span>
-          <span class="power-tag">🚀 Vekst</span>
+          ${intData.powers.map(p => `<span class="power-tag">${p}</span>`).join('')}
         </div>
       </div>
     `;
@@ -250,23 +250,43 @@
     return div.innerHTML;
   }
 
+  // Samtalen så langt. Nathalie får hele tråden, ikke bare siste spørsmål,
+  // så hun kan svare på oppfølgingsspørsmål ("og hva med de yngste?").
+  // Vi holder på de siste 20, som er godt innenfor det endepunktet godtar.
+  const historikk = [];
+
   async function send() {
     const text = inputEl.value.trim();
     if (!text) return;
 
+    started = true;
     inputEl.value = '';
     addMessage(text, true);
     sendBtn.disabled = true;
 
+    historikk.push({ role: 'user', content: text });
+    if (historikk.length > 20) historikk.splice(0, historikk.length - 20);
+
     try {
-      const response = await fetch('/api/ask-nathalie', {
+      const response = await fetch('/ask-nathalie-ai', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: text, lang: lang })
+        body: JSON.stringify({ messages: historikk, lang: lang })
       });
       const data = await response.json();
-      if (data.answer) addMessage(data.answer, false);
+      if (data.reply) {
+        addMessage(data.reply, false);
+        historikk.push({ role: 'assistant', content: data.reply });
+      } else if (data.error) {
+        // Vis den ekte beskjeden, for eksempel at døgngrensen er nådd.
+        // Før sto det bare "prøv igjen om litt", uansett hva som var galt.
+        addMessage(data.error, false);
+        historikk.pop();
+      } else {
+        throw new Error('tomt svar');
+      }
     } catch(e) {
+      historikk.pop();
       const errMsg = lang === 'no'
         ? 'Beklager, jeg kunne ikke svare akkurat nå. Prøv igjen om litt.'
         : 'Sorry, I couldn\'t respond right now. Try again in a moment.';
@@ -283,8 +303,7 @@
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
   });
 
-  applyLang();
-  showIntro();
+  setLang(lang);
 })();
 </script>
 <script src="/js/lme-account.js?v=11" defer></script>

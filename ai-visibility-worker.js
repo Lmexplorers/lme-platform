@@ -175,8 +175,10 @@ export default {
 async function handlePing(env, origin) {
   const out = {
     worker: "lme-ai-visibility",
+    versjon: "v2026-08-14 med dagens-artikkel-motor",
     hasAnthropicKey: !!env.ANTHROPIC_API_KEY,
     hasGithubToken: !!env.GITHUB_TOKEN,
+    hasDailyKey: !!env.DAILY_KEY,
     hasMailersend: !!env.MAILERSEND_API_KEY,
     hasBlotato: !!env.BLOTATO_API_KEY,
     anthropic: env.ANTHROPIC_API_KEY ? "tester…" : "MANGLER nøkkel",
@@ -205,7 +207,40 @@ async function handlePing(env, origin) {
 }
 
 // =====================================================
-// Anthropic-kall (samme som renate-ai-worker.js)
+// PROMPTCACHE
+// =====================================================
+// Alle oppgavene her starter systemprompten med BRAND_CONTEXT, og tre av dem
+// legger GEO_RULES rett etter. Én kjøring av synlighetsmotoren fyrer av åtte
+// eller flere kall like etter hverandre, og uten cache betales den samme
+// merkevareteksten på nytt hver eneste gang.
+//
+// Vi deler derfor systemprompten i to: den delen som er lik fra oppgave til
+// oppgave merkes for buffring, og den oppgavespesifikke setningen kommer
+// etter. Rekkefølgen er hele poenget, Anthropic buffrer et prefiks og treffer
+// bare når det er tegn for tegn likt forrige gang.
+//
+// Kjenner vi ikke igjen starten, sendes prompten uendret. Da mister vi bare
+// besparelsen, ingenting går i stykker. Er prefikset kortere enn minstemålet
+// for modellen, ignorerer Anthropic merket og kallet går som før.
+function systemBlocks(system) {
+  const s = String(system || "");
+  if (!s) return s;
+
+  let fast = "";
+  if (s.startsWith(BRAND_CONTEXT)) {
+    fast = BRAND_CONTEXT;
+    if (s.slice(fast.length).startsWith("\n" + GEO_RULES)) fast += "\n" + GEO_RULES;
+  }
+  if (!fast) return s;
+
+  const blokker = [{ type: "text", text: fast, cache_control: { type: "ephemeral" } }];
+  const resten = s.slice(fast.length);
+  if (resten.trim()) blokker.push({ type: "text", text: resten });
+  return blokker;
+}
+
+// =====================================================
+// Anthropic-kall
 // =====================================================
 async function callClaude(env, system, userPrompt, maxTokens) {
   const resp = await fetch("https://api.anthropic.com/v1/messages", {
@@ -218,7 +253,7 @@ async function callClaude(env, system, userPrompt, maxTokens) {
     body: JSON.stringify({
       model: "claude-sonnet-5",
       max_tokens: maxTokens || 2048,
-      system,
+      system: systemBlocks(system),
       messages: [{ role: "user", content: userPrompt }],
     }),
   });

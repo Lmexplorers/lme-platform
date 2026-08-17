@@ -69,7 +69,7 @@ export async function onRequestPost(context) {
 
   let job;
   try {
-    job = await videoGenerateSubmit(env, scene.image.assetUrl, motionPrompt);
+    job = await videoGenerateSubmit(env, scene.image.assetUrl, motionPrompt, { email: user.email });
   } catch (e) {
     if (!gate.owner) await refundVideoFlow(context, gate.email, CREDIT_COSTS.video);
     return json({ error: "Klarte ikke å starte videogenereringen.", detail: String((e && e.message) || e).slice(0, 200) }, 200);

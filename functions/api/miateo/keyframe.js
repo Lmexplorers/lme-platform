@@ -84,7 +84,7 @@ export async function onRequestPost(context) {
 
   let out;
   try {
-    out = await imageGenerateKeyframe(env, prompt, size);
+    out = await imageGenerateKeyframe(env, prompt, size, { email: gate.user.email });
   } catch (e) {
     // Re-read fresh before writing (see updateShot doc comment in
     // miateo-store.js): the slow image call above is exactly the window

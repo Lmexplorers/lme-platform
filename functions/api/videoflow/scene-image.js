@@ -66,7 +66,7 @@ export async function onRequestPost(context) {
 
   let out;
   try {
-    out = await imageGenerateScene(env, prompt, "1536x1024");
+    out = await imageGenerateScene(env, prompt, "1536x1024", { email: user.email });
   } catch (e) {
     if (!gate.owner) await refundVideoFlow(context, gate.email, CREDIT_COSTS.image);
     // Re-read the project fresh here (see updateScene doc comment): the slow

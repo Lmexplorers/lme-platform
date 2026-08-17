@@ -1,0 +1,10 @@
+name = "lme-ai-visibility"
+main = "../../ai-visibility-worker.js"
+compatibility_date = "2026-07-01"
+
+# Secrets (ligger allerede paa workeren i dashbordet, roeres IKKE av deploy):
+#   ANTHROPIC_API_KEY   sk-ant-...  (alt AI-innhold)
+#   GITHUB_TOKEN        fine-grained, Contents R/W  (publisering av artikler)
+#   DAILY_KEY           delt noekkel med GitHub Actions-cronen (dagens artikkel)
+#   MAILERSEND_API_KEY  valgfritt, e-postvarsel ved publisering
+#   BLOTATO_API_KEY     valgfritt, autoposting til sosiale medier

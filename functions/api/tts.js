@@ -8,6 +8,7 @@
  * stemmen) hvis satt, ellers OpenAI TTS. Krever innlogget bruker.
  */
 
+import { logUsage } from "../_lib/ai-core/usage.js";
 import { sessionUser } from "../_lib/access.js";
 
 const CALL_TIMEOUT_MS = 20000;
@@ -39,6 +40,7 @@ export async function onRequestPost(context) {
 
   const audioHeaders = { "Content-Type": "audio/mpeg", "Cache-Control": "no-store", "Access-Control-Allow-Origin": "*" };
 
+  const t0 = Date.now();
   try {
     // 1) ElevenLabs (forteller-stemmen), hvis konfigurert.
     const voiceId = env.ELEVENLABS_VOICE_NARRATOR || env.ELEVENLABS_VOICE_ID;
@@ -51,6 +53,11 @@ export async function onRequestPost(context) {
           model_id: env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2",
           voice_settings: { stability: 0.5, similarity_boost: 0.75 },
         }),
+      });
+      await logUsage(env, {
+        app: "tts", task: "voice", modelId: env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2",
+        email: (user && user.email) || "", units: { chars: text.length }, ms: Date.now() - t0,
+        status: r.ok ? "ok" : "error", error: r.ok ? "" : "elevenlabs_" + r.status,
       });
       if (r.ok) return new Response(await r.arrayBuffer(), { status: 200, headers: audioHeaders });
       // Faller videre til OpenAI hvis ElevenLabs feiler (f.eks. tom kvote).
@@ -69,6 +76,11 @@ export async function onRequestPost(context) {
         method: "POST",
         headers: { "Authorization": "Bearer " + env.OPENAI_API_KEY, "Content-Type": "application/json" },
         body: JSON.stringify(payload),
+      });
+      await logUsage(env, {
+        app: "tts", task: "voice", modelId: model,
+        email: (user && user.email) || "", units: { chars: text.length }, ms: Date.now() - t0,
+        status: r.ok ? "ok" : "error", error: r.ok ? "" : "openai_tts_" + r.status,
       });
       if (r.ok) return new Response(await r.arrayBuffer(), { status: 200, headers: audioHeaders });
       const t = await r.text();

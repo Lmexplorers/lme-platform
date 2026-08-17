@@ -10,6 +10,11 @@
  * returnerer Anthropic sitt svar { content: [...] } slik byggeren forventer.
  */
 
+import { sessionUser } from "./_lib/access.js";
+import { logUsage, anthropicUnits } from "./_lib/ai-core/usage.js";
+
+const MODEL = "claude-sonnet-5";
+
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -35,6 +40,15 @@ export async function onRequestPost(context) {
     return json({ error: "API-nøkkel mangler i Pages-innstillingene (ANTHROPIC_API_KEY)." }, 500);
   }
 
+  // Innlogging kreves. Uten dette kunne hvem som helst som fant adressen bruke
+  // plattformens Anthropic-nøkkel, siden ruten svarer på alle opphav
+  // (Access-Control-Allow-Origin: *). LME Builder kaller alltid herfra med en
+  // innlogget økt, så dette stenger ingen ekte bruker ute.
+  const user = await sessionUser(context);
+  if (!user) {
+    return json({ error: "Logg inn for å bruke LME Builder." }, 401);
+  }
+
   let body;
   try {
     body = await request.json();
@@ -49,6 +63,7 @@ export async function onRequestPost(context) {
 
   const maxTokens = Math.min(Math.max(parseInt(body.max_tokens, 10) || 2000, 256), 4000);
 
+  const t0 = Date.now();
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -58,7 +73,7 @@ export async function onRequestPost(context) {
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: "claude-sonnet-5",
+        model: MODEL,
         max_tokens: maxTokens,
         system: typeof body.system === "string" ? body.system : "",
         messages: messages,
@@ -66,6 +81,12 @@ export async function onRequestPost(context) {
     });
 
     const data = await res.json().catch(() => null);
+
+    await logUsage(env, {
+      app: "builder", task: "text", modelId: MODEL, email: user.email,
+      units: anthropicUnits(data), ms: Date.now() - t0,
+      status: res.ok ? "ok" : "error", error: res.ok ? "" : "claude_" + res.status,
+    });
 
     if (!res.ok) {
       let hint = "";
@@ -80,6 +101,10 @@ export async function onRequestPost(context) {
     // Pass gjennom Anthropic sitt content-array — byggeren leser data.content[].text
     return json({ content: data.content || [], usage: data.usage }, 200);
   } catch (err) {
+    await logUsage(env, {
+      app: "builder", task: "text", modelId: MODEL, email: user.email,
+      ms: Date.now() - t0, status: "error", error: (err && err.message) || "network",
+    });
     return json({ error: "Noe gikk galt mot Anthropic. Prøv igjen om litt." }, 502);
   }
 }

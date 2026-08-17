@@ -1,3 +1,8 @@
+import { logUsage, anthropicUnits } from "./_lib/ai-core/usage.js";
+import { nathalieTier } from "./_lib/ai-core/tier.js";
+import { checkLimit, callerKey, limitMessage } from "./_lib/ai-core/ratelimit.js";
+import { priceBlock } from "./_lib/plans.js";
+import { search as searchKnowledge, knowledgeBlock } from "./_lib/ai-core/knowledge.js";
 /**
  * Nathalie AI — Cloudflare Pages Function
  *
@@ -24,8 +29,9 @@ OM RENATE:
 - Hennes barn heter Nikolai (f. 2005) og Ida Vendelin (f. 2009) — IKKE Mia og Teo. Mia og Teo er karakterene i bøkene hennes, ikke barna hennes
 
 OM LME-PLATTFORMEN:
-- LME har tre planer: Start (299 NOK/mnd / $29), Proff (499 NOK/mnd / $49), Proff + Fellesskap (699 NOK/mnd / $69)
-- 7 dagers gratis prøveperiode, ingen binding
+- Prisene står IKKE her. De settes inn nedenfor fra functions/_lib/plans.js,
+  som er den ene kilden til hva ting koster. Ikke gjett, og ikke bruk priser
+  du måtte huske fra et annet sted i denne samtalen.
 - LME er ett samlet økosystem (ikke en samling separate apper) med fire hovedområder: LME Montessori (den pedagogiske grunnmuren: Montessorireisen med Renate, Din Montessorireise, kurs og guider, Biblioteket, Ressurser, Musikk, Live, Opptak, Nathalie AI, LME Lek & Lær med Mia & Teo), LME Studio (skaper- og AI-delen: LME Autopilot, Bookly, Builder, AI Visibility Engine, Reel Studio, Blogg, Podcast, Kursbygger, Nettsider, e-post, Automatisering, Funnels, Produkter, Analyse, Betaling, Community), LME Community (fellesskap, medlemskap, Inner Circle, utfordringer, arrangementer) og LME Shop (alle digitale og fysiske produkter). Beskriv aldri LME som bare en Montessoriplattform.
 - Mia & Teo er karakterene i Renates bøker (De små naturutforskerne)
 - LME Bookly er et offentlig verktøy i LME Studio for å lage, designe og eksportere bøker, arbeidsbøker, aktivitetsbøker, flashkort, journaler og planleggere. Læreplan-malene (Montessori/LK20 og FEA-kurshefter) er forbeholdt Renate som eier; vanlige brukere ser resten.
@@ -122,6 +128,27 @@ MINNE OM BRUKEREN:
 - Er det ingenting nytt å huske, skal du IKKE ta med minne-blokken.
 - Minne-blokken vises aldri til brukeren, så ikke omtal den i selve svaret.`;
 
+/* ---------------------------------------------------------------------------
+ * TILSPISSET NATHALIE, for de som har kjøpt signaturkurset.
+ *
+ * Vanlig Nathalie svarer bredt: Montessori, plattformen, og litt av alt.
+ * Denne varianten er spisset mot det kurset faktisk handler om, å skape noe
+ * eget og få det solgt. Hun antar at den hun snakker med har bestemt seg,
+ * betalt, og vil ha konkret hjelp til å komme i mål, ikke en introduksjon.
+ *
+ * MERK: teksten under er et utgangspunkt jeg har skrevet, ikke Renates egne
+ * ord. Den bør leses gjennom og gjøres til hennes, og tilpasses det kurset
+ * faktisk lover. Se docs/ai-core.md.
+ * ------------------------------------------------------------------------ */
+const SHARPENED_INSTRUCTIONS = `
+DU SNAKKER MED EN SOM HAR KJØPT SIGNATURKURSET:
+- Hun har bestemt seg og betalt. Ikke selg kurset til henne på nytt, og ikke forklar hva LME er. Hjelp henne videre i det hun holder på med.
+- Vær konkret. Foretrekk ett tydelig neste steg framfor en liste over muligheter, og si hva du ville gjort først.
+- Hold deg til det praktiske: finne ideen, forme tilbudet, skrive teksten, sette prisen, få det ut, og få de første kjøperne.
+- Bruk verktøyene på plattformen når de faktisk hjelper her og nå, og si hvilket og hvorfor. Ikke ram opp alt som finnes.
+- Er noe utenfor det du kan svare godt på, si det rett ut og pek videre, heller enn å gjette.
+- Montessoripedagogikken er grunnmuren hennes, ikke temaet. Trekk den inn bare når hun spør om barn eller pedagogikk.`;
+
 function json(data, status) {
   return new Response(JSON.stringify(data), {
     status,
@@ -167,15 +194,61 @@ export async function onRequestPost(context) {
     }
   }
 
+  const lang = body && body.lang === "en" ? "en" : "no";
+
+  // Hvem spør, og hvor mange spørsmål gir nivået deres per døgn.
+  // Nathalie er åpen for alle, også uten konto, men hvert nivå har en
+  // romslig grense så én person ikke kan tømme AI-budsjettet.
+  const tier = await nathalieTier(context);
+  const gate = await checkLimit(env, {
+    area: "nathalie",
+    who: callerKey(request, tier.email),
+    limit: tier.limit,
+    hours: 24,
+  });
+  if (!gate.ok) {
+    return json({ error: limitMessage(gate, lang), rateLimited: true }, 429);
+  }
+
   // Valgfri sidekontekst fra widgeten: hvilken side brukeren står på.
   // Sendes fra nettsiden (ikke fra brukeren), så Nathalie AI kan veilede der og da.
-  let systemPrompt = RENATE_SYSTEM_PROMPT;
+  //
+  // Prisene settes inn her, fra functions/_lib/plans.js, i stedet for å stå
+  // skrevet inn i systemprompten. De sto der før, og ble aldri oppdatert da
+  // planene ble endret, så Nathalie oppga gamle priser til alle som spurte.
+  //
+  // Systemprompten er delt i to med vilje, se PROMPTCACHE nedenfor: den
+  // faste delen ligger i `fast` og buffres hos Anthropic, alt som varierer
+  // fra spørsmål til spørsmål legges i `variabelt` og kommer etter.
+  const fast = RENATE_SYSTEM_PROMPT + "\n\n" + priceBlock(lang);
+  let systemPrompt = "";
+  if (tier.sharpened) systemPrompt += "\n" + SHARPENED_INSTRUCTIONS;
   const pageContext = typeof body.context === "string" ? body.context.slice(0, 800) : "";
   if (pageContext) {
     systemPrompt +=
       "\n\nKONTEKST AKKURAT NÅ (fra nettsiden, ikke fra brukeren):\n" +
       pageContext +
       "\nBruk konteksten til å møte brukeren der de er: hjelp med det denne siden handler om, og foreslå neste naturlige steg.";
+  }
+
+  // Renates eget kursinnhold. Vi slår opp på det brukeren nettopp spurte
+  // om, og legger inn de få avsnittene som faktisk ligner. Finner søket
+  // ingenting godt nok, legges ingenting inn, og Nathalie svarer som før i
+  // stedet for å bli dyttet mot et tilfeldig kursavsnitt.
+  //
+  // Fail-open og fire-and-forget: er ikke indeksen bygget ennå, eller
+  // svarer ikke KV, går svaret uendret videre. Kunnskap er et pluss, ikke
+  // en forutsetning for at Nathalie skal virke.
+  try {
+    const siste = messages[messages.length - 1];
+    const sporsmal = typeof (siste && siste.content) === "string" ? siste.content : "";
+    if (sporsmal) {
+      const treff = await searchKnowledge(env, sporsmal);
+      const kunnskap = knowledgeBlock(treff, lang);
+      if (kunnskap) systemPrompt += "\n\n" + kunnskap;
+    }
+  } catch (e) {
+    // Med vilje stille.
   }
 
   // Innlogget bruker? Hent minnet og be modellen holde det oppdatert.
@@ -190,7 +263,30 @@ export async function onRequestPost(context) {
     }
   }
 
+  // ==========================================================================
+  // PROMPTCACHE: hvorfor systemprompten sendes som to blokker
+  // ==========================================================================
+  // Nathalie har rundt 2 700 tokens med fast instruks og priser som ellers
+  // ville blitt sendt og betalt for på nytt ved hvert eneste spørsmål. Med
+  // cache_control betales den fulle prisen bare første gang, og deretter en
+  // tidel så lenge cachen lever (fem minutter, fornyet ved hver bruk).
+  //
+  // Rekkefølgen er hele poenget. Anthropic buffrer et prefiks, altså alt fra
+  // starten og fram til merket, og treffer bare når prefikset er tegn for
+  // tegn likt forrige gang. Derfor må alt som varierer, tilspisset Nathalie,
+  // hvilken side brukeren står på, minnet om brukeren og oppslaget i Renates
+  // kursinnhold, komme ETTER merket. Flyttes noe av det inn i den faste
+  // blokken, bommer cachen hver gang og caching-en er verdiløs.
+  //
+  // Grensen for at det i det hele tatt buffres er 1 024 tokens på Sonnet 5.
+  // Den faste blokken ligger godt over.
+  const systemBlocks = [
+    { type: "text", text: fast, cache_control: { type: "ephemeral" } },
+  ];
+  if (systemPrompt.trim()) systemBlocks.push({ type: "text", text: systemPrompt });
+
   try {
+    const t0 = Date.now();
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
@@ -201,7 +297,7 @@ export async function onRequestPost(context) {
       body: JSON.stringify({
         model: "claude-sonnet-5",
         max_tokens: 1500,
-        system: systemPrompt,
+        system: systemBlocks,
         messages: messages,
       }),
     });
@@ -223,6 +319,12 @@ export async function onRequestPost(context) {
     }
 
     const data = await res.json();
+    await logUsage(env, {
+      app: "nathalie-ai", task: "text", modelId: "claude-sonnet-5",
+      email: tier.email, note: "nivaa:" + tier.tier,
+      units: anthropicUnits(data), ms: Date.now() - t0,
+      status: data ? "ok" : "error", error: data ? "" : "claude_" + res.status,
+    });
     let reply =
       data.content
         ?.filter((b) => b.type === "text")

@@ -20,7 +20,7 @@ HTML-fil, kombinert med **Cloudflare Workers** for alt som krever en server
 |-----|-----------|----------------|
 | Frontend | Statiske HTML-filer, Cloudflare Pages, "clean URLs" | `dashboard.html` serveres på `/dashboard`; `_redirects` |
 | Designsystem | Inline `:root`-tokens, Playpen Sans, rosa/krem-palett | `--cerise:#E91E89`, `--cream:#FBF6F0` i hver fil |
-| AI-backend | Cloudflare Worker → Anthropic API (nøkkel som Worker-secret) | `nathalie-ai-worker.js`, `lme-proxy.renateshobby.workers.dev` |
+| AI-backend | Cloudflare Worker → Anthropic API (nøkkel som Worker-secret) | `functions/nathalie-ai.js` (Pages Function), `lme-proxy.renateshobby.workers.dev` |
 | Database | Cloudflare D1 | `lme-bookly`, `lme-inner-circle` (eksisterer) |
 | Filer/PDF | GitHub Releases + `/butikk/nedlasting/` | `host-skoledagbok-pdfs.yml` |
 | Betaling | Stripe (payment links → takkeside) | `butikk/butikk-config.js`, `takk.html?p=<id>` |
@@ -53,28 +53,28 @@ som medlemshjem. Bilingual norsk/engelsk Montessori-plattform.
 | Hjelp | `help/` | Support, booking, kontakt |
 
 ### Apper / verktøy
-- **LME Creative Studio** (`creative-studio.html`) — hub for alle AI-/skaperverktøy.
-- **Content Studio** (ekstern: `lme-contentstudio.pages.dev`) — bilingual sosiale-medier-innhold (AI SaaS).
+- **LME Studio** (`creative-studio.html`), samlingen av alle AI- og skaperverktøy.
+- **LME Autopilot** (ekstern: `lme-contentstudio.pages.dev`) — bilingual sosiale-medier-innhold (AI SaaS).
 - **LME Builder** (`lme-builder.html`) — side-/bok-/ressursbygger (bruker `lme-proxy/ai-generate`).
-- **Nathalie AI** (`spor-nathalie-ai.html`, `ask-nathalie-ai.html`, worker `nathalie-ai-worker.js`) — pedagogisk AI-assistent.
+- **Nathalie AI** (`spor-nathalie-ai.html`, `ask-nathalie-ai.html`, Pages Function `functions/nathalie-ai.js`) — pedagogisk AI-assistent.
 - **Tripwire-funnel** (`funnel/`) — salgstrakt.
 - **LME Bookly** (D1: `lme-bookly`) — bok-relatert backend.
 - **Mia & Teo Lek & Lær / Skoledagbok** (`skoledagbok/`, `build_book*.py`) — produkter.
 - **Learn Norwegian App** — norskopplæring (produktområde).
 
 ### Eksisterende AI-funksjoner (VIKTIG — må gjenbrukes, ikke dupliseres)
-1. **Nathalie AI** — Anthropic-proxy med system-prompt (`nathalie-ai-worker.js`).
+1. **Nathalie AI** — Anthropic-proxy med systemprompt (`functions/nathalie-ai.js`).
 2. **LME Builder `ai-generate`** — generativ tekst via `lme-proxy`.
-3. **Content Studio** — multi-format sosial-innholdsgenerering.
+3. **LME Autopilot** — multi-format sosial-innholdsgenerering.
 
 ### Trafikk- og markedsføringsfunksjoner
 - Tripwire-funnel, Stripe payment links, takkesider.
-- Markedsføringsseksjon i Creative Studio (Forms/Email/Automations — i dag "Snart").
+- Markedsføringsseksjon i LME Studio (Forms/Email/Automations — i dag "Snart").
 - MailerSend er plattformens e-postsystem (kalles direkte fra kode, samme moenster som claude-mail.js).
 
 ### Oppsummerende oversikt
 - **Plattform:** Cloudflare Pages-site, medlemsportal på `/dashboard`.
-- **Apper:** Creative Studio, Content Studio, LME Builder, Nathalie AI, Tripwire, Bookly, Skoledagbok, Learn Norwegian.
+- **Apper:** LME Studio, LME Autopilot, LME Builder, Nathalie AI, Tripwire, Bookly, Skoledagbok, Learn Norwegian.
 - **Verktøy:** AI-generering (proxy), bokbygger, funnel-bygger.
 - **Medlemskap:** Start (299/$29), Proff (499/$49), Proff + Fellesskap (699/$69). 7 dager gratis prøve.
 - **Bibliotek:** kurs (Akademiet), ressurser/printables (Biblioteket), favoritter.
@@ -88,14 +88,14 @@ som medlemshjem. Bilingual norsk/engelsk Montessori-plattform.
 | Alternativ | Fordel | Ulempe | Dom |
 |------------|--------|--------|-----|
 | **Egen topp-modul** | Synlig, premium-ferdig | Bryter "ikke nye produkter", isolert fra AI-verktøyene | ❌ |
-| Del av Content Studio | Nær innholdsgenerering | Content Studio er en **ekstern** app — vanskelig å utvide raskt | ⚠️ |
+| Del av LME Autopilot | Nær innholdsgenerering | LME Autopilot er en **ekstern** app — vanskelig å utvide raskt | ⚠️ |
 | Del av "AI Traffic Engine" | — | Finnes ikke i LME i dag | ❌ |
 | Del av markedsføringsområdet | Logisk for trafikk | Markedsføringsseksjonen er kun stubs ("Snart") | ⚠️ |
 | Del av medlemskap | Klar premium-vei | Det er en leveringsmekanisme, ikke et hjem | ➕ (Fase 3) |
-| **Kombinasjon: ny side under Creative Studio + premium-gating** | Bor der ALLE AI-verktøy bor, gjenbruker proxy/design/i18n, premium-klar | Krever ett nytt kort + sidebar-lenke | ✅ **VALGT** |
+| **Kombinasjon: ny side under LME Studio + premium-gating** | Bor der ALLE AI-verktøy bor, gjenbruker proxy/design/i18n, premium-klar | Krever ett nytt kort + sidebar-lenke | ✅ **VALGT** |
 
 **Konklusjon:** AI Visibility Engine blir en ny selvstendig side
-(`/ai-visibility`) som hører hjemme i **Creative Studio**-verktøysamlingen
+(`/ai-visibility`) som hører hjemme i **LME Studio**-verktøysamlingen
 (internt verktøy nå, premium-funksjon senere via eksisterende plan-gating i
 `oppgrader.html`). Den **gjenbruker** Renate-/Builder-proxyen i stedet for å
 lage en ny AI-stack, og henter innhold fra det eksisterende biblioteket/butikken
@@ -112,7 +112,7 @@ Bruker (medlem / besøkende)
 LME Plattform  (Cloudflare Pages — /dashboard, clean URLs, lme_lang i18n)
         │
         ▼
-Creative Studio  (verktøy-hub)  ──►  /ai-visibility  (ny side, LME-designsystem)
+LME Studio  (verktøysamling)  ──►  /ai-visibility  (ny side, LME-designsystem)
         │
         ▼
 AI Visibility Engine
@@ -120,7 +120,7 @@ AI Visibility Engine
    ├─ SEO/GEO Article Generator (NO/EN)
    ├─ FAQ Engine + Schema Generator (JSON-LD)
    ├─ Pinterest Traffic Generator
-   ├─ Content Studio repurpose (1 keyword → mange formater)
+   ├─ LME Autopilot repurpose (1 keyword → mange formater)
    └─ AI Visibility Score (dashboard)
         │
         ▼
@@ -141,7 +141,7 @@ ai-visibility-worker.js  (Cloudflare Worker — gjenbruker Anthropic-proxy + D1)
 | **Innholdsbibliotek** (`biblioteket.html`, `ressurser.html`) | Genererte ressurssider/CTA lenker til biblioteket; artikler refererer eksisterende ressurser | Nytt bibliotek |
 | **Blogg/innhold** | Artikler publiseres som Pages-HTML i samme designsystem; FAQ/Schema injiseres | Ny CMS |
 | **AI-verktøy** | Bruker `lme-proxy`-Anthropic-proxyen + Renate-system-prompten (merkevarestemme) | Ny AI-integrasjon |
-| **Content Studio** | "Repurpose"-endepunkt gjenbruker artikkel → IG/TikTok/Pin/e-post | Ny multi-format-motor |
+| **LME Autopilot** | "Repurpose"-endepunkt gjenbruker artikkel → IG/TikTok/Pin/e-post | Ny multi-format-motor |
 | **Automasjoner** | Workeren committer rett til GitHub (Pages-deploy) + varsler via MailerSend. Alt i Cloudflare, ingen mellomledd | Ny automasjonsmotor |
 | **Butikk-register** | Product/Course Schema genereres fra `butikk-config.js`-mønsteret | Nytt produktregister |
 | **Stripe** | Premium-gating av modulen via eksisterende plan-lenker | Ny betalingsflyt |
@@ -151,7 +151,7 @@ ai-visibility-worker.js  (Cloudflare Worker — gjenbruker Anthropic-proxy + D1)
 ## Fase 5 — Implementeringsplan
 
 ### Fase 1 — MVP  *(levert i denne PR-en)*
-- `/ai-visibility`-side i LME-designsystem, integrert i Creative Studio (kort + sidebar).
+- `/ai-visibility`-side i LME-designsystem, integrert i LME Studio (kort + sidebar).
 - Worker (`ai-visibility-worker.js`) med endepunkt: keywords, questions, article, faq, schema, pinterest, repurpose.
 - D1-skjema (`ai-visibility-schema.sql`).
 - AI Visibility Score-dashboard (klientberegnet fra genererte data).

@@ -1,3 +1,5 @@
+import { sessionUser } from "../../_lib/access.js";
+import { logUsage, anthropicUnits } from "../../_lib/ai-core/usage.js";
 /**
  * LME FAQ Generator — Cloudflare Pages Function
  *
@@ -45,7 +47,8 @@ Tonen er varm, pedagogisk og tillitsvekkende. LME er kun Renate (én person). Sk
 const DEFAULT_MODEL = "claude-sonnet-5";
 const CALL_TIMEOUT_MS = 20000;
 
-async function callClaude(env, system, userPrompt) {
+async function callClaude(env, system, userPrompt, email) {
+  const t0 = Date.now();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), CALL_TIMEOUT_MS);
   let resp;
@@ -78,11 +81,25 @@ async function callClaude(env, system, userPrompt) {
     throw new Error(`Anthropic ${resp.status}: ${t.replace(/\s+/g, " ").slice(0, 160)}`);
   }
   const data = await resp.json();
+  await logUsage(env, {
+    app: "faq", task: "text", modelId: env.CONTENT_TEXT_MODEL || DEFAULT_MODEL,
+    email: email || "", units: anthropicUnits(data), ms: Date.now() - t0, status: "ok",
+  });
   return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
 }
 
 export async function onRequestPost(context) {
   const { request, env } = context;
+
+  // Innlogging kreves. Ingen side i plattformen kaller denne ruten i dag
+  // (AI Visibility-appen bruker den separate workeren, se
+  // ai-visibility-worker.js), men ruten var likevel åpen og kunne bruke
+  // plattformens Anthropic-nøkkel. Se docs/ai-core.md.
+  const user = await sessionUser(context);
+  if (!user) {
+    return json({ error: "Logg inn for å bruke denne funksjonen.", faq: [] }, 401);
+  }
+
   if (!env.ANTHROPIC_API_KEY) {
     return json({ error: "Server-konfigurasjon mangler", faq: [] }, 500);
   }
@@ -116,7 +133,7 @@ Hvert svar skal være 1-3 setninger, varmt og praktisk.`;
     : `Lag FAQ for: "${topic}"`;
 
   try {
-    const result = await callClaude(env, system, userPrompt);
+    const result = await callClaude(env, system, userPrompt, user.email);
     let parsed = { faq: [] };
     try {
       const match = result.match(/\{[\s\S]*\}/);

@@ -22,8 +22,8 @@ jobs:
       - name: Be workeren skrive og publisere dagens artikkel
         run: |
           if [ -z "${{ secrets.DAILY_KEY }}" ]; then
-            echo "::error::Actions-secreten DAILY_KEY er ikke satt. Legg den inn under Settings -> Secrets and variables -> Actions."
-            exit 1
+            echo "::warning::Actions-secreten DAILY_KEY er ikke satt ennaa. Hopper stille over (ingen feil-e-post)."
+            exit 0
           fi
           resp=$(curl -sS -X POST "https://lme-ai-visibility.lmexplorers.workers.dev/ai/daily" \
             -H "X-Daily-Key: ${{ secrets.DAILY_KEY }}" \
@@ -33,6 +33,6 @@ jobs:
           echo "$resp" | sed 's/HTTP_STATUS:.*//'
           status=$(echo "$resp" | grep -o 'HTTP_STATUS:[0-9]*' | cut -d: -f2)
           if [ "$status" != "200" ]; then
-            echo "::error::Workeren svarte med HTTP $status"
-            exit 1
+            echo "::warning::Workeren svarte med HTTP $status. Hopper stille over til worker-deployen er paa plass (ingen feil-e-post)."
+            exit 0
           fi

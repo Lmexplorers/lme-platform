@@ -312,12 +312,28 @@ export async function sendOwnerSaleNotice(env, opts) {
     "<tr><td><b>Språk:</b></td><td style=\"padding-left:10px;\">" + språk + "</td></tr>" +
     "</table>" +
     "<p style=\"color:#6b6470;font-size:14px;\">Kunden har fått bekreftelsen sin automatisk.</p>";
+
+  // Noen salg krever at Renate faktisk gjør noe for at kunden skal få varen.
+  // Da skal det stå i e-posten, ikke ligge og vente på at hun oppdager det.
+  // Kalleren bestemmer teksten, siden det er den som vet hva som ble solgt.
+  const act = opts && opts.action;
+  const actInner = act
+    ? '<div style="margin:18px 0;padding:14px 16px;background:#fffdf2;' +
+      'border:1px solid #f4ecc4;border-radius:12px;">' +
+      '<p style="margin:0 0 6px;font-weight:600;">' + esc(act.title || "Dette må du gjøre nå") + "</p>" +
+      '<p style="margin:0;font-size:15px;line-height:1.6;">' + esc(act.body || "") + "</p>" +
+      (act.url ? '<p style="margin:8px 0 0;"><a href="' + esc(act.url) + '">' + esc(act.url) + "</a></p>" : "") +
+      "</div>"
+    : "";
+
   const body = {
     from: { email: FROM_EMAIL, name: FROM_NAME },
     to: [{ email: to, name: FROM_NAME }],
-    subject: "🎉 Nytt salg: " + pname + (beløp ? " (" + beløp + ")" : ""),
-    html: wrap(inner),
-    text: "Nytt salg! Oppskrift: " + pname + ". " + (beløp ? "Beløp: " + beløp + ". " : "") + "Kunde: " + kunde + (opts.email ? " (" + opts.email + ")" : "") + ". Språk: " + språk + ".",
+    subject: (act ? "⚠️ Nytt salg, krever handling: " : "🎉 Nytt salg: ") +
+             pname + (beløp ? " (" + beløp + ")" : ""),
+    html: wrap(inner + actInner),
+    text: "Nytt salg! Oppskrift: " + pname + ". " + (beløp ? "Beløp: " + beløp + ". " : "") + "Kunde: " + kunde + (opts.email ? " (" + opts.email + ")" : "") + ". Språk: " + språk + "." +
+          (act ? "\n\n" + (act.title || "Dette må du gjøre nå") + "\n" + (act.body || "") + (act.url ? "\n" + act.url : "") : ""),
   };
   try {
     const res = await fetch(MS, {

@@ -63,7 +63,7 @@ export async function onRequestPost(context) {
 
   let job;
   try {
-    job = await videoGenerateSubmit(env, shot.keyframe.assetUrl, motionPrompt);
+    job = await videoGenerateSubmit(env, shot.keyframe.assetUrl, motionPrompt, { email: gate.user.email });
   } catch (e) {
     return json({ error: "Klarte ikke å starte videogenereringen.", detail: String((e && e.message) || e).slice(0, 200) }, 200);
   }

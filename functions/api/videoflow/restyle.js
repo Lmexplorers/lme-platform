@@ -80,7 +80,7 @@ export async function onRequestPost(context) {
   const origin = new URL(request.url).origin;
   const results = await Promise.allSettled(scenesSnapshot.map(async (scene) => {
     const prompt = buildPrompt(style, scene);
-    const out = await imageGenerateScene(env, prompt, "1536x1024");
+    const out = await imageGenerateScene(env, prompt, "1536x1024", { email: user.email });
     const assetUrl = await storeImage(env, origin, out.bytes, out.contentType);
     return { assetUrl, prompt };
   }));
