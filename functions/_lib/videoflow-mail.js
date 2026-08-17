@@ -66,7 +66,7 @@ const EMPTY_COPY = {
       7: "Det er en uke siden VideoFlow-kredittene dine tok slutt.",
       14: "Det er to uker siden VideoFlow-kredittene dine tok slutt.",
     },
-    body: "Abonner for $8/mnd og få 2000 nye kreditter med en gang, pluss automatisk påfyll hver måned, så du kan fortsette å lage videoer.",
+    body: "Abonner for 89 kr/mnd og få 2000 nye kreditter med en gang, pluss automatisk påfyll hver måned, så du kan fortsette å lage videoer.",
     cta: "Forny VideoFlow",
     sign: "Klem fra Renate",
     fallbackName: "",

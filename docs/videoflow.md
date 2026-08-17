@@ -74,20 +74,33 @@ the two products can evolve independently).
 ## Stripe subscription (live, built 13. august 2026)
 
 Real, live-mode billing (Renate: "Live modus, opprett, du vet jo prisene",
-"Sett i gang med alt"). $8/mo, USD, recurring monthly, 2000 credits/mo,
-matches the FacelessGenie numbers on `videoflow.html`.
+"Sett i gang med alt"). $8/mo (USD) / 89 kr/mnd (NOK), recurring monthly,
+2000 credits/mo, matches the FacelessGenie numbers on `videoflow.html`.
 
-- **Product/price**: `prod_V4D12UtsHgmMld` / `price_1U44bSLax7B8uQzqahgfMCP4`,
-  created directly via the Stripe API (live mode).
-- **Payment links** (same price, only differ in which language the buyer's
-  emails are sent in, same pattern as `AUTOPILOT_PAYMENT_LINKS`):
-  - no: `plink_1U44bjLax7B8uQzqZuEoO2dT` → https://buy.stripe.com/dRm28s8055Zd51XgNN9R700
-  - en: `plink_1U44bpLax7B8uQzqcoo98yaj` → https://buy.stripe.com/28E3cw6W11IX7a5cxx9R701
-  Both registered in `functions/_lib/purchase-links.js`
-  (`VIDEOFLOW_PAYMENT_LINKS`, `videoFlowCheckoutUrl(lang)`). Linked from the
-  pricing card on `videoflow.html` and from a "⚡ Fyll på kreditter" /
-  "Abonner, $8/mnd" button in `videoflow-studio.html`'s topbar, shown
-  whenever the balance hits 0 or there's no active subscription.
+- **Product**: `prod_V4D12UtsHgmMld`, created directly via the Stripe API
+  (live mode). Two prices on it, one per currency (corrected 14. august
+  2026 after Renate caught the Norwegian link charging in USD — "Hvorfor
+  priser du med Dollar på den norske og? Det skal det være NOK" — the
+  first version had one USD price shared by both language links):
+  - `price_1U44bSLax7B8uQzqahgfMCP4` — USD, $8/mo
+  - `price_1U5N52Lax7B8uQzq0Ni3CoxI` — NOK, 89 kr/mnd, following the same
+    USD→NOK price-matching pattern as `AUTOPILOT_PAYMENT_LINKS`
+    ($19→199kr, $54→549kr, $99→999kr)
+- **Payment links**, one per currency/language, registered in
+  `functions/_lib/purchase-links.js` (`VIDEOFLOW_PAYMENT_LINKS`,
+  `videoFlowCheckoutUrl(lang)`):
+  - no: `plink_1U5N58Lax7B8uQzqzDtZzZzl` → https://buy.stripe.com/9B64gAfsxgDR7a5eFF9R702 (NOK)
+  - en: `plink_1U44bpLax7B8uQzqcoo98yaj` → https://buy.stripe.com/28E3cw6W11IX7a5cxx9R701 (USD)
+  - ~~`plink_1U44bjLax7B8uQzqZuEoO2dT`~~ deactivated in Stripe (was the
+    original, wrongly-USD-priced "no" link), kept mapped with
+    `deactivated: true` purely so an already-started checkout against it
+    still grants credits correctly if one somehow completes.
+  Linked from the pricing card on `videoflow.html` (89 kr/mnd for the
+  Norwegian page, $8/mo for the English page, both `data-no`/`data-en`
+  driven, not hardcoded to one currency) and from a "⚡ Fyll på kreditter" /
+  "Abonner, 89 kr/mnd" (or "Subscribe, $8/mo") button in `videoflow-
+  studio.html`'s topbar, shown whenever the balance hits 0 or there's no
+  active subscription.
 - **Webhook**: reuses the platform's one already-live Stripe endpoint
   (`functions/api/oppskrift-webhook.js`, `/api/oppskrift-webhook`, the same
   one Autopilot/courses/oppskrifter use), not a new endpoint. Added
@@ -130,8 +143,10 @@ matches the FacelessGenie numbers on `videoflow.html`.
 
 ## Credit economy
 
-$8/mo target price for 2000 credits (matches FacelessGenie's own numbers,
-picked deliberately for easy comparison). Costs in
+$8/mo (USD) / 89 kr/mnd (NOK) for 2000 credits (matches FacelessGenie's own
+USD numbers, picked deliberately for easy comparison; NOK price follows the
+platform's usual USD→NOK conversion pattern, see "Stripe subscription"
+above). Costs in
 `functions/_lib/videoflow-providers.js` CREDIT_COSTS:
 
 | Action | Cost |

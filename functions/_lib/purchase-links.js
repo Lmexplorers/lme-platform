@@ -125,26 +125,36 @@ export async function emailForStripeCustomer(env, customerId) {
   return await env.BUILDER_KV.get(custKey(customerId));
 }
 
-/* ---- LME VideoFlow subscription ($8/mo, 2000 credits/mo) ---------------
+/* ---- LME VideoFlow subscription (2000 credits/mo) -----------------------
    Live Stripe setup, created 13. august 2026 (Renate: "Live modus, opprett,
-   du vet jo prisene", 2000 credits for $8/mo matching FacelessGenie).
-   One product/price (USD, recurring monthly), two payment links (no/en,
-   same price, only differ in which mail language the buyer gets, same
-   pattern as AUTOPILOT_PAYMENT_LINKS above). Credits are granted/reset by
+   du vet jo prisene", 2000 credits/mo matching FacelessGenie). Same product
+   (VIDEOFLOW_PRODUCT_ID), two DIFFERENT prices though, one per currency
+   (unlike the two identical-price no/en links VideoFlow started with):
+   corrected 14. august 2026 after Renate caught the Norwegian link
+   charging in USD ("Hvorfor priser du med Dollar på den norske og? Det
+   skal det være NOK") — 89 kr/mnd for "no", following the same USD->NOK
+   price-matching pattern as AUTOPILOT_PAYMENT_LINKS ($19/199kr, $54/549kr,
+   $99/999kr): $8 -> 89 kr. Credits are granted/reset by
    functions/api/oppskrift-webhook.js on checkout + each renewal, never
    here (this file only tracks IDs, see functions/_lib/videoflow-credits.js
    for the actual balance logic). */
 export const VIDEOFLOW_PRODUCT_ID = "prod_V4D12UtsHgmMld";
-export const VIDEOFLOW_PRICE_ID = "price_1U44bSLax7B8uQzqahgfMCP4";
+export const VIDEOFLOW_PRICE_ID_USD = "price_1U44bSLax7B8uQzqahgfMCP4";
+export const VIDEOFLOW_PRICE_ID_NOK = "price_1U5N52Lax7B8uQzq0Ni3CoxI";
 export const VIDEOFLOW_PAYMENT_LINKS = {
-  "plink_1U44bjLax7B8uQzqZuEoO2dT": { lang: "no", url: "https://buy.stripe.com/dRm28s8055Zd51XgNN9R700" },
+  "plink_1U5N58Lax7B8uQzqzDtZzZzl": { lang: "no", url: "https://buy.stripe.com/9B64gAfsxgDR7a5eFF9R702" },
   "plink_1U44bpLax7B8uQzqcoo98yaj": { lang: "en", url: "https://buy.stripe.com/28E3cw6W11IX7a5cxx9R701" },
+  // Deactivated in Stripe 14. august 2026, wrongly priced in USD for a
+  // Norwegian buyer. Kept mapped (not returned by videoFlowCheckoutUrl, see
+  // the `deactivated` filter below) purely so an already-started checkout
+  // against the old link still grants credits correctly if it completes.
+  "plink_1U44bjLax7B8uQzqZuEoO2dT": { lang: "no", url: "https://buy.stripe.com/dRm28s8055Zd51XgNN9R700", deactivated: true },
 };
 
 /** Live checkout URL for a given site language, used by the studio/landing UI and by videoflow-mail.js reminders. */
 export function videoFlowCheckoutUrl(lang) {
   const wanted = lang === "en" ? "en" : "no";
-  const entry = Object.values(VIDEOFLOW_PAYMENT_LINKS).find((v) => v.lang === wanted);
+  const entry = Object.values(VIDEOFLOW_PAYMENT_LINKS).find((v) => v.lang === wanted && !v.deactivated);
   return (entry && entry.url) || Object.values(VIDEOFLOW_PAYMENT_LINKS)[0].url;
 }
 
