@@ -4,7 +4,7 @@ Planlegg innlegg, følg opp kommentarer og la automatiseringen svare, på
 medlemmets egen Facebook-side og Instagram profesjonelle konto. Siden ligger
 på `/planlegger` og er en del av LME Studio. Gamle `/innboks` sendes hit.
 
-## Tre faner, én tilkobling
+## Fire faner, én tilkobling
 
 ### 1. Planlegger
 Medlemmet skriver innlegget, velger hvilke kontoer det skal ut på, legger ved
@@ -41,6 +41,18 @@ Regler som kjøres automatisk hvert kvarter, og som kan kjøres manuelt med
 Hver kommentar behandles bare én gang (`sseen:<e-post>`), og kommentarer
 medlemmet allerede har svart på hoppes over, så ingen får dobbeltsvar.
 
+### 4. Statistikk
+Tallene for hver konto: følgere, og de siste 12 innleggene med likerklikk,
+kommentarer, delinger (Facebook), lagringer (Instagram), rekkevidde og en
+samlet engasjementssum. Beste innlegg løftes fram, og hvert innlegg får en
+liten stolpe som viser hvordan det gjorde det mot de andre.
+
+Rekkevidde og lagringer krever egne insights-tilganger fra Meta. Derfor spør
+koden først med de feltene, og prøver på nytt uten dem hvis Meta klager. Blir
+tilgangene avslått i app-gjennomgangen, virker fanen fortsatt: den viser
+likerklikk, kommentarer og delinger, og sier fra om at rekkevidde kommer når
+tilgangen er godkjent. Tallene mellomlagres i fem minutter.
+
 ## Filer
 
 | Fil | Hva den gjør |
@@ -68,8 +80,11 @@ per medlem, så Metas timegrense ikke tømmes med noen raske trykk.
 3. Be om disse tilgangene, og send dem gjennom Metas app-gjennomgang:
    `pages_show_list`, `pages_read_engagement`, `pages_read_user_content`,
    `pages_manage_engagement`, `pages_manage_posts`, `pages_messaging`,
-   `instagram_basic`, `instagram_manage_comments`, `instagram_content_publish`,
-   `instagram_manage_messages`.
+   `read_insights`, `instagram_basic`, `instagram_manage_comments`,
+   `instagram_content_publish`, `instagram_manage_messages`,
+   `instagram_manage_insights`.
+   De to insights-tilgangene gjelder bare statistikkfanen. Blir de avslått,
+   fungerer alt annet som før.
 4. Lim inn App-ID og app-hemmeligheten på `/planlegger` (bare eier ser
    feltene), eller sett dem som miljøvariabler på Pages-prosjektet:
    `META_APP_ID` og `META_APP_SECRET`.
@@ -94,6 +109,7 @@ er satt opp ennå.
 | `social:<e-post>` | Tilkoblede kontoer med tilgangsnøkler fra Meta |
 | `socialstate:<tilfeldig>` | Kobler et tilkoblingsforsøk til riktig e-post, 10 minutter |
 | `socialc:<e-post>:<konto>` | Mellomlagrede kommentarer, 60 sekunder |
+| `socials:<e-post>:<konto>` | Mellomlagret statistikk, 5 minutter |
 | `splan:<e-post>:<id>` | Ett planlagt innlegg. Publiserte og feilede ryddes bort etter 60 dager |
 | `srule:<e-post>` | Automatiseringsreglene |
 | `sseen:<e-post>` | Kommentarer automatiseringen alt har svart på (de siste 800) |
@@ -119,4 +135,4 @@ Actions-fanen i GitHub.
   sjelden et problem, men en DM til en gammel kommentar vil bli avvist.
 - Kommentarlisten henter de 10 nyeste innleggene per konto, med inntil 25
   kommentarer på hvert.
-- Statistikk og "social listening" er ikke med.
+- "Social listening" (å lytte etter omtaler andre steder) er ikke med.

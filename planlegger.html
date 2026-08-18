@@ -73,8 +73,21 @@
   .row { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .7rem; }
 
   .tabs { display: flex; gap: .4rem; background: #fff; border: 1px solid var(--pink-100); border-radius: 999px; padding: .3rem; box-shadow: var(--shadow-soft); margin-bottom: 1rem; }
-  .tabs button { flex: 1; border: none; background: transparent; color: var(--ink-soft); border-radius: 999px; padding: .55rem .5rem; font-weight: 700; font-size: .92rem; cursor: pointer; }
+  .tabs button { flex: 1 1 auto; border: none; background: transparent; color: var(--ink-soft); border-radius: 999px; padding: .55rem .4rem; font-weight: 700; font-size: .86rem; cursor: pointer; white-space: nowrap; }
   .tabs button.on { background: var(--pink-500); color: #fff; }
+
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: .5rem; margin-top: .7rem; }
+  .kpi { background: var(--pink-50); border: 1px solid var(--pink-100); border-radius: 14px; padding: .6rem .7rem; text-align: center; }
+  .kpi b { display: block; font-family: var(--font-head); font-size: 1.15rem; color: var(--pink-700); }
+  .kpi span { font-size: .78rem; color: var(--ink-soft); }
+  .sp { display: flex; gap: .6rem; align-items: center; padding: .55rem 0; border-top: 1px solid var(--pink-100); }
+  .sp img { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; flex: none; background: var(--pink-50); }
+  .sp .txt { flex: 1; min-width: 0; }
+  .sp .txt div:first-child { font-size: .9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sp .num { font-size: .8rem; color: var(--ink-soft); }
+  .bar { height: 6px; border-radius: 999px; background: var(--pink-100); margin-top: .3rem; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--pink-400), var(--pink-600)); }
+  .best { background: #f1f8e4; border: 1px solid #dcecc3; border-radius: 14px; padding: .6rem .8rem; margin-top: .7rem; font-size: .9rem; color: #4f7a22; }
 
   .bar { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin-bottom: .9rem; }
   .tab { border: 1.5px solid var(--pink-200); background: #fff; color: var(--ink-soft); border-radius: 999px; padding: .42rem .9rem; font-size: .88rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: .4rem; }
@@ -156,7 +169,7 @@
   <div class="hero">
     <span class="badge">📅 <span data-no="LME Studio" data-en="LME Studio">LME Studio</span></span>
     <h1 data-no="Planlegg, svar og la det gå av seg selv" data-en="Plan, reply and let it run by itself">Planlegg, svar og la det gå av seg selv</h1>
-    <p data-no="Planlegg innleggene dine til Facebook og Instagram, følg opp alle kommentarene på ett sted, og la automatiseringen svare og sende DM for deg." data-en="Schedule your posts to Facebook and Instagram, follow up every comment in one place, and let the automation reply and send DMs for you.">Planlegg innleggene dine til Facebook og Instagram, følg opp alle kommentarene på ett sted, og la automatiseringen svare og sende DM for deg.</p>
+    <p data-no="Planlegg innleggene dine til Facebook og Instagram, følg opp alle kommentarene på ett sted, la automatiseringen svare og sende DM for deg, og se hvordan innleggene gjorde det." data-en="Schedule your posts to Facebook and Instagram, follow up every comment in one place, let the automation reply and send DMs for you, and see how your posts did.">Planlegg innleggene dine til Facebook og Instagram, følg opp alle kommentarene på ett sted, la automatiseringen svare og sende DM for deg, og se hvordan innleggene gjorde det.</p>
   </div>
 
   <div class="msg err" id="topErr"></div>
@@ -215,6 +228,7 @@
       <button data-tab="plan" class="on" data-no="Planlegger" data-en="Planner">Planlegger</button>
       <button data-tab="comments" data-no="Kommentarer" data-en="Comments">Kommentarer</button>
       <button data-tab="auto" data-no="Automatisering" data-en="Automation">Automatisering</button>
+      <button data-tab="stats" data-no="Statistikk" data-en="Statistics">Statistikk</button>
     </div>
 
     <!-- ============ FANE 1: PLANLEGGER ============ -->
@@ -295,6 +309,16 @@
       </div>
     </section>
 
+    <!-- ============ FANE 4: STATISTIKK ============ -->
+    <section id="tab-stats" class="hidden">
+      <div class="bar">
+        <span class="tab on" style="cursor:default;" data-no="Siste innlegg" data-en="Latest posts">Siste innlegg</span>
+        <span class="spacer"></span>
+        <button class="tab" id="refreshStats" data-no="↻ Oppdater" data-en="↻ Refresh">↻ Oppdater</button>
+      </div>
+      <div id="statsList"></div>
+    </section>
+
     <div class="card">
       <div class="sub" style="margin:0;" data-no="Kontoene dine er koblet til LME." data-en="Your accounts are connected to LME.">Kontoene dine er koblet til LME.</div>
       <div class="row">
@@ -321,7 +345,7 @@
       el.setAttribute('placeholder', el.getAttribute(lang === 'no' ? 'data-ph-no' : 'data-ph-en'));
     });
     q('langToggle').textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
-    if (state && state.connected) { renderTargets(); renderPlan(); renderCmTabs(); renderComments(); renderRules(); }
+    if (state && state.connected) { renderTargets(); renderPlan(); renderCmTabs(); renderComments(); renderRules(); renderStats(); }
   }
   q('langToggle').addEventListener('click', function () { switchLanguage(currentLang === 'no' ? 'en' : 'no'); });
 
@@ -329,6 +353,7 @@
   var posts = [];          // planlagte og publiserte innlegg
   var comments = [], view = [], account = '', onlyUnanswered = false, loadingList = false;
   var rules = [];
+  var stats = [];          // statistikk per konto
   var targets = [];        // valgte kontoer for nytt innlegg
   var imageUrl = '';
 
@@ -402,11 +427,12 @@
       document.querySelectorAll('.tabs button').forEach(function (x) { x.classList.remove('on'); });
       b.classList.add('on');
       var t = b.getAttribute('data-tab');
-      ['plan', 'comments', 'auto'].forEach(function (name) {
+      ['plan', 'comments', 'auto', 'stats'].forEach(function (name) {
         q('tab-' + name).classList.toggle('hidden', name !== t);
       });
       if (t === 'comments' && !comments.length) loadComments(false);
       if (t === 'auto' && !rules.length) loadRules();
+      if (t === 'stats' && !stats.length) loadStats(false);
     });
   });
 
@@ -853,8 +879,97 @@
 
   q('disconnect').addEventListener('click', function () {
     if (!confirm(L('Koble fra Facebook og Instagram?', 'Disconnect Facebook and Instagram?'))) return;
-    post('disconnect', {}).then(function () { comments = []; posts = []; rules = []; account = ''; loadStatus(); });
+    post('disconnect', {}).then(function () { comments = []; posts = []; rules = []; stats = []; account = ''; loadStatus(); });
   });
+
+  /* ================= FANE 4: STATISTIKK ================= */
+  function n(v) {
+    if (v === null || v === undefined) return '-';
+    return Number(v).toLocaleString(isEn() ? 'en-GB' : 'nb-NO');
+  }
+
+  q('refreshStats').addEventListener('click', function () { loadStats(true); });
+
+  function loadStats(fresh) {
+    q('statsList').innerHTML = '<div class="card"><div class="sub" style="margin:0;">' +
+      L('Henter tallene …', 'Fetching the numbers …') + '</div></div>';
+    return api('stats?' + (fresh ? 'fresh=1&' : '') + 'lang=' + currentLang).then(function (d) {
+      if (!d || d.error) {
+        q('statsList').innerHTML = '';
+        top('err', (d && d.error) || L('Kunne ikke hente statistikken.', 'Could not fetch the statistics.'));
+        return;
+      }
+      stats = d.stats || [];
+      if (d.problems && d.problems.length) top('err', d.problems[0].name + ': ' + d.problems[0].error);
+      renderStats();
+    }).catch(function () {
+      q('statsList').innerHTML = '';
+      top('err', L('Nettverksfeil. Prøv igjen.', 'Network error. Please try again.'));
+    });
+  }
+
+  function renderStats() {
+    if (!stats.length) {
+      q('statsList').innerHTML = '<div class="empty"><div class="ic">📊</div><p>' +
+        L('Ingen tall å vise ennå. Publiser et innlegg, så dukker de opp her.',
+          'No numbers to show yet. Publish a post, and they will appear here.') + '</p></div>';
+      return;
+    }
+    q('statsList').innerHTML = stats.map(function (st) {
+      var t = st.totals || {};
+      var ig = st.platform === 'instagram';
+      var kpis =
+        (st.harRekkevidde ? kpi(t.rekkevidde, L('rekkevidde', 'reach')) : '') +
+        kpi(t.likes, L('likerklikk', 'likes')) +
+        kpi(t.kommentarer, L('kommentarer', 'comments')) +
+        (ig ? kpi(t.lagringer, L('lagringer', 'saves')) : kpi(t.delinger, L('delinger', 'shares'))) +
+        kpi(t.engasjement, L('engasjement', 'engagement'));
+
+      var mest = Math.max.apply(null, (st.posts || []).map(function (p) {
+        return (p.likes || 0) + (p.comments || 0) + (p.shares || 0) + (p.saved || 0);
+      }).concat([1]));
+
+      var rader = (st.posts || []).map(function (p) {
+        var eng = (p.likes || 0) + (p.comments || 0) + (p.shares || 0) + (p.saved || 0);
+        var tall = '♥ ' + n(p.likes) + '  💬 ' + n(p.comments) +
+          (ig ? (p.saved !== null ? '  🔖 ' + n(p.saved) : '') : '  ↗ ' + n(p.shares)) +
+          (p.reach !== null && p.reach !== undefined ? '  👁 ' + n(p.reach) : '');
+        return '<div class="sp">' +
+          (p.img ? '<img src="' + esc(p.img) + '" alt="">' : '<img alt="">') +
+          '<div class="txt">' +
+            '<div>' + (p.url
+              ? '<a href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.text || L('Innlegg', 'Post')) + '</a>'
+              : esc(p.text || L('Innlegg', 'Post'))) + '</div>' +
+            '<div class="num">' + esc(when(p.ts)) + '  ·  ' + tall + '</div>' +
+            '<div class="bar"><i style="width:' + Math.round(eng / mest * 100) + '%"></i></div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+
+      return '<div class="card">' +
+        '<h2>' + (ig ? '📷' : '👍') + ' ' + esc(st.name) + '</h2>' +
+        '<div class="sub" style="margin-bottom:.2rem;">' +
+          (st.followers !== null && st.followers !== undefined
+            ? n(st.followers) + ' ' + L('følgere', 'followers') + '  ·  '
+            : '') +
+          L('siste ' + n(t.antall) + ' innlegg', 'last ' + n(t.antall) + ' posts') +
+        '</div>' +
+        '<div class="kpis">' + kpis + '</div>' +
+        (st.best ? '<div class="best">' + L('Beste innlegg: ', 'Best post: ') +
+          esc(st.best.text || L('uten tekst', 'no text')) + '</div>' : '') +
+        (st.harRekkevidde ? '' :
+          '<div class="note" style="margin-top:.7rem;">' +
+            L('Rekkevidde vises så snart Meta har godkjent statistikktilgangen. Alt annet er ekte tall.',
+              'Reach appears as soon as Meta has approved the insights permission. Everything else is real numbers.') +
+          '</div>') +
+        (rader ? '<div style="margin-top:.6rem;">' + rader + '</div>' : '') +
+      '</div>';
+    }).join('');
+  }
+
+  function kpi(v, label) {
+    return '<div class="kpi"><b>' + n(v) + '</b><span>' + label + '</span></div>';
+  }
 
   /* ---- Start ---- */
   if (currentLang === 'en') switchLanguage('en');

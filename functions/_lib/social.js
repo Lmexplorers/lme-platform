@@ -54,10 +54,16 @@ export function graphBase(env) {
    pages_manage_engagement    svare, like, skjule og slette kommentarer
    pages_manage_posts         publisere og planlegge innlegg på siden
    pages_messaging            sende DM som svar på en kommentar
+   read_insights              tall for rekkevidde på sidens innlegg
    instagram_basic            koble Instagram-kontoen til siden
    instagram_manage_comments  lese og svare på Instagram-kommentarer
    instagram_content_publish  publisere innlegg på Instagram
-   instagram_manage_messages  sende DM som svar på en Instagram-kommentar */
+   instagram_manage_messages  sende DM som svar på en Instagram-kommentar
+   instagram_manage_insights  tall for rekkevidde og lagringer på Instagram
+
+   De to insights-tilgangene er de eneste som bare gjelder statistikk. Blir de
+   avslått i app-gjennomgangen, virker alt annet som før: statistikkfanen viser
+   da likes, kommentarer og delinger, bare uten rekkevidde. */
 export const SCOPES = [
   "pages_show_list",
   "pages_read_engagement",
@@ -65,10 +71,12 @@ export const SCOPES = [
   "pages_manage_engagement",
   "pages_manage_posts",
   "pages_messaging",
+  "read_insights",
   "instagram_basic",
   "instagram_manage_comments",
   "instagram_content_publish",
   "instagram_manage_messages",
+  "instagram_manage_insights",
 ].join(",");
 
 /* Meta-appen: fra KV først (eier kan lime den inn selv på /planlegger),
@@ -563,4 +571,153 @@ export async function runAutomation(env, email, conn, rules, lang) {
 
   await writeSeen(env, email, Array.from(seenSet));
   return { ran, replies, dms, errors };
+}
+
+/* ---------------------------------------------------------------------- */
+/* Statistikk                                                              */
+/* ---------------------------------------------------------------------- */
+
+/**
+ * Tallene for én konto: følgere, og de siste innleggene med likes,
+ * kommentarer, delinger, rekkevidde og lagringer.
+ *
+ * ==========================================================================
+ * HVORFOR TO FORSØK PER KALL
+ * ==========================================================================
+ * Rekkevidde og lagringer krever egne insights-tilganger fra Meta, og de kan
+ * bli avslått i app-gjennomgangen uten at resten stopper. Derfor spør vi
+ * først MED de feltene, og prøver på nytt UTEN dem hvis Meta klager. Da får
+ * medlemmet alltid tallene som finnes, i stedet for en tom side.
+ */
+function engagement(p) {
+  return (p.likes || 0) + (p.comments || 0) + (p.shares || 0) + (p.saved || 0);
+}
+
+async function facebookStats(env, account, limit) {
+  const base = "id,message,created_time,permalink_url,full_picture," +
+    "likes.summary(true).limit(0),comments.summary(true).limit(0),shares";
+  let res = await graphGet(env, "/" + account.id + "/published_posts", {
+    access_token: account.token, limit: limit,
+    fields: base + ",insights.metric(post_impressions_unique)",
+  });
+  let harRekkevidde = res.ok;
+  if (!res.ok) {
+    res = await graphGet(env, "/" + account.id + "/published_posts", {
+      access_token: account.token, limit: limit, fields: base,
+    });
+    harRekkevidde = false;
+  }
+  if (!res.ok) return { ok: false, res };
+
+  const posts = (res.data.data || []).map((p) => {
+    let reach = null;
+    const ins = (p.insights && p.insights.data) || [];
+    if (ins.length && ins[0].values && ins[0].values.length) {
+      reach = ins[0].values[0].value || 0;
+    }
+    return {
+      id: p.id, text: trim(p.message, 100), url: p.permalink_url || "",
+      img: p.full_picture || "", ts: p.created_time || "",
+      likes: (p.likes && p.likes.summary && p.likes.summary.total_count) || 0,
+      comments: (p.comments && p.comments.summary && p.comments.summary.total_count) || 0,
+      shares: (p.shares && p.shares.count) || 0,
+      reach: reach, saved: null,
+    };
+  });
+
+  let followers = null;
+  const info = await graphGet(env, "/" + account.id, {
+    access_token: account.token, fields: "followers_count,fan_count",
+  });
+  if (info.ok) followers = info.data.followers_count || info.data.fan_count || null;
+
+  return { ok: true, followers, posts, harRekkevidde };
+}
+
+async function instagramStats(env, account, limit) {
+  const base = "id,caption,permalink,timestamp,media_type,media_url,thumbnail_url," +
+    "like_count,comments_count";
+  let res = await graphGet(env, "/" + account.id + "/media", {
+    access_token: account.token, limit: limit,
+    fields: base + ",insights.metric(reach,saved)",
+  });
+  let harRekkevidde = res.ok;
+  if (!res.ok) {
+    res = await graphGet(env, "/" + account.id + "/media", {
+      access_token: account.token, limit: limit, fields: base,
+    });
+    harRekkevidde = false;
+  }
+  if (!res.ok) return { ok: false, res };
+
+  const posts = (res.data.data || []).map((p) => {
+    let reach = null, saved = null;
+    ((p.insights && p.insights.data) || []).forEach((m) => {
+      const v = (m.values && m.values[0] && m.values[0].value) || 0;
+      if (m.name === "reach") reach = v;
+      if (m.name === "saved") saved = v;
+    });
+    return {
+      id: p.id, text: trim(p.caption, 100), url: p.permalink || "",
+      img: p.media_type === "VIDEO" ? (p.thumbnail_url || "") : (p.media_url || ""),
+      ts: p.timestamp || "",
+      likes: p.like_count || 0, comments: p.comments_count || 0,
+      shares: 0, reach: reach, saved: saved,
+    };
+  });
+
+  let followers = null;
+  const info = await graphGet(env, "/" + account.id, {
+    access_token: account.token, fields: "followers_count,media_count",
+  });
+  if (info.ok) followers = info.data.followers_count || null;
+
+  return { ok: true, followers, posts, harRekkevidde };
+}
+
+/**
+ * Statistikken for én konto, med et sammendrag over de hentede innleggene.
+ * Mellomlagres i fem minutter: tallene endrer seg langsomt, og hvert oppslag
+ * koster flere kall mot Meta.
+ */
+export async function statsFor(env, email, account, opts) {
+  const limit = Math.min(25, Math.max(3, (opts && opts.posts) || 12));
+  const cacheKey = "socials:" + email + ":" + account.key;
+  if (!(opts && opts.fresh)) {
+    try {
+      const raw = await env.BUILDER_KV.get(cacheKey);
+      if (raw) return { ok: true, stats: JSON.parse(raw), cached: true };
+    } catch (e) {}
+  }
+
+  const res = account.platform === "instagram"
+    ? await instagramStats(env, account, limit)
+    : await facebookStats(env, account, limit);
+  if (!res.ok) return res;
+
+  const posts = res.posts.slice();
+  posts.sort((a, b) => new Date(b.ts) - new Date(a.ts));
+  const sum = (f) => posts.reduce((n, p) => n + (p[f] || 0), 0);
+  const medRekkevidde = posts.filter((p) => typeof p.reach === "number");
+  const best = posts.slice().sort((a, b) => engagement(b) - engagement(a))[0] || null;
+
+  const stats = {
+    account: account.key, name: account.name, platform: account.platform,
+    followers: res.followers,
+    posts: posts,
+    harRekkevidde: !!res.harRekkevidde && medRekkevidde.length > 0,
+    totals: {
+      antall: posts.length,
+      likes: sum("likes"), kommentarer: sum("comments"),
+      delinger: sum("shares"), lagringer: sum("saved"),
+      rekkevidde: medRekkevidde.reduce((n, p) => n + p.reach, 0),
+      engasjement: posts.reduce((n, p) => n + engagement(p), 0),
+    },
+    best: best,
+  };
+
+  try {
+    await env.BUILDER_KV.put(cacheKey, JSON.stringify(stats), { expirationTtl: 300 });
+  } catch (e) {}
+  return { ok: true, stats };
 }

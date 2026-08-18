@@ -17,6 +17,8 @@
  *   POST /api/social/hide    { account, id, on }
  *   POST /api/social/delete  { account, id }
  *
+ *   GET  /api/social/stats?account=&fresh=1  -> følgere og tall per innlegg
+ *
  *   GET  /api/social/plan                    -> planlagte og publiserte innlegg
  *   POST /api/social/plan    { targets, text, imageUrl, when }
  *   POST /api/social/plan-delete { id }
@@ -39,7 +41,7 @@ import {
   SCOPES, metaApp, socialAccess, readConnection, writeConnection, clearConnection,
   publicAccounts, findAccount, exchangeCode, accountsFor, commentsFor, dropCache,
   graphPost, graphDelete, graphError, graphVersion, replyToComment,
-  listPlan, readPlan, writePlan, deletePlan, runPlan,
+  statsFor, listPlan, readPlan, writePlan, deletePlan, runPlan,
   readRules, writeRules, runAutomation,
 } from "../../_lib/social.js";
 
@@ -207,6 +209,29 @@ export async function onRequest(context) {
       connected: true, accounts: publicAccounts(conn),
       comments: comments.slice(0, 200), problems: problems,
     });
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Statistikk                                                        */
+  /* ---------------------------------------------------------------- */
+  if (path === "stats" && request.method === "GET") {
+    const lang = langOf(request, null);
+    const conn = await readConnection(env, me.email);
+    if (!conn || !conn.accounts.length) return json({ connected: false, accounts: [], stats: [] });
+
+    const wanted = url.searchParams.get("account") || "";
+    const fresh = url.searchParams.get("fresh") === "1";
+    const list = wanted ? conn.accounts.filter((a) => a.key === wanted) : conn.accounts;
+    if (!list.length) return json({ error: L(lang, "Ukjent konto.", "Unknown account.") }, 400);
+
+    const stats = [];
+    const problems = [];
+    for (const a of list) {
+      const res = await statsFor(env, me.email, a, { fresh: fresh });
+      if (res.ok) stats.push(res.stats);
+      else problems.push({ account: a.key, name: a.name, error: graphError(res.res, lang) });
+    }
+    return json({ connected: true, accounts: publicAccounts(conn), stats: stats, problems: problems });
   }
 
   /* ---------------------------------------------------------------- */
