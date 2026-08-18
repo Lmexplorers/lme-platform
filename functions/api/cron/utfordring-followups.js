@@ -34,6 +34,33 @@ export async function onRequest(context) {
   const now = Date.now();
   let sent = 0, pending = 0, failed = 0, errored = 0;
 
+  // Eierens eget testmedlemskap skal alltid stå i norsk (plattformens
+  // standardspråk), uansett hvilket språk siden tilfeldigvis viste sist hun
+  // testet "Se utfordringen"-knappen. Før velkomstmailen ble idempotent
+  // (functions/api/utfordring-preview.js) kunne gjentatte testklikk med
+  // ulikt språk skrive feil lang til utf_member-posten hennes, som igjen ga
+  // en enkelt engelsk dagsmail midt i en ellers norsk serie. Rettes
+  // automatisk her hver kjøring, ingen manuell handling nødvendig.
+  const OWNER_EMAIL = "renateshobby@hotmail.com";
+  try {
+    const ownerRaw = await env.BUILDER_KV.get("utf_member:" + OWNER_EMAIL);
+    if (ownerRaw) {
+      const ownerMember = JSON.parse(ownerRaw);
+      if (ownerMember.lang !== "no") {
+        ownerMember.lang = "no";
+        await env.BUILDER_KV.put("utf_member:" + OWNER_EMAIL, JSON.stringify(ownerMember));
+      }
+    }
+  } catch (eOwner) {}
+
+  // Medlemmets lagrede språk (utf_member:<e-post>) er alltid fasit, ikke det
+  // som sto i køen da den enkelte dagen ble lagt inn. Før velkomstmailen ble
+  // idempotent kunne gjentatte testklikk med ulikt språk skrive forskjellig
+  // lang til ulike dager i samme kø, avhengig av hva som allerede var sendt
+  // og fjernet fra køen i mellomtiden, noe som ga blandet norsk/engelsk i
+  // samme serie. Cachet per e-post per kjøring, så det bare slås opp én gang.
+  const memberLangCache = new Map();
+
   let cursor;
   do {
     const list = await env.BUILDER_KV.list({ prefix: "utf_fu:", cursor: cursor });
@@ -49,8 +76,23 @@ export async function onRequest(context) {
         let job;
         try { job = JSON.parse(raw); } catch (e) { await env.BUILDER_KV.delete(k.name); continue; }
         if (job.sendAfter && job.sendAfter > now) { pending++; continue; }
+
+        let lang = job.lang;
+        const e = ((job.email || "") + "").trim().toLowerCase();
+        if (e) {
+          if (!memberLangCache.has(e)) {
+            let memberLang = null;
+            try {
+              const memberRaw = await env.BUILDER_KV.get("utf_member:" + e);
+              if (memberRaw) memberLang = JSON.parse(memberRaw).lang || null;
+            } catch (e3) {}
+            memberLangCache.set(e, memberLang);
+          }
+          lang = memberLangCache.get(e) || job.lang;
+        }
+
         const res = await sendUtfordringMail(env, {
-          to: job.email, name: job.name, lang: job.lang, kind: job.kind,
+          to: job.email, name: job.name, lang: lang, kind: job.kind,
         });
         if (res && res.ok) {
           sent++;
