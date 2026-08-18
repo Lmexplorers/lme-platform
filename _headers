@@ -92,9 +92,9 @@
   Cache-Control: no-store
 /ask-nathalie-ai.html
   Cache-Control: no-store
-# LME Innboks er ny og endres ofte akkurat naa, saa siden maa aldri vises
-# fra en gammel mellomlagret versjon mens den finpusses.
-/innboks
+# LME Sosialplanlegger er ny og endres ofte akkurat naa, saa siden maa aldri
+# vises fra en gammel mellomlagret versjon mens den finpusses.
+/planlegger
   Cache-Control: no-store
-/innboks.html
+/planlegger.html
   Cache-Control: no-store
