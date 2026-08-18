@@ -1,9 +1,12 @@
 /**
- * 10 000-visninger-utfordringen — sender dag 1/3/7/14/21/30 fra køen.
+ * 10 000-visninger-utfordringen — sender de 30 daglige oppfølgerne fra køen.
  *
- * Webhooken legger seks oppfølgere i KV ved kjøp (utf_fu:<e-post>:d<dag>).
- * Dette endepunktet går gjennom køen og sender de som er modne
- * (sendAfter <= naa) via MailerSend, og fjerner dem etterpaa.
+ * Kjøpet/eier-forhåndsvisningen legger 30 oppfølgere i KV
+ * (utf_fu:<e-post>:d<dag>). Dette endepunktet går gjennom køen og sender de
+ * som er modne (sendAfter <= naa) via MailerSend, og fjerner dem etterpaa.
+ * Fyller også automatisk opp medlemmer som ble med før hele 30-dagers-serien
+ * fantes (se LEGACY_CUTOFF under), som ellers bare fikk mail hver
+ * 1./3./7./14./21./30. dag i stedet for daglig.
  *
  * Kalles daglig av GitHub Actions (.github/workflows/utfordring-followups.yml).
  * Valgfri beskyttelse: sett env UTFORDRING_CRON_TOKEN, saa kreves ?token=... .
@@ -32,7 +35,56 @@ export async function onRequest(context) {
   }
 
   const now = Date.now();
-  let sent = 0, pending = 0, failed = 0, errored = 0;
+  const DAG = 24 * 60 * 60 * 1000;
+  let sent = 0, pending = 0, failed = 0, errored = 0, backfilled = 0;
+
+  // Alle som ble med FØR hele 30-dagers-serien fantes (før 5. august 2026,
+  // se d28ff07) fikk bare de daværende seks milepæl-dagene (1/3/7/14/21/30)
+  // lagt i kø, aldri de 24 andre "enkle" dagene som kom senere. Siden
+  // velkomstmailen ble idempotent samme uke, ble de aldri fylt opp
+  // etterpå heller, så disse medlemmene har siden bare fått mail hver
+  // 1./3./7./14./21./30. dag, ikke daglig som lovet. Fylles én gang per
+  // medlem her (merkes backfilled:true), med de manglende dagene lagt inn
+  // med sendAfter fra og med i morgen, én ny dag per døgn, sånn at de
+  // endelig kommer inn i en ekte daglig rytme. To timers margin fra selve
+  // deployet, som en trygg buffer.
+  const LEGACY_CUTOFF = Date.UTC(2026, 7, 5, 12, 0, 0);
+  const SIMPLE_DAY_NUMBERS = [2, 4, 5, 6, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 22, 23, 24, 25, 26, 27, 28, 29];
+  try {
+    let mCursor;
+    do {
+      const mList = await env.BUILDER_KV.list({ prefix: "utf_member:", cursor: mCursor });
+      for (const mk of mList.keys) {
+        try {
+          const raw = await env.BUILDER_KV.get(mk.name);
+          if (!raw) continue;
+          const member = JSON.parse(raw);
+          if (member.backfilled) continue;
+          if (!member.joinedAt || member.joinedAt >= LEGACY_CUTOFF) {
+            member.backfilled = true;
+            await env.BUILDER_KV.put(mk.name, JSON.stringify(member));
+            continue;
+          }
+          const email = (member.email || mk.name.slice("utf_member:".length)).trim().toLowerCase();
+          let offset = 1;
+          for (const day of SIMPLE_DAY_NUMBERS) {
+            const dayKey = "utf_fu:" + email + ":d" + day;
+            const already = await env.BUILDER_KV.get(dayKey);
+            if (already) continue;
+            await env.BUILDER_KV.put(dayKey, JSON.stringify({
+              email: member.email, name: member.name, lang: member.lang, kind: "d" + day,
+              sendAfter: now + offset * DAG,
+            }));
+            offset++;
+            backfilled++;
+          }
+          member.backfilled = true;
+          await env.BUILDER_KV.put(mk.name, JSON.stringify(member));
+        } catch (mErr) {}
+      }
+      mCursor = mList.list_complete ? null : mList.cursor;
+    } while (mCursor);
+  } catch (eBackfill) {}
 
   // Eierens eget testmedlemskap skal alltid stå i norsk (plattformens
   // standardspråk), uansett hvilket språk siden tilfeldigvis viste sist hun
@@ -113,5 +165,5 @@ export async function onRequest(context) {
     cursor = list.list_complete ? null : list.cursor;
   } while (cursor);
 
-  return json({ ok: true, sent: sent, pending: pending, failed: failed, errored: errored });
+  return json({ ok: true, sent: sent, pending: pending, failed: failed, errored: errored, backfilled: backfilled });
 }
