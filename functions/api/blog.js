@@ -1,3 +1,4 @@
+import { logUsage, anthropicUnits } from "../_lib/ai-core/usage.js";
 /**
  * LME Blogg — lagring av blogginnlegg i Cloudflare KV (BUILDER_KV).
  * Samme passord-mekanisme som content.js / course.js (COURSE_EDIT_PASSWORD).
@@ -190,6 +191,7 @@ async function generateDraft(body, env) {
     '===BROEDTEKST_EN===\n(hele den engelske brødteksten som HTML)';
 
   try {
+    const t0 = Date.now();
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
@@ -205,6 +207,11 @@ async function generateDraft(body, env) {
       }),
     });
     const data = await res.json().catch(() => null);
+    await logUsage(env, {
+      app: "blogg", task: "text", modelId: env.BLOG_TEXT_MODEL || "claude-sonnet-5",
+      units: anthropicUnits(data), ms: Date.now() - t0,
+      status: res.ok ? "ok" : "error", error: res.ok ? "" : "claude_" + res.status,
+    });
     if (!res.ok) {
       const msg = (data && data.error && (data.error.message || data.error)) || ("Anthropic svarte " + res.status);
       return json({ error: "" + msg }, 200);
@@ -339,6 +346,10 @@ async function generateImage(body, env, request) {
       const data = await res.json().catch(() => null);
       const parts = (data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) || [];
       const imgPart = parts.find((pt) => (pt.inlineData && pt.inlineData.data) || (pt.inline_data && pt.inline_data.data));
+      await logUsage(env, {
+        app: "blogg", task: "image", modelId: env.BOOKLY_GEMINI_MODEL || "gemini-2.5-flash-image",
+        units: { images: 1 }, status: res.ok && imgPart ? "ok" : "error",
+      });
       if (res.ok && imgPart) b64 = (imgPart.inlineData || imgPart.inline_data).data;
       else lastErr = (data && data.error && (data.error.message || data.error)) || ("HTTP " + (res && res.status));
     } catch (e) {
@@ -358,6 +369,10 @@ async function generateImage(body, env, request) {
       });
       const data = await res.json().catch(() => null);
       const item = data && data.data && data.data[0];
+      await logUsage(env, {
+        app: "blogg", task: "image", modelId: model,
+        units: { images: 1 }, status: res.ok && item ? "ok" : "error",
+      });
       if (res.ok && item && item.b64_json) {
         b64 = item.b64_json;
       } else if (res.ok && item && item.url) {
@@ -389,6 +404,10 @@ async function generateImage(body, env, request) {
         body: fd,
       });
       const data = await res.json().catch(() => null);
+      await logUsage(env, {
+        app: "blogg", task: "image", modelId: "stable-image-core",
+        units: { images: 1 }, status: res.ok && data && data.image ? "ok" : "error",
+      });
       if (res.ok && data && data.image) b64 = data.image;
       else lastErr = (data && ((data.errors && data.errors.join("; ")) || data.message)) || lastErr;
     } catch (e) {

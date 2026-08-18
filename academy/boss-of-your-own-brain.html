@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#2c5f2d">
+<meta name="theme-color" content="#F8D7DA">
 <title>Boss of Your Own Brain — LME</title>
 
 <style>
@@ -54,8 +54,9 @@
     --font-display: 'Playpen Sans', system-ui, sans-serif;
     --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
 
-    --lme-green: #2c5f2d;
-    --lme-green-light: #f0f7f1;
+    --cerise: #E91E89;
+    --cerise-dark: #C13D6A;
+    --accent-light: #FDE7F1;
   }
 
   * {
@@ -104,6 +105,7 @@
     padding: 10px 16px 10px 28px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 24px;
     box-shadow: var(--shadow-md);
     border: 1px solid rgba(255, 255, 255, 0.6);
@@ -114,9 +116,21 @@
     font-size: 28px;
     font-weight: 500;
     font-style: italic;
-    color: var(--lme-green);
+    color: var(--cerise);
     letter-spacing: -0.02em;
     flex-shrink: 0;
+  }
+
+  .btn-back {
+    background: #fff;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: var(--r-pill);
+    padding: 9px 18px;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: var(--font-body);
+    white-space: nowrap;
   }
 
   /* HERO */
@@ -131,7 +145,7 @@
     font-family: var(--font-display);
     font-size: clamp(46px, 6vw, 68px);
     font-weight: 700;
-    color: var(--lme-green);
+    color: var(--cerise);
     margin-bottom: 18px;
     letter-spacing: -0.02em;
   }
@@ -161,7 +175,7 @@
     padding: 40px;
     background: white;
     border-radius: var(--r-lg);
-    border-left: 6px solid var(--lme-green);
+    border-left: 6px solid var(--cerise);
     box-shadow: var(--shadow-md);
   }
 
@@ -169,7 +183,7 @@
     font-family: var(--font-display);
     font-size: 38px;
     font-weight: 700;
-    color: var(--lme-green);
+    color: var(--cerise);
     margin-bottom: 26px;
   }
 
@@ -189,14 +203,14 @@
   }
 
   .module strong {
-    color: var(--lme-green);
+    color: var(--cerise);
     font-weight: 600;
   }
 
   /* CTA */
   .cta-section {
-    background: var(--lme-green-light);
-    border: 2px solid var(--lme-green);
+    background: var(--accent-light);
+    border: 2px solid var(--cerise);
     border-radius: var(--r-lg);
     padding: 40px;
     text-align: center;
@@ -207,7 +221,7 @@
     font-family: var(--font-display);
     font-size: 38px;
     font-weight: 700;
-    color: var(--lme-green);
+    color: var(--cerise);
     margin-bottom: 18px;
   }
 
@@ -219,7 +233,7 @@
 
   .btn-primary {
     display: inline-block;
-    background: var(--lme-green);
+    background: var(--cerise);
     color: white;
     padding: 18px 44px;
     border-radius: var(--r-pill);
@@ -230,7 +244,7 @@
   }
 
   .btn-primary:hover {
-    background: #1d3f1f;
+    background: var(--cerise-dark);
     transform: translateY(-2px);
   }
 
@@ -246,15 +260,21 @@
     .hero h1 { font-size: 38px; }
     .module { padding: 24px; }
   }
+
+  @media (max-width: 480px) {
+    .header { padding: 8px 10px 8px 18px; gap: 10px; }
+    .logo { font-size: 22px; }
+    .btn-back { padding: 8px 12px; font-size: 12.5px; }
+  }
 </style>
 </head>
 <body>
-  <div id="sidebar"></div>
   <div id="avatarMenu"></div>
 
   <div class="header-wrap">
     <div class="header">
-      <div class="logo">LME</div>
+      <a href="/dashboard" class="logo">LME</a>
+      <a href="/dashboard" class="btn-back" data-no="‹ Dashboard" data-en="‹ Dashboard">‹ Dashboard</a>
     </div>
   </div>
 
@@ -392,7 +412,6 @@
     <p data-no="Boss of Your Own Brain – Et kurs med Renate Dahl" data-en="Boss of Your Own Brain – A course with Renate Dahl">Boss of Your Own Brain – Et kurs med Renate Dahl</p>
   </div>
 
-  <script src="/js/sidebar.js"></script>
   <script src="/js/lme-account.js"></script>
   <script>
     // Language switching

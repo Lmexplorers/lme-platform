@@ -10,7 +10,7 @@ webhook, ingen tredjeparts-ledd.
         ▼
 ai-visibility-worker.js  /ai/publish
    render LME-HTML + JSON-LD  →  GitHub Contents API (commit /blog/<slug>.html)
-                              →  (valgfritt) MailerLite-kampanjeutkast
+                              →  (valgfritt) MailerSend-varsel om ny artikkel
         ▼
 Cloudflare Pages bygger og publiserer
 ```
@@ -26,9 +26,8 @@ Settings → Variables):
 | `GITHUB_TOKEN` | for publisering | fine-grained token, **Contents: Read & Write** på `Lmexplorers/lme-platform` |
 | `GITHUB_REPO` | nei | default `Lmexplorers/lme-platform` |
 | `GITHUB_BRANCH` | nei | default `main` (sett til en test-branch om du vil) |
-| `MAILERLITE_TOKEN` | nei | MailerLite API-token (utsendelse) |
-| `MAILERLITE_GROUP_ID` | nei | gruppe som skal varsles |
-| `MAILERLITE_FROM` | nei | default `post@lmexplorers.com` (automatisk system-post; må være verifisert avsender) |
+| `MAILERSEND_API_KEY` | nei | plattformens e-postsystem (samme hemmelighet som `claude-mail.js` bruker); sender varsel når en artikkel publiseres |
+| `NOTIFY_EMAIL` | nei | hvem som varsles, default `renate@lmexplorers.com` (sett gjerne din iCloud-adresse) |
 
 Uten `GITHUB_TOKEN` returnerer `/ai/publish` bare den ferdige HTML-en
 (ingenting committes), så du kan teste trygt.
@@ -40,8 +39,8 @@ Uten `GITHUB_TOKEN` returnerer `/ai/publish` bare den ferdige HTML-en
    `sha` automatisk ved oppdatering).
 3. Cloudflare Pages deployer. Artikkelen er live på
    `https://lmexplorers.com/blog/<slug>`.
-4. Er MailerLite-variablene satt, opprettes et **kampanjeutkast** samtidig.
-   Det sendes ikke automatisk, du gjennomgår og sender det selv i MailerLite.
+4. Er `MAILERSEND_API_KEY` satt, sendes et e-postvarsel om den nye artikkelen
+   via MailerSend (plattformens e-postsystem) til `NOTIFY_EMAIL`.
 
 ## Pinterest (Fase 3)
 

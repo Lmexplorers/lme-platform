@@ -1,3 +1,4 @@
+import { logUsage } from "../_lib/ai-core/usage.js";
 import { enforceGeneration } from "../_lib/access.js";
 /**
  * LME — server-side AI-video via Higgsfield (image-to-video).
@@ -89,6 +90,7 @@ export async function onRequestPost(context) {
   };
 
   let r, data, text;
+  const t0 = Date.now();
   try {
     r = await fetch(HF_BASE + SUBMIT_PATH, {
       method: "POST",
@@ -97,6 +99,11 @@ export async function onRequestPost(context) {
     });
     text = await r.text();
     try { data = JSON.parse(text); } catch { data = null; }
+    await logUsage(env, {
+      app: "autopilot", task: "video", modelId: "dop-turbo", email: gate.email || "",
+      units: { clips: 1 }, ms: Date.now() - t0,
+      status: r.ok ? "ok" : "error", error: r.ok ? "" : "higgsfield_" + r.status,
+    });
   } catch (e) {
     return json({ error: "Kom ikke i kontakt med Higgsfield." }, 502);
   }

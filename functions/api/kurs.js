@@ -23,16 +23,20 @@
  *     slug, size: "mini"|"stor", published: true|false, cert: true|false,
  *     kicker, title, lede,
  *     learn: [ {no,en}, ... ],
- *     lessons: [ { module: {no,en}|null, title, body: [ {no,en}, ... ],
+ *     lessons: [ { module: {no,en,lock:"free"|"member"|"paid",
+ *                            price?:{no,en}, paylink?:{no,en}, thumb?:dataURL}|null,
+ *                  title, body: [ {no,en}, ... ],
  *                  tip: {no,en}|null, img: dataURL|undefined } ],
- *     outro: { title, text }
+ * (module er satt paa foerste leksjon i hver modul-gruppe; lock/price/
+ *  paylink/thumb gjelder for hele modulen den aapner)
+ *     outro: { title, text, cta?: { label, href:"https://..." } }
  *   }
  */
 
-const DEFAULT_PASSWORD = "LME26";
-const KEY_PREFIX = "lme-builder:kurs:";
-const INDEX_KEY = "lme-builder:kurs-index";
-const MAX_SIZE = 4 * 1024 * 1024; // kurs med leksjonsbilder trenger plass
+export const DEFAULT_PASSWORD = "LME26";
+export const KEY_PREFIX = "lme-builder:kurs:";
+export const INDEX_KEY = "lme-builder:kurs-index";
+export const MAX_SIZE = 4 * 1024 * 1024; // kurs med leksjonsbilder trenger plass
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -62,7 +66,7 @@ function langField(v, max) {
 }
 
 // Renser hele kursobjektet, så bare kjente felt og rene strenger lagres.
-function sanitizeCourse(raw) {
+export function sanitizeCourse(raw) {
   if (!raw || typeof raw !== "object") return null;
   const slug = cleanSlug(raw.slug);
   if (!slug) return null;
@@ -83,11 +87,16 @@ function sanitizeCourse(raw) {
     },
     updated: Date.now(),
   };
+  const ctaLabel = langField(raw.outro && raw.outro.cta && raw.outro.cta.label, 60);
+  const ctaHref = (((raw.outro && raw.outro.cta && raw.outro.cta.href) || "") + "").trim();
+  if (ctaLabel.no.trim() && /^(\/|https:\/\/)/.test(ctaHref)) {
+    course.outro.cta = { label: ctaLabel, href: ctaHref };
+  }
   (Array.isArray(raw.learn) ? raw.learn : []).slice(0, 12).forEach((li) => {
     const f = langField(li, 300);
     if (f.no.trim()) course.learn.push(f);
   });
-  (Array.isArray(raw.lessons) ? raw.lessons : []).slice(0, 40).forEach((l) => {
+  (Array.isArray(raw.lessons) ? raw.lessons : []).slice(0, 80).forEach((l) => {
     if (!l || typeof l !== "object") return;
     const lesson = {
       module: null,
@@ -96,7 +105,21 @@ function sanitizeCourse(raw) {
       tip: null,
     };
     const mod = langField(l.module, 120);
-    if (mod.no.trim()) lesson.module = mod;
+    if (mod.no.trim()) {
+      lesson.module = mod;
+      const rawLock = l.module && l.module.lock;
+      lesson.module.lock = (rawLock === "member" || rawLock === "paid") ? rawLock : "free";
+      if (lesson.module.lock === "paid") {
+        const price = langField(l.module && l.module.price, 40);
+        if (price.no.trim() || price.en.trim()) lesson.module.price = price;
+        const paylink = langField(l.module && l.module.paylink, 500);
+        if (/^https:\/\//.test(paylink.no.trim())) lesson.module.paylink = { no: paylink.no.trim(), en: /^https:\/\//.test(paylink.en.trim()) ? paylink.en.trim() : paylink.no.trim() };
+      }
+      const thumb = l.module && l.module.thumb;
+      if (typeof thumb === "string" && /^data:image\/(png|jpe?g|webp|gif);base64,/.test(thumb) && thumb.length <= 900000) {
+        lesson.module.thumb = thumb;
+      }
+    }
     (Array.isArray(l.body) ? l.body : []).slice(0, 10).forEach((p) => {
       const f = langField(p, 2000);
       if (f.no.trim()) lesson.body.push(f);
@@ -112,7 +135,7 @@ function sanitizeCourse(raw) {
   return course;
 }
 
-function indexEntry(course) {
+export function indexEntry(course) {
   return {
     slug: course.slug,
     title: course.title,
@@ -125,7 +148,7 @@ function indexEntry(course) {
   };
 }
 
-async function readIndex(env) {
+export async function readIndex(env) {
   try {
     const raw = await env.BUILDER_KV.get(INDEX_KEY);
     const list = raw ? JSON.parse(raw) : [];

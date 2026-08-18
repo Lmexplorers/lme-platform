@@ -26,13 +26,16 @@
     var txt = en()
       ? "I use cookies to measure visits and improve LME, and to see how my ads perform. Anonymous stats always run; the Facebook pixel only if you accept."
       : "Jeg bruker informasjonskapsler for å måle besøk og forbedre LME, og for å se hvordan annonsene virker. Anonym statistikk går alltid; Facebook-pixelen kun hvis du sier ja.";
-    // Skjul de flytende knappene (Spør Nathalie AI, Gjør synlig) mens boksen
-    // vises, så de ikke dekker Godta/Avvis på mobil.
+    // Skjul de flytende knappene nederst (Spør Nathalie AI, Gjør synlig) mens
+    // boksen vises, så de ikke dekker Godta/Avvis på mobil. Språkbryteren
+    // ligger øverst (se js/mobile-nav.js) og skal IKKE skjules her: uten den
+    // kan en engelsktalende besøkende verken lese samtykketeksten på engelsk
+    // eller resten av siden, før de har tatt et valg de ikke forstår.
     if (!document.getElementById("lme-consent-style")) {
       var st = document.createElement("style");
       st.id = "lme-consent-style";
       st.textContent = "html.lme-consent-open .rw-root,html.lme-consent-open .rw-btn," +
-        "html.lme-consent-open .lme-vis-fab,html.lme-consent-open #lme-floating-lang-btn{display:none !important;}";
+        "html.lme-consent-open .lme-vis-fab{display:none !important;}";
       (document.head || document.documentElement).appendChild(st);
     }
     var w = document.createElement("div");

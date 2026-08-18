@@ -25,7 +25,8 @@ window.LME_FUNNEL = {
       navn: "Little Montessori Explorers",
       kortnavn: "LME",
       logo: "/images/lme-logo.png",
-      optInActionUrl: "/api/mailerlite/subscribe", // sender leads til MailerLite-lista di
+      optInActionUrl: "/api/subscribe", // sender leads til plattformens egen liste
+      newsletterSource: "tripwire",
       etterOptIn: "tilbud.html",
       checkoutUrl: "https://buy.stripe.com/00wfZidkpaft1PLgNN9R60f",  // Stripe (99 kr NOK)
       etterKjop: "takk-kjoper.html",
@@ -41,7 +42,7 @@ window.LME_FUNNEL = {
 
     optIn: {
       merkelapp: "Gratis guide",
-      overskrift: "Slik bygger du en Montessori-inntekt hjemmefra — med hjerte, strategi og AI",
+      overskrift: "Slik bygger du en Montessoriinntekt hjemmefra — med hjerte, strategi og AI",
       underoverskrift:
         "Last ned vår gratis guide og få en realistisk, varm og konkret vei fra " +
         "Montessoripedagogikk til en inntekt du kan bygge i ditt eget tempo — hjemmefra.",
@@ -115,7 +116,7 @@ window.LME_FUNNEL = {
       overskrift: "Helt i orden — her er gratisguiden din 💛",
       underoverskrift:
         "Du trenger ikke kjøpe noe for å komme i gang. Last ned gratisguiden med en gang " +
-        "under, og ta det første steget mot en Montessori-inntekt i dag.",
+        "under, og ta det første steget mot en Montessoriinntekt i dag.",
       steg: [
         "Trykk på knappen under for å laste ned gratisguiden (PDF) med en gang.",
         "Lagre filen så du alltid har den for hånden.",
@@ -142,7 +143,8 @@ window.LME_FUNNEL = {
       navn: "Little Montessori Explorers",
       kortnavn: "LME",
       logo: "/images/lme-logo.png",
-      optInActionUrl: "/api/mailerlite/subscribe", // sends leads to your MailerLite list
+      optInActionUrl: "/api/subscribe", // sends leads to the platform's own list
+      newsletterSource: "tripwire",
       etterOptIn: "tilbud.html",
       checkoutUrl: "https://buy.stripe.com/cNicN64NT0ET7a5app9R60g",  // Stripe (9.99 USD)
       etterKjop: "takk-kjoper.html",

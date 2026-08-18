@@ -2,7 +2,7 @@
 // ========================================================================
 // EKTE innlogging: e-post + passord (PBKDF2-hashing), sesjoner.
 // NYTT i v2.0: medlemskapssalg med Stripe (prøveperiode styres av PROVETID_DAGER, nå 0),
-// affiliate-program med provisjon, velkomst-epost via MailerLite og
+// affiliate-program med provisjon, velkomst-epost via MailerSend og
 // admin-dashbord for VIP.
 //
 // BINDINGS:
@@ -13,7 +13,7 @@
 // SECRETS (wrangler secret put ...):
 //   STRIPE_SECRET_KEY      sk_live_...
 //   STRIPE_WEBHOOK_SECRET  whsec_...
-//   MAILERLITE_API_KEY     API-nokkel fra MailerLite
+//   MAILERSEND_API_KEY     API-nokkel fra MailerSend (samme som hovedplattformen)
 // VARS (wrangler.toml):
 //   AFFILIATE_COMMISSION_PERCENT = "30"
 //   AFFILIATE_COOKIE_DAYS        = "30"
@@ -31,6 +31,18 @@ const PLANS = {
   regular: { tier:'regular', navn:'Medlem', belop:69700 },
   pro:     { tier:'pro',     navn:'Pro',    belop:119700 },
   vip:     { tier:'vip',     navn:'VIP',    belop:199700 },
+  // Grunnleggerpris for kjøpere av 10 000-visninger-utfordringen: full
+  // Inner Circle Pro-tilgang (fellesskap, moduler osv.) til en lavere,
+  // låst pris. Stripe endrer aldri prisen på et løpende abonnement av seg
+  // selv, så denne prisen følger kjøperen så lenge abonnementet er aktivt,
+  // selv om Pro sin ordinære pris endres senere. utfordring:true trigger
+  // innmelding i selve utfordringen (dag 0-e-post, 30-dagers kø,
+  // fellesskap) via api/utfordring-pro-enroll.js i hovedrepoet.
+  // beløpUsd: cent, for engelskspråklige kjøpere (samme mønster som den
+  // gamle frittstående utfordring-planen: NOK/USD etter språk). $97 er satt
+  // direkte etter Renates eget FEA-medlemskap (samme normalpris hun selv
+  // betaler der), 899 kr er nærmeste avrundede NOK-motstykke.
+  proUtfordring: { tier:'pro', navn:'Pro (grunnleggermedlem, 10 000-visninger-utfordringen)', belop:89900, belopUsd:9700, utfordring:true },
 };
 const PROVETID_DAGER = 0; // 0 = ingen prøveperiode; medlemmer betaler fra dag én
 
@@ -144,7 +156,7 @@ const MEDIESIDE = `<!DOCTYPE html>
 <div id="bibliotek" class="skjult">
   <div class="topp">
     <h1>📁 Mine medier</h1>
-    <p id="hilsen">Bildene, PDF-ene og filene dine – lagret trygt i plattformen.</p>
+    <p id="hilsen">Bildene, PDF-ene og filene dine, lagret trygt i plattformen.</p>
   </div>
   <div class="wrap">
     <div class="verktoylinje">
@@ -160,7 +172,7 @@ const MEDIESIDE = `<!DOCTYPE html>
     <div class="dropp" id="dropp">
       <div class="ikon">🌷</div>
       <strong>Klikk eller dra filer hit</strong>
-      <span>Bilder, PDF, lyd, video – opptil 50 MB per fil</span>
+      <span>Bilder, PDF, lyd og video, opptil 50 MB per fil</span>
     </div>
     <input type="file" id="filinput" multiple class="skjult">
 
@@ -425,7 +437,7 @@ ${SIDE_STIL}
   <div class="hero">
     <span class="kick" data-no="LME Inner Circle" data-en="LME Inner Circle">LME Inner Circle</span>
     <h1 data-no="Bli med i Inner Circle 💛" data-en="Join the Inner Circle 💛">Bli med i Inner Circle 💛</h1>
-    <p data-no="Inne i Inner Circle får du hele LME på ett sted: Alle kursene, hele biblioteket og ressursene, alle gruppene og fellesrommet. Også Nathalie AI, som du kan spørre når du vil. Nytt innhold og nye ressurser hver måned, pluss en månedlig medlemssending fra meg. Med Pro får du også skaperverktøyene i LME Studio, så du kan lære, skape og vokse i samme flyt." data-en="Inside the Inner Circle you get all of LME in one place: all the courses, the full library and resources, all the groups and the shared room. Plus Nathalie AI, which you can ask whenever you like. New content and new resources every month, plus a monthly member broadcast from me. With Pro you also get the creator tools in LME Studio, so you can learn, create and grow in one flow.">Inne i Inner Circle får du hele LME på ett sted: Alle kursene, hele biblioteket og ressursene, alle gruppene og fellesrommet. Også Nathalie AI, som du kan spørre når du vil. Nytt innhold og nye ressurser hver måned, pluss en månedlig medlemssending fra meg. Med Pro får du også skaperverktøyene i LME Studio, så du kan lære, skape og vokse i samme flyt.</p>
+    <p data-no="Inne i Inner Circle får du hele LME på ett sted: alle kursene, hele biblioteket og ressursene, alle gruppene og fellesrommet. Også Nathalie AI, som du kan spørre når du vil. Nytt innhold og nye ressurser hver måned, pluss en månedlig medlemssending fra meg. Med Pro får du også skaperverktøyene i LME Studio, så du kan lære, skape og vokse i samme flyt." data-en="Inside the Inner Circle you get all of LME in one place: all the courses, the full library and resources, all the groups and the shared room. Plus Nathalie AI, which you can ask whenever you like. New content and new resources every month, plus a monthly member broadcast from me. With Pro you also get the creator tools in LME Studio, so you can learn, create and grow in one flow.">Inne i Inner Circle får du hele LME på ett sted: alle kursene, hele biblioteket og ressursene, alle gruppene og fellesrommet. Også Nathalie AI, som du kan spørre når du vil. Nytt innhold og nye ressurser hver måned, pluss en månedlig medlemssending fra meg. Med Pro får du også skaperverktøyene i LME Studio, så du kan lære, skape og vokse i samme flyt.</p>
     <div class="prove" data-no="🌸 Full tilgang med en gang. Ingen binding, si opp når du vil." data-en="🌸 Full access right away. No lock-in, cancel whenever you want.">🌸 Full tilgang med en gang. Ingen binding, si opp når du vil.</div>
   </div>
 
@@ -449,11 +461,11 @@ ${SIDE_STIL}
       <div class="pris">1 197 kr<small data-no="/mnd" data-en="/mo">/mnd</small></div>
       <ul>
         <li data-no="Alt i Medlem" data-en="Everything in Member">Alt i Medlem</li>
-        <li data-no="Skaperverktøyene i LME Studio: LME Autopilot, Bookly og Kursbygger" data-en="The creator tools in LME Studio: LME Autopilot, Bookly and Course Builder">Skaperverktøyene i LME Studio: LME Autopilot, Bookly og Kursbygger</li>
+        <li data-no="Skaperverktøyene i LME Studio: Bookly og Kursbygger" data-en="The creator tools in LME Studio: Bookly and Course Builder">Skaperverktøyene i LME Studio: Bookly og Kursbygger</li>
         <li data-no="AI Visibility og Traffic Engine" data-en="AI Visibility and Traffic Engine">AI Visibility og Traffic Engine</li>
         <li data-no="Inntektsgenerator" data-en="Income generator">Inntektsgenerator</li>
         <li data-no="Månedlig AI Challenge" data-en="Monthly AI Challenge">Månedlig AI Challenge</li>
-        <li data-no="Ekstra maler og kreditter" data-en="Extra templates and credits">Ekstra maler og kreditter</li>
+        <li data-no="Ekstra maler" data-en="Extra templates">Ekstra maler</li>
       </ul>
       <button class="knapp knapp-rosa" onclick="velgPlan('pro')" data-no="Velg Pro" data-en="Choose Pro">Velg Pro</button>
     </div>
@@ -934,43 +946,28 @@ async function trackAffiliateSale(env, kode, kundeEpost, tier, belop){
   return provisjon;
 }
 
-// ---- LME Autopilot-tilgang ----
-// Pro og VIP inkluderer LME Autopilot. Kontoene der ligger i KV (STUDIO_KV,
-// samme lager som LME Autopilots ACCOUNTS_KV), med e-post som nokkel.
-// Kredittene fylles pa ved kjop og hver fornyelse, og fjernes ved oppsigelse.
-const STUDIO_PLANER = {
-  pro: { plan: 'proff',     image: 100, video: 6 },
-  vip: { plan: 'proffplus', image: 200, video: 12 },
-};
-async function giStudioTilgang(env, epost, tier){
-  if(!env.STUDIO_KV) return; // bindingen er valgfri; uten den skjer ingenting
-  epost = String(epost || '').trim().toLowerCase();
-  if(!epost) return;
-  const key = 'user:' + epost;
-  let user = null;
-  const raw = await env.STUDIO_KV.get(key);
-  if(raw){ try { user = JSON.parse(raw); } catch(e) {} }
-  const rett = STUDIO_PLANER[tier];
-  if(rett){
-    if(!user) user = { email: epost, createdAt: Date.now() };
-    user.plan = rett.plan;
-    user.credits = { image: rett.image, video: rett.video };
-    user.viaInnerCircle = true;
-    user.lastPayment = { at: Date.now(), source: 'inner-circle' };
-    await env.STUDIO_KV.put(key, JSON.stringify(user));
-  } else if(user && user.viaInnerCircle){
-    // Bare kontoer som fikk tilgangen via medlemskapet nedgraderes;
-    // noen som har kjopt LME Autopilot direkte rores ikke.
-    user.plan = 'free';
-    user.credits = { image: 0, video: 0 };
-    user.viaInnerCircle = false;
-    await env.STUDIO_KV.put(key, JSON.stringify(user));
-  }
+
+// Melder en "utfordring + Pro"-kjøper inn i selve 10 000-visninger-
+// utfordringen (dag 0-e-post, 30-dagers kø, fellesskap), som lever i
+// hovedrepoets BUILDER_KV, ikke her. UTFORDRING_ENROLL_SECRET må settes
+// likt begge steder (her: `wrangler secret put UTFORDRING_ENROLL_SECRET`).
+async function meldInnUtfordring(env, epost, navn, lang){
+  if(!env.UTFORDRING_ENROLL_SECRET) return; // ikke satt opp ennå, hopp over
+  try {
+    await fetch('https://lmexplorers.com/api/utfordring-pro-enroll', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Internal-Secret': env.UTFORDRING_ENROLL_SECRET },
+      body: JSON.stringify({ email: epost, name: navn, lang: lang === 'en' ? 'en' : 'no' }),
+    });
+  } catch(e) { /* Pro-tilgangen er uansett gitt, dette er bare selve utfordrings-innmeldingen */ }
 }
 
 // ---- Velkomst-epost ----
-// Legger e-posten i email_queue og melder personen inn i MailerLite.
-// Selve utsendingen gjøres av en MailerLite-automasjon (trigger: ny abonnent).
+// Legger e-posten i email_queue (logg/historikk) og sender rett fra koden
+// med MailerSend. Fram til 12. august 2026 ble utsendingen gjort av en
+// MailerLite-automasjon (trigger: ny abonnent) — fjernet da Renate ba om å
+// rydde MailerLite helt ut av plattformen, samme mønster som resten av
+// koden (_lib/*-mail.js i hovedrepoet bruker alle MailerSend direkte).
 async function sendVelkomstEpost(env, epost, navn, tier){
   const planNavn = ({regular:'Medlem', pro:'Pro', vip:'VIP'})[tier] || tier;
   const emne = 'Velkommen til LME Inner Circle 💛';
@@ -989,12 +986,19 @@ async function sendVelkomstEpost(env, epost, navn, tier){
   const naa = new Date().toISOString();
   const r = await env.DB.prepare(`INSERT INTO email_queue (email, subject, html_body, status, created_at) VALUES (?,?,?,'pending',?)`)
     .bind(epost, emne, kropp, naa).run();
-  if(env.MAILERLITE_API_KEY){
+  if(env.MAILERSEND_API_KEY){
     try {
-      const res = await fetch('https://connect.mailerlite.com/api/subscribers', {
+      const res = await fetch('https://api.mailersend.com/v1/email', {
         method:'POST',
-        headers:{'Authorization':'Bearer '+env.MAILERLITE_API_KEY,'Content-Type':'application/json','Accept':'application/json'},
-        body: JSON.stringify({ email: epost, fields: { name: navn || '', lme_plan: planNavn }, status: 'active', groups: [env.MAILERLITE_GROUP_ID || '192875174270338867'] }),
+        headers:{'Authorization':'Bearer '+env.MAILERSEND_API_KEY,'Content-Type':'application/json','Accept':'application/json'},
+        body: JSON.stringify({
+          from: { email: 'renate@lmexplorers.com', name: 'Renate Dahl' },
+          reply_to: { email: 'renate@lmexplorers.com', name: 'Renate Dahl' },
+          to: [{ email: epost, name: navn || undefined }],
+          subject: emne,
+          html: kropp,
+          text: `Velkommen, ${navn || 'utforsker'}! Så glad jeg er for å ha deg med i LME Inner Circle på planen ${planNavn}. Gå til Inner Circle: https://lmexplorers.com/grupper/inner-circle`,
+        }),
       });
       if(res.ok) await env.DB.prepare(`UPDATE email_queue SET status='sent', sent_at=? WHERE id=?`).bind(new Date().toISOString(), r.meta.last_row_id).run();
     } catch(e) { /* køen beholder status 'pending', så ingenting går tapt */ }
@@ -1097,24 +1101,40 @@ export default {
         if(!plan) return json({error:'Ukjent plan'},400);
         const epost = (body.email||'').trim().toLowerCase();
         const affKode = saniterKode(body.ref) || getAffiliateCode(request, url);
+        // Kun utfordring-planen støtter USD foreløpig (samme mønster som
+        // den gamle frittstående utfordring-planen); vanlig Inner Circle
+        // selges kun i NOK.
+        const lang = body.lang === 'en' ? 'en' : 'no';
+        const useUsd = lang === 'en' && plan.belopUsd;
         const params = {
           'mode': 'subscription',
           'line_items[0][quantity]': '1',
-          'line_items[0][price_data][currency]': 'nok',
-          'line_items[0][price_data][unit_amount]': String(plan.belop),
+          'line_items[0][price_data][currency]': useUsd ? 'usd' : 'nok',
+          'line_items[0][price_data][unit_amount]': String(useUsd ? plan.belopUsd : plan.belop),
           'line_items[0][price_data][recurring][interval]': 'month',
           'line_items[0][price_data][product_data][name]': 'LME Inner Circle – '+plan.navn,
           'subscription_data[metadata][tier]': plan.tier,
           'allow_promotion_codes': 'true',
           'success_url': url.origin+'/takk?session_id={CHECKOUT_SESSION_ID}',
-          'cancel_url': url.origin+'/medlemskap',
+          // Utfordringen selges fra en egen side på lmexplorers.com, ikke
+          // fra denne workerens /medlemskap, så avbrutt betaling skal sende
+          // kunden tilbake dit, ikke til Inner Circle-salgssiden.
+          'cancel_url': plan.utfordring ? 'https://lmexplorers.com/utfordringen' : url.origin+'/medlemskap',
           'metadata[tier]': plan.tier,
+          // plan-nøkkelen (ikke bare tier) lagres også, siden flere planer
+          // kan dele samme tier (proUtfordring har tier:'pro', men annen
+          // pris/utfordring-flagg enn den vanlige pro-planen).
+          'metadata[plan]': body.plan,
         };
         if(PROVETID_DAGER > 0) params['subscription_data[trial_period_days]'] = String(PROVETID_DAGER);
         if(epost && epost.includes('@')) params['customer_email'] = epost;
         if(affKode){
           params['metadata[affiliate_code]'] = affKode;
           params['subscription_data[metadata][affiliate_code]'] = affKode;
+        }
+        if(plan.utfordring){
+          params['metadata[utfordring]'] = '1';
+          params['metadata[lang]'] = lang;
         }
         const session = await stripeFetch(env, 'checkout/sessions', params);
         return json({ url: session.url });
@@ -1136,7 +1156,12 @@ export default {
         if(event.type === 'checkout.session.completed'){
           const epost = (obj.customer_details?.email || obj.customer_email || '').toLowerCase();
           const tier = obj.metadata?.tier;
-          const plan = Object.values(PLANS).find(p=>p.tier===tier);
+          // metadata[plan] er den eksakte plan-nøkkelen (satt ved kjøp etter
+          // denne endringen); fallback til tier-oppslag for økter som ble
+          // startet før dette (fanger ikke opp proUtfordring siden den deler
+          // tier med pro, men de har allerede fått riktig pris i selve
+          // Checkout-økten uansett, kun etterbehandlingen under ville avvike).
+          const plan = PLANS[obj.metadata?.plan] || Object.values(PLANS).find(p=>p.tier===tier);
           if(!epost || !plan) return json({ok:true, ignorert:'mangler e-post eller plan'});
           const belop = obj.amount_total || 0;
           const affKode = saniterKode(obj.metadata?.affiliate_code);
@@ -1154,8 +1179,14 @@ export default {
             .bind(epost, obj.customer||null, obj.subscription||null, tier, belop, belop>0?'paid':'trial', 'month', affKode||null, naa, belop>0?naa:null).run();
           // Provisjon med en gang hvis det ble betalt penger nå (uten prøvetid)
           if(belop > 0 && affKode) await trackAffiliateSale(env, affKode, epost, tier, belop);
-          await giStudioTilgang(env, epost, tier);
-          await sendVelkomstEpost(env, epost, epost.split('@')[0], tier);
+          if(plan.utfordring){
+            // Utfordring-delen (dag 0-e-post, 30-dagers kø, fellesskap) lever
+            // i hovedrepoets BUILDER_KV, ikke her, så den meldes inn via et
+            // internt API-kall dit i stedet for en lokal funksjon.
+            await meldInnUtfordring(env, epost, epost.split('@')[0], obj.metadata?.lang);
+          } else {
+            await sendVelkomstEpost(env, epost, epost.split('@')[0], tier);
+          }
           return json({ok:true});
         }
 
@@ -1172,16 +1203,13 @@ export default {
             const alt = await env.DB.prepare(`SELECT id FROM affiliate_sales WHERE customer_email=? LIMIT 1`).bind(epost).first();
             if(!alt) await trackAffiliateSale(env, user.referred_by, epost, tier, belop);
           }
-          await giStudioTilgang(env, epost, tier);
           return json({ok:true});
         }
 
         if(event.type === 'customer.subscription.deleted'){
           const abon = obj.id;
           if(abon){
-            const u = await env.DB.prepare(`SELECT email FROM users WHERE stripe_subscription_id=?`).bind(abon).first();
             await env.DB.prepare(`UPDATE users SET tier='free', stripe_subscription_id=NULL WHERE stripe_subscription_id=?`).bind(abon).run();
-            if(u) await giStudioTilgang(env, u.email, 'free');
           }
           return json({ok:true});
         }
@@ -1191,9 +1219,7 @@ export default {
           const abon = obj.id;
           const tier = obj.metadata?.tier;
           if(abon && tier && (obj.status === 'active' || obj.status === 'trialing')){
-            const u = await env.DB.prepare(`SELECT email FROM users WHERE stripe_subscription_id=?`).bind(abon).first();
             await env.DB.prepare(`UPDATE users SET tier=? WHERE stripe_subscription_id=?`).bind(tier, abon).run();
-            if(u) await giStudioTilgang(env, u.email, tier);
           }
           return json({ok:true});
         }

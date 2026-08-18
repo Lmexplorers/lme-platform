@@ -1,3 +1,4 @@
+import { logUsage } from "../_lib/ai-core/usage.js";
 import { enforceVideoApp, refundVideoCredit } from "../_lib/access.js";
 /**
  * LME YouTube-appen — sett sammen manuset til en ferdig video.
@@ -135,9 +136,11 @@ function b64ToBytes(b64) {
 
 // Samme bildemotor-kjede (Gemini foretrukket, ellers OpenAI) som
 // functions/api/image.js, men med en fri, tema-drevet prompt i stedet for
-// den låste Mia&Teo/Montessori-prompten (den er laget for et annet formål,
+// den låste Mia&Teo/Montessoriprompten (den er laget for et annet formål,
 // med mindre useMiaTeo er satt, se buildCharacterImagePrompt).
-async function genSceneImage(env, prompt, aspect) {
+async function genSceneImage(env, prompt, aspect, meta) {
+  const t0 = Date.now();
+  const who = (meta && meta.email) || "";
   const asp = aspect === "9:16" ? "9:16" : "16:9";
   const hasGemini = !!(env.GEMINI_API_KEY || env.GOOGLE_API_KEY || env.GOOGLE_GEMINI_API_KEY);
   const size = asp === "9:16" ? "1024x1536" : "1536x1024"; // samme størrelser som image.js
@@ -157,7 +160,11 @@ async function genSceneImage(env, prompt, aspect) {
       const data = await r.json();
       const parts = (((data.candidates || [])[0] || {}).content || {}).parts || [];
       const img = parts.find((p) => p && p.inlineData && p.inlineData.data);
-      if (img) return { bytes: b64ToBytes(img.inlineData.data), contentType: img.inlineData.mimeType || "image/png" };
+      if (img) {
+        await logUsage(env, { app: "youtube", task: "image", modelId: model, email: who,
+          units: { images: 1 }, ms: Date.now() - t0, status: "ok" });
+        return { bytes: b64ToBytes(img.inlineData.data), contentType: img.inlineData.mimeType || "image/png" };
+      }
     }
     // faller videre til OpenAI under
   }
@@ -188,6 +195,8 @@ async function genSceneImage(env, prompt, aspect) {
   }
   const data = await r.json();
   const item = data && data.data && data.data[0];
+  await logUsage(env, { app: "youtube", task: "image", modelId: model, email: who,
+    units: { images: 1 }, ms: Date.now() - t0, status: item ? "ok" : "error", error: item ? "" : "openai_no_image" });
   if (item && item.b64_json) return { bytes: b64ToBytes(item.b64_json), contentType: "image/png" };
   if (item && item.url) {
     const ir = await fetchTimeout(item.url, {}, 30000);
@@ -281,7 +290,7 @@ export async function onRequestPost(context) {
         // Liten pause mellom hvert AI-bilde (ikke før det første) for å jevne ut
         // forespørslene og unngå å slå i bildemotorens grense per minutt.
         if (i > 0) await sleep(1200);
-        const img = await genSceneImage(env, prompt, aspect);
+        const img = await genSceneImage(env, prompt, aspect, { email: gate.email || "" });
         imageUrl = await storeImage(env, origin, img.bytes, img.contentType);
       }
       scenes.push({

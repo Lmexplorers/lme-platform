@@ -1,3 +1,5 @@
+import { sessionUser } from "../../_lib/access.js";
+import { logUsage, anthropicUnits } from "../../_lib/ai-core/usage.js";
 /**
  * LME FAQ Generator — Cloudflare Pages Function
  *
@@ -29,7 +31,7 @@ const BRAND_CONTEXT = `Du jobber for Little Montessori Explorers (LME), en tospr
 AI-drevet plattform grunnlagt av Renate Dahl. LME er ett samlet økosystem for kreativitet, læring, synlighet og vekst.
 
 LME er laget for deg som ønsker å lære, skape og utvikle deg:
-🌱 For foreldre som ønsker inspirerende, lekne og lærerike aktiviteter for barn i alderen 0-16 år – med fokus på nysgjerrighet, mestring og Montessori-inspirert læring.
+🌱 For foreldre som ønsker inspirerende, lekne og lærerike aktiviteter for barn i alderen 0-16 år – med fokus på nysgjerrighet, mestring og Montessoriinspirert læring.
 📚 For lærere og pedagoger som ønsker ressurser, idéer og verktøy som kan gjøre undervisningen mer kreativ, engasjerende og tilpasset barnas utvikling.
 ✨ For kreative skapere som ønsker å bruke AI, digitale verktøy og kreative metoder til å utvikle innhold, produkter og egne prosjekter.
 🚀 For gründere og små bedrifter som ønsker å bygge noe eget online, lære mer om digital synlighet, innholdsproduksjon, e-postlister og hvordan teknologi kan gjøre veien enklere.
@@ -37,15 +39,16 @@ LME er laget for deg som ønsker å lære, skape og utvikle deg:
 
 LME samler ressurser, apper, kurs, fellesskap og kreative verktøy på ett sted – slik at du kan utforske, skape og vokse i ditt eget tempo.
 
-⚠️ KRITISK REGEL ⚠️ kilden/temaet brukeren oppgir BESTEMMER INNHOLDET HELT OG FULLSTENDIG. Anta ALDRI at emnet handler om Montessori. Hvis brukeren sier "YouTube-kurs" eller noe annet enn eksplisitt Montessori, skal FAQ være 100% om AKKURAT DET TEMAET. IKKE generer Montessori-referanser, pedagogisk innhold eller barn-fokusert materiale med mindre kilden wirkelig ber om det.
-VIKTIG: Montessori nevnes KUN når det spesifikt handler om Montessori-filosofi eller pedagogikk.
+⚠️ KRITISK REGEL ⚠️ kilden/temaet brukeren oppgir BESTEMMER INNHOLDET HELT OG FULLSTENDIG. Anta ALDRI at emnet handler om Montessori. Hvis brukeren sier "YouTube-kurs" eller noe annet enn eksplisitt Montessori, skal FAQ være 100% om AKKURAT DET TEMAET. IKKE generer Montessorireferanser, pedagogisk innhold eller barn-fokusert materiale med mindre kilden wirkelig ber om det.
+VIKTIG: Montessori nevnes KUN når det spesifikt handler om Montessorifilosofi eller pedagogikk.
 
 Tonen er varm, pedagogisk og tillitsvekkende. LME er kun Renate (én person). Skriv ALLTID i jeg-form: jeg, meg, min, mitt, mine.`;
 
 const DEFAULT_MODEL = "claude-sonnet-5";
 const CALL_TIMEOUT_MS = 20000;
 
-async function callClaude(env, system, userPrompt) {
+async function callClaude(env, system, userPrompt, email) {
+  const t0 = Date.now();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), CALL_TIMEOUT_MS);
   let resp;
@@ -78,11 +81,25 @@ async function callClaude(env, system, userPrompt) {
     throw new Error(`Anthropic ${resp.status}: ${t.replace(/\s+/g, " ").slice(0, 160)}`);
   }
   const data = await resp.json();
+  await logUsage(env, {
+    app: "faq", task: "text", modelId: env.CONTENT_TEXT_MODEL || DEFAULT_MODEL,
+    email: email || "", units: anthropicUnits(data), ms: Date.now() - t0, status: "ok",
+  });
   return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
 }
 
 export async function onRequestPost(context) {
   const { request, env } = context;
+
+  // Innlogging kreves. Ingen side i plattformen kaller denne ruten i dag
+  // (AI Visibility-appen bruker den separate workeren, se
+  // ai-visibility-worker.js), men ruten var likevel åpen og kunne bruke
+  // plattformens Anthropic-nøkkel. Se docs/ai-core.md.
+  const user = await sessionUser(context);
+  if (!user) {
+    return json({ error: "Logg inn for å bruke denne funksjonen.", faq: [] }, 401);
+  }
+
   if (!env.ANTHROPIC_API_KEY) {
     return json({ error: "Server-konfigurasjon mangler", faq: [] }, 500);
   }
@@ -116,7 +133,7 @@ Hvert svar skal være 1-3 setninger, varmt og praktisk.`;
     : `Lag FAQ for: "${topic}"`;
 
   try {
-    const result = await callClaude(env, system, userPrompt);
+    const result = await callClaude(env, system, userPrompt, user.email);
     let parsed = { faq: [] };
     try {
       const match = result.match(/\{[\s\S]*\}/);

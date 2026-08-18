@@ -21,30 +21,49 @@
  */
 
 import { sendOppskriftMail, sendOwnerSaleNotice } from "../_lib/oppskrift-mail.js";
-import { sendUtfordringMail } from "../_lib/utfordring-mail.js";
 import { sendClaudeMail } from "../_lib/claude-mail.js";
 import { registerNewsletter } from "../_lib/newsletter.js";
 import { PATTERN_LINKS } from "../_lib/pattern-links.js";
 import { bumpToday } from "../_lib/track.js";
 import {
   CREDIT_PACKS, addCredit,
-  CLAUDE_GROUP_NO, CLAUDE_GROUP_EN, CLAUDE_PAYMENT_LINK_LANG, CLAUDE_MAIN_LINK_LANG, addToClaudeGroup,
+  CLAUDE_PAYMENT_LINK_LANG, CLAUDE_MAIN_LINK_LANG,
+  AUTOPILOT_PAYMENT_LINKS, AUTOPILOT_PRODUCT_PLANS, grantAutopilot, revokeAutopilot, emailForStripeCustomer,
+  COURSE_PAYMENT_LINKS, COURSE_INFO,
+  MODULE_PAYMENT_LINKS,
+  LAERINGSVERKSTED_PAYMENT_LINKS,
+  SKOLEDAGBOK_PAYMENT_LINKS, SKOLEDAGBOK_INFO,
+  VIDEOFLOW_PAYMENT_LINKS, VIDEOFLOW_PRODUCT_ID, grantVideoFlowSub, revokeVideoFlowSub,
 } from "../_lib/purchase-links.js";
+import { sendAutopilotMail } from "../_lib/autopilot-mail.js";
+import { grantCourseAccess, grantModuleAccess } from "../_lib/course-access.js";
+import { sendCourseDeliveryMail, sendModuleDeliveryMail } from "../_lib/course-mail.js";
+import { recordPurchase } from "../_lib/purchases.js";
+import { sendResourceDeliveryMail } from "../_lib/laeringsverksted-mail.js";
+import { sendSkoledagbokMail } from "../_lib/skoledagbok-mail.js";
+import { setMonthlyCredits } from "../_lib/videoflow-credits.js";
+import { sendVideoFlowWelcomeMail } from "../_lib/videoflow-mail.js";
 
-/* ---- 10 000-visninger-utfordringen -------------------------------------
-   Eget abonnement, helt uavhengig av Inner Circle (som selges av den
-   separate lme-inner-circle-workeren): ingen tilgang, ingen tier, ingen
-   deling av kode eller database. Hele 30-dagers-serien sendes rett fra
-   plattformen via MailerSend (_lib/utfordring-mail.js), samme mønster som
-   Claude-kurset, ingen MailerLite-automasjon. Dag 0 sendes med en gang,
-   resten legges i kø (utf_fu:<e-post>:<dag>) og sendes av den daglige
-   cronjobben api/cron/utfordring-followups. */
-const UTFORDRING_PAYMENT_LINK_LANG = {
-  "plink_1U0I2WLax7B8uQzqhBB6bAVC": "no", // Utfordringen, 299 kr/mnd (NOK)
-  "plink_1U0I2XLax7B8uQzq7e9tzjBh": "en", // The Challenge, $33/mo (USD)
-};
-const UTFORDRING_DAYS = Array.from({ length: 30 }, (_, i) => i + 1);
-const DAG = 24 * 60 * 60 * 1000;
+const VIDEOFLOW_MONTHLY_CREDITS = 2000;
+
+/* Rydder unna en eventuell "du er tom for kreditter"-påminnelseskø
+   (videoflow-access.js sin queueEmptyCreditsReminder) når kontoen nettopp
+   har fått fulle kreditter igjen, ellers kan påminnelsen komme selv om
+   personen alt har abonnert på nytt. Cronjobben sjekker riktignok saldo på
+   nytt før den sender, så dette er en ekstra opprydding, ikke en nødvendighet. */
+async function clearVideoFlowReminderQueue(env, email) {
+  if (!email) return;
+  const e = email.trim().toLowerCase();
+  try {
+    await env.BUILDER_KV.delete("vf_fu:" + e + ":d3");
+    await env.BUILDER_KV.delete("vf_fu:" + e + ":d7");
+    await env.BUILDER_KV.delete("vf_fu:" + e + ":d14");
+  } catch (e2) {}
+}
+
+// Må matche KEY_PREFIX i functions/api/laeringsverksted.js (samme
+// dupliseringsmønster som OWNER_EMAILS andre steder i kodebasen).
+const LV_KEY_PREFIX = "lme-builder:lv:";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -111,35 +130,195 @@ export async function onRequestPost(context) {
       await addCredit(env, email, pack.kind, pack.amount);
       const nm = (obj.customer_details && obj.customer_details.name) || "";
       const kindLabel = pack.kind === "video" ? "videokreditt" : "bildekreditt";
+      // Videokreditt er det ENESTE salget som krever at Renate gjør noe:
+      // bildene går på løpende regning hos OpenAI og virker med en gang,
+      // mens video trenger et Higgsfield-abonnement som må være kjøpt før
+      // kunden kan generere. Derfor står det i e-posten hva hun skal gjøre,
+      // i stedet for at hun må huske det eller oppdage det når kunden klager.
+      const action = pack.kind === "video" ? {
+        title: "Dette må du gjøre nå: kjøp videokapasitet",
+        body: "Kunden har betalt for " + pack.amount + " videoer, men det finnes ingen " +
+              "Higgsfield-plan bak dem ennå, så genereringen vil feile (kreditten " +
+              "refunderes automatisk, så kunden taper ingen penger). Kjøp en plan, " +
+              "så virker det med en gang. Ultra gir 133 videoer i måneden og er " +
+              "den billigste per video. Bildekjøp trenger ingenting av dette.",
+        url: "https://higgsfield.ai/pricing",
+      } : null;
       try {
         await sendOwnerSaleNotice(env, {
           pname: pack.amount + " " + kindLabel, name: nm, email: email,
           amount: obj.amount_total, currency: obj.currency,
+          action: action,
         });
       } catch (e3) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "kreditt", id: pack.kind, title: pack.amount + " " + kindLabel,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e4) {}
       return json({ ok: true });
     }
 
-    // Claude-kurset: legg kjøperen i riktig språkgruppe, ikke Inner Circle.
+    // LME Autopilot (Start/Proff/VIP): gir abonnement, ikke Inner Circle.
+    // Var tidligere kun i den aldri-registrerte stripe-webhook.js, så
+    // betalende kunder fikk verken tilgang eller e-post. Se purchase-links.js.
+    const auto = obj.payment_link && AUTOPILOT_PAYMENT_LINKS[obj.payment_link];
+    if (auto && email && obj.payment_status !== "unpaid") {
+      const nm = (obj.customer_details && obj.customer_details.name) || "";
+      await grantAutopilot(env, email, { customer: obj.customer, sub: obj.subscription, plan: auto.plan, limits: auto.limits });
+      try { await sendAutopilotMail(env, email, nm, auto.lang, auto.planLabel); } catch (e1) {}
+      try {
+        await sendOwnerSaleNotice(env, {
+          pname: auto.planLabel, lang: auto.lang, name: nm, email: email,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e3) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "autopilot", id: auto.plan, title: auto.planLabel,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e4) {}
+      return json({ ok: true });
+    }
+
+    // LME VideoFlow ($8/mo, 2000 kreditter/mnd): eget abonnement, egen
+    // kredittvaluta (vf-credit:<e-post>, functions/_lib/videoflow-credits.js),
+    // ikke Inner Circle og ikke Autopilot-planene over. Opprettet live
+    // 13. august 2026 (Renate: "Live modus, opprett, du vet jo prisene").
+    const vfLink = obj.payment_link && VIDEOFLOW_PAYMENT_LINKS[obj.payment_link];
+    if (vfLink && email && obj.payment_status !== "unpaid") {
+      const nm = (obj.customer_details && obj.customer_details.name) || "";
+      await grantVideoFlowSub(env, email, { customer: obj.customer, sub: obj.subscription, lang: vfLink.lang });
+      await setMonthlyCredits(env, email, VIDEOFLOW_MONTHLY_CREDITS);
+      await clearVideoFlowReminderQueue(env, email);
+      try { await sendVideoFlowWelcomeMail(env, email, nm, vfLink.lang); } catch (e1) {}
+      try {
+        await sendOwnerSaleNotice(env, {
+          pname: "LME VideoFlow (" + VIDEOFLOW_MONTHLY_CREDITS + " kreditter/mnd)", lang: vfLink.lang,
+          name: nm, email: email, amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e3) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "videoflow", id: "videoflow-abonnement", title: "LME VideoFlow",
+          amount: obj.amount_total, currency: obj.currency, url: "/videoflow-studio",
+        });
+      } catch (e4) {}
+      return json({ ok: true });
+    }
+
+    // Låste enkeltkurs (YouTube, Videre med YouTube, KI for pedagoger):
+    // engangskjøp, tilgang for alltid via personlig lenke (course-access.js).
+    const course = obj.payment_link && COURSE_PAYMENT_LINKS[obj.payment_link];
+    if (course && email && obj.payment_status !== "unpaid") {
+      const nm = (obj.customer_details && obj.customer_details.name) || "";
+      const info = COURSE_INFO[course.courseId];
+      const courseName = info.name[course.lang] || info.name.no;
+      const token = await grantCourseAccess(env, course.courseId, email, nm);
+      try { await sendCourseDeliveryMail(env, email, nm, course.lang, courseName, info.url, token, true); } catch (e1) {}
+      try {
+        await sendOwnerSaleNotice(env, {
+          pname: courseName + " (" + course.tier + ")", lang: course.lang, name: nm, email: email,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e3) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "kurs", id: course.courseId, title: courseName,
+          amount: obj.amount_total, currency: obj.currency, url: info.url,
+        });
+      } catch (e4) {}
+      return json({ ok: true });
+    }
+
+    // Lås opp enkeltmodul (Skool-stil): samme mønster som hele-kurset over,
+    // men gir bare tilgang til den ene modulen (course-access.js: modul-token).
+    const modulePurchase = obj.payment_link && MODULE_PAYMENT_LINKS[obj.payment_link];
+    if (modulePurchase && email && obj.payment_status !== "unpaid") {
+      const nm = (obj.customer_details && obj.customer_details.name) || "";
+      const info = COURSE_INFO[modulePurchase.courseId];
+      const courseName = (info && info.name[modulePurchase.lang]) || (info && info.name.no) || modulePurchase.courseId;
+      const moduleLabel = courseName + " – " + modulePurchase.moduleKey;
+      const moduleToken = await grantModuleAccess(env, modulePurchase.courseId, modulePurchase.moduleKey, email, nm);
+      try {
+        await sendModuleDeliveryMail(env, email, nm, modulePurchase.lang, moduleLabel, info.url, moduleToken, modulePurchase.moduleKey);
+      } catch (e1) {}
+      try {
+        await sendOwnerSaleNotice(env, {
+          pname: moduleLabel + " (enkeltmodul)", lang: modulePurchase.lang, name: nm, email: email,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e3) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "modul", id: modulePurchase.courseId + ":" + modulePurchase.moduleKey, title: moduleLabel,
+          amount: obj.amount_total, currency: obj.currency, url: info && info.url,
+        });
+      } catch (e4) {}
+      return json({ ok: true });
+    }
+
+    // Mia & Teo skoledagbok: engangskjøp, leveringsmail med BEGGE språk-PDF-ene
+    // (norsk + engelsk), uansett hvilken språklenke/pris kunden brukte, pluss
+    // to oppfølgere med mersalg fra resten av plattformen (dag 3 og uke 2,
+    // sendt fra functions/api/cron/skoledagbok-followups.js), samme mønster
+    // som oppskriftene (opp_fu:-køen). Se purchase-links.js:
+    // SKOLEDAGBOK_PAYMENT_LINKS/SKOLEDAGBOK_INFO. Fantes ikke før 11. august
+    // 2026, så kjøpere fikk ingen leveringsmail i det hele tatt.
+    const diary = obj.payment_link && SKOLEDAGBOK_PAYMENT_LINKS[obj.payment_link];
+    if (diary && email && obj.payment_status !== "unpaid") {
+      const nm = (obj.customer_details && obj.customer_details.name) || "";
+      const info = SKOLEDAGBOK_INFO[diary.book];
+      const bookName = (info && info.name[diary.lang]) || (info && info.name.no) || "Mia & Teo Skoledagbok";
+      try { await sendSkoledagbokMail(env, { to: email, name: nm, lang: diary.lang, book: diary.book, kind: "levering" }); } catch (e1) {}
+      try {
+        await sendOwnerSaleNotice(env, {
+          pname: bookName, lang: diary.lang, name: nm, email: email,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e3) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "skoledagbok", id: "skoledagbok-" + diary.book, title: bookName,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e4) {}
+      try {
+        const e = email.trim().toLowerCase();
+        const base = { email: email, name: nm, lang: diary.lang, book: diary.book };
+        await env.BUILDER_KV.put("skole_fu:" + e + ":d3",
+          JSON.stringify(Object.assign({}, base, { kind: "oppfolging_dag", sendAfter: Date.now() + 3 * 24 * 60 * 60 * 1000 })));
+        await env.BUILDER_KV.put("skole_fu:" + e + ":w2",
+          JSON.stringify(Object.assign({}, base, { kind: "oppfolging_uke", sendAfter: Date.now() + 14 * 24 * 60 * 60 * 1000 })));
+      } catch (e2) {}
+      return json({ ok: true });
+    }
+
+    // Claude-kurset: gir kursets egen takke-/oppfølgingsmail, ikke Inner Circle.
     const claudeLang = obj.payment_link && CLAUDE_PAYMENT_LINK_LANG[obj.payment_link];
     if (claudeLang && email && obj.payment_status !== "unpaid") {
       const name = (obj.customer_details && obj.customer_details.name) || "";
-      const groupId = claudeLang === "en"
-        ? (env.MAILERLITE_CLAUDE_GROUP_EN || CLAUDE_GROUP_EN)
-        : (env.MAILERLITE_CLAUDE_GROUP_NO || CLAUDE_GROUP_NO);
-      await addToClaudeGroup(env, email, name, groupId);
       // Start også den ukentlige nyhetsbrev-serien for kjøperen.
       try { await registerNewsletter(env, email, name, claudeLang); } catch (e) {}
-      // Hovedkurs: send takkemail nå, og legg 2-dagers oppfølger i kø.
+      // Hovedkurset og "Videre med Claude" er hver sin låste kursside
+      // (js/course-gate.js), samme mønster som course-access.js ellers i
+      // filen. Gir en personlig tilgangsnøkkel og sender riktig takkemail
+      // med lenken, uansett om det er hoved- eller mersalgkjøpet.
       const mainLang = CLAUDE_MAIN_LINK_LANG[obj.payment_link];
+      const claudeCourseId = mainLang ? "claude" : "claude-videre";
+      const claudeToken = await grantCourseAccess(env, claudeCourseId, email, name);
       if (mainLang) {
-        await sendClaudeMail(env, { to: email, name: name, lang: mainLang, kind: "takk" });
+        await sendClaudeMail(env, { to: email, name: name, lang: mainLang, kind: "takk", token: claudeToken });
         try {
           await env.BUILDER_KV.put(
             "claude_fu:" + email.trim().toLowerCase(),
-            JSON.stringify({ email: email, name: name, lang: mainLang, sendAfter: Date.now() + 2 * 24 * 60 * 60 * 1000 })
+            JSON.stringify({ email: email, name: name, lang: mainLang, token: claudeToken, sendAfter: Date.now() + 2 * 24 * 60 * 60 * 1000 })
           );
         } catch (e) {}
+      } else {
+        await sendClaudeMail(env, { to: email, name: name, lang: claudeLang, kind: "takk-videre", token: claudeToken });
       }
       try {
         await sendOwnerSaleNotice(env, {
@@ -147,26 +326,12 @@ export async function onRequestPost(context) {
           name: name, email: email, amount: obj.amount_total, currency: obj.currency,
         });
       } catch (e3) {}
-      return json({ ok: true });
-    }
-
-    // Utfordringen: send dag 0 med en gang, legg resten i kø. Aldri Inner Circle.
-    const utfordringLang = obj.payment_link && UTFORDRING_PAYMENT_LINK_LANG[obj.payment_link];
-    if (utfordringLang && email && obj.payment_status !== "unpaid") {
-      const nm = (obj.customer_details && obj.customer_details.name) || "";
-      await sendUtfordringMail(env, { to: email, name: nm, lang: utfordringLang, kind: "d0" });
-      const e = email.trim().toLowerCase();
       try {
-        for (const dag of UTFORDRING_DAYS) {
-          await env.BUILDER_KV.put(
-            "utf_fu:" + e + ":d" + dag,
-            JSON.stringify({ email: email, name: nm, lang: utfordringLang, kind: "d" + dag, sendAfter: Date.now() + dag * DAG })
-          );
-        }
-        // Medlemskap i fellesskapet (funnel/utfordringen/fellesskap.html),
-        // slik at bare betalende kjøpere kan poste/kommentere der.
-        await env.BUILDER_KV.put("utf_member:" + e, JSON.stringify({ email: email, name: nm, lang: utfordringLang, joinedAt: Date.now() }));
-      } catch (e2) {}
+        await recordPurchase(env, email, {
+          type: "claude", id: "claude-kurset", title: mainLang ? "Claude-kurset" : "Claude-kurset, mersalg",
+          amount: obj.amount_total, currency: obj.currency, url: "/claude-kurs",
+        });
+      } catch (e4) {}
       return json({ ok: true });
     }
 
@@ -192,7 +357,116 @@ export async function onRequestPost(context) {
         await env.BUILDER_KV.put("opp_fu:" + e + ":w2",
           JSON.stringify(Object.assign({}, base, { kind: "oppfolging_uke", sendAfter: Date.now() + 14 * 24 * 60 * 60 * 1000 })));
       } catch (e2) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "oppskrift", id: pat.p, title: pat.p,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e4) {}
     }
+
+    // LME Læringsverksted: enkeltressurser og samlepakker solgt via Stripe.
+    // Tom liste (LAERINGSVERKSTED_PAYMENT_LINKS) inntil Renate oppretter og
+    // registrerer en ekte betalingslenke for en betalt ressurs, se
+    // purchase-links.js og hjelpeteksten i /laeringsverksted-bygger.
+    const lvItem = obj.payment_link && LAERINGSVERKSTED_PAYMENT_LINKS[obj.payment_link];
+    if (lvItem && email && obj.payment_status !== "unpaid") {
+      const nm = (obj.customer_details && obj.customer_details.name) || "";
+      let resource = null;
+      try {
+        const raw = await env.BUILDER_KV.get(LV_KEY_PREFIX + lvItem.slug);
+        if (raw) resource = JSON.parse(raw);
+      } catch (eR) {}
+      const title = (resource && resource.title && (resource.title[lvItem.lang] || resource.title.no)) || lvItem.slug;
+      const downloadUrl = (resource && resource.fileUrl) || "";
+      const resourceUrl = "https://lmexplorers.com/lv/" + lvItem.slug;
+      try { await sendResourceDeliveryMail(env, { to: email, name: nm, lang: lvItem.lang, title: title, downloadUrl: downloadUrl, resourceUrl: resourceUrl }); } catch (e1) {}
+      try {
+        await sendOwnerSaleNotice(env, {
+          pname: title + " (" + lvItem.license + ")", lang: lvItem.lang, name: nm, email: email,
+          amount: obj.amount_total, currency: obj.currency,
+        });
+      } catch (e3) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "laeringsverksted", id: lvItem.slug, title: title,
+          amount: obj.amount_total, currency: obj.currency, url: resourceUrl,
+        });
+      } catch (e4) {}
+      // Tell nedlastingen i ressursens egen statistikk (best effort, aldri blokkerende).
+      try {
+        if (resource) {
+          resource.stats = resource.stats || { views: 0, downloads: 0, favorites: 0 };
+          resource.stats.downloads = (resource.stats.downloads || 0) + 1;
+          await env.BUILDER_KV.put(LV_KEY_PREFIX + lvItem.slug, JSON.stringify(resource));
+        }
+      } catch (e5) {}
+    }
+    return json({ ok: true });
+  }
+
+  // Holder LME Autopilot-abonnementet riktig ved fornyelse/oppsigelse.
+  // Rører aldri Inner Circle: den egne lme-inner-circle-workeren har sitt
+  // eget webhook-endepunkt og håndterer sine egne abonnement-hendelser.
+  // Her sjekkes produktet på abonnementet, og alt som ikke er en kjent
+  // Autopilot-plan (prod_… i AUTOPILOT_PRODUCT_PLANS) ignoreres stille.
+  if (event.type === "customer.subscription.updated" || event.type === "customer.subscription.deleted") {
+    const obj = (event.data && event.data.object) || {};
+    let prod = null;
+    try {
+      const item = obj.items && obj.items.data && obj.items.data[0];
+      const price = item && item.price;
+      prod = price && (typeof price.product === "string" ? price.product : (price.product && price.product.id));
+    } catch (e) {}
+    const plan = prod && AUTOPILOT_PRODUCT_PLANS[prod];
+    const active = event.type === "customer.subscription.updated" && (obj.status === "active" || obj.status === "trialing");
+
+    if (plan) {
+      const email = await emailForStripeCustomer(env, obj.customer);
+      if (email) {
+        if (active) await grantAutopilot(env, email, { customer: obj.customer, sub: obj.id, plan: plan.plan, limits: plan.limits });
+        else await revokeAutopilot(env, email);
+      }
+      return json({ ok: true });
+    }
+
+    // LME VideoFlow: holder abonnementsstatus riktig ved oppsigelse/betaling
+    // feilet (status i vf-sub:<e-post>, lest av UI-en for å vise "abonner på
+    // nytt"). Kredittsaldoen (vf-credit:<e-post>) fylles IKKE her, det skjer
+    // kun i invoice.paid under, siden denne hendelsen fyres for mye mer enn
+    // bare fornyelse (f.eks. betalingsmetode oppdatert).
+    if (prod === VIDEOFLOW_PRODUCT_ID) {
+      const email = await emailForStripeCustomer(env, obj.customer);
+      if (email) {
+        if (active) await grantVideoFlowSub(env, email, { customer: obj.customer, sub: obj.id });
+        else await revokeVideoFlowSub(env, email);
+      }
+      return json({ ok: true });
+    }
+
+    return json({ ok: true }); // ikke en kjent Autopilot- eller VideoFlow-plan, ikke vårt bord
+  }
+
+  // LME VideoFlow: fyller på 2000 kreditter ved hver fornyelse. Trygt å
+  // kjøre flere ganger for samme faktura (setMonthlyCredits SETTER saldoen,
+  // legger ikke til), så ingen fare for dobbel-tildeling selv om denne og
+  // checkout.session.completed begge fyrer for samme første betaling.
+  if (event.type === "invoice.paid") {
+    const obj = (event.data && event.data.object) || {};
+    let prod = null;
+    try {
+      const line = obj.lines && obj.lines.data && obj.lines.data[0];
+      const price = line && line.price;
+      prod = price && (typeof price.product === "string" ? price.product : (price.product && price.product.id));
+    } catch (e) {}
+    if (prod === VIDEOFLOW_PRODUCT_ID) {
+      const email = obj.customer_email || (await emailForStripeCustomer(env, obj.customer));
+      if (email) {
+        await setMonthlyCredits(env, email, VIDEOFLOW_MONTHLY_CREDITS);
+        await clearVideoFlowReminderQueue(env, email);
+      }
+    }
+    return json({ ok: true });
   }
 
   return json({ ok: true });

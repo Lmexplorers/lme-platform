@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#F8D7DA">
 <title>Butikk — LME</title>
+<link rel="canonical" href="https://lmexplorers.com/butikk">
+<meta name="description" content="LME-butikken: bøker, Montessorimateriell og strikke- og hekleoppskrifter i LME-stil, digitalt og klart for nedlasting rett etter kjøp.">
 
 <style>
   @font-face {
@@ -757,6 +759,18 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     gap: 20px;
   }
 
+  /* Kategori-kortene på forsiden av butikken: eget grid (auto-fit) så alle
+     5 kortene (Bøker/Materiell/Strikk/Hekle/Læremidler) fordeler seg jevnt
+     i én rad på brede skjermer, i stedet for en låst 4-kolonners rad med
+     ett kort alene på rad to. Kortene selv gjenbruker .product-card. */
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  @media (max-width: 1024px) { .cat-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .cat-grid { grid-template-columns: 1fr; } }
+
   .product-card {
     background: #fff;
     border-radius: var(--r-md);
@@ -1009,6 +1023,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     .lang-float { top: 70px; right: 16px; padding: 6px 14px; font-size: 13px; }
   }
 </style>
+<link rel="stylesheet" href="/css/laeringsverksted.css">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/images/app/apple-touch-icon.png">
 <script>
@@ -1019,6 +1034,8 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
   }
 </script>
 </head>
+<body>
+
 <body>
 
 <!-- ===================================
@@ -1038,7 +1055,6 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
             <h4><span class="ico">✦</span> Lær</h4>
             <ul>
               <li><a href="/academy">Kurs <span class="arrow">›</span></a></li>
-              <li><a href="/montessori-mesterklasse"><span data-no="Montessori mesterklasse" data-en="Montessori Masterclass">Montessori mesterklasse</span> <span class="arrow">›</span></a></li>
               <li><a href="/montessorireisen"><span data-no="Montessorireisen" data-en="The Montessori Journey">Montessorireisen</span> <span class="arrow">›</span></a></li>
               <li><a href="/roadmap">Din Montessorireise <span class="arrow">›</span></a></li>
               <li><a href="/musikk">LME Musikk <span class="arrow">›</span></a></li>
@@ -1120,7 +1136,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     <div class="header-right">
       
       <a href="/spor-nathalie-ai" class="btn-ai">
-        <span class="avatar" style="position:relative;overflow:hidden">N<img src="/images/nathalie-portrait.jpg?v=2" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0" onerror="this.remove()"></span>
+        <span class="avatar" style="position:relative;overflow:hidden">N<img src="/images/nathalie-portrait.jpg?v=3" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0" onerror="this.remove()"></span>
         <span>Spør Nathalie AI ↗</span>
       </a>
       <a href="/creative-academy" class="btn-studio">Åpne LME Studio</a>
@@ -1184,6 +1200,8 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 </div>
 
 
+
+
 <main class="container">
 
   <nav class="breadcrumb" style="margin-top: 32px;">
@@ -1194,1208 +1212,98 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
 
   <section class="page-hero">
     <span class="kicker">LME BUTIKK</span>
-    <h1 data-edit="hero-title">Bøker, arbeidsbøker og <em>Montessorimagi</em></h1>
-    <p data-edit="hero-sub">Mia &amp; Teo-bøker, Montessoribaserte arbeidsbøker og digitale ressurser laget for pedagoger og foreldre som elsker Montessoripedagogikken.</p>
+    <h1>Velg det som <em>passer deg</em></h1>
+    <p>Bøker, læremidler, Montessorimateriell og strikke- og hekleoppskrifter i LME-stil. Alt er digitalt og klart for nedlasting rett etter kjøp.</p>
   </section>
 
-  <!-- Filter-rad -->
-  <div class="filter-row">
-    <div class="search-wrap">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-        <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
-        <path d="M21 21l-4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      <input type="search" class="search" placeholder="Søk i produkter...">
-    </div>
-    <div class="filter-pills">
-      <button class="filter-pill active">Alle</button>
-      <button class="filter-pill">Bildebøker</button>
-      <button class="filter-pill">Arbeidsbøker</button>
-      <button class="filter-pill">Aktiviteter</button>
-      <button class="filter-pill">3–6 år</button>
-      <button class="filter-pill">6–9 år</button>
-      <button class="filter-pill">9–12 år</button>
-      <button class="filter-pill">Gratis</button>
-    </div>
-  </div>
-
-  <!-- Skoledagbøker -->
-  <section class="shop-section">
-    <h2>Skoledag<em>bøker</em></h2>
-    <p class="section-sub">Mia &amp; Teo skoledagbok 2026/2027, én side per dag, i Montessoriånd. Digital PDF (358 sider) på norsk og engelsk.</p>
-
-    <div class="product-grid">
-
-      <article class="product-card">
-        <a href="/butikk/skoledagbok" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#FCF4DA;">
-            <span class="product-tag new">NYHET</span>
-            <img src="/images/skoledagbok/cover-1-3-no.png" data-en-src="/images/skoledagbok/cover-1-3-en.png" alt="Mia &amp; Teo skoledagbok 1.–3. trinn, forside" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:6px;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/skoledagbok" style="text-decoration:none;color:inherit;">Skoledagbok 1.–3. trinn</a></h4>
-          <p class="product-meta">358 sider · 5–9 år · Norsk + Engelsk</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="299 kr" data-usd-price="$29">299 kr</span>
-            <a href="https://buy.stripe.com/28EdRa2FL5Zd7a5fJJ9R60r" data-en-href="https://buy.stripe.com/5kQfZigwB2N1fGB4119R60s" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="product-card">
-        <a href="/butikk/skoledagbok" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#FCF4DA;">
-            <span class="product-tag new">NYHET</span>
-            <img src="/images/skoledagbok/cover-4-7-no.png" data-en-src="/images/skoledagbok/cover-4-7-en.png" alt="Mia &amp; Teo skoledagbok 4.–7. trinn, forside" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:6px;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/skoledagbok" style="text-decoration:none;color:inherit;">Skoledagbok 4.–7. trinn</a></h4>
-          <p class="product-meta">358 sider · 9–13 år · Norsk + Engelsk</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="299 kr" data-usd-price="$29">299 kr</span>
-            <a href="https://buy.stripe.com/fZu6oI949gDRbqlgNN9R60t" data-en-href="https://buy.stripe.com/4gM3cwgwBbjx0LHeFF9R60u" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-
-    </div>
-  </section>
-
-  <section class="shop-section">
-    <h2>Strikk &amp; <em>hekle</em></h2>
-    <p class="section-sub">Norske bøttehatter og skaut i LME-stil, som strikke- og hekleoppskrifter. Perfekt til 17. mai, landskamper og alt vi feirer for Norge. Digital PDF med mønsterdiagram og steg for steg.</p>
-    <p style="margin:-6px 0 18px;"><a href="/shop" style="display:inline-block;background:#fff;border:1.5px solid #f0dde6;color:#c43d75;font-weight:700;text-decoration:none;padding:8px 16px;border-radius:999px;font-size:14px;">🇬🇧 Shopping in English? Go to the English shop →</a></p>
-
-    <div class="product-grid">
-
-      <article class="product-card">
-        <a href="/butikk/norge-strikk" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            
-            <img src="/images/oppskrift-norge-strikk-foto.jpg" alt="NORGE-bøttehatt, maskesting" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/norge-strikk" style="text-decoration:none;color:inherit;">NORGE-bøttehatt, maskesting</a></h4>
-          <p class="product-meta">Strikk · broder bokstavene · nybegynnervennlig · rød NORGE</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="99 kr" data-usd-price="$9">99 kr</span>
-            <a href="https://buy.stripe.com/9B6aEY4NT73heCxdBB9R60H" data-en-href="https://buy.stripe.com/00wcN62FL1IXgKF8hh9R61P" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/norge-innstrikket" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            
-            <img src="/images/oppskrift-norge-strikk-foto.jpg" alt="NORGE-bøttehatt, innstrikket" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/norge-innstrikket" style="text-decoration:none;color:inherit;">NORGE-bøttehatt, innstrikket</a></h4>
-          <p class="product-meta">Strikk · innstrikket flerfargestrikk · viderekommende · rød NORGE</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="99 kr" data-usd-price="$9">99 kr</span>
-            <a href="https://buy.stripe.com/00w5kE0xD0ETfGBcxx9R60J" data-en-href="https://buy.stripe.com/6oUcN62FL3R53XT0OP9R61R" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/norge-rune" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <span class="product-tag">NY</span>
-            <img src="/images/oppskrift-norge-rune.jpg?v=2" alt="NORGE-runehatt, hekleoppskrift" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/norge-rune" style="text-decoration:none;color:inherit;">NORGE-runehatt, heklet</a></h4>
-          <p class="product-meta">Heklet · staver · NORGE/NORWAY i runeskrift · stripet brem · barn til herre</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="99 kr" data-usd-price="$9">99 kr</span>
-            <a href="https://buy.stripe.com/9B67sM3JP9bp0LH7dd9R613" data-en-href="https://buy.stripe.com/cNi9AUeotevJgKFeFF9R61S" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/norge-hekle" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            
-            <img src="/images/oppskrift-norge-hekle-foto.jpg" alt="NORGE-bøttehatt, heklet" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/norge-hekle" style="text-decoration:none;color:inherit;">NORGE-bøttehatt, heklet</a></h4>
-          <p class="product-meta">Heklet · NORGE i blokkbokstaver · flagg · voksen</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="99 kr" data-usd-price="$9">99 kr</span>
-            <a href="https://buy.stripe.com/9B64gAa8d4V90LHcxx9R60K" data-en-href="https://buy.stripe.com/3cI6oI1BH5ZdamhgNN9R61T" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/norge-blokk" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            
-            <img src="/images/oppskrift-norge-blokk.jpg" alt="NORGE-bøttehatt, blokkbokstaver" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/norge-blokk" style="text-decoration:none;color:inherit;">NORGE-bøttehatt, blokkbokstaver</a></h4>
-          <p class="product-meta">Strikk · NORGE i blokkbokstaver · flagg bak · tre størrelser</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="99 kr" data-usd-price="$9">99 kr</span>
-            <a href="https://buy.stripe.com/8x29AU1BH3R5eCx1ST9R60I" data-en-href="https://buy.stripe.com/eVq9AU5RX5ZdfGB8hh9R61Q" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/norway-strikk" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            
-            <img src="/images/oppskrift-norway-strikk.jpg" alt="NORWAY-bøttehatt, strikket" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/norway-strikk" style="text-decoration:none;color:inherit;">NORWAY-bøttehatt, strikket</a></h4>
-          <p class="product-meta">Strikk · NORWAY foran · RO og bølger bak · én størrelse</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="99 kr" data-usd-price="$9">99 kr</span>
-            <a href="https://buy.stripe.com/8x2eVe2FL0ETfGBbtt9R60F" data-en-href="https://buy.stripe.com/28EdRa949drF6619ll9R61N" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/norway-hekle" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            
-            <img src="/images/oppskrift-norway-hekle.png" alt="NORWAY-bøttehatt, heklet" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/norway-hekle" style="text-decoration:none;color:inherit;">NORWAY-bøttehatt, heklet</a></h4>
-          <p class="product-meta">Heklet · NORWAY foran · flagg bak · voksen</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="99 kr" data-usd-price="$9">99 kr</span>
-            <a href="https://buy.stripe.com/4gM3cw94973h8e9dBB9R60G" data-en-href="https://buy.stripe.com/3cI3cw1BH2N18e94119R61O" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/ro-strikk" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            
-            <img src="/images/oppskrift-ro-strikk.jpg" alt="RO-bøttehatt, strikket" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/ro-strikk" style="text-decoration:none;color:inherit;">RO-bøttehatt, strikket</a></h4>
-          <p class="product-meta">Strikk · blå RO og flagg · bølget brem · tre størrelser</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="99 kr" data-usd-price="$9">99 kr</span>
-            <a href="https://buy.stripe.com/14AcN65RX2N10LH1ST9R60D" data-en-href="https://buy.stripe.com/3cI4gA0xD1IXcup5559R61L" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/ro-hekle" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            
-            <img src="/images/oppskrift-ro-hekle.jpg" alt="RO-bøttehatt, heklet" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/ro-hekle" style="text-decoration:none;color:inherit;">RO-bøttehatt, heklet</a></h4>
-          <p class="product-meta">Heklet · blå RO og flagg · bølget brem · voksen</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="99 kr" data-usd-price="$9">99 kr</span>
-            <a href="https://buy.stripe.com/aFa9AU9495ZdgKFapp9R60E" data-en-href="https://buy.stripe.com/aFaaEY1BH9bp51XeFF9R61M" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/norge-skaut" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            
-            <img src="/images/oppskrift-skaut-strikk.jpg" alt="Norge-skaut, strikket" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/norge-skaut" style="text-decoration:none;color:inherit;">Norge-skaut, strikket</a></h4>
-          <p class="product-meta">Strikk · trekantskaut · flagg foran eller bak · I-cord-snorer</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="99 kr" data-usd-price="$9">99 kr</span>
-            <a href="https://buy.stripe.com/4gMaEY3JP5Zd3XT8hh9R60L" data-en-href="https://buy.stripe.com/bJe00ka8dcnBfGB7dd9R61U" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/norge-skaut-hekle" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            
-            <img src="/images/oppskrift-skaut-hekle.jpg" alt="Norge-skaut, heklet" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/norge-skaut-hekle" style="text-decoration:none;color:inherit;">Norge-skaut, heklet</a></h4>
-          <p class="product-meta">Heklet · trekantskaut · flagg foran eller bak · heklede snorer</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="99 kr" data-usd-price="$9">99 kr</span>
-            <a href="https://buy.stripe.com/3cI14ofsx73h8e9fJJ9R611" data-en-href="https://buy.stripe.com/9B600kbchaftfGBdBB9R61V" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/norge-pakke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <span class="product-tag">PAKKE</span>
-            <img src="/images/oppskrift-norge-blokk.jpg" alt="NORGE-bøttehatt, alle 3 strikkevariantene" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/norge-pakke" style="text-decoration:none;color:inherit;">NORGE-bøttehatt, alle 3 strikkevariantene</a></h4>
-          <p class="product-meta">Pakke · maskesting + blokkbokstaver + innstrikket</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="149 kr" data-usd-price="$14">149 kr</span>
-            <a href="https://buy.stripe.com/cNi7sMa8devJgKF9ll9R60M" data-en-href="https://buy.stripe.com/14A9AU6W1evJgKF6999R61W" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/strikk-pakke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <span class="product-tag">PAKKE</span>
-            <img src="/images/oppskrift-ro-strikk.jpg" alt="Alle strikkeoppskriftene, pakke" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/strikk-pakke" style="text-decoration:none;color:inherit;">Alle strikkeoppskriftene, pakke</a></h4>
-          <p class="product-meta">Pakke · RO + NORWAY + NORGE (3) + skaut</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="299 kr" data-usd-price="$29">299 kr</span>
-            <a href="https://buy.stripe.com/6oUbJ23JP9bp2TP4119R61v" data-en-href="https://buy.stripe.com/28EbJ2a8daftbql2WX9R61Y" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/hekle-pakke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <span class="product-tag">PAKKE</span>
-            <img src="/images/oppskrift-ro-hekle.jpg" alt="Alle hekleoppskriftene, pakke" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/hekle-pakke" style="text-decoration:none;color:inherit;">Alle hekleoppskriftene, pakke</a></h4>
-          <p class="product-meta">Pakke · RO + NORWAY + NORGE + skaut, heklet</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="249 kr" data-usd-price="$24">249 kr</span>
-            <a href="https://buy.stripe.com/6oU3cw0xD3R5gKFdBB9R61t" data-en-href="https://buy.stripe.com/6oUaEY1BHevJ1PL0OP9R61X" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-
-    </div>
-  </section>
-
-  <section class="shop-section">
-    <h2>LME Woodland Dreams <em>Baby Collection</em></h2>
-    <p class="section-sub">Amigurumi-oppskrifter i LME-stil: Ellie og fem nye skogvenner, hver med dukke, smokkelenke, rangle og vognlenke, pluss ballerinasko og aktivitetsleke for Ellie. Kjøp enkeltvis eller som samlepakke.</p>
-    <p style="margin:-6px 0 18px;"><a href="/shop" style="display:inline-block;background:#fff;border:1.5px solid #f0dde6;color:#c43d75;font-weight:700;text-decoration:none;padding:8px 16px;border-radius:999px;font-size:14px;">🇬🇧 Shopping in English? Go to the English shop →</a></p>
-
-    <div class="product-grid">
-
-      <article class="product-card">
-        <a href="/butikk/ellie-hekle" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-
-            <img src="/images/oppskrift-ellie-hekle.jpg" alt="Ellie, det lille dådyret, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/ellie-hekle" style="text-decoration:none;color:inherit;">Ellie, det lille dådyret</a></h4>
-          <p class="product-meta">Amigurumi · LME Baby Collection · avtakbar sløyfe · ca. 18-20 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="129 kr" data-usd-price="$12">129 kr</span>
-            <a href="https://buy.stripe.com/6oUdRa4NTgDRfGB1ST9R625" data-en-href="https://buy.stripe.com/14A8wQ805drF1PL2WX9R626" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/ellies-smokkelenke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-
-            <img src="/images/oppskrift-ellies-smokkelenke-2.jpg" alt="Ellies smokkelenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/ellies-smokkelenke" style="text-decoration:none;color:inherit;">Ellies smokkelenke</a></h4>
-          <p class="product-meta">Amigurumi · maks 22 cm (EN 12586) · sikkerhet</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="89 kr" data-usd-price="$8">89 kr</span>
-            <a href="https://buy.stripe.com/eVq00k0xDdrF9id5559R627" data-en-href="https://buy.stripe.com/dRm6oIfsx2N1bql2WX9R628" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/ellies-rangle" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-
-            <img src="/images/oppskrift-ellies-rangle-2.jpg" alt="Ellies rangle, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/ellies-rangle" style="text-decoration:none;color:inherit;">Ellies rangle</a></h4>
-          <p class="product-meta">Amigurumi · trering · ca. 13-15 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="99 kr" data-usd-price="$9">99 kr</span>
-            <a href="https://buy.stripe.com/eVq28sbch87l6612WX9R629" data-en-href="https://buy.stripe.com/14A8wQ949bjx1PL1ST9R62a" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/ellies-vognlenke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-
-            <img src="/images/oppskrift-ellies-vognlenke-3.jpg" alt="Ellies vognlenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/ellies-vognlenke" style="text-decoration:none;color:inherit;">Ellies vognlenke</a></h4>
-          <p class="product-meta">Amigurumi · sju motiver · sideringer · maks 35-40 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="119 kr" data-usd-price="$11">119 kr</span>
-            <a href="https://buy.stripe.com/6oUaEYfsx5ZdfGBfJJ9R62b" data-en-href="https://buy.stripe.com/7sY00k0xD0ET8e96999R62c" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/ellies-ballerinasko" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-
-            <img src="/images/oppskrift-ellies-ballerinasko-2.jpg" alt="Ellies ballerinasko, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/ellies-ballerinasko" style="text-decoration:none;color:inherit;">Ellies ballerinasko</a></h4>
-          <p class="product-meta">Amigurumi · fem størrelser · matchende hårsløyfe</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="129 kr" data-usd-price="$12">129 kr</span>
-            <a href="https://buy.stripe.com/4gMcN62FL4V90LHcxx9R62d" data-en-href="https://buy.stripe.com/28E4gAbchdrF51X0OP9R62e" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/ellies-aktivitetsleke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-
-            <img src="/images/oppskrift-ellies-aktivitetsleke-2.jpg" alt="Ellies aktivitetsleke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/ellies-aktivitetsleke" style="text-decoration:none;color:inherit;">Ellies aktivitetsleke</a></h4>
-          <p class="product-meta">Amigurumi · babysikkert speil · ca. 11-12 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="149 kr" data-usd-price="$14">149 kr</span>
-            <a href="https://buy.stripe.com/28E5kEfsx0ET6618hh9R62f" data-en-href="https://buy.stripe.com/bJe3cw6W14V9dyt5559R62g" class="btn-buy">Kjøp →</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/pip-hekle" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-pip-hekle.jpg" alt="Pip, det lille pinnsvinet, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/pip-hekle" style="text-decoration:none;color:inherit;">Pip, det lille pinnsvinet</a></h4>
-          <p class="product-meta">Amigurumi &middot; LME Baby Collection &middot; salviegrønn &middot; ca. 18-20 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="129 kr" data-usd-price="$12">129 kr</span>
-            <a href="https://buy.stripe.com/cNi00k3JP0ET661app9R62h" data-en-href="https://buy.stripe.com/cNi5kE949aft7a56999R62i" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/pips-smokkelenke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-pips-smokkelenke-3.jpg" alt="Pips smokkelenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/pips-smokkelenke" style="text-decoration:none;color:inherit;">Pips smokkelenke</a></h4>
-          <p class="product-meta">Amigurumi &middot; maks 22 cm (EN 12586) &middot; sikkerhet</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="89 kr" data-usd-price="$8">89 kr</span>
-            <a href="https://buy.stripe.com/3cIdRaeotdrFbql2WX9R62r" data-en-href="https://buy.stripe.com/dRm14o8053R5gKFcxx9R62s" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/pips-rangle" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-pips-rangle-2.jpg" alt="Pips rangle, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/pips-rangle" style="text-decoration:none;color:inherit;">Pips rangle</a></h4>
-          <p class="product-meta">Amigurumi &middot; trering &middot; ca. 13-15 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="99 kr" data-usd-price="$9">99 kr</span>
-            <a href="https://buy.stripe.com/5kQ14o3JP5Zddyt9ll9R62B" data-en-href="https://buy.stripe.com/14A8wQ1BHaftfGB4119R62C" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/pips-vognlenke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-pips-vognlenke-2.jpg" alt="Pips vognlenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/pips-vognlenke" style="text-decoration:none;color:inherit;">Pips vognlenke</a></h4>
-          <p class="product-meta">Amigurumi &middot; sju motiver &middot; sideringer &middot; maks 35-40 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="119 kr" data-usd-price="$11">119 kr</span>
-            <a href="https://buy.stripe.com/bJe4gA0xD5Zd51X0OP9R62L" data-en-href="https://buy.stripe.com/eVq6oI6W13R53XTdBB9R62M" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/pips-ballerinasko" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-pips-ballerinasko.jpg" alt="Pips ballerinasko, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/pips-ballerinasko" style="text-decoration:none;color:inherit;">Pips ballerinasko</a></h4>
-          <p class="product-meta">Amigurumi &middot; fem st&oslash;rrelser &middot; salviegr&oslash;nn</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="129 kr" data-usd-price="$12">129 kr</span>
-            <a href="https://buy.stripe.com/7sY7sMeot9bpeCx9ll9R62Z" data-en-href="https://buy.stripe.com/fZu8wQ1BH1IXgKF6999R630" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/pips-aktivitetsleke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-pips-aktivitetsleke.jpg" alt="Pips aktivitetsleke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/pips-aktivitetsleke" style="text-decoration:none;color:inherit;">Pips aktivitetsleke</a></h4>
-          <p class="product-meta">Amigurumi &middot; babysikkert speil &middot; ca. 11-12 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="149 kr" data-usd-price="$14">149 kr</span>
-            <a href="https://buy.stripe.com/dRmcN69490ETbql0OP9R631" data-en-href="https://buy.stripe.com/bJe6oI8052N10LHapp9R632" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/felix-hekle" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-felix-hekle.jpg" alt="Felix, den lille reven, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/felix-hekle" style="text-decoration:none;color:inherit;">Felix, den lille reven</a></h4>
-          <p class="product-meta">Amigurumi &middot; LME Baby Collection &middot; salviegrønn &middot; ca. 18-20 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="129 kr" data-usd-price="$12">129 kr</span>
-            <a href="https://buy.stripe.com/14A28s3JP3R5gKF5559R62j" data-en-href="https://buy.stripe.com/aFa14ocgl87l8e90OP9R62k" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/felix-smokkelenke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-felix-smokkelenke-3.jpg" alt="Felix' smokkelenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/felix-smokkelenke" style="text-decoration:none;color:inherit;">Felix' smokkelenke</a></h4>
-          <p class="product-meta">Amigurumi &middot; maks 22 cm (EN 12586) &middot; sikkerhet</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="89 kr" data-usd-price="$8">89 kr</span>
-            <a href="https://buy.stripe.com/5kQcN60xDfzN2TP4119R62t" data-en-href="https://buy.stripe.com/6oU28s6W19bp2TPeFF9R62u" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/felix-rangle" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-felix-rangle-2.jpg" alt="Felix' rangle, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/felix-rangle" style="text-decoration:none;color:inherit;">Felix' rangle</a></h4>
-          <p class="product-meta">Amigurumi &middot; trering &middot; ca. 13-15 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="99 kr" data-usd-price="$9">99 kr</span>
-            <a href="https://buy.stripe.com/7sY00k3JP0ET2TP2WX9R62D" data-en-href="https://buy.stripe.com/8x24gAcglfzNeCxcxx9R62E" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/felix-vognlenke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-felix-vognlenke-3.jpg" alt="Felix' vognlenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/felix-vognlenke" style="text-decoration:none;color:inherit;">Felix' vognlenke</a></h4>
-          <p class="product-meta">Amigurumi &middot; sju motiver &middot; sideringer &middot; maks 35-40 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="119 kr" data-usd-price="$11">119 kr</span>
-            <a href="https://buy.stripe.com/cNi8wQ6W1cnB8e9btt9R62N" data-en-href="https://buy.stripe.com/9B69AU8054V9gKFbtt9R62O" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/felix-ballerinasko" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-felix-ballerinasko.jpg" alt="Felix' ballerinasko, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/felix-ballerinasko" style="text-decoration:none;color:inherit;">Felix' ballerinasko</a></h4>
-          <p class="product-meta">Amigurumi &middot; fem st&oslash;rrelser &middot; minihale i stedet for sl&oslash;yfe</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="129 kr" data-usd-price="$12">129 kr</span>
-            <a href="https://buy.stripe.com/bJeeVe0xDdrF1PL9ll9R633" data-en-href="https://buy.stripe.com/6oU00k5RX73hdyt4119R634" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/felix-aktivitetsleke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-felix-aktivitetsleke-2.jpg" alt="Felix' aktivitetsleke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/felix-aktivitetsleke" style="text-decoration:none;color:inherit;">Felix' aktivitetsleke</a></h4>
-          <p class="product-meta">Amigurumi &middot; babysikkert speil &middot; ca. 11-12 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="149 kr" data-usd-price="$14">149 kr</span>
-            <a href="https://buy.stripe.com/dRm5kE6W1cnBeCx8hh9R635" data-en-href="https://buy.stripe.com/5kQbJ20xD4V951XgNN9R636" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/molly-hekle" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-molly-hekle.jpg" alt="Molly, det lille lammet, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/molly-hekle" style="text-decoration:none;color:inherit;">Molly, det lille lammet</a></h4>
-          <p class="product-meta">Amigurumi &middot; LME Baby Collection &middot; smørgul &middot; ca. 18-20 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="129 kr" data-usd-price="$12">129 kr</span>
-            <a href="https://buy.stripe.com/aFa6oI1BH4V9fGB6999R62l" data-en-href="https://buy.stripe.com/eVqaEYfsx0ET7a55559R62m" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/mollys-smokkelenke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-mollys-smokkelenke-2.jpg" alt="Mollys smokkelenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/mollys-smokkelenke" style="text-decoration:none;color:inherit;">Mollys smokkelenke</a></h4>
-          <p class="product-meta">Amigurumi &middot; maks 22 cm (EN 12586) &middot; sikkerhet</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="89 kr" data-usd-price="$8">89 kr</span>
-            <a href="https://buy.stripe.com/4gMeVe80587l2TP6999R62v" data-en-href="https://buy.stripe.com/14A7sM805evJeCx1ST9R62w" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/mollys-rangle" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-mollys-rangle-2.jpg" alt="Mollys rangle, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/mollys-rangle" style="text-decoration:none;color:inherit;">Mollys rangle</a></h4>
-          <p class="product-meta">Amigurumi &middot; trering &middot; ca. 13-15 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="99 kr" data-usd-price="$9">99 kr</span>
-            <a href="https://buy.stripe.com/7sY00kgwBbjx9idgNN9R62F" data-en-href="https://buy.stripe.com/8x29AU0xD1IX8e90OP9R62G" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/mollys-vognlenke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-mollys-vognlenke-2.jpg" alt="Mollys vognlenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/mollys-vognlenke" style="text-decoration:none;color:inherit;">Mollys vognlenke</a></h4>
-          <p class="product-meta">Amigurumi &middot; sju motiver &middot; sideringer &middot; maks 35-40 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="119 kr" data-usd-price="$11">119 kr</span>
-            <a href="https://buy.stripe.com/9B6aEY1BH2N1dytcxx9R62P" data-en-href="https://buy.stripe.com/5kQeVeeot9bp9idgNN9R62Q" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/mollys-ballerinasko" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-mollys-ballerinasko.jpg" alt="Mollys ballerinasko, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/mollys-ballerinasko" style="text-decoration:none;color:inherit;">Mollys ballerinasko</a></h4>
-          <p class="product-meta">Amigurumi &middot; fem st&oslash;rrelser &middot; sm&oslash;rgul</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="129 kr" data-usd-price="$12">129 kr</span>
-            <a href="https://buy.stripe.com/00wfZi5RXgDRdyt7dd9R637" data-en-href="https://buy.stripe.com/cNiaEYeotdrF7a5dBB9R638" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/mollys-aktivitetsleke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-mollys-aktivitetsleke.jpg" alt="Mollys aktivitetsleke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/mollys-aktivitetsleke" style="text-decoration:none;color:inherit;">Mollys aktivitetsleke</a></h4>
-          <p class="product-meta">Amigurumi &middot; babysikkert speil &middot; ca. 11-12 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="149 kr" data-usd-price="$14">149 kr</span>
-            <a href="https://buy.stripe.com/9B6aEYa8d5ZddytfJJ9R639" data-en-href="https://buy.stripe.com/eVqbJ23JP5Zd2TP9ll9R63a" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/luna-hekle" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-luna-hekle.jpg" alt="Luna, den lille kaninen, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/luna-hekle" style="text-decoration:none;color:inherit;">Luna, den lille kaninen</a></h4>
-          <p class="product-meta">Amigurumi &middot; LME Baby Collection &middot; rosa &middot; ca. 18-20 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="129 kr" data-usd-price="$12">129 kr</span>
-            <a href="https://buy.stripe.com/dRm14oeotevJ51X2WX9R62n" data-en-href="https://buy.stripe.com/28E4gA1BH0ETgKF6999R62o" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/lunas-smokkelenke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-lunas-smokkelenke-2.jpg" alt="Lunas smokkelenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/lunas-smokkelenke" style="text-decoration:none;color:inherit;">Lunas smokkelenke</a></h4>
-          <p class="product-meta">Amigurumi &middot; maks 22 cm (EN 12586) &middot; sikkerhet</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="89 kr" data-usd-price="$8">89 kr</span>
-            <a href="https://buy.stripe.com/9B68wQ94987l8e9fJJ9R62x" data-en-href="https://buy.stripe.com/cNi3cwbchcnB8e94119R62y" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/lunas-rangle" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-lunas-rangle-2.jpg" alt="Lunas rangle, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/lunas-rangle" style="text-decoration:none;color:inherit;">Lunas rangle</a></h4>
-          <p class="product-meta">Amigurumi &middot; trering &middot; ca. 13-15 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="99 kr" data-usd-price="$9">99 kr</span>
-            <a href="https://buy.stripe.com/28EeVegwBevJ7a59ll9R62H" data-en-href="https://buy.stripe.com/28E9AU3JPaftgKFbtt9R62I" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/lunas-vognlenke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-lunas-vognlenke-2.jpg" alt="Lunas vognlenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/lunas-vognlenke" style="text-decoration:none;color:inherit;">Lunas vognlenke</a></h4>
-          <p class="product-meta">Amigurumi &middot; sju motiver &middot; sideringer &middot; maks 35-40 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="119 kr" data-usd-price="$11">119 kr</span>
-            <a href="https://buy.stripe.com/00w00kgwB9bp7a5eFF9R62R" data-en-href="https://buy.stripe.com/6oU28sdkpgDR8e91ST9R62S" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/lunas-ballerinasko" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-lunas-ballerinasko.jpg" alt="Lunas ballerinasko, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/lunas-ballerinasko" style="text-decoration:none;color:inherit;">Lunas ballerinasko</a></h4>
-          <p class="product-meta">Amigurumi &middot; fem st&oslash;rrelser &middot; rosa</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="129 kr" data-usd-price="$12">129 kr</span>
-            <a href="https://buy.stripe.com/dRm5kE5RX1IXgKFapp9R63b" data-en-href="https://buy.stripe.com/28EaEYfsx87l1PLgNN9R63c" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/lunas-aktivitetsleke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-lunas-aktivitetsleke.jpg" alt="Lunas aktivitetsleke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/lunas-aktivitetsleke" style="text-decoration:none;color:inherit;">Lunas aktivitetsleke</a></h4>
-          <p class="product-meta">Amigurumi &middot; babysikkert speil &middot; ca. 11-12 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="149 kr" data-usd-price="$14">149 kr</span>
-            <a href="https://buy.stripe.com/5kQ14o80573h51XeFF9R63d" data-en-href="https://buy.stripe.com/5kQ8wQ1BHbjx7a56999R63e" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/oliver-hekle" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-oliver-hekle.jpg" alt="Oliver, den lille bjørnen, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/oliver-hekle" style="text-decoration:none;color:inherit;">Oliver, den lille bjørnen</a></h4>
-          <p class="product-meta">Amigurumi &middot; LME Baby Collection &middot; lyseblå &middot; ca. 18-20 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="129 kr" data-usd-price="$12">129 kr</span>
-            <a href="https://buy.stripe.com/5kQ7sMcgl5ZdgKF0OP9R62p" data-en-href="https://buy.stripe.com/3cIbJ2dkpgDR1PL7dd9R62q" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/olivers-smokkelenke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-olivers-smokkelenke-3.jpg" alt="Olivers smokkelenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/olivers-smokkelenke" style="text-decoration:none;color:inherit;">Olivers smokkelenke</a></h4>
-          <p class="product-meta">Amigurumi &middot; maks 22 cm (EN 12586) &middot; sikkerhet</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="89 kr" data-usd-price="$8">89 kr</span>
-            <a href="https://buy.stripe.com/3cI3cwfsxaft9ideFF9R62z" data-en-href="https://buy.stripe.com/00w28sgwB0ET9idbtt9R62A" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/olivers-rangle" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-olivers-rangle-2.jpg" alt="Olivers rangle, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/olivers-rangle" style="text-decoration:none;color:inherit;">Olivers rangle</a></h4>
-          <p class="product-meta">Amigurumi &middot; trering &middot; ca. 13-15 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="99 kr" data-usd-price="$9">99 kr</span>
-            <a href="https://buy.stripe.com/dRmbJ28054V99id2WX9R62J" data-en-href="https://buy.stripe.com/eVq4gA0xD4V9fGB7dd9R62K" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/olivers-vognlenke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-olivers-vognlenke-2.jpg" alt="Olivers vognlenke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/olivers-vognlenke" style="text-decoration:none;color:inherit;">Olivers vognlenke</a></h4>
-          <p class="product-meta">Amigurumi &middot; sju motiver &middot; sideringer &middot; maks 35-40 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="119 kr" data-usd-price="$11">119 kr</span>
-            <a href="https://buy.stripe.com/00w5kEa8d4V9fGB1ST9R62T" data-en-href="https://buy.stripe.com/28EbJ21BH73h661dBB9R62U" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/olivers-ballerinasko" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-olivers-ballerinasko.jpg" alt="Olivers ballerinasko, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/olivers-ballerinasko" style="text-decoration:none;color:inherit;">Olivers ballerinasko</a></h4>
-          <p class="product-meta">Amigurumi &middot; fem st&oslash;rrelser &middot; ingen sl&oslash;yfe</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="129 kr" data-usd-price="$12">129 kr</span>
-            <a href="https://buy.stripe.com/dRm5kE94987l3XTeFF9R63f" data-en-href="https://buy.stripe.com/fZueVe8052N1dytgNN9R63g" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/olivers-aktivitetsleke" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <img src="/images/oppskrift-olivers-aktivitetsleke.jpg" alt="Olivers aktivitetsleke, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/olivers-aktivitetsleke" style="text-decoration:none;color:inherit;">Olivers aktivitetsleke</a></h4>
-          <p class="product-meta">Amigurumi &middot; babysikkert speil &middot; ca. 11-12 cm</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="149 kr" data-usd-price="$14">149 kr</span>
-            <a href="https://buy.stripe.com/3cI5kEfsx0ET8e99ll9R63h" data-en-href="https://buy.stripe.com/8x200k805bjxfGB2WX9R63i" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-      <article class="product-card">
-        <a href="/butikk/woodland-dreams-bundle" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#F8D7DA;">
-            <span class="product-tag">PAKKE</span>
-            <img src="/images/oppskrift-woodland-dreams-bundle.jpg" alt="Woodland Dreams, hele kolleksjonen, heklet amigurumi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-          </div>
-        </a>
-        <div class="product-info">
-          <h4><a href="/butikk/woodland-dreams-bundle" style="text-decoration:none;color:inherit;">Woodland Dreams, hele kolleksjonen</a></h4>
-          <p class="product-meta">Pakke &middot; 36 oppskrifter &middot; hele kolleksjonen</p>
-          <div class="product-foot">
-            <span class="product-price" data-no-price="2150 kr" data-usd-price="$199">2150 kr</span>
-            <a href="https://buy.stripe.com/5kQ9AUgwBcnB3XT4119R63j" data-en-href="https://buy.stripe.com/4gMdRa4NTaftbqlapp9R63k" class="btn-buy">Kj&oslash;p &rarr;</a>
-          </div>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- Featured produkt -->
+  <!-- Featuret produkt -->
   <article class="featured-product">
-    <div class="featured-image" style="padding:0;background:#fff;">
-      <img src="/images/bok-cover.jpg" data-en-src="/images/book-cover-en.jpg" alt="De små naturutforskerne, bokomslag" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-      <span class="badge-new" style="position:absolute;top:18px;left:18px;z-index:2;">NY UTGIVELSE</span>
+    <div class="featured-image" style="padding:32px;background:linear-gradient(135deg,#FCF4DA,#F5A8B8);">
+      <img src="/images/skoledagbok/cover-1-3-no.png" alt="Mia &amp; Teo skoledagbok, forside" style="position:relative;z-index:1;max-height:340px;width:auto;border-radius:14px;box-shadow:0 20px 40px -18px rgba(26,26,26,0.35);">
+      <span class="badge-new" style="position:absolute;top:18px;left:18px;z-index:2;">NYHET</span>
     </div>
     <div class="featured-body">
-      <span class="kicker">SIGNATUR-BOK · 24 SIDER</span>
-      <h3>Mia &amp; Teo møter <em>skogens små venner</em></h3>
-      <p>En vakkert illustrert barnebok i Pixar-stil hvor bestevennene Mia og Teo utforsker skogen og møter syv små venner: sommerfuglen, marihøna, larven, sneglen, mauren, frosken og blåfuglen. En bok som vekker undring og kjærlighet til naturen.</p>
-
-      <div class="format-options">
-        <label class="format-option selected">
-          <input type="radio" name="format" checked>
-          <div>
-            <p class="format-label">Digital PDF</p>
-            <p class="format-price">99 kr</p>
-          </div>
-        </label>
-        <label class="format-option">
-          <input type="radio" name="format">
-          <div>
-            <p class="format-label">📦 Forhåndsbestill trykk</p>
-            <p class="format-price">249 kr + frakt</p>
-            <p class="format-note">Sendt innen 7–10 dager</p>
-          </div>
-        </label>
-        <label class="format-option">
-          <input type="radio" name="format">
-          <div>
-            <p class="format-label">PDF + Forhåndsbestill trykk</p>
-            <p class="format-price">329 kr + frakt</p>
-            <p class="format-note">PDF umiddelbart, bok 7–10 dager</p>
-          </div>
-        </label>
-      </div>
-
+      <span class="kicker">SKOLEÅRET 2026/2027 · 358 SIDER</span>
+      <h3>Mia &amp; Teo <em>skoledagbok</em></h3>
+      <p>Én side per dag, hele skoleåret, i Montessoriånd. Digital PDF på både norsk og engelsk, for 1.–3. eller 4.–7. trinn.</p>
       <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-        <a href="https://buy.stripe.com/00weVedkp3R5gKFbtt9R60q" data-en-href="https://buy.stripe.com/dRm6oIcglevJ2TP7dd9R601" class="btn-yellow">Legg i handlevogn, 99 kr</a>
-        <a href="/butikk/naturutforskerne" class="btn-blue">Se mer →</a>
+        <a href="/butikk/skoledagbok" class="btn-yellow">Se skoledagboka, fra 299 kr</a>
       </div>
     </div>
   </article>
 
-  <!-- Montessorimateriell (ferdige produkter) -->
   <section class="shop-section">
-    <h2>Montessori-<em>materiell</em></h2>
-    <p class="section-sub">Ferdige, nedlastbare materiell-pakker i tråd med Montessoris kosmiske utdanning.</p>
-
-    <div class="product-grid">
+    <div class="cat-grid">
 
       <article class="product-card">
-        <a href="/butikk/tidslinje" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background: var(--cream);">
-            <span class="product-tag">KOMPLETT PAKKE</span>
-            <img src="/images/thumb-tidslinje.jpg" data-en-src="/images/thumb-timeline.jpg" alt="Livets Tidslinje, tidslinjen med akvarellillustrasjoner" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+        <a href="/butikk/boker" style="display:block;text-decoration:none;color:inherit;">
+          <div class="product-image" style="background: linear-gradient(135deg, #F7C72E, #F5A8B8);">
+            <div class="product-title-overlay">
+              <span class="kicker">KATEGORI</span>
+              <span class="title">Bøker</span>
+            </div>
+          </div>
+          <div class="product-info">
+            <p class="product-meta" style="margin-bottom:0;">Bildebøker, skoledagbøker og arbeidsbøker for barna</p>
           </div>
         </a>
-        <div class="product-info">
-          <h4><a href="/butikk/tidslinje" style="text-decoration:none;color:inherit;">Livets Tidslinje &ndash; komplett pakke</a></h4>
-          <p class="product-meta">Ferdig + tom tidslinje &middot; 55 bildekort &middot; navnekort &middot; lærerveiledning &middot; 3–9 år &middot; Norsk + Engelsk</p>
-          <div class="product-foot">
-            <span class="product-price">499 kr</span>
-            <a href="/butikk/tidslinje" class="btn-buy">Se mer →</a>
-          </div>
-        </div>
       </article>
-
       <article class="product-card">
-        <a href="/butikk/plansjer" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#fff;">
-            <span class="product-tag">MATERIELL &middot; 3–9 ÅR</span>
-            <img src="/images/plansjer/thumb-plansjer.jpg?v=2" data-en-src="/images/plansjer/thumb-posters-en.jpg?v=2" alt="Fire av plansjene: forhistoriske dyr i størrelsesforhold til et barn" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+        <a href="/butikk/materiell" style="display:block;text-decoration:none;color:inherit;">
+          <div class="product-image" style="background: linear-gradient(135deg, #C8E4F4, #A4D233);">
+            <div class="product-title-overlay">
+              <span class="kicker">KATEGORI</span>
+              <span class="title">Materiell</span>
+            </div>
+          </div>
+          <div class="product-info">
+            <p class="product-meta" style="margin-bottom:0;">Montessorimateriell og utskriftsbare ressurser</p>
           </div>
         </a>
-        <div class="product-info">
-          <h4><a href="/butikk/plansjer" style="text-decoration:none;color:inherit;">Plansjer og kortsett</a></h4>
-          <p class="product-meta">Forhistoriske dyr &middot; 10 A3-plansjer &middot; tekstkort &middot; brukerveiledning &middot; Norsk + Engelsk</p>
-          <div class="product-foot">
-            <span class="product-price">199 kr</span>
-            <a href="/butikk/plansjer" class="btn-buy">Se mer →</a>
-          </div>
-        </div>
       </article>
-
-    </div>
-  </section>
-
-  <!-- Bøker -->
-  <section class="shop-section">
-    <h2>Bilde<em>bøker</em></h2>
-    <p class="section-sub">Mia &amp; Teo-fortellinger laget med Montessoriprinsippene i bunn.</p>
-
-    <div class="product-grid">
-
       <article class="product-card">
-        <a href="/butikk/naturutforskerne" style="display:block;text-decoration:none;color:inherit;">
-          <div class="product-image" style="background:#fff;">
-            <span class="product-tag">BESTSELGER</span>
-            <img src="/images/bok-cover.jpg" data-en-src="/images/book-cover-en.jpg" alt="De små naturutforskerne, bokomslag" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+        <a href="/butikk/strikk" style="display:block;text-decoration:none;color:inherit;">
+          <div class="product-image" style="background: linear-gradient(135deg, #3FA9F5, #6B2D5C);">
+            <div class="product-title-overlay">
+              <span class="kicker">KATEGORI</span>
+              <span class="title">Strikk</span>
+            </div>
+          </div>
+          <div class="product-info">
+            <p class="product-meta" style="margin-bottom:0;">Bøttehatter, skaut og annet, strikket i LME-stil</p>
           </div>
         </a>
-        <div class="product-info">
-          <h4><a href="/butikk/naturutforskerne" style="text-decoration:none;color:inherit;">De små naturutforskerne</a></h4>
-          <p class="product-meta">24 sider · 3–6 år · Norsk + Engelsk</p>
-          <div class="product-foot">
-            <span class="product-price">99 kr</span>
-            <a href="/butikk/naturutforskerne" class="btn-buy">Se mer →</a>
-          </div>
-        </div>
       </article>
-
       <article class="product-card">
-        <div class="product-image" style="background: linear-gradient(135deg, #F7C72E, #F5A8B8);">
-          <span class="product-tag new">KOMMER SNART</span>
-          <div class="product-title-overlay">
-            <span class="kicker">BARNEBOK</span>
-            <span class="title">Mia &amp; Teo<br>på stranden</span>
+        <a href="/butikk/hekle" style="display:block;text-decoration:none;color:inherit;">
+          <div class="product-image" style="background: linear-gradient(135deg, #E91E89, #6B2D5C);">
+            <div class="product-title-overlay">
+              <span class="kicker">KATEGORI</span>
+              <span class="title">Hekle</span>
+            </div>
           </div>
-        </div>
-        <div class="product-info">
-          <h4>Mia &amp; Teo på stranden</h4>
-          <p class="product-meta">28 sider · 3–6 år · Norsk + Engelsk</p>
-          <div class="product-foot">
-            <span class="product-price">149 kr</span>
-            <span class="btn-buy" style="background:var(--cream);color:var(--ink-muted);cursor:default;box-shadow:none;">Kommer snart</span>
+          <div class="product-info">
+            <p class="product-meta" style="margin-bottom:0;">Bøttehatter, skaut og hele Woodland Dreams-kolleksjonen</p>
           </div>
-        </div>
+        </a>
       </article>
-
       <article class="product-card">
-        <div class="product-image" style="background: linear-gradient(135deg, #E91E89, #F7C72E);">
-          <div class="product-title-overlay">
-            <span class="kicker">BARNEBOK</span>
-            <span class="title">Vårens<br>små venner</span>
+        <a href="/laeringsverksted" style="display:block;text-decoration:none;color:inherit;">
+          <div class="product-image" style="background: linear-gradient(135deg, #F7C72E, #A4D233);">
+            <div class="product-title-overlay">
+              <span class="kicker">KATEGORI</span>
+              <span class="title">Læremidler</span>
+            </div>
           </div>
-        </div>
-        <div class="product-info">
-          <h4>Vårens små venner</h4>
-          <p class="product-meta">24 sider · 3–6 år · Norsk + Engelsk</p>
-          <div class="product-foot">
-            <span class="product-price">149 kr</span>
-            <span class="btn-buy" style="background:var(--cream);color:var(--ink-muted);cursor:default;box-shadow:none;">Kommer snart</span>
+          <div class="product-info">
+            <p class="product-meta" style="margin-bottom:0;">Arbeidsark, tredelte kort, plakater og samlepakker fra LME Læringsverksted</p>
           </div>
-        </div>
-      </article>
-
-      <article class="product-card">
-        <div class="product-image" style="background: linear-gradient(135deg, #C8E4F4, #3FA9F5); color: var(--ink);">
-          <div class="product-title-overlay" style="text-shadow: none;">
-            <span class="kicker" style="color: var(--ink);">KOMMER SOMMER 2026</span>
-            <span class="title">Sommerens<br>eventyr</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <h4>Sommerens eventyr</h4>
-          <p class="product-meta">Forhåndsbestilling · 3–6 år</p>
-          <div class="product-foot">
-            <span class="product-price">129 kr</span>
-            <span class="btn-buy" style="background:var(--cream);color:var(--ink-muted);cursor:default;box-shadow:none;">Kommer snart</span>
-          </div>
-        </div>
+        </a>
       </article>
 
     </div>
   </section>
 
-  <!-- Arbeidsbøker -->
-  <section class="shop-section">
-    <h2>Arbeids<em>bøker</em></h2>
-    <p class="section-sub">Montessoribaserte arbeidsbøker fordelt på utviklingsfaser.</p>
-
-    <div class="product-grid">
-
-      <article class="product-card">
-        <div class="product-image" style="background: linear-gradient(135deg, #FDE7E0 0%, #F5A8B8 100%); color: var(--ink);">
-          <div class="product-title-overlay" style="text-shadow: none;">
-            <span class="kicker" style="color: var(--ink);">3–6</span>
-            <span class="title">Vårens<br>venner</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <h4>Arbeidsbok: Vårens venner</h4>
-          <p class="product-meta">48 sider · 3–6 år · Norsk PDF</p>
-          <div class="product-foot">
-            <span class="product-price">89 kr</span>
-            <span class="btn-buy" style="background:var(--cream);color:var(--ink-muted);cursor:default;box-shadow:none;">Kommer snart</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="product-card">
-        <div class="product-image" style="background: linear-gradient(135deg, #A4D233, #F7C72E);">
-          <div class="product-title-overlay">
-            <span class="kicker">6–9</span>
-            <span class="title">Kosmisk<br>utforskning</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <h4>Arbeidsbok: Kosmisk utforskning</h4>
-          <p class="product-meta">64 sider · 6–9 år · Norsk PDF</p>
-          <div class="product-foot">
-            <span class="product-price">109 kr</span>
-            <span class="btn-buy" style="background:var(--cream);color:var(--ink-muted);cursor:default;box-shadow:none;">Kommer snart</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="product-card">
-        <div class="product-image" style="background: linear-gradient(135deg, #3FA9F5, #6B2D5C);">
-          <div class="product-title-overlay">
-            <span class="kicker">9–12</span>
-            <span class="title">Going<br>out</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <h4>Arbeidsbok: Going out</h4>
-          <p class="product-meta">72 sider · 9–12 år · Norsk PDF</p>
-          <div class="product-foot">
-            <span class="product-price">119 kr</span>
-            <span class="btn-buy" style="background:var(--cream);color:var(--ink-muted);cursor:default;box-shadow:none;">Kommer snart</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="product-card">
-        <div class="product-image" style="background: linear-gradient(135deg, #F5A8B8, #C8E4F4); color: var(--ink);">
-          <div class="product-title-overlay" style="text-shadow: none;">
-            <span class="kicker" style="color: var(--ink);">PAKKE</span>
-            <span class="title">Alle<br>arbeidsbøker</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <h4>Bunt: Hele arbeidsbok-serien</h4>
-          <p class="product-meta">3 bøker · Spar 20% · Norsk PDF</p>
-          <div class="product-foot">
-            <span class="product-price">249 kr</span>
-            <span class="btn-buy" style="background:var(--cream);color:var(--ink-muted);cursor:default;box-shadow:none;">Kommer snart</span>
-          </div>
-        </div>
-      </article>
-
-    </div>
-  </section>
-
-  <!-- Aktiviteter & utskriftsbare -->
-  <section class="shop-section">
-    <h2>Aktiviteter &amp; <em>utskriftsbare</em></h2>
-    <p class="section-sub">Klar-til-utskrift pakker for hjemmebruk og klasserom.</p>
-
-    <div class="product-grid">
-
-      <article class="product-card">
-        <div class="product-image" style="background: linear-gradient(135deg, #F7C72E, #A4D233);">
-          <div class="product-title-overlay">
-            <span class="kicker">SESONGAKTIVITET</span>
-            <span class="title">Sommer-<br>boksen</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <h4>Sommerboksen 3–6 år</h4>
-          <p class="product-meta">42 utskrivbare ark · Norsk + Engelsk</p>
-          <div class="product-foot">
-            <span class="product-price">79 kr</span>
-            <span class="btn-buy" style="background:var(--cream);color:var(--ink-muted);cursor:default;box-shadow:none;">Kommer snart</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="product-card">
-        <div class="product-image" style="background: linear-gradient(135deg, #E91E89, #6B2D5C);">
-          <span class="product-tag">POPULÆR</span>
-          <div class="product-title-overlay">
-            <span class="kicker">OBSERVASJON</span>
-            <span class="title">Observasjons-<br>journalen</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <h4>Observasjonsjournal for pedagoger</h4>
-          <p class="product-meta">30 sider · Skrivbar PDF · Norsk + Engelsk</p>
-          <div class="product-foot">
-            <span class="product-price">59 kr</span>
-            <span class="btn-buy" style="background:var(--cream);color:var(--ink-muted);cursor:default;box-shadow:none;">Kommer snart</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="product-card">
-        <div class="product-image" style="background: linear-gradient(135deg, #FBF6F0, #F7C72E); color: var(--ink);">
-          <span class="product-tag free">GRATIS</span>
-          <div class="product-title-overlay" style="text-shadow: none;">
-            <span class="kicker" style="color: var(--ink);">LEAD MAGNET</span>
-            <span class="title" style="color: var(--ink);">3 første<br>skritt</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <h4>De 3 første skrittene i Montessori</h4>
-          <p class="product-meta">Gratis e-bok · 16 sider · Norsk + Engelsk</p>
-          <div class="product-foot">
-            <span class="product-price">Gratis</span>
-            <span class="btn-buy" style="background:var(--cream);color:var(--ink-muted);cursor:default;box-shadow:none;">Kommer snart</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="product-card">
-        <div class="product-image" style="background: linear-gradient(135deg, #C8E4F4, #A4D233); color: var(--ink);">
-          <div class="product-title-overlay" style="text-shadow: none;">
-            <span class="kicker" style="color: var(--ink);">CANVA-MALER</span>
-            <span class="title" style="color: var(--ink);">Foreldre-<br>brev-pakke</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <h4>Foreldrebrev-pakke (Canva)</h4>
-          <p class="product-meta">12 redigerbare maler · Norsk + Engelsk</p>
-          <div class="product-foot">
-            <span class="product-price">99 kr</span>
-            <span class="btn-buy" style="background:var(--cream);color:var(--ink-muted);cursor:default;box-shadow:none;">Kommer snart</span>
-          </div>
-        </div>
-      </article>
-
-    </div>
-  </section>
-
-  <!-- Trygghetsband -->
   <section class="shop-trust">
     <div class="trust-cell">
       <div class="trust-num">📥</div>
@@ -2502,7 +1410,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     </div>
 
     <div class="footer-bottom">
-      ©2026 Little Montessori Explorers, Renate Dahl · Tønsberg, Norge
+      ©2026 Little Montessori Explorers, Renate Dahl · Tønsberg, Norge · <a href="/personvern" style="color:inherit">Personvern</a> · <a href="/kjopsvilkar" style="color:inherit">Kjøpsvilkår</a>
     </div>
   </div>
 </footer>

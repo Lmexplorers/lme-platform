@@ -1,0 +1,44 @@
+name: Deploy Inner Circle-worker
+
+# Deployer workers/lme-inner-circle automatisk til Cloudflare hver gang koden
+# endres paa main.
+#
+# Hvorfor denne finnes: salgssiden for Inner Circle ("Bli medlem" paa
+# forsiden) serveres av denne workeren, ikke av Pages. Den lot seg derfor
+# verken redigere med redigeringsknappen paa siden eller endre ved aa pushe
+# til main, saa hver eneste tekstretting krevde en manuell wrangler-deploy.
+# Renate 16. august 2026: "Jeg faar ikke endret noe."
+#
+# Engangsoppsett: samme Actions-secret som AI Visibility-workeren bruker,
+# CLOUDFLARE_API_TOKEN (token-mal "Edit Cloudflare Workers" i Cloudflare:
+# My Profile -> API Tokens -> Create Token). Er den allerede lagt inn for
+# den andre workeren, virker denne med en gang.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "workers/lme-inner-circle/**"
+      - ".github/workflows/deploy-inner-circle-worker.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sjekk at CLOUDFLARE_API_TOKEN er satt
+        id: sjekk
+        run: |
+          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+            echo "::warning::Actions-secreten CLOUDFLARE_API_TOKEN mangler ennaa. Hopper stille over (ingen feil-e-post). Deploy skjer automatisk naar den er lagt inn."
+            echo "klar=nei" >> "$GITHUB_OUTPUT"
+          else
+            echo "klar=ja" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Deploy med wrangler
+        if: steps.sjekk.outputs.klar == 'ja'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: workers/lme-inner-circle

@@ -772,7 +772,7 @@
 
     <div class="page-header">
       <h1 data-edit="ph-title">Email</h1>
-      <p data-edit="ph-sub">E-postkampanjer og nyhetsbrev, hentet direkte fra MailerLite-kontoen din.</p>
+      <p data-edit="ph-sub">Nyhetsbrev-abonnenter, hentet direkte fra plattformens egen liste. Automatiske e-postserier sendes med MailerSend, rett fra koden.</p>
     </div>
 
     <div class="ml-statbar">
@@ -780,55 +780,43 @@
     </div>
 
     <div class="ml-top">
-      <span class="count" id="campCount">Laster …</span>
-      <a href="https://dashboard.mailerlite.com/campaigns" target="_blank" rel="noopener" class="ml-cta">Ny kampanje i MailerLite ↗</a>
+      <span class="count" id="srcCount">Laster …</span>
+      <a href="/automations" class="ml-cta">Se automasjonene ↗</a>
     </div>
 
-    <div id="campBody"><div class="ml-state">Henter kampanjer fra MailerLite …</div></div>
+    <div id="srcBody"><div class="ml-state">Henter abonnenter …</div></div>
 
     <script>
     (function(){
       var subCount = document.getElementById('subCount');
-      var campCount = document.getElementById('campCount');
-      var body = document.getElementById('campBody');
+      var srcCount = document.getElementById('srcCount');
+      var body = document.getElementById('srcBody');
 
-      fetch('/api/mailerlite/stats').then(function(r){return r.json();}).then(function(d){
-        if (d && d.meta && typeof d.meta.total === 'number') subCount.textContent = d.meta.total;
-        else subCount.textContent = '—';
-      }).catch(function(){ subCount.textContent = '—'; });
-
-      fetch('/api/mailerlite/campaigns').then(function(r){return r.json();}).then(function(d){
-        if (d && d.error === 'not_configured') return setup();
+      fetch('/api/newsletter-stats').then(function(r){return r.json();}).then(function(d){
         if (!d || d.error) return fail();
-        var list = d.data || [];
-        campCount.textContent = list.length + (list.length === 1 ? ' kampanje' : ' kampanjer');
-        if (!list.length) {
-          body.innerHTML = '<div class="ml-state">Ingen kampanjer ennå. Lag din første nyhetsbrev-kampanje i MailerLite, så dukker den opp her.</div>';
+        subCount.textContent = typeof d.total === 'number' ? d.total : '—';
+        var sources = Object.keys(d.bySource || {});
+        srcCount.textContent = sources.length + (sources.length === 1 ? ' kilde' : ' kilder');
+        if (!sources.length) {
+          body.innerHTML = '<div class="ml-state">Ingen abonnenter ennå.</div>';
           return;
         }
+        sources.sort(function(a,b){ return d.bySource[b] - d.bySource[a]; });
         var html = '<div class="ml-list">';
-        list.forEach(function(c){
-          var st = (c.status || '').toLowerCase();
-          var cls = st === 'sent' ? 'sent' : 'draft';
-          var label = st === 'sent' ? 'Sendt' : (st === 'ready' ? 'Klar' : 'Utkast');
-          html += '<div class="ml-row"><div class="ml-icon">📧</div>'
-            + '<div class="ml-main"><div class="name">'+esc(c.name)+'</div><div class="meta">'+esc(st||'kampanje')+'</div></div>'
-            + '<span class="ml-badge '+cls+'">'+label+'</span></div>';
+        sources.forEach(function(s){
+          html += '<div class="ml-row"><div class="ml-icon">💌</div>'
+            + '<div class="ml-main"><div class="name">'+esc(s)+'</div><div class="meta">kilde</div></div>'
+            + '<span class="ml-badge sent">'+d.bySource[s]+'</span></div>';
         });
         html += '</div>';
         body.innerHTML = html;
       }).catch(fail);
 
       function esc(s){ var d=document.createElement('div'); d.textContent=s==null?'':s; return d.innerHTML; }
-      function setup(){
-        campCount.textContent = 'Ikke koblet til';
-        body.innerHTML = '<div class="ml-state"><strong>Koble til MailerLite for å se kampanjene dine.</strong><br><br>'
-          + 'Legg til API-nøkkelen i Cloudflare: Workers &amp; Pages → prosjektet → Settings → Variables and Secrets → '
-          + '<code>MAILERLITE_API_KEY</code> (hentes i MailerLite → Integrations → API). Legg den til for både Production og Preview, og redeploy.</div>';
-      }
       function fail(){
-        campCount.textContent = 'Kunne ikke laste';
-        body.innerHTML = '<div class="ml-state">Klarte ikke å hente kampanjer fra MailerLite akkurat nå. Prøv igjen senere.</div>';
+        subCount.textContent = '—';
+        srcCount.textContent = 'Kunne ikke laste';
+        body.innerHTML = '<div class="ml-state">Klarte ikke å hente abonnenter akkurat nå (må være innlogget som eier).</div>';
       }
     })();
     </script>

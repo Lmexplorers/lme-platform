@@ -1,3 +1,5 @@
+import { sessionUser } from "../../_lib/access.js";
+import { logUsage, anthropicUnits, openaiUnits } from "../../_lib/ai-core/usage.js";
 /**
  * LME innholdsgenerering — Cloudflare Pages Function.
  *
@@ -34,8 +36,8 @@ AI-drevet plattform grunnlagt av Renate Dahl. LME er ett samlet økosystem for k
 Reisen er: lær, skap, bli synlig, selg og voks. LME tilbyr pedagogi, innholdsstudio, videoverksted, synlighetsmotor,
 builder, shop, og community – alt for å bygge en digital virksomhet. Montessori er en av flere fagfelt LME dekker.
 Mia & Teo er karakterene i Renates bøker (De små naturutforskerne). Tonen er varm, pedagogisk og tillitsvekkende.
-⚠️ KRITISK REGEL ⚠️ kilden/temaet brukeren oppgir BESTEMMER INNHOLDET HELT OG FULLSTENDIG. Anta ALDRI at emnet handler om Montessori. Hvis brukeren sier "YouTube-kurs" eller noe annet enn eksplisitt Montessori, skal innholdet og bildene være 100% om AKKURAT DET TEMAET. IKKE generer Montessori-materiell, Montessori-farger (rosa/krem/lila), Montessori-hyller, eller pedagogisk innhold med mindre kilden wirkelig ber om Montessori. Bland aldri inn Mia & Teo, pedagogisk fagspråk eller Montessori-referanser med mindre kilden handler om Montessori.
-VIKTIG: Montessori nevnes KUN når det spesifikt handler om Montessori-filosofi eller pedagogikk.
+⚠️ KRITISK REGEL ⚠️ kilden/temaet brukeren oppgir BESTEMMER INNHOLDET HELT OG FULLSTENDIG. Anta ALDRI at emnet handler om Montessori. Hvis brukeren sier "YouTube-kurs" eller noe annet enn eksplisitt Montessori, skal innholdet og bildene være 100% om AKKURAT DET TEMAET. IKKE generer Montessorimateriell, Montessorifarger (rosa/krem/lila), Montessorihyller, eller pedagogisk innhold med mindre kilden wirkelig ber om Montessori. Bland aldri inn Mia & Teo, pedagogisk fagspråk eller Montessorireferanser med mindre kilden handler om Montessori.
+VIKTIG: Montessori nevnes KUN når det spesifikt handler om Montessorifilosofi eller pedagogikk.
 LME er kun Renate (én person). Skriv ALLTID i jeg-form: jeg, meg, min, mitt, mine. Bruk ALDRI vi, oss, vår, våre eller vårt når LME/Renate snakker (skriv f.eks. "barna" eller "barn", ikke "barna våre"; "bli med meg", ikke "bli med oss"). Gjelder også engelsk (I, me, my, ikke we/us/our).
 Ikke dikt opp personlig historie, hendelser, sitater eller påstander som ikke står i kilden/temaet brukeren har gitt. Hold deg til det som faktisk er oppgitt.
 Norske skriveregler: rette anførselstegn oppe, aldri vinkel-anførselstegn. Ingen tankestreker eller lange bindestreker i teksten.
@@ -45,7 +47,7 @@ Aldri nevn AMI eller Association Montessori Internationale.`;
 const langName = (l) => (l === "en" ? "English" : "norsk (bokmål)");
 
 // Sterk modell for kvalitet. En raskere modell (haiku) ble prøvd for å unngå
-// tidsavbrudd, men den beskrev Montessori-materiellet feil og droppet felter
+// tidsavbrudd, men den beskrev Montessorimateriellet feil og droppet felter
 // (hook, caption, CTA, hashtags). Denne jobben krever presisjon: riktige navn
 // og utseende på materiellet, og fullstendig JSON. Vi holder den likevel rask
 // og robust med tenkning AV, ett nytt forsøk ved feil, og en romslig
@@ -59,7 +61,8 @@ const DEFAULT_MODEL = "claude-sonnet-5";
 // den sjeldne trege.
 const CALL_TIMEOUT_MS = 20000;
 
-async function callClaude(env, system, userPrompt, maxTokens, model) {
+async function callClaude(env, system, userPrompt, maxTokens, model, email) {
+  const t0 = Date.now();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), CALL_TIMEOUT_MS);
   let resp;
@@ -95,24 +98,29 @@ async function callClaude(env, system, userPrompt, maxTokens, model) {
     throw new Error(`Anthropic ${resp.status}: ${t.replace(/\s+/g, " ").slice(0, 160)}`);
   }
   const data = await resp.json();
+  await logUsage(env, {
+    app: "autopilot", task: "text", modelId: model || env.CONTENT_TEXT_MODEL || "claude-sonnet-5", email: email || "",
+    units: anthropicUnits(data), ms: Date.now() - t0, status: "ok",
+  });
   return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
 }
 
 // Ett kall kan ryke på en forbigående blipp (timeout, 429/5xx fra Anthropic,
 // nettverk). Prøv en gang til før vi gir opp, så en enkelt hikke ikke gir
 // brukeren "Noe gikk galt".
-async function callClaudeRetry(env, system, userPrompt, maxTokens, model) {
+async function callClaudeRetry(env, system, userPrompt, maxTokens, model, email) {
   try {
-    return await callClaude(env, system, userPrompt, maxTokens, model);
+    return await callClaude(env, system, userPrompt, maxTokens, model, email);
   } catch (e) {
-    return await callClaude(env, system, userPrompt, maxTokens, model);
+    return await callClaude(env, system, userPrompt, maxTokens, model, email);
   }
 }
 
 // Reserve: OpenAI (samme nøkkel som Bookly/headshot). Brukes hvis Anthropic
 // feiler (nøkkel, kreditt, rate, timeout), så tekst-genereringen virker så lenge
 // minst én leverandør svarer. Ber om ren JSON.
-async function callOpenAI(env, system, userPrompt, maxTokens) {
+async function callOpenAI(env, system, userPrompt, maxTokens, email) {
+  const t0 = Date.now();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), CALL_TIMEOUT_MS);
   let resp;
@@ -141,6 +149,10 @@ async function callOpenAI(env, system, userPrompt, maxTokens) {
     throw new Error(`OpenAI ${resp.status}: ${t.replace(/\s+/g, " ").slice(0, 160)}`);
   }
   const data = await resp.json();
+  await logUsage(env, {
+    app: "autopilot", task: "text", modelId: env.CONTENT_OPENAI_MODEL || "gpt-4o-mini", email: email || "",
+    units: openaiUnits(data), ms: Date.now() - t0, status: "ok",
+  });
   return (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || "";
 }
 
@@ -148,19 +160,19 @@ async function callOpenAI(env, system, userPrompt, maxTokens) {
 // finnes, gjør vi bare ETT Anthropic-forsøk, så vi ikke bruker for lang tid (to
 // trege Anthropic-forsøk + reserve kan overskride tidsgrensen på store formater
 // som YouTube). Uten reserve beholder vi retry for robusthet.
-async function generateText(env, system, userPrompt, maxTokens) {
+async function generateText(env, system, userPrompt, maxTokens, email) {
   const hasOpenAI = !!env.OPENAI_API_KEY;
   if (env.ANTHROPIC_API_KEY) {
     try {
       return hasOpenAI
-        ? await callClaude(env, system, userPrompt, maxTokens)
-        : await callClaudeRetry(env, system, userPrompt, maxTokens);
+        ? await callClaude(env, system, userPrompt, maxTokens, undefined, email)
+        : await callClaudeRetry(env, system, userPrompt, maxTokens, undefined, email);
     } catch (e) {
-      if (hasOpenAI) return await callOpenAI(env, system, userPrompt, maxTokens);
+      if (hasOpenAI) return await callOpenAI(env, system, userPrompt, maxTokens, email);
       throw e;
     }
   }
-  if (hasOpenAI) return await callOpenAI(env, system, userPrompt, maxTokens);
+  if (hasOpenAI) return await callOpenAI(env, system, userPrompt, maxTokens, email);
   throw new Error("mangler AI-nøkkel");
 }
 
@@ -223,7 +235,7 @@ Sørg for at hvert element er fysisk realistisk og bildet kunne eksistere som et
 
   const extra = isEnglish
     ? fmt === "carousel" ? "7-9 slides. Each slide is one clear, numbered point that stands alone. When published to Instagram as a carousel, each slide will show the same image with a different text overlay (numbered 1/7, 2/7, etc). Design for scrolling through on Instagram." : fmt === "story" ? "3-5 frames." : fmt === "reel" ? "4-6 scenes." : fmt === "explainer" ? "Exactly 5 scenes, short. About a minute total. Build the explanation step by step, like a drawn whiteboard video: each scene draws on the previous one. Concrete, simple and easy to remember. Keep each narration to one to two sentences and each board to a few bullet points. For each scene, illustration should always be in English and describe ONE concrete, drawable motif (one hand-drawn pencil sketch) that fits the scene, no text in the image." : fmt === "hookreel" ? "4-6 scenes, about 15-40 seconds, in the style of a personal brand reel: a strong text hook that stops scrolling, then an honest first-person story that gives one concrete value, and a warm comment-based call to action at the end. Never write made-up income, numbers, results or promises. Keep it real, in LME's warm tone." : fmt === "youtube" ? "4-7 chapters (sections). A coherent YouTube video of a few minutes. Build the content step by step, concrete and easy to follow, with a clear thread. Keep each talking point short. Never write made-up numbers, results or promises. IMPORTANT: this YouTube video tool is for whatever Renate makes videos about, not just Montessori. The topic/source the user specifies above determines the CONTENT completely. Never assume the video is about Montessori, children, parents or education unless the source explicitly says so; it could just as well be about building a YouTube channel with AI, marketing, tools, business tips or any other topic. Don't mix in Montessori materials, Mia & Teo or educational jargon unless the source asks for it. seoKeywords, tags and hashtags are three different things: seoKeywords are phrases people actually search for, tags are single words/short phrases for YouTube's own tags field, hashtags are 3-5 with # for use in the description itself." : ""
-    : fmt === "carousel" ? "7-9 slides. Hver slide er ett klart, nummerert punkt som står alene. Når det publiseres til Instagram som karusell, vil hver slide vise samme bilde med annen tekstoverlay (nummerert 1/7, 2/7, osv). Utform for å scrolle gjennom på Instagram." : fmt === "story" ? "3-5 frames." : fmt === "reel" ? "4-6 scener." : fmt === "explainer" ? "Nøyaktig 5 scener, korte. Til sammen cirka ett minutt. Bygg forklaringen steg for steg, som en tegnet whiteboard-video: hver scene tegner videre på den forrige. Konkret, enkelt og lett å huske. Hold hver narration til én til to setninger og hver board til noen få stikkord. For hver scene skal illustration alltid være på engelsk og beskrive ETT konkret, tegnbart motiv (én håndtegnet blyantskisse) som passer scenen, uten tekst i bildet." : fmt === "hookreel" ? "4-6 scener, cirka 15-40 sekunder, i stilen til en personlig merkevare-reel: en sterk tekst-hook som stopper scrollingen, deretter en ærlig historie i jeg-form som gir én konkret verdi, og en varm kommentar-basert oppfordring til slutt. Skriv aldri oppdiktede inntekter, tall, resultater eller løfter. Hold det ekte, i LMEs varme tone." : fmt === "youtube" ? "4-7 kapitler (sections). En sammenhengende YouTube-video på noen minutter. Bygg innholdet steg for steg, konkret og lett å følge, med en tydelig rød tråd. Hold hvert talking point kort. Skriv aldri oppdiktede tall, resultater eller løfter. VIKTIG: dette YouTube-videoverktøyet er for hva som helst Renate lager videoer om, ikke bare Montessori. Emnet/kilden brukeren har oppgitt over bestemmer INNHOLDET fullstendig. Anta aldri at videoen handler om Montessori, barn, foreldre eller pedagogikk med mindre kilden eksplisitt sier det, den kan like gjerne handle om å bygge en YouTube-kanal med AI, markedsføring, verktøy, forretningstips eller et helt annet tema. Ikke bland inn Montessori-materiell, Mia & Teo eller pedagogisk fagspråk med mindre kilden ber om det. seoKeywords, tags og hashtags er tre ulike ting: seoKeywords er fraser folk faktisk søker etter, tags er enkeltord/korte fraser til YouTubes eget tags-felt, hashtags er 3-5 stykker med # til bruk i selve beskrivelsen." : "";
+    : fmt === "carousel" ? "7-9 slides. Hver slide er ett klart, nummerert punkt som står alene. Når det publiseres til Instagram som karusell, vil hver slide vise samme bilde med annen tekstoverlay (nummerert 1/7, 2/7, osv). Utform for å scrolle gjennom på Instagram." : fmt === "story" ? "3-5 frames." : fmt === "reel" ? "4-6 scener." : fmt === "explainer" ? "Nøyaktig 5 scener, korte. Til sammen cirka ett minutt. Bygg forklaringen steg for steg, som en tegnet whiteboard-video: hver scene tegner videre på den forrige. Konkret, enkelt og lett å huske. Hold hver narration til én til to setninger og hver board til noen få stikkord. For hver scene skal illustration alltid være på engelsk og beskrive ETT konkret, tegnbart motiv (én håndtegnet blyantskisse) som passer scenen, uten tekst i bildet." : fmt === "hookreel" ? "4-6 scener, cirka 15-40 sekunder, i stilen til en personlig merkevare-reel: en sterk tekst-hook som stopper scrollingen, deretter en ærlig historie i jeg-form som gir én konkret verdi, og en varm kommentar-basert oppfordring til slutt. Skriv aldri oppdiktede inntekter, tall, resultater eller løfter. Hold det ekte, i LMEs varme tone." : fmt === "youtube" ? "4-7 kapitler (sections). En sammenhengende YouTube-video på noen minutter. Bygg innholdet steg for steg, konkret og lett å følge, med en tydelig rød tråd. Hold hvert talking point kort. Skriv aldri oppdiktede tall, resultater eller løfter. VIKTIG: dette YouTube-videoverktøyet er for hva som helst Renate lager videoer om, ikke bare Montessori. Emnet/kilden brukeren har oppgitt over bestemmer INNHOLDET fullstendig. Anta aldri at videoen handler om Montessori, barn, foreldre eller pedagogikk med mindre kilden eksplisitt sier det, den kan like gjerne handle om å bygge en YouTube-kanal med AI, markedsføring, verktøy, forretningstips eller et helt annet tema. Ikke bland inn Montessorimateriell, Mia & Teo eller pedagogisk fagspråk med mindre kilden ber om det. seoKeywords, tags og hashtags er tre ulike ting: seoKeywords er fraser folk faktisk søker etter, tags er enkeltord/korte fraser til YouTubes eget tags-felt, hashtags er 3-5 stykker med # til bruk i selve beskrivelsen." : "";
 
   const instructions = isEnglish
     ? `Language: ${langName(lang)}. Format: ${fmt}.
@@ -247,6 +259,13 @@ export async function onRequestPost(context) {
   if (!env.ANTHROPIC_API_KEY && !env.OPENAI_API_KEY) {
     return json({ error: "Server-konfigurasjon mangler (mangler AI-nøkkel)." }, 500);
   }
+  // Innlogging kreves. Ruten gjør ekte, betalte AI-kall, og var tidligere
+  // åpen for alle som fant adressen. Appene som bruker den er innloggede
+  // flater, så dette stenger ingen ekte bruker ute.
+  const user = await sessionUser(context);
+  if (!user) {
+    return json({ error: "Logg inn for å bruke denne funksjonen." }, 401);
+  }
   let body;
   try { body = await request.json(); }
   catch { return json({ error: "Ugyldig JSON" }, 400); }
@@ -264,7 +283,7 @@ export async function onRequestPost(context) {
   const heavy = (fmt === "explainer" || fmt === "hookreel" || fmt === "reel");
   const maxTokens = heavy ? 4000 : 3200;
   try {
-    let result = await generateText(env, system, contentPrompt(body), maxTokens);
+    let result = await generateText(env, system, contentPrompt(body), maxTokens, user.email);
     return json({ result });
   } catch (err) {
     return json({ error: "AI er midlertidig utilgjengelig. Prøv igjen om litt." }, 502);

@@ -82,6 +82,11 @@ Renate retter ofte disse tingene manuelt. Følg reglene fra start, så slipper h
 6. **LME er kun Renate (enkeltperson).** Skriv "jeg", ikke "vi/oss", når teksten
    er fra LME/Renate til leseren. Gjelder også engelsk ("I", ikke "we").
 
+7. **Norske sammensatte ord skrives i ett ord, ikke med bindestrek.**
+   Eksempel: `Montessoripedagog`, ikke `Montessori-pedagog`. Bindestrek i
+   sammensetninger er engelsk mønster, ikke norsk. Gjelder alle sammensatte
+   ord jeg skriver, ikke bare Montessorieksemplene.
+
 Disse reglene gjelder all norsk tekst jeg skriver: nettsider, kursinnhold,
 e-poster og lignende.
 
@@ -101,23 +106,33 @@ etter valgt språk). Lag aldri ny norsk-only tekst uten engelsk oversettelse.
 - Push med retry (2s, 4s, 8s, 16s) ved nettverksfeil.
 - Ikke lag pull request med mindre Renate ber om det.
 
-## 📧 Automatiserte e-postserier — bruk MailerSend, ikke MailerLite-automasjoner
+## 📧 All e-post går via MailerSend — MailerLite er fjernet fra plattformen
 
-Avtalt med Renate 3. august 2026: for e-postserier som skal sendes automatisk
-etter et kjøp eller en hendelse (velkomstserier, oppfølgingsmail, drypp-kampanjer),
-bruk **MailerSend rett fra koden**, samme mønster som Claude-kurset
-(`functions/_lib/claude-mail.js` + `functions/api/cron/claude-followups.js` +
-`.github/workflows/claude-followups.yml`, daglig cron som sender fra en kø i
-`BUILDER_KV`). Skriv all e-post-tekst (norsk og engelsk) direkte i koden, og
-send via `MAILERSEND_API_KEY` (samme hemmelighet er allerede satt opp).
+Avtalt med Renate 3. august 2026, og skjerpet 12. august 2026 (ryddet HELT ut
+av plattformen, ingen unntak lenger): all e-post, både automatiske serier
+etter et kjøp eller en hendelse (velkomstserier, oppfølgingsmail, drypp-
+kampanjer) OG enkeltstående nyhetsbrev, sendes med **MailerSend rett fra
+koden**, samme mønster som Claude-kurset (`functions/_lib/claude-mail.js` +
+`functions/api/cron/claude-followups.js` + `.github/workflows/claude-followups.yml`,
+daglig cron som sender fra en kø i `BUILDER_KV`). Skriv all e-post-tekst
+(norsk og engelsk) direkte i koden, og send via `MAILERSEND_API_KEY` (samme
+hemmelighet er allerede satt opp).
 
-**Ikke** bygg dette som en MailerLite-automasjon (visuell drag-and-drop-serie
-med flere e-poststeg). Grunnen: MailerLites API kan opprette automasjonen og
-utløseren, men kan ikke fylle ut selve e-post-designet, hvert e-poststeg må
-åpnes og lagres manuelt i deres redigeringsvindu før automasjonen kan
-aktiveres. Det er tungvint og tidkrevende for Renate, og hun har bedt om at
-det aldri gjøres sånn igjen. MailerLite er fortsatt fint til enkeltstående
-utsendelser/nyhetsbrev der hun uansett skal inn og se på innholdet selv.
+Lead-fangst (opt-in-skjemaer) går til plattformens egen abonnentliste
+(`BUILDER_KV`, `nl:<e-post>`, `functions/_lib/newsletter.js`), via det
+felles endepunktet `functions/api/subscribe.js`. Eier-siden `/email` viser
+abonnenttall (fra `functions/api/newsletter-stats.js`), `/automations`
+lister de faktiske e-postseriene i koden.
+
+**Bygg aldri noe mot MailerLite igjen**, verken en automasjon (visuell
+drag-and-drop-serie) eller bare listeoppbevaring. Grunnen fra 3. august
+2026 (opprinnelig avtale): MailerLites API kunne opprette automasjonen og
+utløseren, men ikke fylle ut selve e-post-designet, hvert e-poststeg måtte
+åpnes og lagres manuelt i deres redigeringsvindu før automasjonen kunne
+aktiveres. Det var tungvint og tidkrevende for Renate. 12. august 2026 ba
+hun om å fjerne MailerLite fullstendig, inkludert den tidligere unntatte
+bruken til enkeltstående nyhetsbrev, så det finnes ikke lenger noe scenario
+der MailerLite skal brukes.
 
 ## 🔤 Fontregler — LÅST (aldri avvik)
 
@@ -190,12 +205,12 @@ Bruk aldri Playpen (eller systemfont/Comic Sans) på brødtekst. Aldri avvik.
 ## 🌐 Plattformstruktur — KANONISK (all AI må forstå dette)
 
 LME (Little Montessori Explorers) er **én samlet plattform / ett økosystem**, ikke
-en samling separate apper. Beskriv den aldri som "bare en Montessori-plattform", og
-omtal aldri delene som frittstående produkter. Montessori-filosofien er fundamentet,
+en samling separate apper. Beskriv den aldri som "bare en Montessoriplattform", og
+omtal aldri delene som frittstående produkter. Montessorifilosofien er fundamentet,
 men LME er langt mer: læring, skaping, synlighet, salg og vekst i én sammenhengende
 arbeidsflyt: **Lær → Skap → Bli synlig → Selg → Voks.**
 
-Grunnlegger: Renate Dahl (Montessori-pedagog med utdanning fra Høyskolen i Vestfold,
+Grunnlegger: Renate Dahl (Montessoripedagog med utdanning fra Høyskolen i Vestfold,
 Tønsberg). **Nevn aldri AMI eller Association Montessori Internationale.**
 
 Plattformen har fire hovedområder, alle deler av samme økosystem:

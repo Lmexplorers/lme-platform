@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FBF7F0">
+<title>Mia &amp; Teo, Følelser og sosial kompetanse, hele serien · LME Læringsverksted</title>
+<link rel="icon" href="/images/lme-logo.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root{
+    --lime:#A4D233; --lime-soft:#E8F5D1; --cerise:#E91E89; --cerise-soft:#FCE3F1;
+    --sun:#F7C72E; --sun-soft:#FFF4D6; --bg:#FBF7F0; --bg2:#FFFFFF;
+    --ink:#1F1B24; --ink-soft:#5A5560; --line:rgba(31,27,36,.08);
+    --r-md:16px; --r-lg:22px; --r-xl:30px; --r-pill:999px;
+    --shadow-lg:0 22px 60px rgba(31,27,36,.10);
+    --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+    --font-head:'Playpen Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-body);color:var(--ink);
+    background:radial-gradient(900px 520px at 50% -10%,var(--lime-soft) 0%,transparent 55%),
+      radial-gradient(700px 460px at 100% 100%,var(--sun-soft) 0%,transparent 55%),
+      radial-gradient(700px 460px at 0% 90%,var(--cerise-soft) 0%,transparent 55%),var(--bg);
+    min-height:100vh;line-height:1.6;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:var(--font-head)}
+  a{color:inherit}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 20px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;color:var(--cerise);text-decoration:none;font-size:14.5px}
+  .brand img{width:30px;height:30px;object-fit:contain}
+  .btn-lang{border:0;border-radius:999px;padding:8px 16px;font-weight:700;font-family:inherit;cursor:pointer;background:var(--cerise-soft);color:#C13D6A;font-size:13px}
+  .wrap{max-width:640px;width:100%;margin:0 auto;padding:10px 20px 60px;text-align:center}
+  .chip{display:inline-block;background:var(--lime-soft);color:#5b7d12;font-size:12.5px;font-weight:700;letter-spacing:.03em;padding:6px 15px;border-radius:var(--r-pill);margin-bottom:16px}
+  h1{font-size:clamp(24px,4.2vw,32px);font-weight:800;line-height:1.2;letter-spacing:-.01em;margin-bottom:10px}
+  .lead{font-size:15.5px;color:var(--ink-soft);max-width:480px;margin:0 auto 26px}
+  .card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r-xl);box-shadow:var(--shadow-lg);padding:22px;margin-bottom:18px;text-align:left}
+  .item{display:flex;align-items:center;gap:14px;padding:12px;border-radius:var(--r-md);transition:background .15s ease}
+  .item:hover{background:var(--bg)}
+  .item img{width:56px;height:56px;border-radius:12px;object-fit:cover;flex-shrink:0;box-shadow:0 6px 14px rgba(31,27,36,.12)}
+  .item .meta{flex:1;min-width:0}
+  .item .nm{font-size:15px;font-weight:700;line-height:1.35}
+  .dl-btn{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:800;padding:9px 16px;border-radius:var(--r-pill);
+    background:linear-gradient(120deg,var(--cerise),#ff5fb0);color:#fff;text-decoration:none;box-shadow:0 8px 18px rgba(233,30,137,.24)}
+  .footnote{font-size:13px;color:var(--ink-soft);margin-top:18px}
+  .back{display:inline-block;margin-top:22px;font-size:13.5px;color:var(--ink-soft);text-decoration:none}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/laeringsverksted"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <button class="btn-lang" id="lv-lang" type="button">🇬🇧 English</button>
+  </div>
+  <div class="wrap">
+    <span class="chip" data-no="TAKK FOR KJØPET" data-en="THANK YOU FOR YOUR PURCHASE">TAKK FOR KJØPET</span>
+    <h1 data-no="Mia &amp; Teo, Følelser og sosial kompetanse" data-en="Mia &amp; Teo, Feelings and Social Skills">Mia &amp; Teo, Følelser og sosial kompetanse</h1>
+    <p class="lead" data-no="Her er alle ni ressursene i serien, klare til å lastes ned og skrives ut." data-en="Here are all nine resources in the series, ready to download and print.">Her er alle ni ressursene i serien, klare til å lastes ned og skrives ut.</p>
+
+    <div class="card">
+      <div class="item">
+        <img src="https://lmexplorers.com/images/laeringsverksted/mia-teo-folelser-cover.jpg" alt="">
+        <div class="meta"><div class="nm" data-no="Mia &amp; Teo utforsker følelsene" data-en="Mia &amp; Teo Explore Feelings">Mia &amp; Teo utforsker følelsene</div></div>
+        <a class="dl-btn" href="https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-folelseskort-no.pdf" data-no="Last ned" data-en="Download">Last ned</a>
+      </div>
+      <div class="item">
+        <img src="https://lmexplorers.com/images/laeringsverksted/mia-teo-situasjonskort-cover.jpg" alt="">
+        <div class="meta"><div class="nm" data-no="Hva skjedde? Situasjonskort" data-en="What Happened? Situation Cards">Hva skjedde? Situasjonskort</div></div>
+        <a class="dl-btn" href="https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-situasjonskort-no.pdf" data-no="Last ned" data-en="Download">Last ned</a>
+      </div>
+      <div class="item">
+        <img src="https://lmexplorers.com/images/laeringsverksted/mia-teo-snakkekort-cover.jpg" alt="">
+        <div class="meta"><div class="nm" data-no="La oss snakke om følelser" data-en="Let's Talk About Feelings">La oss snakke om følelser</div></div>
+        <a class="dl-btn" href="https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-snakke-om-folelser-no.pdf" data-no="Last ned" data-en="Download">Last ned</a>
+      </div>
+      <div class="item">
+        <img src="https://lmexplorers.com/images/laeringsverksted/mia-teo-kropp-3-6-cover.jpg" alt="">
+        <div class="meta"><div class="nm" data-no="Følelsene i kroppen, 3–6 år" data-en="Feelings in the Body, ages 3-6">Følelsene i kroppen, 3–6 år</div></div>
+        <a class="dl-btn" href="https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-folelsene-i-kroppen-3-6-no.pdf" data-no="Last ned" data-en="Download">Last ned</a>
+      </div>
+      <div class="item">
+        <img src="https://lmexplorers.com/images/laeringsverksted/mia-teo-kropp-6-9-cover.jpg" alt="">
+        <div class="meta"><div class="nm" data-no="Følelsene i kroppen, 6–9 år" data-en="Feelings in the Body, ages 6-9">Følelsene i kroppen, 6–9 år</div></div>
+        <a class="dl-btn" href="https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-folelsene-i-kroppen-6-9-no.pdf" data-no="Last ned" data-en="Download">Last ned</a>
+      </div>
+      <div class="item">
+        <img src="https://lmexplorers.com/images/laeringsverksted/mia-teo-bok-3-6-cover.jpg" alt="">
+        <div class="meta"><div class="nm" data-no="Min følelsesbok, 3–6 år" data-en="My Feelings Book, ages 3-6">Min følelsesbok, 3–6 år</div></div>
+        <a class="dl-btn" href="https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-min-folelsesbok-3-6-no.pdf" data-no="Last ned" data-en="Download">Last ned</a>
+      </div>
+      <div class="item">
+        <img src="https://lmexplorers.com/images/laeringsverksted/mia-teo-bok-6-9-cover.jpg" alt="">
+        <div class="meta"><div class="nm" data-no="Min følelsesbok, 6–9 år" data-en="My Feelings Book, ages 6-9">Min følelsesbok, 6–9 år</div></div>
+        <a class="dl-btn" href="https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-min-folelsesbok-6-9-no.pdf" data-no="Last ned" data-en="Download">Last ned</a>
+      </div>
+      <div class="item">
+        <img src="https://lmexplorers.com/images/laeringsverksted/mia-teo-termometer-3-6-cover.jpg" alt="">
+        <div class="meta"><div class="nm" data-no="Følelsestermometer og ro-strategier, 3–6 år" data-en="Feelings Thermometer and Calming Strategies, ages 3-6">Følelsestermometer og ro-strategier, 3–6 år</div></div>
+        <a class="dl-btn" href="https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-folelsestermometer-3-6-no.pdf" data-no="Last ned" data-en="Download">Last ned</a>
+      </div>
+      <div class="item">
+        <img src="https://lmexplorers.com/images/laeringsverksted/mia-teo-termometer-6-9-cover.jpg" alt="">
+        <div class="meta"><div class="nm" data-no="Følelsestermometer og ro-strategier, 6–9 år" data-en="Feelings Thermometer and Calming Strategies, ages 6-9">Følelsestermometer og ro-strategier, 6–9 år</div></div>
+        <a class="dl-btn" href="https://lmexplorers.com/laeringsverksted-filer/nedlasting/mia-teo-folelsestermometer-6-9-no.pdf" data-no="Last ned" data-en="Download">Last ned</a>
+      </div>
+    </div>
+
+    <p class="footnote" data-no="Denne lenken er også sendt til e-posten din, så du finner den igjen senere." data-en="This link has also been sent to your email, so you can find it again later.">Denne lenken er også sendt til e-posten din, så du finner den igjen senere.</p>
+    <a class="back" href="/laeringsverksted" data-no="← Tilbake til Læringsverksted" data-en="← Back to the Learning Workshop">← Tilbake til Læringsverksted</a>
+  </div>
+<script>
+(function () {
+  function isEn() { try { return localStorage.getItem('lme_lang') === 'en'; } catch (e) { return false; } }
+  function apply() {
+    var en = isEn();
+    document.documentElement.lang = en ? 'en' : 'no';
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      el.textContent = en ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    document.getElementById('lv-lang').textContent = en ? '🇳🇴 Norsk' : '🇬🇧 English';
+  }
+  document.getElementById('lv-lang').addEventListener('click', function () {
+    try { localStorage.setItem('lme_lang', isEn() ? 'no' : 'en'); } catch (e) {}
+    apply();
+  });
+  apply();
+})();
+</script>
+</body>
+</html>

@@ -1,3 +1,4 @@
+import { logUsage, anthropicUnits } from "../_lib/ai-core/usage.js";
 /**
  * LME — automatisk oversetting av sidetekst ved visning ("nivå 2").
  *
@@ -82,6 +83,7 @@ async function translateToEnglish(env, texts) {
   }
   if (need.length && env.ANTHROPIC_API_KEY) {
     try {
+      const t0 = Date.now();
       const res = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
@@ -98,6 +100,11 @@ async function translateToEnglish(env, texts) {
         }),
       });
       const data = await res.json().catch(() => null);
+      await logUsage(env, {
+        app: "oversettelse", task: "text", modelId: "claude-sonnet-5",
+        units: anthropicUnits(data), ms: Date.now() - t0,
+        status: data ? "ok" : "error", error: data ? "" : "claude_" + res.status,
+      });
       const txt = data && data.content && data.content[0] && data.content[0].text;
       if (txt) {
         let arr = null;

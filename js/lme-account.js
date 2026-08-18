@@ -40,6 +40,11 @@
   // alle sider naar det ikke er lastet opp et eget bilde, saa portrettet er
   // likt overalt og ikke bare der sidens egen avatar hadde et <img>.
   var OWNER_DEFAULT_PHOTO = '/images/renate-portrait.jpg';
+  // Samme e-postliste som isOwner() i functions/_lib/access.js. Uten denne
+  // gjenkjennes eier kun via role==='owner', men kontoen kan ha role
+  // 'admin' eller mangle et satt owner-flagg, og da forsvant hele
+  // byggermenyen (Gruppebygger/Kursbygger) for eieren selv.
+  var OWNER_EMAILS = ['renate@lmexplorers.com', 'hei@lmexplorers.com', 'hello@lmexplorers.com', 'support@lmexplorers.com', 'renateshobby@hotmail.com'];
   // Forminsker bildet til et lite kvadrat, saa det er raskt og lite nok til
   // aa lagres paa kontoen (serveren har en grense).
   function shrink(file, cb) {
@@ -243,7 +248,8 @@
         state.loggedIn = true;
         state.name = d.user.name || null;
         state.email = d.user.email || null;
-        state.owner = d.user.role === 'owner';
+        state.owner = d.user.role === 'owner' || d.user.role === 'admin' ||
+          OWNER_EMAILS.indexOf((d.user.email || '').toLowerCase()) !== -1;
         // Alle medlemmer (Medlem, Pro, VIP med aktivt abonnement) faar
         // byggerverktoeyene, i tillegg til eier.
         var sub = d.subscription;

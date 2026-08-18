@@ -1,3 +1,4 @@
+import { logUsage, anthropicUnits } from "../../_lib/ai-core/usage.js";
 /**
  * LME Podkast, en helautomatisk podkast-serie som lager seg selv og
  * publiserer en ny episode hver dag. Innholdet handler om hele LME-systemet:
@@ -93,7 +94,7 @@ function allEpisodes(kvIndex) {
 /* Hver runde plukkes neste tema (topicCursor), og Claude skriver en hel
    tospråklig episode rundt vinkelen. Dekker hele LME-systemet. */
 const TOPICS = [
-  { cat: "Montessori-prinsipper", no: "Følg barnet", en: "Follow the child", angle: "hva 'følg barnet' egentlig betyr i hverdagen, med et konkret eksempel" },
+  { cat: "Montessoriprinsipper", no: "Følg barnet", en: "Follow the child", angle: "hva 'følg barnet' egentlig betyr i hverdagen, med et konkret eksempel" },
   { cat: "Praktisk liv", no: "Helle vann og dekke bord", en: "Pouring water and setting the table", angle: "hvorfor praktiske hverdagsoppgaver bygger konsentrasjon og selvstendighet" },
   { cat: "Forberedt miljø", no: "Mindre er mer", en: "Less is more", angle: "hvordan et rolig, ryddig miljø hjelper barnet å velge og fokusere" },
   { cat: "Observasjon", no: "Å se uten å gripe inn", en: "Watching without stepping in", angle: "kunsten å observere, og hvorfor det er pedagogens viktigste verktøy" },
@@ -101,16 +102,16 @@ const TOPICS = [
   { cat: "Aldersgruppen 6-9", no: "Den store fortellingen", en: "The great lessons", angle: "hvordan fantasi og store fortellinger åpner verden for 6-9-åringen" },
   { cat: "Aldersgruppen 9-12", no: "Going out", en: "Going out", angle: "hvordan barnet fra 9 til 12 trenger å knytte læring til den virkelige verden" },
   { cat: "LME-bøkene", no: "Mia og Teo", en: "Mia and Teo", angle: "hvordan LME-bøkene om Mia og Teo brukes til samtale og høytlesning" },
-  { cat: "LME-appene", no: "Læring gjennom lek i appen", en: "Learning through play in the app", angle: "hvordan LME-appene støtter Montessori-prinsipper hjemme på en skjermvennlig måte" },
+  { cat: "LME-appene", no: "Læring gjennom lek i appen", en: "Learning through play in the app", angle: "hvordan LME-appene støtter Montessoriprinsipper hjemme på en skjermvennlig måte" },
   { cat: "Inner Circle", no: "Et fellesskap av voksne", en: "A community of grown-ups", angle: "hva Inner Circle er, og hvorfor voksne trenger et fellesskap rundt oppdragelsen" },
   { cat: "Pedagogikk", no: "Frihet innenfor rammer", en: "Freedom within limits", angle: "balansen mellom frihet og tydelige rammer, og hvorfor begge trengs" },
-  { cat: "Foreldretips", no: "Den vanskelige morgenen", en: "The difficult morning", angle: "et konkret Montessori-grep for stressfrie morgener med små barn" },
+  { cat: "Foreldretips", no: "Den vanskelige morgenen", en: "The difficult morning", angle: "et konkret Montessorigrep for stressfrie morgener med små barn" },
   { cat: "Forberedt miljø", no: "Barnets høyde", en: "The child's height", angle: "hvorfor alt bør være tilgjengelig i barnets høyde, og enkle grep hjemme" },
   { cat: "Praktisk liv", no: "Å vente på tur", en: "Waiting for your turn", angle: "hvordan ekte oppgaver lærer tålmodighet bedre enn formaninger" },
-  { cat: "Montessori-prinsipper", no: "Den absorberende hjernen", en: "The absorbent mind", angle: "hvordan små barn suger til seg omgivelsene, og hva det betyr for oss" },
+  { cat: "Montessoriprinsipper", no: "Den absorberende hjernen", en: "The absorbent mind", angle: "hvordan små barn suger til seg omgivelsene, og hva det betyr for oss" },
   { cat: "Observasjon", no: "Konsentrasjonens øyeblikk", en: "The moment of concentration", angle: "hvordan vi kjenner igjen dyp konsentrasjon og verner om den" },
   { cat: "LME-systemet", no: "Akademiet og verktøyene", en: "The academy and the tools", angle: "hvordan LME-akademiet og verktøyene henger sammen til en helhet" },
-  { cat: "Foreldretips", no: "Når barnet sier nei", en: "When the child says no", angle: "et rolig, respektfullt svar på trass, forklart med Montessori-blikk" },
+  { cat: "Foreldretips", no: "Når barnet sier nei", en: "When the child says no", angle: "et rolig, respektfullt svar på trass, forklart med Montessoriblikk" },
 ];
 
 /* ---------------------------- små hjelpere ---------------------------- */
@@ -297,6 +298,7 @@ function parseModelJson(txt) {
 
 async function callClaude(env, topic, num) {
   if (!env.ANTHROPIC_API_KEY) throw new Error("missing_anthropic_key");
+  const t0 = Date.now();
   const { sys, user } = buildPrompt(topic, num);
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -313,6 +315,11 @@ async function callClaude(env, topic, num) {
     }),
   });
   const data = await res.json().catch(() => null);
+  await logUsage(env, {
+    app: "podcast", task: "text", modelId: CLAUDE_MODEL,
+    units: anthropicUnits(data), ms: Date.now() - t0,
+    status: res.ok && data ? "ok" : "error", error: res.ok ? "" : "claude_" + res.status,
+  });
   if (!res.ok || !data) throw new Error("claude_" + res.status);
   const txt = Array.isArray(data.content) ? data.content.map((c) => c.text || "").join("") : "";
   const parsed = parseModelJson(txt);
@@ -323,6 +330,7 @@ async function callClaude(env, topic, num) {
 // Generisk Claude-kall som returnerer parset JSON (brukt av Mia og Teo-eventyr).
 async function callClaudeJson(env, sys, user, maxTokens) {
   if (!env.ANTHROPIC_API_KEY) throw new Error("missing_anthropic_key");
+  const t0 = Date.now();
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
@@ -338,6 +346,11 @@ async function callClaudeJson(env, sys, user, maxTokens) {
     }),
   });
   const data = await res.json().catch(() => null);
+  await logUsage(env, {
+    app: "podcast", task: "text", modelId: CLAUDE_MODEL,
+    units: anthropicUnits(data), ms: Date.now() - t0,
+    status: res.ok && data ? "ok" : "error", error: res.ok ? "" : "claude_" + res.status,
+  });
   if (!res.ok || !data) throw new Error("claude_" + res.status);
   const txt = Array.isArray(data.content) ? data.content.map((c) => c.text || "").join("") : "";
   const parsed = parseModelJson(txt);
@@ -356,6 +369,7 @@ function voiceFor(env, speaker) {
 
 async function elevenTTS(env, text, voiceId) {
   if (!env.ELEVENLABS_API_KEY || !voiceId) return null;
+  const t0 = Date.now();
   try {
     const res = await fetch("https://api.elevenlabs.io/v1/text-to-speech/" + voiceId, {
       method: "POST",
@@ -369,6 +383,11 @@ async function elevenTTS(env, text, voiceId) {
         model_id: env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2",
         voice_settings: { stability: 0.45, similarity_boost: 0.8, style: 0.25 },
       }),
+    });
+    await logUsage(env, {
+      app: "podcast", task: "voice", modelId: env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2",
+      units: { chars: s(text, 600).length }, ms: Date.now() - t0,
+      status: res.ok ? "ok" : "error", error: res.ok ? "" : "elevenlabs_" + res.status,
     });
     if (!res.ok) return null;
     return await res.arrayBuffer();
@@ -389,7 +408,7 @@ function buildDramaPrompt(num) {
     "Du er manusforfatter for et lite norsk lydeventyr for barn (3 til 6 år) fra " +
     "Little Montessori Explorers, med figurene Mia og Teo og en varm forteller. " +
     "Skriv en kort, koselig scene på 12 til 16 replikker der Mia og Teo opplever noe " +
-    "i hverdagen, med en liten Montessori-spire i seg (selvstendighet, utforsking, " +
+    "i hverdagen, med en liten Montessorispire i seg (selvstendighet, utforsking, " +
     "vennlighet, tålmodighet). Enkelt språk, korte setninger, varmt og trygt. Mia og " +
     "Teo er barn og snakker som barn. Fortelleren rammer scenen rolig inn.\n\n" +
     "SKRIVEREGLER: bruk rette anførselstegn, ALDRI tankestreker, følg norske kommaregler.\n\n" +

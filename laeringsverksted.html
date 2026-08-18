@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>LME Læringsverksted — ferdige og tilpassbare læringsressurser | Little Montessori Explorers</title>
+<meta name="description" content="Finn ferdige læringsressurser, lag tilpasset materiell i Bookly, eller utforsk samlepakker i LME-butikken. Inspirert av Montessori og knyttet til norske læreplaner.">
+<meta name="theme-color" content="#F8D7DA">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/laeringsverksted.css?v=2">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/images/app/apple-touch-icon.png">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink: #F8D7DA; --pink-mid: #F5A8B8; --cerise: #E91E89;
+    --lime: #7AAE1F; --yellow: #F7C72E; --cream: #FBF6F0;
+    --ink: #1A1A1A; --grey: #4A4A4A; --line: rgba(26,26,26,0.1);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); color: var(--ink); background: #faf6f7; min-height: 100vh; line-height: 1.6; }
+  h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; }
+  a { color: inherit; }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 13px 64px 13px 20px; background: #fff; box-shadow: 0 2px 10px rgba(180,120,140,.12); position: sticky; top: 0; z-index: 5; }
+  .bar .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--cerise); text-decoration: none; font-size: 15px; }
+  .bar .brand img { width: 32px; height: 32px; object-fit: contain; }
+  .bar .actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; align-items: center; }
+  .btn { border: 0; border-radius: 999px; padding: 9px 16px; font-weight: 700; font-family: inherit; cursor: pointer; text-decoration: none; font-size: 13.5px; white-space: nowrap; }
+  .btn-back { background: #fff; color: var(--ink); border: 1px solid #eedce2; }
+  .btn-lang { background: #FCEFF2; color: #C13D6A; }
+
+  .wrap { max-width: 1180px; width: 100%; margin: 0 auto; padding: 30px 20px 70px; }
+
+  .lv-hero-strip { text-align: center; max-width: 720px; margin: 0 auto 26px; }
+  .lv-hero-strip .kicker { display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--cerise); background: #FDE7F1; padding: 6px 14px; border-radius: 999px; margin-bottom: 12px; }
+  .lv-hero-strip h1 { font-size: 34px; line-height: 1.2; margin-bottom: 10px; }
+  .lv-hero-strip p { font-size: 16px; color: var(--grey); }
+
+  .lv-search-heading { font-size: 18px; margin: 0 0 12px; }
+  .lv-entry-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 34px 0 34px; }
+  .lv-entry-card { display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: inherit; background: #fff; border-radius: 18px; padding: 20px; box-shadow: 0 6px 20px rgba(26,26,26,0.08); transition: transform .15s ease; }
+  .lv-entry-card:hover { transform: translateY(-3px); }
+  .lv-entry-icon { font-size: 26px; }
+  .lv-entry-card h3 { font-size: 17px; }
+  .lv-entry-card p { font-size: 13.5px; color: var(--grey); margin: 0; }
+  .lv-entry-2 { background: linear-gradient(135deg, #FFF8E4, #fff); }
+  .lv-entry-3 { background: linear-gradient(135deg, #F2FBE6, #fff); }
+
+  @media (max-width: 820px) {
+    .lv-entry-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/dashboard"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <div class="actions">
+      <button class="btn btn-lang" id="lv-lang" type="button">🇬🇧 English</button>
+      <a class="btn btn-back" href="/dashboard" data-no="‹ Dashboard" data-en="‹ Dashboard">‹ Dashboard</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="lv-hero-strip">
+      <span class="kicker" data-no="Lær · Skap · Voks" data-en="Learn · Create · Grow">Lær · Skap · Voks</span>
+      <h1 data-no="LME Læringsverksted" data-en="LME Learning Workshop">LME Læringsverksted</h1>
+      <p data-no="Ferdige og tilpassbare læringsressurser for barnehage, skole og hjem, inspirert av Montessori og knyttet til norske læreplaner." data-en="Ready-made and customizable learning resources for kindergarten, school and home, inspired by Montessori and linked to Norwegian curricula.">Ferdige og tilpassbare læringsressurser for barnehage, skole og hjem, inspirert av Montessori og knyttet til norske læreplaner.</p>
+    </div>
+
+    <div id="katalog">
+      <h2 class="lv-search-heading" data-no="Søk og filtrer" data-en="Search and filter">Søk og filtrer</h2>
+      <div class="lv-toolbar">
+        <input type="search" class="lv-search" id="lvSearch" data-no-ph="Søk i ressurser …" data-en-ph="Search resources …" placeholder="Søk i ressurser …" aria-label="Søk i ressurser">
+      </div>
+
+      <form class="lv-filters" id="lvFilters">
+        <div class="lv-filter-group">
+          <label data-no="Målgruppe" data-en="Audience">Målgruppe</label>
+          <select id="fAudience"><option value="">–</option></select>
+        </div>
+        <div class="lv-filter-group">
+          <label data-no="Alder / trinn" data-en="Age / grade">Alder / trinn</label>
+          <select id="fAge"><option value="">–</option></select>
+        </div>
+        <div class="lv-filter-group">
+          <label data-no="Læringsretning" data-en="Curriculum">Læringsretning</label>
+          <select id="fDirection"><option value="">–</option></select>
+        </div>
+        <div class="lv-filter-group">
+          <label data-no="Fag / område" data-en="Subject / area">Fag / område</label>
+          <select id="fSubject"><option value="">–</option></select>
+        </div>
+        <div class="lv-filter-group">
+          <label data-no="Ressurstype" data-en="Resource type">Ressurstype</label>
+          <select id="fType"><option value="">–</option></select>
+        </div>
+        <div class="lv-filter-group">
+          <label data-no="Pris" data-en="Price">Pris</label>
+          <select id="fPrice">
+            <option value="">–</option>
+            <option value="gratis" data-no="Gratis" data-en="Free">Gratis</option>
+            <option value="medlem" data-no="Inkludert i medlemskap" data-en="Included in membership">Inkludert i medlemskap</option>
+            <option value="betalt" data-no="Betalt" data-en="Paid">Betalt</option>
+          </select>
+        </div>
+      </form>
+
+      <p class="lv-result-count" id="lvCount"></p>
+      <div id="lvGrid"><div class="lv-empty"><div class="lv-empty-icon">⏳</div><p data-no="Henter ressurser …" data-en="Loading resources …">Henter ressurser …</p></div></div>
+    </div>
+
+    <div class="lv-entry-row">
+      <a class="lv-entry-card lv-entry-2" href="/bookly/" data-en-href="/bookly/">
+        <span class="lv-entry-icon">📚</span>
+        <h3 data-no="Lag materiell i Bookly" data-en="Create materials in Bookly">Lag materiell i Bookly</h3>
+        <p data-no="Utforsk aktiviteter, eller lag dine egne læringsressurser med KI-hjelp." data-en="Explore activities, or create your own learning resources with AI help.">Utforsk aktiviteter, eller lag dine egne læringsressurser med KI-hjelp.</p>
+      </a>
+      <a class="lv-entry-card lv-entry-3" href="/laeringsverksted?type=samlepakke" data-en-href="/laeringsverksted?type=samlepakke">
+        <span class="lv-entry-icon">🛍️</span>
+        <h3 data-no="Utforsk samlepakker" data-en="Explore bundles">Utforsk samlepakker</h3>
+        <p data-no="Kjøp enkeltressurser eller samlepakker i LME Butikk." data-en="Buy single resources or bundles in the LME Shop.">Kjøp enkeltressurser eller samlepakker i LME Butikk.</p>
+      </a>
+    </div>
+  </div>
+
+<script src="/js/laeringsverksted-render.js?v=2" defer></script>
+<script src="/js/laeringsverksted-favorites.js?v=2" defer></script>
+<script>
+(function () {
+  window.LME_CURRENT_LANG = 'no';
+  try { window.LME_CURRENT_LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no'; } catch (e) {}
+  function isEn() { return window.LME_CURRENT_LANG === 'en'; }
+
+  var all = [];
+  function isFavorite(slug) { return window.LMEFavorites.isFavorite(slug); }
+  function toggleFavorite(slug) { return window.LMEFavorites.toggle(slug); }
+
+  function applyStatic() {
+    var en = isEn();
+    document.documentElement.lang = en ? 'en' : 'no';
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      el.textContent = en ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    document.querySelectorAll('[data-no-href]').forEach(function (el) {
+      var href = en ? el.getAttribute('data-en-href') : el.getAttribute('data-no-href');
+      if (href) el.setAttribute('href', href);
+    });
+    document.querySelectorAll('[data-no-ph]').forEach(function (el) {
+      el.setAttribute('placeholder', en ? el.getAttribute('data-en-ph') : el.getAttribute('data-no-ph'));
+    });
+    var langBtn = document.getElementById('lv-lang');
+    if (langBtn) langBtn.textContent = en ? '🇳🇴 Norsk' : '🇬🇧 English';
+    document.querySelectorAll('option[data-no][data-en]').forEach(function (o) {
+      o.textContent = en ? o.getAttribute('data-en') : o.getAttribute('data-no');
+    });
+  }
+
+  function fillSelect(sel, group) {
+    var en = isEn();
+    var tax = window.LMELaeringsverksted.TAXONOMY[group];
+    Object.keys(tax).forEach(function (key) {
+      var opt = document.createElement('option');
+      opt.value = key;
+      opt.setAttribute('data-no', tax[key][0]);
+      opt.setAttribute('data-en', tax[key][1]);
+      opt.textContent = en ? tax[key][1] : tax[key][0];
+      sel.appendChild(opt);
+    });
+  }
+
+  function currentFilters() {
+    return {
+      q: (document.getElementById('lvSearch').value || '').toLowerCase().trim(),
+      audience: document.getElementById('fAudience').value,
+      age: document.getElementById('fAge').value,
+      direction: document.getElementById('fDirection').value,
+      subject: document.getElementById('fSubject').value,
+      type: document.getElementById('fType').value,
+      price: document.getElementById('fPrice').value,
+    };
+  }
+
+  function matches(r, f) {
+    if (f.q) {
+      var hay = (window.LMELaeringsverksted.pick(r.title, isEn()) + ' ' + window.LMELaeringsverksted.pick(r.subtitle, isEn())).toLowerCase();
+      if (hay.indexOf(f.q) === -1) return false;
+    }
+    if (f.audience && (r.audience || []).indexOf(f.audience) === -1) return false;
+    if (f.age && (r.ageBands || []).indexOf(f.age) === -1) return false;
+    if (f.direction && r.direction !== f.direction) return false;
+    if (f.subject && (r.subjects || []).indexOf(f.subject) === -1) return false;
+    if (f.type && (r.resourceType || []).indexOf(f.type) === -1) return false;
+    if (f.price && r.priceType !== f.price) return false;
+    return true;
+  }
+
+  function renderList() {
+    var f = currentFilters();
+    var list = all.filter(function (r) { return r.published !== false && matches(r, f); });
+    var en = isEn();
+    document.getElementById('lvCount').textContent = list.length + ' ' + (en
+      ? (list.length === 1 ? 'resource' : 'resources')
+      : (list.length === 1 ? 'ressurs' : 'ressurser'));
+    window.LMELaeringsverksted.renderGrid(document.getElementById('lvGrid'), list, {
+      en: en,
+      isFavorite: isFavorite,
+      onFavorite: toggleFavorite,
+    });
+  }
+
+  ['lvSearch'].forEach(function (id) { document.getElementById(id).addEventListener('input', renderList); });
+  ['fAudience', 'fAge', 'fDirection', 'fSubject', 'fType', 'fPrice'].forEach(function (id) {
+    document.getElementById(id).addEventListener('change', renderList);
+  });
+  document.getElementById('lv-lang').addEventListener('click', function () {
+    window.LME_CURRENT_LANG = isEn() ? 'no' : 'en';
+    try { localStorage.setItem('lme_lang', window.LME_CURRENT_LANG); } catch (e) {}
+    try { window.dispatchEvent(new CustomEvent('lme-lang', { detail: window.LME_CURRENT_LANG })); } catch (e) {}
+    applyStatic();
+    renderList();
+  });
+
+  function boot() {
+    fillSelect(document.getElementById('fAudience'), 'audience');
+    fillSelect(document.getElementById('fAge'), 'ageBands');
+    fillSelect(document.getElementById('fDirection'), 'direction');
+    fillSelect(document.getElementById('fSubject'), 'subjects');
+    fillSelect(document.getElementById('fType'), 'resourceType');
+    applyStatic();
+    /* Lenker inn (f.eks. fra Min side sin "Gratisressurser") kan forhåndsvelge
+       et prisfilter: /laeringsverksted?pris=gratis */
+    var presetPris = new URL(location.href).searchParams.get('pris');
+    if (presetPris) document.getElementById('fPrice').value = presetPris;
+    var presetType = new URL(location.href).searchParams.get('type');
+    if (presetType) document.getElementById('fType').value = presetType;
+    var presetSok = new URL(location.href).searchParams.get('sok');
+    if (presetSok) document.getElementById('lvSearch').value = presetSok;
+    renderList();
+  }
+
+  applyStatic();
+  var resourcesReady = false, started = false, pollTimer;
+  fetch('/api/laeringsverksted?t=' + Date.now())
+    .then(function (r) { return r.json(); })
+    .then(function (d) { all = (d && d.resources) || []; })
+    .catch(function () { all = []; })
+    .then(function () { resourcesReady = true; maybeStart(); });
+
+  function maybeStart() {
+    if (started || !resourcesReady || !window.LMELaeringsverksted || !window.LMEFavorites) return;
+    started = true;
+    if (pollTimer) clearInterval(pollTimer);
+    window.LMEFavorites.init(function () { boot(); });
+  }
+  pollTimer = setInterval(maybeStart, 40);
+  maybeStart();
+})();
+</script>
+<script src="/js/lme-visibility.js?v=8" defer></script>
+<script src="/js/lme-account.js?v=11" defer></script>
+<script src="/js/renate-widget.js?v=5" defer></script>
+</body>
+</html>

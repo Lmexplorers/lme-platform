@@ -1,3 +1,4 @@
+import { logUsage } from "../_lib/ai-core/usage.js";
 import { enforceVideoApp, refundVideoCredit, videoAppAccess } from "../_lib/access.js";
 /**
  * LME Video Studio, AI-video med din egen karakter (Higgsfield image-to-video).
@@ -110,6 +111,7 @@ export async function onRequestPost(context) {
   };
 
   let r, data, text;
+  const t0 = Date.now();
   try {
     r = await fetch(HF_BASE + SUBMIT_PATH, {
       method: "POST",
@@ -118,6 +120,11 @@ export async function onRequestPost(context) {
     });
     text = await r.text();
     try { data = JSON.parse(text); } catch { data = null; }
+    await logUsage(env, {
+      app: "video-studio", task: "video", modelId: "dop-turbo", email: gate.email || "",
+      units: { clips: 1 }, ms: Date.now() - t0,
+      status: r.ok ? "ok" : "error", error: r.ok ? "" : "higgsfield_" + r.status,
+    });
   } catch (e) {
     if (!gate.owner) await refundVideoCredit(context, gate.email);
     return json({ error: "Kom ikke i kontakt med Higgsfield. Kreditten er refundert." }, 502);

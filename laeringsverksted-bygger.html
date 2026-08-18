@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LME Læringsverksted-bygger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/laeringsverksted.css?v=2">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'), url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink: #F8D7DA; --pink-mid: #F5A8B8; --cerise: #E91E89; --yellow: #F7C72E; --cream: #FBF6F0;
+    --ink: #1A1A1A; --grey: #4A4A4A; --line: rgba(26,26,26,0.12);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); color: var(--ink); background: #faf6f7; }
+  h1, h2, h3, h4 { font-family: var(--font-head); margin: 0 0 8px; }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 13px 20px; background: #fff; box-shadow: 0 2px 10px rgba(180,120,140,.12); position: sticky; top: 0; z-index: 5; }
+  .bar .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--cerise); text-decoration: none; }
+  .bar .brand img { width: 30px; height: 30px; }
+  .btn { border: 0; border-radius: 999px; padding: 9px 16px; font-weight: 700; font-family: inherit; cursor: pointer; text-decoration: none; font-size: 13.5px; }
+  .btn-primary { background: linear-gradient(135deg, var(--yellow), #F5B301); color: #4a3a00; }
+  .btn-soft { background: #FCEFF2; color: #C13D6A; }
+  .btn-quiet { background: #fff; border: 1px solid var(--line); color: var(--ink); }
+  .btn-danger { background: #fde3e3; color: #a11; }
+
+  .app { display: grid; grid-template-columns: 260px 1fr 380px; gap: 0; align-items: start; }
+  .col { padding: 20px; }
+  .col-list { border-right: 1px solid var(--line); position: sticky; top: 60px; height: calc(100vh - 60px); overflow: auto; }
+  .col-preview { border-left: 1px solid var(--line); position: sticky; top: 60px; height: calc(100vh - 60px); overflow: auto; background: #fff; }
+  .list-item { display: flex; flex-direction: column; gap: 2px; width: 100%; text-align: left; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; cursor: pointer; font-family: inherit; }
+  .list-item.active { border-color: var(--cerise); background: #FFF4F8; }
+  .list-item .lname { font-weight: 700; font-size: 13.5px; }
+  .list-item .ltag { font-size: 11px; color: var(--grey); }
+  .hint { color: var(--grey); font-size: 13.5px; }
+
+  fieldset { border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; margin-bottom: 16px; }
+  legend { font-weight: 800; padding: 0 6px; color: var(--cerise); font-size: 13.5px; text-transform: uppercase; letter-spacing: .03em; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  label { display: block; font-size: 12.5px; font-weight: 700; margin: 10px 0 4px; }
+  input[type=text], input[type=number], input[type=url], textarea, select { width: 100%; font-family: inherit; font-size: 14px; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); }
+  textarea { min-height: 64px; resize: vertical; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; background: var(--cream); border: 1px solid var(--line); border-radius: 999px; padding: 5px 10px; cursor: pointer; }
+  .chip input { margin: 0; }
+  .actions-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0; }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 999px; font-size: 13.5px; z-index: 50; }
+  @media (max-width: 1100px) { .app { grid-template-columns: 1fr; } .col-list, .col-preview { position: static; height: auto; border: none; } }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/laeringsverksted"><img src="/images/lme-logo.png" alt="LME">LME Læringsverksted-bygger</a>
+    <div>
+      <button class="btn btn-soft" id="btnLang" type="button">EN 🌍</button>
+      <a class="btn btn-quiet" href="/laeringsverksted">‹ Til katalogen</a>
+    </div>
+  </div>
+
+  <div class="app">
+    <div class="col col-list">
+      <button class="btn btn-primary" id="btnNew" type="button" style="width:100%;margin-bottom:14px;">＋ Ny ressurs</button>
+      <div id="list"></div>
+    </div>
+
+    <div class="col col-form">
+      <h2 id="formTitle">Ny ressurs</h2>
+      <p class="hint">Endringer lagres først når du trykker Lagre. Passordet er det samme som for kurs- og gruppebyggeren.</p>
+
+      <fieldset>
+        <legend>Grunnleggende</legend>
+        <label>Adresse (slug) — f.eks. hosttema-arbeidshefte</label>
+        <input type="text" id="f-slug">
+        <div class="row2">
+          <div><label>Tittel (norsk) *</label><input type="text" id="f-title"></div>
+          <div><label>Title (English)</label><input type="text" id="f-title-en"></div>
+        </div>
+        <div class="row2">
+          <div><label>Undertittel (norsk)</label><input type="text" id="f-subtitle"></div>
+          <div><label>Subtitle (English)</label><input type="text" id="f-subtitle-en"></div>
+        </div>
+        <div class="row2">
+          <div><label>Beskrivelse (norsk)</label><textarea id="f-desc"></textarea></div>
+          <div><label>Description (English)</label><textarea id="f-desc-en"></textarea></div>
+        </div>
+        <label><input type="checkbox" id="f-published" checked> Publisert (synlig i katalogen)</label>
+        <label><input type="checkbox" id="f-featured"> Utvalgt (fremhevet i katalogen)</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Bilder</legend>
+        <label>Forsidebilde</label>
+        <input type="file" id="f-cover-file" accept="image/*">
+        <img id="f-cover-prev" style="max-width:160px;border-radius:10px;margin-top:8px;display:none;">
+        <label>Flere forhåndsvisningsbilder</label>
+        <input type="file" id="f-gallery-file" accept="image/*" multiple>
+        <div id="f-gallery-prev" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Målgruppe, alder og læringsretning</legend>
+        <label>Målgruppe</label>
+        <div class="chips" id="f-audience"></div>
+        <label>Alder / trinn</label>
+        <div class="chips" id="f-ageBands"></div>
+        <label>Læringsretning</label>
+        <select id="f-direction">
+          <option value="ingen">Ikke knyttet til læreplan</option>
+          <option value="montessori">Montessori</option>
+          <option value="offentlig">Offentlig skole</option>
+          <option value="begge">Begge</option>
+        </select>
+        <label>Fag / område</label>
+        <div class="chips" id="f-subjects"></div>
+        <label>Ressurstype</label>
+        <div class="chips" id="f-resourceType"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Kompetansemål og innhold</legend>
+        <label>Kompetansemål (ett per linje, norsk)</label>
+        <textarea id="f-goals"></textarea>
+        <label>Competence aims (one per line, English)</label>
+        <textarea id="f-goals-en"></textarea>
+        <label>Hva ressursen inneholder (ett per linje, norsk)</label>
+        <textarea id="f-contains"></textarea>
+        <label>What's included (one per line, English)</label>
+        <textarea id="f-contains-en"></textarea>
+        <div class="row2">
+          <div><label>Antall sider</label><input type="number" id="f-pages" min="0"></div>
+          <div><label>Filformat (kommaseparert, f.eks. pdf,docx)</label><input type="text" id="f-format"></div>
+        </div>
+        <label>Språk</label>
+        <div class="chips" id="f-language"></div>
+        <label><input type="checkbox" id="f-editable"> Redigerbar ressurs</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Bruk og differensiering</legend>
+        <div class="row2">
+          <div><label>Forslag til bruk (norsk)</label><textarea id="f-usage"></textarea></div>
+          <div><label>Suggested use (English)</label><textarea id="f-usage-en"></textarea></div>
+        </div>
+        <div class="row2">
+          <div><label>Forberedelser (norsk)</label><textarea id="f-prep"></textarea></div>
+          <div><label>Preparation (English)</label><textarea id="f-prep-en"></textarea></div>
+        </div>
+        <div class="row2">
+          <div><label>Differensiering (norsk)</label><textarea id="f-diff"></textarea></div>
+          <div><label>Differentiation (English)</label><textarea id="f-diff-en"></textarea></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Montessori-tilknytning (valgfritt)</legend>
+        <div class="row2"><div><label>Område (norsk)</label><input type="text" id="f-ma-area"></div><div><label>Area (English)</label><input type="text" id="f-ma-area-en"></div></div>
+        <div class="row2"><div><label>Presentasjon (norsk)</label><textarea id="f-ma-presentation"></textarea></div><div><label>Presentation (English)</label><textarea id="f-ma-presentation-en"></textarea></div></div>
+        <div class="row2"><div><label>Forkunnskaper (norsk)</label><input type="text" id="f-ma-prereq"></div><div><label>Prerequisites (English)</label><input type="text" id="f-ma-prereq-en"></div></div>
+        <div class="row2"><div><label>Direkte formål (norsk)</label><input type="text" id="f-ma-direct"></div><div><label>Direct purpose (English)</label><input type="text" id="f-ma-direct-en"></div></div>
+        <div class="row2"><div><label>Indirekte formål (norsk)</label><input type="text" id="f-ma-indirect"></div><div><label>Indirect purpose (English)</label><input type="text" id="f-ma-indirect-en"></div></div>
+        <div class="row2"><div><label>Kontroll av feil (norsk)</label><input type="text" id="f-ma-control"></div><div><label>Control of error (English)</label><input type="text" id="f-ma-control-en"></div></div>
+        <div class="row2"><div><label>Videre arbeid (norsk)</label><input type="text" id="f-ma-extension"></div><div><label>Extension (English)</label><input type="text" id="f-ma-extension-en"></div></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Lisens og pris</legend>
+        <div class="row2">
+          <div><label>Lisens</label><select id="f-license"><option value="gratis">Gratis</option><option value="privat">Privat (én familie)</option><option value="pedagog">Pedagog</option><option value="barnehage">Barnehage</option><option value="skole">Skole</option></select></div>
+          <div><label>Pristype</label><select id="f-priceType"><option value="gratis">Gratis</option><option value="betalt">Betalt</option><option value="medlem">Inkludert i medlemskap</option></select></div>
+        </div>
+        <div class="row2">
+          <div><label>Pris, norsk (f.eks. "149 kr")</label><input type="text" id="f-price"></div>
+          <div><label>Price, English (e.g. "$15")</label><input type="text" id="f-price-en"></div>
+        </div>
+        <div class="row2">
+          <div><label>Medlemspris, norsk</label><input type="text" id="f-mprice"></div>
+          <div><label>Member price, English</label><input type="text" id="f-mprice-en"></div>
+        </div>
+        <label>Rabattkode (valgfri — vises ved siden av medlemsprisen. Må også skrus på som "Enables user redeemable promotion codes" på selve Stripe-betalingslenken for at koden faktisk skal virke i kassen)</label>
+        <input type="text" id="f-mpromo" placeholder="f.eks. FOLELSER20">
+        <label>Kjøpslenke (Stripe-betalingslenke for betalte ressurser, eller direkte fillenke for gratisressurser)</label>
+        <input type="text" id="f-buyurl" placeholder="https://buy.stripe.com/… eller https://…/fil.pdf">
+        <label>Fillenke for levering etter kjøp (kun betalte ressurser — sendes i leveringsmailen når kjøpet er registrert, se hjelpeteksten under Bookly-feltene)</label>
+        <input type="text" id="f-fileurl" placeholder="https://…/fil.pdf">
+        <label><input type="checkbox" id="f-bundle"> Dette er en samlepakke</label>
+        <label>Ressurser i pakken (kommaseparerte slugs)</label>
+        <input type="text" id="f-bundleitems">
+        <label>Relaterte ressurser (kommaseparerte slugs)</label>
+        <input type="text" id="f-related">
+      </fieldset>
+
+      <fieldset>
+        <legend>Flere lisensnivåer (valgfritt)</legend>
+        <p class="hint">Fyll ut pris og kjøpslenke for de lisensnivåene ressursen skal kunne kjøpes med, i tillegg til standardprisen over. La en rad stå tom for å ikke tilby den lisensen. Kjøperen får en nedtrekksmeny med de utfylte nivåene på produktsiden.</p>
+        <div class="row2">
+          <div><label>Privatlisens (én familie), pris norsk</label><input type="text" id="f-lic-privat-price"></div>
+          <div><label>Privatlisens, kjøpslenke</label><input type="text" id="f-lic-privat-url" placeholder="https://buy.stripe.com/…"></div>
+        </div>
+        <div class="row2">
+          <div><label>Privatlisens, pris English</label><input type="text" id="f-lic-privat-price-en"></div>
+          <div></div>
+        </div>
+        <div class="row2">
+          <div><label>Pedagoglisens, pris norsk</label><input type="text" id="f-lic-pedagog-price"></div>
+          <div><label>Pedagoglisens, kjøpslenke</label><input type="text" id="f-lic-pedagog-url" placeholder="https://buy.stripe.com/…"></div>
+        </div>
+        <div class="row2">
+          <div><label>Pedagoglisens, pris English</label><input type="text" id="f-lic-pedagog-price-en"></div>
+          <div></div>
+        </div>
+        <div class="row2">
+          <div><label>Barnehagelisens, pris norsk</label><input type="text" id="f-lic-barnehage-price"></div>
+          <div><label>Barnehagelisens, kjøpslenke</label><input type="text" id="f-lic-barnehage-url" placeholder="https://buy.stripe.com/…"></div>
+        </div>
+        <div class="row2">
+          <div><label>Barnehagelisens, pris English</label><input type="text" id="f-lic-barnehage-price-en"></div>
+          <div></div>
+        </div>
+        <div class="row2">
+          <div><label>Skolelisens, pris norsk</label><input type="text" id="f-lic-skole-price"></div>
+          <div><label>Skolelisens, kjøpslenke</label><input type="text" id="f-lic-skole-url" placeholder="https://buy.stripe.com/…"></div>
+        </div>
+        <div class="row2">
+          <div><label>Skolelisens, pris English</label><input type="text" id="f-lic-skole-price-en"></div>
+          <div></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Lag i Bookly (dyplenke, valgfritt)</legend>
+        <p class="hint">Fylles ut for å gi brukeren en "Tilpass i Bookly"-knapp med fag, trinn og læreplanmål forhåndsvalgt.</p>
+        <div class="row2">
+          <div><label>Skapertype</label><select id="f-bk-type"><option value="">– ingen –</option><option value="book">Bok</option><option value="workbook">Arbeidshefte</option><option value="activity">Aktivitet</option><option value="puzzle">Pusleri</option><option value="flashcards">Flashkort</option><option value="coloring">Fargelegging</option><option value="journal">Journal</option><option value="planner">Planlegger</option></select></div>
+          <div><label>Kategori (kun arbeidshefte, f.eks. mathematics)</label><input type="text" id="f-bk-category"></div>
+        </div>
+        <label>Tema (fritekst til Bookly)</label>
+        <input type="text" id="f-bk-topic">
+        <div class="row2">
+          <div><label>Læreplan</label><select id="f-bk-plan"><option value="">– ingen –</option><option value="montessori">Montessori</option><option value="lk20">LK20</option><option value="lme36">LME 3–6 år</option></select></div>
+          <div><label>Fagnøkkel i læreplanen (f.eks. matematikk)</label><input type="text" id="f-bk-fag"></div>
+        </div>
+        <div class="row2">
+          <div><label>Bookly-alder (f.eks. 3-6, 6-9, 9-12)</label><input type="text" id="f-bk-age"></div>
+          <div><label>Læreplan-aldersnøkkel (f.eks. 6-9)</label><input type="text" id="f-bk-alder"></div>
+        </div>
+      </fieldset>
+
+      <p class="hint" style="margin:-6px 0 16px;">💡 For at et betalt kjøp skal telles i kjøpsloggen og utløse leveringsmail med fillenken over, må den samme Stripe-betalingslenken også registreres i koden (<code>LAERINGSVERKSTED_PAYMENT_LINKS</code> i <code>functions/_lib/purchase-links.js</code>), på samme måte som andre betalte produkter i LME. Be Claude om å legge den inn når du har opprettet betalingslenken i Stripe.</p>
+
+      <div class="actions-row">
+        <button class="btn btn-primary" id="btnSave" type="button">💾 Lagre</button>
+        <button class="btn btn-danger" id="btnDelete" type="button" style="display:none;">🗑️ Slett</button>
+        <a class="btn btn-quiet" id="btnView" href="#" target="_blank" style="display:none;">↗ Se ressursen</a>
+      </div>
+    </div>
+
+    <div class="col col-preview">
+      <h3>Forhåndsvisning</h3>
+      <div id="preview"></div>
+    </div>
+  </div>
+
+<script src="/js/laeringsverksted-render.js?v=2"></script>
+<script>
+(function () {
+  var uiEn = false;
+  function L(no, en) { return uiEn ? en : no; }
+  var q = function (id) { return document.getElementById(id); };
+  var resources = [];
+  var current = null;
+  var media = { cover: '', gallery: [] };
+  var pw = null;
+
+  function slugify(s) {
+    return (s || '').toLowerCase().replace(/æ/g, 'ae').replace(/ø/g, 'oe').replace(/å/g, 'aa')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
+  }
+  function lines(text) { return (text || '').split('\n').map(function (s) { return s.trim(); }).filter(Boolean); }
+  function csv(text) { return (text || '').split(',').map(function (s) { return s.trim().toLowerCase(); }).filter(Boolean); }
+  function pick(v) { return v && typeof v === 'object' ? (uiEn && v.en ? v.en : (v.no || '')) : (v || ''); }
+  function toast(msg) { var t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(function () { t.remove(); }, 2600); }
+
+  function shrinkImage(file, cb) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      var img = new Image();
+      img.onload = function () {
+        var max = 1200;
+        var scale = Math.min(1, max / Math.max(img.width, img.height));
+        var c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(img.width * scale));
+        c.height = Math.max(1, Math.round(img.height * scale));
+        var gg = c.getContext('2d');
+        gg.fillStyle = '#fff';
+        gg.fillRect(0, 0, c.width, c.height);
+        gg.drawImage(img, 0, 0, c.width, c.height);
+        cb(c.toDataURL('image/jpeg', 0.82));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function chipGroup(container, group, selected) {
+    container.innerHTML = '';
+    var tax = window.LMELaeringsverksted.TAXONOMY[group];
+    Object.keys(tax).forEach(function (key) {
+      var id = 'chip-' + group + '-' + key;
+      var label = document.createElement('label');
+      label.className = 'chip';
+      var cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.value = key; cb.id = id;
+      cb.checked = (selected || []).indexOf(key) !== -1;
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode(tax[key][uiEn ? 1 : 0]));
+      container.appendChild(label);
+    });
+  }
+  function chipValues(container) {
+    return Array.prototype.slice.call(container.querySelectorAll('input:checked')).map(function (i) { return i.value; });
+  }
+
+  function newResource() {
+    return {
+      slug: '', published: true, featured: false,
+      title: { no: '', en: '' }, subtitle: { no: '', en: '' }, description: { no: '', en: '' },
+      cover: '', gallery: [],
+      audience: [], ageBands: [], direction: 'ingen', subjects: [], resourceType: [],
+      competencyGoals: [], contains: [], pageCount: 0, language: ['nb'], fileFormat: ['pdf'], editable: false,
+      usageTips: { no: '', en: '' }, prep: { no: '', en: '' }, differentiation: { no: '', en: '' },
+      montessoriArea: { area: {}, presentation: {}, prerequisites: {}, directPurpose: {}, indirectPurpose: {}, controlOfError: {}, extension: {} },
+      license: 'gratis', priceType: 'gratis', price: { no: '', en: '' }, memberPrice: { no: '', en: '' }, memberPromoCode: '', buyUrl: '', fileUrl: '',
+      licenseOptions: [],
+      bundle: false, bundleItems: [], related: [],
+      bookly: { type: '', category: '', topic: '', age: '', plan: '', fag: '', alder: '' },
+      stats: { views: 0, downloads: 0, favorites: 0 },
+    };
+  }
+
+  function openResource(slug) {
+    current = resources.find(function (r) { return r.slug === slug; }) || null;
+    if (!current) {
+      fetch('/api/laeringsverksted?slug=' + encodeURIComponent(slug)).then(function (r) { return r.json(); }).then(function (d) {
+        current = (d && d.resource) || newResource();
+        fillForm();
+      });
+      return;
+    }
+    fetch('/api/laeringsverksted?slug=' + encodeURIComponent(slug)).then(function (r) { return r.json(); }).then(function (d) {
+      current = (d && d.resource) || current;
+      fillForm();
+    });
+  }
+
+  function fillForm() {
+    var r = current || newResource();
+    q('formTitle').textContent = r.slug ? (L('Rediger: ', 'Edit: ') + (pick(r.title) || r.slug)) : L('Ny ressurs', 'New resource');
+    q('f-slug').value = r.slug || '';
+    q('f-title').value = (r.title && r.title.no) || '';
+    q('f-title-en').value = (r.title && r.title.en) || '';
+    q('f-subtitle').value = (r.subtitle && r.subtitle.no) || '';
+    q('f-subtitle-en').value = (r.subtitle && r.subtitle.en) || '';
+    q('f-desc').value = (r.description && r.description.no) || '';
+    q('f-desc-en').value = (r.description && r.description.en) || '';
+    q('f-published').checked = r.published !== false;
+    q('f-featured').checked = !!r.featured;
+    media = { cover: r.cover || '', gallery: (r.gallery || []).slice() };
+    paintMedia();
+    chipGroup(q('f-audience'), 'audience', r.audience);
+    chipGroup(q('f-ageBands'), 'ageBands', r.ageBands);
+    q('f-direction').value = r.direction || 'ingen';
+    chipGroup(q('f-subjects'), 'subjects', r.subjects);
+    chipGroup(q('f-resourceType'), 'resourceType', r.resourceType);
+    q('f-goals').value = (r.competencyGoals || []).map(function (g) { return g.no || ''; }).join('\n');
+    q('f-goals-en').value = (r.competencyGoals || []).map(function (g) { return g.en || ''; }).join('\n');
+    q('f-contains').value = (r.contains || []).map(function (g) { return g.no || ''; }).join('\n');
+    q('f-contains-en').value = (r.contains || []).map(function (g) { return g.en || ''; }).join('\n');
+    q('f-pages').value = r.pageCount || 0;
+    q('f-format').value = (r.fileFormat || []).join(',');
+    chipGroup(q('f-language'), 'language', r.language && r.language.length ? null : null);
+    q('f-language').innerHTML = '';
+    ['nb', 'nn', 'en'].forEach(function (k) {
+      var label = document.createElement('label'); label.className = 'chip';
+      var cb = document.createElement('input'); cb.type = 'checkbox'; cb.value = k;
+      cb.checked = (r.language || []).indexOf(k) !== -1;
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode(k === 'nb' ? 'Bokmål' : k === 'nn' ? 'Nynorsk' : 'English'));
+      q('f-language').appendChild(label);
+    });
+    q('f-editable').checked = !!r.editable;
+    q('f-usage').value = (r.usageTips && r.usageTips.no) || '';
+    q('f-usage-en').value = (r.usageTips && r.usageTips.en) || '';
+    q('f-prep').value = (r.prep && r.prep.no) || '';
+    q('f-prep-en').value = (r.prep && r.prep.en) || '';
+    q('f-diff').value = (r.differentiation && r.differentiation.no) || '';
+    q('f-diff-en').value = (r.differentiation && r.differentiation.en) || '';
+    var ma = r.montessoriArea || {};
+    ['area', 'presentation', 'prereq', 'direct', 'indirect', 'control', 'extension'].forEach(function (k, i) {
+      var real = ['area', 'presentation', 'prerequisites', 'directPurpose', 'indirectPurpose', 'controlOfError', 'extension'][i];
+      q('f-ma-' + k).value = (ma[real] && ma[real].no) || '';
+      q('f-ma-' + k + '-en').value = (ma[real] && ma[real].en) || '';
+    });
+    q('f-license').value = r.license || 'gratis';
+    q('f-priceType').value = r.priceType || 'gratis';
+    q('f-price').value = (r.price && r.price.no) || '';
+    q('f-price-en').value = (r.price && r.price.en) || '';
+    q('f-mprice').value = (r.memberPrice && r.memberPrice.no) || '';
+    q('f-mprice-en').value = (r.memberPrice && r.memberPrice.en) || '';
+    q('f-mpromo').value = r.memberPromoCode || '';
+    q('f-buyurl').value = r.buyUrl || '';
+    q('f-fileurl').value = r.fileUrl || '';
+    q('f-bundle').checked = !!r.bundle;
+    q('f-bundleitems').value = (r.bundleItems || []).join(',');
+    q('f-related').value = (r.related || []).join(',');
+    var licByType = {};
+    (r.licenseOptions || []).forEach(function (o) { licByType[o.license] = o; });
+    ['privat', 'pedagog', 'barnehage', 'skole'].forEach(function (lic) {
+      var o = licByType[lic] || {};
+      q('f-lic-' + lic + '-price').value = (o.price && o.price.no) || '';
+      q('f-lic-' + lic + '-price-en').value = (o.price && o.price.en) || '';
+      q('f-lic-' + lic + '-url').value = o.buyUrl || '';
+    });
+    var bk = r.bookly || {};
+    q('f-bk-type').value = bk.type || '';
+    q('f-bk-category').value = bk.category || '';
+    q('f-bk-topic').value = bk.topic || '';
+    q('f-bk-plan').value = bk.plan || '';
+    q('f-bk-fag').value = bk.fag || '';
+    q('f-bk-age').value = bk.age || '';
+    q('f-bk-alder').value = bk.alder || '';
+    q('btnDelete').style.display = r.slug ? '' : 'none';
+    q('btnView').style.display = r.slug ? '' : 'none';
+    if (r.slug) q('btnView').href = '/lv/' + r.slug;
+    updatePreview();
+  }
+
+  function paintMedia() {
+    var cp = q('f-cover-prev');
+    cp.src = media.cover || ''; cp.style.display = media.cover ? '' : 'none';
+    var gp = q('f-gallery-prev'); gp.innerHTML = '';
+    media.gallery.forEach(function (src, i) {
+      var img = document.createElement('img');
+      img.src = src; img.style.width = '70px'; img.style.height = '50px'; img.style.objectFit = 'cover'; img.style.borderRadius = '8px'; img.style.cursor = 'pointer';
+      img.title = L('Klikk for å fjerne', 'Click to remove');
+      img.onclick = function () { media.gallery.splice(i, 1); paintMedia(); updatePreview(); };
+      gp.appendChild(img);
+    });
+  }
+
+  q('f-cover-file').addEventListener('change', function (e) {
+    var f = e.target.files[0]; if (!f) return;
+    shrinkImage(f, function (url) { media.cover = url; paintMedia(); updatePreview(); });
+  });
+  q('f-gallery-file').addEventListener('change', function (e) {
+    Array.prototype.slice.call(e.target.files).forEach(function (f) {
+      shrinkImage(f, function (url) { media.gallery.push(url); paintMedia(); updatePreview(); });
+    });
+  });
+
+  function collect() {
+    var lf = function (noId, enId) { return { no: q(noId).value.trim(), en: q(enId).value.trim() }; };
+    var goalsNo = lines(q('f-goals').value), goalsEn = lines(q('f-goals-en').value);
+    var containsNo = lines(q('f-contains').value), containsEn = lines(q('f-contains-en').value);
+    var r = {
+      slug: slugify(q('f-slug').value || q('f-title').value),
+      published: q('f-published').checked,
+      featured: q('f-featured').checked,
+      title: lf('f-title', 'f-title-en'),
+      subtitle: lf('f-subtitle', 'f-subtitle-en'),
+      description: lf('f-desc', 'f-desc-en'),
+      cover: media.cover, gallery: media.gallery.slice(),
+      audience: chipValues(q('f-audience')),
+      ageBands: chipValues(q('f-ageBands')),
+      direction: q('f-direction').value,
+      subjects: chipValues(q('f-subjects')),
+      resourceType: chipValues(q('f-resourceType')),
+      competencyGoals: goalsNo.map(function (t, i) { return { no: t, en: goalsEn[i] || '' }; }),
+      contains: containsNo.map(function (t, i) { return { no: t, en: containsEn[i] || '' }; }),
+      pageCount: parseInt(q('f-pages').value, 10) || 0,
+      language: chipValues(q('f-language')),
+      fileFormat: csv(q('f-format').value),
+      editable: q('f-editable').checked,
+      usageTips: lf('f-usage', 'f-usage-en'),
+      prep: lf('f-prep', 'f-prep-en'),
+      differentiation: lf('f-diff', 'f-diff-en'),
+      montessoriArea: {
+        area: lf('f-ma-area', 'f-ma-area-en'),
+        presentation: lf('f-ma-presentation', 'f-ma-presentation-en'),
+        prerequisites: lf('f-ma-prereq', 'f-ma-prereq-en'),
+        directPurpose: lf('f-ma-direct', 'f-ma-direct-en'),
+        indirectPurpose: lf('f-ma-indirect', 'f-ma-indirect-en'),
+        controlOfError: lf('f-ma-control', 'f-ma-control-en'),
+        extension: lf('f-ma-extension', 'f-ma-extension-en'),
+      },
+      license: q('f-license').value,
+      priceType: q('f-priceType').value,
+      price: lf('f-price', 'f-price-en'),
+      memberPrice: lf('f-mprice', 'f-mprice-en'),
+      memberPromoCode: q('f-mpromo').value.trim(),
+      buyUrl: q('f-buyurl').value.trim(),
+      fileUrl: q('f-fileurl').value.trim(),
+      licenseOptions: ['privat', 'pedagog', 'barnehage', 'skole'].map(function (lic) {
+        return { license: lic, price: lf('f-lic-' + lic + '-price', 'f-lic-' + lic + '-price-en'), buyUrl: q('f-lic-' + lic + '-url').value.trim() };
+      }).filter(function (o) { return o.price.no.trim() || o.buyUrl; }),
+      bundle: q('f-bundle').checked,
+      bundleItems: csv(q('f-bundleitems').value),
+      related: csv(q('f-related').value),
+      bookly: {
+        type: q('f-bk-type').value, category: q('f-bk-category').value.trim(), topic: q('f-bk-topic').value.trim(),
+        plan: q('f-bk-plan').value, fag: q('f-bk-fag').value.trim(), age: q('f-bk-age').value.trim(), alder: q('f-bk-alder').value.trim(),
+      },
+      stats: (current && current.stats) || { views: 0, downloads: 0, favorites: 0 },
+    };
+    return r;
+  }
+
+  function updatePreview() {
+    var r = collect();
+    window.LMELaeringsverksted.renderDetail(q('preview'), r, { en: uiEn });
+  }
+  ['f-title', 'f-title-en', 'f-subtitle', 'f-subtitle-en', 'f-desc', 'f-desc-en', 'f-price', 'f-price-en', 'f-priceType', 'f-license', 'f-goals', 'f-contains'].forEach(function (id) {
+    q(id).addEventListener('input', updatePreview);
+    q(id).addEventListener('change', updatePreview);
+  });
+
+  function renderList() {
+    var box = q('list');
+    box.innerHTML = '';
+    if (!resources.length) { box.innerHTML = '<p class="hint">Ingen ressurser ennå. Lag din første! 🌱</p>'; return; }
+    resources.forEach(function (r) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'list-item' + (current && current.slug === r.slug ? ' active' : '');
+      var name = document.createElement('span'); name.className = 'lname'; name.textContent = pick(r.title) || r.slug;
+      var tag = document.createElement('span'); tag.className = 'ltag'; tag.textContent = r.published === false ? 'Utkast' : (r.priceType || '');
+      b.appendChild(name); b.appendChild(tag);
+      b.onclick = function () { openResource(r.slug); };
+      box.appendChild(b);
+    });
+  }
+
+  function refreshList(then) {
+    fetch('/api/laeringsverksted').then(function (r) { return r.json(); }).then(function (d) {
+      resources = ((d && d.resources) || []).filter(function (r) { return !r.example; });
+    }).catch(function () { resources = []; }).then(function () { renderList(); if (then) then(); });
+  }
+
+  q('btnNew').addEventListener('click', function () { current = newResource(); fillForm(); });
+  q('btnLang').addEventListener('click', function () { uiEn = !uiEn; q('btnLang').textContent = uiEn ? '🇳🇴 Norsk' : 'EN 🌍'; fillForm(); });
+
+  q('btnSave').addEventListener('click', function () {
+    var r = collect();
+    if (!r.title.no.trim()) { alert(L('Gi ressursen en tittel først.', 'Give the resource a title first.')); return; }
+    if (!r.slug) { alert(L('Gi ressursen en gyldig adresse (slug).', 'Give the resource a valid slug.')); return; }
+    if (!pw) pw = prompt(L('Skriv inn passordet for å lagre:', 'Enter the password to save:'));
+    if (!pw) return;
+    fetch('/api/laeringsverksted', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'save', resource: r, password: pw })
+    }).then(function (resp) { return resp.json(); }).then(function (d) {
+      if (d && d.ok) {
+        toast(L('Lagret! 🌸', 'Saved! 🌸'));
+        current = r;
+        refreshList(function () { openResource(r.slug); });
+      } else if (d && d.error === 'bad_password') {
+        pw = null; alert(L('Feil passord. Prøv igjen.', 'Wrong password. Try again.'));
+      } else {
+        alert(L('Noe gikk galt. Prøv igjen.', 'Something went wrong. Try again.'));
+      }
+    }).catch(function () { alert(L('Noe gikk galt. Sjekk nettforbindelsen.', 'Something went wrong. Check your connection.')); });
+  });
+
+  q('btnDelete').addEventListener('click', function () {
+    if (!current || !current.slug) return;
+    if (!confirm(L('Slette denne ressursen?', 'Delete this resource?'))) return;
+    if (!pw) pw = prompt(L('Skriv inn passordet:', 'Enter the password:'));
+    if (!pw) return;
+    fetch('/api/laeringsverksted', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'delete', slug: current.slug, password: pw })
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      if (d && d.ok) { toast(L('Slettet.', 'Deleted.')); current = newResource(); refreshList(); fillForm(); }
+      else if (d && d.error === 'bad_password') { pw = null; alert(L('Feil passord.', 'Wrong password.')); }
+    });
+  });
+
+  try { localStorage.setItem('lme-laeringsverksted-bruker', '1'); } catch (e) {}
+
+  function boot() {
+    current = newResource();
+    fillForm();
+    refreshList(function () {
+      var hashSlug = (location.hash || '').replace('#', '');
+      if (hashSlug) openResource(hashSlug);
+    });
+  }
+  if (window.LMELaeringsverksted) boot();
+  else { var t = setInterval(function () { if (window.LMELaeringsverksted) { clearInterval(t); boot(); } }, 40); }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+name: VideoFlow oppfølgingsmail
+
+# Trigger den daglige køen som sender dag 3/7/14 "kredittene er tomme"-mail
+# til VideoFlow-brukere. Kjører en gang i døgnet og kan også startes manuelt
+# fra Actions-fanen.
+# Valgfritt: legg repo-hemmeligheten VIDEOFLOW_CRON_TOKEN hvis endepunktet er beskyttet.
+
+on:
+  schedule:
+    - cron: "0 9 * * *"   # daglig kl. 09:00 UTC
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger oppfølgings-køen
+        env:
+          TOKEN: ${{ secrets.VIDEOFLOW_CRON_TOKEN }}
+        run: |
+          curl -fsS "https://lmexplorers.com/api/cron/videoflow-followups${TOKEN:+?token=$TOKEN}"

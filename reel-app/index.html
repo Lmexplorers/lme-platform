@@ -328,7 +328,7 @@
 
       <div class="field">
         <label class="lab" data-no="Hva skal innholdet handle om?" data-en="What is the content about?">Hva skal innholdet handle om?</label>
-        <textarea id="topic" data-no-ph="For eksempel: tre enkle Montessori-aktiviteter for barn på kjøkkenet" data-en-ph="For example: three simple Montessori activities for kids in the kitchen" placeholder="For eksempel: tre enkle Montessori-aktiviteter for barn på kjøkkenet"></textarea>
+        <textarea id="topic" data-no-ph="For eksempel: tre enkle Montessoriaktiviteter for barn på kjøkkenet" data-en-ph="For example: three simple Montessori activities for kids in the kitchen" placeholder="For eksempel: tre enkle Montessoriaktiviteter for barn på kjøkkenet"></textarea>
       </div>
 
       <div class="field" id="lenField">
@@ -784,6 +784,16 @@
       row1.appendChild(imgBtn);
     }
     wrap.appendChild(row1);
+    // Hva bildet koster. js/lme-price.js fyller inn tallet fra
+    // /api/ai-core/prices, så prisen står ett sted og ikke på hver side.
+    var pris = document.createElement('div');
+    pris.className = 'pubmsg';
+    pris.style.opacity = '.75';
+    pris.setAttribute('data-lme-price', 'reel-bilde');
+    pris.setAttribute('data-lme-price-mal', 'Ett bilde koster {pris}.');
+    pris.setAttribute('data-lme-price-mal-en', 'One image costs {pris}.');
+    wrap.appendChild(pris);
+    if (window.lmePriceRefresh) window.lmePriceRefresh();
     // Publiser-knapper
     var row2 = document.createElement('div'); row2.className = 'pubrow'; row2.style.marginTop = '10px';
     var plats = [['instagram','📸 Instagram'],['facebook','👍 Facebook'],['tiktok','🎵 TikTok']];
@@ -1064,5 +1074,6 @@
   }
 })();
 </script>
+<script src="/js/lme-price.js" defer></script>
 </body>
 </html>
