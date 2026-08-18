@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>LME Innboks</title>
+<meta name="description" content="Alle kommentarene dine fra Facebook og Instagram på ett sted. Svar, lik og rydd uten å hoppe mellom apper.">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#e85a92">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'), url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink-50:#fff5f8; --pink-100:#ffe8f0; --pink-200:#ffd1e1; --pink-300:#ffb3cd;
+    --pink-400:#ff8ab3; --pink-500:#e85a92; --pink-600:#c43d75; --pink-700:#8f2a55;
+    --lime:#8fc23f; --bla:#6ec1e4; --bla-soft:#dff1f9;
+    --warm-white:#fffcf9; --ink:#3d2438; --ink-soft:#6b4760;
+    --shadow-soft:0 8px 32px rgba(196,61,117,.10); --shadow-med:0 16px 48px rgba(196,61,117,.16);
+    --font-head:'Playpen Sans', system-ui, sans-serif;
+    --font-body:'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body); color: var(--ink); line-height: 1.55; min-height: 100vh;
+    background:
+      radial-gradient(ellipse 80% 40% at 15% 0%, rgba(255,209,225,.4), transparent 60%),
+      radial-gradient(ellipse 70% 40% at 100% 10%, rgba(223,241,249,.5), transparent 60%),
+      var(--warm-white);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  h1, h2, h3 { font-family: var(--font-head); line-height: 1.2; }
+  button, input, textarea, select { font-family: var(--font-body) !important; }
+  a { color: var(--pink-600); }
+
+  .top { position: sticky; top: 0; z-index: 50; background: rgba(255,252,249,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--pink-100); padding: .6rem 1rem; padding-top: calc(.6rem + env(safe-area-inset-top)); }
+  .top-in { max-width: 720px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: .6rem; }
+  .brand { display: flex; align-items: center; gap: .55rem; text-decoration: none; }
+  .brand img { width: 38px; height: 38px; object-fit: contain; }
+  .brand b { font-family: var(--font-head); color: var(--pink-600); font-size: 1rem; }
+  .lang { background: linear-gradient(135deg, var(--pink-400), var(--pink-500)); color: #fff; border: none; padding: .45rem 1rem; border-radius: 999px; font-weight: 600; font-size: .85rem; cursor: pointer; }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 1.1rem 1rem 3rem; }
+  .hero { text-align: center; margin-bottom: 1.2rem; }
+  .hero .badge { display: inline-block; background: var(--pink-100); color: var(--pink-700); font-weight: 700; font-size: .8rem; padding: .3rem .9rem; border-radius: 999px; }
+  .hero h1 { font-size: clamp(1.6rem, 6vw, 2.1rem); color: var(--ink); margin: .6rem 0 .3rem; }
+  .hero p { color: var(--ink-soft); font-size: .98rem; }
+
+  .card { background: #fff; border: 1px solid var(--pink-100); border-radius: 20px; box-shadow: var(--shadow-soft); padding: 1.1rem 1.15rem; margin-bottom: 1rem; }
+  .card h2 { font-size: 1.1rem; margin-bottom: .2rem; display: flex; align-items: center; gap: .45rem; }
+  .card .sub { color: var(--ink-soft); font-size: .9rem; margin-bottom: .8rem; }
+
+  label.lab { display: block; font-weight: 700; font-size: .92rem; margin: .7rem 0 .35rem; }
+  textarea, input[type=text], input[type=password] { width: 100%; border: 1.5px solid var(--pink-200); border-radius: 14px; padding: .7rem .9rem; font-size: 1rem; color: var(--ink); background: #fff; }
+  textarea { min-height: 74px; resize: vertical; }
+  textarea:focus, input:focus { outline: none; border-color: var(--pink-400); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; width: 100%; border: none; border-radius: 999px; padding: .9rem 1.4rem; font-weight: 700; font-size: 1.02rem; cursor: pointer; background: linear-gradient(135deg, var(--pink-500), var(--pink-600)); color: #fff; box-shadow: var(--shadow-soft); text-decoration: none; }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .btn.ghost { background: #fff; color: var(--pink-600); border: 1.5px solid var(--pink-200); box-shadow: none; }
+  .btn.fb { background: linear-gradient(135deg, #4c7ff0, #1877f2); }
+  .btn.small { width: auto; padding: .5rem 1rem; font-size: .9rem; }
+  .spinner { width: 1em; height: 1em; border: 2px solid rgba(255,255,255,.5); border-top-color: #fff; border-radius: 50%; display: inline-block; animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .bar { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin-bottom: .9rem; }
+  .tab { border: 1.5px solid var(--pink-200); background: #fff; color: var(--ink-soft); border-radius: 999px; padding: .42rem .9rem; font-size: .88rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: .4rem; }
+  .tab.on { background: var(--pink-500); border-color: var(--pink-500); color: #fff; }
+  .tab img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+  .spacer { flex: 1; }
+
+  .cm { background: #fff; border: 1px solid var(--pink-100); border-radius: 18px; box-shadow: var(--shadow-soft); padding: .95rem 1rem; margin-bottom: .8rem; }
+  .cm.done { border-color: #dcecc3; background: #fdfff8; }
+  .cm-top { display: flex; align-items: center; gap: .55rem; font-size: .82rem; color: var(--ink-soft); flex-wrap: wrap; }
+  .plat { font-weight: 700; border-radius: 999px; padding: .12rem .6rem; font-size: .76rem; }
+  .plat.fb { background: #e7efff; color: #1a4fb4; }
+  .plat.ig { background: #fdeaf3; color: #b32b78; }
+  .who { font-weight: 700; color: var(--ink); font-size: .95rem; }
+  .cm-text { margin: .5rem 0 .3rem; font-size: 1rem; white-space: pre-wrap; word-break: break-word; }
+  .cm-post { font-size: .82rem; color: var(--ink-soft); background: var(--pink-50); border-radius: 12px; padding: .45rem .65rem; display: flex; gap: .5rem; align-items: center; }
+  .cm-post img { width: 34px; height: 34px; border-radius: 8px; object-fit: cover; flex: none; }
+  .cm-post a { text-decoration: none; }
+  .cm-acts { display: flex; gap: .4rem; flex-wrap: wrap; margin-top: .6rem; }
+  .act { border: 1.5px solid var(--pink-200); background: #fff; color: var(--ink-soft); border-radius: 999px; padding: .35rem .8rem; font-size: .84rem; font-weight: 700; cursor: pointer; }
+  .act:hover { border-color: var(--pink-400); color: var(--pink-600); }
+  .act.on { background: var(--pink-100); border-color: var(--pink-300); color: var(--pink-700); }
+  .act.danger { color: #a33; }
+  .replies { margin-top: .55rem; border-left: 3px solid var(--pink-100); padding-left: .7rem; }
+  .replies div { font-size: .88rem; color: var(--ink-soft); margin-bottom: .25rem; }
+  .replies b { color: var(--ink); }
+  .rbox { margin-top: .6rem; display: none; }
+  .rbox.show { display: block; }
+  .rbox .row { display: flex; gap: .45rem; flex-wrap: wrap; margin-top: .5rem; }
+  .tag-done { background: #f1f8e4; color: #5f8f2a; border-radius: 999px; padding: .12rem .6rem; font-size: .76rem; font-weight: 700; }
+
+  .msg { margin-top: .8rem; padding: .8rem 1rem; border-radius: 14px; font-size: .92rem; display: none; }
+  .msg.show { display: block; }
+  .msg.err { background: #fdeef3; color: var(--pink-700); border: 1px solid var(--pink-200); }
+  .msg.ok { background: #f1f8e4; color: #5f8f2a; border: 1px solid #dcecc3; }
+  .note { background: var(--bla-soft); border: 1px solid #c7e6f2; border-radius: 14px; padding: .8rem 1rem; font-size: .88rem; color: #2f6377; }
+  .steps { margin: .6rem 0 0 1.1rem; font-size: .9rem; color: var(--ink-soft); }
+  .steps li { margin-bottom: .3rem; }
+  .gate { text-align: center; padding: 1.4rem 1rem; }
+  .gate .ic { font-size: 2.6rem; }
+  .gate h2 { margin: .5rem 0 .3rem; justify-content: center; }
+  .gate p { color: var(--ink-soft); margin-bottom: 1rem; }
+  .gate .btn { max-width: 340px; margin: .4rem auto 0; }
+  .empty { text-align: center; color: var(--ink-soft); padding: 1.6rem 1rem; }
+  .empty .ic { font-size: 2.2rem; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-in">
+    <a href="/creative-academy" class="brand"><img src="/images/lme-logo.png" alt="LME" width="38" height="38"><b>Innboks</b></a>
+    <button class="lang" id="langToggle">EN 🌍</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <span class="badge">💬 <span data-no="LME Studio" data-en="LME Studio">LME Studio</span></span>
+    <h1 data-no="Alle kommentarene dine på ett sted" data-en="All your comments in one place">Alle kommentarene dine på ett sted</h1>
+    <p data-no="Facebook og Instagram i samme innboks. Svar, lik og rydd uten å hoppe mellom apper." data-en="Facebook and Instagram in the same inbox. Reply, like and tidy up without jumping between apps.">Facebook og Instagram i samme innboks. Svar, lik og rydd uten å hoppe mellom apper.</p>
+  </div>
+
+  <div class="msg err" id="topErr"></div>
+  <div class="msg ok" id="topOk"></div>
+
+  <div class="card" id="loading"><div class="sub" style="margin:0;" data-no="Laster …" data-en="Loading …">Laster …</div></div>
+
+  <!-- Ikke innlogget -->
+  <div class="card gate hidden" id="gateLogin">
+    <div class="ic">🔑</div>
+    <h2 data-no="Logg inn for å bruke Innboksen" data-en="Log in to use the Inbox">Logg inn for å bruke Innboksen</h2>
+    <p data-no="Du må være innlogget som medlem." data-en="You need to be logged in as a member.">Du må være innlogget som medlem.</p>
+    <a class="btn" href="/login?next=/innboks" data-no="Logg inn" data-en="Log in">Logg inn</a>
+  </div>
+
+  <!-- Ingen tilgang -->
+  <div class="card gate hidden" id="gateAccess">
+    <div class="ic">🌸</div>
+    <h2 data-no="Innboksen er for medlemmer" data-en="The Inbox is for members">Innboksen er for medlemmer</h2>
+    <p data-no="Bli med i Inner Circle, så får du Innboksen sammen med resten av LME Studio." data-en="Join the Inner Circle, and you get the Inbox along with the rest of LME Studio.">Bli med i Inner Circle, så får du Innboksen sammen med resten av LME Studio.</p>
+    <a class="btn" href="/medlemskap" data-no="Se medlemskap" data-en="See membership">Se medlemskap</a>
+  </div>
+
+  <!-- Ikke satt opp ennå (Meta-appen mangler) -->
+  <div class="card hidden" id="gateSetup">
+    <h2>🔧 <span data-no="Innboksen er ikke satt opp ennå" data-en="The Inbox is not set up yet">Innboksen er ikke satt opp ennå</span></h2>
+    <div class="sub" data-no="Innboksen henter kommentarer rett fra Facebook og Instagram, og det krever en Meta-app for LME. Så snart den er på plass, kan alle medlemmer koble til sine egne kontoer selv." data-en="The Inbox pulls comments straight from Facebook and Instagram, which needs a Meta app for LME. As soon as that is in place, every member can connect their own accounts.">Innboksen henter kommentarer rett fra Facebook og Instagram, og det krever en Meta-app for LME. Så snart den er på plass, kan alle medlemmer koble til sine egne kontoer selv.</div>
+    <div class="note" data-no="Er du medlem: kom tilbake hit litt senere, du trenger ikke gjøre noe selv." data-en="If you are a member: come back a little later, there is nothing for you to do.">Er du medlem: kom tilbake hit litt senere, du trenger ikke gjøre noe selv.</div>
+
+    <div id="ownerSetup" class="hidden">
+      <label class="lab" data-no="App-ID (kun eier)" data-en="App ID (owner only)">App-ID (kun eier)</label>
+      <input type="text" id="appId" autocomplete="off" placeholder="1234567890">
+      <label class="lab" data-no="App-hemmelighet" data-en="App secret">App-hemmelighet</label>
+      <input type="password" id="appSecret" autocomplete="off" placeholder="••••••••">
+      <div style="margin-top:.8rem;"><button class="btn" id="saveApp" data-no="Lagre" data-en="Save">Lagre</button></div>
+      <ol class="steps">
+        <li data-no="Lag en app på developers.facebook.com, type Business." data-en="Create an app at developers.facebook.com, type Business.">Lag en app på developers.facebook.com, type Business.</li>
+        <li data-no="Legg til Facebook-innlogging, og sett gyldig svaradresse til https://lmexplorers.com/api/innboks/callback" data-en="Add Facebook Login, and set the valid redirect URI to https://lmexplorers.com/api/innboks/callback">Legg til Facebook-innlogging, og sett gyldig svaradresse til https://lmexplorers.com/api/innboks/callback</li>
+        <li data-no="Be om tilgangene pages_show_list, pages_read_engagement, pages_read_user_content, pages_manage_engagement, instagram_basic og instagram_manage_comments." data-en="Request the permissions pages_show_list, pages_read_engagement, pages_read_user_content, pages_manage_engagement, instagram_basic and instagram_manage_comments.">Be om tilgangene pages_show_list, pages_read_engagement, pages_read_user_content, pages_manage_engagement, instagram_basic og instagram_manage_comments.</li>
+        <li data-no="Lim inn App-ID og hemmeligheten her. Alt lagres på serveren, aldri i nettleseren." data-en="Paste the App ID and the secret here. Everything is stored on the server, never in the browser.">Lim inn App-ID og hemmeligheten her. Alt lagres på serveren, aldri i nettleseren.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- Klar, men ingen kontoer koblet til -->
+  <div class="card hidden" id="gateConnect">
+    <h2>🔗 <span data-no="Koble til kontoene dine" data-en="Connect your accounts">Koble til kontoene dine</span></h2>
+    <div class="sub" data-no="Logg inn med Facebook og velg siden din. Har du en Instagram profesjonell konto koblet til siden, kommer den med automatisk." data-en="Log in with Facebook and pick your Page. If you have an Instagram professional account linked to the Page, it comes along automatically.">Logg inn med Facebook og velg siden din. Har du en Instagram profesjonell konto koblet til siden, kommer den med automatisk.</div>
+    <a class="btn fb" href="/api/innboks/connect" data-no="Koble til Facebook og Instagram" data-en="Connect Facebook and Instagram">Koble til Facebook og Instagram</a>
+    <div class="note" style="margin-top:.9rem;" data-no="LME leser bare kommentarene på dine egne innlegg, og gjør ingenting du ikke ber om. Du kan koble fra igjen når som helst, og da glemmer LME tilgangen med én gang." data-en="LME only reads the comments on your own posts, and does nothing you have not asked for. You can disconnect at any time, and LME forgets the access immediately.">LME leser bare kommentarene på dine egne innlegg, og gjør ingenting du ikke ber om. Du kan koble fra igjen når som helst, og da glemmer LME tilgangen med én gang.</div>
+  </div>
+
+  <!-- Selve innboksen -->
+  <div id="inbox" class="hidden">
+    <div class="bar" id="tabs"></div>
+    <div class="bar">
+      <button class="tab" id="filterUnanswered" data-no="Bare ubesvarte" data-en="Unanswered only">Bare ubesvarte</button>
+      <span class="spacer"></span>
+      <button class="tab" id="refresh" data-no="↻ Oppdater" data-en="↻ Refresh">↻ Oppdater</button>
+    </div>
+    <div id="list"></div>
+    <div class="empty hidden" id="empty">
+      <div class="ic">🌿</div>
+      <p data-no="Ingen kommentarer å svare på akkurat nå. Godt jobbet." data-en="No comments waiting right now. Well done.">Ingen kommentarer å svare på akkurat nå. Godt jobbet.</p>
+    </div>
+    <div class="card" style="margin-top:1rem;">
+      <div class="sub" style="margin:0;" data-no="Kontoene dine er koblet til LME Innboks." data-en="Your accounts are connected to the LME Inbox.">Kontoene dine er koblet til LME Innboks.</div>
+      <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.7rem;">
+        <a class="btn ghost small" href="/api/innboks/connect" data-no="Koble til på nytt" data-en="Reconnect">Koble til på nytt</a>
+        <button class="btn ghost small" id="disconnect" data-no="Koble fra" data-en="Disconnect">Koble fra</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var currentLang = (window.LME_CURRENT_LANG === 'en') ? 'en' : 'no';
+  function q(id) { return document.getElementById(id); }
+  function isEn() { return currentLang === 'en'; }
+  function L(no, en) { return isEn() ? en : no; }
+
+  function switchLanguage(lang) {
+    currentLang = lang; window.LME_CURRENT_LANG = lang; document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      var t = el.getAttribute('data-' + lang); if (t === null) return;
+      if (t.indexOf('<') !== -1) el.innerHTML = t; else el.textContent = t;
+    });
+    document.querySelectorAll('[data-ph-no][data-ph-en]').forEach(function (el) {
+      el.setAttribute('placeholder', el.getAttribute(lang === 'no' ? 'data-ph-no' : 'data-ph-en'));
+    });
+    q('langToggle').textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    if (state) { renderTabs(); render(); }
+  }
+  q('langToggle').addEventListener('click', function () { switchLanguage(currentLang === 'no' ? 'en' : 'no'); });
+
+  var state = null;          // svar fra /api/innboks/status
+  var comments = [];         // alle kommentarer som er lastet
+  var view = [];             // de som vises akkurat nå (etter filter)
+  var account = '';          // '' = alle kontoer
+  var onlyUnanswered = false;
+  var loadingList = false;
+
+  function show(id) { q(id).classList.remove('hidden'); }
+  function hide(id) { q(id).classList.add('hidden'); }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function top(kind, text) {
+    var e = q(kind === 'err' ? 'topErr' : 'topOk'), o = q(kind === 'err' ? 'topOk' : 'topErr');
+    e.textContent = text; e.classList.add('show'); o.classList.remove('show');
+    if (kind === 'ok') setTimeout(function () { e.classList.remove('show'); }, 4000);
+  }
+  function clearTop() { q('topErr').classList.remove('show'); q('topOk').classList.remove('show'); }
+
+  function ago(ts) {
+    var t = new Date(ts).getTime();
+    if (!t) return '';
+    var m = Math.floor((Date.now() - t) / 60000);
+    if (m < 1) return L('nå nettopp', 'just now');
+    if (m < 60) return m + ' ' + L('min siden', 'min ago');
+    var h = Math.floor(m / 60);
+    if (h < 24) return h + ' ' + L('timer siden', 'hours ago');
+    var d = Math.floor(h / 24);
+    if (d < 30) return d + ' ' + L('dager siden', 'days ago');
+    return new Date(ts).toLocaleDateString(isEn() ? 'en-GB' : 'nb-NO');
+  }
+
+  /* ---- Beskjeder etter tilkobling ---- */
+  (function fromRedirect() {
+    var p = new URLSearchParams(location.search);
+    if (p.get('koblet')) top('ok', L('Kontoene dine er koblet til. Kommentarene lastes nå.', 'Your accounts are connected. Loading your comments now.'));
+    var feil = p.get('feil');
+    if (feil) {
+      var m = {
+        oppsett: L('Innboksen er ikke satt opp ennå.', 'The Inbox is not set up yet.'),
+        tilgang: L('Innboksen er for medlemmer.', 'The Inbox is for members.'),
+        avbrutt: L('Tilkoblingen ble avbrutt.', 'The connection was cancelled.'),
+        svar: L('Facebook sendte ikke et svar vi kunne bruke. Prøv en gang til.', 'Facebook did not send a usable response. Please try again.'),
+        utlopt: L('Tilkoblingen tok for lang tid. Prøv en gang til.', 'The connection took too long. Please try again.'),
+        okt: L('Du må være innlogget i LME i samme nettleser. Logg inn og prøv igjen.', 'You need to be logged in to LME in the same browser. Log in and try again.'),
+        nokkel: L('Facebook ga oss ikke tilgang. Prøv en gang til.', 'Facebook did not grant access. Please try again.'),
+        kontoer: L('Fikk ikke hentet sidene dine fra Facebook. Prøv en gang til.', 'Could not fetch your Pages from Facebook. Please try again.'),
+        ingen: L('Fant ingen Facebook-side på kontoen din. Innboksen trenger en side, ikke en vanlig profil.', 'No Facebook Page was found on your account. The Inbox needs a Page, not a personal profile.')
+      };
+      top('err', m[feil] || L('Noe gikk galt. Prøv en gang til.', 'Something went wrong. Please try again.'));
+    }
+    if (p.get('koblet') || feil) history.replaceState({}, '', '/innboks');
+  })();
+
+  /* ---- Status ---- */
+  function loadStatus() {
+    return fetch('/api/innboks/status', { credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) { state = d || { loggedIn: false }; })
+      .catch(function () { state = { loggedIn: false }; })
+      .then(applyState);
+  }
+
+  function applyState() {
+    hide('loading'); hide('gateLogin'); hide('gateAccess'); hide('gateSetup'); hide('gateConnect'); hide('inbox');
+    if (!state || !state.loggedIn) { show('gateLogin'); return; }
+    if (!state.entitled) { show('gateAccess'); return; }
+    if (!state.configured) {
+      show('gateSetup');
+      if (state.owner) show('ownerSetup');
+      return;
+    }
+    if (!state.connected) { show('gateConnect'); return; }
+    show('inbox'); renderTabs(); loadComments(false);
+  }
+
+  /* ---- Meta-appen (kun eier) ---- */
+  q('saveApp').addEventListener('click', function () {
+    var id = q('appId').value.trim(), secret = q('appSecret').value.trim();
+    if (!id || !secret) { top('err', L('Fyll inn både App-ID og hemmeligheten.', 'Fill in both the App ID and the secret.')); return; }
+    fetch('/api/innboks/app', { method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ appId: id, appSecret: secret }) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.ok) { top('ok', L('Lagret. Nå kan medlemmene koble til.', 'Saved. Members can connect now.')); loadStatus(); }
+        else { top('err', (d && d.error) || L('Kunne ikke lagre.', 'Could not save.')); }
+      })
+      .catch(function () { top('err', L('Nettverksfeil.', 'Network error.')); });
+  });
+
+  /* ---- Konto-faner ---- */
+  function renderTabs() {
+    var wrap = q('tabs');
+    var accounts = (state && state.accounts) || [];
+    var html = '<button class="tab' + (account === '' ? ' on' : '') + '" data-acc="">' +
+      L('Alle', 'All') + '</button>';
+    accounts.forEach(function (a) {
+      html += '<button class="tab' + (account === a.key ? ' on' : '') + '" data-acc="' + esc(a.key) + '">' +
+        (a.picture ? '<img src="' + esc(a.picture) + '" alt="">' : (a.platform === 'instagram' ? '📷' : '👍')) +
+        esc(a.name) + '</button>';
+    });
+    wrap.innerHTML = html;
+    wrap.querySelectorAll('.tab').forEach(function (b) {
+      b.addEventListener('click', function () {
+        account = b.getAttribute('data-acc'); renderTabs(); loadComments(false);
+      });
+    });
+    q('filterUnanswered').classList.toggle('on', onlyUnanswered);
+  }
+
+  q('filterUnanswered').addEventListener('click', function () {
+    onlyUnanswered = !onlyUnanswered;
+    q('filterUnanswered').classList.toggle('on', onlyUnanswered);
+    render();
+  });
+  q('refresh').addEventListener('click', function () { loadComments(true); });
+
+  /* ---- Hent kommentarer ---- */
+  function loadComments(fresh) {
+    if (loadingList) return;
+    loadingList = true;
+    q('list').innerHTML = '<div class="card"><div class="sub" style="margin:0;">' +
+      L('Henter kommentarer …', 'Fetching comments …') + '</div></div>';
+    hide('empty');
+    var qs = '?' + (account ? 'account=' + encodeURIComponent(account) + '&' : '') +
+      (fresh ? 'fresh=1&' : '') + 'lang=' + currentLang;
+    fetch('/api/innboks/comments' + qs, { credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        loadingList = false;
+        if (!d || d.error) { q('list').innerHTML = ''; top('err', (d && d.error) || L('Kunne ikke hente kommentarer.', 'Could not fetch comments.')); return; }
+        comments = d.comments || [];
+        if (d.accounts && d.accounts.length) { state.accounts = d.accounts; renderTabs(); }
+        if (d.problems && d.problems.length) top('err', d.problems[0].name + ': ' + d.problems[0].error);
+        render();
+      })
+      .catch(function () {
+        loadingList = false; q('list').innerHTML = '';
+        top('err', L('Nettverksfeil. Prøv igjen.', 'Network error. Please try again.'));
+      });
+  }
+
+  /* ---- Tegn listen ---- */
+  function render() {
+    view = comments.filter(function (c) { return !onlyUnanswered || !c.answered; });
+    q('list').innerHTML = view.map(cardHtml).join('');
+    q('empty').classList.toggle('hidden', view.length > 0);
+    wireCards();
+  }
+
+  function cardHtml(c, i) {
+    var fb = c.platform === 'facebook';
+    var reply = c.replies && c.replies.filter(function (r) { return r.mine; })[0];
+    return '' +
+      '<div class="cm' + (c.answered ? ' done' : '') + '" data-i="' + i + '">' +
+        '<div class="cm-top">' +
+          '<span class="plat ' + (fb ? 'fb' : 'ig') + '">' + (fb ? 'Facebook' : 'Instagram') + '</span>' +
+          '<span class="who">' + esc(c.author) + '</span>' +
+          '<span>' + esc(ago(c.ts)) + '</span>' +
+          (c.answered ? '<span class="tag-done">' + L('Besvart', 'Answered') + '</span>' : '') +
+          (c.hidden ? '<span class="tag-done" style="background:#fdeef3;color:#8f2a55;">' + L('Skjult', 'Hidden') + '</span>' : '') +
+        '</div>' +
+        '<div class="cm-text">' + esc(c.text) + '</div>' +
+        (c.postText || c.postUrl ?
+          '<div class="cm-post">' +
+            (c.postImg ? '<img src="' + esc(c.postImg) + '" alt="">' : '') +
+            '<span>' + esc(c.postText || L('Innlegget ditt', 'Your post')) +
+            (c.postUrl ? ' <a href="' + esc(c.postUrl) + '" target="_blank" rel="noopener">' + L('Se innlegget ↗', 'View post ↗') + '</a>' : '') +
+            '</span>' +
+          '</div>' : '') +
+        (reply ? '<div class="replies"><div><b>' + L('Ditt svar:', 'Your reply:') + '</b> ' + esc(reply.text) + '</div></div>' : '') +
+        '<div class="cm-acts">' +
+          '<button class="act" data-do="open">' + L('Svar', 'Reply') + '</button>' +
+          (fb ? '<button class="act' + (c.liked ? ' on' : '') + '" data-do="like">' + (c.liked ? L('♥ Likt', '♥ Liked') : L('♡ Lik', '♡ Like')) + '</button>' : '') +
+          '<button class="act" data-do="hide">' + (c.hidden ? L('Vis igjen', 'Unhide') : L('Skjul', 'Hide')) + '</button>' +
+          '<button class="act danger" data-do="del">' + L('Slett', 'Delete') + '</button>' +
+        '</div>' +
+        '<div class="rbox">' +
+          '<textarea data-el="text" placeholder="' + L('Skriv svaret ditt …', 'Write your reply …') + '"></textarea>' +
+          '<div class="row">' +
+            '<button class="btn small" data-do="send">' + L('Send svar', 'Send reply') + '</button>' +
+            '<button class="btn ghost small" data-do="ai">' + L('✨ Foreslå svar', '✨ Suggest a reply') + '</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  }
+
+  function wireCards() {
+    q('list').querySelectorAll('.cm').forEach(function (el) {
+      var c = view[Number(el.getAttribute('data-i'))];
+      if (!c) return;
+      el.querySelectorAll('[data-do]').forEach(function (b) {
+        b.addEventListener('click', function () { doAction(b.getAttribute('data-do'), c, el, b); });
+      });
+    });
+  }
+
+  function post(path, body) {
+    return fetch('/api/innboks/' + path, { method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Object.assign({ lang: currentLang }, body)) })
+      .then(function (r) { return r.json(); });
+  }
+
+  function doAction(what, c, el, btn) {
+    clearTop();
+    if (what === 'open') { el.querySelector('.rbox').classList.toggle('show'); el.querySelector('[data-el=text]').focus(); return; }
+
+    if (what === 'send') {
+      var t = el.querySelector('[data-el=text]');
+      var text = t.value.trim();
+      if (!text) { top('err', L('Skriv et svar først.', 'Write a reply first.')); return; }
+      btn.disabled = true; btn.textContent = L('Sender …', 'Sending …');
+      post('reply', { account: c.account, id: c.id, message: text }).then(function (d) {
+        btn.disabled = false; btn.textContent = L('Send svar', 'Send reply');
+        if (!d || d.error) { top('err', (d && d.error) || L('Svaret gikk ikke gjennom.', 'The reply did not go through.')); return; }
+        c.answered = true; c.replies = (c.replies || []).concat([{ text: text, mine: true, ts: new Date().toISOString() }]);
+        top('ok', L('Svaret er publisert.', 'Your reply is published.'));
+        render();
+      }).catch(function () { btn.disabled = false; top('err', L('Nettverksfeil.', 'Network error.')); });
+      return;
+    }
+
+    if (what === 'ai') {
+      btn.disabled = true; btn.textContent = L('Tenker …', 'Thinking …');
+      post('ai-reply', { text: c.text, post: c.postText }).then(function (d) {
+        btn.disabled = false; btn.textContent = L('✨ Foreslå svar', '✨ Suggest a reply');
+        if (!d || !d.reply) { top('err', (d && d.error) || L('Fikk ikke laget et forslag.', 'Could not create a suggestion.')); return; }
+        el.querySelector('[data-el=text]').value = d.reply;
+      }).catch(function () { btn.disabled = false; top('err', L('Nettverksfeil.', 'Network error.')); });
+      return;
+    }
+
+    if (what === 'like') {
+      var on = !c.liked;
+      btn.disabled = true;
+      post('like', { account: c.account, id: c.id, on: on }).then(function (d) {
+        btn.disabled = false;
+        if (!d || d.error) { top('err', (d && d.error) || L('Kunne ikke like kommentaren.', 'Could not like the comment.')); return; }
+        c.liked = on; c.likes = Math.max(0, (c.likes || 0) + (on ? 1 : -1)); render();
+      }).catch(function () { btn.disabled = false; top('err', L('Nettverksfeil.', 'Network error.')); });
+      return;
+    }
+
+    if (what === 'hide') {
+      var hideOn = !c.hidden;
+      btn.disabled = true;
+      post('hide', { account: c.account, id: c.id, on: hideOn }).then(function (d) {
+        btn.disabled = false;
+        if (!d || d.error) { top('err', (d && d.error) || L('Kunne ikke skjule kommentaren.', 'Could not hide the comment.')); return; }
+        c.hidden = hideOn; render();
+      }).catch(function () { btn.disabled = false; top('err', L('Nettverksfeil.', 'Network error.')); });
+      return;
+    }
+
+    if (what === 'del') {
+      if (!confirm(L('Slette denne kommentaren for godt?', 'Delete this comment for good?'))) return;
+      btn.disabled = true;
+      post('delete', { account: c.account, id: c.id }).then(function (d) {
+        btn.disabled = false;
+        if (!d || d.error) { top('err', (d && d.error) || L('Kunne ikke slette kommentaren.', 'Could not delete the comment.')); return; }
+        comments = comments.filter(function (x) { return x.id !== c.id; });
+        top('ok', L('Kommentaren er slettet.', 'The comment is deleted.'));
+        render();
+      }).catch(function () { btn.disabled = false; top('err', L('Nettverksfeil.', 'Network error.')); });
+    }
+  }
+
+  q('disconnect').addEventListener('click', function () {
+    if (!confirm(L('Koble fra Facebook og Instagram?', 'Disconnect Facebook and Instagram?'))) return;
+    post('disconnect', {}).then(function () { comments = []; account = ''; loadStatus(); });
+  });
+
+  /* ---- Start ---- */
+  if (currentLang === 'en') switchLanguage('en');
+  loadStatus();
+</script>
+
+<script src="/js/lme-account.js?v=11" defer></script>
+</body>
+</html>
