@@ -38,6 +38,28 @@
     return /\b(og|du|deg|din|ditt|dine|ikke|det|den|som|på|har|kan|med|til|for|å|vi|er|en|et|de|hva|hvordan|skal|vil|når|hvor|vår|våre|laget|uten|eller|mer|alle|sammen|barn|barnet|hjem|hjemme|nytt|her|oss|dette|disse|over|under|etter|før|gjør|bli|blir|ble|må|får|fått)\b/i.test(t);
   }
 
+  // Nivå 0: sidene har allerede håndskrevet engelsk i data-en, men bare noen
+  // sider har JavaScript som leser attributtene. På resten sto teksten igjen på
+  // norsk selv om oversettelsen lå rett i HTML-en, og siden ba i stedet serveren
+  // om en AI-oversettelse, som bare innloggede medlemmer utløser.
+  // Her slås data-no/data-en rett inn i ordlista: gratis, med en gang, for alle.
+  // Ordlista er fasit, så vi fyller bare hull og overskriver aldri en nøkkel.
+  function harvestAttributePairs() {
+    var added = 0;
+    try {
+      if (!window.LME_TRANSLATIONS) return 0;
+      document.querySelectorAll("[data-no][data-en]").forEach(function (el) {
+        var no = (el.getAttribute("data-no") || "").trim();
+        var en = (el.getAttribute("data-en") || "").trim();
+        if (!no || !en || no === en) return;
+        if (window.LME_TRANSLATIONS[no]) return;
+        window.LME_TRANSLATIONS[no] = en;
+        added++;
+      });
+    } catch (e) {}
+    return added;
+  }
+
   function reapplyEnglish() {
     // Re-kjør engelsk-passet med oppdatert ordliste, uten å bytte språk.
     try {
@@ -99,6 +121,10 @@
       window.lmeToggleLang();
     }
 
+    // Sikkerhetsnett: hent attributtene en gang til, i tilfelle ordlista eller
+    // deler av siden ble laget av JavaScript etter at dette skriptet ble lastet.
+    if (harvestAttributePairs()) reapplyEnglish();
+
     // 1) Hent og slå inn sidens huskede overlay.
     fetch("/api/page-i18n?id=" + encodeURIComponent(PATH))
       .then(function (r) { return r.json(); })
@@ -128,6 +154,12 @@
       window.lmeToggleLang = wrapped;
     }
   }
+
+  // Slå inn attributtene med en gang. Dette skriptet er defer, så det kjører
+  // etter at HTML-en er lest (ordlista finnes) men før DOMContentLoaded, altså
+  // før sidens egen init() bytter til lagret språk. Da slipper vi et glimt av
+  // norsk tekst på vei til engelsk.
+  harvestAttributePairs();
 
   // Vent til den innebygde oversetter-mekanikken finnes.
   var tries = 0;

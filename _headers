@@ -26,6 +26,10 @@
 # kan mobilen kjøre en time(r)vis gammel versjon selv etter en frisk utrulling.
 /js/lme-visibility.js
   Cache-Control: no-store
+# Oversetteren lenkes inn uten ?v=, så en gammel mellomlagret versjon ville
+# holdt engelsk tekst borte fra mobilen selv etter en fersk utrulling.
+/js/i18n-auto.js
+  Cache-Control: no-store
 # Apper-oversikten og de nye verktøyene endres ofte rett etter lansering,
 # saa de maa aldri vises fra en gammel mellomlagret versjon.
 /apper
