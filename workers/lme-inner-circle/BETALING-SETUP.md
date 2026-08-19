@@ -5,7 +5,7 @@ partnerprogram (affiliate) og admin-dashbord. Medlemmer betaler fra dag én.
 
 ## Nye sider
 
-- `/medlemskap` - salgsside med tre planer (Medlem 697 kr, Pro 1 197 kr, VIP 1 997 kr per måned)
+- `/medlemskap` - salgsside med tre planer (Medlem 900 kr / $97, Pro 1 197 kr / $127, VIP 1 997 kr / $213 per måned)
 - `/takk` - takkesiden etter kjøp
 - `/affiliate` - partnerprogrammet (registrering og dashbord)
 - `/admin` - admin-dashbord, kun for VIP-kontoer

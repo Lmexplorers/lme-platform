@@ -49,7 +49,7 @@ const DEFAULT_LIMITS = { image: 250, video: 15 };
 /**
  * Inner Circle skriver ingen grenser på medlemskapet, bare `tier`. Uten
  * dette falt alle tre nivåene tilbake på DEFAULT_LIMITS, altså 250 bilder og
- * 15 videoer i måneden. Et Medlem til 697 kr fikk da nøyaktig samme mengde
+ * 15 videoer i måneden. Et Medlem til 900 kr fikk da nøyaktig samme mengde
  * som VIP til 1997 kr, og 250 bilder koster rundt 210 kr, altså 30 % av det
  * medlemmet betaler. Det var ingenting salgssiden lovet, det var bare det
  * koden gjorde.

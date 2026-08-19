@@ -27,10 +27,16 @@ const json = (d,s=200)=>new Response(JSON.stringify(d),{status:s,headers:{...cor
 const html = (h,ekstra={})=>new Response(h,{status:200,headers:{...cors,'Content-Type':'text/html; charset=utf-8',...ekstra}});
 
 // ---- Prisplaner (beløp i øre; endre prisene her) ----
+// belopUsd (cent) brukes for engelskspråklige kjøpere, slik at prisen både
+// vises og trekkes i dollar. $97 for Medlem er Renates egen referanse: samme
+// nivå som FEA-medlemskapet hun selv betaler. 900 kr er NOK-motstykket
+// (kursen sto i 9,39 kr per dollar da prisen ble satt, 19. august 2026).
+// Pro og VIP beholder kroneprisene sine; dollarbeløpet er de samme kronene
+// omregnet med samme kurs, ikke en ny pris.
 const PLANS = {
-  regular: { tier:'regular', navn:'Medlem', belop:69700 },
-  pro:     { tier:'pro',     navn:'Pro',    belop:119700 },
-  vip:     { tier:'vip',     navn:'VIP',    belop:199700 },
+  regular: { tier:'regular', navn:'Medlem', belop:90000,  belopUsd:9700 },
+  pro:     { tier:'pro',     navn:'Pro',    belop:119700, belopUsd:12700 },
+  vip:     { tier:'vip',     navn:'VIP',    belop:199700, belopUsd:21300 },
   // Grunnleggerpris for kjøpere av 10 000-visninger-utfordringen: full
   // Inner Circle Pro-tilgang (fellesskap, moduler osv.) til en lavere,
   // låst pris. Stripe endrer aldri prisen på et løpende abonnement av seg
@@ -44,6 +50,16 @@ const PLANS = {
   // betaler der), 899 kr er nærmeste avrundede NOK-motstykke.
   proUtfordring: { tier:'pro', navn:'Pro (grunnleggermedlem, 10 000-visninger-utfordringen)', belop:89900, belopUsd:9700, utfordring:true },
 };
+
+// Betalinger lagres i øre i payments-tabellen, og provisjon regnes av samme
+// tall. Et USD-kjøp kommer fra Stripe i cent, så uten omregning ville et salg
+// på $97 blitt bokført som 97 kroner og partneren fått provisjon av det.
+// Samme kurs som prisene ble satt etter (9,39 kr per dollar, 19. august 2026).
+const USD_TIL_NOK = 9.39;
+function tilOre(belop, valuta){
+  const b = Number(belop) || 0;
+  return String(valuta || '').toLowerCase() === 'usd' ? Math.round(b * USD_TIL_NOK) : b;
+}
 
 const MEDIESIDE = `<!DOCTYPE html>
 <html lang="no">
@@ -443,7 +459,7 @@ ${SIDE_STIL}
   <div class="planer">
     <div class="plan">
       <h2 data-no="Medlem" data-en="Member">Medlem</h2>
-      <div class="pris">697 kr<small data-no="/mnd" data-en="/mo">/mnd</small></div>
+      <div class="pris"><span data-no="900 kr" data-en="$97">900 kr</span><small data-no="/mnd" data-en="/mo">/mnd</small></div>
       <ul>
         <li data-no="Alt innhold: alle kurs, hele biblioteket og ressursene" data-en="All content: every course, the full library and resources">Alt innhold: alle kurs, hele biblioteket og ressursene</li>
         <li data-no="Alle gruppene og fellesrommet" data-en="All groups and the shared room">Alle gruppene og fellesrommet</li>
@@ -457,7 +473,7 @@ ${SIDE_STIL}
     <div class="plan populaer">
       <span class="stjerne" data-no="Mest populær" data-en="Most popular">Mest populær</span>
       <h2>Pro</h2>
-      <div class="pris">1 197 kr<small data-no="/mnd" data-en="/mo">/mnd</small></div>
+      <div class="pris"><span data-no="1 197 kr" data-en="$127">1 197 kr</span><small data-no="/mnd" data-en="/mo">/mnd</small></div>
       <ul>
         <li data-no="Alt i Medlem" data-en="Everything in Member">Alt i Medlem</li>
         <li data-no="Skaperverktøyene i LME Studio: Bookly og Kursbygger" data-en="The creator tools in LME Studio: Bookly and Course Builder">Skaperverktøyene i LME Studio: Bookly og Kursbygger</li>
@@ -470,7 +486,7 @@ ${SIDE_STIL}
     </div>
     <div class="plan">
       <h2>VIP</h2>
-      <div class="pris">1 997 kr<small data-no="/mnd" data-en="/mo">/mnd</small></div>
+      <div class="pris"><span data-no="1 997 kr" data-en="$213">1 997 kr</span><small data-no="/mnd" data-en="/mo">/mnd</small></div>
       <ul>
         <li data-no="Alt i Pro" data-en="Everything in Pro">Alt i Pro</li>
         <li data-no="Tidlig tilgang til alt nytt" data-en="Early access to everything new">Tidlig tilgang til alt nytt</li>
@@ -547,7 +563,7 @@ ${SIDE_STIL}
     knapp.innerHTML = '<span class="spinner"></span>';
     try{
       var res = await fetch('/checkout/create',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({plan:valgtPlan, email:epost, ref:sessionStorage.getItem('lme_ref')||''})});
+        body:JSON.stringify({plan:valgtPlan, email:epost, lang: en?'en':'no', ref:sessionStorage.getItem('lme_ref')||''})});
       var d = await res.json();
       if(d.url){ location.href = d.url; return; }
       feil.textContent = d.error || (en?'Something went wrong':'Noe gikk galt');
@@ -1100,9 +1116,8 @@ export default {
         if(!plan) return json({error:'Ukjent plan'},400);
         const epost = (body.email||'').trim().toLowerCase();
         const affKode = saniterKode(body.ref) || getAffiliateCode(request, url);
-        // Kun utfordring-planen støtter USD foreløpig (samme mønster som
-        // den gamle frittstående utfordring-planen); vanlig Inner Circle
-        // selges kun i NOK.
+        // Alle planene har en dollarpris, så engelskspråklige kjøpere ser og
+        // betaler i $ (Renates faste regel), mens norske betaler i kroner.
         const lang = body.lang === 'en' ? 'en' : 'no';
         const useUsd = lang === 'en' && plan.belopUsd;
         const params = {
@@ -1161,7 +1176,7 @@ export default {
           // Checkout-økten uansett, kun etterbehandlingen under ville avvike).
           const plan = PLANS[obj.metadata?.plan] || Object.values(PLANS).find(p=>p.tier===tier);
           if(!epost || !plan) return json({ok:true, ignorert:'mangler e-post eller plan'});
-          const belop = obj.amount_total || 0;
+          const belop = tilOre(obj.amount_total, obj.currency);
           const affKode = saniterKode(obj.metadata?.affiliate_code);
           // Opprett eller oppdater brukeren og gi riktig tilgang
           const finnes = await env.DB.prepare(`SELECT id, referred_by FROM users WHERE email=?`).bind(epost).first();
@@ -1191,7 +1206,7 @@ export default {
 
         if(event.type === 'invoice.paid' || event.type === 'invoice.payment_succeeded'){
           const epost = (obj.customer_email || obj.customer_details?.email || '').toLowerCase();
-          const belop = obj.amount_paid != null ? obj.amount_paid : (obj.amount_due||0);
+          const belop = tilOre(obj.amount_paid != null ? obj.amount_paid : (obj.amount_due||0), obj.currency);
           if(!epost || !belop) return json({ok:true, ignorert:'mangler e-post eller beløp'});
           const user = await env.DB.prepare(`SELECT * FROM users WHERE email=?`).bind(epost).first();
           const tier = user?.tier && user.tier !== 'free' ? user.tier : 'regular';
