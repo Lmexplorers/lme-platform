@@ -1,7 +1,7 @@
 // LME Inner Circle + Auth + Media + Betaling + Affiliate — Worker API v2.0
 // ========================================================================
 // EKTE innlogging: e-post + passord (PBKDF2-hashing), sesjoner.
-// NYTT i v2.0: medlemskapssalg med Stripe (prøveperiode styres av PROVETID_DAGER, nå 0),
+// NYTT i v2.0: medlemskapssalg med Stripe (ingen prøveperiode, betaling fra dag én),
 // affiliate-program med provisjon, velkomst-epost via MailerSend og
 // admin-dashbord for VIP.
 //
@@ -44,7 +44,6 @@ const PLANS = {
   // betaler der), 899 kr er nærmeste avrundede NOK-motstykke.
   proUtfordring: { tier:'pro', navn:'Pro (grunnleggermedlem, 10 000-visninger-utfordringen)', belop:89900, belopUsd:9700, utfordring:true },
 };
-const PROVETID_DAGER = 0; // 0 = ingen prøveperiode; medlemmer betaler fra dag én
 
 const MEDIESIDE = `<!DOCTYPE html>
 <html lang="no">
@@ -1126,7 +1125,6 @@ export default {
           // pris/utfordring-flagg enn den vanlige pro-planen).
           'metadata[plan]': body.plan,
         };
-        if(PROVETID_DAGER > 0) params['subscription_data[trial_period_days]'] = String(PROVETID_DAGER);
         if(epost && epost.includes('@')) params['customer_email'] = epost;
         if(affKode){
           params['metadata[affiliate_code]'] = affKode;
@@ -1174,10 +1172,11 @@ export default {
             await env.DB.prepare(`INSERT INTO users (email, display_name, tier, stripe_customer_id, stripe_subscription_id, referred_by) VALUES (?,?,?,?,?,?)`)
               .bind(epost, epost.split('@')[0], tier, obj.customer||null, obj.subscription||null, affKode||null).run();
           }
-          // Loggfør betalingen (0 kr betyr at prøveperioden er i gang)
+          // Loggfør betalingen. 0 kr skal ikke forekomme (ingen prøveperiode),
+          // men logges som 'trial' hvis Stripe likevel sender det.
           await env.DB.prepare(`INSERT INTO payments (user_email, stripe_customer_id, stripe_subscription_id, tier, amount, status, billing_period, affiliate_code, created_at, paid_at) VALUES (?,?,?,?,?,?,?,?,?,?)`)
             .bind(epost, obj.customer||null, obj.subscription||null, tier, belop, belop>0?'paid':'trial', 'month', affKode||null, naa, belop>0?naa:null).run();
-          // Provisjon med en gang hvis det ble betalt penger nå (uten prøvetid)
+          // Provisjon med en gang, siden medlemmer betaler fra dag én
           if(belop > 0 && affKode) await trackAffiliateSale(env, affKode, epost, tier, belop);
           if(plan.utfordring){
             // Utfordring-delen (dag 0-e-post, 30-dagers kø, fellesskap) lever
@@ -1198,7 +1197,7 @@ export default {
           const tier = user?.tier && user.tier !== 'free' ? user.tier : 'regular';
           await env.DB.prepare(`INSERT INTO payments (user_email, stripe_customer_id, stripe_subscription_id, tier, amount, status, billing_period, affiliate_code, created_at, paid_at) VALUES (?,?,?,?,?,'paid','month',?,?,?)`)
             .bind(epost, obj.customer||null, obj.subscription||null, tier, belop, user?.referred_by||null, naa, naa).run();
-          // Første ekte betaling etter prøvetiden utløser provisjonen
+          // Fornyelse: utløser provisjonen hvis den ikke alt er registrert
           if(user?.referred_by){
             const alt = await env.DB.prepare(`SELECT id FROM affiliate_sales WHERE customer_email=? LIMIT 1`).bind(epost).first();
             if(!alt) await trackAffiliateSale(env, user.referred_by, epost, tier, belop);
