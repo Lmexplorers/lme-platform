@@ -37,3 +37,6 @@
 /ask-renate-ai  /ask-nathalie-ai  301
 /renate-ai-info  /nathalie-ai-info  301
 /innboks  /planlegger  301
+# Malene bor nå under Ressurser (avtalt med Renate 19. august 2026). Bare
+# selve /maler flyttes, undersidene /maler/<mal> ligger der de ligger.
+/maler  /ressurser  301

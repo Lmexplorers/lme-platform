@@ -1656,9 +1656,9 @@
 
   <!-- HERO -->
   <section class="page-hero">
-    <span class="page-kicker">GENERELT MONTESSORI</span>
-    <h1 data-edit="hero-title">Praktiske <em>ressurser</em></h1>
-    <p class="lede" data-edit="hero-sub">Korte, varme guider og oversikter om Montessori, for foreldre og pedagoger. Les på skjerm eller skriv ut.</p>
+    <span class="page-kicker" data-no="GENERELT MONTESSORI" data-en="MONTESSORI, GENERALLY">GENERELT MONTESSORI</span>
+    <h1 data-edit="hero-title" data-no="Praktiske &lt;em&gt;ressurser&lt;/em&gt;" data-en="Practical &lt;em&gt;resources&lt;/em&gt;">Praktiske <em>ressurser</em></h1>
+    <p class="lede" data-edit="hero-sub" data-no="Korte, varme guider og ferdige maler om Montessori, for foreldre og pedagoger. Les på skjerm, skriv ut eller kopier." data-en="Short, warm guides and ready-made templates about Montessori, for parents and educators. Read on screen, print or copy.">Korte, varme guider og ferdige maler om Montessori, for foreldre og pedagoger. Les på skjerm, skriv ut eller kopier.</p>
   </section>
 
   <style>
@@ -1671,40 +1671,72 @@
     .res-card .go{font-weight:700;color:#E91E89;font-size:14px;}
     @media(max-width:780px){.res-grid{grid-template-columns:1fr 1fr;}}
     @media(max-width:520px){.res-grid{grid-template-columns:1fr;}}
+    .res-tittel{font-family:'Playpen Sans',system-ui,sans-serif;font-size:22px;color:#2a1e2e;margin:8px 0 4px;}
+    .res-undertittel{font-size:14px;color:#9a7b85;margin:0 0 18px;}
+    .res-card.snart{opacity:.72;cursor:default;}
+    .res-card.snart:hover{transform:none;box-shadow:0 6px 18px rgba(180,120,140,.08);}
+    .res-card .snart-merke{display:inline-block;font-size:12px;font-weight:700;color:#9a7b85;background:#fdf1f5;border-radius:999px;padding:3px 10px;}
   </style>
 
   <section class="res-section">
+    <h2 class="res-tittel" data-no="Guider" data-en="Guides">Guider</h2>
+    <p class="res-undertittel" data-no="Korte oversikter du kan lese på skjerm eller skrive ut." data-en="Short overviews you can read on screen or print.">Korte oversikter du kan lese på skjerm eller skrive ut.</p>
     <div class="res-grid">
       <a class="res-card" href="/ressurser/print/veilederen">
-        <div class="ic">🧭</div><h3>Veilederen</h3><p>Lærerens rolle som veileder</p><span class="go">Les →</span>
+        <div class="ic">🧭</div><h3 data-no="Veilederen" data-en="The guide">Veilederen</h3><p data-no="Lærerens rolle som veileder" data-en="The teacher's role as a guide">Lærerens rolle som veileder</p><span class="go" data-no="Les →" data-en="Read →">Les →</span>
       </a>
       <a class="res-card" href="/ressurser/print/forberedt-miljo">
-        <div class="ic">🪟</div><h3>Forberedt miljø</h3><p>Sjekkliste for rommet</p><span class="go">Les →</span>
+        <div class="ic">🪟</div><h3 data-no="Forberedt miljø" data-en="The prepared environment">Forberedt miljø</h3><p data-no="Sjekkliste for rommet" data-en="A checklist for the room">Sjekkliste for rommet</p><span class="go" data-no="Les →" data-en="Read →">Les →</span>
       </a>
       <a class="res-card" href="/ressurser/print/utviklingsplanene">
-        <div class="ic">🌱</div><h3>De tre utviklingsplanene</h3><p>0–6, 6–12 og 12–18 år</p><span class="go">Les →</span>
+        <div class="ic">🌱</div><h3 data-no="De tre utviklingsplanene" data-en="The three planes of development">De tre utviklingsplanene</h3><p data-no="0–6, 6–12 og 12–18 år" data-en="ages 0–6, 6–12 and 12–18">0–6, 6–12 og 12–18 år</p><span class="go" data-no="Les →" data-en="Read →">Les →</span>
       </a>
       <a class="res-card" href="/ressurser/print/sensitive-perioder">
-        <div class="ic">⏳</div><h3>Sensitive perioder</h3><p>Når barnet lærer lettest</p><span class="go">Les →</span>
+        <div class="ic">⏳</div><h3 data-no="Sensitive perioder" data-en="Sensitive periods">Sensitive perioder</h3><p data-no="Når barnet lærer lettest" data-en="When the child learns most easily">Når barnet lærer lettest</p><span class="go" data-no="Les →" data-en="Read →">Les →</span>
       </a>
       <a class="res-card" href="/ressurser/print/montessori-hjemme">
-        <div class="ic">🏡</div><h3>Montessori hjemme</h3><p>Enkle grep, rom for rom</p><span class="go">Les →</span>
+        <div class="ic">🏡</div><h3 data-no="Montessori hjemme" data-en="Montessori at home">Montessori hjemme</h3><p data-no="Enkle grep, rom for rom" data-en="Simple steps, room by room">Enkle grep, rom for rom</p><span class="go" data-no="Les →" data-en="Read →">Les →</span>
       </a>
       <a class="res-card" href="/ressurser/print/observasjon">
-        <div class="ic">👀</div><h3>Slik observerer du</h3><p>Se uten å gripe inn</p><span class="go">Les →</span>
+        <div class="ic">👀</div><h3 data-no="Slik observerer du" data-en="How to observe">Slik observerer du</h3><p data-no="Se uten å gripe inn" data-en="Watch without stepping in">Se uten å gripe inn</p><span class="go" data-no="Les →" data-en="Read →">Les →</span>
       </a>
       <a class="res-card" href="/ressurser/print/ordliste">
-        <div class="ic">📖</div><h3>Montessoriordliste</h3><p>Begrepene forklart enkelt</p><span class="go">Les →</span>
+        <div class="ic">📖</div><h3 data-no="Montessoriordliste" data-en="Montessori glossary">Montessoriordliste</h3><p data-no="Begrepene forklart enkelt" data-en="The terms explained simply">Begrepene forklart enkelt</p><span class="go" data-no="Les →" data-en="Read →">Les →</span>
       </a>
       <a class="res-card" href="/ressurser/print/materialoversikt">
-        <div class="ic">🧮</div><h3>Materielloversikt</h3><p>Hva som finnes i hvert område</p><span class="go">Les →</span>
+        <div class="ic">🧮</div><h3 data-no="Materielloversikt" data-en="Materials overview">Materielloversikt</h3><p data-no="Hva som finnes i hvert område" data-en="What exists in each area">Hva som finnes i hvert område</p><span class="go" data-no="Les →" data-en="Read →">Les →</span>
       </a>
       <a class="res-card" href="/ressurser/print/materielliste">
-        <div class="ic">🗂️</div><h3>Materielliste 0–12</h3><p>Anbefalt materiell per utviklingstrinn</p><span class="go">Les →</span>
+        <div class="ic">🗂️</div><h3 data-no="Materielliste 0–12" data-en="Materials list 0–12">Materielliste 0–12</h3><p data-no="Anbefalt materiell per utviklingstrinn" data-en="Recommended materials per stage">Anbefalt materiell per utviklingstrinn</p><span class="go" data-no="Les →" data-en="Read →">Les →</span>
       </a>
       <a class="res-card" href="/ressurser/print/presentere-materiell">
-        <div class="ic">🤲</div><h3>Slik presenterer du et materiell</h3><p>Stegene i en presentasjon</p><span class="go">Les →</span>
+        <div class="ic">🤲</div><h3 data-no="Slik presenterer du et materiell" data-en="How to present a material">Slik presenterer du et materiell</h3><p data-no="Stegene i en presentasjon" data-en="The steps in a presentation">Stegene i en presentasjon</p><span class="go" data-no="Les →" data-en="Read →">Les →</span>
       </a>
+    </div>
+  </section>
+
+  <section class="res-section">
+    <h2 class="res-tittel" data-no="Maler" data-en="Templates">Maler</h2>
+    <p class="res-undertittel" data-no="Ferdige maler du kan skrive ut eller kopiere, laget for å gjøre Montessorihverdagen enklere." data-en="Ready-made templates you can print or copy, made to make the Montessori day simpler.">Ferdige maler du kan skrive ut eller kopiere, laget for å gjøre Montessorihverdagen enklere.</p>
+    <div class="res-grid">
+      <a class="res-card" href="/maler/ukeplan">
+        <div class="ic">🗓️</div><h3 data-no="Din rolige ukeplan" data-en="Your calm weekly plan">Din rolige ukeplan</h3><p data-no="En enkel ukerytme for hjemmet, med plass til aktiviteter, hvile og små ansvarsoppgaver." data-en="A simple weekly rhythm for the home, with room for activities, rest and small responsibilities.">En enkel ukerytme for hjemmet, med plass til aktiviteter, hvile og små ansvarsoppgaver.</p><span class="go" data-no="Åpne malen →" data-en="Open the template →">Åpne malen →</span>
+      </a>
+      <a class="res-card" href="/maler/observasjonsskjema">
+        <div class="ic">🔍</div><h3 data-no="Observasjonsskjema" data-en="Observation sheet">Observasjonsskjema</h3><p data-no="Det viktigste verktøyet i Montessori, et enkelt skjema for å se barnet uten å forstyrre." data-en="The most important tool in Montessori, a simple sheet for seeing the child without interrupting.">Det viktigste verktøyet i Montessori, et enkelt skjema for å se barnet uten å forstyrre.</p><span class="go" data-no="Åpne malen →" data-en="Open the template →">Åpne malen →</span>
+      </a>
+      <a class="res-card" href="/maler/forberedt-miljo-sjekkliste">
+        <div class="ic">🌿</div><h3 data-no="Sjekkliste: forberedt miljø" data-en="Prepared environment checklist">Sjekkliste: forberedt miljø</h3><p data-no="Gå gjennom rommet med Montessoriøyne: orden, skjønnhet, tilgjengelighet og frihet." data-en="Walk through the room with Montessori eyes: order, beauty, accessibility and freedom.">Gå gjennom rommet med Montessoriøyne: orden, skjønnhet, tilgjengelighet og frihet.</p><span class="go" data-no="Åpne malen →" data-en="Open the template →">Åpne malen →</span>
+      </a>
+      <div class="res-card snart">
+        <div class="ic">🃏</div><h3 data-no="Aktivitetskort" data-en="Activity cards">Aktivitetskort</h3><p data-no="Ferdige kort med enkle, naturbaserte aktiviteter du kan gjøre hjemme." data-en="Ready-made cards with simple, nature-based activities you can do at home.">Ferdige kort med enkle, naturbaserte aktiviteter du kan gjøre hjemme.</p><span class="snart-merke" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span>
+      </div>
+      <div class="res-card snart">
+        <div class="ic">🧺</div><h3 data-no="Materialliste" data-en="Materials list">Materialliste</h3><p data-no="Hva du trenger, og hva du ikke trenger, for hver aldersgruppe." data-en="What you need, and what you don't, for each age group.">Hva du trenger, og hva du ikke trenger, for hver aldersgruppe.</p><span class="snart-merke" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span>
+      </div>
+      <div class="res-card snart">
+        <div class="ic">🌳</div><h3 data-no="Årshjul for familien" data-en="Family year wheel">Årshjul for familien</h3><p data-no="Følg årstidene med barnet, en oversikt over hele året på ett ark." data-en="Follow the seasons with your child, a whole-year overview on one sheet.">Følg årstidene med barnet, en oversikt over hele året på ett ark.</p><span class="snart-merke" data-no="Kommer snart" data-en="Coming soon">Kommer snart</span>
+      </div>
     </div>
   </section>
 
