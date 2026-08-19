@@ -60,6 +60,23 @@
     return added;
   }
 
+  // Noen lenker peker et annet sted på engelsk: den norske butikken har en egen
+  // engelsk søster på /shop, med egne kategorisider. Mønsteret data-en-href lå
+  // allerede i HTML-en på 65 sider, men bare dashbordet hadde kode som leste
+  // det. Alle andre sendte engelske lesere til den norske butikken.
+  // Den opprinnelige adressen huskes i data-no-href, samme navn som dashbordet
+  // bruker, så de to ikke tråkker på hverandre.
+  function applyHrefs(lang) {
+    try {
+      document.querySelectorAll('[data-en-href]').forEach(function (el) {
+        var no = el.getAttribute('data-no-href');
+        if (!no) { no = el.getAttribute('href'); if (no) el.setAttribute('data-no-href', no); }
+        var mal = lang === 'en' ? el.getAttribute('data-en-href') : no;
+        if (mal) el.setAttribute('href', mal);
+      });
+    } catch (e) {}
+  }
+
   function reapplyEnglish() {
     // Re-kjør engelsk-passet med oppdatert ordliste, uten å bytte språk.
     try {
@@ -124,6 +141,7 @@
     // Sikkerhetsnett: hent attributtene en gang til, i tilfelle ordlista eller
     // deler av siden ble laget av JavaScript etter at dette skriptet ble lastet.
     if (harvestAttributePairs()) reapplyEnglish();
+    applyHrefs(window.LME_CURRENT_LANG === 'en' ? 'en' : 'no');
 
     // 1) Hent og slå inn sidens huskede overlay.
     fetch("/api/page-i18n?id=" + encodeURIComponent(PATH))
@@ -148,6 +166,7 @@
       var orig = window.lmeToggleLang;
       var wrapped = function () {
         orig.apply(this, arguments);
+        applyHrefs(window.LME_CURRENT_LANG === 'en' ? 'en' : 'no');
         if (window.LME_CURRENT_LANG === "en") setTimeout(fillGaps, 50);
       };
       wrapped.__lmeWrapped = true;
