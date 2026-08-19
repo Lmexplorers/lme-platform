@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arbeidsboken — LME-plattformen fra A til Å — Little Montessori Explorers</title>
+<link rel="stylesheet" href="/bookly/css/bookly.css">
+<style>
+  /* Playpen Sans lastes lokalt her (samme prinsipp som Sasson Montessori i
+     bookly.css). Selvhostet fil garanterer riktig font uansett hvor siden
+     rendres (også ved PDF-bygg uten nett). */
+  @font-face{font-family:'Playpen Sans';src:url('/fonts/PlaypenSans-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:block;}
+  @font-face{font-family:'Playpen Sans';src:url('/fonts/PlaypenSans-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:block;}
+  @font-face{font-family:'Playpen Sans';src:url('/fonts/PlaypenSans-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:block;}
+</style>
+<style>
+  /* Denne siden bruker LMEs faste guide/arbeidsbok-mal (samme oppbygning som
+     YouTube-arbeidsboken): diagonal pastellgradient, kant til venstre,
+     rotert kanttekst, pille-bannere og åpne skriveboks-felt. Fargene er
+     LMEs mint (fra brandpaletten) + gul + fersken, ikke en ny palett.
+     Fontene (Playpen Sans/Sasson Montessori) er LMEs låste fontregel.
+
+     Tekststørrelser er satt ekstra store med vilje: mange leser denne
+     arbeidsboken som PDF på telefon, der en fast A4-side vises mye mindre
+     enn på papir. Skriveplass bruker åpne bokser i stedet for tynne
+     linjer, samme prinsipp som andre store arbeidsbøker (Female
+     Entrepreneur Association m.fl.) for å gi god skriveplass og et
+     tydelig, lesbart utseende. Hver modul er delt over to sider. */
+  :root{
+    --g-ink:#2a2a2a; --g-body:#4a4a4a; --g-muted:#8a9e8a;
+    --g-mint:#b8d8c5; --g-mint-mid:#7cc4a3; --g-green-light:#f0f7f1; --g-yellow:#f7e76b;
+    --g-rose:#c96a72; --g-cream:#fdf5f1;
+  }
+  body{background:#f2eee9;font-family:var(--font-body);margin:0;}
+  .bk-stage{display:block !important;padding:0;}
+
+  /* ===== Sidekropp: gradient + rutepapir + kant + rotert merketekst ===== */
+  .gd-page{position:relative;width:210mm;height:297mm;margin:0 auto;overflow:hidden;
+    background:
+      linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px) 0 0/8mm 8mm,
+      linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px) 0 0/8mm 8mm,
+      linear-gradient(135deg,#fdf5f1 0%,#fbeae9 45%,#f8d7da 100%);
+  }
+  .gd-page{page-break-after:always;}
+  .gd-page:last-child{page-break-after:auto;}
+  .gd-edge{position:absolute;top:0;bottom:0;width:6mm;}
+  .gd-edge-l{left:0;background:linear-gradient(180deg,#7cc4a3,#b8d8c5 55%,#f7e76b);}
+  .gd-edge-r{right:0;}
+  .gd-edge span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-90deg);white-space:nowrap;font-size:7.5pt;letter-spacing:.2em;text-transform:uppercase;font-family:var(--font-body);font-weight:600;}
+  .gd-edge-l span{color:rgba(42,42,42,.75);}
+  .gd-edge-r span{color:#b99a94;}
+  .gd-head{position:absolute;top:8mm;left:9mm;right:9mm;text-align:center;}
+  .gd-head .l1,.gd-head .l2{font-size:9pt;letter-spacing:.2em;text-transform:uppercase;color:var(--g-ink);font-weight:700;font-family:var(--font-body);}
+  .gd-head .l2{margin-top:1mm;color:#b98a8f;}
+  .gd-foot{position:absolute;bottom:7mm;left:0;right:0;text-align:center;font-size:15pt;font-weight:700;color:var(--g-ink);font-family:var(--font-body);}
+  .gd-inner{position:absolute;top:22mm;left:16mm;right:16mm;bottom:15mm;display:flex;flex-direction:column;}
+
+  /* ===== Bilder av Mia &amp; Teo øverst på hver side ===== */
+  .gd-img{width:100%;height:40mm;object-fit:cover;border-radius:4mm;border:1px solid rgba(0,0,0,.08);margin-bottom:5mm;display:block;}
+  .gd-cover-img{width:100%;max-width:150mm;height:56mm;object-fit:cover;border-radius:4mm;border:1px solid rgba(0,0,0,.08);margin-bottom:6mm;display:block;}
+
+  /* ===== Innholdsbrikker som går igjen ===== */
+  .gd-pill{display:block;width:100%;box-sizing:border-box;text-align:center;border-radius:999px;padding:4.5mm 7mm;font-family:var(--font-display);font-weight:700;font-size:24pt;margin:0 0 6mm;}
+  .gd-pill.yellow{background:var(--g-yellow);color:var(--g-ink);}
+  .gd-pill.green{background:var(--g-mint);color:var(--g-ink);}
+  .gd-text{font-family:var(--font-body);font-size:17.5pt;line-height:1.48;color:var(--g-body);margin-bottom:5mm;}
+  .gd-card{background:#fff;border-radius:4mm;border:1px solid #f0eeea;padding:6mm 7.5mm;margin-bottom:5mm;}
+  .gd-card.cream{background:var(--g-cream);box-shadow:none;}
+  .gd-label{font-family:var(--font-display);font-weight:700;font-size:20pt;margin:0 0 3.5mm;display:block;}
+  .gd-label.rose{color:var(--g-rose);}
+  .gd-label.green{color:var(--g-ink);}
+  .gd-q{font-size:16.5pt;font-weight:700;color:var(--g-ink);margin:0 0 3mm;}
+  .gd-ul{list-style:none;margin:0;padding:0;}
+  .gd-ul li{display:flex;align-items:flex-start;gap:3.5mm;font-size:16.5pt;line-height:1.32;margin-bottom:3.5mm;color:var(--g-body);}
+  .gd-ul li strong{color:var(--g-ink);}
+  .gd-chk{flex:0 0 auto;width:6mm;height:6mm;border-radius:1.3mm;border:1.8pt solid var(--g-mint-mid);margin-top:0.6mm;}
+  .gd-num{flex:0 0 auto;width:8.2mm;height:8.2mm;border-radius:50%;background:var(--g-mint);color:var(--g-ink);font-weight:700;font-size:14pt;display:flex;align-items:center;justify-content:center;margin-top:0;}
+  .gd-affirm{font-family:var(--font-body);font-weight:700;font-size:19.5pt;color:var(--g-ink);text-align:center;line-height:1.35;}
+
+  /* ===== Skriveramme med blyant: "her skriver du" ===== */
+  .gd-write{border:1.5px dashed var(--g-mint-mid);border-radius:4mm;padding:6mm 7mm 5mm;margin-top:1mm;}
+  .gd-write-label{display:flex;align-items:center;gap:2.5mm;font-family:var(--font-body);font-weight:700;font-size:14.5pt;color:var(--g-ink);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4mm;}
+  .gd-write-label .pencil{font-size:17pt;}
+  /* Åpen skriveboks (i stedet for tynne linjer) — samme prinsipp som store
+     arbeidsbøker: én tydelig ramme å skrive i, ikke flere smale linjer. */
+  .gd-box{border:1.6pt solid var(--g-mint-mid);border-radius:4mm;background:#fff;margin-bottom:4.5mm;}
+  .gd-box:last-child{margin-bottom:0;}
+
+  /* ===== Forside ===== */
+  .gd-cover .gd-inner{align-items:center;justify-content:center;text-align:center;}
+  .gd-logobox{width:38mm;height:38mm;background:#fff;border-radius:5mm;border:1px solid rgba(0,0,0,.08);display:flex;align-items:center;justify-content:center;margin-bottom:6mm;padding:4mm;box-sizing:border-box;}
+  .gd-logobox img{width:100%;height:100%;object-fit:contain;}
+  .gd-cover-label{font-size:13pt;letter-spacing:.13em;text-transform:uppercase;color:#9a9a9a;margin-bottom:4mm;font-family:var(--font-body);font-weight:700;}
+  .gd-cover-title{font-family:var(--font-display);font-weight:800;font-size:44pt;text-transform:uppercase;line-height:1.1;color:var(--g-ink);margin-bottom:7mm;}
+  .gd-cover-badge{display:inline-block;background:var(--g-yellow);color:var(--g-ink);font-family:var(--font-body);font-weight:700;font-size:18pt;border-radius:999px;padding:4.5mm 10mm;margin-bottom:8mm;}
+  .gd-cover-card{background:#fff;border-radius:5mm;border:1px solid #f0eeea;padding:6mm 10mm;max-width:160mm;margin-bottom:6mm;}
+  .gd-cover-card .sub{font-size:18pt;color:var(--g-body);line-height:1.42;}
+  .gd-cover-card .accent{font-family:var(--font-body);font-weight:700;color:var(--g-rose);font-style:italic;margin-top:3mm;font-size:15.5pt;}
+  .gd-cover-author{font-family:var(--font-body);font-weight:800;color:var(--g-rose);font-size:17.5pt;}
+  .gd-cover-brand{color:#9a9a9a;font-size:13pt;margin-top:1mm;}
+  .gd-cover-domain{color:var(--g-rose);font-size:13pt;margin-bottom:8mm;}
+
+  /* ===== Avslutning ===== */
+  .gd-close-card{background:#fff;border:1.5px solid #f0dede;border-radius:4mm;padding:6mm 7.5mm;margin-bottom:5mm;}
+  .gd-close-card h3{font-family:var(--font-display);font-weight:700;font-size:19pt;margin-bottom:3mm;}
+  .gd-close-card p{font-size:16.5pt;line-height:1.4;color:var(--g-body);margin:0;}
+  .gd-close-card.green h3{color:var(--g-ink);}
+  .gd-close-card.rose h3{color:var(--g-rose);}
+
+  .toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 20px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.06);position:sticky;top:0;z-index:5;}
+  .toolbar .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--g-ink);text-decoration:none;font-size:15px;font-family:var(--font-body);}
+  .toolbar .brand img{width:32px;height:32px;object-fit:contain;}
+  .toolbar .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+  .tbtn{border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-family:var(--font-body);cursor:pointer;text-decoration:none;font-size:14px;white-space:nowrap;}
+  .tbtn-print{background:var(--g-mint);color:var(--g-ink);box-shadow:0 4px 14px rgba(124,196,163,.5);}
+  .tbtn-back{background:#fff;color:var(--g-ink);border:1.5px solid #eee;}
+  .bk-stage{padding-top:26px;}
+
+  @media print{
+    .toolbar{display:none !important;}
+    #lme-acct{display:none !important;}
+    body{background:#fff;}
+    .bk-stage{padding:0;}
+  }
+  @page{size:A4;margin:0;}
+</style>
+</head>
+<body>
+  <div class="toolbar">
+    <a class="brand" href="/kurs/lme-plattformen"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <div class="actions">
+      <button class="tbtn" id="lme-print-lang" type="button" style="background:#fce9f0;color:#c96a72;">🇬🇧 English</button>
+      <a class="tbtn tbtn-back" href="/kurs/lme-plattformen" data-no="‹ Til kurset" data-en="‹ Back to the course">‹ Til kurset</a>
+      <button class="tbtn tbtn-print" onclick="window.print()" data-no="⬇ Lagre som PDF" data-en="⬇ Save as PDF">⬇ Lagre som PDF</button>
+    </div>
+  </div>
+  <div class="bk-stage">
+
+    <div class="gd-page gd-cover">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="LME fra A til Å — Arbeidsbok" data-en="LME from A to Z — Workbook">LME fra A til Å — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="LME-plattformen fra A til Å" data-en="The LME platform from A to Z">LME-plattformen fra A til Å</div></div>
+      <div class="gd-inner">
+        <div class="gd-logobox"><img src="/images/lme-logo.png" alt="Little Montessori Explorers"></div>
+        <div class="gd-cover-label" data-no="LME-arbeidsbok" data-en="LME workbook">LME-arbeidsbok</div>
+        <h1 class="gd-cover-title" data-no="LME-plattformen fra A til Å" data-en="The LME platform from A to Z">LME-plattformen fra A til Å</h1>
+        <div class="gd-cover-badge" data-no="Arbeidsbok · 11 moduler" data-en="Workbook · 11 modules">Arbeidsbok · 11 moduler</div>
+        <img class="gd-cover-img" src="/images/banner_laer.webp" alt="Mia og Teo utforsker sammen">
+        <div class="gd-cover-card">
+          <p class="sub" data-no="Din arbeidsbok gjennom kurset. Ett kapittel per modul, med det du skal se på, ett spørsmål å tenke over og ett steg du kan ta denne uken." data-en="Your workbook through the course. One chapter per module, with what to look at, one question to think about and one step you can take this week.">Din arbeidsbok gjennom kurset. Ett kapittel per modul, med det du skal se på, ett spørsmål å tenke over og ett steg du kan ta denne uken.</p>
+          <p class="accent" data-no="· Ta det i din egen takt ·" data-en="· Take it at your own pace ·">· Ta det i din egen takt ·</p>
+        </div>
+        <div class="gd-cover-author" data-no="Av Renate Dahl" data-en="By Renate Dahl">Av Renate Dahl</div>
+        <div class="gd-cover-brand">Little Montessori Explorers</div>
+        <div class="gd-cover-domain">lmexplorers.com</div>
+      </div>
+      <div class="gd-foot">— 1 —</div>
+    </div>
+
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="LME fra A til Å — Arbeidsbok" data-en="LME from A to Z — Workbook">LME fra A til Å — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Arbeidsbok · LME-plattformen fra A til Å" data-en="Workbook · The LME platform from A to Z">Arbeidsbok · LME-plattformen fra A til Å</div></div>
+      <div class="gd-inner">
+        <img class="gd-img" src="/images/mia-teo-brev.webp" alt="Mia og Teo holder et brev sammen">
+        <h2 class="gd-pill yellow" data-no="Velkommen" data-en="Welcome">Velkommen</h2>
+        <div class="gd-text" data-no="Denne arbeidsboken speiler kurset LME-plattformen fra A til Å. Kurset viser deg rundt, arbeidsboken lar deg stoppe opp underveis og gjøre det til ditt eget. Du trenger ikke fylle ut alt. Ta én modul om gangen, og kom tilbake når du vil." data-en="This workbook mirrors the course The LME platform from A to Z. The course shows you around, the workbook lets you stop along the way and make it your own. You do not have to fill in everything. Take one module at a time, and come back whenever you like.">Denne arbeidsboken speiler kurset LME-plattformen fra A til Å. Kurset viser deg rundt, arbeidsboken lar deg stoppe opp underveis og gjøre det til ditt eget. Du trenger ikke fylle ut alt. Ta én modul om gangen, og kom tilbake når du vil.</div>
+        <div class="gd-write" style="margin-top:6mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Der jeg står i dag" data-en="Where I am today">Der jeg står i dag</span></div>
+          <p class="gd-q" data-no="Hva har du lyst til å få til med LME de neste tre månedene? Skriv det ned, så du kan lese det igjen når du har kommet dit." data-en="What do you want to achieve with LME over the next three months? Write it down, so you can read it again once you get there.">Hva har du lyst til å få til med LME de neste tre månedene? Skriv det ned, så du kan lese det igjen når du har kommet dit.</p>
+          <div class="gd-box" style="height:95mm;"></div>
+        </div>
+      </div>
+      <div class="gd-foot">— 2 —</div>
+    </div>
+
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="LME fra A til Å — Arbeidsbok" data-en="LME from A to Z — Workbook">LME fra A til Å — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 0 av 10" data-en="Module 0 of 10">Modul 0 av 10</div></div>
+      <div class="gd-inner">
+        <h2 class="gd-pill yellow" data-no="Modul 0: Velkommen til LME-plattformen" data-en="Module 0: Welcome to the LME platform">Modul 0: Velkommen til LME-plattformen</h2>
+        <div class="gd-text" data-no="Her får du oversikten: hva LME er, hvordan delene henger sammen, og hvor du finner deg selv i det hele." data-en="Here you get the overview: what LME is, how the parts fit together, and where you find yourself in it all.">Her får du oversikten: hva LME er, hvordan delene henger sammen, og hvor du finner deg selv i det hele.</div>
+        <div class="gd-card">
+          <h3 class="gd-label green" data-no="Dette ser du på" data-en="What you look at">Dette ser du på</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span data-no="Hva er LME?" data-en="What is LME?">Hva er LME?</span></li>
+            <li><span class="gd-chk"></span><span data-no="Hvordan LME henger sammen" data-en="How LME fits together">Hvordan LME henger sammen</span></li>
+            <li><span class="gd-chk"></span><span data-no="Dashbord og Apper, navigasjonen din" data-en="Dashboard and Apps, your navigation">Dashbord og Apper, navigasjonen din</span></li>
+            <li><span class="gd-chk"></span><span data-no="Min konto og innstillingene dine" data-en="My account and your settings">Min konto og innstillingene dine</span></li>
+          </ul>
+        </div>
+        <div class="gd-write" style="margin-top:5mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Tenk over" data-en="Think it over">Tenk over</span></div>
+          <p class="gd-q" data-no="Hva vil du at LME skal gjøre lettere for deg? Skriv det med dine egne ord." data-en="What do you want LME to make easier for you? Write it in your own words.">Hva vil du at LME skal gjøre lettere for deg? Skriv det med dine egne ord.</p>
+          <div class="gd-box" style="height:48mm;"></div>
+        </div>
+        <div class="gd-write" style="margin-top:4mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Ett steg denne uken" data-en="One step this week">Ett steg denne uken</span></div>
+          <div class="gd-box" style="height:22mm;"></div>
+        </div>
+      </div>
+      <div class="gd-foot">— 3 —</div>
+    </div>
+
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="LME fra A til Å — Arbeidsbok" data-en="LME from A to Z — Workbook">LME fra A til Å — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 1 av 10" data-en="Module 1 of 10">Modul 1 av 10</div></div>
+      <div class="gd-inner">
+        <h2 class="gd-pill green" data-no="Modul 1: LME Montessori" data-en="Module 1: LME Montessori">Modul 1: LME Montessori</h2>
+        <div class="gd-text" data-no="Grunnmuren: kursene, biblioteket, ressursene, malene og de levende samlingene." data-en="The foundation: the courses, the library, the resources, the templates and the live sessions.">Grunnmuren: kursene, biblioteket, ressursene, malene og de levende samlingene.</div>
+        <div class="gd-card">
+          <h3 class="gd-label green" data-no="Dette ser du på" data-en="What you look at">Dette ser du på</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span data-no="Akademiet, kursene dine" data-en="The Academy, your courses">Akademiet, kursene dine</span></li>
+            <li><span class="gd-chk"></span><span data-no="Montessorireisen og mesterklassen" data-en="The Montessori Journey and the masterclass">Montessorireisen og mesterklassen</span></li>
+            <li><span class="gd-chk"></span><span data-no="Biblioteket og Ressurser" data-en="The Library and Resources">Biblioteket og Ressurser</span></li>
+            <li><span class="gd-chk"></span><span data-no="Maler, utskrivbare ark i fast LME-stil" data-en="Templates, printables in the LME style">Maler, utskrivbare ark i fast LME-stil</span></li>
+            <li><span class="gd-chk"></span><span data-no="Live og Opptak" data-en="Live and Recordings">Live og Opptak</span></li>
+            <li><span class="gd-chk"></span><span data-no="Mia &amp; Teo, Lek &amp; Lær, og et lite pusterom" data-en="Mia &amp; Teo, Play &amp; Learn, and a little breathing space">Mia &amp; Teo, Lek &amp; Lær, og et lite pusterom</span></li>
+          </ul>
+        </div>
+        <div class="gd-write" style="margin-top:5mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Tenk over" data-en="Think it over">Tenk over</span></div>
+          <p class="gd-q" data-no="Hvilken av disse trenger du mest akkurat nå, og hvorfor?" data-en="Which of these do you need most right now, and why?">Hvilken av disse trenger du mest akkurat nå, og hvorfor?</p>
+          <div class="gd-box" style="height:48mm;"></div>
+        </div>
+        <div class="gd-write" style="margin-top:4mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Ett steg denne uken" data-en="One step this week">Ett steg denne uken</span></div>
+          <div class="gd-box" style="height:22mm;"></div>
+        </div>
+      </div>
+      <div class="gd-foot">— 4 —</div>
+    </div>
+
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="LME fra A til Å — Arbeidsbok" data-en="LME from A to Z — Workbook">LME fra A til Å — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 2 av 10" data-en="Module 2 of 10">Modul 2 av 10</div></div>
+      <div class="gd-inner">
+        <h2 class="gd-pill rose" data-no="Modul 2: LME Studio" data-en="Module 2: LME Studio">Modul 2: LME Studio</h2>
+        <div class="gd-text" data-no="Verkstedet ditt. Her ligger verktøyene du skaper med, og Nathalie AI følger deg gjennom dem." data-en="Your workshop. This is where the tools you create with live, and Nathalie AI follows you through them.">Verkstedet ditt. Her ligger verktøyene du skaper med, og Nathalie AI følger deg gjennom dem.</div>
+        <div class="gd-card">
+          <h3 class="gd-label green" data-no="Dette ser du på" data-en="What you look at">Dette ser du på</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span data-no="Hva er LME Studio?" data-en="What is LME Studio?">Hva er LME Studio?</span></li>
+            <li><span class="gd-chk"></span><span data-no="Utforsk LME Studio" data-en="Explore LME Studio">Utforsk LME Studio</span></li>
+            <li><span class="gd-chk"></span><span data-no="Nathalie AI følger deg gjennom Studio" data-en="Nathalie AI follows you through Studio">Nathalie AI følger deg gjennom Studio</span></li>
+          </ul>
+        </div>
+        <div class="gd-write" style="margin-top:5mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Tenk over" data-en="Think it over">Tenk over</span></div>
+          <p class="gd-q" data-no="Hva vil du lage først? Ett konkret prosjekt er nok." data-en="What do you want to make first? One concrete project is enough.">Hva vil du lage først? Ett konkret prosjekt er nok.</p>
+          <div class="gd-box" style="height:48mm;"></div>
+        </div>
+        <div class="gd-write" style="margin-top:4mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Ett steg denne uken" data-en="One step this week">Ett steg denne uken</span></div>
+          <div class="gd-box" style="height:22mm;"></div>
+        </div>
+      </div>
+      <div class="gd-foot">— 5 —</div>
+    </div>
+
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="LME fra A til Å — Arbeidsbok" data-en="LME from A to Z — Workbook">LME fra A til Å — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 3 av 10" data-en="Module 3 of 10">Modul 3 av 10</div></div>
+      <div class="gd-inner">
+        <h2 class="gd-pill yellow" data-no="Modul 3: Skap innhold" data-en="Module 3: Create content">Modul 3: Skap innhold</h2>
+        <div class="gd-text" data-no="Fra reels og video til blogg og podkast. Verktøyene som gjør en idé om til noe folk kan se." data-en="From reels and video to blog and podcast. The tools that turn an idea into something people can see.">Fra reels og video til blogg og podkast. Verktøyene som gjør en idé om til noe folk kan se.</div>
+        <div class="gd-card">
+          <h3 class="gd-label green" data-no="Dette ser du på" data-en="What you look at">Dette ser du på</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span data-no="LME Reel, LME YouTube og AI Twin" data-en="LME Reel, LME YouTube and AI Twin">LME Reel, LME YouTube og AI Twin</span></li>
+            <li><span class="gd-chk"></span><span data-no="LME Autopilot, innholdet på autopilot" data-en="LME Autopilot, content on autopilot">LME Autopilot, innholdet på autopilot</span></li>
+            <li><span class="gd-chk"></span><span data-no="Reel Studio og AI Reel Generator" data-en="Reel Studio and AI Reel Generator">Reel Studio og AI Reel Generator</span></li>
+            <li><span class="gd-chk"></span><span data-no="Forklaringsvideo, whiteboard-video med AI" data-en="Explainer video, whiteboard video with AI">Forklaringsvideo, whiteboard-video med AI</span></li>
+            <li><span class="gd-chk"></span><span data-no="Video Studio, din egen karakter i video" data-en="Video Studio, your own character on video">Video Studio, din egen karakter i video</span></li>
+            <li><span class="gd-chk"></span><span data-no="Mia &amp; Teo Studio, Video Creator og Filmgenerator" data-en="Mia &amp; Teo Studio, Video Creator and Film Generator">Mia &amp; Teo Studio, Video Creator og Filmgenerator</span></li>
+            <li><span class="gd-chk"></span><span data-no="Blogg og Podkast" data-en="Blog and Podcast">Blogg og Podkast</span></li>
+            <li><span class="gd-chk"></span><span data-no="Hook Generator" data-en="Hook Generator">Hook Generator</span></li>
+          </ul>
+        </div>
+        <div class="gd-write" style="margin-top:5mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Tenk over" data-en="Think it over">Tenk over</span></div>
+          <p class="gd-q" data-no="Hvor pleier du å stoppe opp når du skal lage innhold? Hvilket verktøy kan ta akkurat det steget for deg?" data-en="Where do you usually get stuck when making content? Which tool can take exactly that step for you?">Hvor pleier du å stoppe opp når du skal lage innhold? Hvilket verktøy kan ta akkurat det steget for deg?</p>
+          <div class="gd-box" style="height:48mm;"></div>
+        </div>
+        <div class="gd-write" style="margin-top:4mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Ett steg denne uken" data-en="One step this week">Ett steg denne uken</span></div>
+          <div class="gd-box" style="height:22mm;"></div>
+        </div>
+      </div>
+      <div class="gd-foot">— 6 —</div>
+    </div>
+
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="LME fra A til Å — Arbeidsbok" data-en="LME from A to Z — Workbook">LME fra A til Å — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 4 av 10" data-en="Module 4 of 10">Modul 4 av 10</div></div>
+      <div class="gd-inner">
+        <h2 class="gd-pill green" data-no="Modul 4: Bygg" data-en="Module 4: Build">Modul 4: Bygg</h2>
+        <div class="gd-text" data-no="Sider, kurs, grupper og bøker. Det du bygger én gang og har for alltid." data-en="Pages, courses, groups and books. What you build once and keep for good.">Sider, kurs, grupper og bøker. Det du bygger én gang og har for alltid.</div>
+        <div class="gd-card">
+          <h3 class="gd-label green" data-no="Dette ser du på" data-en="What you look at">Dette ser du på</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span data-no="LME Builder, dra-og-slipp sidebygger" data-en="LME Builder, drag-and-drop page builder">LME Builder, dra-og-slipp sidebygger</span></li>
+            <li><span class="gd-chk"></span><span data-no="Kursbygger" data-en="Course Builder">Kursbygger</span></li>
+            <li><span class="gd-chk"></span><span data-no="Gruppebygger" data-en="Group Builder">Gruppebygger</span></li>
+            <li><span class="gd-chk"></span><span data-no="Bookly, bøker og arbeidsbøker" data-en="Bookly, books and workbooks">Bookly, bøker og arbeidsbøker</span></li>
+            <li><span class="gd-chk"></span><span data-no="Nettsider og Domener" data-en="Websites and Domains">Nettsider og Domener</span></li>
+          </ul>
+        </div>
+        <div class="gd-write" style="margin-top:5mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Tenk over" data-en="Think it over">Tenk over</span></div>
+          <p class="gd-q" data-no="Hva har du lyst til å bygge, som du har utsatt fordi det virket for stort?" data-en="What do you want to build that you have put off because it seemed too big?">Hva har du lyst til å bygge, som du har utsatt fordi det virket for stort?</p>
+          <div class="gd-box" style="height:48mm;"></div>
+        </div>
+        <div class="gd-write" style="margin-top:4mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Ett steg denne uken" data-en="One step this week">Ett steg denne uken</span></div>
+          <div class="gd-box" style="height:22mm;"></div>
+        </div>
+      </div>
+      <div class="gd-foot">— 7 —</div>
+    </div>
+
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="LME fra A til Å — Arbeidsbok" data-en="LME from A to Z — Workbook">LME fra A til Å — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 5 av 10" data-en="Module 5 of 10">Modul 5 av 10</div></div>
+      <div class="gd-inner">
+        <h2 class="gd-pill rose" data-no="Modul 5: Bli synlig" data-en="Module 5: Get visible">Modul 5: Bli synlig</h2>
+        <div class="gd-text" data-no="Å bli funnet av dem som leter. Synlighet, og enkle måter å spørre publikum på." data-en="Being found by those who are looking. Visibility, and simple ways to ask your audience.">Å bli funnet av dem som leter. Synlighet, og enkle måter å spørre publikum på.</div>
+        <div class="gd-card">
+          <h3 class="gd-label green" data-no="Dette ser du på" data-en="What you look at">Dette ser du på</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span data-no="AI Visibility Engine" data-en="AI Visibility Engine">AI Visibility Engine</span></li>
+            <li><span class="gd-chk"></span><span data-no="Forms, Surveys og Quizzes" data-en="Forms, Surveys and Quizzes">Forms, Surveys og Quizzes</span></li>
+          </ul>
+        </div>
+        <div class="gd-write" style="margin-top:5mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Tenk over" data-en="Think it over">Tenk over</span></div>
+          <p class="gd-q" data-no="Hva vil du at folk skal finne når de søker etter det du kan?" data-en="What do you want people to find when they search for what you know?">Hva vil du at folk skal finne når de søker etter det du kan?</p>
+          <div class="gd-box" style="height:48mm;"></div>
+        </div>
+        <div class="gd-write" style="margin-top:4mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Ett steg denne uken" data-en="One step this week">Ett steg denne uken</span></div>
+          <div class="gd-box" style="height:22mm;"></div>
+        </div>
+      </div>
+      <div class="gd-foot">— 8 —</div>
+    </div>
+
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="LME fra A til Å — Arbeidsbok" data-en="LME from A to Z — Workbook">LME fra A til Å — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 6 av 10" data-en="Module 6 of 10">Modul 6 av 10</div></div>
+      <div class="gd-inner">
+        <h2 class="gd-pill yellow" data-no="Modul 6: Selg og voks" data-en="Module 6: Sell and grow">Modul 6: Selg og voks</h2>
+        <div class="gd-text" data-no="Produkter, betaling, e-post og tallene som viser hva som virker." data-en="Products, payment, email and the numbers that show what works.">Produkter, betaling, e-post og tallene som viser hva som virker.</div>
+        <div class="gd-card">
+          <h3 class="gd-label green" data-no="Dette ser du på" data-en="What you look at">Dette ser du på</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span data-no="Produkter og Payments" data-en="Products and Payments">Produkter og Payments</span></li>
+            <li><span class="gd-chk"></span><span data-no="Sales pipeline og Analyse" data-en="Sales pipeline and Analytics">Sales pipeline og Analyse</span></li>
+            <li><span class="gd-chk"></span><span data-no="Email og Automations" data-en="Email and Automations">Email og Automations</span></li>
+            <li><span class="gd-chk"></span><span data-no="Webinars og Forretningsprofil" data-en="Webinars and Business profile">Webinars og Forretningsprofil</span></li>
+            <li><span class="gd-chk"></span><span data-no="Kjøp kreditt, Inntektsgenerator og Sparemål" data-en="Buy credit, Income generator and Savings goal">Kjøp kreditt, Inntektsgenerator og Sparemål</span></li>
+          </ul>
+        </div>
+        <div class="gd-write" style="margin-top:5mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Tenk over" data-en="Think it over">Tenk over</span></div>
+          <p class="gd-q" data-no="Hva er det neste du vil selge, og hva mangler før det kan ligge ute?" data-en="What is the next thing you want to sell, and what is missing before it can go live?">Hva er det neste du vil selge, og hva mangler før det kan ligge ute?</p>
+          <div class="gd-box" style="height:48mm;"></div>
+        </div>
+        <div class="gd-write" style="margin-top:4mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Ett steg denne uken" data-en="One step this week">Ett steg denne uken</span></div>
+          <div class="gd-box" style="height:22mm;"></div>
+        </div>
+      </div>
+      <div class="gd-foot">— 9 —</div>
+    </div>
+
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="LME fra A til Å — Arbeidsbok" data-en="LME from A to Z — Workbook">LME fra A til Å — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 7 av 10" data-en="Module 7 of 10">Modul 7 av 10</div></div>
+      <div class="gd-inner">
+        <h2 class="gd-pill green" data-no="Modul 7: Nathalie AI" data-en="Module 7: Nathalie AI">Modul 7: Nathalie AI</h2>
+        <div class="gd-text" data-no="Hjelperen din, døgnet rundt. Hun kjenner plattformen og kan ta deg videre når du står fast." data-en="Your helper, around the clock. She knows the platform and can take you further when you get stuck.">Hjelperen din, døgnet rundt. Hun kjenner plattformen og kan ta deg videre når du står fast.</div>
+        <div class="gd-card">
+          <h3 class="gd-label green" data-no="Dette ser du på" data-en="What you look at">Dette ser du på</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span data-no="Spør Nathalie AI" data-en="Ask Nathalie AI">Spør Nathalie AI</span></li>
+            <li><span class="gd-chk"></span><span data-no="Hva Nathalie kan hjelpe deg med" data-en="What Nathalie can help you with">Hva Nathalie kan hjelpe deg med</span></li>
+          </ul>
+        </div>
+        <div class="gd-write" style="margin-top:5mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Tenk over" data-en="Think it over">Tenk over</span></div>
+          <p class="gd-q" data-no="Skriv ett spørsmål du vil stille Nathalie i dag." data-en="Write one question you want to ask Nathalie today.">Skriv ett spørsmål du vil stille Nathalie i dag.</p>
+          <div class="gd-box" style="height:48mm;"></div>
+        </div>
+        <div class="gd-write" style="margin-top:4mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Ett steg denne uken" data-en="One step this week">Ett steg denne uken</span></div>
+          <div class="gd-box" style="height:22mm;"></div>
+        </div>
+      </div>
+      <div class="gd-foot">— 10 —</div>
+    </div>
+
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="LME fra A til Å — Arbeidsbok" data-en="LME from A to Z — Workbook">LME fra A til Å — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 8 av 10" data-en="Module 8 of 10">Modul 8 av 10</div></div>
+      <div class="gd-inner">
+        <h2 class="gd-pill rose" data-no="Modul 8: LME Community" data-en="Module 8: LME Community">Modul 8: LME Community</h2>
+        <div class="gd-text" data-no="Menneskene. Inner Circle, gruppene, partnerne og seirene som deles." data-en="The people. The Inner Circle, the groups, the partners and the wins that get shared.">Menneskene. Inner Circle, gruppene, partnerne og seirene som deles.</div>
+        <div class="gd-card">
+          <h3 class="gd-label green" data-no="Dette ser du på" data-en="What you look at">Dette ser du på</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span data-no="Inner Circle og Grupper" data-en="Inner Circle and Groups">Inner Circle og Grupper</span></li>
+            <li><span class="gd-chk"></span><span data-no="Medlemsoversikt og Pedagog-partnere" data-en="Member overview and Educator partners">Medlemsoversikt og Pedagog-partnere</span></li>
+            <li><span class="gd-chk"></span><span data-no="LME Perks" data-en="LME Perks">LME Perks</span></li>
+            <li><span class="gd-chk"></span><span data-no="Del din seier, og Favoritter" data-en="Share your win, and Favourites">Del din seier, og Favoritter</span></li>
+          </ul>
+        </div>
+        <div class="gd-write" style="margin-top:5mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Tenk over" data-en="Think it over">Tenk over</span></div>
+          <p class="gd-q" data-no="Hva vil du ha hjelp til fra andre, og hva kan du selv bidra med?" data-en="What do you want help with from others, and what can you contribute yourself?">Hva vil du ha hjelp til fra andre, og hva kan du selv bidra med?</p>
+          <div class="gd-box" style="height:48mm;"></div>
+        </div>
+        <div class="gd-write" style="margin-top:4mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Ett steg denne uken" data-en="One step this week">Ett steg denne uken</span></div>
+          <div class="gd-box" style="height:22mm;"></div>
+        </div>
+      </div>
+      <div class="gd-foot">— 11 —</div>
+    </div>
+
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="LME fra A til Å — Arbeidsbok" data-en="LME from A to Z — Workbook">LME fra A til Å — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 9 av 10" data-en="Module 9 of 10">Modul 9 av 10</div></div>
+      <div class="gd-inner">
+        <h2 class="gd-pill yellow" data-no="Modul 9: LME Shop" data-en="Module 9: LME Shop">Modul 9: LME Shop</h2>
+        <div class="gd-text" data-no="Butikken. Bøker og digitale ressurser, og plassen der dine egne produkter kan ligge." data-en="The shop. Books and digital resources, and the place your own products can live.">Butikken. Bøker og digitale ressurser, og plassen der dine egne produkter kan ligge.</div>
+        <div class="gd-card">
+          <h3 class="gd-label green" data-no="Dette ser du på" data-en="What you look at">Dette ser du på</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span data-no="Butikken, bøker og digitale ressurser" data-en="The shop, books and digital resources">Butikken, bøker og digitale ressurser</span></li>
+            <li><span class="gd-chk"></span><span data-no="Dine egne produkter i butikken" data-en="Your own products in the shop">Dine egne produkter i butikken</span></li>
+          </ul>
+        </div>
+        <div class="gd-write" style="margin-top:5mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Tenk over" data-en="Think it over">Tenk over</span></div>
+          <p class="gd-q" data-no="Hvilket av dine produkter hører hjemme i butikken først?" data-en="Which of your products belongs in the shop first?">Hvilket av dine produkter hører hjemme i butikken først?</p>
+          <div class="gd-box" style="height:48mm;"></div>
+        </div>
+        <div class="gd-write" style="margin-top:4mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Ett steg denne uken" data-en="One step this week">Ett steg denne uken</span></div>
+          <div class="gd-box" style="height:22mm;"></div>
+        </div>
+      </div>
+      <div class="gd-foot">— 12 —</div>
+    </div>
+
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="LME fra A til Å — Arbeidsbok" data-en="LME from A to Z — Workbook">LME fra A til Å — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Modul 10 av 10" data-en="Module 10 of 10">Modul 10 av 10</div></div>
+      <div class="gd-inner">
+        <h2 class="gd-pill green" data-no="Modul 10: Hjelp og støtte" data-en="Module 10: Help and support">Modul 10: Hjelp og støtte</h2>
+        <div class="gd-text" data-no="Veien videre når noe stopper opp. Du skal aldri sitte fast alene." data-en="The way forward when something stops. You should never be stuck on your own.">Veien videre når noe stopper opp. Du skal aldri sitte fast alene.</div>
+        <div class="gd-card">
+          <h3 class="gd-label green" data-no="Dette ser du på" data-en="What you look at">Dette ser du på</h3>
+          <ul class="gd-ul">
+            <li><span class="gd-chk"></span><span data-no="Hjelpesenteret" data-en="The help centre">Hjelpesenteret</span></li>
+            <li><span class="gd-chk"></span><span data-no="Book en samtale" data-en="Book a call">Book en samtale</span></li>
+            <li><span class="gd-chk"></span><span data-no="FAQ, svar på de vanligste spørsmålene" data-en="FAQ, answers to the most common questions">FAQ, svar på de vanligste spørsmålene</span></li>
+          </ul>
+        </div>
+        <div class="gd-write" style="margin-top:5mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Tenk over" data-en="Think it over">Tenk over</span></div>
+          <p class="gd-q" data-no="Hva pleier du å gjøre når du står fast? Hvem eller hva vil du spørre neste gang?" data-en="What do you usually do when you get stuck? Who or what will you ask next time?">Hva pleier du å gjøre når du står fast? Hvem eller hva vil du spørre neste gang?</p>
+          <div class="gd-box" style="height:48mm;"></div>
+        </div>
+        <div class="gd-write" style="margin-top:4mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Ett steg denne uken" data-en="One step this week">Ett steg denne uken</span></div>
+          <div class="gd-box" style="height:22mm;"></div>
+        </div>
+      </div>
+      <div class="gd-foot">— 13 —</div>
+    </div>
+
+    <div class="gd-page">
+      <div class="gd-edge gd-edge-l"><span>Little Montessori Explorers</span></div>
+      <div class="gd-edge gd-edge-r"><span data-no="LME fra A til Å — Arbeidsbok" data-en="LME from A to Z — Workbook">LME fra A til Å — Arbeidsbok</span></div>
+      <div class="gd-head"><div class="l1">Little Montessori Explorers</div><div class="l2" data-no="Arbeidsbok · LME-plattformen fra A til Å" data-en="Workbook · The LME platform from A to Z">Arbeidsbok · LME-plattformen fra A til Å</div></div>
+      <div class="gd-inner">
+        <h2 class="gd-pill rose" data-no="Du er gjennom" data-en="You made it through">Du er gjennom</h2>
+        <div class="gd-text" data-no="Nå kjenner du hele plattformen: grunnmuren, verkstedet, fellesskapet og butikken. Bla tilbake til side 2 og les hva du skrev da du begynte." data-en="Now you know the whole platform: the foundation, the workshop, the community and the shop. Turn back to page 2 and read what you wrote when you started.">Nå kjenner du hele plattformen: grunnmuren, verkstedet, fellesskapet og butikken. Bla tilbake til side 2 og les hva du skrev da du begynte.</div>
+        <div class="gd-write" style="margin-top:6mm;">
+          <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Det jeg tar med meg videre" data-en="What I take with me">Det jeg tar med meg videre</span></div>
+          <p class="gd-q" data-no="Hva er de tre tingene du vil bruke først, og når begynner du?" data-en="What are the three things you want to use first, and when do you start?">Hva er de tre tingene du vil bruke først, og når begynner du?</p>
+          <div class="gd-box" style="height:80mm;"></div>
+        </div>
+        <div class="gd-card cream" style="margin-top:6mm;">
+          <p class="gd-affirm" data-no="Du trenger ikke bruke alt. Du trenger bare å begynne ett sted, og komme tilbake." data-en="You do not have to use everything. You only need to start somewhere, and come back.">Du trenger ikke bruke alt. Du trenger bare å begynne ett sted, og komme tilbake.</p>
+        </div>
+      </div>
+      <div class="gd-foot">— 14 —</div>
+    </div>
+
+
+
+  </div>
+<script>
+(function(){
+  function apply(lang){
+    window.__lmeLang=lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function(el){
+      el.innerHTML = (lang==='en') ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    document.documentElement.lang=lang;
+    var b=document.getElementById('lme-print-lang');
+    if(b) b.textContent = (lang==='en') ? '🇳🇴 Norsk' : '🇬🇧 English';
+    try{localStorage.setItem('lme_lang',lang);}catch(e){}
+  }
+  var saved='no';
+  try{
+    var qp=new URLSearchParams(location.search).get('lang');
+    if(qp==='en'||qp==='no'){saved=qp;try{localStorage.setItem('lme_lang',qp);}catch(e2){}}
+    else saved=localStorage.getItem('lme_lang')||'no';
+  }catch(e){}
+  var btn=document.getElementById('lme-print-lang');
+  if(btn) btn.addEventListener('click',function(){apply(window.__lmeLang==='en'?'no':'en');});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){apply(saved);});
+  else apply(saved);
+})();
+</script>
+</body>
+</html>
