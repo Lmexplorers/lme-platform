@@ -537,6 +537,27 @@
     document.body.appendChild(bar);
   }
 
+  // Knappen (og panelet, om det alt er åpnet én gang) lages med teksten på
+  // det språket siden viste DA widgeten lastet inn, og oppdaterte seg aldri
+  // igjen. Sider som bytter språk med en egen knapp (samme data-no/data-en-
+  // mønster som resten av plattformen) setter alltid document.documentElement
+  // lang på nytt ved hvert bytte, så en observatør på det attributtet fanger
+  // opp bytte uansett hvilken side widgeten kjører på, uten at hver side må
+  // varsle denne filen selv.
+  function refreshTexts() {
+    if (window.__lmeVisFab) {
+      window.__lmeVisFab.innerHTML = "✨ <span>" + T("Gjør synlig", "Make visible") + "</span>";
+    }
+    if (overlay) {
+      var h3 = overlay.querySelector(".lme-vis-hd h3");
+      if (h3) {
+        h3.innerHTML = T("Gjør synlig", "Make it visible") +
+          '<span class="sub">' + T("Klar til deling: Instagram, Facebook, Pinterest, TikTok og mer", "Ready to share: Instagram, Facebook, Pinterest, TikTok and more") + '</span>';
+      }
+      if (goBtn) goBtn.innerHTML = "✨ " + T("Lag ferdige delinger", "Create ready-to-share posts");
+    }
+  }
+
   function mount() {
     injectStyles();
     mountLegalFooter();
@@ -554,6 +575,9 @@
       window.__lmeVisFab = fab;
     }
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+    try {
+      new MutationObserver(refreshTexts).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+    } catch (e) {}
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount);
