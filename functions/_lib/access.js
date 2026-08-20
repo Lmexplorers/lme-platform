@@ -90,7 +90,7 @@ export function planLimits(sub) {
   return DEFAULT_LIMITS;
 }
 
-const OWNER_EMAILS = [
+export const OWNER_EMAILS = [
   "renate@lmexplorers.com", "hei@lmexplorers.com", "hello@lmexplorers.com",
   "support@lmexplorers.com", "renateshobby@hotmail.com",
 ];

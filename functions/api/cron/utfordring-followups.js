@@ -15,6 +15,7 @@
  */
 
 import { sendUtfordringMail } from "../../_lib/utfordring-mail.js";
+import { OWNER_EMAILS } from "../../_lib/access.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -88,22 +89,26 @@ export async function onRequest(context) {
 
   // Eierens eget testmedlemskap skal alltid stå i norsk (plattformens
   // standardspråk), uansett hvilket språk siden tilfeldigvis viste sist hun
-  // testet "Se utfordringen"-knappen. Før velkomstmailen ble idempotent
-  // (functions/api/utfordring-preview.js) kunne gjentatte testklikk med
-  // ulikt språk skrive feil lang til utf_member-posten hennes, som igjen ga
-  // en enkelt engelsk dagsmail midt i en ellers norsk serie. Rettes
-  // automatisk her hver kjøring, ingen manuell handling nødvendig.
-  const OWNER_EMAIL = "renateshobby@hotmail.com";
-  try {
-    const ownerRaw = await env.BUILDER_KV.get("utf_member:" + OWNER_EMAIL);
-    if (ownerRaw) {
-      const ownerMember = JSON.parse(ownerRaw);
-      if (ownerMember.lang !== "no") {
-        ownerMember.lang = "no";
-        await env.BUILDER_KV.put("utf_member:" + OWNER_EMAIL, JSON.stringify(ownerMember));
+  // testet "Se utfordringen"-knappen, og uansett hvilken av de fem
+  // eier-adressene (OWNER_EMAILS i access.js) testmedlemskapet ble
+  // registrert under den gangen (før utfordring-preview.js begynte å
+  // kanonisere til én fast adresse). Før velkomstmailen ble idempotent
+  // kunne gjentatte testklikk med ulikt språk skrive feil lang til
+  // utf_member-posten, som igjen ga en engelsk dagsmail midt i en ellers
+  // norsk serie. Rettes automatisk her hver kjøring for ALLE eier-
+  // adressene, ingen manuell handling nødvendig.
+  for (const ownerEmail of OWNER_EMAILS) {
+    try {
+      const ownerRaw = await env.BUILDER_KV.get("utf_member:" + ownerEmail);
+      if (ownerRaw) {
+        const ownerMember = JSON.parse(ownerRaw);
+        if (ownerMember.lang !== "no") {
+          ownerMember.lang = "no";
+          await env.BUILDER_KV.put("utf_member:" + ownerEmail, JSON.stringify(ownerMember));
+        }
       }
-    }
-  } catch (eOwner) {}
+    } catch (eOwner) {}
+  }
 
   // Medlemmets lagrede språk (utf_member:<e-post>) er alltid fasit, ikke det
   // som sto i køen da den enkelte dagen ble lagt inn. Før velkomstmailen ble
