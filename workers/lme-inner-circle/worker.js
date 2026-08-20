@@ -37,18 +37,26 @@ const PLANS = {
   regular: { tier:'regular', navn:'Medlem', belop:90000,  belopUsd:9700 },
   pro:     { tier:'pro',     navn:'Pro',    belop:119700, belopUsd:12700 },
   vip:     { tier:'vip',     navn:'VIP',    belop:199700, belopUsd:21300 },
-  // Grunnleggerpris for kjøpere av 10 000-visninger-utfordringen: full
-  // Inner Circle Pro-tilgang (fellesskap, moduler osv.) til en lavere,
-  // låst pris. Stripe endrer aldri prisen på et løpende abonnement av seg
-  // selv, så denne prisen følger kjøperen så lenge abonnementet er aktivt,
-  // selv om Pro sin ordinære pris endres senere. utfordring:true trigger
-  // innmelding i selve utfordringen (dag 0-e-post, 30-dagers kø,
-  // fellesskap) via api/utfordring-pro-enroll.js i hovedrepoet.
-  // beløpUsd: cent, for engelskspråklige kjøpere (samme mønster som den
-  // gamle frittstående utfordring-planen: NOK/USD etter språk). $97 er satt
-  // direkte etter Renates eget FEA-medlemskap (samme normalpris hun selv
-  // betaler der), 899 kr er nærmeste avrundede NOK-motstykke.
+  // Historisk: grunnleggerpris som bundlet full Inner Circle Pro-tilgang inn
+  // i selve utfordring-kjøpet (abonnement). Renate ba 20. august 2026 om å
+  // skille utfordringen fra Inner Circle helt (aldri automatisk binding),
+  // og bekreftet at ingen ekte kunder noensinne kjøpte denne planen, kun
+  // hennes egne tester. Beholdes urørt (ikke slettet) i tilfelle den
+  // trengs igjen, men ingen knapp på siden peker hit lenger, se
+  // utfordringEngang under for den nye, uavhengige engangsplanen.
   proUtfordring: { tier:'pro', navn:'Pro (grunnleggermedlem, 10 000-visninger-utfordringen)', belop:89900, belopUsd:9700, utfordring:true },
+  // Selve utfordringen, som et rent engangskjøp, HELT uavhengig av Inner
+  // Circle (ingen tier, ingen abonnement, ingen automatisk Pro-tilgang).
+  // mode:'payment' (ikke 'subscription') i checkout/create under. Ingen
+  // tier her er signalet webhooken under bruker for å hoppe over
+  // Inner Circle-medlemskap helt og bare melde kjøperen inn i selve
+  // utfordringen (dag 0-e-post, 30-dagers kø, fellesskap) via
+  // api/utfordring-pro-enroll.js i hovedrepoet. Prisen leses også av
+  // GET /priser/utfordring under, som salgssiden henter live fra, så
+  // vist pris og faktisk trukket beløp aldri kan gli fra hverandre.
+  // Endre prisen ved å redigere tallene under og pushe, ingen andre
+  // steder i koden trenger å endres.
+  utfordringEngang: { navn:'10 000-visninger-utfordringen', belop:49700, belopUsd:4700, mode:'payment', utfordring:true },
 };
 
 // Betalinger lagres i øre i payments-tabellen, og provisjon regnes av samme
@@ -1120,30 +1128,39 @@ export default {
         // betaler i $ (Renates faste regel), mens norske betaler i kroner.
         const lang = body.lang === 'en' ? 'en' : 'no';
         const useUsd = lang === 'en' && plan.belopUsd;
+        // utfordringEngang har mode:'payment' (rent engangskjøp, ingen
+        // abonnement, ingen Inner Circle-tier). Alt annet er fortsatt et
+        // løpende abonnement som før.
+        const erEngang = plan.mode === 'payment';
         const params = {
-          'mode': 'subscription',
+          'mode': erEngang ? 'payment' : 'subscription',
           'line_items[0][quantity]': '1',
           'line_items[0][price_data][currency]': useUsd ? 'usd' : 'nok',
           'line_items[0][price_data][unit_amount]': String(useUsd ? plan.belopUsd : plan.belop),
-          'line_items[0][price_data][recurring][interval]': 'month',
-          'line_items[0][price_data][product_data][name]': 'LME Inner Circle – '+plan.navn,
-          'subscription_data[metadata][tier]': plan.tier,
+          'line_items[0][price_data][product_data][name]': erEngang ? plan.navn : ('LME Inner Circle – '+plan.navn),
           'allow_promotion_codes': 'true',
-          'success_url': url.origin+'/takk?session_id={CHECKOUT_SESSION_ID}',
-          // Utfordringen selges fra en egen side på lmexplorers.com, ikke
-          // fra denne workerens /medlemskap, så avbrutt betaling skal sende
-          // kunden tilbake dit, ikke til Inner Circle-salgssiden.
+          // Utfordringen selges fra en egen side på lmexplorers.com, ikke fra
+          // denne workerens egne /takk og /medlemskap, så både vellykket og
+          // avbrutt betaling skal sende kunden dit, ikke til Inner Circle.
+          'success_url': plan.utfordring
+            ? 'https://lmexplorers.com/utfordringen-takk?session_id={CHECKOUT_SESSION_ID}'
+            : url.origin+'/takk?session_id={CHECKOUT_SESSION_ID}',
           'cancel_url': plan.utfordring ? 'https://lmexplorers.com/utfordringen' : url.origin+'/medlemskap',
-          'metadata[tier]': plan.tier,
           // plan-nøkkelen (ikke bare tier) lagres også, siden flere planer
           // kan dele samme tier (proUtfordring har tier:'pro', men annen
-          // pris/utfordring-flagg enn den vanlige pro-planen).
+          // pris/utfordring-flagg enn den vanlige pro-planen), og
+          // utfordringEngang har ingen tier i det hele tatt.
           'metadata[plan]': body.plan,
         };
+        if(!erEngang){
+          params['line_items[0][price_data][recurring][interval]'] = 'month';
+          params['subscription_data[metadata][tier]'] = plan.tier;
+        }
+        if(plan.tier) params['metadata[tier]'] = plan.tier;
         if(epost && epost.includes('@')) params['customer_email'] = epost;
         if(affKode){
           params['metadata[affiliate_code]'] = affKode;
-          params['subscription_data[metadata][affiliate_code]'] = affKode;
+          if(!erEngang) params['subscription_data[metadata][affiliate_code]'] = affKode;
         }
         if(plan.utfordring){
           params['metadata[utfordring]'] = '1';
@@ -1151,6 +1168,17 @@ export default {
         }
         const session = await stripeFetch(env, 'checkout/sessions', params);
         return json({ url: session.url });
+      }
+
+      // ===== PRISER: LEVENDE PRISVISNING (ingen auth, offentlig) =====
+      // Salgssiden på lmexplorers.com henter prisen herfra i stedet for å ha
+      // den hardkodet i HTML-en, slik at vist pris og faktisk trukket beløp
+      // i Stripe aldri kan gli fra hverandre. Endre prisen i PLANS øverst i
+      // filen (utfordringEngang), push, og både visning og betaling følger
+      // automatisk med, ingen andre steder å endre.
+      if(path === '/priser/utfordring' && request.method === 'GET'){
+        const p = PLANS.utfordringEngang;
+        return json({ nok: Math.round(p.belop/100), usd: Math.round(p.belopUsd/100) });
       }
 
       // ===== STRIPE WEBHOOK: BETALINGER GIR TILGANG =====
@@ -1176,21 +1204,29 @@ export default {
           // Checkout-økten uansett, kun etterbehandlingen under ville avvike).
           const plan = PLANS[obj.metadata?.plan] || Object.values(PLANS).find(p=>p.tier===tier);
           if(!epost || !plan) return json({ok:true, ignorert:'mangler e-post eller plan'});
+          const erEngangSalg = plan.mode === 'payment';
           const belop = tilOre(obj.amount_total, obj.currency);
           const affKode = saniterKode(obj.metadata?.affiliate_code);
-          // Opprett eller oppdater brukeren og gi riktig tilgang
-          const finnes = await env.DB.prepare(`SELECT id, referred_by FROM users WHERE email=?`).bind(epost).first();
-          if(finnes){
-            await env.DB.prepare(`UPDATE users SET tier=?, stripe_customer_id=?, stripe_subscription_id=?, referred_by=COALESCE(referred_by,?) WHERE id=?`)
-              .bind(tier, obj.customer||null, obj.subscription||null, affKode||null, finnes.id).run();
-          } else {
-            await env.DB.prepare(`INSERT INTO users (email, display_name, tier, stripe_customer_id, stripe_subscription_id, referred_by) VALUES (?,?,?,?,?,?)`)
-              .bind(epost, epost.split('@')[0], tier, obj.customer||null, obj.subscription||null, affKode||null).run();
+          // Rent utfordring-engangskjøp (utfordringEngang) har ingen tier og
+          // skal ALDRI gi Inner Circle-tilgang, verken ny eller oppdatert, se
+          // Renates instruks 20. august 2026 om at de to aldri skal blandes
+          // teknisk. Hopper derfor helt over users-tabellen (og dermed
+          // tier-tilgangen) for denne planen, bare selve utfordring-
+          // innmeldingen under kjører.
+          if(plan.tier){
+            const finnes = await env.DB.prepare(`SELECT id, referred_by FROM users WHERE email=?`).bind(epost).first();
+            if(finnes){
+              await env.DB.prepare(`UPDATE users SET tier=?, stripe_customer_id=?, stripe_subscription_id=?, referred_by=COALESCE(referred_by,?) WHERE id=?`)
+                .bind(tier, obj.customer||null, obj.subscription||null, affKode||null, finnes.id).run();
+            } else {
+              await env.DB.prepare(`INSERT INTO users (email, display_name, tier, stripe_customer_id, stripe_subscription_id, referred_by) VALUES (?,?,?,?,?,?)`)
+                .bind(epost, epost.split('@')[0], tier, obj.customer||null, obj.subscription||null, affKode||null).run();
+            }
           }
           // Loggfør betalingen. 0 kr skal ikke forekomme (ingen prøveperiode),
           // men logges som 'trial' hvis Stripe likevel sender det.
           await env.DB.prepare(`INSERT INTO payments (user_email, stripe_customer_id, stripe_subscription_id, tier, amount, status, billing_period, affiliate_code, created_at, paid_at) VALUES (?,?,?,?,?,?,?,?,?,?)`)
-            .bind(epost, obj.customer||null, obj.subscription||null, tier, belop, belop>0?'paid':'trial', 'month', affKode||null, naa, belop>0?naa:null).run();
+            .bind(epost, obj.customer||null, obj.subscription||null, tier, belop, belop>0?'paid':'trial', erEngangSalg ? 'engang' : 'month', affKode||null, naa, belop>0?naa:null).run();
           // Provisjon med en gang, siden medlemmer betaler fra dag én
           if(belop > 0 && affKode) await trackAffiliateSale(env, affKode, epost, tier, belop);
           if(plan.utfordring){

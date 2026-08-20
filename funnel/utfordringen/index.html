@@ -173,8 +173,8 @@
   <div class="hero">
     <h1 data-no="Jeg vil ha deg med i 10 000-visninger-utfordringen" data-en="I want you in the 10,000 Views Challenge" data-edit="ch-h1">Jeg vil ha deg med i 10 000-visninger-utfordringen</h1>
     <p class="sub" data-no="Fem minutter om dagen i 30 dager. Jeg viser deg hvordan du finner nisjen din, planlegger innhold med AI og lager noe som faktisk blir sett." data-en="Five minutes a day for 30 days. I'll show you how to find your niche, plan content with AI and create something that actually gets seen." data-edit="ch-sub">Fem minutter om dagen i 30 dager. Jeg viser deg hvordan du finner nisjen din, planlegger innhold med AI og lager noe som faktisk blir sett.</p>
-    <a href="#meld-pa" class="btn-cta" data-no="Bli med for 899 kr/mnd →" data-en="Join for $97/mo →" data-edit="ch-cta1">Bli med for 899 kr/mnd →</a>
-    <p class="trust" data-no="899 kr per måned, din pris som grunnleggermedlem for alltid. Avslutt når som helst." data-en="$97 per month, your founding-member price forever. Cancel anytime." data-edit="ch-trust">899 kr per måned, din pris som grunnleggermedlem for alltid. Avslutt når som helst.</p>
+    <a href="#meld-pa" class="btn-cta" id="heroCta" data-no="Bli med på 30-dagersutfordringen – 497 kr én gang →" data-en="Join the 30-Day Challenge — $47 one-time →" data-edit="ch-cta1">Bli med på 30-dagersutfordringen – 497 kr én gang →</a>
+    <p class="trust" data-no="Én betaling. Du får hele 30-dagersplanen, arbeidsboken og tilgang til challenge-fellesskapet." data-en="One payment. Get the complete 30-day plan, workbook and challenge community." data-edit="ch-trust">Én betaling. Du får hele 30-dagersplanen, arbeidsboken og tilgang til challenge-fellesskapet.</p>
   </div>
 
   <!-- Slik fungerer det -->
@@ -193,12 +193,16 @@
   <div class="card bonus">
     <h2 data-no="Med i utfordringen får du også" data-en="Along with the challenge, you also get" data-edit="ch-bonus-title">Med i utfordringen får du også</h2>
     <ul class="bullets">
-      <li><span class="tick">✓</span><span data-no="Full tilgang til Inner Circle Pro" data-en="Full access to Inner Circle Pro">Full tilgang til Inner Circle Pro</span></li>
-      <li><span class="tick">✓</span><span data-no="Din pris som grunnleggermedlem, låst for alltid, selv om Pro sin ordinære pris stiger senere" data-en="Your founding-member price, locked in forever, even if Pro's regular price rises later">Din pris som grunnleggermedlem, låst for alltid, selv om Pro sin ordinære pris stiger senere</span></li>
-      <li><span class="tick">✓</span><span data-no="En ny oppgave rett i innboksen din, gjennom hele de 30 dagene" data-en="A new task straight to your inbox, throughout all 30 days">En ny oppgave rett i innboksen din, gjennom hele de 30 dagene</span></li>
-      <li><span class="tick">✓</span><span data-no="Praktiske tips du kan bruke uansett hvilke verktøy du har fra før" data-en="Practical tips you can use no matter which tools you already have">Praktiske tips du kan bruke uansett hvilke verktøy du har fra før</span></li>
-      <li><span class="tick">✓</span><span data-no="Fellesskapet, der du møter de andre som er med i utfordringen" data-en="The community, where you meet everyone else doing the challenge">Fellesskapet, der du møter de andre som er med i utfordringen</span></li>
+      <li><span class="tick">✓</span><span data-no="Alle 30 daglige leksjonene, én ny oppgave hver dag" data-en="All 30 daily lessons, one new task every day">Alle 30 daglige leksjonene, én ny oppgave hver dag</span></li>
+      <li><span class="tick">✓</span><span data-no="Arbeidsboken, som du kan skrive ut og fylle ut mens du går gjennom utfordringen" data-en="The workbook, printable to fill in as you go through the challenge">Arbeidsboken, som du kan skrive ut og fylle ut mens du går gjennom utfordringen</span></li>
+      <li><span class="tick">✓</span><span data-no="Challenge-fellesskapet, der du møter de andre som er med" data-en="The challenge community, where you meet everyone else doing it">Challenge-fellesskapet, der du møter de andre som er med</span></li>
+      <li><span class="tick">✓</span><span data-no="Poeng og ledertavle, så du ser fremgangen din" data-en="Points and a leaderboard, so you can see your progress">Poeng og ledertavle, så du ser fremgangen din</span></li>
+      <li><span class="tick">✓</span><span data-no="Ferdige prompter du bruker med din egen Claude- eller ChatGPT-konto" data-en="Ready-to-use prompts for your own Claude or ChatGPT account">Ferdige prompter du bruker med din egen Claude- eller ChatGPT-konto</span></li>
+      <li><span class="tick">✓</span><span data-no="Hjelp til å finne nisjen, målgruppen og en innholdsplan som funker" data-en="Help finding your niche, your audience and a content plan that works">Hjelp til å finne nisjen, målgruppen og en innholdsplan som funker</span></li>
+      <li><span class="tick">✓</span><span data-no="Øvelser på hooks, bildetekster og CTA-er som gjør at innholdet ditt faktisk blir sett" data-en="Practice with hooks, captions and CTAs that get your content actually seen">Øvelser på hooks, bildetekster og CTA-er som gjør at innholdet ditt faktisk blir sett</span></li>
+      <li><span class="tick">✓</span><span data-no="Opplæring i å planlegge innhold med AI, steg for steg" data-en="Training in planning content with AI, step by step">Opplæring i å planlegge innhold med AI, steg for steg</span></li>
     </ul>
+    <p class="lede" style="margin-top:14px;font-size:13px;" data-no="AI-generering av bilder og video er ikke inkludert. Genereringskreditter kan kjøpes separat ved behov." data-en="AI image and video generation is not included. Optional generation credits can be purchased separately.">AI-generering av bilder og video er ikke inkludert. Genereringskreditter kan kjøpes separat ved behov.</p>
   </div>
 
   <!-- Kjop -->
@@ -207,13 +211,13 @@
 
     <div id="buyNormal">
       <div class="price-row">
-        <span class="price-now" data-no="899 kr" data-en="$97" data-edit="ch-price-now">899 kr</span>
-        <span class="price-cur" data-no="/ måned, grunnleggerpris" data-en="/ month, founding-member price" data-edit="ch-price-cur">/ måned, grunnleggerpris</span>
+        <span class="price-now" id="priceNow" data-no="497 kr" data-en="$47" data-edit="ch-price-now">497 kr</span>
+        <span class="price-cur" data-no="engangskjøp" data-en="one-time" data-edit="ch-price-cur">engangskjøp</span>
       </div>
-      <p class="lede" data-no="Inkluderer full Inner Circle Pro-tilgang (vanligvis 1197 kr/mnd). Trykk under, betal hos Stripe, og rett etterpå får du dag 1 i innboksen din." data-en="Includes full Inner Circle Pro access (normally 1197 kr/mo). Click below, pay with Stripe, and day one lands in your inbox right after." data-edit="ch-form-lede">Inkluderer full Inner Circle Pro-tilgang (vanligvis 1197 kr/mnd). Trykk under, betal hos Stripe, og rett etterpå får du dag 1 i innboksen din.</p>
+      <p class="lede" data-no="Én betaling. Du får hele 30-dagersplanen, arbeidsboken og tilgang til challenge-fellesskapet. Trykk under, betal hos Stripe, og rett etterpå får du dag 1 i innboksen din." data-en="One payment. Get the complete 30-day plan, workbook and challenge community. Click below, pay with Stripe, and day one lands in your inbox right after." data-edit="ch-form-lede">Én betaling. Du får hele 30-dagersplanen, arbeidsboken og tilgang til challenge-fellesskapet. Trykk under, betal hos Stripe, og rett etterpå får du dag 1 i innboksen din.</p>
 
-      <a href="#" class="btn-cta" id="chBtn" data-no="Bli med for 899 kr/mnd →" data-en="Join for $97/mo →" data-edit="ch-cta2">Bli med for 899 kr/mnd →</a>
-      <p class="form-safe" data-no="899 kr per måned, din pris for alltid. Avslutt når som helst." data-en="$97 per month, your price forever. Cancel anytime." data-edit="ch-form-safe">899 kr per måned, din pris for alltid. Avslutt når som helst.</p>
+      <a href="#" class="btn-cta" id="chBtn" data-no="Bli med på 30-dagersutfordringen – 497 kr én gang →" data-en="Join the 30-Day Challenge — $47 one-time →" data-edit="ch-cta2">Bli med på 30-dagersutfordringen – 497 kr én gang →</a>
+      <p class="form-safe" data-no="AI-generering av bilder og video er ikke inkludert. Genereringskreditter kan kjøpes separat ved behov." data-en="AI image and video generation is not included. Optional generation credits can be purchased separately." data-edit="ch-form-safe">AI-generering av bilder og video er ikke inkludert. Genereringskreditter kan kjøpes separat ved behov.</p>
     </div>
 
     <!-- Kun for eier: alltid gratis tilgang, ingen Stripe. -->
@@ -241,10 +245,10 @@
   document.getElementById('yr').textContent = new Date().getFullYear();
 
   // Sprakbytte: samme monster som om-renate.html / roadmap.html.
-  // Kjop: går nå via lme-inner-circle-workerens dynamiske checkout
-  // (plan "proUtfordring", grunnleggerpris + ekte Inner Circle Pro-tilgang),
-  // ikke en fast betalingslenke som før. Se PLANS.proUtfordring i
-  // workers/lme-inner-circle/worker.js.
+  // Kjop: rent engangskjøp via lme-inner-circle-workerens dynamiske checkout
+  // (plan "utfordringEngang", mode:'payment', INGEN Inner Circle-tilgang
+  // eller abonnement bundlet inn lenger, avtalt med Renate 20. august 2026).
+  // Se PLANS.utfordringEngang i workers/lme-inner-circle/worker.js.
   const INNER_CIRCLE_API = 'https://lme-inner-circle.lmexplorers.workers.dev';
 
   let currentLang = 'no';
@@ -267,6 +271,27 @@
     if (localStorage.getItem('lme_lang') === 'en') switchLanguage('en');
   } catch (e) {}
 
+  // Hent den faktiske, gjeldende prisen live fra workeren i stedet for å
+  // stole på den hardkodede fallback-teksten i HTML-en, slik at vist pris
+  // og det som faktisk trekkes i Stripe aldri kan gli fra hverandre (se
+  // PLANS.utfordringEngang i workers/lme-inner-circle/worker.js, som er
+  // eneste sted prisen faktisk endres). Feiler henting stille, den
+  // hardkodede teksten i HTML-en er allerede riktig som fallback.
+  fetch(INNER_CIRCLE_API + '/priser/utfordring').then(r => r.json()).then(p => {
+    if (!p || !p.nok || !p.usd) return;
+    const set = (id, no, en) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.setAttribute('data-no', no);
+      el.setAttribute('data-en', en);
+      const text = el.getAttribute('data-' + currentLang);
+      if (text.indexOf('<') !== -1) el.innerHTML = text; else el.textContent = text;
+    };
+    set('priceNow', p.nok + ' kr', '$' + p.usd);
+    set('heroCta', 'Bli med på 30-dagersutfordringen – ' + p.nok + ' kr én gang →', 'Join the 30-Day Challenge — $' + p.usd + ' one-time →');
+    set('chBtn', 'Bli med på 30-dagersutfordringen – ' + p.nok + ' kr én gang →', 'Join the 30-Day Challenge — $' + p.usd + ' one-time →');
+  }).catch(() => {});
+
   // Start dynamisk Stripe-checkout hos lme-inner-circle-workeren i stedet
   // for å lenke rett til en fast betalingslenke. E-post samles av selve
   // Stripe Checkout (customer_email er ikke satt), så vi trenger ingen
@@ -282,7 +307,7 @@
       const res = await fetch(INNER_CIRCLE_API + '/checkout/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: 'proUtfordring', lang: currentLang }),
+        body: JSON.stringify({ plan: 'utfordringEngang', lang: currentLang }),
       });
       const data = await res.json().catch(() => ({}));
       if (data && data.url) { window.location.href = data.url; return; }
