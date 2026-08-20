@@ -21,18 +21,42 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Sjekk at CLOUDFLARE_API_TOKEN er satt
+      - name: Finn Cloudflare-noekkelen
         id: sjekk
         run: |
-          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
-            echo "::warning::Actions-secreten CLOUDFLARE_API_TOKEN mangler ennaa. Hopper stille over (ingen feil-e-post). Deploy skjer automatisk naar den er lagt inn."
+          # Skriver bare ut om navnet finnes, aldri verdien. GitHub setter inn
+          # tom streng for en secret dette repoet ikke ser, saa listen under
+          # viser med en gang om noekkelen ligger under et annet navn.
+          echo "CLOUDFLARE_API_TOKEN satt: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}"
+          echo "CF_API_TOKEN satt:         ${{ secrets.CF_API_TOKEN != '' }}"
+          echo "CLOUDFLARE_TOKEN satt:     ${{ secrets.CLOUDFLARE_TOKEN != '' }}"
+          echo "CLOUDFLARE_API_KEY satt:   ${{ secrets.CLOUDFLARE_API_KEY != '' }}"
+          echo "CF_TOKEN satt:             ${{ secrets.CF_TOKEN != '' }}"
+          # Sammenlikningen gjoeres i uttrykket, saa selve noekkelen aldri
+          # havner paa kommandolinja i skallet, bare "true" eller "false".
+          if [ "${{ (secrets.CLOUDFLARE_API_TOKEN || secrets.CF_API_TOKEN || secrets.CLOUDFLARE_TOKEN || secrets.CLOUDFLARE_API_KEY || secrets.CF_TOKEN) == '' }}" = "true" ]; then
+            echo "::warning::Fant ingen Cloudflare-noekkel under noen av navnene over. Ligger den i et annet repo, eller er den lagret som Environment-secret i stedet for Actions-secret? Hopper stille over."
             echo "klar=nei" >> "$GITHUB_OUTPUT"
           else
             echo "klar=ja" >> "$GITHUB_OUTPUT"
           fi
+      - name: Rens noekkelen
+        if: steps.sjekk.outputs.klar == 'ja'
+        env:
+          RAA: ${{ secrets.CLOUDFLARE_API_TOKEN || secrets.CF_API_TOKEN || secrets.CLOUDFLARE_TOKEN || secrets.CLOUDFLARE_API_KEY || secrets.CF_TOKEN }}
+        run: |
+          # Et linjeskift som ble med i innlimingen gjoer at wrangler stopper med
+          # "Headers.append: ... is an invalid header value", fordi tokenet sendes
+          # som en HTTP-header. Cloudflare-tokener er bare bokstaver, tall,
+          # bindestrek og understrek, saa alt blanktegn kan trygt fjernes.
+          # Verdien naaes bare gjennom miljoevariabelen RAA, aldri paa
+          # kommandolinja, og maskeres foer den skrives videre.
+          ren="$(printf '%s' "$RAA" | tr -d '[:space:]')"
+          echo "::add-mask::$ren"
+          echo "TOKEN=$ren" >> "$GITHUB_ENV"
       - name: Deploy med wrangler
         if: steps.sjekk.outputs.klar == 'ja'
         uses: cloudflare/wrangler-action@v3
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          apiToken: ${{ env.TOKEN }}
           workingDirectory: workers/lme-ai-visibility

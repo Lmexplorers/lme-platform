@@ -1,0 +1,22 @@
+name: LME Sosialplanlegger
+
+# Publiserer planlagte innlegg som har blitt modne, og kjører
+# automatiseringsreglene (nøkkelord i en kommentar -> svar og DM).
+# Kjører hvert kvarter, og kan startes manuelt fra Actions-fanen.
+# Valgfritt: legg repo-hemmeligheten SOCIAL_CRON_TOKEN hvis endepunktet er
+# beskyttet med env SOCIAL_CRON_TOKEN.
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kjør planleggeren
+        env:
+          TOKEN: ${{ secrets.SOCIAL_CRON_TOKEN }}
+        run: |
+          curl -fsS "https://lmexplorers.com/api/cron/social${TOKEN:+?token=$TOKEN}"

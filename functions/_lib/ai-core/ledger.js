@@ -60,6 +60,7 @@ export const APP_SYSTEM = {
   schema: "ingen",
   "film-manus": "ingen",
   utfordringen: "ingen",
+  planlegger: "ingen",
 };
 
 export function systemFor(app) {

@@ -85,6 +85,22 @@
   .card .ic{font-size:30px;margin-bottom:10px;}
   .card h3{font-size:17px;margin-bottom:6px;}
   .card p{font-size:14px;color:var(--ink-soft);}
+
+  /* Medlemspriser rett pa forsiden. "Bli medlem" sto for dette to steder uten
+     at pris eller innhold var nevnt noe sted, sa besokende matte klikke i
+     blinde for a finne ut hva det koster. */
+  .priser{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;}
+  .pris-kort{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:20px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;}
+  .pris-kort.frem{border-color:var(--cerise);box-shadow:var(--shadow-md);}
+  .pris-navn{font-family:var(--font-head);font-size:17px;font-weight:700;}
+  .pris-merke{display:inline-block;margin-left:7px;padding:1px 8px;border-radius:var(--r-pill);
+    background:var(--cerise);color:#fff;font-size:10px;font-weight:700;vertical-align:middle;}
+  .pris-tall{font-family:var(--font-head);font-size:27px;font-weight:900;color:var(--cerise);
+    margin:8px 0 2px;}
+  .pris-tall small{font-family:var(--font-body);font-size:13px;font-weight:400;color:var(--ink-muted);}
+  .pris-hva{font-size:14px;color:var(--ink-soft);flex:1;}
+  .pris-note{text-align:center;color:var(--ink-soft);font-size:14px;margin-top:20px;}
   .card .more{display:inline-block;margin-top:10px;font-size:13px;font-weight:700;color:var(--cerise);}
 
   .strip{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);
@@ -132,6 +148,38 @@
     <p class="member-link" data-no='Allerede medlem? <a href="/dashboard">Gå til dashbordet →</a>'
        data-en='Already a member? <a href="/dashboard">Go to your dashboard →</a>'>Allerede medlem? <a href="/dashboard">Gå til dashbordet →</a></p>
   </section>
+
+    <section class="section wrap" id="priser">
+      <h2 data-no="Hva koster medlemskapet?" data-en="What does membership cost?">Hva koster medlemskapet?</h2>
+      <p class="lead" data-no="Inner Circle er medlemskapet på plattformen. Full tilgang med en gang. Ingen binding, si opp når du vil."
+         data-en="Inner Circle is the membership on the platform. Full access right away. No lock-in, cancel whenever you want.">Inner Circle er medlemskapet på plattformen. Full tilgang med en gang. Ingen binding, si opp når du vil.</p>
+
+      <div class="priser">
+        <div class="pris-kort">
+          <div class="pris-navn" data-no="Medlem" data-en="Member">Medlem</div>
+          <div class="pris-tall"><span data-no="900 kr" data-en="$97">900 kr</span><small data-no="/mnd" data-en="/mo">/mnd</small></div>
+          <p class="pris-hva" data-no="Hele biblioteket og alle ressursene. Alle gruppene, fellesrommet og Nathalie AI."
+             data-en="The full library and all resources. All groups, the shared room and Nathalie AI.">Hele biblioteket og alle ressursene. Alle gruppene, fellesrommet og Nathalie AI.</p>
+        </div>
+
+        <div class="pris-kort frem">
+          <div class="pris-navn">Pro<span class="pris-merke" data-no="Mest populær" data-en="Most popular">Mest populær</span></div>
+          <div class="pris-tall"><span data-no="1 197 kr" data-en="$127">1 197 kr</span><small data-no="/mnd" data-en="/mo">/mnd</small></div>
+          <p class="pris-hva" data-no="Alt i Medlem, pluss skaperverktøyene i LME Studio: Bookly, Kursbygger, AI Visibility og Traffic Engine."
+             data-en="Everything in Member, plus the creator tools in LME Studio: Bookly, Course Builder, AI Visibility and Traffic Engine.">Alt i Medlem, pluss skaperverktøyene i LME Studio: Bookly, Kursbygger, AI Visibility og Traffic Engine.</p>
+        </div>
+
+        <div class="pris-kort">
+          <div class="pris-navn">VIP</div>
+          <div class="pris-tall"><span data-no="1 997 kr" data-en="$213">1 997 kr</span><small data-no="/mnd" data-en="/mo">/mnd</small></div>
+          <p class="pris-hva" data-no="Alt i Pro, pluss tidlig tilgang til alt nytt, VIP-kanal og prioritert support."
+             data-en="Everything in Pro, plus early access to everything new, VIP channel and priority support.">Alt i Pro, pluss tidlig tilgang til alt nytt, VIP-kanal og prioritert support.</p>
+        </div>
+      </div>
+
+      <p class="pris-note" data-no='<a href="/medlemskap">Se alt som er inkludert og bli medlem →</a>'
+         data-en='<a href="/medlemskap">See everything included and become a member →</a>'><a href="/medlemskap">Se alt som er inkludert og bli medlem →</a></p>
+    </section>
 
   <section class="section wrap">
     <h2 data-no="Én plattform, hele reisen" data-en="One platform, the whole journey">Én plattform, hele reisen</h2>

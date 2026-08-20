@@ -1,11 +1,11 @@
 # LME Inner Circle: betaling og partnerprogram
 
-Workeren `lme-inner-circle` har nå salgsside, Stripe-betaling med 7 dagers
-prøvetid, partnerprogram (affiliate) og admin-dashbord.
+Workeren `lme-inner-circle` har nå salgsside, Stripe-betaling uten prøvetid,
+partnerprogram (affiliate) og admin-dashbord. Medlemmer betaler fra dag én.
 
 ## Nye sider
 
-- `/medlemskap` - salgsside med tre planer (Medlem 697 kr, Pro 1 197 kr, VIP 1 997 kr per måned)
+- `/medlemskap` - salgsside med tre planer (Medlem 900 kr / $97, Pro 1 197 kr / $127, VIP 1 997 kr / $213 per måned)
 - `/takk` - takkesiden etter kjøp
 - `/affiliate` - partnerprogrammet (registrering og dashbord)
 - `/admin` - admin-dashbord, kun for VIP-kontoer
@@ -48,12 +48,12 @@ også i tabellen `email_queue` i D1.
 
 ## Slik virker det
 
-- Kjøp: kunden velger plan på `/medlemskap`, betaler hos Stripe og får 7
-  dagers gratis prøvetid. Webhooken gir riktig tilgang (tier) automatisk, og
-  tilgangen fjernes hvis abonnementet sies opp.
+- Kjøp: kunden velger plan på `/medlemskap` og betaler hos Stripe. Det er
+  ingen prøvetid; betalingen skjer fra dag én. Webhooken gir riktig tilgang
+  (tier) automatisk, og tilgangen fjernes hvis abonnementet sies opp.
 - Partner: medlemmer registrerer seg på `/affiliate` og får en lenke som
   `/medlemskap?ref=KODE`. Koden lagres i cookie i 30 dager. Provisjonen (30 %)
-  regnes av den første ekte betalingen etter prøvetiden og vises både hos
+  regnes av den første betalingen og vises både hos
   partneren og i admin-dashbordet. Utbetaling gjør du manuelt; salgene ligger
   i tabellen `affiliate_sales` med status `pending`.
 - Admin: `/admin` viser inntekt, betalinger, partnere og e-postkøen. Logg inn

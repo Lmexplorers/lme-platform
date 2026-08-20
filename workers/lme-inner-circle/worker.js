@@ -1,7 +1,7 @@
 // LME Inner Circle + Auth + Media + Betaling + Affiliate — Worker API v2.0
 // ========================================================================
 // EKTE innlogging: e-post + passord (PBKDF2-hashing), sesjoner.
-// NYTT i v2.0: medlemskapssalg med Stripe (prøveperiode styres av PROVETID_DAGER, nå 0),
+// NYTT i v2.0: medlemskapssalg med Stripe (ingen prøveperiode, betaling fra dag én),
 // affiliate-program med provisjon, velkomst-epost via MailerSend og
 // admin-dashbord for VIP.
 //
@@ -27,10 +27,16 @@ const json = (d,s=200)=>new Response(JSON.stringify(d),{status:s,headers:{...cor
 const html = (h,ekstra={})=>new Response(h,{status:200,headers:{...cors,'Content-Type':'text/html; charset=utf-8',...ekstra}});
 
 // ---- Prisplaner (beløp i øre; endre prisene her) ----
+// belopUsd (cent) brukes for engelskspråklige kjøpere, slik at prisen både
+// vises og trekkes i dollar. $97 for Medlem er Renates egen referanse: samme
+// nivå som FEA-medlemskapet hun selv betaler. 900 kr er NOK-motstykket
+// (kursen sto i 9,39 kr per dollar da prisen ble satt, 19. august 2026).
+// Pro og VIP beholder kroneprisene sine; dollarbeløpet er de samme kronene
+// omregnet med samme kurs, ikke en ny pris.
 const PLANS = {
-  regular: { tier:'regular', navn:'Medlem', belop:69700 },
-  pro:     { tier:'pro',     navn:'Pro',    belop:119700 },
-  vip:     { tier:'vip',     navn:'VIP',    belop:199700 },
+  regular: { tier:'regular', navn:'Medlem', belop:90000,  belopUsd:9700 },
+  pro:     { tier:'pro',     navn:'Pro',    belop:119700, belopUsd:12700 },
+  vip:     { tier:'vip',     navn:'VIP',    belop:199700, belopUsd:21300 },
   // Grunnleggerpris for kjøpere av 10 000-visninger-utfordringen: full
   // Inner Circle Pro-tilgang (fellesskap, moduler osv.) til en lavere,
   // låst pris. Stripe endrer aldri prisen på et løpende abonnement av seg
@@ -44,7 +50,16 @@ const PLANS = {
   // betaler der), 899 kr er nærmeste avrundede NOK-motstykke.
   proUtfordring: { tier:'pro', navn:'Pro (grunnleggermedlem, 10 000-visninger-utfordringen)', belop:89900, belopUsd:9700, utfordring:true },
 };
-const PROVETID_DAGER = 0; // 0 = ingen prøveperiode; medlemmer betaler fra dag én
+
+// Betalinger lagres i øre i payments-tabellen, og provisjon regnes av samme
+// tall. Et USD-kjøp kommer fra Stripe i cent, så uten omregning ville et salg
+// på $97 blitt bokført som 97 kroner og partneren fått provisjon av det.
+// Samme kurs som prisene ble satt etter (9,39 kr per dollar, 19. august 2026).
+const USD_TIL_NOK = 9.39;
+function tilOre(belop, valuta){
+  const b = Number(belop) || 0;
+  return String(valuta || '').toLowerCase() === 'usd' ? Math.round(b * USD_TIL_NOK) : b;
+}
 
 const MEDIESIDE = `<!DOCTYPE html>
 <html lang="no">
@@ -437,16 +452,16 @@ ${SIDE_STIL}
   <div class="hero">
     <span class="kick" data-no="LME Inner Circle" data-en="LME Inner Circle">LME Inner Circle</span>
     <h1 data-no="Bli med i Inner Circle 💛" data-en="Join the Inner Circle 💛">Bli med i Inner Circle 💛</h1>
-    <p data-no="Inne i Inner Circle får du hele LME på ett sted: alle kursene, hele biblioteket og ressursene, alle gruppene og fellesrommet. Også Nathalie AI, som du kan spørre når du vil. Nytt innhold og nye ressurser hver måned, pluss en månedlig medlemssending fra meg. Med Pro får du også skaperverktøyene i LME Studio, så du kan lære, skape og vokse i samme flyt." data-en="Inside the Inner Circle you get all of LME in one place: all the courses, the full library and resources, all the groups and the shared room. Plus Nathalie AI, which you can ask whenever you like. New content and new resources every month, plus a monthly member broadcast from me. With Pro you also get the creator tools in LME Studio, so you can learn, create and grow in one flow.">Inne i Inner Circle får du hele LME på ett sted: alle kursene, hele biblioteket og ressursene, alle gruppene og fellesrommet. Også Nathalie AI, som du kan spørre når du vil. Nytt innhold og nye ressurser hver måned, pluss en månedlig medlemssending fra meg. Med Pro får du også skaperverktøyene i LME Studio, så du kan lære, skape og vokse i samme flyt.</p>
+    <p data-no="Inne i Inner Circle får du hele biblioteket og ressursene, alle gruppene og fellesrommet. Også Nathalie AI, som du kan spørre når du vil. Nytt innhold og nye ressurser hver måned, pluss en månedlig medlemssending fra meg. Med Pro får du også skaperverktøyene i LME Studio, så du kan lære, skape og vokse i samme flyt." data-en="Inside the Inner Circle you get the full library and resources, all the groups and the shared room. Plus Nathalie AI, which you can ask whenever you like. New content and new resources every month, plus a monthly member broadcast from me. With Pro you also get the creator tools in LME Studio, so you can learn, create and grow in one flow.">Inne i Inner Circle får du hele biblioteket og ressursene, alle gruppene og fellesrommet. Også Nathalie AI, som du kan spørre når du vil. Nytt innhold og nye ressurser hver måned, pluss en månedlig medlemssending fra meg. Med Pro får du også skaperverktøyene i LME Studio, så du kan lære, skape og vokse i samme flyt.</p>
     <div class="prove" data-no="🌸 Full tilgang med en gang. Ingen binding, si opp når du vil." data-en="🌸 Full access right away. No lock-in, cancel whenever you want.">🌸 Full tilgang med en gang. Ingen binding, si opp når du vil.</div>
   </div>
 
   <div class="planer">
     <div class="plan">
       <h2 data-no="Medlem" data-en="Member">Medlem</h2>
-      <div class="pris">697 kr<small data-no="/mnd" data-en="/mo">/mnd</small></div>
+      <div class="pris"><span data-no="900 kr" data-en="$97">900 kr</span><small data-no="/mnd" data-en="/mo">/mnd</small></div>
       <ul>
-        <li data-no="Alt innhold: alle kurs, hele biblioteket og ressursene" data-en="All content: every course, the full library and resources">Alt innhold: alle kurs, hele biblioteket og ressursene</li>
+        <li data-no="Hele biblioteket og alle ressursene" data-en="The full library and all resources">Hele biblioteket og alle ressursene</li>
         <li data-no="Alle gruppene og fellesrommet" data-en="All groups and the shared room">Alle gruppene og fellesrommet</li>
         <li data-no="Nathalie AI, spør så mye du vil" data-en="Nathalie AI, ask as much as you want">Nathalie AI, spør så mye du vil</li>
         <li data-no="Nye ressurser hver måned" data-en="New resources every month">Nye ressurser hver måned</li>
@@ -458,7 +473,7 @@ ${SIDE_STIL}
     <div class="plan populaer">
       <span class="stjerne" data-no="Mest populær" data-en="Most popular">Mest populær</span>
       <h2>Pro</h2>
-      <div class="pris">1 197 kr<small data-no="/mnd" data-en="/mo">/mnd</small></div>
+      <div class="pris"><span data-no="1 197 kr" data-en="$127">1 197 kr</span><small data-no="/mnd" data-en="/mo">/mnd</small></div>
       <ul>
         <li data-no="Alt i Medlem" data-en="Everything in Member">Alt i Medlem</li>
         <li data-no="Skaperverktøyene i LME Studio: Bookly og Kursbygger" data-en="The creator tools in LME Studio: Bookly and Course Builder">Skaperverktøyene i LME Studio: Bookly og Kursbygger</li>
@@ -471,7 +486,7 @@ ${SIDE_STIL}
     </div>
     <div class="plan">
       <h2>VIP</h2>
-      <div class="pris">1 997 kr<small data-no="/mnd" data-en="/mo">/mnd</small></div>
+      <div class="pris"><span data-no="1 997 kr" data-en="$213">1 997 kr</span><small data-no="/mnd" data-en="/mo">/mnd</small></div>
       <ul>
         <li data-no="Alt i Pro" data-en="Everything in Pro">Alt i Pro</li>
         <li data-no="Tidlig tilgang til alt nytt" data-en="Early access to everything new">Tidlig tilgang til alt nytt</li>
@@ -548,7 +563,7 @@ ${SIDE_STIL}
     knapp.innerHTML = '<span class="spinner"></span>';
     try{
       var res = await fetch('/checkout/create',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({plan:valgtPlan, email:epost, ref:sessionStorage.getItem('lme_ref')||''})});
+        body:JSON.stringify({plan:valgtPlan, email:epost, lang: en?'en':'no', ref:sessionStorage.getItem('lme_ref')||''})});
       var d = await res.json();
       if(d.url){ location.href = d.url; return; }
       feil.textContent = d.error || (en?'Something went wrong':'Noe gikk galt');
@@ -1101,9 +1116,8 @@ export default {
         if(!plan) return json({error:'Ukjent plan'},400);
         const epost = (body.email||'').trim().toLowerCase();
         const affKode = saniterKode(body.ref) || getAffiliateCode(request, url);
-        // Kun utfordring-planen støtter USD foreløpig (samme mønster som
-        // den gamle frittstående utfordring-planen); vanlig Inner Circle
-        // selges kun i NOK.
+        // Alle planene har en dollarpris, så engelskspråklige kjøpere ser og
+        // betaler i $ (Renates faste regel), mens norske betaler i kroner.
         const lang = body.lang === 'en' ? 'en' : 'no';
         const useUsd = lang === 'en' && plan.belopUsd;
         const params = {
@@ -1126,7 +1140,6 @@ export default {
           // pris/utfordring-flagg enn den vanlige pro-planen).
           'metadata[plan]': body.plan,
         };
-        if(PROVETID_DAGER > 0) params['subscription_data[trial_period_days]'] = String(PROVETID_DAGER);
         if(epost && epost.includes('@')) params['customer_email'] = epost;
         if(affKode){
           params['metadata[affiliate_code]'] = affKode;
@@ -1163,7 +1176,7 @@ export default {
           // Checkout-økten uansett, kun etterbehandlingen under ville avvike).
           const plan = PLANS[obj.metadata?.plan] || Object.values(PLANS).find(p=>p.tier===tier);
           if(!epost || !plan) return json({ok:true, ignorert:'mangler e-post eller plan'});
-          const belop = obj.amount_total || 0;
+          const belop = tilOre(obj.amount_total, obj.currency);
           const affKode = saniterKode(obj.metadata?.affiliate_code);
           // Opprett eller oppdater brukeren og gi riktig tilgang
           const finnes = await env.DB.prepare(`SELECT id, referred_by FROM users WHERE email=?`).bind(epost).first();
@@ -1174,10 +1187,11 @@ export default {
             await env.DB.prepare(`INSERT INTO users (email, display_name, tier, stripe_customer_id, stripe_subscription_id, referred_by) VALUES (?,?,?,?,?,?)`)
               .bind(epost, epost.split('@')[0], tier, obj.customer||null, obj.subscription||null, affKode||null).run();
           }
-          // Loggfør betalingen (0 kr betyr at prøveperioden er i gang)
+          // Loggfør betalingen. 0 kr skal ikke forekomme (ingen prøveperiode),
+          // men logges som 'trial' hvis Stripe likevel sender det.
           await env.DB.prepare(`INSERT INTO payments (user_email, stripe_customer_id, stripe_subscription_id, tier, amount, status, billing_period, affiliate_code, created_at, paid_at) VALUES (?,?,?,?,?,?,?,?,?,?)`)
             .bind(epost, obj.customer||null, obj.subscription||null, tier, belop, belop>0?'paid':'trial', 'month', affKode||null, naa, belop>0?naa:null).run();
-          // Provisjon med en gang hvis det ble betalt penger nå (uten prøvetid)
+          // Provisjon med en gang, siden medlemmer betaler fra dag én
           if(belop > 0 && affKode) await trackAffiliateSale(env, affKode, epost, tier, belop);
           if(plan.utfordring){
             // Utfordring-delen (dag 0-e-post, 30-dagers kø, fellesskap) lever
@@ -1192,13 +1206,13 @@ export default {
 
         if(event.type === 'invoice.paid' || event.type === 'invoice.payment_succeeded'){
           const epost = (obj.customer_email || obj.customer_details?.email || '').toLowerCase();
-          const belop = obj.amount_paid != null ? obj.amount_paid : (obj.amount_due||0);
+          const belop = tilOre(obj.amount_paid != null ? obj.amount_paid : (obj.amount_due||0), obj.currency);
           if(!epost || !belop) return json({ok:true, ignorert:'mangler e-post eller beløp'});
           const user = await env.DB.prepare(`SELECT * FROM users WHERE email=?`).bind(epost).first();
           const tier = user?.tier && user.tier !== 'free' ? user.tier : 'regular';
           await env.DB.prepare(`INSERT INTO payments (user_email, stripe_customer_id, stripe_subscription_id, tier, amount, status, billing_period, affiliate_code, created_at, paid_at) VALUES (?,?,?,?,?,'paid','month',?,?,?)`)
             .bind(epost, obj.customer||null, obj.subscription||null, tier, belop, user?.referred_by||null, naa, naa).run();
-          // Første ekte betaling etter prøvetiden utløser provisjonen
+          // Fornyelse: utløser provisjonen hvis den ikke alt er registrert
           if(user?.referred_by){
             const alt = await env.DB.prepare(`SELECT id FROM affiliate_sales WHERE customer_email=? LIMIT 1`).bind(epost).first();
             if(!alt) await trackAffiliateSale(env, user.referred_by, epost, tier, belop);
