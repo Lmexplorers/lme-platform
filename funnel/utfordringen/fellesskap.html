@@ -104,6 +104,17 @@
   .tabs { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 18px; padding-bottom: 2px; }
   .tab { flex: none; font-size: 13.5px; font-weight: 700; color: var(--ink-soft); background: #fff; border: 1px solid var(--pink-100); padding: 9px 16px; border-radius: var(--r-pill); cursor: pointer; white-space: nowrap; }
   .tab.active { background: var(--pink-600); color: #fff; border-color: var(--pink-600); }
+  /* Synlig antydning om at raden kan skrolles til siden (mobil har ingen
+     annen hint enn selve overflow-x). Klistrer seg til høyre kant av det
+     synlige skrollområdet med position:sticky (uten ekstra wrapper-div),
+     og glir automatisk av når man har skrolt helt til slutten, siden den da
+     havner innenfor sin egen naturlige (ikke-klistrede) posisjon uansett. */
+  .tabs::after, .pills::after {
+    content: ''; flex: none; position: sticky; right: 0; top: 0;
+    width: 26px; height: 100%; margin-left: -26px;
+    background: linear-gradient(to right, transparent, #fffcf9 65%);
+    pointer-events: none;
+  }
 
   .card { background: #fff; border: 1px solid var(--pink-100); border-radius: var(--r-xl); box-shadow: var(--shadow-soft); padding: 22px; margin-bottom: 16px; }
   .card h2 { font-size: 17px; color: var(--pink-700); margin-bottom: 10px; }
