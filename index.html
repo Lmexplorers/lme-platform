@@ -285,7 +285,14 @@
     document.getElementById('lang-no').classList.toggle('active', lang === 'no');
     document.getElementById('lang-en').classList.toggle('active', lang === 'en');
   }
-  var saved = localStorage.getItem('lme_lang');
+  // ?lang=en i lenken går foran det som ligger lagret, slik at en engelsk side
+  // (f.eks. /shop) kan sende leseren hit uten at hun lander på norsk.
+  var saved = null;
+  try {
+    var qLang = new URLSearchParams(location.search).get('lang');
+    if (qLang === 'en' || qLang === 'no') { saved = qLang; localStorage.setItem('lme_lang', qLang); }
+    else saved = localStorage.getItem('lme_lang');
+  } catch (e) { saved = null; }
   if (saved === 'en') switchLanguage('en');
 
   if ('serviceWorker' in navigator) {

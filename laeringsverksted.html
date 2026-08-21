@@ -137,7 +137,17 @@
 <script>
 (function () {
   window.LME_CURRENT_LANG = 'no';
-  try { window.LME_CURRENT_LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no'; } catch (e) {}
+  // ?lang=en i lenken går foran det som ligger lagret, slik at en engelsk
+  // side (f.eks. /shop) kan sende leseren hit uten at hun lander på norsk.
+  try {
+    var qLang = new URLSearchParams(location.search).get('lang');
+    if (qLang === 'en' || qLang === 'no') {
+      window.LME_CURRENT_LANG = qLang;
+      localStorage.setItem('lme_lang', qLang);
+    } else {
+      window.LME_CURRENT_LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no';
+    }
+  } catch (e) {}
   function isEn() { return window.LME_CURRENT_LANG === 'en'; }
 
   var all = [];
