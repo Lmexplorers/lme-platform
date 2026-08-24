@@ -112,14 +112,14 @@ add('garn_lead',
     'Bystrikk Merino and DROPS Cotton Merino (or similar) give a soft, firm amigurumi surface.')
 add('garn_tabell_head', ['Farge', 'Til', 'Mengde'], ['Colour', 'For', 'Amount'])
 add('garn_rows', [
-    ('Bystrikk Merino, brun (hovedfarge)', 'hode, kropp, ben, ansiktsfelt-kant, ører, hale', 'ca. 2 nosler',
+    ('Bystrikk Merino, brun (hovedfarge)', 'hode, kropp, ben, ører, hale', 'ca. 2 nosler',
      'Bystrikk Merino, brown (main colour)', 'head, body, arms, ears, tail', 'approx. 2 skeins'),
     ('Bystrikk Merino, mørkebrun', 'klover på bena (klovtupper)', 'rest',
      'Bystrikk Merino, dark brown', 'hooves at the base of the legs', 'small amount'),
-    ('DROPS Cotton Merino, naturhvit', 'ansiktsfelt, magepanel, ørenes innside, halens underside, prikker',
-     'ca. 1 nosle',
-     'DROPS Cotton Merino, off-white', 'face patch, belly panel, ear insides, tail underside, spots',
-     'approx. 1 skein'),
+    ('DROPS Cotton Merino, naturhvit', 'de to kinnflekkene, snuten, magepanel, ørenes innside, halens '
+     'underside, prikker', 'ca. 1 nosle',
+     'DROPS Cotton Merino, off-white', 'the two cheek patches, the muzzle, belly panel, ear insides, '
+     'tail underside, spots', 'approx. 1 skein'),
     ('Rest, pudderrosa', 'sløyfen (avtakbar)', 'litt',
      'Leftover, powder pink', 'the bow (removable)', 'small amount'),
     ('Svart broderigarn', 'nese og munn (hvis du broderer, se side om ansiktet)', 'litt',
@@ -207,8 +207,8 @@ add('oversikt_lead',
     'glued, and everything is sewn securely so that nothing comes loose. Get to know the pieces '
     'before you begin:')
 add('oversikt_deler', [
-    ('1. Hodet', 'stort og rundt, med et lyst ansiktsfelt', '1. The head', 'big and round, with a light face patch'),
-    ('2. Snuten', 'liten oval snute midt i ansiktsfeltet', '2. The muzzle', 'a small oval muzzle in the middle of the face patch'),
+    ('1. Hodet', 'stort og rundt, med to lyse kinnflekker', '1. The head', 'big and round, with two light cheek patches'),
+    ('2. Snuten', 'liten oval snute mellom de to kinnflekkene', '2. The muzzle', 'a small oval muzzle between the two cheek patches'),
     ('3. Ørene (x2)', 'store, runde, med lys innside', '3. The ears (x2)', 'big, round, with a light inside'),
     ('4. Kroppen', 'liten oval kropp med magepanel', '4. The body', 'a small oval body with a belly panel'),
     ('5. Armene (x2)', 'små og myke, korte', '5. The arms (x2)', 'small and soft, short'),
@@ -282,37 +282,40 @@ add('hode_ferdig',
 # ======================================================================
 # SIDE 7: ANSIKTSFELTET OG SNUTEN
 # ======================================================================
-add('banner_snute', 'DEL 2: ANSIKTSFELTET OG SNUTEN', 'PART 2: THE FACE PATCH AND MUZZLE')
+add('banner_snute', 'DEL 2: KINNFLEKKENE OG SNUTEN', 'PART 2: THE CHEEK PATCHES AND MUZZLE')
 add('snute_lead',
-    'Den lyse "masken" rundt Ellies snute er en egen flat del som sys oppå hodet. Den lille runde '
-    'snuten sys så oppå igjen, midt i feltet. Begge deler hekles i kremhvitt.',
-    "The light coloured 'mask' around Ellie's muzzle is a separate flat piece sewn onto the head. The "
-    "small round muzzle is then sewn on top of that, right in the middle of the patch. Both pieces "
-    "are crocheted in cream.")
-add('pill_ansiktsfelt', 'ANSIKTSFELTET (KREMHVITT)', 'THE FACE PATCH (CREAM)')
+    'Ellies lyse tegning er ikke ett stort felt rundt hele ansiktet, det er to atskilte, ovale '
+    'kremhvite kinnflekker, én under hvert øye, som møtes nede ved snuten. Brunt skal fortsatt '
+    'vises mellom flekkene (nedover neseryggen) og utenfor dem. Den lille runde snuten sys på til '
+    'slutt, midt mellom de to flekkene. Alle tre delene hekles i kremhvitt.',
+    "Ellie's light markings are not one single patch around the whole face, they are two "
+    "separate oval cream patches, one under each eye, that meet down at the muzzle. Brown should "
+    "still show between the patches (down the bridge of the nose) and outside them. The small "
+    "round muzzle is sewn on last, right between the two patches. All three pieces are crocheted "
+    "in cream.")
+add('pill_ansiktsfelt', 'KINNFLEKKENE (KREMHVITT) - HEKLE 2', 'THE CHEEK PATCHES (CREAM) - MAKE 2')
 add('ansiktsfelt_rows', [
     ('1', '6 fm i magisk ring', 6),
     ('2', 'økn x 6', 12),
     ('3', '(1 fm, økn) x 6', 18),
     ('4', '(2 fm, økn) x 6', 24),
-    ('5', '(3 fm, økn) x 6', 30),
-    ('6', '(4 fm, økn) x 6', 36),
 ])
 add('ansiktsfelt_rows_en', [
     ('1', '6 sc in a magic ring', 6),
     ('2', 'inc x 6', 12),
     ('3', '(1 sc, inc) x 6', 18),
     ('4', '(2 sc, inc) x 6', 24),
-    ('5', '(3 sc, inc) x 6', 30),
-    ('6', '(4 sc, inc) x 6', 36),
 ])
 add('ansiktsfelt_ferdig',
-    'Avslutt og klipp av, la ca. 20 cm tråd igjen. Ikke fyll denne delen, den skal ligge flat. Sy den '
-    'flatt fast på nedre halvdel av hodet, fra litt over midten og ned mot haken, så den danner en lys '
-    'oval "maske".',
-    'Fasten off, leaving a tail of approx. 20 cm. Do not stuff this piece, it should lie flat. Sew it '
-    'flat onto the lower half of the head, from just above the middle down towards the chin, so it '
-    'forms a light oval "mask".')
+    'Avslutt og klipp av begge flekkene, la ca. 15 cm tråd igjen på hver. Ikke fyll dem, de skal '
+    'ligge flatt. Sy en flekk på hver side av hodets nedre halvdel, med den ene kanten vendt inn '
+    'mot midten (der snuten skal sitte) og resten av flekken opp og ut mot hvert øye. La det være '
+    'synlig brunt mellom de to flekkene, nedover midten, og synlig brunt utenfor begge.',
+    'Fasten off and cut both patches, leaving a tail of approx. 15 cm on each. Do not stuff them, '
+    'they should lie flat. Sew one patch on each side of the lower half of the head, with one '
+    'edge turned in towards the centre (where the muzzle will sit) and the rest of the patch '
+    'turned up and out towards each eye. Leave brown showing between the two patches, down the '
+    'centre, and brown showing outside both of them.')
 add('pill_snuten', 'SNUTEN (KREMHVIT)', 'THE MUZZLE (CREAM)')
 add('snuten_rows', [
     ('1', '6 fm i magisk ring', 6),
@@ -328,9 +331,9 @@ add('snuten_rows_en', [
 ])
 add('snuten_ferdig',
     'Avslutt og klipp av, la ca. 20 cm tråd igjen. Stopp en liten dott fyll inn i snuten så den blir '
-    'lett høy og rund, og sy den fast midt nederst i ansiktsfeltet.',
+    'lett høy og rund, og sy den fast midt mellom de to kinnflekkene, nederst.',
     'Fasten off, leaving a tail of approx. 20 cm. Tuck a small bit of stuffing into the muzzle so it '
-    'is gently domed, and sew it in place in the lower centre of the face patch.')
+    'is gently domed, and sew it in place right between the two cheek patches, at the bottom.')
 
 # ======================================================================
 # SIDE 8: ØRENE
@@ -398,10 +401,10 @@ add('ansikt_lead',
 add('pill_ojne', 'ØYNE - TO VERSJONER', 'EYES - TWO VERSIONS')
 add('ojne_a_tit', 'Versjon A: sikkerhetsøyne (fra 3 år)', 'Version A: safety eyes (age 3+)')
 add('ojne_a',
-    'Bruk 16 mm sikkerhetsøyne. Sett dem inn ca. 2 cm fra hverandre, i overkanten av ansiktsfeltet, '
+    'Bruk 16 mm sikkerhetsøyne. Sett dem inn ca. 2 cm fra hverandre, øverst på hver kinnflekk, '
     'omtrent midt på hodet i høyden. Skyv baksiden godt på plass FØR du fyller hodet ferdig, så det '
     'ikke er mulig å trekke øyet ut igjen fra innsiden.',
-    'Use 16 mm safety eyes. Insert them approx. 2 cm apart, at the top edge of the face patch, roughly '
+    'Use 16 mm safety eyes. Insert them approx. 2 cm apart, at the top of each cheek patch, roughly '
     'in the middle of the head vertically. Push the backing washer firmly into place BEFORE you finish '
     'stuffing the head, so the eye cannot be pulled back out from the inside.')
 add('ojne_b_tit', 'Versjon B: broderte øyne (babyvennlig, 0 år+)', 'Version B: embroidered eyes (baby-friendly, 0+)')
@@ -657,8 +660,8 @@ add('montering_steg', [
     'Sy magepanelet fast på forsiden av kroppen (hvis ikke gjort allerede).',
     'Sy bena fast under kroppen, ca. 1 til 2 cm fra hverandre, så Ellie står stødig når hun sitter.',
     'Sy armene fast på hver side av kroppen, litt nedenfor der halsen skal være.',
-    'Sy ansiktsfeltet og snuten fast på hodet (hvis ikke gjort allerede), og sett inn øyne, nese, munn, '
-    'vipper og kinn (se side om ansiktet).',
+    'Sy de to kinnflekkene og snuten fast på hodet (hvis ikke gjort allerede), og sett inn øyne, nese, '
+    'munn, vipper og kinn (se side om ansiktet).',
     'Sy hodet fast oppå kroppen, midt over halsen. Sjekk at hodet sitter rett frem før du syr helt '
     'ferdig.',
     'Sy ørene fast oppå hodet, ett på hver side (se side om ører for plassering).',
@@ -670,8 +673,8 @@ add('montering_steg_en', [
     'Sew the belly panel onto the front of the body (if not already done).',
     'Sew the legs onto the bottom of the body, approx. 1 to 2 cm apart, so Ellie sits steadily.',
     'Sew the arms onto each side of the body, a little below where the neck will be.',
-    'Sew the face patch and muzzle onto the head (if not already done), and add the eyes, nose, mouth, '
-    'lashes and cheeks (see the face page).',
+    'Sew the two cheek patches and muzzle onto the head (if not already done), and add the eyes, '
+    'nose, mouth, lashes and cheeks (see the face page).',
     "Sew the head onto the body, centred over the neck. Check that the head faces forward before you "
     "sew it on completely.",
     'Sew the ears onto the head, one on each side (see the ears page for placement).',
@@ -835,8 +838,9 @@ def face_diagram(lang):
     return f'''
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 280" style="width:78mm">
   <circle cx="150" cy="130" r="115" fill="{BROWN_MID}" stroke="{BROWN_DARK}" stroke-width="2.5"/>
-  <ellipse cx="150" cy="185" rx="82" ry="78" fill="{CREAM}" opacity="0.95"/>
-  <ellipse cx="150" cy="205" rx="42" ry="30" fill="{CREAM_DEEP}" stroke="#e3d2b8" stroke-width="1.5"/>
+  <ellipse cx="95" cy="168" rx="48" ry="75" fill="{CREAM}" opacity="0.95"/>
+  <ellipse cx="205" cy="168" rx="48" ry="75" fill="{CREAM}" opacity="0.95"/>
+  <ellipse cx="150" cy="212" rx="38" ry="28" fill="{CREAM_DEEP}" stroke="#e3d2b8" stroke-width="1.5"/>
   <circle cx="103" cy="150" r="15" fill="#fff" stroke="{BROWN_DARK}" stroke-width="2" stroke-dasharray="3 3"/>
   <circle cx="197" cy="150" r="15" fill="#fff" stroke="{BROWN_DARK}" stroke-width="2" stroke-dasharray="3 3"/>
   <circle cx="103" cy="150" r="8" fill="#241a12"/>
@@ -902,8 +906,7 @@ body {{ font-family:var(--font-body); color:#4a4a4a; }}
   position:relative; width:210mm; height:296.5mm; overflow:hidden;
   page-break-after:always;
   background:
-    repeating-linear-gradient(0deg, rgba(255,255,255,.45) 0, rgba(255,255,255,.45) .4mm, transparent .4mm, transparent 8mm),
-    repeating-linear-gradient(90deg, rgba(255,255,255,.45) 0, rgba(255,255,255,.45) .4mm, transparent .4mm, transparent 8mm),
+    url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAArUlEQVR42u3VUQkAIAxFUSfWt4wNTDYD6LcgnhvhHcYiM0fZm0VXqiYAAEAAvq2dHm5EdNO4AAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAAC8GILoF0Gg4kZ4kUAAAAASUVORK5CYII=) 0 0/8mm 8mm repeat,
     linear-gradient(165deg,#f3e8d8 0%,#f6ecec 45%,#f3dde6 100%);
 }}
 .band {{ position:absolute; left:0; top:0; bottom:0; width:11mm;
@@ -922,17 +925,17 @@ body {{ font-family:var(--font-body); color:#4a4a4a; }}
   font-family:var(--font-head); font-weight:700; font-size:10pt; color:#8a8a8a; }}
 
 .banner {{ background:#f5e5b2; border-radius:14px; padding:3.6mm 6mm; margin:2mm 0 4.5mm;
-  box-shadow:0 1px 4px rgba(0,0,0,.08); text-align:center; }}
+  text-align:center; }}
 .banner h1 {{ font-family:var(--font-head); font-weight:800; font-size:16.5pt; color:{INK};
   letter-spacing:.4px; text-transform:uppercase; }}
 .pillwrap {{ text-align:center; margin:4.5mm 0 3mm; }}
 .pill {{ display:inline-block; border-radius:999px; padding:2.4mm 9mm;
   font-family:var(--font-head); font-weight:700; font-size:10.5pt; color:#fff;
-  letter-spacing:.4px; text-transform:uppercase; box-shadow:0 1px 4px rgba(0,0,0,.12); }}
+  letter-spacing:.4px; text-transform:uppercase; }}
 .rosepill {{ background:{ROSE}; }}
 .sagepill {{ background:{SAGE}; }}
 .card {{ background:rgba(255,255,255,.93); border:2px solid #ecd2c0; border-radius:16px;
-  padding:4mm 6mm; margin:0 0 4mm; box-shadow:0 1px 5px rgba(0,0,0,.06); }}
+  padding:4mm 6mm; margin:0 0 4mm; }}
 .cream {{ background:#fbf3e8; border:2px solid #ecd2c0; border-radius:16px;
   padding:4mm 6mm; margin:4mm 0; text-align:center; }}
 .creamtitle {{ font-family:var(--font-head); font-weight:700; font-size:11pt; color:{SAGE}; }}
@@ -957,12 +960,12 @@ table.tl td:first-child {{ white-space:nowrap; }}
 .dot {{ display:inline-block; width:3.5mm; height:3.5mm; border-radius:50%; vertical-align:-0.5mm; margin-right:1.5mm; }}
 
 .coverimg {{ text-align:center; margin:3mm 0 3mm; }}
-.coverimg img {{ width:98mm; border-radius:14px; box-shadow:0 3px 10px rgba(0,0,0,.18);
+.coverimg img {{ width:98mm; border-radius:14px;
   border:3mm solid #fff; }}
 .covertag {{ text-align:center; font-family:var(--font-head); font-size:8pt; letter-spacing:2.6px;
   color:#8a8a8a; margin:1mm 0 2.5mm; }}
 .coverbanner {{ display:flex; align-items:center; justify-content:center; gap:5mm;
-  background:#f5e5b2; border-radius:16px; padding:3.4mm 6mm; box-shadow:0 1px 5px rgba(0,0,0,.1); }}
+  background:#f5e5b2; border-radius:16px; padding:3.4mm 6mm; }}
 .covertitle {{ font-family:var(--font-head); font-weight:800; font-size:27pt; color:{INK}; letter-spacing:1px; }}
 .subpill {{ margin:3.6mm auto; width:fit-content; background:#fdf9e3; border:2.5px solid {INK};
   border-radius:999px; padding:1.8mm 8mm; font-family:var(--font-head); font-weight:700;
@@ -979,7 +982,7 @@ table.tl td:first-child {{ white-space:nowrap; }}
 .twocol {{ display:flex; gap:6mm; align-items:flex-start; }}
 .twocol > div {{ flex:1; }}
 .figwrap {{ text-align:center; }}
-.figwrap img {{ width:44mm; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,.14); border:2mm solid #fff; }}
+.figwrap img {{ width:44mm; border-radius:12px; border:2mm solid #fff; }}
 .figcap {{ font-size:9pt; color:#888; text-align:center; margin-top:1.5mm; }}
 .schematic {{ margin:2mm 0 1mm; }}
 .deler-grid {{ display:grid; grid-template-columns:1fr 1fr; gap:2.4mm 6mm; margin:1mm 0 2mm; }}
