@@ -184,7 +184,7 @@ add('oversikt_lead',
     'Four types of pieces are crocheted separately, then threaded or sewn together at the end '
     'along a short cord, or directly to each other:')
 add('oversikt_deler', [
-    ('1. Det lille dådyrhodet', 'forenklet Ellie med kremhvitt ansiktsfelt, snute og sløyfe, én per lenke', '1. The little deer head', 'a simplified Ellie with a cream face patch, muzzle and a bow, one per clip'),
+    ('1. Det lille dådyrhodet', 'forenklet Ellie med to kremhvite kinnflekker, snute og sløyfe, én per lenke', '1. The little deer head', 'a simplified Ellie with two cream cheek patches, a muzzle and a bow, one per clip'),
     ('2. Volangkragen', 'pudderrosa, rundt halsen', '2. The ruffled collar', 'powder pink, around the neck'),
     ('3. Blomsten', 'flat, seks kronblad', '3. The flower', 'flat, six petals'),
     ('4. Bladet', 'flatt, salviegrønt', '4. The leaf', 'flat, sage green'),
@@ -194,11 +194,11 @@ add('oversikt_deler', [
 # ---------------------------------------------------------------- SIDE 7: DÅDYRHODET
 add('banner_hode', 'DEL 1: DET LILLE DÅDYRHODET', 'PART 1: THE LITTLE DEER HEAD')
 add('hode_lead',
-    'En forenklet, liten utgave av Ellies hode. Selve hodet hekles i spiral, brunt. Et lyst '
-    'ansiktsfelt og en liten snute, begge i kremhvit, hekles separat og sys på, se neste side.',
+    'En forenklet, liten utgave av Ellies hode. Selve hodet hekles i spiral, brunt. To lyse '
+    'kinnflekker og en liten snute, alle i kremhvit, hekles separat og sys på, se neste side.',
     "A simplified, small version of Ellie's head. The head itself is crocheted in a spiral, "
-    "brown. A light face patch and a small muzzle, both in cream, are crocheted separately and "
-    "sewn on, see the next page.")
+    "brown. Two light cheek patches and a small muzzle, all in cream, are crocheted separately "
+    "and sewn on, see the next page.")
 head3 = {'no': ['Omg', 'Beskrivelse', 'Masker'], 'en': ['Rnd', 'Description', 'Sts']}
 add('hode_rows', [
     ('1', '6 fm i magisk ring', 6),
@@ -230,34 +230,35 @@ add('orer_mini_txt',
     'Crochet two small flat circles in brown: 5 sc in a magic ring, fasten off. Sew them onto '
     'the top of the head, with a little space between.')
 
-add('banner_snute_mini', 'ANSIKTSFELTET OG SNUTEN (KREMHVIT)', 'THE FACE PATCH AND MUZZLE (CREAM)')
+add('banner_snute_mini', 'KINNFLEKKENE OG SNUTEN (KREMHVIT)', 'THE CHEEK PATCHES AND MUZZLE (CREAM)')
 add('snute_mini_lead',
-    'Den lyse "masken" rundt Ellies øyne og kinn er et eget flatt felt som sys på hodet. Den '
-    'lille runde snuten sys så oppå igjen, midt nederst i feltet. Begge deler hekles i '
+    'Ellies lyse tegning er IKKE ett stort felt rundt hele ansiktet, det er to atskilte, ovale '
+    'kremhvite flekker, én under hvert øye, som smalner inn og møtes nede ved snuten. Brunt skal '
+    'fortsatt vises både mellom flekkene (nedover neseryggen) og utenfor dem. Snuten hekles og '
+    'sys på som en egen, liten, stoppet del mellom de to flekkene. Alle tre delene hekles i '
     'kremhvit.',
-    "The light coloured \"mask\" around Ellie's eyes and cheeks is a separate flat piece sewn "
-    'onto the head. The small muzzle is then sewn on top of that, in the lower centre of the '
-    'patch. Both pieces are crocheted in cream.')
-add('pill_ansiktsfelt_mini', 'ANSIKTSFELTET (KREMHVITT)', 'THE FACE PATCH (CREAM)')
+    "Ellie's light markings are NOT one single patch around the whole face, they are two "
+    'separate oval cream patches, one under each eye, that narrow and meet down at the muzzle. '
+    'Brown should still show both between the two patches (down the bridge of the nose) and '
+    'outside them. The muzzle is crocheted and sewn on as its own small, stuffed piece between '
+    'the two patches. All three pieces are crocheted in cream.')
+add('pill_ansiktsfelt_mini', 'TO KINNFLEKKER (KREMHVITT) - HEKLE 2', 'TWO CHEEK PATCHES (CREAM) - MAKE 2')
 snute_mini_head = {'no': ['Omg/Rad', 'Beskrivelse', 'Masker'], 'en': ['Rnd/Row', 'Description', 'Sts']}
 add('snute_mini_head', snute_mini_head['no'], snute_mini_head['en'])
 add('ansiktsfelt_mini_rows', [
-    ('1', '6 fm i magisk ring', 6),
-    ('2', 'økn x 6', 12),
-    ('3', '(1 fm, økn) x 6', 18),
+    ('1', 'legg opp 6 lm. Start i 2. lm fra nålen: 4 fm, 3 fm i siste lm (tuppen), fortsett på '
+     'den andre siden av kjeden: 4 fm, 3 fm i samme maske som start (den andre tuppen)', 14),
 ])
 add('ansiktsfelt_mini_rows_en', [
-    ('1', '6 sc in a magic ring', 6),
-    ('2', 'inc x 6', 12),
-    ('3', '(1 sc, inc) x 6', 18),
+    ('1', 'chain 6. Starting in the 2nd ch from the hook: 4 sc, 3 sc in the last ch (one tip), '
+     'continue along the other side of the chain: 4 sc, 3 sc in the same st as the start (the '
+     'other tip)', 14),
 ])
 add('ansiktsfelt_mini_ferdig',
-    'Avslutt og klipp av, la ca. 15 cm trådende igjen. Ikke fyll denne delen, den skal ligge '
-    'flat. Sy den flatt fast på nedre halvdel av hodet, fra litt over midten og ned mot haken, '
-    'så den danner en lys oval "maske" rundt der øynene og kinnene skal være.',
-    'Fasten off, leaving a tail of approx. 15 cm. Do not stuff this piece, it should lie flat. '
-    'Sew it flat onto the lower half of the head, from just above the middle down towards the '
-    'chin, so it forms a light oval "mask" around where the eyes and cheeks will sit.')
+    'Avslutt med kjedemaske og klipp av, la ca. 15 cm trådende igjen på hver av de to flekkene. '
+    'Ikke fyll dem, de skal ligge flatt.',
+    'Finish with a slip stitch and cut, leaving a tail of approx. 15 cm on each of the two '
+    'patches. Do not stuff them, they should lie flat.')
 add('pill_snute_mini', 'SNUTEN (KREMHVIT)', 'THE MUZZLE (CREAM)')
 add('snute_mini_rows', [
     ('1', 'legg opp 4 lm. Start i 2. lm fra nålen: 2 fm, 3 fm i siste lm (tuppen), fortsett på '
@@ -270,30 +271,38 @@ add('snute_mini_rows_en', [
 ])
 add('snute_mini_ferdig',
     'Avslutt med kjedemaske og klipp av, la ca. 15 cm trådende igjen. Stopp en liten dott fyll '
-    'inn i snuten så den blir litt rund og hever seg fra ansiktsfeltet, ikke flat.',
+    'inn i snuten så den blir litt rund og hever seg fra hodet, ikke flat.',
     'Finish with a slip stitch and cut, leaving a tail of approx. 15 cm. Stuff a small amount of '
-    'filling into the muzzle so it becomes slightly round and raised from the face patch, not '
-    'flat.')
+    'filling into the muzzle so it becomes slightly round and raised from the head, not flat.')
 add('pill_snute_mini_fest', 'PLASSERING', 'PLACEMENT')
 add('snute_mini_fest_txt',
-    'Sy snuten fast midt nederst i ansiktsfeltet, rett over kanten der volangkragen senere '
-    'skal hekles på (se del 2). Sy med tette sting rundt hele kanten av ovalen, slik at '
-    'stoppingen ikke kan falle ut.',
-    'Sew the muzzle onto the lower centre of the face patch, right above the edge where the '
-    'ruffled collar will later be crocheted on (see part 2). Sew with tight stitches all the '
-    'way around the edge of the oval, so the stuffing cannot fall out.')
+    'Plasser de to kinnflekkene på nedre halvdel av hodet, én på hver side, med den smale '
+    'tuppen pekende inn mot midten (der snuten skal sitte) og den brede, runde enden vendt opp '
+    'og ut mot hvert øye. La det være synlig brunt mellom de to tuppene, nedover midten, og '
+    'synlig brunt utenfor begge flekkene. Sy flatt fast med tette sting rundt hele kanten av '
+    'hver flekk. Sy til slutt snuten fast midt mellom de to tuppene, nederst, rett over kanten '
+    'der volangkragen senere skal hekles på (se del 2). Stoppingen i snuten skal ikke kunne '
+    'falle ut.',
+    'Place the two cheek patches on the lower half of the head, one on each side, with the '
+    'narrow tip pointing in towards the centre (where the muzzle will sit) and the wide, '
+    'rounded end turned up and out towards each eye. Leave brown showing between the two tips, '
+    'down the centre, and brown showing outside both patches. Sew flat with tight stitches all '
+    'the way around the edge of each patch. Finally, sew the muzzle in place right between the '
+    'two tips, at the bottom, right above the edge where the ruffled collar will later be '
+    'crocheted on (see part 2). The stuffing in the muzzle should not be able to fall out.')
 
 add('pill_ansikt_mini', 'ANSIKTET, BRODERT', 'THE FACE, EMBROIDERED')
 add('ansikt_mini_txt',
-    'Brodér to små, runde øyne i svart satengsting på ansiktsfeltet, rett over snuten, ett på '
-    'hver side. Brodér deretter en liten, svart trekantet nese øverst på selve snuten, midt '
-    'på. Ikke bruk sikkerhetsøyne med plastdeler her, siden lenken skal være helt uten harde '
-    'eller løse deler. Se referansebildet fra Ellie for inspirasjon til uttrykket, i miniatyr.',
-    'Embroider two small, round eyes in black satin stitch onto the face patch, right above '
-    'the muzzle, one on each side. Then embroider a tiny black triangular nose at the top of '
-    'the muzzle itself, centred. Do not use plastic safety eyes here, since the clip must be '
-    'entirely free of hard or loose parts. See the reference photo from Ellie for inspiration '
-    'on the expression, in miniature.')
+    'Brodér to små, runde øyne i svart satengsting, ett øverst på hver kinnflekk. Brodér '
+    'deretter en liten, svart trekantet nese øverst på selve snuten, midt på. Ikke bruk '
+    'sikkerhetsøyne med plastdeler her, siden lenken skal være helt uten harde eller løse '
+    'deler. Se referansebildet fra Ellie for inspirasjon til uttrykket, i miniatyr: to øyne, '
+    'to kinnflekker og synlig brunt mellom dem, ikke ett sammenhengende felt.',
+    'Embroider two small, round eyes in black satin stitch, one at the top of each cheek patch. '
+    'Then embroider a tiny black triangular nose at the top of the muzzle itself, centred. Do '
+    'not use plastic safety eyes here, since the clip must be entirely free of hard or loose '
+    'parts. See the reference photo from Ellie for inspiration on the expression, in miniature: '
+    'two eyes, two cheek patches, and brown showing between them, not one continuous patch.')
 add('banner_krage', 'DEL 2: VOLANGKRAGEN', 'PART 2: THE RUFFLED COLLAR')
 add('pill_krage', 'VOLANGKRAGEN (PUDDERROSA)', 'THE RUFFLED COLLAR (POWDER PINK)')
 add('krage_txt',
@@ -395,7 +404,7 @@ add('montering_lead',
     'Lay out all the pieces in the order you want them, and measure the whole clip fully '
     'stretched out before you sew or tie anything in place.')
 add('montering_steg', [
-    'Sy ansiktsfeltet og snuten fast på hodet, hvis du ikke allerede har gjort det.',
+    'Sy de to kinnflekkene og snuten fast på hodet, hvis du ikke allerede har gjort det.',
     'Hekle volangkragen rundt nederste kant av dådyrhodet, og sy sløyfen fast mellom ørene.',
     'Tre eller sy kulene og stjerneperlen (og eventuelle andre perler) i ønsket rekkefølge på '
     'en kort, sterk bomullssnor eller direkte sammen med tett heftesting mellom hver del.',
@@ -407,7 +416,7 @@ add('montering_steg', [
     'Fest alle løse tråder godt på innsiden av delene, og klipp av det som er igjen.',
 ])
 add('montering_steg_en', [
-    'Sew the face patch and the muzzle onto the head, if you have not already.',
+    'Sew the two cheek patches and the muzzle onto the head, if you have not already.',
     'Crochet the ruffled collar around the bottom edge of the deer head, and sew the bow on '
     'between the ears.',
     'Thread or sew the balls and the star bead (and any other beads) in the order you want, '

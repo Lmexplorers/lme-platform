@@ -23,36 +23,41 @@ smokkeholdere (en enkel klips + snor skal ikke kunne danne en løkke rundt
 barnets hals). Oppskriften minner flere steder om at ferdig produkt må
 kontrolleres mot gjeldende lokale krav før salg.
 
-## Oppdatert 24. august 2026: ansiktsfelt og snute lagt til på hodet
+## Oppdatert 24. august 2026: kinnflekker og snute lagt til på hodet
 
 Renate hadde begynt å hekle smokkelenken og meldte fra at hodebeskrivelsen
 manglet noe: ingen fargeskifte til hvit/naturhvit rundt øyne og nese, og
-ingen forklaring på hvordan nesepartiet skulle bygges ut i 3D. Første
-retting (samme dag) la bare til en liten snute, men Renate presiserte at
-det også manglet en beskrivelse av **det lyse partiet rundt øyne og kinn**,
-og at nesen manglet fargeangivelse (svart). Løsningen er nå hentet fullt ut
-fra samme teknikk som den fulle Ellie-oppskriften (`../ellie-dadyret/`)
-allerede bruker, forenklet og skalert ned til denne miniatyrstørrelsen, med
-et eget oppslag "ANSIKTSFELTET OG SNUTEN" på side 8 til 9 av 16:
+ingen forklaring på hvordan nesepartiet skulle bygges ut i 3D. Dette gikk
+gjennom to rettinger samme dag:
 
-- Et flatt, kremhvitt **ansiktsfelt** (3 omganger, 6→12→18 fm) hekles
-  separat, stoppes IKKE, og sys flatt fast på nedre halvdel av hodet, fra
-  litt over midten og ned mot haken. Dette danner selve den lyse "masken"
-  rundt der øynene og kinnene sitter.
+1. Første retting la til én liten snute, men Renate presiserte at det også
+   manglet en beskrivelse av det lyse partiet rundt øyne og kinn.
+2. Andre retting la til ett stort, sammenhengende ansiktsfelt (samme
+   teknikk som den fulle Ellie-oppskriften), men Renate rettet dette igjen:
+   **det er ikke ett felt som danner en ring/maske rundt ansiktet, det er
+   to atskilte, ovale kinnflekker, én under hvert øye, som smalner inn og
+   møtes nede ved snuten**, med synlig brunt både mellom flekkene (nedover
+   neseryggen) og utenfor dem.
+
+Endelig løsning, i et eget oppslag "KINNFLEKKENE OG SNUTEN" på side 8 til 9
+av 16:
+
+- **To** flate, kremhvite **kinnflekker** hekles hver for seg (kjede 6, 14
+  fm totalt per flekk, samme enkle, entydige rundt-for-rundt-teknikk som
+  snuten, ingen tvetydig "øk jevnt fordelt"-instruks), stoppes IKKE, og sys
+  flatt fast på hver sin side av hodet, med den smale tuppen inn mot
+  midten og den brede enden opp mot hvert øye.
 - En liten, flat oval **snute** hekles separat i kremhvit (kjede 4, 10 fm
-  totalt, ett enkelt rundt-for-rundt-trinn, ingen tvetydig
-  "øk jevnt fordelt"-instruks), stoppes lett, og sys fast midt nederst i
-  ansiktsfeltet, oppå det (ikke direkte på hodet).
-- Øynene broderes i svart på ansiktsfeltet, rett over snuten. Nesen
-  broderes i svart, øverst på selve snuten, midt på. Begge farger er nå
-  eksplisitt angitt.
+  totalt), stoppes lett, og sys fast midt mellom de to kinnflekkenes tupper,
+  nederst.
+- Øynene broderes i svart øverst på hver kinnflekk. Nesen broderes i svart,
+  øverst på selve snuten, midt på. Begge farger er eksplisitt angitt.
 
-Montering-sjekklisten (siste side) fikk også et nytt første punkt som
-minner om å sy fast ansiktsfeltet og snuten, i tilfelle det ikke allerede
-er gjort.
+Montering-sjekklisten (siste side) minner om å sy fast de to kinnflekkene
+og snuten, i tilfelle det ikke allerede er gjort.
 
 Kun Ellies smokkelenke er oppdatert. De andre fem karakterenes
-smokkelenker er bevisst forenklet uten egen ansiktsfelt/snuteflekk (samme
+smokkelenker er bevisst forenklet uten egne kinnflekker/snuteflekk (samme
 mønster som Felix' smokkelenke), og er ikke endret med mindre Renate ber
 om det.
 
