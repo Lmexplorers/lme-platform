@@ -173,4 +173,8 @@ export const PATTERN_LINKS = {
   "plink_1U7uKgLax7B8uQzqZmwJKWYz": { p: "bottehatter-barn-strikk", lang: "en" },
   "plink_1U7uKiLax7B8uQzqutERP2yG": { p: "bottehatter-barn-hekle", lang: "no" },
   "plink_1U7uKjLax7B8uQzqnhWEzD5o": { p: "bottehatter-barn-hekle", lang: "en" },
+  "plink_1U80bLLax7B8uQzqZk6vSsah": { p: "bottehatter-barn-strikk-brodert", lang: "no" },
+  "plink_1U80bpLax7B8uQzqu0LtFpOG": { p: "bottehatter-barn-strikk-brodert", lang: "en" },
+  "plink_1U80buLax7B8uQzq75aBa0PH": { p: "bottehatter-barn-hekle-rune", lang: "no" },
+  "plink_1U80c2Lax7B8uQzqZvwjPTmR": { p: "bottehatter-barn-hekle-rune", lang: "en" },
 };
