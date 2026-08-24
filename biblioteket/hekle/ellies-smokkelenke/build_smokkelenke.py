@@ -69,10 +69,10 @@ add('om_stil',
 add('pill_sikkerhet_kort', 'VIKTIGST AV ALT: SIKKERHET', 'MOST IMPORTANT OF ALL: SAFETY')
 add('om_sikkerhet_kort',
     'En smokkelenke er noe barnet har tett på ansiktet, ofte alene i vogn eller seng. Derfor er '
-    'lengden på denne oppskriften bevisst kort, og hele side 12 er viet sikkerhet. Les den siden '
+    'lengden på denne oppskriften bevisst kort, og hele side 14 er viet sikkerhet. Les den siden '
     'før du hekler videre.',
     "A pacifier clip is something a baby has close to their face, often alone in a pram or bed. "
-    "That's why this pattern's length is deliberately short, and all of page 12 is dedicated to "
+    "That's why this pattern's length is deliberately short, and all of page 14 is dedicated to "
     "safety. Read that page before you crochet on.")
 
 # ---------------------------------------------------------------- SIDE 3
@@ -184,7 +184,7 @@ add('oversikt_lead',
     'Four types of pieces are crocheted separately, then threaded or sewn together at the end '
     'along a short cord, or directly to each other:')
 add('oversikt_deler', [
-    ('1. Det lille dådyrhodet', 'forenklet Ellie med kremhvit snute og sløyfe, én per lenke', '1. The little deer head', 'a simplified Ellie with a cream muzzle and a bow, one per clip'),
+    ('1. Det lille dådyrhodet', 'forenklet Ellie med kremhvitt ansiktsfelt, snute og sløyfe, én per lenke', '1. The little deer head', 'a simplified Ellie with a cream face patch, muzzle and a bow, one per clip'),
     ('2. Volangkragen', 'pudderrosa, rundt halsen', '2. The ruffled collar', 'powder pink, around the neck'),
     ('3. Blomsten', 'flat, seks kronblad', '3. The flower', 'flat, six petals'),
     ('4. Bladet', 'flatt, salviegrønt', '4. The leaf', 'flat, sage green'),
@@ -194,11 +194,11 @@ add('oversikt_deler', [
 # ---------------------------------------------------------------- SIDE 7: DÅDYRHODET
 add('banner_hode', 'DEL 1: DET LILLE DÅDYRHODET', 'PART 1: THE LITTLE DEER HEAD')
 add('hode_lead',
-    'En forenklet, liten utgave av Ellies hode. Selve hodet hekles i spiral, brunt. En liten, '
-    'egen snute i kremhvit hekles separat og sys på, se neste side.',
+    'En forenklet, liten utgave av Ellies hode. Selve hodet hekles i spiral, brunt. Et lyst '
+    'ansiktsfelt og en liten snute, begge i kremhvit, hekles separat og sys på, se neste side.',
     "A simplified, small version of Ellie's head. The head itself is crocheted in a spiral, "
-    "brown. A small muzzle piece in cream is crocheted separately and sewn on, see the next "
-    "page.")
+    "brown. A light face patch and a small muzzle, both in cream, are crocheted separately and "
+    "sewn on, see the next page.")
 head3 = {'no': ['Omg', 'Beskrivelse', 'Masker'], 'en': ['Rnd', 'Description', 'Sts']}
 add('hode_rows', [
     ('1', '6 fm i magisk ring', 6),
@@ -230,16 +230,35 @@ add('orer_mini_txt',
     'Crochet two small flat circles in brown: 5 sc in a magic ring, fasten off. Sew them onto '
     'the top of the head, with a little space between.')
 
-add('banner_snute_mini', 'SNUTEN (KREMHVIT)', 'THE MUZZLE (CREAM)')
+add('banner_snute_mini', 'ANSIKTSFELTET OG SNUTEN (KREMHVIT)', 'THE FACE PATCH AND MUZZLE (CREAM)')
 add('snute_mini_lead',
-    'Ellies snute er lys, kremhvit, og skal stå litt frem fra resten av hodet, akkurat som på '
-    'referansebildet. Den hekles som en liten, flat oval, stoppes lett, og sys fast på nedre '
-    'halvdel av hodet, midt foran.',
-    "Ellie's muzzle is light, cream-coloured, and should stand out a little from the rest of the "
-    'head, just like in the reference photo. It is crocheted as a small, flat oval, lightly '
-    'stuffed, and sewn onto the lower half of the head, centred at the front.')
+    'Den lyse "masken" rundt Ellies øyne og kinn er et eget flatt felt som sys på hodet. Den '
+    'lille runde snuten sys så oppå igjen, midt nederst i feltet. Begge deler hekles i '
+    'kremhvit.',
+    "The light coloured \"mask\" around Ellie's eyes and cheeks is a separate flat piece sewn "
+    'onto the head. The small muzzle is then sewn on top of that, in the lower centre of the '
+    'patch. Both pieces are crocheted in cream.')
+add('pill_ansiktsfelt_mini', 'ANSIKTSFELTET (KREMHVITT)', 'THE FACE PATCH (CREAM)')
 snute_mini_head = {'no': ['Omg/Rad', 'Beskrivelse', 'Masker'], 'en': ['Rnd/Row', 'Description', 'Sts']}
 add('snute_mini_head', snute_mini_head['no'], snute_mini_head['en'])
+add('ansiktsfelt_mini_rows', [
+    ('1', '6 fm i magisk ring', 6),
+    ('2', 'økn x 6', 12),
+    ('3', '(1 fm, økn) x 6', 18),
+])
+add('ansiktsfelt_mini_rows_en', [
+    ('1', '6 sc in a magic ring', 6),
+    ('2', 'inc x 6', 12),
+    ('3', '(1 sc, inc) x 6', 18),
+])
+add('ansiktsfelt_mini_ferdig',
+    'Avslutt og klipp av, la ca. 15 cm trådende igjen. Ikke fyll denne delen, den skal ligge '
+    'flat. Sy den flatt fast på nedre halvdel av hodet, fra litt over midten og ned mot haken, '
+    'så den danner en lys oval "maske" rundt der øynene og kinnene skal være.',
+    'Fasten off, leaving a tail of approx. 15 cm. Do not stuff this piece, it should lie flat. '
+    'Sew it flat onto the lower half of the head, from just above the middle down towards the '
+    'chin, so it forms a light oval "mask" around where the eyes and cheeks will sit.')
+add('pill_snute_mini', 'SNUTEN (KREMHVIT)', 'THE MUZZLE (CREAM)')
 add('snute_mini_rows', [
     ('1', 'legg opp 4 lm. Start i 2. lm fra nålen: 2 fm, 3 fm i siste lm (tuppen), fortsett på '
      'den andre siden av kjeden: 2 fm, 3 fm i samme maske som start (den andre tuppen)', 10),
@@ -251,29 +270,30 @@ add('snute_mini_rows_en', [
 ])
 add('snute_mini_ferdig',
     'Avslutt med kjedemaske og klipp av, la ca. 15 cm trådende igjen. Stopp en liten dott fyll '
-    'inn i snuten før du syr den på, så den blir litt rund og hever seg fra hodet, ikke flat.',
+    'inn i snuten så den blir litt rund og hever seg fra ansiktsfeltet, ikke flat.',
     'Finish with a slip stitch and cut, leaving a tail of approx. 15 cm. Stuff a small amount of '
-    'filling into the muzzle before sewing it on, so it becomes slightly round and raised from '
-    'the head, not flat.')
+    'filling into the muzzle so it becomes slightly round and raised from the face patch, not '
+    'flat.')
 add('pill_snute_mini_fest', 'PLASSERING', 'PLACEMENT')
 add('snute_mini_fest_txt',
-    'Sy snuten fast på nedre halvdel av hodet, midt foran, rett over kanten der volangkragen '
-    'senere skal hekles på (se del 2). Sy med tette sting rundt hele kanten av ovalen, slik at '
+    'Sy snuten fast midt nederst i ansiktsfeltet, rett over kanten der volangkragen senere '
+    'skal hekles på (se del 2). Sy med tette sting rundt hele kanten av ovalen, slik at '
     'stoppingen ikke kan falle ut.',
-    'Sew the muzzle onto the lower half of the head, centred at the front, right above the edge '
-    'where the ruffled collar will later be crocheted on (see part 2). Sew with tight stitches '
-    'all the way around the edge of the oval, so the stuffing cannot fall out.')
+    'Sew the muzzle onto the lower centre of the face patch, right above the edge where the '
+    'ruffled collar will later be crocheted on (see part 2). Sew with tight stitches all the '
+    'way around the edge of the oval, so the stuffing cannot fall out.')
 
 add('pill_ansikt_mini', 'ANSIKTET, BRODERT', 'THE FACE, EMBROIDERED')
 add('ansikt_mini_txt',
-    'Brodér to små, runde øyne i svart satengsting rett over snuten, ett på hver side. Brodér '
-    'deretter en liten trekantet nese øverst på selve snuten, midt på. Ikke bruk sikkerhetsøyne '
-    'med plastdeler her, siden lenken skal være helt uten harde eller løse deler. Se '
-    'referansebildet fra Ellie for inspirasjon til uttrykket, i miniatyr.',
-    'Embroider two small, round eyes in black satin stitch right above the muzzle, one on each '
-    'side. Then embroider a tiny triangular nose at the top of the muzzle itself, centred. Do '
-    'not use plastic safety eyes here, since the clip must be entirely free of hard or loose '
-    'parts. See the reference photo from Ellie for inspiration on the expression, in miniature.')
+    'Brodér to små, runde øyne i svart satengsting på ansiktsfeltet, rett over snuten, ett på '
+    'hver side. Brodér deretter en liten, svart trekantet nese øverst på selve snuten, midt '
+    'på. Ikke bruk sikkerhetsøyne med plastdeler her, siden lenken skal være helt uten harde '
+    'eller løse deler. Se referansebildet fra Ellie for inspirasjon til uttrykket, i miniatyr.',
+    'Embroider two small, round eyes in black satin stitch onto the face patch, right above '
+    'the muzzle, one on each side. Then embroider a tiny black triangular nose at the top of '
+    'the muzzle itself, centred. Do not use plastic safety eyes here, since the clip must be '
+    'entirely free of hard or loose parts. See the reference photo from Ellie for inspiration '
+    'on the expression, in miniature.')
 add('banner_krage', 'DEL 2: VOLANGKRAGEN', 'PART 2: THE RUFFLED COLLAR')
 add('pill_krage', 'VOLANGKRAGEN (PUDDERROSA)', 'THE RUFFLED COLLAR (POWDER PINK)')
 add('krage_txt',
@@ -375,7 +395,7 @@ add('montering_lead',
     'Lay out all the pieces in the order you want them, and measure the whole clip fully '
     'stretched out before you sew or tie anything in place.')
 add('montering_steg', [
-    'Sy snuten fast på nedre halvdel av hodet, midt foran, hvis du ikke allerede har gjort det.',
+    'Sy ansiktsfeltet og snuten fast på hodet, hvis du ikke allerede har gjort det.',
     'Hekle volangkragen rundt nederste kant av dådyrhodet, og sy sløyfen fast mellom ørene.',
     'Tre eller sy kulene og stjerneperlen (og eventuelle andre perler) i ønsket rekkefølge på '
     'en kort, sterk bomullssnor eller direkte sammen med tett heftesting mellom hver del.',
@@ -387,7 +407,7 @@ add('montering_steg', [
     'Fest alle løse tråder godt på innsiden av delene, og klipp av det som er igjen.',
 ])
 add('montering_steg_en', [
-    'Sew the muzzle onto the lower half of the head, centre front, if you have not already.',
+    'Sew the face patch and the muzzle onto the head, if you have not already.',
     'Crochet the ruffled collar around the bottom edge of the deer head, and sew the bow on '
     'between the ears.',
     'Thread or sew the balls and the star bead (and any other beads) in the order you want, '
@@ -575,20 +595,28 @@ def build(lang):
 {card('<p>' + t('orer_mini_txt') + '</p>')}
 ''', 7))
 
+    ansiktsfelt_mini_rows = T['ansiktsfelt_mini_rows']['no'] if lang == 'no' else T['ansiktsfelt_mini_rows_en']['no']
     snute_mini_rows = T['snute_mini_rows']['no'] if lang == 'no' else T['snute_mini_rows_en']['no']
     pages.append(pg(f'''
 {banner(t('banner_snute_mini'))}
 <p>{t('snute_mini_lead')}</p>
+{rosep(t('pill_ansiktsfelt_mini'))}
+{card(otab(ansiktsfelt_mini_rows, T['snute_mini_head'][lang]))}
+{cme(t('ansiktsfelt_mini_ferdig'))}
+{sagep(t('pill_snute_mini'))}
 {card(otab(snute_mini_rows, T['snute_mini_head'][lang]))}
 {cme(t('snute_mini_ferdig'))}
 {rosep(t('pill_snute_mini_fest'))}
 {card('<p>' + t('snute_mini_fest_txt') + '</p>')}
+''', 8))
+
+    pages.append(pg(f'''
 {sagep(t('pill_ansikt_mini'))}
 <div class="twocol">
   <div>{card('<p>' + t('ansikt_mini_txt') + '</p>')}</div>
   <div class="figwrap"><img src="{face_src}" alt="Ellie ansikt, referanse"><div class="figcap small">{'Referanse: Ellies ansiktsuttrykk' if lang == 'no' else "Reference: Ellie's expression"}</div></div>
 </div>
-''', 8))
+''', 9))
 
     pages.append(pg(f'''
 {banner(t('banner_krage'))}
@@ -596,7 +624,7 @@ def build(lang):
 {card('<p>' + t('krage_txt') + '</p>')}
 {sagep(t('pill_krage_fest'))}
 {cme(t('krage_fest_txt'))}
-''', 9))
+''', 10))
 
     pages.append(pg(f'''
 {banner(t('banner_blomst'))}
@@ -608,7 +636,7 @@ def build(lang):
 {card('<p>' + t('blad_txt') + '</p>')}
 {sagep(t('pill_montering_motiv'))}
 {cme(t('montering_motiv_txt'))}
-''', 10))
+''', 11))
 
     kuler_rows = T['kuler_rows']['no'] if lang == 'no' else T['kuler_rows_en']['no']
     pages.append(pg(f'''
@@ -618,14 +646,14 @@ def build(lang):
 {cme(t('kuler_ferdig'))}
 {rosep(t('pill_lokke'))}
 {card('<p>' + t('lokke_txt') + '</p>')}
-''', 11))
+''', 12))
 
     mo_steg = T['montering_steg']['no'] if lang == 'no' else T['montering_steg_en']['no']
     pages.append(pg(f'''
 {banner(t('banner_montering'))}
 <p>{t('montering_lead')}</p>
 {card(steps(mo_steg))}
-''', 12))
+''', 13))
 
     regler = T['regler']['no'] if lang == 'no' else T['regler_en']['no']
     pages.append(pg(f'''
@@ -634,12 +662,12 @@ def build(lang):
 {card('<p>' + t('lengde_txt') + '</p>')}
 {sagep(t('pill_regler'))}
 {card(ul(regler))}
-''', 13))
+''', 14))
 
     pages.append(pg(f'''
 {banner(t('banner_stell'))}
 {cme(t('stell_txt'))}
-''', 14))
+''', 15))
 
     kolliste = T['kolleksjon_liste']['no'] if lang == 'no' else T['kolleksjon_liste']['en']
     pages.append(pg(f'''
@@ -652,7 +680,7 @@ def build(lang):
 <div class="byline">
   <div class="by2">{t('by1')} &middot; {t('by2')} &middot; {t('by3')}</div>
 </div>
-''', 15))
+''', 16))
 
     return pages
 
