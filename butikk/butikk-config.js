@@ -164,6 +164,34 @@ window.LME_BUTIKK = {
       ]
     },
 
+    "bottehatter-barn-strikk-brodert": {
+      navn:  { no: "Bøttehatter barn, brodert strikkeoppskrift", en: "Kids Bucket Hats, duplicate stitch knitting pattern" },
+      undertittel: { no: "NORGE · NORWAY · RO · brodert med maskesting · str. 50–104",
+                     en: "NORGE · NORWAY · RO · duplicate stitch · size 50–104" },
+      cover:   "/images/oppskrift-bottehatter-barn-strikk-brodert.jpg",
+      coverEn: "/images/oppskrift-bottehatter-barn-strikk-brodert.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-brodert.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-brodert-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "bottehatter-barn-hekle-rune": {
+      navn:  { no: "Bøttehatter barn, runeskrift hekleoppskrift", en: "Kids Bucket Hats, rune letters crochet pattern" },
+      undertittel: { no: "NORGE · NORWAY · runeskrift · str. 50–104",
+                     en: "NORGE · NORWAY · rune letters · size 50–104" },
+      cover:   "/images/oppskrift-bottehatter-barn-hekle-rune.jpg",
+      coverEn: "/images/oppskrift-bottehatter-barn-hekle-rune.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-hekle-rune.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-hekle-rune-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
     "ellie-hekle": {
       navn:  { no: "Ellie, det lille dådyret - amigurumi", en: "Ellie the Little Fawn - amigurumi" },
       undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 18-20 cm · avtakbar sløyfe",

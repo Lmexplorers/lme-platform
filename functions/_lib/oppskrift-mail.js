@@ -192,6 +192,10 @@ const PRODUCT = {
     files: { no: [f("bottehatter-barn-strikk.pdf", "Bøttehatter barn, strikk", "")], en: [f("bottehatter-barn-strikk-en.pdf", "", "Kids Bucket Hats, knit")] } },
   "bottehatter-barn-hekle": { no: "Bøttehatter barn, hekle (NORGE/NORWAY/RO)", en: "Kids Bucket Hats, crochet (NORGE/NORWAY/RO)",
     files: { no: [f("bottehatter-barn-hekle.pdf", "Bøttehatter barn, hekle", "")], en: [f("bottehatter-barn-hekle-en.pdf", "", "Kids Bucket Hats, crochet")] } },
+  "bottehatter-barn-strikk-brodert": { no: "Bøttehatter barn, brodert (NORGE/NORWAY/RO)", en: "Kids Bucket Hats, duplicate stitch (NORGE/NORWAY/RO)",
+    files: { no: [f("bottehatter-barn-strikk-brodert.pdf", "Bøttehatter barn, brodert", "")], en: [f("bottehatter-barn-strikk-brodert-en.pdf", "", "Kids Bucket Hats, duplicate stitch")] } },
+  "bottehatter-barn-hekle-rune": { no: "Bøttehatter barn, runeskrift (NORGE/NORWAY)", en: "Kids Bucket Hats, rune letters (NORGE/NORWAY)",
+    files: { no: [f("bottehatter-barn-hekle-rune.pdf", "Bøttehatter barn, runeskrift", "")], en: [f("bottehatter-barn-hekle-rune-en.pdf", "", "Kids Bucket Hats, rune letters")] } },
 };
 
 /* Bygger nedlastings-HTML: kun kjøperens eget språk. Engelsk kjøper får den
