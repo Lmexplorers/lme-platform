@@ -287,7 +287,9 @@ pages.append(make_page('LME HEKLEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTER 
         'Når toppen har riktig maskeantall, hekler du rett ned uten flere økninger. Behold maskeantallet '
         'fra tabellen på forrige side gjennom hele denne delen, det er nå sidene på hatten.',
         'Hekle antall omganger oppgitt i kolonnen &laquo;Før motiv&raquo; i tabellen under, i hovedfargen.',
-        'Hekle inn motivet ditt her, 7 omganger, se diagrammene på neste side.',
+        'Hekle inn motivet ditt her, 7 omganger, se diagrammene på neste side. Viktig: siden hatten hekles '
+        'fra toppen og ned, hekler du diagrammet <b>ovenfra og ned</b> (omgang 7 først, omgang 1 sist), '
+        'motsatt rekkefølge av strikkeversjonen.',
         'Fortsett rett i hovedfargen etter motivet, i antall omganger fra kolonnen &laquo;Etter motiv&raquo;.',
     ]) +
     tealp('TABELL: SIDENE') +
@@ -310,8 +312,9 @@ pages.append(make_page('LME HEKLEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTER 
     f'<div class="chartrow">{chart_svg(NORWAY_CHART, CMAP_LETTERS, cell=16, numbers=True)}</div>' +
     tealp('DIAGRAM: RO + FLAGG (25 masker x 7 omganger)') +
     f'<div class="chartrow">{chart_svg(RO_FLAG_CHART, CMAP_ROFLAG, cell=19, numbers=True)}</div>' +
-    '<p class="small">Les alle diagrammene nedenfra og opp. Fordi du hekler i spiral, forskyves starten '
-    'svakt for hver omgang, følg maskemarkøren, men kontroller visuelt at motivet står rett.</p>'
+    cream('<p class="creamtitle">Les diagrammene ovenfra og ned</p>'
+          '<p>Omgang 7, &oslash;verst i diagrammet, hekles f&oslash;rst, omgang 1, nederst, sist. Gj&oslash;r '
+          'du det motsatt, blir bokstavene opp-ned.</p>')
 , 9))
 
 # ============ SIDE 10: DEL 3 BREMMEN ============
@@ -516,7 +519,9 @@ pages.append(page(
         'of the hat.',
         'Crochet the number of rounds given in the &laquo;Before motif&raquo; column in the table below, in '
         'the main colour.',
-        'Crochet your motif here, 7 rounds, see the charts on the next page.',
+        'Crochet your motif here, 7 rounds, see the charts on the next page. Important: because the hat is '
+        'crocheted from the top down, you work the chart <b>top to bottom</b> (round 7 first, round 1 '
+        'last), the opposite order from the knitting pattern.',
         'Continue plain in the main colour after the motif, for the number of rounds in the &laquo;After '
         'motif&raquo; column.',
     ]) +
@@ -541,9 +546,9 @@ pages.append(page(
     f'<div class="chartrow">{chart_svg(NORWAY_CHART, CMAP_LETTERS, cell=16, numbers=True)}</div>' +
     tealp('CHART: RO + FLAG (25 stitches x 7 rounds)') +
     f'<div class="chartrow">{chart_svg(RO_FLAG_CHART, CMAP_ROFLAG, cell=19, numbers=True)}</div>' +
-    '<p class="small">Read all charts from the bottom up. Because you are crocheting in a spiral, the '
-    'start shifts slightly each round, follow the stitch marker but check visually that the motif sits '
-    'straight.</p>'
+    cream('<p class="creamtitle">Read the charts top to bottom</p>'
+          '<p>Round 7, at the top of the chart, is worked first, round 1, at the bottom, is worked last. '
+          'Work it the other way round and the letters come out upside down.</p>')
 , 9))
 
 # ============ PAGE 10: PART 3 THE BRIM ============
