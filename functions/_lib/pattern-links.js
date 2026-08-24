@@ -167,4 +167,10 @@ export const PATTERN_LINKS = {
   // Fotballpute RO RO RO
   "plink_1U34N1Lax7B8uQzqUTV9yDUo": { p: "fotballpute-ro-strikk", lang: "en" },
   "plink_1U34MtLax7B8uQzqTsFXyYUv": { p: "fotballpute-ro-strikk", lang: "no" },
+
+  // Bøttehatter barn (NORGE/NORWAY/RO, str. 50-104)
+  "plink_1U7uKfLax7B8uQzqhoOM7V47": { p: "bottehatter-barn-strikk", lang: "no" },
+  "plink_1U7uKgLax7B8uQzqZmwJKWYz": { p: "bottehatter-barn-strikk", lang: "en" },
+  "plink_1U7uKiLax7B8uQzqutERP2yG": { p: "bottehatter-barn-hekle", lang: "no" },
+  "plink_1U7uKjLax7B8uQzqnhWEzD5o": { p: "bottehatter-barn-hekle", lang: "en" },
 };

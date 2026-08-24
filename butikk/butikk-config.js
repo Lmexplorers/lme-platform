@@ -136,6 +136,34 @@ window.LME_BUTIKK = {
       ]
     },
 
+    "bottehatter-barn-strikk": {
+      navn:  { no: "Bøttehatter barn, strikkeoppskrift", en: "Kids Bucket Hats, knitting pattern" },
+      undertittel: { no: "NORGE · NORWAY · RO · str. 50–104 · komplett i seg selv",
+                     en: "NORGE · NORWAY · RO · size 50–104 · complete on its own" },
+      cover:   "/images/oppskrift-bottehatter-barn-strikk.jpg",
+      coverEn: "/images/oppskrift-bottehatter-barn-strikk.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "bottehatter-barn-hekle": {
+      navn:  { no: "Bøttehatter barn, hekleoppskrift", en: "Kids Bucket Hats, crochet pattern" },
+      undertittel: { no: "NORGE · NORWAY · RO · str. 50–104 · komplett i seg selv",
+                     en: "NORGE · NORWAY · RO · size 50–104 · complete on its own" },
+      cover:   "/images/oppskrift-bottehatter-barn-hekle.jpg",
+      coverEn: "/images/oppskrift-bottehatter-barn-hekle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-hekle.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-hekle-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
     "ellie-hekle": {
       navn:  { no: "Ellie, det lille dådyret - amigurumi", en: "Ellie the Little Fawn - amigurumi" },
       undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 18-20 cm · avtakbar sløyfe",

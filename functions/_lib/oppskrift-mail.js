@@ -188,6 +188,10 @@ const PRODUCT = {
     files: { no: [f2("https://lmexplorers.com/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del1-no.zip", "Last ned del 1 av 3 (zip, norsk)", "Download part 1 of 3 (zip, Norwegian)"), f2("https://lmexplorers.com/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del2-no.zip", "Last ned del 2 av 3 (zip, norsk)", "Download part 2 of 3 (zip, Norwegian)"), f2("https://lmexplorers.com/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del3-no.zip", "Last ned del 3 av 3 (zip, norsk)", "Download part 3 of 3 (zip, Norwegian)")], en: [f2("https://lmexplorers.com/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del1-en.zip", "Last ned del 1 av 3 (zip, engelsk)", "Download part 1 of 3 (zip, English)"), f2("https://lmexplorers.com/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del2-en.zip", "Last ned del 2 av 3 (zip, engelsk)", "Download part 2 of 3 (zip, English)"), f2("https://lmexplorers.com/butikk/nedlasting/oppskrifter/woodland-dreams-bundle-del3-en.zip", "Last ned del 3 av 3 (zip, engelsk)", "Download part 3 of 3 (zip, English)")] } },
   "fotballpute-ro-strikk": { no: "Fotballpute RO RO RO, strikk", en: "RO RO RO football cushion, knit",
     files: { no: [f("fotballpute-ro-strikk.pdf?v=3", "Fotballpute RO RO RO, strikk", "")], en: [f("fotballpute-ro-strikk-en.pdf?v=3", "", "RO RO RO football cushion, knit")] } },
+  "bottehatter-barn-strikk": { no: "Bøttehatter barn, strikk (NORGE/NORWAY/RO)", en: "Kids Bucket Hats, knit (NORGE/NORWAY/RO)",
+    files: { no: [f("bottehatter-barn-strikk.pdf", "Bøttehatter barn, strikk", "")], en: [f("bottehatter-barn-strikk-en.pdf", "", "Kids Bucket Hats, knit")] } },
+  "bottehatter-barn-hekle": { no: "Bøttehatter barn, hekle (NORGE/NORWAY/RO)", en: "Kids Bucket Hats, crochet (NORGE/NORWAY/RO)",
+    files: { no: [f("bottehatter-barn-hekle.pdf", "Bøttehatter barn, hekle", "")], en: [f("bottehatter-barn-hekle-en.pdf", "", "Kids Bucket Hats, crochet")] } },
 };
 
 /* Bygger nedlastings-HTML: kun kjøperens eget språk. Engelsk kjøper får den
