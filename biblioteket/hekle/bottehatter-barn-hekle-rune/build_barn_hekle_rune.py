@@ -84,29 +84,46 @@ def sizetable(header, rows):
     return f'<table class="t sz"><tr>{head}</tr>{body}</table>'
 
 
-SIZES = ["50", "56", "62", "68", "74", "80", "86", "92", "98", "104"]
-AGE = ["0-1 mnd", "1-2 mnd", "2-4 mnd", "4-6 mnd", "6-9 mnd", "9-12 mnd", "12-18 mnd", "18-24 mnd", "2-3 år", "3-4 år"]
-HEAD = ["34-36", "36-38", "38-40", "40-42", "42-44", "44-46", "46-48", "48-50", "49-51", "50-52"]
+SIZES = ["50", "56", "62", "68", "74", "80", "86", "92", "98", "104",
+         "110", "116", "122", "128", "134", "140", "146", "152", "158", "164", "170"]
+AGE = ["0-1 mnd", "1-2 mnd", "2-4 mnd", "4-6 mnd", "6-9 mnd", "9-12 mnd", "12-18 mnd", "18-24 mnd", "2-3 år", "3-4 år",
+       "4-5 år", "5-6 år", "6-7 år", "7-8 år", "8-9 år", "9-10 år", "10-11 år", "11-12 år", "12-13 år", "13-14 år", "14-16 år"]
+HEAD = ["34-36", "36-38", "38-40", "40-42", "42-44", "44-46", "46-48", "48-50", "49-51", "50-52",
+        "51-53", "52-53", "52-54", "53-54", "53-55", "54-55", "54-56", "55-56", "55-57", "56-57", "56-58"]
 
 # topp (samme oppbygging som den charted barnehekle-oppskriften)
-STD_ROUND = [8, 8, 9, 9, 10, 10, 11, 11, 11, 12]
-EXTRA = [0, 3, 0, 3, 0, 3, 0, 2, 4, 0]
-FINAL = [48, 51, 54, 57, 60, 63, 66, 68, 70, 72]
-FERDIG_OMKR = ["34.3", "36.4", "38.6", "40.7", "42.9", "45.0", "47.1", "48.6", "50.0", "51.4"]
-TOPPDIAM = ["10.9", "11.6", "12.3", "13.0", "13.6", "14.3", "15.0", "15.5", "15.9", "16.4"]
+STD_ROUND = [8, 8, 9, 9, 10, 10, 11, 11, 11, 12,
+             12, 12, 12, 12, 12, 12, 12, 13, 13, 13, 13]
+EXTRA = [0, 3, 0, 3, 0, 3, 0, 2, 4, 0,
+         1, 2, 2, 3, 4, 4, 5, 0, 0, 1, 2]
+FINAL = [48, 51, 54, 57, 60, 63, 66, 68, 70, 72,
+         73, 74, 74, 75, 76, 76, 77, 78, 78, 79, 80]
+FERDIG_OMKR = ["34.3", "36.4", "38.6", "40.7", "42.9", "45.0", "47.1", "48.6", "50.0", "51.4",
+               "52.0", "52.5", "53.0", "53.5", "54.0", "54.5", "55.0", "55.5", "56.0", "56.5", "57.0"]
+TOPPDIAM = ["10.9", "11.6", "12.3", "13.0", "13.6", "14.3", "15.0", "15.5", "15.9", "16.4",
+            "16.6", "16.8", "16.8", "17.1", "17.3", "17.3", "17.5", "17.7", "17.7", "18.0", "18.2"]
 
 # sidene: heltall rett ned, ingen fargeomganger, bokstavene hekles på etterpå
-SIDEOMG = [12, 13, 14, 14, 15, 16, 17, 18, 18, 19]
-SIDE_CM = ["7.5", "8.1", "8.75", "8.75", "9.4", "10", "10.6", "11.25", "11.25", "11.9"]
-LETTER_H = ["3.5", "4", "4.4", "4.4", "4.7", "5", "5.3", "5.6", "5.6", "5.9"]
-LETTER_MARG = ["1.9", "2", "2.2", "2.2", "2.3", "2.5", "2.7", "2.8", "2.8", "3"]
+SIDEOMG = [12, 13, 14, 14, 15, 16, 17, 18, 18, 19,
+           20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+SIDE_CM = ["7.5", "8.1", "8.75", "8.75", "9.4", "10", "10.6", "11.25", "11.25", "11.9",
+           "12.5", "13.1", "13.75", "14.4", "15", "15.6", "16.25", "16.9", "17.5", "18.1", "18.75"]
+LETTER_H = ["3.5", "4", "4.4", "4.4", "4.7", "5", "5.3", "5.6", "5.6", "5.9",
+            "6.2", "6.6", "6.9", "7.2", "7.5", "7.8", "8.1", "8.4", "8.8", "9.1", "9.4"]
+LETTER_MARG = ["1.9", "2", "2.2", "2.2", "2.3", "2.5", "2.7", "2.8", "2.8", "3",
+               "3.1", "3.3", "3.4", "3.6", "3.8", "3.9", "4.1", "4.2", "4.3", "4.5", "4.7"]
 
 # bremmen
-BREMOMG = [6, 6, 7, 7, 8, 8, 9, 9, 10, 10]
+BREMOMG = [6, 6, 7, 7, 8, 8, 9, 9, 10, 10,
+           11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16]
 OK_PA = ["2, 4, 6", "2, 4, 6", "2, 4, 6", "2, 4, 6", "2, 4, 6, 8", "2, 4, 6, 8", "2, 4, 6, 8",
-         "2, 4, 6, 8", "2, 4, 6, 8, 10", "2, 4, 6, 8, 10"]
-OKN_HVER = [6, 6, 7, 7, 8, 8, 8, 9, 9, 9]
-CA_SLUTT = [66, 69, 75, 78, 92, 95, 98, 104, 115, 117]
+         "2, 4, 6, 8", "2, 4, 6, 8, 10", "2, 4, 6, 8, 10",
+         "2, 4, 6, 8, 10", "2, 4, 6, 8, 10", "2, 4, 6, 8, 10", "2, 4, 6, 8, 10", "2, 4, 6, 8, 10",
+         "2, 4, 6, 8, 10", "2, 4, 6, 8, 10", "2, 4, 6, 8, 10", "2, 4, 6, 8, 10", "2, 4, 6, 8, 10", "2, 4, 6, 8, 10"]
+OKN_HVER = [6, 6, 7, 7, 8, 8, 8, 9, 9, 9,
+            9, 9, 10, 10, 10, 11, 11, 11, 12, 12, 12]
+CA_SLUTT = [66, 69, 75, 78, 92, 95, 98, 104, 115, 117,
+            119, 120, 120, 122, 124, 124, 125, 127, 127, 128, 130]
 
 pages = []
 
@@ -117,9 +134,9 @@ pages.append(make_page('LME HEKLEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTER 
 <div class="coverbanner">
   <h1 class="covertitle">BØTTEHATTER TIL BABY<br>OG BARN, RUNESKRIFT</h1>
 </div>
-<div class="subpill">NORGE &middot; NORWAY &middot; STØRRELSE 50&ndash;104</div>
+<div class="subpill">NORGE &middot; NORWAY &middot; STØRRELSE 50&ndash;170</div>
 ''' + card('<p class="center">Samme bøttehatt som NORGE-runehatt-oppskriften for voksne, heklet i fastmasker '
-      'og gradert helt fra bunnen av til ti babyer- og barnestørrelser, 50 til 104. Du hekler hele hatten '
+      'og gradert helt fra bunnen av til tjueen babyer-, barne- og ungdomsstørrelser, 50 til 170. Du hekler hele hatten '
       'ensfarget, og hekler så "NORGE" (eller "NORWAY") på til slutt i lesbare runestil-bokstaver, pluss et '
       'lite norsk flagg på toppen. Denne oppskriften er komplett i seg selv, du trenger ikke eie noen annen '
       'LME-oppskrift for å hekle den.</p>') + '''
@@ -270,22 +287,26 @@ pages.append(make_page('LME HEKLEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTER 
         'bokstaven skal begynne, og hent opp en løkke hvit.',
         'Stikk nålen inn litt lenger langs streken, hent opp en ny løkke og trekk den gjennom løkka som alt '
         'er på nålen. Det er én kjedemaske på overflaten.',
-        'Fortsett kjedemaske etter kjedemaske langs alle strekene i bokstaven, følg malen på neste side. '
+        'Fortsett kjedemaske etter kjedemaske langs alle strekene i bokstaven, følg malen to sider frem. '
         'Hold jevn avstand, ikke stram.',
         'Fest tråden på innsiden når bokstaven er ferdig, og gå videre til neste bokstav.',
     ])) +
     tealp('MÅTE 2: HEKLE EN SNOR OG SY DEN PÅ') +
     card('<p>Hekle en lang luftmaskekjede i hvitt og hekle en omgang kjedemasker tilbake langs den, så du '
          'får en fast snor. Form snoren til hver bokstav etter malen og sy den fast på hatten med hvit '
-         'tråd og stoppenålen. Da blir bokstavene tydelige og opphøyde.</p>') +
-    tealp('STØRRELSE OG PLASSERING') +
+         'tråd og stoppenålen. Da blir bokstavene tydelige og opphøyde.</p>')
+, 9))
+
+# ============ SIDE 10: STØRRELSE OG PLASSERING ============
+pages.append(make_page('LME HEKLEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTER BARN, RUNESKRIFT')(
+    banner('STØRRELSE OG PLASSERING, ALLE STØRRELSER') +
     sizetable(['Str.', 'Bokstavhøyde (cm)', 'Margin over/under (cm)'],
               list(zip(SIZES, LETTER_H, LETTER_MARG))) +
     cream('<p class="creamtitle">Tips: tegn bokstavene lett med et vannløselig tusjmerke eller sett '
           'knappenåler først, så treffer du formen.</p>')
-, 9))
+, 10))
 
-# ============ SIDE 10: BOKSTAVMALEN + FLAGGET ============
+# ============ SIDE 11: BOKSTAVMALEN + FLAGGET ============
 pages.append(make_page('LME HEKLEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTER BARN, RUNESKRIFT')(
     banner('BOKSTAVMALEN OG FLAGGET') +
     '<p>Her er bokstavene i runestil. Hekle dem på i én sammenhengende linje, sentrert midt foran, med '
@@ -305,30 +326,34 @@ pages.append(make_page('LME HEKLEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTER 
         'Lag så et blått kors oppå midten av det hvite, litt smalere, så det hvite lyser rundt det blå.',
         'Fest alle tråder godt på innsiden.',
     ]))
-, 10))
+, 11))
 
-# ============ SIDE 11: DEL 4 BREMMEN ============
+# ============ SIDE 12: DEL 4 BREMMEN ============
 pages.append(make_page('LME HEKLEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTER BARN, RUNESKRIFT')(
     banner('DEL 4: BREMMEN') +
     steps([
         'Bytt til hvitt (eller behold rødt om du vil ha en ensfarget brem).',
         'Hekle &eacute;n omgang uten økning i den nye fargen.',
-        'Finn kolonnen &laquo;Øk på omg.&raquo; i tabellen under. På hver av disse omgangnumrene (talt fra '
-        'starten av bremmen) fordeler du antall økninger fra kolonnen &laquo;Økn. hver gang&raquo; jevnt '
-        'utover omgangen. På omgangene mellom økningene hekler du &eacute;n vanlig fm i hver maske.',
+        'Finn kolonnen &laquo;Øk på omg.&raquo; i tabellen på neste side. På hver av disse omgangnumrene '
+        '(talt fra starten av bremmen) fordeler du antall økninger fra kolonnen &laquo;Økn. hver gang&raquo; '
+        'jevnt utover omgangen. På omgangene mellom økningene hekler du &eacute;n vanlig fm i hver maske.',
         'Fortsett til bremmen har heklet i antall omganger fra kolonnen &laquo;Bremomg.&raquo;. '
         'Sluttresultatet blir omtrent tallet i kolonnen &laquo;Ca. slutt&raquo;.',
-    ]) +
-    tealp('TABELL: BREMMEN') +
+    ])
+, 12))
+
+# ============ SIDE 13: TABELL BREMMEN ============
+pages.append(make_page('LME HEKLEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTER BARN, RUNESKRIFT')(
+    banner('TABELL: BREMMEN, ALLE STØRRELSER') +
     sizetable(['Str.', 'Bremomg.', 'Øk på omg.', 'Økn. hver gang', 'Ca. slutt (m)'],
               list(zip(SIZES, BREMOMG, OK_PA, OKN_HVER, CA_SLUTT))) +
     pink('BØLGET AVSLUTNING') +
     card('<p>For en rolig bølge: avslutt med kjedemasker eller krepsemasker. For en tydeligere bølge: '
          '*3 fm i neste maske, 1 fm, hopp over 2 masker*, gjenta rundt. På de minste størrelsene (50&ndash;'
          '68) anbefales den rolige avslutningen, slik at bremmen ikke blir tung foran ansiktet.</p>')
-, 11))
+, 13))
 
-# ============ SIDE 12: STELL OG SISTE SJEKK ============
+# ============ SIDE 14: STELL OG SISTE SJEKK ============
 pages.append(make_page('LME HEKLEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTER BARN, RUNESKRIFT')(
     banner('STELL OG SISTE SJEKK') +
     tealp('AVSLUTNING') +
@@ -354,7 +379,7 @@ pages.append(make_page('LME HEKLEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTER 
     'Ferdige produkter kan selges i liten skala med kreditering til Little Montessori Explorers.</p>' +
     '<p style="font-size:11pt;color:#c0392b;text-align:center;margin-top:2mm;">Hatten er et plagg for '
     'våken bruk under tilsyn. Skal ikke brukes under søvn eller i vogn uten oppsyn.</p>'
-, 12))
+, 14))
 
 pages_no = pages
 
@@ -373,9 +398,9 @@ pages.append(page('''
 <div class="coverbanner">
   <h1 class="covertitle">BUCKET HATS FOR BABY<br>AND CHILD, RUNE LETTERS</h1>
 </div>
-<div class="subpill">NORGE &middot; NORWAY &middot; SIZE 50&ndash;104</div>
+<div class="subpill">NORGE &middot; NORWAY &middot; SIZE 50&ndash;170</div>
 ''' + card('<p class="center">The same bucket hat as the adult NORGE rune hat pattern, crocheted in single '
-      'crochet and graded completely from scratch into ten baby and child sizes, 50 to 104. You crochet the '
+      'crochet and graded completely from scratch into twenty-one baby, child and teen sizes, 50 to 170. You crochet the '
       'whole hat in one colour, then crochet &ldquo;NORGE&rdquo; (or &ldquo;NORWAY&rdquo;) on at the end in '
       'readable rune-style letters, plus a small Norwegian flag on the top. This pattern is complete on its '
       'own, you do not need any other LME pattern to crochet it.</p>') + '''
@@ -536,15 +561,19 @@ pages.append(page(
     tealp('WAY 2: CROCHET A CORD AND SEW IT ON') +
     card('<p>Crochet a long chain in white and work a row of slip stitches back along it, so you get a firm '
          'cord. Shape the cord into each letter following the template and sew it onto the hat with white '
-         'yarn and the tapestry needle. That makes the letters clear and raised.</p>') +
-    tealp('SIZE AND PLACEMENT') +
+         'yarn and the tapestry needle. That makes the letters clear and raised.</p>')
+, 9))
+
+# ============ PAGE 10: SIZE AND PLACEMENT ============
+pages.append(page(
+    banner('SIZE AND PLACEMENT, ALL SIZES') +
     sizetable(['Size', 'Letter height (cm)', 'Margin above/below (cm)'],
               list(zip(SIZES, LETTER_H, LETTER_MARG))) +
     cream('<p class="creamtitle">Tip: draw the letters lightly with a water-soluble marker or place pins '
           'first, so you hit the shape.</p>')
-, 9))
+, 10))
 
-# ============ PAGE 10: THE LETTER TEMPLATE + FLAG ============
+# ============ PAGE 11: THE LETTER TEMPLATE + FLAG ============
 pages.append(page(
     banner('THE LETTER TEMPLATE AND THE FLAG') +
     '<p>Here are the letters in rune style. Crochet them on in one continuous line, centred at the front, '
@@ -567,22 +596,26 @@ pages.append(page(
         'around the blue.',
         'Fasten all ends well on the inside.',
     ]))
-, 10))
+, 11))
 
-# ============ PAGE 11: PART 4 THE BRIM ============
+# ============ PAGE 12: PART 4 THE BRIM ============
 pages.append(page(
     banner('PART 4: THE BRIM') +
     steps([
         'Switch to white (or keep red if you want a solid-colour brim).',
         'Crochet one round with no increase in the new colour.',
-        'Find the &laquo;Increase on rnd&raquo; column in the table below. On each of these round numbers '
-        '(counted from the start of the brim) you spread the number of increases from the &laquo;Increases '
-        'each time&raquo; column evenly around the round. On the rounds in between you crochet one plain sc '
-        'in every stitch.',
+        'Find the &laquo;Increase on rnd&raquo; column in the table on the next page. On each of these round '
+        'numbers (counted from the start of the brim) you spread the number of increases from the &laquo;'
+        'Increases each time&raquo; column evenly around the round. On the rounds in between you crochet one '
+        'plain sc in every stitch.',
         'Continue until the brim has been crocheted for the number of rounds in the &laquo;Brim rnds&raquo; '
         'column. The final result will be about the number in the &laquo;Approx. finish&raquo; column.',
-    ]) +
-    tealp('TABLE: THE BRIM') +
+    ])
+, 12))
+
+# ============ PAGE 13: TABLE THE BRIM ============
+pages.append(page(
+    banner('TABLE: THE BRIM, ALL SIZES') +
     sizetable(['Size', 'Brim rnds', 'Increase on rnd', 'Increases each time', 'Approx. finish (st)'],
               list(zip(SIZES, BREMOMG, OK_PA, OKN_HVER, CA_SLUTT))) +
     pink('THE WAVY FINISH') +
@@ -590,9 +623,9 @@ pages.append(page(
          'more pronounced wave: *3 sc in the next stitch, 1 sc, skip 2 stitches*, repeat around. For the '
          'smallest sizes (50&ndash;68) the gentle finish is recommended, so the brim does not hang heavy in '
          'front of the face.</p>')
-, 11))
+, 13))
 
-# ============ PAGE 12: CARE AND FINAL CHECK ============
+# ============ PAGE 14: CARE AND FINAL CHECK ============
 pages.append(page(
     banner('CARE AND FINAL CHECK') +
     tealp('FINISHING') +
@@ -618,7 +651,7 @@ pages.append(page(
     'be sold on a small scale with credit to Little Montessori Explorers.</p>' +
     '<p style="font-size:11pt;color:#c0392b;text-align:center;margin-top:2mm;">The hat is a garment for '
     'supervised, awake use. Do not use during sleep or in a pram unattended.</p>'
-, 12))
+, 14))
 
 pages_en = pages
 

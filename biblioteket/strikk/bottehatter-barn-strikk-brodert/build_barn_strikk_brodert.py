@@ -208,22 +208,43 @@ def sizetable(header, rows):
     return f'<table class="t sz"><tr>{head}</tr>{body}</table>'
 
 
-SIZES = ["50", "56", "62", "68", "74", "80", "86", "92", "98", "104"]
-AGE = ["0-1 mnd", "1-2 mnd", "2-4 mnd", "4-6 mnd", "6-9 mnd", "9-12 mnd", "12-18 mnd", "18-24 mnd", "2-3 år", "3-4 år"]
-HEAD = ["34-36", "36-38", "38-40", "40-42", "42-44", "44-46", "46-48", "48-50", "49-51", "50-52"]
-LEGG_OPP = [116, 122, 130, 136, 144, 150, 156, 162, 166, 170]
-BREMOMG = [6, 7, 8, 9, 10, 11, 12, 13, 13, 13]
-FERDIG_OMKR = ["34.1", "35.9", "38.2", "40.0", "42.4", "44.1", "45.9", "47.6", "48.8", "50.0"]
-HOVEDDEL = [58, 61, 65, 68, 72, 75, 78, 81, 83, 85]
-TIL_TOPP = ["5.5 cm", "6 cm", "6.5 cm", "7 cm", "7.5 cm", "8 cm", "8.5 cm", "9 cm", "9 cm", "9 cm"]
-OPPSETT_FELL = ["Fell 2 m", "Fell 5 m", "Fell 2 m", "Fell 5 m", "Fell 2 m", "Fell 5 m", "Fell 1 m", "Fell 4 m", "Fell 6 m", "Fell 1 m"]
-ETTER_OPPSETT = [56, 56, 63, 63, 70, 70, 77, 77, 77, 84]
+SIZES = ["50", "56", "62", "68", "74", "80", "86", "92", "98", "104",
+         "110", "116", "122", "128", "134", "140", "146", "152", "158", "164", "170"]
+AGE = ["0-1 mnd", "1-2 mnd", "2-4 mnd", "4-6 mnd", "6-9 mnd", "9-12 mnd", "12-18 mnd", "18-24 mnd", "2-3 år", "3-4 år",
+       "4-5 år", "5-6 år", "6-7 år", "7-8 år", "8-9 år", "9-10 år", "10-11 år", "11-12 år", "12-13 år", "13-14 år", "14-16 år"]
+HEAD = ["34-36", "36-38", "38-40", "40-42", "42-44", "44-46", "46-48", "48-50", "49-51", "50-52",
+        "51-53", "52-53", "52-54", "53-54", "53-55", "54-55", "54-56", "55-56", "55-57", "56-57", "56-58"]
+LEGG_OPP = [116, 122, 130, 136, 144, 150, 156, 162, 166, 170,
+            172, 174, 176, 178, 178, 180, 182, 184, 186, 188, 190]
+BREMOMG = [6, 7, 8, 9, 10, 11, 12, 13, 13, 13,
+           13, 13, 14, 14, 14, 15, 15, 15, 15, 16, 16]
+FERDIG_OMKR = ["34.1", "35.9", "38.2", "40.0", "42.4", "44.1", "45.9", "47.6", "48.8", "50.0",
+               "50.7", "51.2", "51.7", "52.2", "52.6", "53.1", "53.6", "54.1", "54.6", "55.1", "55.6"]
+HOVEDDEL = [58, 61, 65, 68, 72, 75, 78, 81, 83, 85,
+            86, 87, 88, 89, 89, 90, 91, 92, 93, 94, 95]
+TIL_TOPP = ["5.5 cm", "6 cm", "6.5 cm", "7 cm", "7.5 cm", "8 cm", "8.5 cm", "9 cm", "9 cm", "9 cm",
+            "9.5 cm", "9.5 cm", "10 cm", "10 cm", "10.5 cm", "10.5 cm", "10.5 cm", "11 cm", "11 cm", "11 cm", "11 cm"]
+OPPSETT_FELL = ["Fell 2 m", "Fell 5 m", "Fell 2 m", "Fell 5 m", "Fell 2 m", "Fell 5 m", "Fell 1 m", "Fell 4 m", "Fell 6 m", "Fell 1 m",
+                "Fell 2 m", "Fell 3 m", "Fell 4 m", "Fell 5 m", "Fell 5 m", "Fell 6 m", "Ingen felling", "Fell 1 m", "Fell 2 m", "Fell 3 m", "Fell 4 m"]
+ETTER_OPPSETT = [56, 56, 63, 63, 70, 70, 77, 77, 77, 84,
+                 84, 84, 84, 84, 84, 84, 91, 91, 91, 91, 91]
 STRIPES = [
     "2 rød, 1 hvit, 1 blå, 1 hvit, resten rød",
     "2 rød, 1 hvit, 1 blå, 1 hvit, resten rød",
     "2 rød, 2 hvit, 2 blå, 1 hvit, resten rød",
     "2 rød, 2 hvit, 2 blå, 1 hvit, resten rød",
     "2 rød, 2 hvit, 2 blå, 1 hvit, resten rød",
+    "3 rød, 2 hvit, 3 blå, 2 hvit, resten rød",
+    "3 rød, 2 hvit, 3 blå, 2 hvit, resten rød",
+    "3 rød, 2 hvit, 3 blå, 2 hvit, resten rød",
+    "3 rød, 2 hvit, 3 blå, 2 hvit, resten rød",
+    "3 rød, 2 hvit, 3 blå, 2 hvit, resten rød",
+    "3 rød, 2 hvit, 3 blå, 2 hvit, resten rød",
+    "3 rød, 2 hvit, 3 blå, 2 hvit, resten rød",
+    "3 rød, 2 hvit, 3 blå, 2 hvit, resten rød",
+    "3 rød, 2 hvit, 3 blå, 2 hvit, resten rød",
+    "3 rød, 2 hvit, 3 blå, 2 hvit, resten rød",
+    "3 rød, 2 hvit, 3 blå, 2 hvit, resten rød",
     "3 rød, 2 hvit, 3 blå, 2 hvit, resten rød",
     "3 rød, 2 hvit, 3 blå, 2 hvit, resten rød",
     "3 rød, 2 hvit, 3 blå, 2 hvit, resten rød",
@@ -245,9 +266,9 @@ pages.append(make_page('LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTE
 <div class="coverbanner">
   <h1 class="covertitle">BØTTEHATTER TIL BABY<br>OG BARN, BRODERT</h1>
 </div>
-<div class="subpill">NORGE &middot; NORWAY &middot; RO &middot; STØRRELSE 50&ndash;104</div>
+<div class="subpill">NORGE &middot; NORWAY &middot; RO &middot; STØRRELSE 50&ndash;170</div>
 ''' + card('<p class="center">Samme bøttehatt som NORGE- og RO-oppskriftene for voksne, gradert helt fra bunnen av til '
-      'ti babyer- og barnestørrelser, 50 til 104. Her strikker du hele hatten ensfarget først, og broderer '
+      'tjueen babyer-, barne- og ungdomsstørrelser, 50 til 170. Her strikker du hele hatten ensfarget først, og broderer '
       'bokstavene og flagget på til slutt med maskesting (duplikatsting), akkurat som den voksne '
       '"NORGE-bøttehatt"-oppskriften. Egne, mindre bokstaver er laget spesielt for de minste hodene. '
       'Denne oppskriften er komplett i seg selv, du trenger ikke eie noen annen LME-oppskrift for å strikke den.</p>') + '''
@@ -433,23 +454,29 @@ pages.append(make_page('LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTE
     banner('DEL 4: TOPPEN') +
     steps([
         'Når hoveddelen måler målet i tabellen på side 8, strikker du én oppsettomgang: fell antall masker '
-        'oppgitt i kolonnen &laquo;Oppsett&raquo; i tabellen under, jevnt fordelt rundt hele omgangen.',
+        'oppgitt i kolonnen &laquo;Oppsett&raquo; i tabellen på neste side, jevnt fordelt rundt hele '
+        'omgangen. Står det &laquo;Ingen felling&raquo;, hopper du over denne omgangen og går rett til '
+        'neste steg.',
         'Del de gjenværende maskene i 7 like store felt. Sett en maskemarkør mellom hvert felt (7 markører '
         'totalt, i tillegg til den ved omgangens start).',
         'Strikk til 2 masker gjenstår før hver markør, strikk disse 2 sammen. Gjenta ved alle 7 markørene, '
         'det gir 7 minkinger per omgang.',
         'Str. 50&ndash;68: strikk 1 vanlig omgang uten minking etter de 3 første minkeomgangene, fortsett '
-        'deretter å minke på hver omgang. Str. 74&ndash;104: strikk 1 vanlig omgang etter de 4 første '
+        'deretter å minke på hver omgang. Str. 74&ndash;170: strikk 1 vanlig omgang etter de 4 første '
         'minkeomgangene, fortsett deretter å minke på hver omgang.',
         'Fortsett til 7 masker (én per felt) gjenstår. Klipp av tråden med god margin, tre den gjennom de '
         'gjenværende maskene med en stoppenål, dra sammen og fest godt på innsiden.',
-    ]) +
-    tealp('TABELL: OPPSETT FØR TOPP') +
-    sizetable(['Str.', 'Masker før topp', 'Fell', 'Masker etter'],
-              list(zip(SIZES, HOVEDDEL, OPPSETT_FELL, ETTER_OPPSETT)))
+    ])
 , 11))
 
-# ============ SIDE 12: STELL OG SISTE SJEKK ============
+# ============ SIDE 12: TABELL OPPSETT FØR TOPP ============
+pages.append(make_page('LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTER BARN, BRODERT')(
+    banner('TABELL: OPPSETT FØR TOPP, ALLE STØRRELSER') +
+    sizetable(['Str.', 'Masker før topp', 'Fell', 'Masker etter'],
+              list(zip(SIZES, HOVEDDEL, OPPSETT_FELL, ETTER_OPPSETT)))
+, 12))
+
+# ============ SIDE 13: STELL OG SISTE SJEKK ============
 pages.append(make_page('LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTER BARN, BRODERT')(
     banner('STELL OG SISTE SJEKK') +
     tealp('AVSLUTNING') +
@@ -475,7 +502,7 @@ pages.append(make_page('LME STRIKKEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTE
     'Ferdige produkter kan selges i liten skala med kreditering til Little Montessori Explorers.</p>' +
     '<p style="font-size:11pt;color:#c0392b;text-align:center;margin-top:2mm;">Hatten er et plagg for '
     'våken bruk under tilsyn. Skal ikke brukes under søvn eller i vogn uten oppsyn.</p>'
-, 12))
+, 13))
 
 pages_no = pages
 
@@ -492,7 +519,8 @@ def epage(ph2, right_label='LME KNIT'):
 page = epage('LME KNITTING PATTERN&nbsp;&nbsp;|&nbsp;&nbsp;KIDS BUCKET HATS, DUPLICATE STITCH')
 
 EN_SIZES = SIZES
-EN_AGE = ["0-1 mo", "1-2 mo", "2-4 mo", "4-6 mo", "6-9 mo", "9-12 mo", "12-18 mo", "18-24 mo", "2-3 yr", "3-4 yr"]
+EN_AGE = ["0-1 mo", "1-2 mo", "2-4 mo", "4-6 mo", "6-9 mo", "9-12 mo", "12-18 mo", "18-24 mo", "2-3 yr", "3-4 yr",
+          "4-5 yr", "5-6 yr", "6-7 yr", "7-8 yr", "8-9 yr", "9-10 yr", "10-11 yr", "11-12 yr", "12-13 yr", "13-14 yr", "14-16 yr"]
 EN_STRIPES = [
     "2 red, 1 white, 1 blue, 1 white, rest red",
     "2 red, 1 white, 1 blue, 1 white, rest red",
@@ -504,8 +532,20 @@ EN_STRIPES = [
     "3 red, 2 white, 3 blue, 2 white, rest red",
     "3 red, 2 white, 3 blue, 2 white, rest red",
     "3 red, 2 white, 3 blue, 2 white, rest red",
+    "3 red, 2 white, 3 blue, 2 white, rest red",
+    "3 red, 2 white, 3 blue, 2 white, rest red",
+    "3 red, 2 white, 3 blue, 2 white, rest red",
+    "3 red, 2 white, 3 blue, 2 white, rest red",
+    "3 red, 2 white, 3 blue, 2 white, rest red",
+    "3 red, 2 white, 3 blue, 2 white, rest red",
+    "3 red, 2 white, 3 blue, 2 white, rest red",
+    "3 red, 2 white, 3 blue, 2 white, rest red",
+    "3 red, 2 white, 3 blue, 2 white, rest red",
+    "3 red, 2 white, 3 blue, 2 white, rest red",
+    "3 red, 2 white, 3 blue, 2 white, rest red",
 ]
-EN_OPPSETT_FELL = ["Dec 2 st", "Dec 5 st", "Dec 2 st", "Dec 5 st", "Dec 2 st", "Dec 5 st", "Dec 1 st", "Dec 4 st", "Dec 6 st", "Dec 1 st"]
+EN_OPPSETT_FELL = ["Dec 2 st", "Dec 5 st", "Dec 2 st", "Dec 5 st", "Dec 2 st", "Dec 5 st", "Dec 1 st", "Dec 4 st", "Dec 6 st", "Dec 1 st",
+                    "Dec 2 st", "Dec 3 st", "Dec 4 st", "Dec 5 st", "Dec 5 st", "Dec 6 st", "No decrease", "Dec 1 st", "Dec 2 st", "Dec 3 st", "Dec 4 st"]
 
 # ============ PAGE 1: COVER ============
 pages.append(page('''
@@ -514,9 +554,9 @@ pages.append(page('''
 <div class="coverbanner">
   <h1 class="covertitle">BUCKET HATS FOR BABY<br>AND CHILD, DUPLICATE STITCH</h1>
 </div>
-<div class="subpill">NORGE &middot; NORWAY &middot; RO &middot; SIZE 50&ndash;104</div>
+<div class="subpill">NORGE &middot; NORWAY &middot; RO &middot; SIZE 50&ndash;170</div>
 ''' + card('<p class="center">The same bucket hat as the NORGE and RO patterns for adults, graded completely '
-      'from scratch into ten baby and child sizes, 50 to 104. Here you knit the whole hat in one colour '
+      'from scratch into twenty-one baby, child and teen sizes, 50 to 170. Here you knit the whole hat in one colour '
       'first, then embroider the letters and flag on afterwards with duplicate stitch, just like the adult '
       '&ldquo;NORGE bucket hat&rdquo; pattern. Smaller letters were designed just for the smallest heads. '
       'This pattern is complete on its own, you do not need any other LME pattern to knit it.</p>') + '''
@@ -703,25 +743,30 @@ pages.append(page(
     banner('PART 4: THE CROWN') +
     steps([
         'When the main body measures the value in the table on page 8, knit one setup round: decrease the '
-        'number of stitches given in the &laquo;Decrease&raquo; column in the table below, evenly spaced '
-        'around the whole round.',
+        'number of stitches given in the &laquo;Decrease&raquo; column in the table on the next page, '
+        'evenly spaced around the whole round. If it says &laquo;No decrease&raquo;, skip this round and go '
+        'straight to the next step.',
         'Divide the remaining stitches into 7 equal sections. Place a stitch marker between each section (7 '
         'markers in total, plus the one at the start of the round).',
         'Knit to 2 stitches before each marker, knit these 2 together. Repeat at all 7 markers, giving 7 '
         'decreases per round.',
         'Sizes 50&ndash;68: knit 1 plain round with no decreases after the first 3 decrease rounds, then '
-        'decrease on every round after that. Sizes 74&ndash;104: knit 1 plain round after the first 4 '
+        'decrease on every round after that. Sizes 74&ndash;170: knit 1 plain round after the first 4 '
         'decrease rounds, then decrease every round after that.',
         'Continue until 7 stitches (one per section) remain. Cut the yarn leaving a generous tail, thread it '
         'through the remaining stitches with a tapestry needle, pull tight and fasten off securely on the '
         'inside.',
-    ]) +
-    tealp('TABLE: SETUP BEFORE THE CROWN') +
-    sizetable(['Size', 'Stitches before top', 'Decrease', 'Stitches after'],
-              list(zip(EN_SIZES, HOVEDDEL, EN_OPPSETT_FELL, ETTER_OPPSETT)))
+    ])
 , 11))
 
-# ============ PAGE 12: CARE AND FINAL CHECK ============
+# ============ PAGE 12: TABLE SETUP BEFORE THE CROWN ============
+pages.append(page(
+    banner('TABLE: SETUP BEFORE THE CROWN, ALL SIZES') +
+    sizetable(['Size', 'Stitches before top', 'Decrease', 'Stitches after'],
+              list(zip(EN_SIZES, HOVEDDEL, EN_OPPSETT_FELL, ETTER_OPPSETT)))
+, 12))
+
+# ============ PAGE 13: CARE AND FINAL CHECK ============
 pages.append(page(
     banner('CARE AND FINAL CHECK') +
     tealp('FINISHING') +
@@ -748,7 +793,7 @@ pages.append(page(
     'be sold on a small scale with credit to Little Montessori Explorers.</p>' +
     '<p style="font-size:11pt;color:#c0392b;text-align:center;margin-top:2mm;">The hat is a garment for '
     'supervised, awake use. Do not use during sleep or in a pram unattended.</p>'
-, 12))
+, 13))
 
 pages_en = pages
 

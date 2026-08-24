@@ -138,8 +138,8 @@ window.LME_BUTIKK = {
 
     "bottehatter-barn-strikk": {
       navn:  { no: "Bøttehatter barn, strikkeoppskrift", en: "Kids Bucket Hats, knitting pattern" },
-      undertittel: { no: "NORGE · NORWAY · RO · str. 50–104 · komplett i seg selv",
-                     en: "NORGE · NORWAY · RO · size 50–104 · complete on its own" },
+      undertittel: { no: "NORGE · NORWAY · RO · str. 50–170 · komplett i seg selv",
+                     en: "NORGE · NORWAY · RO · size 50–170 · complete on its own" },
       cover:   "/images/oppskrift-bottehatter-barn-strikk.jpg",
       coverEn: "/images/oppskrift-bottehatter-barn-strikk.jpg",
       filer: [
@@ -152,8 +152,8 @@ window.LME_BUTIKK = {
 
     "bottehatter-barn-hekle": {
       navn:  { no: "Bøttehatter barn, hekleoppskrift", en: "Kids Bucket Hats, crochet pattern" },
-      undertittel: { no: "NORGE · NORWAY · RO · str. 50–104 · komplett i seg selv",
-                     en: "NORGE · NORWAY · RO · size 50–104 · complete on its own" },
+      undertittel: { no: "NORGE · NORWAY · RO · str. 50–170 · komplett i seg selv",
+                     en: "NORGE · NORWAY · RO · size 50–170 · complete on its own" },
       cover:   "/images/oppskrift-bottehatter-barn-hekle.jpg",
       coverEn: "/images/oppskrift-bottehatter-barn-hekle.jpg",
       filer: [
@@ -166,8 +166,8 @@ window.LME_BUTIKK = {
 
     "bottehatter-barn-strikk-brodert": {
       navn:  { no: "Bøttehatter barn, brodert strikkeoppskrift", en: "Kids Bucket Hats, duplicate stitch knitting pattern" },
-      undertittel: { no: "NORGE · NORWAY · RO · brodert med maskesting · str. 50–104",
-                     en: "NORGE · NORWAY · RO · duplicate stitch · size 50–104" },
+      undertittel: { no: "NORGE · NORWAY · RO · brodert med maskesting · str. 50–170",
+                     en: "NORGE · NORWAY · RO · duplicate stitch · size 50–170" },
       cover:   "/images/oppskrift-bottehatter-barn-strikk-brodert.jpg",
       coverEn: "/images/oppskrift-bottehatter-barn-strikk-brodert.jpg",
       filer: [
@@ -180,8 +180,8 @@ window.LME_BUTIKK = {
 
     "bottehatter-barn-hekle-rune": {
       navn:  { no: "Bøttehatter barn, runeskrift hekleoppskrift", en: "Kids Bucket Hats, rune letters crochet pattern" },
-      undertittel: { no: "NORGE · NORWAY · runeskrift · str. 50–104",
-                     en: "NORGE · NORWAY · rune letters · size 50–104" },
+      undertittel: { no: "NORGE · NORWAY · runeskrift · str. 50–170",
+                     en: "NORGE · NORWAY · rune letters · size 50–170" },
       cover:   "/images/oppskrift-bottehatter-barn-hekle-rune.jpg",
       coverEn: "/images/oppskrift-bottehatter-barn-hekle-rune.jpg",
       filer: [

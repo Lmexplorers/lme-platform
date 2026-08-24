@@ -124,28 +124,44 @@ def sizetable(header, rows):
     return f'<table class="t sz"><tr>{head}</tr>{body}</table>'
 
 
-SIZES = ["50", "56", "62", "68", "74", "80", "86", "92", "98", "104"]
-AGE = ["0-1 mnd", "1-2 mnd", "2-4 mnd", "4-6 mnd", "6-9 mnd", "9-12 mnd", "12-18 mnd", "18-24 mnd", "2-3 år", "3-4 år"]
-HEAD = ["34-36", "36-38", "38-40", "40-42", "42-44", "44-46", "46-48", "48-50", "49-51", "50-52"]
+SIZES = ["50", "56", "62", "68", "74", "80", "86", "92", "98", "104",
+         "110", "116", "122", "128", "134", "140", "146", "152", "158", "164", "170"]
+AGE = ["0-1 mnd", "1-2 mnd", "2-4 mnd", "4-6 mnd", "6-9 mnd", "9-12 mnd", "12-18 mnd", "18-24 mnd", "2-3 år", "3-4 år",
+       "4-5 år", "5-6 år", "6-7 år", "7-8 år", "8-9 år", "9-10 år", "10-11 år", "11-12 år", "12-13 år", "13-14 år", "14-16 år"]
+HEAD = ["34-36", "36-38", "38-40", "40-42", "42-44", "44-46", "46-48", "48-50", "49-51", "50-52",
+        "51-53", "52-53", "52-54", "53-54", "53-55", "54-55", "54-56", "55-56", "55-57", "56-57", "56-58"]
 
 # topp
-STD_ROUND = [8, 8, 9, 9, 10, 10, 11, 11, 11, 12]
-EXTRA = [0, 3, 0, 3, 0, 3, 0, 2, 4, 0]
-FINAL = [48, 51, 54, 57, 60, 63, 66, 68, 70, 72]
-FERDIG_OMKR = ["34.3", "36.4", "38.6", "40.7", "42.9", "45.0", "47.1", "48.6", "50.0", "51.4"]
-TOPPDIAM = ["10.9", "11.6", "12.3", "13.0", "13.6", "14.3", "15.0", "15.5", "15.9", "16.4"]
+STD_ROUND = [8, 8, 9, 9, 10, 10, 11, 11, 11, 12,
+             12, 12, 12, 12, 12, 12, 12, 13, 13, 13, 13]
+EXTRA = [0, 3, 0, 3, 0, 3, 0, 2, 4, 0,
+         1, 2, 2, 3, 4, 4, 5, 0, 0, 1, 2]
+FINAL = [48, 51, 54, 57, 60, 63, 66, 68, 70, 72,
+         73, 74, 74, 75, 76, 76, 77, 78, 78, 79, 80]
+FERDIG_OMKR = ["34.3", "36.4", "38.6", "40.7", "42.9", "45.0", "47.1", "48.6", "50.0", "51.4",
+               "52.0", "52.5", "53.0", "53.5", "54.0", "54.5", "55.0", "55.5", "56.0", "56.5", "57.0"]
+TOPPDIAM = ["10.9", "11.6", "12.3", "13.0", "13.6", "14.3", "15.0", "15.5", "15.9", "16.4",
+            "16.6", "16.8", "16.8", "17.1", "17.3", "17.3", "17.5", "17.7", "17.7", "18.0", "18.2"]
 
 # sidene
-SIDEOMG = [12, 13, 14, 14, 15, 16, 17, 18, 18, 19]
-FOR_MOTIV = [2, 2, 3, 3, 4, 4, 4, 4, 4, 4]
-ETTER_MOTIV = [3, 4, 4, 4, 4, 5, 6, 7, 7, 8]
+SIDEOMG = [12, 13, 14, 14, 15, 16, 17, 18, 18, 19,
+           20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+FOR_MOTIV = [2, 2, 3, 3, 4, 4, 4, 4, 4, 4,
+             4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+ETTER_MOTIV = [3, 4, 4, 4, 4, 5, 6, 7, 7, 8,
+               9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
 
 # bremmen
-BREMOMG = [6, 6, 7, 7, 8, 8, 9, 9, 10, 10]
+BREMOMG = [6, 6, 7, 7, 8, 8, 9, 9, 10, 10,
+           11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16]
 OK_PA = ["2, 4, 6", "2, 4, 6", "2, 4, 6", "2, 4, 6", "2, 4, 6, 8", "2, 4, 6, 8", "2, 4, 6, 8",
-         "2, 4, 6, 8", "2, 4, 6, 8, 10", "2, 4, 6, 8, 10"]
-OKN_HVER = [6, 6, 7, 7, 8, 8, 8, 9, 9, 9]
-CA_SLUTT = [66, 69, 75, 78, 92, 95, 98, 104, 115, 117]
+         "2, 4, 6, 8", "2, 4, 6, 8, 10", "2, 4, 6, 8, 10",
+         "2, 4, 6, 8, 10", "2, 4, 6, 8, 10", "2, 4, 6, 8, 10", "2, 4, 6, 8, 10", "2, 4, 6, 8, 10",
+         "2, 4, 6, 8, 10", "2, 4, 6, 8, 10", "2, 4, 6, 8, 10", "2, 4, 6, 8, 10", "2, 4, 6, 8, 10", "2, 4, 6, 8, 10"]
+OKN_HVER = [6, 6, 7, 7, 8, 8, 8, 9, 9, 9,
+            9, 9, 10, 10, 10, 11, 11, 11, 12, 12, 12]
+CA_SLUTT = [66, 69, 75, 78, 92, 95, 98, 104, 115, 117,
+            119, 120, 120, 122, 124, 124, 125, 127, 127, 128, 130]
 
 pages = []
 
@@ -156,9 +172,9 @@ pages.append(make_page('LME HEKLEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTER 
 <div class="coverbanner">
   <h1 class="covertitle">BØTTEHATTER<br>TIL BABY OG BARN</h1>
 </div>
-<div class="subpill">NORGE &middot; NORWAY &middot; RO &middot; STØRRELSE 50&ndash;104</div>
+<div class="subpill">NORGE &middot; NORWAY &middot; RO &middot; STØRRELSE 50&ndash;170</div>
 ''' + card('<p class="center">Samme bøttehatt som NORGE- og RO-oppskriftene for voksne, heklet i fastmasker '
-      'og gradert helt fra bunnen av til ti babyer- og barnestørrelser, 50 til 104. Egne, mindre bokstaver '
+      'og gradert helt fra bunnen av til tjueen babyer-, barne- og ungdomsstørrelser, 50 til 170. Egne, mindre bokstaver '
       'og et eget lite flaggmotiv er laget spesielt for de minste hodene. Denne oppskriften er komplett i '
       'seg selv, du trenger ikke eie noen annen LME-oppskrift for å hekle den.</p>') + '''
 ''' + byline('Av Renate Dahl') + '''
@@ -324,24 +340,28 @@ pages.append(make_page('LME HEKLEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTER 
         'NORGE/NORWAY: bytt til hvitt. RO: bytt til marineblått og hekle hele bremmen i denne fargen, hopp '
         'til steg 5.',
         'Hekle &eacute;n omgang uten økning i den nye fargen.',
-        'Finn kolonnen &laquo;Øk på omg.&raquo; i tabellen under. På hver av disse omgangnumrene (talt fra '
-        'starten av bremmen) fordeler du antall økninger fra kolonnen &laquo;Økn. hver gang&raquo; jevnt '
-        'utover omgangen. På omgangene mellom økningene hekler du &eacute;n vanlig fm i hver maske.',
+        'Finn kolonnen &laquo;Øk på omg.&raquo; i tabellen på neste side. På hver av disse omgangnumrene '
+        '(talt fra starten av bremmen) fordeler du antall økninger fra kolonnen &laquo;Økn. hver gang&raquo; '
+        'jevnt utover omgangen. På omgangene mellom økningene hekler du &eacute;n vanlig fm i hver maske.',
         'Fortsett til bremmen har heklet i antall omganger fra kolonnen &laquo;Bremomg.&raquo; på side 3. '
         'Sluttresultatet blir omtrent tallet i kolonnen &laquo;Ca. slutt&raquo;.',
         'NORGE/NORWAY-farger: legg hvit&ndash;marineblå&ndash;hvit&ndash;rød på de siste fire '
         'bremomgangene. Har størrelsen f&aelig;rre enn fire igjen, begynner stripene tilsvarende tidligere.',
-    ]) +
-    tealp('TABELL: BREMMEN') +
+    ])
+, 10))
+
+# ============ SIDE 11: TABELL BREMMEN ============
+pages.append(make_page('LME HEKLEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTER BARN')(
+    banner('TABELL: BREMMEN, ALLE STØRRELSER') +
     sizetable(['Str.', 'Bremomg.', 'Øk på omg.', 'Økn. hver gang', 'Ca. slutt (m)'],
               list(zip(SIZES, BREMOMG, OK_PA, OKN_HVER, CA_SLUTT))) +
     pink('BØLGET AVSLUTNING') +
     card('<p>For en rolig bølge: avslutt med kjedemasker eller krepsemasker. For en tydeligere bølge: '
          '*3 fm i neste maske, 1 fm, hopp over 2 masker*, gjenta rundt. På de minste størrelsene (50&ndash;'
          '68) anbefales den rolige avslutningen, slik at bremmen ikke blir tung foran ansiktet.</p>')
-, 10))
+, 11))
 
-# ============ SIDE 11: STELL OG SISTE SJEKK ============
+# ============ SIDE 12: STELL OG SISTE SJEKK ============
 pages.append(make_page('LME HEKLEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTER BARN')(
     banner('STELL OG SISTE SJEKK') +
     tealp('AVSLUTNING') +
@@ -367,7 +387,7 @@ pages.append(make_page('LME HEKLEOPPSKRIFT&nbsp;&nbsp;|&nbsp;&nbsp;BØTTEHATTER 
     'Ferdige produkter kan selges i liten skala med kreditering til Little Montessori Explorers.</p>' +
     '<p style="font-size:11pt;color:#c0392b;text-align:center;margin-top:2mm;">Hatten er et plagg for '
     'våken bruk under tilsyn. Skal ikke brukes under søvn eller i vogn uten oppsyn.</p>'
-, 11))
+, 12))
 
 pages_no = pages
 
@@ -386,9 +406,9 @@ pages.append(page('''
 <div class="coverbanner">
   <h1 class="covertitle">BUCKET HATS<br>FOR BABY AND CHILD</h1>
 </div>
-<div class="subpill">NORGE &middot; NORWAY &middot; RO &middot; SIZE 50&ndash;104</div>
+<div class="subpill">NORGE &middot; NORWAY &middot; RO &middot; SIZE 50&ndash;170</div>
 ''' + card('<p class="center">The same bucket hat as the NORGE and RO patterns for adults, crocheted in '
-      'single crochet and graded completely from scratch into ten baby and child sizes, 50 to 104. Smaller '
+      'single crochet and graded completely from scratch into twenty-one baby, child and teen sizes, 50 to 170. Smaller '
       'letters and a small flag motif were designed just for the smallest heads. This pattern is complete '
       'on its own, you do not need any other LME pattern to crochet it.</p>') + '''
 ''' + byline('By Renate Dahl') + '''
@@ -558,25 +578,29 @@ pages.append(page(
         'NORGE/NORWAY: switch to white. RO: switch to navy and crochet the whole brim in this colour, skip '
         'to step 5.',
         'Crochet one round with no increase in the new colour.',
-        'Find the &laquo;Increase on rnd&raquo; column in the table below. On each of these round numbers '
-        '(counted from the start of the brim), spread the number of increases from the &laquo;Increases '
-        'each time&raquo; column evenly around the round. On the rounds in between, crochet one plain sc in '
-        'every stitch.',
+        'Find the &laquo;Increase on rnd&raquo; column in the table on the next page. On each of these round '
+        'numbers (counted from the start of the brim), spread the number of increases from the &laquo;'
+        'Increases each time&raquo; column evenly around the round. On the rounds in between, crochet one '
+        'plain sc in every stitch.',
         'Continue until the brim has been crocheted for the number of rounds in the &laquo;Brim rounds&raquo; '
         'column on page 3. The end result comes out at about the &laquo;Approx. total&raquo; number.',
         'NORGE/NORWAY colours: work white&ndash;navy&ndash;white&ndash;red over the last four brim rounds. '
         'If your size has fewer than four rounds left, the stripes start correspondingly earlier.',
-    ]) +
-    tealp('TABLE: THE BRIM') +
+    ])
+, 10))
+
+# ============ PAGE 11: TABLE THE BRIM ============
+pages.append(page(
+    banner('TABLE: THE BRIM, ALL SIZES') +
     sizetable(['Size', 'Brim rnds', 'Increase on rnd', 'Increases each time', 'Approx. total (st)'],
               list(zip(SIZES, BREMOMG, OK_PA, OKN_HVER, CA_SLUTT))) +
     pink('THE WAVY FINISH') +
     card('<p>For a calm wave: finish with slip stitches or crab stitch. For a more pronounced wave: '
          '*3 sc in the next stitch, 1 sc, skip 2 stitches*, repeat around. For the smallest sizes (50'
          '&ndash;68) the calm finish is recommended, so the brim does not sit heavy in front of the face.</p>')
-, 10))
+, 11))
 
-# ============ PAGE 11: CARE AND FINAL CHECK ============
+# ============ PAGE 12: CARE AND FINAL CHECK ============
 pages.append(page(
     banner('CARE AND FINAL CHECK') +
     tealp('FINISHING') +
@@ -603,7 +627,7 @@ pages.append(page(
     'be sold on a small scale with credit to Little Montessori Explorers.</p>' +
     '<p style="font-size:11pt;color:#c0392b;text-align:center;margin-top:2mm;">The hat is a garment for '
     'supervised, awake use. Do not use during sleep or in a pram unattended.</p>'
-, 11))
+, 12))
 
 pages_en = pages
 
