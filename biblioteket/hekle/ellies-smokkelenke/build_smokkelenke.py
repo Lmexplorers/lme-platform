@@ -69,10 +69,10 @@ add('om_stil',
 add('pill_sikkerhet_kort', 'VIKTIGST AV ALT: SIKKERHET', 'MOST IMPORTANT OF ALL: SAFETY')
 add('om_sikkerhet_kort',
     'En smokkelenke er noe barnet har tett på ansiktet, ofte alene i vogn eller seng. Derfor er '
-    'lengden på denne oppskriften bevisst kort, og hele side 14 er viet sikkerhet. Les den siden '
+    'lengden på denne oppskriften bevisst kort, og hele side 15 er viet sikkerhet. Les den siden '
     'før du hekler videre.',
     "A pacifier clip is something a baby has close to their face, often alone in a pram or bed. "
-    "That's why this pattern's length is deliberately short, and all of page 14 is dedicated to "
+    "That's why this pattern's length is deliberately short, and all of page 15 is dedicated to "
     "safety. Read that page before you crochet on.")
 
 # ---------------------------------------------------------------- SIDE 3
@@ -223,12 +223,39 @@ add('hode_rows_en', [
 add('hode_ferdig',
     'Klipp av, la ca. 20 cm trådende igjen. Diameter ca. 3,5 til 4 cm.',
     'Cut the yarn, leaving a tail of approx. 20 cm. Diameter approx. 3.5 to 4 cm.')
-add('pill_orer_mini', 'TO SMÅ ØRER', 'TWO SMALL EARS')
-add('orer_mini_txt',
-    'Hekle to små flate sirkler i brunt: 5 fm i magisk ring, avslutt. Sy dem fast øverst på '
-    'hodet, med litt avstand mellom.',
-    'Crochet two small flat circles in brown: 5 sc in a magic ring, fasten off. Sew them onto '
-    'the top of the head, with a little space between.')
+add('banner_orer_mini', 'TO SMÅ ØRER', 'TWO SMALL EARS')
+add('orer_mini_lead',
+    'Hvert øre hekles i to lag, akkurat som på Ellie selv: en liten sirkel i brunt (utsiden) og '
+    'en enda mindre sirkel i hvitt eller pudderrosa (innsiden), som sys sammen.',
+    "Each ear is crocheted in two layers, just like on Ellie herself: a small circle in brown "
+    "(the outside) and an even smaller circle in white or powder pink (the inside), which are "
+    "sewn together.")
+orer_mini_head = {'no': ['Omg', 'Beskrivelse', 'Masker'], 'en': ['Rnd', 'Description', 'Sts']}
+add('orer_mini_head', orer_mini_head['no'], orer_mini_head['en'])
+add('pill_ore_ute_mini', 'YTTERSIDEN (BRUNT) - HEKLE 2', 'THE OUTSIDE (BROWN) - MAKE 2')
+add('ore_ute_mini_rows', [
+    ('1', '6 fm i magisk ring', 6),
+    ('2', 'økn x 6', 12),
+])
+add('ore_ute_mini_rows_en', [
+    ('1', '6 sc in a magic ring', 6),
+    ('2', 'inc x 6', 12),
+])
+add('pill_ore_inne_mini', 'INNSIDEN (HVIT ELLER PUDDERROSA) - HEKLE 2', 'THE INSIDE (WHITE OR POWDER PINK) - MAKE 2')
+add('ore_inne_mini_rows', [
+    ('1', '5 fm i magisk ring', 5),
+])
+add('ore_inne_mini_rows_en', [
+    ('1', '5 sc in a magic ring', 5),
+])
+add('orer_mini_ferdig',
+    'Klipp av begge delene, la ca. 15 cm tråd igjen. Ikke fyll ørene, de skal være flate. Legg '
+    'den lille sirkelen midt oppå den brune og sy den fast med heftesting, så det står en jevn '
+    'brun kant rundt. Sy hvert øre fast øverst på hodet, med litt avstand mellom.',
+    'Cut both pieces, leaving a tail of approx. 15 cm. Do not stuff the ears, they should be '
+    'flat. Place the small circle in the middle of the brown one and sew it on with running '
+    'stitch, leaving an even brown rim showing. Sew each ear onto the top of the head, with a '
+    'little space between.')
 
 add('banner_snute_mini', 'KINNFLEKKENE OG SNUTEN (KREMHVIT)', 'THE CHEEK PATCHES AND MUZZLE (CREAM)')
 add('snute_mini_lead',
@@ -404,7 +431,7 @@ add('montering_lead',
     'Lay out all the pieces in the order you want them, and measure the whole clip fully '
     'stretched out before you sew or tie anything in place.')
 add('montering_steg', [
-    'Sy de to kinnflekkene og snuten fast på hodet, hvis du ikke allerede har gjort det.',
+    'Sy ørene, de to kinnflekkene og snuten fast på hodet, hvis du ikke allerede har gjort det.',
     'Hekle volangkragen rundt nederste kant av dådyrhodet, og sy sløyfen fast mellom ørene.',
     'Tre eller sy kulene og stjerneperlen (og eventuelle andre perler) i ønsket rekkefølge på '
     'en kort, sterk bomullssnor eller direkte sammen med tett heftesting mellom hver del.',
@@ -416,7 +443,7 @@ add('montering_steg', [
     'Fest alle løse tråder godt på innsiden av delene, og klipp av det som er igjen.',
 ])
 add('montering_steg_en', [
-    'Sew the two cheek patches and the muzzle onto the head, if you have not already.',
+    'Sew the ears, the two cheek patches and the muzzle onto the head, if you have not already.',
     'Crochet the ruffled collar around the bottom edge of the deer head, and sew the bow on '
     'between the ears.',
     'Thread or sew the balls and the star bead (and any other beads) in the order you want, '
@@ -600,9 +627,19 @@ def build(lang):
 <p>{t('hode_lead')}</p>
 {card(otab(hode_rows, head3[lang]))}
 {cme(t('hode_ferdig'))}
-{rosep(t('pill_orer_mini'))}
-{card('<p>' + t('orer_mini_txt') + '</p>')}
 ''', 7))
+
+    ore_ute_mini_rows = T['ore_ute_mini_rows']['no'] if lang == 'no' else T['ore_ute_mini_rows_en']['no']
+    ore_inne_mini_rows = T['ore_inne_mini_rows']['no'] if lang == 'no' else T['ore_inne_mini_rows_en']['no']
+    pages.append(pg(f'''
+{banner(t('banner_orer_mini'))}
+<p>{t('orer_mini_lead')}</p>
+{rosep(t('pill_ore_ute_mini'))}
+{card(otab(ore_ute_mini_rows, T['orer_mini_head'][lang]))}
+{sagep(t('pill_ore_inne_mini'))}
+{card(otab(ore_inne_mini_rows, T['orer_mini_head'][lang]))}
+{cme(t('orer_mini_ferdig'))}
+''', 8))
 
     ansiktsfelt_mini_rows = T['ansiktsfelt_mini_rows']['no'] if lang == 'no' else T['ansiktsfelt_mini_rows_en']['no']
     snute_mini_rows = T['snute_mini_rows']['no'] if lang == 'no' else T['snute_mini_rows_en']['no']
@@ -617,7 +654,7 @@ def build(lang):
 {cme(t('snute_mini_ferdig'))}
 {rosep(t('pill_snute_mini_fest'))}
 {card('<p>' + t('snute_mini_fest_txt') + '</p>')}
-''', 8))
+''', 9))
 
     pages.append(pg(f'''
 {sagep(t('pill_ansikt_mini'))}
@@ -625,7 +662,7 @@ def build(lang):
   <div>{card('<p>' + t('ansikt_mini_txt') + '</p>')}</div>
   <div class="figwrap"><img src="{face_src}" alt="Ellie ansikt, referanse"><div class="figcap small">{'Referanse: Ellies ansiktsuttrykk' if lang == 'no' else "Reference: Ellie's expression"}</div></div>
 </div>
-''', 9))
+''', 10))
 
     pages.append(pg(f'''
 {banner(t('banner_krage'))}
@@ -633,7 +670,7 @@ def build(lang):
 {card('<p>' + t('krage_txt') + '</p>')}
 {sagep(t('pill_krage_fest'))}
 {cme(t('krage_fest_txt'))}
-''', 10))
+''', 11))
 
     pages.append(pg(f'''
 {banner(t('banner_blomst'))}
@@ -645,7 +682,7 @@ def build(lang):
 {card('<p>' + t('blad_txt') + '</p>')}
 {sagep(t('pill_montering_motiv'))}
 {cme(t('montering_motiv_txt'))}
-''', 11))
+''', 12))
 
     kuler_rows = T['kuler_rows']['no'] if lang == 'no' else T['kuler_rows_en']['no']
     pages.append(pg(f'''
@@ -655,14 +692,14 @@ def build(lang):
 {cme(t('kuler_ferdig'))}
 {rosep(t('pill_lokke'))}
 {card('<p>' + t('lokke_txt') + '</p>')}
-''', 12))
+''', 13))
 
     mo_steg = T['montering_steg']['no'] if lang == 'no' else T['montering_steg_en']['no']
     pages.append(pg(f'''
 {banner(t('banner_montering'))}
 <p>{t('montering_lead')}</p>
 {card(steps(mo_steg))}
-''', 13))
+''', 14))
 
     regler = T['regler']['no'] if lang == 'no' else T['regler_en']['no']
     pages.append(pg(f'''
@@ -671,12 +708,12 @@ def build(lang):
 {card('<p>' + t('lengde_txt') + '</p>')}
 {sagep(t('pill_regler'))}
 {card(ul(regler))}
-''', 14))
+''', 15))
 
     pages.append(pg(f'''
 {banner(t('banner_stell'))}
 {cme(t('stell_txt'))}
-''', 15))
+''', 16))
 
     kolliste = T['kolleksjon_liste']['no'] if lang == 'no' else T['kolleksjon_liste']['en']
     pages.append(pg(f'''
@@ -689,7 +726,7 @@ def build(lang):
 <div class="byline">
   <div class="by2">{t('by1')} &middot; {t('by2')} &middot; {t('by3')}</div>
 </div>
-''', 16))
+''', 17))
 
     return pages
 

@@ -1,7 +1,7 @@
 # Ellies smokkelenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Ellies-smokkelenke-LME.pdf`** (norsk, 16 sider, A4) og
-**`Ellies-smokkelenke-LME-EN.pdf`** (engelsk, 16 sider, A4).
+Ferdig oppskrift: **`Ellies-smokkelenke-LME.pdf`** (norsk, 17 sider, A4) og
+**`Ellies-smokkelenke-LME-EN.pdf`** (engelsk, 17 sider, A4).
 
 Andre oppskrift i **LME Baby Collection "Woodland Dreams"**, etter
 `../ellie-dadyret/`. Et forenklet dådyrhode inspirert av Ellie, med en liten
@@ -60,6 +60,17 @@ Kun Ellies smokkelenke er oppdatert. De andre fem karakterenes
 smokkelenker er bevisst forenklet uten egne kinnflekker/snuteflekk (samme
 mønster som Felix' smokkelenke), og er ikke endret med mindre Renate ber
 om det.
+
+## Oppdatert 24. august 2026: hvitt/rosa innersirkel i ørene
+
+Renate ba om at ørene også skulle hekles med hvitt eller pudderrosa inni,
+akkurat som på den fulle Ellie-oppskriften (`../ellie-dadyret/`). De to
+ørene ("TO SMÅ ØRER", nå egen side 8 av 17) hekles nå i to lag: en liten
+sirkel i brunt (utsiden, 2 omganger, 6→12 fm) og en enda mindre sirkel i
+hvitt eller pudderrosa (innsiden, 5 fm i magisk ring), sydd sammen med en
+jevn brun kant synlig rundt, samme teknikk som resten av kolleksjonen,
+skalert ned. Flyttet til egen side for å unngå sideoverflyt, og rettet
+sidetall-referansen på side 2 (sikkerhetssiden er nå side 15).
 
 - **Garn:** samme Bystrikk Merino + rester av pudderrosa/salviegrønt som
   resten av kolleksjonen.
