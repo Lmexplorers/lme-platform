@@ -8,6 +8,8 @@ node_modules/
 __pycache__/
 *.pyc
 
-# Mellomsteg-HTML fra hekleoppskrift-byggeskriptene (kun PDF-ene committes)
+# Mellomsteg-HTML fra oppskrift-byggeskriptene (kun PDF-ene committes)
 biblioteket/hekle/*/*_no.html
 biblioteket/hekle/*/*_en.html
+biblioteket/strikk/*/*_no.html
+biblioteket/strikk/*/*_en.html

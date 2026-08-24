@@ -192,6 +192,149 @@ window.LME_BUTIKK = {
       ]
     },
 
+    "bottehatter-barn-strikk-norge": {
+      navn:  { no: "NORGE-bøttehatt barn, strikkeoppskrift", en: "NORGE bucket hat kids, knitting pattern" },
+      undertittel: { no: "NORGE · str. 50–170 · komplett i seg selv", en: "NORGE · size 50–170 · complete on its own" },
+      cover:   "/images/oppskrift-bottehatter-barn-strikk.jpg",
+      coverEn: "/images/oppskrift-bottehatter-barn-strikk.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-norge.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-norge-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "bottehatter-barn-strikk-norway": {
+      navn:  { no: "NORWAY-bøttehatt barn, strikkeoppskrift", en: "NORWAY bucket hat kids, knitting pattern" },
+      undertittel: { no: "NORWAY · str. 50–170 · komplett i seg selv", en: "NORWAY · size 50–170 · complete on its own" },
+      cover:   "/images/oppskrift-bottehatter-barn-strikk.jpg",
+      coverEn: "/images/oppskrift-bottehatter-barn-strikk.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-norway.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-norway-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "bottehatter-barn-strikk-ro": {
+      navn:  { no: "RO-bøttehatt barn, strikkeoppskrift", en: "RO bucket hat kids, knitting pattern" },
+      undertittel: { no: "RO · str. 50–170 · komplett i seg selv", en: "RO · size 50–170 · complete on its own" },
+      cover:   "/images/oppskrift-bottehatter-barn-strikk.jpg",
+      coverEn: "/images/oppskrift-bottehatter-barn-strikk.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-ro.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-ro-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "bottehatter-barn-strikk-brodert-norge": {
+      navn:  { no: "NORGE-bøttehatt barn, brodert strikkeoppskrift", en: "NORGE bucket hat kids, duplicate stitch knitting pattern" },
+      undertittel: { no: "NORGE · brodert med maskesting · str. 50–170", en: "NORGE · duplicate stitch · size 50–170" },
+      cover:   "/images/oppskrift-bottehatter-barn-strikk-brodert.jpg",
+      coverEn: "/images/oppskrift-bottehatter-barn-strikk-brodert.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-brodert-norge.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-brodert-norge-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "bottehatter-barn-strikk-brodert-norway": {
+      navn:  { no: "NORWAY-bøttehatt barn, brodert strikkeoppskrift", en: "NORWAY bucket hat kids, duplicate stitch knitting pattern" },
+      undertittel: { no: "NORWAY · brodert med maskesting · str. 50–170", en: "NORWAY · duplicate stitch · size 50–170" },
+      cover:   "/images/oppskrift-bottehatter-barn-strikk-brodert.jpg",
+      coverEn: "/images/oppskrift-bottehatter-barn-strikk-brodert.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-brodert-norway.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-brodert-norway-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "bottehatter-barn-strikk-brodert-ro": {
+      navn:  { no: "RO-bøttehatt barn, brodert strikkeoppskrift", en: "RO bucket hat kids, duplicate stitch knitting pattern" },
+      undertittel: { no: "RO · brodert med maskesting · str. 50–170", en: "RO · duplicate stitch · size 50–170" },
+      cover:   "/images/oppskrift-bottehatter-barn-strikk-brodert.jpg",
+      coverEn: "/images/oppskrift-bottehatter-barn-strikk-brodert.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-brodert-ro.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-brodert-ro-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "bottehatter-barn-hekle-norge": {
+      navn:  { no: "NORGE-bøttehatt barn, hekleoppskrift", en: "NORGE bucket hat kids, crochet pattern" },
+      undertittel: { no: "NORGE · str. 50–170 · komplett i seg selv", en: "NORGE · size 50–170 · complete on its own" },
+      cover:   "/images/oppskrift-bottehatter-barn-hekle.jpg",
+      coverEn: "/images/oppskrift-bottehatter-barn-hekle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-hekle-norge.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-hekle-norge-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "bottehatter-barn-hekle-norway": {
+      navn:  { no: "NORWAY-bøttehatt barn, hekleoppskrift", en: "NORWAY bucket hat kids, crochet pattern" },
+      undertittel: { no: "NORWAY · str. 50–170 · komplett i seg selv", en: "NORWAY · size 50–170 · complete on its own" },
+      cover:   "/images/oppskrift-bottehatter-barn-hekle.jpg",
+      coverEn: "/images/oppskrift-bottehatter-barn-hekle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-hekle-norway.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-hekle-norway-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "bottehatter-barn-hekle-ro": {
+      navn:  { no: "RO-bøttehatt barn, hekleoppskrift", en: "RO bucket hat kids, crochet pattern" },
+      undertittel: { no: "RO · str. 50–170 · komplett i seg selv", en: "RO · size 50–170 · complete on its own" },
+      cover:   "/images/oppskrift-bottehatter-barn-hekle.jpg",
+      coverEn: "/images/oppskrift-bottehatter-barn-hekle.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-hekle-ro.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-hekle-ro-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "bottehatter-barn-hekle-rune-norge": {
+      navn:  { no: "NORGE-bøttehatt barn, runeskrift hekleoppskrift", en: "NORGE bucket hat kids, rune letters crochet pattern" },
+      undertittel: { no: "NORGE · runeskrift · str. 50–170", en: "NORGE · rune letters · size 50–170" },
+      cover:   "/images/oppskrift-bottehatter-barn-hekle-rune.jpg",
+      coverEn: "/images/oppskrift-bottehatter-barn-hekle-rune.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-hekle-rune-norge.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-hekle-rune-norge-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "bottehatter-barn-hekle-rune-norway": {
+      navn:  { no: "NORWAY-bøttehatt barn, runeskrift hekleoppskrift", en: "NORWAY bucket hat kids, rune letters crochet pattern" },
+      undertittel: { no: "NORWAY · runeskrift · str. 50–170", en: "NORWAY · rune letters · size 50–170" },
+      cover:   "/images/oppskrift-bottehatter-barn-hekle-rune.jpg",
+      coverEn: "/images/oppskrift-bottehatter-barn-hekle-rune.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-hekle-rune-norway.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-hekle-rune-norway-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
     "ellie-hekle": {
       navn:  { no: "Ellie, det lille dådyret - amigurumi", en: "Ellie the Little Fawn - amigurumi" },
       undertittel: { no: "LME Baby Collection · Woodland Dreams · ca. 18-20 cm · avtakbar sløyfe",
