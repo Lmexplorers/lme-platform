@@ -37,5 +37,7 @@ python3 build_poncho.py
 ```
 
 Rendres til PDF med Chromium (print-to-pdf). Cover-foto for voksen/barn er
-beskåret fra det originale ChatGPT-utkastets bilde. Baby-hette har en tegnet
-SVG-skisse i stedet, siden plagget ikke er strikket ennå.
+beskåret fra det originale ChatGPT-utkastets bilde, baby-hette bruker et
+eget produktfoto (tre graderte størrelser). SVG-skissen (`hood_schematic`)
+ligger igjen i skriptet som reservefallback dersom `photo` settes til
+`None` for en fremtidig hette-variant uten foto ennå.

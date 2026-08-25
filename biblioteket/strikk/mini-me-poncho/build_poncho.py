@@ -183,7 +183,7 @@ VOKSEN = dict(
 )
 BABY = dict(
     slug='baby', title_no='TIL BABY, MED HETTE', title_en='FOR BABY, WITH HOOD',
-    photo=None, has_hood=True,
+    photo='poncho_baby_ref.jpg', has_hood=True,
     codes=['50', '56', '62', '68', '74', '80', '86', '92'],
     age_no=['nyfødt', '0&ndash;1 mnd', '1&ndash;3 mnd', '3&ndash;6 mnd', '6&ndash;9 mnd', '9&ndash;12 mnd',
             '12&ndash;18 mnd', '18&ndash;24 mnd'],
@@ -226,11 +226,11 @@ def build(kind):
             pages.append(ph(body, pnum[0]))
 
         # ---------- cover ----------
-        if kind['has_hood']:
-            cover_media = '<div class="coverimg" style="padding:4mm 0;">' + hood_schematic(L) + '</div>'
-        else:
-            alt = kind['title_no'] if LANG == 'no' else kind['title_en']
+        alt = kind['title_no'] if LANG == 'no' else kind['title_en']
+        if kind['photo']:
             cover_media = f'<div class="coverimg"><img src="{photo_src(kind["photo"])}" alt="{alt}"></div>'
+        else:
+            cover_media = '<div class="coverimg" style="padding:4mm 0;">' + hood_schematic(L) + '</div>'
 
         intro_no = ('En myk og lettstrikket babyponcho med hette. Selve ponchoen strikkes rundt ovenfra og '
                      'ned som ett sammenhengende stykke, akkurat som barne- og voksenversjonen: med åtte '
