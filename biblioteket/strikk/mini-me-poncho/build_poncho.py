@@ -184,17 +184,23 @@ VOKSEN = dict(
 BABY = dict(
     slug='baby', title_no='TIL BABY, MED HETTE', title_en='FOR BABY, WITH HOOD',
     photo=None, has_hood=True,
-    codes=['B1', 'B2', 'B3'],
-    age_no=['0&ndash;6 mnd', '6&ndash;12 mnd', '12&ndash;24 mnd'],
-    age_en=['0&ndash;6 mo', '6&ndash;12 mo', '12&ndash;24 mo'],
-    head_no=['40 cm', '44 cm', '47 cm'],
-    legg_opp=[64, 72, 80], felt=[8, 9, 10], ribbhoyde=['2 cm', '2 cm', '2 cm'],
-    hettehoyde=[16, 18, 20],
-    okn=[9, 11, 12], final=[136, 160, 176], okn_lengde=[12, 15, 17],
-    bredde=[40, 47, 52], lengde=[36, 41, 46], armapning=[13, 15, 17],
-    stopp=[34.5, 39.5, 44.5], side_masker=[11, 13, 14],
-    kh1=[23, 27, 30], kn1=[45, 53, 58], kn2=[91, 107, 118], kh2=[113, 133, 146],
-    mengde=[150, 200, 250], noster=[3, 4, 5],
+    codes=['50', '56', '62', '68', '74', '80', '86', '92'],
+    age_no=['nyfødt', '0&ndash;1 mnd', '1&ndash;3 mnd', '3&ndash;6 mnd', '6&ndash;9 mnd', '9&ndash;12 mnd',
+            '12&ndash;18 mnd', '18&ndash;24 mnd'],
+    age_en=['newborn', '0&ndash;1 mo', '1&ndash;3 mo', '3&ndash;6 mo', '6&ndash;9 mo', '9&ndash;12 mo',
+            '12&ndash;18 mo', '18&ndash;24 mo'],
+    legg_opp=[56, 56, 64, 64, 64, 72, 72, 72], felt=[7, 7, 8, 8, 8, 9, 9, 9],
+    ribbhoyde=['2 cm', '2 cm', '2 cm', '2 cm', '2.5 cm', '2.5 cm', '2.5 cm', '2.5 cm'],
+    okn=[11, 12, 12, 14, 16, 17, 19, 21], final=[144, 152, 160, 176, 192, 208, 224, 240],
+    okn_lengde=[13, 14, 15, 17, 19, 21, 23, 25],
+    bredde=[42, 45, 47, 52, 56, 61, 66, 71], lengde=[20, 22, 24, 27, 30, 33, 36, 39],
+    hette=[16, 17, 18, 19, 20, 21, 22, 23],
+    gjenta=[2, 2, 3, 3, 4, 4, 5, 5],
+    armapning=[None] * 8, stopp=[18.5, 20.5, 22.5, 25.5, 28.5, 31.5, 34.5, 37.5],
+    side_masker=[8, 9, 10, 11, 12, 13, 14, 15],
+    kh1=[28, 29, 30, 33, 36, 39, 42, 45], kn1=[44, 47, 50, 55, 60, 65, 70, 75],
+    kn2=[100, 105, 110, 121, 132, 143, 154, 165], kh2=[116, 123, 130, 143, 156, 169, 182, 195],
+    mengde=[100, 100, 150, 150, 200, 200, 250, 250], noster=[2, 2, 3, 3, 4, 4, 5, 5],
 )
 
 
@@ -224,19 +230,20 @@ def build(kind):
             alt = kind['title_no'] if LANG == 'no' else kind['title_en']
             cover_media = f'<div class="coverimg"><img src="{photo_src(kind["photo"])}" alt="{alt}"></div>'
 
-        intro_no = ('En lettstrikket poncho med hette, strikket i ett stykke ovenfra og ned. '
-                     'Hetten strikkes først flatt og sys sammen i en enkel søm, deretter plukkes maskene '
-                     'opp og resten av ponchoen strikkes akkurat som barne- og voksenversjonen: rundt, med '
-                     'åtte jevne økningslinjer, sammenhengende i-cordkant og én knepping i hver side. '
-                     'Ingen splitt og ingen ekstra sammensying av selve kroppen.' if kind['has_hood'] else
+        intro_no = ('En myk og lettstrikket babyponcho med hette. Selve ponchoen strikkes rundt ovenfra og '
+                     'ned som ett sammenhengende stykke, akkurat som barne- og voksenversjonen: med åtte '
+                     'jevne økningslinjer, sammenhengende i-cordkant og én knepping i hver side. Til slutt '
+                     'plukkes masker opp langs halsen, og hetten strikkes rett på, fram og tilbake. Ingen '
+                     'løse snorer og ingen separate deler som skal sys på.' if kind['has_hood'] else
                      'En lettstrikket poncho med lav ribbehals og rund økningsdel. Hele plagget strikkes '
                      'rundt ovenfra og ned som ett sammenhengende stykke. Ingen splitt og ingen sammensying. '
                      'Ponchoen avsluttes med en sammenhengende i-cordkant og én knepping i hver side.')
-        intro_en = ('An easy-knit poncho with a hood, knitted in one piece from the top down. The hood is '
-                     'knitted flat first and seamed with one simple seam, then the stitches are picked up '
-                     'and the rest of the poncho is knitted exactly like the kids&rsquo; and adult versions: '
-                     'in the round, with eight even increase lines, a continuous i-cord edge and one fastening '
-                     'on each side. No splits and no extra seaming of the body itself.' if kind['has_hood'] else
+        intro_en = ('A soft, easy-knit baby poncho with a hood. The poncho itself is knitted in the round '
+                     'from the top down as one continuous piece, exactly like the kids&rsquo; and adult '
+                     'versions: with eight even increase lines, a continuous i-cord edge and one fastening '
+                     'on each side. At the end, stitches are picked up along the neckline and the hood is '
+                     'knitted straight on, back and forth. No loose ties and no separate pieces to sew on.'
+                     if kind['has_hood'] else
                      'An easy-knit poncho with a low ribbed neckline and a round increase section. The whole '
                      'garment is knitted in the round from the top down as one continuous piece. No splits '
                      'and no seaming. The poncho finishes with a continuous i-cord edge and one fastening on '
@@ -256,40 +263,28 @@ def build(kind):
         )
 
         # ---------- før du begynner ----------
-        laer_no = [
-            'å strikke en enkel hette flatt og sy den sammen',
-            'å plukke opp masker langs en kant',
-        ] if kind['has_hood'] else ['å strikke en lav hals i 1 rett, 1 vrang']
-        laer_no += [
-            'å strikke rundt på rundpinne',
-            'å øke jevnt i åtte felt',
-            'å lage et enkelt knapphull',
-            'å felle av med i-cord rundt hele nederkanten',
-        ]
-        laer_en = [
-            'to knit a simple hood flat and seam it',
-            'to pick up stitches along an edge',
-        ] if kind['has_hood'] else ['to knit a low neckline in 1 knit, 1 purl']
-        laer_en += [
-            'to knit in the round on a circular needle',
-            'to increase evenly in eight sections',
-            'to make a simple buttonhole',
-            'to bind off with i-cord all round the hem',
-        ]
-        intro2_no = ('Ponchoen strikkes flatt fra toppen av hetten, sys sammen i én søm, og fortsetter deretter '
-                     'rundt til nederkanten. Åtte jevne økningslinjer former den runde fasongen. Etter siste '
-                     'økning strikkes alle maskene videre rundt uten annen forming. Knapphullene lages på den '
-                     'bakre delen av det samme runde stykket, rett over nederkanten. Knappene sys på den fremre '
-                     'delen.' if kind['has_hood'] else
+        laer_no = ['å strikke en lav, myk ribbehals i 1 rett, 1 vrang', 'å strikke rundt på rundpinne',
+                    'å øke jevnt i åtte felt', 'å lage et enkelt knapphull i hver side',
+                    'å felle av med i-cord rundt hele nederkanten']
+        if kind['has_hood']:
+            laer_no.append('å plukke opp masker langs halsen og strikke en enkel hette rett på')
+        laer_en = ['to knit a low, soft ribbed neckline in 1 knit, 1 purl', 'to knit in the round on a circular needle',
+                   'to increase evenly in eight sections', 'to make a simple buttonhole on each side',
+                   'to bind off with i-cord all round the hem']
+        if kind['has_hood']:
+            laer_en.append('to pick up stitches along the neckline and knit a simple hood straight on')
+        intro2_no = ('Først strikkes en lav, myk ribbehals. Deretter formes ponchoen rundt med åtte jevne '
+                     'økningslinjer. Etter siste økning strikkes videre rundt til nederkanten. Til slutt '
+                     'plukkes masker opp langs halsen, og hetten strikkes fram og tilbake direkte på plagget.'
+                     if kind['has_hood'] else
                      'Ponchoen strikkes rundt fra halsen til nederkanten. Åtte jevne økningslinjer former den '
                      'runde fasongen. Etter siste økning strikkes alle maskene videre rundt uten annen forming. '
                      'Knapphullene lages på den bakre delen av det samme runde stykket, rett over nederkanten. '
                      'Knappene sys på den fremre delen.')
-        intro2_en = ('The poncho is knitted flat from the top of the hood, seamed with one seam, and then '
-                     'continues in the round to the hem. Eight even increase lines shape the round silhouette. '
-                     'After the last increase, all stitches are knitted plain in the round with no further '
-                     'shaping. The buttonholes are made on the back part of the same round piece, right above '
-                     'the hem. The buttons are sewn on the front part.' if kind['has_hood'] else
+        intro2_en = ('First a low, soft ribbed neckline is knitted. Then the poncho is shaped in the round '
+                     'with eight even increase lines. After the last increase, knitting continues in the '
+                     'round to the hem. At the end, stitches are picked up along the neckline, and the hood '
+                     'is knitted back and forth straight onto the garment.' if kind['has_hood'] else
                      'The poncho is knitted in the round from the neckline to the hem. Eight even increase '
                      'lines shape the round silhouette. After the last increase, all stitches are knitted '
                      'plain in the round with no further shaping. The buttonholes are made on the back part '
@@ -303,10 +298,10 @@ def build(kind):
             + pink(L('HVOR VANSKELIG ER DET?', 'HOW HARD IS IT?'))
             + card(p('Lett til litt øvet. Du bør kunne legge opp masker, strikke rett og vrang og strikke '
                      'rundt. Økning, knapphull og i-cordavfelling forklares steg for steg.' +
-                     (' Hettesøm og maskeopptak forklares også steg for steg.' if kind['has_hood'] else ''),
+                     (' Hettefellingen og sammenstrikkingen i toppen forklares også steg for steg.' if kind['has_hood'] else ''),
                      'Easy to a little practised. You should be able to cast on, knit and purl, and knit in '
                      'the round. Increases, buttonholes and i-cord bind-off are explained step by step.' +
-                     (' The hood seam and picking up stitches are also explained step by step.' if kind['has_hood'] else ''), L))
+                     (' The hood shaping and joining the top are also explained step by step.' if kind['has_hood'] else ''), L))
             + ctitle('Ett steg om gangen, så blir det poncho til slutt.',
                      'One step at a time, and in the end you have a poncho.', L)
         )
@@ -315,14 +310,18 @@ def build(kind):
         yarn_rows = ''.join(
             f'<tr><td><b>{c}</b></td><td>{m} g</td><td>{ns}</td></tr>'
             for c, m, ns in zip(codes, kind['mengde'], kind['noster']))
-        needle_items_no = (['rundpinne 4,5 mm, 40 cm, til hetten',
-                             'rundpinne 5 mm, 60&ndash;100 cm, til resten av ponchoen'] if kind['has_hood'] else
+        needle_items_no = (['rundpinne 4,5 mm, 40 cm, til halsen',
+                             'rundpinne 5 mm, 60&ndash;100 cm, til ponchoen og hetten',
+                             'eventuelt strømpepinner eller magic loop'] if kind['has_hood'] else
                             ['rundpinne 4,5 mm, 40&ndash;60 cm, til halsen',
                              'rundpinne 5 mm, 80&ndash;120 cm, til resten av ponchoen'])
-        needle_items_en = (['4.5 mm circular needle, 40 cm, for the hood',
-                             '5 mm circular needle, 60&ndash;100 cm, for the rest of the poncho'] if kind['has_hood'] else
+        needle_items_en = (['4.5 mm circular needle, 40 cm, for the neckline',
+                             '5 mm circular needle, 60&ndash;100 cm, for the poncho and the hood',
+                             'double-pointed needles or magic loop, if you prefer'] if kind['has_hood'] else
                             ['4.5 mm circular needle, 40&ndash;60 cm, for the neckline',
                              '5 mm circular needle, 80&ndash;120 cm, for the rest of the poncho'])
+        button_no = '2 flate knapper, ca. 15&ndash;18 mm, sydd svært godt fast' if kind['has_hood'] else '2 flate knapper, ca. 18&ndash;25 mm'
+        button_en = '2 flat buttons, approx. 15&ndash;18 mm, sewn on very securely' if kind['has_hood'] else '2 flat buttons, approx. 18&ndash;25 mm'
         add(
             banner(L('DETTE TRENGER DU', 'WHAT YOU NEED'))
             + tealp(L('GARN', 'YARN'))
@@ -335,7 +334,7 @@ def build(kind):
             + pink(L('PINNER OG UTSTYR', 'NEEDLES AND KIT'))
             + card(ul([L(a, b) for a, b in zip(needle_items_no, needle_items_en)] + [
                 L('8 maskemarkører og 4 avtakbare markører', '8 stitch markers and 4 removable markers'),
-                L('2 flate knapper, ca. 18&ndash;25 mm', '2 flat buttons, approx. 18&ndash;25 mm'),
+                L(button_no, button_en),
                 L('stoppenål og målebånd', 'tapestry needle and tape measure'),
             ]))
             + tealp(L('STRIKKEFASTHET', 'GAUGE'))
@@ -346,39 +345,51 @@ def build(kind):
         )
 
         # ---------- størrelser og mål ----------
-        head_col = ''
-        if kind['has_hood']:
-            head_col = f'<th>{L("Hodemål", "Head")}</th>'
         size_rows = []
         for i in range(n):
-            row = [codes[i], kind['age_no'][i] if LANG == 'no' else kind['age_en'][i]]
+            row = [codes[i], kind['age_no'][i] if LANG == 'no' else kind['age_en'][i], str(kind['final'][i]),
+                   f'ca. {kind["bredde"][i]} cm', f'ca. {kind["lengde"][i]} cm']
             if kind['has_hood']:
-                row.append(kind['head_no'][i])
-            row += [str(kind['final'][i]), f'ca. {kind["bredde"][i]} cm', f'ca. {kind["lengde"][i]} cm',
-                    f'ca. {kind["armapning"][i]} cm']
+                row.append(f'ca. {kind["hette"][i]} cm')
+            else:
+                row.append(f'ca. {kind["armapning"][i]} cm')
             size_rows.append(row)
-        header = [L('Kode', 'Code'), L('Størrelse', 'Size')] + (['&nbsp;'] if False else []) + \
-                 ([L('Hodemål', 'Head')] if kind['has_hood'] else []) + \
-                 [L('Masker', 'Stitches'), L('Bredde', 'Width'), L('Lengde', 'Length'), L('Armåpning', 'Arm opening')]
-        lengde_note_no = ('Hel lengde måles fra toppen av hetten til nederkanten.' if kind['has_hood'] else
+        header = [L('Str.', 'Size'), L('Alder', 'Age'), L('Masker', 'Stitches'), L('Bredde', 'Width'),
+                  L('Lengde', 'Length')] + [L('Hette', 'Hood') if kind['has_hood'] else L('Armåpning', 'Arm opening')]
+        lengde_note_no = ('Størrelsene følger barnets kroppslengde. Hel lengde måles fra halskanten til '
+                           'nederkanten. Bredde måles flatt tvers over den uknappede ponchoen. Hettehøyden '
+                           'måles fra halskanten til toppen.' if kind['has_hood'] else
                            'Hel lengde måles fra øverst på halskanten til nederkanten.')
-        lengde_note_en = ('Full length is measured from the top of the hood to the hem.' if kind['has_hood'] else
+        lengde_note_en = ('Sizes follow the child&rsquo;s body length. Full length is measured from the '
+                           'neckline to the hem. Width is measured flat across the unbuttoned poncho. Hood '
+                           'height is measured from the neckline to the top.' if kind['has_hood'] else
                            'Full length is measured from the top of the neckline to the hem.')
         add(
             banner(L('STØRRELSER OG MÅL', 'SIZES AND MEASUREMENTS'))
-            + tealp(L('HVILKEN STØRRELSE?', 'WHICH SIZE?'))
+            + tealp(L('FRA NYFØDT TIL 2 ÅR', 'FROM NEWBORN TO 2 YEARS') if kind['has_hood'] else
+                    L('HVILKEN STØRRELSE?', 'WHICH SIZE?'))
             + card(p('Velg først etter alder eller vanlig størrelse. Ponchoen har god bevegelsesvidde. ' +
-                     lengde_note_no + ' Bredde måles flatt tvers over det uknappede plagget.',
-                     'Choose first by age or usual size. The poncho has plenty of ease. ' + lengde_note_en +
-                     ' Width is measured flat across the unbuttoned garment.', L))
+                     lengde_note_no,
+                     'Choose first by age or usual size. The poncho has plenty of ease. ' + lengde_note_en, L))
             + sizetable(header, size_rows)
-            + pink(L('VIKTIG OM KONSTRUKSJONEN', 'IMPORTANT ABOUT THE CONSTRUCTION'))
-            + card(p('Alle størrelsene strikkes som ett rundt stykke. Det er ingen sideåpning som klippes '
-                     'eller strikkes separat. Armåpningen dannes først når et punkt på fremre del kneppes '
-                     'til et punkt på bakre del i hver side.',
-                     'All sizes are knitted as one round piece. There is no side opening that is cut or '
-                     'knitted separately. The arm opening is only formed once a point on the front part is '
-                     'buttoned to a point on the back part on each side.', L))
+            + (pink(L('SIKKERHET FOR BABY', 'SAFETY FOR BABY')) + card(check([
+                   L('Hetten har ingen snorer eller dusker.', 'The hood has no ties or tassels.'),
+                   L('Knapper skal sys ekstra godt fast og kontrolleres før hver bruk.',
+                     'Buttons must be sewn on extra securely and checked before every use.'),
+                   L('Plagget skal ikke brukes under søvn eller uten tilsyn.',
+                     'The garment should not be used during sleep or unsupervised.'),
+                   L('Ta av ponchoen i bilstol og andre selesystemer.',
+                     'Take the poncho off in a car seat and other harness systems.'),
+                   L('Pass på at hette og hals aldri dekker barnets ansikt.',
+                     'Make sure the hood and neckline never cover the child&rsquo;s face.'),
+               ])) if kind['has_hood'] else
+               pink(L('VIKTIG OM KONSTRUKSJONEN', 'IMPORTANT ABOUT THE CONSTRUCTION'))
+               + card(p('Alle størrelsene strikkes som ett rundt stykke. Det er ingen sideåpning som klippes '
+                        'eller strikkes separat. Armåpningen dannes først når et punkt på fremre del kneppes '
+                        'til et punkt på bakre del i hver side.',
+                        'All sizes are knitted as one round piece. There is no side opening that is cut or '
+                        'knitted separately. The arm opening is only formed once a point on the front part is '
+                        'buttoned to a point on the back part on each side.', L)))
             + ctitle('Prøv ponchoen underveis. Lengden kan enkelt justeres før knapphullene strikkes.',
                      'Try the poncho on as you go. The length can easily be adjusted before the buttonholes '
                      'are knitted.', L)
@@ -400,71 +411,30 @@ def build(kind):
             ord_html += f'<tr><td><b>{L(a, a2)}</b></td><td>{L(b, b2)}</td></tr>'
         ord_html += '</table>'
 
-        if kind['has_hood']:
-            legg_rows = [[c, f'{lo} m', rh] for c, lo, rh in zip(codes, kind['legg_opp'], kind['ribbhoyde'])]
-            hoyde_rows = [[c, f'{hh} cm'] for c, hh in zip(codes, kind['hettehoyde'])]
-            add(
-                banner(L('TEKNIKKER OG ORDLISTE', 'TECHNIQUES AND GLOSSARY'))
-                + tealp(L('ORDLISTE', 'GLOSSARY'))
-                + card(ord_html)
-                + pink(L('1 &ndash; HETTEN', '1 &ndash; THE HOOD'))
-                + card(p('Legg opp på rundpinne 4,5 mm (flatt, ikke i rundt):',
-                         'Cast on with the 4.5 mm circular needle (flat, not in the round):', L)
-                       + sizetable([L('Str.', 'Size'), L('Legg opp', 'Cast on'), L('Ribbhøyde', 'Rib height')], legg_rows)
-                       + p('Strikk *1 rett, 1 vrang* fram og tilbake til ribben har oppgitt høyde, dette blir '
-                           'kanten rundt ansiktsåpningen. Bytt til pinne 5 mm og fortsett glattstrikk fram og '
-                           'tilbake (rett på retten, vrang på vrangen) til hetten måler total høyde fra opplegget:',
-                           'Knit *1 knit, 1 purl* back and forth until the rib has the given height, this '
-                           'becomes the edge around the face opening. Switch to the 5 mm needle and continue '
-                           'in stockinette back and forth (knit on right side rows, purl on wrong side rows) '
-                           'until the hood measures the total height from the cast-on:', L)
-                       + sizetable([L('Str.', 'Size'), L('Total hettehøyde', 'Total hood height')], hoyde_rows)
-                       + p('Fell av. Brett hetten dobbelt slik at maskekantene på hver side møtes, med '
-                           'oppleggskanten som ansiktsåpning og felleskanten som nederst. Sy de to sidekantene '
-                           'sammen fra brettepunktet (midt topp) og ned til felleskanten. Dette blir sømmen '
-                           'midt bak på hetten.',
-                           'Bind off. Fold the hood in half so the side edges on each side meet, with the '
-                           'cast-on edge as the face opening and the bound-off edge at the bottom. Sew the two '
-                           'side edges together from the fold point (centre top) down to the bound-off edge. '
-                           'This becomes the seam at the centre back of the hood.', L))
-                + ctitle('Rette pinner fungerer like fint som rundpinne når hetten strikkes flatt, bruk det '
-                         'du har.',
-                         'Straight needles work just as well as a circular needle while the hood is knitted '
-                         'flat, use what you have.', L)
-            )
-        else:
-            legg_rows = [[c, f'{lo} m', rh] for c, lo, rh in zip(codes, kind['legg_opp'], kind['ribbhoyde'])]
-            add(
-                banner(L('TEKNIKKER OG HALS', 'TECHNIQUES AND NECKLINE'))
-                + tealp(L('ORDLISTE', 'GLOSSARY'))
-                + card(ord_html)
-                + pink(L('1 &ndash; HALS', '1 &ndash; NECKLINE'))
-                + card(p('Legg opp på rundpinne 4,5 mm:', 'Cast on with the 4.5 mm circular needle:', L)
-                       + sizetable([L('Str.', 'Size'), L('Legg opp', 'Cast on'), L('Ribbhøyde', 'Rib height')], legg_rows)
-                       + p('Sett sammen til en omgang uten å vri arbeidet. Sett en tydelig omgangsmarkør midt '
-                           'bak. Strikk *1 rett, 1 vrang* rundt til halsen har oppgitt høyde. Bytt til pinne '
-                           '5 mm og strikk 1 omgang rett.',
-                           'Join in the round without twisting the work. Place a clear round marker at centre '
-                           'back. Knit *1 knit, 1 purl* in the round until the neckline has the given height. '
-                           'Switch to the 5 mm needle and knit 1 plain round.', L))
-            )
+        legg_rows = [[c, f'{lo} m', rh] for c, lo, rh in zip(codes, kind['legg_opp'], kind['ribbhoyde'])]
+        add(
+            banner(L('TEKNIKKER OG HALS', 'TECHNIQUES AND NECKLINE'))
+            + tealp(L('ORDLISTE', 'GLOSSARY'))
+            + card(ord_html)
+            + pink(L('1 &ndash; HALS', '1 &ndash; NECKLINE'))
+            + card(p('Legg opp på rundpinne 4,5 mm:', 'Cast on with the 4.5 mm circular needle:', L)
+                   + sizetable([L('Str.', 'Size'), L('Legg opp', 'Cast on'), L('Ribbhøyde', 'Rib height')], legg_rows)
+                   + p('Sett sammen til en omgang uten å vri arbeidet. Sett en tydelig omgangsmarkør midt '
+                       'bak. Strikk *1 rett, 1 vrang* rundt til halsen har oppgitt høyde. Bytt til pinne '
+                       '5 mm og strikk 1 omgang rett.',
+                       'Join in the round without twisting the work. Place a clear round marker at centre '
+                       'back. Knit *1 knit, 1 purl* in the round until the neckline has the given height. '
+                       'Switch to the 5 mm needle and knit 1 plain round.', L))
+        )
 
         # ---------- rund økningsdel ----------
         felt_rows = [[c, f] for c, f in zip(codes, kind['felt'])]
         okn_rows = [[c, o, str(f), f'ca. {ol} cm'] for c, o, f, ol in
                     zip(codes, kind['okn'], kind['final'], kind['okn_lengde'])]
-        pickup_step = (L('Med rett side ut, plukk opp masker med rundpinne 5 mm jevnt fordelt langs den '
-                         'nederste kanten av hetten (felleskanten): like mange masker som du la opp til '
-                         'hetten. Sett en tydelig omgangsmarkør midt bak, ved hettesømmen.',
-                         'With the right side facing out, pick up stitches with the 5 mm circular needle '
-                         'evenly along the bottom edge of the hood (the bound-off edge): the same number of '
-                         'stitches you cast on for the hood. Place a clear round marker at centre back, at '
-                         'the hood seam.') if kind['has_hood'] else None)
         add(
             banner(L('RUND ØKNINGSDEL', 'ROUND INCREASE SECTION'))
             + tealp(L('2 &ndash; PLASSER MARKØRENE', '2 &ndash; PLACE THE MARKERS'))
-            + card((steps([pickup_step]) if pickup_step else '')
-                   + p('Del maskene inn i 8 like felt med markører. Omgangsmarkøren er også første '
+            + card(p('Del maskene inn i 8 like felt med markører. Omgangsmarkøren er også første '
                        'økningsmarkør.',
                        'Divide the stitches into 8 equal sections with markers. The round marker is also '
                        'the first increase marker.', L)
@@ -539,26 +509,93 @@ def build(kind):
                      'The i-cord edge runs continuously all round the poncho.', L)
         )
 
+        # ---------- hetten (kun baby) ----------
+        if kind['has_hood']:
+            hette_pickup_rows = [[c, f'{lo} m'] for c, lo in zip(codes, kind['legg_opp'])]
+            top_rows = [[c, L(f'{g} ganger', f'{g} times'), f'{hh} cm']
+                        for c, g, hh in zip(codes, kind['gjenta'], kind['hette'])]
+            add(
+                banner(L('HETTEN', 'THE HOOD'))
+                + tealp(L('8 &ndash; PLUKK OPP MASKER', '8 &ndash; PICK UP STITCHES'))
+                + card(p('Begynn midt foran i halskanten med pinne 5 mm. Plukk opp 1 maske i hver '
+                         'oppleggsmaskes ytterste ledd rundt hele halsen. Du skal ha samme masketall som '
+                         'ved opplegg:',
+                         'Start at centre front of the neckline with the 5 mm needle. Pick up 1 stitch in '
+                         'the outer strand of every cast-on stitch all round the neckline. You should end up '
+                         'with the same stitch count as your cast-on:', L)
+                       + sizetable([L('Str.', 'Size'), L('Masker til hette', 'Stitches for hood')], hette_pickup_rows)
+                       + p('Hetten strikkes nå fram og tilbake. Strikk de første og siste 4 maskene rett på '
+                           'alle pinner. Mellom kantmaskene strikkes glattstrikk.',
+                           'The hood is now knitted back and forth. Knit the first and last 4 stitches plain '
+                           'on every row. Between the edge stitches, knit stockinette.', L))
+                + pink(L('9 &ndash; FORM TOPPEN', '9 &ndash; SHAPE THE TOP'))
+                + card(p('Sett en markør etter en fjerdedel av maskene og en markør etter tre fjerdedeler av '
+                         'maskene. Strikk til hetten måler ca. 4 cm mindre enn ferdig høyde.',
+                         'Place a marker after a quarter of the stitches, and a marker after three quarters '
+                         'of the stitches. Knit until the hood measures approx. 4 cm less than the finished '
+                         'height.', L)
+                       + p('På neste pinne fra retten: *strikk til 2 masker før markøren, 2 rett sammen, '
+                           'flytt markøren, ta 1 maske løst av, strikk 1 rett og trekk den løse maska over.* '
+                           'Gjenta ved begge markørene. Det felles 4 masker. Gjenta denne pinnen på hver '
+                           'rettside, antall ganger fra tabellen:',
+                           'On the next right-side row: *knit to 2 stitches before the marker, k2tog, move '
+                           'the marker, slip 1 stitch, knit 1, pass the slipped stitch over.* Repeat at both '
+                           'markers. This decreases 4 stitches. Repeat this row on every right-side row, the '
+                           'number of times given in the table:', L)
+                       + sizetable([L('Str.', 'Size'), L('Gjenta på hver rettside', 'Repeat on every RS row'),
+                                    L('Ferdig hettehøyde', 'Finished hood height')], top_rows))
+            )
+
+            add(
+                banner(L('LUKK HETTEN', 'CLOSE THE HOOD'))
+                + tealp(L('10 &ndash; TOPPSØM', '10 &ndash; TOP SEAM'))
+                + card(p('Strikk videre uten felling til ferdig høyde. Fordel maskene likt på to pinner. '
+                         'Brett hetten med rettsiden inn, slik at de to ansiktskantene ligger over hverandre. '
+                         'Fell sammen toppen med 3-pinners avfelling. Fest tråden og vreng hetten tilbake.',
+                         'Continue knitting with no more decreases until the finished height. Divide the '
+                         'stitches evenly onto two needles. Fold the hood with right sides together, so the '
+                         'two face-opening edges line up. Bind off the top together with a 3-needle bind-off. '
+                         'Fasten off and turn the hood right side out again.', L))
+                + ctitle('3-pinners avfelling: to masker strikkes sammen (én fra hver pinne) og felles av '
+                         'samtidig, hele veien over.',
+                         '3-needle bind-off: two stitches are knitted together (one from each needle) and '
+                         'bound off at the same time, all the way across.', L)
+            )
+
         # ---------- montering ----------
+        knapp_step_no = 'SY I KNAPPENE' if kind['has_hood'] else 'KNAPPENE'
+        knapp_num = '11' if kind['has_hood'] else '8'
         add(
             banner(L('MONTERING OG ETTERBEHANDLING', 'FINISHING'))
-            + pink(L('8 &ndash; KNAPPENE', '8 &ndash; THE BUTTONS'))
+            + pink(L(knapp_num + ' &ndash; ' + knapp_step_no, knapp_num + ' &ndash; THE BUTTONS'))
             + card(p('Sy én knapp godt fast ved hver markør på fremre del, rett over i-cordkanten. Knepp '
                      'hver knapp gjennom knapphullet på bakre del i samme side. Bakre del ligger over fremre '
-                     'del. Fest tråder, vask forsiktig og tørk flatt.',
+                     'del.' + (' Bruk sterk sytråd eller garnet dobbelt. Sy gjennom knapphullene mange ganger '
+                     'og fest på vrangen. Kontroller at barnet ikke kan trekke knappen løs.' if kind['has_hood'] else
+                     ' Fest tråder, vask forsiktig og tørk flatt.'),
                      'Sew one button on securely at each marker on the front part, right above the i-cord '
                      'edge. Button each one through the buttonhole on the back part on the same side. The '
-                     'back part lies over the front part. Weave in ends, wash gently and dry flat.', L))
+                     'back part lies over the front part.' + (' Use strong sewing thread or double strands of '
+                     'yarn. Sew through the buttonholes many times and fasten off on the wrong side. Check '
+                     'that the child cannot pull the button loose.' if kind['has_hood'] else
+                     ' Weave in ends, wash gently and dry flat.'), L))
             + tealp(L('ETTERBEHANDLING', 'FINISHING TOUCHES'))
             + card(check([
                 L('Fest alle tråder på vrangen.', 'Weave in all ends on the wrong side.'),
                 L('Legg plagget i lunkent vann med ullvaskemiddel. Ikke gni eller vri.',
                   'Soak the garment in lukewarm water with wool wash. Do not rub or wring.'),
-                L('Klem ut vannet i et håndkle og tørk flatt til oppgitte mål.',
-                  'Press the water out in a towel and dry flat to the given measurements.'),
-                L('Kontroller knappene etter tørk og sy dem ekstra godt fast.',
-                  'Check the buttons after drying and sew them extra securely.'),
+                L('Klem ut vannet i et håndkle.' + (' Form hette, hals og nederkant, og tørk flatt.' if kind['has_hood'] else ' Tørk flatt til oppgitte mål.'),
+                  'Press the water out in a towel.' + (' Shape the hood, neckline and hem, and dry flat.' if kind['has_hood'] else ' Dry flat to the given measurements.')),
+                L('Kontroller knappene etter tørk' + (' og før hver bruk.' if kind['has_hood'] else '.') + ' Sy dem ekstra godt fast.',
+                  'Check the buttons after drying' + (' and before every use.' if kind['has_hood'] else '.') + ' Sew them extra securely.'),
             ]))
+            + (pink(L('VIKTIG', 'IMPORTANT')) + card(p(
+                   'Dette er et ytterplagg for bruk under oppsyn. Barnet skal ikke sove med ponchoen eller '
+                   'bruke den i bilstol. Hetten skal aldri dekke ansiktet. Fjern plagget straks dersom en '
+                   'knapp eller tråd løsner.',
+                   'This is an outer garment for supervised use. The child should not sleep in the poncho or '
+                   'wear it in a car seat. The hood should never cover the face. Remove the garment '
+                   'immediately if a button or thread comes loose.', L)) if kind['has_hood'] else '')
             + ctitle('Før oppskriften selges: alle størrelser må teststrikkes, måles etter vask og teknisk '
                      'kontrolleres.',
                      'Before this pattern is sold: every size must be test-knitted, measured after washing '

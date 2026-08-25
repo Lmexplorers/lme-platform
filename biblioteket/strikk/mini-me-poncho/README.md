@@ -14,11 +14,16 @@ hver side:
   (legg opp + 8 × økningsomganger = masker etter økning, stopp ved = hel
   lengde - 1,5 cm, knapp/knapphull-plassering = sidemidt ± masker, alt
   stemmer for alle 8 størrelsene).
-- **Baby, med hette** (B1-B3, 0-6/6-12/12-24 mnd): ny konstruksjon. Hetten
-  strikkes flatt først (kort ribbekant + glattstrikk), felles av, brettes
-  dobbelt og sys sammen i én søm midt bak. Deretter plukkes masker opp
-  langs nederkanten av hetten, og resten av ponchoen strikkes akkurat som
-  barne-/voksenversjonen.
+- **Baby, med hette** (50-92, nyfødt til 2 år): samme graderte størrelser
+  som resten av barnefamilien i biblioteket. Ponchoen strikkes først
+  akkurat som barne-/voksenversjonen (lav ribbehals, rund økningsdel,
+  i-cordkant, sideknepping), deretter plukkes masker opp rundt halsen og
+  hetten strikkes rett på, fram og tilbake, med toppen formet med
+  markørfellinger og lukket med 3-pinners avfelling. Ingen søm utenom selve
+  toppavfellingen. Bygget om fra et andre ChatGPT-utkast (samme
+  tegnfeil-mønster som det første), tallene verifisert på samme måte og
+  stemmer for alle 8 størrelsene. Erstatter en tidligere B1-B3-versjon med
+  en enklere hette-først-konstruksjon.
 
 **IKKE klar for salg ennå.** Baby-hette-varianten er ny design og må
 test-strikkes og måles etter vask før den publiseres, se siste side i hver
