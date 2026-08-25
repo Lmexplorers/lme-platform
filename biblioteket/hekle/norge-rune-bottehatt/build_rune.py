@@ -426,11 +426,11 @@ pages.append(page(f'''
 {card(L('<p class="center">En rød bøttehatt heklet i bomull. Du hekler hele hatten i rødt, med en '
         'stripet brem i rødt, hvitt og blått nederst. Så hekler du "NORGE" på i lesbare '
         'runestil-bokstaver, én sammenhengende linje rundt forsiden, og et lite norsk flagg på '
-        'toppen. Vil du heller ha "NORWAY", finner du den malen på samme side. Størrelser fra barn til herre.</p>',
+        'toppen. Vil du heller ha "NORWAY", finner du den malen på samme side. Voksenstørrelser XS til XXL.</p>',
         '<p class="center">A red bucket hat crocheted in cotton. You crochet the whole hat in red, '
         'with a striped brim in red, white and blue at the bottom. Then you crochet "NORWAY" on in '
         'readable rune-style letters, one continuous line around the front, and a little Norwegian '
-        'flag on the top. If you would rather have "NORGE", the template is on the same page. Sizes from child to man.</p>'))}
+        'flag on the top. If you would rather have "NORGE", the template is on the same page. Adult sizes XS to XXL.</p>'))}
 <div class="byline">
   <div class="by1">{L('Av Renate Dahl','By Renate Dahl')}</div>
   <div class="by2">Little Montessori Explorers</div>
@@ -454,18 +454,18 @@ pages.append(page(f'''
         'the stitch count for your size, the rest is the same for everyone.</p>')
       + '<table class="t"><tr><th>' + L('Størrelse','Size') + '</th><th>' + L('Masker rundt','Stitches around')
       + '</th><th>' + L('Passer hodemål','Fits head size') + '</th></tr>'
-      + L('<tr><td>Barn</td><td>66</td><td>48-51 cm</td></tr>'
-          '<tr><td>Dame S</td><td>72</td><td>52-54 cm</td></tr>'
-          '<tr><td>Dame M</td><td>78</td><td>54-56 cm</td></tr>'
-          '<tr><td>Dame L / Herre S</td><td>84</td><td>56-58 cm</td></tr>'
-          '<tr><td>Herre M</td><td>90</td><td>58-61 cm</td></tr>'
-          '<tr><td>Herre L</td><td>96</td><td>61-63 cm</td></tr>',
-          '<tr><td>Child</td><td>66</td><td>48-51 cm</td></tr>'
-          '<tr><td>Woman S</td><td>72</td><td>52-54 cm</td></tr>'
-          '<tr><td>Woman M</td><td>78</td><td>54-56 cm</td></tr>'
-          '<tr><td>Woman L / Man S</td><td>84</td><td>56-58 cm</td></tr>'
-          '<tr><td>Man M</td><td>90</td><td>58-61 cm</td></tr>'
-          '<tr><td>Man L</td><td>96</td><td>61-63 cm</td></tr>')
+      + L('<tr><td>XS</td><td>72</td><td>52-54 cm</td></tr>'
+          '<tr><td>S</td><td>78</td><td>54-56 cm</td></tr>'
+          '<tr><td>M</td><td>84</td><td>56-58 cm</td></tr>'
+          '<tr><td>L</td><td>90</td><td>58-61 cm</td></tr>'
+          '<tr><td>XL</td><td>96</td><td>61-63 cm</td></tr>'
+          '<tr><td>XXL</td><td>102</td><td>63-66 cm</td></tr>',
+          '<tr><td>XS</td><td>72</td><td>52-54 cm</td></tr>'
+          '<tr><td>S</td><td>78</td><td>54-56 cm</td></tr>'
+          '<tr><td>M</td><td>84</td><td>56-58 cm</td></tr>'
+          '<tr><td>L</td><td>90</td><td>58-61 cm</td></tr>'
+          '<tr><td>XL</td><td>96</td><td>61-63 cm</td></tr>'
+          '<tr><td>XXL</td><td>102</td><td>63-66 cm</td></tr>')
       + '</table>')}
 {tealp(L('MATERIALER','MATERIALS'))}
 {card(L('<p><b>DROPS Paris</b> (100 % bomull):</p>','<p><b>DROPS Paris</b> (100% cotton):</p>')
@@ -530,12 +530,13 @@ pages.append(page(f'''
   (3, L('(1 stav, økn) x 12','(1 dc, inc) x 12'), 36),
   (4, L('(2 staver, økn) x 12','(2 dc, inc) x 12'), 48),
   (5, L('(3 staver, økn) x 12','(3 dc, inc) x 12'), 60),
-  (6, L('(9 staver, økn) x 6  &rarr; Barn','(9 dc, inc) x 6  &rarr; Child'), 66),
-  (7, L('(10 staver, økn) x 6  &rarr; Dame S','(10 dc, inc) x 6  &rarr; Woman S'), 72),
-  (8, L('(11 staver, økn) x 6  &rarr; Dame M','(11 dc, inc) x 6  &rarr; Woman M'), 78),
-  (9, L('(12 staver, økn) x 6  &rarr; Dame L / Herre S','(12 dc, inc) x 6  &rarr; Woman L / Man S'), 84),
-  (10, L('(13 staver, økn) x 6  &rarr; Herre M','(13 dc, inc) x 6  &rarr; Man M'), 90),
-  (11, L('(14 staver, økn) x 6  &rarr; Herre L','(14 dc, inc) x 6  &rarr; Man L'), 96),
+  (6, L('(9 staver, økn) x 6', '(9 dc, inc) x 6'), 66),
+  (7, L('(10 staver, økn) x 6  &rarr; XS','(10 dc, inc) x 6  &rarr; XS'), 72),
+  (8, L('(11 staver, økn) x 6  &rarr; S','(11 dc, inc) x 6  &rarr; S'), 78),
+  (9, L('(12 staver, økn) x 6  &rarr; M','(12 dc, inc) x 6  &rarr; M'), 84),
+  (10, L('(13 staver, økn) x 6  &rarr; L','(13 dc, inc) x 6  &rarr; L'), 90),
+  (11, L('(14 staver, økn) x 6  &rarr; XL','(14 dc, inc) x 6  &rarr; XL'), 96),
+  (12, L('(15 staver, økn) x 6  &rarr; XXL','(15 dc, inc) x 6  &rarr; XXL'), 102),
 ]))}
 {cme(L('De første omgangene øker du mye (flat sirkel), så øker du saktere så toppen begynner å bue '
        'seg nedover. Stopp økningene på ditt maskeantall.',
@@ -552,13 +553,13 @@ pages.append(page(f'''
       'count that the top ended on, on each round. The sides are all red, the letters are crocheted '
       'on at the end.')}</p>
 {card(L('<p>Hekle staver rundt og rundt til sidene måler:</p>'
-        '<table class="t"><tr><th>Barn</th><th>Dame</th><th>Herre</th></tr>'
-        '<tr><td>ca. 14 cm</td><td>ca. 18 cm</td><td>ca. 19 til 20 cm</td></tr></table>'
+        '<table class="t"><tr><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>XXL</th></tr>'
+        '<tr><td>ca. 17 cm</td><td>ca. 17.5 cm</td><td>ca. 18 cm</td><td>ca. 18.5 cm</td><td>ca. 19 cm</td><td>ca. 19.5 cm</td></tr></table>'
         '<p class="small">Mål fra der toppen buet seg og ned til nålen. Hatten skal dekke godt over '
         'ørene.</p>',
         '<p>Crochet dc round and round until the sides measure:</p>'
-        '<table class="t"><tr><th>Child</th><th>Woman</th><th>Man</th></tr>'
-        '<tr><td>approx. 14 cm</td><td>approx. 18 cm</td><td>approx. 19 to 20 cm</td></tr></table>'
+        '<table class="t"><tr><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>XXL</th></tr>'
+        '<tr><td>approx. 17 cm</td><td>approx. 17.5 cm</td><td>approx. 18 cm</td><td>approx. 18.5 cm</td><td>approx. 19 cm</td><td>approx. 19.5 cm</td></tr></table>'
         '<p class="small">Measure from where the top curved down to the hook. The hat should cover '
         'well over the ears.</p>'))}
 {cme(L('Prøv hatten underveis. Vil du ha den dypere, hekler du et par omganger til før bremmen.',

@@ -251,12 +251,12 @@ def build_doc(LANG):
             'rødt, hvitt og blått nederst, akkurat som den heklede runehatten. Så broderer du "NORGE" '
             'på med kjedesting, i lesbare runestil-bokstaver, én sammenhengende linje rundt forsiden, og et '
             'lite norsk flagg på toppen. Vil du heller ha "NORWAY", finner du malen i samme oppskrift. '
-            'Størrelser fra barn til herre.',
+            'Voksenstørrelser XS til XXL.',
             'A red bucket hat knitted in cotton. You knit the whole hat in red, with a striped brim in red, '
             'white and blue at the bottom, just like the crocheted rune hat. Then you embroider "NORGE" '
             'on with chain stitch, in readable rune-style letters, one continuous line around the front, and a '
             'little Norwegian flag on the top. If you would rather have "NORWAY", the template is in the '
-            'same pattern. Sizes from child to man.', L))
+            'same pattern. Adult sizes XS to XXL.', L))
         + byline(L('Av Renate Dahl', 'By Renate Dahl'))
         + tip(L('Les hele oppskriften én gang før du legger opp. Strikk alltid en prøvelapp først, se side 3.',
                  'Read the whole pattern once before you cast on. Always knit a gauge swatch first, see page 3.'))
@@ -295,10 +295,10 @@ def build_doc(LANG):
     , 2))
 
     size_table = (
-        '<table class="t"><tr><th></th><th>' + L('Barn', 'Child') + '</th><th>' + L('Dame', 'Woman') + '</th><th>' + L('Herre', 'Man') + '</th></tr>'
-        '<tr><td>' + L('Passer hodemål', 'Fits head size') + '</td><td>50&ndash;53 cm</td><td>54&ndash;57 cm</td><td>58&ndash;61 cm</td></tr>'
-        '<tr><td>' + L('Legg opp', 'Cast on') + '</td><td>168 m</td><td>182 m</td><td>196 m</td></tr>'
-        '<tr><td>' + L('Etter bølgeomgang', 'After the wave round') + '</td><td>84 m</td><td>91 m</td><td>98 m</td></tr></table>')
+        '<table class="t"><tr><th></th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>XXL</th></tr>'
+        '<tr><td>' + L('Passer hodemål', 'Fits head size') + '</td><td>52&ndash;54 cm</td><td>54&ndash;56 cm</td><td>56&ndash;58 cm</td><td>58&ndash;61 cm</td><td>61&ndash;63 cm</td><td>63&ndash;66 cm</td></tr>'
+        '<tr><td>' + L('Legg opp', 'Cast on') + '</td><td>170 m</td><td>176 m</td><td>184 m</td><td>190 m</td><td>198 m</td><td>208 m</td></tr>'
+        '<tr><td>' + L('Etter bølgeomgang', 'After the wave round') + '</td><td>85 m</td><td>88 m</td><td>92 m</td><td>95 m</td><td>99 m</td><td>104 m</td></tr></table>')
     yarn_table = (
         '<table class="t"><tr><th>' + L('Farge', 'Colour') + '</th><th>' + L('Bruk', 'Use') + '</th></tr>'
         + f'<tr><td><span class="dot" style="background:{RED}"></span> ' + L('Rød', 'Red') + '</td><td>' + L('hovedfarge, hele hatten', 'main colour, whole hat') + '</td></tr>'
@@ -366,11 +366,15 @@ def build_doc(LANG):
                  'for the edge to curl in a little until the hat has been worn a few times.', L))
     , 5))
 
+    height_table = (
+        '<table class="t"><tr><th></th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>XXL</th></tr>'
+        '<tr><td>' + L('Hoveddel, fra bølgeomgang', 'Main body, from wave round') + '</td><td>9 cm</td><td>9.5 cm</td><td>10 cm</td><td>10.5 cm</td><td>11 cm</td><td>11.5 cm</td></tr></table>')
     pages.append(ph(
         banner(L('DEL 2: HOVEDDELEN OG TOPPEN', 'PART 2: THE MAIN BODY AND CROWN'))
+        + card(height_table)
         + steps([
-            L('Etter sammenstrikkingsomgangen strikker du glattstrikk rundt i rødt, uten mønster, til hoveddelen måler ca. 9 (10) 11 cm fra bølgeomgangen. Ikke tenk på bokstavene ennå, de kommer på til slutt.',
-              'After the decrease round, knit stockinette in the round in red, with no pattern, until the main body measures about 9 (10) 11 cm from the wave round. Do not worry about the letters yet, they come on at the end.'),
+            L('Etter sammenstrikkingsomgangen strikker du glattstrikk rundt i rødt, uten mønster, til hoveddelen måler målet for din størrelse i tabellen over, fra bølgeomgangen. Ikke tenk på bokstavene ennå, de kommer på til slutt.',
+              'After the decrease round, knit stockinette in the round in red, with no pattern, until the main body measures the value for your size in the table above, from the wave round. Do not worry about the letters yet, they come on at the end.'),
             L('Strikk én oppsettomgang: fell 7 masker jevnt fordelt rundt hele omgangen.',
               'Knit one setup round: decrease 7 stitches evenly spaced around the whole round.'),
             L('Del de gjenværende maskene i 7 like store felt med maskemarkører. Strikk til 2 masker gjenstår før hver markør, strikk disse 2 sammen. Gjenta ved alle 7 markørene.',
