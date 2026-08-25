@@ -60,7 +60,12 @@
   .hero .sub { font-size: 17px; color: var(--ink-soft); max-width: 640px; margin: 0 auto; line-height: 1.55; }
   .cover-card { background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow-lg); padding: 14px; margin-bottom: 34px; }
   .cover-card img { width: 100%; height: auto; display: block; border-radius: var(--r-md); }
+  .cover-imgs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .cover-imgs figure { margin: 0; }
+  .cover-imgs figcaption { text-align: center; font-size: 12px; font-weight: 700; color: var(--cerise);
+    letter-spacing: .06em; text-transform: uppercase; padding-top: 6px; }
   .cover-note { text-align: center; font-size: 12.5px; color: var(--ink-muted); padding: 10px 6px 2px; }
+  @media (max-width: 520px) { .cover-imgs { grid-template-columns: 1fr; } }
   .layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 26px; align-items: start; }
   .includes { background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow-md); padding: 28px; }
   .includes h2 { font-size: 24px; margin-bottom: 6px; }
@@ -122,8 +127,17 @@
   </section>
 
   <div class="cover-card">
-    <img src="/images/oppskrift-ro-hekle-barn.jpg" alt="RO-bøttehatt barn, hekleoppskrift">
-    <p class="cover-note" data-no='Hvit hatt med "RO" og flagget foran, bølger bak, og en blå brem med bølget kant.' data-en='White hat with "RO" and the flag at the front, waves at the back, and a blue brim with a wavy edge.'>Hvit hatt med "RO" og flagget foran, bølger bak, og en blå brem med bølget kant.</p>
+    <div class="cover-imgs">
+      <figure>
+        <img src="/images/oppskrift-ro-hekle-barn.jpg" alt="RO-bøttehatt barn, hekleoppskrift, forsiden med RO og flagget">
+        <figcaption data-no="Foran" data-en="Front">Foran</figcaption>
+      </figure>
+      <figure>
+        <img src="/images/oppskrift-ro-hekle-barn-bak.jpg" alt="RO-bøttehatt barn, hekleoppskrift, baksiden med bølgene">
+        <figcaption data-no="Bak" data-en="Back">Bak</figcaption>
+      </figure>
+    </div>
+    <p class="cover-note" data-no='Hvit hatt med "RO" og flagget foran, bølger bak, og en blå brem med bølget kant. Gradert fra nyfødt (str. 50) til 170.' data-en='White hat with "RO" and the flag at the front, waves at the back, and a blue brim with a wavy edge. Graded from newborn (size 50) to 170.'>Hvit hatt med "RO" og flagget foran, bølger bak, og en blå brem med bølget kant. Gradert fra nyfødt (str. 50) til 170.</p>
   </div>
 
   <div class="layout">
