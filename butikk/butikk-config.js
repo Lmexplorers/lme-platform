@@ -218,6 +218,32 @@ window.LME_BUTIKK = {
       ]
     },
 
+    "bottehatter-barn-strikk-rune-norge": {
+      navn:  { no: "NORGE-runehatt barn, strikkeoppskrift", en: "NORGE rune hat kids, knitting pattern" },
+      undertittel: { no: "NORGE i runeskrift · str. 50–170 · komplett i seg selv", en: "NORGE in runes · size 50–170 · complete on its own" },
+      cover:   "/images/oppskrift-bottehatter-barn-strikk-rune.jpg",
+      coverEn: "/images/oppskrift-bottehatter-barn-strikk-rune.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-rune-norge.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-rune-norge-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "bottehatter-barn-strikk-rune-norway": {
+      navn:  { no: "NORWAY-runehatt barn, strikkeoppskrift", en: "NORWAY rune hat kids, knitting pattern" },
+      undertittel: { no: "NORWAY i runeskrift · str. 50–170 · komplett i seg selv", en: "NORWAY in runes · size 50–170 · complete on its own" },
+      cover:   "/images/oppskrift-bottehatter-barn-strikk-rune.jpg",
+      coverEn: "/images/oppskrift-bottehatter-barn-strikk-rune.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-rune-norway.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/bottehatter-barn-strikk-rune-norway-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
     "bottehatter-barn-strikk-ro": {
       navn:  { no: "RO-bøttehatt barn, strikkeoppskrift", en: "RO bucket hat kids, knitting pattern" },
       undertittel: { no: "RO · str. 50–170 · komplett i seg selv", en: "RO · size 50–170 · complete on its own" },
@@ -639,6 +665,20 @@ window.LME_BUTIKK = {
         { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-rune.pdf",
           knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
         { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-rune-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "norge-rune-strikk": {
+      navn:  { no: "NORGE-runehatt, strikkeoppskrift", en: "NORGE rune hat, knitting pattern" },
+      undertittel: { no: "Rød hatt · NORGE/NORWAY i runeskrift · stripet brem · kjedesting · barn til herre",
+                     en: "Red hat · NORGE/NORWAY in runes · striped brim · chain stitch · child to man" },
+      cover:   "/images/oppskrift-norge-rune-strikk.jpg",
+      coverEn: "/images/oppskrift-norge-rune-strikk.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/norge-rune-strikk.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/norge-rune-strikk-en.pdf",
           knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
       ]
     },
