@@ -157,8 +157,8 @@ table.sz td:first-child, table.sz th:first-child { font-weight:700; }
 # ---------- data ----------
 BARN = dict(
     slug='barn', title_no='TIL BARN', title_en='FOR KIDS',
-    photo='poncho_barn_ref.jpg', has_hood=False,
-    codes=['M1', 'M2', 'M3', 'M4'],
+    photo='poncho_barn_ref.jpg', has_hood=False, size_span='92&ndash;176',
+    codes=['92&ndash;104', '116&ndash;128', '140&ndash;152', '164&ndash;176'],
     age_no=['2-4 år', '6-8 år', '10-12 år', '14-16 år'],
     age_en=['2-4 yr', '6-8 yr', '10-12 yr', '14-16 yr'],
     legg_opp=[64, 72, 72, 80], felt=[8, 9, 9, 10], ribbhoyde=['2.5 cm', '2.5 cm', '2.5 cm', '3 cm'],
@@ -170,8 +170,8 @@ BARN = dict(
 )
 VOKSEN = dict(
     slug='voksen', title_no='TIL VOKSEN', title_en='FOR ADULTS',
-    photo='poncho_voksen_ref.jpg', has_hood=False,
-    codes=['V1', 'V2', 'V3', 'V4'],
+    photo='poncho_voksen_ref.jpg', has_hood=False, size_span='XS&ndash;4XL', show_age=False,
+    codes=['XS&ndash;S', 'M&ndash;L', 'XL&ndash;2XL', '3XL&ndash;4XL'],
     age_no=['XS&ndash;S', 'M&ndash;L', 'XL&ndash;2XL', '3XL&ndash;4XL'],
     age_en=['XS&ndash;S', 'M&ndash;L', 'XL&ndash;2XL', '3XL&ndash;4XL'],
     legg_opp=[80, 88, 88, 96], felt=[10, 11, 11, 12], ribbhoyde=['3 cm', '3 cm', '3 cm', '3 cm'],
@@ -207,6 +207,8 @@ BABY = dict(
 def build(kind):
     codes = kind['codes']
     n = len(codes)
+    size_span = kind.get('size_span', codes[0] + '&ndash;' + codes[-1])
+    show_age = kind.get('show_age', True)
 
     def build_lang(LANG):
         def L(no, en): return en if LANG == 'en' else no
@@ -255,7 +257,7 @@ def build(kind):
             + '<div class="coverbanner">'
             + f'<h1 class="covertitle">LME MINI &amp; ME PONCHO<br>{sub_title}</h1>'
             + '</div>'
-            + f'<div class="subpill">{L("STR. " + kind["codes"][0] + "&ndash;" + kind["codes"][-1], "SIZE " + kind["codes"][0] + "&ndash;" + kind["codes"][-1])}</div>'
+            + f'<div class="subpill">{L("STR. " + size_span, "SIZE " + size_span)}</div>'
             + card(pc(intro_no, intro_en, L))
             + byline(L('Av Renate Dahl', 'By Renate Dahl'))
             + tip(L('Les hele oppskriften én gang før du legger opp. Strikk alltid en prøvelapp først, se side 3.',
@@ -347,14 +349,17 @@ def build(kind):
         # ---------- størrelser og mål ----------
         size_rows = []
         for i in range(n):
-            row = [codes[i], kind['age_no'][i] if LANG == 'no' else kind['age_en'][i], str(kind['final'][i]),
-                   f'ca. {kind["bredde"][i]} cm', f'ca. {kind["lengde"][i]} cm']
+            row = [codes[i]]
+            if show_age:
+                row.append(kind['age_no'][i] if LANG == 'no' else kind['age_en'][i])
+            row += [str(kind['final'][i]), f'ca. {kind["bredde"][i]} cm', f'ca. {kind["lengde"][i]} cm']
             if kind['has_hood']:
                 row.append(f'ca. {kind["hette"][i]} cm')
             else:
                 row.append(f'ca. {kind["armapning"][i]} cm')
             size_rows.append(row)
-        header = [L('Str.', 'Size'), L('Alder', 'Age'), L('Masker', 'Stitches'), L('Bredde', 'Width'),
+        header = [L('Str.', 'Size')] + ([L('Alder', 'Age')] if show_age else []) + \
+                 [L('Masker', 'Stitches'), L('Bredde', 'Width'),
                   L('Lengde', 'Length')] + [L('Hette', 'Hood') if kind['has_hood'] else L('Armåpning', 'Arm opening')]
         lengde_note_no = ('Størrelsene følger barnets kroppslengde. Hel lengde måles fra halskanten til '
                            'nederkanten. Bredde måles flatt tvers over den uknappede ponchoen. Hettehøyden '
