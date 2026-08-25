@@ -158,28 +158,45 @@ table.sz td:first-child, table.sz th:first-child { font-weight:700; }
 BARN = dict(
     slug='barn', title_no='TIL BARN', title_en='FOR KIDS',
     photo='poncho_barn_ref.jpg', has_hood=False, size_span='92&ndash;176',
-    codes=['92&ndash;104', '116&ndash;128', '140&ndash;152', '164&ndash;176'],
-    age_no=['2-4 år', '6-8 år', '10-12 år', '14-16 år'],
-    age_en=['2-4 yr', '6-8 yr', '10-12 yr', '14-16 yr'],
-    legg_opp=[64, 72, 72, 80], felt=[8, 9, 9, 10], ribbhoyde=['2.5 cm', '2.5 cm', '2.5 cm', '3 cm'],
-    okn=[18, 21, 25, 28], final=[208, 240, 272, 304], okn_lengde=[25, 29, 34, 38],
-    bredde=[61, 71, 80, 89], lengde=[37, 43, 50, 56], armapning=[16, 19, 21, 24],
-    stopp=[35.5, 41.5, 48.5, 54.5], side_masker=[14, 16, 18, 20],
-    kh1=[38, 44, 50, 56], kn1=[66, 76, 86, 96], kn2=[142, 164, 186, 208], kh2=[170, 196, 222, 248],
-    mengde=[200, 250, 300, 350], noster=[4, 5, 6, 7],
+    codes=['92', '98', '104', '110', '116', '122', '128', '134', '140', '146', '152', '158', '164', '170', '176'],
+    age_no=['2 år', '3 år', '4 år', '5 år', '6 år', '7 år', '8 år', '9 år', '10 år', '11 år', '12 år',
+            '13 år', '14 år', '15 år', '16 år'],
+    age_en=['2 yr', '3 yr', '4 yr', '5 yr', '6 yr', '7 yr', '8 yr', '9 yr', '10 yr', '11 yr', '12 yr',
+            '13 yr', '14 yr', '15 yr', '16 yr'],
+    legg_opp=[64, 64, 64, 64, 72, 72, 72, 72, 72, 72, 72, 80, 80, 80, 80],
+    felt=[8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10],
+    ribbhoyde=['2.5 cm'] * 10 + ['3 cm'] * 5,
+    okn=[17, 18, 19, 20, 20, 21, 22, 23, 24, 25, 26, 26, 27, 28, 29],
+    final=[200, 208, 216, 224, 232, 240, 248, 256, 264, 272, 280, 288, 296, 304, 312],
+    okn_lengde=[23, 25, 26, 28, 28, 29, 30, 32, 33, 34, 36, 36, 37, 39, 40],
+    bredde=[59, 61, 64, 66, 68, 71, 73, 75, 78, 80, 82, 85, 87, 89, 92],
+    lengde=[36, 37, 38, 40, 42, 43, 45, 46, 48, 50, 52, 53, 54, 56, 58],
+    armapning=[16, 16, 16, 18, 19, 19, 19, 20, 21, 21, 21, 22, 24, 24, 24],
+    stopp=[34.5, 35.5, 36.5, 38.5, 40.5, 41.5, 43.5, 44.5, 46.5, 48.5, 50.5, 51.5, 52.5, 54.5, 56.5],
+    side_masker=[14, 14, 14, 15, 16, 16, 16, 17, 18, 18, 18, 19, 20, 20, 20],
+    kh1=[36, 38, 40, 41, 42, 44, 46, 47, 48, 50, 52, 53, 54, 56, 58],
+    kn1=[64, 66, 68, 71, 74, 76, 78, 81, 84, 86, 88, 91, 94, 96, 98],
+    kn2=[136, 142, 148, 153, 158, 164, 170, 175, 180, 186, 192, 197, 202, 208, 214],
+    kh2=[164, 170, 176, 183, 190, 196, 202, 209, 216, 222, 228, 235, 242, 248, 254],
+    mengde=[200, 200, 200, 200, 250, 250, 250, 300, 300, 300, 300, 300, 350, 350, 350],
+    noster=[4, 4, 4, 4, 5, 5, 5, 6, 6, 6, 6, 6, 7, 7, 7],
 )
 VOKSEN = dict(
     slug='voksen', title_no='TIL VOKSEN', title_en='FOR ADULTS',
     photo='poncho_voksen_ref.jpg', has_hood=False, size_span='XS&ndash;4XL', show_age=False,
-    codes=['XS&ndash;S', 'M&ndash;L', 'XL&ndash;2XL', '3XL&ndash;4XL'],
-    age_no=['XS&ndash;S', 'M&ndash;L', 'XL&ndash;2XL', '3XL&ndash;4XL'],
-    age_en=['XS&ndash;S', 'M&ndash;L', 'XL&ndash;2XL', '3XL&ndash;4XL'],
-    legg_opp=[80, 88, 88, 96], felt=[10, 11, 11, 12], ribbhoyde=['3 cm', '3 cm', '3 cm', '3 cm'],
-    okn=[32, 35, 39, 42], final=[336, 368, 400, 432], okn_lengde=[44, 48, 53, 57],
-    bredde=[99, 108, 118, 127], lengde=[64, 70, 77, 83], armapning=[28, 31, 33, 35],
-    stopp=[62.5, 68.5, 75.5, 81.5], side_masker=[24, 26, 28, 30],
-    kh1=[60, 66, 72, 78], kn1=[108, 118, 128, 138], kn2=[228, 250, 272, 294], kh2=[276, 302, 328, 354],
-    mengde=[450, 500, 550, 600], noster=[9, 10, 11, 12],
+    codes=['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+    age_no=['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+    age_en=['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+    legg_opp=[80, 80, 88, 88, 88, 88, 96, 96], felt=[10, 10, 11, 11, 11, 11, 12, 12],
+    ribbhoyde=['3 cm'] * 8,
+    okn=[31, 33, 34, 36, 38, 40, 41, 43], final=[328, 344, 360, 376, 392, 408, 424, 440],
+    okn_lengde=[43, 46, 47, 50, 52, 55, 57, 59],
+    bredde=[96, 101, 106, 111, 115, 120, 125, 129], lengde=[62, 66, 68, 72, 75, 78, 82, 84],
+    armapning=[28, 28, 31, 31, 33, 33, 35, 35],
+    stopp=[60.5, 64.5, 66.5, 70.5, 73.5, 76.5, 80.5, 82.5], side_masker=[24, 24, 26, 26, 28, 28, 30, 30],
+    kh1=[58, 62, 64, 68, 70, 74, 76, 80], kn1=[106, 110, 116, 120, 126, 130, 136, 140],
+    kn2=[222, 234, 244, 256, 266, 278, 288, 300], kh2=[270, 282, 296, 308, 322, 334, 348, 360],
+    mengde=[450, 450, 500, 500, 550, 550, 600, 600], noster=[9, 9, 10, 10, 11, 11, 12, 12],
 )
 BABY = dict(
     slug='baby', title_no='TIL BABY, MED HETTE', title_en='FOR BABY, WITH HOOD',
@@ -444,6 +461,9 @@ def build(kind):
                        'Divide the stitches into 8 equal sections with markers. The round marker is also '
                        'the first increase marker.', L)
                    + sizetable([L('Str.', 'Size'), L('Masker i hvert felt', 'Stitches per section')], felt_rows))
+        )
+        add(
+            banner(L('ØKNINGSOMGANG', 'INCREASE ROUND'))
             + pink(L('3 &ndash; ØKNINGSOMGANG', '3 &ndash; INCREASE ROUND'))
             + card(p('*Strikk rett til neste markør, øk 1 maske mot høyre, flytt markøren over.* Gjenta ved '
                      'alle 8 markører. Det økes 8 masker.',
@@ -475,6 +495,9 @@ def build(kind):
                      'all stitches plain in the round with no more increases. Continue until the work measures '
                      'approx. 1.5 cm less than the given full length.', L)
                    + sizetable([L('Str.', 'Size'), L('Stopp ved', 'Stop at')], stopp_rows))
+        )
+        add(
+            banner(L('SIDEKNEPPING', 'SIDE FASTENING'))
             + pink(L('5 &ndash; SIDEKNEPPING', '5 &ndash; SIDE FASTENING'))
             + card(p('Legg arbeidet flatt med omgangsmarkøren midt bak. Finn midten av hver side.',
                      'Lay the work flat with the round marker at centre back. Find the middle of each side.', L)
