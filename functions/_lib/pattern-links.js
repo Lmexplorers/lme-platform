@@ -206,4 +206,12 @@ export const PATTERN_LINKS = {
   "plink_1U86RlLax7B8uQzqoBlg1smS": { p: "bottehatter-barn-hekle-rune-norge", lang: "en" },
   "plink_1U86RoLax7B8uQzqdrecVPJ4": { p: "bottehatter-barn-hekle-rune-norway", lang: "no" },
   "plink_1U86RrLax7B8uQzq4H6DP7sT": { p: "bottehatter-barn-hekle-rune-norway", lang: "en" },
+  "plink_1U8KQhLax7B8uQzqhPP1tMpW": { p: "skaut-barn-strikk-norge", lang: "no" },
+  "plink_1U8KQiLax7B8uQzq2LJEOuSa": { p: "skaut-barn-strikk-norge", lang: "en" },
+  "plink_1U8KQkLax7B8uQzqACMOw5Wk": { p: "skaut-barn-strikk-ro", lang: "no" },
+  "plink_1U8KQmLax7B8uQzqAgiHaRMe": { p: "skaut-barn-strikk-ro", lang: "en" },
+  "plink_1U8KQnLax7B8uQzqqTcViM49": { p: "skaut-barn-hekle-norge", lang: "no" },
+  "plink_1U8KQpLax7B8uQzqyThAEjky": { p: "skaut-barn-hekle-norge", lang: "en" },
+  "plink_1U8KQrLax7B8uQzqFZtNbQox": { p: "skaut-barn-hekle-ro", lang: "no" },
+  "plink_1U8KQsLax7B8uQzqGbwP1oel": { p: "skaut-barn-hekle-ro", lang: "en" },
 };

@@ -224,6 +224,14 @@ const PRODUCT = {
     files: { no: [f("bottehatter-barn-hekle-rune-norge.pdf", "NORGE-bøttehatt barn, runeskrift", "")], en: [f("bottehatter-barn-hekle-rune-norge-en.pdf", "", "NORGE bucket hat kids, rune letters")] } },
   "bottehatter-barn-hekle-rune-norway": { no: "NORWAY-bøttehatt barn, runeskrift", en: "NORWAY bucket hat kids, rune letters",
     files: { no: [f("bottehatter-barn-hekle-rune-norway.pdf", "NORWAY-bøttehatt barn, runeskrift", "")], en: [f("bottehatter-barn-hekle-rune-norway-en.pdf", "", "NORWAY bucket hat kids, rune letters")] } },
+  "skaut-barn-strikk-norge": { no: "NORGE-skaut barn, strikk", en: "Norway kerchief kids, knit",
+    files: { no: [f("skaut-barn-strikk-norge.pdf", "NORGE-skaut barn, strikk", "")], en: [f("skaut-barn-strikk-norge-en.pdf", "", "Norway kerchief kids, knit")] } },
+  "skaut-barn-strikk-ro": { no: "RO-skaut barn, strikk", en: "RO kerchief kids, knit",
+    files: { no: [f("skaut-barn-strikk-ro.pdf", "RO-skaut barn, strikk", "")], en: [f("skaut-barn-strikk-ro-en.pdf", "", "RO kerchief kids, knit")] } },
+  "skaut-barn-hekle-norge": { no: "NORGE-skaut barn, hekle", en: "Norway kerchief kids, crochet",
+    files: { no: [f("skaut-barn-hekle-norge.pdf", "NORGE-skaut barn, hekle", "")], en: [f("skaut-barn-hekle-norge-en.pdf", "", "Norway kerchief kids, crochet")] } },
+  "skaut-barn-hekle-ro": { no: "RO-skaut barn, hekle", en: "RO kerchief kids, crochet",
+    files: { no: [f("skaut-barn-hekle-ro.pdf", "RO-skaut barn, hekle", "")], en: [f("skaut-barn-hekle-ro-en.pdf", "", "RO kerchief kids, crochet")] } },
 };
 
 /* Bygger nedlastings-HTML: kun kjøperens eget språk. Engelsk kjøper får den

@@ -244,6 +244,58 @@ window.LME_BUTIKK = {
       ]
     },
 
+    "skaut-barn-strikk-norge": {
+      navn:  { no: "NORGE-skaut barn, strikkeoppskrift", en: "Norway kerchief kids, knitting pattern" },
+      undertittel: { no: "Trekantskaut · str. 50–170 · komplett i seg selv", en: "Triangle kerchief · size 50–170 · complete on its own" },
+      cover:   "/images/oppskrift-skaut-barn-norge.jpg",
+      coverEn: "/images/oppskrift-skaut-barn-norge.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/skaut-barn-strikk-norge.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/skaut-barn-strikk-norge-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "skaut-barn-strikk-ro": {
+      navn:  { no: "RO-skaut barn, strikkeoppskrift", en: "RO kerchief kids, knitting pattern" },
+      undertittel: { no: "Trekantskaut · str. 50–170 · komplett i seg selv", en: "Triangle kerchief · size 50–170 · complete on its own" },
+      cover:   "/images/oppskrift-skaut-barn-ro.jpg",
+      coverEn: "/images/oppskrift-skaut-barn-ro.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/skaut-barn-strikk-ro.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/skaut-barn-strikk-ro-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "skaut-barn-hekle-norge": {
+      navn:  { no: "NORGE-skaut barn, hekleoppskrift", en: "Norway kerchief kids, crochet pattern" },
+      undertittel: { no: "Trekantskaut · str. 50–170 · komplett i seg selv", en: "Triangle kerchief · size 50–170 · complete on its own" },
+      cover:   "/images/oppskrift-skaut-barn-norge.jpg",
+      coverEn: "/images/oppskrift-skaut-barn-norge.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/skaut-barn-hekle-norge.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/skaut-barn-hekle-norge-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
+    "skaut-barn-hekle-ro": {
+      navn:  { no: "RO-skaut barn, hekleoppskrift", en: "RO kerchief kids, crochet pattern" },
+      undertittel: { no: "Trekantskaut · str. 50–170 · komplett i seg selv", en: "Triangle kerchief · size 50–170 · complete on its own" },
+      cover:   "/images/oppskrift-skaut-barn-ro.jpg",
+      coverEn: "/images/oppskrift-skaut-barn-ro.jpg",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/oppskrifter/skaut-barn-hekle-ro.pdf",
+          knapp: { no: "Last ned oppskriften (PDF)", en: "Download the pattern (PDF)" } },
+        { sprak: "en", url: "/butikk/nedlasting/oppskrifter/skaut-barn-hekle-ro-en.pdf",
+          knapp: { no: "Last ned oppskriften (engelsk PDF)", en: "Download the pattern (PDF)" } }
+      ]
+    },
+
     "bottehatter-barn-strikk-ro": {
       navn:  { no: "RO-bøttehatt barn, strikkeoppskrift", en: "RO bucket hat kids, knitting pattern" },
       undertittel: { no: "RO · str. 50–170 · komplett i seg selv", en: "RO · size 50–170 · complete on its own" },
