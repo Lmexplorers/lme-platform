@@ -1144,7 +1144,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
         <span class="price-period">/måned</span>
       </div>
       <p class="trial" data-no="Ingen binding, avbryt når som helst" data-en="No lock-in, cancel anytime">Ingen binding, avbryt når som helst</p>
-      <a href="https://buy.stripe.com/bJeeVedkpfzN8e9btt9R61Z" class="btn-yellow plan-cta" data-link-nok-monthly="https://buy.stripe.com/bJeeVedkpfzN8e9btt9R61Z" data-link-usd-monthly="https://buy.stripe.com/14A9AUa8d0ET3XT1ST9R620" data-no="Velg Start →" data-en="Choose Start →">
+      <a href="https://buy.stripe.com/bJeeVedkpfzN8e9btt9R61Z" class="btn-yellow plan-cta" data-link-nok-monthly="https://buy.stripe.com/bJeeVedkpfzN8e9btt9R61Z" data-link-usd-monthly="https://buy.stripe.com/14A9AUa8d0ET3XT1ST9R620" data-link-nok-annual="https://buy.stripe.com/9B6eVe1BHevJ1PL8hh9R70L" data-link-usd-annual="https://buy.stripe.com/7sY6oIdkpcnB1PL5559R70M" data-no="Velg Start →" data-en="Choose Start →">
         Velg Start →
       </a>
       <ul class="features">
@@ -1165,7 +1165,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
         <span class="price-amount" data-monthly-nok="549" data-monthly-usd="54" data-annual-nok="5490" data-annual-usd="540">549 kr</span>
         <span class="price-period">/måned</span>
       </div>
-      <a href="https://buy.stripe.com/9B64gAfsx1IXamhbtt9R61l" class="btn-yellow plan-cta" data-link-nok-monthly="https://buy.stripe.com/9B64gAfsx1IXamhbtt9R61l" data-link-usd-monthly="https://buy.stripe.com/bJe4gAfsx73hamhapp9R61m">
+      <a href="https://buy.stripe.com/9B64gAfsx1IXamhbtt9R61l" class="btn-yellow plan-cta" data-link-nok-monthly="https://buy.stripe.com/9B64gAfsx1IXamhbtt9R61l" data-link-usd-monthly="https://buy.stripe.com/bJe4gAfsx73hamhapp9R61m" data-link-nok-annual="https://buy.stripe.com/3cI9AUeot5Zd8e96999R70N" data-link-usd-annual="https://buy.stripe.com/00w9AUfsxfzNcupfJJ9R70O">
         Velg Proff →
       </a>
       <ul class="features">
@@ -1521,7 +1521,9 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
       const amount = curr === 'NOK'
         ? (useAnnual ? parseInt(el.dataset.annualNok) : parseInt(el.dataset.monthlyNok))
         : (useAnnual ? parseInt(el.dataset.annualUsd) : parseInt(el.dataset.monthlyUsd));
-      el.textContent = curr === 'USD' ? '$' + amount : amount + ' kr';
+      // Mellomrom som tusenskille, norsk skrivemaate: 9 990 kr, ikke 9990 kr.
+      const pent = String(amount).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+      el.textContent = curr === 'USD' ? '$' + pent : pent + ' kr';
       const period = card && card.querySelector('.price-period');
       if (period) period.textContent = useAnnual ? '/år' : '/måned';
     });
