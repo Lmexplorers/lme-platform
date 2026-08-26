@@ -42,16 +42,30 @@ export async function onRequestGet(context) {
 
   ut.push("1. Kjører funksjoner i det hele tatt");
   ut.push("OK    denne siden svarer, så ja");
+  /* Cloudflare har egne innstillinger for Production og Preview. Legger man
+     en nøkkel i feil sett, skjer det ingenting, og det er vanskelig å se.
+     Adressen sier hvilket sett som gjelder her. */
+  ut.push("      adresse: " + new URL(context.request.url).hostname);
   ut.push("");
 
-  ut.push("2. Innstillinger (bare lengde, aldri verdien)");
+  /* To av de seks er ikke hemmeligheter, og de vises i klartekst fordi det
+     er nettopp dem Renate skal kunne kjenne igjen fra Vipps-portalen:
+
+       VIPPS_ENV                     "test" eller "production"
+       VIPPS_MERCHANT_SERIAL_NUMBER  salgsenhetens nummer, sendes med i hver
+                                     forespoersel og staar i selve betalingen
+
+     De fire oevrige vises bare som antall tegn. Verdien deres kommer aldri ut. */
+  const APENT = ["VIPPS_ENV", "VIPPS_MERCHANT_SERIAL_NUMBER"];
+
+  ut.push("2. Innstillinger (verdien vises bare der den ikke er hemmelig)");
   for (const n of ["VIPPS_ENV", "VIPPS_CLIENT_ID", "VIPPS_CLIENT_SECRET",
                    "VIPPS_SUBSCRIPTION_KEY", "VIPPS_MERCHANT_SERIAL_NUMBER",
                    "VIPPS_WEBHOOK_SECRET"]) {
     const v = env[n];
-    ut.push(v ? "OK    " + n.padEnd(30) + String(v).length + " tegn" +
-                (n === "VIPPS_ENV" ? " (" + v + ")" : "")
-              : "MANGLER " + n);
+    if (!v) { ut.push("MANGLER " + n); continue; }
+    ut.push("OK    " + n.padEnd(30) +
+            (APENT.includes(n) ? String(v) : String(v).length + " tegn"));
   }
   ut.push("");
 
