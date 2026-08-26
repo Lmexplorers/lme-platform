@@ -137,14 +137,40 @@ feilbelastet.** Men bryteren ser ødelagt ut for to av tre planer, og
 plattformen er rettet slik at ingen av dem lover video. Se `purchase-links.js`
 og `PLAN_CAPS` i appens `generate.js`.
 
-## 3. Det som ikke er avklart
+## 3. Merverdiavgift, avklart 26. august 2026
 
-**Mva.** Anbefalingens tabell trekker fra 25 % mva på alle priser. Mva-plikt
-inntrer først når omsetningen passerer 50 000 kr på tolv måneder, og LME hadde
-ingen kunder da dette ble skrevet. Er ikke LME registrert, er 199 kr faktisk
-199 kr, og marginene er 25 % bedre enn tabellen viser. Dette endrer hvert tall i
-kostnadstaket, og bør avklares med regnskapsfører. Det avgjør også om prisene
-bør settes med mva inkludert fra start, så de slipper å økes senere.
+Renate fører regnskapet selv i Fiken og har ingen regnskapsfører. Status den
+26. august 2026: **ikke mva-registrert**, med rundt 1 000 kr i omsetning fra
+salg av strikkeoppskrifter.
+
+Tre ting som gjelder:
+
+- Mva-plikt inntrer når omsetningen passerer **50 000 kr i løpet av tolv
+  måneder**. Grensen er rullerende, ikke per kalenderår, så den nullstilles
+  ikke ved nyttår.
+- Grensen er ikke et skattefritt beløp. Den sier bare når mva-registrering
+  blir påbudt. Inntektsskatt gjelder fra første krone, og bokføringsplikten
+  gjelder fra første salg.
+- Det er omtrent 49 000 kr igjen til grensen. Ti Proff-kunder bruker opp det
+  rommet på ni måneder.
+
+**Beslutning: 199, 549 og 999 kr regnes som priser inkludert mva fra i dag,
+selv om LME ikke er registrert ennå.**
+
+Marginer regnes derfor på 159, 439 og 799 kr, altså akkurat tallene i
+anbefalingens kostnadstabell. Ikke fordi de stemmer i dag, men fordi de
+kommer til å stemme, og da slipper prisene å røres. Alternativet, å prise uten
+mva nå, betyr enten å øke prisen 25 % på folk som allerede betaler, eller å ta
+tapet selv. Stripe-abonnementer låser prisen kunden sa ja til, så en økning
+krever at alle godtar på nytt.
+
+Det er også vanlig praksis i Norge at forbrukerpriser oppgis med mva inkludert.
+
+**Ikke avklart:** salg i dollar til kunder utenfor Norge faller normalt utenfor
+norsk mva, men reglene skiller mellom privatpersoner og bedrifter og mellom
+land. Bør leses opp hos Skatteetaten før dollarvolumet blir stort.
+
+## 4. Det som ikke er avklart
 
 **9 990 kr betyr to ting.** Anbefalingen foreslår livstid til 9 990 kr, men det
 er allerede prisen på VIP årlig. Da velger ingen VIP årlig. Skal livstid
@@ -156,7 +182,7 @@ skriver til `BUILDER_KV`, appen leser `ACCOUNTS_KV`. Peker de på hvert sitt
 lager, ser appen aldri abonnementet. `/api/kv-sjekk` i appen svarer på dette.
 Dette må avklares før noe bygges oppå, ellers gjør vi bare feilen større.
 
-## 4. Rekkefølge
+## 5. Rekkefølge
 
 Svarene på anbefalingens hovedspørsmål, om de fire kredittvalutaene skal bli
 én, er skrevet ned i `docs/ai-core-arkitektur.md`, del 8. Kort sagt: ja, og det
@@ -166,7 +192,6 @@ bør gjøres mens LME ennå ikke har betalende kunder.
 1. Avklar KV-koblingen. Uten den vet vi ikke om et kjøp gir tilgang.
 2. Opprett årspriser og betalingslenker for Start og Proff, og legg dem i
    `AUTOPILOT_PAYMENT_LINKS`. Krever at Stripe-tilkoblingen er på plass.
-3. Avklar mva-spørsmålet, siden det endrer alle kostnadstallene.
-4. Bygg kredittsystemet: kredittall per plan, trekk ved generering, salg av
+3. Bygg kredittsystemet: kredittall per plan, trekk ved generering, salg av
    påfyllspakker. Tallene godkjennes før koden skrives.
-5. Ta livstid og appsamlingen etterpå, som egne beslutninger.
+4. Ta livstid og appsamlingen etterpå, som egne beslutninger.
