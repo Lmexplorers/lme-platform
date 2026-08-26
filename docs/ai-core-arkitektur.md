@@ -511,3 +511,97 @@ tekst.
 5. **Skal de fire kredittvalutaene til slutt bli én?** Ikke nødvendig for noe
    av dette, men det ville gjort prisingen enklere å forstå for brukerne. Egen
    beslutning, egen plan.
+
+---
+
+## Del 8: Svar på del 7, skrevet ned 26. august 2026
+
+Renate ba om at svarene ble skrevet ned sammen med spørsmålene, så neste økt
+slipper å utlede dem på nytt. Punkt 2 var allerede avklart i planen. Resten er
+anbefalinger med begrunnelse, ikke utført arbeid.
+
+### Hvor planen faktisk står
+
+Kontrollert mot koden 26. august 2026:
+
+| Fase | Status |
+| --- | --- |
+| 1. Register og logging | Ferdig. 27 ruter logger via `usage.js` |
+| 2. `/ai-kostnader` | Ferdig. Siden finnes og ligger på dashbordet |
+| 3. Kreditt-fasaden | Ferdig. `ledger.js` og `payg.js` er i bruk |
+| 4. Ruter, reserve og vern | På pilotstadiet. `router.js` brukes av én rute, `/api/videoflow/script`, slik planen foreslo |
+| 5. Biblioteket | Ikke startet. `library.js` finnes ikke |
+| 6. Migrering av de fire appene | Ikke startet |
+| 7. Sammenhengende arbeidsflyt | Ikke startet |
+
+### Forutsetningen som har endret seg
+
+Planen ble skrevet mens Autopilot hadde betalende brukere. To vurderinger
+bygger på det, og begge er nå snudd:
+
+- Fase 6 legger Autopilot sist, fordi den "har flest betalende brukere".
+- Del 4 setter sammenslåing av kredittvalutaene til høy risiko, fordi det kan
+  gi feil saldo for betalende brukere.
+
+26. august 2026 har Autopilot **null** betalende kunder. Det som er dyrt å
+angre er derfor gratis akkurat nå, og det slutter å være gratis i det øyeblikk
+den første kunden betaler. Begge punktene under bygger på det.
+
+### 1. Går vi for planen slik den står?
+
+Ja, med ett unntak: **snu rekkefølgen i fase 6, og migrer Autopilot først.**
+Begrunnelsen for å ta den sist er borte, og Autopilot er dessuten appen som
+lider mest under duplisering i dag (se avsnittet om standalone-appen under).
+
+### 2. Skal `/ai-generate` få innloggingskrav?
+
+Avklart i planen, og gjort i fase 1. Ingenting å bestemme.
+
+### 3. Ny R2-bøtte `AI_LIBRARY`, eller gjenbruk av `VIDEOFLOW_MEDIA`?
+
+**Gjenbruk**, med prefiks per app inne i den ene bøtta.
+
+Ikke fordi det er raskest, men på grunn av det som skjedde natt til 26. august:
+appen og plattformen viste seg å lese hvert sitt KV-lager, og et kjøp nådde
+aldri fram til kvoten. Hver nye binding er en ny måte to deler kan la være å
+koble seg sammen på, uten at noen merker det. Bøtta kan alltid deles senere,
+når det finnes en konkret grunn.
+
+### 4. Hvilken musikkleverandør?
+
+Ikke bestem nå. Det er fase 7, det er det eneste helt nye abonnementet i hele
+planen, og et valg nå betyr å betale i månedsvis før noe tas i bruk.
+
+### 5. Skal de fire kredittvalutaene bli én?
+
+**Ja, og det bør gjøres nå.**
+
+Samme begrunnelse som punkt 1. Det som gjør sammenslåing risikabelt er feil
+saldo hos folk som har betalt, og det finnes ingen slike i dag. Gjøres det
+etter at de første kundene har kjøpt, må hver saldo migreres riktig, og en feil
+rammer ekte betalende brukere.
+
+Dette er også spørsmålet Renate fikk et eksternt råd om, se
+`docs/prising-og-kredittmodell.md`. Rådet der peker mot samme svar, men
+begrunner det med hva markedet gjør. Begrunnelsen som faktisk gjelder her er
+tidsvinduet: null kunder.
+
+### Følgen for standalone-appen
+
+Autopilot-appen på `lme-contentstudio.pages.dev` har sin egen `PLAN_CAPS` og
+sitt eget KV-lager, fordi den ble bygget før `enforceGeneration` fantes. Den
+bruker ikke plattformens kredittsystem i det hele tatt.
+
+Under én felles valuta skal appen ikke ha egne kvotetall. Den skal spørre
+plattformens ledger. Da forsvinner spørsmålet om hvilket KV-lager den leser,
+ikke fordi de to lagrene begynner å peke likt, men fordi det andre systemet
+ikke lenger finnes.
+
+### Anbefalt rekkefølge herfra
+
+1. Avklar KV-koblingen (`/api/kv-sjekk` i appen). Den forteller om dagens
+   Autopilot i det hele tatt leverer det kunden betaler for.
+2. Slå sammen kredittvalutaene, mens det ikke finnes saldoer å ødelegge.
+3. Migrer Autopilot til AI Core, og fjern appens egen kvotelogikk. Punkt 2 og
+   3 henger sammen og bør gjøres som én jobb.
+4. Fase 5 til 7 etterpå, i planens egen rekkefølge.

@@ -158,6 +158,11 @@ Dette må avklares før noe bygges oppå, ellers gjør vi bare feilen større.
 
 ## 4. Rekkefølge
 
+Svarene på anbefalingens hovedspørsmål, om de fire kredittvalutaene skal bli
+én, er skrevet ned i `docs/ai-core-arkitektur.md`, del 8. Kort sagt: ja, og det
+bør gjøres mens LME ennå ikke har betalende kunder.
+
+
 1. Avklar KV-koblingen. Uten den vet vi ikke om et kjøp gir tilgang.
 2. Opprett årspriser og betalingslenker for Start og Proff, og legg dem i
    `AUTOPILOT_PAYMENT_LINKS`. Krever at Stripe-tilkoblingen er på plass.
