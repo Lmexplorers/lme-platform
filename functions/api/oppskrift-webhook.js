@@ -41,6 +41,7 @@ import { sendCourseDeliveryMail, sendModuleDeliveryMail } from "../_lib/course-m
 import { recordPurchase } from "../_lib/purchases.js";
 import { sendResourceDeliveryMail } from "../_lib/laeringsverksted-mail.js";
 import { sendSkoledagbokMail } from "../_lib/skoledagbok-mail.js";
+import { lagNedlastingsnokkel } from "../_lib/nedlasting-tilgang.js";
 import { setMonthlyCredits } from "../_lib/videoflow-credits.js";
 import { sendVideoFlowWelcomeMail } from "../_lib/videoflow-mail.js";
 
@@ -272,7 +273,10 @@ export async function onRequestPost(context) {
       const nm = (obj.customer_details && obj.customer_details.name) || "";
       const info = SKOLEDAGBOK_INFO[diary.book];
       const bookName = (info && info.name[diary.lang]) || (info && info.name.no) || "Mia & Teo Skoledagbok";
-      try { await sendSkoledagbokMail(env, { to: email, name: nm, lang: diary.lang, book: diary.book, kind: "levering" }); } catch (e1) {}
+      let bokNokkel = null;
+      try { bokNokkel = await lagNedlastingsnokkel(env, "skoledagbok-" + diary.book, email, obj.id); } catch (eN) {}
+      try { await registerNewsletter(env, email, nm, diary.lang, "skoledagbok"); } catch (eB) {}
+      try { await sendSkoledagbokMail(env, { to: email, name: nm, lang: diary.lang, book: diary.book, kind: "levering", nokkel: bokNokkel }); } catch (e1) {}
       try {
         await sendOwnerSaleNotice(env, {
           pname: bookName, lang: diary.lang, name: nm, email: email,
@@ -341,7 +345,16 @@ export async function onRequestPost(context) {
       const nm = (obj.customer_details && obj.customer_details.name) || "";
       // Tell fullført kjøp i funnel-analysen (påvirker ingenting annet).
       try { await bumpToday(env, { purchase: 1 }, {}); } catch (eA) {}
-      await sendOppskriftMail(env, { to: email, name: nm, lang: pat.lang, kind: "levering", pid: pat.p });
+      /* Nedlastingene er låst. Nøkkelen lages her, legges i leveringsmailen,
+         og legges under Stripe-øktnummeret så takkesiden kan hente den med
+         en gang kunden lander der, uten å vente på e-posten. */
+      let dlNokkel = null;
+      try { dlNokkel = await lagNedlastingsnokkel(env, pat.p, email, obj.id); } catch (eN) {}
+      /* Velkomstserien. Kjøpere i butikken sto utenfor nyhetsbrevet, så de
+         fikk aldri velkomstmailen eller de ukentlige. registerNewsletter
+         rører ikke en som alt er påmeldt. */
+      try { await registerNewsletter(env, email, nm, pat.lang, "butikk"); } catch (eB) {}
+      await sendOppskriftMail(env, { to: email, name: nm, lang: pat.lang, kind: "levering", pid: pat.p, nokkel: dlNokkel });
       // Kort salgs-varsel til Renate.
       try {
         await sendOwnerSaleNotice(env, {

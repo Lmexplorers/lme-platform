@@ -15,14 +15,27 @@ function esc(s) {
   return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-function wrap(inner) {
+/* Hver e-post skal ha en enkel vei ut. Det er ikke bare høflig, det er
+   et krav: markedsføringsloven gir alle rett til å melde seg av, uten å
+   måtte lete eller skrive til noen. */
+function avmeldFot(avmeldUrl, lang) {
+  const en = lang === "en";
+  const grunn = en
+    ? "You are getting this because you signed up or bought something from me."
+    : "Du får dette fordi du meldte deg på eller kjøpte noe hos meg.";
+  const knapp = en ? "Unsubscribe" : "Meld deg av";
+  if (!avmeldUrl) return grunn;
+  return grunn + '<br><a href="' + avmeldUrl + '" style="color:#938E99;">' + knapp + "</a>";
+}
+
+function wrap(inner, avmeldUrl, lang) {
   return '<!DOCTYPE html><html><body style="margin:0;background:#FBF7F0;font-family:Arial,Helvetica,sans-serif;color:#1F1B24;">' +
     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FBF7F0;padding:24px 0;"><tr><td align="center">' +
     '<table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:18px;overflow:hidden;">' +
     '<tr><td style="padding:26px 32px 4px;text-align:center;"><img src="' + SITE + '/images/lme-logo.png" alt="Little Montessori Explorers" width="110" style="width:110px;height:auto;"></td></tr>' +
     '<tr><td style="padding:6px 32px 28px;font-size:16px;line-height:1.65;color:#3a343f;">' + inner + '</td></tr>' +
     '</table>' +
-    '<div style="max-width:560px;color:#938E99;font-size:12px;padding:16px;">Little Montessori Explorers · Renate Dahl · Tønsberg<br>Du får dette fordi du meldte deg på hos oss.</div>' +
+    '<div style="max-width:560px;color:#938E99;font-size:12px;padding:16px;">Little Montessori Explorers · Renate Dahl · Tønsberg<br>' + avmeldFot(avmeldUrl, lang) + '</div>' +
     '</td></tr></table></body></html>';
 }
 
@@ -30,8 +43,13 @@ function btn(href, label) {
   return '<p style="margin:22px 0;"><a href="' + href + '" style="background:#E91E89;color:#ffffff;text-decoration:none;font-weight:bold;padding:13px 24px;border-radius:999px;display:inline-block;">' + label + '</a></p>';
 }
 
+/* Selve brevene bygges når filen lastes, altså før vi vet hvem som skal
+   ha dem. Derfor settes et merke inn her, og selve adressen byttes inn
+   rett før sending, i sendNewsletter. */
+const AVMELD_MERKE = "{{AVMELD}}";
+
 function mk(intro, body, ctaHref, ctaLabel, sign) {
-  return wrap('<p>' + intro + '</p><p>' + body + '</p>' + btn(ctaHref, ctaLabel) + '<p>' + sign + '</p>');
+  return wrap('<p>' + intro + '</p><p>' + body + '</p>' + btn(ctaHref, ctaLabel) + '<p>' + sign + '</p>', AVMELD_MERKE, sign.indexOf("Warm") === 0 ? "en" : "no");
 }
 
 /* 6-ukers evergreen serie. Legg gjerne til flere uker senere. */
@@ -191,6 +209,17 @@ export async function sendNewsletter(env, sub, index) {
   if (!apiKey || !to) return { ok: false, skipped: true };
   const msg = newsletterEmail(sub.lang, index, sub.name, sub.source);
   if (!msg) return { ok: false, done: true };
+
+  /* Avmeldingskoden er tilfeldig og ligger på abonnenten. Da kan ingen
+     melde av noen andre ved å gjette en e-postadresse. Mangler den (en
+     abonnent fra før koden fantes), lages den her, og den som kaller oss
+     lagrer den sammen med resten. */
+  if (!sub.avmeld) sub.avmeld = avmeldKode();
+  const avmeldUrl = SITE + "/api/avmeld?e=" + encodeURIComponent(String(to).trim().toLowerCase()) +
+    "&k=" + encodeURIComponent(sub.avmeld);
+  const html = String(msg.html).split(AVMELD_MERKE).join(avmeldUrl);
+  const tekst = String(msg.text) +
+    (sub.lang === "en" ? "\n\nUnsubscribe: " : "\n\nMeld deg av: ") + avmeldUrl;
   try {
     const res = await fetch(MS, {
       method: "POST",
@@ -204,11 +233,11 @@ export async function sendNewsletter(env, sub, index) {
         reply_to: { email: "renate@lmexplorers.com", name: "Renate Dahl" },
         to: [{ email: to, name: sub.name || undefined }],
         subject: msg.subject,
-        html: msg.html,
-        text: msg.text,
+        html: html,
+        text: tekst,
       }),
     });
-    return { ok: res.ok, status: res.status };
+    return { ok: res.ok, status: res.status, avmeld: sub.avmeld };
   } catch (e) {
     return { ok: false, error: String(e) };
   }
@@ -217,6 +246,10 @@ export async function sendNewsletter(env, sub, index) {
 /* Registrer / oppdater en nyhetsbrev-abonnent i KV. "tag" er valgfri ekstra
    kontekst (f.eks. et quiz-resultat) som ikke styrer selve serien, bare
    lagres for oversikt. */
+export function avmeldKode() {
+  return crypto.randomUUID().replace(/-/g, "");
+}
+
 export async function registerNewsletter(env, email, name, lang, source, tag) {
   if (!env.BUILDER_KV || !email) return;
   const key = "nl:" + email.trim().toLowerCase();
@@ -225,6 +258,7 @@ export async function registerNewsletter(env, email, name, lang, source, tag) {
   const rec = {
     email: email.trim(), name: name || "", lang: lang === "en" ? "en" : "no",
     weekIndex: 0, active: true, joined: Date.now(), lastSent: 0, source: (source || "").toString().slice(0, 60),
+    avmeld: avmeldKode(),
   };
   if (tag) rec.tag = String(tag).slice(0, 60);
   await env.BUILDER_KV.put(key, JSON.stringify(rec));

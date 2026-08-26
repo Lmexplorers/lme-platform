@@ -31,11 +31,17 @@ function json(data, status) {
    navn, ingen nøkler. */
 function omOrdren(order) {
   if (!order) return {};
-  return {
+  const ut = {
     type: order.type || "lv",
     slug: order.slug || "",
     title: order.title || "",
   };
+  /* Nedlastingsnøkkelen, så takkesiden kan gi kunden filene med en gang i
+     stedet for å be henne vente på e-posten. Den følger bare med når kjøpet
+     faktisk er levert, og bare til den som kan referansen, altså kjøperen
+     selv. */
+  if (order.status === "fulfilled" && order.nokkel) ut.nokkel = order.nokkel;
+  return ut;
 }
 
 export async function onRequestGet(context) {
@@ -66,7 +72,10 @@ export async function onRequestGet(context) {
   if (tilstand === "AUTHORIZED") {
     const svar = await leverVippsOrdre(env, reference, { alleredeTrukket: betaling.captured > 0 });
     if (!svar.ok) return json({ ok: false, status: svar.resultat, detail: svar.detail, ...omOrdren(order) }, 502);
-    return json({ ok: true, status: svar.resultat, ...omOrdren(order) });
+    /* Ordren fra leveringen, ikke den vi leste før den. Det er den som har
+       fått nedlastingsnøkkelen, og uten den ville takkesiden bedt kunden
+       vente på e-posten selv om filene var klare. */
+    return json({ ok: true, status: svar.resultat, ...omOrdren(svar.order || order) });
   }
   if (tilstand === "CREATED") {
     return json({ ok: false, status: "venter", ...omOrdren(order) });

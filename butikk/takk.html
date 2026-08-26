@@ -116,6 +116,30 @@
     const pid = params.get('p');
     const prod = pid && C.produkter[pid];
 
+    /* Nedlastingene er låst, så hver lenke trenger kjøperens egen nøkkel.
+       Den kan komme tre steder fra:
+         ?t=...          lenken i e-posten
+         ?session_id=... rett etter et kortkjøp, hentes fra webhooken
+         ?vipps=...      rett etter et Vipps-kjøp, hentes av
+                         js/vipps-kvittering.js som roper når den har den
+       Har vi ingen nøkkel, viser vi ikke døde lenker, men sier at
+       nedlastingen ligger i e-posten. */
+    let NOKKEL = params.get('t') || '';
+    let VENTER = !NOKKEL && !!(params.get('session_id') || params.get('vipps'));
+
+    const VENT_TEKST = { no: 'Henter nedlastingene dine …', en: 'Fetching your downloads …' };
+    const MAIL_TEKST = {
+      no: 'Nedlastingslenken ligger i e-posten jeg nettopp sendte deg. Sjekk gjerne søppelpost hvis den ikke dukker opp, eller skriv til meg på post@lmexplorers.com.',
+      en: 'Your download link is in the email I just sent you. Do check your spam folder if it does not turn up, or write to me at post@lmexplorers.com.',
+    };
+
+    function medNokkel(url) {
+      if (!NOKKEL) return url;
+      const u = String(url);
+      if (!(u.charAt(0) === '/' || u.indexOf('https://lmexplorers.com/') === 0)) return u;
+      return u + (u.indexOf('?') >= 0 ? '&' : '?') + 't=' + encodeURIComponent(NOKKEL);
+    }
+
     function render() {
       document.documentElement.lang = LANG;
       txt('yr', new Date().getFullYear());
@@ -139,15 +163,52 @@
 
       const dl = document.getElementById('downloads');
       dl.innerHTML = '';
+
+      if (!NOKKEL) {
+        const p = document.createElement('p');
+        p.style.cssText = 'font-size:15px;line-height:1.55;color:#4A4A4A;margin:8px 0;';
+        p.textContent = VENTER ? t(VENT_TEKST) : t(MAIL_TEKST);
+        dl.appendChild(p);
+        return;
+      }
+
       prod.filer.forEach(f => {
         const a = document.createElement('a');
         a.className = 'dl-btn' + (f.sprak === 'en' ? ' en' : '');
-        a.href = f.url; a.setAttribute('download', ''); a.target = '_blank'; a.rel = 'noopener';
+        a.href = medNokkel(f.url); a.setAttribute('download', ''); a.target = '_blank'; a.rel = 'noopener';
         const flag = f.sprak === 'en' ? '🇬🇧' : '🇳🇴';
         a.innerHTML = '<span class="flag">' + flag + '</span><span>' + t(f.knapp) + '</span>';
         dl.appendChild(a);
       });
     }
+
+    function fikkNokkel(n) {
+      if (!n || NOKKEL) return;
+      NOKKEL = n; VENTER = false; render();
+    }
+
+    /* Vipps: js/vipps-kvittering.js henter nøkkelen sammen med kvitteringen. */
+    window.addEventListener('lme:nedlastingsnokkel', function (e) { fikkNokkel(e.detail); });
+
+    /* Kort: Stripe sender øktnummeret sitt i adressen. Webhooken legger
+       nøkkelen der, men den kan komme et par sekunder etter kunden, så vi
+       spør noen ganger før vi gir oss og viser til e-posten. */
+    (function () {
+      const okt = params.get('session_id');
+      if (!okt || NOKKEL) return;
+      const pauser = [0, 1200, 2000, 3000, 5000];
+      let i = 0;
+      (function spor() {
+        if (NOKKEL) return;
+        if (i >= pauser.length) { VENTER = false; render(); return; }
+        setTimeout(function () {
+          fetch('/api/nedlasting-nokkel?session_id=' + encodeURIComponent(okt))
+            .then(function (r) { return r.json(); })
+            .then(function (d) { if (d && d.ok && d.nokkel) fikkNokkel(d.nokkel); else { i++; spor(); } })
+            .catch(function () { i++; spor(); });
+        }, pauser[i]);
+      })();
+    })();
     render();
 
     // Språk-knapp (samme valg som resten av plattformen)

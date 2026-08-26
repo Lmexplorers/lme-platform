@@ -91,6 +91,14 @@
         var status = (svar && svar.status) || '';
         if (status === 'levert' || status === 'allerede_levert') {
           vis('levert', GRØNN);
+          /* Nedlastingene er låst. Kom det en nøkkel med svaret, si fra til
+             siden, så den kan vise filene med en gang i stedet for å be
+             kunden vente på e-posten. */
+          if (svar && svar.nokkel) {
+            try {
+              window.dispatchEvent(new CustomEvent('lme:nedlastingsnokkel', { detail: svar.nokkel }));
+            } catch (e) {}
+          }
           rydd();
           return;
         }

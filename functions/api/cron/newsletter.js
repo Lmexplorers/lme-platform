@@ -52,6 +52,9 @@ export async function onRequest(context) {
       if (res && res.ok) {
         sub.weekIndex = idx + 1;
         sub.lastSent = now;
+        /* Abonnenter fra før avmeldingskoden fantes får den ved første
+           utsending. Da virker avmeldingslenken deres også. */
+        if (res.avmeld && !sub.avmeld) sub.avmeld = res.avmeld;
         await env.BUILDER_KV.put(k.name, JSON.stringify(sub));
         sent++;
       } else { failed++; }

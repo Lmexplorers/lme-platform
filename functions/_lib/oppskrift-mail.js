@@ -236,22 +236,32 @@ const PRODUCT = {
 
 /* Bygger nedlastings-HTML: kun kjøperens eget språk. Engelsk kjøper får den
    engelske PDF-en, norsk kjøper den norske. Ingen blanding av språk. */
-function downloads(prod, lang) {
+/* Legger nedlastingsnøkkelen på en lenke til vårt eget nettsted. Uten den
+   møter kunden låsen foran filene i stedet for filen sin. Lenker til andre
+   nettsteder (tidslinjen ligger i Google Drive) røres ikke. */
+function medNokkel(url, nokkel) {
+  if (!nokkel || !url) return url;
+  const u = String(url);
+  if (!(u.charAt(0) === "/" || u.indexOf(SITE + "/") === 0)) return u;
+  return u + (u.indexOf("?") >= 0 ? "&" : "?") + "t=" + encodeURIComponent(nokkel);
+}
+
+function downloads(prod, lang, nokkel) {
   const files = prod.files[lang] || prod.files.no || [];
   const lbl = (fl) => (lang === "en" ? fl.en : fl.no) || "PDF";
   if (files.length === 1) {
-    return btn(files[0].url, lang === "en" ? "Download the pattern (PDF)" : "Last ned oppskriften (PDF)");
+    return btn(medNokkel(files[0].url, nokkel), lang === "en" ? "Download the pattern (PDF)" : "Last ned oppskriften (PDF)");
   }
   return '<ul style="padding-left:20px;margin:14px 0;">' +
-    files.map((fl) => '<li style="margin:6px 0;">' + link(fl.url, lbl(fl)) + '</li>').join("") +
+    files.map((fl) => '<li style="margin:6px 0;">' + link(medNokkel(fl.url, nokkel), lbl(fl)) + '</li>').join("") +
     '</ul>';
 }
 
-function content(kind, lang, name, pid) {
+function content(kind, lang, name, pid, nokkel) {
   const prod = PRODUCT[pid];
   if (!prod) return null;
   const pname = lang === "en" ? prod.en : prod.no;
-  const dl = downloads(prod, lang);
+  const dl = downloads(prod, lang, nokkel);
 
   if (lang === "en") {
     if (kind === "levering") return {
@@ -265,7 +275,7 @@ function content(kind, lang, name, pid) {
         btn(SHOP, "See the bundles") +
         "<p>If you get stuck anywhere, just reply to this email and I will help you as best I can.</p>" +
         "<p>Enjoy!<br>Warm wishes, Renate</p>"),
-      text: "Hi " + name + ",\n\nThank you for your purchase. Download your pattern: " + (prod.files.en[0] || prod.files.no[0]).url + "\n\nSee the bundles: " + SHOP + "\n\nWarm wishes, Renate",
+      text: "Hi " + name + ",\n\nThank you for your purchase. Download your pattern: " + medNokkel((prod.files.en[0] || prod.files.no[0]).url, nokkel) + "\n\nSee the bundles: " + SHOP + "\n\nWarm wishes, Renate",
     };
     if (kind === "oppfolging_dag") return {
       subject: "Have you started on " + pname + "?",
@@ -303,7 +313,7 @@ function content(kind, lang, name, pid) {
       btn(SHOP, "Se pakkene") +
       "<p>Står du fast et sted, svar på denne e-posten, så hjelper jeg deg så godt jeg kan.</p>" +
       "<p>God fornøyelse!<br>Klem fra Renate</p>"),
-    text: "Hei " + name + ",\n\nTusen takk for kjøpet. Last ned oppskriften: " + (prod.files.no[0] || prod.files.en[0]).url + "\n\nSe pakkene: " + SHOP + "\n\nKlem fra Renate",
+    text: "Hei " + name + ",\n\nTusen takk for kjøpet. Last ned oppskriften: " + medNokkel((prod.files.no[0] || prod.files.en[0]).url, nokkel) + "\n\nSe pakkene: " + SHOP + "\n\nKlem fra Renate",
   };
   if (kind === "oppfolging_dag") return {
     subject: "Har du kommet i gang med " + pname + "?",
@@ -330,6 +340,31 @@ function content(kind, lang, name, pid) {
 }
 
 export function isOppskrift(pid) { return !!PRODUCT[pid]; }
+
+/* Hvilke filer hvert produkt gir. Brukes av nedlastingslåsen, som må vite
+   om en fil hører til noe kunden faktisk har kjøpt. Stiene er uten
+   nettstedsnavn, slik de kommer inn i en forespørsel. */
+export function oppskriftFiler(pid) {
+  const p = PRODUCT[pid];
+  if (!p) return [];
+  const ut = [];
+  for (const lang of ["no", "en"]) {
+    for (const fil of (p.files && p.files[lang]) || []) {
+      const url = String(fil.url);
+      /* Tidslinjen ligger i Google Drive, ikke hos oss. Den kan vi ikke
+         låse, og den skal ikke med i kartet, ellers ville "/download"
+         stått der som om det var en fil på vårt eget nettsted. */
+      const vaar = url.charAt(0) === "/" || url.indexOf(SITE + "/") === 0;
+      if (!vaar) continue;
+      const sti = url.replace(/^https?:\/\/[^/]+/, "").split("?")[0];
+      if (sti.charAt(0) === "/" && ut.indexOf(sti) === -1) ut.push(sti);
+    }
+  }
+  return ut;
+}
+
+/* Alle produkt-IDene, i den rekkefølgen de står. */
+export function oppskriftIder() { return Object.keys(PRODUCT); }
 
 /* Produktnavnet, på det språket kunden handler på. Brukes av Vipps-flyten,
    som trenger et navn å vise i betalingen, og som skal vise nøyaktig det
@@ -446,7 +481,7 @@ export async function sendOppskriftMail(env, opts) {
   const apiKey = env.MAILERSEND_API_KEY;
   if (!apiKey || !to) return { ok: false, skipped: true };
   const lang = opts.lang === "en" ? "en" : "no";
-  const msg = content(opts.kind || "levering", lang, opts.name || "", opts.pid);
+  const msg = content(opts.kind || "levering", lang, opts.name || "", opts.pid, opts.nokkel);
   if (!msg) return { ok: false, skipped: true };
   const body = {
     from: { email: FROM_EMAIL, name: FROM_NAME },

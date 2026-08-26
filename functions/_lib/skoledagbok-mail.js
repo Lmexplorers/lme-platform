@@ -19,6 +19,13 @@ const MEMBERSHIP = SITE + "/medlemskap";
 const FROM_EMAIL = "renate@lmexplorers.com";
 const FROM_NAME = "Renate Dahl";
 
+function medNokkel(url, nokkel) {
+  if (!nokkel || !url) return url;
+  const u = String(url);
+  if (!(u.charAt(0) === "/" || u.indexOf(SITE + "/") === 0)) return u;
+  return u + (u.indexOf("?") >= 0 ? "&" : "?") + "t=" + encodeURIComponent(nokkel);
+}
+
 function esc(s) {
   return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
@@ -45,10 +52,15 @@ function link(href, label) {
 
 function otherBook(book) { return book === "4-7" ? "1-3" : "4-7"; }
 
-function content(kind, lang, name, book) {
+function content(kind, lang, name, book, nokkel) {
   const info = SKOLEDAGBOK_INFO[book] || SKOLEDAGBOK_INFO["1-3"];
   const bookName = info.name[lang] || info.name.no;
-  const files = info.files;
+  /* Nedlastingene er låst. Uten nøkkelen på lenken møter kjøperen låsen i
+     stedet for boka si. Lenker til andre nettsteder røres ikke. */
+  const files = {
+    no: medNokkel(info.files.no, nokkel),
+    en: medNokkel(info.files.en, nokkel),
+  };
   const other = SKOLEDAGBOK_INFO[otherBook(book)];
   const otherName = other.name[lang] || other.name.no;
   const shop = lang === "en" ? SHOP_EN : SHOP_NO;
@@ -149,7 +161,7 @@ export async function sendSkoledagbokMail(env, opts) {
   const lang = opts.lang === "en" ? "en" : "no";
   const book = SKOLEDAGBOK_INFO[opts.book] ? opts.book : "1-3";
   const name = opts.name || "";
-  const msg = content(opts.kind || "levering", lang, name, book);
+  const msg = content(opts.kind || "levering", lang, name, book, opts.nokkel);
   if (!msg) return { ok: false, skipped: true };
 
   const body = {

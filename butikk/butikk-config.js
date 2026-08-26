@@ -35,6 +35,37 @@ window.LME_BUTIKK = {
   // ---- PRODUKTER ----
   produkter: {
 
+    /* Skoledagbøkene. Kortkjøpere ble tidligere sendt til en side som ikke
+       fantes lenger, så de fikk aldri sett nedlastingene sine på nettet,
+       bare i e-posten. Nå sendes de hit, som alle andre kjøp. */
+    "skoledagbok-1-3": {
+      navn:  { no: "Mia & Teo Skoledagbok, 1.–3. trinn", en: "Mia & Teo School Diary, Grades 1–3" },
+      undertittel: { no: "5–9 år · 358 sider · norsk og engelsk",
+                     en: "Ages 5–9 · 358 pages · Norwegian and English" },
+      cover:   "/images/skoledagbok/cover-1-3-no.png",
+      coverEn: "/images/skoledagbok/cover-1-3-en.png",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/skoledagbok/skoledagbok-1-3-trinn.pdf",
+          knapp: { no: "Last ned norsk PDF", en: "Download the Norwegian PDF" } },
+        { sprak: "en", url: "/butikk/nedlasting/skoledagbok/skoledagbok-1-3-trinn-en.pdf",
+          knapp: { no: "Last ned engelsk PDF", en: "Download the English PDF" } }
+      ]
+    },
+
+    "skoledagbok-4-7": {
+      navn:  { no: "Mia & Teo Skoledagbok, 4.–7. trinn", en: "Mia & Teo School Diary, Grades 4–7" },
+      undertittel: { no: "9–13 år · 358 sider · norsk og engelsk",
+                     en: "Ages 9–13 · 358 pages · Norwegian and English" },
+      cover:   "/images/skoledagbok/cover-4-7-no.png",
+      coverEn: "/images/skoledagbok/cover-4-7-en.png",
+      filer: [
+        { sprak: "no", url: "/butikk/nedlasting/skoledagbok/skoledagbok-4-7-trinn.pdf",
+          knapp: { no: "Last ned norsk PDF", en: "Download the Norwegian PDF" } },
+        { sprak: "en", url: "/butikk/nedlasting/skoledagbok/skoledagbok-4-7-trinn-en.pdf",
+          knapp: { no: "Last ned engelsk PDF", en: "Download the English PDF" } }
+      ]
+    },
+
     "naturutforskerne": {
       navn:  { no: "De små naturutforskerne", en: "The Little Nature Explorers" },
       undertittel: { no: "Mia & Teo møter skogens små venner · 24 sider",

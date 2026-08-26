@@ -22,6 +22,7 @@ import { COURSE_INFO } from "./purchase-links.js";
 import { grantCourseAccess } from "./course-access.js";
 import { sendCourseDeliveryMail } from "./course-mail.js";
 import { sendClaudeMail } from "./claude-mail.js";
+import { lagNedlastingsnokkel, medNokkel } from "./nedlasting-tilgang.js";
 import { registerNewsletter } from "./newsletter.js";
 
 export const ORDRE_PREFIX = "vipps_order:";
@@ -36,7 +37,14 @@ async function leverLaeringsverksted(env, order) {
     const raw = await env.BUILDER_KV.get(LV_KEY_PREFIX + order.slug);
     if (raw) resource = JSON.parse(raw);
   } catch (e) {}
-  const downloadUrl = (resource && resource.fileUrl) || "";
+  let downloadUrl = (resource && resource.fileUrl) || "";
+  let nokkel = null;
+  /* Ligger filen hos oss, er den bak låsen, og lenken trenger nøkkelen. */
+  try {
+    nokkel = await lagNedlastingsnokkel(env, order.slug, order.email);
+    if (nokkel) downloadUrl = medNokkel(downloadUrl, nokkel);
+  } catch (e) {}
+  try { await registerNewsletter(env, order.email, order.name || "", order.lang, "laeringsverksted"); } catch (e) {}
   const resourceUrl = "https://lmexplorers.com/lv/" + order.slug;
 
   try {
@@ -65,6 +73,7 @@ async function leverLaeringsverksted(env, order) {
       await env.BUILDER_KV.put(LV_KEY_PREFIX + order.slug, JSON.stringify(resource));
     }
   } catch (e) {}
+  return nokkel;
 }
 
 /* Leverer et enkeltkurs. Noeyaktig samme steg som Stripe-flyten i
@@ -110,10 +119,17 @@ async function leverKurs(env, order) {
    kortkunde, ville ingen oppdaget det før hun spurte hvor det ble av
    oppfølgingen. */
 async function leverOppskrift(env, order) {
+  /* Nedlastingene er låst. Uten nøkkelen i lenken møter kunden låsen i
+     stedet for oppskriften hun nettopp betalte for. */
+  let nokkel = null;
+  try { nokkel = await lagNedlastingsnokkel(env, order.slug, order.email); } catch (e) {}
+  /* Velkomstserien, samme som et kortkjøp gir. */
+  try { await registerNewsletter(env, order.email, order.name || "", order.lang, "butikk"); } catch (e) {}
+
   try {
     await sendOppskriftMail(env, {
       to: order.email, name: order.name, lang: order.lang,
-      kind: "levering", pid: order.slug,
+      kind: "levering", pid: order.slug, nokkel: nokkel,
     });
   } catch (e) {}
   try {
@@ -139,6 +155,7 @@ async function leverOppskrift(env, order) {
       amount: order.amount, currency: order.currency,
     });
   } catch (e) {}
+  return nokkel;
 }
 
 /* Claude-kursene har sin egen leveringsmail og sin egen oppfølgingsserie,
@@ -238,15 +255,20 @@ export async function leverVippsOrdre(env, reference, opts) {
 
   /* Ordrer laget foer varetyper fantes har ingen `type`. De var alle
      Laeringsverksted-ressurser, saa mangler feltet, er det "lv". */
+  /* Nedlastingsnøkkelen tas vare på ordren. Da kan takkesiden hente den
+     fra /api/vipps-status og gi kunden filene med en gang, i stedet for at
+     hun må vente på e-posten. */
+  let nokkel = null;
   if (order.type === "kurs" && (order.slug === "claude" || order.slug === "claude-videre")) {
     await leverClaudeKurs(env, order);
   } else if (order.type === "kurs") {
     await leverKurs(env, order);
   } else if (order.type === "oppskrift") {
-    await leverOppskrift(env, order);
+    nokkel = await leverOppskrift(env, order);
   } else {
-    await leverLaeringsverksted(env, order);
+    nokkel = await leverLaeringsverksted(env, order);
   }
+  if (nokkel) order.nokkel = nokkel;
 
   order.status = "fulfilled";
   order.fulfilledAt = Date.now();
