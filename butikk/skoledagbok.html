@@ -398,9 +398,20 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ slug, email: emailInput.value, lang: currentLang }),
         });
-        const data = await res.json().catch(() => ({}));
+        /* Leser svaret som tekst foerst, og proever JSON etterpaa. Er 502-en
+           fra Cloudflare og ikke fra oss, er kroppen en HTML-feilside, og da
+           sa siden bare "http_502" uten aa fortelle hva som stod der. Nå tas
+           begynnelsen av teksten med, uten HTML-taggene. */
+        const tekst = await res.text();
+        let data = null;
+        try { data = JSON.parse(tekst); } catch (e) {}
         if (data && data.ok && data.redirectUrl) { window.location.href = data.redirectUrl; return; }
-        kode = (data && data.error) || ('http_' + res.status);
+        if (data && data.error) {
+          kode = data.error + (data.status ? ' ' + data.status : '');
+        } else {
+          const utdrag = tekst.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80);
+          kode = 'http_' + res.status + (utdrag ? ': ' + utdrag : '');
+        }
       } catch (err) { kode = 'nettverk'; }
       visVippsFeil(errorEl, kode);
       submitBtn.disabled = false;
