@@ -83,18 +83,18 @@ export const CLAUDE_MAIN_LINK_LANG = {
    e-post eller faktisk tilgang. Verifisert 1:1 mot knappene på /oppgrader
    og mot Stripe sin liste over betalingslenker samme dag som denne flyttingen. */
 export const AUTOPILOT_PAYMENT_LINKS = {
-  "plink_1Ty9NeLax7B8uQzqIlM5RCuB": { plan: "cs-start", limits: { image: 30,  video: 0 }, planLabel: "LME Autopilot – Start", lang: "no" },
-  "plink_1Ty9NlLax7B8uQzqrRrPUgkr": { plan: "cs-start", limits: { image: 30,  video: 0 }, planLabel: "LME Autopilot – Start", lang: "en" },
-  "plink_1TxaxbLax7B8uQzq9nJeLLHB": { plan: "cs-proff", limits: { image: 100, video: 0 }, planLabel: "LME Autopilot – Proff", lang: "no" },
-  "plink_1TxaxcLax7B8uQzqQWSj2nuD": { plan: "cs-proff", limits: { image: 100, video: 0 }, planLabel: "LME Autopilot – Proff", lang: "en" },
+  "plink_1U8eBXLax7B8uQzq6DNWQTYD": { plan: "cs-start", limits: { image: 30,  video: 0 }, planLabel: "LME Autopilot – Start", lang: "no" },
+  "plink_1U8eBZLax7B8uQzqoMVzOZ8z": { plan: "cs-start", limits: { image: 30,  video: 0 }, planLabel: "LME Autopilot – Start", lang: "en" },
+  "plink_1U8eBbLax7B8uQzq5BZQyOWH": { plan: "cs-proff", limits: { image: 100, video: 0 }, planLabel: "LME Autopilot – Proff", lang: "no" },
+  "plink_1U8eBdLax7B8uQzqHGyhooDY": { plan: "cs-proff", limits: { image: 100, video: 0 }, planLabel: "LME Autopilot – Proff", lang: "en" },
   "plink_1U8dkfLax7B8uQzqQWZty5Zt": { plan: "cs-start", limits: { image: 30,  video: 0 }, planLabel: "LME Autopilot – Start (årlig)", lang: "no" },
   "plink_1U8dkgLax7B8uQzq29kpOfYm": { plan: "cs-start", limits: { image: 30,  video: 0 }, planLabel: "LME Autopilot – Start (årlig)", lang: "en" },
   "plink_1U8dkmLax7B8uQzqkr5b7uee": { plan: "cs-proff", limits: { image: 100, video: 0 }, planLabel: "LME Autopilot – Proff (årlig)", lang: "no" },
   "plink_1U8dknLax7B8uQzqm94G5Tmh": { plan: "cs-proff", limits: { image: 100, video: 0 }, planLabel: "LME Autopilot – Proff (årlig)", lang: "en" },
-  "plink_1TxaxeLax7B8uQzqhpvfmUta": { plan: "cs-pluss", limits: { image: 250, video: 0 }, planLabel: "LME Autopilot – VIP",   lang: "no" },
-  "plink_1TxaxfLax7B8uQzq0VIMveFM": { plan: "cs-pluss", limits: { image: 250, video: 0 }, planLabel: "LME Autopilot – VIP",   lang: "en" },
-  "plink_1TxaxhLax7B8uQzqYOEHA6O9": { plan: "cs-pluss", limits: { image: 250, video: 0 }, planLabel: "LME Autopilot – VIP (årlig)", lang: "no" },
-  "plink_1TxaxiLax7B8uQzqCSt5zYag": { plan: "cs-pluss", limits: { image: 250, video: 0 }, planLabel: "LME Autopilot – VIP (årlig)", lang: "en" },
+  "plink_1U8eBiLax7B8uQzqTShVS4k8": { plan: "cs-pluss", limits: { image: 250, video: 0 }, planLabel: "LME Autopilot – VIP",   lang: "no" },
+  "plink_1U8eBlLax7B8uQzqXaCjQ2o6": { plan: "cs-pluss", limits: { image: 250, video: 0 }, planLabel: "LME Autopilot – VIP",   lang: "en" },
+  "plink_1U8eBnLax7B8uQzq2QQmUwSe": { plan: "cs-pluss", limits: { image: 250, video: 0 }, planLabel: "LME Autopilot – VIP (årlig)", lang: "no" },
+  "plink_1U8eBoLax7B8uQzqVKts7Zm3": { plan: "cs-pluss", limits: { image: 250, video: 0 }, planLabel: "LME Autopilot – VIP (årlig)", lang: "en" },
 };
 
 function memberKey(email) { return "member:" + email.trim().toLowerCase(); }

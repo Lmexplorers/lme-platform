@@ -22,11 +22,17 @@ Autopilot var derfor umulig å kjøpe i en uke. Renate ba meg åpne igjen
   kupong `EG6jdcaS`, kampanjekode `GRUNNLEGGER` (`promo_1U8WMRLax7B8uQzqbWHUB55B`),
   begrenset til to innløsninger og til førstegangskjøp.
 - Den gamle 499-prisen på Proff er arkivert, så ingen kan plukke den ved en feil.
+- Årsplan for Start og Proff er laget, 1 990 kr og 5 490 kr, altså to måneder
+  gratis, samme regnestykke som VIP allerede hadde.
+- Alle tolv betalingslenkene er laget på nytt, og de gamle åtte er slått av.
+  Grunnen står under, i steg 2: teksten kunden ser i Stripe-kassen er et
+  avtrykk av produktnavnet slik det var da lenken ble laget, og den kan ikke
+  redigeres i etterkant. De gamle lenkene sa fortsatt det gamle navnet.
 
 Lenken til Cecilie og Bente:
 
 ```
-https://buy.stripe.com/9B64gAfsx1IXamhbtt9R61l?prefilled_promo_code=GRUNNLEGGER
+https://buy.stripe.com/eVq00k8055Zd51XgNN9R70R?prefilled_promo_code=GRUNNLEGGER
 ```
 
 Verifisert mot Stripe: lenken står på 549 kr, kupongen trekker 250 kr, altså
@@ -46,6 +52,8 @@ Sjekket direkte mot Stripe 26. august 2026:
 | Start | 199 kr | $19 | `prod_UwWlnVHko5a1Dt` |
 | Proff | 549 kr | $54 | `prod_UTtEl6dxkbq4qM` |
 | VIP | 999 kr | $99 | `prod_UwWmmP16D4lT5Z` |
+| Start årlig | 1 990 kr | $190 | samme som Start |
+| Proff årlig | 5 490 kr | $540 | samme som Proff |
 | VIP årlig | 9 990 kr | $990 | samme som VIP |
 
 Tallene stemmer med `functions/_lib/plans.js`, med `/oppgrader` og med
@@ -59,27 +67,41 @@ Den gamle 499-prisen på Proff (`price_1TUvS3Lax7B8uQzqQcZAW8Dx`) er arkivert
 Sett `active: true` på `prod_UwWlnVHko5a1Dt`, `prod_UTtEl6dxkbq4qM` og
 `prod_UwWmmP16D4lT5Z`. Ingenting annet trengs, prisene ligger der fra før.
 
-## Steg 2: slå på de åtte betalingslenkene (gjort)
+## Steg 2: betalingslenkene (gjort)
 
-Alle åtte er `active: false` i dag. De skal settes til `active: true`, og de
-skal få `allow_promotion_codes: true`, ellers virker ikke grunnleggerkoden.
+Lenkene ble først bare slått på igjen. Da oppdaget jeg at de sa feil navn i
+kassen: fire av dem sto med det gamle produktnavnet, og fire sto bare med
+"VIP" uten merkevare. Teksten på linjen i Stripe-kassen er et avtrykk av
+produktnavnet slik det var den dagen lenken ble laget, og Stripe lar den ikke
+redigeres etterpå. Eneste måten å rette den på er å lage lenken på nytt.
+
+Derfor er alle tolv laget om, og de gamle åtte er satt til `active: false`.
+Alle tolv har `allow_promotion_codes: true`, ellers virker ikke
+grunnleggerkoden. Alle sier nå "LME Autopilot" i kassen.
 
 | Lenke | Plan | Adresse |
 | --- | --- | --- |
-| `plink_1Ty9NeLax7B8uQzqIlM5RCuB` | Start, kroner | `buy.stripe.com/bJeeVedkpfzN8e9btt9R61Z` |
-| `plink_1Ty9NlLax7B8uQzqrRrPUgkr` | Start, dollar | `buy.stripe.com/14A9AUa8d0ET3XT1ST9R620` |
-| `plink_1TxaxbLax7B8uQzq9nJeLLHB` | Proff, kroner | `buy.stripe.com/9B64gAfsx1IXamhbtt9R61l` |
-| `plink_1TxaxcLax7B8uQzqQWSj2nuD` | Proff, dollar | `buy.stripe.com/bJe4gAfsx73hamhapp9R61m` |
-| `plink_1TxaxeLax7B8uQzqhpvfmUta` | VIP, kroner | `buy.stripe.com/eVq8wQ1BHevJ51XdBB9R61n` |
-| `plink_1TxaxfLax7B8uQzq0VIMveFM` | VIP, dollar | `buy.stripe.com/8x228s8059bpdyt1ST9R61o` |
-| `plink_1TxaxhLax7B8uQzqYOEHA6O9` | VIP årlig, kroner | `buy.stripe.com/9B628s0xDgDR1PL5559R61p` |
-| `plink_1TxaxiLax7B8uQzqCSt5zYag` | VIP årlig, dollar | `buy.stripe.com/4gMfZicglcnB1PL9ll9R61q` |
+| `plink_1U8eBXLax7B8uQzq6DNWQTYD` | Start, kroner | `buy.stripe.com/dRmcN62FL3R53XT1ST9R70P` |
+| `plink_1U8eBZLax7B8uQzqoMVzOZ8z` | Start, dollar | `buy.stripe.com/fZu00k949bjxdyteFF9R70Q` |
+| `plink_1U8eBbLax7B8uQzq5BZQyOWH` | Proff, kroner | `buy.stripe.com/eVq00k8055Zd51XgNN9R70R` |
+| `plink_1U8eBdLax7B8uQzqHGyhooDY` | Proff, dollar | `buy.stripe.com/14A3cwcgl5ZdfGBfJJ9R70S` |
+| `plink_1U8dkfLax7B8uQzqQWZty5Zt` | Start årlig, kroner | `buy.stripe.com/9B6eVe1BHevJ1PL8hh9R70L` |
+| `plink_1U8dkgLax7B8uQzq29kpOfYm` | Start årlig, dollar | `buy.stripe.com/7sY6oIdkpcnB1PL5559R70M` |
+| `plink_1U8dkmLax7B8uQzqkr5b7uee` | Proff årlig, kroner | `buy.stripe.com/3cI9AUeot5Zd8e96999R70N` |
+| `plink_1U8dknLax7B8uQzqm94G5Tmh` | Proff årlig, dollar | `buy.stripe.com/00w9AUfsxfzNcupfJJ9R70O` |
+| `plink_1U8eBiLax7B8uQzqTShVS4k8` | VIP, kroner | `buy.stripe.com/4gM9AUa8d87l1PLbtt9R70T` |
+| `plink_1U8eBlLax7B8uQzqXaCjQ2o6` | VIP, dollar | `buy.stripe.com/cNiaEY5RX1IX0LH6999R70U` |
+| `plink_1U8eBnLax7B8uQzq2QQmUwSe` | VIP årlig, kroner | `buy.stripe.com/3cI7sM2FL2N1eCx2WX9R70V` |
+| `plink_1U8eBoLax7B8uQzqVKts7Zm3` | VIP årlig, dollar | `buy.stripe.com/eVqeVe1BH73h661btt9R70W` |
 
-Det er viktig at det er akkurat disse lenkene som åpnes, ikke nye. Webhooken
-kjenner igjen kunden på lenke-ID-en (`AUTOPILOT_PAYMENT_LINKS` i
-`functions/_lib/purchase-links.js`), og gir tilgang og kvote ut fra den. Lager
-vi nye lenker, må den listen oppdateres i samme slengen, ellers betaler kunden
+Webhooken kjenner igjen kunden på lenke-ID-en (`AUTOPILOT_PAYMENT_LINKS` i
+`functions/_lib/purchase-links.js`), og gir tilgang og kvote ut fra den. Lages
+en lenke om, må den listen oppdateres i samme slengen, ellers betaler kunden
 uten å få tilgang. Det var akkurat den feilen appen hadde med FEA Create.
+
+De tolv over står nå tre steder, og de tre skal alltid stemme overens:
+`AUTOPILOT_PAYMENT_LINKS` (lenke-ID), `/oppgrader` (adresse) og `lme-pricing.js`
+i appen (adresse).
 
 ## Steg 3: grunnleggertilbudet til Cecilie og Bente (gjort)
 
@@ -113,7 +135,7 @@ tilbudet også kunne brukes i dollar, må det lages en tilsvarende kupong med
 Når steg 1 til 3 er gjort, er lenken til Cecilie og Bente:
 
 ```
-https://buy.stripe.com/9B64gAfsx1IXamhbtt9R61l?prefilled_promo_code=GRUNNLEGGER
+https://buy.stripe.com/eVq00k8055Zd51XgNN9R70R?prefilled_promo_code=GRUNNLEGGER
 ```
 
 Koden fylles inn av seg selv, så de ser 299 kr med en gang, uten å måtte skrive
