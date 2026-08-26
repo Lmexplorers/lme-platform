@@ -30,6 +30,13 @@
  * 26. august 2026.
  */
 
+/* Video følger IKKE med i noen Autopilot-plan. Bestemt av Renate
+   26. august 2026: hun kan ikke kjøpe videogenerering for en hel
+   kundemasse. Kunden bruker egen nøkkel eller kjøper videokreditt.
+   Nevner du video som inkludert et sted, selger du noe appen nekter
+   å levere, og det var akkurat den feilen som gjorde at planene lovet
+   1, 6 og 15 videoer mens appen ga null. */
+
 export const PRICES_CHECKED = "2026-08-16";
 
 /**
@@ -55,8 +62,8 @@ export const PLANS = [
     navn: { no: "LME Autopilot Start", en: "LME Autopilot Start" },
     nok: 199, usd: 19, interval: "month",
     inkluderer: {
-      no: "30 bilder og 1 video i måneden",
-      en: "30 images and 1 video a month",
+      no: "30 AI-bilder i måneden. Video med egen nøkkel eller kjøpt kreditt",
+      en: "30 AI images a month. Video with your own key or bought credit",
     },
     stripePrice: { nok: "price_1TwdidLax7B8uQzqLLBmXBgg", usd: "price_1TwdieLax7B8uQzqvwjrelLk" },
   },
@@ -65,8 +72,8 @@ export const PLANS = [
     navn: { no: "LME Autopilot Proff", en: "LME Autopilot Pro" },
     nok: 549, usd: 54, interval: "month",
     inkluderer: {
-      no: "100 bilder og 6 videoer i måneden",
-      en: "100 images and 6 videos a month",
+      no: "100 AI-bilder i måneden. Video med egen nøkkel eller kjøpt kreditt",
+      en: "100 AI images a month. Video with your own key or bought credit",
     },
     stripePrice: { nok: "price_1Txax0Lax7B8uQzqF9BvHLl5", usd: "price_1Txax1Lax7B8uQzqqB6pkith" },
   },
@@ -75,8 +82,8 @@ export const PLANS = [
     navn: { no: "LME Autopilot VIP", en: "LME Autopilot VIP" },
     nok: 999, usd: 99, interval: "month",
     inkluderer: {
-      no: "250 bilder og 15 videoer i måneden",
-      en: "250 images and 15 videos a month",
+      no: "250 AI-bilder i måneden. Video med egen nøkkel eller kjøpt kreditt",
+      en: "250 AI images a month. Video with your own key or bought credit",
     },
     stripePrice: { nok: "price_1Txax3Lax7B8uQzqe6Ub3Eog", usd: "price_1Txax4Lax7B8uQzqxb8jpZ4k" },
   },
