@@ -13,6 +13,7 @@
  * gang uansett hvem som kom først.
  */
 import { captureVippsPayment } from "./vipps.js";
+import { sendOppskriftMail } from "./oppskrift-mail.js";
 import { KEY_PREFIX as LV_KEY_PREFIX } from "../api/laeringsverksted.js";
 import { sendResourceDeliveryMail } from "./laeringsverksted-mail.js";
 import { sendOwnerSaleNotice } from "./oppskrift-mail.js";
@@ -20,6 +21,8 @@ import { recordPurchase } from "./purchases.js";
 import { COURSE_INFO } from "./purchase-links.js";
 import { grantCourseAccess } from "./course-access.js";
 import { sendCourseDeliveryMail } from "./course-mail.js";
+import { sendClaudeMail } from "./claude-mail.js";
+import { registerNewsletter } from "./newsletter.js";
 
 export const ORDRE_PREFIX = "vipps_order:";
 
@@ -98,6 +101,95 @@ async function leverKurs(env, order) {
   } catch (e) {}
 }
 
+/* Leverer en strikke- eller hekleoppskrift fra butikken. Nøyaktig de
+   samme fire stegene som Stripe-flyten gjør i oppskrift-webhook.js:
+   leveringsmail med nedlastingene, varsel til Renate, de to
+   oppfølgingsmailene i kø, og kjøpet på kundens konto.
+
+   Holdes bevisst likt. Skulle en Vipps-kunde få mindre enn en
+   kortkunde, ville ingen oppdaget det før hun spurte hvor det ble av
+   oppfølgingen. */
+async function leverOppskrift(env, order) {
+  try {
+    await sendOppskriftMail(env, {
+      to: order.email, name: order.name, lang: order.lang,
+      kind: "levering", pid: order.slug,
+    });
+  } catch (e) {}
+  try {
+    await sendOwnerSaleNotice(env, {
+      pid: order.slug, lang: order.lang,
+      name: order.name, email: order.email,
+      amount: order.amount, currency: order.currency,
+    });
+  } catch (e) {}
+  /* De to oppfølgingsmailene, etter tre dager og etter to uker. Samme
+     nøkler og samme kø som Stripe-kjøpene legger seg i. */
+  try {
+    const e = String(order.email || "").trim().toLowerCase();
+    const base = { email: order.email, name: order.name, lang: order.lang, pid: order.slug };
+    await env.BUILDER_KV.put("opp_fu:" + e + ":d3", JSON.stringify(
+      Object.assign({}, base, { kind: "oppfolging_dag", sendAfter: Date.now() + 3 * 24 * 60 * 60 * 1000 })));
+    await env.BUILDER_KV.put("opp_fu:" + e + ":w2", JSON.stringify(
+      Object.assign({}, base, { kind: "oppfolging_uke", sendAfter: Date.now() + 14 * 24 * 60 * 60 * 1000 })));
+  } catch (e) {}
+  try {
+    await recordPurchase(env, order.email, {
+      type: "oppskrift", id: order.slug, title: order.slug,
+      amount: order.amount, currency: order.currency,
+    });
+  } catch (e) {}
+}
+
+/* Claude-kursene har sin egen leveringsmail og sin egen oppfølgingsserie,
+   ikke den vanlige kursmailen. Stegene her er de samme som Stripe-flyten
+   gjør i oppskrift-webhook.js: nyhetsbrevet, tilgangsnøkkelen, riktig
+   takkemail for hoved- eller mersalgskjøp, varsel til Renate, og kjøpet på
+   kundens konto.
+
+   grantCourseAccess kjøres uten catch, av samme grunn som i leverKurs. */
+async function leverClaudeKurs(env, order) {
+  const hovedkurs = order.slug === "claude";
+  const navn = hovedkurs ? "Claude-kurset" : "Claude-kurset, mersalg";
+
+  try { await registerNewsletter(env, order.email, order.name || "", order.lang); } catch (e) {}
+
+  const token = await grantCourseAccess(env, order.slug, order.email, order.name || "");
+
+  try {
+    await sendClaudeMail(env, {
+      to: order.email, name: order.name || "", lang: order.lang,
+      kind: hovedkurs ? "takk" : "takk-videre", token: token,
+    });
+  } catch (e) {}
+  /* Oppfølgingsmailen etter to dager gjelder bare hovedkurset, samme som
+     i Stripe-flyten. */
+  if (hovedkurs) {
+    try {
+      await env.BUILDER_KV.put(
+        "claude_fu:" + String(order.email || "").trim().toLowerCase(),
+        JSON.stringify({
+          email: order.email, name: order.name || "", lang: order.lang,
+          token: token, sendAfter: Date.now() + 2 * 24 * 60 * 60 * 1000,
+        })
+      );
+    } catch (e) {}
+  }
+  try {
+    await sendOwnerSaleNotice(env, {
+      pname: navn + " (Vipps)", lang: order.lang,
+      name: order.name, email: order.email,
+      amount: order.amount, currency: order.currency,
+    });
+  } catch (e) {}
+  try {
+    await recordPurchase(env, order.email, {
+      type: "claude", id: "claude-kurset", title: navn,
+      amount: order.amount, currency: order.currency, url: "/claude-kurs",
+    });
+  } catch (e) {}
+}
+
 /**
  * Tar pengene og leverer varen for en ordre som Vipps har godkjent.
  *
@@ -146,8 +238,12 @@ export async function leverVippsOrdre(env, reference, opts) {
 
   /* Ordrer laget foer varetyper fantes har ingen `type`. De var alle
      Laeringsverksted-ressurser, saa mangler feltet, er det "lv". */
-  if (order.type === "kurs") {
+  if (order.type === "kurs" && (order.slug === "claude" || order.slug === "claude-videre")) {
+    await leverClaudeKurs(env, order);
+  } else if (order.type === "kurs") {
     await leverKurs(env, order);
+  } else if (order.type === "oppskrift") {
+    await leverOppskrift(env, order);
   } else {
     await leverLaeringsverksted(env, order);
   }

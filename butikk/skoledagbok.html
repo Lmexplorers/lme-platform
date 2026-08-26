@@ -235,7 +235,7 @@
     </section>
 
     <aside class="buy-col">
-      <div class="buy-box">
+      <div class="buy-box" data-vipps-produkt="skoledagbok-1-3-trinn" data-vipps-type="lv">
         <span class="tag" data-no="1.–3. TRINN" data-en="GRADES 1–3">1.–3. TRINN</span>
         <h3 data-no="Skoledagbok 1.–3. trinn" data-en="School diary, grades 1–3">Skoledagbok 1.–3. trinn</h3>
         <p class="age" data-no="5–9 år · 358 sider · Norsk + Engelsk" data-en="Ages 5–9 · 358 pages · Norwegian + English">5–9 år · 358 sider · Norsk + Engelsk</p>
@@ -245,15 +245,9 @@
           <a class="btn-buy" style="margin-top:8px;" href="/butikk/nedlasting/skoledagbok/skoledagbok-1-3-trinn-en.pdf" data-no="Last ned engelsk PDF (eier) →" data-en="Download English PDF (owner) →">Last ned engelsk PDF (eier) →</a>
         </div>
         <a class="btn-buy buy-cta" href="https://buy.stripe.com/28EdRa2FL5Zd7a5fJJ9R60r" data-no-href="https://buy.stripe.com/28EdRa2FL5Zd7a5fJJ9R60r" data-en-href="https://buy.stripe.com/5kQfZigwB2N1fGB4119R60s" data-no="Kjøp nå, 299 kr →" data-en="Buy now, $29 →">Kjøp nå, 299 kr →</a>
-        <button type="button" class="btn-vipps buy-cta" data-vipps-slug="skoledagbok-1-3-trinn" data-vipps-toggle data-no="Betal med Vipps" data-en="Pay with Vipps">Betal med Vipps</button>
-        <form class="vipps-form buy-cta" data-vipps-form data-vipps-slug="skoledagbok-1-3-trinn">
-          <input type="email" required placeholder="E-post" data-no-placeholder="E-post" data-en-placeholder="Email" data-vipps-email>
-          <button type="submit" class="btn-vipps" data-vipps-submit data-no="Gå til Vipps →" data-en="Continue to Vipps →">Gå til Vipps →</button>
-          <p class="vipps-error" data-vipps-error data-no="Noe gikk galt. Prøv igjen." data-en="Something went wrong. Please try again.">Noe gikk galt. Prøv igjen.</p>
-        </form>
       </div>
 
-      <div class="buy-box">
+      <div class="buy-box" data-vipps-produkt="skoledagbok-4-7-trinn" data-vipps-type="lv">
         <span class="tag" style="background:var(--sky);" data-no="4.–7. TRINN" data-en="GRADES 4–7">4.–7. TRINN</span>
         <h3 data-no="Skoledagbok 4.–7. trinn" data-en="School diary, grades 4–7">Skoledagbok 4.–7. trinn</h3>
         <p class="age" data-no="9–13 år · 358 sider · Norsk + Engelsk" data-en="Ages 9–13 · 358 pages · Norwegian + English">9–13 år · 358 sider · Norsk + Engelsk</p>
@@ -263,12 +257,6 @@
           <a class="btn-buy" style="margin-top:8px;" href="/butikk/nedlasting/skoledagbok/skoledagbok-4-7-trinn-en.pdf" data-no="Last ned engelsk PDF (eier) →" data-en="Download English PDF (owner) →">Last ned engelsk PDF (eier) →</a>
         </div>
         <a class="btn-buy buy-cta" href="https://buy.stripe.com/fZu6oI949gDRbqlgNN9R60t" data-no-href="https://buy.stripe.com/fZu6oI949gDRbqlgNN9R60t" data-en-href="https://buy.stripe.com/4gM3cwgwBbjx0LHeFF9R60u" data-no="Kjøp nå, 299 kr →" data-en="Buy now, $29 →">Kjøp nå, 299 kr →</a>
-        <button type="button" class="btn-vipps buy-cta" data-vipps-slug="skoledagbok-4-7-trinn" data-vipps-toggle data-no="Betal med Vipps" data-en="Pay with Vipps">Betal med Vipps</button>
-        <form class="vipps-form buy-cta" data-vipps-form data-vipps-slug="skoledagbok-4-7-trinn">
-          <input type="email" required placeholder="E-post" data-no-placeholder="E-post" data-en-placeholder="Email" data-vipps-email>
-          <button type="submit" class="btn-vipps" data-vipps-submit data-no="Gå til Vipps →" data-en="Continue to Vipps →">Gå til Vipps →</button>
-          <p class="vipps-error" data-vipps-error data-no="Noe gikk galt. Prøv igjen." data-en="Something went wrong. Please try again.">Noe gikk galt. Prøv igjen.</p>
-        </form>
       </div>
 
       <ul class="fine">
@@ -340,84 +328,7 @@
 <script src="/js/lme-account.js?v=11" defer></script>
 <script src="/js/renate-widget.js?v=5" defer></script>
 
-<script>
-  // Vipps-betaling: knappen åpner et lite e-postfelt (trengs for å kunne
-  // sende varen etterpå, siden selve Vipps-betalingen ikke gir oss det),
-  // så sender vi kjøperen videre til Vipps-appen.
-  document.querySelectorAll('[data-vipps-toggle]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const form = btn.nextElementSibling;
-      if (form && form.hasAttribute('data-vipps-form')) form.classList.toggle('open');
-    });
-  });
 
-  /* Sju forskjellige ting kan gaa galt naar Vipps-kjoepet startes, og siden
-     sa "Noe gikk galt" til alle sju. Da vet verken kunden eller jeg hva som
-     skjedde. Nå faar kunden en beskjed hun kan gjoere noe med, og den
-     tekniske koden staar i parentes bak, saa den kan leses rett av skjermen
-     paa mobil uten utviklerverktoey.
-
-     Koden roeper ingenting hemmelig: den sier bare hvilket steg som stoppet.
-     Naar Vipps virker, ser ingen den. */
-  const VIPPS_FEIL = {
-    bad_email: { no: 'Sjekk e-postadressen.', en: 'Please check your email address.' },
-    bad_slug:  { no: 'Fant ikke varen. Last siden på nytt.', en: 'Product not found. Reload the page.' },
-    not_found: { no: 'Fant ikke varen. Last siden på nytt.', en: 'Product not found. Reload the page.' },
-  };
-  const VIPPS_IKKE_KLAR = {
-    no: 'Vipps er ikke klar akkurat nå. Bruk knappen Kjøp nå over, så virker kortbetaling.',
-    en: 'Vipps is not available right now. Use the Buy now button above to pay by card.',
-  };
-
-  function visVippsFeil(errorEl, kode) {
-    const t = VIPPS_FEIL[kode] || VIPPS_IKKE_KLAR;
-    /* Teksten legges paa data-no og data-en, ikke bare paa elementet, slik at
-       spraakbytteren ikke skriver den generelle feilmeldingen tilbake. */
-    errorEl.setAttribute('data-no', t.no + ' (' + kode + ')');
-    errorEl.setAttribute('data-en', t.en + ' (' + kode + ')');
-    errorEl.textContent = errorEl.getAttribute(currentLang === 'en' ? 'data-en' : 'data-no');
-    errorEl.classList.add('show');
-    console.error('vipps-pay:', kode);
-  }
-
-  document.querySelectorAll('[data-vipps-form]').forEach(form => {
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const slug = form.getAttribute('data-vipps-slug');
-      const emailInput = form.querySelector('[data-vipps-email]');
-      const submitBtn = form.querySelector('[data-vipps-submit]');
-      const errorEl = form.querySelector('[data-vipps-error]');
-      errorEl.classList.remove('show');
-      submitBtn.disabled = true;
-      const original = submitBtn.textContent;
-      submitBtn.textContent = currentLang === 'en' ? 'One moment …' : 'Ett øyeblikk …';
-      let kode = 'ukjent';
-      try {
-        const res = await fetch('/api/vipps-pay', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ slug, email: emailInput.value, lang: currentLang }),
-        });
-        /* Leser svaret som tekst foerst, og proever JSON etterpaa. Er 502-en
-           fra Cloudflare og ikke fra oss, er kroppen en HTML-feilside, og da
-           sa siden bare "http_502" uten aa fortelle hva som stod der. Nå tas
-           begynnelsen av teksten med, uten HTML-taggene. */
-        const tekst = await res.text();
-        let data = null;
-        try { data = JSON.parse(tekst); } catch (e) {}
-        if (data && data.ok && data.redirectUrl) { window.location.href = data.redirectUrl; return; }
-        if (data && data.error) {
-          kode = data.error + (data.status ? ' ' + data.status : '');
-        } else {
-          const utdrag = tekst.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80);
-          kode = 'http_' + res.status + (utdrag ? ': ' + utdrag : '');
-        }
-      } catch (err) { kode = 'nettverk'; }
-      visVippsFeil(errorEl, kode);
-      submitBtn.disabled = false;
-      submitBtn.textContent = original;
-    });
-  });
-</script>
+<script src="/js/vipps-knapp.js?v=1" defer></script>
 </body>
 </html>

@@ -148,17 +148,39 @@ export const PLANS = [
  * Kursene som selges enkeltvis. Kurs med lanseringspris har to tall:
  * `nok` er prisen som gjelder nå, `nokFull` er prisen den går opp til.
  */
+/* Tre kurs går fra lanseringspris til full pris 1. september 2026. Datoen
+   står i hver salgstrakt sin egen funnel-config.js, og siden
+   der bytter pris helt av seg selv. Serveren måtte vite det samme, ellers
+   ville Vipps trukket lanseringsprisen dagen etter at lanseringen var over,
+   mens siden viste full pris. Bruk kursPrisNok() under, aldri kurs.nok rett. */
+export const KURS_FULLPRIS_FRA = Date.parse("2026-09-01T00:00:00+02:00");
+
 export const COURSES = [
   { id: "claude", navn: { no: "Kom i gang med Claude", en: "Get started with Claude" }, nok: 490, usd: 49 },
   { id: "claude-videre", navn: { no: "Videre med Claude", en: "Next Level with Claude" }, nok: 249, usd: 25 },
-  { id: "youtube", navn: { no: "Voks på YouTube med AI", en: "Grow on YouTube with AI" }, nok: 497, usd: 50, nokFull: 1497, usdFull: 150 },
-  { id: "youtube-videre", navn: { no: "Videre med YouTube", en: "Next Level with YouTube" }, nok: 497, usd: 50, nokFull: 1497, usdFull: 150 },
+  { id: "youtube", navn: { no: "Voks på YouTube med AI", en: "Grow on YouTube with AI" }, nok: 497, usd: 50, nokFull: 1497, usdFull: 150 , fullFra: KURS_FULLPRIS_FRA },
+  { id: "youtube-videre", navn: { no: "Videre med YouTube", en: "Next Level with YouTube" }, nok: 497, usd: 50, nokFull: 1497, usdFull: 150 , fullFra: KURS_FULLPRIS_FRA },
   { id: "ki-pedagoger", navn: { no: "KI for pedagoger", en: "AI for Educators" }, nok: 299, usd: 30, nokFull: 599, usdFull: 60 },
-  { id: "epostliste", navn: { no: "Voks e-postlisten din", en: "Grow your email list" }, nok: 997, usd: 99, nokFull: 1497, usdFull: 150 },
+  { id: "epostliste", navn: { no: "Voks e-postlisten din", en: "Grow your email list" }, nok: 997, usd: 99, nokFull: 1497, usdFull: 150 , fullFra: KURS_FULLPRIS_FRA },
   { id: "markedsforing-claude", navn: { no: "LME Markedsføring med Claude", en: "LME Marketing with Claude" }, nok: 399, usd: 40 },
   { id: "minikurs", navn: { no: "Lag ditt første digitale minikurs", en: "Create your first digital mini-course" }, nok: 699, usd: 70 },
   { id: "montessori-masterclass", navn: { no: "Montessori mesterklasse", en: "Montessori Masterclass" }, nok: 997, usd: 99 },
 ];
+
+/* Prisen som gjelder akkurat nå, i kroner. Er lanseringsperioden over,
+   er det full pris som gjelder. Kurs uten fullFra bytter aldri pris. */
+export function kursPrisNok(kurs) {
+  if (!kurs) return null;
+  if (kurs.fullFra && kurs.nokFull && Date.now() >= kurs.fullFra) return kurs.nokFull;
+  return kurs.nok;
+}
+
+/* Som kursPrisNok, men i dollar. */
+export function kursPrisUsd(kurs) {
+  if (!kurs) return null;
+  if (kurs.fullFra && kurs.usdFull && Date.now() >= kurs.fullFra) return kurs.usdFull;
+  return kurs.usd;
+}
 
 function prisTekst(p, lang) {
   const en = lang === "en";
@@ -191,8 +213,12 @@ export function priceBlock(lang) {
   linjer.push("");
   linjer.push(en ? "COURSES SOLD SEPARATELY:" : "KURS SOM SELGES ENKELTVIS:");
   for (const k of COURSES) {
-    let l = "- " + k.navn[en ? "en" : "no"] + ": " + k.nok + " kr / $" + k.usd;
-    if (k.nokFull) {
+    const naa = kursPrisNok(k), naaUsd = kursPrisUsd(k);
+    let l = "- " + k.navn[en ? "en" : "no"] + ": " + naa + " kr / $" + naaUsd;
+    /* Si "lanseringspris" bare så lenge det faktisk er en lanseringspris.
+       Er fristen passert, er dette full pris, og da skal ingen bli lovet
+       at den er lavere enn den er. */
+    if (k.nokFull && naa !== k.nokFull) {
       l += en
         ? " (launch price, goes up to " + k.nokFull + " kr / $" + k.usdFull + ")"
         : " (lanseringspris, går opp til " + k.nokFull + " kr / $" + k.usdFull + ")";

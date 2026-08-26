@@ -125,3 +125,72 @@ Retursiden trenger dette skriptet for å virke:
 
 Det ligger nå på `/lv/<slug>` og på kurssidene. Lager du en ny side som kan
 være returside for et Vipps-kjøp, må skriptet med dit også.
+
+## Hva som kan kjøpes med Vipps
+
+| Hva | Antall | Type i /api/vipps-pay | Pris hentes fra |
+| --- | --- | --- | --- |
+| Oppskrifter i butikken | 77 | `oppskrift` | `_lib/butikk-priser.js` |
+| Kurs | 9 | `kurs` | `COURSES` i `_lib/plans.js` |
+| Læringsverksted-ressurser | alle betalte | `lv` | ressursen i KV |
+
+Prisen leses alltid på serveren. Den som står i kjøpsboksen kommer fra
+nettleseren, og hvem som helst kan endre den før den sendes hit. Sto beløpet
+bare der, kunne noen kjøpt for én krone.
+
+### Slik legger du Vipps på en ny side
+
+To ting, og ikke noe mer:
+
+```html
+<aside class="buy-box" data-vipps-produkt="ro-strikk" data-vipps-type="oppskrift">
+...
+<script src="/js/vipps-knapp.js?v=1" defer></script>
+```
+
+`js/vipps-knapp.js` lager knappen, e-postfeltet, kallet og feilmeldingene.
+E-postfeltet er ikke til pynt: Vipps forteller oss ikke hvem som betalte, så
+uten adressen har vi ingen å sende varen til.
+
+Knappen vises bare i norsk visning. Vipps tar bare norske kroner, og en som
+har fått se prisen i dollar skal ikke bli trukket i kroner. Bytter kunden til
+engelsk, forsvinner Vipps og kortknappen står igjen.
+
+Blokken får klassen `buy-cta`, den samme sidene bruker for å skjule
+kjøpsknapper for eieren. Renate skal aldri betale for sitt eget produkt.
+
+### Returside
+
+Kunden må sendes tilbake til en side hun faktisk får se. Kurssidene er låst
+(`js/course-gate.js`), og låsen åpnes av den personlige lenken i e-posten,
+ikke av at hun nettopp har betalt. Sendte vi henne dit, ville hun blitt kastet
+rett ut til salgssiden igjen, uten kvittering og uten et ord om hva som
+skjedde. Derfor går kursene til takkesidene, ikke til kursene.
+
+Retursiden må ha kvitteringen:
+
+```html
+<script src="/js/vipps-kvittering.js?v=1" defer></script>
+```
+
+`KURS_TAKKESIDE` i `functions/api/vipps-pay.js` bestemmer hvor hvert kurs
+lander.
+
+### Priser som bytter seg selv
+
+Tre kurs (YouTube, Videre med YouTube og e-postlistekurset) går fra
+lanseringspris til full pris 1. september 2026. Salgssidene bytter selv, og
+serveren måtte vite det samme, ellers ville Vipps trukket lanseringsprisen
+dagen etter at lanseringen var over. Bruk `kursPrisNok()` fra `_lib/plans.js`,
+aldri `kurs.nok` rett.
+
+### Endrer du en pris i butikken
+
+Den står tre steder, og alle tre må endres:
+
+1. i Stripe, det kortkunden faktisk betaler
+2. i kjøpsboksen på produktsiden, det kunden ser
+3. i `functions/_lib/butikk-priser.js`, det Vipps-kunden faktisk betaler
+
+Kjør `node scripts/sjekk-butikkpriser.mjs` etterpå. Den sammenligner punkt 2
+og 3 og sier fra hvis de spriker. Stripe må sjekkes for hånd.

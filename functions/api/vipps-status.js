@@ -32,7 +32,7 @@ function json(data, status) {
 function omOrdren(order) {
   if (!order) return {};
   return {
-    type: order.type === "kurs" ? "kurs" : "lv",
+    type: order.type || "lv",
     slug: order.slug || "",
     title: order.title || "",
   };

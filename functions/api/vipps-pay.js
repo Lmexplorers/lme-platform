@@ -2,7 +2,7 @@
  * Starter et Vipps-kjøp. To slags varer støttes:
  *   "lv"   Læringsverksted-ressurs (Skoledagbøkene, Plansjer, Tidslinje og
  *          alle andre betalte ressurser i samme system).
- *   "kurs" Enkeltkurs fra COURSES/COURSE_INFO (YouTube, KI for pedagoger osv.).
+ *   "kurs" Enkeltkurs fra COURSES i _lib/plans.js (YouTube, KI for pedagoger osv.).
  *
  *   POST /api/vipps-pay
  *   body: { slug, email, name?, phoneNumber?, lang, type }
@@ -17,8 +17,9 @@
  */
 import { createVippsPayment, parseNokPriceToOre } from "../_lib/vipps.js";
 import { KEY_PREFIX as LV_KEY_PREFIX } from "./laeringsverksted.js";
-import { COURSE_INFO } from "../_lib/purchase-links.js";
-import { COURSES } from "../_lib/plans.js";
+import { COURSES, kursPrisNok } from "../_lib/plans.js";
+import { oppskriftPrisOre } from "../_lib/butikk-priser.js";
+import { oppskriftNavn } from "../_lib/oppskrift-mail.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -32,6 +33,33 @@ function cleanSlug(slug) {
   const s = slug.trim().toLowerCase();
   return /^[a-z0-9-]{1,80}$/.test(s) ? s : null;
 }
+
+/* Hvor kunden sendes tilbake etter at hun har betalt i Vipps-appen.
+ *
+ * Ikke kurssiden. Kurssidene er laast (js/course-gate.js), og laasen aapnes
+ * av den personlige lenken i e-posten, ikke av at hun nettopp har betalt.
+ * Sendte vi henne dit, ville hun blitt kastet rett ut til salgssiden igjen,
+ * uten kvittering og uten et ord om hva som skjedde. Derfor takkesiden,
+ * samme sted Stripe-kjoeperen lander.
+ *
+ * Claude-kurset gaar til mersalgssiden, ikke takkesiden, fordi det er dit
+ * Stripe sender kjoeperen. Ellers ville Vipps-kunden gaatt glipp av tilbudet
+ * om "Videre med Claude", og Renate av salget.
+ *
+ * De tre siste kursene selges fra kortene paa /academy og har ingen egen
+ * takkeside. Da er /academy det naermeste vi har, og kvitteringen vises
+ * der. */
+const KURS_TAKKESIDE = {
+  "claude": "/funnel/claude-kurs/mersalg.html",
+  "claude-videre": "/funnel/claude-kurs/takk.html",
+  "youtube": "/funnel/youtube-kurs/takk.html",
+  "youtube-videre": "/funnel/youtube-videre-kurs/takk.html",
+  "ki-pedagoger": "/funnel/ki-pedagoger-kurs/takk.html",
+  "epostliste": "/funnel/epostliste-kurs/takk.html",
+  "markedsforing-claude": "/academy",
+  "minikurs": "/academy",
+  "montessori-masterclass": "/academy",
+};
 
 function randomId() {
   return crypto.randomUUID().replace(/-/g, "").slice(0, 16);
@@ -55,24 +83,39 @@ export async function onRequestPost(context) {
 
        "lv"   Laeringsverksted-ressurs. Pris og tittel staar paa selve
               ressursen i KV, samme sted salgssiden viser dem fra.
-       "kurs" Enkeltkurs. Prisen staar i COURSES i _lib/plans.js og navnet i
-              COURSE_INFO, de samme to listene Stripe-flyten og Nathalie
-              bruker. Ingen ny priskatalog, saa prisene kan ikke sprike. */
-  const type = body.type === "kurs" ? "kurs" : "lv";
+       "kurs" Enkeltkurs. Pris og navn staar i COURSES i _lib/plans.js, den
+              samme listen Nathalie og prislisten bruker. Ingen ny
+              priskatalog, saa prisene kan ikke sprike.
+       "oppskrift" Strikke- og hekleoppskriftene i butikken. Prisen staar i
+              _lib/butikk-priser.js, hentet fra Stripe og sjekket mot
+              prisen paa hver produktside. Navnet kommer fra den samme
+              tabellen som leveringsmailen bruker, saa kunden ser samme
+              navn i Vipps som i e-posten. */
+  const TYPER = ["lv", "kurs", "oppskrift"];
+  const type = TYPER.indexOf(body.type) >= 0 ? body.type : "lv";
   let amount = 0;
   let title = "";
   let returnPath = "";
 
   if (type === "kurs") {
-    const info = COURSE_INFO[slug];
     const kurs = COURSES.filter((k) => k.id === slug)[0];
-    if (!info || !kurs) return json({ ok: false, error: "not_found" }, 404);
-    if (!kurs.nok) return json({ ok: false, error: "no_price" }, 400);
-    amount = kurs.nok * 100;
-    title = (kurs.navn && (kurs.navn[lang] || kurs.navn.no)) || info.name[lang] || info.name.no;
-    /* COURSE_INFO.url er full adresse til kurssiden. Vi trenger bare stien,
-       saa kunden kommer tilbake til samme nettsted hun gikk fra. */
-    try { returnPath = new URL(info.url).pathname; } catch (e) { returnPath = "/academy"; }
+    if (!kurs) return json({ ok: false, error: "not_found" }, 404);
+    const pris = kursPrisNok(kurs);
+    if (!pris) return json({ ok: false, error: "no_price" }, 400);
+    /* kursPrisNok, ikke kurs.nok: tre av kursene gaar fra lanseringspris til
+       full pris 1. september, og da skal Vipps trekke det samme som
+       salgssiden viser. */
+    amount = pris * 100;
+    title = (kurs.navn && (kurs.navn[lang] || kurs.navn.no)) || slug;
+    returnPath = KURS_TAKKESIDE[slug] || "/academy";
+  } else if (type === "oppskrift") {
+    amount = oppskriftPrisOre(slug);
+    title = oppskriftNavn(slug, lang);
+    if (!title) return json({ ok: false, error: "not_found" }, 404);
+    if (!amount) return json({ ok: false, error: "no_price" }, 400);
+    /* Takkesiden er den samme som Stripe sender kunden til, med
+       nedlastingene hennes. Den tar produktet i ?p=. */
+    returnPath = "/butikk/takk.html?p=" + encodeURIComponent(slug);
   } else {
     let resource = null;
     try {
@@ -95,7 +138,10 @@ export async function onRequestPost(context) {
     amount,
     currency: "NOK",
     reference,
-    returnUrl: origin + returnPath + "?vipps=" + encodeURIComponent(reference),
+    /* returnPath kan alt ha et sporsmalstegn (takkesiden tar ?p=), saa
+       skilletegnet velges etter hva som staar der fra for. */
+    returnUrl: origin + returnPath + (returnPath.indexOf("?") >= 0 ? "&" : "?") +
+      "vipps=" + encodeURIComponent(reference),
     description: title,
     phoneNumber: body.phoneNumber || undefined,
   });

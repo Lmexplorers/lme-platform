@@ -331,6 +331,15 @@ function content(kind, lang, name, pid) {
 
 export function isOppskrift(pid) { return !!PRODUCT[pid]; }
 
+/* Produktnavnet, på det språket kunden handler på. Brukes av Vipps-flyten,
+   som trenger et navn å vise i betalingen, og som skal vise nøyaktig det
+   samme navnet som leveringsmailen bruker. Ukjent id gir null. */
+export function oppskriftNavn(pid, lang) {
+  const p = PRODUCT[pid];
+  if (!p) return null;
+  return (lang === "en" ? p.en : p.no) || p.no || null;
+}
+
 /* Kort varsel til Renate ved hvert salg (oppskrift, kreditt, Claude-kurs,
    Inner Circle). amount i minste enhet. opts.pname overstyrer produktnavnet
    når salget ikke er en oppskrift (da er opts.pid ikke en nøkkel i PRODUCT). */
