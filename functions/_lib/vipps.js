@@ -21,6 +21,44 @@ export function vippsBaseUrl(env) {
   return env.VIPPS_ENV === "production" ? "https://api.vipps.no" : "https://apitest.vipps.no";
 }
 
+/* Alle fire hemmelighetene maa finnes FOER vi ringer Vipps.
+
+   Mangler en av dem, blir headeren sendt som teksten "undefined", og da kan
+   Vipps la forbindelsen henge i stedet for aa svare. En Cloudflare-funksjon
+   som venter paa et svar som aldri kommer, rekker aldri aa svare selv, og da
+   er det Cloudflare som svarer kunden med "502 Bad gateway". Kunden ser en
+   feilside uten forklaring, og vi ser ingenting.
+
+   Derfor sjekkes de her, og navnet paa den som mangler kommer med i svaret.
+   Det roeper ingen hemmelighet, bare hvilken innstilling som ikke er satt. */
+export function manglendeVippsNokkel(env) {
+  const kreves = [
+    "VIPPS_CLIENT_ID",
+    "VIPPS_CLIENT_SECRET",
+    "VIPPS_SUBSCRIPTION_KEY",
+    "VIPPS_MERCHANT_SERIAL_NUMBER",
+  ];
+  const mangler = kreves.filter((n) => !env[n] || typeof env[n] !== "string" || !env[n].trim());
+  return mangler.length ? mangler.join(", ") : null;
+}
+
+/* Vipps med tidsfrist. Uten denne kan et kall som henger spise hele
+   funksjonens levetid, og da svarer Cloudflare med 502 i stedet for oss.
+   Tolv sekunder er rundelig: Vipps svarer normalt paa under ett. */
+const VIPPS_TIDSFRIST_MS = 12000;
+
+async function vippsFetch(url, init) {
+  try {
+    return await fetch(url, { ...init, signal: AbortSignal.timeout(VIPPS_TIDSFRIST_MS) });
+  } catch (e) {
+    const navn = (e && e.name) || "";
+    if (navn === "TimeoutError" || navn === "AbortError") {
+      throw new Error("vipps_timeout: svarte ikke innen " + (VIPPS_TIDSFRIST_MS / 1000) + " sekunder");
+    }
+    throw e;
+  }
+}
+
 function vippsSystemHeaders() {
   return {
     "Vipps-System-Name": "lme-plattform",
@@ -31,7 +69,9 @@ function vippsSystemHeaders() {
 }
 
 export async function getVippsAccessToken(env) {
-  const res = await fetch(vippsBaseUrl(env) + "/accessToken/get", {
+  const mangler = manglendeVippsNokkel(env);
+  if (mangler) throw new Error("vipps_mangler_nokkel: " + mangler);
+  const res = await vippsFetch(vippsBaseUrl(env) + "/accessToken/get", {
     method: "POST",
     headers: {
       client_id: env.VIPPS_CLIENT_ID,
@@ -68,7 +108,7 @@ export async function createVippsPayment(env, opts) {
   };
   if (opts.phoneNumber) body.customer = { phoneNumber: opts.phoneNumber };
   try {
-    const res = await fetch(vippsBaseUrl(env) + "/epayment/v1/payments", {
+    const res = await vippsFetch(vippsBaseUrl(env) + "/epayment/v1/payments", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -100,7 +140,7 @@ export async function captureVippsPayment(env, reference, amount, currency) {
     return { ok: false, error: String(e) };
   }
   try {
-    const res = await fetch(vippsBaseUrl(env) + "/epayment/v1/payments/" + encodeURIComponent(reference) + "/capture", {
+    const res = await vippsFetch(vippsBaseUrl(env) + "/epayment/v1/payments/" + encodeURIComponent(reference) + "/capture", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -131,7 +171,7 @@ export async function registerVippsWebhook(env, callbackUrl, events) {
     return { ok: false, error: String(e) };
   }
   try {
-    const res = await fetch(vippsBaseUrl(env) + "/webhooks/v1/webhooks", {
+    const res = await vippsFetch(vippsBaseUrl(env) + "/webhooks/v1/webhooks", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
