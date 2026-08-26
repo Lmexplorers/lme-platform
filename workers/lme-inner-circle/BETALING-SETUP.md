@@ -74,7 +74,7 @@ opp. Kontoer som har kjøpt Content Studio direkte røres aldri.
 Krever én binding på Workeren (gjøres én gang):
 
 1. Finn navnet på Content Studios kontolager: Workers & Pages ->
-   lme-content-studio -> Settings -> Bindings -> se hvilket KV-namespace
+   lme-autopilot -> Settings -> Bindings -> se hvilket KV-namespace
    `ACCOUNTS_KV` peker på.
 2. På Workeren lme-inner-circle: Settings -> Bindings -> Add -> KV namespace.
    Variabelnavn: `STUDIO_KV`. Velg samme namespace som i steg 1.

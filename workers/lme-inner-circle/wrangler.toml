@@ -22,7 +22,7 @@ AFFILIATE_COOKIE_DAYS = "30"
 
 # Valgfri binding: kobler Pro/VIP-medlemskap til Content Studio.
 # I dashbordet: Settings -> Bindings -> Add -> KV namespace,
-# variabelnavn STUDIO_KV, velg samme namespace som lme-content-studio
+# variabelnavn STUDIO_KV, velg samme namespace som lme-autopilot
 # bruker som ACCOUNTS_KV.
 # Namespacet heter "lme-cs-accounts" i dashbordet.
 # [[kv_namespaces]]

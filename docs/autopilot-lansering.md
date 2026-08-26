@@ -157,6 +157,47 @@ Når Stripe er åpnet, er det én endring som gjenstår på siden: bytt
 reservasjonsskjemaet med en kjøpsknapp som peker på lenken i steg 4. Si fra, så
 gjør jeg det.
 
+## Tre navn som ikke er det samme
+
+Dette er lett å blande, så her står det svart på hvitt.
+
+| Hva | Heter | Kan det endres? |
+| --- | --- | --- |
+| Appen, slik kundene ser den | LME Autopilot | ja, det er bare tekst |
+| Prosjektet i Cloudflare | `lme-autopilot` | ja, endret 26. august 2026 |
+| Adressen appen ligger på | `lme-contentstudio.pages.dev` | nei, ikke ved å døpe om prosjektet |
+| Kodelageret på GitHub | `lme-content-studio` | ja, se under |
+
+Det viktige: da prosjektet i Cloudflare fikk nytt navn, fulgte **ikke** adressen
+med. `pages.dev`-underdomenet står fast fra dagen prosjektet ble opprettet.
+Sjekket 26. august 2026: `lme-contentstudio.pages.dev` svarer fortsatt, mens
+`lme-autopilot.pages.dev` ikke finnes i det hele tatt. Derfor peker alle lenkene
+i plattformen fortsatt på den gamle adressen, og det er riktig.
+
+Skal adressen bli pen, er eget domene den eneste veien: `autopilot.lmexplorers.com`.
+Da eier Renate navnet selv, og et navnebytte i Cloudflare kan aldri knekke
+lenkene igjen. App Store og Google Play ser også mer seriøst på et eget domene
+enn på `pages.dev`. Fremgangsmåten: Cloudflare, Pages, `lme-autopilot`, Custom
+domains, legg til `autopilot.lmexplorers.com`. Domenet ligger allerede på samme
+konto, så DNS-oppføringen settes opp av seg selv. Si fra når det er gjort, så
+bytter jeg de elleve lenkene i plattformen og adressene i app-store-dokumentet.
+
+## Døpe om kodelageret på GitHub
+
+Trygt, og kan gjøres når som helst. GitHub setter opp en videresending fra det
+gamle navnet, så eksisterende lenker og lokale kopier fortsetter å virke.
+
+1. Gå til `github.com/Lmexplorers/lme-content-studio`, Settings, General.
+2. Øverst står **Repository name**. Skriv `lme-autopilot` og trykk **Rename**.
+
+Det som ikke skjer: adressen `lme-contentstudio.pages.dev` endrer seg ikke, og
+Cloudflare mister ikke koblingen, siden den følger lageret på ID og ikke på navn.
+Den første byggingen etterpå er verdt et blikk likevel.
+
+Etterpå står navnet `lme-content-studio` igjen noen steder i teksten i koden,
+i `functions/_lib/plans.js`, i `docs/pwa-pakking.md` og i appens
+`docs/APP-STORE-INNSENDING.md`. Si fra når lageret er døpt om, så retter jeg dem.
+
 ## Det som gjenstår for å lansere for alle
 
 1. Kjør PWABuilder og send appen til Google Play og App Store. Oppskriften
