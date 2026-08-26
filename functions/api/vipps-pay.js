@@ -1,10 +1,12 @@
 /**
- * Starter et Vipps-kjøp av en LME Læringsverksted-ressurs (Skoledagbøkene,
- * Plansjer, Tidslinje, og alle andre betalte ressurser i samme system,
- * siden de alle deler samme pris-/leveringsformat).
+ * Starter et Vipps-kjøp. To slags varer støttes:
+ *   "lv"   Læringsverksted-ressurs (Skoledagbøkene, Plansjer, Tidslinje og
+ *          alle andre betalte ressurser i samme system).
+ *   "kurs" Enkeltkurs fra COURSES/COURSE_INFO (YouTube, KI for pedagoger osv.).
  *
  *   POST /api/vipps-pay
- *   body: { slug, email, name?, phoneNumber?, lang }
+ *   body: { slug, email, name?, phoneNumber?, lang, type }
+ *         type: "lv" (standard, Laeringsverksted-ressurs) eller "kurs"
  *   -> { ok: true, redirectUrl } eller { ok: false, error }
  *
  * E-postadressen samles inn HER (i skjemaet på siden, før Vipps-knappen
@@ -15,6 +17,8 @@
  */
 import { createVippsPayment, parseNokPriceToOre } from "../_lib/vipps.js";
 import { KEY_PREFIX as LV_KEY_PREFIX } from "./laeringsverksted.js";
+import { COURSE_INFO } from "../_lib/purchase-links.js";
+import { COURSES } from "../_lib/plans.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -45,30 +49,53 @@ export async function onRequestPost(context) {
   if (!slug) return json({ ok: false, error: "bad_slug" }, 400);
   if (!email || !email.includes("@")) return json({ ok: false, error: "bad_email" }, 400);
 
-  let resource = null;
-  try {
-    const raw = await env.BUILDER_KV.get(LV_KEY_PREFIX + slug);
-    if (raw) resource = JSON.parse(raw);
-  } catch (e) {}
-  if (!resource || resource.published === false) return json({ ok: false, error: "not_found" }, 404);
-  if (resource.priceType !== "betalt") return json({ ok: false, error: "not_a_paid_resource" }, 400);
+  /* To slags varer kan kjoepes med Vipps, og de finner prisen sin to steder.
+     Felles for begge: prisen leses paa serveren, aldri fra klienten, slik at
+     ingen kan endre beloepet som faktisk trekkes.
 
-  // Prisen hentes fra ressursen selv (samme sted salgssiden viser prisen
-  // fra), ikke fra klienten, slik at ingen kan manipulere beløpet som
-  // faktisk trekkes.
-  const priceStr = resource.price && (resource.price.no || resource.price.en);
-  const amount = parseNokPriceToOre(priceStr);
-  if (!amount) return json({ ok: false, error: "no_price" }, 400);
+       "lv"   Laeringsverksted-ressurs. Pris og tittel staar paa selve
+              ressursen i KV, samme sted salgssiden viser dem fra.
+       "kurs" Enkeltkurs. Prisen staar i COURSES i _lib/plans.js og navnet i
+              COURSE_INFO, de samme to listene Stripe-flyten og Nathalie
+              bruker. Ingen ny priskatalog, saa prisene kan ikke sprike. */
+  const type = body.type === "kurs" ? "kurs" : "lv";
+  let amount = 0;
+  let title = "";
+  let returnPath = "";
 
-  const title = (resource.title && (resource.title[lang] || resource.title.no)) || slug;
-  const reference = "lv-" + slug + "-" + randomId();
+  if (type === "kurs") {
+    const info = COURSE_INFO[slug];
+    const kurs = COURSES.filter((k) => k.id === slug)[0];
+    if (!info || !kurs) return json({ ok: false, error: "not_found" }, 404);
+    if (!kurs.nok) return json({ ok: false, error: "no_price" }, 400);
+    amount = kurs.nok * 100;
+    title = (kurs.navn && (kurs.navn[lang] || kurs.navn.no)) || info.name[lang] || info.name.no;
+    /* COURSE_INFO.url er full adresse til kurssiden. Vi trenger bare stien,
+       saa kunden kommer tilbake til samme nettsted hun gikk fra. */
+    try { returnPath = new URL(info.url).pathname; } catch (e) { returnPath = "/academy"; }
+  } else {
+    let resource = null;
+    try {
+      const raw = await env.BUILDER_KV.get(LV_KEY_PREFIX + slug);
+      if (raw) resource = JSON.parse(raw);
+    } catch (e) {}
+    if (!resource || resource.published === false) return json({ ok: false, error: "not_found" }, 404);
+    if (resource.priceType !== "betalt") return json({ ok: false, error: "not_a_paid_resource" }, 400);
+    const priceStr = resource.price && (resource.price.no || resource.price.en);
+    amount = parseNokPriceToOre(priceStr);
+    if (!amount) return json({ ok: false, error: "no_price" }, 400);
+    title = (resource.title && (resource.title[lang] || resource.title.no)) || slug;
+    returnPath = "/lv/" + slug;
+  }
+
+  const reference = type + "-" + slug + "-" + randomId();
   const origin = new URL(request.url).origin;
 
   const result = await createVippsPayment(env, {
     amount,
     currency: "NOK",
     reference,
-    returnUrl: origin + "/lv/" + slug + "?vipps=" + encodeURIComponent(reference),
+    returnUrl: origin + returnPath + "?vipps=" + encodeURIComponent(reference),
     description: title,
     phoneNumber: body.phoneNumber || undefined,
   });
@@ -80,7 +107,7 @@ export async function onRequestPost(context) {
     await env.BUILDER_KV.put(
       "vipps_order:" + reference,
       JSON.stringify({
-        reference, slug, email, name: body.name || "", lang,
+        reference, type, slug, email, name: body.name || "", lang,
         amount, currency: "NOK", title,
         status: "created", createdAt: Date.now(),
       })
