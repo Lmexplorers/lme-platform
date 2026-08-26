@@ -4,24 +4,44 @@ Skrevet 26. august 2026.
 
 ## Kort oppsummert
 
-Appen er klar. Prisene er ryddet. Det som stopper salget er Stripe: de tre
-Autopilot-produktene ble arkivert 19. august kl. 08:16, og et arkivert produkt
-gjør at alle betalingslenkene slutter å virke. Stripe nekter til og med å slå
-lenkene på igjen så lenge produktet er arkivert:
+Salget er åpent igjen. Autopilot ble stengt 19. august kl. 08:16, da de tre
+produktene ble arkivert i Stripe. Et arkivert produkt slår ut alle
+betalingslenkene, og Stripe nekter til og med å slå lenkene på igjen så lenge
+produktet er arkivert:
 
 > Payment Links cannot include a price with an inactive product.
 
-Det er null aktive abonnementer på kontoen. Autopilot har altså ikke vært mulig
-å kjøpe på en uke.
+Autopilot var derfor umulig å kjøpe i en uke. Renate ba meg åpne igjen
+26. august 2026, og alt under er gjort.
 
-Renate ba meg vente med å åpne produktene igjen, så jeg har ikke rørt Stripe.
-Dette dokumentet er oppskriften for når hun sier fra.
+## Gjort 26. august 2026
 
-## Prisene er riktige, det er bare produktene som er av
+- De tre produktene er åpnet: Start, Proff og VIP.
+- Alle åtte betalingslenkene er slått på, med rabattkoder tillatt.
+- Grunnleggerkupongen er opprettet: 250 kr avslag i måneden i 12 måneder,
+  kupong `EG6jdcaS`, kampanjekode `GRUNNLEGGER` (`promo_1U8WMRLax7B8uQzqbWHUB55B`),
+  begrenset til to innløsninger og til førstegangskjøp.
+- Den gamle 499-prisen på Proff er arkivert, så ingen kan plukke den ved en feil.
+
+Lenken til Cecilie og Bente:
+
+```
+https://buy.stripe.com/9B64gAfsx1IXamhbtt9R61l?prefilled_promo_code=GRUNNLEGGER
+```
+
+Verifisert mot Stripe: lenken står på 549 kr, kupongen trekker 250 kr, altså
+299 kr i måneden i 12 måneder, deretter 549 kr. Koden er aktiv med null
+innløsninger brukt.
+
+Merk at koden krever førstegangskjøp. Tester Renate den med en e-post som
+allerede har kjøpt noe av LME før, blir den avvist. Bruk en fersk e-post ved
+test.
+
+## Prisene
 
 Sjekket direkte mot Stripe 26. august 2026:
 
-| Plan | Kroner | Dollar | Produkt (arkivert) |
+| Plan | Kroner | Dollar | Produkt |
 | --- | --- | --- | --- |
 | Start | 199 kr | $19 | `prod_UwWlnVHko5a1Dt` |
 | Proff | 549 kr | $54 | `prod_UTtEl6dxkbq4qM` |
@@ -31,17 +51,15 @@ Sjekket direkte mot Stripe 26. august 2026:
 Tallene stemmer med `functions/_lib/plans.js`, med `/oppgrader` og med
 `lme-pricing.js` i Autopilot-appen. Ingenting av dette trenger endring.
 
-Merk: på Proff ligger det fortsatt en gammel pris på 499 kr
-(`price_1TUvS3Lax7B8uQzqQcZAW8Dx`) aktiv ved siden av 549-prisen. Den brukes
-ikke av noen levende lenke, men den bør arkiveres når produktet åpnes, så ingen
-kommer til å plukke feil pris senere.
+Den gamle 499-prisen på Proff (`price_1TUvS3Lax7B8uQzqQcZAW8Dx`) er arkivert
+26. august 2026, så ingen kan plukke feil pris senere.
 
-## Steg 1: åpne de tre produktene
+## Steg 1: åpne de tre produktene (gjort)
 
 Sett `active: true` på `prod_UwWlnVHko5a1Dt`, `prod_UTtEl6dxkbq4qM` og
 `prod_UwWmmP16D4lT5Z`. Ingenting annet trengs, prisene ligger der fra før.
 
-## Steg 2: slå på de åtte betalingslenkene
+## Steg 2: slå på de åtte betalingslenkene (gjort)
 
 Alle åtte er `active: false` i dag. De skal settes til `active: true`, og de
 skal få `allow_promotion_codes: true`, ellers virker ikke grunnleggerkoden.
@@ -63,7 +81,7 @@ kjenner igjen kunden på lenke-ID-en (`AUTOPILOT_PAYMENT_LINKS` i
 vi nye lenker, må den listen oppdateres i samme slengen, ellers betaler kunden
 uten å få tilgang. Det var akkurat den feilen appen hadde med FEA Create.
 
-## Steg 3: grunnleggertilbudet til Cecilie og Bente
+## Steg 3: grunnleggertilbudet til Cecilie og Bente (gjort)
 
 Renate valgte: **Proff til 299 kr i måneden, låst i 12 måneder.** Normalprisen
 er 549 kr, så avslaget er 250 kr i måneden i 12 måneder.
@@ -90,7 +108,7 @@ Kupongen er i kroner, så den gjelder bare den norske Proff-lenken. Skal
 tilbudet også kunne brukes i dollar, må det lages en tilsvarende kupong med
 `amount_off: 2500` og `currency: usd`.
 
-## Steg 4: lenken Renate sender
+## Steg 4: lenken Renate sender (klar)
 
 Når steg 1 til 3 er gjort, er lenken til Cecilie og Bente:
 
@@ -119,8 +137,8 @@ gjør jeg det.
 
 ## Det som gjenstår for å lansere for alle
 
-1. Åpne Stripe, steg 1 og 2 over. Uten dette kan ingen kjøpe Autopilot.
-2. Arkiver den gamle 499-prisen på Proff.
-3. Kjør PWABuilder og send appen til Google Play og App Store. Oppskriften
+1. Kjør PWABuilder og send appen til Google Play og App Store. Oppskriften
    ligger i `lme-content-studio/docs/APP-STORE-INNSENDING.md`.
-4. Åpne `/oppgrader` for trafikk igjen, og fortell om appen i nyhetsbrevet.
+2. Fortell om appen i nyhetsbrevet og på sosiale medier.
+3. Bytt reservasjonsskjemaet på `/grunnlegger` med en kjøpsknapp, nå som
+   lenken virker.
