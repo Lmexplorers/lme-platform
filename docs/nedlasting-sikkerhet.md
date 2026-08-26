@@ -54,6 +54,11 @@ se slik ut:
 https://lmexplorers.com/butikk/takk.html?p=<produkt>&session_id={CHECKOUT_SESSION_ID}
 ```
 
+Alle 149 aktive betalingslenker i butikken er satt opp slik (26. august
+2026, kontrollert mot Stripe etterpå). Lager du en ny betalingslenke, må
+`&session_id={CHECKOUT_SESSION_ID}` med i retur-adressen, ellers får den
+kunden bare beskjed om å se i e-posten.
+
 ## Gamle lenker
 
 Kunder som kjøpte før låsen kom har lenker uten nøkkel i innboksen. De
