@@ -37,7 +37,7 @@
    å levere, og det var akkurat den feilen som gjorde at planene lovet
    1, 6 og 15 videoer mens appen ga null. */
 
-export const PRICES_CHECKED = "2026-08-16";
+export const PRICES_CHECKED = "2026-08-26";
 
 /**
  * Har planene en gratis prøveperiode.
@@ -88,12 +88,32 @@ export const PLANS = [
     stripePrice: { nok: "price_1Txax3Lax7B8uQzqe6Ub3Eog", usd: "price_1Txax4Lax7B8uQzqxb8jpZ4k" },
   },
   {
+    id: "autopilot-start-arlig",
+    navn: { no: "LME Autopilot Start, årlig", en: "LME Autopilot Start, yearly" },
+    nok: 1990, usd: 190, interval: "year",
+    inkluderer: {
+      no: "samme som Start, betalt for et helt år, altså to måneder gratis",
+      en: "same as Start, paid for a full year, two months free",
+    },
+    stripePrice: { nok: "price_1U8dkNLax7B8uQzqRbmQujml", usd: "price_1U8dkSLax7B8uQzqigghVMRA" },
+  },
+  {
+    id: "autopilot-proff-arlig",
+    navn: { no: "LME Autopilot Proff, årlig", en: "LME Autopilot Pro, yearly" },
+    nok: 5490, usd: 540, interval: "year",
+    inkluderer: {
+      no: "samme som Proff, betalt for et helt år, altså to måneder gratis",
+      en: "same as Pro, paid for a full year, two months free",
+    },
+    stripePrice: { nok: "price_1U8dkULax7B8uQzqRMZ4ghN0", usd: "price_1U8dkWLax7B8uQzqEkeJDA3C" },
+  },
+  {
     id: "autopilot-vip-arlig",
     navn: { no: "LME Autopilot VIP, årlig", en: "LME Autopilot VIP, yearly" },
     nok: 9990, usd: 990, interval: "year",
     inkluderer: {
-      no: "samme som VIP, betalt for et helt år",
-      en: "same as VIP, paid for a full year",
+      no: "samme som VIP, betalt for et helt år, altså to måneder gratis",
+      en: "same as VIP, paid for a full year, two months free",
     },
     stripePrice: { nok: "price_1Txax6Lax7B8uQzqN4GCmOLm", usd: "price_1Txax7Lax7B8uQzqeu7VYPcu" },
   },
