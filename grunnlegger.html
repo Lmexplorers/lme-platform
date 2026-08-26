@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grunnleggerplass i LME Autopilot | Little Montessori Explorers</title>
+<meta name="description" content="Grunnleggerplass i LME Autopilot: Proff til 299 kr i måneden, låst i 12 måneder."/>
+<meta name="robots" content="noindex"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+@font-face{font-family:'Sasson Montessori';src:url('/fonts/SassoonMontessori.woff2') format('woff2'),url('/fonts/SassoonMontessori.ttf') format('truetype');font-weight:normal;font-style:normal;font-display:swap;}
+:root{
+  --font-head:'Playpen Sans',system-ui,sans-serif;
+  --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+  --rose:#E91E89; --rose-d:#C81860; --gold:#F0B429; --sage:#9CC000;
+  --ink:#1A1A1A; --soft:#5a4750; --line:rgba(26,26,26,.08);
+  --cream:#FBF6F0; --r:22px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:var(--font-body);color:var(--ink);background:linear-gradient(160deg,#FFF4F6 0%,var(--cream) 55%,#FFF9F0 100%);line-height:1.7;min-height:100vh;padding:26px 18px 70px;}
+.wrap{max-width:720px;margin:0 auto;}
+h1,h2,h3{font-family:var(--font-head);line-height:1.25;}
+.topbar{display:flex;justify-content:flex-start;align-items:center;gap:14px;margin-bottom:26px;/* Plass til den delte kontoknappen (js/lme-account.js), som ligger fast oppe til   høyre. Uten dette havner språkknappen under den og blir umulig å trykke på. */padding-right:64px;}
+.back{font-size:14px;color:var(--soft);text-decoration:none;font-weight:600;}
+.langbtn{font-family:var(--font-body);font-size:13px;font-weight:700;border:1px solid var(--line);background:#fff;color:var(--soft);padding:8px 15px;border-radius:999px;cursor:pointer;}
+.card{background:#fff;border-radius:var(--r);padding:34px 30px;box-shadow:0 10px 40px rgba(233,30,137,.10);margin-bottom:18px;}
+.kicker{display:inline-block;font-weight:800;letter-spacing:.12em;font-size:12px;color:#fff;background:var(--rose);border-radius:999px;padding:6px 15px;margin-bottom:14px;}
+h1{font-size:31px;color:var(--rose-d);margin-bottom:10px;}
+.lead{font-size:16px;color:var(--soft);margin-bottom:6px;}
+.pris{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:24px 0 6px;}
+.pris .na{font-family:var(--font-head);font-size:44px;font-weight:800;color:var(--rose-d);}
+.pris .fx{font-size:17px;color:var(--soft);text-decoration:line-through;}
+.pris .per{font-size:14px;color:var(--soft);}
+.laast{display:inline-block;background:#FFF8E6;border:1px solid rgba(240,180,41,.4);color:#8a6200;border-radius:999px;padding:7px 15px;font-size:13px;font-weight:700;margin-top:8px;}
+h2{font-size:20px;color:var(--rose-d);margin:26px 0 10px;}
+ul{list-style:none;}
+li{display:flex;gap:10px;align-items:flex-start;font-size:15px;margin-bottom:9px;}
+li .tick{color:var(--sage);font-weight:800;flex-shrink:0;}
+.note{background:#FFF9F0;border:1px solid var(--line);border-radius:16px;padding:18px 20px;font-size:14px;color:var(--soft);margin-top:22px;}
+label{display:block;font-size:14px;font-weight:700;margin-bottom:6px;color:var(--ink);}
+input{font-family:var(--font-body);font-size:16px;width:100%;padding:13px 15px;border:2px solid var(--line);border-radius:13px;color:var(--ink);outline:none;background:#fff;margin-bottom:12px;}
+input:focus{border-color:var(--rose);}
+.knapp{font-family:var(--font-body);font-size:16px;font-weight:800;width:100%;padding:15px;border:none;border-radius:14px;background:linear-gradient(110deg,var(--rose),var(--rose-d));color:#fff;cursor:pointer;box-shadow:0 8px 22px rgba(233,30,137,.28);}
+.knapp[disabled]{opacity:.55;cursor:default;box-shadow:none;}
+.svar{margin-top:12px;font-size:14px;font-weight:700;min-height:20px;}
+.svar.ok{color:#2E7D32;} .svar.feil{color:#C0392B;}
+.skjult{display:none;}
+.eier{background:#F3FBE6;border:1px solid rgba(156,192,0,.35);border-radius:16px;padding:16px 18px;font-size:14px;color:#4a6100;margin-bottom:16px;}
+.fot{text-align:center;font-size:13px;color:var(--soft);margin-top:22px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <a class="back" href="/dashboard" data-no="← Til dashbordet" data-en="← To the dashboard">← Til dashbordet</a>
+    <button class="langbtn" id="langToggle">EN 🌍</button>
+  </div>
+
+  <div class="card">
+    <span class="kicker" data-no="GRUNNLEGGERPLASS" data-en="FOUNDING MEMBER">GRUNNLEGGERPLASS</span>
+    <h1 data-no="Du er blant de aller første i LME Autopilot" data-en="You are among the very first in LME Autopilot">Du er blant de aller første i LME Autopilot</h1>
+    <p class="lead" data-no="LME Autopilot lager innholdet ditt til sosiale medier. Du skriver inn nisjen din, så bygger appen en komplett plan med hooks, tekst, emneknagger, bilder og ferdige innlegg, klare til å publiseres."
+       data-en="LME Autopilot creates your social media content. You enter your niche, and the app builds a complete plan with hooks, captions, hashtags, images and ready-made posts, ready to publish.">LME Autopilot lager innholdet ditt til sosiale medier. Du skriver inn nisjen din, så bygger appen en komplett plan med hooks, tekst, emneknagger, bilder og ferdige innlegg, klare til å publiseres.</p>
+
+    <div class="pris">
+      <span class="na">299 kr</span>
+      <span class="per" data-no="per måned" data-en="per month">per måned</span>
+      <span class="fx" data-no="normalt 549 kr" data-en="normally 549 kr">normalt 549 kr</span>
+    </div>
+    <span class="laast" data-no="🔒 Prisen er låst i 12 måneder" data-en="🔒 The price is locked for 12 months">🔒 Prisen er låst i 12 måneder</span>
+
+    <div class="eier" id="eierNote" data-lme-when="owner" hidden
+         data-no="Dette er din egen side, Renate. Du har allerede full tilgang til LME Autopilot og skal aldri betale for den."
+         data-en="This is your own page, Renate. You already have full access to LME Autopilot and should never pay for it.">Dette er din egen side, Renate. Du har allerede full tilgang til LME Autopilot og skal aldri betale for den.</div>
+
+    <h2 data-no="Dette er Proff, og det får du" data-en="This is Pro, and here is what you get">Dette er Proff, og det får du</h2>
+    <ul>
+      <li><span class="tick">✓</span><span data-no="100 AI-bilder i måneden" data-en="100 AI images a month">100 AI-bilder i måneden</span></li>
+      <li><span class="tick">✓</span><span data-no="6 AI-videoer i måneden" data-en="6 AI videos a month">6 AI-videoer i måneden</span></li>
+      <li><span class="tick">✓</span><span data-no="Innholdsplan for 30 eller 90 dager, ferdig fordelt på ukedager" data-en="A content plan for 30 or 90 days, laid out across the week">Innholdsplan for 30 eller 90 dager, ferdig fordelt på ukedager</span></li>
+      <li><span class="tick">✓</span><span data-no="Tekst, reels, karuseller og stories, klare til å legges ut" data-en="Captions, reels, carousels and stories, ready to post">Tekst, reels, karuseller og stories, klare til å legges ut</span></li>
+      <li><span class="tick">✓</span><span data-no="Reel-editor med musikk, og Story-editor med import fra Canva" data-en="Reel editor with music, and a Story editor with imports from Canva">Reel-editor med musikk, og Story-editor med import fra Canva</span></li>
+      <li><span class="tick">✓</span><span data-no="Autopublisering: appen legger ut for deg, til planlagt tid" data-en="Auto-publishing: the app posts for you, at the scheduled time">Autopublisering: appen legger ut for deg, til planlagt tid</span></li>
+      <li><span class="tick">✓</span><span data-no="Alt på norsk og engelsk" data-en="Everything in Norwegian and English">Alt på norsk og engelsk</span></li>
+      <li><span class="tick">✓</span><span data-no="Prioritert støtte, rett til meg" data-en="Priority support, straight to me">Prioritert støtte, rett til meg</span></li>
+    </ul>
+
+    <h2 data-no="Hvorfor grunnlegger?" data-en="Why founding member?">Hvorfor grunnlegger?</h2>
+    <p data-no="Appen er helt fersk, og du er blant de første som tar den i bruk. Da vil jeg gjerne høre hva som funker og hva som ikke gjør det, og du skal slippe å betale full pris mens vi finner formen sammen. Derfor 299 kr i måneden, låst i 12 måneder. Etter det går den til vanlig pris, og du bestemmer selv om du vil fortsette."
+       data-en="The app is brand new, and you are among the first to use it. I want to hear what works and what does not, and you should not pay full price while we find the shape of it together. That is why it is 299 kr a month, locked for 12 months. After that it goes to the normal price, and you decide whether to continue.">Appen er helt fersk, og du er blant de første som tar den i bruk. Da vil jeg gjerne høre hva som funker og hva som ikke gjør det, og du skal slippe å betale full pris mens vi finner formen sammen. Derfor 299 kr i måneden, låst i 12 måneder. Etter det går den til vanlig pris, og du bestemmer selv om du vil fortsette.</p>
+  </div>
+
+  <div class="card" id="reserverKort">
+    <h2 style="margin-top:0" data-no="Reserver grunnleggerplassen din" data-en="Reserve your founding place">Reserver grunnleggerplassen din</h2>
+    <p style="font-size:15px;color:var(--soft);margin-bottom:18px;"
+       data-no="Legg igjen navn og e-post, så holder jeg av plassen til deg. Du får betalingslenken av meg med en gang den åpner, og prisen din er den samme uansett når du betaler."
+       data-en="Leave your name and email and I will hold the place for you. You get the payment link from me as soon as it opens, and your price stays the same whenever you pay.">Legg igjen navn og e-post, så holder jeg av plassen til deg. Du får betalingslenken av meg med en gang den åpner, og prisen din er den samme uansett når du betaler.</p>
+
+    <div id="skjema">
+      <label for="navn" data-no="Navnet ditt" data-en="Your name">Navnet ditt</label>
+      <input type="text" id="navn" autocomplete="name" placeholder="Cecilie"/>
+      <label for="epost" data-no="E-postadressen din" data-en="Your email address">E-postadressen din</label>
+      <input type="email" id="epost" autocomplete="email" placeholder="deg@eksempel.no"/>
+      <button class="knapp" id="send" data-no="Hold av plassen min →" data-en="Hold my place →">Hold av plassen min →</button>
+    </div>
+    <div class="svar" id="svar"></div>
+
+    <div class="note" data-no="Ingen betaling nå, og ingen binding. Du sier ja eller nei når lenken kommer."
+         data-en="No payment now, and no commitment. You say yes or no when the link arrives.">Ingen betaling nå, og ingen binding. Du sier ja eller nei når lenken kommer.</div>
+  </div>
+
+  <p class="fot" data-no="LME Autopilot er en del av Little Montessori Explorers. Spørsmål? Send meg en e-post."
+     data-en="LME Autopilot is part of Little Montessori Explorers. Questions? Send me an email.">LME Autopilot er en del av Little Montessori Explorers. Spørsmål? Send meg en e-post.</p>
+
+</div>
+
+<script>
+(function () {
+  var currentLang = 'no';
+  var toggle = document.getElementById('langToggle');
+
+  var TITLER = {
+    no: 'Grunnleggerplass i LME Autopilot | Little Montessori Explorers',
+    en: 'Founding place in LME Autopilot | Little Montessori Explorers'
+  };
+
+  function switchLanguage(lang) {
+    currentLang = lang;
+    window.LME_CURRENT_LANG = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      var text = el.getAttribute('data-' + lang);
+      if (text.indexOf('<') !== -1) el.innerHTML = text;
+      else el.textContent = text;
+    });
+    toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    document.title = TITLER[lang];
+  }
+
+  toggle.addEventListener('click', function () {
+    switchLanguage(currentLang === 'no' ? 'en' : 'no');
+  });
+
+  var TEKST = {
+    no: {
+      manglerNavn: 'Skriv inn navnet ditt.',
+      manglerEpost: 'Skriv inn en gyldig e-postadresse.',
+      sender: 'Holder av plassen …',
+      ok: 'Plassen din er reservert. Du hører fra meg så snart betalingslenken er klar.',
+      feil: 'Noe gikk galt. Prøv igjen, eller send meg en e-post.'
+    },
+    en: {
+      manglerNavn: 'Enter your name.',
+      manglerEpost: 'Enter a valid email address.',
+      sender: 'Holding your place …',
+      ok: 'Your place is reserved. You will hear from me as soon as the payment link is ready.',
+      feil: 'Something went wrong. Try again, or send me an email.'
+    }
+  };
+
+  function si(melding, type) {
+    var s = document.getElementById('svar');
+    s.textContent = melding;
+    s.className = 'svar' + (type ? ' ' + type : '');
+  }
+
+  document.getElementById('send').addEventListener('click', function () {
+    var t = TEKST[currentLang];
+    var navn = document.getElementById('navn').value.trim();
+    var epost = document.getElementById('epost').value.trim().toLowerCase();
+    if (!navn) { si(t.manglerNavn, 'feil'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(epost)) { si(t.manglerEpost, 'feil'); return; }
+
+    var knapp = document.getElementById('send');
+    knapp.disabled = true;
+    si(t.sender);
+
+    fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: epost,
+        name: navn,
+        lang: currentLang,
+        group: 'autopilot-grunnlegger',
+        tag: 'proff-299-laast-12mnd'
+      })
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      knapp.disabled = false;
+      if (d && d.ok) {
+        document.getElementById('skjema').classList.add('skjult');
+        si(t.ok, 'ok');
+      } else {
+        si((d && d.error === 'bad_email') ? t.manglerEpost : t.feil, 'feil');
+      }
+    }).catch(function () {
+      knapp.disabled = false;
+      si(t.feil, 'feil');
+    });
+  });
+
+  window.LME_CURRENT_LANG = 'no';
+})();
+</script>
+<script src="/js/lme-account.js?v=11" defer></script>
+<script src="/js/lme-member.js?v=7" defer></script>
+</body>
+</html>
