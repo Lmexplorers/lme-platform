@@ -40,7 +40,9 @@ function json(data, status) {
 }
 
 function baseUrl(env) {
-  return env.VIPPS_ENV === "production" ? "https://api.vipps.no" : "https://apitest.vipps.no";
+  // Samme normalisering som functions/_lib/vipps.js, se forklaringen der.
+  const m = String((env && env.VIPPS_ENV) || "").trim().toLowerCase();
+  return (m === "production" || m === "prod") ? "https://api.vipps.no" : "https://apitest.vipps.no";
 }
 
 /* Standard-headerne Vipps ber om på alle kall, så de kan se hvilken

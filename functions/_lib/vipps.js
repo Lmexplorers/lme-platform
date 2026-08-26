@@ -17,8 +17,20 @@
  *   VIPPS_ENV = "test" | "production" (standard: "test")
  */
 
+/* Hvilket Vipps-miljoe vi ringer.
+
+   Verdien skrives av et menneske i Cloudflare, og da kommer den som
+   "Production", "production", "PROD" eller med et mellomrom bak. Sammenligner
+   vi tegn for tegn mot "production", faller alt annet stille tilbake til
+   testmiljoeet, og da svarer Vipps 401 fordi produksjonsnoeklene ikke gjelder
+   der. Det tok oss en hel kveld aa finne.
+
+   Derfor: klipp vekk mellomrom, gjoer om til smaa bokstaver, og godta "prod"
+   som det samme. Alt annet, inkludert tomt og usatt, er test. */
 export function vippsBaseUrl(env) {
-  return env.VIPPS_ENV === "production" ? "https://api.vipps.no" : "https://apitest.vipps.no";
+  const m = String((env && env.VIPPS_ENV) || "").trim().toLowerCase();
+  const produksjon = m === "production" || m === "prod";
+  return produksjon ? "https://api.vipps.no" : "https://apitest.vipps.no";
 }
 
 /* Alle fire hemmelighetene maa finnes FOER vi ringer Vipps.
