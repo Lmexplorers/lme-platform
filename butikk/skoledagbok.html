@@ -123,6 +123,11 @@
   .buy-box h3 { font-size: 19px; margin-bottom: 4px; }
   .buy-box .age { font-size: 13px; color: var(--ink-muted); margin-bottom: 12px; }
   .buy-box .price { font-size: 30px; font-weight: 700; font-family: var(--font-head); margin-bottom: 12px; }
+  /* hidden må faktisk skjule. Knappene under setter selv display, og en
+     klasseregel slår nettleserens innebygde regel for hidden. Uten denne
+     linjen ble kjøpsknappene stående synlige for eieren, med hidden satt
+     og alt, og hun ble belastet for sin egen skoledagbok. */
+  [hidden] { display: none !important; }
   .btn-buy {
     display: block; text-align: center; background: var(--btn-yellow); color: var(--ink);
     border-radius: var(--r-pill); padding: 13px 18px; font-size: 15px; font-weight: 700;
