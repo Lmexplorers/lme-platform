@@ -157,6 +157,50 @@ export async function createVippsPayment(env, opts) {
   }
 }
 
+/* Henter tilstanden til en betaling hos Vipps. Brukes av /api/vipps-status,
+   som er sikkerhetsnettet vårt: klarer ikke webhooken å nå fram, spør vi
+   Vipps selv når kunden kommer tilbake til siden, og leverer da.
+
+   `state` er Vipps sitt eget ord: CREATED (ikke godkjent ennå),
+   AUTHORIZED (godkjent, pengene er reservert), TERMINATED (avbrutt eller
+   utløpt). Er beløpet alt trukket, ligger det i aggregate.capturedAmount. */
+export async function getVippsPayment(env, reference) {
+  let accessToken;
+  try {
+    accessToken = await getVippsAccessToken(env);
+  } catch (e) {
+    return { ok: false, error: String(e) };
+  }
+  try {
+    const res = await vippsFetch(
+      vippsBaseUrl(env) + "/epayment/v1/payments/" + encodeURIComponent(reference),
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "Ocp-Apim-Subscription-Key": env.VIPPS_SUBSCRIPTION_KEY,
+          "Merchant-Serial-Number": env.VIPPS_MERCHANT_SERIAL_NUMBER,
+          ...vippsSystemHeaders(),
+        },
+      }
+    );
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      return {
+        ok: false,
+        status: res.status,
+        error: (data && (data.detail || data.title)) || "vipps_lookup_failed",
+      };
+    }
+    const trukket =
+      (data && data.aggregate && data.aggregate.capturedAmount &&
+        data.aggregate.capturedAmount.value) || 0;
+    return { ok: true, state: data.state || "", captured: trukket, raw: data };
+  } catch (e) {
+    return { ok: false, error: String(e) };
+  }
+}
+
 /* Fanger opp (tar betalt) et allerede godkjent (AUTHORIZED) beløp. Kalles
    fra webhooken rett etter at kjøperen har godkjent betalingen i appen,
    slik at pengene faktisk trekkes med en gang, samme opplevelse som et

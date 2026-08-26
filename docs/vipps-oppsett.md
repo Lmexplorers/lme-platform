@@ -89,9 +89,39 @@ Derfor: bytter du én nøkkel, sjekk alle fire.
 3. Åpne `/api/vipps-sjekk` og se at steg 5 sier at den fikk et tegn
 4. Kjør `/api/vipps-register-webhook?pw=…` én gang, lagre svaret som
    `VIPPS_WEBHOOK_SECRET`, publiser igjen
-5. Først da kan noe selges. Uten webhook-nøkkelen avviser vi meldingen om at
-   kunden har betalt, og pengene trekkes uten at hun får varen.
+5. Publiser igjen, og selg.
 
 Merk at hver kjøring av `/api/vipps-register-webhook` lager et nytt abonnement
 med en ny nøkkel hos Vipps. Kjører du den flere ganger, må
 `VIPPS_WEBHOOK_SECRET` settes til den ferskeste.
+
+## To veier inn til en levering
+
+Et kjøp leveres av `_lib/vipps-lever.js`, og to veier fører dit:
+
+1. **Varselet fra Vipps** treffer `/api/vipps-webhook`. Det er den normale
+   veien, og den som gjør at leveringen skjer med én gang.
+2. **Kunden selv.** Etter betalingen sendes hun tilbake til produktsiden med
+   `?vipps=<referanse>` i adressen. `js/vipps-kvittering.js` spør da
+   `/api/vipps-status`, som spør Vipps om betalingen er godkjent, og leverer
+   på stedet hvis varselet ikke har kommet.
+
+Vei 2 er sikkerhetsnettet. Blir varselet borte, kommer det for sent, eller
+avvises det fordi `VIPPS_WEBHOOK_SECRET` mangler eller er utdatert, får kunden
+varen likevel i samme øyeblikk som hun lander på siden. Det var den ene feilen
+i denne flyten som ikke kunne oppdages av seg selv: kunden betaler, ingenting
+skjer, og ingen vet det før hun skriver og spør.
+
+Begge veier går gjennom den samme ordren i KV (`vipps_order:<referanse>`), og
+en ordre som står som `fulfilled` leveres aldri på nytt. Kommer begge veier
+fram samtidig, i samme sekund, kan følgen i verste fall bli én ekstra
+leveringsmail. Det er den riktige veien å bomme på.
+
+Retursiden trenger dette skriptet for å virke:
+
+```html
+<script src="/js/vipps-kvittering.js?v=1" defer></script>
+```
+
+Det ligger nå på `/lv/<slug>` og på kurssidene. Lager du en ny side som kan
+være returside for et Vipps-kjøp, må skriptet med dit også.
