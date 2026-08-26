@@ -351,6 +351,35 @@
     });
   });
 
+  /* Sju forskjellige ting kan gaa galt naar Vipps-kjoepet startes, og siden
+     sa "Noe gikk galt" til alle sju. Da vet verken kunden eller jeg hva som
+     skjedde. Nå faar kunden en beskjed hun kan gjoere noe med, og den
+     tekniske koden staar i parentes bak, saa den kan leses rett av skjermen
+     paa mobil uten utviklerverktoey.
+
+     Koden roeper ingenting hemmelig: den sier bare hvilket steg som stoppet.
+     Naar Vipps virker, ser ingen den. */
+  const VIPPS_FEIL = {
+    bad_email: { no: 'Sjekk e-postadressen.', en: 'Please check your email address.' },
+    bad_slug:  { no: 'Fant ikke varen. Last siden på nytt.', en: 'Product not found. Reload the page.' },
+    not_found: { no: 'Fant ikke varen. Last siden på nytt.', en: 'Product not found. Reload the page.' },
+  };
+  const VIPPS_IKKE_KLAR = {
+    no: 'Vipps er ikke klar akkurat nå. Bruk knappen Kjøp nå over, så virker kortbetaling.',
+    en: 'Vipps is not available right now. Use the Buy now button above to pay by card.',
+  };
+
+  function visVippsFeil(errorEl, kode) {
+    const t = VIPPS_FEIL[kode] || VIPPS_IKKE_KLAR;
+    /* Teksten legges paa data-no og data-en, ikke bare paa elementet, slik at
+       spraakbytteren ikke skriver den generelle feilmeldingen tilbake. */
+    errorEl.setAttribute('data-no', t.no + ' (' + kode + ')');
+    errorEl.setAttribute('data-en', t.en + ' (' + kode + ')');
+    errorEl.textContent = errorEl.getAttribute(currentLang === 'en' ? 'data-en' : 'data-no');
+    errorEl.classList.add('show');
+    console.error('vipps-pay:', kode);
+  }
+
   document.querySelectorAll('[data-vipps-form]').forEach(form => {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -362,6 +391,7 @@
       submitBtn.disabled = true;
       const original = submitBtn.textContent;
       submitBtn.textContent = currentLang === 'en' ? 'One moment …' : 'Ett øyeblikk …';
+      let kode = 'ukjent';
       try {
         const res = await fetch('/api/vipps-pay', {
           method: 'POST',
@@ -370,8 +400,9 @@
         });
         const data = await res.json().catch(() => ({}));
         if (data && data.ok && data.redirectUrl) { window.location.href = data.redirectUrl; return; }
-      } catch (err) {}
-      errorEl.classList.add('show');
+        kode = (data && data.error) || ('http_' + res.status);
+      } catch (err) { kode = 'nettverk'; }
+      visVippsFeil(errorEl, kode);
       submitBtn.disabled = false;
       submitBtn.textContent = original;
     });
