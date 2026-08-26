@@ -66,6 +66,10 @@ async function hashPassword(password) {
   return { salt: hex(salt), hash: hex(await pbkdf2(password, salt)) };
 }
 async function verifyPassword(password, saltHex, hashHex) {
+  /* En konto laget i Autopilot-appen har verken salt eller hash. Uten denne
+     sjekken ville unhex(undefined) kastet, og innlogging svart med en femhundre
+     i stedet for en vanlig avvisning. */
+  if (typeof saltHex !== "string" || typeof hashHex !== "string") return false;
   const got = hex(await pbkdf2(password, unhex(saltHex)));
   if (got.length !== hashHex.length) return false;
   let diff = 0;
@@ -179,20 +183,35 @@ export async function onRequestPost(context) {
   if (action === "register") {
     if (!email || !/.+@.+\..+/.test(email)) return json({ error: "bad_email" }, 400);
     if (password.length < 6) return json({ error: "weak_password" }, 400);
-    if (await getUser(env, email)) return json({ error: "exists" }, 409);
+    /* Plattformen og Autopilot-appen deler samme KV-lager, og begge lagrer
+       brukeren på `user:<e-post>`. Appen logger inn med engangskode, så posten
+       den lager har verken passord eller rolle, bare plan og kreditt.
+
+       Uten unntaket under ville en Autopilot-kunde sittet fast for godt: hun
+       får "finnes fra før" når hun prøver å registrere seg, og "feil passord"
+       når hun prøver å logge inn, uten noen vei ut. Derfor setter vi passordet
+       på den posten i stedet, og lar plan, kreditt og abonnement følge med.
+
+       Det gir ikke bort noe. Posten inneholder ingen hemmelighet, så å sette et
+       passord på den krever nøyaktig samme tillit som å registrere seg på nytt
+       med den e-posten. En konto som allerede har passord (`hash`) avvises som
+       før. */
+    const fra_appen = await getUser(env, email);
+    if (fra_appen && fra_appen.hash) return json({ error: "exists" }, 409);
     const { salt, hash } = await hashPassword(password);
     const owners = OWNER_EMAILS.map((e) => e.toLowerCase()).concat(
       (env.OWNER_EMAILS || "").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean)
     );
     const role = owners.indexOf(email) !== -1 ? "owner" : "customer";
     const user = {
-      id: crypto.randomUUID(),
+      ...(fra_appen || {}),
+      id: (fra_appen && fra_appen.id) || crypto.randomUUID(),
       email,
-      name: (body.name || "").trim() || null,
+      name: (body.name || "").trim() || (fra_appen && fra_appen.name) || null,
       salt, hash, role,
-      created_at: Date.now(),
-      subscription: null,
-      purchases: [],
+      created_at: (fra_appen && fra_appen.created_at) || Date.now(),
+      subscription: (fra_appen && fra_appen.subscription) || null,
+      purchases: (fra_appen && fra_appen.purchases) || [],
     };
     await env.BUILDER_KV.put(userKey(email), JSON.stringify(user));
     const sid = await createSession(env, user);
