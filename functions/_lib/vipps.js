@@ -93,8 +93,25 @@ export async function getVippsAccessToken(env) {
       ...vippsSystemHeaders(),
     },
   });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok || !data.access_token) throw new Error("vipps_token_failed: " + res.status);
+  /* Vipps forklarer alltid hvorfor en 400 eller 401 ble avvist, og
+     forklaringen er som regel presis: "Invalid client secret provided",
+     "Merchant not found" og lignende. Vi beholdt bare tallet og kastet
+     teksten, og da sto vi igjen med et statusnummer uten mening.
+
+     Nå tas forklaringen med. Den inneholder ingen hemmelighet, bare hva
+     Vipps mente var galt, og den kappes uansett etter 200 tegn. */
+  const raatekst = await res.text();
+  let data = {};
+  try { data = JSON.parse(raatekst); } catch (e) {}
+  if (!res.ok || !data.access_token) {
+    const hvorfor =
+      data.error_description || data.error || data.detail || data.title ||
+      raatekst.replace(/\s+/g, " ").trim();
+    throw new Error(
+      "vipps_token_failed: " + res.status +
+      (hvorfor ? " " + String(hvorfor).slice(0, 200) : "")
+    );
+  }
   return data.access_token;
 }
 
