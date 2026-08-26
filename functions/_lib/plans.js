@@ -21,6 +21,13 @@
  *
  * NÅR DU ENDRER EN PRIS: oppdater `PRICES_CHECKED` også, så alt som viser
  * tallene kan si ærlig hvor gamle de er.
+ *
+ * Autopilot-appen ligger i et eget repo (`lme-content-studio`) og har sin egen
+ * kopi av de samme tallene i `lme-pricing.js`, siden den ikke kan importere
+ * herfra. Endrer du en Autopilot-pris under, må den endres der også. Det var
+ * nettopp den driften som gjorde at appen solgte til 299, 499 og 699 kr mens
+ * /oppgrader solgte de samme planene til 199, 549 og 999 kr, rettet
+ * 26. august 2026.
  */
 
 export const PRICES_CHECKED = "2026-08-16";
