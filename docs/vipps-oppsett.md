@@ -62,6 +62,25 @@ lå som Text en periode og måtte byttes.
   motsetning til gjennom Stripe, der Vipps bare kan engangsbeløp. Det er en
   egen kobling å bygge, ikke noe som følger med.
 
+## Feilkoder fra Vipps, og hva de betyr
+
+Sjekksiden viser Vipps sin egen forklaring bak statuskoden. Disse har vi sett:
+
+| Melding | Hva det betyr | Fiks |
+| --- | --- | --- |
+| `AADSTS700016: Application with identifier ... was not found in the directory ...` | `client_id` hører til et annet miljø enn det vi spør i, typisk en testnøkkel mot produksjon | hent `client_id` og `subscription key` fra produksjonsdelen |
+| `AADSTS7000215: Invalid client secret provided` | `client_secret` er feil, avkortet eller utløpt | lag en ny under Show keys |
+| `401` uten mer | nøklene er avvist, som regel blandet test og produksjon | sjekk at alle fire kommer fra samme sted |
+| `vipps_mangler_nokkel: NAVN` | innstillingen er ikke satt i Cloudflare | legg den inn, og publiser |
+| `vipps_timeout` | Vipps svarte ikke innen tolv sekunder | sjelden, prøv igjen før du leter videre |
+
+Den vi faktisk gikk i var den første. `client_id` og `subscription key` lå i
+Cloudflare fra et tidligere oppsett og var testnøkler, mens `client_secret` og
+MSN ble hentet fra produksjon. Et blandet sett ser helt normalt ut i listen,
+alle fire står jo der, og det er bare Vipps som kan si at de ikke hører sammen.
+
+Derfor: bytter du én nøkkel, sjekk alle fire.
+
 ## Rekkefølgen som virker
 
 1. Legg inn de fem første i Cloudflare, Production, som Secret (MSN og
