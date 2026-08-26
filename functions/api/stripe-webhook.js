@@ -82,9 +82,9 @@ function userKey(email) { return "user:" + email.trim().toLowerCase(); }
 
 /* LME Autopilot-produkter -> plan og månedskvote (bilder/video). */
 const CS_PLANS = {
-  "prod_UwWlnVHko5a1Dt": { plan: "cs-start", limits: { image: 30,  video: 1  } },
-  "prod_UTtEl6dxkbq4qM": { plan: "cs-proff", limits: { image: 100, video: 6  } },
-  "prod_UwWmmP16D4lT5Z": { plan: "cs-pluss", limits: { image: 250, video: 15 } },
+  "prod_UwWlnVHko5a1Dt": { plan: "cs-start", limits: { image: 30,  video: 0 } },
+  "prod_UTtEl6dxkbq4qM": { plan: "cs-proff", limits: { image: 100, video: 0 } },
+  "prod_UwWmmP16D4lT5Z": { plan: "cs-pluss", limits: { image: 250, video: 0 } },
 };
 
 async function grant(env, email, info) {

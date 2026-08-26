@@ -69,20 +69,28 @@ export const CLAUDE_MAIN_LINK_LANG = {
 };
 
 /* ---- LME Autopilot-abonnement (Start/Proff/VIP), solgt fra /oppgrader ----
+   VIDEO ER 0 I ALLE PLANENE, og det er et bevisst valg fra Renate
+   26. august 2026: hun kan ikke kjøpe videogenerering for en hel kundemasse.
+   Video koster mange ganger et bilde, og en plan med video ville spist
+   marginen på de kundene som faktisk bruker den. Kunden bruker derfor egen
+   video-nøkkel, eller kjøper videokreditt (CREDIT_PACKS over).
+   Bilder følger med, de er billige nok: dall-e-3 koster rundt $0,04 per
+   bilde, så 100 bilder er omtrent $4 i måneden.
+   Appen har samme regel i PLAN_CAPS i functions/api/generate.js.
    IKKE Inner Circle (som håndteres av den separate lme-inner-circle-workeren).
    Betalingslenkene under ble tidligere kun håndtert i den aldri-registrerte
    stripe-webhook.js (se CS_PLANS der), så betalende kunder fikk verken
    e-post eller faktisk tilgang. Verifisert 1:1 mot knappene på /oppgrader
    og mot Stripe sin liste over betalingslenker samme dag som denne flyttingen. */
 export const AUTOPILOT_PAYMENT_LINKS = {
-  "plink_1Ty9NeLax7B8uQzqIlM5RCuB": { plan: "cs-start", limits: { image: 30,  video: 1  }, planLabel: "LME Autopilot – Start", lang: "no" },
-  "plink_1Ty9NlLax7B8uQzqrRrPUgkr": { plan: "cs-start", limits: { image: 30,  video: 1  }, planLabel: "LME Autopilot – Start", lang: "en" },
-  "plink_1TxaxbLax7B8uQzq9nJeLLHB": { plan: "cs-proff", limits: { image: 100, video: 6  }, planLabel: "LME Autopilot – Proff", lang: "no" },
-  "plink_1TxaxcLax7B8uQzqQWSj2nuD": { plan: "cs-proff", limits: { image: 100, video: 6  }, planLabel: "LME Autopilot – Proff", lang: "en" },
-  "plink_1TxaxeLax7B8uQzqhpvfmUta": { plan: "cs-pluss", limits: { image: 250, video: 15 }, planLabel: "LME Autopilot – VIP",   lang: "no" },
-  "plink_1TxaxfLax7B8uQzq0VIMveFM": { plan: "cs-pluss", limits: { image: 250, video: 15 }, planLabel: "LME Autopilot – VIP",   lang: "en" },
-  "plink_1TxaxhLax7B8uQzqYOEHA6O9": { plan: "cs-pluss", limits: { image: 250, video: 15 }, planLabel: "LME Autopilot – VIP (årlig)", lang: "no" },
-  "plink_1TxaxiLax7B8uQzqCSt5zYag": { plan: "cs-pluss", limits: { image: 250, video: 15 }, planLabel: "LME Autopilot – VIP (årlig)", lang: "en" },
+  "plink_1Ty9NeLax7B8uQzqIlM5RCuB": { plan: "cs-start", limits: { image: 30,  video: 0 }, planLabel: "LME Autopilot – Start", lang: "no" },
+  "plink_1Ty9NlLax7B8uQzqrRrPUgkr": { plan: "cs-start", limits: { image: 30,  video: 0 }, planLabel: "LME Autopilot – Start", lang: "en" },
+  "plink_1TxaxbLax7B8uQzq9nJeLLHB": { plan: "cs-proff", limits: { image: 100, video: 0 }, planLabel: "LME Autopilot – Proff", lang: "no" },
+  "plink_1TxaxcLax7B8uQzqQWSj2nuD": { plan: "cs-proff", limits: { image: 100, video: 0 }, planLabel: "LME Autopilot – Proff", lang: "en" },
+  "plink_1TxaxeLax7B8uQzqhpvfmUta": { plan: "cs-pluss", limits: { image: 250, video: 0 }, planLabel: "LME Autopilot – VIP",   lang: "no" },
+  "plink_1TxaxfLax7B8uQzq0VIMveFM": { plan: "cs-pluss", limits: { image: 250, video: 0 }, planLabel: "LME Autopilot – VIP",   lang: "en" },
+  "plink_1TxaxhLax7B8uQzqYOEHA6O9": { plan: "cs-pluss", limits: { image: 250, video: 0 }, planLabel: "LME Autopilot – VIP (årlig)", lang: "no" },
+  "plink_1TxaxiLax7B8uQzqCSt5zYag": { plan: "cs-pluss", limits: { image: 250, video: 0 }, planLabel: "LME Autopilot – VIP (årlig)", lang: "en" },
 };
 
 function memberKey(email) { return "member:" + email.trim().toLowerCase(); }
@@ -122,9 +130,9 @@ export async function grantAutopilot(env, email, info) {
    prisen, ikke lenken kjøpet startet fra. Brukes til å holde tilgangen
    riktig ved fornyelse/oppsigelse, ikke bare ved selve kjøpet. */
 export const AUTOPILOT_PRODUCT_PLANS = {
-  "prod_UwWlnVHko5a1Dt": { plan: "cs-start", limits: { image: 30,  video: 1  } },
-  "prod_UTtEl6dxkbq4qM": { plan: "cs-proff", limits: { image: 100, video: 6  } },
-  "prod_UwWmmP16D4lT5Z": { plan: "cs-pluss", limits: { image: 250, video: 15 } },
+  "prod_UwWlnVHko5a1Dt": { plan: "cs-start", limits: { image: 30,  video: 0 } },
+  "prod_UTtEl6dxkbq4qM": { plan: "cs-proff", limits: { image: 100, video: 0 } },
+  "prod_UwWmmP16D4lT5Z": { plan: "cs-pluss", limits: { image: 250, video: 0 } },
 };
 
 export async function emailForStripeCustomer(env, customerId) {
