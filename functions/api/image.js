@@ -69,28 +69,30 @@ function sizeFor(platform) {
 }
 
 function buildPrompt(text, character) {
-  const parts = [];
-  // STYLE_LOCK comes FIRST and REPEATED to ensure it dominates the prompt
-  parts.push(STYLE_LOCK);
-
   const c = CHAR[character];
-  const theme = String(text || "").replace(/\s+/g, " ").trim().slice(0, 500);
+  const theme = String(text || "").replace(/\s+/g, " ").trim().slice(0, 800);
 
+  // Med Mia/Teo er karakteridentiteten låst, så merkevarens tegneseriestil
+  // skal alltid dominere her.
   if (c) {
-    parts.push(c);
+    const parts = [STYLE_LOCK, c];
     if (theme) {
       parts.push(`Depict them in a scene that fits this theme (illustrate the mood and activity, do not render any of these words as text): ${theme}`);
     } else {
       parts.push("Depict them exploring nature and learning together with varied appearances.");
     }
-  } else if (theme) {
-    parts.push(`Illustration showing this theme: ${theme}`);
-    parts.push("Include children with diverse appearances: different hair colors and textures, different skin tones, different ages.");
-  } else {
-    parts.push("Peaceful learning scene with children of diverse appearances: varied hair colors, varied hair textures, varied skin tones, different ages.");
+    return parts.join("\n\n");
   }
 
-  return parts.join("\n\n");
+  // Uten Mia/Teo (Reel Studio, LME Autopilot, Visibility-appen) har kalleren
+  // som regel allerede laget en ferdig, spesifikk bildeprompt for akkurat dette
+  // innholdet (realistisk foto, håndtegnet skisse osv, se content.js). Å tvinge
+  // på merkevarens barne-tegneseriestil her overstyrte nettopp det som gjorde
+  // bildet relevant, og ga bilder som ikke hadde noe med innholdet å gjøre.
+  if (theme) {
+    return theme + "\n\nNo text, words, labels, logos or watermarks in the image. If depicting people, use natural, diverse appearances (varied hair colors and textures, skin tones, ages).";
+  }
+  return "Peaceful Montessori learning scene with children of diverse appearances: varied hair colors, varied hair textures, varied skin tones, different ages.";
 }
 
 // =====================================================
