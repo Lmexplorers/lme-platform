@@ -14,6 +14,16 @@ Samme sikkerhetsfokus som `../ellies-smokkelenke/`: en egen side minner om at
 rangleboksen aldri må kunne tas ut, og at ferdig produkt må kontrolleres mot
 gjeldende lokale krav før salg.
 
+## Oppdatert 28. august 2026: prikker på pannen lagt til
+
+Samme mangel som ble oppdaget på smokkelenken og hoved-Ellie-oppskriften:
+referansebildet av Ellie viser flere små kremhvite prikker på pannen, men
+dette var aldri beskrevet her. Lagt til i ansikt-avsnittet: 2 til 3 bittesmå
+prikker broderes i kremhvitt (franske knuter eller tette satengstingpunkter)
+på pannen, mellom ørene. Samtidig presisert at nesen broderes i svart
+(fargen var tidligere ikke angitt). Ørenes farger var allerede riktige
+("kremhvitt", ingen fargefeil å rette her).
+
 - **Garn:** samme Bystrikk Merino som resten av kolleksjonen, pluss en liten
   rest av pudderrosa til sløyfen og kragen.
 - Forsidebildet er et beskjært utsnitt av Renates eget referansebilde for

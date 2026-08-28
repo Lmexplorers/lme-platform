@@ -246,10 +246,14 @@ add('horn_txt',
     'on permanently and flat, between the ears.')
 add('pill_ansikt', 'ANSIKTET, BRODERT', 'THE FACE, EMBROIDERED')
 add('ansikt_txt',
-    'Brodér to runde øyne i svart satengsting og en liten nese under. Ingen sikkerhetsøyne med '
-    'plastdeler her, siden rangelen skal være helt uten harde eller løse deler utenom '
+    'Brodér to runde øyne i svart satengsting og en liten svart nese under. Brodér til slutt '
+    '2 til 3 bittesmå prikker i kremhvitt (franske knuter eller tette satengstingpunkter) på '
+    'pannen, mellom ørene, akkurat som de lyse prikkene på selve Ellie. Ingen sikkerhetsøyne '
+    'med plastdeler her, siden rangelen skal være helt uten harde eller løse deler utenom '
     'rangleboksen, som er trygt gjemt inni.',
-    'Embroider two round eyes in black satin stitch and a small nose below. No plastic safety '
+    'Embroider two round eyes in black satin stitch and a small black nose below. Finally, '
+    'embroider 2 to 3 tiny cream dots (French knots or small dense satin-stitch dots) on the '
+    'forehead, between the ears, just like the light spots on Ellie herself. No plastic safety '
     'eyes here, since the rattle must be entirely free of hard or loose parts apart from the '
     'rattle capsule, which is safely hidden inside.')
 
