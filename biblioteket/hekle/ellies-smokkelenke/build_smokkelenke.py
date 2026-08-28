@@ -226,9 +226,9 @@ add('hode_ferdig',
 add('banner_orer_mini', 'TO SMÅ ØRER', 'TWO SMALL EARS')
 add('orer_mini_lead',
     'Hvert øre hekles i to lag, akkurat som på Ellie selv: en liten sirkel i brunt (utsiden) og '
-    'en enda mindre sirkel i hvitt eller pudderrosa (innsiden), som sys sammen.',
+    'en enda mindre sirkel i kremhvitt eller pudderrosa (innsiden), som sys sammen.',
     "Each ear is crocheted in two layers, just like on Ellie herself: a small circle in brown "
-    "(the outside) and an even smaller circle in white or powder pink (the inside), which are "
+    "(the outside) and an even smaller circle in cream or powder pink (the inside), which are "
     "sewn together.")
 orer_mini_head = {'no': ['Omg', 'Beskrivelse', 'Masker'], 'en': ['Rnd', 'Description', 'Sts']}
 add('orer_mini_head', orer_mini_head['no'], orer_mini_head['en'])
@@ -241,7 +241,7 @@ add('ore_ute_mini_rows_en', [
     ('1', '6 sc in a magic ring', 6),
     ('2', 'inc x 6', 12),
 ])
-add('pill_ore_inne_mini', 'INNSIDEN (HVIT ELLER PUDDERROSA) - HEKLE 2', 'THE INSIDE (WHITE OR POWDER PINK) - MAKE 2')
+add('pill_ore_inne_mini', 'INNSIDEN (KREMHVIT ELLER PUDDERROSA) - HEKLE 2', 'THE INSIDE (CREAM OR POWDER PINK) - MAKE 2')
 add('ore_inne_mini_rows', [
     ('1', '5 fm i magisk ring', 5),
 ])
@@ -321,15 +321,20 @@ add('snute_mini_fest_txt',
 add('pill_ansikt_mini', 'ANSIKTET, BRODERT', 'THE FACE, EMBROIDERED')
 add('ansikt_mini_txt',
     'Brodér to små, runde øyne i svart satengsting, ett øverst på hver kinnflekk. Brodér '
-    'deretter en liten, svart trekantet nese øverst på selve snuten, midt på. Ikke bruk '
-    'sikkerhetsøyne med plastdeler her, siden lenken skal være helt uten harde eller løse '
-    'deler. Se referansebildet fra Ellie for inspirasjon til uttrykket, i miniatyr: to øyne, '
-    'to kinnflekker og synlig brunt mellom dem, ikke ett sammenhengende felt.',
+    'deretter en liten, svart trekantet nese øverst på selve snuten, midt på. Brodér til slutt '
+    '2 til 3 bittesmå prikker i kremhvitt (franske knuter eller tette små satengstingpunkter) på '
+    'pannen, mellom ørene og over kinnflekkene, akkurat som de lyse prikkene på selve Ellie. '
+    'Ikke bruk sikkerhetsøyne med plastdeler her, siden lenken skal være helt uten harde eller '
+    'løse deler. Se referansebildet fra Ellie for inspirasjon til uttrykket, i miniatyr: to '
+    'øyne, to kinnflekker og synlig brunt mellom dem, ikke ett sammenhengende felt.',
     'Embroider two small, round eyes in black satin stitch, one at the top of each cheek patch. '
-    'Then embroider a tiny black triangular nose at the top of the muzzle itself, centred. Do '
-    'not use plastic safety eyes here, since the clip must be entirely free of hard or loose '
-    'parts. See the reference photo from Ellie for inspiration on the expression, in miniature: '
-    'two eyes, two cheek patches, and brown showing between them, not one continuous patch.')
+    'Then embroider a tiny black triangular nose at the top of the muzzle itself, centred. '
+    'Finally, embroider 2 to 3 tiny cream dots (French knots or small dense satin-stitch dots) '
+    'on the forehead, between the ears and above the cheek patches, just like the light spots '
+    'on Ellie herself. Do not use plastic safety eyes here, since the clip must be entirely free '
+    'of hard or loose parts. See the reference photo from Ellie for inspiration on the '
+    'expression, in miniature: two eyes, two cheek patches, and brown showing between them, not '
+    'one continuous patch.')
 add('banner_krage', 'DEL 2: VOLANGKRAGEN', 'PART 2: THE RUFFLED COLLAR')
 add('pill_krage', 'VOLANGKRAGEN (PUDDERROSA)', 'THE RUFFLED COLLAR (POWDER PINK)')
 add('krage_txt',

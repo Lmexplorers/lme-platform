@@ -1,7 +1,9 @@
 # Ellies smokkelenke (LME Baby Collection, Woodland Dreams)
 
 Ferdig oppskrift: **`Ellies-smokkelenke-LME.pdf`** (norsk, 17 sider, A4) og
-**`Ellies-smokkelenke-LME-EN.pdf`** (engelsk, 17 sider, A4).
+**`Ellies-smokkelenke-LME-EN.pdf`** (engelsk, 17 sider, A4). Sidetallet er
+uendret av den siste rettingen (se under), kun tekst innenfor eksisterende
+sider.
 
 Andre oppskrift i **LME Baby Collection "Woodland Dreams"**, etter
 `../ellie-dadyret/`. Et forenklet dådyrhode inspirert av Ellie, med en liten
@@ -60,6 +62,28 @@ Kun Ellies smokkelenke er oppdatert. De andre fem karakterenes
 smokkelenker er bevisst forenklet uten egne kinnflekker/snuteflekk (samme
 mønster som Felix' smokkelenke), og er ikke endret med mindre Renate ber
 om det.
+
+## Oppdatert 28. august 2026: fargefeil rettet, prikker på pannen lagt til
+
+Renate flagget to ting til, samme dag hun mottok forrige retting:
+
+1. **Fargefeil:** ørenes innerside var beskrevet som "hvitt eller
+   pudderrosa", men "hvitt" (rent hvit) finnes ikke i garnpaletten for
+   denne oppskriften, kun "kremhvitt" (samme farge som kinnflekkene og
+   snuten). Rettet til "kremhvitt eller pudderrosa" i både pill-tittel og
+   løpetekst, konsekvent med resten av oppskriften.
+2. **Manglende prikker:** referansebildet av Ellie viser flere små
+   kremhvite prikker på pannen (mellom ørene, over kinnflekkene), men dette
+   var aldri beskrevet i den mini-forenklede smokkelenken. Lagt til som en
+   ny setning i ansikt-avsnittet: 2 til 3 bittesmå prikker broderes i
+   kremhvitt (franske knuter eller tette satengstingpunkter, siden hodet er
+   for lite til en egen heklet del), plassert på pannen mellom ørene og
+   over kinnflekkene.
+
+Samme dag ble den identiske fargefeilen ("hvitt" i stedet for "kremhvitt")
+og de manglende prikkene rettet på hoved-Ellie-oppskriften og resten av
+tilbehørsserien også, se `../ellie-dadyret/README.md` og de andre
+tilbehørs-mappene.
 
 ## Oppdatert 24. august 2026: hvitt/rosa innersirkel i ørene
 
