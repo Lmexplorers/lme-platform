@@ -425,6 +425,8 @@ def build(kind):
             ('øke 1, høyrehellende', 'stikk venstre pinne inn bakfra under tråden mellom to masker og '
                                       'strikk den gjennom fremre maskeledd, ikke vridd'),
             ('glattstrikk rundt', 'alle masker strikkes rett'), ('i-cord', 'smal strikket snorkant'),
+            ('strikket opplegg', 'strikk inn i siste maske på pinnen uten å ta den av, sett den nye maska '
+                                  'tilbake på venstre pinne'),
         ]
         ordliste_rows_en = [
             ('st', 'stitch'), ('rnd', 'round'), ('k / p', 'knit / purl'),
@@ -433,6 +435,8 @@ def build(kind):
             ('inc 1, leaning right', 'insert the left needle from the back under the strand between two '
                                       'stitches and knit it through the front loop, not twisted'),
             ('stockinette in the round', 'all stitches knitted plain'), ('i-cord', 'narrow knitted cord edge'),
+            ('knitted cast-on', 'knit into the last stitch on the needle without slipping it off, place '
+                                 'the new stitch back onto the left needle'),
         ]
         ord_html = '<table class="t tl"><tr><th>' + L('Ord', 'Term') + '</th><th>' + L('Betyr', 'Means') + '</th></tr>'
         for (a, b), (a2, b2) in zip(ordliste_rows_no, ordliste_rows_en):
