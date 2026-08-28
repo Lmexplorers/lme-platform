@@ -166,18 +166,18 @@ BARN = dict(
     legg_opp=[64, 64, 64, 64, 72, 72, 72, 72, 72, 72, 72, 80, 80, 80, 80],
     felt=[8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10],
     ribbhoyde=['2.5 cm'] * 10 + ['3 cm'] * 5,
-    okn=[17, 18, 19, 20, 20, 21, 22, 23, 24, 25, 26, 26, 27, 28, 29],
-    final=[200, 208, 216, 224, 232, 240, 248, 256, 264, 272, 280, 288, 296, 304, 312],
-    okn_lengde=[23, 25, 26, 28, 28, 29, 30, 32, 33, 34, 36, 36, 37, 39, 40],
-    bredde=[59, 61, 64, 66, 68, 71, 73, 75, 78, 80, 82, 85, 87, 89, 92],
+    okn=[9, 9, 10, 10, 10, 11, 11, 12, 12, 13, 13, 13, 14, 14, 15],
+    final=[208, 208, 224, 224, 232, 248, 248, 264, 264, 280, 280, 288, 304, 304, 320],
+    okn_lengde=[12, 13, 14, 14, 14, 15, 15, 17, 17, 18, 18, 18, 19, 20, 21],
+    bredde=[61, 61, 66, 66, 68, 73, 73, 78, 78, 82, 82, 85, 89, 89, 94],
     lengde=[36, 37, 38, 40, 42, 43, 45, 46, 48, 50, 52, 53, 54, 56, 58],
     armapning=[16, 16, 16, 18, 19, 19, 19, 20, 21, 21, 21, 22, 24, 24, 24],
     stopp=[34.5, 35.5, 36.5, 38.5, 40.5, 41.5, 43.5, 44.5, 46.5, 48.5, 50.5, 51.5, 52.5, 54.5, 56.5],
     side_masker=[14, 14, 14, 15, 16, 16, 16, 17, 18, 18, 18, 19, 20, 20, 20],
-    kh1=[36, 38, 40, 41, 42, 44, 46, 47, 48, 50, 52, 53, 54, 56, 58],
-    kn1=[64, 66, 68, 71, 74, 76, 78, 81, 84, 86, 88, 91, 94, 96, 98],
-    kn2=[136, 142, 148, 153, 158, 164, 170, 175, 180, 186, 192, 197, 202, 208, 214],
-    kh2=[164, 170, 176, 183, 190, 196, 202, 209, 216, 222, 228, 235, 242, 248, 254],
+    kh1=[38, 38, 42, 41, 42, 46, 46, 49, 48, 52, 52, 53, 56, 56, 60],
+    kn1=[66, 66, 70, 71, 74, 78, 78, 83, 84, 88, 88, 91, 96, 96, 100],
+    kn2=[142, 142, 154, 153, 158, 170, 170, 181, 180, 192, 192, 197, 208, 208, 220],
+    kh2=[170, 170, 182, 183, 190, 202, 202, 215, 216, 228, 228, 235, 248, 248, 260],
     mengde=[200, 200, 200, 200, 250, 250, 250, 300, 300, 300, 300, 300, 350, 350, 350],
     noster=[4, 4, 4, 4, 5, 5, 5, 6, 6, 6, 6, 6, 7, 7, 7],
 )
@@ -189,13 +189,13 @@ VOKSEN = dict(
     age_en=['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
     legg_opp=[80, 80, 88, 88, 88, 88, 96, 96], felt=[10, 10, 11, 11, 11, 11, 12, 12],
     ribbhoyde=['3 cm'] * 8,
-    okn=[31, 33, 34, 36, 38, 40, 41, 43], final=[328, 344, 360, 376, 392, 408, 424, 440],
-    okn_lengde=[43, 46, 47, 50, 52, 55, 57, 59],
-    bredde=[96, 101, 106, 111, 115, 120, 125, 129], lengde=[62, 66, 68, 72, 75, 78, 82, 84],
+    okn=[16, 17, 17, 18, 19, 20, 21, 22], final=[336, 352, 360, 376, 392, 408, 432, 448],
+    okn_lengde=[22, 24, 24, 25, 26, 28, 29, 30],
+    bredde=[99, 104, 106, 111, 115, 120, 127, 132], lengde=[62, 66, 68, 72, 75, 78, 82, 84],
     armapning=[28, 28, 31, 31, 33, 33, 35, 35],
     stopp=[60.5, 64.5, 66.5, 70.5, 73.5, 76.5, 80.5, 82.5], side_masker=[24, 24, 26, 26, 28, 28, 30, 30],
-    kh1=[58, 62, 64, 68, 70, 74, 76, 80], kn1=[106, 110, 116, 120, 126, 130, 136, 140],
-    kn2=[222, 234, 244, 256, 266, 278, 288, 300], kh2=[270, 282, 296, 308, 322, 334, 348, 360],
+    kh1=[60, 64, 64, 68, 70, 74, 78, 82], kn1=[108, 112, 116, 120, 126, 130, 138, 142],
+    kn2=[228, 240, 244, 256, 266, 278, 294, 306], kh2=[276, 288, 296, 308, 322, 334, 354, 366],
     mengde=[450, 450, 500, 500, 550, 550, 600, 600], noster=[9, 9, 10, 10, 11, 11, 12, 12],
 )
 BABY = dict(
@@ -208,15 +208,15 @@ BABY = dict(
             '12&ndash;18 mo', '18&ndash;24 mo'],
     legg_opp=[56, 56, 64, 64, 64, 72, 72, 72], felt=[7, 7, 8, 8, 8, 9, 9, 9],
     ribbhoyde=['2 cm', '2 cm', '2 cm', '2 cm', '2.5 cm', '2.5 cm', '2.5 cm', '2.5 cm'],
-    okn=[11, 12, 12, 14, 16, 17, 19, 21], final=[144, 152, 160, 176, 192, 208, 224, 240],
-    okn_lengde=[13, 14, 15, 17, 19, 21, 23, 25],
-    bredde=[42, 45, 47, 52, 56, 61, 66, 71], lengde=[20, 22, 24, 27, 30, 33, 36, 39],
+    okn=[6, 6, 6, 7, 8, 9, 10, 11], final=[152, 152, 160, 176, 192, 216, 232, 248],
+    okn_lengde=[7, 7, 8, 9, 10, 11, 12, 13],
+    bredde=[45, 45, 47, 52, 56, 64, 68, 73], lengde=[20, 22, 24, 27, 30, 33, 36, 39],
     hette=[16, 17, 18, 19, 20, 21, 22, 23],
     gjenta=[2, 2, 3, 3, 4, 4, 5, 5],
     armapning=[None] * 8, stopp=[18.5, 20.5, 22.5, 25.5, 28.5, 31.5, 34.5, 37.5],
     side_masker=[8, 9, 10, 11, 12, 13, 14, 15],
-    kh1=[28, 29, 30, 33, 36, 39, 42, 45], kn1=[44, 47, 50, 55, 60, 65, 70, 75],
-    kn2=[100, 105, 110, 121, 132, 143, 154, 165], kh2=[116, 123, 130, 143, 156, 169, 182, 195],
+    kh1=[30, 29, 30, 33, 36, 41, 44, 47], kn1=[46, 47, 50, 55, 60, 67, 72, 77],
+    kn2=[106, 105, 110, 121, 132, 149, 160, 171], kh2=[122, 123, 130, 143, 156, 175, 188, 201],
     mengde=[100, 100, 150, 150, 200, 200, 250, 250], noster=[2, 2, 3, 3, 4, 4, 5, 5],
 )
 
@@ -465,10 +465,12 @@ def build(kind):
         add(
             banner(L('ØKNINGSOMGANG', 'INCREASE ROUND'))
             + pink(L('3 &ndash; ØKNINGSOMGANG', '3 &ndash; INCREASE ROUND'))
-            + card(p('*Strikk rett til neste markør, øk 1 maske mot høyre, flytt markøren over.* Gjenta ved '
-                     'alle 8 markører. Det økes 8 masker.',
-                     '*Knit to the next marker, increase 1 stitch to the right, move the marker over.* '
-                     'Repeat at all 8 markers. This increases 8 stitches.', L)
+            + card(p('*Strikk til 1 maske før markøren. Øk 1 maske som heller mot venstre (M1V). Flytt '
+                     'markøren over. Øk 1 maske som heller mot høyre (M1H).* Gjenta ved alle 8 markører. '
+                     'Det økes 16 masker.',
+                     '*Knit to 1 stitch before the marker. Increase 1 stitch leaning left (M1L). Move the '
+                     'marker over. Increase 1 stitch leaning right (M1R).* Repeat at all 8 markers. This '
+                     'increases 16 stitches.', L)
                    + p('Strikk deretter 1 hel omgang rett uten økninger. Gjenta disse to omgangene til '
                        'riktig masketall er nådd:',
                        'Then knit 1 whole round plain with no increases. Repeat these two rounds until the '
@@ -476,6 +478,16 @@ def build(kind):
                    + sizetable([L('Str.', 'Size'), L('Økningsomganger', 'Increase rounds'),
                                 L('Masker etter økning', 'Stitches after increases'), L('Ca. lengde', 'Approx. length')],
                                okn_rows))
+            + tip(L('M1V (heller mot venstre): før venstre pinnetupp forfra og bakover inn under tråden '
+                    'mellom to masker, strikk tråden vridd (gjennom bakre maskeledd). M1H (heller mot '
+                    'høyre): før venstre pinnetupp bakfra og forover inn under tråden mellom to masker, '
+                    'strikk tråden vridd (gjennom fremre maskeledd). De to nye maskene heller da bort fra '
+                    'hverandre, og du får en fin, symmetrisk linje ut fra hver markør.',
+                    'M1L (leaning left): insert the left needle tip from front to back under the strand '
+                    'between two stitches, then knit it twisted (through the back loop). M1R (leaning '
+                    'right): insert the left needle tip from back to front under the strand, then knit it '
+                    'twisted (through the front loop). The two new stitches then lean away from each '
+                    'other, giving a neat, symmetrical line out from each marker.'))
             + ctitle('Kontrollpunkt: Riktig masketall er viktigst. Hvis høyden avviker, strikker du videre '
                      'uten økninger til arbeidet har oppgitt lengde.',
                      'Checkpoint: The right stitch count matters most. If the height is off, keep knitting '
