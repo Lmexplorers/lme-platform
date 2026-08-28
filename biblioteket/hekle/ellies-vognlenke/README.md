@@ -5,6 +5,13 @@ Ferdig oppskrift: **`Ellies-vognlenke-LME.pdf`** (norsk, 14 sider, A4) og
 
 Fjerde oppskrift i **LME Baby Collection "Woodland Dreams"**.
 
+## Oppdatert 28. august 2026: prikker på pannen lagt til
+
+Samme mangel som ble oppdaget på smokkelenken, rangelen og hoved-Ellie-
+oppskriften: teksten "brodér et lite ansikt akkurat som på rangelen og
+smokkelenken" var for vag. Presisert direkte: svarte øyne og nese, og 2 til
+3 bittesmå prikker i kremhvitt (franske knuter) på pannen, mellom ørene.
+
 Oppdatert 4. august 2026 etter Renates referansebilder av profesjonelt
 stylede vognlenker: bygget fullstendig om fra sju flate motiver (sky, sol,
 blad, blomst, stjerne, sommerfugl) til en kjede av heklede kuler og

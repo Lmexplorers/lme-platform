@@ -191,9 +191,11 @@ add('medaljong_rows_en', [
 ])
 add('medaljong_ferdig',
     'Klipp av med god tråd igjen. Sy to små ører (5 fm i magisk ring, avslutt, hekle 2 stk) '
-    'øverst, og brodér et lite ansikt akkurat som på rangelen og smokkelenken.',
+    'øverst, og brodér et lite ansikt akkurat som på rangelen og smokkelenken: svarte øyne og '
+    'nese, og 2 til 3 bittesmå prikker i kremhvitt (franske knuter) på pannen, mellom ørene.',
     'Cut, leaving a long tail. Sew on two small ears (5 sc in a magic ring, fasten off, make 2) '
-    "on top, and embroider a small face just like on the rattle and pacifier clip.")
+    'on top, and embroider a small face just like on the rattle and pacifier clip: black eyes '
+    'and nose, and 2 to 3 tiny cream dots (French knots) on the forehead, between the ears.')
 add('pill_krage', 'VOLANGKRAGEN (PUDDERROSA)', 'THE RUFFLED COLLAR (POWDER PINK)')
 add('krage_txt',
     'Fest pudderrosa tråd rundt kanten der hodet er som smalest, nederst. *1 fm i neste maske, '
