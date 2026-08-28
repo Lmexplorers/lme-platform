@@ -421,17 +421,17 @@ def build(kind):
         ordliste_rows_no = [
             ('m', 'maske'), ('omg', 'omgang'), ('r / vr', 'rett / vrang'),
             ('øke 1, venstrehellende', 'stikk venstre pinne inn forfra under tråden mellom to masker og '
-                                       'strikk den vridd'),
+                                       'strikk den vridd, gjennom bakre maskeledd'),
             ('øke 1, høyrehellende', 'stikk venstre pinne inn bakfra under tråden mellom to masker og '
-                                      'strikk den vridd'),
+                                      'strikk den gjennom fremre maskeledd, ikke vridd'),
             ('glattstrikk rundt', 'alle masker strikkes rett'), ('i-cord', 'smal strikket snorkant'),
         ]
         ordliste_rows_en = [
             ('st', 'stitch'), ('rnd', 'round'), ('k / p', 'knit / purl'),
             ('inc 1, leaning left', 'insert the left needle from the front under the strand between two '
-                                     'stitches and knit it twisted'),
+                                     'stitches and knit it twisted, through the back loop'),
             ('inc 1, leaning right', 'insert the left needle from the back under the strand between two '
-                                      'stitches and knit it twisted'),
+                                      'stitches and knit it through the front loop, not twisted'),
             ('stockinette in the round', 'all stitches knitted plain'), ('i-cord', 'narrow knitted cord edge'),
         ]
         ord_html = '<table class="t tl"><tr><th>' + L('Ord', 'Term') + '</th><th>' + L('Betyr', 'Means') + '</th></tr>'
@@ -485,15 +485,16 @@ def build(kind):
                                 L('Masker etter økning', 'Stitches after increases'), L('Ca. lengde', 'Approx. length')],
                                okn_rows))
             + tip(L('Slik økes det: Til en maske som heller mot venstre, stikk venstre pinne inn forfra '
-                    'under tråden mellom to masker og strikk den vridd. Til en maske som heller mot høyre, '
-                    'stikk venstre pinne inn bakfra under tråden mellom to masker og strikk den vridd. Da '
-                    'heller de to nye maskene bort fra hverandre, og du får en fin, symmetrisk linje ut fra '
-                    'hver markør.',
+                    'under tråden mellom to masker og strikk den vridd, gjennom bakre maskeledd. Til en '
+                    'maske som heller mot høyre, stikk venstre pinne inn bakfra under tråden mellom to '
+                    'masker og strikk den gjennom fremre maskeledd, ikke vridd. Da heller de to nye '
+                    'maskene bort fra hverandre, og du får en fin, symmetrisk linje ut fra hver markør.',
                     'How to increase: For a stitch leaning left, insert the left needle from the front '
-                    'under the strand between two stitches and knit it twisted. For a stitch leaning '
-                    'right, insert the left needle from the back under the strand between two stitches and '
-                    'knit it twisted. The two new stitches then lean away from each other, giving a neat, '
-                    'symmetrical line out from each marker.'))
+                    'under the strand between two stitches and knit it twisted, through the back loop. For '
+                    'a stitch leaning right, insert the left needle from the back under the strand between '
+                    'two stitches and knit it through the front loop, not twisted. The two new stitches '
+                    'then lean away from each other, giving a neat, symmetrical line out from each '
+                    'marker.'))
             + ctitle('Kontrollpunkt: Riktig masketall er viktigst. Hvis høyden avviker, strikker du videre '
                      'uten økninger til arbeidet har oppgitt lengde.',
                      'Checkpoint: The right stitch count matters most. If the height is off, keep knitting '
