@@ -475,11 +475,11 @@ def build(kind):
         add(
             banner(L('ØKNINGSOMGANG', 'INCREASE ROUND'))
             + pink(L('3 &ndash; ØKNINGSOMGANG', '3 &ndash; INCREASE ROUND'))
-            + card(p('*Strikk til 1 maske før markøren. Øk 1 maske som heller mot venstre. Flytt markøren '
-                     'over. Øk 1 maske som heller mot høyre.* Gjenta ved alle 8 markører. Det økes 16 '
+            + card(p('*Strikk til 1 maske før markøren. Øk 1 maske som heller mot høyre. Flytt markøren '
+                     'over. Øk 1 maske som heller mot venstre.* Gjenta ved alle 8 markører. Det økes 16 '
                      'masker.',
-                     '*Knit to 1 stitch before the marker. Increase 1 stitch leaning left. Move the marker '
-                     'over. Increase 1 stitch leaning right.* Repeat at all 8 markers. This increases 16 '
+                     '*Knit to 1 stitch before the marker. Increase 1 stitch leaning right. Move the marker '
+                     'over. Increase 1 stitch leaning left.* Repeat at all 8 markers. This increases 16 '
                      'stitches.', L)
                    + p('Strikk deretter 1 hel omgang rett uten økninger. Gjenta disse to omgangene til '
                        'riktig masketall er nådd:',
