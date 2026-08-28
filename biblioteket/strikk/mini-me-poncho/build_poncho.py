@@ -546,12 +546,20 @@ def build(kind):
                      'marker and repeat. Finish the round. Then knit 1 whole plain round, also across the '
                      'yarn overs.', L))
             + tealp(L('7 &ndash; I-CORDKANT', '7 &ndash; I-CORD EDGE'))
-            + card(p('Legg opp 3 nye masker på venstre pinne. Strikk 2 rett. Strikk neste i-cordmaske og '
-                     'neste maske fra ponchoen vridd rett sammen. Flytt de 3 maskene tilbake uten å snu. '
-                     'Gjenta rundt hele nederkanten. Sy begynnelsen og slutten pent sammen.',
-                     'Cast on 3 new stitches on the left needle. Knit 2. Knit the next i-cord stitch together '
-                     'with the next poncho stitch through the back loop. Slide the 3 stitches back without '
-                     'turning. Repeat all round the hem. Sew the beginning and end neatly together.', L))
+            + card(p('Legg opp 3 nye masker på venstre pinne med strikket opplegg. Strikk 2 rett. Strikk '
+                     'neste i-cordmaske og neste maske fra ponchoen vridd rett sammen. Flytt de 3 maskene '
+                     'tilbake uten å snu. Gjenta rundt hele nederkanten. Sy begynnelsen og slutten pent '
+                     'sammen.',
+                     'Cast on 3 new stitches on the left needle using the knitted cast-on method. Knit 2. '
+                     'Knit the next i-cord stitch together with the next poncho stitch through the back '
+                     'loop. Slide the 3 stitches back without turning. Repeat all round the hem. Sew the '
+                     'beginning and end neatly together.', L))
+            + tip(L('Strikket opplegg: strikk inn i siste maske på venstre pinne som vanlig, men ikke ta '
+                    'den gamle maska av pinnen. Sett den nye maska du nettopp strikket, tilbake på venstre '
+                    'pinne. Gjenta til du har lagt opp 3 nye masker.',
+                    'Knitted cast-on: knit into the last stitch on the left needle as usual, but do not '
+                    'slip the old stitch off. Place the new stitch you just knitted back onto the left '
+                    'needle. Repeat until you have cast on 3 new stitches.'))
             + ctitle('I-cordkanten går sammenhengende rundt hele ponchoen.',
                      'The i-cord edge runs continuously all round the poncho.', L)
         )
