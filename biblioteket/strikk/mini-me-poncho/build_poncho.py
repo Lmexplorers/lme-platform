@@ -420,12 +420,18 @@ def build(kind):
         # ---------- teknikker / hette eller hals ----------
         ordliste_rows_no = [
             ('m', 'maske'), ('omg', 'omgang'), ('r / vr', 'rett / vrang'),
-            ('øke 1', 'løft tråden mellom maskene og strikk den vridd rett'),
+            ('øke 1, venstrehellende', 'stikk venstre pinne inn forfra under tråden mellom to masker og '
+                                       'strikk den vridd'),
+            ('øke 1, høyrehellende', 'stikk venstre pinne inn bakfra under tråden mellom to masker og '
+                                      'strikk den vridd'),
             ('glattstrikk rundt', 'alle masker strikkes rett'), ('i-cord', 'smal strikket snorkant'),
         ]
         ordliste_rows_en = [
             ('st', 'stitch'), ('rnd', 'round'), ('k / p', 'knit / purl'),
-            ('inc 1', 'lift the strand between stitches and knit it through the back loop'),
+            ('inc 1, leaning left', 'insert the left needle from the front under the strand between two '
+                                     'stitches and knit it twisted'),
+            ('inc 1, leaning right', 'insert the left needle from the back under the strand between two '
+                                      'stitches and knit it twisted'),
             ('stockinette in the round', 'all stitches knitted plain'), ('i-cord', 'narrow knitted cord edge'),
         ]
         ord_html = '<table class="t tl"><tr><th>' + L('Ord', 'Term') + '</th><th>' + L('Betyr', 'Means') + '</th></tr>'
