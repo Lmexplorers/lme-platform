@@ -465,12 +465,12 @@ def build(kind):
         add(
             banner(L('ØKNINGSOMGANG', 'INCREASE ROUND'))
             + pink(L('3 &ndash; ØKNINGSOMGANG', '3 &ndash; INCREASE ROUND'))
-            + card(p('*Strikk til 1 maske før markøren. Øk 1 maske som heller mot venstre (M1V). Flytt '
-                     'markøren over. Øk 1 maske som heller mot høyre (M1H).* Gjenta ved alle 8 markører. '
-                     'Det økes 16 masker.',
-                     '*Knit to 1 stitch before the marker. Increase 1 stitch leaning left (M1L). Move the '
-                     'marker over. Increase 1 stitch leaning right (M1R).* Repeat at all 8 markers. This '
-                     'increases 16 stitches.', L)
+            + card(p('*Strikk til 1 maske før markøren. Øk 1 maske som heller mot venstre. Flytt markøren '
+                     'over. Øk 1 maske som heller mot høyre.* Gjenta ved alle 8 markører. Det økes 16 '
+                     'masker.',
+                     '*Knit to 1 stitch before the marker. Increase 1 stitch leaning left. Move the marker '
+                     'over. Increase 1 stitch leaning right.* Repeat at all 8 markers. This increases 16 '
+                     'stitches.', L)
                    + p('Strikk deretter 1 hel omgang rett uten økninger. Gjenta disse to omgangene til '
                        'riktig masketall er nådd:',
                        'Then knit 1 whole round plain with no increases. Repeat these two rounds until the '
@@ -478,16 +478,16 @@ def build(kind):
                    + sizetable([L('Str.', 'Size'), L('Økningsomganger', 'Increase rounds'),
                                 L('Masker etter økning', 'Stitches after increases'), L('Ca. lengde', 'Approx. length')],
                                okn_rows))
-            + tip(L('M1V (heller mot venstre): før venstre pinnetupp forfra og bakover inn under tråden '
-                    'mellom to masker, strikk tråden vridd (gjennom bakre maskeledd). M1H (heller mot '
-                    'høyre): før venstre pinnetupp bakfra og forover inn under tråden mellom to masker, '
-                    'strikk tråden vridd (gjennom fremre maskeledd). De to nye maskene heller da bort fra '
-                    'hverandre, og du får en fin, symmetrisk linje ut fra hver markør.',
-                    'M1L (leaning left): insert the left needle tip from front to back under the strand '
-                    'between two stitches, then knit it twisted (through the back loop). M1R (leaning '
-                    'right): insert the left needle tip from back to front under the strand, then knit it '
-                    'twisted (through the front loop). The two new stitches then lean away from each '
-                    'other, giving a neat, symmetrical line out from each marker.'))
+            + tip(L('Slik økes det: Til en maske som heller mot venstre, stikk venstre pinne inn forfra '
+                    'under tråden mellom to masker og strikk den vridd. Til en maske som heller mot høyre, '
+                    'stikk venstre pinne inn bakfra under tråden mellom to masker og strikk den vridd. Da '
+                    'heller de to nye maskene bort fra hverandre, og du får en fin, symmetrisk linje ut fra '
+                    'hver markør.',
+                    'How to increase: For a stitch leaning left, insert the left needle from the front '
+                    'under the strand between two stitches and knit it twisted. For a stitch leaning '
+                    'right, insert the left needle from the back under the strand between two stitches and '
+                    'knit it twisted. The two new stitches then lean away from each other, giving a neat, '
+                    'symmetrical line out from each marker.'))
             + ctitle('Kontrollpunkt: Riktig masketall er viktigst. Hvis høyden avviker, strikker du videre '
                      'uten økninger til arbeidet har oppgitt lengde.',
                      'Checkpoint: The right stitch count matters most. If the height is off, keep knitting '
