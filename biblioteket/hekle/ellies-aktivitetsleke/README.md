@@ -11,6 +11,15 @@ titter opp av en lomme, en knitreside med en liten sky med knitrefolie inni,
 og en enkel bunn. To hjørneringer i tre og en perlekant langs toppen
 fullfører kuben.
 
+## Oppdatert 28. august 2026: prikker på pannen lagt til
+
+Samme mangel som ble oppdaget på resten av Ellie-serien: presisert at øyne
+og nese broderes i svart (var uspesifisert), og lagt til 2 til 3 bittesmå
+prikker i kremhvitt (franske knuter) på pannen, mellom ørene, på Ellie-siden
+av kuben. Miniatyr-Ellien i lommen refererer fortsatt til Ellie-siden for
+ansiktsdetaljer ("akkurat som på Ellie-siden"), og arver dermed samme
+retting automatisk.
+
 Redesignet fra en ring til en kube 3. august 2026, etter ønske fra Renate
 om å matche en referanse for aktivitetskuber i handelen. Flette-siden
 (seks maskehull og en snor) ble samme dag byttet ut med en knitre-side,

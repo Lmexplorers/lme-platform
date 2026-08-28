@@ -262,9 +262,11 @@ add('ellie_rows_en', [
 ])
 add('ellie_ferdig',
     'Klipp av med god tråd igjen. Sy to små ører (5 fm i magisk ring, avslutt, hekle 2 stk) '
-    'øverst, og brodér et lite ansikt.',
+    'øverst, og brodér et lite ansikt: svarte øyne og nese, og 2 til 3 bittesmå prikker i '
+    'kremhvitt (franske knuter) på pannen, mellom ørene.',
     'Cut, leaving a long tail. Sew on two small ears (5 sc in a magic ring, fasten off, make 2) '
-    'on top, and embroider a small face.')
+    'on top, and embroider a small face: black eyes and nose, and 2 to 3 tiny cream dots '
+    '(French knots) on the forehead, between the ears.')
 add('ellie_sloyfe',
     'Sløyfen: hekle en smal strimmel i pudderrosa, legg opp 16 lm + 1 vendemaske, 1 rad fm (16 '
     'fm). Fold strimmelen til en sløyfeform og sy stramt sammen på midten flere ganger, som '
