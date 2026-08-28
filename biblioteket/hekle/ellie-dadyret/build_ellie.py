@@ -415,7 +415,7 @@ add('ojne_b',
     'For the very youngest: embroider the eyes instead, with black embroidery thread. Sew a small, '
     'dense oval or circle (satin stitch) at each eye point, leaving a tiny unstitched highlight near '
     'the top of the eye for a lively look. Fasten the threads extra securely inside the head.')
-add('pill_resten', 'NESE, MUNN, VIPPER OG KINN', 'NOSE, MOUTH, LASHES AND CHEEKS')
+add('pill_resten', 'NESE, MUNN, VIPPER, KINN OG PRIKKER PÅ PANNEN', 'NOSE, MOUTH, LASHES, CHEEKS AND FOREHEAD SPOTS')
 add('ansikt_resten', [
     ('Nese', 'Brodér en liten svart trekant eller oval nese ovenfor midten av snuten, i tett '
      'satengsting.',
@@ -435,6 +435,12 @@ add('ansikt_resten', [
      'Cheeks', 'Crochet two small flat circles in powder pink (6 sc in a magic ring, fasten off), and '
      'sew them lightly onto the cheeks below each eye. An alternative is to brush a little dry blusher '
      'onto the cheeks, but that colour can fade in the wash.'),
+    ('Prikker på pannen', 'Hekle 3 til 5 små sirkler i kremhvitt (6 fm i magisk ring, avslutt, samme '
+     'teknikk som ryggprikkene i del 6). Ikke fyll dem. Sy dem spredt på pannen, mellom ørene og over '
+     'øynene, akkurat som på referansebildet.',
+     'Forehead spots', 'Crochet 3 to 5 small circles in cream (6 sc in a magic ring, fasten off, the '
+     'same technique as the back spots in part 6). Do not stuff them. Sew them scattered on the '
+     'forehead, between the ears and above the eyes, just like in the reference photo.'),
 ])
 add('ansikt_bilde_caption',
     'Slik kan det ferdige ansiktet se ut: sikkerhetsøyne, brodert nese og munn, vipper og rosa kinn.',
@@ -661,7 +667,7 @@ add('montering_steg', [
     'Sy bena fast under kroppen, ca. 1 til 2 cm fra hverandre, så Ellie står stødig når hun sitter.',
     'Sy armene fast på hver side av kroppen, litt nedenfor der halsen skal være.',
     'Sy de to kinnflekkene og snuten fast på hodet (hvis ikke gjort allerede), og sett inn øyne, nese, '
-    'munn, vipper og kinn (se side om ansiktet).',
+    'munn, vipper, kinn og prikkene på pannen (se side om ansiktet).',
     'Sy hodet fast oppå kroppen, midt over halsen. Sjekk at hodet sitter rett frem før du syr helt '
     'ferdig.',
     'Sy ørene fast oppå hodet, ett på hver side (se side om ører for plassering).',
@@ -674,7 +680,7 @@ add('montering_steg_en', [
     'Sew the legs onto the bottom of the body, approx. 1 to 2 cm apart, so Ellie sits steadily.',
     'Sew the arms onto each side of the body, a little below where the neck will be.',
     'Sew the two cheek patches and muzzle onto the head (if not already done), and add the eyes, '
-    'nose, mouth, lashes and cheeks (see the face page).',
+    'nose, mouth, lashes, cheeks and forehead spots (see the face page).',
     "Sew the head onto the body, centred over the neck. Check that the head faces forward before you "
     "sew it on completely.",
     'Sew the ears onto the head, one on each side (see the ears page for placement).',

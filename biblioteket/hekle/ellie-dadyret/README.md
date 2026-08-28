@@ -21,6 +21,15 @@ limes.
 - **Fonter (låst LME-stil):** Playpen Sans på overskrifter, Sasson Montessori
   på brødtekst.
 
+## Oppdatert 24. august 2026: prikker på pannen lagt til
+
+Renate meldte fra at referansebildet også viser flere små kremhvite prikker
+på pannen, mellom ørene og over øynene, noe teksten aldri beskrev (kun
+ryggprikkene var beskrevet). Lagt til som et nytt punkt "Prikker på pannen" i
+ansikts-listen (samme side som nese/munn/vipper/kinn): 3 til 5 små sirkler i
+kremhvitt, samme teknikk som ryggprikkene, sydd spredt på pannen. Montering-
+sjekklisten er også oppdatert.
+
 ## Oppdatert 24. august 2026: to kinnflekker i stedet for ett ansiktsfelt
 
 Samme feil som ble oppdaget og rettet på Ellies smokkelenke fantes også her,
