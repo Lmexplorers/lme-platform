@@ -13,7 +13,7 @@
  * Hvis ingen er satt, brukes standardpassordet under.
  */
 
-const DEFAULT_PASSWORD = "LME26";
+const DEFAULT_PASSWORD = "LME2026";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {

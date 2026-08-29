@@ -20,7 +20,7 @@ import { logUsage, anthropicUnits } from "../_lib/ai-core/usage.js";
  * ellers standardpassordet under.
  */
 
-const DEFAULT_PASSWORD = "LME26";
+const DEFAULT_PASSWORD = "LME2026";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {

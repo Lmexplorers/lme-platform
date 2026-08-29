@@ -31,7 +31,7 @@ import { logUsage, anthropicUnits } from "../../_lib/ai-core/usage.js";
  * generate en gang om dagen, og serien skriver og stemmelegger seg selv.
  */
 
-const DEFAULT_PASSWORD = "LME26";
+const DEFAULT_PASSWORD = "LME2026";
 const IDX = "lme-podcast:index";
 const EP = "lme-podcast:ep:";
 const AUDIO = "lme-podcast:audio:";

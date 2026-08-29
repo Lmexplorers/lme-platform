@@ -33,7 +33,7 @@
  *   }
  */
 
-export const DEFAULT_PASSWORD = "LME26";
+export const DEFAULT_PASSWORD = "LME2026";
 export const KEY_PREFIX = "lme-builder:kurs:";
 export const INDEX_KEY = "lme-builder:kurs-index";
 export const MAX_SIZE = 4 * 1024 * 1024; // kurs med leksjonsbilder trenger plass

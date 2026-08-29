@@ -20,7 +20,7 @@ import { logUsage, anthropicUnits } from "../_lib/ai-core/usage.js";
  * serveres fra dette API-et, saa bildelenken i innlegget er kort.
  */
 
-const DEFAULT_PASSWORD = "LME26";
+const DEFAULT_PASSWORD = "LME2026";
 const INDEX_KEY = "lme-blog:index";
 const POST_PREFIX = "lme-blog:post:";
 const IMG_PREFIX = "lme-blog:img:";

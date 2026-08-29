@@ -51,7 +51,7 @@
  *   }
  */
 
-export const DEFAULT_PASSWORD = "LME26";
+export const DEFAULT_PASSWORD = "LME2026";
 export const KEY_PREFIX = "lme-builder:lv:";
 export const INDEX_KEY = "lme-builder:lv-index";
 export const MAX_SIZE = 4 * 1024 * 1024;
