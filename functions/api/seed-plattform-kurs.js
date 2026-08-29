@@ -146,7 +146,12 @@ async function store(env, course) {
 async function importer(env, pw, full) {
   if (!env.BUILDER_KV) return json({ error: "not_configured" }, 200);
   const expected = (env.COURSE_EDIT_PASSWORD || DEFAULT_PASSWORD) + "";
-  if (pw !== expected) return json({ error: "bad_password" }, 401);
+  if (pw !== expected) {
+    // Sier IKKE hva passordet er, bare hvor det kommer fra. Uten dette er det
+    // umulig å vite om et avvist passord skyldes standarden i koden eller en
+    // hemmelighet satt i Cloudflare som overstyrer den.
+    return json({ error: "bad_password", kilde: env.COURSE_EDIT_PASSWORD ? "cloudflare" : "kode" }, 401);
+  }
 
   const source = sanitizeCourse(PLATTFORM_KURS);
   if (!source) return json({ error: "bad_course_data" }, 500);

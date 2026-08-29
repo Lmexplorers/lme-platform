@@ -157,9 +157,16 @@
             : 'Done. Added ' + nye + (nye === 1 ? ' new lesson' : ' new lessons') + '. The course now has ' + d.lessonCount + ' lessons.';
           vis('ok', LANG === 'en' ? eng : norsk);
         } else if (d && d.error === 'bad_password') {
-          vis('feil', LANG === 'en'
-            ? 'Wrong password. Use the same one the course builder asks for when you save a course, not your login password.'
-            : 'Feil passord. Bruk det samme som Kursbygger spør om når du lagrer et kurs, ikke innloggingspassordet ditt.');
+          // Sier hvor serveren henter passordet fra, så en feil kan spores
+          // videre uten gjetting. Selve passordet vises aldri.
+          const fraCloudflare = d.kilde === 'cloudflare';
+          const norsk = fraCloudflare
+            ? 'Feil passord. Serveren bruker passordet som er satt som hemmelighet i Cloudflare (COURSE_EDIT_PASSWORD), ikke standarden i koden. Er du usikker på hva den er satt til, kan den endres eller fjernes i Cloudflare Pages under Settings og Environment variables.'
+            : 'Feil passord. Serveren bruker standardpassordet i koden, altså LME2026. Får du fortsatt feil, er ikke den nyeste versjonen bygget ferdig ennå, vent et minutt og prøv igjen.';
+          const eng = fraCloudflare
+            ? 'Wrong password. The server uses the password set as a secret in Cloudflare (COURSE_EDIT_PASSWORD), not the default in the code. If you are unsure what it is set to, it can be changed or removed in Cloudflare Pages under Settings and Environment variables.'
+            : 'Wrong password. The server uses the default in the code, which is LME2026. If it still fails, the latest version has not finished building yet, wait a minute and try again.';
+          vis('feil', LANG === 'en' ? eng : norsk);
         } else {
           vis('feil', (LANG === 'en' ? 'Something went wrong: ' : 'Noe gikk galt: ') + ((d && d.error) || r.status));
         }
