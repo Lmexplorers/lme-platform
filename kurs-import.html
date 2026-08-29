@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FBF7F0">
+<title>Oppdater plattformkurset · LME</title>
+<link rel="icon" href="/images/lme-logo.png">
+<meta name="robots" content="noindex">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-800.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: swap; }
+
+  :root {
+    --lime:#A4D233; --lime-soft:#E8F5D1; --cerise:#E91E89; --cerise-soft:#FCE3F1;
+    --sun:#F7C72E; --sun-soft:#FFF4D6; --bg:#FBF7F0; --bg-2:#FFFFFF;
+    --ink:#1F1B24; --ink-soft:#5A5560; --ink-muted:#938E99;
+    --line:rgba(31,27,36,.08); --r-lg:26px; --r-xl:36px; --r-pill:999px;
+    --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+    --font-head:'Playpen Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:var(--font-body); color:var(--ink); line-height:1.6; min-height:100vh;
+    background:
+      radial-gradient(900px 520px at 50% -10%, var(--lime-soft) 0%, transparent 55%),
+      radial-gradient(700px 460px at 100% 100%, var(--sun-soft) 0%, transparent 55%),
+      var(--bg);
+    display:flex; align-items:center; justify-content:center; -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit}
+  .wrap{max-width:560px;width:100%;padding:40px 22px}
+  .brandbar{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:24px}
+  .brandbar img{height:34px}
+  .brandbar span{font-weight:700;font-size:15px}
+  .card{
+    background:var(--bg-2); border:1px solid var(--line); border-radius:var(--r-xl);
+    box-shadow:0 18px 50px rgba(31,27,36,.08); padding:32px 30px;
+  }
+  h1{font-size:clamp(23px,4vw,30px);font-weight:800;letter-spacing:-.02em;margin-bottom:10px}
+  .lede{font-size:15.5px;color:var(--ink-soft);margin-bottom:22px}
+  label{display:block;font-size:14px;font-weight:700;margin-bottom:8px}
+  input[type=password]{
+    width:100%;font-size:16px;color:var(--ink);background:#FAF7F2;
+    border:1px solid var(--line);border-radius:var(--r-pill);padding:14px 20px;outline:none;
+  }
+  input[type=password]:focus{border-color:var(--cerise);box-shadow:0 0 0 3px var(--cerise-soft)}
+  .hint{font-size:13px;color:var(--ink-muted);margin-top:8px}
+  button{
+    width:100%;margin-top:18px;font-family:var(--font-body);font-size:16.5px;font-weight:800;
+    padding:16px 22px;border:none;border-radius:var(--r-pill);cursor:pointer;color:#fff;
+    background:linear-gradient(120deg,var(--cerise),#ff5fb0);
+    box-shadow:0 12px 28px rgba(233,30,137,.3);transition:transform .16s ease;
+  }
+  button:hover{transform:translateY(-2px)}
+  button[disabled]{opacity:.6;cursor:default;transform:none}
+  .svar{margin-top:20px;border-radius:var(--r-lg);padding:16px 18px;font-size:14.5px;display:none}
+  .svar.ok{background:var(--lime-soft);color:#4d6a10;display:block}
+  .svar.feil{background:var(--cerise-soft);color:#a11360;display:block}
+  .tilbake{display:block;text-align:center;margin-top:22px;font-size:14px;color:var(--ink-muted);text-decoration:none}
+  .tilbake:hover{color:var(--ink-soft);text-decoration:underline}
+  h1,h2,h3,h4,h5,h6{font-family:var(--font-head)}
+  button,input,select,textarea{font-family:var(--font-body)}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brandbar">
+      <img src="/images/lme-logo.png" alt="LME" onerror="this.style.display='none'">
+      <span>LME</span>
+    </div>
+    <div class="card">
+      <h1 data-no="Oppdater plattformkurset" data-en="Update the platform course">Oppdater plattformkurset</h1>
+      <p class="lede" data-no="Legger nye leksjoner fra koden inn i kurset LME-plattformen fra A til Å. Alt du har redigert i Kursbygger blir stående som det er."
+         data-en="Adds new lessons from the code into the course The LME Platform from A to Z. Everything you have edited in the course builder stays exactly as it is.">Legger nye leksjoner fra koden inn i kurset LME-plattformen fra A til Å. Alt du har redigert i Kursbygger blir stående som det er.</p>
+
+      <label for="pw" data-no="Kursredigeringspassord" data-en="Course editing password">Kursredigeringspassord</label>
+      <input id="pw" type="password" autocomplete="current-password" data-no-placeholder="Samme passord som når du lagrer i Kursbygger" data-en-placeholder="The same password you use to save in the course builder" placeholder="Samme passord som når du lagrer i Kursbygger">
+      <p class="hint" data-no="Ikke innloggingspassordet ditt. Det er passordet Kursbygger spør om når du lagrer et kurs."
+         data-en="Not your login password. It is the password the course builder asks for when you save a course.">Ikke innloggingspassordet ditt. Det er passordet Kursbygger spør om når du lagrer et kurs.</p>
+
+      <button id="kjor" data-no="Oppdater kurset" data-en="Update the course">Oppdater kurset</button>
+      <div class="svar" id="svar"></div>
+      <a class="tilbake" href="/kurs/lme-plattformen" data-no="Åpne kurset →" data-en="Open the course →">Åpne kurset →</a>
+    </div>
+  </div>
+
+  <script>
+    let LANG = (() => {
+      const q = new URLSearchParams(location.search).get('lang');
+      let l = (q || localStorage.getItem('lme_lang') || 'no').toLowerCase();
+      if (l !== 'en' && l !== 'no') l = 'no';
+      try { localStorage.setItem('lme_lang', l); } catch (e) {}
+      return l;
+    })();
+
+    function switchLanguage(lang) {
+      LANG = lang;
+      document.documentElement.lang = lang;
+      try { localStorage.setItem('lme_lang', lang); } catch (e) {}
+      document.querySelectorAll('[data-no][data-en]').forEach((el) => {
+        el.textContent = lang === 'en' ? el.dataset.en : el.dataset.no;
+      });
+      document.querySelectorAll('[data-no-placeholder][data-en-placeholder]').forEach((el) => {
+        el.placeholder = lang === 'en' ? el.dataset.enPlaceholder : el.dataset.noPlaceholder;
+      });
+      const b = document.getElementById('langBtn');
+      if (b) b.textContent = lang === 'en' ? '🇳🇴 Norsk' : '🇬🇧 English';
+    }
+
+    (() => {
+      const b = document.createElement('button');
+      b.id = 'langBtn';
+      b.setAttribute('aria-label', 'Bytt språk / Switch language');
+      b.style.cssText = 'position:fixed;top:16px;right:16px;width:auto;margin:0;z-index:300;border:1px solid rgba(31,27,36,.12);background:#fff;color:#1F1B24;font-weight:700;font-size:13px;line-height:1;padding:10px 15px;border-radius:999px;box-shadow:0 6px 20px rgba(31,27,36,.12);cursor:pointer;';
+      b.addEventListener('click', () => switchLanguage(LANG === 'en' ? 'no' : 'en'));
+      document.body.appendChild(b);
+    })();
+
+    const knapp = document.getElementById('kjor');
+    const felt = document.getElementById('pw');
+    const svar = document.getElementById('svar');
+
+    function vis(klasse, tekst) {
+      svar.className = 'svar ' + klasse;
+      svar.textContent = tekst;
+    }
+
+    async function kjor() {
+      const pw = felt.value.trim();
+      if (!pw) { felt.focus(); return; }
+      knapp.disabled = true;
+      vis('ok', LANG === 'en' ? 'Working…' : 'Jobber…');
+      try {
+        // Passordet sendes i kroppen, ikke i adressen, så det ikke havner i
+        // nettleserhistorikken.
+        const r = await fetch('/api/seed-plattform-kurs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pw }),
+        });
+        const d = await r.json();
+        if (d && d.ok) {
+          const nye = d.added || 0;
+          const norsk = nye === 0
+            ? 'Ferdig. Kurset var allerede oppdatert, ingen nye leksjoner å legge til. Kurset har ' + d.lessonCount + ' leksjoner.'
+            : 'Ferdig. La til ' + nye + (nye === 1 ? ' ny leksjon' : ' nye leksjoner') + '. Kurset har nå ' + d.lessonCount + ' leksjoner.';
+          const eng = nye === 0
+            ? 'Done. The course was already up to date, no new lessons to add. It has ' + d.lessonCount + ' lessons.'
+            : 'Done. Added ' + nye + (nye === 1 ? ' new lesson' : ' new lessons') + '. The course now has ' + d.lessonCount + ' lessons.';
+          vis('ok', LANG === 'en' ? eng : norsk);
+        } else if (d && d.error === 'bad_password') {
+          vis('feil', LANG === 'en'
+            ? 'Wrong password. Use the same one the course builder asks for when you save a course, not your login password.'
+            : 'Feil passord. Bruk det samme som Kursbygger spør om når du lagrer et kurs, ikke innloggingspassordet ditt.');
+        } else {
+          vis('feil', (LANG === 'en' ? 'Something went wrong: ' : 'Noe gikk galt: ') + ((d && d.error) || r.status));
+        }
+      } catch (e) {
+        vis('feil', LANG === 'en' ? 'Could not reach the server. Try again.' : 'Fikk ikke kontakt med serveren. Prøv igjen.');
+      }
+      knapp.disabled = false;
+    }
+
+    knapp.addEventListener('click', kjor);
+    felt.addEventListener('keydown', (e) => { if (e.key === 'Enter') kjor(); });
+    switchLanguage(LANG);
+  </script>
+<script src="/js/lme-account.js?v=11" defer></script>
+</body>
+</html>

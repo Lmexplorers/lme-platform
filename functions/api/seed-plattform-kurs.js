@@ -140,15 +140,13 @@ async function store(env, course) {
   return null;
 }
 
-export async function onRequestGet(context) {
-  const { request, env } = context;
+/* Selve importen. Kalles både fra GET (adresselinjen) og POST (siden
+   /kurs-import, som sender passordet i kroppen i stedet for i URL-en, så det
+   ikke havner i nettleserhistorikken). */
+async function importer(env, pw, full) {
   if (!env.BUILDER_KV) return json({ error: "not_configured" }, 200);
-
-  const url = new URL(request.url);
-  const pw = (url.searchParams.get("pw") || "").trim();
   const expected = (env.COURSE_EDIT_PASSWORD || DEFAULT_PASSWORD) + "";
   if (pw !== expected) return json({ error: "bad_password" }, 401);
-  const full = url.searchParams.get("mode") === "full";
 
   const source = sanitizeCourse(PLATTFORM_KURS);
   if (!source) return json({ error: "bad_course_data" }, 500);
@@ -176,4 +174,25 @@ export async function onRequestGet(context) {
   } catch (e) {
     return json({ error: "write_failed", detail: String(e) }, 200);
   }
+}
+
+export async function onRequestGet(context) {
+  const url = new URL(context.request.url);
+  return importer(
+    context.env,
+    (url.searchParams.get("pw") || "").trim(),
+    url.searchParams.get("mode") === "full"
+  );
+}
+
+/* POST /api/seed-plattform-kurs  body { password, mode? }
+   Brukt av siden /kurs-import. Samme sjekk og samme resultat som GET. */
+export async function onRequestPost(context) {
+  let body = null;
+  try { body = await context.request.json(); } catch (e) { body = null; }
+  return importer(
+    context.env,
+    (((body && body.password) || "") + "").trim(),
+    (body && body.mode) === "full"
+  );
 }
