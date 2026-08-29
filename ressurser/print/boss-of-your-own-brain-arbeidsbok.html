@@ -53,7 +53,7 @@
   .gd-head .l1,.gd-head .l2{font-size:9pt;letter-spacing:.2em;text-transform:uppercase;color:var(--g-ink);font-weight:700;font-family:var(--font-body);}
   .gd-head .l2{margin-top:1mm;color:#b98a8f;}
   .gd-foot{position:absolute;bottom:7mm;left:0;right:0;text-align:center;font-size:15pt;font-weight:700;color:var(--g-ink);font-family:var(--font-body);}
-  .gd-inner{position:absolute;top:22mm;left:16mm;right:16mm;bottom:15mm;display:flex;flex-direction:column;}
+  .gd-inner{position:absolute;top:22mm;left:16mm;right:16mm;bottom:20mm;display:flex;flex-direction:column;}
 
   /* ===== Bilder av Mia &amp; Teo øverst på hver side ===== */
   .gd-img{width:100%;height:40mm;object-fit:cover;border-radius:4mm;border:1px solid rgba(0,0,0,.08);margin-bottom:5mm;display:block;}
@@ -71,7 +71,8 @@
   .gd-label.green{color:var(--g-ink);}
   .gd-q{font-size:16.5pt;font-weight:700;color:var(--g-ink);margin:0 0 3mm;}
   .gd-ul{list-style:none;margin:0;padding:0;}
-  .gd-ul li{display:flex;align-items:flex-start;gap:3.5mm;font-size:16.5pt;line-height:1.32;margin-bottom:3.5mm;color:var(--g-body);}
+  .gd-ul li{display:flex;align-items:flex-start;gap:3.5mm;font-size:16.5pt;line-height:1.32;margin-bottom:2.8mm;color:var(--g-body);}
+  .gd-ul li:last-child{margin-bottom:0;}
   .gd-ul li strong{color:var(--g-ink);}
   .gd-chk{flex:0 0 auto;width:6mm;height:6mm;border-radius:1.3mm;border:1.8pt solid var(--g-mint-mid);margin-top:0.6mm;}
   .gd-num{flex:0 0 auto;width:8.2mm;height:8.2mm;border-radius:50%;background:var(--g-mint);color:var(--g-ink);font-weight:700;font-size:14pt;display:flex;align-items:center;justify-content:center;margin-top:0;}
@@ -84,10 +85,17 @@
   /* Åpen skriveboks (i stedet for tynne linjer) — samme prinsipp som store
      arbeidsbøker: én tydelig ramme å skrive i, ikke flere smale linjer. */
   .gd-box{border:1.6pt solid var(--g-mint-mid);border-radius:4mm;background:#fff;margin-bottom:4.5mm;}
+  /* Skrivefeltene skal heller krympe enn å renne ut over sidekanten og oppå
+     sidetallet. Boksene vokser aldri, de gir bare etter når innholdet er for
+     høyt for siden. */
+  .gd-write{display:flex;flex-direction:column;min-height:0;}
+  .gd-write .gd-box{flex:0 1 auto;min-height:14mm;}
   .gd-box:last-child{margin-bottom:0;}
 
   /* ===== Forside ===== */
-  .gd-cover .gd-inner{align-items:center;justify-content:center;text-align:center;}
+  /* Forsiden er sentrert og har ingen skrivefelt, så den beholder den
+     opprinnelige rammen. */
+  .gd-cover .gd-inner{align-items:center;justify-content:center;text-align:center;bottom:15mm;}
   .gd-logobox{width:38mm;height:38mm;background:#fff;border-radius:5mm;border:1px solid rgba(0,0,0,.08);display:flex;align-items:center;justify-content:center;margin-bottom:6mm;padding:4mm;box-sizing:border-box;}
   .gd-logobox img{width:100%;height:100%;object-fit:contain;}
   .gd-cover-label{font-size:13pt;letter-spacing:.13em;text-transform:uppercase;color:#9a9a9a;margin-bottom:4mm;font-family:var(--font-body);font-weight:700;}
@@ -170,11 +178,11 @@
         <div class="gd-card">
           <h3 class="gd-label green" data-no="Fem moduler" data-en="Five modules">Fem moduler</h3>
           <ul class="gd-ul">
-            <li><span class="gd-num">1</span><span data-no="Møt dine stemmer — bli kjent med Komitéen i hodet ditt." data-en="Meet your voices — get to know the Committee in your head.">Møt dine stemmer — bli kjent med Komitéen i hodet ditt.</span></li>
-            <li><span class="gd-num">2</span><span data-no="Glassets øvelse & takknemlighet — bytt briller, bytt virkelighet." data-en="The glasses exercise & gratitude — change glasses, change reality.">Glassets øvelse & takknemlighet — bytt briller, bytt virkelighet.</span></li>
-            <li><span class="gd-num">3</span><span data-no="Money mindset — skriv en ny historie om penger." data-en="Money mindset — write a new story about money.">Money mindset — skriv en ny historie om penger.</span></li>
-            <li><span class="gd-num">4</span><span data-no="Beslutninger fra din sanne stemme — tre magiske spørsmål." data-en="Decisions from your true voice — three magic questions.">Beslutninger fra din sanne stemme — tre magiske spørsmål.</span></li>
-            <li><span class="gd-num">5</span><span data-no="Vedlikehold & vekst — de fire pilarene som holder deg i gang." data-en="Maintenance & growth — the four pillars that keep you going.">Vedlikehold & vekst — de fire pilarene som holder deg i gang.</span></li>
+            <li><span class="gd-num">1</span><span data-no="Møt dine stemmer: bli kjent med Komitéen i hodet ditt." data-en="Meet your voices — get to know the Committee in your head.">Møt dine stemmer: bli kjent med Komitéen i hodet ditt.</span></li>
+            <li><span class="gd-num">2</span><span data-no="Glassets øvelse & takknemlighet: bytt briller, bytt virkelighet." data-en="The glasses exercise & gratitude — change glasses, change reality.">Glassets øvelse & takknemlighet: bytt briller, bytt virkelighet.</span></li>
+            <li><span class="gd-num">3</span><span data-no="Money mindset: skriv en ny historie om penger." data-en="Money mindset — write a new story about money.">Money mindset: skriv en ny historie om penger.</span></li>
+            <li><span class="gd-num">4</span><span data-no="Beslutninger fra din sanne stemme: tre magiske spørsmål." data-en="Decisions from your true voice — three magic questions.">Beslutninger fra din sanne stemme: tre magiske spørsmål.</span></li>
+            <li><span class="gd-num">5</span><span data-no="Vedlikehold & vekst: de fire pilarene som holder deg i gang." data-en="Maintenance & growth — the four pillars that keep you going.">Vedlikehold & vekst: de fire pilarene som holder deg i gang.</span></li>
           </ul>
         </div>
       </div>
@@ -212,11 +220,11 @@
         <div class="gd-card">
           <h3 class="gd-label green" data-no="Komitéen i hodet ditt" data-en="The committee in your head">Komitéen i hodet ditt</h3>
           <ul class="gd-ul">
-            <li><span class="gd-chk"></span><span data-no="Kritikeren — sier at det du gjør ikke er godt nok." data-en="The Critic — says what you do isn't good enough.">Kritikeren — sier at det du gjør ikke er godt nok.</span></li>
-            <li><span class="gd-chk"></span><span data-no="Frykten — sier at det er tryggest å ikke prøve." data-en="Fear — says it's safest not to try.">Frykten — sier at det er tryggest å ikke prøve.</span></li>
-            <li><span class="gd-chk"></span><span data-no="Tvilen — spør om du egentlig kan dette." data-en="Doubt — asks if you can really do this.">Tvilen — spør om du egentlig kan dette.</span></li>
-            <li><span class="gd-chk"></span><span data-no="Skammen — minner deg på gamle feil." data-en="Shame — reminds you of old mistakes.">Skammen — minner deg på gamle feil.</span></li>
-            <li><span class="gd-chk"></span><span data-no="Sammenligningen — måler deg opp mot alle andre." data-en="Comparison — measures you up against everyone else.">Sammenligningen — måler deg opp mot alle andre.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Kritikeren: sier at det du gjør ikke er godt nok." data-en="The Critic — says what you do isn't good enough.">Kritikeren: sier at det du gjør ikke er godt nok.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Frykten: sier at det er tryggest å ikke prøve." data-en="Fear — says it's safest not to try.">Frykten: sier at det er tryggest å ikke prøve.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Tvilen: spør om du egentlig kan dette." data-en="Doubt — asks if you can really do this.">Tvilen: spør om du egentlig kan dette.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Skammen: minner deg på gamle feil." data-en="Shame — reminds you of old mistakes.">Skammen: minner deg på gamle feil.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Sammenligningen: måler deg opp mot alle andre." data-en="Comparison — measures you up against everyone else.">Sammenligningen: måler deg opp mot alle andre.</span></li>
           </ul>
         </div>
       </div>
@@ -253,7 +261,7 @@
       <div class="gd-inner">
         <img class="gd-img" src="/images/banner_rolig_stund.webp" alt="Mia og Teo koser seg med en bok i skumringen, en rolig og takknemlig stund">
         <h2 class="gd-pill yellow" data-no="Modul 2: Glassets øvelse &amp; takknemlighet" data-en="Module 2: The glasses exercise &amp; gratitude">Modul 2: Glassets øvelse &amp; takknemlighet</h2>
-        <div class="gd-text" data-no="Ditt perspektiv bestemmer din virkelighet. Med riktige «briller» kan du se mulighetene i stedet for problemene. I denne modulen lærer du den magiske glassets-øvelsen, og hvordan takknemlighet trener hjernen din til å legge merke til det som allerede går bra." data-en="Your perspective determines your reality. With the right “glasses,” you can see opportunities instead of problems. In this module you learn the magical glasses exercise, and how gratitude trains your brain to notice what's already going well.">Ditt perspektiv bestemmer din virkelighet. Med riktige «briller» kan du se mulighetene i stedet for problemene. I denne modulen lærer du den magiske glassets-øvelsen, og hvordan takknemlighet trener hjernen din til å legge merke til det som allerede går bra.</div>
+        <div class="gd-text" data-no="Ditt perspektiv bestemmer din virkelighet. Med riktige “briller” kan du se mulighetene i stedet for problemene. I denne modulen lærer du den magiske glassets-øvelsen, og hvordan takknemlighet trener hjernen din til å legge merke til det som allerede går bra." data-en="Your perspective determines your reality. With the right “glasses,” you can see opportunities instead of problems. In this module you learn the magical glasses exercise, and how gratitude trains your brain to notice what's already going well.">Ditt perspektiv bestemmer din virkelighet. Med riktige “briller” kan du se mulighetene i stedet for problemene. I denne modulen lærer du den magiske glassets-øvelsen, og hvordan takknemlighet trener hjernen din til å legge merke til det som allerede går bra.</div>
 
         <div class="gd-write">
           <div class="gd-write-label"><span class="pencil">✏️</span><span data-no="Refleksjon" data-en="Reflection">Refleksjon</span></div>

@@ -73,7 +73,10 @@
   .gd-q{font-size:9.8pt;font-weight:700;color:var(--g-ink);margin:0 0 2mm;}
   .gd-line{border-bottom:1pt solid #e2dfe0;height:6.5mm;}
   .gd-ul{list-style:none;}
-  .gd-ul li{display:flex;align-items:flex-start;gap:3mm;font-size:9.8pt;line-height:1.5;margin-bottom:2.3mm;color:var(--g-body);}
+  .gd-ul li{display:flex;align-items:flex-start;gap:3mm;font-size:9.8pt;line-height:1.5;margin-bottom:2.2mm;color:var(--g-body);}
+  /* Uten dette dyttet luften under siste punkt innholdet ut over sidekanten
+     på de fulleste sidene. */
+  .gd-ul li:last-child{margin-bottom:0;}
   .gd-chk{flex:0 0 auto;width:4mm;height:4mm;border-radius:1mm;border:1.3pt solid var(--g-teal);margin-top:0.6mm;}
   .gd-affirm{font-family:var(--font-body);font-weight:700;font-size:11pt;color:var(--g-teal);text-align:center;line-height:1.5;}
 
@@ -189,7 +192,7 @@
 
         <div class="gd-card">
           <h3 class="gd-label pink" data-no="Refleksjon" data-en="Reflection">Refleksjon</h3>
-          <p class="gd-q" data-no="Hvilken unnskyldning kjenner du deg mest igjen i, «for overfylt», «kan ikke redigere», «ikke teknisk» eller «har ikke tid»?" data-en="Which excuse do you recognise most in yourself, “too crowded”, “can't edit”, “not technical” or “no time”?">Hvilken unnskyldning kjenner du deg mest igjen i, «for overfylt», «kan ikke redigere», «ikke teknisk» eller «har ikke tid»?</p>
+          <p class="gd-q" data-no="Hvilken unnskyldning kjenner du deg mest igjen i, “for overfylt”, “kan ikke redigere”, “ikke teknisk” eller “har ikke tid”?" data-en="Which excuse do you recognise most in yourself, “too crowded”, “can't edit”, “not technical” or “no time”?">Hvilken unnskyldning kjenner du deg mest igjen i, “for overfylt”, “kan ikke redigere”, “ikke teknisk” eller “har ikke tid”?</p>
           <div class="gd-line"></div><div class="gd-line"></div>
           <p class="gd-q" style="margin-top:4mm;" data-no="Hva ville en YouTube-kanal gjøre for deg og LME-reisen din, om den lyktes?" data-en="What would a YouTube channel do for you and your LME journey, if it worked?">Hva ville en YouTube-kanal gjøre for deg og LME-reisen din, om den lyktes?</p>
           <div class="gd-line"></div><div class="gd-line"></div>
@@ -281,7 +284,7 @@
 
         <div class="gd-card cream">
           <h3 class="gd-label teal" data-no="Denne ukens steg" data-en="This week's step">Denne ukens steg</h3>
-          <p class="gd-q" data-no="Bruk «Pakking»-oppskriften i kurset til å få ti titler og en miniatyr-idé." data-en="Use the “Packaging” recipe in the course to get ten titles and a thumbnail idea.">Bruk «Pakking»-oppskriften i kurset til å få ti titler og en miniatyr-idé.</p>
+          <p class="gd-q" data-no="Bruk “Pakking”-oppskriften i kurset til å få ti titler og en miniatyr-idé." data-en="Use the “Packaging” recipe in the course to get ten titles and a thumbnail idea.">Bruk “Pakking”-oppskriften i kurset til å få ti titler og en miniatyr-idé.</p>
           <div class="gd-line"></div>
         </div>
       </div>
@@ -309,7 +312,7 @@
         <div class="gd-card">
           <h3 class="gd-label teal" data-no="Sjekkliste for produksjon" data-en="Checklist for production">Sjekkliste for produksjon</h3>
           <ul class="gd-ul">
-            <li><span class="gd-chk"></span><span data-no="Jeg har brukt «Manus»-oppskriften og fått et utkast fra Claude." data-en="I have used the “Script” recipe and gotten a draft from Claude.">Jeg har brukt «Manus»-oppskriften og fått et utkast fra Claude.</span></li>
+            <li><span class="gd-chk"></span><span data-no="Jeg har brukt “Manus”-oppskriften og fått et utkast fra Claude." data-en="I have used the “Script” recipe and gotten a draft from Claude.">Jeg har brukt “Manus”-oppskriften og fått et utkast fra Claude.</span></li>
             <li><span class="gd-chk"></span><span data-no="Jeg har testet flere varianter av kroken." data-en="I have tested several variations of the hook.">Jeg har testet flere varianter av kroken.</span></li>
             <li><span class="gd-chk"></span><span data-no="Jeg har laget en tavle med kolonnene idé, manus, stemme, redigering, publisert." data-en="I have made a board with the columns idea, script, voice, editing, published.">Jeg har laget en tavle med kolonnene idé, manus, stemme, redigering, publisert.</span></li>
             <li><span class="gd-chk"></span><span data-no="Jeg vet hvilke steg jeg gjør selv, og hvilke AI kan ta." data-en="I know which steps I do myself, and which AI can take.">Jeg vet hvilke steg jeg gjør selv, og hvilke AI kan ta.</span></li>
