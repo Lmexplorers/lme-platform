@@ -280,11 +280,16 @@ export const COURSE_PAYMENT_LINKS = {
   "plink_1U2I9tLax7B8uQzqCYi2ntGG": { courseId: "montessori-masterclass", tier: "standard", lang: "no" },
   "plink_1U2I9uLax7B8uQzqYzTq1jUw": { courseId: "montessori-masterclass", tier: "standard", lang: "en" },
   // LME Vault (/vault): engangskjøp av malhvelvet, samme leveringsvei som
-  // kursene over (tilgangslenke på e-post, tilgang for alltid). Legg inn
-  // betalingslenke-ID-ene her når betalingslenkene er laget i Stripe, og lim
-  // de samme URL-ene inn i "checkoutUrl" i funnel/vault/funnel-config.js.
-  // "plink_...": { courseId: "vault", tier: "launch", lang: "no" },
-  // "plink_...": { courseId: "vault", tier: "launch", lang: "en" },
+  // kursene over (tilgangslenke på e-post, tilgang for alltid). Opprettet i
+  // live-modus 29. august 2026: grunnleggerpris 199 kr og $19, ordinær pris
+  // 349 kr og $34, samme prismatching som resten av filen. Salgssiden bruker
+  // grunnleggerlenkene, som ligger i "checkoutUrl" i
+  // funnel/vault/funnel-config.js. Ordinærlenkene står klare til prishevingen,
+  // og alle fire gir tilgang, så et kjøp som var i gang leveres uansett.
+  "plink_1U9kRiLax7B8uQzqHUEe2TWx": { courseId: "vault", tier: "launch", lang: "no" },
+  "plink_1U9kRpLax7B8uQzq228YXsYe": { courseId: "vault", tier: "launch", lang: "en" },
+  "plink_1U9kUTLax7B8uQzqnOk0SUpD": { courseId: "vault", tier: "full",   lang: "no" },
+  "plink_1U9kUZLax7B8uQzqppwl1JR4": { courseId: "vault", tier: "full",   lang: "en" },
 };
 
 export const COURSE_INFO = {

@@ -33,7 +33,7 @@ window.LME_FUNNEL = {
     },
 
     salg: {
-      checkoutUrl: "",                 // Stripe-betalingslenke i kroner (tom = hopp rett til takkesiden)
+      checkoutUrl: "https://buy.stripe.com/9B6eVebchfzN2TPdBB9R70X",   // Stripe: LME Vault 199 kr (tom = hopp rett til takkesiden)
       etterKjop: "takk.html",
 
       pris: {
@@ -116,7 +116,7 @@ window.LME_FUNNEL = {
     },
 
     salg: {
-      checkoutUrl: "",                 // Stripe payment link in USD
+      checkoutUrl: "https://buy.stripe.com/00wbJ22FL87l3XT0OP9R70Y",   // Stripe: LME Vault $19
       etterKjop: "takk.html",
 
       pris: {

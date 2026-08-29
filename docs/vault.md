@@ -41,20 +41,32 @@ samme lås som de andre betalte kursene:
 ## Betaling
 
 Betalingen går gjennom det vanlige kurs-oppsettet, så leveringen skjer av seg
-selv i `functions/api/oppskrift-webhook.js`:
+selv i `functions/api/oppskrift-webhook.js`. Alt er koblet på (opprettet i
+live-modus 29. august 2026):
 
-1. Lag to betalingslenker i Stripe, én i kroner og én i dollar (engangsbeløp).
-2. Lim URL-ene inn i `checkoutUrl` under `no` og `en` i
-   `funnel/vault/funnel-config.js`.
-3. Legg betalingslenke-ID-ene (`plink_…`) inn i `COURSE_PAYMENT_LINKS` i
-   `functions/_lib/purchase-links.js` med `courseId: "vault"`. Plassen ligger
-   klar, kommentert ut, i samme fil.
+| Pris | Språk | Betalingslenke | ID |
+| --- | --- | --- | --- |
+| Grunnlegger, 199 kr | Norsk | `https://buy.stripe.com/9B6eVebchfzN2TPdBB9R70X` | `plink_1U9kRiLax7B8uQzqHUEe2TWx` |
+| Grunnlegger, $19 | Engelsk | `https://buy.stripe.com/00wbJ22FL87l3XT0OP9R70Y` | `plink_1U9kRpLax7B8uQzq228YXsYe` |
+| Ordinær, 349 kr | Norsk | `https://buy.stripe.com/7sY9AUa8d5ZdfGB5559R70Z` | `plink_1U9kUTLax7B8uQzqnOk0SUpD` |
+| Ordinær, $34 | Engelsk | `https://buy.stripe.com/3cIbJ2bch73h9idbtt9R710` | `plink_1U9kUZLax7B8uQzqppwl1JR4` |
 
-Da får kjøperen tilgangslenken sin på e-post automatisk, kjøpet havner i
-kjøpsloggen på Min side, og du får salgsvarselet ditt som vanlig.
+Produktet er `prod_VA4ZeuIHvlzY6E`. Alle fire lenkene sender kjøperen videre til
+`/vault-takk` på riktig språk etter betaling, og alle fire gir tilgang, så et
+kjøp som allerede var i gang leveres uansett hvilken pris som er ute.
 
-Så lenge `checkoutUrl` står tom, hopper kjøpsknappen rett til takkesiden. Det er
-med vilje, slik at trakten kan forhåndsvises før betalingen er koblet på.
+Salgssiden bruker grunnleggerprisen. Skal du heve prisen til ordinær, bytter du
+to ting i `funnel/vault/funnel-config.js`: `checkoutUrl` til ordinærlenken over,
+og `pris.belop` til 349 (og 34 på engelsk), og tømmer `pris.visningFor` så det
+ikke står en overstrøket pris som ikke lenger stemmer.
+
+URL-ene ligger i `checkoutUrl` i `funnel/vault/funnel-config.js`, og ID-ene i
+`COURSE_PAYMENT_LINKS` i `functions/_lib/purchase-links.js`. Etter kjøp får
+kjøperen tilgangslenken sin på e-post automatisk, kjøpet havner i kjøpsloggen på
+Min side, og du får salgsvarselet ditt som vanlig.
+
+Står `checkoutUrl` tom, hopper kjøpsknappen rett til takkesiden. Det er med
+vilje, slik at en trakt kan forhåndsvises før betalingen er koblet på.
 
 ## Priser
 
