@@ -12,12 +12,14 @@
  * nettleseren hennes med ett enkelt trykk.
  *
  * GET /api/seed-plattform-kurs?pw=<COURSE_EDIT_PASSWORD>
- *   Standard: fyller bare inn engelsk tekst i kurset som allerede ligger i
- *   KV. Norsk tekst røres ikke, så alt Renate har redigert i Kursbygger blir
- *   stående. Engelsk fylles inn der feltet er tomt, og bare når den norske
- *   teksten er den samme som i koden. Ligger ikke kurset i KV ennå, skrives
- *   hele kurset inn.
- *   -> { ok: true, slug, mode: "en", filled, skipped, lessonCount }
+ *   Standard: legger til leksjoner som er nye i koden, og fyller inn engelsk
+ *   tekst i kurset som allerede ligger i KV. Norsk tekst røres ikke, og en
+ *   leksjon som alt ligger der blir stående nøyaktig som den er, så alt
+ *   Renate har redigert i Kursbygger beholdes. Nye leksjoner settes inn på
+ *   samme plass som de har i koden. Engelsk fylles inn der feltet er tomt, og
+ *   bare når den norske teksten er den samme som i koden. Ligger ikke kurset
+ *   i KV ennå, skrives hele kurset inn.
+ *   -> { ok: true, slug, mode: "en", filled, skipped, added, lessonCount }
  *
  * GET /api/seed-plattform-kurs?pw=<...>&mode=full
  *   Overskriver hele kurset med innholdet i koden. Bruk kun når du vil
@@ -65,6 +67,68 @@ function fillEnglish(live, map) {
   return { filled: filled, skipped: skipped };
 }
 
+/* Norsk tittel som nøkkel, brukt til å kjenne igjen en leksjon på tvers av
+   koden og det lagrede kurset. */
+function titleKey(lesson) {
+  return ((lesson && lesson.title && lesson.title.no) || "").trim().toLowerCase();
+}
+
+/* Hvilke leksjoner denne importen allerede har levert til kurset, lagret som
+   en liste med norske titler. Uten dette ville en leksjon Renate har gitt et
+   nytt navn i Kursbygger se ut som en manglende leksjon, og blitt lagt inn på
+   nytt som en duplikat. Med lista vet vi at den er levert før, uansett hva
+   den heter nå. */
+const deliveredKey = (slug) => "lme-builder:kurs-levert:" + slug;
+
+async function readDelivered(env, slug) {
+  try {
+    const raw = await env.BUILDER_KV.get(deliveredKey(slug));
+    if (!raw) return null;
+    const list = JSON.parse(raw);
+    return Array.isArray(list) ? new Set(list) : null;
+  } catch (e) { return null; }
+}
+
+async function writeDelivered(env, slug, keys) {
+  try {
+    await env.BUILDER_KV.put(deliveredKey(slug), JSON.stringify(keys));
+  } catch (e) { /* med vilje stille, importen er alt lagret */ }
+}
+
+/* Legger til leksjoner som finnes i koden, men ikke i kurset som ligger i KV.
+   Nye leksjoner settes inn rett etter leksjonen de følger i koden, så
+   rekkefølgen blir den samme begge steder. En leksjon som allerede ligger der
+   røres ALDRI, uansett hvor mye teksten er endret i Kursbygger. Slik kan et
+   nytt verktøy (for eksempel LME Vault) komme inn i kurset uten at Renate
+   mister noe hun har skrevet om.
+
+   `levert` er lista over leksjoner importen har levert før. Finnes den, er
+   den fasiten, og en leksjon som står der legges aldri inn igjen selv om den
+   har byttet navn i Kursbygger. Første gang finnes ingen liste, og da
+   sammenlignes det mot kurset slik det ligger, som stemmer, siden kurset
+   opprinnelig ble skrevet inn fra nettopp denne koden. */
+function addMissingLessons(live, source, levert) {
+  const finnes = new Set(live.lessons.map(titleKey));
+  let added = 0;
+  source.lessons.forEach((lesson, i) => {
+    const key = titleKey(lesson);
+    if (!key || finnes.has(key)) return;
+    if (levert && levert.has(key)) return;
+    // Finn nærmeste leksjon foran i koden som også ligger i det lagrede
+    // kurset, og legg den nye rett etter den. Finner vi ingen, havner den sist.
+    let pos = live.lessons.length;
+    for (let j = i - 1; j >= 0; j--) {
+      const before = titleKey(source.lessons[j]);
+      const at = live.lessons.findIndex((l) => titleKey(l) === before);
+      if (at !== -1) { pos = at + 1; break; }
+    }
+    live.lessons.splice(pos, 0, JSON.parse(JSON.stringify(lesson)));
+    finnes.add(key);
+    added++;
+  });
+  return added;
+}
+
 async function store(env, course) {
   const payload = JSON.stringify(course);
   if (payload.length > MAX_SIZE) return { error: "too_large", bytes: payload.length };
@@ -96,15 +160,18 @@ export async function onRequestGet(context) {
         let live = null;
         try { live = sanitizeCourse(JSON.parse(raw)); } catch (e) { live = null; }
         if (live) {
+          const added = addMissingLessons(live, source, await readDelivered(env, source.slug));
           const res = fillEnglish(live, translationMap(source));
           const err = await store(env, live);
           if (err) return json(err, 413);
-          return json({ ok: true, slug: live.slug, mode: "en", filled: res.filled, skipped: res.skipped, lessonCount: live.lessons.length });
+          await writeDelivered(env, source.slug, source.lessons.map(titleKey));
+          return json({ ok: true, slug: live.slug, mode: "en", filled: res.filled, skipped: res.skipped, added: added, lessonCount: live.lessons.length });
         }
       }
     }
     const err = await store(env, source);
     if (err) return json(err, 413);
+    await writeDelivered(env, source.slug, source.lessons.map(titleKey));
     return json({ ok: true, slug: source.slug, mode: full ? "full" : "en", lessonCount: source.lessons.length });
   } catch (e) {
     return json({ error: "write_failed", detail: String(e) }, 200);

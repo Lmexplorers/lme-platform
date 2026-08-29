@@ -586,6 +586,31 @@ export const PLATTFORM_KURS = {
     {
       "module": null,
       "title": {
+        "no": "LME Vault, ferdige maler for digitale produkter",
+        "en": "LME Vault, ready-made templates for digital products"
+      },
+      "body": [
+        {
+          "no": "LME Vault er hvelvet med ferdige Claude-maler, laget for deg som sitter fast på tom side. Der inne ligger tolv maler du kan kopiere rett inn i Claude: fra videoen din til ferdige produktideer, en quiz som fanger e-postadresser, en minikursplan, et veikart, en lead magnet, en salgsside og e-postserien som går ut etter kjøp.",
+          "en": "LME Vault is the vault of ready-made Claude templates, built for those moments when the blank page stops you. Inside are twelve templates you can copy straight into Claude: from your video to finished product ideas, a quiz that captures email addresses, a mini course plan, a roadmap, a lead magnet, a sales page and the email series that goes out after a purchase."
+        },
+        {
+          "no": "Hver mal har et felt du fyller inn selv, alt som står i klammer. Du bytter ut det med ditt eget tema, din målgruppe og prisen din, og får et førsteutkast du bare trenger å justere. Så legger du resultatet rett inn i verktøyene du nettopp har lest om: kursplanen inn i Kursbygger, salgssiden inn i Builder, e-postene inn i Email.",
+          "en": "Every template has fields you fill in yourself, everything written in brackets. You replace them with your own topic, your own audience and your own price, and get a first draft you only need to adjust. Then you put the result straight into the tools you have just read about: the course plan into the course builder, the sales page into Builder, the emails into Email."
+        },
+        {
+          "no": "Hvelvet er et engangskjøp, ikke et abonnement, og tilgangen varer for alltid. Du finner det på /vault, og selve malene ligger på /academy/vault når du er inne. Nye maler legges til i hvelvet etter hvert, uten at du betaler på nytt.",
+          "en": "The vault is a one-time purchase, not a subscription, and access lasts forever. You find it at /vault, and the templates themselves live at /academy/vault once you are in. New templates are added to the vault over time, at no extra cost."
+        }
+      ],
+      "tip": {
+        "no": "🌸 Begynn med den malen som passer det du holder på med akkurat nå, ikke den som ser mest imponerende ut. Ett ferdig produkt er verdt mer enn ti gode ideer.",
+        "en": "🌸 Start with the template that fits what you are working on right now, not the one that looks most impressive. One finished product is worth more than ten good ideas."
+      }
+    },
+    {
+      "module": null,
+      "title": {
         "no": "Gruppebygger",
         "en": "The group builder"
       },
