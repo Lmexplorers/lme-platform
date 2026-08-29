@@ -14,7 +14,11 @@
 <meta property="og:image" content="https://lmexplorers.com/images/lme-logo.png">
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
+  /* Playpen Sans lastes lokalt, samme filer som resten av plattformen, så
+     overskriftene aldri faller tilbake på systemfont om Google Fonts er nede. */
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-800.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: swap; }
   @font-face {
     font-family: 'Sasson Montessori';
     src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
@@ -90,7 +94,7 @@
     padding: 30px 26px; text-align: center; border: 1px solid rgba(31,27,36,.06);
   }
   .vaultbox .lock { font-size: 46px; line-height: 1; }
-  .vaultbox .vname { font-family: var(--font-head); font-weight: 800; font-size: 24px; margin-top: 10px; }
+  .vaultbox .vname { font-weight: 800; font-size: 24px; margin-top: 10px; }
   .vaultbox .vcount { font-size: 14.5px; color: #6b5520; margin-top: 4px; }
 
   .card {
@@ -200,7 +204,7 @@
       <p id="sub"></p>
       <div class="vaultbox">
         <div class="lock">🔐</div>
-        <div class="vname">LME Vault</div>
+        <h2 class="vname">LME Vault</h2>
         <div class="vcount" id="vaultCount"></div>
       </div>
     </div>

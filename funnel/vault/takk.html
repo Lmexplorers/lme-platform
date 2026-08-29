@@ -8,7 +8,11 @@
 <link rel="icon" href="/images/lme-logo.png">
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700;800&display=swap');
+  /* Playpen Sans lastes lokalt, samme filer som resten av plattformen, så
+     overskriftene aldri faller tilbake på systemfont om Google Fonts er nede. */
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-800.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: swap; }
   @font-face {
     font-family: 'Sasson Montessori';
     src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
