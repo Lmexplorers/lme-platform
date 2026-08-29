@@ -64,6 +64,13 @@
   .svar{margin-top:20px;border-radius:var(--r-lg);padding:16px 18px;font-size:14.5px;display:none}
   .svar.ok{background:var(--lime-soft);color:#4d6a10;display:block}
   .svar.feil{background:var(--cerise-soft);color:#a11360;display:block}
+  .dublett{display:none;margin-top:16px;background:var(--sun-soft);border-radius:var(--r-lg);padding:18px 20px}
+  .dublett.vis{display:block}
+  .dublett p{font-size:14.5px;color:#7a5e00;margin-bottom:10px}
+  .dublett ul{list-style:none;display:grid;gap:8px;margin-bottom:14px}
+  .dublett li{font-size:14px;color:#7a5e00;background:#fff;border-radius:14px;padding:10px 14px}
+  .dublett li b{display:block;font-weight:800}
+  .rydd-knapp{margin-top:0;background:linear-gradient(120deg,#F7C72E,#e0a800);color:#4a3708;box-shadow:0 10px 22px rgba(247,199,46,.35)}
   .tilbake{display:block;text-align:center;margin-top:22px;font-size:14px;color:var(--ink-muted);text-decoration:none}
   .tilbake:hover{color:var(--ink-soft);text-decoration:underline}
   h1,h2,h3,h4,h5,h6{font-family:var(--font-head)}
@@ -88,6 +95,11 @@
 
       <button id="kjor" data-no="Oppdater kurset" data-en="Update the course">Oppdater kurset</button>
       <div class="svar" id="svar"></div>
+      <div class="dublett" id="dublett">
+        <p id="dublettTekst"></p>
+        <ul id="dublettListe"></ul>
+        <button id="rydd" class="rydd-knapp" data-no="Fjern kopien" data-en="Remove the copy">Fjern kopien</button>
+      </div>
       <a class="tilbake" href="/kurs/lme-plattformen" data-no="Åpne kurset →" data-en="Open the course →">Åpne kurset →</a>
     </div>
   </div>
@@ -156,6 +168,7 @@
             ? 'Done. The course was already up to date, no new lessons to add. It has ' + d.lessonCount + ' lessons.'
             : 'Done. Added ' + nye + (nye === 1 ? ' new lesson' : ' new lessons') + '. The course now has ' + d.lessonCount + ' lessons.';
           vis('ok', LANG === 'en' ? eng : norsk);
+          visDubletter(d.dubletter);
         } else if (d && d.error === 'bad_password') {
           // Sier hvor serveren henter passordet fra, så en feil kan spores
           // videre uten gjetting. Selve passordet vises aldri.
@@ -172,6 +185,57 @@
       knapp.disabled = false;
     }
 
+    const dublettBoks = document.getElementById('dublett');
+    const dublettTekst = document.getElementById('dublettTekst');
+    const dublettListe = document.getElementById('dublettListe');
+    const ryddKnapp = document.getElementById('rydd');
+
+    /* Viser dubletter uten å slette noe. Renate ser hvilken leksjon som blir
+       stående og hvilken kopi som fjernes, før hun bestemmer. */
+    function visDubletter(liste) {
+      if (!liste || !liste.length) { dublettBoks.classList.remove('vis'); return; }
+      dublettTekst.textContent = LANG === 'en'
+        ? 'Found ' + liste.length + (liste.length === 1 ? ' lesson that exists twice' : ' lessons that exist twice') + ', because it was renamed in the course builder and the import added the code version next to it. Your own version is kept, with your text. Only the copy is removed.'
+        : 'Fant ' + liste.length + (liste.length === 1 ? ' leksjon som ligger dobbelt' : ' leksjoner som ligger dobbelt') + ', fordi den var gitt nytt navn i Kursbygger og importen la inn kodens versjon ved siden av. Din egen beholdes, med teksten din. Bare kopien fjernes.';
+      dublettListe.innerHTML = '';
+      liste.forEach((d) => {
+        const li = document.createElement('li');
+        const b = document.createElement('b');
+        b.textContent = (LANG === 'en' ? 'Kept: ' : 'Beholdes: ') + d.min;
+        const sp = document.createElement('span');
+        sp.textContent = (LANG === 'en' ? 'Removed: ' : 'Fjernes: ') + d.fraKoden;
+        li.appendChild(b); li.appendChild(sp);
+        dublettListe.appendChild(li);
+      });
+      ryddKnapp.textContent = LANG === 'en' ? 'Remove the copy' : 'Fjern kopien';
+      dublettBoks.classList.add('vis');
+    }
+
+    async function rydd() {
+      const pw = felt.value.trim();
+      if (!pw) { felt.focus(); return; }
+      ryddKnapp.disabled = true;
+      try {
+        const r = await fetch('/api/seed-plattform-kurs', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pw, action: 'fjern-dubletter' }),
+        });
+        const d = await r.json();
+        if (d && d.ok) {
+          vis('ok', LANG === 'en'
+            ? 'Removed ' + d.fjernet + (d.fjernet === 1 ? ' copy' : ' copies') + '. The course now has ' + d.lessonCount + ' lessons.'
+            : 'Fjernet ' + d.fjernet + (d.fjernet === 1 ? ' kopi' : ' kopier') + '. Kurset har nå ' + d.lessonCount + ' leksjoner.');
+          visDubletter(d.dubletter);
+        } else {
+          vis('feil', (LANG === 'en' ? 'Could not clean up: ' : 'Fikk ikke ryddet: ') + ((d && d.error) || r.status));
+        }
+      } catch (e) {
+        vis('feil', LANG === 'en' ? 'Could not reach the server. Try again.' : 'Fikk ikke kontakt med serveren. Prøv igjen.');
+      }
+      ryddKnapp.disabled = false;
+    }
+
+    ryddKnapp.addEventListener('click', rydd);
     knapp.addEventListener('click', kjor);
     felt.addEventListener('keydown', (e) => { if (e.key === 'Enter') kjor(); });
     switchLanguage(LANG);

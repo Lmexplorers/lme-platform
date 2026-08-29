@@ -141,6 +141,47 @@ async function store(env, course) {
   return null;
 }
 
+/* Teksten i en leksjon, normalisert, brukt til å kjenne igjen to leksjoner som
+   er den samme selv om tittelen er endret. */
+function bodyKey(lesson) {
+  return ((lesson && lesson.body) || [])
+    .map((b) => ((b && b.no) || "").replace(/\s+/g, " ").trim().toLowerCase())
+    .join(" ")
+    .slice(0, 400);
+}
+
+/* Finner dubletter i kurset: par der to leksjoner har samme innhold, men ulik
+   tittel. Det oppstår hvis en leksjon er gitt nytt navn i Kursbygger FØR
+   importen begynte å føre liste over hva den hadde levert: importen kjente den
+   ikke igjen, og la inn kodens versjon ved siden av.
+
+   Returnerer par på formen { min, fraKoden }, der "min" er leksjonen Renate
+   har i kurset sitt (tittel som ikke finnes i koden, altså den hun har døpt
+   om) og "fraKoden" er kopien importen la inn. Sletter ingenting. */
+function finnDubletter(live, source) {
+  const kodeTitler = new Set(source.lessons.map(titleKey));
+  const par = [];
+  live.lessons.forEach((a, i) => {
+    const aKey = bodyKey(a);
+    if (!aKey) return;
+    live.lessons.forEach((b, j) => {
+      if (j <= i) return;
+      if (bodyKey(b) !== aKey) return;
+      if (titleKey(a) === titleKey(b)) return;
+      // Den som IKKE står i koden er Renates egen, den beholdes.
+      const aFraKoden = kodeTitler.has(titleKey(a));
+      const bFraKoden = kodeTitler.has(titleKey(b));
+      if (aFraKoden === bFraKoden) return; // ingen tydelig vinner, la den stå
+      par.push({
+        min: aFraKoden ? b.title.no : a.title.no,
+        fraKoden: aFraKoden ? a.title.no : b.title.no,
+        tekst: (((aFraKoden ? b : a).body || [])[0] || {}).no || "",
+      });
+    });
+  });
+  return par;
+}
+
 /* Selve importen. Kalles både fra GET (adresselinjen) og POST (siden
    /kurs-import, som sender passordet i kroppen i stedet for i URL-en, så det
    ikke havner i nettleserhistorikken). */
@@ -168,7 +209,11 @@ async function importer(env, pw, full) {
           const err = await store(env, live);
           if (err) return json(err, 413);
           await writeDelivered(env, source.slug, source.lessons.map(titleKey));
-          return json({ ok: true, slug: live.slug, mode: "en", filled: res.filled, skipped: res.skipped, added: added, lessonCount: live.lessons.length });
+          return json({
+            ok: true, slug: live.slug, mode: "en", filled: res.filled, skipped: res.skipped,
+            added: added, lessonCount: live.lessons.length,
+            dubletter: finnDubletter(live, source),
+          });
         }
       }
     }
@@ -179,6 +224,42 @@ async function importer(env, pw, full) {
   } catch (e) {
     return json({ error: "write_failed", detail: String(e) }, 200);
   }
+}
+
+/* Ser etter dubletter uten å endre noe. */
+async function seEtterDubletter(env) {
+  const source = sanitizeCourse(PLATTFORM_KURS);
+  const raw = await env.BUILDER_KV.get(KEY_PREFIX + source.slug);
+  if (!raw) return json({ ok: true, dubletter: [], lessonCount: 0 });
+  const live = sanitizeCourse(JSON.parse(raw));
+  return json({ ok: true, dubletter: finnDubletter(live, source), lessonCount: live.lessons.length });
+}
+
+/* Fjerner kodens kopi i hvert dublettpar, og beholder leksjonen Renate har
+   døpt om, med teksten hennes. Fjerner ALDRI en leksjon som ikke inngår i et
+   par der den andre halvdelen fortsatt blir stående. */
+async function fjernDubletter(env) {
+  const source = sanitizeCourse(PLATTFORM_KURS);
+  const raw = await env.BUILDER_KV.get(KEY_PREFIX + source.slug);
+  if (!raw) return json({ error: "not_found" }, 404);
+  const live = sanitizeCourse(JSON.parse(raw));
+  const par = finnDubletter(live, source);
+  if (!par.length) return json({ ok: true, fjernet: 0, lessonCount: live.lessons.length, dubletter: [] });
+
+  const skalBort = new Set(par.map((d) => d.fraKoden.trim().toLowerCase()));
+  const beholdes = new Set(par.map((d) => d.min.trim().toLowerCase()));
+  const foer = live.lessons.length;
+  live.lessons = live.lessons.filter((l) => {
+    const t = titleKey(l);
+    // Bare kodens kopi ryker, og bare når leksjonen den dubletterer blir stående.
+    return !(skalBort.has(t) && live.lessons.some((a) => beholdes.has(titleKey(a))));
+  });
+  const err = await store(env, live);
+  if (err) return json(err, 413);
+  return json({
+    ok: true, fjernet: foer - live.lessons.length, lessonCount: live.lessons.length,
+    titler: par.map((d) => d.fraKoden), dubletter: finnDubletter(live, source),
+  });
 }
 
 export async function onRequestGet(context) {
@@ -195,9 +276,17 @@ export async function onRequestGet(context) {
 export async function onRequestPost(context) {
   let body = null;
   try { body = await context.request.json(); } catch (e) { body = null; }
-  return importer(
-    context.env,
-    (((body && body.password) || "") + "").trim(),
-    (body && body.mode) === "full"
-  );
+  const env = context.env;
+  const pw = (((body && body.password) || "") + "").trim();
+  if (!env.BUILDER_KV) return json({ error: "not_configured" }, 200);
+  if (!editPasswordOk(env, pw, [DEFAULT_PASSWORD])) {
+    return json({ error: "bad_password", kilde: editPasswordSource(env) }, 401);
+  }
+  try {
+    if (body && body.action === "dubletter") return await seEtterDubletter(env);
+    if (body && body.action === "fjern-dubletter") return await fjernDubletter(env);
+  } catch (e) {
+    return json({ error: "write_failed", detail: String(e) }, 200);
+  }
+  return importer(env, pw, (body && body.mode) === "full");
 }
