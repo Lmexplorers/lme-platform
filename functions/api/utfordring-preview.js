@@ -15,6 +15,7 @@
 
 import { sessionUser, isOwner } from "../_lib/access.js";
 import { sendUtfordringMail } from "../_lib/utfordring-mail.js";
+import { editPasswordOk } from "../_lib/edit-password.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -35,7 +36,7 @@ export async function onRequestPost(context) {
   const body = await request.json().catch(() => ({}));
   const lang = body.lang === "en" ? "en" : "no";
   const suppliedKey = ((body.key || "") + "").trim();
-  const keyOk = suppliedKey && suppliedKey === ((env.COURSE_EDIT_PASSWORD || OWNER_KEY_FALLBACK) + "");
+  const keyOk = editPasswordOk(env, suppliedKey, [OWNER_KEY_FALLBACK]);
 
   if (!keyOk) {
     const user = await sessionUser(context);

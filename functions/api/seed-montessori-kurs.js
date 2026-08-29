@@ -12,6 +12,7 @@
  */
 import { sanitizeCourse, indexEntry, readIndex, KEY_PREFIX, INDEX_KEY, MAX_SIZE, DEFAULT_PASSWORD } from "./kurs.js";
 import { MONTESSORI_KOM_I_GANG, MONTESSORI_MASTERCLASS } from "../_lib/seed-montessori-kurs-data.js";
+import { editPasswordOk } from "../_lib/edit-password.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data, null, 2), {
@@ -26,8 +27,7 @@ export async function onRequestGet(context) {
 
   const url = new URL(request.url);
   const pw = (url.searchParams.get("pw") || "").trim();
-  const expected = (env.COURSE_EDIT_PASSWORD || DEFAULT_PASSWORD) + "";
-  if (pw !== expected) return json({ error: "bad_password" }, 401);
+  if (!editPasswordOk(env, pw, [DEFAULT_PASSWORD])) return json({ error: "bad_password" }, 401);
 
   const results = [];
   for (const raw of [MONTESSORI_KOM_I_GANG, MONTESSORI_MASTERCLASS]) {

@@ -35,6 +35,7 @@
  *     cover: dataURL|undefined      // plakat/miniatyr
  *   }
  */
+import { editPasswordOk } from "../_lib/edit-password.js";
 
 const DEFAULT_PASSWORD = "LME2026";
 const KEY_PREFIX = "lme-builder:episode:";
@@ -190,8 +191,7 @@ export async function onRequestPost(context) {
   } catch (e) {
     return json({ error: "bad_json" }, 400);
   }
-  const expected = (env.COURSE_EDIT_PASSWORD || DEFAULT_PASSWORD) + "";
-  if (((body && body.password) || "") + "" !== expected) {
+  if (!editPasswordOk(env, body && body.password, [DEFAULT_PASSWORD])) {
     return json({ error: "bad_password" }, 401);
   }
 

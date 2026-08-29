@@ -15,6 +15,7 @@
  */
 import { registerVippsWebhook } from "../_lib/vipps.js";
 import { DEFAULT_PASSWORD } from "./laeringsverksted.js";
+import { editPasswordOk } from "../_lib/edit-password.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -29,8 +30,7 @@ export async function onRequestGet(context) {
 
   const url = new URL(request.url);
   const pw = (url.searchParams.get("pw") || "").trim();
-  const expected = (env.COURSE_EDIT_PASSWORD || DEFAULT_PASSWORD) + "";
-  if (pw !== expected) return json({ error: "bad_password" }, 401);
+  if (!editPasswordOk(env, pw, [DEFAULT_PASSWORD])) return json({ error: "bad_password" }, 401);
 
   const callbackUrl = url.origin + "/api/vipps-webhook";
   const result = await registerVippsWebhook(env, callbackUrl, ["epayments.payment.authorized.v1"]);

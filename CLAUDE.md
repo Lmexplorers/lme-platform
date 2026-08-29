@@ -198,7 +198,10 @@ Bruk aldri Playpen (eller systemfont/Comic Sans) på brødtekst. Aldri avvik.
 - Bare elementer merket `data-edit="…"` (og `section.crs` på kurs) er redigerbare.
 - Lagres i Cloudflare KV via `functions/api/content.js` og `functions/api/course.js`.
 - Knappen er skjult: vis med `#rediger` i adressen eller `Ctrl/Cmd+Shift+E`.
-  Lagring krever passord (`COURSE_EDIT_PASSWORD`, ellers standardpassordet i koden).
+  Lagring krever passord. Passordet ligger i `functions/_lib/edit-password.js`
+  (`LME2026`), og en eventuell hemmelighet `COURSE_EDIT_PASSWORD` i Cloudflare
+  godtas i tillegg, ikke i stedet. Skal passordet byttes, endres verdien i den
+  filen, så gjelder det alle byggerne.
 - **Lagret tekst overstyrer HTML-en.** Hvis Renate har redigert en side, spør henne
   før du endrer samme tekst i kildekoden.
 

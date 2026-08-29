@@ -1,4 +1,5 @@
 import { logUsage, anthropicUnits } from "../_lib/ai-core/usage.js";
+import { editPasswordOk } from "../_lib/edit-password.js";
 /**
  * LME — redigerbare tekstblokker lagret i Cloudflare KV.
  *
@@ -137,8 +138,7 @@ export async function onRequestPost(context) {
   let body;
   try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
 
-  const expected = (env.COURSE_EDIT_PASSWORD || DEFAULT_PASSWORD) + "";
-  if (((body && body.password) || "") + "" !== expected) {
+  if (!editPasswordOk(env, body && body.password, [DEFAULT_PASSWORD])) {
     return json({ error: "bad_password" }, 401);
   }
 

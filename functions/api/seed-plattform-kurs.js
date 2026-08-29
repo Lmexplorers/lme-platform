@@ -30,6 +30,7 @@
  */
 import { sanitizeCourse, indexEntry, readIndex, KEY_PREFIX, INDEX_KEY, MAX_SIZE, DEFAULT_PASSWORD } from "./kurs.js";
 import { PLATTFORM_KURS } from "../_lib/seed-plattform-kurs-data.js";
+import { editPasswordOk, editPasswordSource } from "../_lib/edit-password.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data, null, 2), {
@@ -145,12 +146,11 @@ async function store(env, course) {
    ikke havner i nettleserhistorikken). */
 async function importer(env, pw, full) {
   if (!env.BUILDER_KV) return json({ error: "not_configured" }, 200);
-  const expected = (env.COURSE_EDIT_PASSWORD || DEFAULT_PASSWORD) + "";
-  if (pw !== expected) {
+  if (!editPasswordOk(env, pw, [DEFAULT_PASSWORD])) {
     // Sier IKKE hva passordet er, bare hvor det kommer fra. Uten dette er det
     // umulig å vite om et avvist passord skyldes standarden i koden eller en
     // hemmelighet satt i Cloudflare som overstyrer den.
-    return json({ error: "bad_password", kilde: env.COURSE_EDIT_PASSWORD ? "cloudflare" : "kode" }, 401);
+    return json({ error: "bad_password", kilde: editPasswordSource(env) }, 401);
   }
 
   const source = sanitizeCourse(PLATTFORM_KURS);
