@@ -279,6 +279,12 @@ export const COURSE_PAYMENT_LINKS = {
   "plink_1U1sDzLax7B8uQzqZRyfpuwu": { courseId: "lag-ditt-foerste-digitale-minikurs", tier: "standard", lang: "en" },
   "plink_1U2I9tLax7B8uQzqCYi2ntGG": { courseId: "montessori-masterclass", tier: "standard", lang: "no" },
   "plink_1U2I9uLax7B8uQzqYzTq1jUw": { courseId: "montessori-masterclass", tier: "standard", lang: "en" },
+  // LME Vault (/vault): engangskjøp av malhvelvet, samme leveringsvei som
+  // kursene over (tilgangslenke på e-post, tilgang for alltid). Legg inn
+  // betalingslenke-ID-ene her når betalingslenkene er laget i Stripe, og lim
+  // de samme URL-ene inn i "checkoutUrl" i funnel/vault/funnel-config.js.
+  // "plink_...": { courseId: "vault", tier: "launch", lang: "no" },
+  // "plink_...": { courseId: "vault", tier: "launch", lang: "en" },
 };
 
 export const COURSE_INFO = {
@@ -309,6 +315,10 @@ export const COURSE_INFO = {
   "montessori-masterclass": {
     name: { no: "Montessori mesterklasse", en: "Montessori Masterclass" },
     url: "https://lmexplorers.com/academy/kurs?k=montessori-masterclass",
+  },
+  "vault": {
+    name: { no: "LME Vault", en: "LME Vault" },
+    url: "https://lmexplorers.com/academy/vault",
   },
 };
 
