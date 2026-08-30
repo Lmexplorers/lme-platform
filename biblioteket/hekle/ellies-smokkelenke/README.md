@@ -23,6 +23,16 @@ smokkeholdere (en enkel klips + snor skal ikke kunne danne en løkke rundt
 barnets hals). Oppskriften minner flere steder om at ferdig produkt må
 kontrolleres mot gjeldende lokale krav før salg.
 
+## Oppdatert 30. august 2026: bilder komprimert, raskere å skrive ut og laste opp
+
+Renate meldte fra at PDF-ene var trege å skrive ut. Referansebildet
+`ellie_face_ref.png` var lagret som PNG (ukomprimert, tenkt for grafikk),
+selv om det er et bilde av det heklede produktet, ikke grafikk med skarpe
+kanter eller gjennomsiktighet. Byttet til komprimert JPEG (`ellie_face_ref.jpg`,
+kvalitet 85), samme teknikk brukt på resten av bildene i filen. Ingen synlig
+kvalitetsforskjell ved vanlig visning/print, men PDF-en er nå vesentlig
+mindre og raskere å åpne, skrive ut og laste opp for de som kjøper.
+
 ## Oppdatert 28. august 2026: kragen hekles for seg selv, blomst/blad fjernet
 
 Renate begynte å hekle kragen og meldte fra om tre ting:

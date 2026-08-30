@@ -5,6 +5,13 @@ Ferdig oppskrift: **`Ellies-vognlenke-LME.pdf`** (norsk, 14 sider, A4) og
 
 Fjerde oppskrift i **LME Baby Collection "Woodland Dreams"**.
 
+## Oppdatert 30. august 2026: bilder komprimert, raskere å skrive ut og laste opp
+
+Renate meldte fra at PDF-ene var trege å skrive ut. `vognlenke_real.jpg` er
+nå re-komprimert (kvalitet 85, samme teknikk som resten av kolleksjonen),
+ingen synlig kvalitetsforskjell ved vanlig visning/print, men PDF-en er noe
+mindre og raskere å åpne, skrive ut og laste opp for de som kjøper.
+
 ## Oppdatert 30. august 2026: kragen hekles for seg selv
 
 Renate ba om at volangkragen på alle Ellie-oppskriftene skal hekles som en

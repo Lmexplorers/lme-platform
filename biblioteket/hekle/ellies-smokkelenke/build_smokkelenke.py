@@ -9,9 +9,9 @@ import lme_pattern_kit as kit
 from lme_pattern_kit import (BROWN, BROWN_MID, BROWN_DARK, CREAM, CREAM_DEEP, ROSE, SAGE, INK,
                               banner, rosep, sagep, card, cream, cme, ul, steps, otab, abbrtab)
 
-FACE_REF = BASE / 'ellie_face_ref.png'
+FACE_REF = BASE / 'ellie_face_ref.jpg'
 face_b64 = base64.b64encode(FACE_REF.read_bytes()).decode()
-face_src = f'data:image/png;base64,{face_b64}'
+face_src = f'data:image/jpeg;base64,{face_b64}'
 
 REF = BASE / 'smokkelenke_ref.jpg'
 ref_b64 = base64.b64encode(REF.read_bytes()).decode()

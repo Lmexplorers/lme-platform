@@ -11,6 +11,14 @@ titter opp av en lomme, en knitreside med en liten sky med knitrefolie inni,
 og en enkel bunn. To hjørneringer i tre og en perlekant langs toppen
 fullfører kuben.
 
+## Oppdatert 30. august 2026: bilder komprimert, raskere å skrive ut og laste opp
+
+Renate meldte fra at PDF-ene var trege å skrive ut. Denne oppskriften har
+flest bilder av alle Ellie-oppskriftene (seks referansebilder). Alle er nå
+re-komprimert (kvalitet 85, samme teknikk som resten av kolleksjonen),
+ingen synlig kvalitetsforskjell ved vanlig visning/print, men PDF-en er nå
+merkbart mindre og raskere å åpne, skrive ut og laste opp for de som kjøper.
+
 ## Oppdatert 30. august 2026: kragen hekles for seg selv
 
 Renate ba om at volangkragen på alle Ellie-oppskriftene skal hekles som en
