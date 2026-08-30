@@ -1,13 +1,11 @@
 # Ellies smokkelenke (LME Baby Collection, Woodland Dreams)
 
-Ferdig oppskrift: **`Ellies-smokkelenke-LME.pdf`** (norsk, 17 sider, A4) og
-**`Ellies-smokkelenke-LME-EN.pdf`** (engelsk, 17 sider, A4). Sidetallet er
-uendret av den siste rettingen (se under), kun tekst innenfor eksisterende
-sider.
+Ferdig oppskrift: **`Ellies-smokkelenke-LME.pdf`** (norsk, 16 sider, A4) og
+**`Ellies-smokkelenke-LME-EN.pdf`** (engelsk, 16 sider, A4).
 
 Andre oppskrift i **LME Baby Collection "Woodland Dreams"**, etter
 `../ellie-dadyret/`. Et forenklet dådyrhode inspirert av Ellie, med en liten
-sløyfe mellom ørene, en blomst, et blad og heklede kuler, tredd/sydd sammen
+sløyfe mellom ørene og heklede kuler, tredd/sydd sammen
 til en smokkelenke.
 
 Oppdatert 4. august 2026 etter Renates referansebilder av profesjonelt
@@ -24,6 +22,29 @@ til 22 cm, i tråd med prinsippet i den europeiske standarden EN 12586 for
 smokkeholdere (en enkel klips + snor skal ikke kunne danne en løkke rundt
 barnets hals). Oppskriften minner flere steder om at ferdig produkt må
 kontrolleres mot gjeldende lokale krav før salg.
+
+## Oppdatert 28. august 2026: kragen hekles for seg selv, blomst/blad fjernet
+
+Renate begynte å hekle kragen og meldte fra om tre ting:
+
+1. **Kragen var dårlig forklart.** Den gamle instruksjonen sa "fest tråd
+   rundt kanten der hodet er som smalest" og hekl kragen direkte inn i
+   hodets masker, men hodet hekles helt lukket (mink x 6 til slutt), det
+   finnes ingen slik åpen kant å hekle inn i. Dette var rett og slett en
+   konstruksjonsfeil. Rettet: kragen hekles nå som en egen, liten del
+   (legg opp 24 lm, lukk til en ring, 1 omgang med viftemønster = 6 vifter),
+   med eksplisitt masketall, og sys fast rundt halsen med heftesting
+   etterpå. Samme retting er gjort på resten av Ellie-tilbehøret som har en
+   krage (rangelen, vognlenka, aktivitetsleken), se deres README-er.
+2. **Ingen blomst og blad i denne oppskriften.** Fjernet hele "DEL 3:
+   BLOMSTEN OG BLADET"-siden, alle referanser i forside-tekst, materialliste,
+   fargepalett (salviegrønt er ikke lenger i bruk) og monteringssjekklisten.
+   Sløyfen (som tidligere delte side med blomst/blad) er flyttet inn på
+   kragesiden i stedet. 16 sider nå (ned fra 17).
+3. **"Heftesting" var ikke forklart.** Lagt til en kort forklaring første
+   gang ordet brukes (i ørene), pluss en egen rad i forkortelsestabellen:
+   "tette, jevne sting rett gjennom begge lag med synål og tråd, brukes til
+   å sy deler fast".
 
 ## Oppdatert 24. august 2026: kinnflekker og snute lagt til på hodet
 

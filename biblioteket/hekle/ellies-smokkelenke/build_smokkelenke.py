@@ -30,15 +30,15 @@ add('covertitle', 'ELLIES SMOKKELENKE', "ELLIE'S PACIFIER CLIP")
 add('subpill', 'LME BABY COLLECTION - WOODLAND DREAMS', 'LME BABY COLLECTION - WOODLAND DREAMS')
 add('cover_desc',
     'En liten smokkelenke med et forenklet dådyrhode inspirert av Ellie, med en pudderrosa '
-    'volangkrage rundt halsen, en liten sløyfe mellom ørene, en blomst, et blad, noen myke '
-    'heklede kuler med en stjerneperle, og en snorløkke til smokkeringen i enden. Heklet i de '
-    'samme naturfargene som resten av kolleksjonen. Maks lengde er satt for å følge gjeldende '
-    'sikkerhetsanbefaling for smokkeholdere.',
+    'volangkrage rundt halsen, en liten sløyfe mellom ørene, noen myke heklede kuler med en '
+    'stjerneperle, og en snorløkke til smokkeringen i enden. Heklet i de samme naturfargene som '
+    'resten av kolleksjonen. Maks lengde er satt for å følge gjeldende sikkerhetsanbefaling for '
+    'smokkeholdere.',
     "A little pacifier clip with a simplified deer head inspired by Ellie, with a powder pink "
-    "ruffled collar around the neck, a little bow between the ears, a flower, a leaf, a few "
-    "soft crocheted balls with a star bead, and a cord loop for the pacifier ring at the end. "
-    "Crocheted in the same natural colours as the rest of the collection. Maximum length "
-    "follows current safety guidance for soother holders.")
+    "ruffled collar around the neck, a little bow between the ears, a few soft crocheted balls "
+    "with a star bead, and a cord loop for the pacifier ring at the end. Crocheted in the same "
+    "natural colours as the rest of the collection. Maximum length follows current safety "
+    "guidance for soother holders.")
 add('by1', 'Av Renate Dahl', 'By Renate Dahl')
 add('by2', 'Little Montessori Explorers', 'Little Montessori Explorers')
 add('by3', 'lmexplorers.com', 'lmexplorers.com')
@@ -54,37 +54,35 @@ add('pill_historien', 'DEL AV ELLIES VERDEN', "PART OF ELLIE'S WORLD")
 add('om_historien',
     'Ellies smokkelenke hører til LME Baby Collection "Woodland Dreams", samme skogsunivers som '
     'Ellie, det lille dådyret. Det lille dådyrhodet på lenken er en forenklet utgave av Ellie, '
-    'akkurat stor nok til å henge trygt og lekent ved siden av smokken. Blomsten og bladet er '
-    'hentet fra den samme blomsterengen Ellie elsker å utforske.',
+    'akkurat stor nok til å henge trygt og lekent ved siden av smokken.',
     'Ellie\'s pacifier clip belongs to the LME Baby Collection "Woodland Dreams", the same '
     'woodland world as Ellie, the little fawn. The small deer head on the clip is a simplified '
-    'version of Ellie, just the right size to hang safely and playfully next to the pacifier. '
-    'The flower and leaf are picked from the same flower meadow Ellie loves to explore.')
+    'version of Ellie, just the right size to hang safely and playfully next to the pacifier.')
 add('pill_stil', 'STIL', 'STYLE')
 add('om_stil',
     'Minimalistisk, Montessori-inspirert og skandinavisk, i de samme naturfargene som Ellie: '
-    'brunt, kremhvitt, pudderrosa og salviegrønt. Rolig og enkelt, aldri overlesset.',
+    'brunt, kremhvitt og pudderrosa. Rolig og enkelt, aldri overlesset.',
     'Minimalist, Montessori-inspired and Scandinavian, in the same natural colours as Ellie: '
-    'brown, cream, powder pink and sage green. Calm and simple, never cluttered.')
+    'brown, cream and powder pink. Calm and simple, never cluttered.')
 add('pill_sikkerhet_kort', 'VIKTIGST AV ALT: SIKKERHET', 'MOST IMPORTANT OF ALL: SAFETY')
 add('om_sikkerhet_kort',
     'En smokkelenke er noe barnet har tett på ansiktet, ofte alene i vogn eller seng. Derfor er '
-    'lengden på denne oppskriften bevisst kort, og hele side 15 er viet sikkerhet. Les den siden '
+    'lengden på denne oppskriften bevisst kort, og hele side 14 er viet sikkerhet. Les den siden '
     'før du hekler videre.',
     "A pacifier clip is something a baby has close to their face, often alone in a pram or bed. "
-    "That's why this pattern's length is deliberately short, and all of page 15 is dedicated to "
+    "That's why this pattern's length is deliberately short, and all of page 14 is dedicated to "
     "safety. Read that page before you crochet on.")
 
 # ---------------------------------------------------------------- SIDE 3
 add('banner_mat', 'MATERIALER OG GARNALTERNATIVER', 'MATERIALS AND YARN ALTERNATIVES')
 add('pill_garn', 'GARN', 'YARN')
 add('garn_txt',
-    'Bystrikk Merino (brun og kremhvit), rester av pudderrosa og salviegrønt til blomst og blad. '
+    'Bystrikk Merino (brun og kremhvit), rester av pudderrosa til volangkragen og sløyfen. '
     'Samme garn som resten av Ellie-kolleksjonen, så restene fra de andre oppskriftene ofte '
     'strekker til.',
-    'Bystrikk Merino (brown and cream), leftover powder pink and sage green for the flower and '
-    'leaf. Same yarn as the rest of the Ellie collection, so leftovers from the other patterns '
-    'often stretch to cover this.')
+    'Bystrikk Merino (brown and cream), leftover powder pink for the ruffled collar and the bow. '
+    'Same yarn as the rest of the Ellie collection, so leftovers from the other patterns often '
+    'stretch to cover this.')
 add('garn_alt',
     'Alternativt garn: Enhver myk bomullsblanding i DK-tykkelse (fx. DROPS Safran, Hobbii Amigo, '
     'Rico Ricorumi) fungerer fint. Unngå akryl helt nær munnen, bomull er lettest å vaske rent.',
@@ -143,16 +141,15 @@ add('fasthet_txt',
 add('banner_ord', 'FORKORTELSER (NORSK OG US)', 'ABBREVIATIONS (NORWEGIAN AND US)')
 add('ord_lead',
     'Denne oppskriften bruker litt flere hekleteknikker enn en ren amigurumi-figur, siden '
-    'blomsten og bladet trenger stav og halvstav. Her er alle forkortelsene, med de vanlige '
-    'amerikanske hekletermene ved siden av.',
+    'volangkragen trenger stav. Her er alle forkortelsene, med de vanlige amerikanske '
+    'hekletermene ved siden av, pluss sømteknikken som brukes til å sy delene fast.',
     'This pattern uses a few more crochet techniques than a plain amigurumi figure, since the '
-    'flower and leaf need double and half double crochet. Here are all the abbreviations, with '
-    'the common US crochet terms alongside.')
+    'ruffled collar needs double crochet. Here are all the abbreviations, with the common US '
+    'crochet terms alongside, plus the sewing technique used to sew the pieces on.')
 add('ord_head', ['Norsk', 'US', 'Betyr'], ['Norwegian', 'US', 'Means'])
 add('ord_rows', [
     ('lm', 'ch', 'luftmaske / chain'),
     ('fm', 'sc', 'fastmaske / single crochet'),
-    ('halvstav', 'hdc', 'halv stav / half double crochet'),
     ('stav', 'dc', 'stav / double crochet'),
     ('kjm', 'sl st', 'kjedemaske / slip stitch'),
     ('magisk ring', 'magic ring', 'justerbar startring uten hull i midten'),
@@ -161,6 +158,8 @@ add('ord_rows', [
     ('m', 'st(s)', 'maske(r)'),
     ('( )', '( )', 'totalt antall masker på omgangen'),
     ('*...*', '*...*', 'gjenta det mellom stjernene så mange ganger som står bak'),
+    ('heftesting', 'running stitch', 'sømteknikk (ikke hekling): tette, jevne sting rett '
+     'gjennom begge lag med synål og tråd, brukes til å sy deler fast'),
 ])
 add('pill_tips', 'TIPS FØR DU BEGYNNER', 'TIPS BEFORE YOU START')
 add('tips', [
@@ -179,16 +178,14 @@ add('tips_en', [
 # ---------------------------------------------------------------- SIDE 6
 add('banner_oversikt', 'SLIK ER SMOKKELENKEN BYGGET OPP', 'HOW THE PACIFIER CLIP IS BUILT')
 add('oversikt_lead',
-    'Fire typer deler hekles hver for seg og tres/sys sammen til slutt langs en kort snor eller '
+    'Tre typer deler hekles hver for seg og tres/sys sammen til slutt langs en kort snor eller '
     'direkte til hverandre:',
-    'Four types of pieces are crocheted separately, then threaded or sewn together at the end '
+    'Three types of pieces are crocheted separately, then threaded or sewn together at the end '
     'along a short cord, or directly to each other:')
 add('oversikt_deler', [
     ('1. Det lille dådyrhodet', 'forenklet Ellie med to kremhvite kinnflekker, snute og sløyfe, én per lenke', '1. The little deer head', 'a simplified Ellie with two cream cheek patches, a muzzle and a bow, one per clip'),
-    ('2. Volangkragen', 'pudderrosa, rundt halsen', '2. The ruffled collar', 'powder pink, around the neck'),
-    ('3. Blomsten', 'flat, seks kronblad', '3. The flower', 'flat, six petals'),
-    ('4. Bladet', 'flatt, salviegrønt', '4. The leaf', 'flat, sage green'),
-    ('5. De heklede kulene', 'så mange du trenger for å fylle ut lengden, med én stjerneperle', '5. The crocheted balls', 'as many as you need to fill out the length, with one star bead'),
+    ('2. Volangkragen', 'pudderrosa, hekles for seg selv og sys rundt halsen', '2. The ruffled collar', 'powder pink, crocheted separately and sewn around the neck'),
+    ('3. De heklede kulene', 'så mange du trenger for å fylle ut lengden, med én stjerneperle', '3. The crocheted balls', 'as many as you need to fill out the length, with one star bead'),
 ])
 
 # ---------------------------------------------------------------- SIDE 7: DÅDYRHODET
@@ -250,11 +247,13 @@ add('ore_inne_mini_rows_en', [
 ])
 add('orer_mini_ferdig',
     'Klipp av begge delene, la ca. 15 cm tråd igjen. Ikke fyll ørene, de skal være flate. Legg '
-    'den lille sirkelen midt oppå den brune og sy den fast med heftesting, så det står en jevn '
-    'brun kant rundt. Sy hvert øre fast øverst på hodet, med litt avstand mellom.',
+    'den lille sirkelen midt oppå den brune og sy den fast med heftesting (tette, jevne sting '
+    'rett gjennom begge lag, ett ved siden av det neste, med synål og tråd), så det står en '
+    'jevn brun kant rundt. Sy hvert øre fast øverst på hodet, med litt avstand mellom.',
     'Cut both pieces, leaving a tail of approx. 15 cm. Do not stuff the ears, they should be '
     'flat. Place the small circle in the middle of the brown one and sew it on with running '
-    'stitch, leaving an even brown rim showing. Sew each ear onto the top of the head, with a '
+    'stitch (small, even stitches straight through both layers, one next to the other, using a '
+    'sewing needle and thread), leaving an even brown rim showing. Sew each ear onto the top of the head, with a '
     'little space between.')
 
 add('banner_snute_mini', 'KINNFLEKKENE OG SNUTEN (KREMHVIT)', 'THE CHEEK PATCHES AND MUZZLE (CREAM)')
@@ -336,22 +335,29 @@ add('ansikt_mini_txt',
     'expression, in miniature: two eyes, two cheek patches, and brown showing between them, not '
     'one continuous patch.')
 add('banner_krage', 'DEL 2: VOLANGKRAGEN', 'PART 2: THE RUFFLED COLLAR')
-add('pill_krage', 'VOLANGKRAGEN (PUDDERROSA)', 'THE RUFFLED COLLAR (POWDER PINK)')
+add('pill_krage', 'VOLANGKRAGEN (PUDDERROSA) - HEKLES FOR SEG SELV', 'THE RUFFLED COLLAR (POWDER PINK) - CROCHETED SEPARATELY')
 add('krage_txt',
-    'Fest pudderrosa tråd rundt kanten der hodet er som smalest, nederst. *1 fm i neste maske, '
-    'hopp over 1 maske, 3 stav i neste maske (en liten vifte), hopp over 1 maske*, gjenta rundt '
-    'hele kanten. Fest av og gjem tråden.',
-    'Attach powder pink yarn around the edge where the head is narrowest, at the bottom. '
-    '*1 sc in the next stitch, skip 1 stitch, 3 dc in the next stitch (a little fan), skip 1 '
-    'stitch*, repeat all the way around the edge. Fasten off and weave in the end.')
+    'Kragen hekles ikke direkte på hodet, den er en egen, liten del som sys fast etterpå. Legg '
+    'opp 24 lm, lukk til en ring med 1 kjedemaske i den aller første luftmasken (pass på at '
+    'luftmaskekjeden ikke vrir seg før du lukker). Omgang 1: *1 fm i neste maske, hopp over 1 '
+    'maske, 3 stav i neste maske (en liten vifte), hopp over 1 maske*, gjenta 6 ganger rundt '
+    'hele ringen til du er tilbake ved start (24 masker totalt i ringen, 6 vifter). Avslutt med '
+    'kjedemaske i den aller første fastmasken, klipp av og la ca. 15 cm tråd igjen.',
+    'The collar is not crocheted directly onto the head, it is a separate little piece sewn on '
+    'afterwards. Chain 24, join into a ring with 1 slip stitch in the very first chain (make '
+    'sure the chain is not twisted before you join). Round 1: *1 sc in the next stitch, skip 1 '
+    'stitch, 3 dc in the next stitch (a little fan), skip 1 stitch*, repeat 6 times around the '
+    'whole ring until you are back at the start (24 stitches total in the ring, 6 fans). Finish '
+    'with a slip stitch in the very first sc, cut and leave a tail of approx. 15 cm.')
 add('pill_krage_fest', 'PLASSERING', 'PLACEMENT')
 add('krage_fest_txt',
-    'Volangkragen hekles direkte på hodet og trenger ingen ekstra festing, den sitter fast '
-    'som en liten ruflete kant rundt halsen, akkurat som i referansebildet.',
+    'Sy kragen fast med heftesting rundt nedre del av hodet, rett der kinnflekkene og snuten '
+    'møter halsen, akkurat som i referansebildet. Fordel vidden på kragen jevnt rundt mens du '
+    'syr, så den ligger flatt og ruflete hele veien rundt.',
     'The ruffled collar is crocheted directly onto the head and needs no extra attaching, it '
     'sits in place as a little ruffled edge around the neck, just like in the reference photo.')
 
-add('pill_sloyfe_mini', 'DEN LILLE SLØYFEN', 'THE LITTLE BOW')
+add('pill_sloyfe_mini', 'SLØYFEN (PUDDERROSA)', 'THE BOW (POWDER PINK)')
 add('sloyfe_mini_txt',
     'Hekle en smal strimmel i pudderrosa: legg opp 10 lm + 1 vendemaske, 1 rad fm (10 fm). Fold '
     'strimmelen sammen til en liten sløyfeform og sy et lite stykke garn stramt rundt midten '
@@ -362,33 +368,8 @@ add('sloyfe_mini_txt',
     'around the centre a few times. Sew the bow on permanently and flat, between the ears, just '
     'like in the reference photo.')
 
-# ---------------------------------------------------------------- SIDE 8: BLOMST OG BLAD
-add('banner_blomst', 'DEL 3: BLOMSTEN OG BLADET', 'PART 3: THE FLOWER AND THE LEAF')
-add('pill_blomst', 'BLOMSTEN (PUDDERROSA)', 'THE FLOWER (POWDER PINK)')
-add('blomst_txt',
-    'Hekle 12 fm i magisk ring. Ikke lukk omgangen, fortsett rett inn i kronbladene: '
-    '*hopp over 1 m, i neste m: 1 kjm, 1 lm, 3 stav, 1 lm, 1 kjm*, gjenta rundt til du har seks '
-    'kronblad. Avslutt med kjedemaske og klipp av med god tråd igjen.',
-    'Crochet 12 sc in a magic ring. Do not join the round, continue straight into the petals: '
-    '*skip 1 st, in the next st: 1 sl st, 1 ch, 3 dc, 1 ch, 1 sl st*, repeat around until you '
-    'have six petals. Finish with a slip stitch and cut, leaving a long tail.')
-add('pill_blad', 'BLADET (SALVIEGRØNT)', 'THE LEAF (SAGE GREEN)')
-add('blad_txt',
-    'Legg opp 7 lm. Start i 2. lm fra nålen: 1 kjm, 1 fm, 1 halvstav, 2 stav i siste lm '
-    '(tuppen), snu og fortsett på den andre siden av kjeden: 1 halvstav, 1 fm, 1 kjm. Avslutt og '
-    'klipp av med god tråd igjen.',
-    'Chain 7. Starting in the 2nd ch from the hook: 1 sl st, 1 sc, 1 hdc, 2 dc in the last ch '
-    '(the tip), turn and continue along the other side of the chain: 1 hdc, 1 sc, 1 sl st. '
-    'Fasten off, leaving a long tail.')
-add('pill_montering_motiv', 'FEST BLOMST OG BLAD TIL HODET', 'ATTACH THE FLOWER AND LEAF TO THE HEAD')
-add('montering_motiv_txt',
-    'Sy blomsten og bladet sammen, og fest dem godt til siden av dådyrhodet eller rett ved '
-    'siden av på snoren, akkurat som Ellies egen sløyfe. Bruk mange, tette sting.',
-    "Sew the flower and leaf together, and attach them securely to the side of the deer head or "
-    "right next to it on the cord, just like Ellie's own bow. Use plenty of tight stitches.")
-
 # ---------------------------------------------------------------- SIDE 9: KULENE
-add('banner_kuler', 'DEL 4: DE HEKLEDE KULENE', 'PART 4: THE CROCHETED BALLS')
+add('banner_kuler', 'DEL 3: DE HEKLEDE KULENE', 'PART 3: THE CROCHETED BALLS')
 add('kuler_lead',
     'Hekle så mange kuler du trenger for å fylle ut lengden mellom klipsen og dådyrhodet, '
     'gjerne i en rytme av brunt og kremhvitt, med treperler mellom og én stjerneformet '
@@ -437,10 +418,11 @@ add('montering_lead',
     'stretched out before you sew or tie anything in place.')
 add('montering_steg', [
     'Sy ørene, de to kinnflekkene og snuten fast på hodet, hvis du ikke allerede har gjort det.',
-    'Hekle volangkragen rundt nederste kant av dådyrhodet, og sy sløyfen fast mellom ørene.',
+    'Hekle volangkragen ferdig som egen del (hvis ikke gjort allerede), og sy den fast rundt '
+    'nederste kant av dådyrhodet med heftesting. Sy sløyfen fast mellom ørene.',
     'Tre eller sy kulene og stjerneperlen (og eventuelle andre perler) i ønsket rekkefølge på '
     'en kort, sterk bomullssnor eller direkte sammen med tett heftesting mellom hver del.',
-    'Fest dådyrhodet i den ene enden, og sy blomsten og bladet ved siden av det.',
+    'Fest dådyrhodet i den ene enden.',
     'Hekle snorløkken og sy den godt fast til siste kule i den andre enden, tre smokkeringen '
     'gjennom løkka.',
     'Mål hele lenken strukket helt ut. Er den lengre enn 22 cm, ta bort en kule eller to.',
@@ -449,12 +431,13 @@ add('montering_steg', [
 ])
 add('montering_steg_en', [
     'Sew the ears, the two cheek patches and the muzzle onto the head, if you have not already.',
-    'Crochet the ruffled collar around the bottom edge of the deer head, and sew the bow on '
-    'between the ears.',
+    'Finish crocheting the ruffled collar as its own piece (if not done already), and sew it in '
+    'place around the bottom edge of the deer head with running stitch. Sew the bow on between '
+    'the ears.',
     'Thread or sew the balls and the star bead (and any other beads) in the order you want, '
     'on a short, strong cotton cord, or sew them directly together with tight running stitch '
     'between each piece.',
-    'Attach the deer head at one end, and sew the flower and leaf on next to it.',
+    'Attach the deer head at one end.',
     'Crochet the cord loop and sew it securely to the last ball at the other end, thread the '
     'pacifier ring through the loop.',
     'Measure the whole clip fully stretched out. If it is longer than 22 cm, remove a ball or two.',
@@ -675,19 +658,9 @@ def build(lang):
 {card('<p>' + t('krage_txt') + '</p>')}
 {sagep(t('pill_krage_fest'))}
 {cme(t('krage_fest_txt'))}
-''', 11))
-
-    pages.append(pg(f'''
-{banner(t('banner_blomst'))}
 {rosep(t('pill_sloyfe_mini'))}
 {card('<p>' + t('sloyfe_mini_txt') + '</p>')}
-{sagep(t('pill_blomst'))}
-{card('<p>' + t('blomst_txt') + '</p>')}
-{rosep(t('pill_blad'))}
-{card('<p>' + t('blad_txt') + '</p>')}
-{sagep(t('pill_montering_motiv'))}
-{cme(t('montering_motiv_txt'))}
-''', 12))
+''', 11))
 
     kuler_rows = T['kuler_rows']['no'] if lang == 'no' else T['kuler_rows_en']['no']
     pages.append(pg(f'''
@@ -697,14 +670,14 @@ def build(lang):
 {cme(t('kuler_ferdig'))}
 {rosep(t('pill_lokke'))}
 {card('<p>' + t('lokke_txt') + '</p>')}
-''', 13))
+''', 12))
 
     mo_steg = T['montering_steg']['no'] if lang == 'no' else T['montering_steg_en']['no']
     pages.append(pg(f'''
 {banner(t('banner_montering'))}
 <p>{t('montering_lead')}</p>
 {card(steps(mo_steg))}
-''', 14))
+''', 13))
 
     regler = T['regler']['no'] if lang == 'no' else T['regler_en']['no']
     pages.append(pg(f'''
@@ -713,12 +686,12 @@ def build(lang):
 {card('<p>' + t('lengde_txt') + '</p>')}
 {sagep(t('pill_regler'))}
 {card(ul(regler))}
-''', 15))
+''', 14))
 
     pages.append(pg(f'''
 {banner(t('banner_stell'))}
 {cme(t('stell_txt'))}
-''', 16))
+''', 15))
 
     kolliste = T['kolleksjon_liste']['no'] if lang == 'no' else T['kolleksjon_liste']['en']
     pages.append(pg(f'''
@@ -731,7 +704,7 @@ def build(lang):
 <div class="byline">
   <div class="by2">{t('by1')} &middot; {t('by2')} &middot; {t('by3')}</div>
 </div>
-''', 17))
+''', 16))
 
     return pages
 
