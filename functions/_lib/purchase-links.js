@@ -324,6 +324,9 @@ export const COURSE_INFO = {
   "vault": {
     name: { no: "LME Vault", en: "LME Vault" },
     url: "https://lmexplorers.com/academy/vault",
+    // Hvelvet er ikke et kurs, så knappen i leveringsmailen skal ikke si
+    // "Åpne kurset". Uten cta faller den tilbake på standardteksten.
+    cta: { no: "Åpne hvelvet", en: "Open the vault" },
   },
 };
 

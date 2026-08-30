@@ -218,7 +218,8 @@ export async function onRequestPost(context) {
       const info = COURSE_INFO[course.courseId];
       const courseName = info.name[course.lang] || info.name.no;
       const token = await grantCourseAccess(env, course.courseId, email, nm);
-      try { await sendCourseDeliveryMail(env, email, nm, course.lang, courseName, info.url, token, true); } catch (e1) {}
+      const ctaLabel = info.cta ? (info.cta[course.lang] || info.cta.no) : "";
+      try { await sendCourseDeliveryMail(env, email, nm, course.lang, courseName, info.url, token, true, ctaLabel); } catch (e1) {}
       try {
         await sendOwnerSaleNotice(env, {
           pname: courseName + " (" + course.tier + ")", lang: course.lang, name: nm, email: email,
