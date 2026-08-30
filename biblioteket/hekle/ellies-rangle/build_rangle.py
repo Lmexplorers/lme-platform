@@ -109,14 +109,17 @@ add('fasthet_txt',
 # ---------------------------------------------------------------- SIDE 5
 add('banner_ord', 'FORKORTELSER (NORSK OG US)', 'ABBREVIATIONS (NORWEGIAN AND US)')
 add('ord_lead',
-    'Hele rangelen hekles med fastmasker i spiral. Her er forkortelsene, med de vanlige '
-    'amerikanske hekletermene ved siden av.',
-    'The whole rattle is crocheted with single crochet in a spiral. Here are the abbreviations, '
-    'with the common US crochet terms alongside.')
+    'Det meste av rangelen hekles med fastmasker i spiral, men volangkragen trenger stav. Her '
+    'er alle forkortelsene, med de vanlige amerikanske hekletermene ved siden av, pluss '
+    'sømteknikken som brukes til å sy delene fast.',
+    'Most of the rattle is crocheted with single crochet in a spiral, but the ruffled collar '
+    'needs double crochet. Here are all the abbreviations, with the common US crochet terms '
+    'alongside, plus the sewing technique used to sew the pieces on.')
 add('ord_head', ['Norsk', 'US', 'Betyr'], ['Norwegian', 'US', 'Means'])
 add('ord_rows', [
     ('lm', 'ch', 'luftmaske / chain'),
     ('fm', 'sc', 'fastmaske / single crochet'),
+    ('stav', 'dc', 'stav / double crochet'),
     ('kjm', 'sl st', 'kjedemaske / slip stitch'),
     ('magisk ring', 'magic ring', 'justerbar startring uten hull i midten'),
     ('økn', 'inc', 'økning: 2 fm i samme maske. Gir én maske mer.'),
@@ -125,6 +128,8 @@ add('ord_rows', [
     ('omg', 'rnd', 'omgang, en hel runde rundt i spiral'),
     ('( )', '( )', 'totalt antall masker på omgangen'),
     ('*...*', '*...*', 'gjenta det mellom stjernene så mange ganger som står bak'),
+    ('heftesting', 'running stitch', 'sømteknikk (ikke hekling): tette, jevne sting rett '
+     'gjennom begge lag med synål og tråd, brukes til å sy deler fast'),
 ])
 add('pill_tips', 'TIPS FØR DU BEGYNNER', 'TIPS BEFORE YOU START')
 add('tips',
@@ -211,14 +216,26 @@ add('hals_ferdig',
     'Do not cut the yarn. Place the wooden ring inside the neck tube, fold the edge of the tube '
     'over the ring and sew all the way around it with tight, secure stitches, so the ring is '
     'fully enclosed and cannot slide out.')
-add('pill_krage', 'VOLANGKRAGEN', 'THE RUFFLED COLLAR')
+add('pill_krage', 'VOLANGKRAGEN (PUDDERROSA) - HEKLES FOR SEG SELV', 'THE RUFFLED COLLAR (POWDER PINK) - CROCHETED SEPARATELY')
 add('krage_txt',
-    'Før du syr hodet fast: fest pudderrosa tråd i halsens øverste kant (12 m). *1 fm i neste '
-    'maske, hopp over 1 maske, 3 stav i neste maske (en liten vifte)*, gjenta rundt hele '
-    'kanten (6 vifter totalt). Fest av og gjem tråden.',
-    'Before sewing the head on: attach powder pink yarn at the top edge of the neck (12 sts). '
-    '*1 sc in the next stitch, skip 1 stitch, 3 dc in the next stitch (a little fan)*, repeat '
-    'all the way around the edge (6 fans in total). Fasten off and weave in the end.')
+    'Kragen hekles ikke direkte på halsen, den er en egen, liten del som sys fast etterpå. '
+    'Legg opp 18 lm, lukk til en ring med 1 kjedemaske i den aller første luftmasken (pass på '
+    'at luftmaskekjeden ikke vrir seg før du lukker). Omgang 1: *1 fm i neste maske, hopp over '
+    '1 maske, 3 stav i neste maske (en liten vifte)*, gjenta 6 ganger rundt hele ringen til du '
+    'er tilbake ved start (18 masker totalt i ringen, 6 vifter). Avslutt med kjedemaske i den '
+    'aller første fastmasken, klipp av og la ca. 15 cm tråd igjen.',
+    'The collar is not crocheted directly onto the neck, it is a separate little piece sewn on '
+    'afterwards. Chain 18, join into a ring with 1 slip stitch in the very first chain (make '
+    'sure the chain is not twisted before you join). Round 1: *1 sc in the next stitch, skip 1 '
+    'stitch, 3 dc in the next stitch (a little fan)*, repeat 6 times around the whole ring '
+    'until you are back at the start (18 stitches total in the ring, 6 fans). Finish with a '
+    'slip stitch in the very first sc, cut and leave a tail of approx. 15 cm.')
+add('pill_krage_fest', 'PLASSERING', 'PLACEMENT')
+add('krage_fest_txt',
+    'Sy kragen fast med heftesting rundt den øverste kanten av halstuben, før du syr hodet '
+    'fast oppå.',
+    'Sew the collar in place with running stitch around the top edge of the neck tube, before '
+    'you sew the head on top.')
 add('pill_montering_hode', 'FEST HODET PÅ HALSEN', "ATTACH THE HEAD TO THE NECK")
 add('montering_hode_txt',
     'Sy hodet fast oppå halsen med tette sting hele veien rundt, midt over ringen.',
@@ -264,7 +281,8 @@ add('montering_steg', [
     'Fyll hodet jevnt, legg inn rangleboksen midt inni, godt omgitt av fyll på alle sider, og '
     'lukk de siste omgangene.',
     'Hekle halsen, legg treringen inni, og sy tuben godt rundt hele ringen.',
-    'Hekle volangkragen rundt halsens øverste kant, før du syr hodet fast.',
+    'Hekle volangkragen ferdig som egen del, og sy den fast med heftesting rundt halsens '
+    'øverste kant, før du syr hodet fast.',
     'Sy hodet fast oppå halsen, midt over ringen og kragen.',
     'Sy ørene fast øverst på hodet, og sløyfen mellom dem.',
     'Brodér ansiktet.',
@@ -278,7 +296,8 @@ add('montering_steg_en', [
     'on all sides, and close the last rounds.',
     'Crochet the neck, place the wooden ring inside, and sew the tube securely around the whole '
     'ring.',
-    'Crochet the ruffled collar around the top edge of the neck, before sewing the head on.',
+    'Finish crocheting the ruffled collar as its own piece, and sew it in place with running '
+    'stitch around the top edge of the neck, before sewing the head on.',
     'Sew the head onto the neck, centred over the ring and the collar.',
     'Sew the ears onto the top of the head, and the bow between them.',
     'Embroider the face.',
@@ -445,7 +464,9 @@ def build(lang):
 {cme(t('hals_ferdig'))}
 {sagep(t('pill_krage'))}
 {card('<p>' + t('krage_txt') + '</p>')}
-{rosep(t('pill_montering_hode'))}
+{rosep(t('pill_krage_fest'))}
+{card('<p>' + t('krage_fest_txt') + '</p>')}
+{sagep(t('pill_montering_hode'))}
 {card('<p>' + t('montering_hode_txt') + '</p>')}
 ''', 8))
 

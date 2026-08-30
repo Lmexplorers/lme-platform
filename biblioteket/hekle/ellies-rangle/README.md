@@ -14,6 +14,22 @@ Samme sikkerhetsfokus som `../ellies-smokkelenke/`: en egen side minner om at
 rangleboksen aldri må kunne tas ut, og at ferdig produkt må kontrolleres mot
 gjeldende lokale krav før salg.
 
+## Oppdatert 28. august 2026: kragen hekles for seg selv
+
+Renate ba om at volangkragen på alle Ellie-oppskriftene skal hekles som en
+egen del og sys fast etterpå, i stedet for direkte inn i eksisterende
+masker. I motsetning til smokkelenken hadde denne oppskriften allerede et
+ekte, åpent maskeantall å hekle fra (halstubens 12 m), så det var teknisk
+sett ikke en konstruksjonsfeil her, men rettet for konsekvens på tvers av
+hele kolleksjonen: legg opp 18 lm, lukk til en ring, hekl viftemønsteret
+inn i ringen (6 vifter), sy den ferdige kragen fast med heftesting rundt
+halstubens øverste kant. Oppdaget i samme slengen at det gamle maskeantallet
+i teksten ("6 vifter totalt" på et 12-maskers grunnlag) ikke stemte
+matematisk (12 delt på 3 masker per vifte gir 4, ikke 6), rettet ved å gå
+over til 18 masker i den nye, separate ringen. Lagt til "stav" og
+"heftesting" i forkortelsestabellen, som ble brukt av kragen uten å være
+forklart.
+
 ## Oppdatert 28. august 2026: prikker på pannen lagt til
 
 Samme mangel som ble oppdaget på smokkelenken og hoved-Ellie-oppskriften:
