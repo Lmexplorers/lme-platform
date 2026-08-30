@@ -132,7 +132,7 @@ window.LME_VAULT_ITEMS = [
         "og én oppgave deltakeren gjør selv. Legg til en velkomstleksjon og en avslutning " +
         "som peker videre til neste steg hos meg. Ingen fyllstoff, bare det som faktisk " +
         "flytter deltakeren mot resultatet.",
-      tips: "Legg planen rett inn i Kursbygger på /kursbygger, så er kurset ute samme dag."
+      tips: "Bygg kurset der du allerede selger, det trenger ikke være mer avansert enn en side med leksjonene under hverandre."
     },
     en: {
       tittel: "Mini course template",
@@ -149,7 +149,7 @@ window.LME_VAULT_ITEMS = [
         "and one task the participant does themselves. Add a welcome lesson and a closing " +
         "that points to the next step with me. No filler, only what actually moves the " +
         "participant towards the outcome.",
-      tips: "Drop the plan straight into the course builder at /kursbygger, and the course is live the same day."
+      tips: "Build the course wherever you already sell, it does not need to be more advanced than one page with the lessons listed."
     }
   },
   {
@@ -340,7 +340,7 @@ window.LME_VAULT_ITEMS = [
         "halvveis. For hver: navn, format, hvorfor akkurat den passer publikumet mitt. " +
         "Skriv deretter ut hele innholdet i den du mener er best, klart til å legges ut, " +
         "med en tittel og en avslutning som peker mot produktet mitt.",
-      tips: "Sett den opp med skjemaet på plattformen, så havner e-postene rett i abonnentlista di."
+      tips: "Koble den til e-postverktøyet du allerede bruker, så havner adressene rett i lista di."
     },
     en: {
       tittel: "Lead magnet in twenty minutes",
@@ -355,7 +355,7 @@ window.LME_VAULT_ITEMS = [
         "halfway. For each: name, format, why it fits my audience. Then write out the full " +
         "content of the one you think is best, ready to publish, with a title and a closing " +
         "that points towards my product.",
-      tips: "Set it up with the platform form, and the emails land straight in your subscriber list."
+      tips: "Connect it to the email tool you already use, so the addresses land straight in your list."
     }
   },
   {
@@ -413,7 +413,7 @@ window.LME_VAULT_ITEMS = [
         "For hver: emnefelt, brødtekst på 120 til 200 ord, og én ting leseren skal gjøre. " +
         "Den siste skal invitere videre til neste steg uten å presse. " +
         "Skriv som meg til én person, ikke som et firma til en liste.",
-      tips: "Legg tekstene rett inn i koden med MailerSend, samme mønster som resten av plattformen."
+      tips: "Legg de fem e-postene inn i e-postverktøyet ditt som en serie, så går de av seg selv etter hvert kjøp."
     },
     en: {
       tittel: "Post-purchase email series",
@@ -429,7 +429,7 @@ window.LME_VAULT_ITEMS = [
         "For each: subject line, 120 to 200 words of body text, and one thing the reader should do. " +
         "The last one should invite them to the next step without pushing. " +
         "Write as me to one person, not as a company to a list.",
-      tips: "Put the texts straight into the code with MailerSend, same pattern as the rest of the platform."
+      tips: "Put the five emails into your email tool as a series, so they go out on their own after every purchase."
     }
   }
 ];

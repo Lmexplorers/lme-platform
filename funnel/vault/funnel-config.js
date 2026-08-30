@@ -57,7 +57,7 @@ window.LME_FUNNEL = {
         "Trykk kopier, og lim malen rett inn i Claude",
         "Bytt ut det som står i [klammer] med ditt eget",
         "Få et førsteutkast du bare trenger å justere, ikke skrive fra bunnen",
-        "Legg resultatet rett inn i plattformen: kurs, side, e-post eller lead magnet",
+        "Legg resultatet der du allerede jobber: kurset ditt, siden din, e-postene dine",
         "Nye maler legges til i hvelvet, og du har tilgang for alltid"
       ],
 
@@ -140,7 +140,7 @@ window.LME_FUNNEL = {
         "Hit copy, and paste the template straight into Claude",
         "Replace everything in [brackets] with your own details",
         "Get a first draft you only need to adjust, not write from scratch",
-        "Put the result straight into the platform: a course, page, email or lead magnet",
+        "Put the result where you already work: your course, your page, your emails",
         "New templates are added to the vault, and your access lasts forever"
       ],
 
