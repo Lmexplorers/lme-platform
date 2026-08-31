@@ -793,9 +793,17 @@ function richInline(container, text) {
 }
 function richPara(text) {
   text = String(text || '');
-  if (/^##\s+/.test(text)) {
-    return el('h4', 'crs-sub', text.replace(/^##\s+/, ''));
+  /* Flere avsnitt i ett felt (tom linje mellom) blir egne avsnitt, slik at
+     en overskrift skrevet rett over teksten sin ikke sluker hele avsnittet.
+     Tekst uten tom linje oppfører seg nøyaktig som før. */
+  var blocks = text.split(/\n\s*\n/).filter(function (b) { return b.trim(); });
+  if (blocks.length > 1) {
+    var frag = document.createDocumentFragment();
+    blocks.forEach(function (b) { frag.appendChild(richPara(b)); });
+    return frag;
   }
+  text = blocks.length ? blocks[0] : text;
+  if (/^##\s+/.test(text)) return el('h4', 'crs-sub', text.replace(/^##\s+/, ''));
   var lines = text.split('\n').filter(function (l) { return l.trim(); });
   var isBullets = lines.length > 1 && lines.every(function (l) { return /^-\s+/.test(l.trim()); });
   var isNumbered = lines.length > 1 && lines.every(function (l) { return /^\d+\.\s+/.test(l.trim()); });

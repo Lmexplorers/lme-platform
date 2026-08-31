@@ -202,6 +202,10 @@ export const PLATTFORM_KURS = {
         {
           "no": "I tillegg finner du et voksende utvalg praktiske kurs: KI for pedagoger, Kom i gang med Claude og Videre med Claude, Voks på YouTube med AI og Videre med YouTube, og Boss of Your Own Brain. Nye kurs dukker jevnlig opp, både fra meg og etter hvert fra medlemmer som bygger sine egne i Kursbygger (mer om det i Modul 4).",
           "en": "You will also find a growing selection of practical classes: AI for educators, Getting started with Claude and Next level with Claude, Grow on YouTube with AI and Next level with YouTube, and Boss of Your Own Brain. New classes appear regularly, both from me and, in time, from members building their own in the course builder (more about that in Module 4)."
+        },
+        {
+          "no": "Noen av kursene er arbeidsøkter mer enn kurs. Workshopen \"Ansett dine fem AI-assistenter\" er en av dem: du setter fem faste assistenter i arbeid i Claude, én for hver oppgave som spiser opp uken, og lager seks ferdige karuseller på seksti minutter mens du følger med. Du finner den her: [Ansett dine fem AI-assistenter](https://lmexplorers.com/kurs/ai-assistent-workshop).",
+          "en": "Some of the classes are working sessions more than classes. The workshop \"Hire your five AI assistants\" is one of them: you put five permanent assistants to work in Claude, one for each task that eats up your week, and create six finished carousels in sixty minutes as you follow along. You will find it here: [Hire your five AI assistants](https://lmexplorers.com/kurs/ai-assistent-workshop)."
         }
       ],
       "tip": {
