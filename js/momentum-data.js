@@ -19,6 +19,9 @@
                appen ser hel ut. Renate kan spille inn senere.
      maaling   valgfritt spørsmål med tall fra 0 til 10. Brukes på dag 1
                (utgangspunkt) og dag 11 (samme spørsmål igjen).
+     pause     valgfri liten pause på slutten av dagen, med egen tittel,
+               en linje å lese og en egen lydfil. Står tittelen tom, vises
+               ikke seksjonen i det hele tatt.
    ===================================================================== */
 
 window.LME_MOMENTUM = {
@@ -76,6 +79,11 @@ window.LME_MOMENTUM = {
         no: "Hvor nær er du det livet du vil ha, akkurat nå?",
         en: "How close are you to the life you want, right now?",
       },
+      pause: {
+        tittel: { no: "Ett minutt med ønsket", en: "One minute with the wish" },
+        tekst: { no: "Sett deg ned et øyeblikk og se for deg det du nettopp skrev, som om det alt var sånn. Ikke planlegg noe. Bare se det.", en: "Sit down for a moment and picture what you just wrote, as if it were already so. Do not plan anything. Just see it." },
+        lyd: "",
+      },
       lyd: "",
     },
 
@@ -109,6 +117,11 @@ window.LME_MOMENTUM = {
           "Who are you waiting for to tell you that you are ready?",
           "What would you do this week if you knew no one was going to laugh?",
         ],
+      },
+      pause: {
+        tittel: { no: "Legg merke til nei-et", en: "Notice the no" },
+        tekst: { no: "Neste gang du hører deg selv si ikke ennå, stopp i to sekunder. Du trenger ikke gjøre noe med det. Bare høre det.", en: "Next time you hear yourself say not yet, stop for two seconds. You do not need to do anything about it. Just hear it." },
+        lyd: "",
       },
       lyd: "",
     },
@@ -146,6 +159,11 @@ window.LME_MOMENTUM = {
           "What would she pay to be free of?",
         ],
       },
+      pause: {
+        tittel: { no: "Se henne for deg", en: "Picture her" },
+        tekst: { no: "Lukk øynene og se henne du skrev om. Hva sitter hun med akkurat nå, og hva ville hun blitt lettet over å høre?", en: "Close your eyes and see the person you wrote about. What is she sitting with right now, and what would she be relieved to hear?" },
+        lyd: "",
+      },
       lyd: "",
     },
 
@@ -181,6 +199,11 @@ window.LME_MOMENTUM = {
           "What have you solved for yourself that others still struggle with?",
           "What could you explain to someone in ten minutes, without preparing?",
         ],
+      },
+      pause: {
+        tittel: { no: "Les lista di sakte", en: "Read your list slowly" },
+        tekst: { no: "Gå gjennom lista di en gang til, rolig. Legg merke til hva du blir litt varm av å lese. Det er ofte et hint.", en: "Go through your list once more, slowly. Notice what makes you feel a little warm to read. That is often a hint." },
+        lyd: "",
       },
       lyd: "",
     },
@@ -218,6 +241,11 @@ window.LME_MOMENTUM = {
           "When is it finished? Set a date.",
         ],
       },
+      pause: {
+        tittel: { no: "Si det høyt", en: "Say it out loud" },
+        tekst: { no: "Si den ene setningen om produktet ditt høyt, til deg selv. Høres den klar ut, eller må du si den enklere?", en: "Say the one sentence about your product out loud, to yourself. Does it sound clear, or do you need to say it more simply?" },
+        lyd: "",
+      },
       lyd: "",
     },
 
@@ -252,6 +280,11 @@ window.LME_MOMENTUM = {
           "What are you afraid people will think? Write it down, it gets smaller once it is seen.",
         ],
       },
+      pause: {
+        tittel: { no: "Åpne kanalen din", en: "Open your channel" },
+        tekst: { no: "Åpne kanalen du valgte, og se deg rundt i to minutter uten å legge ut noe. Bare kjenn etter hvordan det er å være der.", en: "Open the channel you chose, and look around for two minutes without posting anything. Just notice how it feels to be there." },
+        lyd: "",
+      },
       lyd: "",
     },
 
@@ -285,6 +318,11 @@ window.LME_MOMENTUM = {
           "What can you manage in a bad week? That is your rhythm.",
           "What is the first thing you drop when things get busy? Could something else take that job?",
         ],
+      },
+      pause: {
+        tittel: { no: "Prøv rytmen i dag", en: "Try the rhythm today" },
+        tekst: { no: "Gjør den ene tingen du satte som rytme, nå, i dag. Det er den beste måten å finne ut om den er liten nok.", en: "Do the one thing you set as your rhythm, now, today. That is the best way to find out whether it is small enough." },
+        lyd: "",
       },
       lyd: "",
     },
@@ -322,6 +360,11 @@ window.LME_MOMENTUM = {
           "What do you tell yourself about money that you do not actually believe?",
         ],
       },
+      pause: {
+        tittel: { no: "Si prisen høyt", en: "Say the price out loud" },
+        tekst: { no: "Si prisen din høyt, uten å legge til en forklaring etterpå. Legg merke til om du får lyst til å si unnskyld.", en: "Say your price out loud, without adding an explanation afterwards. Notice whether you feel the urge to apologise." },
+        lyd: "",
+      },
       lyd: "",
     },
 
@@ -358,6 +401,11 @@ window.LME_MOMENTUM = {
           "Who are the first five people you can tell about it?",
         ],
       },
+      pause: {
+        tittel: { no: "Skriv navnet på én", en: "Write down one name" },
+        tekst: { no: "Skriv ned navnet på én person du kan fortelle om dette i dag. Bare én. Så er den jobben mindre enn den var.", en: "Write down the name of one person you can tell about this today. Just one. Then the job is smaller than it was." },
+        lyd: "",
+      },
       lyd: "",
     },
 
@@ -391,6 +439,11 @@ window.LME_MOMENTUM = {
           "What will you do regularly for the next three months? One thing.",
           "Which win have you already had, that you have not been counting?",
         ],
+      },
+      pause: {
+        tittel: { no: "Se tre måneder fram", en: "Look three months ahead" },
+        tekst: { no: "Se for deg deg selv om tre måneder, som har gjort den ene tingen jevnt hele veien. Hva er annerledes da?", en: "Picture yourself three months from now, having done that one thing steadily all the way. What is different then?" },
+        lyd: "",
       },
       lyd: "",
     },
@@ -429,6 +482,11 @@ window.LME_MOMENTUM = {
       maaling: {
         no: "Hvor nær er du det livet du vil ha, akkurat nå?",
         en: "How close are you to the life you want, right now?",
+      },
+      pause: {
+        tittel: { no: "Se tilbake på dag én", en: "Look back at day one" },
+        tekst: { no: "Les det du skrev på dag én en siste gang. Du skrev det for elleve dager siden, og du er ikke helt den samme nå.", en: "Read what you wrote on day one one last time. You wrote it eleven days ago, and you are not quite the same now." },
+        lyd: "",
       },
       lyd: "",
     },

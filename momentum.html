@@ -220,6 +220,38 @@
   .tavle .fjern { position: absolute; top: 7px; right: 7px; width: 26px; height: 26px; border-radius: 50%;
                   border: 0; background: rgba(255,255,255,.92); color: #7a7470; cursor: pointer; font-size: 15px; line-height: 1; }
 
+  /* Teksten er den samme som lyden sier, så når det finnes lyd legges
+     teksten sammen under en linje man kan trykke på. Uten lyd står den
+     åpen, for da er den alt man har. */
+  .lesmer { width: 100%; display: flex; align-items: center; gap: 9px; background: #FFFDFC;
+            border: 1.5px solid #efdfe3; border-radius: 14px; padding: 12px 15px; cursor: pointer;
+            font-weight: 700; font-size: 14.5px; color: var(--cerise); margin-top: 14px; }
+  .lesmer span.pil { margin-left: auto; transition: transform .2s ease; }
+  .lesmer[aria-expanded="true"] span.pil { transform: rotate(180deg); }
+
+  .refleksjon { margin-top: 16px; }
+  .refleksjon .knapp {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 9px;
+    background: #fff; border: 1.5px solid #efdfe3; border-radius: 999px; padding: 13px;
+    font-weight: 700; font-size: 15px; cursor: pointer; color: var(--ink);
+  }
+  .refleksjon .knapp[disabled] { opacity: .55; cursor: default; }
+  .refleksjon .svar {
+    margin-top: 13px; background: #FCEFEA; border-radius: 16px; padding: 16px 17px; font-size: 16px;
+  }
+  .refleksjon .svar b { display: block; font-family: var(--font-head); font-size: 14px; color: var(--cerise);
+                        margin-bottom: 7px; }
+  .refleksjon .svar p { margin-bottom: 10px; }
+  .refleksjon .svar p:last-child { margin-bottom: 0; }
+  .refleksjon .feil { margin-top: 11px; font-size: 14.5px; color: #a2541f; }
+
+  .pausetittel { font-family: var(--font-head); font-weight: 700; font-size: 18px; margin: 4px 0 7px; }
+
+  /* Tomt visjonsbrett */
+  .tomtavle { text-align: center; padding: 26px 12px 8px; }
+  .tomtavle h3 { font-size: 19px; color: var(--cerise); margin-bottom: 6px; }
+  .tomtavle p { color: var(--grey); font-size: 15px; margin-bottom: 16px; }
+
   .varsel { background: #FFF8E6; color: #7a5e00; border-radius: 14px; padding: 12px 15px; font-size: 14.5px; margin-bottom: 16px; }
 
   @media (min-width: 620px) { .tall { grid-template-columns: repeat(4, 1fr); } }
@@ -292,8 +324,11 @@
 
     <div class="kort">
       <div class="seksjon"><span class="nr">1</span><h3 data-no="Dagens tekst" data-en="Today's reading">Dagens tekst</h3></div>
-      <div class="brod" id="dBrod"></div>
       <div class="lyd skjul" id="dLydBoks"><audio id="dLyd" controls preload="none"></audio></div>
+      <button class="lesmer skjul" id="dLesMer" type="button" aria-expanded="false">
+        <span id="dLesMerTekst"></span><span class="pil">⌄</span>
+      </button>
+      <div class="brod" id="dBrod"></div>
     </div>
 
     <div class="kort skjul" id="dMaalingKort">
@@ -306,11 +341,24 @@
       <div class="seksjon"><span class="nr">2</span><h3 data-no="Skriv" data-en="Journal">Skriv</h3></div>
       <div id="dJournal"></div>
       <p id="dLagret" style="font-size:13px;color:#9a9490;margin-top:10px"></p>
+      <div class="refleksjon">
+        <button class="knapp" id="dReflKnapp" type="button">✨ <span data-no="Få en refleksjon fra Renate" data-en="Get a reflection from Renate">Få en refleksjon fra Renate</span></button>
+        <div class="svar skjul" id="dReflSvar"></div>
+        <p class="feil skjul" id="dReflFeil"></p>
+      </div>
+    </div>
+
+    <div class="kort skjul" id="dPauseKort">
+      <div class="seksjon"><span class="nr">3</span><h3 data-no="En liten pause" data-en="A small pause">En liten pause</h3></div>
+      <p class="pausetittel" id="dPauseTittel"></p>
+      <p id="dPauseTekst" style="font-size:16px"></p>
+      <div class="lyd skjul" id="dPauseLydBoks"><audio id="dPauseLyd" controls preload="none"></audio></div>
     </div>
   </section>
 
   <!-- ===== Visjonstavle ===== -->
   <section id="side-tavle" class="skjul">
+    <span class="stempel" data-no="DIN EGEN DRØMMEMAPPE" data-en="YOUR OWN DREAM FOLDER">DIN EGEN DRØMMEMAPPE</span>
     <h1 data-no="Visjonstavla" data-en="Vision board">Visjonstavla</h1>
     <p class="ingress" data-no="Det du holder på med, der du ser det. Skriv et kort, eller lim inn adressen til et bilde du er glad i." data-en="What you are working towards, where you can see it. Write a card, or paste the address of an image you love.">Det du holder på med, der du ser det. Skriv et kort, eller lim inn adressen til et bilde du er glad i.</p>
     <div class="kort" style="margin-top:16px">
@@ -323,7 +371,10 @@
       </div>
     </div>
     <div class="tavle" id="vListe"></div>
-    <p class="tomt skjul" id="vTomt" data-no="Ingen kort ennå." data-en="No cards yet.">Ingen kort ennå.</p>
+    <div class="tomtavle skjul" id="vTomt">
+      <h3 data-no="Drømmen din begynner her ✨" data-en="Your dream starts here ✨">Drømmen din begynner her ✨</h3>
+      <p data-no="Ingenting her ennå. Skriv det første kortet ditt, eller lim inn et bilde du blir glad av." data-en="Nothing here yet. Write your first card, or paste an image that makes you happy.">Ingenting her ennå. Skriv det første kortet ditt, eller lim inn et bilde du blir glad av.</p>
+    </div>
   </section>
 
   <!-- ===== Seire ===== -->
@@ -553,8 +604,26 @@
     });
 
     var lydBoks = document.getElementById("dLydBoks");
-    if (d.lyd) { document.getElementById("dLyd").src = d.lyd; lydBoks.classList.remove("skjul"); }
-    else { lydBoks.classList.add("skjul"); }
+    var lesMer = document.getElementById("dLesMer");
+    if (d.lyd) {
+      document.getElementById("dLyd").src = d.lyd;
+      lydBoks.classList.remove("skjul");
+      // Teksten sier det samme som lyden, så den legges sammen. Den som
+      // heller vil lese enn å høre, trykker én gang.
+      lesMer.classList.remove("skjul");
+      lesMer.setAttribute("aria-expanded", "false");
+      brod.classList.add("skjul");
+      document.getElementById("dLesMerTekst").textContent = en() ? "Read the text instead" : "Les teksten i stedet";
+      lesMer.onclick = function () {
+        var apen = lesMer.getAttribute("aria-expanded") === "true";
+        lesMer.setAttribute("aria-expanded", String(!apen));
+        brod.classList.toggle("skjul", apen);
+      };
+    } else {
+      lydBoks.classList.add("skjul");
+      lesMer.classList.add("skjul");
+      brod.classList.remove("skjul");
+    }
 
     var mk = document.getElementById("dMaalingKort");
     if (d.maaling) {
@@ -588,10 +657,30 @@
       p.appendChild(document.createTextNode(sp));
       var ta = document.createElement("textarea");
       ta.value = lagrede[i] || "";
+      ta.placeholder = en() ? "Write freely here. No judgement, just honesty…"
+                            : "Skriv fritt her. Ingen dømmer, bare vær ærlig…";
       ta.addEventListener("input", planleggLagring);
       j.appendChild(p); j.appendChild(ta);
     });
     document.getElementById("dLagret").textContent = "";
+
+    // Refleksjonen hører til den ene dagen, så den tømmes når man bytter dag.
+    document.getElementById("dReflSvar").classList.add("skjul");
+    document.getElementById("dReflSvar").innerHTML = "";
+    document.getElementById("dReflFeil").classList.add("skjul");
+    var rk = document.getElementById("dReflKnapp");
+    rk.disabled = false;
+    rk.querySelector("span").textContent = en() ? "Get a reflection from Renate" : "Få en refleksjon fra Renate";
+
+    var pk = document.getElementById("dPauseKort");
+    if (d.pause && d.pause.tittel && T(d.pause.tittel)) {
+      pk.classList.remove("skjul");
+      document.getElementById("dPauseTittel").textContent = T(d.pause.tittel);
+      document.getElementById("dPauseTekst").textContent = T(d.pause.tekst);
+      var plb = document.getElementById("dPauseLydBoks");
+      if (d.pause.lyd) { document.getElementById("dPauseLyd").src = d.pause.lyd; plb.classList.remove("skjul"); }
+      else { plb.classList.add("skjul"); }
+    } else { pk.classList.add("skjul"); }
 
     var ferd = erFullfort(n);
     var kn = document.getElementById("fullforKnapp");
@@ -622,6 +711,65 @@
       document.getElementById("dLagret").textContent = en() ? "Saved." : "Lagret.";
     });
   }
+
+  /* Refleksjonen leses av /api/momentum-refleksjon, som svarer i Renates
+     stemme. Den koster penger per svar, så serveren avgjør hvem som får
+     den og hvor ofte. Her viser vi bare svaret, eller beskjeden. */
+  document.getElementById("dReflKnapp").onclick = function () {
+    var kn = this;
+    var svarBoks = document.getElementById("dReflSvar");
+    var feil = document.getElementById("dReflFeil");
+    var d = D.dager[aktivDag - 1];
+    if (!d) return;
+    var svar = [];
+    document.querySelectorAll("#dJournal textarea").forEach(function (ta) { svar.push(ta.value); });
+    if (svar.join(" ").trim().length < 15) {
+      feil.textContent = en() ? "Write a little more first, then I will read it."
+                              : "Skriv litt mer først, så leser jeg det.";
+      feil.classList.remove("skjul");
+      return;
+    }
+    feil.classList.add("skjul");
+    kn.disabled = true;
+    kn.querySelector("span").textContent = en() ? "Reading what you wrote…" : "Leser det du skrev…";
+    lagreJournal();
+    fetch("/api/momentum-refleksjon", {
+      method: "POST", credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        dag: aktivDag,
+        sporsmal: en() ? d.journal.en : d.journal.no,
+        svar: svar,
+        lang: en() ? "en" : "no",
+      }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        kn.disabled = false;
+        kn.querySelector("span").textContent = en() ? "Get a new reflection" : "Få en ny refleksjon";
+        if (!res || !res.ok) {
+          feil.textContent = (res && res.error) ||
+            (en() ? "Could not get a reflection right now." : "Fikk ikke hentet en refleksjon akkurat nå.");
+          feil.classList.remove("skjul");
+          return;
+        }
+        svarBoks.innerHTML = "";
+        var t = document.createElement("b");
+        t.textContent = en() ? "Renate" : "Renate";
+        svarBoks.appendChild(t);
+        String(res.tekst).split(/\n{2,}/).forEach(function (a) {
+          if (!a.trim()) return;
+          var p = document.createElement("p"); p.textContent = a.trim(); svarBoks.appendChild(p);
+        });
+        svarBoks.classList.remove("skjul");
+      })
+      .catch(function () {
+        kn.disabled = false;
+        kn.querySelector("span").textContent = en() ? "Get a reflection from Renate" : "Få en refleksjon fra Renate";
+        feil.textContent = en() ? "Could not get a reflection right now." : "Fikk ikke hentet en refleksjon akkurat nå.";
+        feil.classList.remove("skjul");
+      });
+  };
 
   function fullfor(n) {
     lagreJournal();
