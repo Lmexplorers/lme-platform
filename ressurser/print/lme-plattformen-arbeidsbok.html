@@ -90,7 +90,12 @@
      utskrift på de fulleste sidene. Boksene vokser aldri, de gir bare etter
      når innholdet er for høyt for siden. */
   .gd-write{display:flex;flex-direction:column;min-height:0;}
-  .gd-write .gd-box{flex:0 1 auto;min-height:14mm;}
+  /* 9mm er hvor langt en boks får krympe før den slutter å være til å
+     skrive i. Grensen lå på 14mm, og da rant de to fulleste sidene
+     (Modul 3, og Modul 0 etter at den fikk en leksjon til) fortsatt noen
+     piksler ut over rammen. Det er bare de sidene som når helt ned hit,
+     resten beholder de 48mm og 22mm som står i selve boksen. */
+  .gd-write .gd-box{flex:0 1 auto;min-height:9mm;}
   .gd-box:last-child{margin-bottom:0;}
 
   /* ===== Forside ===== */
@@ -196,6 +201,7 @@
             <li><span class="gd-chk"></span><span data-no="Hva er LME?" data-en="What is LME?">Hva er LME?</span></li>
             <li><span class="gd-chk"></span><span data-no="Hvordan LME henger sammen" data-en="How LME fits together">Hvordan LME henger sammen</span></li>
             <li><span class="gd-chk"></span><span data-no="Dashbord og Apper, navigasjonen din" data-en="Dashboard and Apps, your navigation">Dashbord og Apper, navigasjonen din</span></li>
+            <li><span class="gd-chk"></span><span data-no="Hva som er gratis, og hva som krever en plan" data-en="What is free, and what needs a plan">Hva som er gratis, og hva som krever en plan</span></li>
             <li><span class="gd-chk"></span><span data-no="Min reise, din egen vei gjennom LME" data-en="My journey, your own path through LME">Min reise, din egen vei gjennom LME</span></li>
             <li><span class="gd-chk"></span><span data-no="Min konto og innstillingene dine" data-en="My account and your settings">Min konto og innstillingene dine</span></li>
           </ul>

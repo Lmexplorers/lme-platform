@@ -16,6 +16,13 @@
    Pris bytter seg selv automatisk ved fristen (ingen manuell oppdatering
    nødvendig): lanseringspris frem til 1. september 2026, deretter full pris.
    Selve betalingslenkene er faste Stripe-lenker, én per pris og valuta.
+
+   Beløpene under er sjekket mot Stripe 31. august 2026 og skal stemme
+   nøyaktig med det kjøperen faktisk betaler: 997 kr og $99 i lansering,
+   1497 kr og $150 til vanlig. Den engelske lanseringsprisen sto tidligere
+   som $997, altså det norske beløpet med dollartegn, så en engelsk kjøper
+   så $997 på siden og $99 i kassen. Endres en pris i Stripe, må den endres
+   her i samme slengen.
    ===================================================================== */
 
 (function () {
@@ -29,7 +36,7 @@
 
   function priceFor(lang) {
     return launch
-      ? { belop: 997, valuta: lang === "en" ? "$" : "kr", visningFor: lang === "en" ? "$150" : "1497 kr" }
+      ? { belop: lang === "en" ? 99 : 997, valuta: lang === "en" ? "$" : "kr", visningFor: lang === "en" ? "$150" : "1497 kr" }
       : { belop: lang === "en" ? 150 : 1497, valuta: lang === "en" ? "$" : "kr", visningFor: "" };
   }
   function checkoutFor(lang) {
