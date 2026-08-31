@@ -19,10 +19,17 @@
 # serveres på den adressen uansett.
 /oppdater-kurs  /kurs-import  301
 /kurs  /academy/kurs.html  200
-# Kursnavnet sendes med som ?k=, ikke bare i stien. Uten dette forsvinner
-# navnet hvis adressen blir sendt videre underveis, og kurssiden viser lista
-# over alle kurs i stedet for kurset du ba om (Renate, 31. august 2026).
-/kurs/*  /academy/kurs.html?k=:splat  200
+# Kursnavnet må sendes med som ?k=, ikke bare i stien. Den pene adressen
+# /kurs/<navn> ble sendt videre til /academy/kurs UTEN navnet, og da viser
+# kurssiden lista over alle kurs i stedet for kurset du ba om. Det gjaldt
+# alle kursene, ikke bare workshopen (målt med "Sjekk lenker" 31. august
+# 2026, etter at Renate meldte det tre ganger).
+#
+# Dette MÅ være en 301, ikke en 200: en 200-regel med ?k=:splat blir
+# ignorert av Cloudflare Pages, målt samme dag. Adressen i nettleseren blir
+# altså /academy/kurs?k=<navn>, og det er en liten pris for at lenken
+# faktisk åpner kurset.
+/kurs/*  /academy/kurs?k=:splat  301
 /lv/*  /academy/laeringsverksted-ressurs.html  200
 /creative-studio  /creative-academy  301
 /academy/intro  /kurs/montessori-kom-i-gang  301
