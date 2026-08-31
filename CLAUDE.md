@@ -54,6 +54,14 @@ Renate skrevet om en leksjon i Kursbygger, står hennes versjon, og den telles
 som beholdt. Arbeidsboken `ressurser/print/lme-plattformen-arbeidsbok.html`
 speiler kurset og oppdateres samtidig.
 
+## 🔗 Skriv alltid HELE lenken til Renate
+
+Avtalt 29. august 2026: når jeg nevner en side i chatten, skriver jeg aldri
+bare stien (`/min-epost`). Den kan hun ikke trykke på, og hun må sette den
+sammen selv. Skriv alltid hele adressen, `https://lmexplorers.com/min-epost`,
+også når jeg nevner den midt i en setning eller i en liste. Gjelder alle sider,
+også de som bare er for henne.
+
 ## 🔗 Alt nytt skal ha et synlig kort/lenke — aldri en gjemt URL
 
 Avtalt med Renate 3. august 2026, etter at 10 000-visninger-utfordringen kun var
