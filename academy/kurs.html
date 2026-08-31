@@ -2413,6 +2413,27 @@
         }
       }
 
+      /* Veien videre til kursimporten, bare for eieren. Renate havnet her da
+         hun lette etter importen (31. august 2026), så lenken skal stå der
+         hun faktisk er, ikke bare inne i Kursbygger. */
+      function visEierlenke(en) {
+        fetch('/api/access', { credentials: 'same-origin' })
+          .then(function (r) { return r.json(); })
+          .then(function (a) {
+            if (!a || a.plan !== 'owner') return;
+            var boks = el('div', 'crs-next');
+            boks.appendChild(el('h3', null, en ? 'Update the courses' : 'Oppdater kursene'));
+            boks.appendChild(el('p', null, en
+              ? 'Pull new lessons and new courses from the code into the course builder. Text you have edited yourself stays as it is.'
+              : 'Hent inn nye leksjoner og nye kurs fra koden inn i Kursbygger. Teksten du har endret selv blir stående.'));
+            var a2 = el('a', 'btn-primary', en ? 'Open the course import →' : 'Åpne kursimporten →');
+            a2.href = '/kurs-import';
+            boks.appendChild(a2);
+            root.appendChild(boks);
+          })
+          .catch(function () {});
+      }
+
       /* Uten kursnavn i adressen (/kurs) er ikke siden en blindvei:
          da viser vi lista over publiserte egne kurs i stedet. */
       function visListe() {
@@ -2444,10 +2465,12 @@
               root.appendChild(a);
             });
             var back = el('div', 'crs-next');
+            // Pekte tidligere til /kurs, altså siden du allerede står på.
             var ba = el('a', 'btn-primary', en ? '← Back to the classes' : '← Tilbake til kurs');
-            ba.href = '/kurs';
+            ba.href = '/academy';
             back.appendChild(ba);
             root.appendChild(back);
+            visEierlenke(en);
           })
           .catch(function () {
             course = null;
