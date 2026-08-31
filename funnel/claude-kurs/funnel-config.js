@@ -38,6 +38,27 @@ function lmeMerke(fast, sprak) {
   return sprak === "en" ? k.merkelapp.en : k.merkelapp.no;
 }
 
+/* Ekte rabatt i Black Friday-uken og i julen. Egne priser og egne
+   Stripe-lenker, opprettet 31. august 2026 og sjekket mot Stripe.
+   Utenfor de to periodene gjelder den vanlige tilbudsprisen under. */
+var LME_RABATTER = {
+  blackfriday: {
+    no: { url: "https://buy.stripe.com/bJeaEY1BHbjxdyt8hh9R71f", belop: 297 },
+    en: { url: "https://buy.stripe.com/00w00k6W12N1bqlapp9R71g", belop: 29 },
+  },
+  jul: {
+    no: { url: "https://buy.stripe.com/8x25kEeotaft7a51ST9R71r", belop: 367 },
+    en: { url: "https://buy.stripe.com/9B63cwdkp2N1eCxapp9R71s", belop: 37 },
+  },
+};
+function lmeRabatt(sprak) {
+  return (window.LME_KAMPANJE && window.LME_KAMPANJE.rabattFor)
+    ? window.LME_KAMPANJE.rabattFor(LME_RABATTER, sprak)
+    : null;
+}
+function lmeLenke(fast, sprak) { var r = lmeRabatt(sprak); return r ? r.url : fast; }
+function lmeBelop(fast, sprak) { var r = lmeRabatt(sprak); return r ? r.belop : fast; }
+
 window.LME_FUNNEL = {
 
   /* =================================================================
@@ -52,11 +73,11 @@ window.LME_FUNNEL = {
 
     /* ---- Salgsside: hovedtilbudet ---- */
     salg: {
-      checkoutUrl: "https://buy.stripe.com/cNi4gA4NTaftfGBgNN9R615",   // Stripe: hovedkurs 490 kr (tom = hopp rett til mersalg)
+      checkoutUrl: lmeLenke("https://buy.stripe.com/cNi4gA4NTaftfGBgNN9R615", "no"),   // Stripe: hovedkurs 490 kr
       etterKjop: "mersalg.html",       // hit går brukeren etter kjøp
 
       pris: {
-        belop: 490,                    // lanseringspris
+        belop: lmeBelop(490, "no"),    // lanseringspris
         valuta: "kr",
         visningFor: "990 kr"           // vanlig pris (overstrøket). "" skjuler
       },
@@ -191,11 +212,11 @@ window.LME_FUNNEL = {
     },
 
     salg: {
-      checkoutUrl: "https://buy.stripe.com/bJedRa6W1cnB3XT4119R616",   // Stripe: main course $49 (empty = skip to upsell)
+      checkoutUrl: lmeLenke("https://buy.stripe.com/bJedRa6W1cnB3XT4119R616", "en"),   // Stripe: main course $49
       etterKjop: "mersalg.html",
 
       pris: {
-        belop: 49,                     // launch price
+        belop: lmeBelop(49, "en"),      // launch price
         valuta: "USD",
         visningFor: "$99"              // regular price (struck through)
       },

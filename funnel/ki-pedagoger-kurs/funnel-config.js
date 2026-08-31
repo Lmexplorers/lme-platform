@@ -18,16 +18,37 @@ function lmeMerke(fast, sprak) {
   return sprak === "en" ? k.merkelapp.en : k.merkelapp.no;
 }
 
+/* Ekte rabatt i Black Friday-uken og i julen. Egne priser og egne
+   Stripe-lenker, opprettet 31. august 2026 og sjekket mot Stripe.
+   Utenfor de to periodene gjelder den vanlige tilbudsprisen under. */
+var LME_RABATTER = {
+  blackfriday: {
+    no: { url: "https://buy.stripe.com/fZudRa5RXbjx3XTapp9R71b", belop: 179 },
+    en: { url: "https://buy.stripe.com/8x24gAdkp0ETdyt1ST9R71c", belop: 18 },
+  },
+  jul: {
+    no: { url: "https://buy.stripe.com/9B6bJ24NT9bp51Xbtt9R71n", belop: 224 },
+    en: { url: "https://buy.stripe.com/cNifZidkpgDReCxbtt9R71o", belop: 22 },
+  },
+};
+function lmeRabatt(sprak) {
+  return (window.LME_KAMPANJE && window.LME_KAMPANJE.rabattFor)
+    ? window.LME_KAMPANJE.rabattFor(LME_RABATTER, sprak)
+    : null;
+}
+function lmeLenke(fast, sprak) { var r = lmeRabatt(sprak); return r ? r.url : fast; }
+function lmeBelop(fast, sprak) { var r = lmeRabatt(sprak); return r ? r.belop : fast; }
+
 window.LME_FUNNEL = {
 
   no: {
     brand: { navn: "Little Montessori Explorers", kortnavn: "LME", logo: "/images/lme-logo.png" },
 
     salg: {
-      checkoutUrl: "https://buy.stripe.com/4gM5kEgwBgDR9id0OP9R63t",
+      checkoutUrl: lmeLenke("https://buy.stripe.com/4gM5kEgwBgDR9id0OP9R63t", "no"),
       etterKjop: "takk.html",
 
-      pris: { belop: 299, valuta: "kr", visningFor: "599 kr" },
+      pris: { belop: lmeBelop(299, "no"), valuta: "kr", visningFor: "599 kr" },
 
       merkelapp: lmeMerke("Lanseringstilbud", "no"),
       overskrift: "KI for pedagoger",
@@ -98,10 +119,10 @@ window.LME_FUNNEL = {
     brand: { navn: "Little Montessori Explorers", kortnavn: "LME", logo: "/images/lme-logo.png" },
 
     salg: {
-      checkoutUrl: "https://buy.stripe.com/5kQ9AU8051IX2TPbtt9R63u",
+      checkoutUrl: lmeLenke("https://buy.stripe.com/5kQ9AU8051IX2TPbtt9R63u", "en"),
       etterKjop: "takk.html",
 
-      pris: { belop: 30, valuta: "$", visningFor: "$60" },
+      pris: { belop: lmeBelop(30, "en"), valuta: "$", visningFor: "$60" },
 
       merkelapp: lmeMerke("Launch offer", "en"),
       overskrift: "AI for Educators",

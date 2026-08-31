@@ -54,11 +54,13 @@
       id: "thanksgiving",
       fra: "2026-11-23T00:00:00+01:00",
       merkelapp: { no: "Thanksgiving-tilbud", en: "Thanksgiving offer" },
+      rabatt: "blackfriday",
     },
     {
       id: "jul",
       fra: "2026-12-01T00:00:00+01:00",
       merkelapp: { no: "Juletilbud", en: "Christmas offer" },
+      rabatt: "jul",
     },
     {
       // Renate har bursdag 4. januar, og vil ha bursdagstilbud hele
@@ -86,8 +88,23 @@
       id: valgt.id,
       tilbud: valgt.tilbud !== false,
       merkelapp: valgt.merkelapp,
+      rabatt: valgt.rabatt || null,
     };
   }
 
-  window.LME_KAMPANJE = { naa: naa, perioder: PERIODER };
+  /* Slår opp den ekte rabatten for perioden vi er i nå, hvis den har en.
+     `tabell` er kampanjetabellen i den enkelte funnelen, på formen
+       { blackfriday: { no: { url, belop }, en: { url, belop } }, jul: {...} }
+     Finnes ingen rabatt for perioden, eller mangler språket i tabellen,
+     returneres null, og funnelen bruker den vanlige tilbudsprisen sin.
+     Da kan en funnel legges til i kalenderen uten å ha egne rabattlenker. */
+  function rabattFor(tabell, sprak, tid) {
+    var k = naa(tid);
+    if (!k.rabatt || !tabell) return null;
+    var r = tabell[k.rabatt];
+    if (!r) return null;
+    return r[sprak === "en" ? "en" : "no"] || null;
+  }
+
+  window.LME_KAMPANJE = { naa: naa, rabattFor: rabattFor, perioder: PERIODER };
 })();

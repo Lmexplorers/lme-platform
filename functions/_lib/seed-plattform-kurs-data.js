@@ -188,6 +188,39 @@ export const PLATTFORM_KURS = {
     {
       "module": null,
       "title": {
+        "no": "LME Momentum, elleve dager om gangen",
+        "en": "LME Momentum, eleven days at a time"
+      },
+      "body": [
+        {
+          "no": "Momentum er en app som gjør én ting: den gir deg noe lite å gjøre hver dag i elleve dager, og holder styr på hvor langt du er kommet. Du finner den på https://lmexplorers.com/momentum",
+          "en": "Momentum is an app that does one thing: it gives you something small to do each day for eleven days, and keeps track of how far you have come. You find it at https://lmexplorers.com/momentum"
+        },
+        {
+          "no": "Hver dag har en kort tekst å lese, og noen spørsmål å skrive på. Du skriver rett i appen, og det lagres av seg selv mens du skriver. Nederst er det én knapp: fullfør dagen. Da åpner neste dag seg, og de andre står låst til du kommer dit. Det er med vilje, for det er lettere å gjøre én ting enn å velge mellom elleve.",
+          "en": "Each day has a short text to read and a few questions to write on. You write straight into the app, and it saves itself as you go. At the bottom there is one button: complete the day. That unlocks the next day, and the rest stay locked until you get there. That is deliberate, because doing one thing is easier than choosing between eleven."
+        },
+        {
+          "no": "Dag 1 og dag 11 stiller det samme spørsmålet, med et tall fra 0 til 10. Det er den eneste målingen i appen, og den sammenligner deg bare med deg selv, elleve dager tidligere.",
+          "en": "Day 1 and day 11 ask the same question, with a number from 0 to 10. It is the only measurement in the app, and it compares you only with yourself, eleven days earlier."
+        },
+        {
+          "no": "I tillegg har appen to steder som er dine: visjonstavla, der du legger inn kort med det du ser for deg, og seierslista, der du skriver ned det som går bra mens det skjer. Den lista er verdt mer enn den ser ut som. Om tre måneder er det den som viser deg at noe faktisk har flyttet seg.",
+          "en": "The app also has two places that are yours: the vision board, where you add cards with what you picture, and the wins list, where you write down what goes well as it happens. That list is worth more than it looks. In three months it is what shows you that something actually moved."
+        },
+        {
+          "no": "Er du logget inn, følger alt du skriver med kontoen din, så du kan begynne på maskinen og fortsette på telefonen. Er du ikke logget inn, lagres det bare i nettleseren du sitter i.",
+          "en": "If you are logged in, everything you write follows your account, so you can start on your computer and continue on your phone. If you are not logged in, it is saved only in the browser you are sitting in."
+        }
+      ],
+      "tip": {
+        "no": "✨ Gjør dagen om morgenen hvis du kan. Den tar noen minutter, og resten av dagen blir litt annerledes av at du har gjort den.",
+        "en": "✨ Do the day in the morning if you can. It takes a few minutes, and the rest of the day is a little different for having done it."
+      }
+    },
+    {
+      "module": null,
+      "title": {
         "no": "Min konto og innstillingene dine",
         "en": "My Account and your settings"
       },
