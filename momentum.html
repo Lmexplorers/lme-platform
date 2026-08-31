@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FDF5F1">
+<title>LME Momentum</title>
+<meta name="description" content="Elleve dager som setter deg i gang. En liten ting hver dag, i ditt eget tempo.">
+<link rel="icon" href="/images/lme-logo.png">
+<script>
+  /* Låsen kjører først, så innholdet aldri blinker frem for noen som ikke
+     har kjøpt. Eier slipper alltid inn, se js/course-gate.js. */
+  window.LME_COURSE_ID = "momentum";
+  window.LME_COURSE_SALES_URL = "/momentum-info";
+</script>
+<script src="/js/course-gate.js?v=1"></script>
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Playpen Sans';
+    src: url('/fonts/PlaypenSans-400.woff2') format('woff2');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Playpen Sans';
+    src: url('/fonts/PlaypenSans-700.woff2') format('woff2');
+    font-weight: 700; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink: #F8D7DA; --pink-mid: #F5A8B8; --cerise: #E91E89;
+    --lime: #7AAE1F; --yellow: #F7C72E; --cream: #FBF6F0;
+    --ink: #1A1A1A; --grey: #5A5A5A; --line: rgba(26,26,26,0.10);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body); color: var(--ink); line-height: 1.6;
+    background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 60%, #F8D7DA 100%);
+    min-height: 100vh; padding-bottom: 86px;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); line-height: 1.25; }
+  a { color: inherit; }
+  button, input, textarea, select { font-family: inherit; font-size: inherit; color: inherit; }
+
+  .topp {
+    position: sticky; top: 0; z-index: 20; display: flex; align-items: center;
+    justify-content: space-between; gap: 10px; padding: 13px 18px;
+    background: rgba(253,245,241,0.92); backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line);
+    /* Kontoknappen fra js/lme-account.js ligger fast øverst til høyre.
+       Uten denne plassen legger den seg oppå knappene her. */
+    padding-right: 62px;
+  }
+  .merke { font-family: var(--font-head); font-weight: 700; font-size: 19px; letter-spacing: -0.01em; }
+  .merke i { color: var(--cerise); font-style: normal; }
+  .topp .knapper { display: flex; gap: 8px; }
+  .minibtn {
+    border: 1px solid #eedce2; background: #fff; border-radius: 999px;
+    padding: 7px 13px; font-size: 12.5px; font-weight: 700; cursor: pointer; white-space: nowrap;
+  }
+
+  .wrap { max-width: 640px; margin: 0 auto; padding: 22px 18px 40px; }
+  .skjul { display: none !important; }
+
+  .hei { color: var(--grey); font-size: 15px; }
+  .wrap > h1 { font-size: 30px; margin: 2px 0 20px; }
+
+  .kort {
+    background: #fff; border: 1px solid var(--line); border-radius: 20px;
+    padding: 20px; margin-bottom: 16px; box-shadow: 0 6px 20px rgba(26,26,26,0.04);
+  }
+  .kort.mykt { background: #FCEFEA; border-color: #f3ddd4; }
+
+  .stempel {
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--cerise);
+  }
+  .ingress { font-size: 16px; color: #333; margin-top: 10px; }
+
+  /* Dagens kort */
+  .dagrad { display: flex; align-items: center; gap: 15px; text-align: left; width: 100%;
+            background: #fff; border: 1px solid var(--line); border-radius: 20px;
+            padding: 16px; cursor: pointer; box-shadow: 0 6px 20px rgba(26,26,26,0.04); }
+  .dagnr {
+    flex: 0 0 auto; width: 58px; height: 58px; border-radius: 16px; background: var(--cerise);
+    color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: var(--font-head); line-height: 1;
+  }
+  .dagnr span { font-size: 9.5px; letter-spacing: 0.12em; opacity: .85; }
+  .dagnr b { font-size: 22px; font-weight: 700; }
+  .dagrad h3 { font-size: 18px; }
+  .dagrad p { font-size: 13.5px; color: var(--grey); margin-top: 2px; }
+
+  /* Tallene */
+  .tall { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .tall .boks { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 16px; text-align: center; }
+  .tall .verdi { font-family: var(--font-head); font-weight: 700; font-size: 27px; line-height: 1.1; }
+  .tall .verdi small { font-size: 15px; color: #aaa; font-weight: 400; }
+  .tall .navn { font-size: 12.5px; color: var(--grey); margin-top: 3px; }
+
+  .stripe { height: 9px; border-radius: 999px; background: #F6E4E6; overflow: hidden; margin: 9px 0 6px; }
+  .stripe i { display: block; height: 100%; border-radius: 999px;
+              background: linear-gradient(90deg, var(--pink-mid), var(--cerise)); transition: width .4s ease; }
+  .stripetekst { display: flex; justify-content: space-between; font-size: 12px; color: var(--grey); }
+
+  /* Lista over dager */
+  .liste { list-style: none; }
+  .liste li { display: flex; align-items: center; gap: 13px; padding: 11px 12px; border-radius: 14px; }
+  .liste li.na { background: #FDECEF; box-shadow: inset 0 0 0 1px #f6c9d5; }
+  .liste li.ferdig { background: #FAFAF8; }
+  .liste button.aapne {
+    display: flex; align-items: center; gap: 13px; width: 100%; background: none;
+    border: 0; padding: 0; text-align: left; cursor: pointer;
+  }
+  .liste li.laast button.aapne { cursor: default; }
+  .prikk {
+    flex: 0 0 auto; width: 34px; height: 34px; border-radius: 50%; display: flex;
+    align-items: center; justify-content: center; font-family: var(--font-head);
+    font-weight: 700; font-size: 14px; background: #F1EFEC; color: #b3aeaa;
+  }
+  .prikk.ok { background: var(--pink-mid); color: #fff; }
+  .prikk.na { background: var(--cerise); color: #fff; }
+  .liste .navn { flex: 1; font-size: 15.5px; }
+  .liste li.laast .navn { color: #b3aeaa; }
+  .liste .hoyre { font-size: 12px; font-weight: 700; color: var(--cerise); }
+
+  /* Dagsiden */
+  .tilbake { background: none; border: 0; color: var(--cerise); font-weight: 700; font-size: 14px;
+             cursor: pointer; padding: 0 0 12px; }
+  .dagtopp { display: flex; align-items: center; gap: 15px; }
+  .dagtopp .dagnr { background: #FBE6E9; color: var(--cerise); }
+  .skiftetekst { font-size: 11.5px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: var(--cerise); }
+  .dagtopp h2 { font-size: 24px; margin-top: 2px; }
+
+  .seksjon { display: flex; align-items: center; gap: 11px; margin-bottom: 12px; }
+  .seksjon .nr { width: 30px; height: 30px; border-radius: 50%; background: #FBE6E9; color: var(--cerise);
+                 display: flex; align-items: center; justify-content: center; font-family: var(--font-head);
+                 font-weight: 700; font-size: 14px; }
+  .seksjon h3 { font-size: 19px; }
+
+  .brod p { margin-bottom: 13px; font-size: 16.5px; }
+  .brod p:last-child { margin-bottom: 0; }
+
+  .sporsmal { font-size: 16px; margin: 16px 0 8px; }
+  .sporsmal b { color: var(--cerise); font-family: var(--font-head); margin-right: 6px; }
+  textarea {
+    width: 100%; min-height: 96px; border: 1.5px solid #efdfe3; border-radius: 14px;
+    padding: 12px 14px; background: #FFFDFC; resize: vertical; line-height: 1.55; font-size: 15.5px;
+  }
+  textarea:focus { outline: none; border-color: var(--pink-mid); }
+
+  .skala { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .skala button {
+    width: 38px; height: 38px; border-radius: 12px; border: 1.5px solid #efdfe3; background: #fff;
+    font-family: var(--font-head); font-weight: 700; cursor: pointer;
+  }
+  .skala button[aria-pressed="true"] { background: var(--cerise); color: #fff; border-color: var(--cerise); }
+
+  .lyd { display: flex; align-items: center; gap: 14px; background: #FDEFF2; border-radius: 16px; padding: 14px; margin-top: 14px; }
+  .lyd audio { width: 100%; }
+
+  .stor {
+    display: block; width: 100%; border: 0; border-radius: 999px; padding: 15px;
+    background: var(--ink); color: #fff; font-weight: 700; font-size: 16px; cursor: pointer;
+  }
+  .stor.lys { background: var(--cerise); }
+  .stor[disabled] { opacity: .45; cursor: default; }
+  .stor.igjen { background: #fff; color: var(--ink); border: 1.5px solid #eedce2; }
+
+  .bunnstang {
+    position: fixed; left: 0; right: 0; bottom: 62px; z-index: 15;
+    padding: 11px 16px calc(11px + env(safe-area-inset-bottom, 0px));
+    background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+    border-top: 1px solid var(--line); display: flex; align-items: center; gap: 12px;
+  }
+  .bunnstang span { flex: 1; font-size: 14.5px; font-weight: 700; }
+  .bunnstang button { flex: 0 0 auto; width: auto; padding: 12px 22px; }
+
+  /* Menyen nederst */
+  .meny {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 16; display: flex;
+    background: #fff; border-top: 1px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .meny button {
+    flex: 1; background: none; border: 0; padding: 9px 4px 10px; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    font-size: 11px; color: #9a9490; font-weight: 700;
+  }
+  .meny button svg { width: 23px; height: 23px; stroke: currentColor; fill: none; stroke-width: 1.7; }
+  .meny button[aria-current="page"] { color: var(--cerise); }
+
+  .tomt { color: var(--grey); font-size: 15px; text-align: center; padding: 26px 10px; }
+
+  .rad { display: flex; gap: 9px; align-items: flex-start; }
+  .rad input[type=text] {
+    flex: 1; border: 1.5px solid #efdfe3; border-radius: 12px; padding: 11px 13px; background: #FFFDFC;
+  }
+  .rad input[type=text]:focus { outline: none; border-color: var(--pink-mid); }
+  .rad button { flex: 0 0 auto; border: 0; border-radius: 12px; background: var(--cerise); color: #fff;
+                font-weight: 700; padding: 11px 17px; cursor: pointer; }
+
+  .seier { display: flex; gap: 11px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .seier:last-child { border-bottom: 0; }
+  .seier .dato { font-size: 12px; color: #a9a3a0; white-space: nowrap; }
+  .seier .fjern { margin-left: auto; background: none; border: 0; color: #c9c2be; cursor: pointer; font-size: 17px; line-height: 1; }
+
+  .tavle { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .tavle figure { position: relative; background: #fff; border: 1px solid var(--line); border-radius: 16px;
+                  overflow: hidden; box-shadow: 0 4px 14px rgba(26,26,26,.05); }
+  .tavle img { display: block; width: 100%; height: 118px; object-fit: cover; background: #FBE6E9; }
+  .tavle figcaption { padding: 11px 12px; font-size: 14px; }
+  .tavle .fjern { position: absolute; top: 7px; right: 7px; width: 26px; height: 26px; border-radius: 50%;
+                  border: 0; background: rgba(255,255,255,.92); color: #7a7470; cursor: pointer; font-size: 15px; line-height: 1; }
+
+  .varsel { background: #FFF8E6; color: #7a5e00; border-radius: 14px; padding: 12px 15px; font-size: 14.5px; margin-bottom: 16px; }
+
+  @media (min-width: 620px) { .tall { grid-template-columns: repeat(4, 1fr); } }
+</style>
+</head>
+<body>
+
+<div class="topp">
+  <span class="merke">LME Momentum<i>.</i></span>
+  <div class="knapper">
+    <button class="minibtn" id="sprak" type="button">🇬🇧 English</button>
+    <a class="minibtn" href="/dashboard" data-no="‹ LME" data-en="‹ LME">‹ LME</a>
+  </div>
+</div>
+
+<main class="wrap">
+  <!-- ===== Forsiden ===== -->
+  <section id="side-hjem">
+    <p class="hei" id="hilsen"></p>
+    <h1 id="velkommen"></h1>
+
+    <div id="ikkeInnlogget" class="varsel skjul"></div>
+
+    <div class="kort mykt" id="dagensKort">
+      <span class="stempel" id="dagensStempel"></span>
+      <p class="ingress" id="dagensIngress"></p>
+    </div>
+
+    <button class="dagrad" id="dagensRad" type="button">
+      <span class="dagnr"><span id="dagensDagOrd"></span><b id="dagensDagNr"></b></span>
+      <span>
+        <h3 id="dagensTittel"></h3>
+        <p id="dagensHandling"></p>
+      </span>
+    </button>
+
+    <div class="tall">
+      <div class="boks"><div class="verdi"><span id="tGjort">0</span><small id="tAv"></small></div><div class="navn" data-no="dager gjort" data-en="days done">dager gjort</div></div>
+      <div class="boks"><div class="verdi">🔥 <span id="tRekke">0</span></div><div class="navn" data-no="dagers rekke" data-en="day streak">dagers rekke</div></div>
+      <div class="boks"><div class="verdi"><span id="tStart">–</span><small>/10</small></div><div class="navn" data-no="utgangspunkt" data-en="baseline">utgangspunkt</div></div>
+      <div class="boks"><div class="verdi"><span id="tEndring">–</span></div><div class="navn" data-no="endring" data-en="change">endring</div></div>
+    </div>
+
+    <div class="kort">
+      <div class="stripetekst"><b id="reiseNavn"></b><span id="reisePst">0 %</span></div>
+      <div class="stripe"><i id="reiseStripe" style="width:0%"></i></div>
+      <div class="stripetekst"><span data-no="Dag 1" data-en="Day 1">Dag 1</span><span id="sisteDagTekst"></span></div>
+    </div>
+
+    <div class="kort">
+      <div class="stripetekst" style="margin-bottom:10px">
+        <b id="listeTittel" style="font-family:var(--font-head);font-size:17px"></b>
+        <span id="listeTeller"></span>
+      </div>
+      <ul class="liste" id="dagListe"></ul>
+    </div>
+  </section>
+
+  <!-- ===== En enkelt dag ===== -->
+  <section id="side-dag" class="skjul">
+    <button class="tilbake" id="tilbakeKnapp" type="button">‹ <span data-no="Til forsiden" data-en="Back to home">Til forsiden</span></button>
+
+    <div class="kort dagtopp">
+      <span class="dagnr"><span data-no="DAG" data-en="DAY">DAG</span><b id="dNr"></b></span>
+      <span>
+        <span class="skiftetekst" id="dSkifte"></span>
+        <h2 id="dTittel"></h2>
+      </span>
+    </div>
+
+    <div class="kort">
+      <div class="seksjon"><span class="nr">1</span><h3 data-no="Dagens tekst" data-en="Today's reading">Dagens tekst</h3></div>
+      <div class="brod" id="dBrod"></div>
+      <div class="lyd skjul" id="dLydBoks"><audio id="dLyd" controls preload="none"></audio></div>
+    </div>
+
+    <div class="kort skjul" id="dMaalingKort">
+      <div class="seksjon"><span class="nr">★</span><h3 data-no="Ditt tall" data-en="Your number">Ditt tall</h3></div>
+      <p id="dMaalingSp" style="font-size:16px"></p>
+      <div class="skala" id="dSkala"></div>
+    </div>
+
+    <div class="kort">
+      <div class="seksjon"><span class="nr">2</span><h3 data-no="Skriv" data-en="Journal">Skriv</h3></div>
+      <div id="dJournal"></div>
+      <p id="dLagret" style="font-size:13px;color:#9a9490;margin-top:10px"></p>
+    </div>
+  </section>
+
+  <!-- ===== Visjonstavle ===== -->
+  <section id="side-tavle" class="skjul">
+    <h1 data-no="Visjonstavla" data-en="Vision board">Visjonstavla</h1>
+    <p class="ingress" data-no="Det du holder på med, der du ser det. Skriv et kort, eller lim inn adressen til et bilde du er glad i." data-en="What you are working towards, where you can see it. Write a card, or paste the address of an image you love.">Det du holder på med, der du ser det. Skriv et kort, eller lim inn adressen til et bilde du er glad i.</p>
+    <div class="kort" style="margin-top:16px">
+      <div class="rad" style="margin-bottom:9px">
+        <input type="text" id="vTekst" maxlength="300" data-ph-no="Hva ser du for deg?" data-ph-en="What do you picture?">
+      </div>
+      <div class="rad">
+        <input type="text" id="vBilde" maxlength="600" data-ph-no="Bildeadresse (valgfritt, https)" data-ph-en="Image address (optional, https)">
+        <button id="vLegg" type="button" data-no="Legg til" data-en="Add">Legg til</button>
+      </div>
+    </div>
+    <div class="tavle" id="vListe"></div>
+    <p class="tomt skjul" id="vTomt" data-no="Ingen kort ennå." data-en="No cards yet.">Ingen kort ennå.</p>
+  </section>
+
+  <!-- ===== Seire ===== -->
+  <section id="side-seire" class="skjul">
+    <h1 data-no="Seirene dine" data-en="Your wins">Seirene dine</h1>
+    <p class="ingress" data-no="Skriv dem ned mens de skjer, også de små. Om tre måneder er det disse som viser deg at noe faktisk har flyttet seg." data-en="Write them down as they happen, the small ones too. In three months these are what show you that something actually moved.">Skriv dem ned mens de skjer, også de små. Om tre måneder er det disse som viser deg at noe faktisk har flyttet seg.</p>
+    <div class="kort" style="margin-top:16px">
+      <div class="rad">
+        <input type="text" id="sTekst" maxlength="500" data-ph-no="Hva gikk bra i dag?" data-ph-en="What went well today?">
+        <button id="sLegg" type="button" data-no="Lagre" data-en="Save">Lagre</button>
+      </div>
+    </div>
+    <div class="kort" id="sKort"><div id="sListe"></div></div>
+    <p class="tomt skjul" id="sTomt" data-no="Ingen seire skrevet ned ennå." data-en="No wins written down yet.">Ingen seire skrevet ned ennå.</p>
+  </section>
+
+  <!-- ===== Mer ===== -->
+  <section id="side-mer" class="skjul">
+    <h1 data-no="Mer" data-en="More">Mer</h1>
+    <p class="ingress" data-no="Verktøyene og stedene i LME som hører sammen med det du jobber med nå." data-en="The tools and places in LME that belong with what you are working on now.">Verktøyene og stedene i LME som hører sammen med det du jobber med nå.</p>
+    <div class="kort" style="margin-top:16px">
+      <ul class="liste" id="merListe"></ul>
+    </div>
+  </section>
+</main>
+
+<div class="bunnstang skjul" id="bunnstang">
+  <span id="bunnTekst"></span>
+  <button class="stor lys" id="fullforKnapp" type="button" style="width:auto"></button>
+</div>
+
+<nav class="meny">
+  <button type="button" data-side="hjem" aria-current="page">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
+    <span data-no="Forsiden" data-en="Home">Forsiden</span>
+  </button>
+  <button type="button" data-side="tavle">
+    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m4 17 5-5 4 4 3-2 4 4"/></svg>
+    <span data-no="Visjon" data-en="Vision">Visjon</span>
+  </button>
+  <button type="button" data-side="seire">
+    <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.6-7-9.4A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.6C19 15.4 12 20 12 20z"/></svg>
+    <span data-no="Seire" data-en="Wins">Seire</span>
+  </button>
+  <button type="button" data-side="mer">
+    <svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M3 12h18M12 8v13M12 8s-1-4-4-4a2.5 2.5 0 0 0 0 5M12 8s1-4 4-4a2.5 2.5 0 0 1 0 5"/></svg>
+    <span data-no="Mer" data-en="More">Mer</span>
+  </button>
+</nav>
+
+<script src="/js/momentum-data.js?v=1"></script>
+<script>
+(function () {
+  var D = window.LME_MOMENTUM;
+  var ANTALL = D.dager.length;
+
+  /* ---------- språk ---------- */
+  function en() { return window.LME_CURRENT_LANG === "en"; }
+  try { window.LME_CURRENT_LANG = localStorage.getItem("lme_lang") === "en" ? "en" : "no"; } catch (e) { window.LME_CURRENT_LANG = "no"; }
+  function T(o) { return o ? (en() ? (o.en || o.no) : o.no) : ""; }
+
+  function oversett() {
+    document.documentElement.lang = en() ? "en" : "no";
+    document.querySelectorAll("[data-no][data-en]").forEach(function (el) {
+      el.textContent = en() ? el.getAttribute("data-en") : el.getAttribute("data-no");
+    });
+    document.querySelectorAll("[data-ph-no][data-ph-en]").forEach(function (el) {
+      el.placeholder = en() ? el.getAttribute("data-ph-en") : el.getAttribute("data-ph-no");
+    });
+    document.getElementById("sprak").textContent = en() ? "🇳🇴 Norsk" : "🇬🇧 English";
+    document.title = "LME Momentum";
+    tegnAlt();
+  }
+  document.getElementById("sprak").addEventListener("click", function () {
+    window.LME_CURRENT_LANG = en() ? "no" : "en";
+    try { localStorage.setItem("lme_lang", window.LME_CURRENT_LANG); } catch (e) {}
+    oversett();
+  });
+
+  /* ---------- fremdrift ---------- */
+  var F = { fullfort: [], journal: {}, maaling: {}, seire: [], visjon: [], datoer: {} };
+  var innlogget = false;
+  var LOKAL = "momentum-fremdrift";
+
+  function lesLokalt() {
+    try { var r = localStorage.getItem(LOKAL); if (r) F = Object.assign(F, JSON.parse(r) || {}); } catch (e) {}
+  }
+  function skrivLokalt() {
+    try { localStorage.setItem(LOKAL, JSON.stringify(F)); } catch (e) {}
+  }
+
+  /* Lagrer på serveren når man er logget inn, i nettleseren ellers. Ingen
+     skal miste det de har skrevet fordi økten løp ut. */
+  function lagre(handling, data) {
+    skrivLokalt();
+    if (!innlogget) return Promise.resolve({ ok: true });
+    var kropp = Object.assign({ handling: handling }, data || {});
+    return fetch("/api/momentum", {
+      method: "POST", credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(kropp),
+    }).then(function (r) { return r.json(); }).catch(function () { return { ok: false }; });
+  }
+
+  function erFullfort(d) { return F.fullfort.indexOf(d) !== -1; }
+  function apen(d) { return d === 1 || erFullfort(d - 1) || erFullfort(d); }
+  function forsteApne() {
+    for (var i = 1; i <= ANTALL; i++) if (!erFullfort(i)) return i;
+    return ANTALL;
+  }
+
+  /* Rekken er dager på rad i kalenderen, ikke dagnumre. Har du gjort to
+     dager samme dag, er det fortsatt én dag på rad. */
+  function rekke() {
+    var dager = Object.keys(F.datoer || {}).map(function (k) { return F.datoer[k]; });
+    if (!dager.length) return 0;
+    var unike = dager.filter(function (v, i, a) { return a.indexOf(v) === i; }).sort().reverse();
+    var idag = new Date(); idag.setHours(12, 0, 0, 0);
+    var dagstr = function (d) { return d.toISOString().slice(0, 10); };
+    var igaar = new Date(idag.getTime() - 86400000);
+    if (unike[0] !== dagstr(idag) && unike[0] !== dagstr(igaar)) return 0;
+    var n = 1;
+    for (var i = 1; i < unike.length; i++) {
+      var forrige = new Date(unike[i - 1] + "T12:00:00");
+      var denne = new Date(unike[i] + "T12:00:00");
+      if (Math.round((forrige - denne) / 86400000) === 1) n++; else break;
+    }
+    return n;
+  }
+
+  function maalingDager() {
+    var ut = [];
+    D.dager.forEach(function (d, i) { if (d.maaling) ut.push(i + 1); });
+    return ut;
+  }
+
+  /* ---------- forsiden ---------- */
+  function tegnHjem() {
+    var t = new Date().getHours();
+    document.getElementById("hilsen").textContent = en()
+      ? (t < 12 ? "Good morning" : t < 18 ? "Good afternoon" : "Good evening")
+      : (t < 12 ? "God morgen" : t < 18 ? "God dag" : "God kveld");
+    var gjort = F.fullfort.length;
+    document.getElementById("velkommen").textContent = gjort === 0
+      ? (en() ? "Let's begin." : "La oss begynne.")
+      : (en() ? "Welcome back." : "Velkommen tilbake.");
+
+    var nr = forsteApne();
+    var dag = D.dager[nr - 1];
+    var ferdig = gjort >= ANTALL;
+
+    document.getElementById("dagensStempel").textContent = ferdig
+      ? (en() ? "YOU MADE IT" : "DU KOM I MÅL")
+      : (en() ? "READY FOR TODAY?" : "KLAR FOR I DAG?");
+    document.getElementById("dagensIngress").textContent = ferdig
+      ? (en() ? "All eleven days are done. Come back whenever you want to read one again, everything you wrote is still here." :
+                "Alle elleve dagene er gjort. Kom tilbake når du vil lese en om igjen, alt du skrev står her fortsatt.")
+      : T(dag.ingress);
+
+    document.getElementById("dagensDagOrd").textContent = en() ? "DAY" : "DAG";
+    document.getElementById("dagensDagNr").textContent = nr;
+    document.getElementById("dagensTittel").textContent = T(dag.tittel);
+    document.getElementById("dagensHandling").textContent = erFullfort(nr)
+      ? (en() ? "Read it again ›" : "Les den om igjen ›")
+      : (en() ? "Continue today's practice ›" : "Fortsett med dagen din ›");
+    document.getElementById("dagensRad").onclick = function () { visDag(nr); };
+
+    document.getElementById("tGjort").textContent = gjort;
+    document.getElementById("tAv").textContent = "/" + ANTALL;
+    document.getElementById("tRekke").textContent = rekke();
+
+    var m = maalingDager();
+    var forst = m.length ? F.maaling[String(m[0])] : undefined;
+    var sist = m.length > 1 ? F.maaling[String(m[m.length - 1])] : undefined;
+    document.getElementById("tStart").textContent = (forst === undefined ? "–" : forst);
+    var endring = "–";
+    if (forst !== undefined && sist !== undefined) endring = (sist - forst > 0 ? "+" : "") + (sist - forst);
+    document.getElementById("tEndring").textContent = endring;
+
+    var pst = Math.round((gjort / ANTALL) * 100);
+    document.getElementById("reiseNavn").textContent = en()
+      ? "Your " + ANTALL + " day journey" : "Reisen din på " + ANTALL + " dager";
+    document.getElementById("reisePst").textContent = pst + " %";
+    document.getElementById("reiseStripe").style.width = pst + "%";
+    document.getElementById("sisteDagTekst").textContent = (en() ? "Day " : "Dag ") + ANTALL;
+
+    document.getElementById("listeTittel").textContent = T(D.tittel);
+    document.getElementById("listeTeller").textContent = gjort + "/" + ANTALL + (en() ? " done" : " gjort");
+
+    var ul = document.getElementById("dagListe");
+    ul.innerHTML = "";
+    D.dager.forEach(function (d, i) {
+      var n = i + 1, li = document.createElement("li");
+      var ferd = erFullfort(n), aapen = apen(n), naa = (n === nr && !ferd);
+      li.className = ferd ? "ferdig" : (naa ? "na" : (aapen ? "" : "laast"));
+      var b = document.createElement("button");
+      b.className = "aapne"; b.type = "button";
+      b.innerHTML =
+        '<span class="prikk ' + (ferd ? "ok" : (naa ? "na" : "")) + '">' +
+          (ferd ? "✓" : (aapen ? n : "🔒")) + "</span>" +
+        '<span class="navn"></span>' +
+        (naa ? '<span class="hoyre">' + (en() ? "Now" : "Nå") + "</span>" : "");
+      b.querySelector(".navn").textContent = T(d.tittel);
+      if (aapen) b.onclick = function () { visDag(n); };
+      else b.disabled = true;
+      li.appendChild(b);
+      ul.appendChild(li);
+    });
+  }
+
+  /* ---------- en dag ---------- */
+  var aktivDag = 0;
+
+  function visDag(n) {
+    aktivDag = n;
+    var d = D.dager[n - 1];
+    var skifte = (D.skifter.filter(function (s) { return s.id === d.skifte; })[0] || {}).navn;
+
+    document.getElementById("dNr").textContent = n;
+    document.getElementById("dSkifte").textContent = T(skifte);
+    document.getElementById("dTittel").textContent = T(d.tittel);
+
+    var brod = document.getElementById("dBrod");
+    brod.innerHTML = "";
+    (en() ? d.tekst.en : d.tekst.no).forEach(function (a) {
+      var p = document.createElement("p"); p.textContent = a; brod.appendChild(p);
+    });
+
+    var lydBoks = document.getElementById("dLydBoks");
+    if (d.lyd) { document.getElementById("dLyd").src = d.lyd; lydBoks.classList.remove("skjul"); }
+    else { lydBoks.classList.add("skjul"); }
+
+    var mk = document.getElementById("dMaalingKort");
+    if (d.maaling) {
+      mk.classList.remove("skjul");
+      document.getElementById("dMaalingSp").textContent = T(d.maaling);
+      var sk = document.getElementById("dSkala");
+      sk.innerHTML = "";
+      for (var i = 0; i <= 10; i++) {
+        (function (v) {
+          var b = document.createElement("button");
+          b.type = "button"; b.textContent = v;
+          b.setAttribute("aria-pressed", String(F.maaling[String(n)] === v));
+          b.onclick = function () {
+            F.maaling[String(n)] = v;
+            sk.querySelectorAll("button").forEach(function (x, j) { x.setAttribute("aria-pressed", String(j === v)); });
+            lagre("maaling", { dag: n, tall: v });
+            tegnHjem();
+          };
+          sk.appendChild(b);
+        })(i);
+      }
+    } else { mk.classList.add("skjul"); }
+
+    var j = document.getElementById("dJournal");
+    j.innerHTML = "";
+    var lagrede = F.journal[String(n)] || [];
+    (en() ? d.journal.en : d.journal.no).forEach(function (sp, i) {
+      var p = document.createElement("p");
+      p.className = "sporsmal";
+      p.innerHTML = "<b>" + (i + 1) + "</b>";
+      p.appendChild(document.createTextNode(sp));
+      var ta = document.createElement("textarea");
+      ta.value = lagrede[i] || "";
+      ta.addEventListener("input", planleggLagring);
+      j.appendChild(p); j.appendChild(ta);
+    });
+    document.getElementById("dLagret").textContent = "";
+
+    var ferd = erFullfort(n);
+    var kn = document.getElementById("fullforKnapp");
+    document.getElementById("bunnTekst").textContent = ferd
+      ? (en() ? "Day " + n + " is done." : "Dag " + n + " er gjort.")
+      : (en() ? "Ready to complete day " + n + "?" : "Klar til å fullføre dag " + n + "?");
+    kn.textContent = ferd ? (en() ? "Undo" : "Angre") : (en() ? "✓ Complete" : "✓ Fullfør");
+    kn.className = ferd ? "stor igjen" : "stor lys";
+    kn.onclick = function () { ferd ? angre(n) : fullfor(n); };
+    document.getElementById("bunnstang").classList.remove("skjul");
+
+    byttSide("dag");
+    window.scrollTo(0, 0);
+  }
+
+  var lagreTimer = null;
+  function planleggLagring() {
+    clearTimeout(lagreTimer);
+    document.getElementById("dLagret").textContent = en() ? "Saving…" : "Lagrer…";
+    lagreTimer = setTimeout(lagreJournal, 900);
+  }
+  function lagreJournal() {
+    if (!aktivDag) return;
+    var svar = [];
+    document.querySelectorAll("#dJournal textarea").forEach(function (ta) { svar.push(ta.value); });
+    F.journal[String(aktivDag)] = svar;
+    lagre("journal", { dag: aktivDag, svar: svar }).then(function () {
+      document.getElementById("dLagret").textContent = en() ? "Saved." : "Lagret.";
+    });
+  }
+
+  function fullfor(n) {
+    lagreJournal();
+    if (F.fullfort.indexOf(n) === -1) F.fullfort.push(n);
+    F.fullfort.sort(function (a, b) { return a - b; });
+    F.datoer = F.datoer || {};
+    F.datoer[String(n)] = new Date().toISOString().slice(0, 10);
+    lagre("fullfor", { dag: n });
+    tegnHjem();
+    byttSide("hjem");
+    window.scrollTo(0, 0);
+  }
+  function angre(n) {
+    F.fullfort = F.fullfort.filter(function (x) { return x !== n; });
+    if (F.datoer) delete F.datoer[String(n)];
+    lagre("angre", { dag: n });
+    tegnHjem(); visDag(n);
+  }
+
+  document.getElementById("tilbakeKnapp").onclick = function () { byttSide("hjem"); window.scrollTo(0, 0); };
+
+  /* ---------- visjonstavla ---------- */
+  function tegnTavle() {
+    var v = document.getElementById("vListe");
+    v.innerHTML = "";
+    (F.visjon || []).forEach(function (k) {
+      var f = document.createElement("figure");
+      if (k.bilde) {
+        var img = document.createElement("img");
+        img.src = k.bilde; img.alt = k.tekst || "";
+        img.onerror = function () { img.remove(); };
+        f.appendChild(img);
+      }
+      if (k.tekst) {
+        var c = document.createElement("figcaption");
+        c.textContent = k.tekst; f.appendChild(c);
+      }
+      var x = document.createElement("button");
+      x.className = "fjern"; x.type = "button"; x.textContent = "×";
+      x.setAttribute("aria-label", en() ? "Remove" : "Fjern");
+      x.onclick = function () {
+        F.visjon = F.visjon.filter(function (a) { return a.id !== k.id; });
+        lagre("fjernVisjon", { id: k.id }); tegnTavle();
+      };
+      f.appendChild(x);
+      v.appendChild(f);
+    });
+    document.getElementById("vTomt").classList.toggle("skjul", (F.visjon || []).length > 0);
+  }
+  document.getElementById("vLegg").onclick = function () {
+    var t = document.getElementById("vTekst"), b = document.getElementById("vBilde");
+    var tekst = t.value.trim(), bilde = b.value.trim();
+    if (bilde && !/^https:\/\//i.test(bilde)) bilde = "";
+    if (!tekst && !bilde) { t.focus(); return; }
+    F.visjon.unshift({ id: "v" + Date.now(), tekst: tekst, bilde: bilde, ts: Date.now() });
+    lagre("visjon", { tekst: tekst, bilde: bilde });
+    t.value = ""; b.value = ""; tegnTavle();
+  };
+
+  /* ---------- seire ---------- */
+  function tegnSeire() {
+    var l = document.getElementById("sListe");
+    l.innerHTML = "";
+    (F.seire || []).forEach(function (s) {
+      var rad = document.createElement("div");
+      rad.className = "seier";
+      var dato = document.createElement("span");
+      dato.className = "dato";
+      dato.textContent = new Date(s.ts).toLocaleDateString(en() ? "en-GB" : "nb-NO", { day: "numeric", month: "short" });
+      var tekst = document.createElement("span");
+      tekst.textContent = s.tekst;
+      var x = document.createElement("button");
+      x.className = "fjern"; x.type = "button"; x.textContent = "×";
+      x.setAttribute("aria-label", en() ? "Remove" : "Fjern");
+      x.onclick = function () {
+        F.seire = F.seire.filter(function (a) { return a.id !== s.id; });
+        lagre("fjernSeier", { id: s.id }); tegnSeire();
+      };
+      rad.appendChild(dato); rad.appendChild(tekst); rad.appendChild(x);
+      l.appendChild(rad);
+    });
+    var tomt = (F.seire || []).length === 0;
+    document.getElementById("sTomt").classList.toggle("skjul", !tomt);
+    document.getElementById("sKort").classList.toggle("skjul", tomt);
+  }
+  document.getElementById("sLegg").onclick = function () {
+    var i = document.getElementById("sTekst");
+    var tekst = i.value.trim();
+    if (!tekst) { i.focus(); return; }
+    F.seire.unshift({ id: "s" + Date.now(), tekst: tekst, ts: Date.now() });
+    lagre("seier", { tekst: tekst });
+    i.value = ""; tegnSeire();
+  };
+  document.getElementById("sTekst").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") document.getElementById("sLegg").click();
+  });
+
+  /* ---------- mer ---------- */
+  var MER = [
+    { url: "/kursbygger", no: ["Kursbygger", "Lag kurset eller minikurset ditt"], en: ["Course builder", "Build your course or mini course"] },
+    { url: "/min-epost", no: ["E-postlista mi", "Samle adressene dine, adskilt fra alt annet"], en: ["My email list", "Collect your own addresses, kept separate"] },
+    { url: "/vault", no: ["LME Vault", "Ferdige Claude-maler for digitale produkter"], en: ["LME Vault", "Ready-made Claude templates for digital products"] },
+    { url: "/min-reise", no: ["Min reise", "Hvor du er i LME akkurat nå"], en: ["My journey", "Where you are in LME right now"] },
+    { url: "/apper", no: ["Alle appene", "Se hvert verktøy og hva det krever"], en: ["All the apps", "See every tool and what it needs"] },
+    { url: "/help/contact", no: ["Spør meg", "Sitter du fast, så svar meg her"], en: ["Ask me", "If you are stuck, reply to me here"] },
+  ];
+  function tegnMer() {
+    var ul = document.getElementById("merListe");
+    ul.innerHTML = "";
+    MER.forEach(function (m) {
+      var li = document.createElement("li");
+      var a = document.createElement("a");
+      a.href = m.url;
+      a.className = "aapne";
+      a.style.textDecoration = "none";
+      a.innerHTML = '<span class="prikk">›</span><span class="navn"></span>';
+      var n = a.querySelector(".navn");
+      var tekst = en() ? m.en : m.no;
+      n.innerHTML = "";
+      var b = document.createElement("b"); b.textContent = tekst[0];
+      var p = document.createElement("div");
+      p.style.cssText = "font-size:13px;color:var(--grey)";
+      p.textContent = tekst[1];
+      n.appendChild(b); n.appendChild(p);
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
+  }
+
+  /* ---------- sidebytte ---------- */
+  var SIDER = ["hjem", "dag", "tavle", "seire", "mer"];
+  function byttSide(navn) {
+    SIDER.forEach(function (s) {
+      document.getElementById("side-" + s).classList.toggle("skjul", s !== navn);
+    });
+    document.getElementById("bunnstang").classList.toggle("skjul", navn !== "dag");
+    document.querySelectorAll(".meny button").forEach(function (b) {
+      var s = b.getAttribute("data-side");
+      if (s === (navn === "dag" ? "hjem" : navn)) b.setAttribute("aria-current", "page");
+      else b.removeAttribute("aria-current");
+    });
+  }
+  document.querySelectorAll(".meny button").forEach(function (b) {
+    b.onclick = function () {
+      var s = b.getAttribute("data-side");
+      byttSide(s);
+      if (s === "tavle") tegnTavle();
+      if (s === "seire") tegnSeire();
+      if (s === "mer") tegnMer();
+      window.scrollTo(0, 0);
+    };
+  });
+
+  function tegnAlt() {
+    tegnHjem(); tegnTavle(); tegnSeire(); tegnMer();
+    if (aktivDag && !document.getElementById("side-dag").classList.contains("skjul")) visDag(aktivDag);
+  }
+
+  /* ---------- start ---------- */
+  lesLokalt();
+  oversett();
+
+  fetch("/api/momentum", { credentials: "same-origin" })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (!d || !d.ok) return;
+      innlogget = !!d.innlogget;
+      if (innlogget && d.fremdrift) {
+        var s = d.fremdrift;
+        // Serveren vinner der den har noe, men det som bare finnes i denne
+        // nettleseren (skrevet før innlogging) skal ikke gå tapt.
+        F.fullfort = (s.fullfort && s.fullfort.length) ? s.fullfort : F.fullfort;
+        F.journal = Object.assign({}, F.journal, s.journal || {});
+        F.maaling = Object.assign({}, F.maaling, s.maaling || {});
+        F.seire = (s.seire && s.seire.length) ? s.seire : F.seire;
+        F.visjon = (s.visjon && s.visjon.length) ? s.visjon : F.visjon;
+        F.datoer = Object.assign({}, F.datoer, s.datoer || {});
+        skrivLokalt();
+      }
+      if (!innlogget) {
+        var v = document.getElementById("ikkeInnlogget");
+        v.textContent = en()
+          ? "You are not logged in, so what you write is saved in this browser only. Log in and it follows you to your phone as well."
+          : "Du er ikke logget inn, så det du skriver lagres bare i denne nettleseren. Logger du inn, følger det med til telefonen også.";
+        v.classList.remove("skjul");
+      }
+      tegnAlt();
+    })
+    .catch(function () {});
+})();
+</script>
+<script src="/js/lme-account.js?v=11" defer></script>
+</body>
+</html>
