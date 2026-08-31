@@ -388,7 +388,7 @@
       <div id="dJournal"></div>
       <p id="dLagret" style="font-size:13px;color:#9a9490;margin-top:10px"></p>
       <div class="refleksjon">
-        <button class="knapp" id="dReflKnapp" type="button">✨ <span data-no="Få en refleksjon fra Renate" data-en="Get a reflection from Renate">Få en refleksjon fra Renate</span></button>
+        <button class="knapp" id="dReflKnapp" type="button">✨ <span data-no="Spør Nathalie AI om en refleksjon" data-en="Ask Nathalie AI for a reflection">Spør Nathalie AI om en refleksjon</span></button>
         <div class="svar skjul" id="dReflSvar"></div>
         <p class="feil skjul" id="dReflFeil"></p>
       </div>
@@ -756,7 +756,7 @@
     document.getElementById("dReflFeil").classList.add("skjul");
     var rk = document.getElementById("dReflKnapp");
     rk.disabled = false;
-    rk.querySelector("span").textContent = en() ? "Get a reflection from Renate" : "Få en refleksjon fra Renate";
+    rk.querySelector("span").textContent = en() ? "Ask Nathalie AI for a reflection" : "Spør Nathalie AI om en refleksjon";
 
     var pk = document.getElementById("dPauseKort");
     if (d.pause && d.pause.tittel && T(d.pause.tittel)) {
@@ -798,9 +798,11 @@
     });
   }
 
-  /* Refleksjonen leses av /api/momentum-refleksjon, som svarer i Renates
-     stemme. Den koster penger per svar, så serveren avgjør hvem som får
-     den og hvor ofte. Her viser vi bare svaret, eller beskjeden. */
+  /* Refleksjonen leses av /api/momentum-refleksjon, som svarer som Nathalie
+     AI, den samme AI-assistenten som ellers i plattformen. Hun svarer på
+     vegne av Renate, men er ærlig om at hun er en AI. Den koster penger per
+     svar, så serveren avgjør hvem som får den og hvor ofte. Her viser vi
+     bare svaret, eller beskjeden. */
   document.getElementById("dReflKnapp").onclick = function () {
     var kn = this;
     var svarBoks = document.getElementById("dReflSvar");
@@ -817,7 +819,7 @@
     }
     feil.classList.add("skjul");
     kn.disabled = true;
-    kn.querySelector("span").textContent = en() ? "Reading what you wrote…" : "Leser det du skrev…";
+    kn.querySelector("span").textContent = en() ? "Nathalie is reading…" : "Nathalie leser…";
     lagreJournal();
     fetch("/api/momentum-refleksjon", {
       method: "POST", credentials: "same-origin",
@@ -832,7 +834,7 @@
       .then(function (r) { return r.json(); })
       .then(function (res) {
         kn.disabled = false;
-        kn.querySelector("span").textContent = en() ? "Get a new reflection" : "Få en ny refleksjon";
+        kn.querySelector("span").textContent = en() ? "Ask for a new reflection" : "Spør om en ny refleksjon";
         if (!res || !res.ok) {
           feil.textContent = (res && res.error) ||
             (en() ? "Could not get a reflection right now." : "Fikk ikke hentet en refleksjon akkurat nå.");
@@ -841,7 +843,7 @@
         }
         svarBoks.innerHTML = "";
         var t = document.createElement("b");
-        t.textContent = en() ? "Renate" : "Renate";
+        t.textContent = "Nathalie AI";
         svarBoks.appendChild(t);
         String(res.tekst).split(/\n{2,}/).forEach(function (a) {
           if (!a.trim()) return;
@@ -851,7 +853,7 @@
       })
       .catch(function () {
         kn.disabled = false;
-        kn.querySelector("span").textContent = en() ? "Get a reflection from Renate" : "Få en refleksjon fra Renate";
+        kn.querySelector("span").textContent = en() ? "Ask Nathalie AI for a reflection" : "Spør Nathalie AI om en refleksjon";
         feil.textContent = en() ? "Could not get a reflection right now." : "Fikk ikke hentet en refleksjon akkurat nå.";
         feil.classList.remove("skjul");
       });
