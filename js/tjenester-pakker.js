@@ -17,6 +17,13 @@
 
 export const PRISER_SJEKKET = "2026-08-31";
 
+/* `kjopLenke` er den levende Stripe-betalingslenken for pakken, opprettet
+   31. august 2026 i live-modus. Den er også registrert i
+   functions/_lib/purchase-links.js (TJENESTE_PAYMENT_LINKS), slik at
+   webhooken kjenner igjen kjøpet, legger ordren i Renates panel på
+   /tjenester og varsler henne. Legger du til en ny pakke, må BEGGE stedene
+   oppdateres, ellers blir noe betalt uten at noen får beskjed. */
+
 /* Prisene er "gjort for deg"-arbeid, altså Renates tid, ikke abonnement.
    Et eventuelt LME Autopilot-abonnement kommer i tillegg, se AUTOPILOT_NOTE. */
 export const PAKKER = [
@@ -24,6 +31,7 @@ export const PAKKER = [
     id: "effekt",
     emoji: "🎬",
     nok: 1490,
+    kjopLenke: "https://buy.stripe.com/28EfZia8dgDR6612WX9R71t",
     navn: { no: "Effektpakken", en: "The Effects Package" },
     undertittel: {
       no: "Videoene dine, ferdig med effekter",
@@ -58,6 +66,7 @@ export const PAKKER = [
     id: "karakter",
     emoji: "✨",
     nok: 3900,
+    kjopLenke: "https://buy.stripe.com/5kQ28s0xD87l3XTdBB9R71u",
     populaer: true,
     navn: { no: "AI-karakteren din", en: "Your AI Character" },
     undertittel: {
@@ -95,6 +104,7 @@ export const PAKKER = [
     id: "autopilot",
     emoji: "🚀",
     nok: 7900,
+    kjopLenke: "https://buy.stripe.com/eVqeVe6W1evJ661eFF9R71v",
     navn: { no: "Innhold på autopilot", en: "Content on Autopilot" },
     undertittel: {
       no: "En hel måned med innhold, satt opp for deg",

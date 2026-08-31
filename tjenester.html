@@ -110,7 +110,21 @@
   .pakke ul { list-style: none; margin-bottom: 22px; }
   .pakke li { position: relative; padding-left: 25px; margin-bottom: 9px; font-size: 15px; }
   .pakke li::before { content: "✓"; position: absolute; left: 0; color: var(--lime); font-weight: 800; }
-  .pakke .velg { margin-top: auto; width: 100%; text-align: center; }
+  .pakke .velg { margin-top: auto; width: 100%; text-align: center; text-decoration: none; }
+  .lenkeknapp {
+    background: none; border: none; padding: 10px 0 0; width: 100%;
+    color: var(--grey); font-size: 13.5px; font-weight: 700;
+    text-decoration: underline; cursor: pointer;
+  }
+  .lenkeknapp:hover { color: var(--cerise); }
+
+  /* Takkemeldingen etter at kunden kommer tilbake fra kassen. */
+  .takk {
+    background: #F2F8E6; border: 2px solid #B7D96B; border-radius: 20px;
+    padding: 22px 24px; margin-bottom: 26px;
+  }
+  .takk h2 { font-size: 22px; margin-bottom: 8px; }
+  .takk p { color: #47600F; font-size: 15.5px; }
 
   .notis {
     background: #fff; border-radius: 18px; padding: 20px 22px; margin-top: 22px;
@@ -176,6 +190,11 @@
 </header>
 
 <div class="wrap">
+
+  <section class="takk skjul" id="takk">
+    <h2 data-no="Takk! Nå setter jeg i gang" data-en="Thank you! I am starting now">Takk! Nå setter jeg i gang</h2>
+    <p data-no="Kjøpet er registrert, og du får en e-post fra meg med det ene jeg trenger for å komme videre: en lenke til materialet ditt. Har du allerede lagt den inn i kassen, trenger du ikke gjøre noe mer." data-en="Your purchase is registered, and you will get an email from me asking for the one thing I need to move on: a link to your material. If you already added it at checkout, there is nothing more for you to do.">Kjøpet er registrert, og du får en e-post fra meg med det ene jeg trenger for å komme videre: en lenke til materialet ditt. Har du allerede lagt den inn i kassen, trenger du ikke gjøre noe mer.</p>
+  </section>
 
   <section class="hero">
     <span class="kicker" data-no="GJORT FOR DEG" data-en="DONE FOR YOU">GJORT FOR DEG</span>
@@ -342,7 +361,15 @@
         html += '<li data-no="' + linje + '" data-en="' + (p.inkluderer.en[i] || linje) + '">' + linje + '</li>';
       });
       html += '</ul>';
-      html += '<button class="knapp-stor velg" type="button" data-pakke="' + p.id + '" data-no="Velg denne" data-en="Choose this one">Velg denne</button>';
+      /* To veier ut av kortet: betal med en gang, eller be om et tilbud
+         først. Den andre er ikke pynt, den er der for oppdrag som er
+         større eller rotete enn pakken beskriver. */
+      if (p.kjopLenke) {
+        html += '<a class="knapp-stor velg" href="' + p.kjopLenke + '" data-no="Kjøp for ' + p.nok.toLocaleString('nb-NO') + ' kr" data-en="Buy for ' + p.nok.toLocaleString('nb-NO') + ' kr">Kjøp for ' + p.nok.toLocaleString('nb-NO') + ' kr</a>';
+        html += '<button class="lenkeknapp be-om" type="button" data-pakke="' + p.id + '" data-no="eller be om et tilbud først" data-en="or ask for a quote first">eller be om et tilbud først</button>';
+      } else {
+        html += '<button class="knapp-stor velg be-om" type="button" data-pakke="' + p.id + '" data-no="Velg denne" data-en="Choose this one">Velg denne</button>';
+      }
       kort.innerHTML = html;
       liste.appendChild(kort);
     });
@@ -355,7 +382,7 @@
       '<h3 data-no="' + SKREDDERSYDD.navn.no + '" data-en="' + SKREDDERSYDD.navn.en + '">' + SKREDDERSYDD.navn.no + '</h3>' +
       '<p class="undertittel" data-no="' + SKREDDERSYDD.undertittel.no + '" data-en="' + SKREDDERSYDD.undertittel.en + '">' + SKREDDERSYDD.undertittel.no + '</p>' +
       '<p class="for-hvem" data-no="' + SKREDDERSYDD.tekst.no + '" data-en="' + SKREDDERSYDD.tekst.en + '">' + SKREDDERSYDD.tekst.no + '</p>' +
-      '<button class="knapp-mild velg" type="button" data-pakke="' + SKREDDERSYDD.id + '" data-no="Beskriv oppdraget" data-en="Describe the job">Beskriv oppdraget</button>';
+      '<button class="knapp-mild velg be-om" type="button" data-pakke="' + SKREDDERSYDD.id + '" data-no="Beskriv oppdraget" data-en="Describe the job">Beskriv oppdraget</button>';
     liste.appendChild(annet);
 
     const notis = document.getElementById('autopilot-notis');
@@ -368,7 +395,9 @@
     kreditt.setAttribute('data-en', KREDITT_NOTE.en.replace('About images and video:', '<strong>About images and video:</strong>'));
     kreditt.innerHTML = KREDITT_NOTE.no.replace('Om bilder og video:', '<strong>Om bilder og video:</strong>');
 
-    liste.querySelectorAll('.velg').forEach(knapp => {
+    /* Bare tilbudsknappene hopper ned til skjemaet. Kjøpsknappene er ekte
+       lenker til kassen og skal få gå sin vei. */
+    liste.querySelectorAll('.be-om').forEach(knapp => {
       knapp.addEventListener('click', () => {
         document.getElementById('f-pakke').value = knapp.getAttribute('data-pakke');
         document.getElementById('skjema').scrollIntoView({ behavior: 'smooth' });
@@ -417,6 +446,14 @@
   byggPakker();
   byggValg();
   if (sprak === 'en') byttSprak('en');
+
+  /* Kassen sender kunden tilbake hit med ?takk=<pakke>. Da skal hun møte en
+     kvittering, ikke bare salgssiden på nytt. */
+  if (new URLSearchParams(location.search).get('takk')) {
+    const takk = document.getElementById('takk');
+    takk.classList.remove('skjul');
+    takk.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   /* Skjemaet */
   const skjema = document.getElementById('foresporselsskjema');
@@ -476,6 +513,7 @@
      ingenting lekker om noen åpner siden uten å være logget inn. */
   const STATUSER = [
     { id: 'ny', no: 'Ny', en: 'New' },
+    { id: 'betalt', no: 'Betalt', en: 'Paid' },
     { id: 'svart', no: 'Svart', en: 'Answered' },
     { id: 'i-gang', no: 'I gang', en: 'In progress' },
     { id: 'ferdig', no: 'Ferdig', en: 'Done' },

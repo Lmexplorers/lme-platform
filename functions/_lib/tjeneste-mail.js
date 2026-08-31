@@ -105,3 +105,32 @@ export async function sendKvitteringTilKunde(env, sak, pakkeNavn) {
   const emne = en ? "I have got your request 💗" : "Jeg har fått forespørselen din 💗";
   return send(env, sak.epost, sak.navn, emne, wrap(inner));
 }
+
+/**
+ * Kvitteringen til en som har betalt en pakke rett i kassen, uten å be om
+ * tilbud først. Da er prisen avklart, og det eneste som gjenstår er å få tak
+ * i materialet hennes. Derfor spør dette brevet om nettopp det, i stedet for
+ * å love et pristilbud hun allerede har betalt.
+ *
+ * Stripe sender sin egen betalingskvittering. Denne er min, med neste steg.
+ */
+export async function sendKvitteringKjop(env, sak, pakkeNavn) {
+  const fornavn = esc((sak.navn || "").split(" ")[0]);
+  const harLenke = !!sak.lenke;
+  const inner =
+    '<h2 style="font-size:21px;margin:0 0 14px;">Takk! Nå setter jeg i gang</h2>' +
+    "<p>Hei " + fornavn + ",</p>" +
+    "<p>Du har kjøpt <strong>" + esc(pakkeNavn) + "</strong>, og jeg har fått beskjed. Nå er det bare én ting jeg trenger fra deg, og det er materialet ditt.</p>" +
+    (harLenke
+      ? '<p>Du la igjen denne lenken i kassen, og den ser jeg på med en gang: <br><span style="color:#938E99;">' + esc(sak.lenke) + "</span></p>"
+      : "<p>Svar på denne e-posten med en lenke til filene dine, fra Google Drive, Dropbox eller WeTransfer. Er de store, er en lenke bedre enn vedlegg.</p>") +
+    '<p style="margin:18px 0 6px;">Fortell meg gjerne samtidig:</p>' +
+    '<ul style="margin:0 0 18px;padding-left:20px;">' +
+    "<li>hvem innholdet er for</li>" +
+    "<li>hvilken tone du vil ha, rolig eller energisk</li>" +
+    "<li>om du har farger, logo eller en font jeg skal holde meg til</li>" +
+    "</ul>" +
+    "<p>Så snart jeg har materialet, starter leveringstiden å løpe, og du får et utkast før noe er endelig. Er det noe du lurer på underveis, svarer du bare her.</p>" +
+    '<p style="margin:16px 0 0;">Varm hilsen<br>Renate</p>';
+  return send(env, sak.epost, sak.navn, "Takk for kjøpet, her er neste steg 💗", wrap(inner));
+}

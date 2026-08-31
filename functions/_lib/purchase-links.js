@@ -503,3 +503,22 @@ export const SKOLEDAGBOK_INFO = {
     },
   },
 };
+
+/* ---------------------------------------------------------------------------
+ * LME Studio Tjenester (/tjenester), "gjort for deg"-pakkene.
+ *
+ * Engangskjøp, ingen tilgang som skal låses opp. Det eneste som skjer ved et
+ * kjøp er at ordren legges i Renates eget panel nederst på /tjenester (samme
+ * KV-nøkler som forespørslene, tjeneste:<...>), at hun får salgsvarsel, og at
+ * kjøpet føres i kjøpshistorikken.
+ *
+ * Prisene står i js/tjenester-pakker.js, som både salgssiden og
+ * functions/api/tjeneste-foresporsel.js leser fra. Endres en pris, må den
+ * endres der OG i Stripe, ellers selger siden noe annet enn kassen tar betalt.
+ * Betalingslenkene er opprettet 31. august 2026, i live-modus.
+ * ------------------------------------------------------------------------- */
+export const TJENESTE_PAYMENT_LINKS = {
+  "plink_1UAe88Lax7B8uQzq3Ru9cZ4B": { pakke: "effekt", navn: "Effektpakken", nok: 1490 },
+  "plink_1UAe8OLax7B8uQzq3DwgTsA1": { pakke: "karakter", navn: "AI-karakteren din", nok: 3900 },
+  "plink_1UAe8QLax7B8uQzq0wlcBYrV": { pakke: "autopilot", navn: "Innhold på autopilot", nok: 7900 },
+};

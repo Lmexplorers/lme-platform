@@ -18,7 +18,9 @@ import { pakkeMedId, SKREDDERSYDD } from "../../js/tjenester-pakker.js";
 import { sendVarselTilRenate, sendKvitteringTilKunde } from "../_lib/tjeneste-mail.js";
 
 const PREFIX = "tjeneste:";
-const GYLDIGE_STATUS = ["ny", "svart", "i-gang", "ferdig"];
+/* "betalt" settes av webhooken når noen kjøper en pakke rett i kassen
+   (functions/api/oppskrift-webhook.js), de andre av Renate selv i panelet. */
+const GYLDIGE_STATUS = ["ny", "betalt", "svart", "i-gang", "ferdig"];
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
