@@ -124,3 +124,9 @@
   Cache-Control: no-store
 /momentum-info.html
   Cache-Control: no-store
+# Tjenestesiden viser priser og leveringstider, og maa aldri vises fra en
+# gammel mellomlagret versjon naar en pris eller en pakke endres.
+/tjenester
+  Cache-Control: no-store
+/tjenester.html
+  Cache-Control: no-store

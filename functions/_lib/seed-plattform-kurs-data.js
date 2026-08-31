@@ -506,6 +506,27 @@ export const PLATTFORM_KURS = {
     {
       "module": null,
       "title": {
+        "no": "LME Studio Tjenester, når du heller vil kjøpe tiden",
+        "en": "LME Studio Services, when you would rather buy the time"
+      },
+      "body": [
+        {
+          "no": "Noen ganger er det ikke verktøyet som mangler, det er tiden. LME Studio Tjenester er ferdige pakker med fast pris, der jeg gjør jobben for deg i stedet for at du lærer deg verktøyet: videoer med effekter, en egen AI-karakter satt opp, eller en hel måned med innhold lagt i kø. Du finner dem på https://lmexplorers.com/tjenester",
+          "en": "Sometimes it is not the tool that is missing, it is the time. LME Studio Services are ready-made packages with a fixed price, where I do the work for you instead of you learning the tool: videos with effects, your own AI character set up, or a full month of content queued. You find them at https://lmexplorers.com/tjenester"
+        },
+        {
+          "no": "Slik foregår det: du fyller ut skjemaet med hva du trenger, og får et fast tilbud tilbake innen én virkedag, med pris og leveringsdato. Ingenting trekkes før du har sagt ja, og hver pakke har en runde med endringer inkludert. Et eventuelt Autopilot-abonnement kommer i tillegg, siden det er appen som lager innholdet videre etterpå.",
+          "en": "This is how it works: you fill in the form with what you need, and get a fixed quote back within one working day, with the price and the delivery date. Nothing is charged before you have said yes, and every package includes one round of changes. An Autopilot subscription comes in addition, since that is the app making the content afterwards."
+        }
+      ],
+      "tip": {
+        "no": "💡 Er du i tvil, prøv verktøyet selv først. Pakkene er for oppdrag der tiden er verdt mer enn kronene, ikke for det du raskt får til på egen hånd.",
+        "en": "💡 If in doubt, try the tool yourself first. The packages are for jobs where your time is worth more than the money, not for what you can quickly do on your own."
+      }
+    },
+    {
+      "module": null,
+      "title": {
         "no": "Reel Studio og AI Reel Generator",
         "en": "Reel Studio and AI Reel Generator"
       },
