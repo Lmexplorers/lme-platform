@@ -33,6 +33,14 @@ export const AI_ASSISTENT_WORKSHOP = {
       "en": "How to describe a job clearly enough that an assistant can do it without you"
     },
     {
+      "no": "Hvor du trykker i Claude for å sette opp en assistent, steg for steg",
+      "en": "Where to tap in Claude to set up an assistant, step by step"
+    },
+    {
+      "no": "Når du bruker Claude-appen, når du bruker Claude Code, og når du bruker Claude Design",
+      "en": "When to use the Claude app, when to use Claude Code, and when to use Claude Design"
+    },
+    {
       "no": "Fem ferdige assistenter: e-post, regnskap, design, innhold og podkast",
       "en": "Five ready-made assistants: email, bookkeeping, design, content and podcast"
     },
@@ -150,6 +158,47 @@ export const AI_ASSISTENT_WORKSHOP = {
       }
     },
     {
+      "module": null,
+      "title": {
+        "no": "Slik bygger du assistenten i Claude, steg for steg",
+        "en": "How to build the assistant in Claude, step by step"
+      },
+      "body": [
+        {
+          "no": "**Mål:** Du vet nøyaktig hvor du trykker, ikke bare hva du skal skrive.",
+          "en": "**Goal:** You know exactly where to tap, not just what to write."
+        },
+        {
+          "no": "En assistent er ikke en knapp du skrur på. Det er et sted du lager én gang, der instruksjonen din allerede ligger, slik at du bare limer inn dagens materiale og får jobben gjort. I Claude heter det stedet et prosjekt.",
+          "en": "An assistant isn't a switch you flip. It's a place you set up once, where your instruction already lives, so you just paste in today's material and get the job done. In Claude that place is called a project."
+        },
+        {
+          "no": "## Seks steg, én gang per assistent",
+          "en": "## Six steps, once per assistant"
+        },
+        {
+          "no": "1. Åpne Claude i nettleseren eller i appen på telefonen.\n2. Finn Prosjekter i menyen, og lag et nytt prosjekt.\n3. Gi prosjektet navnet på jobben, for eksempel \"E-postassistenten\".\n4. Åpne instruksjonene til prosjektet, og lim inn stemmen din fra forrige leksjon, og under den de tre linjene for jobben.\n5. Legg ved filer prosjektet alltid skal kjenne til: prislisten din, en e-post du er fornøyd med, malen du bruker.\n6. Start en samtale inne i prosjektet, og lim inn dagens materiale.",
+          "en": "1. Open Claude in your browser or in the app on your phone.\n2. Find Projects in the menu, and create a new project.\n3. Name the project after the job, for example \"The email assistant\".\n4. Open the project instructions, and paste in your voice from the previous lesson, and beneath it the three lines for the job.\n5. Attach files the project should always know: your price list, an email you are happy with, the template you use.\n6. Start a conversation inside the project, and paste in today's material."
+        },
+        {
+          "no": "## Hvorfor prosjekt, og ikke bare en ny samtale",
+          "en": "## Why a project, and not just a new conversation"
+        },
+        {
+          "no": "En ny samtale husker ingenting. Et prosjekt husker instruksjonen, filene og tonen hver eneste gang du åpner det. Det er forskjellen på å forklare jobben på nytt hver dag, og å ha noen som allerede kan den.",
+          "en": "A new conversation remembers nothing. A project remembers the instruction, the files and the tone every single time you open it. That's the difference between explaining the job again every day, and having someone who already knows it."
+        },
+        {
+          "no": "Finner du ikke Prosjekter i din utgave av Claude, gjør du nøyaktig det samme i en vanlig samtale: lim inn instruksjonen øverst før du limer inn materialet, og ta vare på teksten i et notat, så du finner den igjen i morgen.",
+          "en": "If you cannot find Projects in your version of Claude, do exactly the same in an ordinary conversation: paste the instruction at the top before you paste the material, and keep the text in a note so you can find it again tomorrow."
+        }
+      ],
+      "tip": {
+        "no": "📝 Oppgave: Lag det første prosjektet nå, mens du leser. Gi det navnet på oppgaven du gruer deg mest til, og lim inn stemmen din. Resten fyller du på i neste del.",
+        "en": "📝 Task: Create the first project now, while you read. Name it after the task you dread most, and paste in your voice. You fill in the rest in the next part."
+      }
+    },
+    {
       "module": {
         "no": "Del 2 · De fem assistentene",
         "en": "Part 2 · The five assistants",
@@ -171,6 +220,10 @@ export const AI_ASSISTENT_WORKSHOP = {
         {
           "no": "## Ferdig prompt\n\n\"Her er e-postene jeg har fått i dag. Del dem i tre bunker: svar i dag, svar denne uken, trenger ikke svar. Skriv deretter ferdige svarutkast i min stemme til bunken svar i dag, maks 120 ord hver, vennlige og konkrete. Marker det du er usikker på, i stedet for å gjette.\"",
           "en": "## Ready-made prompt\n\n\"Here are the emails I received today. Split them into three piles: answer today, answer this week, no answer needed. Then write finished draft replies in my voice for the answer today pile, max 120 words each, friendly and concrete. Flag anything you're unsure about instead of guessing.\""
+        },
+        {
+          "no": "## Slik setter du den opp\n\nLag prosjektet \"E-postassistenten\". Lim de tre linjene og prompten over inn i instruksjonene. Legg ved to eller tre svar du selv har skrevet og er fornøyd med, det er den raskeste opplæringen i tonen din. Hver morgen limer du inn e-postene, eller skjermbilder av dem, og får bunkene og utkastene tilbake.",
+          "en": "## How to set it up\n\nCreate the project \"The email assistant\". Paste the three lines and the prompt above into the instructions. Attach two or three replies you wrote yourself and are happy with, that is the fastest training in your tone. Every morning you paste in the emails, or screenshots of them, and get the piles and the drafts back."
         },
         {
           "no": "## Vær ryddig med andres opplysninger\n\nDu trykker send, ikke Claude. Bytt ut navn, adresser og fødselsdatoer med [forelder] eller [barn] før du limer inn, så får du samme hjelpen uten å dele opplysninger som ikke er dine.",
@@ -202,6 +255,10 @@ export const AI_ASSISTENT_WORKSHOP = {
           "en": "## Ready-made prompt\n\n\"Here are this month's receipts. Build a table with date, supplier, amount, VAT and the expense category you think it belongs to. Clearly flag anything you're unsure about instead of guessing. Finish with three sentences on what I spent the most on, and what stands out compared to last month.\""
         },
         {
+          "no": "## Slik setter du den opp\n\nLag prosjektet \"Regnskapsassistenten\". Legg kategoriene du bruker inn som en fil i prosjektet, så slipper du å forklare dem hver måned. Når måneden er over, laster du opp bilagene som PDF eller bilde og ber om tabellen.",
+          "en": "## How to set it up\n\nCreate the project \"The bookkeeping assistant\". Put the categories you use into the project as a file, so you do not have to explain them every month. When the month is over, upload the receipts as PDF or photo and ask for the table."
+        },
+        {
           "no": "## Assistenten forbereder, regnskapsføreren bestemmer\n\nDette er forarbeidet, ikke selve regnskapet. Bilagene skal fortsatt lagres slik loven krever, og regnskapsføreren din skal ha siste ord. Det du sparer, er tiden fram til hun får en ryddig bunke i hendene.",
           "en": "## The assistant prepares, your accountant decides\n\nThis is the preparation, not the accounts themselves. The receipts still have to be stored the way the law requires, and your accountant still has the final say. What you save is the time it takes to hand her a tidy pile."
         }
@@ -229,6 +286,10 @@ export const AI_ASSISTENT_WORKSHOP = {
         {
           "no": "## Ferdig prompt\n\n\"Lag en presentasjon på tolv bilder om [tema] for [publikum]. Gi meg overskrift, maks tre punkter og én setning jeg skal si, for hvert bilde. Bygg den slik at det siste bildet leder naturlig til [det du vil at de skal gjøre]. Foreslå også ett bilde eller én illustrasjon per lysbilde.\"",
           "en": "## Ready-made prompt\n\n\"Create a twelve-slide presentation about [topic] for [audience]. Give me a headline, at most three bullet points and one sentence for me to say, for each slide. Build it so the last slide leads naturally to [what you want them to do]. Also suggest one image or illustration per slide.\""
+        },
+        {
+          "no": "## Slik setter du den opp\n\nLag prosjektet \"Designassistenten\". Legg ved en presentasjon du har holdt før, så kjenner den formen din, og malen du bruker om du har en. Be om presentasjonen, og lim resultatet inn i malen.",
+          "en": "## How to set it up\n\nCreate the project \"The design assistant\". Attach a presentation you have given before, so it knows your form, and the template you use if you have one. Ask for the presentation, and paste the result into the template."
         },
         {
           "no": "Når strukturen sitter, er selve designet raskt. Da limer du innholdet inn i malen du allerede bruker, og bruker tiden på hvordan det ser ut, ikke på hva som skal stå.",
@@ -260,6 +321,10 @@ export const AI_ASSISTENT_WORKSHOP = {
           "en": "## Ready-made prompt\n\n\"Here's an idea I spoke into my phone while walking. Tidy it up and rewrite it as a post for [platform] in my voice. Keep my own phrasing where it's good, and remove anything that sounds like a brochure. Give me three suggestions for the opening line.\""
         },
         {
+          "no": "## Slik setter du den opp\n\nLag prosjektet \"Innholdsassistenten\". Legg ved fem innlegg du selv er fornøyd med, det lærer den stemmen din bedre enn noen beskrivelse. Snakk inn ideen på telefonen mens du går, og lim inn teksten du får, med pauser og alt.",
+          "en": "## How to set it up\n\nCreate the project \"The content assistant\". Attach five posts you are happy with yourself, that teaches it your voice better than any description. Speak the idea into your phone while walking, and paste in the text you get, pauses and all."
+        },
+        {
           "no": "Når teksten er klar, tar LME Autopilot seg av selve produksjonen: reels, stories og karuseller, laget på minutter. Denne assistenten skriver, Autopilot lager, og veien inn går via [LME Studio](https://lmexplorers.com/creative-academy).",
           "en": "Once the text is ready, LME Autopilot handles the production itself: reels, stories and carousels, made in minutes. This assistant writes, Autopilot builds, and the way in goes through [LME Studio](https://lmexplorers.com/creative-academy)."
         }
@@ -287,6 +352,10 @@ export const AI_ASSISTENT_WORKSHOP = {
         {
           "no": "## Ferdig prompt\n\n\"Her er notatene mine fra denne uken. Foreslå tre vinklinger til neste episode, med én setning om hvem hver av dem er for. Når jeg har valgt én, lager du disposisjon med fem bolker, show notes, en e-post til listen min og tre innlegg som peker til episoden.\"",
           "en": "## Ready-made prompt\n\n\"Here are my notes from this week. Suggest three angles for the next episode, with one sentence on who each of them is for. Once I've chosen one, create an outline with five sections, show notes, an email to my list and three posts pointing to the episode.\""
+        },
+        {
+          "no": "## Slik setter du den opp\n\nLag prosjektet \"Podkastprodusenten\". Legg ved show notes og en episodebeskrivelse du liker fra før, så treffer den formen med en gang. Lim inn ukens notater når du planlegger neste episode, og opptaket eller transkripsjonen etterpå.",
+          "en": "## How to set it up\n\nCreate the project \"The podcast producer\". Attach show notes and an episode description you already like, so it hits the form straight away. Paste in the week's notes when you plan the next episode, and the recording or transcript afterwards."
         },
         {
           "no": "Det samme oppsettet fungerer for et nyhetsbrev, en YouTube-video eller en live-økt. Bytt ut ordet episode med det du faktisk lager, så har du en produsent for det også.",
@@ -536,6 +605,150 @@ export const AI_ASSISTENT_WORKSHOP = {
       "tip": {
         "no": "📝 Siste oppgave: Skriv de tre linjene for assistent nummer seks, den du selv trenger mest, og sett den i arbeid før uken er omme.",
         "en": "📝 Final task: Write the three lines for assistant number six, the one you need most yourself, and put it to work before the week is over."
+      }
+    },
+    {
+      "module": {
+        "no": "Del 5 · Hvor assistentene skal bo",
+        "en": "Part 5 · Where the assistants should live",
+        "lock": "free"
+      },
+      "title": {
+        "no": "Appen, Claude Code eller Cowork",
+        "en": "The app, Claude Code or Cowork"
+      },
+      "body": [
+        {
+          "no": "**Mål:** Du vet hvilken av dem du skal åpne, før du begynner.",
+          "en": "**Goal:** You know which one to open, before you start."
+        },
+        {
+          "no": "Claude finnes flere steder, og de er gode til hver sine ting. Velger du feil sted, føles det tregt, og det er ikke assistenten sin skyld.",
+          "en": "Claude lives in several places, and they are good at different things. Pick the wrong place and it feels slow, and that is not the assistant's fault."
+        },
+        {
+          "no": "## Claude-appen, på nett eller telefon\n\nHer bor prosjektene, og her hører de fem assistentene hjemme. Bruk den når svaret er tekst: e-poster, innlegg, disposisjoner, oppsummeringer, ideer. Du limer inn, leser gjennom og bruker svaret et annet sted.",
+          "en": "## The Claude app, on the web or your phone\n\nThis is where projects live, and where the five assistants belong. Use it when the answer is text: emails, posts, outlines, summaries, ideas. You paste in, read through and use the answer somewhere else."
+        },
+        {
+          "no": "## Claude Code\n\nHer får Claude tilgang til selve filene og verktøyene dine, og gjør arbeidet i stedet for å foreslå det. Den leser og endrer filer, lager nye, og gir beskjed underveis. Den kan kjøres på maskinen din, eller i nettleseren, og da stiller den ingen krav til maskinen du sitter med.",
+          "en": "## Claude Code\n\nHere Claude gets access to your actual files and tools, and does the work instead of suggesting it. It reads and changes files, creates new ones, and reports back as it goes. It can run on your machine, or in your browser, and then it asks nothing of the computer you are sitting with."
+        },
+        {
+          "no": "## Cowork\n\nClaudes nyere arbeidsflate for oppgaver som ikke handler om kode, i skrivebordsappen. Trenger du den ikke ennå, mister du ingenting: alt i denne workshopen fungerer i appen og i Claude Code.",
+          "en": "## Cowork\n\nClaude's newer workspace for tasks that are not about code, in the desktop app. If you do not need it yet, you lose nothing: everything in this workshop works in the app and in Claude Code."
+        },
+        {
+          "no": "## Regelen jeg bruker\n\nSkal det komme tekst ut, bruk appen.\n\nSkal noe faktisk gjøres med filene dine, bruk Claude Code.\n\nSkal det bli noe å se på, bruk Claude Design, som er neste leksjon.",
+          "en": "## The rule I use\n\nIf text is what comes out, use the app.\n\nIf something actually has to happen to your files, use Claude Code.\n\nIf it has to be something to look at, use Claude Design, which is the next lesson."
+        }
+      ],
+      "tip": {
+        "no": "💡 Bra å vite: Du trenger ikke velge én gang for alle. De fleste av oss tenker i appen, og lar Claude Code gjøre selve jobben etterpå.",
+        "en": "💡 Good to know: You do not have to choose once and for all. Most of us think in the app, and let Claude Code do the actual work afterwards."
+      }
+    },
+    {
+      "module": null,
+      "title": {
+        "no": "Gi Claude Code et oppdrag",
+        "en": "Give Claude Code an assignment"
+      },
+      "body": [
+        {
+          "no": "**Mål:** Du kan gi bort en hel oppgave, ikke bare stille et spørsmål.",
+          "en": "**Goal:** You can hand over a whole task, not just ask a question."
+        },
+        {
+          "no": "Et oppdrag skiller seg fra en prompt på én måte: du sier hva som skal være sant når det er ferdig, ikke hvordan det skal gjøres. Så lar du den jobbe, og leser gjennom resultatet.",
+          "en": "An assignment differs from a prompt in one way: you say what should be true when it is finished, not how to do it. Then you let it work, and read through the result."
+        },
+        {
+          "no": "## Ferdig oppdrag\n\n\"I mappen [navn] ligger det bilder med tilfeldige filnavn. Gi dem navn etter hva de viser, i formen tema-nummer, lag en oversikt over hva som ble hva, og la originalene ligge urørt til jeg har sett gjennom.\"",
+          "en": "## Ready-made assignment\n\n\"The folder [name] contains images with random file names. Rename them after what they show, in the form topic-number, make an overview of what became what, and leave the originals untouched until I have looked through it.\""
+        },
+        {
+          "no": "## Oppgaver dette passer til\n\nRydde og navngi filer, og lage en oversikt over det som ligger der.\n\nGjøre om mange dokumenter til samme format, eller slå sammen regneark.\n\nEndre den samme teksten alle steder den står, uten å glemme noen.\n\nBygge en side, en mal eller et skjema, og rette den etterpå.",
+          "en": "## Tasks this fits\n\nTidying and naming files, and making an overview of what is there.\n\nTurning many documents into the same format, or merging spreadsheets.\n\nChanging the same text everywhere it appears, without missing any.\n\nBuilding a page, a template or a form, and fixing it afterwards."
+        },
+        {
+          "no": "Bruker du det samme oppdraget ofte, lagrer du det som en fast kommando, så du slipper å skrive det på nytt. Da er det blitt en assistent, akkurat som prosjektene i appen, bare at denne gjør jobben i stedet for å beskrive den.",
+          "en": "If you use the same assignment often, save it as a fixed command, so you do not have to write it again. Then it has become an assistant, just like the projects in the app, except this one does the job instead of describing it."
+        },
+        {
+          "no": "Den spør før den gjør noe som ikke kan gjøres om, og du kan stoppe den når som helst. Be den gjerne fortelle hva den har tenkt å gjøre først, når oppdraget er stort.",
+          "en": "It asks before doing anything that cannot be undone, and you can stop it at any time. Ask it to tell you what it plans to do first, when the assignment is a large one."
+        }
+      ],
+      "tip": {
+        "no": "📝 Oppgave: Velg den kjedeligste ryddejobben du har liggende, og skriv den som ett oppdrag: hva som skal være sant når den er ferdig.",
+        "en": "📝 Task: Pick the most boring tidying job you have waiting, and write it as one assignment: what should be true when it is finished."
+      }
+    },
+    {
+      "module": null,
+      "title": {
+        "no": "Når du skal bruke Claude Design",
+        "en": "When to use Claude Design"
+      },
+      "body": [
+        {
+          "no": "**Mål:** Du vet når du skal be om noe å se på, i stedet for noe å lese.",
+          "en": "**Goal:** You know when to ask for something to look at, instead of something to read."
+        },
+        {
+          "no": "Claude Design er et lerret. Du beskriver hva du vil ha, og får et utkast du kan klikke i: flytte en tittel, bytte en farge, skrive om en setning der den står. Det er forskjellen på å beskrive et design i tekst, og å ha det foran deg.",
+          "en": "Claude Design is a canvas. You describe what you want, and get a draft you can click around in: move a title, change a colour, rewrite a sentence where it sits. That is the difference between describing a design in words, and having it in front of you."
+        },
+        {
+          "no": "## Bruk det til\n\nPlakater, flyere, invitasjoner og kort.\n\nEn enkel side eller et førsteutkast til hvordan noe skal se ut.\n\nBilder til sosiale medier, når du vil ha kontroll på detaljene.\n\nEn oversikt eller et skjema du skal skrive ut.",
+          "en": "## Use it for\n\nPosters, flyers, invitations and cards.\n\nA simple page or a first draft of how something should look.\n\nSocial media graphics, when you want control over the details.\n\nAn overview or a form you are going to print."
+        },
+        {
+          "no": "## Ikke bruk det til\n\nLange tekster, de hører hjemme i appen eller i et dokument.\n\nNoe som skal endres av mange, ofte.\n\nInnhold som allerede har en fast mal i LME, der bruker du malen.",
+          "en": "## Do not use it for\n\nLong texts, they belong in the app or in a document.\n\nSomething that many people will change, often.\n\nContent that already has a fixed template in LME, there you use the template."
+        },
+        {
+          "no": "Rekkefølgen som sparer mest tid: la innholdsassistenten skrive teksten først, og be Design om utseendet etterpå. Design er raskest når det ikke må finne på hva som skal stå.",
+          "en": "The order that saves the most time: let the content assistant write the text first, and ask Design for the look afterwards. Design is fastest when it does not have to invent what to say."
+        }
+      ],
+      "tip": {
+        "no": "🎨 Prøv dette: Ta teksten fra en av karusellene du lagde i Del 3, og be om et utkast til hvordan bildene kan se ut. Da ser du forskjellen på tekst og lerret med en gang.",
+        "en": "🎨 Try this: Take the text from one of the carousels you made in Part 3, and ask for a draft of how the slides could look. Then you see the difference between text and canvas straight away."
+      }
+    },
+    {
+      "module": null,
+      "title": {
+        "no": "Assistentene du allerede har laget",
+        "en": "The assistants you have already made"
+      },
+      "body": [
+        {
+          "no": "**Mål:** Det du satte opp for lenge siden, kommer i arbeid igjen.",
+          "en": "**Goal:** What you set up long ago goes back to work."
+        },
+        {
+          "no": "De fleste som har brukt Claude en stund, har prosjekter de ikke har åpnet på måneder. Det betyr ikke at de var feil. Det betyr som regel at de ble laget før du visste hvor arbeidet ditt faktisk skjer.",
+          "en": "Most people who have used Claude for a while have projects they have not opened in months. That does not mean they were wrong. It usually means they were made before you knew where your work actually happens."
+        },
+        {
+          "no": "## Ta dem fram igjen, tre spørsmål per assistent\n\nHva var den satt til å gjøre, med mine egne ord?\n\nGjør jeg fortsatt den oppgaven manuelt?\n\nKommer det tekst ut, eller skal noe faktisk gjøres med filer?",
+          "en": "## Bring them back, three questions per assistant\n\nWhat was it set up to do, in my own words?\n\nAm I still doing that task by hand?\n\nDoes text come out, or does something actually have to happen to files?"
+        },
+        {
+          "no": "Kommer det tekst ut, blir den stående i appen, og du gir den en fast plass i uken. Skal noe gjøres med filer, flytter du instruksjonen over til Claude Code som et fast oppdrag. Samme assistent, nytt sted, og nå blir den faktisk brukt.",
+          "en": "If text comes out, it stays in the app, and you give it a fixed slot in your week. If something has to happen to files, you move the instruction over to Claude Code as a standing assignment. Same assistant, new place, and now it actually gets used."
+        },
+        {
+          "no": "Og de du ikke har åpnet på tre måneder, og ikke savner: slett dem. En kort liste du bruker slår en lang liste du har dårlig samvittighet for.",
+          "en": "And the ones you have not opened in three months and do not miss: delete them. A short list you use beats a long list you feel guilty about."
+        }
+      ],
+      "tip": {
+        "no": "📝 Oppgave: Åpne prosjektlista di, gå gjennom de tre spørsmålene på hver, og sett én av de gamle i arbeid igjen denne uken.",
+        "en": "📝 Task: Open your project list, run the three questions on each one, and put one of the old ones back to work this week."
       }
     }
   ],

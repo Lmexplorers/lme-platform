@@ -79,7 +79,7 @@ window.LME_FUNNEL = {
         "i Claude, én for hver oppgave som spiser opp uken din, og lager seks ferdige " +
         "karuseller på seksti minutter. Du går ut med prompter du kan bruke i kveld.",
 
-      fakta: "16 leksjoner · 4 deler · kursbevis · tilgang for alltid",
+      fakta: "21 leksjoner · 5 deler · kursbevis · tilgang for alltid",
 
       hvaDuFaarTittel: "Dette er workshopen",
       deler: [
@@ -102,6 +102,11 @@ window.LME_FUNNEL = {
           ikon: "🗓️",
           tittel: "Del 4: Etter workshopen",
           kort: "Ukesrytmen som holder assistentene i arbeid, og planen for assistent nummer seks."
+        },
+        {
+          ikon: "🧭",
+          tittel: "Del 5: Hvor assistentene skal bo",
+          kort: "Når du bruker Claude-appen, når du gir Claude Code et oppdrag, og når du bruker Claude Design."
         }
       ],
 
@@ -111,6 +116,7 @@ window.LME_FUNNEL = {
         "Du gir Claude stemmen din én gang, og alle assistentene arver den",
         "Du beskriver hver jobb med tre linjer: den får, den gjør, den sparer meg",
         "Du får ferdige prompter du bare limer inn og fyller ut med ditt eget",
+        "Du får stegene for hvor du trykker i Claude, ikke bare hva du skal skrive",
         "Du setter av én time og lager seks karuseller i samme økt",
         "Du setter assistentene i en ukesrytme du faktisk holder",
         "Du får kursbevis når du er ferdig, og tilgang for alltid"
@@ -183,7 +189,7 @@ window.LME_FUNNEL = {
         "in Claude, one for each task that eats up your week, and create six finished " +
         "carousels in sixty minutes. You leave with prompts you can use tonight.",
 
-      fakta: "16 lessons · 4 parts · certificate · access forever",
+      fakta: "21 lessons · 5 parts · certificate · access forever",
 
       hvaDuFaarTittel: "This is the workshop",
       deler: [
@@ -206,6 +212,11 @@ window.LME_FUNNEL = {
           ikon: "🗓️",
           tittel: "Part 4: After the workshop",
           kort: "The weekly rhythm that keeps the assistants working, and the plan for assistant number six."
+        },
+        {
+          ikon: "🧭",
+          tittel: "Part 5: Where the assistants live",
+          kort: "When to use the Claude app, when to give Claude Code an assignment, and when to use Claude Design."
         }
       ],
 
@@ -215,6 +226,7 @@ window.LME_FUNNEL = {
         "You give Claude your voice once, and every assistant inherits it",
         "You describe each job in three lines: it gets, it does, it saves me",
         "You get ready-made prompts you simply paste and fill in with your own details",
+        "You get the steps for where to tap in Claude, not just what to write",
         "You set aside one hour and create six carousels in the same sitting",
         "You put the assistants into a weekly rhythm you can actually keep",
         "You get a certificate when you finish, and access forever"

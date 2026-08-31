@@ -24,6 +24,14 @@ on:
           - alt
           - workshop
           - plattformkurset
+      modus:
+        description: "Vanlig legger bare til det som mangler. Overskriv erstatter workshopen med versjonen i koden, og forkaster endringer gjort i Kursbygger."
+        required: true
+        default: "vanlig"
+        type: choice
+        options:
+          - vanlig
+          - overskriv
 
 jobs:
   importer:
@@ -34,9 +42,11 @@ jobs:
         env:
           PW: ${{ secrets.COURSE_EDIT_PASSWORD }}
         run: |
+          modus=""
+          if [ "${{ inputs.modus }}" = "overskriv" ]; then modus=',"mode":"full"'; fi
           curl -fsS -X POST "https://lmexplorers.com/api/seed-ai-assistent-workshop" \
             -H "Content-Type: application/json" \
-            -d "{\"password\":\"${PW:-LME2026}\"}" | tee svar-workshop.json
+            -d "{\"password\":\"${PW:-LME2026}\"$modus}" | tee svar-workshop.json
           echo
           grep -q '"ok": true' svar-workshop.json
 
