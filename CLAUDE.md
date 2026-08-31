@@ -54,6 +54,32 @@ Renate skrevet om en leksjon i Kursbygger, står hennes versjon, og den telles
 som beholdt. Arbeidsboken `ressurser/print/lme-plattformen-arbeidsbok.html`
 speiler kurset og oppdateres samtidig.
 
+## ⛔ ALDRI skriv `/x  /x.html  200` i `_redirects`
+
+Lært den harde veien 31. august 2026, av to økter samme dag, uavhengig av
+hverandre: workshop-økten med `/kurs-import`, og denne med `/momentum`.
+Begge la inn en regel som "sikkerhetsnett", og begge gjorde siden umulig å
+åpne. Renate fikk `Load cannot follow more than 20 redirections` i Safari.
+
+Grunnen: Cloudflare Pages sender `.html`-adresser videre til den rene
+adressen helt av seg selv. Regelen sender den rene adressen tilbake til
+`.html`. De to peker på hverandre, og nettleseren gir opp etter tjue hopp.
+
+**En fil i roten trenger ingen regel.** `momentum.html` serveres på
+`/momentum` uansett, det er slik rene URL-er virker her fra før. Regelen
+løser ingenting og ødelegger siden.
+
+To ting til, som gjorde feilen verre enn den trengte å være:
+
+- **En 301 lagres permanent i Safari.** Har hun rukket å treffe ringen én
+  gang, spiller telefonen den av igjen uten å spørre serveren, og
+  rettelsen ser ut til å ikke virke. Gi henne da adressen med noe bak, for
+  eksempel `?ny=1`, så nettleseren må hente den på nytt. Nye sider bør ha
+  `Cache-Control: no-store` i `_headers`, samme som salgssidene.
+- **Sjekk at målet finnes.** `/momentum` sendte alle uten tilgang til
+  `/momentum-info`, en side som ikke var laget. Peker en kurslås eller en
+  regel på en adresse, må den adressen finnes før det publiseres.
+
 ## 🛠️ Fiks feil du finner underveis, ikke spør om lov
 
 Avtalt 29. august 2026: finner jeg en feil mens jeg jobber med noe annet,

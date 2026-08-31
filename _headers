@@ -103,6 +103,15 @@
 /planlegger.html
   Cache-Control: no-store
 
+# Kursimporten lå i samme ring tidligere 31. august 2026, og en nettleser
+# som rakk å lagre den, spiller den av igjen. Derfor no-store her også.
+/kurs-import
+  Cache-Control: no-store
+/kurs-import.html
+  Cache-Control: no-store
+/oppdater-kurs
+  Cache-Control: no-store
+
 # Momentum må aldri hentes fra buffer. Siden lå en kort stund bak en ring av
 # omdirigeringer (se _redirects, 31. august 2026), og en 301 lagres permanent
 # i Safari. Uten dette kan en nettleser som rakk å lagre ringen, fortsette å
