@@ -798,6 +798,36 @@
     });
   }
 
+  /* Alt Nathalie trenger for å svare på akkurat denne dagen: hvor i reisen
+     hun er, hva dagen sa, hva som ble skrevet i dag, og et kort utdrag fra de
+     tre siste dagene hun skrev på. Uten det siste kan Nathalie ikke se en
+     tråd, og svarene blir like uansett hvor langt hun er kommet. */
+  function byggRefleksjon(d, svar) {
+    var skifte = (D.skifter.filter(function (x) { return x.id === d.skifte; })[0] || {}).navn;
+    var tidligere = [];
+    for (var n = aktivDag - 1; n >= 1 && tidligere.length < 3; n--) {
+      var tekst = F.journal[String(n)];
+      if (!tekst || !tekst.join("").trim()) continue;
+      tidligere.push({ dag: n, tittel: T(D.dager[n - 1].tittel), svar: tekst });
+    }
+    var m = [];
+    D.dager.forEach(function (x, i) { if (x.maaling) m.push(i + 1); });
+    var forst = m.length ? F.maaling[String(m[0])] : undefined;
+    return {
+      dag: aktivDag,
+      antallDager: ANTALL,
+      skifte: T(skifte),
+      dagTittel: T(d.tittel),
+      dagTekst: en() ? d.tekst.en : d.tekst.no,
+      sporsmal: en() ? d.journal.en : d.journal.no,
+      svar: svar,
+      tidligere: tidligere,
+      maalingFor: forst === undefined ? null : forst,
+      maalingNaa: F.maaling[String(aktivDag)] === undefined ? null : F.maaling[String(aktivDag)],
+      lang: en() ? "en" : "no",
+    };
+  }
+
   /* Refleksjonen leses av /api/momentum-refleksjon, som svarer som Nathalie
      AI, den samme AI-assistenten som ellers i plattformen. Hun svarer på
      vegne av Renate, men er ærlig om at hun er en AI. Den koster penger per
@@ -824,12 +854,7 @@
     fetch("/api/momentum-refleksjon", {
       method: "POST", credentials: "same-origin",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        dag: aktivDag,
-        sporsmal: en() ? d.journal.en : d.journal.no,
-        svar: svar,
-        lang: en() ? "en" : "no",
-      }),
+      body: JSON.stringify(byggRefleksjon(d, svar)),
     })
       .then(function (r) { return r.json(); })
       .then(function (res) {
