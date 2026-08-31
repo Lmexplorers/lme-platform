@@ -134,6 +134,35 @@ export const PLATTFORM_KURS = {
     {
       "module": null,
       "title": {
+        "no": "Hva som er gratis, og hva som krever en plan",
+        "en": "What is free, and what needs a plan"
+      },
+      "body": [
+        {
+          "no": "På Apper-siden står det på hvert kort hva verktøyet krever, før du trykker. Noen er gratis for alle, noen følger med en plan, og ett par kan kjøpes for seg selv hvis du bare vil ha akkurat det verktøyet. Da slipper du å oppdage prisen først etter at du er halvveis inn i noe.",
+          "en": "On the Apps page every card says what the tool needs, before you tap it. Some are free for everyone, some come with a plan, and a couple can be bought on their own if that one tool is all you want. That way you do not discover the price halfway into something."
+        },
+        {
+          "no": "Merket bytter seg etter hvem du er. Er du medlem med en aktiv plan, står det \"Med i planen\" på det du allerede har. Har du ingen plan ennå, står det \"Krever plan\", og øverst på siden ligger en knapp rett til planene. Er du eier, ser du aldri en pris på ditt eget produkt.",
+          "en": "The label changes with who you are. If you are a member with an active plan, it says \"In your plan\" on what you already have. If you have no plan yet, it says \"Needs a plan\", and at the top of the page there is a button straight to the plans. If you are the owner, you never see a price on your own product."
+        },
+        {
+          "no": "Selve planene ligger på Priser og planer, som du finner både i sidemenyen og fra knappen på Apper-siden: https://lmexplorers.com/oppgrader. Der ser du hva hver plan koster i måneden og i året, hva du får med, og du kan bytte mellom norske kroner og dollar.",
+          "en": "The plans themselves live on Prices and plans, which you find both in the side menu and from the button on the Apps page: https://lmexplorers.com/oppgrader. There you see what each plan costs per month and per year, what you get with it, and you can switch between Norwegian kroner and dollars."
+        },
+        {
+          "no": "Merket låser ingenting av seg selv, det bare forteller. Det er serveren som avgjør tilgangen, og den vet om du har betalt for et enkelt verktøy uten å ha abonnement. Slik stenges ingen ekte kjøper ute av en tekst i nettleseren.",
+          "en": "The label locks nothing by itself, it only tells you. The server decides access, and it knows if you paid for a single tool without having a subscription. That way no real buyer is shut out by a piece of text in the browser."
+        }
+      ],
+      "tip": {
+        "no": "💛 Er du usikker på om noe er verdt en plan, begynn med de gratis verktøyene. De er ekte verktøy, ikke smakebiter, og de gir deg en god følelse av hvordan resten fungerer.",
+        "en": "💛 If you are unsure whether something is worth a plan, start with the free tools. They are real tools, not samples, and they give you a good feel for how the rest works."
+      }
+    },
+    {
+      "module": null,
+      "title": {
         "no": "Min reise, din egen vei gjennom LME",
         "en": "My journey, your own path through LME"
       },
