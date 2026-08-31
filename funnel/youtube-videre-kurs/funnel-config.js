@@ -6,7 +6,8 @@
    lanseringsprisen gjelder fra nå av.
 
    Pris bytter seg selv automatisk ved fristen (ingen manuell oppdatering
-   nødvendig): lanseringspris frem til 1. september 2026, deretter full pris.
+   nødvendig): kampanjekalenderen i /js/kampanjer.js styrer datoene, full pris
+   fra 1. februar 2027.
 
    Beløpene under er sjekket mot Stripe 31. august 2026 og skal stemme
    nøyaktig med det kjøperen faktisk betaler: 497 kr og $50 i lansering,
@@ -17,8 +18,14 @@
    ===================================================================== */
 
 (function () {
-  var FULL_FROM = Date.parse("2026-09-01T00:00:00+02:00");
-  var launch = Date.now() < FULL_FROM;
+  // Kampanjekalenderen i /js/kampanjer.js bestemmer om det er tilbud nå, og
+  // hva tilbudet heter. Laster den ikke, gjelder tilbudsprisen frem til
+  // 1. februar 2027, samme dato som kalenderen bruker.
+  var k = (window.LME_KAMPANJE && window.LME_KAMPANJE.naa()) || {
+    tilbud: Date.now() < Date.parse("2027-02-01T00:00:00+01:00"),
+    merkelapp: { no: "Lanseringstilbud", en: "Launch offer" },
+  };
+  var launch = k.tilbud;
 
   var LINKS = {
     no: { launch: "https://buy.stripe.com/aFaaEYbchdrFdyt0OP9R63p", full: "https://buy.stripe.com/14A5kE9492N17a5cxx9R63r" },
@@ -32,8 +39,7 @@
   }
   function checkoutFor(lang) { return launch ? LINKS[lang].launch : LINKS[lang].full; }
   function merkelapp(lang) {
-    if (launch) return lang === "en" ? "Launch offer" : "Lanseringstilbud";
-    return lang === "en" ? "Full course" : "Fullt kurs";
+    return lang === "en" ? k.merkelapp.en : k.merkelapp.no;
   }
 
 window.LME_FUNNEL = {
