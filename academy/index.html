@@ -1492,6 +1492,20 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
       'lag-ditt-foerste-digitale-minikurs': {
         price: { no: '699 kr', en: '$70' },
         checkout: { no: 'https://buy.stripe.com/4gMaEYa8d73hbqldBB9R63z', en: 'https://buy.stripe.com/28E3cw805evJgKFdBB9R63A' }
+      },
+      // Lå tidligere i PAID_KURSBYGGER_SLUGS uten oppføring her, så kortet
+      // lenket til det låste kurset og sendte den som ikke hadde kjøpt rett
+      // tilbake til akademiforsiden, uten noen vei til kjøp.
+      'montessori-masterclass': {
+        price: { no: '997 kr', en: '$99' },
+        checkout: { no: 'https://buy.stripe.com/7sYeVe2FL0ET661eFF9R63F', en: 'https://buy.stripe.com/cNi8wQ6W12N1amhcxx9R63G' }
+      },
+      // Workshopen har sin egen salgsside, så kortet går dit i stedet for
+      // rett til Stripe.
+      'ai-assistent-workshop': {
+        price: { no: '490 kr', en: '$49' },
+        sales: '/workshop',
+        checkout: { no: 'https://buy.stripe.com/cNi9AUgwBcnB3XTeFF9R711', en: 'https://buy.stripe.com/8x2eVe8051IX51X4119R712' }
       }
     };
 
@@ -1503,7 +1517,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
         var paid = isOwner ? null : PAID_COURSES[c.slug];
         var a = document.createElement('a');
         a.className = 'course-tile';
-        a.href = paid ? paid.checkout[lang] : ('/kurs?k=' + encodeURIComponent(c.slug || ''));
+        a.href = paid ? (paid.sales || paid.checkout[lang]) : ('/kurs?k=' + encodeURIComponent(c.slug || ''));
         a.innerHTML =
           '<div class="thumb ' + thumbs[i % thumbs.length] + '"><div class="thumb-content">' +
           '<div class="kicker"></div><div class="title"></div></div></div>' +

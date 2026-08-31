@@ -290,6 +290,19 @@ export const COURSE_PAYMENT_LINKS = {
   "plink_1U9kRpLax7B8uQzq228YXsYe": { courseId: "vault", tier: "launch", lang: "en" },
   "plink_1U9kUTLax7B8uQzqnOk0SUpD": { courseId: "vault", tier: "full",   lang: "no" },
   "plink_1U9kUZLax7B8uQzqppwl1JR4": { courseId: "vault", tier: "full",   lang: "en" },
+  // Workshop: Ansett dine fem AI-assistenter (/workshop). Kursbygger-kurs
+  // (slug ai-assistent-workshop), samme leveringsvei som kursene over:
+  // tilgangslenke på e-post, tilgang for alltid. Opprettet i live-modus
+  // 31. august 2026 etter Renates valg av pris: lansering 490 kr og $49,
+  // ordinær 990 kr og $99, samme nivå som Claude-kurset. Salgssiden bruker
+  // lanseringslenkene, som ligger i "checkoutUrl" i
+  // funnel/ai-assistent-workshop/funnel-config.js. Ordinærlenkene står
+  // klare til prishevingen, og alle fire gir tilgang, så et kjøp som var i
+  // gang leveres uansett.
+  "plink_1UAOevLax7B8uQzqWQjg7vBK": { courseId: "ai-assistent-workshop", tier: "launch", lang: "no" },
+  "plink_1UAOexLax7B8uQzqeiguUsj5": { courseId: "ai-assistent-workshop", tier: "launch", lang: "en" },
+  "plink_1UAOezLax7B8uQzqD3KambG9": { courseId: "ai-assistent-workshop", tier: "full",   lang: "no" },
+  "plink_1UAOf1Lax7B8uQzqPEHcuJ6Q": { courseId: "ai-assistent-workshop", tier: "full",   lang: "en" },
 };
 
 export const COURSE_INFO = {
@@ -321,6 +334,14 @@ export const COURSE_INFO = {
     name: { no: "Montessori mesterklasse", en: "Montessori Masterclass" },
     url: "https://lmexplorers.com/academy/kurs?k=montessori-masterclass",
   },
+  "ai-assistent-workshop": {
+    name: {
+      no: "Workshop: Ansett dine fem AI-assistenter",
+      en: "Workshop: Hire your five AI assistants",
+    },
+    url: "https://lmexplorers.com/kurs/ai-assistent-workshop",
+    cta: { no: "Åpne workshopen", en: "Open the workshop" },
+  },
   "vault": {
     name: { no: "LME Vault", en: "LME Vault" },
     url: "https://lmexplorers.com/academy/vault",
@@ -337,7 +358,15 @@ export const PAID_KURSBYGGER_SLUGS = [
   "lme-markedsfoering-med-claude",
   "lag-ditt-foerste-digitale-minikurs",
   "montessori-masterclass",
+  "ai-assistent-workshop",
 ];
+
+/* Hvor den som ikke har kjøpt sendes, per låst kurs. Uten en egen oppføring
+   sendes de til akademiforsiden, som før. Listen må holdes lik den i
+   academy/kurs.html, som kjører før siden bygges. */
+export const PAID_KURSBYGGER_SALES_URLS = {
+  "ai-assistent-workshop": "/workshop",
+};
 
 /* ---- Lås opp ENKELTMODUL (Skool-stil) -----------------------------------
    I tillegg til å kjøpe hele kurset (COURSE_PAYMENT_LINKS over) kan en

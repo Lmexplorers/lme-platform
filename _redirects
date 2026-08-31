@@ -27,6 +27,9 @@
 /claude-kurs  /funnel/claude-kurs/salg.html  200
 /vault  /funnel/vault/salg.html  200
 /vault-takk  /funnel/vault/takk.html  200
+/workshop  /funnel/ai-assistent-workshop/salg.html  200
+/workshop-takk  /funnel/ai-assistent-workshop/takk.html  200
+/ai-assistent-workshop  /funnel/ai-assistent-workshop/salg.html  200
 # Takkeside for kjøp av medlemmenes egne kurs, se functions/_lib/kurs-kvittering.js
 /kjopt/*  /kjopt.html  200
 /youtube-kurs  /funnel/youtube-kurs/salg.html  200

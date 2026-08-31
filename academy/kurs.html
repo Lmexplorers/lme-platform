@@ -12,12 +12,16 @@
 // bygges) så innholdet skjules umiddelbart for et låst kurs, samme mønster
 // som js/course-gate.js bruker på de faste kurssidene.
 (function () {
-  var PAID = ["lme-markedsfoering-med-claude", "lag-ditt-foerste-digitale-minikurs", "montessori-masterclass"];
+  var PAID = ["lme-markedsfoering-med-claude", "lag-ditt-foerste-digitale-minikurs", "montessori-masterclass", "ai-assistent-workshop"];
+  // Egen salgsside per kurs, samme liste som PAID_KURSBYGGER_SALES_URLS i
+  // purchase-links.js. Uten oppføring sendes den som ikke har kjøpt til
+  // akademiforsiden, som før.
+  var SALG = { "ai-assistent-workshop": "/workshop" };
   var m = location.pathname.match(/^\/kurs\/([a-z0-9\-]+)\/?$/i);
   var slug = (m && m[1]) || new URL(location.href).searchParams.get('k') || '';
   if (PAID.indexOf(slug) === -1) return;
   window.LME_COURSE_ID = slug;
-  window.LME_COURSE_SALES_URL = "/academy";
+  window.LME_COURSE_SALES_URL = SALG[slug] || "/academy";
   document.write('<script src="/js/course-gate.js?v=1"><\/script>');
 })();
 </script>
