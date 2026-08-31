@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FDF5F1">
+<title>LME Momentum</title>
+<meta name="description" content="Elleve dager som setter deg i gang. En liten ting hver dag, i ditt eget tempo.">
+<link rel="icon" href="/images/lme-logo.png">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-400.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+  :root {
+    --pink-mid: #F5A8B8; --cerise: #E91E89; --ink: #1A1A1A; --grey: #5A5A5A;
+    --line: rgba(26,26,26,0.10);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body); color: var(--ink); line-height: 1.6;
+    background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 60%, #F8D7DA 100%);
+    min-height: 100vh; -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: var(--font-head); line-height: 1.25; }
+  a { color: inherit; }
+  .topp {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 13px 18px; padding-right: 62px; background: rgba(253,245,241,0.92);
+    border-bottom: 1px solid var(--line);
+  }
+  .merke { font-family: var(--font-head); font-weight: 700; font-size: 19px; }
+  .merke i { color: var(--cerise); font-style: normal; }
+  .minibtn { border: 1px solid #eedce2; background: #fff; border-radius: 999px;
+             padding: 7px 13px; font-size: 12.5px; font-weight: 700; cursor: pointer;
+             text-decoration: none; white-space: nowrap; }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 30px 18px 60px; }
+  .stempel { font-size: 11.5px; font-weight: 700; letter-spacing: 0.13em;
+             text-transform: uppercase; color: var(--cerise); }
+  h1 { font-size: 32px; margin: 6px 0 14px; }
+  .ingress { font-size: 17px; color: #333; margin-bottom: 24px; }
+  .kort { background: #fff; border: 1px solid var(--line); border-radius: 20px;
+          padding: 22px; margin-bottom: 16px; box-shadow: 0 6px 20px rgba(26,26,26,0.04); }
+  .kort h2 { font-size: 20px; margin-bottom: 12px; }
+  ul { list-style: none; }
+  li { display: flex; gap: 11px; margin-bottom: 11px; font-size: 16px; }
+  li:last-child { margin-bottom: 0; }
+  li span.hake { flex: 0 0 auto; color: var(--cerise); font-weight: 700; }
+  .naar { background: #FFF8E6; color: #7a5e00; border-radius: 16px; padding: 18px 20px; margin-bottom: 16px; }
+  .naar b { font-family: var(--font-head); display: block; margin-bottom: 5px; font-size: 17px; }
+  .knapper { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+  .knapper a { display: inline-flex; align-items: center; border-radius: 999px; text-decoration: none;
+               font-weight: 700; font-size: 15px; padding: 13px 22px; }
+  .knapper a.hoved { background: var(--cerise); color: #fff; }
+  .knapper a.side { background: #fff; color: var(--ink); border: 1.5px solid #eedce2; }
+</style>
+</head>
+<body>
+
+<div class="topp">
+  <span class="merke">LME Momentum<i>.</i></span>
+  <div style="display:flex;gap:8px">
+    <button class="minibtn" id="sprak" type="button">🇬🇧 English</button>
+    <a class="minibtn" href="/dashboard" data-no="‹ LME" data-en="‹ LME">‹ LME</a>
+  </div>
+</div>
+
+<main class="wrap">
+  <span class="stempel" data-no="ELLEVE DAGER" data-en="ELEVEN DAYS">ELLEVE DAGER</span>
+  <h1 data-no="Elleve dager som setter deg i gang" data-en="Eleven days to get you moving">Elleve dager som setter deg i gang</h1>
+  <p class="ingress" data-no="En liten ting hver dag, i elleve dager. Du trenger ikke være ferdig utlært, og du trenger ikke gjøre alt på en gang. Du trenger bare å begynne." data-en="One small thing each day, for eleven days. You do not need to know everything first, and you do not need to do it all at once. You only need to begin.">En liten ting hver dag, i elleve dager. Du trenger ikke være ferdig utlært, og du trenger ikke gjøre alt på en gang. Du trenger bare å begynne.</p>
+
+  <div class="kort">
+    <h2 data-no="Slik er en dag" data-en="What a day looks like">Slik er en dag</h2>
+    <ul>
+      <li><span class="hake">✓</span><span data-no="En kort tekst å lese, eller høre når lyden er klar." data-en="A short text to read, or to listen to once the audio is ready.">En kort tekst å lese, eller høre når lyden er klar.</span></li>
+      <li><span class="hake">✓</span><span data-no="Noen spørsmål å skrive på, som lagrer seg selv mens du skriver." data-en="A few questions to write on, saving themselves as you write.">Noen spørsmål å skrive på, som lagrer seg selv mens du skriver.</span></li>
+      <li><span class="hake">✓</span><span data-no="En liten pause til slutt, noe konkret å gjøre samme dag." data-en="A small pause at the end, something concrete to do the same day.">En liten pause til slutt, noe konkret å gjøre samme dag.</span></li>
+      <li><span class="hake">✓</span><span data-no="Én knapp som fullfører dagen og åpner den neste." data-en="One button that completes the day and unlocks the next.">Én knapp som fullfører dagen og åpner den neste.</span></li>
+    </ul>
+  </div>
+
+  <div class="kort">
+    <h2 data-no="Og underveis" data-en="And along the way">Og underveis</h2>
+    <ul>
+      <li><span class="hake">✓</span><span data-no="En visjonstavle du fyller med det du vil at året ditt skal se ut som." data-en="A vision board you fill with what you want your year to look like.">En visjonstavle du fyller med det du vil at året ditt skal se ut som.</span></li>
+      <li><span class="hake">✓</span><span data-no="En seiersliste, så du husker hva som faktisk skjedde." data-en="A wins list, so you remember what actually happened.">En seiersliste, så du husker hva som faktisk skjedde.</span></li>
+      <li><span class="hake">✓</span><span data-no="Dag 1 og dag 11 stiller samme spørsmål, så du ser din egen endring." data-en="Day 1 and day 11 ask the same question, so you see your own change.">Dag 1 og dag 11 stiller samme spørsmål, så du ser din egen endring.</span></li>
+    </ul>
+  </div>
+
+  <div class="naar">
+    <b data-no="Åpner i januar" data-en="Opens in January">Åpner i januar</b>
+    <span data-no="Momentum er ferdig bygget, men slippes i januar. Vil du vite når det åpner, står du på lista mi hvis du alt får nyhetsbrevet." data-en="Momentum is finished and built, but opens in January. If you already get my newsletter, you are on the list and will hear when it opens.">Momentum er ferdig bygget, men slippes i januar. Vil du vite når det åpner, står du på lista mi hvis du alt får nyhetsbrevet.</span>
+  </div>
+
+  <div class="knapper">
+    <a class="hoved" href="/apper" data-no="Se alle appene" data-en="See all the apps">Se alle appene</a>
+    <a class="side" href="/dashboard" data-no="Til dashbordet" data-en="To the dashboard">Til dashbordet</a>
+  </div>
+</main>
+
+<script>
+(function () {
+  function en() { return window.LME_CURRENT_LANG === "en"; }
+  try { window.LME_CURRENT_LANG = localStorage.getItem("lme_lang") === "en" ? "en" : "no"; } catch (e) { window.LME_CURRENT_LANG = "no"; }
+  function bruk() {
+    document.documentElement.lang = en() ? "en" : "no";
+    document.querySelectorAll("[data-no][data-en]").forEach(function (el) {
+      el.textContent = en() ? el.getAttribute("data-en") : el.getAttribute("data-no");
+    });
+    document.getElementById("sprak").textContent = en() ? "🇳🇴 Norsk" : "🇬🇧 English";
+  }
+  document.getElementById("sprak").addEventListener("click", function () {
+    window.LME_CURRENT_LANG = en() ? "no" : "en";
+    try { localStorage.setItem("lme_lang", window.LME_CURRENT_LANG); } catch (e) {}
+    bruk();
+  });
+  bruk();
+})();
+</script>
+<script src="/js/lme-account.js?v=11" defer></script>
+</body>
+</html>
