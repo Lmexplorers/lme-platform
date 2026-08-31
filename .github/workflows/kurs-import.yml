@@ -1,0 +1,57 @@
+name: Kursimport
+
+# Kjører den samme importen som knappene på https://lmexplorers.com/kurs-import,
+# men fra GitHub i stedet for fra nettleseren. Nyttig når Renate ikke får
+# trykket selv, eller når et nytt kurs er skrevet i koden og skal hentes inn
+# med en gang.
+#
+# Importene legger BARE til det som mangler. Tekst som er endret i Kursbygger
+# blir stående nøyaktig som den er.
+#
+# Startes manuelt fra Actions-fanen. Passordet er det samme som Kursbygger
+# spør om: hemmeligheten COURSE_EDIT_PASSWORD hvis den finnes i repoet,
+# ellers standardpassordet i functions/_lib/edit-password.js.
+
+on:
+  workflow_dispatch:
+    inputs:
+      hva:
+        description: "Hva skal hentes inn?"
+        required: true
+        default: "alt"
+        type: choice
+        options:
+          - alt
+          - workshop
+          - plattformkurset
+
+jobs:
+  importer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hent inn workshopen
+        if: ${{ inputs.hva == 'alt' || inputs.hva == 'workshop' }}
+        env:
+          PW: ${{ secrets.COURSE_EDIT_PASSWORD }}
+        run: |
+          curl -fsS -X POST "https://lmexplorers.com/api/seed-ai-assistent-workshop" \
+            -H "Content-Type: application/json" \
+            -d "{\"password\":\"${PW:-LME2026}\"}" | tee svar-workshop.json
+          echo
+          grep -q '"ok": true' svar-workshop.json
+
+      - name: Oppdater plattformkurset (A til Å)
+        if: ${{ inputs.hva == 'alt' || inputs.hva == 'plattformkurset' }}
+        env:
+          PW: ${{ secrets.COURSE_EDIT_PASSWORD }}
+        run: |
+          curl -fsS -X POST "https://lmexplorers.com/api/seed-plattform-kurs" \
+            -H "Content-Type: application/json" \
+            -d "{\"password\":\"${PW:-LME2026}\"}" | tee svar-plattform.json
+          echo
+          grep -q '"ok": true' svar-plattform.json
+
+      - name: Sjekk at kursene ligger ute
+        run: |
+          curl -fsS "https://lmexplorers.com/api/kurs" \
+            | tr ',' '\n' | grep -i '"slug"' || true
