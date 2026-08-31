@@ -54,6 +54,15 @@ Renate skrevet om en leksjon i Kursbygger, står hennes versjon, og den telles
 som beholdt. Arbeidsboken `ressurser/print/lme-plattformen-arbeidsbok.html`
 speiler kurset og oppdateres samtidig.
 
+## 🛠️ Fiks feil du finner underveis, ikke spør om lov
+
+Avtalt 29. august 2026: finner jeg en feil mens jeg jobber med noe annet,
+retter jeg den med en gang og forteller hva jeg gjorde. Renate skal ikke måtte
+godkjenne at noe ødelagt blir reparert. Gjelder også feil i deler jeg ikke ble
+bedt om å røre. Unntaket er endringer som forandrer hva et produkt ER, eller
+som koster penger utad, for eksempel priser, betalingslenker og utsending av
+e-post til ekte mottakere. De spør jeg om først.
+
 ## 🔗 Skriv alltid HELE lenken til Renate
 
 Avtalt 29. august 2026: når jeg nevner en side i chatten, skriver jeg aldri
