@@ -14,7 +14,8 @@
      functions/api/oppskrift-webhook.js og _lib/course-access.js)
 
    Pris bytter seg selv automatisk ved fristen (ingen manuell oppdatering
-   nødvendig): lanseringspris frem til 1. september 2026, deretter full pris.
+   nødvendig): kampanjekalenderen i /js/kampanjer.js styrer datoene, full pris
+   fra 1. februar 2027.
    Selve betalingslenkene er faste Stripe-lenker, én per pris og valuta.
 
    Beløpene under er sjekket mot Stripe 31. august 2026 og skal stemme
@@ -26,8 +27,14 @@
    ===================================================================== */
 
 (function () {
-  var FULL_FROM = Date.parse("2026-09-01T00:00:00+02:00");
-  var launch = Date.now() < FULL_FROM;
+  // Kampanjekalenderen i /js/kampanjer.js bestemmer om det er tilbud nå, og
+  // hva tilbudet heter. Laster den ikke, gjelder tilbudsprisen frem til
+  // 1. februar 2027, samme dato som kalenderen bruker.
+  var k = (window.LME_KAMPANJE && window.LME_KAMPANJE.naa()) || {
+    tilbud: Date.now() < Date.parse("2027-02-01T00:00:00+01:00"),
+    merkelapp: { no: "Lanseringstilbud", en: "Launch offer" },
+  };
+  var launch = k.tilbud;
 
   var LINKS = {
     no: { launch: "https://buy.stripe.com/5kQbJ24NTevJgKFgNN9R63l", full: "https://buy.stripe.com/4gMbJ26W13R5cup9ll9R63n" },
@@ -43,8 +50,7 @@
     return launch ? LINKS[lang].launch : LINKS[lang].full;
   }
   function merkelapp(lang) {
-    if (launch) return lang === "en" ? "Launch offer" : "Lanseringstilbud";
-    return lang === "en" ? "Full course" : "Fullt kurs";
+    return lang === "en" ? k.merkelapp.en : k.merkelapp.no;
   }
 
 window.LME_FUNNEL = {
