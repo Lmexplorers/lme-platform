@@ -161,13 +161,24 @@
         const d = await r.json();
         if (d && d.ok) {
           const nye = d.added || 0;
-          const norsk = nye === 0
-            ? 'Ferdig. Kurset var allerede oppdatert, ingen nye leksjoner å legge til. Kurset har ' + d.lessonCount + ' leksjoner.'
-            : 'Ferdig. La til ' + nye + (nye === 1 ? ' ny leksjon' : ' nye leksjoner') + '. Kurset har nå ' + d.lessonCount + ' leksjoner.';
-          const eng = nye === 0
-            ? 'Done. The course was already up to date, no new lessons to add. It has ' + d.lessonCount + ' lessons.'
-            : 'Done. Added ' + nye + (nye === 1 ? ' new lesson' : ' new lessons') + '. The course now has ' + d.lessonCount + ' lessons.';
-          vis('ok', LANG === 'en' ? eng : norsk);
+          const endret = d.oppdatert || 0;
+          const beholdt = d.beholdt || 0;
+          const deler = [];
+          if (LANG === 'en') {
+            if (nye) deler.push('added ' + nye + (nye === 1 ? ' new lesson' : ' new lessons'));
+            if (endret) deler.push('updated the text in ' + endret + (endret === 1 ? ' lesson' : ' lessons'));
+            if (!deler.length) deler.push('nothing to change, the course was already up to date');
+            let t = 'Done: ' + deler.join(' and ') + '. The course has ' + d.lessonCount + ' lessons.';
+            if (beholdt) t += ' ' + beholdt + (beholdt === 1 ? ' lesson you have edited yourself was left' : ' lessons you have edited yourself were left') + ' exactly as they are.';
+            vis('ok', t);
+          } else {
+            if (nye) deler.push('la til ' + nye + (nye === 1 ? ' ny leksjon' : ' nye leksjoner'));
+            if (endret) deler.push('oppdaterte teksten i ' + endret + (endret === 1 ? ' leksjon' : ' leksjoner'));
+            if (!deler.length) deler.push('ingenting å endre, kurset var allerede oppdatert');
+            let t = 'Ferdig: ' + deler.join(' og ') + '. Kurset har ' + d.lessonCount + ' leksjoner.';
+            if (beholdt) t += ' ' + beholdt + (beholdt === 1 ? ' leksjon du har redigert selv står' : ' leksjoner du har redigert selv står') + ' urørt.';
+            vis('ok', t);
+          }
           visDubletter(d.dubletter);
         } else if (d && d.error === 'bad_password') {
           // Sier hvor serveren henter passordet fra, så en feil kan spores

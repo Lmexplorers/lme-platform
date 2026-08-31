@@ -81,19 +81,54 @@ function titleKey(lesson) {
    den heter nå. */
 const deliveredKey = (slug) => "lme-builder:kurs-levert:" + slug;
 
+/* Leser lista. Den eldste formen var bare en liste med titler, den nyere er
+   { titler: [...], tekst: { <tittel>: <tekstavtrykk> } }. Begge leses, så en
+   gammel lagret liste ikke gjør noen skade. */
 async function readDelivered(env, slug) {
   try {
     const raw = await env.BUILDER_KV.get(deliveredKey(slug));
     if (!raw) return null;
-    const list = JSON.parse(raw);
-    return Array.isArray(list) ? new Set(list) : null;
+    const d = JSON.parse(raw);
+    if (Array.isArray(d)) return { titler: new Set(d), tekst: {} };
+    if (d && Array.isArray(d.titler)) {
+      return { titler: new Set(d.titler), tekst: (d && d.tekst) || {} };
+    }
+    return null;
   } catch (e) { return null; }
 }
 
-async function writeDelivered(env, slug, keys) {
+async function writeDelivered(env, slug, source) {
   try {
-    await env.BUILDER_KV.put(deliveredKey(slug), JSON.stringify(keys));
+    const tekst = {};
+    source.lessons.forEach((l) => { tekst[titleKey(l)] = bodyKey(l); });
+    await env.BUILDER_KV.put(deliveredKey(slug), JSON.stringify({
+      titler: source.lessons.map(titleKey), tekst: tekst,
+    }));
   } catch (e) { /* med vilje stille, importen er alt lagret */ }
+}
+
+/* Oppdaterer teksten i leksjoner som er endret i koden, men BARE der teksten i
+   kurset er nøyaktig den importen leverte sist. Har Renate skrevet om noe i
+   Kursbygger, står hennes versjon, og leksjonen telles som hoppet over.
+
+   Uten dette kunne importen bare legge til nye leksjoner: en rettelse i
+   teksten til en leksjon som allerede lå der, nådde aldri fram til kurset. */
+function updateChangedLessons(live, source, levert) {
+  if (!levert || !levert.tekst) return { oppdatert: 0, hoppetOver: 0 };
+  let oppdatert = 0, hoppetOver = 0;
+  source.lessons.forEach((kilde) => {
+    const key = titleKey(kilde);
+    const levertTekst = levert.tekst[key];
+    if (!levertTekst) return;                       // aldri levert, ikke vår å endre
+    const min = live.lessons.find((l) => titleKey(l) === key);
+    if (!min) return;                               // slettet eller omdøpt, la den være
+    if (bodyKey(min) === bodyKey(kilde)) return;    // allerede lik, ingenting å gjøre
+    if (bodyKey(min) !== levertTekst) { hoppetOver++; return; }  // Renate har redigert
+    min.body = JSON.parse(JSON.stringify(kilde.body || []));
+    min.tip = kilde.tip ? JSON.parse(JSON.stringify(kilde.tip)) : min.tip;
+    oppdatert++;
+  });
+  return { oppdatert: oppdatert, hoppetOver: hoppetOver };
 }
 
 /* Legger til leksjoner som finnes i koden, men ikke i kurset som ligger i KV.
@@ -110,11 +145,12 @@ async function writeDelivered(env, slug, keys) {
    opprinnelig ble skrevet inn fra nettopp denne koden. */
 function addMissingLessons(live, source, levert) {
   const finnes = new Set(live.lessons.map(titleKey));
+  const levertTitler = (levert && levert.titler) || null;
   let added = 0;
   source.lessons.forEach((lesson, i) => {
     const key = titleKey(lesson);
     if (!key || finnes.has(key)) return;
-    if (levert && levert.has(key)) return;
+    if (levertTitler && levertTitler.has(key)) return;
     // Finn nærmeste leksjon foran i koden som også ligger i det lagrede
     // kurset, og legg den nye rett etter den. Finner vi ingen, havner den sist.
     let pos = live.lessons.length;
@@ -204,14 +240,17 @@ async function importer(env, pw, full) {
         let live = null;
         try { live = sanitizeCourse(JSON.parse(raw)); } catch (e) { live = null; }
         if (live) {
-          const added = addMissingLessons(live, source, await readDelivered(env, source.slug));
+          const levert = await readDelivered(env, source.slug);
+          const added = addMissingLessons(live, source, levert);
+          const endret = updateChangedLessons(live, source, levert);
           const res = fillEnglish(live, translationMap(source));
           const err = await store(env, live);
           if (err) return json(err, 413);
-          await writeDelivered(env, source.slug, source.lessons.map(titleKey));
+          await writeDelivered(env, source.slug, source);
           return json({
             ok: true, slug: live.slug, mode: "en", filled: res.filled, skipped: res.skipped,
-            added: added, lessonCount: live.lessons.length,
+            added: added, oppdatert: endret.oppdatert, beholdt: endret.hoppetOver,
+            lessonCount: live.lessons.length,
             dubletter: finnDubletter(live, source),
           });
         }
@@ -219,7 +258,7 @@ async function importer(env, pw, full) {
     }
     const err = await store(env, source);
     if (err) return json(err, 413);
-    await writeDelivered(env, source.slug, source.lessons.map(titleKey));
+    await writeDelivered(env, source.slug, source);
     return json({ ok: true, slug: source.slug, mode: full ? "full" : "en", lessonCount: source.lessons.length });
   } catch (e) {
     return json({ error: "write_failed", detail: String(e) }, 200);

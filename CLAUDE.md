@@ -39,6 +39,21 @@ for kjøpsknappen, ikke bare et unntak dypt i betalings-webhooken.
 `/roadmap` skal alltid speile plattformen. Når nye moduler, kurs eller verktøy
 lanseres (eller fjernes), oppdater riktig fase på `roadmap.html` i samme slengen.
 
+## 📚 Hold A til Å-kurset oppdatert
+
+Avtalt med Renate 29. august 2026: `LME-plattformen fra A til Å` er kurset som
+viser rundt i hele plattformen, og det skal alltid speile den. Endrer jeg noe
+brukeren merker (nytt verktøy, nytt produkt, endret arbeidsflyt), oppdaterer jeg
+kurset i samme slengen, i `functions/_lib/seed-plattform-kurs-data.js`, og sier
+fra til Renate at hun må kjøre `/kurs-import` én gang for at endringen skal nå
+det lagrede kurset.
+
+Importen legger til nye leksjoner OG oppdaterer teksten i leksjoner som er
+endret i koden, men bare der teksten er nøyaktig den importen leverte sist. Har
+Renate skrevet om en leksjon i Kursbygger, står hennes versjon, og den telles
+som beholdt. Arbeidsboken `ressurser/print/lme-plattformen-arbeidsbok.html`
+speiler kurset og oppdateres samtidig.
+
 ## 🔗 Alt nytt skal ha et synlig kort/lenke — aldri en gjemt URL
 
 Avtalt med Renate 3. august 2026, etter at 10 000-visninger-utfordringen kun var
