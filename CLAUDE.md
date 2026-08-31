@@ -89,6 +89,31 @@ bedt om å røre. Unntaket er endringer som forandrer hva et produkt ER, eller
 som koster penger utad, for eksempel priser, betalingslenker og utsending av
 e-post til ekte mottakere. De spør jeg om først.
 
+## 💳 ALLTID Vipps til norske kunder
+
+Sagt av Renate 31. august 2026, etter at jeg laget tre Stripe-betalingslenker
+til tjenestepakkene og glemte Vipps: **alt som selges til norske kunder skal ha
+Vipps ved siden av kortbetalingen.** Ikke som noe jeg legger til hvis noen ber
+om det, men fra første versjon av hver eneste salgsside.
+
+Vipps er allerede bygget, og skal ikke lages på nytt:
+
+- `js/vipps-knapp.js` lager knappen, e-postfeltet og hele kjøpet. Legg
+  `data-vipps-produkt="<slug>"` og `data-vipps-type="<type>"` på boksen rundt
+  kjøpsknappen, og ta med skriptet nederst på siden. Står det en tom
+  `<div class="pay-methods"></div>` rett under kjøpsknappen, havner Vipps
+  akkurat der.
+- `functions/api/vipps-pay.js` starter kjøpet. Prisen leses ALLTID på
+  serveren, aldri fra siden. Varetypene i dag er `lv`, `kurs`, `oppskrift`
+  og `tjeneste`. Ny vare betyr en ny gren her.
+- `functions/_lib/vipps-lever.js` leverer varen etter betaling, og skal gjøre
+  nøyaktig det samme som Stripe-flyten gjør for den samme varen.
+- Vipps tar bare kroner, så knappen skjuler seg selv i engelsk visning.
+  Kortbetalingen står igjen alene der.
+
+E-postadressen må samles inn før kunden sendes til Vipps. Vipps forteller oss
+ikke hvem som betalte, så uten adressen har vi ingen å levere til.
+
 ## 🔗 Skriv alltid HELE lenken til Renate
 
 Avtalt 29. august 2026: når jeg nevner en side i chatten, skriver jeg aldri

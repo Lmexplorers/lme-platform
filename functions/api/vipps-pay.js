@@ -20,6 +20,7 @@ import { KEY_PREFIX as LV_KEY_PREFIX } from "./laeringsverksted.js";
 import { COURSES, kursPrisNok } from "../_lib/plans.js";
 import { oppskriftPrisOre } from "../_lib/butikk-priser.js";
 import { oppskriftNavn } from "../_lib/oppskrift-mail.js";
+import { pakkeMedId } from "../../js/tjenester-pakker.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -91,7 +92,7 @@ export async function onRequestPost(context) {
               prisen paa hver produktside. Navnet kommer fra den samme
               tabellen som leveringsmailen bruker, saa kunden ser samme
               navn i Vipps som i e-posten. */
-  const TYPER = ["lv", "kurs", "oppskrift"];
+  const TYPER = ["lv", "kurs", "oppskrift", "tjeneste"];
   const type = TYPER.indexOf(body.type) >= 0 ? body.type : "lv";
   let amount = 0;
   let title = "";
@@ -108,6 +109,16 @@ export async function onRequestPost(context) {
     amount = pris * 100;
     title = (kurs.navn && (kurs.navn[lang] || kurs.navn.no)) || slug;
     returnPath = KURS_TAKKESIDE[slug] || "/academy";
+  } else if (type === "tjeneste") {
+    /* "Gjort for deg"-pakkene på /tjenester. Prisen leses fra den samme
+       filen som salgssiden og Stripe-kvitteringen bruker, så Vipps aldri
+       kan trekke et annet beløp enn det kunden så. */
+    const pakke = pakkeMedId(slug);
+    if (!pakke || !pakke.nok) return json({ ok: false, error: "not_found" }, 404);
+    amount = pakke.nok * 100;
+    title = (pakke.navn && (pakke.navn[lang] || pakke.navn.no)) || slug;
+    /* Samme takkeside som Stripe sender kjøperen til. */
+    returnPath = "/tjenester?takk=" + encodeURIComponent(slug);
   } else if (type === "oppskrift") {
     amount = oppskriftPrisOre(slug);
     title = oppskriftNavn(slug, lang);

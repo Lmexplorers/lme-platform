@@ -24,8 +24,57 @@ import { sendCourseDeliveryMail } from "./course-mail.js";
 import { sendClaudeMail } from "./claude-mail.js";
 import { lagNedlastingsnokkel, medNokkel } from "./nedlasting-tilgang.js";
 import { registerNewsletter } from "./newsletter.js";
+import { sendKvitteringKjop } from "./tjeneste-mail.js";
 
 export const ORDRE_PREFIX = "vipps_order:";
+
+/* Leverer en "gjort for deg"-pakke fra /tjenester. Ingen fil å sende og
+   ingen tilgang å låse opp: det som skal skje er at ordren havner i Renates
+   eget panel nederst på /tjenester, at kunden får en kvittering som ber om
+   materialet sitt, og at Renate får salgsvarsel. Nøyaktig de samme stegene
+   som Stripe-flyten i api/oppskrift-webhook.js gjør. */
+async function leverTjeneste(env, order) {
+  const sak = {
+    id: "tjeneste:" + Date.now() + "-" + Math.random().toString(36).slice(2, 8),
+    navn: order.name || order.email,
+    epost: order.email,
+    telefon: order.phoneNumber || "",
+    melding: "Betalt med Vipps, uten beskrivelse. Be om materialet og detaljene.",
+    lenke: "",
+    lang: order.lang || "no",
+    pakke: order.slug,
+    pakkeNavn: order.title || order.slug,
+    pris: Math.round((order.amount || 0) / 100),
+    status: "betalt",
+    betalt: true,
+    betaltMed: "vipps",
+    opprettet: new Date().toISOString(),
+  };
+  try { await env.BUILDER_KV.put(sak.id, JSON.stringify(sak)); } catch (e) {}
+  try { await sendKvitteringKjop(env, sak, sak.pakkeNavn); } catch (e) {}
+  try {
+    await sendOwnerSaleNotice(env, {
+      pname: "LME Studio Tjenester: " + sak.pakkeNavn + " (Vipps)", lang: sak.lang,
+      name: order.name || "", email: order.email,
+      amount: order.amount, currency: order.currency,
+      action: {
+        title: "Dette må du gjøre nå: hent inn materialet",
+        body: "Kunden har betalt for en pakke du skal levere selv. Ordren ligger " +
+              "nederst på /tjenester, merket som betalt, og kvitteringen som ber om " +
+              "filene hennes er allerede sendt.",
+        url: "https://lmexplorers.com/tjenester",
+      },
+    });
+  } catch (e) {}
+  try {
+    await recordPurchase(env, order.email, {
+      type: "tjeneste", id: order.slug, title: sak.pakkeNavn,
+      amount: order.amount, currency: order.currency,
+      url: "https://lmexplorers.com/tjenester",
+    });
+  } catch (e) {}
+  return null;
+}
 
 /* Leverer en Laeringsverksted-ressurs: leveringsmail med nedlastingslenke,
    varsel til Renate, kjoepet paa kundens konto, og en telling opp paa
@@ -265,6 +314,8 @@ export async function leverVippsOrdre(env, reference, opts) {
     await leverKurs(env, order);
   } else if (order.type === "oppskrift") {
     nokkel = await leverOppskrift(env, order);
+  } else if (order.type === "tjeneste") {
+    await leverTjeneste(env, order);
   } else {
     nokkel = await leverLaeringsverksted(env, order);
   }

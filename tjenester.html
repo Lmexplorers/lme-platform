@@ -265,7 +265,7 @@
     </div>
     <div class="sporsmal">
       <h3 data-no="Hvordan betaler jeg?" data-en="How do I pay?">Hvordan betaler jeg?</h3>
-      <p data-no="Du får en betalingslenke eller en faktura fra meg etter at du har sagt ja til tilbudet. Halvparten før jeg starter på de to største pakkene, resten ved levering." data-en="You get a payment link or an invoice from me after you have said yes to the quote. Half before I start on the two largest packages, the rest on delivery.">Du får en betalingslenke eller en faktura fra meg etter at du har sagt ja til tilbudet. Halvparten før jeg starter på de to største pakkene, resten ved levering.</p>
+      <p data-no="Med Vipps eller kort, rett på knappen i pakken du vil ha. Vil du heller ha et tilbud først, får du betalingslenke eller faktura fra meg etterpå, når vi er enige om hva jobben er." data-en="By card, straight from the button in the package you want. If you would rather have a quote first, you get a payment link or an invoice from me afterwards, once we agree on what the job is.">Med Vipps eller kort, rett på knappen i pakken du vil ha. Vil du heller ha et tilbud først, får du betalingslenke eller faktura fra meg etterpå, når vi er enige om hva jobben er.</p>
     </div>
   </section>
 
@@ -346,6 +346,13 @@
     PAKKER.forEach(p => {
       const kort = document.createElement('div');
       kort.className = 'pakke' + (p.populaer ? ' populaer' : '');
+      /* Norske kunder skal alltid ha Vipps. js/vipps-knapp.js finner kortet
+         på disse to merkene og bygger knappen, e-postfeltet og kallet til
+         /api/vipps-pay selv. */
+      if (p.kjopLenke) {
+        kort.setAttribute('data-vipps-produkt', p.id);
+        kort.setAttribute('data-vipps-type', 'tjeneste');
+      }
       let html = '';
       if (p.populaer) {
         html += '<span class="merkelapp" data-no="MEST VALGT" data-en="MOST CHOSEN">MEST VALGT</span>';
@@ -365,7 +372,11 @@
          først. Den andre er ikke pynt, den er der for oppdrag som er
          større eller rotete enn pakken beskriver. */
       if (p.kjopLenke) {
-        html += '<a class="knapp-stor velg" href="' + p.kjopLenke + '" data-no="Kjøp for ' + p.nok.toLocaleString('nb-NO') + ' kr" data-en="Buy for ' + p.nok.toLocaleString('nb-NO') + ' kr">Kjøp for ' + p.nok.toLocaleString('nb-NO') + ' kr</a>';
+        html += '<a class="knapp-stor velg" href="' + p.kjopLenke + '" data-no="Kjøp med kort, ' + p.nok.toLocaleString('nb-NO') + ' kr" data-en="Pay by card, ' + p.nok.toLocaleString('nb-NO') + ' kr">Kjøp med kort, ' + p.nok.toLocaleString('nb-NO') + ' kr</a>';
+        /* js/vipps-knapp.js legger Vipps-knappen rett foran .pay-methods,
+           altså under kortknappen og over tilbudslenken. Vipps tar bare
+           kroner, så skriptet skjuler den selv i engelsk visning. */
+        html += '<div class="pay-methods"></div>';
         html += '<button class="lenkeknapp be-om" type="button" data-pakke="' + p.id + '" data-no="eller be om et tilbud først" data-en="or ask for a quote first">eller be om et tilbud først</button>';
       } else {
         html += '<button class="knapp-stor velg be-om" type="button" data-pakke="' + p.id + '" data-no="Velg denne" data-en="Choose this one">Velg denne</button>';
@@ -574,6 +585,9 @@
   hentSaker();
 </script>
 
+<!-- Vipps-knappen på hvert pakkekort. Må stå ETTER modulen over, som er den
+     som bygger kortene, ellers finner skriptet ingenting å henge seg på. -->
+<script src="/js/vipps-knapp.js?v=1" defer></script>
 <script src="/js/lme-account.js?v=11" defer></script>
 </body>
 </html>
