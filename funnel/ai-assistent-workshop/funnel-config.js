@@ -10,17 +10,49 @@
    Innholdet er skrevet i functions/_lib/seed-ai-assistent-workshop-data.js
 
    Slik henger betalingen sammen:
-     "checkoutUrl" under er Stripe-betalingslenken, én for kroner og én for
-     dollar. Betalingslenke-ID-en (plink_…) ligger i COURSE_PAYMENT_LINKS i
-     functions/_lib/purchase-links.js med courseId "ai-assistent-workshop",
-     og det er den som gjør at kjøperen får tilgangslenken sin på e-post.
-     Skal prisen heves til ordinær pris, bytt checkoutUrl til
-     ordinærlenkene som allerede står i purchase-links.js, og fjern
-     "visningFor" under. La checkoutUrl stå tom for å forhåndsvise trakten
-     uten betaling, da hopper knappen rett til takkesiden.
+     Betalingslenkene er faste Stripe-lenker, én per pris og valuta, og
+     ligger i LENKER under. Betalingslenke-ID-ene (plink_…) ligger i
+     COURSE_PAYMENT_LINKS i functions/_lib/purchase-links.js med courseId
+     "ai-assistent-workshop", og det er de som gjør at kjøperen får
+     tilgangslenken sin på e-post.
+
+   Prisen bytter seg selv: kampanjekalenderen i /js/kampanjer.js bestemmer
+     om det er tilbud nå, og hva tilbudet heter, akkurat som på
+     YouTube-kursene. Tilbudspris 490 kr og $49 frem til 1. februar 2027,
+     deretter full pris 990 kr og $99. Beløpene under er sjekket mot Stripe
+     31. august 2026, og endres en pris der, må den endres her i samme
+     slengen.
 
    Rediger bare verdiene under, lagre, og last siden på nytt.
    ===================================================================== */
+
+(function () {
+  // Kampanjekalenderen i /js/kampanjer.js bestemmer om det er tilbud nå, og
+  // hva tilbudet heter. Laster den ikke, gjelder tilbudsprisen frem til
+  // 1. februar 2027, samme dato som kalenderen bruker.
+  var k = (window.LME_KAMPANJE && window.LME_KAMPANJE.naa()) || {
+    tilbud: Date.now() < Date.parse("2027-02-01T00:00:00+01:00"),
+    merkelapp: { no: "Lanseringstilbud", en: "Launch offer" },
+  };
+  var tilbud = k.tilbud;
+
+  var LENKER = {
+    no: { tilbud: "https://buy.stripe.com/cNi9AUgwBcnB3XTeFF9R711", full: "https://buy.stripe.com/eVqbJ28050ETfGB1ST9R713" },
+    en: { tilbud: "https://buy.stripe.com/8x2eVe8051IX51X4119R712", full: "https://buy.stripe.com/cNi00kdkp9bp7a56999R714" },
+  };
+
+  function pris(lang) {
+    return tilbud
+      ? { belop: lang === "en" ? 49 : 490, valuta: lang === "en" ? "$" : "kr", visningFor: lang === "en" ? "$99" : "990 kr" }
+      : { belop: lang === "en" ? 99 : 990, valuta: lang === "en" ? "$" : "kr", visningFor: "" };
+  }
+  function kasse(lang) { return tilbud ? LENKER[lang].tilbud : LENKER[lang].full; }
+  // Merkelappen øverst på siden. Kalenderens siste periode heter "Fullt kurs",
+  // som passer på kursene, men ikke her. Uten tilbud står det bare Workshop.
+  function merkelapp(lang) {
+    if (!tilbud) return "Workshop";
+    return lang === "en" ? k.merkelapp.en : k.merkelapp.no;
+  }
 
 window.LME_FUNNEL = {
 
@@ -35,16 +67,12 @@ window.LME_FUNNEL = {
     },
 
     salg: {
-      checkoutUrl: "https://buy.stripe.com/cNi9AUgwBcnB3XTeFF9R711",   // Stripe: workshop 490 kr (tom = hopp rett til takkesiden)
+      checkoutUrl: kasse("no"),
       etterKjop: "takk.html",
 
-      pris: {
-        belop: 490,
-        valuta: "kr",
-        visningFor: "990 kr"           // ordinær pris (overstrøket). "" skjuler
-      },
+      pris: pris("no"),
 
-      merkelapp: "Lanseringspris",
+      merkelapp: merkelapp("no"),
       overskrift: "Ansett dine fem AI-assistenter",
       underoverskrift:
         "En arbeidsøkt, ikke en forelesning. Du setter fem faste assistenter i arbeid " +
@@ -143,16 +171,12 @@ window.LME_FUNNEL = {
     },
 
     salg: {
-      checkoutUrl: "https://buy.stripe.com/8x2eVe8051IX51X4119R712",   // Stripe: workshop $49
+      checkoutUrl: kasse("en"),
       etterKjop: "takk.html",
 
-      pris: {
-        belop: 49,
-        valuta: "$",
-        visningFor: "$99"
-      },
+      pris: pris("en"),
 
-      merkelapp: "Launch price",
+      merkelapp: merkelapp("en"),
       overskrift: "Hire your five AI assistants",
       underoverskrift:
         "A working session, not a lecture. You put five permanent assistants to work " +
@@ -240,3 +264,5 @@ window.LME_FUNNEL = {
     }
   }
 };
+
+})();

@@ -1450,6 +1450,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
     <div class="course-grid" id="egne-kurs-grid"></div>
   </section>
 
+  <script src="/js/kampanjer.js?v=1"></script>
   <script>
   (function () {
     var grid = document.getElementById('egne-kurs-grid');
@@ -1501,13 +1502,28 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
         checkout: { no: 'https://buy.stripe.com/7sYeVe2FL0ET661eFF9R63F', en: 'https://buy.stripe.com/cNi8wQ6W12N1amhcxx9R63G' }
       },
       // Workshopen har sin egen salgsside, så kortet går dit i stedet for
-      // rett til Stripe.
+      // rett til Stripe. Prisen følger kampanjekalenderen i /js/kampanjer.js,
+      // samme som salgssiden, så kortet aldri viser en utgått tilbudspris.
       'ai-assistent-workshop': {
         price: { no: '490 kr', en: '$49' },
+        fullPrice: { no: '990 kr', en: '$99' },
         sales: '/workshop',
         checkout: { no: 'https://buy.stripe.com/cNi9AUgwBcnB3XTeFF9R711', en: 'https://buy.stripe.com/8x2eVe8051IX51X4119R712' }
       }
     };
+
+    // Er tilbudsprisen fortsatt gyldig? Laster kalenderen ikke, gjelder
+    // tilbudet frem til 1. februar 2027, samme dato som kalenderen bruker.
+    function tilbudNaa() {
+      try {
+        if (window.LME_KAMPANJE) return window.LME_KAMPANJE.naa().tilbud;
+      } catch (e) {}
+      return Date.now() < Date.parse('2027-02-01T00:00:00+01:00');
+    }
+    function prisFor(paid, lang) {
+      var p = (!tilbudNaa() && paid.fullPrice) ? paid.fullPrice : paid.price;
+      return p[lang];
+    }
 
     function render() {
       var en = window.LME_CURRENT_LANG === 'en';
@@ -1526,7 +1542,7 @@ main > *:nth-child(6) { animation-delay: 0.3s; }
         a.querySelector('.kicker').textContent = pick(c.kicker) || (en ? 'MY COURSE' : 'MITT KURS');
         a.querySelector('.title').textContent = pick(c.title);
         var metaLabel = (c.size === 'stor') ? (en ? 'FULL COURSE' : 'STORT KURS') : (en ? 'MINI COURSE' : 'MINIKURS');
-        a.querySelector('.meta').textContent = paid ? metaLabel + ' · ' + paid.price[lang] : metaLabel;
+        a.querySelector('.meta').textContent = paid ? metaLabel + ' · ' + prisFor(paid, lang) : metaLabel;
         a.querySelector('h4').textContent = pick(c.title);
         a.querySelector('.desc').textContent = pick(c.lede);
         a.querySelector('.lessons').textContent = (c.lessonCount || 0) + (en ? ' lessons' : ' leksjoner');
