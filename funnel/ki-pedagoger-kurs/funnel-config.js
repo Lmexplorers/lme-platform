@@ -7,6 +7,17 @@
    dato-bytte som YouTube-kursene).
    ===================================================================== */
 
+/* Kampanjekalenderen i /js/kampanjer.js gir merkelappen på salgssiden
+   (Høstkampanje, Halloweentilbud, Juletilbud, Bursdagstilbud og så videre).
+   Prisen er urørt, bare navnet på tilbudet følger årstiden. Utenfor
+   kampanjeperioden, og hvis kalenderen ikke laster, står den faste
+   merkelappen under. */
+function lmeMerke(fast, sprak) {
+  var k = window.LME_KAMPANJE && window.LME_KAMPANJE.naa();
+  if (!k || !k.tilbud) return fast;
+  return sprak === "en" ? k.merkelapp.en : k.merkelapp.no;
+}
+
 window.LME_FUNNEL = {
 
   no: {
@@ -18,7 +29,7 @@ window.LME_FUNNEL = {
 
       pris: { belop: 299, valuta: "kr", visningFor: "599 kr" },
 
-      merkelapp: "Lanseringstilbud",
+      merkelapp: lmeMerke("Lanseringstilbud", "no"),
       overskrift: "KI for pedagoger",
       underoverskrift:
         "En rolig og praktisk innføring i KI-verktøyene alle snakker om, laget for " +
@@ -92,7 +103,7 @@ window.LME_FUNNEL = {
 
       pris: { belop: 30, valuta: "$", visningFor: "$60" },
 
-      merkelapp: "Launch offer",
+      merkelapp: lmeMerke("Launch offer", "en"),
       overskrift: "AI for Educators",
       underoverskrift:
         "A calm, practical introduction to the AI tools everyone's talking about, made for " +

@@ -27,6 +27,17 @@
    Tips: tekst i "anførselstegn", tall uten. Komma etter hver linje.
    ===================================================================== */
 
+/* Kampanjekalenderen i /js/kampanjer.js gir merkelappen på salgssiden
+   (Høstkampanje, Halloweentilbud, Juletilbud, Bursdagstilbud og så videre).
+   Prisen er urørt, bare navnet på tilbudet følger årstiden. Utenfor
+   kampanjeperioden, og hvis kalenderen ikke laster, står den faste
+   merkelappen under. */
+function lmeMerke(fast, sprak) {
+  var k = window.LME_KAMPANJE && window.LME_KAMPANJE.naa();
+  if (!k || !k.tilbud) return fast;
+  return sprak === "en" ? k.merkelapp.en : k.merkelapp.no;
+}
+
 window.LME_FUNNEL = {
 
   /* =================================================================
@@ -50,7 +61,7 @@ window.LME_FUNNEL = {
         visningFor: "990 kr"           // vanlig pris (overstrøket). "" skjuler
       },
 
-      merkelapp: "Lanseringstilbud",
+      merkelapp: lmeMerke("Lanseringstilbud", "no"),
       overskrift: "Kom i gang med Claude, den rolige veien",
       underoverskrift:
         "Et vennlig kurs som lærer deg å bruke Claude som en rolig medhjelper i " +
@@ -189,7 +200,7 @@ window.LME_FUNNEL = {
         visningFor: "$99"              // regular price (struck through)
       },
 
-      merkelapp: "Launch offer",
+      merkelapp: lmeMerke("Launch offer", "en"),
       overskrift: "Get started with Claude, the calm way",
       underoverskrift:
         "A friendly course that teaches you to use Claude as a calm helper in " +
