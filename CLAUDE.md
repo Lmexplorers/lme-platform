@@ -114,6 +114,23 @@ Vipps er allerede bygget, og skal ikke lages på nytt:
 E-postadressen må samles inn før kunden sendes til Vipps. Vipps forteller oss
 ikke hvem som betalte, så uten adressen har vi ingen å levere til.
 
+## 👀 Skriv lesbart til Renate, aldri i liten kodeskrift
+
+Sagt av Renate 31. august 2026: hun klarer ikke å lese den lille skriften.
+Hun leser stort sett på mobil.
+
+Derfor, i alt jeg skriver til henne i chatten:
+
+- Ikke skriv filnavn, stier, mappenavn eller knappetekst i kodeformat
+  (bakoverfnutter). Skriv dem som vanlig tekst i setningen: filen store.js
+  ligger i mappen functions, så api.
+- Ikke lim inn kodeblokker med mindre hun ber om kode. Forklar hva koden
+  gjør i stedet, med vanlige ord.
+- Bruk hele setninger og vanlig tekststørrelse. Tabeller er greit når de
+  sammenligner tall, men hold dem korte.
+
+Dette gjelder bare chatten. Kommentarer og kode i selve filene skrives som før.
+
 ## 🔗 Skriv alltid HELE lenken til Renate
 
 Avtalt 29. august 2026: når jeg nevner en side i chatten, skriver jeg aldri
