@@ -56,6 +56,17 @@
     });
   }
 
+  /* Kort som selger noe Renate selv eier: hun skal inn i selve produktet, ikke
+     til salgssiden. Merk kortet med data-lme-owner-href="/veien/inn", så bytter
+     lenken seg for eieren og står uendret for alle andre. */
+  function ownerHrefs() {
+    if (!state.owner) return;
+    document.querySelectorAll("[data-lme-owner-href]").forEach(function (a) {
+      var inn = a.getAttribute("data-lme-owner-href");
+      if (a.tagName === "A" && inn) a.setAttribute("href", inn);
+    });
+  }
+
   function apply() {
     document.body.classList.toggle("lme-auth-in", state.loggedIn);
     document.body.classList.toggle("lme-auth-out", !state.loggedIn);
@@ -63,6 +74,7 @@
     document.body.classList.toggle("lme-member", state.inside);
     applyWhen();
     upgradeJoinCtas();
+    ownerHrefs();
   }
 
   function wireLogout() {

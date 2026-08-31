@@ -2015,6 +2015,10 @@
           var tek = el('p', null, 'Teknisk: adresse "' + (slug || '(tom)') + '"' + (sistSvar ? ', svar fra skyen: ' + sistSvar : ''));
           tek.style.cssText = 'text-align:center;color:#9b8b93;font-size:12.5px;margin-top:14px';
           root.appendChild(tek);
+          // Et kurs som ligger ferdig skrevet i koden, men som ikke er hentet
+          // inn i Kursbygger ennå, ser akkurat sånn ut. Eieren skal få vite
+          // det, og komme rett til importen, i stedet for å stå i en blindvei.
+          visEierlenke(en, true);
           return;
         }
 
@@ -2416,16 +2420,22 @@
       /* Veien videre til kursimporten, bare for eieren. Renate havnet her da
          hun lette etter importen (31. august 2026), så lenken skal stå der
          hun faktisk er, ikke bare inne i Kursbygger. */
-      function visEierlenke(en) {
+      function visEierlenke(en, mangler) {
         fetch('/api/access', { credentials: 'same-origin' })
           .then(function (r) { return r.json(); })
           .then(function (a) {
             if (!a || a.plan !== 'owner') return;
             var boks = el('div', 'crs-next');
-            boks.appendChild(el('h3', null, en ? 'Update the courses' : 'Oppdater kursene'));
-            boks.appendChild(el('p', null, en
-              ? 'Pull new lessons and new courses from the code into the course builder. Text you have edited yourself stays as it is.'
-              : 'Hent inn nye leksjoner og nye kurs fra koden inn i Kursbygger. Teksten du har endret selv blir stående.'));
+            boks.appendChild(el('h3', null, mangler
+              ? (en ? 'Not imported yet?' : 'Ikke hentet inn ennå?')
+              : (en ? 'Update the courses' : 'Oppdater kursene')));
+            boks.appendChild(el('p', null, mangler
+              ? (en
+                ? 'A course written in the code lives at this address only after it has been imported into the course builder. One tap does it.'
+                : 'Et kurs som er skrevet i koden ligger på denne adressen først når det er hentet inn i Kursbygger. Ett trykk holder.')
+              : (en
+                ? 'Pull new lessons and new courses from the code into the course builder. Text you have edited yourself stays as it is.'
+                : 'Hent inn nye leksjoner og nye kurs fra koden inn i Kursbygger. Teksten du har endret selv blir stående.')));
             var a2 = el('a', 'btn-primary', en ? 'Open the course import →' : 'Åpne kursimporten →');
             a2.href = '/kurs-import';
             boks.appendChild(a2);
