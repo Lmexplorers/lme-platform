@@ -20,6 +20,17 @@
    Rediger bare verdiene under, lagre, og last siden på nytt.
    ===================================================================== */
 
+/* Kampanjekalenderen i /js/kampanjer.js gir merkelappen på salgssiden
+   (Høstkampanje, Halloweentilbud, Juletilbud, Bursdagstilbud og så videre).
+   Prisen er urørt, bare navnet på tilbudet følger årstiden. Utenfor
+   kampanjeperioden, og hvis kalenderen ikke laster, står den faste
+   merkelappen under. */
+function lmeMerke(fast, sprak) {
+  var k = window.LME_KAMPANJE && window.LME_KAMPANJE.naa();
+  if (!k || !k.tilbud) return fast;
+  return sprak === "en" ? k.merkelapp.en : k.merkelapp.no;
+}
+
 window.LME_FUNNEL = {
 
   /* =================================================================
@@ -42,7 +53,7 @@ window.LME_FUNNEL = {
         visningFor: "349 kr"           // ordinær pris (overstrøket). "" skjuler
       },
 
-      merkelapp: "Grunnleggerpris",
+      merkelapp: lmeMerke("Grunnleggerpris", "no"),
       overskrift: "Ferdige Claude-maler for digitale produkter",
       underoverskrift:
         "LME Vault er samlingen min med tolv ferdige maler som gjør deg fra tom side " +
@@ -125,7 +136,7 @@ window.LME_FUNNEL = {
         visningFor: "$34"
       },
 
-      merkelapp: "Founding price",
+      merkelapp: lmeMerke("Founding price", "en"),
       overskrift: "Ready-made Claude templates for digital products",
       underoverskrift:
         "LME Vault is my collection of twelve ready-made templates that take you from " +
