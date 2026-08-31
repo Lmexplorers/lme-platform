@@ -13,6 +13,7 @@ import { grantCourseAccess } from "../_lib/course-access.js";
 import { sendCourseDeliveryMail } from "../_lib/course-mail.js";
 import { KEY_PREFIX } from "./kurs.js";
 import { lesNokkel, nokkelStemmer, innenforGrensen, lagreKjoper } from "../_lib/kurs-kvittering.js";
+import { leggTil as leggTilPaaListe } from "../_lib/medlem-liste.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -63,6 +64,14 @@ export async function onRequestPost(context) {
   } catch (e) { /* tilgangen er alt gitt, e-posten er en bonus */ }
 
   try { await lagreKjoper(env, slug, { epost, navn, token }); } catch (e) {}
+
+  /* Kjøperen havner også på selgerens EGEN e-postliste, ikke Renates. Det er
+     slik en skaper bygger videre: den som har kjøpt én gang, er den viktigste
+     å kunne snakke med igjen. */
+  try {
+    const eier = ((kurs.eier || "") + "").toLowerCase();
+    if (eier) await leggTilPaaListe(env, eier, { epost, navn, kilde: "kjøpte " + slug });
+  } catch (e) {}
 
   return json({ ok: true, lenke: lenke, kurs: navnPaaKurs });
 }

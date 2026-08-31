@@ -636,6 +636,35 @@ export const PLATTFORM_KURS = {
     {
       "module": null,
       "title": {
+        "no": "Selg kursene dine, og få kjøperne inn av seg selv",
+        "en": "Sell your courses, and let buyers in automatically"
+      },
+      "body": [
+        {
+          "no": "Når du setter pris på et kurs, legger du inn din egen betalingslenke. Du velger selv hvilken løsning du bruker: Stripe, PayPal, Klarna, Vipps eller noe annet. Pengene går rett til deg, LME er ikke mellomledd og blander det aldri med mine egne produkter.",
+          "en": "When you put a price on a course, you add your own payment link. You choose the provider yourself: Stripe, PayPal, Klarna, Vipps or something else. The money goes straight to you, LME is not a middleman and never mixes it with my own products."
+        },
+        {
+          "no": "Kursbygger gir deg samtidig en **takkeadresse**. Den limer du inn hos betalingsleverandøren din, der det står hvor kjøperen skal sendes etter betaling. Hos Stripe heter det \"etter betaling\", hos PayPal retur-URL, hos Vipps landingsside. Det gjør du én gang per kurs.",
+          "en": "The course builder also gives you a **thank-you address**. You paste it into your payment provider, where it says where the buyer should go after paying. In Stripe it is called \"after payment\", in PayPal the return URL, in Vipps the landing page. You do this once per course."
+        },
+        {
+          "no": "Da går resten av seg selv: kjøperen lander der, skriver e-posten sin, og får tilgangen med det samme, pluss en personlig lenke på e-post som varer for alltid. Du ser hver kjøper i Kursbygger, og kan fjerne en tilgang igjen hvis du trenger det.",
+          "en": "Then the rest runs by itself: the buyer lands there, enters their email, and gets access right away, plus a personal link by email that lasts forever. You see every buyer in the course builder, and can remove an access again if you need to."
+        },
+        {
+          "no": "Kjøperen havner også på din egen e-postliste, som du finner på /min-epost. Den er din, adskilt fra min, og du laster den ned og tar den med til det e-postverktøyet du selv velger.",
+          "en": "The buyer also lands on your own email list, which you find at /min-epost. It is yours, separate from mine, and you download it and take it to whichever email tool you choose."
+        }
+      ],
+      "tip": {
+        "no": "🌸 Test ditt eget kurs én gang med en liten sum til deg selv, så ser du nøyaktig hva kjøperen din opplever.",
+        "en": "🌸 Test your own course once with a small amount to yourself, so you see exactly what your buyer experiences."
+      }
+    },
+    {
+      "module": null,
+      "title": {
         "no": "Gruppebygger",
         "en": "The group builder"
       },
