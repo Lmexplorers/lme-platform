@@ -247,10 +247,56 @@
 
   .pausetittel { font-family: var(--font-head); font-weight: 700; font-size: 18px; margin: 4px 0 7px; }
 
-  /* Tomt visjonsbrett */
-  .tomtavle { text-align: center; padding: 26px 12px 8px; }
-  .tomtavle h3 { font-size: 19px; color: var(--cerise); margin-bottom: 6px; }
-  .tomtavle p { color: var(--grey); font-size: 15px; margin-bottom: 16px; }
+  /* Toppen av en fane: stempel og tittel til venstre, handlingsknappen
+     til høyre, slik at "legg til" alltid er der uten å fylle skjermen. */
+  .sidetopp { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 4px; }
+  .sidetopp > div { flex: 1; min-width: 0; }
+  .pill {
+    flex: 0 0 auto; border: 0; border-radius: 999px; background: var(--cerise); color: #fff;
+    font-weight: 700; font-size: 14px; padding: 11px 18px; cursor: pointer; white-space: nowrap;
+  }
+  .pill.stor { padding: 14px 24px; font-size: 15.5px; }
+
+  .tomtavle { text-align: center; padding: 30px 12px 10px; }
+  .tomtavle .ikon {
+    width: 62px; height: 62px; margin: 0 auto 16px; border-radius: 50%; background: #FBE6E9;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tomtavle .ikon svg { width: 30px; height: 30px; stroke: var(--cerise); fill: none; stroke-width: 1.8; }
+  .tomtavle h3 { font-size: 20px; color: var(--cerise); margin-bottom: 7px; }
+  .tomtavle p { color: var(--grey); font-size: 15px; margin-bottom: 18px; }
+
+  /* Ressurskort */
+  .ress { background: #fff; border: 1px solid var(--line); border-radius: 20px; overflow: hidden;
+          margin-bottom: 16px; box-shadow: 0 6px 20px rgba(26,26,26,0.04); }
+  .ress > img { display: block; width: 100%; height: 150px; object-fit: cover; background: #FBE6E9; }
+  .ress .inni { padding: 20px; }
+  .ress .merkelapp { font-size: 11.5px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase;
+                     color: var(--cerise); display: block; margin-bottom: 7px; }
+  .ress h3 { font-size: 19px; margin-bottom: 7px; }
+  .ress p { color: var(--grey); font-size: 15px; margin-bottom: 14px; }
+  .ress a.gaa {
+    display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; background: var(--cerise);
+    color: #fff; text-decoration: none; font-weight: 700; font-size: 14.5px; padding: 11px 20px;
+  }
+
+  /* Kontakt */
+  .kontakt { text-align: center; }
+  .kontakt .hjerte {
+    width: 76px; height: 76px; margin: 8px auto 18px; border-radius: 50%; background: #FBE6E9;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .kontakt .hjerte svg { width: 34px; height: 34px; stroke: var(--cerise); fill: none; stroke-width: 1.8; }
+  .kontakt h1 { margin: 4px 0 12px; }
+  .kontakt > p { color: var(--grey); font-size: 16px; margin-bottom: 20px; }
+  .kontakt .kort { text-align: center; }
+  .kontakt .konvolutt {
+    width: 56px; height: 56px; margin: 0 auto 14px; border-radius: 50%; background: #FDEFF2;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .kontakt .konvolutt svg { width: 25px; height: 25px; stroke: var(--cerise); fill: none; stroke-width: 1.8; }
+  .kontakt .adresse { font-family: var(--font-head); font-weight: 700; font-size: 17px; word-break: break-all; }
+  .kontakt .adresse a { text-decoration: none; color: var(--ink); }
 
   .varsel { background: #FFF8E6; color: #7a5e00; border-radius: 14px; padding: 12px 15px; font-size: 14.5px; margin-bottom: 16px; }
 
@@ -358,47 +404,83 @@
 
   <!-- ===== Visjonstavle ===== -->
   <section id="side-tavle" class="skjul">
-    <span class="stempel" data-no="DIN EGEN DRØMMEMAPPE" data-en="YOUR OWN DREAM FOLDER">DIN EGEN DRØMMEMAPPE</span>
-    <h1 data-no="Visjonstavla" data-en="Vision board">Visjonstavla</h1>
-    <p class="ingress" data-no="Det du holder på med, der du ser det. Skriv et kort, eller lim inn adressen til et bilde du er glad i." data-en="What you are working towards, where you can see it. Write a card, or paste the address of an image you love.">Det du holder på med, der du ser det. Skriv et kort, eller lim inn adressen til et bilde du er glad i.</p>
-    <div class="kort" style="margin-top:16px">
+    <div class="sidetopp">
+      <div>
+        <span class="stempel" data-no="DIN EGEN DRØMMEMAPPE" data-en="YOUR OWN DREAM FOLDER">DIN EGEN DRØMMEMAPPE</span>
+        <h1 data-no="Visjonstavla" data-en="Vision board">Visjonstavla</h1>
+      </div>
+      <button class="pill" id="vAapne" type="button" data-no="+ Legg til" data-en="+ Add">+ Legg til</button>
+    </div>
+    <p class="ingress" data-no="Se innom her hver dag. Legg inn et bilde, en setning, det du vil at året ditt skal se ut som. Gjør bildet så tydelig at hodet ditt begynner å tro på det." data-en="Look in here every day. Add an image, a sentence, what you want your year to look like. Make the picture clear enough that your mind starts to believe it.">Se innom her hver dag. Legg inn et bilde, en setning, det du vil at året ditt skal se ut som. Gjør bildet så tydelig at hodet ditt begynner å tro på det.</p>
+
+    <div class="kort skjul" id="vSkjema" style="margin-top:16px">
       <div class="rad" style="margin-bottom:9px">
         <input type="text" id="vTekst" maxlength="300" data-ph-no="Hva ser du for deg?" data-ph-en="What do you picture?">
       </div>
       <div class="rad">
         <input type="text" id="vBilde" maxlength="600" data-ph-no="Bildeadresse (valgfritt, https)" data-ph-en="Image address (optional, https)">
-        <button id="vLegg" type="button" data-no="Legg til" data-en="Add">Legg til</button>
+        <button id="vLegg" type="button" data-no="Lagre" data-en="Save">Lagre</button>
       </div>
     </div>
-    <div class="tavle" id="vListe"></div>
+
+    <div class="tavle" id="vListe" style="margin-top:16px"></div>
+
     <div class="tomtavle skjul" id="vTomt">
+      <div class="ikon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m4 17 5-5 4 4 3-2 4 4"/></svg></div>
       <h3 data-no="Drømmen din begynner her ✨" data-en="Your dream starts here ✨">Drømmen din begynner her ✨</h3>
-      <p data-no="Ingenting her ennå. Skriv det første kortet ditt, eller lim inn et bilde du blir glad av." data-en="Nothing here yet. Write your first card, or paste an image that makes you happy.">Ingenting her ennå. Skriv det første kortet ditt, eller lim inn et bilde du blir glad av.</p>
+      <p data-no="Ingenting her ennå. Lag det første kortet ditt." data-en="Nothing here yet. Make your first card.">Ingenting her ennå. Lag det første kortet ditt.</p>
+      <button class="pill stor" id="vForste" type="button" data-no="+ Lag det første kortet" data-en="+ Make your first card">+ Lag det første kortet</button>
     </div>
   </section>
 
   <!-- ===== Seire ===== -->
   <section id="side-seire" class="skjul">
-    <h1 data-no="Seirene dine" data-en="Your wins">Seirene dine</h1>
-    <p class="ingress" data-no="Skriv dem ned mens de skjer, også de små. Om tre måneder er det disse som viser deg at noe faktisk har flyttet seg." data-en="Write them down as they happen, the small ones too. In three months these are what show you that something actually moved.">Skriv dem ned mens de skjer, også de små. Om tre måneder er det disse som viser deg at noe faktisk har flyttet seg.</p>
-    <div class="kort" style="margin-top:16px">
+    <div class="sidetopp">
+      <div>
+        <span class="stempel" data-no="SAML BEVISENE" data-en="COLLECT THE EVIDENCE">SAML BEVISENE</span>
+        <h1 data-no="Seirene dine" data-en="Your wins">Seirene dine</h1>
+      </div>
+      <button class="pill" id="sAapne" type="button" data-no="+ Skriv" data-en="+ Log">+ Skriv</button>
+    </div>
+    <p class="ingress" data-no="Når du begynner å gjøre deg tilgjengelig for det du vil ha, skjer det ting du ikke hadde regnet med. Ikke la dem gå fra deg, skriv dem ned her mens de skjer." data-en="When you start making yourself available for what you want, things happen that you did not expect. Do not let them slip past, write them down here as they happen.">Når du begynner å gjøre deg tilgjengelig for det du vil ha, skjer det ting du ikke hadde regnet med. Ikke la dem gå fra deg, skriv dem ned her mens de skjer.</p>
+
+    <div class="kort skjul" id="sSkjema" style="margin-top:16px">
       <div class="rad">
         <input type="text" id="sTekst" maxlength="500" data-ph-no="Hva gikk bra i dag?" data-ph-en="What went well today?">
         <button id="sLegg" type="button" data-no="Lagre" data-en="Save">Lagre</button>
       </div>
     </div>
-    <div class="kort" id="sKort"><div id="sListe"></div></div>
-    <p class="tomt skjul" id="sTomt" data-no="Ingen seire skrevet ned ennå." data-en="No wins written down yet.">Ingen seire skrevet ned ennå.</p>
+
+    <div class="kort skjul" id="sKort" style="margin-top:16px"><div id="sListe"></div></div>
+
+    <div class="tomtavle skjul" id="sTomt">
+      <div class="ikon"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.6-7-9.4A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.6C19 15.4 12 20 12 20z"/></svg></div>
+      <h3 data-no="Det skjer alt noe ✨" data-en="Something is already happening ✨">Det skjer alt noe ✨</h3>
+      <p data-no="Du har bare ikke skrevet det ned ennå. Begynn å legge merke til det, så ser du mer." data-en="You just have not written it down yet. Start noticing, and you will see more.">Du har bare ikke skrevet det ned ennå. Begynn å legge merke til det, så ser du mer.</p>
+      <button class="pill stor" id="sForste" type="button" data-no="+ Skriv den første seieren" data-en="+ Log your first win">+ Skriv den første seieren</button>
+    </div>
   </section>
 
   <!-- ===== Mer ===== -->
   <section id="side-mer" class="skjul">
     <h1 data-no="Mer" data-en="More">Mer</h1>
     <p class="ingress" data-no="Verktøyene og stedene i LME som hører sammen med det du jobber med nå." data-en="The tools and places in LME that belong with what you are working on now.">Verktøyene og stedene i LME som hører sammen med det du jobber med nå.</p>
-    <div class="kort" style="margin-top:16px">
-      <ul class="liste" id="merListe"></ul>
+    <div id="merListe" style="margin-top:18px"></div>
+  </section>
+
+  <section id="side-kontakt" class="skjul kontakt">
+    <div class="hjerte"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.6-7-9.4A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.6C19 15.4 12 20 12 20z"/></svg></div>
+    <span class="stempel" data-no="JEG ER HER FOR DEG" data-en="I AM HERE FOR YOU">JEG ER HER FOR DEG</span>
+    <h1 data-no="Ta kontakt" data-en="Get in touch">Ta kontakt</h1>
+    <p data-no="Sitter du fast, eller har du noe du vil fortelle, så vil jeg gjerne høre det. Send meg en e-post, så svarer jeg deg selv." data-en="If you are stuck, or you have something you want to tell me, I would love to hear it. Send me an email, and I will answer you myself.">Sitter du fast, eller har du noe du vil fortelle, så vil jeg gjerne høre det. Send meg en e-post, så svarer jeg deg selv.</p>
+    <div class="kort">
+      <div class="konvolutt"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div>
+      <p style="color:var(--grey);font-size:15px;margin-bottom:6px" data-no="Send meg en e-post på" data-en="Send me an email at">Send meg en e-post på</p>
+      <p class="adresse"><a href="mailto:support@lmexplorers.com">support@lmexplorers.com</a></p>
+      <p style="color:var(--grey);font-size:15px;margin-top:12px" data-no="Enten det er et spørsmål, en seier du vil dele, eller bare en hei." data-en="Whether it is a question, a win you want to share, or just a hello.">Enten det er et spørsmål, en seier du vil dele, eller bare en hei.</p>
     </div>
   </section>
+
 </main>
 
 <div class="bunnstang skjul" id="bunnstang">
@@ -422,6 +504,10 @@
   <button type="button" data-side="mer">
     <svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M3 12h18M12 8v13M12 8s-1-4-4-4a2.5 2.5 0 0 0 0 5M12 8s1-4 4-4a2.5 2.5 0 0 1 0 5"/></svg>
     <span data-no="Mer" data-en="More">Mer</span>
+  </button>
+  <button type="button" data-side="kontakt">
+    <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+    <span data-no="Kontakt" data-en="Contact">Kontakt</span>
   </button>
 </nav>
 
@@ -817,8 +903,22 @@
       f.appendChild(x);
       v.appendChild(f);
     });
-    document.getElementById("vTomt").classList.toggle("skjul", (F.visjon || []).length > 0);
+    var tomt = (F.visjon || []).length === 0;
+    document.getElementById("vTomt").classList.toggle("skjul", !tomt);
+    // Er brettet tomt, holder den store knappen i tomtilstanden, og da skal
+    // ikke skjemaet stå åpent av seg selv.
+    if (tomt) document.getElementById("vSkjema").classList.add("skjul");
   }
+  function visSkjema(id, felt) {
+    document.getElementById(id).classList.remove("skjul");
+    var f = document.getElementById(felt);
+    if (f) f.focus();
+  }
+  document.getElementById("vAapne").onclick = function () { visSkjema("vSkjema", "vTekst"); };
+  document.getElementById("vForste").onclick = function () { visSkjema("vSkjema", "vTekst"); };
+  document.getElementById("sAapne").onclick = function () { visSkjema("sSkjema", "sTekst"); };
+  document.getElementById("sForste").onclick = function () { visSkjema("sSkjema", "sTekst"); };
+
   document.getElementById("vLegg").onclick = function () {
     var t = document.getElementById("vTekst"), b = document.getElementById("vBilde");
     var tekst = t.value.trim(), bilde = b.value.trim();
@@ -854,6 +954,7 @@
     var tomt = (F.seire || []).length === 0;
     document.getElementById("sTomt").classList.toggle("skjul", !tomt);
     document.getElementById("sKort").classList.toggle("skjul", tomt);
+    if (tomt) document.getElementById("sSkjema").classList.add("skjul");
   }
   document.getElementById("sLegg").onclick = function () {
     var i = document.getElementById("sTekst");
@@ -866,41 +967,80 @@
   document.getElementById("sTekst").addEventListener("keydown", function (e) {
     if (e.key === "Enter") document.getElementById("sLegg").click();
   });
+  ["vTekst", "vBilde"].forEach(function (id) {
+    document.getElementById(id).addEventListener("keydown", function (e) {
+      if (e.key === "Enter") document.getElementById("vLegg").click();
+    });
+  });
 
   /* ---------- mer ---------- */
+  /* Ressurskort. `merke` er den lille etiketten øverst, `bilde` og `lyd` er
+     valgfrie. Legger Renate inn en lydfil her, dukker spilleren opp av seg
+     selv, akkurat som pausen inne i en dag. */
   var MER = [
-    { url: "/kursbygger", no: ["Kursbygger", "Lag kurset eller minikurset ditt"], en: ["Course builder", "Build your course or mini course"] },
-    { url: "/min-epost", no: ["E-postlista mi", "Samle adressene dine, adskilt fra alt annet"], en: ["My email list", "Collect your own addresses, kept separate"] },
-    { url: "/vault", no: ["LME Vault", "Ferdige Claude-maler for digitale produkter"], en: ["LME Vault", "Ready-made Claude templates for digital products"] },
-    { url: "/min-reise", no: ["Min reise", "Hvor du er i LME akkurat nå"], en: ["My journey", "Where you are in LME right now"] },
-    { url: "/apper", no: ["Alle appene", "Se hvert verktøy og hva det krever"], en: ["All the apps", "See every tool and what it needs"] },
-    { url: "/help/contact", no: ["Spør meg", "Sitter du fast, så svar meg her"], en: ["Ask me", "If you are stuck, reply to me here"] },
+    { url: "/vault", merke: { no: "BONUS", en: "BONUS" },
+      tittel: { no: "LME Vault", en: "LME Vault" },
+      tekst: { no: "Tolv ferdige Claude-maler som tar deg fra tom side til ferdig digitalt produkt. Den raskeste veien fra ideen du skrev ned på dag 5 til noe som finnes.",
+               en: "Twelve ready-made Claude templates that take you from a blank page to a finished digital product. The fastest way from the idea you wrote on day 5 to something that exists." },
+      knapp: { no: "Se hvelvet", en: "Open the vault" } },
+    { url: "/kursbygger",
+      tittel: { no: "Kursbygger", en: "Course builder" },
+      tekst: { no: "Bygg kurset eller minikurset ditt uten å kunne kode, og sett din egen pris og betalingsløsning.",
+               en: "Build your course or mini course without writing code, and set your own price and payment method." },
+      knapp: { no: "Bygg kurset ditt", en: "Build your course" } },
+    { url: "/min-epost",
+      tittel: { no: "E-postlista mi", en: "My email list" },
+      tekst: { no: "Adressene du samler selv, adskilt fra alt annet, klare til å tas med til ditt eget e-postverktøy.",
+               en: "The addresses you collect yourself, kept separate from everything else, ready to take to your own email tool." },
+      knapp: { no: "Se lista", en: "See the list" } },
+    { url: "/min-reise",
+      tittel: { no: "Min reise", en: "My journey" },
+      tekst: { no: "Hvor du er i LME akkurat nå, hva du har gjort, og hva som er neste lille steg.",
+               en: "Where you are in LME right now, what you have done, and what the next small step is." },
+      knapp: { no: "Se reisen din", en: "See your journey" } },
+    { url: "/apper",
+      tittel: { no: "Alle appene", en: "All the apps" },
+      tekst: { no: "Hvert verktøy i LME, med hva det krever: gratis, med i planen, eller kjøpt for seg.",
+               en: "Every tool in LME, with what it needs: free, included in your plan, or bought on its own." },
+      knapp: { no: "Se appene", en: "See the apps" } },
   ];
   function tegnMer() {
-    var ul = document.getElementById("merListe");
-    ul.innerHTML = "";
+    var boks = document.getElementById("merListe");
+    boks.innerHTML = "";
     MER.forEach(function (m) {
-      var li = document.createElement("li");
-      var a = document.createElement("a");
-      a.href = m.url;
-      a.className = "aapne";
-      a.style.textDecoration = "none";
-      a.innerHTML = '<span class="prikk">›</span><span class="navn"></span>';
-      var n = a.querySelector(".navn");
-      var tekst = en() ? m.en : m.no;
-      n.innerHTML = "";
-      var b = document.createElement("b"); b.textContent = tekst[0];
-      var p = document.createElement("div");
-      p.style.cssText = "font-size:13px;color:var(--grey)";
-      p.textContent = tekst[1];
-      n.appendChild(b); n.appendChild(p);
-      li.appendChild(a);
-      ul.appendChild(li);
+      var art = document.createElement("article");
+      art.className = "ress";
+      if (m.bilde) {
+        var img = document.createElement("img");
+        img.src = m.bilde; img.alt = ""; img.onerror = function () { img.remove(); };
+        art.appendChild(img);
+      }
+      var inni = document.createElement("div");
+      inni.className = "inni";
+      if (m.merke) {
+        var mk = document.createElement("span");
+        mk.className = "merkelapp"; mk.textContent = T(m.merke);
+        inni.appendChild(mk);
+      }
+      var h = document.createElement("h3"); h.textContent = T(m.tittel); inni.appendChild(h);
+      var pp = document.createElement("p"); pp.textContent = T(m.tekst); inni.appendChild(pp);
+      if (m.lyd) {
+        var lb = document.createElement("div");
+        lb.className = "lyd"; lb.style.marginBottom = "14px";
+        var a = document.createElement("audio"); a.controls = true; a.preload = "none"; a.src = m.lyd;
+        lb.appendChild(a); inni.appendChild(lb);
+      }
+      var lenke = document.createElement("a");
+      lenke.className = "gaa"; lenke.href = m.url;
+      lenke.textContent = T(m.knapp) + " →";
+      inni.appendChild(lenke);
+      art.appendChild(inni);
+      boks.appendChild(art);
     });
   }
 
   /* ---------- sidebytte ---------- */
-  var SIDER = ["hjem", "dag", "tavle", "seire", "mer"];
+  var SIDER = ["hjem", "dag", "tavle", "seire", "mer", "kontakt"];
   function byttSide(navn) {
     SIDER.forEach(function (s) {
       document.getElementById("side-" + s).classList.toggle("skjul", s !== navn);
