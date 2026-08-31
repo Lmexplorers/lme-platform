@@ -60,12 +60,22 @@ export const CLAUDE_PAYMENT_LINK_LANG = {
   "plink_1TwFJZLax7B8uQzqqjnXtmbR": "no", // Videre med Claude, mersalg (NOK)
   "plink_1TwFJYLax7B8uQzqO1gObkcB": "en", // Get started with Claude (USD)
   "plink_1TwFJbLax7B8uQzqB3CNr2yR": "en", // Next Level with Claude, upsell (USD)
+  // Kampanjelenker for hovedkurset, opprettet 31. august 2026. Mersalget
+  // har ingen egen kampanjepris, det er alt et engangstilbud i kassen.
+  "plink_1UAQWqLax7B8uQzq0pw58VLA": "no", // Black Friday (NOK)
+  "plink_1UAQWsLax7B8uQzq2GsLX3Hq": "en", // Black Friday (USD)
+  "plink_1UAQXJLax7B8uQzqmLel7KXw": "no", // Juletilbud (NOK)
+  "plink_1UAQXKLax7B8uQzq4VzNcMka": "en", // Juletilbud (USD)
 };
 // Bare hovedkurset trigger takke- og oppfølgingsmail. Mersalget sender ingen
 // egen takkemail (kjøperen har alt fått den fra hovedkjøpet).
 export const CLAUDE_MAIN_LINK_LANG = {
   "plink_1TwFJWLax7B8uQzqsBQjTBxl": "no", // Kom i gang med Claude (NOK)
   "plink_1TwFJYLax7B8uQzqO1gObkcB": "en", // Get started with Claude (USD)
+  "plink_1UAQWqLax7B8uQzq0pw58VLA": "no", // Black Friday (NOK)
+  "plink_1UAQWsLax7B8uQzq2GsLX3Hq": "en", // Black Friday (USD)
+  "plink_1UAQXJLax7B8uQzqmLel7KXw": "no", // Juletilbud (NOK)
+  "plink_1UAQXKLax7B8uQzq4VzNcMka": "en", // Juletilbud (USD)
 };
 
 /* ---- LME Autopilot-abonnement (Start/Proff/VIP), solgt fra /oppgrader ----
@@ -303,6 +313,35 @@ export const COURSE_PAYMENT_LINKS = {
   "plink_1UAOexLax7B8uQzqeiguUsj5": { courseId: "ai-assistent-workshop", tier: "launch", lang: "en" },
   "plink_1UAOezLax7B8uQzqD3KambG9": { courseId: "ai-assistent-workshop", tier: "full",   lang: "no" },
   "plink_1UAOf1Lax7B8uQzqPEHcuJ6Q": { courseId: "ai-assistent-workshop", tier: "full",   lang: "en" },
+  /* ---- Kampanjelenker (ekte rabatt) --------------------------------
+     Opprettet 31. august 2026. Black Friday-uken (23.-30. november) og
+     julen (desember) har egne priser og derfor egne betalingslenker.
+     Periodene styres av js/kampanjer.js på salgssidene; her listes
+     lenkene bare slik at et kjøp gir tilgang, akkurat som lanserings- og
+     fullprislenkene over. `tier` er kampanjens navn, og brukes ikke til
+     annet enn å kunne se hva som ble solgt når. */
+  // Black Friday 2026
+  "plink_1UAQWTLax7B8uQzqWSSgW60k": { courseId: "youtube", tier: "blackfriday", lang: "no" },
+  "plink_1UAQWYLax7B8uQzqCii5LM7e": { courseId: "youtube", tier: "blackfriday", lang: "en" },
+  "plink_1UAQWaLax7B8uQzqxPm8BPhP": { courseId: "youtube-videre", tier: "blackfriday", lang: "no" },
+  "plink_1UAQWcLax7B8uQzqEnFm5609": { courseId: "youtube-videre", tier: "blackfriday", lang: "en" },
+  "plink_1UAQWeLax7B8uQzqgMYpSNSy": { courseId: "epostliste", tier: "blackfriday", lang: "no" },
+  "plink_1UAQWgLax7B8uQzqg4oaB9yt": { courseId: "epostliste", tier: "blackfriday", lang: "en" },
+  "plink_1UAQWjLax7B8uQzqfF0ToVd4": { courseId: "ki-pedagoger", tier: "blackfriday", lang: "no" },
+  "plink_1UAQWlLax7B8uQzqacKibjm9": { courseId: "ki-pedagoger", tier: "blackfriday", lang: "en" },
+  "plink_1UAQWmLax7B8uQzqBvG7VM0i": { courseId: "vault", tier: "blackfriday", lang: "no" },
+  "plink_1UAQWoLax7B8uQzqMHORNiMh": { courseId: "vault", tier: "blackfriday", lang: "en" },
+  // Juletilbud 2026
+  "plink_1UAQWyLax7B8uQzqFGqmWeoa": { courseId: "youtube", tier: "jul", lang: "no" },
+  "plink_1UAQX0Lax7B8uQzqIGzvUWq6": { courseId: "youtube", tier: "jul", lang: "en" },
+  "plink_1UAQX2Lax7B8uQzqPdS0HXnr": { courseId: "youtube-videre", tier: "jul", lang: "no" },
+  "plink_1UAQX4Lax7B8uQzqqGOf6z3K": { courseId: "youtube-videre", tier: "jul", lang: "en" },
+  "plink_1UAQX6Lax7B8uQzqSq60bPKZ": { courseId: "epostliste", tier: "jul", lang: "no" },
+  "plink_1UAQX8Lax7B8uQzq66sBPssO": { courseId: "epostliste", tier: "jul", lang: "en" },
+  "plink_1UAQXALax7B8uQzqzQIr63SG": { courseId: "ki-pedagoger", tier: "jul", lang: "no" },
+  "plink_1UAQXDLax7B8uQzqlQPyM1Nl": { courseId: "ki-pedagoger", tier: "jul", lang: "en" },
+  "plink_1UAQXELax7B8uQzqD3stYTJT": { courseId: "vault", tier: "jul", lang: "no" },
+  "plink_1UAQXGLax7B8uQzqK6bJjIhV": { courseId: "vault", tier: "jul", lang: "en" },
 };
 
 export const COURSE_INFO = {

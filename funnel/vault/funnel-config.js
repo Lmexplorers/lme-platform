@@ -31,6 +31,27 @@ function lmeMerke(fast, sprak) {
   return sprak === "en" ? k.merkelapp.en : k.merkelapp.no;
 }
 
+/* Ekte rabatt i Black Friday-uken og i julen. Egne priser og egne
+   Stripe-lenker, opprettet 31. august 2026 og sjekket mot Stripe.
+   Utenfor de to periodene gjelder den vanlige tilbudsprisen under. */
+var LME_RABATTER = {
+  blackfriday: {
+    no: { url: "https://buy.stripe.com/bJe14o3JPgDR9idcxx9R71d", belop: 119 },
+    en: { url: "https://buy.stripe.com/7sYaEY0xD3R5dytbtt9R71e", belop: 12 },
+  },
+  jul: {
+    no: { url: "https://buy.stripe.com/7sYfZi0xDcnB1PLapp9R71p", belop: 149 },
+    en: { url: "https://buy.stripe.com/bJefZi4NT2N10LH6999R71q", belop: 14 },
+  },
+};
+function lmeRabatt(sprak) {
+  return (window.LME_KAMPANJE && window.LME_KAMPANJE.rabattFor)
+    ? window.LME_KAMPANJE.rabattFor(LME_RABATTER, sprak)
+    : null;
+}
+function lmeLenke(fast, sprak) { var r = lmeRabatt(sprak); return r ? r.url : fast; }
+function lmeBelop(fast, sprak) { var r = lmeRabatt(sprak); return r ? r.belop : fast; }
+
 window.LME_FUNNEL = {
 
   /* =================================================================
@@ -44,11 +65,11 @@ window.LME_FUNNEL = {
     },
 
     salg: {
-      checkoutUrl: "https://buy.stripe.com/9B6eVebchfzN2TPdBB9R70X",   // Stripe: LME Vault 199 kr (tom = hopp rett til takkesiden)
+      checkoutUrl: lmeLenke("https://buy.stripe.com/9B6eVebchfzN2TPdBB9R70X", "no"),   // Stripe: LME Vault 199 kr
       etterKjop: "takk.html",
 
       pris: {
-        belop: 199,
+        belop: lmeBelop(199, "no"),
         valuta: "kr",
         visningFor: "349 kr"           // ordinær pris (overstrøket). "" skjuler
       },
@@ -127,11 +148,11 @@ window.LME_FUNNEL = {
     },
 
     salg: {
-      checkoutUrl: "https://buy.stripe.com/00wbJ22FL87l3XT0OP9R70Y",   // Stripe: LME Vault $19
+      checkoutUrl: lmeLenke("https://buy.stripe.com/00wbJ22FL87l3XT0OP9R70Y", "en"),   // Stripe: LME Vault $19
       etterKjop: "takk.html",
 
       pris: {
-        belop: 19,
+        belop: lmeBelop(19, "en"),
         valuta: "$",
         visningFor: "$34"
       },

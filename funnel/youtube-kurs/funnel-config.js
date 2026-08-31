@@ -36,17 +36,40 @@
   };
   var launch = k.tilbud;
 
+  /* Ekte rabatt i Black Friday-uken og i julen. Egne priser og egne
+     Stripe-lenker, opprettet 31. august 2026 og sjekket mot Stripe.
+     Utenfor disse to periodene gjelder den vanlige tilbudsprisen. */
+  var RABATTER = {
+    blackfriday: {
+      no: { url: "https://buy.stripe.com/3cI7sMgwB4V9dyt7dd9R715", belop: 297 },
+      en: { url: "https://buy.stripe.com/28E9AU2FL5Zd9idcxx9R716", belop: 29 },
+    },
+    jul: {
+      no: { url: "https://buy.stripe.com/28E00ka8d9bpamh0OP9R71h", belop: 373 },
+      en: { url: "https://buy.stripe.com/4gM9AU1BHfzNgKF8hh9R71i", belop: 37 },
+    },
+  };
+
   var LINKS = {
     no: { launch: "https://buy.stripe.com/5kQbJ24NTevJgKFgNN9R63l", full: "https://buy.stripe.com/4gMbJ26W13R5cup9ll9R63n" },
     en: { launch: "https://buy.stripe.com/4gMbJ2bchcnB0LHdBB9R63m", full: "https://buy.stripe.com/aFadRabchfzNdyt6999R63o" },
   };
 
+  function rabatt(lang) {
+    return window.LME_KAMPANJE && window.LME_KAMPANJE.rabattFor
+      ? window.LME_KAMPANJE.rabattFor(RABATTER, lang)
+      : null;
+  }
   function priceFor(lang) {
+    var r = rabatt(lang);
+    if (r) return { belop: r.belop, valuta: lang === "en" ? "$" : "kr", visningFor: lang === "en" ? "$150" : "1497 kr" };
     return launch
       ? { belop: lang === "en" ? 50 : 497, valuta: lang === "en" ? "$" : "kr", visningFor: lang === "en" ? "$150" : "1497 kr" }
       : { belop: lang === "en" ? 150 : 1497, valuta: lang === "en" ? "$" : "kr", visningFor: "" };
   }
   function checkoutFor(lang) {
+    var r = rabatt(lang);
+    if (r) return r.url;
     return launch ? LINKS[lang].launch : LINKS[lang].full;
   }
   function merkelapp(lang) {
