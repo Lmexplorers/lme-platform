@@ -192,6 +192,7 @@
     <p class="under" data-no="Alle prisene er faste og inkluderer arbeidet mitt. Du betaler først når du har sagt ja til tilbudet du får tilbake." data-en="All prices are fixed and include my work. You pay only after you have said yes to the quote you get back.">Alle prisene er faste og inkluderer arbeidet mitt. Du betaler først når du har sagt ja til tilbudet du får tilbake.</p>
     <div class="pakker" id="pakkeliste"></div>
     <div class="notis" id="autopilot-notis"></div>
+    <div class="notis" id="kreditt-notis"></div>
   </section>
 
   <section class="bolk">
@@ -238,6 +239,10 @@
     <div class="sporsmal">
       <h3 data-no="Kan jeg lage dette selv i stedet?" data-en="Can I make this myself instead?">Kan jeg lage dette selv i stedet?</h3>
       <p data-no="Ja, og det er ofte det rimeligste. Verktøyene ligger inne i LME Studio, og LME Autopilot lager innholdet for deg fra 199 kr i måneden. Pakkene her er for deg som heller vil kjøpe tiden enn å lære verktøyet." data-en="Yes, and that is often the cheapest route. The tools are inside LME Studio, and LME Autopilot makes the content for you from 199 kr a month. The packages here are for you who would rather buy the time than learn the tool.">Ja, og det er ofte det rimeligste. Verktøyene ligger inne i LME Studio, og LME Autopilot lager innholdet for deg fra 199 kr i måneden. Pakkene her er for deg som heller vil kjøpe tiden enn å lære verktøyet.</p>
+    </div>
+    <div class="sporsmal">
+      <h3 data-no="Må jeg kjøpe kreditt i tillegg?" data-en="Do I have to buy credit as well?">Må jeg kjøpe kreditt i tillegg?</h3>
+      <p data-no="Ikke for pakken min, den er ferdig betalt med prisen du ser. Etterpå, når du lager innhold selv, følger AI-bildene med i Autopilot-planen din. Video gjør det ikke, den kjøper du som kreditt fra 99 kr for tre videoer. Grunnen er at video koster mye å lage, og da blir det riktigere at hver kjøper betaler for sitt eget forbruk enn at prisen økes for alle." data-en="Not for my package, that is fully paid with the price you see. Afterwards, when you make content yourself, the AI images are included in your Autopilot plan. Video is not, and is bought as credit from 99 kr for three videos. The reason is that video is expensive to make, so it is fairer that each buyer pays for their own use than to raise the price for everyone.">Ikke for pakken min, den er ferdig betalt med prisen du ser. Etterpå, når du lager innhold selv, følger AI-bildene med i Autopilot-planen din. Video gjør det ikke, den kjøper du som kreditt fra 99 kr for tre videoer. Grunnen er at video koster mye å lage, og da blir det riktigere at hver kjøper betaler for sitt eget forbruk enn at prisen økes for alle.</p>
     </div>
     <div class="sporsmal">
       <h3 data-no="Hvordan betaler jeg?" data-en="How do I pay?">Hvordan betaler jeg?</h3>
@@ -294,7 +299,7 @@
 </div>
 
 <script type="module">
-  import { PAKKER, SKREDDERSYDD, AUTOPILOT_NOTE } from '/js/tjenester-pakker.js?v=1';
+  import { PAKKER, SKREDDERSYDD, AUTOPILOT_NOTE, KREDITT_NOTE } from '/js/tjenester-pakker.js?v=2';
 
   let sprak = (new URLSearchParams(location.search).get('lang') === 'en') ? 'en' : 'no';
 
@@ -357,6 +362,11 @@
     notis.setAttribute('data-no', '<strong>Om abonnementet:</strong> ' + AUTOPILOT_NOTE.no);
     notis.setAttribute('data-en', '<strong>About the subscription:</strong> ' + AUTOPILOT_NOTE.en);
     notis.innerHTML = '<strong>Om abonnementet:</strong> ' + AUTOPILOT_NOTE.no;
+
+    const kreditt = document.getElementById('kreditt-notis');
+    kreditt.setAttribute('data-no', KREDITT_NOTE.no.replace('Om bilder og video:', '<strong>Om bilder og video:</strong>'));
+    kreditt.setAttribute('data-en', KREDITT_NOTE.en.replace('About images and video:', '<strong>About images and video:</strong>'));
+    kreditt.innerHTML = KREDITT_NOTE.no.replace('Om bilder og video:', '<strong>Om bilder og video:</strong>');
 
     liste.querySelectorAll('.velg').forEach(knapp => {
       knapp.addEventListener('click', () => {

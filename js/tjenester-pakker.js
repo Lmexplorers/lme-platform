@@ -78,6 +78,7 @@ export const PAKKER = [
         "Ti ferdige klipp med henne, klare til å legges ut",
         "Karakteren lagret i LME Autopilot, så hun ser lik ut hver gang",
         "Oppskriften, så du kan lage flere klipp selv etterpå",
+        "Videokreditten for de ti klippene, den er med i prisen",
         "En runde med endringer på karakteren",
       ],
       en: [
@@ -85,6 +86,7 @@ export const PAKKER = [
         "Ten finished clips with her, ready to post",
         "The character saved in LME Autopilot, so she looks the same every time",
         "The recipe, so you can make more clips yourself afterwards",
+        "The video credit for those ten clips, included in the price",
         "One round of changes to the character",
       ],
     },
@@ -113,6 +115,7 @@ export const PAKKER = [
         "Tjue ferdige innlegg og reels, lagt i kø og klare til publisering",
         "Din tone og dine farger lagt inn, så alt ser ut som deg",
         "En time på video med meg, der jeg viser deg hvordan du kjører det videre selv",
+        "Alt settes opp på din egen konto, så innholdet er ditt fra første dag",
       ],
       en: [
         "LME Autopilot set up and connected to your accounts",
@@ -120,6 +123,7 @@ export const PAKKER = [
         "Twenty finished posts and reels, queued and ready to publish",
         "Your tone and your colours applied, so everything looks like you",
         "One hour on video with me, showing you how to run it yourself from there",
+        "Everything is set up on your own account, so the content is yours from day one",
       ],
     },
   },
@@ -147,6 +151,14 @@ export const SKREDDERSYDD = {
 export const AUTOPILOT_NOTE = {
   no: "LME Autopilot er appen som lager innholdet videre etterpå, og koster 199 kr, 549 kr eller 999 kr i måneden avhengig av hvor mye du lager. Abonnementet kommer i tillegg til pakkeprisen, og du kan si det opp når du vil.",
   en: "LME Autopilot is the app that keeps making the content afterwards, and costs 199, 549 or 999 kr a month depending on how much you make. The subscription comes in addition to the package price, and you can cancel it whenever you want.",
+};
+
+/* Bilder følger med i planen, video gjør det ikke. Dette er det folk
+   misforstår, og misforstår de det etter kjøp, er det for sent. Tallene
+   er de samme som i functions/_lib/plans.js og på /kjop-kreditt. */
+export const KREDITT_NOTE = {
+  no: "Om bilder og video: AI-bildene følger med i Autopilot-planen, 30, 100 eller 250 i måneden alt etter nivå. Video følger ikke med i noen plan, og kjøpes som videokreditt fra 99 kr for tre videoer. Det gjelder etter at pakken min er levert, når du lager innhold på egen hånd.",
+  en: "About images and video: the AI images are included in the Autopilot plan, 30, 100 or 250 a month depending on the level. Video is not included in any plan, and is bought as video credit from 99 kr for three videos. This applies after my package is delivered, when you make content on your own.",
 };
 
 export function pakkeMedId(id) {
