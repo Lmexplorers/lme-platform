@@ -6,7 +6,7 @@
      takk.html  → takkeside etter kjøp           (/workshop-takk)
 
    Selve workshopen ligger i Kursbygger (KV) og vises på
-   https://lmexplorers.com/kurs/ai-assistent-workshop
+   https://lmexplorers.com/academy/kurs?k=ai-assistent-workshop
    Innholdet er skrevet i functions/_lib/seed-ai-assistent-workshop-data.js
 
    Slik henger betalingen sammen:
@@ -153,7 +153,7 @@ window.LME_FUNNEL = {
         "Ansett den første assistenten i kveld, resten kan vente til i morgen"
       ],
       knapp: "Åpne workshopen",
-      knappLenke: "/kurs/ai-assistent-workshop",
+      knappLenke: "/academy/kurs?k=ai-assistent-workshop",
       sekundaerKnapp: "Til LME Studio",
       sekundaerLenke: "/academy",
       support: "Noe som ikke stemmer? Svar på e-posten, så ordner jeg det."
@@ -257,7 +257,7 @@ window.LME_FUNNEL = {
         "Hire the first assistant tonight, the rest can wait until tomorrow"
       ],
       knapp: "Open the workshop",
-      knappLenke: "/kurs/ai-assistent-workshop",
+      knappLenke: "/academy/kurs?k=ai-assistent-workshop",
       sekundaerKnapp: "To LME Studio",
       sekundaerLenke: "/academy",
       support: "Something not right? Just reply to the email and I will fix it."

@@ -1,0 +1,29 @@
+name: Sjekk lenker
+
+# Følger noen viktige adresser på lmexplorers.com og skriver ut hvor de
+# faktisk ender opp, med alle hopp underveis. Nyttig når en lenke "ikke
+# virker" og det er uklart om det er siden, en videresending eller noe annet.
+#
+# Startes manuelt fra Actions-fanen.
+
+on:
+  workflow_dispatch:
+    inputs:
+      adresser:
+        description: "Adresser å følge, atskilt med mellomrom"
+        required: false
+        default: "/kurs/ai-assistent-workshop /academy/kurs?k=ai-assistent-workshop /workshop /workshop-takk /kurs-import /oppdater-kurs"
+
+jobs:
+  sjekk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Følg adressene
+        run: |
+          for sti in ${{ inputs.adresser }}; do
+            url="https://lmexplorers.com$sti"
+            echo "=== $sti"
+            curl -sS -L -o /dev/null \
+              -w '   ender på: %{url_effective}\n   status: %{http_code}, antall hopp: %{num_redirects}\n' \
+              "$url" || echo "   FEIL: fikk ikke svar"
+          done

@@ -339,7 +339,7 @@ export const COURSE_INFO = {
       no: "Workshop: Ansett dine fem AI-assistenter",
       en: "Workshop: Hire your five AI assistants",
     },
-    url: "https://lmexplorers.com/kurs/ai-assistent-workshop",
+    url: "https://lmexplorers.com/academy/kurs?k=ai-assistent-workshop",
     cta: { no: "Åpne workshopen", en: "Open the workshop" },
   },
   "vault": {

@@ -19,7 +19,10 @@
 # serveres på den adressen uansett.
 /oppdater-kurs  /kurs-import  301
 /kurs  /academy/kurs.html  200
-/kurs/*  /academy/kurs.html  200
+# Kursnavnet sendes med som ?k=, ikke bare i stien. Uten dette forsvinner
+# navnet hvis adressen blir sendt videre underveis, og kurssiden viser lista
+# over alle kurs i stedet for kurset du ba om (Renate, 31. august 2026).
+/kurs/*  /academy/kurs.html?k=:splat  200
 /lv/*  /academy/laeringsverksted-ressurs.html  200
 /creative-studio  /creative-academy  301
 /academy/intro  /kurs/montessori-kom-i-gang  301
