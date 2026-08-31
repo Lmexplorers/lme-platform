@@ -176,6 +176,17 @@
       <p class="hint" data-no="Pengene går rett til deg, hos den leverandøren du selv velger. LME tar ikke imot betaling på dine vegne og blander det aldri med Renates egne produkter."
          data-en="The money goes straight to you, with the provider you choose yourself. LME does not take payments on your behalf and never mixes it with Renate's own products.">Pengene går rett til deg, hos den leverandøren du selv velger. LME tar ikke imot betaling på dine vegne og blander det aldri med Renates egne produkter.</p>
 
+      <div id="kvitteringBoks" style="display:none;background:#FFF4D6;border-radius:18px;padding:16px 18px;margin:6px 0 14px">
+        <b style="display:block;font-size:14.5px;margin-bottom:6px" data-no="Én ting til, så går alt av seg selv" data-en="One more thing, then it all runs by itself">Én ting til, så går alt av seg selv</b>
+        <p class="hint" style="margin:0 0 10px" data-no="Lim denne adressen inn hos betalingsleverandøren din, der det står hvor kjøperen skal sendes etter betaling. Da får kjøperen tilgang med det samme, og en lenke på e-post, uten at du gjør noe."
+           data-en="Paste this address into your payment provider, where it asks where the buyer should go after paying. Then the buyer gets access right away, and a link by email, without you doing anything.">Lim denne adressen inn hos betalingsleverandøren din, der det står hvor kjøperen skal sendes etter betaling. Da får kjøperen tilgang med det samme, og en lenke på e-post, uten at du gjør noe.</p>
+        <input type="text" id="kvitteringAdresse" readonly style="font-size:13.5px;background:#fff">
+        <button type="button" id="kopierKvittering" class="btn-secondary" style="margin-top:6px" data-no="Kopier adressen" data-en="Copy the address">Kopier adressen</button>
+        <p class="hint" style="margin:10px 0 0" data-no="Stripe: Etter betaling → Send til en side. PayPal: Retur-URL. Vipps: Landingsside etter betaling. Klarna: Bekreftelsesside."
+           data-en="Stripe: After payment → Redirect to a page. PayPal: Return URL. Vipps: Landing page after payment. Klarna: Confirmation page.">Stripe: Etter betaling → Send til en side. PayPal: Retur-URL. Vipps: Landingsside etter betaling. Klarna: Bekreftelsesside.</p>
+        <div id="kjoperListe" style="margin-top:12px"></div>
+      </div>
+
       <label class="f" for="f-learn" data-no="Hva du lærer (ett punkt per linje)" data-en="What you'll learn (one point per line)">Hva du lærer (ett punkt per linje)</label>
       <textarea id="f-learn"></textarea>
       <div class="en-field"><textarea id="f-learn-en" data-ph-no="Engelske punkter, ett per linje" data-ph-en="English points, one per line"></textarea></div>
@@ -438,6 +449,7 @@ function loadCourse(c, isNew) {
   q('f-pris-en').value = (c.pris && c.pris.en) || '';
   q('f-betalingslenke').value = (c.betalingslenke && c.betalingslenke.no) || '';
   q('f-betalingslenke-en').value = (c.betalingslenke && c.betalingslenke.en) || '';
+  visKvittering(c.slug || '');
   q('f-learn').value = (c.learn || []).map(function (x) { return x.no; }).join('\n');
   q('f-learn-en').value = (c.learn || []).map(function (x) { return x.en || ''; }).join('\n');
   document.querySelectorAll('[name="f-size"]').forEach(function (r) { r.checked = r.value === c.size; });
@@ -919,6 +931,67 @@ function medPassord(data) {
   return data;
 }
 
+/* Takkeadressen og kjøperlista for et kurs som selges. Hentes bare for kurs
+   som er lagret og har en betalingslenke, og bare til den som eier kurset. */
+function visKvittering(slug) {
+  var boks = document.getElementById('kvitteringBoks');
+  if (!boks) return;
+  var harLenke = (q('f-betalingslenke').value || '').trim().indexOf('https://') === 0;
+  if (!slug || !harLenke) { boks.style.display = 'none'; return; }
+  fetch('/api/kurs-kvittering?slug=' + encodeURIComponent(slug), { credentials: 'same-origin' })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (!d || !d.ok) { boks.style.display = 'none'; return; }
+      boks.style.display = '';
+      q('kvitteringAdresse').value = d.adresse;
+      var liste = document.getElementById('kjoperListe');
+      liste.innerHTML = '';
+      if (!d.kjopere || !d.kjopere.length) {
+        var p = el('p', 'hint', L('Ingen kjøpere ennå. De dukker opp her etter hvert.',
+                                  'No buyers yet. They will show up here as they come.'));
+        p.style.margin = '0';
+        liste.appendChild(p);
+        return;
+      }
+      var tittel = el('b', null, L('Kjøpere (' + d.kjopere.length + ')', 'Buyers (' + d.kjopere.length + ')'));
+      tittel.style.cssText = 'display:block;font-size:14px;margin-bottom:6px';
+      liste.appendChild(tittel);
+      d.kjopere.slice(0, 20).forEach(function (k) {
+        var rad = el('div', null);
+        rad.style.cssText = 'display:flex;align-items:center;gap:10px;font-size:13.5px;background:#fff;border-radius:12px;padding:8px 12px;margin-bottom:6px';
+        var e = el('span', null, k.epost);
+        e.style.flex = '1';
+        var fjern = el('button', null, L('Fjern tilgang', 'Remove access'));
+        fjern.type = 'button';
+        fjern.style.cssText = 'border:none;background:none;color:#c43d75;font-weight:700;cursor:pointer;font-size:13px';
+        fjern.addEventListener('click', function () {
+          if (!confirm(L('Fjerne tilgangen til ' + k.epost + '?', 'Remove access for ' + k.epost + '?'))) return;
+          fetch('/api/kurs-kvittering', {
+            method: 'POST', credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slug: slug, action: 'fjern', epost: k.epost }),
+          }).then(function () { visKvittering(slug); });
+        });
+        rad.appendChild(e); rad.appendChild(fjern);
+        liste.appendChild(rad);
+      });
+    })
+    .catch(function () { boks.style.display = 'none'; });
+}
+
+(function () {
+  document.addEventListener('click', function (e) {
+    if (!e.target || e.target.id !== 'kopierKvittering') return;
+    var felt = document.getElementById('kvitteringAdresse');
+    felt.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+    if (!ok && navigator.clipboard) navigator.clipboard.writeText(felt.value);
+    toast(L('Adressen er kopiert. Lim den inn hos betalingsleverandøren din.',
+            'The address is copied. Paste it into your payment provider.'));
+  });
+})();
+
 function updateOpenLink() {
   var slug = slugify(q('f-slug').value.trim() || slugify(q('f-title').value));
   var link = q('openLink');
@@ -949,6 +1022,7 @@ function saveCourse() {
         q('f-slug').value = d.slug;
         q('deleteBtn').style.display = '';
         updateOpenLink();
+        visKvittering(d.slug);
         refreshList();
         toast(L('☁️ Lagret! Kurset ligger nå i skyen.', '☁️ Saved! The course is now in the cloud.'));
       } else if (d && d.error === 'bad_password') {

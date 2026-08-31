@@ -69,7 +69,11 @@ function renderDeliveryEmail(lang, name, courseName, link, paid, ctaLabel) {
 }
 
 export function courseDeliveryEmail(lang, name, courseName, courseUrl, token, paid, ctaLabel) {
-  const link = courseUrl + "?t=" + encodeURIComponent(token);
+  // Adressen kan alt ha et spørsmålstegn, for eksempel /kurs?k=<slug>. Da må
+  // tokenet henges på med &, ellers blir lenken ugyldig og kjøperen kommer
+  // ikke inn. Det traff Kursbygger-kursene, som alle har ?k= i adressen.
+  const skille = courseUrl.indexOf("?") === -1 ? "?" : "&";
+  const link = courseUrl + skille + "t=" + encodeURIComponent(token);
   return renderDeliveryEmail(lang, name, courseName, link, paid, ctaLabel);
 }
 

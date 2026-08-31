@@ -2031,7 +2031,39 @@
           kjopBtn.rel = 'noopener';
           kjopBtn.style.display = 'inline-block';
           kjopBoks.appendChild(kjopBtn);
+          if (window.LME_KURS_LAAST) {
+            var forklaring = el('p', null, en
+              ? 'You get access right after paying, and a personal link by email. The link works forever.'
+              : 'Du får tilgang rett etter betaling, og en personlig lenke på e-post. Lenken virker for alltid.');
+            forklaring.style.cssText = 'font-size:14px;color:#5A5560;margin-top:12px';
+            kjopBoks.appendChild(forklaring);
+          }
           root.appendChild(kjopBoks);
+        }
+
+        /* Ikke kjøpt ennå: vis hva kurset inneholder, men ikke selve
+           leksjonene. Den som har betalt, ser alt. */
+        if (window.LME_KURS_LAAST) {
+          if (course.learn && course.learn.length) {
+            var hva = el('div', 'crs-next');
+            hva.appendChild(el('h3', null, en ? 'What you get' : 'Dette får du'));
+            var ul = document.createElement('ul');
+            ul.style.cssText = 'list-style:none;padding:0;margin:0;display:grid;gap:10px';
+            course.learn.forEach(function (p) {
+              var li = document.createElement('li');
+              li.textContent = '✓ ' + pick(p);
+              ul.appendChild(li);
+            });
+            hva.appendChild(ul);
+            root.appendChild(hva);
+          }
+          var laast = el('div', 'crs-next');
+          laast.appendChild(el('h3', null, (en ? '🔒 ' : '🔒 ') + (en ? 'The lessons open after purchase' : 'Leksjonene åpnes etter kjøp')));
+          laast.appendChild(el('p', null, en
+            ? 'This course has ' + (course.lessons || []).length + ' lessons. They open by themselves the moment you have paid.'
+            : 'Dette kurset har ' + (course.lessons || []).length + ' leksjoner. De åpner seg av seg selv i det du har betalt.'));
+          root.appendChild(laast);
+          return;
         }
 
         // Din lærer (kan skrus av per kurs i kursbyggeren). Hopper også
@@ -2439,6 +2471,29 @@
               setTimeout(function () { hent(forsok + 1); }, 2500);
               return;
             }
+            /* Kurs som et medlem selger med sin egen betalingslenke: vis
+               salgsvisningen til den som ikke har kjøpt, og leksjonene til
+               den som har. Tilgangen kommer av seg selv etter betaling, se
+               functions/_lib/kurs-kvittering.js. */
+            if (course && course.betalingslenke) {
+              var lsKey = 'course_access:' + slug;
+              var qT = new URL(location.href).searchParams.get('t');
+              var token = qT || (function () { try { return localStorage.getItem(lsKey); } catch (e) { return null; } })();
+              if (!token) { window.LME_KURS_LAAST = true; return; }
+              return fetch('/api/course-access?course=' + encodeURIComponent(slug) + '&t=' + encodeURIComponent(token))
+                .then(function (r) { return r.json(); })
+                .then(function (d) {
+                  if (d && d.ok) {
+                    if (qT) { try { localStorage.setItem(lsKey, qT); } catch (e) {} }
+                    window.LME_KURS_LAAST = false;
+                  } else {
+                    window.LME_KURS_LAAST = true;
+                  }
+                })
+                .catch(function () { window.LME_KURS_LAAST = true; });
+            }
+          })
+          .then(function () {
             function safeRender() {
               try {
                 render();
