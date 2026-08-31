@@ -134,6 +134,31 @@ export const PLATTFORM_KURS = {
     {
       "module": null,
       "title": {
+        "no": "Min reise, din egen vei gjennom LME",
+        "en": "My journey, your own path through LME"
+      },
+      "body": [
+        {
+          "no": "Veikartet på /roadmap viser hva LME er, altså hele plattformen i fem faser. **Min reise** viser noe annet: hvor du er. Du finner den på /min-reise, og som et kort på dashbordet.",
+          "en": "The roadmap at /roadmap shows what LME is, the whole platform in five phases. **My journey** shows something else: where you are. You find it at /min-reise, and as a card on the dashboard."
+        },
+        {
+          "no": "Der ser du de samme fem fasene, men med dine egne steg. Noen av dem hukes av av seg selv, fordi plattformen ser dem: at du har opprettet konto, kjøpt noe, blitt medlem, laget ditt første eget kurs eller satt en pris. Resten huker du av selv når du har gjort dem.",
+          "en": "There you see the same five phases, but with your own steps. Some tick themselves off, because the platform can see them: that you created an account, bought something, became a member, made your first own course or set a price. The rest you tick off yourself once you have done them."
+        },
+        {
+          "no": "Poenget er ikke å bli ferdig fortest mulig. Poenget er at du alltid skal vite hva som er det neste lille steget, i stedet for å se på alt du ikke har gjort ennå.",
+          "en": "The point is not to finish as fast as possible. The point is that you always know what the next small step is, instead of looking at everything you have not done yet."
+        }
+      ],
+      "tip": {
+        "no": "🌸 Ta ett steg om gangen. Reisen venter på deg, den går ingen steder.",
+        "en": "🌸 Take one step at a time. The journey waits for you, it is not going anywhere."
+      }
+    },
+    {
+      "module": null,
+      "title": {
         "no": "Min konto og innstillingene dine",
         "en": "My Account and your settings"
       },
@@ -574,8 +599,8 @@ export const PLATTFORM_KURS = {
           "en": "The course builder (Kursbygger) is where you create your own courses, without code: mini courses or larger ones, with modules, lessons, tip boxes and images. Your courses appear automatically under \"Your own courses\" in the Academy once they are published."
         },
         {
-          "no": "Du kan sette pris på kursene dine og låse dem til kjøpere, eller låse enkeltmoduler til medlemmer eller til separate kjøp, akkurat slik dette kurset du leser nå er bygget opp.",
-          "en": "You can put a price on your courses and lock them to buyers, or lock individual modules to members or to separate purchases, exactly the way the course you are reading now is built."
+          "no": "Du kan sette pris på kursene dine og låse dem til kjøpere, eller låse enkeltmoduler til medlemmer eller til separate kjøp, akkurat slik dette kurset du leser nå er bygget opp. Kursene du lager er dine: bare du ser og redigerer dem, og du legger inn din egen betalingslenke, enten du bruker Stripe, PayPal, Klarna, Vipps eller noe annet. Pengene går rett til deg.",
+          "en": "You can put a price on your courses and lock them to buyers, or lock individual modules to members or to separate purchases, exactly the way the course you are reading now is built. The courses you make are yours: only you can see and edit them, and you add your own payment link, whether you use Stripe, PayPal, Klarna, Vipps or something else. The money goes straight to you."
         }
       ],
       "tip": {

@@ -93,6 +93,22 @@ export function sanitizeCourse(raw) {
   // egne kurs, altså plattformens egne. Settes av lagringen, aldri av det
   // klienten sender inn, så ingen kan skrive seg til et annet kurs.
   course.eier = ((raw.eier || "") + "").trim().toLowerCase();
+
+  /* Pris og betalingslenke på hele kurset. Medlemmene velger selv hvilken
+     betalingsløsning de bruker, Stripe, PayPal, Klarna, Vipps eller noe annet,
+     så her godtas enhver https-lenke. Dette blandes ALDRI med Renates egne
+     betalingslenker i functions/_lib/purchase-links.js, som bare gjelder
+     hennes egne produkter. */
+  const pris = langField(raw.pris, 40);
+  if (pris.no.trim() || pris.en.trim()) course.pris = pris;
+  const lenke = langField(raw.betalingslenke, 500);
+  const gyldig = (v) => /^https:\/\//.test((v || "").trim());
+  if (gyldig(lenke.no) || gyldig(lenke.en)) {
+    course.betalingslenke = {
+      no: gyldig(lenke.no) ? lenke.no.trim() : (gyldig(lenke.en) ? lenke.en.trim() : ""),
+      en: gyldig(lenke.en) ? lenke.en.trim() : (gyldig(lenke.no) ? lenke.no.trim() : ""),
+    };
+  }
   const ctaLabel = langField(raw.outro && raw.outro.cta && raw.outro.cta.label, 60);
   const ctaHref = (((raw.outro && raw.outro.cta && raw.outro.cta.href) || "") + "").trim();
   if (ctaLabel.no.trim() && /^(\/|https:\/\/)/.test(ctaHref)) {

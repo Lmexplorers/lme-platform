@@ -2011,6 +2011,29 @@
 
         root.innerHTML = '';
 
+        /* Kjøpsknapp for kurs som har egen pris og egen betalingslenke.
+           Dette er medlemmenes egne kurs: pengene går rett til dem, hos den
+           leverandøren de selv har valgt, og LME er ikke mellomledd. Renates
+           egne kurs har ingen slik lenke, de går gjennom hennes eget oppsett. */
+        var kjopLenke = course.betalingslenke && pick(course.betalingslenke);
+        if (kjopLenke && /^https:\/\//.test(kjopLenke)) {
+          var kjopBoks = el('div', 'crs-kjop');
+          kjopBoks.style.cssText = 'background:#fff;border:1px solid rgba(31,27,36,.08);border-radius:26px;padding:22px 24px;margin:0 0 22px;text-align:center;box-shadow:0 10px 30px rgba(31,27,36,.06)';
+          var prisTxt = course.pris && pick(course.pris);
+          if (prisTxt) {
+            var pris = el('div', null, prisTxt);
+            pris.style.cssText = 'font-family:var(--font-head,inherit);font-size:26px;font-weight:800;margin-bottom:10px';
+            kjopBoks.appendChild(pris);
+          }
+          var kjopBtn = el('a', 'btn-primary', en ? 'Buy this course' : 'Kjøp dette kurset');
+          kjopBtn.href = kjopLenke;
+          kjopBtn.target = '_blank';
+          kjopBtn.rel = 'noopener';
+          kjopBtn.style.display = 'inline-block';
+          kjopBoks.appendChild(kjopBtn);
+          root.appendChild(kjopBoks);
+        }
+
         // Din lærer (kan skrus av per kurs i kursbyggeren). Hopper også
         // over seg selv når kursets egen intro allerede presenterer
         // Renate, saa det ikke blir dobbelt opp.

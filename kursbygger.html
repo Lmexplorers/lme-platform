@@ -166,6 +166,16 @@
       <textarea id="f-lede"></textarea>
       <div class="en-field"><textarea id="f-lede-en" data-ph-no="Engelsk ingress" data-ph-en="English intro"></textarea></div>
 
+      <label class="f" for="f-pris" data-no="Pris (la stå tom hvis kurset er gratis)" data-en="Price (leave empty if the course is free)">Pris (la stå tom hvis kurset er gratis)</label>
+      <input type="text" id="f-pris" data-ph-no="F.eks. 349 kr" data-ph-en="E.g. $39">
+      <div class="en-field"><input type="text" id="f-pris-en" data-ph-no="Pris på engelsk, f.eks. $39" data-ph-en="Price in English, e.g. $39"></div>
+
+      <label class="f" for="f-betalingslenke" data-no="Betalingslenke (din egen: Stripe, PayPal, Klarna, Vipps eller noe annet)" data-en="Payment link (your own: Stripe, PayPal, Klarna, Vipps or something else)">Betalingslenke (din egen: Stripe, PayPal, Klarna, Vipps eller noe annet)</label>
+      <input type="url" id="f-betalingslenke" data-ph-no="https://…" data-ph-en="https://…">
+      <div class="en-field"><input type="url" id="f-betalingslenke-en" data-ph-no="Egen lenke for engelske kjøpere (valgfritt)" data-ph-en="Separate link for English buyers (optional)"></div>
+      <p class="hint" data-no="Pengene går rett til deg, hos den leverandøren du selv velger. LME tar ikke imot betaling på dine vegne og blander det aldri med Renates egne produkter."
+         data-en="The money goes straight to you, with the provider you choose yourself. LME does not take payments on your behalf and never mixes it with Renate's own products.">Pengene går rett til deg, hos den leverandøren du selv velger. LME tar ikke imot betaling på dine vegne og blander det aldri med Renates egne produkter.</p>
+
       <label class="f" for="f-learn" data-no="Hva du lærer (ett punkt per linje)" data-en="What you'll learn (one point per line)">Hva du lærer (ett punkt per linje)</label>
       <textarea id="f-learn"></textarea>
       <div class="en-field"><textarea id="f-learn-en" data-ph-no="Engelske punkter, ett per linje" data-ph-en="English points, one per line"></textarea></div>
@@ -386,6 +396,7 @@ function newCourse(size) {
   var c = {
     slug: '', size: size, published: true, cert: true,
     kicker: { no: '', en: '' }, title: { no: '', en: '' }, lede: { no: '', en: '' },
+    pris: { no: '', en: '' }, betalingslenke: { no: '', en: '' },
     learn: [], lessons: [], outro: { title: { no: '', en: '' }, text: { no: '', en: '' } }
   };
   var n = size === 'stor' ? 8 : 3;
@@ -423,6 +434,10 @@ function loadCourse(c, isNew) {
   q('f-kicker-en').value = c.kicker.en || '';
   q('f-lede').value = c.lede.no || '';
   q('f-lede-en').value = c.lede.en || '';
+  q('f-pris').value = (c.pris && c.pris.no) || '';
+  q('f-pris-en').value = (c.pris && c.pris.en) || '';
+  q('f-betalingslenke').value = (c.betalingslenke && c.betalingslenke.no) || '';
+  q('f-betalingslenke-en').value = (c.betalingslenke && c.betalingslenke.en) || '';
   q('f-learn').value = (c.learn || []).map(function (x) { return x.no; }).join('\n');
   q('f-learn-en').value = (c.learn || []).map(function (x) { return x.en || ''; }).join('\n');
   document.querySelectorAll('[name="f-size"]').forEach(function (r) { r.checked = r.value === c.size; });
@@ -456,6 +471,8 @@ function collectCourse() {
     kicker: { no: q('f-kicker').value.trim(), en: q('f-kicker-en').value.trim() },
     title: { no: q('f-title').value.trim(), en: q('f-title-en').value.trim() },
     lede: { no: q('f-lede').value.trim(), en: q('f-lede-en').value.trim() },
+    pris: { no: q('f-pris').value.trim(), en: q('f-pris-en').value.trim() },
+    betalingslenke: { no: q('f-betalingslenke').value.trim(), en: q('f-betalingslenke-en').value.trim() },
     learn: [],
     lessons: [],
     outro: {
