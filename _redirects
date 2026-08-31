@@ -10,10 +10,14 @@
 /podkast/feed.xml  /api/podcast/feed.xml  200
 /podkast/feed-en.xml  /api/podcast/feed-en.xml  200
 /g/*  /academy/gruppe.html  200
-# Kursimporten. Står FØR /kurs-reglene, og har sin egen regel, så adressen
-# aldri kan bli tolket som et kursnavn og havne på kurslista i stedet.
-/kurs-import  /kurs-import.html  200
-/oppdater-kurs  /kurs-import.html  200
+# Lettere adresse til kursimporten. Peker til den rene adressen, ALDRI til
+# kurs-import.html: Cloudflare Pages sender .html-adresser videre til den
+# rene adressen av seg selv, så en 200-regel fra /kurs-import til
+# /kurs-import.html sender siden i evig runddans ("Load cannot follow more
+# than 20 redirections", oppdaget av Renate 31. august 2026). /kurs-import
+# trenger ingen regel i det hele tatt, filen kurs-import.html i roten
+# serveres på den adressen uansett.
+/oppdater-kurs  /kurs-import  301
 /kurs  /academy/kurs.html  200
 /kurs/*  /academy/kurs.html  200
 /lv/*  /academy/laeringsverksted-ressurs.html  200
