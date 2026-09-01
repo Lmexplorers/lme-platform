@@ -142,3 +142,9 @@
   Cache-Control: no-store
 /autopilot-nokler.html
   Cache-Control: no-store
+
+# Utsendingsverktoyet er kun for eier, og skal aldri ligge i en cache.
+/utsending
+  Cache-Control: no-store
+/utsending.html
+  Cache-Control: no-store
