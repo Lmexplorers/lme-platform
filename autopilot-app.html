@@ -287,7 +287,11 @@
 
   function tegnTilbud(t) {
     const pris = document.getElementById('prislinje');
-    const kr = (n) => n.toLocaleString('nb-NO') + ' kr';
+    /* nb-NO skiller tusener med et smalt hardt mellomrom (U+202F), og i
+       Playpen Sans blir det et stort, stygt hull. Vi bytter det med et
+       vanlig hardt mellomrom, som ser riktig ut og fortsatt ikke deler
+       tallet over to linjer. */
+    const kr = (n) => n.toLocaleString('nb-NO').replace(/[\u202f\u2009]/g, '\u00a0') + ' kr';
     /* Er lanseringsprisen i gang, skal kunden se hva den ordinære prisen
        er, og at tilbudet tar slutt. Uten det er en rabatt bare et tall. */
     const erLansering = t.trinn === 'lansering' && t.ordinaer && t.ordinaer > t.nok;
