@@ -6,7 +6,7 @@
  *   - autopilot-app.html          (prisen kunden ser, via /api/app-kjop)
  *   - functions/_lib/purchase-links.js (beløpet i APP_PAYMENT_LINKS)
  *
- * Skal prisen endres, endres den HER, og i Stripe. Det var to kopier av de
+ * Skal prisen endres, endres den i TRINN under, og i Stripe. Det var to kopier av de
  * samme tallene som gjorde at Autopilot en periode solgte til 299, 499 og
  * 699 kr mens /oppgrader solgte de samme planene til 199, 549 og 999 kr.
  *
@@ -24,15 +24,61 @@
  * selges én gang uten at Renate sitter igjen med en løpende regning for en
  * kunde som betalte for to år siden.
  */
+/* Lanseringsprisen gjelder ut september 2026, så går den til fastpris av
+   seg selv. Datoen står her, ikke i hodet til Renate: ingen skal måtte huske
+   å skru den av 1. oktober. Tidspunktet er midnatt norsk sommertid. */
+export const LANSERING_SLUTT = Date.parse("2026-10-01T00:00:00+02:00");
+
+/* De to trinnene, hver med sin egen betalingslenke i Stripe. Endres et
+   beløp her, må det endres i Stripe også, ellers betaler kunden noe annet
+   enn det siden lover. */
+export const TRINN = {
+  lansering: {
+    nok: 1997,
+    kjopLenke: "https://buy.stripe.com/eVq8wQdkp9bp51X0OP9R71x",
+  },
+  fast: {
+    nok: 2997,
+    kjopLenke: "https://buy.stripe.com/cNibJ2805evJcup8hh9R71y",
+  },
+};
+
+/**
+ * Prisen som gjelder nå. Leses av siden, av Stripe-knappen og av Vipps, så
+ * de tre aldri kan komme i utakt.
+ *   -> { trinn, nok, kjopLenke, gjelderTil }
+ */
+export function gjeldendeTilbud(na) {
+  const tid = na ? new Date(na).getTime() : Date.now();
+  if (tid < LANSERING_SLUTT) {
+    return {
+      trinn: "lansering",
+      nok: TRINN.lansering.nok,
+      kjopLenke: TRINN.lansering.kjopLenke,
+      gjelderTil: new Date(LANSERING_SLUTT).toISOString(),
+      ordinaer: TRINN.fast.nok,
+    };
+  }
+  return {
+    trinn: "fast",
+    nok: TRINN.fast.nok,
+    kjopLenke: TRINN.fast.kjopLenke,
+    gjelderTil: null,
+    ordinaer: TRINN.fast.nok,
+  };
+}
+
 export const APP_KJOP = {
   id: "autopilot",
-  nok: 1490,
+  /* Standardprisen. Det kunden faktisk betaler i dag kommer fra
+     gjeldendeTilbud() over, som tar hensyn til lanseringsprisen. */
+  nok: TRINN.fast.nok,
   navn: {
     no: "LME Autopilot, appen",
     en: "LME Autopilot, the app",
   },
   /* Betalingslenken for kort. Vipps går via /api/vipps-pay i stedet. */
-  kjopLenke: "https://buy.stripe.com/8x29AUfsx73h51Xapp9R71w",
+  kjopLenke: TRINN.fast.kjopLenke,
   /* Dette låses opp av kjøpet. Må stemme med det appen faktisk åpner,
      se lmeHarApp() i no.html og en.html i lme-content-studio. */
   inkluderer: {

@@ -85,6 +85,11 @@
     padding: 16px 28px; border-radius: 999px; border: none; cursor: pointer;
     box-shadow: 0 12px 26px rgba(233,30,137,.28);
   }
+  .lansering-notis {
+    text-align: center; color: var(--cerise); font-weight: 700;
+    font-size: 14px; margin: -10px 0 16px;
+  }
+
   .notis {
     background: var(--cream); border-radius: 16px; padding: 18px 20px; margin-top: 20px;
     border-left: 5px solid var(--yellow); color: var(--grey); font-size: 15px;
@@ -172,6 +177,7 @@
 
   <section class="kjopsboks" id="kjopsboks" data-vipps-produkt="autopilot" data-vipps-type="app">
     <div class="pris" id="prislinje"></div>
+    <p id="lanseringsnotis" class="lansering-notis" hidden></p>
     <ul id="punkter"></ul>
     <a class="knapp-stor buy-cta" id="kjopknapp" href="#" data-no="Kjøp med kort" data-en="Pay by card">Kjøp med kort</a>
     <!-- js/vipps-knapp.js legger Vipps-knappen akkurat her, rett under
@@ -192,7 +198,7 @@
         </tr>
         <tr>
           <td data-no="Hva du betaler" data-en="What you pay">Hva du betaler</td>
-          <td data-no="1490 kr én gang" data-en="1490 kr once">1490 kr én gang</td>
+          <td id="tabellpris" data-no="1997 kr én gang" data-en="1997 kr once">1997 kr én gang</td>
           <td data-no="fra 199 kr i måneden" data-en="from 199 kr a month">fra 199 kr i måneden</td>
         </tr>
         <tr>
@@ -281,8 +287,33 @@
 
   function tegnTilbud(t) {
     const pris = document.getElementById('prislinje');
-    pris.innerHTML = t.nok.toLocaleString('nb-NO') + ' kr' +
+    const kr = (n) => n.toLocaleString('nb-NO') + ' kr';
+    /* Er lanseringsprisen i gang, skal kunden se hva den ordinære prisen
+       er, og at tilbudet tar slutt. Uten det er en rabatt bare et tall. */
+    const erLansering = t.trinn === 'lansering' && t.ordinaer && t.ordinaer > t.nok;
+    pris.innerHTML = kr(t.nok) +
       '<span data-no="én gang, ikke i måneden" data-en="once, not per month">én gang, ikke i måneden</span>';
+    const lansering = document.getElementById('lanseringsnotis');
+    if (lansering) {
+      if (erLansering) {
+        const no = 'Lanseringspris ut september. Ordinær pris er ' + kr(t.ordinaer) + '.';
+        const en = 'Launch price through September. The regular price is ' + kr(t.ordinaer) + '.';
+        lansering.setAttribute('data-no', no);
+        lansering.setAttribute('data-en', en);
+        lansering.textContent = document.documentElement.lang === 'en' ? en : no;
+        lansering.hidden = false;
+      } else {
+        lansering.hidden = true;
+      }
+    }
+    const tabellpris = document.getElementById('tabellpris');
+    if (tabellpris) {
+      const no = kr(t.nok) + ' én gang';
+      const en = kr(t.nok) + ' once';
+      tabellpris.setAttribute('data-no', no);
+      tabellpris.setAttribute('data-en', en);
+      tabellpris.textContent = document.documentElement.lang === 'en' ? en : no;
+    }
 
     const liste = document.getElementById('punkter');
     liste.innerHTML = '';
@@ -320,9 +351,9 @@
       /* Svarer ikke serveren, skal siden fortsatt kunne selge. Da står
          prisen fra fallback-teksten under. */
       if (!tilbud) {
-        document.getElementById('prislinje').innerHTML = '1 490 kr' +
+        document.getElementById('prislinje').innerHTML = '1 997 kr' +
           '<span data-no="én gang, ikke i måneden" data-en="once, not per month">én gang, ikke i måneden</span>';
-        document.getElementById('kjopknapp').href = 'https://buy.stripe.com/8x29AUfsx73h51Xapp9R71w';
+        document.getElementById('kjopknapp').href = 'https://buy.stripe.com/eVq8wQdkp9bp51X0OP9R71x';
       }
     }
     if (new URLSearchParams(location.search).get('takk')) {

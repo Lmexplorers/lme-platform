@@ -150,6 +150,12 @@ export async function grantAutopilot(env, email, info) {
  * salgssiden, ellers tror kjøperen hun har kjøpt bildene også.
  * ------------------------------------------------------------------------- */
 export const APP_PAYMENT_LINKS = {
+  /* Lanseringspris ut september 2026, deretter fastpris. Begge lenkene er
+     aktive i Stripe samtidig, og siden velger den som gjelder. Den gamle
+     1490-lenken er slaatt av i Stripe, men staar igjen her slik at et kjop
+     som var underveis fortsatt blir levert. */
+  "plink_1UAnZaLax7B8uQzq03DKsBml": { app: "autopilot", navn: "LME Autopilot, appen", nok: 1997, lang: "no" },
+  "plink_1UAnZgLax7B8uQzqK29tJmZY": { app: "autopilot", navn: "LME Autopilot, appen", nok: 2997, lang: "no" },
   "plink_1UAfFnLax7B8uQzqXM6UqgnM": { app: "autopilot", navn: "LME Autopilot, appen", nok: 1490, lang: "no" },
 };
 

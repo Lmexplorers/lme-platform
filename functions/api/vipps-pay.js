@@ -21,7 +21,7 @@ import { COURSES, kursPrisNok } from "../_lib/plans.js";
 import { oppskriftPrisOre } from "../_lib/butikk-priser.js";
 import { oppskriftNavn } from "../_lib/oppskrift-mail.js";
 import { pakkeMedId } from "../../js/tjenester-pakker.js";
-import { APP_KJOP } from "../_lib/app-kjop.js";
+import { APP_KJOP, gjeldendeTilbud } from "../_lib/app-kjop.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -114,7 +114,7 @@ export async function onRequestPost(context) {
     /* LME Autopilot som engangskjøp. Prisen leses på serveren, fra den
        samme filen Stripe-lenken og salgssiden bruker. */
     if (slug !== APP_KJOP.id) return json({ ok: false, error: "not_found" }, 404);
-    amount = APP_KJOP.nok * 100;
+    amount = gjeldendeTilbud().nok * 100;
     title = APP_KJOP.navn[lang] || APP_KJOP.navn.no;
     returnPath = "/autopilot-app?takk=1";
   } else if (type === "tjeneste") {
