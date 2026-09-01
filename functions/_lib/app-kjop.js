@@ -32,14 +32,14 @@ export const APP_KJOP = {
     no: [
       "Hele appen låst opp, for godt, uten månedspris",
       "Reel-editoren, der du finpusser hvert klipp",
-      "Autopublisering til Instagram, Facebook, TikTok og resten, med egen Blotato-konto",
+      "Autopublisering til Instagram og Facebook, koblet til på ett minutt",
       "90-dagers innholdsplan i stedet for 30",
       "Alle oppdateringer som kommer senere",
     ],
     en: [
       "The whole app unlocked, for good, with no monthly price",
       "The reel editor, where you fine tune every clip",
-      "Auto-publishing to Instagram, Facebook, TikTok and the rest, with your own Blotato account",
+      "Auto-publishing to Instagram and Facebook, connected in a minute",
       "A 90 day content plan instead of 30",
       "Every update that comes later",
     ],
@@ -47,7 +47,7 @@ export const APP_KJOP = {
   /* Dette følger IKKE med, og det må stå like tydelig som det som gjør.
      Oppdager kunden det først etter kjøp, er det for sent. */
   ikkeInkludert: {
-    no: "Ingen AI-kvote følger med. Du legger inn dine egne nøkler under Innstillinger, fra OpenAI eller Gemini til bilder, og Claude til tekst. Da betaler du AI-en direkte for det du lager, og ingenting til meg hver måned. For at appen skal legge ut for deg, trenger du i tillegg en egen Blotato-konto med betalt plan. Det er den som gir appen lov til å poste til Instagram, Facebook og TikTok, og API-et følger ikke med gratisversjonen deres. Uten den koblingen publiserer ikke appen, og da er den ikke lenger en autopilot. Alle stegene, med lenker: lmexplorers.com/autopilot-nokler",
-    en: "No AI quota is included. You add your own keys under Settings, from OpenAI or Gemini for images, and Claude for text. You then pay the AI directly for what you make, and nothing to me every month. For the app to post for you, you also need your own Blotato account on a paid plan. That is what lets the app post to Instagram, Facebook and TikTok, and their free version does not include the API. Without that connection the app does not publish, and then it is no longer an autopilot. Every step, with links: lmexplorers.com/autopilot-nokler",
+    no: "Ingen AI-kvote følger med. Du legger inn dine egne nøkler under Innstillinger, fra OpenAI eller Gemini til bilder, og Claude til tekst. Da betaler du AI-en direkte for det du lager, og ingenting til meg hver måned. Autopubliseringen til Instagram og Facebook er inkludert, og går gjennom LME. Du kobler til kontoene dine én gang på lmexplorers.com/planlegger, og det koster deg ingenting ekstra. Vil du i tillegg poste til TikTok, trenger du en egen Blotato-konto med betalt plan, men det er et tillegg, ikke noe appen står og faller på. Alle stegene, med lenker: lmexplorers.com/autopilot-nokler",
+    en: "No AI quota is included. You add your own keys under Settings, from OpenAI or Gemini for images, and Claude for text. You then pay the AI directly for what you make, and nothing to me every month. Auto-publishing to Instagram and Facebook is included, and runs through LME. You connect your accounts once at lmexplorers.com/planlegger, at no extra cost. To also post to TikTok you need your own Blotato account on a paid plan, but that is an extra, not something the app depends on. Every step, with links: lmexplorers.com/autopilot-nokler",
   },
 };

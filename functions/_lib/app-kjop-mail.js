@@ -74,10 +74,10 @@ export async function sendAppKjopMail(env, { to, name, lang, betaltMed }) {
       '<p style="margin:18px 0 6px;"><strong>Two things before you start:</strong></p>' +
       '<ol style="margin:0 0 18px;padding-left:20px;">' +
       "<li>Log in with <strong>this same email address</strong>. That is how the app recognises you.</li>" +
-      "<li>Go to Settings and paste in your own AI keys, from OpenAI or Gemini for images, Claude for text, and Blotato so the app can post for you.</li>" +
+      "<li>Go to Settings and paste in your own AI keys, from OpenAI or Gemini for images, and Claude for text. Then connect Instagram and Facebook at lmexplorers.com/planlegger, so the app can post for you.</li>" +
       "</ol>" +
       "<p>Your own keys is the whole point of this purchase: you pay the AI directly for what you make, instead of a monthly fee to me. There is no included quota.</p>" +
-      "<p>For images, get a key at <a href=\"https://platform.openai.com/api-keys\" style=\"color:#E91E89;\">platform.openai.com/api-keys</a>. For text, at <a href=\"https://console.anthropic.com/settings/keys\" style=\"color:#E91E89;\">console.anthropic.com/settings/keys</a>. Both need a small top-up under Billing before the key works. Posting for you runs through <a href=\"https://my.blotato.com\" style=\"color:#E91E89;\">Blotato</a>, and needs a paid plan there, since their free version does not include the API. Without it the app cannot publish.</p>" +
+      "<p>For images, get a key at <a href=\"https://platform.openai.com/api-keys\" style=\"color:#E91E89;\">platform.openai.com/api-keys</a>. For text, at <a href=\"https://console.anthropic.com/settings/keys\" style=\"color:#E91E89;\">console.anthropic.com/settings/keys</a>. Both need a small top-up under Billing before the key works. Posting to Instagram and Facebook runs through LME: connect your accounts once at <a href=\"https://lmexplorers.com/planlegger\" style=\"color:#E91E89;\">lmexplorers.com/planlegger</a>, at no extra cost. TikTok needs your own <a href=\"https://my.blotato.com\" style=\"color:#E91E89;\">Blotato</a> plan, and is an optional extra.</p>" +
       btn(SITE + "/autopilot-nokler?lang=en", "Get started, step by step") +
       "<p>Stuck on the keys? Reply to this email and I will walk you through it.</p>" +
       '<p style="margin:16px 0 0;">Warmly,<br>Renate</p>'
@@ -91,8 +91,8 @@ export async function sendAppKjopMail(env, { to, name, lang, betaltMed }) {
       "<p style=\"margin:0 0 14px;\">Lag konto på <a href=\"https://platform.openai.com/api-keys\" style=\"color:#E91E89;\">platform.openai.com/api-keys</a>, legg inn kort under Billing og fyll på et lite beløp, og trykk Create new secret key. Kopier nøkkelen med en gang, den vises bare én gang. Lim den inn under Innstillinger i appen. Et bilde koster noen få kroner.</p>" +
       '<p style="margin:0 0 6px;"><strong>3. Nøkkel til tekst</strong></p>' +
       "<p style=\"margin:0 0 14px;\">Samme fremgangsmåte på <a href=\"https://console.anthropic.com/settings/keys\" style=\"color:#E91E89;\">console.anthropic.com/settings/keys</a>. Denne skriver bildetekster og innholdsplaner, og koster ører per tekst.</p>" +
-      '<p style="margin:0 0 6px;"><strong>4. Koble til publiseringen</strong></p>' +
-      "<p style=\"margin:0 0 14px;\">Da lager du konto på <a href=\"https://my.blotato.com\" style=\"color:#E91E89;\">my.blotato.com</a> og velger en betalt plan. API-et følger ikke med gratisversjonen deres, og det er API-et appen bruker. Koble til Instagram, Facebook og TikTok der, og hent nøkkelen under Settings, så API keys. Uten denne koblingen kan ikke appen legge ut for deg, og da mister du hele autopiloten.</p>" +
+      '<p style="margin:0 0 6px;"><strong>4. Koble til Instagram og Facebook</strong></p>' +
+      "<p style=\"margin:0 0 14px;\">Gå til <a href=\"https://lmexplorers.com/planlegger\" style=\"color:#E91E89;\">lmexplorers.com/planlegger</a> og koble til Facebook-siden og Instagram-kontoen din. Det tar et minutt, og du gjør det bare én gang. Da legger appen ut for deg, til den tiden du har valgt. Vil du i tillegg poste til TikTok, trenger du en egen Blotato-konto, men det er et tillegg du kan ta senere.</p>" +
       '<p style="margin:18px 0 6px;">Hele veiledningen, med lenker og skjermbeskrivelser, ligger her:</p>' +
       btn(SITE + "/autopilot-nokler", "Kom i gang, steg for steg") +
       "<p>Egne nøkler er hele poenget med dette kjøpet: du betaler AI-en direkte for det du lager, i stedet for en månedspris til meg. Det følger derfor ingen kvote med.</p>" +

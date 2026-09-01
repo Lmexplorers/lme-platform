@@ -424,17 +424,39 @@ export async function deletePlan(env, email, id) {
 export async function publishTo(env, account, post, lang) {
   const text = String(post.text || "").trim();
   const img = String(post.imageUrl || "").trim();
+  /* Video og innleggstype kom med LME Autopilot: appen legger reels og
+     stories i den samme køen som planleggeren bruker. Planleggerens egne
+     innlegg sender bare imageUrl, og oppfører seg nøyaktig som før. */
+  const video = String(post.videoUrl || "").trim();
+  const kind = post.kind || "post";
 
   if (account.platform === "instagram") {
-    if (!img) {
+    if (!img && !video) {
       return { ok: false, error: lang === "en"
         ? "Instagram needs an image. Add one, or publish to Facebook only."
         : "Instagram trenger et bilde. Legg til et, eller publiser bare til Facebook." };
     }
-    const box = await graphPost(env, "/" + account.id + "/media", {
-      access_token: account.token, image_url: img, caption: text,
-    });
+    const params = { access_token: account.token };
+    if (video) {
+      params.video_url = video;
+      params.media_type = kind === "story" ? "STORIES" : "REELS";
+    } else {
+      params.image_url = img;
+      if (kind === "story") params.media_type = "STORIES";
+    }
+    // Stories har ingen bildetekst. Alt annet har det.
+    if (kind !== "story" && text) params.caption = text;
+
+    const box = await graphPost(env, "/" + account.id + "/media", params);
     if (!box.ok || !box.data.id) return { ok: false, error: graphError(box, lang) };
+
+    // Meta bygger videoen ferdig først. Publiserer vi før den er FINISHED,
+    // avvises innlegget.
+    if (video) {
+      const klar = await waitForContainer(env, box.data.id, account.token, lang);
+      if (!klar.ok) return { ok: false, error: klar.error };
+    }
+
     const pub = await graphPost(env, "/" + account.id + "/media_publish", {
       access_token: account.token, creation_id: box.data.id,
     });
@@ -442,6 +464,13 @@ export async function publishTo(env, account, post, lang) {
     return { ok: true, id: pub.data.id || "" };
   }
 
+  if (video) {
+    const vres = await graphPost(env, "/" + account.id + "/videos", {
+      access_token: account.token, file_url: video, description: text,
+    });
+    if (!vres.ok) return { ok: false, error: graphError(vres, lang) };
+    return { ok: true, id: vres.data.id || "" };
+  }
   const res = img
     ? await graphPost(env, "/" + account.id + "/photos", {
         access_token: account.token, url: img, caption: text,
@@ -451,6 +480,26 @@ export async function publishTo(env, account, post, lang) {
       });
   if (!res.ok) return { ok: false, error: graphError(res, lang) };
   return { ok: true, id: res.data.post_id || res.data.id || "" };
+}
+
+/* Vent til Instagram er ferdig med å behandle videoen. Maks ett minutt, så
+   bakgrunnsjobben ikke blir stående på ett innlegg. Blir den ikke ferdig,
+   sier vi fra i stedet for å publisere noe halvt. */
+async function waitForContainer(env, containerId, token, lang) {
+  for (let i = 0; i < 30; i++) {
+    const r = await graphGet(env, "/" + containerId, { access_token: token, fields: "status_code,status" });
+    const code = r.ok && r.data && r.data.status_code;
+    if (code === "FINISHED") return { ok: true };
+    if (code === "ERROR" || code === "EXPIRED") {
+      return { ok: false, error: lang === "en"
+        ? "Meta could not process the video."
+        : "Meta klarte ikke å behandle videoen." };
+    }
+    await new Promise((done) => setTimeout(done, 2000));
+  }
+  return { ok: false, error: lang === "en"
+    ? "Meta did not finish the video in time. It will be retried."
+    : "Meta ble ikke ferdig med videoen i tide. Den prøves på nytt." };
 }
 
 /* ---------------------------------------------------------------------- */
