@@ -64,7 +64,7 @@ async function leverAppKjop(env, order) {
   try {
     await recordPurchase(env, order.email, {
       type: "app", id: order.slug, title: order.title || "LME Autopilot, appen",
-      amount: order.amount, currency: order.currency, url: "https://app.lmexplorers.com",
+      amount: order.amount, currency: order.currency, url: "https://lme-contentstudio.pages.dev",
     });
   } catch (e) {}
 }

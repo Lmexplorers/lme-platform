@@ -11,7 +11,12 @@
  */
 const MS = "https://api.mailersend.com/v1/email";
 const SITE = "https://lmexplorers.com";
-const APP = "https://app.lmexplorers.com";
+/* Adressen til selve appen. IKKE app.lmexplorers.com: det domenet er
+   oppført på /domener, men peker ikke noe sted (Renate fikk "tjeneren ble
+   ikke funnet" i Safari 1. september 2026). Den levende adressen er den
+   under, den samme som app-kortet på /apper bruker. Endres den, må den
+   endres her, på /autopilot-app og i app-kortet. */
+const APP = "https://lme-contentstudio.pages.dev";
 const FROM_EMAIL = "post@lmexplorers.com";
 const FROM_NAME = "Renate fra LME";
 

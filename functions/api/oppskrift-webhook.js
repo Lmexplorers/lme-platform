@@ -414,7 +414,7 @@ export async function onRequestPost(context) {
         await recordPurchase(env, email, {
           type: "app", id: appKjop.app, title: appKjop.navn,
           amount: obj.amount_total, currency: obj.currency,
-          url: "https://app.lmexplorers.com",
+          url: "https://lme-contentstudio.pages.dev",
         });
       } catch (e4) {}
       return json({ ok: true });
