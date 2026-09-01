@@ -95,7 +95,7 @@ export async function sendAppKjopMail(env, { to, name, lang, betaltMed }) {
       "<p style=\"margin:0 0 14px;\">Da lager du konto på <a href=\"https://my.blotato.com\" style=\"color:#E91E89;\">my.blotato.com</a> og velger en betalt plan. Den rimeligste koster 29 dollar i måneden, altså rundt 300 kroner avhengig av dollarkursen. API-et følger ikke med gratisversjonen deres, og det er API-et appen bruker. Koble til Instagram, Facebook og TikTok der, og hent nøkkelen under Settings, så API keys. Uten denne koblingen kan ikke appen legge ut for deg, og da mister du hele autopiloten.</p>" +
       '<p style="margin:18px 0 6px;">Hele veiledningen, med lenker og skjermbeskrivelser, ligger her:</p>' +
       btn(SITE + "/autopilot-nokler", "Kom i gang, steg for steg") +
-      "<p>Egne nøkler er hele poenget med dette kjøpet: du betaler AI-en direkte for det du lager, i stedet for en månedspris til meg. Det følger derfor ingen kvote med.</p>" +
+      "<p>Egne nøkler er hele poenget med dette kjøpet: Du betaler AI-en direkte for det du lager, i stedet for en månedspris til meg. Det følger derfor ingen kvote med.</p>" +
       "<p style=\"margin:16px 0 0;\">Står du fast på nøklene, svarer du bare på denne e-posten, så hjelper jeg deg gjennom det. Det er den eneste kronglete biten, og den er en engangsjobb.</p>" +
       '<p style="margin:16px 0 0;">Varm hilsen<br>Renate</p>';
 
