@@ -8,7 +8,7 @@
  *
  * som er en Pages Function og deployer automatisk fra GitHub sammen med resten
  * av siden. Ingenting på plattformen kaller lenger workers.dev-adressen:
- * widgeten (js/renate-widget.js), /spor-nathalie-ai og /ask-nathalie-ai går
+ * widgeten (js/nathalie-widget.js), /spor-nathalie-ai og /ask-nathalie-ai går
  * alle mot /nathalie-ai.
  *
  * HVORFOR INNHOLDET ER FJERNET HERFRA

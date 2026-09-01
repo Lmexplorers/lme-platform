@@ -26,6 +26,15 @@
 # kan mobilen kjøre en time(r)vis gammel versjon selv etter en frisk utrulling.
 /js/lme-visibility.js
   Cache-Control: no-store
+# Nathalie-widgeten (den flytende chatteknappen) ligger paa 213 sider og
+# hentes uten at noen husker aa oke tallet bak ?v=. Renate satt 1. september
+# 2026 med en knapp som fortsatt sa "Spor Renate AI", uker etter at teksten
+# var endret, fordi telefonen spilte av sin egen lagrede kopi. Uten buffer
+# kan det ikke skje igjen.
+/js/nathalie-widget.js
+  Cache-Control: no-store
+/js/renate-widget.js
+  Cache-Control: no-store
 # Oversetteren lenkes inn uten ?v=, så en gammel mellomlagret versjon ville
 # holdt engelsk tekst borte fra mobilen selv etter en fersk utrulling.
 /js/i18n-auto.js
