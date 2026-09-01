@@ -450,6 +450,14 @@ export async function onRequestPost(context) {
         opprettet: new Date().toISOString(),
       };
       try { await env.BUILDER_KV.put(sak.id, JSON.stringify(sak)); } catch (e1) {}
+      /* Pakken med personlig oppsett inneholder selve appen. Da må kjøpet
+         låse den opp med en gang, slik et engangskjøp gjør, i tillegg til
+         at Renate får ordren. Ellers har kunden betalt 4997 kr og møter en
+         låst app frem til timen deres. */
+      if (tjeneste.girApp) {
+        try { await grantAutopilotApp(env, email, { via: "tjeneste-oppsett" }); } catch (eA) {}
+        try { await sendAppKjopMail(env, { to: email, name: nm, lang: "no" }); } catch (eB) {}
+      }
       try { await sendKvitteringKjop(env, sak, tjeneste.navn); } catch (e2) {}
       try {
         await sendOwnerSaleNotice(env, {

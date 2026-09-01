@@ -576,6 +576,9 @@ export const SKOLEDAGBOK_INFO = {
  * Betalingslenkene er opprettet 31. august 2026, i live-modus.
  * ------------------------------------------------------------------------- */
 export const TJENESTE_PAYMENT_LINKS = {
+  /* girApp: pakken inneholder selve appen, ikke bare Renates tid, så
+     kjøpet må også låse den opp. Se PAKKER i js/tjenester-pakker.js. */
+  "plink_1UAnggLax7B8uQzqSHxOLJKo": { pakke: "oppsett", navn: "Autopilot med personlig oppsett", nok: 4997, girApp: true },
   "plink_1UAe88Lax7B8uQzq3Ru9cZ4B": { pakke: "effekt", navn: "Effektpakken", nok: 1490 },
   "plink_1UAe8OLax7B8uQzq3DwgTsA1": { pakke: "karakter", navn: "AI-karakteren din", nok: 3900 },
   "plink_1UAe8QLax7B8uQzq0wlcBYrV": { pakke: "autopilot", navn: "Innhold på autopilot", nok: 7900 },

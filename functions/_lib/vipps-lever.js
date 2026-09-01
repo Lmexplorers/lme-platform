@@ -27,6 +27,7 @@ import { registerNewsletter } from "./newsletter.js";
 import { sendKvitteringKjop } from "./tjeneste-mail.js";
 import { grantAutopilotApp } from "./purchase-links.js";
 import { sendAppKjopMail } from "./app-kjop-mail.js";
+import { pakkeMedId } from "../../js/tjenester-pakker.js";
 
 export const ORDRE_PREFIX = "vipps_order:";
 
@@ -92,6 +93,14 @@ async function leverTjeneste(env, order) {
     opprettet: new Date().toISOString(),
   };
   try { await env.BUILDER_KV.put(sak.id, JSON.stringify(sak)); } catch (e) {}
+  /* Pakken med personlig oppsett inneholder selve appen, og skal låse den
+     opp med en gang. Nøyaktig samme regel som Stripe-flyten følger, se
+     tjeneste-grenen i functions/api/oppskrift-webhook.js. */
+  const pakke = pakkeMedId(order.slug);
+  if (pakke && pakke.girApp && order.email) {
+    try { await grantAutopilotApp(env, order.email, { via: "vipps-tjeneste-oppsett" }); } catch (e) {}
+    try { await sendAppKjopMail(env, { to: order.email, name: order.name, lang: sak.lang, betaltMed: "vipps" }); } catch (e) {}
+  }
   try { await sendKvitteringKjop(env, sak, sak.pakkeNavn); } catch (e) {}
   try {
     await sendOwnerSaleNotice(env, {

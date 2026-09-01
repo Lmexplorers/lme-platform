@@ -28,6 +28,48 @@ export const PRISER_SJEKKET = "2026-08-31";
    Et eventuelt LME Autopilot-abonnement kommer i tillegg, se AUTOPILOT_NOTE. */
 export const PAKKER = [
   {
+    /* Den eneste pakken som inneholder et produkt og ikke bare Renates tid.
+       `girApp` forteller webhooken at kjøpet også skal låse opp LME
+       Autopilot, på samme måte som et engangskjøp av appen gjør. Uten det
+       ville kunden betalt 4997 kr og fått en app hun ikke kommer inn i. */
+    id: "oppsett",
+    emoji: "🚀",
+    nok: 4997,
+    girApp: true,
+    kjopLenke: "https://buy.stripe.com/dRmfZi2FL0ETbqleFF9R71z",
+    navn: { no: "Autopilot med personlig oppsett", en: "Autopilot with personal setup" },
+    undertittel: {
+      no: "Appen din, satt opp og klar til bruk",
+      en: "Your app, set up and ready to use",
+    },
+    forHvem: {
+      no: "Du vil eie appen, men ikke bruke en kveld på nøkler og innstillinger alene.",
+      en: "You want to own the app, but not spend an evening alone on keys and settings.",
+    },
+    levering: {
+      no: "Vi setter av en time sammen, innen en uke",
+      en: "We book an hour together, within a week",
+    },
+    inkluderer: {
+      no: [
+        "Hele appen låst opp, for godt, uten månedspris",
+        "En time på video, der jeg setter den opp sammen med deg",
+        "AI-nøklene dine hentet og lagt inn, så alt virker når vi er ferdige",
+        "Publiseringen koblet til, så appen legger ut for deg",
+        "Din første innholdsplan laget sammen, med din egen nisje",
+        "Opptak av timen, så du kan se den igjen når du vil",
+      ],
+      en: [
+        "The whole app unlocked, for good, with no monthly price",
+        "An hour on video, where I set it up together with you",
+        "Your AI keys fetched and entered, so everything works when we finish",
+        "Publishing connected, so the app posts for you",
+        "Your first content plan made together, for your own niche",
+        "A recording of the hour, so you can watch it again",
+      ],
+    },
+  },
+  {
     id: "effekt",
     emoji: "🎬",
     nok: 1490,

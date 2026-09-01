@@ -511,8 +511,8 @@ export const PLATTFORM_KURS = {
       },
       "body": [
         {
-          "no": "Noen ganger er det ikke verktøyet som mangler, det er tiden. LME Studio Tjenester er ferdige pakker med fast pris, der jeg gjør jobben for deg i stedet for at du lærer deg verktøyet: videoer med effekter, en egen AI-karakter satt opp, eller en hel måned med innhold lagt i kø. Du finner dem på https://lmexplorers.com/tjenester",
-          "en": "Sometimes it is not the tool that is missing, it is the time. LME Studio Services are ready-made packages with a fixed price, where I do the work for you instead of you learning the tool: videos with effects, your own AI character set up, or a full month of content queued. You find them at https://lmexplorers.com/tjenester"
+          "no": "Noen ganger er det ikke verktøyet som mangler, det er tiden. LME Studio Tjenester er ferdige pakker med fast pris, der jeg gjør jobben for deg i stedet for at du lærer deg verktøyet: videoer med effekter, en egen AI-karakter satt opp, Autopilot med personlig oppsett, eller en hel måned med innhold lagt i kø. Du finner dem på https://lmexplorers.com/tjenester",
+          "en": "Sometimes it is not the tool that is missing, it is the time. LME Studio Services are ready-made packages with a fixed price, where I do the work for you instead of you learning the tool: videos with effects, your own AI character set up, Autopilot with personal setup, or a full month of content queued. You find them at https://lmexplorers.com/tjenester"
         },
         {
           "no": "Slik foregår det: du fyller ut skjemaet med hva du trenger, og får et fast tilbud tilbake innen én virkedag, med pris og leveringsdato. Ingenting trekkes før du har sagt ja, og hver pakke har en runde med endringer inkludert. Et eventuelt Autopilot-abonnement kommer i tillegg, siden det er appen som lager innholdet videre etterpå.",
