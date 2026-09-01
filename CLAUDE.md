@@ -182,6 +182,18 @@ Renate retter ofte disse tingene manuelt. Følg reglene fra start, så slipper h
 6. **LME er kun Renate (enkeltperson).** Skriv "jeg", ikke "vi/oss", når teksten
    er fra LME/Renate til leseren. Gjelder også engelsk ("I", ikke "we").
 
+   Ryddet ut av hele plattformen 1. september 2026: "Kontakt oss" sto på 46
+   sider, og "Send oss en melding, vi svarer alltid" på åtte. Alt er jeg-form nå.
+
+   **Unntak, bestemt av Renate samme natt:** personvernerklæringen og
+   kjøpsvilkårene beholder "vi". Der er det mer formelt, og hun ser det som
+   riktig, siden det er henne sammen med AI-en. Ikke rett dem til jeg-form.
+
+   Andre steder der "oss" er RIKTIG, og skal stå: "Pust med oss" (Mia og Teo
+   snakker, to figurer), foreldrebrevet i Biblioteket (pedagogens eget brev
+   til foreldrene), standardtekstene i Gruppebygger og LME Builder
+   (medlemmets egen stemme på hennes egen side), og kundesitater.
+
 7. **Norske sammensatte ord skrives i ett ord, ikke med bindestrek.**
    Eksempel: `Montessoripedagog`, ikke `Montessori-pedagog`. Bindestrek i
    sammensetninger er engelsk mønster, ikke norsk. Gjelder alle sammensatte
