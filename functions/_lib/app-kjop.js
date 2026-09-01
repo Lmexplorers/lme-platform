@@ -10,6 +10,13 @@
  * samme tallene som gjorde at Autopilot en periode solgte til 299, 499 og
  * 699 kr mens /oppgrader solgte de samme planene til 199, 549 og 999 kr.
  *
+ * INNER CIRCLE SKAL IKKE GI TILGANG TIL AUTOPILOT
+ * Spurt og avgjort av Renate 1. september 2026: Autopilot skal være en
+ * separat app som står på egne ben, ikke en frynsegode i medlemskapet.
+ * Inner Circle har egen innlogging og egen database, og appen leser dem
+ * ikke. Ikke bygg en bro mellom dem. Tilgang til Autopilot kommer fra to
+ * ting, og bare de to: et Autopilot-abonnement, eller dette engangskjøpet.
+ *
  * HVORFOR ET ENGANGSKJØP I DET HELE TATT
  * Et abonnement gir kvote på Renates nøkler, og koster henne penger hver
  * måned. Engangskjøpet gir ingen kvote: kunden legger inn sine egne
