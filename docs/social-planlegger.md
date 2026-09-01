@@ -53,6 +53,24 @@ tilgangene avslått i app-gjennomgangen, virker fanen fortsatt: den viser
 likerklikk, kommentarer og delinger, og sier fra om at rekkevidde kommer når
 tilgangen er godkjent. Tallene mellomlagres i fem minutter.
 
+## Delt med LME Autopilot
+
+Autopilot (eget prosjekt, `lme-content-studio`) publiserer gjennom den samme
+koblingen. Appene deler KV-navnerom, så `social:<e-post>` og `img:<id>` er de
+samme postene begge steder:
+
+- Autopilot leser de tilkoblede kontoene og publiserer rett til Meta i
+  `functions/_lib/meta-publish.js`.
+- Planlagte innlegg fra Autopilot legges i `splan:<e-post>:<id>`, altså den
+  samme køen denne bakgrunnsjobben tømmer. Derfor tar `publishTo` nå også
+  `videoUrl` og `kind` (post, story, reel), slik at reels fra Autopilot går ut
+  av seg selv. Planleggerens egne innlegg sender bare `imageUrl`, og oppfører
+  seg nøyaktig som før.
+
+Grunnen: Autopilot krevde tidligere at hver kunde kjøpte et Blotato-abonnement
+for å få autopublisering. Da var appen ingen autopilot for den som ikke gjorde
+det. Blotato er nå bare veien til TikTok og de andre.
+
 ## Filer
 
 | Fil | Hva den gjør |

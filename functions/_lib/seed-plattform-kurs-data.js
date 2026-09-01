@@ -496,6 +496,10 @@ export const PLATTFORM_KURS = {
         {
           "no": "Der de andre verktøyene i denne modulen løser én oppgave om gangen, er Autopilot tenkt som et sted du går tilbake til jevnlig for å holde en jevn strøm av innhold gående, uten å måtte starte fra bunnen hver gang. Du kan enten abonnere, og få AI-bilder inkludert hver måned, eller kjøpe appen én gang for 1490 kr og bruke dine egne AI-nøkler. Se forskjellen på https://lmexplorers.com/autopilot-app",
           "en": "Where the other tools in this module solve one task at a time, Autopilot is meant as a place you come back to regularly to keep a steady stream of content going, without starting from scratch every time. You can either subscribe, and get AI images included every month, or buy the app once for 1490 kr and use your own AI keys. See the difference at https://lmexplorers.com/autopilot-app"
+        },
+        {
+          "no": "Autopilot legger også ut for deg. Du kobler til Facebook-siden og Instagram-kontoen din én gang på https://lmexplorers.com/planlegger, og etter det publiserer appen til den tiden du har valgt, uten at du trenger å være til stede. Koblingen er inkludert, og koster ingenting ekstra. Vil du i tillegg poste til TikTok, kobler du til Blotato, men det er et tillegg og ikke noe appen står og faller på.",
+          "en": "Autopilot also posts for you. You connect your Facebook page and Instagram account once at https://lmexplorers.com/planlegger, and after that the app publishes at the time you picked, without you being there. The connection is included, and costs nothing extra. To also post to TikTok you connect Blotato, but that is an extra and not something the app depends on."
         }
       ],
       "tip": {
