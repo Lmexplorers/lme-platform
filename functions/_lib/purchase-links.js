@@ -138,6 +138,58 @@ export async function grantAutopilot(env, email, info) {
   }
 }
 
+/* ---------------------------------------------------------------------------
+ * LME Autopilot, engangskjøp av appen.
+ *
+ * Et abonnement gir kvote på MINE nøkler, og koster meg penger hver måned.
+ * Engangskjøpet gir noe annet: appen låses opp for godt, og kunden bruker
+ * sine egne AI-nøkler. Da er det hennes regning som løper, ikke min, og
+ * derfor kan den selges én gang uten at jeg sitter igjen med utgiften.
+ *
+ * Kjøpet gir INGEN kvote. Det er hele poenget, og det må stå tydelig på
+ * salgssiden, ellers tror kjøperen hun har kjøpt bildene også.
+ * ------------------------------------------------------------------------- */
+export const APP_PAYMENT_LINKS = {
+  "plink_1UAfFnLax7B8uQzqXM6UqgnM": { app: "autopilot", navn: "LME Autopilot, appen", nok: 1490, lang: "no" },
+};
+
+/* Merker kontoen som "har kjøpt appen". Lagres på member:<e-post>, samme
+   post som abonnementet, siden det er den posten Autopilot-appen leser
+   (den heter ACCOUNTS_KV der, men er den samme lagringen som BUILDER_KV
+   her). Appen sjekker `appKjopt` og åpner de låste delene på den.
+ *
+ * Røret aldri `plan` eller `limits`: har kunden ET abonnement fra før, skal
+ * det stå urørt. Kjøper hun appen i tillegg, har hun begge deler, og
+ * abonnementet skal ikke forsvinne fordi hun kjøpte noe annet. */
+export async function grantAutopilotApp(env, email, info) {
+  if (!email) return;
+  const mkey = memberKey(email);
+  let rec = {};
+  try { const r = await env.BUILDER_KV.get(mkey); if (r) rec = JSON.parse(r) || {}; } catch (e) {}
+  rec.appKjopt = true;
+  rec.appKjoptAt = rec.appKjoptAt || Date.now();
+  rec.appKjoptVia = (info && info.via) || "stripe";
+  rec.updated = Date.now();
+  /* En konto som BARE har kjøpt appen har ingen plan. Da må status settes,
+     ellers ser posten uferdig ut for alt annet som leser den. */
+  if (!rec.status) rec.status = "active";
+  if (!rec.since) rec.since = Date.now();
+  await env.BUILDER_KV.put(mkey, JSON.stringify(rec));
+  if (info && info.customer) await env.BUILDER_KV.put(custKey(info.customer), email.trim().toLowerCase());
+  /* Speil til kontoen, hvis den finnes. Kjøper hun før hun har logget inn i
+     appen, finnes den ikke ennå, og da er member-posten det eneste stedet.
+     Appen leser begge, member-posten som reserve. */
+  const uraw = await env.BUILDER_KV.get(userKey(email));
+  if (uraw) {
+    try {
+      const u = JSON.parse(uraw);
+      u.appKjopt = true;
+      u.appKjoptAt = rec.appKjoptAt;
+      await env.BUILDER_KV.put(userKey(email), JSON.stringify(u));
+    } catch (e) {}
+  }
+}
+
 /* Samme plan/limits som AUTOPILOT_PAYMENT_LINKS over, men nøkkelen er
    Stripe-produktet (ikke betalingslenken), siden abonnements-hendelser
    (customer.subscription.updated/deleted) refererer til produktet på

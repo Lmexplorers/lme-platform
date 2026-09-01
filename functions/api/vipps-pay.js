@@ -21,6 +21,7 @@ import { COURSES, kursPrisNok } from "../_lib/plans.js";
 import { oppskriftPrisOre } from "../_lib/butikk-priser.js";
 import { oppskriftNavn } from "../_lib/oppskrift-mail.js";
 import { pakkeMedId } from "../../js/tjenester-pakker.js";
+import { APP_KJOP } from "../_lib/app-kjop.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -92,7 +93,7 @@ export async function onRequestPost(context) {
               prisen paa hver produktside. Navnet kommer fra den samme
               tabellen som leveringsmailen bruker, saa kunden ser samme
               navn i Vipps som i e-posten. */
-  const TYPER = ["lv", "kurs", "oppskrift", "tjeneste"];
+  const TYPER = ["lv", "kurs", "oppskrift", "tjeneste", "app"];
   const type = TYPER.indexOf(body.type) >= 0 ? body.type : "lv";
   let amount = 0;
   let title = "";
@@ -109,6 +110,13 @@ export async function onRequestPost(context) {
     amount = pris * 100;
     title = (kurs.navn && (kurs.navn[lang] || kurs.navn.no)) || slug;
     returnPath = KURS_TAKKESIDE[slug] || "/academy";
+  } else if (type === "app") {
+    /* LME Autopilot som engangskjøp. Prisen leses på serveren, fra den
+       samme filen Stripe-lenken og salgssiden bruker. */
+    if (slug !== APP_KJOP.id) return json({ ok: false, error: "not_found" }, 404);
+    amount = APP_KJOP.nok * 100;
+    title = APP_KJOP.navn[lang] || APP_KJOP.navn.no;
+    returnPath = "/autopilot-app?takk=1";
   } else if (type === "tjeneste") {
     /* "Gjort for deg"-pakkene på /tjenester. Prisen leses fra den samme
        filen som salgssiden og Stripe-kvitteringen bruker, så Vipps aldri

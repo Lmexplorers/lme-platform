@@ -494,8 +494,8 @@ export const PLATTFORM_KURS = {
           "en": "LME Autopilot is the app inside LME Studio that puts content production itself on autopilot: reels, stories and carousels, made with AI in minutes rather than hours. It opens in its own window outside the platform."
         },
         {
-          "no": "Der de andre verktøyene i denne modulen løser én oppgave om gangen, er Autopilot tenkt som et sted du går tilbake til jevnlig for å holde en jevn strøm av innhold gående, uten å måtte starte fra bunnen hver gang.",
-          "en": "Where the other tools in this module solve one task at a time, Autopilot is meant as a place you come back to regularly to keep a steady stream of content going, without starting from scratch every time."
+          "no": "Der de andre verktøyene i denne modulen løser én oppgave om gangen, er Autopilot tenkt som et sted du går tilbake til jevnlig for å holde en jevn strøm av innhold gående, uten å måtte starte fra bunnen hver gang. Du kan enten abonnere, og få AI-bilder inkludert hver måned, eller kjøpe appen én gang for 1490 kr og bruke dine egne AI-nøkler. Se forskjellen på https://lmexplorers.com/autopilot-app",
+          "en": "Where the other tools in this module solve one task at a time, Autopilot is meant as a place you come back to regularly to keep a steady stream of content going, without starting from scratch every time. You can either subscribe, and get AI images included every month, or buy the app once for 1490 kr and use your own AI keys. See the difference at https://lmexplorers.com/autopilot-app"
         }
       ],
       "tip": {

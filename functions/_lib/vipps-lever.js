@@ -25,8 +25,49 @@ import { sendClaudeMail } from "./claude-mail.js";
 import { lagNedlastingsnokkel, medNokkel } from "./nedlasting-tilgang.js";
 import { registerNewsletter } from "./newsletter.js";
 import { sendKvitteringKjop } from "./tjeneste-mail.js";
+import { grantAutopilotApp } from "./purchase-links.js";
+import { sendAppKjopMail } from "./app-kjop-mail.js";
 
 export const ORDRE_PREFIX = "vipps_order:";
+
+/* Leverer engangskjopet av LME Autopilot. Noyaktig de samme stegene som
+   Stripe-flyten i api/oppskrift-webhook.js gjor: apne tilgangen, sende
+   kvitteringen som forklarer noklene, varsle Renate, og fore kjopet paa
+   kundens konto.
+
+   grantAutopilotApp kjores FORST og uten catch. Feiler den, har hun betalt
+   for ingenting, og det er den ene feilen som ikke kan svelges. Da kastes
+   den videre, ordren staar fortsatt ikke som levert, og neste forsok tar
+   den. Samme monster som leverKurs. */
+async function leverAppKjop(env, order) {
+  await grantAutopilotApp(env, order.email, { via: "vipps" });
+
+  try {
+    await sendAppKjopMail(env, {
+      to: order.email, name: order.name || "", lang: order.lang, betaltMed: "vipps",
+    });
+  } catch (e) {}
+  try {
+    await sendOwnerSaleNotice(env, {
+      pname: (order.title || "LME Autopilot, appen") + " (engangskjøp, Vipps)", lang: order.lang,
+      name: order.name || "", email: order.email,
+      amount: order.amount, currency: order.currency,
+      action: {
+        title: "Ingenting å gjøre, men verdt å vite",
+        body: "Hun har kjøpt appen som engangskjøp, ikke abonnement. Tilgangen er " +
+              "åpnet automatisk, og hun bruker sine egne AI-nøkler, så dette koster " +
+              "deg ingenting videre.",
+        url: "https://lmexplorers.com/autopilot-app",
+      },
+    });
+  } catch (e) {}
+  try {
+    await recordPurchase(env, order.email, {
+      type: "app", id: order.slug, title: order.title || "LME Autopilot, appen",
+      amount: order.amount, currency: order.currency, url: "https://app.lmexplorers.com",
+    });
+  } catch (e) {}
+}
 
 /* Leverer en "gjort for deg"-pakke fra /tjenester. Ingen fil å sende og
    ingen tilgang å låse opp: det som skal skje er at ordren havner i Renates
@@ -316,6 +357,8 @@ export async function leverVippsOrdre(env, reference, opts) {
     nokkel = await leverOppskrift(env, order);
   } else if (order.type === "tjeneste") {
     await leverTjeneste(env, order);
+  } else if (order.type === "app") {
+    await leverAppKjop(env, order);
   } else {
     nokkel = await leverLaeringsverksted(env, order);
   }

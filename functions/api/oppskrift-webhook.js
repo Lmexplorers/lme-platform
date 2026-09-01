@@ -35,6 +35,7 @@ import {
   SKOLEDAGBOK_PAYMENT_LINKS, SKOLEDAGBOK_INFO,
   VIDEOFLOW_PAYMENT_LINKS, VIDEOFLOW_PRODUCT_ID, grantVideoFlowSub, revokeVideoFlowSub,
   TJENESTE_PAYMENT_LINKS,
+  APP_PAYMENT_LINKS, grantAutopilotApp,
 } from "../_lib/purchase-links.js";
 import { sendAutopilotMail } from "../_lib/autopilot-mail.js";
 import { grantCourseAccess, grantModuleAccess } from "../_lib/course-access.js";
@@ -42,6 +43,7 @@ import { sendCourseDeliveryMail, sendModuleDeliveryMail } from "../_lib/course-m
 import { recordPurchase } from "../_lib/purchases.js";
 import { sendResourceDeliveryMail } from "../_lib/laeringsverksted-mail.js";
 import { sendKvitteringKjop } from "../_lib/tjeneste-mail.js";
+import { sendAppKjopMail } from "../_lib/app-kjop-mail.js";
 import { sendSkoledagbokMail } from "../_lib/skoledagbok-mail.js";
 import { lagNedlastingsnokkel } from "../_lib/nedlasting-tilgang.js";
 import { setMonthlyCredits } from "../_lib/videoflow-credits.js";
@@ -385,6 +387,39 @@ export async function onRequestPost(context) {
     // Tom liste (LAERINGSVERKSTED_PAYMENT_LINKS) inntil Renate oppretter og
     // registrerer en ekte betalingslenke for en betalt ressurs, se
     // purchase-links.js og hjelpeteksten i /laeringsverksted-bygger.
+    // LME Autopilot, engangskjøp av appen. Gir ingen kvote, bare varig
+    // tilgang. Kunden bruker sine egne AI-nøkler, så kjøpet koster meg
+    // ingenting etterpå, og kan derfor selges én gang.
+    const appKjop = obj.payment_link && APP_PAYMENT_LINKS[obj.payment_link];
+    if (appKjop && email && obj.payment_status !== "unpaid") {
+      const nm = (obj.customer_details && obj.customer_details.name) || "";
+      await grantAutopilotApp(env, email, { customer: obj.customer, via: "stripe" });
+      try {
+        await sendAppKjopMail(env, { to: email, name: nm, lang: appKjop.lang, betaltMed: "kort" });
+      } catch (e1) {}
+      try {
+        await sendOwnerSaleNotice(env, {
+          pname: appKjop.navn + " (engangskjøp)", lang: appKjop.lang, name: nm, email: email,
+          amount: obj.amount_total, currency: obj.currency,
+          action: {
+            title: "Ingenting å gjøre, men verdt å vite",
+            body: "Hun har kjøpt appen som engangskjøp, ikke abonnement. Tilgangen er " +
+                  "åpnet automatisk, og hun bruker sine egne AI-nøkler, så dette koster " +
+                  "deg ingenting videre. Kvitteringen som forklarer nøklene er sendt.",
+            url: "https://lmexplorers.com/autopilot-app",
+          },
+        });
+      } catch (e3) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "app", id: appKjop.app, title: appKjop.navn,
+          amount: obj.amount_total, currency: obj.currency,
+          url: "https://app.lmexplorers.com",
+        });
+      } catch (e4) {}
+      return json({ ok: true });
+    }
+
     // LME Studio Tjenester (/tjenester): en "gjort for deg"-pakke betalt rett
     // i kassen. Ingen tilgang skal låses opp, men ordren må havne der Renate
     // ser den, altså i det samme panelet som forespørslene, og hun må få vite
