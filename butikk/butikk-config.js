@@ -24,7 +24,7 @@ window.LME_BUTIKK = {
                      en: "Download your files below. You can download as many times as you like — keep them safe." },
     norsk:         { no: "Norsk versjon",                  en: "Norwegian version" },
     engelsk:       { no: "Engelsk versjon",                en: "English version" },
-    support:       { no: "Spørsmål? Svar på kvitteringen fra Stripe, så hjelper vi deg.",
+    support:       { no: "Spørsmål? Svar på kvitteringen fra Stripe, så hjelper jeg deg.",
                      en: "Questions? Reply to your Stripe receipt and we'll help you." },
     tilbake:       { no: "Tilbake til butikken",           en: "Back to the shop" },
     tilbakeLenke:  "/butikk",
