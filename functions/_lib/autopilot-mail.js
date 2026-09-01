@@ -33,7 +33,10 @@ const COPY = {
   no: {
     subject: "Du er i gang med {plan} 🎉",
     intro: "Hei {name}, tusen takk for at du ble med på {plan}!",
-    body: "Abonnementet ditt er aktivt med en gang, ingenting mer å gjøre. Logg inn og sett i gang med bilde- og videogenerering, autoposting og alt det andre som ligger i LME Autopilot.",
+    /* Sier hva som faktisk er inkludert. Video er 0 i alle planer, og
+       autopublisering krever en egen Blotato-konto, saa brevet skal ikke
+       love noen av delene. */
+    body: "Abonnementet ditt er aktivt med en gang, og du trenger ingen AI-nøkler: bildene og tekstene er inkludert og går på min nøkkel. Logg inn, skriv inn nisjen din under Innstillinger, og la appen lage den første innholdsplanen din. Vil du at den skal legge ut for deg av seg selv, kobler du til Blotato under Innstillinger.",
     cta: "Åpne LME Autopilot",
     sign: "Klem fra Renate",
     fallbackName: "",
@@ -41,7 +44,7 @@ const COPY = {
   en: {
     subject: "You're in with {plan} 🎉",
     intro: "Hi {name}, thank you so much for joining {plan}!",
-    body: "Your subscription is active right away, nothing more to do. Log in and get started with image and video generation, autoposting and everything else in LME Autopilot.",
+    body: "Your subscription is active right away, and you need no AI keys: images and text are included and run on my key. Log in, write your niche under Settings, and let the app build your first content plan. If you want it to post for you on its own, connect Blotato under Settings.",
     cta: "Open LME Autopilot",
     sign: "Warm wishes, Renate",
     fallbackName: "there",

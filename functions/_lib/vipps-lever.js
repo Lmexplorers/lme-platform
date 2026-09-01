@@ -27,6 +27,7 @@ import { registerNewsletter } from "./newsletter.js";
 import { sendKvitteringKjop } from "./tjeneste-mail.js";
 import { grantAutopilotApp } from "./purchase-links.js";
 import { sendAppKjopMail } from "./app-kjop-mail.js";
+import { koOppfolging } from "./autopilot-followup-mail.js";
 import { pakkeMedId } from "../../js/tjenester-pakker.js";
 
 export const ORDRE_PREFIX = "vipps_order:";
@@ -44,6 +45,7 @@ async function leverAppKjop(env, order) {
   await grantAutopilotApp(env, order.email, { via: "vipps" });
 
   try {
+    await koOppfolging(env, { email: order.email, name: order.name, lang: order.lang, kilde: "kjop" });
     await sendAppKjopMail(env, {
       to: order.email, name: order.name || "", lang: order.lang, betaltMed: "vipps",
     });
@@ -100,6 +102,7 @@ async function leverTjeneste(env, order) {
   if (pakke && pakke.girApp && order.email) {
     try { await grantAutopilotApp(env, order.email, { via: "vipps-tjeneste-oppsett" }); } catch (e) {}
     try { await sendAppKjopMail(env, { to: order.email, name: order.name, lang: sak.lang, betaltMed: "vipps" }); } catch (e) {}
+    try { await koOppfolging(env, { email: order.email, name: order.name, lang: sak.lang, kilde: "kjop" }); } catch (e) {}
   }
   try { await sendKvitteringKjop(env, sak, sak.pakkeNavn); } catch (e) {}
   try {

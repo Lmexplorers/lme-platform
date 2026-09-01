@@ -44,6 +44,7 @@ import { recordPurchase } from "../_lib/purchases.js";
 import { sendResourceDeliveryMail } from "../_lib/laeringsverksted-mail.js";
 import { sendKvitteringKjop } from "../_lib/tjeneste-mail.js";
 import { sendAppKjopMail } from "../_lib/app-kjop-mail.js";
+import { koOppfolging } from "../_lib/autopilot-followup-mail.js";
 import { sendSkoledagbokMail } from "../_lib/skoledagbok-mail.js";
 import { lagNedlastingsnokkel } from "../_lib/nedlasting-tilgang.js";
 import { setMonthlyCredits } from "../_lib/videoflow-credits.js";
@@ -173,6 +174,9 @@ export async function onRequestPost(context) {
       const nm = (obj.customer_details && obj.customer_details.name) || "";
       await grantAutopilot(env, email, { customer: obj.customer, sub: obj.subscription, plan: auto.plan, limits: auto.limits });
       try { await sendAutopilotMail(env, email, nm, auto.lang, auto.planLabel); } catch (e1) {}
+      /* Oppfolgingsserien: tre brev over tre uker, som tar henne gjennom
+         oppsettet. Se _lib/autopilot-followup-mail.js. */
+      try { await koOppfolging(env, { email: email, name: nm, lang: auto.lang, kilde: "abonnement" }); } catch (e1b) {}
       try {
         await sendOwnerSaleNotice(env, {
           pname: auto.planLabel, lang: auto.lang, name: nm, email: email,
@@ -396,6 +400,7 @@ export async function onRequestPost(context) {
       await grantAutopilotApp(env, email, { customer: obj.customer, via: "stripe" });
       try {
         await sendAppKjopMail(env, { to: email, name: nm, lang: appKjop.lang, betaltMed: "kort" });
+        await koOppfolging(env, { email: email, name: nm, lang: appKjop.lang, kilde: "kjop" });
       } catch (e1) {}
       try {
         await sendOwnerSaleNotice(env, {
@@ -457,6 +462,7 @@ export async function onRequestPost(context) {
       if (tjeneste.girApp) {
         try { await grantAutopilotApp(env, email, { via: "tjeneste-oppsett" }); } catch (eA) {}
         try { await sendAppKjopMail(env, { to: email, name: nm, lang: "no" }); } catch (eB) {}
+        try { await koOppfolging(env, { email: email, name: nm, lang: "no", kilde: "kjop" }); } catch (eC) {}
       }
       try { await sendKvitteringKjop(env, sak, tjeneste.navn); } catch (e2) {}
       try {
