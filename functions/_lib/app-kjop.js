@@ -32,14 +32,14 @@ export const APP_KJOP = {
     no: [
       "Hele appen låst opp, for godt, uten månedspris",
       "Reel-editoren, der du finpusser hvert klipp",
-      "Autopublisering rett til Instagram, Facebook, TikTok og resten",
+      "Autopublisering til Instagram, Facebook, TikTok og resten, med egen Blotato-konto",
       "90-dagers innholdsplan i stedet for 30",
       "Alle oppdateringer som kommer senere",
     ],
     en: [
       "The whole app unlocked, for good, with no monthly price",
       "The reel editor, where you fine tune every clip",
-      "Auto-publishing straight to Instagram, Facebook, TikTok and the rest",
+      "Auto-publishing to Instagram, Facebook, TikTok and the rest, with your own Blotato account",
       "A 90 day content plan instead of 30",
       "Every update that comes later",
     ],
@@ -47,7 +47,7 @@ export const APP_KJOP = {
   /* Dette følger IKKE med, og det må stå like tydelig som det som gjør.
      Oppdager kunden det først etter kjøp, er det for sent. */
   ikkeInkludert: {
-    no: "Ingen AI-kvote følger med. Du legger inn dine egne nøkler under Innstillinger, fra OpenAI eller Gemini til bilder, Claude til tekst, og Blotato til publisering. Da betaler du AI-en direkte for det du lager, og ingenting til meg hver måned.",
-    en: "No AI quota is included. You add your own keys under Settings, from OpenAI or Gemini for images, Claude for text, and Blotato for publishing. You then pay the AI directly for what you make, and nothing to me every month.",
+    no: "Ingen AI-kvote følger med. Du legger inn dine egne nøkler under Innstillinger, fra OpenAI eller Gemini til bilder, og Claude til tekst. Da betaler du AI-en direkte for det du lager, og ingenting til meg hver måned. Vil du publisere automatisk, trenger du i tillegg et betalt Blotato-abonnement, siden API-et ikke følger med gratisversjonen deres. Hopper du over det, laster du ned innholdet og legger det ut selv. Alle stegene, med lenker: lmexplorers.com/autopilot-nokler",
+    en: "No AI quota is included. You add your own keys under Settings, from OpenAI or Gemini for images, and Claude for text. You then pay the AI directly for what you make, and nothing to me every month. To publish automatically you also need a paid Blotato subscription, since their free version does not include the API. Skip that, and you download the content and post it yourself. Every step, with links: lmexplorers.com/autopilot-nokler",
   },
 };

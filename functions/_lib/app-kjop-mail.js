@@ -77,20 +77,26 @@ export async function sendAppKjopMail(env, { to, name, lang, betaltMed }) {
       "<li>Go to Settings and paste in your own AI keys, from OpenAI or Gemini for images, Claude for text, and Blotato if you want auto-publishing.</li>" +
       "</ol>" +
       "<p>Your own keys is the whole point of this purchase: you pay the AI directly for what you make, instead of a monthly fee to me. There is no included quota.</p>" +
-      btn(APP, "Open LME Autopilot") +
+      "<p>For images, get a key at <a href=\"https://platform.openai.com/api-keys\" style=\"color:#E91E89;\">platform.openai.com/api-keys</a>. For text, at <a href=\"https://console.anthropic.com/settings/keys\" style=\"color:#E91E89;\">console.anthropic.com/settings/keys</a>. Both need a small top-up under Billing before the key works. Auto-publishing is optional and needs a paid <a href=\"https://my.blotato.com\" style=\"color:#E91E89;\">Blotato</a> plan, since their free version does not include the API.</p>" +
+      btn(SITE + "/autopilot-nokler?lang=en", "Get started, step by step") +
       "<p>Stuck on the keys? Reply to this email and I will walk you through it.</p>" +
       '<p style="margin:16px 0 0;">Warmly,<br>Renate</p>'
     : '<h2 style="font-size:21px;margin:0 0 14px;">Appen er din</h2>' +
       "<p>" + hei + "</p>" +
       "<p>Du har kjøpt <strong>LME Autopilot</strong>, og appen er nå låst opp på kontoen din, for godt. Ingen månedspris, og ingenting å si opp.</p>" +
-      '<p style="margin:18px 0 6px;"><strong>To ting før du starter:</strong></p>' +
-      '<ol style="margin:0 0 18px;padding-left:20px;">' +
-      "<li>Logg inn med <strong>den samme e-postadressen</strong>. Det er slik appen kjenner deg igjen.</li>" +
-      "<li>Gå til Innstillinger og lim inn dine egne AI-nøkler, fra OpenAI eller Gemini til bilder, Claude til tekst, og Blotato hvis du vil ha autopublisering.</li>" +
-      "</ol>" +
+      "<p>Nå trenger den nøklene dine for å lage noe. Sett av tjue minutter, så er du i gang. Her er hvert steg.</p>" +
+      '<p style="margin:20px 0 6px;"><strong>1. Logg inn med den samme e-postadressen</strong></p>' +
+      "<p style=\"margin:0 0 14px;\">Appen kjenner deg igjen på adressen du betalte med. Bruker du en annen, finner den ikke kjøpet ditt. Du får en sekssifret kode på e-post, ikke noe passord å huske.</p>" +
+      '<p style="margin:0 0 6px;"><strong>2. Nøkkel til bilder</strong></p>' +
+      "<p style=\"margin:0 0 14px;\">Lag konto på <a href=\"https://platform.openai.com/api-keys\" style=\"color:#E91E89;\">platform.openai.com/api-keys</a>, legg inn kort under Billing og fyll på et lite beløp, og trykk Create new secret key. Kopier nøkkelen med en gang, den vises bare én gang. Lim den inn under Innstillinger i appen. Et bilde koster noen få kroner.</p>" +
+      '<p style="margin:0 0 6px;"><strong>3. Nøkkel til tekst</strong></p>' +
+      "<p style=\"margin:0 0 14px;\">Samme fremgangsmåte på <a href=\"https://console.anthropic.com/settings/keys\" style=\"color:#E91E89;\">console.anthropic.com/settings/keys</a>. Denne skriver bildetekster og innholdsplaner, og koster ører per tekst.</p>" +
+      '<p style="margin:0 0 6px;"><strong>4. Vil du publisere automatisk?</strong></p>' +
+      "<p style=\"margin:0 0 14px;\">Da lager du konto på <a href=\"https://my.blotato.com\" style=\"color:#E91E89;\">my.blotato.com</a> og velger en betalt plan. API-et følger ikke med gratisversjonen deres, og det er API-et appen bruker. Koble til Instagram, Facebook og TikTok der, og hent nøkkelen under Settings, så API keys. Dette steget er valgfritt: hopper du over det, laster du ned innholdet og legger det ut selv.</p>" +
+      '<p style="margin:18px 0 6px;">Hele veiledningen, med lenker og skjermbeskrivelser, ligger her:</p>' +
+      btn(SITE + "/autopilot-nokler", "Kom i gang, steg for steg") +
       "<p>Egne nøkler er hele poenget med dette kjøpet: du betaler AI-en direkte for det du lager, i stedet for en månedspris til meg. Det følger derfor ingen kvote med.</p>" +
-      btn(APP, "Åpne LME Autopilot") +
-      "<p>Står du fast på nøklene, svarer du bare på denne e-posten, så viser jeg deg hvordan.</p>" +
+      "<p style=\"margin:16px 0 0;\">Står du fast på nøklene, svarer du bare på denne e-posten, så hjelper jeg deg gjennom det. Det er den eneste kronglete biten, og den er en engangsjobb.</p>" +
       '<p style="margin:16px 0 0;">Varm hilsen<br>Renate</p>';
 
   const emne = en ? "LME Autopilot is unlocked for you 🚀" : "LME Autopilot er låst opp for deg 🚀";
