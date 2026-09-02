@@ -41,7 +41,18 @@
       // forste visning i engelsk modus ikke faller tilbake til redigert (norsk) tekst.
       try {
         var lang = (localStorage.getItem("lme_lang") === "en") ? "en" : "no";
-        if (typeof window.switchLanguage === "function") window.switchLanguage(lang);
+        if (typeof window.switchLanguage === "function") {
+          window.switchLanguage(lang);
+        } else if (lang === "en") {
+          /* Ikke alle sider har switchLanguage. Flere bruker den flytende
+             NO/EN-knappen (lmeToggleLang) i stedet, og der gjorde linja over
+             ingenting: lagret norsk tekst ble staaende midt i en engelsk
+             side. Da setter vi den engelske teksten selv. */
+          nodes.forEach(function (el) {
+            var en = el.getAttribute("data-en");
+            if (en && el.innerHTML !== en) el.innerHTML = en;
+          });
+        }
       } catch (e) {}
     })
     .catch(function () {});

@@ -26,6 +26,16 @@
 # kan mobilen kjøre en time(r)vis gammel versjon selv etter en frisk utrulling.
 /js/lme-visibility.js
   Cache-Control: no-store
+# Oppgraderingssiden er en salgsside, og skal folge samme regel som de
+# andre: aldri fra buffer. Renate satt 2. september 2026 og saa fortsatt
+# gamle priser og norsk tekst i engelsk visning, timer etter at rettelsen
+# var publisert, fordi maskinen hennes spilte av sin egen lagrede kopi.
+/oppgrader
+  Cache-Control: no-store
+/oppgrader.html
+  Cache-Control: no-store
+/js/page-editor.js
+  Cache-Control: no-store
 # Nathalie-widgeten (den flytende chatteknappen) ligger paa 213 sider og
 # hentes uten at noen husker aa oke tallet bak ?v=. Renate satt 1. september
 # 2026 med en knapp som fortsatt sa "Spor Renate AI", uker etter at teksten
