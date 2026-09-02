@@ -127,9 +127,9 @@ const BREV = {
   abonnement: {
     no: {
       1: {
-        emne: "Bildene dine er klare, du trenger ingen nøkkel 🎨",
+        emne: "Bildene dine er klare, og de går på min nøkkel 🎨",
         html: "<p>Hei {navn},</p>" +
-          "<p>En ting mange lurer på først: Du trenger ingen AI-nøkkel. Bildene og tekstene er inkludert i abonnementet ditt og går på min nøkkel, så du kan lage med en gang.</p>" +
+          "<p>En ting mange lurer på først: Bildene og tekstene er inkludert i abonnementet ditt og går på min nøkkel, så dem kan du lage med en gang, uten å skaffe noe selv.</p>" +"<p>Skal appen legge ut helt av seg selv, er det én ting du må ordne: din egen nøkkel fra Blotato. Den krever en betalt plan hos dem, fra 29 dollar i måneden. Uten den lager appen alt innholdet ferdig, men du legger det ut selv. Slik gjør du det: <a href=\"https://lmexplorers.com/autopilot-nokler\">lmexplorers.com/autopilot-nokler</a></p>" +
           "<p>Det eneste jeg vil du skal gjøre nå, er å skrive inn nisjen din under Innstillinger. Hva du driver med, og hvem du snakker til. Det tar to minutter, og alt appen lager etterpå treffer mye bedre.</p>" +
           btn(APP, "Åpne appen") +
           "<p>Står du fast, svarer du bare på denne e-posten.</p>" +
@@ -154,9 +154,9 @@ const BREV = {
     },
     en: {
       1: {
-        emne: "Your images are ready, no key needed 🎨",
+        emne: "Your images are ready, and they run on my key 🎨",
         html: "<p>Hi {navn},</p>" +
-          "<p>One thing people wonder about first: You do not need an AI key. Images and text are included in your subscription and run on my key, so you can start right away.</p>" +
+          "<p>One thing people wonder about first: Images and text are included in your subscription and run on my key, so you can start on those right away without getting anything yourself.</p>" +"<p>For the app to post on its own there is one thing you need: your own key from Blotato. It requires a paid plan with them, from 29 dollars a month. Without it the app still makes everything, you just post it yourself. Here is how: <a href=\"https://lmexplorers.com/autopilot-nokler\">lmexplorers.com/autopilot-nokler</a></p>" +
           "<p>The only thing I want you to do now is write your niche under Settings. What you do, and who you speak to. It takes two minutes, and everything the app makes afterwards will fit much better.</p>" +
           btn(APP, "Open the app") +
           "<p>Stuck? Just reply to this email.</p>" +
