@@ -188,6 +188,21 @@ export async function onRequest(context) {
       }
     }
 
+    /* Kommer hun fra en ferdig lenke, /admin-setup?fjern=<e-post>, fylles
+       adressen inn og oppslaget kjorer med en gang. Da er det ett trykk
+       igjen, paa den rode knappen. Renate 2. september 2026: hun skal ikke
+       bruke tid paa aa skrive inn adresser jeg allerede vet. */
+    (function () {
+      try {
+        var p = new URLSearchParams(location.search);
+        var e = (p.get('fjern') || '').trim();
+        if (e) {
+          document.getElementById('slett-epost').value = e;
+          sokOpp();
+        }
+      } catch (err) {}
+    })();
+
     document.getElementById('userForm').addEventListener('submit', async function (e) {
       e.preventDefault();
       var data = {
