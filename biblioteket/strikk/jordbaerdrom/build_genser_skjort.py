@@ -279,17 +279,16 @@ def sider(lang):
               'two pieces match when worn together.')), 12))
 
     # ----------------------------------------------------- 12 SKJØRT, PICOT OG ELASTIKK
+    bue_h = [S] + L(lang, ['Masker nederst', 'Buer', 'Masker per bue', 'Bueomganger'],
+                    ['Stitches at hem', 'Scallops', 'Sts per scallop', 'Scallop rounds'])
+    bue_r = [[p['str_nr'], str(p['skjort_vidde']) + m, p['skjort_buer'],
+              p['bue_bredde'], p['bue_omganger']] for p in PLAGG]
     P.append(pg(
-        banner(L(lang, 'SKJØRT · 7 · PICOTKANT OG ELASTIKK',
-                 'SKIRT · 7 · PICOT EDGE AND ELASTIC')) +
-        rosep(L(lang, 'PICOTKANTEN', 'THE PICOT EDGE')) +
-        card('<p>' + L(lang,
-             'Strikk 3 omganger rosa, deretter en hullomgang: *1 kast, 2 rett sammen*, '
-             'gjenta rundt. Strikk 3 omganger til og fell løst av. Brett kanten inn langs '
-             'hullomgangen og sy den løst fast på vrangen.',
-             'Work 3 rounds in pink, then an eyelet round: *yarn over, k2tog*, repeat round. '
-             'Work 3 more rounds and cast off loosely. Fold the edge to the inside along the '
-             'eyelet round and sew it down loosely on the wrong side.') + '</p>') +
+        banner(L(lang, 'SKJØRT · 7 · BUEKANT OG ELASTIKK',
+                 'SKIRT · 7 · SCALLOPED EDGE AND ELASTIC')) +
+        rosep(L(lang, 'BUEKANTEN NEDERST', 'THE SCALLOPED HEM')) +
+        card('<p>' + L(lang, 'Del kanten i buer med en markør mellom hver bue. Hver bue er 10 masker. Strikk så buerunden: *2 rett sammen vridd, 2 rett, 1 økning, 2 rett, 1 økning, 2 rett, 2 rett sammen*, og gjenta rundt. Masketallet står stille, men kanten begynner å bølge. Gjenta buerunden i alt 5 ganger, og fell så løst av.', 'Divide the edge into scallops with a marker between each. Every scallop is 10 stitches. Then work the scallop round: *ssk, k2, M1R, k2, M1L, k2, k2tog*, repeat round. The stitch count stays the same, but the edge begins to wave. Repeat the scallop round 5 times in all, then cast off loosely.') + '</p>' +
+             tabell(bue_h, bue_r, min_index=0)) +
         sagep(L(lang, 'ELASTIKKEN', 'THE ELASTIC')) +
         card('<p>' + L(lang,
              'Mål barnets liv og klipp en myk elastikk 1 cm kortere enn målet. Tre den '

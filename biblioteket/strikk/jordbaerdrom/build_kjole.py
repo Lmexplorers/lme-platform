@@ -259,19 +259,38 @@ def sider(lang):
     kant_h = [S] + L(lang, ['Plukk opp per armhull', 'Omganger vridd ribb'],
                      ['Pick up per armhole', 'Rounds of twisted rib'])
     kant_r = [[p['str_nr'], str(p['armhull_ermelos']) + m, 4] for p in PLAGG]
+    bue_h = [S] + L(lang, ['Masker nederst', 'Buer', 'Masker per bue', 'Bueomganger'],
+                    ['Stitches at hem', 'Scallops', 'Sts per scallop', 'Scallop rounds'])
+    bue_r = [[p['str_nr'], str(p['kjole_skjort_2']) + m, p['kjole_buer'],
+              p['bue_bredde'], p['bue_omganger']] for p in PLAGG]
     P.append(pg(
-        banner(L(lang, '6 · PICOTKANT OG ARMHULL', '6 · PICOT EDGE AND ARMHOLES')) +
-        rosep(L(lang, 'NEDERKANTEN', 'THE LOWER EDGE')) +
+        banner(L(lang, '6 · BUEKANTEN NEDERST', '6 · THE SCALLOPED HEM')) +
+        '<p>' + L(lang,
+        'Kjolen ender i en buekant, ikke en rett kant. Buen lages med fellinger i dalen '
+        'mellom buene og økinger midt i hver bue, like mange av hver, så masketallet står '
+        'stille mens kanten bølger.',
+        'The dress ends in a scalloped edge, not a straight one. The scallop is made with '
+        'decreases in the valley between the scallops and increases at the centre of each, '
+        'the same number of both, so the stitch count stays put while the edge waves.') +
+        '</p>' +
         card('<p>' + L(lang,
-             'Strikk 3 omganger rosa. Strikk så en hullomgang: *1 kast, 2 rett sammen*, '
-             'gjenta rundt. Strikk 3 omganger rosa til og fell løst av. Brett kanten inn '
-             'langs hullomgangen og sy den ned med små, løse sting. Kanten skal bli en '
-             'diskret picot, ikke en rillestrikket kant.',
-             'Work 3 rounds in pink. Then work an eyelet round: *yarn over, k2tog*, repeat '
-             'round. Work 3 more rounds in pink and cast off loosely. Fold the edge to the '
-             'inside along the eyelet round and sew it down with small, loose stitches. '
-             'The edge should form a discreet picot, not a garter ridge.') + '</p>') +
-        sagep(L(lang, 'ARMHULLSKANTENE', 'THE ARMHOLE EDGINGS')) +
+             'Del kanten i buer med en markør mellom hver bue. Hver bue er 10 masker. '
+             'Strikk så buerunden: *2 rett sammen vridd, 2 rett, 1 økning, 2 rett, '
+             '1 økning, 2 rett, 2 rett sammen*, og gjenta rundt. Gjenta buerunden i alt '
+             '5 ganger, og fell så løst av.',
+             'Divide the edge into scallops with a marker between each. Every scallop is '
+             '10 stitches. Then work the scallop round: *ssk, k2, M1R, k2, M1L, k2, '
+             'k2tog*, repeat round. Repeat the scallop round 5 times in all, then cast '
+             'off loosely.') + '</p>' + tabell(bue_h, bue_r, min_index=0)) +
+        cme(L(lang,
+              'Fell av løst. En stram avfelling retter ut buene, og da forsvinner hele '
+              'poenget med kanten.',
+              'Cast off loosely. A tight cast-off straightens the scallops out, and then '
+              'the whole point of the edge is lost.')), 12))
+
+    # ------------------------------------------------------------ 13 ARMHULLENE
+    P.append(pg(
+        banner(L(lang, '7 · ARMHULLSKANTENE', '7 · THE ARMHOLE EDGINGS')) +
         card('<p>' + L(lang,
              'Plukk opp maskene i kolonnen din rundt hvert armhull med grønt: de hvilende '
              'ermemaskene, maskene du la opp under armen, og 1 maske i hvert av de to '
@@ -281,19 +300,19 @@ def sider(lang):
              'each of the two corners. Work 4 rounds of twisted rib and cast off with '
              'stretch.') + '</p>' + tabell(kant_h, kant_r, min_index=0)) +
         cme(L(lang,
-              'Sy knappen på nakkeåpningen til slutt, og kontroller at knapphullet ikke er '
-              'blitt for stort etter vask.',
-              'Sew the button on the back neck opening last, and check that the buttonhole '
-              'has not stretched after washing.')), 12))
+              'Sy knappen på nakkeåpningen til slutt, og kontroller at knapphullet ikke '
+              'er blitt for stort etter vask.',
+              'Sew the button on the back neck opening last, and check that the '
+              'buttonhole has not stretched after washing.')), 13))
 
     # ------------------------------------------------------------- 12 TESTSTRIKK
-    P.append(pg(f.side_teststrikk(lang, 'kjolen', 'dress'), 13))
+    P.append(pg(f.side_teststrikk(lang, 'kjolen', 'dress'), 14))
 
     # -------------------------------------------------------------- 13 MONTERING
-    P.append(pg(f.side_montering(lang), 14))
+    P.append(pg(f.side_montering(lang), 15))
 
     # ------------------------------------------------------------- 14 AVSLUTNING
-    P.append(pg(f.side_avslutning(lang), 15))
+    P.append(pg(f.side_avslutning(lang), 16))
     return P
 
 

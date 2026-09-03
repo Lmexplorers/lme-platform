@@ -83,6 +83,18 @@ SIZES = [
 HALS_AV_HODE_MIN = 0.78
 HALS_AV_HODE_MAX = 0.90
 
+# BUEKANTEN NEDERST
+# Kjolen, romperens skjørt og det løse skjørtet ender i en buekant, slik
+# designbildene viser: myke, runde buer, ikke picotspisser. Buen lages med
+# fellinger i dalen mellom buene og økinger midt i hver bue, like mange av
+# hver, så masketallet står stille mens kanten bølger.
+#
+# Hver bue er BUE_BREDDE masker. Da må masketallet nederst være delelig med
+# BUE_BREDDE, og derfor rundes skjørtenes sluttmasketall av til nærmeste
+# multiplum, i stedet for å la buene «nesten» gå opp.
+BUE_BREDDE = 10        # masker per bue, ca. 4,8 cm
+BUE_OMGANGER = 5       # omganger buekanten strikkes over
+
 ROMSLIGHET = 6.0       # cm romslighet over brystet på den ermeløse bolen
 UNDERARM_ERMELOS = 2   # masker lagt opp under armen på kjole og romper
 UNDERARM_GENSER = 4    # masker lagt opp under armen på genseren
@@ -134,6 +146,7 @@ def finn_par(mal_bryst_m, mal_erme_m, min_front, min_erme):
 
 rows = []
 prev_front, prev_erme, prev_mansjett = 0, 0, 0
+prev_kjole_skjort = prev_romper_skjort = prev_skjort_vidde = 0
 for i, (nr, tno, ten, kropp_bryst, overarm_cm, hode_cm, hals) in enumerate(SIZES):
     mal_bryst_m = (kropp_bryst + ROMSLIGHET) * GAUGE_ST_CM
     mal_erme_m = overarm_cm * GAUGE_ST_CM
@@ -174,10 +187,20 @@ for i, (nr, tno, ten, kropp_bryst, overarm_cm, hode_cm, hals) in enumerate(SIZES
     # strikkes i vridd ribb med 1 vridd rett og 1 vrang.
     armhull_ermelos = sleeve + UNDERARM_ERMELOS + 2
 
-    # Skjørt: *2 r, M1* gir halvannen gang vidden, deretter en jevn øking til.
+    # Skjørt: *2 r, M1* gir halvannen gang vidden, deretter en jevn øking til
+    # et masketall som er delelig med buebredden, slik at buekanten går opp.
+    # Avrundingen må aldri gjøre et skjørt smalere enn i størrelsen under, så
+    # den runder opp til neste hele bue når det trengs.
+    def til_bue(m, forrige):
+        n = BUE_BREDDE * round(m / BUE_BREDDE)
+        while n <= forrige:
+            n += BUE_BREDDE
+        return n
+
     kjole_skjort_1 = bol_ermelos + bol_ermelos // 2
-    kjole_skjort_2 = kjole_skjort_1 + 6 * (3 + i)
-    romper_skjort = bol_ermelos + bol_ermelos // 2
+    kjole_skjort_2 = til_bue(kjole_skjort_1 + 6 * (3 + i), prev_kjole_skjort)
+    romper_skjort = til_bue(bol_ermelos + bol_ermelos // 2, prev_romper_skjort)
+    prev_kjole_skjort, prev_romper_skjort = kjole_skjort_2, romper_skjort
 
     # Bleiedelen på romperen: bolen deles i to like halvdeler, og hver del
     # felles inn til en skrittbredde som vokser med størrelsen.
@@ -187,7 +210,8 @@ for i, (nr, tno, ten, kropp_bryst, overarm_cm, hode_cm, hals) in enumerate(SIZES
     # Løst skjørt til genseren: linningen legges opp direkte på et masketall
     # som er delelig med 8, slik at bladrapporten går opp uten justering.
     skjort_liv = 72 + 8 * i
-    skjort_vidde = skjort_liv + skjort_liv // 2
+    skjort_vidde = til_bue(skjort_liv + skjort_liv // 2, prev_skjort_vidde)
+    prev_skjort_vidde = skjort_vidde
 
     rows.append(dict(
         str_nr=nr, tillegg_no=tno, tillegg_en=ten,
@@ -226,6 +250,10 @@ for i, (nr, tno, ten, kropp_bryst, overarm_cm, hode_cm, hals) in enumerate(SIZES
         skjort_vidde=skjort_vidde,
         skjort_vidde_cm=round(skjort_vidde / GAUGE_ST_CM, 1),
         skjort_lengde_cm=SKJORT_LENGDE[i],
+        bue_bredde=BUE_BREDDE, bue_omganger=BUE_OMGANGER,
+        kjole_buer=kjole_skjort_2 // BUE_BREDDE,
+        romper_buer=romper_skjort // BUE_BREDDE,
+        skjort_buer=skjort_vidde // BUE_BREDDE,
         # Ferdige lengder, summert av delene og ikke oppgitt på frihånd.
         kjole_lengde_cm=round(yoke_cm + BOL_KJOLE[i] + SKJORT_KJOLE[i]),
         romper_lengde_cm=round(yoke_cm + BOL_ROMPER[i] + BLEIE_ROMPER[i] + 3),
@@ -317,6 +345,14 @@ for r in rows:
     assert r['romper_skjort'] > r['bol_ermelos']
     assert r['skjort_vidde'] > r['skjort_liv']
     assert r['skjort_liv'] % BLAD_RAPPORT == 0, f"str {r['str_nr']}: skjørtelinningen ikke delelig med 8"
+    # Buekanten: hver bue er BUE_BREDDE masker, så kanten må gå opp i hele
+    # buer. Gjør den ikke det, ender strikkeren med en halv bue midt bak.
+    for felt, buer in (('kjole_skjort_2', 'kjole_buer'), ('romper_skjort', 'romper_buer'),
+                       ('skjort_vidde', 'skjort_buer')):
+        assert r[felt] % BUE_BREDDE == 0, (
+            f"str {r['str_nr']}: {felt} = {r[felt]} går ikke opp i buer à {BUE_BREDDE}")
+        assert r[buer] * BUE_BREDDE == r[felt]
+        assert r[buer] >= 10, f"str {r['str_nr']}: for få buer ({r[buer]}) til at kanten ser ut som en bue"
     # Bleiedelen: to like halvdeler som felles inn til en smalere skrittbredde.
     assert 2 * r['bleie_halv'] == r['bol_ermelos']
     assert r['skritt_m'] < r['bleie_halv'], f"str {r['str_nr']}: skrittet felles ikke inn"

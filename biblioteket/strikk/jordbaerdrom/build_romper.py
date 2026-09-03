@@ -203,9 +203,7 @@ def sider(lang):
         'løst av. Brett langs hullomgangen mot vrangen og sy ned til en myk picotkant.',
         'From the waist marker work *k2, M1*, repeat round. Continue in pink stocking stitch '
         'with scattered seeds until the skirt measures the length in the last column. Then '
-        'work 3 rounds in pink, 1 eyelet round *yarn over, k2tog*, and 3 rounds in pink. '
-        'Cast off loosely. Fold along the eyelet round to the wrong side and sew down into a '
-        'soft picot edge.') + '</p>' +
+        'the scalloped edge follows: ' + 'Divide the edge into scallops with a marker between each. Every scallop is 10 stitches. Then work the scallop round: *ssk, k2, M1R, k2, M1L, k2, k2tog*, repeat round. The stitch count stays the same, but the edge begins to wave: the decreases pull the valley between the scallops up, and the increases push the scallop down. Repeat the scallop round 5 times in all, then cast off loosely.') + '</p>' +
         card(tabell(sk_h, sk_r, min_index=0)) +
         cme(L(lang,
               'Skjørtet er kort med vilje. Det skal ligge over bleiedelen, ikke under den, '
@@ -254,6 +252,18 @@ def sider(lang):
              'of the front, make 3 buttonholes evenly spaced: yarn over, k2tog. Cast off in '
              'rib. Sew the 3 buttons onto the back, directly under the buttonholes.') +
              '</p>') +
+        sagep(L(lang, 'BEINKANTENE', 'THE LEG EDGINGS')) +
+        card('<p>' + L(lang,
+             'Plukk opp masker med grønt rundt hver beinåpning, langs den skrå kanten fra '
+             'skrittet og opp til siden, og videre ned igjen. Plukk opp ca. 3 masker for '
+             'hver 4. pinne langs kanten, og rund av til et partall. Strikk 4 omganger '
+             'vridd ribb og fell elastisk av. Beinkantene er det som gjør at romperen '
+             'sitter, og de skal ligge glatt uten å stramme rundt låret.',
+             'Pick up stitches in green round each leg opening, along the sloped edge from '
+             'the crotch up to the side and down again. Pick up about 3 stitches for every '
+             '4 rows along the edge, and round to an even number. Work 4 rounds of twisted '
+             'rib and cast off with stretch. The leg edgings are what make the romper sit '
+             'properly, and they should lie flat without gripping the thigh.') + '</p>') +
         sagep(L(lang, 'ARMHULL OG NAKKE', 'ARMHOLES AND NECK')) +
         card('<p>' + L(lang,
              'Plukk opp maskene i kolonnen din rundt hvert armhull med grønt: de hvilende '
