@@ -122,6 +122,25 @@
   .garment p { font-size: 14px; color: var(--ink-soft); margin-bottom: 10px; }
   .garment .meta { font-size: 12px; color: var(--leaf-dark); font-family: var(--font-head); }
 
+  /* ------------------------------------------------------------ nedlasting */
+  .dl { display: grid; gap: 10px; }
+  .dl-rad {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    background: var(--pink-50); border: 2px solid var(--pink-100);
+    border-radius: 14px; padding: 12px 14px;
+  }
+  .dl-navn {
+    font-family: var(--font-head); font-weight: 600; font-size: 15px;
+    color: var(--pink-600); flex: 1 1 140px;
+  }
+  .dl-rad a {
+    display: inline-block; padding: 9px 15px; border-radius: 999px;
+    background: var(--pink-600); color: #fff; text-decoration: none;
+    font-size: 14px; font-weight: 600; min-height: 22px;
+  }
+  .dl-rad a.sek { background: var(--leaf-dark); }
+  .dl-rad a:hover, .dl-rad a:focus { opacity: .88; }
+
   /* ---------------------------------------------------------------- skjemaet */
   .form { display: grid; gap: 14px; max-width: 520px; }
   .field label {
@@ -251,6 +270,49 @@
 
     <h3 data-no="Garn og pinner" data-en="Yarn and needles">Garn og pinner</h3>
     <p data-no="DROPS Merino Extra Fine på pinne 4 mm, i jordbærrosa, bladgrønn og en liten rest kremhvit. Strikkefastheten er 21 masker og 28 omganger glattstrikk på 10 x 10 cm. Bruker du et annet garn, er det fastheten som må stemme, ikke navnet på garnet." data-en="DROPS Merino Extra Fine on 4 mm needles, in strawberry pink, leaf green and a small amount of cream white. The gauge is 21 stitches and 28 rounds in stocking stitch over 10 x 10 cm. If you use a different yarn, it is the gauge that must match, not the name of the yarn.">DROPS Merino Extra Fine på pinne 4 mm, i jordbærrosa, bladgrønn og en liten rest kremhvit. Strikkefastheten er 21 masker og 28 omganger glattstrikk på 10 x 10 cm. Bruker du et annet garn, er det fastheten som må stemme, ikke navnet på garnet.</p>
+  </section>
+
+  <section class="card" id="last-ned">
+    <h2 data-no="Last ned oppskriftene" data-en="Download the patterns">Last ned oppskriftene</h2>
+    <p data-no="Alle sju oppskriftene ligger her, på norsk og engelsk. Du trenger ikke melde deg på for å laste dem ned, men jeg blir veldig glad om du gjør det, for det er tilbakemeldingene som avgjør om graderingen holder." data-en="All seven patterns are here, in Norwegian and English. You do not have to sign up to download them, but I would be very glad if you did, because it is the feedback that decides whether the grading holds.">Alle sju oppskriftene ligger her, på norsk og engelsk. Du trenger ikke melde deg på for å laste dem ned, men jeg blir veldig glad om du gjør det, for det er tilbakemeldingene som avgjør om graderingen holder.</p>
+    <div class="dl">
+        <div class="dl-rad">
+          <span class="dl-navn" data-no="Kjole" data-en="Dress">Kjole</span>
+          <a href="/biblioteket/strikk/jordbaerdrom/LME-Jordbaerdrom-Kjole.pdf" download data-no="Norsk PDF" data-en="Norwegian PDF">Norsk PDF</a>
+          <a class="sek" href="/biblioteket/strikk/jordbaerdrom/LME-Jordbaerdrom-Kjole-EN.pdf" download data-no="Engelsk PDF" data-en="English PDF">Engelsk PDF</a>
+        </div>
+        <div class="dl-rad">
+          <span class="dl-navn" data-no="Romper med skjørt" data-en="Romper with skirt">Romper med skjørt</span>
+          <a href="/biblioteket/strikk/jordbaerdrom/LME-Jordbaerdrom-Romper.pdf" download data-no="Norsk PDF" data-en="Norwegian PDF">Norsk PDF</a>
+          <a class="sek" href="/biblioteket/strikk/jordbaerdrom/LME-Jordbaerdrom-Romper-EN.pdf" download data-no="Engelsk PDF" data-en="English PDF">Engelsk PDF</a>
+        </div>
+        <div class="dl-rad">
+          <span class="dl-navn" data-no="Genser og skjørt" data-en="Jumper and skirt">Genser og skjørt</span>
+          <a href="/biblioteket/strikk/jordbaerdrom/LME-Jordbaerdrom-Genser-og-skjort.pdf" download data-no="Norsk PDF" data-en="Norwegian PDF">Norsk PDF</a>
+          <a class="sek" href="/biblioteket/strikk/jordbaerdrom/LME-Jordbaerdrom-Genser-og-skjort-EN.pdf" download data-no="Engelsk PDF" data-en="English PDF">Engelsk PDF</a>
+        </div>
+        <div class="dl-rad">
+          <span class="dl-navn" data-no="Votter" data-en="Mittens">Votter</span>
+          <a href="/biblioteket/strikk/jordbaerdrom/LME-Jordbaerdrom-Votter.pdf" download data-no="Norsk PDF" data-en="Norwegian PDF">Norsk PDF</a>
+          <a class="sek" href="/biblioteket/strikk/jordbaerdrom/LME-Jordbaerdrom-Votter-EN.pdf" download data-no="Engelsk PDF" data-en="English PDF">Engelsk PDF</a>
+        </div>
+        <div class="dl-rad">
+          <span class="dl-navn" data-no="Tøfler" data-en="Booties">Tøfler</span>
+          <a href="/biblioteket/strikk/jordbaerdrom/LME-Jordbaerdrom-Tofler.pdf" download data-no="Norsk PDF" data-en="Norwegian PDF">Norsk PDF</a>
+          <a class="sek" href="/biblioteket/strikk/jordbaerdrom/LME-Jordbaerdrom-Tofler-EN.pdf" download data-no="Engelsk PDF" data-en="English PDF">Engelsk PDF</a>
+        </div>
+        <div class="dl-rad">
+          <span class="dl-navn" data-no="Lue" data-en="Hat">Lue</span>
+          <a href="/biblioteket/strikk/jordbaerdrom/LME-Jordbaerdrom-Lue.pdf" download data-no="Norsk PDF" data-en="Norwegian PDF">Norsk PDF</a>
+          <a class="sek" href="/biblioteket/strikk/jordbaerdrom/LME-Jordbaerdrom-Lue-EN.pdf" download data-no="Engelsk PDF" data-en="English PDF">Engelsk PDF</a>
+        </div>
+        <div class="dl-rad">
+          <span class="dl-navn" data-no="Sokker" data-en="Socks">Sokker</span>
+          <a href="/biblioteket/strikk/jordbaerdrom/LME-Jordbaerdrom-Sokker.pdf" download data-no="Norsk PDF" data-en="Norwegian PDF">Norsk PDF</a>
+          <a class="sek" href="/biblioteket/strikk/jordbaerdrom/LME-Jordbaerdrom-Sokker-EN.pdf" download data-no="Engelsk PDF" data-en="English PDF">Engelsk PDF</a>
+        </div>
+    </div>
+    <p class="formnote" data-no="Alle heftene er merket Teststrikkversjon 1.0. Ingenting i kolleksjonen er strikket ennå, og det er nettopp derfor jeg trenger teststrikkere." data-en="Every booklet is marked Test knit version 1.0. Nothing in the collection has been knitted yet, and that is exactly why I need test knitters.">Alle heftene er merket Teststrikkversjon 1.0. Ingenting i kolleksjonen er strikket ennå, og det er nettopp derfor jeg trenger teststrikkere.</p>
   </section>
 
   <section class="card" id="meld-deg">
