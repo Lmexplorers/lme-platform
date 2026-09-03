@@ -305,9 +305,15 @@ def side_diagram(lang, smaa=False, snudd=False):
         blad='JORDBÆRHETTE, 4 MASKER x 4 OMGANGER' if smaa
              else 'BLAD, 8 MASKER x 10 OMGANGER',
         fro='FRØ, 8 MASKER',
-        frotxt=('Frøene er enkeltmasker i kremhvit, strødd utover det rosa. Strikk omgang '
-                'A, deretter 2-3 omganger rosa, og så omgang B. Gjenta dette så tett eller '
-                'spredt du selv vil.'),
+        frotxt=(('Frøene er enkeltmasker i kremhvit. På en så liten flate er to '
+                 'frøomganger nok: strikk omgang A, deretter 2-3 omganger rosa, og så '
+                 'omgang B. De to omgangene forskyver frøene i forhold til hverandre.')
+                if smaa else
+                ('Frøene er enkeltmasker i kremhvit, og de strikkes inn over ALT det '
+                 'rosa, både over livet og nedover hele skjørtet. Rytmen er den samme '
+                 'overalt: frøomgang A, 4 omganger rosa, frøomgang B, 4 omganger rosa, og '
+                 'så om igjen. De to omgangene forskyver frøene i forhold til hverandre, '
+                 'så de ligger strødd og ikke i loddrette rekker.')),
         tips=('Trådspranget bak arbeidet blir aldri lengre enn 3 masker i noen av '
               'diagrammene. Det er med vilje: lange løse tråder på innsiden er både '
               'ubehagelig mot huden og noe små fingre kan sette seg fast i. Hold den '
@@ -327,9 +333,16 @@ def side_diagram(lang, smaa=False, snudd=False):
         blad='STRAWBERRY TOP, 4 STITCHES x 4 ROUNDS' if smaa
              else 'LEAF, 8 STITCHES x 10 ROUNDS',
         fro='SEED, 8 STITCHES',
-        frotxt=('The seeds are single cream white stitches scattered over the pink. Work '
-                'round A, then 2-3 rounds in pink, then round B. Repeat as densely or as '
-                'sparsely as you like.'),
+        frotxt=(('The seeds are single cream white stitches. On such a small area two '
+                 'seed rounds are enough: work round A, then 2-3 rounds in pink, then '
+                 'round B. The two rounds offset the seeds against each other.')
+                if smaa else
+                ('The seeds are single cream white stitches, and they are knitted in over '
+                 'ALL the pink, over the bodice and all the way down the skirt. The '
+                 'rhythm is the same everywhere: seed round A, 4 rounds in pink, seed '
+                 'round B, 4 rounds in pink, and so on. The two rounds offset the seeds '
+                 'against each other, so they lie scattered rather than in vertical '
+                 'columns.')),
         tips=('The float behind the work is never longer than 3 stitches in either chart. '
               'That is deliberate: long loose strands on the inside are both uncomfortable '
               'against the skin and something small fingers can catch in. Keep the '

@@ -177,12 +177,12 @@ def sider(lang):
         card(tabell(del_h, del_r, min_index=0)) +
         sagep(L(lang, 'KROPPEN', 'THE BODY')) +
         card('<p>' + L(lang,
-             'Strikk rosa glattstrikk rundt. Strø inn frø: frøomgang A, 2-3 omganger rosa, '
-             'så frøomgang B. Strikk til kroppen måler lengden i tabellen på neste side, '
+             'Strikk rosa glattstrikk rundt med frø. ' + 'Frøene strikkes inn hele veien ned, ikke bare her. Rytmen er den samme overalt: frøomgang A, 4 omganger rosa, frøomgang B, 4 omganger rosa, og så om igjen. Begynn med en gang det rosa begynner, rett etter bladpartiet.' + ' '
+             'Strikk til kroppen måler lengden i tabellen på neste side, '
              'målt rett ned fra under armen, og sett en markør i omgangen. Den markøren er '
              'livet.',
-             'Work in pink stocking stitch in the round. Scatter seeds: seed round A, 2-3 '
-             'rounds in pink, then seed round B. Work until the body measures the length in '
+             'Work in pink stocking stitch in the round with seeds. ' + 'The seeds are knitted in all the way down, not just here. The rhythm is the same everywhere: seed round A, 4 rounds in pink, seed round B, 4 rounds in pink, and so on. Start as soon as the pink starts, right after the leaf panel.' + ' '
+             'Work until the body measures the length in '
              'the table on the next page, measured straight down from the underarm, and '
              'place a marker in the round. That marker is the waist.') + '</p>'), 9))
 
@@ -198,10 +198,12 @@ def sider(lang):
         banner(L(lang, '4 · SKJØRTET', '4 · THE SKIRT')) +
         '<p>' + L(lang,
         'Fra livmarkøren strikker du *2 rett, 1 økning*, gjenta rundt. Fortsett i rosa '
-        'glattstrikk med spredte frø til skjørtet måler lengden i kolonnen din. Da '
+        'glattstrikk, og hold frørytmen fra kroppen gående uavbrutt nedover hele '
+        'skjørtet, til skjørtet måler lengden i kolonnen din. Da '
         'kommer buekanten med grønn kant: ' + 'del kanten i buer med en markør mellom hver bue, 10 masker per bue. Strikk buerunden i rosa: *2 rett sammen vridd, 2 rett, 1 økning, 2 rett, 1 økning, 2 rett, 2 rett sammen* rundt, og gjenta den i alt 5 ganger. Bytt så til grønt, strikk 3 omganger rett, og fell svært løst av. Den grønne kanten legger seg som en smal strek langs buekurven.',
         'From the waist marker work *k2, M1*, repeat round. Continue in pink stocking '
-        'stitch with scattered seeds until the skirt measures the length in your column. '
+        'stitch, keeping the seed rhythm from the body running unbroken all the way down '
+        'the skirt, until the skirt measures the length in your column. '
         'Then comes the scalloped hem with its green edge: ' + 'divide the edge into scallops with a marker between each, 10 stitches per scallop. Work the scallop round in pink: *ssk, k2, M1R, k2, M1L, k2, k2tog* round, and repeat it 5 times in all. Then change to green, work 3 rounds in knit, and cast off very loosely. The green edge sits as a narrow line along the curve of the scallops.') + '</p>' +
         card(tabell(sk_h, sk_r, min_index=0)) +
         cme(L(lang,

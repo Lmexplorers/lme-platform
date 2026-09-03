@@ -180,12 +180,12 @@ def sider(lang):
     P.append(pg(
         banner(L(lang, 'GENSER · 3 · BOLEN', 'JUMPER · 3 · THE BODY')) +
         '<p>' + L(lang,
-        'Strikk rosa glattstrikk rundt med frø: frøomgang A, 2-3 omganger rosa, så '
-        'frøomgang B. Gjenta så tett eller spredt du vil. Strikk til bolen måler lengden i '
+        'Strikk rosa glattstrikk rundt med frø. ' + 'Frøene strikkes inn hele veien ned, ikke bare her. Rytmen er den samme overalt: frøomgang A, 4 omganger rosa, frøomgang B, 4 omganger rosa, og så om igjen. Begynn med en gang det rosa begynner, rett etter bladpartiet.' + ' '
+        'Strikk til bolen måler lengden i '
         'kolonnen din, målt rett ned fra under armen. Bytt så til grønt og strikk '
         'buekanten, som står på neste side.',
         'Work in pink stocking stitch in the round with seeds: seed round A, 2-3 rounds in '
-        'pink, then seed round B. Repeat as densely or sparsely as you like. Work until the '
+        'The seeds are knitted in all the way down, not just here. The rhythm is the same everywhere: seed round A, 4 rounds in pink, seed round B, 4 rounds in pink, and so on. Start as soon as the pink starts, right after the leaf panel. Work until the '
         'body measures the length in your column, measured straight down from the underarm. '
         'Then work the scalloped hem, which is on the next page.') + '</p>' +
         card(tabell(bol_h, bol_r, min_index=0)) +
@@ -336,11 +336,13 @@ def sider(lang):
         '<p>' + L(lang,
         'Strikk bladrapporten fra side 5 over 8 masker, gjentatt så mange ganger som '
         'kolonnen din sier. Bytt så til rosa og strikk *2 rett, 1 økning*, gjenta rundt. Nå '
-        'er skjørtet ute i full vidde. Fortsett i rosa glattstrikk med spredte frø til '
+        'er skjørtet ute i full vidde. Fortsett i rosa glattstrikk, og hold frørytmen '
+        'gående uavbrutt nedover hele skjørtet, til '
         'skjørtet måler lengden i siste kolonne, målt nedenfor linningen.',
         'Work the leaf repeat from page 5 over 8 stitches, repeated as many times as your '
         'column says. Then change to pink and work *k2, M1*, repeat round. The skirt is now '
-        'at full width. Continue in pink stocking stitch with scattered seeds until the '
+        'at full width. Continue in pink stocking stitch, keeping the seed rhythm '
+        'running unbroken all the way down the skirt, until the '
         'skirt measures the length in the last column, measured below the waistband.') +
         '</p>' +
         card(tabell(sk_h, sk_r, min_index=0)) +
