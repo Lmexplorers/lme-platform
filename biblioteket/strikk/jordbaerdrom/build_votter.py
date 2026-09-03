@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
 """
-Jordbærdrøm votter, gradert i to størrelser.
+Jordbærdrøm votter, gradert i to størrelser (dekker plaggstørrelse 44 til 74).
 
 Myke votter uten tommel, med brettet ribb, bladspisser, frø og en
 sammenhengende i-cord mellom de to vottene.
 
-Vottene har to størrelser, ikke fem som plaggene. Grunnen står i
+Vottene har to størrelser, ikke ni som plaggene. Grunnen står i
 grading_jordbaerdrom.py: bladrapporten er 8 masker, altså ca. 3,8 cm i
-omkrets, og en babyhånd vokser mindre enn det fra prematur til to måneder.
-Fem vottestørrelser ville vært fem navn på to reelle mål.
+omkrets, mens en babyhånd vokser langt mindre enn det mellom to
+nabostørrelser.
+
+Vottene er uten tommel, som er det vanlige på babyvotter. Det er også
+grunnen til at de stopper ved str 74: et barn på over ett år vil ha tommel,
+og en tommelløs vott blir da mer til hinder enn til hjelp.
 """
 import _jordbaer_felles as f
 from _jordbaer_felles import (VOTTER, banner, rosep, sagep, card, cme, ul,
@@ -42,14 +46,14 @@ def sider(lang):
     P.append(pg(f.forside(
         lang,
         L(lang, 'JORDBÆRDRØM VOTTER', 'STRAWBERRY DREAM MITTENS'),
-        L(lang, 'PREMATUR TIL 2 MÅNEDER', 'PREEMIE TO 2 MONTHS'),
+        L(lang, 'STØRRELSE 44 TIL 74', 'SIZES 44 TO 74'),
         L(lang,
           'Myke votter uten tommel, med brettet ribb, bladspisser, frø og en '
-          'sammenhengende i-cord mellom vottene. Gradert i to størrelser som dekker hele '
-          'Jordbærdrøm-kolleksjonen.',
-          'Soft thumbless mittens with a folded rib cuff, leaf tips, seeds and a connecting '
-          'i-cord between the two. Graded in two sizes covering the whole Strawberry Dream '
-          'collection.'),
+          'sammenhengende i-cord mellom vottene. To størrelser, som dekker '
+          'plaggstørrelse 44 til 74.',
+          'Soft thumbless mittens with a folded rib cuff, leaf tips, seeds and a '
+          'connecting i-cord between the two. Two sizes, covering garment sizes 44 to '
+          '74.'),
         bar=bar(lang)), 1))
 
     # ---------------------------------------------------------- 2 FØR DU BEGYNNER
@@ -99,15 +103,18 @@ def sider(lang):
     P.append(pg(f.side_storrelser_smaadel(
         lang,
         L(lang,
-          'Vottene er gradert i to størrelser, ikke fem som plaggene. En bladrapport er 8 '
-          'masker, altså ca. 3,8 cm rundt, og en babyhånd vokser mindre enn det fra '
-          'prematur til to måneder. To størrelser er derfor to reelle mål, ikke to navn på '
-          'det samme. Mål barnets hånd rundt knokene, eller velg etter plaggstørrelsen.',
-          'The mittens are graded in two sizes, not five like the garments. One leaf repeat '
-          'is 8 stitches, approx. 3.8 cm round, and a baby hand grows less than that from '
-          'premature to two months. Two sizes are therefore two real measurements, not two '
-          'names for the same thing. Measure the baby hand round the knuckles, or choose by '
-          'the garment size.'),
+          'Vottene er gradert i to størrelser, ikke ni som plaggene. En bladrapport er 8 '
+          'masker, altså ca. 3,8 cm rundt, mens en babyhånd vokser langt mindre enn det '
+          'mellom to nabostørrelser. To størrelser er derfor to reelle mål, ikke to navn '
+          'på det samme. Mål barnets hånd rundt knokene, eller velg etter '
+          'plaggstørrelsen. Vottene stopper ved str 74 fordi de er uten tommel, og et '
+          'barn på over ett år vil ha tommel.',
+          'The mittens are graded in two sizes, not nine like the garments. One leaf '
+          'repeat is 8 stitches, approx. 3.8 cm round, while a baby hand grows far less '
+          'than that between two neighbouring sizes. Two sizes are therefore two real '
+          'measurements, not two names for the same thing. Measure the hand round the '
+          'knuckles, or choose by the garment size. The mittens stop at size 74 because '
+          'they are thumbless, and a child over one year wants a thumb.'),
         khead, krow, mhead, mrow,
         [(navn(v, lang), L(lang, 'str ', 'size ') + v['dekker']) for v in VOTTER],
         L(lang,

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Jordbærdrøm romper med skjørt, gradert i fem størrelser (32, 38, 44, 50, 56).
+Jordbærdrøm romper med skjørt, gradert i ni størrelser (44 til 92).
 
 Ermeløs romper med innstrikket bladparti, frø, integrert skjørt og
 knappåpning mellom beina. Bygger HTML for norsk og engelsk, klar for
@@ -45,14 +45,13 @@ def sider(lang):
     P.append(pg(f.forside(
         lang,
         L(lang, 'JORDBÆRDRØM ROMPER', 'STRAWBERRY DREAM ROMPER'),
-        L(lang, 'PREMATUR TIL 2 MÅNEDER', 'PREEMIE TO 2 MONTHS'),
+        L(lang, 'STØRRELSE 44 TIL 92', 'SIZES 44 TO 92'),
         L(lang,
           'Ermeløs romper med innstrikket bladparti, frø, integrert skjørt og knappåpning '
-          'mellom beina. Gradert i fem størrelser, fra det aller minste premature barnet '
-          'og opp til to måneder.',
+          'mellom beina. Gradert i ni størrelser, fra liten nyfødt og opp til to år.',
           'A sleeveless romper with a knitted-in leaf yoke, seeds, an integrated skirt and '
-          'a buttoned opening at the crotch. Graded in five sizes, from the very smallest '
-          'premature baby up to two months.')), 1))
+          'a buttoned opening at the crotch. Graded in nine sizes, from small newborn up '
+          'to two years.')), 1))
 
     # ---------------------------------------------------------- 2 FØR DU BEGYNNER
     P.append(pg(
@@ -91,19 +90,22 @@ def sider(lang):
     mr = [[p['str_nr'], komma(p['bryst_ermelos_cm']) + ' cm',
            str(p['romper_lengde_cm']) + ' cm', komma(p['yoke_cm']) + ' cm',
            str(p['skjort_romper_cm']) + ' cm'] for p in PLAGG]
-    P.append(pg(f.side_storrelser(lang, 'romperen', mr, mh), 3))
+    for i, kropp in enumerate(f.side_storrelser(lang, 'romperen', mr, mh)):
+        P.append(pg(kropp, 3 + i))
 
     # ------------------------------------------------------------------- 4 GARN
-    P.append(pg(f.side_garn(lang, GARN, L(lang, EKSTRA_NO, EKSTRA_EN)), 4))
+    P.append(pg(f.side_garn(lang, GARN, L(lang, EKSTRA_NO, EKSTRA_EN)), 5))
 
     # ---------------------------------------------------------------- 5 DIAGRAM
-    P.append(pg(f.side_diagram(lang), 5))
+    P.append(pg(f.side_diagram(lang), 6))
 
     # ------------------------------------------------------- 6 HALS OG BÆRESTYKKE
-    hals_h = [S] + L(lang, ['Legg opp', 'Masker per felt', 'Økeomganger', 'Etter økingene'],
-                     ['Cast on', 'Sts per section', 'Increase rounds', 'After increases'])
+    hals_h = [S] + L(lang, ['Legg opp', 'Per felt', 'Økeomganger', 'Etter økingene',
+                            'Jevne omg. etter'],
+                     ['Cast on', 'Per section', 'Increase rounds', 'After increases',
+                      'Even rnds after'])
     hals_r = [[p['str_nr'], str(p['hals_co']) + m, p['hals_per_felt'],
-               p['oke_omganger'], str(p['yoke']) + m] for p in PLAGG]
+               p['oke_omganger'], str(p['yoke']) + m, p['yoke_jevne']] for p in PLAGG]
     P.append(pg(
         banner(L(lang, '1 · HALS OG ÅPNING', '1 · NECK AND OPENING')) +
         card('<p>' + L(lang,
@@ -127,7 +129,12 @@ def sider(lang):
              'stitches over the opening and join to work in the round. Continue the '
              'increases in the round until you have the stitch count in your column.') +
              '</p>') +
-        card(tabell(hals_h, hals_r, min_index=0)), 6))
+        card(tabell(hals_h, hals_r, min_index=0)) +
+        cme(L(lang,
+              'Når økingene er ferdige, strikker du antallet jevne omganger i siste '
+              'kolonne uten å øke. De gir bærestykket den dybden det skal ha.',
+              'When the increases are done, work the number of even rounds in the last '
+              'column without increasing. They give the yoke the depth it needs.')), 7))
 
     # ------------------------------------------------------------- 7 BLADSPISSER
     blad_h = [S] + L(lang, ['Masker i bærestykket', 'Bladrapporter rundt', 'Bærestykkets dybde'],
@@ -151,7 +158,7 @@ def sider(lang):
               'opp, har det sneket seg inn en øking for mye eller for lite lenger oppe.',
               'Check the stitch count before dividing for the armholes. If the leaf repeat '
               'does not come out even, an increase has slipped in or been missed higher '
-              'up.')), 7))
+              'up.')), 8))
 
     # ---------------------------------------------------------- 8 DEL TIL ARMHULL
     del_h = [S] + L(lang, ['Forstykke', 'Sett av til erme', 'Legg opp', 'Bakstykke', 'Kropp'],
@@ -177,7 +184,7 @@ def sider(lang):
              'Work in pink stocking stitch in the round. Scatter seeds: seed round A, 2-3 '
              'rounds in pink, then seed round B. Work until the body measures the length in '
              'the table on the next page, measured straight down from the underarm, and '
-             'place a marker in the round. That marker is the waist.') + '</p>'), 8))
+             'place a marker in the round. That marker is the waist.') + '</p>'), 9))
 
     # ---------------------------------------------------------------- 9 SKJØRTET
     sk_h = [S] + L(lang, ['Kropp fra under armen', 'Masker i kroppen', '*2 r, M1* gir',
@@ -204,7 +211,7 @@ def sider(lang):
               'Skjørtet er kort med vilje. Det skal ligge over bleiedelen, ikke under den, '
               'og et langt skjørt ville kommet i veien ved bleieskift.',
               'The skirt is deliberately short. It sits over the nappy panel, not under it, '
-              'and a long skirt would get in the way at nappy changes.')), 9))
+              'and a long skirt would get in the way at nappy changes.')), 10))
 
     # --------------------------------------------------------------- 10 BLEIEDEL
     bl_h = [S] + L(lang, ['Kroppsmasker', 'Lengde fra livet', 'Del i to', 'Fell til'],
@@ -229,7 +236,7 @@ def sider(lang):
               'Strikk bakstykket 4 pinner lengre enn forstykket. Da havner knappene under '
               'barnet og ikke oppå, og skrittet lukker seg glatt.',
               'Work the back 4 rows longer than the front. That puts the buttons underneath '
-              'the baby rather than on top, and the crotch closes smoothly.')), 10))
+              'the baby rather than on top, and the crotch closes smoothly.')), 11))
 
     # ---------------------------------------------------- 11 KNAPPEBÅND OG ARMHULL
     kn_h = [S] + L(lang, ['Masker i skrittet', 'Knapphull', 'Plukk opp per armhull'],
@@ -257,19 +264,19 @@ def sider(lang):
              'sleeve stitches, the stitches you cast on under the arm, and 1 stitch in each '
              'of the two corners. Work 4 rounds of twisted rib and cast off with stretch. '
              'Finally sew the fourth button at the neck.') + '</p>' +
-             tabell(kn_h, kn_r, min_index=0)), 11))
+             tabell(kn_h, kn_r, min_index=0)), 12))
 
     # ------------------------------------------------------------- 12 TESTSTRIKK
-    P.append(pg(f.side_teststrikk(lang, 'romperen', 'romper'), 12))
+    P.append(pg(f.side_teststrikk(lang, 'romperen', 'romper'), 13))
 
     # -------------------------------------------------------------- 13 MONTERING
     P.append(pg(f.side_montering(
         lang,
         'Kjenn etter at knappene i skrittet ikke ligger hardt an når barnet ligger på rygg.',
-        'Check that the crotch buttons do not press when the baby lies on its back.'), 13))
+        'Check that the crotch buttons do not press when the baby lies on its back.'), 14))
 
     # ------------------------------------------------------------- 14 AVSLUTNING
-    P.append(pg(f.side_avslutning(lang), 14))
+    P.append(pg(f.side_avslutning(lang), 15))
     return P
 
 

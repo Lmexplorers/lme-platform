@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Jordbærdrøm kjole, gradert i fem størrelser (32, 38, 44, 50, 56).
+Jordbærdrøm kjole, gradert i ni størrelser (44 til 92, liten nyfødt til 2 år).
 
 Ermeløs, toppstrikket babykjole med bladparti i bærestykket, innstrikkede frø
 og et mykt utsvingt skjørt. Bygger HTML for norsk og engelsk, klar for
@@ -58,14 +58,12 @@ def sider(lang):
     P.append(pg(f.forside(
         lang,
         L(lang, 'JORDBÆRDRØM KJOLE', 'STRAWBERRY DREAM DRESS'),
-        L(lang, 'PREMATUR TIL 2 MÅNEDER', 'PREEMIE TO 2 MONTHS'),
+        L(lang, 'STØRRELSE 44 TIL 92', 'SIZES 44 TO 92'),
         L(lang,
-          'Ermeløs, toppstrikket babykjole med bladparti, innstrikkede frø og et mykt '
-          'utsvingt skjørt. Gradert i fem størrelser, fra det aller minste premature '
-          'barnet og opp til to måneder.',
-          'A sleeveless, top-down baby dress with a leaf yoke, knitted-in seeds and a '
-          'soft flared skirt. Graded in five sizes, from the very smallest premature '
-          'baby up to two months.')), 1))
+          'Ermeløs, toppstrikket kjole med bladparti, innstrikkede frø og et mykt '
+          'utsvingt skjørt. Gradert i ni størrelser, fra liten nyfødt og opp til to år.',
+          'A sleeveless, top-down dress with a leaf yoke, knitted-in seeds and a soft '
+          'flared skirt. Graded in nine sizes, from small newborn up to two years.')), 1))
 
     # ---------------------------------------------------------- 2 FØR DU BEGYNNER
     P.append(pg(
@@ -100,20 +98,23 @@ def sider(lang):
 
     # ------------------------------------------------------------- 3 STØRRELSER
     mh, mr = mal(lang)
-    P.append(pg(f.side_storrelser(lang, 'kjolen', mr, mh), 3))
+    for i, kropp in enumerate(f.side_storrelser(lang, 'kjolen', mr, mh)):
+        P.append(pg(kropp, 3 + i))
 
     # ------------------------------------------------------------------- 4 GARN
-    P.append(pg(f.side_garn(lang, GARN, L(lang, EKSTRA_NO, EKSTRA_EN)), 4))
+    P.append(pg(f.side_garn(lang, GARN, L(lang, EKSTRA_NO, EKSTRA_EN)), 5))
 
     # ---------------------------------------------------------------- 5 DIAGRAM
-    P.append(pg(f.side_diagram(lang), 5))
+    P.append(pg(f.side_diagram(lang), 6))
 
     # --------------------------------------------------------- 6 HALS OG ØKINGER
     hals_h = [S] + L(lang,
-                     ['Legg opp', 'Masker per felt', 'Økeomganger', 'Etter økingene'],
-                     ['Cast on', 'Sts per section', 'Increase rounds', 'After increases'])
+                     ['Legg opp', 'Per felt', 'Økeomganger', 'Etter økingene',
+                      'Jevne omg. etter'],
+                     ['Cast on', 'Per section', 'Increase rounds', 'After increases',
+                      'Even rnds after'])
     hals_r = [[p['str_nr'], str(p['hals_co']) + m, p['hals_per_felt'],
-               p['oke_omganger'], str(p['yoke']) + m] for p in PLAGG]
+               p['oke_omganger'], str(p['yoke']) + m, p['yoke_jevne']] for p in PLAGG]
     P.append(pg(
         banner(L(lang, '1 · HALS OG BÆRESTYKKE', '1 · NECK AND YOKE')) +
         card('<p>' + L(lang,
@@ -140,12 +141,14 @@ def sider(lang):
              '</p>') +
         card(tabell(hals_h, hals_r, min_index=0)) +
         cme(L(lang,
-              'Antall økeomganger er ulikt i hver størrelse, men de 8 feltene og de 8 '
-              'maskene per økeomgang er de samme i alle. Det er halsen og antall omganger '
-              'som gir størrelsen.',
-              'The number of increase rounds differs between sizes, but the 8 sections '
-              'and the 8 stitches per increase round are the same in all of them. The '
-              'neck and the number of rounds create the size.')), 6))
+              'Når økingene er ferdige, strikker du antallet jevne omganger i siste '
+              'kolonne uten å øke. De gir bærestykket den dybden det skal ha, slik at '
+              'armhullet havner riktig, og de er derfor ulike fra størrelse til '
+              'størrelse.',
+              'When the increases are done, work the number of even rounds in the last '
+              'column without increasing. They give the yoke the depth it needs so the '
+              'armhole sits correctly, and they therefore differ from size to '
+              'size.')), 7))
 
     # ------------------------------------------------------------- 7 BLADPARTIET
     blad_h = [S] + L(lang,
@@ -171,7 +174,7 @@ def sider(lang):
               'Strikk 1 omgang jevnt i rosa. Da er bærestykket ferdig, og hele plagget er '
               'rosa fra her og ned, bortsett fra frøene og kantene.',
               'Work 1 even round in pink. The yoke is now finished, and the whole garment '
-              'is pink from here down apart from the seeds and the edgings.')), 7))
+              'is pink from here down apart from the seeds and the edgings.')), 8))
 
     # ---------------------------------------------------------- 8 DEL TIL ARMHULL
     del_h = [S] + L(lang,
@@ -195,7 +198,7 @@ def sider(lang):
               'Kontroller masketallet før du går videre. Forstykke og bakstykke skal være '
               'like, og de to armhullene skal ha nøyaktig like mange masker på tråden.',
               'Check the stitch count before going on. Front and back should be equal, and '
-              'the two armholes should hold exactly the same number of stitches.')), 8))
+              'the two armholes should hold exactly the same number of stitches.')), 9))
 
     # -------------------------------------------------------------------- 9 BOL
     bol_h = [S] + L(lang,
@@ -221,7 +224,7 @@ def sider(lang):
               'Sett en markør i omgangen når bolen er ferdig. Den markøren er livet, og '
               'alle skjørtemål regnes fra den.',
               'Place a marker in the round when the body is finished. That marker is the '
-              'waist, and all skirt measurements are taken from it.')), 9))
+              'waist, and all skirt measurements are taken from it.')), 10))
 
     # ---------------------------------------------------------------- 10 SKJØRT
     sk_h = [S] + L(lang,
@@ -250,7 +253,7 @@ def sider(lang):
               'Skjørtelengden kan endres fritt uten at noe annet i oppskriften påvirkes.',
               'If you want the dress longer or shorter, this is where you decide. The '
               'skirt length can be changed freely without affecting anything else in the '
-              'pattern.')), 10))
+              'pattern.')), 11))
 
     # ---------------------------------------------------------------- 11 KANTER
     kant_h = [S] + L(lang, ['Plukk opp per armhull', 'Omganger vridd ribb'],
@@ -281,16 +284,16 @@ def sider(lang):
               'Sy knappen på nakkeåpningen til slutt, og kontroller at knapphullet ikke er '
               'blitt for stort etter vask.',
               'Sew the button on the back neck opening last, and check that the buttonhole '
-              'has not stretched after washing.')), 11))
+              'has not stretched after washing.')), 12))
 
     # ------------------------------------------------------------- 12 TESTSTRIKK
-    P.append(pg(f.side_teststrikk(lang, 'kjolen', 'dress'), 12))
+    P.append(pg(f.side_teststrikk(lang, 'kjolen', 'dress'), 13))
 
     # -------------------------------------------------------------- 13 MONTERING
-    P.append(pg(f.side_montering(lang), 13))
+    P.append(pg(f.side_montering(lang), 14))
 
     # ------------------------------------------------------------- 14 AVSLUTNING
-    P.append(pg(f.side_avslutning(lang), 14))
+    P.append(pg(f.side_avslutning(lang), 15))
     return P
 
 

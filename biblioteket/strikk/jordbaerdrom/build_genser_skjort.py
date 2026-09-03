@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Jordbærdrøm genser og skjørt, gradert i fem størrelser (32, 38, 44, 50, 56).
+Jordbærdrøm genser og skjørt, gradert i ni størrelser (44 til 92).
 
 Et matchende todelt sett: toppstrikket genser med rundt bærestykke og lange
 ermer, og et separat skjørt med elastisk liv. Begge plaggene har det samme
@@ -24,10 +24,12 @@ GARN = [[p['str_nr'],
         for p in PLAGG]
 
 EKSTRA_NO = [['Pinne 4 mm', 'settpinner eller Magic Loop til hals, ermer og linning'],
+             ['1 flat knapp', 'ca. 10-12 mm, til nakkeåpningen på genseren'],
              ['Myk elastikk', 'ca. 1 cm bred, til skjørtets linning'],
              ['Stoppenål', 'til å feste tråder og sy ned linning og picotkant'],
              ['Maskemarkør', 'til å merke omgangens begynnelse og hver ermeside']]
 EKSTRA_EN = [['4 mm needles', 'double-pointed or Magic Loop for neck, sleeves and waistband'],
+             ['1 flat button', 'approx. 10-12 mm, for the jumper back neck opening'],
              ['Soft elastic', 'approx. 1 cm wide, for the skirt waistband'],
              ['Darning needle', 'for weaving in ends and sewing down the waistband and picot'],
              ['Stitch marker', 'to mark the beginning of the round and each sleeve side']]
@@ -48,25 +50,28 @@ def sider(lang):
     P.append(pg(f.forside(
         lang,
         L(lang, 'JORDBÆRDRØM SETT', 'STRAWBERRY DREAM SET'),
-        L(lang, 'GENSER OG SKJØRT · PREMATUR TIL 2 MÅNEDER',
-          'JUMPER AND SKIRT · PREEMIE TO 2 MONTHS'),
+        L(lang, 'GENSER OG SKJØRT · STØRRELSE 44 TIL 92',
+          'JUMPER AND SKIRT · SIZES 44 TO 92'),
         L(lang,
           'Et matchende todelt sett: toppstrikket genser med rundt bærestykke og lange '
           'ermer, og et separat skjørt med mykt elastisk liv. Begge delene har det samme '
           'blad- og frømønsteret. Gradert i fem størrelser.',
           'A matching two-piece set: a top-down jumper with a round yoke and long sleeves, '
           'and a separate skirt with a soft elasticated waist. Both pieces share the same '
-          'leaf and seed pattern. Graded in five sizes.')), 1))
+          'leaf and seed pattern. Graded in nine sizes, from small newborn to two '
+          'years.')), 1))
 
     # ---------------------------------------------------------- 2 FØR DU BEGYNNER
     P.append(pg(
         banner(L(lang, 'FØR DU BEGYNNER', 'BEFORE YOU START')) +
         card('<p>' + L(lang,
-             'Genseren strikkes ovenfra og ned med rundt bærestykke og lange ermer. '
+             'Genseren strikkes ovenfra og ned med rundt bærestykke, lange ermer og en '
+             'liten knappåpning bak i nakken. '
              'Skjørtet strikkes separat, også ovenfra og ned, med en brettet linning som '
              'en myk elastikk tres gjennom til slutt. De to delene deler diagram, fasthet '
              'og farger, men strikkes helt uavhengig av hverandre.',
-             'The jumper is knitted top-down with a round yoke and long sleeves. The skirt '
+             'The jumper is knitted top-down with a round yoke, long sleeves and a small '
+             'buttoned opening at the back neck. The skirt '
              'is knitted separately, also from the top down, with a folded waistband that a '
              'soft elastic is threaded through at the end. The two pieces share the charts, '
              'the gauge and the colours, but are knitted entirely independently.') + '</p>') +
@@ -97,44 +102,53 @@ def sider(lang):
            str(p['genser_lengde_cm']) + ' cm', str(p['erme_lengde_cm']) + ' cm',
            komma(p['skjort_liv_cm']) + ' cm',
            str(p['skjort_lengde_cm'] + 3) + ' cm'] for p in PLAGG]
-    P.append(pg(f.side_storrelser(lang, 'settet', mr, mh), 3))
+    for i, kropp in enumerate(f.side_storrelser(lang, 'settet', mr, mh)):
+        P.append(pg(kropp, 3 + i))
 
     # ------------------------------------------------------------------- 4 GARN
-    P.append(pg(f.side_garn(lang, GARN, L(lang, EKSTRA_NO, EKSTRA_EN)), 4))
+    P.append(pg(f.side_garn(lang, GARN, L(lang, EKSTRA_NO, EKSTRA_EN)), 5))
 
     # ---------------------------------------------------------------- 5 DIAGRAM
-    P.append(pg(f.side_diagram(lang), 5))
+    P.append(pg(f.side_diagram(lang), 6))
 
     # ------------------------------------------------- 6 GENSER, HALS OG BÆRESTYKKE
-    hals_h = [S] + L(lang, ['Legg opp', 'Masker per felt', 'Økeomganger', 'Bærestykke',
-                            'Bladrapporter'],
-                     ['Cast on', 'Sts per section', 'Increase rounds', 'Yoke',
-                      'Leaf repeats'])
+    hals_h = [S] + L(lang, ['Legg opp', 'Per felt', 'Økeomg.', 'Jevne omg.', 'Bærestykke',
+                            'Bladrapp.'],
+                     ['Cast on', 'Per section', 'Inc. rnds', 'Even rnds', 'Yoke',
+                      'Leaf rep.'])
     hals_r = [[p['str_nr'], str(p['hals_co']) + m, p['hals_per_felt'], p['oke_omganger'],
-               str(p['yoke']) + m, str(p['blad_rapporter']) + ' x'] for p in PLAGG]
+               p['yoke_jevne'], str(p['yoke']) + m, str(p['blad_rapporter']) + ' x']
+              for p in PLAGG]
     P.append(pg(
         banner(L(lang, 'GENSER · 1 · HALS OG BÆRESTYKKE', 'JUMPER · 1 · NECK AND YOKE')) +
         card('<p>' + L(lang,
-             'Legg opp med grønt på pinne 4 mm, samle til en omgang og strikk 5 omganger '
-             'vridd ribb. Del maskene i 8 like felt og sett en markør mellom hvert felt. Øk '
-             '1 maske i hvert felt på annenhver omgang, altså 8 masker per økeomgang, til '
-             'du har masketallet i kolonnen din. Strikk så bladrapporten fra side 5 over 8 '
-             'masker, gjentatt så mange ganger som kolonnen sier, og avslutt med 1 omgang '
-             'rosa.',
-             'Cast on in green on 4 mm needles, join in the round and work 5 rounds of '
-             'twisted rib. Divide the stitches into 8 equal sections and place a marker '
-             'between each. Increase 1 stitch in each section every other round, that is 8 '
-             'stitches per increase round, until you have the stitch count in your column. '
-             'Then work the leaf repeat from page 5 over 8 stitches, repeated as many times '
-             'as the column says, and finish with 1 round in pink.') + '</p>') +
+             'Legg opp med grønt på pinne 4 mm og strikk 5 pinner vridd ribb frem og '
+             'tilbake. På pinne 3 lager du ett knapphull 3 masker innenfor kanten: 2 rett '
+             'sammen, 1 kast. Fortsett i glattstrikk frem og tilbake. Del maskene i 8 like '
+             'felt og øk 1 maske i hvert felt på annenhver pinne, altså 8 masker per '
+             'økeomgang. Når åpningen bak måler ca. 4 cm, legger du opp 2 masker over '
+             'åpningen og samler arbeidet til en omgang. Fortsett økingene rundt til du '
+             'har masketallet i kolonnen din, strikk de jevne omgangene i siste kolonne, '
+             'og så bladrapporten fra side 5 over 8 masker. Avslutt med 1 omgang rosa.',
+             'Cast on in green on 4 mm needles and work 5 rows of twisted rib back and '
+             'forth. On row 3 make one buttonhole 3 stitches in from the edge: knit 2 '
+             'together, yarn over. Continue in stocking stitch back and forth. Divide the '
+             'stitches into 8 equal sections and increase 1 stitch in each section every '
+             'other row, that is 8 stitches per increase round. When the back opening '
+             'measures approx. 4 cm, cast on 2 stitches over the opening and join to work '
+             'in the round. Continue the increases until you have the stitch count in your '
+             'column, work the even rounds in the last column, then the leaf repeat from '
+             'page 5 over 8 stitches. Finish with 1 round in pink.') + '</p>') +
         card(tabell(hals_h, hals_r, min_index=0)) +
         cme(L(lang,
-              'Genseren har ingen åpning i nakken. På størrelse 50 og 56 kan du gjerne '
-              'strikke de fire første pinnene frem og tilbake og lage ett knapphull, som på '
-              'kjolen. Da kommer hodet lettere gjennom, og halsen trenger ikke strekkes.',
-              'The jumper has no neck opening. In sizes 50 and 56 you may work the first '
-              'four rows back and forth and make one buttonhole, as on the dress. The head '
-              'then passes through more easily and the neck does not have to stretch.')), 6))
+              'Knappåpningen i nakken er ikke pynt, den er nødvendig. En hals som er vid '
+              'nok til å tres over hodet uten åpning, ville hengt løst rundt halsen '
+              'etterpå, og det gjelder i alle størrelser. Med åpningen kan halsen sitte '
+              'der den skal.',
+              'The buttoned back opening is not decoration, it is necessary. A neck wide '
+              'enough to pass over the head without an opening would hang loose around the '
+              'neck afterwards, and that holds in every size. With the opening the neck '
+              'can sit where it should.')), 7))
 
     # ------------------------------------------------ 7 GENSER, DEL TIL BOL OG ERMER
     del_h = [S] + L(lang, ['Forstykke', 'Sett av til erme', 'Legg opp', 'Bakstykke', 'Bol'],
@@ -155,7 +169,7 @@ def sider(lang):
         'the arm, the back, then the same sleeve on the other side. The jumper casts on 4 '
         'stitches under each arm, two more than the dress and the romper, because a sleeve '
         'needs a little extra width at the underarm.') + '</p>' +
-        card(tabell(del_h, del_r, min_index=0)), 7))
+        card(tabell(del_h, del_r, min_index=0)), 8))
 
     # ------------------------------------------------------------- 8 GENSER, BOL
     bol_h = [S] + L(lang, ['Masker i bolen', 'Brystvidde', 'Lengde fra under armen',
@@ -179,7 +193,7 @@ def sider(lang):
               'Fell alltid av løst i ribben. En stram avfelling gjør at genseren ikke går '
               'ned over brystet, og det merkes mest på de minste størrelsene.',
               'Always cast off loosely in rib. A tight cast-off stops the jumper from '
-              'pulling down over the chest, and that shows most in the smallest sizes.')), 8))
+              'pulling down over the chest, and that shows most in the smallest sizes.')), 9))
 
     # ----------------------------------------------------------- 9 GENSER, ERMER
     erme_h = [S] + L(lang, ['Hvilende masker', 'Plukk opp', 'Overarm', 'Felleomganger',
@@ -209,7 +223,7 @@ def sider(lang):
               'ermet helt likt.',
               'When the sleeve measures approx. 2 cm less than the sleeve length in the '
               'table, change to green and work 6 rounds of twisted rib. Cast off with '
-              'stretch. Work the second sleeve exactly the same.')), 9))
+              'stretch. Work the second sleeve exactly the same.')), 10))
 
     # -------------------------------------------------------- 10 SKJØRT, LINNING
     lin_h = [S] + L(lang, ['Legg opp', 'Bladrapporter', 'Livvidde', 'Linning, høyde'],
@@ -235,7 +249,7 @@ def sider(lang):
               'Legg opp løst. Linningen skal kunne strekkes over hoftene, og en stram '
               'oppleggingskant er den vanligste grunnen til at et babyskjørt ikke går på.',
               'Cast on loosely. The waistband must stretch over the hips, and a tight '
-              'cast-on edge is the most common reason a baby skirt will not go on.')), 10))
+              'cast-on edge is the most common reason a baby skirt will not go on.')), 11))
 
     # ------------------------------------------------------ 11 SKJØRT, BLAD OG VIDDE
     sk_h = [S] + L(lang, ['Masker i linningen', 'Bladrapporter', '*2 r, M1* gir',
@@ -263,7 +277,7 @@ def sider(lang):
               'Bladene på skjørtet peker nedover, akkurat som på genserens bærestykke, så '
               'de to delene ser like ut når de brukes sammen.',
               'The leaves on the skirt point downwards, just as on the jumper yoke, so the '
-              'two pieces match when worn together.')), 11))
+              'two pieces match when worn together.')), 12))
 
     # ----------------------------------------------------- 12 SKJØRT, PICOT OG ELASTIKK
     P.append(pg(
@@ -290,22 +304,22 @@ def sider(lang):
              'waistband. The elastic should hold the skirt up without marking the skin. '
              'Check with a finger: you should slip easily under the waistband.') + '</p>') +
         cme(L(lang,
-              'På et prematurt barn er huden ekstra sart. Er du i tvil, velger du den '
+              'På de minste barna er huden ekstra sart. Er du i tvil, velger du den '
               'løseste elastikken, og heller strammer den senere.',
-              'A premature baby\'s skin is especially delicate. If in doubt, choose the '
-              'looser elastic and tighten it later if needed.')), 12))
+              'On the smallest children the skin is especially delicate. If in doubt, '
+              'choose the looser elastic and tighten it later if needed.')), 13))
 
     # ------------------------------------------------------------- 13 TESTSTRIKK
-    P.append(pg(f.side_teststrikk(lang, 'settet', 'set'), 13))
+    P.append(pg(f.side_teststrikk(lang, 'settet', 'set'), 14))
 
     # -------------------------------------------------------------- 14 MONTERING
     P.append(pg(f.side_montering(
         lang,
         'Kontroller at elastikken sitter mykt og ikke lager merker etter en times bruk.',
-        'Check that the elastic sits softly and leaves no marks after an hour of wear.'), 14))
+        'Check that the elastic sits softly and leaves no marks after an hour of wear.'), 15))
 
     # ------------------------------------------------------------- 15 AVSLUTNING
-    P.append(pg(f.side_avslutning(lang), 15))
+    P.append(pg(f.side_avslutning(lang), 16))
     return P
 
 

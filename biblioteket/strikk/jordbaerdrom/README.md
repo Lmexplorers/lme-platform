@@ -1,13 +1,13 @@
-# Jordbærdrøm (LME strikkekolleksjon, prematur og nyfødt)
+# Jordbærdrøm (LME strikkekolleksjon, str 44 til 92)
 
-Fem strikkeoppskrifter for de aller minste, med innstrikkede jordbærblad og
-frø. Ferdige PDF-er, norsk og engelsk, A4:
+Fem strikkeoppskrifter med innstrikkede jordbærblad og frø, gradert fra
+liten nyfødt til to år. Ferdige PDF-er, norsk og engelsk, A4:
 
 | Plagg | Norsk | Engelsk | Sider |
 |---|---|---|---|
-| Kjole | `LME-Jordbaerdrom-Kjole.pdf` | `-EN.pdf` | 14 |
-| Romper med skjørt | `LME-Jordbaerdrom-Romper.pdf` | `-EN.pdf` | 14 |
-| Genser og skjørt | `LME-Jordbaerdrom-Genser-og-skjort.pdf` | `-EN.pdf` | 15 |
+| Kjole | `LME-Jordbaerdrom-Kjole.pdf` | `-EN.pdf` | 15 |
+| Romper med skjørt | `LME-Jordbaerdrom-Romper.pdf` | `-EN.pdf` | 15 |
+| Genser og skjørt | `LME-Jordbaerdrom-Genser-og-skjort.pdf` | `-EN.pdf` | 16 |
 | Votter | `LME-Jordbaerdrom-Votter.pdf` | `-EN.pdf` | 12 |
 | Tøfler | `LME-Jordbaerdrom-Tofler.pdf` | `-EN.pdf` | 12 |
 
@@ -16,25 +16,18 @@ https://lmexplorers.com/teststrikk, som er lenket fra et kort på dashbordet.
 
 ## Hva som ble gjort
 
-Utgangspunktet var fem PDF-er i **én** størrelse (prematur / liten nyfødt),
-laget med ChatGPT og aldri strikket av noen. De ga konstruksjonen og stilen:
-det runde bærestykket delt i 8 felt, bladrapporten, frøene, picotkanten.
+Utgangspunktet var fem PDF-er i **én** størrelse, laget med ChatGPT og aldri
+strikket av noen. De ga konstruksjonen og stilen: det runde bærestykket delt
+i 8 felt, bladrapporten, frøene, picotkanten.
 
 De ga derimot ikke tall det gikk an å stole på. Flere av dem gikk rett og
 slett ikke opp (se listen lenger nede). **Alle masketall er derfor regnet ut
 på nytt her**, fra barnas mål og strikkefastheten, ikke overtatt fra PDF-ene.
-Denne mappen er kildefilene som mangler, og oppskriftene er gradert til
-**fem størrelser: 32, 38, 44, 50 og 56**.
+Denne mappen er kildefilene som mangler.
 
-Str 50 er det minste som selges i vanlige butikker, og var altfor stort for
-barnet oppskriftene først skulle brukes til. Derfor går kolleksjonen ned til
-str 32, som passer et barn på rundt ett kilo.
-
-Størrelse 32 lander på de samme tallene som sto i PDF-en (88 masker i
-bærestykket, 60 i bolen, 48 i halsen), men her fordi de er riktige for
-størrelsen, ikke fordi PDF-en sa det: 4,6 cm romslighet over brystet, en hals
-som strekker til ca. 29 cm over et hode på 25 til 27 cm, og et bærestykke på
-7,5 cm mot en skulderhøyde på 6 til 7 cm.
+Kolleksjonen er gradert i **ni størrelser: 44, 50, 56, 62, 68, 74, 80, 86 og
+92**, altså fra liten nyfødt til to år. Str 44 er den minste som lages til
+premature og små nyfødte, og str 92 svarer til to år.
 
 **Ingenting i kolleksjonen er strikket ennå.** Det er hele poenget med
 teststrikken, og det står rett ut på teststrikksiden i hvert hefte.
@@ -55,24 +48,44 @@ Delingen til bol og ermer er derimot fri. Der graderes bolen raskere enn
 ermene i de største størrelsene, så brystvidden følger barnets mål og ikke
 rapporten:
 
-| Str | Hals | Økeomg. | Bærestykke | Rapporter | Bol | Ferdig bryst | Romslighet |
-|---|---|---|---|---|---|---|---|
-| 32 | 48 | 5 | 88 | 11 | 60 | 28,6 cm | 4,6 cm |
-| 38 | 48 | 7 | 104 | 13 | 68 | 32,4 cm | 5,4 cm |
-| 44 | 56 | 8 | 120 | 15 | 76 | 36,2 cm | 6,2 cm |
-| 50 | 56 | 10 | 136 | 17 | 84 | 40,0 cm | 7,0 cm |
-| 56 | 64 | 11 | 152 | 19 | 92 | 43,8 cm | 7,8 cm |
+| Str | Passer til | Hals | Økeomg. | Jevne omg. | Bærestykke | Rapporter | Bol | Ferdig bryst | Romslighet |
+|---|---|---|---|---|---|---|---|---|---|
+| 44 | liten nyfødt / prematur | 48 | 8 | 1 | 112 | 14 | 80 | 38,1 cm | 6,1 cm |
+| 50 | nyfødt, 0-1 mnd | 48 | 10 | 1 | 128 | 16 | 88 | 41,9 cm | 6,9 cm |
+| 56 | 1-2 mnd | 56 | 10 | 3 | 136 | 17 | 92 | 43,8 cm | 5,8 cm |
+| 62 | 2-4 mnd | 56 | 12 | 1 | 152 | 19 | 100 | 47,6 cm | 6,6 cm |
+| 68 | 4-6 mnd | 56 | 13 | 1 | 160 | 20 | 104 | 49,5 cm | 6,5 cm |
+| 74 | 6-9 mnd | 64 | 13 | 2 | 168 | 21 | 108 | 51,4 cm | 6,4 cm |
+| 80 | 9-12 mnd | 64 | 14 | 2 | 176 | 22 | 112 | 53,3 cm | 6,3 cm |
+| 86 | 12-18 mnd | 64 | 15 | 1 | 184 | 23 | 116 | 55,2 cm | 6,2 cm |
+| 92 | 18-24 mnd, 2 år | 72 | 15 | 2 | 192 | 24 | 120 | 57,1 cm | 6,1 cm |
 
-Halsen har bare 48, 56 og 64 masker å velge mellom (sprang på 3,8 cm), og
-holdes derfor på samme masketall over to størrelser om gangen, mens antall
-økeomganger tar resten av veksten. Halsen **må** vokse: genseren har ingen
-åpning i nakken og skal over hodet, og hodet vokser raskere enn brystet.
+Halsen har bare 48, 56, 64 og 72 masker å velge mellom (sprang på 3,8 cm), og
+holdes derfor på samme masketall over flere størrelser, mens antall
+økeomganger tar resten av veksten.
+
+**Bærestykkets dybde styres av et eget mål, ikke av økingene.** Der halsen
+hopper opp et trinn, blir det færre økeomganger igjen til å nå samme
+bærestykke, og uten et eget dybdemål ville bærestykket stått stille akkurat
+der barnet ble større. Differansen fylles med jevne omganger uten økinger,
+rett før bladpartiet. Det er kolonnen «Jevne omg.» over.
+
+**Bindingen løses med et søk, ikke på frihånd.** Bærestykket er 2 x forstykke
++ 2 x erme, så kravet om delelighet med 8 betyr at forstykke + erme må være
+delelig med 4. Over ni størrelser går det ikke an å treffe alle brystmål
+innenfor den bindingen ved å gjette. `finn_par()` i graderingsskriptet søker
+derfor etter det paret som ligger nærmest målene og samtidig oppfyller alle
+kravene.
 
 **Votter og tøfler har færre størrelser.** Samme binding slår ut motsatt vei
-på de små delene: en bladrapport er ca. 3,8 cm i omkrets, og en babyhånd
-vokser mindre enn det fra prematur til to måneder. Fem vottestørrelser ville
-vært fem navn på to reelle mål. Vottene har derfor 2 størrelser og tøflene 3,
-og hver av dem dekker et oppgitt spenn av plaggstørrelsene.
+på de små delene: en bladrapport er ca. 3,8 cm i omkrets, mens en hånd eller
+fot vokser langt mindre enn det mellom to nabostørrelser. Vottene har derfor
+2 størrelser og tøflene 4, og hver av dem dekker et oppgitt spenn av
+plaggstørrelsene.
+
+**Vottene stopper ved str 74**, ikke fordi masketallet stopper, men fordi de
+er uten tommel. Det er riktig på en baby, men et barn på over ett år vil ha
+tommel, og en tommelløs vott blir da mer til hinder enn til hjelp.
 
 Alle tall står i `sizes.json` og beregnes av `grading_jordbaerdrom.py`, som
 har interne konsistenssjekk (`assert`): bladrapporten må gå opp, delingen må
@@ -84,22 +97,28 @@ feil, stopper byggingen der og ikke i en oppskrift noen strikker etter.
 ## Feil i PDF-ene som er rettet
 
 Disse er verdt å lese som en påminnelse om hva et ukontrollert utkast kan
-inneholde. Alle fire så riktige ut i en pen PDF.
+inneholde. Alle så riktige ut i en pen PDF.
 
 - **Armhullskanten.** PDF-en sa "plukk opp ca. 42 masker rundt hvert
   armhull", men armhullet har bare 16 hvilende masker pluss 2 lagt opp under
   armen. 42 er ikke mulig. Kanten er nå regnet ut: hvilende masker +
-  maskene under armen + 1 i hvert hjørne, altså 20 masker i str 32 og opp til
-  36 i str 56, alltid et partall siden kanten strikkes i vridd ribb.
+  maskene under armen + 1 i hvert hjørne, altså 22 masker i str 44
+  og opp til 42 i str 92, alltid et partall siden kanten strikkes i
+  vridd ribb.
 - **Kjolens skjørtelengde** sto som 16 cm i måltabellen og 15 cm i selve
   arbeidsbeskrivelsen, i samme PDF. Nå ett tall, hentet fra `sizes.json`.
 - **Skjørtets linning** la først opp 60 masker, økte til 64 for at
   bladrapporten skulle gå opp, og felte tilbake til 60 etterpå. Linningen
   legges nå opp direkte på et masketall som er delelig med 8, så både
   økingen og fellingen er borte.
-- **Halsen på genseren** var 48 masker uansett størrelse. Det er trangt selv
-  på det minste barnet, og umulig på str 56. Halsen graderes nå, og
-  oppskriften nevner et valgfritt knapphull for de to største størrelsene.
+- **Halsen på genseren** var 48 masker uansett størrelse, og genseren hadde
+  ingen åpning i nakken. Regnet etter hodeomkrets går den halsen ikke over
+  hodet i én eneste størrelse, heller ikke på den minste: 48 masker er 22,9
+  cm, som strukket i vridd ribb blir ca. 31 cm mot et nyfødt hode på 35 cm.
+  Halsen graderes nå (48 til 72 masker), **og genseren har fått samme
+  knappåpning i nakken som kjolen og romperen, i alle størrelser**. En hals
+  som er vid nok til å tres over hodet uten åpning, ville hengt løst rundt
+  halsen etterpå.
 
 ## Diagrammene
 

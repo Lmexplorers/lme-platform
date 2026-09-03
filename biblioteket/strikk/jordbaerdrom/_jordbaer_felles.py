@@ -158,42 +158,61 @@ def storrelsesbar(lang):
 
 # ------------------------------------------------------------- FELLES SIDETEKST
 def side_storrelser(lang, plaggnavn, malrader, malhead):
-    """Størrelsesside: hvilke størrelser finnes, og de ferdige målene."""
+    """To sider: barnets mål på den første, plaggets ferdige mål på den andre.
+
+    Med ni størrelser blir det ni rader i hver tabell, og de to tabellene får
+    ikke plass på samme ark. Sidemalen klipper i stillhet det som ikke får
+    plass, så de må deles. Returnerer en liste med to sidekropper.
+    """
     t = {'no': dict(
-        b='STØRRELSER OG FERDIGE MÅL',
-        lead=('Oppskriften er gradert i fem størrelser. Velg størrelse etter barnets '
-              'brystmål, ikke etter alder: premature barn vokser i sitt eget tempo, og '
-              'et par uker gir store utslag. Er du mellom to størrelser, velger du den '
+        b1='STØRRELSER',
+        b2='FERDIGE MÅL PÅ PLAGGET',
+        lead=('Oppskriften er gradert i ni størrelser, fra 44 til 92, altså fra liten '
+              'nyfødt til to år. Velg størrelse etter barnets brystmål, ikke etter '
+              'alder. Aldersangivelsene er bare en pekepinn, og et barn som kom for '
+              'tidlig følger sin egen kurve. Er du mellom to størrelser, velger du den '
               'største, siden et plagg som er litt for stort kan brukes lenger.'),
-        p1='BARNETS MÅL', p2='FERDIGE MÅL PÅ PLAGGET',
+        p1='BARNETS MÅL', p2='SLIK LESER DU TABELLENE',
         khead=[str_head(lang), 'Passer til', 'Barnets brystmål', 'Romslighet'],
         note=('Alle tall i oppskriften er oppgitt i egne kolonner per størrelse. Finn din '
-              'kolonne én gang, marker den, og les bare den videre.'))}
+              'kolonne én gang, marker den med en penn, og les bare den videre.'),
+        note2=('Målene under er plagget slik det skal være etter vask og flat tørking. '
+               'Får du andre mål, er det som regel strikkefastheten det står på, ikke '
+               'oppskriften.'))}
     t['en'] = dict(
-        b='SIZES AND FINISHED MEASUREMENTS',
-        lead=('The pattern is graded in five sizes. Choose by the baby\'s chest '
-              'measurement, not by age: premature babies grow at their own pace, and a '
-              'couple of weeks makes a big difference. Between two sizes, take the '
-              'larger one, since a garment that is slightly big lasts longer.'),
-        p1='THE BABY\'S MEASUREMENTS', p2='FINISHED MEASUREMENTS',
-        khead=[str_head(lang), 'Suits', 'Baby chest', 'Ease'],
+        b1='SIZES',
+        b2='FINISHED MEASUREMENTS',
+        lead=('The pattern is graded in nine sizes, from 44 to 92, that is from small '
+              'newborn to two years. Choose by the child\'s chest measurement, not by '
+              'age. The ages are only a guide, and a baby born early follows its own '
+              'curve. Between two sizes, take the larger one, since a garment that is '
+              'slightly big lasts longer.'),
+        p1='THE CHILD\'S MEASUREMENTS', p2='HOW TO READ THE TABLES',
+        khead=[str_head(lang), 'Suits', 'Child chest', 'Ease'],
         note=('Every number in the pattern is given in its own column per size. Find your '
-              'column once, mark it, and read only that one from there on.'))
+              'column once, mark it with a pen, and read only that one from there on.'),
+        note2=('The measurements below are the garment as it should be after washing and '
+               'drying flat. If you get different measurements, it is usually the gauge '
+               'and not the pattern.'))
     tt = t[lang]
     krow = [[p['str_nr'], p['tillegg_no' if lang == 'no' else 'tillegg_en'],
              f"{p['kropp_bryst_cm']:.0f} cm".replace('.', ','),
              f"{round(p['bryst_ermelos_cm'] - p['kropp_bryst_cm'], 1)} cm".replace('.', ',')]
             for p in PLAGG]
-    return f'''
-{banner(tt['b'])}
+    side_a = f"""
+{banner(tt['b1'])}
 <p>{tt['lead']}</p>
-{storrelsesbar(lang)}
 {rosep(tt['p1'])}
 {card(tabell(tt['khead'], krow, min_index=0))}
 {sagep(tt['p2'])}
-{card(tabell(malhead, malrader, min_index=0))}
 {cme(tt['note'])}
-'''
+"""
+    side_b = f"""
+{banner(tt['b2'])}
+{card(tabell(malhead, malrader, min_index=0))}
+{cme(tt['note2'])}
+"""
+    return [side_a, side_b]
 
 
 def side_garn(lang, garnmengder, ekstra_rader):
@@ -202,30 +221,24 @@ def side_garn(lang, garnmengder, ekstra_rader):
         b='GARN, UTSTYR OG FASTHET', p1='GARN OG PINNER', p2='GARNMENGDE',
         p3='STRIKKEFASTHET',
         garn=('DROPS Merino Extra Fine, 50 g = ca. 105 m, i jordbærrosa, bladgrønn og en '
-              'liten rest kremhvit. Pinne 4 mm, settpinner eller Magic Loop til de små '
-              'omgangene. Garnmengden under er beregnet med god margin, og gjelder per '
-              'størrelse.'),
+              'liten rest kremhvit. Garnmengden under er beregnet med god margin, og '
+              'gjelder per størrelse.'),
         ghead=[str_head(lang), 'Rosa', 'Grønt', 'Kremhvit'],
         fasthet=('21 masker og 28 omganger glattstrikk = 10 x 10 cm på pinne 4 mm. Strikk '
-                 'en prøvelapp rundt, ikke frem og tilbake, og mål den etter at den er '
-                 'vasket og tørket flatt. Får du flere masker enn 21, går du opp en '
-                 'pinnestørrelse. Får du færre, går du ned. Fastheten avgjør alle mål i '
-                 'oppskriften, og på så små plagg slår et lite avvik fort ut i flere '
-                 'centimeter.'),
+                 'prøvelappen rundt, ikke frem og tilbake, og mål den etter vask og flat '
+                 'tørking. Flere masker enn 21 betyr én pinne opp, færre betyr én ned. '
+                 'Fastheten avgjør alle mål i oppskriften.'),
         ehead=['Utstyr', 'Til hva'])}
     t['en'] = dict(
         b='YARN, TOOLS AND GAUGE', p1='YARN AND NEEDLES', p2='YARN AMOUNT', p3='GAUGE',
         garn=('DROPS Merino Extra Fine, 50 g = approx. 105 m, in strawberry pink, leaf '
-              'green and a small amount of cream white. 4 mm needles, double-pointed or '
-              'Magic Loop for the small rounds. The amounts below include a good margin, '
-              'and are given per size.'),
+              'green and a small amount of cream white. The amounts below include a good '
+              'margin, and are given per size.'),
         ghead=[str_head(lang), 'Pink', 'Green', 'Cream'],
         fasthet=('21 stitches and 28 rounds in stocking stitch = 10 x 10 cm on 4 mm '
                  'needles. Knit your swatch in the round, not flat, and measure it after '
-                 'washing and drying flat. More than 21 stitches means going up a needle '
-                 'size, fewer means going down. The gauge decides every measurement in '
-                 'the pattern, and on garments this small a slight difference quickly '
-                 'becomes several centimetres.'),
+                 'washing and drying flat. More than 21 stitches means one needle size up, '
+                 'fewer means one down. The gauge decides every measurement here.'),
         ehead=['Tools', 'For what'])
     tt = t[lang]
     return f'''
@@ -368,9 +381,9 @@ def side_montering(lang, ekstra_no=None, ekstra_en=None):
                'Kontroller alle knapper, snorer, kanter og løse tråder før plagget brukes.',
                'Mål plagget etter vask og skriv tallene i skjemaet på forrige side.'],
         p2='SIKKERHET',
-        sikker=('Knapper og snorer på babyplagg skal alltid kontrolleres før bruk, og '
+        sikker=('Knapper og snorer på barneplagg skal alltid kontrolleres før bruk, og '
                 'plagget brukes bare under oppsyn. Sy knappene med sterk tråd og gå over '
-                'dem igjen etter hver vask. På et prematurt barn ligger plagget tett '
+                'dem igjen etter hver vask. På de minste størrelsene ligger plagget tett '
                 'inntil huden, så kjenn etter at ingen søm eller knute ligger hardt an.'),
         takk='God strikkelyst!')}
     t['en'] = dict(
@@ -383,11 +396,11 @@ def side_montering(lang, ekstra_no=None, ekstra_en=None):
                'Measure the garment after washing and write the numbers in the form on '
                'the previous page.'],
         p2='SAFETY',
-        sikker=('Buttons and ties on baby garments must always be checked before use, and '
-                'the garment worn only under supervision. Sew buttons on with strong '
-                'thread and go over them again after every wash. On a premature baby the '
-                'garment sits right against the skin, so feel that no seam or knot presses '
-                'hard.'),
+        sikker=('Buttons and ties on children\'s garments must always be checked before '
+                'use, and the garment worn only under supervision. Sew buttons on with '
+                'strong thread and go over them again after every wash. In the smallest '
+                'sizes the garment sits right against the skin, so feel that no seam or '
+                'knot presses hard.'),
         takk='Happy knitting!')
     tt = t[lang]
     liste = list(tt['liste'])
@@ -411,8 +424,9 @@ def side_avslutning(lang):
         liste=['Jordbærdrøm kjole, ermeløs kjole med bladparti og utsvingt skjørt.',
                'Jordbærdrøm romper med skjørt, med bleiedel og knapper i skrittet.',
                'Jordbærdrøm genser og skjørt, et todelt sett med elastisk liv i skjørtet.',
-               'Jordbærdrøm votter, uten tommel, med sammenbindingssnor.',
-               'Jordbærdrøm tøfler, med brettet ribb og knyting rundt ankelen.'],
+               'Jordbærdrøm votter, uten tommel, med sammenbindingssnor, str 44 til 74.',
+               'Jordbærdrøm tøfler, med brettet ribb og knyting rundt ankelen, '
+               'str 44 til 92.'],
         p2='OPPHAVSRETT',
         opph=(f'(c) {AAR} Renate Dahl, Little Montessori Explorers. Jordbærdrøm er et helt '
               'originalt LME-design. Oppskriften er kun til personlig bruk, og kan ikke '
@@ -428,8 +442,10 @@ def side_avslutning(lang):
                'crotch.',
                'Strawberry Dream jumper and skirt, a two-piece set with an elasticated '
                'waist.',
-               'Strawberry Dream mittens, thumbless, with a connecting cord.',
-               'Strawberry Dream booties, with a folded rib cuff and ties at the ankle.'],
+               'Strawberry Dream mittens, thumbless, with a connecting cord, '
+               'sizes 44 to 74.',
+               'Strawberry Dream booties, with a folded rib cuff and ties at the ankle, '
+               'sizes 44 to 92.'],
         p2='COPYRIGHT',
         opph=(f'(c) {AAR} Renate Dahl, Little Montessori Explorers. Strawberry Dream is a '
               'fully original LME design. The pattern is for personal use only, and may '

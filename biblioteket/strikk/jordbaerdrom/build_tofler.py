@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Jordbærdrøm tøfler med knyting, gradert i tre størrelser.
+Jordbærdrøm tøfler med knyting, gradert i fire størrelser.
 
 Klassiske babytøfler med rund fot, brettet ribb, bladspisser og
 i-cord-knyting rundt ankelen.
 
-Tøflene har tre størrelser, ikke fem som plaggene. Grunnen står i
+Tøflene har fire størrelser, ikke ni som plaggene. Grunnen står i
 grading_jordbaerdrom.py: bladrapporten er 8 masker, altså ca. 3,8 cm i
-omkrets, og ankelen har bare tre reelle trinn å gå på i dette spennet.
+omkrets rundt ankelen, og en fot vokser langt mindre enn det mellom to
+nabostørrelser.
 """
 import _jordbaer_felles as f
 from _jordbaer_felles import (TOFLER, banner, rosep, sagep, card, cme, ul,
@@ -41,14 +42,14 @@ def sider(lang):
     P.append(pg(f.forside(
         lang,
         L(lang, 'JORDBÆRDRØM TØFLER', 'STRAWBERRY DREAM BOOTIES'),
-        L(lang, 'PREMATUR TIL 2 MÅNEDER', 'PREEMIE TO 2 MONTHS'),
+        L(lang, 'STØRRELSE 44 TIL 92', 'SIZES 44 TO 92'),
         L(lang,
           'Klassiske babytøfler med rund fot, brettet ribb, bladspisser og '
-          'i-cord-knyting rundt ankelen. Gradert i tre størrelser som dekker hele '
-          'Jordbærdrøm-kolleksjonen.',
-          'Classic baby booties with a rounded foot, a folded rib cuff, leaf tips and i-cord '
-          'ties at the ankle. Graded in three sizes covering the whole Strawberry Dream '
-          'collection.'),
+          'i-cord-knyting rundt ankelen. Fire størrelser, som dekker hele kolleksjonen, '
+          'plaggstørrelse 44 til 92.',
+          'Classic baby booties with a rounded foot, a folded rib cuff, leaf tips and '
+          'i-cord ties at the ankle. Four sizes, covering the whole collection, garment '
+          'sizes 44 to 92.'),
         bar=bar(lang)), 1))
 
     # ---------------------------------------------------------- 2 FØR DU BEGYNNER
@@ -93,14 +94,14 @@ def sider(lang):
     P.append(pg(f.side_storrelser_smaadel(
         lang,
         L(lang,
-          'Tøflene er gradert i tre størrelser, ikke fem som plaggene. En bladrapport er 8 '
-          'masker, altså ca. 3,8 cm rundt ankelen, og det gir bare tre reelle trinn i dette '
-          'spennet. Mål foten fra hælen til lengste tå, og velg den størrelsen som er '
-          'nærmest over målet.',
-          'The booties are graded in three sizes, not five like the garments. One leaf '
-          'repeat is 8 stitches, approx. 3.8 cm round the ankle, which gives only three real '
-          'steps in this range. Measure the foot from heel to longest toe, and choose the '
-          'size just above that measurement.'),
+          'Tøflene er gradert i fire størrelser, ikke ni som plaggene. En bladrapport er '
+          '8 masker, altså ca. 3,8 cm rundt ankelen, og en fot vokser langt mindre enn '
+          'det mellom to nabostørrelser. Mål foten fra hælen til lengste tå, og velg den '
+          'størrelsen som er nærmest over målet.',
+          'The booties are graded in four sizes, not nine like the garments. One leaf '
+          'repeat is 8 stitches, approx. 3.8 cm round the ankle, and a foot grows far '
+          'less than that between two neighbouring sizes. Measure the foot from heel to '
+          'longest toe, and choose the size just above that measurement.'),
         khead, krow, mhead, mrow,
         [(navn(s, lang), L(lang, 'str ', 'size ') + s['dekker']) for s in TOFLER],
         L(lang,
@@ -111,7 +112,7 @@ def sider(lang):
           'right width.')), 3))
 
     # ------------------------------------------------------------------- 4 GARN
-    garn = [[navn(s, lang), '%d g' % (15 + 5 * i), '%d g' % (15 + 5 * i), '5 g']
+    garn = [[navn(s, lang), '%d g' % (15 + 10 * i), '%d g' % (15 + 5 * i), '5 g']
             for i, s in enumerate(TOFLER)]
     ekstra = L(lang,
                [['Pinne 4 mm', 'settpinner eller Magic Loop, omgangene er svært små'],
