@@ -131,6 +131,15 @@ for v in DATA['sokker']:
             feil.append(f'sokk {v["navn_no"]}: {felt}={v[felt]} står ikke i PDF-en')
 print(f'   kontrollert {len(DATA["sokker"])} sokkestørrelser x 16 tall')
 
+ge = pymupdf.open(BASE / 'LME-Jordbaerdrom-Genser-og-skjort.pdf')
+getekst = ' '.join(s.get_text() for s in ge)
+for p in DATA['plagg']:
+    for felt in ('genser_bolge', 'genser_bolge_buer', 'erme_bolge', 'erme_bolge_buer',
+                 'bolge_gjent', 'bolge_omganger'):
+        if str(p[felt]) not in getekst:
+            feil.append(f'genser: {felt}={p[felt]} for str {p["str_nr"]} står ikke i PDF-en')
+print(f'   kontrollert bølgekanten i {len(DATA["plagg"])} størrelser x 6 tall')
+
 # --------------------------------------------------------- 3 SKRIVESTILREGLER
 print('\n3. Skrivestilregler')
 forbudt = {'«': 'vinkelanførselstegn', '»': 'vinkelanførselstegn',

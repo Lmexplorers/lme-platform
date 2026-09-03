@@ -78,11 +78,11 @@ def sider(lang):
                   ['å strikke en genser med rundt bærestykke',
                    'å dele til bol og ermer, og strikke ermene i runden',
                    'å strikke et skjørt med brettet, elastisk linning',
-                   'å tilpasse lengde og avslutte med buekant'],
+                   'å strikke en grønn bølgekant på bol og ermer'],
                   ['knitting a jumper with a round yoke',
                    'dividing for body and sleeves, and working sleeves in the round',
                    'knitting a skirt with a folded, elasticated waistband',
-                   'adjusting the length and finishing with a scalloped edge']))) +
+                   'knitting a green wave edge on body and sleeves']))) +
         sagep(L(lang, 'VANSKELIGHETSGRAD', 'DIFFICULTY')) +
         cme(L(lang,
               'Lett til litt øvet. Ermene er den eneste delen med få masker på pinnen, og '
@@ -181,18 +181,21 @@ def sider(lang):
         '<p>' + L(lang,
         'Strikk rosa glattstrikk rundt med frø: frøomgang A, 2-3 omganger rosa, så '
         'frøomgang B. Gjenta så tett eller spredt du vil. Strikk til bolen måler lengden i '
-        'kolonnen din, målt rett ned fra under armen. Bytt til grønt, strikk 6 omganger '
-        'vridd ribb og fell elastisk av.',
+        'kolonnen din, målt rett ned fra under armen. Bytt så til grønt og strikk '
+        'bølgekanten, som står på neste side.',
         'Work in pink stocking stitch in the round with seeds: seed round A, 2-3 rounds in '
         'pink, then seed round B. Repeat as densely or sparsely as you like. Work until the '
         'body measures the length in your column, measured straight down from the underarm. '
-        'Change to green, work 6 rounds of twisted rib and cast off with stretch.') + '</p>' +
+        'Then change to green and work the wave edge, which is on the next page.') + '</p>' +
         card(tabell(bol_h, bol_r, min_index=0)) +
         cme(L(lang,
-              'Fell alltid av løst i ribben. En stram avfelling gjør at genseren ikke går '
-              'ned over brystet, og det merkes mest på de minste størrelsene.',
-              'Always cast off loosely in rib. A tight cast-off stops the jumper from '
-              'pulling down over the chest, and that shows most in the smallest sizes.')), 9))
+              'Bolen avsluttes med den grønne bølgekanten på neste side. Fell aldri av i '
+              'bølgeomgangen, alltid i en rett omgang etter den, og fell svært løst. En '
+              'stram avfelling trekker bølgene sammen, og da blir kanten rett.',
+              'The body ends with the green wave edge on the next page. Never cast off in '
+              'a wave round, always in a knit round after one, and cast off very loosely. '
+              'A tight cast-off pulls the waves together, and then the edge comes out '
+              'straight.')), 9))
 
     # ----------------------------------------------------------- 9 GENSER, ERMER
     erme_h = [S] + L(lang, ['Hvilende masker', 'Plukk opp', 'Overarm', 'Felleomganger',
@@ -217,12 +220,76 @@ def sider(lang):
         card(tabell(erme_h, erme_r, min_index=0)) +
         sagep(L(lang, 'MANSJETTEN', 'THE CUFF')) +
         cme(L(lang,
-              'Når ermet måler ca. 2 cm mindre enn ermelengden i tabellen, bytter du til '
-              'grønt og strikker 6 omganger vridd ribb. Fell elastisk av. Strikk det andre '
-              'ermet helt likt.',
-              'When the sleeve measures approx. 2 cm less than the sleeve length in the '
-              'table, change to green and work 6 rounds of twisted rib. Cast off with '
-              'stretch. Work the second sleeve exactly the same.')), 10))
+              'Når ermet er så langt at det bare mangler bølgekantens dybde, bytter du til '
+              'grønt og strikker bølgekanten fra neste side, akkurat som på bolen. '
+              'Dybden står i tabellen der. Strikk det andre ermet helt likt, og tell '
+              'omgangene i stedet for å måle, så blir de to like lange.',
+              'When the sleeve is long enough that only the depth of the wave edge is '
+              'missing, change to green and work the wave edge from the next page, exactly '
+              'as on the body. The depth is in the table there. Work the second sleeve the '
+              'same, and count the rounds rather than measuring, so the two come out the '
+              'same length.')), 10))
+
+    # ------------------------------------------------------ 11 GRØNN BØLGEKANT
+    bo_h = [S] + L(lang, ['Bol, masker', 'Bol, øk til', 'Bølger', 'Erme, masker',
+                          'Erme, øk til', 'Bølger'],
+                   ['Body stitches', 'Body, increase to', 'Waves', 'Sleeve stitches',
+                    'Sleeve, increase to', 'Waves'])
+    bo_r = [[p['str_nr'], str(p['bol_genser']) + m, str(p['genser_bolge']) + m,
+             str(p['genser_bolge_buer']) + ' x', str(p['erme_mansjett']) + m,
+             str(p['erme_bolge']) + m, str(p['erme_bolge_buer']) + ' x'] for p in PLAGG]
+    P.append(pg(
+        banner(L(lang, 'GENSER · 5 · KLARGJØR BØLGEKANTEN',
+                 'JUMPER · 5 · PREPARING THE WAVE EDGE')) +
+        '<p>' + L(lang,
+        'Bol og ermer avsluttes med den samme grønne bølgekanten. Bytt til grønt og '
+        'strikk 1 omgang rett, og øk samtidig jevnt fordelt til masketallet i kolonnen '
+        'din. Det er bare noen få masker, og de er der for at bølgene skal gå opp rundt. '
+        'Strikk 1 omgang rett til, og gå så videre til neste side.',
+        'The body and the sleeves both end with the same green wave edge. Change to green '
+        'and work 1 round in knit, increasing evenly to the stitch count in your column as '
+        'you go. It is only a few stitches, and they are there so the waves come out even '
+        'all the way round. Work 1 more round in knit, then go on to the next page.') +
+        '</p>' + card(tabell(bo_h, bo_r, min_index=0)) +
+        cme(L(lang,
+             'Fordel økingene jevnt rundt, ikke samlet på ett sted. Samler du dem, får '
+             'genseren en pose akkurat der, og den synes når plagget henger.',
+             'Spread the increases evenly round, not gathered in one place. Gathered, the '
+             'jumper gets a pouch right there, and it shows when the garment hangs.')), 11))
+
+    # -------------------------------------------------------------- 12 BØLGEN
+    bd_h = [S] + L(lang, ['Bølgeomganger', 'Omganger i alt', 'Kantens dybde'],
+                   ['Wave rounds', 'Rounds in all', 'Depth of the edge'])
+    bd_r = [[p['str_nr'], str(p['bolge_gjent']) + ' x', str(p['bolge_omganger']) + ' x',
+             komma(p['bolge_cm']) + ' cm'] for p in PLAGG]
+    P.append(pg(
+        banner(L(lang, 'GENSER · 6 · BØLGEN', 'JUMPER · 6 · THE WAVE')) +
+        '<p>' + L(lang,
+        'Bølgen er 6 masker og gjentas rundt. Strikk disse tre omgangene:',
+        'The wave is 6 stitches and is repeated round. Work these three rounds:') +
+        '</p>' + card(ul(L(lang,
+        ['Omgang 1, bølgeomgangen: *2 rett sammen, 2 rett sammen vridd, 1 kast, 1 rett, '
+         '1 kast, 1 rett*, gjentatt rundt. Masketallet står stille.',
+         'Omgang 2: rett.',
+         'Omgang 3: rett.'],
+        ['Round 1, the wave round: *k2tog, ssk, yo, k1, yo, k1*, repeated round. The '
+         'stitch count stays the same.',
+         'Round 2: knit.',
+         'Round 3: knit.']))) +
+        '<p>' + L(lang,
+        'Gjenta de tre omgangene så mange ganger som kolonnen din sier. Strikk til slutt '
+        '1 omgang rett, og fell svært løst av.',
+        'Repeat the three rounds as many times as your column says. Finally work 1 round '
+        'in knit, and cast off very loosely.') + '</p>' +
+        card(tabell(bd_h, bd_r, min_index=0)) +
+        cme(L(lang,
+             'De to fellingene står samlet der dalen skal være, og de to kastene samlet '
+             'der toppen skal være. Det er den samlingen som gjør at kanten bølger. '
+             'Sprer du dem utover rapporten, blir det bare hull i en rett kant.',
+             'The two decreases sit together where the valley goes, and the two yarn '
+             'overs together where the crest goes. That grouping is what makes the edge '
+             'wave. Spread them out across the repeat, and you get only eyelets in a '
+             'straight edge.')), 12))
 
     # -------------------------------------------------------- 10 SKJØRT, LINNING
     lin_h = [S] + L(lang, ['Legg opp', 'Bladrapporter', 'Livvidde', 'Linning, høyde'],
@@ -248,7 +315,7 @@ def sider(lang):
               'Legg opp løst. Linningen skal kunne strekkes over hoftene, og en stram '
               'oppleggingskant er den vanligste grunnen til at et babyskjørt ikke går på.',
               'Cast on loosely. The waistband must stretch over the hips, and a tight '
-              'cast-on edge is the most common reason a baby skirt will not go on.')), 11))
+              'cast-on edge is the most common reason a baby skirt will not go on.')), 13))
 
     # ------------------------------------------------------ 11 SKJØRT, BLAD OG VIDDE
     sk_h = [S] + L(lang, ['Masker i linningen', 'Bladrapporter', '*2 r, M1* gir',
@@ -276,7 +343,7 @@ def sider(lang):
               'Bladene på skjørtet peker nedover, akkurat som på genserens bærestykke, så '
               'de to delene ser like ut når de brukes sammen.',
               'The leaves on the skirt point downwards, just as on the jumper yoke, so the '
-              'two pieces match when worn together.')), 12))
+              'two pieces match when worn together.')), 14))
 
     # ----------------------------------------------------- 12 SKJØRT, PICOT OG ELASTIKK
     bue_h = [S] + L(lang, ['Masker nederst', 'Buer', 'Masker per bue', 'Bueomganger'],
@@ -305,19 +372,19 @@ def sider(lang):
               'På de minste barna er huden ekstra sart. Er du i tvil, velger du den '
               'løseste elastikken, og heller strammer den senere.',
               'On the smallest children the skin is especially delicate. If in doubt, '
-              'choose the looser elastic and tighten it later if needed.')), 13))
+              'choose the looser elastic and tighten it later if needed.')), 15))
 
     # ------------------------------------------------------------- 13 TESTSTRIKK
-    P.append(pg(f.side_teststrikk(lang, 'settet', 'set'), 14))
+    P.append(pg(f.side_teststrikk(lang, 'settet', 'set'), 16))
 
     # -------------------------------------------------------------- 14 MONTERING
     P.append(pg(f.side_montering(
         lang,
         'Kontroller at elastikken sitter mykt og ikke lager merker etter en times bruk.',
-        'Check that the elastic sits softly and leaves no marks after an hour of wear.'), 15))
+        'Check that the elastic sits softly and leaves no marks after an hour of wear.'), 17))
 
     # ------------------------------------------------------------- 15 AVSLUTNING
-    P.append(pg(f.side_avslutning(lang), 16))
+    P.append(pg(f.side_avslutning(lang), 18))
     return P
 
 

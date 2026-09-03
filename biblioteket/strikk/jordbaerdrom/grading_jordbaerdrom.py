@@ -97,6 +97,19 @@ HALS_AV_HODE_MAX = 0.90
 # BUE_BREDDE, og derfor rundes skjørtenes sluttmasketall av til nærmeste
 # multiplum, i stedet for å la buene "nesten" gå opp.
 BUE_BREDDE = 10        # masker per bue, ca. 4,8 cm
+# Genserens bol og ermer ender i en grønn bølgekant, etter designet Renate
+# sendte 3. september 2026. Rapporten er 6 masker, ikke 8 eller 10: den må gå
+# opp både på en bol på 84 masker og på en mansjett på 16, og en bredere
+# rapport ville gitt de minste mansjettene bare to bølger, eller tvunget dem
+# opp i en krage. 6 masker er ca. 2,9 cm, altså en liten bølge som passer
+# skalaen på den lille jordbærhetten.
+#
+# Bølgeomgangen er maskenøytral: 2 fellinger og 2 kast per rapport. Bølgen
+# kommer av at fellingene står samlet i dalen og kastene samlet på toppen,
+# ikke av at masketallet vokser. Utkastet Renate sendte spredte fellingene og
+# kastene utover rapporten, og da bølger kanten nesten ikke.
+BOLGE_RAPPORT = 6      # masker per bølge, ca. 2,9 cm
+BOLGE_OMG_PER = 3      # omganger per bølgegjentakelse: bølgeomgang + 2 rette
 BUE_OMGANGER = 5       # omganger buekanten strikkes over
 
 ROMSLIGHET = 6.0       # cm romslighet over brystet på den ermeløse bolen
@@ -217,6 +230,17 @@ for i, (nr, tno, ten, kropp_bryst, overarm_cm, hode_cm, hals) in enumerate(SIZES
     skjort_vidde = til_bue(skjort_liv + skjort_liv // 2, prev_skjort_vidde)
     prev_skjort_vidde = skjort_vidde
 
+    # BØLGEKANTEN PÅ GENSEREN
+    # Masketallet rundes OPP til nærmeste hele bølge. Det gir samtidig den lille
+    # vidden kanten trenger for å legge seg utover, uten at den blir en rynke.
+    def til_bolge(m):
+        return BOLGE_RAPPORT * -(-m // BOLGE_RAPPORT)
+    genser_bolge = til_bolge(bol_genser)
+    erme_bolge = til_bolge(erme_mansjett)
+    # Antall gjentakelser vokser med størrelsen, så kanten ikke blir like dyp
+    # på en prematur som på en toåring.
+    bolge_gjent = 2 if i <= 2 else (3 if i <= 6 else 4)
+
     rows.append(dict(
         str_nr=nr, tillegg_no=tno, tillegg_en=ten,
         kropp_bryst_cm=kropp_bryst, hode_cm=hode_cm,
@@ -255,6 +279,14 @@ for i, (nr, tno, ten, kropp_bryst, overarm_cm, hode_cm, hals) in enumerate(SIZES
         skjort_vidde_cm=round(skjort_vidde / GAUGE_ST_CM, 1),
         skjort_lengde_cm=SKJORT_LENGDE[i],
         bue_bredde=BUE_BREDDE, bue_omganger=BUE_OMGANGER,
+        bolge_rapport=BOLGE_RAPPORT,
+        genser_bolge=genser_bolge, genser_bolge_buer=genser_bolge // BOLGE_RAPPORT,
+        genser_bolge_oke=genser_bolge - bol_genser,
+        erme_bolge=erme_bolge, erme_bolge_buer=erme_bolge // BOLGE_RAPPORT,
+        erme_bolge_oke=erme_bolge - erme_mansjett,
+        bolge_gjent=bolge_gjent,
+        bolge_omganger=bolge_gjent * BOLGE_OMG_PER + 2,
+        bolge_cm=round((bolge_gjent * BOLGE_OMG_PER + 2) / GAUGE_ROW_CM, 1),
         kjole_buer=kjole_skjort_2 // BUE_BREDDE,
         romper_buer=romper_skjort // BUE_BREDDE,
         skjort_buer=skjort_vidde // BUE_BREDDE,
@@ -452,6 +484,22 @@ for r in rows:
     assert r['romper_skjort'] > r['bol_ermelos']
     assert r['skjort_vidde'] > r['skjort_liv']
     assert r['skjort_liv'] % BLAD_RAPPORT == 0, f"str {r['str_nr']}: skjørtelinningen ikke delelig med 8"
+    # Bølgekanten på genseren: må gå opp i hele bølger, både på bol og erme.
+    for felt, buer, fra in (('genser_bolge', 'genser_bolge_buer', 'bol_genser'),
+                            ('erme_bolge', 'erme_bolge_buer', 'erme_mansjett')):
+        assert r[felt] % BOLGE_RAPPORT == 0, (
+            f"str {r['str_nr']}: {felt} = {r[felt]} går ikke opp i bølger à {BOLGE_RAPPORT}")
+        assert r[buer] * BOLGE_RAPPORT == r[felt]
+        # Kanten må ikke være smalere enn det den strikkes ut fra.
+        assert r[felt] >= r[fra], f"str {r['str_nr']}: {felt} er smalere enn {fra}"
+        # Og den må ikke bli en rynke. Mer enn en drøy fjerdedel ekstra, og
+        # kanten står ut i stedet for å legge seg.
+        assert r[felt] - r[fra] < BOLGE_RAPPORT, (
+            f"str {r['str_nr']}: {felt} øker {r[felt] - r[fra]} masker, det er en hel bølge for mye")
+    # Færre enn tre bølger rundt leses ikke som en bølgekant, bare som en skjev kant.
+    assert r['erme_bolge_buer'] >= 3, f"str {r['str_nr']}: bare {r['erme_bolge_buer']} bølger på ermet"
+    assert r['genser_bolge_buer'] >= 12, f"str {r['str_nr']}: bare {r['genser_bolge_buer']} bølger på bolen"
+
     # Buekanten: hver bue er BUE_BREDDE masker, så kanten må gå opp i hele
     # buer. Gjør den ikke det, ender strikkeren med en halv bue midt bak.
     for felt, buer in (('kjole_skjort_2', 'kjole_buer'), ('romper_skjort', 'romper_buer'),
@@ -487,6 +535,9 @@ for a, b in zip(rows, rows[1:]):
                  'armhull_ermelos'):
         assert b[felt] > a[felt], f"str {b['str_nr']}: {felt} vokser ikke ({a[felt]} -> {b[felt]})"
     assert b['hals_co'] >= a['hals_co'], f"str {b['str_nr']}: halsen krymper"
+    for felt in ('genser_bolge', 'erme_bolge', 'genser_bolge_buer', 'erme_bolge_buer',
+                 'bolge_omganger'):
+        assert b[felt] >= a[felt], f"str {b['str_nr']}: {felt} krymper ({a[felt]} -> {b[felt]})"
 
 # Str 44 er festet med et eksplisitt tall, slik at en endring i inndataene
 # øverst ikke kan flytte den ubemerket. Endrer du den bevisst, endrer du

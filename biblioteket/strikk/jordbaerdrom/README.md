@@ -91,6 +91,14 @@ vokser lite mellom to nabostørrelser, og brettet ribb og knyting tar opp
 resten. Vottene har 2 størrelser og tøflene 4, og hver av dem dekker et
 oppgitt spenn av plaggstørrelsene.
 
+**Genserens bølgekant er 6 masker, ikke 10 som buekanten.** Rapporten må gå
+opp både på en bol på 84 masker og på en mansjett på 16. En bredere rapport
+ville gitt de minste mansjettene bare to bølger, eller tvunget dem opp i en
+krage. Bølgeomgangen er maskenøytral, med 2 fellinger og 2 kast: bølgen
+kommer av at fellingene står samlet i dalen og kastene samlet på toppen, ikke
+av at masketallet vokser. Utkastet som kom inn spredte fellingene og kastene
+utover rapporten, og da bølger kanten nesten ikke.
+
 **Sokkene har 4 størrelser og bryter med 8-maskers-regelen.** En sokk skal
 sitte tett, og 8 masker er 3,8 cm i omkrets. Med bare multipler av 8 hopper
 sokken fra 11,4 til 15,2 cm, og det er for grovt for en fot. Sokkene er
