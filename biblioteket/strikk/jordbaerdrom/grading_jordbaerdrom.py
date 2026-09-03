@@ -237,9 +237,12 @@ for i, (nr, tno, ten, kropp_bryst, overarm_cm, hode_cm, hals) in enumerate(SIZES
         return BOLGE_RAPPORT * -(-m // BOLGE_RAPPORT)
     genser_bolge = til_bolge(bol_genser)
     erme_bolge = til_bolge(erme_mansjett)
-    # Skjørtet i settet fikk samme grønne bølgekant 3. september 2026, etter
-    # ønske fra Renate. Kjolen og romperen beholder buekanten sin.
+    # Hele kolleksjonen fikk den grønne bølgekanten 3. september 2026, etter
+    # ønske fra Renate: først genseren, så skjørtet i settet, og til slutt
+    # kjolen og romperen. Buekanten er dermed ute av alle plaggene.
     skjort_bolge = til_bolge(skjort_vidde)
+    kjole_bolge = til_bolge(kjole_skjort_2)
+    romper_bolge = til_bolge(romper_skjort)
     # Antall gjentakelser vokser med størrelsen, så kanten ikke blir like dyp
     # på en prematur som på en toåring.
     bolge_gjent = 2 if i <= 2 else (3 if i <= 6 else 4)
@@ -281,7 +284,6 @@ for i, (nr, tno, ten, kropp_bryst, overarm_cm, hode_cm, hals) in enumerate(SIZES
         skjort_vidde=skjort_vidde,
         skjort_vidde_cm=round(skjort_vidde / GAUGE_ST_CM, 1),
         skjort_lengde_cm=SKJORT_LENGDE[i],
-        bue_bredde=BUE_BREDDE, bue_omganger=BUE_OMGANGER,
         bolge_rapport=BOLGE_RAPPORT,
         genser_bolge=genser_bolge, genser_bolge_buer=genser_bolge // BOLGE_RAPPORT,
         genser_bolge_oke=genser_bolge - bol_genser,
@@ -290,10 +292,12 @@ for i, (nr, tno, ten, kropp_bryst, overarm_cm, hode_cm, hals) in enumerate(SIZES
         bolge_gjent=bolge_gjent,
         bolge_omganger=bolge_gjent * BOLGE_OMG_PER + 2,
         bolge_cm=round((bolge_gjent * BOLGE_OMG_PER + 2) / GAUGE_ROW_CM, 1),
-        kjole_buer=kjole_skjort_2 // BUE_BREDDE,
-        romper_buer=romper_skjort // BUE_BREDDE,
         skjort_bolge=skjort_bolge, skjort_bolge_buer=skjort_bolge // BOLGE_RAPPORT,
         skjort_bolge_oke=skjort_bolge - skjort_vidde,
+        kjole_bolge=kjole_bolge, kjole_bolge_buer=kjole_bolge // BOLGE_RAPPORT,
+        kjole_bolge_oke=kjole_bolge - kjole_skjort_2,
+        romper_bolge=romper_bolge, romper_bolge_buer=romper_bolge // BOLGE_RAPPORT,
+        romper_bolge_oke=romper_bolge - romper_skjort,
         # Ferdige lengder, summert av delene og ikke oppgitt på frihånd.
         kjole_lengde_cm=round(yoke_cm + BOL_KJOLE[i] + SKJORT_KJOLE[i]),
         romper_lengde_cm=round(yoke_cm + BOL_ROMPER[i] + BLEIE_ROMPER[i] + 3),
@@ -491,7 +495,9 @@ for r in rows:
     # Bølgekanten på genseren: må gå opp i hele bølger, både på bol og erme.
     for felt, buer, fra in (('genser_bolge', 'genser_bolge_buer', 'bol_genser'),
                             ('erme_bolge', 'erme_bolge_buer', 'erme_mansjett'),
-                            ('skjort_bolge', 'skjort_bolge_buer', 'skjort_vidde')):
+                            ('skjort_bolge', 'skjort_bolge_buer', 'skjort_vidde'),
+                            ('kjole_bolge', 'kjole_bolge_buer', 'kjole_skjort_2'),
+                            ('romper_bolge', 'romper_bolge_buer', 'romper_skjort')):
         assert r[felt] % BOLGE_RAPPORT == 0, (
             f"str {r['str_nr']}: {felt} = {r[felt]} går ikke opp i bølger à {BOLGE_RAPPORT}")
         assert r[buer] * BOLGE_RAPPORT == r[felt]
@@ -505,15 +511,11 @@ for r in rows:
     assert r['erme_bolge_buer'] >= 3, f"str {r['str_nr']}: bare {r['erme_bolge_buer']} bølger på ermet"
     assert r['genser_bolge_buer'] >= 12, f"str {r['str_nr']}: bare {r['genser_bolge_buer']} bølger på bolen"
     assert r['skjort_bolge_buer'] >= 12, f"str {r['str_nr']}: bare {r['skjort_bolge_buer']} bølger på skjørtet"
+    assert r['kjole_bolge_buer'] >= 12, f"str {r['str_nr']}: bare {r['kjole_bolge_buer']} bølger på kjolen"
+    assert r['romper_bolge_buer'] >= 12, f"str {r['str_nr']}: bare {r['romper_bolge_buer']} bølger på romperen"
 
     # Buekanten: hver bue er BUE_BREDDE masker, så kanten må gå opp i hele
     # buer. Gjør den ikke det, ender strikkeren med en halv bue midt bak.
-    # Kjolen og romperen ender i buekant. Skjørtet gjør det ikke lenger.
-    for felt, buer in (('kjole_skjort_2', 'kjole_buer'), ('romper_skjort', 'romper_buer')):
-        assert r[felt] % BUE_BREDDE == 0, (
-            f"str {r['str_nr']}: {felt} = {r[felt]} går ikke opp i buer à {BUE_BREDDE}")
-        assert r[buer] * BUE_BREDDE == r[felt]
-        assert r[buer] >= 10, f"str {r['str_nr']}: for få buer ({r[buer]}) til at kanten ser ut som en bue"
     # Bleiedelen: to like halvdeler som felles inn til en smalere skrittbredde.
     assert 2 * r['bleie_halv'] == r['bol_ermelos']
     assert r['skritt_m'] < r['bleie_halv'], f"str {r['str_nr']}: skrittet felles ikke inn"
@@ -541,8 +543,10 @@ for a, b in zip(rows, rows[1:]):
                  'armhull_ermelos'):
         assert b[felt] > a[felt], f"str {b['str_nr']}: {felt} vokser ikke ({a[felt]} -> {b[felt]})"
     assert b['hals_co'] >= a['hals_co'], f"str {b['str_nr']}: halsen krymper"
-    for felt in ('genser_bolge', 'erme_bolge', 'skjort_bolge', 'genser_bolge_buer',
-                 'erme_bolge_buer', 'skjort_bolge_buer', 'bolge_omganger'):
+    for felt in ('genser_bolge', 'erme_bolge', 'skjort_bolge', 'kjole_bolge',
+                 'romper_bolge', 'genser_bolge_buer', 'erme_bolge_buer',
+                 'skjort_bolge_buer', 'kjole_bolge_buer', 'romper_bolge_buer',
+                 'bolge_omganger'):
         assert b[felt] >= a[felt], f"str {b['str_nr']}: {felt} krymper ({a[felt]} -> {b[felt]})"
 
 # Str 44 er festet med et eksplisitt tall, slik at en endring i inndataene

@@ -187,24 +187,31 @@ def sider(lang):
              'place a marker in the round. That marker is the waist.') + '</p>'), 9))
 
     # ---------------------------------------------------------------- 9 SKJØRTET
-    sk_h = [S] + L(lang, ['Kropp fra under armen', 'Masker i kroppen', '*2 r, M1* gir',
-                          'Skjørtevidde', 'Skjørtelengde'],
-                   ['Body from underarm', 'Body stitches', '*k2, M1* gives', 'Skirt width',
-                    'Skirt length'])
-    sk_r = [[p['str_nr'], str(p['bol_romper_cm']) + ' cm', str(p['bol_ermelos']) + m,
-             str(p['romper_skjort']) + m, komma(p['romper_skjort_vidde_cm']) + ' cm',
-             str(p['skjort_romper_cm']) + ' cm'] for p in PLAGG]
+    sk_h = [S] + L(lang, ['Masker i kroppen', '*2 r, M1* gir', 'Skjørtelengde',
+                          'Øk til', 'Bølger', 'Omganger'],
+                   ['Body stitches', '*k2, M1* gives', 'Skirt length', 'Increase to',
+                    'Waves', 'Rounds'])
+    sk_r = [[p['str_nr'], str(p['bol_ermelos']) + m, str(p['romper_skjort']) + m,
+             str(p['skjort_romper_cm']) + ' cm', str(p['romper_bolge']) + m,
+             str(p['romper_bolge_buer']) + ' x', str(p['bolge_omganger']) + ' x']
+            for p in PLAGG]
     P.append(pg(
         banner(L(lang, '4 · SKJØRTET', '4 · THE SKIRT')) +
         '<p>' + L(lang,
         'Fra livmarkøren strikker du *2 rett, 1 økning*, gjenta rundt. Fortsett i rosa '
-        'glattstrikk med spredte frø til skjørtet måler lengden i siste kolonne. Da '
-        'kommer buekanten: del kanten i buer med en markør mellom hver bue, 10 masker per bue. '
-        'Strikk buerunden *2 rett sammen vridd, 2 rett, 1 økning, 2 rett, 1 økning, 2 rett, '
-        '2 rett sammen* rundt, gjenta den i alt 5 ganger, og fell så løst av.',
-        'From the waist marker work *k2, M1*, repeat round. Continue in pink stocking stitch '
-        'with scattered seeds until the skirt measures the length in the last column. Then '
-        'the scalloped edge follows: ' + 'Divide the edge into scallops with a marker between each. Every scallop is 10 stitches. Then work the scallop round: *ssk, k2, M1R, k2, M1L, k2, k2tog*, repeat round. The stitch count stays the same, but the edge begins to wave: the decreases pull the valley between the scallops up, and the increases push the scallop down. Repeat the scallop round 5 times in all, then cast off loosely.') + '</p>' +
+        'glattstrikk med spredte frø til skjørtet måler lengden i kolonnen din. Da '
+        'kommer den grønne bølgekanten, den samme som resten av kolleksjonen: bytt til '
+        'grønt, strikk 1 omgang rett og øk samtidig jevnt til masketallet i kolonnen din, '
+        'strikk 1 omgang rett til, og strikk så bølgeomgangen *2 rett sammen, 2 rett '
+        'sammen vridd, 1 kast, 1 rett, 1 kast, 1 rett* rundt, etterfulgt av 2 omganger '
+        'rett. Gjenta til du har omgangene i kolonnen din, og fell svært løst av.',
+        'From the waist marker work *k2, M1*, repeat round. Continue in pink stocking '
+        'stitch with scattered seeds until the skirt measures the length in your column. '
+        'Then the green wave edge follows, the same one as the rest of the collection: '
+        'change to green, work 1 round in knit while increasing evenly to the stitch '
+        'count in your column, work 1 more round in knit, then work the wave round '
+        '*k2tog, ssk, yo, k1, yo, k1* round, followed by 2 rounds in knit. Repeat until '
+        'you have the rounds in your column, and cast off very loosely.') + '</p>' +
         card(tabell(sk_h, sk_r, min_index=0)) +
         cme(L(lang,
               'Skjørtet er kort med vilje. Det skal ligge over bleiedelen, ikke under den, '

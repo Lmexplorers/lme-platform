@@ -141,6 +141,9 @@ def forklaring(lang):
 
 DIAG_CSS = f'''
 .coverimg {{ text-align:center; margin:3mm 0 1mm; }}
+.logo {{ text-align:center; margin:2mm 0 0; }}
+.logo img {{ width:17mm; height:17mm; object-fit:contain; }}
+.logo.stor img {{ width:23mm; height:23mm; }}
 .coverimg img {{ width:84mm; height:84mm; object-fit:cover; border-radius:14px;
   border:2.5mm solid #fff; box-shadow:0 2mm 6mm rgba(0,0,0,.10); }}
 .diag {{ text-align:center; margin:2mm 0 3mm; }}
@@ -477,6 +480,10 @@ def side_avslutning(lang):
                'Jordbærdrøm genser og skjørt, et todelt sett med elastisk liv i skjørtet.',
                'Jordbærdrøm votter, uten tommel, med sammenbindingssnor, str 44 til 74.',
                'Jordbærdrøm tøfler, med brettet ribb og knyting rundt ankelen, '
+               'str 44 til 92.',
+               'Jordbærdrøm lue, med krans av jordbærhetter og stilk på toppen, '
+               'str 44 til 92.',
+               'Jordbærdrøm sokker, med hællapp og båttå som maskes sammen, '
                'str 44 til 92.'],
         p2='OPPHAVSRETT',
         opph=(f'(c) {AAR} Renate Dahl, Little Montessori Explorers. Jordbærdrøm er et helt '
@@ -496,6 +503,10 @@ def side_avslutning(lang):
                'Strawberry Dream mittens, thumbless, with a connecting cord, '
                'sizes 44 to 74.',
                'Strawberry Dream booties, with a folded rib cuff and ties at the ankle, '
+               'sizes 44 to 92.',
+               'Strawberry Dream hat, with a ring of strawberry tops and a stalk on top, '
+               'sizes 44 to 92.',
+               'Strawberry Dream socks, with a heel flap and a grafted wedge toe, '
                'sizes 44 to 92.'],
         p2='COPYRIGHT',
         opph=(f'(c) {AAR} Renate Dahl, Little Montessori Explorers. Strawberry Dream is a '
@@ -512,6 +523,7 @@ def side_avslutning(lang):
 {card(ul(tt['liste']))}
 {sagep(tt['p2'])}
 {card('<p class="small center">' + tt['opph'] + '</p>')}
+<div class="logo stor"><img src="bilder/lme-logo.png" alt=""></div>
 <div class="byline"><div class="by2">{tt['by']}</div></div>
 '''
 
@@ -537,6 +549,7 @@ def forside(lang, tittel, undertittel, beskrivelse, bar=None, bilde=None):
 {('<div class="coverimg"><img src="bilder/' + bilde + '" alt=""></div>') if bilde else ''}
 {card('<p class="center">' + beskrivelse + '</p>')}
 {bar if bar is not None else storrelsesbar(lang)}
+<div class="logo"><img src="bilder/lme-logo.png" alt=""></div>
 <div class="byline">
   <div class="by1">{tt['by1']}</div>
   <div class="by2">{tt['by2']}</div>

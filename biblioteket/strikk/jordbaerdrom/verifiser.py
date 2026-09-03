@@ -138,10 +138,30 @@ for p in DATA['plagg']:
                  'skjort_bolge', 'skjort_bolge_buer', 'bolge_gjent', 'bolge_omganger'):
         if str(p[felt]) not in getekst:
             feil.append(f'genser: {felt}={p[felt]} for str {p["str_nr"]} står ikke i PDF-en')
-print(f'   kontrollert bølgekanten i {len(DATA["plagg"])} størrelser x 8 tall')
+
+kj = pymupdf.open(BASE / 'LME-Jordbaerdrom-Kjole.pdf')
+kjt = ' '.join(s.get_text() for s in kj)
+ro = pymupdf.open(BASE / 'LME-Jordbaerdrom-Romper.pdf')
+rot = ' '.join(s.get_text() for s in ro)
+for p in DATA['plagg']:
+    for felt in ('kjole_bolge', 'kjole_bolge_buer'):
+        if str(p[felt]) not in kjt:
+            feil.append(f'kjole: {felt}={p[felt]} for str {p["str_nr"]} står ikke i PDF-en')
+    for felt in ('romper_bolge', 'romper_bolge_buer'):
+        if str(p[felt]) not in rot:
+            feil.append(f'romper: {felt}={p[felt]} for str {p["str_nr"]} står ikke i PDF-en')
+print(f'   kontrollert bølgekanten i {len(DATA["plagg"])} størrelser x 12 tall')
+
+print('\n3. LME-logoen står på forsiden og siste side i alle heftene')
+for hfil, pfil in PAR:
+    dd = pymupdf.open(BASE / pfil)
+    for si in (0, dd.page_count - 1):
+        if not dd[si].get_images():
+            feil.append(f'{pfil} s.{si + 1}: LME-logoen mangler')
+print(f'   kontrollert {2 * len(PAR)} sider')
 
 # --------------------------------------------------------- 3 SKRIVESTILREGLER
-print('\n3. Skrivestilregler')
+print('\n4. Skrivestilregler')
 forbudt = {'«': 'vinkelanførselstegn', '»': 'vinkelanførselstegn',
            '—': 'tankestrek', '–': 'tankestrek',
            '’': 'krøllapostrof', '“': 'krøllanførselstegn',
