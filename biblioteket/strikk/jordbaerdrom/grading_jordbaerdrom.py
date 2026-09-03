@@ -371,27 +371,56 @@ for navn_no, navn_en, dekker, m, ribb_cm, fot_cm, overfot_m, overfot_p, plukk, i
 # Luen skal ligge inntil, ikke stramme. Ribben strekker seg, så omkretsen
 # ligger med vilje under hodemålet. Forholdet kontrolleres nedenfor.
 LUER = []
-for navn_no, navn_en, dekker, hoder, m, ribb_cm, rosa_cm, band_cm in [
-    ("Liten",       "Small",       "44",    [32.0],       56, 4, 4.0, 22),
-    ("Medium",      "Medium",      "50-56", [35.0, 38.0], 64, 5, 4.5, 25),
-    ("Stor",        "Large",       "62-68", [41.0, 43.0], 72, 5, 5.5, 28),
-    ("Ekstra stor", "Extra large", "74-80", [45.0, 46.0], 80, 6, 6.0, 30),
-    ("XXL",         "XXL",         "86-92", [47.0, 48.0], 88, 6, 6.5, 32),
+# Luen etter designbildet Renate sendte 3. september 2026. Den er IKKE bygget
+# som votter og tøfler, og har ingen krans av små jordbærhetter:
+#   rosa vridd ribb nederst (enkel, ikke brettet), rosa legg med frø, rosa
+#   toppfelling, og øverst en grønn kalyks av spisse begerblad som legger seg
+#   over det rosa, med en i-cord-stilk i midten. To øreklaffer plukkes opp
+#   under ribben, felles til en spiss, og båndet fortsetter rett ut av spissen
+#   som i-cord.
+#
+# Den første utgaven av denne oppskriften ble skrevet før bildet fantes, og
+# gjettet feil på tre punkter: grønn brettet ribb i stedet for rosa enkel,
+# en krans av små hetter i stedet for begerblad, og bånd sydd på i stedet for
+# øreklaffer. Alt tre er rettet her.
+for navn_no, navn_en, dekker, hoder, m, ribb_cm, rosa_cm, blad_base, klaff_m, band_cm in [
+    ("Liten",       "Small",       "44",    [32.0],       56, 2.0, 5.0, 5, 11, 22),
+    ("Medium",      "Medium",      "50-56", [35.0, 38.0], 64, 2.0, 6.0, 7, 13, 25),
+    ("Stor",        "Large",       "62-68", [41.0, 43.0], 72, 2.5, 7.0, 7, 13, 28),
+    ("Ekstra stor", "Extra large", "74-80", [45.0, 46.0], 80, 2.5, 8.0, 9, 15, 30),
+    ("XXL",         "XXL",         "86-92", [47.0, 48.0], 88, 3.0, 8.5, 9, 15, 32),
 ]:
     # Toppen felles i 8 felt, én felling per felt, annenhver omgang, til 8 m.
     fell_omg = (m - 8) // 8
     fell_cm = round(2 * fell_omg / GAUGE_ROW_CM, 1)
-    # Kransen med jordbærhetter er 4 omganger, som i votter og tøfler.
-    krans_cm = round(SMABLAD_OMG / GAUGE_ROW_CM, 1)
-    # Ferdig høyde: halv ribb (den brettes dobbel), rosa, krans, toppfelling.
-    hoyde_cm = round(ribb_cm / 2 + rosa_cm + krans_cm + fell_cm, 1)
+    # Ferdig høyde fra ribbens nedre kant: ribb + rosa legg + toppfelling.
+    # Ribben brettes ikke, så den teller i sin helhet.
+    hoyde_cm = round(ribb_cm + rosa_cm + fell_cm, 1)
+
+    # KALYKSEN. Seks begerblad, som på bildet. Hvert blad felles 1 maske i hver
+    # side hver 4. rad til 1 maske står igjen, så bladet ender i en spiss.
+    blad_antall = 6
+    kalyks_m = blad_antall * blad_base
+    blad_felleomg = (blad_base - 1) // 2
+    blad_rader = 4 * blad_felleomg
+    blad_cm = round(blad_rader / GAUGE_ROW_CM, 1)
+
+    # ØREKLAFFENE. 4 rette rader, så 1 maske felt i hver side annenhver rad til
+    # 3 masker står igjen. De 3 blir til i-cord-båndet.
+    klaff_felleomg = (klaff_m - 3) // 2
+    klaff_rader = 4 + 2 * klaff_felleomg
+    klaff_cm = round(klaff_rader / GAUGE_ROW_CM, 1)
+
     LUER.append(dict(
         navn_no=navn_no, navn_en=navn_en, dekker=dekker, hoder=hoder, masker=m,
-        spisser=m // SMABLAD_RAPPORT,
         fro_rapporter=m // BLAD_RAPPORT,
         omkrets_cm=round(m / GAUGE_ST_CM, 1),
-        ribb_cm=ribb_cm, rosa_cm=rosa_cm, krans_cm=krans_cm,
+        ribb_cm=ribb_cm, rosa_cm=rosa_cm,
         fell_omganger=fell_omg, fell_cm=fell_cm, hoyde_cm=hoyde_cm,
+        blad_antall=blad_antall, blad_base=blad_base, kalyks_m=kalyks_m,
+        blad_felleomg=blad_felleomg, blad_rader=blad_rader, blad_cm=blad_cm,
+        klaff_m=klaff_m, klaff_felleomg=klaff_felleomg, klaff_rader=klaff_rader,
+        klaff_cm=klaff_cm,
         band_cm=band_cm, stilk_cm=4 + (m - 56) // 16,
     ))
 
@@ -573,9 +602,8 @@ for a, b in zip(TOFLER, TOFLER[1:]):
     assert b['masker'] > a['masker'] and b['fot_cm'] > a['fot_cm']
 
 for lue in LUER:
-    # Frøomgangene er 8 masker brede, jordbærhettene 4. Begge må gå opp rundt.
+    # Frøomgangen er 8 masker og må gå opp rundt. Luen har ingen jordbærhette.
     assert lue['masker'] % BLAD_RAPPORT == 0, f"lue {lue['navn_no']}: frøomgangen går ikke opp"
-    assert lue['masker'] % SMABLAD_RAPPORT == 0, f"lue {lue['navn_no']}: hettene går ikke opp"
     # Toppen felles i 8 felt og skal ende på nøyaktig 8 masker.
     assert lue['masker'] - 8 * lue['fell_omganger'] == 8, \
         f"lue {lue['navn_no']}: toppfellingen ender ikke på 8 masker"
@@ -589,9 +617,31 @@ for lue in LUER:
     for hode in lue['hoder']:
         assert 0.31 <= lue['hoyde_cm'] / hode <= 0.42, \
             f"lue {lue['navn_no']}: høyde {lue['hoyde_cm']} cm passer ikke hode {hode} cm"
+    # Kalyksen: seks begerblad som hver ender i EN maske, ellers blir det ingen spiss.
+    assert lue['kalyks_m'] == lue['blad_antall'] * lue['blad_base'], \
+        f"lue {lue['navn_no']}: kalyksen går ikke opp i {lue['blad_antall']} blad"
+    assert lue['blad_base'] % 2 == 1, \
+        f"lue {lue['navn_no']}: bladet har {lue['blad_base']} masker, et partall kan ikke ende i én spiss"
+    assert lue['blad_base'] - 2 * lue['blad_felleomg'] == 1, \
+        f"lue {lue['navn_no']}: bladet ender ikke på 1 maske"
+    # Kalyksen skal dekke toppen, ikke hele luen. Bildet viser omtrent halve
+    # omkretsen i grønt ved bladenes fot.
+    andel_kalyks = lue['kalyks_m'] / lue['masker']
+    assert 0.45 <= andel_kalyks <= 0.68, \
+        f"lue {lue['navn_no']}: kalyksen er {andel_kalyks:.0%} av luen, utenfor det bildet viser"
+    # Øreklaffen felles til nøyaktig 3 masker, som blir i-corden i båndet.
+    assert lue['klaff_m'] - 2 * lue['klaff_felleomg'] == 3, \
+        f"lue {lue['navn_no']}: øreklaffen ender ikke på 3 masker"
+    assert lue['klaff_m'] % 2 == 1, f"lue {lue['navn_no']}: øreklaffen må ha et oddetall masker"
+    # To klaffer må få plass under ribben uten å møtes.
+    assert 2 * lue['klaff_m'] < lue['masker'] // 2, \
+        f"lue {lue['navn_no']}: øreklaffene tar for stor del av omkretsen"
+
 for a, b in zip(LUER, LUER[1:]):
     for felt in ('masker', 'hoyde_cm', 'band_cm', 'fell_omganger'):
         assert b[felt] > a[felt], f"lue {b['navn_no']}: {felt} vokser ikke"
+    for felt in ('kalyks_m', 'klaff_m', 'blad_cm', 'klaff_cm'):
+        assert b[felt] >= a[felt], f"lue {b['navn_no']}: {felt} krymper ({a[felt]} -> {b[felt]})"
 
 for sk in SOKKER:
     # Jordbærhetten er 4 masker og må gå opp rundt.
@@ -673,8 +723,8 @@ for s in TOFLER:
           f"fot {s['fot_cm']} cm, {s['etter_plukk']} m etter oppplukking")
 for lue in LUER:
     print(f"  lue    {lue['navn_no']:>12} (str {lue['dekker']}): {lue['masker']} m, "
-          f"{lue['omkrets_cm']} cm rundt, {lue['hoyde_cm']} cm høy, "
-          f"{lue['fell_omganger']} felleomganger")
+          f"{lue['omkrets_cm']} cm rundt, {lue['hoyde_cm']} cm høy, kalyks "
+          f"{lue['kalyks_m']} m i 6 blad à {lue['blad_cm']} cm, klaff {lue['klaff_m']} m")
 for sk in SOKKER:
     print(f"  sokk   {sk['navn_no']:>12} (str {sk['dekker']}): {sk['masker']} m, "
           f"fot {sk['fot_cm']} cm, hæl {sk['hael_m']} m -> {sk['hael_igjen']} m, "

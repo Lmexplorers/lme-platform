@@ -2,9 +2,9 @@
 """
 Jordbærdrøm lue, gradert i fem størrelser (dekker plaggstørrelse 44 til 92).
 
-Rund lue strikket nedenfra og opp: brettet ribb, rosa glattstrikk med frø,
-en krans av små jordbærhetter, grønn topp og en i-cord-stilk. Knytebånd i
-i-cord under haken.
+Rund lue strikket nedenfra og opp: rosa vridd ribb, rosa glattstrikk med
+frø, rosa toppfelling, og en grønn kalyks av seks begerblad med i-cord-stilk
+som sys over toppen. Øreklaffer med i-cord-bånd.
 
 Luen har fem størrelser, ikke ni som plaggene. Grunnen står i
 grading_jordbaerdrom.py: frødiagrammet er 8 masker, altså 3,8 cm i omkrets,
@@ -49,39 +49,41 @@ def sider(lang):
         L(lang, 'JORDBÆRDRØM LUE', 'STRAWBERRY DREAM HAT'),
         L(lang, 'STØRRELSE 44 TIL 92', 'SIZES 44 TO 92'),
         L(lang,
-          'Rund lue med brettet ribb, frø i kremhvit, en krans av små jordbærhetter '
-          'og en grønn topp med stilk. Knytebånd i i-cord under haken. Fem '
-          'størrelser, som dekker plaggstørrelse 44 til 92.',
-          'A round hat with a folded rib brim, cream seeds, a ring of small strawberry '
-          'tops and a green crown with a stalk. I-cord ties under the chin. Five '
-          'sizes, covering garment sizes 44 to 92.'),
-        bar=bar(lang)), 1))
+          'Rund lue med rosa ribb, innstrikkede frø, øreklaffer med bånd, og en grønn '
+          'kalyks av seks begerblad med i-cord-stilk på toppen. Fem størrelser, som '
+          'dekker plaggstørrelse 44 til 92.',
+          'A round hat with a pink rib brim, knitted-in seeds, ear flaps with ties, and '
+          'a green calyx of six sepals with an i-cord stalk on top. Five sizes, '
+          'covering garment sizes 44 to 92.'),
+        bar=bar(lang), bilde='lue.jpg'), 1))
 
     # ------------------------------------------------------- 2 FØR DU BEGYNNER
     P.append(pg(
         banner(L(lang, 'FØR DU BEGYNNER', 'BEFORE YOU START')) +
         card('<p>' + L(lang,
-             'Luen strikkes rundt nedenfra og opp. Du begynner med en høy ribb som '
-             'brettes dobbel, så den ligger varmt over ørene. Videre går den i rosa '
-             'glattstrikk med noen få frø, og øverst kommer en krans av små '
-             'jordbærhetter i grønt. Toppen felles i åtte felt og avsluttes med en '
-             'kort i-cord som blir stilken.',
-             'The hat is worked in the round from the bottom up. You start with a deep '
-             'rib that folds double, so it sits warmly over the ears. It then continues '
-             'in pink stocking stitch with a few seeds, and at the top comes a ring of '
-             'small strawberry tops in green. The crown is decreased in eight sections '
-             'and finished with a short i-cord that becomes the stalk.') + '</p>') +
+             'Luen strikkes rundt nedenfra og opp, og hele luen er rosa: ribb, legg og '
+             'toppfelling. Frøene strikkes inn i legget. Når luen er ferdig, strikkes '
+             'kalyksen som en egen del i grønt, seks spisse begerblad rundt en '
+             'i-cord-stilk, og den sys fast over toppen. Til slutt plukkes '
+             'øreklaffene opp under ribben, felles til en spiss, og båndet fortsetter '
+             'rett ut av spissen som i-cord.',
+             'The hat is worked in the round from the bottom up, and the whole hat is '
+             'pink: rib, body and crown. The seeds are knitted into the body. When the '
+             'hat is finished, the calyx is worked as a separate piece in green, six '
+             'pointed sepals round an i-cord stalk, and sewn over the top. Finally the '
+             'ear flaps are picked up under the rib, decreased to a point, and the tie '
+             'continues straight out of the point as an i-cord.') + '</p>') +
         rosep(L(lang, 'DETTE LÆRER DU', 'WHAT YOU WILL LEARN')) +
         card(ul(L(lang,
-                  ['å strikke rundt med brettet dobbel ribb',
-                   'å strø enkeltmasker i en annen farge uten lange trådsprang',
-                   'å strikke en krans av små jordbærhetter i to farger',
+                  ['å strø enkeltmasker i en annen farge uten lange trådsprang',
                    'å felle en rund topp i åtte felt',
+                   'å strikke spisse blad som felles til én maske',
+                   'å plukke opp øreklaffer og felle dem til en spiss',
                    'å strikke i-cord til både stilk og knytebånd'],
-                  ['working in the round with a folded double rib',
-                   'scattering single stitches in another colour without long floats',
-                   'working a ring of small strawberry tops in two colours',
+                  ['scattering single stitches in another colour without long floats',
                    'decreasing a round crown in eight sections',
+                   'knitting pointed leaves decreased to a single stitch',
+                   'picking up ear flaps and decreasing them to a point',
                    'knitting i-cord for both the stalk and the ties']))) +
         sagep(L(lang, 'VANSKELIGHETSGRAD', 'DIFFICULTY')) +
         cme(L(lang,
@@ -102,10 +104,10 @@ def sider(lang):
         if lang == 'en':
             hs = hs.replace(',', '.').replace(' til ', ' to ')
         krow.append([navn(v, lang), v['dekker'], hs + ' cm'])
-    mhead = [Sh] + L(lang, ['Masker rundt', 'Omkrets', 'Høyde', 'Spisser rundt'],
-                     ['Stitches round', 'Circumference', 'Height', 'Points round'])
+    mhead = [Sh] + L(lang, ['Masker rundt', 'Omkrets', 'Høyde', 'Bladlengde'],
+                     ['Stitches round', 'Circumference', 'Height', 'Leaf length'])
     mrow = [[navn(v, lang), str(v['masker']) + m, komma(v['omkrets_cm']) + ' cm',
-             komma(v['hoyde_cm']) + ' cm', str(v['spisser']) + ' x'] for v in LUER]
+             komma(v['hoyde_cm']) + ' cm', komma(v['blad_cm']) + ' cm'] for v in LUER]
     P.append(pg(f.side_storrelser_smaadel(
         lang,
         L(lang,
@@ -143,37 +145,33 @@ def sider(lang):
     P.append(pg(f.side_garn(lang, garn, ekstra), 4))
 
     # --------------------------------------------------------------- 5 DIAGRAM
-    P.append(pg(f.side_diagram(lang, smaa=True, snudd=True), 5))
+    P.append(pg(f.side_diagram(lang, smaa=True), 5))
 
     # ------------------------------------------------------------------ 6 RIBB
-    ribb_h = [Sh] + L(lang, ['Legg opp', 'Ribb', 'Brettet ribb blir'],
-                      ['Cast on', 'Rib', 'Folded brim becomes'])
-    ribb_r = [[navn(v, lang), str(v['masker']) + m, str(v['ribb_cm']) + ' cm',
-               komma(round(v['ribb_cm'] / 2, 1)) + ' cm'] for v in LUER]
+    ribb_h = [Sh] + L(lang, ['Legg opp', 'Ribb'], ['Cast on', 'Rib'])
+    ribb_r = [[navn(v, lang), str(v['masker']) + m, komma(v['ribb_cm']) + ' cm']
+              for v in LUER]
     P.append(pg(
         banner(L(lang, '1 · RIBBEN', '1 · THE RIB')) +
         card('<p>' + L(lang,
              'Legg opp med rosa, samle til en omgang uten å vri opplegget, og sett en '
              'markør i omgangens begynnelse. Strikk vridd ribb, altså *1 rett i bakre '
-             'maskebue, 1 vrang*, til ribben måler høyden i kolonnen din. Vridd ribb '
-             'er strammere enn vanlig ribb og holder luen bedre på plass.',
+             'maskebue, 1 vrang*, til ribben måler høyden i kolonnen din. Ribben er '
+             'rosa, ikke grønn, og den brettes ikke: den står som en smal kant nederst.',
              'Cast on in pink, join in the round without twisting the cast-on, and '
              'place a marker at the beginning of the round. Work twisted rib, that is '
-             '*k1 through the back loop, p1*, until the rib measures the height in '
-             'your column. Twisted rib is firmer than plain rib and holds the hat '
-             'better in place.') + '</p>') +
+             '*k1 through the back loop, p1*, until the rib measures the height in your '
+             'column. The rib is pink, not green, and it is not folded: it stands as a '
+             'narrow band at the lower edge.') + '</p>') +
         card(tabell(ribb_h, ribb_r, min_index=0)) +
-        sagep(L(lang, 'SLIK BRETTES DEN', 'HOW IT FOLDS')) +
+        sagep(L(lang, 'OPPLEGGET', 'THE CAST-ON')) +
         cme(L(lang,
-              'Ribben brettes opp dobbelt når luen er ferdig, derfor er den så høy. '
-              'Den brettede kanten er den som ligger mot pannen, og den blir halvparten '
-              'så høy som tallet du strikket. Ikke sy den fast: en løs brett kan '
-              'rettes ut når barnet vokser, og gir luen noen ukers ekstra levetid.',
-              'The rib folds up double when the hat is finished, which is why it is '
-              'this deep. The folded edge is the one that sits against the forehead, '
-              'and it ends up half the height you knitted. Do not sew it down: a loose '
-              'fold can be let out as the child grows, and gives the hat a few extra '
-              'weeks of wear.')), 6))
+              'Legg opp løst. Luen skal tres over hodet, og ribben er det eneste som '
+              'holder igjen. Et stramt oppligg er den vanligste grunnen til at en '
+              'babylue ikke går på, og det merkes mest i de minste størrelsene.',
+              'Cast on loosely. The hat has to go over the head, and the rib is the only '
+              'thing holding it back. A tight cast-on is the most common reason a baby '
+              'hat will not go on, and it shows most in the smallest sizes.')), 6))
 
     # -------------------------------------------------------- 7 ROSA DEL OG FRØ
     rosa_h = [Sh] + L(lang, ['Masker', 'Rosa del', 'Frørapporter rundt'],
@@ -195,40 +193,10 @@ def sider(lang):
         'each other, so they look scattered rather than lined up.') + '</p>' +
         card(tabell(rosa_h, rosa_r, min_index=0)) +
         cme(L(lang,
-              'Mål den rosa delen fra brettekanten, ikke fra opplegget. Det er den '
-              'brettede kanten som er luens nedre kant når den er på.',
-              'Measure the pink section from the fold line, not from the cast-on. The '
-              'folded edge is the lower edge of the hat as it is worn.')), 7))
-
-    # ---------------------------------------------------------------- 8 KRANSEN
-    krans_h = [Sh] + L(lang, ['Masker', 'Spisser rundt', 'Kransens høyde'],
-                       ['Stitches', 'Points round', 'Height of the ring'])
-    krans_r = [[navn(v, lang), str(v['masker']) + m, str(v['spisser']) + ' x',
-                komma(v['krans_cm']) + ' cm'] for v in LUER]
-    P.append(pg(
-        banner(L(lang, '3 · KRANSEN MED JORDBÆRHETTER', '3 · THE RING OF STRAWBERRY TOPS')) +
-        card('<p>' + L(lang,
-             'Strikk jordbærhetten fra side 5 over 4 masker og gjenta den rundt så '
-             'mange ganger som kolonnen din sier. På luen er hetten snudd, fordi det '
-             'grønne ligger over det rosa her og ikke under. Omgang 1 er derfor den '
-             'siste helt rosa omgangen, spissene vokser opp av det rosa på omgang 2 og '
-             '3, og omgang 4 er helt grønn. Diagrammet på side 5 er allerede snudd '
-             'riktig vei, så du strikker det som det står. Fortsett i grønt alene '
-             'etterpå.',
-             'Work the strawberry top from page 5 over 4 stitches and repeat it round '
-             'as many times as your column says. On the hat the top is turned upside '
-             'down, because the green sits above the pink here and not below. Round 1 '
-             'is therefore the last fully pink round, the points grow up out of the '
-             'pink on rounds 2 and 3, and round 4 is all green. The chart on page 5 is '
-             'already turned the right way, so you work it exactly as it stands. '
-             'Continue in green alone afterwards.') + '</p>') +
-        card(tabell(krans_h, krans_r, min_index=0)) +
-        cme(L(lang,
-              'Hold den grønne tråden løs bak arbeidet. Trekker du den til, snurper '
-              'kransen seg sammen, og luen blir smalere akkurat der den skal være '
-              'videst.',
-              'Keep the green yarn loose behind the work. Pulled tight, the ring draws '
-              'in, and the hat becomes narrower exactly where it should be widest.')), 8))
+              'Mål den rosa delen fra der ribben slutter, ikke fra opplegget. Ribben '
+              'står som den er, og teller for seg i høydetabellen.',
+              'Measure the pink section from where the rib ends, not from the cast-on. '
+              'The rib stands as it is, and counts separately in the height table.')), 7))
 
     # ----------------------------------------------------------- 9 TOPPFELLINGEN
     fell_h = [Sh] + L(lang, ['Start', 'Felleomganger', 'Igjen etter felling',
@@ -238,19 +206,21 @@ def sider(lang):
     fell_r = [[navn(v, lang), str(v['masker']) + m, str(v['fell_omganger']) + ' x',
                '8' + m, komma(v['fell_cm']) + ' cm'] for v in LUER]
     P.append(pg(
-        banner(L(lang, '4 · TOPPFELLINGEN', '4 · SHAPING THE CROWN')) +
+        banner(L(lang, '3 · TOPPFELLINGEN', '3 · SHAPING THE CROWN')) +
         '<p>' + L(lang,
-        'Del omgangen i 8 like felt og sett en markør ved hvert. Masketallet i hver '
+        'Alt dette gjøres i ROSA. Del omgangen i 8 like felt og sett en markør ved hvert. Masketallet i hver '
         'størrelse er delelig med 8, så feltene går opp uten justering. Strikk så '
         'slik: en felleomgang der du strikker 2 rett sammen rett før hver markør, '
         'altså 8 masker felt, og deretter 1 omgang rett. Gjenta til du har 8 masker '
-        'igjen. Antall felleomganger står i kolonnen din.',
-        'Divide the round into 8 equal sections and place a marker at each. The stitch '
+        'igjen. Antall felleomganger står i kolonnen din. Klipp garnet, trekk tråden '
+        'gjennom de 8 maskene, stram og fest på innsiden.',
+        'All of this is worked in PINK. Divide the round into 8 equal sections and place a marker at each. The stitch '
         'count in every size is divisible by 8, so the sections come out even without '
         'adjustment. Then work as follows: a decrease round where you knit 2 together '
         'just before each marker, that is 8 stitches decreased, then 1 round in knit. '
         'Repeat until 8 stitches remain. The number of decrease rounds is in your '
-        'column.') + '</p>' +
+        'column. Cut the yarn, draw it through the 8 stitches, tighten and fasten off '
+        'on the inside.') + '</p>' +
         card(tabell(fell_h, fell_r, min_index=0)) +
         cme(L(lang,
               'Fell alltid på samme sted i forhold til markøren. Da danner fellingene '
@@ -258,42 +228,86 @@ def sider(lang):
               'en rund lue ser rund ut og ikke skjev.',
               'Always decrease in the same place relative to the marker. The decreases '
               'then form eight clear lines up towards the top, and it is that line '
-              'that makes a round hat look round rather than lopsided.')), 9))
+              'that makes a round hat look round rather than lopsided.')), 8))
 
-    # ------------------------------------------------------- 10 STILK OG BÅND
-    icord_h = [Sh] + L(lang, ['Stilk', 'Knytebånd, hvert'], ['Stalk', 'Ties, each'])
-    icord_r = [[navn(v, lang), str(v['stilk_cm']) + ' cm', str(v['band_cm']) + ' cm']
-               for v in LUER]
+    # ------------------------------------------------------------- 9 KALYKSEN
+    ka_h = [Sh] + L(lang, ['Stilk, masker', 'Stilk', 'Øk til', 'Blad', 'Masker per blad',
+                           'Felleomganger', 'Bladlengde'],
+                    ['Stalk stitches', 'Stalk', 'Increase to', 'Leaves', 'Sts per leaf',
+                     'Decrease rows', 'Leaf length'])
+    ka_r = [[navn(v, lang), '3' + m, str(v['stilk_cm']) + ' cm', str(v['kalyks_m']) + m,
+             str(v['blad_antall']) + ' x', str(v['blad_base']) + m,
+             str(v['blad_felleomg']) + ' x', komma(v['blad_cm']) + ' cm'] for v in LUER]
     P.append(pg(
-        banner(L(lang, '5 · STILKEN OG KNYTEBÅNDENE', '5 · THE STALK AND THE TIES')) +
-        rosep(L(lang, 'STILKEN', 'THE STALK')) +
-        card('<p>' + L(lang,
-             'Du har 8 masker igjen i grønt. Fell til 3 masker på neste omgang og '
-             'strikk i-cord på disse til stilken måler lengden i kolonnen din. Klipp '
-             'garnet, trekk tråden gjennom de 3 maskene og fest den ned gjennom '
-             'stilken, så den står rett opp.',
-             'You have 8 stitches left in green. Decrease to 3 stitches on the next '
-             'round and work an i-cord on these until the stalk measures the length in '
-             'your column. Cut the yarn, draw it through the 3 stitches and fasten it '
-             'down through the stalk, so that it stands upright.') + '</p>') +
-        sagep(L(lang, 'KNYTEBÅNDENE', 'THE TIES')) +
-        card('<p>' + L(lang,
-             'Legg opp 3 masker med rosa og strikk i-cord til båndet måler lengden i '
-             'kolonnen din. Fell av. Strikk et bånd til. Sy ett bånd godt fast på '
-             'innsiden av ribben ved hvert øre, med flere små sting. Båndene knytes i '
-             'en sløyfe under haken, aldri i en knute.',
-             'Cast on 3 stitches in pink and work an i-cord until the tie measures the '
-             'length in your column. Cast off. Work a second tie. Sew one tie firmly '
-             'to the inside of the rib at each ear, with several small stitches. The '
-             'ties are tied in a bow under the chin, never in a knot.') + '</p>' +
-             tabell(icord_h, icord_r, min_index=0)) +
+        banner(L(lang, '4 · KALYKSEN MED BEGERBLADENE', '4 · THE CALYX AND ITS SEPALS')) +
+        '<p>' + L(lang,
+        'Kalyksen er en egen del i grønt, og den strikkes ovenfra og ned: først stilken, '
+        'så bladene. Til slutt sys den fast over toppen av luen.',
+        'The calyx is a separate piece in green, worked from the top down: first the '
+        'stalk, then the sepals. It is sewn over the top of the hat at the end.') +
+        '</p>' +
+        card(ul(L(lang,
+        ['Legg opp 3 masker med grønt og strikk i-cord til stilken måler lengden i '
+         'kolonnen din.',
+         'Øk jevnt fordelt på neste omgang til masketallet i kolonnen din, og fordel '
+         'maskene på 6 like felt. Hvert felt er ett begerblad.',
+         'Strikk hvert blad for seg, frem og tilbake i glattstrikk: strikk 3 rader rett '
+         'fram, og fell så 1 maske i hver side på hver 4. rad, til det står 1 maske '
+         'igjen. Trekk tråden gjennom og fest.',
+         'Gjenta til alle 6 bladene er ferdige.'],
+        ['Cast on 3 stitches in green and work an i-cord until the stalk measures the '
+         'length in your column.',
+         'Increase evenly on the next round to the stitch count in your column, and '
+         'divide the stitches into 6 equal sections. Each section is one sepal.',
+         'Work each sepal separately, back and forth in stocking stitch: work 3 rows '
+         'straight, then decrease 1 stitch at each side on every 4th row until 1 stitch '
+         'remains. Draw the yarn through and fasten off.',
+         'Repeat until all 6 sepals are done.']))) +
+        card(tabell(ka_h, ka_r, min_index=0)) +
         cme(L(lang,
-              'Vil du heller ha luen uten bånd, hopper du over dem. Luen sitter på av '
-              'ribben alene, og båndene er der for de minste, som ennå ikke drar luen '
-              'av seg selv.',
-              'If you would rather have the hat without ties, leave them out. The hat '
-              'stays on by the rib alone, and the ties are there for the smallest, who '
-              'cannot yet pull the hat off themselves.')), 10))
+              'Sy kalyksen fast med små sting langs bladenes fot, ikke langs spissene. '
+              'Da får bladene ligge løst utover det rosa, slik de gjør på et jordbær, i '
+              'stedet for å bli sydd flatt ned.',
+              'Sew the calyx down with small stitches along the base of the sepals, not '
+              'along the points. That lets the sepals lie loosely out over the pink, the '
+              'way they do on a strawberry, instead of being sewn down flat.')), 9))
+
+    # -------------------------------------------------- 10 ØREKLAFFER OG BÅND
+    kl_h = [Sh] + L(lang, ['Plukk opp per klaff', 'Rette rader', 'Felleomganger',
+                           'Klaffens høyde', 'Bånd'],
+                    ['Pick up per flap', 'Straight rows', 'Decrease rows',
+                     'Height of the flap', 'Tie'])
+    kl_r = [[navn(v, lang), str(v['klaff_m']) + m, '4', str(v['klaff_felleomg']) + ' x',
+             komma(v['klaff_cm']) + ' cm', str(v['band_cm']) + ' cm'] for v in LUER]
+    P.append(pg(
+        banner(L(lang, '5 · ØREKLAFFENE OG BÅNDENE', '5 · THE EAR FLAPS AND THE TIES')) +
+        '<p>' + L(lang,
+        'Klaffene plukkes opp i opplegget, under ribben, én på hver side. Finn midt '
+        'foran og midt bak, og plasser klaffene midt mellom dem, altså rett under der '
+        'øret sitter. Plukk opp med rosa det antallet masker kolonnen din sier.',
+        'The flaps are picked up in the cast-on edge, under the rib, one on each side. '
+        'Find centre front and centre back, and place the flaps midway between them, '
+        'that is right under where the ear sits. Pick up in pink the number of stitches '
+        'your column says.') + '</p>' +
+        card(ul(L(lang,
+        ['Strikk 4 rader glattstrikk frem og tilbake.',
+         'Fell så 1 maske i hver side annenhver rad, til det står 3 masker igjen.',
+         'Strikk i-cord på de 3 maskene til båndet måler lengden i kolonnen din, og '
+         'fell av. Båndet vokser altså rett ut av klaffens spiss, det sys ikke på.',
+         'Strikk den andre klaffen helt likt.'],
+        ['Work 4 rows in stocking stitch back and forth.',
+         'Then decrease 1 stitch at each side every other row, until 3 stitches remain.',
+         'Work an i-cord on those 3 stitches until the tie measures the length in your '
+         'column, and cast off. The tie therefore grows straight out of the point of the '
+         'flap, it is not sewn on.',
+         'Work the second flap exactly the same.']))) +
+        card(tabell(kl_h, kl_r, min_index=0)) +
+        cme(L(lang,
+              'Båndene knytes i en sløyfe under haken, aldri i en knute. Tell radene i '
+              'stedet for å måle på den andre klaffen, så blir de to like lange.',
+              'The ties are tied in a bow under the chin, never in a knot. Count the rows '
+              'rather than measuring on the second flap, so the two come out the same '
+              'length.')), 10))
 
     # ------------------------------------------------------------ 11 TESTSTRIKK
     P.append(pg(f.side_teststrikk(lang, 'luen', 'the hat'), 11))
