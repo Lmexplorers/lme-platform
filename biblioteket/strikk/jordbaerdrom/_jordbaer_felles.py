@@ -178,6 +178,8 @@ DIAG_CSS = f'''
 .logo.stor img {{ width:23mm; height:23mm; }}
 .coverimg img {{ width:84mm; height:84mm; object-fit:cover; border-radius:14px;
   border:2.5mm solid #fff; }}
+.coverimg.par {{ display:flex; gap:4mm; justify-content:center; }}
+.coverimg.par img {{ width:52mm; height:52mm; border-width:2mm; }}
 .sideimg {{ text-align:center; margin:1mm 0 2mm; }}
 .sideimg img {{ width:56mm; height:56mm; object-fit:cover; border-radius:10px;
   border:1.8mm solid #fff; }}
@@ -576,7 +578,20 @@ def side_avslutning(lang):
 '''
 
 
-def forside(lang, tittel, undertittel, beskrivelse, bar=None, bilde=None):
+
+def _forsidebilder(bilde, bilder):
+    """Ett bilde i full bredde, eller to side om side når heftet dekker to
+    plagg. To bilder får klassen par, som gjør dem smalere, slik at raden
+    tar like mye plass på arket som ett stort bilde gjorde."""
+    if bilder:
+        inner = ''.join(f'<img src="bilder/{b}" alt="">' for b in bilder)
+        return f'<div class="coverimg par">{inner}</div>'
+    if bilde:
+        return f'<div class="coverimg"><img src="bilder/{bilde}" alt=""></div>'
+    return ''
+
+
+def forside(lang, tittel, undertittel, beskrivelse, bar=None, bilde=None, bilder=None):
     t = {'no': dict(
         tag='LITTLE MONTESSORI EXPLORERS',
         by1='Av Renate Dahl', by2='Little Montessori Explorers', by3='lmexplorers.com',
@@ -594,7 +609,7 @@ def forside(lang, tittel, undertittel, beskrivelse, bar=None, bilde=None):
 <div class="covertag">{tt['tag']}</div>
 <div class="coverbanner"><h1 class="covertitle">{tittel}</h1></div>
 <div class="subpill">{undertittel}</div>
-{('<div class="coverimg"><img src="bilder/' + bilde + '" alt=""></div>') if bilde else ''}
+{_forsidebilder(bilde, bilder)}
 {card('<p class="center">' + beskrivelse + '</p>')}
 {bar if bar is not None else storrelsesbar(lang)}
 <div class="logo"><img src="bilder/lme-logo.png" alt=""></div>
