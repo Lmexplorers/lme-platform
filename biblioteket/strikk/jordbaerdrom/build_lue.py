@@ -49,11 +49,12 @@ def sider(lang):
         L(lang, 'JORDBÆRDRØM LUE', 'STRAWBERRY DREAM HAT'),
         L(lang, 'STØRRELSE 44 TIL 92', 'SIZES 44 TO 92'),
         L(lang,
-          'Rund lue med grønn buekant nederst, innstrikkede frø, øreklaffer med bånd, og '
-          'en grønn kalyks av seks begerblad med i-cord-stilk på toppen. Fem størrelser, som '
+          'Rund lue med grønn buekant nederst, innstrikkede frø, grønne øreklaffer med '
+          'bånd, og en grønn kalyks av seks begerblad med i-cord-stilk på toppen. Fem '
+          'størrelser, som '
           'dekker plaggstørrelse 44 til 92.',
-          'A round hat with a green scalloped edge, knitted-in seeds, ear flaps with ties, '
-          'and a green calyx of six sepals with an i-cord stalk on top. Five sizes, '
+          'A round hat with a green scalloped edge, knitted-in seeds, green ear flaps with '
+          'ties, and a green calyx of six sepals with an i-cord stalk on top. Five sizes, '
           'covering garment sizes 44 to 92.'),
         bar=bar(lang), bilde='lue.jpg'), 1))
 
@@ -65,14 +66,14 @@ def sider(lang):
              'buekanten, og resten av luen er rosa: legg og toppfelling. Frøene strikkes inn i legget. Når luen er ferdig, strikkes '
              'kalyksen som en egen del i grønt, seks spisse begerblad rundt en '
              'i-cord-stilk, og den sys fast over toppen. Til slutt plukkes '
-             'øreklaffene opp rett over den grønne kanten, felles til en spiss, og båndet '
+             'de grønne øreklaffene opp i den grønne kanten, felles til en spiss, og båndet '
              'fortsetter '
              'rett ut av spissen som i-cord.',
              'The hat is worked in the round from the bottom up. It begins with the '
              'green scalloped edge, and the rest of the hat is pink: body and crown. The seeds are knitted into the body. When the '
              'hat is finished, the calyx is worked as a separate piece in green, six '
              'pointed sepals round an i-cord stalk, and sewn over the top. Finally the '
-             'ear flaps are picked up just above the green edge, decreased to a point, and '
+             'green ear flaps are picked up in the green edge, decreased to a point, and '
              'the tie '
              'continues straight out of the point as an i-cord.') + '</p>') +
         rosep(L(lang, 'DETTE LÆRER DU', 'WHAT YOU WILL LEARN')) +
@@ -141,7 +142,7 @@ def sider(lang):
           'the ties on the smallest sizes.')), 3))
 
     # ------------------------------------------------------------------ 4 GARN
-    garn = [[navn(v, lang), '%d g' % (20 + 5 * i), '%d g' % (10 + 5 * i), '5 g']
+    garn = [[navn(v, lang), '%d g' % (20 + 5 * i), '%d g' % (15 + 5 * i), '5 g']
             for i, v in enumerate(LUER)]
     ekstra = L(lang,
                [['Pinne 4 mm', 'kort rundpinne, settpinner eller Magic Loop'],
@@ -307,24 +308,23 @@ def sider(lang):
     P.append(pg(
         banner(L(lang, '5 · ØREKLAFFENE OG BÅNDENE', '5 · THE EAR FLAPS AND THE TIES')) +
         '<p>' + L(lang,
-        'Klaffene plukkes opp på innsiden av luen, rett OVER den grønne kanten, én på '
-        'hver side. Finn midt foran og midt bak, og plasser klaffene midt mellom dem, '
-        'altså rett under der øret sitter. Plukk opp med rosa det antallet masker '
-        'kolonnen din sier. Plukk opp over kanten, ikke i den, så buene får henge fritt.',
-        'The flaps are picked up on the inside of the hat, just ABOVE the green edge, one '
-        'on each side. Find centre front and centre back, and place the flaps midway '
-        'between them, that is right under where the ear sits. Pick up in pink the number '
-        'of stitches your column says. Pick up above the edge, not into it, so the '
-        'scallops hang free.') + '</p>' +
+        'Klaffene er GRØNNE, og de henger rett ned fra den grønne kanten. Plukk opp med '
+        'grønt i selve opplegget, én klaff på hver side. Finn midt foran og midt bak, og '
+        'plasser klaffene midt mellom dem, altså rett under der øret sitter. Plukk opp '
+        'det antallet masker kolonnen din sier.',
+        'The flaps are GREEN, and they hang straight down from the green edge. Pick up in '
+        'green in the cast-on edge itself, one flap on each side. Find centre front and '
+        'centre back, and place the flaps midway between them, that is right under where '
+        'the ear sits. Pick up the number of stitches your column says.') + '</p>' +
         card(ul(L(lang,
-        ['Strikk 4 rader glattstrikk frem og tilbake.',
+        ['Strikk 4 rader glattstrikk frem og tilbake, i grønt.',
          'Fell så 1 maske i hver side annenhver rad, til det står 3 masker igjen.',
-         'Strikk i-cord på de 3 maskene til båndet måler lengden i kolonnen din, og '
+         'Strikk i-cord i grønt på de 3 maskene til båndet måler lengden i kolonnen din, og '
          'fell av. Båndet vokser altså rett ut av klaffens spiss, det sys ikke på.',
          'Strikk den andre klaffen helt likt.'],
-        ['Work 4 rows in stocking stitch back and forth.',
+        ['Work 4 rows in stocking stitch back and forth, in green.',
          'Then decrease 1 stitch at each side every other row, until 3 stitches remain.',
-         'Work an i-cord on those 3 stitches until the tie measures the length in your '
+         'Work an i-cord in green on those 3 stitches until the tie measures the length in your '
          'column, and cast off. The tie therefore grows straight out of the point of the '
          'flap, it is not sewn on.',
          'Work the second flap exactly the same.']))) +
