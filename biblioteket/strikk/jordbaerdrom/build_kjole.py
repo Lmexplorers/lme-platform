@@ -25,11 +25,11 @@ GARN = [[p['str_nr'],
 
 EKSTRA_NO = [['Pinne 4 mm', 'settpinner eller Magic Loop til hals, armhull og skjørt'],
              ['1 flat knapp', 'ca. 10-12 mm, til nakkeåpningen'],
-             ['Stoppenål', 'til å feste tråder og sy ned picotkanten'],
+             ['Stoppenål', 'til å feste tråder og jevne ut buekanten'],
              ['Maskemarkør', 'til å merke omgangens begynnelse midt bak']]
 EKSTRA_EN = [['4 mm needles', 'double-pointed or Magic Loop for neck, armholes and skirt'],
              ['1 flat button', 'approx. 10-12 mm, for the back neck opening'],
-             ['Darning needle', 'for weaving in ends and sewing down the picot edge'],
+             ['Darning needle', 'for weaving in ends and evening out the scalloped edge'],
              ['Stitch marker', 'to mark the beginning of the round at centre back']]
 
 
@@ -84,11 +84,11 @@ def sider(lang):
                   ['å strikke et ermeløst bærestykke ovenfra og ned',
                    'å strikke inn bladspisser og frø i to farger',
                    'å øke jevnt fra liv til skjørt',
-                   'å strikke picotkant og armhullskanter'],
+                   'å strikke buekant og armhullskanter'],
                   ['knitting a sleeveless yoke from the top down',
                    'working leaf tips and seeds in two colours',
                    'increasing evenly from waist into a skirt',
-                   'working a picot edge and armhole edgings']))) +
+                   'working a scalloped edge and armhole edgings']))) +
         sagep(L(lang, 'VANSKELIGHETSGRAD', 'DIFFICULTY')) +
         cme(L(lang,
               'Lett til litt øvet. Du bør kunne strikke rundt, øke, felle og holde to '

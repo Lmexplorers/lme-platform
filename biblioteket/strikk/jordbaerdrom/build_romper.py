@@ -22,11 +22,11 @@ GARN = [[p['str_nr'],
 
 EKSTRA_NO = [['Pinne 4 mm', 'settpinner eller Magic Loop til hals, armhull og skritt'],
              ['4 flate knapper', 'ca. 10-12 mm, 3 i skrittet og 1 i nakken'],
-             ['Stoppenål', 'til å feste tråder og sy ned picotkanten'],
+             ['Stoppenål', 'til å feste tråder og feste beinkantene'],
              ['Maskemarkør', 'til å merke omgangens begynnelse og livet']]
 EKSTRA_EN = [['4 mm needles', 'double-pointed or Magic Loop for neck, armholes and crotch'],
              ['4 flat buttons', 'approx. 10-12 mm, 3 at the crotch and 1 at the neck'],
-             ['Darning needle', 'for weaving in ends and sewing down the picot edge'],
+             ['Darning needle', 'for weaving in ends and securing the leg edgings'],
              ['Stitch marker', 'to mark the beginning of the round and the waist']]
 
 
@@ -198,9 +198,10 @@ def sider(lang):
         banner(L(lang, '4 · SKJØRTET', '4 · THE SKIRT')) +
         '<p>' + L(lang,
         'Fra livmarkøren strikker du *2 rett, 1 økning*, gjenta rundt. Fortsett i rosa '
-        'glattstrikk med spredte frø til skjørtet måler lengden i siste kolonne. Strikk så '
-        '3 omganger rosa, 1 hullomgang *1 kast, 2 rett sammen*, og 3 omganger rosa. Fell '
-        'løst av. Brett langs hullomgangen mot vrangen og sy ned til en myk picotkant.',
+        'glattstrikk med spredte frø til skjørtet måler lengden i siste kolonne. Da '
+        'kommer buekanten: del kanten i buer med en markør mellom hver bue, 10 masker per bue. '
+        'Strikk buerunden *2 rett sammen vridd, 2 rett, 1 økning, 2 rett, 1 økning, 2 rett, '
+        '2 rett sammen* rundt, gjenta den i alt 5 ganger, og fell så løst av.',
         'From the waist marker work *k2, M1*, repeat round. Continue in pink stocking stitch '
         'with scattered seeds until the skirt measures the length in the last column. Then '
         'the scalloped edge follows: ' + 'Divide the edge into scallops with a marker between each. Every scallop is 10 stitches. Then work the scallop round: *ssk, k2, M1R, k2, M1L, k2, k2tog*, repeat round. The stitch count stays the same, but the edge begins to wave: the decreases pull the valley between the scallops up, and the increases push the scallop down. Repeat the scallop round 5 times in all, then cast off loosely.') + '</p>' +

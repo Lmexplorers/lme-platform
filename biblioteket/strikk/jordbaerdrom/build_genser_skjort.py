@@ -25,11 +25,11 @@ GARN = [[p['str_nr'],
 
 EKSTRA_NO = [['Pinne 4 mm', 'settpinner eller Magic Loop til hals, ermer og linning'],
              ['Myk elastikk', 'ca. 1 cm bred, til skjørtets linning'],
-             ['Stoppenål', 'til å feste tråder og sy ned linning og picotkant'],
+             ['Stoppenål', 'til å feste tråder og sy ned linningen'],
              ['Maskemarkør', 'til å merke omgangens begynnelse og hver ermeside']]
 EKSTRA_EN = [['4 mm needles', 'double-pointed or Magic Loop for neck, sleeves and waistband'],
              ['Soft elastic', 'approx. 1 cm wide, for the skirt waistband'],
-             ['Darning needle', 'for weaving in ends and sewing down the waistband and picot'],
+             ['Darning needle', 'for weaving in ends and sewing down the waistband'],
              ['Stitch marker', 'to mark the beginning of the round and each sleeve side']]
 
 
@@ -78,11 +78,11 @@ def sider(lang):
                   ['å strikke en genser med rundt bærestykke',
                    'å dele til bol og ermer, og strikke ermene i runden',
                    'å strikke et skjørt med brettet, elastisk linning',
-                   'å tilpasse lengde og avslutte med picotkant'],
+                   'å tilpasse lengde og avslutte med buekant'],
                   ['knitting a jumper with a round yoke',
                    'dividing for body and sleeves, and working sleeves in the round',
                    'knitting a skirt with a folded, elasticated waistband',
-                   'adjusting the length and finishing with a picot edge']))) +
+                   'adjusting the length and finishing with a scalloped edge']))) +
         sagep(L(lang, 'VANSKELIGHETSGRAD', 'DIFFICULTY')) +
         cme(L(lang,
               'Lett til litt øvet. Ermene er den eneste delen med få masker på pinnen, og '
