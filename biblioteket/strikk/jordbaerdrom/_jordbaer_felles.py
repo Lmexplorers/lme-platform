@@ -113,6 +113,9 @@ def forklaring(lang):
 
 
 DIAG_CSS = f'''
+.coverimg {{ text-align:center; margin:3mm 0 1mm; }}
+.coverimg img {{ width:84mm; height:84mm; object-fit:cover; border-radius:14px;
+  border:2.5mm solid #fff; box-shadow:0 2mm 6mm rgba(0,0,0,.10); }}
 .diag {{ text-align:center; margin:2mm 0 3mm; }}
 .diagtitle {{ font-family:var(--font-head); font-weight:700; font-size:10pt;
   color:{GRONN}; margin-bottom:1.5mm; }}
@@ -465,7 +468,7 @@ def side_avslutning(lang):
 '''
 
 
-def forside(lang, tittel, undertittel, beskrivelse, bar=None):
+def forside(lang, tittel, undertittel, beskrivelse, bar=None, bilde=None):
     t = {'no': dict(
         tag='LITTLE MONTESSORI EXPLORERS',
         by1='Av Renate Dahl', by2='Little Montessori Explorers', by3='lmexplorers.com',
@@ -483,6 +486,7 @@ def forside(lang, tittel, undertittel, beskrivelse, bar=None):
 <div class="covertag">{tt['tag']}</div>
 <div class="coverbanner"><h1 class="covertitle">{tittel}</h1></div>
 <div class="subpill">{undertittel}</div>
+{('<div class="coverimg"><img src="bilder/' + bilde + '" alt=""></div>') if bilde else ''}
 {card('<p class="center">' + beskrivelse + '</p>')}
 {bar if bar is not None else storrelsesbar(lang)}
 <div class="byline">

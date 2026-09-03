@@ -57,7 +57,7 @@ def sider(lang):
           'A matching two-piece set: a top-down jumper with a round yoke and long sleeves, '
           'and a separate skirt with a soft elasticated waist. Both pieces share the same '
           'leaf and seed pattern. Graded in nine sizes, from small newborn to two '
-          'years.')), 1))
+          'years.'), bilde='genser.jpg'), 1))
 
     # ---------------------------------------------------------- 2 FØR DU BEGYNNER
     P.append(pg(

@@ -51,7 +51,7 @@ def sider(lang):
           'mellom beina. Gradert i ni størrelser, fra liten nyfødt og opp til to år.',
           'A sleeveless romper with a knitted-in leaf yoke, seeds, an integrated skirt and '
           'a buttoned opening at the crotch. Graded in nine sizes, from small newborn up '
-          'to two years.')), 1))
+          'to two years.'), bilde='romper.jpg'), 1))
 
     # ---------------------------------------------------------- 2 FØR DU BEGYNNER
     P.append(pg(

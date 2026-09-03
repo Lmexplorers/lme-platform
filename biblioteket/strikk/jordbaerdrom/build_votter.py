@@ -54,7 +54,7 @@ def sider(lang):
           'Soft thumbless mittens with a folded rib cuff, leaf tips, seeds and a '
           'connecting i-cord between the two. Two sizes, covering garment sizes 44 to '
           '74.'),
-        bar=bar(lang)), 1))
+        bar=bar(lang), bilde='votter.jpg'), 1))
 
     # ---------------------------------------------------------- 2 FØR DU BEGYNNER
     P.append(pg(

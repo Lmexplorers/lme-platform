@@ -50,7 +50,7 @@ def sider(lang):
           'Classic baby booties with a rounded foot, a folded rib cuff, leaf tips and '
           'i-cord ties at the ankle. Four sizes, covering the whole collection, garment '
           'sizes 44 to 92.'),
-        bar=bar(lang)), 1))
+        bar=bar(lang), bilde='tofler.jpg'), 1))
 
     # ---------------------------------------------------------- 2 FØR DU BEGYNNER
     P.append(pg(

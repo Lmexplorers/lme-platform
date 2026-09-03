@@ -63,7 +63,7 @@ def sider(lang):
           'Ermeløs, toppstrikket kjole med bladparti, innstrikkede frø og et mykt '
           'utsvingt skjørt. Gradert i ni størrelser, fra liten nyfødt og opp til to år.',
           'A sleeveless, top-down dress with a leaf yoke, knitted-in seeds and a soft '
-          'flared skirt. Graded in nine sizes, from small newborn up to two years.')), 1))
+          'flared skirt. Graded in nine sizes, from small newborn up to two years.'), bilde='kjole.jpg'), 1))
 
     # ---------------------------------------------------------- 2 FØR DU BEGYNNER
     P.append(pg(
