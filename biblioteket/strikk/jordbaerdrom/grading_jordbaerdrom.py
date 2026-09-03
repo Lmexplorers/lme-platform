@@ -50,6 +50,8 @@ GAUGE_ST_CM = 21 / 10          # masker per cm i glattstrikk
 GAUGE_ROW_CM = 28 / 10         # omganger per cm i glattstrikk
 BLAD_RAPPORT = 8               # masker i bladrapporten
 BLAD_OMG = 10                  # omganger i bladdiagrammet
+SMABLAD_RAPPORT = 4            # masker i den lille jordbærhetten
+SMABLAD_OMG = 4                # omganger i den lille jordbærhetten
 
 # ------------------------------------------------------------------ STØRRELSER
 # (str, no-tillegg, en-tillegg, barnets brystmål cm, ønsket overarm cm,
@@ -314,6 +316,43 @@ for navn_no, navn_en, dekker, m, ribb_cm, fot_cm, overfot_m, overfot_p, plukk, i
         icord_cm=icord_cm,
     ))
 
+# ---------------------------------------------------------------------- LUER
+# Jordbærluen: brettet ribb, rosa glattstrikk med frø, en krans av små
+# jordbærhetter, og en grønn topp med i-cord-stilk. Knytebånd i i-cord.
+#
+# HVORFOR FEM STØRRELSER OG IKKE NI
+# Frødiagrammet er 8 masker, så masketallet rundt luen må være delelig med 8.
+# Ett slikt trinn er 3,8 cm i omkrets, mens et barnehode vokser 1 til 3 cm
+# mellom to nabostørrelser. Ni luestørrelser hadde derfor blitt de samme fem
+# tallene med ni navn. Fem trinn er fem reelle mål.
+#
+# Luen skal ligge inntil, ikke stramme. Ribben strekker seg, så omkretsen
+# ligger med vilje under hodemålet. Forholdet kontrolleres nedenfor.
+LUER = []
+for navn_no, navn_en, dekker, hoder, m, ribb_cm, rosa_cm, band_cm in [
+    ("Liten",       "Small",       "44",    [32.0],       56, 4, 4.0, 22),
+    ("Medium",      "Medium",      "50-56", [35.0, 38.0], 64, 5, 4.5, 25),
+    ("Stor",        "Large",       "62-68", [41.0, 43.0], 72, 5, 5.5, 28),
+    ("Ekstra stor", "Extra large", "74-80", [45.0, 46.0], 80, 6, 6.0, 30),
+    ("XXL",         "XXL",         "86-92", [47.0, 48.0], 88, 6, 6.5, 32),
+]:
+    # Toppen felles i 8 felt, én felling per felt, annenhver omgang, til 8 m.
+    fell_omg = (m - 8) // 8
+    fell_cm = round(2 * fell_omg / GAUGE_ROW_CM, 1)
+    # Kransen med jordbærhetter er 4 omganger, som i votter og tøfler.
+    krans_cm = round(SMABLAD_OMG / GAUGE_ROW_CM, 1)
+    # Ferdig høyde: halv ribb (den brettes dobbel), rosa, krans, toppfelling.
+    hoyde_cm = round(ribb_cm / 2 + rosa_cm + krans_cm + fell_cm, 1)
+    LUER.append(dict(
+        navn_no=navn_no, navn_en=navn_en, dekker=dekker, hoder=hoder, masker=m,
+        spisser=m // SMABLAD_RAPPORT,
+        fro_rapporter=m // BLAD_RAPPORT,
+        omkrets_cm=round(m / GAUGE_ST_CM, 1),
+        ribb_cm=ribb_cm, rosa_cm=rosa_cm, krans_cm=krans_cm,
+        fell_omganger=fell_omg, fell_cm=fell_cm, hoyde_cm=hoyde_cm,
+        band_cm=band_cm, stilk_cm=4 + (m - 56) // 16,
+    ))
+
 # ------------------------------------------------------------- KONSISTENSSJEKK
 # Alt under er tall som PDF-ene skriver ut. Slår én av dem feil, skal
 # byggingen stoppe her og ikke ende i en oppskrift noen strikker etter.
@@ -405,11 +444,48 @@ for s in TOFLER:
 for a, b in zip(TOFLER, TOFLER[1:]):
     assert b['masker'] > a['masker'] and b['fot_cm'] > a['fot_cm']
 
+for lue in LUER:
+    # Frøomgangene er 8 masker brede, jordbærhettene 4. Begge må gå opp rundt.
+    assert lue['masker'] % BLAD_RAPPORT == 0, f"lue {lue['navn_no']}: frøomgangen går ikke opp"
+    assert lue['masker'] % SMABLAD_RAPPORT == 0, f"lue {lue['navn_no']}: hettene går ikke opp"
+    # Toppen felles i 8 felt og skal ende på nøyaktig 8 masker.
+    assert lue['masker'] - 8 * lue['fell_omganger'] == 8, \
+        f"lue {lue['navn_no']}: toppfellingen ender ikke på 8 masker"
+    # Luen skal ligge inntil hodet uten å stramme. Ribben strekker seg, så
+    # omkretsen ligger under hodemålet, men ikke hvor som helst under.
+    for hode in lue['hoder']:
+        andel = lue['omkrets_cm'] / hode
+        assert 0.78 <= andel <= 0.92, \
+            f"lue {lue['navn_no']}: {lue['omkrets_cm']} cm er {andel:.0%} av hode {hode} cm"
+    # Høyden må dekke ørene uten at luen blir en pose.
+    for hode in lue['hoder']:
+        assert 0.31 <= lue['hoyde_cm'] / hode <= 0.42, \
+            f"lue {lue['navn_no']}: høyde {lue['hoyde_cm']} cm passer ikke hode {hode} cm"
+for a, b in zip(LUER, LUER[1:]):
+    for felt in ('masker', 'hoyde_cm', 'band_cm', 'fell_omganger'):
+        assert b[felt] > a[felt], f"lue {b['navn_no']}: {felt} vokser ikke"
+
+# Hver plaggstørrelse skal ha nøyaktig én lue. Ingen hull, ingen dobbeltdekning.
+dekket = []
+for lue in LUER:
+    d = lue['dekker'].split('-')
+    dekket += [int(x) for x in d] if len(d) == 2 else [int(d[0])]
+alle = [r['str_nr'] for r in rows]
+lue_str = []
+for lue in LUER:
+    d = lue['dekker'].split('-')
+    if len(d) == 1:
+        lue_str.append(int(d[0]))
+    else:
+        lo, hi = int(d[0]), int(d[1])
+        lue_str += [n for n in alle if lo <= n <= hi]
+assert lue_str == alle, f"luene dekker {lue_str}, ikke alle ni plaggstørrelsene"
+
 out = BASE / 'sizes.json'
 out.write_text(json.dumps(
     dict(gauge_st=21, gauge_row=28, blad_rapport=BLAD_RAPPORT, blad_omg=BLAD_OMG,
          hals_ribb_omg=HALS_RIBB_OMG,
-         plagg=rows, votter=VOTTER, tofler=TOFLER),
+         plagg=rows, votter=VOTTER, tofler=TOFLER, luer=LUER),
     ensure_ascii=False, indent=2), encoding='utf-8')
 
 print('OK, skrev', out.name, 'for', len(rows), 'plaggstørrelser.')
@@ -429,3 +505,7 @@ for v in VOTTER:
 for s in TOFLER:
     print(f"  tøfler {s['navn_no']:>12} (str {s['dekker']}): {s['masker']} m, "
           f"fot {s['fot_cm']} cm, {s['etter_plukk']} m etter oppplukking")
+for lue in LUER:
+    print(f"  lue    {lue['navn_no']:>12} (str {lue['dekker']}): {lue['masker']} m, "
+          f"{lue['omkrets_cm']} cm rundt, {lue['hoyde_cm']} cm høy, "
+          f"{lue['fell_omganger']} felleomganger")

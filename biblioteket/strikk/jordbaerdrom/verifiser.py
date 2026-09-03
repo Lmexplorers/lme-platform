@@ -38,6 +38,8 @@ PAR = [
     ('votter_en.html', 'LME-Jordbaerdrom-Votter-EN.pdf'),
     ('tofler_no.html', 'LME-Jordbaerdrom-Tofler.pdf'),
     ('tofler_en.html', 'LME-Jordbaerdrom-Tofler-EN.pdf'),
+    ('lue_no.html', 'LME-Jordbaerdrom-Lue.pdf'),
+    ('lue_en.html', 'LME-Jordbaerdrom-Lue-EN.pdf'),
 ]
 
 feil = []
@@ -103,6 +105,17 @@ for p in DATA['plagg']:
             feil.append(f'kjole: {felt}={p[felt]} for str {p["str_nr"]} står ikke i PDF-en')
 print(f'   kontrollert {len(DATA["plagg"])} størrelser x 4 tall')
 
+lu = pymupdf.open(BASE / 'LME-Jordbaerdrom-Lue.pdf')
+lutekst = ' '.join(s.get_text() for s in lu)
+for v in DATA['luer']:
+    for felt in ('masker', 'spisser', 'fell_omganger', 'band_cm'):
+        if str(v[felt]) not in lutekst:
+            feil.append(f'lue {v["navn_no"]}: {felt}={v[felt]} står ikke i PDF-en')
+    for felt in ('omkrets_cm', 'hoyde_cm'):
+        if str(v[felt]).replace('.', ',') not in lutekst:
+            feil.append(f'lue {v["navn_no"]}: {felt}={v[felt]} står ikke i PDF-en')
+print(f'   kontrollert {len(DATA["luer"])} luestørrelser x 6 tall')
+
 # --------------------------------------------------------- 3 SKRIVESTILREGLER
 print('\n3. Skrivestilregler')
 forbudt = {'«': 'vinkelanførselstegn', '»': 'vinkelanførselstegn',
@@ -126,4 +139,4 @@ if feil:
     for f in feil[:40]:
         print('  -', f)
     sys.exit(1)
-print('Alt i orden. Alle ti PDF-ene er komplette og stemmer med sizes.json.')
+print('Alt i orden. Alle tolv PDF-ene er komplette og stemmer med sizes.json.')

@@ -27,6 +27,7 @@ DATA = json.loads(BASE.joinpath('sizes.json').read_text(encoding='utf-8'))
 PLAGG = DATA['plagg']
 VOTTER = DATA['votter']
 TOFLER = DATA['tofler']
+LUER = DATA['luer']
 
 # ---------------------------------------------------------------------- FARGER
 # Jordbærdrøm bruker LME-paletten, men med jordbærrosa og bladgrønn som de

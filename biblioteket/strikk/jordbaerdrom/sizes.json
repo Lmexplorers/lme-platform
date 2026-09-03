@@ -695,5 +695,111 @@
       "ta_m": 15,
       "icord_cm": 48
     }
+  ],
+  "luer": [
+    {
+      "navn_no": "Liten",
+      "navn_en": "Small",
+      "dekker": "44",
+      "hoder": [
+        32.0
+      ],
+      "masker": 56,
+      "spisser": 14,
+      "fro_rapporter": 7,
+      "omkrets_cm": 26.7,
+      "ribb_cm": 4,
+      "rosa_cm": 4.0,
+      "krans_cm": 1.4,
+      "fell_omganger": 6,
+      "fell_cm": 4.3,
+      "hoyde_cm": 11.7,
+      "band_cm": 22,
+      "stilk_cm": 4
+    },
+    {
+      "navn_no": "Medium",
+      "navn_en": "Medium",
+      "dekker": "50-56",
+      "hoder": [
+        35.0,
+        38.0
+      ],
+      "masker": 64,
+      "spisser": 16,
+      "fro_rapporter": 8,
+      "omkrets_cm": 30.5,
+      "ribb_cm": 5,
+      "rosa_cm": 4.5,
+      "krans_cm": 1.4,
+      "fell_omganger": 7,
+      "fell_cm": 5.0,
+      "hoyde_cm": 13.4,
+      "band_cm": 25,
+      "stilk_cm": 4
+    },
+    {
+      "navn_no": "Stor",
+      "navn_en": "Large",
+      "dekker": "62-68",
+      "hoder": [
+        41.0,
+        43.0
+      ],
+      "masker": 72,
+      "spisser": 18,
+      "fro_rapporter": 9,
+      "omkrets_cm": 34.3,
+      "ribb_cm": 5,
+      "rosa_cm": 5.5,
+      "krans_cm": 1.4,
+      "fell_omganger": 8,
+      "fell_cm": 5.7,
+      "hoyde_cm": 15.1,
+      "band_cm": 28,
+      "stilk_cm": 5
+    },
+    {
+      "navn_no": "Ekstra stor",
+      "navn_en": "Extra large",
+      "dekker": "74-80",
+      "hoder": [
+        45.0,
+        46.0
+      ],
+      "masker": 80,
+      "spisser": 20,
+      "fro_rapporter": 10,
+      "omkrets_cm": 38.1,
+      "ribb_cm": 6,
+      "rosa_cm": 6.0,
+      "krans_cm": 1.4,
+      "fell_omganger": 9,
+      "fell_cm": 6.4,
+      "hoyde_cm": 16.8,
+      "band_cm": 30,
+      "stilk_cm": 5
+    },
+    {
+      "navn_no": "XXL",
+      "navn_en": "XXL",
+      "dekker": "86-92",
+      "hoder": [
+        47.0,
+        48.0
+      ],
+      "masker": 88,
+      "spisser": 22,
+      "fro_rapporter": 11,
+      "omkrets_cm": 41.9,
+      "ribb_cm": 6,
+      "rosa_cm": 6.5,
+      "krans_cm": 1.4,
+      "fell_omganger": 10,
+      "fell_cm": 7.1,
+      "hoyde_cm": 18.0,
+      "band_cm": 32,
+      "stilk_cm": 6
+    }
   ]
 }

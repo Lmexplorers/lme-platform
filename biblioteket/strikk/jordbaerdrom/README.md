@@ -1,6 +1,6 @@
 # Jordbærdrøm (LME strikkekolleksjon, str 44 til 92)
 
-Fem strikkeoppskrifter med innstrikkede jordbærblad og frø, gradert fra
+Seks strikkeoppskrifter med innstrikkede jordbærblad og frø, gradert fra
 liten nyfødt til to år. Ferdige PDF-er, norsk og engelsk, A4:
 
 | Plagg | Norsk | Engelsk | Sider |
@@ -91,6 +91,13 @@ vokser lite mellom to nabostørrelser, og brettet ribb og knyting tar opp
 resten. Vottene har 2 størrelser og tøflene 4, og hver av dem dekker et
 oppgitt spenn av plaggstørrelsene.
 
+**Luen har 5 størrelser.** Frødiagrammet er 8 masker, altså 3,8 cm i
+omkrets, mens et barnehode vokser 1 til 3 cm mellom to nabostørrelser. Ni
+luer hadde blitt de samme fem tallene med ni navn. En assert kontrollerer at
+de fem luene dekker nøyaktig de ni plaggstørrelsene, uten hull og uten
+dobbeltdekning, og at omkretsen ligger på 78 til 92 % av hodemålet i hver av
+størrelsene den er ment for. En lue som måler like mye som hodet, sklir av.
+
 **Vottene stopper ved str 74**, ikke fordi masketallet stopper, men fordi de
 er uten tommel. Det er riktig på en baby, men et barn på over ett år vil ha
 tommel, og en tommelløs vott blir da mer til hinder enn til hjelp.
@@ -146,7 +153,9 @@ Bladet er 8 masker x 10 omganger og leses nedenfra og opp, selv om plagget
 strikkes ovenfra og ned: diagrammet er snudd, så bladene peker nedover på det
 ferdige plagget. Votter og tøfler bruker et eget, mindre diagram, den lille
 jordbærhetten på 4 masker x 4 omganger. På en vott eller en tøffel ville det
-store bladet dekket nesten hele flaten, og bildene viser små, korte spisser. Lengste trådsprang bak arbeidet er 3 masker, med vilje.
+store bladet dekket nesten hele flaten, og bildene viser små, korte spisser.
+
+Lengste trådsprang bak arbeidet er 3 masker, med vilje.
 Lange løse tråder på innsiden er ubehagelige mot sart hud og noe små fingre
 kan sette seg fast i.
 
@@ -155,20 +164,20 @@ kan sette seg fast i.
 | Fil | Hva den gjør |
 |---|---|
 | `grading_jordbaerdrom.py` | regner ut alle masketall, skriver `sizes.json` |
-| `sizes.json` | de verifiserte tallene, lest av alle fem byggeskriptene |
+| `sizes.json` | de verifiserte tallene, lest av alle seks byggeskriptene |
 | `_jordbaer_felles.py` | diagrammer, felles sider, farger, språkhjelper |
-| `build_kjole.py` og de fire andre | ett hefte hver, norsk og engelsk HTML |
+| `build_kjole.py` og de fem andre | ett hefte hver, norsk og engelsk HTML |
 | `verifiser.py` | kontrollerer de ferdige PDF-ene |
 
 ## Bygge alt på nytt
 
 ```bash
 python3 grading_jordbaerdrom.py     # kun ved endring i tall eller størrelser
-for b in kjole romper genser_skjort votter tofler; do python3 build_$b.py; done
+for b in kjole romper genser_skjort votter tofler lue; do python3 build_$b.py; done
 
 CHROME=/opt/pw-browsers/chromium-1194/chrome-linux/chrome
 for f in kjole:Kjole romper:Romper genser_skjort:Genser-og-skjort \
-         votter:Votter tofler:Tofler; do
+         votter:Votter tofler:Tofler lue:Lue; do
   src=${f%%:*}; navn=${f##*:}
   "$CHROME" --headless --no-sandbox --no-pdf-header-footer \
     --print-to-pdf="LME-Jordbaerdrom-$navn.pdf" ${src}_no.html
