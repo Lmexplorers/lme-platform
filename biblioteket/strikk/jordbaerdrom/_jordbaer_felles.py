@@ -525,16 +525,14 @@ def side_montering(lang, ekstra_no=None, ekstra_en=None):
 def side_avslutning(lang):
     t = {'no': dict(
         b='JORDBÆRDRØM', p1='HELE KOLLEKSJONEN',
-        liste=['Jordbærdrøm kjole, ermeløs kjole med bladparti og utsvingt skjørt.',
+        liste=['Jordbærdrøm kjole, ermeløs, med bladparti og utsvingt skjørt.',
                'Jordbærdrøm romper med skjørt, med bleiedel og knapper i skrittet.',
-               'Jordbærdrøm genser og skjørt, et todelt sett med elastisk liv i skjørtet.',
-               'Jordbærdrøm votter, uten tommel, med sammenbindingssnor, str 44 til 74.',
-               'Jordbærdrøm tøfler, med brettet ribb og knyting rundt ankelen, '
-               'str 44 til 92.',
-               'Jordbærdrøm lue, med krans av jordbærhetter og stilk på toppen, '
-               'str 44 til 92.',
-               'Jordbærdrøm sokker, med hællapp og båttå som maskes sammen, '
-               'str 44 til 92.'],
+               'Jordbærdrøm genser, med rundt bærestykke og lange ermer.',
+               'Jordbærdrøm skjørt, med grønn ribb i livet og buekant.',
+               'Jordbærdrøm votter, uten tommel, med snor, str 44 til 74.',
+               'Jordbærdrøm tøfler, med knyting rundt ankelen, str 44 til 92.',
+               'Jordbærdrøm lue, med kalyks og øreklaffer, str 44 til 92.',
+               'Jordbærdrøm sokker, med hællapp og båttå, str 44 til 92.'],
         p2='OPPHAVSRETT',
         opph=(f'(c) {AAR} Renate Dahl, Little Montessori Explorers. Jordbærdrøm er et helt '
               'originalt LME-design. Oppskriften er kun til personlig bruk, og kan ikke '
@@ -545,19 +543,14 @@ def side_avslutning(lang):
         by='Renate Dahl · Little Montessori Explorers · lmexplorers.com')}
     t['en'] = dict(
         b='STRAWBERRY DREAM', p1='THE WHOLE COLLECTION',
-        liste=['Strawberry Dream dress, sleeveless with a leaf yoke and a flared skirt.',
-               'Strawberry Dream romper with skirt, with a nappy panel and buttons at the '
-               'crotch.',
-               'Strawberry Dream jumper and skirt, a two-piece set with an elasticated '
-               'waist.',
-               'Strawberry Dream mittens, thumbless, with a connecting cord, '
-               'sizes 44 to 74.',
-               'Strawberry Dream booties, with a folded rib cuff and ties at the ankle, '
-               'sizes 44 to 92.',
-               'Strawberry Dream hat, with a ring of strawberry tops and a stalk on top, '
-               'sizes 44 to 92.',
-               'Strawberry Dream socks, with a heel flap and a grafted wedge toe, '
-               'sizes 44 to 92.'],
+        liste=['Strawberry Dream dress, sleeveless, with a leaf yoke and flared skirt.',
+               'Strawberry Dream romper with skirt, nappy panel and buttons at the crotch.',
+               'Strawberry Dream jumper, with a round yoke and long sleeves.',
+               'Strawberry Dream skirt, with a green rib at the waist and a scalloped hem.',
+               'Strawberry Dream mittens, thumbless, with a cord, sizes 44 to 74.',
+               'Strawberry Dream booties, with ties at the ankle, sizes 44 to 92.',
+               'Strawberry Dream hat, with a calyx and ear flaps, sizes 44 to 92.',
+               'Strawberry Dream socks, with a heel flap and wedge toe, sizes 44 to 92.'],
         p2='COPYRIGHT',
         opph=(f'(c) {AAR} Renate Dahl, Little Montessori Explorers. Strawberry Dream is a '
               'fully original LME design. The pattern is for personal use only, and may '

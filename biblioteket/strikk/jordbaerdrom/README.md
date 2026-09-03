@@ -5,9 +5,10 @@ liten nyfødt til to år. Ferdige PDF-er, norsk og engelsk, A4:
 
 | Plagg | Norsk | Engelsk | Sider |
 |---|---|---|---|
-| Kjole | `LME-Jordbaerdrom-Kjole.pdf` | `-EN.pdf` | 15 |
+| Kjole | `LME-Jordbaerdrom-Kjole.pdf` | `-EN.pdf` | 16 |
 | Romper med skjørt | `LME-Jordbaerdrom-Romper.pdf` | `-EN.pdf` | 15 |
-| Genser og skjørt | `LME-Jordbaerdrom-Genser-og-skjort.pdf` | `-EN.pdf` | 16 |
+| Genser | `LME-Jordbaerdrom-Genser.pdf` | `-EN.pdf` | 15 |
+| Skjørt | `LME-Jordbaerdrom-Skjort.pdf` | `-EN.pdf` | 12 |
 | Votter | `LME-Jordbaerdrom-Votter.pdf` | `-EN.pdf` | 12 |
 | Tøfler | `LME-Jordbaerdrom-Tofler.pdf` | `-EN.pdf` | 12 |
 
@@ -188,19 +189,19 @@ kan sette seg fast i.
 | Fil | Hva den gjør |
 |---|---|
 | `grading_jordbaerdrom.py` | regner ut alle masketall, skriver `sizes.json` |
-| `sizes.json` | de verifiserte tallene, lest av alle sju byggeskriptene |
+| `sizes.json` | de verifiserte tallene, lest av alle åtte byggeskriptene |
 | `_jordbaer_felles.py` | diagrammer, felles sider, farger, språkhjelper |
-| `build_kjole.py` og de seks andre | ett hefte hver, norsk og engelsk HTML |
+| `build_kjole.py` og de sju andre | ett hefte hver, norsk og engelsk HTML |
 | `verifiser.py` | kontrollerer de ferdige PDF-ene |
 
 ## Bygge alt på nytt
 
 ```bash
 python3 grading_jordbaerdrom.py     # kun ved endring i tall eller størrelser
-for b in kjole romper genser_skjort votter tofler lue sokker; do python3 build_$b.py; done
+for b in kjole romper genser skjort votter tofler lue sokker; do python3 build_$b.py; done
 
 CHROME=/opt/pw-browsers/chromium-1194/chrome-linux/chrome
-for f in kjole:Kjole romper:Romper genser_skjort:Genser-og-skjort \
+for f in kjole:Kjole romper:Romper genser:Genser skjort:Skjort \
          votter:Votter tofler:Tofler lue:Lue sokker:Sokker; do
   src=${f%%:*}; navn=${f##*:}
   "$CHROME" --headless --no-sandbox --no-pdf-header-footer \

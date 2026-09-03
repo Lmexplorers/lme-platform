@@ -32,8 +32,10 @@ PAR = [
     ('kjole_en.html', 'LME-Jordbaerdrom-Kjole-EN.pdf'),
     ('romper_no.html', 'LME-Jordbaerdrom-Romper.pdf'),
     ('romper_en.html', 'LME-Jordbaerdrom-Romper-EN.pdf'),
-    ('genser_skjort_no.html', 'LME-Jordbaerdrom-Genser-og-skjort.pdf'),
-    ('genser_skjort_en.html', 'LME-Jordbaerdrom-Genser-og-skjort-EN.pdf'),
+    ('genser_no.html', 'LME-Jordbaerdrom-Genser.pdf'),
+    ('genser_en.html', 'LME-Jordbaerdrom-Genser-EN.pdf'),
+    ('skjort_no.html', 'LME-Jordbaerdrom-Skjort.pdf'),
+    ('skjort_en.html', 'LME-Jordbaerdrom-Skjort-EN.pdf'),
     ('votter_no.html', 'LME-Jordbaerdrom-Votter.pdf'),
     ('votter_en.html', 'LME-Jordbaerdrom-Votter-EN.pdf'),
     ('tofler_no.html', 'LME-Jordbaerdrom-Tofler.pdf'),
@@ -154,24 +156,29 @@ for t in DATA['tofler']:
             feil.append(f'tøffel str {t["str_nr"]}: {felt}={t[felt]} står ikke i PDF-en')
 print(f'   kontrollert {len(DATA["votter"])} vottestørrelser og {len(DATA["tofler"])} tøffelstørrelser')
 
-ge = pymupdf.open(BASE / 'LME-Jordbaerdrom-Genser-og-skjort.pdf')
+ge = pymupdf.open(BASE / 'LME-Jordbaerdrom-Genser.pdf')
 getekst = ' '.join(s.get_text() for s in ge)
+sk = pymupdf.open(BASE / 'LME-Jordbaerdrom-Skjort.pdf')
+sktekst = ' '.join(s.get_text() for s in sk)
 kj = pymupdf.open(BASE / 'LME-Jordbaerdrom-Kjole.pdf')
 kjt = ' '.join(s.get_text() for s in kj)
 ro = pymupdf.open(BASE / 'LME-Jordbaerdrom-Romper.pdf')
 rot = ' '.join(s.get_text() for s in ro)
 for p in DATA['plagg']:
     for felt in ('genser_bolge', 'genser_bolge_buer', 'erme_bolge', 'erme_bolge_buer',
-                 'bolge_gjent', 'bolge_omganger', 'skjort_vidde', 'skjort_buer'):
+                 'bolge_gjent', 'bolge_omganger'):
         if str(p[felt]) not in getekst:
             feil.append(f'genser: {felt}={p[felt]} for str {p["str_nr"]} står ikke i PDF-en')
+    for felt in ('skjort_liv', 'skjort_vidde', 'skjort_buer', 'skjort_rapporter'):
+        if str(p[felt]) not in sktekst:
+            feil.append(f'skjørt: {felt}={p[felt]} for str {p["str_nr"]} står ikke i PDF-en')
     for felt in ('kjole_skjort_2', 'kjole_buer'):
         if str(p[felt]) not in kjt:
             feil.append(f'kjole: {felt}={p[felt]} for str {p["str_nr"]} står ikke i PDF-en')
     for felt in ('romper_skjort', 'romper_buer'):
         if str(p[felt]) not in rot:
             feil.append(f'romper: {felt}={p[felt]} for str {p["str_nr"]} står ikke i PDF-en')
-print(f'   kontrollert kantene i {len(DATA["plagg"])} størrelser x 12 tall')
+print(f'   kontrollert kantene i {len(DATA["plagg"])} størrelser x 14 tall')
 
 print('\n3. LME-logoen står på forsiden og siste side i alle heftene')
 for hfil, pfil in PAR:
@@ -204,4 +211,4 @@ if feil:
     for f in feil[:40]:
         print('  -', f)
     sys.exit(1)
-print('Alt i orden. Alle fjorten PDF-ene er komplette og stemmer med sizes.json.')
+print('Alt i orden. Alle seksten PDF-ene er komplette og stemmer med sizes.json.')
