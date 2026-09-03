@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teststrikk Jordbærdrøm | Little Montessori Explorers</title>
+<link rel="canonical" href="https://lmexplorers.com/teststrikk">
+<meta name="description" content="Bli teststrikker for Jordbærdrøm, LMEs strikkekolleksjon for premature og nyfødte. Fem plagg i fem størrelser, fra str 32 til 56.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    --pink-50:  #fff5f8;
+    --pink-100: #ffe8f0;
+    --pink-200: #ffd1e1;
+    --pink-400: #ff8ab3;
+    --pink-500: #e85a92;
+    --pink-600: #c43d75;
+    --leaf:     #8FA681;
+    --leaf-dark:#5f7452;
+    --warm-white: #fffcf9;
+    --ink:      #3d2438;
+    --ink-soft: #6b4760;
+    --shadow-soft: 0 8px 32px rgba(196, 61, 117, 0.08);
+    --shadow-med:  0 16px 48px rgba(196, 61, 117, 0.14);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--ink);
+    line-height: 1.65;
+    background:
+      radial-gradient(1100px 620px at 12% -8%, var(--pink-100) 0%, transparent 60%),
+      radial-gradient(900px 520px at 92% 6%, #eef5e6 0%, transparent 55%),
+      var(--warm-white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 700; line-height: 1.25; }
+
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+
+  /* --------------------------------------------------------------- topplinje */
+  /* Kontoknappen fra js/lme-account.js ligger fast oeverst til hoeyre.
+     Topplinjen holder derfor av plass til den, ellers legger avataren seg
+     rett oppaa spraakknappen. */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 18px 64px 18px 20px; max-width: 980px; margin: 0 auto;
+  }
+  .brand {
+    font-family: var(--font-head); font-weight: 700; font-size: 15px;
+    color: var(--pink-600); text-decoration: none;
+  }
+  .langbtn {
+    background: #fff; border: 2px solid var(--pink-200); color: var(--pink-600);
+    font-family: var(--font-head); font-weight: 600; font-size: 14px;
+    padding: 7px 14px; border-radius: 999px; cursor: pointer;
+  }
+  .langbtn:hover { background: var(--pink-50); }
+
+  /* -------------------------------------------------------------------- hero */
+  .hero { text-align: center; padding: 26px 0 8px; }
+  .kicker {
+    display: inline-block; background: var(--leaf); color: #fff;
+    font-family: var(--font-head); font-weight: 700; font-size: 12px;
+    letter-spacing: 1.6px; padding: 7px 18px; border-radius: 999px;
+    text-transform: uppercase;
+  }
+  .hero h1 { font-size: clamp(30px, 6vw, 46px); margin: 18px 0 12px; color: var(--ink); }
+  .hero .lead { font-size: 17px; color: var(--ink-soft); max-width: 620px; margin: 0 auto; }
+
+  .sizes { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 26px 0 6px; }
+  .size {
+    background: #fff; border: 2px solid var(--pink-200); border-radius: 14px;
+    padding: 10px 16px; text-align: center; min-width: 92px; box-shadow: var(--shadow-soft);
+  }
+  .size b { display: block; font-family: var(--font-head); font-size: 21px; color: var(--pink-600); }
+  .size span { font-size: 12px; color: var(--ink-soft); }
+
+  /* ------------------------------------------------------------------- kort */
+  .card {
+    background: #fff; border-radius: 22px; padding: 28px;
+    box-shadow: var(--shadow-soft); margin: 22px 0;
+  }
+  .card h2 { font-size: 24px; margin-bottom: 12px; color: var(--pink-600); }
+  .card h3 { font-size: 18px; margin: 20px 0 8px; color: var(--leaf-dark); }
+  .card p { margin-bottom: 12px; }
+  .card p:last-child { margin-bottom: 0; }
+
+  ul.dots { list-style: none; margin: 8px 0 0; }
+  ul.dots li { position: relative; padding-left: 24px; margin-bottom: 10px; }
+  ul.dots li::before {
+    content: '🍓'; position: absolute; left: 0; top: 0; font-size: 13px;
+  }
+
+  /* -------------------------------------------------------------- plagg-liste */
+  .garments { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .garment {
+    background: var(--pink-50); border: 2px solid var(--pink-100);
+    border-radius: 18px; padding: 20px;
+  }
+  .garment h3 { margin: 0 0 6px; color: var(--pink-600); font-size: 17px; }
+  .garment p { font-size: 14px; color: var(--ink-soft); margin-bottom: 10px; }
+  .garment .meta { font-size: 12px; color: var(--leaf-dark); font-family: var(--font-head); }
+
+  /* ---------------------------------------------------------------- skjemaet */
+  .form { display: grid; gap: 14px; max-width: 520px; }
+  .field label {
+    display: block; font-family: var(--font-head); font-weight: 600;
+    font-size: 14px; margin-bottom: 5px; color: var(--ink-soft);
+  }
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 12px 14px; border: 2px solid var(--pink-200);
+    border-radius: 12px; font-family: var(--font-body); font-size: 16px;
+    color: var(--ink); background: #fff;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    outline: none; border-color: var(--pink-400);
+  }
+  .submit {
+    background: linear-gradient(135deg, var(--pink-400), var(--pink-600));
+    color: #fff; border: none; border-radius: 999px; cursor: pointer;
+    font-family: var(--font-head); font-weight: 700; font-size: 17px;
+    padding: 15px 30px; box-shadow: var(--shadow-med);
+  }
+  .submit:hover { filter: brightness(1.05); }
+  .submit:disabled { opacity: .6; cursor: default; }
+  .formnote { font-size: 13px; color: var(--ink-soft); }
+  .status { font-family: var(--font-head); font-weight: 600; min-height: 24px; }
+  .status.ok { color: var(--leaf-dark); }
+  .status.err { color: var(--pink-600); }
+
+  footer {
+    text-align: center; padding: 40px 20px 60px; color: var(--ink-soft); font-size: 14px;
+  }
+  footer a { color: var(--pink-600); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="/dashboard">Little Montessori Explorers</a>
+  <button class="langbtn" id="langToggle" type="button">EN 🌍</button>
+</div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <span class="kicker" data-no="Teststrikk" data-en="Test knit">Teststrikk</span>
+    <h1 data-no="Jordbærdrøm" data-en="Strawberry Dream">Jordbærdrøm</h1>
+    <p class="lead" data-no="En strikkekolleksjon for de aller minste: fem plagg med innstrikkede jordbærblad og frø, gradert fra str 32 til 56. Nå søker jeg teststrikkere før oppskriftene legges ut for salg." data-en="A knitting collection for the very smallest: five garments with knitted-in strawberry leaves and seeds, graded from size 32 to 56. I am now looking for test knitters before the patterns go on sale.">En strikkekolleksjon for de aller minste: fem plagg med innstrikkede jordbærblad og frø, gradert fra str 32 til 56. Nå søker jeg teststrikkere før oppskriftene legges ut for salg.</p>
+
+    <div class="sizes">
+      <div class="size"><b>32</b><span data-no="ca. 1,0-1,5 kg" data-en="approx. 1.0-1.5 kg">ca. 1,0-1,5 kg</span></div>
+      <div class="size"><b>38</b><span data-no="ca. 1,5-2,5 kg" data-en="approx. 1.5-2.5 kg">ca. 1,5-2,5 kg</span></div>
+      <div class="size"><b>44</b><span data-no="ca. 2,5-3,2 kg" data-en="approx. 2.5-3.2 kg">ca. 2,5-3,2 kg</span></div>
+      <div class="size"><b>50</b><span data-no="ca. 3,2-4,2 kg" data-en="approx. 3.2-4.2 kg">ca. 3,2-4,2 kg</span></div>
+      <div class="size"><b>56</b><span data-no="ca. 1-2 mnd" data-en="approx. 1-2 months">ca. 1-2 mnd</span></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 data-no="Hvorfor så små størrelser" data-en="Why such small sizes">Hvorfor så små størrelser</h2>
+    <p data-no="Str 50 er det minste som selges i vanlige butikker, og for et barn som kommer flere uker for tidlig, er 50 altfor stort. Da henger plagget på barnet i stedet for å varme det. Derfor begynner Jordbærdrøm på str 32, som passer et barn på rundt ett kilo, og går opp til 56." data-en="Size 50 is the smallest sold in ordinary shops, and for a baby born several weeks early, 50 is far too big. The garment then hangs on the baby instead of keeping it warm. That is why Strawberry Dream starts at size 32, which fits a baby of around one kilo, and goes up to 56.">Str 50 er det minste som selges i vanlige butikker, og for et barn som kommer flere uker for tidlig, er 50 altfor stort. Da henger plagget på barnet i stedet for å varme det. Derfor begynner Jordbærdrøm på str 32, som passer et barn på rundt ett kilo, og går opp til 56.</p>
+    <p data-no="Alle plaggene er strikket ovenfra og ned, uten sømmer i seg selv, og med korte trådsprang på innsiden. Det er med vilje: lange løse tråder er ubehagelige mot sart hud, og noe små fingre kan sette seg fast i." data-en="Every garment is knitted from the top down, with no seams of its own, and with short floats on the inside. That is deliberate: long loose strands are uncomfortable against delicate skin, and something small fingers can catch in.">Alle plaggene er strikket ovenfra og ned, uten sømmer i seg selv, og med korte trådsprang på innsiden. Det er med vilje: lange løse tråder er ubehagelige mot sart hud, og noe små fingre kan sette seg fast i.</p>
+  </section>
+
+  <section class="card">
+    <h2 data-no="De fem plaggene" data-en="The five garments">De fem plaggene</h2>
+    <div class="garments">
+      <div class="garment">
+        <h3 data-no="Kjole" data-en="Dress">Kjole</h3>
+        <p data-no="Ermeløs, toppstrikket kjole med bladparti og mykt utsvingt skjørt. Knappåpning i nakken." data-en="A sleeveless, top-down dress with a leaf yoke and a soft flared skirt. Buttoned opening at the neck.">Ermeløs, toppstrikket kjole med bladparti og mykt utsvingt skjørt. Knappåpning i nakken.</p>
+        <span class="meta" data-no="Str 32 · 38 · 44 · 50 · 56" data-en="Sizes 32 · 38 · 44 · 50 · 56">Str 32 · 38 · 44 · 50 · 56</span>
+      </div>
+      <div class="garment">
+        <h3 data-no="Romper med skjørt" data-en="Romper with skirt">Romper med skjørt</h3>
+        <p data-no="Ermeløs romper med integrert skjørt, bleiedel og tre knapper i skrittet." data-en="A sleeveless romper with an integrated skirt, a nappy panel and three buttons at the crotch.">Ermeløs romper med integrert skjørt, bleiedel og tre knapper i skrittet.</p>
+        <span class="meta" data-no="Str 32 · 38 · 44 · 50 · 56" data-en="Sizes 32 · 38 · 44 · 50 · 56">Str 32 · 38 · 44 · 50 · 56</span>
+      </div>
+      <div class="garment">
+        <h3 data-no="Genser og skjørt" data-en="Jumper and skirt">Genser og skjørt</h3>
+        <p data-no="Et todelt sett: genser med rundt bærestykke og lange ermer, og et skjørt med mykt elastisk liv." data-en="A two-piece set: a jumper with a round yoke and long sleeves, and a skirt with a soft elasticated waist.">Et todelt sett: genser med rundt bærestykke og lange ermer, og et skjørt med mykt elastisk liv.</p>
+        <span class="meta" data-no="Str 32 · 38 · 44 · 50 · 56" data-en="Sizes 32 · 38 · 44 · 50 · 56">Str 32 · 38 · 44 · 50 · 56</span>
+      </div>
+      <div class="garment">
+        <h3 data-no="Votter" data-en="Mittens">Votter</h3>
+        <p data-no="Myke votter uten tommel, med brettet ribb og en i-cord som binder dem sammen." data-en="Soft thumbless mittens with a folded rib cuff and an i-cord connecting them.">Myke votter uten tommel, med brettet ribb og en i-cord som binder dem sammen.</p>
+        <span class="meta" data-no="2 størrelser, dekker str 32-56" data-en="2 sizes, covering sizes 32-56">2 størrelser, dekker str 32-56</span>
+      </div>
+      <div class="garment">
+        <h3 data-no="Tøfler" data-en="Booties">Tøfler</h3>
+        <p data-no="Klassiske babytøfler med rund fot, brettet ribb og i-cord-knyting rundt ankelen." data-en="Classic baby booties with a rounded foot, a folded rib cuff and i-cord ties at the ankle.">Klassiske babytøfler med rund fot, brettet ribb og i-cord-knyting rundt ankelen.</p>
+        <span class="meta" data-no="3 størrelser, dekker str 32-56" data-en="3 sizes, covering sizes 32-56">3 størrelser, dekker str 32-56</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 data-no="Slik foregår teststrikkingen" data-en="How the test knit works">Slik foregår teststrikkingen</h2>
+    <p data-no="Du får oppskriften gratis, på norsk eller engelsk, i den størrelsen du velger. Til gjengjeld ber jeg om at du strikker plagget ferdig, vasker det, måler det og forteller meg hvordan det gikk." data-en="You get the pattern free, in Norwegian or English, in the size you choose. In return I ask that you finish the garment, wash it, measure it and tell me how it went.">Du får oppskriften gratis, på norsk eller engelsk, i den størrelsen du velger. Til gjengjeld ber jeg om at du strikker plagget ferdig, vasker det, måler det og forteller meg hvordan det gikk.</p>
+
+    <h3 data-no="Dette trenger jeg fra deg" data-en="What I need from you">Dette trenger jeg fra deg</h3>
+    <ul class="dots">
+      <li data-no="Din egen strikkefasthet, målt på en vasket og flattørket prøvelapp." data-en="Your own gauge, measured on a washed swatch dried flat.">Din egen strikkefasthet, målt på en vasket og flattørket prøvelapp.</li>
+      <li data-no="De ferdige målene på plagget, målt etter vask. Måleskjemaet ligger bakerst i oppskriften." data-en="The finished measurements of the garment after washing. The form is at the back of the pattern.">De ferdige målene på plagget, målt etter vask. Måleskjemaet ligger bakerst i oppskriften.</li>
+      <li data-no="Alt som var uklart: en setning du måtte lese tre ganger, et masketall som ikke gikk opp, et sted du måtte gjette." data-en="Anything unclear: a sentence you had to read three times, a stitch count that did not add up, a place where you had to guess.">Alt som var uklart: en setning du måtte lese tre ganger, et masketall som ikke gikk opp, et sted du måtte gjette.</li>
+      <li data-no="Gjerne et bilde av det ferdige plagget, hvis du vil." data-en="A photo of the finished garment, if you like.">Gjerne et bilde av det ferdige plagget, hvis du vil.</li>
+    </ul>
+
+    <h3 data-no="Dette får du" data-en="What you get">Dette får du</h3>
+    <ul class="dots">
+      <li data-no="Oppskriften gratis, og den ferdige utgaven når kolleksjonen er klar." data-en="The pattern free, and the finished edition when the collection is ready.">Oppskriften gratis, og den ferdige utgaven når kolleksjonen er klar.</li>
+      <li data-no="Navnet ditt som teststrikker i oppskriften, hvis du ønsker det." data-en="Your name credited as a test knitter in the pattern, if you want it.">Navnet ditt som teststrikker i oppskriften, hvis du ønsker det.</li>
+      <li data-no="Plagget er ditt. Strikker du til et sykehus eller en prematuravdeling, hører jeg gjerne om det." data-en="The garment is yours. If you are knitting for a hospital or a neonatal unit, I would love to hear about it.">Plagget er ditt. Strikker du til et sykehus eller en prematuravdeling, hører jeg gjerne om det.</li>
+    </ul>
+
+    <h3 data-no="Garn og pinner" data-en="Yarn and needles">Garn og pinner</h3>
+    <p data-no="DROPS Merino Extra Fine på pinne 4 mm, i jordbærrosa, bladgrønn og en liten rest kremhvit. Strikkefastheten er 21 masker og 28 omganger glattstrikk på 10 x 10 cm. Bruker du et annet garn, er det fastheten som må stemme, ikke navnet på garnet." data-en="DROPS Merino Extra Fine on 4 mm needles, in strawberry pink, leaf green and a small amount of cream white. The gauge is 21 stitches and 28 rounds in stocking stitch over 10 x 10 cm. If you use a different yarn, it is the gauge that must match, not the name of the yarn.">DROPS Merino Extra Fine på pinne 4 mm, i jordbærrosa, bladgrønn og en liten rest kremhvit. Strikkefastheten er 21 masker og 28 omganger glattstrikk på 10 x 10 cm. Bruker du et annet garn, er det fastheten som må stemme, ikke navnet på garnet.</p>
+  </section>
+
+  <section class="card" id="meld-deg">
+    <h2 data-no="Meld deg som teststrikker" data-en="Sign up as a test knitter">Meld deg som teststrikker</h2>
+    <p data-no="Fyll ut skjemaet, så sender jeg oppskriften til deg på e-post, sammen med fristen." data-en="Fill in the form and I will send you the pattern by email, together with the deadline.">Fyll ut skjemaet, så sender jeg oppskriften til deg på e-post, sammen med fristen.</p>
+
+    <form class="form" id="tkForm" novalidate>
+      <div class="field">
+        <label for="tkNavn" data-no="Navn" data-en="Name">Navn</label>
+        <input type="text" id="tkNavn" name="navn" autocomplete="name" required>
+      </div>
+      <div class="field">
+        <label for="tkEpost" data-no="E-post" data-en="Email">E-post</label>
+        <input type="email" id="tkEpost" name="epost" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="tkPlagg" data-no="Hvilket plagg vil du strikke" data-en="Which garment do you want to knit">Hvilket plagg vil du strikke</label>
+        <select id="tkPlagg" name="plagg">
+          <option value="kjole" data-no="Kjole" data-en="Dress">Kjole</option>
+          <option value="romper" data-no="Romper med skjørt" data-en="Romper with skirt">Romper med skjørt</option>
+          <option value="genser-skjort" data-no="Genser og skjørt" data-en="Jumper and skirt">Genser og skjørt</option>
+          <option value="votter" data-no="Votter" data-en="Mittens">Votter</option>
+          <option value="tofler" data-no="Tøfler" data-en="Booties">Tøfler</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="tkStr" data-no="Hvilken størrelse" data-en="Which size">Hvilken størrelse</label>
+        <select id="tkStr" name="storrelse">
+          <option value="32">32</option>
+          <option value="38">38</option>
+          <option value="44">44</option>
+          <option value="50">50</option>
+          <option value="56">56</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="tkSprak" data-no="Språk på oppskriften" data-en="Pattern language">Språk på oppskriften</label>
+        <select id="tkSprak" name="sprak">
+          <option value="no" data-no="Norsk" data-en="Norwegian">Norsk</option>
+          <option value="en" data-no="Engelsk" data-en="English">Engelsk</option>
+        </select>
+      </div>
+      <button class="submit" type="submit" id="tkSend" data-no="Send påmeldingen" data-en="Send my sign-up">Send påmeldingen</button>
+      <p class="status" id="tkStatus" role="status" aria-live="polite"></p>
+      <p class="formnote" data-no="Jeg bruker adressen din til å sende oppskriften og til å følge opp teststrikkingen. Du kan melde deg av når som helst." data-en="I use your address to send the pattern and to follow up on the test knit. You can unsubscribe at any time.">Jeg bruker adressen din til å sende oppskriften og til å følge opp teststrikkingen. Du kan melde deg av når som helst.</p>
+    </form>
+  </section>
+
+</div>
+
+<footer>
+  <p>
+    <span data-no="Laget med" data-en="Made with">Laget med</span>
+    <span>💗</span>
+    <span data-no="i Tønsberg, Norge" data-en="in Tønsberg, Norway">i Tønsberg, Norge</span>
+    · © 2026 Little Montessori Explorers
+  </p>
+</footer>
+
+<script>
+  /* Språkbytte, samme mønster som resten av plattformen: alle elementer med
+     både data-no og data-en byttes om. */
+  let currentLang = 'no';
+  const toggle = document.getElementById('langToggle');
+
+  function switchLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(el => {
+      const text = el.getAttribute('data-' + lang);
+      if (text.includes('<')) el.innerHTML = text;
+      else el.textContent = text;
+    });
+    toggle.textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    document.title = lang === 'no'
+      ? 'Teststrikk Jordbærdrøm | Little Montessori Explorers'
+      : 'Test knit Strawberry Dream | Little Montessori Explorers';
+  }
+
+  toggle.addEventListener('click', () => switchLanguage(currentLang === 'no' ? 'en' : 'no'));
+
+  /* Påmeldingen går til plattformens egen abonnentliste via /api/subscribe,
+     med "teststrikk-jordbaerdrom" som kilde. Plagg, størrelse og språk
+     følger med som tag, slik at Renate ser hvem som skal ha hva. */
+  const form = document.getElementById('tkForm');
+  const status = document.getElementById('tkStatus');
+  const knapp = document.getElementById('tkSend');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const navn = document.getElementById('tkNavn').value.trim();
+    const epost = document.getElementById('tkEpost').value.trim();
+    const plagg = document.getElementById('tkPlagg').value;
+    const str = document.getElementById('tkStr').value;
+    const sprak = document.getElementById('tkSprak').value;
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(epost)) {
+      status.className = 'status err';
+      status.textContent = currentLang === 'no'
+        ? 'Sjekk e-postadressen, den ser ikke helt riktig ut.'
+        : 'Please check the email address, it does not look quite right.';
+      return;
+    }
+
+    knapp.disabled = true;
+    status.className = 'status';
+    status.textContent = currentLang === 'no' ? 'Sender…' : 'Sending…';
+
+    try {
+      const svar = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: epost,
+          name: navn,
+          lang: sprak,
+          group: 'teststrikk-jordbaerdrom',
+          tag: plagg + '-str' + str
+        })
+      });
+      if (!svar.ok) throw new Error('feil');
+      status.className = 'status ok';
+      status.textContent = currentLang === 'no'
+        ? 'Takk! Du er påmeldt, og oppskriften kommer på e-post.'
+        : 'Thank you! You are signed up, and the pattern is on its way by email.';
+      form.reset();
+    } catch (err) {
+      status.className = 'status err';
+      status.textContent = currentLang === 'no'
+        ? 'Noe gikk galt. Prøv igjen om litt, eller send meg en melding.'
+        : 'Something went wrong. Try again shortly, or send me a message.';
+    } finally {
+      knapp.disabled = false;
+    }
+  });
+</script>
+
+<script src="/js/lme-account.js?v=11" defer></script>
+</body>
+</html>
