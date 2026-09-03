@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Jordbærdrøm tøfler med knyting, gradert i fire størrelser.
+Jordbærdrøm tøfler med knyting, gradert i ni størrelser, én per plaggstørrelse.
 
 Klassiske babytøfler med rund fot, brettet ribb, bladspisser og
 i-cord-knyting rundt ankelen.
@@ -22,12 +22,7 @@ def komma(x):
 
 
 def navn(s, lang):
-    return s['navn_no'] if lang == 'no' else s['navn_en']
-
-
-def bar(lang):
-    return f.storrelsesbar_liste(
-        [(navn(s, lang), L(lang, 'str ', 'size ') + s['dekker']) for s in TOFLER])
+    return s['str_nr']
 
 
 def sider(lang):
@@ -44,12 +39,12 @@ def sider(lang):
         L(lang, 'STØRRELSE 44 TIL 92', 'SIZES 44 TO 92'),
         L(lang,
           'Klassiske babytøfler med rund fot, brettet ribb, bladspisser og '
-          'i-cord-knyting rundt ankelen. Fire størrelser, som dekker hele kolleksjonen, '
+          'i-cord-knyting rundt ankelen. Ni størrelser, én per plaggstørrelse, '
           'plaggstørrelse 44 til 92.',
           'Classic baby booties with a rounded foot, a folded rib cuff, leaf tips and '
-          'i-cord ties at the ankle. Four sizes, covering the whole collection, garment '
-          'sizes 44 to 92.'),
-        bar=bar(lang), bilde='tofler.jpg'), 1))
+          'i-cord ties at the ankle. Nine sizes, one per garment size, from small '
+          'newborn up to two years.'),
+        bilde='tofler.jpg'), 1))
 
     # ---------------------------------------------------------- 2 FØR DU BEGYNNER
     P.append(pg(
@@ -82,33 +77,35 @@ def sider(lang):
               'in the edge thread.')), 2))
 
     # ------------------------------------------------------------- 3 STØRRELSER
-    khead = [Sh] + L(lang, ['Passer til plaggstørrelse', 'Fotlengde', 'Ankelomkrets'],
-                     ['Fits garment size', 'Foot length', 'Ankle circumference'])
-    krow = [[navn(s, lang), s['dekker'], komma(s['fot_cm']) + ' cm',
-             komma(s['ankel_cm']) + ' cm'] for s in TOFLER]
-    mhead = [Sh] + L(lang, ['Legg opp', 'Spisser rundt', 'Ribb før bretting', 'I-cord per tøffel'],
-                     ['Cast on', 'Points round', 'Cuff before folding', 'I-cord per bootie'])
-    mrow = [[navn(s, lang), str(s['masker']) + m, str(s['masker'] // 4) + ' x',
-             str(s['ribb_cm']) + ' cm', str(s['icord_cm']) + ' cm'] for s in TOFLER]
-    P.append(pg(f.side_storrelser_smaadel(
-        lang,
-        L(lang,
-          'Tøflene er gradert i fire størrelser, ikke ni som plaggene. En babyfot vokser '
-          'lite mellom to nabostørrelser, og ribben knytes inn til riktig vidde uansett. '
-          'Mål foten fra hælen til lengste tå, og velg den '
-          'størrelsen som er nærmest over målet.',
-          'The booties are graded in four sizes, not nine like the garments. A baby foot '
-          'grows little between two neighbouring sizes, and the rib is tied in to the '
-          'right width anyway. Measure the foot from heel to '
-          'longest toe, and choose the size just above that measurement.'),
-        khead, krow, mhead, mrow,
-        [(navn(s, lang), L(lang, 'str ', 'size ') + s['dekker']) for s in TOFLER],
-        L(lang,
-          'Fotlengden er det målet som betyr noe. Ankelomkretsen er romslig med vilje, '
-          'siden ribben skal brettes og knytes inn til riktig vidde.',
-          'The foot length is the measurement that matters. The ankle circumference is '
-          'deliberately generous, since the rib is folded and the ties draw it in to the '
-          'right width.')), 3))
+    mal_h = [Sh] + L(lang, ['Fotlengde', 'Legg opp', 'Ankelvidde', 'Ribb',
+                            'I-cord per tøffel'],
+                     ['Foot length', 'Cast on', 'Ankle width', 'Rib',
+                      'I-cord per bootie'])
+    mal_r = [[s['str_nr'], komma(s['fot_cm']) + ' cm', str(s['masker']) + m,
+              komma(s['ankel_cm']) + ' cm', komma(s['ribb_cm']) + ' cm',
+              str(s['icord_cm']) + ' cm'] for s in TOFLER]
+    P.append(pg(
+        banner(L(lang, 'STØRRELSER OG FERDIGE MÅL', 'SIZES AND FINISHED MEASUREMENTS')) +
+        '<p>' + L(lang,
+        'Tøflene er gradert i de samme ni størrelsene som resten av kolleksjonen, én '
+        'tøffel per plaggstørrelse, og etter nøyaktig de samme fotlengdene som sokkene. '
+        'Da ender ikke en fot med én størrelse i sokken og en annen i tøffelen utenpå. '
+        'Mål foten fra hælen til lengste tå.',
+        'The booties are graded in the same nine sizes as the rest of the collection, one '
+        'bootie per garment size, and by exactly the same foot lengths as the socks. That '
+        'way a foot does not end up one size in the sock and another in the bootie over '
+        'it. Measure the foot from heel to longest toe.') + '</p>' +
+        f.storrelsesbar(lang) +
+        card(tabell(mal_h, mal_r, min_index=0)) +
+        cme(L(lang,
+              'Noen nabostørrelser har samme masketall rundt ankelen. Det er ikke to like '
+              'størrelser: fotlengden, ribben og i-corden er forskjellige i hver rad. '
+              'Ankelvidden er dessuten romslig med vilje, siden ribben skal brettes og '
+              'knytes inn til riktig vidde.',
+              'Some neighbouring sizes share a stitch count round the ankle. They are not '
+              'two identical sizes: the foot length, the rib and the i-cord differ in '
+              'every row. The ankle width is also deliberately generous, since the rib is '
+              'folded and the ties draw it in to the right width.')), 3))
 
     # ------------------------------------------------------------------- 4 GARN
     garn = [[navn(s, lang), '%d g' % (15 + 10 * i), '%d g' % (15 + 5 * i), '5 g']

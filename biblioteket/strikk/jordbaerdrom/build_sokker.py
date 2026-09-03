@@ -6,9 +6,11 @@ Ekte sokker strikket ovenfra og ned: grønn vridd ribb, en krans av små
 jordbærhetter, rosa legg med frø, hællapp i slippemasker, rund hælvending,
 kile, fot og båttå som maskes sammen.
 
-Sokkene har fire størrelser, ikke ni som plaggene, og de er gradert etter
-nøyaktig de samme fotlengdene som tøflene. Det kontrolleres med en assert, så
-et barn ikke ender med én størrelse på foten og en annen i tøffelen utenpå.
+Sokkene er gradert i de samme ni størrelsene som resten av kolleksjonen, én
+sokk per plaggstørrelse. Noen nabostørrelser deler masketall, fordi en fot
+blir lengre mye raskere enn den blir bredere, men ingen størrelser er slått
+sammen: fotlengde, legglengde, ribb, hællapp og tåfelling er egne tall i hver
+rad.
 
 Sokkene bryter med 8-maskers-regelen som gjelder resten av kolleksjonen. Se
 grading_jordbaerdrom.py: en sokk skal sitte tett, og med bare multipler av 8
@@ -29,12 +31,7 @@ def komma(x):
 
 
 def navn(v, lang):
-    return v['navn_no'] if lang == 'no' else v['navn_en']
-
-
-def bar(lang):
-    return f.storrelsesbar_liste(
-        [(navn(v, lang), L(lang, 'str ', 'size ') + v['dekker']) for v in SOKKER])
+    return v['str_nr']
 
 
 def sider(lang):
@@ -48,15 +45,16 @@ def sider(lang):
     P.append(pg(f.forside(
         lang,
         L(lang, 'JORDBÆRDRØM SOKKER', 'STRAWBERRY DREAM SOCKS'),
-        L(lang, 'STØRRELSE 44 TIL 92', 'SIZES 44 TO 92'),
+        L(lang, 'NI STØRRELSER, 44 TIL 92', 'NINE SIZES, 44 TO 92'),
         L(lang,
           'Sokker strikket ovenfra og ned, med grønn vridd ribb, en krans av små '
           'jordbærhetter, frø i kremhvit, ekte hællapp med hælvending og en båttå som '
-          'maskes sammen. Fire størrelser, som dekker plaggstørrelse 44 til 92.',
+          'maskes sammen. Gradert i ni størrelser, fra liten nyfødt og opp til to år.',
           'Socks worked from the top down, with a green twisted rib, a ring of small '
           'strawberry tops, cream seeds, a proper heel flap with a turned heel and a '
-          'wedge toe that is grafted. Four sizes, covering garment sizes 44 to 92.'),
-        bar=bar(lang), bilde='sokker.jpg'), 1))
+          'wedge toe that is grafted. Graded in nine sizes, from small newborn up to two '
+          'years.'),
+        bilde='sokker.jpg'), 1))
 
     # ------------------------------------------------------- 2 FØR DU BEGYNNER
     P.append(pg(
@@ -98,35 +96,37 @@ def sider(lang):
               'hands.')), 2))
 
     # ------------------------------------------------------------ 3 STØRRELSER
-    khead = [Sh] + L(lang, ['Passer til plaggstørrelse', 'Fotlengde'],
-                     ['Fits garment size', 'Foot length'])
-    krow = [[navn(v, lang), v['dekker'], komma(v['fot_cm']) + ' cm'] for v in SOKKER]
-    mhead = [Sh] + L(lang, ['Masker rundt', 'Omkrets', 'Ribb', 'Legg i rosa'],
-                     ['Stitches round', 'Circumference', 'Rib', 'Leg in pink'])
-    mrow = [[navn(v, lang), str(v['masker']) + m, komma(v['omkrets_cm']) + ' cm',
-             komma(v['ribb_cm']) + ' cm', komma(v['legg_cm']) + ' cm'] for v in SOKKER]
-    P.append(pg(f.side_storrelser_smaadel(
-        lang,
-        L(lang,
-          'Sokkene er gradert etter fotlengde, ikke etter alder, og etter nøyaktig de '
-          'samme fotlengdene som tøflene. Da passer sokk og tøffel til hverandre. Mål '
-          'foten fra hælen til lengste tå, og velg den størrelsen som er nærmest over '
-          'målet. Er foten midt mellom to størrelser, velg den minste: en sokk skal '
-          'sitte tett, og en for stor sokk skrukker seg under foten.',
-          'The socks are graded by foot length, not by age, and by exactly the same foot '
-          'lengths as the booties. That way sock and bootie match each other. Measure '
-          'the foot from heel to longest toe, and choose the size just above that '
-          'measurement. If the foot falls between two sizes, choose the smaller one: a '
-          'sock should sit close, and a sock that is too big wrinkles under the foot.'),
-        khead, krow, mhead, mrow,
-        [(navn(v, lang), L(lang, 'str ', 'size ') + v['dekker']) for v in SOKKER],
-        L(lang,
-          'Omkretsen er mindre enn foten, og det skal den være. En sokk holdes oppe av '
-          'at den strekker seg litt. Måler sokken like mye som foten, sklir den ned i '
-          'skoen og samler seg under tærne.',
-          'The circumference is smaller than the foot, and it should be. A sock stays up '
-          'because it stretches a little. If the sock measures the same as the foot, it '
-          'slides down inside the shoe and gathers under the toes.')), 3))
+    mal_h = [Sh] + L(lang, ['Fotlengde', 'Legglengde', 'Masker rundt', 'Omkrets', 'Ribb'],
+                    ['Foot length', 'Leg length', 'Stitches round', 'Circumference',
+                     'Rib'])
+    mal_r = [[v['str_nr'], komma(v['fot_cm']) + ' cm', komma(v['legg_cm']) + ' cm',
+              str(v['masker']) + m, komma(v['omkrets_cm']) + ' cm',
+              komma(v['ribb_cm']) + ' cm'] for v in SOKKER]
+    P.append(pg(
+        banner(L(lang, 'STØRRELSER OG FERDIGE MÅL', 'SIZES AND FINISHED MEASUREMENTS')) +
+        '<p>' + L(lang,
+        'Sokkene er gradert i de samme ni størrelsene som resten av kolleksjonen, én '
+        'sokk per plaggstørrelse. Mål foten fra hælen til lengste tå, og velg den '
+        'størrelsen som er nærmest over målet. Fotlengden er det målet som avgjør om en '
+        'sokk passer.',
+        'The socks are graded in the same nine sizes as the rest of the collection, one '
+        'sock per garment size. Measure the foot from heel to longest toe, and choose the '
+        'size just above that measurement. The foot length is the measurement that '
+        'decides whether a sock fits.') + '</p>' +
+        f.storrelsesbar(lang) +
+        card(tabell(mal_h, mal_r, min_index=0)) +
+        cme(L(lang,
+              'Du vil se at noen nabostørrelser har samme masketall rundt. Det er ikke to '
+              'like størrelser: en fot blir lengre mye raskere enn den blir bredere, så '
+              'fotlengden, legglengden, ribben og hællappen er forskjellige selv der '
+              'omkretsen står stille. Omkretsen er dessuten mindre enn foten er lang, og '
+              'det skal den være. En sokk holdes oppe av at den strekker seg litt.',
+              'You will notice that some neighbouring sizes have the same stitch count '
+              'round. They are not two identical sizes: a foot grows longer far faster '
+              'than it grows wider, so the foot length, leg length, rib and heel flap all '
+              'differ even where the circumference stands still. The circumference is '
+              'also smaller than the foot is long, and it should be. A sock stays up '
+              'because it stretches a little.')), 3))
 
     # ------------------------------------------------------------------ 4 GARN
     garn = [[navn(v, lang), '%d g' % (15 + 5 * i), '%d g' % (10 + 5 * i), '5 g']

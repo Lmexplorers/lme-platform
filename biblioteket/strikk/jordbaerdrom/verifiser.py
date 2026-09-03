@@ -124,15 +124,35 @@ print(f'   kontrollert {len(DATA["luer"])} luestørrelser x 22 tall')
 so = pymupdf.open(BASE / 'LME-Jordbaerdrom-Sokker.pdf')
 sotekst = ' '.join(s.get_text() for s in so)
 for v in DATA['sokker']:
-    for felt in ('masker', 'spisser', 'fro_rapport', 'hael_m', 'hael_rader',
-                 'hael_igjen', 'plukk', 'etter_plukk', 'kile_omganger',
-                 'ta_omganger', 'ta_slutt', 'vend_a', 'vend_b'):
+    for felt in ('str_nr', 'masker', 'spisser', 'fro_rapport', 'fro_antall',
+                 'hael_m', 'hael_rader', 'hael_igjen', 'plukk', 'etter_plukk',
+                 'kile_omganger', 'ta_omganger', 'ta_slutt', 'vend_a', 'vend_b'):
         if str(v[felt]) not in sotekst:
             feil.append(f'sokk {v["navn_no"]}: {felt}={v[felt]} står ikke i PDF-en')
-    for felt in ('omkrets_cm', 'fot_cm', 'fot_for_ta_cm'):
+    for felt in ('omkrets_cm', 'fot_cm', 'fot_for_ta_cm', 'legg_cm', 'ribb_cm'):
         if str(v[felt]).replace('.', ',') not in sotekst:
             feil.append(f'sokk {v["navn_no"]}: {felt}={v[felt]} står ikke i PDF-en')
-print(f'   kontrollert {len(DATA["sokker"])} sokkestørrelser x 16 tall')
+print(f'   kontrollert {len(DATA["sokker"])} sokkestørrelser x 20 tall')
+
+vo = pymupdf.open(BASE / 'LME-Jordbaerdrom-Votter.pdf')
+vot = ' '.join(s.get_text() for s in vo)
+for v in DATA['votter']:
+    for felt in ('str_nr', 'masker', 'snor_cm'):
+        if str(v[felt]) not in vot:
+            feil.append(f'vott str {v["str_nr"]}: {felt}={v[felt]} står ikke i PDF-en')
+    for felt in ('omkrets_cm', 'hand_cm', 'ribb_cm', 'lengde_cm'):
+        if str(v[felt]).replace('.', ',') not in vot:
+            feil.append(f'vott str {v["str_nr"]}: {felt}={v[felt]} står ikke i PDF-en')
+to = pymupdf.open(BASE / 'LME-Jordbaerdrom-Tofler.pdf')
+tot = ' '.join(s.get_text() for s in to)
+for t in DATA['tofler']:
+    for felt in ('str_nr', 'masker', 'overfot_m', 'plukk', 'etter_plukk', 'icord_cm'):
+        if str(t[felt]) not in tot:
+            feil.append(f'tøffel str {t["str_nr"]}: {felt}={t[felt]} står ikke i PDF-en')
+    for felt in ('ankel_cm', 'fot_cm', 'ribb_cm'):
+        if str(t[felt]).replace('.', ',') not in tot:
+            feil.append(f'tøffel str {t["str_nr"]}: {felt}={t[felt]} står ikke i PDF-en')
+print(f'   kontrollert {len(DATA["votter"])} vottestørrelser og {len(DATA["tofler"])} tøffelstørrelser')
 
 ge = pymupdf.open(BASE / 'LME-Jordbaerdrom-Genser-og-skjort.pdf')
 getekst = ' '.join(s.get_text() for s in ge)

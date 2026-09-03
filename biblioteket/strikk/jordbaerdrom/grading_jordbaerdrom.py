@@ -27,16 +27,24 @@ skriptet under etter det paret (forstykke, erme) som ligger nærmest de
 ønskede målene og samtidig oppfyller alle kravene. Ingen tall er valgt for
 hånd.
 
-HVORFOR VOTTER OG TØFLER HAR FÆRRE STØRRELSER
-De små delene bruker den lille jordbærhetten, 4 masker x 4 omganger, ikke
-den store bladrapporten. Grunnen til færre størrelser er derfor ikke
-mønsteret, men barnet: en hånd eller fot vokser lite mellom to
-nabostørrelser, og brettet ribb og knyting tar opp resten. Vottene har
-2 størrelser og tøflene 4, og hver av dem dekker et oppgitt spenn av
-plaggstørrelsene.
+INGEN SAMMENSLÅTTE STØRRELSER
+Lue, sokker og tøfler hadde først færre størrelser som dekket to og tre
+plaggstørrelser hver. Renate sa fra at størrelsene ikke skal slås sammen, og
+hver størrelse har nå sin egen rad med sine egne tall.
+
+På luen kunne hver størrelse få sin egen omkrets, fordi et hode vokser jevnt
+rundt. Det krevde at antall felt i toppfellingen får variere, 8, 9 eller 10,
+i stedet for å stå fast på 8.
+
+På sokker, tøfler og votter deler noen nabostørrelser masketall. Det er ikke
+sammenslåing: en fot og en hånd blir LENGRE mye raskere enn de blir BREDERE,
+så fotlengde, håndlengde, ribb, hællapp og snor er egne tall i hver rad. Det
+kontrolleres med asserts som krever ni ulike fotlengder og seks ulike
+håndlengder.
 
 Vottene er uten tommel. Det er riktig på en baby, men et barn på over ett år
-vil ha tommel, så vottene stopper med vilje ved str 74.
+vil ha tommel, så vottene stopper med vilje ved str 74. Det er en annen
+avgjørelse enn sammenslåing, og den står.
 
 Kjøres med:  python3 grading_jordbaerdrom.py
 Skriver:     sizes.json (i denne mappen)
@@ -315,10 +323,24 @@ for i, (nr, tno, ten, kropp_bryst, overarm_cm, hode_cm, hals) in enumerate(SIZES
 # Egne, grovere størrelsestrinn, se modul-docstringen. dekker = hvilke
 # plaggstørrelser hvert trinn er beregnet for.
 VOTTER = []
-for navn_no, navn_en, dekker, m, ribb_cm, hand_cm, snor_cm in [
-    ("Liten", "Small", "44-56", 24, 5, 4.5, 40),
-    ("Stor",  "Large", "62-74", 32, 6, 6.0, 50),
-]:
+# SEKS STØRRELSER, ÉN PER PLAGGSTØRRELSE FRA 44 TIL 74.
+# Vottene hadde først to størrelser som dekket tre plaggstørrelser hver.
+# Renate sa fra at størrelsene ikke skal slås sammen, og hver størrelse har nå
+# sin egen rad. Som på sokkene deler noen nabostørrelser masketall, fordi en
+# hånd blir lengre raskere enn den blir bredere, men lengden, mansjetten og
+# snorlengden er egne tall i hver rad.
+#
+# Vottene stopper ved str 74, og det er en annen avgjørelse enn sammenslåing:
+# de er uten tommel, som er riktig på en baby, men et barn på over ett år vil
+# ha tommel, og en tommelløs vott blir da mer til hinder enn til hjelp.
+for i, (nr, m, ribb_cm, hand_cm, snor_cm) in enumerate([
+    (44, 24, 4.5, 4.5, 38),
+    (50, 24, 5.0, 5.0, 40),
+    (56, 24, 5.5, 5.5, 44),
+    (62, 32, 6.0, 6.0, 48),
+    (68, 32, 6.5, 6.5, 52),
+    (74, 32, 7.0, 7.0, 56),
+]):
     # Toppfelling: *2 r, 2 r sm*, deretter *1 r, 2 r sm*, deretter 2 r sm rundt
     # til det står få nok masker igjen til å trekke sammen.
     trinn = []
@@ -331,21 +353,29 @@ for navn_no, navn_en, dekker, m, ribb_cm, hand_cm, snor_cm in [
         m_n = m_n // 2
         trinn.append(m_n)
     VOTTER.append(dict(
-        navn_no=navn_no, navn_en=navn_en, dekker=dekker, masker=m,
-        rapporter=m // BLAD_RAPPORT,
+        str_nr=nr, tillegg_no=SIZES[i][1], tillegg_en=SIZES[i][2],
+        masker=m, spisser=m // SMABLAD_RAPPORT,
         omkrets_cm=round(m / GAUGE_ST_CM, 1),
         ribb_cm=ribb_cm, hand_cm=hand_cm,
-        lengde_cm=round(hand_cm + BLAD_OMG / GAUGE_ROW_CM + 2.5, 1),
+        lengde_cm=round(hand_cm + SMABLAD_OMG / GAUGE_ROW_CM + 2.5, 1),
         snor_cm=snor_cm, fellinger=trinn,
     ))
 
 TOFLER = []
-for navn_no, navn_en, dekker, m, ribb_cm, fot_cm, overfot_m, overfot_p, plukk, icord_cm in [
-    ("Liten",       "Small",       "44-50", 24, 5, 7.5,  9, 12, 6, 30),
-    ("Medium",      "Medium",      "56-68", 32, 6, 10.0, 11, 14, 7, 36),
-    ("Stor",        "Large",       "74-86", 40, 7, 12.5, 13, 17, 9, 42),
-    ("Ekstra stor", "Extra large", "92",    48, 8, 14.5, 15, 20, 11, 48),
-]:
+# NI STØRRELSER, ÉN PER PLAGGSTØRRELSE, som sokkene og av samme grunn.
+# Tøflene er gradert etter nøyaktig de samme fotlengdene som sokkene, så en
+# fot ikke ender med én størrelse i sokken og en annen i tøffelen utenpå.
+for i, (nr, fot_cm, m, ribb_cm, overfot_m, overfot_p, plukk, icord_cm) in enumerate([
+    (44,  7.0, 24, 4.5,  9, 12,  6, 28),
+    (50,  8.0, 24, 5.0,  9, 13,  6, 30),
+    (56,  9.0, 32, 5.5, 11, 14,  7, 32),
+    (62, 10.0, 32, 6.0, 11, 15,  7, 34),
+    (68, 11.0, 32, 6.5, 11, 16,  7, 36),
+    (74, 12.0, 40, 7.0, 13, 17,  9, 38),
+    (80, 13.0, 40, 7.5, 13, 18,  9, 40),
+    (86, 14.0, 40, 8.0, 13, 19,  9, 42),
+    (92, 15.0, 48, 8.5, 15, 20, 11, 44),
+]):
     hvilende = m - overfot_m
     etter_plukk = overfot_m + hvilende + 2 * plukk
     # Tre felleomganger à 4 masker, én i hvert av overfotens fire hjørner.
@@ -353,8 +383,8 @@ for navn_no, navn_en, dekker, m, ribb_cm, fot_cm, overfot_m, overfot_p, plukk, i
     halv = etter_felling // 2
     ta_m = halv - (halv // 2)     # tåen felles til om lag halvparten
     TOFLER.append(dict(
-        navn_no=navn_no, navn_en=navn_en, dekker=dekker, masker=m,
-        rapporter=m // BLAD_RAPPORT,
+        str_nr=nr, tillegg_no=SIZES[i][1], tillegg_en=SIZES[i][2],
+        masker=m, spisser=m // SMABLAD_RAPPORT,
         ankel_cm=round(m / GAUGE_ST_CM, 1),
         ribb_cm=ribb_cm, fot_cm=fot_cm,
         overfot_m=overfot_m, overfot_pinner=overfot_p,
@@ -495,30 +525,50 @@ def hael_vending(H):
 
 
 SOKKER = []
-for navn_no, navn_en, dekker, m, fro_rap, ribb_cm, legg_cm, fot_cm, ta_slutt in [
-    ("Liten",       "Small",       "44-50", 24, 8, 3.0, 3.5, 7.5,  12),
-    ("Medium",      "Medium",      "56-68", 28, 7, 3.5, 4.5, 10.0, 12),
-    ("Stor",        "Large",       "74-86", 32, 8, 4.0, 5.5, 12.5, 12),
-    ("Ekstra stor", "Extra large", "92",    36, 9, 4.0, 6.5, 14.5, 16),
-]:
+# NI STØRRELSER, ÉN PER PLAGGSTØRRELSE
+# Sokkene hadde først fire størrelser som dekket to og tre plaggstørrelser
+# hver. Renate sa fra at størrelsene ikke skal slås sammen. Hver størrelse har
+# nå sin egen rad med sine egne tall.
+#
+# Merk forskjellen fra luen: der kunne hver størrelse få sin egen omkrets,
+# fordi et hode vokser jevnt i omkrets. En fot blir LENGRE mye raskere enn den
+# blir BREDERE. Noen nabostørrelser deler derfor masketall, men de deler ikke
+# størrelse: fotlengde, legglengde, ribbehøyde, hællapp og tåfelling er egne
+# tall i hver rad. Fotlengden er dessuten det målet som avgjør om en sokk
+# passer, og den er forskjellig i alle ni.
+#
+# Masketallet må gå opp i jordbærhetten (4 masker). Frørapporten velges per
+# størrelse blant 6 til 9, slik at den går opp i akkurat det masketallet.
+for i, (nr, fot_cm, m, ribb_cm, legg_cm, ta_slutt) in enumerate([
+    (44,  7.0, 24, 2.5, 5.0, 12),
+    (50,  8.0, 24, 2.5, 5.5, 12),
+    (56,  9.0, 28, 3.0, 6.0, 12),
+    (62, 10.0, 28, 3.0, 6.5, 12),
+    (68, 11.0, 32, 3.5, 7.0, 12),
+    (74, 12.0, 32, 3.5, 7.5, 12),
+    (80, 13.0, 32, 4.0, 8.0, 12),
+    (86, 14.0, 36, 4.0, 8.5, 16),
+    (92, 15.0, 36, 4.0, 9.0, 16),
+]):
+    fro_rap = max(f for f in (6, 7, 8, 9) if m % f == 0)
     hael_m = m // 2                       # hælen er halve omgangen
     vrist_m = m - hael_m
     hael_rader = hael_m                   # like mange rader som masker
     plukk = hael_rader // 2               # kantmasker langs hver side av lappen
-    a, b, vend_rader, hael_igjen = hael_vending(hael_m)
+    a_v, b_v, vend_rader, hael_igjen = hael_vending(hael_m)
     etter_plukk = hael_igjen + 2 * plukk + vrist_m
     kile_omg = (etter_plukk - m) // 2     # 2 masker felt per felleomgang
     ta_omg = (m - ta_slutt) // 4          # 4 masker felt per felleomgang
     ta_cm = round(2 * ta_omg / GAUGE_ROW_CM, 1)
     krans_cm = round(SMABLAD_OMG / GAUGE_ROW_CM, 1)
     SOKKER.append(dict(
-        navn_no=navn_no, navn_en=navn_en, dekker=dekker, masker=m,
-        spisser=m // SMABLAD_RAPPORT, fro_rapport=fro_rap,
-        fro_antall=m // fro_rap,
+        str_nr=nr, tillegg_no=SIZES[i][1], tillegg_en=SIZES[i][2],
+        masker=m, spisser=m // SMABLAD_RAPPORT,
+        fro_rapport=fro_rap, fro_antall=m // fro_rap,
         omkrets_cm=round(m / GAUGE_ST_CM, 1),
         ribb_cm=ribb_cm, legg_cm=legg_cm, krans_cm=krans_cm, fot_cm=fot_cm,
         hael_m=hael_m, vrist_m=vrist_m, hael_rader=hael_rader, plukk=plukk,
-        vend_a=a, vend_b=b, vend_rader=vend_rader, hael_igjen=hael_igjen,
+        vend_a=a_v, vend_b=b_v, vend_rader=vend_rader, hael_igjen=hael_igjen,
         etter_plukk=etter_plukk, kile_omganger=kile_omg,
         ta_omganger=ta_omg, ta_slutt=ta_slutt, ta_cm=ta_cm,
         fot_for_ta_cm=round(fot_cm - ta_cm, 1),
@@ -621,19 +671,48 @@ assert (p['hals_co'], p['yoke'], p['bol_ermelos']) == (56, 112, 80), \
     f"str 44 har flyttet seg til {(p['hals_co'], p['yoke'], p['bol_ermelos'])}, kontroller at det er ment"
 
 for v in VOTTER:
-    assert v['masker'] % BLAD_RAPPORT == 0
+    # Jordbærhetten er 4 masker og må gå opp rundt.
+    assert v['masker'] % SMABLAD_RAPPORT == 0, f"vott str {v['str_nr']}: hettene går ikke opp"
     assert v['fellinger'] == sorted(v['fellinger'], reverse=True)
     assert 4 <= v['fellinger'][-1] <= 8, 'antall masker å trekke sammen til slutt er urimelig'
-assert VOTTER[1]['masker'] > VOTTER[0]['masker']
+    # Votten skal sitte løst nok til å dras av med én hånd.
+    assert 1.6 <= v['omkrets_cm'] / v['hand_cm'] <= 2.6, \
+        f"vott str {v['str_nr']}: {v['omkrets_cm']} cm rundt på en hånd på {v['hand_cm']} cm"
 
-for s in TOFLER:
-    assert s['masker'] % BLAD_RAPPORT == 0
-    assert s['overfot_m'] + s['hvilende'] == s['masker']
-    assert s['etter_plukk'] == s['overfot_m'] + s['hvilende'] + 2 * s['plukk']
-    assert s['etter_felling'] == 2 * s['halv'], f"tøffel {s['navn_no']}: felt masketall ikke delelig i to"
-    assert 0 < s['ta_m'] < s['halv']
+# Seks vottestørrelser, én per plaggstørrelse fra 44 til 74.
+assert len(VOTTER) == 6, f"vottene har {len(VOTTER)} størrelser, ikke 6"
+assert [v['str_nr'] for v in VOTTER] == [r['str_nr'] for r in rows[:6]], \
+    'vottestørrelsene stemmer ikke med de seks minste plaggstørrelsene'
+assert len({v['hand_cm'] for v in VOTTER}) == 6, \
+    'to vottestørrelser har samme håndlengde, og da er de samme størrelse'
+for a, b in zip(VOTTER, VOTTER[1:]):
+    for felt in ('hand_cm', 'ribb_cm', 'lengde_cm', 'snor_cm'):
+        assert b[felt] > a[felt], f"vott str {b['str_nr']}: {felt} vokser ikke"
+    assert b['masker'] >= a['masker'], f"vott str {b['str_nr']}: masketallet krymper"
+
+for t in TOFLER:
+    assert t['masker'] % SMABLAD_RAPPORT == 0, f"tøffel str {t['str_nr']}: hettene går ikke opp"
+    assert t['overfot_m'] + t['hvilende'] == t['masker']
+    assert t['etter_plukk'] == t['overfot_m'] + t['hvilende'] + 2 * t['plukk']
+    assert t['etter_felling'] == 2 * t['halv'], \
+        f"tøffel str {t['str_nr']}: felt masketall ikke delelig i to"
+    assert 0 < t['ta_m'] < t['halv']
+
+# Ni tøffelstørrelser, én per plaggstørrelse.
+assert len(TOFLER) == 9, f"tøflene har {len(TOFLER)} størrelser, ikke 9"
+assert [t['str_nr'] for t in TOFLER] == [r['str_nr'] for r in rows], \
+    'tøffelstørrelsene stemmer ikke med plaggstørrelsene'
+assert len({t['fot_cm'] for t in TOFLER}) == 9, \
+    'to tøffelstørrelser har samme fotlengde, og da er de samme størrelse'
 for a, b in zip(TOFLER, TOFLER[1:]):
-    assert b['masker'] > a['masker'] and b['fot_cm'] > a['fot_cm']
+    for felt in ('fot_cm', 'ribb_cm', 'overfot_pinner', 'icord_cm'):
+        assert b[felt] > a[felt], f"tøffel str {b['str_nr']}: {felt} vokser ikke"
+    for felt in ('masker', 'overfot_m', 'plukk', 'etter_plukk'):
+        assert b[felt] >= a[felt], f"tøffel str {b['str_nr']}: {felt} krymper"
+
+# Sokk og tøffel skal passe til hverandre: samme fotlengde i hver størrelse.
+assert [t['fot_cm'] for t in TOFLER] == [s['fot_cm'] for s in SOKKER], \
+    'sokker og tøfler er gradert etter ulike fotlengder'
 
 for lue in LUER:
     # Frørapporten og bølgerapporten må gå opp i akkurat dette masketallet.
@@ -690,6 +769,47 @@ for a, b in zip(LUER, LUER[1:]):
         assert b[felt] >= a[felt], f"lue str {b['str_nr']}: {felt} krymper"
 
 
+for sk in SOKKER:
+    # Jordbærhetten er 4 masker og må gå opp rundt.
+    assert sk['masker'] % SMABLAD_RAPPORT == 0, f"sokk str {sk['str_nr']}: hettene går ikke opp"
+    # Frørapporten er egen per størrelse, og MÅ gå opp i akkurat det masketallet.
+    assert sk['masker'] % sk['fro_rapport'] == 0, \
+        f"sokk str {sk['str_nr']}: frørapporten {sk['fro_rapport']} går ikke opp i {sk['masker']} m"
+    assert 6 <= sk['fro_rapport'] <= 9
+    assert sk['hael_m'] + sk['vrist_m'] == sk['masker']
+    assert sk['hael_m'] % 2 == 0, f"sokk str {sk['str_nr']}: hælen er ikke delelig i to"
+    assert sk['hael_igjen'] % 2 == 0, \
+        f"sokk str {sk['str_nr']}: hælvendingen ender på {sk['hael_igjen']} masker, ikke et partall"
+    assert 0 < sk['hael_igjen'] < sk['hael_m']
+    assert sk['vend_b'] >= 1
+    assert sk['etter_plukk'] - 2 * sk['kile_omganger'] == sk['masker'], \
+        f"sokk str {sk['str_nr']}: kilen feller ikke tilbake til {sk['masker']} masker"
+    assert sk['kile_omganger'] > 0
+    assert sk['masker'] - 4 * sk['ta_omganger'] == sk['ta_slutt'], \
+        f"sokk str {sk['str_nr']}: tåen ender ikke på {sk['ta_slutt']} masker"
+    assert sk['ta_slutt'] % 4 == 0
+    assert sk['fot_for_ta_cm'] > 2.0, \
+        f"sokk str {sk['str_nr']}: bare {sk['fot_for_ta_cm']} cm fot før tåfellingen"
+    # En fot blir lengre raskere enn den blir bredere. Forholdet skal derfor
+    # falle jevnt fra de minste til de største, men holde seg innenfor dette.
+    assert 1.10 <= sk['omkrets_cm'] / sk['fot_cm'] <= 1.70, \
+        f"sokk str {sk['str_nr']}: {sk['omkrets_cm']} cm rundt på en fot på {sk['fot_cm']} cm"
+
+# Ni sokkestørrelser, én per plaggstørrelse. Ingen sammenslåtte størrelser.
+assert len(SOKKER) == 9, f"sokkene har {len(SOKKER)} størrelser, ikke 9"
+assert [s['str_nr'] for s in SOKKER] == [r['str_nr'] for r in rows], \
+    'sokkestørrelsene stemmer ikke med plaggstørrelsene'
+assert len({s['fot_cm'] for s in SOKKER}) == 9, \
+    'to sokkestørrelser har samme fotlengde, og da er de samme størrelse'
+# Nabostørrelser KAN dele masketall, siden en fot blir lengre raskere enn den
+# blir bredere. De kan ikke dele fotlengden, som er målet som avgjør passformen.
+for a, b in zip(SOKKER, SOKKER[1:]):
+    for felt in ('fot_cm', 'legg_cm'):
+        assert b[felt] > a[felt], f"sokk str {b['str_nr']}: {felt} vokser ikke"
+    for felt in ('masker', 'ribb_cm', 'hael_m', 'etter_plukk', 'omkrets_cm'):
+        assert b[felt] >= a[felt], f"sokk str {b['str_nr']}: {felt} krymper"
+
+
 out = BASE / 'sizes.json'
 out.write_text(json.dumps(
     dict(gauge_st=21, gauge_row=28, blad_rapport=BLAD_RAPPORT, blad_omg=BLAD_OMG,
@@ -708,19 +828,25 @@ for r in rows:
           f"{r['bol_ermelos']:>5} {r['bryst_ermelos_cm']:>6} cm {romsl:>5} "
           f"{r['yoke_cm']:>6} {r['yoke_jevne']:>6}")
 print()
+print()
+print(f"  {'vott':>7} {'m':>4} {'cm':>6} {'hånd':>6} {'ribb':>6} {'snor':>6}")
 for v in VOTTER:
-    print(f"  votter {v['navn_no']:>12} (str {v['dekker']}): {v['masker']} m, "
-          f"{v['omkrets_cm']} cm, felling {v['fellinger']}")
-for s in TOFLER:
-    print(f"  tøfler {s['navn_no']:>12} (str {s['dekker']}): {s['masker']} m, "
-          f"fot {s['fot_cm']} cm, {s['etter_plukk']} m etter oppplukking")
+    print(f"  str {v['str_nr']:>3} {v['masker']:>4} {v['omkrets_cm']:>5} {v['hand_cm']:>5} "
+          f"{v['ribb_cm']:>5} {v['snor_cm']:>5}")
+print()
+print(f"  {'tøffel':>7} {'m':>4} {'ankel':>7} {'fot':>7} {'ribb':>6} {'plukk':>6} {'etter':>6}")
+for t in TOFLER:
+    print(f"  str {t['str_nr']:>3} {t['masker']:>4} {t['ankel_cm']:>6} {t['fot_cm']:>5} cm "
+          f"{t['ribb_cm']:>5} {t['plukk']:>6} {t['etter_plukk']:>6}")
 print()
 print(f"  {'lue':>7} {'m':>4} {'cm':>6} {'%hode':>6} {'felt':>5} {'høyde':>7} {'buer':>5} {'frø':>4} {'kalyks':>7}")
 for lue in LUER:
     print(f"  str {lue['str_nr']:>3} {lue['masker']:>4} {lue['omkrets_cm']:>5} "
           f"{lue['andel_av_hode']:>5.0%} {lue['felt']:>5} {lue['hoyde_cm']:>6} cm "
           f"{lue['lue_buer']:>5} {lue['fro_rapport']:>4} {lue['kalyks_m']:>7}")
+print()
+print(f"  {'sokk':>7} {'fot':>8} {'m':>4} {'cm':>6} {'frø':>4} {'hæl':>4} {'->':>4} {'plukk':>6} {'kile':>5} {'tå':>4}")
 for sk in SOKKER:
-    print(f"  sokk   {sk['navn_no']:>12} (str {sk['dekker']}): {sk['masker']} m, "
-          f"fot {sk['fot_cm']} cm, hæl {sk['hael_m']} m -> {sk['hael_igjen']} m, "
-          f"{sk['etter_plukk']} m etter oppplukking, {sk['kile_omganger']} kileomg")
+    print(f"  str {sk['str_nr']:>3} {sk['fot_cm']:>6} cm {sk['masker']:>4} {sk['omkrets_cm']:>5} "
+          f"{sk['fro_rapport']:>4} {sk['hael_m']:>4} {sk['hael_igjen']:>4} "
+          f"{sk['etter_plukk']:>6} {sk['kile_omganger']:>5} {sk['ta_omganger']:>4}")

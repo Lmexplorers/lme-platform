@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Jordbærdrøm votter, gradert i to størrelser (dekker plaggstørrelse 44 til 74).
+Jordbærdrøm votter, gradert i seks størrelser, én per plaggstørrelse 44 til 74.
 
 Myke votter uten tommel, med brettet ribb, bladspisser, frø og en
 sammenhengende i-cord mellom de to vottene.
@@ -26,12 +26,7 @@ def komma(x):
 
 
 def navn(v, lang):
-    return v['navn_no'] if lang == 'no' else v['navn_en']
-
-
-def bar(lang):
-    return f.storrelsesbar_liste(
-        [(navn(v, lang), L(lang, 'str ', 'size ') + v['dekker']) for v in VOTTER])
+    return v['str_nr']
 
 
 def sider(lang):
@@ -48,12 +43,12 @@ def sider(lang):
         L(lang, 'STØRRELSE 44 TIL 74', 'SIZES 44 TO 74'),
         L(lang,
           'Myke votter uten tommel, med brettet ribb, bladspisser, frø og en '
-          'sammenhengende i-cord mellom vottene. To størrelser, som dekker '
-          'plaggstørrelse 44 til 74.',
+          'sammenhengende i-cord mellom vottene. Seks størrelser, én per '
+          'plaggstørrelse fra 44 til 74.',
           'Soft thumbless mittens with a folded rib cuff, leaf tips, seeds and a '
-          'connecting i-cord between the two. Two sizes, covering garment sizes 44 to '
+          'connecting i-cord between the two. Six sizes, one per garment size from 44 to '
           '74.'),
-        bar=bar(lang), bilde='votter.jpg'), 1))
+        bilde='votter.jpg'), 1))
 
     # ---------------------------------------------------------- 2 FØR DU BEGYNNER
     P.append(pg(
@@ -89,38 +84,37 @@ def sider(lang):
               'before starting a larger garment.')), 2))
 
     # ------------------------------------------------------------- 3 STØRRELSER
-    khead = [Sh] + L(lang, ['Passer til plaggstørrelse', 'Håndomkrets'],
-                     ['Fits garment size', 'Hand circumference'])
-    krow = [[navn(v, lang), v['dekker'], komma(v['omkrets_cm']) + ' cm'] for v in VOTTER]
-    mhead = [Sh] + L(lang, ['Masker rundt', 'Spisser rundt', 'Ribb før bretting',
+    mal_h = [Sh] + L(lang, ['Masker rundt', 'Omkrets', 'Hånd i rosa', 'Ribb',
                             'Lengde uten ribb', 'Snor'],
-                     ['Stitches round', 'Points round', 'Cuff before folding',
+                     ['Stitches round', 'Circumference', 'Hand in pink', 'Cuff',
                       'Length without cuff', 'Cord'])
-    mrow = [[navn(v, lang), str(v['masker']) + m, str(v['masker'] // 4) + ' x',
-             str(v['ribb_cm']) + ' cm', komma(v['lengde_cm']) + ' cm',
-             str(v['snor_cm']) + ' cm'] for v in VOTTER]
-    P.append(pg(f.side_storrelser_smaadel(
-        lang,
-        L(lang,
-          'Vottene er gradert i to størrelser, ikke ni som plaggene. En babyhånd vokser '
-          'svært lite mellom to nabostørrelser, og den brettede ribben tar opp resten av '
-          'forskjellen. To størrelser er derfor to reelle mål, ikke to navn '
-          'på det samme. Mål barnets hånd rundt knokene, eller velg etter '
-          'plaggstørrelsen. Vottene stopper ved str 74 fordi de er uten tommel, og et '
-          'barn på over ett år vil ha tommel.',
-          'The mittens are graded in two sizes, not nine like the garments. A baby hand '
-          'grows very little between two neighbouring sizes, and the folded cuff takes up '
-          'the rest of the difference. Two sizes are therefore two real '
-          'measurements, not two names for the same thing. Measure the hand round the '
-          'knuckles, or choose by the garment size. The mittens stop at size 74 because '
-          'they are thumbless, and a child over one year wants a thumb.'),
-        khead, krow, mhead, mrow,
-        [(navn(v, lang), L(lang, 'str ', 'size ') + v['dekker']) for v in VOTTER],
-        L(lang,
-          'Vottene skal sitte løst. De skal kunne dras av med én hånd, og de holdes på '
-          'plass av den brettede ribben, ikke av at de strammer.',
-          'The mittens should sit loosely. They must come off with one hand, and are held '
-          'in place by the folded cuff, not by being tight.')), 3))
+    mal_r = [[v['str_nr'], str(v['masker']) + m, komma(v['omkrets_cm']) + ' cm',
+              komma(v['hand_cm']) + ' cm', komma(v['ribb_cm']) + ' cm',
+              komma(v['lengde_cm']) + ' cm', str(v['snor_cm']) + ' cm'] for v in VOTTER]
+    P.append(pg(
+        banner(L(lang, 'STØRRELSER OG FERDIGE MÅL', 'SIZES AND FINISHED MEASUREMENTS')) +
+        '<p>' + L(lang,
+        'Vottene har én størrelse per plaggstørrelse, fra str 44 til 74. De stopper ved '
+        '74 fordi de er uten tommel: det er riktig på en baby, men et barn på over ett år '
+        'vil ha tommel, og en tommelløs vott blir da mer til hinder enn til hjelp.',
+        'The mittens have one size per garment size, from size 44 to 74. They stop at 74 '
+        'because they are thumbless: that is right for a baby, but a child over one year '
+        'wants a thumb, and a thumbless mitten then gets in the way rather than '
+        'helping.') + '</p>' +
+        f.storrelsesbar_liste([(v['str_nr'],
+                                L(lang, v['tillegg_no'], v['tillegg_en'])) for v in VOTTER]) +
+        card(tabell(mal_h, mal_r, min_index=0)) +
+        cme(L(lang,
+              'Noen nabostørrelser har samme masketall rundt. Det er ikke to like '
+              'størrelser: en hånd blir lengre raskere enn den blir bredere, så lengden, '
+              'ribben og snoren er forskjellige i hver rad. Vottene skal dessuten sitte '
+              'løst, de skal kunne dras av med én hånd, og de holdes på plass av den '
+              'brettede ribben, ikke av at de strammer.',
+              'Some neighbouring sizes share a stitch count round. They are not two '
+              'identical sizes: a hand grows longer faster than it grows wider, so the '
+              'length, the cuff and the cord differ in every row. The mittens should also '
+              'sit loosely, they must come off with one hand, and they are held in place '
+              'by the folded cuff, not by being tight.')), 3))
 
     # ------------------------------------------------------------------- 4 GARN
     garn = [[navn(v, lang), '%d g' % (10 + 5 * i), '%d g' % (15 + 5 * i), '5 g']
