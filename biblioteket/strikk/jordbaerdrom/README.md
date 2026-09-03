@@ -48,21 +48,28 @@ Delingen til bol og ermer er derimot fri. Der graderes bolen raskere enn
 ermene i de største størrelsene, så brystvidden følger barnets mål og ikke
 rapporten:
 
-| Str | Passer til | Hals | Økeomg. | Jevne omg. | Bærestykke | Rapporter | Bol | Ferdig bryst | Romslighet |
-|---|---|---|---|---|---|---|---|---|---|
-| 44 | liten nyfødt / prematur | 48 | 8 | 1 | 112 | 14 | 80 | 38,1 cm | 6,1 cm |
-| 50 | nyfødt, 0-1 mnd | 48 | 10 | 1 | 128 | 16 | 88 | 41,9 cm | 6,9 cm |
-| 56 | 1-2 mnd | 56 | 10 | 3 | 136 | 17 | 92 | 43,8 cm | 5,8 cm |
-| 62 | 2-4 mnd | 56 | 12 | 1 | 152 | 19 | 100 | 47,6 cm | 6,6 cm |
-| 68 | 4-6 mnd | 56 | 13 | 1 | 160 | 20 | 104 | 49,5 cm | 6,5 cm |
-| 74 | 6-9 mnd | 64 | 13 | 2 | 168 | 21 | 108 | 51,4 cm | 6,4 cm |
-| 80 | 9-12 mnd | 64 | 14 | 2 | 176 | 22 | 112 | 53,3 cm | 6,3 cm |
-| 86 | 12-18 mnd | 64 | 15 | 1 | 184 | 23 | 116 | 55,2 cm | 6,2 cm |
-| 92 | 18-24 mnd, 2 år | 72 | 15 | 2 | 192 | 24 | 120 | 57,1 cm | 6,1 cm |
+| Str | Passer til | Hals | Hals cm | Hode | Andel | Økeomg. | Jevne omg. | Bærestykke | Bol | Ferdig bryst | Romslighet |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 44 | liten nyfødt / prematur | 56 | 26,7 cm | 32 cm | 83 % | 7 | 3 | 112 | 80 | 38,1 cm | 6,1 cm |
+| 50 | nyfødt, 0-1 mnd | 64 | 30,5 cm | 35 cm | 87 % | 8 | 5 | 128 | 88 | 41,9 cm | 6,9 cm |
+| 56 | 1-2 mnd | 64 | 30,5 cm | 38 cm | 80 % | 9 | 5 | 136 | 92 | 43,8 cm | 5,8 cm |
+| 62 | 2-4 mnd | 72 | 34,3 cm | 41 cm | 84 % | 10 | 5 | 152 | 100 | 47,6 cm | 6,6 cm |
+| 68 | 4-6 mnd | 72 | 34,3 cm | 43 cm | 80 % | 11 | 5 | 160 | 104 | 49,5 cm | 6,5 cm |
+| 74 | 6-9 mnd | 80 | 38,1 cm | 45 cm | 85 % | 11 | 6 | 168 | 108 | 51,4 cm | 6,4 cm |
+| 80 | 9-12 mnd | 80 | 38,1 cm | 46 cm | 83 % | 12 | 6 | 176 | 112 | 53,3 cm | 6,3 cm |
+| 86 | 12-18 mnd | 80 | 38,1 cm | 47 cm | 81 % | 13 | 5 | 184 | 116 | 55,2 cm | 6,2 cm |
+| 92 | 18-24 mnd, 2 år | 88 | 41,9 cm | 48 cm | 87 % | 13 | 6 | 192 | 120 | 57,1 cm | 6,1 cm |
 
-Halsen har bare 48, 56, 64 og 72 masker å velge mellom (sprang på 3,8 cm), og
-holdes derfor på samme masketall over flere størrelser, mens antall
-økeomganger tar resten av veksten.
+**Halsen er regnet fra hodet, ikke gjettet.** Genseren har ingen åpning i
+nakken, så halsen må gå over hodet og likevel ligge pent etterpå.
+Tommelfingerregelen i strikking er at en ribbehals, avslappet, skal være ca.
+80 til 85 % av hodeomkretsen: ribben strekker resten når plagget tres på, og
+trekker seg sammen igjen etterpå. Kolonnene «Hode» og «Andel» over viser
+dette, og `grading_jordbaerdrom.py` har en `assert` som stopper byggingen
+hvis andelen faller utenfor 78 til 90 %.
+
+Halsoppligget må i tillegg være delelig med 8, siden halsen deles i 8 felt.
+Tallene er derfor det multiplumet av 8 som lander innenfor spennet.
 
 **Bærestykkets dybde styres av et eget mål, ikke av økingene.** Der halsen
 hopper opp et trinn, blir det færre økeomganger igjen til å nå samme
@@ -111,14 +118,22 @@ inneholde. Alle så riktige ut i en pen PDF.
   bladrapporten skulle gå opp, og felte tilbake til 60 etterpå. Linningen
   legges nå opp direkte på et masketall som er delelig med 8, så både
   økingen og fellingen er borte.
-- **Halsen på genseren** var 48 masker uansett størrelse, og genseren hadde
-  ingen åpning i nakken. Regnet etter hodeomkrets går den halsen ikke over
-  hodet i én eneste størrelse, heller ikke på den minste: 48 masker er 22,9
-  cm, som strukket i vridd ribb blir ca. 31 cm mot et nyfødt hode på 35 cm.
-  Halsen graderes nå (48 til 72 masker), **og genseren har fått samme
-  knappåpning i nakken som kjolen og romperen, i alle størrelser**. En hals
-  som er vid nok til å tres over hodet uten åpning, ville hengt løst rundt
-  halsen etterpå.
+- **Halsen var 48 masker i alle størrelser**, arvet uendret fra utkastet.
+  48 masker er 22,9 cm, altså 65 % av et nyfødt hode på 35 cm. Det er
+  altfor trangt for en genser uten åpning i nakken.
+
+  Første forsøk på å rette dette var feil vei: jeg beholdt de 48 maskene,
+  konkluderte med at halsen ikke gikk over hodet, og la til en knappåpning i
+  genseren. Renate sa fra at gensere uten knapp selvsagt finnes, og hun har
+  rett. Feilen var ikke at genseren manglet knapp, men at ingen hadde regnet
+  halsen mot hodet.
+
+  Halsen er nå dimensjonert fra hodeomkretsen (56 til 88 masker, 80 til 87 %
+  av hodet), genseren strikkes rundt fra første omgang uten åpning, og
+  oppskriften ber uttrykkelig om en elastisk oppleggingskant. Kjolen og
+  romperen beholder sin lille knappåpning bak, slik utkastet hadde den. Der
+  er den ikke nødvendig lenger, men den gjør det lettere å få plagget på en
+  bløt baby.
 
 ## Diagrammene
 

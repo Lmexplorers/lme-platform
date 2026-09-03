@@ -24,12 +24,10 @@ GARN = [[p['str_nr'],
         for p in PLAGG]
 
 EKSTRA_NO = [['Pinne 4 mm', 'settpinner eller Magic Loop til hals, ermer og linning'],
-             ['1 flat knapp', 'ca. 10-12 mm, til nakkeåpningen på genseren'],
              ['Myk elastikk', 'ca. 1 cm bred, til skjørtets linning'],
              ['Stoppenål', 'til å feste tråder og sy ned linning og picotkant'],
              ['Maskemarkør', 'til å merke omgangens begynnelse og hver ermeside']]
 EKSTRA_EN = [['4 mm needles', 'double-pointed or Magic Loop for neck, sleeves and waistband'],
-             ['1 flat button', 'approx. 10-12 mm, for the jumper back neck opening'],
              ['Soft elastic', 'approx. 1 cm wide, for the skirt waistband'],
              ['Darning needle', 'for weaving in ends and sewing down the waistband and picot'],
              ['Stitch marker', 'to mark the beginning of the round and each sleeve side']]
@@ -65,13 +63,13 @@ def sider(lang):
     P.append(pg(
         banner(L(lang, 'FØR DU BEGYNNER', 'BEFORE YOU START')) +
         card('<p>' + L(lang,
-             'Genseren strikkes ovenfra og ned med rundt bærestykke, lange ermer og en '
-             'liten knappåpning bak i nakken. '
+             'Genseren strikkes ovenfra og ned med rundt bærestykke og lange ermer, uten '
+             'åpning i nakken. '
              'Skjørtet strikkes separat, også ovenfra og ned, med en brettet linning som '
              'en myk elastikk tres gjennom til slutt. De to delene deler diagram, fasthet '
              'og farger, men strikkes helt uavhengig av hverandre.',
-             'The jumper is knitted top-down with a round yoke, long sleeves and a small '
-             'buttoned opening at the back neck. The skirt '
+             'The jumper is knitted top-down with a round yoke and long sleeves, with no '
+             'neck opening. The skirt '
              'is knitted separately, also from the top down, with a folded waistband that a '
              'soft elastic is threaded through at the end. The two pieces share the charts, '
              'the gauge and the colours, but are knitted entirely independently.') + '</p>') +
@@ -122,33 +120,34 @@ def sider(lang):
     P.append(pg(
         banner(L(lang, 'GENSER · 1 · HALS OG BÆRESTYKKE', 'JUMPER · 1 · NECK AND YOKE')) +
         card('<p>' + L(lang,
-             'Legg opp med grønt på pinne 4 mm og strikk 5 pinner vridd ribb frem og '
-             'tilbake. På pinne 3 lager du ett knapphull 3 masker innenfor kanten: 2 rett '
-             'sammen, 1 kast. Fortsett i glattstrikk frem og tilbake. Del maskene i 8 like '
-             'felt og øk 1 maske i hvert felt på annenhver pinne, altså 8 masker per '
-             'økeomgang. Når åpningen bak måler ca. 4 cm, legger du opp 2 masker over '
-             'åpningen og samler arbeidet til en omgang. Fortsett økingene rundt til du '
-             'har masketallet i kolonnen din, strikk de jevne omgangene i siste kolonne, '
-             'og så bladrapporten fra side 5 over 8 masker. Avslutt med 1 omgang rosa.',
-             'Cast on in green on 4 mm needles and work 5 rows of twisted rib back and '
-             'forth. On row 3 make one buttonhole 3 stitches in from the edge: knit 2 '
-             'together, yarn over. Continue in stocking stitch back and forth. Divide the '
-             'stitches into 8 equal sections and increase 1 stitch in each section every '
-             'other row, that is 8 stitches per increase round. When the back opening '
-             'measures approx. 4 cm, cast on 2 stitches over the opening and join to work '
-             'in the round. Continue the increases until you have the stitch count in your '
-             'column, work the even rounds in the last column, then the leaf repeat from '
-             'page 5 over 8 stitches. Finish with 1 round in pink.') + '</p>') +
+             'Legg opp med grønt på pinne 4 mm med en elastisk oppleggingskant, samle til '
+             'en omgang og strikk 5 omganger vridd ribb. Genseren har ingen åpning i '
+             'nakken, så halsen skal tres over hodet, og da er det oppleggingskanten som '
+             'avgjør. Legg opp løst, gjerne over to pinner holdt sammen. Del så maskene i '
+             '8 like felt, sett en markør mellom hvert felt, og øk 1 maske i hvert felt på '
+             'annenhver omgang, altså 8 masker per økeomgang, til du har masketallet i '
+             'kolonnen din. Strikk de jevne omgangene i siste kolonne, og deretter '
+             'bladrapporten fra side 5 over 8 masker. Avslutt med 1 omgang rosa.',
+             'Cast on in green on 4 mm needles with a stretchy cast-on, join in the round '
+             'and work 5 rounds of twisted rib. The jumper has no neck opening, so the '
+             'neck has to pass over the head, and there the cast-on edge decides. Cast on '
+             'loosely, for instance over two needles held together. Then divide the '
+             'stitches into 8 equal sections, place a marker between each, and increase 1 '
+             'stitch in each section every other round, that is 8 stitches per increase '
+             'round, until you have the stitch count in your column. Work the even rounds '
+             'in the last column, then the leaf repeat from page 5 over 8 stitches. Finish '
+             'with 1 round in pink.') + '</p>') +
         card(tabell(hals_h, hals_r, min_index=0)) +
         cme(L(lang,
-              'Knappåpningen i nakken er ikke pynt, den er nødvendig. En hals som er vid '
-              'nok til å tres over hodet uten åpning, ville hengt løst rundt halsen '
-              'etterpå, og det gjelder i alle størrelser. Med åpningen kan halsen sitte '
-              'der den skal.',
-              'The buttoned back opening is not decoration, it is necessary. A neck wide '
-              'enough to pass over the head without an opening would hang loose around the '
-              'neck afterwards, and that holds in every size. With the opening the neck '
-              'can sit where it should.')), 7))
+              'Halsen er regnet ut fra hodet, ikke gjettet: den ligger på 80 til 87 % av '
+              'hodeomkretsen i hver størrelse. Ribben strekker resten når genseren tres '
+              'på, og trekker seg sammen igjen etterpå. Kjennes den likevel stram, er det '
+              'nesten alltid oppleggingskanten som er for hard, ikke masketallet.',
+              'The neck is calculated from the head, not guessed: it sits at 80 to 87 % of '
+              'the head circumference in every size. The rib stretches the rest as the '
+              'jumper goes on, and draws back in afterwards. If it still feels tight, it '
+              'is almost always the cast-on edge that is too firm, not the stitch '
+              'count.')), 7))
 
     # ------------------------------------------------ 7 GENSER, DEL TIL BOL OG ERMER
     del_h = [S] + L(lang, ['Forstykke', 'Sett av til erme', 'Legg opp', 'Bakstykke', 'Bol'],

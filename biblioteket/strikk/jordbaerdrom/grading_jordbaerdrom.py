@@ -51,25 +51,37 @@ BLAD_OMG = 10                  # omganger i bladdiagrammet
 
 # ------------------------------------------------------------------ STØRRELSER
 # (str, no-tillegg, en-tillegg, barnets brystmål cm, ønsket overarm cm,
-#  halsoppligg m)
+#  hodeomkrets cm, halsoppligg m)
 #
-# Brystmålene er vanlige norske barnemål. Ønsket overarm er armens omkrets
-# med litt slark. Halsoppligget må være delelig med 8, så det finnes bare
-# 48, 56, 64 og 72 å velge mellom i dette spennet: halsen holdes derfor på
-# samme masketall over flere størrelser, og antall økeomganger tar resten av
-# veksten. Halsen MÅ vokse: genseren har ingen åpning i nakken og skal over
-# hodet, og hodet vokser raskere enn brystet.
+# HALSEN ER REGNET FRA HODET, IKKE GJETTET
+# Genseren har ingen åpning i nakken, så halsen må gå over hodet og likevel
+# ligge pent etterpå. Tommelfingerregelen i strikking er at en ribbehals,
+# avslappet, skal være ca. 80 til 85 % av hodeomkretsen: ribben strekker
+# resten når plagget tres på, og trekker seg sammen igjen etterpå.
+#
+# Halsoppligget må i tillegg være delelig med 8, siden halsen deles i 8 felt.
+# Tallene under er derfor det multiplumet av 8 som lander innenfor det
+# spennet, og forholdet kontrolleres eksplisitt lenger nede.
+#
+# Dette var opprinnelig feil: halsen sto på 48 masker i alle størrelser,
+# arvet uendret fra utkastet, og det er altfor trangt (48 m = 22,9 cm, altså
+# 65 % av et nyfødt hode). Feilen var ikke at genseren manglet knapp, men at
+# ingen hadde regnet halsen mot hodet.
 SIZES = [
-    (44, "liten nyfødt / prematur", "small newborn / preemie", 32.0, 11.0, 48),
-    (50, "nyfødt, 0-1 mnd",         "newborn, 0-1 mo",         35.0, 12.0, 48),
-    (56, "1-2 mnd",                 "1-2 mo",                  38.0, 13.0, 56),
-    (62, "2-4 mnd",                 "2-4 mo",                  41.0, 14.0, 56),
-    (68, "4-6 mnd",                 "4-6 mo",                  43.0, 15.0, 56),
-    (74, "6-9 mnd",                 "6-9 mo",                  45.0, 16.0, 64),
-    (80, "9-12 mnd",                "9-12 mo",                 47.0, 17.0, 64),
-    (86, "12-18 mnd",               "12-18 mo",                49.0, 18.0, 64),
-    (92, "18-24 mnd, 2 år",         "18-24 mo, 2 years",       51.0, 19.0, 72),
+    (44, "liten nyfødt / prematur", "small newborn / preemie", 32.0, 11.0, 32.0, 56),
+    (50, "nyfødt, 0-1 mnd",         "newborn, 0-1 mo",         35.0, 12.0, 35.0, 64),
+    (56, "1-2 mnd",                 "1-2 mo",                  38.0, 13.0, 38.0, 64),
+    (62, "2-4 mnd",                 "2-4 mo",                  41.0, 14.0, 41.0, 72),
+    (68, "4-6 mnd",                 "4-6 mo",                  43.0, 15.0, 43.0, 72),
+    (74, "6-9 mnd",                 "6-9 mo",                  45.0, 16.0, 45.0, 80),
+    (80, "9-12 mnd",                "9-12 mo",                 47.0, 17.0, 46.0, 80),
+    (86, "12-18 mnd",               "12-18 mo",                49.0, 18.0, 47.0, 80),
+    (92, "18-24 mnd, 2 år",         "18-24 mo, 2 years",       51.0, 19.0, 48.0, 88),
 ]
+
+# Hvor stor andel av hodeomkretsen halsen skal være, avslappet.
+HALS_AV_HODE_MIN = 0.78
+HALS_AV_HODE_MAX = 0.90
 
 ROMSLIGHET = 6.0       # cm romslighet over brystet på den ermeløse bolen
 UNDERARM_ERMELOS = 2   # masker lagt opp under armen på kjole og romper
@@ -122,7 +134,7 @@ def finn_par(mal_bryst_m, mal_erme_m, min_front, min_erme):
 
 rows = []
 prev_front, prev_erme, prev_mansjett = 0, 0, 0
-for i, (nr, tno, ten, kropp_bryst, overarm_cm, hals) in enumerate(SIZES):
+for i, (nr, tno, ten, kropp_bryst, overarm_cm, hode_cm, hals) in enumerate(SIZES):
     mal_bryst_m = (kropp_bryst + ROMSLIGHET) * GAUGE_ST_CM
     mal_erme_m = overarm_cm * GAUGE_ST_CM
     front, sleeve = finn_par(mal_bryst_m, mal_erme_m, prev_front + 2, prev_erme + 2)
@@ -179,8 +191,10 @@ for i, (nr, tno, ten, kropp_bryst, overarm_cm, hals) in enumerate(SIZES):
 
     rows.append(dict(
         str_nr=nr, tillegg_no=tno, tillegg_en=ten,
-        kropp_bryst_cm=kropp_bryst,
+        kropp_bryst_cm=kropp_bryst, hode_cm=hode_cm,
         hals_co=hals, hals_felt=8, hals_per_felt=hals // 8,
+        hals_cm=round(hals / GAUGE_ST_CM, 1),
+        hals_av_hode=round(hals / GAUGE_ST_CM / hode_cm, 2),
         oke_omganger=inc, oke_pinner=inc * 2,
         yoke=yoke, blad_rapporter=yoke // BLAD_RAPPORT,
         yoke_omganger=yoke_omg, yoke_jevne=yoke_jevne, yoke_cm=yoke_cm,
@@ -283,7 +297,14 @@ for r in rows:
     assert r['blad_rapporter'] * BLAD_RAPPORT == r['yoke']
     assert r['hals_co'] + r['oke_omganger'] * 8 == r['yoke'], f"str {r['str_nr']}: økingene går ikke opp"
     assert r['front'] + r['back'] + 2 * r['sleeve'] == r['yoke'], f"str {r['str_nr']}: delingen går ikke opp"
-    assert r['hals_co'] >= 48, f"str {r['str_nr']}: halsen for trang"
+    # Genseren har ingen åpning i nakken. Halsen må derfor gå over hodet, og
+    # det er dette forholdet som avgjør det, ikke en magefølelse.
+    assert HALS_AV_HODE_MIN <= r['hals_av_hode'] <= HALS_AV_HODE_MAX, (
+        f"str {r['str_nr']}: halsen er {r['hals_cm']} cm mot et hode på "
+        f"{r['hode_cm']} cm, altså {r['hals_av_hode'] * 100:.0f} %. "
+        f"Skal ligge mellom {HALS_AV_HODE_MIN * 100:.0f} og "
+        f"{HALS_AV_HODE_MAX * 100:.0f} %, ellers går genseren enten ikke over "
+        f"hodet eller henger løst rundt halsen.")
     assert r['oke_omganger'] >= 5
     # Ermet må gi plass til en hånd, og mansjetten må være et partall til ribben.
     assert r['erme_mansjett'] % 2 == 0, f"str {r['str_nr']}: mansjett ikke partall"
@@ -328,7 +349,7 @@ for a, b in zip(rows, rows[1:]):
 # øverst ikke kan flytte den ubemerket. Endrer du den bevisst, endrer du
 # tallet her samtidig, og da er det et valg og ikke et uhell.
 p = rows[0]
-assert (p['hals_co'], p['yoke'], p['bol_ermelos']) == (48, 112, 80), \
+assert (p['hals_co'], p['yoke'], p['bol_ermelos']) == (56, 112, 80), \
     f"str 44 har flyttet seg til {(p['hals_co'], p['yoke'], p['bol_ermelos'])}, kontroller at det er ment"
 
 for v in VOTTER:
@@ -355,14 +376,14 @@ out.write_text(json.dumps(
 
 print('OK, skrev', out.name, 'for', len(rows), 'plaggstørrelser.')
 print('Alle konsistenssjekk består.\n')
-print(f"{'str':>4} {'hals':>5} {'øk':>3} {'bær':>5} {'rapp':>5} {'bol':>5} {'bryst':>8} "
-      f"{'romsl':>6} {'bær cm':>7} {'jevne':>6} {'erme':>5} {'mansj':>6}")
+print(f"{'str':>4} {'hals':>5} {'hals cm':>8} {'hode':>5} {'%':>4} {'øk':>3} {'bær':>5} "
+      f"{'bol':>5} {'bryst':>8} {'romsl':>6} {'bær cm':>7} {'jevne':>6}")
 for r in rows:
     romsl = round(r['bryst_ermelos_cm'] - r['kropp_bryst_cm'], 1)
-    print(f"{r['str_nr']:>4} {r['hals_co']:>5} {r['oke_omganger']:>3} {r['yoke']:>5} "
-          f"{r['blad_rapporter']:>5} {r['bol_ermelos']:>5} {r['bryst_ermelos_cm']:>6} cm "
-          f"{romsl:>5} {r['yoke_cm']:>6} {r['yoke_jevne']:>6} {r['erme_overarm']:>5} "
-          f"{r['erme_mansjett']:>6}")
+    print(f"{r['str_nr']:>4} {r['hals_co']:>5} {r['hals_cm']:>7} {r['hode_cm']:>5.0f} "
+          f"{r['hals_av_hode'] * 100:>3.0f}% {r['oke_omganger']:>3} {r['yoke']:>5} "
+          f"{r['bol_ermelos']:>5} {r['bryst_ermelos_cm']:>6} cm {romsl:>5} "
+          f"{r['yoke_cm']:>6} {r['yoke_jevne']:>6}")
 print()
 for v in VOTTER:
     print(f"  votter {v['navn_no']:>12} (str {v['dekker']}): {v['masker']} m, "
