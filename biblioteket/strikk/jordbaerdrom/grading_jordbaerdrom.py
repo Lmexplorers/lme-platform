@@ -2,18 +2,26 @@
 """
 Jordbærdrøm, graderingsberegning for hele kolleksjonen.
 
-Utgangspunktet er de fem prøveoppskriftene i én størrelse (prematur / liten
-nyfødt), som Renate sendte inn. Denne filen graderer den samme
-konstruksjonen opp til fem størrelser, 32, 38, 44, 50 og 56, og skriver
-sizes.json som alle fem build_*.py leser.
+Utgangspunktet var fem PDF-er i én størrelse (prematur / liten nyfødt),
+laget med ChatGPT og aldri strikket av noen. De ga konstruksjonen og stilen,
+altså det runde bærestykket delt i 8 felt, bladrapporten, frøene og
+picotkanten. Selve tallene er regnet ut på nytt her, fra barnas mål og
+fastheten, og ikke overtatt fra PDF-ene.
 
-Den minste størrelsen (32) beholder prøveoppskriftens egne tall med vilje:
-88 masker i bærestykket, 60 masker i bolen, 48 masker i halsen. Det som
-allerede er strikket etter prøveoppskriften er dermed fortsatt gyldig.
+Det er en viktig forskjell: en oppskrift ingen har strikket etter er et
+utkast, ikke en fasit. Flere av tallene i de opprinnelige PDF-ene gikk ikke
+opp (se README-en), og de er rettet, ikke bevart.
+
+Den minste størrelsen (32) lander på 88 masker i bærestykket, 60 i bolen og
+48 i halsen. Det er de samme tallene som sto i PDF-en, men her fordi de er
+riktige for et barn på ca. 1,0 til 1,5 kg: 4,6 cm romslighet over brystet,
+en hals som strekker til ca. 29 cm over et hode på 25 til 27 cm, og et
+bærestykke på 7,5 cm mot en skulderhøyde på 6 til 7 cm.
 
 FASTHET
 21 m og 28 omg glattstrikk = 10 x 10 cm, pinne 4 mm, DROPS Merino Extra
-Fine. Uendret fra prøveoppskriften, og brukt i alle beregninger her.
+Fine. Samme fasthet som PDF-ene oppga, beholdt fordi den passer garnet og
+pinnen, og brukt i alle beregninger her.
 
 BINDINGEN SOM STYRER ALT: BLADRAPPORTEN ER 8 MASKER
 Bladmønsteret går rundt hele bærestykket, så masketallet i bærestykket må
@@ -260,10 +268,12 @@ for a, b in zip(rows, rows[1:]):
         assert b[felt] > a[felt], f"str {b['str_nr']}: {felt} vokser ikke ({a[felt]} -> {b[felt]})"
     assert b['hals_co'] >= a['hals_co'], f"str {b['str_nr']}: halsen krymper"
 
-# Den minste størrelsen skal være prøveoppskriften, uendret.
+# Den minste størrelsen er festet med et eksplisitt tall, slik at en endring
+# i inndataene øverst ikke kan flytte den ubemerket. Endrer du den bevisst,
+# endrer du tallet her samtidig, og da er det et valg og ikke et uhell.
 p = rows[0]
 assert (p['hals_co'], p['oke_omganger'], p['yoke'], p['bol_ermelos']) == (48, 5, 88, 60), \
-    "str 32 skal være identisk med prøveoppskriften"
+    "str 32 har flyttet seg, kontroller at det er ment"
 
 for v in VOTTER:
     assert v['masker'] % BLAD_RAPPORT == 0

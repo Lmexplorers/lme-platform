@@ -16,23 +16,34 @@ https://lmexplorers.com/teststrikk, som er lenket fra et kort på dashbordet.
 
 ## Hva som ble gjort
 
-Utgangspunktet var fem prøveoppskrifter i **én** størrelse (prematur / liten
-nyfødt), levert som ferdige PDF-er uten kildefiler. Denne mappen er
-kildefilene, og oppskriftene er gradert til **fem størrelser: 32, 38, 44, 50
-og 56**.
+Utgangspunktet var fem PDF-er i **én** størrelse (prematur / liten nyfødt),
+laget med ChatGPT og aldri strikket av noen. De ga konstruksjonen og stilen:
+det runde bærestykket delt i 8 felt, bladrapporten, frøene, picotkanten.
+
+De ga derimot ikke tall det gikk an å stole på. Flere av dem gikk rett og
+slett ikke opp (se listen lenger nede). **Alle masketall er derfor regnet ut
+på nytt her**, fra barnas mål og strikkefastheten, ikke overtatt fra PDF-ene.
+Denne mappen er kildefilene som mangler, og oppskriftene er gradert til
+**fem størrelser: 32, 38, 44, 50 og 56**.
 
 Str 50 er det minste som selges i vanlige butikker, og var altfor stort for
 barnet oppskriftene først skulle brukes til. Derfor går kolleksjonen ned til
 str 32, som passer et barn på rundt ett kilo.
 
-Størrelse 32 beholder prøveoppskriftens egne tall med vilje (88 masker i
-bærestykket, 60 i bolen, 48 i halsen), så det som allerede er strikket etter
-prøveoppskriften fortsatt er gyldig.
+Størrelse 32 lander på de samme tallene som sto i PDF-en (88 masker i
+bærestykket, 60 i bolen, 48 i halsen), men her fordi de er riktige for
+størrelsen, ikke fordi PDF-en sa det: 4,6 cm romslighet over brystet, en hals
+som strekker til ca. 29 cm over et hode på 25 til 27 cm, og et bærestykke på
+7,5 cm mot en skulderhøyde på 6 til 7 cm.
+
+**Ingenting i kolleksjonen er strikket ennå.** Det er hele poenget med
+teststrikken, og det står rett ut på teststrikksiden i hvert hefte.
 
 ## Fasthet og gradering
 
 21 masker og 28 omganger glattstrikk = 10 x 10 cm, pinne 4 mm, DROPS Merino
-Extra Fine. Uendret fra prøveoppskriften og brukt i alle beregninger.
+Extra Fine. Samme fasthet som PDF-ene oppga, beholdt fordi den passer garnet
+og pinnen, og brukt i alle beregninger.
 
 **Bindingen som styrer alt: bladrapporten er 8 masker.** Mønsteret går rundt
 hele bærestykket, så masketallet der må være delelig med 8 i hver eneste
@@ -70,15 +81,18 @@ må være videre enn livet det henger fra, romsligheten må ligge mellom 3,5 og
 8,5 cm, og alt som skal vokse med størrelsen må faktisk vokse. Slår én av dem
 feil, stopper byggingen der og ikke i en oppskrift noen strikker etter.
 
-## Feil i prøveoppskriften som er rettet
+## Feil i PDF-ene som er rettet
 
-- **Armhullskanten.** Prøveoppskriften sa «plukk opp ca. 42 masker rundt
-  hvert armhull», men armhullet har bare 16 hvilende masker pluss 2 lagt opp
-  under armen. 42 er ikke mulig. Kanten er nå regnet ut: hvilende masker +
+Disse er verdt å lese som en påminnelse om hva et ukontrollert utkast kan
+inneholde. Alle fire så riktige ut i en pen PDF.
+
+- **Armhullskanten.** PDF-en sa "plukk opp ca. 42 masker rundt hvert
+  armhull", men armhullet har bare 16 hvilende masker pluss 2 lagt opp under
+  armen. 42 er ikke mulig. Kanten er nå regnet ut: hvilende masker +
   maskene under armen + 1 i hvert hjørne, altså 20 masker i str 32 og opp til
   36 i str 56, alltid et partall siden kanten strikkes i vridd ribb.
 - **Kjolens skjørtelengde** sto som 16 cm i måltabellen og 15 cm i selve
-  arbeidsbeskrivelsen. Nå ett tall, hentet fra `sizes.json`.
+  arbeidsbeskrivelsen, i samme PDF. Nå ett tall, hentet fra `sizes.json`.
 - **Skjørtets linning** la først opp 60 masker, økte til 64 for at
   bladrapporten skulle gå opp, og felte tilbake til 60 etterpå. Linningen
   legges nå opp direkte på et masketall som er delelig med 8, så både
@@ -145,6 +159,11 @@ samme stil som Woodland Dreams-serien.
 
 Kolleksjonen er ikke koblet til butikken ennå, med vilje: den skal
 teststrikkes, vaskes, måles og teknisk kontrolleres i alle fem størrelser
-først. Når målene fra teststrikkerne er inne, oppdateres `sizes.json`,
+først. Et utkast laget av en språkmodell, gradert og rettet av en annen, er
+fortsatt et utkast til noen har strikket etter det.
+
+Teststrikkerne blir også bedt om å si fra hvis mønsteret minner dem om en
+oppskrift de har sett før. Konstruksjonen kom fra en språkmodell, og da er
+det verdt å ha øyne på det før noe selges. Når målene fra teststrikkerne er inne, oppdateres `sizes.json`,
 alt bygges på nytt, «Teststrikkversjon 1.0» fjernes fra forsiden, og
 oppskriftene kan legges ut for salg.

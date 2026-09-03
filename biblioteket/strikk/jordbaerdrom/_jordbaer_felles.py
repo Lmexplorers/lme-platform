@@ -288,16 +288,21 @@ def side_teststrikk(lang, plaggnavn_no, plaggnavn_en):
     plagg = plaggnavn_no if lang == 'no' else plaggnavn_en
     t = {'no': dict(
         b='TIL DEG SOM TESTSTRIKKER',
-        lead=(f'Denne utgaven av {plagg} er en teststrikkversjon. Den er beregnet, '
-              'kontrollert og korrekturlest, men den er ennå ikke strikket opp i alle '
-              'størrelser. Det er nettopp det du hjelper meg med.'),
+        lead=(f'Denne utgaven av {plagg} er en teststrikkversjon. Alle masketall er '
+              'regnet ut fra barnas mål og strikkefastheten, og kontrollert mot '
+              'hverandre, men ingen har strikket etter oppskriften ennå. Du er den '
+              'første. Det betyr at du kan støte på ting jeg ikke har sett, og det er '
+              'nettopp derfor jeg trenger deg.'),
         p1='DETTE TRENGER JEG FRA DEG',
         liste=['Hvilken størrelse du strikket, og hvilket garn og hvilken pinne du brukte.',
                'Din egen strikkefasthet, målt på en vasket og flattørket prøvelapp.',
                'De ferdige målene på plagget, målt etter vask, med tallene i skjemaet under.',
                'Alt som var uklart: en setning du måtte lese tre ganger, et masketall som '
                'ikke gikk opp, et sted du måtte gjette.',
-               'Et bilde av det ferdige plagget, gjerne på barnet, hvis du vil.'],
+               'Et bilde av det ferdige plagget, gjerne på barnet, hvis du vil.',
+               'Si fra hvis mønsteret minner deg om en oppskrift du har sett før. '
+               'Jordbærdrøm er tegnet for LME, og jeg vil vite det med en gang hvis '
+               'noe likevel ligger for tett på noe annet.'],
         p2='MÅLESKJEMA, FYLLES UT ETTER VASK',
         p3='SLIK SENDER DU INN',
         send=('Send skjemaet, kommentarene og eventuelle bilder til '
@@ -307,16 +312,21 @@ def side_teststrikk(lang, plaggnavn_no, plaggnavn_en):
               'også, og det er lettere å rette nå enn etterpå.'))}
     t['en'] = dict(
         b='FOR YOU, THE TEST KNITTER',
-        lead=(f'This edition of the {plagg} is a test knit version. It has been '
-              'calculated, checked and proofread, but it has not yet been knitted up in '
-              'every size. That is exactly what you are helping me with.'),
+        lead=(f'This edition of the {plagg} is a test knit version. Every stitch count '
+              'has been calculated from the babies\' measurements and the gauge, and '
+              'checked against the others, but nobody has knitted from the pattern yet. '
+              'You are the first. That means you may run into things I have not seen, '
+              'and that is exactly why I need you.'),
         p1='WHAT I NEED FROM YOU',
         liste=['Which size you knitted, and which yarn and needles you used.',
                'Your own gauge, measured on a washed swatch dried flat.',
                'The finished measurements of the garment after washing, in the form below.',
                'Anything unclear: a sentence you had to read three times, a stitch count '
                'that did not add up, a place where you had to guess.',
-               'A photo of the finished garment, on the baby if you like.'],
+               'A photo of the finished garment, on the baby if you like.',
+               'Tell me if the pattern reminds you of one you have seen before. '
+               'Strawberry Dream is drawn for LME, and I want to know straight away if '
+               'something still sits too close to something else.'],
         p2='MEASUREMENT FORM, FILL IN AFTER WASHING',
         p3='HOW TO SEND IT IN',
         send=('Send the form, your comments and any photos to '
