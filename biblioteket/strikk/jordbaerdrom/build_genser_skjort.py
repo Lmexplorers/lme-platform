@@ -74,6 +74,18 @@ def sider(lang):
              'is knitted separately, also from the top down, with a folded waistband that a '
              'soft elastic is threaded through at the end. The two pieces share the charts, '
              'the gauge and the colours, but are knitted entirely independently.') + '</p>') +
+        cme(L(lang,
+              'MERK OM FORSIDEBILDET: bildet viser en tidligere utgave av kantene. Der '
+              'har genseren grønn ribb nederst på bolen og på mansjettene, og skjørtets '
+              'buer er helt rosa. Oppskriften er den som gjelder: bol, ermer og skjørt '
+              'ender alle i buekant med en smal grønn kant, slik kjolen og romperen gjør. '
+              'Nytt bilde kommer når settet er strikket.',
+              'NOTE ON THE COVER PHOTO: the photo shows an earlier version of the edges. '
+              'There the jumper has a green rib at the lower body and at the cuffs, and '
+              'the scallops on the skirt are all pink. The pattern is what counts: body, '
+              'sleeves and skirt all end in a scalloped hem with a narrow green edge, as '
+              'on the dress and the romper. A new photo follows once the set has been '
+              'knitted.')) +
         rosep(L(lang, 'DETTE LÆRER DU', 'WHAT YOU WILL LEARN')) +
         card(ul(L(lang,
                   ['å strikke en genser med rundt bærestykke',
