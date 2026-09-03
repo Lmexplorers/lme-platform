@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#F8D7DA">
-<title>Live arrangementer — LME</title>
+<title>Live-rommet — LME</title>
 
 
 
@@ -1637,6 +1637,137 @@
   }
 </style>
 
+<style>
+  /* === Selve live-rommet === */
+  /* Toppmargen gjoer plass til den faste menylinjen oeverst. */
+  #room-body { padding-top: 92px; }
+  .live-lock { margin-top: 92px; }
+  .room-back {
+    display: inline-block;
+    font-size: 14px;
+    color: var(--cerise);
+    margin-bottom: 18px;
+  }
+  .room-head { text-align: center; margin-bottom: 22px; }
+  .room-head h1 {
+    font-family: var(--font-display);
+    font-size: clamp(26px, 4vw, 40px);
+    font-weight: 400;
+    color: var(--ink);
+    margin: 12px 0 8px;
+  }
+  .room-head .when { font-size: 15px; color: var(--ink-soft); margin: 0; }
+  .room-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+  .room-stage {
+    background: linear-gradient(135deg, var(--pink-soft) 0%, #FFE5E8 55%, var(--cream) 100%);
+    border: 1px solid rgba(228, 160, 168, 0.25);
+    border-radius: var(--r-lg);
+    padding: 40px 28px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .room-stage h2 {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--ink);
+    margin: 0 0 12px;
+  }
+  .room-stage p { font-size: 15px; color: var(--ink-soft); line-height: 1.6; margin: 0 auto 18px; max-width: 420px; }
+  .room-pass {
+    display: inline-block;
+    background: #fff;
+    border-radius: var(--r-sm);
+    padding: 10px 18px;
+    font-size: 15px;
+    color: var(--ink);
+    box-shadow: var(--shadow-sm);
+    margin-top: 16px;
+  }
+  .room-pass b { font-family: var(--font-display); color: var(--cerise); letter-spacing: 2px; }
+
+  .room-chat {
+    background: #fff;
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    min-height: 320px;
+    max-height: 560px;
+    overflow: hidden;
+  }
+  .room-chat h3 {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 400;
+    margin: 0;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+  }
+  .chat-log { flex: 1; overflow-y: auto; padding: 14px 18px; }
+  .chat-msg { margin-bottom: 14px; }
+  .chat-msg .n { font-size: 12px; font-weight: 700; color: var(--cerise); display: block; }
+  .chat-msg .x { font-size: 14px; color: var(--ink); line-height: 1.5; word-wrap: break-word; }
+  .chat-msg .ts { font-size: 11px; color: var(--ink-muted); }
+  .chat-empty { font-size: 14px; color: var(--ink-muted); text-align: center; padding: 20px 0; }
+  .chat-form { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line); }
+  .chat-form input {
+    flex: 1;
+    min-width: 0;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--cream);
+    border: 1px solid var(--line);
+    border-radius: var(--r-pill);
+    padding: 10px 15px;
+  }
+  .chat-form button {
+    background: var(--cerise);
+    color: #fff;
+    border: 0;
+    border-radius: var(--r-pill);
+    padding: 10px 18px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .room-help {
+    background: #fff;
+    border-radius: var(--r-md);
+    padding: 22px 24px;
+    box-shadow: var(--shadow-sm);
+    margin-top: 18px;
+  }
+  .room-help h3 {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 400;
+    margin: 0 0 10px;
+    color: var(--ink);
+  }
+  .room-help li { font-size: 14px; color: var(--ink-soft); line-height: 1.7; margin-left: 18px; }
+
+  @media (max-width: 860px) {
+    .room-grid { grid-template-columns: 1fr; }
+    .room-chat { max-height: 420px; }
+    .room-stage { padding: 30px 20px; min-height: 260px; }
+  }
+</style>
+
 </head>
 <body>
 
@@ -1760,20 +1891,12 @@
      MAIN
      =================================== -->
 <main class="container">
-
-  <section class="page-hero">
-    <span class="page-kicker" data-no="LIVE I LME STUDIO" data-en="LIVE IN LME STUDIO">LIVE I LME STUDIO</span>
-    <h1 data-edit="hero-title">Live <em>arrangementer</em></h1>
-    <p class="lede" data-edit="hero-sub">Månedlige live-samtaler med Renate, spørretimer, workshops og fellessamlinger i Inner Circle. Du blir med rett herfra, og opptaket ligger klart etterpå.</p>
-  </section>
-
   <div class="live-wrap">
 
-    <!-- Lås: vises til de som ikke er innlogget eller ikke er medlem -->
     <div class="live-lock" id="lock-login" hidden>
       <span class="ic">🔑</span>
-      <h2 data-no="Logg inn for å se samlingene" data-en="Log in to see the sessions">Logg inn for å se samlingene</h2>
-      <p data-no="Live-samlingene ligger bak innlogging, slik at rommet holder seg lukket for andre enn medlemmene." data-en="The live sessions sit behind a login, so the room stays closed to everyone but the members.">Live-samlingene ligger bak innlogging, slik at rommet holder seg lukket for andre enn medlemmene.</p>
+      <h2 data-no="Logg inn for å komme inn i rommet" data-en="Log in to enter the room">Logg inn for å komme inn i rommet</h2>
+      <p data-no="Live-rommet er lukket for andre enn medlemmene, så lenken til samlingen deles bare med deg som er logget inn." data-en="The live room is closed to everyone but the members, so the link to the session is only handed to you when you are logged in.">Live-rommet er lukket for andre enn medlemmene, så lenken til samlingen deles bare med deg som er logget inn.</p>
       <div class="acts">
         <a href="/login" class="btn-primary" data-no="Logg inn" data-en="Log in">Logg inn</a>
         <a href="/community" class="btn-secondary" data-no="Bli med i Inner Circle" data-en="Join Inner Circle">Bli med i Inner Circle</a>
@@ -1782,63 +1905,63 @@
 
     <div class="live-lock" id="lock-member" hidden>
       <span class="ic">✨</span>
-      <h2 data-no="Live-samlingene er for medlemmer" data-en="The live sessions are for members">Live-samlingene er for medlemmer</h2>
-      <p data-no="Inner Circle gir deg alle live-samlingene, spørretimene og opptakene, sammen med resten av fellesskapet." data-en="Inner Circle gives you every live session, every Q and A and every recording, together with the rest of the community.">Inner Circle gir deg alle live-samlingene, spørretimene og opptakene, sammen med resten av fellesskapet.</p>
+      <h2 data-no="Live-rommet er for medlemmer" data-en="The live room is for members">Live-rommet er for medlemmer</h2>
+      <p data-no="Inner Circle gir deg alle live-samlingene, chatten under sending og opptakene etterpå." data-en="Inner Circle gives you every live session, the chat during the broadcast and the recordings afterwards.">Inner Circle gir deg alle live-samlingene, chatten under sending og opptakene etterpå.</p>
       <div class="acts">
         <a href="/community" class="btn-primary" data-no="Bli med i Inner Circle" data-en="Join Inner Circle">Bli med i Inner Circle</a>
-        <a href="/roadmap" class="btn-secondary" data-no="Se roadmap" data-en="See the roadmap">Se roadmap</a>
+        <a href="/live" class="btn-secondary" data-no="Se hva som kommer" data-en="See what is coming">Se hva som kommer</a>
       </div>
     </div>
 
-    <!-- For medlemmer -->
-    <div id="live-body" hidden>
-      <div id="live-next"></div>
+    <div id="room-body" hidden>
+      <a class="room-back" href="/live" data-no="← Alle samlinger" data-en="← All sessions">← Alle samlinger</a>
 
-      <h2 class="live-h2" data-no="Kommende samlinger" data-en="Upcoming sessions">Kommende samlinger</h2>
-      <div id="live-list"></div>
+      <div class="room-head" id="room-head"></div>
 
-      <h2 class="live-h2" data-no="Opptak fra tidligere" data-en="Recordings from earlier">Opptak fra tidligere</h2>
-      <div id="live-past"></div>
+      <div class="room-grid">
+        <div class="room-stage" id="room-stage"></div>
+        <aside class="room-chat">
+          <h3 data-no="Chat under sendingen" data-en="Chat during the session">Chat under sendingen</h3>
+          <div class="chat-log" id="chat-log"></div>
+          <form class="chat-form" id="chat-form">
+            <input id="chat-input" type="text" maxlength="1000" autocomplete="off" placeholder="Skriv noe til de andre">
+            <button type="submit" data-no="Send" data-en="Send">Send</button>
+          </form>
+        </aside>
+      </div>
 
-      <!-- Kun for Renate -->
-      <div id="ev-admin" hidden>
-        <h2 class="live-h2" data-no="Legg inn en ny samling" data-en="Add a new session">Legg inn en ny samling</h2>
+      <div id="room-owner" hidden>
         <div class="ev-form">
-          <label data-no="Tittel" data-en="Title">Tittel</label>
-          <input id="ev-title" type="text" placeholder="Spørretime i Inner Circle">
-          <div class="row">
-            <div>
-              <label data-no="Tidspunkt" data-en="Time">Tidspunkt</label>
-              <input id="ev-when" type="datetime-local">
-            </div>
-            <div>
-              <label data-no="Varighet i minutter" data-en="Length in minutes">Varighet i minutter</label>
-              <input id="ev-dur" type="number" min="10" max="600" value="60">
-            </div>
-          </div>
+          <h3 style="font-family:var(--font-display);font-weight:400;font-size:18px;margin:0 0 4px;" data-no="Kun for deg" data-en="Owner only">Kun for deg</h3>
           <label data-no="Lenke til Zoom-rommet" data-en="Link to the Zoom room">Lenke til Zoom-rommet</label>
-          <input id="ev-link" type="url" placeholder="https://us02web.zoom.us/j/...">
-          <p class="ev-hint" data-no="Lim inn invitasjonslenken fra Zoom. Den vises aldri på siden, og deles bare med innloggede medlemmer et kvarter før start." data-en="Paste the invitation link from Zoom. It is never shown on the page, and is only handed to logged in members a quarter of an hour before the start.">Lim inn invitasjonslenken fra Zoom. Den vises aldri på siden, og deles bare med innloggede medlemmer et kvarter før start.</p>
+          <input id="own-link" type="url" placeholder="https://us02web.zoom.us/j/...">
           <div class="row">
             <div>
-              <label data-no="Passord i Zoom, hvis du bruker det" data-en="Zoom passcode, if you use one">Passord i Zoom, hvis du bruker det</label>
-              <input id="ev-pass" type="text" placeholder="123456">
+              <label data-no="Passord i Zoom" data-en="Zoom passcode">Passord i Zoom</label>
+              <input id="own-pass" type="text">
             </div>
             <div>
-              <label data-no="Lenke til opptaket, kan legges inn etterpå" data-en="Link to the recording, can be added afterwards">Lenke til opptaket, kan legges inn etterpå</label>
-              <input id="ev-replay" type="url" placeholder="https://...">
+              <label data-no="Lenke til opptaket" data-en="Link to the recording">Lenke til opptaket</label>
+              <input id="own-replay" type="url" placeholder="https://...">
             </div>
           </div>
-          <label data-no="Kort beskrivelse" data-en="Short description">Kort beskrivelse</label>
-          <textarea id="ev-desc" placeholder="Hva handler samlingen om?"></textarea>
-          <p class="ev-note" id="ev-note"></p>
-          <button class="btn-primary" id="ev-create" data-no="Opprett samlingen" data-en="Create the session">Opprett samlingen</button>
+          <p class="ev-note" id="own-note"></p>
+          <button class="btn-primary" id="own-save" data-no="Lagre" data-en="Save">Lagre</button>
         </div>
       </div>
+
+      <section class="room-help">
+        <h3 data-no="Slik blir du med" data-en="How you join">Slik blir du med</h3>
+        <ul>
+          <li data-no="Rommet åpner et kvarter før start, og knappen her blir rosa når du kan gå inn." data-en="The room opens a quarter of an hour before the start, and the button here turns pink when you can enter.">Rommet åpner et kvarter før start, og knappen her blir rosa når du kan gå inn.</li>
+          <li data-no="Første gang laster telefonen eller maskinen ned Zoom, så vær litt tidlig ute." data-en="The first time, your phone or computer downloads Zoom, so be a little early.">Første gang laster telefonen eller maskinen ned Zoom, så vær litt tidlig ute.</li>
+          <li data-no="Du kan ha kamera og mikrofon av, og heller skrive i chatten her på siden." data-en="You can keep camera and microphone off, and write in the chat here on the page instead.">Du kan ha kamera og mikrofon av, og heller skrive i chatten her på siden.</li>
+          <li data-no="Rekker du det ikke, kommer opptaket på denne siden etterpå." data-en="If you cannot make it, the recording appears on this page afterwards.">Rekker du det ikke, kommer opptaket på denne siden etterpå.</li>
+        </ul>
+      </section>
+
     </div>
-
   </div>
-
 </main>
 
 <!-- ===================================
@@ -2150,20 +2273,17 @@
   <script src="/js/page-editor.js" defer></script>
 <script>function lmeSoon(m){var t=document.createElement("div");t.textContent=m||(window.LME_CURRENT_LANG==="en"?"Coming soon 💛":"Kommer snart 💛");t.style.cssText="position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#2a1e2e;color:#fff;padding:12px 20px;border-radius:999px;z-index:99999;font-weight:700;font-family:inherit;box-shadow:0 8px 24px rgba(0,0,0,.25)";document.body.appendChild(t);setTimeout(function(){t.remove();},2200);}</script>
 <script>
-/* === Live-oversikten ===
-   Henter samlingene fra /api/events. Lista inneholder aldri selve
-   Zoom-lenken; den ligger bak /live-rom, som ber om den for et innlogget
-   medlem naar rommet er aapent. */
+/* === Live-rommet ===
+   Siden viser en samling om gangen (?e=<id>, ellers den foerste som ikke er
+   ferdig). Zoom-lenken hentes foerst naar medlemmet trykker paa knappen, og
+   bare mens rommet er aapent. Chatten er plattformens egen (gruppe "live"). */
 (function () {
-  var body = document.getElementById('live-body');
+  var body = document.getElementById('room-body');
   if (!body) return;
-  var elNext = document.getElementById('live-next');
-  var elList = document.getElementById('live-list');
-  var elPast = document.getElementById('live-past');
-  var elAdmin = document.getElementById('ev-admin');
-  var events = [];
-  var isOwner = false;
-  var tick = null;
+  var head = document.getElementById('room-head');
+  var stage = document.getElementById('room-stage');
+  var ownerBox = document.getElementById('room-owner');
+  var ev = null, isOwner = false, tick = null;
 
   function lang() { try { return localStorage.getItem('lme_lang') || 'no'; } catch (e) { return 'no'; } }
   function t(no, en) { return lang() === 'en' ? en : no; }
@@ -2174,106 +2294,15 @@
         { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
     } catch (e) { return ''; }
   }
-
+  function clock(ts) {
+    try { return new Date(ts).toLocaleTimeString(lang() === 'en' ? 'en-GB' : 'nb-NO', { hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; }
+  }
   function show(id) {
-    ['lock-login', 'lock-member'].forEach(function (x) {
-      var el = document.getElementById(x); if (el) el.hidden = true;
-    });
+    ['lock-login', 'lock-member'].forEach(function (x) { var el = document.getElementById(x); if (el) el.hidden = true; });
     body.hidden = true;
     if (id === 'body') body.hidden = false;
     else { var el = document.getElementById(id); if (el) el.hidden = false; }
   }
-
-  function countdown(ms) {
-    if (ms < 0) ms = 0;
-    var s = Math.floor(ms / 1000);
-    var d = Math.floor(s / 86400); s -= d * 86400;
-    var h = Math.floor(s / 3600); s -= h * 3600;
-    var m = Math.floor(s / 60); s -= m * 60;
-    var parts = [
-      [d, t('dager', 'days')], [h, t('timer', 'hours')],
-      [m, t('min', 'min')], [s, t('sek', 'sec')]
-    ];
-    return '<div class="live-count">' + parts.map(function (p) {
-      return '<div><b>' + p[0] + '</b><span>' + p[1] + '</span></div>';
-    }).join('') + '</div>';
-  }
-
-  function paintNext() {
-    var now = Date.now();
-    var next = events.filter(function (e) { return e.closes > now; })[0];
-    if (!next) {
-      elNext.innerHTML = '<div class="live-empty">' +
-        t('Ingen samling er satt opp ennå. Den neste dukker opp her så snart datoen er klar.',
-          'No session is scheduled yet. The next one shows up here as soon as the date is set.') + '</div>';
-      return;
-    }
-    var badge = next.live
-      ? '<span class="live-badge now">' + t('LIVE NÅ', 'LIVE NOW') + '</span>'
-      : next.joinOpen
-      ? '<span class="live-badge now">' + t('ROMMET ER ÅPENT', 'THE ROOM IS OPEN') + '</span>'
-      : '<span class="live-badge soon">' + t('NESTE SAMLING', 'NEXT SESSION') + '</span>';
-    var mid = next.live
-      ? '<p class="when">' + t('Rommet er åpent nå.', 'The room is open now.') + '</p>'
-      : countdown(next.ts - now);
-    elNext.innerHTML = '<div class="live-next">' + badge +
-      '<h2>' + esc(next.title) + '</h2>' +
-      '<p class="when">' + esc(when(next.ts)) + '</p>' +
-      (next.desc ? '<p class="desc">' + esc(next.desc) + '</p>' : '') +
-      mid +
-      '<a class="btn-join" href="/live-rom?e=' + encodeURIComponent(next.id) + '">' +
-        (next.joinOpen ? t('Gå inn i rommet', 'Enter the room') : t('Åpne samlingssiden', 'Open the session page')) +
-      '</a></div>';
-  }
-
-  function itemHtml(e, past) {
-    var badge = e.live ? '<span class="live-badge now">' + t('LIVE NÅ', 'LIVE NOW') + '</span>'
-      : past ? (e.replay ? '<span class="live-badge replay">' + t('OPPTAK', 'RECORDING') + '</span>' : '<span class="live-badge">' + t('FERDIG', 'DONE') + '</span>')
-      : e.joinOpen ? '<span class="live-badge now">' + t('ROMMET ER ÅPENT', 'THE ROOM IS OPEN') + '</span>'
-      : '<span class="live-badge">' + t('KOMMER', 'UPCOMING') + '</span>';
-    var acts = '';
-    if (past) {
-      if (e.replay) acts = '<a class="ev-go" href="' + esc(e.replay) + '" target="_blank" rel="noopener">' + t('Se opptaket', 'Watch the recording') + '</a>';
-    } else {
-      acts = '<button class="ev-rsvp' + (e.youRsvp ? ' on' : '') + '" data-id="' + esc(e.id) + '">' +
-        (e.youRsvp ? t('✓ Påmeldt', '✓ Going') : t('Meld meg på', 'Sign me up')) + '</button>' +
-        '<a class="ev-go" href="/live-rom?e=' + encodeURIComponent(e.id) + '">' + t('Til rommet', 'To the room') + '</a>';
-    }
-    return '<div class="live-item"><div class="body">' + badge +
-      '<h3>' + esc(e.title) + '</h3>' +
-      '<p class="when">' + esc(when(e.ts)) + '</p>' +
-      (e.desc ? '<p>' + esc(e.desc) + '</p>' : '') +
-      '</div><div class="acts">' + acts +
-      (isOwner ? '<button class="ev-rsvp ev-del" data-del="' + esc(e.id) + '">' + t('Slett', 'Delete') + '</button>' : '') +
-      '</div></div>';
-  }
-
-  function paintLists() {
-    var now = Date.now();
-    var up = events.filter(function (e) { return e.closes > now; });
-    var past = events.filter(function (e) { return e.closes <= now; }).reverse();
-    elList.innerHTML = up.length ? up.map(function (e) { return itemHtml(e, false); }).join('')
-      : '<div class="live-empty">' + t('Ingen kommende samlinger akkurat nå.', 'No upcoming sessions right now.') + '</div>';
-    elPast.innerHTML = past.length ? past.map(function (e) { return itemHtml(e, true); }).join('')
-      : '<div class="live-empty">' + t('Opptakene fra samlingene havner her.', 'Recordings from the sessions land here.') + '</div>';
-    wire();
-  }
-
-  function wire() {
-    Array.prototype.forEach.call(document.querySelectorAll('.ev-rsvp[data-id]'), function (b) {
-      b.addEventListener('click', function () {
-        b.disabled = true;
-        post({ action: 'rsvp', id: b.getAttribute('data-id') }).then(load);
-      });
-    });
-    Array.prototype.forEach.call(document.querySelectorAll('.ev-del'), function (b) {
-      b.addEventListener('click', function () {
-        if (!confirm(t('Slette denne samlingen?', 'Delete this session?'))) return;
-        post({ action: 'delete', id: b.getAttribute('data-del') }).then(load);
-      });
-    });
-  }
-
   function post(payload) {
     return fetch('/api/events', {
       method: 'POST', credentials: 'same-origin',
@@ -2281,25 +2310,136 @@
       body: JSON.stringify(payload)
     }).then(function (r) { return r.json(); }).catch(function () { return {}; });
   }
+  function countdown(ms) {
+    if (ms < 0) ms = 0;
+    var s = Math.floor(ms / 1000);
+    var d = Math.floor(s / 86400); s -= d * 86400;
+    var h = Math.floor(s / 3600); s -= h * 3600;
+    var m = Math.floor(s / 60); s -= m * 60;
+    var parts = [[d, t('dager', 'days')], [h, t('timer', 'hours')], [m, t('min', 'min')], [s, t('sek', 'sec')]];
+    return '<div class="live-count">' + parts.map(function (p) {
+      return '<div><b>' + p[0] + '</b><span>' + p[1] + '</span></div>';
+    }).join('') + '</div>';
+  }
 
-  function paint() { paintNext(); paintLists(); }
+  function paintHead() {
+    if (!ev) { head.innerHTML = ''; return; }
+    var badge = ev.live ? '<span class="live-badge now">' + t('LIVE NÅ', 'LIVE NOW') + '</span>'
+      : Date.now() > ev.closes ? '<span class="live-badge">' + t('FERDIG', 'DONE') + '</span>'
+      : ev.joinOpen ? '<span class="live-badge now">' + t('ROMMET ER ÅPENT', 'THE ROOM IS OPEN') + '</span>'
+      : '<span class="live-badge soon">' + t('KOMMER', 'UPCOMING') + '</span>';
+    head.innerHTML = badge + '<h1>' + esc(ev.title) + '</h1>' +
+      '<p class="when">' + esc(when(ev.ts)) + ' · ' + ev.dur + ' ' + t('minutter', 'minutes') + '</p>' +
+      (ev.desc ? '<p class="when" style="margin-top:8px">' + esc(ev.desc) + '</p>' : '');
+  }
+
+  function paintStage() {
+    if (!ev) {
+      stage.innerHTML = '<h2>' + t('Ingen samling er satt opp ennå', 'No session is scheduled yet') + '</h2>' +
+        '<p>' + t('Den neste dukker opp her så snart datoen er klar.', 'The next one appears here as soon as the date is set.') + '</p>' +
+        '<div><a class="btn-secondary" href="/live">' + t('Se alle samlinger', 'See all sessions') + '</a></div>';
+      return;
+    }
+    var now = Date.now();
+    if (now > ev.closes) {
+      stage.innerHTML = '<h2>' + t('Denne samlingen er ferdig', 'This session is over') + '</h2>' +
+        (ev.replay
+          ? '<p>' + t('Opptaket ligger klart.', 'The recording is ready.') + '</p><div><a class="btn-join" href="' + esc(ev.replay) + '" target="_blank" rel="noopener">' + t('Se opptaket', 'Watch the recording') + '</a></div>'
+          : '<p>' + t('Opptaket legges ut her så snart det er klart.', 'The recording is posted here as soon as it is ready.') + '</p><div><a class="btn-secondary" href="/live">' + t('Se hva som kommer', 'See what is coming') + '</a></div>');
+      return;
+    }
+    if (!ev.hasRoom) {
+      stage.innerHTML = '<h2>' + t('Rommet er ikke åpnet ennå', 'The room is not open yet') + '</h2>' +
+        '<p>' + t('Lenken til samlingen legges inn før start. Meld deg på, så finner du veien hit igjen.', 'The link to the session is added before the start. Sign up, and you will find your way back here.') + '</p>' +
+        countdown(ev.ts - now);
+      return;
+    }
+    if (!ev.joinOpen) {
+      stage.innerHTML = '<h2>' + t('Rommet åpner et kvarter før', 'The room opens a quarter of an hour before') + '</h2>' +
+        '<p>' + t('Bli stående på siden, knappen åpner seg av seg selv klokken ', 'Stay on the page, the button opens by itself at ') + esc(clock(ev.opens)) + '.</p>' +
+        countdown(ev.opens - now) +
+        '<div><button class="btn-join" disabled>' + t('Åpne Zoom-rommet', 'Open the Zoom room') + '</button></div>' +
+        '<div style="margin-top:14px"><button class="ev-rsvp' + (ev.youRsvp ? ' on' : '') + '" id="room-rsvp">' +
+        (ev.youRsvp ? t('✓ Påmeldt', '✓ Going') : t('Meld meg på', 'Sign me up')) + '</button></div>';
+      var r = document.getElementById('room-rsvp');
+      if (r) r.addEventListener('click', function () { r.disabled = true; post({ action: 'rsvp', id: ev.id }).then(load); });
+      return;
+    }
+    stage.innerHTML = '<h2>' + t('Rommet er åpent', 'The room is open') + '</h2>' +
+      '<p>' + t('Trykk her, så åpnes Zoom i et nytt vindu. Chatten her på siden står åpen hele veien.', 'Tap here, and Zoom opens in a new window. The chat here on the page stays open the whole way.') + '</p>' +
+      '<div><button class="btn-join" id="room-join">' + t('Åpne Zoom-rommet', 'Open the Zoom room') + '</button></div>' +
+      '<div id="room-extra"></div>';
+    var j = document.getElementById('room-join');
+    j.addEventListener('click', function () {
+      j.disabled = true;
+      j.textContent = t('Åpner ...', 'Opening ...');
+      post({ action: 'join', id: ev.id }).then(function (d) {
+        j.disabled = false;
+        j.textContent = t('Åpne Zoom-rommet', 'Open the Zoom room');
+        var extra = document.getElementById('room-extra');
+        if (d && d.ok && d.link) {
+          window.open(d.link, '_blank', 'noopener');
+          if (extra) {
+            extra.innerHTML = (d.pass ? '<div class="room-pass">' + t('Passord i Zoom: ', 'Zoom passcode: ') + '<b>' + esc(d.pass) + '</b></div>' : '') +
+              '<p style="margin-top:14px;font-size:14px">' + t('Åpnet ikke Zoom seg? ', 'Did Zoom not open? ') +
+              '<a href="' + esc(d.link) + '" target="_blank" rel="noopener" style="color:var(--cerise)">' + t('Trykk her.', 'Tap here.') + '</a></p>';
+          }
+        } else if (extra) {
+          extra.innerHTML = '<p style="margin-top:14px;font-size:14px">' +
+            t('Rommet er ikke åpent akkurat nå. Prøv igjen om et øyeblikk.', 'The room is not open right now. Try again in a moment.') + '</p>';
+        }
+      });
+    });
+  }
+
+  function paintOwner() {
+    if (!ownerBox) return;
+    ownerBox.hidden = !(isOwner && ev);
+    if (ownerBox.hidden) return;
+    document.getElementById('own-link').value = ev.link || '';
+    document.getElementById('own-pass').value = ev.pass || '';
+    document.getElementById('own-replay').value = ev.replay || '';
+  }
+
+  var save = document.getElementById('own-save');
+  if (save) {
+    save.addEventListener('click', function () {
+      if (!ev) return;
+      var note = document.getElementById('own-note');
+      post({
+        action: 'update', id: ev.id,
+        link: (document.getElementById('own-link').value || '').trim(),
+        pass: (document.getElementById('own-pass').value || '').trim(),
+        replay: (document.getElementById('own-replay').value || '').trim()
+      }).then(function (d) {
+        if (d && d.ok) { note.textContent = t('Lagret ✓', 'Saved ✓'); note.className = 'ev-note ok'; load(); }
+        else { note.textContent = t('Kunne ikke lagre.', 'Could not save.'); note.className = 'ev-note err'; }
+      });
+    });
+  }
+
+  function wanted() {
+    try { return new URLSearchParams(location.search).get('e') || ''; } catch (e) { return ''; }
+  }
+
+  function paint() { paintHead(); paintStage(); paintOwner(); }
 
   function load() {
     return fetch('/api/events', { credentials: 'same-origin' })
-      .then(function (r) {
-        if (r.status === 403) throw new Error('forbidden');
-        return r.json();
-      })
+      .then(function (r) { if (r.status === 403) throw new Error('forbidden'); return r.json(); })
       .then(function (d) {
-        events = (d && d.events) || [];
+        var list = (d && d.events) || [];
         isOwner = !!(d && d.owner);
-        if (elAdmin) elAdmin.hidden = !isOwner;
+        var id = wanted();
+        var now = Date.now();
+        ev = (id && list.filter(function (e) { return e.id === id; })[0]) ||
+             list.filter(function (e) { return e.closes > now; })[0] ||
+             list[list.length - 1] || null;
         show('body');
         paint();
-        if (!tick) tick = setInterval(paintNext, 1000);
+        if (!tick) tick = setInterval(function () { if (ev) paintStage(); }, 1000);
       })
       .catch(function () {
-        /* 403 kan bety to ting: ikke innlogget, eller innlogget uten medlemskap. */
         fetch('/api/group/access', { credentials: 'same-origin' })
           .then(function (r) { return r.json(); })
           .then(function (a) { show(a && a.loggedIn ? 'lock-member' : 'lock-login'); })
@@ -2307,42 +2447,63 @@
       });
   }
 
-  var create = document.getElementById('ev-create');
-  if (create) {
-    create.addEventListener('click', function () {
-      var note = document.getElementById('ev-note');
-      var title = (document.getElementById('ev-title').value || '').trim();
-      var datetime = document.getElementById('ev-when').value;
-      if (!title || !datetime) {
-        note.textContent = t('Fyll inn tittel og tidspunkt.', 'Fill in a title and a time.');
-        note.className = 'ev-note err'; return;
-      }
-      post({
-        action: 'create', title: title, datetime: datetime,
-        dur: document.getElementById('ev-dur').value,
-        link: (document.getElementById('ev-link').value || '').trim(),
-        pass: (document.getElementById('ev-pass').value || '').trim(),
-        replay: (document.getElementById('ev-replay').value || '').trim(),
-        desc: (document.getElementById('ev-desc').value || '').trim()
-      }).then(function (d) {
-        if (d && d.ok) {
-          note.textContent = t('Samlingen er lagt inn ✓', 'The session is saved ✓');
-          note.className = 'ev-note ok';
-          ['ev-title', 'ev-when', 'ev-link', 'ev-pass', 'ev-replay', 'ev-desc'].forEach(function (id) {
-            document.getElementById(id).value = '';
-          });
-          load();
-        } else {
-          note.textContent = t('Kunne ikke lagre samlingen.', 'Could not save the session.');
-          note.className = 'ev-note err';
+  /* --- Chatten, plattformens egen --- */
+  var log = document.getElementById('chat-log');
+  var form = document.getElementById('chat-form');
+  var input = document.getElementById('chat-input');
+  var last = 0, seen = {};
+
+  function addMsg(m) {
+    if (seen[m.id]) return;
+    seen[m.id] = 1;
+    var empty = log.querySelector('.chat-empty');
+    if (empty) empty.remove();
+    var d = document.createElement('div');
+    d.className = 'chat-msg';
+    d.innerHTML = '<span class="n">' + esc(m.n || t('Medlem', 'Member')) + ' <span class="ts">' + esc(clock(m.ts)) + '</span></span>' +
+      '<span class="x">' + esc(m.t) + '</span>';
+    log.appendChild(d);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function loadChat() {
+    fetch('/api/group/live/messages' + (last ? '?after=' + last : ''), { credentials: 'same-origin' })
+      .then(function (r) { if (!r.ok) throw new Error('no'); return r.json(); })
+      .then(function (d) {
+        var ms = (d && d.messages) || [];
+        if (!last && !ms.length && !log.children.length) {
+          log.innerHTML = '<p class="chat-empty">' + t('Ingen har skrevet ennå. Si gjerne hei.', 'Nobody has written yet. Feel free to say hello.') + '</p>';
         }
-      });
+        ms.forEach(function (m) { addMsg(m); if (m.ts > last) last = m.ts; });
+      })
+      .catch(function () {});
+  }
+
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var text = (input.value || '').trim();
+      if (!text) return;
+      input.value = '';
+      fetch('/api/group/live/messages', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: text })
+      }).then(function (r) { return r.json(); })
+        .then(function (d) { if (d && d.message) { addMsg(d.message); if (d.message.ts > last) last = d.message.ts; } })
+        .catch(function () {});
     });
   }
 
-  window.addEventListener('lme-lang', function () { if (!body.hidden) paint(); });
+  window.addEventListener('lme-lang', function () {
+    if (!body.hidden) paint();
+    if (input) input.placeholder = t('Skriv noe til de andre', 'Write something to the others');
+  });
+
   load();
   setInterval(load, 60000);
+  loadChat();
+  setInterval(loadChat, 5000);
 })();
 </script>
 <script src="/js/mobile-nav.js?v=9" defer></script>

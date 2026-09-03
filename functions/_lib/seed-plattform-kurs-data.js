@@ -1037,6 +1037,31 @@ export const PLATTFORM_KURS = {
     {
       "module": null,
       "title": {
+        "no": "Live-samlingene og Live-rommet",
+        "en": "The live sessions and the live room"
+      },
+      "body": [
+        {
+          "no": "Live-siden viser når neste samling går. Der ser du nedtellingen, melder deg på med ett trykk, og finner opptakene fra samlingene som allerede har vært. Du finner den på https://lmexplorers.com/live",
+          "en": "The Live page shows when the next session runs. There you see the countdown, sign up with one tap, and find the recordings from sessions that have already happened. You find it at https://lmexplorers.com/live"
+        },
+        {
+          "no": "Selve samlingen foregår i Live-rommet. Rommet åpner et kvarter før start, og da blir knappen aktiv av seg selv. Du trenger ikke lete etter en lenke i e-posten, alt ligger på siden. Ved siden av knappen står chatten, så du kan skrive til de andre uten å slå på kamera eller mikrofon.",
+          "en": "The session itself happens in the live room. The room opens a quarter of an hour before the start, and the button becomes active by itself. You do not have to hunt for a link in your inbox, everything sits on the page. Next to the button is the chat, so you can write to the others without turning on camera or microphone."
+        },
+        {
+          "no": "Rekker du ikke å være med direkte, gjør det ingenting. Opptaket legges på den samme siden etterpå, og du finner det igjen under \"Opptak fra tidligere\".",
+          "en": "If you cannot join live, that is fine. The recording is posted on the same page afterwards, and you find it again under \"Recordings from earlier\"."
+        }
+      ],
+      "tip": {
+        "no": "📺 Første gang du blir med, laster telefonen eller maskinen ned møteappen. Gå inn fem minutter før start, så slipper du å vente på det mens samlingen er i gang.",
+        "en": "📺 The first time you join, your phone or computer downloads the meeting app. Enter five minutes early, so you do not have to wait for that while the session is running."
+      }
+    },
+    {
+      "module": null,
+      "title": {
         "no": "Medlemsoversikt og Pedagog-partnere",
         "en": "Member overview and Educator partners"
       },

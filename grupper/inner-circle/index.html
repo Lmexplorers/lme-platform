@@ -183,7 +183,7 @@
     if(!up.length){ box.innerHTML='<p class="side-empty">'+(lang()==='en'?'No upcoming events.':'Ingen kommende arrangementer.')+'</p>'; return; }
     box.innerHTML=up.map(function(e){
       return '<div class="side-news-item"><span class="d">'+esc(evDate(e.ts))+'</span><span class="x">'+esc(e.title)+'</span>'+
-        (e.link?' <a href="'+esc(e.link)+'" target="_blank" rel="noopener" style="font-size:12px;color:#E91E89;text-decoration:none;">'+(lang()==='en'?'Open link →':'Åpne lenke →')+'</a>':'')+
+        (e.hasRoom?' <a href="/live-rom?e='+encodeURIComponent(e.id)+'" style="font-size:12px;color:#E91E89;text-decoration:none;">'+(lang()==='en'?(e.joinOpen?'Enter the room →':'To the room →'):(e.joinOpen?'Gå inn i rommet →':'Til rommet →'))+'</a>':'')+
         '<div style="margin-top:5px;display:flex;align-items:center;gap:8px;"><button class="ev-rsvp" data-id="'+esc(e.id)+'" style="font-size:12px;border:1px solid #f3dce6;border-radius:999px;padding:3px 11px;cursor:pointer;font-family:inherit;background:'+(e.youRsvp?'#FCE3EC':'#fff')+';color:#2a1e2e;">'+(e.youRsvp?(lang()==='en'?'✓ Going':'✓ Påmeldt'):(lang()==='en'?'Join':'Meld meg på'))+'</button><span style="font-size:11px;color:#b6a0a9;">'+e.rsvpCount+'</span></div>'+
       '</div>';
     }).join('');

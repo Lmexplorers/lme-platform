@@ -167,3 +167,14 @@
   Cache-Control: no-store
 /utsending.html
   Cache-Control: no-store
+# Live-sidene endrer seg mens en sending naermer seg (nedtelling, aapent rom,
+# opptak lagt inn etterpaa). De maa aldri vises fra en gammel lagret kopi,
+# ellers staar knappen "lukket" hos noen som faktisk kan gaa inn.
+/live
+  Cache-Control: no-store
+/live.html
+  Cache-Control: no-store
+/live-rom
+  Cache-Control: no-store
+/live-rom.html
+  Cache-Control: no-store

@@ -20,6 +20,7 @@ const GROUPS = {
   "9-12": "9–12 år",
   "voksen": "Voksengruppe",
   "inner-circle": "Inner Circle",
+  "live": "Live-rommet",
 };
 
 // Eiere har alltid tilgang, selv om rollen i KV skulle vaere utdatert

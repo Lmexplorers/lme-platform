@@ -2,10 +2,16 @@
  * LME arrangementer — live-samlinger og events i fellesskapet.
  * Eier oppretter, medlemmer ser og melder seg paa (RSVP). KV-basert.
  *
- *   GET  /api/events            -> { events: [...], owner }
- *   POST /api/events  { action: "create"|"rsvp"|"delete", ... }
+ *   GET  /api/events            -> { events: [...], owner, now }
+ *   POST /api/events  { action: "create"|"update"|"rsvp"|"join"|"delete", ... }
  *
- * Lagring: events -> JSON [{ id, title, desc, ts, link, rsvps:[e-post], created }]
+ * Lagring: events -> JSON [{ id, title, desc, ts, dur, link, pass, replay,
+ *                            rsvps:[e-post], att:[e-post], created }]
+ *
+ * Selve moteromslenken (Zoom) sendes ALDRI ut i lista. Den ligger bak
+ * "join", som krever innlogget medlem OG at rommet er aapent, slik at en
+ * lenke som lekker videre ikke gir noen utenfra tilgang til samlingen.
+ * Eieren faar lenken med i lista, siden hun skal kunne redigere den.
  */
 
 const OWNER_EMAILS = [
@@ -13,6 +19,12 @@ const OWNER_EMAILS = [
   "support@lmexplorers.com", "renateshobby@hotmail.com",
 ];
 const MAX_EVENTS = 100;
+const MAX_ATT = 500;
+
+/* Rommet aapnes et kvarter foer, og staar aapent en time etter slutt. */
+const OPEN_BEFORE = 15 * 60 * 1000;
+const OPEN_AFTER = 60 * 60 * 1000;
+const DEFAULT_DUR = 60;
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -55,15 +67,54 @@ async function loadEvents(env) {
   try { const a = JSON.parse(raw); return Array.isArray(a) ? a : []; } catch (e) { return []; }
 }
 
+/* Bare vanlige nettadresser slipper gjennom, slik at ingen kan lagre
+   javascript: eller data: og faa det aapnet i nettleseren til et medlem. */
+function safeUrl(v) {
+  const s = (v == null ? "" : String(v)).trim().slice(0, 500);
+  if (!s) return "";
+  if (!/^https?:\/\//i.test(s)) return "";
+  return s;
+}
+function dur(e) { return Number(e.dur) > 0 ? Number(e.dur) : DEFAULT_DUR; }
+function endsAt(e) { return e.ts + dur(e) * 60000; }
+function opensAt(e) { return e.ts - OPEN_BEFORE; }
+function closesAt(e) { return endsAt(e) + OPEN_AFTER; }
+
+function view(e, u, owner, now) {
+  const out = {
+    id: e.id,
+    title: e.title,
+    desc: e.desc || "",
+    ts: e.ts,
+    dur: dur(e),
+    ends: endsAt(e),
+    opens: opensAt(e),
+    closes: closesAt(e),
+    replay: e.replay || "",
+    hasRoom: !!e.link,
+    joinOpen: !!e.link && now >= opensAt(e) && now <= closesAt(e),
+    live: now >= e.ts && now <= endsAt(e),
+    rsvpCount: (e.rsvps || []).length,
+    youRsvp: (e.rsvps || []).indexOf(u.email) !== -1,
+  };
+  if (owner) {
+    out.link = e.link || "";
+    out.pass = e.pass || "";
+    out.attCount = (e.att || []).length;
+  }
+  return out;
+}
+
 export async function onRequestGet(context) {
   const { env } = context;
   if (!env.BUILDER_KV) return json({ events: [] });
   const u = await userFrom(context);
   if (!(await isMember(env, u))) return json({ error: "forbidden", events: [] }, 403);
-  const events = (await loadEvents(env)).sort((a, b) => a.ts - b.ts).map(function (e) {
-    return { id: e.id, title: e.title, desc: e.desc || "", ts: e.ts, link: e.link || "", rsvpCount: (e.rsvps || []).length, youRsvp: (e.rsvps || []).indexOf(u.email) !== -1 };
-  });
-  return json({ events: events, owner: isOwner(u) });
+  const owner = isOwner(u);
+  const now = Date.now();
+  const events = (await loadEvents(env)).sort((a, b) => a.ts - b.ts)
+    .map(function (e) { return view(e, u, owner, now); });
+  return json({ events: events, owner: owner, now: now });
 }
 
 export async function onRequestPost(context) {
@@ -76,17 +127,44 @@ export async function onRequestPost(context) {
   try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
   const action = body.action;
   const events = await loadEvents(env);
+  const now = Date.now();
 
   if (action === "create") {
     if (!isOwner(u)) return json({ error: "forbidden" }, 403);
     const title = (body.title || "").toString().trim().slice(0, 140);
     const ts = Number(body.ts) || Date.parse(body.datetime || "") || 0;
     if (!title || !ts) return json({ error: "bad_request" }, 400);
-    const ev = { id: crypto.randomUUID(), title: title, desc: (body.desc || "").toString().trim().slice(0, 1000), ts: ts, link: (body.link || "").toString().trim().slice(0, 300), rsvps: [], created: Date.now() };
+    const ev = {
+      id: crypto.randomUUID(),
+      title: title,
+      desc: (body.desc || "").toString().trim().slice(0, 1000),
+      ts: ts,
+      dur: Math.min(600, Math.max(10, Number(body.dur) || DEFAULT_DUR)),
+      link: safeUrl(body.link),
+      pass: (body.pass || "").toString().trim().slice(0, 40),
+      replay: safeUrl(body.replay),
+      rsvps: [], att: [], created: now,
+    };
     events.push(ev);
     while (events.length > MAX_EVENTS) events.sort((a, b) => a.ts - b.ts).shift();
     await env.BUILDER_KV.put("events", JSON.stringify(events));
     return json({ ok: true, id: ev.id });
+  }
+
+  if (action === "update") {
+    if (!isOwner(u)) return json({ error: "forbidden" }, 403);
+    const ev = events.find((e) => e.id === body.id);
+    if (!ev) return json({ error: "not_found" }, 404);
+    if (typeof body.title === "string" && body.title.trim()) ev.title = body.title.trim().slice(0, 140);
+    if (typeof body.desc === "string") ev.desc = body.desc.trim().slice(0, 1000);
+    const ts = Number(body.ts) || Date.parse(body.datetime || "") || 0;
+    if (ts) ev.ts = ts;
+    if (body.dur != null) ev.dur = Math.min(600, Math.max(10, Number(body.dur) || DEFAULT_DUR));
+    if (typeof body.link === "string") ev.link = safeUrl(body.link);
+    if (typeof body.pass === "string") ev.pass = body.pass.trim().slice(0, 40);
+    if (typeof body.replay === "string") ev.replay = safeUrl(body.replay);
+    await env.BUILDER_KV.put("events", JSON.stringify(events));
+    return json({ ok: true, event: view(ev, u, true, now) });
   }
 
   if (action === "rsvp") {
@@ -97,6 +175,22 @@ export async function onRequestPost(context) {
     if (i === -1) ev.rsvps.push(u.email); else ev.rsvps.splice(i, 1);
     await env.BUILDER_KV.put("events", JSON.stringify(events));
     return json({ ok: true, youRsvp: i === -1, rsvpCount: ev.rsvps.length });
+  }
+
+  /* Selve doeren inn i moterommet. */
+  if (action === "join") {
+    const ev = events.find((e) => e.id === body.id);
+    if (!ev) return json({ error: "not_found" }, 404);
+    if (!ev.link) return json({ error: "no_room" }, 200);
+    if (now < opensAt(ev)) return json({ error: "not_open", opens: opensAt(ev), ts: ev.ts }, 200);
+    if (now > closesAt(ev)) return json({ error: "ended", replay: ev.replay || "" }, 200);
+    if (!ev.att) ev.att = [];
+    if (ev.att.indexOf(u.email) === -1) {
+      ev.att.push(u.email);
+      while (ev.att.length > MAX_ATT) ev.att.shift();
+      await env.BUILDER_KV.put("events", JSON.stringify(events));
+    }
+    return json({ ok: true, link: ev.link, pass: ev.pass || "", title: ev.title });
   }
 
   if (action === "delete") {
