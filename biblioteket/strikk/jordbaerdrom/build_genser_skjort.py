@@ -53,11 +53,11 @@ def sider(lang):
         L(lang,
           'Et matchende todelt sett: toppstrikket genser med rundt bærestykke og lange '
           'ermer, og et separat skjørt med mykt elastisk liv. Begge delene har det samme '
-          'blad- og frømønsteret, og begge avsluttes med en grønn bølgekant. Gradert i ni '
+          'blad- og frømønsteret, og begge avsluttes med buekant og en smal grønn kant. Gradert i ni '
           'størrelser, fra liten nyfødt og opp til to år.',
           'A matching two-piece set: a top-down jumper with a round yoke and long sleeves, '
           'and a separate skirt with a soft elasticated waist. Both pieces share the same '
-          'leaf and seed pattern, and both end in a green wave edge. Graded in nine sizes, '
+          'leaf and seed pattern, and both end in a scalloped hem with a narrow green edge. Graded in nine sizes, '
           'from small newborn to two years.'), bilde='genser.jpg'), 1))
 
     # ---------------------------------------------------------- 2 FØR DU BEGYNNER
@@ -78,12 +78,12 @@ def sider(lang):
         card(ul(L(lang,
                   ['å strikke en genser med rundt bærestykke',
                    'å dele til bol og ermer, og strikke ermene i runden',
-                   'å strikke et skjørt med brettet, elastisk linning og grønn bølgekant',
-                   'å strikke en grønn bølgekant på bol og ermer'],
+                   'å strikke et skjørt med brettet, elastisk linning og buekant',
+                   'å strikke buekant med grønn kant på bol og ermer'],
                   ['knitting a jumper with a round yoke',
                    'dividing for body and sleeves, and working sleeves in the round',
-                   'knitting a skirt with a folded, elasticated waistband and a green wave edge',
-                   'knitting a green wave edge on body and sleeves']))) +
+                   'knitting a skirt with a folded, elasticated waistband and a scalloped hem',
+                   'working a scalloped hem with a green edge on body and sleeves']))) +
         sagep(L(lang, 'VANSKELIGHETSGRAD', 'DIFFICULTY')) +
         cme(L(lang,
               'Lett til litt øvet. Ermene er den eneste delen med få masker på pinnen, og '
@@ -183,20 +183,20 @@ def sider(lang):
         'Strikk rosa glattstrikk rundt med frø: frøomgang A, 2-3 omganger rosa, så '
         'frøomgang B. Gjenta så tett eller spredt du vil. Strikk til bolen måler lengden i '
         'kolonnen din, målt rett ned fra under armen. Bytt så til grønt og strikk '
-        'bølgekanten, som står på neste side.',
+        'buekanten, som står på neste side.',
         'Work in pink stocking stitch in the round with seeds: seed round A, 2-3 rounds in '
         'pink, then seed round B. Repeat as densely or sparsely as you like. Work until the '
         'body measures the length in your column, measured straight down from the underarm. '
-        'Then change to green and work the wave edge, which is on the next page.') + '</p>' +
+        'Then work the scalloped hem, which is on the next page.') + '</p>' +
         card(tabell(bol_h, bol_r, min_index=0)) +
         cme(L(lang,
-              'Bolen avsluttes med den grønne bølgekanten på neste side. Fell aldri av i '
-              'bølgeomgangen, alltid i en rett omgang etter den, og fell svært løst. En '
-              'stram avfelling trekker bølgene sammen, og da blir kanten rett.',
-              'The body ends with the green wave edge on the next page. Never cast off in '
-              'a wave round, always in a knit round after one, and cast off very loosely. '
-              'A tight cast-off pulls the waves together, and then the edge comes out '
-              'straight.')), 9))
+              'Bolen avsluttes med buekanten på neste side. Fell aldri av i buerunden, alltid '
+              'i den grønne kanten etter den, og fell svært løst. En stram avfelling '
+              'trekker buene sammen, og da blir kanten rett.',
+              'The body ends with the scalloped hem on the next page. Never cast off in a '
+              'scallop round, always in the green edge after it, and cast off very '
+              'loosely. A tight cast-off pulls the scallops together, and then the edge '
+              'comes out straight.')), 9))
 
     # ----------------------------------------------------------- 9 GENSER, ERMER
     erme_h = [S] + L(lang, ['Hvilende masker', 'Plukk opp', 'Overarm', 'Felleomganger',
@@ -221,35 +221,35 @@ def sider(lang):
         card(tabell(erme_h, erme_r, min_index=0)) +
         sagep(L(lang, 'MANSJETTEN', 'THE CUFF')) +
         cme(L(lang,
-              'Når ermet er så langt at det bare mangler bølgekantens dybde, bytter du til '
-              'grønt og strikker bølgekanten fra neste side, akkurat som på bolen. '
+              'Når ermet er så langt at det bare mangler kantens dybde, strikker du buekanten '
+              'fra neste side, akkurat som på bolen. '
               'Dybden står i tabellen der. Strikk det andre ermet helt likt, og tell '
               'omgangene i stedet for å måle, så blir de to like lange.',
               'When the sleeve is long enough that only the depth of the wave edge is '
-              'missing, change to green and work the wave edge from the next page, exactly '
-              'as on the body. The depth is in the table there. Work the second sleeve the '
+              'missing, work the scalloped hem from the next page, exactly as on the body. '
+              'The depth is in the table there. Work the second sleeve the '
               'same, and count the rounds rather than measuring, so the two come out the '
               'same length.')), 10))
 
     # ------------------------------------------------------ 11 GRØNN BØLGEKANT
-    bo_h = [S] + L(lang, ['Bol, masker', 'Bol, øk til', 'Bølger', 'Erme, masker',
-                          'Erme, øk til', 'Bølger'],
-                   ['Body stitches', 'Body, increase to', 'Waves', 'Sleeve stitches',
-                    'Sleeve, increase to', 'Waves'])
+    bo_h = [S] + L(lang, ['Bol, masker', 'Bol, øk til', 'Buer', 'Erme, masker',
+                          'Erme, øk til', 'Buer'],
+                   ['Body stitches', 'Body, increase to', 'Scallops', 'Sleeve stitches',
+                    'Sleeve, increase to', 'Scallops'])
     bo_r = [[p['str_nr'], str(p['bol_genser']) + m, str(p['genser_bolge']) + m,
              str(p['genser_bolge_buer']) + ' x', str(p['erme_mansjett']) + m,
              str(p['erme_bolge']) + m, str(p['erme_bolge_buer']) + ' x'] for p in PLAGG]
     P.append(pg(
-        banner(L(lang, 'GENSER · 5 · KLARGJØR BØLGEKANTEN',
-                 'JUMPER · 5 · PREPARING THE WAVE EDGE')) +
+        banner(L(lang, 'GENSER · 5 · KLARGJØR BUEKANTEN',
+                 'JUMPER · 5 · PREPARING THE SCALLOPED HEM')) +
         '<p>' + L(lang,
-        'Bol og ermer avsluttes med den samme grønne bølgekanten. Bytt til grønt og '
+        'Bol og ermer avsluttes med den samme buekanten. Bytt til grønt og '
         'strikk 1 omgang rett, og øk samtidig jevnt fordelt til masketallet i kolonnen '
-        'din. Det er bare noen få masker, og de er der for at bølgene skal gå opp rundt. '
+        'din. Det er bare noen få masker, og de er der for at buene skal gå opp rundt. '
         'Strikk 1 omgang rett til, og gå så videre til neste side.',
-        'The body and the sleeves both end with the same green wave edge. Change to green '
+        'The body and the sleeves both end with the same scalloped hem. Change to green '
         'and work 1 round in knit, increasing evenly to the stitch count in your column as '
-        'you go. It is only a few stitches, and they are there so the waves come out even '
+        'you go. It is only a few stitches, and they are there so the scallops come out even '
         'all the way round. Work 1 more round in knit, then go on to the next page.') +
         '</p>' + card(tabell(bo_h, bo_r, min_index=0)) +
         cme(L(lang,
@@ -259,38 +259,42 @@ def sider(lang):
              'jumper gets a pouch right there, and it shows when the garment hangs.')), 11))
 
     # -------------------------------------------------------------- 12 BØLGEN
-    bd_h = [S] + L(lang, ['Bølgeomganger', 'Omganger i alt', 'Kantens dybde'],
-                   ['Wave rounds', 'Rounds in all', 'Depth of the edge'])
+    bd_h = [S] + L(lang, ['Buerunder', 'Omganger i alt', 'Kantens dybde'],
+                   ['Scallop rounds', 'Rounds in all', 'Depth of the edge'])
     bd_r = [[p['str_nr'], str(p['bolge_gjent']) + ' x', str(p['bolge_omganger']) + ' x',
              komma(p['bolge_cm']) + ' cm'] for p in PLAGG]
     P.append(pg(
-        banner(L(lang, 'GENSER · 6 · BØLGEN', 'JUMPER · 6 · THE WAVE')) +
+        banner(L(lang, 'GENSER · 6 · BUEKANTEN', 'JUMPER · 6 · THE WAVE')) +
         '<p>' + L(lang,
-        'Bølgen er 6 masker og gjentas rundt. Strikk disse tre omgangene:',
-        'The wave is 6 stitches and is repeated round. Work these three rounds:') +
+        'Buen er 6 masker og gjentas rundt. Strikk disse tre omgangene:',
+        'The scallop is 6 stitches and is repeated round. Work these three rounds:') +
         '</p>' + card(ul(L(lang,
-        ['Omgang 1, bølgeomgangen: *2 rett sammen, 2 rett sammen vridd, 1 kast, 1 rett, '
-         '1 kast, 1 rett*, gjentatt rundt. Masketallet står stille.',
+        ['Omgang 1, buerunden, i ROSA: *2 rett sammen vridd, 1 økning, 2 rett, 1 økning, '
+         '2 rett sammen*, gjentatt rundt. Masketallet står stille, men kanten former seg '
+         'i runde buer.',
          'Omgang 2: rett.',
          'Omgang 3: rett.'],
-        ['Round 1, the wave round: *k2tog, ssk, yo, k1, yo, k1*, repeated round. The '
-         'stitch count stays the same.',
+        ['Round 1, the scallop round, in PINK: *ssk, M1R, k2, M1L, k2tog*, repeated '
+         'round. The stitch count stays the same, but the edge shapes itself into '
+         'rounded scallops.',
          'Round 2: knit.',
          'Round 3: knit.']))) +
         '<p>' + L(lang,
-        'Gjenta de tre omgangene så mange ganger som kolonnen din sier. Strikk til slutt '
-        '1 omgang rett, og fell svært løst av.',
-        'Repeat the three rounds as many times as your column says. Finally work 1 round '
-        'in knit, and cast off very loosely.') + '</p>' +
+        'Gjenta de tre omgangene så mange ganger som kolonnen din sier. Bytt så til '
+        'grønt, strikk 3 omganger rett, og fell svært løst av. Den grønne kanten legger '
+        'seg som en smal strek langs buekurven, også ned i dalene.',
+        'Repeat the three rounds as many times as your column says. Then change to green, '
+        'work 3 rounds in knit, and cast off very loosely. The green edge sits as a '
+        'narrow line along the curve of the scallops, down into the valleys too.') +
+        '</p>' +
         card(tabell(bd_h, bd_r, min_index=0)) +
         cme(L(lang,
-             'De to fellingene står samlet der dalen skal være, og de to kastene samlet '
-             'der toppen skal være. Det er den samlingen som gjør at kanten bølger. '
-             'Sprer du dem utover rapporten, blir det bare hull i en rett kant.',
-             'The two decreases sit together where the valley goes, and the two yarn '
-             'overs together where the crest goes. That grouping is what makes the edge '
-             'wave. Spread them out across the repeat, and you get only eyelets in a '
-             'straight edge.')), 12))
+             'Fellingene står i dalen mellom buene og økingene midt i buen. Det er det '
+             'som former kanten. Økingene er lukkede, ikke kast: designbildene viser en '
+             'hel kant uten hull.',
+             'The decreases sit in the valley between the scallops and the increases at '
+             'the centre of each. That is what shapes the edge. The increases are closed, '
+             'not yarn overs: the design images show a solid edge with no holes.')), 12))
 
     # -------------------------------------------------------- 10 SKJØRT, LINNING
     lin_h = [S] + L(lang, ['Legg opp', 'Bladrapporter', 'Livvidde', 'Linning, høyde'],
@@ -347,27 +351,28 @@ def sider(lang):
               'two pieces match when worn together.')), 14))
 
     # -------------------------------------------- 12 SKJØRT, BØLGEKANT OG ELASTIKK
-    bue_h = [S] + L(lang, ['Masker nederst', 'Øk til', 'Bølger', 'Omganger'],
-                    ['Stitches at hem', 'Increase to', 'Waves', 'Rounds'])
-    bue_r = [[p['str_nr'], str(p['skjort_vidde']) + m, str(p['skjort_bolge']) + m,
-              str(p['skjort_bolge_buer']) + ' x', str(p['bolge_omganger']) + ' x']
-             for p in PLAGG]
+    bue_h = [S] + L(lang, ['Masker nederst', 'Buer', 'Masker per bue', 'Buerunder',
+                           'Grønne omganger'],
+                    ['Stitches at hem', 'Scallops', 'Sts per scallop', 'Scallop rounds',
+                     'Green rounds'])
+    bue_r = [[p['str_nr'], str(p['skjort_vidde']) + m, str(p['skjort_buer']) + ' x',
+              p['bue_bredde'], p['bue_omganger'], p['gronn_kant_omg']] for p in PLAGG]
     P.append(pg(
-        banner(L(lang, 'SKJØRT · 7 · BØLGEKANT OG ELASTIKK',
-                 'SKIRT · 7 · WAVE EDGE AND ELASTIC')) +
-        rosep(L(lang, 'DEN GRØNNE BØLGEKANTEN', 'THE GREEN WAVE EDGE')) +
+        banner(L(lang, 'SKJØRT · 7 · BUEKANT OG ELASTIKK',
+                 'SKIRT · 7 · SCALLOPED HEM AND ELASTIC')) +
+        rosep(L(lang, 'BUEKANTEN MED GRØNN KANT', 'THE SCALLOPED HEM WITH A GREEN EDGE')) +
         card('<p>' + L(lang,
-             'Skjørtet avsluttes med den samme grønne bølgekanten som genseren. Bytt til '
-             'grønt, strikk 1 omgang rett og øk samtidig jevnt til masketallet i kolonnen '
-             'din, strikk 1 omgang rett til, og strikk så bølgen fra side 12: *2 rett '
-             'sammen, 2 rett sammen vridd, 1 kast, 1 rett, 1 kast, 1 rett*, deretter 2 '
-             'omganger rett. Gjenta til du har omgangene i kolonnen din, og fell svært '
-             'løst av.',
-             'The skirt ends with the same green wave edge as the jumper. Change to green, '
-             'work 1 round in knit while increasing evenly to the stitch count in your '
-             'column, work 1 more round in knit, then work the wave from page 12: *k2tog, '
-             'ssk, yo, k1, yo, k1*, then 2 rounds in knit. Repeat until you have the '
-             'rounds in your column, and cast off very loosely.') + '</p>' +
+             'Skjørtet avsluttes med samme buekant som kjolen og romperen, med buer '
+             'på 10 masker. Masketallet går opp i hele buer allerede, så her økes det '
+             'ikke. Strikk buerunden i ROSA: *2 rett sammen vridd, 2 rett, 1 økning, 2 '
+             'rett, 1 økning, 2 rett, 2 rett sammen*, gjentatt rundt, og gjenta den i alt '
+             '5 ganger. Bytt så til grønt, strikk 3 omganger rett, og fell svært løst av.',
+             'The skirt ends with the same scalloped hem as the dress and the romper, '
+             'with scallops of 10 stitches. The stitch count already divides into whole '
+             'scallops, so there is no increasing here. Work the scallop round in PINK: '
+             '*ssk, k2, M1R, k2, M1L, k2, k2tog*, repeated round, and repeat it 5 times '
+             'in all. Then change to green, work 3 rounds in knit, and cast off very '
+             'loosely.') + '</p>' +
              tabell(bue_h, bue_r, min_index=0)) +
         sagep(L(lang, 'ELASTIKKEN', 'THE ELASTIC')) +
         card('<p>' + L(lang,

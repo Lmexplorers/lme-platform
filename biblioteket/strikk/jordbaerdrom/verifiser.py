@@ -133,24 +133,22 @@ print(f'   kontrollert {len(DATA["sokker"])} sokkestørrelser x 16 tall')
 
 ge = pymupdf.open(BASE / 'LME-Jordbaerdrom-Genser-og-skjort.pdf')
 getekst = ' '.join(s.get_text() for s in ge)
-for p in DATA['plagg']:
-    for felt in ('genser_bolge', 'genser_bolge_buer', 'erme_bolge', 'erme_bolge_buer',
-                 'skjort_bolge', 'skjort_bolge_buer', 'bolge_gjent', 'bolge_omganger'):
-        if str(p[felt]) not in getekst:
-            feil.append(f'genser: {felt}={p[felt]} for str {p["str_nr"]} står ikke i PDF-en')
-
 kj = pymupdf.open(BASE / 'LME-Jordbaerdrom-Kjole.pdf')
 kjt = ' '.join(s.get_text() for s in kj)
 ro = pymupdf.open(BASE / 'LME-Jordbaerdrom-Romper.pdf')
 rot = ' '.join(s.get_text() for s in ro)
 for p in DATA['plagg']:
-    for felt in ('kjole_bolge', 'kjole_bolge_buer'):
+    for felt in ('genser_bolge', 'genser_bolge_buer', 'erme_bolge', 'erme_bolge_buer',
+                 'bolge_gjent', 'bolge_omganger', 'skjort_vidde', 'skjort_buer'):
+        if str(p[felt]) not in getekst:
+            feil.append(f'genser: {felt}={p[felt]} for str {p["str_nr"]} står ikke i PDF-en')
+    for felt in ('kjole_skjort_2', 'kjole_buer'):
         if str(p[felt]) not in kjt:
             feil.append(f'kjole: {felt}={p[felt]} for str {p["str_nr"]} står ikke i PDF-en')
-    for felt in ('romper_bolge', 'romper_bolge_buer'):
+    for felt in ('romper_skjort', 'romper_buer'):
         if str(p[felt]) not in rot:
             feil.append(f'romper: {felt}={p[felt]} for str {p["str_nr"]} står ikke i PDF-en')
-print(f'   kontrollert bølgekanten i {len(DATA["plagg"])} størrelser x 12 tall')
+print(f'   kontrollert kantene i {len(DATA["plagg"])} størrelser x 12 tall')
 
 print('\n3. LME-logoen står på forsiden og siste side i alle heftene')
 for hfil, pfil in PAR:
