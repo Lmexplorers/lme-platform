@@ -15,6 +15,7 @@ komme i utakt med masketallene, de skalerer skarpt i PDF-en, og de veier
 ingenting.
 """
 import json
+import re
 import pathlib
 import sys
 
@@ -36,6 +37,14 @@ SOKKER = DATA['sokker']
 ROSA = '#E48FA6'      # jordbærrosa, hovedfargen
 GRONN = '#8FA681'     # bladgrønn
 KREM = '#FBF3E8'      # kremhvit, frøene
+
+# Kantfargene på sidemalen. Renate 3. september 2026: den brune kantstripen
+# skulle bort, og erstattes med rosa, cerise, gult og blått. Det delte
+# byggesettet i hekle/_shared brukes også av Woodland Dreams, så fargene
+# settes her og overstyrer byggesettet bare for Jordbærdrøm.
+CERISE = '#D6437B'
+GUL = '#F2C14E'
+BLA = '#6FA8D6'
 KANT = '#c9b3a0'
 
 VERSJON = 'Teststrikkversjon 1.0'
@@ -139,13 +148,36 @@ def forklaring(lang):
         for f, t in par) + '</p>'
 
 
+# Sidebakgrunnen i byggesettet har rutenettet og fargeovergangen i SAMME
+# background-regel, så vi kan ikke bytte bare fargen. Rutenettet hentes
+# derfor ut av byggesettets CSS og settes inn igjen sammen med den nye
+# fargeovergangen. Finnes det ikke, står fargeovergangen alene: rutenettet
+# er dekor, ikke noe oppskriften er avhengig av.
+_rutenett = re.search(r'url\(data:image/png;base64,[A-Za-z0-9+/=]+\)\s*0 0/8mm 8mm repeat',
+                      kit.BASE_CSS)
+RUTENETT = (_rutenett.group(0) + ',\n    ') if _rutenett else ''
+
 DIAG_CSS = f'''
+/* ---------------------------------------------------------- KANTENE
+   Overstyrer det delte byggesettet. Den brune kantstripen er byttet mot
+   rosa, cerise, gult og blått i fire tydelige felt, ikke en overgang:
+   cerise som glir over i gult blir gjørmete, fire felt blir rene farger.
+   Skyggen under forsidebildet er fjernet. Chromium tegner box-shadow som
+   en hard grå boks i print-visning, og den overlappet bildet. */
+.band {{ background:linear-gradient(180deg,
+  {ROSA} 0%, {ROSA} 24%,
+  {CERISE} 26%, {CERISE} 49%,
+  {GUL} 51%, {GUL} 74%,
+  {BLA} 76%, {BLA} 100%) !important; }}
+.ph1 {{ color:{CERISE} !important; }}
+.page {{ background:
+    {RUTENETT}linear-gradient(165deg,#fdf4f4 0%,#fbeef0 45%,#f7e2ea 100%) !important; }}
 .coverimg {{ text-align:center; margin:3mm 0 1mm; }}
 .logo {{ text-align:center; margin:2mm 0 0; }}
 .logo img {{ width:17mm; height:17mm; object-fit:contain; }}
 .logo.stor img {{ width:23mm; height:23mm; }}
 .coverimg img {{ width:84mm; height:84mm; object-fit:cover; border-radius:14px;
-  border:2.5mm solid #fff; box-shadow:0 2mm 6mm rgba(0,0,0,.10); }}
+  border:2.5mm solid #fff; }}
 .diag {{ text-align:center; margin:2mm 0 3mm; }}
 .diagtitle {{ font-family:var(--font-head); font-weight:700; font-size:10pt;
   color:{GRONN}; margin-bottom:1.5mm; }}
