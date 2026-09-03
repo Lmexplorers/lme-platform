@@ -178,6 +178,9 @@ DIAG_CSS = f'''
 .logo.stor img {{ width:23mm; height:23mm; }}
 .coverimg img {{ width:84mm; height:84mm; object-fit:cover; border-radius:14px;
   border:2.5mm solid #fff; }}
+.sideimg {{ text-align:center; margin:1mm 0 2mm; }}
+.sideimg img {{ width:56mm; height:56mm; object-fit:cover; border-radius:10px;
+  border:1.8mm solid #fff; }}
 .diag {{ text-align:center; margin:2mm 0 3mm; }}
 .diagtitle {{ font-family:var(--font-head); font-weight:700; font-size:10pt;
   color:{GRONN}; margin-bottom:1.5mm; }}
@@ -612,6 +615,11 @@ def skriv(navn, lang_titler, sider_fn, filnavn):
         ut = BASE / f'{filnavn}_{lang}.html'
         ut.write_text(html_doc, encoding='utf-8')
         print(f'  OK {navn} {lang}: {len(sider)} sider, {len(html_doc)} tegn')
+
+
+def sidebilde(fil):
+    """Et lite bilde midt på en vanlig side, ikke på forsiden."""
+    return f'<div class="sideimg"><img src="bilder/{fil}" alt=""></div>'
 
 
 def side(body, num, lang, ph2_no, ph2_en):

@@ -3,7 +3,7 @@
 Jordbærdrøm genser og skjørt, gradert i ni størrelser (44 til 92).
 
 Et matchende todelt sett: toppstrikket genser med rundt bærestykke og lange
-ermer, og et separat skjørt med elastisk liv. Begge plaggene har det samme
+ermer, og et separat skjørt med grønn ribb i livet. Begge plaggene har det samme
 blad- og frømønsteret.
 
 Alle masketall leses fra sizes.json, som skrives av grading_jordbaerdrom.py.
@@ -24,11 +24,11 @@ GARN = [[p['str_nr'],
         for p in PLAGG]
 
 EKSTRA_NO = [['Pinne 4 mm', 'settpinner eller Magic Loop til hals, ermer og linning'],
-             ['Myk elastikk', 'ca. 1 cm bred, til skjørtets linning'],
+             ['Myk elastikk', 'ca. 1 cm bred, valgfritt til skjørtets linning'],
              ['Stoppenål', 'til å feste tråder og sy ned linningen'],
              ['Maskemarkør', 'til å merke omgangens begynnelse og hver ermeside']]
 EKSTRA_EN = [['4 mm needles', 'double-pointed or Magic Loop for neck, sleeves and waistband'],
-             ['Soft elastic', 'approx. 1 cm wide, for the skirt waistband'],
+             ['Soft elastic', 'approx. 1 cm wide, optional for the skirt waistband'],
              ['Darning needle', 'for weaving in ends and sewing down the waistband'],
              ['Stitch marker', 'to mark the beginning of the round and each sleeve side']]
 
@@ -52,11 +52,11 @@ def sider(lang):
           'JUMPER AND SKIRT · SIZES 44 TO 92'),
         L(lang,
           'Et matchende todelt sett: toppstrikket genser med rundt bærestykke og lange '
-          'ermer, og et separat skjørt med mykt elastisk liv. Begge delene har det samme '
+          'ermer, og et separat skjørt med grønn ribb i livet. Begge delene har det samme '
           'blad- og frømønsteret, og begge avsluttes med buekant og en smal grønn kant. Gradert i ni '
           'størrelser, fra liten nyfødt og opp til to år.',
           'A matching two-piece set: a top-down jumper with a round yoke and long sleeves, '
-          'and a separate skirt with a soft elasticated waist. Both pieces share the same '
+          'and a separate skirt with a green rib at the waist. Both pieces share the same '
           'leaf and seed pattern, and both end in a scalloped hem with a narrow green edge. Graded in nine sizes, '
           'from small newborn to two years.'), bilde='genser.jpg'), 1))
 
@@ -67,22 +67,22 @@ def sider(lang):
              'Genseren strikkes ovenfra og ned med rundt bærestykke og lange ermer, uten '
              'åpning i nakken. '
              'Skjørtet strikkes separat, også ovenfra og ned, med en brettet linning som '
-             'en myk elastikk tres gjennom til slutt. De to delene deler diagram, fasthet '
+             'grønn ribb i livet. De to delene deler diagram, fasthet '
              'og farger, men strikkes helt uavhengig av hverandre.',
              'The jumper is knitted top-down with a round yoke and long sleeves, with no '
              'neck opening. The skirt '
              'is knitted separately, also from the top down, with a folded waistband that a '
-             'soft elastic is threaded through at the end. The two pieces share the charts, '
+             'a green rib at the waist. The two pieces share the charts, '
              'the gauge and the colours, but are knitted entirely independently.') + '</p>') +
         rosep(L(lang, 'DETTE LÆRER DU', 'WHAT YOU WILL LEARN')) +
         card(ul(L(lang,
                   ['å strikke en genser med rundt bærestykke',
                    'å dele til bol og ermer, og strikke ermene i runden',
-                   'å strikke et skjørt med brettet, elastisk linning og buekant',
+                   'å strikke et skjørt med ribbet linning og buekant',
                    'å strikke buekant med grønn kant på bol og ermer'],
                   ['knitting a jumper with a round yoke',
                    'dividing for body and sleeves, and working sleeves in the round',
-                   'knitting a skirt with a folded, elasticated waistband and a scalloped hem',
+                   'knitting a skirt with a ribbed waistband and a scalloped hem',
                    'working a scalloped hem with a green edge on body and sleeves']))) +
         sagep(L(lang, 'VANSKELIGHETSGRAD', 'DIFFICULTY')) +
         cme(L(lang,
@@ -297,30 +297,33 @@ def sider(lang):
              'not yarn overs: the design images show a solid edge with no holes.')), 12))
 
     # -------------------------------------------------------- 10 SKJØRT, LINNING
-    lin_h = [S] + L(lang, ['Legg opp', 'Bladrapporter', 'Livvidde', 'Linning, høyde'],
-                    ['Cast on', 'Leaf repeats', 'Waist', 'Waistband height'])
+    lin_h = [S] + L(lang, ['Legg opp', 'Bladrapporter', 'Livvidde', 'Ribb', 'Grønt over ribben'],
+                    ['Cast on', 'Leaf repeats', 'Waist', 'Rib', 'Green above the rib'])
     lin_r = [[p['str_nr'], str(p['skjort_liv']) + m, str(p['skjort_rapporter']) + ' x',
-              komma(p['skjort_liv_cm']) + ' cm', '2 x 2,5 cm'] for p in PLAGG]
+              komma(p['skjort_liv_cm']) + ' cm', L(lang, '3 cm', '3 cm'),
+              L(lang, '2 cm', '2 cm')] for p in PLAGG]
     P.append(pg(
         banner(L(lang, 'SKJØRT · 5 · LINNINGEN', 'SKIRT · 5 · THE WAISTBAND')) +
         '<p>' + L(lang,
         'Legg løst opp med grønt og samle til en omgang. Masketallet er alt delelig med 8, '
-        'så bladrapporten går opp uten justering. Strikk 2,5 cm glattstrikk, 1 omgang vrang '
-        'til brettekant, og deretter 2,5 cm glattstrikk til. Sett oppleggingskanten på en '
-        'ekstra pinne og strikk én maske fra hver pinne sammen hele veien rundt, men la en '
-        'åpning på ca. 2 cm stå igjen til elastikken.',
+        'så bladrapporten går opp uten justering. Strikk *1 rett, 1 vrang* rundt i 3 cm, og '
+        'deretter 2 cm grønn glattstrikk. Der begynner bladrapporten, som står på neste '
+        'side.',
         'Cast on loosely in green and join in the round. The stitch count already divides by '
-        '8, so the leaf repeat comes out even without adjustment. Work 2.5 cm in stocking '
-        'stitch, 1 purl round for the fold line, then another 2.5 cm in stocking stitch. '
-        'Place the cast-on edge on a spare needle and knit one stitch from each needle '
-        'together all the way round, leaving an opening of approx. 2 cm for the elastic.') +
-        '</p>' +
+        '8, so the leaf repeat comes out even without adjustment. Work *k1, p1* in the round '
+        'for 3 cm, then 2 cm of green stocking stitch. That is where the leaf repeat '
+        'starts, on the next page.') +
+        '</p>' + f.sidebilde('skjort.jpg') +
         card(tabell(lin_h, lin_r, min_index=0)) +
         cme(L(lang,
-              'Legg opp løst. Linningen skal kunne strekkes over hoftene, og en stram '
-              'oppleggingskant er den vanligste grunnen til at et babyskjørt ikke går på.',
-              'Cast on loosely. The waistband must stretch over the hips, and a tight '
-              'cast-on edge is the most common reason a baby skirt will not go on.')), 13))
+              'Legg opp løst. Ribben skal kunne strekkes over hoftene, og en stram '
+              'oppleggingskant er den vanligste grunnen til at et babyskjørt ikke går på. '
+              'Vil du ha elastikk i livet, står den andre måten å strikke linningen på '
+              'nederst på side 7.',
+              'Cast on loosely. The rib must stretch over the hips, and a tight cast-on '
+              'edge is the most common reason a baby skirt will not go on. If you want '
+              'elastic at the waist, the other way of working the waistband is at the '
+              'bottom of page 7.')), 13))
 
     # ------------------------------------------------------ 11 SKJØRT, BLAD OG VIDDE
     sk_h = [S] + L(lang, ['Masker i linningen', 'Bladrapporter', '*2 r, M1* gir',
@@ -360,8 +363,8 @@ def sider(lang):
     bue_r = [[p['str_nr'], str(p['skjort_vidde']) + m, str(p['skjort_buer']) + ' x',
               p['bue_bredde'], p['bue_omganger'], p['gronn_kant_omg']] for p in PLAGG]
     P.append(pg(
-        banner(L(lang, 'SKJØRT · 7 · BUEKANT OG ELASTIKK',
-                 'SKIRT · 7 · SCALLOPED HEM AND ELASTIC')) +
+        banner(L(lang, 'SKJØRT · 7 · BUEKANT OG VALGFRI ELASTIKK',
+                 'SKIRT · 7 · SCALLOPED HEM AND OPTIONAL ELASTIC')) +
         rosep(L(lang, 'BUEKANTEN MED GRØNN KANT', 'THE SCALLOPED HEM WITH A GREEN EDGE')) +
         card('<p>' + L(lang,
              'Skjørtet avsluttes med samme buekant som kjolen og romperen, med buer '
@@ -376,23 +379,33 @@ def sider(lang):
              'in all. Then change to green, work 3 rounds in knit, and cast off very '
              'loosely.') + '</p>' +
              tabell(bue_h, bue_r, min_index=0)) +
-        sagep(L(lang, 'ELASTIKKEN', 'THE ELASTIC')) +
+        sagep(L(lang, 'ELASTIKK I LIVET, VALGFRITT',
+                 'ELASTIC AT THE WAIST, OPTIONAL')) +
         card('<p>' + L(lang,
-             'Mål barnets liv og klipp en myk elastikk 1 cm kortere enn målet. Tre den '
-             'gjennom linningen med en sikkerhetsnål, sy endene godt sammen med flere rader '
-             'sting, og sy så åpningen i linningen igjen. Elastikken skal holde skjørtet '
-             'oppe uten å lage merker i huden. Kjenn etter med en finger: du skal komme '
-             'lett inn under linningen.',
-             'Measure the baby\'s waist and cut a soft elastic 1 cm shorter than the '
-             'measurement. Thread it through the waistband with a safety pin, sew the ends '
-             'firmly together with several rows of stitches, then close the opening in the '
-             'waistband. The elastic should hold the skirt up without marking the skin. '
-             'Check with a finger: you should slip easily under the waistband.') + '</p>') +
+             'Skjørtet i oppskriften har grønn ribb i livet, uten elastikk, slik '
+             'designbildet viser. Vil du ha elastikk i stedet, strikker du linningen som '
+             'en brettet kant: legg opp med grønt, strikk 2,5 cm glattstrikk, 1 omgang '
+             'vrang til brettekant, og 2,5 cm glattstrikk til. Sett oppleggingskanten på '
+             'en ekstra pinne og strikk én maske fra hver pinne sammen rundt, men la en '
+             'åpning på 2 cm stå igjen. Mål så barnets liv, klipp en myk elastikk 1 cm '
+             'kortere enn målet, tre den gjennom med en sikkerhetsnål, sy endene godt '
+             'sammen og sy åpningen igjen. Kjenn etter med en finger: du skal komme lett '
+             'inn under linningen.',
+             'The skirt in this pattern has a green rib at the waist, with no elastic, as '
+             'the design photo shows. If you would rather have elastic, work the waistband '
+             'as a folded edge instead: cast on in green, work 2.5 cm in stocking stitch, '
+             '1 purl round for the fold line, and another 2.5 cm in stocking stitch. Place '
+             'the cast-on edge on a spare needle and knit one stitch from each needle '
+             'together round, leaving an opening of 2 cm. Then measure the baby\'s waist, '
+             'cut a soft elastic 1 cm shorter than the measurement, thread it through with '
+             'a safety pin, sew the ends firmly together and close the opening. Check with '
+             'a finger: you should slip easily under the waistband.') + '</p>') +
         cme(L(lang,
-              'På de minste barna er huden ekstra sart. Er du i tvil, velger du den '
-              'løseste elastikken, og heller strammer den senere.',
-              'On the smallest children the skin is especially delicate. If in doubt, '
-              'choose the looser elastic and tighten it later if needed.')), 15))
+              'Velger du elastikk, husk at huden på de minste barna er ekstra sart. Er du '
+              'i tvil, velger du den løseste elastikken, og heller strammer den senere.',
+              'If you choose elastic, remember that the skin on the smallest children is '
+              'especially delicate. If in doubt, choose the looser elastic and tighten it '
+              'later if needed.')), 15))
 
     # ------------------------------------------------------------- 13 TESTSTRIKK
     P.append(pg(f.side_teststrikk(lang, 'settet', 'set'), 16))
@@ -400,8 +413,8 @@ def sider(lang):
     # -------------------------------------------------------------- 14 MONTERING
     P.append(pg(f.side_montering(
         lang,
-        'Kontroller at elastikken sitter mykt og ikke lager merker etter en times bruk.',
-        'Check that the elastic sits softly and leaves no marks after an hour of wear.'), 17))
+        'Kontroller at linningen sitter mykt og ikke lager merker etter en times bruk.',
+        'Check that the waistband sits softly and leaves no marks after an hour of wear.'), 17))
 
     # ------------------------------------------------------------- 15 AVSLUTNING
     P.append(pg(f.side_avslutning(lang), 18))
