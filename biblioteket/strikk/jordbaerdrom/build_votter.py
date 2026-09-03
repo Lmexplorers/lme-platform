@@ -156,11 +156,11 @@ def sider(lang):
         card('<p>' + L(lang,
              'Strikk jordbærhetten fra side 5 over 4 masker og gjenta den rundt så mange '
              'ganger som kolonnen din sier. Den er bare 4 omganger høy, så hetten blir en '
-             'smal krans av små grønne spisser ned i det rosa, ikke et stort bladparti. '
+             'smal krans av små grønne spisser opp i det rosa, ikke et stort bladparti. '
              'Bytt til rosa etter siste mønsteromgang og strikk 1 omgang rett.',
              'Work the strawberry top from page 5 over 4 stitches and repeat it round as '
              'many times as your column says. It is only 4 rounds deep, so it forms a '
-             'narrow ring of small green points down into the pink, not a large leaf '
+             'narrow ring of small green points up into the pink, not a large leaf '
              'panel. Change to pink after the last chart round and work 1 round in '
              'knit.') + '</p>'), 6))
 

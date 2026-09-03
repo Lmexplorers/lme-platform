@@ -143,7 +143,7 @@ def sider(lang):
     P.append(pg(f.side_garn(lang, garn, ekstra), 4))
 
     # --------------------------------------------------------------- 5 DIAGRAM
-    P.append(pg(f.side_diagram(lang, smaa=True), 5))
+    P.append(pg(f.side_diagram(lang, smaa=True, snudd=True), 5))
 
     # ------------------------------------------------------------------ 6 RIBB
     ribb_h = [Sh] + L(lang, ['Legg opp', 'Ribb', 'Brettet ribb blir'],
@@ -209,13 +209,19 @@ def sider(lang):
         banner(L(lang, '3 · KRANSEN MED JORDBÆRHETTER', '3 · THE RING OF STRAWBERRY TOPS')) +
         card('<p>' + L(lang,
              'Strikk jordbærhetten fra side 5 over 4 masker og gjenta den rundt så '
-             'mange ganger som kolonnen din sier. Hetten er bare 4 omganger høy, så '
-             'kransen blir en smal rekke små grønne spisser som peker ned i det rosa. '
-             'Etter siste mønsteromgang fortsetter du i grønt alene.',
+             'mange ganger som kolonnen din sier. På luen er hetten snudd, fordi det '
+             'grønne ligger over det rosa her og ikke under. Omgang 1 er derfor den '
+             'siste helt rosa omgangen, spissene vokser opp av det rosa på omgang 2 og '
+             '3, og omgang 4 er helt grønn. Diagrammet på side 5 er allerede snudd '
+             'riktig vei, så du strikker det som det står. Fortsett i grønt alene '
+             'etterpå.',
              'Work the strawberry top from page 5 over 4 stitches and repeat it round '
-             'as many times as your column says. The top is only 4 rounds deep, so the '
-             'ring forms a narrow row of small green points pointing down into the '
-             'pink. After the last chart round, continue in green alone.') + '</p>') +
+             'as many times as your column says. On the hat the top is turned upside '
+             'down, because the green sits above the pink here and not below. Round 1 '
+             'is therefore the last fully pink round, the points grow up out of the '
+             'pink on rounds 2 and 3, and round 4 is all green. The chart on page 5 is '
+             'already turned the right way, so you work it exactly as it stands. '
+             'Continue in green alone afterwards.') + '</p>') +
         card(tabell(krans_h, krans_r, min_index=0)) +
         cme(L(lang,
               'Hold den grønne tråden løs bak arbeidet. Trekker du den til, snurper '

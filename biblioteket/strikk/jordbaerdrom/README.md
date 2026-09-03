@@ -1,6 +1,6 @@
 # Jordbærdrøm (LME strikkekolleksjon, str 44 til 92)
 
-Seks strikkeoppskrifter med innstrikkede jordbærblad og frø, gradert fra
+Sju strikkeoppskrifter med innstrikkede jordbærblad og frø, gradert fra
 liten nyfødt til to år. Ferdige PDF-er, norsk og engelsk, A4:
 
 | Plagg | Norsk | Engelsk | Sider |
@@ -91,6 +91,19 @@ vokser lite mellom to nabostørrelser, og brettet ribb og knyting tar opp
 resten. Vottene har 2 størrelser og tøflene 4, og hver av dem dekker et
 oppgitt spenn av plaggstørrelsene.
 
+**Sokkene har 4 størrelser og bryter med 8-maskers-regelen.** En sokk skal
+sitte tett, og 8 masker er 3,8 cm i omkrets. Med bare multipler av 8 hopper
+sokken fra 11,4 til 15,2 cm, og det er for grovt for en fot. Sokkene er
+derfor delelig med 4, som jordbærhetten krever, og frøene har en egen rapport
+per størrelse (8, 7, 8 og 9 masker) som går opp i akkurat det masketallet.
+Sokkene er gradert etter nøyaktig de samme fotlengdene som tøflene, og en
+assert stopper byggingen hvis de to kommer i utakt.
+
+Hælvendingen er ikke skrevet av fra en annen oppskrift. Funksjonen
+`hael_vending()` teller masker rad for rad på samme måte som strikkeren gjør,
+og gir tallene som står i heftet. En assert krever at vendingen ender på et
+partall, ellers går ikke kilefellingen opp.
+
 **Luen har 5 størrelser.** Frødiagrammet er 8 masker, altså 3,8 cm i
 omkrets, mens et barnehode vokser 1 til 3 cm mellom to nabostørrelser. Ni
 luer hadde blitt de samme fem tallene med ni navn. En assert kontrollerer at
@@ -164,20 +177,20 @@ kan sette seg fast i.
 | Fil | Hva den gjør |
 |---|---|
 | `grading_jordbaerdrom.py` | regner ut alle masketall, skriver `sizes.json` |
-| `sizes.json` | de verifiserte tallene, lest av alle seks byggeskriptene |
+| `sizes.json` | de verifiserte tallene, lest av alle sju byggeskriptene |
 | `_jordbaer_felles.py` | diagrammer, felles sider, farger, språkhjelper |
-| `build_kjole.py` og de fem andre | ett hefte hver, norsk og engelsk HTML |
+| `build_kjole.py` og de seks andre | ett hefte hver, norsk og engelsk HTML |
 | `verifiser.py` | kontrollerer de ferdige PDF-ene |
 
 ## Bygge alt på nytt
 
 ```bash
 python3 grading_jordbaerdrom.py     # kun ved endring i tall eller størrelser
-for b in kjole romper genser_skjort votter tofler lue; do python3 build_$b.py; done
+for b in kjole romper genser_skjort votter tofler lue sokker; do python3 build_$b.py; done
 
 CHROME=/opt/pw-browsers/chromium-1194/chrome-linux/chrome
 for f in kjole:Kjole romper:Romper genser_skjort:Genser-og-skjort \
-         votter:Votter tofler:Tofler lue:Lue; do
+         votter:Votter tofler:Tofler lue:Lue sokker:Sokker; do
   src=${f%%:*}; navn=${f##*:}
   "$CHROME" --headless --no-sandbox --no-pdf-header-footer \
     --print-to-pdf="LME-Jordbaerdrom-$navn.pdf" ${src}_no.html

@@ -40,6 +40,8 @@ PAR = [
     ('tofler_en.html', 'LME-Jordbaerdrom-Tofler-EN.pdf'),
     ('lue_no.html', 'LME-Jordbaerdrom-Lue.pdf'),
     ('lue_en.html', 'LME-Jordbaerdrom-Lue-EN.pdf'),
+    ('sokker_no.html', 'LME-Jordbaerdrom-Sokker.pdf'),
+    ('sokker_en.html', 'LME-Jordbaerdrom-Sokker-EN.pdf'),
 ]
 
 feil = []
@@ -116,6 +118,19 @@ for v in DATA['luer']:
             feil.append(f'lue {v["navn_no"]}: {felt}={v[felt]} står ikke i PDF-en')
 print(f'   kontrollert {len(DATA["luer"])} luestørrelser x 6 tall')
 
+so = pymupdf.open(BASE / 'LME-Jordbaerdrom-Sokker.pdf')
+sotekst = ' '.join(s.get_text() for s in so)
+for v in DATA['sokker']:
+    for felt in ('masker', 'spisser', 'fro_rapport', 'hael_m', 'hael_rader',
+                 'hael_igjen', 'plukk', 'etter_plukk', 'kile_omganger',
+                 'ta_omganger', 'ta_slutt', 'vend_a', 'vend_b'):
+        if str(v[felt]) not in sotekst:
+            feil.append(f'sokk {v["navn_no"]}: {felt}={v[felt]} står ikke i PDF-en')
+    for felt in ('omkrets_cm', 'fot_cm', 'fot_for_ta_cm'):
+        if str(v[felt]).replace('.', ',') not in sotekst:
+            feil.append(f'sokk {v["navn_no"]}: {felt}={v[felt]} står ikke i PDF-en')
+print(f'   kontrollert {len(DATA["sokker"])} sokkestørrelser x 16 tall')
+
 # --------------------------------------------------------- 3 SKRIVESTILREGLER
 print('\n3. Skrivestilregler')
 forbudt = {'«': 'vinkelanførselstegn', '»': 'vinkelanførselstegn',
@@ -139,4 +154,4 @@ if feil:
     for f in feil[:40]:
         print('  -', f)
     sys.exit(1)
-print('Alt i orden. Alle tolv PDF-ene er komplette og stemmer med sizes.json.')
+print('Alt i orden. Alle fjorten PDF-ene er komplette og stemmer med sizes.json.')

@@ -353,6 +353,72 @@ for navn_no, navn_en, dekker, hoder, m, ribb_cm, rosa_cm, band_cm in [
         band_cm=band_cm, stilk_cm=4 + (m - 56) // 16,
     ))
 
+# --------------------------------------------------------------------- SOKKER
+# Sokker strikket ovenfra og ned: grønn vridd ribb, en krans av jordbærhetter,
+# rosa legg med frø, hællapp med hælvending, kile, fot og båttå som maskes
+# sammen.
+#
+# HVORFOR SOKKENE IKKE FØLGER 8-MASKERS-REGELEN
+# Alle de andre delene har et masketall delelig med 8, fordi frødiagrammet er
+# 8 masker. En sokk skal sitte tett, og 8 masker er 3,8 cm i omkrets. Med bare
+# multipler av 8 hopper sokken fra 11,4 til 15,2 cm, og det er for grovt for
+# en fot. Sokkene er derfor delelig med 4, som jordbærhetten krever, og frøene
+# får en egen rapport per størrelse som går opp i akkurat det masketallet.
+# Rapporten står i oppskriften, så strikkeren slipper å regne.
+#
+# HÆLVENDINGEN ER SIMULERT, IKKE GJETTET
+# Tallene i hælvendingen er regnet ut av funksjonen under, som teller masker
+# rad for rad på samme måte som strikkeren gjør. Da kan ikke oppskriften be om
+# en hælvending som ikke går opp.
+def hael_vending(H):
+    """Klassisk rund hælvending over H masker. Returnerer (a, b, rader, igjen).
+
+    a = masker strikket etter den første omslagsmasken på rad 1
+    b = masker vrangt etter omslagsmasken på rad 2
+    rader = antall vendinger i alt
+    igjen = masker igjen på hælen når vendingen er ferdig
+    """
+    a = H // 2
+    brukt = 1 + a + 2 + 1          # omslagsmaske, a rett, 2 r sm, 1 rett
+    ubearbeidet = H - brukt        # masker igjen på den siden
+    levende = 1 + a + 1 + 1        # masker i den bearbeidede midten
+    b = levende - ubearbeidet - 4  # samme antall skal stå igjen på andre siden
+    # Etter de to første radene spises 2 masker per side per rad, 1 på siste.
+    rader = 2 + 2 * -(-ubearbeidet // 2)
+    igjen = H - rader
+    return a, b, rader, igjen
+
+
+SOKKER = []
+for navn_no, navn_en, dekker, m, fro_rap, ribb_cm, legg_cm, fot_cm, ta_slutt in [
+    ("Liten",       "Small",       "44-50", 24, 8, 3.0, 3.5, 7.5,  12),
+    ("Medium",      "Medium",      "56-68", 28, 7, 3.5, 4.5, 10.0, 12),
+    ("Stor",        "Large",       "74-86", 32, 8, 4.0, 5.5, 12.5, 12),
+    ("Ekstra stor", "Extra large", "92",    36, 9, 4.0, 6.5, 14.5, 16),
+]:
+    hael_m = m // 2                       # hælen er halve omgangen
+    vrist_m = m - hael_m
+    hael_rader = hael_m                   # like mange rader som masker
+    plukk = hael_rader // 2               # kantmasker langs hver side av lappen
+    a, b, vend_rader, hael_igjen = hael_vending(hael_m)
+    etter_plukk = hael_igjen + 2 * plukk + vrist_m
+    kile_omg = (etter_plukk - m) // 2     # 2 masker felt per felleomgang
+    ta_omg = (m - ta_slutt) // 4          # 4 masker felt per felleomgang
+    ta_cm = round(2 * ta_omg / GAUGE_ROW_CM, 1)
+    krans_cm = round(SMABLAD_OMG / GAUGE_ROW_CM, 1)
+    SOKKER.append(dict(
+        navn_no=navn_no, navn_en=navn_en, dekker=dekker, masker=m,
+        spisser=m // SMABLAD_RAPPORT, fro_rapport=fro_rap,
+        fro_antall=m // fro_rap,
+        omkrets_cm=round(m / GAUGE_ST_CM, 1),
+        ribb_cm=ribb_cm, legg_cm=legg_cm, krans_cm=krans_cm, fot_cm=fot_cm,
+        hael_m=hael_m, vrist_m=vrist_m, hael_rader=hael_rader, plukk=plukk,
+        vend_a=a, vend_b=b, vend_rader=vend_rader, hael_igjen=hael_igjen,
+        etter_plukk=etter_plukk, kile_omganger=kile_omg,
+        ta_omganger=ta_omg, ta_slutt=ta_slutt, ta_cm=ta_cm,
+        fot_for_ta_cm=round(fot_cm - ta_cm, 1),
+    ))
+
 # ------------------------------------------------------------- KONSISTENSSJEKK
 # Alt under er tall som PDF-ene skriver ut. Slår én av dem feil, skal
 # byggingen stoppe her og ikke ende i en oppskrift noen strikker etter.
@@ -465,6 +531,44 @@ for a, b in zip(LUER, LUER[1:]):
     for felt in ('masker', 'hoyde_cm', 'band_cm', 'fell_omganger'):
         assert b[felt] > a[felt], f"lue {b['navn_no']}: {felt} vokser ikke"
 
+for sk in SOKKER:
+    # Jordbærhetten er 4 masker og må gå opp rundt.
+    assert sk['masker'] % SMABLAD_RAPPORT == 0, f"sokk {sk['navn_no']}: hettene går ikke opp"
+    # Frørapporten er egen per størrelse, og MÅ gå opp i akkurat det masketallet.
+    assert sk['masker'] % sk['fro_rapport'] == 0, \
+        f"sokk {sk['navn_no']}: frørapporten {sk['fro_rapport']} går ikke opp i {sk['masker']} m"
+    assert 6 <= sk['fro_rapport'] <= 9, f"sokk {sk['navn_no']}: frøene står for tett eller for spredt"
+    # Hælen er halve omgangen, vristen den andre halvparten.
+    assert sk['hael_m'] + sk['vrist_m'] == sk['masker']
+    assert sk['hael_m'] % 2 == 0, f"sokk {sk['navn_no']}: hælen er ikke delelig i to"
+    # Hælvendingen må ende på et partall, ellers går ikke kilefellingen opp.
+    assert sk['hael_igjen'] % 2 == 0, \
+        f"sokk {sk['navn_no']}: hælvendingen ender på {sk['hael_igjen']} masker, ikke et partall"
+    assert 0 < sk['hael_igjen'] < sk['hael_m']
+    assert sk['vend_b'] >= 1, f"sokk {sk['navn_no']}: rad 2 i hælvendingen går ikke opp"
+    # Kilen må felle tilbake til nøyaktig det masketallet sokken hadde.
+    assert sk['etter_plukk'] - 2 * sk['kile_omganger'] == sk['masker'], \
+        f"sokk {sk['navn_no']}: kilen feller ikke tilbake til {sk['masker']} masker"
+    assert sk['kile_omganger'] > 0
+    # Tåen felles med 4 masker per omgang og må ende på nøyaktig ta_slutt.
+    assert sk['masker'] - 4 * sk['ta_omganger'] == sk['ta_slutt'], \
+        f"sokk {sk['navn_no']}: tåen ender ikke på {sk['ta_slutt']} masker"
+    assert sk['ta_slutt'] % 4 == 0
+    # Foten må være lengre enn tåen, ellers er tåen ferdig før foten er begynt.
+    assert sk['fot_for_ta_cm'] > 2.0, \
+        f"sokk {sk['navn_no']}: bare {sk['fot_for_ta_cm']} cm fot før tåfellingen"
+for a, b in zip(SOKKER, SOKKER[1:]):
+    for felt in ('masker', 'fot_cm', 'legg_cm', 'hael_m', 'etter_plukk'):
+        assert b[felt] > a[felt], f"sokk {b['navn_no']}: {felt} vokser ikke"
+
+# Sokker og tøfler er gradert etter samme fotlengder, og skal dekke de samme
+# plaggstørrelsene. Ellers vil et barn ha én størrelse på foten og en annen i
+# tøffelen utenpå.
+assert [sk['dekker'] for sk in SOKKER] == [t['dekker'] for t in TOFLER], \
+    'sokker og tøfler dekker ikke de samme størrelsene'
+assert [sk['fot_cm'] for sk in SOKKER] == [t['fot_cm'] for t in TOFLER], \
+    'sokker og tøfler er gradert etter ulike fotlengder'
+
 # Hver plaggstørrelse skal ha nøyaktig én lue. Ingen hull, ingen dobbeltdekning.
 dekket = []
 for lue in LUER:
@@ -485,7 +589,7 @@ out = BASE / 'sizes.json'
 out.write_text(json.dumps(
     dict(gauge_st=21, gauge_row=28, blad_rapport=BLAD_RAPPORT, blad_omg=BLAD_OMG,
          hals_ribb_omg=HALS_RIBB_OMG,
-         plagg=rows, votter=VOTTER, tofler=TOFLER, luer=LUER),
+         plagg=rows, votter=VOTTER, tofler=TOFLER, luer=LUER, sokker=SOKKER),
     ensure_ascii=False, indent=2), encoding='utf-8')
 
 print('OK, skrev', out.name, 'for', len(rows), 'plaggstørrelser.')
@@ -509,3 +613,7 @@ for lue in LUER:
     print(f"  lue    {lue['navn_no']:>12} (str {lue['dekker']}): {lue['masker']} m, "
           f"{lue['omkrets_cm']} cm rundt, {lue['hoyde_cm']} cm høy, "
           f"{lue['fell_omganger']} felleomganger")
+for sk in SOKKER:
+    print(f"  sokk   {sk['navn_no']:>12} (str {sk['dekker']}): {sk['masker']} m, "
+          f"fot {sk['fot_cm']} cm, hæl {sk['hael_m']} m -> {sk['hael_igjen']} m, "
+          f"{sk['etter_plukk']} m etter oppplukking, {sk['kile_omganger']} kileomg")
