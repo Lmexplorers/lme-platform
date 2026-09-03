@@ -6,9 +6,8 @@ Myke votter uten tommel, med brettet ribb, bladspisser, frø og en
 sammenhengende i-cord mellom de to vottene.
 
 Vottene har to størrelser, ikke ni som plaggene. Grunnen står i
-grading_jordbaerdrom.py: bladrapporten er 8 masker, altså ca. 3,8 cm i
-omkrets, mens en babyhånd vokser langt mindre enn det mellom to
-nabostørrelser.
+grading_jordbaerdrom.py: en babyhånd vokser svært lite mellom to
+nabostørrelser, og den brettede ribben tar opp resten av forskjellen.
 
 Vottene er uten tommel, som er det vanlige på babyvotter. Det er også
 grunnen til at de stopper ved str 74: et barn på over ett år vil ha tommel,
@@ -73,11 +72,11 @@ def sider(lang):
         rosep(L(lang, 'DETTE LÆRER DU', 'WHAT YOU WILL LEARN')) +
         card(ul(L(lang,
                   ['å strikke små omganger med Magic Loop eller settpinner',
-                   'å strikke mønster med korte trådsprang',
+                   'å strikke en liten jordbærhette i to farger',
                    'å forme en rund vottetopp',
                    'å strikke og feste en i-cord mellom vottene'],
                   ['knitting small rounds with Magic Loop or double-pointed needles',
-                   'working colourwork with short floats',
+                   'working a small strawberry top in two colours',
                    'shaping a rounded mitten top',
                    'knitting and attaching an i-cord between the mittens']))) +
         sagep(L(lang, 'VANSKELIGHETSGRAD', 'DIFFICULTY')) +
@@ -93,25 +92,25 @@ def sider(lang):
     khead = [Sh] + L(lang, ['Passer til plaggstørrelse', 'Håndomkrets'],
                      ['Fits garment size', 'Hand circumference'])
     krow = [[navn(v, lang), v['dekker'], komma(v['omkrets_cm']) + ' cm'] for v in VOTTER]
-    mhead = [Sh] + L(lang, ['Masker rundt', 'Bladrapporter', 'Ribb før bretting',
+    mhead = [Sh] + L(lang, ['Masker rundt', 'Spisser rundt', 'Ribb før bretting',
                             'Lengde uten ribb', 'Snor'],
-                     ['Stitches round', 'Leaf repeats', 'Cuff before folding',
+                     ['Stitches round', 'Points round', 'Cuff before folding',
                       'Length without cuff', 'Cord'])
-    mrow = [[navn(v, lang), str(v['masker']) + m, str(v['rapporter']) + ' x',
+    mrow = [[navn(v, lang), str(v['masker']) + m, str(v['masker'] // 4) + ' x',
              str(v['ribb_cm']) + ' cm', komma(v['lengde_cm']) + ' cm',
              str(v['snor_cm']) + ' cm'] for v in VOTTER]
     P.append(pg(f.side_storrelser_smaadel(
         lang,
         L(lang,
-          'Vottene er gradert i to størrelser, ikke ni som plaggene. En bladrapport er 8 '
-          'masker, altså ca. 3,8 cm rundt, mens en babyhånd vokser langt mindre enn det '
-          'mellom to nabostørrelser. To størrelser er derfor to reelle mål, ikke to navn '
+          'Vottene er gradert i to størrelser, ikke ni som plaggene. En babyhånd vokser '
+          'svært lite mellom to nabostørrelser, og den brettede ribben tar opp resten av '
+          'forskjellen. To størrelser er derfor to reelle mål, ikke to navn '
           'på det samme. Mål barnets hånd rundt knokene, eller velg etter '
           'plaggstørrelsen. Vottene stopper ved str 74 fordi de er uten tommel, og et '
           'barn på over ett år vil ha tommel.',
-          'The mittens are graded in two sizes, not nine like the garments. One leaf '
-          'repeat is 8 stitches, approx. 3.8 cm round, while a baby hand grows far less '
-          'than that between two neighbouring sizes. Two sizes are therefore two real '
+          'The mittens are graded in two sizes, not nine like the garments. A baby hand '
+          'grows very little between two neighbouring sizes, and the folded cuff takes up '
+          'the rest of the difference. Two sizes are therefore two real '
           'measurements, not two names for the same thing. Measure the hand round the '
           'knuckles, or choose by the garment size. The mittens stop at size 74 because '
           'they are thumbless, and a child over one year wants a thumb.'),
@@ -136,13 +135,13 @@ def sider(lang):
     P.append(pg(f.side_garn(lang, garn, ekstra), 4))
 
     # ---------------------------------------------------------------- 5 DIAGRAM
-    P.append(pg(f.side_diagram(lang), 5))
+    P.append(pg(f.side_diagram(lang, smaa=True), 5))
 
     # ---------------------------------------------------------- 6 RIBB OG BLAD
-    ribb_h = [Sh] + L(lang, ['Legg opp', 'Ribb', 'Bladrapporter rundt'],
-                      ['Cast on', 'Rib', 'Leaf repeats round'])
+    ribb_h = [Sh] + L(lang, ['Legg opp', 'Ribb', 'Spisser rundt'],
+                      ['Cast on', 'Rib', 'Points round'])
     ribb_r = [[navn(v, lang), str(v['masker']) + m, str(v['ribb_cm']) + ' cm',
-               str(v['rapporter']) + ' x'] for v in VOTTER]
+               str(v['masker'] // 4) + ' x'] for v in VOTTER]
     P.append(pg(
         banner(L(lang, '1 · MANSJETT OG BLADSPISSER', '1 · CUFF AND LEAF TIPS')) +
         card('<p>' + L(lang,
@@ -153,14 +152,17 @@ def sider(lang):
              'the height in your column. The rib folds outwards in wear, which is why it is '
              'this deep. Work 1 round in knit.') + '</p>') +
         card(tabell(ribb_h, ribb_r, min_index=0)) +
-        rosep(L(lang, 'BLADSPISSENE', 'THE LEAF TIPS')) +
+        rosep(L(lang, 'JORDBÆRHETTEN', 'THE STRAWBERRY TOP')) +
         card('<p>' + L(lang,
-             'Strikk bladrapporten fra side 5 over 8 masker og gjenta den rundt så mange '
-             'ganger som kolonnen din sier. Bytt til rosa etter siste mønsteromgang og '
-             'strikk 1 omgang rett.',
-             'Work the leaf repeat from page 5 over 8 stitches and repeat it round as many '
-             'times as your column says. Change to pink after the last chart round and work '
-             '1 round in knit.') + '</p>'), 6))
+             'Strikk jordbærhetten fra side 5 over 4 masker og gjenta den rundt så mange '
+             'ganger som kolonnen din sier. Den er bare 4 omganger høy, så hetten blir en '
+             'smal krans av små grønne spisser ned i det rosa, ikke et stort bladparti. '
+             'Bytt til rosa etter siste mønsteromgang og strikk 1 omgang rett.',
+             'Work the strawberry top from page 5 over 4 stitches and repeat it round as '
+             'many times as your column says. It is only 4 rounds deep, so it forms a '
+             'narrow ring of small green points down into the pink, not a large leaf '
+             'panel. Change to pink after the last chart round and work 1 round in '
+             'knit.') + '</p>'), 6))
 
     # ------------------------------------------------------------ 7 HÅND OG FRØ
     hand_h = [Sh] + L(lang, ['Masker', 'Hånd i rosa'], ['Stitches', 'Hand in pink'])
@@ -219,10 +221,10 @@ def sider(lang):
         banner(L(lang, '4 · ANDRE VOTT OG SNOR', '4 · SECOND MITTEN AND CORD')) +
         rosep(L(lang, 'DEN ANDRE VOTTEN', 'THE SECOND MITTEN')) +
         card('<p>' + L(lang,
-             'Strikk den andre votten helt likt. Kontroller at blad- og frømønsteret '
+             'Strikk den andre votten helt likt. Kontroller at jordbærhetten og frøene '
              'begynner på samme sted på begge, og tell omgangene i rosa i stedet for å måle, '
              'så blir de to like lange.',
-             'Work the second mitten exactly the same. Check that the leaf and seed patterns '
+             'Work the second mitten exactly the same. Check that the strawberry top and seeds '
              'start in the same place on both, and count the rounds in pink rather than '
              'measuring, so the two come out the same length.') + '</p>') +
         sagep(L(lang, 'I-CORD', 'THE I-CORD')) +

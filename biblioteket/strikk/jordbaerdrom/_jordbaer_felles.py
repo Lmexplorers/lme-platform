@@ -59,6 +59,19 @@ BLAD = [
     'GGGGGGGG',   # omgang 1, første
 ]
 
+# Den lille jordbærhetten, 4 masker x 4 omganger, til votter og tøfler.
+# Det store bladdiagrammet er 8 masker og 10 omganger, altså 3,8 cm bredt og
+# 3,6 cm høyt. På en vott som bare er 11,4 cm rundt blir det en hette som
+# dekker nesten hele håndbaken, og designbildene viser noe helt annet: små,
+# korte spisser. Denne rapporten er halvparten så bred og under halvparten så
+# høy, og går opp i alle vott- og tøffelstørrelsene (24, 32, 40 og 48 masker).
+SMABLAD = [
+    'RRRR',   # omgang 4, siste
+    'RGGR',
+    'RGGR',
+    'GGGG',   # omgang 1, første
+]
+
 # Frørapporten, 8 masker. To omganger, A og B, med 2-3 rosa omganger mellom.
 # K = kremhvit, den ene innstrikkede masken som blir et jordbærfrø.
 FRO_A = 'RRRKRRRR'    # *3 rosa, 1 kremhvit, 4 rosa*
@@ -255,14 +268,23 @@ def side_garn(lang, garnmengder, ekstra_rader):
 '''
 
 
-def side_diagram(lang):
+def side_diagram(lang, smaa=False):
+    """Diagramsiden. smaa=True bytter det store bladet mot den lille hetten,
+    som er den som brukes på votter og tøfler."""
     t = {'no': dict(
-        b='BLAD- OG FRØMØNSTER',
-        lead=('Begge diagrammene leses nedenfra og opp, og hver omgang fra høyre mot '
-              'venstre, samme vei som du strikker. Bladrapporten er 8 masker og gjentas '
-              'rundt hele bærestykket. Antall gjentakelser står i din egen størrelse '
-              'lenger bak.'),
-        blad='BLAD, 8 MASKER x 10 OMGANGER', fro='FRØ, 8 MASKER',
+        b='JORDBÆRHETTE OG FRØ' if smaa else 'BLAD- OG FRØMØNSTER',
+        lead=(('Begge diagrammene leses nedenfra og opp, og hver omgang fra høyre mot '
+               'venstre, samme vei som du strikker. Jordbærhetten er 4 masker og gjentas '
+               'rundt. Den er med vilje mindre enn bladet på de store plaggene: på en '
+               'vott eller en tøffel ville det store bladet dekket nesten hele flaten.')
+              if smaa else
+              ('Begge diagrammene leses nedenfra og opp, og hver omgang fra høyre mot '
+               'venstre, samme vei som du strikker. Bladrapporten er 8 masker og gjentas '
+               'rundt hele bærestykket. Antall gjentakelser står i din egen størrelse '
+               'lenger bak.')),
+        blad='JORDBÆRHETTE, 4 MASKER x 4 OMGANGER' if smaa
+             else 'BLAD, 8 MASKER x 10 OMGANGER',
+        fro='FRØ, 8 MASKER',
         frotxt=('Frøene er enkeltmasker i kremhvit, strødd utover det rosa. Strikk omgang '
                 'A, deretter 2-3 omganger rosa, og så omgang B. Gjenta dette så tett eller '
                 'spredt du selv vil.'),
@@ -271,12 +293,20 @@ def side_diagram(lang):
               'ubehagelig mot huden og noe små fingre kan sette seg fast i. Hold den '
               'løpende tråden løs nok til at arbeidet ikke snurper seg sammen.'))}
     t['en'] = dict(
-        b='LEAF AND SEED CHARTS',
-        lead=('Both charts are read from the bottom up, and each round from right to '
-              'left, the same way you knit. The leaf repeat is 8 stitches and is repeated '
-              'all the way round the yoke. The number of repeats for your size is given '
-              'further on.'),
-        blad='LEAF, 8 STITCHES x 10 ROUNDS', fro='SEED, 8 STITCHES',
+        b='STRAWBERRY TOP AND SEEDS' if smaa else 'LEAF AND SEED CHARTS',
+        lead=(('Both charts are read from the bottom up, and each round from right to '
+               'left, the same way you knit. The strawberry top is 4 stitches and is '
+               'repeated round. It is deliberately smaller than the leaf on the larger '
+               'garments: on a mitten or a bootie the large leaf would cover almost the '
+               'whole surface.')
+              if smaa else
+              ('Both charts are read from the bottom up, and each round from right to '
+               'left, the same way you knit. The leaf repeat is 8 stitches and is repeated '
+               'all the way round the yoke. The number of repeats for your size is given '
+               'further on.')),
+        blad='STRAWBERRY TOP, 4 STITCHES x 4 ROUNDS' if smaa
+             else 'LEAF, 8 STITCHES x 10 ROUNDS',
+        fro='SEED, 8 STITCHES',
         frotxt=('The seeds are single cream white stitches scattered over the pink. Work '
                 'round A, then 2-3 rounds in pink, then round B. Repeat as densely or as '
                 'sparsely as you like.'),
@@ -293,7 +323,8 @@ def side_diagram(lang):
     return f'''
 {banner(tt['b'])}
 <p>{tt['lead']}</p>
-{card(diagram(BLAD, tt['blad'], {'no': 'omg', 'en': 'rnd'}[lang]) + forklaring(lang))}
+{card(diagram(SMABLAD if smaa else BLAD, tt['blad'], {'no': 'omg', 'en': 'rnd'}[lang],
+              bredde_mm=34 if smaa else 62) + forklaring(lang))}
 {sagep(tt['fro'])}
 {card(fro + '<p class="small center">' + tt['frotxt'] + '</p>')}
 {cme(tt['tips'])}

@@ -6,9 +6,8 @@ Klassiske babytøfler med rund fot, brettet ribb, bladspisser og
 i-cord-knyting rundt ankelen.
 
 Tøflene har fire størrelser, ikke ni som plaggene. Grunnen står i
-grading_jordbaerdrom.py: bladrapporten er 8 masker, altså ca. 3,8 cm i
-omkrets rundt ankelen, og en fot vokser langt mindre enn det mellom to
-nabostørrelser.
+grading_jordbaerdrom.py: en babyfot vokser lite mellom to nabostørrelser,
+og ribben knytes inn til riktig vidde uansett.
 """
 import _jordbaer_felles as f
 from _jordbaer_felles import (TOFLER, banner, rosep, sagep, card, cme, ul,
@@ -87,20 +86,20 @@ def sider(lang):
                      ['Fits garment size', 'Foot length', 'Ankle circumference'])
     krow = [[navn(s, lang), s['dekker'], komma(s['fot_cm']) + ' cm',
              komma(s['ankel_cm']) + ' cm'] for s in TOFLER]
-    mhead = [Sh] + L(lang, ['Legg opp', 'Bladrapporter', 'Ribb før bretting', 'I-cord per tøffel'],
-                     ['Cast on', 'Leaf repeats', 'Cuff before folding', 'I-cord per bootie'])
-    mrow = [[navn(s, lang), str(s['masker']) + m, str(s['rapporter']) + ' x',
+    mhead = [Sh] + L(lang, ['Legg opp', 'Spisser rundt', 'Ribb før bretting', 'I-cord per tøffel'],
+                     ['Cast on', 'Points round', 'Cuff before folding', 'I-cord per bootie'])
+    mrow = [[navn(s, lang), str(s['masker']) + m, str(s['masker'] // 4) + ' x',
              str(s['ribb_cm']) + ' cm', str(s['icord_cm']) + ' cm'] for s in TOFLER]
     P.append(pg(f.side_storrelser_smaadel(
         lang,
         L(lang,
-          'Tøflene er gradert i fire størrelser, ikke ni som plaggene. En bladrapport er '
-          '8 masker, altså ca. 3,8 cm rundt ankelen, og en fot vokser langt mindre enn '
-          'det mellom to nabostørrelser. Mål foten fra hælen til lengste tå, og velg den '
+          'Tøflene er gradert i fire størrelser, ikke ni som plaggene. En babyfot vokser '
+          'lite mellom to nabostørrelser, og ribben knytes inn til riktig vidde uansett. '
+          'Mål foten fra hælen til lengste tå, og velg den '
           'størrelsen som er nærmest over målet.',
-          'The booties are graded in four sizes, not nine like the garments. One leaf '
-          'repeat is 8 stitches, approx. 3.8 cm round the ankle, and a foot grows far '
-          'less than that between two neighbouring sizes. Measure the foot from heel to '
+          'The booties are graded in four sizes, not nine like the garments. A baby foot '
+          'grows little between two neighbouring sizes, and the rib is tied in to the '
+          'right width anyway. Measure the foot from heel to '
           'longest toe, and choose the size just above that measurement.'),
         khead, krow, mhead, mrow,
         [(navn(s, lang), L(lang, 'str ', 'size ') + s['dekker']) for s in TOFLER],
@@ -124,15 +123,15 @@ def sider(lang):
     P.append(pg(f.side_garn(lang, garn, ekstra), 4))
 
     # ---------------------------------------------------------------- 5 DIAGRAM
-    P.append(pg(f.side_diagram(lang), 5))
+    P.append(pg(f.side_diagram(lang, smaa=True), 5))
 
     # -------------------------------------------------------- 6 RIBB OG HULLRAD
-    ribb_h = [Sh] + L(lang, ['Legg opp', 'Ribb', 'Bladrapporter rundt'],
-                      ['Cast on', 'Rib', 'Leaf repeats round'])
+    ribb_h = [Sh] + L(lang, ['Legg opp', 'Ribb', 'Spisser rundt'],
+                      ['Cast on', 'Rib', 'Points round'])
     ribb_r = [[navn(s, lang), str(s['masker']) + m, str(s['ribb_cm']) + ' cm',
-               str(s['rapporter']) + ' x'] for s in TOFLER]
+               str(s['masker'] // 4) + ' x'] for s in TOFLER]
     P.append(pg(
-        banner(L(lang, '1 · RIBB, HULLRAD OG BLAD', '1 · RIB, EYELETS AND LEAVES')) +
+        banner(L(lang, '1 · RIBB, HULLRAD OG HETTE', '1 · RIB, EYELETS AND TOP')) +
         card('<p>' + L(lang,
              'Legg opp med grønt, samle til en omgang og strikk *2 rett, 2 vrang* til ribben '
              'måler høyden i kolonnen din. Ribben skal senere brettes utover. Strikk 1 '
@@ -141,16 +140,16 @@ def sider(lang):
              'the height in your column. The rib will later be folded outwards. Work 1 round '
              'in knit.') + '</p>') +
         card(tabell(ribb_h, ribb_r, min_index=0)) +
-        rosep(L(lang, 'HULLRAD OG BLADSPISSER', 'EYELETS AND LEAF TIPS')) +
+        rosep(L(lang, 'HULLRAD OG JORDBÆRHETTE', 'EYELETS AND STRAWBERRY TOP')) +
         card('<p>' + L(lang,
              'Strikk hullraden: *2 rett sammen, 1 kast, 2 rett*, gjenta rundt. Strikk 1 '
-             'omgang grønt. Strikk så bladrapporten fra side 5 over 8 masker, gjentatt så '
-             'mange ganger som kolonnen din sier, slik at det grønne smalner ned mot den '
-             'rosa foten. Strikk 2 omganger rosa.',
+             'omgang grønt. Strikk så jordbærhetten fra side 5 over 4 masker, gjentatt så '
+             'mange ganger som kolonnen din sier. Den er 4 omganger høy og gir en smal '
+             'krans av små grønne spisser ned mot den rosa foten. Strikk 2 omganger rosa.',
              'Work the eyelet round: *k2tog, yarn over, k2*, repeat round. Work 1 round in '
-             'green. Then work the leaf repeat from page 5 over 8 stitches, repeated as many '
-             'times as your column says, so that the green narrows down towards the pink '
-             'foot. Work 2 rounds in pink.') + '</p>'), 6))
+             'green. Then work the strawberry top from page 5 over 4 stitches, repeated as '
+             'many times as your column says. It is 4 rounds deep and gives a narrow ring '
+             'of small green points down towards the pink foot. Work 2 rounds in pink.') + '</p>'), 6))
 
     # ------------------------------------------------------------- 7 OVERFOTEN
     ov_h = [Sh] + L(lang, ['Masker rundt', 'Midt foran', 'Hvilende', 'Pinner frem og tilbake'],

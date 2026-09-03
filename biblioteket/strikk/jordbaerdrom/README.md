@@ -18,7 +18,7 @@ https://lmexplorers.com/teststrikk, som er lenket fra et kort på dashbordet.
 
 Utgangspunktet var fem PDF-er i **én** størrelse, laget med ChatGPT og aldri
 strikket av noen. De ga konstruksjonen og stilen: det runde bærestykket delt
-i 8 felt, bladrapporten, frøene, picotkanten.
+i 8 felt, bladrapporten, frøene, de buede kantene.
 
 De ga derimot ikke tall det gikk an å stole på. Flere av dem gikk rett og
 slett ikke opp (se listen lenger nede). **Alle masketall er derfor regnet ut
@@ -84,11 +84,12 @@ innenfor den bindingen ved å gjette. `finn_par()` i graderingsskriptet søker
 derfor etter det paret som ligger nærmest målene og samtidig oppfyller alle
 kravene.
 
-**Votter og tøfler har færre størrelser.** Samme binding slår ut motsatt vei
-på de små delene: en bladrapport er ca. 3,8 cm i omkrets, mens en hånd eller
-fot vokser langt mindre enn det mellom to nabostørrelser. Vottene har derfor
-2 størrelser og tøflene 4, og hver av dem dekker et oppgitt spenn av
-plaggstørrelsene.
+**Votter og tøfler har færre størrelser.** De små delene bruker den lille
+jordbærhetten, 4 masker x 4 omganger, ikke den store bladrapporten. Grunnen
+til færre størrelser er derfor ikke mønsteret, men barnet: en hånd eller fot
+vokser lite mellom to nabostørrelser, og brettet ribb og knyting tar opp
+resten. Vottene har 2 størrelser og tøflene 4, og hver av dem dekker et
+oppgitt spenn av plaggstørrelsene.
 
 **Vottene stopper ved str 74**, ikke fordi masketallet stopper, men fordi de
 er uten tommel. Det er riktig på en baby, men et barn på over ett år vil ha
@@ -143,7 +144,9 @@ i PDF-en, og de veier ingenting.
 
 Bladet er 8 masker x 10 omganger og leses nedenfra og opp, selv om plagget
 strikkes ovenfra og ned: diagrammet er snudd, så bladene peker nedover på det
-ferdige plagget. Lengste trådsprang bak arbeidet er 3 masker, med vilje.
+ferdige plagget. Votter og tøfler bruker et eget, mindre diagram, den lille
+jordbærhetten på 4 masker x 4 omganger. På en vott eller en tøffel ville det
+store bladet dekket nesten hele flaten, og bildene viser små, korte spisser. Lengste trådsprang bak arbeidet er 3 masker, med vilje.
 Lange løse tråder på innsiden er ubehagelige mot sart hud og noe små fingre
 kan sette seg fast i.
 

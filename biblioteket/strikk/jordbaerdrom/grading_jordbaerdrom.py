@@ -8,7 +8,7 @@ str 92 svarer til to år.
 
 Utgangspunktet var fem PDF-er i én størrelse, laget med ChatGPT og aldri
 strikket av noen. De ga konstruksjonen og stilen, altså det runde
-bærestykket delt i 8 felt, bladrapporten, frøene og picotkanten. Tallene er
+bærestykket delt i 8 felt, bladrapporten, frøene og kantene. Tallene er
 regnet ut på nytt her, fra barnas mål og fastheten.
 
 FASTHET
@@ -20,7 +20,7 @@ Bladmønsteret går rundt hele bærestykket, så masketallet der må være delel
 med 8 i hver eneste størrelse. Halsen deles i 8 felt, og hver økeomgang
 legger til nøyaktig 8 masker, så halsoppligget må også være delelig med 8.
 
-Bærestykket = 2 x forstykke + 2 x erme, så kravet «delelig med 8» betyr at
+Bærestykket = 2 x forstykke + 2 x erme, så kravet "delelig med 8" betyr at
 forstykke + erme må være delelig med 4. Over ni størrelser er det ikke mulig
 å treffe alle brystmål på frihånd innenfor den bindingen. Derfor SØKER
 skriptet under etter det paret (forstykke, erme) som ligger nærmest de
@@ -28,10 +28,12 @@ skriptet under etter det paret (forstykke, erme) som ligger nærmest de
 hånd.
 
 HVORFOR VOTTER OG TØFLER HAR FÆRRE STØRRELSER
-Samme binding slår ut motsatt vei på de små delene: en bladrapport er ca.
-3,8 cm i omkrets, mens en hånd eller fot vokser langt mindre enn det mellom
-to nabostørrelser. Vottene har derfor 2 størrelser og tøflene 4, og hver av
-dem dekker et oppgitt spenn av plaggstørrelsene.
+De små delene bruker den lille jordbærhetten, 4 masker x 4 omganger, ikke
+den store bladrapporten. Grunnen til færre størrelser er derfor ikke
+mønsteret, men barnet: en hånd eller fot vokser lite mellom to
+nabostørrelser, og brettet ribb og knyting tar opp resten. Vottene har
+2 størrelser og tøflene 4, og hver av dem dekker et oppgitt spenn av
+plaggstørrelsene.
 
 Vottene er uten tommel. Det er riktig på en baby, men et barn på over ett år
 vil ha tommel, så vottene stopper med vilje ved str 74.
@@ -91,7 +93,7 @@ HALS_AV_HODE_MAX = 0.90
 #
 # Hver bue er BUE_BREDDE masker. Da må masketallet nederst være delelig med
 # BUE_BREDDE, og derfor rundes skjørtenes sluttmasketall av til nærmeste
-# multiplum, i stedet for å la buene «nesten» gå opp.
+# multiplum, i stedet for å la buene "nesten" gå opp.
 BUE_BREDDE = 10        # masker per bue, ca. 4,8 cm
 BUE_OMGANGER = 5       # omganger buekanten strikkes over
 
