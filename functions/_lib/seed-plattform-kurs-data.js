@@ -1046,8 +1046,8 @@ export const PLATTFORM_KURS = {
           "en": "The Live page shows when the next session runs. There you see the countdown, sign up with one tap, and find the recordings from sessions that have already happened. You find it at https://lmexplorers.com/live"
         },
         {
-          "no": "Selve samlingen foregår i Live-rommet. Rommet åpner et kvarter før start, og da blir knappen aktiv av seg selv. Du trenger ikke lete etter en lenke i e-posten, alt ligger på siden. Ved siden av knappen står chatten, så du kan skrive til de andre uten å slå på kamera eller mikrofon.",
-          "en": "The session itself happens in the live room. The room opens a quarter of an hour before the start, and the button becomes active by itself. You do not have to hunt for a link in your inbox, everything sits on the page. Next to the button is the chat, so you can write to the others without turning on camera or microphone."
+          "no": "Selve samlingen foregår i Live-rommet, og videoen går rett på siden. Du trenger ingen app, ingen konto og ingen lenke i e-posten. Rommet åpner et kvarter før start, og da blir knappen aktiv av seg selv. Ved siden av videoen står chatten, så du kan skrive til de andre uten å slå på kamera eller mikrofon.",
+          "en": "The session itself happens in the live room, and the video runs right on the page. You need no app, no account and no link in your inbox. The room opens a quarter of an hour before the start, and the button becomes active by itself. Next to the video is the chat, so you can write to the others without turning on camera or microphone."
         },
         {
           "no": "Rekker du ikke å være med direkte, gjør det ingenting. Opptaket legges på den samme siden etterpå, og du finner det igjen under \"Opptak fra tidligere\".",
@@ -1055,8 +1055,8 @@ export const PLATTFORM_KURS = {
         }
       ],
       "tip": {
-        "no": "📺 Første gang du blir med, laster telefonen eller maskinen ned møteappen. Gå inn fem minutter før start, så slipper du å vente på det mens samlingen er i gang.",
-        "en": "📺 The first time you join, your phone or computer downloads the meeting app. Enter five minutes early, so you do not have to wait for that while the session is running."
+        "no": "📺 Nettleseren spør om kamera og mikrofon første gang du blir med. Du kan trygt svare nei og heller skrive i chatten, du ser og hører samlingen like godt.",
+        "en": "📺 Your browser asks for camera and microphone the first time you join. You can safely say no and write in the chat instead, you see and hear the session just as well."
       }
     },
     {

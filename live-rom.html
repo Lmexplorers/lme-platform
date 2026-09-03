@@ -1684,6 +1684,27 @@
     margin: 0 0 12px;
   }
   .room-stage p { font-size: 15px; color: var(--ink-soft); line-height: 1.6; margin: 0 auto 18px; max-width: 420px; }
+  .room-stage.playing {
+    padding: 0;
+    background: #14101a;
+    border-color: #14101a;
+    min-height: 0;
+    display: block;
+    overflow: hidden;
+  }
+  .room-video { width: 100%; aspect-ratio: 16 / 9; background: #14101a; }
+  .room-video iframe { display: block; width: 100%; height: 100%; border: 0; }
+  .room-leave {
+    background: #fff;
+    border-radius: var(--r-md);
+    padding: 14px 18px;
+    margin-top: 12px;
+    box-shadow: var(--shadow-sm);
+    font-size: 14px;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+  .room-leave a { color: var(--cerise); }
   .room-pass {
     display: inline-block;
     background: #fff;
@@ -1933,11 +1954,12 @@
       <div id="room-owner" hidden>
         <div class="ev-form">
           <h3 style="font-family:var(--font-display);font-weight:400;font-size:18px;margin:0 0 4px;" data-no="Kun for deg" data-en="Owner only">Kun for deg</h3>
-          <label data-no="Lenke til Zoom-rommet" data-en="Link to the Zoom room">Lenke til Zoom-rommet</label>
-          <input id="own-link" type="url" placeholder="https://us02web.zoom.us/j/...">
+          <label data-no="Egen møtelenke, valgfritt" data-en="Your own meeting link, optional">Egen møtelenke, valgfritt</label>
+          <input id="own-link" type="url" placeholder="La stå tom for å bruke LMEs eget rom">
+          <p class="ev-hint" data-no="La feltet stå tomt, så går sendingen i LMEs eget videorom rett på siden. Vil du heller bruke Zoom eller Google Meet, limer du inn lenken her." data-en="Leave this empty, and the session runs in LME's own video room right on the page. If you would rather use Zoom or Google Meet, paste the link here.">La feltet stå tomt, så går sendingen i LMEs eget videorom rett på siden. Vil du heller bruke Zoom eller Google Meet, limer du inn lenken her.</p>
           <div class="row">
             <div>
-              <label data-no="Passord i Zoom" data-en="Zoom passcode">Passord i Zoom</label>
+              <label data-no="Passord til den egne lenken" data-en="Passcode for your own link">Passord til den egne lenken</label>
               <input id="own-pass" type="text">
             </div>
             <div>
@@ -1954,8 +1976,8 @@
         <h3 data-no="Slik blir du med" data-en="How you join">Slik blir du med</h3>
         <ul>
           <li data-no="Rommet åpner et kvarter før start, og knappen her blir rosa når du kan gå inn." data-en="The room opens a quarter of an hour before the start, and the button here turns pink when you can enter.">Rommet åpner et kvarter før start, og knappen her blir rosa når du kan gå inn.</li>
-          <li data-no="Første gang laster telefonen eller maskinen ned Zoom, så vær litt tidlig ute." data-en="The first time, your phone or computer downloads Zoom, so be a little early.">Første gang laster telefonen eller maskinen ned Zoom, så vær litt tidlig ute.</li>
-          <li data-no="Du kan ha kamera og mikrofon av, og heller skrive i chatten her på siden." data-en="You can keep camera and microphone off, and write in the chat here on the page instead.">Du kan ha kamera og mikrofon av, og heller skrive i chatten her på siden.</li>
+          <li data-no="Sendingen går her på siden. Du trenger ingen app og ingen konto, bare trykk på knappen." data-en="The session runs here on the page. You need no app and no account, just tap the button.">Sendingen går her på siden. Du trenger ingen app og ingen konto, bare trykk på knappen.</li>
+          <li data-no="Nettleseren spør om kamera og mikrofon første gang. Du kan trygt svare nei og heller skrive i chatten." data-en="Your browser asks for camera and microphone the first time. You can safely say no and write in the chat instead.">Nettleseren spør om kamera og mikrofon første gang. Du kan trygt svare nei og heller skrive i chatten.</li>
           <li data-no="Rekker du det ikke, kommer opptaket på denne siden etterpå." data-en="If you cannot make it, the recording appears on this page afterwards.">Rekker du det ikke, kommer opptaket på denne siden etterpå.</li>
         </ul>
       </section>
@@ -2283,7 +2305,7 @@
   var head = document.getElementById('room-head');
   var stage = document.getElementById('room-stage');
   var ownerBox = document.getElementById('room-owner');
-  var ev = null, isOwner = false, tick = null;
+  var ev = null, isOwner = false, tick = null, inRoom = false;
 
   function lang() { try { return localStorage.getItem('lme_lang') || 'no'; } catch (e) { return 'no'; } }
   function t(no, en) { return lang() === 'en' ? en : no; }
@@ -2348,17 +2370,11 @@
           : '<p>' + t('Opptaket legges ut her så snart det er klart.', 'The recording is posted here as soon as it is ready.') + '</p><div><a class="btn-secondary" href="/live">' + t('Se hva som kommer', 'See what is coming') + '</a></div>');
       return;
     }
-    if (!ev.hasRoom) {
-      stage.innerHTML = '<h2>' + t('Rommet er ikke åpnet ennå', 'The room is not open yet') + '</h2>' +
-        '<p>' + t('Lenken til samlingen legges inn før start. Meld deg på, så finner du veien hit igjen.', 'The link to the session is added before the start. Sign up, and you will find your way back here.') + '</p>' +
-        countdown(ev.ts - now);
-      return;
-    }
     if (!ev.joinOpen) {
       stage.innerHTML = '<h2>' + t('Rommet åpner et kvarter før', 'The room opens a quarter of an hour before') + '</h2>' +
         '<p>' + t('Bli stående på siden, knappen åpner seg av seg selv klokken ', 'Stay on the page, the button opens by itself at ') + esc(clock(ev.opens)) + '.</p>' +
         countdown(ev.opens - now) +
-        '<div><button class="btn-join" disabled>' + t('Åpne Zoom-rommet', 'Open the Zoom room') + '</button></div>' +
+        '<div><button class="btn-join" disabled>' + t('Bli med i sendingen', 'Join the session') + '</button></div>' +
         '<div style="margin-top:14px"><button class="ev-rsvp' + (ev.youRsvp ? ' on' : '') + '" id="room-rsvp">' +
         (ev.youRsvp ? t('✓ Påmeldt', '✓ Going') : t('Meld meg på', 'Sign me up')) + '</button></div>';
       var r = document.getElementById('room-rsvp');
@@ -2366,22 +2382,27 @@
       return;
     }
     stage.innerHTML = '<h2>' + t('Rommet er åpent', 'The room is open') + '</h2>' +
-      '<p>' + t('Trykk her, så åpnes Zoom i et nytt vindu. Chatten her på siden står åpen hele veien.', 'Tap here, and Zoom opens in a new window. The chat here on the page stays open the whole way.') + '</p>' +
-      '<div><button class="btn-join" id="room-join">' + t('Åpne Zoom-rommet', 'Open the Zoom room') + '</button></div>' +
+      '<p>' + (ev.external
+        ? t('Trykk her, så åpnes møtet i et nytt vindu. Chatten her på siden står åpen hele veien.', 'Tap here, and the meeting opens in a new window. The chat here on the page stays open the whole way.')
+        : t('Sendingen går her på siden. Du trenger ingen app og ingen konto.', 'The session runs here on the page. You need no app and no account.')) + '</p>' +
+      '<div><button class="btn-join" id="room-join">' + t('Bli med i sendingen', 'Join the session') + '</button></div>' +
       '<div id="room-extra"></div>';
     var j = document.getElementById('room-join');
     j.addEventListener('click', function () {
       j.disabled = true;
-      j.textContent = t('Åpner ...', 'Opening ...');
+      j.textContent = t('Kobler til ...', 'Connecting ...');
       post({ action: 'join', id: ev.id }).then(function (d) {
+        if (d && d.ok && d.kind === 'innebygd') { startRoom(d); return; }
         j.disabled = false;
-        j.textContent = t('Åpne Zoom-rommet', 'Open the Zoom room');
+        j.textContent = t('Bli med i sendingen', 'Join the session');
         var extra = document.getElementById('room-extra');
         if (d && d.ok && d.link) {
+          /* Ellers tegner nedtellingen over passordet og reservelenken. */
+          inRoom = true;
           window.open(d.link, '_blank', 'noopener');
           if (extra) {
-            extra.innerHTML = (d.pass ? '<div class="room-pass">' + t('Passord i Zoom: ', 'Zoom passcode: ') + '<b>' + esc(d.pass) + '</b></div>' : '') +
-              '<p style="margin-top:14px;font-size:14px">' + t('Åpnet ikke Zoom seg? ', 'Did Zoom not open? ') +
+            extra.innerHTML = (d.pass ? '<div class="room-pass">' + t('Passord: ', 'Passcode: ') + '<b>' + esc(d.pass) + '</b></div>' : '') +
+              '<p style="margin-top:14px;font-size:14px">' + t('Åpnet ikke møtet seg? ', 'Did the meeting not open? ') +
               '<a href="' + esc(d.link) + '" target="_blank" rel="noopener" style="color:var(--cerise)">' + t('Trykk her.', 'Tap here.') + '</a></p>';
           }
         } else if (extra) {
@@ -2390,6 +2411,92 @@
         }
       });
     });
+  }
+
+  /* --- LMEs eget videorom ---
+     Videoen kjoeres av Jitsi, som er aapen kildekode og gratis, og legges rett
+     inn i siden. Ingen app, ingen konto, ingen tidsgrense. Romnavnet bygges paa
+     arrangementets uuid og deles bare ut til innloggede medlemmer, saa ingen kan
+     gjette seg inn utenfra. */
+  var JITSI_VERT = 'meet.jit.si';
+  var jitsi = null, scriptState = 0; /* 0 = ikke lastet, 1 = laster, 2 = klar, 3 = feilet */
+
+  function loadJitsiScript(done) {
+    if (scriptState === 2) return done(true);
+    if (scriptState === 3) return done(false);
+    if (scriptState === 1) { setTimeout(function () { loadJitsiScript(done); }, 300); return; }
+    scriptState = 1;
+    var el = document.createElement('script');
+    el.src = 'https://' + JITSI_VERT + '/external_api.js';
+    el.async = true;
+    var ferdig = false;
+    function svar(ok) {
+      if (ferdig) return;
+      ferdig = true;
+      scriptState = ok && window.JitsiMeetExternalAPI ? 2 : 3;
+      done(scriptState === 2);
+    }
+    el.onload = function () { svar(true); };
+    el.onerror = function () { svar(false); };
+    /* Blir skriptet blokkert uten aa gi feil, gir vi opp etter ti sekunder og
+       viser en lenke i stedet, slik at ingen blir staaende og vente. */
+    setTimeout(function () { svar(false); }, 10000);
+    document.head.appendChild(el);
+  }
+
+  function startRoom(d) {
+    inRoom = true;
+    stage.className = 'room-stage playing';
+    stage.innerHTML = '<div class="room-video" id="room-video"></div>';
+    var boks = document.getElementById('room-video');
+    loadJitsiScript(function (ok) {
+      if (!ok) {
+        stage.className = 'room-stage';
+        stage.innerHTML = '<h2>' + t('Åpne sendingen i et eget vindu', 'Open the session in its own window') + '</h2>' +
+          '<p>' + t('Videoen fikk ikke plass her på siden i nettleseren din. Den samme sendingen ligger klar bak knappen.', 'The video could not load here on the page in your browser. The same session is ready behind the button.') + '</p>' +
+          '<div><a class="btn-join" href="https://' + JITSI_VERT + '/' + encodeURIComponent(d.room) +
+          '" target="_blank" rel="noopener">' + t('Åpne sendingen', 'Open the session') + '</a></div>';
+        return;
+      }
+      try {
+        jitsi = new window.JitsiMeetExternalAPI(JITSI_VERT, {
+          roomName: d.room,
+          parentNode: boks,
+          width: '100%',
+          height: '100%',
+          userInfo: { displayName: d.navn || t('Medlem', 'Member') },
+          configOverwrite: {
+            startWithAudioMuted: !d.vert,
+            startWithVideoMuted: !d.vert,
+            prejoinPageEnabled: true,
+            disableDeepLinking: true,
+            defaultLanguage: lang() === 'en' ? 'en' : 'no'
+          },
+          interfaceConfigOverwrite: {
+            MOBILE_APP_PROMO: false,
+            SHOW_JITSI_WATERMARK: false,
+            SHOW_BRAND_WATERMARK: false,
+            SHOW_CHROME_EXTENSION_BANNER: false
+          }
+        });
+        jitsi.addEventListener('readyToClose', function () {
+          stopRoom();
+          stage.className = 'room-stage';
+          stage.innerHTML = '<h2>' + t('Du forlot sendingen', 'You left the session') + '</h2>' +
+            '<p>' + t('Du kan gå inn igjen når du vil, så lenge samlingen pågår.', 'You can go back in whenever you like, as long as the session is running.') + '</p>' +
+            '<div><button class="btn-join" id="room-again">' + t('Bli med igjen', 'Join again') + '</button></div>';
+          var a = document.getElementById('room-again');
+          if (a) a.addEventListener('click', function () { startRoom(d); });
+        });
+      } catch (e) {
+        scriptState = 3;
+        startRoom(d);
+      }
+    });
+  }
+
+  function stopRoom() {
+    if (jitsi) { try { jitsi.dispose(); } catch (e) {} jitsi = null; }
   }
 
   function paintOwner() {
@@ -2422,7 +2529,7 @@
     try { return new URLSearchParams(location.search).get('e') || ''; } catch (e) { return ''; }
   }
 
-  function paint() { paintHead(); paintStage(); paintOwner(); }
+  function paint() { paintHead(); if (!inRoom) paintStage(); paintOwner(); }
 
   function load() {
     return fetch('/api/events', { credentials: 'same-origin' })
@@ -2437,7 +2544,7 @@
              list[list.length - 1] || null;
         show('body');
         paint();
-        if (!tick) tick = setInterval(function () { if (ev) paintStage(); }, 1000);
+        if (!tick) tick = setInterval(function () { if (ev && !inRoom) paintStage(); }, 1000);
       })
       .catch(function () {
         fetch('/api/group/access', { credentials: 'same-origin' })

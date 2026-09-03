@@ -91,8 +91,9 @@ function view(e, u, owner, now) {
     opens: opensAt(e),
     closes: closesAt(e),
     replay: e.replay || "",
-    hasRoom: !!e.link,
-    joinOpen: !!e.link && now >= opensAt(e) && now <= closesAt(e),
+    hasRoom: true,
+    external: !!e.link,
+    joinOpen: now >= opensAt(e) && now <= closesAt(e),
     live: now >= e.ts && now <= endsAt(e),
     rsvpCount: (e.rsvps || []).length,
     youRsvp: (e.rsvps || []).indexOf(u.email) !== -1,
@@ -181,7 +182,6 @@ export async function onRequestPost(context) {
   if (action === "join") {
     const ev = events.find((e) => e.id === body.id);
     if (!ev) return json({ error: "not_found" }, 404);
-    if (!ev.link) return json({ error: "no_room" }, 200);
     if (now < opensAt(ev)) return json({ error: "not_open", opens: opensAt(ev), ts: ev.ts }, 200);
     if (now > closesAt(ev)) return json({ error: "ended", replay: ev.replay || "" }, 200);
     if (!ev.att) ev.att = [];
@@ -190,7 +190,19 @@ export async function onRequestPost(context) {
       while (ev.att.length > MAX_ATT) ev.att.shift();
       await env.BUILDER_KV.put("events", JSON.stringify(events));
     }
-    return json({ ok: true, link: ev.link, pass: ev.pass || "", title: ev.title });
+    if (ev.link) {
+      return json({ ok: true, kind: "ekstern", link: ev.link, pass: ev.pass || "", title: ev.title });
+    }
+    /* LMEs eget rom. Navnet bygges paa id-en, som er en tilfeldig uuid, saa
+       ingen kan gjette seg fram til rommet utenfra. */
+    return json({
+      ok: true,
+      kind: "innebygd",
+      room: "lme-" + ev.id.replace(/-/g, ""),
+      navn: u.name || (u.email ? u.email.split("@")[0] : "Medlem"),
+      vert: isOwner(u),
+      title: ev.title,
+    });
   }
 
   if (action === "delete") {
