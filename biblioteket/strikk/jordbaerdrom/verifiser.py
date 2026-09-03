@@ -110,15 +110,16 @@ print(f'   kontrollert {len(DATA["plagg"])} størrelser x 4 tall')
 lu = pymupdf.open(BASE / 'LME-Jordbaerdrom-Lue.pdf')
 lutekst = ' '.join(s.get_text() for s in lu)
 for v in DATA['luer']:
-    for felt in ('masker', 'fell_omganger', 'band_cm', 'kalyks_m', 'blad_base',
-                 'blad_felleomg', 'klaff_m', 'klaff_felleomg', 'stilk_cm',
-                 'lue_buer', 'bue_lue'):
+    for felt in ('str_nr', 'masker', 'fell_omganger', 'band_cm', 'kalyks_m',
+                 'blad_base', 'blad_felleomg', 'klaff_m', 'klaff_felleomg',
+                 'stilk_cm', 'lue_buer', 'bue_lue', 'felt', 'fro_rapport',
+                 'fro_antall', 'bue_a', 'bue_b'):
         if str(v[felt]) not in lutekst:
             feil.append(f'lue {v["navn_no"]}: {felt}={v[felt]} står ikke i PDF-en')
     for felt in ('omkrets_cm', 'hoyde_cm', 'blad_cm', 'klaff_cm', 'kant_cm'):
         if str(v[felt]).replace('.', ',') not in lutekst:
             feil.append(f'lue {v["navn_no"]}: {felt}={v[felt]} står ikke i PDF-en')
-print(f'   kontrollert {len(DATA["luer"])} luestørrelser x 16 tall')
+print(f'   kontrollert {len(DATA["luer"])} luestørrelser x 22 tall')
 
 so = pymupdf.open(BASE / 'LME-Jordbaerdrom-Sokker.pdf')
 sotekst = ' '.join(s.get_text() for s in so)

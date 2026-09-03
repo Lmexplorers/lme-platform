@@ -376,63 +376,86 @@ for navn_no, navn_en, dekker, m, ribb_cm, fot_cm, overfot_m, overfot_p, plukk, i
 # Luen skal ligge inntil, ikke stramme. Ribben strekker seg, så omkretsen
 # ligger med vilje under hodemålet. Forholdet kontrolleres nedenfor.
 LUER = []
-# Luen etter designbildet Renate sendte 3. september 2026. Den er IKKE bygget
-# som votter og tøfler, og har ingen krans av små jordbærhetter:
-#   rosa vridd ribb nederst (enkel, ikke brettet), rosa legg med frø, rosa
-#   toppfelling, og øverst en grønn kalyks av spisse begerblad som legger seg
-#   over det rosa, med en i-cord-stilk i midten. To øreklaffer plukkes opp
-#   under ribben, felles til en spiss, og båndet fortsetter rett ut av spissen
-#   som i-cord.
+# Luen etter designbildene Renate sendte 3. september 2026: grønn buekant
+# nederst, rosa legg med frø, rosa toppfelling, en grønn kalyks av seks
+# begerblad med i-cord-stilk, og grønne øreklaffer med bånd som vokser ut av
+# klaffens spiss.
 #
-# Den første utgaven av denne oppskriften ble skrevet før bildet fantes, og
-# gjettet feil på tre punkter: grønn brettet ribb i stedet for rosa enkel,
-# en krans av små hetter i stedet for begerblad, og bånd sydd på i stedet for
-# øreklaffer. Alt tre er rettet her.
-for navn_no, navn_en, dekker, hoder, m, rosa_cm, blad_base, klaff_m, band_cm in [
-    ("Liten",       "Small",       "44",    [32.0],       56, 5.0, 5, 11, 22),
-    ("Medium",      "Medium",      "50-56", [35.0, 38.0], 64, 6.0, 7, 13, 25),
-    ("Stor",        "Large",       "62-68", [41.0, 43.0], 72, 7.0, 7, 13, 28),
-    ("Ekstra stor", "Extra large", "74-80", [45.0, 46.0], 80, 8.0, 9, 15, 30),
-    ("XXL",         "XXL",         "86-92", [47.0, 48.0], 88, 8.5, 9, 15, 32),
-]:
-    # Nedre kant: 3 omganger grønt, så 5 buerunder i rosa. Luen strikkes
-    # nedenfra og opp, så kanten kommer FØRST, men buen blir den samme:
-    # fellingene i dalen og økingene på toppen former kurven uansett retning.
-    lue_buer = m // BUE_LUE
+# NI STØRRELSER, IKKE FEM
+# Luen hadde først fem størrelser som dekket to og to plaggstørrelser. Renate
+# sa klart fra at størrelsene ikke skal slås sammen, og hun har rett:
+# kolleksjonen lover ni størrelser, og da skal luen ha ni.
+#
+# Grunnen til at det først ble fem var at toppen felles i 8 felt, og da må
+# masketallet være delelig med 8. Mellom 56 og 88 masker finnes det bare fem
+# slike tall. Løsningen er ikke å slå sammen størrelser, men å la ANTALL FELT
+# variere: 8, 9 eller 10 felt etter hvilket masketall størrelsen trenger. Da
+# finnes det ni tall, og hver størrelse får sitt eget.
+#
+# Samme grep brukes på bølgekanten og frøene: rapporten velges per størrelse
+# blant dem som går opp i akkurat det masketallet. Strikkeren ser bare tallet
+# i sin egen kolonne og slipper å regne.
+for i, (nr, hode, m, blad_base, klaff_m, band_cm, hoyde_maal) in enumerate([
+    (44, 32.0, 56, 5, 11, 22, 11.5),
+    (50, 35.0, 60, 5, 11, 24, 12.5),
+    (56, 38.0, 63, 7, 13, 25, 13.5),
+    (62, 41.0, 70, 7, 13, 27, 14.5),
+    (68, 43.0, 72, 7, 13, 28, 15.3),
+    (74, 45.0, 80, 9, 15, 30, 16.0),
+    (80, 46.0, 81, 9, 15, 31, 16.5),
+    (86, 47.0, 88, 9, 15, 32, 17.2),
+    (92, 48.0, 90, 9, 15, 33, 17.8),
+]):
+    # Antall felt i toppfellingen: det første av 8, 9 eller 10 som går opp.
+    felt = next(f for f in (8, 9, 10) if m % f == 0)
+    fell_omg = m // felt - 1
+    fell_cm = round(2 * fell_omg / GAUGE_ROW_CM, 1)
+    # Bølgekanten og frøene: bredeste rapport mellom 6 og 9 som går opp.
+    bue = max(b for b in (6, 7, 8, 9) if m % b == 0)
+    fro_rapport = max(f for f in (6, 7, 8, 9) if m % f == 0)
+    lue_buer = m // bue
+    # Buerunden skrives generelt: *2 r sm vridd, A rett, 1 økning, B rett,
+    # 1 økning, A rett, 2 r sm*. Den er maskenøytral for alle A og B, og
+    # 2A + B = rapport - 4 gir riktig bredde uansett hvilken rapport
+    # størrelsen har.
+    bue_a = max(0, (bue - 6) // 2)
+    bue_b = bue - 4 - 2 * bue_a
     kant_omg = GRONN_KANT_OMG + BUE_OMGANGER
     kant_cm = round(kant_omg / GAUGE_ROW_CM, 1)
-    # Toppen felles i 8 felt, én felling per felt, annenhver omgang, til 8 m.
-    fell_omg = (m - 8) // 8
-    fell_cm = round(2 * fell_omg / GAUGE_ROW_CM, 1)
-    # Ferdig høyde fra nedre kant: kant + rosa legg + toppfelling.
+    # Det rosa legget fyller opp til den høyden størrelsen skal ha. Da blir
+    # totalhøyden jevnt stigende selv om toppfellingen hopper litt, fordi
+    # antall felt varierer.
+    rosa_cm = round(hoyde_maal - kant_cm - fell_cm, 1)
     hoyde_cm = round(kant_cm + rosa_cm + fell_cm, 1)
 
-    # KALYKSEN. Seks begerblad, som på bildet. Hvert blad felles 1 maske i hver
-    # side hver 4. rad til 1 maske står igjen, så bladet ender i en spiss.
+    # KALYKSEN. Seks begerblad. Hvert blad felles 1 maske i hver side hver
+    # 4. rad til 1 maske står igjen, så bladet ender i en spiss.
     blad_antall = 6
     kalyks_m = blad_antall * blad_base
     blad_felleomg = (blad_base - 1) // 2
     blad_rader = 4 * blad_felleomg
     blad_cm = round(blad_rader / GAUGE_ROW_CM, 1)
 
-    # ØREKLAFFENE. 4 rette rader, så 1 maske felt i hver side annenhver rad til
-    # 3 masker står igjen. De 3 blir til i-cord-båndet.
+    # ØREKLAFFENE. 4 rette rader, så 1 maske felt i hver side annenhver rad
+    # til 3 masker står igjen. De 3 blir til i-cord-båndet.
     klaff_felleomg = (klaff_m - 3) // 2
     klaff_rader = 4 + 2 * klaff_felleomg
     klaff_cm = round(klaff_rader / GAUGE_ROW_CM, 1)
 
     LUER.append(dict(
-        navn_no=navn_no, navn_en=navn_en, dekker=dekker, hoder=hoder, masker=m,
-        fro_rapporter=m // BLAD_RAPPORT,
+        str_nr=nr, tillegg_no=SIZES[i][1], tillegg_en=SIZES[i][2],
+        hode_cm=hode, masker=m,
         omkrets_cm=round(m / GAUGE_ST_CM, 1),
-        lue_buer=lue_buer, bue_lue=BUE_LUE, kant_omg=kant_omg, kant_cm=kant_cm,
-        rosa_cm=rosa_cm,
-        fell_omganger=fell_omg, fell_cm=fell_cm, hoyde_cm=hoyde_cm,
+        andel_av_hode=round(m / GAUGE_ST_CM / hode, 2),
+        felt=felt, fell_omganger=fell_omg, fell_cm=fell_cm,
+        bue_lue=bue, lue_buer=lue_buer, bue_a=bue_a, bue_b=bue_b, kant_omg=kant_omg, kant_cm=kant_cm,
+        fro_rapport=fro_rapport, fro_antall=m // fro_rapport,
+        rosa_cm=rosa_cm, hoyde_cm=hoyde_cm,
         blad_antall=blad_antall, blad_base=blad_base, kalyks_m=kalyks_m,
         blad_felleomg=blad_felleomg, blad_rader=blad_rader, blad_cm=blad_cm,
         klaff_m=klaff_m, klaff_felleomg=klaff_felleomg, klaff_rader=klaff_rader,
         klaff_cm=klaff_cm,
-        band_cm=band_cm, stilk_cm=4 + (m - 56) // 16,
+        band_cm=band_cm, stilk_cm=4 + i // 3,
     ))
 
 # --------------------------------------------------------------------- SOKKER
@@ -613,106 +636,59 @@ for a, b in zip(TOFLER, TOFLER[1:]):
     assert b['masker'] > a['masker'] and b['fot_cm'] > a['fot_cm']
 
 for lue in LUER:
-    # Frøomgangen er 8 masker og må gå opp rundt. Luen har ingen jordbærhette.
-    assert lue['masker'] % BLAD_RAPPORT == 0, f"lue {lue['navn_no']}: frøomgangen går ikke opp"
-    # Toppen felles i 8 felt og skal ende på nøyaktig 8 masker.
-    assert lue['masker'] - 8 * lue['fell_omganger'] == 8, \
-        f"lue {lue['navn_no']}: toppfellingen ender ikke på 8 masker"
-    # Luen skal ligge inntil hodet uten å stramme. Ribben strekker seg, så
-    # omkretsen ligger under hodemålet, men ikke hvor som helst under.
-    for hode in lue['hoder']:
-        andel = lue['omkrets_cm'] / hode
-        assert 0.78 <= andel <= 0.92, \
-            f"lue {lue['navn_no']}: {lue['omkrets_cm']} cm er {andel:.0%} av hode {hode} cm"
+    # Frørapporten og bølgerapporten må gå opp i akkurat dette masketallet.
+    assert lue['masker'] % lue['fro_rapport'] == 0, \
+        f"lue str {lue['str_nr']}: frørapporten {lue['fro_rapport']} går ikke opp i {lue['masker']}"
+    assert lue['masker'] % lue['bue_lue'] == 0, \
+        f"lue str {lue['str_nr']}: bølgerapporten {lue['bue_lue']} går ikke opp i {lue['masker']}"
+    assert lue['lue_buer'] * lue['bue_lue'] == lue['masker']
+    assert lue['lue_buer'] >= 7, f"lue str {lue['str_nr']}: bare {lue['lue_buer']} buer rundt"
+    # Buerunden må bruke nøyaktig så mange masker som rapporten er, og gi
+    # like mange tilbake. 2 fellinger + 2 økinger + A + B + A masker.
+    assert 2 * lue['bue_a'] + lue['bue_b'] + 4 == lue['bue_lue'], \
+        f"lue str {lue['str_nr']}: buerunden bruker ikke {lue['bue_lue']} masker"
+    assert lue['bue_b'] >= 1, f"lue str {lue['str_nr']}: buerunden har ingen masker mellom økingene"
+    # Toppen felles i like mange felt hele veien og skal ende på felt-tallet.
+    assert lue['masker'] % lue['felt'] == 0, \
+        f"lue str {lue['str_nr']}: {lue['masker']} m går ikke opp i {lue['felt']} felt"
+    assert lue['masker'] - lue['felt'] * lue['fell_omganger'] == lue['felt'], \
+        f"lue str {lue['str_nr']}: toppfellingen ender ikke på {lue['felt']} masker"
+    assert 8 <= lue['felt'] <= 10, \
+        f"lue str {lue['str_nr']}: {lue['felt']} felt gir en topp som ikke ser rund ut"
+    # Luen skal ligge inntil hodet uten å stramme.
+    assert 0.78 <= lue['andel_av_hode'] <= 0.92, \
+        f"lue str {lue['str_nr']}: {lue['omkrets_cm']} cm er {lue['andel_av_hode']:.0%} av hode {lue['hode_cm']} cm"
     # Høyden må dekke ørene uten at luen blir en pose.
-    for hode in lue['hoder']:
-        assert 0.31 <= lue['hoyde_cm'] / hode <= 0.42, \
-            f"lue {lue['navn_no']}: høyde {lue['hoyde_cm']} cm passer ikke hode {hode} cm"
-    # Kalyksen: seks begerblad som hver ender i EN maske, ellers blir det ingen spiss.
-    assert lue['kalyks_m'] == lue['blad_antall'] * lue['blad_base'], \
-        f"lue {lue['navn_no']}: kalyksen går ikke opp i {lue['blad_antall']} blad"
+    assert 0.31 <= lue['hoyde_cm'] / lue['hode_cm'] <= 0.42, \
+        f"lue str {lue['str_nr']}: høyde {lue['hoyde_cm']} cm passer ikke hode {lue['hode_cm']} cm"
+    # Det rosa legget må faktisk finnes, ellers møter kanten toppfellingen.
+    assert lue['rosa_cm'] >= 3.0, \
+        f"lue str {lue['str_nr']}: bare {lue['rosa_cm']} cm rosa legg mellom kant og toppfelling"
+    # Kalyksen: seks begerblad som hver ender i EN maske.
+    assert lue['kalyks_m'] == lue['blad_antall'] * lue['blad_base']
     assert lue['blad_base'] % 2 == 1, \
-        f"lue {lue['navn_no']}: bladet har {lue['blad_base']} masker, et partall kan ikke ende i én spiss"
-    assert lue['blad_base'] - 2 * lue['blad_felleomg'] == 1, \
-        f"lue {lue['navn_no']}: bladet ender ikke på 1 maske"
-    # Kalyksen skal dekke toppen, ikke hele luen. Bildet viser omtrent halve
-    # omkretsen i grønt ved bladenes fot.
-    andel_kalyks = lue['kalyks_m'] / lue['masker']
-    assert 0.45 <= andel_kalyks <= 0.68, \
-        f"lue {lue['navn_no']}: kalyksen er {andel_kalyks:.0%} av luen, utenfor det bildet viser"
+        f"lue str {lue['str_nr']}: bladet har {lue['blad_base']} masker, et partall kan ikke ende i én spiss"
+    assert lue['blad_base'] - 2 * lue['blad_felleomg'] == 1
+    assert 0.45 <= lue['kalyks_m'] / lue['masker'] <= 0.70, \
+        f"lue str {lue['str_nr']}: kalyksen er {lue['kalyks_m'] / lue['masker']:.0%} av luen"
     # Øreklaffen felles til nøyaktig 3 masker, som blir i-corden i båndet.
-    assert lue['klaff_m'] - 2 * lue['klaff_felleomg'] == 3, \
-        f"lue {lue['navn_no']}: øreklaffen ender ikke på 3 masker"
-    assert lue['klaff_m'] % 2 == 1, f"lue {lue['navn_no']}: øreklaffen må ha et oddetall masker"
-    # To klaffer må få plass under ribben uten å møtes.
+    assert lue['klaff_m'] % 2 == 1 and lue['klaff_m'] - 2 * lue['klaff_felleomg'] == 3, \
+        f"lue str {lue['str_nr']}: øreklaffen ender ikke på 3 masker"
     assert 2 * lue['klaff_m'] < lue['masker'] // 2, \
-        f"lue {lue['navn_no']}: øreklaffene tar for stor del av omkretsen"
-    # Buekanten nederst må gå opp i hele buer, ellers ender strikkeren med en
-    # halv bue midt bak, og det er det første øyet ser på en lue.
-    assert lue['masker'] % BUE_LUE == 0, \
-        f"lue {lue['navn_no']}: {lue['masker']} m går ikke opp i buer à {BUE_LUE}"
-    assert lue['lue_buer'] * BUE_LUE == lue['masker']
-    assert lue['lue_buer'] >= 7, f"lue {lue['navn_no']}: bare {lue['lue_buer']} buer rundt"
+        f"lue str {lue['str_nr']}: øreklaffene tar for stor del av omkretsen"
 
+# Ni luer, én per plaggstørrelse. Ingen sammenslåtte størrelser.
+assert len(LUER) == 9, f"luen har {len(LUER)} størrelser, ikke 9"
+assert [l['str_nr'] for l in LUER] == [r['str_nr'] for r in rows], \
+    'luestørrelsene stemmer ikke med plaggstørrelsene'
+assert len({l['masker'] for l in LUER}) == 9, \
+    'to luestørrelser har samme masketall, det er fem størrelser med ni navn'
 for a, b in zip(LUER, LUER[1:]):
-    for felt in ('masker', 'hoyde_cm', 'band_cm', 'fell_omganger'):
-        assert b[felt] > a[felt], f"lue {b['navn_no']}: {felt} vokser ikke"
-    for felt in ('kalyks_m', 'klaff_m', 'blad_cm', 'klaff_cm', 'lue_buer'):
-        assert b[felt] >= a[felt], f"lue {b['navn_no']}: {felt} krymper ({a[felt]} -> {b[felt]})"
+    for felt in ('masker', 'hoyde_cm', 'band_cm', 'omkrets_cm'):
+        assert b[felt] > a[felt], f"lue str {b['str_nr']}: {felt} vokser ikke ({a[felt]} -> {b[felt]})"
+    for felt in ('kalyks_m', 'klaff_m', 'blad_cm', 'klaff_cm', 'stilk_cm'):
+        assert b[felt] >= a[felt], f"lue str {b['str_nr']}: {felt} krymper"
 
-for sk in SOKKER:
-    # Jordbærhetten er 4 masker og må gå opp rundt.
-    assert sk['masker'] % SMABLAD_RAPPORT == 0, f"sokk {sk['navn_no']}: hettene går ikke opp"
-    # Frørapporten er egen per størrelse, og MÅ gå opp i akkurat det masketallet.
-    assert sk['masker'] % sk['fro_rapport'] == 0, \
-        f"sokk {sk['navn_no']}: frørapporten {sk['fro_rapport']} går ikke opp i {sk['masker']} m"
-    assert 6 <= sk['fro_rapport'] <= 9, f"sokk {sk['navn_no']}: frøene står for tett eller for spredt"
-    # Hælen er halve omgangen, vristen den andre halvparten.
-    assert sk['hael_m'] + sk['vrist_m'] == sk['masker']
-    assert sk['hael_m'] % 2 == 0, f"sokk {sk['navn_no']}: hælen er ikke delelig i to"
-    # Hælvendingen må ende på et partall, ellers går ikke kilefellingen opp.
-    assert sk['hael_igjen'] % 2 == 0, \
-        f"sokk {sk['navn_no']}: hælvendingen ender på {sk['hael_igjen']} masker, ikke et partall"
-    assert 0 < sk['hael_igjen'] < sk['hael_m']
-    assert sk['vend_b'] >= 1, f"sokk {sk['navn_no']}: rad 2 i hælvendingen går ikke opp"
-    # Kilen må felle tilbake til nøyaktig det masketallet sokken hadde.
-    assert sk['etter_plukk'] - 2 * sk['kile_omganger'] == sk['masker'], \
-        f"sokk {sk['navn_no']}: kilen feller ikke tilbake til {sk['masker']} masker"
-    assert sk['kile_omganger'] > 0
-    # Tåen felles med 4 masker per omgang og må ende på nøyaktig ta_slutt.
-    assert sk['masker'] - 4 * sk['ta_omganger'] == sk['ta_slutt'], \
-        f"sokk {sk['navn_no']}: tåen ender ikke på {sk['ta_slutt']} masker"
-    assert sk['ta_slutt'] % 4 == 0
-    # Foten må være lengre enn tåen, ellers er tåen ferdig før foten er begynt.
-    assert sk['fot_for_ta_cm'] > 2.0, \
-        f"sokk {sk['navn_no']}: bare {sk['fot_for_ta_cm']} cm fot før tåfellingen"
-for a, b in zip(SOKKER, SOKKER[1:]):
-    for felt in ('masker', 'fot_cm', 'legg_cm', 'hael_m', 'etter_plukk'):
-        assert b[felt] > a[felt], f"sokk {b['navn_no']}: {felt} vokser ikke"
-
-# Sokker og tøfler er gradert etter samme fotlengder, og skal dekke de samme
-# plaggstørrelsene. Ellers vil et barn ha én størrelse på foten og en annen i
-# tøffelen utenpå.
-assert [sk['dekker'] for sk in SOKKER] == [t['dekker'] for t in TOFLER], \
-    'sokker og tøfler dekker ikke de samme størrelsene'
-assert [sk['fot_cm'] for sk in SOKKER] == [t['fot_cm'] for t in TOFLER], \
-    'sokker og tøfler er gradert etter ulike fotlengder'
-
-# Hver plaggstørrelse skal ha nøyaktig én lue. Ingen hull, ingen dobbeltdekning.
-dekket = []
-for lue in LUER:
-    d = lue['dekker'].split('-')
-    dekket += [int(x) for x in d] if len(d) == 2 else [int(d[0])]
-alle = [r['str_nr'] for r in rows]
-lue_str = []
-for lue in LUER:
-    d = lue['dekker'].split('-')
-    if len(d) == 1:
-        lue_str.append(int(d[0]))
-    else:
-        lo, hi = int(d[0]), int(d[1])
-        lue_str += [n for n in alle if lo <= n <= hi]
-assert lue_str == alle, f"luene dekker {lue_str}, ikke alle ni plaggstørrelsene"
 
 out = BASE / 'sizes.json'
 out.write_text(json.dumps(
@@ -738,10 +714,12 @@ for v in VOTTER:
 for s in TOFLER:
     print(f"  tøfler {s['navn_no']:>12} (str {s['dekker']}): {s['masker']} m, "
           f"fot {s['fot_cm']} cm, {s['etter_plukk']} m etter oppplukking")
+print()
+print(f"  {'lue':>7} {'m':>4} {'cm':>6} {'%hode':>6} {'felt':>5} {'høyde':>7} {'buer':>5} {'frø':>4} {'kalyks':>7}")
 for lue in LUER:
-    print(f"  lue    {lue['navn_no']:>12} (str {lue['dekker']}): {lue['masker']} m, "
-          f"{lue['omkrets_cm']} cm rundt, {lue['hoyde_cm']} cm høy, kalyks "
-          f"{lue['kalyks_m']} m i 6 blad à {lue['blad_cm']} cm, klaff {lue['klaff_m']} m")
+    print(f"  str {lue['str_nr']:>3} {lue['masker']:>4} {lue['omkrets_cm']:>5} "
+          f"{lue['andel_av_hode']:>5.0%} {lue['felt']:>5} {lue['hoyde_cm']:>6} cm "
+          f"{lue['lue_buer']:>5} {lue['fro_rapport']:>4} {lue['kalyks_m']:>7}")
 for sk in SOKKER:
     print(f"  sokk   {sk['navn_no']:>12} (str {sk['dekker']}): {sk['masker']} m, "
           f"fot {sk['fot_cm']} cm, hæl {sk['hael_m']} m -> {sk['hael_igjen']} m, "

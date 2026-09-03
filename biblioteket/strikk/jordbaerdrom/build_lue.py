@@ -6,10 +6,10 @@ Rund lue strikket nedenfra og opp: grønn buekant nederst, rosa glattstrikk med
 frø, rosa toppfelling, og en grønn kalyks av seks begerblad med i-cord-stilk
 som sys over toppen. Øreklaffer med i-cord-bånd.
 
-Luen har fem størrelser, ikke ni som plaggene. Grunnen står i
-grading_jordbaerdrom.py: frødiagrammet er 8 masker, altså 3,8 cm i omkrets,
-mens et barnehode vokser 1 til 3 cm mellom to nabostørrelser. Ni luer hadde
-blitt de samme fem tallene med ni navn.
+Luen er gradert i de samme ni størrelsene som resten av kolleksjonen, én lue
+per plaggstørrelse. Det krever at antall felt i toppfellingen, bølgerapporten
+og frørapporten varierer med størrelsen, siden ni ulike masketall ikke kan
+dele én fast rapport. Se grading_jordbaerdrom.py.
 
 Hver av de ni plaggstørrelsene er dekket av nøyaktig én lue. Det kontrolleres
 med en assert i graderingen, så et hull eller en dobbeltdekning stopper
@@ -28,12 +28,7 @@ def komma(x):
 
 
 def navn(v, lang):
-    return v['navn_no'] if lang == 'no' else v['navn_en']
-
-
-def bar(lang):
-    return f.storrelsesbar_liste(
-        [(navn(v, lang), L(lang, 'str ', 'size ') + v['dekker']) for v in LUER])
+    return v['str_nr']
 
 
 def sider(lang):
@@ -47,16 +42,15 @@ def sider(lang):
     P.append(pg(f.forside(
         lang,
         L(lang, 'JORDBÆRDRØM LUE', 'STRAWBERRY DREAM HAT'),
-        L(lang, 'STØRRELSE 44 TIL 92', 'SIZES 44 TO 92'),
+        L(lang, 'NI STØRRELSER, 44 TIL 92', 'NINE SIZES, 44 TO 92'),
         L(lang,
           'Rund lue med grønn buekant nederst, innstrikkede frø, grønne øreklaffer med '
-          'bånd, og en grønn kalyks av seks begerblad med i-cord-stilk på toppen. Fem '
-          'størrelser, som '
-          'dekker plaggstørrelse 44 til 92.',
+          'bånd, og en grønn kalyks av seks begerblad med i-cord-stilk på toppen. '
+          'Gradert i ni størrelser, fra liten nyfødt og opp til to år.',
           'A round hat with a green scalloped edge, knitted-in seeds, green ear flaps with '
-          'ties, and a green calyx of six sepals with an i-cord stalk on top. Five sizes, '
-          'covering garment sizes 44 to 92.'),
-        bar=bar(lang), bilde='lue.jpg'), 1))
+          'ties, and a green calyx of six sepals with an i-cord stalk on top. Graded in '
+          'nine sizes, from small newborn up to two years.'),
+        bilde='lue.jpg'), 1))
 
     # ------------------------------------------------------- 2 FØR DU BEGYNNER
     P.append(pg(
@@ -100,46 +94,33 @@ def sider(lang):
               'stitches that a mistake is put right in minutes.')), 2))
 
     # ------------------------------------------------------------ 3 STØRRELSER
-    khead = [Sh] + L(lang, ['Passer til plaggstørrelse', 'Hodeomkrets'],
-                     ['Fits garment size', 'Head circumference'])
-    krow = []
-    for v in LUER:
-        h = v['hoder']
-        hs = komma(h[0]) if len(h) == 1 else komma(h[0]) + ' til ' + komma(h[-1])
-        if lang == 'en':
-            hs = hs.replace(',', '.').replace(' til ', ' to ')
-        krow.append([navn(v, lang), v['dekker'], hs + ' cm'])
-    mhead = [Sh] + L(lang, ['Masker rundt', 'Omkrets', 'Høyde', 'Bladlengde'],
-                     ['Stitches round', 'Circumference', 'Height', 'Leaf length'])
-    mrow = [[navn(v, lang), str(v['masker']) + m, komma(v['omkrets_cm']) + ' cm',
-             komma(v['hoyde_cm']) + ' cm', komma(v['blad_cm']) + ' cm'] for v in LUER]
-    P.append(pg(f.side_storrelser_smaadel(
-        lang,
-        L(lang,
-          'Luen er gradert i fem størrelser, ikke ni som plaggene. Frødiagrammet er 8 '
-          'masker, altså 3,8 cm rundt, mens et barnehode vokser 1 til 3 cm mellom to '
-          'nabostørrelser. Ni luer hadde derfor blitt de samme fem tallene med ni '
-          'navn. Mål hodet der luen skal sitte, altså rundt pannen og over ørene, og '
-          'velg etter det målet. Hver plaggstørrelse har nøyaktig én lue.',
-          'The hat is graded in five sizes, not nine like the garments. The seed chart '
-          'is 8 stitches, that is 3.8 cm round, while a child head grows 1 to 3 cm '
-          'between two neighbouring sizes. Nine hats would therefore have been the '
-          'same five numbers under nine names. Measure the head where the hat will '
-          'sit, round the forehead and over the ears, and choose by that measurement. '
-          'Each garment size has exactly one hat.'),
-        khead, krow, mhead, mrow,
-        [(navn(v, lang), L(lang, 'str ', 'size ') + v['dekker']) for v in LUER],
-        L(lang,
-          'Omkretsen er med vilje mindre enn hodet, så luen ligger inntil. Merk at '
-          'denne luen ikke har ribb: buekanten strekker seg når luen tres på, men den '
-          'trekker seg ikke sammen igjen slik en ribb gjør. Det er knytebåndene som '
-          'holder luen på plass, ikke kanten. Legg derfor opp svært løst, og bruk alltid '
-          'båndene på de minste.',
-          'The circumference is deliberately smaller than the head, so the hat sits '
-          'close. Note that this hat has no rib: the scalloped edge stretches as the hat '
-          'goes on, but it does not draw back in the way a rib does. It is the ties that '
-          'hold the hat in place, not the edge. So cast on very loosely, and always use '
-          'the ties on the smallest sizes.')), 3))
+    mal_h = [Sh] + L(lang, ['Hodeomkrets', 'Masker rundt', 'Luens omkrets', 'Høyde',
+                            'Buer', 'Bladlengde'],
+                     ['Head circumference', 'Stitches round', 'Hat circumference',
+                      'Height', 'Scallops', 'Leaf length'])
+    mal_r = [[v['str_nr'], komma(v['hode_cm']) + ' cm', str(v['masker']) + m,
+              komma(v['omkrets_cm']) + ' cm', komma(v['hoyde_cm']) + ' cm',
+              str(v['lue_buer']) + ' x', komma(v['blad_cm']) + ' cm'] for v in LUER]
+    P.append(pg(
+        banner(L(lang, 'STØRRELSER OG FERDIGE MÅL', 'SIZES AND FINISHED MEASUREMENTS')) +
+        '<p>' + L(lang,
+        'Luen er gradert i de samme ni størrelsene som resten av kolleksjonen, én lue '
+        'per plaggstørrelse. Mål hodet der luen skal sitte, altså rundt pannen og over '
+        'ørene, og velg etter det målet.',
+        'The hat is graded in the same nine sizes as the rest of the collection, one hat '
+        'per garment size. Measure the head where the hat will sit, round the forehead '
+        'and over the ears, and choose by that measurement.') + '</p>' +
+        f.storrelsesbar(lang) +
+        card(tabell(mal_h, mal_r, min_index=0)) +
+        cme(L(lang,
+              'Omkretsen er med vilje mindre enn hodet, så luen ligger inntil. Merk at '
+              'denne luen ikke har ribb: buekanten strekker seg når luen tres på, men '
+              'den trekker seg ikke sammen igjen slik en ribb gjør. Det er knytebåndene '
+              'som holder luen på plass. Legg derfor opp svært løst.',
+              'The circumference is deliberately smaller than the head, so the hat sits '
+              'close. Note that this hat has no rib: the scalloped edge stretches as the '
+              'hat goes on, but it does not draw back in the way a rib does. It is the '
+              'ties that hold the hat in place. So cast on very loosely.')), 3))
 
     # ------------------------------------------------------------------ 4 GARN
     garn = [[navn(v, lang), '%d g' % (20 + 5 * i), '%d g' % (15 + 5 * i), '5 g']
@@ -157,12 +138,13 @@ def sider(lang):
     P.append(pg(f.side_diagram(lang, smaa=True), 5))
 
     # ------------------------------------------------------------- 6 BUEKANTEN
-    ribb_h = [Sh] + L(lang, ['Legg opp', 'Buer', 'Masker per bue', 'Grønne omganger',
+    ribb_h = [Sh] + L(lang, ['Legg opp', 'Buer', 'Masker per bue', 'A', 'B',
                              'Buerunder', 'Kantens høyde'],
-                      ['Cast on', 'Scallops', 'Sts per scallop', 'Green rounds',
+                      ['Cast on', 'Scallops', 'Sts per scallop', 'A', 'B',
                        'Scallop rounds', 'Height of the edge'])
     ribb_r = [[navn(v, lang), str(v['masker']) + m, str(v['lue_buer']) + ' x',
-               v['bue_lue'], 3, 5, komma(v['kant_cm']) + ' cm'] for v in LUER]
+               str(v['bue_lue']) + m, v['bue_a'], v['bue_b'], 5,
+               komma(v['kant_cm']) + ' cm'] for v in LUER]
     P.append(pg(
         banner(L(lang, '1 · BUEKANTEN NEDERST', '1 · THE SCALLOPED EDGE')) +
         card('<p>' + L(lang,
@@ -176,61 +158,68 @@ def sider(lang):
              'a marker at the beginning of the round. Work 3 rounds in knit in green.') +
              '</p>') +
         card('<p>' + L(lang,
-             'Bytt til rosa. Del omgangen i buer med en markør mellom hver bue. Hver bue '
-             'er 8 masker. Strikk buerunden: *2 rett sammen vridd, 1 rett, 1 økning, 2 '
-             'rett, 1 økning, 1 rett, 2 rett sammen*, og gjenta rundt. Masketallet står '
-             'stille, men kanten former seg i runde buer. Gjenta buerunden i alt 5 '
-             'ganger, og fortsett så rett opp.',
+             'Bytt til rosa. Del omgangen i buer med en markør mellom hver bue. Hvor '
+             'mange masker buen er, og tallene A og B, står i kolonnen din. Strikk '
+             'buerunden: *2 rett sammen vridd, A rett, 1 økning, B rett, 1 økning, A '
+             'rett, 2 rett sammen*, og gjenta rundt. Er A null, hopper du bare over de '
+             'maskene. Masketallet står stille, men kanten former seg i runde buer. '
+             'Gjenta buerunden i alt 5 ganger, og fortsett så rett opp.',
              'Change to pink. Divide the round into scallops with a marker between each. '
-             'Every scallop is 8 stitches. Work the scallop round: *ssk, k1, M1R, k2, '
-             'M1L, k1, k2tog*, and repeat round. The stitch count stays the same, but the '
-             'edge shapes itself into rounded scallops. Repeat the scallop round 5 times '
-             'in all, then continue straight up.') + '</p>' +
-             tabell(ribb_h, ribb_r, min_index=0)) +
+             'How many stitches the scallop is, and the numbers A and B, are in your '
+             'column. Work the scallop round: *ssk, k A, M1R, k B, M1L, k A, k2tog*, and '
+             'repeat round. If A is zero, you simply skip those stitches. The stitch '
+             'count stays the same, but the edge shapes itself into rounded scallops. '
+             'Repeat the scallop round 5 times in all, then continue straight up.') +
+             '</p>' + tabell(ribb_h, ribb_r, min_index=0)) +
         cme(L(lang,
-              'Buen er 8 masker på luen, ikke 6 som på genseren eller 10 som på '
-              'skjørtene. Grunnen er at rapporten må gå opp i alle fem luestørrelsene, '
-              'og 8 er det eneste tallet som gjør det. Det gir 7 til 11 buer rundt. '
-              'Legg opp svært løst: opplegget er den ytterste kanten, og et stramt '
-              'oppligg trekker buene rette.',
-              'The scallop is 8 stitches on the hat, not 6 as on the jumper or 10 as on '
-              'the skirts. The reason is that the repeat has to divide into all five hat '
-              'sizes, and 8 is the only number that does. That gives 7 to 11 scallops '
-              'round. Cast on very loosely: the cast-on is the outermost edge, and a '
-              'tight cast-on pulls the scallops straight.')), 6))
+              'Buens bredde er ikke den samme i alle størrelser, og det er med vilje. '
+              'Skulle alle ni luene hatt samme rapport, måtte flere størrelser hatt '
+              'samme masketall, og da er det ikke ni størrelser. Rapporten velges i '
+              'stedet blant dem som går opp i akkurat ditt masketall. Du ser bare tallet '
+              'i din egen kolonne.',
+              'The width of the scallop is not the same in every size, and that is '
+              'deliberate. If all nine hats had to share one repeat, several sizes would '
+              'have to share a stitch count, and then they are not nine sizes. The repeat '
+              'is chosen instead from those that divide into your stitch count exactly. '
+              'You only ever read the number in your own column.')), 6))
 
     # -------------------------------------------------------- 7 ROSA DEL OG FRØ
-    rosa_h = [Sh] + L(lang, ['Masker', 'Rosa del', 'Frørapporter rundt'],
-                      ['Stitches', 'Pink section', 'Seed repeats round'])
+    rosa_h = [Sh] + L(lang, ['Masker', 'Rosa del', 'Frørapport', 'Frø per omgang'],
+                      ['Stitches', 'Pink section', 'Seed repeat', 'Seeds per round'])
     rosa_r = [[navn(v, lang), str(v['masker']) + m, komma(v['rosa_cm']) + ' cm',
-               str(v['fro_rapporter']) + ' x'] for v in LUER]
+               str(v['fro_rapport']) + m, str(v['fro_antall']) + ' x'] for v in LUER]
     P.append(pg(
         banner(L(lang, '2 · DEN ROSA DELEN OG FRØENE', '2 · THE PINK SECTION AND SEEDS')) +
         '<p>' + L(lang,
-        'Fortsett i rosa glattstrikk rundt, altså rett på alle omganger. På en '
-        'frøomgang strikker du frøomgang A fra side 5, altså *3 rosa, 1 kremhvit, 4 '
-        'rosa*, gjentatt rundt. Strikk 3 omganger rosa. Strikk deretter frøomgang B, '
-        'altså *7 rosa, 1 kremhvit*, gjentatt rundt. De to omgangene forskyver frøene '
-        'i forhold til hverandre, så de ser strødd ut og ikke oppstilt.',
-        'Continue in pink stocking stitch in the round, that is knit on every round. '
-        'On a seed round work seed round A from page 5, that is *3 pink, 1 cream, 4 '
-        'pink*, repeated round. Work 3 rounds in pink. Then work seed round B, that is '
-        '*7 pink, 1 cream*, repeated round. The two rounds offset the seeds against '
-        'each other, so they look scattered rather than lined up.') + '</p>' +
+        'Fortsett i rosa glattstrikk rundt, altså rett på alle omganger. På en frøomgang '
+        'strikker du *1 kremhvit, resten rosa*, der rapporten er masketallet i kolonnen '
+        'din. Strikk 4 omganger rosa, og strikk så neste frøomgang forskjøvet med halve '
+        'rapporten, så frøene ikke står i loddrette rekker. Fortsett slik til den rosa '
+        'delen måler lengden i kolonnen din.',
+        'Continue in pink stocking stitch in the round, that is knit on every round. On a '
+        'seed round work *1 cream, the rest pink*, where the repeat is the stitch count '
+        'in your column. Work 4 rounds in pink, then work the next seed round offset by '
+        'half the repeat, so the seeds do not sit in vertical columns. Continue like that '
+        'until the pink section measures the length in your column.') + '</p>' +
         card(tabell(rosa_h, rosa_r, min_index=0)) +
         cme(L(lang,
-              'Mål den rosa delen fra der buerundene slutter, ikke fra opplegget. '
-              'Kanten teller for seg i høydetabellen.',
-              'Measure the pink section from where the scallop rounds end, not from the '
-              'cast-on. The edge counts separately in the height table.')), 7))
+              'Luen har sin egen frørapport per størrelse, akkurat som sokkene. Grunnen '
+              'er den samme: masketallet er valgt for at luen skal passe hodet, ikke for '
+              'at et fast diagram skal gå opp. Rapporten i kolonnen din går opp i akkurat '
+              'ditt masketall.',
+              'The hat has its own seed repeat for each size, just like the socks. The '
+              'reason is the same: the stitch count is chosen so the hat fits the head, '
+              'not so that a fixed chart comes out even. The repeat in your column '
+              'divides exactly into your stitch count.')), 7))
 
     # ----------------------------------------------------------- 9 TOPPFELLINGEN
-    fell_h = [Sh] + L(lang, ['Start', 'Felleomganger', 'Igjen etter felling',
-                             'Toppens høyde'],
-                      ['Start', 'Decrease rounds', 'Left after decreasing',
+    fell_h = [Sh] + L(lang, ['Start', 'Antall felt', 'Felleomganger',
+                             'Igjen etter felling', 'Toppens høyde'],
+                      ['Start', 'Sections', 'Decrease rounds', 'Left after decreasing',
                        'Height of the crown'])
-    fell_r = [[navn(v, lang), str(v['masker']) + m, str(v['fell_omganger']) + ' x',
-               '8' + m, komma(v['fell_cm']) + ' cm'] for v in LUER]
+    fell_r = [[navn(v, lang), str(v['masker']) + m, str(v['felt']) + ' x',
+               str(v['fell_omganger']) + ' x', str(v['felt']) + m,
+               komma(v['fell_cm']) + ' cm'] for v in LUER]
     P.append(pg(
         banner(L(lang, '3 · TOPPFELLINGEN', '3 · SHAPING THE CROWN')) +
         '<p>' + L(lang,
