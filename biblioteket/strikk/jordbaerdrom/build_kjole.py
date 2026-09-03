@@ -24,11 +24,9 @@ GARN = [[p['str_nr'],
          '%d g' % (5 * round((p['yoke'] * 0.28 + 8) / 5)), '5 g'] for p in PLAGG]
 
 EKSTRA_NO = [['Pinne 4 mm', 'settpinner eller Magic Loop til hals, armhull og skjørt'],
-             ['1 flat knapp', 'ca. 10-12 mm, til nakkeåpningen'],
              ['Stoppenål', 'til å feste tråder og jevne ut buekanten'],
              ['Maskemarkør', 'til å merke omgangens begynnelse midt bak']]
 EKSTRA_EN = [['4 mm needles', 'double-pointed or Magic Loop for neck, armholes and skirt'],
-             ['1 flat button', 'approx. 10-12 mm, for the back neck opening'],
              ['Darning needle', 'for weaving in ends and evening out the scalloped edge'],
              ['Stitch marker', 'to mark the beginning of the round at centre back']]
 
@@ -69,12 +67,14 @@ def sider(lang):
     P.append(pg(
         banner(L(lang, 'FØR DU BEGYNNER', 'BEFORE YOU START')) +
         card('<p>' + L(lang,
-             'Kjolen strikkes ovenfra og ned med en liten knappåpning bak i nakken. Halsen '
+             'Kjolen strikkes rundt ovenfra og ned, uten åpning i nakken, akkurat som '
+             'genseren i settet. Halsen '
              'legges opp i grønt og deles i 8 felt, og økingene former det runde '
              'bærestykket. Etter bladpartiet settes armhullsmaskene til side, bolen '
              'strikkes rundt ned til livet, og der økes det ut til et lett og fyldig '
              'skjørt.',
-             'The dress is knitted top-down with a small buttoned opening at the back '
+             'The dress is worked in the round from the top down, with no neck opening, '
+             'just like the jumper in the set. The neck '
              'neck. The neck is cast on in green and divided into 8 sections, and the '
              'increases shape the round yoke. After the leaf panel the armhole stitches '
              'are set aside, the body is worked in the round down to the waist, and there '
@@ -118,33 +118,39 @@ def sider(lang):
     P.append(pg(
         banner(L(lang, '1 · HALS OG BÆRESTYKKE', '1 · NECK AND YOKE')) +
         card('<p>' + L(lang,
-             'Legg opp med grønt på pinne 4 mm og strikk 4 pinner vridd ribb frem og '
-             'tilbake, altså 1 vridd rett og 1 vrang. På pinne 3 lager du ett knapphull 3 '
-             'masker innenfor kanten: 2 rett sammen, 1 kast. Fortsett i glattstrikk frem '
-             'og tilbake.',
-             'Cast on in green on 4 mm needles and work 4 rows of twisted rib back and '
-             'forth, that is 1 twisted knit, 1 purl. On row 3 make one buttonhole 3 '
-             'stitches in from the edge: knit 2 together, yarn over. Continue in stocking '
-             'stitch back and forth.') + '</p>') +
+             'Legg opp med grønt på pinne 4 mm med en elastisk oppleggingskant, samle '
+             'til en omgang og strikk 5 omganger vridd ribb, altså 1 rett i bakre '
+             'maskebue og 1 vrang. Kjolen har ingen åpning i nakken, så halsen skal tres '
+             'over hodet, og da er det oppleggingskanten som avgjør. Legg opp løst, '
+             'gjerne over to pinner holdt sammen.',
+             'Cast on in green on 4 mm needles with a stretchy cast-on, join in the round '
+             'and work 5 rounds of twisted rib, that is k1 through the back loop, p1. The '
+             'dress has no neck opening, so the neck has to pass over the head, and there '
+             'the cast-on edge decides. Cast on loosely, for instance over two needles '
+             'held together.') + '</p>') +
         rosep(L(lang, 'ØKINGENE', 'THE INCREASES')) +
         card('<p>' + L(lang,
              'Del maskene i 8 like felt og sett en markør mellom hvert felt. Øk 1 maske i '
-             'hvert felt på annenhver pinne, altså 8 masker per økeomgang. Når åpningen '
-             'bak måler ca. 4 cm, legger du opp 2 masker over åpningen og samler arbeidet '
-             'til en omgang. Fortsett økingene rundt til du har masketallet i kolonnen '
-             'din.',
+             'hvert felt på annenhver omgang, altså 8 masker per økeomgang, til du har '
+             'masketallet i kolonnen din.',
              'Divide the stitches into 8 equal sections and place a marker between each. '
-             'Increase 1 stitch in each section every other row, that is 8 stitches per '
-             'increase round. When the back opening measures approx. 4 cm, cast on 2 '
-             'stitches over the opening and join to work in the round. Continue the '
-             'increases in the round until you have the stitch count in your column.') +
+             'Increase 1 stitch in each section every other round, that is 8 stitches per '
+             'increase round, until you have the stitch count in your column.') +
              '</p>') +
         card(tabell(hals_h, hals_r, min_index=0)) +
         cme(L(lang,
-              'Når økingene er ferdige, strikker du antallet jevne omganger i siste '
+              'Halsen er regnet ut fra hodet, ikke gjettet: den ligger på 80 til 87 % av '
+              'hodeomkretsen i hver størrelse, akkurat som på genseren. Det er derfor '
+              'kjolen ikke trenger knapp bak. Kjennes halsen stram, er det nesten alltid '
+              'oppleggingskanten som er for hard, ikke masketallet. Når økingene er '
+              'ferdige, strikker du antallet jevne omganger i siste '
               'kolonne uten å øke. De gir bærestykket den dybden det skal ha, slik at '
               'armhullet havner riktig, og de er derfor ulike fra størrelse til '
               'størrelse.',
+              'The neck is calculated from the head, not guessed: it sits at 80 to 87 % '
+              'of the head circumference in every size, exactly as on the jumper. That is '
+              'why the dress needs no button at the back. If the neck feels tight, it is '
+              'almost always the cast-on edge that is too firm, not the stitch count. '
               'When the increases are done, work the number of even rounds in the last '
               'column without increasing. They give the yoke the depth it needs so the '
               'armhole sits correctly, and they therefore differ from size to '
@@ -292,10 +298,11 @@ def sider(lang):
              'each of the two corners. Work 4 rounds of twisted rib and cast off with '
              'stretch.') + '</p>' + tabell(kant_h, kant_r, min_index=0)) +
         cme(L(lang,
-              'Sy knappen på nakkeåpningen til slutt, og kontroller at knapphullet ikke '
-              'er blitt for stort etter vask.',
-              'Sew the button on the back neck opening last, and check that the '
-              'buttonhole has not stretched after washing.')), 13))
+              'Fell av løst i armhullskantene. En stram kant skjærer inn i armen, og det '
+              'er den vanligste grunnen til at et ermeløst plagg blir liggende ubrukt.',
+              'Cast off loosely in the armhole edgings. A tight edge cuts into the arm, '
+              'and that is the most common reason a sleeveless garment ends up '
+              'unworn.')), 13))
 
     # ------------------------------------------------------------- 12 TESTSTRIKK
     P.append(pg(f.side_teststrikk(lang, 'kjolen', 'dress'), 14))

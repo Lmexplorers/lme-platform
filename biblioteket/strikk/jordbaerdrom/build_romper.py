@@ -21,7 +21,7 @@ GARN = [[p['str_nr'],
          '%d g' % (5 * round((p['yoke'] * 0.28 + 8) / 5)), '5 g'] for p in PLAGG]
 
 EKSTRA_NO = [['Pinne 4 mm', 'settpinner eller Magic Loop til hals, armhull og skritt'],
-             ['4 flate knapper', 'ca. 10-12 mm, 3 i skrittet og 1 i nakken'],
+             ['3 flate knapper', 'ca. 10-12 mm, til skrittet'],
              ['Stoppenål', 'til å feste tråder og feste beinkantene'],
              ['Maskemarkør', 'til å merke omgangens begynnelse og livet']]
 EKSTRA_EN = [['4 mm needles', 'double-pointed or Magic Loop for neck, armholes and crotch'],
@@ -57,13 +57,13 @@ def sider(lang):
     P.append(pg(
         banner(L(lang, 'FØR DU BEGYNNER', 'BEFORE YOU START')) +
         card('<p>' + L(lang,
-             'Romperen strikkes ovenfra og ned. Bærestykket strikkes først frem og tilbake '
-             'for en liten åpning midt bak, før arbeidet samles til en omgang. Maskene til '
+             'Romperen strikkes rundt ovenfra og ned, uten åpning i nakken, akkurat som '
+             'genseren og kjolen. Maskene til '
              'armhullene settes til side, kroppen strikkes rundt ned til livet, og skjørtet '
              'strikkes ut derfra. Til slutt brettes skjørtet opp, og for- og bakstykke '
              'formes til bleiedelen.',
-             'The romper is knitted top-down. The yoke is first worked back and forth for a '
-             'small opening at centre back, then joined in the round. The armhole stitches '
+             'The romper is worked in the round from the top down, with no neck opening, '
+             'just like the jumper and the dress. The armhole stitches '
              'are set aside, the body is worked in the round down to the waist, and the '
              'skirt is worked out from there. Finally the skirt is folded up and the front '
              'and back are shaped into the nappy panel.') + '</p>') +
@@ -72,7 +72,7 @@ def sider(lang):
                   ['å strikke et rundt bærestykke ovenfra og ned',
                    'å strikke blad- og frømønster med to farger',
                    'å forme armhull og bleiedel',
-                   'å lage knapphull og plukke opp kanter'],
+                   'å lage knapphull i skrittet og plukke opp kanter'],
                   ['knitting a round yoke from the top down',
                    'working leaf and seed charts in two colours',
                    'shaping armholes and a nappy panel',
@@ -107,16 +107,18 @@ def sider(lang):
     hals_r = [[p['str_nr'], str(p['hals_co']) + m, p['hals_per_felt'],
                p['oke_omganger'], str(p['yoke']) + m, p['yoke_jevne']] for p in PLAGG]
     P.append(pg(
-        banner(L(lang, '1 · HALS OG ÅPNING', '1 · NECK AND OPENING')) +
+        banner(L(lang, '1 · HALS OG BÆRESTYKKE', '1 · NECK AND YOKE')) +
         card('<p>' + L(lang,
-             'Legg opp med grønt på pinne 4 mm og strikk 4 pinner vridd ribb frem og '
-             'tilbake, altså 1 vridd rett og 1 vrang. På pinne 3 lager du ett lite '
-             'knapphull 3 masker innenfor kanten: 2 rett sammen, 1 kast. Fortsett i '
-             'glattstrikk frem og tilbake.',
-             'Cast on in green on 4 mm needles and work 4 rows of twisted rib back and '
-             'forth, that is 1 twisted knit, 1 purl. On row 3 make one small buttonhole 3 '
-             'stitches in from the edge: knit 2 together, yarn over. Continue in stocking '
-             'stitch back and forth.') + '</p>') +
+             'Legg opp med grønt på pinne 4 mm med en elastisk oppleggingskant, samle '
+             'til en omgang og strikk 5 omganger vridd ribb, altså 1 rett i bakre '
+             'maskebue og 1 vrang. Romperen har ingen åpning i nakken, så halsen skal '
+             'tres over hodet, og da er det oppleggingskanten som avgjør. Legg opp løst, '
+             'gjerne over to pinner holdt sammen.',
+             'Cast on in green on 4 mm needles with a stretchy cast-on, join in the round '
+             'and work 5 rounds of twisted rib, that is k1 through the back loop, p1. The '
+             'romper has no neck opening, so the neck has to pass over the head, and there '
+             'the cast-on edge decides. Cast on loosely, for instance over two needles '
+             'held together.') + '</p>') +
         rosep(L(lang, 'ØKINGENE', 'THE INCREASES')) +
         card('<p>' + L(lang,
              'Del maskene i 8 like felt og sett en markør mellom hvert felt. Øk 1 maske i '
@@ -265,16 +267,15 @@ def sider(lang):
              '4 rows along the edge, and round to an even number. Work 4 rounds of twisted '
              'rib and cast off with stretch. The leg edgings are what make the romper sit '
              'properly, and they should lie flat without gripping the thigh.') + '</p>') +
-        sagep(L(lang, 'ARMHULL OG NAKKE', 'ARMHOLES AND NECK')) +
+        sagep(L(lang, 'ARMHULLSKANTENE', 'THE ARMHOLE EDGINGS')) +
         card('<p>' + L(lang,
              'Plukk opp maskene i kolonnen din rundt hvert armhull med grønt: de hvilende '
              'ermemaskene, maskene du la opp under armen, og 1 maske i hvert av de to '
-             'hjørnene. Strikk 4 omganger vridd ribb og fell elastisk av. Sy til slutt den '
-             'fjerde knappen i nakken.',
+             'hjørnene. Strikk 4 omganger vridd ribb og fell elastisk av.',
              'Pick up the stitches in your column round each armhole in green: the held '
              'sleeve stitches, the stitches you cast on under the arm, and 1 stitch in each '
-             'of the two corners. Work 4 rounds of twisted rib and cast off with stretch. '
-             'Finally sew the fourth button at the neck.') + '</p>' +
+             'of the two corners. Work 4 rounds of twisted rib and cast off with '
+             'stretch.') + '</p>' +
              tabell(kn_h, kn_r, min_index=0)), 12))
 
     # ------------------------------------------------------------- 12 TESTSTRIKK
