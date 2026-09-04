@@ -1,0 +1,24 @@
+name: Autopilot oppfølgingsmail
+
+# Trigger den daglige køen som sender oppfølgingsserien til dem som har
+# kjøpt LME Autopilot, enten som engangskjøp eller abonnement.
+# Serien er tre brev: dag 2, dag 7 og dag 21 etter kjøpet.
+#
+# Kjører en gang i døgnet og kan også startes manuelt fra Actions-fanen.
+# Valgfritt: legg repo-hemmeligheten AUTOPILOT_CRON_TOKEN hvis endepunktet
+# er beskyttet med samme verdi som miljøvariabelen i Cloudflare.
+
+on:
+  schedule:
+    - cron: "30 9 * * *"   # daglig kl. 09:30 UTC, en halvtime etter Claude-køen
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger oppfølgings-køen
+        env:
+          TOKEN: ${{ secrets.AUTOPILOT_CRON_TOKEN }}
+        run: |
+          curl -fsS "https://lmexplorers.com/api/cron/autopilot-followups${TOKEN:+?token=$TOKEN}"

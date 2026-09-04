@@ -1,4 +1,5 @@
 import { logUsage, anthropicUnits } from "../_lib/ai-core/usage.js";
+import { editPasswordOk } from "../_lib/edit-password.js";
 /**
  * LME Blogg — lagring av blogginnlegg i Cloudflare KV (BUILDER_KV).
  * Samme passord-mekanisme som content.js / course.js (COURSE_EDIT_PASSWORD).
@@ -20,7 +21,7 @@ import { logUsage, anthropicUnits } from "../_lib/ai-core/usage.js";
  * serveres fra dette API-et, saa bildelenken i innlegget er kort.
  */
 
-const DEFAULT_PASSWORD = "LME26";
+const DEFAULT_PASSWORD = "LME2026";
 const INDEX_KEY = "lme-blog:index";
 const POST_PREFIX = "lme-blog:post:";
 const IMG_PREFIX = "lme-blog:img:";
@@ -85,8 +86,7 @@ export async function onRequestPost(context) {
   let body = {};
   try { body = await request.json(); } catch (e) { return json({ error: "bad_json" }, 400); }
 
-  const expected = (env.COURSE_EDIT_PASSWORD || DEFAULT_PASSWORD) + "";
-  if (((body && body.password) || "") + "" !== expected) {
+  if (!editPasswordOk(env, body && body.password, [DEFAULT_PASSWORD])) {
     return json({ error: "bad_password" }, 401);
   }
   if (!env.BUILDER_KV) return json({ error: "not_configured" }, 200);

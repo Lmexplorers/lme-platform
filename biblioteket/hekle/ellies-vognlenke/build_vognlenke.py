@@ -121,8 +121,10 @@ add('fasthet_txt',
 # ---------------------------------------------------------------- SIDE 5
 add('banner_ord', 'FORKORTELSER (NORSK OG US)', 'ABBREVIATIONS (NORWEGIAN AND US)')
 add('ord_lead',
-    'Delene bruker fastmasker, stav og halvstav, akkurat som Ellies smokkelenke.',
-    "The pieces use single, double and half double crochet, just like Ellie's pacifier clip.")
+    'Delene bruker fastmasker, stav og halvstav, akkurat som Ellies smokkelenke, pluss '
+    'sømteknikken som brukes til å sy delene fast.',
+    "The pieces use single, double and half double crochet, just like Ellie's pacifier clip, "
+    "plus the sewing technique used to sew the pieces on.")
 add('ord_head', ['Norsk', 'US', 'Betyr'], ['Norwegian', 'US', 'Means'])
 add('ord_rows', [
     ('lm', 'ch', 'luftmaske / chain'),
@@ -135,6 +137,8 @@ add('ord_rows', [
     ('mink', 'dec', 'minking: 2 fm sammen. Gir én maske mindre.'),
     ('m', 'st(s)', 'maske(r)'),
     ('*...*', '*...*', 'gjenta det mellom stjernene så mange ganger som står bak'),
+    ('heftesting', 'running stitch', 'sømteknikk (ikke hekling): tette, jevne sting rett '
+     'gjennom begge lag med synål og tråd, brukes til å sy deler fast'),
 ])
 add('pill_tips', 'TIPS FØR DU BEGYNNER', 'TIPS BEFORE YOU START')
 add('tips',
@@ -191,19 +195,30 @@ add('medaljong_rows_en', [
 ])
 add('medaljong_ferdig',
     'Klipp av med god tråd igjen. Sy to små ører (5 fm i magisk ring, avslutt, hekle 2 stk) '
-    'øverst, og brodér et lite ansikt akkurat som på rangelen og smokkelenken.',
+    'øverst, og brodér et lite ansikt akkurat som på rangelen og smokkelenken: svarte øyne og '
+    'nese, og 2 til 3 bittesmå prikker i kremhvitt (franske knuter) på pannen, mellom ørene.',
     'Cut, leaving a long tail. Sew on two small ears (5 sc in a magic ring, fasten off, make 2) '
-    "on top, and embroider a small face just like on the rattle and pacifier clip.")
-add('pill_krage', 'VOLANGKRAGEN (PUDDERROSA)', 'THE RUFFLED COLLAR (POWDER PINK)')
+    'on top, and embroider a small face just like on the rattle and pacifier clip: black eyes '
+    'and nose, and 2 to 3 tiny cream dots (French knots) on the forehead, between the ears.')
+add('pill_krage', 'VOLANGKRAGEN (PUDDERROSA) - HEKLES FOR SEG SELV', 'THE RUFFLED COLLAR (POWDER PINK) - CROCHETED SEPARATELY')
 add('krage_txt',
-    'Fest pudderrosa tråd rundt kanten der hodet er som smalest, nederst. *1 fm i neste maske, '
-    'hopp over 1 maske, 3 stav i neste maske (en liten vifte), hopp over 1 maske*, gjenta rundt '
-    'hele kanten. Fest av og gjem tråden. Volangkragen hekles direkte på hodet og trenger ingen '
-    'ekstra festing.',
-    'Attach powder pink yarn around the edge where the head is narrowest, at the bottom. '
-    '*1 sc in the next stitch, skip 1 stitch, 3 dc in the next stitch (a little fan), skip 1 '
-    'stitch*, repeat all the way around the edge. Fasten off and weave in the end. The ruffled '
-    'collar is crocheted directly onto the head and needs no extra attaching.')
+    'Kragen hekles ikke direkte på hodet, den er en egen, liten del som sys fast etterpå. Legg '
+    'opp 24 lm, lukk til en ring med 1 kjedemaske i den aller første luftmasken (pass på at '
+    'luftmaskekjeden ikke vrir seg før du lukker). Omgang 1: *1 fm i neste maske, hopp over 1 '
+    'maske, 3 stav i neste maske (en liten vifte), hopp over 1 maske*, gjenta 6 ganger rundt '
+    'hele ringen til du er tilbake ved start (24 masker totalt i ringen, 6 vifter). Avslutt med '
+    'kjedemaske i den aller første fastmasken, klipp av og la ca. 15 cm tråd igjen.',
+    'The collar is not crocheted directly onto the head, it is a separate little piece sewn on '
+    'afterwards. Chain 24, join into a ring with 1 slip stitch in the very first chain (make '
+    'sure the chain is not twisted before you join). Round 1: *1 sc in the next stitch, skip 1 '
+    'stitch, 3 dc in the next stitch (a little fan), skip 1 stitch*, repeat 6 times around the '
+    'whole ring until you are back at the start (24 stitches total in the ring, 6 fans). Finish '
+    'with a slip stitch in the very first sc, cut and leave a tail of approx. 15 cm.')
+add('pill_krage_fest', 'PLASSERING', 'PLACEMENT')
+add('krage_fest_txt',
+    'Sy kragen fast med heftesting rundt nedre del av hodet, akkurat som i referansebildet.',
+    'Sew the collar in place with running stitch around the lower part of the head, just like '
+    'in the reference photo.')
 
 # ---------------------------------------------------------------- SIDE 8: BLAD OG BLOMST
 add('banner_blad_blomst', 'DEL 2: BLADET OG BLOMSTEN', 'PART 2: THE LEAF AND THE FLOWER')
@@ -287,7 +302,8 @@ add('montering_lead',
 add('montering_steg', [
     'Klipp en kort, sterk bomullssnor eller flett et bomullsbånd i ønsket lengde (se side om '
     'sikkerhet for maks lengde).',
-    'Sy Ellie-medaljongen fast midt på kjeden, med volangkragen ferdig heklet.',
+    'Sy volangkragen fast med heftesting rundt nedre del av Ellie-medaljongen, hvis du ikke '
+    'allerede har gjort det, og sy medaljongen fast midt på kjeden.',
     'Tre kulene på snoren med en liten tre-mellomperle mellom hver, jevnt fordelt på begge '
     'sider av Ellie.',
     'Sy blomsten og bladet fast et stykke ut på hver side, tett inntil kjeden.',
@@ -301,8 +317,8 @@ add('montering_steg', [
 add('montering_steg_en', [
     'Cut a short, strong cotton cord or braid a cotton strap to the length you want (see the '
     'safety page for the maximum length).',
-    'Sew the Ellie medallion onto the middle of the chain, with the ruffled collar already '
-    'crocheted on.',
+    'Sew the ruffled collar in place with running stitch around the lower part of the Ellie '
+    'medallion, if you have not already, and sew the medallion onto the middle of the chain.',
     'Thread the balls onto the cord with a small wooden spacer bead between each one, evenly '
     'distributed on both sides of Ellie.',
     'Sew the flower and leaf on partway out on each side, close against the chain.',
@@ -488,6 +504,8 @@ def build(lang):
 {cme(t('medaljong_ferdig'))}
 {rosep(t('pill_krage'))}
 {card('<p>' + t('krage_txt') + '</p>')}
+{sagep(t('pill_krage_fest'))}
+{card('<p>' + t('krage_fest_txt') + '</p>')}
 ''', 7))
 
     pages.append(pg(f'''

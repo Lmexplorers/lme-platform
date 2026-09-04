@@ -11,6 +11,14 @@ hårsløyfe. Dådyransiktet og hjertet ble lagt til 3. august 2026, etter
 Renates referansebilde, slik at produktbildet i butikken stemmer med
 oppskriften.
 
+## Oppdatert 28. august 2026: prikker på pannen lagt til
+
+Samme mangel som ble oppdaget på resten av Ellie-serien: presisert at øyne
+og nese broderes i svart (var uspesifisert), og lagt til forslag om 2 til 3
+bittesmå prikker på pannen mellom ørene, i en tredje kontrastfarge, siden
+selve dådyransiktet her allerede hekles i den fargen som kontrasterer mest
+med skoen (ikke fast kremhvitt som resten av kolleksjonen).
+
 Tallene i oppskriften følger samme flerstørrelses-konvensjon som
 `../ro-bottehatt/` og de andre eldre LME-oppskriftene: `prematur (0-3) 3-6
 (6-9) 9-12`. Egen størrelsestabell med fotlengde på side 4.

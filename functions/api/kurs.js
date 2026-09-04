@@ -32,8 +32,10 @@
  *     outro: { title, text, cta?: { label, href:"https://..." } }
  *   }
  */
+import { editPasswordOk } from "../_lib/edit-password.js";
+import { sessionUser, isOwner, getAccess } from "../_lib/access.js";
 
-export const DEFAULT_PASSWORD = "LME26";
+export const DEFAULT_PASSWORD = "LME2026";
 export const KEY_PREFIX = "lme-builder:kurs:";
 export const INDEX_KEY = "lme-builder:kurs-index";
 export const MAX_SIZE = 4 * 1024 * 1024; // kurs med leksjonsbilder trenger plass
@@ -87,6 +89,26 @@ export function sanitizeCourse(raw) {
     },
     updated: Date.now(),
   };
+  // Eieren av kurset, som e-post i små bokstaver. Tom streng betyr Renates
+  // egne kurs, altså plattformens egne. Settes av lagringen, aldri av det
+  // klienten sender inn, så ingen kan skrive seg til et annet kurs.
+  course.eier = ((raw.eier || "") + "").trim().toLowerCase();
+
+  /* Pris og betalingslenke på hele kurset. Medlemmene velger selv hvilken
+     betalingsløsning de bruker, Stripe, PayPal, Klarna, Vipps eller noe annet,
+     så her godtas enhver https-lenke. Dette blandes ALDRI med Renates egne
+     betalingslenker i functions/_lib/purchase-links.js, som bare gjelder
+     hennes egne produkter. */
+  const pris = langField(raw.pris, 40);
+  if (pris.no.trim() || pris.en.trim()) course.pris = pris;
+  const lenke = langField(raw.betalingslenke, 500);
+  const gyldig = (v) => /^https:\/\//.test((v || "").trim());
+  if (gyldig(lenke.no) || gyldig(lenke.en)) {
+    course.betalingslenke = {
+      no: gyldig(lenke.no) ? lenke.no.trim() : (gyldig(lenke.en) ? lenke.en.trim() : ""),
+      en: gyldig(lenke.en) ? lenke.en.trim() : (gyldig(lenke.no) ? lenke.no.trim() : ""),
+    };
+  }
   const ctaLabel = langField(raw.outro && raw.outro.cta && raw.outro.cta.label, 60);
   const ctaHref = (((raw.outro && raw.outro.cta && raw.outro.cta.href) || "") + "").trim();
   if (ctaLabel.no.trim() && /^(\/|https:\/\/)/.test(ctaHref)) {
@@ -145,7 +167,36 @@ export function indexEntry(course) {
     lessonCount: course.lessons.length,
     published: course.published,
     updated: course.updated,
+    eier: course.eier || "",
   };
+}
+
+/* Hvem gjør dette kallet, og hva har de lov til?
+   - Renate: enten innlogget som eier, eller med redigeringspassordet, som før.
+   - Medlem: innlogget med aktivt medlemskap. De eier sine egne kurs.
+   - Andre: ingenting.
+   Eierskapet leses ALDRI fra det klienten sender, bare fra økten, så ingen kan
+   skrive seg til et kurs som ikke er deres. */
+async function aktor(context, body) {
+  const passordOk = editPasswordOk(context.env, body && body.password, [DEFAULT_PASSWORD]);
+  let bruker = null;
+  try { bruker = await sessionUser(context); } catch (e) { bruker = null; }
+  if (bruker && isOwner(bruker)) return { rolle: "eier", epost: "" };
+  if (passordOk) return { rolle: "eier", epost: "" };
+  if (!bruker) return { rolle: "ingen", epost: "" };
+  let tilgang = null;
+  try { tilgang = await getAccess(context); } catch (e) { tilgang = null; }
+  if (tilgang && tilgang.active) return { rolle: "medlem", epost: (bruker.email || "").toLowerCase() };
+  return { rolle: "innlogget", epost: (bruker.email || "").toLowerCase() };
+}
+
+/* Har denne aktøren lov til å endre kurset som ligger der fra før?
+   Et kurs uten eier er Renates, og da er det bare hun som kan røre det. */
+function kanEndre(rolle, epost, eksisterende) {
+  if (rolle === "eier") return true;
+  if (rolle !== "medlem") return false;
+  if (!eksisterende) return true;                       // nytt kurs
+  return ((eksisterende.eier || "") + "") === epost;    // bare sitt eget
 }
 
 export async function readIndex(env) {
@@ -203,7 +254,24 @@ export async function onRequestGet(context) {
     }
   }
   const index = await fullIndex(env);
-  return json({ courses: index }, 200);
+  const url = new URL(request.url);
+
+  // ?mine=1 -> bare kursene den innloggede eier selv.
+  if (url.searchParams.get("mine") === "1") {
+    let bruker = null;
+    try { bruker = await sessionUser(context); } catch (e) { bruker = null; }
+    if (!bruker) return json({ courses: [], loggedIn: false }, 200);
+    const epost = (bruker.email || "").toLowerCase();
+    if (isOwner(bruker)) return json({ courses: index, loggedIn: true, eier: true }, 200);
+    return json({
+      courses: index.filter((c) => c && (c.eier || "") === epost),
+      loggedIn: true, eier: false,
+    }, 200);
+  }
+
+  // Standard: plattformens egne kurs. Medlemmenes kurs er deres, og skal ikke
+  // dukke opp i Renates lister eller på forsiden hennes.
+  return json({ courses: index.filter((c) => c && !(c.eier || "")) }, 200);
 }
 
 export async function onRequestPost(context) {
@@ -215,14 +283,24 @@ export async function onRequestPost(context) {
   } catch (e) {
     return json({ error: "bad_json" }, 400);
   }
-  const expected = (env.COURSE_EDIT_PASSWORD || DEFAULT_PASSWORD) + "";
-  if (((body && body.password) || "") + "" !== expected) {
-    return json({ error: "bad_password" }, 401);
+  const { rolle, epost } = await aktor(context, body);
+  if (rolle === "ingen") return json({ error: "bad_password" }, 401);
+  if (rolle === "innlogget") {
+    return json({ error: "no_membership" }, 403);
   }
+
+  const lesEksisterende = async (slug) => {
+    try {
+      const raw = await env.BUILDER_KV.get(KEY_PREFIX + slug);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  };
 
   if (body.action === "delete") {
     const slug = cleanSlug(body.slug);
     if (!slug) return json({ error: "bad_slug" }, 400);
+    const fra_for = await lesEksisterende(slug);
+    if (!kanEndre(rolle, epost, fra_for)) return json({ error: "not_yours" }, 403);
     try {
       await env.BUILDER_KV.delete(KEY_PREFIX + slug);
       const index = (await readIndex(env)).filter((c) => c && c.slug !== slug);
@@ -236,6 +314,10 @@ export async function onRequestPost(context) {
   // Standard: lagre
   const course = sanitizeCourse(body.course);
   if (!course) return json({ error: "bad_course" }, 400);
+  const fra_for = await lesEksisterende(course.slug);
+  if (!kanEndre(rolle, epost, fra_for)) return json({ error: "not_yours" }, 403);
+  // Eieren settes her, av økten, og beholdes ved senere lagringer.
+  course.eier = fra_for ? ((fra_for.eier || "") + "") : (rolle === "medlem" ? epost : "");
   const payload = JSON.stringify(course);
   if (payload.length > MAX_SIZE) return json({ error: "too_large" }, 413);
   try {

@@ -128,6 +128,7 @@
   <a href="/dashboard" aria-label="LME Dashbord" title="Til dashbordet"><img src="/images/lme-logo.png" alt="Little Montessori Explorers"></a>
   <h1 data-no="Kursbygger 🌸" data-en="Course builder 🌸">Kursbygger 🌸</h1>
   <button class="lang-btn" id="langToggle" type="button">EN 🌍</button>
+  <a href="/kurs-import" data-no="Oppdater plattformkurset" data-en="Update the platform course">Oppdater plattformkurset</a>
   <a href="/academy" data-no="← Kurs" data-en="← Classes">← Kurs</a>
 </header>
 
@@ -137,6 +138,7 @@
   <div>
     <section class="panel">
       <h2 data-no="Kursene dine" data-en="Your courses">Kursene dine</h2>
+      <p class="hint" id="eierLinje" style="display:none"></p>
       <p class="hint" data-no="Kurs lagres trygt i skyen og vises automatisk på Kurs-forsiden når de er publisert." data-en="Classes are saved safely in the cloud and appear automatically on the Classes page once published.">Kurs lagres trygt i skyen og vises automatisk på Kurs-forsiden når de er publisert.</p>
       <div class="course-list" id="courseList"></div>
       <div class="new-row">
@@ -163,6 +165,27 @@
       <label class="f" for="f-lede" data-no="Ingress (kort beskrivelse under tittelen)" data-en="Intro (short description under the title)">Ingress (kort beskrivelse under tittelen)</label>
       <textarea id="f-lede"></textarea>
       <div class="en-field"><textarea id="f-lede-en" data-ph-no="Engelsk ingress" data-ph-en="English intro"></textarea></div>
+
+      <label class="f" for="f-pris" data-no="Pris (la stå tom hvis kurset er gratis)" data-en="Price (leave empty if the course is free)">Pris (la stå tom hvis kurset er gratis)</label>
+      <input type="text" id="f-pris" data-ph-no="F.eks. 349 kr" data-ph-en="E.g. $39">
+      <div class="en-field"><input type="text" id="f-pris-en" data-ph-no="Pris på engelsk, f.eks. $39" data-ph-en="Price in English, e.g. $39"></div>
+
+      <label class="f" for="f-betalingslenke" data-no="Betalingslenke (din egen: Stripe, PayPal, Klarna, Vipps eller noe annet)" data-en="Payment link (your own: Stripe, PayPal, Klarna, Vipps or something else)">Betalingslenke (din egen: Stripe, PayPal, Klarna, Vipps eller noe annet)</label>
+      <input type="url" id="f-betalingslenke" data-ph-no="https://…" data-ph-en="https://…">
+      <div class="en-field"><input type="url" id="f-betalingslenke-en" data-ph-no="Egen lenke for engelske kjøpere (valgfritt)" data-ph-en="Separate link for English buyers (optional)"></div>
+      <p class="hint" data-no="Pengene går rett til deg, hos den leverandøren du selv velger. LME tar ikke imot betaling på dine vegne og blander det aldri med Renates egne produkter."
+         data-en="The money goes straight to you, with the provider you choose yourself. LME does not take payments on your behalf and never mixes it with Renate's own products.">Pengene går rett til deg, hos den leverandøren du selv velger. LME tar ikke imot betaling på dine vegne og blander det aldri med Renates egne produkter.</p>
+
+      <div id="kvitteringBoks" style="display:none;background:#FFF4D6;border-radius:18px;padding:16px 18px;margin:6px 0 14px">
+        <b style="display:block;font-size:14.5px;margin-bottom:6px" data-no="Én ting til, så går alt av seg selv" data-en="One more thing, then it all runs by itself">Én ting til, så går alt av seg selv</b>
+        <p class="hint" style="margin:0 0 10px" data-no="Lim denne adressen inn hos betalingsleverandøren din, der det står hvor kjøperen skal sendes etter betaling. Da får kjøperen tilgang med det samme, og en lenke på e-post, uten at du gjør noe."
+           data-en="Paste this address into your payment provider, where it asks where the buyer should go after paying. Then the buyer gets access right away, and a link by email, without you doing anything.">Lim denne adressen inn hos betalingsleverandøren din, der det står hvor kjøperen skal sendes etter betaling. Da får kjøperen tilgang med det samme, og en lenke på e-post, uten at du gjør noe.</p>
+        <input type="text" id="kvitteringAdresse" readonly style="font-size:13.5px;background:#fff">
+        <button type="button" id="kopierKvittering" class="btn-secondary" style="margin-top:6px" data-no="Kopier adressen" data-en="Copy the address">Kopier adressen</button>
+        <p class="hint" style="margin:10px 0 0" data-no="Stripe: Etter betaling → Send til en side. PayPal: Retur-URL. Vipps: Landingsside etter betaling. Klarna: Bekreftelsesside."
+           data-en="Stripe: After payment → Redirect to a page. PayPal: Return URL. Vipps: Landing page after payment. Klarna: Confirmation page.">Stripe: Etter betaling → Send til en side. PayPal: Retur-URL. Vipps: Landingsside etter betaling. Klarna: Bekreftelsesside.</p>
+        <div id="kjoperListe" style="margin-top:12px"></div>
+      </div>
 
       <label class="f" for="f-learn" data-no="Hva du lærer (ett punkt per linje)" data-en="What you'll learn (one point per line)">Hva du lærer (ett punkt per linje)</label>
       <textarea id="f-learn"></textarea>
@@ -338,12 +361,43 @@ function renderList() {
   });
 }
 
+/* Hvem er innlogget? Et medlem eier sine egne kurs og skal aldri se eller
+   spørres om Renates redigeringspassord. Renate selv jobber som før. */
+var erMedlem = false;   // innlogget medlem, ikke eier
+var erEier = false;     // Renate
+
 function refreshList(then) {
-  fetch('/api/kurs')
+  // ?mine=1 gir bare kursene den innloggede eier selv. Er ingen logget inn,
+  // faller vi tilbake til den vanlige lista, som før.
+  fetch('/api/kurs?mine=1', { credentials: 'same-origin' })
     .then(function (r) { return r.json(); })
-    .then(function (d) { courses = (d && d.courses) || []; })
+    .then(function (d) {
+      if (d && d.loggedIn) {
+        erEier = !!d.eier;
+        erMedlem = !d.eier;
+        courses = d.courses || [];
+        return;
+      }
+      erEier = false; erMedlem = false;
+      return fetch('/api/kurs').then(function (r) { return r.json(); })
+        .then(function (d2) { courses = (d2 && d2.courses) || []; });
+    })
     .catch(function () { courses = []; })
-    .then(function () { renderList(); if (then) then(); });
+    .then(function () { renderList(); visEierskap(); if (then) then(); });
+}
+
+/* Liten linje øverst som sier hvem kursene tilhører, så et medlem forstår at
+   dette er deres eget område og ikke Renates. */
+function visEierskap() {
+  var boks = document.getElementById('eierLinje');
+  if (!boks) return;
+  if (erMedlem) {
+    boks.textContent = L('Dette er dine egne kurs. Bare du ser og redigerer dem.',
+                         'These are your own courses. Only you can see and edit them.');
+    boks.style.display = '';
+  } else {
+    boks.style.display = 'none';
+  }
 }
 
 /* ---------- Nytt kurs / aapne kurs ---------- */
@@ -353,6 +407,7 @@ function newCourse(size) {
   var c = {
     slug: '', size: size, published: true, cert: true,
     kicker: { no: '', en: '' }, title: { no: '', en: '' }, lede: { no: '', en: '' },
+    pris: { no: '', en: '' }, betalingslenke: { no: '', en: '' },
     learn: [], lessons: [], outro: { title: { no: '', en: '' }, text: { no: '', en: '' } }
   };
   var n = size === 'stor' ? 8 : 3;
@@ -390,6 +445,11 @@ function loadCourse(c, isNew) {
   q('f-kicker-en').value = c.kicker.en || '';
   q('f-lede').value = c.lede.no || '';
   q('f-lede-en').value = c.lede.en || '';
+  q('f-pris').value = (c.pris && c.pris.no) || '';
+  q('f-pris-en').value = (c.pris && c.pris.en) || '';
+  q('f-betalingslenke').value = (c.betalingslenke && c.betalingslenke.no) || '';
+  q('f-betalingslenke-en').value = (c.betalingslenke && c.betalingslenke.en) || '';
+  visKvittering(c.slug || '');
   q('f-learn').value = (c.learn || []).map(function (x) { return x.no; }).join('\n');
   q('f-learn-en').value = (c.learn || []).map(function (x) { return x.en || ''; }).join('\n');
   document.querySelectorAll('[name="f-size"]').forEach(function (r) { r.checked = r.value === c.size; });
@@ -423,6 +483,8 @@ function collectCourse() {
     kicker: { no: q('f-kicker').value.trim(), en: q('f-kicker-en').value.trim() },
     title: { no: q('f-title').value.trim(), en: q('f-title-en').value.trim() },
     lede: { no: q('f-lede').value.trim(), en: q('f-lede-en').value.trim() },
+    pris: { no: q('f-pris').value.trim(), en: q('f-pris-en').value.trim() },
+    betalingslenke: { no: q('f-betalingslenke').value.trim(), en: q('f-betalingslenke-en').value.trim() },
     learn: [],
     lessons: [],
     outro: {
@@ -731,9 +793,17 @@ function richInline(container, text) {
 }
 function richPara(text) {
   text = String(text || '');
-  if (/^##\s+/.test(text)) {
-    return el('h4', 'crs-sub', text.replace(/^##\s+/, ''));
+  /* Flere avsnitt i ett felt (tom linje mellom) blir egne avsnitt, slik at
+     en overskrift skrevet rett over teksten sin ikke sluker hele avsnittet.
+     Tekst uten tom linje oppfører seg nøyaktig som før. */
+  var blocks = text.split(/\n\s*\n/).filter(function (b) { return b.trim(); });
+  if (blocks.length > 1) {
+    var frag = document.createDocumentFragment();
+    blocks.forEach(function (b) { frag.appendChild(richPara(b)); });
+    return frag;
   }
+  text = blocks.length ? blocks[0] : text;
+  if (/^##\s+/.test(text)) return el('h4', 'crs-sub', text.replace(/^##\s+/, ''));
   var lines = text.split('\n').filter(function (l) { return l.trim(); });
   var isBullets = lines.length > 1 && lines.every(function (l) { return /^-\s+/.test(l.trim()); });
   var isNumbered = lines.length > 1 && lines.every(function (l) { return /^\d+\.\s+/.test(l.trim()); });
@@ -854,10 +924,81 @@ function renderPreview() {
 
 /* ---------- Lagre / slette ---------- */
 function askPassword() {
+  // Medlemmer er allerede identifisert gjennom innloggingen, og serveren
+  // kjenner dem igjen på økten. De skal aldri se Renates passord.
+  if (erMedlem) return true;
   if (pw) return pw;
   pw = prompt(L('Skriv inn passordet for å lagre:', 'Enter the password to save:'));
   return pw;
 }
+
+/* Kroppen som sendes til serveren: passord bare når det faktisk brukes. */
+function medPassord(data) {
+  if (erMedlem) return data;
+  data.password = pw;
+  return data;
+}
+
+/* Takkeadressen og kjøperlista for et kurs som selges. Hentes bare for kurs
+   som er lagret og har en betalingslenke, og bare til den som eier kurset. */
+function visKvittering(slug) {
+  var boks = document.getElementById('kvitteringBoks');
+  if (!boks) return;
+  var harLenke = (q('f-betalingslenke').value || '').trim().indexOf('https://') === 0;
+  if (!slug || !harLenke) { boks.style.display = 'none'; return; }
+  fetch('/api/kurs-kvittering?slug=' + encodeURIComponent(slug), { credentials: 'same-origin' })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (!d || !d.ok) { boks.style.display = 'none'; return; }
+      boks.style.display = '';
+      q('kvitteringAdresse').value = d.adresse;
+      var liste = document.getElementById('kjoperListe');
+      liste.innerHTML = '';
+      if (!d.kjopere || !d.kjopere.length) {
+        var p = el('p', 'hint', L('Ingen kjøpere ennå. De dukker opp her etter hvert.',
+                                  'No buyers yet. They will show up here as they come.'));
+        p.style.margin = '0';
+        liste.appendChild(p);
+        return;
+      }
+      var tittel = el('b', null, L('Kjøpere (' + d.kjopere.length + ')', 'Buyers (' + d.kjopere.length + ')'));
+      tittel.style.cssText = 'display:block;font-size:14px;margin-bottom:6px';
+      liste.appendChild(tittel);
+      d.kjopere.slice(0, 20).forEach(function (k) {
+        var rad = el('div', null);
+        rad.style.cssText = 'display:flex;align-items:center;gap:10px;font-size:13.5px;background:#fff;border-radius:12px;padding:8px 12px;margin-bottom:6px';
+        var e = el('span', null, k.epost);
+        e.style.flex = '1';
+        var fjern = el('button', null, L('Fjern tilgang', 'Remove access'));
+        fjern.type = 'button';
+        fjern.style.cssText = 'border:none;background:none;color:#c43d75;font-weight:700;cursor:pointer;font-size:13px';
+        fjern.addEventListener('click', function () {
+          if (!confirm(L('Fjerne tilgangen til ' + k.epost + '?', 'Remove access for ' + k.epost + '?'))) return;
+          fetch('/api/kurs-kvittering', {
+            method: 'POST', credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slug: slug, action: 'fjern', epost: k.epost }),
+          }).then(function () { visKvittering(slug); });
+        });
+        rad.appendChild(e); rad.appendChild(fjern);
+        liste.appendChild(rad);
+      });
+    })
+    .catch(function () { boks.style.display = 'none'; });
+}
+
+(function () {
+  document.addEventListener('click', function (e) {
+    if (!e.target || e.target.id !== 'kopierKvittering') return;
+    var felt = document.getElementById('kvitteringAdresse');
+    felt.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+    if (!ok && navigator.clipboard) navigator.clipboard.writeText(felt.value);
+    toast(L('Adressen er kopiert. Lim den inn hos betalingsleverandøren din.',
+            'The address is copied. Paste it into your payment provider.'));
+  });
+})();
 
 function updateOpenLink() {
   var slug = slugify(q('f-slug').value.trim() || slugify(q('f-title').value));
@@ -880,7 +1021,8 @@ function saveCourse() {
   fetch('/api/kurs', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'save', course: c, password: pw })
+    credentials: 'same-origin',
+    body: JSON.stringify(medPassord({ action: 'save', course: c }))
   })
     .then(function (r) { return r.json(); })
     .then(function (d) {
@@ -888,11 +1030,18 @@ function saveCourse() {
         q('f-slug').value = d.slug;
         q('deleteBtn').style.display = '';
         updateOpenLink();
+        visKvittering(d.slug);
         refreshList();
         toast(L('☁️ Lagret! Kurset ligger nå i skyen.', '☁️ Saved! The course is now in the cloud.'));
       } else if (d && d.error === 'bad_password') {
         pw = null;
         alert(L('Feil passord. Prøv igjen.', 'Wrong password. Try again.'));
+      } else if (d && d.error === 'no_membership') {
+        alert(L('Du trenger et aktivt medlemskap for å lage egne kurs.',
+                'You need an active membership to create your own courses.'));
+      } else if (d && d.error === 'not_yours') {
+        alert(L('Dette kurset tilhører noen andre, så det kan du ikke endre.',
+                'This course belongs to someone else, so you cannot change it.'));
       } else {
         alert(L('Kunne ikke lagre: ', 'Could not save: ') + ((d && d.error) || L('ukjent feil', 'unknown error')));
       }
@@ -909,7 +1058,8 @@ function deleteCourse() {
   fetch('/api/kurs', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'delete', slug: slug, password: pw })
+    credentials: 'same-origin',
+    body: JSON.stringify(medPassord({ action: 'delete', slug: slug }))
   })
     .then(function (r) { return r.json(); })
     .then(function (d) {
@@ -964,7 +1114,7 @@ refreshList(openFromHash);
 
 <script src="/js/lme-visibility.js?v=8" defer></script>
 <script src="/js/lme-account.js?v=11" defer></script>
-<script src="/js/renate-widget.js?v=5" defer></script>
+<script src="/js/nathalie-widget.js?v=1" defer></script>
 <script>window.LME_REQUIRES="sub";window.LME_MIN_TIER="pro";window.LME_GATE_TITLE="Kursbygger er for Pro og VIP";window.LME_GATE_URL="/medlemskap";</script>
 <script src="/js/lme-gate.js" defer></script>
 </body>

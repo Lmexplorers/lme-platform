@@ -25,6 +25,7 @@
  */
 
 import { DEFAULT_PASSWORD } from "./kurs.js";
+import { editPasswordOk } from "../_lib/edit-password.js";
 
 const PREFIKSER = ["lme-builder:content:", "lme-builder:i18n:", "lme-builder:kurs:"];
 
@@ -110,8 +111,7 @@ export async function onRequestGet(context) {
 
   const url = new URL(request.url);
   const pw = (url.searchParams.get("pw") || "").trim();
-  const expected = (env.COURSE_EDIT_PASSWORD || DEFAULT_PASSWORD) + "";
-  if (pw !== expected) return json({ error: "bad_password" }, 401);
+  if (!editPasswordOk(env, pw, [DEFAULT_PASSWORD])) return json({ error: "bad_password" }, 401);
 
   const rett = url.searchParams.get("rett") === "ja";
   const treff = [];

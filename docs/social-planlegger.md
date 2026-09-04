@@ -53,6 +53,32 @@ tilgangene avslått i app-gjennomgangen, virker fanen fortsatt: den viser
 likerklikk, kommentarer og delinger, og sier fra om at rekkevidde kommer når
 tilgangen er godkjent. Tallene mellomlagres i fem minutter.
 
+## Delt med LME Autopilot
+
+Autopilot (eget prosjekt, `lme-content-studio`) publiserer gjennom den samme
+koblingen. Appene deler KV-navnerom, så `social:<e-post>` og `img:<id>` er de
+samme postene begge steder:
+
+- Autopilot leser de tilkoblede kontoene og publiserer rett til Meta i
+  `functions/_lib/meta-publish.js`.
+- Planlagte innlegg fra Autopilot legges i `splan:<e-post>:<id>`, altså den
+  samme køen denne bakgrunnsjobben tømmer. Derfor tar `publishTo` nå også
+  `videoUrl` og `kind` (post, story, reel), slik at reels fra Autopilot går ut
+  av seg selv. Planleggerens egne innlegg sender bare `imageUrl`, og oppfører
+  seg nøyaktig som før.
+
+**Denne veien er ikke i bruk ennå, og skal ikke selges.** 1. september 2026 viste
+det seg at det aldri er opprettet noen app hos Meta: Business-porteføljen
+`Littlemontessoriexplorers` står med null apper. Uten den registreringen kan
+verken planleggeren eller Autopilot publisere, for noen. Koden ligger klar og
+gjør ingen skade, men den våkner først den dagen registreringen er opprettet og
+tilgangene er godkjent (se Oppsett under).
+
+Inntil da går all autopublisering i Autopilot gjennom kundens egen
+Blotato-konto, og salgstekstene skal si nettopp det. Ikke lov bort
+LME-koblingen på en side før `instagram_content_publish` og
+`pages_manage_posts` står som godkjent Advanced Access hos Meta.
+
 ## Filer
 
 | Fil | Hva den gjør |

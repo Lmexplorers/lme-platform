@@ -5,6 +5,39 @@ Ferdig oppskrift: **`Ellies-vognlenke-LME.pdf`** (norsk, 14 sider, A4) og
 
 Fjerde oppskrift i **LME Baby Collection "Woodland Dreams"**.
 
+## Oppdatert 30. august 2026: bilder komprimert, raskere å skrive ut og laste opp
+
+Renate meldte fra at PDF-ene var trege å skrive ut. `vognlenke_real.jpg` er
+nå re-komprimert (kvalitet 85, samme teknikk som resten av kolleksjonen),
+ingen synlig kvalitetsforskjell ved vanlig visning/print, men PDF-en er noe
+mindre og raskere å åpne, skrive ut og laste opp for de som kjøper.
+
+## Oppdatert 30. august 2026: kragen hekles for seg selv
+
+Renate ba om at volangkragen på alle Ellie-oppskriftene skal hekles som en
+egen del og sys fast etterpå, i stedet for direkte inn i eksisterende
+masker. Samme konstruksjonsfeil som på smokkelenken: Ellie-medaljongens
+hode hekles helt lukket (mink x 6 til slutt, 9 masker), det finnes ingen
+åpen kant å hekle kragen inn i der. Rettet: kragen hekles nå som en egen,
+liten del (legg opp 24 lm, lukk til en ring, 1 omgang med viftemønster =
+6 vifter, samme 24-maskers/4-masker-per-vifte-oppskrift som smokkelenken,
+siden medaljongens bredeste omgang også er 24 masker), med eksplisitt
+masketall, og sys fast rundt nedre del av medaljonghodet med heftesting
+etterpå. Lagt til "heftesting" i forkortelsestabellen, som ble brukt uten
+å være forklart. Sideantallet er uendret (14 sider): kragens konstruksjon
+og plassering ble først forsøkt splittet på to sider, men begge rendret
+tynt, så de er slått sammen til én tettere side igjen, samme vurdering som
+ble gjort på rangelen. Rettet samtidig en sidetall-referanse som hadde
+kommet skjevt ut av denne sideflyttingen: sikkerhetssiden omtales nå riktig
+som side 12, ikke 13.
+
+## Oppdatert 28. august 2026: prikker på pannen lagt til
+
+Samme mangel som ble oppdaget på smokkelenken, rangelen og hoved-Ellie-
+oppskriften: teksten "brodér et lite ansikt akkurat som på rangelen og
+smokkelenken" var for vag. Presisert direkte: svarte øyne og nese, og 2 til
+3 bittesmå prikker i kremhvitt (franske knuter) på pannen, mellom ørene.
+
 Oppdatert 4. august 2026 etter Renates referansebilder av profesjonelt
 stylede vognlenker: bygget fullstendig om fra sju flate motiver (sky, sol,
 blad, blomst, stjerne, sommerfugl) til en kjede av heklede kuler og

@@ -14,6 +14,40 @@ Samme sikkerhetsfokus som `../ellies-smokkelenke/`: en egen side minner om at
 rangleboksen aldri må kunne tas ut, og at ferdig produkt må kontrolleres mot
 gjeldende lokale krav før salg.
 
+## Oppdatert 30. august 2026: bilder komprimert, raskere å skrive ut og laste opp
+
+Renate meldte fra at PDF-ene var trege å skrive ut. `rangle_real.jpg` og
+`rangle_ref.jpg` er nå re-komprimert (kvalitet 85, samme teknikk som resten
+av kolleksjonen), ingen synlig kvalitetsforskjell ved vanlig visning/print,
+men PDF-en er noe mindre og raskere å åpne, skrive ut og laste opp for de
+som kjøper.
+
+## Oppdatert 28. august 2026: kragen hekles for seg selv
+
+Renate ba om at volangkragen på alle Ellie-oppskriftene skal hekles som en
+egen del og sys fast etterpå, i stedet for direkte inn i eksisterende
+masker. I motsetning til smokkelenken hadde denne oppskriften allerede et
+ekte, åpent maskeantall å hekle fra (halstubens 12 m), så det var teknisk
+sett ikke en konstruksjonsfeil her, men rettet for konsekvens på tvers av
+hele kolleksjonen: legg opp 18 lm, lukk til en ring, hekl viftemønsteret
+inn i ringen (6 vifter), sy den ferdige kragen fast med heftesting rundt
+halstubens øverste kant. Oppdaget i samme slengen at det gamle maskeantallet
+i teksten ("6 vifter totalt" på et 12-maskers grunnlag) ikke stemte
+matematisk (12 delt på 3 masker per vifte gir 4, ikke 6), rettet ved å gå
+over til 18 masker i den nye, separate ringen. Lagt til "stav" og
+"heftesting" i forkortelsestabellen, som ble brukt av kragen uten å være
+forklart.
+
+## Oppdatert 28. august 2026: prikker på pannen lagt til
+
+Samme mangel som ble oppdaget på smokkelenken og hoved-Ellie-oppskriften:
+referansebildet av Ellie viser flere små kremhvite prikker på pannen, men
+dette var aldri beskrevet her. Lagt til i ansikt-avsnittet: 2 til 3 bittesmå
+prikker broderes i kremhvitt (franske knuter eller tette satengstingpunkter)
+på pannen, mellom ørene. Samtidig presisert at nesen broderes i svart
+(fargen var tidligere ikke angitt). Ørenes farger var allerede riktige
+("kremhvitt", ingen fargefeil å rette her).
+
 - **Garn:** samme Bystrikk Merino som resten av kolleksjonen, pluss en liten
   rest av pudderrosa til sløyfen og kragen.
 - Forsidebildet er et beskjært utsnitt av Renates eget referansebilde for

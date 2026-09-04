@@ -105,7 +105,7 @@ window.LME_FUNNEL = {
       bonusLenke: "/funnel/nedlasting/mia-og-teo-kom-bli-med.mp4",
       sekundaerKnapp: "Tilbake til LME Studio",
       sekundaerLenke: "/creative-studio",
-      support: "Spørsmål? Svar på e-posten du nettopp fikk, så hjelper vi deg.",
+      support: "Spørsmål? Svar på e-posten du nettopp fikk, så hjelper jeg deg.",
       butikkTekst: "Når du er klar for neste steg, finner du workbooks og bundles i butikken.",
       butikkKnapp: "Se workbooks og bundles i butikken",
       butikkLenke: "/butikk"

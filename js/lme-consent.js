@@ -49,7 +49,26 @@
       "</div>";
     document.body.appendChild(w);
     document.documentElement.classList.add("lme-consent-open");
-    function close() { w.remove(); document.documentElement.classList.remove("lme-consent-open"); }
+
+    /* Boksen ligger fast nederst, så uten dette dekker den det som står
+       nederst på siden. Renate fant det 31. august 2026: knappen for å hente
+       inn workshopen på /kurs-import lå rett under boksen og kunne ikke
+       trykkes. Vi gir derfor siden like mye luft nederst som boksen er høy,
+       så lenge den vises, og tar den bort igjen når den lukkes. */
+    var forrigeLuft = document.body.style.paddingBottom;
+    function settLuft() {
+      var h = w.offsetHeight || 0;
+      if (h) document.body.style.paddingBottom = (h + 32) + "px";
+    }
+    settLuft();
+    window.addEventListener("resize", settLuft);
+
+    function close() {
+      w.remove();
+      document.documentElement.classList.remove("lme-consent-open");
+      window.removeEventListener("resize", settLuft);
+      document.body.style.paddingBottom = forrigeLuft;
+    }
     document.getElementById("lme-consent-yes").addEventListener("click", function () { set("yes"); close(); loadPixel(); });
     document.getElementById("lme-consent-no").addEventListener("click", function () { set("no"); close(); });
   }

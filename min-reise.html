@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FBF7F0">
+<title>Min reise · LME</title>
+<link rel="icon" href="/images/lme-logo.png">
+<meta name="description" content="Din egen vei gjennom LME: hvor du er nå, hva du har gjort, og hva som er neste steg.">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-800.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: swap; }
+
+  :root {
+    --lime:#A4D233; --lime-soft:#E8F5D1; --cerise:#E91E89; --cerise-soft:#FCE3F1;
+    --sun:#F7C72E; --sun-soft:#FFF4D6; --bg:#FBF7F0; --bg-2:#FFFFFF;
+    --ink:#1F1B24; --ink-soft:#5A5560; --ink-muted:#938E99;
+    --line:rgba(31,27,36,.08); --r-md:18px; --r-lg:26px; --r-xl:36px; --r-pill:999px;
+    --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+    --font-head:'Playpen Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:var(--font-body);color:var(--ink);line-height:1.6;min-height:100vh;
+    background:
+      radial-gradient(900px 520px at 100% -8%, var(--sun-soft) 0%, transparent 52%),
+      radial-gradient(800px 500px at -5% 6%, var(--cerise-soft) 0%, transparent 50%),
+      radial-gradient(800px 520px at 50% 110%, var(--lime-soft) 0%, transparent 55%),
+      var(--bg);
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none}
+  .wrap{max-width:820px;margin:0 auto;padding:26px 20px 70px}
+
+  .brandbar{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:22px}
+  .brandbar img{height:34px}
+  .brandbar span{font-weight:700;font-size:15px}
+
+  .head{text-align:center;margin-bottom:26px}
+  .chip{display:inline-block;background:var(--lime-soft);color:#5b7d12;font-size:12.5px;font-weight:700;letter-spacing:.03em;padding:7px 16px;border-radius:var(--r-pill);margin-bottom:14px}
+  h1{font-size:clamp(27px,4.6vw,40px);font-weight:800;letter-spacing:-.02em;line-height:1.15;margin-bottom:12px}
+  .head p{font-size:16px;color:var(--ink-soft);max-width:600px;margin:0 auto}
+
+  .fremdrift{max-width:520px;margin:24px auto 0}
+  .stripe{height:12px;border-radius:999px;background:#fff;border:1px solid var(--line);overflow:hidden}
+  .stripe i{display:block;height:100%;background:linear-gradient(90deg,var(--lime),var(--sun));width:0;transition:width .6s ease}
+  .fremdrift .tall{text-align:center;font-size:13.5px;color:var(--ink-muted);margin-top:8px}
+
+  .fase{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-xl);box-shadow:0 10px 30px rgba(31,27,36,.05);padding:24px 26px;margin-top:18px}
+  .fase.naa{border-color:rgba(233,30,137,.35);box-shadow:0 14px 40px rgba(233,30,137,.12)}
+  .fase-topp{display:flex;align-items:center;gap:12px;margin-bottom:4px;flex-wrap:wrap}
+  .fase-ikon{font-size:26px;line-height:1}
+  .fase h2{font-size:20px;font-weight:800;letter-spacing:-.01em}
+  .naa-merke{font-size:11.5px;font-weight:800;letter-spacing:.04em;color:#fff;background:var(--cerise);padding:5px 12px;border-radius:var(--r-pill)}
+  .fase .under{font-size:14.5px;color:var(--ink-soft);margin-bottom:16px}
+
+  .steg{list-style:none;display:grid;gap:10px}
+  .steg li{display:flex;align-items:flex-start;gap:12px;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-lg);padding:13px 16px}
+  .steg li.gjort{background:var(--lime-soft);border-color:rgba(164,210,51,.4)}
+  .hake{flex:0 0 auto;width:26px;height:26px;border-radius:8px;border:2px solid var(--line);background:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#5b7d12;cursor:pointer}
+  .steg li.gjort .hake{background:var(--lime);border-color:var(--lime);color:#fff}
+  .hake.lest{cursor:default;opacity:.9}
+  .steg .tekst{font-size:15px;color:var(--ink)}
+  .steg .auto{display:block;font-size:12.5px;color:var(--ink-muted);margin-top:2px}
+
+  .boks{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-xl);padding:28px;text-align:center;margin-top:20px}
+  .boks p{font-size:16px;color:var(--ink-soft);margin-bottom:18px}
+  .knapp{display:inline-block;font-size:16px;font-weight:800;color:#fff;background:linear-gradient(120deg,var(--cerise),#ff5fb0);padding:15px 26px;border-radius:var(--r-pill);box-shadow:0 12px 26px rgba(233,30,137,.28)}
+  .bunn{text-align:center;margin-top:30px}
+  .bunn a{display:inline-block;font-size:14.5px;font-weight:700;color:var(--ink-soft);background:#fff;border:1px solid var(--line);padding:12px 22px;border-radius:var(--r-pill)}
+  .footer{text-align:center;margin-top:30px;font-size:13px;color:var(--ink-muted)}
+
+  h1,h2,h3,h4,h5,h6{font-family:var(--font-head)}
+  button,input,select,textarea{font-family:var(--font-body)}
+  @media (max-width:520px){ .wrap{padding:20px 14px 54px} .fase{padding:20px 18px} }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="brandbar" href="/dashboard">
+      <img src="/images/lme-logo.png" alt="LME" onerror="this.style.display='none'">
+      <span>LME</span>
+    </a>
+
+    <div class="head">
+      <span class="chip" data-no="DIN EGEN REISE" data-en="YOUR OWN JOURNEY">DIN EGEN REISE</span>
+      <h1 data-no="Min reise" data-en="My journey">Min reise</h1>
+      <p data-no="Veikartet viser hva LME er. Denne siden viser hvor du er: hva du har gjort, og hva som er neste lille steg. Ta ett om gangen, i din egen takt."
+         data-en="The roadmap shows what LME is. This page shows where you are: what you have done, and what the next small step is. Take one at a time, at your own pace.">Veikartet viser hva LME er. Denne siden viser hvor du er: hva du har gjort, og hva som er neste lille steg. Ta ett om gangen, i din egen takt.</p>
+      <div class="fremdrift">
+        <div class="stripe"><i id="stripe"></i></div>
+        <div class="tall" id="fremdriftTall"></div>
+      </div>
+    </div>
+
+    <div id="faser"></div>
+
+    <div class="boks" id="innloggingsboks" style="display:none">
+      <p data-no="Logg inn for å se din egen reise. Da husker LME hvor du er, og du kan hake av etter hvert."
+         data-en="Log in to see your own journey. Then LME remembers where you are, and you can tick things off as you go.">Logg inn for å se din egen reise. Da husker LME hvor du er, og du kan hake av etter hvert.</p>
+      <a class="knapp" href="/login" data-no="Logg inn" data-en="Log in">Logg inn</a>
+    </div>
+
+    <div class="bunn">
+      <a href="/roadmap" data-no="Se hele veikartet for LME →" data-en="See the full LME roadmap →">Se hele veikartet for LME →</a>
+    </div>
+    <div class="footer">© <span id="yr"></span> Little Montessori Explorers</div>
+  </div>
+
+  <script>
+    var IKONER = { froet: '🌱', spiren: '🌿', blomsten: '🌸', treet: '🌳', frukten: '🍎' };
+    var LANG = (function () {
+      var q = new URLSearchParams(location.search).get('lang');
+      var l = (q || localStorage.getItem('lme_lang') || 'no').toLowerCase();
+      if (l !== 'en' && l !== 'no') l = 'no';
+      try { localStorage.setItem('lme_lang', l); } catch (e) {}
+      return l;
+    })();
+    var data = null;
+
+    function switchLanguage(lang) {
+      LANG = lang;
+      document.documentElement.lang = lang;
+      try { localStorage.setItem('lme_lang', lang); } catch (e) {}
+      document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+        el.textContent = lang === 'en' ? el.dataset.en : el.dataset.no;
+      });
+      var b = document.getElementById('langBtn');
+      if (b) b.textContent = lang === 'en' ? '🇳🇴 Norsk' : '🇬🇧 English';
+      if (data) tegn(data);
+    }
+
+    (function () {
+      var b = document.createElement('button');
+      b.id = 'langBtn';
+      b.setAttribute('aria-label', 'Bytt språk / Switch language');
+      b.style.cssText = 'position:fixed;top:18px;right:74px;z-index:300;display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(31,27,36,.12);background:#fff;color:#1F1B24;font-weight:700;font-size:13px;line-height:1;padding:10px 15px;border-radius:999px;box-shadow:0 6px 20px rgba(31,27,36,.12);cursor:pointer;';
+      b.addEventListener('click', function () { switchLanguage(LANG === 'en' ? 'no' : 'en'); });
+      document.body.appendChild(b);
+    })();
+
+    function tekst(felt) { return (felt && (LANG === 'en' ? felt.en : felt.no)) || (felt && felt.no) || ''; }
+
+    function tegn(d) {
+      var ut = document.getElementById('faser');
+      ut.innerHTML = '';
+      d.faser.forEach(function (f, i) {
+        var kort = document.createElement('section');
+        kort.className = 'fase' + (i === d.fase ? ' naa' : '');
+
+        var topp = document.createElement('div');
+        topp.className = 'fase-topp';
+        var ikon = document.createElement('span');
+        ikon.className = 'fase-ikon';
+        ikon.textContent = IKONER[f.id] || '🌱';
+        var h = document.createElement('h2');
+        h.textContent = tekst(f.navn);
+        topp.appendChild(ikon); topp.appendChild(h);
+        if (i === d.fase) {
+          var merke = document.createElement('span');
+          merke.className = 'naa-merke';
+          merke.textContent = LANG === 'en' ? 'YOU ARE HERE' : 'DU ER HER';
+          topp.appendChild(merke);
+        }
+        kort.appendChild(topp);
+
+        var under = document.createElement('div');
+        under.className = 'under';
+        under.textContent = tekst(f.undertittel);
+        kort.appendChild(under);
+
+        var liste = document.createElement('ul');
+        liste.className = 'steg';
+        f.steg.forEach(function (s) {
+          var li = document.createElement('li');
+          li.className = s.gjort ? 'gjort' : '';
+          var hake = document.createElement('button');
+          hake.className = 'hake' + (s.automatisk ? ' lest' : '');
+          hake.textContent = s.gjort ? '✓' : '';
+          hake.setAttribute('aria-label', tekst(s.tekst));
+          if (s.automatisk) {
+            hake.disabled = true;
+          } else {
+            hake.addEventListener('click', function () { hukAv(s, li, hake); });
+          }
+          var boks = document.createElement('div');
+          var t = document.createElement('span');
+          t.className = 'tekst';
+          t.textContent = tekst(s.tekst);
+          boks.appendChild(t);
+          if (s.automatisk) {
+            var a = document.createElement('span');
+            a.className = 'auto';
+            a.textContent = s.gjort
+              ? (LANG === 'en' ? 'LME registered this for you' : 'Dette har LME registrert for deg')
+              : (LANG === 'en' ? 'LME ticks this off on its own when you do it' : 'Denne hukes av av seg selv når du gjør det');
+            boks.appendChild(a);
+          }
+          li.appendChild(hake); li.appendChild(boks);
+          liste.appendChild(li);
+        });
+        kort.appendChild(liste);
+        ut.appendChild(kort);
+      });
+
+      var prosent = d.totalt ? Math.round((d.gjort / d.totalt) * 100) : 0;
+      document.getElementById('stripe').style.width = prosent + '%';
+      document.getElementById('fremdriftTall').textContent = LANG === 'en'
+        ? d.gjort + ' of ' + d.totalt + ' steps done'
+        : d.gjort + ' av ' + d.totalt + ' steg gjort';
+    }
+
+    function hukAv(steg, li, hake) {
+      var nyVerdi = !steg.gjort;
+      steg.gjort = nyVerdi;
+      li.className = nyVerdi ? 'gjort' : '';
+      hake.textContent = nyVerdi ? '✓' : '';
+      data.gjort += nyVerdi ? 1 : -1;
+      var prosent = data.totalt ? Math.round((data.gjort / data.totalt) * 100) : 0;
+      document.getElementById('stripe').style.width = prosent + '%';
+      document.getElementById('fremdriftTall').textContent = LANG === 'en'
+        ? data.gjort + ' of ' + data.totalt + ' steps done'
+        : data.gjort + ' av ' + data.totalt + ' steg gjort';
+      fetch('/api/min-reise', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ steg: steg.id, gjort: nyVerdi }),
+      }).catch(function () {});
+    }
+
+    fetch('/api/min-reise', { credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.loggedIn) {
+          document.getElementById('innloggingsboks').style.display = 'block';
+          document.querySelector('.fremdrift').style.display = 'none';
+          return;
+        }
+        data = d;
+        tegn(d);
+      })
+      .catch(function () {
+        document.getElementById('innloggingsboks').style.display = 'block';
+      });
+
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    switchLanguage(LANG);
+  </script>
+<script src="/js/lme-account.js?v=11" defer></script>
+</body>
+</html>

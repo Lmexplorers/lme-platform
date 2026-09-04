@@ -1,4 +1,5 @@
 import { logUsage, anthropicUnits } from "../../_lib/ai-core/usage.js";
+import { editPasswordOk } from "../../_lib/edit-password.js";
 /**
  * LME Podkast, en helautomatisk podkast-serie som lager seg selv og
  * publiserer en ny episode hver dag. Innholdet handler om hele LME-systemet:
@@ -31,7 +32,7 @@ import { logUsage, anthropicUnits } from "../../_lib/ai-core/usage.js";
  * generate en gang om dagen, og serien skriver og stemmelegger seg selv.
  */
 
-const DEFAULT_PASSWORD = "LME26";
+const DEFAULT_PASSWORD = "LME2026";
 const IDX = "lme-podcast:index";
 const EP = "lme-podcast:ep:";
 const AUDIO = "lme-podcast:audio:";
@@ -749,8 +750,7 @@ export async function onRequestGet(context) {
 }
 
 function pwOk(env, given) {
-  const expected = (env.PODCAST_PASSWORD || env.COURSE_EDIT_PASSWORD || DEFAULT_PASSWORD) + "";
-  return (((given) || "") + "") === expected;
+  return editPasswordOk(env, given, [DEFAULT_PASSWORD, env.PODCAST_PASSWORD]);
 }
 
 // Last opp lyd (multipart/form-data). To bruk:

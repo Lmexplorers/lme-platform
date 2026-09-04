@@ -14,30 +14,66 @@
      functions/api/oppskrift-webhook.js og _lib/course-access.js)
 
    Pris bytter seg selv automatisk ved fristen (ingen manuell oppdatering
-   nødvendig): lanseringspris frem til 1. september 2026, deretter full pris.
+   nødvendig): kampanjekalenderen i /js/kampanjer.js styrer datoene, full pris
+   fra 1. februar 2027.
    Selve betalingslenkene er faste Stripe-lenker, én per pris og valuta.
+
+   Beløpene under er sjekket mot Stripe 31. august 2026 og skal stemme
+   nøyaktig med det kjøperen faktisk betaler: 497 kr og $50 i lansering,
+   1497 kr og $150 til vanlig. Den engelske lanseringsprisen sto tidligere
+   som $497, altså det norske beløpet med dollartegn, så en engelsk kjøper
+   så $497 på siden og $50 i kassen. Endres en pris i Stripe, må den endres
+   her i samme slengen.
    ===================================================================== */
 
 (function () {
-  var FULL_FROM = Date.parse("2026-09-01T00:00:00+02:00");
-  var launch = Date.now() < FULL_FROM;
+  // Kampanjekalenderen i /js/kampanjer.js bestemmer om det er tilbud nå, og
+  // hva tilbudet heter. Laster den ikke, gjelder tilbudsprisen frem til
+  // 1. februar 2027, samme dato som kalenderen bruker.
+  var k = (window.LME_KAMPANJE && window.LME_KAMPANJE.naa()) || {
+    tilbud: Date.now() < Date.parse("2027-02-01T00:00:00+01:00"),
+    merkelapp: { no: "Lanseringstilbud", en: "Launch offer" },
+  };
+  var launch = k.tilbud;
+
+  /* Ekte rabatt i Black Friday-uken og i julen. Egne priser og egne
+     Stripe-lenker, opprettet 31. august 2026 og sjekket mot Stripe.
+     Utenfor disse to periodene gjelder den vanlige tilbudsprisen. */
+  var RABATTER = {
+    blackfriday: {
+      no: { url: "https://buy.stripe.com/3cI7sMgwB4V9dyt7dd9R715", belop: 297 },
+      en: { url: "https://buy.stripe.com/28E9AU2FL5Zd9idcxx9R716", belop: 29 },
+    },
+    jul: {
+      no: { url: "https://buy.stripe.com/28E00ka8d9bpamh0OP9R71h", belop: 373 },
+      en: { url: "https://buy.stripe.com/4gM9AU1BHfzNgKF8hh9R71i", belop: 37 },
+    },
+  };
 
   var LINKS = {
     no: { launch: "https://buy.stripe.com/5kQbJ24NTevJgKFgNN9R63l", full: "https://buy.stripe.com/4gMbJ26W13R5cup9ll9R63n" },
     en: { launch: "https://buy.stripe.com/4gMbJ2bchcnB0LHdBB9R63m", full: "https://buy.stripe.com/aFadRabchfzNdyt6999R63o" },
   };
 
+  function rabatt(lang) {
+    return window.LME_KAMPANJE && window.LME_KAMPANJE.rabattFor
+      ? window.LME_KAMPANJE.rabattFor(RABATTER, lang)
+      : null;
+  }
   function priceFor(lang) {
+    var r = rabatt(lang);
+    if (r) return { belop: r.belop, valuta: lang === "en" ? "$" : "kr", visningFor: lang === "en" ? "$150" : "1497 kr" };
     return launch
-      ? { belop: 497, valuta: lang === "en" ? "$" : "kr", visningFor: lang === "en" ? "$150" : "1497 kr" }
+      ? { belop: lang === "en" ? 50 : 497, valuta: lang === "en" ? "$" : "kr", visningFor: lang === "en" ? "$150" : "1497 kr" }
       : { belop: lang === "en" ? 150 : 1497, valuta: lang === "en" ? "$" : "kr", visningFor: "" };
   }
   function checkoutFor(lang) {
+    var r = rabatt(lang);
+    if (r) return r.url;
     return launch ? LINKS[lang].launch : LINKS[lang].full;
   }
   function merkelapp(lang) {
-    if (launch) return lang === "en" ? "Launch offer" : "Lanseringstilbud";
-    return lang === "en" ? "Full course" : "Fullt kurs";
+    return lang === "en" ? k.merkelapp.en : k.merkelapp.no;
   }
 
 window.LME_FUNNEL = {

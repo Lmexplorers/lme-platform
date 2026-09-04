@@ -50,8 +50,9 @@
  *     updated
  *   }
  */
+import { editPasswordOk } from "../_lib/edit-password.js";
 
-export const DEFAULT_PASSWORD = "LME26";
+export const DEFAULT_PASSWORD = "LME2026";
 export const KEY_PREFIX = "lme-builder:lv:";
 export const INDEX_KEY = "lme-builder:lv-index";
 export const MAX_SIZE = 4 * 1024 * 1024;
@@ -516,8 +517,7 @@ export async function onRequestPost(context) {
     }
   }
 
-  const expected = (env.COURSE_EDIT_PASSWORD || DEFAULT_PASSWORD) + "";
-  if (((body && body.password) || "") + "" !== expected) {
+  if (!editPasswordOk(env, body && body.password, [DEFAULT_PASSWORD])) {
     return json({ error: "bad_password" }, 401);
   }
 

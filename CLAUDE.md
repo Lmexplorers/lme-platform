@@ -39,6 +39,106 @@ for kjøpsknappen, ikke bare et unntak dypt i betalings-webhooken.
 `/roadmap` skal alltid speile plattformen. Når nye moduler, kurs eller verktøy
 lanseres (eller fjernes), oppdater riktig fase på `roadmap.html` i samme slengen.
 
+## 📚 Hold A til Å-kurset oppdatert
+
+Avtalt med Renate 29. august 2026: `LME-plattformen fra A til Å` er kurset som
+viser rundt i hele plattformen, og det skal alltid speile den. Endrer jeg noe
+brukeren merker (nytt verktøy, nytt produkt, endret arbeidsflyt), oppdaterer jeg
+kurset i samme slengen, i `functions/_lib/seed-plattform-kurs-data.js`, og sier
+fra til Renate at hun må kjøre `/kurs-import` én gang for at endringen skal nå
+det lagrede kurset.
+
+Importen legger til nye leksjoner OG oppdaterer teksten i leksjoner som er
+endret i koden, men bare der teksten er nøyaktig den importen leverte sist. Har
+Renate skrevet om en leksjon i Kursbygger, står hennes versjon, og den telles
+som beholdt. Arbeidsboken `ressurser/print/lme-plattformen-arbeidsbok.html`
+speiler kurset og oppdateres samtidig.
+
+## ⛔ ALDRI skriv `/x  /x.html  200` i `_redirects`
+
+Lært den harde veien 31. august 2026, av to økter samme dag, uavhengig av
+hverandre: workshop-økten med `/kurs-import`, og denne med `/momentum`.
+Begge la inn en regel som "sikkerhetsnett", og begge gjorde siden umulig å
+åpne. Renate fikk `Load cannot follow more than 20 redirections` i Safari.
+
+Grunnen: Cloudflare Pages sender `.html`-adresser videre til den rene
+adressen helt av seg selv. Regelen sender den rene adressen tilbake til
+`.html`. De to peker på hverandre, og nettleseren gir opp etter tjue hopp.
+
+**En fil i roten trenger ingen regel.** `momentum.html` serveres på
+`/momentum` uansett, det er slik rene URL-er virker her fra før. Regelen
+løser ingenting og ødelegger siden.
+
+To ting til, som gjorde feilen verre enn den trengte å være:
+
+- **En 301 lagres permanent i Safari.** Har hun rukket å treffe ringen én
+  gang, spiller telefonen den av igjen uten å spørre serveren, og
+  rettelsen ser ut til å ikke virke. Gi henne da adressen med noe bak, for
+  eksempel `?ny=1`, så nettleseren må hente den på nytt. Nye sider bør ha
+  `Cache-Control: no-store` i `_headers`, samme som salgssidene.
+- **Sjekk at målet finnes.** `/momentum` sendte alle uten tilgang til
+  `/momentum-info`, en side som ikke var laget. Peker en kurslås eller en
+  regel på en adresse, må den adressen finnes før det publiseres.
+
+## 🛠️ Fiks feil du finner underveis, ikke spør om lov
+
+Avtalt 29. august 2026: finner jeg en feil mens jeg jobber med noe annet,
+retter jeg den med en gang og forteller hva jeg gjorde. Renate skal ikke måtte
+godkjenne at noe ødelagt blir reparert. Gjelder også feil i deler jeg ikke ble
+bedt om å røre. Unntaket er endringer som forandrer hva et produkt ER, eller
+som koster penger utad, for eksempel priser, betalingslenker og utsending av
+e-post til ekte mottakere. De spør jeg om først.
+
+## 💳 ALLTID Vipps til norske kunder
+
+Sagt av Renate 31. august 2026, etter at jeg laget tre Stripe-betalingslenker
+til tjenestepakkene og glemte Vipps: **alt som selges til norske kunder skal ha
+Vipps ved siden av kortbetalingen.** Ikke som noe jeg legger til hvis noen ber
+om det, men fra første versjon av hver eneste salgsside.
+
+Vipps er allerede bygget, og skal ikke lages på nytt:
+
+- `js/vipps-knapp.js` lager knappen, e-postfeltet og hele kjøpet. Legg
+  `data-vipps-produkt="<slug>"` og `data-vipps-type="<type>"` på boksen rundt
+  kjøpsknappen, og ta med skriptet nederst på siden. Står det en tom
+  `<div class="pay-methods"></div>` rett under kjøpsknappen, havner Vipps
+  akkurat der.
+- `functions/api/vipps-pay.js` starter kjøpet. Prisen leses ALLTID på
+  serveren, aldri fra siden. Varetypene i dag er `lv`, `kurs`, `oppskrift`
+  og `tjeneste`. Ny vare betyr en ny gren her.
+- `functions/_lib/vipps-lever.js` leverer varen etter betaling, og skal gjøre
+  nøyaktig det samme som Stripe-flyten gjør for den samme varen.
+- Vipps tar bare kroner, så knappen skjuler seg selv i engelsk visning.
+  Kortbetalingen står igjen alene der.
+
+E-postadressen må samles inn før kunden sendes til Vipps. Vipps forteller oss
+ikke hvem som betalte, så uten adressen har vi ingen å levere til.
+
+## 👀 Skriv lesbart til Renate, aldri i liten kodeskrift
+
+Sagt av Renate 31. august 2026: hun klarer ikke å lese den lille skriften.
+Hun leser stort sett på mobil.
+
+Derfor, i alt jeg skriver til henne i chatten:
+
+- Ikke skriv filnavn, stier, mappenavn eller knappetekst i kodeformat
+  (bakoverfnutter). Skriv dem som vanlig tekst i setningen: filen store.js
+  ligger i mappen functions, så api.
+- Ikke lim inn kodeblokker med mindre hun ber om kode. Forklar hva koden
+  gjør i stedet, med vanlige ord.
+- Bruk hele setninger og vanlig tekststørrelse. Tabeller er greit når de
+  sammenligner tall, men hold dem korte.
+
+Dette gjelder bare chatten. Kommentarer og kode i selve filene skrives som før.
+
+## 🔗 Skriv alltid HELE lenken til Renate
+
+Avtalt 29. august 2026: når jeg nevner en side i chatten, skriver jeg aldri
+bare stien (`/min-epost`). Den kan hun ikke trykke på, og hun må sette den
+sammen selv. Skriv alltid hele adressen, `https://lmexplorers.com/min-epost`,
+også når jeg nevner den midt i en setning eller i en liste. Gjelder alle sider,
+også de som bare er for henne.
+
 ## 🔗 Alt nytt skal ha et synlig kort/lenke — aldri en gjemt URL
 
 Avtalt med Renate 3. august 2026, etter at 10 000-visninger-utfordringen kun var
@@ -81,6 +181,18 @@ Renate retter ofte disse tingene manuelt. Følg reglene fra start, så slipper h
 
 6. **LME er kun Renate (enkeltperson).** Skriv "jeg", ikke "vi/oss", når teksten
    er fra LME/Renate til leseren. Gjelder også engelsk ("I", ikke "we").
+
+   Ryddet ut av hele plattformen 1. september 2026: "Kontakt oss" sto på 46
+   sider, og "Send oss en melding, vi svarer alltid" på åtte. Alt er jeg-form nå.
+
+   **Unntak, bestemt av Renate samme natt:** personvernerklæringen og
+   kjøpsvilkårene beholder "vi". Der er det mer formelt, og hun ser det som
+   riktig, siden det er henne sammen med AI-en. Ikke rett dem til jeg-form.
+
+   Andre steder der "oss" er RIKTIG, og skal stå: "Pust med oss" (Mia og Teo
+   snakker, to figurer), foreldrebrevet i Biblioteket (pedagogens eget brev
+   til foreldrene), standardtekstene i Gruppebygger og LME Builder
+   (medlemmets egen stemme på hennes egen side), og kundesitater.
 
 7. **Norske sammensatte ord skrives i ett ord, ikke med bindestrek.**
    Eksempel: `Montessoripedagog`, ikke `Montessori-pedagog`. Bindestrek i
@@ -198,7 +310,10 @@ Bruk aldri Playpen (eller systemfont/Comic Sans) på brødtekst. Aldri avvik.
 - Bare elementer merket `data-edit="…"` (og `section.crs` på kurs) er redigerbare.
 - Lagres i Cloudflare KV via `functions/api/content.js` og `functions/api/course.js`.
 - Knappen er skjult: vis med `#rediger` i adressen eller `Ctrl/Cmd+Shift+E`.
-  Lagring krever passord (`COURSE_EDIT_PASSWORD`, ellers standardpassordet i koden).
+  Lagring krever passord. Passordet ligger i `functions/_lib/edit-password.js`
+  (`LME2026`), og en eventuell hemmelighet `COURSE_EDIT_PASSWORD` i Cloudflare
+  godtas i tillegg, ikke i stedet. Skal passordet byttes, endres verdien i den
+  filen, så gjelder det alle byggerne.
 - **Lagret tekst overstyrer HTML-en.** Hvis Renate har redigert en side, spør henne
   før du endrer samme tekst i kildekoden.
 

@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FDF5F1">
+<title>LME Studio Tjenester</title>
+<meta name="description" content="Ferdige pakker der jeg gjør jobben for deg: videoer med effekter, din egen AI-karakter, og en hel måned med innhold satt opp på autopilot.">
+<link rel="icon" href="/images/lme-logo.png">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Playpen Sans';
+    src: url('/fonts/PlaypenSans-400.woff2') format('woff2');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Playpen Sans';
+    src: url('/fonts/PlaypenSans-700.woff2') format('woff2');
+    font-weight: 700; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink: #F8D7DA; --pink-mid: #F5A8B8; --cerise: #E91E89;
+    --lime: #7AAE1F; --yellow: #F7C72E; --cream: #FBF6F0;
+    --ink: #1A1A1A; --grey: #5A5A5A; --line: rgba(26,26,26,0.10);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body); color: var(--ink); line-height: 1.65;
+    background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 55%, #F8D7DA 100%);
+    min-height: 100vh; -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); line-height: 1.25; }
+  a { color: inherit; }
+  button, input, textarea, select { font-family: inherit; font-size: inherit; color: inherit; }
+
+  .topp {
+    position: sticky; top: 0; z-index: 20; display: flex; align-items: center;
+    justify-content: space-between; gap: 10px; padding: 13px 18px;
+    background: rgba(253,245,241,0.92); backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line);
+    /* Kontoknappen fra js/lme-account.js ligger fast øverst til høyre.
+       Uten denne plassen legger den seg oppå knappene her. */
+    padding-right: 62px;
+  }
+  .merke { font-family: var(--font-head); font-weight: 700; font-size: 19px; letter-spacing: -0.01em; text-decoration: none; }
+  .merke i { color: var(--cerise); font-style: normal; }
+  .minibtn {
+    border: 1px solid #eedce2; background: #fff; border-radius: 999px;
+    padding: 7px 13px; font-size: 12.5px; font-weight: 700; cursor: pointer; white-space: nowrap;
+  }
+
+  .wrap { max-width: 940px; margin: 0 auto; padding: 34px 18px 60px; }
+
+  .hero { text-align: center; padding: 20px 0 12px; }
+  .kicker {
+    display: inline-block; background: #fff; border: 1px solid var(--pink-mid);
+    color: var(--cerise); border-radius: 999px; padding: 7px 16px;
+    font-size: 12.5px; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 16px;
+  }
+  .hero h1 { font-size: clamp(30px, 6vw, 48px); letter-spacing: -0.02em; margin-bottom: 14px; }
+  .hero h1 em { color: var(--cerise); font-style: normal; }
+  .hero p.ingress { font-size: clamp(16px, 2.2vw, 19px); color: var(--grey); max-width: 620px; margin: 0 auto 22px; }
+  .hero-knapper { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .knapp-stor {
+    display: inline-block; background: linear-gradient(120deg, #E91E89, #ff5fb0);
+    color: #fff; text-decoration: none; font-weight: 800; font-size: 16px;
+    padding: 15px 30px; border-radius: 999px; border: none; cursor: pointer;
+    box-shadow: 0 12px 26px rgba(233,30,137,.28);
+  }
+  .knapp-mild {
+    display: inline-block; background: #fff; color: var(--ink); text-decoration: none;
+    font-weight: 700; font-size: 15px; padding: 14px 26px; border-radius: 999px;
+    border: 1.5px solid var(--pink-mid); cursor: pointer;
+  }
+
+  .bolk { margin-top: 52px; }
+  .bolk > h2 { font-size: clamp(23px, 4vw, 31px); text-align: center; margin-bottom: 10px; }
+  .bolk > p.under { text-align: center; color: var(--grey); max-width: 620px; margin: 0 auto 26px; }
+
+  .pakker { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .pakke {
+    background: #fff; border-radius: 22px; padding: 26px 24px;
+    box-shadow: 0 10px 30px rgba(26,26,26,.07); display: flex; flex-direction: column;
+    position: relative; border: 2px solid transparent;
+  }
+  .pakke.populaer { border-color: var(--pink-mid); }
+  .pakke .merkelapp {
+    position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+    background: var(--cerise); color: #fff; font-size: 11.5px; font-weight: 800;
+    letter-spacing: 0.05em; padding: 5px 14px; border-radius: 999px; white-space: nowrap;
+  }
+  .pakke .ikon { font-size: 34px; line-height: 1; margin-bottom: 12px; }
+  .pakke h3 { font-size: 21px; margin-bottom: 5px; }
+  .pakke .undertittel { color: var(--cerise); font-weight: 700; font-size: 14.5px; margin-bottom: 12px; }
+  .pakke .for-hvem { color: var(--grey); font-size: 14.5px; margin-bottom: 16px; }
+  .pakke .pris { font-family: var(--font-head); font-size: 32px; font-weight: 700; letter-spacing: -0.02em; }
+  .pakke .pris span { font-family: var(--font-body); font-size: 14px; font-weight: 400; color: var(--grey); }
+  .pakke .levering {
+    display: inline-block; background: #F2F8E6; color: #5B8416; font-size: 12.5px;
+    font-weight: 700; padding: 5px 12px; border-radius: 999px; margin: 12px 0 16px;
+  }
+  .pakke ul { list-style: none; margin-bottom: 22px; }
+  .pakke li { position: relative; padding-left: 25px; margin-bottom: 9px; font-size: 15px; }
+  .pakke li::before { content: "✓"; position: absolute; left: 0; color: var(--lime); font-weight: 800; }
+  .pakke .velg { margin-top: auto; width: 100%; text-align: center; text-decoration: none; }
+  .lenkeknapp {
+    background: none; border: none; padding: 10px 0 0; width: 100%;
+    color: var(--grey); font-size: 13.5px; font-weight: 700;
+    text-decoration: underline; cursor: pointer;
+  }
+  .lenkeknapp:hover { color: var(--cerise); }
+
+  /* Takkemeldingen etter at kunden kommer tilbake fra kassen. */
+  .takk {
+    background: #F2F8E6; border: 2px solid #B7D96B; border-radius: 20px;
+    padding: 22px 24px; margin-bottom: 26px;
+  }
+  .takk h2 { font-size: 22px; margin-bottom: 8px; }
+  .takk p { color: #47600F; font-size: 15.5px; }
+
+  .notis {
+    background: #fff; border-radius: 18px; padding: 20px 22px; margin-top: 22px;
+    border-left: 5px solid var(--yellow); color: var(--grey); font-size: 15px;
+  }
+  .notis strong { color: var(--ink); }
+
+  .steg { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+  .steg .kort { background: #fff; border-radius: 20px; padding: 24px; box-shadow: 0 8px 24px rgba(26,26,26,.06); }
+  .steg .tall {
+    width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
+    background: linear-gradient(135deg, #F5A8B8, #E91E89); color: #fff;
+    font-family: var(--font-head); font-weight: 700; margin-bottom: 12px;
+  }
+  .steg h3 { font-size: 18px; margin-bottom: 7px; }
+  .steg p { color: var(--grey); font-size: 15px; }
+
+  .sporsmal { background: #fff; border-radius: 18px; padding: 20px 22px; margin-bottom: 12px; box-shadow: 0 6px 18px rgba(26,26,26,.05); }
+  .sporsmal h3 { font-size: 17px; margin-bottom: 7px; }
+  .sporsmal p { color: var(--grey); font-size: 15px; }
+
+  .skjema { background: #fff; border-radius: 24px; padding: 30px 26px; box-shadow: 0 14px 36px rgba(26,26,26,.09); }
+  .felt { margin-bottom: 16px; }
+  .felt label { display: block; font-weight: 700; font-size: 14.5px; margin-bottom: 6px; }
+  .felt input, .felt textarea, .felt select {
+    width: 100%; border: 1.5px solid #eedce2; border-radius: 14px;
+    padding: 13px 15px; font-size: 15.5px; background: #fffdfc;
+  }
+  .felt input:focus, .felt textarea:focus, .felt select:focus { outline: none; border-color: var(--pink-mid); }
+  .felt textarea { min-height: 130px; resize: vertical; }
+  .felt .hjelp { color: var(--grey); font-size: 13px; margin-top: 5px; }
+  .skjema-svar { margin-top: 14px; font-weight: 700; font-size: 15px; }
+  .skjema-svar.ok { color: #5B8416; }
+  .skjema-svar.feil { color: #C0392B; }
+
+  /* Eierpanelet. Vises bare for Renate, og henter forespørslene fra
+     /api/tjeneste-foresporsel, som selv sjekker at du er eier. */
+  .eierpanel { background: #fff; border-radius: 24px; padding: 26px 24px; box-shadow: 0 14px 36px rgba(26,26,26,.09); }
+  .sak { border: 1px solid #f1e2e7; border-radius: 16px; padding: 16px 18px; margin-bottom: 12px; }
+  .sak .rad { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: baseline; }
+  .sak .navn { font-weight: 800; }
+  .sak .meta { color: var(--grey); font-size: 13.5px; }
+  .sak .melding { white-space: pre-wrap; background: var(--cream); border-radius: 12px; padding: 12px 14px; margin-top: 10px; font-size: 15px; }
+  .sak .status-knapper { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .sak .status-knapper button { font-size: 12.5px; padding: 6px 12px; }
+  .sak .status-knapper button.aktiv { background: var(--cerise); color: #fff; border-color: var(--cerise); }
+  .skjul { display: none !important; }
+
+  .bunn { text-align: center; color: var(--grey); font-size: 14px; padding: 40px 18px 60px; }
+  .bunn a { color: var(--cerise); font-weight: 700; }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 24px 15px 50px; }
+    .skjema, .eierpanel { padding: 22px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topp">
+  <a class="merke" href="/dashboard">LME <i>Studio</i></a>
+  <button class="minibtn" id="sprakbytte" type="button">EN 🌍</button>
+</header>
+
+<div class="wrap">
+
+  <section class="takk skjul" id="takk">
+    <h2 data-no="Takk! Nå setter jeg i gang" data-en="Thank you! I am starting now">Takk! Nå setter jeg i gang</h2>
+    <p data-no="Kjøpet er registrert, og du får en e-post fra meg med det ene jeg trenger for å komme videre: en lenke til materialet ditt. Har du allerede lagt den inn i kassen, trenger du ikke gjøre noe mer." data-en="Your purchase is registered, and you will get an email from me asking for the one thing I need to move on: a link to your material. If you already added it at checkout, there is nothing more for you to do.">Kjøpet er registrert, og du får en e-post fra meg med det ene jeg trenger for å komme videre: en lenke til materialet ditt. Har du allerede lagt den inn i kassen, trenger du ikke gjøre noe mer.</p>
+  </section>
+
+  <section class="hero">
+    <span class="kicker" data-no="GJORT FOR DEG" data-en="DONE FOR YOU">GJORT FOR DEG</span>
+    <h1 data-no="Du trenger ikke lære det. Jeg kan <em>gjøre det for deg</em>." data-en="You do not have to learn it. I can <em>do it for you</em>.">Du trenger ikke lære det. Jeg kan <em>gjøre det for deg</em>.</h1>
+    <p class="ingress" data-no="Ferdige pakker med fast pris, fast leveringstid og ingen overraskelser. Du sender meg det du har, og får det ferdige tilbake, klart til å legges ut." data-en="Ready-made packages with a fixed price, a fixed delivery time and no surprises. You send me what you have, and get the finished result back, ready to post.">Ferdige pakker med fast pris, fast leveringstid og ingen overraskelser. Du sender meg det du har, og får det ferdige tilbake, klart til å legges ut.</p>
+    <div class="hero-knapper">
+      <a class="knapp-stor" href="#pakkene" data-no="Se pakkene og prisene" data-en="See the packages and prices">Se pakkene og prisene</a>
+      <a class="knapp-mild" href="#skjema" data-no="Fortell meg hva du trenger" data-en="Tell me what you need">Fortell meg hva du trenger</a>
+    </div>
+  </section>
+
+  <section class="bolk" id="pakkene">
+    <h2 data-no="Tre ferdige pakker" data-en="Three ready-made packages">Tre ferdige pakker</h2>
+    <p class="under" data-no="Alle prisene er faste og inkluderer arbeidet mitt. Du betaler først når du har sagt ja til tilbudet du får tilbake." data-en="All prices are fixed and include my work. You pay only after you have said yes to the quote you get back.">Alle prisene er faste og inkluderer arbeidet mitt. Du betaler først når du har sagt ja til tilbudet du får tilbake.</p>
+    <div class="pakker" id="pakkeliste"></div>
+    <div class="notis" id="autopilot-notis"></div>
+    <div class="notis" id="kreditt-notis"></div>
+  </section>
+
+  <section class="bolk">
+    <h2 data-no="Slik foregår det" data-en="How it works">Slik foregår det</h2>
+    <p class="under" data-no="Fire steg, og du vet hele veien hva som skjer og hva det koster." data-en="Four steps, and you know all the way what happens and what it costs.">Fire steg, og du vet hele veien hva som skjer og hva det koster.</p>
+    <div class="steg">
+      <div class="kort">
+        <div class="tall">1</div>
+        <h3 data-no="Du forteller" data-en="You tell me">Du forteller</h3>
+        <p data-no="Fyll ut skjemaet nederst med hva du trenger. Har du filer eller lenker allerede, tar du dem med med en gang." data-en="Fill in the form at the bottom with what you need. If you already have files or links, bring them along right away.">Fyll ut skjemaet nederst med hva du trenger. Har du filer eller lenker allerede, tar du dem med med en gang.</p>
+      </div>
+      <div class="kort">
+        <div class="tall">2</div>
+        <h3 data-no="Du får et fast tilbud" data-en="You get a fixed quote">Du får et fast tilbud</h3>
+        <p data-no="Innen én virkedag får du pris, leveringsdato og hva som er inkludert, skriftlig. Ingenting trekkes før du sier ja." data-en="Within one working day you get the price, the delivery date and what is included, in writing. Nothing is charged before you say yes.">Innen én virkedag får du pris, leveringsdato og hva som er inkludert, skriftlig. Ingenting trekkes før du sier ja.</p>
+      </div>
+      <div class="kort">
+        <div class="tall">3</div>
+        <h3 data-no="Jeg lager det" data-en="I make it">Jeg lager det</h3>
+        <p data-no="Du hører ingenting fra meg før det er noe å se på. Da får du et utkast, og du sier hva som skal justeres." data-en="You hear nothing from me until there is something to look at. Then you get a draft, and you say what should be adjusted.">Du hører ingenting fra meg før det er noe å se på. Da får du et utkast, og du sier hva som skal justeres.</p>
+      </div>
+      <div class="kort">
+        <div class="tall">4</div>
+        <h3 data-no="Du får filene" data-en="You get the files">Du får filene</h3>
+        <p data-no="Ferdig, i riktig format, klart til å legges ut. Filene er dine, og du kan bruke dem hvor du vil, så lenge du vil." data-en="Finished, in the right format, ready to post. The files are yours, and you can use them wherever you want, for as long as you want.">Ferdig, i riktig format, klart til å legges ut. Filene er dine, og du kan bruke dem hvor du vil, så lenge du vil.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bolk">
+    <h2 data-no="Spørsmål jeg får ofte" data-en="Questions I often get">Spørsmål jeg får ofte</h2>
+    <div class="sporsmal">
+      <h3 data-no="Må jeg kunne noe om AI fra før?" data-en="Do I need to know anything about AI beforehand?">Må jeg kunne noe om AI fra før?</h3>
+      <p data-no="Nei. Det er hele poenget med disse pakkene. Du forteller hva du vil ha, jeg gjør resten, og du får det ferdige tilbake." data-en="No. That is the whole point of these packages. You say what you want, I do the rest, and you get the finished result back.">Nei. Det er hele poenget med disse pakkene. Du forteller hva du vil ha, jeg gjør resten, og du får det ferdige tilbake.</p>
+    </div>
+    <div class="sporsmal">
+      <h3 data-no="Hvem eier det ferdige innholdet?" data-en="Who owns the finished content?">Hvem eier det ferdige innholdet?</h3>
+      <p data-no="Det gjør du. Filene er dine å bruke i markedsføring, på nettsiden din og i sosiale medier, uten begrensning i tid." data-en="You do. The files are yours to use in marketing, on your website and in social media, with no time limit.">Det gjør du. Filene er dine å bruke i markedsføring, på nettsiden din og i sosiale medier, uten begrensning i tid.</p>
+    </div>
+    <div class="sporsmal">
+      <h3 data-no="Hva om jeg ikke blir fornøyd?" data-en="What if I am not happy with it?">Hva om jeg ikke blir fornøyd?</h3>
+      <p data-no="Hver pakke har en runde med endringer inkludert, og den runden er ikke en formalitet. Treffer jeg ikke, gjør jeg det om." data-en="Every package includes one round of changes, and that round is not a formality. If I miss, I do it over.">Hver pakke har en runde med endringer inkludert, og den runden er ikke en formalitet. Treffer jeg ikke, gjør jeg det om.</p>
+    </div>
+    <div class="sporsmal">
+      <h3 data-no="Kan jeg lage dette selv i stedet?" data-en="Can I make this myself instead?">Kan jeg lage dette selv i stedet?</h3>
+      <p data-no="Ja, og det er ofte det rimeligste. Verktøyene ligger inne i LME Studio, og LME Autopilot lager innholdet for deg fra 199 kr i måneden. Pakkene her er for deg som heller vil kjøpe tiden enn å lære verktøyet." data-en="Yes, and that is often the cheapest route. The tools are inside LME Studio, and LME Autopilot makes the content for you from 199 kr a month. The packages here are for you who would rather buy the time than learn the tool.">Ja, og det er ofte det rimeligste. Verktøyene ligger inne i LME Studio, og LME Autopilot lager innholdet for deg fra 199 kr i måneden. Pakkene her er for deg som heller vil kjøpe tiden enn å lære verktøyet.</p>
+    </div>
+    <div class="sporsmal">
+      <h3 data-no="Må jeg kjøpe kreditt i tillegg?" data-en="Do I have to buy credit as well?">Må jeg kjøpe kreditt i tillegg?</h3>
+      <p data-no="Ikke for pakken min, den er ferdig betalt med prisen du ser. Etterpå, når du lager innhold selv, følger AI-bildene med i Autopilot-planen din. Video gjør det ikke, den kjøper du som kreditt fra 99 kr for tre videoer. Grunnen er at video koster mye å lage, og da blir det riktigere at hver kjøper betaler for sitt eget forbruk enn at prisen økes for alle." data-en="Not for my package, that is fully paid with the price you see. Afterwards, when you make content yourself, the AI images are included in your Autopilot plan. Video is not, and is bought as credit from 99 kr for three videos. The reason is that video is expensive to make, so it is fairer that each buyer pays for their own use than to raise the price for everyone.">Ikke for pakken min, den er ferdig betalt med prisen du ser. Etterpå, når du lager innhold selv, følger AI-bildene med i Autopilot-planen din. Video gjør det ikke, den kjøper du som kreditt fra 99 kr for tre videoer. Grunnen er at video koster mye å lage, og da blir det riktigere at hver kjøper betaler for sitt eget forbruk enn at prisen økes for alle.</p>
+    </div>
+    <div class="sporsmal">
+      <h3 data-no="Hvordan betaler jeg?" data-en="How do I pay?">Hvordan betaler jeg?</h3>
+      <p data-no="Med Vipps eller kort, rett på knappen i pakken du vil ha. Vil du heller ha et tilbud først, får du betalingslenke eller faktura fra meg etterpå, når vi er enige om hva jobben er." data-en="By card, straight from the button in the package you want. If you would rather have a quote first, you get a payment link or an invoice from me afterwards, once we agree on what the job is.">Med Vipps eller kort, rett på knappen i pakken du vil ha. Vil du heller ha et tilbud først, får du betalingslenke eller faktura fra meg etterpå, når vi er enige om hva jobben er.</p>
+    </div>
+  </section>
+
+  <section class="bolk" id="skjema">
+    <h2 data-no="Fortell meg hva du trenger" data-en="Tell me what you need">Fortell meg hva du trenger</h2>
+    <p class="under" data-no="Du får svar innen én virkedag, med fast pris og forslag til når vi starter. Ingenting trekkes før du har sagt ja." data-en="You get an answer within one working day, with a fixed price and a suggested start date. Nothing is charged before you have said yes.">Du får svar innen én virkedag, med fast pris og forslag til når vi starter. Ingenting trekkes før du har sagt ja.</p>
+    <form class="skjema" id="foresporselsskjema" novalidate>
+      <div class="felt">
+        <label for="f-navn" data-no="Navnet ditt" data-en="Your name">Navnet ditt</label>
+        <input id="f-navn" name="navn" type="text" autocomplete="name" required>
+      </div>
+      <div class="felt">
+        <label for="f-epost" data-no="E-posten din" data-en="Your email">E-posten din</label>
+        <input id="f-epost" name="epost" type="email" autocomplete="email" required>
+      </div>
+      <div class="felt">
+        <label for="f-telefon" data-no="Telefon (valgfritt)" data-en="Phone (optional)">Telefon (valgfritt)</label>
+        <input id="f-telefon" name="telefon" type="tel" autocomplete="tel">
+      </div>
+      <div class="felt">
+        <label for="f-pakke" data-no="Hva er du interessert i?" data-en="What are you interested in?">Hva er du interessert i?</label>
+        <select id="f-pakke" name="pakke"></select>
+      </div>
+      <div class="felt">
+        <label for="f-melding" data-no="Fortell meg om oppdraget" data-en="Tell me about the job">Fortell meg om oppdraget</label>
+        <textarea id="f-melding" name="melding" required></textarea>
+        <p class="hjelp" data-no="Hva slags videoer eller innhold er det, hvem er det for, og når trenger du det?" data-en="What kind of videos or content is it, who is it for, and when do you need it?">Hva slags videoer eller innhold er det, hvem er det for, og når trenger du det?</p>
+      </div>
+      <div class="felt">
+        <label for="f-lenke" data-no="Lenke til materialet (valgfritt)" data-en="Link to your material (optional)">Lenke til materialet (valgfritt)</label>
+        <input id="f-lenke" name="lenke" type="text" placeholder="Google Drive, Dropbox, WeTransfer">
+        <p class="hjelp" data-no="Har du klippene eller bildene klare, sparer vi en runde ved at du legger lenken inn med en gang." data-en="If your clips or images are ready, adding the link now saves us a round.">Har du klippene eller bildene klare, sparer vi en runde ved at du legger lenken inn med en gang.</p>
+      </div>
+      <button class="knapp-stor" type="submit" id="send-knapp" data-no="Send forespørselen" data-en="Send the request">Send forespørselen</button>
+      <p class="skjema-svar skjul" id="skjema-svar"></p>
+    </form>
+  </section>
+
+  <section class="bolk skjul" id="eierbolk">
+    <h2 data-no="Forespørslene dine" data-en="Your requests">Forespørslene dine</h2>
+    <p class="under" data-no="Bare du ser denne delen. Her ligger alt som er sendt inn, nyeste først." data-en="Only you see this part. Everything sent in is here, newest first.">Bare du ser denne delen. Her ligger alt som er sendt inn, nyeste først.</p>
+    <div class="eierpanel" id="sakliste"></div>
+  </section>
+
+</div>
+
+<div class="bunn">
+  <p data-no="LME Studio Tjenester er en del av Little Montessori Explorers." data-en="LME Studio Services is part of Little Montessori Explorers.">LME Studio Tjenester er en del av Little Montessori Explorers.</p>
+  <p style="margin-top:8px"><a href="/dashboard" data-no="Tilbake til plattformen" data-en="Back to the platform">Tilbake til plattformen</a></p>
+</div>
+
+<script type="module">
+  import { PAKKER, SKREDDERSYDD, AUTOPILOT_NOTE, KREDITT_NOTE } from '/js/tjenester-pakker.js?v=2';
+
+  let sprak = (new URLSearchParams(location.search).get('lang') === 'en') ? 'en' : 'no';
+
+  /* Alt som er skrevet inn av en kunde må escapes før det settes inn som
+     HTML. Skjemaet er åpent for hvem som helst, og navnet eller meldingen
+     kan inneholde tagger. */
+  function esc(v) {
+    return ((v === null || v === undefined) ? '' : String(v))
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  /* Lenken kunden limer inn åpnes i eierpanelet. Bare vanlige nettadresser
+     slipper gjennom, så en javascript:-lenke ikke kan kjøres med ett trykk. */
+  function trygglenke(v) {
+    const s = ((v || '') + '').trim();
+    return /^https?:\/\//i.test(s) ? s : '';
+  }
+
+  /* Kortene bygges fra pakkedataene, med både data-no og data-en satt, slik
+     at språkbyttet under tar dem på samme måte som all annen tekst. */
+  function byggPakker() {
+    const liste = document.getElementById('pakkeliste');
+    liste.innerHTML = '';
+    PAKKER.forEach(p => {
+      const kort = document.createElement('div');
+      kort.className = 'pakke' + (p.populaer ? ' populaer' : '');
+      /* Norske kunder skal alltid ha Vipps. js/vipps-knapp.js finner kortet
+         på disse to merkene og bygger knappen, e-postfeltet og kallet til
+         /api/vipps-pay selv. */
+      if (p.kjopLenke) {
+        kort.setAttribute('data-vipps-produkt', p.id);
+        kort.setAttribute('data-vipps-type', 'tjeneste');
+      }
+      let html = '';
+      if (p.populaer) {
+        html += '<span class="merkelapp" data-no="MEST VALGT" data-en="MOST CHOSEN">MEST VALGT</span>';
+      }
+      html += '<div class="ikon">' + p.emoji + '</div>';
+      html += '<h3 data-no="' + p.navn.no + '" data-en="' + p.navn.en + '">' + p.navn.no + '</h3>';
+      html += '<p class="undertittel" data-no="' + p.undertittel.no + '" data-en="' + p.undertittel.en + '">' + p.undertittel.no + '</p>';
+      html += '<p class="for-hvem" data-no="' + p.forHvem.no + '" data-en="' + p.forHvem.en + '">' + p.forHvem.no + '</p>';
+      html += '<div class="pris">' + p.nok.toLocaleString('nb-NO') + ' <span data-no="kr, fast pris" data-en="kr, fixed price">kr, fast pris</span></div>';
+      html += '<span class="levering" data-no="' + p.levering.no + '" data-en="' + p.levering.en + '">' + p.levering.no + '</span>';
+      html += '<ul>';
+      p.inkluderer.no.forEach((linje, i) => {
+        html += '<li data-no="' + linje + '" data-en="' + (p.inkluderer.en[i] || linje) + '">' + linje + '</li>';
+      });
+      html += '</ul>';
+      /* To veier ut av kortet: betal med en gang, eller be om et tilbud
+         først. Den andre er ikke pynt, den er der for oppdrag som er
+         større eller rotete enn pakken beskriver. */
+      if (p.kjopLenke) {
+        html += '<a class="knapp-stor velg" href="' + p.kjopLenke + '" data-no="Kjøp med kort, ' + p.nok.toLocaleString('nb-NO') + ' kr" data-en="Pay by card, ' + p.nok.toLocaleString('nb-NO') + ' kr">Kjøp med kort, ' + p.nok.toLocaleString('nb-NO') + ' kr</a>';
+        /* js/vipps-knapp.js legger Vipps-knappen rett foran .pay-methods,
+           altså under kortknappen og over tilbudslenken. Vipps tar bare
+           kroner, så skriptet skjuler den selv i engelsk visning. */
+        html += '<div class="pay-methods"></div>';
+        html += '<button class="lenkeknapp be-om" type="button" data-pakke="' + p.id + '" data-no="eller be om et tilbud først" data-en="or ask for a quote first">eller be om et tilbud først</button>';
+      } else {
+        html += '<button class="knapp-stor velg be-om" type="button" data-pakke="' + p.id + '" data-no="Velg denne" data-en="Choose this one">Velg denne</button>';
+      }
+      kort.innerHTML = html;
+      liste.appendChild(kort);
+    });
+
+    /* Skreddersydd står til slutt, uten pris, fordi prisen settes per oppdrag. */
+    const annet = document.createElement('div');
+    annet.className = 'pakke';
+    annet.innerHTML =
+      '<div class="ikon">' + SKREDDERSYDD.emoji + '</div>' +
+      '<h3 data-no="' + SKREDDERSYDD.navn.no + '" data-en="' + SKREDDERSYDD.navn.en + '">' + SKREDDERSYDD.navn.no + '</h3>' +
+      '<p class="undertittel" data-no="' + SKREDDERSYDD.undertittel.no + '" data-en="' + SKREDDERSYDD.undertittel.en + '">' + SKREDDERSYDD.undertittel.no + '</p>' +
+      '<p class="for-hvem" data-no="' + SKREDDERSYDD.tekst.no + '" data-en="' + SKREDDERSYDD.tekst.en + '">' + SKREDDERSYDD.tekst.no + '</p>' +
+      '<button class="knapp-mild velg be-om" type="button" data-pakke="' + SKREDDERSYDD.id + '" data-no="Beskriv oppdraget" data-en="Describe the job">Beskriv oppdraget</button>';
+    liste.appendChild(annet);
+
+    const notis = document.getElementById('autopilot-notis');
+    notis.setAttribute('data-no', '<strong>Om abonnementet:</strong> ' + AUTOPILOT_NOTE.no);
+    notis.setAttribute('data-en', '<strong>About the subscription:</strong> ' + AUTOPILOT_NOTE.en);
+    notis.innerHTML = '<strong>Om abonnementet:</strong> ' + AUTOPILOT_NOTE.no;
+
+    const kreditt = document.getElementById('kreditt-notis');
+    kreditt.setAttribute('data-no', KREDITT_NOTE.no.replace('Om bilder og video:', '<strong>Om bilder og video:</strong>'));
+    kreditt.setAttribute('data-en', KREDITT_NOTE.en.replace('About images and video:', '<strong>About images and video:</strong>'));
+    kreditt.innerHTML = KREDITT_NOTE.no.replace('Om bilder og video:', '<strong>Om bilder og video:</strong>');
+
+    /* Bare tilbudsknappene hopper ned til skjemaet. Kjøpsknappene er ekte
+       lenker til kassen og skal få gå sin vei. */
+    liste.querySelectorAll('.be-om').forEach(knapp => {
+      knapp.addEventListener('click', () => {
+        document.getElementById('f-pakke').value = knapp.getAttribute('data-pakke');
+        document.getElementById('skjema').scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => document.getElementById('f-navn').focus(), 400);
+      });
+    });
+  }
+
+  function byggValg() {
+    const velger = document.getElementById('f-pakke');
+    velger.innerHTML = '';
+    PAKKER.forEach(p => {
+      const o = document.createElement('option');
+      o.value = p.id;
+      o.setAttribute('data-no', p.navn.no + ', ' + p.nok.toLocaleString('nb-NO') + ' kr');
+      o.setAttribute('data-en', p.navn.en + ', ' + p.nok.toLocaleString('nb-NO') + ' kr');
+      o.textContent = p.navn.no + ', ' + p.nok.toLocaleString('nb-NO') + ' kr';
+      velger.appendChild(o);
+    });
+    const o = document.createElement('option');
+    o.value = SKREDDERSYDD.id;
+    o.setAttribute('data-no', SKREDDERSYDD.navn.no + ', pris etter avtale');
+    o.setAttribute('data-en', SKREDDERSYDD.navn.en + ', price by agreement');
+    o.textContent = SKREDDERSYDD.navn.no + ', pris etter avtale';
+    velger.appendChild(o);
+  }
+
+  /* Samme mønster som om-renate.html: gå gjennom alt som har begge språkene. */
+  function byttSprak(lang) {
+    sprak = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(el => {
+      const t = el.getAttribute('data-' + lang);
+      if (t === null) return;
+      if (t.indexOf('<') !== -1) el.innerHTML = t;
+      else el.textContent = t;
+    });
+    document.getElementById('sprakbytte').textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    document.title = lang === 'no' ? 'LME Studio Tjenester' : 'LME Studio Services';
+  }
+
+  document.getElementById('sprakbytte').addEventListener('click', () => {
+    byttSprak(sprak === 'no' ? 'en' : 'no');
+  });
+
+  byggPakker();
+  byggValg();
+  if (sprak === 'en') byttSprak('en');
+
+  /* Kassen sender kunden tilbake hit med ?takk=<pakke>. Da skal hun møte en
+     kvittering, ikke bare salgssiden på nytt. */
+  if (new URLSearchParams(location.search).get('takk')) {
+    const takk = document.getElementById('takk');
+    takk.classList.remove('skjul');
+    takk.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* Skjemaet */
+  const skjema = document.getElementById('foresporselsskjema');
+  const svar = document.getElementById('skjema-svar');
+  const sendKnapp = document.getElementById('send-knapp');
+
+  skjema.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {
+      navn: document.getElementById('f-navn').value.trim(),
+      epost: document.getElementById('f-epost').value.trim(),
+      telefon: document.getElementById('f-telefon').value.trim(),
+      pakke: document.getElementById('f-pakke').value,
+      melding: document.getElementById('f-melding').value.trim(),
+      lenke: document.getElementById('f-lenke').value.trim(),
+      lang: sprak,
+    };
+    svar.className = 'skjema-svar';
+    if (!data.navn || !data.epost || !data.melding) {
+      svar.classList.add('feil');
+      svar.textContent = sprak === 'no'
+        ? 'Fyll inn navn, e-post og litt om oppdraget, så sender jeg deg et tilbud.'
+        : 'Fill in your name, email and a little about the job, and I will send you a quote.';
+      return;
+    }
+    sendKnapp.disabled = true;
+    sendKnapp.textContent = sprak === 'no' ? 'Sender …' : 'Sending …';
+    try {
+      const r = await fetch('/api/tjeneste-foresporsel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const j = await r.json();
+      if (j.ok) {
+        svar.classList.add('ok');
+        svar.textContent = sprak === 'no'
+          ? 'Takk, forespørselen er sendt. Du får svar fra meg innen én virkedag, og en kvittering på e-post nå.'
+          : 'Thank you, your request is sent. You will hear from me within one working day, and get a receipt by email now.';
+        skjema.reset();
+        byggValg();
+      } else {
+        throw new Error(j.error || 'ukjent');
+      }
+    } catch (feil) {
+      svar.classList.add('feil');
+      svar.textContent = sprak === 'no'
+        ? 'Noe gikk galt her hos meg. Send det heller til post@lmexplorers.com, så svarer jeg der.'
+        : 'Something went wrong on my side. Send it to post@lmexplorers.com instead, and I will answer there.';
+    }
+    svar.classList.remove('skjul');
+    sendKnapp.disabled = false;
+    byttSprak(sprak);
+  });
+
+  /* Eierpanelet. Endepunktet svarer med eier:false for alle andre, så
+     ingenting lekker om noen åpner siden uten å være logget inn. */
+  const STATUSER = [
+    { id: 'ny', no: 'Ny', en: 'New' },
+    { id: 'betalt', no: 'Betalt', en: 'Paid' },
+    { id: 'svart', no: 'Svart', en: 'Answered' },
+    { id: 'i-gang', no: 'I gang', en: 'In progress' },
+    { id: 'ferdig', no: 'Ferdig', en: 'Done' },
+  ];
+
+  async function hentSaker() {
+    let j = null;
+    try {
+      const r = await fetch('/api/tjeneste-foresporsel', { headers: { 'Accept': 'application/json' } });
+      j = await r.json();
+    } catch (e) { return; }
+    if (!j || !j.eier) return;
+
+    document.getElementById('eierbolk').classList.remove('skjul');
+    const boks = document.getElementById('sakliste');
+    if (!j.saker.length) {
+      boks.innerHTML = '<p data-no="Ingen forespørsler ennå. De dukker opp her med en gang noen sender inn skjemaet." data-en="No requests yet. They show up here the moment someone sends the form.">Ingen forespørsler ennå. De dukker opp her med en gang noen sender inn skjemaet.</p>';
+      byttSprak(sprak);
+      return;
+    }
+    boks.innerHTML = '';
+    j.saker.forEach(sak => {
+      const dato = new Date(sak.opprettet).toLocaleDateString('nb-NO', { day: 'numeric', month: 'long', year: 'numeric' });
+      const el = document.createElement('div');
+      el.className = 'sak';
+      let html = '<div class="rad"><span class="navn">' + esc(sak.navn) + '</span>' +
+        '<span class="meta">' + esc(dato) + '</span></div>' +
+        '<div class="meta">' + esc(sak.pakkeNavn) + (sak.pris ? ', ' + esc(sak.pris) + ' kr' : '') + '</div>' +
+        '<div class="meta"><a href="mailto:' + esc(sak.epost) + '">' + esc(sak.epost) + '</a>' +
+        (sak.telefon ? ' · ' + esc(sak.telefon) : '') + '</div>';
+      const lenke = trygglenke(sak.lenke);
+      if (lenke) html += '<div class="meta"><a href="' + esc(lenke) + '" rel="noopener noreferrer" target="_blank">' + esc(lenke) + '</a></div>';
+      html += '<div class="melding">' + esc(sak.melding) + '</div><div class="status-knapper"></div>';
+      el.innerHTML = html;
+      const knapper = el.querySelector('.status-knapper');
+      STATUSER.forEach(s => {
+        const b = document.createElement('button');
+        b.className = 'minibtn' + ((sak.status || 'ny') === s.id ? ' aktiv' : '');
+        b.type = 'button';
+        b.setAttribute('data-no', s.no);
+        b.setAttribute('data-en', s.en);
+        b.textContent = sprak === 'en' ? s.en : s.no;
+        b.addEventListener('click', async () => {
+          await fetch('/api/tjeneste-foresporsel', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'status', id: sak.id, status: s.id }),
+          });
+          hentSaker();
+        });
+        knapper.appendChild(b);
+      });
+      boks.appendChild(el);
+    });
+    byttSprak(sprak);
+  }
+
+  hentSaker();
+</script>
+
+<!-- Vipps-knappen på hvert pakkekort. Må stå ETTER modulen over, som er den
+     som bygger kortene, ellers finner skriptet ingenting å henge seg på. -->
+<script src="/js/vipps-knapp.js?v=1" defer></script>
+<script src="/js/lme-account.js?v=11" defer></script>
+</body>
+</html>

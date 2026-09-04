@@ -265,13 +265,17 @@ add('dadyr_ferdig',
     'Fest av med god tråd igjen, og press hodet flatt. Hekle to bittesmå ører (5 fm i magisk '
     'ring, fest av, hekle 2 stk per sko) og sy dem fast øverst på hodet, med litt av overkanten '
     'stikkende opp over skoens overkant, akkurat som i referansebildet. Brodér et lite ansikt '
-    '(to øyne, en liten nese og gjerne rosa kinn) med samme teknikk som Ellies andre motiver. '
-    'Sy dådyransiktet godt fast midt på tåpartiet av skoen.',
+    '(svarte øyne, en liten svart nese og gjerne rosa kinn) med samme teknikk som Ellies andre '
+    'motiver, og legg gjerne til 2 til 3 bittesmå prikker på pannen, mellom ørene, i en tredje '
+    'kontrastfarge (samme idé som de lyse prikkene på selve Ellie). Sy dådyransiktet godt fast '
+    'midt på tåpartiet av skoen.',
     'Fasten off, leaving a long tail, and press the head flat. Crochet two tiny ears (5 sc in a '
     'magic ring, fasten off, make 2 per shoe) and sew them onto the top of the head, with a bit '
     'of the top peeking up over the top edge of the shoe, just like in the reference photo. '
-    'Embroider a small face (two eyes, a little nose, and pink cheeks if you like) using the '
-    'same technique as Ellie\'s other motifs. Sew the deer face securely onto the middle of the '
+    'Embroider a small face (black eyes, a little black nose, and pink cheeks if you like) using '
+    'the same technique as Ellie\'s other motifs, and feel free to add 2 to 3 tiny dots on the '
+    'forehead, between the ears, in a third contrasting colour (the same idea as the light spots '
+    'on Ellie herself). Sew the deer face securely onto the middle of the '
     'toe of the shoe.')
 
 # ---------------------------------------------------------------- SIDE 11: T-STROPP OG LUKKING

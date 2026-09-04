@@ -10,6 +10,7 @@
  * Trygt å kjøre flere ganger (overskriver med samme innhold hver gang).
  * Password er det samme som ellers i Læringsverksted-byggeren.
  */
+import { editPasswordOk } from "../_lib/edit-password.js";
 import {
   sanitizeResource, indexEntry, readIndex, KEY_PREFIX, INDEX_KEY, MAX_SIZE, DEFAULT_PASSWORD,
 } from "./laeringsverksted.js";
@@ -41,8 +42,7 @@ export async function onRequestGet(context) {
 
   const url = new URL(request.url);
   const pw = (url.searchParams.get("pw") || "").trim();
-  const expected = (env.COURSE_EDIT_PASSWORD || DEFAULT_PASSWORD) + "";
-  if (pw !== expected) return json({ error: "bad_password" }, 401);
+  if (!editPasswordOk(env, pw, [DEFAULT_PASSWORD])) return json({ error: "bad_password" }, 401);
 
   const results = [];
   for (const raw of [LIVETS_TIDSLINJE, PLANSJER_OG_KORTSETT, DE_SMA_NATURUTFORSKERNE, SKOLEDAGBOK_1_3_TRINN, SKOLEDAGBOK_4_7_TRINN, MIA_TEO_FOLELSER, MIA_TEO_SITUASJONSKORT, MIA_TEO_SNAKKE_OM_FOLELSER, MIA_TEO_KROPP_3_6, MIA_TEO_KROPP_6_9, MIA_TEO_BOK_3_6, MIA_TEO_BOK_6_9, MIA_TEO_SERIE_KOMPLETT, MIA_TEO_TERMOMETER_3_6, MIA_TEO_TERMOMETER_6_9, MIA_TEO_DAG_3_6, MIA_TEO_DAG_6_9, MIA_TEO_HISTORIER_3_6, MIA_TEO_HISTORIER_6_9, MIA_TEO_PRAKTISK_3_6, MIA_TEO_PRAKTISK_6_9, MIA_TEO_SPRAKLEK_3_6, MIA_TEO_SPRAKLEK_6_9, MIA_TEO_MATTE_3_6, MIA_TEO_MATTE_6_9, MIA_TEO_BOKSTAV_3_6, MIA_TEO_BOKSTAV_6_9, MIA_TEO_NATUR_3_6, MIA_TEO_NATUR_6_9]) {

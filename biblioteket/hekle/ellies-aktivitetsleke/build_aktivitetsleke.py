@@ -90,10 +90,10 @@ add('pill_sikkerhet_kort', 'VIKTIGST AV ALT: SIKKERHET', 'MOST IMPORTANT OF ALL:
 add('om_sikkerhet_kort',
     'Denne leken har flere små deler enn noen annen oppskrift i kolleksjonen, og inneholder '
     'også et lite speil, to treringer og knitrefolie. Alt skal sys fast med dobbel styrke, og '
-    'side 18 er viet sikkerhet i sin helhet. Les den siden nøye før du begynner.',
+    'side 19 er viet sikkerhet i sin helhet. Les den siden nøye før du begynner.',
     'This toy has more small parts than any other pattern in the collection, and also includes '
     'a small mirror, two wooden rings and a crinkle sheet. Everything must be sewn on with '
-    'double strength, and page 18 is entirely dedicated to safety. Read that page carefully '
+    'double strength, and page 19 is entirely dedicated to safety. Read that page carefully '
     'before you begin.')
 
 # ---------------------------------------------------------------- SIDE 3
@@ -153,9 +153,9 @@ add('fasthet_txt',
 add('banner_ord', 'FORKORTELSER (NORSK OG US)', 'ABBREVIATIONS (NORWEGIAN AND US)')
 add('ord_lead',
     'Her er alle forkortelsene som brukes i denne oppskriften, med de vanlige amerikanske '
-    'hekletermene ved siden av.',
+    'hekletermene ved siden av, pluss sømteknikken som brukes til å sy delene fast.',
     'Here are all the abbreviations used in this pattern, with the common US crochet terms '
-    'alongside.')
+    'alongside, plus the sewing technique used to sew the pieces on.')
 add('ord_head', ['Norsk', 'US', 'Betyr'], ['Norwegian', 'US', 'Means'])
 add('ord_rows', [
     ('lm', 'ch', 'luftmaske / chain'),
@@ -167,6 +167,8 @@ add('ord_rows', [
     ('mink', 'dec', 'minking: 2 fm sammen'),
     ('m', 'st(s)', 'maske(r)'),
     ('*...*', '*...*', 'gjenta det mellom stjernene så mange ganger som står bak'),
+    ('heftesting', 'running stitch', 'sømteknikk (ikke hekling): tette, jevne sting rett '
+     'gjennom begge lag med synål og tråd, brukes til å sy deler fast'),
 ])
 add('pill_tips', 'TIPS FØR DU BEGYNNER', 'TIPS BEFORE YOU START')
 add('tips',
@@ -262,9 +264,11 @@ add('ellie_rows_en', [
 ])
 add('ellie_ferdig',
     'Klipp av med god tråd igjen. Sy to små ører (5 fm i magisk ring, avslutt, hekle 2 stk) '
-    'øverst, og brodér et lite ansikt.',
+    'øverst, og brodér et lite ansikt: svarte øyne og nese, og 2 til 3 bittesmå prikker i '
+    'kremhvitt (franske knuter) på pannen, mellom ørene.',
     'Cut, leaving a long tail. Sew on two small ears (5 sc in a magic ring, fasten off, make 2) '
-    'on top, and embroider a small face.')
+    'on top, and embroider a small face: black eyes and nose, and 2 to 3 tiny cream dots '
+    '(French knots) on the forehead, between the ears.')
 add('ellie_sloyfe',
     'Sløyfen: hekle en smal strimmel i pudderrosa, legg opp 16 lm + 1 vendemaske, 1 rad fm (16 '
     'fm). Fold strimmelen til en sløyfeform og sy stramt sammen på midten flere ganger, som '
@@ -276,14 +280,28 @@ add('ellie_sloyfe',
     'times, as described in Ellie\'s own main pattern. Sew the bow on permanently and flat, at '
     'the top between the ears. Unlike on the Ellie toy itself, this bow should NOT be '
     'removable, since it is sewn directly onto a flat panel.')
-add('ellie_krage',
-    'Volangkragen: fest pudderrosa tråd i nedre kant av hodet. *1 fm i neste maske, hopp over 1 '
-    'maske, 5 stav i neste maske (en liten vifte), hopp over 1 maske*, gjenta hele veien rundt '
-    'underkanten. Fest av. Sy til slutt Ellies hode godt fast midt på panelet.',
-    'The ruffled collar: attach powder pink yarn at the bottom edge of the head. *1 sc in the '
-    'next stitch, skip 1 stitch, 5 dc in the next stitch (a little fan), skip 1 stitch*, repeat '
-    'all the way around the bottom edge. Fasten off. Finally, sew Ellie\'s head securely onto '
-    'the middle of the panel.')
+add('pill_krage', 'VOLANGKRAGEN (PUDDERROSA) - HEKLES FOR SEG SELV',
+    'THE RUFFLED COLLAR (POWDER PINK) - CROCHETED SEPARATELY')
+add('krage_txt',
+    'Kragen hekles ikke direkte på hodet, den er en egen, liten del som sys fast etterpå. Legg '
+    'opp 24 lm, lukk til en ring med 1 kjedemaske i den aller første luftmasken (pass på at '
+    'luftmaskekjeden ikke vrir seg før du lukker). Omgang 1: *1 fm i neste maske, hopp over 1 '
+    'maske, 5 stav i neste maske (en liten vifte), hopp over 1 maske*, gjenta 6 ganger rundt '
+    'hele ringen til du er tilbake ved start (24 masker totalt i ringen, 6 vifter). Avslutt med '
+    'kjedemaske i den aller første fastmasken, klipp av og la ca. 15 cm tråd igjen.',
+    'The collar is not crocheted directly onto the head, it is a small, separate piece that is '
+    'sewn on afterwards. Chain 24, join into a ring with 1 slip stitch in the very first chain '
+    '(make sure the chain has not twisted before you join). Round 1: *1 sc in the next stitch, '
+    'skip 1 stitch, 5 dc in the next stitch (a little fan), skip 1 stitch*, repeat 6 times all '
+    'the way around the ring until you are back at the start (24 stitches total in the ring, 6 '
+    'fans). Finish with a slip stitch in the very first sc, cut the yarn leaving a tail of '
+    'approx. 15 cm.')
+add('pill_krage_fest', 'PLASSERING', 'PLACEMENT')
+add('krage_fest_txt',
+    'Sy kragen fast med heftesting rundt nedre kant av Ellies hode, og sy til slutt hodet godt '
+    'fast midt på panelet.',
+    "Sew the collar on with running stitch around the bottom edge of Ellie's head, and finally "
+    'sew the head securely onto the middle of the panel.')
 
 # ---------------------------------------------------------------- SIDE 9: SPEIL-SIDEN
 add('banner_speil', 'DEL 3: SPEIL-SIDEN (BABYSIKKERT)', 'PART 3: THE MIRROR SIDE (BABY-SAFE)')
@@ -700,8 +718,14 @@ def build(lang):
 {card(otab(ellie_rows, head3[lang]))}
 {cme(t('ellie_ferdig'))}
 {card('<p>' + t('ellie_sloyfe') + '</p>')}
-{card('<p>' + t('ellie_krage') + '</p>')}
 ''', 8))
+
+    pages.append(pg(f'''
+{rosep(t('pill_krage'))}
+{card('<p>' + t('krage_txt') + '</p>')}
+{sagep(t('pill_krage_fest'))}
+{card('<p>' + t('krage_fest_txt') + '</p>')}
+''', 9))
 
     pages.append(pg(f'''
 {banner(t('banner_speil'))}
@@ -710,7 +734,7 @@ def build(lang):
 {card('<p>' + t('speil_ramme') + '</p>')}
 {cme(t('speil_note'))}
 <div class="figwrap"><img src="{speil_src}" alt="Speil-siden" style="width:44mm"><div class="figcap">{t('caption_speil')}</div></div>
-''', 9))
+''', 10))
 
     pages.append(pg(f'''
 {banner(t('banner_form'))}
@@ -720,14 +744,14 @@ def build(lang):
 {sagep(t('pill_stjerne_form'))}
 {card('<p>' + t('stjerne_form_txt') + '</p>')}
 <div class="figwrap"><img src="{form_src}" alt="Form-siden, alle fire formene" style="width:44mm"><div class="figcap">{t('caption_form')}</div></div>
-''', 10))
+''', 11))
 
     pages.append(pg(f'''
 {rosep(t('pill_sirkel'))}
 {card('<p>' + t('sirkel_txt') + '</p>')}
 {sagep(t('pill_trekant'))}
 {card('<p>' + t('trekant_txt') + '</p>')}
-''', 11))
+''', 12))
 
     pages.append(pg(f'''
 {banner(t('banner_lomme'))}
@@ -736,7 +760,7 @@ def build(lang):
 {card('<p>' + t('lomme_ellie') + '</p>')}
 {cme(t('lomme_montering'))}
 <div class="figwrap"><img src="{lomme_src}" alt="Lomme-siden" style="width:44mm"><div class="figcap">{t('caption_lomme')}</div></div>
-''', 12))
+''', 13))
 
     pages.append(pg(f'''
 {banner(t('banner_flette'))}
@@ -744,32 +768,32 @@ def build(lang):
 {card('<p>' + t('flette_hull') + '</p>')}
 {cme(t('flette_snor'))}
 <div class="figwrap"><img src="{knitre_src}" alt="Knitre-siden" style="width:44mm"><div class="figcap">{t('caption_knitre')}</div></div>
-''', 13))
+''', 14))
 
     ss_steg = T['sammensying_steg']['no'] if lang == 'no' else T['sammensying_steg']['en']
     pages.append(pg(f'''
 {banner(t('banner_sammensying'))}
 <p>{t('sammensying_lead')}</p>
 {card(steps(ss_steg))}
-''', 14))
+''', 15))
 
     pages.append(pg(f'''
 {banner(t('banner_handtak'))}
 {card('<p>' + t('handtak_txt') + '</p>')}
 {cme(t('handtak_note'))}
-''', 15))
+''', 16))
 
     pages.append(pg(f'''
 {banner(t('banner_hjorner'))}
 {card('<p>' + t('hjorner_txt') + '</p>')}
 {cme(t('dusker_txt'))}
-''', 16))
+''', 17))
 
     mo_steg = T['montering_steg']['no'] if lang == 'no' else T['montering_steg_en']['no']
     pages.append(pg(f'''
 {banner(t('banner_montering'))}
 {card(steps(mo_steg))}
-''', 17))
+''', 18))
 
     regler = T['regler']['no'] if lang == 'no' else T['regler']['en']
     pages.append(pg(f'''
@@ -778,12 +802,12 @@ def build(lang):
 {card('<p>' + t('smadeler_txt') + '</p>')}
 {sagep(t('pill_regler'))}
 {card(ul(regler))}
-''', 18))
+''', 19))
 
     pages.append(pg(f'''
 {banner(t('banner_stell'))}
 {cme(t('stell_txt'))}
-''', 19))
+''', 20))
 
     kolliste = T['kolleksjon_liste']['no'] if lang == 'no' else T['kolleksjon_liste']['en']
     pages.append(pg(f'''
@@ -796,7 +820,7 @@ def build(lang):
 <div class="byline">
   <div class="by2">{t('by1')} &middot; {t('by2')} &middot; {t('by3')}</div>
 </div>
-''', 20))
+''', 21))
 
     return pages
 

@@ -259,6 +259,7 @@ const I18N = {
     vidImage:"Lager bilde…",vidMaking:"Lager video… (kan ta et par minutter)",vidUploading:"Laster opp…",vidReady:"Video klar 🎬 Lagt inn under.",vidFail:"Kunne ikke lage video.",
     vidZoomOnly:"Dette ble bare en enkel zoom på et stillbilde, ikke ekte AI-video.",
     vidEngineOff:"Den ekte video-motoren er ikke koblet til ennå. Legg inn HIGGSFIELD_API_KEY og HIGGSFIELD_SECRET i Cloudflare, så lager jeg ekte video automatisk.",
+    vidEngineAuth:"Higgsfield avviste nøkkelen (401). HIGGSFIELD_API_KEY/HIGGSFIELD_SECRET i Cloudflare er enten feil, utløpt eller mangler mellomrom/linjeskift. Sjekk nøklene i Higgsfield-kontoen din og lim dem inn på nytt i Cloudflare Pages → innstillinger → miljøvariabler (Secrets). Eier kan se detaljer på /api/diag.",
     vidEngineSlow:"Video-motoren brukte for lang tid denne gangen. Prøv igjen om litt.",
     vidEngineErr:"Video-motoren svarte med en feil:",
     vidServerBusy:"Serveren svarer ikke som forventet ennå. En ny versjon kan være under utrulling. Last siden på nytt og prøv igjen om et minutt.",
@@ -298,6 +299,7 @@ const I18N = {
     vidImage:"Creating image…",vidMaking:"Creating video… (may take a couple of minutes)",vidUploading:"Uploading…",vidReady:"Video ready 🎬 Added below.",vidFail:"Could not create the video.",
     vidZoomOnly:"This is only a simple zoom on a still image, not real AI video.",
     vidEngineOff:"The real video engine isn't connected yet. Add HIGGSFIELD_API_KEY and HIGGSFIELD_SECRET in Cloudflare and I'll create real video automatically.",
+    vidEngineAuth:"Higgsfield rejected the key (401). HIGGSFIELD_API_KEY/HIGGSFIELD_SECRET in Cloudflare are either wrong, expired, or have a stray space/newline. Check the keys in your Higgsfield account and re-paste them into Cloudflare Pages → settings → environment variables (Secrets). Owner can see details at /api/diag.",
     vidEngineSlow:"The video engine took too long this time. Please try again shortly.",
     vidEngineErr:"The video engine returned an error:",
     vidServerBusy:"The server isn't responding as expected yet. A new version may be deploying. Reload the page and try again in a minute.",
@@ -654,6 +656,7 @@ function videoReasonText(reason){
   reason=String(reason||'').trim();
   if(!reason) return t('vidEngineOff');
   if(/not_configured|mangler|missing|ikke koblet/i.test(reason)) return t('vidEngineOff');
+  if(/\b401\b|unauthorized|unauthenticated/i.test(reason)) return t('vidEngineAuth');
   if(/timeout|for lang tid|too long/i.test(reason)) return t('vidEngineSlow');
   return t('vidEngineErr')+' '+reason.slice(0,160);
 }

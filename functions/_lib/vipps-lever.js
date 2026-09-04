@@ -24,8 +24,110 @@ import { sendCourseDeliveryMail } from "./course-mail.js";
 import { sendClaudeMail } from "./claude-mail.js";
 import { lagNedlastingsnokkel, medNokkel } from "./nedlasting-tilgang.js";
 import { registerNewsletter } from "./newsletter.js";
+import { sendKvitteringKjop } from "./tjeneste-mail.js";
+import { grantAutopilotApp } from "./purchase-links.js";
+import { sendAppKjopMail } from "./app-kjop-mail.js";
+import { koOppfolging } from "./autopilot-followup-mail.js";
+import { pakkeMedId } from "../../js/tjenester-pakker.js";
 
 export const ORDRE_PREFIX = "vipps_order:";
+
+/* Leverer engangskjopet av LME Autopilot. Noyaktig de samme stegene som
+   Stripe-flyten i api/oppskrift-webhook.js gjor: apne tilgangen, sende
+   kvitteringen som forklarer noklene, varsle Renate, og fore kjopet paa
+   kundens konto.
+
+   grantAutopilotApp kjores FORST og uten catch. Feiler den, har hun betalt
+   for ingenting, og det er den ene feilen som ikke kan svelges. Da kastes
+   den videre, ordren staar fortsatt ikke som levert, og neste forsok tar
+   den. Samme monster som leverKurs. */
+async function leverAppKjop(env, order) {
+  await grantAutopilotApp(env, order.email, { via: "vipps" });
+
+  try {
+    await koOppfolging(env, { email: order.email, name: order.name, lang: order.lang, kilde: "kjop" });
+    await sendAppKjopMail(env, {
+      to: order.email, name: order.name || "", lang: order.lang, betaltMed: "vipps",
+    });
+  } catch (e) {}
+  try {
+    await sendOwnerSaleNotice(env, {
+      pname: (order.title || "LME Autopilot, appen") + " (engangskjøp, Vipps)", lang: order.lang,
+      name: order.name || "", email: order.email,
+      amount: order.amount, currency: order.currency,
+      action: {
+        title: "Ingenting å gjøre, men verdt å vite",
+        body: "Hun har kjøpt appen som engangskjøp, ikke abonnement. Tilgangen er " +
+              "åpnet automatisk, og hun bruker sine egne AI-nøkler, så dette koster " +
+              "deg ingenting videre.",
+        url: "https://lmexplorers.com/autopilot-app",
+      },
+    });
+  } catch (e) {}
+  try {
+    await recordPurchase(env, order.email, {
+      type: "app", id: order.slug, title: order.title || "LME Autopilot, appen",
+      amount: order.amount, currency: order.currency, url: "https://lme-contentstudio.pages.dev",
+    });
+  } catch (e) {}
+}
+
+/* Leverer en "gjort for deg"-pakke fra /tjenester. Ingen fil å sende og
+   ingen tilgang å låse opp: det som skal skje er at ordren havner i Renates
+   eget panel nederst på /tjenester, at kunden får en kvittering som ber om
+   materialet sitt, og at Renate får salgsvarsel. Nøyaktig de samme stegene
+   som Stripe-flyten i api/oppskrift-webhook.js gjør. */
+async function leverTjeneste(env, order) {
+  const sak = {
+    id: "tjeneste:" + Date.now() + "-" + Math.random().toString(36).slice(2, 8),
+    navn: order.name || order.email,
+    epost: order.email,
+    telefon: order.phoneNumber || "",
+    melding: "Betalt med Vipps, uten beskrivelse. Be om materialet og detaljene.",
+    lenke: "",
+    lang: order.lang || "no",
+    pakke: order.slug,
+    pakkeNavn: order.title || order.slug,
+    pris: Math.round((order.amount || 0) / 100),
+    status: "betalt",
+    betalt: true,
+    betaltMed: "vipps",
+    opprettet: new Date().toISOString(),
+  };
+  try { await env.BUILDER_KV.put(sak.id, JSON.stringify(sak)); } catch (e) {}
+  /* Pakken med personlig oppsett inneholder selve appen, og skal låse den
+     opp med en gang. Nøyaktig samme regel som Stripe-flyten følger, se
+     tjeneste-grenen i functions/api/oppskrift-webhook.js. */
+  const pakke = pakkeMedId(order.slug);
+  if (pakke && pakke.girApp && order.email) {
+    try { await grantAutopilotApp(env, order.email, { via: "vipps-tjeneste-oppsett" }); } catch (e) {}
+    try { await sendAppKjopMail(env, { to: order.email, name: order.name, lang: sak.lang, betaltMed: "vipps" }); } catch (e) {}
+    try { await koOppfolging(env, { email: order.email, name: order.name, lang: sak.lang, kilde: "kjop" }); } catch (e) {}
+  }
+  try { await sendKvitteringKjop(env, sak, sak.pakkeNavn); } catch (e) {}
+  try {
+    await sendOwnerSaleNotice(env, {
+      pname: "LME Studio Tjenester: " + sak.pakkeNavn + " (Vipps)", lang: sak.lang,
+      name: order.name || "", email: order.email,
+      amount: order.amount, currency: order.currency,
+      action: {
+        title: "Dette må du gjøre nå: hent inn materialet",
+        body: "Kunden har betalt for en pakke du skal levere selv. Ordren ligger " +
+              "nederst på /tjenester, merket som betalt, og kvitteringen som ber om " +
+              "filene hennes er allerede sendt.",
+        url: "https://lmexplorers.com/tjenester",
+      },
+    });
+  } catch (e) {}
+  try {
+    await recordPurchase(env, order.email, {
+      type: "tjeneste", id: order.slug, title: sak.pakkeNavn,
+      amount: order.amount, currency: order.currency,
+      url: "https://lmexplorers.com/tjenester",
+    });
+  } catch (e) {}
+  return null;
+}
 
 /* Leverer en Laeringsverksted-ressurs: leveringsmail med nedlastingslenke,
    varsel til Renate, kjoepet paa kundens konto, og en telling opp paa
@@ -265,6 +367,10 @@ export async function leverVippsOrdre(env, reference, opts) {
     await leverKurs(env, order);
   } else if (order.type === "oppskrift") {
     nokkel = await leverOppskrift(env, order);
+  } else if (order.type === "tjeneste") {
+    await leverTjeneste(env, order);
+  } else if (order.type === "app") {
+    await leverAppKjop(env, order);
   } else {
     nokkel = await leverLaeringsverksted(env, order);
   }

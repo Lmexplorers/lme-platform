@@ -60,12 +60,22 @@ export const CLAUDE_PAYMENT_LINK_LANG = {
   "plink_1TwFJZLax7B8uQzqqjnXtmbR": "no", // Videre med Claude, mersalg (NOK)
   "plink_1TwFJYLax7B8uQzqO1gObkcB": "en", // Get started with Claude (USD)
   "plink_1TwFJbLax7B8uQzqB3CNr2yR": "en", // Next Level with Claude, upsell (USD)
+  // Kampanjelenker for hovedkurset, opprettet 31. august 2026. Mersalget
+  // har ingen egen kampanjepris, det er alt et engangstilbud i kassen.
+  "plink_1UAQWqLax7B8uQzq0pw58VLA": "no", // Black Friday (NOK)
+  "plink_1UAQWsLax7B8uQzq2GsLX3Hq": "en", // Black Friday (USD)
+  "plink_1UAQXJLax7B8uQzqmLel7KXw": "no", // Juletilbud (NOK)
+  "plink_1UAQXKLax7B8uQzq4VzNcMka": "en", // Juletilbud (USD)
 };
 // Bare hovedkurset trigger takke- og oppfølgingsmail. Mersalget sender ingen
 // egen takkemail (kjøperen har alt fått den fra hovedkjøpet).
 export const CLAUDE_MAIN_LINK_LANG = {
   "plink_1TwFJWLax7B8uQzqsBQjTBxl": "no", // Kom i gang med Claude (NOK)
   "plink_1TwFJYLax7B8uQzqO1gObkcB": "en", // Get started with Claude (USD)
+  "plink_1UAQWqLax7B8uQzq0pw58VLA": "no", // Black Friday (NOK)
+  "plink_1UAQWsLax7B8uQzq2GsLX3Hq": "en", // Black Friday (USD)
+  "plink_1UAQXJLax7B8uQzqmLel7KXw": "no", // Juletilbud (NOK)
+  "plink_1UAQXKLax7B8uQzq4VzNcMka": "en", // Juletilbud (USD)
 };
 
 /* ---- LME Autopilot-abonnement (Start/Proff/VIP), solgt fra /oppgrader ----
@@ -123,6 +133,64 @@ export async function grantAutopilot(env, email, info) {
     try {
       const u = JSON.parse(uraw);
       u.subscription = { status: rec.status, plan: rec.plan, tier: rec.tier, limits: rec.limits, source: "stripe", updated: rec.updated };
+      await env.BUILDER_KV.put(userKey(email), JSON.stringify(u));
+    } catch (e) {}
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * LME Autopilot, engangskjøp av appen.
+ *
+ * Et abonnement gir kvote på MINE nøkler, og koster meg penger hver måned.
+ * Engangskjøpet gir noe annet: appen låses opp for godt, og kunden bruker
+ * sine egne AI-nøkler. Da er det hennes regning som løper, ikke min, og
+ * derfor kan den selges én gang uten at jeg sitter igjen med utgiften.
+ *
+ * Kjøpet gir INGEN kvote. Det er hele poenget, og det må stå tydelig på
+ * salgssiden, ellers tror kjøperen hun har kjøpt bildene også.
+ * ------------------------------------------------------------------------- */
+export const APP_PAYMENT_LINKS = {
+  /* Lanseringspris ut september 2026, deretter fastpris. Begge lenkene er
+     aktive i Stripe samtidig, og siden velger den som gjelder. Den gamle
+     1490-lenken er slaatt av i Stripe, men staar igjen her slik at et kjop
+     som var underveis fortsatt blir levert. */
+  "plink_1UAnZaLax7B8uQzq03DKsBml": { app: "autopilot", navn: "LME Autopilot, appen", nok: 1997, lang: "no" },
+  "plink_1UAnZgLax7B8uQzqK29tJmZY": { app: "autopilot", navn: "LME Autopilot, appen", nok: 2997, lang: "no" },
+  "plink_1UAfFnLax7B8uQzqXM6UqgnM": { app: "autopilot", navn: "LME Autopilot, appen", nok: 1490, lang: "no" },
+};
+
+/* Merker kontoen som "har kjøpt appen". Lagres på member:<e-post>, samme
+   post som abonnementet, siden det er den posten Autopilot-appen leser
+   (den heter ACCOUNTS_KV der, men er den samme lagringen som BUILDER_KV
+   her). Appen sjekker `appKjopt` og åpner de låste delene på den.
+ *
+ * Røret aldri `plan` eller `limits`: har kunden ET abonnement fra før, skal
+ * det stå urørt. Kjøper hun appen i tillegg, har hun begge deler, og
+ * abonnementet skal ikke forsvinne fordi hun kjøpte noe annet. */
+export async function grantAutopilotApp(env, email, info) {
+  if (!email) return;
+  const mkey = memberKey(email);
+  let rec = {};
+  try { const r = await env.BUILDER_KV.get(mkey); if (r) rec = JSON.parse(r) || {}; } catch (e) {}
+  rec.appKjopt = true;
+  rec.appKjoptAt = rec.appKjoptAt || Date.now();
+  rec.appKjoptVia = (info && info.via) || "stripe";
+  rec.updated = Date.now();
+  /* En konto som BARE har kjøpt appen har ingen plan. Da må status settes,
+     ellers ser posten uferdig ut for alt annet som leser den. */
+  if (!rec.status) rec.status = "active";
+  if (!rec.since) rec.since = Date.now();
+  await env.BUILDER_KV.put(mkey, JSON.stringify(rec));
+  if (info && info.customer) await env.BUILDER_KV.put(custKey(info.customer), email.trim().toLowerCase());
+  /* Speil til kontoen, hvis den finnes. Kjøper hun før hun har logget inn i
+     appen, finnes den ikke ennå, og da er member-posten det eneste stedet.
+     Appen leser begge, member-posten som reserve. */
+  const uraw = await env.BUILDER_KV.get(userKey(email));
+  if (uraw) {
+    try {
+      const u = JSON.parse(uraw);
+      u.appKjopt = true;
+      u.appKjoptAt = rec.appKjoptAt;
       await env.BUILDER_KV.put(userKey(email), JSON.stringify(u));
     } catch (e) {}
   }
@@ -279,6 +347,59 @@ export const COURSE_PAYMENT_LINKS = {
   "plink_1U1sDzLax7B8uQzqZRyfpuwu": { courseId: "lag-ditt-foerste-digitale-minikurs", tier: "standard", lang: "en" },
   "plink_1U2I9tLax7B8uQzqCYi2ntGG": { courseId: "montessori-masterclass", tier: "standard", lang: "no" },
   "plink_1U2I9uLax7B8uQzqYzTq1jUw": { courseId: "montessori-masterclass", tier: "standard", lang: "en" },
+  // LME Vault (/vault): engangskjøp av malhvelvet, samme leveringsvei som
+  // kursene over (tilgangslenke på e-post, tilgang for alltid). Opprettet i
+  // live-modus 29. august 2026: grunnleggerpris 199 kr og $19, ordinær pris
+  // 349 kr og $34, samme prismatching som resten av filen. Salgssiden bruker
+  // grunnleggerlenkene, som ligger i "checkoutUrl" i
+  // funnel/vault/funnel-config.js. Ordinærlenkene står klare til prishevingen,
+  // og alle fire gir tilgang, så et kjøp som var i gang leveres uansett.
+  "plink_1U9kRiLax7B8uQzqHUEe2TWx": { courseId: "vault", tier: "launch", lang: "no" },
+  "plink_1U9kRpLax7B8uQzq228YXsYe": { courseId: "vault", tier: "launch", lang: "en" },
+  "plink_1U9kUTLax7B8uQzqnOk0SUpD": { courseId: "vault", tier: "full",   lang: "no" },
+  "plink_1U9kUZLax7B8uQzqppwl1JR4": { courseId: "vault", tier: "full",   lang: "en" },
+  // Workshop: Ansett dine fem AI-assistenter (/workshop). Kursbygger-kurs
+  // (slug ai-assistent-workshop), samme leveringsvei som kursene over:
+  // tilgangslenke på e-post, tilgang for alltid. Opprettet i live-modus
+  // 31. august 2026 etter Renates valg av pris: lansering 490 kr og $49,
+  // ordinær 990 kr og $99, samme nivå som Claude-kurset. Salgssiden bruker
+  // lanseringslenkene, som ligger i "checkoutUrl" i
+  // funnel/ai-assistent-workshop/funnel-config.js. Ordinærlenkene står
+  // klare til prishevingen, og alle fire gir tilgang, så et kjøp som var i
+  // gang leveres uansett.
+  "plink_1UAOevLax7B8uQzqWQjg7vBK": { courseId: "ai-assistent-workshop", tier: "launch", lang: "no" },
+  "plink_1UAOexLax7B8uQzqeiguUsj5": { courseId: "ai-assistent-workshop", tier: "launch", lang: "en" },
+  "plink_1UAOezLax7B8uQzqD3KambG9": { courseId: "ai-assistent-workshop", tier: "full",   lang: "no" },
+  "plink_1UAOf1Lax7B8uQzqPEHcuJ6Q": { courseId: "ai-assistent-workshop", tier: "full",   lang: "en" },
+  /* ---- Kampanjelenker (ekte rabatt) --------------------------------
+     Opprettet 31. august 2026. Black Friday-uken (23.-30. november) og
+     julen (desember) har egne priser og derfor egne betalingslenker.
+     Periodene styres av js/kampanjer.js på salgssidene; her listes
+     lenkene bare slik at et kjøp gir tilgang, akkurat som lanserings- og
+     fullprislenkene over. `tier` er kampanjens navn, og brukes ikke til
+     annet enn å kunne se hva som ble solgt når. */
+  // Black Friday 2026
+  "plink_1UAQWTLax7B8uQzqWSSgW60k": { courseId: "youtube", tier: "blackfriday", lang: "no" },
+  "plink_1UAQWYLax7B8uQzqCii5LM7e": { courseId: "youtube", tier: "blackfriday", lang: "en" },
+  "plink_1UAQWaLax7B8uQzqxPm8BPhP": { courseId: "youtube-videre", tier: "blackfriday", lang: "no" },
+  "plink_1UAQWcLax7B8uQzqEnFm5609": { courseId: "youtube-videre", tier: "blackfriday", lang: "en" },
+  "plink_1UAQWeLax7B8uQzqgMYpSNSy": { courseId: "epostliste", tier: "blackfriday", lang: "no" },
+  "plink_1UAQWgLax7B8uQzqg4oaB9yt": { courseId: "epostliste", tier: "blackfriday", lang: "en" },
+  "plink_1UAQWjLax7B8uQzqfF0ToVd4": { courseId: "ki-pedagoger", tier: "blackfriday", lang: "no" },
+  "plink_1UAQWlLax7B8uQzqacKibjm9": { courseId: "ki-pedagoger", tier: "blackfriday", lang: "en" },
+  "plink_1UAQWmLax7B8uQzqBvG7VM0i": { courseId: "vault", tier: "blackfriday", lang: "no" },
+  "plink_1UAQWoLax7B8uQzqMHORNiMh": { courseId: "vault", tier: "blackfriday", lang: "en" },
+  // Juletilbud 2026
+  "plink_1UAQWyLax7B8uQzqFGqmWeoa": { courseId: "youtube", tier: "jul", lang: "no" },
+  "plink_1UAQX0Lax7B8uQzqIGzvUWq6": { courseId: "youtube", tier: "jul", lang: "en" },
+  "plink_1UAQX2Lax7B8uQzqPdS0HXnr": { courseId: "youtube-videre", tier: "jul", lang: "no" },
+  "plink_1UAQX4Lax7B8uQzqqGOf6z3K": { courseId: "youtube-videre", tier: "jul", lang: "en" },
+  "plink_1UAQX6Lax7B8uQzqSq60bPKZ": { courseId: "epostliste", tier: "jul", lang: "no" },
+  "plink_1UAQX8Lax7B8uQzq66sBPssO": { courseId: "epostliste", tier: "jul", lang: "en" },
+  "plink_1UAQXALax7B8uQzqzQIr63SG": { courseId: "ki-pedagoger", tier: "jul", lang: "no" },
+  "plink_1UAQXDLax7B8uQzqlQPyM1Nl": { courseId: "ki-pedagoger", tier: "jul", lang: "en" },
+  "plink_1UAQXELax7B8uQzqD3stYTJT": { courseId: "vault", tier: "jul", lang: "no" },
+  "plink_1UAQXGLax7B8uQzqK6bJjIhV": { courseId: "vault", tier: "jul", lang: "en" },
 };
 
 export const COURSE_INFO = {
@@ -310,6 +431,21 @@ export const COURSE_INFO = {
     name: { no: "Montessori mesterklasse", en: "Montessori Masterclass" },
     url: "https://lmexplorers.com/academy/kurs?k=montessori-masterclass",
   },
+  "ai-assistent-workshop": {
+    name: {
+      no: "Workshop: Ansett dine fem AI-assistenter",
+      en: "Workshop: Hire your five AI assistants",
+    },
+    url: "https://lmexplorers.com/academy/kurs?k=ai-assistent-workshop",
+    cta: { no: "Åpne workshopen", en: "Open the workshop" },
+  },
+  "vault": {
+    name: { no: "LME Vault", en: "LME Vault" },
+    url: "https://lmexplorers.com/academy/vault",
+    // Hvelvet er ikke et kurs, så knappen i leveringsmailen skal ikke si
+    // "Åpne kurset". Uten cta faller den tilbake på standardteksten.
+    cta: { no: "Åpne hvelvet", en: "Open the vault" },
+  },
 };
 
 /* Kursbygger-slugs som krever kjøp for å lese innholdet (academy/kurs.html
@@ -319,7 +455,15 @@ export const PAID_KURSBYGGER_SLUGS = [
   "lme-markedsfoering-med-claude",
   "lag-ditt-foerste-digitale-minikurs",
   "montessori-masterclass",
+  "ai-assistent-workshop",
 ];
+
+/* Hvor den som ikke har kjøpt sendes, per låst kurs. Uten en egen oppføring
+   sendes de til akademiforsiden, som før. Listen må holdes lik den i
+   academy/kurs.html, som kjører før siden bygges. */
+export const PAID_KURSBYGGER_SALES_URLS = {
+  "ai-assistent-workshop": "/workshop",
+};
 
 /* ---- Lås opp ENKELTMODUL (Skool-stil) -----------------------------------
    I tillegg til å kjøpe hele kurset (COURSE_PAYMENT_LINKS over) kan en
@@ -416,4 +560,26 @@ export const SKOLEDAGBOK_INFO = {
       en: DL_SKOLEDAGBOK + "skoledagbok-4-7-trinn-en.pdf",
     },
   },
+};
+
+/* ---------------------------------------------------------------------------
+ * LME Studio Tjenester (/tjenester), "gjort for deg"-pakkene.
+ *
+ * Engangskjøp, ingen tilgang som skal låses opp. Det eneste som skjer ved et
+ * kjøp er at ordren legges i Renates eget panel nederst på /tjenester (samme
+ * KV-nøkler som forespørslene, tjeneste:<...>), at hun får salgsvarsel, og at
+ * kjøpet føres i kjøpshistorikken.
+ *
+ * Prisene står i js/tjenester-pakker.js, som både salgssiden og
+ * functions/api/tjeneste-foresporsel.js leser fra. Endres en pris, må den
+ * endres der OG i Stripe, ellers selger siden noe annet enn kassen tar betalt.
+ * Betalingslenkene er opprettet 31. august 2026, i live-modus.
+ * ------------------------------------------------------------------------- */
+export const TJENESTE_PAYMENT_LINKS = {
+  /* girApp: pakken inneholder selve appen, ikke bare Renates tid, så
+     kjøpet må også låse den opp. Se PAKKER i js/tjenester-pakker.js. */
+  "plink_1UAnggLax7B8uQzqSHxOLJKo": { pakke: "oppsett", navn: "Autopilot med personlig oppsett", nok: 4997, girApp: true },
+  "plink_1UAe88Lax7B8uQzq3Ru9cZ4B": { pakke: "effekt", navn: "Effektpakken", nok: 1490 },
+  "plink_1UAe8OLax7B8uQzq3DwgTsA1": { pakke: "karakter", navn: "AI-karakteren din", nok: 3900 },
+  "plink_1UAe8QLax7B8uQzq0wlcBYrV": { pakke: "autopilot", navn: "Innhold på autopilot", nok: 7900 },
 };

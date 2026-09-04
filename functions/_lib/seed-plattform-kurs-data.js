@@ -134,6 +134,93 @@ export const PLATTFORM_KURS = {
     {
       "module": null,
       "title": {
+        "no": "Hva som er gratis, og hva som krever en plan",
+        "en": "What is free, and what needs a plan"
+      },
+      "body": [
+        {
+          "no": "På Apper-siden står det på hvert kort hva verktøyet krever, før du trykker. Noen er gratis for alle, noen følger med en plan, og ett par kan kjøpes for seg selv hvis du bare vil ha akkurat det verktøyet. Da slipper du å oppdage prisen først etter at du er halvveis inn i noe.",
+          "en": "On the Apps page every card says what the tool needs, before you tap it. Some are free for everyone, some come with a plan, and a couple can be bought on their own if that one tool is all you want. That way you do not discover the price halfway into something."
+        },
+        {
+          "no": "Merket bytter seg etter hvem du er. Er du medlem med en aktiv plan, står det \"Med i planen\" på det du allerede har. Har du ingen plan ennå, står det \"Krever plan\", og øverst på siden ligger en knapp rett til planene. Er du eier, ser du aldri en pris på ditt eget produkt.",
+          "en": "The label changes with who you are. If you are a member with an active plan, it says \"In your plan\" on what you already have. If you have no plan yet, it says \"Needs a plan\", and at the top of the page there is a button straight to the plans. If you are the owner, you never see a price on your own product."
+        },
+        {
+          "no": "Selve planene ligger på Priser og planer, som du finner både i sidemenyen og fra knappen på Apper-siden: https://lmexplorers.com/oppgrader. Der ser du hva hver plan koster i måneden og i året, hva du får med, og du kan bytte mellom norske kroner og dollar.",
+          "en": "The plans themselves live on Prices and plans, which you find both in the side menu and from the button on the Apps page: https://lmexplorers.com/oppgrader. There you see what each plan costs per month and per year, what you get with it, and you can switch between Norwegian kroner and dollars."
+        },
+        {
+          "no": "Merket låser ingenting av seg selv, det bare forteller. Det er serveren som avgjør tilgangen, og den vet om du har betalt for et enkelt verktøy uten å ha abonnement. Slik stenges ingen ekte kjøper ute av en tekst i nettleseren.",
+          "en": "The label locks nothing by itself, it only tells you. The server decides access, and it knows if you paid for a single tool without having a subscription. That way no real buyer is shut out by a piece of text in the browser."
+        }
+      ],
+      "tip": {
+        "no": "💛 Er du usikker på om noe er verdt en plan, begynn med de gratis verktøyene. De er ekte verktøy, ikke smakebiter, og de gir deg en god følelse av hvordan resten fungerer.",
+        "en": "💛 If you are unsure whether something is worth a plan, start with the free tools. They are real tools, not samples, and they give you a good feel for how the rest works."
+      }
+    },
+    {
+      "module": null,
+      "title": {
+        "no": "Min reise, din egen vei gjennom LME",
+        "en": "My journey, your own path through LME"
+      },
+      "body": [
+        {
+          "no": "Veikartet på /roadmap viser hva LME er, altså hele plattformen i fem faser. **Min reise** viser noe annet: hvor du er. Du finner den på /min-reise, og som et kort på dashbordet.",
+          "en": "The roadmap at /roadmap shows what LME is, the whole platform in five phases. **My journey** shows something else: where you are. You find it at /min-reise, and as a card on the dashboard."
+        },
+        {
+          "no": "Der ser du de samme fem fasene, men med dine egne steg. Noen av dem hukes av av seg selv, fordi plattformen ser dem: at du har opprettet konto, kjøpt noe, blitt medlem, laget ditt første eget kurs eller satt en pris. Resten huker du av selv når du har gjort dem.",
+          "en": "There you see the same five phases, but with your own steps. Some tick themselves off, because the platform can see them: that you created an account, bought something, became a member, made your first own course or set a price. The rest you tick off yourself once you have done them."
+        },
+        {
+          "no": "Poenget er ikke å bli ferdig fortest mulig. Poenget er at du alltid skal vite hva som er det neste lille steget, i stedet for å se på alt du ikke har gjort ennå.",
+          "en": "The point is not to finish as fast as possible. The point is that you always know what the next small step is, instead of looking at everything you have not done yet."
+        }
+      ],
+      "tip": {
+        "no": "🌸 Ta ett steg om gangen. Reisen venter på deg, den går ingen steder.",
+        "en": "🌸 Take one step at a time. The journey waits for you, it is not going anywhere."
+      }
+    },
+    {
+      "module": null,
+      "title": {
+        "no": "LME Momentum, elleve dager om gangen",
+        "en": "LME Momentum, eleven days at a time"
+      },
+      "body": [
+        {
+          "no": "Momentum er en app som gjør én ting: den gir deg noe lite å gjøre hver dag i elleve dager, og holder styr på hvor langt du er kommet. Du finner den på https://lmexplorers.com/momentum",
+          "en": "Momentum is an app that does one thing: it gives you something small to do each day for eleven days, and keeps track of how far you have come. You find it at https://lmexplorers.com/momentum"
+        },
+        {
+          "no": "Hver dag har en kort tekst å lese, og noen spørsmål å skrive på. Du skriver rett i appen, og det lagres av seg selv mens du skriver. Nederst er det én knapp: fullfør dagen. Da åpner neste dag seg, og de andre står låst til du kommer dit. Det er med vilje, for det er lettere å gjøre én ting enn å velge mellom elleve.",
+          "en": "Each day has a short text to read and a few questions to write on. You write straight into the app, and it saves itself as you go. At the bottom there is one button: complete the day. That unlocks the next day, and the rest stay locked until you get there. That is deliberate, because doing one thing is easier than choosing between eleven."
+        },
+        {
+          "no": "Dag 1 og dag 11 stiller det samme spørsmålet, med et tall fra 0 til 10. Det er den eneste målingen i appen, og den sammenligner deg bare med deg selv, elleve dager tidligere.",
+          "en": "Day 1 and day 11 ask the same question, with a number from 0 to 10. It is the only measurement in the app, and it compares you only with yourself, eleven days earlier."
+        },
+        {
+          "no": "I tillegg har appen to steder som er dine: visjonstavla, der du legger inn kort med det du ser for deg, og seierslista, der du skriver ned det som går bra mens det skjer. Den lista er verdt mer enn den ser ut som. Om tre måneder er det den som viser deg at noe faktisk har flyttet seg.",
+          "en": "The app also has two places that are yours: the vision board, where you add cards with what you picture, and the wins list, where you write down what goes well as it happens. That list is worth more than it looks. In three months it is what shows you that something actually moved."
+        },
+        {
+          "no": "Er du logget inn, følger alt du skriver med kontoen din, så du kan begynne på maskinen og fortsette på telefonen. Er du ikke logget inn, lagres det bare i nettleseren du sitter i.",
+          "en": "If you are logged in, everything you write follows your account, so you can start on your computer and continue on your phone. If you are not logged in, it is saved only in the browser you are sitting in."
+        }
+      ],
+      "tip": {
+        "no": "✨ Gjør dagen om morgenen hvis du kan. Den tar noen minutter, og resten av dagen blir litt annerledes av at du har gjort den.",
+        "en": "✨ Do the day in the morning if you can. It takes a few minutes, and the rest of the day is a little different for having done it."
+      }
+    },
+    {
+      "module": null,
+      "title": {
         "no": "Min konto og innstillingene dine",
         "en": "My Account and your settings"
       },
@@ -177,6 +264,10 @@ export const PLATTFORM_KURS = {
         {
           "no": "I tillegg finner du et voksende utvalg praktiske kurs: KI for pedagoger, Kom i gang med Claude og Videre med Claude, Voks på YouTube med AI og Videre med YouTube, og Boss of Your Own Brain. Nye kurs dukker jevnlig opp, både fra meg og etter hvert fra medlemmer som bygger sine egne i Kursbygger (mer om det i Modul 4).",
           "en": "You will also find a growing selection of practical classes: AI for educators, Getting started with Claude and Next level with Claude, Grow on YouTube with AI and Next level with YouTube, and Boss of Your Own Brain. New classes appear regularly, both from me and, in time, from members building their own in the course builder (more about that in Module 4)."
+        },
+        {
+          "no": "Noen av kursene er arbeidsøkter mer enn kurs. Workshopen \"Ansett dine fem AI-assistenter\" er en av dem: du setter fem faste assistenter i arbeid i Claude, én for hver oppgave som spiser opp uken, og lager seks ferdige karuseller på seksti minutter mens du følger med. Den er et eget kjøp, og leksjonene åpner seg med en gang du har betalt. Se hva den inneholder her: [Ansett dine fem AI-assistenter](https://lmexplorers.com/workshop).",
+          "en": "Some of the classes are working sessions more than classes. The workshop \"Hire your five AI assistants\" is one of them: you put five permanent assistants to work in Claude, one for each task that eats up your week, and create six finished carousels in sixty minutes as you follow along. It is a separate purchase, and the lessons open the moment you have paid. See what is inside here: [Hire your five AI assistants](https://lmexplorers.com/workshop)."
         }
       ],
       "tip": {
@@ -403,13 +494,34 @@ export const PLATTFORM_KURS = {
           "en": "LME Autopilot is the app inside LME Studio that puts content production itself on autopilot: reels, stories and carousels, made with AI in minutes rather than hours. It opens in its own window outside the platform."
         },
         {
-          "no": "Der de andre verktøyene i denne modulen løser én oppgave om gangen, er Autopilot tenkt som et sted du går tilbake til jevnlig for å holde en jevn strøm av innhold gående, uten å måtte starte fra bunnen hver gang.",
-          "en": "Where the other tools in this module solve one task at a time, Autopilot is meant as a place you come back to regularly to keep a steady stream of content going, without starting from scratch every time."
+          "no": "Der de andre verktøyene i denne modulen løser én oppgave om gangen, er Autopilot tenkt som et sted du går tilbake til jevnlig for å holde en jevn strøm av innhold gående, uten å måtte starte fra bunnen hver gang. Du kan enten abonnere, og få AI-bilder inkludert hver måned, eller kjøpe appen én gang, uten månedspris, og bruke dine egne AI-nøkler. Se forskjellen på https://lmexplorers.com/autopilot-app",
+          "en": "Where the other tools in this module solve one task at a time, Autopilot is meant as a place you come back to regularly to keep a steady stream of content going, without starting from scratch every time. You can either subscribe, and get AI images included every month, or buy the app once, with no monthly price, and use your own AI keys. See the difference at https://lmexplorers.com/autopilot-app"
         }
       ],
       "tip": {
         "no": "📱 Bruk Autopilot til den daglige/ukentlige rytmen, og de andre innholdsverktøyene når du trenger noe mer spesifikt eller skreddersydd.",
         "en": "📱 Use Autopilot for the daily or weekly rhythm, and the other content tools when you need something more specific or tailored."
+      }
+    },
+    {
+      "module": null,
+      "title": {
+        "no": "LME Studio Tjenester, når du heller vil kjøpe tiden",
+        "en": "LME Studio Services, when you would rather buy the time"
+      },
+      "body": [
+        {
+          "no": "Noen ganger er det ikke verktøyet som mangler, det er tiden. LME Studio Tjenester er ferdige pakker med fast pris, der jeg gjør jobben for deg i stedet for at du lærer deg verktøyet: videoer med effekter, en egen AI-karakter satt opp, Autopilot med personlig oppsett, eller en hel måned med innhold lagt i kø. Du finner dem på https://lmexplorers.com/tjenester",
+          "en": "Sometimes it is not the tool that is missing, it is the time. LME Studio Services are ready-made packages with a fixed price, where I do the work for you instead of you learning the tool: videos with effects, your own AI character set up, Autopilot with personal setup, or a full month of content queued. You find them at https://lmexplorers.com/tjenester"
+        },
+        {
+          "no": "Slik foregår det: du fyller ut skjemaet med hva du trenger, og får et fast tilbud tilbake innen én virkedag, med pris og leveringsdato. Ingenting trekkes før du har sagt ja, og hver pakke har en runde med endringer inkludert. Et eventuelt Autopilot-abonnement kommer i tillegg, siden det er appen som lager innholdet videre etterpå.",
+          "en": "This is how it works: you fill in the form with what you need, and get a fixed quote back within one working day, with the price and the delivery date. Nothing is charged before you have said yes, and every package includes one round of changes. An Autopilot subscription comes in addition, since that is the app making the content afterwards."
+        }
+      ],
+      "tip": {
+        "no": "💡 Er du i tvil, prøv verktøyet selv først. Pakkene er for oppdrag der tiden er verdt mer enn kronene, ikke for det du raskt får til på egen hånd.",
+        "en": "💡 If in doubt, try the tool yourself first. The packages are for jobs where your time is worth more than the money, not for what you can quickly do on your own."
       }
     },
     {
@@ -574,13 +686,67 @@ export const PLATTFORM_KURS = {
           "en": "The course builder (Kursbygger) is where you create your own courses, without code: mini courses or larger ones, with modules, lessons, tip boxes and images. Your courses appear automatically under \"Your own courses\" in the Academy once they are published."
         },
         {
-          "no": "Du kan sette pris på kursene dine og låse dem til kjøpere, eller låse enkeltmoduler til medlemmer eller til separate kjøp, akkurat slik dette kurset du leser nå er bygget opp.",
-          "en": "You can put a price on your courses and lock them to buyers, or lock individual modules to members or to separate purchases, exactly the way the course you are reading now is built."
+          "no": "Du kan sette pris på kursene dine og låse dem til kjøpere, eller låse enkeltmoduler til medlemmer eller til separate kjøp, akkurat slik dette kurset du leser nå er bygget opp. Kursene du lager er dine: bare du ser og redigerer dem, og du legger inn din egen betalingslenke, enten du bruker Stripe, PayPal, Klarna, Vipps eller noe annet. Pengene går rett til deg.",
+          "en": "You can put a price on your courses and lock them to buyers, or lock individual modules to members or to separate purchases, exactly the way the course you are reading now is built. The courses you make are yours: only you can see and edit them, and you add your own payment link, whether you use Stripe, PayPal, Klarna, Vipps or something else. The money goes straight to you."
         }
       ],
       "tip": {
         "no": "🌸 Kursbygger krever et passord for lagring, det samme som resten av kursredigeringen på plattformen.",
         "en": "🌸 The course builder needs a password to save, the same one as the rest of the course editing on the platform."
+      }
+    },
+    {
+      "module": null,
+      "title": {
+        "no": "LME Vault, ferdige maler for digitale produkter",
+        "en": "LME Vault, ready-made templates for digital products"
+      },
+      "body": [
+        {
+          "no": "LME Vault er hvelvet med ferdige Claude-maler, laget for deg som sitter fast på tom side. Der inne ligger tolv maler du kan kopiere rett inn i Claude: fra videoen din til ferdige produktideer, en quiz som fanger e-postadresser, en minikursplan, et veikart, en lead magnet, en salgsside og e-postserien som går ut etter kjøp.",
+          "en": "LME Vault is the vault of ready-made Claude templates, built for those moments when the blank page stops you. Inside are twelve templates you can copy straight into Claude: from your video to finished product ideas, a quiz that captures email addresses, a mini course plan, a roadmap, a lead magnet, a sales page and the email series that goes out after a purchase."
+        },
+        {
+          "no": "Hver mal har et felt du fyller inn selv, alt som står i klammer. Du bytter ut det med ditt eget tema, din målgruppe og prisen din, og får et førsteutkast du bare trenger å justere. Så legger du resultatet rett inn i verktøyene du nettopp har lest om: kursplanen inn i Kursbygger, salgssiden inn i Builder, e-postene inn i Email.",
+          "en": "Every template has fields you fill in yourself, everything written in brackets. You replace them with your own topic, your own audience and your own price, and get a first draft you only need to adjust. Then you put the result straight into the tools you have just read about: the course plan into the course builder, the sales page into Builder, the emails into Email."
+        },
+        {
+          "no": "Hvelvet er et engangskjøp, ikke et abonnement, og tilgangen varer for alltid. Du finner det på /vault, og selve malene ligger på /academy/vault når du er inne. Nye maler legges til i hvelvet etter hvert, uten at du betaler på nytt.",
+          "en": "The vault is a one-time purchase, not a subscription, and access lasts forever. You find it at /vault, and the templates themselves live at /academy/vault once you are in. New templates are added to the vault over time, at no extra cost."
+        }
+      ],
+      "tip": {
+        "no": "🌸 Begynn med den malen som passer det du holder på med akkurat nå, ikke den som ser mest imponerende ut. Ett ferdig produkt er verdt mer enn ti gode ideer.",
+        "en": "🌸 Start with the template that fits what you are working on right now, not the one that looks most impressive. One finished product is worth more than ten good ideas."
+      }
+    },
+    {
+      "module": null,
+      "title": {
+        "no": "Selg kursene dine, og få kjøperne inn av seg selv",
+        "en": "Sell your courses, and let buyers in automatically"
+      },
+      "body": [
+        {
+          "no": "Når du setter pris på et kurs, legger du inn din egen betalingslenke. Du velger selv hvilken løsning du bruker: Stripe, PayPal, Klarna, Vipps eller noe annet. Pengene går rett til deg, LME er ikke mellomledd og blander det aldri med mine egne produkter.",
+          "en": "When you put a price on a course, you add your own payment link. You choose the provider yourself: Stripe, PayPal, Klarna, Vipps or something else. The money goes straight to you, LME is not a middleman and never mixes it with my own products."
+        },
+        {
+          "no": "Kursbygger gir deg samtidig en **takkeadresse**. Den limer du inn hos betalingsleverandøren din, der det står hvor kjøperen skal sendes etter betaling. Hos Stripe heter det \"etter betaling\", hos PayPal retur-URL, hos Vipps landingsside. Det gjør du én gang per kurs.",
+          "en": "The course builder also gives you a **thank-you address**. You paste it into your payment provider, where it says where the buyer should go after paying. In Stripe it is called \"after payment\", in PayPal the return URL, in Vipps the landing page. You do this once per course."
+        },
+        {
+          "no": "Da går resten av seg selv: kjøperen lander der, skriver e-posten sin, og får tilgangen med det samme, pluss en personlig lenke på e-post som varer for alltid. Du ser hver kjøper i Kursbygger, og kan fjerne en tilgang igjen hvis du trenger det.",
+          "en": "Then the rest runs by itself: the buyer lands there, enters their email, and gets access right away, plus a personal link by email that lasts forever. You see every buyer in the course builder, and can remove an access again if you need to."
+        },
+        {
+          "no": "Kjøperen havner også på din egen e-postliste, som du finner på /min-epost. Den er din, adskilt fra min, og du laster den ned og tar den med til det e-postverktøyet du selv velger.",
+          "en": "The buyer also lands on your own email list, which you find at /min-epost. It is yours, separate from mine, and you download it and take it to whichever email tool you choose."
+        }
+      ],
+      "tip": {
+        "no": "🌸 Test ditt eget kurs én gang med en liten sum til deg selv, så ser du nøyaktig hva kjøperen din opplever.",
+        "en": "🌸 Test your own course once with a small amount to yourself, so you see exactly what your buyer experiences."
       }
     },
     {
@@ -866,6 +1032,31 @@ export const PLATTFORM_KURS = {
       "tip": {
         "no": "🌸 Bli med i gruppen som matcher barnets alder først, du kan alltid utforske de andre gruppene etter hvert.",
         "en": "🌸 Join the group that matches your child's age first, you can always explore the other groups later."
+      }
+    },
+    {
+      "module": null,
+      "title": {
+        "no": "Live-samlingene og Live-rommet",
+        "en": "The live sessions and the live room"
+      },
+      "body": [
+        {
+          "no": "Live-siden viser når neste samling går. Der ser du nedtellingen, melder deg på med ett trykk, og finner opptakene fra samlingene som allerede har vært. Du finner den på https://lmexplorers.com/live",
+          "en": "The Live page shows when the next session runs. There you see the countdown, sign up with one tap, and find the recordings from sessions that have already happened. You find it at https://lmexplorers.com/live"
+        },
+        {
+          "no": "Selve samlingen foregår i Live-rommet, og videoen går rett på siden. Du trenger ingen app, ingen konto og ingen lenke i e-posten. Rommet åpner et kvarter før start, og da blir knappen aktiv av seg selv. Ved siden av videoen står chatten, så du kan skrive til de andre uten å slå på kamera eller mikrofon.",
+          "en": "The session itself happens in the live room, and the video runs right on the page. You need no app, no account and no link in your inbox. The room opens a quarter of an hour before the start, and the button becomes active by itself. Next to the video is the chat, so you can write to the others without turning on camera or microphone."
+        },
+        {
+          "no": "Rekker du ikke å være med direkte, gjør det ingenting. Opptaket legges på den samme siden etterpå, og du finner det igjen under \"Opptak fra tidligere\".",
+          "en": "If you cannot join live, that is fine. The recording is posted on the same page afterwards, and you find it again under \"Recordings from earlier\"."
+        }
+      ],
+      "tip": {
+        "no": "📺 Nettleseren spør om kamera og mikrofon første gang du blir med. Du kan trygt svare nei og heller skrive i chatten, du ser og hører samlingen like godt.",
+        "en": "📺 Your browser asks for camera and microphone the first time you join. You can safely say no and write in the chat instead, you see and hear the session just as well."
       }
     },
     {

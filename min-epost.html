@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FBF7F0">
+<title>E-postlista mi · LME</title>
+<link rel="icon" href="/images/lme-logo.png">
+<meta name="robots" content="noindex">
+<style>
+  @font-face { font-family:'Sasson Montessori'; src:url('/fonts/SassoonMontessori.woff2') format('woff2'), url('/fonts/SassoonMontessori.ttf') format('truetype'); font-weight:normal; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Playpen Sans'; src:url('/fonts/PlaypenSans-400.woff2') format('woff2'); font-weight:400; font-display:swap; }
+  @font-face { font-family:'Playpen Sans'; src:url('/fonts/PlaypenSans-700.woff2') format('woff2'); font-weight:700; font-display:swap; }
+  @font-face { font-family:'Playpen Sans'; src:url('/fonts/PlaypenSans-800.woff2') format('woff2'); font-weight:800; font-display:swap; }
+  :root{--lime:#A4D233;--lime-soft:#E8F5D1;--cerise:#E91E89;--cerise-soft:#FCE3F1;--sun-soft:#FFF4D6;
+    --bg:#FBF7F0;--bg-2:#fff;--ink:#1F1B24;--ink-soft:#5A5560;--ink-muted:#938E99;--line:rgba(31,27,36,.08);
+    --r-lg:26px;--r-xl:36px;--r-pill:999px;
+    --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;--font-head:'Playpen Sans',system-ui,sans-serif;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-body);color:var(--ink);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;
+    background:radial-gradient(900px 520px at 100% -8%,var(--sun-soft) 0%,transparent 52%),radial-gradient(800px 500px at -5% 6%,var(--cerise-soft) 0%,transparent 50%),var(--bg);}
+  a{color:inherit}
+  button{font-family:var(--font-body);cursor:pointer;border:none}
+  .wrap{max-width:800px;margin:0 auto;padding:26px 20px 70px}
+  .brandbar{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:22px}
+  .brandbar img{height:32px}.brandbar span{font-weight:700;font-size:15px}
+  .head{text-align:center;margin-bottom:24px}
+  .chip{display:inline-block;background:var(--lime-soft);color:#5b7d12;font-size:12.5px;font-weight:700;padding:7px 16px;border-radius:var(--r-pill);margin-bottom:12px}
+  h1{font-size:clamp(26px,4.4vw,36px);font-weight:800;letter-spacing:-.02em;margin-bottom:10px}
+  .head p{font-size:15.5px;color:var(--ink-soft);max-width:600px;margin:0 auto}
+  .kort{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-xl);box-shadow:0 10px 30px rgba(31,27,36,.05);padding:24px 26px;margin-top:18px}
+  .kort h2{font-size:19px;font-weight:800;margin-bottom:6px}
+  .kort .hint{font-size:14px;color:var(--ink-soft);margin-bottom:14px}
+  .tall{font-size:40px;font-weight:800;font-family:var(--font-head);line-height:1}
+  .rad{display:flex;align-items:center;gap:10px;font-size:14.5px;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:11px 15px;margin-bottom:8px}
+  .rad .e{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+  .rad .kilde{font-size:12.5px;color:var(--ink-muted)}
+  .rad button{background:none;color:#c43d75;font-weight:700;font-size:13px}
+  .knapp{display:inline-block;font-size:15px;font-weight:800;color:#fff;background:linear-gradient(120deg,var(--cerise),#ff5fb0);padding:13px 22px;border-radius:var(--r-pill);box-shadow:0 10px 22px rgba(233,30,137,.26);text-decoration:none}
+  .knapp.ro{background:#fff;color:var(--ink-soft);border:1px solid var(--line);box-shadow:none}
+  input{font-size:15px;color:var(--ink);background:#FAF7F2;border:1px solid var(--line);border-radius:var(--r-pill);padding:12px 18px;outline:none;width:100%;margin-bottom:10px}
+  textarea{width:100%;font-family:var(--font-body);font-size:13px;background:#FAF7F2;border:1px solid var(--line);border-radius:16px;padding:14px;min-height:120px}
+  .knapperad{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .footer{text-align:center;margin-top:30px;font-size:13px;color:var(--ink-muted)}
+  h1,h2,h3{font-family:var(--font-head)}
+  @media(max-width:520px){.wrap{padding:20px 14px 54px}.kort{padding:20px 18px}}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="brandbar" href="/dashboard">
+      <img src="/images/lme-logo.png" alt="LME" onerror="this.style.display='none'"><span>LME</span>
+    </a>
+    <div class="head">
+      <span class="chip" data-no="DIN EGEN LISTE" data-en="YOUR OWN LIST">DIN EGEN LISTE</span>
+      <h1 data-no="E-postlista mi" data-en="My email list">E-postlista mi</h1>
+      <p data-no="Adressene du samler er dine. De ligger adskilt fra Renates liste, og du tar dem med deg til det e-postverktøyet du selv velger."
+         data-en="The addresses you collect are yours. They are kept separate from Renate's list, and you take them with you to whichever email tool you choose.">Adressene du samler er dine. De ligger adskilt fra Renates liste, og du tar dem med deg til det e-postverktøyet du selv velger.</p>
+    </div>
+
+    <div id="innhold" style="display:none">
+      <div class="kort">
+        <div class="tall" id="antall">0</div>
+        <div class="hint" id="antallTekst" data-no="på lista di" data-en="on your list">på lista di</div>
+        <div class="knapperad">
+          <a class="knapp" href="/api/min-epost?csv=1" id="lastNed" data-no="Last ned som CSV" data-en="Download as CSV">Last ned som CSV</a>
+        </div>
+      </div>
+
+      <div class="kort">
+        <h2 data-no="Slik samler du adresser" data-en="How you collect addresses">Slik samler du adresser</h2>
+        <p class="hint" data-no="To ting fyller lista di av seg selv: alle som kjøper et av kursene dine, og alle som fyller ut skjemaet under. Lim skjemaet inn på siden din, akkurat som det står."
+           data-en="Two things fill your list on their own: everyone who buys one of your courses, and everyone who fills in the form below. Paste the form onto your page exactly as it is.">To ting fyller lista di av seg selv: alle som kjøper et av kursene dine, og alle som fyller ut skjemaet under. Lim skjemaet inn på siden din, akkurat som det står.</p>
+        <textarea id="skjema" readonly></textarea>
+        <div class="knapperad">
+          <button class="knapp ro" id="kopierSkjema" data-no="Kopier skjemaet" data-en="Copy the form">Kopier skjemaet</button>
+        </div>
+      </div>
+
+      <div class="kort">
+        <h2 data-no="Legg inn en adresse selv" data-en="Add an address yourself">Legg inn en adresse selv</h2>
+        <p class="hint" data-no="Har du fått en adresse et annet sted, kan du legge den inn her. Husk at personen må ha sagt ja til å høre fra deg."
+           data-en="If you got an address somewhere else, you can add it here. Remember that the person must have agreed to hear from you.">Har du fått en adresse et annet sted, kan du legge den inn her. Husk at personen må ha sagt ja til å høre fra deg.</p>
+        <input id="nyEpost" type="email" placeholder="navn@example.com">
+        <input id="nyNavn" type="text" data-ph-no="Navn (valgfritt)" data-ph-en="Name (optional)" placeholder="Navn (valgfritt)">
+        <button class="knapp" id="leggTil" data-no="Legg til" data-en="Add">Legg til</button>
+      </div>
+
+      <div class="kort">
+        <h2 data-no="Adressene dine" data-en="Your addresses">Adressene dine</h2>
+        <div id="liste"></div>
+      </div>
+
+      <div class="kort" style="background:var(--sun-soft);border-color:rgba(247,199,46,.4)">
+        <h2 data-no="Hvorfor sender ikke LME for deg?" data-en="Why does LME not send for you?">Hvorfor sender ikke LME for deg?</h2>
+        <p class="hint" style="margin:0" data-no="Fordi e-posten da hadde gått ut fra Renates avsender og hennes domene, og både kostnaden og omdømmet hadde vært hennes. Du velger ditt eget verktøy, akkurat som du velger din egen betalingsløsning. Last ned lista, lim den inn der du vil sende fra, og skriv med din egen stemme."
+           data-en="Because the emails would then go out from Renate's sender and her domain, and both the cost and the reputation would be hers. You choose your own tool, just as you choose your own payment provider. Download the list, import it where you want to send from, and write in your own voice.">Fordi e-posten da hadde gått ut fra Renates avsender og hennes domene, og både kostnaden og omdømmet hadde vært hennes. Du velger ditt eget verktøy, akkurat som du velger din egen betalingsløsning. Last ned lista, lim den inn der du vil sende fra, og skriv med din egen stemme.</p>
+      </div>
+    </div>
+
+    <div class="kort" id="innloggingsboks" style="display:none;text-align:center">
+      <p class="hint" data-no="Logg inn for å se lista di." data-en="Log in to see your list.">Logg inn for å se lista di.</p>
+      <a class="knapp" href="/login" data-no="Logg inn" data-en="Log in">Logg inn</a>
+    </div>
+
+    <div class="footer">© <span id="yr"></span> Little Montessori Explorers</div>
+  </div>
+
+  <script>
+    var LANG = (function () {
+      var q = new URLSearchParams(location.search).get('lang');
+      var l = (q || localStorage.getItem('lme_lang') || 'no').toLowerCase();
+      if (l !== 'en' && l !== 'no') l = 'no';
+      try { localStorage.setItem('lme_lang', l); } catch (e) {}
+      return l;
+    })();
+    var minEpost = '';
+    function L(no, en) { return LANG === 'en' ? en : no; }
+    function switchLanguage(lang) {
+      LANG = lang; document.documentElement.lang = lang;
+      try { localStorage.setItem('lme_lang', lang); } catch (e) {}
+      document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+        el.textContent = lang === 'en' ? el.dataset.en : el.dataset.no;
+      });
+      document.querySelectorAll('[data-ph-no][data-ph-en]').forEach(function (el) {
+        el.placeholder = lang === 'en' ? el.dataset.phEn : el.dataset.phNo;
+      });
+      var b = document.getElementById('langBtn');
+      if (b) b.textContent = lang === 'en' ? '🇳🇴 Norsk' : '🇬🇧 English';
+      if (minEpost) visSkjema();
+    }
+    (function () {
+      var b = document.createElement('button');
+      b.id = 'langBtn';
+      b.style.cssText = 'position:fixed;top:18px;right:74px;z-index:300;border:1px solid rgba(31,27,36,.12);background:#fff;color:#1F1B24;font-weight:700;font-size:13px;padding:10px 15px;border-radius:999px;box-shadow:0 6px 20px rgba(31,27,36,.12);cursor:pointer;';
+      b.addEventListener('click', function () { switchLanguage(LANG === 'en' ? 'no' : 'en'); });
+      document.body.appendChild(b);
+    })();
+
+    function visSkjema() {
+      document.getElementById('skjema').value =
+        '<form action="https://lmexplorers.com/api/subscribe" method="post">\n' +
+        '  <input type="hidden" name="eier" value="' + minEpost + '">\n' +
+        '  <input type="hidden" name="group" value="' + L('min-side', 'my-page') + '">\n' +
+        '  <input type="email" name="email" placeholder="' + L('E-posten din', 'Your email') + '" required>\n' +
+        '  <input type="text" name="name" placeholder="' + L('Navnet ditt', 'Your name') + '">\n' +
+        '  <button type="submit">' + L('Meld meg på', 'Sign me up') + '</button>\n' +
+        '</form>';
+    }
+
+    function tegn(d) {
+      document.getElementById('antall').textContent = d.antall;
+      var ut = document.getElementById('liste');
+      ut.innerHTML = '';
+      if (!d.liste.length) {
+        var p = document.createElement('p');
+        p.className = 'hint';
+        p.style.margin = '0';
+        p.textContent = L('Ingen adresser ennå. De første kommer når noen kjøper eller melder seg på.',
+                          'No addresses yet. The first ones arrive when someone buys or signs up.');
+        ut.appendChild(p);
+        return;
+      }
+      d.liste.forEach(function (a) {
+        var rad = document.createElement('div');
+        rad.className = 'rad';
+        var e = document.createElement('div');
+        e.className = 'e';
+        e.textContent = a.epost + (a.navn ? ' · ' + a.navn : '');
+        var k = document.createElement('span');
+        k.className = 'kilde';
+        k.textContent = a.kilde || '';
+        var f = document.createElement('button');
+        f.textContent = L('Fjern', 'Remove');
+        f.addEventListener('click', function () {
+          if (!confirm(L('Fjerne ' + a.epost + ' fra lista?', 'Remove ' + a.epost + ' from the list?'))) return;
+          fetch('/api/min-epost', { method: 'POST', credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'fjern', epost: a.epost }) }).then(hent);
+        });
+        rad.appendChild(e); rad.appendChild(k); rad.appendChild(f);
+        ut.appendChild(rad);
+      });
+    }
+
+    function hent() {
+      fetch('/api/min-epost', { credentials: 'same-origin' })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (!d || !d.loggedIn) {
+            document.getElementById('innloggingsboks').style.display = '';
+            return;
+          }
+          document.getElementById('innhold').style.display = '';
+          tegn(d);
+        })
+        .catch(function () { document.getElementById('innloggingsboks').style.display = ''; });
+    }
+
+    fetch('/api/auth/me', { credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (me) { minEpost = (me && me.user && me.user.email) || ''; visSkjema(); })
+      .catch(function () {});
+
+    document.getElementById('kopierSkjema').addEventListener('click', function () {
+      var t = document.getElementById('skjema');
+      t.select();
+      try { document.execCommand('copy'); } catch (e) {
+        if (navigator.clipboard) navigator.clipboard.writeText(t.value);
+      }
+      this.textContent = L('Kopiert', 'Copied');
+      var knapp = this;
+      setTimeout(function () { knapp.textContent = L('Kopier skjemaet', 'Copy the form'); }, 2000);
+    });
+
+    document.getElementById('leggTil').addEventListener('click', function () {
+      var epost = document.getElementById('nyEpost').value.trim();
+      if (!epost) { document.getElementById('nyEpost').focus(); return; }
+      fetch('/api/min-epost', { method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'legg-til', epost: epost, navn: document.getElementById('nyNavn').value.trim() }) })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (d && d.ok) {
+            document.getElementById('nyEpost').value = '';
+            document.getElementById('nyNavn').value = '';
+            hent();
+          } else {
+            alert(L('Den adressen ser ikke riktig ut.', 'That address does not look right.'));
+          }
+        });
+    });
+
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    switchLanguage(LANG);
+    hent();
+  </script>
+<script src="/js/lme-account.js?v=11" defer></script>
+</body>
+</html>

@@ -53,21 +53,28 @@ const COPY = {
   },
 };
 
-/* paid: true|false — bare tekst, tilgangen er den samme i begge tilfeller. */
-function renderDeliveryEmail(lang, name, courseName, link, paid) {
+/* paid: true|false — bare tekst, tilgangen er den samme i begge tilfeller.
+   ctaLabel: valgfri knappetekst. Uten den står det "Åpne kurset", som er feil
+   for et produkt som ikke er et kurs (LME Vault er et hvelv med maler). */
+function renderDeliveryEmail(lang, name, courseName, link, paid, ctaLabel) {
   const l = lang === "en" ? "en" : "no";
   const c = COPY[l];
   const nm = name || c.fallbackName;
   const intro = (paid ? c.introPaid : c.introFree).replace("{name}", esc(nm)).replace("{course}", esc(courseName));
   const subject = (paid ? c.subjectPaid : c.subjectFree).replace("{course}", courseName);
-  const html = wrap('<p>' + intro + '</p><p>' + c.body + '</p>' + btn(link, c.cta) + '<p>' + c.sign + '</p>');
+  const knapp = (ctaLabel || "").trim() || c.cta;
+  const html = wrap('<p>' + intro + '</p><p>' + c.body + '</p>' + btn(link, knapp) + '<p>' + c.sign + '</p>');
   const text = intro + "\n\n" + c.body + "\n\n" + link + "\n\n" + c.sign;
   return { subject, html, text };
 }
 
-export function courseDeliveryEmail(lang, name, courseName, courseUrl, token, paid) {
-  const link = courseUrl + "?t=" + encodeURIComponent(token);
-  return renderDeliveryEmail(lang, name, courseName, link, paid);
+export function courseDeliveryEmail(lang, name, courseName, courseUrl, token, paid, ctaLabel) {
+  // Adressen kan alt ha et spørsmålstegn, for eksempel /kurs?k=<slug>. Da må
+  // tokenet henges på med &, ellers blir lenken ugyldig og kjøperen kommer
+  // ikke inn. Det traff Kursbygger-kursene, som alle har ?k= i adressen.
+  const skille = courseUrl.indexOf("?") === -1 ? "?" : "&";
+  const link = courseUrl + skille + "t=" + encodeURIComponent(token);
+  return renderDeliveryEmail(lang, name, courseName, link, paid, ctaLabel);
 }
 
 async function sendViaMailerSend(env, to, name, msg) {
@@ -90,8 +97,8 @@ async function sendViaMailerSend(env, to, name, msg) {
   }
 }
 
-export async function sendCourseDeliveryMail(env, to, name, lang, courseName, courseUrl, token, paid) {
-  const msg = courseDeliveryEmail(lang, name, courseName, courseUrl, token, paid);
+export async function sendCourseDeliveryMail(env, to, name, lang, courseName, courseUrl, token, paid, ctaLabel) {
+  const msg = courseDeliveryEmail(lang, name, courseName, courseUrl, token, paid, ctaLabel);
   return sendViaMailerSend(env, to, name, msg);
 }
 

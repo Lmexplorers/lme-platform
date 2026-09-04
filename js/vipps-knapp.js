@@ -14,8 +14,10 @@
  * data-vipps-type er "oppskrift" (butikken), "kurs" eller "lv"
  * (Læringsverksted). Står den ikke, gjettes "oppskrift".
  *
- * Vipps tar bare norske kroner, så knappen vises bare i norsk visning.
- * Bytter kunden til engelsk, forsvinner den, og kortknappen står igjen.
+ * Vipps er hovedknappen for norske kunder og står øverst i kjøpsboksen,
+ * med kortknappen dempet under. Vipps tar bare norske kroner, så den vises
+ * bare i norsk visning. Bytter kunden til engelsk, forsvinner den, og
+ * kortknappen blir hovedknapp igjen.
  *
  * E-postfeltet er ikke valgfritt: Vipps forteller oss ikke hvem som
  * betalte, så uten adressen har vi ingen å sende varen til.
@@ -40,7 +42,15 @@
       'font-family:var(--font-body,"Sasson Montessori",system-ui,sans-serif)}' +
     '.lme-vipps-hvorfor{font-size:12.5px;color:var(--ink-muted,#8A8A8A);margin:0;text-align:center}' +
     '.lme-vipps-feil{color:#E91E89;font-size:12.5px;display:none;margin:0}' +
-    '.lme-vipps-feil.vis{display:block}';
+    '.lme-vipps-feil.vis{display:block}' +
+    /* Vipps staar oeverst, saa den trenger ingen luft over seg. */
+    '.lme-vipps.forst{margin:0 0 10px}' +
+    /* Kortknappen naar Vipps staar over den: samme stoerrelse, men dempet,
+       saa oeyet lander paa Vipps foerst. Regelen ligger her og ikke paa
+       hver side, saa alle salgssider ser like ut. */
+    '.lme-kort-sekundaer{background:transparent!important;color:var(--cerise,#E91E89)!important;' +
+      'border:2px solid var(--cerise,#E91E89)!important;box-shadow:none!important}' +
+    '.lme-kort-sekundaer:hover{background:rgba(233,30,137,.06)!important}';
 
   var stil = document.createElement('style');
   stil.textContent = STIL;
@@ -65,8 +75,8 @@
     no_price: { no: 'Denne varen kan ikke kjøpes med Vipps ennå.', en: 'This item cannot be bought with Vipps yet.' },
   };
   var IKKE_KLAR = {
-    no: 'Vipps er ikke klar akkurat nå. Bruk kjøpsknappen over, så virker kortbetaling.',
-    en: 'Vipps is not available right now. Use the buy button above to pay by card.',
+    no: 'Vipps er ikke klar akkurat nå. Bruk kortknappen under, så virker kortbetaling.',
+    en: 'Vipps is not available right now. Use the card button below to pay by card.',
   };
 
   function visFeil(feilEl, kode) {
@@ -127,11 +137,22 @@
     blokk.appendChild(knapp);
     blokk.appendChild(skjema);
 
-    /* Under kjøpsknappen, men over linjen om betalingsmåter, der den hører
-       hjemme. Finnes ingen slik linje, legges den nederst i boksen. */
+    /* Vipps er hovedveien for norske kunder, og staar derfor OVER
+       kortknappen. Renate bestemte det 1. september 2026, av to grunner:
+       nordmenn trykker helst Vipps, og pengene kommer paa konto raskere enn
+       Stripes tre dager.
+       Finnes ingen kortknapp i boksen, faller vi tilbake til den gamle
+       plassen rett over linjen om betalingsmaater. */
+    var kortknapp = boks.querySelector('.knapp-stor, .buy-cta:not(.lme-vipps)');
     var etter = boks.querySelector('.pay-methods');
-    if (etter) etter.parentNode.insertBefore(blokk, etter);
-    else boks.appendChild(blokk);
+    if (kortknapp) {
+      blokk.classList.add('forst');
+      kortknapp.parentNode.insertBefore(blokk, kortknapp);
+    } else if (etter) {
+      etter.parentNode.insertBefore(blokk, etter);
+    } else {
+      boks.appendChild(blokk);
+    }
 
     /* Er kjøpsknappene i denne boksen alt skjult, er eieren logget inn og
        har fått varen gratis. Da skal ikke Vipps-knappen dukke opp igjen
@@ -185,7 +206,7 @@
         });
     });
 
-    alle.push({ blokk: blokk, skjema: skjema, epost: epost });
+    alle.push({ blokk: blokk, skjema: skjema, epost: epost, kortknapp: kortknapp });
   });
 
   /* Vipps tar bare norske kroner. Sidenes egen språkbytter setter lang på
@@ -197,6 +218,9 @@
       v.blokk.style.display = en ? 'none' : '';
       if (en) v.skjema.classList.remove('apen');
       v.epost.placeholder = en ? 'Email' : 'E-post';
+      /* Forsvinner Vipps i engelsk visning, staar kortknappen alene, og da
+         skal den vaere hovedknapp igjen. */
+      if (v.kortknapp) v.kortknapp.classList.toggle('lme-kort-sekundaer', !en);
     });
   }
   følgSpråk();

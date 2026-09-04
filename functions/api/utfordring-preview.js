@@ -6,7 +6,7 @@
  *
  * To veier inn, så det aldri er avhengig av at en bestemt innlogging er
  * aktiv akkurat da: (1) samme admin-nøkkel som resten av plattformen
- * bruker for redigering (COURSE_EDIT_PASSWORD, ellers LME26), sendt fra
+ * bruker for redigering (COURSE_EDIT_PASSWORD, ellers LME2026), sendt fra
  * knappen på /utfordringen, eller (2) en gjenkjent eier-økt (isOwner).
  *
  * Sender dag 0 med en gang og legger resten i kø, akkurat som et ekte
@@ -15,6 +15,7 @@
 
 import { sessionUser, isOwner } from "../_lib/access.js";
 import { sendUtfordringMail } from "../_lib/utfordring-mail.js";
+import { editPasswordOk } from "../_lib/edit-password.js";
 
 function json(data, status) {
   return new Response(JSON.stringify(data), {
@@ -25,7 +26,7 @@ function json(data, status) {
 
 const UTFORDRING_DAYS = Array.from({ length: 30 }, (_, i) => i + 1);
 const DAG = 24 * 60 * 60 * 1000;
-const OWNER_KEY_FALLBACK = "LME26";
+const OWNER_KEY_FALLBACK = "LME2026";
 const OWNER_EMAIL = "renateshobby@hotmail.com";
 
 export async function onRequestPost(context) {
@@ -35,7 +36,7 @@ export async function onRequestPost(context) {
   const body = await request.json().catch(() => ({}));
   const lang = body.lang === "en" ? "en" : "no";
   const suppliedKey = ((body.key || "") + "").trim();
-  const keyOk = suppliedKey && suppliedKey === ((env.COURSE_EDIT_PASSWORD || OWNER_KEY_FALLBACK) + "");
+  const keyOk = editPasswordOk(env, suppliedKey, [OWNER_KEY_FALLBACK]);
 
   if (!keyOk) {
     const user = await sessionUser(context);

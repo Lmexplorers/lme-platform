@@ -33,7 +33,10 @@ const COPY = {
   no: {
     subject: "Du er i gang med {plan} 🎉",
     intro: "Hei {name}, tusen takk for at du ble med på {plan}!",
-    body: "Abonnementet ditt er aktivt med en gang, ingenting mer å gjøre. Logg inn og sett i gang med bilde- og videogenerering, autoposting og alt det andre som ligger i LME Autopilot.",
+    /* Sier hva som faktisk er inkludert. Video er 0 i alle planer, og
+       autopublisering krever en egen Blotato-konto, saa brevet skal ikke
+       love noen av delene. */
+    body: "Abonnementet ditt er aktivt med en gang. Bildene og tekstene er inkludert og går på min nøkkel, så dem kan du lage uten å skaffe noe selv. Logg inn, skriv inn nisjen din under Innstillinger, og la appen lage den første innholdsplanen din. For at postingen skal gå på autopilot, trenger man en API-nøkkel, som man kjøper tilgang til, med abonnement hos Blotato. Det rimeligste abonnementet der koster fra 29 dollar i måneden, altså rundt 300 kroner. Uten nøkkelen lager appen alt innholdet ferdig, men du legger det ut selv.",
     cta: "Åpne LME Autopilot",
     sign: "Klem fra Renate",
     fallbackName: "",
@@ -41,7 +44,7 @@ const COPY = {
   en: {
     subject: "You're in with {plan} 🎉",
     intro: "Hi {name}, thank you so much for joining {plan}!",
-    body: "Your subscription is active right away, nothing more to do. Log in and get started with image and video generation, autoposting and everything else in LME Autopilot.",
+    body: "Your subscription is active right away. Images and text are included and run on my key, so you can make those without getting anything yourself. Log in, write your niche under Settings, and let the app build your first content plan. For the posting to run on autopilot you need an API key, which you buy access to with a subscription at Blotato. Their cheapest plan is 29 dollars a month. Without the key the app still makes everything, you just post it yourself.",
     cta: "Open LME Autopilot",
     sign: "Warm wishes, Renate",
     fallbackName: "there",
