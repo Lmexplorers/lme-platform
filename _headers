@@ -178,3 +178,10 @@
   Cache-Control: no-store
 /live-rom.html
   Cache-Control: no-store
+# Teststrikksiden for Jordbaerdroem er en ny side, og skal alltid hentes
+# fersk. Uten dette risikerer vi at fristen eller stoerrelseslista staar
+# igjen fra en gammel lagret kopi paa mobilen.
+/teststrikk
+  Cache-Control: no-store
+/teststrikk.html
+  Cache-Control: no-store

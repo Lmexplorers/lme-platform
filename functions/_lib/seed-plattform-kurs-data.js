@@ -1164,6 +1164,35 @@ export const PLATTFORM_KURS = {
       }
     },
     {
+      "module": null,
+      "title": {
+        "no": "Teststrikk, slik en oppskrift blir ferdig",
+        "en": "Test knitting, how a pattern gets finished"
+      },
+      "body": [
+        {
+          "no": "En strikkeoppskrift er ikke ferdig fordi tallene går opp. Den er ferdig når noen andre enn den som skrev den har strikket etter den, vasket plagget, målt det og sagt fra om hva som var uklart. Det steget heter teststrikk, og det er det siste før en oppskrift legges ut for salg.",
+          "en": "A knitting pattern is not finished because the numbers add up. It is finished when someone other than the person who wrote it has knitted from it, washed the garment, measured it and said what was unclear. That step is called test knitting, and it is the last one before a pattern goes on sale."
+        },
+        {
+          "no": "Jordbærdrøm er kolleksjonen som er på teststrikk nå: åtte plagg, kjole, romper med skjørt, genser, skjørt, votter, tøfler, lue og sokker, alle med innstrikkede jordbærblad og frø. De er gradert i ni størrelser, fra str 44, som passer en liten nyfødt, og helt opp til str 92, som er to år. Det betyr at det samme plagget kan strikkes om igjen etter hvert som barnet vokser.",
+          "en": "Strawberry Dream is the collection in test knitting now: eight garments, a dress, a romper with skirt, a jumper, a skirt, mittens, booties, a hat and socks, all with knitted-in strawberry leaves and seeds. They are graded in nine sizes, from size 44, which fits a small newborn, all the way up to size 92, which is two years. That means the same garment can be knitted again as the child grows."
+        },
+        {
+          "no": "Du melder deg som teststrikker på https://lmexplorers.com/teststrikk. Der velger du plagg, størrelse og språk, og får oppskriften på e-post. Bakerst i hver oppskrift ligger et måleskjema du fyller ut etter vask, og det er de tallene som avgjør om graderingen holder.",
+          "en": "You sign up as a test knitter at https://lmexplorers.com/teststrikk. There you choose the garment, the size and the language, and the pattern arrives by email. At the back of every pattern there is a measurement form you fill in after washing, and those numbers are what decide whether the grading holds."
+        },
+        {
+          "no": "Det samme mønsteret gjelder alt du selv lager og selger: la noen andre prøve det før du tar betalt for det. En teststrikker, en prøveleser eller en som går gjennom kurset ditt før lansering, finner det du selv er blitt blind for.",
+          "en": "The same pattern applies to everything you make and sell yourself: let someone else try it before you charge for it. A test knitter, a proofreader or someone who goes through your course before launch will find what you have gone blind to."
+        }
+      ],
+      "tip": {
+        "no": "🍓 Teststrikkerne får oppskriften gratis og navnet sitt i den ferdige utgaven, hvis de vil. Det koster lite og gir en oppskrift som faktisk virker hos andre enn deg.",
+        "en": "🍓 Test knitters get the pattern free and their name in the finished edition, if they want it. It costs little and gives you a pattern that actually works for people other than you."
+      }
+    },
+    {
       "module": {
         "no": "Modul 10 · Hjelp og støtte",
         "en": "Module 10 · Help and support"
