@@ -303,20 +303,26 @@
 
     <section class="gave" id="gaveboks">
       <span class="pill" data-no="🎁 Kun for deg" data-en="🎁 Owner only">🎁 Kun for deg</span>
-      <h2 data-no="Gi appen bort til noen" data-en="Give the app to someone">Gi appen bort til noen</h2>
-      <p class="lead" data-no="Skriv inn adressen til den som skal ha den, så lager jeg en tilgang med en gang. Ingen betaling, ingen kasse, ingen konto. Du får lenken her på skjermen også, i tilfelle hun heller vil ha den på melding." data-en="Enter the address of the person who should have it, and access is created straight away. No payment, no checkout, no account. You also get the link here on screen, in case they would rather have it by message.">Skriv inn adressen til den som skal ha den, så lager jeg en tilgang med en gang. Ingen betaling, ingen kasse, ingen konto. Du får lenken her på skjermen også, i tilfelle hun heller vil ha den på melding.</p>
-      <div class="rad">
-        <input type="email" id="gaveEpost" autocomplete="off" placeholder="mamma@epost.no">
-        <input type="text" id="gaveNavn" autocomplete="off" placeholder="Fornavn (valgfritt)">
-      </div>
-      <label class="valg"><input type="checkbox" id="gaveMail" checked> <span data-no="Send henne en e-post med lenken" data-en="Send an email with the link">Send henne en e-post med lenken</span></label>
-      <button class="knapp-stor" type="button" id="gaveKnapp" style="margin-top:16px" data-no="Gi tilgang" data-en="Give access">Gi tilgang</button>
+      <h2 data-no="Lag en lenke og gi appen bort" data-en="Make a link and give the app away">Lag en lenke og gi appen bort</h2>
+      <p class="lead" data-no="Trykk på knappen, så får du en lenke du kan sende på melding, i en chat, eller lese opp i telefonen. Mottakeren trenger verken å betale, lage konto eller ha e-post." data-en="Tap the button and you get a link you can send by message, in a chat, or read out over the phone. The person receiving it needs no payment, no account and no email.">Trykk på knappen, så får du en lenke du kan sende på melding, i en chat, eller lese opp i telefonen. Mottakeren trenger verken å betale, lage konto eller ha e-post.</p>
+      <button class="knapp-stor" type="button" id="gaveKnapp" data-no="Lag lenke" data-en="Make a link">Lag lenke</button>
       <p class="svar" id="gaveSvar"></p>
       <div class="lenkeboks" id="gaveLenkeboks">
-        <strong data-no="Her er hennes egen lenke:" data-en="Here is their own link:">Her er hennes egen lenke:</strong>
+        <strong data-no="Her er lenken. Send den til henne:" data-en="Here is the link. Send it to them:">Her er lenken. Send den til henne:</strong>
         <code id="gaveLenke"></code>
         <button type="button" id="gaveKopier" style="background:#fff;color:var(--cerise);border:1.5px solid #F5C9D8;border-radius:999px;padding:10px 20px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer" data-no="Kopier lenken" data-en="Copy the link">Kopier lenken</button>
       </div>
+
+      <details style="margin-top:20px">
+        <summary style="font-family:var(--font-head);font-weight:700;font-size:15.5px;cursor:pointer;color:var(--grey)" data-no="Vil du at jeg skal sende den på e-post i stedet?" data-en="Want me to send it by email instead?">Vil du at jeg skal sende den på e-post i stedet?</summary>
+        <div class="rad" style="margin-top:14px">
+          <input type="email" id="gaveEpost" autocomplete="off" placeholder="hennes@epost.no">
+          <input type="text" id="gaveNavn" autocomplete="off" placeholder="Fornavn (valgfritt)">
+        </div>
+        <label class="valg"><input type="checkbox" id="gaveMail"> <span data-no="Send henne et brev med lenken" data-en="Send a letter with the link">Send henne et brev med lenken</span></label>
+        <p class="liten" style="text-align:left" data-no="Fornavnet er bare til din egen oversikt under. Lenken virker uansett om feltene står tomme." data-en="The first name is only for your own overview below. The link works whether or not the fields are filled in.">Fornavnet er bare til din egen oversikt under. Lenken virker uansett om feltene står tomme.</p>
+      </details>
+
       <ul class="gitt" id="gaveListe"></ul>
     </section>
 
@@ -482,7 +488,22 @@
     gaver.forEach(function (g) {
       var li = document.createElement('li');
       var d = g.gitt ? new Date(g.gitt).toLocaleDateString(en() ? 'en-GB' : 'nb-NO') : '';
-      li.textContent = (g.name ? g.name + ', ' : '') + g.email + (d ? ' (' + d + ')' : '');
+      var hvem = g.name || g.email || t('uten navn', 'no name');
+      li.appendChild(document.createTextNode(hvem + (d ? ' (' + d + ')' : '') + ' '));
+      /* Lenken hentes frem igjen her, så en mistet lenke ikke er tapt. */
+      var k = document.createElement('button');
+      k.type = 'button';
+      k.style.cssText = 'background:transparent;border:0;color:var(--cerise);font-family:inherit;font-weight:700;font-size:13.5px;cursor:pointer;padding:0';
+      k.textContent = t('kopier lenken', 'copy the link');
+      k.addEventListener('click', function () {
+        try {
+          navigator.clipboard.writeText(g.lenke || '').then(function () {
+            k.textContent = t('kopiert!', 'copied!');
+            setTimeout(function () { k.textContent = t('kopier lenken', 'copy the link'); }, 2000);
+          });
+        } catch (e) {}
+      });
+      if (g.lenke) li.appendChild(k);
       ul.appendChild(li);
     });
   }
@@ -499,12 +520,8 @@
       var e = (document.getElementById('gaveEpost').value || '').trim();
       var n = (document.getElementById('gaveNavn').value || '').trim();
       var svar = document.getElementById('gaveSvar');
-      if (!e || e.indexOf('@') < 1) {
-        svar.textContent = t('Skriv inn en e-postadresse.', 'Enter an email address.');
-        return;
-      }
       knapp.disabled = true;
-      svar.textContent = t('Lager tilgangen …', 'Creating access …');
+      svar.textContent = t('Lager lenken …', 'Making the link …');
       fetch('/api/strikk-gave', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
@@ -514,7 +531,7 @@
         .then(function (d) {
           if (!(d && d.ok)) { svar.textContent = t('Det gikk ikke. Er du logget inn?', 'That did not work. Are you logged in?'); return; }
           svar.textContent = d.mailSendt
-            ? t('Ferdig. Hun har fått e-posten, og lenken står under her også.', 'Done. They have the email, and the link is below as well.')
+            ? t('Ferdig. Hun har fått brevet, og lenken står under her også.', 'Done. They have the letter, and the link is below as well.')
             : t('Ferdig. Send henne lenken under.', 'Done. Send them the link below.');
           document.getElementById('gaveLenke').textContent = d.lenke;
           document.getElementById('gaveLenkeboks').classList.add('on');

@@ -6,12 +6,12 @@
  *   GET  /api/strikk-gave  -> { ok, gaver: [...] }
  *
  * Bakgrunnen (Renate, 5. september 2026): moren hennes kjøper aldri noe på
- * nett, så selv en rabattkode gjennom Stripe er for mye. Hun trenger en vei
- * som gir tilgang uten at mottakeren skal gjennom en kasse i det hele tatt.
+ * nett, så selv en rabattkode gjennom Stripe er for mye. Hun bruker heller
+ * ikke e-post. Det Renate trenger er en lenke hun kan sende på melding.
  *
- * Lenken returneres ALLTID til eieren, også når e-posten sendes. Mottakeren
- * bruker kanskje ikke e-post så mye, og da kan Renate sende lenken på melding
- * i stedet.
+ * DERFOR ER E-POST VALGFRITT. En lenke lages uten at noen adresse oppgis i
+ * det hele tatt, og den returneres alltid til eieren. Skriver hun inn en
+ * adresse, kan brevet sendes i tillegg, men det er tillegget, ikke veien.
  *
  * Gaver settes IKKE i oppfølgingsserien. Den selger Inner Circle og spør om
  * hva som skal lages neste gang, og det er en samtale for en kunde, ikke for
@@ -48,11 +48,13 @@ export async function onRequestPost(context) {
   const email = String(body.email || "").trim().toLowerCase();
   const navn = String(body.name || "").trim().slice(0, 80);
   const lang = body.lang === "en" ? "en" : "no";
-  const sendMail = body.sendMail !== false;
-  if (!email || email.indexOf("@") < 1) return json({ ok: false, error: "ugyldig_epost" }, 400);
+  /* Bare send e-post hvis det faktisk står en adresse der OG hun har bedt om
+     det. Uten adresse lages lenken uansett. */
+  const sendMail = body.sendMail === true && email.indexOf("@") > 0;
+  if (email && email.indexOf("@") < 1) return json({ ok: false, error: "ugyldig_epost" }, 400);
 
-  /* Tilgangen først. Den er hele poenget, og skal stå selv om e-posten
-     skulle feile. */
+  /* Tilgangen først. Den er hele poenget, og virker uten at vi vet hvem den
+     er til. Selve nøkkelen er lenken, ikke adressen. */
   const token = await grantCourseAccess(env, STRIKK_ID, email, navn);
 
   let mailSendt = false;
@@ -67,8 +69,12 @@ export async function onRequestPost(context) {
   }
 
   try {
-    await env.BUILDER_KV.put(GAVE_PREFIX + email, JSON.stringify({
-      email: email, name: navn, lang: lang,
+    /* Nøkkelen er tokenet, ikke e-posten: en lenke kan lages helt uten
+       adresse, og da finnes det ingen e-post å lagre den under. Lenken
+       lagres med, så Renate kan hente den frem igjen hvis mottakeren mister
+       den. */
+    await env.BUILDER_KV.put(GAVE_PREFIX + token, JSON.stringify({
+      id: token, email: email, name: navn, lang: lang, lenke: appLenke(token),
       gitt: Date.now(), av: (eier.email || "").toLowerCase(), mailSendt: mailSendt,
     }));
   } catch (e) {}
