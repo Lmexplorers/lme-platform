@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Strikk og hekle">
+  <defs>
+    <linearGradient id="gmBall" x1="0.15" y1="0.05" x2="0.9" y2="1">
+      <stop offset="0%" stop-color="#FF7FB4"/><stop offset="100%" stop-color="#D8137B"/>
+    </linearGradient>
+    <linearGradient id="gmWood" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#EFD6B8"/><stop offset="100%" stop-color="#C29B71"/>
+    </linearGradient>
+    <clipPath id="gmClip"><circle cx="100" cy="104" r="62"/></clipPath>
+  </defs>
+  <circle cx="100" cy="100" r="98" fill="#FFFFFF"/>
+  <g stroke-linecap="round">
+    <line x1="46" y1="158" x2="156" y2="50" stroke="url(#gmWood)" stroke-width="15"/>
+    <circle cx="158" cy="48" r="10" fill="#C29B71"/>
+    <line x1="156" y1="158" x2="46" y2="50" stroke="url(#gmWood)" stroke-width="15"/>
+    <circle cx="44" cy="48" r="10" fill="#C29B71"/>
+  </g>
+  <circle cx="100" cy="104" r="62" fill="url(#gmBall)"/>
+  <g clip-path="url(#gmClip)" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="7">
+    <ellipse cx="100" cy="104" rx="62" ry="26" transform="rotate(-34 100 104)"/>
+    <ellipse cx="100" cy="104" rx="58" ry="11" transform="rotate(-34 100 104)"/>
+    <ellipse cx="100" cy="104" rx="62" ry="22" transform="rotate(40 100 104)"/>
+    <ellipse cx="100" cy="104" rx="60" ry="17" transform="rotate(86 100 104)"/>
+  </g>
+</svg>
