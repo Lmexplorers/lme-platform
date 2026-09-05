@@ -105,6 +105,17 @@
   .felt button { background: #fff; color: var(--cerise); border: 1.5px solid #F5C9D8; border-radius: 999px; padding: 12px 22px; font-family: inherit; font-weight: 700; font-size: 14.5px; cursor: pointer; }
   .svar { font-size: 14.5px; margin-top: 10px; }
 
+  .gave { display: none; background: #fff; border-radius: 28px; padding: 30px; box-shadow: 0 12px 40px rgba(233,30,137,0.07); margin-bottom: 22px; outline: 2px dashed #F5C9D8; outline-offset: -2px; }
+  .gave.on { display: block; }
+  .gave .rad { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+  .gave input[type=text], .gave input[type=email] { width: 100%; padding: 13px 15px; border: 1.5px solid #F2E3E7; border-radius: 14px; font-family: inherit; font-size: 16px; background: #FFFCFD; }
+  .gave input:focus { outline: none; border-color: var(--cerise); box-shadow: 0 0 0 3px rgba(233,30,137,0.12); }
+  .gave label.valg { display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--grey); margin-top: 14px; }
+  .gave .lenkeboks { display: none; margin-top: 18px; background: #FFF8F5; border-radius: 16px; padding: 16px 18px; }
+  .gave .lenkeboks.on { display: block; }
+  .gave .lenkeboks code { display: block; font-family: ui-monospace, monospace; font-size: 13px; word-break: break-all; background: #fff; border-radius: 10px; padding: 12px 14px; margin: 10px 0; }
+  .gave .gitt { margin-top: 20px; font-size: 14.5px; color: var(--grey); }
+  .gave .gitt li { margin-bottom: 5px; list-style: none; }
   .faq details { border-bottom: 1px solid var(--line); padding: 14px 0; }
   .faq summary { font-family: var(--font-head); font-weight: 700; font-size: 16.5px; cursor: pointer; list-style: none; }
   .faq summary::-webkit-details-marker { display: none; }
@@ -290,6 +301,25 @@
       <div class="notis" id="ikkeinkludert"></div>
     </section>
 
+    <section class="gave" id="gaveboks">
+      <span class="pill" data-no="🎁 Kun for deg" data-en="🎁 Owner only">🎁 Kun for deg</span>
+      <h2 data-no="Gi appen bort til noen" data-en="Give the app to someone">Gi appen bort til noen</h2>
+      <p class="lead" data-no="Skriv inn adressen til den som skal ha den, så lager jeg en tilgang med en gang. Ingen betaling, ingen kasse, ingen konto. Du får lenken her på skjermen også, i tilfelle hun heller vil ha den på melding." data-en="Enter the address of the person who should have it, and access is created straight away. No payment, no checkout, no account. You also get the link here on screen, in case they would rather have it by message.">Skriv inn adressen til den som skal ha den, så lager jeg en tilgang med en gang. Ingen betaling, ingen kasse, ingen konto. Du får lenken her på skjermen også, i tilfelle hun heller vil ha den på melding.</p>
+      <div class="rad">
+        <input type="email" id="gaveEpost" autocomplete="off" placeholder="mamma@epost.no">
+        <input type="text" id="gaveNavn" autocomplete="off" placeholder="Fornavn (valgfritt)">
+      </div>
+      <label class="valg"><input type="checkbox" id="gaveMail" checked> <span data-no="Send henne en e-post med lenken" data-en="Send an email with the link">Send henne en e-post med lenken</span></label>
+      <button class="knapp-stor" type="button" id="gaveKnapp" style="margin-top:16px" data-no="Gi tilgang" data-en="Give access">Gi tilgang</button>
+      <p class="svar" id="gaveSvar"></p>
+      <div class="lenkeboks" id="gaveLenkeboks">
+        <strong data-no="Her er hennes egen lenke:" data-en="Here is their own link:">Her er hennes egen lenke:</strong>
+        <code id="gaveLenke"></code>
+        <button type="button" id="gaveKopier" style="background:#fff;color:var(--cerise);border:1.5px solid #F5C9D8;border-radius:999px;padding:10px 20px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer" data-no="Kopier lenken" data-en="Copy the link">Kopier lenken</button>
+      </div>
+      <ul class="gitt" id="gaveListe"></ul>
+    </section>
+
     <section class="card">
       <span class="pill" data-no="🔑 Mistet lenken" data-en="🔑 Lost your link">🔑 Mistet lenken</span>
       <h2 data-no="Har du kjøpt, men ikke finner e-posten?" data-en="Bought it, but cannot find the email?">Har du kjøpt, men ikke finner e-posten?</h2>
@@ -440,9 +470,80 @@
     }
   }
 
+  /* Gaveboksen er bare for eier. Hun skal slippe å huske en egen adresse,
+     så den ligger her på salgssiden i stedet for på sin egen side. */
+  function tegnGaver(gaver) {
+    var ul = document.getElementById('gaveListe');
+    ul.innerHTML = '';
+    if (!gaver || !gaver.length) return;
+    var tit = document.createElement('li');
+    tit.innerHTML = '<strong>' + t('Du har gitt den til:', 'You have given it to:') + '</strong>';
+    ul.appendChild(tit);
+    gaver.forEach(function (g) {
+      var li = document.createElement('li');
+      var d = g.gitt ? new Date(g.gitt).toLocaleDateString(en() ? 'en-GB' : 'nb-NO') : '';
+      li.textContent = (g.name ? g.name + ', ' : '') + g.email + (d ? ' (' + d + ')' : '');
+      ul.appendChild(li);
+    });
+  }
+
+  function startGave() {
+    document.getElementById('gaveboks').classList.add('on');
+    fetch('/api/strikk-gave', { credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) { if (d && d.ok) tegnGaver(d.gaver); })
+      .catch(function () {});
+
+    var knapp = document.getElementById('gaveKnapp');
+    knapp.addEventListener('click', function () {
+      var e = (document.getElementById('gaveEpost').value || '').trim();
+      var n = (document.getElementById('gaveNavn').value || '').trim();
+      var svar = document.getElementById('gaveSvar');
+      if (!e || e.indexOf('@') < 1) {
+        svar.textContent = t('Skriv inn en e-postadresse.', 'Enter an email address.');
+        return;
+      }
+      knapp.disabled = true;
+      svar.textContent = t('Lager tilgangen …', 'Creating access …');
+      fetch('/api/strikk-gave', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: e, name: n, lang: en() ? 'en' : 'no', sendMail: document.getElementById('gaveMail').checked }),
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (!(d && d.ok)) { svar.textContent = t('Det gikk ikke. Er du logget inn?', 'That did not work. Are you logged in?'); return; }
+          svar.textContent = d.mailSendt
+            ? t('Ferdig. Hun har fått e-posten, og lenken står under her også.', 'Done. They have the email, and the link is below as well.')
+            : t('Ferdig. Send henne lenken under.', 'Done. Send them the link below.');
+          document.getElementById('gaveLenke').textContent = d.lenke;
+          document.getElementById('gaveLenkeboks').classList.add('on');
+          document.getElementById('gaveEpost').value = '';
+          document.getElementById('gaveNavn').value = '';
+          fetch('/api/strikk-gave', { credentials: 'same-origin' })
+            .then(function (r) { return r.json(); })
+            .then(function (x) { if (x && x.ok) tegnGaver(x.gaver); })
+            .catch(function () {});
+        })
+        .catch(function () { svar.textContent = t('Noe gikk galt. Prøv igjen om litt.', 'Something went wrong. Try again in a moment.'); })
+        .then(function () { knapp.disabled = false; });
+    });
+
+    document.getElementById('gaveKopier').addEventListener('click', function () {
+      var tekst = document.getElementById('gaveLenke').textContent;
+      var k = document.getElementById('gaveKopier');
+      try {
+        navigator.clipboard.writeText(tekst).then(function () {
+          k.textContent = t('Kopiert!', 'Copied!');
+          setTimeout(function () { k.textContent = t('Kopier lenken', 'Copy the link'); }, 2000);
+        });
+      } catch (e) {}
+    });
+  }
+
   fetch('/api/strikk-kjop', { credentials: 'same-origin' })
     .then(function (r) { return r.json(); })
-    .then(function (d) { data = d; tegnTilbud(); })
+    .then(function (d) { data = d; tegnTilbud(); if (d && d.eier) startGave(); })
     .catch(function () {
       document.getElementById('prislinje').textContent = t('Kunne ikke hente prisen', 'Could not load the price');
     });

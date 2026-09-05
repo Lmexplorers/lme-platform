@@ -105,6 +105,38 @@ export async function sendStrikkKjopMail(env, { to, name, lang, token, betaltMed
   return send(env, to, name, en ? "Your app is ready, here is the link" : "Appen din er klar, her er lenken", wrap(inner));
 }
 
+/**
+ * Gaven: Renate gir noen tilgang uten betaling.
+ *
+ * Brevet skal ikke ligne en kvittering. Mottakeren har ikke kjøpt noe, hun
+ * har fått noe, og da er det Renate som snakker, ikke butikken.
+ */
+export async function sendStrikkGaveMail(env, { to, name, lang, token, fra }) {
+  const en = lang === "en";
+  const fornavn = esc((name || "").split(" ")[0]);
+  const hei = fornavn ? (en ? "Hi " + fornavn + "," : "Hei " + fornavn + ",") : (en ? "Hi," : "Hei,");
+  const lenke = appLenke(token);
+  const avsender = esc(fra || "Renate");
+
+  const inner = en
+    ? '<h2 style="font-size:21px;margin:0 0 14px;">A little gift for you</h2>' +
+      "<p>" + hei + "</p>" +
+      "<p>" + avsender + " has given you <strong>LME Knit &amp; Crochet</strong>, the app that works out increases, decreases, stitches, rows and yarn amounts. It is yours, there is nothing to pay and nothing to sign up for.</p>" +
+      btn(lenke, "Open the app") +
+      "<p>The link is yours. Open it once on your phone and it is remembered there, so later you can just go to lmexplorers.com/strikk. Tap the share button and choose Add to home screen, and it sits there like any other app.</p>" +
+      "<p>One tip before you start: knit a swatch and enter your gauge at the top. Everything the app works out builds on those two numbers.</p>" +
+      "<p>Warm wishes,<br>Renate</p>"
+    : '<h2 style="font-size:21px;margin:0 0 14px;">En liten gave til deg</h2>' +
+      "<p>" + hei + "</p>" +
+      "<p>" + avsender + " har gitt deg <strong>LME Strikk &amp; Hekle</strong>, appen som regner ut økning, felling, masker, rader og garnmengde. Den er din, det er ingenting å betale og ingenting å melde seg på.</p>" +
+      btn(lenke, "Åpne appen") +
+      "<p>Lenken er din. Åpne den én gang på telefonen, så husker den seg selv der, og senere kan du bare gå til lmexplorers.com/strikk. Trykk på del-knappen og velg Legg til på Hjem-skjerm, så ligger den der som en hvilken som helst annen app.</p>" +
+      "<p>Ett tips før du starter: strikk en prøvelapp og legg inn strikkefastheten øverst. Alt appen regner ut bygger på de to tallene.</p>" +
+      "<p>Klem,<br>Renate</p>";
+
+  return send(env, to, name, en ? "A little gift: Knit & Crochet is yours" : "En liten gave: Strikk & Hekle er din", wrap(inner));
+}
+
 /** Sender lenken på nytt til en som har mistet e-posten. */
 export async function sendStrikkLenkePaaNytt(env, { to, name, lang, token }) {
   const en = lang === "en";
