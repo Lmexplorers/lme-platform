@@ -230,6 +230,32 @@ export async function onRequestPost(context) {
       const token = await grantCourseAccess(env, course.courseId, email, nm);
       const ctaLabel = info.cta ? (info.cta[course.lang] || info.cta.no) : "";
       try { await sendCourseDeliveryMail(env, email, nm, course.lang, courseName, info.url, token, true, ctaLabel); } catch (e1) {}
+
+      /* Byggeøkten 24. september: billetten gir også workshopen "Ansett dine
+         fem AI-assistenter", som forberedelse. Den har sin egen lås, så
+         kjøperen trenger sitt eget token til den, og en egen e-post med
+         lenken. Plassen telles her, ETTER at selve leveringen er sendt, så
+         en teller som svikter aldri stopper en billett. */
+      if (course.courseId === "byggeokt") {
+        try {
+          const bonus = COURSE_INFO["ai-assistent-workshop"];
+          const bonusToken = await grantCourseAccess(env, "ai-assistent-workshop", email, nm);
+          await sendCourseDeliveryMail(
+            env, email, nm, course.lang,
+            bonus.name[course.lang] || bonus.name.no,
+            bonus.url, bonusToken, true,
+            bonus.cta ? (bonus.cta[course.lang] || bonus.cta.no) : ""
+          );
+        } catch (e5) { /* billetten er levert, bonusen kan sendes på nytt */ }
+        try {
+          const { tellByggeoktSalg } = await import("./byggeokt-plasser.js");
+          await tellByggeoktSalg(env);
+        } catch (e6) { /* med vilje stille */ }
+        try {
+          const { leggTilDeltaker } = await import("../_lib/byggeokt-mail.js");
+          await leggTilDeltaker(env, email, nm, course.lang);
+        } catch (e7) { /* uten køen går påminnelsene glipp, ikke billetten */ }
+      }
       try {
         await sendOwnerSaleNotice(env, {
           pname: courseName + " (" + course.tier + ")", lang: course.lang, name: nm, email: email,

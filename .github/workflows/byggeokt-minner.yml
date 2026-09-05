@@ -1,0 +1,38 @@
+name: Byggeøkt påminnelser
+
+# Sender påminnelsene til byggeøkten 24. september til alle som har kjøpt
+# billett: uken før, dagen før, og en time før. Endepunktet bestemmer selv
+# hva som er forfalt, og sender aldri det samme to ganger, så det er trygt
+# at denne kjører oftere enn det er noe å sende.
+#
+# Kjører fire ganger i døgnet, så "en time før" treffer riktig vindu på
+# selve dagen (økten starter 18:00 UTC).
+
+on:
+  schedule:
+    - cron: "0 7 * * *"    # 09:00 norsk tid
+    - cron: "0 15 * * *"   # 17:00 norsk tid
+    - cron: "30 16 * * *"  # 18:30 norsk tid
+    - cron: "0 17 * * *"   # 19:00 norsk tid, altså en time før økten
+  workflow_dispatch:
+    inputs:
+      dryrun:
+        description: "Bare vis hva som ville blitt sendt, uten å sende"
+        required: true
+        default: "nei"
+        type: choice
+        options:
+          - nei
+          - ja
+
+jobs:
+  minne:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send det som er forfalt
+        run: |
+          sti="/api/cron/byggeokt-minner"
+          if [ "${{ inputs.dryrun }}" = "ja" ]; then sti="$sti?dryrun=1"; fi
+          curl -fsS "https://lmexplorers.com$sti" | tee svar.json
+          echo
+          grep -q '"ok": true' svar.json
