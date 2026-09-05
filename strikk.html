@@ -54,6 +54,30 @@
   .card .lead { color: var(--grey); font-size: 15.5px; margin-bottom: 20px; }
   .pill { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #C13D6A; background: #FCEFF2; border-radius: 999px; padding: 6px 15px; margin-bottom: 14px; }
 
+  /* Myke fargeflater bak innholdet, gir dybde uten aa ta oppmerksomhet */
+  body::before, body::after { content: ''; position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.55; pointer-events: none; z-index: 0; }
+  body::before { width: 460px; height: 460px; top: -160px; left: -140px; background: radial-gradient(circle, #FFD9E4 0%, rgba(255,217,228,0) 70%); }
+  body::after { width: 520px; height: 520px; top: 380px; right: -220px; background: radial-gradient(circle, #FFE9CF 0%, rgba(255,233,207,0) 70%); }
+  .bar, .wrap { position: relative; z-index: 1; }
+
+  .hero { display: grid; grid-template-columns: 1fr; gap: 26px; align-items: center; margin-bottom: 34px; }
+  .hero-art { position: relative; border-radius: 26px; overflow: hidden; box-shadow: 0 18px 46px rgba(233,30,137,0.13); background: #FFF6F2; aspect-ratio: 3 / 2; }
+  .hero-art .hero-svg { display: block; width: 100%; height: 100%; }
+  .hero-art .hero-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  @media (min-width: 860px) {
+    .hero { grid-template-columns: 1.05fr 0.95fr; gap: 40px; text-align: left; }
+    .hero .head { text-align: left; margin-bottom: 0; }
+    .hero .head h1 { margin-left: 0; margin-right: 0; max-width: none; }
+    .hero .head p { margin-left: 0; }
+    .hero .dots { justify-content: flex-start; }
+  }
+
+  .card-head { display: flex; align-items: flex-start; gap: 18px; }
+  .card-head .ct { flex: 1; min-width: 0; }
+  .card-art { flex: 0 0 auto; width: 92px; height: 92px; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 22px rgba(233,30,137,0.1); background: #FFF6F2; }
+  .card-art img, .card-art .ca { width: 100%; height: 100%; display: block; }
+  @media (max-width: 560px) { .card-art { width: 64px; height: 64px; border-radius: 16px; } }
+
   .segwrap { display: flex; justify-content: center; margin-bottom: 14px; }
   .segwrap .seg { box-shadow: 0 6px 20px rgba(233,30,137,0.06); }
   .gaugebar { background: #fff; border-radius: 20px; box-shadow: 0 8px 26px rgba(233,30,137,0.07); margin-bottom: 18px; overflow: hidden; }
@@ -151,11 +175,116 @@
   </div>
 
   <div class="wrap">
+    <div class="hero">
     <div class="head">
       <span class="kick" data-no="LME Strikk &amp; Hekle" data-en="LME Knit &amp; Crochet">LME Strikk &amp; Hekle</span>
       <h1><span data-no="Øk og fell masker" data-en="Increase and decrease stitches">Øk og fell masker</span> <em data-no="uten hoderegning" data-en="without doing the maths">uten hoderegning</em></h1>
       <p data-no="Skriv inn hva du har og hva du skal ha, så får du vite hvor ofte du skal øke eller felle, og på hvilke rader. Ermer, raglan, ermehull, hals og skuldre. Under ligger også masker og rader, garnmengde og hekling." data-en="Enter what you have and what you need, and you get how often to increase or decrease, and on which rows. Sleeves, raglan, armholes, necklines and shoulders. Below you also get stitches and rows, yarn amounts and crochet.">Skriv inn hva du har og hva du skal ha, så får du vite hvor ofte du skal øke eller felle, og på hvilke rader. Ermer, raglan, ermehull, hals og skuldre. Under ligger også masker og rader, garnmengde og hekling.</p>
       <div class="dots"><i></i><i></i><i></i><i></i></div>
+    </div>
+      <div class="hero-art">
+<svg class="hero-svg" viewBox="0 0 600 400" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="skBg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#FFF8F4"/><stop offset="55%" stop-color="#FDECEF"/><stop offset="100%" stop-color="#FADFE7"/>
+            </linearGradient>
+            <linearGradient id="skBall1" x1="0.15" y1="0.05" x2="0.9" y2="1">
+              <stop offset="0%" stop-color="#FF7FB4"/><stop offset="100%" stop-color="#D8137B"/>
+            </linearGradient>
+            <linearGradient id="skBall2" x1="0.15" y1="0.05" x2="0.9" y2="1">
+              <stop offset="0%" stop-color="#FBD3DE"/><stop offset="100%" stop-color="#F296AE"/>
+            </linearGradient>
+            <linearGradient id="skFab" x1="0" y1="0" x2="0.6" y2="1">
+              <stop offset="0%" stop-color="#FBC9D8"/><stop offset="100%" stop-color="#F3A0BC"/>
+            </linearGradient>
+            <linearGradient id="skWood" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#EFD6B8"/><stop offset="100%" stop-color="#C29B71"/>
+            </linearGradient>
+            <pattern id="skKnit" width="21" height="18" patternUnits="userSpaceOnUse">
+              <path d="M2.5 15.5 L10.5 4.5 L18.5 15.5" fill="none" stroke="#ffffff" stroke-opacity="0.82" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"/>
+            </pattern>
+            <clipPath id="skClipBall1"><circle cx="470" cy="132" r="76"/></clipPath>
+        <clipPath id="skClipBall2"><circle cx="416" cy="288" r="50"/></clipPath>
+        <clipPath id="skSwatchClip"><path d="M52 168 h250 a14 14 0 0 1 14 14 v150 a14 14 0 0 1 -14 14 h-250 a14 14 0 0 1 -14 -14 v-150 a14 14 0 0 1 14 -14 z"/></clipPath>
+          </defs>
+        
+          <rect width="600" height="400" fill="url(#skBg)"/>
+          <circle cx="472" cy="120" r="150" fill="#FFFFFF" opacity="0.45"/>
+          <circle cx="120" cy="352" r="110" fill="#FFFFFF" opacity="0.32"/>
+        
+          <!-- garntraaden fra noestet ned i arbeidet -->
+          <path d="M470 196 C 430 236, 372 214, 330 190 C 300 172, 276 166, 250 166" fill="none" stroke="#E91E89" stroke-width="4" stroke-linecap="round" opacity="0.85"/>
+        
+          <!-- strikketoeyet -->
+          <g>
+            <path d="M52 168 h250 a14 14 0 0 1 14 14 v150 a14 14 0 0 1 -14 14 h-250 a14 14 0 0 1 -14 -14 v-150 a14 14 0 0 1 14 -14 z" fill="url(#skFab)"/>
+            <g clip-path="url(#skSwatchClip)"><rect x="38" y="168" width="278" height="178" fill="url(#skKnit)"/></g>
+            <path d="M52 168 h250 a14 14 0 0 1 14 14 v150 a14 14 0 0 1 -14 14 h-250 a14 14 0 0 1 -14 -14 v-150 a14 14 0 0 1 14 -14 z" fill="none" stroke="#E8809F" stroke-width="2.5"/>
+          </g>
+        
+          <!-- masker paa pinnen, oeverste kant -->
+          <g fill="none" stroke="#FBE3EA" stroke-width="7" stroke-linecap="round">
+            <path d="M64 172 c 0 -14 18 -14 18 0"/><path d="M96 172 c 0 -14 18 -14 18 0"/>
+            <path d="M128 172 c 0 -14 18 -14 18 0"/><path d="M160 172 c 0 -14 18 -14 18 0"/>
+            <path d="M192 172 c 0 -14 18 -14 18 0"/><path d="M224 172 c 0 -14 18 -14 18 0"/>
+            <path d="M256 172 c 0 -14 18 -14 18 0"/>
+          </g>
+        
+          <!-- pinner som krysser over arbeidet -->
+          <g stroke-linecap="round">
+            <line x1="44" y1="186" x2="352" y2="62" stroke="url(#skWood)" stroke-width="11"/>
+            <circle cx="356" cy="60" r="11" fill="#C29B71"/>
+            <line x1="60" y1="66" x2="332" y2="196" stroke="url(#skWood)" stroke-width="11"/>
+            <circle cx="336" cy="198" r="11" fill="#C29B71"/>
+          </g>
+        
+          <!-- stort garnnoeste -->
+          <g>
+            <circle cx="470" cy="132" r="76" fill="url(#skBall1)"/>
+            <g clip-path="url(#skClipBall1)" fill="none" stroke="#FFFFFF" stroke-opacity="0.42" stroke-width="4">
+              <ellipse cx="470" cy="132" rx="76" ry="31" transform="rotate(-34 470 132)"/>
+              <ellipse cx="470" cy="132" rx="72" ry="15" transform="rotate(-34 470 132)"/>
+              <ellipse cx="470" cy="132" rx="76" ry="27" transform="rotate(40 470 132)"/>
+              <ellipse cx="470" cy="132" rx="70" ry="12" transform="rotate(40 470 132)"/>
+              <ellipse cx="470" cy="132" rx="74" ry="22" transform="rotate(86 470 132)"/>
+            </g>
+            <circle cx="470" cy="132" r="76" fill="none" stroke="#B90F67" stroke-opacity="0.25" stroke-width="2.5"/>
+          </g>
+        
+          <!-- mindre noeste -->
+          <g>
+            <circle cx="416" cy="288" r="50" fill="url(#skBall2)"/>
+            <g clip-path="url(#skClipBall2)" fill="none" stroke="#FFFFFF" stroke-opacity="0.7" stroke-width="3.2">
+              <ellipse cx="416" cy="288" rx="50" ry="20" transform="rotate(-30 416 288)"/>
+              <ellipse cx="416" cy="288" rx="47" ry="9" transform="rotate(-30 416 288)"/>
+              <ellipse cx="416" cy="288" rx="50" ry="17" transform="rotate(44 416 288)"/>
+              <ellipse cx="416" cy="288" rx="46" ry="7" transform="rotate(44 416 288)"/>
+            </g>
+          </g>
+        
+          <!-- heklenaal -->
+          <g stroke-linecap="round">
+            <line x1="466" y1="360" x2="566" y2="288" stroke="url(#skWood)" stroke-width="9"/>
+            <path d="M566 288 c 11 -8 21 -1 19 9 c -2 8 -12 11 -18 6" fill="none" stroke="#C29B71" stroke-width="8" stroke-linecap="round"/>
+          </g>
+        
+          <!-- maalebaand -->
+          <path d="M20 368 C 130 344, 236 396, 352 366 C 402 353, 430 356, 456 356" fill="none" stroke="#F7C72E" stroke-width="15" stroke-linecap="round" opacity="0.95"/>
+          <g stroke="#B98F0F" stroke-width="2.2" stroke-linecap="round" opacity="0.5">
+            <line x1="76" y1="352" x2="76" y2="362"/><line x1="120" y1="348" x2="120" y2="358"/>
+            <line x1="164" y1="352" x2="164" y2="362"/><line x1="208" y1="362" x2="208" y2="372"/>
+            <line x1="252" y1="372" x2="252" y2="382"/><line x1="296" y1="374" x2="296" y2="384"/>
+            <line x1="340" y1="366" x2="340" y2="376"/><line x1="384" y1="358" x2="384" y2="368"/>
+          </g>
+        
+          <!-- smaa prikker -->
+          <g fill="#F5A8B8" opacity="0.7">
+            <circle cx="380" cy="36" r="5"/><circle cx="566" cy="212" r="5"/><circle cx="576" cy="86" r="3.6"/>
+            <circle cx="352" cy="248" r="4"/><circle cx="30" cy="120" r="4.4"/><circle cx="96" cy="60" r="3.4"/>
+          </g>
+        </svg>
+        <img class="hero-photo" src="/images/strikk-hero.webp" alt="" loading="eager" onerror="this.remove()">
+      </div>
     </div>
 
     <div class="segwrap">
@@ -202,9 +331,30 @@
     <!-- TAB 2 -->
     <section class="panel on" id="t2">
       <div class="card">
-        <span class="pill" data-no="📐 Forming" data-en="📐 Shaping">📐 Forming</span>
-        <h2 data-no="Øk og fell jevnt over en lengde" data-en="Increase and decrease evenly over a length">Øk og fell jevnt over en lengde</h2>
-        <p class="lead" data-no="Til ermer, raglan, skrå sider og alt annet som skal smalne eller vide seg ut jevnt. Du får vite hvor ofte du skal øke eller felle, hvor mange ganger, og hvilke rader det skjer på." data-en="For sleeves, raglan yokes, sloped sides and anything else that should narrow or widen evenly. You get how often to increase or decrease, how many times, and which rows it happens on.">Til ermer, raglan, skrå sider og alt annet som skal smalne eller vide seg ut jevnt. Du får vite hvor ofte du skal øke eller felle, hvor mange ganger, og hvilke rader det skjer på.</p>
+        <div class="card-head">
+          <div class="ct">
+            <span class="pill" data-no="📐 Forming" data-en="📐 Shaping">📐 Forming</span>
+            <h2 data-no="Øk og fell jevnt over en lengde" data-en="Increase and decrease evenly over a length">Øk og fell jevnt over en lengde</h2>
+            <p class="lead" data-no="Til ermer, raglan, skrå sider og alt annet som skal smalne eller vide seg ut jevnt. Du får vite hvor ofte du skal øke eller felle, hvor mange ganger, og hvilke rader det skjer på." data-en="For sleeves, raglan yokes, sloped sides and anything else that should narrow or widen evenly. You get how often to increase or decrease, how many times, and which rows it happens on.">Til ermer, raglan, skrå sider og alt annet som skal smalne eller vide seg ut jevnt. Du får vite hvor ofte du skal øke eller felle, hvor mange ganger, og hvilke rader det skjer på.</p>
+          </div>
+          <div class="card-art">
+            <svg viewBox="0 0 96 96" class="ca" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="sp1g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F3A0BC"/><stop offset="100%" stop-color="#FBD3DE"/></linearGradient>
+                <pattern id="sp1k" width="12" height="11" patternUnits="userSpaceOnUse"><path d="M1.5 9 L6 2.5 L10.5 9" fill="none" stroke="#fff" stroke-opacity="0.8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></pattern>
+                <clipPath id="sp1c"><path d="M38 16 h20 l16 62 h-52 z"/></clipPath>
+              </defs>
+              <rect width="96" height="96" rx="20" fill="#FFF6F3"/>
+              <path d="M38 16 h20 l16 62 h-52 z" fill="url(#sp1g)"/>
+              <g clip-path="url(#sp1c)"><rect x="20" y="16" width="56" height="62" fill="url(#sp1k)"/></g>
+              <path d="M38 16 h20 l16 62 h-52 z" fill="none" stroke="#E8809F" stroke-width="2"/>
+              <g stroke="#E91E89" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                <path d="M28 74 L16 74"/><path d="M20 69 L15 74 L20 79"/>
+                <path d="M68 74 L80 74"/><path d="M76 69 L81 74 L76 79"/>
+              </g>
+            </svg>
+          </div>
+        </div>
         <div class="fields">
           <div class="field">
             <label for="s1from" data-no="Fra antall masker" data-en="From stitch count">Fra antall masker</label>
@@ -249,9 +399,30 @@
     <!-- TAB 9 -->
     <section class="panel" id="t9">
       <div class="card">
-        <span class="pill" data-no="🪡 Ermehull" data-en="🪡 Armhole">🪡 Ermehull</span>
-        <h2 data-no="Fell av i sidene, slik oppskriftene skriver det" data-en="Bind off at the sides, the way patterns write it">Fell av i sidene, slik oppskriftene skriver det</h2>
-        <p class="lead" data-no="Til ermehull og andre steder der maskene skal bort raskt, ikke jevnt. Du får rekken oppskriftene bruker, for eksempel fell 4-3-2-1-1-1 masker, der hvert tall felles i begynnelsen av en rad." data-en="For armholes and other places where the stitches come off quickly, not evenly. You get the sequence patterns use, for example bind off 4-3-2-1-1-1 stitches, where each number is bound off at the beginning of a row.">Til ermehull og andre steder der maskene skal bort raskt, ikke jevnt. Du får rekken oppskriftene bruker, for eksempel fell 4-3-2-1-1-1 masker, der hvert tall felles i begynnelsen av en rad.</p>
+        <div class="card-head">
+          <div class="ct">
+            <span class="pill" data-no="🪡 Ermehull" data-en="🪡 Armhole">🪡 Ermehull</span>
+            <h2 data-no="Fell av i sidene, slik oppskriftene skriver det" data-en="Bind off at the sides, the way patterns write it">Fell av i sidene, slik oppskriftene skriver det</h2>
+            <p class="lead" data-no="Til ermehull og andre steder der maskene skal bort raskt, ikke jevnt. Du får rekken oppskriftene bruker, for eksempel fell 4-3-2-1-1-1 masker, der hvert tall felles i begynnelsen av en rad." data-en="For armholes and other places where the stitches come off quickly, not evenly. You get the sequence patterns use, for example bind off 4-3-2-1-1-1 stitches, where each number is bound off at the beginning of a row.">Til ermehull og andre steder der maskene skal bort raskt, ikke jevnt. Du får rekken oppskriftene bruker, for eksempel fell 4-3-2-1-1-1 masker, der hvert tall felles i begynnelsen av en rad.</p>
+          </div>
+          <div class="card-art">
+            <svg viewBox="0 0 96 96" class="ca" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="sp2g" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0%" stop-color="#FBD3DE"/><stop offset="100%" stop-color="#F3A0BC"/></linearGradient>
+                <pattern id="sp2k" width="12" height="11" patternUnits="userSpaceOnUse"><path d="M1.5 9 L6 2.5 L10.5 9" fill="none" stroke="#fff" stroke-opacity="0.75" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></pattern>
+                <clipPath id="sp2c"><path d="M22 22 h14 a12 12 0 0 0 24 0 h14 v10 a12 12 0 0 1 -8 11 v33 h-36 v-33 a12 12 0 0 1 -8 -11 z"/></clipPath>
+              </defs>
+              <rect width="96" height="96" rx="20" fill="#FFF6F3"/>
+              <path d="M22 22 h14 a12 12 0 0 0 24 0 h14 v10 a12 12 0 0 1 -8 11 v33 h-36 v-33 a12 12 0 0 1 -8 -11 z" fill="url(#sp2g)"/>
+              <g clip-path="url(#sp2c)"><rect x="22" y="22" width="52" height="54" fill="url(#sp2k)"/></g>
+              <path d="M22 22 h14 a12 12 0 0 0 24 0 h14 v10 a12 12 0 0 1 -8 11 v33 h-36 v-33 a12 12 0 0 1 -8 -11 z" fill="none" stroke="#E8809F" stroke-width="2"/>
+              <g stroke="#E91E89" stroke-width="2.4" stroke-linecap="round" fill="none" opacity="0.9">
+                <path d="M30 34 h6"/><path d="M32 40 h5"/><path d="M34 46 h4"/>
+                <path d="M66 34 h-6"/><path d="M64 40 h-5"/><path d="M62 46 h-4"/>
+              </g>
+            </svg>
+          </div>
+        </div>
         <div class="fields">
           <div class="field">
             <label for="f1side" data-no="Masker som skal bort i hver side" data-en="Stitches to remove at each side">Masker som skal bort i hver side</label>
@@ -402,9 +573,38 @@
     <!-- TAB 4 -->
     <section class="panel" id="t4">
       <div class="card">
-        <span class="pill" data-no="⚖️ Nøyaktig garnmengde" data-en="⚖️ Accurate yarn amount">⚖️ Nøyaktig garnmengde</span>
-        <h2 data-no="Garnmengde ut fra prøvelappen" data-en="Yarn amount from your swatch">Garnmengde ut fra prøvelappen</h2>
-        <p class="lead" data-no="Dette er den nøyaktige måten. Vei prøvelappen din på en kjøkkenvekt, legg inn delene plagget består av, så regner appen ut hvor mye garn hele plagget trenger." data-en="This is the accurate way. Weigh your swatch on a kitchen scale, enter the pieces the garment is made of, and the app works out how much yarn the whole thing needs.">Dette er den nøyaktige måten. Vei prøvelappen din på en kjøkkenvekt, legg inn delene plagget består av, så regner appen ut hvor mye garn hele plagget trenger.</p>
+        <div class="card-head">
+          <div class="ct">
+            <span class="pill" data-no="⚖️ Nøyaktig garnmengde" data-en="⚖️ Accurate yarn amount">⚖️ Nøyaktig garnmengde</span>
+            <h2 data-no="Garnmengde ut fra prøvelappen" data-en="Yarn amount from your swatch">Garnmengde ut fra prøvelappen</h2>
+            <p class="lead" data-no="Dette er den nøyaktige måten. Vei prøvelappen din på en kjøkkenvekt, legg inn delene plagget består av, så regner appen ut hvor mye garn hele plagget trenger." data-en="This is the accurate way. Weigh your swatch on a kitchen scale, enter the pieces the garment is made of, and the app works out how much yarn the whole thing needs.">Dette er den nøyaktige måten. Vei prøvelappen din på en kjøkkenvekt, legg inn delene plagget består av, så regner appen ut hvor mye garn hele plagget trenger.</p>
+          </div>
+          <div class="card-art">
+            <svg viewBox="0 0 96 96" class="ca" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="sp3g" x1="0.1" y1="0" x2="0.9" y2="1"><stop offset="0%" stop-color="#FF7FB4"/><stop offset="100%" stop-color="#D8137B"/></linearGradient>
+                <linearGradient id="sp3h" x1="0.1" y1="0" x2="0.9" y2="1"><stop offset="0%" stop-color="#FBD3DE"/><stop offset="100%" stop-color="#F296AE"/></linearGradient>
+                <clipPath id="sp3c"><circle cx="36" cy="40" r="22"/></clipPath>
+                <clipPath id="sp3d"><circle cx="68" cy="56" r="14"/></clipPath>
+              </defs>
+              <rect width="96" height="96" rx="20" fill="#FFF6F3"/>
+              <rect x="14" y="72" width="68" height="10" rx="5" fill="#F7C72E"/>
+              <rect x="26" y="66" width="44" height="8" rx="4" fill="#EFB61C"/>
+              <circle cx="36" cy="40" r="22" fill="url(#sp3g)"/>
+              <g clip-path="url(#sp3c)" fill="none" stroke="#fff" stroke-opacity="0.45" stroke-width="2.4">
+                <ellipse cx="36" cy="40" rx="22" ry="9" transform="rotate(-32 36 40)"/>
+                <ellipse cx="36" cy="40" rx="21" ry="4" transform="rotate(-32 36 40)"/>
+                <ellipse cx="36" cy="40" rx="22" ry="8" transform="rotate(42 36 40)"/>
+              </g>
+              <circle cx="68" cy="56" r="14" fill="url(#sp3h)"/>
+              <g clip-path="url(#sp3d)" fill="none" stroke="#fff" stroke-opacity="0.7" stroke-width="2">
+                <ellipse cx="68" cy="56" rx="14" ry="6" transform="rotate(-28 68 56)"/>
+                <ellipse cx="68" cy="56" rx="14" ry="5" transform="rotate(46 68 56)"/>
+              </g>
+              <path d="M58 44 C 66 34, 74 26, 82 22" fill="none" stroke="#E91E89" stroke-width="2.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
         <div class="fields">
           <div class="field">
             <label for="y1sw" data-no="Prøvelappens bredde (cm)" data-en="Swatch width (cm)">Prøvelappens bredde (cm)</label>
