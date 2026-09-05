@@ -47,6 +47,10 @@
 /vault-takk  /funnel/vault/takk.html  200
 /workshop  /funnel/ai-assistent-workshop/salg.html  200
 /workshop-takk  /funnel/ai-assistent-workshop/takk.html  200
+# Byggeøkten 24. september. Deltakersiden er en fil i roten
+# (byggeokt-deltaker.html) og trenger ingen regel.
+/byggeokt  /funnel/byggeokt/salg.html  200
+/byggeokt-takk  /funnel/byggeokt/takk.html  200
 /ai-assistent-workshop  /funnel/ai-assistent-workshop/salg.html  200
 # Takkeside for kjøp av medlemmenes egne kurs, se functions/_lib/kurs-kvittering.js
 /kjopt/*  /kjopt.html  200

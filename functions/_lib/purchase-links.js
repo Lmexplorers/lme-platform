@@ -313,6 +313,16 @@ export const COURSE_PAYMENT_LINKS = {
   "plink_1UAOexLax7B8uQzqeiguUsj5": { courseId: "ai-assistent-workshop", tier: "launch", lang: "en" },
   "plink_1UAOezLax7B8uQzqD3KambG9": { courseId: "ai-assistent-workshop", tier: "full",   lang: "no" },
   "plink_1UAOf1Lax7B8uQzqPEHcuJ6Q": { courseId: "ai-assistent-workshop", tier: "full",   lang: "en" },
+  // Byggeøkten "Bygg din egen app med AI, live", torsdag 24. september 2026
+  // kl. 20.00, 20 plasser. Billetten gir deltakersiden OG workshopen over,
+  // se særtilfellet for courseId "byggeokt" i oppskrift-webhook.js, som også
+  // teller plassen. Opprettet i live-modus 31. august 2026: tidligpris
+  // 990 kr og $99 til og med 14. september, deretter full pris 1990 kr og
+  // $199. Salgssiden bruker tidligprislenkene og bytter selv etter fristen.
+  "plink_1UCDZRLax7B8uQzqicjsRgJh": { courseId: "byggeokt", tier: "launch", lang: "no" },
+  "plink_1UCDZWLax7B8uQzq2h7pIu7R": { courseId: "byggeokt", tier: "launch", lang: "en" },
+  "plink_1UCDZTLax7B8uQzqnWXPgOQJ": { courseId: "byggeokt", tier: "full",   lang: "no" },
+  "plink_1UCDZXLax7B8uQzqQ3dzWsOe": { courseId: "byggeokt", tier: "full",   lang: "en" },
   /* ---- Kampanjelenker (ekte rabatt) --------------------------------
      Opprettet 31. august 2026. Black Friday-uken (23.-30. november) og
      julen (desember) har egne priser og derfor egne betalingslenker.
@@ -372,6 +382,14 @@ export const COURSE_INFO = {
   "montessori-masterclass": {
     name: { no: "Montessori mesterklasse", en: "Montessori Masterclass" },
     url: "https://lmexplorers.com/academy/kurs?k=montessori-masterclass",
+  },
+  "byggeokt": {
+    name: {
+      no: "Byggeøkt: Bygg din egen app med AI, live",
+      en: "Build session: Build your own app with AI, live",
+    },
+    url: "https://lmexplorers.com/byggeokt-deltaker",
+    cta: { no: "Åpne deltakersiden", en: "Open the participant page" },
   },
   "ai-assistent-workshop": {
     name: {

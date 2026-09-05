@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FBF7F0">
+<title>Byggeøkt 24. september · deltakerside · LME</title>
+<link rel="icon" href="/images/lme-logo.png">
+<meta name="robots" content="noindex">
+
+<!-- Låst side: bare de som har kjøpt billett kommer inn. Kjøperen får en
+     personlig lenke på e-post, og eieren slipper alltid inn. -->
+<script>window.LME_COURSE_ID = "byggeokt"; window.LME_COURSE_SALES_URL = "/byggeokt";</script>
+<script src="/js/course-gate.js?v=1"></script>
+
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-800.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: swap; }
+
+  :root {
+    --lime:#A4D233; --lime-soft:#E8F5D1; --cerise:#E91E89; --cerise-soft:#FCE3F1;
+    --sun:#F7C72E; --sun-soft:#FFF4D6; --bg:#FBF7F0; --bg-2:#FFFFFF;
+    --ink:#1F1B24; --ink-soft:#5A5560; --ink-muted:#938E99;
+    --line:rgba(31,27,36,.08); --r-lg:26px; --r-xl:36px; --r-pill:999px;
+    --font-body:'Sasson Montessori','Playpen Sans',system-ui,sans-serif;
+    --font-head:'Playpen Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:var(--font-body); color:var(--ink); line-height:1.65; min-height:100vh;
+    background:
+      radial-gradient(900px 520px at 50% -10%, var(--cerise-soft) 0%, transparent 55%),
+      radial-gradient(700px 460px at 100% 100%, var(--lime-soft) 0%, transparent 55%),
+      var(--bg);
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit}
+  img{max-width:100%;display:block}
+  h1,h2,h3,h4{font-family:var(--font-head)}
+  button,input,select,textarea{font-family:var(--font-body)}
+
+  .wrap{max-width:760px;margin:0 auto;padding:28px 22px 70px}
+  .brandbar{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:24px}
+  .brandbar img{height:34px;width:auto}
+  .brandbar span{font-weight:700;font-size:15px}
+
+  .chip{
+    display:block;width:fit-content;margin:0 auto 16px;background:var(--cerise);color:#fff;
+    font-size:12.5px;font-weight:700;padding:8px 18px;border-radius:var(--r-pill);
+    box-shadow:0 8px 20px rgba(233,30,137,.28);
+  }
+  h1{font-size:clamp(26px,4.4vw,38px);font-weight:800;letter-spacing:-.02em;text-align:center;margin-bottom:12px}
+  .lede{text-align:center;color:var(--ink-soft);font-size:16.5px;max-width:560px;margin:0 auto 26px}
+
+  .card{
+    background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-xl);
+    box-shadow:0 10px 34px rgba(31,27,36,.06);padding:26px 28px;margin-bottom:18px;
+  }
+  .card h2{font-size:20px;margin-bottom:12px}
+  .card p{color:var(--ink-soft);margin-bottom:10px}
+  .card p:last-child{margin-bottom:0}
+
+  .naar{
+    background:linear-gradient(150deg,#FFE9F4 0%,#FBC0DC 55%,#F5A8C8 100%);
+    border-radius:var(--r-xl);padding:26px 28px;text-align:center;margin-bottom:18px;
+    border:1px solid rgba(31,27,36,.06);box-shadow:0 12px 34px rgba(31,27,36,.08);
+  }
+  .naar .dato{font-family:var(--font-head);font-size:26px;font-weight:800;line-height:1.2}
+  .naar .kl{font-size:16px;color:#7a2b55;margin-top:4px}
+  .naar .nedtelling{font-size:14.5px;color:#7a2b55;margin-top:10px;font-weight:700}
+
+  .btn{
+    display:inline-block;font-size:16px;font-weight:800;padding:15px 26px;border:none;
+    border-radius:var(--r-pill);color:#fff;background:linear-gradient(120deg,var(--cerise),#ff5fb0);
+    box-shadow:0 12px 26px rgba(233,30,137,.3);text-decoration:none;cursor:pointer;
+  }
+  .btn-2{
+    display:inline-block;font-size:15px;font-weight:700;padding:13px 22px;border-radius:var(--r-pill);
+    background:#fff;border:1px solid var(--line);color:var(--ink);text-decoration:none;
+  }
+  .knapperad{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+
+  ul{list-style:none;display:grid;gap:11px;margin-top:6px}
+  li{display:flex;gap:11px;align-items:flex-start;color:var(--ink-soft)}
+  li .m{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--lime-soft);color:#5b7d12;
+    display:inline-flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800;margin-top:2px}
+
+  .lenkeboks{background:var(--sun-soft);border-radius:var(--r-lg);padding:18px 20px;margin-top:14px}
+  .lenkeboks p{color:#7a5e00;font-size:14.5px}
+
+  .foot{text-align:center;color:var(--ink-muted);font-size:13px;margin-top:34px}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="brandbar" href="/academy" style="text-decoration:none;color:inherit">
+      <img src="/images/lme-logo.png" alt="LME" onerror="this.style.display='none'">
+      <span>LME</span>
+    </a>
+
+    <span class="chip" data-no="DIN PLASS ER KLAR" data-en="YOUR SEAT IS READY">DIN PLASS ER KLAR</span>
+    <h1 data-no="Bygg din egen app med AI, live" data-en="Build your own app with AI, live">Bygg din egen app med AI, live</h1>
+    <p class="lede" data-no="Alt du trenger til kvelden ligger her. Denne siden er din, og oppdateres fram mot økten." data-en="Everything you need for the evening is here. This page is yours, and gets updated as the session approaches.">Alt du trenger til kvelden ligger her. Denne siden er din, og oppdateres fram mot økten.</p>
+
+    <div class="naar">
+      <div class="dato" data-no="Torsdag 24. september" data-en="Thursday 24 September">Torsdag 24. september</div>
+      <div class="kl" data-no="Kl. 20.00 til 23.00, norsk tid" data-en="20:00 to 23:00, Norwegian time">Kl. 20.00 til 23.00, norsk tid</div>
+      <div class="nedtelling" id="nedtelling"></div>
+      <div class="knapperad">
+        <a class="btn" id="rom" href="#" data-no="Gå til rommet" data-en="Go to the room">Gå til rommet</a>
+        <a class="btn-2" id="kalender" href="#" download="byggeokt-24-september.ics" data-no="Legg i kalender" data-en="Add to calendar">Legg i kalender</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 data-no="Lenken til rommet" data-en="The link to the room">Lenken til rommet</h2>
+      <p data-edit="okt-rom" data-no="Lenken legges ut her senest dagen før, og du får den også på e-post. Trykker du på knappen over før den tid, kommer du tilbake hit." data-en="The link goes up here at the latest the day before, and you get it by email too. If you tap the button above before then, you come back here.">Lenken legges ut her senest dagen før, og du får den også på e-post. Trykker du på knappen over før den tid, kommer du tilbake hit.</p>
+    </div>
+
+    <div class="card">
+      <h2 data-no="Slik forbereder du deg" data-en="How to prepare">Slik forbereder du deg</h2>
+      <ul>
+        <li><span class="m">1</span><span data-no="Ta workshopen som fulgte med billetten. Den lærer deg å beskrive en jobb tydelig, som er hele ferdigheten vi bygger på." data-en="Take the workshop that came with your ticket. It teaches you to describe a job clearly, which is the whole skill we build on.">Ta workshopen som fulgte med billetten. Den lærer deg å beskrive en jobb tydelig, som er hele ferdigheten vi bygger på.</span></li>
+        <li><span class="m">2</span><span data-no="Lag deg en konto hos Claude, hvis du ikke har en. Du trenger ikke installere noe." data-en="Create a Claude account if you do not have one. You do not need to install anything.">Lag deg en konto hos Claude, hvis du ikke har en. Du trenger ikke installere noe.</span></li>
+        <li><span class="m">3</span><span data-no="Ha en idé i hodet. Er du usikker, velger du en av de tre under, det er helt greit." data-en="Have an idea in mind. If you are unsure, pick one of the three below, that is perfectly fine.">Ha en idé i hodet. Er du usikker, velger du en av de tre under, det er helt greit.</span></li>
+        <li><span class="m">4</span><span data-no="Sett av kvelden, og sitt ved en PC eller Mac. Det går an på nettbrett, men det blir tyngre." data-en="Set the evening aside, and sit at a PC or Mac. A tablet works, but it is heavier going.">Sett av kvelden, og sitt ved en PC eller Mac. Det går an på nettbrett, men det blir tyngre.</span></li>
+      </ul>
+      <div class="lenkeboks">
+        <p data-no="Workshopen åpner du med lenken du fikk på e-post. Har du åpnet den én gang, husker nettleseren din den." data-en="Open the workshop with the link you got by email. Once you have opened it, your browser remembers it.">Workshopen åpner du med lenken du fikk på e-post. Har du åpnet den én gang, husker nettleseren din den.</p>
+        <div class="knapperad" style="justify-content:flex-start;margin-top:10px">
+          <a class="btn-2" href="/academy/kurs?k=ai-assistent-workshop" data-no="Åpne workshopen" data-en="Open the workshop">Åpne workshopen</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 data-no="Tre idéer, hvis du ikke har en selv" data-en="Three ideas, if you do not have one yourself">Tre idéer, hvis du ikke har en selv</h2>
+      <ul>
+        <li><span class="m">🧠</span><span data-no="En quiz som gir et svar folk vil ha, og samler e-postadressen på veien." data-en="A quiz that gives an answer people want, and collects the email address along the way.">En quiz som gir et svar folk vil ha, og samler e-postadressen på veien.</span></li>
+        <li><span class="m">🎲</span><span data-no="En generator: aktiviteter, ukeplaner, middagsforslag, det du selv blir spurt om hele tiden." data-en="A generator: activities, weekly plans, dinner ideas, whatever people keep asking you for.">En generator: aktiviteter, ukeplaner, middagsforslag, det du selv blir spurt om hele tiden.</span></li>
+        <li><span class="m">📋</span><span data-no="En planlegger eller sjekkliste kundene dine kan bruke, og komme tilbake til." data-en="A planner or checklist your customers can use, and come back to.">En planlegger eller sjekkliste kundene dine kan bruke, og komme tilbake til.</span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2 data-no="Etter økten" data-en="After the session">Etter økten</h2>
+      <p data-no="Opptaket legges her og på Opptak-siden i dagene etter, så du kan bygge videre i eget tempo. Appen du lager er din, og ligger der du publiserte den." data-en="The recording goes up here and on the Replays page in the days after, so you can keep building at your own pace. The app you make is yours, and lives where you published it.">Opptaket legges her og på Opptak-siden i dagene etter, så du kan bygge videre i eget tempo. Appen du lager er din, og ligger der du publiserte den.</p>
+      <p data-no="Står du fast etterpå, svar på e-posten du fikk. Da ser jeg på det." data-en="If you get stuck afterwards, reply to the email you received. Then I will look at it.">Står du fast etterpå, svar på e-posten du fikk. Da ser jeg på det.</p>
+    </div>
+
+    <div class="foot">© <span id="yr"></span> Little Montessori Explorers</div>
+  </div>
+
+  <script>
+    var START = "2026-09-24T20:00:00+02:00";
+    var SLUTT = "2026-09-24T23:00:00+02:00";
+
+    var LANG = (function () {
+      var q = new URLSearchParams(location.search).get('lang');
+      var l = (q || localStorage.getItem('lme_lang') || 'no').toLowerCase();
+      if (l !== 'en' && l !== 'no') l = 'no';
+      try { localStorage.setItem('lme_lang', l); } catch (e) {}
+      return l;
+    })();
+
+    function switchLanguage(lang) {
+      LANG = lang;
+      document.documentElement.lang = lang;
+      try { localStorage.setItem('lme_lang', lang); } catch (e) {}
+      document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+        el.textContent = lang === 'en' ? el.dataset.en : el.dataset.no;
+      });
+      var b = document.getElementById('langBtn');
+      if (b) b.textContent = lang === 'en' ? '🇳🇴 Norsk' : '🇬🇧 English';
+      nedtelling();
+    }
+
+    (function () {
+      var b = document.createElement('button');
+      b.id = 'langBtn';
+      b.setAttribute('aria-label', 'Bytt språk / Switch language');
+      b.style.cssText = 'position:fixed;top:16px;right:16px;z-index:300;border:1px solid rgba(31,27,36,.12);background:#fff;color:#1F1B24;font-weight:700;font-size:13px;line-height:1;padding:10px 15px;border-radius:999px;box-shadow:0 6px 20px rgba(31,27,36,.12);cursor:pointer;';
+      b.addEventListener('click', function () { switchLanguage(LANG === 'en' ? 'no' : 'en'); });
+      document.body.appendChild(b);
+    })();
+
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    /* Nedtelling. Er økten i gang, sier den det, og etterpå står det at den
+       er ferdig, i stedet for et negativt tall. */
+    function nedtelling() {
+      var el = document.getElementById('nedtelling');
+      var start = Date.parse(START), slutt = Date.parse(SLUTT), naa = Date.now();
+      if (naa >= slutt) {
+        el.textContent = LANG === 'en' ? 'The session is done. The recording comes here.' : 'Økten er ferdig. Opptaket kommer her.';
+        return;
+      }
+      if (naa >= start) {
+        el.textContent = LANG === 'en' ? 'We are live right now' : 'Vi er i gang nå';
+        return;
+      }
+      var min = Math.floor((start - naa) / 60000);
+      var d = Math.floor(min / 1440), t = Math.floor((min % 1440) / 60), m = min % 60;
+      el.textContent = LANG === 'en'
+        ? d + ' days, ' + t + ' hours and ' + m + ' minutes to go'
+        : d + ' dager, ' + t + ' timer og ' + m + ' minutter igjen';
+    }
+    nedtelling();
+    setInterval(nedtelling, 30000);
+
+    /* Kalenderfil, laget i nettleseren, så det ikke trengs noe på serveren. */
+    (function () {
+      function stempel(iso) { return new Date(iso).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''); }
+      var ics = [
+        'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//LME//Byggeokt//NO',
+        'BEGIN:VEVENT',
+        'UID:byggeokt-2026-09-24@lmexplorers.com',
+        'DTSTAMP:' + stempel(new Date().toISOString()),
+        'DTSTART:' + stempel(START),
+        'DTEND:' + stempel(SLUTT),
+        'SUMMARY:Bygg din egen app med AI, live (LME)',
+        'DESCRIPTION:Deltakerside: https://lmexplorers.com/byggeokt-deltaker',
+        'URL:https://lmexplorers.com/byggeokt-deltaker',
+        'END:VEVENT', 'END:VCALENDAR'
+      ].join('\r\n');
+      document.getElementById('kalender').href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
+    })();
+
+    /* Knappen til rommet peker hit selv, helt til Renate limer inn den ekte
+       lenken i avsnittet under (rediger siden med #rediger i adressen). Da
+       plukker knappen den opp av seg selv. */
+    (function () {
+      var boks = document.querySelector('[data-edit="okt-rom"]');
+      var knapp = document.getElementById('rom');
+      function finnLenke() {
+        var t = (boks && boks.textContent) || '';
+        var m = t.match(/https?:\/\/[^\s)]+/);
+        if (m) { knapp.href = m[0]; knapp.target = '_blank'; knapp.rel = 'noopener'; }
+        else { knapp.href = '#rom'; }
+      }
+      finnLenke();
+      setTimeout(finnLenke, 1500);
+    })();
+
+    switchLanguage(LANG);
+  </script>
+  <script src="/js/page-editor.js?v=1" defer></script>
+  <script src="/js/lme-account.js?v=11" defer></script>
+</body>
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FBF7F0">
+<title>Bygg din egen app med AI, live · 24. september · LME</title>
+<link rel="icon" href="/images/lme-logo.png">
+<meta name="description" content="Live byggeøkt torsdag 24. september kl. 20.00. Du bygger din egen app underveis og publiserer den samme kveld. 20 plasser.">
+<meta property="og:title" content="Bygg din egen app med AI, live">
+<meta property="og:description" content="Torsdag 24. september kl. 20.00. Tre timer, 20 plasser, og en app som er publisert før du logger av.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lmexplorers.com/byggeokt">
+<meta property="og:image" content="https://lmexplorers.com/images/lme-logo.png">
+
+<style>
+  /* Playpen Sans lastes lokalt, samme filer som resten av plattformen, så
+     overskriftene aldri faller tilbake på systemfont om Google Fonts er nede. */
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Playpen Sans'; src: url('/fonts/PlaypenSans-800.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: swap; }
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+
+  :root {
+    --lime: #A4D233;
+    --lime-soft: #E8F5D1;
+    --cerise: #E91E89;
+    --cerise-soft: #FCE3F1;
+    --sun: #F7C72E;
+    --sun-soft: #FFF4D6;
+    --bg: #FBF7F0;
+    --bg-2: #FFFFFF;
+    --ink: #1F1B24;
+    --ink-soft: #5A5560;
+    --ink-muted: #938E99;
+    --line: rgba(31, 27, 36, 0.08);
+    --r-md: 18px;
+    --r-lg: 26px;
+    --r-xl: 36px;
+    --r-pill: 999px;
+    --shadow-lg: 0 22px 60px rgba(31, 27, 36, 0.10);
+    --font: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font);
+    color: var(--ink);
+    background:
+      radial-gradient(1000px 560px at 100% -6%, var(--sun-soft) 0%, transparent 52%),
+      radial-gradient(900px 520px at -5% 4%, var(--cerise-soft) 0%, transparent 50%),
+      radial-gradient(800px 520px at 50% 112%, var(--lime-soft) 0%, transparent 55%),
+      var(--bg);
+    min-height: 100vh; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+  .wrap { max-width: 900px; margin: 0 auto; padding: 28px 24px 64px; }
+
+  .brandbar { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 26px; }
+  .brandbar img { height: 34px; width: auto; }
+  .brandbar .brandname { font-weight: 700; font-size: 15px; }
+
+  .topchip {
+    display: block; width: fit-content; margin: 0 auto 18px;
+    background: var(--cerise); color: #fff;
+    font-size: 12.5px; font-weight: 700; letter-spacing: 0.03em;
+    padding: 8px 18px; border-radius: var(--r-pill);
+    box-shadow: 0 8px 20px rgba(233, 30, 137, 0.28);
+  }
+
+  .head { text-align: center; margin-bottom: 30px; }
+  h1 {
+    font-size: clamp(28px, 4.6vw, 44px);
+    font-weight: 800; line-height: 1.14; letter-spacing: -0.02em;
+    max-width: 720px; margin: 0 auto 16px;
+  }
+  h1 .hl { background: linear-gradient(120deg, var(--cerise), var(--sun)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .head p { font-size: 17px; color: var(--ink-soft); max-width: 640px; margin: 0 auto; }
+
+  /* Faktaboks øverst: laget i ren CSS, ingen bildefil å vedlikeholde */
+  .factbox {
+    margin: 28px auto 0; max-width: 520px;
+    background: linear-gradient(150deg, #FFE9F4 0%, #FBC0DC 55%, #F5A8C8 100%);
+    border-radius: var(--r-xl); box-shadow: var(--shadow-lg);
+    padding: 30px 26px; text-align: center; border: 1px solid rgba(31,27,36,.06);
+  }
+  .factbox .ic { font-size: 46px; line-height: 1; }
+  .factbox .fname { font-weight: 800; font-size: 24px; margin-top: 10px; }
+  .factbox .fmeta { font-size: 14.5px; color: #7a2b55; margin-top: 4px; }
+
+  .card {
+    background: var(--bg-2); border: 1px solid var(--line);
+    border-radius: var(--r-xl); box-shadow: 0 10px 34px rgba(31,27,36,0.06);
+    padding: 32px 34px; margin: 22px 0;
+  }
+  .card h2 { font-size: clamp(21px, 3vw, 27px); font-weight: 800; margin-bottom: 18px; letter-spacing: -0.01em; }
+
+  /* Bolkene i økten */
+  .parts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .part-item {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: var(--bg); border-radius: var(--r-lg); padding: 16px 18px;
+    border: 1px solid var(--line);
+  }
+  .part-item .ic { font-size: 22px; line-height: 1.2; flex-shrink: 0; }
+  .part-item h3 { font-size: 15.5px; font-weight: 800; margin-bottom: 3px; }
+  .part-item p { font-size: 13.5px; color: var(--ink-soft); }
+
+  .bullets { list-style: none; display: grid; gap: 13px; }
+  .bullets li { display: flex; align-items: flex-start; gap: 12px; font-size: 15.5px; color: var(--ink-soft); }
+  .bullets .tick {
+    flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%;
+    background: var(--lime-soft); color: #5b7d12;
+    display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; margin-top: 1px;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .col-for, .col-not { border-radius: var(--r-lg); padding: 24px 26px; border: 1px solid var(--line); }
+  .col-for { background: var(--lime-soft); }
+  .col-not { background: #fff; }
+  .col-for h3, .col-not h3 { font-size: 17px; font-weight: 800; margin-bottom: 14px; }
+  .mini { list-style: none; display: grid; gap: 10px; }
+  .mini li { display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; color: var(--ink-soft); }
+  .mini .mk { flex-shrink: 0; font-weight: 800; margin-top: 1px; }
+  .col-for .mk { color: #5b7d12; }
+  .col-not .mk { color: var(--ink-muted); }
+
+  .buybox { text-align: center; }
+  .price-row { display: flex; align-items: baseline; justify-content: center; gap: 12px; margin-bottom: 6px; }
+  .price-now { font-size: 52px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+  .price-cur { font-size: 22px; font-weight: 700; color: var(--ink-soft); }
+  .price-before { font-size: 18px; color: var(--ink-muted); text-decoration: line-through; }
+  .price-note { font-size: 13.5px; color: var(--ink-muted); margin-bottom: 20px; }
+  .seats {
+    display: inline-block; margin-bottom: 12px; font-size: 13.5px; font-weight: 700;
+    color: #5b7d12; background: var(--lime-soft); border-radius: var(--r-pill); padding: 7px 16px;
+  }
+  .seats:empty { display: none; }
+  .seats-few { color: #a11360; background: var(--cerise-soft); }
+  .seats-full { color: #7a5e00; background: var(--sun-soft); }
+
+  .guarantee {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--sun-soft); border-radius: var(--r-md);
+    padding: 12px 18px; font-size: 13.5px; color: #7a5e00; margin-bottom: 20px;
+  }
+  .guarantee svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--sun); }
+
+  .btn-buy {
+    width: 100%; max-width: 460px; font-size: 17px; font-weight: 800;
+    padding: 18px 22px; border-radius: var(--r-pill);
+    background: linear-gradient(120deg, var(--cerise), #ff5fb0);
+    color: #fff; box-shadow: 0 12px 28px rgba(233, 30, 137, 0.32);
+    transition: transform .16s ease, box-shadow .16s ease;
+  }
+  .btn-buy:hover { transform: translateY(-2px); box-shadow: 0 18px 36px rgba(233, 30, 137, 0.4); }
+
+  /* Eierens egen vei inn, uten kjøp (vises kun for innlogget eier) */
+  .owner-box {
+    display: none; margin: 0 auto 18px; max-width: 460px;
+    background: var(--lime-soft); border: 1px solid rgba(164, 210, 51, .45);
+    border-radius: var(--r-lg); padding: 18px 20px; text-align: center;
+  }
+  .owner-box p { font-size: 14px; color: #4d6a10; margin-bottom: 12px; }
+  .owner-box a {
+    display: inline-block; font-weight: 800; font-size: 15px; color: #fff;
+    background: #6f9a17; padding: 13px 22px; border-radius: var(--r-pill);
+  }
+
+  .social { text-align: center; margin-top: 26px; font-size: 14px; color: var(--ink-soft); }
+
+  .quote { max-width: 620px; margin: 0 auto 22px; background: var(--cerise-soft); border-radius: var(--r-lg); padding: 26px 28px; text-align: center; }
+  .quote .stars { color: var(--sun); letter-spacing: 2px; font-size: 17px; margin-bottom: 10px; }
+  .quote p { font-size: 16.5px; color: var(--ink); line-height: 1.6; margin-bottom: 12px; }
+  .quote .who { font-size: 13.5px; font-weight: 700; color: var(--cerise); }
+
+  .footer { text-align: center; margin-top: 50px; font-size: 13px; color: var(--ink-muted); }
+
+  @media (max-width: 720px) { .two-col { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) {
+    .wrap { padding: 22px 16px 48px; }
+    .card { padding: 24px 22px; }
+    .price-now { font-size: 42px; }
+  }
+
+  /* Laast fontregel: Sasson Montessori paa alt unntatt overskrifter */
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); }
+  button, input, select, textarea { font-family: var(--font); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="brandbar" href="/academy" title="Til LME Studio" style="color:inherit;text-decoration:none">
+      <img id="brandLogo" src="/images/lme-logo.png" alt="LME" onerror="this.style.display='none'">
+      <span class="brandname" id="brandName">LME</span>
+    </a>
+
+    <span class="topchip" id="topLabel"></span>
+
+    <div class="head">
+      <h1 id="heading"></h1>
+      <p id="sub"></p>
+      <div class="factbox">
+        <div class="ic">🤖</div>
+        <h2 class="fname" id="factName"></h2>
+        <div class="fmeta" id="factMeta"></div>
+      </div>
+    </div>
+
+    <!-- Bolkene i økten -->
+    <div class="card">
+      <h2 id="partsTitle"></h2>
+      <div class="parts-grid" id="partsList"></div>
+    </div>
+
+    <!-- Slik bruker du det -->
+    <div class="card">
+      <h2 id="learnTitle"></h2>
+      <ul class="bullets" id="learnList"></ul>
+    </div>
+
+    <!-- For / ikke for deg -->
+    <div class="two-col">
+      <div class="col-for">
+        <h3 id="forTitle"></h3>
+        <ul class="mini" id="forList"></ul>
+      </div>
+      <div class="col-not">
+        <h3 id="notTitle"></h3>
+        <ul class="mini" id="notList"></ul>
+      </div>
+    </div>
+
+    <!-- Dette trenger du -->
+    <div class="card">
+      <h2 id="needTitle"></h2>
+      <ul class="bullets" id="needList"></ul>
+    </div>
+
+    <!-- Kundeuttalelse (vises kun hvis fylt ut i config) -->
+    <div class="quote" id="quoteBox" style="display:none;">
+      <div class="stars">★★★★★</div>
+      <p id="quoteText"></p>
+      <div class="who" id="quoteWho"></div>
+    </div>
+
+    <!-- Pris + kjøp -->
+    <div class="card buybox">
+      <div class="owner-box" id="ownerBox">
+        <p id="ownerText"></p>
+        <a href="/byggeokt-deltaker" id="ownerLink"></a>
+      </div>
+      <div class="seats" id="seats"></div>
+      <div class="price-row">
+        <span class="price-now" id="priceNow"></span>
+        <span class="price-cur" id="priceCur"></span>
+        <span class="price-before" id="priceBefore"></span>
+      </div>
+      <div class="price-note" id="priceNote"></div>
+      <div class="guarantee">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
+        <span id="guarantee"></span>
+      </div>
+      <button class="btn-buy" id="buyBtn"></button>
+      <div class="social"><span id="social"></span></div>
+    </div>
+
+    <div class="footer">© <span id="yr"></span> <span id="brandFooter">LME</span></div>
+  </div>
+
+  <script src="/js/kampanjer.js?v=1"></script>
+  <script src="funnel-config.js?v=1"></script>
+  <script>
+    // Språk: ?lang=… > localStorage 'lme_lang' (samme som resten av
+    // plattformen) > norsk.
+    const LANG = (() => {
+      const q = new URLSearchParams(location.search).get('lang');
+      let l = (q || localStorage.getItem('lme_lang') || 'no').toLowerCase();
+      if (l !== 'en' && l !== 'no') l = 'no';
+      try { localStorage.setItem('lme_lang', l); } catch (e) {}
+      return l;
+    })();
+    document.documentElement.lang = LANG;
+    const C = window.LME_FUNNEL[LANG] || window.LME_FUNNEL.no;
+
+    // Språk-knapp (🇬🇧/🇳🇴)
+    (() => {
+      const b = document.createElement('button');
+      b.textContent = LANG === 'en' ? '🇳🇴 Norsk' : '🇬🇧 English';
+      b.setAttribute('aria-label', 'Bytt språk / Switch language');
+      b.style.cssText = 'position:fixed;top:16px;right:16px;z-index:300;display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(31,27,36,.12);background:#fff;color:#1F1B24;font-family:inherit;font-weight:700;font-size:13px;line-height:1;padding:10px 15px;border-radius:999px;box-shadow:0 6px 20px rgba(31,27,36,.12);cursor:pointer;';
+      b.addEventListener('click', () => {
+        const next = LANG === 'en' ? 'no' : 'en';
+        try { localStorage.setItem('lme_lang', next); } catch (e) {}
+        const u = new URL(location.href); u.searchParams.set('lang', next); location.href = u.toString();
+      });
+      document.body.appendChild(b);
+    })();
+
+    const s = C.salg;
+    const p = s.pris;
+    const items = s.deler || [];
+    const txt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+
+    // Branding
+    document.getElementById('brandLogo').src = C.brand.logo;
+    txt('brandName', C.brand.kortnavn);
+    txt('brandFooter', C.brand.navn);
+    txt('yr', new Date().getFullYear());
+
+    // Topp
+    txt('topLabel', s.merkelapp);
+    document.getElementById('heading').innerHTML = highlightLast(s.overskrift);
+    txt('sub', s.underoverskrift);
+    txt('factName', LANG === 'en' ? 'Thursday 24 September' : 'Torsdag 24. september');
+    txt('factMeta', s.fakta);
+
+    // Bolkene i økten
+    txt('partsTitle', s.hvaDuFaarTittel);
+    const grid = document.getElementById('partsList');
+    items.forEach((it) => {
+      const d = document.createElement('div');
+      d.className = 'part-item';
+      d.innerHTML = '<span class="ic"></span><div><h3></h3><p></p></div>';
+      d.querySelector('.ic').textContent = it.ikon;
+      d.querySelector('h3').textContent = it.tittel;
+      d.querySelector('p').textContent = it.kort;
+      grid.appendChild(d);
+    });
+
+    // Slik bruker du det
+    txt('learnTitle', s.hvaDuLaererTittel);
+    fillBullets('learnList', s.hvaDuLaerer);
+
+    // Dette trenger du
+    txt('needTitle', s.trengerTittel);
+    fillBullets('needList', s.trenger);
+
+    // For / ikke for deg
+    txt('forTitle', s.forDegTittel);
+    txt('notTitle', s.ikkeForDegTittel);
+    fillMini('forList', s.forDeg, '✓');
+    fillMini('notList', s.ikkeForDeg, '×');
+
+    // Pris. Kroner skrives etter tallet (199 kr), dollar og euro foran ($19),
+    // så prisen ser riktig ut på begge språk.
+    const symbolValuta = /^[$€£]$/.test(p.valuta || '');
+    txt('priceNow', symbolValuta ? p.valuta + p.belop : p.belop);
+    txt('priceCur', symbolValuta ? '' : p.valuta);
+    if (symbolValuta) document.getElementById('priceCur').style.display = 'none';
+    const pb = document.getElementById('priceBefore');
+    if (p.visningFor) pb.textContent = p.visningFor; else pb.style.display = 'none';
+    txt('priceNote', LANG === 'en'
+      ? 'Early bird until 14 September. One-time payment, the recording is included.'
+      : 'Tidligpris til og med 14. september. Engangsbeløp, opptaket følger med.');
+    if (s.garanti) { txt('guarantee', s.garanti); }
+    else { const gEl = document.getElementById('guarantee'); const gBox = gEl && gEl.closest('.guarantee'); if (gBox) gBox.style.display = 'none'; }
+    txt('social', s.sosialtBevis);
+
+    // Kundeuttalelse (vises bare hvis sitat er satt i config)
+    if (s.testimonial && s.testimonial.sitat) {
+      txt('quoteText', '"' + s.testimonial.sitat + '"');
+      const who = [s.testimonial.navn, s.testimonial.sted].filter(Boolean).join(', ');
+      txt('quoteWho', who);
+      document.getElementById('quoteBox').style.display = 'block';
+    }
+
+    // Kjøp
+    const buy = document.getElementById('buyBtn');
+    buy.textContent = s.kjopKnapp;
+    buy.addEventListener('click', () => {
+      window.location.href = s.checkoutUrl || s.etterKjop;
+    });
+
+    /* Plassene telles ekte: serveren teller hvert kjøp, og siden viser hvor
+       mange som er igjen. Er det fullt, forsvinner kjøpsknappen, så ingen
+       betaler for en plass som ikke finnes. Svarer ikke serveren, står
+       knappen som den er, heller en solgt plass for mye enn en tapt kjøper. */
+    fetch('/api/byggeokt-plasser')
+      .then((r) => r.json())
+      .then((d) => {
+        if (!d || typeof d.igjen !== 'number') return;
+        const el = document.getElementById('seats');
+        if (d.igjen <= 0) {
+          el.textContent = LANG === 'en' ? 'All seats are taken' : 'Alle plassene er tatt';
+          el.className = 'seats seats-full';
+          buy.textContent = s.utsolgtKnapp;
+          buy.disabled = true;
+          buy.style.opacity = '.55';
+          buy.style.cursor = 'default';
+          return;
+        }
+        el.textContent = LANG === 'en'
+          ? d.igjen + ' of ' + d.plasser + ' seats left'
+          : d.igjen + ' av ' + d.plasser + ' plasser igjen';
+        el.className = 'seats' + (d.igjen <= 5 ? ' seats-few' : '');
+      })
+      .catch(() => {});
+
+    // Eieren skal aldri betale for sitt eget produkt: er du logget inn som
+    // eier, får du din egen gratis vei rett inn på deltakersiden i stedet for
+    // kjøpsknappen. Samme regel som resten av plattformen, se
+    // functions/_lib/access.js.
+    fetch('/api/access', { credentials: 'same-origin' })
+      .then((r) => r.json())
+      .then((a) => {
+        if (!a || a.plan !== 'owner') return;
+        const box = document.getElementById('ownerBox');
+        txt('ownerText', LANG === 'en'
+          ? 'You are logged in as the owner, so this evening is already yours.'
+          : 'Du er logget inn som eier, så denne kvelden er allerede din.');
+        txt('ownerLink', LANG === 'en' ? 'Open the participant page' : 'Åpne deltakersiden');
+        box.style.display = 'block';
+        buy.style.display = 'none';
+      })
+      .catch(() => {});
+
+    function fillBullets(id, arr) {
+      const ul = document.getElementById(id);
+      (arr || []).forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = '<span class="tick">✓</span><span></span>';
+        li.querySelector('span:last-child').textContent = item;
+        ul.appendChild(li);
+      });
+    }
+    function fillMini(id, arr, mark) {
+      const ul = document.getElementById(id);
+      (arr || []).forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = '<span class="mk"></span><span></span>';
+        li.querySelector('.mk').textContent = mark;
+        li.querySelector('span:last-child').textContent = item;
+        ul.appendChild(li);
+      });
+    }
+    function highlightLast(str) {
+      const words = str.split(' ');
+      if (words.length < 3) return str;
+      const cut = words.length - 2;
+      return words.slice(0, cut).join(' ') + ' <span class="hl">' + words.slice(cut).join(' ') + '</span>';
+    }
+  </script>
+<script src="/js/lme-visibility.js?v=8" defer></script>
+</body>
+</html>
