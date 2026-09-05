@@ -54,7 +54,16 @@
   .card .lead { color: var(--grey); font-size: 15.5px; margin-bottom: 20px; }
   .pill { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #C13D6A; background: #FCEFF2; border-radius: 999px; padding: 6px 15px; margin-bottom: 14px; }
 
-  .gauge { box-shadow: 0 12px 40px rgba(233,30,137,0.1); outline: 2px solid #FBE0E7; outline-offset: -2px; }
+  .segwrap { display: flex; justify-content: center; margin-bottom: 14px; }
+  .segwrap .seg { box-shadow: 0 6px 20px rgba(233,30,137,0.06); }
+  .gaugebar { background: #fff; border-radius: 20px; box-shadow: 0 8px 26px rgba(233,30,137,0.07); margin-bottom: 18px; overflow: hidden; }
+  .gb-head { display: flex; align-items: center; gap: 12px; width: 100%; background: transparent; border: 0; font-family: inherit; font-size: 15px; color: var(--ink); padding: 15px 20px; cursor: pointer; text-align: left; }
+  .gb-ic { font-size: 20px; flex: 0 0 auto; }
+  .gb-txt { flex: 1; color: var(--grey); }
+  .gb-edit { flex: 0 0 auto; font-weight: 700; font-size: 13.5px; color: var(--cerise); background: #FCEFF2; border-radius: 999px; padding: 6px 15px; }
+  .gb-body { padding: 4px 20px 20px; border-top: 1px solid #F7EAEE; }
+  .gb-body .seg { margin-top: 16px; }
+  .gb-note { font-size: 13.5px; color: var(--grey); margin-top: 12px; }
 
   .sig { text-align: center; color: #a08b90; font-size: 14px; margin-top: 34px; }
   .sig a { color: var(--pink-mid); font-weight: 600; }
@@ -144,38 +153,45 @@
   <div class="wrap">
     <div class="head">
       <span class="kick" data-no="LME Strikk &amp; Hekle" data-en="LME Knit &amp; Crochet">LME Strikk &amp; Hekle</span>
-      <h1><span data-no="Alle utregningene i" data-en="Every calculation in">Alle utregningene i</span> <em data-no="strikking og hekling" data-en="knitting and crochet">strikking og hekling</em></h1>
-      <p data-no="Masker, rader, økning, felling og garnmengde. Alt tar utgangspunkt i din egen strikkefasthet, så tallene passer akkurat dine hender og ditt garn." data-en="Stitches, rows, increases, decreases and yarn amounts. Everything starts from your own gauge, so the numbers fit your hands and your yarn.">Masker, rader, økning, felling og garnmengde. Alt tar utgangspunkt i din egen strikkefasthet, så tallene passer akkurat dine hender og ditt garn.</p>
+      <h1><span data-no="Øk og fell masker" data-en="Increase and decrease stitches">Øk og fell masker</span> <em data-no="uten hoderegning" data-en="without doing the maths">uten hoderegning</em></h1>
+      <p data-no="Skriv inn hva du har og hva du skal ha, så får du vite hvor ofte du skal øke eller felle, og på hvilke rader. Ermer, raglan, ermehull, hals og skuldre. Under ligger også masker og rader, garnmengde og hekling." data-en="Enter what you have and what you need, and you get how often to increase or decrease, and on which rows. Sleeves, raglan, armholes, necklines and shoulders. Below you also get stitches and rows, yarn amounts and crochet.">Skriv inn hva du har og hva du skal ha, så får du vite hvor ofte du skal øke eller felle, og på hvilke rader. Ermer, raglan, ermehull, hals og skuldre. Under ligger også masker og rader, garnmengde og hekling.</p>
       <div class="dots"><i></i><i></i><i></i><i></i></div>
     </div>
 
-    <div class="card gauge">
-      <span class="pill" data-no="🧶 Start her" data-en="🧶 Start here">🧶 Start her</span>
-      <h2 id="gaugeTitle" data-no="Strikkefastheten din" data-en="Your gauge">Strikkefastheten din</h2>
-      <p class="lead" data-no="Strikk eller hekle en prøvelapp på minst 12 x 12 cm, og tell hvor mange masker og rader du får på 10 cm midt i lappen. Alle utregningene under bruker disse tallene, og de lagres på denne enheten." data-en="Knit or crochet a swatch of at least 12 x 12 cm, and count how many stitches and rows you get over 10 cm in the middle of it. Every calculation below uses these numbers, and they are saved on this device.">Strikk eller hekle en prøvelapp på minst 12 x 12 cm, og tell hvor mange masker og rader du får på 10 cm midt i lappen. Alle utregningene under bruker disse tallene, og de lagres på denne enheten.</p>
-
+    <div class="segwrap">
       <div class="seg" id="techSeg">
         <button type="button" data-tech="strikk" class="on" data-no="🧶 Strikking" data-en="🧶 Knitting">🧶 Strikking</button>
         <button type="button" data-tech="hekle" data-no="🪝 Hekling" data-en="🪝 Crochet">🪝 Hekling</button>
       </div>
+    </div>
 
-      <div class="fields">
-        <div class="field">
-          <label for="gSt" data-no="Masker per 10 cm" data-en="Stitches per 10 cm">Masker per 10 cm</label>
-          <input id="gSt" type="number" inputmode="decimal" step="0.5" min="1" value="22">
+    <div class="gaugebar">
+      <button type="button" class="gb-head" id="gaugeToggle" aria-expanded="false">
+        <span class="gb-ic">🧶</span>
+        <span class="gb-txt" id="gaugeSummary"></span>
+        <span class="gb-edit" data-no="Endre" data-en="Change">Endre</span>
+      </button>
+      <div class="gb-body" id="gaugeBody" hidden>
+        <div class="fields">
+          <div class="field">
+            <label for="gSt" data-no="Masker per 10 cm" data-en="Stitches per 10 cm">Masker per 10 cm</label>
+            <input id="gSt" type="number" inputmode="decimal" step="0.5" min="1" value="22">
+          </div>
+          <div class="field">
+            <label for="gRow" id="gRowLbl" data-no="Rader per 10 cm" data-en="Rows per 10 cm">Rader per 10 cm</label>
+            <input id="gRow" type="number" inputmode="decimal" step="0.5" min="1" value="30">
+          </div>
         </div>
-        <div class="field">
-          <label for="gRow" id="gRowLbl" data-no="Rader per 10 cm" data-en="Rows per 10 cm">Rader per 10 cm</label>
-          <input id="gRow" type="number" inputmode="decimal" step="0.5" min="1" value="30">
-        </div>
+        <p class="gb-note" id="gaugeEcho"></p>
+        <p class="gb-note" data-no="Tallene trengs bare når du regner i centimeter. Skal du bare fordele masker eller rader, kan du la dem stå. Strikk gjerne en prøvelapp på minst 12 x 12 cm, og tell midt i lappen. Det du skriver her, huskes på denne enheten." data-en="These numbers are only needed when you work in centimetres. If you are only distributing stitches or rows, you can leave them as they are. Make a swatch of at least 12 x 12 cm, and count in the middle of it. What you enter here is remembered on this device.">Tallene trengs bare når du regner i centimeter. Skal du bare fordele masker eller rader, kan du la dem stå. Strikk gjerne en prøvelapp på minst 12 x 12 cm, og tell midt i lappen. Det du skriver her, huskes på denne enheten.</p>
       </div>
-      <p class="lead" style="margin:12px 0 0" id="gaugeEcho"></p>
     </div>
 
     <div class="tabs" id="tabs">
-      <button type="button" data-tab="t1" class="on" data-no="🧮 Masker &amp; rader" data-en="🧮 Stitches &amp; rows">🧮 Masker &amp; rader</button>
-      <button type="button" data-tab="t2" data-no="📐 Øk &amp; fell" data-en="📐 Increase &amp; decrease">📐 Øk &amp; fell</button>
+      <button type="button" data-tab="t2" class="on" data-no="📐 Øk &amp; fell" data-en="📐 Increase &amp; decrease">📐 Øk &amp; fell</button>
+      <button type="button" data-tab="t9" data-no="🪡 Fell av" data-en="🪡 Bind off">🪡 Fell av</button>
       <button type="button" data-tab="t3" data-no="➗ Fordel jevnt" data-en="➗ Spread evenly">➗ Fordel jevnt</button>
+      <button type="button" data-tab="t1" data-no="🧮 Masker &amp; rader" data-en="🧮 Stitches &amp; rows">🧮 Masker &amp; rader</button>
       <button type="button" data-tab="t4" data-no="🧶 Garnmengde" data-en="🧶 Yarn amount">🧶 Garnmengde</button>
       <button type="button" data-tab="t5" data-no="🔁 Bytt garn" data-en="🔁 Swap yarn">🔁 Bytt garn</button>
       <button type="button" data-tab="t6" data-no="⭕ Hekling" data-en="⭕ Crochet">⭕ Hekling</button>
@@ -183,8 +199,128 @@
       <button type="button" data-tab="t8" data-no="📖 Ordliste" data-en="📖 Glossary">📖 Ordliste</button>
     </div>
 
+    <!-- TAB 2 -->
+    <section class="panel on" id="t2">
+      <div class="card">
+        <span class="pill" data-no="📐 Forming" data-en="📐 Shaping">📐 Forming</span>
+        <h2 data-no="Øk og fell jevnt over en lengde" data-en="Increase and decrease evenly over a length">Øk og fell jevnt over en lengde</h2>
+        <p class="lead" data-no="Til ermer, raglan, skrå sider og alt annet som skal smalne eller vide seg ut jevnt. Du får vite hvor ofte du skal øke eller felle, hvor mange ganger, og hvilke rader det skjer på." data-en="For sleeves, raglan yokes, sloped sides and anything else that should narrow or widen evenly. You get how often to increase or decrease, how many times, and which rows it happens on.">Til ermer, raglan, skrå sider og alt annet som skal smalne eller vide seg ut jevnt. Du får vite hvor ofte du skal øke eller felle, hvor mange ganger, og hvilke rader det skjer på.</p>
+        <div class="fields">
+          <div class="field">
+            <label for="s1from" data-no="Fra antall masker" data-en="From stitch count">Fra antall masker</label>
+            <input id="s1from" type="number" inputmode="numeric" step="1" min="1" value="48">
+          </div>
+          <div class="field">
+            <label for="s1to" data-no="Til antall masker" data-en="To stitch count">Til antall masker</label>
+            <input id="s1to" type="number" inputmode="numeric" step="1" min="1" value="90">
+          </div>
+          <div class="field">
+            <label for="s1len" data-no="Over lengde" data-en="Over a length of">Over lengde</label>
+            <input id="s1len" type="number" inputmode="decimal" step="0.5" min="1" value="45">
+          </div>
+          <div class="field">
+            <label for="s1unit" data-no="Målt i" data-en="Measured in">Målt i</label>
+            <select id="s1unit">
+              <option value="cm" data-no="Centimeter" data-en="Centimetres">Centimeter</option>
+              <option value="rows" data-no="Rader" data-en="Rows">Rader</option>
+            </select>
+          </div>
+          <div class="field wide">
+            <label for="s1hvor" data-no="Hvor øker eller feller du" data-en="Where do you increase or decrease">Hvor øker eller feller du</label>
+            <select id="s1hvor">
+              <option value="begge" data-no="I hver side (2 masker)" data-en="At each side (2 stitches)">I hver side (2 masker)</option>
+              <option value="en" data-no="Bare én side (1 maske)" data-en="One side only (1 stitch)">Bare én side (1 maske)</option>
+              <option value="begge2" data-no="2 i hver side (4 masker)" data-en="2 at each side (4 stitches)">2 i hver side (4 masker)</option>
+              <option value="raglan4" data-no="Raglan, 4 punkter (4 masker)" data-en="Raglan, 4 points (4 stitches)">Raglan, 4 punkter (4 masker)</option>
+              <option value="raglan8" data-no="Raglan, 8 punkter (8 masker)" data-en="Raglan, 8 points (8 stitches)">Raglan, 8 punkter (8 masker)</option>
+              <option value="eget" data-no="Eget antall" data-en="My own number">Eget antall</option>
+            </select>
+          </div>
+          <div class="field" id="s1perWrap" hidden>
+            <label for="s1per" data-no="Masker per gang" data-en="Stitches each time">Masker per gang</label>
+            <input id="s1per" type="number" inputmode="numeric" step="1" min="1" value="6">
+          </div>
+        </div>
+        <button class="go" id="s1go" data-no="Regn ut" data-en="Calculate">Regn ut</button>
+        <div class="res" id="s1res"></div>
+      </div>
+    </section>
+
+    <!-- TAB 9 -->
+    <section class="panel" id="t9">
+      <div class="card">
+        <span class="pill" data-no="🪡 Ermehull" data-en="🪡 Armhole">🪡 Ermehull</span>
+        <h2 data-no="Fell av i sidene, slik oppskriftene skriver det" data-en="Bind off at the sides, the way patterns write it">Fell av i sidene, slik oppskriftene skriver det</h2>
+        <p class="lead" data-no="Til ermehull og andre steder der maskene skal bort raskt, ikke jevnt. Du får rekken oppskriftene bruker, for eksempel fell 4-3-2-1-1-1 masker, der hvert tall felles i begynnelsen av en rad." data-en="For armholes and other places where the stitches come off quickly, not evenly. You get the sequence patterns use, for example bind off 4-3-2-1-1-1 stitches, where each number is bound off at the beginning of a row.">Til ermehull og andre steder der maskene skal bort raskt, ikke jevnt. Du får rekken oppskriftene bruker, for eksempel fell 4-3-2-1-1-1 masker, der hvert tall felles i begynnelsen av en rad.</p>
+        <div class="fields">
+          <div class="field">
+            <label for="f1side" data-no="Masker som skal bort i hver side" data-en="Stitches to remove at each side">Masker som skal bort i hver side</label>
+            <input id="f1side" type="number" inputmode="numeric" step="1" min="1" value="12">
+          </div>
+          <div class="field">
+            <label for="f1now" data-no="Masker på pinnen nå" data-en="Stitches on the needle now">Masker på pinnen nå</label>
+            <input id="f1now" type="number" inputmode="numeric" step="1" min="0" value="110">
+            <span class="hint" data-no="Skriv 0 hvis du ikke trenger sluttsummen." data-en="Enter 0 if you do not need the final count.">Skriv 0 hvis du ikke trenger sluttsummen.</span>
+          </div>
+          <div class="field">
+            <label for="f1first" data-no="Start med å felle" data-en="Start by binding off">Start med å felle</label>
+            <select id="f1first">
+              <option value="0" data-no="La appen velge" data-en="Let the app choose">La appen velge</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+          </div>
+        </div>
+        <button class="go" id="f1go" data-no="Regn ut" data-en="Calculate">Regn ut</button>
+        <div class="res" id="f1res"></div>
+      </div>
+
+      <div class="card">
+        <span class="pill" data-no="👕 Hals" data-en="👕 Neckline">👕 Hals</span>
+        <h2 data-no="Halsutringning" data-en="Neckline shaping">Halsutringning</h2>
+        <p class="lead" data-no="Du feller de midterste maskene først, og former så hver side for seg. Her får du hvor mange masker som skal felles i midten, hvordan du feller mot halsen, og hvor mange masker som blir igjen til hver skulder." data-en="You bind off the centre stitches first, then shape each side separately. Here you get how many stitches to bind off in the centre, how to decrease towards the neck, and how many stitches are left for each shoulder.">Du feller de midterste maskene først, og former så hver side for seg. Her får du hvor mange masker som skal felles i midten, hvordan du feller mot halsen, og hvor mange masker som blir igjen til hver skulder.</p>
+        <div class="fields">
+          <div class="field">
+            <label for="f2now" data-no="Masker på pinnen nå" data-en="Stitches on the needle now">Masker på pinnen nå</label>
+            <input id="f2now" type="number" inputmode="numeric" step="1" min="4" value="100">
+          </div>
+          <div class="field">
+            <label for="f2w" data-no="Halsens bredde (cm)" data-en="Neck width (cm)">Halsens bredde (cm)</label>
+            <input id="f2w" type="number" inputmode="decimal" step="0.5" min="1" value="20">
+          </div>
+          <div class="field">
+            <label for="f2d" data-no="Halsens dybde (cm)" data-en="Neck depth (cm)">Halsens dybde (cm)</label>
+            <input id="f2d" type="number" inputmode="decimal" step="0.5" min="1" value="7">
+          </div>
+        </div>
+        <button class="go" id="f2go" data-no="Regn ut" data-en="Calculate">Regn ut</button>
+        <div class="res" id="f2res"></div>
+      </div>
+
+      <div class="card">
+        <span class="pill" data-no="🧍 Skulder" data-en="🧍 Shoulder">🧍 Skulder</span>
+        <h2 data-no="Skulderskråning" data-en="Shoulder slope">Skulderskråning</h2>
+        <p class="lead" data-no="Skulderen skal skrå litt nedover, og da feller du den i noen få like store trinn i stedet for alt på én gang. Her får du trinnene." data-en="The shoulder should slope down a little, so you bind it off in a few equal steps instead of all at once. Here are the steps.">Skulderen skal skrå litt nedover, og da feller du den i noen få like store trinn i stedet for alt på én gang. Her får du trinnene.</p>
+        <div class="fields">
+          <div class="field">
+            <label for="f3st" data-no="Masker i hver skulder" data-en="Stitches in each shoulder">Masker i hver skulder</label>
+            <input id="f3st" type="number" inputmode="numeric" step="1" min="2" value="22">
+          </div>
+          <div class="field">
+            <label for="f3n" data-no="Antall trinn" data-en="Number of steps">Antall trinn</label>
+            <input id="f3n" type="number" inputmode="numeric" step="1" min="1" max="10" value="3">
+          </div>
+        </div>
+        <button class="go" id="f3go" data-no="Regn ut" data-en="Calculate">Regn ut</button>
+        <div class="res" id="f3res"></div>
+      </div>
+    </section>
+
     <!-- TAB 1 -->
-    <section class="panel on" id="t1">
+    <section class="panel" id="t1">
       <div class="card">
         <span class="pill" data-no="📏 Mål til masker" data-en="📏 Measurements to stitches">📏 Mål til masker</span>
         <h2 data-no="Hvor mange masker skal jeg legge opp?" data-en="How many stitches do I cast on?">Hvor mange masker skal jeg legge opp?</h2>
@@ -232,46 +368,6 @@
         </div>
         <button class="go" id="m2go" data-no="Regn om" data-en="Convert">Regn om</button>
         <div class="res" id="m2res"></div>
-      </div>
-    </section>
-
-    <!-- TAB 2 -->
-    <section class="panel" id="t2">
-      <div class="card">
-        <span class="pill" data-no="📐 Forming" data-en="📐 Shaping">📐 Forming</span>
-        <h2 data-no="Øk og fell jevnt over en lengde" data-en="Increase and decrease evenly over a length">Øk og fell jevnt over en lengde</h2>
-        <p class="lead" data-no="Til ermer, skrå sider, halsutringning og alt annet som skal smalne eller vide seg ut. Du får vite nøyaktig hvor ofte du skal øke eller felle, og på hvilke rader." data-en="For sleeves, sloped sides, necklines and anything that should get narrower or wider. You get exactly how often to increase or decrease, and on which rows.">Til ermer, skrå sider, halsutringning og alt annet som skal smalne eller vide seg ut. Du får vite nøyaktig hvor ofte du skal øke eller felle, og på hvilke rader.</p>
-        <div class="fields">
-          <div class="field">
-            <label for="s1from" data-no="Fra antall masker" data-en="From stitch count">Fra antall masker</label>
-            <input id="s1from" type="number" inputmode="numeric" step="1" min="1" value="48">
-          </div>
-          <div class="field">
-            <label for="s1to" data-no="Til antall masker" data-en="To stitch count">Til antall masker</label>
-            <input id="s1to" type="number" inputmode="numeric" step="1" min="1" value="90">
-          </div>
-          <div class="field">
-            <label for="s1len" data-no="Over lengde" data-en="Over a length of">Over lengde</label>
-            <input id="s1len" type="number" inputmode="decimal" step="0.5" min="1" value="45">
-          </div>
-          <div class="field">
-            <label for="s1unit" data-no="Målt i" data-en="Measured in">Målt i</label>
-            <select id="s1unit">
-              <option value="cm" data-no="Centimeter" data-en="Centimetres">Centimeter</option>
-              <option value="rows" data-no="Rader" data-en="Rows">Rader</option>
-            </select>
-          </div>
-          <div class="field wide">
-            <label for="s1per" data-no="Masker per gang" data-en="Stitches each time">Masker per gang</label>
-            <select id="s1per">
-              <option value="2" data-no="2 masker, én i hver side" data-en="2 stitches, one at each side">2 masker, én i hver side</option>
-              <option value="1" data-no="1 maske, kun én side" data-en="1 stitch, one side only">1 maske, kun én side</option>
-              <option value="4" data-no="4 masker, to i hver side" data-en="4 stitches, two at each side">4 masker, to i hver side</option>
-            </select>
-          </div>
-        </div>
-        <button class="go" id="s1go" data-no="Regn ut" data-en="Calculate">Regn ut</button>
-        <div class="res" id="s1res"></div>
       </div>
     </section>
 
@@ -699,6 +795,7 @@
     dec = dec || 0;
     return n.toLocaleString(en() ? 'en-GB' : 'nb-NO', { minimumFractionDigits: dec, maximumFractionDigits: dec });
   }
+  function fmtSmart(n) { return Math.abs(n - Math.round(n)) < 0.05 ? fmt(Math.round(n)) : fmt(n, 1); }
   function esc(s) {
     return String(s).replace(/[&<>"]/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
@@ -748,19 +845,29 @@
   }
   function gaugeEcho() {
     var st = num('gSt'), row = num('gRow');
-    var ttl = el('gaugeTitle');
-    ttl.setAttribute('data-no', isCro() ? 'Heklefastheten din' : 'Strikkefastheten din');
-    ttl.textContent = en() ? ttl.getAttribute('data-en') : ttl.getAttribute('data-no');
     var lbl = el('gRowLbl');
     lbl.setAttribute('data-no', isCro() ? 'Omganger per 10 cm' : 'Rader per 10 cm');
     lbl.setAttribute('data-en', isCro() ? 'Rounds per 10 cm' : 'Rows per 10 cm');
     lbl.textContent = en() ? lbl.getAttribute('data-en') : lbl.getAttribute('data-no');
-    if (!st || !row) { el('gaugeEcho').textContent = ''; return; }
+    var sum = el('gaugeSummary');
+    if (!st || !row) {
+      el('gaugeEcho').textContent = '';
+      sum.textContent = t('Fyll inn strikkefastheten din', 'Enter your gauge');
+      return;
+    }
     el('gaugeEcho').textContent = t(
       'Én maske er ' + fmt(10 / st, 2) + ' cm bred, og én ' + rowWord() + ' er ' + fmt(10 / row, 2) + ' cm høy.',
       'One stitch is ' + fmt(10 / st, 2) + ' cm wide, and one ' + rowWord() + ' is ' + fmt(10 / row, 2) + ' cm tall.'
     );
+    sum.textContent = t(
+      fmtSmart(st) + ' masker og ' + fmtSmart(row) + ' ' + rowsWord() + ' per 10 cm',
+      fmtSmart(st) + ' stitches and ' + fmtSmart(row) + ' ' + rowsWord() + ' per 10 cm');
   }
+  el('gaugeToggle').addEventListener('click', function () {
+    var body = el('gaugeBody'), open = body.hidden;
+    body.hidden = !open;
+    el('gaugeToggle').setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
   function setTech(v) {
     tech = v;
     document.querySelectorAll('#techSeg button').forEach(function (b) {
@@ -845,9 +952,27 @@
   el('m2go').addEventListener('click', runner('m2', calcs.m2));
 
   /* ================= 2: øk og fell over lengde ================= */
+  var PER = { begge: 2, en: 1, begge2: 4, raglan4: 4, raglan8: 8 };
+  function perFromChoice() {
+    var v = el('s1hvor').value;
+    if (v === 'eget') return Math.max(1, Math.round(num('s1per') || 1));
+    return PER[v] || 2;
+  }
+  function sideText(per) {
+    var v = el('s1hvor').value;
+    if (v === 'en') return t('1 maske i den ene siden', '1 stitch at one side');
+    if (v === 'begge') return t('1 maske i hver side', '1 stitch at each side');
+    if (v === 'begge2') return t('2 masker i hver side', '2 stitches at each side');
+    if (v === 'raglan4') return t('1 maske ved hvert av de fire raglanpunktene', '1 stitch at each of the four raglan points');
+    if (v === 'raglan8') return t('1 maske ved hvert av de åtte raglanpunktene', '1 stitch at each of the eight raglan points');
+    return t(per + ' masker fordelt på markørene', per + ' stitches spread across the markers');
+  }
+  el('s1hvor').addEventListener('change', function () {
+    el('s1perWrap').hidden = el('s1hvor').value !== 'eget';
+  });
   calcs.s1 = function () {
     var from = Math.round(num('s1from')), to = Math.round(num('s1to'));
-    var len = num('s1len'), unit = el('s1unit').value, per = parseInt(el('s1per').value, 10);
+    var len = num('s1len'), unit = el('s1unit').value, per = perFromChoice();
     var gr = num('gRow');
     if (!from || !to || !len) { return err('s1res', t('Fyll inn maskeantall og lengde.', 'Fill in stitch counts and length.')); }
     if (from === to) { return err('s1res', t('Start og mål er like, da er det ingenting å øke eller felle.', 'Start and target are the same, so there is nothing to increase or decrease.')); }
@@ -870,9 +995,7 @@
 
     var verb = up ? t('Øk', 'Increase') : t('Fell', 'Decrease');
     var verbNoun = up ? t('økning', 'increase') : t('felling', 'decrease');
-    var sideTxt = per === 1 ? t('1 maske i den ene siden', '1 stitch at one side')
-      : per === 2 ? t('1 maske i hver side', '1 stitch at each side')
-      : t('2 masker i hver side', '2 stitches at each side');
+    var sideTxt = sideText(per);
 
     var lines = groups.map(function (gp) {
       return t(
@@ -919,6 +1042,99 @@
     });
   };
   el('s1go').addEventListener('click', runner('s1', calcs.s1));
+
+  /* ================= 9: fell av i trinn ================= */
+  /* Bygger rekken oppskriftene bruker: stoerste gruppe foerst, saa nedover til 1,
+     og fyller med enere til alle maskene er brukt. Summen blir alltid noeyaktig S. */
+  function bindOffSeq(S, first) {
+    var g1 = first || Math.max(1, Math.min(6, Math.round(S / 3)));
+    while (g1 > 1 && (g1 * (g1 + 1)) / 2 > S) g1--;
+    var seq = [], left = S;
+    for (var g = g1; g >= 1 && left > 0; g--) {
+      if (left >= g) { seq.push(g); left -= g; }
+    }
+    while (left > 0) { seq.push(1); left--; }
+    return seq;
+  }
+  calcs.f1 = function () {
+    var S = Math.round(num('f1side')), now = Math.round(num('f1now') || 0);
+    var first = parseInt(el('f1first').value, 10) || 0;
+    if (!S || S < 1) { return err('f1res', t('Fyll inn hvor mange masker som skal bort i hver side.', 'Fill in how many stitches to remove at each side.')); }
+    if (now && now <= 2 * S) { return err('f1res', t('Du kan ikke felle ' + fmt(2 * S) + ' masker av ' + fmt(now) + '. Sjekk tallene.', 'You cannot bind off ' + fmt(2 * S) + ' stitches out of ' + fmt(now) + '. Check the numbers.')); }
+    var seq = bindOffSeq(S, first);
+    var rows = seq.length * 2;
+    var html = '<div class="big">' + t('Fell ' + seq.join('-') + ' masker i hver side', 'Bind off ' + seq.join('-') + ' stitches at each side') + '</div>';
+    html += '<div class="steps">' + t(
+      'Hvert tall felles i begynnelsen av en rad. Du feller først på retten, så på vrangen, og da er begge sidene like. Rekken tar ' + fmt(rows) + ' rader til sammen.',
+      'Each number is bound off at the beginning of a row. You bind off on the right side first, then on the wrong side, and both sides come out the same. The sequence takes ' + fmt(rows) + ' rows in total.') + '</div>';
+    html += '<p>' + t('Til sammen ' + fmt(S) + ' masker i hver side, altså ' + fmt(2 * S) + ' masker i alt.',
+      'That is ' + fmt(S) + ' stitches at each side, so ' + fmt(2 * S) + ' stitches in total.') + '</p>';
+    if (now) {
+      html += '<p><strong>' + t('Du sitter igjen med ' + fmt(now - 2 * S) + ' masker.', 'You are left with ' + fmt(now - 2 * S) + ' stitches.') + '</strong></p>';
+    }
+    html += '<p class="note">' + t(
+      'Store tall først og små til slutt gir en myk bue i stedet for et hakk. Vil du ha en brattere eller slakere bue, endre tallet du starter med.',
+      'Large numbers first and small ones last give a soft curve instead of a notch. For a steeper or gentler curve, change the number you start with.') + '</p>';
+    show('f1res', html);
+  };
+  el('f1go').addEventListener('click', runner('f1', calcs.f1));
+
+  calcs.f2 = function () {
+    var now = Math.round(num('f2now')), w = num('f2w'), d = num('f2d');
+    var gs = num('gSt'), gr = num('gRow');
+    if (!now || !w || !d) { return err('f2res', t('Fyll inn maskeantall, bredde og dybde.', 'Fill in the stitch count, width and depth.')); }
+    if (!gs || !gr) { return err('f2res', t('Fyll inn strikkefastheten øverst på siden først.', 'Fill in your gauge at the top of the page first.')); }
+    var neck = Math.round(w / 10 * gs);
+    if (neck >= now - 3) { return err('f2res', t('Halsen blir bredere enn hele arbeidet. Sjekk bredden.', 'The neck comes out wider than the whole piece. Check the width.')); }
+    var mid = Math.round(neck / 2);
+    if ((neck - mid) % 2 !== 0) mid += 1;
+    var sideSts = (neck - mid) / 2;
+    var shoulder = (now - neck) / 2;
+    var seq = sideSts > 0 ? bindOffSeq(sideSts, 0) : [];
+    var depthRows = Math.round(d / 10 * gr);
+    var shapeRows = seq.length * 2;
+    var html = '<div class="big">' + t('Fell av de midterste ' + fmt(mid) + ' maskene', 'Bind off the centre ' + fmt(mid) + ' stitches') + '</div>';
+    html += '<div class="steps">';
+    html += '<div>' + t('1. Strikk til det står ' + fmt(mid) + ' masker igjen midt foran, og fell dem av.',
+      '1. Knit until ' + fmt(mid) + ' stitches remain at the centre front, and bind them off.') + '</div>';
+    if (seq.length) {
+      html += '<div>' + t('2. Strikk hver side ferdig for seg, og fell mot halsen ' + seq.join('-') + ' masker.',
+        '2. Work each side separately, and towards the neck bind off ' + seq.join('-') + ' stitches.') + '</div>';
+      html += '<div>' + t('3. Strikk rett opp til du har ' + fmt(depthRows) + ' rader fra der halsen begynte.',
+        '3. Work straight up until you have ' + fmt(depthRows) + ' rows from where the neck started.') + '</div>';
+    } else {
+      html += '<div>' + t('2. Strikk hver side rett opp, halsen er så smal at det ikke trengs felling i sidene.',
+        '2. Work each side straight up, the neck is narrow enough that no side shaping is needed.') + '</div>';
+    }
+    html += '</div>';
+    html += '<p>' + t('Da står det ' + fmt(shoulder) + ' masker igjen til hver skulder.', 'That leaves ' + fmt(shoulder) + ' stitches for each shoulder.') + '</p>';
+    html += '<p class="note">' + t(
+      'Halsen er ' + fmt(neck) + ' masker bred i alt, ' + fmt(mid) + ' i midten og ' + fmt(sideSts) + ' i hver side. Fellingene tar ' + fmt(shapeRows) + ' av de ' + fmt(depthRows) + ' radene, resten strikker du rett opp.',
+      'The neck is ' + fmt(neck) + ' stitches wide in total, ' + fmt(mid) + ' in the centre and ' + fmt(sideSts) + ' at each side. The shaping takes ' + fmt(shapeRows) + ' of the ' + fmt(depthRows) + ' rows, and you work the rest straight up.') + '</p>';
+    html += '<p class="note">' + t('Forstykket har dypere hals enn bakstykket. En vanlig regel er 2 til 3 cm dyp hals bak, og det du har skrevet her foran.',
+      'The front has a deeper neck than the back. A common rule is 2 to 3 cm deep at the back, and what you entered here at the front.') + '</p>';
+    show('f2res', html);
+  };
+  el('f2go').addEventListener('click', runner('f2', calcs.f2));
+
+  calcs.f3 = function () {
+    var S = Math.round(num('f3st')), n = Math.round(num('f3n'));
+    if (!S || !n) { return err('f3res', t('Fyll inn begge tallene.', 'Fill in both numbers.')); }
+    if (n > S) { return err('f3res', t('Du kan ikke dele ' + fmt(S) + ' masker på ' + fmt(n) + ' trinn. Velg færre trinn.', 'You cannot split ' + fmt(S) + ' stitches into ' + fmt(n) + ' steps. Choose fewer steps.')); }
+    var q = Math.floor(S / n), r = S % n;
+    var groups = [];
+    for (var i = 0; i < n; i++) groups.push(i < r ? q + 1 : q);
+    var html = '<div class="big">' + t('Fell ' + groups.join('-') + ' masker', 'Bind off ' + groups.join('-') + ' stitches') + '</div>';
+    html += '<div class="steps">' + t(
+      'Fell fra ermehullssiden, i begynnelsen av annenhver rad, så skulderen skrår jevnt nedover. Det tar ' + fmt(n * 2) + ' rader for begge skuldrene.',
+      'Bind off from the armhole edge, at the beginning of every other row, so the shoulder slopes evenly. It takes ' + fmt(n * 2) + ' rows for both shoulders.') + '</div>';
+    html += '<p>' + t('Til sammen ' + fmt(S) + ' masker i hver skulder.', 'That is ' + fmt(S) + ' stitches in each shoulder.') + '</p>';
+    html += '<p class="note">' + t(
+      'Vil du slippe hakkene i skulderkanten, kan du strikke trinnene med vendinger i stedet for å felle. Da blir kanten glatt, og du feller alt til slutt.',
+      'To avoid the little steps along the shoulder edge, work the steps with short rows instead of binding off. The edge comes out smooth, and you bind off everything at the end.') + '</p>';
+    show('f3res', html);
+  };
+  el('f3go').addEventListener('click', runner('f3', calcs.f3));
 
   /* ================= 3: fordel jevnt på én rad ================= */
   calcs.e1 = function () {
