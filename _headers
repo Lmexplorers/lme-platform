@@ -178,3 +178,10 @@
   Cache-Control: no-store
 /live-rom.html
   Cache-Control: no-store
+
+# Strikk og Hekle-appen skal alltid vises i nyeste versjon, den endres ofte
+# mens nye utregninger kommer til.
+/strikk
+  Cache-Control: no-store
+/strikk.html
+  Cache-Control: no-store

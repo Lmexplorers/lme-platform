@@ -966,6 +966,31 @@ export const PLATTFORM_KURS = {
       }
     },
     {
+      "module": null,
+      "title": {
+        "no": "Strikk og Hekle, regnestykkene i håndarbeidet",
+        "en": "Knit and Crochet, the maths of handwork"
+      },
+      "body": [
+        {
+          "no": "Strikk og Hekle ligger på https://lmexplorers.com/strikk og tar seg av alle utregningene du ellers gjør på et papir ved siden av arbeidet. Du starter med å legge inn strikkefastheten din, altså hvor mange masker og rader du får på 10 cm, og alt det andre bygger på den.",
+          "en": "Knit and Crochet lives at https://lmexplorers.com/strikk and handles every calculation you would otherwise scribble on a piece of paper beside your work. You start by entering your gauge, meaning how many stitches and rows you get over 10 cm, and everything else builds on that."
+        },
+        {
+          "no": "Herfra får du antall masker og rader ut fra målene på plagget, hvor ofte du skal øke eller felle for å få en jevn skråning, hvordan du fordeler fellinger jevnt på én rad, hvor mye garn du trenger, og hvor mange nøster det blir hvis du bytter til et annet garn enn oppskriften sier. For hekling får du i tillegg en ferdig oppskrift på en flat sirkel runde for runde, antall ruter til et teppe og lengden på startkjeden.",
+          "en": "From there you get the stitch and row counts from the measurements of the garment, how often to increase or decrease for an even slope, how to spread decreases evenly across one row, how much yarn you need, and how many balls it comes to if you swap to a different yarn than the pattern says. For crochet you also get a finished round by round pattern for a flat circle, the number of squares for a blanket, and the length of the starting chain."
+        },
+        {
+          "no": "Appen har også tellere du kan ha åpne mens du jobber, med markering hver gang det er rad for å øke eller felle, og en ordliste som oversetter mellom norske, amerikanske og britiske heklebegreper. Den er gratis for alle, og virker like godt på mobilen i sofaen som på maskinen.",
+          "en": "The app also has counters you can keep open while you work, marking every row where it is time to increase or decrease, plus a glossary that translates between Norwegian, American and British crochet terms. It is free for everyone, and works just as well on a phone in the sofa as on a computer."
+        }
+      ],
+      "tip": {
+        "no": "🧶 Vask og tørk prøvelappen før du måler den. Mange garn endrer seg i vann, og da endrer alle tallene i appen seg med den.",
+        "en": "🧶 Wash and dry the swatch before you measure it. Many yarns change in water, and every number in the app changes with it."
+      }
+    },
+    {
       "module": {
         "no": "Modul 7 · Nathalie AI",
         "en": "Module 7 · Nathalie AI"

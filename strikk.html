@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+<title>Strikk &amp; Hekle — LME</title>
+<meta name="description" content="Regn ut masker, rader, økning, felling og garnmengde til strikking og hekling. Alt tar utgangspunkt i din egen strikkefasthet.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink: #F8D7DA; --pink-mid: #F5A8B8; --cerise: #E91E89;
+    --lime: #7AAE1F; --yellow: #F7C72E; --cream: #FBF6F0;
+    --ink: #1A1A1A; --grey: #4A4A4A; --line: rgba(26,26,26,0.1);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); color: var(--ink); background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 55%, #F8D7DA 100%); min-height: 100vh; line-height: 1.55; }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); }
+  a { color: inherit; text-decoration: none; }
+
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 13px 20px; background: rgba(255,255,255,0.78); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 20; }
+  .bar .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--cerise); font-size: 15px; }
+  .bar .brand img { width: 32px; height: 32px; object-fit: contain; }
+  .bar .actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .btn { border: 0; border-radius: 999px; padding: 9px 16px; font-weight: 700; font-family: inherit; cursor: pointer; font-size: 13.5px; white-space: nowrap; }
+  .btn-back { background: #fff; color: var(--ink); border: 1px solid #eedce2; }
+  .btn-lang { background: #FCEFF2; color: #C13D6A; }
+
+  .wrap { max-width: 780px; width: 100%; margin: 0 auto; padding: 30px 18px 80px; }
+  .head { text-align: center; margin-bottom: 24px; }
+  .head .kick { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cerise); }
+  .head h1 { font-size: 33px; margin: 6px 0 8px; }
+  .head p { color: var(--grey); font-size: 15.5px; max-width: 560px; margin: 0 auto; }
+
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 20px; box-shadow: 0 6px 22px rgba(26,26,26,0.05); margin-bottom: 18px; }
+  .card > h2 { font-size: 19px; margin-bottom: 4px; }
+  .card > h3 { font-size: 17px; margin-bottom: 4px; }
+  .card .lead { color: var(--grey); font-size: 14px; margin-bottom: 16px; }
+
+  .gauge { border: 2px solid var(--pink-mid); }
+  .gauge .badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cerise); background: #FCEFF2; border-radius: 999px; padding: 4px 12px; margin-bottom: 10px; }
+
+  .seg { display: inline-flex; background: #F6F1F3; border-radius: 999px; padding: 4px; gap: 4px; margin-bottom: 16px; }
+  .seg button { border: 0; background: transparent; font-family: inherit; font-size: 14px; font-weight: 700; color: var(--grey); padding: 8px 18px; border-radius: 999px; cursor: pointer; }
+  .seg button.on { background: #fff; color: var(--cerise); box-shadow: 0 2px 8px rgba(26,26,26,0.08); }
+
+  .fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+  .field label { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--grey); margin-bottom: 6px; }
+  .field input, .field select { width: 100%; padding: 11px 12px; border: 1px solid var(--line); border-radius: 12px; font-family: inherit; font-size: 16px; background: #fff; color: var(--ink); }
+  .field input:focus, .field select:focus { outline: none; border-color: var(--cerise); box-shadow: 0 0 0 3px rgba(233,30,137,0.12); }
+  .field.wide { grid-column: 1 / -1; }
+  .field .hint { display: block; font-size: 12px; color: var(--grey); margin-top: 5px; }
+
+  .go { margin-top: 16px; background: linear-gradient(135deg, var(--cerise), #d1166d); color: #fff; padding: 13px 26px; border: 0; border-radius: 999px; font-family: inherit; font-weight: 700; font-size: 15px; cursor: pointer; box-shadow: 0 6px 16px rgba(233,30,137,0.22); }
+  .go:hover { transform: translateY(-2px); }
+  .go.ghost { background: #fff; color: var(--cerise); border: 1.5px solid var(--pink-mid); box-shadow: none; font-size: 13.5px; padding: 10px 18px; }
+
+  .tabs { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 12px; margin-bottom: 6px; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs button { flex: 0 0 auto; border: 1px solid var(--line); background: #fff; font-family: inherit; font-size: 13.5px; font-weight: 700; color: var(--grey); padding: 9px 15px; border-radius: 999px; cursor: pointer; }
+  .tabs button.on { background: var(--cerise); color: #fff; border-color: var(--cerise); }
+  .panel { display: none; }
+  .panel.on { display: block; }
+
+  .res { display: none; margin-top: 18px; background: #FBF6F0; border: 1px solid #F0E4DA; border-radius: 16px; padding: 16px 18px; }
+  .res.on { display: block; }
+  .res .big { font-family: var(--font-head); font-size: 25px; font-weight: 700; color: var(--cerise); line-height: 1.25; margin-bottom: 6px; }
+  .res p { font-size: 15px; margin-bottom: 8px; }
+  .res p:last-child { margin-bottom: 0; }
+  .res ol, .res ul { margin: 8px 0 8px 20px; font-size: 15px; }
+  .res li { margin-bottom: 5px; }
+  .res .steps { background: #fff; border-radius: 12px; padding: 12px 14px; margin: 10px 0; font-size: 15px; }
+  .res .note { font-size: 13.5px; color: var(--grey); }
+  .res .warn { background: #FFF6E5; border-left: 4px solid var(--yellow); border-radius: 8px; padding: 10px 12px; font-size: 14px; margin: 10px 0; }
+  .res .rows { font-size: 14px; color: var(--grey); word-break: break-word; }
+
+  .tbl { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 12px; }
+  .tbl th, .tbl td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .tbl th { font-family: var(--font-head); font-size: 13px; color: var(--cerise); }
+  .tbl-scroll { overflow-x: auto; }
+
+  .parts { display: flex; flex-direction: column; gap: 10px; }
+  .part { display: grid; grid-template-columns: 1fr 1fr 70px 40px; gap: 8px; align-items: end; }
+  .part input { width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 10px; font-family: inherit; font-size: 15px; }
+  .part label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--grey); display: block; margin-bottom: 4px; }
+  .part .del { background: #FCEFF2; color: #C13D6A; border: 0; border-radius: 10px; height: 42px; font-size: 18px; cursor: pointer; font-family: inherit; }
+
+  .counters { display: flex; flex-direction: column; gap: 14px; }
+  .counter { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 16px; box-shadow: 0 4px 14px rgba(26,26,26,0.04); }
+  .counter .top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+  .counter .nm { font-family: var(--font-head); font-weight: 700; font-size: 16px; }
+  .counter .kill { background: transparent; border: 0; color: var(--grey); font-size: 18px; cursor: pointer; font-family: inherit; }
+  .counter .mid { display: flex; align-items: center; justify-content: center; gap: 18px; }
+  .counter .num { font-family: var(--font-head); font-size: 40px; font-weight: 700; min-width: 90px; text-align: center; }
+  .counter .pm { width: 54px; height: 54px; border-radius: 50%; border: 0; background: #FCEFF2; color: var(--cerise); font-size: 26px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .counter .pm.plus { background: linear-gradient(135deg, var(--cerise), #d1166d); color: #fff; }
+  .counter .foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; font-size: 13px; color: var(--grey); }
+  .counter .flag { background: #EAF6D6; color: #4c7a12; border-radius: 999px; padding: 4px 12px; font-weight: 700; font-size: 13px; }
+  .counter .rst { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; font-family: inherit; font-size: 13px; cursor: pointer; color: var(--grey); }
+  .empty { color: var(--grey); font-size: 14.5px; }
+
+  @media (max-width: 520px) {
+    .head h1 { font-size: 27px; }
+    .wrap { padding: 22px 15px 70px; }
+    .card { padding: 17px; }
+    .part { grid-template-columns: 1fr 1fr 60px 38px; }
+  }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/dashboard"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <div class="actions">
+      <button class="btn btn-lang" id="lme-lang" type="button">🇬🇧 English</button>
+      <a class="btn btn-back" href="/apper" data-no="‹ Apper" data-en="‹ Apps">‹ Apper</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="head">
+      <span class="kick" data-no="LME APP" data-en="LME APP">LME APP</span>
+      <h1 data-no="Strikk &amp; Hekle" data-en="Knit &amp; Crochet">Strikk &amp; Hekle</h1>
+      <p data-no="Regn ut masker, rader, økning, felling og garnmengde. Alt tar utgangspunkt i din egen strikkefasthet, så tallene passer akkurat dine hender og ditt garn." data-en="Work out stitches, rows, increases, decreases and yarn amounts. Everything starts from your own gauge, so the numbers fit your hands and your yarn.">Regn ut masker, rader, økning, felling og garnmengde. Alt tar utgangspunkt i din egen strikkefasthet, så tallene passer akkurat dine hender og ditt garn.</p>
+    </div>
+
+    <div class="card gauge">
+      <span class="badge" data-no="Start her" data-en="Start here">Start her</span>
+      <h2 id="gaugeTitle" data-no="Strikkefastheten din" data-en="Your gauge">Strikkefastheten din</h2>
+      <p class="lead" data-no="Strikk eller hekle en prøvelapp på minst 12 x 12 cm, og tell hvor mange masker og rader du får på 10 cm midt i lappen. Alle utregningene under bruker disse tallene, og de lagres på denne enheten." data-en="Knit or crochet a swatch of at least 12 x 12 cm, and count how many stitches and rows you get over 10 cm in the middle of it. Every calculation below uses these numbers, and they are saved on this device.">Strikk eller hekle en prøvelapp på minst 12 x 12 cm, og tell hvor mange masker og rader du får på 10 cm midt i lappen. Alle utregningene under bruker disse tallene, og de lagres på denne enheten.</p>
+
+      <div class="seg" id="techSeg">
+        <button type="button" data-tech="strikk" class="on" data-no="🧶 Strikking" data-en="🧶 Knitting">🧶 Strikking</button>
+        <button type="button" data-tech="hekle" data-no="🪝 Hekling" data-en="🪝 Crochet">🪝 Hekling</button>
+      </div>
+
+      <div class="fields">
+        <div class="field">
+          <label for="gSt" data-no="Masker per 10 cm" data-en="Stitches per 10 cm">Masker per 10 cm</label>
+          <input id="gSt" type="number" inputmode="decimal" step="0.5" min="1" value="22">
+        </div>
+        <div class="field">
+          <label for="gRow" id="gRowLbl" data-no="Rader per 10 cm" data-en="Rows per 10 cm">Rader per 10 cm</label>
+          <input id="gRow" type="number" inputmode="decimal" step="0.5" min="1" value="30">
+        </div>
+      </div>
+      <p class="lead" style="margin:12px 0 0" id="gaugeEcho"></p>
+    </div>
+
+    <div class="tabs" id="tabs">
+      <button type="button" data-tab="t1" class="on" data-no="🧮 Masker &amp; rader" data-en="🧮 Stitches &amp; rows">🧮 Masker &amp; rader</button>
+      <button type="button" data-tab="t2" data-no="📐 Øk &amp; fell" data-en="📐 Increase &amp; decrease">📐 Øk &amp; fell</button>
+      <button type="button" data-tab="t3" data-no="➗ Fordel jevnt" data-en="➗ Spread evenly">➗ Fordel jevnt</button>
+      <button type="button" data-tab="t4" data-no="🧶 Garnmengde" data-en="🧶 Yarn amount">🧶 Garnmengde</button>
+      <button type="button" data-tab="t5" data-no="🔁 Bytt garn" data-en="🔁 Swap yarn">🔁 Bytt garn</button>
+      <button type="button" data-tab="t6" data-no="⭕ Hekling" data-en="⭕ Crochet">⭕ Hekling</button>
+      <button type="button" data-tab="t7" data-no="🔢 Tellere" data-en="🔢 Counters">🔢 Tellere</button>
+      <button type="button" data-tab="t8" data-no="📖 Ordliste" data-en="📖 Glossary">📖 Ordliste</button>
+    </div>
+
+    <!-- TAB 1 -->
+    <section class="panel on" id="t1">
+      <div class="card">
+        <h2 data-no="Hvor mange masker skal jeg legge opp?" data-en="How many stitches do I cast on?">Hvor mange masker skal jeg legge opp?</h2>
+        <p class="lead" data-no="Fyll inn målene på plagget eller delen du skal lage, så får du antall masker og rader." data-en="Enter the measurements of the piece you are making, and you get the number of stitches and rows.">Fyll inn målene på plagget eller delen du skal lage, så får du antall masker og rader.</p>
+        <div class="fields">
+          <div class="field">
+            <label for="m1w" data-no="Bredde (cm)" data-en="Width (cm)">Bredde (cm)</label>
+            <input id="m1w" type="number" inputmode="decimal" step="0.5" min="1" value="50">
+          </div>
+          <div class="field">
+            <label for="m1h" data-no="Høyde (cm)" data-en="Height (cm)">Høyde (cm)</label>
+            <input id="m1h" type="number" inputmode="decimal" step="0.5" min="1" value="60">
+          </div>
+          <div class="field">
+            <label for="m1rep" data-no="Mønsterrapport (masker)" data-en="Pattern repeat (stitches)">Mønsterrapport (masker)</label>
+            <input id="m1rep" type="number" inputmode="numeric" step="1" min="1" value="1">
+            <span class="hint" data-no="Skriv 1 hvis du ikke har mønster." data-en="Enter 1 if you have no pattern repeat.">Skriv 1 hvis du ikke har mønster.</span>
+          </div>
+          <div class="field">
+            <label for="m1edge" data-no="Kantmasker i tillegg" data-en="Extra edge stitches">Kantmasker i tillegg</label>
+            <input id="m1edge" type="number" inputmode="numeric" step="1" min="0" value="0">
+          </div>
+        </div>
+        <button class="go" id="m1go" data-no="Regn ut" data-en="Calculate">Regn ut</button>
+        <div class="res" id="m1res"></div>
+      </div>
+
+      <div class="card">
+        <h2 data-no="Oppskriften har en annen strikkefasthet enn meg" data-en="The pattern has a different gauge than mine">Oppskriften har en annen strikkefasthet enn meg</h2>
+        <p class="lead" data-no="Da regner du om oppskriftens maskeantall til ditt eget, så plagget blir riktig størrelse selv om du strikker fastere eller løsere enn den som skrev oppskriften." data-en="Convert the pattern's stitch count to your own, so the piece comes out the right size even if you knit tighter or looser than whoever wrote the pattern.">Da regner du om oppskriftens maskeantall til ditt eget, så plagget blir riktig størrelse selv om du strikker fastere eller løsere enn den som skrev oppskriften.</p>
+        <div class="fields">
+          <div class="field">
+            <label for="m2pg" data-no="Oppskriftens masker per 10 cm" data-en="Pattern stitches per 10 cm">Oppskriftens masker per 10 cm</label>
+            <input id="m2pg" type="number" inputmode="decimal" step="0.5" min="1" value="20">
+          </div>
+          <div class="field">
+            <label for="m2ps" data-no="Masker oppskriften sier" data-en="Stitches the pattern says">Masker oppskriften sier</label>
+            <input id="m2ps" type="number" inputmode="numeric" step="1" min="1" value="100">
+          </div>
+          <div class="field">
+            <label for="m2rep" data-no="Mønsterrapport (masker)" data-en="Pattern repeat (stitches)">Mønsterrapport (masker)</label>
+            <input id="m2rep" type="number" inputmode="numeric" step="1" min="1" value="1">
+          </div>
+        </div>
+        <button class="go" id="m2go" data-no="Regn om" data-en="Convert">Regn om</button>
+        <div class="res" id="m2res"></div>
+      </div>
+    </section>
+
+    <!-- TAB 2 -->
+    <section class="panel" id="t2">
+      <div class="card">
+        <h2 data-no="Øk og fell jevnt over en lengde" data-en="Increase and decrease evenly over a length">Øk og fell jevnt over en lengde</h2>
+        <p class="lead" data-no="Til ermer, skrå sider, halsutringning og alt annet som skal smalne eller vide seg ut. Du får vite nøyaktig hvor ofte du skal øke eller felle, og på hvilke rader." data-en="For sleeves, sloped sides, necklines and anything that should get narrower or wider. You get exactly how often to increase or decrease, and on which rows.">Til ermer, skrå sider, halsutringning og alt annet som skal smalne eller vide seg ut. Du får vite nøyaktig hvor ofte du skal øke eller felle, og på hvilke rader.</p>
+        <div class="fields">
+          <div class="field">
+            <label for="s1from" data-no="Fra antall masker" data-en="From stitch count">Fra antall masker</label>
+            <input id="s1from" type="number" inputmode="numeric" step="1" min="1" value="48">
+          </div>
+          <div class="field">
+            <label for="s1to" data-no="Til antall masker" data-en="To stitch count">Til antall masker</label>
+            <input id="s1to" type="number" inputmode="numeric" step="1" min="1" value="90">
+          </div>
+          <div class="field">
+            <label for="s1len" data-no="Over lengde" data-en="Over a length of">Over lengde</label>
+            <input id="s1len" type="number" inputmode="decimal" step="0.5" min="1" value="45">
+          </div>
+          <div class="field">
+            <label for="s1unit" data-no="Målt i" data-en="Measured in">Målt i</label>
+            <select id="s1unit">
+              <option value="cm" data-no="Centimeter" data-en="Centimetres">Centimeter</option>
+              <option value="rows" data-no="Rader" data-en="Rows">Rader</option>
+            </select>
+          </div>
+          <div class="field wide">
+            <label for="s1per" data-no="Masker per gang" data-en="Stitches each time">Masker per gang</label>
+            <select id="s1per">
+              <option value="2" data-no="2 masker, én i hver side" data-en="2 stitches, one at each side">2 masker, én i hver side</option>
+              <option value="1" data-no="1 maske, kun én side" data-en="1 stitch, one side only">1 maske, kun én side</option>
+              <option value="4" data-no="4 masker, to i hver side" data-en="4 stitches, two at each side">4 masker, to i hver side</option>
+            </select>
+          </div>
+        </div>
+        <button class="go" id="s1go" data-no="Regn ut" data-en="Calculate">Regn ut</button>
+        <div class="res" id="s1res"></div>
+      </div>
+    </section>
+
+    <!-- TAB 3 -->
+    <section class="panel" id="t3">
+      <div class="card">
+        <h2 data-no="Fordel økninger eller fellinger jevnt på én rad" data-en="Spread increases or decreases evenly across one row">Fordel økninger eller fellinger jevnt på én rad</h2>
+        <p class="lead" data-no="Den klassiske setningen i oppskrifter: fell 12 masker jevnt fordelt. Her får du vite nøyaktig hvor mange masker du skal ha mellom hver." data-en="The classic pattern line: decrease 12 stitches evenly spaced. Here you get exactly how many stitches to work between each one.">Den klassiske setningen i oppskrifter: fell 12 masker jevnt fordelt. Her får du vite nøyaktig hvor mange masker du skal ha mellom hver.</p>
+        <div class="fields">
+          <div class="field">
+            <label for="e1now" data-no="Masker på pinnen nå" data-en="Stitches on the needle now">Masker på pinnen nå</label>
+            <input id="e1now" type="number" inputmode="numeric" step="1" min="2" value="96">
+          </div>
+          <div class="field wide">
+            <label for="e1dir" data-no="Skal du" data-en="Do you want to">Skal du</label>
+            <select id="e1dir">
+              <option value="dec" data-no="Felle masker" data-en="Decrease stitches">Felle masker</option>
+              <option value="inc" data-no="Øke masker" data-en="Increase stitches">Øke masker</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="e1n" data-no="Hvor mange masker" data-en="How many stitches">Hvor mange masker</label>
+            <input id="e1n" type="number" inputmode="numeric" step="1" min="1" value="12">
+          </div>
+        </div>
+        <button class="go" id="e1go" data-no="Regn ut" data-en="Calculate">Regn ut</button>
+        <div class="res" id="e1res"></div>
+      </div>
+    </section>
+
+    <!-- TAB 4 -->
+    <section class="panel" id="t4">
+      <div class="card">
+        <h2 data-no="Garnmengde ut fra prøvelappen" data-en="Yarn amount from your swatch">Garnmengde ut fra prøvelappen</h2>
+        <p class="lead" data-no="Dette er den nøyaktige måten. Vei prøvelappen din på en kjøkkenvekt, legg inn delene plagget består av, så regner appen ut hvor mye garn hele plagget trenger." data-en="This is the accurate way. Weigh your swatch on a kitchen scale, enter the pieces the garment is made of, and the app works out how much yarn the whole thing needs.">Dette er den nøyaktige måten. Vei prøvelappen din på en kjøkkenvekt, legg inn delene plagget består av, så regner appen ut hvor mye garn hele plagget trenger.</p>
+        <div class="fields">
+          <div class="field">
+            <label for="y1sw" data-no="Prøvelappens bredde (cm)" data-en="Swatch width (cm)">Prøvelappens bredde (cm)</label>
+            <input id="y1sw" type="number" inputmode="decimal" step="0.5" min="1" value="12">
+          </div>
+          <div class="field">
+            <label for="y1sh" data-no="Prøvelappens høyde (cm)" data-en="Swatch height (cm)">Prøvelappens høyde (cm)</label>
+            <input id="y1sh" type="number" inputmode="decimal" step="0.5" min="1" value="12">
+          </div>
+          <div class="field">
+            <label for="y1sg" data-no="Prøvelappens vekt (gram)" data-en="Swatch weight (grams)">Prøvelappens vekt (gram)</label>
+            <input id="y1sg" type="number" inputmode="decimal" step="0.1" min="0.1" value="8">
+          </div>
+        </div>
+
+        <h3 style="margin:20px 0 4px" data-no="Delene i plagget" data-en="The pieces of the garment">Delene i plagget</h3>
+        <p class="lead" data-no="Legg inn hver del som et rektangel. En genser er som regel forstykke og bakstykke, hver på halve brystvidden ganger lengden, og to ermer. Rund heller opp enn ned." data-en="Enter each piece as a rectangle. A sweater is usually a front and a back, each half the chest width by the length, plus two sleeves. Round up rather than down.">Legg inn hver del som et rektangel. En genser er som regel forstykke og bakstykke, hver på halve brystvidden ganger lengden, og to ermer. Rund heller opp enn ned.</p>
+        <div class="parts" id="y1parts"></div>
+        <button class="go ghost" id="y1add" style="margin-top:12px" data-no="+ Legg til del" data-en="+ Add piece">+ Legg til del</button>
+
+        <div class="fields" style="margin-top:18px">
+          <div class="field">
+            <label for="y1extra" data-no="Slingringsmonn (%)" data-en="Safety margin (%)">Slingringsmonn (%)</label>
+            <input id="y1extra" type="number" inputmode="numeric" step="5" min="0" value="15">
+            <span class="hint" data-no="Til vrangbord, sammensying og en liten reserve." data-en="For ribbing, seaming and a little reserve.">Til vrangbord, sammensying og en liten reserve.</span>
+          </div>
+          <div class="field">
+            <label for="y1bg" data-no="Gram per nøste" data-en="Grams per ball">Gram per nøste</label>
+            <input id="y1bg" type="number" inputmode="decimal" step="1" min="1" value="50">
+          </div>
+          <div class="field">
+            <label for="y1bm" data-no="Meter per nøste" data-en="Metres per ball">Meter per nøste</label>
+            <input id="y1bm" type="number" inputmode="decimal" step="1" min="1" value="105">
+          </div>
+        </div>
+        <button class="go" id="y1go" data-no="Regn ut garnmengde" data-en="Calculate yarn amount">Regn ut garnmengde</button>
+        <div class="res" id="y1res"></div>
+      </div>
+
+      <div class="card">
+        <h2 data-no="Raskt anslag uten prøvelapp" data-en="Quick estimate without a swatch">Raskt anslag uten prøvelapp</h2>
+        <p class="lead" data-no="Når du står i garnbutikken og bare trenger å vite omtrent hvor mye du skal kjøpe. Dette er et anslag, ikke en fasit, så kjøp heller ett nøste for mye fra samme parti." data-en="For when you are standing in the yarn shop and just need to know roughly how much to buy. This is an estimate, not a fact, so buy one ball too many from the same dye lot.">Når du står i garnbutikken og bare trenger å vite omtrent hvor mye du skal kjøpe. Dette er et anslag, ikke en fasit, så kjøp heller ett nøste for mye fra samme parti.</p>
+        <div class="fields">
+          <div class="field wide">
+            <label for="y2item" data-no="Hva skal du lage" data-en="What are you making">Hva skal du lage</label>
+            <select id="y2item">
+              <option value="genser" data-no="Genser" data-en="Sweater">Genser</option>
+              <option value="jakke" data-no="Jakke eller kardigan" data-en="Jacket or cardigan">Jakke eller kardigan</option>
+              <option value="vest" data-no="Vest eller topp uten ermer" data-en="Vest or sleeveless top">Vest eller topp uten ermer</option>
+              <option value="kjole" data-no="Kjole" data-en="Dress">Kjole</option>
+              <option value="lue" data-no="Lue" data-en="Hat">Lue</option>
+              <option value="hals" data-no="Hals eller pannebånd" data-en="Cowl or headband">Hals eller pannebånd</option>
+              <option value="skjerf" data-no="Skjerf" data-en="Scarf">Skjerf</option>
+              <option value="sjal" data-no="Sjal" data-en="Shawl">Sjal</option>
+              <option value="votter" data-no="Votter eller vanter" data-en="Mittens or gloves">Votter eller vanter</option>
+              <option value="sokker" data-no="Sokker" data-en="Socks">Sokker</option>
+              <option value="babyteppe" data-no="Babyteppe" data-en="Baby blanket">Babyteppe</option>
+              <option value="teppe" data-no="Teppe til sofaen" data-en="Sofa blanket">Teppe til sofaen</option>
+            </select>
+          </div>
+          <div class="field wide">
+            <label for="y2size" data-no="Størrelse" data-en="Size">Størrelse</label>
+            <select id="y2size">
+              <option value="baby" data-no="Baby, 0 til 1 år" data-en="Baby, 0 to 1 year">Baby, 0 til 1 år</option>
+              <option value="barn" data-no="Barn, 2 til 5 år" data-en="Child, 2 to 5 years">Barn, 2 til 5 år</option>
+              <option value="storbarn" data-no="Barn, 6 til 11 år" data-en="Child, 6 to 11 years">Barn, 6 til 11 år</option>
+              <option value="xs" data-no="Voksen XS" data-en="Adult XS">Voksen XS</option>
+              <option value="s" data-no="Voksen S" data-en="Adult S">Voksen S</option>
+              <option value="m" selected data-no="Voksen M" data-en="Adult M">Voksen M</option>
+              <option value="l" data-no="Voksen L" data-en="Adult L">Voksen L</option>
+              <option value="xl" data-no="Voksen XL" data-en="Adult XL">Voksen XL</option>
+              <option value="xxl" data-no="Voksen 2XL" data-en="Adult 2XL">Voksen 2XL</option>
+              <option value="xxxl" data-no="Voksen 3XL" data-en="Adult 3XL">Voksen 3XL</option>
+            </select>
+          </div>
+          <div class="field wide">
+            <label for="y2yarn" data-no="Garntykkelse" data-en="Yarn weight">Garntykkelse</label>
+            <select id="y2yarn">
+              <option value="lace" data-no="Tynt, over 500 m per 100 g" data-en="Lace, over 500 m per 100 g">Tynt, over 500 m per 100 g</option>
+              <option value="fingering" data-no="Sokkegarn, 350 til 450 m" data-en="Fingering, 350 to 450 m">Sokkegarn, 350 til 450 m</option>
+              <option value="sport" data-no="Tynn mellomtykk, 280 til 350 m" data-en="Sport, 280 to 350 m">Tynn mellomtykk, 280 til 350 m</option>
+              <option value="dk" selected data-no="Mellomtykk, 200 til 280 m" data-en="DK, 200 to 280 m">Mellomtykk, 200 til 280 m</option>
+              <option value="aran" data-no="Tykk, 140 til 200 m" data-en="Aran, 140 to 200 m">Tykk, 140 til 200 m</option>
+              <option value="chunky" data-no="Tykt, 80 til 140 m" data-en="Chunky, 80 to 140 m">Tykt, 80 til 140 m</option>
+              <option value="superchunky" data-no="Ekstra tykt, under 80 m" data-en="Super chunky, under 80 m">Ekstra tykt, under 80 m</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="y2bg" data-no="Gram per nøste" data-en="Grams per ball">Gram per nøste</label>
+            <input id="y2bg" type="number" inputmode="decimal" step="1" min="1" value="50">
+          </div>
+        </div>
+        <button class="go" id="y2go" data-no="Gi meg et anslag" data-en="Give me an estimate">Gi meg et anslag</button>
+        <div class="res" id="y2res"></div>
+      </div>
+
+      <div class="card">
+        <h2 data-no="Hvor langt rekker garnet jeg har igjen?" data-en="How far will my leftover yarn go?">Hvor langt rekker garnet jeg har igjen?</h2>
+        <p class="lead" data-no="Vei restegarnet, så ser du hvor mange kvadratcentimeter og hvor mange rader du får ut av det med den strikkefastheten du har oppgitt øverst." data-en="Weigh your leftovers, and see how many square centimetres and how many rows you get out of them at the gauge you entered at the top.">Vei restegarnet, så ser du hvor mange kvadratcentimeter og hvor mange rader du får ut av det med den strikkefastheten du har oppgitt øverst.</p>
+        <div class="fields">
+          <div class="field">
+            <label for="y3g" data-no="Restegarn (gram)" data-en="Leftover yarn (grams)">Restegarn (gram)</label>
+            <input id="y3g" type="number" inputmode="decimal" step="1" min="1" value="60">
+          </div>
+          <div class="field">
+            <label for="y3w" data-no="Bredde på arbeidet (cm)" data-en="Width of the piece (cm)">Bredde på arbeidet (cm)</label>
+            <input id="y3w" type="number" inputmode="decimal" step="0.5" min="1" value="20">
+          </div>
+        </div>
+        <p class="lead" style="margin-top:12px" data-no="Utregningen bruker prøvelappen fra kortet øverst i denne fanen, så fyll den ut først." data-en="This uses the swatch from the first card in this tab, so fill that in first.">Utregningen bruker prøvelappen fra kortet øverst i denne fanen, så fyll den ut først.</p>
+        <button class="go" id="y3go" data-no="Regn ut" data-en="Calculate">Regn ut</button>
+        <div class="res" id="y3res"></div>
+      </div>
+    </section>
+
+    <!-- TAB 5 -->
+    <section class="panel" id="t5">
+      <div class="card">
+        <h2 data-no="Bytte til et annet garn enn oppskriften sier" data-en="Swapping to a different yarn than the pattern says">Bytte til et annet garn enn oppskriften sier</h2>
+        <p class="lead" data-no="Nøster kan ikke sammenlignes med nøster, bare meter med meter. Her regner du om fra oppskriftens garn til det du faktisk vil bruke." data-en="You cannot compare balls with balls, only metres with metres. Here you convert from the pattern's yarn to the one you actually want to use.">Nøster kan ikke sammenlignes med nøster, bare meter med meter. Her regner du om fra oppskriftens garn til det du faktisk vil bruke.</p>
+        <h3 style="margin-top:14px" data-no="Garnet i oppskriften" data-en="The yarn in the pattern">Garnet i oppskriften</h3>
+        <div class="fields" style="margin-top:10px">
+          <div class="field">
+            <label for="b1n" data-no="Antall nøster" data-en="Number of balls">Antall nøster</label>
+            <input id="b1n" type="number" inputmode="decimal" step="1" min="1" value="10">
+          </div>
+          <div class="field">
+            <label for="b1g" data-no="Gram per nøste" data-en="Grams per ball">Gram per nøste</label>
+            <input id="b1g" type="number" inputmode="decimal" step="1" min="1" value="50">
+          </div>
+          <div class="field">
+            <label for="b1m" data-no="Meter per nøste" data-en="Metres per ball">Meter per nøste</label>
+            <input id="b1m" type="number" inputmode="decimal" step="1" min="1" value="105">
+          </div>
+        </div>
+        <h3 style="margin-top:18px" data-no="Garnet du vil bruke" data-en="The yarn you want to use">Garnet du vil bruke</h3>
+        <div class="fields" style="margin-top:10px">
+          <div class="field">
+            <label for="b2g" data-no="Gram per nøste" data-en="Grams per ball">Gram per nøste</label>
+            <input id="b2g" type="number" inputmode="decimal" step="1" min="1" value="100">
+          </div>
+          <div class="field">
+            <label for="b2m" data-no="Meter per nøste" data-en="Metres per ball">Meter per nøste</label>
+            <input id="b2m" type="number" inputmode="decimal" step="1" min="1" value="230">
+          </div>
+        </div>
+        <button class="go" id="b1go" data-no="Regn om" data-en="Convert">Regn om</button>
+        <div class="res" id="b1res"></div>
+      </div>
+    </section>
+
+    <!-- TAB 6 -->
+    <section class="panel" id="t6">
+      <div class="card">
+        <h2 data-no="Flat sirkel, runde for runde" data-en="Flat circle, round by round">Flat sirkel, runde for runde</h2>
+        <p class="lead" data-no="Til grytekluter, kurvbunner, hekleteppe i sirkel og bunnen på amigurumi. Du får hele oppskriften, runde for runde, med riktig antall økninger så sirkelen ligger flatt." data-en="For dishcloths, basket bases, circular blankets and the base of amigurumi. You get the whole pattern, round by round, with the right number of increases so the circle lies flat.">Til grytekluter, kurvbunner, hekleteppe i sirkel og bunnen på amigurumi. Du får hele oppskriften, runde for runde, med riktig antall økninger så sirkelen ligger flatt.</p>
+        <div class="fields">
+          <div class="field">
+            <label for="c1d" data-no="Ønsket diameter (cm)" data-en="Wanted diameter (cm)">Ønsket diameter (cm)</label>
+            <input id="c1d" type="number" inputmode="decimal" step="0.5" min="2" value="20">
+          </div>
+          <div class="field wide">
+            <label for="c1st" data-no="Masketype" data-en="Stitch type">Masketype</label>
+            <select id="c1st">
+              <option value="6" data-no="Fastmasker, 6 i ringen" data-en="Single crochet, 6 in the ring">Fastmasker, 6 i ringen</option>
+              <option value="8" data-no="Halvstaver, 8 i ringen" data-en="Half double crochet, 8 in the ring">Halvstaver, 8 i ringen</option>
+              <option value="12" data-no="Staver, 12 i ringen" data-en="Double crochet, 12 in the ring">Staver, 12 i ringen</option>
+            </select>
+          </div>
+        </div>
+        <button class="go" id="c1go" data-no="Lag oppskriften" data-en="Build the pattern">Lag oppskriften</button>
+        <div class="res" id="c1res"></div>
+      </div>
+
+      <div class="card">
+        <h2 data-no="Ruter til et teppe" data-en="Squares for a blanket">Ruter til et teppe</h2>
+        <p class="lead" data-no="Bestemorruter og andre firkanter. Se hvor mange ruter du trenger, hvor stort teppet faktisk blir, og hvor mye garn det går med." data-en="Granny squares and other blocks. See how many squares you need, how big the blanket actually turns out, and how much yarn it takes.">Bestemorruter og andre firkanter. Se hvor mange ruter du trenger, hvor stort teppet faktisk blir, og hvor mye garn det går med.</p>
+        <div class="fields">
+          <div class="field">
+            <label for="c2w" data-no="Teppets bredde (cm)" data-en="Blanket width (cm)">Teppets bredde (cm)</label>
+            <input id="c2w" type="number" inputmode="decimal" step="1" min="10" value="120">
+          </div>
+          <div class="field">
+            <label for="c2h" data-no="Teppets lengde (cm)" data-en="Blanket length (cm)">Teppets lengde (cm)</label>
+            <input id="c2h" type="number" inputmode="decimal" step="1" min="10" value="150">
+          </div>
+          <div class="field">
+            <label for="c2s" data-no="Én rute måler (cm)" data-en="One square measures (cm)">Én rute måler (cm)</label>
+            <input id="c2s" type="number" inputmode="decimal" step="0.5" min="2" value="15">
+          </div>
+          <div class="field">
+            <label for="c2g" data-no="Gram garn per rute" data-en="Grams of yarn per square">Gram garn per rute</label>
+            <input id="c2g" type="number" inputmode="decimal" step="0.5" min="0" value="9">
+            <span class="hint" data-no="Vei én ferdig rute. Skriv 0 hvis du ikke vet." data-en="Weigh one finished square. Enter 0 if you do not know.">Vei én ferdig rute. Skriv 0 hvis du ikke vet.</span>
+          </div>
+        </div>
+        <button class="go" id="c2go" data-no="Regn ut" data-en="Calculate">Regn ut</button>
+        <div class="res" id="c2res"></div>
+      </div>
+
+      <div class="card">
+        <h2 data-no="Startkjede til noe rett" data-en="Starting chain for something straight">Startkjede til noe rett</h2>
+        <p class="lead" data-no="Til pledd, skjerf og alt du hekler frem og tilbake. Du får antall luftmasker, med mønsterrapport og vendemasker regnet inn." data-en="For blankets, scarves and anything you crochet back and forth. You get the number of chains, with the pattern repeat and turning chains included.">Til pledd, skjerf og alt du hekler frem og tilbake. Du får antall luftmasker, med mønsterrapport og vendemasker regnet inn.</p>
+        <div class="fields">
+          <div class="field">
+            <label for="c3w" data-no="Ønsket bredde (cm)" data-en="Wanted width (cm)">Ønsket bredde (cm)</label>
+            <input id="c3w" type="number" inputmode="decimal" step="1" min="2" value="90">
+          </div>
+          <div class="field">
+            <label for="c3rep" data-no="Mønsterrapport (masker)" data-en="Pattern repeat (stitches)">Mønsterrapport (masker)</label>
+            <input id="c3rep" type="number" inputmode="numeric" step="1" min="1" value="3">
+          </div>
+          <div class="field">
+            <label for="c3turn" data-no="Vendemasker" data-en="Turning chains">Vendemasker</label>
+            <input id="c3turn" type="number" inputmode="numeric" step="1" min="0" value="3">
+            <span class="hint" data-no="1 for fastmasker, 2 for halvstaver, 3 for staver." data-en="1 for single crochet, 2 for half doubles, 3 for doubles.">1 for fastmasker, 2 for halvstaver, 3 for staver.</span>
+          </div>
+        </div>
+        <button class="go" id="c3go" data-no="Regn ut" data-en="Calculate">Regn ut</button>
+        <div class="res" id="c3res"></div>
+      </div>
+    </section>
+
+    <!-- TAB 7 -->
+    <section class="panel" id="t7">
+      <div class="card">
+        <h2 data-no="Tellere" data-en="Counters">Tellere</h2>
+        <p class="lead" data-no="Én teller for hvert prosjekt eller hver del. Sett inn hvor ofte du skal øke eller felle, så sier telleren fra når det er rad for det. Alt lagres på denne enheten, også om du lukker siden." data-en="One counter for each project or piece. Enter how often you increase or decrease, and the counter tells you when it is time. Everything is saved on this device, even if you close the page.">Én teller for hvert prosjekt eller hver del. Sett inn hvor ofte du skal øke eller felle, så sier telleren fra når det er rad for det. Alt lagres på denne enheten, også om du lukker siden.</p>
+        <div class="fields">
+          <div class="field">
+            <label for="k1nm" data-no="Navn på telleren" data-en="Counter name">Navn på telleren</label>
+            <input id="k1nm" type="text" maxlength="40" placeholder="Erme 1">
+          </div>
+          <div class="field">
+            <label for="k1int" data-no="Marker hver … rad" data-en="Mark every … row">Marker hver … rad</label>
+            <input id="k1int" type="number" inputmode="numeric" step="1" min="0" value="0">
+            <span class="hint" data-no="Skriv 0 hvis du bare vil telle." data-en="Enter 0 if you just want to count.">Skriv 0 hvis du bare vil telle.</span>
+          </div>
+        </div>
+        <button class="go" id="k1add" data-no="Lag teller" data-en="Add counter">Lag teller</button>
+      </div>
+      <div class="counters" id="k1list"></div>
+    </section>
+
+    <!-- TAB 8 -->
+    <section class="panel" id="t8">
+      <div class="card">
+        <h2 data-no="Heklemasker på norsk, amerikansk og britisk" data-en="Crochet stitches in Norwegian, US and UK terms">Heklemasker på norsk, amerikansk og britisk</h2>
+        <p class="lead" data-no="Den vanligste fellen i engelske oppskrifter: en amerikansk double crochet er en norsk stav, mens en britisk double crochet er en fastmaske. Sjekk alltid hvilket land oppskriften kommer fra." data-en="The most common trap in English patterns: a US double crochet is a Norwegian stav, while a UK double crochet is a fastmaske. Always check which country the pattern comes from.">Den vanligste fellen i engelske oppskrifter: en amerikansk double crochet er en norsk stav, mens en britisk double crochet er en fastmaske. Sjekk alltid hvilket land oppskriften kommer fra.</p>
+        <div class="tbl-scroll">
+        <table class="tbl">
+          <thead><tr>
+            <th data-no="Norsk" data-en="Norwegian">Norsk</th>
+            <th data-no="Amerikansk (US)" data-en="American (US)">Amerikansk (US)</th>
+            <th data-no="Britisk (UK)" data-en="British (UK)">Britisk (UK)</th>
+          </tr></thead>
+          <tbody>
+            <tr><td data-no="Luftmaske (lm)" data-en="Luftmaske (lm)">Luftmaske (lm)</td><td>chain (ch)</td><td>chain (ch)</td></tr>
+            <tr><td data-no="Kjedemaske (km)" data-en="Kjedemaske (km)">Kjedemaske (km)</td><td>slip stitch (sl st)</td><td>slip stitch (sl st)</td></tr>
+            <tr><td data-no="Fastmaske (fm)" data-en="Fastmaske (fm)">Fastmaske (fm)</td><td>single crochet (sc)</td><td>double crochet (dc)</td></tr>
+            <tr><td data-no="Halvstav (hst)" data-en="Halvstav (hst)">Halvstav (hst)</td><td>half double crochet (hdc)</td><td>half treble (htr)</td></tr>
+            <tr><td data-no="Stav (st)" data-en="Stav (st)">Stav (st)</td><td>double crochet (dc)</td><td>treble (tr)</td></tr>
+            <tr><td data-no="Dobbeltstav (dst)" data-en="Dobbeltstav (dst)">Dobbeltstav (dst)</td><td>treble (tr)</td><td>double treble (dtr)</td></tr>
+            <tr><td data-no="Magisk ring" data-en="Magisk ring">Magisk ring</td><td>magic ring / magic circle</td><td>magic ring / magic circle</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 data-no="Strikkeord norsk og engelsk" data-en="Knitting terms in Norwegian and English">Strikkeord norsk og engelsk</h2>
+        <div class="tbl-scroll">
+        <table class="tbl">
+          <thead><tr>
+            <th data-no="Norsk" data-en="Norwegian">Norsk</th>
+            <th data-no="Engelsk" data-en="English">Engelsk</th>
+          </tr></thead>
+          <tbody>
+            <tr><td data-no="Legg opp" data-en="Legg opp">Legg opp</td><td>cast on (CO)</td></tr>
+            <tr><td data-no="Fell av" data-en="Fell av">Fell av</td><td>bind off / cast off (BO)</td></tr>
+            <tr><td data-no="Rett maske (r)" data-en="Rett maske (r)">Rett maske (r)</td><td>knit (k)</td></tr>
+            <tr><td data-no="Vrang maske (vr)" data-en="Vrang maske (vr)">Vrang maske (vr)</td><td>purl (p)</td></tr>
+            <tr><td data-no="2 rett sammen" data-en="2 rett sammen">2 rett sammen</td><td>k2tog</td></tr>
+            <tr><td data-no="Løft 1, 1 rett, trekk den løftede over" data-en="Løft 1, 1 rett, trekk den løftede over">Løft 1, 1 rett, trekk den løftede over</td><td>ssk / sl1-k1-psso</td></tr>
+            <tr><td data-no="Ta ut 1 maske" data-en="Ta ut 1 maske">Ta ut 1 maske</td><td>make 1 (M1) / increase</td></tr>
+            <tr><td data-no="Kast" data-en="Kast">Kast</td><td>yarn over (yo)</td></tr>
+            <tr><td data-no="Glattstrikk" data-en="Glattstrikk">Glattstrikk</td><td>stockinette / stocking stitch</td></tr>
+            <tr><td data-no="Rettstrikk" data-en="Rettstrikk">Rettstrikk</td><td>garter stitch</td></tr>
+            <tr><td data-no="Vrangbord" data-en="Vrangbord">Vrangbord</td><td>ribbing</td></tr>
+            <tr><td data-no="Omgang" data-en="Omgang">Omgang</td><td>round (rnd)</td></tr>
+            <tr><td data-no="Pinne eller rad" data-en="Pinne eller rad">Pinne eller rad</td><td>row</td></tr>
+            <tr><td data-no="Strikkefasthet" data-en="Strikkefasthet">Strikkefasthet</td><td>gauge / tension</td></tr>
+            <tr><td data-no="Prøvelapp" data-en="Prøvelapp">Prøvelapp</td><td>swatch</td></tr>
+            <tr><td data-no="Maskemarkør" data-en="Maskemarkør">Maskemarkør</td><td>stitch marker</td></tr>
+            <tr><td data-no="Hvilemasker" data-en="Hvilemasker">Hvilemasker</td><td>stitches on hold</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 data-no="Garntykkelse, pinner og heklenål" data-en="Yarn weight, needles and hooks">Garntykkelse, pinner og heklenål</h2>
+        <p class="lead" data-no="Veiledende tall. Garnbanderolen og din egen prøvelapp bestemmer alltid til slutt." data-en="Guideline numbers. The ball band and your own swatch always have the final say.">Veiledende tall. Garnbanderolen og din egen prøvelapp bestemmer alltid til slutt.</p>
+        <div class="tbl-scroll">
+        <table class="tbl">
+          <thead><tr>
+            <th data-no="Norsk navn" data-en="Norwegian name">Norsk navn</th>
+            <th data-no="Engelsk navn" data-en="English name">Engelsk navn</th>
+            <th data-no="Meter per 100 g" data-en="Metres per 100 g">Meter per 100 g</th>
+            <th data-no="Pinner" data-en="Needles">Pinner</th>
+            <th data-no="Heklenål" data-en="Hook">Heklenål</th>
+          </tr></thead>
+          <tbody>
+            <tr><td data-no="Tynt" data-en="Thin">Tynt</td><td>Lace</td><td>500–800</td><td>2–3 mm</td><td>2–3 mm</td></tr>
+            <tr><td data-no="Sokkegarn" data-en="Sock yarn">Sokkegarn</td><td>Fingering</td><td>350–450</td><td>2,5–3,5 mm</td><td>2,5–3,5 mm</td></tr>
+            <tr><td data-no="Tynn mellomtykk" data-en="Light DK">Tynn mellomtykk</td><td>Sport</td><td>280–350</td><td>3–3,5 mm</td><td>3–4 mm</td></tr>
+            <tr><td data-no="Mellomtykk" data-en="Medium">Mellomtykk</td><td>DK</td><td>200–280</td><td>3,5–4,5 mm</td><td>4–5 mm</td></tr>
+            <tr><td data-no="Tykk" data-en="Thick">Tykk</td><td>Worsted / Aran</td><td>140–200</td><td>4,5–5,5 mm</td><td>5–6 mm</td></tr>
+            <tr><td data-no="Tykt" data-en="Bulky">Tykt</td><td>Chunky</td><td>80–140</td><td>6–8 mm</td><td>6–9 mm</td></tr>
+            <tr><td data-no="Ekstra tykt" data-en="Extra thick">Ekstra tykt</td><td>Super chunky</td><td data-no="under 80" data-en="under 80">under 80</td><td>9–15 mm</td><td>10–15 mm</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 data-no="Tre ting som redder prosjektet" data-en="Three things that save a project">Tre ting som redder prosjektet</h2>
+        <ul style="margin-left:18px;font-size:15px">
+          <li style="margin-bottom:8px" data-no="Strikk prøvelappen større enn 10 x 10 cm, og mål midt i den. Kantene trekker seg alltid litt sammen og lyver på deg." data-en="Make the swatch bigger than 10 x 10 cm, and measure in the middle of it. The edges always pull in a little and lie to you.">Strikk prøvelappen større enn 10 x 10 cm, og mål midt i den. Kantene trekker seg alltid litt sammen og lyver på deg.</li>
+          <li style="margin-bottom:8px" data-no="Vask og tørk prøvelappen som du vil vaske plagget, før du måler. Mange garn endrer seg i vann." data-en="Wash and dry the swatch the way you will wash the garment, before you measure. Many yarns change in water.">Vask og tørk prøvelappen som du vil vaske plagget, før du måler. Mange garn endrer seg i vann.</li>
+          <li data-no="Kjøp alt garnet på én gang, fra samme parti. Fargen kan variere mellom partiene, og det synes på et ferdig plagg." data-en="Buy all the yarn at once, from the same dye lot. Colour can vary between lots, and it shows on a finished garment.">Kjøp alt garnet på én gang, fra samme parti. Fargen kan variere mellom partiene, og det synes på et ferdig plagg.</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- språk ---------- */
+  window.LME_CURRENT_LANG = 'no';
+  try { window.LME_CURRENT_LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no'; } catch (e) {}
+  function en() { return window.LME_CURRENT_LANG === 'en'; }
+  function t(no, eng) { return en() ? eng : no; }
+
+  function applyLang() {
+    var isEn = en();
+    document.documentElement.lang = isEn ? 'en' : 'no';
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      el.textContent = isEn ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    var b = document.getElementById('lme-lang');
+    if (b) b.textContent = isEn ? '🇳🇴 Norsk' : '🇬🇧 English';
+    document.title = (isEn ? 'Knit & Crochet' : 'Strikk & Hekle') + ' — LME';
+    gaugeEcho();
+    rerunAll();
+    renderCounters();
+  }
+  window.lmeToggleLang = function () {
+    window.LME_CURRENT_LANG = en() ? 'no' : 'en';
+    try { localStorage.setItem('lme_lang', window.LME_CURRENT_LANG); } catch (e) {}
+    applyLang();
+    try { window.dispatchEvent(new Event('lme-lang')); } catch (e) {}
+  };
+
+  /* ---------- små hjelpere ---------- */
+  function el(id) { return document.getElementById(id); }
+  function num(id) {
+    var v = el(id).value.replace(',', '.').trim();
+    var n = parseFloat(v);
+    return isNaN(n) ? null : n;
+  }
+  function fmt(n, dec) {
+    dec = dec || 0;
+    return n.toLocaleString(en() ? 'en-GB' : 'nb-NO', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+  function show(id, html) {
+    var box = el(id);
+    box.innerHTML = html;
+    box.classList.add('on');
+  }
+  function err(id, msg) {
+    show(id, '<p class="warn" style="margin:0">' + msg + '</p>');
+  }
+  /* riktig ordform for rekkefølge: 4. rad, 6. rad ... */
+  function ordinal(n) { return en() ? (n + (n === 1 ? 'st' : n === 2 ? 'nd' : n === 3 ? 'rd' : 'th')) : (n + '.'); }
+
+  /* ---------- teknikk og strikkefasthet ---------- */
+  var tech = 'strikk';
+  try { tech = localStorage.getItem('lme_strikk_tech') === 'hekle' ? 'hekle' : 'strikk'; } catch (e) {}
+
+  function isCro() { return tech === 'hekle'; }
+  function rowWord(cap) {
+    var w = isCro() ? t('omgang', 'round') : t('rad', 'row');
+    return cap ? w.charAt(0).toUpperCase() + w.slice(1) : w;
+  }
+  function rowsWord() { return isCro() ? t('omganger', 'rounds') : t('rader', 'rows'); }
+  function rowsWordDef() { return isCro() ? t('omgangene', 'rounds') : t('radene', 'rows'); }
+  function gaugeWord() { return isCro() ? t('heklefastheten', 'gauge') : t('strikkefastheten', 'gauge'); }
+  function doVerb(cap) {
+    var w = isCro() ? t('hekle', 'crochet') : t('strikk', 'knit');
+    return cap ? w.charAt(0).toUpperCase() + w.slice(1) : w;
+  }
+  function decPhrase() { return isCro() ? t('2 masker sammen', 'work 2 stitches together') : t('2 rett sammen', 'k2tog'); }
+
+  function saveGauge() {
+    try {
+      localStorage.setItem('lme_strikk_tech', tech);
+      localStorage.setItem('lme_strikk_gauge', JSON.stringify({ st: el('gSt').value, row: el('gRow').value }));
+    } catch (e) {}
+  }
+  function loadGauge() {
+    try {
+      var g = JSON.parse(localStorage.getItem('lme_strikk_gauge') || 'null');
+      if (g && g.st) el('gSt').value = g.st;
+      if (g && g.row) el('gRow').value = g.row;
+    } catch (e) {}
+  }
+  function gaugeEcho() {
+    var st = num('gSt'), row = num('gRow');
+    var ttl = el('gaugeTitle');
+    ttl.setAttribute('data-no', isCro() ? 'Heklefastheten din' : 'Strikkefastheten din');
+    ttl.textContent = en() ? ttl.getAttribute('data-en') : ttl.getAttribute('data-no');
+    var lbl = el('gRowLbl');
+    lbl.setAttribute('data-no', isCro() ? 'Omganger per 10 cm' : 'Rader per 10 cm');
+    lbl.setAttribute('data-en', isCro() ? 'Rounds per 10 cm' : 'Rows per 10 cm');
+    lbl.textContent = en() ? lbl.getAttribute('data-en') : lbl.getAttribute('data-no');
+    if (!st || !row) { el('gaugeEcho').textContent = ''; return; }
+    el('gaugeEcho').textContent = t(
+      'Én maske er ' + fmt(10 / st, 2) + ' cm bred, og én ' + rowWord() + ' er ' + fmt(10 / row, 2) + ' cm høy.',
+      'One stitch is ' + fmt(10 / st, 2) + ' cm wide, and one ' + rowWord() + ' is ' + fmt(10 / row, 2) + ' cm tall.'
+    );
+  }
+  function setTech(v) {
+    tech = v;
+    document.querySelectorAll('#techSeg button').forEach(function (b) {
+      b.classList.toggle('on', b.getAttribute('data-tech') === v);
+    });
+    saveGauge();
+    gaugeEcho();
+    rerunAll();
+  }
+  document.querySelectorAll('#techSeg button').forEach(function (b) {
+    b.addEventListener('click', function () { setTech(b.getAttribute('data-tech')); });
+  });
+  ['gSt', 'gRow'].forEach(function (id) {
+    el(id).addEventListener('input', function () { saveGauge(); gaugeEcho(); rerunAll(); });
+  });
+
+  /* ---------- faner ---------- */
+  document.querySelectorAll('#tabs button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('#tabs button').forEach(function (x) { x.classList.remove('on'); });
+      document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('on'); });
+      b.classList.add('on');
+      el(b.getAttribute('data-tab')).classList.add('on');
+    });
+  });
+
+  /* ---------- kjør på nytt ved språk- eller teknikkbytte ---------- */
+  var ran = {};
+  function runner(key, fn) {
+    return function () { ran[key] = true; fn(); };
+  }
+  function rerunAll() {
+    Object.keys(ran).forEach(function (k) { if (ran[k] && calcs[k]) calcs[k](); });
+  }
+  var calcs = {};
+
+  /* ================= 1: masker og rader ================= */
+  calcs.m1 = function () {
+    var g = num('gSt'), gr = num('gRow'), w = num('m1w'), h = num('m1h');
+    var rep = Math.max(1, Math.round(num('m1rep') || 1)), edge = Math.max(0, Math.round(num('m1edge') || 0));
+    if (!g || !gr || !w || !h) { return err('m1res', t('Fyll inn strikkefasthet, bredde og høyde.', 'Fill in gauge, width and height.')); }
+    var raw = w / 10 * g;
+    var body = Math.max(rep, Math.round(raw / rep) * rep);
+    var total = body + edge;
+    var rows = Math.max(1, Math.round(h / 10 * gr));
+    var realW = total / g * 10;
+    var html = '<div class="big">' + (isCro()
+      ? t('Start med ' + fmt(total) + ' masker', 'Start with ' + fmt(total) + ' stitches')
+      : t('Legg opp ' + fmt(total) + ' masker', 'Cast on ' + fmt(total) + ' stitches')) + '</div>';
+    html += '<p>' + t(doVerb(true) + ' ' + fmt(rows) + ' ' + rowsWord() + ' for å få ' + fmt(h, 1) + ' cm i høyden.',
+      doVerb(true) + ' ' + fmt(rows) + ' ' + rowsWord() + ' to reach ' + fmt(h, 1) + ' cm in height.') + '</p>';
+    var off = Math.abs(realW - w);
+    var offNo = off < 0.05 ? ' Det gir nøyaktig ' + fmt(realW, 1) + ' cm bredde.' : ' Det gir ' + fmt(realW, 1) + ' cm bredde, ' + fmt(off, 1) + ' cm fra målet ditt.';
+    var offEn = off < 0.05 ? ' That gives exactly ' + fmt(realW, 1) + ' cm in width.' : ' That gives ' + fmt(realW, 1) + ' cm in width, ' + fmt(off, 1) + ' cm from your target.';
+    html += '<p class="note">' + t(
+      'Utregningen ga ' + fmt(raw, 1) + ' masker. Rundet til ' + fmt(body) + ' masker' + (rep > 1 ? ', som går opp i mønsterrapporten på ' + rep + ' masker' : '') + (edge ? ', pluss ' + edge + ' kantmasker' : '') + '.' + offNo,
+      'The calculation gave ' + fmt(raw, 1) + ' stitches. Rounded to ' + fmt(body) + ' stitches' + (rep > 1 ? ', which fits the repeat of ' + rep + ' stitches' : '') + (edge ? ', plus ' + edge + ' edge stitches' : '') + '.' + offEn) + '</p>';
+    show('m1res', html);
+  };
+  el('m1go').addEventListener('click', runner('m1', calcs.m1));
+
+  /* ================= 1b: skaler oppskrift ================= */
+  calcs.m2 = function () {
+    var mine = num('gSt'), pg = num('m2pg'), ps = num('m2ps');
+    var rep = Math.max(1, Math.round(num('m2rep') || 1));
+    if (!mine || !pg || !ps) { return err('m2res', t('Fyll inn begge strikkefasthetene og maskeantallet.', 'Fill in both gauges and the stitch count.')); }
+    var cm = ps / pg * 10;
+    var raw = cm / 10 * mine;
+    var mineSt = Math.max(rep, Math.round(raw / rep) * rep);
+    var html = '<div class="big">' + t(fmt(mineSt) + ' masker for deg', fmt(mineSt) + ' stitches for you') + '</div>';
+    html += '<p>' + t('Oppskriftens ' + fmt(ps) + ' masker gir ' + fmt(cm, 1) + ' cm. Med din strikkefasthet trenger du ' + fmt(mineSt) + ' masker for den samme bredden.',
+      'The pattern’s ' + fmt(ps) + ' stitches give ' + fmt(cm, 1) + ' cm. With your gauge you need ' + fmt(mineSt) + ' stitches for the same width.') + '</p>';
+    if (mine > pg) {
+      html += '<p class="note">' + t('Du strikker fastere enn oppskriften, derfor trenger du flere masker.', 'You work tighter than the pattern, so you need more stitches.') + '</p>';
+    } else if (mine < pg) {
+      html += '<p class="note">' + t('Du strikker løsere enn oppskriften, derfor trenger du færre masker.', 'You work looser than the pattern, so you need fewer stitches.') + '</p>';
+    }
+    html += '<p class="note">' + t('Husk å regne om alle maskeantall i oppskriften på samme måte, ikke bare oppleggingen. Gang med ' + fmt(mine / pg, 3) + '.',
+      'Remember to convert every stitch count in the pattern the same way, not just the cast-on. Multiply by ' + fmt(mine / pg, 3) + '.') + '</p>';
+    show('m2res', html);
+  };
+  el('m2go').addEventListener('click', runner('m2', calcs.m2));
+
+  /* ================= 2: øk og fell over lengde ================= */
+  calcs.s1 = function () {
+    var from = Math.round(num('s1from')), to = Math.round(num('s1to'));
+    var len = num('s1len'), unit = el('s1unit').value, per = parseInt(el('s1per').value, 10);
+    var gr = num('gRow');
+    if (!from || !to || !len) { return err('s1res', t('Fyll inn maskeantall og lengde.', 'Fill in stitch counts and length.')); }
+    if (from === to) { return err('s1res', t('Start og mål er like, da er det ingenting å øke eller felle.', 'Start and target are the same, so there is nothing to increase or decrease.')); }
+    var R = unit === 'cm' ? Math.round(len / 10 * gr) : Math.round(len);
+    if (!R || R < 1) { return err('s1res', t('Lengden gir null ' + rowsWord() + '. Sjekk strikkefastheten.', 'The length gives zero ' + rowsWord() + '. Check your gauge.')); }
+    var up = to > from;
+    var diff = Math.abs(to - from);
+    var N = Math.round(diff / per);
+    if (N < 1) { return err('s1res', t('Forskjellen er mindre enn ' + per + ' masker. Velg færre masker per gang.', 'The difference is smaller than ' + per + ' stitches. Choose fewer stitches each time.')); }
+    var reached = from + (up ? 1 : -1) * N * per;
+    if (N > R) {
+      return err('s1res', t(
+        'Det er ikke plass. Over ' + fmt(R) + ' ' + rowsWord() + ' rekker du høyst ' + fmt(R * per) + ' masker når du tar ' + per + ' av gangen. Du trenger ' + fmt(diff) + '.',
+        'It does not fit. Over ' + fmt(R) + ' ' + rowsWord() + ' you can change at most ' + fmt(R * per) + ' stitches at ' + per + ' at a time. You need ' + fmt(diff) + '.'));
+    }
+    var q = Math.floor(R / N), r = R % N;
+    var groups = [];
+    if (N - r > 0) groups.push({ every: q, times: N - r });
+    if (r > 0) groups.push({ every: q + 1, times: r });
+
+    var verb = up ? t('Øk', 'Increase') : t('Fell', 'Decrease');
+    var verbNoun = up ? t('økning', 'increase') : t('felling', 'decrease');
+    var sideTxt = per === 1 ? t('1 maske i den ene siden', '1 stitch at one side')
+      : per === 2 ? t('1 maske i hver side', '1 stitch at each side')
+      : t('2 masker i hver side', '2 stitches at each side');
+
+    var lines = groups.map(function (gp) {
+      return t(
+        verb + ' ' + sideTxt + ' hver ' + ordinal(gp.every) + ' ' + rowWord() + ', ' + gp.times + ' ' + (gp.times === 1 ? 'gang' : 'ganger'),
+        verb + ' ' + sideTxt + ' every ' + ordinal(gp.every) + ' ' + rowWord() + ', ' + gp.times + ' ' + (gp.times === 1 ? 'time' : 'times'));
+    });
+
+    var rowsList = [], cur = 0;
+    groups.forEach(function (gp) {
+      for (var i = 0; i < gp.times; i++) { cur += gp.every; rowsList.push(cur); }
+    });
+
+    var html = '<div class="big">' + t(
+      verb + ' ' + fmt(diff) + ' masker over ' + fmt(R) + ' ' + rowsWord(),
+      verb + ' ' + fmt(diff) + ' stitches over ' + fmt(R) + ' ' + rowsWord()) + '</div>';
+    html += '<div class="steps">';
+    lines.forEach(function (l, i) { html += '<div>' + (i ? t('Deretter: ', 'Then: ') : '') + esc(l) + '.</div>'; });
+    html += '</div>';
+    html += '<p>' + t(
+      'Du ender på ' + fmt(reached) + ' masker etter siste ' + verbNoun + ' på ' + rowWord() + ' ' + fmt(R) + '.',
+      'You end on ' + fmt(reached) + ' stitches after the last ' + verbNoun + ' on ' + rowWord() + ' ' + fmt(R) + '.') + '</p>';
+    if (reached !== to) {
+      var rest = Math.abs(to - reached);
+      var restNo = rest === 1 ? 'den siste masken' : 'de siste ' + fmt(rest) + ' maskene';
+      var restEn = rest === 1 ? 'the last stitch' : 'the last ' + fmt(rest) + ' stitches';
+      html += '<p class="warn">' + t(
+        'Det går ikke helt opp: ' + fmt(diff) + ' masker deler seg ikke jevnt på ' + per + '. Du treffer ' + fmt(reached) + ' masker i stedet for ' + fmt(to) + '. Juster ' + restNo + ' på en ' + rowWord() + ' for seg, eller endre målet.',
+        'It does not divide evenly: ' + fmt(diff) + ' stitches do not split evenly by ' + per + '. You land on ' + fmt(reached) + ' stitches instead of ' + fmt(to) + '. Adjust ' + restEn + ' on a separate ' + rowWord() + ', or change your target.') + '</p>';
+    }
+    if (unit === 'cm') {
+      html += '<p class="note">' + t(fmt(len, 1) + ' cm er ' + fmt(R) + ' ' + rowsWord() + ' med ' + gaugeWord() + ' din.',
+        fmt(len, 1) + ' cm is ' + fmt(R) + ' ' + rowsWord() + ' at your gauge.') + '</p>';
+    }
+    html += '<p class="rows"><strong>' + t(verb + ' på disse ' + rowsWordDef() + ':', verb + ' on these ' + rowsWord() + ':') + '</strong> ' + rowsList.join(', ') + '</p>';
+    html += '<p class="note">' + t(
+      'Siste ' + verbNoun + ' faller på aller siste ' + rowWord() + '. Vil du ha noen ' + rowsWord() + ' uten ' + verbNoun + ' før avslutningen, skriv inn litt kortere lengde.',
+      'The last ' + verbNoun + ' falls on the very last ' + rowWord() + '. If you want a few ' + rowsWord() + ' without shaping before finishing, enter a slightly shorter length.') + '</p>';
+    html += '<button class="go ghost" id="s1toCounter" style="margin-top:6px">' + t('Lag en teller for dette', 'Make a counter for this') + '</button>';
+    show('s1res', html);
+    el('s1toCounter').addEventListener('click', function () {
+      addCounter(t(verb + ' hver ' + ordinal(groups[0].every) + ' ' + rowWord(), verb + ' every ' + ordinal(groups[0].every) + ' ' + rowWord()), groups[0].every);
+      document.querySelector('#tabs button[data-tab="t7"]').click();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  };
+  el('s1go').addEventListener('click', runner('s1', calcs.s1));
+
+  /* ================= 3: fordel jevnt på én rad ================= */
+  calcs.e1 = function () {
+    var S = Math.round(num('e1now')), n = Math.round(num('e1n')), dir = el('e1dir').value;
+    if (!S || !n) { return err('e1res', t('Fyll inn begge tallene.', 'Fill in both numbers.')); }
+    var html = '';
+    if (dir === 'dec') {
+      if (n * 2 > S) {
+        return err('e1res', t('Du kan ikke felle ' + fmt(n) + ' masker av ' + fmt(S) + '. Hver felling bruker to masker, så du kan felle høyst ' + fmt(Math.floor(S / 2)) + '.',
+          'You cannot decrease ' + fmt(n) + ' stitches out of ' + fmt(S) + '. Each decrease uses two stitches, so you can decrease at most ' + fmt(Math.floor(S / 2)) + '.'));
+      }
+      var q = Math.floor(S / n), r = S % n;
+      var segs = [];
+      if (n - r > 0) segs.push({ size: q, times: n - r });
+      if (r > 0) segs.push({ size: q + 1, times: r });
+      html += '<div class="big">' + t('Fell ' + fmt(n) + ' masker, du sitter igjen med ' + fmt(S - n),
+        'Decrease ' + fmt(n) + ' stitches, leaving you with ' + fmt(S - n)) + '</div>';
+      html += '<div class="steps">';
+      segs.forEach(function (sg, i) {
+        var plain = sg.size - 2;
+        var part = plain > 0
+          ? t(doVerb(true) + ' ' + plain + ' ' + (plain === 1 ? 'maske' : 'masker') + ', ' + decPhrase(), doVerb(true) + ' ' + plain + ' ' + (plain === 1 ? 'stitch' : 'stitches') + ', ' + decPhrase())
+          : t(decPhrase().charAt(0).toUpperCase() + decPhrase().slice(1), decPhrase().charAt(0).toUpperCase() + decPhrase().slice(1));
+        html += '<div>' + (i ? t('Deretter: ', 'Then: ') : '') + '*' + esc(part) + '*, ' +
+          t('gjenta ' + sg.times + ' ' + (sg.times === 1 ? 'gang' : 'ganger'), 'repeat ' + sg.times + ' ' + (sg.times === 1 ? 'time' : 'times')) + '.</div>';
+      });
+      html += '</div>';
+      html += '<p class="note">' + t('Til sammen bruker du alle de ' + fmt(S) + ' maskene, og hver felling ligger med ' + (q - 2) + ' til ' + (q - 1) + ' masker imellom.',
+        'Altogether you use all ' + fmt(S) + ' stitches, and each decrease sits with ' + (q - 2) + ' to ' + (q - 1) + ' stitches in between.') + '</p>';
+    } else {
+      var qi = Math.floor(S / n), ri = S % n;
+      if (qi < 1) {
+        return err('e1res', t('Du kan ikke øke ' + fmt(n) + ' masker på bare ' + fmt(S) + '. Øk høyst ' + fmt(S) + ' masker om gangen.',
+          'You cannot increase ' + fmt(n) + ' stitches on only ' + fmt(S) + '. Increase at most ' + fmt(S) + ' stitches at a time.'));
+      }
+      var segsI = [];
+      if (n - ri > 0) segsI.push({ size: qi, times: n - ri });
+      if (ri > 0) segsI.push({ size: qi + 1, times: ri });
+      html += '<div class="big">' + t('Øk ' + fmt(n) + ' masker, du ender på ' + fmt(S + n),
+        'Increase ' + fmt(n) + ' stitches, ending on ' + fmt(S + n)) + '</div>';
+      html += '<div class="steps">';
+      segsI.forEach(function (sg, i) {
+        var part;
+        if (isCro()) {
+          var before = sg.size - 1;
+          part = before > 0
+            ? t('Hekle ' + before + ' ' + (before === 1 ? 'maske' : 'masker') + ', 2 masker i neste maske', 'Crochet ' + before + ' ' + (before === 1 ? 'stitch' : 'stitches') + ', 2 stitches in the next stitch')
+            : t('2 masker i hver maske', '2 stitches in every stitch');
+        } else {
+          part = t('Strikk ' + sg.size + ' ' + (sg.size === 1 ? 'maske' : 'masker') + ', ta ut 1 maske', 'Knit ' + sg.size + ' ' + (sg.size === 1 ? 'stitch' : 'stitches') + ', make 1');
+        }
+        html += '<div>' + (i ? t('Deretter: ', 'Then: ') : '') + '*' + esc(part) + '*, ' +
+          t('gjenta ' + sg.times + ' ' + (sg.times === 1 ? 'gang' : 'ganger'), 'repeat ' + sg.times + ' ' + (sg.times === 1 ? 'time' : 'times')) + '.</div>';
+      });
+      html += '</div>';
+      html += '<p class="note">' + t('Økningene ligger med ' + qi + ' til ' + (qi + 1) + ' masker imellom, jevnt fordelt over hele ' + rowWord() + 'en.',
+        'The increases sit with ' + qi + ' to ' + (qi + 1) + ' stitches in between, spread evenly across the whole ' + rowWord() + '.') + '</p>';
+    }
+    show('e1res', html);
+  };
+  el('e1go').addEventListener('click', runner('e1', calcs.e1));
+
+  /* ================= 4: garn fra prøvelapp ================= */
+  var parts = [];
+  function partRow(p, i) {
+    return '<div class="part">' +
+      '<div><label>' + t('Bredde (cm)', 'Width (cm)') + '</label><input type="number" inputmode="decimal" step="0.5" min="0" value="' + esc(p.w) + '" data-pi="' + i + '" data-pf="w"></div>' +
+      '<div><label>' + t('Høyde (cm)', 'Height (cm)') + '</label><input type="number" inputmode="decimal" step="0.5" min="0" value="' + esc(p.h) + '" data-pi="' + i + '" data-pf="h"></div>' +
+      '<div><label>' + t('Antall', 'Count') + '</label><input type="number" inputmode="numeric" step="1" min="1" value="' + esc(p.n) + '" data-pi="' + i + '" data-pf="n"></div>' +
+      '<button class="del" type="button" data-pdel="' + i + '" title="' + t('Fjern', 'Remove') + '">×</button>' +
+      '</div>';
+  }
+  function renderParts() {
+    el('y1parts').innerHTML = parts.map(partRow).join('');
+    el('y1parts').querySelectorAll('input').forEach(function (inp) {
+      inp.addEventListener('input', function () {
+        parts[+inp.getAttribute('data-pi')][inp.getAttribute('data-pf')] = inp.value;
+      });
+    });
+    el('y1parts').querySelectorAll('[data-pdel]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        parts.splice(+btn.getAttribute('data-pdel'), 1);
+        if (!parts.length) parts.push({ w: '', h: '', n: 1 });
+        renderParts();
+      });
+    });
+  }
+  parts.push({ w: 50, h: 60, n: 2 }, { w: 35, h: 45, n: 2 });
+  renderParts();
+  el('y1add').addEventListener('click', function () { parts.push({ w: '', h: '', n: 1 }); renderParts(); });
+
+  function swatchGramPerCm2() {
+    var sw = num('y1sw'), sh = num('y1sh'), sg = num('y1sg');
+    if (!sw || !sh || !sg) return null;
+    return sg / (sw * sh);
+  }
+  calcs.y1 = function () {
+    var gpc = swatchGramPerCm2();
+    if (!gpc) { return err('y1res', t('Fyll inn målene og vekten på prøvelappen.', 'Fill in the size and weight of the swatch.')); }
+    var area = 0, any = false;
+    parts.forEach(function (p) {
+      var w = parseFloat(String(p.w).replace(',', '.')), h = parseFloat(String(p.h).replace(',', '.')), n = parseInt(p.n, 10) || 1;
+      if (w > 0 && h > 0) { area += w * h * n; any = true; }
+    });
+    if (!any) { return err('y1res', t('Legg inn minst én del med bredde og høyde.', 'Add at least one piece with a width and a height.')); }
+    var extra = Math.max(0, num('y1extra') || 0);
+    var gram = area * gpc * (1 + extra / 100);
+    var bg = num('y1bg'), bm = num('y1bm');
+    var html = '<div class="big">' + t('Ca. ' + fmt(Math.ceil(gram / 10) * 10) + ' gram garn', 'About ' + fmt(Math.ceil(gram / 10) * 10) + ' grams of yarn') + '</div>';
+    html += '<p>' + t('Delene dine er til sammen ' + fmt(area) + ' kvadratcentimeter, og prøvelappen veier ' + fmt(gpc * 100, 2) + ' gram per 100 kvadratcentimeter. Slingringsmonn på ' + fmt(extra) + ' prosent er lagt til.',
+      'Your pieces add up to ' + fmt(area) + ' square centimetres, and the swatch weighs ' + fmt(gpc * 100, 2) + ' grams per 100 square centimetres. A margin of ' + fmt(extra) + ' per cent is included.') + '</p>';
+    if (bg && bm) {
+      var balls = Math.ceil(gram / bg);
+      var meters = Math.round(gram / bg * bm / 10) * 10;
+      html += '<p><strong>' + t('Det blir ' + fmt(balls) + ' ' + (balls === 1 ? 'nøste' : 'nøster') + ' à ' + fmt(bg) + ' gram. Du trenger rundt ' + fmt(meters) + ' meter garn.',
+        'That is ' + fmt(balls) + ' ' + (balls === 1 ? 'ball' : 'balls') + ' of ' + fmt(bg) + ' grams. You need around ' + fmt(meters) + ' metres of yarn.') + '</strong></p>';
+    }
+    html += '<p class="note">' + t('Kjøp alt fra samme parti, og gjerne ett nøste ekstra. Har du garn til overs, kan du som regel levere det tilbake, mens et manglende nøste i feil fargeparti synes.',
+      'Buy it all from the same dye lot, and preferably one ball extra. Leftover yarn can usually be returned, while a missing ball in the wrong dye lot shows.') + '</p>';
+    show('y1res', html);
+  };
+  el('y1go').addEventListener('click', runner('y1', calcs.y1));
+
+  /* ================= 4b: raskt anslag ================= */
+  var BASE = { lace: 300, fingering: 380, sport: 450, dk: 520, aran: 620, chunky: 780, superchunky: 950 };
+  var ITEM = { genser: 1, jakke: 1.15, vest: 0.6, kjole: 1.6, lue: 0.18, hals: 0.2, skjerf: 0.35, sjal: 0.4, votter: 0.15, sokker: 0.2, babyteppe: 0.7, teppe: 2.4 };
+  var SIZE = { baby: 0.28, barn: 0.45, storbarn: 0.65, xs: 0.85, s: 0.92, m: 1, l: 1.12, xl: 1.25, xxl: 1.4, xxxl: 1.55 };
+  var SMALL = { lue: 1, hals: 1, skjerf: 1, sjal: 1, votter: 1, sokker: 1, babyteppe: 1, teppe: 1 };
+
+  calcs.y2 = function () {
+    var item = el('y2item').value, size = el('y2size').value, yarn = el('y2yarn').value;
+    var bg = num('y2bg');
+    var sf = SIZE[size];
+    if (SMALL[item]) sf = 1 + (sf - 1) * 0.5;
+    var gram = BASE[yarn] * ITEM[item] * sf * (isCro() ? 1.3 : 1);
+    var lo = Math.round(gram * 0.85 / 10) * 10, hi = Math.round(gram * 1.15 / 10) * 10;
+    var html = '<div class="big">' + t('Ca. ' + fmt(lo) + ' til ' + fmt(hi) + ' gram', 'About ' + fmt(lo) + ' to ' + fmt(hi) + ' grams') + '</div>';
+    if (bg) {
+      html += '<p><strong>' + t('Det er ' + Math.ceil(lo / bg) + ' til ' + Math.ceil(hi / bg) + ' nøster à ' + fmt(bg) + ' gram.',
+        'That is ' + Math.ceil(lo / bg) + ' to ' + Math.ceil(hi / bg) + ' balls of ' + fmt(bg) + ' grams.') + '</strong></p>';
+    }
+    if (isCro()) {
+      html += '<p class="note">' + t('Hekling bruker rundt en tredjedel mer garn enn strikking på samme flate, og det er regnet inn her.',
+        'Crochet uses around a third more yarn than knitting for the same area, and that is included here.') + '</p>';
+    }
+    html += '<p class="note">' + t('Dette er et anslag bygget på vanlige plagg. Lange ermer, høy hals, mye mønster, kabler og lange sjal drar oppover. Vil du ha et tall du kan stole på, bruk prøvelappen i kortet over.',
+      'This is an estimate based on ordinary garments. Long sleeves, a high neck, heavy patterning, cables and long shawls all push it up. For a number you can rely on, use the swatch card above.') + '</p>';
+    show('y2res', html);
+  };
+  el('y2go').addEventListener('click', runner('y2', calcs.y2));
+
+  /* ================= 4c: restegarn ================= */
+  calcs.y3 = function () {
+    var gpc = swatchGramPerCm2();
+    if (!gpc) { return err('y3res', t('Fyll inn prøvelappen i det første kortet i denne fanen først.', 'Fill in the swatch in the first card of this tab first.')); }
+    var g = num('y3g'), w = num('y3w'), gr = num('gRow');
+    if (!g || !w || !gr) { return err('y3res', t('Fyll inn vekten på restegarnet og bredden på arbeidet.', 'Fill in the weight of the leftovers and the width of the piece.')); }
+    var area = g / gpc;
+    var cm = area / w;
+    var rows = Math.floor(cm / 10 * gr);
+    var html = '<div class="big">' + t('Ca. ' + fmt(cm, 1) + ' cm på ' + fmt(w, 1) + ' cm bredde', 'About ' + fmt(cm, 1) + ' cm at ' + fmt(w, 1) + ' cm wide') + '</div>';
+    html += '<p>' + t('Det tilsvarer ' + fmt(rows) + ' ' + rowsWord() + ', eller ' + fmt(Math.round(area)) + ' kvadratcentimeter i alt.',
+      'That is ' + fmt(rows) + ' ' + rowsWord() + ', or ' + fmt(Math.round(area)) + ' square centimetres in total.') + '</p>';
+    html += '<p class="note">' + t('Regn med litt mindre enn dette, du trenger en hale til å feste av med.',
+      'Count on a little less than this, you need a tail to fasten off with.') + '</p>';
+    show('y3res', html);
+  };
+  el('y3go').addEventListener('click', runner('y3', calcs.y3));
+
+  /* ================= 5: bytt garn ================= */
+  calcs.b1 = function () {
+    var n = num('b1n'), g1 = num('b1g'), m1 = num('b1m'), g2 = num('b2g'), m2 = num('b2m');
+    if (!n || !g1 || !m1 || !g2 || !m2) { return err('b1res', t('Fyll inn alle fem feltene.', 'Fill in all five fields.')); }
+    var totalM = n * m1;
+    var newBalls = Math.ceil(totalM / m2);
+    var newGram = newBalls * g2;
+    var oldGram = n * g1;
+    var lp1 = m1 / g1 * 100, lp2 = m2 / g2 * 100;
+    var html = '<div class="big">' + t('Kjøp ' + fmt(newBalls) + ' ' + (newBalls === 1 ? 'nøste' : 'nøster'), 'Buy ' + fmt(newBalls) + ' ' + (newBalls === 1 ? 'ball' : 'balls')) + '</div>';
+    html += '<p>' + t('Oppskriften trenger ' + fmt(totalM) + ' meter garn, det er ' + fmt(oldGram) + ' gram av oppskriftens garn. Av ditt garn blir det ' + fmt(newGram) + ' gram.',
+      'The pattern needs ' + fmt(totalM) + ' metres of yarn, which is ' + fmt(oldGram) + ' grams of the pattern’s yarn. In your yarn that is ' + fmt(newGram) + ' grams.') + '</p>';
+    html += '<p class="note">' + t('Oppskriftens garn: ' + fmt(Math.round(lp1)) + ' meter per 100 gram. Ditt garn: ' + fmt(Math.round(lp2)) + ' meter per 100 gram.',
+      'Pattern yarn: ' + fmt(Math.round(lp1)) + ' metres per 100 grams. Your yarn: ' + fmt(Math.round(lp2)) + ' metres per 100 grams.') + '</p>';
+    var diff = Math.abs(lp2 - lp1) / lp1;
+    if (diff > 0.2) {
+      html += '<p class="warn">' + t('Garnene er ganske ulikt tykke, ' + fmt(Math.round(diff * 100)) + ' prosent forskjell i løpelengde. Strikk en prøvelapp før du starter, og regn om maskeantallet i fanen Masker og rader.',
+        'The two yarns differ quite a lot in thickness, ' + fmt(Math.round(diff * 100)) + ' per cent difference in length per weight. Make a swatch before you start, and convert the stitch counts in the Stitches and rows tab.') + '</p>';
+    } else {
+      html += '<p class="note">' + t('Løpelengdene ligger nær hverandre, men strikk likevel en prøvelapp. To garn med samme løpelengde kan gi ulik strikkefasthet.',
+        'The two are close in length per weight, but still make a swatch. Two yarns with the same yardage can give different gauge.') + '</p>';
+    }
+    show('b1res', html);
+  };
+  el('b1go').addEventListener('click', runner('b1', calcs.b1));
+
+  /* ================= 6: flat sirkel ================= */
+  calcs.c1 = function () {
+    var d = num('c1d'), base = parseInt(el('c1st').value, 10), g = num('gSt');
+    if (!d || !g) { return err('c1res', t('Fyll inn diameter og masker per 10 cm.', 'Fill in the diameter and stitches per 10 cm.')); }
+    var perCm = g / 10;
+    var sts = Math.PI * d * perCm;
+    var rounds = Math.max(1, Math.round(sts / base));
+    var finalSts = rounds * base;
+    var realD = finalSts / perCm / Math.PI;
+    var stName = base === 6 ? t('fastmasker', 'single crochet') : base === 8 ? t('halvstaver', 'half doubles') : t('staver', 'doubles');
+    var html = '<div class="big">' + t(fmt(rounds) + ' runder, ' + fmt(finalSts) + ' masker til slutt', fmt(rounds) + ' rounds, ' + fmt(finalSts) + ' stitches at the end') + '</div>';
+    html += '<p>' + t('Det gir en sirkel på ' + fmt(realD, 1) + ' cm i diameter i ' + stName + '.',
+      'That gives a circle ' + fmt(realD, 1) + ' cm across in ' + stName + '.') + '</p>';
+    html += '<ol>';
+    for (var r = 1; r <= rounds; r++) {
+      var line;
+      if (r === 1) {
+        line = t(base + ' masker i en magisk ring (' + base + ')', base + ' stitches in a magic ring (' + base + ')');
+      } else if (r === 2) {
+        line = t('2 masker i hver maske hele runden (' + (2 * base) + ')', '2 stitches in every stitch all round (' + (2 * base) + ')');
+      } else {
+        var plain = r - 2;
+        line = t('*' + plain + ' ' + (plain === 1 ? 'maske' : 'masker') + ', 2 masker i neste maske*, gjenta ' + base + ' ganger (' + (r * base) + ')',
+          '*' + plain + ' ' + (plain === 1 ? 'stitch' : 'stitches') + ', 2 stitches in the next stitch*, repeat ' + base + ' times (' + (r * base) + ')');
+      }
+      html += '<li><strong>' + t('Runde ' + r, 'Round ' + r) + ':</strong> ' + esc(line) + '</li>';
+    }
+    html += '</ol>';
+    html += '<p class="note">' + t('Bølger sirkelen seg, hekler du for løst eller øker for mye. Krøller den seg som en bolle, øker du for lite. Da legger du inn eller hopper over én økerunde.',
+      'If the circle ruffles, you are working too loosely or increasing too much. If it curls into a bowl, you are increasing too little. Add or skip one increase round to fix it.') + '</p>';
+    show('c1res', html);
+  };
+  el('c1go').addEventListener('click', runner('c1', calcs.c1));
+
+  /* ================= 6b: ruter ================= */
+  calcs.c2 = function () {
+    var w = num('c2w'), h = num('c2h'), s = num('c2s'), gpr = num('c2g');
+    if (!w || !h || !s) { return err('c2res', t('Fyll inn teppets mål og størrelsen på én rute.', 'Fill in the blanket size and the size of one square.')); }
+    var cols = Math.max(1, Math.round(w / s)), rows = Math.max(1, Math.round(h / s));
+    var total = cols * rows;
+    var realW = cols * s, realH = rows * s;
+    var html = '<div class="big">' + t(fmt(total) + ' ruter, ' + cols + ' i bredden og ' + rows + ' i lengden',
+      fmt(total) + ' squares, ' + cols + ' across and ' + rows + ' down') + '</div>';
+    html += '<p>' + t('Ferdig teppe blir ' + fmt(realW, 1) + ' x ' + fmt(realH, 1) + ' cm før kanten. Legger du på en kant, kommer det noen centimeter i tillegg på hver side.',
+      'The finished blanket is ' + fmt(realW, 1) + ' x ' + fmt(realH, 1) + ' cm before the border. A border adds a few centimetres on each side.') + '</p>';
+    if (gpr && gpr > 0) {
+      var gram = total * gpr * 1.12;
+      html += '<p><strong>' + t('Du trenger rundt ' + fmt(Math.ceil(gram / 10) * 10) + ' gram garn, sammensying og kant medregnet.',
+        'You need around ' + fmt(Math.ceil(gram / 10) * 10) + ' grams of yarn, joining and border included.') + '</strong></p>';
+    }
+    html += '<p class="note">' + t('Skal du lage rutene i flere farger, del tallet på antall farger, og legg litt ekstra på bakgrunnsfargen hvis den går igjen i alle rutene.',
+      'If you are making the squares in several colours, divide the number by the number of colours, and add a little extra to the background colour if it appears in every square.') + '</p>';
+    show('c2res', html);
+  };
+  el('c2go').addEventListener('click', runner('c2', calcs.c2));
+
+  /* ================= 6c: startkjede ================= */
+  calcs.c3 = function () {
+    var w = num('c3w'), g = num('gSt');
+    var rep = Math.max(1, Math.round(num('c3rep') || 1)), turn = Math.max(0, Math.round(num('c3turn') || 0));
+    if (!w || !g) { return err('c3res', t('Fyll inn bredde og masker per 10 cm.', 'Fill in the width and stitches per 10 cm.')); }
+    var raw = w / 10 * g;
+    var sts = Math.max(rep, Math.round(raw / rep) * rep);
+    var chains = sts + turn;
+    var realW = sts / g * 10;
+    var html = '<div class="big">' + t('Hekle ' + fmt(chains) + ' luftmasker', 'Chain ' + fmt(chains) + ' stitches') + '</div>';
+    html += '<p>' + t('Det gir ' + fmt(sts) + ' masker i første omgang' + (turn ? ', pluss ' + turn + ' vendemasker' : '') + ', altså ' + fmt(realW, 1) + ' cm bredde.',
+      'That gives ' + fmt(sts) + ' stitches in the first row' + (turn ? ', plus ' + turn + ' turning chains' : '') + ', so ' + fmt(realW, 1) + ' cm wide.') + '</p>';
+    if (rep > 1) {
+      html += '<p class="note">' + t(fmt(sts) + ' går opp i mønsterrapporten på ' + rep + ' masker.', fmt(sts) + ' fits the repeat of ' + rep + ' stitches.') + '</p>';
+    }
+    html += '<p class="note">' + t('Hekle startkjeden løst, gjerne med en nål som er ett halvt nummer større. En stram startkjede strammer hele kanten på det ferdige arbeidet.',
+      'Work the starting chain loosely, ideally with a hook half a size larger. A tight starting chain pulls in the whole edge of the finished piece.') + '</p>';
+    show('c3res', html);
+  };
+  el('c3go').addEventListener('click', runner('c3', calcs.c3));
+
+  /* ================= 7: tellere ================= */
+  var counters = [];
+  try { counters = JSON.parse(localStorage.getItem('lme_strikk_counters') || '[]') || []; } catch (e) { counters = []; }
+  function saveCounters() {
+    try { localStorage.setItem('lme_strikk_counters', JSON.stringify(counters)); } catch (e) {}
+  }
+  function addCounter(name, interval) {
+    counters.push({ id: Date.now() + '' + Math.round(Math.random() * 999), name: name || t('Teller', 'Counter'), n: 0, iv: interval || 0 });
+    saveCounters();
+    renderCounters();
+  }
+  function renderCounters() {
+    var box = el('k1list');
+    if (!box) return;
+    if (!counters.length) {
+      box.innerHTML = '<p class="empty">' + t('Ingen tellere ennå. Lag den første over.', 'No counters yet. Make the first one above.') + '</p>';
+      return;
+    }
+    box.innerHTML = counters.map(function (c) {
+      var flag = c.iv > 0 && c.n > 0 && c.n % c.iv === 0
+        ? '<span class="flag">' + t('Marker nå!', 'Mark it now!') + '</span>' : '';
+      var sub = c.iv > 0
+        ? t('Marker hver ' + ordinal(c.iv) + ' ' + rowWord(), 'Marks every ' + ordinal(c.iv) + ' ' + rowWord())
+        : t('Teller ' + rowsWord(), 'Counting ' + rowsWord());
+      return '<div class="counter">' +
+        '<div class="top"><span class="nm">' + esc(c.name) + '</span>' +
+        '<button class="kill" type="button" data-kill="' + c.id + '" title="' + t('Slett', 'Delete') + '">🗑</button></div>' +
+        '<div class="mid">' +
+        '<button class="pm" type="button" data-minus="' + c.id + '">−</button>' +
+        '<span class="num">' + c.n + '</span>' +
+        '<button class="pm plus" type="button" data-plus="' + c.id + '">+</button>' +
+        '</div>' +
+        '<div class="foot"><span>' + esc(sub) + ' ' + flag + '</span>' +
+        '<button class="rst" type="button" data-reset="' + c.id + '">' + t('Nullstill', 'Reset') + '</button></div>' +
+        '</div>';
+    }).join('');
+    function find(id) { return counters.filter(function (c) { return c.id === id; })[0]; }
+    box.querySelectorAll('[data-plus]').forEach(function (b) {
+      b.addEventListener('click', function () { var c = find(b.getAttribute('data-plus')); c.n++; saveCounters(); renderCounters(); });
+    });
+    box.querySelectorAll('[data-minus]').forEach(function (b) {
+      b.addEventListener('click', function () { var c = find(b.getAttribute('data-minus')); if (c.n > 0) c.n--; saveCounters(); renderCounters(); });
+    });
+    box.querySelectorAll('[data-reset]').forEach(function (b) {
+      b.addEventListener('click', function () { var c = find(b.getAttribute('data-reset')); c.n = 0; saveCounters(); renderCounters(); });
+    });
+    box.querySelectorAll('[data-kill]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var id = b.getAttribute('data-kill');
+        counters = counters.filter(function (c) { return c.id !== id; });
+        saveCounters(); renderCounters();
+      });
+    });
+  }
+  el('k1add').addEventListener('click', function () {
+    var nm = el('k1nm').value.trim();
+    var iv = Math.max(0, Math.round(num('k1int') || 0));
+    addCounter(nm || t('Teller ' + (counters.length + 1), 'Counter ' + (counters.length + 1)), iv);
+    el('k1nm').value = '';
+  });
+
+  /* ---------- oppstart ---------- */
+  loadGauge();
+  setTech(tech);
+  document.getElementById('lme-lang').addEventListener('click', window.lmeToggleLang);
+  applyLang();
+  renderCounters();
+})();
+</script>
+<script src="/js/lme-account.js?v=11" defer></script>
+<script src="/js/nathalie-widget.js?v=1" defer></script>
+</body>
+</html>
