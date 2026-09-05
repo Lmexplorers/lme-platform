@@ -164,6 +164,9 @@ export const APP_PAYMENT_LINKS = {
    ene kilden prisen leses fra. Endres prisen, må begge steder og Stripe
    endres sammen. */
 export const STRIKK_PAYMENT_LINKS = {
+  /* Lanseringspris ut september 2026, deretter fastpris. Begge lenkene er
+     aktive i Stripe samtidig, og siden velger den som gjelder. */
+  "plink_1UCEizLax7B8uQzqPA3saWwI": { app: "strikk", navn: "LME Strikk & Hekle, appen", nok: 199, lang: "no" },
   "plink_1UCEAfLax7B8uQzqAYp2ZPHT": { app: "strikk", navn: "LME Strikk & Hekle, appen", nok: 299, lang: "no" },
 };
 

@@ -11,7 +11,7 @@
  * sitt eget produkt (CLAUDE.md), hun skal ha en egen gratis vei inn.
  */
 import { sessionUser, isOwner } from "../_lib/access.js";
-import { STRIKK_KJOP, STRIKK_ID } from "../_lib/strikk-kjop.js";
+import { STRIKK_KJOP, STRIKK_ID, gjeldendeTilbud } from "../_lib/strikk-kjop.js";
 import { getPurchases } from "../_lib/purchases.js";
 
 function json(data, status) {
@@ -23,7 +23,15 @@ function json(data, status) {
 
 export async function onRequestGet(context) {
   const { env } = context;
-  const svar = { ok: true, tilbud: STRIKK_KJOP, eier: false, harApp: false, loggedIn: false };
+  /* Prisen kunden ser er den som gjelder i dag, ikke standardprisen.
+     Lanseringsprisen slår over til fastpris av seg selv, se
+     gjeldendeTilbud() i _lib/strikk-kjop.js. */
+  const naa = gjeldendeTilbud();
+  const tilbud = Object.assign({}, STRIKK_KJOP, {
+    nok: naa.nok, kjopLenke: naa.kjopLenke,
+    trinn: naa.trinn, gjelderTil: naa.gjelderTil, ordinaer: naa.ordinaer,
+  });
+  const svar = { ok: true, tilbud: tilbud, eier: false, harApp: false, loggedIn: false };
   if (!env.BUILDER_KV) return json(svar);
 
   const bruker = await sessionUser(context);

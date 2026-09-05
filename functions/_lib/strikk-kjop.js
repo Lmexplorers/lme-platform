@@ -6,9 +6,9 @@
  *   - functions/api/strikk-kjop.js    (prisen kunden ser på /strikk-app)
  *   - functions/_lib/purchase-links.js (beløpet i STRIKK_PAYMENT_LINKS)
  *
- * Endres prisen, endres den her OG i Stripe. Autopilot solgte en periode
- * til tre forskjellige priser fordi tallet lå to steder, og det skal ikke
- * gjenta seg her.
+ * Endres en pris, endres den i TRINN under OG i Stripe. Autopilot solgte en
+ * periode til tre forskjellige priser fordi tallet lå to steder, og det skal
+ * ikke gjenta seg her.
  *
  * HVORFOR ET ENGANGSKJØP
  * Appen regner på kundens egen strikkefasthet i hennes egen nettleser. Den
@@ -23,17 +23,57 @@
  */
 export const STRIKK_ID = "strikk";
 
-/* Prisen. Ett tall, ett sted. Bestemt av Renate 5. september 2026. */
-export const STRIKK_PRIS_NOK = 299;
+/* Lanseringsprisen gjelder ut september 2026, så går den til fastpris av seg
+   selv. Datoen står her, ikke i hodet til Renate: ingen skal måtte huske å
+   skru den av 1. oktober. Tidspunktet er midnatt norsk sommertid. */
+export const LANSERING_SLUTT = Date.parse("2026-10-01T00:00:00+02:00");
 
-/* Betalingslenken for kort, opprettet i Stripe 5. september 2026.
-   Vipps går via /api/vipps-pay i stedet, og leser prisen over. */
-export const STRIKK_KJOP_LENKE = "https://buy.stripe.com/00waEY4NT1IX6619ll9R71E";
+/* De to trinnene, hver med sin egen betalingslenke i Stripe. Begge lenkene
+   er aktive samtidig, og siden velger den som gjelder. Endres et beløp her,
+   må det endres i Stripe også, ellers betaler kunden noe annet enn det siden
+   lover. Bestemt av Renate 5. september 2026. */
+export const TRINN = {
+  lansering: {
+    nok: 199,
+    kjopLenke: "https://buy.stripe.com/fZuaEYdkp87l6617dd9R71F",
+  },
+  fast: {
+    nok: 299,
+    kjopLenke: "https://buy.stripe.com/00waEY4NT1IX6619ll9R71E",
+  },
+};
+
+/**
+ * Prisen som gjelder nå. Leses av salgssiden, av kortknappen og av Vipps, så
+ * de tre aldri kan komme i utakt.
+ *   -> { trinn, nok, kjopLenke, gjelderTil, ordinaer }
+ */
+export function gjeldendeTilbud(na) {
+  const tid = na ? new Date(na).getTime() : Date.now();
+  if (tid < LANSERING_SLUTT) {
+    return {
+      trinn: "lansering",
+      nok: TRINN.lansering.nok,
+      kjopLenke: TRINN.lansering.kjopLenke,
+      gjelderTil: new Date(LANSERING_SLUTT).toISOString(),
+      ordinaer: TRINN.fast.nok,
+    };
+  }
+  return {
+    trinn: "fast",
+    nok: TRINN.fast.nok,
+    kjopLenke: TRINN.fast.kjopLenke,
+    gjelderTil: null,
+    ordinaer: TRINN.fast.nok,
+  };
+}
 
 export const STRIKK_KJOP = {
   id: STRIKK_ID,
-  nok: STRIKK_PRIS_NOK,
-  kjopLenke: STRIKK_KJOP_LENKE,
+  /* Standardprisen. Det kunden faktisk betaler i dag kommer fra
+     gjeldendeTilbud() over, som tar hensyn til lanseringsprisen. */
+  nok: TRINN.fast.nok,
+  kjopLenke: TRINN.fast.kjopLenke,
   navn: {
     no: "LME Strikk & Hekle, appen",
     en: "LME Knit & Crochet, the app",

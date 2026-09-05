@@ -63,7 +63,7 @@ export function appLenke(token) {
   return SITE + "/strikk" + (token ? "?t=" + encodeURIComponent(token) : "");
 }
 
-export async function sendStrikkKjopMail(env, { to, name, lang, token, betaltMed }) {
+export async function sendStrikkKjopMail(env, { to, name, lang, token, betaltMed, lansering }) {
   const en = lang === "en";
   const fornavn = esc((name || "").split(" ")[0]);
   const hei = fornavn ? (en ? "Hi " + fornavn + "," : "Hei " + fornavn + ",") : (en ? "Hi," : "Hei,");
@@ -81,6 +81,9 @@ export async function sendStrikkKjopMail(env, { to, name, lang, token, betaltMed
       "<li><strong>Put it on your home screen.</strong> Open the link on your phone, tap the share button and choose Add to home screen. Then it sits there like any other app, and opens straight into your work.</li>" +
       "<li><strong>Start with a swatch.</strong> Every calculation builds on your gauge. Knit at least 12 x 12 cm, wash it the way you will wash the garment, and count in the middle of it.</li>" +
       "</ol>" +
+      (lansering
+        ? "<p>You are among the very first to buy this app, and that means something to me. If there is anything you wish it could do, tell me. It is easier for me to change it now than later.</p>"
+        : "") +
       "<p>You paid with " + betalt + ". If anything is unclear, just answer this email. It comes straight to me.</p>" +
       "<p>Warm wishes,<br>Renate</p>"
     : '<h2 style="font-size:21px;margin:0 0 14px;">Appen er din</h2>' +
@@ -93,6 +96,9 @@ export async function sendStrikkKjopMail(env, { to, name, lang, token, betaltMed
       "<li><strong>Legg den på hjemskjermen.</strong> Åpne lenken på telefonen, trykk på del-knappen og velg Legg til på Hjem-skjerm. Da ligger den der som en hvilken som helst annen app, og åpner rett i arbeidet ditt.</li>" +
       "<li><strong>Start med en prøvelapp.</strong> Alle utregningene bygger på strikkefastheten din. Strikk minst 12 x 12 cm, vask den slik du vil vaske plagget, og tell midt i lappen.</li>" +
       "</ol>" +
+      (lansering
+        ? "<p>Du er blant de aller første som har kjøpt denne appen, og det betyr noe for meg. Er det noe du skulle ønske at den kunne, så si fra. Det er lettere for meg å endre den nå enn senere.</p>"
+        : "") +
       "<p>Du betalte med " + betalt + ". Er noe uklart, svar på denne e-posten. Den kommer rett til meg.</p>" +
       "<p>Klem,<br>Renate</p>";
 

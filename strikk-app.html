@@ -25,6 +25,9 @@
     --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* hidden-attributtet maa slaa klasser som setter display, ellers blir et
+     skjult element staaende synlig. */
+  [hidden] { display: none !important; }
   body { font-family: var(--font-body); color: var(--ink); background: linear-gradient(180deg, #FFF9F6 0%, #FDF1EE 45%, #FBE7EA 100%); background-attachment: fixed; min-height: 100vh; line-height: 1.6; }
   h1, h2, h3 { font-family: var(--font-head); }
   a { color: inherit; text-decoration: none; }
@@ -75,6 +78,8 @@
 
   .kjopsboks { background: #fff; border-radius: 28px; padding: 32px; box-shadow: 0 18px 50px rgba(233,30,137,0.12); outline: 2px solid #FBE0E7; outline-offset: -2px; margin-bottom: 22px; text-align: center; }
   .pris { font-family: var(--font-head); font-size: 44px; font-weight: 700; color: var(--cerise); line-height: 1.1; }
+  .pris .for { font-family: var(--font-body); font-size: 22px; font-weight: 400; color: #b09aa1; text-decoration: line-through; margin-right: 10px; vertical-align: middle; }
+  .lansering { display: inline-block; background: #EAF6D6; color: #4c7a12; border-radius: 999px; padding: 6px 16px; font-size: 13.5px; font-weight: 700; margin-bottom: 14px; }
   .pris small { display: block; font-family: var(--font-body); font-size: 15px; font-weight: 400; color: var(--grey); margin-top: 6px; }
   .knapp-stor { display: inline-block; margin-top: 20px; background: linear-gradient(135deg, var(--cerise), #ff5fb0); color: #fff; padding: 16px 38px; border: 0; border-radius: 999px; font-family: inherit; font-weight: 700; font-size: 16.5px; cursor: pointer; box-shadow: 0 12px 26px rgba(233,30,137,0.26); transition: transform .18s ease, box-shadow .18s ease; }
   .knapp-stor:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(233,30,137,0.32); }
@@ -245,6 +250,7 @@
     </div>
 
     <section class="kjopsboks" id="kjopsboks" data-vipps-produkt="strikk" data-vipps-type="strikk">
+      <p class="lansering" id="lanseringsmerke" hidden></p>
       <div class="pris" id="prislinje"></div>
       <a class="knapp-stor buy-cta" id="kjopknapp" href="#" data-no="Kjøp med kort" data-en="Pay by card">Kjøp med kort</a>
       <!-- js/vipps-knapp.js legger Vipps-knappen akkurat her, rett under
@@ -364,11 +370,30 @@
     var tb = data.tilbud;
 
     var pris = document.getElementById('prislinje');
+    var merke = document.getElementById('lanseringsmerke');
+    var lansering = tb.trinn === 'lansering' && tb.ordinaer && tb.ordinaer > tb.nok;
     pris.innerHTML = '';
+    if (lansering) {
+      /* Den gamle prisen overstrøket, ellers er 199 bare en pris og ikke et
+         tilbud. Datoen kommer fra serveren, så siden aldri lover et tilbud
+         som alt har gått ut. */
+      var forpris = document.createElement('span');
+      forpris.className = 'for';
+      forpris.textContent = tb.ordinaer + ' kr';
+      pris.appendChild(forpris);
+      merke.hidden = false;
+      merke.textContent = t('Lanseringspris ut september, spar ' + (tb.ordinaer - tb.nok) + ' kroner',
+                            'Launch price until 1 October, save ' + (tb.ordinaer - tb.nok) + ' kroner');
+    } else {
+      merke.hidden = true;
+    }
     var stor = document.createElement('span');
     stor.textContent = tb.nok + ' kr';
     var liten = document.createElement('small');
-    liten.textContent = t('Engangskjøp, appen er din for godt', 'A one-time purchase, the app is yours for good');
+    liten.textContent = lansering
+      ? t('Engangskjøp. Fra 1. oktober koster den ' + tb.ordinaer + ' kroner.',
+          'A one-time purchase. From 1 October it costs ' + tb.ordinaer + ' kroner.')
+      : t('Engangskjøp, appen er din for godt', 'A one-time purchase, the app is yours for good');
     pris.appendChild(stor); pris.appendChild(liten);
 
     var ul = document.getElementById('punkter');
@@ -398,6 +423,7 @@
          eieren av tilgangsskriptene. Denne knappen er ikke lenger et kjøp,
          så merket må vekk, ellers forsvinner veien inn i appen. */
       knapp.classList.remove('buy-cta');
+      merke.hidden = true;
       notis.textContent = data.eier
         ? t('Du er eier, så appen er åpen for deg uten kjøp.', 'You are the owner, so the app is open to you without buying.')
         : t('Du har kjøpt denne fra før. Trykk for å åpne den.', 'You have already bought this. Tap to open it.');

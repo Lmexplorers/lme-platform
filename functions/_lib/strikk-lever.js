@@ -18,7 +18,7 @@ import { sendStrikkKjopMail } from "./strikk-mail.js";
 import { koOppfolging } from "./strikk-followup-mail.js";
 import { recordPurchase } from "./purchases.js";
 import { sendOwnerSaleNotice } from "./oppskrift-mail.js";
-import { STRIKK_ID, STRIKK_KJOP } from "./strikk-kjop.js";
+import { STRIKK_ID, STRIKK_KJOP, gjeldendeTilbud } from "./strikk-kjop.js";
 
 /**
  * @returns { ok, token } der token er den personlige lenkenøkkelen.
@@ -34,7 +34,13 @@ export async function leverStrikk(env, { email, name, lang, betaltMed, amount, c
 
   /* 2. Kvitteringen med lenken hennes. */
   try {
-    await sendStrikkKjopMail(env, { to: e, name: name || "", lang: spraak, token: token, betaltMed: betaltMed || "kort" });
+    await sendStrikkKjopMail(env, {
+      to: e, name: name || "", lang: spraak, token: token,
+      betaltMed: betaltMed || "kort",
+      /* De som kjøper i lanseringsvinduet er de første, og skal få vite det.
+         Det gir Renate tilbakemeldinger mens appen ennå er lett å endre. */
+      lansering: gjeldendeTilbud().trinn === "lansering",
+    });
   } catch (e1) {}
 
   /* 3. Oppfølgingsserien. */

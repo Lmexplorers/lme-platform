@@ -19,7 +19,7 @@ import { createVippsPayment, parseNokPriceToOre } from "../_lib/vipps.js";
 import { KEY_PREFIX as LV_KEY_PREFIX } from "./laeringsverksted.js";
 import { COURSES, kursPrisNok } from "../_lib/plans.js";
 import { oppskriftPrisOre } from "../_lib/butikk-priser.js";
-import { STRIKK_KJOP } from "../_lib/strikk-kjop.js";
+import { STRIKK_KJOP, gjeldendeTilbud as strikkTilbud } from "../_lib/strikk-kjop.js";
 import { oppskriftNavn } from "../_lib/oppskrift-mail.js";
 import { pakkeMedId } from "../../js/tjenester-pakker.js";
 import { APP_KJOP, gjeldendeTilbud } from "../_lib/app-kjop.js";
@@ -123,7 +123,9 @@ export async function onRequestPost(context) {
        samme filen Stripe-lenken og salgssiden bruker, så Vipps aldri kan
        trekke et annet beløp enn det kunden så. */
     if (slug !== STRIKK_KJOP.id) return json({ ok: false, error: "not_found" }, 404);
-    amount = STRIKK_KJOP.nok * 100;
+    /* strikkTilbud(), ikke STRIKK_KJOP.nok: lanseringsprisen gjelder ut
+       september, og da skal Vipps trekke det samme som salgssiden viser. */
+    amount = strikkTilbud().nok * 100;
     title = STRIKK_KJOP.navn[lang] || STRIKK_KJOP.navn.no;
     /* Samme takkeside som Stripe sender kjøperen til. Lenken inn i appen
        kommer på e-post, siden kjøperen ikke har noen konto. */
