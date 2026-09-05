@@ -62,6 +62,12 @@
   .builder-app { display: none; }
   body.lme-member .builder-app, body.lme-owner .builder-app { display: flex; }
 
+  /* Kort som bare eieren skal se. Brukes der verktøyet allerede ligger inne i
+     et produkt medlemmene har fra før, så kortet bare ville forvirret dem.
+     Klassen på body settes av js/lme-member.js. */
+  .eier-kun { display: none; }
+  body.lme-owner .eier-kun { display: flex; }
+
   @media (max-width: 520px) { .head h1 { font-size: 28px; } }
 </style>
 </head>
@@ -89,10 +95,10 @@
         <span class="go" data-no="Åpne →" data-en="Open →">Åpne →</span>
       </a>
 
-      <a class="app c3" href="/reel-app/" data-lme-tilgang="plan">
+      <a class="app c3 eier-kun" href="/reel-app/" data-lme-tilgang="eier">
         <div class="ico">🎬</div>
         <h3>LME Reel</h3>
-        <p data-no="Lag ferdige reels, stories, karuseller og innlegg med AI. Ingen filming, klar for Instagram og Facebook. På norsk og engelsk." data-en="Make finished reels, stories, carousels and posts with AI. No filming, ready for Instagram and Facebook. In Norwegian and English.">Lag ferdige reels, stories, karuseller og innlegg med AI. Ingen filming, klar for Instagram og Facebook. På norsk og engelsk.</p>
+        <p data-no="Reels, stories, karuseller og innlegg laget med AI. Ingen filming, klart for Instagram og Facebook, på norsk og engelsk. Medlemmene får det samme inne i LME Autopilot." data-en="Reels, stories, carousels and posts made with AI. No filming, ready for Instagram and Facebook, in Norwegian and English. Members get the same inside LME Autopilot.">Reels, stories, karuseller og innlegg laget med AI. Ingen filming, klart for Instagram og Facebook, på norsk og engelsk. Medlemmene får det samme inne i LME Autopilot.</p>
         <span class="go" data-no="Åpne →" data-en="Open →">Åpne →</span>
       </a>
 
@@ -219,13 +225,6 @@
         <div class="ico">🎞️</div>
         <h3>LME VideoFlow</h3>
         <p data-no="Fra idé til ferdig video, uansett tema. Manus, bilder, tale og klipp settes sammen for deg." data-en="From idea to finished video, whatever the topic. Script, images, voice and cuts are put together for you.">Fra idé til ferdig video, uansett tema. Manus, bilder, tale og klipp settes sammen for deg.</p>
-        <span class="go" data-no="Åpne →" data-en="Open →">Åpne →</span>
-      </a>
-
-      <a class="app c5" href="/reel-studio" data-lme-tilgang="plan">
-        <div class="ico">✨</div>
-        <h3>LME Reel Studio</h3>
-        <p data-no="Ferdige AI-reels til Instagram og TikTok: hook, manus scene for scene, tale, b-roll og bildetekst, klart til publisering." data-en="Finished AI reels for Instagram and TikTok: hook, scene by scene script, voiceover, b-roll and caption, ready to publish.">Ferdige AI-reels til Instagram og TikTok: hook, manus scene for scene, tale, b-roll og bildetekst, klart til publisering.</p>
         <span class="go" data-no="Åpne →" data-en="Open →">Åpne →</span>
       </a>
 
