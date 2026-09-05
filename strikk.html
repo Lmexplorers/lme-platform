@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#F8D7DA">
+<link rel="manifest" href="/strikk.webmanifest">
+<link rel="apple-touch-icon" href="/images/app/strikk/apple-touch-icon.png">
+<link rel="icon" href="/images/app/strikk/icon-192.png" type="image/png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Strikk &amp; Hekle">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
 <title>Strikk &amp; Hekle — LME</title>
 <meta name="description" content="Regn ut masker, rader, økning, felling og garnmengde til strikking og hekling. Alt tar utgangspunkt i din egen strikkefasthet.">
@@ -34,6 +40,21 @@
     --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* Lasteskjermen */
+  #splash { position: fixed; inset: 0; z-index: 2147483647; visibility: visible; display: flex; align-items: center; justify-content: center; background: linear-gradient(180deg, #FFF9F6 0%, #FDF1EE 45%, #FBE7EA 100%); transition: opacity .45s ease; }
+  #splash.vekk { opacity: 0; pointer-events: none; }
+  #splash .sp-inner { text-align: center; }
+  #splash .sp-logo { width: 132px; height: 132px; display: block; margin: 0 auto 18px; filter: drop-shadow(0 14px 34px rgba(233,30,137,0.18)); animation: sp-inn .6s ease both; }
+  #splash .sp-navn { font-family: 'Playpen Sans', system-ui, sans-serif; font-weight: 700; font-size: 24px; color: #1A1A1A; animation: sp-inn .6s .1s ease both; }
+  #splash .sp-strek { width: 132px; height: 4px; border-radius: 999px; background: #F6DEE5; margin: 20px auto 0; overflow: hidden; }
+  #splash .sp-strek i { display: block; width: 40%; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #F5A8B8, #E91E89); animation: sp-lop 1.1s ease-in-out infinite; }
+  @keyframes sp-inn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @keyframes sp-lop { 0% { transform: translateX(-110%); } 100% { transform: translateX(360%); } }
+  @media (prefers-reduced-motion: reduce) {
+    #splash .sp-logo, #splash .sp-navn { animation: none; }
+    #splash .sp-strek i { animation: none; width: 100%; }
+  }
   body { font-family: var(--font-body); color: var(--ink); background: linear-gradient(180deg, #FFF9F6 0%, #FDF1EE 45%, #FBE7EA 100%); background-attachment: fixed; min-height: 100vh; line-height: 1.6; }
   h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); }
   a { color: inherit; text-decoration: none; }
@@ -187,6 +208,54 @@
 </style>
 </head>
 <body>
+  <!-- Lasteskjermen. Laasen skjuler hele dokumentet mens den sjekker om du
+       har tilgang, og uten dette ville du sett en blank side i det sekundet.
+       Derfor staar den med visibility: visible, saa den slipper unna
+       skjulingen, akkurat som meldingen i js/course-gate.js gjoer. -->
+  <div id="splash" aria-hidden="true">
+    <div class="sp-inner">
+      <svg class="sp-logo" viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="sp-lgBg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#FFF6F2"/><stop offset="100%" stop-color="#FBDCE5"/>
+            </linearGradient>
+            <linearGradient id="sp-lgBall" x1="0.15" y1="0.05" x2="0.9" y2="1">
+              <stop offset="0%" stop-color="#FF7FB4"/><stop offset="100%" stop-color="#D8137B"/>
+            </linearGradient>
+            <linearGradient id="sp-lgWood" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#EFD6B8"/><stop offset="100%" stop-color="#C29B71"/>
+            </linearGradient>
+            <clipPath id="sp-lgClip"><circle cx="256" cy="286" r="132"/></clipPath>
+          </defs>
+        
+          <rect id="sp-lgPlate" width="512" height="512" rx="112" fill="url(#sp-lgBg)"/>
+        
+          <!-- pinnene bak noestet -->
+          <g stroke-linecap="round">
+            <line x1="118" y1="392" x2="392" y2="120" stroke="url(#sp-lgWood)" stroke-width="30"/>
+            <circle cx="396" cy="116" r="21" fill="#C29B71"/>
+            <line x1="394" y1="392" x2="120" y2="120" stroke="url(#sp-lgWood)" stroke-width="30"/>
+            <circle cx="116" cy="116" r="21" fill="#C29B71"/>
+          </g>
+        
+          <!-- garnnoestet -->
+          <circle cx="256" cy="286" r="132" fill="url(#sp-lgBall)"/>
+          <g clip-path="url(#sp-lgClip)" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="13">
+            <ellipse cx="256" cy="286" rx="132" ry="54" transform="rotate(-34 256 286)"/>
+            <ellipse cx="256" cy="286" rx="125" ry="26" transform="rotate(-34 256 286)"/>
+            <ellipse cx="256" cy="286" rx="132" ry="47" transform="rotate(40 256 286)"/>
+            <ellipse cx="256" cy="286" rx="122" ry="21" transform="rotate(40 256 286)"/>
+            <ellipse cx="256" cy="286" rx="129" ry="38" transform="rotate(86 256 286)"/>
+          </g>
+        
+          <!-- garntraaden som stikker ut -->
+          <path d="M374 336 C 406 356, 414 392, 396 420" fill="none" stroke="#E91E89" stroke-width="13" stroke-linecap="round"/>
+      </svg>
+      <div class="sp-navn">Strikk &amp; Hekle</div>
+      <div class="sp-strek"><i></i></div>
+    </div>
+  </div>
+
   <div class="bar">
     <a class="brand" href="/dashboard"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
     <div class="actions">
@@ -1726,6 +1795,37 @@
     function start() { setTimeout(proev, 400); }
     if (document.readyState === 'complete') start();
     else window.addEventListener('load', start);
+  })();
+
+  /* ---------- lasteskjermen ----------
+     Den skal vekk naar to ting er sanne: laasen har sluppet oss inn (den
+     skjuler hele dokumentet mens den sjekker), og appen har rukket aa male
+     seg ferdig. Slipper laasen oss IKKE inn, sendes vi til salgssiden, og da
+     skal lasteskjermen bli staaende til vi er borte, i stedet for aa vise et
+     blaff av appen vi ikke har tilgang til. */
+  (function () {
+    var el = document.getElementById('splash');
+    if (!el) return;
+    var start = Date.now();
+    function vekk() {
+      /* Litt minstetid, ellers blinker den bare til og ser ut som en feil. */
+      var igjen = Math.max(0, 500 - (Date.now() - start));
+      setTimeout(function () {
+        el.classList.add('vekk');
+        setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 500);
+      }, igjen);
+    }
+    function vent() {
+      /* course-gate.js setter visibility: hidden paa <html> til svaret er
+         der, og fjerner den igjen naar du slipper inn. */
+      if (document.documentElement.style.visibility === 'hidden') return setTimeout(vent, 80);
+      vekk();
+    }
+    if (document.readyState === 'complete') vent();
+    else window.addEventListener('load', vent);
+    /* Sikkerhetsnett: skulle noe henge, skal lasteskjermen aldri bli staaende
+       for alltid og laase brukeren ute fra sin egen app. */
+    setTimeout(function () { if (el.parentNode) vekk(); }, 8000);
   })();
 
   /* ---------- oppstart ---------- */
