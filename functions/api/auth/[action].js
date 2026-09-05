@@ -10,7 +10,7 @@
  *
  * Lagring i KV:
  *   user:<e-post>   -> { id, email, name, salt, hash, role, created_at, subscription, purchases }
- *   sess:<sid>      -> { uid, email, role }   (HttpOnly-cookie lme_sess)
+ *   sess:<sid>      -> { uid, email, role, iat }   (HttpOnly-cookie lme_sess)
  */
 
 import { sendWelcome } from "../../_lib/welcome-mail.js";
@@ -86,6 +86,12 @@ function readCookies(request) {
   return out;
 }
 const SESS_TTL = 60 * 60 * 24 * 30; // 30 dager
+// Hvor lenge vi lar en økt stå i fred før den skrives på nytt i KV.
+// Cookien fornyes ved hvert besøk (gratis), men selve KV-skrivingen skjer
+// høyst én gang i døgnet per innlogget bruker. Uten dette ble det én
+// KV-skriving for HVER sidevisning, og gratisgrensen på 1000 skrivinger
+// i døgnet gikk fort med.
+const SESS_REFRESH_AFTER = 60 * 60 * 24; // 1 døgn
 function sessionCookie(sid) {
   return `lme_sess=${sid}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${SESS_TTL}`;
 }
@@ -98,7 +104,7 @@ async function createSession(env, user) {
   const sid = (crypto.randomUUID() + crypto.randomUUID()).replace(/-/g, "");
   await env.BUILDER_KV.put(
     "sess:" + sid,
-    JSON.stringify({ uid: user.id, email: user.email, role: user.role }),
+    JSON.stringify({ uid: user.id, email: user.email, role: user.role, iat: Date.now() }),
     { expirationTtl: SESS_TTL }
   );
   return sid;
@@ -128,19 +134,23 @@ export async function onRequestGet(context) {
   if (!sess) return json({ user: null }, 200);
   const u = await getUser(env, sess.email);
   if (!u) return json({ user: null }, 200);
-  // Rullerende innlogging: hver gang en side sjekker "hvem er jeg", fornyes
-  // økten med nye 30 dager, og cookien settes på nytt. Aktive brukere (som
-  // Renate) forblir da alltid innlogget, akkurat som i FEA. Feiler fornyingen
-  // (f.eks. KV nede et øyeblikk), svarer vi som før uten å logge noen ut.
-  let refresh = {};
-  try {
-    await env.BUILDER_KV.put(
-      "sess:" + sess.sid,
-      JSON.stringify({ uid: sess.uid, email: sess.email, role: sess.role }),
-      { expirationTtl: SESS_TTL }
-    );
-    refresh = { "Set-Cookie": sessionCookie(sess.sid) };
-  } catch (e) { /* behold eksisterende økt */ }
+  // Rullerende innlogging: cookien settes på nytt ved hvert besøk, så aktive
+  // brukere (som Renate) forblir alltid innlogget. Selve økten i KV skrives
+  // bare når den er eldre enn ett døgn. Det holder den like levende, men
+  // koster én skriving om dagen i stedet for én per sidevisning.
+  // Feiler fornyingen (f.eks. KV nede et øyeblikk), svarer vi som før uten
+  // å logge noen ut.
+  const refresh = { "Set-Cookie": sessionCookie(sess.sid) };
+  const alder = Date.now() - (Number(sess.iat) || 0);
+  if (alder > SESS_REFRESH_AFTER * 1000) {
+    try {
+      await env.BUILDER_KV.put(
+        "sess:" + sess.sid,
+        JSON.stringify({ uid: sess.uid, email: sess.email, role: sess.role, iat: Date.now() }),
+        { expirationTtl: SESS_TTL }
+      );
+    } catch (e) { /* behold eksisterende økt */ }
+  }
   return json({ user: publicUser(u), subscription: u.subscription || null, purchases: u.purchases || [] }, 200, refresh);
 }
 

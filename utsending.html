@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Utsending — LME</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  :root {
+    --cerise: #E91E89;
+    --ink: #1A1A1A;
+    --grey: #6F6A75;
+    --cream: #FDF5F1;
+    --line: rgba(26,26,26,0.10);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--cream); color: var(--ink);
+    font-family: var(--font-body); font-size: 16px; line-height: 1.65;
+  }
+  h1, h2, h3 { font-family: var(--font-head); line-height: 1.25; margin: 0 0 10px; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 28px 18px 70px; }
+  .topp { display: flex; align-items: center; gap: 10px; padding: 13px 18px; border-bottom: 1px solid var(--line); }
+  .merke { font-family: var(--font-head); font-weight: 700; font-size: 19px; text-decoration: none; color: var(--ink); }
+  .merke i { color: var(--cerise); font-style: normal; }
+  .kort { background: #fff; border-radius: 20px; padding: 22px; margin-bottom: 16px; }
+  label { display: block; font-weight: 700; font-size: 14.5px; margin: 14px 0 6px; }
+  input, textarea {
+    width: 100%; padding: 12px 14px; border: 1px solid var(--line);
+    border-radius: 12px; font-family: var(--font-body); font-size: 15px; background: #fff;
+  }
+  textarea { min-height: 130px; resize: vertical; }
+  textarea.stor { min-height: 300px; }
+  .hjelp { color: var(--grey); font-size: 13px; margin: 5px 0 0; }
+  .knapp {
+    display: inline-block; background: var(--cerise); color: #fff; border: none;
+    border-radius: 999px; padding: 13px 24px; font-family: var(--font-body);
+    font-size: 15.5px; font-weight: 700; cursor: pointer;
+  }
+  .knapp.mild { background: #fff; color: var(--cerise); border: 2px solid var(--cerise); }
+  .knapp:disabled { opacity: .55; cursor: default; }
+  .rad { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  .svar { margin-top: 14px; font-weight: 700; font-size: 14.5px; }
+  .svar.feil { color: #C81860; }
+  .svar.ok { color: #4E7A0E; }
+  .liste { margin: 10px 0 0; padding: 0; list-style: none; font-size: 14px; }
+  .liste li { padding: 4px 0; border-bottom: 1px solid var(--line); }
+  .forhandsvis {
+    border: 1px solid var(--line); border-radius: 14px; padding: 16px;
+    background: #fff; margin-top: 12px; font-size: 15px;
+  }
+  .stengt { text-align: center; padding: 50px 20px; color: var(--grey); }
+</style>
+</head>
+<body>
+
+<div class="topp">
+  <a class="merke" href="/dashboard">LME <i>Utsending</i></a>
+</div>
+
+<div class="wrap">
+  <div id="stengt" class="stengt" hidden>
+    <h2>Kun for eier</h2>
+    <p>Denne siden er for Renate. <a href="/logg-inn" style="color:var(--cerise)">Logg inn</a>.</p>
+  </div>
+
+  <div id="verktoy" hidden>
+    <h1>Send ett brev</h1>
+    <p class="hjelp" style="margin-bottom:18px;">
+      Her sender du en enkeltstående e-post til noen få, uten å bygge en serie.
+      Send alltid en test til deg selv først, så ser du brevet slik mottakeren får det.
+    </p>
+
+    <div class="kort">
+      <label for="mal">Ferdig tekst</label>
+      <select id="mal" onchange="fyllMal(this.value)" style="width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-family:var(--font-body);font-size:15px;background:#fff;">
+        <option value="">Velg en mal, eller skriv fritt under</option>
+        <option value="testere">Grunneleggertilbud til testerne</option>
+      </select>
+
+      <label for="mottakere">Mottakere</label>
+      <textarea id="mottakere" placeholder="Ida Ursin &lt;ida@example.com&gt;&#10;ingunn@example.com"></textarea>
+      <p class="hjelp">Én per linje. Enten bare adressen, eller «Navn &lt;adresse&gt;» hvis du vil at brevet skal hilse med fornavn.</p>
+
+      <label for="emne">Emne</label>
+      <input id="emne" type="text" placeholder="Emnet i innboksen">
+
+      <label for="tekst">Teksten</label>
+      <textarea id="tekst" class="stor" placeholder="Hei {navn},&#10;&#10;Skriv brevet her. Tom linje gir nytt avsnitt, og lenker blir klikkbare av seg selv."></textarea>
+      <p class="hjelp">Skriv vanlig tekst. {navn} byttes med fornavnet til hver mottaker.</p>
+
+      <div class="rad">
+        <button class="knapp mild" type="button" onclick="forhandsvis()">Se hvordan det blir</button>
+        <button class="knapp mild" type="button" id="testknapp" onclick="send(true)">Send test til meg selv</button>
+        <button class="knapp" type="button" id="sendknapp" onclick="send(false)">Send til alle</button>
+      </div>
+      <p id="svar" class="svar"></p>
+      <ul id="detaljer" class="liste"></ul>
+      <div id="forhand" class="forhandsvis" hidden></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Malen for testerne. Ligger her og ikke i koden på serveren, så teksten
+   kan endres uten utrulling, og ingen adresser lagres noe sted. */
+const MALER = {
+  testere: {
+    emne: "Takk for at du sa ja, her er tilbudet ditt 💛",
+    tekst:
+"Hei {navn},\n\n" +
+"Du sa ja til å teste LME Autopilot da jeg trengte testere, og det satte jeg stor pris på. Det meldte seg ikke nok folk, så testrunden ble det dessverre ikke noe av. Nå har jeg opprettet firma, og appen er ferdig og i salg.\n\n" +
+"Du skal likevel få noe igjen for at du sa ja. Derfor tilbyr jeg deg grunnleggerprisen: 299 kr i måneden i stedet for 549, låst i 12 måneder. 100 AI-bilder i måneden er inkludert og går på min nøkkel, så bilder og tekst kan du lage med en gang. Video lager du med din egen nøkkel eller med kjøpt videokreditt. Du kan si opp når du vil.\n" +
+"https://lmexplorers.com/grunnlegger\n\n" +
+"Vil du heller eie appen enn å abonnere, koster den 1997 kr én gang ut september, ordinært 2997.\n" +
+"https://lmexplorers.com/autopilot-app\n\n" +
+"For at postingen skal gå på autopilot, trenger man en API-nøkkel, som man kjøper tilgang til, med abonnement hos Blotato. Det rimeligste abonnementet der koster fra 29 dollar i måneden, altså rundt 300 kroner. Uten nøkkelen lager appen alt innholdet ferdig, men du legger det ut selv. Jeg hjelper deg gjerne med oppsettet.\n\n" +
+"Har du spørsmål, svar på denne e-posten. Jeg leser hvert svar selv.\n\n" +
+"Varm hilsen\n" +
+"Renate\n\n" +
+"Du får denne e-posten fordi du meldte deg som tester av LME Autopilot."
+  }
+};
+
+function fyllMal(id) {
+  const m = MALER[id];
+  if (!m) return;
+  document.getElementById('emne').value = m.emne;
+  document.getElementById('tekst').value = m.tekst;
+}
+
+/* «Navn <adresse>» eller bare adressen. */
+function lesMottakere() {
+  return (document.getElementById('mottakere').value || '')
+    .split('\n')
+    .map(l => l.trim())
+    .filter(Boolean)
+    .map(function (linje) {
+      const m = linje.match(/^(.*?)[<(]\s*([^>)\s]+)\s*[>)]?\s*$/);
+      if (m && m[2]) return { navn: m[1].replace(/[",]/g, '').trim(), epost: m[2].trim() };
+      const deler = linje.split(/[,;]/).map(s => s.trim()).filter(Boolean);
+      if (deler.length >= 2 && deler[1].includes('@')) return { navn: deler[0], epost: deler[1] };
+      return { navn: '', epost: linje };
+    });
+}
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function forhandsvis() {
+  const boks = document.getElementById('forhand');
+  const navn = (lesMottakere()[0] || {}).navn || 'du';
+  const tekst = (document.getElementById('tekst').value || '').replace(/\{navn\}/g, navn.split(' ')[0] || 'du');
+  const html = tekst.split(/\n{2,}/).map(function (a) {
+    return '<p style="margin:0 0 14px;">' +
+      esc(a.trim()).replace(/\n/g, '<br>').replace(/(https?:\/\/[^\s<]+)/g, u => '<a href="' + u + '" style="color:#E91E89;">' + u + '</a>') +
+      '</p>';
+  }).join('');
+  boks.innerHTML = '<p style="font-weight:700;margin:0 0 10px;">' + esc(document.getElementById('emne').value) + '</p>' + html;
+  boks.hidden = false;
+}
+
+async function send(erTest) {
+  const svar = document.getElementById('svar');
+  const detaljer = document.getElementById('detaljer');
+  const mottakere = lesMottakere();
+  detaljer.innerHTML = '';
+  svar.className = 'svar';
+
+  if (!erTest) {
+    if (!mottakere.length) { svar.className = 'svar feil'; svar.textContent = 'Ingen mottakere.'; return; }
+    const navnliste = mottakere.map(m => m.epost).join('\n');
+    if (!confirm('Sende til ' + mottakere.length + ' mottakere?\n\n' + navnliste)) return;
+  }
+
+  const knapp = document.getElementById(erTest ? 'testknapp' : 'sendknapp');
+  knapp.disabled = true;
+  const før = knapp.textContent;
+  knapp.textContent = 'Sender …';
+  svar.textContent = '';
+
+  try {
+    const r = await fetch('/api/utsending', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        test: !!erTest,
+        mottakere: mottakere,
+        emne: document.getElementById('emne').value,
+        tekst: document.getElementById('tekst').value,
+      }),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!d || d.ok === false && d.error) {
+      svar.className = 'svar feil';
+      svar.textContent = d.error || 'Noe gikk galt.';
+    } else {
+      svar.className = d.feilet ? 'svar feil' : 'svar ok';
+      svar.textContent = erTest
+        ? 'Testen er sendt til deg selv. Sjekk innboksen.'
+        : 'Sendt til ' + d.sendt + ' av ' + (d.sendt + d.feilet) + '.';
+      (d.detaljer || []).forEach(function (x) {
+        const li = document.createElement('li');
+        li.textContent = (x.ok ? '✓ ' : '✗ ') + x.epost + (x.grunn ? ' (' + x.grunn + ')' : '');
+        detaljer.appendChild(li);
+      });
+    }
+  } catch (e) {
+    svar.className = 'svar feil';
+    svar.textContent = 'Fikk ikke kontakt med serveren.';
+  }
+  knapp.disabled = false;
+  knapp.textContent = før;
+}
+
+/* Bare eier slipper inn. Serveren sjekker det samme, så dette er kun for
+   å slippe å vise et verktøy ingen andre kan bruke. */
+(async function () {
+  try {
+    const r = await fetch('/api/access');
+    const d = await r.json().catch(() => ({}));
+    const eier = d && (d.plan === 'owner' || d.tier === 'owner');
+    document.getElementById(eier ? 'verktoy' : 'stengt').hidden = false;
+  } catch (e) {
+    document.getElementById('stengt').hidden = false;
+  }
+})();
+</script>
+</body>
+</html>

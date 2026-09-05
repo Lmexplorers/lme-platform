@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FDF5F1">
+<title>LME Autopilot, kjøp appen én gang</title>
+<meta name="description" content="Kjøp LME Autopilot én gang, så eier du appen. Ingen månedspris. Du bruker dine egne AI-nøkler og betaler AI-en direkte for det du lager.">
+<link rel="icon" href="/images/lme-logo.png">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Playpen Sans';
+    src: url('/fonts/PlaypenSans-400.woff2') format('woff2');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Playpen Sans';
+    src: url('/fonts/PlaypenSans-700.woff2') format('woff2');
+    font-weight: 700; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink: #F8D7DA; --pink-mid: #F5A8B8; --cerise: #E91E89;
+    --lime: #7AAE1F; --yellow: #F7C72E; --cream: #FBF6F0;
+    --ink: #1A1A1A; --grey: #5A5A5A; --line: rgba(26,26,26,0.10);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body); color: var(--ink); line-height: 1.65;
+    background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 55%, #F8D7DA 100%);
+    min-height: 100vh; -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-head); line-height: 1.25; }
+  a { color: inherit; }
+  button, input, textarea, select { font-family: inherit; font-size: inherit; color: inherit; }
+
+  .topp {
+    position: sticky; top: 0; z-index: 20; display: flex; align-items: center;
+    justify-content: space-between; gap: 10px; padding: 13px 18px;
+    background: rgba(253,245,241,0.92); backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line);
+    /* Plass til kontoknappen fra js/lme-account.js, som ligger fast øverst
+       til høyre og ellers legger seg oppå knappene her. */
+    padding-right: 62px;
+  }
+  .merke { font-family: var(--font-head); font-weight: 700; font-size: 19px; letter-spacing: -0.01em; text-decoration: none; }
+  .merke i { color: var(--cerise); font-style: normal; }
+  .minibtn {
+    border: 1px solid #eedce2; background: #fff; border-radius: 999px;
+    padding: 7px 13px; font-size: 12.5px; font-weight: 700; cursor: pointer; white-space: nowrap;
+  }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 34px 18px 60px; }
+
+  .hero { text-align: center; padding: 16px 0 10px; }
+  .kicker {
+    display: inline-block; background: #fff; border: 1px solid var(--pink-mid);
+    color: var(--cerise); border-radius: 999px; padding: 7px 16px;
+    font-size: 12.5px; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 16px;
+  }
+  .hero h1 { font-size: clamp(29px, 6vw, 44px); letter-spacing: -0.02em; margin-bottom: 14px; }
+  .hero h1 em { color: var(--cerise); font-style: normal; }
+  .hero p.ingress { font-size: clamp(16px, 2.2vw, 19px); color: var(--grey); max-width: 560px; margin: 0 auto; }
+
+  .kjopsboks {
+    background: #fff; border-radius: 24px; padding: 30px 26px; margin-top: 28px;
+    box-shadow: 0 14px 36px rgba(26,26,26,.09); border: 2px solid var(--pink-mid);
+  }
+  .pris { font-family: var(--font-head); font-size: 44px; font-weight: 700; letter-spacing: -0.02em; text-align: center; }
+  .pris span { font-family: var(--font-body); font-size: 15px; font-weight: 400; color: var(--grey); display: block; margin-top: 2px; }
+  .kjopsboks ul { list-style: none; margin: 22px 0; }
+  .kjopsboks li { position: relative; padding-left: 26px; margin-bottom: 10px; font-size: 15.5px; }
+  .kjopsboks li::before { content: "✓"; position: absolute; left: 0; color: var(--lime); font-weight: 800; }
+  .knapp-stor {
+    display: block; width: 100%; text-align: center;
+    background: linear-gradient(120deg, #E91E89, #ff5fb0);
+    color: #fff; text-decoration: none; font-weight: 800; font-size: 16.5px;
+    padding: 16px 28px; border-radius: 999px; border: none; cursor: pointer;
+    box-shadow: 0 12px 26px rgba(233,30,137,.28);
+  }
+  .lansering-notis {
+    text-align: center; color: var(--cerise); font-weight: 700;
+    font-size: 14px; margin: -10px 0 16px;
+  }
+
+  .notis {
+    background: var(--cream); border-radius: 16px; padding: 18px 20px; margin-top: 20px;
+    border-left: 5px solid var(--yellow); color: var(--grey); font-size: 15px;
+  }
+  .notis strong { color: var(--ink); }
+
+  .bolk { margin-top: 44px; }
+  .bolk > h2 { font-size: clamp(22px, 4vw, 29px); text-align: center; margin-bottom: 20px; }
+
+  .sammenlign { background: #fff; border-radius: 20px; padding: 8px 6px; box-shadow: 0 10px 28px rgba(26,26,26,.07); overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; min-width: 460px; }
+  th, td { text-align: left; padding: 13px 14px; font-size: 15px; border-bottom: 1px solid var(--line); }
+  th { font-family: var(--font-head); font-size: 14.5px; }
+  tr:last-child td { border-bottom: none; }
+  td.ja { color: #5B8416; font-weight: 700; }
+  td.nei { color: var(--grey); }
+
+  .sporsmal { background: #fff; border-radius: 18px; padding: 20px 22px; margin-bottom: 12px; box-shadow: 0 6px 18px rgba(26,26,26,.05); }
+  .sporsmal h3 { font-size: 17px; margin-bottom: 7px; }
+  .sporsmal p { color: var(--grey); font-size: 15px; }
+
+  /* Eieren skal aldri møte en kjøpsknapp for sitt eget produkt. */
+  .eierboks {
+    background: #F2F8E6; border: 2px solid #B7D96B; border-radius: 22px;
+    padding: 24px; margin-top: 28px; text-align: center;
+  }
+  .eierboks h2 { font-size: 21px; margin-bottom: 8px; }
+  .eierboks p { color: #47600F; font-size: 15.5px; margin-bottom: 16px; }
+  .eierboks a { display: inline-block; background: #5B8416; color: #fff; text-decoration: none; font-weight: 800; padding: 13px 26px; border-radius: 999px; }
+
+  .takk {
+    background: #F2F8E6; border: 2px solid #B7D96B; border-radius: 20px;
+    padding: 22px 24px; margin-bottom: 24px;
+  }
+  .takk h2 { font-size: 22px; margin-bottom: 8px; }
+  .takk p { color: #47600F; font-size: 15.5px; }
+  .takk p + p { margin-top: 10px; }
+
+  .skjul { display: none !important; }
+
+  .bunn { text-align: center; color: var(--grey); font-size: 14px; padding: 36px 18px 60px; }
+  .bunn a { color: var(--cerise); font-weight: 700; }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 24px 15px 50px; }
+    .kjopsboks { padding: 22px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topp">
+  <a class="merke" href="/dashboard">LME <i>Autopilot</i></a>
+  <button class="minibtn" id="sprakbytte" type="button">EN 🌍</button>
+</header>
+
+<div class="wrap">
+
+  <section class="takk skjul" id="takk">
+    <h2 data-no="Takk! Appen er din" data-en="Thank you! The app is yours">Takk! Appen er din</h2>
+    <p data-no="Tilgangen åpnes på kontoen med den e-postadressen du betalte med. Du får en e-post fra meg nå, med de to tingene du må gjøre for å komme i gang." data-en="Access opens on the account with the email address you paid with. You get an email from me now, with the two things you need to do to get started.">Tilgangen åpnes på kontoen med den e-postadressen du betalte med. Du får en e-post fra meg nå, med de to tingene du må gjøre for å komme i gang.</p>
+    <p data-no="Ser du fortsatt låsen i appen, logg ut og inn igjen én gang." data-en="If you still see the lock in the app, log out and back in once.">Ser du fortsatt låsen i appen, logg ut og inn igjen én gang.</p>
+    <p style="margin-top:14px"><a href="/autopilot-nokler" style="display:inline-block;background:#5B8416;color:#fff;text-decoration:none;font-weight:800;padding:13px 26px;border-radius:999px" data-no="Kom i gang, steg for steg →" data-en="Get started, step by step →">Kom i gang, steg for steg →</a></p>
+  </section>
+
+  <section class="hero">
+    <span class="kicker" data-no="ENGANGSKJØP" data-en="ONE-TIME PURCHASE">ENGANGSKJØP</span>
+    <h1 data-no="Kjøp appen én gang, så <em>eier du den</em>." data-en="Buy the app once, and <em>own it</em>.">Kjøp appen én gang, så <em>eier du den</em>.</h1>
+    <p class="ingress" data-no="LME Autopilot uten månedspris. Du legger inn dine egne AI-nøkler, og betaler AI-en direkte for det du lager. Ingenting til meg hver måned." data-en="LME Autopilot with no monthly price. You add your own AI keys, and pay the AI directly for what you make. Nothing to me every month.">LME Autopilot uten månedspris. Du legger inn dine egne AI-nøkler, og betaler AI-en direkte for det du lager. Ingenting til meg hver måned.</p>
+  </section>
+
+  <!-- Eieren: ingen kjøpsknapp, bare veien inn. -->
+  <section class="eierboks skjul" id="eierboks">
+    <h2 data-no="Dette er ditt eget produkt" data-en="This is your own product">Dette er ditt eget produkt</h2>
+    <p data-no="Du skal aldri betale for appen din. Tilgangen er åpen for deg allerede." data-en="You should never pay for your own app. Your access is already open.">Du skal aldri betale for appen din. Tilgangen er åpen for deg allerede.</p>
+    <a href="https://lme-contentstudio.pages.dev" data-no="Åpne LME Autopilot →" data-en="Open LME Autopilot →">Åpne LME Autopilot →</a>
+  </section>
+
+  <!-- Har alt kjøpt: ingen ny kjøpsknapp. -->
+  <section class="eierboks skjul" id="harboks">
+    <h2 data-no="Du har allerede kjøpt appen" data-en="You have already bought the app">Du har allerede kjøpt appen</h2>
+    <p data-no="Tilgangen din er åpen, og den utløper ikke. Ser du fortsatt låsen, logg ut og inn igjen én gang." data-en="Your access is open, and it does not expire. If you still see the lock, log out and back in once.">Tilgangen din er åpen, og den utløper ikke. Ser du fortsatt låsen, logg ut og inn igjen én gang.</p>
+    <a href="https://lme-contentstudio.pages.dev" data-no="Åpne LME Autopilot →" data-en="Open LME Autopilot →">Åpne LME Autopilot →</a>
+  </section>
+
+  <section class="kjopsboks" id="kjopsboks" data-vipps-produkt="autopilot" data-vipps-type="app">
+    <div class="pris" id="prislinje"></div>
+    <p id="lanseringsnotis" class="lansering-notis" hidden></p>
+    <ul id="punkter"></ul>
+    <a class="knapp-stor buy-cta" id="kjopknapp" href="#" data-no="Kjøp med kort" data-en="Pay by card">Kjøp med kort</a>
+    <!-- js/vipps-knapp.js legger Vipps-knappen akkurat her, rett under
+         kortknappen. Vipps tar bare kroner, så den skjuler seg selv i
+         engelsk visning. -->
+    <div class="pay-methods"></div>
+    <div class="notis" id="kreditt-notis"></div>
+  </section>
+
+  <section class="bolk">
+    <h2 data-no="Engangskjøp eller abonnement?" data-en="One-time or subscription?">Engangskjøp eller abonnement?</h2>
+    <div class="sammenlign">
+      <table>
+        <tr>
+          <th></th>
+          <th data-no="Engangskjøp" data-en="One-time">Engangskjøp</th>
+          <th data-no="Abonnement" data-en="Subscription">Abonnement</th>
+        </tr>
+        <tr>
+          <td data-no="Hva du betaler" data-en="What you pay">Hva du betaler</td>
+          <td id="tabellpris" data-no="1997 kr én gang" data-en="1997 kr once">1997 kr én gang</td>
+          <td data-no="fra 199 kr i måneden" data-en="from 199 kr a month">fra 199 kr i måneden</td>
+        </tr>
+        <tr>
+          <td data-no="Hele appen" data-en="The whole app">Hele appen</td>
+          <td class="ja">✓</td>
+          <td class="ja">✓</td>
+        </tr>
+        <tr>
+          <td data-no="Autopublisering (krever din egen Blotato-nøkkel)" data-en="Auto-publishing (needs your own Blotato key)">Autopublisering (krever din egen Blotato-nøkkel)</td>
+          <td class="ja">✓</td>
+          <td class="ja">✓</td>
+        </tr>
+        <tr>
+          <td data-no="AI-bilder inkludert" data-en="AI images included">AI-bilder inkludert</td>
+          <td class="nei" data-no="nei, egen nøkkel" data-en="no, your own key">nei, egen nøkkel</td>
+          <td class="ja" data-no="30 til 250 i måneden" data-en="30 to 250 a month">30 til 250 i måneden</td>
+        </tr>
+        <tr>
+          <td data-no="Hvem betaler AI-en" data-en="Who pays the AI">Hvem betaler AI-en</td>
+          <td data-no="du, direkte" data-en="you, directly">du, direkte</td>
+          <td data-no="jeg" data-en="I do">jeg</td>
+        </tr>
+      </table>
+    </div>
+    <div class="notis" style="border-left-color:var(--pink-mid)">
+      <strong data-no="Kort sagt:" data-en="In short:">Kort sagt:</strong>
+      <span data-no="lager du mye, blir engangskjøpet billigst i lengden, fordi AI-en din koster det den koster og ikke mer. Lager du lite, og vil slippe å tenke på nøkler i det hele tatt, er abonnementet enklere." data-en="If you make a lot, the one-time purchase is cheapest in the long run, because your AI costs what it costs and no more. If you make little, and would rather not think about keys at all, the subscription is simpler."> lager du mye, blir engangskjøpet billigst i lengden, fordi AI-en din koster det den koster og ikke mer. Lager du lite, og vil slippe å tenke på nøkler i det hele tatt, er abonnementet enklere.</span>
+      <a href="/oppgrader" style="color:var(--cerise);font-weight:700" data-no="Se abonnementene →" data-en="See the subscriptions →">Se abonnementene →</a>
+    </div>
+  </section>
+
+  <section class="bolk">
+    <h2 data-no="Spørsmål jeg får ofte" data-en="Questions I often get">Spørsmål jeg får ofte</h2>
+    <div class="sporsmal">
+      <h3 data-no="Hva er en AI-nøkkel, egentlig?" data-en="What is an AI key, really?">Hva er en AI-nøkkel, egentlig?</h3>
+      <p data-no="Det er en lang tekststreng du henter i din egen konto hos OpenAI, Google eller Anthropic. Hele fremgangsmåten står på lmexplorers.com/autopilot-nokler. Den forteller AI-en at det er du som spør, og at regningen er din. Du limer den inn i appen én gang, under Innstillinger, og så er den saken ute av verden." data-en="It is a long line of text you get from your own account at OpenAI, Google or Anthropic. It tells the AI that it is you asking, and that the bill is yours. You paste it into the app once, under Settings, and then it is done.">Det er en lang tekststreng du henter i din egen konto hos OpenAI, Google eller Anthropic. Hele fremgangsmåten står på lmexplorers.com/autopilot-nokler. Den forteller AI-en at det er du som spør, og at regningen er din. Du limer den inn i appen én gang, under Innstillinger, og så er den saken ute av verden.</p>
+    </div>
+    <div class="sporsmal">
+      <h3 data-no="Hva koster AI-en meg da?" data-en="What does the AI cost me then?">Hva koster AI-en meg da?</h3>
+      <p data-no="Det avhenger av hvor mye du lager. Et AI-bilde koster typisk noen få kroner, og tekst koster ører. Lager du hundre bilder i måneden, snakker vi noen titalls kroner. Du betaler bare for det du faktisk bruker, og du ser regningen selv." data-en="It depends on how much you make. An AI image typically costs a few kroner, and text costs pennies. If you make a hundred images a month, we are talking a few tens of kroner. You pay only for what you actually use, and you see the bill yourself.">Det avhenger av hvor mye du lager. Et AI-bilde koster typisk noen få kroner, og tekst koster ører. Lager du hundre bilder i måneden, snakker vi noen titalls kroner. Du betaler bare for det du faktisk bruker, og du ser regningen selv.</p>
+    </div>
+    <div class="sporsmal">
+      <h3 data-no="Er nøkkelen min trygg?" data-en="Is my key safe?">Er nøkkelen min trygg?</h3>
+      <p data-no="Nøkkelen din lagres kryptert, og brukes bare til å gjøre det du ber om i appen. Den vises aldri for andre, og du kan fjerne den når du vil ved å tømme feltet under Innstillinger." data-en="Your key is stored encrypted, and is only used to do what you ask for in the app. It is never shown to anyone else, and you can remove it whenever you want by clearing the field under Settings.">Nøkkelen din lagres kryptert, og brukes bare til å gjøre det du ber om i appen. Den vises aldri for andre, og du kan fjerne den når du vil ved å tømme feltet under Innstillinger.</p>
+    </div>
+    <div class="sporsmal">
+      <h3 data-no="Kan jeg bytte til abonnement senere?" data-en="Can I switch to a subscription later?">Kan jeg bytte til abonnement senere?</h3>
+      <p data-no="Ja, når som helst, og du mister ikke engangskjøpet. Har du begge deler, bruker appen den inkluderte kvoten først, og går over på din egen nøkkel når den er brukt opp." data-en="Yes, whenever you want, and you do not lose the one-time purchase. If you have both, the app uses the included quota first, and moves over to your own key when it runs out.">Ja, når som helst, og du mister ikke engangskjøpet. Har du begge deler, bruker appen den inkluderte kvoten først, og går over på din egen nøkkel når den er brukt opp.</p>
+    </div>
+    <div class="sporsmal">
+      <h3 data-no="Hva om jeg vil ha pengene tilbake?" data-en="What if I want a refund?">Hva om jeg vil ha pengene tilbake?</h3>
+      <p data-no="Får du det ikke til å virke, og jeg ikke klarer å hjelpe deg i havn, får du pengene tilbake. Send meg en e-post innen fjorten dager, så ordner jeg det." data-en="If you cannot get it to work, and I cannot help you get there, you get your money back. Send me an email within fourteen days and I will sort it out.">Får du det ikke til å virke, og jeg ikke klarer å hjelpe deg i havn, får du pengene tilbake. Send meg en e-post innen fjorten dager, så ordner jeg det.</p>
+    </div>
+  </section>
+
+</div>
+
+<div class="bunn">
+  <p data-no="LME Autopilot er appen inni LME Studio." data-en="LME Autopilot is the app inside LME Studio.">LME Autopilot er appen inni LME Studio.</p>
+  <p style="margin-top:8px"><a href="/dashboard" data-no="Tilbake til plattformen" data-en="Back to the platform">Tilbake til plattformen</a></p>
+</div>
+
+<script type="module">
+  let sprak = (new URLSearchParams(location.search).get('lang') === 'en') ? 'en' : 'no';
+
+  /* Prisen og punktene hentes fra serveren, fra den samme filen Vipps leser,
+     så siden aldri kan vise et annet beløp enn det som faktisk trekkes. */
+  let tilbud = null;
+
+  function byttSprak(lang) {
+    sprak = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-no][data-en]').forEach(el => {
+      const t = el.getAttribute('data-' + lang);
+      if (t === null) return;
+      if (t.indexOf('<') !== -1) el.innerHTML = t;
+      else el.textContent = t;
+    });
+    document.getElementById('sprakbytte').textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+    document.title = lang === 'no' ? 'LME Autopilot, kjøp appen én gang' : 'LME Autopilot, buy the app once';
+  }
+
+  document.getElementById('sprakbytte').addEventListener('click', () => {
+    byttSprak(sprak === 'no' ? 'en' : 'no');
+  });
+
+  function tegnTilbud(t) {
+    const pris = document.getElementById('prislinje');
+    /* nb-NO skiller tusener med et smalt hardt mellomrom (U+202F), og i
+       Playpen Sans blir det et stort, stygt hull. Vi bytter det med et
+       vanlig hardt mellomrom, som ser riktig ut og fortsatt ikke deler
+       tallet over to linjer. */
+    const kr = (n) => n.toLocaleString('nb-NO').replace(/[\u202f\u2009]/g, '\u00a0') + ' kr';
+    /* Er lanseringsprisen i gang, skal kunden se hva den ordinære prisen
+       er, og at tilbudet tar slutt. Uten det er en rabatt bare et tall. */
+    const erLansering = t.trinn === 'lansering' && t.ordinaer && t.ordinaer > t.nok;
+    pris.innerHTML = kr(t.nok) +
+      '<span data-no="én gang, ikke i måneden" data-en="once, not per month">én gang, ikke i måneden</span>';
+    const lansering = document.getElementById('lanseringsnotis');
+    if (lansering) {
+      if (erLansering) {
+        const no = 'Lanseringspris ut september. Ordinær pris er ' + kr(t.ordinaer) + '.';
+        const en = 'Launch price through September. The regular price is ' + kr(t.ordinaer) + '.';
+        lansering.setAttribute('data-no', no);
+        lansering.setAttribute('data-en', en);
+        lansering.textContent = document.documentElement.lang === 'en' ? en : no;
+        lansering.hidden = false;
+      } else {
+        lansering.hidden = true;
+      }
+    }
+    const tabellpris = document.getElementById('tabellpris');
+    if (tabellpris) {
+      const no = kr(t.nok) + ' én gang';
+      const en = kr(t.nok) + ' once';
+      tabellpris.setAttribute('data-no', no);
+      tabellpris.setAttribute('data-en', en);
+      tabellpris.textContent = document.documentElement.lang === 'en' ? en : no;
+    }
+
+    const liste = document.getElementById('punkter');
+    liste.innerHTML = '';
+    t.inkluderer.no.forEach((linje, i) => {
+      const li = document.createElement('li');
+      li.setAttribute('data-no', linje);
+      li.setAttribute('data-en', t.inkluderer.en[i] || linje);
+      li.textContent = linje;
+      liste.appendChild(li);
+    });
+
+    const knapp = document.getElementById('kjopknapp');
+    knapp.href = t.kjopLenke;
+
+    const notis = document.getElementById('kreditt-notis');
+    notis.setAttribute('data-no', '<strong>Viktig:</strong> ' + t.ikkeInkludert.no);
+    notis.setAttribute('data-en', '<strong>Important:</strong> ' + t.ikkeInkludert.en);
+    notis.innerHTML = '<strong>Viktig:</strong> ' + t.ikkeInkludert.no;
+  }
+
+  async function start() {
+    try {
+      const r = await fetch('/api/app-kjop', { headers: { 'Accept': 'application/json' } });
+      const j = await r.json();
+      if (j && j.tilbud) { tilbud = j.tilbud; tegnTilbud(j.tilbud); }
+      /* Eieren, og den som alt har kjøpt, skal ikke se en kjøpsknapp.
+         js/vipps-knapp.js ser etter en skjult .buy-cta og skjuler
+         Vipps-knappen sammen med den. */
+      if (j && (j.eier || j.harApp)) {
+        document.getElementById('kjopsboks').classList.add('skjul');
+        document.getElementById('kjopknapp').hidden = true;
+        document.getElementById(j.eier ? 'eierboks' : 'harboks').classList.remove('skjul');
+      }
+    } catch (e) {
+      /* Svarer ikke serveren, skal siden fortsatt kunne selge. Da står
+         prisen fra fallback-teksten under. */
+      if (!tilbud) {
+        document.getElementById('prislinje').innerHTML = '1 997 kr' +
+          '<span data-no="én gang, ikke i måneden" data-en="once, not per month">én gang, ikke i måneden</span>';
+        document.getElementById('kjopknapp').href = 'https://buy.stripe.com/eVq8wQdkp9bp51X0OP9R71x';
+      }
+    }
+    if (new URLSearchParams(location.search).get('takk')) {
+      const takk = document.getElementById('takk');
+      takk.classList.remove('skjul');
+      takk.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    byttSprak(sprak);
+  }
+
+  start();
+</script>
+
+<!-- Vipps-knappen i kjøpsboksen. Må stå etter modulen over, som er den som
+     fyller boksen. -->
+<script src="/js/vipps-knapp.js?v=1" defer></script>
+<script src="/js/lme-account.js?v=11" defer></script>
+</body>
+</html>

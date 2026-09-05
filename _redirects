@@ -74,3 +74,8 @@
 # Malene bor nå under Ressurser (avtalt med Renate 19. august 2026). Bare
 # selve /maler flyttes, undersidene /maler/<mal> ligger der de ligger.
 /maler  /ressurser  301
+
+# Kort lenke til abonnementene på LME Autopilot, lett å si i en reel og lett
+# å ha i bio. Avtalt med Renate 4. september 2026.
+/autopilot  /oppgrader  301
+/lme-autopilot  /oppgrader  301

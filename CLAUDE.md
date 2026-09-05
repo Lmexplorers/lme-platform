@@ -89,6 +89,48 @@ bedt om å røre. Unntaket er endringer som forandrer hva et produkt ER, eller
 som koster penger utad, for eksempel priser, betalingslenker og utsending av
 e-post til ekte mottakere. De spør jeg om først.
 
+## 💳 ALLTID Vipps til norske kunder
+
+Sagt av Renate 31. august 2026, etter at jeg laget tre Stripe-betalingslenker
+til tjenestepakkene og glemte Vipps: **alt som selges til norske kunder skal ha
+Vipps ved siden av kortbetalingen.** Ikke som noe jeg legger til hvis noen ber
+om det, men fra første versjon av hver eneste salgsside.
+
+Vipps er allerede bygget, og skal ikke lages på nytt:
+
+- `js/vipps-knapp.js` lager knappen, e-postfeltet og hele kjøpet. Legg
+  `data-vipps-produkt="<slug>"` og `data-vipps-type="<type>"` på boksen rundt
+  kjøpsknappen, og ta med skriptet nederst på siden. Står det en tom
+  `<div class="pay-methods"></div>` rett under kjøpsknappen, havner Vipps
+  akkurat der.
+- `functions/api/vipps-pay.js` starter kjøpet. Prisen leses ALLTID på
+  serveren, aldri fra siden. Varetypene i dag er `lv`, `kurs`, `oppskrift`
+  og `tjeneste`. Ny vare betyr en ny gren her.
+- `functions/_lib/vipps-lever.js` leverer varen etter betaling, og skal gjøre
+  nøyaktig det samme som Stripe-flyten gjør for den samme varen.
+- Vipps tar bare kroner, så knappen skjuler seg selv i engelsk visning.
+  Kortbetalingen står igjen alene der.
+
+E-postadressen må samles inn før kunden sendes til Vipps. Vipps forteller oss
+ikke hvem som betalte, så uten adressen har vi ingen å levere til.
+
+## 👀 Skriv lesbart til Renate, aldri i liten kodeskrift
+
+Sagt av Renate 31. august 2026: hun klarer ikke å lese den lille skriften.
+Hun leser stort sett på mobil.
+
+Derfor, i alt jeg skriver til henne i chatten:
+
+- Ikke skriv filnavn, stier, mappenavn eller knappetekst i kodeformat
+  (bakoverfnutter). Skriv dem som vanlig tekst i setningen: filen store.js
+  ligger i mappen functions, så api.
+- Ikke lim inn kodeblokker med mindre hun ber om kode. Forklar hva koden
+  gjør i stedet, med vanlige ord.
+- Bruk hele setninger og vanlig tekststørrelse. Tabeller er greit når de
+  sammenligner tall, men hold dem korte.
+
+Dette gjelder bare chatten. Kommentarer og kode i selve filene skrives som før.
+
 ## 🔗 Skriv alltid HELE lenken til Renate
 
 Avtalt 29. august 2026: når jeg nevner en side i chatten, skriver jeg aldri
@@ -139,6 +181,18 @@ Renate retter ofte disse tingene manuelt. Følg reglene fra start, så slipper h
 
 6. **LME er kun Renate (enkeltperson).** Skriv "jeg", ikke "vi/oss", når teksten
    er fra LME/Renate til leseren. Gjelder også engelsk ("I", ikke "we").
+
+   Ryddet ut av hele plattformen 1. september 2026: "Kontakt oss" sto på 46
+   sider, og "Send oss en melding, vi svarer alltid" på åtte. Alt er jeg-form nå.
+
+   **Unntak, bestemt av Renate samme natt:** personvernerklæringen og
+   kjøpsvilkårene beholder "vi". Der er det mer formelt, og hun ser det som
+   riktig, siden det er henne sammen med AI-en. Ikke rett dem til jeg-form.
+
+   Andre steder der "oss" er RIKTIG, og skal stå: "Pust med oss" (Mia og Teo
+   snakker, to figurer), foreldrebrevet i Biblioteket (pedagogens eget brev
+   til foreldrene), standardtekstene i Gruppebygger og LME Builder
+   (medlemmets egen stemme på hennes egen side), og kundesitater.
 
 7. **Norske sammensatte ord skrives i ett ord, ikke med bindestrek.**
    Eksempel: `Montessoripedagog`, ikke `Montessori-pedagog`. Bindestrek i

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FDF5F1">
+<title>Kom i gang med LME Autopilot</title>
+<meta name="description" content="Steg for steg: hvordan du henter dine egne AI-nøkler og limer dem inn i LME Autopilot, og hva hver av dem koster.">
+<link rel="icon" href="/images/lme-logo.png">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Playpen Sans';
+    src: url('/fonts/PlaypenSans-400.woff2') format('woff2');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Playpen Sans';
+    src: url('/fonts/PlaypenSans-700.woff2') format('woff2');
+    font-weight: 700; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink: #F8D7DA; --pink-mid: #F5A8B8; --cerise: #E91E89;
+    --lime: #7AAE1F; --yellow: #F7C72E; --cream: #FBF6F0;
+    --ink: #1A1A1A; --grey: #5A5A5A; --line: rgba(26,26,26,0.10);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body); color: var(--ink); line-height: 1.7;
+    background: linear-gradient(180deg, #FDF5F1 0%, #FBEAE9 60%, #F8D7DA 100%);
+    min-height: 100vh; -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: var(--font-head); line-height: 1.25; }
+  a { color: var(--cerise); }
+  button { font-family: inherit; font-size: inherit; color: inherit; }
+
+  .topp {
+    position: sticky; top: 0; z-index: 20; display: flex; align-items: center;
+    justify-content: space-between; gap: 10px; padding: 13px 18px;
+    background: rgba(253,245,241,0.92); backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line);
+    padding-right: 62px;
+  }
+  .merke { font-family: var(--font-head); font-weight: 700; font-size: 19px; text-decoration: none; color: var(--ink); }
+  .merke i { color: var(--cerise); font-style: normal; }
+  .minibtn {
+    border: 1px solid #eedce2; background: #fff; border-radius: 999px;
+    padding: 7px 13px; font-size: 12.5px; font-weight: 700; cursor: pointer; white-space: nowrap;
+  }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 30px 18px 60px; }
+  .hero { text-align: center; padding: 10px 0 6px; }
+  .hero h1 { font-size: clamp(27px, 5.5vw, 40px); letter-spacing: -0.02em; margin-bottom: 12px; }
+  .hero p { font-size: clamp(16px, 2.2vw, 18px); color: var(--grey); max-width: 560px; margin: 0 auto; }
+
+  .steg { background: #fff; border-radius: 22px; padding: 26px 24px; margin-top: 20px; box-shadow: 0 10px 28px rgba(26,26,26,.07); }
+  .steg .nr {
+    width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center;
+    background: linear-gradient(135deg, #F5A8B8, #E91E89); color: #fff;
+    font-family: var(--font-head); font-weight: 700; margin-bottom: 12px;
+  }
+  .steg h2 { font-size: 21px; margin-bottom: 6px; }
+  .steg .hva { color: var(--cerise); font-weight: 700; font-size: 14.5px; margin-bottom: 12px; }
+  .steg ol, .steg ul { margin: 0 0 4px 20px; }
+  .steg li { margin-bottom: 8px; }
+  .steg p { margin-bottom: 10px; }
+  .pris-lapp {
+    display: inline-block; background: #F2F8E6; color: #47600F; font-size: 13.5px;
+    font-weight: 700; padding: 5px 13px; border-radius: 999px; margin-bottom: 12px;
+  }
+  .pris-lapp.betalt { background: #FDF0D8; color: #8A6100; }
+
+  .notis {
+    background: #fff; border-radius: 18px; padding: 20px 22px; margin-top: 20px;
+    border-left: 5px solid var(--yellow); color: var(--grey); font-size: 15.5px;
+  }
+  .notis strong { color: var(--ink); }
+
+  .knapp {
+    display: inline-block; background: linear-gradient(120deg, #E91E89, #ff5fb0);
+    color: #fff; text-decoration: none; font-weight: 800; font-size: 16px;
+    padding: 14px 26px; border-radius: 999px; margin-top: 8px;
+  }
+  .bunn { text-align: center; color: var(--grey); font-size: 14px; padding: 30px 18px 60px; }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 22px 15px 50px; }
+    .steg { padding: 20px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topp">
+  <a class="merke" href="/dashboard">LME <i>Autopilot</i></a>
+  <button class="minibtn" id="sprakbytte" type="button">EN 🌍</button>
+</header>
+
+<div class="wrap">
+
+  <section class="hero">
+    <h1 data-no="Kom i gang med dine egne nøkler" data-en="Getting started with your own keys">Kom i gang med dine egne nøkler</h1>
+    <p data-no="Du har kjøpt appen, og nå trenger den nøklene dine for å lage noe. Her er hvert steg, med lenker rett til stedet du henter dem. Sett av tjue minutter." data-en="You have bought the app, and now it needs your keys to make anything. Here is every step, with links straight to where you get them. Set aside twenty minutes.">Du har kjøpt appen, og nå trenger den nøklene dine for å lage noe. Her er hvert steg, med lenker rett til stedet du henter dem. Sett av tjue minutter.</p>
+  </section>
+
+  <div class="notis">
+    <strong data-no="Hva en nøkkel er:" data-en="What a key is:">Hva en nøkkel er:</strong>
+    <span data-no="En lang tekststreng som forteller AI-en at det er du som spør, og at regningen er din. Du henter den i din egen konto hos leverandøren, limer den inn i appen én gang, og så er den saken ute av verden. Nøkkelen lagres kryptert, og vises aldri for andre." data-en="a long line of text that tells the AI it is you asking, and that the bill is yours. You get it from your own account with the provider, paste it into the app once, and then it is done. The key is stored encrypted, and is never shown to anyone else."> En lang tekststreng som forteller AI-en at det er du som spør, og at regningen er din. Du henter den i din egen konto hos leverandøren, limer den inn i appen én gang, og så er den saken ute av verden. Nøkkelen lagres kryptert, og vises aldri for andre.</span>
+  </div>
+
+  <section class="steg">
+    <div class="nr">1</div>
+    <h2 data-no="Logg inn i appen" data-en="Log in to the app">Logg inn i appen</h2>
+    <p class="hva" data-no="Med den samme e-postadressen du betalte med" data-en="With the same email address you paid with">Med den samme e-postadressen du betalte med</p>
+    <p data-no="Appen kjenner deg igjen på adressen. Bruker du en annen, finner den ikke kjøpet ditt, og du møter låsen." data-en="The app recognises you by that address. Use a different one and it will not find your purchase, and you will meet the lock.">Appen kjenner deg igjen på adressen. Bruker du en annen, finner den ikke kjøpet ditt, og du møter låsen.</p>
+    <p data-no="Du får en sekssifret kode på e-post, ikke noe passord å huske." data-en="You get a six digit code by email, no password to remember.">Du får en sekssifret kode på e-post, ikke noe passord å huske.</p>
+    <a class="knapp" href="https://lme-contentstudio.pages.dev" target="_blank" rel="noopener" data-no="Åpne LME Autopilot →" data-en="Open LME Autopilot →">Åpne LME Autopilot →</a>
+  </section>
+
+  <section class="steg">
+    <div class="nr">2</div>
+    <h2 data-no="Nøkkel til bilder" data-en="Key for images">Nøkkel til bilder</h2>
+    <p class="hva" data-no="OpenAI, eller Google Gemini" data-en="OpenAI, or Google Gemini">OpenAI, eller Google Gemini</p>
+    <span class="pris-lapp betalt" data-no="Koster: noen få kroner per bilde" data-en="Costs: a few kroner per image">Koster: noen få kroner per bilde</span>
+    <p data-no="Dette er nøkkelen du kommer til å bruke mest. Velg én av de to, du trenger ikke begge." data-en="This is the key you will use the most. Pick one of the two, you do not need both.">Dette er nøkkelen du kommer til å bruke mest. Velg én av de to, du trenger ikke begge.</p>
+    <ol>
+      <li data-no="Gå til <a href='https://platform.openai.com/api-keys' target='_blank' rel='noopener'>platform.openai.com/api-keys</a> og lag en konto, eller logg inn." data-en="Go to <a href='https://platform.openai.com/api-keys' target='_blank' rel='noopener'>platform.openai.com/api-keys</a> and create an account, or log in.">Gå til <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">platform.openai.com/api-keys</a> og lag en konto, eller logg inn.</li>
+      <li data-no="Legg inn et betalingskort under Billing, og fyll på et lite beløp, for eksempel ti dollar. Uten det virker ikke nøkkelen." data-en="Add a payment card under Billing, and top up a small amount, for example ten dollars. Without it the key will not work.">Legg inn et betalingskort under Billing, og fyll på et lite beløp, for eksempel ti dollar. Uten det virker ikke nøkkelen.</li>
+      <li data-no="Trykk Create new secret key, gi den navnet LME, og kopier den med en gang. Den vises bare denne ene gangen." data-en="Press Create new secret key, name it LME, and copy it right away. It is shown only this one time.">Trykk Create new secret key, gi den navnet LME, og kopier den med en gang. Den vises bare denne ene gangen.</li>
+      <li data-no="I appen: Innstillinger, så feltet for OpenAI-nøkkel. Lim inn og lagre." data-en="In the app: Settings, then the field for the OpenAI key. Paste and save.">I appen: Innstillinger, så feltet for OpenAI-nøkkel. Lim inn og lagre.</li>
+    </ol>
+    <p data-no="Vil du heller bruke Google: Hent nøkkelen på <a href='https://aistudio.google.com/apikey' target='_blank' rel='noopener'>aistudio.google.com/apikey</a>, og lim den inn i Gemini-feltet i stedet." data-en="Prefer Google: get the key at <a href='https://aistudio.google.com/apikey' target='_blank' rel='noopener'>aistudio.google.com/apikey</a>, and paste it into the Gemini field instead.">Vil du heller bruke Google: Hent nøkkelen på <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>, og lim den inn i Gemini-feltet i stedet.</p>
+  </section>
+
+  <section class="steg">
+    <div class="nr">3</div>
+    <h2 data-no="Nøkkel til tekst" data-en="Key for text">Nøkkel til tekst</h2>
+    <p class="hva" data-no="Claude, fra Anthropic" data-en="Claude, from Anthropic">Claude, fra Anthropic</p>
+    <span class="pris-lapp betalt" data-no="Koster: ører per tekst" data-en="Costs: pennies per text">Koster: ører per tekst</span>
+    <p data-no="Denne skriver bildetekster, hooks og innholdsplanene dine." data-en="This one writes your captions, hooks and content plans.">Denne skriver bildetekster, hooks og innholdsplanene dine.</p>
+    <ol>
+      <li data-no="Gå til <a href='https://console.anthropic.com/settings/keys' target='_blank' rel='noopener'>console.anthropic.com/settings/keys</a> og lag en konto, eller logg inn." data-en="Go to <a href='https://console.anthropic.com/settings/keys' target='_blank' rel='noopener'>console.anthropic.com/settings/keys</a> and create an account, or log in.">Gå til <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com/settings/keys</a> og lag en konto, eller logg inn.</li>
+      <li data-no="Fyll på et lite beløp under Billing, på samme måte som hos OpenAI." data-en="Top up a small amount under Billing, the same way as with OpenAI.">Fyll på et lite beløp under Billing, på samme måte som hos OpenAI.</li>
+      <li data-no="Trykk Create Key, kopier den, og lim den inn i Claude-feltet under Innstillinger i appen." data-en="Press Create Key, copy it, and paste it into the Claude field under Settings in the app.">Trykk Create Key, kopier den, og lim den inn i Claude-feltet under Innstillinger i appen.</li>
+    </ol>
+  </section>
+
+  <section class="steg">
+    <div class="nr">4</div>
+    <h2 data-no="Nøkkel til publisering" data-en="Key for publishing">Nøkkel til publisering</h2>
+    <p class="hva" data-no="Blotato, som er det appen legger ut gjennom" data-en="Blotato, which is what the app posts through">Blotato, som er det appen legger ut gjennom</p>
+    <span class="pris-lapp betalt" data-no="Koster: fra 29 dollar i måneden hos Blotato" data-en="Costs: from 29 dollars a month with Blotato">Koster: fra 29 dollar i måneden hos Blotato</span>
+    <p data-no="Dette steget hører med. Autopilot legger ut for deg, og det er Blotato som gir appen lov til å poste til kontoene dine. Uten denne koblingen har du ingen autopilot, bare en innholdsmaskin du må laste ned fra selv." data-en="This step belongs. Autopilot posts for you, and Blotato is what lets the app post to your accounts. Without that connection you have no autopilot, only a content machine you have to download from yourself.">Dette steget hører med. Autopilot legger ut for deg, og det er Blotato som gir appen lov til å poste til kontoene dine. Uten denne koblingen har du ingen autopilot, bare en innholdsmaskin du må laste ned fra selv.</p>
+    <ol>
+      <li data-no="Lag en konto på <a href='https://my.blotato.com' target='_blank' rel='noopener'>my.blotato.com</a>." data-en="Create an account at <a href='https://my.blotato.com' target='_blank' rel='noopener'>my.blotato.com</a>.">Lag en konto på <a href="https://my.blotato.com" target="_blank" rel="noopener">my.blotato.com</a>.</li>
+      <li data-no="Velg en betalt plan. Den rimeligste heter Starter og koster 29 dollar i måneden, altså rundt 300 kroner avhengig av dollarkursen. Der er API-tilgangen med, og du kan koble til inntil 20 kontoer. API-tilgang følger IKKE med gratisversjonen eller prøveperioden, og det er API-et appen bruker. Gjeldende priser: <a href='https://www.blotato.com/pricing' target='_blank' rel='noopener'>blotato.com/pricing</a>." data-en="Choose a paid plan. The cheapest one is called Starter and costs 29 dollars a month. It includes the API access, and lets you connect up to 20 accounts. API access is NOT included in the free version or the trial, and the API is what the app uses. Current prices: <a href='https://www.blotato.com/pricing' target='_blank' rel='noopener'>blotato.com/pricing</a>.">Velg en betalt plan. Den rimeligste heter Starter og koster 29 dollar i måneden, altså rundt 300 kroner avhengig av dollarkursen. Der er API-tilgangen med, og du kan koble til inntil 20 kontoer. API-tilgang følger IKKE med gratisversjonen eller prøveperioden, og det er API-et appen bruker. Gjeldende priser: <a href='https://www.blotato.com/pricing' target='_blank' rel='noopener'>blotato.com/pricing</a>.</li>
+      <li data-no="Koble til kontoene dine i Blotato, altså Instagram, Facebook, TikTok og de andre du vil poste til." data-en="Connect your accounts in Blotato, that is Instagram, Facebook, TikTok and the others you want to post to.">Koble til kontoene dine i Blotato, altså Instagram, Facebook, TikTok og de andre du vil poste til.</li>
+      <li data-no="I Blotato: Settings, så API keys. Kopier nøkkelen." data-en="In Blotato: Settings, then API keys. Copy the key.">I Blotato: Settings, så API keys. Kopier nøkkelen.</li>
+      <li data-no="I appen: Innstillinger, så Blotato-feltet. Lim inn, lagre, og trykk Hent kontoer. Da dukker profilene dine opp, og du huker av dem du vil poste til." data-en="In the app: Settings, then the Blotato field. Paste, save, and press Get accounts. Your profiles then appear, and you tick the ones you want to post to.">I appen: Innstillinger, så Blotato-feltet. Lim inn, lagre, og trykk Hent kontoer. Da dukker profilene dine opp, og du huker av dem du vil poste til.</li>
+    </ol>
+  </section>
+
+  <section class="steg">
+    <div class="nr">5</div>
+    <h2 data-no="Lag det første innlegget" data-en="Make the first post">Lag det første innlegget</h2>
+    <p data-no="Nå er du i gang. Skriv inn nisjen din under Innstillinger, altså hva du faktisk driver med, så treffer alt appen lager mye bedre. Så velger du et tema, og lar den lage det første innlegget." data-en="Now you are up and running. Write your niche under Settings, that is what you actually do, and everything the app makes will fit much better. Then pick a topic, and let it make the first post.">Nå er du i gang. Skriv inn nisjen din under Innstillinger, altså hva du faktisk driver med, så treffer alt appen lager mye bedre. Så velger du et tema, og lar den lage det første innlegget.</p>
+  </section>
+
+  <div class="notis">
+    <strong data-no="Står du fast?" data-en="Stuck?">Står du fast?</strong>
+    <span data-no="Send meg en e-post på post@lmexplorers.com, så hjelper jeg deg gjennom det. Nøklene er det eneste som er litt kronglete, og det er en engangsjobb." data-en="Send me an email at post@lmexplorers.com, and I will help you through it. The keys are the only fiddly part, and it is a one-time job."> Send meg en e-post på post@lmexplorers.com, så hjelper jeg deg gjennom det. Nøklene er det eneste som er litt kronglete, og det er en engangsjobb.</span>
+  </div>
+
+</div>
+
+<div class="bunn">
+  <p><a href="/autopilot-app" data-no="Tilbake til LME Autopilot" data-en="Back to LME Autopilot">Tilbake til LME Autopilot</a></p>
+</div>
+
+<script>
+  (function () {
+    var sprak = (new URLSearchParams(location.search).get('lang') === 'en') ? 'en' : 'no';
+    function bytt(lang) {
+      sprak = lang;
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+        var t = el.getAttribute('data-' + lang);
+        if (t === null) return;
+        if (t.indexOf('<') !== -1) el.innerHTML = t; else el.textContent = t;
+      });
+      document.getElementById('sprakbytte').textContent = lang === 'no' ? 'EN 🌍' : 'NO 🇳🇴';
+      document.title = lang === 'no' ? 'Kom i gang med LME Autopilot' : 'Getting started with LME Autopilot';
+    }
+    document.getElementById('sprakbytte').addEventListener('click', function () {
+      bytt(sprak === 'no' ? 'en' : 'no');
+    });
+    if (sprak === 'en') bytt('en');
+  })();
+</script>
+<script src="/js/lme-account.js?v=11" defer></script>
+</body>
+</html>

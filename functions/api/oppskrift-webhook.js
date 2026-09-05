@@ -34,12 +34,17 @@ import {
   LAERINGSVERKSTED_PAYMENT_LINKS,
   SKOLEDAGBOK_PAYMENT_LINKS, SKOLEDAGBOK_INFO,
   VIDEOFLOW_PAYMENT_LINKS, VIDEOFLOW_PRODUCT_ID, grantVideoFlowSub, revokeVideoFlowSub,
+  TJENESTE_PAYMENT_LINKS,
+  APP_PAYMENT_LINKS, grantAutopilotApp,
 } from "../_lib/purchase-links.js";
 import { sendAutopilotMail } from "../_lib/autopilot-mail.js";
 import { grantCourseAccess, grantModuleAccess } from "../_lib/course-access.js";
 import { sendCourseDeliveryMail, sendModuleDeliveryMail } from "../_lib/course-mail.js";
 import { recordPurchase } from "../_lib/purchases.js";
 import { sendResourceDeliveryMail } from "../_lib/laeringsverksted-mail.js";
+import { sendKvitteringKjop } from "../_lib/tjeneste-mail.js";
+import { sendAppKjopMail } from "../_lib/app-kjop-mail.js";
+import { koOppfolging } from "../_lib/autopilot-followup-mail.js";
 import { sendSkoledagbokMail } from "../_lib/skoledagbok-mail.js";
 import { lagNedlastingsnokkel } from "../_lib/nedlasting-tilgang.js";
 import { setMonthlyCredits } from "../_lib/videoflow-credits.js";
@@ -169,6 +174,9 @@ export async function onRequestPost(context) {
       const nm = (obj.customer_details && obj.customer_details.name) || "";
       await grantAutopilot(env, email, { customer: obj.customer, sub: obj.subscription, plan: auto.plan, limits: auto.limits });
       try { await sendAutopilotMail(env, email, nm, auto.lang, auto.planLabel); } catch (e1) {}
+      /* Oppfolgingsserien: tre brev over tre uker, som tar henne gjennom
+         oppsettet. Se _lib/autopilot-followup-mail.js. */
+      try { await koOppfolging(env, { email: email, name: nm, lang: auto.lang, kilde: "abonnement" }); } catch (e1b) {}
       try {
         await sendOwnerSaleNotice(env, {
           pname: auto.planLabel, lang: auto.lang, name: nm, email: email,
@@ -409,6 +417,104 @@ export async function onRequestPost(context) {
     // Tom liste (LAERINGSVERKSTED_PAYMENT_LINKS) inntil Renate oppretter og
     // registrerer en ekte betalingslenke for en betalt ressurs, se
     // purchase-links.js og hjelpeteksten i /laeringsverksted-bygger.
+    // LME Autopilot, engangskjøp av appen. Gir ingen kvote, bare varig
+    // tilgang. Kunden bruker sine egne AI-nøkler, så kjøpet koster meg
+    // ingenting etterpå, og kan derfor selges én gang.
+    const appKjop = obj.payment_link && APP_PAYMENT_LINKS[obj.payment_link];
+    if (appKjop && email && obj.payment_status !== "unpaid") {
+      const nm = (obj.customer_details && obj.customer_details.name) || "";
+      await grantAutopilotApp(env, email, { customer: obj.customer, via: "stripe" });
+      try {
+        await sendAppKjopMail(env, { to: email, name: nm, lang: appKjop.lang, betaltMed: "kort" });
+        await koOppfolging(env, { email: email, name: nm, lang: appKjop.lang, kilde: "kjop" });
+      } catch (e1) {}
+      try {
+        await sendOwnerSaleNotice(env, {
+          pname: appKjop.navn + " (engangskjøp)", lang: appKjop.lang, name: nm, email: email,
+          amount: obj.amount_total, currency: obj.currency,
+          action: {
+            title: "Ingenting å gjøre, men verdt å vite",
+            body: "Hun har kjøpt appen som engangskjøp, ikke abonnement. Tilgangen er " +
+                  "åpnet automatisk, og hun bruker sine egne AI-nøkler, så dette koster " +
+                  "deg ingenting videre. Kvitteringen som forklarer nøklene er sendt.",
+            url: "https://lmexplorers.com/autopilot-app",
+          },
+        });
+      } catch (e3) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "app", id: appKjop.app, title: appKjop.navn,
+          amount: obj.amount_total, currency: obj.currency,
+          url: "https://lme-contentstudio.pages.dev",
+        });
+      } catch (e4) {}
+      return json({ ok: true });
+    }
+
+    // LME Studio Tjenester (/tjenester): en "gjort for deg"-pakke betalt rett
+    // i kassen. Ingen tilgang skal låses opp, men ordren må havne der Renate
+    // ser den, altså i det samme panelet som forespørslene, og hun må få vite
+    // det uten å måtte lete i Stripe.
+    const tjeneste = obj.payment_link && TJENESTE_PAYMENT_LINKS[obj.payment_link];
+    if (tjeneste && email && obj.payment_status !== "unpaid") {
+      const nm = (obj.customer_details && obj.customer_details.name) || "";
+      const tlf = (obj.customer_details && obj.customer_details.phone) || "";
+      // Lenken til materialet er et valgfritt felt i kassen.
+      let materiale = "";
+      try {
+        const felt = (obj.custom_fields || []).filter(function (f) { return f.key === "materiale"; })[0];
+        materiale = (felt && felt.text && felt.text.value) || "";
+      } catch (eM) {}
+      const sak = {
+        id: "tjeneste:" + Date.now() + "-" + Math.random().toString(36).slice(2, 8),
+        navn: nm || email,
+        epost: email,
+        telefon: tlf,
+        melding: "Betalt rett i kassen, uten beskrivelse. Be om materialet og detaljene.",
+        lenke: materiale,
+        lang: "no",
+        pakke: tjeneste.pakke,
+        pakkeNavn: tjeneste.navn,
+        pris: tjeneste.nok,
+        status: "betalt",
+        betalt: true,
+        opprettet: new Date().toISOString(),
+      };
+      try { await env.BUILDER_KV.put(sak.id, JSON.stringify(sak)); } catch (e1) {}
+      /* Pakken med personlig oppsett inneholder selve appen. Da må kjøpet
+         låse den opp med en gang, slik et engangskjøp gjør, i tillegg til
+         at Renate får ordren. Ellers har kunden betalt 4997 kr og møter en
+         låst app frem til timen deres. */
+      if (tjeneste.girApp) {
+        try { await grantAutopilotApp(env, email, { via: "tjeneste-oppsett" }); } catch (eA) {}
+        try { await sendAppKjopMail(env, { to: email, name: nm, lang: "no" }); } catch (eB) {}
+        try { await koOppfolging(env, { email: email, name: nm, lang: "no", kilde: "kjop" }); } catch (eC) {}
+      }
+      try { await sendKvitteringKjop(env, sak, tjeneste.navn); } catch (e2) {}
+      try {
+        await sendOwnerSaleNotice(env, {
+          pname: "LME Studio Tjenester: " + tjeneste.navn, name: nm, email: email,
+          amount: obj.amount_total, currency: obj.currency,
+          action: {
+            title: "Dette må du gjøre nå: hent inn materialet",
+            body: "Kunden har betalt for en pakke du skal levere selv. Ordren ligger " +
+                  "nederst på /tjenester, merket som betalt. Kvitteringen som ber om " +
+                  "filene hennes er allerede sendt" +
+                  (materiale ? ", og hun la igjen denne lenken i kassen: " + materiale : "") + ".",
+            url: "https://lmexplorers.com/tjenester",
+          },
+        });
+      } catch (e3) {}
+      try {
+        await recordPurchase(env, email, {
+          type: "tjeneste", id: tjeneste.pakke, title: tjeneste.navn,
+          amount: obj.amount_total, currency: obj.currency,
+          url: "https://lmexplorers.com/tjenester",
+        });
+      } catch (e4) {}
+      return json({ ok: true });
+    }
+
     const lvItem = obj.payment_link && LAERINGSVERKSTED_PAYMENT_LINKS[obj.payment_link];
     if (lvItem && email && obj.payment_status !== "unpaid") {
       const nm = (obj.customer_details && obj.customer_details.name) || "";

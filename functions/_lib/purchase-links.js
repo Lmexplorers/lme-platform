@@ -138,6 +138,64 @@ export async function grantAutopilot(env, email, info) {
   }
 }
 
+/* ---------------------------------------------------------------------------
+ * LME Autopilot, engangskjøp av appen.
+ *
+ * Et abonnement gir kvote på MINE nøkler, og koster meg penger hver måned.
+ * Engangskjøpet gir noe annet: appen låses opp for godt, og kunden bruker
+ * sine egne AI-nøkler. Da er det hennes regning som løper, ikke min, og
+ * derfor kan den selges én gang uten at jeg sitter igjen med utgiften.
+ *
+ * Kjøpet gir INGEN kvote. Det er hele poenget, og det må stå tydelig på
+ * salgssiden, ellers tror kjøperen hun har kjøpt bildene også.
+ * ------------------------------------------------------------------------- */
+export const APP_PAYMENT_LINKS = {
+  /* Lanseringspris ut september 2026, deretter fastpris. Begge lenkene er
+     aktive i Stripe samtidig, og siden velger den som gjelder. Den gamle
+     1490-lenken er slaatt av i Stripe, men staar igjen her slik at et kjop
+     som var underveis fortsatt blir levert. */
+  "plink_1UAnZaLax7B8uQzq03DKsBml": { app: "autopilot", navn: "LME Autopilot, appen", nok: 1997, lang: "no" },
+  "plink_1UAnZgLax7B8uQzqK29tJmZY": { app: "autopilot", navn: "LME Autopilot, appen", nok: 2997, lang: "no" },
+  "plink_1UAfFnLax7B8uQzqXM6UqgnM": { app: "autopilot", navn: "LME Autopilot, appen", nok: 1490, lang: "no" },
+};
+
+/* Merker kontoen som "har kjøpt appen". Lagres på member:<e-post>, samme
+   post som abonnementet, siden det er den posten Autopilot-appen leser
+   (den heter ACCOUNTS_KV der, men er den samme lagringen som BUILDER_KV
+   her). Appen sjekker `appKjopt` og åpner de låste delene på den.
+ *
+ * Røret aldri `plan` eller `limits`: har kunden ET abonnement fra før, skal
+ * det stå urørt. Kjøper hun appen i tillegg, har hun begge deler, og
+ * abonnementet skal ikke forsvinne fordi hun kjøpte noe annet. */
+export async function grantAutopilotApp(env, email, info) {
+  if (!email) return;
+  const mkey = memberKey(email);
+  let rec = {};
+  try { const r = await env.BUILDER_KV.get(mkey); if (r) rec = JSON.parse(r) || {}; } catch (e) {}
+  rec.appKjopt = true;
+  rec.appKjoptAt = rec.appKjoptAt || Date.now();
+  rec.appKjoptVia = (info && info.via) || "stripe";
+  rec.updated = Date.now();
+  /* En konto som BARE har kjøpt appen har ingen plan. Da må status settes,
+     ellers ser posten uferdig ut for alt annet som leser den. */
+  if (!rec.status) rec.status = "active";
+  if (!rec.since) rec.since = Date.now();
+  await env.BUILDER_KV.put(mkey, JSON.stringify(rec));
+  if (info && info.customer) await env.BUILDER_KV.put(custKey(info.customer), email.trim().toLowerCase());
+  /* Speil til kontoen, hvis den finnes. Kjøper hun før hun har logget inn i
+     appen, finnes den ikke ennå, og da er member-posten det eneste stedet.
+     Appen leser begge, member-posten som reserve. */
+  const uraw = await env.BUILDER_KV.get(userKey(email));
+  if (uraw) {
+    try {
+      const u = JSON.parse(uraw);
+      u.appKjopt = true;
+      u.appKjoptAt = rec.appKjoptAt;
+      await env.BUILDER_KV.put(userKey(email), JSON.stringify(u));
+    } catch (e) {}
+  }
+}
+
 /* Samme plan/limits som AUTOPILOT_PAYMENT_LINKS over, men nøkkelen er
    Stripe-produktet (ikke betalingslenken), siden abonnements-hendelser
    (customer.subscription.updated/deleted) refererer til produktet på
@@ -520,4 +578,26 @@ export const SKOLEDAGBOK_INFO = {
       en: DL_SKOLEDAGBOK + "skoledagbok-4-7-trinn-en.pdf",
     },
   },
+};
+
+/* ---------------------------------------------------------------------------
+ * LME Studio Tjenester (/tjenester), "gjort for deg"-pakkene.
+ *
+ * Engangskjøp, ingen tilgang som skal låses opp. Det eneste som skjer ved et
+ * kjøp er at ordren legges i Renates eget panel nederst på /tjenester (samme
+ * KV-nøkler som forespørslene, tjeneste:<...>), at hun får salgsvarsel, og at
+ * kjøpet føres i kjøpshistorikken.
+ *
+ * Prisene står i js/tjenester-pakker.js, som både salgssiden og
+ * functions/api/tjeneste-foresporsel.js leser fra. Endres en pris, må den
+ * endres der OG i Stripe, ellers selger siden noe annet enn kassen tar betalt.
+ * Betalingslenkene er opprettet 31. august 2026, i live-modus.
+ * ------------------------------------------------------------------------- */
+export const TJENESTE_PAYMENT_LINKS = {
+  /* girApp: pakken inneholder selve appen, ikke bare Renates tid, så
+     kjøpet må også låse den opp. Se PAKKER i js/tjenester-pakker.js. */
+  "plink_1UAnggLax7B8uQzqSHxOLJKo": { pakke: "oppsett", navn: "Autopilot med personlig oppsett", nok: 4997, girApp: true },
+  "plink_1UAe88Lax7B8uQzq3Ru9cZ4B": { pakke: "effekt", navn: "Effektpakken", nok: 1490 },
+  "plink_1UAe8OLax7B8uQzq3DwgTsA1": { pakke: "karakter", navn: "AI-karakteren din", nok: 3900 },
+  "plink_1UAe8QLax7B8uQzq0wlcBYrV": { pakke: "autopilot", navn: "Innhold på autopilot", nok: 7900 },
 };

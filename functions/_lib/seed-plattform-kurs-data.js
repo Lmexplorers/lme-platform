@@ -494,13 +494,34 @@ export const PLATTFORM_KURS = {
           "en": "LME Autopilot is the app inside LME Studio that puts content production itself on autopilot: reels, stories and carousels, made with AI in minutes rather than hours. It opens in its own window outside the platform."
         },
         {
-          "no": "Der de andre verktøyene i denne modulen løser én oppgave om gangen, er Autopilot tenkt som et sted du går tilbake til jevnlig for å holde en jevn strøm av innhold gående, uten å måtte starte fra bunnen hver gang.",
-          "en": "Where the other tools in this module solve one task at a time, Autopilot is meant as a place you come back to regularly to keep a steady stream of content going, without starting from scratch every time."
+          "no": "Der de andre verktøyene i denne modulen løser én oppgave om gangen, er Autopilot tenkt som et sted du går tilbake til jevnlig for å holde en jevn strøm av innhold gående, uten å måtte starte fra bunnen hver gang. Du kan enten abonnere, og få AI-bilder inkludert hver måned, eller kjøpe appen én gang, uten månedspris, og bruke dine egne AI-nøkler. Se forskjellen på https://lmexplorers.com/autopilot-app",
+          "en": "Where the other tools in this module solve one task at a time, Autopilot is meant as a place you come back to regularly to keep a steady stream of content going, without starting from scratch every time. You can either subscribe, and get AI images included every month, or buy the app once, with no monthly price, and use your own AI keys. See the difference at https://lmexplorers.com/autopilot-app"
         }
       ],
       "tip": {
         "no": "📱 Bruk Autopilot til den daglige/ukentlige rytmen, og de andre innholdsverktøyene når du trenger noe mer spesifikt eller skreddersydd.",
         "en": "📱 Use Autopilot for the daily or weekly rhythm, and the other content tools when you need something more specific or tailored."
+      }
+    },
+    {
+      "module": null,
+      "title": {
+        "no": "LME Studio Tjenester, når du heller vil kjøpe tiden",
+        "en": "LME Studio Services, when you would rather buy the time"
+      },
+      "body": [
+        {
+          "no": "Noen ganger er det ikke verktøyet som mangler, det er tiden. LME Studio Tjenester er ferdige pakker med fast pris, der jeg gjør jobben for deg i stedet for at du lærer deg verktøyet: videoer med effekter, en egen AI-karakter satt opp, Autopilot med personlig oppsett, eller en hel måned med innhold lagt i kø. Du finner dem på https://lmexplorers.com/tjenester",
+          "en": "Sometimes it is not the tool that is missing, it is the time. LME Studio Services are ready-made packages with a fixed price, where I do the work for you instead of you learning the tool: videos with effects, your own AI character set up, Autopilot with personal setup, or a full month of content queued. You find them at https://lmexplorers.com/tjenester"
+        },
+        {
+          "no": "Slik foregår det: du fyller ut skjemaet med hva du trenger, og får et fast tilbud tilbake innen én virkedag, med pris og leveringsdato. Ingenting trekkes før du har sagt ja, og hver pakke har en runde med endringer inkludert. Et eventuelt Autopilot-abonnement kommer i tillegg, siden det er appen som lager innholdet videre etterpå.",
+          "en": "This is how it works: you fill in the form with what you need, and get a fixed quote back within one working day, with the price and the delivery date. Nothing is charged before you have said yes, and every package includes one round of changes. An Autopilot subscription comes in addition, since that is the app making the content afterwards."
+        }
+      ],
+      "tip": {
+        "no": "💡 Er du i tvil, prøv verktøyet selv først. Pakkene er for oppdrag der tiden er verdt mer enn kronene, ikke for det du raskt får til på egen hånd.",
+        "en": "💡 If in doubt, try the tool yourself first. The packages are for jobs where your time is worth more than the money, not for what you can quickly do on your own."
       }
     },
     {
@@ -1011,6 +1032,31 @@ export const PLATTFORM_KURS = {
       "tip": {
         "no": "🌸 Bli med i gruppen som matcher barnets alder først, du kan alltid utforske de andre gruppene etter hvert.",
         "en": "🌸 Join the group that matches your child's age first, you can always explore the other groups later."
+      }
+    },
+    {
+      "module": null,
+      "title": {
+        "no": "Live-samlingene og Live-rommet",
+        "en": "The live sessions and the live room"
+      },
+      "body": [
+        {
+          "no": "Live-siden viser når neste samling går. Der ser du nedtellingen, melder deg på med ett trykk, og finner opptakene fra samlingene som allerede har vært. Du finner den på https://lmexplorers.com/live",
+          "en": "The Live page shows when the next session runs. There you see the countdown, sign up with one tap, and find the recordings from sessions that have already happened. You find it at https://lmexplorers.com/live"
+        },
+        {
+          "no": "Selve samlingen foregår i Live-rommet, og videoen går rett på siden. Du trenger ingen app, ingen konto og ingen lenke i e-posten. Rommet åpner et kvarter før start, og da blir knappen aktiv av seg selv. Ved siden av videoen står chatten, så du kan skrive til de andre uten å slå på kamera eller mikrofon.",
+          "en": "The session itself happens in the live room, and the video runs right on the page. You need no app, no account and no link in your inbox. The room opens a quarter of an hour before the start, and the button becomes active by itself. Next to the video is the chat, so you can write to the others without turning on camera or microphone."
+        },
+        {
+          "no": "Rekker du ikke å være med direkte, gjør det ingenting. Opptaket legges på den samme siden etterpå, og du finner det igjen under \"Opptak fra tidligere\".",
+          "en": "If you cannot join live, that is fine. The recording is posted on the same page afterwards, and you find it again under \"Recordings from earlier\"."
+        }
+      ],
+      "tip": {
+        "no": "📺 Nettleseren spør om kamera og mikrofon første gang du blir med. Du kan trygt svare nei og heller skrive i chatten, du ser og hører samlingen like godt.",
+        "en": "📺 Your browser asks for camera and microphone the first time you join. You can safely say no and write in the chat instead, you see and hear the session just as well."
       }
     },
     {
