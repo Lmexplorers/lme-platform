@@ -185,3 +185,10 @@
   Cache-Control: no-store
 /strikk.html
   Cache-Control: no-store
+
+# Salgssiden for Strikk og Hekle viser pris og kjoepsknapp, og maa aldri
+# vises fra en gammel mellomlagret versjon.
+/strikk-app
+  Cache-Control: no-store
+/strikk-app.html
+  Cache-Control: no-store

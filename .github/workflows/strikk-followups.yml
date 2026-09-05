@@ -1,0 +1,21 @@
+name: Strikk og Hekle oppfølgingsmail
+
+# Trigger den daglige køen som sender oppfølgingsserien til dem som har
+# kjøpt Strikk & Hekle. Tre brev: dag 2, dag 7 og dag 21 etter kjøpet.
+# Kjører en gang i døgnet og kan også startes manuelt fra Actions-fanen.
+# Valgfritt: legg repo-hemmeligheten STRIKK_CRON_TOKEN hvis endepunktet er beskyttet.
+
+on:
+  schedule:
+    - cron: "20 9 * * *"   # daglig kl. 09:20 UTC, litt etter de andre køene
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger oppfølgings-køen
+        env:
+          TOKEN: ${{ secrets.STRIKK_CRON_TOKEN }}
+        run: |
+          curl -fsS "https://lmexplorers.com/api/cron/strikk-followups${TOKEN:+?token=$TOKEN}"

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F8D7DA">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+<title>Strikk &amp; Hekle, appen — LME</title>
+<meta name="description" content="Appen som regner ut økning, felling, masker, rader og garnmengde til strikking og hekling. Engangskjøp, varig tilgang.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'Sasson Montessori';
+    src: url('/fonts/SassoonMontessori.woff2') format('woff2'),
+         url('/fonts/SassoonMontessori.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --pink: #F8D7DA; --pink-mid: #F5A8B8; --cerise: #E91E89;
+    --lime: #7AAE1F; --yellow: #F7C72E; --cream: #FBF6F0;
+    --ink: #1A1A1A; --grey: #4A4A4A; --line: rgba(26,26,26,0.1);
+    --font-head: 'Playpen Sans', system-ui, sans-serif;
+    --font-body: 'Sasson Montessori', 'Playpen Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); color: var(--ink); background: linear-gradient(180deg, #FFF9F6 0%, #FDF1EE 45%, #FBE7EA 100%); background-attachment: fixed; min-height: 100vh; line-height: 1.6; }
+  h1, h2, h3 { font-family: var(--font-head); }
+  a { color: inherit; text-decoration: none; }
+
+  body::before, body::after { content: ''; position: fixed; border-radius: 50%; filter: blur(70px); opacity: 0.55; pointer-events: none; z-index: 0; }
+  body::before { width: 460px; height: 460px; top: -160px; left: -140px; background: radial-gradient(circle, #FFD9E4 0%, rgba(255,217,228,0) 70%); }
+  body::after { width: 520px; height: 520px; top: 380px; right: -220px; background: radial-gradient(circle, #FFE9CF 0%, rgba(255,233,207,0) 70%); }
+  .bar, .wrap { position: relative; z-index: 1; }
+
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 13px 20px; background: rgba(255,255,255,0.78); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 20; }
+  .bar .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--cerise); font-size: 15px; }
+  .bar .brand img { width: 32px; height: 32px; object-fit: contain; }
+  .bar .actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .btn { border: 0; border-radius: 999px; padding: 9px 16px; font-weight: 700; font-family: inherit; cursor: pointer; font-size: 13.5px; white-space: nowrap; }
+  .btn-back { background: #fff; color: var(--ink); border: 1px solid #eedce2; }
+  .btn-lang { background: #FCEFF2; color: #C13D6A; }
+
+  .wrap { max-width: 820px; width: 100%; margin: 0 auto; padding: 44px 18px 80px; }
+  .hero { display: grid; grid-template-columns: 1fr; gap: 26px; align-items: center; margin-bottom: 34px; }
+  .head { text-align: center; }
+  .head .kick { display: inline-flex; align-items: center; gap: 8px; background: #fff; border-radius: 999px; padding: 8px 18px; font-size: 13px; font-weight: 600; color: #8a6a72; box-shadow: 0 4px 16px rgba(233,30,137,0.07); }
+  .head .kick::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--pink-mid); }
+  .head h1 { font-size: 42px; line-height: 1.18; margin: 20px 0 14px; max-width: 640px; margin-left: auto; margin-right: auto; text-wrap: balance; }
+  .head h1 em { font-style: italic; color: var(--pink-mid); }
+  .head p { color: var(--grey); font-size: 17px; max-width: 580px; margin: 0 auto; }
+  .hero-art { position: relative; border-radius: 26px; overflow: hidden; box-shadow: 0 18px 46px rgba(233,30,137,0.13); background: #FFF6F2; aspect-ratio: 3 / 2; }
+  .hero-art .hero-svg { display: block; width: 100%; height: 100%; }
+  .sk-wind { transform-box: view-box; }
+  .sk-wind-a { transform-origin: 470px 132px; animation: sk-spin 48s linear infinite; }
+  .sk-wind-b { transform-origin: 416px 288px; animation: sk-spin 66s linear infinite reverse; }
+  @keyframes sk-spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .sk-wind-a, .sk-wind-b { animation: none; } }
+  @media (min-width: 860px) {
+    .hero { grid-template-columns: 1.05fr 0.95fr; gap: 40px; }
+    .head { text-align: left; }
+    .head h1 { margin-left: 0; margin-right: 0; max-width: none; }
+    .head p { margin-left: 0; }
+  }
+
+  .card { background: #fff; border-radius: 28px; padding: 30px; box-shadow: 0 12px 40px rgba(233,30,137,0.07); margin-bottom: 22px; }
+  .card h2 { font-size: 25px; line-height: 1.25; margin-bottom: 8px; }
+  .card .lead { color: var(--grey); font-size: 15.5px; margin-bottom: 18px; }
+  .pill { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #C13D6A; background: #FCEFF2; border-radius: 999px; padding: 6px 15px; margin-bottom: 14px; }
+
+  .liste { list-style: none; }
+  .liste li { position: relative; padding-left: 30px; margin-bottom: 11px; font-size: 15.5px; }
+  .liste li::before { content: '✓'; position: absolute; left: 0; top: 0; color: var(--lime); font-weight: 700; }
+
+  .kjopsboks { background: #fff; border-radius: 28px; padding: 32px; box-shadow: 0 18px 50px rgba(233,30,137,0.12); outline: 2px solid #FBE0E7; outline-offset: -2px; margin-bottom: 22px; text-align: center; }
+  .pris { font-family: var(--font-head); font-size: 44px; font-weight: 700; color: var(--cerise); line-height: 1.1; }
+  .pris small { display: block; font-family: var(--font-body); font-size: 15px; font-weight: 400; color: var(--grey); margin-top: 6px; }
+  .knapp-stor { display: inline-block; margin-top: 20px; background: linear-gradient(135deg, var(--cerise), #ff5fb0); color: #fff; padding: 16px 38px; border: 0; border-radius: 999px; font-family: inherit; font-weight: 700; font-size: 16.5px; cursor: pointer; box-shadow: 0 12px 26px rgba(233,30,137,0.26); transition: transform .18s ease, box-shadow .18s ease; }
+  .knapp-stor:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(233,30,137,0.32); }
+  .pay-methods { margin-top: 12px; }
+  .liten { font-size: 13.5px; color: var(--grey); margin-top: 14px; }
+
+  .steg { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
+  .steg .s { background: #FFF8F5; border-radius: 18px; padding: 20px; }
+  .steg .n { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: var(--cerise); color: #fff; font-family: var(--font-head); font-weight: 700; margin-bottom: 10px; }
+  .steg h3 { font-size: 17px; margin-bottom: 6px; }
+  .steg p { font-size: 14.5px; color: var(--grey); }
+
+  .takk { display: none; background: #EAF6D6; border-radius: 22px; padding: 26px 28px; margin-bottom: 22px; }
+  .takk.on { display: block; }
+  .takk h2 { font-size: 23px; margin-bottom: 8px; color: #4c7a12; }
+  .takk p { font-size: 15.5px; color: #3f5f18; }
+
+  .notis { background: #FFF6E5; border-left: 4px solid var(--yellow); border-radius: 12px; padding: 14px 16px; font-size: 14.5px; margin-top: 16px; }
+
+  .felt { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .felt input { flex: 1 1 220px; padding: 13px 15px; border: 1.5px solid #F2E3E7; border-radius: 14px; font-family: inherit; font-size: 16px; background: #FFFCFD; }
+  .felt input:focus { outline: none; border-color: var(--cerise); box-shadow: 0 0 0 3px rgba(233,30,137,0.12); }
+  .felt button { background: #fff; color: var(--cerise); border: 1.5px solid #F5C9D8; border-radius: 999px; padding: 12px 22px; font-family: inherit; font-weight: 700; font-size: 14.5px; cursor: pointer; }
+  .svar { font-size: 14.5px; margin-top: 10px; }
+
+  .faq details { border-bottom: 1px solid var(--line); padding: 14px 0; }
+  .faq summary { font-family: var(--font-head); font-weight: 700; font-size: 16.5px; cursor: pointer; list-style: none; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; float: right; color: var(--cerise); font-size: 20px; line-height: 1; }
+  .faq details[open] summary::after { content: '–'; }
+  .faq p { font-size: 15px; color: var(--grey); margin-top: 10px; }
+
+  .sig { text-align: center; color: #a08b90; font-size: 14px; margin-top: 34px; }
+  .sig a { color: var(--pink-mid); font-weight: 600; }
+
+  @media (max-width: 620px) {
+    .head h1 { font-size: 30px; }
+    .wrap { padding: 28px 15px 70px; }
+    .card, .kjopsboks { padding: 21px; border-radius: 24px; }
+    .card h2 { font-size: 21px; }
+    .pris { font-size: 36px; }
+  }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="brand" href="/dashboard"><img src="/images/lme-logo.png" alt="LME">Little Montessori Explorers</a>
+    <div class="actions">
+      <button class="btn btn-lang" id="lme-lang" type="button">🇬🇧 English</button>
+      <a class="btn btn-back" href="/apper" data-no="‹ Apper" data-en="‹ Apps">‹ Apper</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="takk" id="takkboks">
+      <h2 data-no="Takk! Appen er din" data-en="Thank you! The app is yours">Takk! Appen er din</h2>
+      <p data-no="Jeg har sendt deg en e-post med din egen lenke inn i appen. Den kommer vanligvis i løpet av et minutt eller to. Finner du den ikke, se i søppelposten, eller be om lenken på nytt lenger nede på siden." data-en="I have sent you an email with your own link into the app. It usually arrives within a minute or two. If you cannot find it, check your spam folder, or ask for the link again further down this page.">Jeg har sendt deg en e-post med din egen lenke inn i appen. Den kommer vanligvis i løpet av et minutt eller to. Finner du den ikke, se i søppelposten, eller be om lenken på nytt lenger nede på siden.</p>
+    </div>
+
+    <div class="hero">
+      <div class="head">
+        <span class="kick" data-no="LME Strikk &amp; Hekle" data-en="LME Knit &amp; Crochet">LME Strikk &amp; Hekle</span>
+        <h1><span data-no="Øk og fell masker" data-en="Increase and decrease stitches">Øk og fell masker</span> <em data-no="uten hoderegning" data-en="without doing the maths">uten hoderegning</em></h1>
+        <p data-no="Appen som regner ut ermer, raglan, ermehull, hals, skuldre og garnmengde, ut fra din egen strikkefasthet. Kjøp én gang, bruk den så lenge du strikker." data-en="The app that works out sleeves, raglan yokes, armholes, necklines, shoulders and yarn amounts, from your own gauge. Buy once, use it for as long as you knit.">Appen som regner ut ermer, raglan, ermehull, hals, skuldre og garnmengde, ut fra din egen strikkefasthet. Kjøp én gang, bruk den så lenge du strikker.</p>
+      </div>
+      <div class="hero-art">
+        <svg class="hero-svg" viewBox="0 0 600 400" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="skBg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#FFF8F4"/><stop offset="55%" stop-color="#FDECEF"/><stop offset="100%" stop-color="#FADFE7"/>
+            </linearGradient>
+            <linearGradient id="skBall1" x1="0.15" y1="0.05" x2="0.9" y2="1">
+              <stop offset="0%" stop-color="#FF7FB4"/><stop offset="100%" stop-color="#D8137B"/>
+            </linearGradient>
+            <linearGradient id="skBall2" x1="0.15" y1="0.05" x2="0.9" y2="1">
+              <stop offset="0%" stop-color="#FBD3DE"/><stop offset="100%" stop-color="#F296AE"/>
+            </linearGradient>
+            <linearGradient id="skFab" x1="0" y1="0" x2="0.6" y2="1">
+              <stop offset="0%" stop-color="#FBC9D8"/><stop offset="100%" stop-color="#F3A0BC"/>
+            </linearGradient>
+            <linearGradient id="skWood" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#EFD6B8"/><stop offset="100%" stop-color="#C29B71"/>
+            </linearGradient>
+            <pattern id="skKnit" width="21" height="18" patternUnits="userSpaceOnUse">
+              <path d="M2.5 15.5 L10.5 4.5 L18.5 15.5" fill="none" stroke="#ffffff" stroke-opacity="0.82" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round"/>
+            </pattern>
+            <clipPath id="skClipBall1"><circle cx="470" cy="132" r="76"/></clipPath>
+        <clipPath id="skClipBall2"><circle cx="416" cy="288" r="50"/></clipPath>
+        <clipPath id="skSwatchClip"><path d="M52 168 h250 a14 14 0 0 1 14 14 v150 a14 14 0 0 1 -14 14 h-250 a14 14 0 0 1 -14 -14 v-150 a14 14 0 0 1 14 -14 z"/></clipPath>
+          </defs>
+        
+          <rect width="600" height="400" fill="url(#skBg)"/>
+          <circle cx="472" cy="120" r="150" fill="#FFFFFF" opacity="0.45"/>
+          <circle cx="120" cy="352" r="110" fill="#FFFFFF" opacity="0.32"/>
+        
+          <!-- garntraaden fra noestet ned i arbeidet -->
+          <path d="M470 196 C 430 236, 372 214, 330 190 C 300 172, 276 166, 250 166" fill="none" stroke="#E91E89" stroke-width="4" stroke-linecap="round" opacity="0.85"/>
+        
+          <!-- strikketoeyet -->
+          <g>
+            <path d="M52 168 h250 a14 14 0 0 1 14 14 v150 a14 14 0 0 1 -14 14 h-250 a14 14 0 0 1 -14 -14 v-150 a14 14 0 0 1 14 -14 z" fill="url(#skFab)"/>
+            <g clip-path="url(#skSwatchClip)"><rect x="38" y="168" width="278" height="178" fill="url(#skKnit)"/></g>
+            <path d="M52 168 h250 a14 14 0 0 1 14 14 v150 a14 14 0 0 1 -14 14 h-250 a14 14 0 0 1 -14 -14 v-150 a14 14 0 0 1 14 -14 z" fill="none" stroke="#E8809F" stroke-width="2.5"/>
+          </g>
+        
+          <!-- masker paa pinnen, oeverste kant -->
+          <g fill="none" stroke="#FBE3EA" stroke-width="7" stroke-linecap="round">
+            <path d="M64 172 c 0 -14 18 -14 18 0"/><path d="M96 172 c 0 -14 18 -14 18 0"/>
+            <path d="M128 172 c 0 -14 18 -14 18 0"/><path d="M160 172 c 0 -14 18 -14 18 0"/>
+            <path d="M192 172 c 0 -14 18 -14 18 0"/><path d="M224 172 c 0 -14 18 -14 18 0"/>
+            <path d="M256 172 c 0 -14 18 -14 18 0"/>
+          </g>
+        
+          <!-- pinner som krysser over arbeidet -->
+          <g stroke-linecap="round">
+            <line x1="44" y1="186" x2="352" y2="62" stroke="url(#skWood)" stroke-width="11"/>
+            <circle cx="356" cy="60" r="11" fill="#C29B71"/>
+            <line x1="60" y1="66" x2="332" y2="196" stroke="url(#skWood)" stroke-width="11"/>
+            <circle cx="336" cy="198" r="11" fill="#C29B71"/>
+          </g>
+        
+          <!-- stort garnnoeste -->
+          <g>
+            <circle cx="470" cy="132" r="76" fill="url(#skBall1)"/>
+            <g class="sk-wind sk-wind-a" clip-path="url(#skClipBall1)" fill="none" stroke="#FFFFFF" stroke-opacity="0.42" stroke-width="4">
+              <ellipse cx="470" cy="132" rx="76" ry="31" transform="rotate(-34 470 132)"/>
+              <ellipse cx="470" cy="132" rx="72" ry="15" transform="rotate(-34 470 132)"/>
+              <ellipse cx="470" cy="132" rx="76" ry="27" transform="rotate(40 470 132)"/>
+              <ellipse cx="470" cy="132" rx="70" ry="12" transform="rotate(40 470 132)"/>
+              <ellipse cx="470" cy="132" rx="74" ry="22" transform="rotate(86 470 132)"/>
+            </g>
+            <circle cx="470" cy="132" r="76" fill="none" stroke="#B90F67" stroke-opacity="0.25" stroke-width="2.5"/>
+          </g>
+        
+          <!-- mindre noeste -->
+          <g>
+            <circle cx="416" cy="288" r="50" fill="url(#skBall2)"/>
+            <g class="sk-wind sk-wind-b" clip-path="url(#skClipBall2)" fill="none" stroke="#FFFFFF" stroke-opacity="0.7" stroke-width="3.2">
+              <ellipse cx="416" cy="288" rx="50" ry="20" transform="rotate(-30 416 288)"/>
+              <ellipse cx="416" cy="288" rx="47" ry="9" transform="rotate(-30 416 288)"/>
+              <ellipse cx="416" cy="288" rx="50" ry="17" transform="rotate(44 416 288)"/>
+              <ellipse cx="416" cy="288" rx="46" ry="7" transform="rotate(44 416 288)"/>
+            </g>
+          </g>
+        
+          <!-- heklenaal -->
+          <g stroke-linecap="round">
+            <line x1="466" y1="360" x2="566" y2="288" stroke="url(#skWood)" stroke-width="9"/>
+            <path d="M566 288 c 11 -8 21 -1 19 9 c -2 8 -12 11 -18 6" fill="none" stroke="#C29B71" stroke-width="8" stroke-linecap="round"/>
+          </g>
+        
+          <!-- maalebaand -->
+          <path d="M20 368 C 130 344, 236 396, 352 366 C 402 353, 430 356, 456 356" fill="none" stroke="#F7C72E" stroke-width="15" stroke-linecap="round" opacity="0.95"/>
+          <g stroke="#B98F0F" stroke-width="2.2" stroke-linecap="round" opacity="0.5">
+            <line x1="76" y1="352" x2="76" y2="362"/><line x1="120" y1="348" x2="120" y2="358"/>
+            <line x1="164" y1="352" x2="164" y2="362"/><line x1="208" y1="362" x2="208" y2="372"/>
+            <line x1="252" y1="372" x2="252" y2="382"/><line x1="296" y1="374" x2="296" y2="384"/>
+            <line x1="340" y1="366" x2="340" y2="376"/><line x1="384" y1="358" x2="384" y2="368"/>
+          </g>
+        
+          <!-- smaa prikker -->
+          <g fill="#F5A8B8" opacity="0.7">
+            <circle cx="380" cy="36" r="5"/><circle cx="566" cy="212" r="5"/><circle cx="576" cy="86" r="3.6"/>
+            <circle cx="352" cy="248" r="4"/><circle cx="30" cy="120" r="4.4"/><circle cx="96" cy="60" r="3.4"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <section class="kjopsboks" id="kjopsboks" data-vipps-produkt="strikk" data-vipps-type="strikk">
+      <div class="pris" id="prislinje"></div>
+      <a class="knapp-stor buy-cta" id="kjopknapp" href="#" data-no="Kjøp med kort" data-en="Pay by card">Kjøp med kort</a>
+      <!-- js/vipps-knapp.js legger Vipps-knappen akkurat her, rett under
+           kortknappen. Vipps tar bare kroner, så den skjuler seg selv i
+           engelsk visning. -->
+      <div class="pay-methods"></div>
+      <p class="liten" id="kjopnotis" data-no="Engangskjøp. Ingen månedspris, ingenting å si opp. Du får lenken på e-post rett etter betaling." data-en="A one-time purchase. No monthly price, nothing to cancel. You get the link by email right after payment.">Engangskjøp. Ingen månedspris, ingenting å si opp. Du får lenken på e-post rett etter betaling.</p>
+    </section>
+
+    <section class="card">
+      <span class="pill" data-no="🧶 Dette får du" data-en="🧶 What you get">🧶 Dette får du</span>
+      <h2 data-no="Alle utregningene, samlet på ett sted" data-en="Every calculation, in one place">Alle utregningene, samlet på ett sted</h2>
+      <p class="lead" data-no="Du legger inn strikkefastheten din én gang, og alt annet bygger på den. Appen virker på mobilen i sofaen, og du kan legge den på hjemskjermen." data-en="You enter your gauge once, and everything else builds on it. The app works on your phone in the sofa, and you can put it on your home screen.">Du legger inn strikkefastheten din én gang, og alt annet bygger på den. Appen virker på mobilen i sofaen, og du kan legge den på hjemskjermen.</p>
+      <ul class="liste" id="punkter"></ul>
+    </section>
+
+    <section class="card">
+      <span class="pill" data-no="📬 Slik virker det" data-en="📬 How it works">📬 Slik virker det</span>
+      <h2 data-no="Fra betaling til strikketøyet, på et minutt" data-en="From payment to your knitting, in a minute">Fra betaling til strikketøyet, på et minutt</h2>
+      <div class="steg">
+        <div class="s">
+          <span class="n">1</span>
+          <h3 data-no="Du betaler" data-en="You pay">Du betaler</h3>
+          <p data-no="Med kort eller Vipps. Du skriver inn e-postadressen din underveis, og det er den adressen appen leveres til." data-en="By card or Vipps. You enter your email address on the way, and that is the address the app is delivered to.">Med kort eller Vipps. Du skriver inn e-postadressen din underveis, og det er den adressen appen leveres til.</p>
+        </div>
+        <div class="s">
+          <span class="n">2</span>
+          <h3 data-no="Du får lenken" data-en="You get the link">Du får lenken</h3>
+          <p data-no="En e-post med din egen lenke inn i appen. Ingen konto, ingen passord. Nettleseren husker lenken etterpå." data-en="An email with your own link into the app. No account, no password. Your browser remembers the link afterwards.">En e-post med din egen lenke inn i appen. Ingen konto, ingen passord. Nettleseren husker lenken etterpå.</p>
+        </div>
+        <div class="s">
+          <span class="n">3</span>
+          <h3 data-no="Du legger den på hjemskjermen" data-en="You add it to your home screen">Du legger den på hjemskjermen</h3>
+          <p data-no="Åpne lenken på telefonen, trykk del og velg Legg til på Hjem-skjerm. Da ligger den der som en vanlig app." data-en="Open the link on your phone, tap share and choose Add to home screen. Then it sits there like any other app.">Åpne lenken på telefonen, trykk del og velg Legg til på Hjem-skjerm. Da ligger den der som en vanlig app.</p>
+        </div>
+      </div>
+      <div class="notis" id="ikkeinkludert"></div>
+    </section>
+
+    <section class="card">
+      <span class="pill" data-no="🔑 Mistet lenken" data-en="🔑 Lost your link">🔑 Mistet lenken</span>
+      <h2 data-no="Har du kjøpt, men ikke finner e-posten?" data-en="Bought it, but cannot find the email?">Har du kjøpt, men ikke finner e-posten?</h2>
+      <p class="lead" data-no="Skriv inn den samme adressen du betalte med, så sender jeg lenken på nytt." data-en="Enter the same address you paid with, and I will send the link again.">Skriv inn den samme adressen du betalte med, så sender jeg lenken på nytt.</p>
+      <div class="felt">
+        <input type="email" id="lenkeEpost" autocomplete="email" placeholder="din@epost.no">
+        <button type="button" id="lenkeKnapp" data-no="Send lenken" data-en="Send the link">Send lenken</button>
+      </div>
+      <p class="svar" id="lenkeSvar"></p>
+    </section>
+
+    <section class="card faq">
+      <span class="pill" data-no="❓ Spørsmål" data-en="❓ Questions">❓ Spørsmål</span>
+      <h2 data-no="Det folk lurer på" data-en="What people wonder about">Det folk lurer på</h2>
+      <details>
+        <summary data-no="Må jeg lage en konto?" data-en="Do I need an account?">Må jeg lage en konto?</summary>
+        <p data-no="Nei. Du får en personlig lenke på e-post, og den er nok. Nettleseren husker den, så du kan gå rett til lmexplorers.com/strikk senere." data-en="No. You get a personal link by email, and that is all you need. Your browser remembers it, so later you can go straight to lmexplorers.com/strikk.">Nei. Du får en personlig lenke på e-post, og den er nok. Nettleseren husker den, så du kan gå rett til lmexplorers.com/strikk senere.</p>
+      </details>
+      <details>
+        <summary data-no="Virker den på telefonen?" data-en="Does it work on a phone?">Virker den på telefonen?</summary>
+        <p data-no="Ja, den er laget for telefonen først. Legg den på hjemskjermen, så åpner den seg som en vanlig app, uten adressefelt." data-en="Yes, it is built for the phone first. Add it to your home screen and it opens like an ordinary app, with no address bar.">Ja, den er laget for telefonen først. Legg den på hjemskjermen, så åpner den seg som en vanlig app, uten adressefelt.</p>
+      </details>
+      <details>
+        <summary data-no="Er det månedspris?" data-en="Is there a monthly price?">Er det månedspris?</summary>
+        <p data-no="Nei. Du betaler én gang, og så er appen din. Oppdateringene som kommer senere følger med uten at du betaler mer." data-en="No. You pay once, and then the app is yours. Updates that come later are included without you paying more.">Nei. Du betaler én gang, og så er appen din. Oppdateringene som kommer senere følger med uten at du betaler mer.</p>
+      </details>
+      <details>
+        <summary data-no="Følger det med oppskrifter?" data-en="Are patterns included?">Følger det med oppskrifter?</summary>
+        <p data-no="Nei. Appen regner, den gir deg tallene til det du selv skal lage, enten du følger en oppskrift eller finner på ditt eget." data-en="No. The app does the maths, it gives you the numbers for what you are making yourself, whether you follow a pattern or make up your own.">Nei. Appen regner, den gir deg tallene til det du selv skal lage, enten du følger en oppskrift eller finner på ditt eget.</p>
+      </details>
+      <details>
+        <summary data-no="Virker den til hekling også?" data-en="Does it work for crochet too?">Virker den til hekling også?</summary>
+        <p data-no="Ja. Øverst velger du hekling, og da bytter appen ord og utregninger. Der ligger også flat sirkel runde for runde, ruter til teppe og startkjede." data-en="Yes. At the top you choose crochet, and the app changes its wording and its calculations. That is also where the flat circle round by round, blanket squares and starting chain live.">Ja. Øverst velger du hekling, og da bytter appen ord og utregninger. Der ligger også flat sirkel runde for runde, ruter til teppe og startkjede.</p>
+      </details>
+    </section>
+
+    <p class="sig"><span data-no="Drevet av" data-en="Powered by">Drevet av</span> <a href="/dashboard">Little Montessori Explorers</a> · lmexplorers.com</p>
+  </div>
+
+<script>
+(function () {
+  window.LME_CURRENT_LANG = 'no';
+  try { window.LME_CURRENT_LANG = localStorage.getItem('lme_lang') === 'en' ? 'en' : 'no'; } catch (e) {}
+  function en() { return window.LME_CURRENT_LANG === 'en'; }
+  function t(no, eng) { return en() ? eng : no; }
+  var data = null;
+
+  function applyLang() {
+    var isEn = en();
+    document.documentElement.lang = isEn ? 'en' : 'no';
+    document.querySelectorAll('[data-no][data-en]').forEach(function (el) {
+      el.textContent = isEn ? el.getAttribute('data-en') : el.getAttribute('data-no');
+    });
+    var b = document.getElementById('lme-lang');
+    if (b) b.textContent = isEn ? '🇳🇴 Norsk' : '🇬🇧 English';
+    document.title = (isEn ? 'Knit & Crochet, the app' : 'Strikk & Hekle, appen') + ' — LME';
+    tegnTilbud();
+  }
+  window.lmeToggleLang = function () {
+    window.LME_CURRENT_LANG = en() ? 'no' : 'en';
+    try { localStorage.setItem('lme_lang', window.LME_CURRENT_LANG); } catch (e) {}
+    applyLang();
+    try { window.dispatchEvent(new Event('lme-lang')); } catch (e) {}
+  };
+  document.getElementById('lme-lang').addEventListener('click', window.lmeToggleLang);
+
+  /* Takkesiden: både kort og Vipps sender kjøperen hit med ?takk=1. */
+  try {
+    if (new URLSearchParams(location.search).get('takk')) {
+      document.getElementById('takkboks').classList.add('on');
+      window.scrollTo({ top: 0 });
+    }
+  } catch (e) {}
+
+  function tegnTilbud() {
+    if (!data || !data.tilbud) return;
+    var spr = en() ? 'en' : 'no';
+    var tb = data.tilbud;
+
+    var pris = document.getElementById('prislinje');
+    pris.innerHTML = '';
+    var stor = document.createElement('span');
+    stor.textContent = tb.nok + ' kr';
+    var liten = document.createElement('small');
+    liten.textContent = t('Engangskjøp, appen er din for godt', 'A one-time purchase, the app is yours for good');
+    pris.appendChild(stor); pris.appendChild(liten);
+
+    var ul = document.getElementById('punkter');
+    ul.innerHTML = '';
+    ((tb.inkluderer && (tb.inkluderer[spr] || tb.inkluderer.no)) || []).forEach(function (p) {
+      var li = document.createElement('li'); li.textContent = p; ul.appendChild(li);
+    });
+
+    var ikke = document.getElementById('ikkeinkludert');
+    ikke.innerHTML = '';
+    var sterk = document.createElement('strong');
+    sterk.textContent = t('Verdt å vite: ', 'Worth knowing: ');
+    ikke.appendChild(sterk);
+    ikke.appendChild(document.createTextNode((tb.ikkeInkludert && (tb.ikkeInkludert[spr] || tb.ikkeInkludert.no)) || ''));
+
+    var knapp = document.getElementById('kjopknapp');
+    var notis = document.getElementById('kjopnotis');
+    var boks = document.getElementById('kjopsboks');
+
+    if (data.eier || data.harApp) {
+      /* Eieren skal aldri møte en kjøpsknapp for sitt eget produkt, og den
+         som alt har kjøpt skal ikke kunne kjøpe to ganger. Begge får en vei
+         rett inn i stedet. */
+      knapp.textContent = t('Åpne appen', 'Open the app');
+      knapp.setAttribute('href', '/strikk');
+      /* buy-cta er merkingen for "dette er en kjøpsknapp", og skjules for
+         eieren av tilgangsskriptene. Denne knappen er ikke lenger et kjøp,
+         så merket må vekk, ellers forsvinner veien inn i appen. */
+      knapp.classList.remove('buy-cta');
+      notis.textContent = data.eier
+        ? t('Du er eier, så appen er åpen for deg uten kjøp.', 'You are the owner, so the app is open to you without buying.')
+        : t('Du har kjøpt denne fra før. Trykk for å åpne den.', 'You have already bought this. Tap to open it.');
+      /* Vipps-knappen legger seg OVER kortknappen, ikke inne i pay-methods,
+         så den må fjernes der den faktisk står. Skriptet kan ha rukket å
+         sette den inn før dette svaret kom. */
+      boks.removeAttribute('data-vipps-produkt');
+      boks.querySelectorAll('.lme-vipps').forEach(function (v) { v.remove(); });
+      var pm = boks.querySelector('.pay-methods');
+      if (pm) pm.innerHTML = '';
+    } else {
+      knapp.setAttribute('href', tb.kjopLenke);
+      knapp.textContent = t('Kjøp med kort', 'Pay by card');
+    }
+  }
+
+  fetch('/api/strikk-kjop', { credentials: 'same-origin' })
+    .then(function (r) { return r.json(); })
+    .then(function (d) { data = d; tegnTilbud(); })
+    .catch(function () {
+      document.getElementById('prislinje').textContent = t('Kunne ikke hente prisen', 'Could not load the price');
+    });
+
+  /* Mistet lenken */
+  var lknapp = document.getElementById('lenkeKnapp');
+  lknapp.addEventListener('click', function () {
+    var e = (document.getElementById('lenkeEpost').value || '').trim();
+    var svar = document.getElementById('lenkeSvar');
+    if (!e || e.indexOf('@') < 0) {
+      svar.textContent = t('Skriv inn e-postadressen du betalte med.', 'Enter the email address you paid with.');
+      return;
+    }
+    lknapp.disabled = true;
+    svar.textContent = t('Sender …', 'Sending …');
+    fetch('/api/strikk-lenke', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: e, lang: en() ? 'en' : 'no' }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        svar.textContent = (d && d.ok)
+          ? t('Sendt. Se i innboksen din, og i søppelposten hvis den ikke dukker opp.', 'Sent. Check your inbox, and your spam folder if it does not turn up.')
+          : t('Jeg finner ikke et kjøp på den adressen. Er det den samme du betalte med?', 'I cannot find a purchase on that address. Is it the same one you paid with?');
+      })
+      .catch(function () {
+        svar.textContent = t('Noe gikk galt. Prøv igjen om litt.', 'Something went wrong. Try again in a moment.');
+      })
+      .then(function () { lknapp.disabled = false; });
+  });
+
+  applyLang();
+})();
+</script>
+<script src="/js/vipps-knapp.js?v=1" defer></script>
+<script src="/js/lme-account.js?v=11" defer></script>
+</body>
+</html>

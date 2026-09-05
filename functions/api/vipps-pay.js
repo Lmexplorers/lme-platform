@@ -19,6 +19,7 @@ import { createVippsPayment, parseNokPriceToOre } from "../_lib/vipps.js";
 import { KEY_PREFIX as LV_KEY_PREFIX } from "./laeringsverksted.js";
 import { COURSES, kursPrisNok } from "../_lib/plans.js";
 import { oppskriftPrisOre } from "../_lib/butikk-priser.js";
+import { STRIKK_KJOP } from "../_lib/strikk-kjop.js";
 import { oppskriftNavn } from "../_lib/oppskrift-mail.js";
 import { pakkeMedId } from "../../js/tjenester-pakker.js";
 import { APP_KJOP, gjeldendeTilbud } from "../_lib/app-kjop.js";
@@ -93,7 +94,7 @@ export async function onRequestPost(context) {
               prisen paa hver produktside. Navnet kommer fra den samme
               tabellen som leveringsmailen bruker, saa kunden ser samme
               navn i Vipps som i e-posten. */
-  const TYPER = ["lv", "kurs", "oppskrift", "tjeneste", "app"];
+  const TYPER = ["lv", "kurs", "oppskrift", "tjeneste", "app", "strikk"];
   const type = TYPER.indexOf(body.type) >= 0 ? body.type : "lv";
   let amount = 0;
   let title = "";
@@ -117,6 +118,16 @@ export async function onRequestPost(context) {
     amount = gjeldendeTilbud().nok * 100;
     title = APP_KJOP.navn[lang] || APP_KJOP.navn.no;
     returnPath = "/autopilot-app?takk=1";
+  } else if (type === "strikk") {
+    /* LME Strikk & Hekle som engangskjøp. Prisen leses på serveren, fra den
+       samme filen Stripe-lenken og salgssiden bruker, så Vipps aldri kan
+       trekke et annet beløp enn det kunden så. */
+    if (slug !== STRIKK_KJOP.id) return json({ ok: false, error: "not_found" }, 404);
+    amount = STRIKK_KJOP.nok * 100;
+    title = STRIKK_KJOP.navn[lang] || STRIKK_KJOP.navn.no;
+    /* Samme takkeside som Stripe sender kjøperen til. Lenken inn i appen
+       kommer på e-post, siden kjøperen ikke har noen konto. */
+    returnPath = "/strikk-app?takk=1";
   } else if (type === "tjeneste") {
     /* "Gjort for deg"-pakkene på /tjenester. Prisen leses fra den samme
        filen som salgssiden og Stripe-kvitteringen bruker, så Vipps aldri

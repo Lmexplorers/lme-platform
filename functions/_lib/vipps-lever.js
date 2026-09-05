@@ -26,6 +26,7 @@ import { lagNedlastingsnokkel, medNokkel } from "./nedlasting-tilgang.js";
 import { registerNewsletter } from "./newsletter.js";
 import { sendKvitteringKjop } from "./tjeneste-mail.js";
 import { grantAutopilotApp } from "./purchase-links.js";
+import { leverStrikk } from "./strikk-lever.js";
 import { sendAppKjopMail } from "./app-kjop-mail.js";
 import { koOppfolging } from "./autopilot-followup-mail.js";
 import { pakkeMedId } from "../../js/tjenester-pakker.js";
@@ -371,6 +372,12 @@ export async function leverVippsOrdre(env, reference, opts) {
     await leverTjeneste(env, order);
   } else if (order.type === "app") {
     await leverAppKjop(env, order);
+  } else if (order.type === "strikk") {
+    /* Nøyaktig samme levering som kortkjøpet, se _lib/strikk-lever.js. */
+    await leverStrikk(env, {
+      email: order.email, name: order.name, lang: order.lang,
+      betaltMed: "vipps", amount: order.amount, currency: order.currency || "nok",
+    });
   } else {
     nokkel = await leverLaeringsverksted(env, order);
   }

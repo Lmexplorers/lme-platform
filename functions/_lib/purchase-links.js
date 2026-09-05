@@ -159,6 +159,14 @@ export const APP_PAYMENT_LINKS = {
   "plink_1UAfFnLax7B8uQzqXM6UqgnM": { app: "autopilot", navn: "LME Autopilot, appen", nok: 1490, lang: "no" },
 };
 
+/* LME Strikk & Hekle, engangskjøp. Betalingslenken er opprettet i Stripe
+   5. september 2026. Beløpet står også i _lib/strikk-kjop.js, som er den
+   ene kilden prisen leses fra. Endres prisen, må begge steder og Stripe
+   endres sammen. */
+export const STRIKK_PAYMENT_LINKS = {
+  "plink_1UCEAfLax7B8uQzqAYp2ZPHT": { app: "strikk", navn: "LME Strikk & Hekle, appen", nok: 299, lang: "no" },
+};
+
 /* Merker kontoen som "har kjøpt appen". Lagres på member:<e-post>, samme
    post som abonnementet, siden det er den posten Autopilot-appen leser
    (den heter ACCOUNTS_KV der, men er den samme lagringen som BUILDER_KV

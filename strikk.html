@@ -7,6 +7,15 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
 <title>Strikk &amp; Hekle — LME</title>
 <meta name="description" content="Regn ut masker, rader, økning, felling og garnmengde til strikking og hekling. Alt tar utgangspunkt i din egen strikkefasthet.">
+<script>
+  /* Låsen kjører først, så appen aldri blinker frem for noen som ikke har
+     kjøpt. Kjøperen har ingen konto: hun får en personlig lenke (?t=...) på
+     e-post, og nettleseren husker den etterpå. Eier slipper alltid inn,
+     se js/course-gate.js. */
+  window.LME_COURSE_ID = "strikk";
+  window.LME_COURSE_SALES_URL = "/strikk-app";
+</script>
+<script src="/js/course-gate.js?v=1"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">

@@ -36,9 +36,11 @@ import {
   VIDEOFLOW_PAYMENT_LINKS, VIDEOFLOW_PRODUCT_ID, grantVideoFlowSub, revokeVideoFlowSub,
   TJENESTE_PAYMENT_LINKS,
   APP_PAYMENT_LINKS, grantAutopilotApp,
+  STRIKK_PAYMENT_LINKS,
 } from "../_lib/purchase-links.js";
 import { sendAutopilotMail } from "../_lib/autopilot-mail.js";
 import { grantCourseAccess, grantModuleAccess } from "../_lib/course-access.js";
+import { leverStrikk } from "../_lib/strikk-lever.js";
 import { sendCourseDeliveryMail, sendModuleDeliveryMail } from "../_lib/course-mail.js";
 import { recordPurchase } from "../_lib/purchases.js";
 import { sendResourceDeliveryMail } from "../_lib/laeringsverksted-mail.js";
@@ -394,6 +396,19 @@ export async function onRequestPost(context) {
     // LME Autopilot, engangskjøp av appen. Gir ingen kvote, bare varig
     // tilgang. Kunden bruker sine egne AI-nøkler, så kjøpet koster meg
     // ingenting etterpå, og kan derfor selges én gang.
+    // LME Strikk & Hekle, engangskjøp av appen. Kunden trenger ingen konto:
+    // leveringen lager en personlig lenke med token og sender den på e-post.
+    // Kort og Vipps deler den samme leveringen, se _lib/strikk-lever.js.
+    const strikkKjop = obj.payment_link && STRIKK_PAYMENT_LINKS[obj.payment_link];
+    if (strikkKjop && email && obj.payment_status !== "unpaid") {
+      const nmS = (obj.customer_details && obj.customer_details.name) || "";
+      await leverStrikk(env, {
+        email: email, name: nmS, lang: strikkKjop.lang,
+        betaltMed: "kort", amount: obj.amount_total, currency: obj.currency,
+      });
+      return json({ ok: true });
+    }
+
     const appKjop = obj.payment_link && APP_PAYMENT_LINKS[obj.payment_link];
     if (appKjop && email && obj.payment_status !== "unpaid") {
       const nm = (obj.customer_details && obj.customer_details.name) || "";
